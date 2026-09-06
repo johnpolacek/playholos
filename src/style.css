@@ -24,3 +24,15 @@ dialog{color:var(--ink);background:#0d141e;border:1px solid #2a3b4c;border-radiu
 @media(min-width:761px) and (max-height:1000px){.zoom-rail{margin-top:9px;padding-top:8px}.zoom-rail>label,.zoom-rail>div{display:none}}
 @media(min-width:761px) and (max-height:700px){.scale-nav{width:560px}.zoom-rail{width:240px;padding:0;border:0;margin-top:6px}.object-info{bottom:134px}.object-info p{max-height:58px;overflow:auto}.travel-status{top:128px;left:64%;width:290px}}
 @media(max-width:760px){.scale-nav{width:auto}.scale-step{gap:5px}.zoom-rail{border:0;padding:0;margin-top:8px}.zoom-rail>label,.zoom-rail>div{display:none}.zoom-rail input{height:12px}.travel-status{top:147px;width:300px;padding:8px 12px}.travel-status>div{font-size:10px}.hint{display:none}}
+
+/* Keep navigation and object details in one flow so long titles cannot overlap controls. */
+.exploration-panel{position:absolute;z-index:3;top:136px;bottom:178px;left:42px;width:302px;display:flex;flex-direction:column;gap:24px;pointer-events:none}
+.exploration-panel .scale-nav{position:static;flex-shrink:0;pointer-events:auto}
+.exploration-panel .object-info{position:static;width:100%;min-height:0;margin-top:auto;overflow-y:auto;overscroll-behavior:contain;pointer-events:auto;scrollbar-width:thin;padding:5px;margin-left:-5px}
+@media(min-width:1600px){.exploration-panel{top:154px;bottom:200px;width:340px}}
+@media(min-width:761px) and (max-height:1000px){.exploration-panel{top:100px;bottom:161px;width:270px}}
+@media(max-width:1050px){.exploration-panel{left:27px;width:255px}}
+@media(min-width:761px) and (max-height:700px){.exploration-panel{top:88px;bottom:134px;left:40px;width:560px;gap:20px}.exploration-panel .object-info{width:271px}}
+@media(min-width:761px) and (max-height:510px){.exploration-panel{top:77px;bottom:130px}}
+@media(max-width:760px){.exploration-panel{top:82px;bottom:169px;left:20px;right:72px;width:auto;gap:24px}.exploration-panel .scale-nav{width:calc(100vw - 36px);margin-left:-2px}.exploration-panel .object-info{width:100%}}
+@media(max-width:760px) and (max-height:700px){.exploration-panel{bottom:161px}}
