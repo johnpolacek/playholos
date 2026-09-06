@@ -36,3 +36,7 @@ Solar System Scope / INOVE: CC BY 4.0, https://www.solarsystemscope.com/textures
 
 Copyright 2008–2026, GreenSock. All rights reserved.
 Subject to the GSAP Standard License: https://gsap.com/standard-license
+
+## Galaxy position data
+
+Selected Galactic coordinates and heliocentric distances are factual values from Alan W. McConnachie (2012), *The observed properties of dwarf galaxies in and around the Local Group*, AJ 144, 4, Table 2: https://arxiv.org/html/1204.1562. Galaxy renderings are original illustrative density models.

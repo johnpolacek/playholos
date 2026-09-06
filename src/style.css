@@ -36,3 +36,9 @@ dialog{color:var(--ink);background:#0d141e;border:1px solid #2a3b4c;border-radiu
 @media(min-width:761px) and (max-height:510px){.exploration-panel{top:77px;bottom:130px}}
 @media(max-width:760px){.exploration-panel{top:82px;bottom:169px;left:20px;right:72px;width:auto;gap:24px}.exploration-panel .scale-nav{width:calc(100vw - 36px);margin-left:-2px}.exploration-panel .object-info{width:100%}}
 @media(max-width:760px) and (max-height:700px){.exploration-panel{bottom:161px}}
+
+/* Five destinations share the same compact navigation on narrow screens. */
+@media(min-width:761px) and (max-height:700px){.exploration-panel,.exploration-panel .scale-nav{width:680px}}
+@media(max-width:760px){.scale-steps{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:2px}.scale-step{justify-content:center;padding:0 3px;gap:4px;white-space:nowrap}.scale-step[data-mode=stars] span:nth-child(2):after{content:'Stars'}}
+@media(max-width:480px){.scale-step{font-size:9px}.scale-step .step-dot{display:none}.scale-step[data-mode=stars] span:nth-child(2):after{font-size:9px}}
+.object-label.guide-label{color:var(--faint);background:none;font-size:9px;pointer-events:none}
