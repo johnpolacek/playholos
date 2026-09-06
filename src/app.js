@@ -3,7 +3,7 @@ import { gsap } from 'gsap';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { AU_KM, PLANETS, julianDate, planetPosition } from './astronomy.js';
 import { Universe } from './universe.js';
-import { LY_AU, GALACTIC_CENTER, MIN_DISTANCE_AU, MAX_DISTANCE_AU, RENDER_DISTANCE, eclipticToGalactic, homeTarget, scaleAtDistance, clampDistance, planFlight, sampleFlight, smooth } from './navigation.js';
+import { LY_AU, GALACTIC_CENTER, MIN_DISTANCE_AU, MAX_DISTANCE_AU, RENDER_DISTANCE, eclipticToGalactic, homeTarget, scaleAtDistance, clampDistance, planFlight, sampleFlight, smooth, logBlend } from './navigation.js';
 import { ASSETS, CATALOG, STAR_BUFFER, META } from './embedded.js';
 
 const $=id=>document.getElementById(id),vec=a=>new THREE.Vector3(...a);
@@ -150,9 +150,11 @@ function updateContext() {
 function addLabel({name,position,action,priority=0,kind='planet',color,star}) {
   const el=document.createElement(action?'button':'span');el.className=`object-label ${kind==='galaxy'?'galaxy-label':''} ${kind==='sun'?'sun-label':''}`;
   el.textContent=name;el.style.setProperty('--label-color',color||'#8daabc');
-  if(kind==='earth'){el.classList.add('earth-marker');el.style.opacity='0';}
+  if(kind==='earth')el.classList.add('earth-marker');
+  const fades=['earth','sun','system'].includes(kind);
+  if(fades)el.style.opacity='0';
   if(action){el.setAttribute('aria-label',`Explore ${name}`);el.onclick=action;}
-  const fade=kind==='earth'?gsap.quickTo(el,'opacity',{duration:.18,ease:'power1.out'}):null;
+  const fade=fades?gsap.quickTo(el,'opacity',{duration:.18,ease:'power1.out'}):null;
   $('labels').append(el);labelItems.push({name,position,action,priority,kind,color,star,el,fade});
 }
 function ensureStarLabel(star,selected=false){
@@ -164,6 +166,7 @@ function createLabels(){
   for(const body of universe.bodies)addLabel({name:body.planet.name,position:()=>body.positionAU,action:()=>focusPlanet(body.planet),kind:body===universe.earth?'earth':'planet',priority:body===universe.earth?60:20-PLANETS.indexOf(body.planet),color:body.planet.color});
   addLabel({name:'Moon',position:()=>universe.moonPositionAU,action:focusMoon,priority:19,kind:'moon',color:'#d3d7dc'});
   addLabel({name:'Sun',position:()=>new THREE.Vector3(),priority:40,kind:'sun',color:'#ffe1a4',action:()=>setMode('solar')});
+  addLabel({name:'Solar System',position:()=>new THREE.Vector3(),priority:65,kind:'system',color:'#a3d9ed',action:()=>setMode('solar')});
   for(const star of CATALOG.filter(s=>s.distance<17||['Vega','Altair','Arcturus','Fomalhaut','Capella','Aldebaran','Betelgeuse','Polaris','Rigel','Deneb','Spica'].includes(s.name))){if(star.name!=='Toliman')ensureStarLabel(star);}
   addLabel({name:'Galactic center · Sagittarius A*',position:()=>GALACTIC_CENTER,priority:35,kind:'center',action:()=>flyTo({target:GALACTIC_CENTER.clone(),direction:new THREE.Vector3(.2,.6,.77).normalize(),distance:22000*LY_AU,home:false,follow:null},'the galactic center')});
 }
@@ -182,13 +185,17 @@ function updateLabels(){
   const earthOpacity=earthDepth>0?1-smooth((earthDiameter-2)/10):0;
   for(const item of [...labelItems].sort((a,b)=>b.priority-a.priority)){
     let visible=state.labels;
-    if(item.kind==='earth'){
-      visible&&=pose.distance<.35*LY_AU;
-      if(reducedMotion){item.fade.tween.pause();gsap.set(item.el,{opacity:earthOpacity});}
-      else if(item.fadeTarget!==earthOpacity)item.fade(earthOpacity);
-      item.fadeTarget=earthOpacity;
-      item.el.style.visibility=earthOpacity===0&&Number(item.el.style.opacity)<.001?'hidden':'inherit';
-      item.el.style.pointerEvents=earthOpacity>.1?'auto':'none';
+    if(item.fade){
+      // Fade local identities away before introducing the system-level name.
+      // Distance-based blends work for flights, manual zoom, and the return trip.
+      const localOpacity=1-logBlend(dLy,.025,.1);
+      const alpha=item.kind==='earth'?earthOpacity*localOpacity:
+        item.kind==='sun'?logBlend(pose.distance,.06,.15)*localOpacity:logBlend(dLy,.1,.3);
+      if(reducedMotion){item.fade.tween.pause();gsap.set(item.el,{opacity:alpha});}
+      else if(item.fadeTarget!==alpha)item.fade(alpha);
+      item.fadeTarget=alpha;
+      visible&&=alpha>.001||Number(item.el.style.opacity)>.001;
+      item.el.style.pointerEvents=alpha>.1?'auto':'none';
     }
     if(item.kind==='planet'){
       const body=universe.bodies.find(b=>b.planet.name===item.name);
@@ -197,7 +204,6 @@ function updateLabels(){
     if(item.kind==='moon')visible&&=pose.distance>.0002&&pose.distance<.025;
     if(item.kind==='star')visible&&=dLy>.15&&dLy<4000;
     if(item.kind==='center')visible&&=dLy>4000;
-    if(item.kind==='sun'){visible&&=pose.distance>.1;item.el.textContent=dLy>300?'Solar System':dLy>.2?'Sun · you are here':'Sun';}
     if(!visible){item.el.hidden=true;continue;}
     const position=item.position();projectAU(position);
     if(projected.z<-1||projected.z>1||Math.abs(projected.x)>1.1||Math.abs(projected.y)>1.1){item.el.hidden=true;continue;}
@@ -207,8 +213,8 @@ function updateLabels(){
     const x=(projected.x+1)*w/2+(earth?-76:9),y=(1-projected.y)*h/2-(earth?36:11);
     const width=earth?58:Math.min(245,item.el.textContent.length*(w<761?4.7:5.8)+29),height=24;
     if(y<(w<761?145:116)||y>h-145||x+width>w-16||(x<panel.right+8&&x+width>panel.left&&y>panel.top-12&&y<panel.bottom+8)||(w>760&&h>700&&x<300&&y<400)){item.el.hidden=true;continue;}
-    if(occupied.some(r=>x<r.x+r.w&&x+width>r.x&&y<r.y+r.h&&y+height>r.y)){item.el.hidden=true;continue;}
-    occupied.push({x,y,w:width,h:height});item.el.hidden=false;item.el.style.transform=`translate(${x.toFixed(2)}px,${y.toFixed(2)}px)`;
+    if(occupied.some(r=>!(item.kind==='sun'&&r.kind==='system')&&x<r.x+r.w&&x+width>r.x&&y<r.y+r.h&&y+height>r.y)){item.el.hidden=true;continue;}
+    occupied.push({x,y,w:width,h:height,kind:item.kind});item.el.hidden=false;item.el.style.transform=`translate(${x.toFixed(2)}px,${y.toFixed(2)}px)`;
   }
 }
 function formatDistance(distance){
