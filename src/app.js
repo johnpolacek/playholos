@@ -177,7 +177,7 @@ function updateContext() {
 }
 
 function addLabel({name,position,action,priority=0,kind='planet',color,star}) {
-  const el=document.createElement(action?'button':'span');el.className=`object-label ${kind==='galaxy'?'galaxy-label':''} ${kind==='sun'?'sun-label':''}`;
+  const el=document.createElement(action?'button':'span');el.className=`object-label ${kind==='galaxy'?'galaxy-label':''} ${kind==='sun'?'sun-label':''} ${kind==='system'?'system-label':''}`;
   el.textContent=name;el.style.setProperty('--label-color',color||'#8daabc');
   if(kind==='earth')el.classList.add('earth-marker');
   if(kind==='guide')el.classList.add('guide-label');
