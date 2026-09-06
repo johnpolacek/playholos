@@ -210,8 +210,8 @@ export class Universe {
       nearestPlanetRadii=Math.min(nearestPlanetRadii,distance/real);
       const display=Math.max(real,Math.min(.17*Math.sqrt(b.planet.radius/6371),distance*.0034));
       const detail=logBlend(distance/real,30,800);
-      // Earth recedes at its physical size; its marker takes over once the
-      // globe becomes subpixel instead of retaining an enlarged Earth disk.
+      // Earth recedes at its physical size; its marker fades in as the globe
+      // shrinks to a few pixels instead of retaining an enlarged Earth disk.
       b.displayRadiusAU=state.trueSizes||b===this.earth?real:THREE.MathUtils.lerp(real,display,detail);
       b.root.scale.setScalar(b.displayRadiusAU*scale);
       // Subpixel surfaces need no geometry; their existing labels and star markers remain.

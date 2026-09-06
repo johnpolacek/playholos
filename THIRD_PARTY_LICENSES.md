@@ -31,3 +31,8 @@ HYG 4.1 by David Nash / Astronexus and the adapted catalog subset: CC BY-SA 4.0.
 ## Planetary textures
 
 Solar System Scope / INOVE: CC BY 4.0, https://www.solarsystemscope.com/textures/. Original maps are retained in assets/. https://creativecommons.org/licenses/by/4.0/
+
+## GSAP
+
+Copyright 2008–2026, GreenSock. All rights reserved.
+Subject to the GSAP Standard License: https://gsap.com/standard-license
