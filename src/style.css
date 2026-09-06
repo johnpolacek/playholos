@@ -42,3 +42,13 @@ dialog{color:var(--ink);background:#0d141e;border:1px solid #2a3b4c;border-radiu
 @media(max-width:760px){.scale-steps{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:2px}.scale-step{justify-content:center;padding:0 3px;gap:4px;white-space:nowrap}.scale-step[data-mode=stars] span:nth-child(2):after{content:'Stars'}}
 @media(max-width:480px){.scale-step{font-size:9px}.scale-step .step-dot{display:none}.scale-step[data-mode=stars] span:nth-child(2):after{font-size:9px}}
 .object-label.guide-label{color:var(--faint);background:none;font-size:9px;pointer-events:none}
+
+.object-info .object-evidence{font-size:10px;line-height:1.5;color:var(--cyan);margin:0 0 8px}
+.object-source{display:block;font-size:10px;color:var(--muted);line-height:1.5;text-underline-offset:3px;margin-bottom:13px}
+#measurement-details{font-size:10px;color:var(--muted);margin-bottom:14px}
+#measurement-details summary{cursor:pointer;padding:4px 0;color:var(--cyan)}
+#measurement-details p{font-size:11px;margin:8px 0;line-height:1.6}
+.exploration-panel .outward-button{position:sticky;bottom:0;background:#101b24}
+@media(min-width:761px) and (max-height:700px){#object-description{display:none}}
+@media(min-width:761px){.scene-options{flex-wrap:wrap;justify-content:center;gap:8px 16px;max-width:530px}.scene-options label{white-space:nowrap}}
+@media(max-width:760px){.scene-options{height:auto;min-height:21px;flex-wrap:wrap;gap:8px 12px;padding-left:0}.object-info .object-evidence,.object-source{font-size:9px}.object-info .object-evidence{display:block}.exploration-panel{bottom:190px}}

@@ -1,7 +1,8 @@
 import * as THREE from 'three';
-import { AU_KM, DEG, PLANETS, julianDate, planetPosition, orbitPath, seededRandom, colorFromBV } from './astronomy.js';
+import { AU_KM, DEG, PLANETS, julianDate, orbitPath, seededRandom, colorFromBV } from './astronomy.js';
 import { LY_AU, GALACTIC_CENTER, ECLIPTIC_ROTATION, eclipticToGalactic, RENDER_DISTANCE, logBlend } from './navigation.js';
-import { GALAXIES, galaxyPosition } from './galaxies.js';
+import { GALAXIES, galaxyPosition, galaxyOutline, galaxyDistanceRange } from './galaxies.js';
+import { bodyPosition, bodyOrientation, moonOffset, moonOrbitPath } from './ephemeris.js';
 
 let renderer,textures;
 const sphere=new THREE.SphereGeometry(1,96,64);
@@ -144,38 +145,15 @@ function galacticDensity() {
   return {density,haze};
 }
 
-function nearbyGalaxy(galaxy,index) {
-  const rand=seededRandom(1627+index*97),gaussian=()=>Math.sqrt(-2*Math.log(Math.max(1e-8,rand())))*Math.cos(2*Math.PI*rand());
-  const positions=[],colors=[],sizes=[],mist=[],mistColors=[],mistSizes=[];
-  const count=galaxy.id==='m31'?60000:galaxy.shape==='spiral'?30000:3500,point=new THREE.Vector3();
-  const orientation=new THREE.Quaternion().setFromEuler(new THREE.Euler(galaxy.tilt,galaxy.turn,.2));
-  for(let i=0;i<count;i++){
-    let color;
-    if(galaxy.shape==='spiral'){
-      if(rand()<.22){
-        point.set(gaussian()*.12,gaussian()*.05,gaussian()*.09);color=[.96,.68,.4];
-      }else{
-        const radius=Math.min(1,-Math.log(Math.max(1e-8,rand()*rand()))*.18);
-        const angle=rand()<.65?Math.floor(rand()*2)*Math.PI+Math.log(Math.max(.04,radius))/.28+gaussian()*.13:rand()*Math.PI*2;
-        point.set(radius*Math.cos(angle),gaussian()*.015,radius*Math.sin(angle));
-        color=rand()<.08?[.96,.5,.59]:[.57,.72,.91];
-      }
-    }else{
-      point.set(gaussian()*.3,gaussian()*(galaxy.shape==='elliptical'?.2:.1),gaussian()*.2);
-      if(galaxy.shape==='irregular')point.x+=Math.sin(point.z*15)*.1;
-      color=galaxy.shape==='elliptical'?[.85,.69,.49]:rand()<.15?[.87,.55,.65]:[.57,.73,.9];
-    }
-    point.multiplyScalar(galaxy.radius).applyQuaternion(orientation);
-    const brightness=.45+rand()*.55;
-    positions.push(...point.toArray());colors.push(...color.map(c=>c*brightness));sizes.push(1+rand()*1.8);
-    if(i%8===0){mist.push(...point.toArray());mistColors.push(...color);mistSizes.push(12);}
-  }
+function nearbyGalaxy(galaxy) {
   const positionLy=galaxyPosition(galaxy),positionAU=positionLy.clone().multiplyScalar(LY_AU);
-  const density=distantPoints(positions,colors,sizes,sizes.map(()=>1),{offset:positionLy});
-  const haze=distantPoints(mist,mistColors,mistSizes,mistSizes.map(()=>1),{offset:positionLy});
-  // An unresolved center marker keeps small dwarf galaxies discoverable.
-  const marker=distantPoints([0,0,0],new THREE.Color(galaxy.color).toArray(),[9],[1],{offset:positionLy});
-  return {galaxy,positionAU,density,haze,marker};
+  const root=new THREE.Group(),outline=galaxyOutline(galaxy);
+  const extent=outline.length?line(outline,'#a3c8db',.55):null;
+  if(extent)root.add(extent);
+  const uncertainty=line(galaxyDistanceRange(galaxy),'#c8ac80',.42);root.add(uncertainty);
+  // Screen-sized map symbols indicate catalog centers, never galaxy size/color.
+  const marker=distantPoints([0,0,0],[.63,.79,.89],[9],[1],{offset:positionLy});
+  return {galaxy,positionAU,root,extent,uncertainty,marker};
 }
 
 export class Universe {
@@ -201,7 +179,7 @@ export class Universe {
     this.belt=starPoints(p,c,s,{opacity:.35});this.orbits.add(this.belt);
     this.moon=new THREE.Mesh(sphere,new THREE.MeshStandardMaterial({map:textures.moon,roughness:1}));this.moon.quaternion.copy(ECLIPTIC_ROTATION);this.scene.add(this.moon);
     this.moonPositionAU=new THREE.Vector3();
-    this.moonOrbit=circle(384400/AU_KM,'#728598',.15);this.moonOrbit.quaternion.copy(ECLIPTIC_ROTATION).multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1,0,0),-5.145*DEG));this.scene.add(this.moonOrbit);
+    this.moonOrbit=line([], '#728598',.15);this.scene.add(this.moonOrbit);
     const positions=[],colors=[],sizes=[],near=[];
     for(let i=0;i<catalogArray.length;i+=5){
       positions.push(catalogArray[i],catalogArray[i+1],catalogArray[i+2]);
@@ -210,29 +188,35 @@ export class Universe {
     }
     this.catalog=distantPoints(positions,colors,sizes,near,{opacity:.8});this.scene.add(this.catalog);
     const galaxy=galacticDensity();this.density=galaxy.density;this.haze=galaxy.haze;this.scene.add(this.density,this.haze);
-    this.distant=[this.catalog,this.density,this.haze,this.sunMarker];
+    this.milkyWayMarker=distantPoints([0,0,0],[.63,.79,.89],[9],[1],{offset:GALACTIC_CENTER.clone().divideScalar(LY_AU)});this.scene.add(this.milkyWayMarker);
+    this.distant=[this.catalog,this.density,this.haze,this.sunMarker,this.milkyWayMarker];
     this.galaxies=GALAXIES.map(nearbyGalaxy);
-    for(const galaxy of this.galaxies){this.scene.add(galaxy.density,galaxy.haze,galaxy.marker);this.distant.push(galaxy.density,galaxy.haze,galaxy.marker);}
+    for(const galaxy of this.galaxies){this.scene.add(galaxy.root,galaxy.marker);this.distant.push(galaxy.marker);}
     this.starRings=new THREE.Group();this.scene.add(this.starRings);
     for(const radius of [5,10,20,50,100,500,1000])this.starRings.add(circle(radius,'#759bb3',.10));
     this.galaxyRings=new THREE.Group();this.scene.add(this.galaxyRings);
     for(const radius of [10000,20000,30000,40000,50000])this.galaxyRings.add(circle(radius,'#70879c',.085,-100));
-    this.galaxyRings.add(line([[-26000,65,0],[0,65,0]],'#d3b580',.28));
+    this.galaxyRings.add(line([GALACTIC_CENTER.clone().divideScalar(-LY_AU),[0,0,0]],'#d3b580',.28));
     this.groupRings=new THREE.Group();this.scene.add(this.groupRings);
     for(const radius of [1e6,2e6,3e6])this.groupRings.add(circle(radius,'#70879c',.1));
     this.cameraAU=new THREE.Vector3();this.renderScale=1;this.lastOrbitYear=null;
   }
 
   updateEphemeris(date) {
-    const jd=julianDate(date),days=jd-2451545;
+    if(this.lastEphemerisTime===date.getTime())return;
+    this.lastEphemerisTime=date.getTime();
+    const jd=julianDate(date);
     for(const b of this.bodies){
-      b.positionAU.copy(eclipticToGalactic(vec(planetPosition(b.planet,jd))));b.sunDir.copy(b.positionAU).negate().normalize();
-      b.surface.rotation.y=(days/Math.abs(b.planet.day)%1)*Math.PI*2+.5;
-      if(b.clouds)b.clouds.rotation.y=b.surface.rotation.y+.002;
+      b.positionAU.copy(bodyPosition(b.planet.name,date));b.sunDir.copy(b.positionAU).negate().normalize();
+      b.root.quaternion.copy(bodyOrientation(b.planet.name,date));b.axial.rotation.set(0,0,0);b.surface.rotation.set(0,0,0);
+      if(b.clouds)b.clouds.rotation.set(0,0,0);
     }
-    const phase=(days/27.321661%1)*Math.PI*2+.8,d=384400/AU_KM;
-    this.moonPositionAU.copy(eclipticToGalactic(new THREE.Vector3(Math.cos(phase)*d,Math.sin(phase)*d*Math.sin(5.145*DEG),Math.sin(phase)*d*Math.cos(5.145*DEG)))).add(this.earth.positionAU);
-    this.moon.quaternion.copy(ECLIPTIC_ROTATION).multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,1,0),-phase));
+    this.sun.quaternion.copy(bodyOrientation('Sun',date));
+    this.moonPositionAU.copy(moonOffset(date)).add(this.earth.positionAU);
+    this.moon.quaternion.copy(bodyOrientation('Moon',date));
+    if(this.lastMoonOrbitDay!==Math.floor(jd)){
+      this.lastMoonOrbitDay=Math.floor(jd);this.moonOrbit.geometry.setFromPoints(moonOrbitPath(date));
+    }
     if(this.lastOrbitYear!==date.getUTCFullYear()){
       this.lastOrbitYear=date.getUTCFullYear();this.orbitLines.forEach((path,i)=>path.geometry.setFromPoints(orbitPath(PLANETS[i],jd).map(vec)));
     }
@@ -269,7 +253,7 @@ export class Universe {
     const solarVisibility=logBlend(nearestPlanetRadii,25,120)*logBlend(pose.distance,.0002,.003)*(1-logBlend(pose.distance,150,6000));
     this.orbits.position.copy(origin).negate().multiplyScalar(scale);this.orbits.scale.setScalar(scale);
     this.orbits.visible=state.orbits&&solarVisibility>.001;
-    this.orbitLines.forEach(path=>path.material.opacity=.24*solarVisibility);this.belt.material.uniforms.opacity.value=.35*solarVisibility;
+    this.orbitLines.forEach(path=>path.material.opacity=.24*solarVisibility);this.belt.visible=state.reconstruction;this.belt.material.uniforms.opacity.value=.35*solarVisibility;
     this.moon.position.copy(this.moonPositionAU).sub(origin).multiplyScalar(scale);this.moon.scale.setScalar(1737.4/AU_KM*scale);
     this.moon.visible=(1737.4/AU_KM)/this.cameraAU.distanceTo(this.moonPositionAU)>1e-6;
     this.moonOrbit.position.copy(this.earth.positionAU).sub(origin).multiplyScalar(scale);this.moonOrbit.scale.setScalar(scale);
@@ -284,24 +268,23 @@ export class Universe {
     this.catalog.material.uniforms.opacity.value=.8*(1-logBlend(dLy,2500,50000))+(state.reconstruction?.0015:.16)*logBlend(dLy,2500,50000);
     this.sunMarker.material.uniforms.opacity.value=logBlend(pose.distance,.02,4)*(1-logBlend(dLy,400000,650000));
     const groupVisibility=logBlend(dLy,35000,180000);
+    this.milkyWayMarker.material.uniforms.opacity.value=.7*groupVisibility;
+    this.milkyWayMarker.visible=groupVisibility>.001;
     for(const neighbor of this.galaxies){
-      const {galaxy,density,haze,marker,positionAU}=neighbor;
-      const distance=this.cameraAU.distanceTo(positionAU)/LY_AU;
-      const visibility=state.reconstruction?Math.max(groupVisibility,1-logBlend(distance/galaxy.radius,8,24)):0;
-      const compact=Math.min(1,Math.pow(galaxy.radius*4/Math.max(1,distance),1.4));
-      density.visible=haze.visible=visibility>.001;
-      density.material.uniforms.opacity.value=.4*visibility*compact;
-      haze.material.uniforms.opacity.value=.05*visibility*compact;
-      const markerVisibility=Math.max(groupVisibility,pose.follow?.galaxy===galaxy?1:0);
-      marker.visible=markerVisibility>.001;
-      marker.material.uniforms.opacity.value=.55*markerVisibility*(state.reconstruction?logBlend(distance/galaxy.radius,12,50):1);
+      const {galaxy,root,extent,uncertainty,marker,positionAU}=neighbor;
+      const visibility=Math.max(groupVisibility,state.galaxy===galaxy?1:0);
+      root.position.copy(positionAU).sub(origin).multiplyScalar(scale);root.scale.setScalar(LY_AU*scale);
+      root.visible=marker.visible=visibility>.001;
+      if(extent){extent.visible=state.extents;extent.material.opacity=.55*visibility;}
+      uncertainty.visible=state.uncertainty;uncertainty.material.opacity=.42*visibility;
+      marker.material.uniforms.opacity.value=.7*visibility;
     }
     for(const points of this.distant){const u=points.material.uniforms;u.cameraLy.value.copy(this.cameraAU).divideScalar(LY_AU);u.scaleLy.value=scale*LY_AU;}
     const ringVisibility=logBlend(dLy,.5,4)*(1-logBlend(dLy,2000,7000));
     this.starRings.position.copy(origin).negate().multiplyScalar(scale);this.starRings.scale.setScalar(LY_AU*scale);
     this.starRings.visible=state.orbits&&ringVisibility>.001;this.starRings.children.forEach(r=>r.material.opacity=.10*ringVisibility);
     this.galaxyRings.position.copy(GALACTIC_CENTER).sub(origin).multiplyScalar(scale);this.galaxyRings.scale.setScalar(LY_AU*scale);
-    const galaxyGuides=galaxyVisibility*(1-logBlend(dLy,150000,650000));
+    const galaxyGuides=logBlend(dLy,400,12000)*(1-logBlend(dLy,150000,650000));
     this.galaxyRings.visible=state.orbits&&galaxyGuides>.001;this.galaxyRings.children.forEach(r=>r.material.opacity=.08*galaxyGuides);
     this.groupRings.position.copy(GALACTIC_CENTER).sub(origin).multiplyScalar(scale);this.groupRings.scale.setScalar(LY_AU*scale);
     const groupGuides=logBlend(dLy,350000,1e6);

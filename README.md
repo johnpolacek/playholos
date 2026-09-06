@@ -1,36 +1,26 @@
 # Holos — Earth to the Local Group
 
-Open **index.html** in a modern browser. The complete 3D application, thirteen texture maps, and star catalog are embedded in that one file. No server, account, CDN, or internet connection is needed. WebGL 2 / hardware acceleration is required.
+Open **index.html** in a modern browser. The application, thirteen texture maps, ephemeris, and catalogs are embedded in that file. No server, account, CDN, or internet connection is needed. WebGL 2 / hardware acceleration is required.
 
-The atlas covers:
+Explore Earth and the Moon, all eight planets, **109,400 HYG stars** (958 searchable), the Milky Way, and **10 selected neighboring galaxies**. Search for names and aliases such as M31 or M33. This is an educational coordinate atlas with documented observations and uncertainty, not a complete or exact reconstruction of the universe.
 
-- Earth and the Moon, with a textured globe, clouds, atmosphere, sunlight, and night lights.
-- All eight planets, textured close-ups, Saturn's rings and ring shadows, and date-dependent elliptical orbits.
-- A local star map containing **109,400 HYG stars**, with **958 searchable entries**.
-- A Milky Way reconstruction containing a disk, spiral-arm density enhancements, central bar and bulge, the Sun's approximate location, and the measured catalog.
+The atlas occupies **one Three.js scene with one camera**. Scroll, pinch, or use the zoom slider to move continuously across scales. Destination buttons or keys **1–5** animate the camera through the same world. Drag, scroll, or press **Escape** to stop a flight; choose another destination to redirect it. Drag to orbit, right-drag to pan, **/** to search, **R** to reset, and **Space** to play or pause planetary time. Arrow keys and **+ / −** also control the camera.
 
-- A Local Group view with **10 neighboring galaxies**, searchable by common names and catalog aliases such as **M31** and **M33**. Select a galaxy for a closer look, then return to the group overview.
-
-The entire atlas occupies **one Three.js scene with one camera**. Earth, the planets, measured stars, and all galaxies keep their positions in a shared Galactic reference frame. Scroll, pinch, or use the zoom slider to move continuously from Earth out to the Local Group. The destination buttons or keys **1–5** animate the camera through that same world. Drag, scroll, or press **Escape** to stop anywhere along a flight; choose another destination to reverse or redirect it.
-
-Drag to orbit and right-drag to pan. Search with **/**. Select planets or labeled stars to fly to them. **R** resets the current perspective; **Space** plays or pauses the planetary clock. Keyboard controls also support arrow keys and **+ / −**. The view center gradually moves from Earth to the Sun, the Galactic center, and then the Local Group overview during outward zooming, and follows the same path inward. Panning lets you explore independently of that path.
-
-Physical coordinates use astronomical units and a floating origin. Uniform render scaling and logarithmic depth keep close-up planetary surfaces and faraway stars stable across the distance range. Geometry detail, labels, and brightness adapt with distance; the application does not replace scenes or cover travel with a screen fade.
-
-The Solar System's **True sizes** switch uses physical radii instead of enlarged planet disks. Positions and orbital distances remain linear in either setting. The galaxy's **Galaxy reconstruction** switch isolates the measured stars and galaxy center markers.
+Coordinates use astronomical units, a floating origin, uniform render scaling, and logarithmic depth. Planetary **True sizes** are enabled by default. Optional enlarged disks, illustrative Milky Way structure, and a statistical asteroid belt are labeled as visualization aids. Reconstructions are off by default. Galaxy centers, projected photometric contours, and distance uncertainty are visible by default.
 
 ## Scientific scope
 
-This is an educational atlas, with its assumptions available inside the **Model and sources** dialog:
+The **Model and sources** dialog explains these assumptions inside the application. Selecting a neighboring galaxy shows its adopted distance study and expandable measurement details.
 
-- Planetary orbits use [JPL's approximate Keplerian elements and rates](https://ssd.jpl.nasa.gov/planets/approx_pos.html), Table 1, for 1800–2050. Earth uses the Earth–Moon barycenter. UTC substitutes for TDB; this is not a high-precision ephemeris. Initial date: September 6, 2026, noon UTC.
-- Radii and rotation periods follow [JPL's physical parameter table](https://ssd.jpl.nasa.gov/planets/phys_par.html). Planetary surfaces are spherical, using mean radii. Axial tilt magnitudes are included; pole longitudes and texture longitudes are illustrative. Cloud maps are static composites. General relativistic effects and gravitational N-body interactions are not simulated.
-- The Moon has its actual mean distance and radius, an inclined circular orbit, and its sidereal period. Its phase, node, and orientation are illustrative. The asteroid belt is a statistical distribution, not an asteroid ephemeris. Other moons, dwarf planets, comets, spacecraft, and exoplanet orbits are not yet included.
-- [HYG 4.1](https://github.com/astronexus/HYG-Database) combines Hipparcos, Yale, and Gliese sources. The subset retains distances in **(0, 1,000] parsecs**, excluding missing-distance sentinels. It is neither complete nor uniformly precise. Star positions stay at **J2000.0**, independently of the planetary clock.
-- Star Cartesian positions are recomputed from HYG's RA, declination, and distance fields, then transformed into Galactic coordinates. This avoids small inconsistencies between some updated spherical fields and legacy Cartesian fields. The atlas uses the axis order `(Galactic X, Galactic Z, −Galactic Y)`; the embedded star buffer stores light-years, while camera and planetary calculations use astronomical units. Planetary ecliptic coordinates are rotated into this same Galactic frame. Point size/brightness/color favor legibility and are not calibrated photometry or stellar radii.
-- Search includes named stars, stars closer than 12 parsecs, and stars with apparent magnitude brighter than 3. Multiple-star components may remain unresolved.
-- The galaxy follows the broad morphology in [ESA's guide](https://www.esa.int/Science_Exploration/Space_Science/Gaia/Guide_to_our_galaxy): approximately 100,000 light-years across, with the Sun about 26,000 light-years from the center. The disk/bar/arms are a seeded statistical density model, **not a catalog of individual known stars**. Spiral-arm locations are illustrative. The Sun is placed approximately 65 light-years above the model midplane. Dust extinction, galactic warp, stellar halo, and dark matter are not modeled in this version.
-- Ten neighboring galaxies use Galactic coordinates and heliocentric distances from [McConnachie (2012), AJ 144, 4, Table 2](https://arxiv.org/html/1204.1562). This selection includes Andromeda, Triangulum, the Magellanic Clouds, M32, NGC 205, IC 10, NGC 6822, IC 1613, and WLM; it is not a complete census. Galaxy shapes, orientations, extents, and colors are illustrative seeded models, and small center markers favor legibility. Positions stay fixed as the planetary clock advances. The overview anchor is the midpoint of the Milky Way and Andromeda, not a measured barycenter. Guide rings are 1, 2, and 3 million light-years from the Milky Way. Galaxy motions, interactions, dark matter halos, and cosmic expansion are not simulated.
+- **Planet and Moon positions:** [Astronomy Engine 2.1.19](https://github.com/cosinekitty/astronomy), using its VSOP87-derived planetary and lunar ephemeris. Its design target is approximately one arcminute, with upstream comparisons against JPL Horizons and NOVAS. Earth uses its actual center. Coordinates are geometric J2000 vectors for the selected UTC time, without observer light-time, aberration, or atmospheric corrections. Initial time is September 6, 2026, noon UTC; the date control spans 1800–2050.
+- **Orbit guides:** planetary ellipses use [JPL's approximate Keplerian elements](https://ssd.jpl.nasa.gov/planets/approx_pos.html), Table 1. Body positions use the ephemeris, so the guides are approximate. The Moon's guide samples its geocentric ephemeris over a sidereal month and refreshes daily.
+- **Surfaces and rotation:** spherical mean radii follow [JPL's physical parameters](https://ssd.jpl.nasa.gov/planets/phys_par.html). Poles and prime-meridian rotation follow Astronomy Engine's IAU 2015 implementation. Texture maps are static composites; absolute texture longitude registration and colors are not independently calibrated. Rendering omits oblateness, terrain, and current weather. Other moons, dwarf planets, comets, spacecraft, and exoplanet orbits are omitted. The optional asteroid belt is generated, not a catalog of measured asteroids.
+- **Stars:** [HYG 4.1](https://github.com/astronexus/HYG-Database) combines Hipparcos, Yale, and Gliese sources. The subset retains distances in **(0, 1,000] parsecs**, excluding missing-distance sentinels. It is incomplete and has varying measurement precision. Empty space beyond its survey cut is not an observed absence of stars. Positions stay at **J2000.0**, independently of the planetary clock; proper motion is not animated. Search includes named stars, stars closer than 12 parsecs, and stars brighter than apparent magnitude 3. Multiple-star components can remain unresolved.
+- **Reference frame:** star positions are recomputed from HYG RA, declination, and distance fields, then transformed into Galactic coordinates. The atlas uses axis order `(Galactic X, Galactic Z, −Galactic Y)`. The embedded star buffer stores light-years; camera and planetary calculations use AU. J2000 equatorial ephemeris vectors and galaxy directions use the same transform. Point size, brightness, and color favor legibility and do not represent physical stellar radii or calibrated photometry.
+- **Milky Way:** the default view shows HYG and a Galactic center marker. The center adopts the J2000 radio position of [Sagittarius A*](https://simbad.cds.unistra.fr/simbad/sim-id?Ident=Sagittarius+A) at **8,277 pc**, with statistical uncertainty 9 pc and systematics roughly 30 pc ([GRAVITY Collaboration 2022](https://www.aanda.org/articles/aa/full_html/2022/01/aa42465-21/aa42465-21.html)). The optional disk, bar, and spiral arms are a seeded statistical illustration; particle positions, arm paths, and the roughly 100,000-light-year disk boundary are not measurement results. We do not have a complete 3D census or an external photograph of our galaxy.
+- **Neighboring galaxies:** the pinned [Local Volume Database v1.1.1, released August 12, 2026](https://github.com/apace7/local_volume_database/releases/tag/v1.1.1), supplies observed centers and adopted measurements with original-study references. Selected objects are Andromeda, Triangulum, the Magellanic Clouds, M32, NGC 205, IC 10, NGC 6822, IC 1613, and WLM. This is not a complete census; different methods can give different distance estimates. The Magellanic Clouds use direct eclipsing-binary distances from [Pietrzyński et al. 2019](https://arxiv.org/abs/1903.08096) and [Graczyk et al. 2020](https://arxiv.org/abs/2010.08754), with statistical and systematic errors combined in quadrature for display. Other distance intervals are transformed from reported distance-modulus bounds. Gold segments show those reported 1σ intervals along our line of sight, not galaxy lengths.
+- **Galaxy outlines:** blue ellipses show sky-projected photometric contours in the observer's tangent plane. Most use the catalog's half-light semi-major axis, ellipticity, and position angle. Andromeda and Triangulum use [RC3 B-band 25 mag/arcsec² isophotes](https://cdsarc.cds.unistra.fr/viz-bin/ReadMe/VII/155?format=html), which are not directly comparable to half-light contours. These are fitted summaries of observations, not exact boundaries or 3D disks. Missing orientations stay unknown: SMC and IC 10 have center markers without ellipses. Stellar halos can extend farther. Marker size and color are map symbols. Galaxy motions, interactions, dark matter, and expansion are not simulated.
+- **Epochs and framing:** stars remain at their catalog epoch and galaxies at their adopted observed estimates; the planetary clock does not reconstruct a simultaneous present-day universe from ancient light. The overview anchor is the framing midpoint of the Milky Way and Andromeda, not a measured barycenter. Guide rings are 1, 2, and 3 million light-years from the Milky Way center.
 
 ## Editing and rebuilding
 
@@ -41,26 +31,30 @@ npm test
 npm run dev
 ```
 
-The local preview is `http://127.0.0.1:4173`. `npm run build` creates the portable `index.html`; only that file needs to be copied or shared. The source files and data are kept separately to make future expansion easier.
+The preview is `http://127.0.0.1:4173`. The build creates portable `index.html`; only that file needs to be shared. Ordinary builds do not fetch data.
 
-- `src/app.js`: camera controls, animated travel, interface, and render loop.
-- `src/universe.js`: the persistent Three.js scene, bodies, star catalog, galaxy density, and adaptive rendering.
-- `src/navigation.js`: shared reference frame, floating-origin projection, continuous zoom anchors, and camera flight paths.
-- `src/galaxies.js`: curated Local Group positions, search aliases, and illustrative galaxy model parameters.
-- `src/astronomy.js`: orbital calculations and physical parameters.
-- `src/template.html` / `src/style.css`: document and interface.
+- `src/app.js`: camera controls, travel, interface, and render loop.
+- `src/universe.js`: persistent bodies, observed contours, catalog points, and optional illustrations.
+- `src/navigation.js` / `src/coordinates.js`: reference frame, floating origin, zoom anchors, and flights.
+- `src/ephemeris.js`: geometric positions and IAU orientations.
+- `src/galaxies.js`: names, aliases, projected contours, and distance intervals.
+- `src/astronomy.js`: approximate orbit guides and physical parameters.
+- `src/template.html` / `src/style.css`: interface and source explanations.
+- `data/galaxies.json`: adopted measurements. Rebuild offline with `python3 scripts/prepare-galaxies.py`; provenance is documented in `data/galaxy-sources/README.md`.
 - `data/stars.bin`: little-endian float32 records: Galactic X, Z, −Y (light-years), apparent magnitude, B−V color index.
 - `data/stars.json`: searchable catalog subset.
-- `scripts/prepare-catalog.py`: catalog preprocessing. It expects the [original HYG CSV](https://raw.githubusercontent.com/astronexus/HYG-Database/main/hyg/CURRENT/hygdata_v41.csv) at `.cache/hygdata_v41.csv`. Preprocessing is not needed for ordinary builds.
+- `scripts/prepare-catalog.py`: star preprocessing; expects the [original HYG CSV](https://raw.githubusercontent.com/astronexus/HYG-Database/main/hyg/CURRENT/hygdata_v41.csv) at `.cache/hygdata_v41.csv`.
 
 ## Attribution
 
-Planet maps: **Solar System Scope / INOVE**, [texture collection](https://www.solarsystemscope.com/textures/), **CC BY 4.0**, based on NASA imagery. Maps are supplied as composite imagery, with enhanced colors and some filled gaps. Rendering adds lighting and atmosphere; the original downloaded maps are retained in `assets/`.
+Planet maps: **Solar System Scope / INOVE**, [texture collection](https://www.solarsystemscope.com/textures/), **CC BY 4.0**, based on NASA imagery. Composite maps have enhanced colors and some filled gaps; originals remain in `assets/`.
 
-Star data: **David Nash / Astronexus, HYG 4.1**, **CC BY-SA 4.0**. The filtered/reprojected catalog in `data/` and the embedded copy carry the same data license. See `data/HYG-LICENSE.txt`.
+Star data: **David Nash / Astronexus, HYG 4.1**, **CC BY-SA 4.0**. The filtered/reprojected catalog and embedded copy carry the same license (`data/HYG-LICENSE.txt`). Galaxy compilation: **Andrew B. Pace, Local Volume Database**, **CC0**, with original studies and RC3 credited in the source records.
 
-Three.js: **Three.js authors**, **MIT**. Its license is embedded in the HTML and reproduced in `THIRD_PARTY_LICENSES.md`.
+Three.js and Astronomy Engine: **MIT**. Full notices are embedded in the HTML and reproduced in `THIRD_PARTY_LICENSES.md`; that file also documents GSAP and data attribution.
 
 ## Verification
 
-Numerical tests check Kepler convergence, orbital transformations, planetary distance bounds over 1800–2050, an independent JPL Horizons reference at J2000, Julian dates, physical scale conversion, and every binary catalog record. Navigation tests check coordinate rotation, floating-origin precision, continuous and reversible zoom anchors through the Local Group, galaxy coordinate distances and handedness, travel endpoints, and interruption without position jumps. Browser checks cover the outward and return journey, persistent scene/camera/body identities, scrolling across scales, galaxy selection and search aliases, planetary close-ups, simulation time, true-size and reconstruction toggles, responsive layout, and direct offline file loading.
+Numerical tests compare all eight planets and the Moon with independent **JPL Horizons ICRF vectors at three dates** (J2000, September 2026, and December 2049), requiring angular differences below one arcminute and radial differences below 0.1%. Additional checks cover varying lunar distance, an IAU pole reference, coordinate directions independently calculated with Astropy, projected ellipse axes and position angles, missing structural measurements, and asymmetric distance intervals. Source URLs accompany the fixtures.
+
+Existing tests cover approximate orbit guides, Julian dates, physical scale conversion, every binary star record, floating-origin precision, continuous reversible zoom anchors, and interruptible travel. Browser verification covers navigation and search, observed defaults and optional overlays, uncertainty toggles, planetary close-ups, responsive layout, persistent scene objects, simulation time, and direct offline loading. These checks validate implementation within the stated model; they do not establish catalog completeness or eliminate observational uncertainty.

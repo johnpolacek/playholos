@@ -1,9 +1,12 @@
 import { Vector3, Quaternion, Matrix4 } from 'three';
-import { AU_KM } from './astronomy.js';
+import { AU_KM, PC_LY } from './astronomy.js';
 import { GALAXIES, galaxyPosition } from './galaxies.js';
+import { equatorialToGalactic, skyBasis } from './coordinates.js';
 
 export const LY_AU = 9460730472580.8 / AU_KM;
-export const GALACTIC_CENTER = new Vector3(26000 * LY_AU, -65 * LY_AU, 0);
+// Sgr A*: J2000 radio position (Petrov et al. 2011 / SIMBAD), with the
+// GRAVITY Collaboration (2022) distance 8277 ± 9(stat) ± ~30(sys) pc.
+export const GALACTIC_CENTER = skyBasis((17+45/60+40.03599/3600)*15,-(29+28.1699/3600)).radial.multiplyScalar(8277*PC_LY*LY_AU);
 // A framing midpoint, not an inferred center of mass of the Local Group.
 export const LOCAL_GROUP_CENTER = GALACTIC_CENTER.clone().lerp(galaxyPosition(GALAXIES[0]).multiplyScalar(LY_AU), .5);
 export const MIN_DISTANCE_AU = 6371.0084 / AU_KM * 1.12;
@@ -18,11 +21,7 @@ export const clampDistance = distance => Math.max(MIN_DISTANCE_AU, Math.min(MAX_
 export function eclipticToGalactic(v) {
   const e = 23.43928 * Math.PI / 180;
   const x = v.x, y = -v.z * Math.cos(e) - v.y * Math.sin(e), z = -v.z * Math.sin(e) + v.y * Math.cos(e);
-  return new Vector3(
-    -.0548755604*x - .8734370902*y - .4838350155*z,
-    -.8676661490*x - .1980763734*y + .4559837762*z,
-    -(.4941094279*x - .4448296300*y + .7469822445*z)
-  );
+  return equatorialToGalactic({x,y,z});
 }
 export const ECLIPTIC_ROTATION = new Quaternion().setFromRotationMatrix(new Matrix4().makeBasis(
   eclipticToGalactic(new Vector3(1,0,0)), eclipticToGalactic(new Vector3(0,1,0)), eclipticToGalactic(new Vector3(0,0,1))

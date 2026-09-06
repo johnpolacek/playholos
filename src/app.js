@@ -3,7 +3,8 @@ import { gsap } from 'gsap';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { AU_KM, PC_LY, PLANETS, julianDate, planetPosition } from './astronomy.js';
 import { Universe } from './universe.js';
-import { GALAXIES, galaxyPosition } from './galaxies.js';
+import { GALAXIES, GALAXY_CATALOG, galaxyPosition, galaxyViewRadius, referenceLink } from './galaxies.js';
+import { skyBasis } from './coordinates.js';
 import { LY_AU, GALACTIC_CENTER, MIN_DISTANCE_AU, MAX_DISTANCE_AU, RENDER_DISTANCE, eclipticToGalactic, homeTarget, scaleAtDistance, clampDistance, planFlight, sampleFlight, smooth, logBlend } from './navigation.js';
 import { ASSETS, CATALOG, STAR_BUFFER, META } from './embedded.js';
 
@@ -12,7 +13,7 @@ const modes=['earth','solar','stars','galaxy','group'];
 const motionPreference=matchMedia('(prefers-reduced-motion: reduce)');
 let reducedMotion=motionPreference.matches;
 motionPreference.addEventListener('change',()=>{reducedMotion=motionPreference.matches;if(reducedMotion){stopTravel();labelItems.forEach(item=>item.fade?.tween.progress(1));}});
-const state={mode:'earth',planet:PLANETS[2],star:null,galaxy:null,date:new Date('2026-09-06T12:00:00Z'),playing:false,speed:1,labels:true,orbits:true,trueSizes:false,reconstruction:true};
+const state={mode:'earth',planet:PLANETS[2],star:null,galaxy:null,date:new Date('2026-09-06T12:00:00Z'),playing:false,speed:1,labels:true,orbits:true,trueSizes:true,reconstruction:false,extents:true,uncertainty:true};
 const pose={target:new THREE.Vector3(),direction:new THREE.Vector3(0,0,1),distance:1,home:true,follow:null};
 const textures={},labelItems=[];
 let renderer,camera,controls,universe,flight=null,zoomGoal=null,toastTimer,uiTime=0,viewFactor=1,frameCount=0,contextKey='';
@@ -31,7 +32,10 @@ async function loadTextures(){
   }));
 }
 
-function setInfo({kicker,name,description,facts}) {
+function setInfo({kicker,name,description,facts,evidence,source,measurement}) {
+  $('object-evidence').textContent=evidence||(['earth','solar'].includes(state.mode)?'Computed ephemeris · static surface maps':state.mode==='stars'?'HYG catalog positions · J2000.0':state.reconstruction?'Illustrative Milky Way density enabled':'Catalog positions · incomplete coverage');
+  $('object-source').hidden=!source;if(source){$('object-source').textContent=source.label;$('object-source').href=source.url;}
+  $('measurement-details').hidden=!measurement;$('measurement-text').textContent=measurement||'';
   $('object-kicker').textContent=kicker;$('object-name').textContent=name;$('object-description').textContent=description;
   $('object-name').style.fontSize=name.length>19?'clamp(27px, 3.6vw, 49px)':name.length>12?'clamp(30px, 4vw, 56px)':'';
   $('object-facts').replaceChildren(...facts.map(([label,value,unit])=>{
@@ -47,13 +51,21 @@ function defaultInfo() {
   else if(state.mode==='stars') {
     if(state.star)return starInfo(state.star);
     setInfo({kicker:'THE LOCAL STELLAR NEIGHBORHOOD',name:'Among the stars',description:'Our Sun is one of many. Explore the nearest stellar systems at their cataloged three-dimensional positions.',facts:[['Nearest star','4.23','ly'],['Catalog stars',format(META.count),'']]});
-  } else if(state.mode==='galaxy')setInfo({kicker:'OUR GALAXY / BARRED SPIRAL',name:'Milky Way',description:'A disk of stars, dust, and gas, wrapped around a luminous central bar. Our Sun lies far from the crowded galactic center.',facts:[['Disk diameter','~100,000','ly'],['Sun to center','~26,000','ly']]});
-  else setInfo({kicker:'OUR NEIGHBORHOOD OF GALAXIES',name:'Local Group',description:'The Milky Way becomes one island among others. Find Andromeda, Triangulum, and smaller companions across millions of light-years.',facts:[['Galaxies in this view',String(GALAXIES.length+1),''],['Andromeda from Sun','~2.55','million ly']]});
+  } else if(state.mode==='galaxy')setInfo({kicker:'OUR GALAXY / BARRED SPIRAL',name:'Milky Way',description:'A disk of stars, dust, and gas, wrapped around a luminous central bar. Our Sun lies far from the crowded galactic center.',facts:[['Disk scale (model)','~100,000','ly'],['Sun to center','~27,000','ly']],evidence:state.reconstruction?'Illustrative density · not individual observed stars':'Measured stars only · HYG coverage is incomplete',source:{label:'Galactic center distance · GRAVITY 2022',url:'https://www.aanda.org/articles/aa/full_html/2022/01/aa42465-21/aa42465-21.html'}});
+  else setInfo({kicker:'OUR NEIGHBORHOOD OF GALAXIES',name:'Local Group',description:'The Milky Way becomes one island among others. Find Andromeda, Triangulum, and smaller companions across millions of light-years.',facts:[['Selected galaxies',String(GALAXIES.length+1),''],['Andromeda from Sun','~'+format(GALAXIES[0].kpc*PC_LY/1000,2),'million ly']],evidence:'Catalog positions · this selection is not a census',source:{label:'Local Volume Database · August 2026 release',url:GALAXY_CATALOG.source}});
 }
 function galaxyInfo(galaxy){
-  const distance=galaxy.kpc*1000*PC_LY;
-  setInfo({kicker:`LOCAL GROUP / ${galaxy.type.toUpperCase()}`,name:galaxy.name,description:galaxy.description,facts:[['Distance from Sun',format(distance/(distance>=1e6?1e6:1000),distance>=1e6?2:0),distance>=1e6?'million ly':'thousand ly'],['Galaxy family',galaxy.family==='Milky Way subgroup'?'Milky Way':galaxy.family==='M31 subgroup'?'Andromeda':'Local Group','']]});
+  const distance=galaxy.kpc*1000*PC_LY,divisor=distance>=1e6?1e6:1000,unit=distance>=1e6?'million ly':'thousand ly';
+  const low=(galaxy.kpc-galaxy.minusKpc)*1000*PC_LY/divisor,high=(galaxy.kpc+galaxy.plusKpc)*1000*PC_LY/divisor;
+  const extent=galaxy.extent;
+  const outline=extent?`${extent.kind==='half-light'?'Projected half-light ellipse':'B-band 25 mag/arcsec² contour'}: semi-major axis ${format(extent.semimajorArcmin,2)} arcmin, axis ratio ${format(extent.axisRatio,3)}, position angle ${format(extent.paDeg,2)}° north through east. This is a sky projection, not a measured 3D boundary.`:'No complete projected ellipse is provided for this object, so only its center and distance range are drawn.';
+  const errors=galaxy.statisticalKpc!==undefined?`±${galaxy.statisticalKpc} kpc statistical and ±${galaxy.systematicKpc} kpc systematic, combined in quadrature for the displayed range.`:`−${format(galaxy.minusKpc,2)} / +${format(galaxy.plusKpc,2)} kpc, transformed from the reported distance-modulus interval.`;
+  setInfo({kicker:`LOCAL GROUP / ${galaxy.type.toUpperCase()}`,name:galaxy.name,description:galaxy.description,
+    facts:[['Distance estimate',format(distance/divisor,2),unit],['Reported 1σ range',`${format(low,2)}–${format(high,2)}`,unit]],
+    evidence:'Observed sky position · distance has uncertainty',source:{label:galaxy.distanceRef.replace(/(\d{4}).*/,' et al. $1')+' · distance study',url:referenceLink(galaxy.distanceRef)},
+    measurement:`ICRS/J2000: RA ${format(galaxy.ra,5)}°, Dec ${format(galaxy.dec,5)}°. Adopted distance ${format(galaxy.kpc,2)} kpc; ${errors} ${outline} Yellow segments show the reported distance interval along our line of sight, not a galaxy’s physical length. The catalog is LVDB v1.1.1; the SMC distance is updated from Graczyk et al. (2020). Different stellar populations can have different measured centers, especially in the Magellanic Clouds.`});
 }
+
 function starInfo(star) {
   let description=`A cataloged ${star.spectral==='Unknown'?'star':star.spectral+' star'} ${format(star.distance,2)} light-years from the Sun. Its position is shown in the Galactic reference frame at epoch J2000.0.`;
   if(star.name==='Proxima Centauri')description='The nearest known star to the Sun, a faint red dwarf in the Alpha Centauri system. Its catalog distance is about 4.23 light-years.';
@@ -130,8 +142,8 @@ function focusStar(star){
 }
 function focusGalaxy(galaxy){
   state.galaxy=galaxy;state.star=null;
-  const direction=new THREE.Vector3(.25,.85,1).applyEuler(new THREE.Euler(galaxy.tilt,galaxy.turn,.2)).normalize();
-  flyTo({target:galaxyPosition(galaxy).multiplyScalar(LY_AU),direction,distance:galaxy.radius*3.6*LY_AU*viewFactor,home:false,follow:{galaxy}},galaxy.name);
+  const direction=skyBasis(galaxy.ra,galaxy.dec).radial.negate();
+  flyTo({target:galaxyPosition(galaxy).multiplyScalar(LY_AU),direction,distance:galaxyViewRadius(galaxy)*4*LY_AU*viewFactor,home:false,follow:{galaxy}},galaxy.name);
   contextKey='';
 }
 function focusMoon(){
@@ -148,18 +160,19 @@ function setPlaying(){if($('play').disabled)return;state.playing=!state.playing;
 
 function updateContext() {
   state.mode=state.galaxy&&!flight&&pose.distance<650000*LY_AU?'galaxy':scaleAtDistance(pose.distance);
-  const m=state.mode,extragalactic=m==='group'||!!state.galaxy&&!flight,key=[m,state.planet.name,state.star?.id,state.galaxy?.id,state.trueSizes,state.reconstruction,!!flight,pose.follow?.moon].join('|');
+  const m=state.mode,extragalactic=m==='group'||!!state.galaxy&&!flight,key=[m,state.planet.name,state.star?.id,state.galaxy?.id,state.trueSizes,state.reconstruction,state.extents,state.uncertainty,!!flight,pose.follow?.moon].join('|');
   if(key===contextKey)return;contextKey=key;
   const activeMode=state.galaxy&&!flight?'group':m;
   document.querySelectorAll('[data-mode]').forEach(el=>{el.classList.toggle('active',el.dataset.mode===activeMode);el.setAttribute('aria-pressed',String(el.dataset.mode===activeMode));});
   $('frame-note').textContent='ONE UNIVERSE · CONTINUOUS 3D';
-  $('model-note').textContent=extragalactic?(state.reconstruction?'Cataloged galaxy centers · illustrative shapes':'Cataloged galaxy centers · shapes hidden'):m==='earth'?'Physical proportions · composite surface imagery':m==='solar'?(state.trueSizes?'True physical sizes & distances':'True orbital distances · distant planet disks enlarged'):m==='stars'?`${format(META.count)} measured stars · J2000.0`:(state.reconstruction?'Statistical galaxy reconstruction + measured local stars':'Measured HYG catalog + galaxy center markers');
+  $('model-note').textContent=extragalactic?'Observed positions · projected extents · distance uncertainty':m==='earth'?'Computed ephemeris · physical radii · static maps':m==='solar'?(state.trueSizes?'Computed ephemeris · true physical radii':'Computed positions · planet disks enlarged'):m==='stars'?`${format(META.count)} measured stars · J2000.0`:(state.reconstruction?'Illustrative Milky Way density + catalog stars':'Measured HYG stars · survey coverage is incomplete');
   $('outward-label').textContent=state.galaxy&&!flight?'Return to the Local Group':m==='earth'?'Travel to the Solar System':m==='solar'?'Travel to nearby stars':m==='stars'?'Travel to the Milky Way':m==='galaxy'?'Travel to other galaxies':'Travel back to Earth';
-  $('sizes-option').hidden=m!=='solar';$('orbits-option').hidden=false;$('reconstruction-option').hidden=m!=='galaxy'&&m!=='group';
+  $('sizes-option').hidden=m!=='solar';$('orbits-option').hidden=false;$('reconstruction-option').hidden=m==='earth'||m==='stars';$('reconstruction-option').querySelector('span').textContent=m==='solar'?'Illustrative asteroid belt':'Illustrative Milky Way';
+  $('extents-option').hidden=$('uncertainty-option').hidden=!extragalactic;
   $('orbits-option').querySelector('span').textContent=['stars','galaxy','group'].includes(m)?'Distance guides':'Orbits';
   $('play').disabled=!!flight||['stars','galaxy','group'].includes(m);$('speed').disabled=$('play').disabled;$('date').disabled=!!flight;
   if(['stars','galaxy','group'].includes(m)){state.playing=false;updatePlay();}
-  if(pose.follow?.moon&&!flight)setInfo({kicker:'EARTH’S NATURAL SATELLITE',name:'Moon',description:'A cratered world orbiting Earth. Its mean distance and physical size are represented here; orbital phase and orientation are illustrative.',facts:[['Mean diameter','3,475','km'],['Mean Earth distance','384,400','km']]});
+  if(pose.follow?.moon&&!flight)setInfo({kicker:'EARTH’S NATURAL SATELLITE',name:'Moon',description:'A cratered world orbiting Earth. Its position and varying distance follow a lunar ephemeris for the selected date. Its pole and rotation follow the IAU model; the surface map is a static composite.',facts:[['Mean diameter','3,475','km'],['Mean Earth distance','384,400','km']]});
   else defaultInfo();
 }
 
@@ -329,6 +342,8 @@ function wireControls(){
   $('orbits').onchange=()=>state.orbits=$('orbits').checked;
   $('true-sizes').onchange=()=>{state.trueSizes=$('true-sizes').checked;updateContext();};
   $('reconstruction').onchange=()=>{state.reconstruction=$('reconstruction').checked;updateContext();};
+  $('extents').onchange=()=>{state.extents=$('extents').checked;updateContext();};
+  $('uncertainty').onchange=()=>{state.uncertainty=$('uncertainty').checked;updateContext();};
   $('search-open').onclick=openSearch;$('search-input').oninput=()=>searchResults($('search-input').value);
   $('search-input').onkeydown=e=>{if(e.key==='ArrowDown'){e.preventDefault();$('search-results').querySelector('button')?.focus();}if(e.key==='Enter')$('search-results').querySelector('button')?.click();};
   $('about-open').onclick=()=>$('about-dialog').showModal();$('help-open').onclick=()=>$('help-dialog').showModal();
@@ -376,9 +391,10 @@ async function start(){
     syncCamera();universe.update(pose,state);createLabels();wireControls();$('date').value=dateText();updateContext();updateLabels();updateReadout();
     $('loading').classList.add('done');gsap.ticker.add(frame);
     window.holos={
-      getState:()=>({mode:state.mode,planet:state.planet.name,star:state.star?.name,galaxy:state.galaxy?.name,neighborGalaxies:GALAXIES.length,date:dateText(),playing:state.playing,trueSizes:state.trueSizes,reconstruction:state.reconstruction,catalogStars:META.count,searchable:META.searchable,loadedTextures:Object.keys(textures).length,sceneId:universe.scene.uuid,sceneCount:1,cameraId:camera.uuid,earthObjectId:universe.earth.root.uuid,frameCount,traveling:!!flight,destination:flight?.name,travelProgress:flight?flight.progress:null,drawCalls:renderer.info.render.calls,points:renderer.info.render.points,webgl:renderer.capabilities.isWebGL2}),
+      getState:()=>({mode:state.mode,planet:state.planet.name,star:state.star?.name,galaxy:state.galaxy?.name,neighborGalaxies:GALAXIES.length,date:dateText(),playing:state.playing,trueSizes:state.trueSizes,reconstruction:state.reconstruction,extents:state.extents,uncertainty:state.uncertainty,catalogStars:META.count,searchable:META.searchable,loadedTextures:Object.keys(textures).length,sceneId:universe.scene.uuid,sceneCount:1,cameraId:camera.uuid,earthObjectId:universe.earth.root.uuid,frameCount,traveling:!!flight,destination:flight?.name,travelProgress:flight?flight.progress:null,drawCalls:renderer.info.render.calls,points:renderer.info.render.points,webgl:renderer.capabilities.isWebGL2}),
       getCamera:()=>({positionAU:universe.cameraAU.toArray(),targetAU:pose.target.toArray(),direction:pose.direction.toArray(),distanceAU:pose.distance,renderScale:universe.renderScale,homeAnchored:pose.home}),
-      getGalaxyPositions:()=>universe.galaxies.map(g=>({name:g.galaxy.name,positionAU:g.positionAU.toArray(),visible:g.density.visible,markerVisible:g.marker.visible,objectId:g.density.uuid})),
+      getGalaxyPositions:()=>universe.galaxies.map(g=>({name:g.galaxy.name,positionAU:g.positionAU.toArray(),visible:!!g.extent?.visible&&g.root.visible,markerVisible:g.marker.visible,uncertaintyVisible:g.uncertainty.visible&&g.root.visible,objectId:g.root.uuid})),
+      getMoonPosition:()=>({positionAU:universe.moonPositionAU.toArray(),earthPositionAU:universe.earth.positionAU.toArray()}),
       getSolarPositions:()=>universe.bodies.map(b=>({name:b.planet.name,positionAU:b.positionAU.toArray(),radiusAU:b.planet.radius/AU_KM})),
       getGalaxyProjection:name=>{const g=universe.galaxies.find(g=>g.galaxy.name===name);if(!g)return null;const p=projectAU(g.positionAU,new THREE.Vector3());return {x:(p.x+1)*innerWidth/2,y:(1-p.y)*innerHeight/2};},
       getObjectProjection:name=>{const b=universe.bodies.find(b=>b.planet.name===name);if(!b)return null;const p=projectAU(b.positionAU,new THREE.Vector3());return {x:(p.x+1)*innerWidth/2,y:(1-p.y)*innerHeight/2,visible:b.root.visible,objectId:b.root.uuid};}
