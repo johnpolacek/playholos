@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#06090e">
+  <meta name="description" content="Explore a 3D atlas from Earth to the Milky Way, with JPL planetary orbits and 109,400 cataloged stars. A self-contained, offline HTML experience.">
+  <title>Holos — Earth to the Milky Way</title>
+  <style>/*__CSS__*/</style>
+</head>
+<body>
+  <main id="atlas" aria-label="Interactive three-dimensional astronomical atlas">
+    <div id="viewport" tabindex="0" role="application" aria-label="3D universe. Drag to orbit, scroll to zoom, arrow keys to rotate, plus and minus to zoom. Choose a scale using keys 1 through 4."></div>
+    <div id="labels" aria-label="Objects in the current view"></div>
+    <header class="topbar">
+      <a class="brand" href="#earth" aria-label="Holos, return to Earth"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="10"/><ellipse cx="16" cy="16" rx="15" ry="5" transform="rotate(-38 16 16)"/><circle cx="23.8" cy="7.9" r="2" class="brand-dot"/></svg><span>HOLOS</span><span class="brand-caption">A COSMIC ATLAS</span></a>
+      <div class="top-actions"><span class="edition"><i></i> THE MILKY WAY · VOL. 01</span><button id="search-open" class="icon-button" aria-label="Search planets and stars" title="Search planets and stars (/)"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/></svg><span class="search-word">Find an object</span><kbd>/</kbd></button><button id="about-open" class="icon-button square" aria-label="About this model and its sources" title="Model and sources">i</button></div>
+    </header>
+
+    <nav class="scale-nav" aria-label="Explore astronomical scales">
+      <div class="eyebrow">YOUR PERSPECTIVE</div>
+      <div class="scale-steps">
+        <button data-mode="earth" class="scale-step active" aria-pressed="true"><span class="step-dot"></span><span>Earth</span><small>01</small></button>
+        <button data-mode="solar" class="scale-step" aria-pressed="false"><span class="step-dot"></span><span>Solar System</span><small>02</small></button>
+        <button data-mode="stars" class="scale-step" aria-pressed="false"><span class="step-dot"></span><span>Stellar neighborhood</span><small>03</small></button>
+        <button data-mode="galaxy" class="scale-step" aria-pressed="false"><span class="step-dot"></span><span>Milky Way</span><small>04</small></button>
+      </div>
+    </nav>
+
+    <aside class="object-info" id="object-info" aria-label="Selected object">
+      <div class="eyebrow" id="object-kicker">SOL III / TERRESTRIAL PLANET</div>
+      <h1 id="object-name">Earth</h1>
+      <p id="object-description">Our home, suspended in sunlight. Liquid oceans, a thin atmosphere, and the only life we have found in the universe.</p>
+      <dl id="object-facts"><div><dt>Mean diameter</dt><dd>12,742 <span>km</span></dd></div><div><dt>Distance from Sun</dt><dd>1.00 <span>AU</span></dd></div></dl>
+      <button id="outward" class="outward-button"><span id="outward-label">Explore the Solar System</span><span aria-hidden="true">↗</span></button>
+    </aside>
+
+    <div class="view-tools" role="group" aria-label="View controls">
+      <button id="zoom-in" class="tool" aria-label="Zoom in" title="Zoom in (+)">+</button>
+      <button id="zoom-out" class="tool" aria-label="Zoom out" title="Zoom out (−)">−</button>
+      <span class="tool-divider"></span>
+      <button id="reset-view" class="tool" aria-label="Reset view" title="Reset view (R)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10a8 8 0 1 1 1.8 7M4 4v6h6"/></svg></button>
+      <button id="top-view" class="tool" aria-label="View from above" title="View from above"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 9 5-9 5-9-5Zm-9 9 9 5 9-5M3 16l9 5 9-5"/></svg></button>
+      <button id="labels-toggle" class="tool text-tool" aria-label="Toggle object labels" aria-pressed="true" title="Object labels">Aa</button>
+      <button id="fullscreen" class="tool" aria-label="Toggle fullscreen" title="Fullscreen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></svg></button>
+    </div>
+
+    <section class="bottom-panel" aria-label="Simulation controls">
+      <div class="context-row"><span id="frame-note">EARTH-CENTERED VIEW</span><span id="model-note">Physical proportions · composite surface imagery</span><button id="help-open" class="plain-button">Controls <span aria-hidden="true">?</span></button></div>
+      <div class="control-row">
+        <div class="time-control"><button id="play" class="play-button" aria-label="Play time" title="Play or pause (Space)">▶</button><div class="date-block"><label for="date">SIMULATION DATE · UTC</label><input id="date" type="date" min="1800-01-01" max="2050-12-31" value="2026-09-06" aria-label="Simulation date in UTC"></div><label class="sr-only" for="speed">Simulation speed</label><select id="speed"><option value="1">1 day / sec</option><option value="10">10 days / sec</option><option value="100">100 days / sec</option><option value="0.000011574074">Real time</option></select></div>
+        <div class="scene-options"><label id="orbits-option"><input id="orbits" type="checkbox" checked><span>Orbits</span></label><label id="sizes-option"><input id="true-sizes" type="checkbox"><span>True sizes</span></label><label id="reconstruction-option" hidden><input id="reconstruction" type="checkbox" checked><span>Galaxy reconstruction</span></label></div>
+        <div class="distance-readout"><span id="distance-value">17,000 km</span><span id="distance-label">ALTITUDE ABOVE EARTH</span></div>
+      </div>
+    </section>
+    <div class="hint" id="hint">Drag to orbit <span>·</span> Scroll to travel <span>·</span> Select a scale to go farther</div>
+    <div id="transition" aria-hidden="true"></div>
+    <div id="toast" role="status" aria-live="polite"></div>
+    <div id="loading" role="status"><div class="loading-orbit"></div><strong>Finding our place.</strong><span id="loading-detail">Loading the atlas…</span></div>
+    <div id="fatal" role="alert" hidden><h1>The 3D view couldn’t start.</h1><p id="fatal-message">This atlas needs a browser with WebGL 2 enabled. Try a recent version of Chrome, Edge, Firefox, or Safari with hardware acceleration enabled.</p><button onclick="location.reload()">Try again</button></div>
+  </main>
+
+  <dialog id="search-dialog" class="search-dialog"><form method="dialog"><button class="dialog-close" aria-label="Close search">×</button></form><label for="search-input">Find your next destination</label><input id="search-input" type="search" autocomplete="off" placeholder="Earth, Saturn, Sirius, Alpha Centauri…"><p class="search-meta">Planets and selected HYG stars · names, HIP, or Gliese IDs</p><div id="search-results" role="list" aria-label="Search results"></div></dialog>
+  <dialog id="about-dialog"><form method="dialog"><button class="dialog-close" aria-label="Close model information">×</button></form><div class="eyebrow">THE SCIENCE BEHIND THE VIEW</div><h2>A model of what we know.</h2><p>From a single world to a galaxy, this atlas changes coordinate frames to keep astronomical distances usable. Each scale preserves relative positions; switching scales is a guided transition.</p><h3>Solar System</h3><p>All eight planets follow elliptical, inclined orbits computed from <a href="https://ssd.jpl.nasa.gov/planets/approx_pos.html" target="_blank" rel="noopener">JPL’s approximate Keplerian elements</a> for 1800–2050. Earth uses the Earth–Moon barycenter approximation. UTC is used in place of ephemeris time. These are educational positions, not a navigation ephemeris.</p><p>Distances stay linear. In the overview, planet disks are enlarged adaptively for visibility. Turn on <strong>True sizes</strong> for physical radii; labels still mark objects too small to see. Planet close-ups use physical radius units. Axial tilt magnitudes and rotation periods are represented; pole longitudes, cloud patterns, and surface longitude at the chosen date are illustrative. Planet shapes use spherical mean radii. The Moon uses its real mean distance and radius, with an illustrative orbit phase and fixed orbital plane. Belt particles represent a statistical distribution, not individual measured asteroids. Other moons, dwarf planets, and comets are not included.</p><h3>Stars we have measured</h3><p><strong>109,400 stars</strong> from David Nash’s <a href="https://github.com/astronexus/HYG-Database" target="_blank" rel="noopener">HYG 4.1 catalog</a>, combining Hipparcos, Yale, and Gliese catalogs. Positions are at epoch J2000.0, transformed into Galactic coordinates. This subset includes catalog distances up to 1,000 parsecs (3,262 light-years), excluding missing-distance sentinels. It is incomplete and biased toward brighter stars; distance estimates have varying uncertainty. Proper motion is not animated.</p><p>958 named, bright, or nearby entries are searchable. Multiple stars can remain unresolved at this scale. Point sizes, brightness, and color are adapted for visibility; they do not represent stellar radii or calibrated exposure. Exoplanet orbits are not included in this first volume.</p><h3>The Milky Way</h3><p>The catalog sits inside a <strong>statistical reconstruction</strong> of a barred spiral disk about 100,000 light-years across, with the Sun about 26,000 light-years from the center. The bar, bulge, disk, and spiral structure follow the broad picture described by <a href="https://www.esa.int/Science_Exploration/Space_Science/Gaia/Guide_to_our_galaxy" target="_blank" rel="noopener">ESA’s guide to our galaxy</a>. The generated points outside the catalog are samples of stellar density, not individual known stars. Spiral-arm geometry is illustrative, and no exact arm membership is inferred. Toggle the reconstruction off to see only the measured catalog.</p><h3>Imagery & licenses</h3><p>Planetary textures by <a href="https://www.solarsystemscope.com/textures/" target="_blank" rel="noopener">Solar System Scope / INOVE</a>, based on NASA imagery, under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>. These are composite maps with enhanced color and some filled gaps, not live imagery. HYG and the adapted star subset are <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>. Rendering uses <a href="https://threejs.org/" target="_blank" rel="noopener">Three.js</a> (MIT). All rendering code, textures, and star data are embedded in this HTML file.</p></dialog>
+  <dialog id="help-dialog"><form method="dialog"><button class="dialog-close" aria-label="Close controls">×</button></form><div class="eyebrow">EXPLORING THE ATLAS</div><h2>A little perspective.</h2><dl class="help-list"><div><dt>Orbit a destination</dt><dd>Drag · arrow keys</dd></div><div><dt>Move closer or farther</dt><dd>Scroll / pinch · + / −</dd></div><div><dt>Pan the view</dt><dd>Right-drag · two-finger drag</dd></div><div><dt>Change scale</dt><dd>Left navigation · keys 1–4</dd></div><div><dt>Find a planet or star</dt><dd>Search · /</dd></div><div><dt>Play / pause time</dt><dd>Space</dd></div><div><dt>Reset perspective</dt><dd>R</dd></div></dl><p>Select a planet or a labeled star to inspect it. The arrow under its description continues the journey outward. Use the scale navigation to return.</p></dialog>
+  <noscript><div class="noscript">Enable JavaScript to explore this 3D atlas.</div></noscript>
+  <script>/*__APP__*/</script>
+</body>
+</html>
