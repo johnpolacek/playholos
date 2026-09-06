@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { AU_KM, PLANETS, julianDate, planetPosition } from './astronomy.js';
 import { Universe } from './universe.js';
-import { LY_AU, GALACTIC_CENTER, MIN_DISTANCE_AU, MAX_DISTANCE_AU, RENDER_DISTANCE, eclipticToGalactic, homeTarget, scaleAtDistance, clampDistance, planFlight, sampleFlight } from './navigation.js';
+import { LY_AU, GALACTIC_CENTER, MIN_DISTANCE_AU, MAX_DISTANCE_AU, RENDER_DISTANCE, eclipticToGalactic, homeTarget, scaleAtDistance, clampDistance, planFlight, sampleFlight, smooth } from './navigation.js';
 import { ASSETS, CATALOG, STAR_BUFFER, META } from './embedded.js';
 
 const $=id=>document.getElementById(id),vec=a=>new THREE.Vector3(...a);
@@ -146,6 +146,7 @@ function updateContext() {
 function addLabel({name,position,action,priority=0,kind='planet',color,star}) {
   const el=document.createElement(action?'button':'span');el.className=`object-label ${kind==='galaxy'?'galaxy-label':''} ${kind==='sun'?'sun-label':''}`;
   el.textContent=name;el.style.setProperty('--label-color',color||'#8daabc');
+  if(kind==='earth'){el.classList.add('earth-marker');el.style.opacity='0';}
   if(action){el.setAttribute('aria-label',`Explore ${name}`);el.onclick=action;}
   $('labels').append(el);labelItems.push({name,position,action,priority,kind,color,star,el});
 }
@@ -155,7 +156,7 @@ function ensureStarLabel(star,selected=false){
   if(selected){labelItems.forEach(l=>l.el.classList.toggle('selected',l===label));label.priority=50;}
 }
 function createLabels(){
-  for(const body of universe.bodies)addLabel({name:body.planet.name,position:()=>body.positionAU,action:()=>focusPlanet(body.planet),priority:20-PLANETS.indexOf(body.planet),color:body.planet.color});
+  for(const body of universe.bodies)addLabel({name:body.planet.name,position:()=>body.positionAU,action:()=>focusPlanet(body.planet),kind:body===universe.earth?'earth':'planet',priority:body===universe.earth?60:20-PLANETS.indexOf(body.planet),color:body.planet.color});
   addLabel({name:'Moon',position:()=>universe.moonPositionAU,action:focusMoon,priority:19,kind:'moon',color:'#d3d7dc'});
   addLabel({name:'Sun',position:()=>new THREE.Vector3(),priority:40,kind:'sun',color:'#ffe1a4',action:()=>setMode('solar')});
   for(const star of CATALOG.filter(s=>s.distance<17||['Vega','Altair','Arcturus','Fomalhaut','Capella','Aldebaran','Betelgeuse','Polaris','Rigel','Deneb','Spica'].includes(s.name))){if(star.name!=='Toliman')ensureStarLabel(star);}
@@ -169,8 +170,17 @@ function projectAU(positionAU,target=projected){
 }
 function updateLabels(){
   const occupied=[],panel=$('object-info').getBoundingClientRect(),w=innerWidth,h=innerHeight,dLy=pose.distance/LY_AU;
+  // Wait until the physical globe is smaller than one CSS pixel, then blend
+  // in its marker as it recedes to a quarter pixel. This reverses on approach.
+  const earthDepth=-offset.copy(universe.earth.root.position).applyMatrix4(camera.matrixWorldInverse).z;
+  const earthDiameter=universe.earth.displayRadiusAU*universe.renderScale*h*camera.projectionMatrix.elements[5]/earthDepth;
+  const earthOpacity=earthDepth>0?1-smooth((earthDiameter-.25)/.75):0;
   for(const item of [...labelItems].sort((a,b)=>b.priority-a.priority)){
     let visible=state.labels;
+    if(item.kind==='earth'){
+      visible&&=(state.mode==='earth'||state.mode==='solar')&&earthOpacity>.001;
+      item.el.style.opacity=String(earthOpacity);
+    }
     if(item.kind==='planet'){
       const body=universe.bodies.find(b=>b.planet.name===item.name);
       visible&&=pose.distance>.0007&&pose.distance<4000&&universe.cameraAU.distanceTo(body.positionAU)>body.planet.radius/AU_KM*15;
@@ -182,8 +192,11 @@ function updateLabels(){
     if(!visible){item.el.hidden=true;continue;}
     const position=item.position();projectAU(position);
     if(projected.z<-1||projected.z>1||Math.abs(projected.x)>1.1||Math.abs(projected.y)>1.1){item.el.hidden=true;continue;}
-    const x=(projected.x+1)*w/2+9,y=(1-projected.y)*h/2-11;
-    const width=Math.min(245,item.el.textContent.length*(w<761?4.7:5.8)+29),height=24;
+    // Keep Earth's callout above-left of its exact point, away from the Sun
+    // and inner-planet labels. Its connector still ends at Earth's position.
+    const earth=item.kind==='earth';
+    const x=(projected.x+1)*w/2+(earth?-76:9),y=(1-projected.y)*h/2-(earth?36:11);
+    const width=earth?58:Math.min(245,item.el.textContent.length*(w<761?4.7:5.8)+29),height=24;
     if(y<(w<761?145:116)||y>h-145||x+width>w-16||(x<panel.right+8&&x+width>panel.left&&y>panel.top-12&&y<panel.bottom+8)||(w>760&&h>700&&x<300&&y<400)){item.el.hidden=true;continue;}
     if(occupied.some(r=>x<r.x+r.w&&x+width>r.x&&y<r.y+r.h&&y+height>r.y)){item.el.hidden=true;continue;}
     occupied.push({x,y,w:width,h:height});item.el.hidden=false;item.el.style.transform=`translate(${Math.round(x)}px,${Math.round(y)}px)`;
