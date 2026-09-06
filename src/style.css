@@ -52,3 +52,9 @@ dialog{color:var(--ink);background:#0d141e;border:1px solid #2a3b4c;border-radiu
 @media(min-width:761px) and (max-height:700px){#object-description{display:none}}
 @media(min-width:761px){.scene-options{flex-wrap:wrap;justify-content:center;gap:8px 16px;max-width:530px}.scene-options label{white-space:nowrap}}
 @media(max-width:760px){.scene-options{height:auto;min-height:21px;flex-wrap:wrap;gap:8px 12px;padding-left:0}.object-info .object-evidence,.object-source{font-size:9px}.object-info .object-evidence{display:block}.exploration-panel{bottom:190px}}
+
+/* Galaxy centers are rendered in the scene; labels need no second marker. */
+.object-label.neighbor-label::before{display:none}
+.object-label.neighbor-label{color:#b5c6d6;letter-spacing:.035em;background:rgba(6,9,14,.2)}
+.object-label.major-galaxy-label{color:#e1eaf2;font-size:12px;font-weight:500}
+@media(max-width:760px){.object-label.major-galaxy-label{font-size:9px}}

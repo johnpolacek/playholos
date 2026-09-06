@@ -145,15 +145,39 @@ function galacticDensity() {
   return {density,haze};
 }
 
+// A soft fill makes the measured contour readable without inventing a disk
+// inclination or a resolved stellar population. The gradient is map styling.
+function contourFill(outline) {
+  const positions=[],uv=[];
+  for(let i=0;i<outline.length-1;i++){
+    positions.push(0,0,0,...outline[i].toArray(),...outline[i+1].toArray());
+    const a=i*Math.PI/64,b=(i+1)*Math.PI/64;
+    uv.push(0,0,Math.cos(a),Math.sin(a),Math.cos(b),Math.sin(b));
+  }
+  const geometry=new THREE.BufferGeometry();
+  geometry.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));
+  geometry.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));
+  const material=shaderMaterial({transparent:true,depthWrite:false,side:THREE.DoubleSide,blending:THREE.AdditiveBlending,
+    uniforms:{opacity:{value:.5}},
+    vertexShader:`varying vec2 point;void main(){point=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
+    fragmentShader:`varying vec2 point;uniform float opacity;void main(){float r=length(point);float center=exp(-r*r*8.);vec3 tint=mix(vec3(.30,.57,.76),vec3(.95,.78,.52),center);gl_FragColor=vec4(tint,opacity*(1.-smoothstep(.1,1.,r))*.65);
+      #include <tonemapping_fragment>
+      #include <colorspace_fragment>
+    }`});
+  return new THREE.Mesh(geometry,material);
+}
+
 function nearbyGalaxy(galaxy) {
   const positionLy=galaxyPosition(galaxy),positionAU=positionLy.clone().multiplyScalar(LY_AU);
   const root=new THREE.Group(),outline=galaxyOutline(galaxy);
   const extent=outline.length?line(outline,'#a3c8db',.55):null;
-  if(extent)root.add(extent);
+  const fill=outline.length?contourFill(outline):null;
+  if(extent)root.add(extent,fill);
   const uncertainty=line(galaxyDistanceRange(galaxy),'#c8ac80',.42);root.add(uncertainty);
   // Screen-sized map symbols indicate catalog centers, never galaxy size/color.
-  const marker=distantPoints([0,0,0],[.63,.79,.89],[9],[1],{offset:positionLy});
-  return {galaxy,positionAU,root,extent,uncertainty,marker};
+  const major=['m31','m33'].includes(galaxy.id);
+  const marker=distantPoints([0,0,0,0,0,0],[.63,.79,.89,.3,.5,.7],[9,major?36:22],[1,1],{offset:positionLy});
+  return {galaxy,positionAU,root,extent,fill,uncertainty,marker};
 }
 
 export class Universe {
@@ -188,7 +212,7 @@ export class Universe {
     }
     this.catalog=distantPoints(positions,colors,sizes,near,{opacity:.8});this.scene.add(this.catalog);
     const galaxy=galacticDensity();this.density=galaxy.density;this.haze=galaxy.haze;this.scene.add(this.density,this.haze);
-    this.milkyWayMarker=distantPoints([0,0,0],[.63,.79,.89],[9],[1],{offset:GALACTIC_CENTER.clone().divideScalar(LY_AU)});this.scene.add(this.milkyWayMarker);
+    this.milkyWayMarker=distantPoints([0,0,0,0,0,0],[.95,.8,.6,.6,.4,.2],[9,36],[1,1],{offset:GALACTIC_CENTER.clone().divideScalar(LY_AU)});this.scene.add(this.milkyWayMarker);
     this.distant=[this.catalog,this.density,this.haze,this.sunMarker,this.milkyWayMarker];
     this.galaxies=GALAXIES.map(nearbyGalaxy);
     for(const galaxy of this.galaxies){this.scene.add(galaxy.root,galaxy.marker);this.distant.push(galaxy.marker);}
@@ -266,16 +290,17 @@ export class Universe {
     this.density.visible=this.haze.visible=galaxyVisibility>.001;
     this.catalog.material.uniforms.surveyBlend.value=logBlend(dLy,.002,.5);
     this.catalog.material.uniforms.opacity.value=.8*(1-logBlend(dLy,2500,50000))+(state.reconstruction?.0015:.16)*logBlend(dLy,2500,50000);
+    this.catalog.material.uniforms.opacity.value*=1-logBlend(dLy,350000,650000);
     this.sunMarker.material.uniforms.opacity.value=logBlend(pose.distance,.02,4)*(1-logBlend(dLy,400000,650000));
     const groupVisibility=logBlend(dLy,35000,180000);
     this.milkyWayMarker.material.uniforms.opacity.value=.7*groupVisibility;
     this.milkyWayMarker.visible=groupVisibility>.001;
     for(const neighbor of this.galaxies){
-      const {galaxy,root,extent,uncertainty,marker,positionAU}=neighbor;
+      const {galaxy,root,extent,fill,uncertainty,marker,positionAU}=neighbor;
       const visibility=Math.max(groupVisibility,state.galaxy===galaxy?1:0);
       root.position.copy(positionAU).sub(origin).multiplyScalar(scale);root.scale.setScalar(LY_AU*scale);
       root.visible=marker.visible=visibility>.001;
-      if(extent){extent.visible=state.extents;extent.material.opacity=.55*visibility;}
+      if(extent){extent.visible=state.extents;extent.material.opacity=.4*visibility;fill.visible=state.extents;fill.material.uniforms.opacity.value=.65*visibility;}
       uncertainty.visible=state.uncertainty;uncertainty.material.opacity=.42*visibility;
       marker.material.uniforms.opacity.value=.7*visibility;
     }
