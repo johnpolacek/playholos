@@ -52,6 +52,11 @@ kbd{display:inline-flex;align-items:center;justify-content:center;min-width:20px
 #viewport{touch-action:none}
 canvas{display:block;width:100%;height:100%}
 #labels{z-index:2;pointer-events:none;overflow:hidden}
+#atlas>.group-overlay{position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none;overflow:hidden}
+#group-guide-line{stroke:rgba(157,190,209,.3);stroke-width:1;stroke-dasharray:3 8}
+#group-guide text{fill:#a4b8c7;stroke:none;font:10px var(--mono);letter-spacing:.08em;paint-order:stroke;stroke:var(--bg);stroke-width:4px;stroke-linejoin:round}
+#group-guide .group-guide-subtitle{fill:#61798d;font-size:8px;letter-spacing:.12em;stroke-width:3px}
+#group-callout-lines{stroke:rgba(155,185,207,.27);stroke-width:.75}
 /* Legibility scrim behind the reading column. */
 #atlas::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,rgba(var(--bg-rgb),.9),rgba(var(--bg-rgb),.6) calc(var(--gutter) + var(--panel-w)),transparent calc(var(--gutter) + var(--panel-w) + 20vw))}
 

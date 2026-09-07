@@ -3,6 +3,7 @@ import { AU_KM, DEG, PLANETS, julianDate, orbitPath, seededRandom, colorFromBV }
 import { LY_AU, GALACTIC_CENTER, ECLIPTIC_ROTATION, eclipticToGalactic, RENDER_DISTANCE, logBlend } from './navigation.js';
 import { GALAXIES, galaxyPosition, galaxyOutline, galaxyDistanceRange } from './galaxies.js';
 import { bodyPosition, bodyOrientation, moonOffset, moonOrbitPath } from './ephemeris.js';
+import { GALAXY_PORTRAITS, createGalaxyPortrait, portraitScale } from './galaxy-portraits.js';
 
 let renderer,textures;
 const sphere=new THREE.SphereGeometry(1,96,64);
@@ -216,6 +217,10 @@ export class Universe {
     this.distant=[this.catalog,this.density,this.haze,this.sunMarker,this.milkyWayMarker];
     this.galaxies=GALAXIES.map(nearbyGalaxy);
     for(const galaxy of this.galaxies){this.scene.add(galaxy.root,galaxy.marker);this.distant.push(galaxy.marker);}
+    this.portraits=[{id:'milkyway',positionAU:GALACTIC_CENTER},...this.galaxies.map(g=>({id:g.galaxy.id,positionAU:g.positionAU}))]
+      .filter(g=>GALAXY_PORTRAITS[g.id]).map(g=>({...g,sprite:createGalaxyPortrait(g.id)}));
+    for(const portrait of this.portraits)this.scene.add(portrait.sprite);
+    this.viewportSize=new THREE.Vector2();
     this.starRings=new THREE.Group();this.scene.add(this.starRings);
     for(const radius of [5,10,20,50,100,500,1000])this.starRings.add(circle(radius,'#759bb3',.10));
     this.galaxyRings=new THREE.Group();this.scene.add(this.galaxyRings);
@@ -246,7 +251,7 @@ export class Universe {
     }
   }
 
-  update(pose,state) {
+  update(pose,state,camera) {
     const scale=this.renderScale=RENDER_DISTANCE/pose.distance,dLy=pose.distance/LY_AU;
     this.cameraAU.copy(pose.target).addScaledVector(pose.direction,pose.distance);
     const origin=pose.target;
@@ -293,6 +298,17 @@ export class Universe {
     this.catalog.material.uniforms.opacity.value*=1-logBlend(dLy,350000,650000);
     this.sunMarker.material.uniforms.opacity.value=logBlend(pose.distance,.02,4)*(1-logBlend(dLy,400000,650000));
     const groupVisibility=logBlend(dLy,35000,180000);
+    const portraitVisibility=state.portraits?logBlend(dLy,state.galaxy?2e6:650000,state.galaxy?4e6:1.5e6):0;
+    renderer.getSize(this.viewportSize);
+    const symbolScale=portraitScale(this.viewportSize.x,dLy);
+    for(const {id,positionAU,sprite} of this.portraits){
+      sprite.position.copy(positionAU).sub(origin).multiplyScalar(scale);
+      const depth=-offsetDepth(positionAU,this.cameraAU,pose.direction)*scale;
+      sprite.visible=portraitVisibility>.001&&depth>0&&depth<700000;
+      if(!sprite.visible)continue;
+      sprite.material.opacity=portraitVisibility;
+      sprite.scale.setScalar(GALAXY_PORTRAITS[id].size*symbolScale*2*depth/(this.viewportSize.y*camera.projectionMatrix.elements[5]));
+    }
     this.milkyWayMarker.material.uniforms.opacity.value=.7*groupVisibility;
     this.milkyWayMarker.visible=groupVisibility>.001;
     for(const neighbor of this.galaxies){
@@ -315,4 +331,8 @@ export class Universe {
     const groupGuides=logBlend(dLy,350000,1e6);
     this.groupRings.visible=state.orbits&&groupGuides>.001;this.groupRings.children.forEach(r=>r.material.opacity=.1*groupGuides);
   }
+}
+
+function offsetDepth(position,camera,direction) {
+  return (position.x-camera.x)*direction.x+(position.y-camera.y)*direction.y+(position.z-camera.z)*direction.z;
 }
