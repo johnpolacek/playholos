@@ -15,7 +15,7 @@ let reducedMotion=motionPreference.matches;
 motionPreference.addEventListener('change',()=>{reducedMotion=motionPreference.matches;if(reducedMotion){stopTravel();labelItems.forEach(item=>item.fade?.tween.progress(1));}});
 const state={mode:'earth',planet:PLANETS[2],star:null,galaxy:null,date:new Date('2026-09-06T12:00:00Z'),playing:false,speed:1,labels:true,orbits:true,trueSizes:true,reconstruction:false,extents:true,uncertainty:true};
 const pose={target:new THREE.Vector3(),direction:new THREE.Vector3(0,0,1),distance:1,home:true,follow:null};
-const textures={},labelItems=[];
+const textures={},labelItems=[];let hudZones=[];
 let renderer,camera,controls,universe,flight=null,zoomGoal=null,toastTimer,uiTime=0,viewFactor=1,frameCount=0,contextKey='';
 const raycaster=new THREE.Raycaster(),offset=new THREE.Vector3(),projected=new THREE.Vector3();
 function format(n,dp=0){return n.toLocaleString('en-US',{maximumFractionDigits:dp,minimumFractionDigits:dp});}
@@ -32,15 +32,17 @@ async function loadTextures(){
   }));
 }
 
+function syncOverflow(){const body=document.querySelector('.object-body');if(body)body.classList.toggle('overflowing',body.scrollTop+body.clientHeight<body.scrollHeight-2);}
 function setInfo({kicker,name,description,facts,evidence,source,measurement}) {
   $('object-evidence').textContent=evidence||(['earth','solar'].includes(state.mode)?'Computed ephemeris · static surface maps':state.mode==='stars'?'HYG catalog positions · J2000.0':state.reconstruction?'Illustrative Milky Way density enabled':'Catalog positions · incomplete coverage');
   $('object-source').hidden=!source;if(source){$('object-source').textContent=source.label;$('object-source').href=source.url;}
   $('measurement-details').hidden=!measurement;$('measurement-text').textContent=measurement||'';
   $('object-kicker').textContent=kicker;$('object-name').textContent=name;$('object-description').textContent=description;
-  $('object-name').style.fontSize=name.length>19?'clamp(27px, 3.6vw, 49px)':name.length>12?'clamp(30px, 4vw, 56px)':'';
+  $('object-name').dataset.size=name.length>19?'long':name.length>11?'medium':'';
   $('object-facts').replaceChildren(...facts.map(([label,value,unit])=>{
     const div=document.createElement('div'),dt=document.createElement('dt'),dd=document.createElement('dd'),span=document.createElement('span');dt.textContent=label;dd.textContent=value+' ';span.textContent=unit;dd.append(span);div.append(dt,dd);return div;
   }));
+  syncOverflow();
 }
 function defaultInfo() {
   if(state.galaxy&&!flight)return galaxyInfo(state.galaxy);
@@ -164,6 +166,8 @@ function updateContext() {
   if(key===contextKey)return;contextKey=key;
   const activeMode=state.galaxy&&!flight?'group':m;
   document.querySelectorAll('[data-mode]').forEach(el=>{el.classList.toggle('active',el.dataset.mode===activeMode);el.setAttribute('aria-pressed',String(el.dataset.mode===activeMode));});
+  // Narrow layouts scroll the destinations horizontally; keep the active one in view.
+  const activeStep=document.querySelector('.scale-step.active'),steps=activeStep?.parentElement;if(steps&&steps.scrollWidth>steps.clientWidth)activeStep.scrollIntoView({block:'nearest',inline:'center',behavior:reducedMotion?'auto':'smooth'});
   $('frame-note').textContent='ONE UNIVERSE · CONTINUOUS 3D';
   $('model-note').textContent=extragalactic?'Observed positions · projected extents · distance uncertainty':m==='earth'?'Computed ephemeris · physical radii · static maps':m==='solar'?(state.trueSizes?'Computed ephemeris · true physical radii':'Computed positions · planet disks enlarged'):m==='stars'?`${format(META.count)} measured stars · J2000.0`:(state.reconstruction?'Illustrative Milky Way density + catalog stars':'Measured HYG stars · survey coverage is incomplete');
   $('outward-label').textContent=state.galaxy&&!flight?'Return to the Local Group':m==='earth'?'Travel to the Solar System':m==='solar'?'Travel to nearby stars':m==='stars'?'Travel to the Milky Way':m==='galaxy'?'Travel to other galaxies':'Travel back to Earth';
@@ -211,7 +215,7 @@ function projectAU(positionAU,target=projected){
   return target.add(camera.position).project(camera);
 }
 function updateLabels(){
-  const occupied=[],panel=$('object-info').getBoundingClientRect(),w=innerWidth,h=innerHeight,dLy=pose.distance/LY_AU;
+  const occupied=[],zones=hudZones.filter(el=>!el.classList.contains('dismissed')).map(el=>el.getBoundingClientRect()),w=innerWidth,h=innerHeight,dLy=pose.distance/LY_AU;
   // Hand the globe over to its marker across 12–2 CSS pixels, while the
   // physical surface is still visible. The same blend reverses on approach.
   const earthDepth=-offset.copy(universe.earth.root.position).applyMatrix4(camera.matrixWorldInverse).z;
@@ -247,11 +251,13 @@ function updateLabels(){
     // and inner-planet labels. Its connector still ends at Earth's position.
     const earth=item.kind==='earth';
     let x=(projected.x+1)*w/2+(earth?-76:9),y=(1-projected.y)*h/2-(earth?36:11);
-    const width=earth?58:Math.min(245,item.el.textContent.length*(w<761?4.7:5.8)+29),height=24;
-    const blocked=(x,y)=>x<16||y<(w<761?145:116)||y>h-145||x+width>w-16||(x<panel.right+8&&x+width>panel.left&&y>panel.top-12&&y<panel.bottom+8)||(w>760&&h>700&&x<300&&y<400)||occupied.some(r=>!(item.kind==='sun'&&r.kind==='system')&&x<r.x+r.w&&x+width>r.x&&y<r.y+r.h&&y+height>r.y);
+    if(item.w===undefined&&!earth){item.el.hidden=false;item.w=item.el.offsetWidth;}
+    const width=earth?58:item.w,height=25;
+    // Labels avoid the measured interface panels rather than assumed pixel zones.
+    const blocked=(x,y)=>x<12||y<8||x+width>w-12||y+height>h-8||zones.some(z=>x<z.right+8&&x+width>z.left-8&&y<z.bottom+8&&y+height>z.top-8)||occupied.some(r=>!(item.kind==='sun'&&r.kind==='system')&&x<r.x+r.w&&x+width>r.x&&y<r.y+r.h&&y+height>r.y);
     // Nearby companions often project together. Give their labels a few stable
     // alternatives while keeping their actual galaxy positions untouched.
-    const candidates=item.kind==='neighbor'?[[x,y],[x,y+26],[x,y-26],[x-width-18,y],[x-width-18,y+26],[x-width-18,y-26]]:[[x,y]];
+    const candidates=item.kind==='neighbor'?[[x,y],[x,y+26],[x,y-26],[x-width-18,y],[x-width-18,y+26],[x-width-18,y-26],[x-width/2-9,y-30],[x-width/2-9,y+30],[x,y+52],[x,y-52],[x-width-18,y+52],[x-width-18,y-52],[x-width/2-9,y+56],[x-width/2-9,y-56]]:[[x,y]];
     const placement=candidates.find(([x,y])=>!blocked(x,y));
     if(!placement){item.el.hidden=true;continue;}
     [x,y]=placement;
@@ -264,6 +270,7 @@ function formatDistance(distance){
   if(distance>=1e6*LY_AU)return `${format(distance/LY_AU/1e6,2)} ${innerWidth<=760?'Mly':'million light-years'}`;
   return `${format(distance/LY_AU,distance/LY_AU<100?1:0)} ${innerWidth<=760?'ly':'light-years'}`;
 }
+function syncZoomFill(){const z=$('zoom-scale'),min=Number(z.min),max=Number(z.max);z.style.setProperty('--fill',`${((Number(z.value)-min)/(max-min)*100).toFixed(2)}%`);}
 function updateReadout(){
   let distance=pose.distance,label='DISTANCE TO VIEW CENTER';
   if(state.mode==='earth'&&(pose.home||pose.follow?.planet)){
@@ -271,7 +278,7 @@ function updateReadout(){
   }
   $('distance-value').textContent=formatDistance(distance);$('distance-label').textContent=label;
   const sliderDistance=zoomGoal??pose.distance;
-  $('zoom-scale').value=String(Math.log10(sliderDistance));$('zoom-scale').setAttribute('aria-valuetext',formatDistance(sliderDistance));
+  $('zoom-scale').value=String(Math.log10(sliderDistance));$('zoom-scale').setAttribute('aria-valuetext',formatDistance(sliderDistance));syncZoomFill();
   if(flight){const t=flight.progress;$('travel-progress').value=t;$('travel-percent').textContent=`${Math.round(t*100)}%`;}
 }
 function resize(){
@@ -280,6 +287,7 @@ function resize(){
   // CSS owns the canvas layout. Its drawing buffer must never force the mobile
   // viewport wider during a resize or a change in device orientation.
   renderer.setSize(w,h,false);camera.aspect=w/h;
+  labelItems.forEach(item=>{item.w=undefined;});syncOverflow();
   const factor=w<=760?Math.max(1,h/w*1.25):1;
   if(universe&&factor!==viewFactor){stopTravel();pose.distance=clampDistance(pose.distance*factor/viewFactor);}
   viewFactor=factor;camera.clearViewOffset();
@@ -318,12 +326,19 @@ function frame(time,deltaTime){
 }
 
 function wireControls(){
+  hudZones=['.topbar','.scale-nav','#object-info','.view-tools','.bottom-panel','#hint'].map(s=>document.querySelector(s));
+  const body=document.querySelector('.object-body');body.addEventListener('scroll',syncOverflow,{passive:true});body.addEventListener('toggle',e=>{syncOverflow();if(e.target.open)e.target.scrollIntoView({block:'nearest',behavior:reducedMotion?'auto':'smooth'});},true);
+  // Narrow layouts scroll the destinations sideways; fade the edges that hide more.
+  const steps=document.querySelector('.scale-steps'),syncEdges=()=>{const left=steps.scrollLeft>2,right=steps.scrollLeft+steps.clientWidth<steps.scrollWidth-2;steps.dataset.edge=left&&right?'both':left?'left':right?'right':'';};
+  steps.addEventListener('scroll',syncEdges,{passive:true});new ResizeObserver(syncEdges).observe(steps);
+  const dismissHint=()=>$('hint').classList.add('dismissed');
+  for(const type of ['pointerdown','wheel','keydown'])addEventListener(type,dismissHint,{capture:true,once:true,passive:true});
   document.querySelectorAll('[data-mode]').forEach(el=>el.onclick=()=>setMode(el.dataset.mode));
   document.querySelector('.brand').onclick=e=>{e.preventDefault();setMode('earth');};
   $('outward').onclick=()=>setMode(state.galaxy&&!flight?'group':modes[(modes.indexOf(state.mode)+1)%modes.length]);
   $('zoom-in').onclick=()=>zoom(1/3);$('zoom-out').onclick=()=>zoom(3);
   $('zoom-scale').min=String(Math.log10(MIN_DISTANCE_AU));$('zoom-scale').max=String(Math.log10(MAX_DISTANCE_AU));
-  $('zoom-scale').oninput=()=>{stopTravel();zoomGoal=clampDistance(10**Number($('zoom-scale').value));if(reducedMotion){pose.distance=zoomGoal;zoomGoal=null;}};
+  $('zoom-scale').oninput=()=>{stopTravel();syncZoomFill();zoomGoal=clampDistance(10**Number($('zoom-scale').value));if(reducedMotion){pose.distance=zoomGoal;zoomGoal=null;}};
   $('travel-stop').onclick=()=>stopTravel();
   $('reset-view').onclick=()=>state.galaxy?focusGalaxy(state.galaxy):setMode(state.mode);
   $('top-view').onclick=()=>{
