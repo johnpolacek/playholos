@@ -12,6 +12,18 @@ The atlas occupies **one Three.js scene with one camera**. Scroll, pinch, or use
 
 Coordinates use astronomical units, a floating origin, uniform render scaling, and logarithmic depth. Planetary **True sizes** are enabled by default. Optional enlarged disks, illustrative Milky Way structure, and a statistical asteroid belt are labeled as visualization aids. Density reconstructions are off by default. Galaxy centers, projected photometric contours, and distance uncertainty are visible by default. The Local Group overview also includes enlarged, illustrative galaxy portraits; turn off **Galaxy portraits** for a view of the measured overlays alone.
 
+## Player home preview
+
+Choose **Player home** in the atlas header, or open `index.html#home` directly. With `npm run dev`, visit **http://127.0.0.1:4173/#home**. `#home-system` opens the Solar System overview. **Open atlas** returns to the existing atlas; its Godview button and both `#godview-*` links remain available. The default atlas entry is unchanged.
+
+The player is the awakened mind of the illustrative **Terran Continuity**, starting on Earth. **Homeworld** and **Home system** fly the existing camera through the same scene; drag, pinch, scroll, arrow keys, and +/− retain camera navigation. Keys 1 and 2 select the two home views. Escape interrupts camera travel. Reduced-motion preferences make the view transitions immediate. Mobile keeps the globe and camera controls above a scrollable civilization menu and overview.
+
+Overview is selected; the other five menu destinations are disabled visual placeholders. Capacity statuses and three project ideas are explicitly illustrative, without quantities, costs, engineering estimates, or durations. There is no running game clock or other game system. Player entry resets the astronomical snapshot to **2026-09-06 12:00 UTC**; it does not date the fictional civilization. Physical radii, AU coordinates, ephemerides, floating origin, and orbit geometry are retained. Labels and luminous point markers are enlarged visual aids, and orbit lines are approximate guides. Surface imagery is the atlas’s static composite imagery, not a depiction of future infrastructure. No admin placement overlay or alien civilization detection is shown in player mode.
+
+The shell lives in `src/player-home.js`, with styles in `src/style.css` and integration in `src/app.js`. Rebuild `index.html` with `npm run build`. It is separate from `explorations/gameplay/gameplay.html`.
+
+Browser verification: desktop at 1440×900 and 1280×720, mobile at 390×844; home/system transitions in both directions, interrupted travel, drag rotation, reduced-motion instant navigation, mobile overview scrolling, and atlas Solar System / admin Godview access. The existing 23 astronomy and navigation tests pass.
+
 ## Scientific scope
 
 The **Model and sources** dialog explains these assumptions inside the application. Selecting a neighboring galaxy shows its adopted distance study and expandable measurement details.
