@@ -2,6 +2,8 @@
 
 Open **index.html** in a modern browser. The application, thirteen texture maps, ephemeris, and catalogs are embedded in that file. No server, account, CDN, or internet connection is needed. WebGL 2 / hardware acceleration is required.
 
+**Gameplay exploration:** open [explorations/gameplay/gameplay.html](explorations/gameplay/gameplay.html) for an illustrated walkthrough of the proposed civilization game, including interactive light-time, probe-travel, and offline-guidance examples. It is a standalone concept page, separate from the atlas and game implementation; keep its adjacent `assets` folder when sharing it.
+
 Explore Earth and the Moon, all eight planets, **109,400 HYG stars** (958 searchable), the Milky Way, and **10 selected neighboring galaxies**. Search for names and aliases such as M31 or M33. This is an educational coordinate atlas with documented observations and uncertainty, not a complete or exact reconstruction of the universe.
 
 **Godview · 10 players** opens an optional civilization-placement study: compare Earth plus nine observed exoplanet sites with Earth plus nine fictional systems spread across the Milky Way. Select a site for pairwise distances and minimum message delays at five real minutes per game year. All civilizations are fictional; planet habitability is not established. See [the placement notes](HOLOS_PLAYER_PLACEMENT.md) and [data provenance](data/player-sites/README.md). Direct entry: `#godview-observed` or `#godview-speculative`.
