@@ -8,6 +8,7 @@ import { skyBasis } from './coordinates.js';
 import { portraitBounds, portraitScale } from './galaxy-portraits.js';
 import { LY_AU, GALACTIC_CENTER, MIN_DISTANCE_AU, MAX_DISTANCE_AU, RENDER_DISTANCE, eclipticToGalactic, homeTarget, scaleAtDistance, clampDistance, planFlight, sampleFlight, smooth, logBlend } from './navigation.js';
 import { ASSETS, CATALOG, STAR_BUFFER, META } from './embedded.js';
+import { createGodview } from './godview.js';
 
 const $=id=>document.getElementById(id),vec=a=>new THREE.Vector3(...a);
 const modes=['earth','solar','stars','galaxy','group'];
@@ -17,7 +18,7 @@ motionPreference.addEventListener('change',()=>{reducedMotion=motionPreference.m
 const state={mode:'earth',planet:PLANETS[2],star:null,galaxy:null,date:new Date('2026-09-06T12:00:00Z'),playing:false,speed:1,labels:true,orbits:true,trueSizes:true,reconstruction:false,portraits:true,extents:true,uncertainty:true};
 const pose={target:new THREE.Vector3(),direction:new THREE.Vector3(0,0,1),distance:1,home:true,follow:null};
 const textures={},labelItems=[];let hudZones=[];
-let renderer,camera,controls,universe,flight=null,zoomGoal=null,toastTimer,uiTime=0,viewFactor=1,frameCount=0,contextKey='';
+let renderer,camera,controls,universe,godview,flight=null,zoomGoal=null,toastTimer,uiTime=0,viewFactor=1,frameCount=0,contextKey='';
 const raycaster=new THREE.Raycaster(),offset=new THREE.Vector3(),projected=new THREE.Vector3();
 function format(n,dp=0){return n.toLocaleString('en-US',{maximumFractionDigits:dp,minimumFractionDigits:dp});}
 function dateText(){return state.date.toISOString().slice(0,10);}
@@ -88,7 +89,7 @@ function searchResults(query='') {
   $('search-results').replaceChildren(...results.map(r=>{const row=document.createElement('div'),button=document.createElement('button'),name=document.createElement('span'),sub=document.createElement('em'),detail=document.createElement('small');row.setAttribute('role','listitem');button.className='search-result';name.textContent=r.name;sub.textContent=r.subtitle;name.append(sub);detail.textContent=r.detail;button.append(name,detail);button.onclick=()=>{$('search-dialog').close();r.action();};row.append(button);return row;}));
   if(!results.length){const p=document.createElement('p');p.className='no-results';p.textContent='No match in this subset. Try a planet, star or galaxy name, or a catalog ID such as M31.';$('search-results').append(p);}
 }
-function openSearch(){searchResults();$('search-input').value='';$('search-dialog').showModal();$('search-input').focus();}
+function openSearch(){if(godview?.active)godview.hide();searchResults();$('search-input').value='';$('search-dialog').showModal();$('search-input').focus();}
 
 function planetView(planet) {
   const body=universe.bodies[PLANETS.indexOf(planet)],radius=planet.radius/AU_KM;
@@ -131,6 +132,7 @@ function flyTo(destination,name,{instant=false,duration}={}) {
 }
 function setMode(mode,{instant=false,planet}={}) {
   if(!modes.includes(mode))return;
+  if(godview?.active)godview.hide();
   state.star=null;state.galaxy=null;state.planet=planet||PLANETS[2];
   const destination=planet?planetView(planet):bookmark(mode);
   flyTo(destination,planet?.name||{earth:'Earth',solar:'the Solar System',stars:'nearby stars',galaxy:'the Milky Way',group:'the Local Group'}[mode],{instant});
@@ -182,6 +184,11 @@ function updateContext() {
   if(['stars','galaxy','group'].includes(m)){state.playing=false;updatePlay();}
   if(pose.follow?.moon&&!flight)setInfo({kicker:'EARTH’S NATURAL SATELLITE',name:'Moon',description:'A cratered world orbiting Earth. Its position and varying distance follow a lunar ephemeris for the selected date. Its pole and rotation follow the IAU model; the surface map is a static composite.',facts:[['Mean diameter','3,475','km'],['Mean Earth distance','384,400','km']]});
   else defaultInfo();
+  if(godview?.active){
+    $('frame-note').textContent='ADMIN GODVIEW · STATIC PLACEMENT STUDY';
+    $('model-note').textContent='Lines show separation, not established contact · light-time estimates use fixed positions';
+    $('play').disabled=$('speed').disabled=$('date').disabled=true;
+  }
 }
 
 function addLabel({name,position,action,priority=0,kind='planet',color,star,portraitId}) {
@@ -237,6 +244,7 @@ function updateGroupGuide(){
   guide.style.opacity=String(logBlend(dLy,1e6,2e6));
 }
 function updateLabels(){
+  if(godview?.active)return;
   const occupied=[],zones=hudZones.filter(el=>!el.classList.contains('dismissed')).map(el=>el.getBoundingClientRect()),w=innerWidth,h=innerHeight,dLy=pose.distance/LY_AU;
   const portraits=state.portraits&&dLy>(state.galaxy?3e6:1e6),portraitBoxes=[],leaders=[];
   const symbolScale=portraitScale(w,dLy);
@@ -366,7 +374,7 @@ function frame(time,deltaTime){
     trackTarget();syncCamera();
   }
   universe.update(pose,state,camera);renderer.render(universe.scene,camera);
-  updateLabels();
+  updateLabels();godview?.render();
   uiTime+=dt;
   if(uiTime>.06){uiTime=0;updateContext();updateReadout();if(state.playing&&document.activeElement!==$('date'))$('date').value=dateText();}
 }
@@ -386,7 +394,7 @@ function wireControls(){
   $('zoom-scale').min=String(Math.log10(MIN_DISTANCE_AU));$('zoom-scale').max=String(Math.log10(MAX_DISTANCE_AU));
   $('zoom-scale').oninput=()=>{stopTravel();syncZoomFill();zoomGoal=clampDistance(10**Number($('zoom-scale').value));if(reducedMotion){pose.distance=zoomGoal;zoomGoal=null;}};
   $('travel-stop').onclick=()=>stopTravel();
-  $('reset-view').onclick=()=>state.galaxy?focusGalaxy(state.galaxy):setMode(state.mode);
+  $('reset-view').onclick=()=>godview?.active?godview.fit():state.galaxy?focusGalaxy(state.galaxy):setMode(state.mode);
   $('top-view').onclick=()=>{
     const up=new THREE.Vector3(0,1,.001).normalize();
     const direction=state.mode==='earth'||state.mode==='solar'?eclipticToGalactic(up).normalize():up;
@@ -447,7 +455,7 @@ function wireControls(){
   });
   renderer.domElement.addEventListener('webglcontextlost',e=>{e.preventDefault();gsap.ticker.remove(frame);stopTravel();labelItems.forEach(item=>item.fade?.tween.kill());fatal(new Error('The graphics context was interrupted. Reload to restore the atlas.'));});
   addEventListener('resize',resize);new ResizeObserver(resize).observe($('viewport'));
-  addEventListener('hashchange',()=>{const mode=location.hash.slice(1);if(modes.includes(mode))setMode(mode);});
+  addEventListener('hashchange',()=>{const mode=location.hash.slice(1);if(mode.startsWith('godview-'))godview.show(mode.endsWith('speculative')?'speculative':'observed');else if(modes.includes(mode)){if(godview?.active)godview.hide();setMode(mode);}});
 }
 
 async function start(){
@@ -464,10 +472,13 @@ async function start(){
     const initial=modes.includes(location.hash.slice(1))?location.hash.slice(1):'earth',destination=bookmark(initial);
     pose.target.copy(destination.target);pose.direction.copy(destination.direction);pose.distance=destination.distance;pose.home=true;pose.follow=destination.follow;
     syncCamera();universe.update(pose,state,camera);createLabels();wireControls();$('date').value=dateText();updateContext();updateLabels();updateReadout();
+    godview=createGodview({state,pose,universe,flyTo,projectAU,onChange:()=>{contextKey='';updateContext();}});
+    if(location.hash.startsWith('#godview-'))godview.show(location.hash.endsWith('speculative')?'speculative':'observed',{instant:true});
     $('loading').classList.add('done');gsap.ticker.add(frame);
     window.holos={
       getState:()=>({mode:state.mode,planet:state.planet.name,star:state.star?.name,galaxy:state.galaxy?.name,neighborGalaxies:GALAXIES.length,date:dateText(),playing:state.playing,trueSizes:state.trueSizes,reconstruction:state.reconstruction,portraits:state.portraits,visiblePortraits:universe.portraits.filter(p=>p.sprite.visible).length,extents:state.extents,uncertainty:state.uncertainty,catalogStars:META.count,searchable:META.searchable,loadedTextures:Object.keys(textures).length,sceneId:universe.scene.uuid,sceneCount:1,cameraId:camera.uuid,earthObjectId:universe.earth.root.uuid,frameCount,traveling:!!flight,destination:flight?.name,travelProgress:flight?flight.progress:null,drawCalls:renderer.info.render.calls,points:renderer.info.render.points,webgl:renderer.capabilities.isWebGL2}),
       getCamera:()=>({positionAU:universe.cameraAU.toArray(),targetAU:pose.target.toArray(),direction:pose.direction.toArray(),distanceAU:pose.distance,renderScale:universe.renderScale,homeAnchored:pose.home}),
+      getGodviewState:()=>godview.getState(),
       getGalaxyPositions:()=>universe.galaxies.map(g=>({name:g.galaxy.name,positionAU:g.positionAU.toArray(),visible:!!g.extent?.visible&&g.root.visible,markerVisible:g.marker.visible,uncertaintyVisible:g.uncertainty.visible&&g.root.visible,objectId:g.root.uuid})),
       getMoonPosition:()=>({positionAU:universe.moonPositionAU.toArray(),earthPositionAU:universe.earth.positionAU.toArray()}),
       getSolarPositions:()=>universe.bodies.map(b=>({name:b.planet.name,positionAU:b.positionAU.toArray(),radiusAU:b.planet.radius/AU_KM})),

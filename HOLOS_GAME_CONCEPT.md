@@ -8,6 +8,8 @@ This is a living record of the concept discussion, not an implementation plan or
 
 Record agreed decisions here as the discussion continues. Keep unanswered questions and illustrative possibilities separate from commitments. Later user clarifications take precedence over earlier suggestions.
 
+The user subsequently requested an exploratory **admin godview of ten player worlds on the map**, comparing observationally grounded possibilities with speculation. This authorizes a placement visualization, not construction of the game systems. [HOLOS_PLAYER_PLACEMENT.md](HOLOS_PLAYER_PLACEMENT.md) records two provisional layouts and their communication times. Neither layout is a final population or starting-world decision.
+
 ## Core premise
 
 Holos is a multiplayer, hard science fiction browser game where you inherit a civilization as it becomes superintelligent and guide its future across a persistent galaxy.
