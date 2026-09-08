@@ -2,11 +2,15 @@
 
 September 7, 2026. Two provisional admin visualization scenarios, not final starting locations or gameplay mechanics.
 
-The existing map now has an optional **Godview · 10 players** overlay. It uses the same scene, camera, and spatial frame as the atlas. All sites are visible to the admin regardless of what a player could observe. Select a marker or roster entry to compare its separation and minimum message delay to the other nine; use **Frame all 10** to return to the overview.
+The existing map now has an optional **Godview · 10 players** overlay. It uses the same scene, camera, and spatial frame as the atlas. All sites are visible to the admin regardless of what a player could observe. Select a marker or roster entry to compare its separation and minimum message delay to the other nine. Choose **Measure to** for a highlighted pair and an on-map light-year annotation; use **Frame all 10** to return to the overview. Labels avoid other markers and interface panels and may be hidden when no clear space is available; the measured distance remains in the panel.
+
+**The layouts are alternatives for the same ten hypothetical player slots, not separate populations.** The former “Observed worlds” and “Speculative galaxy” buttons are now **Real planet sites** and **Invented planet sites**. “Observed” referred only to the astronomical planet, never to a detected civilization. All future player civilizations in both layouts are fictional.
+
+The user's selection rule is observational compatibility: a real homeworld must have a defensible life-bearing scenario that a player can investigate through real research. An invented planet is also acceptable, including around a real distant host, provided its proposed properties do not contradict known measurements or detection limits. The current invented layout uses invented hosts too; it has not matched those coordinates to surveyed stars. Neither layout is a certified final set of viable homeworlds.
 
 Open the built `index.html` and select Godview, or use `#godview-observed` / `#godview-speculative` as direct-entry fragments. This is a local, offline placement study, with no accounts, resource economy, AI simulation, missions, or running game clock.
 
-## Scenario A: observed planet sites
+## Scenario A: real planet sites
 
 Earth anchors a deliberately selected group of nine confirmed exoplanets. The exoplanet positions and existence are supported by catalogs; their habitability and all player civilizations remain speculative. This is not a claim that our stellar neighborhood contains ten civilizations.
 
@@ -29,7 +33,7 @@ Across all 45 pairs, separations range from **4.24 to 111.70 ly**. Minimum one-w
 
 These are investigation-worthy sites, not nine proven Earth analogues. All nine exoplanet hosts in the sample are M dwarfs, reflecting the selected nearby detections rather than a decision that civilizations require red dwarfs. Detailed site evidence, the archive snapshot, and a documented GJ 273 distance discrepancy are in [the data notes](data/player-sites/README.md).
 
-## Scenario B: speculative galactic sites
+## Scenario B: invented planet sites
 
 Earth remains the reference. Nine invented systems are dispersed through the Galactic disk at its actual mapped scale. Their host stars, planets, and environmental descriptions are fictional. Neither their arrangement nor the illustrative spiral background establishes where life is likely.
 

@@ -418,6 +418,12 @@ dialog p strong{color:var(--ink);font-weight:500}
 .godview-tabs button{flex:1;min-height:38px;border-radius:5px;font-size:13px;color:var(--muted)}
 .godview-tabs button[aria-pressed=true]{background:var(--accent-soft);color:var(--accent-ink);box-shadow:inset 0 0 0 1px var(--accent-line)}
 #godview-description{font-size:13px;color:var(--muted);margin:12px 0}
+.godview-alternatives{font-size:11px;color:var(--accent);margin:8px 0}
+.godview-measure{display:grid;gap:6px;padding:12px;margin-top:12px;border:1px solid var(--accent-line);border-radius:7px;background:var(--accent-soft)}
+.godview-measure>span{font-size:13px;color:var(--ink)}
+.godview-measure label,.godview-measure small{font-size:11px;color:var(--muted)}
+.godview-measure select{width:100%;min-width:0;min-height:36px;border:1px solid var(--line-strong);border-radius:4px;background:var(--surface-solid);color:var(--ink);font:13px var(--mono);padding:5px}
+.godview-measure output{font:13px var(--mono);color:var(--accent-ink);padding:4px 0}
 .godview-actions{display:flex;gap:8px}
 .godview-actions button{flex:1;border:1px solid var(--line-strong);border-radius:6px;min-height:36px;font-size:13px;color:var(--ink-2)}
 .godview-actions button:hover{border-color:var(--accent);background:var(--accent-soft)}
@@ -445,6 +451,8 @@ dialog p strong{color:var(--ink);font-weight:500}
 #atlas>#godview-lines{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none}
 .godview-links{stroke:rgba(163,217,237,.24);stroke-width:1;stroke-dasharray:3 6}
 .godview-leaders{stroke:rgba(180,205,222,.55);stroke-width:1}
+.godview-measure-line{stroke:#fff0c9;stroke-width:2;fill:none}
+#atlas>#godview-measure-label{position:absolute;left:0;top:0;z-index:3;pointer-events:none;white-space:nowrap;font:12px var(--mono);color:#fff0c9;background:rgba(6,9,14,.96);border:1px solid rgba(232,207,159,.6);border-radius:4px;padding:6px 8px}
 #atlas>#godview-markers{position:absolute;inset:0;z-index:2;pointer-events:none;overflow:hidden}
 .godview-dot{position:absolute;left:0;top:0;width:7px;height:7px;margin:-3.5px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px rgba(163,217,237,.1),0 0 16px rgba(163,217,237,.55)}
 .godview-dot.fictional{background:var(--gold);box-shadow:0 0 0 4px rgba(232,207,159,.1),0 0 16px rgba(232,207,159,.4)}

@@ -39,6 +39,15 @@ Iain M. Banks's Culture books are an inspiration: being a powerful Mind responsi
 - Do not treat the three choices as different difficulty levels or bundles of strategic advantages.
 - Physical resource circumstances may vary somewhat by planet. How to reconcile that variation with equal starts remains to be worked out.
 
+### Observational compatibility of starting worlds
+
+- The user wants players to be able to look up a real home planet and find that the proposed life-bearing setting is scientifically possible. Merely being a detected planet is insufficient.
+- Do not place a civilization on a world whose established conditions contradict its proposed life and environment. Preserve measured constraints; describe any assumed atmosphere, climate, biology, and technology as speculation.
+- Invented planets in distant, incompletely surveyed systems are welcome, subject to known observational constraints. A real host with an invented planet and an entirely invented system are distinct cases and should be labeled separately.
+- Proposed real sites need a source-backed habitability case with its assumptions and adverse evidence recorded. This is an implementation criterion for the user's compatibility requirement, not a claim that the provisional shortlist is proven habitable. New evidence can require replacing a site or revising its fictional environment.
+- The admin's two layouts are alternatives for the **same ten hypothetical player slots**. They do not distinguish the player from other players, observed civilizations from hidden civilizations, or humans from AI. Either kind of site could host any player slot.
+- Observational grounding and population spacing are independent choices. Invented worlds need not be separated by galactic distances; no final spacing has been chosen.
+
 ## Multiplayer population and purpose
 
 - The galaxy contains player civilizations, with AI-controlled civilizations filling player slots when there are not enough humans.

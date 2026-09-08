@@ -18,12 +18,26 @@ const choices = [
   ['LHS 1140 b', 'LHS 1140 b', 'A transiting super-Earth of interest for atmospheric studies. Its environment and suitability for life remain uncertain.'],
   ['TOI-700 d', 'TOI-700 d', 'An Earth-sized, habitable-zone planet. This more distant outpost stretches the local layout’s communication times.'],
 ];
+// A detected planet is insufficient: each proposed exoplanet also needs a
+// published, conditional case for habitability. These are provisional sites.
+const habitability = {
+  'Proxima Cen b': ['Climate models permit surface liquid water if suitable air and water survive. Stellar flares and atmospheric escape remain major challenges.', 'https://www.giss.nasa.gov/research/features/202002_proxima/'],
+  'Ross 128 b': ['Its low minimum mass and relatively quiet star motivate a temperate-world scenario. Climate depends on unknown atmosphere and reflectivity; it may be too hot.', 'https://www.eso.org/public/news/eso1736/'],
+  'GJ 1061 d': ['The discovery study places this low-minimum-mass planet in the liquid-water habitable zone. Its composition, atmosphere, and water inventory are unknown.', 'https://arxiv.org/abs/1908.04717'],
+  'GJ 273 b': ['Formation and dynamical models allow a potentially water-rich habitable-zone planet. Water delivery and a habitable surface are model possibilities, not detections.', 'https://arxiv.org/abs/2006.09403'],
+  "Teegarden's Star b": ['A 2025 climate study permits habitable conditions with an assumed Earth-like atmosphere at one irradiation estimate; a higher estimate triggers runaway warming. A conditional choice near the inner edge.', 'https://arxiv.org/abs/2510.11940'],
+  'GJ 1002 b': ['Its minimum mass is close to Earth’s and its orbit is in the habitable zone. A rocky surface, atmosphere, and liquid water have not been established.', 'https://science.nasa.gov/universe/exoplanets/discovery-alert-two-nearby-worlds-might-be-habitable/'],
+  'TRAPPIST-1 e': ['Webb observations still allow some atmospheres compatible with liquid water, as well as an airless world. Neither an atmosphere nor an ocean is confirmed.', 'https://science.nasa.gov/missions/webb/nasa-webb-looks-at-earth-sized-habitable-zone-exoplanet-trappist-1-e/'],
+  'LHS 1140 b': ['A water-rich world with a substantial atmosphere is a research possibility. It is larger than Earth, and its actual atmosphere and surface remain unresolved; do not assume an Earth twin.', 'https://arxiv.org/abs/2406.15136'],
+  'TOI-700 d': ['An Earth-sized planet in the conservative habitable zone. That orbit supports investigating liquid-water climates; its atmosphere and actual surface conditions remain unknown.', 'https://science.nasa.gov/photojournal/toi-700-habitable-zone-diagram/'],
+};
 const observed = [earth, ...choices.map(([key, name, description], i) => {
   const row = planets.find(p => p.pl_name === key);
   // The composite archive's GJ 273 distance conflicts with the published system
   // study. Explicitly adopt its 3.75 pc value, retaining the raw row for audit.
   const distancePc = key === 'GJ 273 b' ? 3.75 : row.sy_dist;
   return { id: `P${String(i + 2).padStart(2, '0')}`, name, host: row.hostname, evidence: 'Observed world', description,
+    habitability: habitability[key][0], research: habitability[key][1],
     positionLy: skyBasis(row.ra, row.dec).radial.multiplyScalar(distancePc * PC_LY).toArray(),
     source: archive + encodeURIComponent(key), sourceLabel: 'NASA Exoplanet Archive',
     note: `Host position from catalog RA/Dec and adopted distance; planet orbit unresolved. ${key === 'GJ 273 b' ? 'Distance override: 3.75 pc from Pozuelos et al. (2020); archive composite currently lists 5.92 pc. ' : ''}Atmosphere, life, and a post-singularity civilization are not established by these data.`,
@@ -53,11 +67,11 @@ const speculative = [earth, ...fictional.map(([name, radius, angle, height, spec
 }))];
 
 export const PLAYER_LAYOUTS = {
-  observed: { name: 'Observed worlds', subtitle: 'Real planet sites · fictional civilizations', worlds: observed,
-    description: 'Earth + nine confirmed exoplanets. Chosen for a nearby exploration study, not as evidence for ten inhabited systems.',
-    caveat: 'Known planets ≠ known habitable worlds. This dense local civilization population is a fictional assumption.' },
-  speculative: { name: 'Speculative galaxy', subtitle: 'Invented worlds · real galactic scale', worlds: speculative,
-    description: 'Earth + nine invented systems spread through the Galactic disk. Host positions are authored, not observations.',
+  observed: { name: 'Real planet sites', subtitle: 'Nearby layout · real planets, hypothetical players', worlds: observed,
+    description: 'Earth + nine identified exoplanets with conditional habitability cases. Select a site for its record and research.',
+    caveat: 'Provisional shortlist: habitable conditions are possible under assumptions, not confirmed. All player civilizations are fictional.' },
+  speculative: { name: 'Invented planet sites', subtitle: 'Galactic layout · invented systems, hypothetical players', worlds: speculative,
+    description: 'The same ten slots: Earth + nine invented stars and planets. Spread across the disk to explore distance; invented sites could also be nearby.',
     caveat: 'Illustrative distribution, not a model of where life is likely. Equal capabilities do not imply equal geography.' },
 };
 
