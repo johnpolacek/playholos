@@ -146,6 +146,14 @@ Transmission and travel delays remain part of these relationships. Specific agre
 
 ## Open questions to carry forward
 
+### Relationship to the Holos theory
+
+The user introduced their theory in `docs/holos.pdf` as a source to evaluate, specifically its speculative ideas about aliens and technology. The PDF was located in the sibling `holos-game` project. [HOLOS_THEORY_EVALUATION.md](HOLOS_THEORY_EVALUATION.md) records the comparison, source page references, scientific qualifications, and proposed directions.
+
+The Integration Hypothesis, Holosian scale, Dark Nodes, and named technologies are now discussion material. They have **not** automatically become agreed game mechanics or the selected explanation of the Fermi paradox. The evaluation's recommendations remain proposals; the decisions above still govern.
+
+### Unresolved game questions
+
 These are unresolved, not permission to start implementation:
 
 1. What physical and historical setting supports the population of comparable civilizations while respecting observational limits and the Fermi paradox?
