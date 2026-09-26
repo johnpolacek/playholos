@@ -4,6 +4,7 @@ import { LY_AU, GALACTIC_CENTER, ECLIPTIC_ROTATION, eclipticToGalactic, RENDER_D
 import { GALAXIES, galaxyPosition, galaxyOutline, galaxyDistanceRange } from './galaxies.js';
 import { bodyPosition, bodyOrientation, moonOffset, moonOrbitPath } from './ephemeris.js';
 import { GALAXY_PORTRAITS, createGalaxyPortrait, portraitScale } from './galaxy-portraits.js';
+import { sphereSilhouette } from './coordinates.js';
 import { LINE_ART, inkTheme, shaderMaterial, inkLine, setInkPoints, inkSphereMaterial, inkRings, planetSymbols, INK_POINT_FRAGMENT, inkPointUniforms, trackPixelRatio, inkHatchMaterial, syncInkViewport } from './line-art.js';
 
 let renderer,textures;
@@ -107,13 +108,13 @@ function distantPoints(positions,colors,sizes,nearAlpha,{opacity=1,offset=new TH
   geometry.setAttribute('pointSize',new THREE.Float32BufferAttribute(sizes,1));
   geometry.setAttribute('nearAlpha',new THREE.Float32BufferAttribute(nearAlpha,1));
   const material=shaderMaterial({transparent:true,depthWrite:false,vertexColors:true,blending:LINE_ART?THREE.NormalBlending:THREE.AdditiveBlending,
-    uniforms:{...(LINE_ART?inkPointUniforms(fill):{}),cameraLy:{value:new THREE.Vector3()},offsetLy:{value:offset},scaleLy:{value:1},opacity:{value:opacity},surveyBlend:{value:1},pixelRatio:{value:renderer.getPixelRatio()}},
+    uniforms:{...(LINE_ART?inkPointUniforms(fill):{}),cameraLy:{value:new THREE.Vector3()},offsetLy:{value:offset},scaleLy:{value:1},opacity:{value:opacity},surveyBlend:{value:1},hideInsideLy:{value:0},pixelRatio:{value:renderer.getPixelRatio()}},
     vertexShader:`attribute float pointSize;attribute float nearAlpha;varying vec3 vColor;varying float vAlpha;varying float vSize;
-      uniform vec3 cameraLy;uniform vec3 offsetLy;uniform float scaleLy;uniform float surveyBlend;uniform float pixelRatio;
+      uniform vec3 cameraLy;uniform vec3 offsetLy;uniform float scaleLy;uniform float surveyBlend;uniform float hideInsideLy;uniform float pixelRatio;
       void main(){vec3 relative=position+offsetLy-cameraLy;float d=max(length(relative),1e-20);
         vec3 renderRelative=relative/d*min(d*scaleLy,800000.);
         gl_Position=projectionMatrix*vec4(mat3(viewMatrix)*renderRelative,1.);
-        vColor=color;vAlpha=mix(nearAlpha,1.,surveyBlend);
+        vColor=color;vAlpha=mix(nearAlpha,1.,surveyBlend)*step(hideInsideLy,length(position+offsetLy));
         gl_PointSize=clamp(pointSize*pixelRatio,1.,40.);vSize=gl_PointSize;
       }`,
     fragmentShader:LINE_ART?INK_POINT_FRAGMENT:`varying vec3 vColor;varying float vAlpha;uniform float opacity;
@@ -124,6 +125,27 @@ function distantPoints(positions,colors,sizes,nearAlpha,{opacity=1,offset=new TH
       }`});
   if(LINE_ART)trackPixelRatio(material);
   const points=new THREE.Points(geometry,material);points.frustumCulled=false;return points;
+}
+
+// The v1 game region: the complete census inside 100 ly and the outlines of
+// its two spheres, the region edge and the seeding limit. Hidden until the
+// study opens; the outlines are silhouettes, recomputed as the camera moves.
+function createRegionLayer(array,meta) {
+  const positions=[],colors=[],sizes=[],near=[];
+  for(let i=0;i<array.length;i+=5){
+    positions.push(array[i],array[i+1],array[i+2]);
+    colors.push(...colorFromBV(Math.max(-.39,Math.min(2.5,array[i+4]))));
+    sizes.push(Math.max(1.3,4.3-array[i+3]*.36));near.push(array[i+3]<=6.5?1:0);
+  }
+  const census=distantPoints(positions,colors,sizes,near,{opacity:.8});census.visible=false;
+  const outlines=new THREE.Group();outlines.visible=false;
+  // Size each buffer for a full outline up front: three rewrites a line's
+  // positions in place and never grows the buffer it was created with.
+  const blank=Array.from({length:257},()=>[0,0,0]);
+  const edge=LINE_ART?inkLine(blank,.75,{width:1.3}):line(blank,'#a3d9ed',.55);
+  const seed=LINE_ART?inkLine(blank,.6,{width:1,dash:[1.4,1.4]}):new THREE.Line(new THREE.BufferGeometry().setFromPoints(blank.map(vec)),new THREE.LineDashedMaterial({color:'#e8cf9f',transparent:true,opacity:.5,dashSize:1.4,gapSize:1.4,depthWrite:false}));
+  edge.frustumCulled=seed.frustumCulled=false;outlines.add(edge,seed);
+  return {census,outlines,edge,seed,radius:meta.radiusLy,seedRadius:meta.seedRadiusLy,cameraLy:new THREE.Vector3()};
 }
 
 function galacticDensity() {
@@ -197,7 +219,7 @@ function nearbyGalaxy(galaxy) {
 }
 
 export class Universe {
-  constructor(webglRenderer,loadedTextures,catalogArray) {
+  constructor(webglRenderer,loadedTextures,catalogArray,neighborhoodArray,neighborhood) {
     renderer=webglRenderer;textures=loadedTextures;
     // This is the only Scene. Every destination keeps the same object identity.
     this.scene=new THREE.Scene();this.scene.background=new THREE.Color(LINE_ART?inkTheme().paper:'#06090e');
@@ -234,9 +256,10 @@ export class Universe {
       sizes.push(Math.max(1.3,4.3-catalogArray[i+3]*.36));near.push(catalogArray[i+3]<=6.5?1:0);
     }
     this.catalog=distantPoints(positions,colors,sizes,near,{opacity:.8});this.scene.add(this.catalog);
+    this.region=createRegionLayer(neighborhoodArray,neighborhood);this.scene.add(this.region.census,this.region.outlines);
     const galaxy=galacticDensity();this.density=galaxy.density;this.haze=galaxy.haze;this.scene.add(this.density,this.haze);
     this.milkyWayMarker=distantPoints([0,0,0,0,0,0],[.95,.8,.6,.6,.4,.2],[9,36],[1,1],{offset:GALACTIC_CENTER.clone().divideScalar(LY_AU)});this.scene.add(this.milkyWayMarker);
-    this.distant=[this.catalog,this.density,this.haze,this.sunMarker,this.milkyWayMarker];
+    this.distant=[this.catalog,this.region.census,this.density,this.haze,this.sunMarker,this.milkyWayMarker];
     this.galaxies=GALAXIES.map(nearbyGalaxy);
     for(const galaxy of this.galaxies){this.scene.add(galaxy.root,galaxy.marker);this.distant.push(galaxy.marker);}
     this.portraits=[{id:'milkyway',positionAU:GALACTIC_CENTER},...this.galaxies.map(g=>({id:g.galaxy.id,positionAU:g.positionAU}))]
@@ -244,7 +267,7 @@ export class Universe {
     for(const portrait of this.portraits)this.scene.add(portrait.sprite);
     this.viewportSize=new THREE.Vector2();
     this.starRings=new THREE.Group();this.scene.add(this.starRings);
-    for(const radius of [5,10,20,50,100,500,1000])this.starRings.add(circle(radius,'#759bb3',.10));
+    for(const radius of [5,10,20,50,100,500,1000]){const ring=circle(radius,'#759bb3',.10);ring.userData.radius=radius;this.starRings.add(ring);}
     this.galaxyRings=new THREE.Group();this.scene.add(this.galaxyRings);
     for(const radius of [10000,20000,30000,40000,50000])this.galaxyRings.add(circle(radius,'#70879c',.085,-100));
     this.galaxyRings.add(LINE_ART?inkLine([GALACTIC_CENTER.clone().divideScalar(-LY_AU),[0,0,0]],LOOK.galaxyLine,{width:.9,dash:[300,420]}):line([GALACTIC_CENTER.clone().divideScalar(-LY_AU),[0,0,0]],'#d3b580',.28));
@@ -269,6 +292,20 @@ export class Universe {
     alpha.needsUpdate=position.needsUpdate=true;
     const sunDisk=.00465047/Math.max(1e-20,this.cameraAU.length())*pixels;
     this.sunMarker.material.uniforms.opacity.value*=1-smooth((sunDisk-9)/10);
+  }
+
+  updateRegion(state,origin,scale) {
+    const region=this.region;
+    region.census.visible=region.outlines.visible=!!state.region;
+    if(!state.region)return;
+    const u=region.census.material.uniforms;u.surveyBlend.value=this.catalog.material.uniforms.surveyBlend.value;u.opacity.value=LOOK.catalog;
+    region.outlines.position.copy(origin).negate().multiplyScalar(scale);region.outlines.scale.setScalar(LY_AU*scale);
+    region.cameraLy.copy(this.cameraAU).divideScalar(LY_AU);
+    for(const [path,radius] of [[region.edge,region.radius],[region.seed,region.seedRadius]]){
+      const outline=sphereSilhouette(radius,region.cameraLy);
+      path.visible=!!outline;if(!outline)continue;
+      setPath(path,outline);if(!LINE_ART&&path.material.isLineDashedMaterial)path.computeLineDistances();
+    }
   }
 
   updateEphemeris(date) {
@@ -334,6 +371,8 @@ export class Universe {
     this.density.material.uniforms.opacity.value=.19*galaxyVisibility*compact;this.haze.material.uniforms.opacity.value=.023*galaxyVisibility*compact;
     this.density.visible=this.haze.visible=galaxyVisibility>.001;
     this.catalog.material.uniforms.surveyBlend.value=logBlend(dLy,.002,.5);
+    // The game-region study swaps HYG inside the region for the complete census.
+    this.catalog.material.uniforms.hideInsideLy.value=state.region?this.region.radius:0;
     this.catalog.material.uniforms.opacity.value=LOOK.catalog*(1-logBlend(dLy,2500,50000))+(state.reconstruction?.0015:LOOK.catalogFar)*logBlend(dLy,2500,50000);
     this.catalog.material.uniforms.opacity.value*=1-logBlend(dLy,350000,650000);
     this.sunMarker.material.uniforms.opacity.value=logBlend(pose.distance,.02,4)*(1-logBlend(dLy,400000,650000));
@@ -365,6 +404,10 @@ export class Universe {
     const ringVisibility=logBlend(dLy,.5,4)*(1-logBlend(dLy,2000,7000));
     this.starRings.position.copy(origin).negate().multiplyScalar(scale);this.starRings.scale.setScalar(LY_AU*scale);
     this.starRings.visible=state.orbits&&ringVisibility>.001;this.starRings.children.forEach(r=>r.material.opacity=LOOK.starRings*ringVisibility);
+    // The study keeps only the plane rings that mark the region's two radii.
+    if(state.region)this.starRings.children.forEach(r=>r.visible=[this.region.seedRadius,this.region.radius].includes(r.userData.radius));
+    else this.starRings.children.forEach(r=>r.visible=true);
+    this.updateRegion(state,origin,scale);
     this.galaxyRings.position.copy(GALACTIC_CENTER).sub(origin).multiplyScalar(scale);this.galaxyRings.scale.setScalar(LY_AU*scale);
     const galaxyGuides=logBlend(dLy,400,12000)*(1-logBlend(dLy,150000,650000));
     this.galaxyRings.visible=state.orbits&&galaxyGuides>.001;this.galaxyRings.children.forEach((r,i)=>r.material.opacity=(i<5?LOOK.galaxyRings:LOOK.galaxyLine)*galaxyGuides);

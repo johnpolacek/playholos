@@ -402,15 +402,16 @@ dialog p strong{color:var(--ink);font-weight:500}
 }
 
 /* Admin placement study: an optional layer on the same atlas and camera. */
-#godview-open[aria-pressed=true]{color:var(--accent-ink);border-color:var(--accent)}
-.godview-active{--panel-w:340px}
-.godview-active .exploration-panel{grid-column:2;align-self:stretch;min-height:0;padding-top:16px}
-.godview-active .scale-nav,.godview-active .object-info,.godview-active .hint,.godview-active #labels,.godview-active .group-overlay,.godview-active .time-control,.godview-active .scene-options{display:none!important}
-.godview-active .bottom-panel{gap:6px;padding-top:10px;padding-bottom:12px}
-.godview-active .control-row{justify-content:flex-end}
-.godview-active .distance-readout{display:none}
-#godview-panel{height:100%;min-height:0;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:var(--ghost) transparent;padding:0 14px 18px 0;background:linear-gradient(90deg,rgba(6,9,14,.94) 80%,transparent);font-size:14px;line-height:1.5}
-#godview-panel .eyebrow{font-size:11px;letter-spacing:.1em}
+.label-narrow{display:none}
+#godview-open[aria-pressed=true],#region-open[aria-pressed=true]{color:var(--accent-ink);border-color:var(--accent)}
+.study-active{--panel-w:340px}
+.study-active .exploration-panel{grid-column:2;align-self:stretch;min-height:0;padding-top:16px}
+.study-active .scale-nav,.study-active .object-info,.study-active .hint,.study-active #labels,.study-active .group-overlay,.study-active .time-control,.study-active .scene-options{display:none!important}
+.study-active .bottom-panel{gap:6px;padding-top:10px;padding-bottom:12px}
+.study-active .control-row{justify-content:flex-end}
+.study-active .distance-readout{display:none}
+.study-panel{height:100%;min-height:0;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:var(--ghost) transparent;padding:0 14px 18px 0;background:linear-gradient(90deg,rgba(6,9,14,.94) 80%,transparent);font-size:14px;line-height:1.5}
+.study-panel .eyebrow{font-size:11px;letter-spacing:.1em}
 .godview-heading{display:flex;align-items:center;justify-content:space-between}
 .godview-heading h1{font-size:28px;font-weight:400;letter-spacing:-.035em;margin:4px 0 16px;line-height:1.2}
 #godview-close{align-self:flex-start;font-size:26px;color:var(--muted);width:34px;height:34px}
@@ -460,32 +461,46 @@ dialog p strong{color:var(--ink);font-weight:500}
 .godview-marker{position:absolute;left:0;top:0;pointer-events:auto;white-space:nowrap;font:12px var(--mono);color:var(--accent-ink);background:rgba(6,9,14,.88);border:1px solid var(--accent-line);border-radius:4px;padding:6px 8px;min-height:30px;transition:color .15s,background .15s,border-color .15s}
 .godview-marker.fictional{border-color:rgba(232,207,159,.4);color:var(--gold)}
 .godview-marker:hover,.godview-marker[aria-pressed=true]{color:white;border-color:white;background:#18212d;z-index:1}
-#atlas>#godview-caption{position:absolute;top:calc(var(--top-h) + 20px);left:calc(var(--gutter) + 385px);right:100px;pointer-events:none;display:flex;align-items:flex-start;flex-direction:column;gap:6px}
-#godview-caption strong{font-size:clamp(24px,2.8vw,38px);font-weight:300;letter-spacing:-.03em;line-height:1.2}
-#godview-caption>span:not(.eyebrow){font-size:13px;color:var(--muted)}
+#atlas>.study-caption{position:absolute;top:calc(var(--top-h) + 20px);left:calc(var(--gutter) + 385px);right:100px;pointer-events:none;display:flex;align-items:flex-start;flex-direction:column;gap:6px}
+.study-caption strong{font-size:clamp(24px,2.8vw,38px);font-weight:300;letter-spacing:-.03em;line-height:1.2}
+.study-caption>span:not(.eyebrow){font-size:13px;color:var(--muted)}
 .godview-legend{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:6px;font-size:11px!important}
 .godview-legend i{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent)}
 .godview-legend i.fictional{background:var(--gold);margin-left:8px}
+/* Game-region study: the real neighborhood where v1 plays. */
+.region-lede{font-size:13px;color:var(--muted);margin:0 0 14px}
+.region-sources{margin:0 0 4px;display:grid;gap:6px}
+.region-sources div{display:flex;justify-content:space-between;gap:12px;font-size:12px;color:var(--muted);border-bottom:1px solid var(--line);padding-bottom:6px}
+.region-sources dd{margin:0;font:12px var(--mono);color:var(--ink)}
+#atlas>#region-labels{position:absolute;inset:0;z-index:2;pointer-events:none;overflow:hidden}
+.region-label{position:absolute;left:0;top:0;white-space:nowrap;font:11px var(--mono);color:var(--muted)}
+.region-label.home{color:var(--accent-ink)}
+.region-label.ring{color:var(--accent);letter-spacing:.06em}
+.region-legend{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:6px;font-size:11px!important}
+.region-legend i{display:inline-block;width:18px;height:0;border-top:1.5px solid #a3d9ed}
+.region-legend i.seed{border-top:1.5px dashed #e8cf9f;margin-left:8px}
 @media(min-width:761px) and (max-width:1100px){
-  .godview-active{--panel-w:310px}
-  #atlas>#godview-caption{left:calc(var(--gutter) + 335px);right:70px}
+  .study-active{--panel-w:310px}
+  #atlas>.study-caption{left:calc(var(--gutter) + 335px);right:70px}
   .top-actions .edition{display:none}
 }
 @media(max-width:760px){
-  #godview-open{font-size:11px;padding:0 8px;min-height:34px}
-  .godview-active .exploration-panel{grid-column:2;align-self:end;height:min(43dvh,370px);padding:0;margin-bottom:8px}
-  #godview-panel{border:1px solid var(--line-strong);border-radius:10px;background:rgba(6,9,14,.96);padding:12px}
+  #godview-open,#region-open{font-size:11px;padding:0 8px;min-height:34px}
+  .label-wide{display:none}.label-narrow{display:inline}
+  .study-active .exploration-panel{grid-column:2;align-self:end;height:min(43dvh,370px);padding:0;margin-bottom:8px}
+  .study-panel{border:1px solid var(--line-strong);border-radius:10px;background:rgba(6,9,14,.96);padding:12px}
   .godview-heading h1{font-size:23px;margin-bottom:10px}
   .godview-stats{padding:10px 0;margin-bottom:12px}
-  #atlas>#godview-caption{left:var(--gutter);right:var(--gutter);top:calc(var(--top-h) + 12px);gap:4px}
-  #godview-caption strong{font-size:22px}
-  #godview-caption>span:not(.eyebrow){font-size:12px}
+  #atlas>.study-caption{left:var(--gutter);right:var(--gutter);top:calc(var(--top-h) + 12px);gap:4px}
+  .study-caption strong{font-size:22px}
+  .study-caption>span:not(.eyebrow){font-size:12px}
   .godview-legend{display:none!important}
-  .godview-active .bottom-panel{display:block;padding:7px var(--gutter)}
-  .godview-active .context-row{display:block;font-size:10px}
-  .godview-active #model-note,.godview-active #help-open{display:none}
-  .godview-active .view-tools{align-self:start;margin-top:112px}
-  .godview-active .brand-caption{display:none}
+  .region-legend,.region-label.star{display:none!important}
+  .study-active .bottom-panel{display:block;padding:7px var(--gutter)}
+  .study-active .context-row{display:block;font-size:10px}
+  .study-active #model-note,.study-active #help-open{display:none}
+  .study-active .view-tools{align-self:start;margin-top:112px}
+  .study-active .brand-caption{display:none}
 }
 
 /* Player home: a presentation shell over the atlas's unmodified physical world. */

@@ -132,5 +132,6 @@ Godview remains an admin tool. The player view must render only what the knowled
 
 1. ~~Settle conflicts 1–6.~~ Done 2026-09-25.
 2. ~~Record the outcomes in HOLOS_GAME_CONCEPT.md and holos-game's docs.~~ Done 2026-09-26: roadmap.md, stakes-design.md, vision.md, and act3-map.md carry dated amendments.
-3. Import a complete nearby-star census for the 100 ly region.
+3. ~~Import a complete nearby-star census for the 100 ly region.~~ Done 2026-09-26: 9,494 objects from the Gaia Catalogue of Nearby Stars plus bright Hipparcos stars, shown in the atlas's **Game region** view.
+   - **License, open:** Gaia data are CC BY-NC 3.0 IGO. The free atlas qualifies as non-commercial use. A paid game using this census needs prior authorization from ESA (data.licences@esa.int), or a census rebuilt from sources licensed for commercial use.
 4. Prototype: the atlas renders one real cohort served by holos-game's server.

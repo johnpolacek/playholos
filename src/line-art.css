@@ -30,7 +30,7 @@ kbd{background:transparent}
 .edition i{background:transparent;border:1px solid var(--ink);box-shadow:none}
 .icon-button{background:var(--bg);border-color:var(--line-strong);color:var(--ink-2)}
 .icon-button:hover{background:var(--ink);border-color:var(--ink);color:var(--bg)}
-#godview-open[aria-pressed=true]{background:var(--ink);color:var(--bg)}
+#godview-open[aria-pressed=true],#region-open[aria-pressed=true]{background:var(--ink);color:var(--bg)}
 
 /* Scale steps: hollow when idle, filled when active */
 .step-dot{background:var(--bg);border-color:var(--ink-2)}
@@ -105,7 +105,7 @@ dialog h3{color:var(--ink)}
 .search-dialog>input:focus{border-color:var(--ink)}
 
 /* Admin placement study: observed sites solid, invented sites hollow */
-#godview-panel{background:linear-gradient(90deg,rgba(var(--bg-rgb),.96) 80%,transparent)}
+.study-panel{background:linear-gradient(90deg,rgba(var(--bg-rgb),.96) 80%,transparent)}
 .godview-tabs button[aria-pressed=true]{background:var(--ink);color:var(--bg);box-shadow:none}
 .godview-row:hover{background:var(--accent-soft)}
 .godview-caveat{border-left-color:var(--ink);color:var(--ink-2)}
@@ -121,7 +121,7 @@ dialog h3{color:var(--ink)}
 .godview-marker:hover,.godview-marker[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .godview-legend i{background:var(--ink)}
 .godview-legend i.fictional{background:transparent;border:1px solid var(--ink)}
-@media(max-width:760px){#godview-panel{background:rgba(var(--bg-rgb),.97)}}
+@media(max-width:760px){.study-panel{background:rgba(var(--bg-rgb),.97)}}
 
 /* Player home */
 .player-view #atlas::before{background:linear-gradient(90deg,rgba(var(--bg-rgb),.94),transparent 43%)}
@@ -143,3 +143,7 @@ dialog h3{color:var(--ink)}
 @media(max-width:760px){.top-actions{gap:6px}}
 @media(max-width:430px){.brand>span:first-of-type{display:none}}
 @media(hover:none){.icon-button:hover,.home-theme:hover{background:var(--bg);border-color:var(--line-strong);color:var(--ink-2)}}
+.region-label{color:var(--ink-2)}
+.region-label.home,.region-label.ring{color:var(--ink)}
+.region-legend i{border-top-color:var(--ink)}
+.region-legend i.seed{border-top-color:var(--ink)}

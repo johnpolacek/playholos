@@ -28,6 +28,10 @@ THE SOFTWARE.
 
 HYG 4.1 by David Nash / Astronexus and the adapted catalog subset: CC BY-SA 4.0. See data/HYG-LICENSE.txt and https://github.com/astronexus/HYG-Database.
 
+## Nearby-star census (game region)
+
+Gaia Catalogue of Nearby Stars: Gaia Collaboration, Smart et al. (2021), A&A 649, A6, https://doi.org/10.1051/0004-6361/202039498, via VizieR J/A+A/649/A6. Credit: ESA, Gaia DPAC. Gaia data are licensed CC BY-NC 3.0 IGO (https://www.cosmos.esa.int/web/esdc/terms-and-conditions). Commercial use requires prior authorization from ESA (data.licences@esa.int). The derived data/neighborhood.bin carries the same terms. Provenance and method: data/neighborhood-sources/README.md.
+
 ## Planetary textures
 
 Solar System Scope / INOVE: CC BY 4.0, https://www.solarsystemscope.com/textures/. Original maps are retained in assets/. https://creativecommons.org/licenses/by/4.0/

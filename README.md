@@ -14,6 +14,12 @@ The atlas occupies **one Three.js scene with one camera**. Scroll, pinch, or use
 
 Coordinates use astronomical units, a floating origin, uniform render scaling, and logarithmic depth. Planetary **True sizes** are enabled by default. Optional enlarged disks, illustrative Milky Way structure, and a statistical asteroid belt are labeled as visualization aids. Density reconstructions are off by default. Galaxy centers, projected photometric contours, and distance uncertainty are visible by default. The Local Group overview also includes enlarged, illustrative galaxy portraits; turn off **Galaxy portraits** for a view of the measured overlays alone.
 
+## Game region
+
+Choose **Game region** in the atlas header, or open `index.html#region`. It is a design study of where the planned game's v1 cohort plays: the real solar neighborhood, 100 light-years around the Sun, with civilizations seeded inside 50 ly (see [HOLOS_MERGE.md](HOLOS_MERGE.md)). Inside that sphere the atlas swaps its HYG subset for a complete census: **9,494 objects**, 9,281 from the [Gaia Catalogue of Nearby Stars](https://doi.org/10.1051/0004-6361/202039498) plus 213 bright Hipparcos stars Gaia does not measure. The view draws the region edge and the seeding limit as sphere outlines, labels 17 landmark stars, and reports counts and light-time at the game clock. No planets or civilizations are shown. **View from above** looks down the Galactic pole; **Frame the region** or **R** restores the overview.
+
+Gaia data are **CC BY-NC 3.0 IGO**: non-commercial use with credit (ESA, Gaia DPAC). A paid game would need prior authorization from ESA. Provenance, matching method, and limits: [data/neighborhood-sources/README.md](data/neighborhood-sources/README.md). Rebuild the census with `python3 scripts/prepare-neighborhood.py` after downloading its two queries into `.cache/`. The view lives in `src/region.js`; the census layer and outlines are in `src/universe.js`.
+
 ## Player home preview
 
 Choose **Player home** in the atlas header, or open `index.html#home` directly. With `npm run dev`, visit **http://127.0.0.1:4173/#home**. `#home-system` opens the Solar System overview. **Open atlas** returns to the existing atlas; its Godview button and both `#godview-*` links remain available. The default atlas entry is unchanged.
@@ -79,6 +85,7 @@ The preview is `http://127.0.0.1:4173`. The build creates portable `index.html` 
 - `data/galaxies.json`: adopted measurements. Rebuild offline with `python3 scripts/prepare-galaxies.py`; provenance is documented in `data/galaxy-sources/README.md`.
 - `data/stars.bin`: little-endian float32 records: Galactic X, Z, −Y (light-years), apparent magnitude, B−V color index.
 - `data/stars.json`: searchable catalog subset.
+- `data/neighborhood.bin` / `data/neighborhood-meta.json`: the game-region census, same record layout as `stars.bin` with approximate V and B−V for Gaia objects, plus counts and landmarks. Built by `scripts/prepare-neighborhood.py`.
 - `scripts/prepare-catalog.py`: star preprocessing; expects the [original HYG CSV](https://raw.githubusercontent.com/astronexus/HYG-Database/main/hyg/CURRENT/hygdata_v41.csv) at `.cache/hygdata_v41.csv`.
 
 ## Attribution

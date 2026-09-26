@@ -6,10 +6,10 @@ const $ = id => document.getElementById(id);
 const number = n => n.toLocaleString('en-US', { maximumFractionDigits: n < 100 ? 1 : 0 });
 const svgNS = 'http://www.w3.org/2000/svg';
 
-export function createGodview({ state, pose, universe, flyTo, projectAU, onChange }) {
+export function createGodview({ state, pose, universe, flyTo, projectAU, onChange, beforeShow }) {
   let active = false, layoutKey = 'observed', selectedId = 'P01', targetId = 'P02', previous = null, markers = [];
   const panel = document.createElement('aside');
-  panel.id = 'godview-panel'; panel.hidden = true; panel.setAttribute('aria-label', 'Civilization placement study');
+  panel.id = 'godview-panel'; panel.className = 'study-panel'; panel.hidden = true; panel.setAttribute('aria-label', 'Civilization placement study');
   panel.innerHTML = `
     <div class="godview-heading"><div><div class="eyebrow">ADMIN · PLACEMENT STUDY</div><h1>Ten civilizations</h1></div><button id="godview-close" aria-label="Return to the atlas" title="Return to the atlas">×</button></div>
     <div class="godview-tabs" role="group" aria-label="Placement scenario"><button data-layout="observed" aria-pressed="true">Real planet sites</button><button data-layout="speculative" aria-pressed="false">Invented planet sites</button></div>
@@ -29,7 +29,7 @@ export function createGodview({ state, pose, universe, flyTo, projectAU, onChang
   links.classList.add('godview-links'); leaders.classList.add('godview-leaders'); measurement.classList.add('godview-measure-line'); overlay.append(links, measurement, leaders); $('atlas').append(overlay);
   const measureLabel = document.createElement('span'); measureLabel.id = 'godview-measure-label'; measureLabel.hidden = true; $('atlas').append(measureLabel);
   const markerLayer = document.createElement('div'); markerLayer.id = 'godview-markers'; markerLayer.hidden = true; markerLayer.setAttribute('aria-label', 'Player sites on the map'); $('atlas').append(markerLayer);
-  const caption = document.createElement('div'); caption.id = 'godview-caption'; caption.hidden = true;
+  const caption = document.createElement('div'); caption.id = 'godview-caption'; caption.className = 'study-caption'; caption.hidden = true;
   caption.innerHTML = '<span class="eyebrow">ALL PLAYERS VISIBLE · ADMIN VIEW</span><strong id="godview-caption-title"></strong><span id="godview-caption-subtitle"></span><span class="godview-legend"><i></i> Observed site <i class="fictional"></i> Invented site · All civilizations fictional</span>';
   $('atlas').append(caption);
 
@@ -111,15 +111,16 @@ export function createGodview({ state, pose, universe, flyTo, projectAU, onChang
     history.replaceState(null, '', `#godview-${key}`); onChange();
   }
   function show(key = layoutKey, options = {}) {
+    if (!active) beforeShow?.();
     if (!active) previous = { reconstruction: state.reconstruction, target: pose.target.clone(), direction: pose.direction.clone(), distance: pose.distance, home: pose.home, follow: pose.follow, star: state.star, galaxy: state.galaxy, hash: location.hash };
     active = true; state.playing = false;
-    $('atlas').classList.add('godview-active'); $('godview-open').setAttribute('aria-pressed', 'true');
+    $('atlas').classList.add('study-active'); $('godview-open').setAttribute('aria-pressed', 'true');
     panel.hidden = markerLayer.hidden = caption.hidden = false; overlay.removeAttribute('hidden');
     setLayout(key, options);
   }
   function hide() {
     active = false; panel.hidden = markerLayer.hidden = caption.hidden = measureLabel.hidden = true; overlay.setAttribute('hidden', '');
-    $('atlas').classList.remove('godview-active'); $('godview-open').setAttribute('aria-pressed', 'false');
+    $('atlas').classList.remove('study-active'); $('godview-open').setAttribute('aria-pressed', 'false');
     if (previous) {
       state.reconstruction = previous.reconstruction; $('reconstruction').checked = previous.reconstruction;
       state.star = previous.star; state.galaxy = previous.galaxy;

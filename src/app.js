@@ -7,9 +7,10 @@ import { GALAXIES, GALAXY_CATALOG, galaxyPosition, galaxyViewRadius, referenceLi
 import { skyBasis } from './coordinates.js';
 import { portraitBounds, portraitScale } from './galaxy-portraits.js';
 import { LY_AU, GALACTIC_CENTER, MIN_DISTANCE_AU, MAX_DISTANCE_AU, RENDER_DISTANCE, eclipticToGalactic, homeTarget, scaleAtDistance, clampDistance, planFlight, sampleFlight, smooth, logBlend } from './navigation.js';
-import { ASSETS, CATALOG, STAR_BUFFER, META } from './embedded.js';
+import { ASSETS, CATALOG, STAR_BUFFER, META, NEIGHBORHOOD, NEIGHBORHOOD_BUFFER } from './embedded.js';
 import { createPlayerHome } from './player-home.js';
 import { createGodview } from './godview.js';
+import { createRegion } from './region.js';
 import { LINE_ART, INK_THEMES, setInkTheme } from './line-art.js';
 
 const $=id=>document.getElementById(id),vec=a=>new THREE.Vector3(...a);
@@ -18,10 +19,10 @@ const modes=['earth','solar','stars','galaxy','group'];
 const motionPreference=matchMedia('(prefers-reduced-motion: reduce)');
 let reducedMotion=motionPreference.matches;
 motionPreference.addEventListener('change',()=>{reducedMotion=motionPreference.matches;if(reducedMotion){stopTravel();labelItems.forEach(item=>item.fade?.tween.progress(1));}});
-const state={mode:'earth',planet:PLANETS[2],star:null,galaxy:null,date:new Date('2026-09-06T12:00:00Z'),playing:false,speed:1,labels:true,orbits:true,trueSizes:true,reconstruction:false,portraits:true,extents:true,uncertainty:true};
+const state={mode:'earth',planet:PLANETS[2],star:null,galaxy:null,date:new Date('2026-09-06T12:00:00Z'),playing:false,speed:1,labels:true,orbits:true,trueSizes:true,reconstruction:false,portraits:true,extents:true,uncertainty:true,region:false};
 const pose={target:new THREE.Vector3(),direction:new THREE.Vector3(0,0,1),distance:1,home:true,follow:null};
 const textures={},labelItems=[];let hudZones=[];
-let renderer,camera,controls,universe,godview,flight=null,zoomGoal=null,toastTimer,uiTime=0,viewFactor=1,frameCount=0,contextKey='';
+let renderer,camera,controls,universe,godview,region,flight=null,zoomGoal=null,toastTimer,uiTime=0,viewFactor=1,frameCount=0,contextKey='';
 const raycaster=new THREE.Raycaster(),offset=new THREE.Vector3(),projected=new THREE.Vector3();
 // Line edition theme: follows the system setting until the viewer chooses one.
 const themeQuery=matchMedia('(prefers-color-scheme: dark)'),storedTheme=()=>{try{return localStorage.getItem('holos-line-theme');}catch{return null;}};
@@ -45,7 +46,7 @@ function format(n,dp=0){return n.toLocaleString('en-US',{maximumFractionDigits:d
 function dateText(){return state.date.toISOString().slice(0,10);}
 function toast(message){$('toast').textContent=message;$('toast').classList.add('visible');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('visible'),3600);}
 function fatal(error){console.error(error);$('fatal').hidden=false;$('loading').classList.add('done');}
-function decodeStars(){return new Float32Array(Uint8Array.from(atob(STAR_BUFFER),c=>c.charCodeAt(0)).buffer);}
+function decodeFloats(base64){return new Float32Array(Uint8Array.from(atob(base64),c=>c.charCodeAt(0)).buffer);}
 async function loadTextures(){
   const loader=new THREE.TextureLoader();let completed=0;
   await Promise.all(Object.entries(ASSETS).map(async([key,url])=>{
@@ -110,7 +111,7 @@ function searchResults(query='') {
   $('search-results').replaceChildren(...results.map(r=>{const row=document.createElement('div'),button=document.createElement('button'),name=document.createElement('span'),sub=document.createElement('em'),detail=document.createElement('small');row.setAttribute('role','listitem');button.className='search-result';name.textContent=r.name;sub.textContent=r.subtitle;name.append(sub);detail.textContent=r.detail;button.append(name,detail);button.onclick=()=>{$('search-dialog').close();r.action();};row.append(button);return row;}));
   if(!results.length){const p=document.createElement('p');p.className='no-results';p.textContent='No match in this subset. Try a planet, star or galaxy name, or a catalog ID such as M31.';$('search-results').append(p);}
 }
-function openSearch(){if(godview?.active)godview.hide();searchResults();$('search-input').value='';$('search-dialog').showModal();$('search-input').focus();}
+function openSearch(){if(godview?.active)godview.hide();if(region?.active)region.hide();searchResults();$('search-input').value='';$('search-dialog').showModal();$('search-input').focus();}
 
 function planetView(planet) {
   const body=universe.bodies[PLANETS.indexOf(planet)],radius=planet.radius/AU_KM;
@@ -155,6 +156,7 @@ function flyTo(destination,name,{instant=false,duration}={}) {
 function setMode(mode,{instant=false,planet}={}) {
   if(!modes.includes(mode))return;
   if(godview?.active)godview.hide();
+  if(region?.active)region.hide();
   state.star=null;state.galaxy=null;state.planet=planet||PLANETS[2];
   const destination=planet?planetView(planet):bookmark(mode);
   flyTo(destination,planet?.name||{earth:'Earth',solar:'the Solar System',stars:'nearby stars',galaxy:'the Milky Way',group:'the Local Group'}[mode],{instant});
@@ -187,7 +189,7 @@ function setPlaying(){if(playerActive)return;if($('play').disabled)return;state.
 
 function updateContext() {
   state.mode=state.galaxy&&!flight&&pose.distance<650000*LY_AU?'galaxy':scaleAtDistance(pose.distance);
-  const m=state.mode,extragalactic=m==='group'||!!state.galaxy&&!flight,key=[m,state.planet.name,state.star?.id,state.galaxy?.id,state.trueSizes,state.reconstruction,state.portraits,state.extents,state.uncertainty,!!flight,pose.follow?.moon].join('|');
+  const m=state.mode,extragalactic=m==='group'||!!state.galaxy&&!flight,key=[m,state.planet.name,state.star?.id,state.galaxy?.id,state.trueSizes,state.reconstruction,state.portraits,state.extents,state.uncertainty,state.region,!!flight,pose.follow?.moon].join('|');
   if(key===contextKey)return;contextKey=key;
   playerHome?.update(state.mode,state.planet.name);
   const activeMode=state.galaxy&&!flight?'group':m;
@@ -210,6 +212,11 @@ function updateContext() {
   if(godview?.active){
     $('frame-note').textContent='ADMIN GODVIEW · STATIC PLACEMENT STUDY';
     $('model-note').textContent='Lines show separation, not established contact · light-time estimates use fixed positions';
+    $('play').disabled=$('speed').disabled=$('date').disabled=true;
+  }
+  if(region?.active){
+    $('frame-note').textContent='DESIGN STUDY · V1 GAME REGION';
+    $('model-note').textContent=`${format(NEIGHBORHOOD.count)} objects within ${NEIGHBORHOOD.radiusLy} ly · Gaia census + Hipparcos bright stars`;
     $('play').disabled=$('speed').disabled=$('date').disabled=true;
   }
 }
@@ -267,7 +274,7 @@ function updateGroupGuide(){
   guide.style.opacity=String(logBlend(dLy,1e6,2e6));
 }
 function updateLabels(){
-  if(godview?.active)return;
+  if(godview?.active||region?.active)return;
   const occupied=[],zones=(playerActive?playerHome.zones:hudZones).filter(el=>el.getClientRects().length&&!el.classList.contains('dismissed')).map(el=>el.getBoundingClientRect()),w=innerWidth,h=innerHeight,dLy=pose.distance/LY_AU;
   const portraits=state.portraits&&dLy>(state.galaxy?3e6:1e6),portraitBoxes=[],leaders=[];
   const symbolScale=portraitScale(w,dLy);
@@ -400,7 +407,7 @@ function frame(time,deltaTime){
     trackTarget();syncCamera();
   }
   universe.update(pose,state,camera);renderer.render(universe.scene,camera);
-  updateLabels();godview?.render();
+  updateLabels();godview?.render();region?.render();
   uiTime+=dt;
   if(uiTime>.06){uiTime=0;updateContext();updateReadout();if(state.playing&&document.activeElement!==$('date'))$('date').value=dateText();}
 }
@@ -420,7 +427,7 @@ function wireControls(){
   $('zoom-scale').min=String(Math.log10(MIN_DISTANCE_AU));$('zoom-scale').max=String(Math.log10(MAX_DISTANCE_AU));
   $('zoom-scale').oninput=()=>{stopTravel();syncZoomFill();zoomGoal=clampDistance(10**Number($('zoom-scale').value));if(reducedMotion){pose.distance=zoomGoal;zoomGoal=null;}};
   $('travel-stop').onclick=()=>stopTravel();
-  $('reset-view').onclick=()=>godview?.active?godview.fit():state.galaxy?focusGalaxy(state.galaxy):setMode(state.mode);
+  $('reset-view').onclick=()=>godview?.active?godview.fit():region?.active?region.fit():state.galaxy?focusGalaxy(state.galaxy):setMode(state.mode);
   $('top-view').onclick=()=>{
     const up=new THREE.Vector3(0,1,.001).normalize();
     const direction=state.mode==='earth'||state.mode==='solar'?eclipticToGalactic(up).normalize():up;
@@ -482,12 +489,12 @@ function wireControls(){
   });
   renderer.domElement.addEventListener('webglcontextlost',e=>{e.preventDefault();gsap.ticker.remove(frame);stopTravel();labelItems.forEach(item=>item.fade?.tween.kill());fatal(new Error('The graphics context was interrupted. Reload to restore the atlas.'));});
   addEventListener('resize',resize);new ResizeObserver(resize).observe($('viewport'));
-  addEventListener('hashchange',()=>{const mode=location.hash.slice(1);setPlayerActive(['home','home-system'].includes(mode));if(playerActive){setMode(mode==='home-system'?'solar':'earth');return;}if(mode.startsWith('godview-'))godview.show(mode.endsWith('speculative')?'speculative':'observed');else if(modes.includes(mode)){if(godview?.active)godview.hide();setMode(mode);}});
+  addEventListener('hashchange',()=>{const mode=location.hash.slice(1);setPlayerActive(['home','home-system'].includes(mode));if(playerActive){setMode(mode==='home-system'?'solar':'earth');return;}if(mode.startsWith('godview-'))godview.show(mode.endsWith('speculative')?'speculative':'observed');else if(mode==='region')region.show();else if(modes.includes(mode)){if(godview?.active)godview.hide();setMode(mode);}});
 }
 
 function setPlayerActive(active){
   stopTravel();playerActive=active;state.playing=false;updatePlay();
-  if(active){if(godview?.active)godview.hide();state.trueSizes=true;$('true-sizes').checked=true;state.orbits=true;state.labels=true;state.reconstruction=false;state.date=new Date('2026-09-06T12:00:00Z');universe.updateEphemeris(state.date);$('date').value=dateText();$('orbits').checked=true;$('reconstruction').checked=false;$('labels-toggle').setAttribute('aria-pressed','true');}
+  if(active){if(godview?.active)godview.hide();if(region?.active)region.hide();state.trueSizes=true;$('true-sizes').checked=true;state.orbits=true;state.labels=true;state.reconstruction=false;state.date=new Date('2026-09-06T12:00:00Z');universe.updateEphemeris(state.date);$('date').value=dateText();$('orbits').checked=true;$('reconstruction').checked=false;$('labels-toggle').setAttribute('aria-pressed','true');}
   playerHome.setActive(active);resize();contextKey='';
   document.title=(active?'Holos — Home civilization':'Holos — Earth to the Local Group')+(LINE_ART?'':' · Color edition');
 }
@@ -503,18 +510,22 @@ async function start(){
     renderer.domElement.addEventListener('wheel',e=>{e.preventDefault();e.stopImmediatePropagation();const pixels=e.deltaY*(e.deltaMode===1?16:e.deltaMode===2?innerHeight:1);zoom(Math.exp(Math.max(-2,Math.min(2,pixels*.006))));},{passive:false,capture:true});
     controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.dampingFactor=.07;controls.rotateSpeed=.65;controls.zoomSpeed=2;controls.minDistance=1;controls.maxDistance=10000;controls.screenSpacePanning=true;
     playerHome=createPlayerHome({navigate:mode=>setMode(mode),zoom});playerHome.setActive(playerActive);if(LINE_ART)addThemeToggles();
-    resize();await loadTextures();universe=new Universe(renderer,textures,decodeStars());universe.updateEphemeris(state.date);
+    resize();await loadTextures();universe=new Universe(renderer,textures,decodeFloats(STAR_BUFFER),decodeFloats(NEIGHBORHOOD_BUFFER),NEIGHBORHOOD);universe.updateEphemeris(state.date);
     const initial=playerActive?(location.hash==='#home-system'?'solar':'earth'):modes.includes(location.hash.slice(1))?location.hash.slice(1):'earth',destination=bookmark(initial);
     pose.target.copy(destination.target);pose.direction.copy(destination.direction);pose.distance=destination.distance;pose.home=true;pose.follow=destination.follow;
     syncCamera();universe.update(pose,state,camera);createLabels();wireControls();$('date').value=dateText();updateContext();updateLabels();updateReadout();
-    godview=createGodview({state,pose,universe,flyTo,projectAU,onChange:()=>{contextKey='';updateContext();}});
+    const onChange=()=>{contextKey='';updateContext();};
+    godview=createGodview({state,pose,universe,flyTo,projectAU,onChange,beforeShow:()=>region?.active&&region.hide()});
+    region=createRegion({state,pose,flyTo,projectAU,onChange,beforeShow:()=>godview?.active&&godview.hide(),meta:NEIGHBORHOOD});
     if(location.hash.startsWith('#godview-'))godview.show(location.hash.endsWith('speculative')?'speculative':'observed',{instant:true});
+    if(location.hash==='#region')region.show({instant:true});
     document.title=playerActive?'Holos — Home civilization'+(LINE_ART?'':' · Color edition'):document.title;
     $('loading').classList.add('done');gsap.ticker.add(frame);
     window.holos={
       getState:()=>({playerView:playerActive,mode:state.mode,planet:state.planet.name,star:state.star?.name,galaxy:state.galaxy?.name,neighborGalaxies:GALAXIES.length,date:dateText(),playing:state.playing,trueSizes:state.trueSizes,reconstruction:state.reconstruction,portraits:state.portraits,visiblePortraits:universe.portraits.filter(p=>p.sprite.visible).length,extents:state.extents,uncertainty:state.uncertainty,catalogStars:META.count,searchable:META.searchable,loadedTextures:Object.keys(textures).length,sceneId:universe.scene.uuid,sceneCount:1,cameraId:camera.uuid,earthObjectId:universe.earth.root.uuid,frameCount,traveling:!!flight,destination:flight?.name,travelProgress:flight?flight.progress:null,drawCalls:renderer.info.render.calls,points:renderer.info.render.points,webgl:renderer.capabilities.isWebGL2}),
       getCamera:()=>({positionAU:universe.cameraAU.toArray(),targetAU:pose.target.toArray(),direction:pose.direction.toArray(),distanceAU:pose.distance,renderScale:universe.renderScale,homeAnchored:pose.home}),
       getGodviewState:()=>playerActive?{active:false}:godview.getState(),
+      getRegionState:()=>region.getState(),
       getGalaxyPositions:()=>universe.galaxies.map(g=>({name:g.galaxy.name,positionAU:g.positionAU.toArray(),visible:!!g.extent?.visible&&g.root.visible,markerVisible:g.marker.visible,uncertaintyVisible:g.uncertainty.visible&&g.root.visible,objectId:g.root.uuid})),
       getMoonPosition:()=>({positionAU:universe.moonPositionAU.toArray(),earthPositionAU:universe.earth.positionAU.toArray()}),
       getSolarPositions:()=>universe.bodies.map(b=>({name:b.planet.name,positionAU:b.positionAU.toArray(),radiusAU:b.planet.radius/AU_KM})),

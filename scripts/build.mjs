@@ -7,11 +7,14 @@ const encode=async file=>`data:image/${file.endsWith('.png')?'png':'jpeg'};base6
 const catalog=await readFile(new URL('data/stars.json',root),'utf8');
 const meta=await readFile(new URL('data/catalog-meta.json',root),'utf8');
 const stars=(await readFile(new URL('data/stars.bin',root))).toString('base64');
+const neighborhood=await readFile(new URL('data/neighborhood-meta.json',root),'utf8');
+const neighborhoodStars=(await readFile(new URL('data/neighborhood.bin',root))).toString('base64');
 const css=await readFile(new URL('src/style.css',root),'utf8');
 const template=await readFile(new URL('src/template.html',root),'utf8');
 const license=await readFile(new URL('node_modules/three/LICENSE',root),'utf8');
 const ephemerisLicense=(await readFile(new URL('node_modules/astronomy-engine/esm/astronomy.js',root),'utf8')).split('*/')[0].replace('/**','').trim();
-const attribution=`<!--\nThree.js license:\n${license}\nAstronomy Engine license:\n${ephemerisLicense}\nPlanetary texture maps: Solar System Scope / INOVE, CC BY 4.0, https://www.solarsystemscope.com/textures/\nHYG 4.1 star data: David Nash / Astronexus, CC BY-SA 4.0, https://github.com/astronexus/HYG-Database\nAdaptations: distance filtering and Galactic coordinate transformation; adapted data remains CC BY-SA 4.0.\nGalaxy compilation: Andrew B. Pace, Local Volume Database v1.1.1, CC0, https://github.com/apace7/local_volume_database\nGalaxy measurements: original studies cited per object; RC3 B25 contours, de Vaucouleurs et al. (1991), CDS VII/155.\n-->\n`;
+const attribution=`<!--\nThree.js license:\n${license}\nAstronomy Engine license:\n${ephemerisLicense}\nPlanetary texture maps: Solar System Scope / INOVE, CC BY 4.0, https://www.solarsystemscope.com/textures/\nHYG 4.1 star data: David Nash / Astronexus, CC BY-SA 4.0, https://github.com/astronexus/HYG-Database\nAdaptations: distance filtering and Galactic coordinate transformation; adapted data remains CC BY-SA 4.0.\nNearby-star census within 100 ly: Gaia Catalogue of Nearby Stars, Gaia Collaboration, Smart et al. (2021), A&A 649, A6. Credit: ESA, Gaia DPAC. Gaia data: CC BY-NC 3.0 IGO; commercial use requires ESA authorization.
+Galaxy compilation: Andrew B. Pace, Local Volume Database v1.1.1, CC0, https://github.com/apace7/local_volume_database\nGalaxy measurements: original studies cited per object; RC3 B25 contours, de Vaucouleurs et al. (1991), CDS VII/155.\n-->\n`;
 
 // index.html is the line drawing; color.html keeps the original color rendering.
 // The line drawing traces coastlines and contours from the surface maps, so it
@@ -24,7 +27,7 @@ const LINE_WORDING=[['Blue outlines with soft shading show','Hatched outlines sh
 async function buildEdition({lineArt,output}) {
   const assets={};
   for(const file of assetFiles){const name=path.parse(file).name;if(lineArt&&LINE_UNUSED.includes(name))continue;assets[name]=await encode(file);}
-  const embedded=`export const ASSETS=${JSON.stringify(assets)};export const CATALOG=${catalog};export const META=${meta};export const STAR_BUFFER=${JSON.stringify(stars)};`;
+  const embedded=`export const ASSETS=${JSON.stringify(assets)};export const CATALOG=${catalog};export const META=${meta};export const STAR_BUFFER=${JSON.stringify(stars)};export const NEIGHBORHOOD=${neighborhood};export const NEIGHBORHOOD_BUFFER=${JSON.stringify(neighborhoodStars)};`;
   const result=await build({entryPoints:[new URL('src/app.js',root).pathname],bundle:true,write:false,format:'iife',minify:true,target:'es2020',legalComments:'inline',define:{__LINE_ART__:String(lineArt)},plugins:[{name:'embedded-assets',setup(b){b.onResolve({filter:/embedded\.js$/},()=>({path:'embedded',namespace:'virtual'}));b.onLoad({filter:/.*/,namespace:'virtual'},()=>({contents:embedded,loader:'js'}));}}]});
   // Escape script closing delimiters so embedded data can never terminate the script tag.
   const js=result.outputFiles[0].text.replace(/<\/script/gi,'<\\/script');
