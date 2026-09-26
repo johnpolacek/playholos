@@ -252,7 +252,7 @@ Matter · all idle
 Compute · all idle
 NEXT 3 HOURS
 now · 01:00:00 · 02:00:00 · 03:00:00
-One Year passes every · 00:05:00. Your first project will appear on this line.
+One Year passes every · 00:05:00 · (5 minutes). Your first project will appear on this line.
 [Start a project]
 start a project ›
 
@@ -298,7 +298,7 @@ Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
 ENERGY · [62%] · MATTER · [78%] · COMPUTE · [45%]
 PROJECTS · 1 RUNNING
 [drawing: Infrared telescope; labels: under construction · 0% built]
-Infrared telescope · Done in Year 18.4 · 18 Years · 01:29:47
+Infrared telescope · Done in Year 18.4 · 18 Years · 01:29:47 · [Pause Infrared telescope]
 Helps with: New warm glow · ε Indi · When done: dust, companions or waste heat, told apart
 EACH YEAR YOU CAN SPEND
 Energy · [25%] · 75% free
@@ -316,8 +316,8 @@ Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
 ENERGY · [62%] · MATTER · [78%] · COMPUTE · [45%]
 PROJECTS · 2 RUNNING
 RUNNING
-[drawing: Transit watch] · Transit watch · Gl 783 A · 4 Years · 00:19:58
-[drawing: Infrared telescope] · Infrared telescope · ε Indi · 18 Years · 01:29:16
+[drawing: Transit watch] · Transit watch · Gl 783 A · 4 Years · 00:19:58 · [Pause Transit watch]
+[drawing: Infrared telescope] · Infrared telescope · ε Indi · 18 Years · 01:29:16 · [Pause Infrared telescope]
 The transit watch finishes first. Its answer lands in the Report.
 EACH YEAR YOU CAN SPEND
 Energy · [30%] · 70% free
@@ -326,6 +326,26 @@ Compute · [25%] · 75% free
 NEXT 3 HOURS
 Transit watch
 Infrared telescope
+now · 01:00:00 · 02:00:00 · 03:00:00
+[Start another project]
+pause ›
+
+#### 6 · Paused · Any project can be paused. Progress is kept and its share of the year is freed.
+Veyra · Year 0.4
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [62%] · MATTER · [78%] · COMPUTE · [45%]
+PROJECTS · 1 RUNNING · 1 PAUSED
+RUNNING
+[drawing: Transit watch] · Transit watch · Gl 783 A · 4 Years · 00:07:31 · [Pause Transit watch]
+PAUSED
+[drawing: Infrared telescope] · Infrared telescope · ε Indi · Paused · 10.8 Years left · 00:54:00 · [selected: Resume Infrared telescope]
+A paused project keeps its progress and uses nothing. Its share of the year is free for something else until you resume it.
+EACH YEAR YOU CAN SPEND
+Energy · [5%] · 95% free
+Matter · [0%] · 100% free
+Compute · [10%] · 90% free
+NEXT 3 HOURS
+Transit watch
 now · 01:00:00 · 02:00:00 · 03:00:00
 [Start another project]
 

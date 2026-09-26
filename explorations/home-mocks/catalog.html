@@ -142,6 +142,11 @@ try{const t=localStorage.getItem('holos-mock-theme');if(t==='light'||t==='dark')
 .lane .lname{position:absolute;left:0;top:-10px;font-size:10.5px;color:var(--you);white-space:nowrap}
 .lanes+.track{margin-top:4px}
 .primary.ghost{background:none;color:var(--ink);border:1px solid var(--ink)}
+.rside{display:flex;align-items:center;gap:10px}
+.pause{width:32px;height:32px;border-radius:50%;border:1px solid var(--ink);display:grid;place-items:center;color:var(--ink);flex-shrink:0}
+.pause.on{background:var(--ink);color:var(--paper)}
+.paused-chip{align-self:flex-start;padding:1px 7px;border-radius:9px;background:var(--muted);color:var(--paper);font-size:10.5px}
+.prow.is-paused .bar span{background:var(--muted)}.prow.is-paused .tstack .rtime{color:var(--muted)}
 .why{list-style:none;margin:6px 0 0;padding:0;display:flex;flex-direction:column;gap:5px;font-size:14px;line-height:1.4}.why b{font-weight:600}
 .kinds{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:auto;padding-top:12px}
 .kinds button{height:38px;border:1px solid var(--ink);border-radius:19px;text-align:center;font-size:13px}

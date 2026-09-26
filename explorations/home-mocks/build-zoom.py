@@ -723,6 +723,11 @@ tour_css = '''<style>
 .lane .lname{position:absolute;left:0;top:-10px;font-size:10.5px;color:var(--you);white-space:nowrap}
 .lanes+.track{margin-top:4px}
 .primary.ghost{background:none;color:var(--ink);border:1px solid var(--ink)}
+.rside{display:flex;align-items:center;gap:10px}
+.pause{width:32px;height:32px;border-radius:50%;border:1px solid var(--ink);display:grid;place-items:center;color:var(--ink);flex-shrink:0}
+.pause.on{background:var(--ink);color:var(--paper)}
+.paused-chip{align-self:flex-start;padding:1px 7px;border-radius:9px;background:var(--muted);color:var(--paper);font-size:10.5px}
+.prow.is-paused .bar span{background:var(--muted)}.prow.is-paused .tstack .rtime{color:var(--muted)}
 .why{list-style:none;margin:6px 0 0;padding:0;display:flex;flex-direction:column;gap:5px;font-size:14px;line-height:1.4}.why b{font-weight:600}
 .kinds{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:auto;padding-top:12px}
 .kinds button{height:38px;border:1px solid var(--ink);border-radius:19px;text-align:center;font-size:13px}
@@ -764,7 +769,7 @@ PROJECTS_EMPTY = tab_screen('Projects', 'PROJECTS', 'NOTHING UNDER WAY', ''.join
     capacity('Energy', 'all idle'), capacity('Matter', 'all idle'), capacity('Compute', 'all idle'),
     '<div class="sec">NEXT 3 HOURS</div>',
     '<div class="track"><i style="left:0"></i><i style="left:33.3%"></i><i style="left:66.6%"></i><i style="left:100%"></i><span>now</span><span>01:00:00</span><span>02:00:00</span><span>03:00:00</span></div>',
-    '<p class="copy small">One Year passes every <span class="rtime">00:05:00</span>. Your first project will appear on this line.</p>',
+    '<p class="copy small">One Year passes every <span class="rtime">00:05:00</span> (5 minutes). Your first project will appear on this line.</p>',
     '<button class="primary">Start a project</button>']))
 
 # ---------- Start a project: pick, then confirm ----------
@@ -860,19 +865,33 @@ def track(bars):
     marks = '<i style="left:0"></i><i style="left:33.3%"></i><i style="left:66.6%"></i><i style="left:100%"></i><span>now</span><span>01:00:00</span><span>02:00:00</span><span>03:00:00</span>'
     lanes = ''.join(f'<div class="lane"><div class="span" style="width:{w}%"></div><span class="lname">{name}</span></div>' for name, w in bars)
     return f'<div class="lanes">{lanes}</div><div class="track">{marks}</div>'
-def running_row(key, name, years, remaining, pct, clue=None):
+PAUSE_ICON = '<svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><rect x="3" y="2" width="3" height="10" fill="currentColor"></rect><rect x="8" y="2" width="3" height="10" fill="currentColor"></rect></svg>'
+PLAY_ICON = '<svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M4 2 L12 7 L4 12 Z" fill="currentColor"></path></svg>'
+def pause_button(name, paused=False):
+    return f'<button class="pause{" on" if paused else ""}" aria-label="{"Resume" if paused else "Pause"} {name}">{PLAY_ICON if paused else PAUSE_ICON}</button>'
+def running_row(key, name, years, remaining, pct, clue=None, paused=False):
     tag = f'<span class="clue">{clue}</span>' if clue else ''
-    return (f'<div class="prow"><span class="thumb">{ICONS[key]}</span><span class="pt"><b>{name}</b>{tag}'
-            f'<span class="bar"><span style="width:{max(pct, 1.5)}%"></span></span></span>{tstack(years, remaining, True)}</div>')
+    state = '<span class="paused-chip">Paused</span>' if paused else ''
+    return (f'<div class="prow{" is-paused" if paused else ""}"><span class="thumb">{ICONS[key]}</span><span class="pt"><b>{name}</b>{tag}{state}'
+            f'<span class="bar"><span style="width:{max(pct, 1.5)}%"></span></span></span><span class="rside">{tstack(years, remaining, not paused)}{pause_button(name, paused)}</span></div>')
 
 ir, tw = CAT['infrared-telescope'], CAT['transit-watch']
 STARTED = tab_screen('Projects', 'PROJECTS', '1 RUNNING', ''.join([
     f'<div class="art">{big_ir(0.0, 150)}</div>',
-    f'<div class="runhead"><span><b class="lead">{ir["name"]}</b><span class="copy small">Done in Year 18.4</span></span>{tstack(f"{ir["years"]} Years", "01:29:47", True)}</div>',
+    f'<div class="runhead"><span><b class="lead">{ir["name"]}</b><span class="copy small">Done in Year 18.4</span></span><span class="rside">{tstack(f"{ir["years"]} Years", "01:29:47", True)}{pause_button(ir["name"])}</span></div>',
     '<span class="bar big"><span style="width:1.5%"></span></span>',
     '<div class="helps"><span class="mk other"></span><span><b class="other">Helps with: New warm glow · ε Indi</b><span class="sub">When done: dust, companions or waste heat, told apart</span></span></div>',
     '<div class="sec">EACH YEAR YOU CAN SPEND</div>', used('Energy', 25), used('Matter', 10), used('Compute', 15),
     '<div class="sec">NEXT 3 HOURS</div>', track([(ir['name'], 50)]),
+    '<button class="primary ghost">Start another project</button>']))
+PAUSED = tab_screen('Projects', 'PROJECTS', '1 RUNNING · 1 PAUSED', ''.join([
+    '<div class="sec">RUNNING</div>',
+    running_row('transit', tw['name'], f'{tw["years"]} Years', '00:07:31', 62, 'Gl 783 A'),
+    '<div class="sec">PAUSED</div>',
+    running_row('ir', ir['name'], '10.8 Years left', '00:54:00', 40, 'ε Indi', paused=True),
+    '<p class="copy small">A paused project keeps its progress and uses nothing. Its share of the year is free for something else until you resume it.</p>',
+    '<div class="sec">EACH YEAR YOU CAN SPEND</div>', used('Energy', 5), used('Matter', 0), used('Compute', 10),
+    '<div class="sec">NEXT 3 HOURS</div>', track([(tw['name'], 4.2)]),
     '<button class="primary ghost">Start another project</button>']))
 TWO_RUNNING = tab_screen('Projects', 'PROJECTS', '2 RUNNING', ''.join([
     '<div class="sec">RUNNING</div>',
@@ -903,7 +922,9 @@ SECTIONS = [
      '<span class="pinch">start ›</span>'
      f'<figure><figcaption><strong>4 · Started</strong><span>The drawing fills in as it is built. Its timer runs even while you are away.</span></figcaption>{STARTED}</figure>'
      '<span class="pinch">start another ›</span>'
-     f'<figure><figcaption><strong>5 · Two running</strong><span>Each takes its share of the year. The quick one finishes first.</span></figcaption>{TWO_RUNNING}</figure>'),
+     f'<figure><figcaption><strong>5 · Two running</strong><span>Each takes its share of the year. The quick one finishes first.</span></figcaption>{TWO_RUNNING}</figure>'
+     '<span class="pinch">pause ›</span>'
+     f'<figure><figcaption><strong>6 · Paused</strong><span>Any project can be paused. Progress is kept and its share of the year is freed.</span></figcaption>{PAUSED}</figure>'),
 ]
 # Explorations: an appendix of working-session mocks, newest first. Not current design.
 EXPLORATIONS = [
