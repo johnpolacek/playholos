@@ -116,8 +116,37 @@ def ellipse_path(cx, cy, rx, ry, a0, a1, steps=64):
     pts = [(cx + rx * math.cos(math.radians(a0 + (a1 - a0) * i / steps)), cy + ry * math.sin(math.radians(a0 + (a1 - a0) * i / steps))) for i in range(steps + 1)]
     return 'M' + ' L'.join(f'{fmt(x)},{fmt(y)}' for x, y in pts)
 
+# ---------- Projects on the map: real positions, every timer shown ----------
+def map_chip(x, y, name, time, anchor='start', done=False):
+    w = max(len(name), len(time)) * 5.7 + 14
+    left = x if anchor == 'start' else x - w if anchor == 'end' else x - w / 2
+    color = INK if done else YOU
+    return (f'<rect x="{fmt(left)}" y="{fmt(y - 13)}" width="{fmt(w)}" height="29" rx="5" fill="{PAPER}" stroke="{color}" stroke-width="1"></rect>'
+            f'<text x="{fmt(left + 7)}" y="{fmt(y - 1)}" font-size="9" fill="{MUTED}">{name}</text>'
+            f'<text x="{fmt(left + 7)}" y="{fmt(y + 11)}" font-size="10.5" fill="{color}" font-weight="600">{time}</text>')
+
+def receiver_glyph(x, y, built=1.0):
+    out = []
+    for i, (dx, dy) in enumerate(((-15, -10), (1, -10), (-15, 4), (1, 4))):
+        ok = i < round(built * 4)
+        stroke, dash = (INK, '') if ok else (YOU, ' stroke-dasharray="2 2"')
+        X, Y = x + dx, y + dy
+        out.append(f'<path d="M{fmt(X)} {fmt(Y)} q7 -5 14 0 v6 q-7 -5 -14 0 Z" fill="{PAPER}" stroke="{stroke}" stroke-width="1"{dash}></path>')
+    if built >= 1:
+        out.append(''.join(f'<path d="M{fmt(x - 8 - i * 5)} {fmt(y - 14 - i * 5)} q{8 + i * 5} {-8 - i * 5} {16 + i * 10} 0" fill="none" stroke="{INK}" stroke-width=".8" opacity="{.7 - i * .2}"></path>' for i in range(3)))
+    return ''.join(out)
+
+def truss_glyph(x, y, built=0.2):
+    out, n = [], 8
+    for i in range(n):
+        ok = i < round(built * n)
+        stroke, dash = (INK, '') if ok else (YOU, ' stroke-dasharray="2 2"')
+        X = x - 24 + i * 6
+        out.append(f'<path d="M{X} {y - 4} L{X + 6} {y - 4} M{X} {y + 4} L{X + 6} {y + 4} M{X} {y + (4 if i % 2 else -4)} L{X + 6} {y + (-4 if i % 2 else 4)}" stroke="{stroke}" stroke-width=".9" fill="none"{dash}></path>')
+    return ''.join(out)
+
 # ---------- 1 · World ----------
-def world():
+def world(receiver=0.7, done=False, times=('00:37:42', '01:09:15', '02:29:48')):
     cx, cy, r = 195, 190, 128
     s = [stipple(1)]
     s.append(f'<path d="{ellipse_path(cx, cy + 8, 176, 36, 180, 360)}" fill="none" stroke="{INK}" stroke-width=".8" stroke-dasharray="3 4" opacity=".45"></path>')
@@ -153,12 +182,19 @@ def world():
     s.extend(g)
     s.append(f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="none" stroke="{INK}" stroke-width="1.4"></circle>')
     s.append(f'<path d="{ellipse_path(cx, cy + 8, 176, 36, 0, 180)}" fill="none" stroke="{INK}" stroke-width=".9" opacity=".7"></path>')
+    # The receiver, in orbit: a blueprint that fills in as it is built.
     rx, ry = cx + 176 * math.cos(math.radians(38)), cy + 8 + 36 * math.sin(math.radians(38))
-    s.append(f'<rect x="{fmt(rx - 4)}" y="{fmt(ry - 4)}" width="8" height="8" fill="{YOU}"></rect>')
-    s.append(f'<line x1="{fmt(rx + 3)}" y1="{fmt(ry + 5)}" x2="370" y2="300" stroke="{YOU}" stroke-width=".8"></line>')
-    s.append(text(376, 314, 'Deep-field receiver', 10, YOU, 'end'))
-    s.append(text(376, 327, 'online in 00:37:42', 10, MUTED, 'end'))
-    s.append(text(374, 28, 'light from Delta Pavonis ↗', 10, MUTED, 'end'))
+    s.append(receiver_glyph(rx, ry, 1.0 if done else receiver))
+    s.append(f'<line x1="{fmt(rx)}" y1="{fmt(ry + 12)}" x2="{fmt(rx)}" y2="264" stroke="{INK if done else YOU}" stroke-width=".8"></line>')
+    s.append(map_chip(384, 278, 'Deep-field receiver', 'Done · listening' if done else times[0], 'end', done))
+    # The survey runs from observatories on Veyra's day side.
+    sx_, sy_ = cx - 96, cy + 28
+    s.append(f'<circle cx="{sx_}" cy="{sy_}" r="3.5" fill="{PAPER}" stroke="{YOU}" stroke-width="1.3"></circle>')
+    s.append(f'<line x1="{sx_ - 2}" y1="{sy_ + 4}" x2="60" y2="290" stroke="{YOU}" stroke-width=".8"></line>')
+    s.append(map_chip(10, 303, 'Planet survey', times[1]))
+    # The foundry is millions of kilometers away, at Veyra's L5 point: an edge marker.
+    s.append(map_chip(384, 44, 'Orbital foundry · L5 →', times[2], 'end'))
+    s.append(text(16, 52, '↖ light from Delta Pavonis', 9, MUTED))
     s.append(text(cx - r + 6, cy - r + 6, 'Veyra', 13, YOU, 'start', 600))
     s.append(text(18, 346, 'pinch out: the star system', 10, MUTED))
     return ''.join(s), '5,000 km  [world size invented]', 92
@@ -186,9 +222,14 @@ def system():
     vx, vy = cx + 1.12 * k * math.cos(math.radians(62)), cy + 1.12 * k * tilt * math.sin(math.radians(62))
     s.append(f'<circle cx="{fmt(vx)}" cy="{fmt(vy)}" r="5" fill="{YOU}"></circle><circle cx="{fmt(vx)}" cy="{fmt(vy)}" r="9" fill="none" stroke="{YOU}"></circle>')
     s.append(text(vx + 12, vy + 4, 'Veyra', 11, YOU, 'start', 600))
+    # The foundry at L5, 60° ahead of Veyra in its orbit, and the two projects at Veyra itself.
     fx, fy = cx + 1.12 * k * math.cos(math.radians(2)), cy + 1.12 * k * tilt * math.sin(math.radians(2))
-    s.append(f'<rect x="{fmt(fx - 3.5)}" y="{fmt(fy - 3.5)}" width="7" height="7" fill="none" stroke="{YOU}" stroke-width="1.3"></rect>')
-    s.append(text(fx + 8, fy - 6, 'foundry site', 9, YOU))
+    s.append(truss_glyph(fx + 4, fy, 0.25))
+    s.append(f'<line x1="{fmt(fx + 4)}" y1="{fmt(fy - 6)}" x2="{fmt(fx + 20)}" y2="{fmt(fy - 32)}" stroke="{YOU}" stroke-width=".8"></line>')
+    s.append(map_chip(384, fy - 45, 'Orbital foundry · L5', '02:29:48', 'end'))
+    s.append(f'<line x1="{fmt(vx)}" y1="{fmt(vy + 9)}" x2="{fmt(vx - 30)}" y2="{fmt(vy + 44)}" stroke="{YOU}" stroke-width=".8"></line>')
+    s.append(map_chip(vx - 110, vy + 58, 'Deep-field receiver', '00:37:42'))
+    s.append(map_chip(vx - 110, vy + 92, 'Planet survey', '01:09:15'))
     s.append(text(cx + 2.9 * k, cy - 2.9 * k * tilt - 8, 'belt', 9, MUTED, 'middle'))
     s.append(text(378, 300, '[ice world] 9 AU →', 10, MUTED, 'end'))
     s.append(text(378, 344, 'star real · planets invented', 9, MUTED, 'end'))
@@ -197,7 +238,7 @@ def system():
 # ---------- 3 · Neighbors (15 ly around home) ----------
 NAMED = {'ε Indi': ('108870', True), 'Gl 783 A': ('99461', True), 'Gl 832': ('106440', False), 'β Hyi': ('2021', False),
          'Lacaille 8760': ('105090', False), 'γ Pav': ('105858', False), 'ζ Tuc': ('1599', False)}
-def neighbors(time_demo=False):
+def neighbors(time_demo=False, after_result=False):
     el = 58; cam, k, origin = camera(el, 205), 11, (195, 196)
     s = [stipple(3, 60)]; labels = Labels([(8, 8, 110, 40)])
     rings = []
@@ -219,7 +260,13 @@ def neighbors(time_demo=False):
     for name, (hip, lead) in sorted(NAMED.items(), key=lambda item: not item[1][1]):
         p = atlas(by_hip[hip]); x, y = project(p, HOME, cam, k, origin)
         d = math.dist(p, HOME)
-        if lead:
+        if lead and after_result and name == 'Gl 783 A':
+            # Investigated: the ring fills, and the label carries what is now known.
+            s.append(f'<circle cx="{fmt(x)}" cy="{fmt(y)}" r="7" fill="{OTHER}" fill-opacity=".25" stroke="{OTHER}" stroke-width="1.5"></circle>')
+            s.append(f'<circle cx="{fmt(x + 6)}" cy="{fmt(y - 6)}" r="3" fill="{OTHER}"></circle>')
+            s.append(labels.place(x, y, 'Gl 783 A · dims every 212 days', 10, OTHER, 600, ((11, 4), (-11, 4), (0, -12))))
+            s.append(labels.place(x, y + 13, 'dust 55 · rings 30 · built 15', 9, OTHER, None, ((11, 4), (-11, 4), (0, 16))))
+        elif lead:
             s.append(f'<circle cx="{fmt(x)}" cy="{fmt(y)}" r="7" fill="none" stroke="{OTHER}" stroke-width="1.5"></circle>')
             s.append(labels.place(x, y, f'{name} · {light_clock(d)}', 10, OTHER, 600, ((11, 4), (-11, 4), (0, -12), (0, 20))))
         else:
@@ -445,7 +492,7 @@ def row(title, sub, right='', tone='', bar=None, marker=False):
     return f'<button class="row">{mk}<span class="rt"><span class="{tone}">{title}</span><span class="sub">{sub}</span>{b}</span><span class="rr">{right}</span></button>'
 
 PANELS = [
-    ('IN MOTION · 3', 'TIME LEFT', [row('Deep-field receiver', 'in orbit around Veyra', tstack('7.6 Years', '00:37:42', True), bar=70), row('Planet survey · 12 nearest stars', 'looking out from Veyra', tstack('14 Years', '01:09:15', True), bar=40), row('Orbital foundry', 'site chosen in Veyra’s orbit', tstack('30 Years', '02:29:48', True), bar=15), row('Leads · 3', 'Sol, ε Indi, Gl 783 A', '›', 'other')]),
+    ('IN MOTION · 3', 'TIME LEFT', [row('Deep-field receiver', 'in orbit around Veyra', tstack('7.6 Years', '00:37:42', True), bar=70), row('Planet survey · 12 nearest stars', 'from Veyra’s observatories', tstack('14 Years', '01:09:15', True), bar=40), row('Orbital foundry', 'at L5, 60° ahead of Veyra', tstack('30 Years', '02:29:48', True), bar=15), row('Leads · 3', 'Sol, ε Indi, Gl 783 A', '›', 'other')]),
     ('DELTA PAVONIS SYSTEM', 'INVENTED PLANETS', [row('Veyra · your world', '1.12 AU · habitable zone', '', 'you', marker=True), row('[Inner world]', '0.45 AU · unvisited', '›'), row('Belt · 2.6–3.2 AU', 'prospect: metals and ice', '›'), row('[Ice world]', '9 AU · beyond this view', '›')]),
     ('WITHIN 10 LY · 12 STARS', 'LIGHT-TIME', [row('New warm glow · ε Indi', 'dust, cold companions, or waste heat', light_clock(math.dist(atlas(by_hip['108870']), HOME)), 'other', marker=True), row('Uneven dimming · Gl 783 A', 'dust, bodies in orbit, or structures', light_clock(math.dist(atlas(by_hip['99461']), HOME)), 'other', marker=True), row('Planet survey · 12 nearest', 'finds what orbits them', tstack('14 Years', '01:09:15', True), bar=40)]),
     ('THE REGION · 100 LY AROUND SOL', 'WHERE V1 PLAYS', [row('1,212 stars inside 50 ly', 'where civilizations start', ''), row('Oxygen world · Sol', '19.9 ly · light takes ' + light_clock(math.dist(HOME, (0, 0, 0))), '›', 'other', marker=True), row('Technosignatures detected', 'none yet · receivers at baseline', '0')]),
@@ -456,8 +503,8 @@ PANELS = [
     ('LARGE MAGELLANIC CLOUD', '162,000 LY · 1.5 YR', [row('Off-center bar, one main arm', 'a Magellanic spiral, likely disrupted', ''), row('About 32,000 ly across', 'orbiting the Milky Way', ''), row('Tarantula Nebula', 'the Local Group’s most active star nursery', '')]),
 ]
 
-def frame(i, viz, scale_label, scale_px, rung=None, overlay=''):
-    head, right, rows = PANELS[i]
+def frame(i, viz, scale_label, scale_px, rung=None, overlay='', panel=None, year=None):
+    head, right, rows = panel or PANELS[i]
     rung = i if rung is None else rung
     svg = (f'<svg width="390" height="360" viewBox="0 0 390 360" font-family="IBM Plex Mono, monospace" role="img" aria-label="{LEVELS[i] if i < len(LEVELS) else 'Local Group'} view">'
            f'{viz}<line x1="16" y1="18" x2="{fmt(16 + scale_px)}" y2="18" stroke="{INK}" stroke-width="1.2"></line>'
@@ -472,7 +519,7 @@ def frame(i, viz, scale_label, scale_px, rung=None, overlay=''):
 <div class="viz">{svg}{overlay}{ladder(rung)}</div>
 <div class="panel"><div class="ph"><span>{head}</span><span class="mono">{right}</span></div>{''.join(rows)}</div>
 {rail('Home')}
-</div>'''
+</div>'''.replace('Year 0.4', year or 'Year 0.4')
 
 CAPTIONS = [('1 · World', 'Veyra, with what is in motion around it.'), ('2 · System', 'Delta Pavonis and its invented planets, to scale inside the belt.'),
             ('3 · Stars', 'Real stars within 15 ly of home. Rings are light-time.'), ('4 · Region', 'All 9,494 objects within 100 ly of Sol. Dim red dwarfs are specks.'),
@@ -974,6 +1021,17 @@ PICKER_NEW = f"""<div class="phone">{HUD44}<div class="sheet">
 {''.join(catalog_card(*entry) for entry in PICKER_ORDER if entry[0] not in ('infrared-telescope', 'transit-watch'))}
 </div></div>"""
 
+HOME_AFTER = frame(2, *neighbors(after_result=True), panel=('CLUES · 3', 'YEAR 4.4', [
+    '<button class="row"><span class="mk other"></span><span class="rt"><span class="newtag">New</span><span class="other">Regular dimming · Gl 783 A</span><span class="sub">dust 55 · ringed planet 30 · something built 15</span></span><span class="rr">›</span></button>',
+    row('New warm glow · ε Indi', 'infrared telescope under way', tstack('14 Years', '01:10:00', True), 'other', marker=True),
+    row('Oxygen world · Sol', 'not yet studied · light takes ' + light_clock(math.dist(HOME, (0, 0, 0))), '›', 'other', marker=True)]), year='Year 4.4')
+
+MAP_DONE = frame(0, *world(done=True, times=('', '00:31:33', '01:52:06')), panel=('IN MOTION · 2', 'TIME LEFT', [
+    '<button class="row"><span class="mk" style="color:var(--ink)"></span><span class="rt"><span class="newtag">Done</span><span>Deep-field receiver</span><span class="sub">listening · the radio floor is lower</span></span><span class="rr">›</span></button>',
+    row('Planet survey · 12 nearest stars', 'from Veyra’s observatories', tstack('6.3 Years', '00:31:33', True), bar=73),
+    row('Orbital foundry', 'at L5, 60° ahead of Veyra', tstack('22.4 Years', '01:52:06', True), bar=25),
+    row('Leads · 3', 'Sol, ε Indi, Gl 783 A', '›', 'other')]), year='Year 7.9')
+
 # ---------- Low-fi layouts, recolored to follow the theme ----------
 import re
 LOFI = {'#F3F1EA': 'var(--paper)', '#1D1D1B': 'var(--ink)', '#6B6860': 'var(--muted)', '#CFCBC0': 'var(--faint)', '#E0DCD1': 'var(--track)', '#4A4843': 'var(--fill2)',
@@ -997,12 +1055,20 @@ SECTIONS = [
      f'<figure><figcaption><strong>5 · Two running</strong><span>Each takes its share of the year. The quick one finishes first.</span></figcaption>{TWO_RUNNING}</figure>'
      '<span class="pinch">pause ›</span>'
      f'<figure><figcaption><strong>6 · Paused</strong><span>Any project can be paused. Progress is kept and its share of the year is freed.</span></figcaption>{PAUSED}</figure>'),
+    ('map', 'On the map', 'Projects on the map', 'Every project appears where it physically is, with its timer. Things in orbit show at World; things elsewhere around the star show at System; anything off-screen gets an edge marker. Drawings are symbols, not to scale: a kilometer-wide receiver would be smaller than a pixel here.',
+     f'<figure><figcaption><strong>1 · Building</strong><span>The receiver fills in as it is built. Each project carries its countdown.</span></figcaption>{frame(0, *world())}</figure>'
+     '<span class="pinch">00:37:42 later ›</span>'
+     f'<figure><figcaption><strong>2 · Done</strong><span>Drawn in full, marked done, and listening. The other timers kept running.</span></figcaption>{MAP_DONE}</figure>'
+     '<span class="pinch">pinch out ›</span>'
+     f'<figure><figcaption><strong>3 · System</strong><span>The foundry at L5, and both projects at Veyra, each with its timer.</span></figcaption>{frame(1, *system())}</figure>'),
     ('result', 'First result', 'First result · the transit watch finishes', 'Twenty real minutes after starting it, the transit watch reports. The answer shifts the odds on the Gl 783 A clue and opens a new project aimed at it. Four game years have passed: it is now Year 4.4.',
      f'<figure><figcaption><strong>1 · The report</strong><span>The finished project lands at the top, marked new.</span></figcaption>{REPORT_NEW}</figure>'
      '<span class="pinch">see the result ›</span>'
      f'<figure><figcaption><strong>2 · The result</strong><span>Opens inside the Report tab: what was seen, how the odds moved, and what it opens.</span></figcaption>{RESULT}</figure>'
      '<span class="pinch">start a project ›</span>'
-     f'<figure><figcaption><strong>3 · A new project</strong><span>The discovery project is waiting at the top of Know.</span></figcaption>{PICKER_NEW}</figure>'),
+     f'<figure><figcaption><strong>3 · A new project</strong><span>The discovery project is waiting at the top of Know.</span></figcaption>{PICKER_NEW}</figure>'
+     '<span class="pinch">back to Home ›</span>'
+     f'<figure><figcaption><strong>4 · Home, after</strong><span>The Gl 783 A marker fills in and carries what is now known.</span></figcaption>{HOME_AFTER}</figure>'),
 ]
 # Explorations: an appendix of working-session mocks, newest first. Not current design.
 EXPLORATIONS = [

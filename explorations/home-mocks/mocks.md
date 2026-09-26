@@ -9,12 +9,12 @@ One screen, pinched outward: the map changes scale and the panel below follows i
 Veyra · Year 0.4
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
 ENERGY · [62%] · MATTER · [78%] · COMPUTE · [45%]
-[drawing: World view; labels: Deep-field receiver, online in 00:37:42, light from Delta Pavonis ↗, Veyra, pinch out: the star system, 5,000 km [world size invented]]
+[drawing: World view; labels: Deep-field receiver, 00:37:42, Planet survey, 01:09:15, Orbital foundry · L5 →, 02:29:48, ↖ light from Delta Pavonis, Veyra, pinch out: the star system, 5,000 km [world size invented]]
 [selected: World] · [System] · [Stars] · [Region] · [Galaxy]
 IN MOTION · 3 · TIME LEFT
 - Deep-field receiver · in orbit around Veyra · 7.6 Years · 00:37:42
-- Planet survey · 12 nearest stars · looking out from Veyra · 14 Years · 01:09:15
-- Orbital foundry · site chosen in Veyra’s orbit · 30 Years · 02:29:48
+- Planet survey · 12 nearest stars · from Veyra’s observatories · 14 Years · 01:09:15
+- Orbital foundry · at L5, 60° ahead of Veyra · 30 Years · 02:29:48
 - Leads · 3 · Sol, ε Indi, Gl 783 A · ›
 pinch out ›
 
@@ -22,7 +22,7 @@ pinch out ›
 Veyra · Year 0.4
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
 ENERGY · [62%] · MATTER · [78%] · COMPUTE · [45%]
-[drawing: System view; labels: habitable zone, Delta Pavonis, Veyra, foundry site, belt, [ice world] 9 AU →, star real · planets invented, 1 AU]
+[drawing: System view; labels: habitable zone, Delta Pavonis, Veyra, Orbital foundry · L5, 02:29:48, Deep-field receiver, 00:37:42, Planet survey, 01:09:15, belt, [ice world] 9 AU →, star real · planets invented, 1 AU]
 [World] · [selected: System] · [Stars] · [Region] · [Galaxy]
 DELTA PAVONIS SYSTEM · INVENTED PLANETS
 - Veyra · your world · 1.12 AU · habitable zone
@@ -133,12 +133,12 @@ Six stops after landing. The rest of Home is left to discovery. The Projects tab
 Veyra · Year 0.4
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
 ENERGY · [62%] · MATTER · [78%] · COMPUTE · [45%]
-[drawing: World view; labels: Deep-field receiver, online in 00:37:42, light from Delta Pavonis ↗, Veyra, pinch out: the star system, 5,000 km [world size invented]]
+[drawing: World view; labels: Deep-field receiver, 00:37:42, Planet survey, 01:09:15, Orbital foundry · L5 →, 02:29:48, ↖ light from Delta Pavonis, Veyra, pinch out: the star system, 5,000 km [world size invented]]
 [selected: World] · [System] · [Stars] · [Region] · [Galaxy]
 IN MOTION · 3 · TIME LEFT
 - Deep-field receiver · in orbit around Veyra · 7.6 Years · 00:37:42
-- Planet survey · 12 nearest stars · looking out from Veyra · 14 Years · 01:09:15
-- Orbital foundry · site chosen in Veyra’s orbit · 30 Years · 02:29:48
+- Planet survey · 12 nearest stars · from Veyra’s observatories · 14 Years · 01:09:15
+- Orbital foundry · at L5, 60° ahead of Veyra · 30 Years · 02:29:48
 - Leads · 3 · Sol, ε Indi, Gl 783 A · ›
 TOUR · 1 OF 6
 
@@ -349,6 +349,47 @@ Transit watch
 now · 01:00:00 · 02:00:00 · 03:00:00
 [Start another project]
 
+## Projects on the map
+Every project appears where it physically is, with its timer. Things in orbit show at World; things elsewhere around the star show at System; anything off-screen gets an edge marker. Drawings are symbols, not to scale: a kilometer-wide receiver would be smaller than a pixel here.
+
+#### 1 · Building · The receiver fills in as it is built. Each project carries its countdown.
+Veyra · Year 0.4
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [62%] · MATTER · [78%] · COMPUTE · [45%]
+[drawing: World view; labels: Deep-field receiver, 00:37:42, Planet survey, 01:09:15, Orbital foundry · L5 →, 02:29:48, ↖ light from Delta Pavonis, Veyra, pinch out: the star system, 5,000 km [world size invented]]
+[selected: World] · [System] · [Stars] · [Region] · [Galaxy]
+IN MOTION · 3 · TIME LEFT
+- Deep-field receiver · in orbit around Veyra · 7.6 Years · 00:37:42
+- Planet survey · 12 nearest stars · from Veyra’s observatories · 14 Years · 01:09:15
+- Orbital foundry · at L5, 60° ahead of Veyra · 30 Years · 02:29:48
+- Leads · 3 · Sol, ε Indi, Gl 783 A · ›
+00:37:42 later ›
+
+#### 2 · Done · Drawn in full, marked done, and listening. The other timers kept running.
+Veyra · Year 7.9
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [62%] · MATTER · [78%] · COMPUTE · [45%]
+[drawing: World view; labels: Deep-field receiver, Done · listening, Planet survey, 00:31:33, Orbital foundry · L5 →, 01:52:06, ↖ light from Delta Pavonis, Veyra, pinch out: the star system, 5,000 km [world size invented]]
+[selected: World] · [System] · [Stars] · [Region] · [Galaxy]
+IN MOTION · 2 · TIME LEFT
+- Done · Deep-field receiver · listening · the radio floor is lower · ›
+- Planet survey · 12 nearest stars · from Veyra’s observatories · 6.3 Years · 00:31:33
+- Orbital foundry · at L5, 60° ahead of Veyra · 22.4 Years · 01:52:06
+- Leads · 3 · Sol, ε Indi, Gl 783 A · ›
+pinch out ›
+
+#### 3 · System · The foundry at L5, and both projects at Veyra, each with its timer.
+Veyra · Year 0.4
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [62%] · MATTER · [78%] · COMPUTE · [45%]
+[drawing: System view; labels: habitable zone, Delta Pavonis, Veyra, Orbital foundry · L5, 02:29:48, Deep-field receiver, 00:37:42, Planet survey, 01:09:15, belt, [ice world] 9 AU →, star real · planets invented, 1 AU]
+[World] · [selected: System] · [Stars] · [Region] · [Galaxy]
+DELTA PAVONIS SYSTEM · INVENTED PLANETS
+- Veyra · your world · 1.12 AU · habitable zone
+- [Inner world] · 0.45 AU · unvisited · ›
+- Belt · 2.6–3.2 AU · prospect: metals and ice · ›
+- [Ice world] · 9 AU · beyond this view · ›
+
 ## First result · the transit watch finishes
 Twenty real minutes after starting it, the transit watch reports. The answer shifts the odds on the Gl 783 A clue and opens a new project aimed at it. Four game years have passed: it is now Year 4.4.
 
@@ -396,6 +437,18 @@ Start a project · [Close · ×]
 - [drawing: Deep-field receiver] · Deep-field receiver · Hear civilizations quieter than you. Without it, the sky stays silent. · E 20% · M 15% · C 20% · 12 Years · 01:00:00
 - [drawing: Optical flash watch] · Optical flash watch · Catches a signal a quiet civilization might send on purpose. · E 10% · M 5% · C 20% · 6 Years · 00:30:00
 - [drawing: Planet survey] · Planet survey · Shows which nearby stars have worlds worth studying, visiting or settling. · E 10% · C 25% · Needs: Spectrograph bank · 14 Years · 01:10:00
+back to Home ›
+
+#### 4 · Home, after · The Gl 783 A marker fills in and carries what is now known.
+Veyra · Year 4.4
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [62%] · MATTER · [78%] · COMPUTE · [45%]
+[drawing: Stars view; labels: Veyra, ε Indi · 00:46:03, Gl 783 A · dims every 212 days, dust 55 · rings 30 · built 15, Gl 832, β Hyi, Lacaille 8760, γ Pav, ζ Tuc, 00:25:00, 00:50:00, 01:15:00, Sol · oxygen world · 01:39:37, 5 ly]
+[World] · [System] · [selected: Stars] · [Region] · [Galaxy]
+CLUES · 3 · YEAR 4.4
+- New · Regular dimming · Gl 783 A · dust 55 · ringed planet 30 · something built 15 · ›
+- New warm glow · ε Indi · infrared telescope under way · 14 Years · 01:10:00
+- Oxygen world · Sol · not yet studied · light takes 01:39:37 · ›
 
 ---
 

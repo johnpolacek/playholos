@@ -91,6 +91,7 @@ The session rhythm is **spinning plates:** several projects, investigations, mis
 Shown in the [mocks](explorations/home-mocks/index.html). Their sample civilization, Veyra at δ Pavonis, and all game state are sample data.
 
 - **Home:** your world first, with what is in motion and the leads below it. Pinch out through five levels: world, system, stars, region, galaxy. An icon in the galaxy view opens the Local Group.
+- **Projects on the map:** each project appears where it physically is, at the zoom level where that place is visible, with its countdown timer. Off-screen projects get edge markers. Drawings are symbols, not to scale. While building, a project is a blueprint that fills in; when finished it is drawn in full.
 - **Tabs:** Home, Report, Projects, Reach, Mind.
   - **Report:** what happened while you were away. News arrives when its light does.
   - **Projects:** what you are building and when it finishes, in real time.
