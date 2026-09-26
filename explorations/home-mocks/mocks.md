@@ -349,6 +349,54 @@ Transit watch
 now · 01:00:00 · 02:00:00 · 03:00:00
 [Start another project]
 
+## First result · the transit watch finishes
+Twenty real minutes after starting it, the transit watch reports. The answer shifts the odds on the Gl 783 A clue and opens a new project aimed at it. Four game years have passed: it is now Year 4.4.
+
+#### 1 · The report · The finished project lands at the top, marked new.
+Veyra · Year 4.4
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [62%] · MATTER · [78%] · COMPUTE · [45%]
+REPORT · WHILE YOU WERE AWAY
+Year 4.4 · New · Transit watch finished. · Gl 783 A dims every 212 days, and no two dips look the same. · [See the result ›]
+Year 0.4 · Infrared telescope started. Done in Year 18.4, · 01:10:00 · from now.
+Year 0.4 · Transit watch started on Gl 783 A.
+Year 0 · Veyra woke.
+News lands when its light does. This came from light that was already reaching us.
+see the result ›
+
+#### 2 · The result · Opens inside the Report tab: what was seen, how the odds moved, and what it opens.
+Veyra · Year 4.4
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [62%] · MATTER · [78%] · COMPUTE · [45%]
+REPORT · RESULT
+[‹ All reports]
+[drawing: Gl 783 A light curve: seven dips, each a different shape; labels: normal brightness, Year 0.4, Year 4.4, one dip every 212 days]
+
+### Gl 783 A dims again
+Transit watch · finished Year 4.4
+Seven dips, one every 212 days. No two have the same shape. Whatever crosses the star is regular, but not solid like a single planet.
+WHAT IT COULD BE · BEFORE → NOW
+Dust or debris in orbit · [35%] · [55%] · 35 → 55
+A planet with rings · [15%] · [30%] · 15 → 30
+Something built · [10%] · [15%] · 10 → 15
+A fluke · ruled out · [40%] · [0%] · 40 → 0
+NOW OPEN
+New · from the transit watch · Measure what’s crossing Gl 783 A · Learn what keeps dimming that star: a planet, dust, or something built.
+E 10% · C 15% · 8 Years · 00:40:00 · [Start]
+start a project ›
+
+#### 3 · A new project · The discovery project is waiting at the top of Know.
+Veyra · Year 4.4
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [62%] · MATTER · [78%] · COMPUTE · [45%]
+Start a project · [Close · ×]
+[selected: Know · 5] · [Grow · 4] · [Reach · 2]
+- [drawing: Transit watch] · New · from the transit watch · Measure what’s crossing Gl 783 A · Learn what keeps dimming that star: a planet, dust, or something built. · E 10% · C 15% · Gl 783 A · 8 Years · 00:40:00
+- [drawing: Spectrograph bank] · Spectrograph bank · Reads what anything is made of. Most other Know projects build on it. · E 10% · M 5% · C 15% · 8 Years · 00:40:00
+- [drawing: Deep-field receiver] · Deep-field receiver · Hear civilizations quieter than you. Without it, the sky stays silent. · E 20% · M 15% · C 20% · 12 Years · 01:00:00
+- [drawing: Optical flash watch] · Optical flash watch · Catches a signal a quiet civilization might send on purpose. · E 10% · M 5% · C 20% · 6 Years · 00:30:00
+- [drawing: Planet survey] · Planet survey · Shows which nearby stars have worlds worth studying, visiting or settling. · E 10% · C 25% · Needs: Spectrograph bank · 14 Years · 01:10:00
+
 ---
 
 _Appendix: working-session mocks, not the current design._

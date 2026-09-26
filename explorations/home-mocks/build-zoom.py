@@ -600,8 +600,8 @@ HUD = '''<div class="hud"><div class="hud1"><span class="name"><i></i>Veyra</spa
 <div class="hud2"><span>Delta Pavonis · 19.9 ly from Sol</span><span>1 Year = <span class="rtime">00:05:00</span></span></div>
 <div class="res"><span>ENERGY<b><s style="width:62%"></s></b></span><span>MATTER<b><s style="width:78%"></s></b></span><span>COMPUTE<b><s style="width:45%"></s></b></span></div></div>'''
 
-def tab_screen(tab, head, right, body):
-    return f'<div class="phone">{HUD}<div class="tabpage"><div class="ph"><span>{head}</span><span class="mono">{right}</span></div>{body}</div>{rail(tab)}</div>'
+def tab_screen(tab, head, right, body, hud=None):
+    return f'<div class="phone">{hud or HUD}<div class="tabpage"><div class="ph"><span>{head}</span><span class="mono">{right}</span></div>{body}</div>{rail(tab)}</div>'
 
 def start_row(title, sub, cost, time):
     return f'<div class="row"><span class="rt"><span>{title}</span><span class="sub">{sub}</span><span class="sub mono">{cost}</span></span><span class="start">{time}<button>Start</button></span></div>'
@@ -723,6 +723,18 @@ tour_css = '''<style>
 .lane .lname{position:absolute;left:0;top:-10px;font-size:10.5px;color:var(--you);white-space:nowrap}
 .lanes+.track{margin-top:4px}
 .primary.ghost{background:none;color:var(--ink);border:1px solid var(--ink)}
+.backlink.inline{align-self:flex-start;font-size:14px;margin:-2px 0 6px;color:var(--ink)}
+.newtag{display:inline-block;align-self:flex-start;padding:1px 7px;border-radius:9px;background:var(--other);color:var(--paper);font-size:10.5px;font-weight:500}
+.entry.fresh{background:var(--paper);margin:0 -16px;padding:12px 16px;border-left:3px solid var(--other)}
+.entry b{font-weight:600}.seeresult{display:block;margin-top:8px;font-size:13px;font-weight:600;color:var(--other)}
+.odds{display:grid;grid-template-columns:130px 1fr 92px;gap:8px;align-items:center;font-size:12.5px;padding:4px 0}
+.odds b{position:relative;height:8px;background:var(--track);border-radius:4px;overflow:hidden}
+.odds s{position:absolute;left:0;top:0;height:100%;border-radius:4px}.odds .before{background:var(--faint)}.odds .after{background:var(--other);height:4px;top:2px}
+.odds .mono{font-size:11px;text-align:right;color:var(--muted)}
+.dcard{display:flex;flex-direction:column;gap:4px;padding:12px;border:1px solid var(--other);border-radius:12px;background:var(--paper);font-size:14px}
+.dcard b{font-weight:600}.dfoot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:6px}
+.go-small{height:34px;padding:0 16px;border-radius:17px;background:var(--ink);color:var(--paper);text-align:center;font-size:13px}
+.pcard.fresh{background:var(--paper);margin:0 -16px;padding:10px 16px;width:calc(100% + 32px);border-left:3px solid var(--other)}
 .rside{display:flex;align-items:center;gap:10px}
 .pause{width:32px;height:32px;border-radius:50%;border:1px solid var(--ink);display:grid;place-items:center;color:var(--ink);flex-shrink:0}
 .pause.on{background:var(--ink);color:var(--paper)}
@@ -902,6 +914,66 @@ TWO_RUNNING = tab_screen('Projects', 'PROJECTS', '2 RUNNING', ''.join([
     '<div class="sec">NEXT 3 HOURS</div>', track([(tw['name'], 11.1), (ir['name'], 50)]),
     '<button class="primary ghost">Start another project</button>']))
 
+# ---------- First result: the transit watch finishes at Year 4.4 ----------
+HUD44 = HUD.replace('Year 0.4', 'Year 4.4')
+DISC = {p['id']: p for p in catalog.DISCOVERIES}
+mc = dict(DISC['measure-crossing'], name=DISC['measure-crossing']['name'].replace('{star}', 'Gl 783 A'))
+
+def light_curve():
+    w, h, x0, x1, base = 358, 170, 34, 346, 48
+    s = [f'<line x1="{x0}" y1="{base}" x2="{x1}" y2="{base}" stroke="{INK}" stroke-width=".7" stroke-dasharray="3 4" opacity=".5"></line>',
+         text(x0, base - 8, 'normal brightness', 9),
+         f'<line x1="{x0}" y1="18" x2="{x0}" y2="138" stroke="{INK}" stroke-width=".8"></line><line x1="{x0}" y1="138" x2="{x1}" y2="138" stroke="{INK}" stroke-width=".8"></line>',
+         text(x0, 154, 'Year 0.4', 9), text(x1, 154, 'Year 4.4', 9, MUTED, 'end'), text((x0 + x1) / 2, 154, 'one dip every 212 days', 9, OTHER, 'middle')]
+    # Seven dips at a fixed period, each a different depth and shape.
+    dips = [(1.4, 10, 0), (2.3, 16, .5), (1.1, 8, -.4), (2.0, 22, .2), (1.6, 12, -.6), (2.4, 18, .7), (1.3, 14, 0)]
+    rng = random.Random(3); pts = []
+    for i in range(0, 620):
+        t = i / 619; x = x0 + 4 + t * (x1 - x0 - 8); drop = 0
+        for k, (depth, width, skew) in enumerate(dips):
+            c = x0 + 22 + k * (x1 - x0 - 44) / 6; d = (x - c) / (width * (1 + (skew if x > c else -skew) * .6))
+            drop += depth * math.exp(-d * d * 3)
+        pts.append(f'{fmt(x)},{fmt(base + drop * 30 + (rng.random() - .5) * 1.6)}')
+    s.append(f'<polyline points="{" ".join(pts)}" fill="none" stroke="{OTHER}" stroke-width="1.1"></polyline>')
+    return f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" font-family="IBM Plex Mono, monospace" role="img" aria-label="Gl 783 A light curve: seven dips, each a different shape">{"".join(s)}</svg>'
+
+def odds(name, before, after, note=''):
+    return (f'<div class="odds"><span>{name}</span><b><s class="before" style="width:{before}%"></s><s class="after" style="width:{after}%"></s></b>'
+            f'<span class="mono">{before} → {after}{note}</span></div>')
+
+def discovery_card(p, source):
+    real = catalog.real_time(p['years'])
+    return (f'<div class="dcard"><span class="newtag">New · from {source}</span><b>{p["name"]}</b><span class="sub">{p["why"]}</span>'
+            f'<div class="dfoot"><span class="costs mono">{cost_short(p["cost"])}</span>{tstack(f"{p["years"]} Years", real)}<button class="go-small">Start</button></div></div>')
+
+REPORT_NEW = tab_screen('Report', 'REPORT', 'WHILE YOU WERE AWAY', ''.join([
+    '<div class="entry fresh"><span class="gy">Year 4.4</span><span><span class="newtag">New</span> <b>Transit watch finished.</b> Gl 783 A dims every 212 days, and no two dips look the same.<button class="seeresult">See the result ›</button></span></div>',
+    f'<div class="entry"><span class="gy">Year 0.4</span><span>Infrared telescope started. Done in Year 18.4, <span class="rtime">01:10:00</span> from now.</span></div>',
+    '<div class="entry"><span class="gy">Year 0.4</span><span>Transit watch started on Gl 783 A.</span></div>',
+    '<div class="entry"><span class="gy">Year 0</span><span>Veyra woke.</span></div>',
+    '<p class="note">News lands when its light does. This came from light that was already reaching us.</p>']), HUD44)
+
+RESULT = tab_screen('Report', 'REPORT', 'RESULT', f"""<button class="backlink inline">‹ All reports</button>
+<div class="art">{light_curve()}</div>
+<h3 class="lead">Gl 783 A dims again</h3>
+<p class="copy small">Transit watch · finished Year 4.4</p>
+<p class="copy">Seven dips, one every 212 days. No two have the same shape. Whatever crosses the star is regular, but not solid like a single planet.</p>
+<div class="sec">WHAT IT COULD BE · BEFORE → NOW</div>
+{odds('Dust or debris in orbit', 35, 55)}{odds('A planet with rings', 15, 30)}{odds('Something built', 10, 15)}{odds('A fluke · ruled out', 40, 0)}
+<div class="sec">NOW OPEN</div>
+{discovery_card(mc, 'the transit watch')}""", HUD44)
+
+def new_card_in_picker():
+    p = mc
+    return (f'<button class="pcard fresh"><span class="thumb">{ICONS["transit"]}</span><span class="pt"><span class="newtag">New · from the transit watch</span><b>{p["name"]}</b><span class="sub">{p["why"]}</span>'
+            f'<span class="costs mono">{cost_short(p["cost"])}</span><span class="clue">Gl 783 A</span></span><span class="pd">{tstack(f"{p["years"]} Years", catalog.real_time(p["years"]))}</span></button>')
+PICKER_NEW = f"""<div class="phone">{HUD44}<div class="sheet">
+<div class="sh"><strong>Start a project</strong><button aria-label="Close">×</button></div>
+<div class="seg" role="tablist"><button role="tab" aria-selected="true" class="on">Know · 5</button><button role="tab" aria-selected="false">Grow · {tier_count('grow')}</button><button role="tab" aria-selected="false">Reach · {tier_count('reach')}</button></div>
+{new_card_in_picker()}
+{''.join(catalog_card(*entry) for entry in PICKER_ORDER if entry[0] not in ('infrared-telescope', 'transit-watch'))}
+</div></div>"""
+
 # ---------- Low-fi layouts, recolored to follow the theme ----------
 import re
 LOFI = {'#F3F1EA': 'var(--paper)', '#1D1D1B': 'var(--ink)', '#6B6860': 'var(--muted)', '#CFCBC0': 'var(--faint)', '#E0DCD1': 'var(--track)', '#4A4843': 'var(--fill2)',
@@ -925,6 +997,12 @@ SECTIONS = [
      f'<figure><figcaption><strong>5 · Two running</strong><span>Each takes its share of the year. The quick one finishes first.</span></figcaption>{TWO_RUNNING}</figure>'
      '<span class="pinch">pause ›</span>'
      f'<figure><figcaption><strong>6 · Paused</strong><span>Any project can be paused. Progress is kept and its share of the year is freed.</span></figcaption>{PAUSED}</figure>'),
+    ('result', 'First result', 'First result · the transit watch finishes', 'Twenty real minutes after starting it, the transit watch reports. The answer shifts the odds on the Gl 783 A clue and opens a new project aimed at it. Four game years have passed: it is now Year 4.4.',
+     f'<figure><figcaption><strong>1 · The report</strong><span>The finished project lands at the top, marked new.</span></figcaption>{REPORT_NEW}</figure>'
+     '<span class="pinch">see the result ›</span>'
+     f'<figure><figcaption><strong>2 · The result</strong><span>Opens inside the Report tab: what was seen, how the odds moved, and what it opens.</span></figcaption>{RESULT}</figure>'
+     '<span class="pinch">start a project ›</span>'
+     f'<figure><figcaption><strong>3 · A new project</strong><span>The discovery project is waiting at the top of Know.</span></figcaption>{PICKER_NEW}</figure>'),
 ]
 # Explorations: an appendix of working-session mocks, newest first. Not current design.
 EXPLORATIONS = [
