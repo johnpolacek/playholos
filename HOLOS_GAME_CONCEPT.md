@@ -76,6 +76,8 @@ One shared clock advances continuously, including offline. **5 real minutes = 1 
 
 The session rhythm is **spinning plates:** several projects, investigations, missions, and relationships at once. Attention comes from decision points, surprising observations, competing resource demands, and autonomous minds asking for guidance. Players leave guidance for their absence, and AI acts on it. Automation controls and notification rules are not specified.
 
+**On screen, two clocks have two voices.** Game time is words in the interface sans: *18 Years*, *Year 12*, *light that left 9 Years ago*. Real time is a countdown in the mono: `01:30:00`, `2d 04:10:00`, and past a year `24y 19d`. Where both apply, years sit above the countdown. Only running items tick; a fixed duration reads `01:30:00`.
+
 ## The opening
 
 - **The game begins in the eerie silence.** No one has been heard, which matches current observations. A few clues suggest we may not be alone; none proves it.

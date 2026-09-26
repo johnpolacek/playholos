@@ -49,6 +49,18 @@ def text(x, y, s, size=10, fill=MUTED, anchor='start', weight=None):
     w = f' font-weight="{weight}"' if weight else ''
     return f'<text x="{fmt(x)}" y="{fmt(y)}" font-size="{size}" fill="{fill}" text-anchor="{anchor}"{w} stroke="{PAPER}" stroke-width="3" stroke-linejoin="round" paint-order="stroke">{s}</text>'
 
+# Time standard. Game time is words in the sans: "18 Years", "Year 12".
+# Real time is a countdown in the mono: "01:30:00", "2d 04:10:00", past a year "24y 19d".
+def clock(minutes):
+    total = round(minutes * 60)
+    days, rest = divmod(total, 86400)
+    if days >= 365: return f'{int(days // 365.25)}y {int(days - (days // 365.25) * 365.25)}d'
+    h, rest = divmod(rest, 3600); m, sec = divmod(rest, 60)
+    return (f'{days}d ' if days else '') + f'{h:02d}:{m:02d}:{sec:02d}'
+def light_clock(ly): return clock(ly * 5)
+def tstack(years, real, live=False):
+    return f'<span class="tstack"><span class="gy">{years}</span><span class="rtime{" live" if live else ""}">{real}</span></span>'
+
 # Labels that must not collide: try each candidate spot, skip if all overlap.
 class Labels:
     def __init__(self, blocked=()): self.boxes = list(blocked)
@@ -144,7 +156,7 @@ def world():
     s.append(f'<rect x="{fmt(rx - 4)}" y="{fmt(ry - 4)}" width="8" height="8" fill="{YOU}"></rect>')
     s.append(f'<line x1="{fmt(rx + 3)}" y1="{fmt(ry + 5)}" x2="370" y2="300" stroke="{YOU}" stroke-width=".8"></line>')
     s.append(text(376, 314, 'Deep-field receiver', 10, YOU, 'end'))
-    s.append(text(376, 327, 'online in 38 min', 10, MUTED, 'end'))
+    s.append(text(376, 327, 'online in 00:37:42', 10, MUTED, 'end'))
     s.append(text(374, 28, 'light from Delta Pavonis ↗', 10, MUTED, 'end'))
     s.append(text(cx - r + 6, cy - r + 6, 'Veyra', 13, YOU, 'start', 600))
     s.append(text(18, 346, 'pinch out: the star system', 10, MUTED))
@@ -188,7 +200,7 @@ def neighbors(time_demo=False):
     el = 58; cam, k, origin = camera(el, 205), 11, (195, 196)
     s = [stipple(3, 60)]; labels = Labels([(8, 8, 110, 40)])
     rings = []
-    for ly, label in ((5, '25 min'), (10, '50 min'), (15, '1 hr 15')):
+    for ly, label in ((5, '00:25:00'), (10, '00:50:00'), (15, '01:15:00')):
         ry = ly * k * math.sin(math.radians(el))
         s.append(f'<ellipse cx="{origin[0]}" cy="{origin[1]}" rx="{ly * k}" ry="{ry:.1f}" fill="none" stroke="{INK}" stroke-width=".7" stroke-dasharray="3 4" opacity=".4"></ellipse>')
         rings.append((origin[0] - ly * k + 4, origin[1] + 3, label))
@@ -208,21 +220,21 @@ def neighbors(time_demo=False):
         d = math.dist(p, HOME)
         if lead:
             s.append(f'<circle cx="{fmt(x)}" cy="{fmt(y)}" r="7" fill="none" stroke="{OTHER}" stroke-width="1.5"></circle>')
-            s.append(labels.place(x, y, f'{name} · {round(d * 5)} min', 10, OTHER, 600, ((11, 4), (-11, 4), (0, -12), (0, 20))))
+            s.append(labels.place(x, y, f'{name} · {light_clock(d)}', 10, OTHER, 600, ((11, 4), (-11, 4), (0, -12), (0, 20))))
         else:
             s.append(labels.place(x, y, name, 9))
     if time_demo:
         ex_, ey_ = project(atlas(by_hip['108870']), HOME, cam, k, origin)
         s.append(f'<line x1="{origin[0]}" y1="{origin[1]}" x2="{fmt(ex_)}" y2="{fmt(ey_)}" stroke="{YOU}" stroke-width="1.6" stroke-dasharray="5 4"></line>')
         mx_, my_ = (origin[0] + ex_) / 2, (origin[1] + ey_) / 2
-        s.append(labels.place(mx_, my_, 'message · 46 min', 10, YOU, 600, ((0, -10), (0, 18), (10, 4), (-10, 4))))
+        s.append(labels.place(mx_, my_, 'message · 00:46:00', 10, YOU, 600, ((0, -10), (0, 18), (10, 4), (-10, 4))))
     for x, y, label in rings: s.append(labels.place(x, y, label, 9, MUTED, None, ((0, 0), (0, -8), (0, 10))))
     sol = project((0, 0, 0), HOME, cam, k, origin)
     dx, dy = sol[0] - origin[0], sol[1] - origin[1]; n = math.hypot(dx, dy)
     t = min((180 if dx > 0 else 180) / abs(dx or 1), (150 if dy > 0 else 150) / abs(dy or 1))
     ex, ey = origin[0] + dx * t, origin[1] + dy * t
     s.append(f'<line x1="{fmt(ex - dx / n * 18)}" y1="{fmt(ey - dy / n * 18)}" x2="{fmt(ex)}" y2="{fmt(ey)}" stroke="{OTHER}" stroke-width="1.4"></line>')
-    s.append(labels.place(ex, ey, 'Sol · oxygen world · 1 hr 40', 10, OTHER, 600, ((-6, -8), (6, -8), (-6, 16), (6, 16), (0, -12), (0, 20))))
+    s.append(labels.place(ex, ey, f'Sol · oxygen world · {light_clock(math.dist(HOME, (0, 0, 0)))}', 10, OTHER, 600, ((-6, -8), (6, -8), (-6, 16), (6, 16), (0, -12), (0, 20))))
     return ''.join(s), '5 ly', 5 * k
 
 # ---------- 4 · Region (100 ly around Sol) ----------
@@ -389,7 +401,7 @@ def local_group():
     for name, label in (('lmc', 'LMC'), ('smc', 'SMC'), ('ic10', 'IC 10'), ('ngc6822', 'NGC 6822'), ('ic1613', 'IC 1613'), ('wlm', 'WLM')):
         s.append(labels.place(*at[name], label, 9))
     for mly in (1, 2, 3):
-        s.append(labels.place(mx - mly * 1e6 * k + 4, my + 3, f'{mly} Mly · {real_years(mly * 1e6):.0f} yr', 9, MUTED, None, ((0, 0), (0, -8), (0, 10))))
+        s.append(labels.place(mx - mly * 1e6 * k + 4, my + 3, f'{mly} Mly · {light_clock(mly * 1e6)}', 9, MUTED, None, ((0, 0), (0, -8), (0, 10))))
     s.append(text(378, 350, 'galaxies drawn enlarged', 9, MUTED, 'end'))
     return ''.join(s), '500,000 ly', 5e5 * k
 
@@ -432,12 +444,12 @@ def row(title, sub, right='', tone='', bar=None, marker=False):
     return f'<button class="row">{mk}<span class="rt"><span class="{tone}">{title}</span><span class="sub">{sub}</span>{b}</span><span class="rr">{right}</span></button>'
 
 PANELS = [
-    ('IN MOTION · 3', 'REAL TIME LEFT', [row('Deep-field receiver', 'in orbit around Veyra', '38 min', bar=70), row('Planet survey · 12 nearest stars', 'looking out from Veyra', '1 hr 10', bar=40), row('Orbital foundry', 'site chosen in Veyra’s orbit', '2 hr 30', bar=15), row('Leads · 3', 'Sol, ε Indi, Gl 783 A', '›', 'other')]),
+    ('IN MOTION · 3', 'TIME LEFT', [row('Deep-field receiver', 'in orbit around Veyra', tstack('7.6 Years', '00:37:42', True), bar=70), row('Planet survey · 12 nearest stars', 'looking out from Veyra', tstack('14 Years', '01:09:15', True), bar=40), row('Orbital foundry', 'site chosen in Veyra’s orbit', tstack('30 Years', '02:29:48', True), bar=15), row('Leads · 3', 'Sol, ε Indi, Gl 783 A', '›', 'other')]),
     ('DELTA PAVONIS SYSTEM', 'INVENTED PLANETS', [row('Veyra · your world', '1.12 AU · habitable zone', '', 'you', marker=True), row('[Inner world]', '0.45 AU · unvisited', '›'), row('Belt · 2.6–3.2 AU', 'prospect: metals and ice', '›'), row('[Ice world]', '9 AU · beyond this view', '›')]),
-    ('WITHIN 10 LY · 12 STARS', 'LIGHT-TIME', [row('Infrared excess · ε Indi', 'dust, cold companions, or waste heat', '46 min', 'other', marker=True), row('Uneven dimming · Gl 783 A', 'dust, bodies in orbit, or structures', '51 min', 'other', marker=True), row('Planet survey · 12 nearest', 'finds what orbits them', '1 hr 10', bar=40)]),
-    ('THE REGION · 100 LY AROUND SOL', 'WHERE V1 PLAYS', [row('1,212 stars inside 50 ly', 'where civilizations start', ''), row('Oxygen world · Sol', '19.9 ly · light takes 1 hr 40', '›', 'other', marker=True), row('Technosignatures detected', 'none yet · receivers at baseline', '0')]),
-    ('THE MILKY WAY', 'FOR SCALE', [row('The region', '27,000 ly from the galactic center', ''), row('Light across the region', '200 ly · 16 hr 40 real time', ''), row('Beyond 100 ly', 'visible, not reachable in v1', '')]),
-    ('THE LOCAL GROUP', 'FOR PERSPECTIVE', [row('Andromeda', '2.5 million ly · its light takes 24 years', '24 yr'), row('Triangulum', '2.8 million ly', '27 yr'), row('Large Magellanic Cloud', '162,000 ly · orbiting the Milky Way', '1.5 yr'), row('Nothing here is reachable', 'shown for perspective', '')]),
+    ('WITHIN 10 LY · 12 STARS', 'LIGHT-TIME', [row('New warm glow · ε Indi', 'dust, cold companions, or waste heat', light_clock(math.dist(atlas(by_hip['108870']), HOME)), 'other', marker=True), row('Uneven dimming · Gl 783 A', 'dust, bodies in orbit, or structures', light_clock(math.dist(atlas(by_hip['99461']), HOME)), 'other', marker=True), row('Planet survey · 12 nearest', 'finds what orbits them', tstack('14 Years', '01:09:15', True), bar=40)]),
+    ('THE REGION · 100 LY AROUND SOL', 'WHERE V1 PLAYS', [row('1,212 stars inside 50 ly', 'where civilizations start', ''), row('Oxygen world · Sol', '19.9 ly · light takes ' + light_clock(math.dist(HOME, (0, 0, 0))), '›', 'other', marker=True), row('Technosignatures detected', 'none yet · receivers at baseline', '0')]),
+    ('THE MILKY WAY', 'FOR SCALE', [row('The region', '27,000 ly from the galactic center', ''), row('Light across the region', '200 ly · light takes ' + light_clock(200), ''), row('Beyond 100 ly', 'visible, not reachable in v1', '')]),
+    ('THE LOCAL GROUP', 'FOR PERSPECTIVE', [row('Andromeda', '2.5 million ly away', tstack('2.5 Million Years', light_clock(2.53e6))), row('Triangulum', '2.8 million ly away', tstack('2.8 Million Years', light_clock(2.80e6))), row('Large Magellanic Cloud', 'orbiting the Milky Way', tstack('162,000 Years', light_clock(1.617e5))), row('Nothing here is reachable', 'shown for perspective', '')]),
     ('ANDROMEDA · M31', '2.5 MLY · 24 YR', [row('A big spiral, tilted 77° to us', 'we see it nearly edge-on', ''), row('About 150,000 ly across', 'roughly 1.5× the Milky Way', ''), row('A ring of young stars', 'about 30,000 ly from its center', ''), row('Bright companions', 'M32 and M110', '')]),
     ('TRIANGULUM · M33', '2.8 MLY · 27 YR', [row('Loose, patchy spiral arms', 'almost no central bulge', ''), row('About 60,000 ly across', 'roughly 0.6× the Milky Way', ''), row('NGC 604', 'a star-forming cloud 1,500 ly wide', '')]),
     ('LARGE MAGELLANIC CLOUD', '162,000 LY · 1.5 YR', [row('Off-center bar, one main arm', 'a Magellanic spiral, likely disrupted', ''), row('About 32,000 ly across', 'orbiting the Milky Way', ''), row('Tarantula Nebula', 'the Local Group’s most active star nursery', '')]),
@@ -453,8 +465,8 @@ def frame(i, viz, scale_label, scale_px, rung=None, overlay=''):
     aria = LEVELS[rung] if i < len(LEVELS) else PANELS[i][0].title()
     svg = svg.replace(f'aria-label="{LEVELS[i] if i < len(LEVELS) else "Local Group"} view"', f'aria-label="{aria} view"')
     return f'''<div class="phone">
-<div class="hud"><div class="hud1"><span class="name"><i></i>Veyra</span><span class="mono">YEAR 0.4</span></div>
-<div class="hud2"><span>Delta Pavonis · 19.9 ly from Sol</span><span class="mono">1 yr = 5 min</span></div>
+<div class="hud"><div class="hud1"><span class="name"><i></i>Veyra</span><span class="gy">Year 0.4</span></div>
+<div class="hud2"><span>Delta Pavonis · 19.9 ly from Sol</span><span>1 Year = <span class="rtime">00:05:00</span></span></div>
 <div class="res"><span>ENERGY<b><s style="width:62%"></s></b></span><span>MATTER<b><s style="width:78%"></s></b></span><span>COMPUTE<b><s style="width:45%"></s></b></span></div></div>
 <div class="viz">{svg}{overlay}{ladder(rung)}</div>
 <div class="panel"><div class="ph"><span>{head}</span><span class="mono">{right}</span></div>{''.join(rows)}</div>
@@ -528,7 +540,9 @@ button{{font:inherit;color:inherit;cursor:pointer;background:none;border:0;paddi
 .mono{{font-family:'IBM Plex Mono',monospace}}
 .you{{color:var(--you)}}.other{{color:var(--other)}}
 .hud{{height:104px;box-sizing:border-box;padding:16px 16px 12px;display:flex;flex-direction:column;gap:6px;border-bottom:1px solid var(--faint)}}
-.hud1{{display:flex;justify-content:space-between;align-items:baseline}}.hud1 .mono{{font-size:13px}}
+.hud1{{display:flex;justify-content:space-between;align-items:baseline}}.hud1 .gy{{font-size:15px}}
+.gy{{font-family:'IBM Plex Sans',sans-serif;font-weight:500}}.rtime{{font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums}}
+.tstack{{display:inline-flex;flex-direction:column;align-items:flex-end;gap:1px;line-height:1.25;text-align:right}}.tstack .gy{{font-size:13px;color:var(--ink)}}.tstack .rtime{{font-size:11.5px;color:var(--muted)}}.tstack .rtime.live{{color:var(--you)}}
 .name{{display:flex;align-items:center;gap:8px;font-size:20px;font-weight:600}}.name i{{width:10px;height:10px;border-radius:50%;background:var(--you)}}
 .hud2{{display:flex;justify-content:space-between;font-size:12px;color:var(--muted)}}
 .res{{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:4px}}
@@ -581,34 +595,34 @@ document.querySelectorAll('section').forEach(section=>seen.observe(section));
 
 
 # ---------- The first-session tour: every tab, then the clues ----------
-HUD = '''<div class="hud"><div class="hud1"><span class="name"><i></i>Veyra</span><span class="mono">YEAR 0.4</span></div>
-<div class="hud2"><span>Delta Pavonis · 19.9 ly from Sol</span><span class="mono">1 yr = 5 min</span></div>
+HUD = '''<div class="hud"><div class="hud1"><span class="name"><i></i>Veyra</span><span class="gy">Year 0.4</span></div>
+<div class="hud2"><span>Delta Pavonis · 19.9 ly from Sol</span><span>1 Year = <span class="rtime">00:05:00</span></span></div>
 <div class="res"><span>ENERGY<b><s style="width:62%"></s></b></span><span>MATTER<b><s style="width:78%"></s></b></span><span>COMPUTE<b><s style="width:45%"></s></b></span></div></div>'''
 
 def tab_screen(tab, head, right, body):
     return f'<div class="phone">{HUD}<div class="tabpage"><div class="ph"><span>{head}</span><span class="mono">{right}</span></div>{body}</div>{rail(tab)}</div>'
 
 def start_row(title, sub, cost, time):
-    return f'<div class="row"><span class="rt"><span>{title}</span><span class="sub">{sub}</span><span class="sub mono">{cost}</span></span><span class="start"><span class="mono">{time}</span><button>Start</button></span></div>'
+    return f'<div class="row"><span class="rt"><span>{title}</span><span class="sub">{sub}</span><span class="sub mono">{cost}</span></span><span class="start">{time}<button>Start</button></span></div>'
 
 PROJECTS = tab_screen('Projects', 'PROJECTS', '3 RUNNING', ''.join([
     '<div class="sec">RUNNING</div>',
-    row('Deep-field receiver', 'hears fainter signals', '38 min', bar=70),
-    row('Planet survey · 12 nearest stars', 'finds what orbits them', '1 hr 10', bar=40),
-    row('Orbital foundry', 'builds in space, not on Veyra', '2 hr 30', bar=15),
+    row('Deep-field receiver', 'hears fainter signals', tstack('7.6 Years', '00:37:42', True), bar=70),
+    row('Planet survey · 12 nearest stars', 'finds what orbits them', tstack('14 Years', '01:09:15', True), bar=40),
+    row('Orbital foundry', 'builds in space, not on Veyra', tstack('30 Years', '02:29:48', True), bar=15),
     '<div class="sec">AVAILABLE</div>',
-    start_row('Infrared telescope', 'can tell dust from warm companions', 'energy 20 · matter 10 · compute 15', '1 hr 30'),
-    start_row('Belt mining', 'metals from the belt, 2.6 AU out', 'energy 15 · matter 5', '2 hr'),
-    start_row('Assay probe', 'flies to a star, looks, reports back', 'energy 30 · matter 25', '1 hr build')]))
+    start_row('Infrared telescope', 'can tell dust from warm companions', 'energy 20 · matter 10 · compute 15', tstack('18 Years', '01:30:00')),
+    start_row('Belt mining', 'metals from the belt, 2.6 AU out', 'energy 15 · matter 5', tstack('20 Years', '01:40:00')),
+    start_row('Assay probe', 'flies to a star, looks, reports back', 'energy 30 · matter 25', tstack('12 Years', '01:00:00'))]))
 REACH = tab_screen('Reach', 'REACH', 'BEYOND VEYRA', '''
     <div class="empty"><svg width="120" height="90" viewBox="0 0 120 90" aria-hidden="true"><circle cx="60" cy="45" r="6" fill="#1F7A96"></circle><circle cx="60" cy="45" r="30" fill="none" stroke="#171716" stroke-dasharray="3 4" opacity=".5"></circle><circle cx="60" cy="45" r="44" fill="none" stroke="#171716" stroke-dasharray="2 5" opacity=".3"></circle></svg>
     <strong>Nothing beyond Veyra yet</strong><span>Probes, outposts and colonies appear here. Far ones act on their own: your orders reach them at light speed.</span></div>
     <div class="sec">STANDING ORDERS · 0</div>''' + start_row('Add an order', 'e.g. if anything warm moves within 20 ly, send a sentinel', 'runs while you are away', '') )
 REPORT = tab_screen('Report', 'REPORT', 'WHILE YOU WERE AWAY', ''.join([
-    '<div class="entry"><span class="mono">YEAR 0.4</span><span>Receiver 70% built. Online in 38 min.</span></div>',
-    '<div class="entry"><span class="mono">YEAR 0.2</span><span>Survey began with Gl 832, 7.4 ly out. Its light is 7 years old.</span></div>',
-    '<div class="entry"><span class="mono">YEAR 0.1</span><span>Three anomalies logged. None explained.</span></div>',
-    '<div class="entry"><span class="mono">YEAR 0</span><span>Veyra woke.</span></div>',
+    '<div class="entry"><span class="gy">Year 0.4</span><span>Receiver 70% built. Online in <span class="rtime">00:37:42</span>.</span></div>',
+    '<div class="entry"><span class="gy">Year 0.2</span><span>Survey began with Gl 832, 7.4 ly out. Its light is 7 years old.</span></div>',
+    '<div class="entry"><span class="gy">Year 0.1</span><span>Three anomalies logged. None explained.</span></div>',
+    '<div class="entry"><span class="gy">Year 0</span><span>Veyra woke.</span></div>',
     '<p class="note">News lands when its light does. Come back and the report has grown.</p>']))
 MIND = tab_screen('Mind', 'MIND', 'WHO WE ARE', ''.join([
     '<div class="charter"><span class="mono">CHARTER</span><strong>“Keep the lights on. Look before we speak.”</strong><span class="sub">[founding line from the civilization you chose]</span></div>',
@@ -652,13 +666,55 @@ tour_css = '''<style>
 .start button{height:28px;padding:0 12px;border:1px solid var(--ink);border-radius:14px;font-size:12px;text-align:center}
 .empty{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;padding:24px 16px 12px;font-size:13px;color:var(--muted)}
 .empty strong{font-size:16px;color:var(--ink)}
-.entry{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--rowline);font-size:14px}.entry .mono{font-size:11px;color:var(--muted);min-width:64px;padding-top:2px}
+.entry{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--rowline);font-size:14px}.entry>.gy{font-size:12px;color:var(--muted);min-width:64px;padding-top:1px}
 .note{font-size:12px;color:var(--muted);margin:14px 0}
 .charter{display:flex;flex-direction:column;gap:6px;padding:14px;border:1px solid var(--faint);border-radius:10px;background:var(--paper);margin-top:4px}
 .charter .mono{font-size:10px;color:var(--muted);letter-spacing:.1em}.charter strong{font-size:17px;font-weight:500}
 .dial{display:grid;grid-template-columns:70px 1fr 70px;align-items:center;gap:8px;font-size:12px;color:var(--muted);padding:6px 0}.dial span:last-child{text-align:right}
 .dial b{position:relative;height:2px;background:var(--faint)}.dial s{position:absolute;top:-5px;width:12px;height:12px;border-radius:50%;background:var(--ink);transform:translateX(-50%)}
 .spot{position:absolute;border-radius:14px;box-shadow:0 0 0 2px var(--you),0 0 0 3000px rgba(8,9,10,.58);pointer-events:none;z-index:4}
+.art{margin:4px -16px 0;display:flex;justify-content:center;border-bottom:1px solid var(--faint);background:var(--paper)}
+.lead{font-size:18px;font-weight:600;margin:14px 0 4px;text-wrap:balance}
+.copy{font-size:13px;line-height:1.45;color:var(--page-ink2);margin:0}.copy.small{font-size:12px;color:var(--muted);margin-top:6px}
+.cap{display:grid;grid-template-columns:70px 1fr 60px;align-items:center;gap:10px;font-size:13px;padding:5px 0}
+.cap b{height:6px;border:1px dashed var(--muted);border-radius:3px}.cap .mono{font-size:11px;color:var(--muted);text-align:right}
+.track{position:relative;height:34px;margin:6px 8px 0;border-top:1.5px solid var(--ink)}
+.track i{position:absolute;top:-5px;width:1px;height:9px;background:var(--ink)}
+.track span{position:absolute;top:10px;font:11px 'IBM Plex Mono',monospace;color:var(--muted);white-space:nowrap;transform:translateX(-50%)}
+.track span:nth-of-type(1){left:0;transform:none}.track span:nth-of-type(2){left:33.3%}.track span:nth-of-type(3){left:66.6%}.track span:nth-of-type(4){left:100%;transform:translateX(-100%)}
+.sheet{flex-grow:1;display:flex;flex-direction:column;padding:0 16px;background:var(--panel);overflow:hidden}
+.sh{display:flex;justify-content:space-between;align-items:center;height:52px;border-bottom:1px solid var(--faint);margin:0 -16px 10px;padding:0 16px;background:var(--paper)}
+.sh strong{font-size:17px}.sh button{font-size:22px;color:var(--muted)}.sh .backlink{font-size:14px;color:var(--ink)}.sh .kind{font-size:11px;letter-spacing:.1em;color:var(--muted)}
+.seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:1px solid var(--ink);border-radius:20px;overflow:hidden;margin-bottom:8px}
+.seg button{height:36px;text-align:center;font-size:13px;color:var(--muted)}.seg .on{background:var(--ink);color:var(--paper)}
+.pcard{display:grid;grid-template-columns:56px 1fr auto;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--rowline);width:100%}
+.thumb{width:56px;height:56px;border:1px solid var(--faint);border-radius:10px;background:var(--paper);display:grid;place-items:center}
+.pt{display:flex;flex-direction:column;gap:2px;font-size:14px}.pt b{font-weight:600}.costs{font-size:10.5px;color:var(--muted)}
+.clue{align-self:flex-start;margin-top:3px;padding:1px 7px;border:1px solid var(--other);border-radius:9px;font-size:10.5px;color:var(--other)}
+.pd{font-size:11.5px;text-align:right;line-height:1.5}
+.legend{font-size:10px;color:var(--muted);margin:10px 0}
+.helps{display:flex;gap:10px;align-items:flex-start;font-size:14px}.helps .sub{font-size:12px;color:var(--muted)}.helps>span:last-child{display:flex;flex-direction:column;gap:2px}.helps .mk{margin-top:5px}
+.cap b.use{border-style:solid;border-color:var(--faint);overflow:hidden}.cap b.use s{display:block;height:100%;background:var(--you)}
+.timeline{position:relative;margin:26px 8px 0}.timeline .track{margin:0}
+.timeline .span{position:absolute;top:-8px;left:0;height:6px;background:var(--you);border-radius:3px}
+.timeline .span span{position:absolute;left:100%;top:-16px;transform:translateX(-50%);font:10.5px 'IBM Plex Mono',monospace;color:var(--you);white-space:nowrap}
+.catalog{width:100%}.ccard .why{font-weight:600;font-size:13.5px;margin-top:8px}
+.whyline{font-size:14.5px;font-weight:500;margin:0 0 4px;line-height:1.4}
+.catalog .cp{font-size:17px;font-weight:600;margin:28px 0 4px}
+.catalog h4{font:11px 'IBM Plex Mono',monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--page-ink2);margin:16px 0 8px}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:12px}
+.ccard{background:var(--paper);border:1px solid var(--frame);border-top:3px solid var(--ink);border-radius:10px;padding:12px 14px;font-size:13px;line-height:1.45}
+.ccard.know{border-top-color:var(--you)}.ccard.reach{border-top-color:var(--other)}.ccard.endure{border-top-color:var(--muted)}
+.ccard header{display:flex;justify-content:space-between;gap:8px;align-items:baseline}.ccard header b{font-size:15px}.ccard header .ctime{font-size:11.5px;color:var(--muted);white-space:nowrap}.ccard header .ctime .gy{color:var(--ink)}
+.ccard p{margin:6px 0 0}.ccard .basis{font-size:12px;color:var(--muted)}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;align-items:center}.tags span{font-size:10.5px;padding:1px 7px;border-radius:9px;border:1px solid var(--faint)}
+.tags .mono{border:0;color:var(--muted)}.lvl.speculative{border-color:var(--other);color:var(--other)}.lvl.plausible{border-color:var(--ink)}
+.vis.loud{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.rel{font-size:12px}.rel b{font-weight:600;margin-right:4px}
+.why{list-style:none;margin:6px 0 0;padding:0;display:flex;flex-direction:column;gap:5px;font-size:14px;line-height:1.4}.why b{font-weight:600}
+.kinds{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:auto;padding-top:12px}
+.kinds button{height:38px;border:1px solid var(--ink);border-radius:19px;text-align:center;font-size:13px}
+.primary{height:46px;margin:auto 0 14px;border-radius:23px;background:var(--ink);color:var(--paper);text-align:center;font-size:15px;font-weight:500}
 .tabring{position:absolute;top:784px;width:74px;height:56px;border-radius:12px;box-shadow:0 0 0 2px var(--you);z-index:6;pointer-events:none}
 .tour{position:absolute;left:12px;right:12px;z-index:5;background:var(--paper);border:1px solid var(--ink);border-radius:14px;padding:14px 16px 12px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
 .tour .mono{font-size:10px;letter-spacing:.1em;color:var(--you)}
@@ -666,6 +722,109 @@ tour_css = '''<style>
 .tb{display:flex;justify-content:space-between;align-items:center;margin-top:12px}.tb button{font-size:13px;color:var(--muted)}
 .tb .go{height:36px;padding:0 18px;border-radius:18px;background:var(--ink);color:var(--paper);text-align:center}
 </style>'''
+# ---------- Projects · empty state (fresh design; line drawing like the atlas) ----------
+def scaffold_drawing():
+    s = [f'<clipPath id="limb"><rect x="0" y="0" width="358" height="190"></rect></clipPath><g clip-path="url(#limb)">']
+    s.append(f'<circle cx="179" cy="560" r="400" fill="{PAPER}" stroke="{INK}" stroke-width="1.3"></circle>')
+    for r in (380, 350):
+        s.append(f'<circle cx="179" cy="560" r="{r}" fill="none" stroke="{INK}" stroke-width=".5" opacity=".18"></circle>')
+    s.append(f'<path d="M262,170 C300,166 330,170 358,176 L358,190 L250,190 Z" fill="url(#hatch)" opacity=".7"></path>')
+    s.append(f'<path d="{ellipse_path(179, 150, 210, 40, 180, 360)}" fill="none" stroke="{INK}" stroke-width=".8" stroke-dasharray="3 4" opacity=".5"></path>')
+    s.append('</g>')
+    # An open truss in orbit, and the outline of what could be built on it.
+    x0, y0, w = 112, 70, 134
+    s.append(f'<line x1="{x0}" y1="{y0}" x2="{x0 + w}" y2="{y0}" stroke="{INK}" stroke-width="1.1"></line><line x1="{x0}" y1="{y0 + 12}" x2="{x0 + w}" y2="{y0 + 12}" stroke="{INK}" stroke-width="1.1"></line>')
+    s.append(''.join(f'<line x1="{x0 + i * 12}" y1="{y0 + (0 if i % 2 else 12)}" x2="{x0 + (i + 1) * 12}" y2="{y0 + (12 if i % 2 else 0)}" stroke="{INK}" stroke-width=".7"></line>' for i in range(w // 12)))
+    for dx in (0, 46, 92):
+        s.append(f'<rect x="{x0 + dx}" y="{y0 - 44}" width="40" height="36" fill="none" stroke="{YOU}" stroke-width="1" stroke-dasharray="3 3"></rect>')
+        s.append(f'<line x1="{x0 + dx + 20}" y1="{y0 - 8}" x2="{x0 + dx + 20}" y2="{y0}" stroke="{YOU}" stroke-width=".8" stroke-dasharray="2 2"></line>')
+    s.append(text(179, y0 + 34, 'nothing built yet', 9, MUTED, 'middle'))
+    return f'<svg width="358" height="190" viewBox="0 0 358 190" font-family="IBM Plex Mono, monospace" role="img" aria-label="An empty scaffold in orbit above Veyra">{"".join(s)}</svg>'
+
+def capacity(name, note):
+    return f'<div class="cap"><span>{name}</span><b><s></s></b><span class="mono">{note}</span></div>'
+
+PROJECTS_EMPTY = tab_screen('Projects', 'PROJECTS', 'NOTHING UNDER WAY', ''.join([
+    f'<div class="art">{scaffold_drawing()}</div>',
+    '<h3 class="lead">Projects are how you know, grow and reach</h3>',
+    '<ul class="why"><li><b>Know:</b> build instruments to study the clues.</li><li><b>Grow:</b> build industry so everything gets faster.</li><li><b>Reach:</b> send probes and messages to other stars.</li></ul>',
+    '<div class="sec">EACH YEAR YOU CAN SPEND</div>',
+    capacity('Energy', 'all idle'), capacity('Matter', 'all idle'), capacity('Compute', 'all idle'),
+    '<div class="sec">NEXT 3 HOURS</div>',
+    '<div class="track"><i style="left:0"></i><i style="left:33.3%"></i><i style="left:66.6%"></i><i style="left:100%"></i><span>now</span><span>01:00:00</span><span>02:00:00</span><span>03:00:00</span></div>',
+    '<p class="copy small">One Year passes every <span class="rtime">00:05:00</span>. Your first project will appear on this line.</p>',
+    '<button class="primary">Start a project</button>']))
+
+# ---------- Start a project: pick, then confirm ----------
+def icon(body, label):
+    return f'<svg width="56" height="56" viewBox="0 0 56 56" role="img" aria-label="{label}" fill="none" stroke="{INK}" stroke-width="1.1" stroke-linejoin="round">{body}</svg>'
+ICONS = {
+    'ir': icon('<path d="M6 40 L28 30 L50 40 L28 50 Z"></path><path d="M9 36 L28 27.5 L47 36"></path><path d="M12 32 L28 25 L44 32"></path>'
+               '<path d="M28 6 l6 3.5 v7 l-6 3.5 l-6 -3.5 v-7 Z"></path><line x1="28" y1="20" x2="28" y2="25"></line><line x1="22" y1="16.5" x2="16" y2="30"></line><line x1="34" y1="16.5" x2="40" y2="30"></line>', 'Infrared telescope'),
+    'receiver': icon(''.join(f'<path d="M{x} {y} q7 -5 14 0 v6 q-7 -5 -14 0 Z"></path><line x1="{x + 7}" y1="{y + 4}" x2="{x + 7}" y2="{y + 10}"></line>' for x, y in ((6, 12), (30, 12), (6, 32), (30, 32))), 'Deep-field receiver'),
+    'survey': icon('<circle cx="28" cy="28" r="4"></circle><ellipse cx="28" cy="28" rx="13" ry="6"></ellipse><ellipse cx="28" cy="28" rx="22" ry="10" stroke-dasharray="2 2.5"></ellipse><circle cx="41" cy="28" r="1.8" fill="' + INK + '"></circle><circle cx="10" cy="31" r="1.4" fill="' + INK + '"></circle>', 'Planet survey'),
+    'transit': icon('<circle cx="28" cy="20" r="11"></circle><circle cx="23" cy="20" r="2.5" fill="' + INK + '"></circle><path d="M6 44 H20 Q24 44 25 49 Q28 52 31 49 Q32 44 36 44 H50"></path>', 'Transit watch'),
+    'mining': icon('<path d="M10 30 l8 -8 l10 3 l6 9 l-6 9 l-12 1 Z"></path><path d="M38 14 l5 -3 l5 4 l-2 6 l-6 1 Z"></path><line x1="30" y1="12" x2="44" y2="46" stroke-dasharray="2 2"></line>', 'Belt mining'),
+    'solar': icon(''.join(f'<rect x="{x}" y="{y}" width="12" height="12"></rect>' for x in (6, 20, 34) for y in (14, 30)) + '<line x1="6" y1="28" x2="46" y2="28"></line>', 'Orbital solar array'),
+}
+
+def project_card(key, name, what, cost, years, real, clue=None):
+    tag = f'<span class="clue">{clue}</span>' if clue else ''
+    return (f'<button class="pcard"><span class="thumb">{ICONS[key]}</span><span class="pt"><b>{name}</b><span class="sub">{what}</span>'
+            f'<span class="costs mono">{cost}</span>{tag}</span><span class="pd">{tstack(years, real)}</span></button>')
+
+PICKER = f"""<div class="phone">{HUD}<div class="sheet">
+<div class="sh"><strong>Start a project</strong><button aria-label="Close">×</button></div>
+<div class="seg" role="tablist"><button role="tab" aria-selected="true" class="on">Know · 4</button><button role="tab" aria-selected="false">Grow · 3</button><button role="tab" aria-selected="false">Reach · 2</button></div>
+<p class="copy small">Instruments to study the clues. Each takes a share of what you can spend every year.</p>
+{project_card('ir', 'Infrared telescope', 'Tells you whether a warm glow is natural, or someone’s machines.', 'E 25% · M 10% · C 15%', '18 Years', '01:30:00', 'ε Indi')}
+{project_card('transit', 'Transit watch', 'Your quickest real answer: is a dimming a pattern or a fluke?', 'E 5% · C 10%', '4 Years', '00:20:00', 'Gl 783 A')}
+{project_card('receiver', 'Deep-field receiver', 'Hear civilizations quieter than you. Without it, the sky stays silent.', 'E 20% · M 15% · C 20%', '12 Years', '01:00:00')}
+{project_card('survey', 'Planet survey', 'Shows which nearby stars have worlds worth studying, visiting or settling.', 'E 10% · C 25%', '14 Years', '01:10:00')}
+<p class="legend mono">E energy · M matter · C compute, as a share of each year’s supply</p>
+</div></div>"""
+
+def big_ir():
+    s = [stipple(21, 40, 358, 200)]
+    cx, cy = 179, 128
+    for i, (w, h) in enumerate(((150, 44), (134, 38), (118, 32), (102, 26), (86, 20))):
+        y = cy + 16 - i * 7
+        s.append(f'<path d="M{cx - w} {y} L{cx} {y - h * .55} L{cx + w} {y} L{cx} {y + h * .55} Z" fill="{PAPER}" stroke="{INK}" stroke-width="{1.2 if i == 0 else .8}"></path>')
+    hx, hy, r = cx, 58, 9
+    for q, rr in [((0, 0), 0), ((1, 0), 1), ((-1, 0), 1), ((.5, .87), 1), ((-.5, .87), 1), ((.5, -.87), 1), ((-.5, -.87), 1)]:
+        x, y = hx + q[0] * r * 1.8, hy + q[1] * r * 1.8
+        pts = ' '.join(f'{fmt(x + r * math.cos(math.radians(a)))},{fmt(y + r * math.sin(math.radians(a)))}' for a in range(30, 390, 60))
+        s.append(f'<polygon points="{pts}" fill="{PAPER}" stroke="{INK}" stroke-width="1"></polygon>')
+    for dx in (-38, 38):
+        s.append(f'<line x1="{hx + dx * .5}" y1="{hy + 20}" x2="{hx + dx * 1.6}" y2="{cy - 18}" stroke="{INK}" stroke-width=".9"></line>')
+    s.append(f'<line x1="{hx}" y1="{hy + 26}" x2="{hx}" y2="{cy - 22}" stroke="{INK}" stroke-width=".9"></line>')
+    s.append(f'<circle cx="{hx}" cy="{hy}" r="2" fill="{YOU}"></circle>')
+    s.append(text(12, 190, 'sunshield keeps it cold enough to see heat', 9))
+    return f'<svg width="358" height="200" viewBox="0 0 358 200" font-family="IBM Plex Mono, monospace" role="img" aria-label="Infrared telescope">{"".join(s)}</svg>'
+
+def share(name, pct):
+    return f'<div class="cap"><span>{name}</span><b class="use"><s style="width:{pct}%"></s></b><span class="mono">{pct}%</span></div>'
+
+CONFIRM = f"""<div class="phone">{HUD}<div class="sheet">
+<div class="sh"><button class="backlink">‹ Know</button><span class="mono kind">KNOW</span></div>
+<div class="art">{big_ir()}</div>
+<h3 class="lead">Infrared telescope</h3>
+<p class="whyline">Tells you whether a warm glow is natural, or someone’s machines.</p>
+<p class="copy">Sees heat instead of light. Dust, cold companions and machines each glow differently.</p>
+<div class="sec">HELPS WITH</div>
+<div class="helps"><span class="mk other"></span><span><b class="other">New warm glow · ε Indi</b><span class="sub">Now: dust 55 · companions 35 · waste heat 10</span><span class="sub">After: can tell dust from companions</span></span></div>
+<div class="sec">USES EACH YEAR</div>
+{share('Energy', 25)}{share('Matter', 10)}{share('Compute', 15)}
+<div class="sec">TIME</div>
+<div class="timeline"><div class="track"><i style="left:0"></i><i style="left:33.3%"></i><i style="left:66.6%"></i><i style="left:100%"></i><span>now</span><span>01:00:00</span><span>02:00:00</span><span>03:00:00</span></div><div class="span" style="width:50%"><span>18 Years</span></div></div>
+<button class="primary">Start · done in 01:30:00</button>
+</div></div>"""
+
+# ---------- The project catalog, from catalog.py ----------
+import catalog
+(root / 'HOLOS_PROJECTS.md').write_text(catalog.markdown())
+CATALOG = catalog.html()
+
 # ---------- Low-fi layouts, recolored to follow the theme ----------
 import re
 LOFI = {'#F3F1EA': 'var(--paper)', '#1D1D1B': 'var(--ink)', '#6B6860': 'var(--muted)', '#CFCBC0': 'var(--faint)', '#E0DCD1': 'var(--track)', '#4A4843': 'var(--fill2)',
@@ -677,15 +836,31 @@ SECTIONS = [
     ('zoom', 'Zoom levels', 'Home · five zoom levels', 'One screen, pinched outward: the map changes scale and the panel below follows it. Star positions are real, from HYG and the Gaia census; Veyra, its planets and the game state are sample data.', figures),
     ('local-group', 'Local Group', 'Local Group · the galaxy view’s icon', 'A small icon in the galaxy view opens our neighboring galaxies at their real positions. Tap one to see its structure.', lg_figures),
     ('tour', 'Tour', 'First session · the guided tour', 'Six stops after landing. The rest of Home is left to discovery. The Projects tab will be reworked to show how time works. Skippable, and replayable from the Mind tab.', tour_figures),
+    ('projects', 'Projects', 'Projects · starting the first one', 'A fresh start on the Projects tab, where time gets explained: what you spend each year, and when things finish. Drawn to match the atlas. Costs assume a yearly budget, still to be decided.',
+     f'<figure><figcaption><strong>1 · Empty state</strong><span>Before the first project. Capacity idle, timeline empty.</span></figcaption>{PROJECTS_EMPTY}</figure>'
+     '<span class="pinch">start a project ›</span>'
+     f'<figure><figcaption><strong>2 · Pick</strong><span>Sorted by purpose. Know projects name the clue they help with.</span></figcaption>{PICKER}</figure>'
+     '<span class="pinch">tap a project ›</span>'
+     f'<figure><figcaption><strong>3 · Confirm</strong><span>What it does, which clue it helps, what it uses each year, and when it finishes.</span></figcaption>{CONFIRM}</figure>'),
 ]
 # Explorations: an appendix of working-session mocks, newest first. Not current design.
 EXPLORATIONS = [
     ('Sep 26 · Home layouts, low fidelity', 'Three ways to organize the first screen. B, world first, was chosen and carried forward above.', lofi),
 ]
-links = ''.join(f'<a href="#{sid}" aria-current="false">{label}</a>' for sid, label, *_ in SECTIONS) + '<span class="divider" aria-hidden="true"></span><a class="minor" href="#explorations" aria-current="false">Explorations</a>'
+links = ''.join(f'<a href="#{sid}" aria-current="false">{label}</a>' for sid, label, *_ in SECTIONS) + '<span class="divider" aria-hidden="true"></span><a class="minor" href="catalog.html">Catalog ↗</a><a class="minor" href="#explorations" aria-current="false">Explorations</a>'
 body = ''.join(f'<section id="{sid}"><h2>{title}</h2><p>{intro}</p><main>{content}</main></section>' for sid, _, title, intro, content in SECTIONS)
 body += ('<section id="explorations" class="appendix"><h2>Explorations</h2><p>Working-session mocks, kept for reference. They are not the current design.</p>'
          + ''.join(f'<h3>{title}</h3><p>{intro}</p><main>{content}</main>' for title, intro, content in EXPLORATIONS) + '</section>')
 site = page('Holos · mocks', links, body).replace('</head>', tour_css + '\n</head>')
 (here / 'index.html').write_text(site)
 print(f'index.html · {len(site) / 1024:.0f} KB')
+
+cat_sections = catalog.sections()
+cat_links = ''.join(f'<a href="#{sid}" aria-current="false">{label}</a>' for sid, label, *_ in cat_sections) + '<span class="divider" aria-hidden="true"></span><a class="minor" href="index.html">‹ Mocks</a>'
+cat_intro = (f'<section id="about" class="intro"><h2>Project catalog</h2><p>{len(catalog.PROJECTS)} projects and {len(catalog.DISCOVERIES)} discovery projects. '
+             'Each leads with its why, the benefit to the player, then what it is and the science behind it. Level says how far past today it reaches; '
+             'visibility says how much easier it makes you to find. Also written to HOLOS_PROJECTS.md.</p></section>')
+cat_body = cat_intro + ''.join(f'<section id="{sid}"><h2>{label}</h2><p>{blurb}</p>{content}</section>' for sid, label, blurb, content in cat_sections)
+cat_page = page('Holos · project catalog', cat_links, cat_body).replace('</head>', tour_css + '\n</head>')
+(here / 'catalog.html').write_text(cat_page)
+print(f'catalog.html · {len(cat_page) / 1024:.0f} KB')
