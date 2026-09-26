@@ -88,7 +88,7 @@ function galaxyInfo(galaxy){
   setInfo({kicker:`LOCAL GROUP / ${galaxy.type.toUpperCase()}`,name:galaxy.name,description:galaxy.description,
     facts:[['Distance estimate',format(distance/divisor,2),unit],['Reported 1σ range',`${format(low,2)}–${format(high,2)}`,unit]],
     evidence:'Observed sky position · distance has uncertainty',source:{label:galaxy.distanceRef.replace(/(\d{4}).*/,' et al. $1')+' · distance study',url:referenceLink(galaxy.distanceRef)},
-    measurement:`ICRS/J2000: RA ${format(galaxy.ra,5)}°, Dec ${format(galaxy.dec,5)}°. Adopted distance ${format(galaxy.kpc,2)} kpc; ${errors} ${outline} Yellow segments show the reported distance interval along our line of sight, not a galaxy’s physical length. The catalog is LVDB v1.1.1; the SMC distance is updated from Graczyk et al. (2020). Different stellar populations can have different measured centers, especially in the Magellanic Clouds.`});
+    measurement:`ICRS/J2000: RA ${format(galaxy.ra,5)}°, Dec ${format(galaxy.dec,5)}°. Adopted distance ${format(galaxy.kpc,2)} kpc; ${errors} ${outline} ${LINE_ART?'Heavier':'Yellow'} segments show the reported distance interval along our line of sight, not a galaxy’s physical length. The catalog is LVDB v1.1.1; the SMC distance is updated from Graczyk et al. (2020). Different stellar populations can have different measured centers, especially in the Magellanic Clouds.`});
 }
 
 function starInfo(star) {
@@ -489,7 +489,7 @@ function setPlayerActive(active){
   stopTravel();playerActive=active;state.playing=false;updatePlay();
   if(active){if(godview?.active)godview.hide();state.trueSizes=true;$('true-sizes').checked=true;state.orbits=true;state.labels=true;state.reconstruction=false;state.date=new Date('2026-09-06T12:00:00Z');universe.updateEphemeris(state.date);$('date').value=dateText();$('orbits').checked=true;$('reconstruction').checked=false;$('labels-toggle').setAttribute('aria-pressed','true');}
   playerHome.setActive(active);resize();contextKey='';
-  document.title=(active?'Holos — Home civilization':'Holos — Earth to the Local Group')+(LINE_ART?' · Line edition':'');
+  document.title=(active?'Holos — Home civilization':'Holos — Earth to the Local Group')+(LINE_ART?'':' · Color edition');
 }
 
 async function start(){
@@ -509,7 +509,7 @@ async function start(){
     syncCamera();universe.update(pose,state,camera);createLabels();wireControls();$('date').value=dateText();updateContext();updateLabels();updateReadout();
     godview=createGodview({state,pose,universe,flyTo,projectAU,onChange:()=>{contextKey='';updateContext();}});
     if(location.hash.startsWith('#godview-'))godview.show(location.hash.endsWith('speculative')?'speculative':'observed',{instant:true});
-    document.title=playerActive?'Holos — Home civilization'+(LINE_ART?' · Line edition':''):document.title;
+    document.title=playerActive?'Holos — Home civilization'+(LINE_ART?'':' · Color edition'):document.title;
     $('loading').classList.add('done');gsap.ticker.add(frame);
     window.holos={
       getState:()=>({playerView:playerActive,mode:state.mode,planet:state.planet.name,star:state.star?.name,galaxy:state.galaxy?.name,neighborGalaxies:GALAXIES.length,date:dateText(),playing:state.playing,trueSizes:state.trueSizes,reconstruction:state.reconstruction,portraits:state.portraits,visiblePortraits:universe.portraits.filter(p=>p.sprite.visible).length,extents:state.extents,uncertainty:state.uncertainty,catalogStars:META.count,searchable:META.searchable,loadedTextures:Object.keys(textures).length,sceneId:universe.scene.uuid,sceneCount:1,cameraId:camera.uuid,earthObjectId:universe.earth.root.uuid,frameCount,traveling:!!flight,destination:flight?.name,travelProgress:flight?flight.progress:null,drawCalls:renderer.info.render.calls,points:renderer.info.render.points,webgl:renderer.capabilities.isWebGL2}),

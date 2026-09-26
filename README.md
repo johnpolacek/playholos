@@ -1,10 +1,10 @@
 # Holos — Earth to the Local Group
 
-Open **index.html** in a modern browser. The application, thirteen texture maps, ephemeris, and catalogs are embedded in that file. No server, account, CDN, or internet connection is needed. WebGL 2 / hardware acceleration is required.
+Open **index.html** in a modern browser. The atlas is drawn as minimalist line diagrams, ink on paper or chalk on slate, with a light / dark toggle. The application, the surface maps its globes are traced from, ephemeris, and catalogs are embedded in that file. No server, account, CDN, or internet connection is needed. WebGL 2 / hardware acceleration is required.
 
 **Gameplay exploration:** open [explorations/gameplay/gameplay.html](explorations/gameplay/gameplay.html) for an illustrated walkthrough of the proposed civilization game, including interactive light-time, probe-travel, and offline-guidance examples. It is a standalone concept page, separate from the atlas and game implementation; keep its adjacent `assets` folder when sharing it.
 
-**Line edition:** open **line-art.html** for the same atlas drawn as minimalist ink-on-paper diagrams. Positions, orbits, catalogs, measurements, navigation, Godview, and the player home are identical; only the rendering differs. It is also self-contained and offline. With `npm run dev`, visit **http://127.0.0.1:4173/line-art.html**. See [Line edition](#line-edition).
+**Color edition:** open **color.html** for the original rendering: photographic surface maps, glowing stars, and a dark interface. Positions, orbits, catalogs, measurements, navigation, Godview, and the player home are identical; only the drawing differs. It is also self-contained and offline. With `npm run dev`, visit **http://127.0.0.1:4173/color.html**. See [Drawing style](#drawing-style).
 
 Explore Earth and the Moon, all eight planets, **109,400 HYG stars** (958 searchable), the Milky Way, and **10 selected neighboring galaxies**. Search for names and aliases such as M31 or M33. This is an educational coordinate atlas with documented observations and uncertainty, not a complete or exact reconstruction of the universe.
 
@@ -26,9 +26,9 @@ The shell lives in `src/player-home.js`, with styles in `src/style.css` and inte
 
 Browser verification: desktop at 1440×900 and 1280×720, mobile at 390×844; home/system transitions in both directions, interrupted travel, drag rotation, reduced-motion instant navigation, mobile overview scrolling, and atlas Solar System / admin Godview access. The existing 23 astronomy and navigation tests pass.
 
-## Line edition
+## Drawing style
 
-`npm run build` writes `line-art.html` alongside `index.html` from the same source, with `__LINE_ART__` set at build time. Its drawing conventions:
+`npm run build` writes `index.html` (line drawing) and `color.html` (color edition) from the same source; `__LINE_ART__` is set at build time for `index.html`. The line drawing's conventions:
 
 - Orbits are solid hairlines; distance guides are dashed. Line widths stay constant in screen pixels at every scale.
 - Planets, the Moon, and the Sun appear as open circle symbols (Saturn with a ring) until their true globe is larger than the symbol.
@@ -36,10 +36,10 @@ Browser verification: desktop at 1440×900 and 1280×720, mobile at 390×844; ho
 - Night sides are hatched from the computed sunlight direction.
 - Stars are stipple: faint stars are dots, bright stars are open rings. The illustrative asteroid belt becomes evenly dotted rings.
 - Galaxy portraits are pen drawings, and projected galaxy contours are hatched instead of shaded.
-- The Solar System destination looks across the orbital plane at a lower angle than the color atlas.
+- The Solar System destination looks across the orbital plane at a lower angle than the color edition.
 - A light / dark toggle sits in the header and the player home header. Light is ink on paper; dark is chalk on slate. It follows the system setting until the viewer chooses, then remembers the choice in local storage.
 
-These are map symbols, not measured sizes or structures; the in-app **Model and sources** dialog says so. The line edition omits the cloud, night-lights, Sun, and ring-alpha maps it does not draw, so it is smaller than `index.html`. Rendering lives in `src/line-art.js` and interface overrides in `src/line-art.css`; hooks in `src/universe.js`, `src/galaxy-portraits.js`, and `src/app.js` are guarded by `LINE_ART`, so the color atlas is unchanged.
+These are map symbols, not measured sizes or structures; the in-app **Model and sources** dialog says so and links to the color edition. `index.html` omits the cloud, night-lights, Sun, and ring-alpha maps it does not draw, so it is smaller than `color.html`. Rendering lives in `src/line-art.js` and interface overrides in `src/line-art.css`; hooks in `src/universe.js`, `src/galaxy-portraits.js`, and `src/app.js` are guarded by `LINE_ART`, so `color.html` keeps the original rendering.
 
 ## Scientific scope
 
@@ -51,8 +51,8 @@ The **Model and sources** dialog explains these assumptions inside the applicati
 - **Stars:** [HYG 4.1](https://github.com/astronexus/HYG-Database) combines Hipparcos, Yale, and Gliese sources. The subset retains distances in **(0, 1,000] parsecs**, excluding missing-distance sentinels. It is incomplete and has varying measurement precision. Empty space beyond its survey cut is not an observed absence of stars. Positions stay at **J2000.0**, independently of the planetary clock; proper motion is not animated. Search includes named stars, stars closer than 12 parsecs, and stars brighter than apparent magnitude 3. Multiple-star components can remain unresolved.
 - **Reference frame:** star positions are recomputed from HYG RA, declination, and distance fields, then transformed into Galactic coordinates. The atlas uses axis order `(Galactic X, Galactic Z, −Galactic Y)`. The embedded star buffer stores light-years; camera and planetary calculations use AU. J2000 equatorial ephemeris vectors and galaxy directions use the same transform. Point size, brightness, and color favor legibility and do not represent physical stellar radii or calibrated photometry.
 - **Milky Way:** the default view shows HYG and a Galactic center marker. The center adopts the J2000 radio position of [Sagittarius A*](https://simbad.cds.unistra.fr/simbad/sim-id?Ident=Sagittarius+A) at **8,277 pc**, with statistical uncertainty 9 pc and systematics roughly 30 pc ([GRAVITY Collaboration 2022](https://www.aanda.org/articles/aa/full_html/2022/01/aa42465-21/aa42465-21.html)). The optional disk, bar, and spiral arms are a seeded statistical illustration; particle positions, arm paths, and the roughly 100,000-light-year disk boundary are not measurement results. We do not have a complete 3D census or an external photograph of our galaxy.
-- **Neighboring galaxies:** the pinned [Local Volume Database v1.1.1, released August 12, 2026](https://github.com/apace7/local_volume_database/releases/tag/v1.1.1), supplies observed centers and adopted measurements with original-study references. Selected objects are Andromeda, Triangulum, the Magellanic Clouds, M32, NGC 205, IC 10, NGC 6822, IC 1613, and WLM. This is not a complete census; different methods can give different distance estimates. The Magellanic Clouds use direct eclipsing-binary distances from [Pietrzyński et al. 2019](https://arxiv.org/abs/1903.08096) and [Graczyk et al. 2020](https://arxiv.org/abs/2010.08754), with statistical and systematic errors combined in quadrature for display. Other distance intervals are transformed from reported distance-modulus bounds. Gold segments show those reported 1σ intervals along our line of sight, not galaxy lengths.
-- **Galaxy outlines:** blue ellipses show sky-projected photometric contours in the observer's tangent plane. Most use the catalog's half-light semi-major axis, ellipticity, and position angle. Andromeda and Triangulum use [RC3 B-band 25 mag/arcsec² isophotes](https://cdsarc.cds.unistra.fr/viz-bin/ReadMe/VII/155?format=html), which are not directly comparable to half-light contours. These are fitted summaries of observations, not exact boundaries or 3D disks. Missing orientations stay unknown: SMC and IC 10 have center markers without ellipses. Stellar halos can extend farther. Marker size and color are map symbols. Galaxy motions, interactions, dark matter, and expansion are not simulated.
+- **Neighboring galaxies:** the pinned [Local Volume Database v1.1.1, released August 12, 2026](https://github.com/apace7/local_volume_database/releases/tag/v1.1.1), supplies observed centers and adopted measurements with original-study references. Selected objects are Andromeda, Triangulum, the Magellanic Clouds, M32, NGC 205, IC 10, NGC 6822, IC 1613, and WLM. This is not a complete census; different methods can give different distance estimates. The Magellanic Clouds use direct eclipsing-binary distances from [Pietrzyński et al. 2019](https://arxiv.org/abs/1903.08096) and [Graczyk et al. 2020](https://arxiv.org/abs/2010.08754), with statistical and systematic errors combined in quadrature for display. Other distance intervals are transformed from reported distance-modulus bounds. Heavier line segments (gold in the color edition) show those reported 1σ intervals along our line of sight, not galaxy lengths.
+- **Galaxy outlines:** hatched ellipses (blue in the color edition) show sky-projected photometric contours in the observer's tangent plane. Most use the catalog's half-light semi-major axis, ellipticity, and position angle. Andromeda and Triangulum use [RC3 B-band 25 mag/arcsec² isophotes](https://cdsarc.cds.unistra.fr/viz-bin/ReadMe/VII/155?format=html), which are not directly comparable to half-light contours. These are fitted summaries of observations, not exact boundaries or 3D disks. Missing orientations stay unknown: SMC and IC 10 have center markers without ellipses. Stellar halos can extend farther. Marker size and color are map symbols. Galaxy motions, interactions, dark matter, and expansion are not simulated.
 - **Galaxy portraits:** screen-facing, procedurally drawn map symbols make the major spirals and isolated dwarfs readable in the Local Group overview. Their apparent sizes, inclinations, colors, spiral arms, dust lanes, and generated stars are artistic choices, not observed structure or physical extents. Centers remain at catalog positions; portraits fade out as you approach the measured contours. Click a portrait or catalog center to explore it. On phones the overview prioritizes the three main galaxy labels; companions remain tappable and searchable. The dashed Milky Way–Andromeda ruler displays the 3D separation of the adopted centers (about 2.54 million light-years), not an orbit.
 - **Epochs and framing:** stars remain at their catalog epoch and galaxies at their adopted observed estimates; the planetary clock does not reconstruct a simultaneous present-day universe from ancient light. The overview anchor is the framing midpoint of the Milky Way and Andromeda, not a measured barycenter. Guide rings are 1, 2, and 3 million light-years from the Milky Way center.
 
@@ -65,7 +65,7 @@ npm test
 npm run dev
 ```
 
-The preview is `http://127.0.0.1:4173`. The build creates portable `index.html`; only that file needs to be shared. Ordinary builds do not fetch data.
+The preview is `http://127.0.0.1:4173`. The build creates portable `index.html` and `color.html`; either file can be shared on its own. Ordinary builds do not fetch data.
 
 - `src/app.js`: camera controls, travel, interface, and render loop.
 - `src/universe.js`: persistent bodies, observed contours, catalog points, and optional illustrations.
@@ -75,7 +75,7 @@ The preview is `http://127.0.0.1:4173`. The build creates portable `index.html`;
 - `src/galaxies.js`: names, aliases, projected contours, and distance intervals.
 - `src/astronomy.js`: approximate orbit guides and physical parameters.
 - `src/template.html` / `src/style.css`: interface and source explanations.
-- `src/line-art.js` / `src/line-art.css`: line edition rendering and paper interface.
+- `src/line-art.js` / `src/line-art.css`: line drawing, themes, and paper / slate interface.
 - `data/galaxies.json`: adopted measurements. Rebuild offline with `python3 scripts/prepare-galaxies.py`; provenance is documented in `data/galaxy-sources/README.md`.
 - `data/stars.bin`: little-endian float32 records: Galactic X, Z, −Y (light-years), apparent magnitude, B−V color index.
 - `data/stars.json`: searchable catalog subset.
