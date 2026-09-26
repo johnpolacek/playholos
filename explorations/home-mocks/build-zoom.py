@@ -6,6 +6,7 @@ the game state, and the galaxy's arm structure are invented or illustrative.
 """
 import csv, math, random, struct
 from pathlib import Path
+import catalog
 
 here = Path(__file__).resolve().parent
 root = here.parents[1]
@@ -682,7 +683,7 @@ tour_css = '''<style>
 .track i{position:absolute;top:-5px;width:1px;height:9px;background:var(--ink)}
 .track span{position:absolute;top:10px;font:11px 'IBM Plex Mono',monospace;color:var(--muted);white-space:nowrap;transform:translateX(-50%)}
 .track span:nth-of-type(1){left:0;transform:none}.track span:nth-of-type(2){left:33.3%}.track span:nth-of-type(3){left:66.6%}.track span:nth-of-type(4){left:100%;transform:translateX(-100%)}
-.sheet{flex-grow:1;display:flex;flex-direction:column;padding:0 16px;background:var(--panel);overflow:hidden}
+.sheet{flex-grow:1;display:flex;flex-direction:column;padding:0 16px;background:var(--panel);overflow:hidden}.sheet>*,.tabpage>*{flex-shrink:0}
 .sh{display:flex;justify-content:space-between;align-items:center;height:52px;border-bottom:1px solid var(--faint);margin:0 -16px 10px;padding:0 16px;background:var(--paper)}
 .sh strong{font-size:17px}.sh button{font-size:22px;color:var(--muted)}.sh .backlink{font-size:14px;color:var(--ink)}.sh .kind{font-size:11px;letter-spacing:.1em;color:var(--muted)}
 .seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:1px solid var(--ink);border-radius:20px;overflow:hidden;margin-bottom:8px}
@@ -711,6 +712,17 @@ tour_css = '''<style>
 .tags .mono{border:0;color:var(--muted)}.lvl.speculative{border-color:var(--other);color:var(--other)}.lvl.plausible{border-color:var(--ink)}
 .vis.loud{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 .rel{font-size:12px}.rel b{font-weight:600;margin-right:4px}
+.pcard.locked{opacity:.55}.needs{font-size:11px;color:var(--ink);margin-top:2px}
+.runhead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin:12px 0 6px}.runhead>span:first-child{display:flex;flex-direction:column}
+.runhead .lead{margin:0}.runhead .tstack .gy{font-size:15px}.runhead .tstack .rtime{font-size:14px}
+.bar.big{display:block;height:4px;margin:0 0 10px}
+.prow{display:grid;grid-template-columns:56px 1fr auto;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--rowline)}
+.prow .pt{display:flex;flex-direction:column;gap:4px}.prow .clue{margin:0}.prow .bar{display:block}
+.lanes{display:flex;flex-direction:column;gap:12px;margin:10px 8px 8px}
+.lane{position:relative;height:14px}.lane .span{position:absolute;left:0;top:4px;height:6px;border-radius:3px;background:var(--you)}
+.lane .lname{position:absolute;left:0;top:-10px;font-size:10.5px;color:var(--you);white-space:nowrap}
+.lanes+.track{margin-top:4px}
+.primary.ghost{background:none;color:var(--ink);border:1px solid var(--ink)}
 .why{list-style:none;margin:6px 0 0;padding:0;display:flex;flex-direction:column;gap:5px;font-size:14px;line-height:1.4}.why b{font-weight:600}
 .kinds{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:auto;padding-top:12px}
 .kinds button{height:38px;border:1px solid var(--ink);border-radius:19px;text-align:center;font-size:13px}
@@ -764,6 +776,10 @@ ICONS = {
     'receiver': icon(''.join(f'<path d="M{x} {y} q7 -5 14 0 v6 q-7 -5 -14 0 Z"></path><line x1="{x + 7}" y1="{y + 4}" x2="{x + 7}" y2="{y + 10}"></line>' for x, y in ((6, 12), (30, 12), (6, 32), (30, 32))), 'Deep-field receiver'),
     'survey': icon('<circle cx="28" cy="28" r="4"></circle><ellipse cx="28" cy="28" rx="13" ry="6"></ellipse><ellipse cx="28" cy="28" rx="22" ry="10" stroke-dasharray="2 2.5"></ellipse><circle cx="41" cy="28" r="1.8" fill="' + INK + '"></circle><circle cx="10" cy="31" r="1.4" fill="' + INK + '"></circle>', 'Planet survey'),
     'transit': icon('<circle cx="28" cy="20" r="11"></circle><circle cx="23" cy="20" r="2.5" fill="' + INK + '"></circle><path d="M6 44 H20 Q24 44 25 49 Q28 52 31 49 Q32 44 36 44 H50"></path>', 'Transit watch'),
+    'spectro': icon('<path d="M10 40 L22 14 L34 40 Z"></path><line x1="2" y1="30" x2="16" y2="27"></line>'
+                    + ''.join(f'<line x1="30" y1="{27 + i * 2}" x2="54" y2="{20 + i * 6}" stroke-dasharray="{2 if i % 2 else 0} 2"></line>' for i in range(4)), 'Spectrograph bank'),
+    'flash': icon('<path d="M8 40 Q28 8 48 40 Z"></path><line x1="28" y1="40" x2="28" y2="48"></line><line x1="18" y1="48" x2="38" y2="48"></line>'
+                  '<path d="M40 8 l-4 6 h5 l-4 6" stroke-width="1.3"></path>', 'Optical flash watch'),
     'mining': icon('<path d="M10 30 l8 -8 l10 3 l6 9 l-6 9 l-12 1 Z"></path><path d="M38 14 l5 -3 l5 4 l-2 6 l-6 1 Z"></path><line x1="30" y1="12" x2="44" y2="46" stroke-dasharray="2 2"></line>', 'Belt mining'),
     'solar': icon(''.join(f'<rect x="{x}" y="{y}" width="12" height="12"></rect>' for x in (6, 20, 34) for y in (14, 30)) + '<line x1="6" y1="28" x2="46" y2="28"></line>', 'Orbital solar array'),
 }
@@ -773,34 +789,47 @@ def project_card(key, name, what, cost, years, real, clue=None):
     return (f'<button class="pcard"><span class="thumb">{ICONS[key]}</span><span class="pt"><b>{name}</b><span class="sub">{what}</span>'
             f'<span class="costs mono">{cost}</span>{tag}</span><span class="pd">{tstack(years, real)}</span></button>')
 
+CAT = {p['id']: p for p in catalog.PROJECTS}
+PICKER_ORDER = [('infrared-telescope', 'ir', 'ε Indi'), ('transit-watch', 'transit', 'Gl 783 A'), ('spectrograph-bank', 'spectro', None),
+                ('deep-field-receiver', 'receiver', None), ('optical-flash-watch', 'flash', None), ('planet-survey', 'survey', None)]
+def cost_short(cost): return ' · '.join(f'{c[0]} {c[1:]}%' for c in cost.split())
+def catalog_card(pid, key, clue, started=()):
+    p = CAT[pid]
+    locked = [n for n in p['needs'] if n not in started]
+    card = project_card(key, p['name'], p['why'], cost_short(p['cost']), f'{p["years"]} Years', catalog.real_time(p['years']), clue)
+    if locked:
+        card = card.replace('<button class="pcard">', '<button class="pcard locked" aria-disabled="true">').replace(
+            '</span><span class="pd">', f'<span class="needs">Needs: {" + ".join(CAT[n]["name"] for n in locked)}</span></span><span class="pd">', 1)
+    return card
+def tier_count(purpose): return sum(p['purpose'] == purpose and p['tier'] == 1 for p in catalog.PROJECTS)
 PICKER = f"""<div class="phone">{HUD}<div class="sheet">
 <div class="sh"><strong>Start a project</strong><button aria-label="Close">×</button></div>
-<div class="seg" role="tablist"><button role="tab" aria-selected="true" class="on">Know · 4</button><button role="tab" aria-selected="false">Grow · 3</button><button role="tab" aria-selected="false">Reach · 2</button></div>
-<p class="copy small">Instruments to study the clues. Each takes a share of what you can spend every year.</p>
-{project_card('ir', 'Infrared telescope', 'Tells you whether a warm glow is natural, or someone’s machines.', 'E 25% · M 10% · C 15%', '18 Years', '01:30:00', 'ε Indi')}
-{project_card('transit', 'Transit watch', 'Your quickest real answer: is a dimming a pattern or a fluke?', 'E 5% · C 10%', '4 Years', '00:20:00', 'Gl 783 A')}
-{project_card('receiver', 'Deep-field receiver', 'Hear civilizations quieter than you. Without it, the sky stays silent.', 'E 20% · M 15% · C 20%', '12 Years', '01:00:00')}
-{project_card('survey', 'Planet survey', 'Shows which nearby stars have worlds worth studying, visiting or settling.', 'E 10% · C 25%', '14 Years', '01:10:00')}
-<p class="legend mono">E energy · M matter · C compute, as a share of each year’s supply</p>
+<div class="seg" role="tablist"><button role="tab" aria-selected="true" class="on">Know · {tier_count('know')}</button><button role="tab" aria-selected="false">Grow · {tier_count('grow')}</button><button role="tab" aria-selected="false">Reach · {tier_count('reach')}</button></div>
+{''.join(catalog_card(*entry) for entry in PICKER_ORDER)}
 </div></div>"""
 
-def big_ir():
-    s = [stipple(21, 40, 358, 200)]
-    cx, cy = 179, 128
+def big_ir(built=1.0, height=200):
+    s = [stipple(21, 40, 358, height)]
+    done = lambda i, n: i < round(built * n)
+    dash = lambda ok: '' if ok else ' stroke-dasharray="3 3" opacity=".6"'
+    k = height / 200
+    cx, cy = 179, 128 * k
     for i, (w, h) in enumerate(((150, 44), (134, 38), (118, 32), (102, 26), (86, 20))):
-        y = cy + 16 - i * 7
-        s.append(f'<path d="M{cx - w} {y} L{cx} {y - h * .55} L{cx + w} {y} L{cx} {y + h * .55} Z" fill="{PAPER}" stroke="{INK}" stroke-width="{1.2 if i == 0 else .8}"></path>')
-    hx, hy, r = cx, 58, 9
-    for q, rr in [((0, 0), 0), ((1, 0), 1), ((-1, 0), 1), ((.5, .87), 1), ((-.5, .87), 1), ((.5, -.87), 1), ((-.5, -.87), 1)]:
+        w, h = w * (.8 + .2 * k), h * k
+        y = cy + 16 * k - i * 7 * k
+        s.append(f'<path d="M{cx - w} {y} L{cx} {y - h * .55} L{cx + w} {y} L{cx} {y + h * .55} Z" fill="{PAPER}" stroke="{INK if done(i, 5) else YOU}" stroke-width="{1.2 if i == 0 else .8}"{dash(done(i, 5))}></path>')
+    hx, hy, r = cx, 58 * k, 9 * (.7 + .3 * k)
+    for j, (q, rr) in enumerate([((0, 0), 0), ((1, 0), 1), ((-1, 0), 1), ((.5, .87), 1), ((-.5, .87), 1), ((.5, -.87), 1), ((-.5, -.87), 1)]):
         x, y = hx + q[0] * r * 1.8, hy + q[1] * r * 1.8
         pts = ' '.join(f'{fmt(x + r * math.cos(math.radians(a)))},{fmt(y + r * math.sin(math.radians(a)))}' for a in range(30, 390, 60))
-        s.append(f'<polygon points="{pts}" fill="{PAPER}" stroke="{INK}" stroke-width="1"></polygon>')
+        ok = built >= 1 or (built > .5 and j < round((built - .5) * 14))
+        s.append(f'<polygon points="{pts}" fill="{PAPER}" stroke="{INK if ok else YOU}" stroke-width="1"{dash(ok)}></polygon>')
     for dx in (-38, 38):
-        s.append(f'<line x1="{hx + dx * .5}" y1="{hy + 20}" x2="{hx + dx * 1.6}" y2="{cy - 18}" stroke="{INK}" stroke-width=".9"></line>')
-    s.append(f'<line x1="{hx}" y1="{hy + 26}" x2="{hx}" y2="{cy - 22}" stroke="{INK}" stroke-width=".9"></line>')
+        s.append(f'<line x1="{hx + dx * .5}" y1="{hy + 20 * k}" x2="{hx + dx * 1.6}" y2="{cy - 18 * k}" stroke="{INK}" stroke-width=".9"></line>')
+    s.append(f'<line x1="{hx}" y1="{hy + 26 * k}" x2="{hx}" y2="{cy - 22 * k}" stroke="{INK}" stroke-width=".9"></line>')
     s.append(f'<circle cx="{hx}" cy="{hy}" r="2" fill="{YOU}"></circle>')
-    s.append(text(12, 190, 'sunshield keeps it cold enough to see heat', 9))
-    return f'<svg width="358" height="200" viewBox="0 0 358 200" font-family="IBM Plex Mono, monospace" role="img" aria-label="Infrared telescope">{"".join(s)}</svg>'
+    s.append(text(12, height - 10, 'sunshield keeps it cold enough to see heat', 9) if built >= 1 else text(12, 18, f'under construction · {round(built * 100)}% built', 9, YOU))
+    return f'<svg width="358" height="{height}" viewBox="0 0 358 {height}" font-family="IBM Plex Mono, monospace" role="img" aria-label="Infrared telescope">{"".join(s)}</svg>'
 
 def share(name, pct):
     return f'<div class="cap"><span>{name}</span><b class="use"><s style="width:{pct}%"></s></b><span class="mono">{pct}%</span></div>'
@@ -821,9 +850,38 @@ CONFIRM = f"""<div class="phone">{HUD}<div class="sheet">
 </div></div>"""
 
 # ---------- The project catalog, from catalog.py ----------
-import catalog
 (root / 'HOLOS_PROJECTS.md').write_text(catalog.markdown())
 CATALOG = catalog.html()
+
+# ---------- After starting: the telescope under way, then a second project ----------
+def used(name, pct):
+    return f'<div class="cap"><span>{name}</span><b class="use"><s style="width:{pct}%"></s></b><span class="mono">{100 - pct}% free</span></div>'
+def track(bars):
+    marks = '<i style="left:0"></i><i style="left:33.3%"></i><i style="left:66.6%"></i><i style="left:100%"></i><span>now</span><span>01:00:00</span><span>02:00:00</span><span>03:00:00</span>'
+    lanes = ''.join(f'<div class="lane"><div class="span" style="width:{w}%"></div><span class="lname">{name}</span></div>' for name, w in bars)
+    return f'<div class="lanes">{lanes}</div><div class="track">{marks}</div>'
+def running_row(key, name, years, remaining, pct, clue=None):
+    tag = f'<span class="clue">{clue}</span>' if clue else ''
+    return (f'<div class="prow"><span class="thumb">{ICONS[key]}</span><span class="pt"><b>{name}</b>{tag}'
+            f'<span class="bar"><span style="width:{max(pct, 1.5)}%"></span></span></span>{tstack(years, remaining, True)}</div>')
+
+ir, tw = CAT['infrared-telescope'], CAT['transit-watch']
+STARTED = tab_screen('Projects', 'PROJECTS', '1 RUNNING', ''.join([
+    f'<div class="art">{big_ir(0.0, 150)}</div>',
+    f'<div class="runhead"><span><b class="lead">{ir["name"]}</b><span class="copy small">Done in Year 18.4</span></span>{tstack(f"{ir["years"]} Years", "01:29:47", True)}</div>',
+    '<span class="bar big"><span style="width:1.5%"></span></span>',
+    '<div class="helps"><span class="mk other"></span><span><b class="other">Helps with: New warm glow · ε Indi</b><span class="sub">When done: dust, companions or waste heat, told apart</span></span></div>',
+    '<div class="sec">EACH YEAR YOU CAN SPEND</div>', used('Energy', 25), used('Matter', 10), used('Compute', 15),
+    '<div class="sec">NEXT 3 HOURS</div>', track([(ir['name'], 50)]),
+    '<button class="primary ghost">Start another project</button>']))
+TWO_RUNNING = tab_screen('Projects', 'PROJECTS', '2 RUNNING', ''.join([
+    '<div class="sec">RUNNING</div>',
+    running_row('transit', tw['name'], f'{tw["years"]} Years', '00:19:58', 1, 'Gl 783 A'),
+    running_row('ir', ir['name'], f'{ir["years"]} Years', '01:29:16', 1, 'ε Indi'),
+    '<p class="copy small">The transit watch finishes first. Its answer lands in the Report.</p>',
+    '<div class="sec">EACH YEAR YOU CAN SPEND</div>', used('Energy', 30), used('Matter', 10), used('Compute', 25),
+    '<div class="sec">NEXT 3 HOURS</div>', track([(tw['name'], 11.1), (ir['name'], 50)]),
+    '<button class="primary ghost">Start another project</button>']))
 
 # ---------- Low-fi layouts, recolored to follow the theme ----------
 import re
@@ -841,7 +899,11 @@ SECTIONS = [
      '<span class="pinch">start a project ›</span>'
      f'<figure><figcaption><strong>2 · Pick</strong><span>Sorted by purpose. Know projects name the clue they help with.</span></figcaption>{PICKER}</figure>'
      '<span class="pinch">tap a project ›</span>'
-     f'<figure><figcaption><strong>3 · Confirm</strong><span>What it does, which clue it helps, what it uses each year, and when it finishes.</span></figcaption>{CONFIRM}</figure>'),
+     f'<figure><figcaption><strong>3 · Confirm</strong><span>What it does, which clue it helps, what it uses each year, and when it finishes.</span></figcaption>{CONFIRM}</figure>'
+     '<span class="pinch">start ›</span>'
+     f'<figure><figcaption><strong>4 · Started</strong><span>The drawing fills in as it is built. Its timer runs even while you are away.</span></figcaption>{STARTED}</figure>'
+     '<span class="pinch">start another ›</span>'
+     f'<figure><figcaption><strong>5 · Two running</strong><span>Each takes its share of the year. The quick one finishes first.</span></figcaption>{TWO_RUNNING}</figure>'),
 ]
 # Explorations: an appendix of working-session mocks, newest first. Not current design.
 EXPLORATIONS = [
@@ -864,3 +926,7 @@ cat_body = cat_intro + ''.join(f'<section id="{sid}"><h2>{label}</h2><p>{blurb}<
 cat_page = page('Holos · project catalog', cat_links, cat_body).replace('</head>', tour_css + '\n</head>')
 (here / 'catalog.html').write_text(cat_page)
 print(f'catalog.html · {len(cat_page) / 1024:.0f} KB')
+
+# Plain-text copy for reading, diffing, and LLMs.
+import extract
+extract.main([here / "index.html"])

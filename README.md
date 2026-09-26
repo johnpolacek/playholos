@@ -2,7 +2,7 @@
 
 Open **index.html** in a modern browser. The atlas is drawn as minimalist line diagrams, ink on paper or chalk on slate, with a light / dark toggle. The application, the surface maps its globes are traced from, ephemeris, and catalogs are embedded in that file. No server, account, CDN, or internet connection is needed. WebGL 2 / hardware acceleration is required.
 
-**Game design:** the rules are in [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md), the project list in [HOLOS_PROJECTS.md](HOLOS_PROJECTS.md), and the screens in [explorations/home-mocks/index.html](explorations/home-mocks/index.html), built by `python3 explorations/home-mocks/build-zoom.py` (needs `.cache/hygdata_v41.csv`). First-round records are in [legacy/alpha-1](legacy/alpha-1/README.md).
+**Game design:** the rules are in [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md), the project list in [HOLOS_PROJECTS.md](HOLOS_PROJECTS.md), and the screens in [explorations/home-mocks/index.html](explorations/home-mocks/index.html), built by `python3 explorations/home-mocks/build-zoom.py` (needs `.cache/hygdata_v41.csv`). The build also writes [mocks.md](explorations/home-mocks/mocks.md), a plain-text copy for searching, diffs, and LLMs; `python3 explorations/home-mocks/extract.py` regenerates it alone. First-round records are in [legacy/alpha-1](legacy/alpha-1/README.md).
 
 **Color edition:** open **color.html** for the original rendering: photographic surface maps, glowing stars, and a dark interface. Positions, orbits, catalogs, measurements, navigation, Godview, and the player home are identical; only the drawing differs. It is also self-contained and offline. With `npm run dev`, visit **http://127.0.0.1:4173/color.html**. See [Drawing style](#drawing-style).
 
