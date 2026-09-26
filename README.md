@@ -4,6 +4,8 @@ Open **index.html** in a modern browser. The application, thirteen texture maps,
 
 **Gameplay exploration:** open [explorations/gameplay/gameplay.html](explorations/gameplay/gameplay.html) for an illustrated walkthrough of the proposed civilization game, including interactive light-time, probe-travel, and offline-guidance examples. It is a standalone concept page, separate from the atlas and game implementation; keep its adjacent `assets` folder when sharing it.
 
+**Line edition:** open **line-art.html** for the same atlas drawn as minimalist ink-on-paper diagrams. Positions, orbits, catalogs, measurements, navigation, Godview, and the player home are identical; only the rendering differs. It is also self-contained and offline. With `npm run dev`, visit **http://127.0.0.1:4173/line-art.html**. See [Line edition](#line-edition).
+
 Explore Earth and the Moon, all eight planets, **109,400 HYG stars** (958 searchable), the Milky Way, and **10 selected neighboring galaxies**. Search for names and aliases such as M31 or M33. This is an educational coordinate atlas with documented observations and uncertainty, not a complete or exact reconstruction of the universe.
 
 **Godview · 10 players** opens an optional civilization-placement study: compare Earth plus nine observed exoplanet sites with Earth plus nine fictional systems spread across the Milky Way. Select a site for pairwise distances and minimum message delays at five real minutes per game year. All civilizations are fictional; planet habitability is not established. See [the placement notes](HOLOS_PLAYER_PLACEMENT.md) and [data provenance](data/player-sites/README.md). Direct entry: `#godview-observed` or `#godview-speculative`.
@@ -23,6 +25,21 @@ Overview is selected; the other five menu destinations are disabled visual place
 The shell lives in `src/player-home.js`, with styles in `src/style.css` and integration in `src/app.js`. Rebuild `index.html` with `npm run build`. It is separate from `explorations/gameplay/gameplay.html`.
 
 Browser verification: desktop at 1440×900 and 1280×720, mobile at 390×844; home/system transitions in both directions, interrupted travel, drag rotation, reduced-motion instant navigation, mobile overview scrolling, and atlas Solar System / admin Godview access. The existing 23 astronomy and navigation tests pass.
+
+## Line edition
+
+`npm run build` writes `line-art.html` alongside `index.html` from the same source, with `__LINE_ART__` set at build time. Its drawing conventions:
+
+- Orbits are solid hairlines; distance guides are dashed. Line widths stay constant in screen pixels at every scale.
+- Planets, the Moon, and the Sun appear as open circle symbols (Saturn with a ring) until their true globe is larger than the symbol.
+- Globes are traced from the same static surface maps. Earth shows coastlines from its land–ocean contrast and a faint 30° graticule. Other bodies show luminance contours; Jupiter, Saturn, Uranus, and Neptune are averaged along longitude first so contours follow their bands. Saturn's rings are drawn as their main edges and the Cassini division.
+- Night sides are hatched from the computed sunlight direction.
+- Stars are stipple: faint stars are dots, bright stars are open rings. The illustrative asteroid belt becomes evenly dotted rings.
+- Galaxy portraits are pen drawings, and projected galaxy contours are hatched instead of shaded.
+- The Solar System destination looks across the orbital plane at a lower angle than the color atlas.
+- A light / dark toggle sits in the header and the player home header. Light is ink on paper; dark is chalk on slate. It follows the system setting until the viewer chooses, then remembers the choice in local storage.
+
+These are map symbols, not measured sizes or structures; the in-app **Model and sources** dialog says so. The line edition omits the cloud, night-lights, Sun, and ring-alpha maps it does not draw, so it is smaller than `index.html`. Rendering lives in `src/line-art.js` and interface overrides in `src/line-art.css`; hooks in `src/universe.js`, `src/galaxy-portraits.js`, and `src/app.js` are guarded by `LINE_ART`, so the color atlas is unchanged.
 
 ## Scientific scope
 
@@ -58,6 +75,7 @@ The preview is `http://127.0.0.1:4173`. The build creates portable `index.html`;
 - `src/galaxies.js`: names, aliases, projected contours, and distance intervals.
 - `src/astronomy.js`: approximate orbit guides and physical parameters.
 - `src/template.html` / `src/style.css`: interface and source explanations.
+- `src/line-art.js` / `src/line-art.css`: line edition rendering and paper interface.
 - `data/galaxies.json`: adopted measurements. Rebuild offline with `python3 scripts/prepare-galaxies.py`; provenance is documented in `data/galaxy-sources/README.md`.
 - `data/stars.bin`: little-endian float32 records: Galactic X, Z, −Y (light-years), apparent magnitude, B−V color index.
 - `data/stars.json`: searchable catalog subset.

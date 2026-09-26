@@ -1,18 +1,17 @@
 import * as THREE from 'three';
 import { AU_KM, DEG, PLANETS, julianDate, orbitPath, seededRandom, colorFromBV } from './astronomy.js';
-import { LY_AU, GALACTIC_CENTER, ECLIPTIC_ROTATION, eclipticToGalactic, RENDER_DISTANCE, logBlend } from './navigation.js';
+import { LY_AU, GALACTIC_CENTER, ECLIPTIC_ROTATION, eclipticToGalactic, RENDER_DISTANCE, logBlend, smooth } from './navigation.js';
 import { GALAXIES, galaxyPosition, galaxyOutline, galaxyDistanceRange } from './galaxies.js';
 import { bodyPosition, bodyOrientation, moonOffset, moonOrbitPath } from './ephemeris.js';
 import { GALAXY_PORTRAITS, createGalaxyPortrait, portraitScale } from './galaxy-portraits.js';
+import { LINE_ART, inkTheme, shaderMaterial, inkLine, setInkPoints, inkSphereMaterial, inkRings, planetSymbols, INK_POINT_FRAGMENT, inkPointUniforms, trackPixelRatio, inkHatchMaterial, syncInkViewport } from './line-art.js';
 
 let renderer,textures;
 const sphere=new THREE.SphereGeometry(1,96,64);
 const vec=a=>new THREE.Vector3(...a);
-function shaderMaterial(parameters) {
-  parameters.vertexShader='#include <common>\n#include <logdepthbuf_pars_vertex>\n'+parameters.vertexShader.replace(/\}\s*$/, '\n#include <logdepthbuf_vertex>\n}');
-  parameters.fragmentShader='#include <logdepthbuf_pars_fragment>\n'+parameters.fragmentShader.replace(/void main\(\)\s*\{/, 'void main(){\n#include <logdepthbuf_fragment>\n');
-  return new THREE.ShaderMaterial(parameters);
-}
+// Ink on paper needs stronger guides than glowing lines on black.
+const LOOK=LINE_ART?{orbit:.6,belt:.75,moonOrbit:.45,extent:.7,fill:.8,uncertainty:.8,marker:.9,starRings:.22,galaxyRings:.2,groupRings:.24,galaxyLine:.45,catalog:.5,catalogFar:.025}
+  :{orbit:.24,belt:.35,moonOrbit:.18,extent:.4,fill:.65,uncertainty:.42,marker:.7,starRings:.10,galaxyRings:.08,groupRings:.1,galaxyLine:.08,catalog:.8,catalogFar:.16};
 
 function starPoints(positions,colors,sizes,{opacity=1,attenuate=false,scale=100,additive=true}={}) {
   const geometry=new THREE.BufferGeometry();
@@ -20,23 +19,30 @@ function starPoints(positions,colors,sizes,{opacity=1,attenuate=false,scale=100,
   geometry.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));
   geometry.setAttribute('pointSize',new THREE.Float32BufferAttribute(sizes,1));
   const material=shaderMaterial({transparent:true,depthWrite:false,vertexColors:true,
-    blending:additive?THREE.AdditiveBlending:THREE.NormalBlending,
-    uniforms:{opacity:{value:opacity},pixelRatio:{value:renderer.getPixelRatio()},attenuate:{value:attenuate?1:0},sizeScale:{value:scale}},
-    vertexShader:`attribute float pointSize; varying vec3 vColor; uniform float pixelRatio; uniform float attenuate; uniform float sizeScale;
-    void main(){vColor=color;vec4 mv=modelViewMatrix*vec4(position,1.);gl_Position=projectionMatrix*mv;
-      float factor=mix(1.,clamp(sizeScale/max(1.,-mv.z),.25,4.),attenuate);gl_PointSize=clamp(pointSize*pixelRatio*factor,1.,40.);}`,
-    fragmentShader:`varying vec3 vColor;uniform float opacity;
+    blending:additive&&!LINE_ART?THREE.AdditiveBlending:THREE.NormalBlending,
+    uniforms:{...(LINE_ART?inkPointUniforms():{}),opacity:{value:opacity},pixelRatio:{value:renderer.getPixelRatio()},attenuate:{value:attenuate?1:0},sizeScale:{value:scale}},
+    vertexShader:`attribute float pointSize; varying vec3 vColor; varying float vAlpha; varying float vSize; uniform float pixelRatio; uniform float attenuate; uniform float sizeScale;
+    void main(){vColor=color;vAlpha=1.;vec4 mv=modelViewMatrix*vec4(position,1.);gl_Position=projectionMatrix*mv;
+      float factor=mix(1.,clamp(sizeScale/max(1.,-mv.z),.25,4.),attenuate);gl_PointSize=clamp(pointSize*pixelRatio*factor,1.,40.);vSize=gl_PointSize;}`,
+    fragmentShader:LINE_ART?INK_POINT_FRAGMENT:`varying vec3 vColor;uniform float opacity;
     void main(){float d=length(gl_PointCoord-.5)*2.;if(d>1.)discard;float core=exp(-d*d*20.);float halo=exp(-d*d*5.)*.22;gl_FragColor=vec4(vColor,(core+halo)*opacity);
       #include <tonemapping_fragment>
       #include <colorspace_fragment>
     }`});
+  if(LINE_ART)trackPixelRatio(material);
   const points=new THREE.Points(geometry,material);points.frustumCulled=false;return points;
 }
 
 function line(points,color='#597487',opacity=.2) {
+  if(LINE_ART)return inkLine(points,opacity);
   return new THREE.Line(new THREE.BufferGeometry().setFromPoints(points.map(p=>Array.isArray(p)?vec(p):p)),new THREE.LineBasicMaterial({color,transparent:true,opacity,depthWrite:false}));
 }
-function circle(radius,color,opacity,y=0) { return line(Array.from({length:257},(_,i)=>[radius*Math.cos(i*Math.PI/128),y,radius*Math.sin(i*Math.PI/128)]),color,opacity); }
+function circle(radius,color,opacity,y=0) {
+  const points=Array.from({length:257},(_,i)=>[radius*Math.cos(i*Math.PI/128),y,radius*Math.sin(i*Math.PI/128)]);
+  // Distance guides are dashed in the line edition, keeping solid lines for orbits.
+  return LINE_ART?inkLine(points,opacity,{width:.8,dash:[radius*Math.PI/150,radius*Math.PI/110]}):line(points,color,opacity);
+}
+function setPath(path,points){if(LINE_ART)setInkPoints(path,points);else path.geometry.setFromPoints(points);}
 function glow(color,size,opacity=.7) {
   const positions=[0,0,0],colors=new THREE.Color(color).toArray();
   const point=starPoints(positions,colors,[size],{opacity});return point;
@@ -53,6 +59,12 @@ function makeAtmosphere(radius,color='#62b5ff',sunDir=new THREE.Vector3(1,0,0)) 
 }
 function createPlanet(planet,{detailed=false,sunDir=new THREE.Vector3(-3,1,3)}={}) {
   const root=new THREE.Group(),axial=new THREE.Group();root.add(axial);axial.rotation.x=-planet.tilt*DEG;
+  root.userData.planet=planet;
+  if(LINE_ART){
+    const surface=new THREE.Mesh(sphere,inkSphereMaterial(planet.name,textures[planet.texture],sunDir));axial.add(surface);
+    if(planet.name==='Saturn')axial.add(inkRings());
+    return {root,axial,surface,sunDir,planet};
+  }
   let material;
   if(planet.name==='Earth') {
     material=shaderMaterial({uniforms:{dayMap:{value:textures.earth_daymap},nightMap:{value:textures.earth_nightmap},sunDir:{value:sunDir}},
@@ -82,35 +94,35 @@ function createPlanet(planet,{detailed=false,sunDir=new THREE.Vector3(-3,1,3)}={
     const rings=new THREE.Mesh(geometry,new THREE.MeshStandardMaterial({map:textures.saturn_ring_alpha,transparent:true,alphaTest:.04,side:THREE.DoubleSide,depthWrite:false,roughness:1,opacity:.9}));
     rings.castShadow=true;rings.receiveShadow=true;rings.rotation.x=-Math.PI/2;axial.add(rings);
   }
-  root.userData.planet=planet;
   return {root,axial,surface,clouds,atmosphere,sunDir,planet};
 }
 
 // Distant point positions remain in light-years. Camera subtraction occurs
 // before conversion to render units, preserving angular positions and parallax.
 // Capping only depth keeps distant stars inside the same camera's depth range.
-function distantPoints(positions,colors,sizes,nearAlpha,{opacity=1,offset=new THREE.Vector3()}={}) {
+function distantPoints(positions,colors,sizes,nearAlpha,{opacity=1,offset=new THREE.Vector3(),fill=0}={}) {
   const geometry=new THREE.BufferGeometry();
   geometry.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));
   geometry.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));
   geometry.setAttribute('pointSize',new THREE.Float32BufferAttribute(sizes,1));
   geometry.setAttribute('nearAlpha',new THREE.Float32BufferAttribute(nearAlpha,1));
-  const material=shaderMaterial({transparent:true,depthWrite:false,vertexColors:true,blending:THREE.AdditiveBlending,
-    uniforms:{cameraLy:{value:new THREE.Vector3()},offsetLy:{value:offset},scaleLy:{value:1},opacity:{value:opacity},surveyBlend:{value:1},pixelRatio:{value:renderer.getPixelRatio()}},
-    vertexShader:`attribute float pointSize;attribute float nearAlpha;varying vec3 vColor;varying float vAlpha;
+  const material=shaderMaterial({transparent:true,depthWrite:false,vertexColors:true,blending:LINE_ART?THREE.NormalBlending:THREE.AdditiveBlending,
+    uniforms:{...(LINE_ART?inkPointUniforms(fill):{}),cameraLy:{value:new THREE.Vector3()},offsetLy:{value:offset},scaleLy:{value:1},opacity:{value:opacity},surveyBlend:{value:1},pixelRatio:{value:renderer.getPixelRatio()}},
+    vertexShader:`attribute float pointSize;attribute float nearAlpha;varying vec3 vColor;varying float vAlpha;varying float vSize;
       uniform vec3 cameraLy;uniform vec3 offsetLy;uniform float scaleLy;uniform float surveyBlend;uniform float pixelRatio;
       void main(){vec3 relative=position+offsetLy-cameraLy;float d=max(length(relative),1e-20);
         vec3 renderRelative=relative/d*min(d*scaleLy,800000.);
         gl_Position=projectionMatrix*vec4(mat3(viewMatrix)*renderRelative,1.);
         vColor=color;vAlpha=mix(nearAlpha,1.,surveyBlend);
-        gl_PointSize=clamp(pointSize*pixelRatio,1.,40.);
+        gl_PointSize=clamp(pointSize*pixelRatio,1.,40.);vSize=gl_PointSize;
       }`,
-    fragmentShader:`varying vec3 vColor;varying float vAlpha;uniform float opacity;
+    fragmentShader:LINE_ART?INK_POINT_FRAGMENT:`varying vec3 vColor;varying float vAlpha;uniform float opacity;
       void main(){float d=length(gl_PointCoord-.5)*2.;if(d>1.||vAlpha<.001)discard;
         gl_FragColor=vec4(vColor,(exp(-d*d*20.)+.22*exp(-d*d*5.))*opacity*vAlpha);
         #include <tonemapping_fragment>
         #include <colorspace_fragment>
       }`});
+  if(LINE_ART)trackPixelRatio(material);
   const points=new THREE.Points(geometry,material);points.frustumCulled=false;return points;
 }
 
@@ -143,6 +155,8 @@ function galacticDensity() {
   const p=[],c=[],s=[];
   for(let i=0;i<pos.length;i+=15){p.push(pos[i],pos[i+1],pos[i+2]);c.push(col[i]*.45,col[i+1]*.45,col[i+2]*.45);s.push(17);}
   const haze=distantPoints(p,c,s,s.map(()=>1),{opacity:.023,offset});
+  // Stipple needs no glow; the soft haze layer is color-edition styling.
+  if(LINE_ART)haze.material.visible=false;
   return {density,haze};
 }
 
@@ -158,6 +172,7 @@ function contourFill(outline) {
   const geometry=new THREE.BufferGeometry();
   geometry.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));
   geometry.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));
+  if(LINE_ART)return new THREE.Mesh(geometry,inkHatchMaterial());
   const material=shaderMaterial({transparent:true,depthWrite:false,side:THREE.DoubleSide,blending:THREE.AdditiveBlending,
     uniforms:{opacity:{value:.5}},
     vertexShader:`varying vec2 point;void main(){point=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
@@ -174,7 +189,7 @@ function nearbyGalaxy(galaxy) {
   const extent=outline.length?line(outline,'#a3c8db',.55):null;
   const fill=outline.length?contourFill(outline):null;
   if(extent)root.add(extent,fill);
-  const uncertainty=line(galaxyDistanceRange(galaxy),'#c8ac80',.42);root.add(uncertainty);
+  const uncertainty=LINE_ART?inkLine(galaxyDistanceRange(galaxy),LOOK.uncertainty,{width:2}):line(galaxyDistanceRange(galaxy),'#c8ac80',.42);root.add(uncertainty);
   // Screen-sized map symbols indicate catalog centers, never galaxy size/color.
   const major=['m31','m33'].includes(galaxy.id);
   const marker=distantPoints([0,0,0,0,0,0],[.63,.79,.89,.3,.5,.7],[9,major?36:22],[1,1],{offset:positionLy});
@@ -185,26 +200,33 @@ export class Universe {
   constructor(webglRenderer,loadedTextures,catalogArray) {
     renderer=webglRenderer;textures=loadedTextures;
     // This is the only Scene. Every destination keeps the same object identity.
-    this.scene=new THREE.Scene();this.scene.background=new THREE.Color('#06090e');
+    this.scene=new THREE.Scene();this.scene.background=new THREE.Color(LINE_ART?inkTheme().paper:'#06090e');
     this.bodies=PLANETS.map(planet=>{
       const body=createPlanet(planet);body.positionAU=new THREE.Vector3();body.root.quaternion.copy(ECLIPTIC_ROTATION);this.scene.add(body.root);return body;
     });
     this.earth=this.bodies[2];
-    this.sun=new THREE.Mesh(sphere,new THREE.MeshBasicMaterial({map:textures.sun,color:'#fff1d9'}));this.scene.add(this.sun);
+    this.sun=new THREE.Mesh(sphere,LINE_ART?inkSphereMaterial('Sun',null):new THREE.MeshBasicMaterial({map:textures.sun,color:'#fff1d9'}));this.scene.add(this.sun);
     this.sunlight=new THREE.PointLight('#fff5e7',3,0,0);this.scene.add(this.sunlight,new THREE.AmbientLight('#8797ae',.065));
     this.saturnLight=new THREE.DirectionalLight('#fff6e7',0);this.saturnLight.castShadow=true;
     this.saturnLight.shadow.mapSize.set(2048,2048);this.saturnLight.shadow.bias=-.00015;this.saturnLight.shadow.normalBias=.008;
     this.scene.add(this.saturnLight,this.saturnLight.target);
-    this.sunMarker=distantPoints([0,0,0],[1,.82,.5],[13],[1]);this.scene.add(this.sunMarker);
+    this.sunMarker=LINE_ART?distantPoints([0,0,0],[1,1,1],[17],[1],{fill:1}):distantPoints([0,0,0],[1,.82,.5],[13],[1]);this.scene.add(this.sunMarker);
+    this.sunMarker.renderOrder=LINE_ART?4:0;
     this.orbits=new THREE.Group();this.orbits.quaternion.copy(ECLIPTIC_ROTATION);this.scene.add(this.orbits);
     this.orbitLines=[];
     for(const planet of PLANETS){const path=line(orbitPath(planet,2451545),planet.color,.24);this.orbitLines.push(path);this.orbits.add(path);}
     const r=seededRandom(34),p=[],c=[],s=[];
-    for(let i=0;i<3200;i++){const a=2.15+r()*1.15,t=r()*Math.PI*2;p.push(Math.cos(t)*a,(r()-.5)*.15,Math.sin(t)*a);c.push(.35,.33,.30);s.push(.8);}
+    // The line edition draws the same statistical belt as evenly dotted rings.
+    if(LINE_ART)for(const a of [2.3,2.55,2.8,3.05])for(let i=0,n=Math.round(Math.PI*2*a/.055);i<n;i++){const t=(i+a*3)/n*Math.PI*2;p.push(Math.cos(t)*a,0,Math.sin(t)*a);c.push(1,1,1);s.push(1.7);}
+    else for(let i=0;i<3200;i++){const a=2.15+r()*1.15,t=r()*Math.PI*2;p.push(Math.cos(t)*a,(r()-.5)*.15,Math.sin(t)*a);c.push(.35,.33,.30);s.push(.8);}
     this.belt=starPoints(p,c,s,{opacity:.35});this.orbits.add(this.belt);
-    this.moon=new THREE.Mesh(sphere,new THREE.MeshStandardMaterial({map:textures.moon,roughness:1}));this.moon.quaternion.copy(ECLIPTIC_ROTATION);this.scene.add(this.moon);
+    this.moon=new THREE.Mesh(sphere,LINE_ART?inkSphereMaterial('Moon',textures.moon,this.earth.sunDir):new THREE.MeshStandardMaterial({map:textures.moon,roughness:1}));this.moon.quaternion.copy(ECLIPTIC_ROTATION);this.scene.add(this.moon);
     this.moonPositionAU=new THREE.Vector3();
     this.moonOrbit=line([], '#728598',.15);this.scene.add(this.moonOrbit);
+    if(LINE_ART){
+      this.symbolSpecs=[...[5,7,7.5,6,12.5,10,8.5,8.5].map((size,i)=>({size,ringed:i===5,body:this.bodies[i]})),{size:4.5,moon:true}];
+      this.symbols=planetSymbols(this.symbolSpecs);this.scene.add(this.symbols);
+    }
     const positions=[],colors=[],sizes=[],near=[];
     for(let i=0;i<catalogArray.length;i+=5){
       positions.push(catalogArray[i],catalogArray[i+1],catalogArray[i+2]);
@@ -225,10 +247,28 @@ export class Universe {
     for(const radius of [5,10,20,50,100,500,1000])this.starRings.add(circle(radius,'#759bb3',.10));
     this.galaxyRings=new THREE.Group();this.scene.add(this.galaxyRings);
     for(const radius of [10000,20000,30000,40000,50000])this.galaxyRings.add(circle(radius,'#70879c',.085,-100));
-    this.galaxyRings.add(line([GALACTIC_CENTER.clone().divideScalar(-LY_AU),[0,0,0]],'#d3b580',.28));
+    this.galaxyRings.add(LINE_ART?inkLine([GALACTIC_CENTER.clone().divideScalar(-LY_AU),[0,0,0]],LOOK.galaxyLine,{width:.9,dash:[300,420]}):line([GALACTIC_CENTER.clone().divideScalar(-LY_AU),[0,0,0]],'#d3b580',.28));
     this.groupRings=new THREE.Group();this.scene.add(this.groupRings);
     for(const radius of [1e6,2e6,3e6])this.groupRings.add(circle(radius,'#70879c',.1));
     this.cameraAU=new THREE.Vector3();this.renderScale=1;this.lastOrbitYear=null;
+  }
+
+  // Diagram symbols stand in for planets and the Moon until their globes
+  // are drawn larger than the symbol itself.
+  updateSymbols(pose,camera) {
+    const alpha=this.symbols.geometry.attributes.alpha,position=this.symbols.geometry.attributes.position;
+    const pixels=this.viewportSize.y*camera.projectionMatrix.elements[5];
+    const planets=logBlend(pose.distance,.0005,.002)*(1-logBlend(pose.distance,400,4000));
+    const moon=logBlend(pose.distance,.0002,.0006)*(1-logBlend(pose.distance,.015,.05));
+    this.symbolSpecs.forEach((spec,i)=>{
+      const object=spec.moon?this.moon:spec.body.root,positionAU=spec.moon?this.moonPositionAU:spec.body.positionAU;
+      const radius=spec.moon?1737.4/AU_KM:spec.body.displayRadiusAU,disk=radius/Math.max(1e-20,this.cameraAU.distanceTo(positionAU))*pixels;
+      position.setXYZ(i,object.position.x,object.position.y,object.position.z);
+      alpha.setX(i,(spec.moon?moon:planets)*(1-smooth((disk-spec.size*.55)/(spec.size*.6))));
+    });
+    alpha.needsUpdate=position.needsUpdate=true;
+    const sunDisk=.00465047/Math.max(1e-20,this.cameraAU.length())*pixels;
+    this.sunMarker.material.uniforms.opacity.value*=1-smooth((sunDisk-9)/10);
   }
 
   updateEphemeris(date) {
@@ -244,10 +284,10 @@ export class Universe {
     this.moonPositionAU.copy(moonOffset(date)).add(this.earth.positionAU);
     this.moon.quaternion.copy(bodyOrientation('Moon',date));
     if(this.lastMoonOrbitDay!==Math.floor(jd)){
-      this.lastMoonOrbitDay=Math.floor(jd);this.moonOrbit.geometry.setFromPoints(moonOrbitPath(date));
+      this.lastMoonOrbitDay=Math.floor(jd);setPath(this.moonOrbit,moonOrbitPath(date));
     }
     if(this.lastOrbitYear!==date.getUTCFullYear()){
-      this.lastOrbitYear=date.getUTCFullYear();this.orbitLines.forEach((path,i)=>path.geometry.setFromPoints(orbitPath(PLANETS[i],jd).map(vec)));
+      this.lastOrbitYear=date.getUTCFullYear();this.orbitLines.forEach((path,i)=>setPath(path,orbitPath(PLANETS[i],jd).map(vec)));
     }
   }
 
@@ -282,24 +322,25 @@ export class Universe {
     const solarVisibility=logBlend(nearestPlanetRadii,25,120)*logBlend(pose.distance,.0002,.003)*(1-logBlend(pose.distance,150,6000));
     this.orbits.position.copy(origin).negate().multiplyScalar(scale);this.orbits.scale.setScalar(scale);
     this.orbits.visible=state.orbits&&solarVisibility>.001;
-    this.orbitLines.forEach(path=>path.material.opacity=.24*solarVisibility);this.belt.visible=state.reconstruction;this.belt.material.uniforms.opacity.value=.35*solarVisibility;
+    this.orbitLines.forEach(path=>path.material.opacity=LOOK.orbit*solarVisibility);this.belt.visible=state.reconstruction;this.belt.material.uniforms.opacity.value=LOOK.belt*solarVisibility;
     this.moon.position.copy(this.moonPositionAU).sub(origin).multiplyScalar(scale);this.moon.scale.setScalar(1737.4/AU_KM*scale);
     this.moon.visible=(1737.4/AU_KM)/this.cameraAU.distanceTo(this.moonPositionAU)>1e-6;
     this.moonOrbit.position.copy(this.earth.positionAU).sub(origin).multiplyScalar(scale);this.moonOrbit.scale.setScalar(scale);
     const moonVisibility=logBlend(pose.distance,.0003,.001)*(1-logBlend(pose.distance,.015,.05));
-    this.moonOrbit.visible=state.orbits&&moonVisibility>.001;this.moonOrbit.material.opacity=.18*moonVisibility;
+    this.moonOrbit.visible=state.orbits&&moonVisibility>.001;this.moonOrbit.material.opacity=LOOK.moonOrbit*moonVisibility;
     const galaxyVisibility=state.reconstruction?logBlend(dLy,400,12000):0;
     const milkyWayDistance=this.cameraAU.distanceTo(GALACTIC_CENTER)/LY_AU;
     const compact=Math.min(1,Math.pow(220000/Math.max(1,milkyWayDistance),1.35));
     this.density.material.uniforms.opacity.value=.19*galaxyVisibility*compact;this.haze.material.uniforms.opacity.value=.023*galaxyVisibility*compact;
     this.density.visible=this.haze.visible=galaxyVisibility>.001;
     this.catalog.material.uniforms.surveyBlend.value=logBlend(dLy,.002,.5);
-    this.catalog.material.uniforms.opacity.value=.8*(1-logBlend(dLy,2500,50000))+(state.reconstruction?.0015:.16)*logBlend(dLy,2500,50000);
+    this.catalog.material.uniforms.opacity.value=LOOK.catalog*(1-logBlend(dLy,2500,50000))+(state.reconstruction?.0015:LOOK.catalogFar)*logBlend(dLy,2500,50000);
     this.catalog.material.uniforms.opacity.value*=1-logBlend(dLy,350000,650000);
     this.sunMarker.material.uniforms.opacity.value=logBlend(pose.distance,.02,4)*(1-logBlend(dLy,400000,650000));
     const groupVisibility=logBlend(dLy,35000,180000);
     const portraitVisibility=state.portraits?logBlend(dLy,state.galaxy?2e6:650000,state.galaxy?4e6:1.5e6):0;
     renderer.getSize(this.viewportSize);
+    if(LINE_ART)syncInkViewport(this.viewportSize.x,this.viewportSize.y,renderer.getPixelRatio());
     const symbolScale=portraitScale(this.viewportSize.x,dLy);
     for(const {id,positionAU,sprite} of this.portraits){
       sprite.position.copy(positionAU).sub(origin).multiplyScalar(scale);
@@ -316,20 +357,21 @@ export class Universe {
       const visibility=Math.max(groupVisibility,state.galaxy===galaxy?1:0);
       root.position.copy(positionAU).sub(origin).multiplyScalar(scale);root.scale.setScalar(LY_AU*scale);
       root.visible=marker.visible=visibility>.001;
-      if(extent){extent.visible=state.extents;extent.material.opacity=.4*visibility;fill.visible=state.extents;fill.material.uniforms.opacity.value=.65*visibility;}
-      uncertainty.visible=state.uncertainty;uncertainty.material.opacity=.42*visibility;
-      marker.material.uniforms.opacity.value=.7*visibility;
+      if(extent){extent.visible=state.extents;extent.material.opacity=LOOK.extent*visibility;fill.visible=state.extents;fill.material.uniforms.opacity.value=LOOK.fill*visibility;}
+      uncertainty.visible=state.uncertainty;uncertainty.material.opacity=LOOK.uncertainty*visibility;
+      marker.material.uniforms.opacity.value=LOOK.marker*visibility;
     }
     for(const points of this.distant){const u=points.material.uniforms;u.cameraLy.value.copy(this.cameraAU).divideScalar(LY_AU);u.scaleLy.value=scale*LY_AU;}
     const ringVisibility=logBlend(dLy,.5,4)*(1-logBlend(dLy,2000,7000));
     this.starRings.position.copy(origin).negate().multiplyScalar(scale);this.starRings.scale.setScalar(LY_AU*scale);
-    this.starRings.visible=state.orbits&&ringVisibility>.001;this.starRings.children.forEach(r=>r.material.opacity=.10*ringVisibility);
+    this.starRings.visible=state.orbits&&ringVisibility>.001;this.starRings.children.forEach(r=>r.material.opacity=LOOK.starRings*ringVisibility);
     this.galaxyRings.position.copy(GALACTIC_CENTER).sub(origin).multiplyScalar(scale);this.galaxyRings.scale.setScalar(LY_AU*scale);
     const galaxyGuides=logBlend(dLy,400,12000)*(1-logBlend(dLy,150000,650000));
-    this.galaxyRings.visible=state.orbits&&galaxyGuides>.001;this.galaxyRings.children.forEach(r=>r.material.opacity=.08*galaxyGuides);
+    this.galaxyRings.visible=state.orbits&&galaxyGuides>.001;this.galaxyRings.children.forEach((r,i)=>r.material.opacity=(i<5?LOOK.galaxyRings:LOOK.galaxyLine)*galaxyGuides);
     this.groupRings.position.copy(GALACTIC_CENTER).sub(origin).multiplyScalar(scale);this.groupRings.scale.setScalar(LY_AU*scale);
     const groupGuides=logBlend(dLy,350000,1e6);
-    this.groupRings.visible=state.orbits&&groupGuides>.001;this.groupRings.children.forEach(r=>r.material.opacity=.1*groupGuides);
+    this.groupRings.visible=state.orbits&&groupGuides>.001;this.groupRings.children.forEach(r=>r.material.opacity=LOOK.groupRings*groupGuides);
+    if(LINE_ART)this.updateSymbols(pose,camera);
   }
 }
 

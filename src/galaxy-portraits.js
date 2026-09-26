@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { seededRandom } from './astronomy.js';
+import { LINE_ART, inkPortraitCanvas, tintWithInk } from './line-art.js';
 
 // Screen-sized atlas illustrations, independent of the measured contours.
 // Shape, inclination, color, and generated stars are artistic choices.
@@ -67,7 +68,10 @@ function portraitTexture(style) {
 export function createGalaxyPortrait(id) {
   const style=GALAXY_PORTRAITS[id];
   if(!style)return null;
-  const sprite=new THREE.Sprite(new THREE.SpriteMaterial({map:portraitTexture(style),transparent:true,depthWrite:false,depthTest:false,toneMapped:false}));
+  const map=LINE_ART?new THREE.CanvasTexture(inkPortraitCanvas(style,seededRandom(style.seed))):portraitTexture(style);
+  map.colorSpace=THREE.SRGBColorSpace;
+  const sprite=new THREE.Sprite(new THREE.SpriteMaterial({map,transparent:true,depthWrite:false,depthTest:false,toneMapped:false}));
+  if(LINE_ART)tintWithInk(sprite.material);
   sprite.renderOrder=-2;
   return sprite;
 }

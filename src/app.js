@@ -10,6 +10,7 @@ import { LY_AU, GALACTIC_CENTER, MIN_DISTANCE_AU, MAX_DISTANCE_AU, RENDER_DISTAN
 import { ASSETS, CATALOG, STAR_BUFFER, META } from './embedded.js';
 import { createPlayerHome } from './player-home.js';
 import { createGodview } from './godview.js';
+import { LINE_ART, INK_THEMES, setInkTheme } from './line-art.js';
 
 const $=id=>document.getElementById(id),vec=a=>new THREE.Vector3(...a);
 let playerActive=['#home','#home-system'].includes(location.hash),playerHome;
@@ -22,6 +23,24 @@ const pose={target:new THREE.Vector3(),direction:new THREE.Vector3(0,0,1),distan
 const textures={},labelItems=[];let hudZones=[];
 let renderer,camera,controls,universe,godview,flight=null,zoomGoal=null,toastTimer,uiTime=0,viewFactor=1,frameCount=0,contextKey='';
 const raycaster=new THREE.Raycaster(),offset=new THREE.Vector3(),projected=new THREE.Vector3();
+// Line edition theme: follows the system setting until the viewer chooses one.
+const themeQuery=matchMedia('(prefers-color-scheme: dark)'),storedTheme=()=>{try{return localStorage.getItem('holos-line-theme');}catch{return null;}};
+let theme=['light','dark'].includes(storedTheme())?storedTheme():themeQuery.matches?'dark':'light';
+function applyTheme(name){
+  theme=name;document.documentElement.dataset.theme=name;setInkTheme(name);universe?.scene.background.set(INK_THEMES[name].paper);
+  document.querySelector('meta[name=theme-color]')?.setAttribute('content',INK_THEMES[name].paper);
+  const next=name==='dark'?'light':'dark';
+  document.querySelectorAll('.theme-toggle').forEach(b=>{b.setAttribute('aria-pressed',String(name==='dark'));b.setAttribute('aria-label',`Switch to ${next} mode`);b.title=`Switch to ${next} mode`;});
+}
+function toggleTheme(){const next=theme==='dark'?'light':'dark';applyTheme(next);try{localStorage.setItem('holos-line-theme',next);}catch{}}
+function addThemeToggles(){
+  const icon='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7.5"/><path d="M12 4.5a7.5 7.5 0 0 1 0 15Z" fill="currentColor"/></svg>';
+  for(const [parent,before,className] of [[document.querySelector('.top-actions'),$('about-open'),'icon-button square theme-toggle'],[document.querySelector('.home-header'),null,'theme-toggle home-theme']]){
+    const button=document.createElement('button');button.className=className;button.innerHTML=icon;button.onclick=toggleTheme;parent.insertBefore(button,before);
+  }
+  applyTheme(theme);
+}
+if(LINE_ART){applyTheme(theme);themeQuery.addEventListener('change',e=>{if(!storedTheme())applyTheme(e.matches?'dark':'light');});}
 function format(n,dp=0){return n.toLocaleString('en-US',{maximumFractionDigits:dp,minimumFractionDigits:dp});}
 function dateText(){return state.date.toISOString().slice(0,10);}
 function toast(message){$('toast').textContent=message;$('toast').classList.add('visible');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('visible'),3600);}
@@ -106,7 +125,8 @@ function bookmark(mode) {
   // in the Galactic frame, without rotating or rearranging the actual planets.
   const normal=eclipticToGalactic(new THREE.Vector3(0,1,0)).normalize();
   const tangent=new THREE.Vector3(0,1,0).addScaledVector(normal,-normal.y).normalize();
-  const view=mode==='solar'?normal.multiplyScalar(.6).addScaledVector(tangent,.8).multiplyScalar(85*viewFactor):
+  // The line edition looks across the orbital plane at a low angle, like a drawn orrery.
+  const view=mode==='solar'?normal.multiplyScalar(LINE_ART?.36:.6).addScaledVector(tangent,LINE_ART?.933:.8).multiplyScalar((LINE_ART?76:85)*viewFactor):
     mode==='stars'?new THREE.Vector3(21,15,29).multiplyScalar(LY_AU*viewFactor):mode==='galaxy'?new THREE.Vector3(18000,85000,105000).multiplyScalar(LY_AU*viewFactor):new THREE.Vector3(-.1,.86,.5).normalize().multiplyScalar(5.2e6*LY_AU*viewFactor);
   return {target:homeTarget(view.length(),universe.earth.positionAU),direction:view.clone().normalize(),distance:view.length(),home:true,follow:null};
 }
@@ -305,7 +325,9 @@ function updateLabels(){
     const blocked=(x,y)=>x<12||y<8||x+width>w-12||y+height>h-8||zones.some(z=>x<z.right+8&&x+width>z.left-8&&y<z.bottom+8&&y+height>z.top-8)||portraitBoxes.some(r=>overlapsPortrait(x,y,r))||occupied.some(r=>!(item.kind==='sun'&&r.kind==='system')&&x<r.x+r.w&&x+width>r.x&&y<r.y+r.h&&y+height>r.y);
     // Nearby companions often project together. Give their labels a few stable
     // alternatives while keeping their actual galaxy positions untouched.
-    const candidates=item.kind==='neighbor'?[[x,y],[x,y+26],[x,y-26],[x-width-18,y],[x-width-18,y+26],[x-width-18,y-26],[x-width/2-9,y-30],[x-width/2-9,y+30],[x,y+52],[x,y-52],[x-width-18,y+52],[x-width-18,y-52],[x-width/2-9,y+56],[x-width/2-9,y-56]]:[[x,y]];
+    const candidates=item.kind==='neighbor'?[[x,y],[x,y+26],[x,y-26],[x-width-18,y],[x-width-18,y+26],[x-width-18,y-26],[x-width/2-9,y-30],[x-width/2-9,y+30],[x,y+52],[x,y-52],[x-width-18,y+52],[x-width-18,y-52],[x-width/2-9,y+56],[x-width/2-9,y-56]]:
+      // Low-angle line views crowd planets; their labels may move to the other side.
+      LINE_ART&&item.kind==='planet'?[[x,y],[x-width-18,y],[x,y+22],[x-width-18,y+22]]:[[x,y]];
     if(portraits&&item.kind==='neighbor'){
       const bounds=portraitBounds(item.portraitId,symbolScale);
       if(bounds)candidates.unshift([anchorX+bounds.x+10,y],[anchorX+bounds.x+10,y-26],[anchorX+bounds.x+10,y+26],[anchorX-width/2,anchorY+bounds.y+8],[anchorX-width/2,anchorY-bounds.y-height-8],[anchorX-bounds.x-width-10,y]);
@@ -467,27 +489,27 @@ function setPlayerActive(active){
   stopTravel();playerActive=active;state.playing=false;updatePlay();
   if(active){if(godview?.active)godview.hide();state.trueSizes=true;$('true-sizes').checked=true;state.orbits=true;state.labels=true;state.reconstruction=false;state.date=new Date('2026-09-06T12:00:00Z');universe.updateEphemeris(state.date);$('date').value=dateText();$('orbits').checked=true;$('reconstruction').checked=false;$('labels-toggle').setAttribute('aria-pressed','true');}
   playerHome.setActive(active);resize();contextKey='';
-  document.title=active?'Holos — Home civilization':'Holos — Earth to the Local Group';
+  document.title=(active?'Holos — Home civilization':'Holos — Earth to the Local Group')+(LINE_ART?' · Line edition':'');
 }
 
 async function start(){
   try{
     renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:'high-performance',logarithmicDepthBuffer:true});
-    renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.08;
-    renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+    renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=LINE_ART?THREE.NoToneMapping:THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.08;
+    renderer.shadowMap.enabled=!LINE_ART;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
     $('viewport').append(renderer.domElement);camera=new THREE.PerspectiveCamera(43,innerWidth/innerHeight,.05,1e6);
     camera.position.set(0,0,RENDER_DISTANCE);
     // Capture wheel input before OrbitControls so one gesture crosses any scale.
     renderer.domElement.addEventListener('wheel',e=>{e.preventDefault();e.stopImmediatePropagation();const pixels=e.deltaY*(e.deltaMode===1?16:e.deltaMode===2?innerHeight:1);zoom(Math.exp(Math.max(-2,Math.min(2,pixels*.006))));},{passive:false,capture:true});
     controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.dampingFactor=.07;controls.rotateSpeed=.65;controls.zoomSpeed=2;controls.minDistance=1;controls.maxDistance=10000;controls.screenSpacePanning=true;
-    playerHome=createPlayerHome({navigate:mode=>setMode(mode),zoom});playerHome.setActive(playerActive);
+    playerHome=createPlayerHome({navigate:mode=>setMode(mode),zoom});playerHome.setActive(playerActive);if(LINE_ART)addThemeToggles();
     resize();await loadTextures();universe=new Universe(renderer,textures,decodeStars());universe.updateEphemeris(state.date);
     const initial=playerActive?(location.hash==='#home-system'?'solar':'earth'):modes.includes(location.hash.slice(1))?location.hash.slice(1):'earth',destination=bookmark(initial);
     pose.target.copy(destination.target);pose.direction.copy(destination.direction);pose.distance=destination.distance;pose.home=true;pose.follow=destination.follow;
     syncCamera();universe.update(pose,state,camera);createLabels();wireControls();$('date').value=dateText();updateContext();updateLabels();updateReadout();
     godview=createGodview({state,pose,universe,flyTo,projectAU,onChange:()=>{contextKey='';updateContext();}});
     if(location.hash.startsWith('#godview-'))godview.show(location.hash.endsWith('speculative')?'speculative':'observed',{instant:true});
-    document.title=playerActive?'Holos — Home civilization':document.title;
+    document.title=playerActive?'Holos — Home civilization'+(LINE_ART?' · Line edition':''):document.title;
     $('loading').classList.add('done');gsap.ticker.add(frame);
     window.holos={
       getState:()=>({playerView:playerActive,mode:state.mode,planet:state.planet.name,star:state.star?.name,galaxy:state.galaxy?.name,neighborGalaxies:GALAXIES.length,date:dateText(),playing:state.playing,trueSizes:state.trueSizes,reconstruction:state.reconstruction,portraits:state.portraits,visiblePortraits:universe.portraits.filter(p=>p.sprite.visible).length,extents:state.extents,uncertainty:state.uncertainty,catalogStars:META.count,searchable:META.searchable,loadedTextures:Object.keys(textures).length,sceneId:universe.scene.uuid,sceneCount:1,cameraId:camera.uuid,earthObjectId:universe.earth.root.uuid,frameCount,traveling:!!flight,destination:flight?.name,travelProgress:flight?flight.progress:null,drawCalls:renderer.info.render.calls,points:renderer.info.render.points,webgl:renderer.capabilities.isWebGL2}),
