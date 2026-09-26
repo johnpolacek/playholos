@@ -510,7 +510,14 @@ section{{padding:32px 0 24px;scroll-margin-top:64px}}
 section>h2{{font-size:22px;font-weight:600;margin:0 0 6px}}
 section>p{{margin:0 0 28px;color:var(--page-ink2);font-size:14px;max-width:820px}}
 section>main{{display:flex;flex-wrap:wrap;gap:18px;align-items:center}}
-#sketch button{{text-align:center}}
+#explorations button{{text-align:center}}
+.links .divider{{width:1px;margin:6px 8px;background:var(--frame)}}
+.links .minor{{font-size:12px}}
+.appendix{{margin-top:32px;border-top:1px solid var(--frame)}}
+.appendix>h2{{font-size:17px;color:var(--page-ink2)}}
+.appendix>h3{{font-size:15px;font-weight:600;margin:20px 0 4px}}
+.appendix>p{{margin:0 0 20px;color:var(--page-ink2);font-size:13px;max-width:820px}}
+.appendix>main{{display:flex;flex-wrap:wrap;gap:18px;align-items:flex-start;margin-bottom:24px}}
 .theme{{flex-shrink:0;height:36px;padding:0 14px;border:1px solid var(--ink);border-radius:18px;font-size:13px;text-align:center}}
 figure{{margin:0;display:flex;flex-direction:column;gap:12px;width:390px;align-self:flex-start}}
 figcaption{{display:flex;flex-direction:column;gap:2px;font-size:13px;color:var(--page-ink2);min-height:40px}}
@@ -667,13 +674,18 @@ lofi = (here / 'lofi.html').read_text().split('-->', 1)[1]
 lofi = re.sub(r'style="([^"]*)"', lambda m: 'style="' + re.sub('|'.join(LOFI), lambda c: LOFI[c.group(0)], m.group(1)) + '"', lofi)
 
 SECTIONS = [
-    ('sketch', 'Sketch', 'Home · low-fidelity sketch', 'The chosen layout: your world first, what is in motion, then your leads.', lofi),
     ('zoom', 'Zoom levels', 'Home · five zoom levels', 'One screen, pinched outward: the map changes scale and the panel below follows it. Star positions are real, from HYG and the Gaia census; Veyra, its planets and the game state are sample data.', figures),
     ('local-group', 'Local Group', 'Local Group · the galaxy view’s icon', 'A small icon in the galaxy view opens our neighboring galaxies at their real positions. Tap one to see its structure.', lg_figures),
     ('tour', 'Tour', 'First session · the guided tour', 'Six stops after landing. The rest of Home is left to discovery. The Projects tab will be reworked to show how time works. Skippable, and replayable from the Mind tab.', tour_figures),
 ]
-links = ''.join(f'<a href="#{sid}" aria-current="false">{label}</a>' for sid, label, *_ in SECTIONS)
+# Explorations: an appendix of working-session mocks, newest first. Not current design.
+EXPLORATIONS = [
+    ('Sep 26 · Home layouts, low fidelity', 'Three ways to organize the first screen. B, world first, was chosen and carried forward above.', lofi),
+]
+links = ''.join(f'<a href="#{sid}" aria-current="false">{label}</a>' for sid, label, *_ in SECTIONS) + '<span class="divider" aria-hidden="true"></span><a class="minor" href="#explorations" aria-current="false">Explorations</a>'
 body = ''.join(f'<section id="{sid}"><h2>{title}</h2><p>{intro}</p><main>{content}</main></section>' for sid, _, title, intro, content in SECTIONS)
+body += ('<section id="explorations" class="appendix"><h2>Explorations</h2><p>Working-session mocks, kept for reference. They are not the current design.</p>'
+         + ''.join(f'<h3>{title}</h3><p>{intro}</p><main>{content}</main>' for title, intro, content in EXPLORATIONS) + '</section>')
 site = page('Holos · mocks', links, body).replace('</head>', tour_css + '\n</head>')
 (here / 'index.html').write_text(site)
 print(f'index.html · {len(site) / 1024:.0f} KB')
