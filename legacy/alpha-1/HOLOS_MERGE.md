@@ -8,12 +8,12 @@ September 25, 2026. Decision record and reconciliation worksheet.
 
 Why this direction:
 
-- holos-game's August playtest failed, and Phase S condemned the client while keeping the server ([roadmap](../holos-game/docs/roadmap.md), § Phase S).
+- holos-game's August playtest failed, and Phase S condemned the client while keeping the server ([roadmap](../../../holos-game/docs/roadmap.md), § Phase S).
 - The one element the playtest liked was "the spatial feeling of having a place in a real sky." The atlas is that element, built from real data.
-- holos-game already planned a real-catalog sky: the HYG backdrop in [act3-map.md](../holos-game/docs/act3-map.md) and the "textbook sky" in [stakes-design.md](../holos-game/docs/stakes-design.md), § The two-layer sky.
+- holos-game already planned a real-catalog sky: the HYG backdrop in [act3-map.md](../../../holos-game/docs/act3-map.md) and the "textbook sky" in [stakes-design.md](../../../holos-game/docs/stakes-design.md), § The two-layer sky.
 - Starting over would discard a server that implements every Phase A system.
 
-All six conflicts were settled on 2026-09-25. Integration work starts when the user authorizes it. Until then, [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md)'s "do not build yet" still applies to game systems in this repository.
+All six conflicts were settled on 2026-09-25. Integration work starts when the user authorizes it. Until then, [HOLOS_GAME_CONCEPT.md](../../HOLOS_GAME_CONCEPT.md)'s "do not build yet" still applies to game systems in this repository.
 
 ## Already agreed by both
 
@@ -24,7 +24,7 @@ All six conflicts were settled on 2026-09-25. Integration work starts when the u
 - AI civilizations fill empty seats and are real superintelligences in the fiction.
 - Success beyond survival is defined by the player.
 - Tight beam as the standard for communication.
-- Current observations must stay consistent with the setting. holos-game's [vision](../holos-game/docs/vision.md) calls this a "consistency check."
+- Current observations must stay consistent with the setting. holos-game's [vision](../../../holos-game/docs/vision.md) calls this a "consistency check."
 
 ## Conflicts to settle
 

@@ -16,4 +16,4 @@ Calculations use 5 real minutes per game year, fixed endpoints, and the shared g
 
 `assets/awakened-world.png` is original generated concept art made for this page on September 8, 2026: a speculative inhabited terrestrial world at orbital dawn. It is not an observation of a real exoplanet. The page supplies this qualification beside the image and in its assumptions.
 
-The underlying agreed directions remain in [HOLOS_GAME_CONCEPT.md](../../HOLOS_GAME_CONCEPT.md); the observationally grounded and invented placement comparisons remain in [HOLOS_PLAYER_PLACEMENT.md](../../HOLOS_PLAYER_PLACEMENT.md).
+The underlying agreed directions remain in [HOLOS_GAME_CONCEPT.md](../../../HOLOS_GAME_CONCEPT.md); the observationally grounded and invented placement comparisons remain in [HOLOS_PLAYER_PLACEMENT.md](../HOLOS_PLAYER_PLACEMENT.md).

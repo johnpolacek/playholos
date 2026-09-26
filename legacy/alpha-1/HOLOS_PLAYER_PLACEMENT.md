@@ -31,7 +31,7 @@ Distances and delays below are **from Earth**. The interactive map calculates ot
 
 Across all 45 pairs, separations range from **4.24 to 111.70 ly**. Minimum one-way delays range from **21.2 minutes to 9.3 real hours**, with a median separation of 26.75 ly. This supplies varied local relationships with distant outposts, rather than equal spacing.
 
-These are investigation-worthy sites, not nine proven Earth analogues. All nine exoplanet hosts in the sample are M dwarfs, reflecting the selected nearby detections rather than a decision that civilizations require red dwarfs. Detailed site evidence, the archive snapshot, and a documented GJ 273 distance discrepancy are in [the data notes](data/player-sites/README.md).
+These are investigation-worthy sites, not nine proven Earth analogues. All nine exoplanet hosts in the sample are M dwarfs, reflecting the selected nearby detections rather than a decision that civilizations require red dwarfs. Detailed site evidence, the archive snapshot, and a documented GJ 273 distance discrepancy are in [the data notes](../../data/player-sites/README.md).
 
 ## Scenario B: invented planet sites
 

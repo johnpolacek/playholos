@@ -4,7 +4,7 @@ September 7, 2026. Concept evaluation only; no game implementation.
 
 ## Scope and conclusion
 
-This evaluates the game decisions in [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md) against the user's *Holos: A Scientific Interpretive Framework for Explaining Reality*. The requested PDF was found in the sibling project at [holos-game/docs/holos.pdf](../holos-game/docs/holos.pdf), not in this workspace. Page references below are PDF page positions, counted from the cover.
+This evaluates the game decisions in [HOLOS_GAME_CONCEPT.md](../../HOLOS_GAME_CONCEPT.md) against the user's *Holos: A Scientific Interpretive Framework for Explaining Reality*. The requested PDF was found in the sibling project at [holos-game/docs/holos.pdf](../../../holos-game/docs/holos.pdf), not in this workspace. Page references below are PDF page positions, counted from the cover.
 
 The primary sections reviewed were **Aliens** and **The Teeming Dark** (pp. 12–16), and **Speculation**, **The Holosian Scale**, **Visibility Collapse**, and **Technology** (pp. 51–58). The observer criteria, open problems, and related reference entries were also checked for context.
 
