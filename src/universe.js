@@ -43,7 +43,14 @@ function circle(radius,color,opacity,y=0) {
   // Distance guides are dashed in the line edition, keeping solid lines for orbits.
   return LINE_ART?inkLine(points,opacity,{width:.8,dash:[radius*Math.PI/150,radius*Math.PI/110]}):line(points,color,opacity);
 }
-function setPath(path,points){if(LINE_ART)setInkPoints(path,points);else path.geometry.setFromPoints(points);}
+// Three rewrites a line's positions in place and never grows the buffer, so a
+// path whose length changes (the Moon's guide starts empty) gets a new geometry.
+function setPath(path,points){
+  if(LINE_ART){setInkPoints(path,points);return;}
+  if(path.geometry.getAttribute('position')?.count!==points.length){path.geometry.dispose();path.geometry=new THREE.BufferGeometry();}
+  path.geometry.setFromPoints(points).computeBoundingSphere();
+  if(path.material.isLineDashedMaterial)path.computeLineDistances();
+}
 function glow(color,size,opacity=.7) {
   const positions=[0,0,0],colors=new THREE.Color(color).toArray();
   const point=starPoints(positions,colors,[size],{opacity});return point;
@@ -139,12 +146,9 @@ function createRegionLayer(array,meta) {
   }
   const census=distantPoints(positions,colors,sizes,near,{opacity:.8});census.visible=false;
   const outlines=new THREE.Group();outlines.visible=false;
-  // Size each buffer for a full outline up front: three rewrites a line's
-  // positions in place and never grows the buffer it was created with.
-  const blank=Array.from({length:257},()=>[0,0,0]);
-  const edge=LINE_ART?inkLine(blank,.75,{width:1.3}):line(blank,'#a3d9ed',.55);
-  const seed=LINE_ART?inkLine(blank,.6,{width:1,dash:[1.4,1.4]}):new THREE.Line(new THREE.BufferGeometry().setFromPoints(blank.map(vec)),new THREE.LineDashedMaterial({color:'#e8cf9f',transparent:true,opacity:.5,dashSize:1.4,gapSize:1.4,depthWrite:false}));
-  edge.frustumCulled=seed.frustumCulled=false;outlines.add(edge,seed);
+  const edge=LINE_ART?inkLine([],.75,{width:1.3}):line([],'#a3d9ed',.55);
+  const seed=LINE_ART?inkLine([],.6,{width:1,dash:[1.4,1.4]}):new THREE.Line(new THREE.BufferGeometry(),new THREE.LineDashedMaterial({color:'#e8cf9f',transparent:true,opacity:.5,dashSize:1.4,gapSize:1.4,depthWrite:false}));
+  outlines.add(edge,seed);
   return {census,outlines,edge,seed,radius:meta.radiusLy,seedRadius:meta.seedRadiusLy,cameraLy:new THREE.Vector3()};
 }
 
@@ -303,8 +307,7 @@ export class Universe {
     region.cameraLy.copy(this.cameraAU).divideScalar(LY_AU);
     for(const [path,radius] of [[region.edge,region.radius],[region.seed,region.seedRadius]]){
       const outline=sphereSilhouette(radius,region.cameraLy);
-      path.visible=!!outline;if(!outline)continue;
-      setPath(path,outline);if(!LINE_ART&&path.material.isLineDashedMaterial)path.computeLineDistances();
+      path.visible=!!outline;if(outline)setPath(path,outline);
     }
   }
 
