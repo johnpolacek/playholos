@@ -15,7 +15,10 @@ svg [fill="#FBFAF7"]{fill:var(--paper)}svg [stroke="#FBFAF7"]{stroke:var(--paper
 svg [fill="#6B6860"]{fill:var(--muted)}svg [stroke="#6B6860"]{stroke:var(--muted)}
 svg [fill="#1F7A96"]{fill:var(--you)}svg [stroke="#1F7A96"]{stroke:var(--you)}
 svg [fill="#A8620F"]{fill:var(--other)}svg [stroke="#A8620F"]{stroke:var(--other)}
-body{margin:0;padding:0 24px 64px;background:var(--page);font-family:'IBM Plex Sans',sans-serif;color:var(--ink)}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;padding:0 24px 64px;background:var(--page);font-family:'IBM Plex Sans',sans-serif;color:var(--ink);text-wrap:pretty}
+h2,h3,figcaption strong{text-wrap:balance}
 /* The low-fi sketches were drawn with their own hex values. */
 svg [fill="#1D1D1B"]{fill:var(--ink)}svg [stroke="#1D1D1B"]{stroke:var(--ink)}svg [fill="#F3F1EA"]{fill:var(--paper)}svg [stroke="#F3F1EA"]{stroke:var(--paper)}
 svg [fill="#CFCBC0"]{fill:var(--faint)}svg [stroke="#CFCBC0"]{stroke:var(--faint)}svg [fill="#8F8B82"]{fill:var(--dot)}svg [fill="#E0DCD1"]{fill:var(--track)}
