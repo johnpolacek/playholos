@@ -580,15 +580,14 @@ Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
 ENERGY · [65%] · MATTER · 1,720 kt · COMPUTE · [100%]
 PROJECTS · 5 RUNNING · 3 UP NEXT
 RUNNING · 5
-- Deep flash watch · frees 20% compute when done · 4 Years · 00:20:00
-- Belt mining · +120 kt of matter a year when done · 6 Years · 00:30:00
-- Map the dust at Ember · frees 15% compute when done · 6.4 Years · 00:32:00
-- Waste-heat survey · every star in range, at once · 12.4 Years · 01:02:00
-- Pulsar timing array · lets probes find their way · 14.4 Years · 01:12:00
+[drawing: Deep flash watch] · Deep flash watch · frees 20% compute when done · 4 Years · 00:20:00 · [Pause Deep flash watch]
+[drawing: Belt mining] · Belt mining · +120 kt of matter a year when done · 6 Years · 00:30:00 · [Pause Belt mining]
+[drawing: Dust map] · Map the dust at Ember · Ember · frees 15% compute when done · 6.4 Years · 00:32:00 · [Pause Map the dust at Ember]
+[2 more running · Waste-heat survey · Pulsar timing array · ›]
 UP NEXT · STARTS ON ITS OWN
-1 · Listen to Ember · when the flash watch frees its compute · in 4 Years · 00:20:00 · [Reorder Listen to Ember]
-2 · Resolve the companions of Ember · when the dust map frees its compute · in 6.4 Years · 00:32:00 · [Reorder Resolve the companions of Ember]
-3 · Orbital foundry · after mining, and once 6,000 kt is saved · in 31 Years · 02:36:15 · [Reorder Orbital foundry]
+1 · [drawing: Deep-field receiver] · Listen to Ember · when the flash watch frees its compute · in 4 Years · 00:20:00 · [Reorder Listen to Ember]
+2 · [drawing: Companions resolved] · Resolve the companions of Ember · when the dust map frees its compute · in 6.4 Years · 00:32:00 · [Reorder Resolve the companions of Ember]
+3 · [drawing: Orbital foundry] · Orbital foundry · after mining, and once 6,000 kt is saved · in 31 Years · 02:36:15 · [Reorder Orbital foundry]
 Each starts as soon as its energy, compute and matter fit, top first, even while you are away. Drag to reorder.
 or, earlier ›
 

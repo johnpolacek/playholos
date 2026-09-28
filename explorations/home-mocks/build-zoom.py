@@ -829,8 +829,8 @@ tour_css = '''<style>
 .opt.pick{border:1.5px solid var(--ink)}.opt .pt{font-size:14px}.opt .pd{font-size:11.5px;text-align:right}
 .mindtag{align-self:flex-start;font:10px 'IBM Plex Mono',monospace;letter-spacing:.06em;color:var(--you);text-transform:uppercase}
 .donehead{display:flex;flex-direction:column;gap:2px;margin:10px 0 2px}.donehead .lead{margin:2px 0 0}.donetag{background:var(--ink)}
-.orow{display:grid;grid-template-columns:9px 1fr auto;gap:10px;align-items:center;padding:6px 0;border-bottom:1px solid var(--rowline)}.orow .pt{font-size:13.5px}.orow .sub,.qrow .sub{font-size:11.5px;color:var(--muted)}.orow .pd{font-size:11px;text-align:right}
-.qrow{display:grid;grid-template-columns:14px 1fr auto 24px;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid var(--rowline)}
+.orow{display:grid;grid-template-columns:9px 1fr auto;gap:10px;align-items:center;padding:6px 0;border-bottom:1px solid var(--rowline)}.orow .pt{font-size:13.5px}.orow .sub,.qrow .sub,.prow .sub{font-size:11.5px;color:var(--muted)}.orow .pd{font-size:11px;text-align:right}
+.qrow{display:grid;grid-template-columns:14px 40px 1fr auto 24px;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid var(--rowline)}
 .qrow .qn{font-size:12px;color:var(--muted)}.qrow .pt{font-size:14px}.qrow .pd{font-size:11.5px;text-align:right}.grip{color:var(--muted);display:grid;place-items:center;height:28px}
 .scrim{position:absolute;inset:0;z-index:4;background:rgba(8,9,10,.45)}
 .csheet{position:absolute;left:0;right:0;bottom:0;z-index:5;display:flex;flex-direction:column;gap:6px;padding:6px 16px 18px;background:var(--paper);border-radius:16px 16px 0 0}
@@ -1011,6 +1011,15 @@ ICONS = {
     'launcher': icon('<line x1="8" y1="46" x2="48" y2="12"></line><line x1="13" y1="49" x2="52" y2="16"></line><rect x="6" y="24" width="10" height="14" rx="3"></rect><path d="M44 12 l6 -3 l-1 6 Z"></path>', 'Launcher'),
     'probe': icon('<circle cx="28" cy="20" r="13"></circle><line x1="28" y1="42" x2="17" y2="29"></line><line x1="28" y1="42" x2="39" y2="29"></line><line x1="28" y1="42" x2="28" y2="33"></line><rect x="25" y="42" width="6" height="6"></rect>', 'Assay probe'),
     'solar': icon(''.join(f'<rect x="{x}" y="{y}" width="12" height="12"></rect>' for x in (6, 20, 34) for y in (14, 30)) + '<line x1="6" y1="28" x2="46" y2="28"></line>', 'Orbital solar array'),
+    'dust': icon('<circle cx="28" cy="28" r="3.5"></circle><ellipse cx="28" cy="28" rx="12" ry="5.5" stroke-dasharray="1 2"></ellipse>'
+                 '<ellipse cx="28" cy="28" rx="23" ry="10.5" stroke-dasharray="1 2.5"></ellipse><circle cx="45" cy="25" r="1.8" fill="' + INK + '"></circle>', 'Dust map'),
+    'companions': icon('<circle cx="16" cy="38" r="6"></circle><line x1="21" y1="34" x2="36" y2="22" stroke-dasharray="1 3"></line>'
+                       '<circle cx="40" cy="17" r="2.2" fill="' + INK + '"></circle><circle cx="46" cy="21" r="1.7" fill="' + INK + '"></circle>'
+                       '<path d="M33 13 V9 H37 M47 9 H51 V13 M51 25 V29 H47 M37 29 H33 V25"></path>', 'Companions resolved'),
+    'heat': icon('<path d="M18 48 Q28 38 38 48 Z"></path>' + ''.join(f'<line x1="28" y1="43" x2="{x}" y2="{y}" stroke-dasharray="2 3" opacity=".7"></line><circle cx="{x}" cy="{y}" r="1.6" fill="{INK}"></circle>' for x, y in ((6, 20), (16, 10), (28, 7), (40, 10), (50, 20)))
+                 + '<path d="M44 7 q2 -2 0 -4 M47 9 q2 -2 0 -4" stroke-width=".9"></path>', 'Waste-heat survey'),
+    'pulsar': icon('<circle cx="28" cy="20" r="3.5"></circle><path d="M26.5 17 L17 3 Q21 1 26 2 L28 16.5 Z M29.5 23 L39 37 Q35 39 30 38 L28 23.5 Z"></path>'
+                   '<path d="M4 50 H12 V44 V50 H22 V44 V50 H32 V44 V50 H42 V44 V50 H52"></path>', 'Pulsar timing array'),
 }
 
 def project_card(key, name, what, cost, years, real, clue=None):
@@ -1100,8 +1109,9 @@ PAUSE_ICON = '<svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"
 PLAY_ICON = '<svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M4 2 L12 7 L4 12 Z" fill="currentColor"></path></svg>'
 def pause_button(name, paused=False):
     return f'<button class="pause{" on" if paused else ""}" aria-label="{"Resume" if paused else "Pause"} {name}">{PLAY_ICON if paused else PAUSE_ICON}</button>'
-def running_row(key, name, years, remaining, pct, clue=None, paused=False):
+def running_row(key, name, years, remaining, pct, clue=None, paused=False, sub=None):
     tag = f'<span class="clue">{clue}</span>' if clue else ''
+    if sub: tag += f'<span class="sub">{sub}</span>'
     state = '<span class="paused-chip">Paused</span>' if paused else ''
     return (f'<div class="prow{" is-paused" if paused else ""}"><span class="thumb">{ICONS[key]}</span><span class="pt"><b>{name}</b>{tag}{state}'
             f'<span class="bar"><span style="width:{max(pct, 1.5)}%"></span></span></span><span class="rside">{tstack(years, remaining, not paused)}{pause_button(name, paused)}</span></div>')
@@ -1305,22 +1315,21 @@ FINISHED = tab_screen('Projects', 'PROJECTS', '2 RUNNING · 1 DONE', ''.join([
     '<div class="sec">EACH YEAR YOU CAN SPEND · 2 STILL RUNNING</div>', used('Energy', 30), used('Compute', 40),
     '<p class="copy small">The telescope’s 25% of energy and 15% of compute are free again.</p>']), at_year((30, 40, '1,560 kt'), 18.4))
 
-def qrow(n, name, sub, right):
+def qrow(n, key, name, sub, right):
     grip = '<svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 4 H12 M2 7 H12 M2 10 H12" stroke="currentColor" stroke-width="1.3"></path></svg>'
-    return f'<div class="qrow"><span class="qn mono">{n}</span><span class="pt"><b>{name}</b><span class="sub">{sub}</span></span><span class="pd">{right}</span><button class="grip" aria-label="Reorder {name}">{grip}</button></div>'
+    return f'<div class="qrow"><span class="qn mono">{n}</span><span class="kthumb">{ICONS[key]}</span><span class="pt"><b>{name}</b><span class="sub">{sub}</span></span><span class="pd">{right}</span><button class="grip" aria-label="Reorder {name}">{grip}</button></div>'
 # The foundry waits for belt mining (done Year 28) and for 6,000 kt: 1,720 kt now, +40 kt a year, +160 kt once mining is done.
 _q_start = 28 + (catalog.matter_tonnes(of) - (1720 + 40 * 6)) / 160
 UP_NEXT = tab_screen('Projects', 'PROJECTS', '5 RUNNING · 3 UP NEXT', ''.join([
     '<div class="sec">RUNNING · 5</div>',
-    row(CAT['optical-flash-watch']['name'], 'frees 20% compute when done', tstack('4 Years', '00:20:00', True), bar=33),
-    row(mine['name'], '+120 kt of matter a year when done', tstack('6 Years', '00:30:00', True), bar=70),
-    row(md['name'], 'frees 15% compute when done', tstack('6.4 Years', '00:32:00', True), bar=36),
-    row(whs['name'], 'every star in range, at once', tstack('12.4 Years', '01:02:00', True), bar=22),
-    row(pta['name'], 'lets probes find their way', tstack('14.4 Years', '01:12:00', True), bar=28),
+    running_row('flash', CAT['optical-flash-watch']['name'], '4 Years', '00:20:00', 33, sub='frees 20% compute when done'),
+    running_row('mining', mine['name'], '6 Years', '00:30:00', 70, sub='+120 kt of matter a year when done'),
+    running_row('dust', md['name'], '6.4 Years', '00:32:00', 36, 'Ember', sub='frees 15% compute when done'),
+    row('2 more running', f'{whs["name"]} · {pta["name"]}', '›'),
     '<div class="sec">UP NEXT · STARTS ON ITS OWN</div>',
-    qrow(1, lt2['name'], 'when the flash watch frees its compute', tstack('in 4 Years', '00:20:00')),
-    qrow(2, rc['name'], 'when the dust map frees its compute', tstack('in 6.4 Years', '00:32:00')),
-    qrow(3, of['name'], f'after mining, and once 6,000 kt is saved', tstack(f'in {_q_start - 22:.0f} Years', clock((_q_start - 22) * 5))),
+    qrow(1, 'receiver', lt2['name'], 'when the flash watch frees its compute', tstack('in 4 Years', '00:20:00')),
+    qrow(2, 'companions', rc['name'], 'when the dust map frees its compute', tstack('in 6.4 Years', '00:32:00')),
+    qrow(3, 'foundry', of['name'], f'after mining, and once 6,000 kt is saved', tstack(f'in {_q_start - 22:.0f} Years', clock((_q_start - 22) * 5))),
     '<p class="copy small">Each starts as soon as its energy, compute and matter fit, top first, even while you are away. Drag to reorder.</p>']),
     HUD22)
 
