@@ -698,9 +698,54 @@ REACH = tab_screen('Reach', 'REACH', 'BEYOND VEYRA', '''
     <div class="empty"><svg width="120" height="90" viewBox="0 0 120 90" aria-hidden="true"><circle cx="60" cy="45" r="6" fill="#1F7A96"></circle><circle cx="60" cy="45" r="30" fill="none" stroke="#171716" stroke-dasharray="3 4" opacity=".5"></circle><circle cx="60" cy="45" r="44" fill="none" stroke="#171716" stroke-dasharray="2 5" opacity=".3"></circle></svg>
     <strong>Nothing beyond Veyra yet</strong><span>Probes, outposts and colonies appear here. Far ones act on their own: your orders reach them at light speed.</span></div>
     <div class="sec">STANDING ORDERS · 0</div>''' + start_row('Add an order', 'e.g. if anything warm moves within 20 ly, send a sentinel', 'runs while you are away', '') )
+def icon(body, label):
+    return f'<svg width="56" height="56" viewBox="0 0 56 56" role="img" aria-label="{label}" fill="none" stroke="{INK}" stroke-width="1.1" stroke-linejoin="round">{body}</svg>'
+ICONS = {
+    'ir': icon('<path d="M6 40 L28 30 L50 40 L28 50 Z"></path><path d="M9 36 L28 27.5 L47 36"></path><path d="M12 32 L28 25 L44 32"></path>'
+               '<path d="M28 6 l6 3.5 v7 l-6 3.5 l-6 -3.5 v-7 Z"></path><line x1="28" y1="20" x2="28" y2="25"></line><line x1="22" y1="16.5" x2="16" y2="30"></line><line x1="34" y1="16.5" x2="40" y2="30"></line>', 'Infrared telescope'),
+    'receiver': icon(''.join(f'<path d="M{x} {y} q7 -5 14 0 v6 q-7 -5 -14 0 Z"></path><line x1="{x + 7}" y1="{y + 4}" x2="{x + 7}" y2="{y + 10}"></line>' for x, y in ((6, 12), (30, 12), (6, 32), (30, 32))), 'Deep-field receiver'),
+    'survey': icon('<circle cx="28" cy="28" r="4"></circle><ellipse cx="28" cy="28" rx="13" ry="6"></ellipse><ellipse cx="28" cy="28" rx="22" ry="10" stroke-dasharray="2 2.5"></ellipse><circle cx="41" cy="28" r="1.8" fill="' + INK + '"></circle><circle cx="10" cy="31" r="1.4" fill="' + INK + '"></circle>', 'Planet survey'),
+    'transit': icon('<circle cx="28" cy="20" r="11"></circle><circle cx="23" cy="20" r="2.5" fill="' + INK + '"></circle><path d="M6 44 H20 Q24 44 25 49 Q28 52 31 49 Q32 44 36 44 H50"></path>', 'Transit watch'),
+    'spectro': icon('<path d="M10 40 L22 14 L34 40 Z"></path><line x1="2" y1="30" x2="16" y2="27"></line>'
+                    + ''.join(f'<line x1="30" y1="{27 + i * 2}" x2="54" y2="{20 + i * 6}" stroke-dasharray="{2 if i % 2 else 0} 2"></line>' for i in range(4)), 'Spectrograph bank'),
+    'flash': icon('<path d="M8 40 Q28 8 48 40 Z"></path><line x1="28" y1="40" x2="28" y2="48"></line><line x1="18" y1="48" x2="38" y2="48"></line>'
+                  '<path d="M40 8 l-4 6 h5 l-4 6" stroke-width="1.3"></path>', 'Deep flash watch'),
+    'mining': icon('<path d="M10 30 l8 -8 l10 3 l6 9 l-6 9 l-12 1 Z"></path><path d="M38 14 l5 -3 l5 4 l-2 6 l-6 1 Z"></path><line x1="30" y1="12" x2="44" y2="46" stroke-dasharray="2 2"></line>', 'Belt mining'),
+    'sentinel': icon('<circle cx="28" cy="28" r="19" stroke-dasharray="3 2"></circle><rect x="25" y="25" width="6" height="6"></rect><line x1="28" y1="9" x2="28" y2="25"></line><line x1="28" y1="31" x2="28" y2="47"></line>', 'Sentinel probe'),
+    'lurker': icon('<ellipse cx="28" cy="30" rx="24" ry="10" stroke-dasharray="2 3"></ellipse><circle cx="12" cy="30" r="3.5"></circle><rect x="44" y="18" width="5" height="5"></rect><path d="M49 20 l4 -3" stroke-dasharray="1 2"></path>', 'Lurker'),
+    'chips': icon(''.join(f'<rect x="{x}" y="{y}" width="3.5" height="3.5"></rect><line x1="{x - 7}" y1="{y + 2}" x2="{x - 2}" y2="{y + 2}" stroke-dasharray="1 1.5"></line>' for x, y in ((20, 12), (34, 18), (26, 26), (42, 30), (22, 38), (36, 42))), 'Chip swarm'),
+    'lightsail': icon('<path d="M14 10 L44 6 L48 36 L18 40 Z"></path><line x1="16" y1="25" x2="31" y2="48"></line><line x1="46" y1="21" x2="31" y2="48"></line><rect x="29" y="46" width="4" height="4"></rect>', 'Starlight sail'),
+    'torch': icon('<path d="M28 6 C33 12 34 22 33 32 H23 C22 22 23 12 28 6 Z"></path><path d="M23 34 Q28 52 33 34" stroke-dasharray="2 2"></path><line x1="20" y1="30" x2="16" y2="38"></line><line x1="36" y1="30" x2="40" y2="38"></line>', 'Torch probe'),
+    'seed': icon('<circle cx="28" cy="18" r="9" stroke-dasharray="3 2"></circle><rect x="24" y="30" width="8" height="8"></rect><path d="M28 38 V46 M28 46 L18 50 M28 46 L38 50"></path><rect x="14" y="48" width="5" height="5"></rect><rect x="37" y="48" width="5" height="5"></rect>', 'Seed probe'),
+    'antimatter': icon('<path d="M28 6 C33 12 34 22 33 32 H23 C22 22 23 12 28 6 Z"></path>' + ''.join(f'<line x1="28" y1="36" x2="{28 + 14 * math.cos(math.radians(a))}" y2="{36 + 14 * math.sin(math.radians(a))}" stroke-dasharray="1.5 2"></line>' for a in (60, 90, 120)), 'Antimatter probe'),
+    'skywatch': icon('<path d="M4 22 Q28 0 52 22" stroke-dasharray="2 3"></path><path d="M8 46 H48"></path><path d="M14 46 V36 A14 14 0 0 1 42 36 V46"></path><path d="M26 23 L30 23 L31 36 L25 36 Z"></path>', 'Sky watch'),
+    'grid': icon('<path d="M28 8 L18 48 M28 8 L38 48 M21 36 H35 M23 26 H33 M14 16 H42"></path><path d="M2 20 Q8 26 14 16 M42 16 Q48 26 54 20"></path>', 'Planetary grid'),
+    'lift': icon('<path d="M28 6 C34 14 35 26 34 38 H22 C21 26 22 14 28 6 Z"></path><path d="M22 30 L15 42 H22 M34 30 L41 42 H34"></path><line x1="25" y1="44" x2="24" y2="50"></line><line x1="31" y1="44" x2="32" y2="50"></line><circle cx="28" cy="20" r="3"></circle>', 'Mines and heavy lift'),
+    'prospect': icon('<path d="M6 32 l7 -11 l12 1 l6 10 l-5 11 l-13 1 Z"></path><circle cx="18" cy="31" r="1.5" fill="' + INK + '"></circle><circle cx="41" cy="18" r="8"></circle><line x1="47" y1="24" x2="52" y2="30"></line>', 'Belt prospecting'),
+    'annex': icon('<path d="M6 14 Q28 2 50 14"></path>' + ''.join(f'<rect x="{x}" y="20" width="10" height="26"></rect><line x1="{x}" y1="28" x2="{x + 10}" y2="28"></line><line x1="{x}" y1="36" x2="{x + 10}" y2="36"></line>' for x in (11, 23, 35)), 'Cold compute annex'),
+    'foundry': icon('<line x1="6" y1="36" x2="50" y2="36"></line><line x1="6" y1="42" x2="50" y2="42"></line><path d="M6 42 L12 36 L18 42 L24 36 L30 42 L36 36 L42 42 L48 36"></path><rect x="10" y="16" width="14" height="14"></rect><rect x="30" y="20" width="12" height="10"></rect><line x1="17" y1="30" x2="17" y2="36"></line><line x1="36" y1="30" x2="36" y2="36"></line>', 'Orbital foundry'),
+    'beam': icon('<path d="M12 18 Q22 28 12 38"></path><line x1="14" y1="28" x2="20" y2="28"></line><line x1="20" y1="27" x2="46" y2="25" stroke-dasharray="3 2"></line><line x1="20" y1="29" x2="46" y2="31" stroke-dasharray="3 2"></line><circle cx="49" cy="28" r="2.5"></circle>', 'Tight-beam transmitter'),
+    'beacon': icon('<line x1="28" y1="46" x2="28" y2="24"></line><path d="M20 46 L28 32 L36 46"></path><circle cx="28" cy="22" r="2"></circle>' + ''.join(f'<circle cx="28" cy="22" r="{r}" stroke-dasharray="2 3" opacity="{o}"></circle>' for r, o in ((8, .9), (14, .6), (20, .35))), 'Broadcast beacon'),
+    'launcher': icon('<line x1="8" y1="46" x2="48" y2="12"></line><line x1="13" y1="49" x2="52" y2="16"></line><rect x="6" y="24" width="10" height="14" rx="3"></rect><path d="M44 12 l6 -3 l-1 6 Z"></path>', 'Launcher'),
+    'probe': icon('<circle cx="28" cy="20" r="13"></circle><line x1="28" y1="42" x2="17" y2="29"></line><line x1="28" y1="42" x2="39" y2="29"></line><line x1="28" y1="42" x2="28" y2="33"></line><rect x="25" y="42" width="6" height="6"></rect>', 'Flyby probe'),
+    'solar': icon(''.join(f'<rect x="{x}" y="{y}" width="12" height="12"></rect>' for x in (6, 20, 34) for y in (14, 30)) + '<line x1="6" y1="28" x2="46" y2="28"></line>', 'Orbital solar array'),
+    'woke': icon('<circle cx="30" cy="30" r="14"></circle><path d="M30 16 Q21 30 30 44"></path><circle cx="9" cy="10" r="2.5"></circle>'
+                 '<path d="M14 15 L18 19 M9 17 V21 M16 10 H20" stroke-dasharray="1 2"></path>', 'Veyra'),
+    'dust': icon('<circle cx="28" cy="28" r="3.5"></circle><ellipse cx="28" cy="28" rx="12" ry="5.5" stroke-dasharray="1 2"></ellipse>'
+                 '<ellipse cx="28" cy="28" rx="23" ry="10.5" stroke-dasharray="1 2.5"></ellipse><circle cx="45" cy="25" r="1.8" fill="' + INK + '"></circle>', 'Dust map'),
+    'companions': icon('<circle cx="16" cy="38" r="6"></circle><line x1="21" y1="34" x2="36" y2="22" stroke-dasharray="1 3"></line>'
+                       '<circle cx="40" cy="17" r="2.2" fill="' + INK + '"></circle><circle cx="46" cy="21" r="1.7" fill="' + INK + '"></circle>'
+                       '<path d="M33 13 V9 H37 M47 9 H51 V13 M51 25 V29 H47 M37 29 H33 V25"></path>', 'Companions resolved'),
+    'heat': icon('<path d="M18 48 Q28 38 38 48 Z"></path>' + ''.join(f'<line x1="28" y1="43" x2="{x}" y2="{y}" stroke-dasharray="2 3" opacity=".7"></line><circle cx="{x}" cy="{y}" r="1.6" fill="{INK}"></circle>' for x, y in ((6, 20), (16, 10), (28, 7), (40, 10), (50, 20)))
+                 + '<path d="M44 7 q2 -2 0 -4 M47 9 q2 -2 0 -4" stroke-width=".9"></path>', 'Waste-heat survey'),
+    'pulsar': icon('<circle cx="28" cy="20" r="3.5"></circle><path d="M26.5 17 L17 3 Q21 1 26 2 L28 16.5 Z M29.5 23 L39 37 Q35 39 30 38 L28 23.5 Z"></path>'
+                   '<path d="M4 50 H12 V44 V50 H22 V44 V50 H32 V44 V50 H42 V44 V50 H52"></path>', 'Pulsar timing array'),
+}
+def entry(year, key, body, fresh=False):
+    return f'<div class="entry{" fresh" if fresh else ""}"><span class="gy">Year {year}</span><span class="kthumb">{ICONS[key]}</span><span>{body}</span></div>'
 REPORT = tab_screen('Report', 'REPORT', 'WHILE YOU WERE AWAY', ''.join([
-    '<div class="entry"><span class="gy">Year 0.1</span><span>Three leads logged: an oxygen world at Twin, a new warm glow at Ember, uneven dimming at Lantern. None explained.</span></div>',
-    '<div class="entry"><span class="gy">Year 0</span><span>Veyra woke.</span></div>',
+    entry('0.1', 'survey', 'Three leads logged: an oxygen world at Twin, a new warm glow at Ember, uneven dimming at Lantern. None explained.'),
+    entry('0', 'woke', 'Veyra woke.'),
     '<p class="note">News lands when its light does. When a project finishes, its result appears here.</p>']), HUD)
 MIND = tab_screen('Mind', 'MIND', 'WHO WE ARE', ''.join([
     '<div class="charter"><span class="mono">CHARTER</span><strong>“Keep the lights on. Look before we speak.”</strong><span class="sub">[founding line from the civilization you chose]</span></div>',
@@ -736,7 +781,7 @@ tour_css = '''<style>
 .start button{height:28px;padding:0 12px;border:1px solid var(--ink);border-radius:14px;font-size:12px;text-align:center}
 .empty{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;padding:24px 16px 12px;font-size:13px;color:var(--muted)}
 .empty strong{font-size:16px;color:var(--ink)}
-.entry{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--rowline);font-size:14px}.entry>.gy{font-size:12px;color:var(--muted);min-width:64px;padding-top:1px}
+.entry{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--rowline);font-size:14px}.entry>.gy{font-size:12px;color:var(--muted);min-width:64px;padding-top:1px}.entry>.kthumb{flex:none}
 .note{font-size:12px;color:var(--muted);margin:14px 0}
 .charter{display:flex;flex-direction:column;gap:6px;padding:14px;border:1px solid var(--faint);border-radius:10px;background:var(--paper);margin-top:4px}
 .charter .mono{font-size:10px;color:var(--muted);letter-spacing:.1em}.charter strong{font-size:17px;font-weight:500}
@@ -911,6 +956,11 @@ tour_css = '''<style>
 .jnow{position:absolute;top:-5px;bottom:-5px;width:2px;background:var(--ink)}
 .probecard{display:grid;grid-template-columns:56px 1fr auto;gap:12px;align-items:center;padding:8px 0}.probecard .pt{display:flex;flex-direction:column;gap:3px;font-size:14px}.probecard .sub{font-size:11.5px;color:var(--muted)}
 .opt.act{grid-template-columns:1fr auto 10px;padding:9px 12px}.opt.act .sub{font-size:12px;color:var(--page-ink2)}.opt.act .chev{color:var(--muted)}
+.ptypes{display:flex;flex-direction:column;gap:5px;margin-top:6px}
+.ptype{display:grid;grid-template-columns:40px 1fr auto;gap:10px;align-items:center;padding:6px 10px;border:1px solid var(--faint);border-radius:10px;background:var(--paper);width:100%;box-sizing:border-box}
+.ptype .pt{display:flex;flex-direction:column;gap:2px;font-size:13.5px}.ptype .ph2{display:flex;align-items:center;gap:6px}.ptype .sub{font-size:11px;color:var(--muted)}.ptype .pd{font-size:11px;text-align:right}
+.ptype .tag{font-size:10px;padding:0 6px;border-radius:8px;border:1px solid var(--muted);color:var(--muted)}.ptype .tag.stop{border-color:var(--you);color:var(--you)}
+.ptype.cant,.ptype.locked{background:none;opacity:.6}.ptype .needs{font-size:11px;color:var(--ink)}
 .ledger{grid-template-columns:110px 1fr;row-gap:7px;font-size:13px;margin:2px 0}.ledger dd{color:var(--ink)}
 .starsheet{position:absolute;left:0;right:0;top:392px;bottom:64px;z-index:3;display:flex;flex-direction:column;padding:6px 16px 0;background:var(--paper);border-top:1px solid var(--faint);border-radius:16px 16px 0 0;box-shadow:0 -10px 24px var(--shadow)}
 .starsheet>*{flex-shrink:0}.grab{align-self:center;width:36px;height:4px;border-radius:2px;background:var(--faint);margin-bottom:6px}
@@ -987,40 +1037,6 @@ tour_figures = ''.join(f'<figure><figcaption><strong>{n + 1} · {TOUR_CAPTIONS[n
                        for n, (phone, title, body, spot, top) in enumerate(STOPS))
 TALK = '<button class="talk">Talk it through with the mind ›</button>'
 # ---------- Start a project: pick, then confirm ----------
-def icon(body, label):
-    return f'<svg width="56" height="56" viewBox="0 0 56 56" role="img" aria-label="{label}" fill="none" stroke="{INK}" stroke-width="1.1" stroke-linejoin="round">{body}</svg>'
-ICONS = {
-    'ir': icon('<path d="M6 40 L28 30 L50 40 L28 50 Z"></path><path d="M9 36 L28 27.5 L47 36"></path><path d="M12 32 L28 25 L44 32"></path>'
-               '<path d="M28 6 l6 3.5 v7 l-6 3.5 l-6 -3.5 v-7 Z"></path><line x1="28" y1="20" x2="28" y2="25"></line><line x1="22" y1="16.5" x2="16" y2="30"></line><line x1="34" y1="16.5" x2="40" y2="30"></line>', 'Infrared telescope'),
-    'receiver': icon(''.join(f'<path d="M{x} {y} q7 -5 14 0 v6 q-7 -5 -14 0 Z"></path><line x1="{x + 7}" y1="{y + 4}" x2="{x + 7}" y2="{y + 10}"></line>' for x, y in ((6, 12), (30, 12), (6, 32), (30, 32))), 'Deep-field receiver'),
-    'survey': icon('<circle cx="28" cy="28" r="4"></circle><ellipse cx="28" cy="28" rx="13" ry="6"></ellipse><ellipse cx="28" cy="28" rx="22" ry="10" stroke-dasharray="2 2.5"></ellipse><circle cx="41" cy="28" r="1.8" fill="' + INK + '"></circle><circle cx="10" cy="31" r="1.4" fill="' + INK + '"></circle>', 'Planet survey'),
-    'transit': icon('<circle cx="28" cy="20" r="11"></circle><circle cx="23" cy="20" r="2.5" fill="' + INK + '"></circle><path d="M6 44 H20 Q24 44 25 49 Q28 52 31 49 Q32 44 36 44 H50"></path>', 'Transit watch'),
-    'spectro': icon('<path d="M10 40 L22 14 L34 40 Z"></path><line x1="2" y1="30" x2="16" y2="27"></line>'
-                    + ''.join(f'<line x1="30" y1="{27 + i * 2}" x2="54" y2="{20 + i * 6}" stroke-dasharray="{2 if i % 2 else 0} 2"></line>' for i in range(4)), 'Spectrograph bank'),
-    'flash': icon('<path d="M8 40 Q28 8 48 40 Z"></path><line x1="28" y1="40" x2="28" y2="48"></line><line x1="18" y1="48" x2="38" y2="48"></line>'
-                  '<path d="M40 8 l-4 6 h5 l-4 6" stroke-width="1.3"></path>', 'Deep flash watch'),
-    'mining': icon('<path d="M10 30 l8 -8 l10 3 l6 9 l-6 9 l-12 1 Z"></path><path d="M38 14 l5 -3 l5 4 l-2 6 l-6 1 Z"></path><line x1="30" y1="12" x2="44" y2="46" stroke-dasharray="2 2"></line>', 'Belt mining'),
-    'skywatch': icon('<path d="M4 22 Q28 0 52 22" stroke-dasharray="2 3"></path><path d="M8 46 H48"></path><path d="M14 46 V36 A14 14 0 0 1 42 36 V46"></path><path d="M26 23 L30 23 L31 36 L25 36 Z"></path>', 'Sky watch'),
-    'grid': icon('<path d="M28 8 L18 48 M28 8 L38 48 M21 36 H35 M23 26 H33 M14 16 H42"></path><path d="M2 20 Q8 26 14 16 M42 16 Q48 26 54 20"></path>', 'Planetary grid'),
-    'lift': icon('<path d="M28 6 C34 14 35 26 34 38 H22 C21 26 22 14 28 6 Z"></path><path d="M22 30 L15 42 H22 M34 30 L41 42 H34"></path><line x1="25" y1="44" x2="24" y2="50"></line><line x1="31" y1="44" x2="32" y2="50"></line><circle cx="28" cy="20" r="3"></circle>', 'Mines and heavy lift'),
-    'prospect': icon('<path d="M6 32 l7 -11 l12 1 l6 10 l-5 11 l-13 1 Z"></path><circle cx="18" cy="31" r="1.5" fill="' + INK + '"></circle><circle cx="41" cy="18" r="8"></circle><line x1="47" y1="24" x2="52" y2="30"></line>', 'Belt prospecting'),
-    'annex': icon('<path d="M6 14 Q28 2 50 14"></path>' + ''.join(f'<rect x="{x}" y="20" width="10" height="26"></rect><line x1="{x}" y1="28" x2="{x + 10}" y2="28"></line><line x1="{x}" y1="36" x2="{x + 10}" y2="36"></line>' for x in (11, 23, 35)), 'Cold compute annex'),
-    'foundry': icon('<line x1="6" y1="36" x2="50" y2="36"></line><line x1="6" y1="42" x2="50" y2="42"></line><path d="M6 42 L12 36 L18 42 L24 36 L30 42 L36 36 L42 42 L48 36"></path><rect x="10" y="16" width="14" height="14"></rect><rect x="30" y="20" width="12" height="10"></rect><line x1="17" y1="30" x2="17" y2="36"></line><line x1="36" y1="30" x2="36" y2="36"></line>', 'Orbital foundry'),
-    'beam': icon('<path d="M12 18 Q22 28 12 38"></path><line x1="14" y1="28" x2="20" y2="28"></line><line x1="20" y1="27" x2="46" y2="25" stroke-dasharray="3 2"></line><line x1="20" y1="29" x2="46" y2="31" stroke-dasharray="3 2"></line><circle cx="49" cy="28" r="2.5"></circle>', 'Tight-beam transmitter'),
-    'beacon': icon('<line x1="28" y1="46" x2="28" y2="24"></line><path d="M20 46 L28 32 L36 46"></path><circle cx="28" cy="22" r="2"></circle>' + ''.join(f'<circle cx="28" cy="22" r="{r}" stroke-dasharray="2 3" opacity="{o}"></circle>' for r, o in ((8, .9), (14, .6), (20, .35))), 'Broadcast beacon'),
-    'launcher': icon('<line x1="8" y1="46" x2="48" y2="12"></line><line x1="13" y1="49" x2="52" y2="16"></line><rect x="6" y="24" width="10" height="14" rx="3"></rect><path d="M44 12 l6 -3 l-1 6 Z"></path>', 'Launcher'),
-    'probe': icon('<circle cx="28" cy="20" r="13"></circle><line x1="28" y1="42" x2="17" y2="29"></line><line x1="28" y1="42" x2="39" y2="29"></line><line x1="28" y1="42" x2="28" y2="33"></line><rect x="25" y="42" width="6" height="6"></rect>', 'Assay probe'),
-    'solar': icon(''.join(f'<rect x="{x}" y="{y}" width="12" height="12"></rect>' for x in (6, 20, 34) for y in (14, 30)) + '<line x1="6" y1="28" x2="46" y2="28"></line>', 'Orbital solar array'),
-    'dust': icon('<circle cx="28" cy="28" r="3.5"></circle><ellipse cx="28" cy="28" rx="12" ry="5.5" stroke-dasharray="1 2"></ellipse>'
-                 '<ellipse cx="28" cy="28" rx="23" ry="10.5" stroke-dasharray="1 2.5"></ellipse><circle cx="45" cy="25" r="1.8" fill="' + INK + '"></circle>', 'Dust map'),
-    'companions': icon('<circle cx="16" cy="38" r="6"></circle><line x1="21" y1="34" x2="36" y2="22" stroke-dasharray="1 3"></line>'
-                       '<circle cx="40" cy="17" r="2.2" fill="' + INK + '"></circle><circle cx="46" cy="21" r="1.7" fill="' + INK + '"></circle>'
-                       '<path d="M33 13 V9 H37 M47 9 H51 V13 M51 25 V29 H47 M37 29 H33 V25"></path>', 'Companions resolved'),
-    'heat': icon('<path d="M18 48 Q28 38 38 48 Z"></path>' + ''.join(f'<line x1="28" y1="43" x2="{x}" y2="{y}" stroke-dasharray="2 3" opacity=".7"></line><circle cx="{x}" cy="{y}" r="1.6" fill="{INK}"></circle>' for x, y in ((6, 20), (16, 10), (28, 7), (40, 10), (50, 20)))
-                 + '<path d="M44 7 q2 -2 0 -4 M47 9 q2 -2 0 -4" stroke-width=".9"></path>', 'Waste-heat survey'),
-    'pulsar': icon('<circle cx="28" cy="20" r="3.5"></circle><path d="M26.5 17 L17 3 Q21 1 26 2 L28 16.5 Z M29.5 23 L39 37 Q35 39 30 38 L28 23.5 Z"></path>'
-                   '<path d="M4 50 H12 V44 V50 H22 V44 V50 H32 V44 V50 H42 V44 V50 H52"></path>', 'Pulsar timing array'),
-}
 
 def project_card(key, name, what, cost, years, real, clue=None):
     tag = f'<span class="clue">{clue}</span>' if clue else ''
@@ -1183,10 +1199,10 @@ def discovery_card(p, source):
             f'<div class="dfoot"><span class="costs mono">{cost_short(p)}</span>{tstack(f"{p["years"]} Years", real)}<button class="go-small">Start</button></div></div>')
 
 REPORT_NEW = tab_screen('Report', 'REPORT', 'WHILE YOU WERE AWAY', ''.join([
-    '<div class="entry fresh"><span class="gy">Year 4.4</span><span><span class="newtag">New</span> <b>Transit watch finished.</b> Lantern dims every 212 days, and no two dips look the same.<button class="seeresult">See the result ›</button></span></div>',
-    f'<div class="entry"><span class="gy">Year 0.4</span><span>Infrared telescope started. Done in Year 18.4, <span class="rtime">01:10:00</span> from now.</span></div>',
-    '<div class="entry"><span class="gy">Year 0.4</span><span>Transit watch started on Lantern.</span></div>',
-    '<div class="entry"><span class="gy">Year 0</span><span>Veyra woke.</span></div>',
+    entry('4.4', 'transit', '<span class="newtag">New</span> <b>Transit watch finished.</b> Lantern dims every 212 days, and no two dips look the same.<button class="seeresult">See the result ›</button>', True),
+    entry('0.4', 'ir', 'Infrared telescope started. Done in Year 18.4, <span class="rtime">01:10:00</span> from now.'),
+    entry('0.4', 'transit', 'Transit watch started on Lantern.'),
+    entry('0', 'woke', 'Veyra woke.'),
     '<p class="note">News lands when its light does. This came from light that was already reaching us.</p>']), HUD44)
 
 RESULT = tab_screen('Report', 'REPORT', 'RESULT', f"""<button class="backlink inline">‹ All reports</button>
@@ -1436,7 +1452,7 @@ CLUE_GLOW = tab_screen('Home', 'CLUE', 'YEAR 0.4', f"""<button class="backlink i
 {way('Look closer', 'Infrared telescope · tells dust from companions', tstack('18 Years', catalog.real_time(18)))}
 {way('Listen harder', 'Listen to Ember · opens after the telescope', '<span class="sub">later</span>')}
 {way('Speak', 'A message, then their reply · tells them we exist', tstack(f'{6 + 2 * d_ember:.1f} Years', clock((6 + 2 * d_ember) * 5)))}
-{way('Send something', f'An assay probe · flies {10 * d_ember:.0f} Years, reports {d_ember:.1f} later', tstack(f'{11 * d_ember:.0f} Years', clock(11 * d_ember * 5)))}""", HUD)
+{way('Send something', f'A flyby probe · flies {10 * d_ember:.0f} Years, reports {d_ember:.1f} later', tstack(f'{11 * d_ember:.0f} Years', clock(11 * d_ember * 5)))}""", HUD)
 
 # ---------- First contact: the knock ----------
 # Year 31.2. Beacon (Beta Hydri) aimed a laser at Veyra 9.3 Years ago. The flash watch catches it.
@@ -1806,7 +1822,7 @@ PORTRAIT = tab_screen('Reach', 'REACH', 'BEACON', f"""<button class="backlink in
 <p class="copy small">Their world itself. How many they are. How far they reach. Whether anyone else hears them.</p>""", HUD_C1)
 
 # ---------- Reach: sending a probe ----------
-# Year 118: the launcher and the assay probe line are built. A targeted probe takes 12 Years to build and launch,
+# Year 118: the launcher and the flyby probe line are built. A targeted probe takes 12 Years to build and launch,
 # then flies at a tenth of light speed (10 Years per light-year), passes its star without stopping, and beams
 # its report home at light speed.
 REACH_EMPTY = tab_screen('Reach', 'REACH', 'BEYOND VEYRA', '''<div class="empty"><svg width="120" height="90" viewBox="0 0 120 90" aria-hidden="true"><circle cx="60" cy="45" r="6" fill="#1F7A96"></circle><circle cx="60" cy="45" r="30" fill="none" stroke="#171716" stroke-dasharray="3 4" opacity=".5"></circle><circle cx="60" cy="45" r="44" fill="none" stroke="#171716" stroke-dasharray="2 5" opacity=".3"></circle></svg>
@@ -1847,7 +1863,7 @@ def targets_drawing():
 
 PROBE_PICK = f"""<div class="phone">{HUD_P0}<div class="sheet">
 <div class="sh"><strong>Send a probe</strong><button aria-label="Close">×</button></div>
-<p class="copy">An assay probe flies past its star at a tenth of light speed, looks, and beams home what it saw. Times below run from now to its report.</p>
+<p class="copy">A flyby probe flies past its star at a tenth of light speed, looks, and beams home what it saw. Times below run from now to its report.</p>
 <div class="art">{targets_drawing()}</div>
 <div class="sec">WHERE TO · NEAREST FIRST</div>
 <div role="radiogroup" class="choices">{''.join(target_card(*t) for t in TARGETS)}</div>
@@ -1864,7 +1880,7 @@ def probe_drawing():
     s.append(f'<path d="M{cx + 110} {cy} H{cx + 190}" stroke="{YOU}" stroke-width="1.2" stroke-dasharray="4 3"></path><path d="M{cx + 190} {cy} l-6 -4 M{cx + 190} {cy} l-6 4" stroke="{YOU}" stroke-width="1.2" fill="none"></path>')
     s.append(text(cx + 150, cy - 10, 'a tenth of light speed', 9, YOU, 'middle'))
     s.append(text(cx, cy + 60, 'sail and a small body of instruments', 9, MUTED, 'middle') + text(346, 124, 'not to scale', 8, MUTED, 'end'))
-    return f'<svg width="358" height="130" viewBox="0 0 358 130" font-family="IBM Plex Mono, monospace" role="img" aria-label="An assay probe: a sail and a small instrument body">{"".join(s)}</svg>'
+    return f'<svg width="358" height="130" viewBox="0 0 358 130" font-family="IBM Plex Mono, monospace" role="img" aria-label="A flyby probe: a sail and a small instrument body">{"".join(s)}</svg>'
 
 def journey(hip, now=None, compact=False):
     d, launch, arrive, report = trip(hip); now = now or Y_PB
@@ -1876,7 +1892,7 @@ def journey(hip, now=None, compact=False):
     return f'<div class="journey{" compact" if compact else ""}"><div class="jbar">{bars}{nowmark}</div>{"" if compact else rows}</div>'
 
 d_e, L_e, A_e, R_e = trip('108870')
-at_ = CAT['assay-probe']; to_ = dict(DISC['assay-to'], name=DISC['assay-to']['name'].replace('{star}', 'Ember'))
+at_ = CAT['assay-probe']; to_ = dict(DISC['assay-to'], name='Send a flyby probe to Ember')
 PROBE_CONFIRM = f"""<div class="phone">{HUD_P0}<div class="sheet">
 <div class="sh"><button class="backlink">‹ Where to</button><span class="mono kind">REACH · PROBE</span></div>
 <div class="art">{probe_drawing()}</div>
@@ -1895,7 +1911,7 @@ PROBE_CONFIRM = f"""<div class="phone">{HUD_P0}<div class="sheet">
 
 Y_PF = 176.0
 PROBE_FLIGHT = tab_screen('Reach', 'REACH', '1 PROBE · 1 CONVERSATION', f"""<div class="sec">PROBES</div>
-<div class="probecard"><span class="thumb">{ICONS['probe']}</span><span class="pt"><b>Assay probe → Ember</b>
+<div class="probecard"><span class="thumb">{ICONS['probe']}</span><span class="pt"><b>Flyby probe → Ember</b>
 <span class="sub">launched Year {L_e:.0f} · at a tenth of light speed · {(Y_PF - L_e) * .1:.1f} ly out of {d_e:.1f}</span></span>
 <span class="pd">{tstack(f'report in {R_e - Y_PF:.0f} Years', clock((R_e - Y_PF) * 5), True)}</span></div>
 {journey('108870', Y_PF, True)}
@@ -1906,8 +1922,8 @@ PROBE_FLIGHT = tab_screen('Reach', 'REACH', '1 PROBE · 1 CONVERSATION', f"""<di
 {row('If the probe finds anything unnatural', 'tell me at once, wherever I am', '›')}
 {row('Add an order', 'e.g. if anything knocks while I am away, tell me at once', '+')}""", at_year((20, 25, '1,480 kt'), Y_PF))
 
-PROBE_MAP = frame(2, *neighbors(probe=('108870', (Y_PF - L_e) / (A_e - L_e), 'assay probe')), panel=('IN FLIGHT · 1', f'YEAR {Y_PF:.0f}', [
-    row('Assay probe → Ember', f'{(Y_PF - L_e) * .1:.1f} of {d_e:.1f} ly', tstack(f'{R_e - Y_PF:.0f} Years', clock((R_e - Y_PF) * 5), True), bar=round((Y_PF - Y_PB) / (R_e - Y_PB) * 100)),
+PROBE_MAP = frame(2, *neighbors(probe=('108870', (Y_PF - L_e) / (A_e - L_e), 'flyby probe')), panel=('IN FLIGHT · 1', f'YEAR {Y_PF:.0f}', [
+    row('Flyby probe → Ember', f'{(Y_PF - L_e) * .1:.1f} of {d_e:.1f} ly', tstack(f'{R_e - Y_PF:.0f} Years', clock((R_e - Y_PF) * 5), True), bar=round((Y_PF - Y_PB) / (R_e - Y_PB) * 100)),
     row('New warm glow · Ember', 'the probe will pass it', '›', 'other', marker=True),
     row('Uneven dimming · Lantern', 'dust, bodies in orbit, or structures', '›', 'other', marker=True)]), year=f'Year {Y_PF:.0f}', res=(20, 25, '1,480 kt'))
 
@@ -1947,7 +1963,7 @@ FLYBY_LANDS = f"""<div class="phone cine"><div class="cinetop"><span>Veyra</span
 FLYBY_REPORT = tab_screen('Report', 'REPORT', 'PROBE REPORT', f"""<button class="backlink inline">‹ All reports</button>
 <div class="art">{flyby(358, 170, 179, 88, 150)}</div>
 <h3 class="lead">Ember has been built around</h3>
-<p class="copy small">Assay probe · passed Year {A_e:.0f} · report arrived Year {R_e:.0f}</p>
+<p class="copy small">Flyby probe · passed Year {A_e:.0f} · report arrived Year {R_e:.0f}</p>
 <div class="sec">WHAT IT SAW</div>
 <dl class="facts wide ledger"><dt>Around the star</dt><dd>Countless flat bodies in a band half an AU out. The largest it saw, 40 km across.</dd>
 <dt>Each one</dt><dd>Dark toward Ember, warm behind: collectors, shedding heat.</dd>
@@ -1989,9 +2005,48 @@ EMBER_KNOWN = tab_screen('Reach', 'REACH', 'EMBER', f"""<button class="backlink 
 <div class="sec">HOW IT FILLED IN</div>
 {learned('0.1', 'A new warm glow', 'Our sky watch and star surveys.')}
 {learned(Y_CK1, 'No dust in the glow', 'Beacon’s claim, then our own measurement.')}
-{learned(f'{R_e:.0f}', 'A band of collectors, built', 'Our assay probe, passing in Year ' + f'{A_e:.0f}.')}
+{learned(f'{R_e:.0f}', 'A band of collectors, built', 'Our flyby probe, passing in Year ' + f'{A_e:.0f}.')}
 <div class="sec">NOT YET KNOWN</div>
 <p class="copy small">Who built it, and where they live. Whether they saw our probe. Whether they have ever spoken, to anyone.</p>""", HUD_F)
+
+# ---------- Eight kinds of probe: how to get there, compared for one target ----------
+# Years per light-year, how it ends, and what others could see. The catalog holds the rest.
+PTYPES = [  # (catalog id, icon, years per ly, how it ends, who could see it, bright star needed)
+    ('assay-probe', 'probe', 10, 'passes', 'launch only', False),
+    ('chip-swarm', 'chips', 5, 'passes', 'our laser beam', False),
+    ('sentinel-probe', 'sentinel', 20, 'orbits', 'braking may show', False),
+    ('lurker-probe', 'lurker', 20, 'parks far out', 'nearly invisible', False),
+    ('starlight-sail', 'lightsail', 22, 'orbits', 'nearly invisible', True),
+    ('torch-probe', 'torch', 12, 'orbits', 'exhaust, for years', False),
+    ('seed-probe', 'seed', 25, 'stays and builds', 'its industry warms', False),
+    ('antimatter-probe', 'antimatter', 5, 'orbits', 'gamma rays', False),
+]
+LOCKED_AT_300 = {'seed-probe': 'self-replicating factory', 'antimatter-probe': 'solar swarm'}
+Y_PT = 300.0
+def type_row(pid, key, ypl, ends, seen, bright, hip, lum):
+    p = CAT[pid]; d = math.dist(atlas(by_hip[hip]), HOME)
+    first = p['years'] + ypl * d + d
+    head = f'<b>{p["name"]}</b><span class="tag {"stop" if ends != "passes" else ""}">{ends}</span>'
+    if pid in LOCKED_AT_300:
+        return (f'<div class="ptype locked"><span class="kthumb">{ICONS[key]}</span><span class="pt"><span class="ph2">{head}</span><span class="sub">{p["what"].split(":")[0].split(".")[0]}.</span>'
+                f'<span class="needs">Needs: {LOCKED_AT_300[pid]}</span></span><span class="pd"></span></div>')
+    if bright and lum < 1.5:
+        return (f'<div class="ptype cant"><span class="kthumb">{ICONS[key]}</span><span class="pt"><span class="ph2">{head}</span>'
+                f'<span class="sub">Can’t brake here: the star is too dim.</span></span><span class="pd"></span></div>')
+    return (f'<button class="ptype" role="radio" aria-checked="false"><span class="kthumb">{ICONS[key]}</span><span class="pt"><span class="ph2">{head}</span>'
+            f'<span class="sub">Seen: {seen} · arrives Year {Y_PT + p["years"] + ypl * d:.0f}</span></span>'
+            f'<span class="pd">{tstack(f"{first:.0f} Years", clock(first * 5))}</span></button>')
+def how_to(hip, name, lum_note, lum):
+    d = math.dist(atlas(by_hip[hip]), HOME)
+    return f"""<div class="phone">{at_year((30, 35, '9,800 kt'), Y_PT)}<div class="sheet">
+<div class="sh"><button class="backlink">‹ Where to</button><span class="mono kind">{name.upper()} · {d:.1f} LY</span></div>
+<h3 class="lead">How to get to {name}</h3>
+<p class="copy small">{lum_note} Each type trades speed, stopping and being seen. Times run to its first report.</p>
+<div role="radiogroup" class="ptypes">{''.join(type_row(*t, hip, lum) for t in PTYPES)}</div>
+<button class="primary" disabled>Choose a probe</button>
+</div></div>"""
+TYPES_EMBER = how_to('108870', 'Ember', 'Ember is a dim orange dwarf, a fifth as bright as our star.', .22)
+TYPES_BEACON = how_to('2021', 'Beacon', 'Beacon is three times as bright as our star: a sail can brake on its light.', 3.5)
 
 # ---------- The arrival, as a moment: the screen gives way to the sky ----------
 # Line art in the app's theme, like every other screen: the drawing colors retint with it.
@@ -2074,7 +2129,7 @@ CHECKLIST = [
                   ('Cancel a project', 'done')]),
     ('Report', [('A new result, and the result in full', 'done'), ('Back after a long absence', 'todo'), ('Nothing new yet', 'todo')]),
     ('Reach', [('Empty, with standing orders', 'done'), ('Launch a probe: target, arrival and report times', 'done'), ('A probe in flight', 'done'),
-               ('A probe arrives and reports', 'done'), ('Compose a message: intent, the mind’s version, approve', 'done'),
+               ('A probe arrives and reports', 'done'), ('Probe types: how to get there, per target', 'done'), ('Compose a message: intent, the mind’s version, approve', 'done'),
                ('Broadcast: the permanent choice', 'todo'), ('Standing orders editor', 'todo')]),
     ('Mind', [('Charter and character', 'done'), ('Talk it through: the mind’s view, when asked', 'done'), ('Orders for while you are away', 'todo'),
               ('Settings: theme, replay the tour, notifications', 'todo')]),
@@ -2189,7 +2244,7 @@ SECTIONS = [
      f'<figure><figcaption><strong>4 · Sent</strong><span>Our signature, and our reply leaving for Beacon. It can’t be recalled.</span></figcaption>{SENT_CINE}</figure>'
      '<span class="pinch">then ›</span>'
      f'<figure><figcaption><strong>5 · The conversation</strong><span>The gulf between the worlds, the exchange with its years in flight, what we know of them, and how they have changed us.</span></figcaption>{GULF}</figure>'),
-    ('probe', 'Probe', 'Reach · sending a probe', f'Year {Y_PB:.0f}. The launcher and the assay probe line are built. A probe flies past its star at a tenth of light speed and beams home what it saw. Every choice shows its whole journey: build, flight, and the report crossing back. Ember is {d_e:.1f} ly away, so its report comes {R_e - Y_PB:.0f} Years from now, <span class="rtime">{clock((R_e - Y_PB) * 5)}</span> of real time.',
+    ('probe', 'Probe', 'Reach · sending a probe', f'Year {Y_PB:.0f}. The launcher and the flyby probe line are built. A probe flies past its star at a tenth of light speed and beams home what it saw. Every choice shows its whole journey: build, flight, and the report crossing back. Ember is {d_e:.1f} ly away, so its report comes {R_e - Y_PB:.0f} Years from now, <span class="rtime">{clock((R_e - Y_PB) * 5)}</span> of real time.',
      f'<figure><figcaption><strong>0 · Reach, before anything</strong><span>The first session: nothing beyond Veyra yet, and no standing orders.</span></figcaption>{REACH_EMPTY}</figure>'
      '<span class="pinch">later: Year 118 ›</span>'
      f'<figure><figcaption><strong>1 · Where to</strong><span>Every reachable target, nearest first, with its arrival, its report, and the real time until we know.</span></figcaption>{PROBE_PICK}</figure>'
@@ -2207,6 +2262,10 @@ SECTIONS = [
      f'<figure><figcaption><strong>3 · What now</strong><span>Every next step, with what it costs in time and what it reveals. Any of them, or none.</span></figcaption>{FLYBY_NEXT}</figure>'
      '<span class="pinch">Ember ›</span>'
      f'<figure><figcaption><strong>4 · Ember, as we now know it</strong><span>The same drawing as Beacon’s, filling in. Where Beacon’s founding line rings its star, Ember’s ring is empty.</span></figcaption>{EMBER_KNOWN}</figure>'),
+    ('probe-types', 'Probe types', 'Reach · eight kinds of probe', f'Later in a game, Year {Y_PT:.0f}. Physics allows several ways to cross between stars, and each is good at something different: a quick look, staying, stealth, numbers, speed, or building. They unlock over a game. Which ones can stop depends on the target: a sail can brake on starlight only at a bright star. Nothing is chosen for you.',
+     f'<figure><figcaption><strong>1 · How to get to Ember</strong><span>Every type compared for one target. Ember is too dim for a starlight sail to brake. Two types are not yet built.</span></figcaption>{TYPES_EMBER}</figure>'
+     '<span class="pinch">or Beacon ›</span>'
+     f'<figure><figcaption><strong>2 · How to get to Beacon</strong><span>The same list for a bright star: here a starlight sail can stop, quietly and cheaply.</span></figcaption>{TYPES_BEACON}</figure>'),
     ('check', 'Check', 'First contact · checking what they told us', 'Beacon said Ember’s heat is smooth, with no dust. A lie reads exactly like the truth, so the only test is to measure it ourselves. It takes 2 Years, and the answer can go either way. Their view of Ember is older than ours, so a mismatch is strong evidence of a lie, not proof.',
      f'<figure><figcaption><strong>1 · Check it</strong><span>From the finding in their message. Our space telescope, 2 Years.</span></figcaption>{CHECK_START}</figure>'
      '<span class="pinch">if it holds ›</span>'
@@ -2225,7 +2284,7 @@ AREAS = [  # (page, area as named in CHECKLIST, one-line summary, section ids)
     ('home', 'Home', 'The map at five zoom levels, star cards and clues, projects in place.', ['zoom', 'local-group', 'clues', 'map']),
     ('projects', 'Projects', 'Starting, running, finishing, queueing and cancelling projects.', ['projects', 'picker', 'upnext']),
     ('report', 'Report', 'What comes back while you are away.', ['result']),
-    ('reach', 'Reach', 'Beyond Veyra: sending a probe, following it, and what it finds.', ['probe', 'flyby']),
+    ('reach', 'Reach', 'Beyond Veyra: sending a probe, following it, what it finds, and the kinds of probe.', ['probe', 'flyby', 'probe-types']),
     ('contact', 'Contact', 'First contact: the knock, the reply, and checking what they told us.', ['knock', 'reply', 'check']),
 ]
 assert sorted(sid for *_, ids in AREAS for sid in ids) == sorted(sid for sid, *_ in SECTIONS), 'every section belongs to exactly one page'

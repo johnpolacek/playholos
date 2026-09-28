@@ -31,7 +31,7 @@ GROW · WHAT WE CAN MAKE
 [drawing: Mines and heavy lift] · Mines and heavy lift · 1,240 kt of matter in orbit, and 40 kt more each year.
 REACH · HOW FAR WE TOUCH
 [drawing: Tight-beam transmitter] · Laser links · Messages across the home system in hours.
-[drawing: Assay probe] · Precursor probes · Two probes heading out. The farthest is 900 AU away.
+[drawing: Flyby probe] · Precursor probes · Two probes heading out. The farthest is 900 AU away.
 The sky watch and star surveys have already found · three things that don’t fit.
 [See what we found]
 
@@ -99,8 +99,8 @@ Veyra · Year 0.4
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
 ENERGY · [0%] · MATTER · 1,240 kt · COMPUTE · [0%]
 REPORT · WHILE YOU WERE AWAY
-Year 0.1 · Three leads logged: an oxygen world at Twin, a new warm glow at Ember, uneven dimming at Lantern. None explained.
-Year 0 · Veyra woke.
+Year 0.1 · [drawing: Planet survey] · Three leads logged: an oxygen world at Twin, a new warm glow at Ember, uneven dimming at Lantern. None explained.
+Year 0 · [drawing: Veyra] · Veyra woke.
 News lands when its light does. When a project finishes, its result appears here.
 TOUR · 4 OF 6
 
@@ -306,7 +306,7 @@ HOW TO FIND OUT · EARLIEST ANSWER
 Look closer · Infrared telescope · tells dust from companions · 18 Years · 01:30:00
 Listen harder · Listen to Ember · opens after the telescope · later
 Speak · A message, then their reply · tells them we exist · 24.4 Years · 02:02:06
-Send something · An assay probe · flies 92 Years, reports 9.2 later · 101 Years · 08:26:31
+Send something · A flyby probe · flies 92 Years, reports 9.2 later · 101 Years · 08:26:31
 or tap a faint star ›
 
 #### 3 · A faint star · Too dim for Veyra’s eyes, so it keeps its catalog name. Nothing unusual yet.
@@ -530,7 +530,7 @@ Start a project · [Close · ×]
 - [drawing: Broadcast beacon] · Broadcast beacon · Everyone in range learns you exist: friends and threats alike. · E 20% · Everyone who can hear, will. It cannot be taken back. · Announces us · 4 Years · 00:20:00
 LATER · NEEDS SOMETHING FIRST
 - [drawing: Launcher] · Launcher · Required to send anything to another star. · E 25% · C 10% · 5,000 kt · Easier to spot · Needs: Orbital foundry · 24 Years · 02:00:00
-- [drawing: Assay probe] · Assay probe · See a star up close. The only way to be sure what is there. · E 20% · C 15% · 4,000 kt · Easier to spot · Needs: Launcher + Pulsar timing array · 12 Years · 01:00:00
+- [drawing: Flyby probe] · Flyby probe · See a star up close, soonest. The only way to be sure what is there. · E 20% · C 15% · 4,000 kt · One look, in passing. · Easier to spot · Needs: Launcher + Pulsar timing array · 12 Years · 01:00:00
 later: Year 22 ›
 
 #### 4 · Not enough compute · Starting Listen to Ember would need 120% of this year’s compute.
@@ -619,10 +619,10 @@ Veyra · Year 4.4
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
 ENERGY · [25%] · MATTER · 1,200 kt · COMPUTE · [15%]
 REPORT · WHILE YOU WERE AWAY
-Year 4.4 · New · Transit watch finished. · Lantern dims every 212 days, and no two dips look the same. · [See the result ›]
-Year 0.4 · Infrared telescope started. Done in Year 18.4, · 01:10:00 · from now.
-Year 0.4 · Transit watch started on Lantern.
-Year 0 · Veyra woke.
+Year 4.4 · [drawing: Transit watch] · New · Transit watch finished. · Lantern dims every 212 days, and no two dips look the same. · [See the result ›]
+Year 0.4 · [drawing: Infrared telescope] · Infrared telescope started. Done in Year 18.4, · 01:10:00 · from now.
+Year 0.4 · [drawing: Transit watch] · Transit watch started on Lantern.
+Year 0 · [drawing: Veyra] · Veyra woke.
 News lands when its light does. This came from light that was already reaching us.
 see the result ›
 
@@ -674,7 +674,7 @@ CLUES · 3 · YEAR 4.4
 # Holos · Reach
 
 ## Reach · sending a probe
-Year 118. The launcher and the assay probe line are built. A probe flies past its star at a tenth of light speed and beams home what it saw. Every choice shows its whole journey: build, flight, and the report crossing back. Ember is 9.2 ly away, so its report comes 113 Years from now, · 09:26:31 · of real time.
+Year 118. The launcher and the flyby probe line are built. A probe flies past its star at a tenth of light speed and beams home what it saw. Every choice shows its whole journey: build, flight, and the report crossing back. Ember is 9.2 ly away, so its report comes 113 Years from now, · 09:26:31 · of real time.
 
 #### 0 · Reach, before anything · The first session: nothing beyond Veyra yet, and no standing orders.
 Veyra · Year 0.4
@@ -691,7 +691,7 @@ Veyra · Year 118.0
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
 ENERGY · [35%] · MATTER · 5,200 kt · COMPUTE · [40%]
 Send a probe · [Close · ×]
-An assay probe flies past its star at a tenth of light speed, looks, and beams home what it saw. Times below run from now to its report.
+A flyby probe flies past its star at a tenth of light speed, looks, and beams home what it saw. Times below run from now to its report.
 [drawing: The five targets placed by distance from Veyra, from Gliese 832 at 7.4 light-years to Twin at 19.9; labels: 5 ly, 10 ly, 15 ly, 20 ly, Veyra, Gliese 832, Ember, Beacon, Lantern, Twin]
 WHERE TO · NEAREST FIRST
 - Gliese 832 · 7.4 ly · nothing unusual seen · arrives Year 204 · report Year 211 · 93 Years · 07:45:49
@@ -707,9 +707,9 @@ Veyra · Year 118.0
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
 ENERGY · [35%] · MATTER · 5,200 kt · COMPUTE · [40%]
 [‹ Where to] · REACH · PROBE
-[drawing: An assay probe: a sail and a small instrument body; labels: a tenth of light speed, sail and a small body of instruments, not to scale]
+[drawing: A flyby probe: a sail and a small instrument body; labels: a tenth of light speed, sail and a small body of instruments, not to scale]
 
-### Send an assay probe to Ember
+### Send a flyby probe to Ember
 It passes Ember at a tenth of light speed, crossing its inner system in hours: pictures, heat and air, up close. It can’t stop.
 THE JOURNEY
 Build and launch · Year 118 → 130 · 01:00:00
@@ -729,7 +729,7 @@ Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
 ENERGY · [20%] · MATTER · 1,480 kt · COMPUTE · [25%]
 REACH · 1 PROBE · 1 CONVERSATION
 PROBES
-[drawing: Assay probe] · Assay probe → Ember · launched Year 130 · at a tenth of light speed · 4.6 ly out of 9.2 · report in 55 Years · 04:36:31
+[drawing: Flyby probe] · Flyby probe → Ember · launched Year 130 · at a tenth of light speed · 4.6 ly out of 9.2 · report in 55 Years · 04:36:31
 It passes Ember in Year 222. We learn what it saw in Year 231, when its report crosses back.
 CONVERSATIONS
 [Beacon · the conversation continues · their last message, Year 169 · ›]
@@ -742,10 +742,10 @@ on the map ›
 Veyra · Year 176
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
 ENERGY · [20%] · MATTER · 1,480 kt · COMPUTE · [25%]
-[drawing: Stars view; labels: Veyra, Ember, Epsilon Indi · 00:46:03, Lantern, Gliese 783 A · 00:51:20, Beacon, Beta Hydri, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760, assay probe, 01:15:00, Twin · oxygen world, Sol · 01:39:37, 5 ly]
+[drawing: Stars view; labels: Veyra, Ember, Epsilon Indi · 00:46:03, Lantern, Gliese 783 A · 00:51:20, Beacon, Beta Hydri, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760, flyby probe, 01:15:00, Twin · oxygen world, Sol · 01:39:37, 5 ly]
 [World] · [System] · [selected: Stars] · [Region] · [Galaxy]
 IN FLIGHT · 1 · YEAR 176
-- Assay probe → Ember · 4.6 of 9.2 ly · 55 Years · 04:36:31
+- Flyby probe → Ember · 4.6 of 9.2 ly · 55 Years · 04:36:31
 - New warm glow · Ember · the probe will pass it · ›
 - Uneven dimming · Lantern · dust, bodies in orbit, or structures · ›
 
@@ -772,7 +772,7 @@ REPORT · PROBE REPORT
 [drawing: Ember, ringed by a band of flat bodies, with our probe’s path through the system; labels: the band · half an AU out, our probe · 2 hours across, Ember, cold giant planet, far out →, 0.5 AU]
 
 ### Ember has been built around
-Assay probe · passed Year 222 · report arrived Year 231
+Flyby probe · passed Year 222 · report arrived Year 231
 WHAT IT SAW
 Around the star · Countless flat bodies in a band half an AU out. The largest it saw, 40 km across. · Each one · Dark toward Ember, warm behind: collectors, shedding heat. · Together · They catch about 1.5% of Ember’s light: the glow we measured. · Also · The cold giant planet, as known. No dust. · Who built it · Not seen. Nothing answered as the probe passed.
 THE CLUE
@@ -807,9 +807,49 @@ solid: measured · dashed: inferred · ?: not yet seen
 HOW IT FILLED IN
 Year 0.1 · A new warm glow · Our sky watch and star surveys.
 Year 52.4 · No dust in the glow · Beacon’s claim, then our own measurement.
-Year 231 · A band of collectors, built · Our assay probe, passing in Year 222.
+Year 231 · A band of collectors, built · Our flyby probe, passing in Year 222.
 NOT YET KNOWN
 Who built it, and where they live. Whether they saw our probe. Whether they have ever spoken, to anyone.
+
+## Reach · eight kinds of probe
+Later in a game, Year 300. Physics allows several ways to cross between stars, and each is good at something different: a quick look, staying, stealth, numbers, speed, or building. They unlock over a game. Which ones can stop depends on the target: a sail can brake on starlight only at a bright star. Nothing is chosen for you.
+
+#### 1 · How to get to Ember · Every type compared for one target. Ember is too dim for a starlight sail to brake. Two types are not yet built.
+Veyra · Year 300.0
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [30%] · MATTER · 9,800 kt · COMPUTE · [35%]
+[‹ Where to] · EMBER · 9.2 LY
+
+### How to get to Ember
+Ember is a dim orange dwarf, a fifth as bright as our star. Each type trades speed, stopping and being seen. Times run to its first report.
+- [drawing: Flyby probe] · Flyby probe · passes · Seen: launch only · arrives Year 404 · 113 Years · 09:26:31
+- [drawing: Chip swarm] · Chip swarm · passes · Seen: our laser beam · arrives Year 350 · 59 Years · 04:56:17
+- [drawing: Sentinel probe] · Sentinel probe · orbits · Seen: braking may show · arrives Year 504 · 213 Years · 17:47:00
+- [drawing: Lurker] · Lurker · parks far out · Seen: nearly invisible · arrives Year 504 · 213 Years · 17:47:00
+[drawing: Starlight sail] · Starlight sail · orbits · Can’t brake here: the star is too dim.
+[[drawing: Torch probe] · Torch probe · orbits · Seen: exhaust, for years · arrives Year 435 · 144 Years · 11:58:37]
+[drawing: Seed probe] · Seed probe · stays and builds · Stops, mines the target’s asteroids, and builds instruments or more probes there. · Needs: self-replicating factory
+[drawing: Antimatter probe] · Antimatter probe · orbits · The most efficient engine physics allows. · Needs: solar swarm
+[Choose a probe]
+or Beacon ›
+
+#### 2 · How to get to Beacon · The same list for a bright star: here a starlight sail can stop, quietly and cheaply.
+Veyra · Year 300.0
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [30%] · MATTER · 9,800 kt · COMPUTE · [35%]
+[‹ Where to] · BEACON · 9.3 LY
+
+### How to get to Beacon
+Beacon is three times as bright as our star: a sail can brake on its light. Each type trades speed, stopping and being seen. Times run to its first report.
+- [drawing: Flyby probe] · Flyby probe · passes · Seen: launch only · arrives Year 405 · 114 Years · 09:30:52
+- [drawing: Chip swarm] · Chip swarm · passes · Seen: our laser beam · arrives Year 350 · 60 Years · 04:58:39
+- [drawing: Sentinel probe] · Sentinel probe · orbits · Seen: braking may show · arrives Year 506 · 215 Years · 17:55:17
+- [drawing: Lurker] · Lurker · parks far out · Seen: nearly invisible · arrives Year 506 · 215 Years · 17:55:17
+- [drawing: Starlight sail] · Starlight sail · orbits · Seen: nearly invisible · arrives Year 514 · 224 Years · 18:38:10
+- [drawing: Torch probe] · Torch probe · orbits · Seen: exhaust, for years · arrives Year 435 · 145 Years · 12:03:45
+[drawing: Seed probe] · Seed probe · stays and builds · Stops, mines the target’s asteroids, and builds instruments or more probes there. · Needs: self-replicating factory
+[drawing: Antimatter probe] · Antimatter probe · orbits · The most efficient engine physics allows. · Needs: solar swarm
+[Choose a probe]
 
 # Holos · Contact
 
@@ -1162,11 +1202,12 @@ A new result, and the result in full
 Back after a long absence
 Nothing new yet
 
-### Reach · 5 of 7
+### Reach · 6 of 8
 Empty, with standing orders
 Launch a probe: target, arrival and report times
 A probe in flight
 A probe arrives and reports
+Probe types: how to get there, per target
 Compose a message: intent, the mind’s version, approve
 Broadcast: the permanent choice
 Standing orders editor

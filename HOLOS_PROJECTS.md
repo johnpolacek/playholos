@@ -129,7 +129,7 @@ Know: learn what is out there, and answer the clues.
 - **Uses:** energy 10% a year, compute 30% a year
 - **Needs:** Deep-field receiver
 - **Effect:** Probes can navigate between stars.
-- **Unlocks:** Assay probe
+- **Unlocks:** Flyby probe
 
 **Neutrino watch** · 24 Years · `02:00:00` · Grounded · quiet
 
@@ -255,7 +255,7 @@ Grow: more energy, matter and compute every year, so everything goes faster.
 - **Uses:** compute 20% a year, 5,000 kt of matter at start
 - **Needs:** Ice harvest
 - **Effect:** +60% energy every year.
-- **Unlocks:** Laser sail array, Fusion torch ship
+- **Unlocks:** Laser sail array, Torch probe, Fusion torch ship
 
 ### Tier 3 · the first week
 
@@ -277,7 +277,7 @@ Grow: more energy, matter and compute every year, so everything goes faster.
 - **Uses:** energy 30% a year, compute 30% a year, 60 Mt of matter at start
 - **Needs:** Orbital foundry + Cold compute annex
 - **Effect:** Every Grow project after this is 40% faster.
-- **Unlocks:** Kilometer interferometer, Solar swarm, Seedship
+- **Unlocks:** Kilometer interferometer, Solar swarm, Seed probe, Seedship
 
 **Solar swarm** · 120 Years · `10:00:00` · Speculative · loud
 
@@ -287,7 +287,7 @@ Grow: more energy, matter and compute every year, so everything goes faster.
 - **Uses:** energy 20% a year, compute 20% a year, 100 Mt of matter at start
 - **Needs:** Self-replicating factory + Mass driver
 - **Effect:** Energy ×4. Visible as warm glow for light-years.
-- **Unlocks:** Star lifting
+- **Unlocks:** Star lifting, Antimatter probe
 
 ### Tier 4 · the long works
 
@@ -334,8 +334,8 @@ Reach: touch other stars. Messages, probes, ships.
 - **Basis:** Staged launch from orbit, built on the foundry.
 - **Uses:** energy 25% a year, compute 10% a year, 5,000 kt of matter at start
 - **Needs:** Orbital foundry
-- **Unlocks:** Solar lens observatory, Relay station, Assay probe, Seedship
-- **Can open:** Send an assay probe to {star}
+- **Unlocks:** Solar lens observatory, Relay station, Flyby probe, Torch probe, Seedship, Antimatter probe
+- **Can open:** Send a probe to {star}
 
 **Relay station** · 20 Years · `01:40:00` · Plausible · quiet
 
@@ -346,33 +346,82 @@ Reach: touch other stars. Messages, probes, ships.
 - **Needs:** Launcher
 - **Unlocks:** Mind transmitter
 
-**Assay probe** · 12 Years · `01:00:00` · Plausible · noticeable
+**Flyby probe** · 12 Years · `01:00:00` · Plausible · noticeable
 
-- **Why:** See a star up close. The only way to be sure what is there.
-- **What:** Flies to a star, looks, and reports back. Travel adds 10 years per light-year.
-- **Basis:** Fusion or sail-driven flyby probes at a tenth of light speed.
+- **Why:** See a star up close, soonest. The only way to be sure what is there.
+- **What:** Flies past a star at a tenth of light speed, looks the whole way in, and beams home what it saw. Can’t stop.
+- **Basis:** Fusion or sail-driven flyby probes: 10 years per light-year.
 - **Uses:** energy 20% a year, compute 15% a year, 4,000 kt of matter at start
 - **Needs:** Launcher + Pulsar timing array
-- **Unlocks:** Sentinel probe, Send an assay probe to {star}
+- **Effect:** One look, in passing.
+- **Unlocks:** Sentinel probe, Send a probe to {star}
 
 ### Tier 3 · the first week
 
 **Sentinel probe** · 20 Years · `01:40:00` · Plausible · noticeable
 
 - **Why:** A permanent watcher at a star you care about.
-- **What:** Parks at a star and watches for decades.
-- **Basis:** Decelerating probes need far more energy than flybys; magnetic sails can help.
+- **What:** Brakes with a magnetic sail against interstellar gas, then orbits its star and watches for decades.
+- **Basis:** Magnetic sail braking, as proposed by Robert Zubrin and Dana Andrews: about 20 years per light-year.
 - **Uses:** energy 25% a year, compute 20% a year, 50 Mt of matter at start
-- **Needs:** Assay probe
+- **Needs:** Flyby probe
+- **Effect:** Stops and stays. Its braking may show.
+- **Unlocks:** Lurker, Seed probe
+
+**Lurker** · 20 Years · `01:40:00` · Plausible · quiet
+
+- **Why:** Watch a star without being noticed.
+- **What:** Brakes like a sentinel, but stops in a system’s cold outskirts and watches from there.
+- **Basis:** Magnetic sail braking; parks among comets or distant companions.
+- **Uses:** energy 20% a year, compute 15% a year, 40 Mt of matter at start
+- **Needs:** Sentinel probe
+- **Effect:** Nearly invisible. Sees less, from farther.
 
 **Laser sail array** · 60 Years · `05:00:00` · Speculative · loud
 
-- **Why:** Probes arrive twice as fast, but the beam can be seen.
+- **Why:** Opens the fastest probes, but the beam can be seen.
 - **What:** A huge laser that pushes light sails to a fifth of light speed.
 - **Basis:** Beamed sail propulsion, as in Breakthrough Starshot.
 - **Uses:** energy 50% a year, compute 15% a year, 40 Mt of matter at start
 - **Needs:** Fusion plant + Orbital foundry
-- **Effect:** Probes travel 5 years per light-year. The beam is visible.
+- **Effect:** Pushes chip swarms and starlight sails. The beam is visible.
+- **Unlocks:** Starlight sail, Chip swarm
+
+**Starlight sail** · 10 Years · `00:50:00` · Speculative · quiet
+
+- **Why:** Stop at a bright star, quietly, for almost nothing.
+- **What:** A light sail that brakes on its target star’s light and gravity, then stays.
+- **Basis:** Photogravitational braking, as modeled by René Heller and Michael Hippke: about 22 years per light-year.
+- **Uses:** energy 10% a year, compute 10% a year, 10 Mt of matter at start
+- **Needs:** Laser sail array
+- **Effect:** Stops only at bright stars. Nearly invisible.
+
+**Chip swarm** · 4 Years · `00:20:00` · Speculative · loud
+
+- **Why:** The fastest look, at many stars at once.
+- **What:** Thousands of gram-sized sails, pushed by the laser array to a fifth of light speed.
+- **Basis:** Breakthrough Starshot’s gram-scale sails.
+- **Uses:** energy 30% a year, compute 10% a year
+- **Needs:** Laser sail array
+- **Effect:** 5 years per light-year. Can’t stop. The launch beam is visible.
+
+**Torch probe** · 24 Years · `02:00:00` · Speculative · loud
+
+- **Why:** Get there fast, and stay.
+- **What:** Carries fusion fuel to brake hard: it arrives fast, and stops.
+- **Basis:** Fusion rocket designs such as Project Daedalus and Icarus, with fuel kept for braking.
+- **Uses:** energy 30% a year, compute 20% a year, 60 Mt of matter at start
+- **Needs:** Fusion plant + Launcher
+- **Effect:** About 12 years per light-year. Its exhaust shows for years.
+
+**Seed probe** · 30 Years · `02:30:00` · Speculative · noticeable
+
+- **Why:** Turn one probe into a foothold.
+- **What:** Stops, mines the target’s asteroids, and builds instruments or more probes there.
+- **Basis:** Self-replicating seed probes, as studied by Robert Freitas.
+- **Uses:** energy 25% a year, compute 25% a year, 60 Mt of matter at start
+- **Needs:** Sentinel probe + Self-replicating factory
+- **Effect:** About 25 years per light-year. Its industry warms up.
 
 **Seedship** · 50 Years · `04:10:00` · Speculative · noticeable
 
@@ -393,6 +442,15 @@ Reach: touch other stars. Messages, probes, ships.
 - **Uses:** energy 40% a year, compute 20% a year, 800 Mt of matter at start
 - **Needs:** Fusion plant + Orbital foundry
 - **Effect:** Its exhaust can be seen for decades.
+
+**Antimatter probe** · 40 Years · `03:20:00` · Speculative · loud
+
+- **Why:** The fastest way to arrive, and stop.
+- **What:** The most efficient engine physics allows: fast out, and a hard stop.
+- **Basis:** Antimatter rockets. Making the fuel takes a large share of a star’s output.
+- **Uses:** energy 60% a year, compute 20% a year, 200 Mt of matter at start
+- **Needs:** Solar swarm + Launcher
+- **Effect:** About 5 years per light-year, and it stops. Its exhaust gives off gamma rays.
 
 **Mind transmitter** · 60 Years · `05:00:00` · Speculative · noticeable
 
@@ -530,13 +588,13 @@ These appear from results, and name their target. Braces mark where a real star,
 - **Needs:** Planet survey
 - **Appears:** When its prerequisite finishes.
 
-**Send an assay probe to {star}** · Reach · 12 Years · `01:00:00` · Plausible
+**Send a probe to {star}** · Reach · 12 Years · `01:00:00` · Plausible
 
 - **Why:** Go and see for yourself.
-- **What:** A probe with one target. Arrival and report times are shown before you commit.
-- **Basis:** Flyby probe at a tenth of light speed.
+- **What:** One probe, one target. Every type you have is compared, with its arrival and report times, before you commit.
+- **Basis:** Any probe type you have built.
 - **Uses:** energy 20% a year, compute 15% a year, 4,000 kt of matter at start
-- **Needs:** Assay probe
+- **Needs:** Flyby probe
 - **Appears:** Appears for every star with an open clue.
 
 **Reply to {sender}** · Reach · 2 Years · `00:10:00` · Grounded
@@ -550,4 +608,4 @@ These appear from results, and name their target. Braces mark where a real star,
 
 ## Counts
 
-40 catalog projects (14 know, 12 grow, 10 reach, 4 endure) and 11 discovery projects.
+46 catalog projects (14 know, 12 grow, 16 reach, 4 endure) and 11 discovery projects.
