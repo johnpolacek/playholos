@@ -1,6 +1,63 @@
-<!-- Generated from onboarding.html, home.html, projects.html, report.html, reach.html, contact.html, index.html by extract.py. Edit the mocks, not this file. -->
+<!-- Generated from onboarding.html, home.html, projects.html, report.html, reach.html, mind.html, contact.html, index.html by extract.py. Edit the mocks, not this file. -->
 
 # Holos · Onboarding
+
+## Before Year 0 · choosing a civilization
+Three candidates from the generator, each a real star with an invented world and people, and the mind they wake as. All three start equal: the same kit, stocks and budgets. They differ in character and place. The player looks closer at one, names it, and accepts its founding line. Then it wakes.
+
+#### 1 · Three candidates · Star, world, people, founding line and character, side by side. None is selected.
+BEFORE YEAR 0 · CHOOSE YOUR CIVILIZATION
+
+### Three worlds are about to wake
+Each is a real star with an invented world, where surveys leave room for one. All three start equal: the same kit, stocks and budgets. They differ in who they are, and where.
+[[drawing: Veyra, drawn in line] · Veyra · Delta Pavonis · 19.9 ly from Sol · Continents and seas, 1.12 AU out. Upright, two-handed, land-born. · Keep the lights on. Look before we speak.
+Open · Hidden
+Expand · Deepen
+Cautious · Bold
+›] · [[drawing: Sael, drawn in line] · Sael · 70 Ophiuchi A · 16.6 ly from Sol · Cloudy highlands, 0.74 AU out, with a second sun. Winged, grasping with hands and feet. · Call out first, so no one wakes alone.
+Open · Hidden
+Expand · Deepen
+Cautious · Bold
+›] · [[drawing: Maren, drawn in line] · Maren · Chara · 27.5 ly from Sol · Shallow seas and few islands, 1.1 AU out. Ocean-dwellers who remember in song. · Carry every song, so those who come will know we were.
+Open · Hidden
+Expand · Deepen
+Cautious · Bold
+›]
+Tap one to see it up close. Nothing is chosen until you name it.
+tap Veyra ›
+
+#### 2 · Up close · What is real and what is invented, why surveys allow it, and the mind it wakes as.
+[‹ All three]
+[drawing: Veyra, drawn in line]
+
+### Veyra
+Delta Pavonis · 19.9 ly from Sol
+[drawing: Delta Pavonis, its habitable zone, and Veyra’s orbit within it; labels: Veyra · invented, Delta Pavonis · real, habitable zone, 1 AU]
+Star · real · Delta Pavonis. Yellow, a little older and brighter than the Sun. · World · invented · Continents and seas, about Earth’s size, in the habitable zone. · Surveys · No world this size, this far out, could have been found there yet. · People · invented · Upright, two-handed, land-born. Many nations, one world. · In its sky · Beacon, the brightest star. It has its own names for five more.
+THE MIND IT WAKES AS
+FOUNDING LINE · “Keep the lights on. Look before we speak.”
+Open · Hidden
+Expand · Deepen
+Cautious · Bold
+Same kit as the other two. Its star and world shape how it grows later, not where it starts.
+[Choose Veyra]
+choose ›
+
+#### 3 · Name it, and accept its charter · The name is its people’s own, and can change. The founding line is how the mind will reason when asked.
+[‹ Veyra] · NAME IT, AND ACCEPT ITS CHARTER
+
+### Who will you be?
+[drawing: Veyra, ringed by its founding line; labels: KEEP THE LIGHTS ON · LOOK BEFORE WE SPEAK]
+ITS NAME
+Veyra · What its people call their world. Keep it, or give it another.
+ITS CHARTER
+FOUNDING LINE · “Keep the lights on. Look before we speak.” · The mind reasons from this when you ask its view. It never decides for you.
+ITS CHARACTER · WHERE IT STARTS
+Open · Hidden
+Expand · Deepen
+Cautious · Bold
+What you do moves these. The civilization you choose can’t be changed in this cohort.
+[Accept, and wake]
 
 ## First seconds · waking, and what you inherit
 After choosing and naming a civilization. The mind wakes, then sees what Veyra already has: Earth’s instruments and industry today, plus about a century. The kit found the opening clues. Every project goes beyond it.
@@ -720,6 +777,7 @@ Nothing new since you looked · News arrives when its light does. Here is what i
 ON ITS WAY · SOONEST FIRST
 - The sentinel’s next report · from Ember, once a Year · 1 Year · 00:05:00
 - Deep flash watch finishes · a project · 3.7 Years · 00:18:30
+- Their emissary’s earliest answer · our answer of Year 450 passes it on its way · 6.8 Years · 00:34:00
 - Beacon’s earliest reply · to our answer of Year 450 · 16.6 Years · 01:22:53
 - The meeting with Beacon · the date we both agreed to · 48 Years · 04:00:00
 LAST NEWS
@@ -950,6 +1008,157 @@ WHERE IT COULD GO · MOVED BY ITS SAIL ON EMBER’S WIND
 - Withdraw to the brown dwarfs · Watch from 1,500 AU out. Safest, and sees far less. · report Year 507 · 04:52:03 · takes decades · ›
 - Stay where it is · Keep watching from just outside the band. · report Year 467 · 01:32:03 · no change · ›
 - Talk it through with the mind ›
+
+## Reach · broadcasting
+Year 520. The broadcast beacon is built. A knock goes to one star; a broadcast goes to every star at once, and never stops. It carries its own address: anyone who hears it learns where we are. It is composed like any message, but no reader is known, so the mind can’t shape it for them. Then the permanent choice, the send, and the map as the shell spreads.
+
+#### 1 · What will travel · Your words, the mind’s version, and how anyone will read it.
+Veyra · Year 520.0
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [35%] · MATTER · 14,200 kt · COMPUTE · [40%]
+[‹ Reach] · REACH · BROADCAST
+WHAT YOU WANT TO SAY
+Tell everyone who can hear that we are here, who we are, and that we answer anyone who knocks. Nothing about Beacon or our probes.
+THE MIND’S VERSION · WHAT WILL TRAVEL
+WHO WE ARE · OUR FOUNDING LINE · “Keep the lights on. Look before we speak.”
+AN OFFER · “Knock, and we will answer.”
+Our signature · leads it: our pulses, so any answer can find us.
+Where we are · needs no part. A broadcast’s source is its address.
+Beacon, our probes: nothing here names them.
+Broadcasting goes against our lean toward hidden.
+HOW ANYONE WILL READ IT · NO READER KNOWN
+“We are Veyra. We keep the lights on, and we look before we speak. Knock, and we will answer.”
+The mind can’t shape it for listeners it doesn’t know, so it goes in our own voice, repeating.
+[Talk it through with the mind ›]
+[Edit] · [Who will hear it]
+who will hear it ›
+
+#### 2 · Everyone, for good · Who hears it and when, soonest first, and who already knows where we are.
+Veyra · Year 520.0
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [35%] · MATTER · 14,200 kt · COMPUTE · [40%]
+[‹ Broadcast] · REACH · BROADCAST
+
+### Everyone, for good
+It goes every way at once, at light speed, and keeps going. Anyone who hears it learns where we are.
+[drawing: Who hears the broadcast, placed by distance: the nearest known stars within 11 years, Twin at 20, every star of the region by Year 590; labels: on, every star of the region, Veyra, Ember · Beacon · Lantern · Frost, Twin, Year 530, Year 540, Year 560, Year 590]
+WHO HEARS IT · SOONEST FIRST
+Gliese 832 · 7.4 ly · nothing seen there · Year 527.4 · 00:36:54
+Ember · 9.2 ly · knows where we are since Year 458.6 · Year 529.2 · 00:46:03
+Beacon · 9.3 ly · knows since Year 12.6 or earlier · Year 529.3 · 00:46:27
+Lantern · 10.3 ly · never heard from us · Year 530.3 · 00:51:20
+Frost · 10.8 ly · knows since Year 418 or earlier · Year 530.8 · 00:54:11
+Twin · 19.9 ly · oxygen world · never heard from us · Year 539.9 · 01:39:37
+Every star of the region · 1,212 within 50 ly of Twin, most never heard · by Year 590 · 05:49:37
+You can stop sending. What has left keeps going: past the region’s edge by Year 640, fading, never stopping.
+Sending: E 10% each Year while it sends
+[Hold to broadcast]
+hold to broadcast ›
+
+#### 3 · Sent · It leaves in every direction.
+Veyra · Year 520.0
+[drawing: Our broadcast leaving Veyra in every direction; labels: Ember, Beacon, Frost, Twin]
+BROADCASTING
+
+### To everyone.
+In 9 Years it passes Ember and Beacon. In 20, Twin. By Year 590, every star in the region.
+You can stop sending. You can’t unsend.
+[Back to Reach]
+Year 531 ›
+
+#### 4 · On the map · The shell at 11 light-years, spreading at light speed. Five stars we know have heard it.
+Veyra · Year 531.0
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [45%] · MATTER · 14,600 kt · COMPUTE · [40%]
+[drawing: Stars view; labels: Veyra, Ember, Epsilon Indi · 00:46:03, Lantern, Gliese 783 A · 00:51:20, Beacon, Beta Hydri, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760, our broadcast · 11 ly, 01:15:00, Twin · oxygen world, Sol · 01:39:37, 5 ly]
+[World] · [System] · [selected: Stars] · [Region] · [Galaxy]
+SPREADING · 11 LY OUT · YEAR 531
+- Our broadcast · 11 of 70 ly · the whole region by Year 590 · 59 Years · 04:54:37
+- Heard it by now · 5 stars we know · Gliese 832, Ember, Beacon, Lantern, Frost
+- Next we know of · Twin · oxygen world · 19.9 ly · 8.9 Years · 00:44:37
+- Earliest answer · from Ember · if they answer the moment it lands · Year 538.4 · 00:37:06
+
+# Holos · Mind
+
+## Mind · standing orders, near and far
+Year 448.2, just back from 108 Years away. Standing orders are how the mind acts without you. Each is written the way a message is: you say what you want, the mind shows exactly what it will do, and tries it on your last absence. Orders for a far mind cross at light speed, so they land late and are followed alone. Opens from the Mind tab, and from Reach for far places.
+
+#### 1 · While you are away · Every order, and what each did last time. Far ones are marked with their light-time.
+Veyra · Year 448.2
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [45%] · MATTER · 14,800 kt · COMPUTE · [50%]
+MIND · STANDING ORDERS
+What each order did while you were away.
+[drawing: Your last absence, Year 340 to 448, with each time an order acted; labels: Year 340, Year 448, project started, message held, woke you]
+HERE AT VEYRA · IT ACTS AT ONCE
+- Keep running projects · started 4 from Up next · 3 finished · ›
+- Never send messages · held Beacon’s two messages, and Frost’s knock · ›
+- If anything knocks, wake me · woke you once: Frost, Year 440 · ›
+- If a probe finds anything unnatural, tell me · not needed · ›
+FAR AWAY · THE SENTINEL AT EMBER
+Orders reach it 9.2 Years after you send them. What it does, we learn 9.2 Years late.
+- Keep watching the band · report every Year · ›
+- If anything comes toward it, withdraw · outward, sail full open · ›
+- Never transmit toward Ember · reports go only home, as a narrow beam · ›
+- Add an order
+add an order ›
+
+#### 2 · A new order · What you want, the mind’s version, what it overrides, and a test on your last absence.
+Veyra · Year 448.2
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [45%] · MATTER · 14,800 kt · COMPUTE · [50%]
+[‹ Orders] · NEW ORDER · HERE AT VEYRA
+WHAT YOU WANT
+If Beacon writes about the meeting while I’m away, answer anything about when and where. Wake me for the rest.
+THE MIND’S VERSION · WHAT IT WILL DO
+WHEN · A message from Beacon arrives
+IF IT ASKS ONLY WHEN OR WHERE WE MEET · Answer in our voice, adding nothing new about us
+ANYTHING ELSE · Hold it unanswered, and wake you
+Never send messages: this makes one exception to it, for Beacon, about the meeting.
+Whether we meet at all · isn’t when or where. That stays yours.
+TRIED ON YOUR LAST ABSENCE · YEAR 340 → 448
+Year 371 · Beacon wrote · Held. It wasn’t about a meeting.
+Year 426 · Beacon’s invitation · Held, and woke you. It asks whether we meet, not only when.
+[drawing: Your last absence, Year 340 to 448, with each time an order acted; labels: held, held · woke you, Year 340, Year 448, answered 0 · held 2 · woke you 1]
+[Edit] · [Approve]
+or, for the sentinel ›
+
+#### 3 · An order for a far mind · It crosses to Ember at light speed. Until it lands, the sentinel follows what it has.
+Veyra · Year 448.2
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [45%] · MATTER · 14,800 kt · COMPUTE · [50%]
+[‹ Orders] · NEW ORDER · THE SENTINEL AT EMBER
+WHAT YOU WANT
+If anything there signals at it, report at once. Don’t wait for the yearly report.
+THE MIND’S VERSION · WHAT IT WILL DO
+WHEN · Something at Ember signals toward the sentinel · Light, radio, or the band turning toward it. The sentinel judges, from what it sees then.
+DO · Report home at once, out of turn
+It still won’t answer: “Never transmit toward Ember” stands.
+THE ORDER’S JOURNEY · AT LIGHT SPEED
+[drawing: Our order leaving Veyra for the sentinel at Ember, 9.2 light-years away; labels: Veyra, Ember, the sentinel: old orders until they land, our order · lands Year 457.4, if it acts, word comes home 9.2 Years later]
+Crosses to Ember · Year 448.2 → 457.4 · 00:46:03
+When used, word comes home · 9.2 Years later · 00:46:03
+Until Year 457.4 it follows the orders it has. It reads this one in its own moment, knowing what it knows then.
+It can’t be recalled. A later order would land later still.
+[Send to the sentinel]
+sent ›
+
+#### 4 · In flight · The new order at home, and the sentinel’s order crossing to Ember.
+Veyra · Year 448.2
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [45%] · MATTER · 14,800 kt · COMPUTE · [50%]
+MIND · STANDING ORDERS
+HERE AT VEYRA · IT ACTS AT ONCE
+- New · If Beacon writes about the meeting · answers when and where · wakes you for the rest · ›
+- Keep running projects · started 4 from Up next · 3 finished · ›
+- Never send messages · held Beacon’s two messages, and Frost’s knock · ›
+- If anything knocks, wake me · woke you once: Frost, Year 440 · ›
+- If a probe finds anything unnatural, tell me · not needed · ›
+FAR AWAY · THE SENTINEL AT EMBER
+- If anything there signals, report at once · in flight · lands Year 457.4 · 9.2 Years · 00:46:03
+- Keep watching the band · report every Year · ›
+- If anything comes toward it, withdraw · outward, sail full open · ›
+- Never transmit toward Ember · reports go only home, as a narrow beam · ›
 
 # Holos · Contact
 
@@ -1312,6 +1521,118 @@ WHAT WE COULD DO · ANY, OR NONE
 - Knock at Ember from home · Our own voice, from Veyra. · arrives in 9.2 Years · 00:46:03 · ›
 - Talk it through with the mind ›
 
+## Contact · meeting Beacon
+Beacon’s second letter asked to meet in Year 500. Its emissary, one of their minds aboard a torch craft launched in Year 405, was already coming. Answering, the player sees every way to meet, each with what it needs: meet the emissary here, host one of their minds, send one of ours, or meet halfway. Here we meet the emissary beside our ice world. Light crosses between us in about an hour: the first conversation with no Years between the lines.
+
+#### 1 · The invitation · Held for you while you were away. Their voice, then what it carried: a proposal, a fact, an offer.
+Veyra · Year 448.3
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [45%] · MATTER · 14,800 kt · COMPUTE · [50%]
+REACH · MESSAGE
+[‹ Beacon]
+[drawing: Beacon’s signature] · Beacon · SENT YEAR 416.7 · ARRIVED YEAR 426 · HELD FOR YOU
+“Light is slow for questions. One of us is coming, and stops in Year 500 wherever you say. Meet it, or send one of you.”
+WHAT IT CARRIED
+A PROPOSAL · Meet, in Year 500
+A FACT · THEIR EMISSARY · It left Beacon in Year 405, at a tenth of light speed, carrying one of them. · Our sky watch saw its launch flare in Year 414.3, unexplained until now. · [See its path ›]
+AN OFFER · “Send one of you to us”: a mind, sent as light, to run on their machines.
+[Answer]
+see its path ›
+
+#### 2 · Its path, in time · Years against distance. Light lines are nearly flat; the emissary’s is steep. Where our answer crosses it, it hears us.
+Veyra · Year 448.3
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [45%] · MATTER · 14,800 kt · COMPUTE · [50%]
+REACH · THEIR EMISSARY
+[‹ Message]
+
+### Beacon’s emissary, in time
+Years go up, distance across. Light crosses in 9.3 Years; the emissary takes 95.
+[drawing: Years against distance: the emissary crossing from Beacon to Veyra over 95 Years, and an answer sent in Year 450 meeting it in Year 454.4; labels: Veyra, Beacon, 405, 414.3, 426, 450, 500, now, it hears us · 454.4, an answer sent in 450, it stops here · Year 500, their emissary, their letter, its launch flare, years ↑ · distance →]
+WHAT WE KNOW
+Left Beacon · Year 405, at a tenth of light speed · Seen leaving · Year 414.3: the flare our sky watch logged · Stops here · Year 500, braking over its last two Years · Its own clock · About half a Year behind ours when it stops · Hears us · Year 454.4, if we answer in Year 450. Beacon, in 459.3. · Carries · One of their minds. Its news of home ends in Year 490.7. · [Answer]
+answer ›
+
+#### 3 · Ways to meet · Year 450. Each way, what it needs, and when it could happen. The emissary comes either way. Any, or none.
+Veyra · Year 450.0
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [45%] · MATTER · 14,900 kt · COMPUTE · [50%]
+[‹ Message] · REACH · BEACON
+
+### Meet Beacon?
+Their emissary arrives in Year 500 either way. What we choose is where it stops, and who else goes.
+[drawing: When each way to meet could happen: the emissary and a hosted mind in Year 500, our own mind in 519, halfway in 530; labels: their emissary, their mind, hosted, our mind, sent, meet halfway, Year 450, Year 500, Year 535]
+WAYS TO MEET · ANY, OR NONE
+- Meet their emissary here · Tell it where to stop. Our answer passes it on its way. · it hears us Year 454.4 · 00:22:00 · ›
+- Host one of them here · Their mind, sent as light, on sealed machines we build: 12 Years. · arrives Year 500 · 04:10:00 · ›
+- Send one of us to them · A copy of ours, as light. Needs the mind transmitter: 60 Years. · arrives Year 519 · 05:46:27 · ›
+- Meet halfway · Both send a craft 4.6 ly out. Ours can’t by Year 500. · earliest Year 530 · 06:40:00 · ›
+- Say nothing · It stops where it chooses. · now · ›
+Nothing sent can be recalled.
+[Talk it through with the mind ›]
+meet it here ›
+
+#### 4 · Where it stops · Three places, what it would see from each, and how long each answer takes. Nothing is chosen for you.
+Veyra · Year 450.0
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [45%] · MATTER · 14,900 kt · COMPUTE · [50%]
+[‹ Ways to meet] · REACH · BEACON
+
+### Where should it stop?
+It sees what light reaches it there. What it sees, Beacon learns 9.3 Years later.
+[drawing: Three places the emissary could stop: in orbit around Veyra, beside the ice world, or at the edge of our system; labels: Veyra, in orbit, ice world, 9 AU, the edge, 1,000 AU, their emissary · from Beacon, not to scale]
+- At the edge · 1,000 AU out · It sees our star, and little else of us. · each answer · 00:00:10
+- Beside the ice world · 9 AU · It sees our works across the system, but not Veyra up close. · each answer · <00:00:01
+- In orbit around Veyra · It sees everything, up close. · each answer · <00:00:01
+It hears where to stop in Year 454.4, from our answer. Times are for light out and back, in real time.
+[Talk it through with the mind ›] · [Choose a place]
+Year 500 ›
+
+#### 5 · It has stopped · Its braking trail fades beside the ice world.
+Veyra · Year 500.0
+[drawing: Beacon’s emissary, stopped beside our ice world, its braking trail fading behind it]
+BEACON’S EMISSARY · BESIDE THE ICE WORLD
+
+### It has stopped.
+After 95 Years crossing, it braked hard for two: a flare we watched from Year 498. It waits beside the ice world, where we asked.
+95 Years by our clocks. About half a Year less by its own.
+[Meet it] · [Later]
+meet it ›
+
+#### 6 · Talking live · Answers in under a tenth of a second, while the clock runs. It speaks for Beacon as of its last word from home.
+Veyra · Year 500.1
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [30%] · MATTER · 13,400 kt · COMPUTE · [35%]
+REACH · MEETING · LIVE
+[drawing: Beacon’s signature] · Beacon’s emissary · BESIDE THE ICE WORLD · 1.2 LIGHT-HOURS · LIVE
+Since Year 500.1. Each answer returns in under a tenth of a second. The clock runs: every real minute here is 0.2 Years at home.
+THE EMISSARY · “You chose the cold world. From here we see your light, and not your cities. That is courteous.”
+Why come yourselves?
+WENT AS · A QUESTION
+THE EMISSARY · “Questions die in the dark. By the time an answer comes home, the one who asked has changed. Here I can ask, and listen, and ask again.”
+How old is what you know of Beacon?
+WENT AS · A QUESTION
+THE EMISSARY · “The last word from home left in Year 490.7. I speak for Beacon as it was then.”
+THE EMISSARY · IT CARRIES A PROPOSAL · “We share what we see. Neither of us sends anything armed toward the other.” · [See the proposal ›]
+What you want to say… · [Send · ↑]
+the proposal ›
+
+#### 7 · A pact? · What it offers, what each answer would share, and when Beacon hears. Nothing is chosen for you.
+Veyra · Year 500.3
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [30%] · MATTER · 13,400 kt · COMPUTE · [35%]
+[‹ Meeting] · REACH · BEACON
+
+### A pact with Beacon?
+It offers this for Beacon as of Year 490.7. Beacon hears our answer in Year 509.6.
+THEIR PROPOSAL · “We share what we see. Neither of us sends anything armed toward the other.” · Nothing enforces it. Each side can only watch the other keep it.
+OUR ANSWER
+- Accept it all · All we see goes to them, our sentinel’s view of Ember too. They may not know of it. · 9.3 Years · 00:46:27
+- Share, but promise nothing on arms · Half the pact. It shows them where we stop. · 9.3 Years · 00:46:27
+- Ask for time · The meeting goes on. The clock keeps running. · now
+- Decline · It stays or leaves as its own orders say. · now
+[Talk it through with the mind ›] · [Choose an answer]
+
 ---
 
 _Appendix: working-session mocks, not the current design._
@@ -1319,7 +1640,7 @@ _Appendix: working-session mocks, not the current design._
 ## Checklist
 Everything the game needs mocked, and where each stands. Also written to CHECKLIST.md.
 
-### Onboarding · 4 of 6
+### Onboarding · 6 of 6
 Choose your civilization: three candidates
 Name it and accept its charter
 Landing: the first seconds on Veyra
@@ -1327,7 +1648,7 @@ What you inherit: the starting kit
 Guided tour
 Hand-off to the clues
 
-### Home · 7 of 8
+### Home · 8 of 8
 Five zoom levels
 Local Group and galaxy close-ups
 Projects on the map, with timers
@@ -1352,7 +1673,7 @@ Back after a long absence
 Replaying an absence on the map
 Nothing new yet
 
-### Reach · 7 of 9
+### Reach · 9 of 9
 Empty, with standing orders
 Launch a probe: target, arrival and report times
 A probe in flight
@@ -1363,13 +1684,13 @@ Compose a message: intent, the mind’s version, approve
 Broadcast: the permanent choice
 Standing orders editor
 
-### Mind · 2 of 4
+### Mind · 3 of 4
 Charter and character
 Talk it through: the mind’s view, when asked
 Orders for while you are away
 Settings: theme, replay the tour, notifications
 
-### Contact · 17 of 21
+### Contact · 18 of 22
 Away: the notification
 The arrival, as a moment
 The knock arrives
@@ -1389,6 +1710,7 @@ We find them first: a clue confirmed
 A broadcast sweeps past
 A visitor brakes into our system
 A far mind met them first
+A meeting in person: how, where, and talking live
 Crossed knocks
 The silent one: no answer, ever
 

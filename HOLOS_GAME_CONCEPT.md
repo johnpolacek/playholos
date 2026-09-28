@@ -1,6 +1,6 @@
 # Holos — Game Concept
 
-Last updated: September 26, 2026.
+Last updated: September 28, 2026.
 
 ## Status
 
@@ -46,6 +46,7 @@ Iain M. Banks's Culture books are an inspiration: a powerful Mind responsible fo
 - Commonality across post-singularity civilizations is assumed. Species and homeworld shape a mind's context; players choose its guidance and priorities, including how much the organic past matters.
 - Start on one inhabited planet, comparable to a speculative Earth about 100 years ahead, with substantial astronomical knowledge and knowledge of the home system's resources.
 - **Three civilization choices per player,** from holos-game's generator: each has a cradle, lineage, dial sheet, and archetype.
+- **Choosing (2026-09-28):** the three sit side by side: real star, invented world and people, founding line, and dials. None is preselected. The player looks closer at one, keeps or changes its name, and accepts its founding line. The choice holds for the cohort. The mocks' candidates are Veyra (Delta Pavonis), Sael (70 Ophiuchi A) and Maren (Chara); surveys leave room for all three worlds.
 - **Identical starts.** All three share one set of starting ladders and stocks. The archetype shows only in dials, counsel, AI behavior, and flavor. Dials may price particular acts and bound colony charters; that is character, not strength.
 - Host-star and planet differences shape later growth, not starting capacity.
 
@@ -74,7 +75,9 @@ One shared clock advances continuously, including offline. **5 real minutes = 1 
 | 8 hours | 96 years |
 | 24 hours | 288 years |
 
-The session rhythm is **spinning plates:** several projects, investigations, missions, and relationships at once. Attention comes from decision points, surprising observations, competing resource demands, and autonomous minds asking for guidance. Players leave guidance for their absence, and AI acts on it. Automation controls and notification rules are not specified.
+The session rhythm is **spinning plates:** several projects, investigations, missions, and relationships at once. Attention comes from decision points, surprising observations, competing resource demands, and autonomous minds asking for guidance. Players leave guidance for their absence, and AI acts on it. Notification rules are not specified.
+
+- **Standing orders (2026-09-28):** written like a message. The player says what they want; the mind shows exactly what it will do (when, if, do, otherwise) and which order it overrides, then tries it on the player's last absence. Orders for a far mind cross at light speed, can't be recalled, and are read in that mind's own moment. Until one lands, the far mind follows the orders it has.
 
 **On screen, two clocks have two voices.** Game time is words in the interface sans: *18 Years*, *Year 12*, *light that left 9 Years ago*. Real time is a countdown in the mono: `01:30:00`, `2d 04:10:00`, and past a year `24y 19d`. Where both apply, years sit above the countdown. Only running items tick; a fixed duration reads `01:30:00`.
 
@@ -131,6 +134,7 @@ Shown in the [mocks](explorations/home-mocks/index.html). Their sample civilizat
 - **In transit the player can do nothing,** for the real-time crossing: 20 ly is 100 minutes, 100 ly about 8.3 hours.
 - Divergence is found on arrival. Arriving at a colony that no longer aligns is emigration: the player takes up its values. A wounded player escapes the same way, as a transmission others can intercept.
 - Tight beam is the standard link.
+- **Meeting in person (2026-09-28):** minds talk live only when close. Every way to get close is offered, each with what it needs and when it could happen: meet a craft carrying one of their minds, host their mind sent as light on sealed machines, send ours as light, or both send craft halfway. Close in, answers return in under a second of real time, and the clock keeps running. A craft's mind speaks for home as of the last word that reached it.
 - **Open:** the authority and limits of autonomous minds, and how they interpret guidance.
 
 ## Communication and deception
@@ -138,6 +142,7 @@ Shown in the [mocks](explorations/home-mocks/index.html). Their sample civilizat
 - **The mind composes messages.** The player writes intent as free text; the mind translates it into holos-game's typed message parts; the player approves before sending. Only typed parts travel. If an intent does not fit the grammar, the mind says so.
 - The mind knows only what the sender knows.
 - **Each civilization has its own voice.** The same parts read differently by archetype, dials, species, homeworld, and lineage. Facts stay identical, outside the flavored prose. Each reading is written fresh and frozen at send. Without the model, the archetype voice bank renders it.
+- **Broadcasting (2026-09-28):** a broadcast goes every way at once and carries its own address. It is composed like any message, but no reader is known, so it goes in our own voice. Before sending, the player sees who hears it and when, and who already knows where we are. Sending can stop; what has left keeps going. Sending takes a share of each year's energy (sample value).
 - **Lies are forged parts,** identical in form to true ones. The approval screen marks them for the sender only; the game records them privately so a caught lie can enter dossiers. AI civilizations forge too.
 - **A received message reads voice first, then parts (2026-09-28).** The sender's prose comes first, as the mind reads it; the parts follow as facts. A finding shows how it would move our odds if true, and how to check it ourselves. When composing, the mind lists what will travel, what was left out and why, and how the recipient will read it.
 - **A claim can be checked, at a cost in time (2026-09-28).** Checking uses our own instruments and lands in the Report. It can hold or fail. A failed check shows how likely a lie is against honest causes like older light, never a verdict. Each conversation keeps a record both ways: what we know about them, and what they know about us.
@@ -163,6 +168,6 @@ Shown in the [mocks](explorations/home-mocks/index.html). Their sample civilizat
 
 1. What can particular instruments resolve, clue by clue? The starting kit produces the initial clues.
 2. What are the starting kit's exact stocks and rates? Its contents are set; its numbers are sample values.
-3. How are autonomous minds instructed, and how do they handle surprises and authority?
+3. How far does an autonomous mind's authority reach, and how does it handle surprises? Standing orders set how it is instructed.
 4. How are claims, uncertainty, provenance, and information age shown to players?
 5. Why did no older civilizations expand through the galaxy first?

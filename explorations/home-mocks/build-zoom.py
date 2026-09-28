@@ -254,7 +254,7 @@ def system():
 STAR_NAMES = {'108870': ('Ember', 'Epsilon Indi'), '99461': ('Lantern', 'Gliese 783 A'), '2021': ('Beacon', 'Beta Hydri'),
               '105858': ('Frost', 'Gamma Pavonis'), '1599': ('Pearl', 'Zeta Tucanae'), '106440': (None, 'Gliese 832'), '105090': (None, 'Lacaille 8760')}
 LEADS = ('108870', '99461')
-def neighbors(time_demo=False, after_result=False, select=None, beam=None, probe=None):
+def neighbors(time_demo=False, after_result=False, select=None, beam=None, probe=None, shell=None):
     el = 58; cam, k, origin = camera(el, 205), 11, (195, 196)
     s = [stipple(3, 60)]; labels = Labels([(8, 8, 110, 40)])
     rings = []
@@ -263,6 +263,9 @@ def neighbors(time_demo=False, after_result=False, select=None, beam=None, probe
         s.append(f'<ellipse cx="{origin[0]}" cy="{origin[1]}" rx="{ly * k}" ry="{ry:.1f}" fill="none" stroke="{INK}" stroke-width=".7" stroke-dasharray="3 4" opacity=".4"></ellipse>')
         rings.append((origin[0] - ly * k + 4, origin[1] + 3, label))
     stars = [p for p in CENSUS if 0.05 < math.dist(p[:3], HOME) <= 15]
+    if shell:   # a sphere of light around home; seen from any angle, its outline is a circle
+        r_ly, shell_label = shell
+        s.append(f'<circle cx="{origin[0]}" cy="{origin[1]}" r="{fmt(r_ly * k)}" fill="{YOU}" fill-opacity=".06" stroke="{YOU}" stroke-width="1.4" stroke-dasharray="6 4"></circle>')
     for p in sorted(stars, key=lambda p: -sum((a - b) * c for a, b, c in zip(p[:3], HOME, (0, 0, 1)))):
         x, y = project(p[:3], HOME, cam, k, origin)
         base = (p[0], HOME[1], p[2])
@@ -307,6 +310,7 @@ def neighbors(time_demo=False, after_result=False, select=None, beam=None, probe
         s.append(f'<line x1="{origin[0]}" y1="{origin[1]}" x2="{fmt(ex_)}" y2="{fmt(ey_)}" stroke="{YOU}" stroke-width="1.6" stroke-dasharray="5 4"></line>')
         mx_, my_ = (origin[0] + ex_) / 2, (origin[1] + ey_) / 2
         s.append(labels.place(mx_, my_, 'message · 00:46:00', 10, YOU, 600, ((0, -10), (0, 18), (10, 4), (-10, 4))))
+    if shell: s.append(labels.place(origin[0], origin[1] - shell[0] * k, shell[1], 10, YOU, 600, ((0, -6), (0, 14), (40, -6), (-40, -6))))
     for x, y, label in rings: s.append(labels.place(x, y, label, 9, MUTED, None, ((0, 0), (0, -8), (0, 10))))
     sol = project((0, 0, 0), HOME, cam, k, origin)
     dx, dy = sol[0] - origin[0], sol[1] - origin[1]; n = math.hypot(dx, dy)
@@ -2231,12 +2235,19 @@ REPLAY = frame(2, *neighbors(probe=('108870', (Y_RP - Y_SL) / (Y_SA - Y_SL), 'se
 
 def coming(title, sub, years, real):
     return row(title, sub, tstack(years, real, True))
+# Beacon's meeting (Contact page): its emissary left Beacon in Year 405 at a tenth of light speed and stops here in 500.
+# Our answer of Year 450 passes it on its way, so it can answer long before Beacon can.
+Y_INV, Y_EM_L, Y_EM_A, Y_ANS = 426.0, 405.0, 500.0, 450.0
+Y_EM_HEARS = round((Y_ANS + d_b + .1 * Y_EM_L) / 1.1, 1)   # where our light meets it, closing at a tenth of light speed
+Y_EM_REPLY = round(2 * Y_EM_HEARS - Y_ANS, 1)
+Y_MEET, Y_PACT = 500.1, 500.3; Y_BCN_HEARS = round(Y_PACT + d_b, 1)
 Y_NN = 452.0
 NOTHING_NEW = tab_screen('Report', 'REPORT', 'NOTHING NEW', f"""<div class="empty"><svg width="120" height="70" viewBox="0 0 120 70" aria-hidden="true"><circle cx="60" cy="56" r="4" fill="#1F7A96"></circle><path d="M20 56 A40 40 0 0 1 100 56" fill="none" stroke="#171716" stroke-dasharray="3 4" opacity=".5"></path><path d="M36 56 A24 24 0 0 1 84 56" fill="none" stroke="#171716" stroke-dasharray="2 4" opacity=".35"></path></svg>
 <strong>Nothing new since you looked</strong><span>News arrives when its light does. Here is what is already on its way.</span></div>
 <div class="sec">ON ITS WAY · SOONEST FIRST</div>
 {coming('The sentinel’s next report', 'from Ember, once a Year', '1 Year', '00:05:00')}
 {coming('Deep flash watch finishes', 'a project', '3.7 Years', '00:18:30')}
+{coming('Their emissary’s earliest answer', 'our answer of Year 450 passes it on its way', f'{Y_EM_REPLY - Y_NN:.1f} Years', clock((Y_EM_REPLY - Y_NN) * 5))}
 {coming('Beacon’s earliest reply', 'to our answer of Year 450', f'{2 * d_b - 2:.1f} Years', clock((2 * d_b - 2) * 5))}
 {coming('The meeting with Beacon', 'the date we both agreed to', f'{500 - Y_NN:.0f} Years', clock((500 - Y_NN) * 5))}
 <div class="sec">LAST NEWS</div>
@@ -2309,14 +2320,519 @@ INHERIT = f"""<div class="phone"><div class="onb">
 <button class="primary">See what we found</button>
 </div></div>"""
 
+# ---------- Styles for the screens below ----------
+tour_css = tour_css.replace('</style>', '''.gthumb{display:block;width:56px;height:56px}.civ{display:grid;grid-template-columns:56px 1fr 10px;gap:12px;align-items:start;padding:10px 12px;border:1px solid var(--faint);border-radius:12px;background:var(--paper);width:100%;box-sizing:border-box}
+.civ .pt{gap:3px}.civ .pt b{font-size:17px}.civ .sub{font-size:11.5px;color:var(--muted);line-height:1.35}.civ q{font-size:13px;font-style:italic;margin:2px 0 0}.civ .chev{color:var(--muted);align-self:center}
+.minidials .dial{grid-template-columns:54px 1fr 54px;font-size:10.5px;padding:3px 0}.minidials .dial s{width:9px;height:9px;top:-3.5px}
+.namefield{display:flex;flex-direction:column;gap:4px;padding:10px 12px;border:1.5px solid var(--ink);border-radius:10px;background:var(--paper)}.namefield b{font-size:24px;font-weight:600}
+.namefield i{display:inline-block;width:1.5px;height:22px;margin-left:2px;background:var(--ink);vertical-align:-3px}.namefield .sub{font-size:12px;color:var(--muted)}
+.ent.test{border-left-color:var(--muted)}.opt.act.cant{background:none;opacity:.6}
+.livehead{display:grid;grid-template-columns:36px 1fr auto;gap:10px;align-items:center;margin:2px 0 2px}.livehead>span{display:flex;flex-direction:column;gap:1px}.livehead b{font-size:15px}.livehead .mono{font-size:9.5px;letter-spacing:.08em;color:var(--muted)}
+.live{display:flex;align-items:center;gap:5px;font-size:10px;letter-spacing:.1em;color:var(--other)!important}.live i{width:8px;height:8px;border-radius:50%;background:var(--other)}
+.say.them{align-self:flex-start;display:flex;flex-direction:column;gap:3px;background:var(--paper);border:1px solid var(--faint);border-left:3px solid var(--other);font-style:italic}
+.say.them .mono{color:var(--other);font-style:normal}.say.them .chip{font-style:normal;margin-top:4px}
+.went{align-self:flex-end;margin-top:-5px;font-size:9.5px;letter-spacing:.06em;color:var(--muted)}
+.charter .sub{font-size:12px;color:var(--muted);line-height:1.4}
+.hearrow{display:grid;grid-template-columns:9px 1fr auto;gap:10px;align-items:center;padding:6px 0;border-bottom:1px solid var(--rowline)}.hearrow .pt{font-size:13.5px}.hearrow .sub{font-size:11px;color:var(--muted)}
+</style>''')
+
+# ---------- Choosing a civilization: three candidates, then one up close, then its name and charter ----------
+# Real stars from HYG; each world and people is invented where surveys leave room. All three start equal:
+# the same kit, stocks and budgets. Dials are Open ↔ Hidden, Expand ↔ Deepen, Cautious ↔ Bold, as on the Mind tab.
+CANDIDATES = [  # (key, name, hip, star, world, people, charter, dials)
+    ('veyra', 'Veyra', '99240', 'Delta Pavonis', 'Continents and seas, 1.12 AU out', 'Upright, two-handed, land-born',
+     'Keep the lights on. Look before we speak.', (62, 40, 30)),
+    ('sael', 'Sael', '88601', '70 Ophiuchi A', 'Cloudy highlands, 0.74 AU out, with a second sun', 'Winged, grasping with hands and feet',
+     'Call out first, so no one wakes alone.', (22, 25, 68)),
+    ('maren', 'Maren', '61317', 'Chara', 'Shallow seas and few islands, 1.1 AU out', 'Ocean-dwellers who remember in song',
+     'Carry every song, so those who come will know we were.', (40, 78, 45)),
+]
+def civ_glyph(key, name):
+    bodies = {
+        'veyra': '<circle cx="29" cy="30" r="19"></circle><path d="M14 23 q6 -5 12 -1 q4 3 9 -1 M17 37 q7 4 13 -2 q3 -3 8 0" stroke-width=".9"></path><circle cx="8" cy="8" r="3"></circle>',
+        'sael': '<circle cx="25" cy="32" r="18"></circle><path d="M9 26 q16 -4 32 0 M8 34 q17 3 34 0 M12 42 q13 3 26 0" stroke-width=".8" stroke-dasharray="3 2"></path>'
+                '<circle cx="8" cy="8" r="3"></circle><circle cx="46" cy="10" r="2"></circle><path d="M46 4 V6 M46 14 V16 M40 10 H42 M50 10 H52" stroke-width=".8"></path>',
+        'maren': '<circle cx="29" cy="30" r="19"></circle>' + ''.join(f'<path d="M{x} {y} q3 -2.5 6 0 t6 0 t6 0" stroke-width=".8"></path>' for x, y in ((15, 23), (18, 31), (14, 39)))
+                 + f'<circle cx="37" cy="24" r="1.3" fill="{INK}"></circle><circle cx="40" cy="36" r="1" fill="{INK}"></circle><circle cx="8" cy="8" r="3"></circle>',
+    }
+    return icon(bodies[key], name)
+_globes = [0]
+def globe(seed, cx, cy, r, sea=.62, n=56, lw=1.0, extra=''):
+    # A small invented world: coastlines at the sea level's percentile, shaded from the left.
+    _globes[0] += 1; gid = f'globe{_globes[0]}'
+    f = noise3(seed); step = 2 * r / (n - 1); tilt, spin = math.radians(18), math.radians(40)
+    field = []
+    for j in range(n):
+        row_ = []
+        for i in range(n):
+            x, y = (i * step - r) / r, (j * step - r) / r
+            if x * x + y * y > .998: row_.append(None); continue
+            z = math.sqrt(1 - x * x - y * y)
+            y2, z2 = y * math.cos(tilt) - z * math.sin(tilt), y * math.sin(tilt) + z * math.cos(tilt)
+            x3, z3 = x * math.cos(spin) + z2 * math.sin(spin), -x * math.sin(spin) + z2 * math.cos(spin)
+            row_.append(f(x3, y2, z3))
+        field.append(row_)
+    vals = sorted(v for rw in field for v in rw if v is not None)
+    level = vals[min(len(vals) - 1, int(len(vals) * sea))]
+    return (f'<clipPath id="{gid}"><circle cx="{fmt(cx)}" cy="{fmt(cy)}" r="{fmt(r)}"></circle></clipPath>'
+            f'<circle cx="{fmt(cx)}" cy="{fmt(cy)}" r="{fmt(r)}" fill="{PAPER}"></circle><g clip-path="url(#{gid})">'
+            f'<path d="{contours(field, n, cx - r, cy - r, step, level)}" fill="none" stroke="{INK}" stroke-width="{lw}" stroke-linecap="round"></path>{extra}'
+            f'<path d="M{fmt(cx)},{fmt(cy - r)} A{fmt(r)},{fmt(r)} 0 0,1 {fmt(cx)},{fmt(cy + r)} A{fmt(r * .4)},{fmt(r)} 0 0,0 {fmt(cx)},{fmt(cy - r)} Z" '
+            f'transform="rotate(-24 {fmt(cx)} {fmt(cy)})" fill="url(#hatch)" opacity=".75"></path></g>'
+            f'<circle cx="{fmt(cx)}" cy="{fmt(cy)}" r="{fmt(r)}" fill="none" stroke="{INK}" stroke-width="{fmt(lw * 1.3)}"></circle>')
+CIV_WORLDS = {'veyra': (5, .62), 'sael': (11, .42), 'maren': (23, .95)}   # (noise seed, share of the globe under sea)
+def civ_globe(key, name, size=56):
+    seed, sea = CIV_WORLDS[key]; c, r = size / 2, size * .36
+    extra = ''
+    if key == 'sael':   # cloud bands over the highlands
+        extra = ''.join(f'<path d="M{fmt(c + 2 - r)} {fmt(c + 4 + dy)} Q{fmt(c + 2)} {fmt(c + 4 + dy - r * .3)} {fmt(c + 2 + r)} {fmt(c + 4 + dy)}" fill="none" stroke="{INK}" stroke-width=".6" stroke-dasharray="3 2"></path>' for dy in (-r * .5, 0, r * .5))
+    s = [globe(seed, c + 2, c + 4, r, sea, 44, .7, extra)]
+    s.append(f'<circle cx="{fmt(size * .14)}" cy="{fmt(size * .14)}" r="{fmt(size * .05)}" fill="none" stroke="{INK}" stroke-width=".9"></circle>')   # its sun
+    if key == 'sael':   # and 70 Ophiuchi B, a second, smaller sun
+        sx, sy = size * .86, size * .13
+        s.append(f'<circle cx="{fmt(sx)}" cy="{fmt(sy)}" r="{fmt(size * .035)}" fill="none" stroke="{INK}" stroke-width=".8"></circle>'
+                 + ''.join(f'<line x1="{fmt(sx + size * .06 * math.cos(math.radians(a)))}" y1="{fmt(sy + size * .06 * math.sin(math.radians(a)))}" x2="{fmt(sx + size * .09 * math.cos(math.radians(a)))}" y2="{fmt(sy + size * .09 * math.sin(math.radians(a)))}" stroke="{INK}" stroke-width=".7"></line>' for a in range(0, 360, 60)))
+    return f'<svg width="{size}" height="{size}" viewBox="0 0 {size} {size}" role="img" aria-label="{name}, drawn in line">{"".join(s)}</svg>'
+def dials(v):
+    ends = (('Open', 'Hidden'), ('Expand', 'Deepen'), ('Cautious', 'Bold'))
+    return ''.join(f'<div class="dial"><span>{a}</span><b><s style="left:{p}%"></s></b><span>{b}</span></div>' for (a, b), p in zip(ends, v))
+def civ_card(c):
+    key, name, hip, star, world_, people, charter, v = c
+    d = math.dist(atlas(by_hip[hip]), (0, 0, 0))
+    return (f'<button class="civ" role="radio" aria-checked="false"><span class="gthumb">{civ_globe(key, name)}</span>'
+            f'<span class="pt"><b>{name}</b><span class="sub">{star} · {d:.1f} ly from Sol</span><span class="sub">{world_}. {people}.</span>'
+            f'<q>{charter}</q><span class="minidials">{dials(v)}</span></span><span class="chev">›</span></button>')
+CHOOSE = f"""<div class="phone"><div class="onb">
+<span class="mono kick">BEFORE YEAR 0 · CHOOSE YOUR CIVILIZATION</span>
+<h3 class="lead">Three worlds are about to wake</h3>
+<p class="copy">Each is a real star with an invented world, where surveys leave room for one. All three start equal: the same kit, stocks and budgets. They differ in who they are, and where.</p>
+<div role="radiogroup" class="choices">{''.join(civ_card(c) for c in CANDIDATES)}</div>
+<p class="copy small">Tap one to see it up close. Nothing is chosen until you name it.</p>
+</div></div>"""
+
+def cand_system():
+    # Veyra's star, its habitable zone and Veyra's orbit, drawn to scale from the star's luminosity.
+    w, h, cx, cy, k, tilt, lum = 358, 160, 179, 76, 70, .36, 1.24
+    hz0, hz1 = .95 * math.sqrt(lum), 1.67 * math.sqrt(lum)
+    s = [stipple(83, 40, w, h)]
+    s.append(f'<ellipse cx="{cx}" cy="{cy}" rx="{fmt(hz1 * k)}" ry="{fmt(hz1 * k * tilt)}" fill="url(#hatchLight)"></ellipse>'
+             f'<ellipse cx="{cx}" cy="{cy}" rx="{fmt(hz0 * k)}" ry="{fmt(hz0 * k * tilt)}" fill="{PAPER}"></ellipse>')
+    for au, col, wd in ((.45, INK, .7), (1.12, YOU, 1.2)):
+        s.append(f'<ellipse cx="{cx}" cy="{cy}" rx="{fmt(au * k)}" ry="{fmt(au * k * tilt)}" fill="none" stroke="{col}" stroke-width="{wd}" opacity=".85"></ellipse>')
+    s.append(f'<circle cx="{cx}" cy="{cy}" r="6" fill="{PAPER}" stroke="{INK}" stroke-width="1.3"></circle>')
+    for i in range(8):
+        a = math.radians(i * 45)
+        s.append(f'<line x1="{fmt(cx + 9 * math.cos(a))}" y1="{fmt(cy + 9 * math.sin(a))}" x2="{fmt(cx + 13 * math.cos(a))}" y2="{fmt(cy + 13 * math.sin(a))}" stroke="{INK}" stroke-width=".9"></line>')
+    vx, vy = cx + 1.12 * k * math.cos(math.radians(62)), cy + 1.12 * k * tilt * math.sin(math.radians(62))
+    s.append(f'<circle cx="{fmt(vx)}" cy="{fmt(vy)}" r="4.5" fill="{YOU}"></circle>' + text(vx + 10, vy + 4, 'Veyra · invented', 9.5, YOU, 'start', 600))
+    top = cy - hz1 * k * tilt
+    s.append(f'<line x1="{cx}" y1="{cy - 15}" x2="{cx}" y2="{fmt(top - 2)}" stroke="{INK}" stroke-width=".6"></line>' + text(cx, top - 6, 'Delta Pavonis · real', 9.5, INK, 'middle'))
+    s.append(text(cx + hz1 * k - 2, cy + hz1 * k * tilt + 14, 'habitable zone', 8.5, MUTED, 'end'))
+    s.append(f'<line x1="12" y1="{h - 12}" x2="{12 + k}" y2="{h - 12}" stroke="{INK}" stroke-width="1"></line>' + text(12, h - 17, '1 AU', 8.5, INK))
+    return f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" font-family="IBM Plex Mono, monospace" role="img" aria-label="Delta Pavonis, its habitable zone, and Veyra’s orbit within it">{"".join(s)}</svg>'
+VEYRA_DIALS = CANDIDATES[0][7]
+CIV_FULL = f"""<div class="phone"><div class="onb">
+<button class="backlink inline">‹ All three</button>
+<div class="overhead"><span class="thumb">{civ_globe('veyra', 'Veyra', 54)}</span><span><h3 class="lead">Veyra</h3><span class="sub">Delta Pavonis · 19.9 ly from Sol</span></span></div>
+<div class="art">{cand_system()}</div>
+{ledger([('Star · real', 'Delta Pavonis. Yellow, a little older and brighter than the Sun.'),
+         ('World · invented', 'Continents and seas, about Earth’s size, in the habitable zone.'),
+         ('Surveys', 'No world this size, this far out, could have been found there yet.'),
+         ('People · invented', 'Upright, two-handed, land-born. Many nations, one world.'),
+         ('In its sky', 'Beacon, the brightest star. It has its own names for five more.')])}
+<div class="sec">THE MIND IT WAKES AS</div>
+<div class="charter"><span class="mono">FOUNDING LINE</span><strong>“Keep the lights on. Look before we speak.”</strong></div>
+<div class="minidials">{dials(VEYRA_DIALS)}</div>
+<p class="copy small">Same kit as the other two. Its star and world shape how it grows later, not where it starts.</p>
+<button class="primary">Choose Veyra</button>
+</div></div>"""
+def ringed_world():
+    w, h, cx, cy, r, R = 358, 176, 179, 118, 54, 102
+    s = [stipple(151, 50, w, h), f'<defs><path id="ring-veyra" d="M{cx - R},{cy} A{R},{R} 0 0,1 {cx + R},{cy}"></path></defs>']
+    s.append(f'<text font-size="9" letter-spacing="2.3" fill="{YOU}" text-anchor="middle"><textPath href="#ring-veyra" startOffset="50%">KEEP THE LIGHTS ON · LOOK BEFORE WE SPEAK</textPath></text>')
+    s.append(globe(5, cx, cy, r, .62, 90, 1.1))
+    return f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" font-family="IBM Plex Mono, monospace" role="img" aria-label="Veyra, ringed by its founding line">{"".join(s)}</svg>'
+CIV_NAME = f"""<div class="phone"><div class="onb">
+<button class="backlink inline">‹ Veyra</button>
+<span class="mono kick">NAME IT, AND ACCEPT ITS CHARTER</span>
+<h3 class="lead">Who will you be?</h3>
+<div class="art">{ringed_world()}</div>
+<div class="sec">ITS NAME</div>
+<div class="namefield"><b>Veyra<i></i></b><span class="sub">What its people call their world. Keep it, or give it another.</span></div>
+<div class="sec">ITS CHARTER</div>
+<div class="charter"><span class="mono">FOUNDING LINE</span><strong>“Keep the lights on. Look before we speak.”</strong><span class="sub">The mind reasons from this when you ask its view. It never decides for you.</span></div>
+<div class="sec">ITS CHARACTER · WHERE IT STARTS</div>
+{dials(VEYRA_DIALS)}
+<p class="copy small">What you do moves these. The civilization you choose can’t be changed in this cohort.</p>
+<button class="primary">Accept, and wake</button>
+</div></div>"""
+
+# ---------- Standing orders: what the mind does while you are away, near and far ----------
+# Year 448.2, just back from 108 Years away. Orders at home act at once. Orders for a far mind cross at light
+# speed: this one, sent now, lands at Ember in 457.4, a Year before the builders flash at the sentinel.
+Y_SO = 448.2; Y_SO_ARR = round(Y_SO + d_e, 1)
+HUD_SO = at_year((45, 50, '14,800 kt'), Y_SO)
+def orders_strip(marks, middle='', legend=False, w=358):
+    # Year 340 → 448 on one line, a tick wherever an order acted: blue for projects, amber for messages held.
+    x0, x1, y = 8, w - 8, 12; X = lambda yr: x0 + (yr - Y_AW0) / (Y_AW1 - Y_AW0) * (x1 - x0)
+    s = [f'<line x1="{x0}" y1="{y}" x2="{x1}" y2="{y}" stroke="{INK}" stroke-width=".8" opacity=".6"></line>']
+    for yr, kind, lab in marks:
+        col = YOU if kind == 'started' else OTHER
+        s.append(f'<line x1="{fmt(X(yr))}" y1="{y - 7}" x2="{fmt(X(yr))}" y2="{y + 7}" stroke="{col}" stroke-width="1.8"></line>')
+        if kind == 'woke': s.append(f'<circle cx="{fmt(X(yr))}" cy="{y}" r="5" fill="none" stroke="{OTHER}" stroke-width="1"></circle>')
+        if lab: s.append(text(X(yr), y + 18, lab, 8, col, 'middle', 600))
+    by = y + 18 + (14 if any(l for *_, l in marks) else 0)
+    s.append(text(x0, by, f'Year {Y_AW0:.0f}', 8, MUTED) + text(x1, by, f'Year {Y_AW1:.0f}', 8, MUTED, 'end'))
+    if middle: s.append(text(w / 2, by, middle, 8, INK, 'middle', 600))
+    if legend:
+        by += 14; lx = 8
+        for col, ring, lab in ((YOU, False, 'project started'), (OTHER, False, 'message held'), (OTHER, True, 'woke you')):
+            s.append(f'<line x1="{lx}" y1="{by - 8}" x2="{lx}" y2="{by + 1}" stroke="{col}" stroke-width="1.8"></line>'
+                     + (f'<circle cx="{lx}" cy="{by - 3.5}" r="4" fill="none" stroke="{col}" stroke-width="1"></circle>' if ring else '')
+                     + text(lx + 7, by, lab, 8, MUTED))
+            lx += 16 + len(lab) * 5.2
+    h = by + 5
+    return f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" font-family="IBM Plex Mono, monospace" role="img" aria-label="Your last absence, Year 340 to 448, with each time an order acted">{"".join(s)}</svg>'
+def tried(year, what, result):
+    return f'<div class="ent test"><span class="y mono">Year {year}</span><span class="t"><b>{what}</b><span>{result}</span></span></div>'
+HOME_ORDERS = [('Keep running projects', 'started 4 from Up next · 3 finished'), ('Never send messages', 'held Beacon’s two messages, and Frost’s knock'),
+               ('If anything knocks, wake me', 'woke you once: Frost, Year 440'), ('If a probe finds anything unnatural, tell me', 'not needed')]
+FAR_ORDERS = [('Keep watching the band', 'report every Year'), ('If anything comes toward it, withdraw', 'outward, sail full open'),
+              ('Never transmit toward Ember', 'reports go only home, as a narrow beam')]
+ACTED = [(344, 'started', ''), (366, 'started', ''), (392, 'started', ''), (431, 'started', ''), (371, 'held', ''), (426, 'held', ''), (440, 'woke', '')]
+ORDERS = tab_screen('Mind', 'MIND', 'STANDING ORDERS', f"""<p class="copy small">What each order did while you were away.</p>
+<div class="strip">{orders_strip(ACTED, legend=True)}</div>
+<div class="sec">HERE AT VEYRA · IT ACTS AT ONCE</div>
+{''.join(row(t, s, '›') for t, s in HOME_ORDERS)}
+<div class="sec">FAR AWAY · THE SENTINEL AT EMBER</div>
+<p class="lag mono">Orders reach it {d_e:.1f} Years after you send them. What it does, we learn {d_e:.1f} Years late.</p>
+{''.join(row(t, s, '›') for t, s in FAR_ORDERS)}
+<button class="primary">Add an order</button>""", HUD_SO)
+
+ORDER_NEW = f"""<div class="phone">{HUD_SO}<div class="sheet">
+<div class="sh"><button class="backlink">‹ Orders</button><span class="mono kind">NEW ORDER · HERE AT VEYRA</span></div>
+<div class="sec">WHAT YOU WANT</div>
+<div class="intent">If Beacon writes about the meeting while I’m away, answer anything about when and where. Wake me for the rest.<i></i></div>
+<div class="sec">THE MIND’S VERSION · WHAT IT WILL DO</div>
+{part('WHEN', '<b>A message from Beacon arrives</b>')}
+{part('IF IT ASKS ONLY WHEN OR WHERE WE MEET', '<b>Answer in our voice, adding nothing new about us</b>')}
+{part('ANYTHING ELSE', '<b>Hold it unanswered, and wake you</b>')}
+<ul class="left"><li><b>Never send messages:</b> this makes one exception to it, for Beacon, about the meeting.</li><li><b>Whether we meet at all</b> isn’t when or where. That stays yours.</li></ul>
+<div class="sec">TRIED ON YOUR LAST ABSENCE · YEAR {Y_AW0:.0f} → {Y_AW1:.0f}</div>
+{tried(371, 'Beacon wrote', 'Held. It wasn’t about a meeting.')}
+{tried(426, 'Beacon’s invitation', 'Held, and woke you. It asks whether we meet, not only when.')}
+<div class="strip">{orders_strip([(371, 'held', 'held'), (426, 'woke', 'held · woke you')], 'answered 0 · held 2 · woke you 1')}</div>
+<div class="twobtn"><button class="primary ghost">Edit</button><button class="primary">Approve</button></div>
+</div></div>"""
+
+def far_gulf():
+    w, h, vx, ex, y = 358, 92, 24, 318, 34
+    a, b = vx + 18, ex - 24
+    s = [stipple(161, 30, w, h), f'<line x1="{a}" y1="{y}" x2="{b}" y2="{y}" stroke="{INK}" stroke-width=".8" stroke-dasharray="2 4"></line>']
+    for k in range(1, 10):
+        x = a + (b - a) * k / d_e
+        s.append(f'<line x1="{fmt(x)}" y1="{y - 3}" x2="{fmt(x)}" y2="{y + 3}" stroke="{INK}" stroke-width=".7" opacity=".6"></line>')
+    s.append(f'<circle cx="{vx}" cy="{y}" r="13" fill="{PAPER}" stroke="{INK}" stroke-width="1.2"></circle><path d="M{vx - 9} {y - 3} q5 -5 11 -1 q4 3 7 0 M{vx - 9} {y + 5} q6 4 12 -1" fill="none" stroke="{INK}" stroke-width=".7"></path>')
+    s.append(text(vx, y + 28, 'Veyra', 9, YOU, 'middle', 600))
+    s.append(f'<ellipse cx="{ex}" cy="{y}" rx="20" ry="7" fill="none" stroke="{OTHER}" stroke-width=".9" stroke-dasharray="3 2"></ellipse><circle cx="{ex}" cy="{y}" r="5" fill="{PAPER}" stroke="{INK}" stroke-width="1.2"></circle>')
+    s.append(f'<circle cx="{ex + 26}" cy="{y - 8}" r="3" fill="{YOU}"></circle>' + text(ex, y - 14, 'Ember', 9, INK, 'middle', 600))
+    s.append(text(w - 6, y + 24, 'the sentinel: old orders until they land', 8, YOU, 'end'))
+    s.append(f'<circle cx="{a + 4}" cy="{y}" r="4" fill="{YOU}"></circle>' + text(a + 12, y - 9, f'our order · lands Year {Y_SO_ARR}', 8.5, YOU, 'start', 600))
+    s.append(f'<path d="M{b} {y + 38} H{a} M{a} {y + 38} l6 -4 M{a} {y + 38} l6 4" fill="none" stroke="{OTHER}" stroke-width="1" stroke-dasharray="4 3"></path>')
+    s.append(text((a + b) / 2, y + 52, f'if it acts, word comes home {d_e:.1f} Years later', 8, OTHER, 'middle'))
+    return f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" font-family="IBM Plex Mono, monospace" role="img" aria-label="Our order leaving Veyra for the sentinel at Ember, 9.2 light-years away">{"".join(s)}</svg>'
+def far_journey():
+    legs = [('Crosses to Ember', f'Year {Y_SO} → {Y_SO_ARR}', 'var(--you)'), ('When used, word comes home', f'{d_e:.1f} Years later', 'var(--other)')]
+    bars = ''.join(f'<span class="jseg" style="width:50%;background:{c}"></span>' for *_, c in legs)
+    rows = ''.join(f'<div class="jleg"><i style="background:{c}"></i><span>{n}</span><span class="mono">{y}</span><span class="rtime">{light_clock(d_e)}</span></div>' for n, y, c in legs)
+    return f'<div class="art">{far_gulf()}</div><div class="journey">{rows}</div>'
+ORDER_FAR = f"""<div class="phone">{HUD_SO}<div class="sheet">
+<div class="sh"><button class="backlink">‹ Orders</button><span class="mono kind">NEW ORDER · THE SENTINEL AT EMBER</span></div>
+<div class="sec">WHAT YOU WANT</div>
+<div class="intent">If anything there signals at it, report at once. Don’t wait for the yearly report.<i></i></div>
+<div class="sec">THE MIND’S VERSION · WHAT IT WILL DO</div>
+{part('WHEN', '<b>Something at Ember signals toward the sentinel</b><span class="sub">Light, radio, or the band turning toward it. The sentinel judges, from what it sees then.</span>')}
+{part('DO', '<b>Report home at once, out of turn</b>')}
+<ul class="left"><li><b>It still won’t answer:</b> “Never transmit toward Ember” stands.</li></ul>
+<div class="sec">THE ORDER’S JOURNEY · AT LIGHT SPEED</div>
+{far_journey()}
+<p class="lag mono">Until Year {Y_SO_ARR} it follows the orders it has. It reads this one in its own moment, knowing what it knows then.</p>
+<p class="copy small">It can’t be recalled. A later order would land later still.</p>
+<button class="primary">Send to the sentinel</button>
+</div></div>"""
+
+ORDERS_AFTER = tab_screen('Mind', 'MIND', 'STANDING ORDERS', f"""<div class="sec">HERE AT VEYRA · IT ACTS AT ONCE</div>
+{row('<span class="newtag">New</span> If Beacon writes about the meeting', 'answers when and where · wakes you for the rest', '›')}
+{''.join(row(t, s, '›') for t, s in HOME_ORDERS)}
+<div class="sec">FAR AWAY · THE SENTINEL AT EMBER</div>
+{row('If anything there signals, report at once', f'in flight · lands Year {Y_SO_ARR}', tstack(f'{d_e:.1f} Years', light_clock(d_e), True), 'you', bar=1)}
+{''.join(row(t, s, '›') for t, s in FAR_ORDERS)}""", at_year((45, 50, '14,800 kt'), Y_SO))
+
+# ---------- Meeting Beacon: their emissary, and talking live ----------
+# Beacon's second letter (sent 416.7, held for us at 426) asks to meet in Year 500. Its emissary, a Beacon mind on a
+# torch craft, left in Year 405 at a tenth of light speed; its launch flare reached our sky watch in 414.3, unexplained
+# until now. Our answer (450) passes it on its way (Y_EM_HEARS) and reaches Beacon in 459.3. It brakes over its last
+# two Years, bright, and stops beside the ice world, 9 AU out: a round trip of light there is 2.5 hours, under a
+# tenth of a second of real time. Its clock ran slow by 0.5% for 95 Years: about half a Year.
+Y_INV_SENT, Y_EM_SEEN = round(Y_INV - d_b, 1), round(Y_EM_L + d_b, 1)
+HUD_M0 = at_year((45, 50, '14,900 kt'), Y_ANS)
+HUD_M1 = at_year((30, 35, '13,400 kt'), Y_MEET)
+INVITE_VOICE = '“Light is slow for questions. One of us is coming, and stops in Year 500 wherever you say. Meet it, or send one of you.”'
+def meet_spacetime(w=358, h=236):
+    # Years go up, distance goes across. Light crosses in 9.3 Years; the emissary takes 95.
+    x0, x1, yb, yt, Y0, Y1 = 44, 300, h - 22, 26, 400, 504
+    X = lambda ly: x0 + ly / d_b * (x1 - x0); Yp = lambda yr: yb - (yr - Y0) / (Y1 - Y0) * (yb - yt)
+    L = lambda ly, yr: f'{fmt(X(ly))},{fmt(Yp(yr))}'
+    s = [f'<line x1="{x0}" y1="{yb}" x2="{x0}" y2="{yt}" stroke="{YOU}" stroke-width="1"></line><line x1="{x1}" y1="{yb}" x2="{x1}" y2="{yt}" stroke="{OTHER}" stroke-width="1"></line>',
+         text(x0, yt - 5, 'Veyra', 9, YOU, 'middle', 600), text(x1, yt - 5, 'Beacon', 9, OTHER, 'middle', 600)]
+    for yr in (405, Y_EM_SEEN, Y_INV, 450, 500): s.append(text(x0 - 5, Yp(yr) + 3, f'{yr:g}', 8, MUTED, 'end'))
+    for yr in (Y_EM_SEEN, Y_INV): s.append(f'<circle cx="{x0}" cy="{fmt(Yp(yr))}" r="2.5" fill="{OTHER}"></circle>')
+    s.append(f'<path d="M{L(d_b, Y_EM_L)} L{L(0, Y_EM_L + d_b)}" fill="none" stroke="{OTHER}" stroke-width=".9" stroke-dasharray="2 2"></path>')
+    s.append(f'<path d="M{L(d_b, Y_INV_SENT)} L{L(0, Y_INV)}" fill="none" stroke="{OTHER}" stroke-width=".9"></path>')
+    s.append(f'<path d="M{L(d_b, Y_EM_L)} L{L(.1, Y_EM_L + (d_b - .1) / .1)} Q{L(0, 499)} {L(0, Y_EM_A)}" fill="none" stroke="{OTHER}" stroke-width="1.8"></path>')
+    s.append(f'<line x1="{x0}" y1="{fmt(Yp(448.3))}" x2="{x1}" y2="{fmt(Yp(448.3))}" stroke="{INK}" stroke-width=".6" stroke-dasharray="1 3"></line>' + text(x1 + 4, Yp(448.3) + 3, 'now', 8, INK))
+    s.append(f'<path d="M{L(0, Y_ANS)} L{L(d_b, Y_ANS + d_b)}" fill="none" stroke="{YOU}" stroke-width="1.3" stroke-dasharray="4 3"></path>')
+    cx_, cy_ = X(Y_EM_HEARS - Y_ANS), Yp(Y_EM_HEARS)
+    s.append(f'<circle cx="{fmt(cx_)}" cy="{fmt(cy_)}" r="4" fill="{PAPER}" stroke="{YOU}" stroke-width="1.4"></circle>')
+    s.append(text(cx_ + 8, cy_ - 14, f'it hears us · {Y_EM_HEARS}', 8.5, YOU, 'start', 600))
+    s.append(text(x0 + 8, Yp(Y_ANS) + 13, 'an answer sent in 450', 8, YOU))
+    s.append(f'<circle cx="{x0}" cy="{fmt(Yp(Y_EM_A))}" r="3.5" fill="{OTHER}"></circle>' + text(x0 + 8, Yp(Y_EM_A) + 3, 'it stops here · Year 500', 8.5, OTHER, 'start', 600))
+    s.append(text(X(1.5) + 8, Yp(Y_EM_L + (d_b - 1.5) / .1) + 3, 'their emissary', 8.5, OTHER, 'start', 600))
+    s.append(text(X(d_b / 2), Yp((Y_INV_SENT + Y_INV) / 2) - 5, 'their letter', 8, OTHER, 'middle'))
+    s.append(text(x1 - 4, yb + 12, 'its launch flare', 8, OTHER, 'end') + text(x0, h - 3, 'years ↑ · distance →', 8, MUTED))
+    return f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" font-family="IBM Plex Mono, monospace" role="img" aria-label="Years against distance: the emissary crossing from Beacon to Veyra over 95 Years, and an answer sent in Year 450 meeting it in Year 454.4">{"".join(s)}</svg>'
+MEET_INVITE = tab_screen('Reach', 'REACH', 'MESSAGE', f"""<button class="backlink inline">‹ Beacon</button>
+<div class="speech"><div class="speaker">{sigil_svg(BEACON_SEED, OTHER, 44, 'Beacon’s signature')}<span><b>Beacon</b><span class="mono">SENT YEAR {Y_INV_SENT} · ARRIVED YEAR {Y_INV:.0f} · HELD FOR YOU</span></span></div>
+<p class="big">{INVITE_VOICE}</p></div>
+<div class="sec">WHAT IT CARRIED</div>
+{part('A PROPOSAL', '<b>Meet, in Year 500</b>')}
+{part('A FACT · THEIR EMISSARY', f'<b>It left Beacon in Year {Y_EM_L:.0f}, at a tenth of light speed, carrying one of them.</b><span class="sub">Our sky watch saw its launch flare in Year {Y_EM_SEEN}, unexplained until now.</span><button class="chip">See its path ›</button>')}
+{part('AN OFFER', '<b>“Send one of you to us”: a mind, sent as light, to run on their machines.</b>')}
+<button class="primary">Answer</button>""", at_year((45, 50, '14,800 kt'), 448.3))
+
+MEET_PATH = tab_screen('Reach', 'REACH', 'THEIR EMISSARY', f"""<button class="backlink inline">‹ Message</button>
+<h3 class="lead">Beacon’s emissary, in time</h3>
+<p class="copy small">Years go up, distance across. Light crosses in {d_b:.1f} Years; the emissary takes 95.</p>
+<div class="art">{meet_spacetime()}</div>
+<div class="sec">WHAT WE KNOW</div>
+{ledger([('Left Beacon', f'Year {Y_EM_L:.0f}, at a tenth of light speed'), ('Seen leaving', f'Year {Y_EM_SEEN}: the flare our sky watch logged'),
+         ('Stops here', f'Year {Y_EM_A:.0f}, braking over its last two Years'), ('Its own clock', 'About half a Year behind ours when it stops'),
+         ('Hears us', f'Year {Y_EM_HEARS}, if we answer in Year {Y_ANS:.0f}. Beacon, in {Y_ANS + d_b:.1f}.'),
+         ('Carries', f'One of their minds. Its news of home ends in Year {Y_EM_A - d_b:.1f}.')])}
+<button class="primary">Answer</button>""", at_year((45, 50, '14,800 kt'), 448.3))
+def action_(title, sub, right, cls=''):
+    return action(title, sub, right).replace('class="opt act"', f'class="opt act {cls}"') if cls else action(title, sub, right)
+Y_HALF = round(Y_ANS + CAT['torch-probe']['years'] + 12 * d_b / 2)
+def meet_timeline():
+    w, h, lx, x0, x1, Y1 = 358, 84, 112, 120, 346, 535
+    X = lambda yr: x0 + (yr - Y_ANS) / (Y1 - Y_ANS) * (x1 - x0)
+    rows = [('their emissary', Y_EM_A, OTHER, ''), ('their mind, hosted', 500, OTHER, ''), ('our mind, sent', Y_ANS + 60 + d_b, YOU, ''), ('meet halfway', Y_HALF, MUTED, '3 3')]
+    s = [f'<line x1="{fmt(X(500))}" y1="2" x2="{fmt(X(500))}" y2="{h - 18}" stroke="{INK}" stroke-width="1" stroke-dasharray="3 3"></line>']
+    for i, (lab, yr, col, dash) in enumerate(rows):
+        y = 10 + i * 16
+        s.append(text(lx, y + 3, lab, 8.5, col, 'end', 600))
+        s.append(f'<line x1="{x0}" y1="{y}" x2="{fmt(X(yr))}" y2="{y}" stroke="{col}" stroke-width="2"' + (f' stroke-dasharray="{dash}"' if dash else '') + f'></line><circle cx="{fmt(X(yr))}" cy="{y}" r="3.5" fill="{col}"></circle>')
+    for yr, anchor in ((Y_ANS, 'start'), (500, 'middle'), (Y1, 'end')):
+        s.append(text(X(yr), h - 4, f'Year {yr:.0f}', 8, INK if yr == 500 else MUTED, anchor, 600 if yr == 500 else None))
+    return f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" font-family="IBM Plex Mono, monospace" role="img" aria-label="When each way to meet could happen: the emissary and a hosted mind in Year 500, our own mind in 519, halfway in 530">{"".join(s)}</svg>'
+MEET_HOW = f"""<div class="phone">{HUD_M0}<div class="sheet">
+<div class="sh"><button class="backlink">‹ Message</button><span class="mono kind">REACH · BEACON</span></div>
+<h3 class="lead">Meet Beacon?</h3>
+<p class="whyline">Their emissary arrives in Year 500 either way. What we choose is where it stops, and who else goes.</p>
+<div class="art">{meet_timeline()}</div>
+<div class="sec">WAYS TO MEET · ANY, OR NONE</div>
+{action_('Meet their emissary here', 'Tell it where to stop. Our answer passes it on its way.', tstack(f'it hears us Year {Y_EM_HEARS}', clock((Y_EM_HEARS - Y_ANS) * 5)))}
+{action_('Host one of them here', 'Their mind, sent as light, on sealed machines we build: 12 Years.', tstack('arrives Year 500', clock((500 - Y_ANS) * 5)))}
+{action_('Send one of us to them', 'A copy of ours, as light. Needs the mind transmitter: 60 Years.', tstack(f'arrives Year {Y_ANS + 60 + d_b:.0f}', clock((60 + d_b) * 5)))}
+{action_('Meet halfway', f'Both send a craft {d_b / 2:.1f} ly out. Ours can’t by Year 500.', tstack(f'earliest Year {Y_HALF}', clock((Y_HALF - Y_ANS) * 5)), 'cant')}
+{action_('Say nothing', 'It stops where it chooses.', '<span class="gy">now</span>')}
+<p class="copy small">Nothing sent can be recalled.</p>
+{TALK}
+</div></div>"""
+
+def emissary_glyph(x, y, sc=1.0):
+    # A torch craft side-on: dust shield ahead, spine, tanks, engine bell.
+    return (f'<g transform="translate({fmt(x)} {fmt(y)}) scale({sc})" fill="none" stroke="{OTHER}" stroke-width="1.2">'
+            '<path d="M-14 -7 Q-18 0 -14 7"></path><line x1="-14" y1="0" x2="12" y2="0"></line>'
+            '<rect x="-7" y="-4" width="9" height="8"></rect><path d="M12 -3 L18 -6 L18 6 L12 3 Z"></path></g>')
+def places_drawing():
+    w, h, y = 358, 104, 56
+    stops = [(52, 'Veyra', 'in orbit'), (150, 'ice world', '9 AU'), (318, 'the edge', '1,000 AU')]
+    s = [stipple(117, 30, w, h), f'<line x1="18" y1="{y}" x2="340" y2="{y}" stroke="{INK}" stroke-width=".6" stroke-dasharray="1 3"></line>']
+    s.append(f'<circle cx="18" cy="{y}" r="5" fill="{PAPER}" stroke="{INK}" stroke-width="1.2"></circle>')
+    for x, name, where in stops:
+        col = YOU if name == 'Veyra' else INK
+        s.append(f'<circle cx="{x}" cy="{y}" r="{3.5 if name == "Veyra" else 5}" fill="{YOU if name == "Veyra" else PAPER}" stroke="{col}" stroke-width="1.2"></circle>'
+                 if name != 'the edge' else f'<line x1="{x}" y1="{y - 14}" x2="{x}" y2="{y + 14}" stroke="{INK}" stroke-width="1" stroke-dasharray="3 3"></line>')
+        s.append(text(x, y + 26, name, 9, col, 'middle', 600) + text(x, y + 38, where, 8.5, MUTED, 'middle'))
+    s.append(f'<path d="M326 24 H196 M196 24 l6 -4 M196 24 l6 4" fill="none" stroke="{OTHER}" stroke-width="1.1" stroke-dasharray="4 3"></path>')
+    s.append(emissary_glyph(340, 24, .7) + text(262, 16, 'their emissary · from Beacon', 8.5, OTHER, 'middle', 600))
+    s.append(text(8, 12, 'not to scale', 8, MUTED))
+    return f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" font-family="IBM Plex Mono, monospace" role="img" aria-label="Three places the emissary could stop: in orbit around Veyra, beside the ice world, or at the edge of our system">{"".join(s)}</svg>'
+def place(title, sub, answer, on=False):
+    return choice(title, sub, tstack('each answer', answer), on)
+MEET_WHERE = f"""<div class="phone">{HUD_M0}<div class="sheet">
+<div class="sh"><button class="backlink">‹ Ways to meet</button><span class="mono kind">REACH · BEACON</span></div>
+<h3 class="lead">Where should it stop?</h3>
+<p class="whyline">It sees what light reaches it there. What it sees, Beacon learns {d_b:.1f} Years later.</p>
+<div class="art">{places_drawing()}</div>
+<div role="radiogroup" class="choices">
+{place('At the edge · 1,000 AU out', 'It sees our star, and little else of us.', '00:00:10')}
+{place('Beside the ice world · 9 AU', 'It sees our works across the system, but not Veyra up close.', '&lt;00:00:01')}
+{place('In orbit around Veyra', 'It sees everything, up close.', '&lt;00:00:01')}
+</div>
+<p class="copy small">It hears where to stop in Year {Y_EM_HEARS}, from our answer. Times are for light out and back, in real time.</p>
+{TALK}
+<button class="primary" disabled>Choose a place</button>
+</div></div>"""
+
+def arrival_svg(w=390, h=300):
+    s = [stipple(131, 90, w, h)]
+    ix, iy, r = 150, 176, 38
+    s.append(f'<circle cx="{ix}" cy="{iy}" r="{r}" fill="{PAPER}" stroke="{INK}" stroke-width="1.3"></circle>')
+    for dy in (-20, -6, 8, 22):
+        hw = math.sqrt(r * r - dy * dy)
+        s.append(f'<line x1="{fmt(ix - hw + 3)}" y1="{iy + dy}" x2="{fmt(ix + hw - 3)}" y2="{iy + dy}" stroke="{INK}" stroke-width=".6" stroke-dasharray="4 3" opacity=".6"></line>')
+    s.append(f'<path d="M{ix} {iy - r} A{r} {r} 0 0 1 {ix} {iy + r} A16 {r} 0 0 0 {ix} {iy - r} Z" transform="rotate(-20 {ix} {iy})" fill="url(#hatch)" opacity=".7"></path>')
+    ex, ey = 252, 150
+    s.append(f'<path d="M{w + 4} 14 C330 40 300 110 {ex + 22} {ey - 4}" fill="none" stroke="{OTHER}" stroke-width="1.2" stroke-dasharray="5 4" opacity=".6"></path>')
+    s.append(f'<path d="M318 88 C305 112 292 130 {ex + 22} {ey - 4}" fill="none" stroke="{OTHER}" stroke-width="3" opacity=".35"></path>')
+    s.append(emissary_glyph(ex, ey, 1.8))
+    s.append(f'<circle cx="{ex}" cy="{ey}" r="30" fill="none" stroke="{OTHER}" stroke-width=".8" stroke-dasharray="2 3"></circle>')
+    s.append(f'<circle cx="34" cy="{h - 30}" r="5" fill="{PAPER}" stroke="{INK}" stroke-width="1.2"></circle><circle cx="56" cy="{h - 42}" r="3" fill="{YOU}"></circle>')
+    s.append(f'<line x1="{ex - 30}" y1="{ey + 12}" x2="62" y2="{h - 46}" stroke="{YOU}" stroke-width=".8" stroke-dasharray="1 4"></line>')
+    return f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" role="img" aria-label="Beacon’s emissary, stopped beside our ice world, its braking trail fading behind it">{"".join(s)}</svg>'
+MEET_ARRIVES = f"""<div class="phone cine"><div class="cinetop"><span>Veyra</span><span class="mono">Year {Y_EM_A:.1f}</span></div>
+{arrival_svg()}
+<div class="cinetext"><span class="mono kick">BEACON’S EMISSARY · BESIDE THE ICE WORLD</span>
+<h3>It has stopped.</h3>
+<p class="inscr">After 95 Years crossing, it braked hard for two: a flare we watched from Year 498. It waits beside the ice world, where we asked.</p>
+<p>95 Years by our clocks. About half a Year less by its own.</p>
+<div class="cinebtn"><button class="light">Meet it</button><button class="ghostlight">Later</button></div></div></div>"""
+
+MEET_LIVE = tab_screen('Reach', 'REACH', 'MEETING · LIVE', f"""<div class="livehead">{sigil_svg(BEACON_SEED, OTHER, 36, 'Beacon’s signature')}<span><b>Beacon’s emissary</b><span class="mono">BESIDE THE ICE WORLD · 1.2 LIGHT-HOURS</span></span><span class="live mono"><i></i>LIVE</span></div>
+<p class="clockline">Since Year {Y_MEET}. Each answer returns in under a tenth of a second. The clock runs: every real minute here is 0.2 Years at home.</p>
+<div class="chat">
+<div class="say them"><span class="mono">THE EMISSARY</span>“You chose the cold world. From here we see your light, and not your cities. That is courteous.”</div>
+<div class="say you">Why come yourselves?</div><span class="went mono">WENT AS · A QUESTION</span>
+<div class="say them"><span class="mono">THE EMISSARY</span>“Questions die in the dark. By the time an answer comes home, the one who asked has changed. Here I can ask, and listen, and ask again.”</div>
+<div class="say you">How old is what you know of Beacon?</div><span class="went mono">WENT AS · A QUESTION</span>
+<div class="say them"><span class="mono">THE EMISSARY</span>“The last word from home left in Year {Y_EM_A - d_b:.1f}. I speak for Beacon as it was then.”</div>
+<div class="say them"><span class="mono">THE EMISSARY · IT CARRIES A PROPOSAL</span>“We share what we see. Neither of us sends anything armed toward the other.”<button class="chip">See the proposal ›</button></div>
+</div>
+<div class="ask"><span>What you want to say…</span><button aria-label="Send">↑</button></div>""", HUD_M1)
+
+MEET_PACT = f"""<div class="phone">{at_year((30, 35, '13,400 kt'), Y_PACT)}<div class="sheet">
+<div class="sh"><button class="backlink">‹ Meeting</button><span class="mono kind">REACH · BEACON</span></div>
+<h3 class="lead">A pact with Beacon?</h3>
+<p class="whyline">It offers this for Beacon as of Year {Y_EM_A - d_b:.1f}. Beacon hears our answer in Year {Y_BCN_HEARS}.</p>
+{part('THEIR PROPOSAL', '<b>“We share what we see. Neither of us sends anything armed toward the other.”</b><span class="sub">Nothing enforces it. Each side can only watch the other keep it.</span>')}
+<div class="sec">OUR ANSWER</div>
+<div role="radiogroup" class="choices">
+{choice('Accept it all', 'All we see goes to them, our sentinel’s view of Ember too. They may not know of it.', tstack(f'{d_b:.1f} Years', light_clock(d_b)))}
+{choice('Share, but promise nothing on arms', 'Half the pact. It shows them where we stop.', tstack(f'{d_b:.1f} Years', light_clock(d_b)))}
+{choice('Ask for time', 'The meeting goes on. The clock keeps running.', '<span class="gy">now</span>')}
+{choice('Decline', 'It stays or leaves as its own orders say.', '<span class="gy">now</span>')}
+</div>
+{TALK}
+<button class="primary" disabled>Choose an answer</button>
+</div></div>"""
+
+# ---------- Broadcasting: the permanent choice ----------
+# Year 520. The broadcast beacon is built. A knock goes to one star; a broadcast goes every way at once and carries its
+# own address. Every star of the region (50 ly around Sol, so up to 69.9 ly from Veyra) hears it by Year 590, and it
+# never stops. Sending takes a share of each year's energy for as long as it sends: a sample value.
+Y_BC = 520.0; Y_BM = 531.0
+HUD_BC = at_year((35, 40, '14,200 kt'), Y_BC)
+d_sol = math.dist(HOME, (0, 0, 0)); R_REGION = d_sol + 50
+HEARD = [  # (name, hip, what we know, tone)
+    ('Gliese 832', '106440', 'nothing seen there', ''), ('Ember', '108870', f'knows where we are since Year {Y_FLASH}', 'other'),
+    ('Beacon', '2021', f'knows since Year {Y_FOUND:.1f} or earlier', 'other'), ('Lantern', '99461', 'never heard from us', 'other'),
+    ('Frost', '105858', f'knows since Year {440 - 2 * d_f:.0f} or earlier', 'other'), ('Twin', 'sol', 'oxygen world · never heard from us', 'other')]
+def dist_to(hip): return d_sol if hip == 'sol' else math.dist(atlas(by_hip[hip]), HOME)
+def hear_row(name, hip, known, tone):
+    d = dist_to(hip)
+    return (f'<div class="hearrow"><span class="mk {tone}"></span><span class="pt"><span class="{tone}">{name} · {d:.1f} ly</span><span class="sub">{known}</span></span>'
+            f'<span class="pd">{tstack(f"Year {Y_BC + d:.1f}", clock(d * 5))}</span></div>')
+
+BC_COMPOSE = f"""<div class="phone">{HUD_BC}<div class="sheet">
+<div class="sh"><button class="backlink">‹ Reach</button><span class="mono kind">REACH · BROADCAST</span></div>
+<div class="sec">WHAT YOU WANT TO SAY</div>
+<div class="intent">Tell everyone who can hear that we are here, who we are, and that we answer anyone who knocks. Nothing about Beacon or our probes.<i></i></div>
+<div class="sec">THE MIND’S VERSION · WHAT WILL TRAVEL</div>
+{part('WHO WE ARE · OUR FOUNDING LINE', '<b class="inscribed">“Keep the lights on. Look before we speak.”</b>')}
+{part('AN OFFER', '<b>“Knock, and we will answer.”</b>')}
+<ul class="left"><li><b>Our signature</b> leads it: our pulses, so any answer can find us.</li><li><b>Where we are</b> needs no part. A broadcast’s source is its address.</li><li><b>Beacon, our probes:</b> nothing here names them.</li></ul>
+<p class="warnline">Broadcasting goes against our lean toward hidden.</p>
+<div class="voice ours"><span class="mono">HOW ANYONE WILL READ IT · NO READER KNOWN</span><p>“We are Veyra. We keep the lights on, and we look before we speak. Knock, and we will answer.”</p></div>
+<p class="copy small">The mind can’t shape it for listeners it doesn’t know, so it goes in our own voice, repeating.</p>
+{TALK}
+<div class="twobtn"><button class="primary ghost">Edit</button><button class="primary">Who will hear it</button></div>
+</div></div>"""
+
+def hears_drawing():
+    w, h, x0, px, y = 358, 96, 20, 4.4, 40
+    X = lambda ly: x0 + ly * px
+    s = [f'<line x1="{x0}" y1="{y}" x2="{fmt(X(R_REGION))}" y2="{y}" stroke="{INK}" stroke-width=".7"></line>',
+         f'<path d="M{fmt(X(R_REGION))} {y} H{w - 8} M{w - 8} {y} l-6 -4 M{w - 8} {y} l-6 4" fill="none" stroke="{YOU}" stroke-width="1.1" stroke-dasharray="3 3"></path>',
+         text(w - 8, y - 8, 'on', 8.5, YOU, 'end'),
+         f'<rect x="{x0}" y="{y + 20}" width="{fmt(X(R_REGION) - x0)}" height="5" fill="url(#hatch)" opacity=".6"></rect>',
+         text(X(R_REGION), y + 36, 'every star of the region', 8.5, MUTED, 'end')]
+    s.append(f'<circle cx="{x0}" cy="{y}" r="4.5" fill="{YOU}"></circle>' + text(x0 - 4, y - 10, 'Veyra', 9, YOU))
+    lo, hi = X(dist_to('108870')), X(dist_to('105858'))
+    s.append(f'<path d="M{fmt(lo)} {y - 10} V{y - 14} H{fmt(hi)} V{y - 10}" fill="none" stroke="{OTHER}" stroke-width=".8"></path>'
+             + text(lo - 2, y - 20, 'Ember · Beacon · Lantern · Frost', 8.5, OTHER, 'start', 600))
+    for name, hip, _, tone in HEARD:
+        x = X(dist_to(hip)); col = OTHER if tone else INK
+        s.append(f'<circle cx="{fmt(x)}" cy="{y}" r="2.6" fill="{PAPER}" stroke="{col}" stroke-width="1.2"></circle>')
+    s.append(text(X(d_sol), y + 14, 'Twin', 8.5, OTHER, 'middle', 600))
+    for ly in (10, 20, 40, R_REGION):
+        s.append(text(X(ly), h - 4, f'Year {Y_BC + ly:.0f}', 8, MUTED, 'middle' if ly < R_REGION else 'end'))
+    return f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" font-family="IBM Plex Mono, monospace" role="img" aria-label="Who hears the broadcast, placed by distance: the nearest known stars within 11 years, Twin at 20, every star of the region by Year 590">{"".join(s)}</svg>'
+BC_WHO = f"""<div class="phone">{HUD_BC}<div class="sheet">
+<div class="sh"><button class="backlink">‹ Broadcast</button><span class="mono kind">REACH · BROADCAST</span></div>
+<h3 class="lead">Everyone, for good</h3>
+<p class="whyline">It goes every way at once, at light speed, and keeps going. Anyone who hears it learns where we are.</p>
+<div class="art">{hears_drawing()}</div>
+<div class="sec">WHO HEARS IT · SOONEST FIRST</div>
+{''.join(hear_row(*r) for r in HEARD)}
+<div class="hearrow"><span class="mk"></span><span class="pt"><span>Every star of the region</span><span class="sub">1,212 within 50 ly of Twin, most never heard</span></span><span class="pd">{tstack(f'by Year {Y_BC + R_REGION:.0f}', clock(R_REGION * 5))}</span></div>
+<p class="copy small">You can stop sending. What has left keeps going: past the region’s edge by Year {Y_BC + d_sol + 100:.0f}, fading, never stopping.</p>
+<p class="copy small mono">Sending: E 10% each Year while it sends</p>
+<button class="primary">Hold to broadcast</button>
+</div></div>"""
+
+def bc_sky():
+    w, h, cx, cy = 390, 380, 195, 210
+    s = [f'<rect width="{w}" height="{h}" fill="{PAPER}"></rect>', stipple(143, 150, w, h)]
+    for i, r in enumerate((34, 68, 108, 152, 200, 252)):
+        s.append(f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="none" stroke="{YOU}" stroke-width="{1.6 if i == 0 else 1.1}" stroke-dasharray="{"" if i == 0 else "4 4"}" opacity="{fmt(1 - i * .14)}"></circle>')
+    for x, y, name in ((258, 150, 'Ember'), (118, 128, 'Beacon'), (300, 262, 'Frost'), (70, 312, 'Twin')):
+        s.append(f'<circle cx="{x}" cy="{y}" r="3.5" fill="{PAPER}" stroke="{OTHER}" stroke-width="1.3"></circle>' + text(x + 8, y + 4, name, 10, OTHER, 'start', 600))
+    s.append(sigil(VEYRA_SEED, YOU, cx, cy, 26))
+    return f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" font-family="IBM Plex Mono, monospace" role="img" aria-label="Our broadcast leaving Veyra in every direction">{"".join(s)}</svg>'
+BC_SENT = f"""<div class="phone cine"><div class="cinetop"><span>Veyra</span><span class="mono">Year {Y_BC:.1f}</span></div>{bc_sky()}
+<div class="cinetext"><span class="mono kick">BROADCASTING</span><h3>To everyone.</h3>
+<p>In {dist_to('108870'):.0f} Years it passes Ember and Beacon. In {d_sol:.0f}, Twin. By Year {Y_BC + R_REGION:.0f}, every star in the region.</p>
+<p>You can stop sending. You can’t unsend.</p>
+<div class="cinebtn"><button class="light">Back to Reach</button></div></div></div>"""
+
+r_bm = Y_BM - Y_BC
+BC_MAP = frame(2, *neighbors(shell=(r_bm, f'our broadcast · {r_bm:.0f} ly')), panel=(f'SPREADING · {r_bm:.0f} LY OUT', f'YEAR {Y_BM:.0f}', [
+    row('Our broadcast', f'{r_bm:.0f} of {R_REGION:.0f} ly · the whole region by Year {Y_BC + R_REGION:.0f}', tstack(f'{Y_BC + R_REGION - Y_BM:.0f} Years', clock((Y_BC + R_REGION - Y_BM) * 5), True), 'you', bar=round(r_bm / R_REGION * 100)),
+    row('Heard it by now · 5 stars we know', 'Gliese 832, Ember, Beacon, Lantern, Frost', ''),
+    row('Next we know of · Twin', f'oxygen world · {d_sol:.1f} ly', tstack(f'{Y_BC + d_sol - Y_BM:.1f} Years', clock((Y_BC + d_sol - Y_BM) * 5), True), 'other', marker=True),
+    row('Earliest answer · from Ember', 'if they answer the moment it lands', tstack(f'Year {Y_BC + 2 * dist_to("108870"):.1f}', clock((Y_BC + 2 * dist_to('108870') - Y_BM) * 5), True))]),
+    year=f'Year {Y_BM:.1f}', res=(45, 40, '14,600 kt'))
+
 # ---------- Mock checklist: everything to mock, and where each stands ----------
 CHECKLIST = [
-    ('Onboarding', [('Choose your civilization: three candidates', 'todo'), ('Name it and accept its charter', 'todo'),
+    ('Onboarding', [('Choose your civilization: three candidates', 'done'), ('Name it and accept its charter', 'done'),
                     ('Landing: the first seconds on Veyra', 'done'), ('What you inherit: the starting kit', 'done'), ('Guided tour', 'done'),
                     ('Hand-off to the clues', 'done')]),
     ('Home', [('Five zoom levels', 'done'), ('Local Group and galaxy close-ups', 'done'), ('Projects on the map, with timers', 'done'),
               ('Clue marker after a result', 'done'), ('Tap a star: its card', 'done'), ('A clue in full: what we know, odds, next steps', 'done'),
-              ('A probe in flight on the map', 'done'), ('A message on its way, spreading at light speed', 'todo')]),
+              ('A probe in flight on the map', 'done'), ('A message on its way, spreading at light speed', 'done')]),
     ('Projects', [('Empty, pick, confirm, started, two running, paused', 'done'), ('Grow and Reach tabs of the picker', 'done'),
                   ('A locked project and what it needs', 'done'), ('Not enough energy or compute', 'done'),
                   ('A project finishes, seen in Projects', 'done'), ('Queue the next project for while you are away', 'done'),
@@ -2324,14 +2840,14 @@ CHECKLIST = [
     ('Report', [('A new result, and the result in full', 'done'), ('Back after a long absence', 'done'), ('Replaying an absence on the map', 'done'), ('Nothing new yet', 'done')]),
     ('Reach', [('Empty, with standing orders', 'done'), ('Launch a probe: target, arrival and report times', 'done'), ('A probe in flight', 'done'),
                ('A probe arrives and reports', 'done'), ('Probe types: how to get there, per target', 'done'), ('A sentinel in orbit: watching, and new orders', 'done'), ('Compose a message: intent, the mind’s version, approve', 'done'),
-               ('Broadcast: the permanent choice', 'todo'), ('Standing orders editor', 'todo')]),
-    ('Mind', [('Charter and character', 'done'), ('Talk it through: the mind’s view, when asked', 'done'), ('Orders for while you are away', 'todo'),
+               ('Broadcast: the permanent choice', 'done'), ('Standing orders editor', 'done')]),
+    ('Mind', [('Charter and character', 'done'), ('Talk it through: the mind’s view, when asked', 'done'), ('Orders for while you are away', 'done'),
               ('Settings: theme, replay the tour, notifications', 'todo')]),
     ('Contact', [('Away: the notification', 'done'), ('The arrival, as a moment', 'done'), ('The knock arrives', 'done'), ('The signal in full: what it tells us', 'done'), ('Who sent it: the star card', 'done'),
                  ('The choice: knock back, broadcast, or stay dark', 'done'), ('Sent: the conversation and its timeline', 'done'),
                  ('The first reply arrives', 'done'), ('A message lands: their signature and words', 'done'), ('Sending: the reply leaves', 'done'), ('The conversation as the gulf between worlds', 'done'), ('Replying: intent, the mind’s version, approve', 'done'), ('Checking a claim: it holds, or it doesn’t', 'done'), ('What we know, both ways', 'done'), ('Their world, as we know it: a drawing that fills in', 'done'),
                  ('We find them first: a clue confirmed', 'done'), ('A broadcast sweeps past', 'todo'), ('A visitor brakes into our system', 'todo'),
-                 ('A far mind met them first', 'done'), ('Crossed knocks', 'todo'), ('The silent one: no answer, ever', 'todo')]),
+                 ('A far mind met them first', 'done'), ('A meeting in person: how, where, and talking live', 'done'), ('Crossed knocks', 'todo'), ('The silent one: no answer, ever', 'todo')]),
     ('Stakes · later', [('The strike as first contact', 'later'), ('A launch flare seen toward us', 'later'), ('Wounded: the morning after', 'later'), ('Total loss and a new cohort', 'later')]),
 ]
 def checklist_html(areas=None):
@@ -2490,14 +3006,54 @@ SECTIONS = [
      f'<figure><figcaption><strong>4 · Their world, as we know it</strong><span>A drawing that fills in with every message and check. Solid is measured, dashed inferred, a question mark not yet seen. Their founding line rings it.</span></figcaption>{PORTRAIT}</figure>'),
 ]
 
-# One page per area of the game, in the checklist's order. Reach and Mind get pages once they have mocks of their own.
+SECTIONS += [
+    ('choose', 'Choosing', 'Before Year 0 · choosing a civilization', 'Three candidates from the generator, each a real star with an invented world and people, and the mind they wake as. All three start equal: the same kit, stocks and budgets. They differ in character and place. The player looks closer at one, names it, and accepts its founding line. Then it wakes.',
+     f'<figure><figcaption><strong>1 · Three candidates</strong><span>Star, world, people, founding line and character, side by side. None is selected.</span></figcaption>{CHOOSE}</figure>'
+     '<span class="pinch">tap Veyra ›</span>'
+     f'<figure><figcaption><strong>2 · Up close</strong><span>What is real and what is invented, why surveys allow it, and the mind it wakes as.</span></figcaption>{CIV_FULL}</figure>'
+     '<span class="pinch">choose ›</span>'
+     f'<figure><figcaption><strong>3 · Name it, and accept its charter</strong><span>The name is its people’s own, and can change. The founding line is how the mind will reason when asked.</span></figcaption>{CIV_NAME}</figure>'),
+    ('orders', 'Standing orders', 'Mind · standing orders, near and far', f'Year {Y_SO}, just back from 108 Years away. Standing orders are how the mind acts without you. Each is written the way a message is: you say what you want, the mind shows exactly what it will do, and tries it on your last absence. Orders for a far mind cross at light speed, so they land late and are followed alone. Opens from the Mind tab, and from Reach for far places.',
+     f'<figure><figcaption><strong>1 · While you are away</strong><span>Every order, and what each did last time. Far ones are marked with their light-time.</span></figcaption>{ORDERS}</figure>'
+     '<span class="pinch">add an order ›</span>'
+     f'<figure><figcaption><strong>2 · A new order</strong><span>What you want, the mind’s version, what it overrides, and a test on your last absence.</span></figcaption>{ORDER_NEW}</figure>'
+     '<span class="pinch">or, for the sentinel ›</span>'
+     f'<figure><figcaption><strong>3 · An order for a far mind</strong><span>It crosses to Ember at light speed. Until it lands, the sentinel follows what it has.</span></figcaption>{ORDER_FAR}</figure>'
+     '<span class="pinch">sent ›</span>'
+     f'<figure><figcaption><strong>4 · In flight</strong><span>The new order at home, and the sentinel’s order crossing to Ember.</span></figcaption>{ORDERS_AFTER}</figure>'),
+    ('meeting', 'Meeting', 'Contact · meeting Beacon', f'Beacon’s second letter asked to meet in Year 500. Its emissary, one of their minds aboard a torch craft launched in Year {Y_EM_L:.0f}, was already coming. Answering, the player sees every way to meet, each with what it needs: meet the emissary here, host one of their minds, send one of ours, or meet halfway. Here we meet the emissary beside our ice world. Light crosses between us in about an hour: the first conversation with no Years between the lines.',
+     f'<figure><figcaption><strong>1 · The invitation</strong><span>Held for you while you were away. Their voice, then what it carried: a proposal, a fact, an offer.</span></figcaption>{MEET_INVITE}</figure>'
+     '<span class="pinch">see its path ›</span>'
+     f'<figure><figcaption><strong>2 · Its path, in time</strong><span>Years against distance. Light lines are nearly flat; the emissary’s is steep. Where our answer crosses it, it hears us.</span></figcaption>{MEET_PATH}</figure>'
+     '<span class="pinch">answer ›</span>'
+     f'<figure><figcaption><strong>3 · Ways to meet</strong><span>Year 450. Each way, what it needs, and when it could happen. The emissary comes either way. Any, or none.</span></figcaption>{MEET_HOW}</figure>'
+     '<span class="pinch">meet it here ›</span>'
+     f'<figure><figcaption><strong>4 · Where it stops</strong><span>Three places, what it would see from each, and how long each answer takes. Nothing is chosen for you.</span></figcaption>{MEET_WHERE}</figure>'
+     '<span class="pinch">Year 500 ›</span>'
+     f'<figure><figcaption><strong>5 · It has stopped</strong><span>Its braking trail fades beside the ice world.</span></figcaption>{MEET_ARRIVES}</figure>'
+     '<span class="pinch">meet it ›</span>'
+     f'<figure><figcaption><strong>6 · Talking live</strong><span>Answers in under a tenth of a second, while the clock runs. It speaks for Beacon as of its last word from home.</span></figcaption>{MEET_LIVE}</figure>'
+     '<span class="pinch">the proposal ›</span>'
+     f'<figure><figcaption><strong>7 · A pact?</strong><span>What it offers, what each answer would share, and when Beacon hears. Nothing is chosen for you.</span></figcaption>{MEET_PACT}</figure>'),
+    ('broadcast', 'Broadcast', 'Reach · broadcasting', f'Year {Y_BC:.0f}. The broadcast beacon is built. A knock goes to one star; a broadcast goes to every star at once, and never stops. It carries its own address: anyone who hears it learns where we are. It is composed like any message, but no reader is known, so the mind can’t shape it for them. Then the permanent choice, the send, and the map as the shell spreads.',
+     f'<figure><figcaption><strong>1 · What will travel</strong><span>Your words, the mind’s version, and how anyone will read it.</span></figcaption>{BC_COMPOSE}</figure>'
+     '<span class="pinch">who will hear it ›</span>'
+     f'<figure><figcaption><strong>2 · Everyone, for good</strong><span>Who hears it and when, soonest first, and who already knows where we are.</span></figcaption>{BC_WHO}</figure>'
+     '<span class="pinch">hold to broadcast ›</span>'
+     f'<figure><figcaption><strong>3 · Sent</strong><span>It leaves in every direction.</span></figcaption>{BC_SENT}</figure>'
+     '<span class="pinch">Year 531 ›</span>'
+     f'<figure><figcaption><strong>4 · On the map</strong><span>The shell at 11 light-years, spreading at light speed. Five stars we know have heard it.</span></figcaption>{BC_MAP}</figure>'),
+]
+
+# One page per area of the game, in the checklist's order. Stakes gets a page once it has mocks of its own.
 AREAS = [  # (page, area as named in CHECKLIST, one-line summary, section ids)
-    ('onboarding', 'Onboarding', 'Waking on Veyra, what you inherit, and the guided tour.', ['waking', 'tour']),
+    ('onboarding', 'Onboarding', 'Choosing a civilization, waking on it, what you inherit, and the guided tour.', ['choose', 'waking', 'tour']),
     ('home', 'Home', 'The map at five zoom levels, star cards and clues, projects in place.', ['zoom', 'local-group', 'clues', 'map']),
     ('projects', 'Projects', 'Starting, running, finishing, queueing and cancelling projects.', ['projects', 'picker', 'upnext']),
     ('report', 'Report', 'What comes back while you are away, and catching up after a long absence.', ['result', 'absence']),
-    ('reach', 'Reach', 'Beyond Veyra: sending a probe, following it, what it finds, and the kinds of probe.', ['probe', 'flyby', 'probe-types', 'sentinel']),
-    ('contact', 'Contact', 'First contact: the knock, the reply, checking what they told us, and the builders meeting our sentinel.', ['knock', 'reply', 'check', 'noticed']),
+    ('reach', 'Reach', 'Beyond Veyra: sending a probe, following it, what it finds, the kinds of probe, and broadcasting.', ['probe', 'flyby', 'probe-types', 'sentinel', 'broadcast']),
+    ('mind', 'Mind', 'Standing orders: what the mind does while you are away, at home and far away.', ['orders']),
+    ('contact', 'Contact', 'First contact: the knock, the reply, checking what they told us, and the builders meeting our sentinel, and meeting Beacon’s emissary.', ['knock', 'reply', 'check', 'noticed', 'meeting']),
 ]
 assert sorted(sid for *_, ids in AREAS for sid in ids) == sorted(sid for sid, *_ in SECTIONS), 'every section belongs to exactly one page'
 def nav_pages(current):
