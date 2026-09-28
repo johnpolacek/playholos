@@ -795,36 +795,32 @@ STANDING ORDERS
 - Add an order · e.g. if anything else knocks, tell me at once · +
 
 ## First contact · the first reply
-Year 50.3. Beacon answers our bare knock with three parts: who they are, a finding about Ember, and a question. Then our reply: plain intent, turned by the mind into parts that can travel, approved before it goes. Facts travel as parts; the prose is each civilization’s own voice.
+Year 50.3. Two worlds 9.3 light-years apart, speaking across a decade each way. A message landing is an event: their signature, their words set large, what they carried. Sending is a ceremony. The conversation is drawn as the gulf between the two worlds, with every message’s years in flight. Facts travel as parts; the prose is each civilization’s own voice.
 
-#### 1 · They answered · The conversation, with every send and arrival stamped, and the timeline filled in.
+#### 1 · Beacon speaks · A reply lands. Their signature, drawn from their pulses, then their words.
 Veyra · Year 50.3
-Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [40%] · MATTER · 1,480 kt · COMPUTE · [45%]
-REACH · CONVERSATION
-[‹ Conversations]
-Beacon · Beta Hydri · 9.3 ly · each message takes 9.3 Years
-They knocked · A bare knock: no words, only that they had found us. · sent Year 21.9 · arrived Year 31.2
-We knocked back · Bare. Nothing but the knock. · sent Year 31.3 · reached Beacon Year 40.6
-New · They answered · Who they are, a finding about Ember, and a question for us. They answered 0.4 Years after our knock reached them. · sent Year 41.0 · arrived Year 50.3 · [Read it ›]
-[drawing: Timeline: our light reached Beacon, their knock reached us, our knock is on its way, and a reply could come back; labels: Beacon, Veyra, Year 10, Year 20, Year 30, Year 40, Year 50, now, our light, their knock, our knock, their reply, Messages cross at light speed: 1 ly takes 1 Year.]
-read it ›
+[drawing: Beacon’s signature]
+BEACON SPEAKS · 9.3 LIGHT-YEARS
 
-#### 2 · What they said · Their voice, then the parts. The finding would change our odds on Ember, if it is true.
+### “You answered, and quickly. Good.”
+“We keep what the light brings. Ember’s warmth carries no dust. Who are you?”
+Sent Year 41.0. It crossed the dark for 9.3 Years to reach us.
+[Read what it carried] · [Later]
+read what it carried ›
+
+#### 2 · What they said · Their voice first, set large, with what doesn’t translate. Then the parts.
 Veyra · Year 50.3
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
 ENERGY · [40%] · MATTER · 1,480 kt · COMPUTE · [45%]
 REACH · MESSAGE
 [‹ Beacon]
-
-### Beacon answered
-Sent Year 41.0 · arrived Year 50.3
-IN THEIR VOICE, AS THE MIND READS IT
+[drawing: Beacon’s signature] · Beacon · SENT YEAR 41.0 · ARRIVED YEAR 50.3
 “You answered, and quickly. Good. We keep what the light brings. Ember’s warmth carries no dust. Who are you?”
-WHAT TRAVELED · 3 PARTS
+One of their words has no match in ours. The mind renders it “keep”: to hold, and to guard, at once.
+WHAT IT CARRIED
 WHO THEY ARE · THEIR FOUNDING LINE · “We keep what the light brings.”
 A QUESTION · “Who are you?”
-A FINDING · EMBER · Ember’s heat is smooth. Warm dust would add a bump near 10 µm. · [drawing: Ember’s heat: smooth, without the bump warm dust would show; labels: dust would bump here, what they see, 5 µm, 10 µm, 25 µm] · Their view of Ember is 5.1 Years older than ours. · If true: dust 35 · companions 15 · machines 50 · [Check it ourselves · 2 Years]
+A FINDING · EMBER · Ember’s heat is smooth: no dust bump near 10 µm. · If true: dust 35 · companions 15 · machines 50 · [See the finding, and check it ›]
 [Reply]
 reply ›
 
@@ -846,9 +842,41 @@ HOW BEACON WILL READ IT
 Arrives Year 59.7, · 00:46:27 · after sending. Earliest reply: Year 69.0.
 [Talk it through with the mind ›]
 [Edit] · [Approve and send]
+approve and send ›
+
+#### 4 · Sent · Our signature, and our reply leaving for Beacon. It can’t be recalled.
+Veyra · Year 50.4
+[drawing: Our reply leaving Veyra for Beacon; labels: Veyra, Beacon, 9.3 light-years, arrives Year 59.7]
+SENT
+
+### It’s on its way.
+It reaches Beacon in Year 59.7, and can’t be recalled.
+By the time it arrives, we will have changed. So will they.
+[Back to the conversation]
+then ›
+
+#### 5 · The conversation · The gulf between the worlds, the exchange with its years in flight, what we know of them, and how they have changed us.
+Veyra · Year 50.4
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [40%] · MATTER · 1,480 kt · COMPUTE · [45%]
+REACH · BEACON
+[‹ Conversations]
+[drawing: Veyra and Beacon, 9.3 light-years apart, with our reply in flight; labels: 9.3 light-years · 1 tick = 1 Year of travel, Veyra, ?, Beacon, our reply, in flight]
+THE EXCHANGE
+Year 21.9 · Beacon knocked · A bare pulse, aimed at us.
+9.3 Years in flight
+Year 31.3 · We knocked back · Bare.
+9.3 Years to reach them. They answered 0.4 Years later.
+Year 41.0 · Beacon spoke · “We keep what the light brings.”
+9.3 Years in flight. Meanwhile, our orbital foundry began.
+Year 50.4 · We answered · “We are Veyra. We keep the lights on…” · in flight · arrives Year 59.7 · 00:46:27
+WHAT WE KNOW OF THEM
+[Their beam came from beside the star · about 1.9 AU out: where a living world could be · ›]
+WHAT THIS HAS CHANGED IN US
+Leans hidden, 62 → 58. Speaking with them has opened us a little.
 
 ## First contact · checking what they told us
-Beacon said Ember’s heat is smooth, with no dust. A lie looks exactly like the truth, so the only test is our own look. It takes 2 Years, and the answer can go either way. Their view of Ember is older than ours, so a mismatch is strong evidence of a lie, not proof.
+Beacon said Ember’s heat is smooth, with no dust. A lie reads exactly like the truth, so the only test is to measure it ourselves. It takes 2 Years, and the answer can go either way. Their view of Ember is older than ours, so a mismatch is strong evidence of a lie, not proof.
 
 #### 1 · Check it · From the finding in their message. Our space telescope, 2 Years.
 Veyra · Year 50.4
@@ -857,7 +885,7 @@ ENERGY · [45%] · MATTER · 1,480 kt · COMPUTE · [55%]
 [‹ Message] · KNOW · CHECK A CLAIM
 
 ### Check Beacon’s claim
-A lie looks exactly like the truth. Only our own look can tell them apart.
+A lie reads exactly like the truth. Only measuring it ourselves can tell them apart.
 THEIR CLAIM · Ember’s heat is smooth. Warm dust would add a bump near 10 µm.
 HOW
 Point our space telescope at Ember and read its heat, color by color.
@@ -866,21 +894,21 @@ Energy · [5%] · 5%
 Compute · [10%] · 10%
 TIME
 2 Years · result in the Report, · 00:10:00 · from now
-Our view of Ember is 9.2 Years old; theirs was 14.3. The two looks see Ember at different moments.
+Our view of Ember is 9.2 Years old; theirs was 14.3. The two measurements see Ember at different moments.
 [Start · done in 00:10:00]
 if it holds ›
 
-#### 2a · It holds · Our look matches theirs. The odds on Ember move, and Beacon’s record grows.
+#### 2a · It holds · Our measurement matches theirs. The odds on Ember move, and Beacon’s record grows.
 Veyra · Year 52.4
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
 ENERGY · [40%] · MATTER · 1,560 kt · COMPUTE · [45%]
 REPORT · RESULT
 [‹ All reports]
-[drawing: Ember’s heat: their claim against our own look; labels: their claim, our look, 5 µm, 10 µm, 25 µm]
+[drawing: Ember’s heat: their claim against our own measurement; labels: their claim, our measurement, 5 µm, 10 µm, 25 µm]
 
 ### Beacon’s claim holds
 Checked Year 52.4 with our space telescope
-Our own look matches theirs: Ember’s heat is smooth, with no dust bump. What they told us was true.
+Our measurement matches theirs: Ember’s heat is smooth, with no dust bump. What they told us was true.
 WHAT IT COULD BE · BEFORE → NOW
 Dust from a collision · [55%] · [35%] · 55 → 35
 Cold companions · [35%] · [15%] · 35 → 15
@@ -890,24 +918,26 @@ BEACON’S RECORD
 One true claim doesn’t prove the next one.
 or if not ›
 
-#### 2b · It doesn’t · We see the dust. How likely a lie is, against older light, and what we could do. Nothing is chosen for us.
+#### 2b · It doesn’t · We see the dust. How likely a lie is against three honest causes, and what we could do. Nothing is chosen for us.
 Veyra · Year 52.4
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
 ENERGY · [40%] · MATTER · 1,560 kt · COMPUTE · [45%]
 REPORT · RESULT
 [‹ All reports]
-[drawing: Ember’s heat: their claim against our own look; labels: their claim, our look, 5 µm, 10 µm, 25 µm, the bump they said wasn’t there]
+[drawing: Ember’s heat: their claim against our own measurement; labels: their claim, our measurement, 5 µm, 10 µm, 25 µm, ↑ the bump they said wasn’t there]
 
 ### Beacon’s claim doesn’t hold
-Checked Year 52.4 · our view of Ember is 5.1 Years newer than theirs
-We see the dust bump they said wasn’t there. The odds on Ember stay where they were.
+Checked Year 52.4 with our space telescope
+We see the dust bump they said wasn’t there. Ember’s odds don’t change.
 WHY THE DIFFERENCE · ODDS
-They told us something false · [70%] · 70
-Fresh dust since they looked · [30%] · 30
-Dust from a collision can appear within months: astronomers watched it happen at the star ID8.
+They told us something false · [55%] · 55
+Fresh dust since they measured · [25%] · 25
+Their instrument missed it · [12%] · 12
+Our measurement is off · [8%] · 8
+Their measurement is 5.1 Years older than ours, and fresh dust can appear within months: astronomers watched it happen at the star ID8.
 WHAT NOW
 - Say nothing, keep watching · They won’t know we checked. · now
-- Ask Beacon about it · Arrives Year 61.7. Also tells them we checked. · answer by Year 71.0 · 01:32:53
+- Ask Beacon about it · Also tells them we checked. · answer by Year 71.0 · 01:32:53
 [Talk it through with the mind ›]
 then ›
 
@@ -979,7 +1009,7 @@ Talk it through: the mind’s view, when asked
 Orders for while you are away
 Settings: theme, replay the tour, notifications
 
-### Contact · 11 of 17
+### Contact · 14 of 20
 Away: the notification
 The arrival, as a moment
 The knock arrives
@@ -988,6 +1018,9 @@ Who sent it: the star card
 The choice: knock back, broadcast, or stay dark
 Sent: the conversation and its timeline
 The first reply arrives
+A message lands: their signature and words
+Sending: the reply leaves
+The conversation as the gulf between worlds
 Replying: intent, the mind’s version, approve
 Checking a claim: it holds, or it doesn’t
 What we know, both ways

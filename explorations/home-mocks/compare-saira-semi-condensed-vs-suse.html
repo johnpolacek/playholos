@@ -244,6 +244,17 @@ try{const t=localStorage.getItem('holos-mock-theme');if(t==='light'||t==='dark')
 .say .mono{font-size:9.5px;letter-spacing:.1em;color:var(--you)}.dials{font:10.5px 'IBM Plex Mono',monospace;color:var(--muted)}
 .ask{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;height:44px;margin:auto 0 12px;padding:0 6px 0 14px;border:1px solid var(--ink);border-radius:22px;background:var(--paper);font-size:14px;color:var(--muted)}
 .ask button{width:32px;height:32px;border-radius:50%;background:var(--ink);color:var(--paper);text-align:center}
+.oddswide .odds{grid-template-columns:186px 1fr 26px;padding:3px 0}
+.cinetext .kick{color:var(--other)}.inscr{font-size:17px!important;line-height:1.5;color:var(--ink)!important;font-style:italic}
+.speech{display:flex;flex-direction:column;gap:8px;margin:6px 0 4px;padding:14px;border-radius:14px;background:var(--paper);border:1px solid var(--faint);border-top:3px solid var(--other)}
+.speaker{display:flex;align-items:center;gap:10px}.speaker>span{display:flex;flex-direction:column;gap:1px}.speaker b{font-size:16px}.speaker .mono{font-size:9.5px;letter-spacing:.08em;color:var(--muted)}
+.speech .big{margin:0;font-size:19px;line-height:1.45;font-style:italic}.untr{margin:0;font-size:12px;color:var(--muted);line-height:1.4}
+.inscribed{font-size:16px;font-style:italic;font-weight:500!important}
+.gulfart{padding:6px 0}
+.ent{display:grid;grid-template-columns:70px 1fr;gap:10px;padding:5px 0 5px 10px;border-left:3px solid var(--other)}.ent.us{border-left-color:var(--you)}
+.ent .y{font-size:10.5px;color:var(--muted);padding-top:2px}.ent .t{display:flex;flex-direction:column;gap:1px;font-size:13.5px}.ent .t>span{color:var(--page-ink2);font-style:italic}
+.ent.live{background:var(--paper)}.ent .fly{font-size:10px;color:var(--you);font-style:normal}
+.gapline{margin:0 0 0 12px;padding:3px 0 3px 70px;border-left:1px dashed var(--muted);font-size:10.5px;color:var(--muted)}
 .ledger{grid-template-columns:110px 1fr;row-gap:7px;font-size:13px;margin:2px 0}.ledger dd{color:var(--ink)}
 .starsheet{position:absolute;left:0;right:0;top:392px;bottom:64px;z-index:3;display:flex;flex-direction:column;padding:6px 16px 0;background:var(--paper);border-top:1px solid var(--faint);border-radius:16px 16px 0 0;box-shadow:0 -10px 24px var(--shadow)}
 .starsheet>*{flex-shrink:0}.grab{align-self:center;width:36px;height:4px;border-radius:2px;background:var(--faint);margin-bottom:6px}

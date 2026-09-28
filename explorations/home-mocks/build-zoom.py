@@ -882,6 +882,17 @@ tour_css = '''<style>
 .say .mono{font-size:9.5px;letter-spacing:.1em;color:var(--you)}.dials{font:10.5px 'IBM Plex Mono',monospace;color:var(--muted)}
 .ask{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;height:44px;margin:auto 0 12px;padding:0 6px 0 14px;border:1px solid var(--ink);border-radius:22px;background:var(--paper);font-size:14px;color:var(--muted)}
 .ask button{width:32px;height:32px;border-radius:50%;background:var(--ink);color:var(--paper);text-align:center}
+.oddswide .odds{grid-template-columns:186px 1fr 26px;padding:3px 0}
+.cinetext .kick{color:var(--other)}.inscr{font-size:17px!important;line-height:1.5;color:var(--ink)!important;font-style:italic}
+.speech{display:flex;flex-direction:column;gap:8px;margin:6px 0 4px;padding:14px;border-radius:14px;background:var(--paper);border:1px solid var(--faint);border-top:3px solid var(--other)}
+.speaker{display:flex;align-items:center;gap:10px}.speaker>span{display:flex;flex-direction:column;gap:1px}.speaker b{font-size:16px}.speaker .mono{font-size:9.5px;letter-spacing:.08em;color:var(--muted)}
+.speech .big{margin:0;font-size:19px;line-height:1.45;font-style:italic}.untr{margin:0;font-size:12px;color:var(--muted);line-height:1.4}
+.inscribed{font-size:16px;font-style:italic;font-weight:500!important}
+.gulfart{padding:6px 0}
+.ent{display:grid;grid-template-columns:70px 1fr;gap:10px;padding:5px 0 5px 10px;border-left:3px solid var(--other)}.ent.us{border-left-color:var(--you)}
+.ent .y{font-size:10.5px;color:var(--muted);padding-top:2px}.ent .t{display:flex;flex-direction:column;gap:1px;font-size:13.5px}.ent .t>span{color:var(--page-ink2);font-style:italic}
+.ent.live{background:var(--paper)}.ent .fly{font-size:10px;color:var(--you);font-style:normal}
+.gapline{margin:0 0 0 12px;padding:3px 0 3px 70px;border-left:1px dashed var(--muted);font-size:10.5px;color:var(--muted)}
 .ledger{grid-template-columns:110px 1fr;row-gap:7px;font-size:13px;margin:2px 0}.ledger dd{color:var(--ink)}
 .starsheet{position:absolute;left:0;right:0;top:392px;bottom:64px;z-index:3;display:flex;flex-direction:column;padding:6px 16px 0;background:var(--paper);border-top:1px solid var(--faint);border-radius:16px 16px 0 0;box-shadow:0 -10px 24px var(--shadow)}
 .starsheet>*{flex-shrink:0}.grab{align-self:center;width:36px;height:4px;border-radius:2px;background:var(--faint);margin-bottom:6px}
@@ -1602,7 +1613,7 @@ MIND_TALK = tab_screen('Mind', 'MIND', 'TALKING IT THROUGH', f"""<div class="pin
 Y_CK0, Y_CK1 = Y_R_NOW, round(Y_R_NOW + 2, 1)
 HUD_C0, HUD_C1 = at_year((45, 55, '1,480 kt'), Y_CK0), at_year((40, 45, '1,560 kt'), Y_CK1)
 def ember_compare(ours_bump):
-    # Their claim (smooth, amber) against our own look (blue), with or without the silicate bump near 10 µm.
+    # Their claim (smooth, amber) against our own measurement (blue), with or without the silicate bump near 10 µm.
     w, h, x0, x1, y0, y1 = 358, 96, 16, 342, 72, 20
     lo, hi = math.log10(5), math.log10(25)
     X = lambda l: x0 + (math.log10(l) - lo) / (hi - lo) * (x1 - x0)
@@ -1616,17 +1627,17 @@ def ember_compare(ours_bump):
     s = [f'<line x1="{x0}" y1="{y0}" x2="{x1}" y2="{y0}" stroke="{INK}" stroke-width=".7"></line>',
          f'<path d="{P(smooth)}" fill="none" stroke="{OTHER}" stroke-width="1.4" stroke-dasharray="5 3"></path>',
          f'<path d="{P(bump if ours_bump else smooth)}" fill="none" stroke="{YOU}" stroke-width="1.6"{"" if ours_bump else " opacity=\".8\""}></path>',
-         text(x0, 12, 'their claim', 9, OTHER, 'start', 600), text(x0 + 84, 12, 'our look', 9, YOU, 'start', 600),
+         text(x0, 12, 'their claim', 9, OTHER, 'start', 600), text(x0 + 84, 12, 'our measurement', 9, YOU, 'start', 600),
          f'<line x1="{x0 + 62}" y1="9" x2="{x0 + 78}" y2="9" stroke="{OTHER}" stroke-width="1.4" stroke-dasharray="5 3"></line>',
-         f'<line x1="{x0 + 134}" y1="9" x2="{x0 + 150}" y2="9" stroke="{YOU}" stroke-width="1.6"></line>',
+         f'<line x1="{x0 + 174}" y1="9" x2="{x0 + 190}" y2="9" stroke="{YOU}" stroke-width="1.6"></line>',
          text(x0, h - 8, '5 µm', 8.5, MUTED), text(X(10), h - 8, '10 µm', 8.5, MUTED, 'middle'), text(x1, h - 8, '25 µm', 8.5, MUTED, 'end')]
-    if ours_bump: s.append(text(X(9.8) + 14, y1 - 2, 'the bump they said wasn’t there', 8.5, YOU, 'start'))
-    return f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" font-family="IBM Plex Mono, monospace" role="img" aria-label="Ember’s heat: their claim against our own look">{"".join(s)}</svg>'
+    if ours_bump: s.append(text(X(9.8) - 4, y0 - 12, '↑ the bump they said wasn’t there', 8.5, YOU, 'start'))
+    return f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" font-family="IBM Plex Mono, monospace" role="img" aria-label="Ember’s heat: their claim against our own measurement">{"".join(s)}</svg>'
 
 CHECK_START = f"""<div class="phone">{HUD_C0}<div class="sheet">
 <div class="sh"><button class="backlink">‹ Message</button><span class="mono kind">KNOW · CHECK A CLAIM</span></div>
 <h3 class="lead">Check Beacon’s claim</h3>
-<p class="whyline">A lie looks exactly like the truth. Only our own look can tell them apart.</p>
+<p class="whyline">A lie reads exactly like the truth. Only measuring it ourselves can tell them apart.</p>
 {part('THEIR CLAIM', '<b>Ember’s heat is smooth. Warm dust would add a bump near 10 µm.</b>')}
 <div class="sec">HOW</div>
 <p class="copy">Point our space telescope at Ember and read its heat, color by color.</p>
@@ -1634,7 +1645,7 @@ CHECK_START = f"""<div class="phone">{HUD_C0}<div class="sheet">
 {share('Energy', 5)}{share('Compute', 10)}
 <div class="sec">TIME</div>
 <div class="pile"><b>2 Years</b><span>result in the Report, <span class="rtime">00:10:00</span> from now</span></div>
-<p class="copy small">Our view of Ember is {d_ember:.1f} Years old; theirs was {d_be:.1f}. The two looks see Ember at different moments.</p>
+<p class="copy small">Our view of Ember is {d_ember:.1f} Years old; theirs was {d_be:.1f}. The two measurements see Ember at different moments.</p>
 <button class="primary">Start · done in 00:10:00</button>
 </div></div>"""
 
@@ -1642,7 +1653,7 @@ CHECK_HOLDS = tab_screen('Report', 'REPORT', 'RESULT', f"""<button class="backli
 <div class="art">{ember_compare(False)}</div>
 <h3 class="lead">Beacon’s claim holds</h3>
 <p class="copy small">Checked Year {Y_CK1} with our space telescope</p>
-<p class="copy">Our own look matches theirs: Ember’s heat is smooth, with no dust bump. What they told us was true.</p>
+<p class="copy">Our measurement matches theirs: Ember’s heat is smooth, with no dust bump. What they told us was true.</p>
 <div class="sec">WHAT IT COULD BE · BEFORE → NOW</div>
 {odds('Dust from a collision', 55, 35)}{odds('Cold companions', 35, 15)}{odds('Waste heat from machines', 10, 50)}
 <div class="sec">BEACON’S RECORD</div>
@@ -1652,15 +1663,15 @@ CHECK_HOLDS = tab_screen('Report', 'REPORT', 'RESULT', f"""<button class="backli
 CHECK_FAILS = tab_screen('Report', 'REPORT', 'RESULT', f"""<button class="backlink inline">‹ All reports</button>
 <div class="art">{ember_compare(True)}</div>
 <h3 class="lead">Beacon’s claim doesn’t hold</h3>
-<p class="copy small">Checked Year {Y_CK1} · our view of Ember is {d_be - d_ember:.1f} Years newer than theirs</p>
-<p class="copy">We see the dust bump they said wasn’t there. The odds on Ember stay where they were.</p>
+<p class="copy small">Checked Year {Y_CK1} with our space telescope</p>
+<p class="copy">We see the dust bump they said wasn’t there. Ember’s odds don’t change.</p>
 <div class="sec">WHY THE DIFFERENCE · ODDS</div>
-{odds_now('They told us something false', 70)}{odds_now('Fresh dust since they looked', 30)}
-<p class="copy small">Dust from a collision can appear within months: astronomers watched it happen at the star ID8.</p>
+<div class="oddswide">{odds_now('They told us something false', 55)}{odds_now('Fresh dust since they measured', 25)}{odds_now('Their instrument missed it', 12)}{odds_now('Our measurement is off', 8)}</div>
+<p class="copy small">Their measurement is {d_be - d_ember:.1f} Years older than ours, and fresh dust can appear within months: astronomers watched it happen at the star ID8.</p>
 <div class="sec">WHAT NOW</div>
 <div role="radiogroup" class="choices">
 {choice('Say nothing, keep watching', 'They won’t know we checked.', '<span class="gy">now</span>')}
-{choice('Ask Beacon about it', f'Arrives Year {Y_CK1 + d_b:.1f}. Also tells them we checked.', tstack(f'answer by Year {Y_CK1 + 2 * d_b:.1f}', light_clock(2 * d_b)))}
+{choice('Ask Beacon about it', 'Also tells them we checked.', tstack(f'answer by Year {Y_CK1 + 2 * d_b:.1f}', light_clock(2 * d_b)))}
 </div>
 {TALK}""", HUD_C1)
 
@@ -1675,6 +1686,95 @@ DOSSIER = tab_screen('Reach', 'REACH', 'BEACON', f"""<button class="backlink inl
 {ledger([('Where we are', f'Since Year {Y_FOUND:.1f} or earlier'), ('That we heard', f'Since Year {Y_THERE:.1f}'),
          ('Our founding line', f'From Year {Y_R_NOW + d_b:.1f}, when our reply lands'), ('That we checked', 'Only if we tell them')])}
 <p class="note">Everything here comes from light and messages. Nothing about them is certain.</p>""", HUD_C1)
+
+# ---------- Conversations between worlds: each message is a transmission ----------
+# Every civilization has a signature: its first pulses, drawn as a radial map, like the Voyager plaque's pulsar map.
+def sigil(seed, color, cx, cy, r, n=15):
+    rng = random.Random(seed); s = [f'<circle cx="{fmt(cx)}" cy="{fmt(cy)}" r="{fmt(r * .07)}" fill="none" stroke="{color}" stroke-width="1.2"></circle>']
+    for i in range(n):
+        a = 2 * math.pi * i / n + rng.random() * .25; L = r * (.35 + rng.random() * .65)
+        x2, y2 = cx + L * math.cos(a), cy + L * math.sin(a)
+        s.append(f'<line x1="{fmt(cx + r * .1 * math.cos(a))}" y1="{fmt(cy + r * .1 * math.sin(a))}" x2="{fmt(x2)}" y2="{fmt(y2)}" stroke="{color}" stroke-width=".9"></line>')
+        for k in range(1, 6):          # ticks along the line: the pulse timing, in binary
+            if rng.random() < .5: continue
+            t = .2 + k * .14; px, py = cx + L * t * math.cos(a), cy + L * t * math.sin(a); nx, ny = -math.sin(a) * r * .035, math.cos(a) * r * .035
+            s.append(f'<line x1="{fmt(px - nx)}" y1="{fmt(py - ny)}" x2="{fmt(px + nx)}" y2="{fmt(py + ny)}" stroke="{color}" stroke-width=".9"></line>')
+    return ''.join(s)
+def sigil_svg(seed, color, size, label):
+    return f'<svg width="{size}" height="{size}" viewBox="0 0 {size} {size}" role="img" aria-label="{label}">{sigil(seed, color, size / 2, size / 2, size * .46)}</svg>'
+BEACON_SEED, VEYRA_SEED = 2021, 99240
+VOICE = '“You answered, and quickly. Good. We keep what the light brings. Ember’s warmth carries no dust. Who are you?”'
+
+RECEPTION = f"""<div class="phone cine"><div class="cinetop"><span>Veyra</span><span class="mono">Year {Y_R_ARR}</span></div>
+<svg width="390" height="300" viewBox="0 0 390 300" role="img" aria-label="Beacon’s signature">{stipple(52, 70, 390, 300)}{sigil(BEACON_SEED, OTHER, 195, 150, 118)}</svg>
+<div class="cinetext"><span class="mono kick">BEACON SPEAKS · {d_b:.1f} LIGHT-YEARS</span>
+<h3>“You answered, and quickly. Good.”</h3>
+<p class="inscr">“We keep what the light brings. Ember’s warmth carries no dust. Who are you?”</p>
+<p>Sent Year {Y_R_SENT}. It crossed the dark for {d_b:.1f} Years to reach us.</p>
+<div class="cinebtn"><button class="light">Read what it carried</button><button class="ghostlight">Later</button></div></div></div>"""
+
+REPLY_READ = tab_screen('Reach', 'REACH', 'MESSAGE', f"""<button class="backlink inline">‹ Beacon</button>
+<div class="speech"><div class="speaker">{sigil_svg(BEACON_SEED, OTHER, 44, 'Beacon’s signature')}<span><b>Beacon</b><span class="mono">SENT YEAR {Y_R_SENT} · ARRIVED YEAR {Y_R_ARR}</span></span></div>
+<p class="big">{VOICE}</p>
+<p class="untr">One of their words has no match in ours. The mind renders it “keep”: to hold, and to guard, at once.</p></div>
+<div class="sec">WHAT IT CARRIED</div>
+{part('WHO THEY ARE · THEIR FOUNDING LINE', '<b class="inscribed">“We keep what the light brings.”</b>')}
+{part('A QUESTION', '<b>“Who are you?”</b>')}
+{part('A FINDING · EMBER', '<b>Ember’s heat is smooth: no dust bump near 10 µm.</b><span class="iftrue mono">If true: dust 35 · companions 15 · machines 50</span><button class="chip">See the finding, and check it ›</button>')}
+<button class="primary">Reply</button>""", HUD_R1)
+
+def sent_sky():
+    s = [f'<rect width="390" height="380" fill="{PAPER}"></rect>', stipple(61, 150, 390, 380)]
+    vx, vy, bx, by = 70, 300, 318, 84
+    frac = .16; ex, ey = vx + (bx - vx) * frac, vy + (by - vy) * frac
+    s.append(f'<line x1="{vx}" y1="{vy}" x2="{bx}" y2="{by}" stroke="{INK}" stroke-width=".7" stroke-dasharray="2 5" opacity=".5"></line>')
+    s.append(f'<line x1="{vx}" y1="{vy}" x2="{fmt(ex)}" y2="{fmt(ey)}" stroke="{YOU}" stroke-width="2"></line><circle cx="{fmt(ex)}" cy="{fmt(ey)}" r="4" fill="{YOU}"></circle>')
+    s.append(sigil(VEYRA_SEED, YOU, vx, vy, 44))
+    s.append(text(vx, vy + 62, 'Veyra', 11, YOU, 'middle', 600))
+    s.append(f'<circle cx="{bx}" cy="{by}" r="6" fill="{PAPER}" stroke="{OTHER}" stroke-width="1.5"></circle><path d="M{bx - 16} {by} H{bx + 16} M{bx} {by - 16} V{by + 16}" stroke="{OTHER}" stroke-width=".9"></path>')
+    s.append(text(bx, by - 26, 'Beacon', 11, OTHER, 'middle', 600))
+    s.append(text((vx + bx) / 2 + 20, (vy + by) / 2 + 26, f'{d_b:.1f} light-years', 10, MUTED, 'start'))
+    s.append(text((vx + bx) / 2 + 20, (vy + by) / 2 + 40, f'arrives Year {Y_OUR}', 10, YOU, 'start', 600))
+    return f'<svg width="390" height="380" viewBox="0 0 390 380" font-family="IBM Plex Mono, monospace" role="img" aria-label="Our reply leaving Veyra for Beacon">{"".join(s)}</svg>'
+SENT_CINE = f"""<div class="phone cine"><div class="cinetop"><span>Veyra</span><span class="mono">Year {Y_R_NOW}</span></div>{sent_sky()}
+<div class="cinetext"><span class="mono kick">SENT</span><h3>It’s on its way.</h3>
+<p>It reaches Beacon in Year {Y_OUR}, and can’t be recalled.</p><p>By the time it arrives, we will have changed. So will they.</p>
+<div class="cinebtn"><button class="light">Back to the conversation</button></div></div></div>"""
+
+def gulf():
+    w, h = 358, 150; vx, bx, y = 44, 316, 70
+    s = [stipple(71, 60, w, h), f'<line x1="{vx + 26}" y1="{y}" x2="{bx - 22}" y2="{y}" stroke="{INK}" stroke-width=".8" stroke-dasharray="2 4"></line>']
+    for k in range(1, 10):
+        x = vx + 26 + (bx - 22 - vx - 26) * k / d_b
+        s.append(f'<line x1="{fmt(x)}" y1="{y - 3}" x2="{fmt(x)}" y2="{y + 3}" stroke="{INK}" stroke-width=".7" opacity=".6"></line>')
+    s.append(text((vx + bx) / 2, y + 20, f'{d_b:.1f} light-years · 1 tick = 1 Year of travel', 9, MUTED, 'middle'))
+    # Veyra: our world in line. Beacon: its star, and the orbit its beam came from.
+    s.append(f'<circle cx="{vx}" cy="{y}" r="22" fill="{PAPER}" stroke="{INK}" stroke-width="1.3"></circle><path d="M{vx - 16} {y - 6} q10 -8 20 0 q6 5 12 1 M{vx - 18} {y + 8} q12 6 22 -2" fill="none" stroke="{INK}" stroke-width=".8"></path>')
+    s.append(text(vx, y + 40, 'Veyra', 10, YOU, 'middle', 600))
+    s.append(f'<ellipse cx="{bx}" cy="{y}" rx="30" ry="10" fill="none" stroke="{OTHER}" stroke-width=".8" stroke-dasharray="3 3"></ellipse><circle cx="{bx}" cy="{y}" r="8" fill="{PAPER}" stroke="{OTHER}" stroke-width="1.4"></circle>')
+    s.append(f'<circle cx="{bx - 30}" cy="{y}" r="3" fill="{PAPER}" stroke="{OTHER}" stroke-width="1.2"></circle>' + text(bx - 30, y - 12, '?', 10, OTHER, 'middle', 600))
+    s.append(text(bx, y + 40, 'Beacon', 10, OTHER, 'middle', 600))
+    fx = vx + 26 + (bx - 22 - vx - 26) * .01
+    s.append(f'<circle cx="{fmt(fx + 6)}" cy="{y}" r="4" fill="{YOU}"></circle>' + text(fx + 6, y - 12, 'our reply, in flight', 9, YOU, 'start', 600))
+    return f'<svg width="{w}" height="{h - 44}" viewBox="0 14 {w} {h - 44}" font-family="IBM Plex Mono, monospace" role="img" aria-label="Veyra and Beacon, 9.3 light-years apart, with our reply in flight">{"".join(s)}</svg>'
+
+def ent(side, year, title, line, extra=''):
+    return f'<div class="ent {side}"><span class="y mono">Year {year}</span><span class="t"><b>{title}</b><span>{line}</span>{extra}</span></div>'
+def gap(line): return f'<div class="gapline">{line}</div>'
+GULF = tab_screen('Reach', 'REACH', 'BEACON', f"""<button class="backlink inline">‹ Conversations</button>
+<div class="art gulfart">{gulf()}</div>
+<div class="sec">THE EXCHANGE</div>
+{ent('them', f'{Y_SENT:.1f}', 'Beacon knocked', 'A bare pulse, aimed at us.')}
+{gap(f'{d_b:.1f} Years in flight')}
+{ent('us', Y_NOW, 'We knocked back', 'Bare.')}
+{gap(f'{d_b:.1f} Years to reach them. They answered 0.4 Years later.')}
+{ent('them', Y_R_SENT, 'Beacon spoke', '“We keep what the light brings.”')}
+{gap(f'{d_b:.1f} Years in flight. Meanwhile, our orbital foundry began.')}
+{ent('us live', Y_R_NOW, 'We answered', '“We are Veyra. We keep the lights on…”', f'<span class="fly mono">in flight · arrives Year {Y_OUR} · {light_clock(d_b)}</span>')}
+<div class="sec">WHAT WE KNOW OF THEM</div>
+{row('Their beam came from beside the star', 'about 1.9 AU out: where a living world could be', '›', 'other', marker=True)}
+<div class="sec">WHAT THIS HAS CHANGED IN US</div>
+<p class="copy small">Leans hidden, 62 → 58. Speaking with them has opened us a little.</p>""", HUD_R2)
 
 # ---------- The arrival, as a moment: the screen gives way to the sky ----------
 # Line art in the app's theme, like every other screen: the drawing colors retint with it.
@@ -1763,7 +1863,7 @@ CHECKLIST = [
               ('Settings: theme, replay the tour, notifications', 'todo')]),
     ('Contact', [('Away: the notification', 'done'), ('The arrival, as a moment', 'done'), ('The knock arrives', 'done'), ('The signal in full: what it tells us', 'done'), ('Who sent it: the star card', 'done'),
                  ('The choice: knock back, broadcast, or stay dark', 'done'), ('Sent: the conversation and its timeline', 'done'),
-                 ('The first reply arrives', 'done'), ('Replying: intent, the mind’s version, approve', 'done'), ('Checking a claim: it holds, or it doesn’t', 'done'), ('What we know, both ways', 'done'),
+                 ('The first reply arrives', 'done'), ('A message lands: their signature and words', 'done'), ('Sending: the reply leaves', 'done'), ('The conversation as the gulf between worlds', 'done'), ('Replying: intent, the mind’s version, approve', 'done'), ('Checking a claim: it holds, or it doesn’t', 'done'), ('What we know, both ways', 'done'),
                  ('We find them first: a clue confirmed', 'todo'), ('A broadcast sweeps past', 'todo'), ('A visitor brakes into our system', 'todo'),
                  ('A far mind met them first', 'todo'), ('Crossed knocks', 'todo'), ('The silent one: no answer, ever', 'todo')]),
     ('Stakes · later', [('The strike as first contact', 'later'), ('A launch flare seen toward us', 'later'), ('Wounded: the morning after', 'later'), ('Total loss and a new cohort', 'later')]),
@@ -1861,18 +1961,22 @@ SECTIONS = [
      f'<figure><figcaption><strong>5 · Talk it through</strong><span>Opt-in. The decision stays pinned. The mind answers from what we know, and gives its view only when asked.</span></figcaption>{MIND_TALK}</figure>'
      '<span class="pinch">decide ›</span>'
      f'<figure><figcaption><strong>6 · Sent</strong><span>The first conversation in Reach, drawn in time: our light, their knock, ours, and the earliest reply.</span></figcaption>{KNOCK_SENT}</figure>'),
-    ('reply', 'Reply', 'First contact · the first reply', f'Year {Y_R_ARR}. Beacon answers our bare knock with three parts: who they are, a finding about Ember, and a question. Then our reply: plain intent, turned by the mind into parts that can travel, approved before it goes. Facts travel as parts; the prose is each civilization’s own voice.',
-     f'<figure><figcaption><strong>1 · They answered</strong><span>The conversation, with every send and arrival stamped, and the timeline filled in.</span></figcaption>{REPLY_THREAD}</figure>'
-     '<span class="pinch">read it ›</span>'
-     f'<figure><figcaption><strong>2 · What they said</strong><span>Their voice, then the parts. The finding would change our odds on Ember, if it is true.</span></figcaption>{REPLY_READ}</figure>'
+    ('reply', 'Reply', 'First contact · the first reply', f'Year {Y_R_ARR}. Two worlds {d_b:.1f} light-years apart, speaking across a decade each way. A message landing is an event: their signature, their words set large, what they carried. Sending is a ceremony. The conversation is drawn as the gulf between the two worlds, with every message’s years in flight. Facts travel as parts; the prose is each civilization’s own voice.',
+     f'<figure><figcaption><strong>1 · Beacon speaks</strong><span>A reply lands. Their signature, drawn from their pulses, then their words.</span></figcaption>{RECEPTION}</figure>'
+     '<span class="pinch">read what it carried ›</span>'
+     f'<figure><figcaption><strong>2 · What they said</strong><span>Their voice first, set large, with what doesn’t translate. Then the parts.</span></figcaption>{REPLY_READ}</figure>'
      '<span class="pinch">reply ›</span>'
-     f'<figure><figcaption><strong>3 · Our reply</strong><span>What you want to say, what will travel, what was left out and why, and how it will read. The mind translates; it doesn’t judge.</span></figcaption>{COMPOSE}</figure>'),
-    ('check', 'Check', 'First contact · checking what they told us', 'Beacon said Ember’s heat is smooth, with no dust. A lie looks exactly like the truth, so the only test is our own look. It takes 2 Years, and the answer can go either way. Their view of Ember is older than ours, so a mismatch is strong evidence of a lie, not proof.',
+     f'<figure><figcaption><strong>3 · Our reply</strong><span>What you want to say, what will travel, what was left out and why, and how it will read. The mind translates; it doesn’t judge.</span></figcaption>{COMPOSE}</figure>'
+     '<span class="pinch">approve and send ›</span>'
+     f'<figure><figcaption><strong>4 · Sent</strong><span>Our signature, and our reply leaving for Beacon. It can’t be recalled.</span></figcaption>{SENT_CINE}</figure>'
+     '<span class="pinch">then ›</span>'
+     f'<figure><figcaption><strong>5 · The conversation</strong><span>The gulf between the worlds, the exchange with its years in flight, what we know of them, and how they have changed us.</span></figcaption>{GULF}</figure>'),
+    ('check', 'Check', 'First contact · checking what they told us', 'Beacon said Ember’s heat is smooth, with no dust. A lie reads exactly like the truth, so the only test is to measure it ourselves. It takes 2 Years, and the answer can go either way. Their view of Ember is older than ours, so a mismatch is strong evidence of a lie, not proof.',
      f'<figure><figcaption><strong>1 · Check it</strong><span>From the finding in their message. Our space telescope, 2 Years.</span></figcaption>{CHECK_START}</figure>'
      '<span class="pinch">if it holds ›</span>'
-     f'<figure><figcaption><strong>2a · It holds</strong><span>Our look matches theirs. The odds on Ember move, and Beacon’s record grows.</span></figcaption>{CHECK_HOLDS}</figure>'
+     f'<figure><figcaption><strong>2a · It holds</strong><span>Our measurement matches theirs. The odds on Ember move, and Beacon’s record grows.</span></figcaption>{CHECK_HOLDS}</figure>'
      '<span class="pinch">or if not ›</span>'
-     f'<figure><figcaption><strong>2b · It doesn’t</strong><span>We see the dust. How likely a lie is, against older light, and what we could do. Nothing is chosen for us.</span></figcaption>{CHECK_FAILS}</figure>'
+     f'<figure><figcaption><strong>2b · It doesn’t</strong><span>We see the dust. How likely a lie is against three honest causes, and what we could do. Nothing is chosen for us.</span></figcaption>{CHECK_FAILS}</figure>'
      '<span class="pinch">then ›</span>'
      f'<figure><figcaption><strong>3 · What we know, both ways</strong><span>The record of the conversation: what we know about Beacon, and what Beacon knows about us.</span></figcaption>{DOSSIER}</figure>'),
 ]
