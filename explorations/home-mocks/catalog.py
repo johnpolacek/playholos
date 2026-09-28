@@ -5,8 +5,11 @@ Hard science, speculative engineering. Every entry names a physical basis; the
   grounded     demonstrated, or built from demonstrated parts
   plausible    physics is sound; the engineering is unproven at this scale
   speculative  physics allows it; far beyond anything built
-Costs are shares of each year's supply (the yearly-budget model, not yet
-decided). One game year is 5 real minutes. Visibility is what the project adds
+Energy and compute are yearly budgets: they cannot be stored at planetary
+scale, so a running project takes a share of each year's supply. Matter is a
+stockpile: a project draws its matter once, when it starts. In `cost`, E and C
+are percent shares; M is converted to kilotonnes by tier (see matter_tonnes).
+One game year is 5 real minutes. Visibility is what the project adds
 to how detectable the civilization is: quiet, noticeable, or loud.
 """
 
@@ -22,30 +25,45 @@ def P(id, name, purpose, tier, years, cost, what, basis, level, visibility, need
     return dict(id=id, name=name, purpose=purpose, tier=tier, years=years, cost=cost, what=what, basis=basis,
                 level=level, visibility=visibility, needs=list(needs), effect=effect, reveals=list(reveals))
 
+# What every civilization starts with: Earth's instruments and industry today, plus about a century.
+# Catalog projects are upgrades beyond it. (purpose, name, icon key, what it gives you, basis)
+STARTING_KIT = [
+    ('know', 'Sky watch', 'skywatch', 'The whole sky in light and radio, always on. Catches strong knocks and broadcasts.',
+     'Whole-sky surveys such as Rubin and CHIME; PANOSETI is being built to catch nanosecond flashes.'),
+    ('know', 'Space telescope', 'ir', 'One large telescope for light and heat.', 'JWST today; the Habitable Worlds Observatory is planned for the 2040s.'),
+    ('know', 'Star surveys', 'survey', 'The big planets of the nearest stars, already mapped. The three clues came from here.', 'Gaia, HARPS, TESS and PLATO.'),
+    ('know', 'Radio array', 'receiver', 'A radio telescope as wide as a continent.', 'The Square Kilometre Array, under construction.'),
+    ('grow', 'Planetary grid', 'grid', 'All of each year’s energy: the 100% every project shares.', 'Today’s grids, a century further on.'),
+    ('grow', 'Data centers', 'annex', 'Where the mind runs. All of each year’s compute.', 'Today’s data centers, a century further on.'),
+    ('grow', 'Mines and heavy lift', 'lift', '1,240 kt of matter in orbit, and 40 kt more each year.', 'Reusable heavy lift, as Starship is being built to do.'),
+    ('reach', 'Laser links', 'beam', 'Messages across the home system in hours.', 'NASA’s DSOC laser link, tested from deep space in 2023.'),
+    ('reach', 'Precursor probes', 'probe', 'Two probes heading out. The farthest is 900 AU away.', 'Voyager 1 is about 170 AU out today.'),
+]
+
 PROJECTS = [
     # ---------- KNOW ----------
     P('transit-watch', 'Transit watch', 'know', 1, 4, 'E5 C10',
-      'Times dimming events to see whether they repeat, and how regularly.',
-      'Transit photometry, as done by Kepler and TESS.', 'grounded', 'quiet',
+      'Stares at one star without a break, timing every dip the surveys catch only in passing.',
+      'Continuous photometry, beyond the survey cadence of TESS and PLATO.', 'grounded', 'quiet',
       reveals=['measure-crossing']),
     P('spectrograph-bank', 'Spectrograph bank', 'know', 1, 8, 'E10 M5 C15',
-      'Splits starlight into colors to read gases, temperatures and motion.',
-      'High-resolution spectroscopy, as with ESPRESSO and HARPS.', 'grounded', 'quiet'),
-    P('optical-flash-watch', 'Optical flash watch', 'know', 1, 6, 'E10 M5 C20',
-      'Watches the whole sky for nanosecond laser flashes.',
-      'Optical SETI, as in the PANOSETI project.', 'grounded', 'quiet',
+      'Ultra-stable spectrographs: they read gases, and feel small planets tug their stars.',
+      'Past ESPRESSO’s 10 cm/s goal: an Earth tugs a Sun-like star by about 9 cm/s.', 'grounded', 'quiet'),
+    P('optical-flash-watch', 'Deep flash watch', 'know', 1, 6, 'E10 M5 C20',
+      'Catches laser flashes a hundred times fainter than the sky watch can, anywhere in the sky.',
+      'Optical SETI at scale, far beyond PANOSETI.', 'grounded', 'quiet',
       reveals=['watch-flashes']),
     P('deep-field-receiver', 'Deep-field receiver', 'know', 1, 12, 'E20 M15 C20',
-      'Hears fainter radio. Quiet neighbors stay hidden until you can.',
-      'Sensitivity grows with collecting area, as in the Square Kilometre Array.', 'grounded', 'quiet',
+      'A radio array far beyond the one we start with. Quiet neighbors stay hidden until you have it.',
+      'Sensitivity grows with collecting area; this is many times the Square Kilometre Array.', 'grounded', 'quiet',
       effect='Lowers the detection floor for radio.', reveals=['listen-to']),
     P('planet-survey', 'Planet survey', 'know', 1, 14, 'E10 C25',
-      'Finds planets around the 12 nearest stars by the wobble they cause.',
-      'Radial-velocity and astrometric surveys, as with HARPS and Gaia.', 'grounded', 'quiet',
+      'Finds Earth-sized planets around the 12 nearest stars. The big ones are already known.',
+      'Precise radial velocity and astrometry, beyond today’s reach.', 'grounded', 'quiet',
       needs=['spectrograph-bank'], reveals=['study-air', 'survey-wider']),
     P('infrared-telescope', 'Infrared telescope', 'know', 1, 18, 'E25 M10 C15',
-      'Sees heat. Can tell cold dust from warm companions.',
-      'Cryogenic infrared telescopes, as with JWST.', 'grounded', 'quiet',
+      'A cold telescope many times larger than the one we start with. Tells cold dust from warm companions.',
+      'Cryogenic infrared telescopes, like JWST at far larger scale.', 'grounded', 'quiet',
       reveals=['map-dust', 'resolve-companions', 'listen-to']),
     P('waste-heat-survey', 'Waste-heat survey', 'know', 2, 16, 'E15 C25',
       'Checks every star in range for heat that nature does not explain.',
@@ -95,7 +113,7 @@ PROJECTS = [
     P('belt-mining', 'Belt mining', 'grow', 1, 20, 'E20 C10',
       'Metals from the belt, hauled to Veyra’s orbit.',
       'Asteroid mining; no one has done it yet, but every step is known.', 'plausible', 'quiet',
-      needs=['belt-prospecting'], effect='+30% matter every year.'),
+      needs=['belt-prospecting'], effect='+120 kt of matter every year.'),
     P('orbital-foundry', 'Orbital foundry', 'grow', 2, 30, 'E25 M30 C10',
       'Builds large things in space instead of lifting them off Veyra.',
       'In-space manufacturing, from today’s orbital 3D printers upward.', 'plausible', 'noticeable',
@@ -107,7 +125,7 @@ PROJECTS = [
     P('ice-harvest', 'Ice harvest', 'grow', 2, 36, 'E20 M15 C10',
       'Water and fuel from the ice world at 9 AU.',
       'Volatiles mining from outer-system ices; deuterium is fusion fuel.', 'plausible', 'quiet',
-      needs=['orbital-foundry'], effect='+15% matter; supplies fusion fuel.'),
+      needs=['orbital-foundry'], effect='+60 kt of ice every year; supplies fusion fuel.'),
     P('fusion-plant', 'Fusion plant', 'grow', 2, 40, 'M25 C20',
       'Power from fusing light atoms. A large step up in energy.',
       'Deuterium fusion is physically sound; sustained net power is not yet demonstrated.', 'plausible', 'noticeable',
@@ -127,12 +145,12 @@ PROJECTS = [
     P('star-lifting', 'Star lifting', 'grow', 4, 240, 'E40 M20 C30',
       'Pulls gas off the star itself for fuel and raw material.',
       'Star lifting, proposed by David Criswell. Physics allows it; the scale is vast.', 'speculative', 'loud',
-      needs=['solar-swarm'], effect='Matter ×3.'),
+      needs=['solar-swarm'], effect='Triples matter income.'),
 
     # ---------- REACH ----------
     P('tight-beam', 'Tight-beam transmitter', 'reach', 1, 6, 'E15 C5',
       'Sends a private laser message to one known star.',
-      'Deep-space laser communication, as NASA’s DSOC demonstrated.', 'grounded', 'quiet',
+      'Scales up deep-space laser links like NASA’s DSOC to reach other stars.', 'grounded', 'quiet',
       effect='Only the target can read it. It still tells them we exist.', reveals=['reply-to']),
     P('broadcast-beacon', 'Broadcast beacon', 'reach', 1, 4, 'E20',
       'Announces us to every star in range, permanently.',
@@ -199,7 +217,7 @@ DISCOVERIES = [
       'Reads a planet’s atmosphere from the starlight passing through it.',
       'Transmission spectroscopy, as JWST does today.', 'grounded', 'quiet', needs=['planet-survey', 'spectrograph-bank'],
       effect='Appears when the survey finds a planet worth a look.'),
-    P('study-sol', 'Study Sol’s living world', 'know', 2, 18, 'E15 C20',
+    P('study-sol', 'Study the oxygen world', 'know', 2, 18, 'E15 C20',
       'Oxygen, methane, water: and maybe gases only industry makes.',
       'Biosignatures and technosignatures such as CFCs and nitrogen dioxide.', 'plausible', 'quiet',
       needs=['spectrograph-bank', 'infrared-telescope'], effect='Appears from the oxygen clue. Earth is 19.9 ly away.'),
@@ -239,7 +257,7 @@ DISCOVERIES = [
 WHY = {
     'transit-watch': 'Your quickest real answer: is a dimming a pattern or a fluke?',
     'spectrograph-bank': 'Reads what anything is made of. Most other Know projects build on it.',
-    'optical-flash-watch': 'Catches a signal a quiet civilization might send on purpose.',
+    'optical-flash-watch': 'Hears knocks too faint for the sky watch: quieter senders, or farther ones.',
     'deep-field-receiver': 'Hear civilizations quieter than you. Without it, the sky stays silent.',
     'planet-survey': 'Shows which nearby stars have worlds worth studying, visiting or settling.',
     'infrared-telescope': 'Tells you whether a warm glow is natural, or someone’s machines.',
@@ -279,7 +297,7 @@ WHY = {
     'dispersal-outposts': 'One strike can no longer end you.',
     'measure-crossing': 'Learn what keeps dimming that star: a planet, dust, or something built.',
     'study-air': 'Find out whether a planet has life, or could.',
-    'study-sol': 'Learn whether Sol’s living world has a civilization.',
+    'study-sol': 'Learn whether the oxygen world has a civilization.',
     'map-dust': 'Rings in the dust can show where hidden planets are.',
     'resolve-companions': 'Rule companions in or out as the source of a glow.',
     'listen-to': 'Your best chance to hear a quiet neighbor.',
@@ -299,9 +317,24 @@ def real_time(years):
     days, rest = divmod(total, 86400); h, rest = divmod(rest, 3600); m, sec = divmod(rest, 60)
     return (f'{days}d ' if days else '') + f'{h:02d}:{m:02d}:{sec:02d}'
 
-def cost_text(cost):
-    names = {'E': 'energy', 'M': 'matter', 'C': 'compute'}
-    return ', '.join(f'{names[c[0]]} {c[1:]}%' for c in cost.split())
+TONNES_PER_POINT = {1: 20, 2: 200, 3: 2000, 4: 20000}   # kilotonnes per point of M
+def matter_tonnes(p):
+    """Matter drawn once at start, in kilotonnes. Sample amounts, scaled by tier."""
+    points = sum(int(c[1:]) for c in p['cost'].split() if c[0] == 'M')
+    return points * TONNES_PER_POINT[p['tier']]
+
+def tonnes(kt):
+    return f'{kt / 1000:,.0f} Mt' if kt >= 10000 else f'{kt:,} kt'
+
+def cost_text(p):
+    parts = [f'{"energy" if c[0] == "E" else "compute"} {c[1:]}% a year' for c in p['cost'].split() if c[0] in 'EC']
+    if matter_tonnes(p): parts.append(f'{tonnes(matter_tonnes(p))} of matter at start')
+    return ', '.join(parts)
+
+def cost_chips(p):
+    parts = [f'{c[0]} {c[1:]}%' for c in p['cost'].split() if c[0] in 'EC']
+    if matter_tonnes(p): parts.append(tonnes(matter_tonnes(p)))
+    return ' · '.join(parts)
 
 def unlocks(pid):
     everything = PROJECTS + DISCOVERIES
@@ -312,7 +345,7 @@ def card(p, names):
     opens = unlocks(p['id'])
     return (f'<article class="ccard {p["purpose"]}"><header><b>{p["name"]}</b><span class="ctime"><span class="gy">{p["years"]} Years</span> <span class="rtime">{real_time(p["years"])}</span></span></header>'
             f'<p class="why">{p["why"]}</p><p>{p["what"]}</p><p class="basis">{p["basis"]}</p>'
-            f'<div class="tags"><span class="lvl {p["level"]}">{LEVEL_WORDS[p["level"]]}</span><span class="vis {p["visibility"]}">{p["visibility"]}</span><span class="mono">{p["cost"].replace(" ", " · ")}</span></div>'
+            f'<div class="tags"><span class="lvl {p["level"]}">{LEVEL_WORDS[p["level"]]}</span><span class="vis {p["visibility"]}">{p["visibility"]}</span><span class="mono">{cost_chips(p)}</span></div>'
             + (f'<p class="rel"><b>Needs</b> {need}</p>' if need else '')
             + (f'<p class="rel"><b>Unlocks</b> {", ".join(opens)}</p>' if opens else '')
             + (f'<p class="rel"><b>Effect</b> {p["effect"]}</p>' if p['effect'] else '') + '</article>')
@@ -346,13 +379,18 @@ def markdown():
     need_names = lambda needs: ' + '.join(' or '.join(names[x] for x in n.split('|')) for n in needs) or 'nothing'
     out = ['# Holos: project catalog', '',
            'September 26, 2026. A design catalog, generated from `explorations/home-mocks/catalog.py`. Edit the data there, then run `python3 explorations/home-mocks/build-zoom.py`.', '',
-           '**Projects are how you know, grow and reach**, and later how you endure. Every entry leads with its **why**: the benefit to the player, in plain words. Each one spends a share of every year’s energy, matter and compute, and takes game time that passes as real time. Game time is written in words, like 18 Years; real time is written as a countdown, like `01:30:00`. One Year is `00:05:00`.', '',
+           '**Projects are how you know, grow and reach**, and later how you endure. Every entry leads with its **why**: the benefit to the player, in plain words. Each one takes a share of every year’s energy and compute while it runs, draws matter from the stockpile once when it starts, and takes game time that passes as real time. Game time is written in words, like 18 Years; real time is written as a countdown, like `01:30:00`. One Year is `00:05:00`.', '',
            'Everything here is hard science with speculative engineering. **Level** says how far each reaches: *grounded* is demonstrated or built from demonstrated parts; *plausible* is sound physics with unproven engineering at this scale; *speculative* is allowed by physics but far beyond anything built. **Visibility** is what the project adds to how easily others could detect us.', '',
+           '## What every civilization starts with', '',
+           'Earth’s instruments and industry today, plus about a century. Every project below is an upgrade beyond this kit. The kit found the opening clues, and it catches strong knocks.', '']
+    out += [f'- **{name}** ({purpose.title()}): {what} *{basis}*' for purpose, name, _, what, basis in STARTING_KIT]
+    out += ['',
            '## How unlocks work', '',
            '- **Building unlocks** follow fixed chains: you need the tools first. The foundry comes before anything large in space; a launcher before any probe.',
            '- **Discovery projects** appear only when a result opens them, and target a specific star or planet. They are listed at the end.',
            '- Locked projects stay visible with the reason: “Needs: orbital foundry.”',
-           '- Costs assume a yearly budget, which is not yet decided. Tiers group projects by how far into a game they usually come.', '']
+           '- **Energy and compute are yearly budgets;** neither can be stored at planetary scale, so a running project takes a share of every year’s supply, and pausing frees it. **Matter is a stockpile:** a project draws its matter once when it starts. Amounts are sample values, in kilotonnes (kt) and megatonnes (Mt).',
+           '- Tiers group projects by how far into a game they usually come.', '']
     for purpose, blurb in PURPOSES.items():
         out += [f'## {purpose.title()}', '', blurb, '']
         for tier in (1, 2, 3, 4):
@@ -364,7 +402,7 @@ def markdown():
                         f'- **Why:** {p["why"]}',
                         f'- **What:** {p["what"]}',
                         f'- **Basis:** {p["basis"]}',
-                        f'- **Uses each year:** {cost_text(p["cost"])}',
+                        f'- **Uses:** {cost_text(p)}',
                         f'- **Needs:** {need_names(p["needs"])}']
                 if p['effect']: out.append(f'- **Effect:** {p["effect"]}')
                 opens = [n for n in unlocks(p['id']) if n not in {names[r] for r in p['reveals']}]
@@ -374,7 +412,7 @@ def markdown():
     out += ['## Discovery projects', '', 'These appear from results, and name their target. Braces mark where a real star, planet or sender is filled in.', '']
     for p in DISCOVERIES:
         out += [f'**{p["name"]}** · {p["purpose"].title()} · {p["years"]} Years · `{real_time(p["years"])}` · {LEVEL_WORDS[p["level"]]}', '',
-                f'- **Why:** {p["why"]}', f'- **What:** {p["what"]}', f'- **Basis:** {p["basis"]}', f'- **Uses each year:** {cost_text(p["cost"])}',
+                f'- **Why:** {p["why"]}', f'- **What:** {p["what"]}', f'- **Basis:** {p["basis"]}', f'- **Uses:** {cost_text(p)}',
                 f'- **Needs:** {need_names(p["needs"])}', f'- **Appears:** {p["effect"] or "When its prerequisite finishes."}', '']
     counts = {k: sum(p['purpose'] == k for p in PROJECTS) for k in PURPOSES}
     out += ['## Counts', '', f'{len(PROJECTS)} catalog projects ({", ".join(f"{v} {k}" for k, v in counts.items())}) and {len(DISCOVERIES)} discovery projects.', '']

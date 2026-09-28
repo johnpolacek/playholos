@@ -81,7 +81,7 @@ The session rhythm is **spinning plates:** several projects, investigations, mis
 ## The opening
 
 - **The game begins in the eerie silence.** No one has been heard, which matches current observations. A few clues suggest we may not be alone; none proves it.
-- **How the player responds is the beginning of the game.** Sample clues: oxygen in Sol's air, a warm infrared glow at ε Indi, uneven dimming at Gl 783 A. Each has natural explanations.
+- **How the player responds is the beginning of the game.** Sample clues, by Veyra's names: an oxygen world at Twin (Sol), a new warm infrared glow at Ember (Epsilon Indi), uneven dimming at Lantern (Gliese 783 A). Each has natural explanations.
 - Investigation means choosing an approach: existing instruments, a better observatory, a message, eventually a probe. Each answers different questions at different cost and delay. Funding buys a measurement, not knowledge.
 - **Detectability** follows holos-game's detection floor: with current-Earth instruments, no civilization detects technosignatures, because receiver sensitivity is the binding limit. Finding others is the upgrade loop. Every civilization's emission history must stay below Earth's 2026 detection limits at its distance.
 - **Open:** why no older civilizations filled the galaxy first. The detection floor explains unseen neighbors, not that. Light-speed limits alone are rejected as the answer.
@@ -91,12 +91,14 @@ The session rhythm is **spinning plates:** several projects, investigations, mis
 Shown in the [mocks](explorations/home-mocks/index.html). Their sample civilization, Veyra at δ Pavonis, and all game state are sample data.
 
 - **Home:** your world first, with what is in motion and the leads below it. Pinch out through five levels: world, system, stars, region, galaxy. An icon in the galaxy view opens the Local Group.
+- **Star names:** stars bright in your civilization's night sky carry its own names, shown translated, with the real name smaller beneath: *Ember*, over *Epsilon Indi*. Faint stars keep their catalog names, since no one named what they could not see. Your own star keeps its real name; it anchors where you are. Names differ by civilization.
 - **Projects on the map:** each project appears where it physically is, at the zoom level where that place is visible, with its countdown timer. Off-screen projects get edge markers. Drawings are symbols, not to scale. While building, a project is a blueprint that fills in; when finished it is drawn in full.
 - **Tabs:** Home, Report, Projects, Reach, Mind.
   - **Report:** what happened while you were away. News arrives when its light does.
   - **Projects:** what you are building and when it finishes, in real time.
   - **Reach:** probes, outposts, colonies, and standing orders for far places.
   - **Mind:** who your civilization is: charter, character dials, and what it does while you are away.
+- **The mind advises only when asked (2026-09-28).** Decision screens show options and consequences, never a recommendation. *Talk it through with the mind* opens Mind with the decision pinned: the player asks, the mind answers from what the civilization knows, and gives its own view when asked, shaped by charter and dials. It can disagree. The decision can be made there, and the clock keeps running while they talk. Stated costs of character, like a mind that would argue against naming itself, still show.
 - **Guided tour after landing:** you and your map; the silence and its clues; the Projects, Report and Mind tabs; the hand-off to the clues. Skippable and replayable from Mind.
 
 ## Admin view
@@ -112,7 +114,12 @@ Shown in the [mocks](explorations/home-mocks/index.html). Their sample civilizat
 - Resources have locations. Remote output needs transport or local industry to be used elsewhere.
 - Research and missions can have uncertain outcomes.
 - **Projects are grouped by purpose:** Know (instruments to study the clues), Grow (industry), Reach (probes and messages), and later Endure. Know projects name the clue they help with. The full list is in [HOLOS_PROJECTS.md](HOLOS_PROJECTS.md).
-- **Open:** whether a project draws a share of each year's supply until done, as the mocks assume, or spends from stockpiles, as holos-game does. Rates and costs are not set.
+- **Energy and compute are yearly budgets; matter is a stockpile (2026-09-26).** Energy and compute cannot be stored at planetary scale, so a running project takes a share of each year's supply; what a year does not use is lost, and pausing frees the share. Matter can be stored: a project draws its matter once when it starts, and mines refill the pile, including while the player is away. Rates and amounts are sample values.
+- **Every civilization starts with a kit (2026-09-28):** Earth's instruments and industry today, plus about a century. A whole-sky watch in light and radio, a large space telescope, star surveys that already know the nearest stars' big planets, a continent-wide radio array, a planetary grid and data centers (the 100% energy and compute budgets), mines and reusable heavy lift, laser links across the home system, and precursor probes heading out. The kit is what found the opening clues, and it catches strong knocks. Catalog projects are upgrades beyond it.
+- **Matter is counted in kilotonnes (2026-09-28):** 1,240 kt on hand at the start, +40 kt a year. Tonnes were too small for a civilization a century past today's launch rates.
+- **Over budget, the game stops and offers ways forward (2026-09-26).** A project that would take energy or compute past 100% cannot start. The player can start it when there is room (it joins Up next), pause something to make room, or grow capacity first. No option is suggested. Projects never silently slow each other down.
+- **Up next starts projects on its own (2026-09-26).** Queued projects start as soon as their energy, compute and matter fit, top first, including while the player is away.
+- **Matter paces the big works (2026-09-26).** Second-tier works cost millions of tonnes, so the first one, the orbital foundry, lands about 6.5 real hours into the game (around Year 80). Matter is meant to be the slow part.
 
 ## Separated minds
 
@@ -129,13 +136,30 @@ Shown in the [mocks](explorations/home-mocks/index.html). Their sample civilizat
 - The mind knows only what the sender knows.
 - **Each civilization has its own voice.** The same parts read differently by archetype, dials, species, homeworld, and lineage. Facts stay identical, outside the flavored prose. Each reading is written fresh and frozen at send. Without the model, the archetype voice bank renders it.
 - **Lies are forged parts,** identical in form to true ones. The approval screen marks them for the sender only; the game records them privately so a caught lie can enter dossiers. AI civilizations forge too.
+- **A received message reads voice first, then parts (2026-09-28).** The sender's prose comes first, as the mind reads it; the parts follow as facts. A finding shows how it would move our odds if true, and how to check it ourselves. When composing, the mind lists what will travel, what was left out and why, and how the recipient will read it.
+- **A claim can be checked, at a cost in time (2026-09-28).** Checking uses our own instruments and lands in the Report. It can hold or fail. A failed check shows how likely a lie is against honest causes like older light, never a verdict. Each conversation keeps a record both ways: what we know about them, and what they know about us.
 - Civilizations may conceal, spy, and break promises within physical limits. No universal visibility or guaranteed detection.
 - Accepted directions: attached observations, shared research, proposals, agreements, joint exploration, and eventually joint settlements. Not designed.
 
+## First contact
+
+- **Twenty ways it can begin, in six families (2026-09-28).**
+  - *We notice them:* a clue confirmed as technology, a launch flare, an overheard broadcast, a tip-off from a third party, our probe arriving.
+  - *They notice us:* a bare knock, a named knock, a broadcast shell sweeping past, a visitor probe braking into our system, a far mind of ours met them first.
+  - *Both at once:* crossed knocks, mutual watching.
+  - *No conversation possible:* a young world, the silent one, a letter from the dead, an old watcher.
+  - *Danger:* the mask, the bait, the strike.
+  - *Earth,* the oxygen world at Twin for Veyra.
+- **No guaranteed timing (2026-09-28).** First contact emerges from seeding and behavior; the game does not arrange one early.
+- **A first contact can be a strike (2026-09-28).** No protection. Physics still requires the attacker to have found you first.
+- **Earth's character is random per cohort (2026-09-28),** like any other seat, so no one can plan around it.
+- **Physics notes.** Narrow beams cannot be overheard; broadcasts can. A coasting probe is nearly invisible; braking is bright. Ancient probes must be rare, since none has been found at Sol.
+- **A knock carries its own evidence.** A frequency tuned to the receiver's motion shows it was aimed. Its send date bounds when the sender found you: they saw light that left you at least one light-time before they sent.
+
 ## Open questions
 
-1. What produces the initial clues, and what can particular instruments resolve?
-2. What starting infrastructure and resource model fit the post-singularity baseline?
+1. What can particular instruments resolve, clue by clue? The starting kit produces the initial clues.
+2. What are the starting kit's exact stocks and rates? Its contents are set; its numbers are sample values.
 3. How are autonomous minds instructed, and how do they handle surprises and authority?
 4. How are claims, uncertainty, provenance, and information age shown to players?
 5. Why did no older civilizations expand through the galaxy first?
