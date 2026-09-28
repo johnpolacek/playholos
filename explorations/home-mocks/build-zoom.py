@@ -1827,9 +1827,28 @@ def target_card(hip, name, note, tone, on=False):
             f'<span class="pt"><b>{name}</b><span class="sub">{d:.1f} ly · <span class="{tone}">{note}</span></span>'
             f'<span class="sub">arrives Year {arrive:.0f} · report Year {report:.0f}</span></span>'
             f'<span class="pd">{tstack(f"{report - Y_PB:.0f} Years", clock((report - Y_PB) * 5))}</span></button>')
+def targets_drawing():
+    # Every target on one line, placed by its real distance from Veyra.
+    x0, px, y = 22, 16, 44
+    s = [f'<line x1="{x0}" y1="{y}" x2="{x0 + 20.5 * px}" y2="{y}" stroke="{INK}" stroke-width=".6" stroke-dasharray="1 3"></line>']
+    for ly in (5, 10, 15, 20):
+        s.append(f'<line x1="{x0 + ly * px}" y1="{y + 22}" x2="{x0 + ly * px}" y2="{y + 26}" stroke="{MUTED}" stroke-width=".6"></line>' + text(x0 + ly * px, y + 35, f'{ly} ly', 8, MUTED, 'middle'))
+    s.append(f'<line x1="{x0}" y1="{y + 24}" x2="{x0 + 20 * px}" y2="{y + 24}" stroke="{MUTED}" stroke-width=".6"></line>')
+    s.append(f'<circle cx="{x0}" cy="{y}" r="4.5" fill="{YOU}"></circle>' + text(x0 - 4, y - 10, 'Veyra', 9, YOU))
+    # (label above or below, anchor) per target, so the close ones never collide
+    place = {'Gliese 832': (-1, 'end'), 'Ember': (-1, 'start'), 'Beacon': (1, 'end'), 'Lantern': (1, 'start'), 'Twin': (-1, 'end')}
+    for hip, name, note, tone in TARGETS:
+        d = trip(hip)[0]; x = x0 + d * px; col = OTHER if tone else INK
+        side, anchor = place[name]; ly = y + side * 14
+        s.append(f'<line x1="{fmt(x)}" y1="{y}" x2="{fmt(x)}" y2="{ly - (3 if side < 0 else -3)}" stroke="{col}" stroke-width=".6"></line>')
+        s.append(f'<circle cx="{fmt(x)}" cy="{y}" r="2.6" fill="{PAPER}" stroke="{col}" stroke-width="1.2"></circle>')
+        s.append(text(x + (-3 if anchor == 'end' else 3), ly + (0 if side < 0 else 7), name, 9, col, anchor))
+    return f'<svg width="358" height="84" viewBox="0 0 358 84" font-family="IBM Plex Mono, monospace" role="img" aria-label="The five targets placed by distance from Veyra, from Gliese 832 at 7.4 light-years to Twin at 19.9">{"".join(s)}</svg>'
+
 PROBE_PICK = f"""<div class="phone">{HUD_P0}<div class="sheet">
 <div class="sh"><strong>Send a probe</strong><button aria-label="Close">×</button></div>
 <p class="copy">An assay probe flies past its star at a tenth of light speed, looks, and beams home what it saw. Times below run from now to its report.</p>
+<div class="art">{targets_drawing()}</div>
 <div class="sec">WHERE TO · NEAREST FIRST</div>
 <div role="radiogroup" class="choices">{''.join(target_card(*t) for t in TARGETS)}</div>
 <p class="copy small">Each takes {P_BUILD} Years to build and launch, then 10 Years per light-year in flight. Its report crosses back at light speed.</p>

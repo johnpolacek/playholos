@@ -692,6 +692,7 @@ Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
 ENERGY · [35%] · MATTER · 5,200 kt · COMPUTE · [40%]
 Send a probe · [Close · ×]
 An assay probe flies past its star at a tenth of light speed, looks, and beams home what it saw. Times below run from now to its report.
+[drawing: The five targets placed by distance from Veyra, from Gliese 832 at 7.4 light-years to Twin at 19.9; labels: 5 ly, 10 ly, 15 ly, 20 ly, Veyra, Gliese 832, Ember, Beacon, Lantern, Twin]
 WHERE TO · NEAREST FIRST
 - Gliese 832 · 7.4 ly · nothing unusual seen · arrives Year 204 · report Year 211 · 93 Years · 07:45:49
 - Ember · 9.2 ly · new warm glow · arrives Year 222 · report Year 231 · 113 Years · 09:26:31

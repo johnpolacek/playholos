@@ -22,7 +22,7 @@ Iain M. Banks's Culture books are an inspiration: a powerful Mind responsible fo
 
 **The test, in the user's words:** "I want this game to feel like something that is actually possible." An element passes if current observations permit it. Improbable is acceptable; contradicted is not. It applies to exploration, observation, communication, travel, industry, intelligence gathering, and conflict.
 
-- Nothing, including actionable information, travels faster than light.
+- **Nothing travels faster than light in a way that violates physics (2026-09-28).** No matter, message or influence outruns light. Things that only seem faster carry nothing: entangled particles stay correlated, but no message rides on that. Relativity's real effects are in play: a fast traveler's own clock runs slow, so it ages less than those it left.
 - Speculative engineering is welcome within known physics. Each technology still needs scrutiny.
 - Missions and measurements need physical mechanisms, resources, and elapsed time.
 - Development combines research, experiments, physical validation, and building the infrastructure to use discoveries.
