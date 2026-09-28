@@ -731,6 +731,12 @@ ICONS = {
     'solar': icon(''.join(f'<rect x="{x}" y="{y}" width="12" height="12"></rect>' for x in (6, 20, 34) for y in (14, 30)) + '<line x1="6" y1="28" x2="46" y2="28"></line>', 'Orbital solar array'),
     'woke': icon('<circle cx="30" cy="30" r="14"></circle><path d="M30 16 Q21 30 30 44"></path><circle cx="9" cy="10" r="2.5"></circle>'
                  '<path d="M14 15 L18 19 M9 17 V21 M16 10 H20" stroke-dasharray="1 2"></path>', 'Veyra'),
+    # Answer Beacon? One glyph per option, all in the same neutral ink: Veyra left, Beacon right.
+    'ans-bare': icon('<g stroke-width="1.7"><circle cx="9" cy="28" r="5.5"></circle><circle cx="49" cy="28" r="3.5"></circle><path d="M15 28 H21 l3 -9 l4 18 l3 -9 H44 M44 28 l-5 -4 M44 28 l-5 4"></path></g>', 'Bare knock'),
+    'ans-charter': icon('<g stroke-width="1.7"><circle cx="9" cy="28" r="5.5"></circle><circle cx="49" cy="28" r="3.5"></circle><path d="M15 28 H18 M38 28 H44 M44 28 l-5 -4 M44 28 l-5 4"></path>'
+                        '<rect x="18" y="19" width="20" height="18" rx="2"></rect><path d="M22 25 H34 M22 31 H30" stroke-width="1.2"></path></g>', 'Knock with our charter'),
+    'ans-broadcast': icon('<g stroke-width="1.7"><circle cx="22" cy="28" r="5.5"></circle><circle cx="50" cy="28" r="3.5"></circle>' + ''.join(f'<circle cx="22" cy="28" r="{r}" stroke-dasharray="3 3"></circle>' for r in (12, 20)) + '</g>', 'Broadcast'),
+    'ans-dark': icon('<g stroke-width="1.7"><circle cx="9" cy="28" r="5.5"></circle><circle cx="49" cy="28" r="3.5"></circle><path d="M44 28 H16" stroke-dasharray="3 3"></path><path d="M16 28 l5 -4 M16 28 l5 4"></path></g>', 'Stay dark'),
     'dust': icon('<circle cx="28" cy="28" r="3.5"></circle><ellipse cx="28" cy="28" rx="12" ry="5.5" stroke-dasharray="1 2"></ellipse>'
                  '<ellipse cx="28" cy="28" rx="23" ry="10.5" stroke-dasharray="1 2.5"></ellipse><circle cx="45" cy="25" r="1.8" fill="' + INK + '"></circle>', 'Dust map'),
     'companions': icon('<circle cx="16" cy="38" r="6"></circle><line x1="21" y1="34" x2="36" y2="22" stroke-dasharray="1 3"></line>'
@@ -888,7 +894,7 @@ tour_css = '''<style>
 .primary[disabled]{opacity:.35;cursor:default}
 .choices{display:flex;flex-direction:column;gap:6px;margin-top:4px}
 .choice{display:grid;grid-template-columns:16px 1fr auto;gap:10px;align-items:center;padding:9px 12px;border:1px solid var(--faint);border-radius:10px;background:var(--paper);width:100%;box-sizing:border-box}
-.choice .pt{font-size:14px}.choice .pd{font-size:11.5px;text-align:right}.choice.on{border:1.5px solid var(--ink)}
+.choice .pt{font-size:14px}.choice .pd{font-size:11.5px;text-align:right}.choice.on{border:1.5px solid var(--ink)}.choice.drawn{grid-template-columns:16px 40px 1fr auto}
 .radio{width:14px;height:14px;border-radius:50%;border:1.5px solid var(--ink);box-sizing:border-box}.choice.on .radio{border-width:4.5px}
 .counsel{margin-top:10px;padding:10px 12px;border-left:3px solid var(--you);background:var(--paper)}.counsel .mono{font-size:10px;letter-spacing:.1em;color:var(--you)}.counsel p{margin:4px 0 0;font-size:13.5px;line-height:1.45}
 .thread{display:grid;grid-template-columns:9px 1fr auto;gap:10px;align-items:start;padding:10px 0;border-bottom:1px solid var(--rowline)}.thread .mk{margin-top:5px}
@@ -961,6 +967,15 @@ tour_css = '''<style>
 .ptype .pt{display:flex;flex-direction:column;gap:2px;font-size:13.5px}.ptype .ph2{display:flex;align-items:center;gap:6px}.ptype .sub{font-size:11px;color:var(--muted)}.ptype .pd{font-size:11px;text-align:right}
 .ptype .tag{font-size:10px;padding:0 6px;border-radius:8px;border:1px solid var(--muted);color:var(--muted)}.ptype .tag.stop{border-color:var(--you);color:var(--you)}
 .ptype.cant,.ptype.locked{background:none;opacity:.6}.ptype .needs{font-size:11px;color:var(--ink)}
+.lag{margin:6px 0 0;padding:6px 10px;border-radius:8px;background:var(--paper);border:1px dashed var(--you);font-size:10.5px;color:var(--you)}
+.takes{display:block;font-size:10px;color:var(--muted);margin-top:2px}
+.awayhead{display:flex;flex-direction:column;gap:2px;margin:6px 0 2px}.awayhead h3{margin:0;font-size:30px;font-weight:600;letter-spacing:-.01em}.awayhead .sub{font-size:12px;color:var(--muted)}
+.strip{margin:4px 0 0}
+.bigthing{display:grid;grid-template-columns:1fr auto 10px;gap:10px;align-items:center;width:100%;padding:8px 12px;margin-top:5px;border-radius:10px;background:var(--paper);border:1px solid var(--faint);border-left:3px solid var(--other);box-sizing:border-box}
+.bigthing.you{border-left-color:var(--you)}.bigthing .pt{display:flex;flex-direction:column;gap:1px;font-size:14px}.bigthing .sub{font-size:11.5px;color:var(--muted)}.bigthing .pd{font-size:10.5px;color:var(--muted)}.bigthing .chev{color:var(--muted)}
+.did{margin:2px 0 0;padding-left:16px;font-size:12.5px;line-height:1.5;color:var(--page-ink2)}
+.replay{position:absolute;left:12px;right:12px;bottom:46px;display:flex;align-items:center;gap:8px;padding:4px 10px;border:1px solid var(--ink);border-radius:18px;background:var(--paper)}
+.replay .play{width:26px;height:26px;border-radius:50%;background:var(--ink);color:var(--paper);display:grid;place-items:center;flex-shrink:0}.replay .rnow{font-size:10.5px;white-space:nowrap}.rtrack svg{display:block}
 .ledger{grid-template-columns:110px 1fr;row-gap:7px;font-size:13px;margin:2px 0}.ledger dd{color:var(--ink)}
 .starsheet{position:absolute;left:0;right:0;top:392px;bottom:64px;z-index:3;display:flex;flex-direction:column;padding:6px 16px 0;background:var(--paper);border-top:1px solid var(--faint);border-radius:16px 16px 0 0;box-shadow:0 -10px 24px var(--shadow)}
 .starsheet>*{flex-shrink:0}.grab{align-self:center;width:36px;height:4px;border-radius:2px;background:var(--faint);margin-bottom:6px}
@@ -1512,18 +1527,19 @@ KNOCK_WHO = with_sheet(frame(2, *neighbors(select='2021', beam='2021'), panel=('
      ('Star', 'Yellow, aging, three times as bright as Delta Pavonis'), ('In our sky', 'The brightest star we see'), ('Before this', 'Nothing unusual seen')],
     [row('A signal aimed at us', f'bare knock · arrived Year {Y_ARR}', '›', 'other', marker=True)], action='Decide how to answer'))
 
-def choice(title, sub, right, on=False, tag='', extra=''):
-    return (f'<button class="choice{" on" if on else ""}" role="radio" aria-checked="{str(on).lower()}"><span class="radio"></span>'
+def choice(title, sub, right, on=False, tag='', extra='', glyph=None):
+    g = f'<span class="kthumb">{ICONS[glyph]}</span>' if glyph else ''
+    return (f'<button class="choice{" on" if on else ""}{" drawn" if glyph else ""}" role="radio" aria-checked="{str(on).lower()}"><span class="radio"></span>{g}'
             f'<span class="pt">{tag}<b>{title}</b><span class="sub">{sub}</span>{extra}</span><span class="pd">{right}</span></button>')
 KNOCK_CHOICE = f"""<div class="phone">{HUD_K2}<div class="sheet">
 <div class="sh"><button class="backlink">‹ Signal</button><span class="mono kind">REACH · BEACON</span></div>
 <h3 class="lead">Answer Beacon?</h3>
 <p class="whyline">They know where we are. They don’t know we heard.</p>
 <div role="radiogroup" class="choices">
-{choice('Knock back, bare', 'Tells them we heard. Nothing more.', tstack(f'arrives in {d_b:.1f} Years', light_clock(d_b)))}
-{choice('Knock back, with our charter', 'Adds: “Keep the lights on. Look before we speak.”', tstack(f'arrives in {d_b:.1f} Years', light_clock(d_b)), extra='<span class="warnline">The mind would argue: we lean hidden.</span>')}
-{choice('Broadcast', 'Every star in range hears us, forever. Needs the broadcast beacon: 4 Years.', '<span class="vischip loud">Announces us</span>')}
-{choice('Stay dark', 'Keep watching. They won’t know we heard.', '<span class="gy">now</span>')}
+{choice('Knock back, bare', 'Tells them we heard. Nothing more.', tstack(f'arrives in {d_b:.1f} Years', light_clock(d_b)), glyph='ans-bare')}
+{choice('Knock back, with our charter', 'Adds: “Keep the lights on. Look before we speak.”', tstack(f'arrives in {d_b:.1f} Years', light_clock(d_b)), extra='<span class="warnline">The mind would argue: we lean hidden.</span>', glyph='ans-charter')}
+{choice('Broadcast', 'Every star in range hears us, forever. Needs the broadcast beacon: 4 Years.', '<span class="vischip loud">Announces us</span>', glyph='ans-broadcast')}
+{choice('Stay dark', 'Keep watching. They won’t know we heard.', '<span class="gy">now</span>', glyph='ans-dark')}
 </div>
 <p class="copy small">Earliest reply: Year {Y_REPLY:.1f}, <span class="rtime">{light_clock(2 * d_b)}</span> from now. Knocks and broadcasts can’t be taken back.</p>
 {TALK}
@@ -1931,7 +1947,7 @@ PROBE_MAP = frame(2, *neighbors(probe=('108870', (Y_PF - L_e) / (A_e - L_e), 'fl
 # Year 231: the flyby was in Year 222, and its report has crossed 9.2 light-years home. The glow was a swarm:
 # countless flat collectors in a band half an AU out, together catching about 1.5% of Ember's light, the same
 # fraction as the heat excess we measured. Ember's light reached Earth's telescopes of 2026 before any of this began.
-def flyby(w, h, cx, cy, k, labels=True, seed=7):
+def flyby(w, h, cx, cy, k, labels=True, seed=7, path=True):
     rng = random.Random(seed); s = [stipple(seed + 90, 50, w, h)]
     tilt = .4
     for i in range(420):            # the band: short flat bodies, edge-on to us as they turn
@@ -1941,8 +1957,9 @@ def flyby(w, h, cx, cy, k, labels=True, seed=7):
     s.append(f'<circle cx="{cx}" cy="{cy}" r="{fmt(k * .06)}" fill="{PAPER}" stroke="{INK}" stroke-width="1.4"></circle>')
     # Our probe's straight path, passing 0.3 AU from the star.
     x0, y0, x1, y1 = cx - k * 1.5, cy + k * .62, cx + k * 1.5, cy - k * .38
-    s.append(f'<line x1="{fmt(x0)}" y1="{fmt(y0)}" x2="{fmt(x1)}" y2="{fmt(y1)}" stroke="{YOU}" stroke-width="1.5" stroke-dasharray="6 4"></line>')
-    s.append(f'<path d="M{fmt(x1)} {fmt(y1)} l-9 1 M{fmt(x1)} {fmt(y1)} l-5 7" stroke="{YOU}" stroke-width="1.5" fill="none"></path>')
+    if path:
+        s.append(f'<line x1="{fmt(x0)}" y1="{fmt(y0)}" x2="{fmt(x1)}" y2="{fmt(y1)}" stroke="{YOU}" stroke-width="1.5" stroke-dasharray="6 4"></line>')
+        s.append(f'<path d="M{fmt(x1)} {fmt(y1)} l-9 1 M{fmt(x1)} {fmt(y1)} l-5 7" stroke="{YOU}" stroke-width="1.5" fill="none"></path>')
     if labels:
         s.append(text(cx, cy - k * .5 * tilt - 10, 'the band · half an AU out', 9, OTHER, 'middle', 600))
         lx = min(x1, w - 8); s.append(text(lx - 4, cy - k * .38 * (lx - cx) / (k * 1.5) + 18, 'our probe · 2 hours across', 9, YOU, 'end', 600))
@@ -2048,6 +2065,183 @@ def how_to(hip, name, lum_note, lum):
 TYPES_EMBER = how_to('108870', 'Ember', 'Ember is a dim orange dwarf, a fifth as bright as our star.', .22)
 TYPES_BEACON = how_to('2021', 'Beacon', 'Beacon is three times as bright as our star: a sail can brake on its light.', 3.5)
 
+# ---------- A sentinel at Ember: it brakes, settles into orbit, and watches ----------
+# Ordered after the flyby's report (Year 232), built by 252. It cruises at 5% of light speed and brakes with a
+# magnetic sail, first against interstellar gas, then against Ember's wind. It orbits at 1 AU, outside the band
+# at 0.5 AU. Everything it sees reaches us 9.2 Years late; every order we send arrives 9.2 Years late.
+Y_SO = 232.0; S_BUILD = CAT['sentinel-probe']['years']; Y_SL = Y_SO + S_BUILD
+Y_SA = round(Y_SL + 20 * d_e, 1); Y_SR = round(Y_SA + d_e, 1); Y_SN = round(Y_SR + 3.6, 1)
+def sentinel_view(w, h, cx, cy, k, spiral=False):
+    s = [flyby(w, h, cx, cy, k, False, 13, path=False).split('>', 1)[1].rsplit('</svg>', 1)[0]]
+    s.append(f'<ellipse cx="{cx}" cy="{cy}" rx="{k}" ry="{fmt(k * .4)}" fill="none" stroke="{YOU}" stroke-width="1.3" stroke-dasharray="{"" if not spiral else "5 3"}"></ellipse>')
+    a = math.radians(-28); sx, sy = cx + k * math.cos(a), cy + k * .4 * math.sin(a)
+    if spiral:
+        s.append(f'<path d="M{w - 6} 8 C{w - 40} {cy - k * .9} {sx + 60} {sy - 40} {fmt(sx)} {fmt(sy)}" fill="none" stroke="{YOU}" stroke-width="1.6"></path>')
+    s.append(f'<circle cx="{fmt(sx)}" cy="{fmt(sy)}" r="9" fill="none" stroke="{YOU}" stroke-width="1" stroke-dasharray="2 2"></circle><circle cx="{fmt(sx)}" cy="{fmt(sy)}" r="3" fill="{YOU}"></circle>')
+    return s, sx, sy
+def sentinel_svg(w, h, cx, cy, k, spiral=False, labels=True):
+    s, sx, sy = sentinel_view(w, h, cx, cy, k, spiral)
+    if labels:
+        s.append(text(sx - 12, sy - 10, 'sentinel', 9, YOU, 'end', 600))
+        s.append(text(cx, cy - k * .2 - 8, 'the band', 9, OTHER, 'middle', 600))
+        s.append(text(cx - k - 4, cy + 4, '1 AU', 9, YOU, 'end'))
+        s.append(text(cx, cy + 22, 'Ember', 10, INK, 'middle', 600))
+    return f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" font-family="IBM Plex Mono, monospace" role="img" aria-label="Our sentinel in orbit around Ember, outside the band">{"".join(s)}</svg>'
+
+SENT_ARRIVES = f"""<div class="phone cine"><div class="cinetop"><span>Veyra</span><span class="mono">Year {Y_SR}</span></div>
+{sentinel_svg(390, 300, 190, 160, 150, True, False)}
+<div class="cinetext"><span class="mono kick">THE SENTINEL REPORTS · FROM EMBER, {d_e:.1f} LIGHT-YEARS</span>
+<h3>It has stopped.</h3>
+<p class="inscr">After {20 * d_e:.0f} Years crossing, its sail caught Ember’s wind. It is in orbit, just outside the band.</p>
+<p>It settled in Year {Y_SA:.0f}. We are seeing that {d_e:.1f} Years later.</p>
+<div class="cinebtn"><button class="light">See what it sees</button><button class="ghostlight">Later</button></div></div></div>"""
+
+SENT_WATCH = tab_screen('Reach', 'REACH', 'SENTINEL · EMBER', f"""<button class="backlink inline">‹ Reach</button>
+<div class="art">{sentinel_svg(358, 146, 179, 74, 140)}</div>
+<p class="lag mono">What we see here is {d_e:.1f} Years old. Orders we send arrive {d_e:.1f} Years from now.</p>
+<div class="sec">WHAT IT WATCHES</div>
+<dl class="facts wide ledger"><dt>The band</dt><dd>Still growing: about 0.3% more light caught each year.</dd>
+<dt>Its bodies</dt><dd>Move in formation, and turn together every 11 days.</dd>
+<dt>A gap</dt><dd>One stretch of the band is empty, as if something was taken away.</dd>
+<dt>Toward us</dt><dd>Nothing. No signal, no change of course.</dd></dl>
+<div class="sec">ITS STANDING ORDERS · IT ACTS ON THESE ALONE</div>
+{row('Keep watching the band', 'report every year', '›')}
+{row('If anything comes toward it, withdraw', 'outward, sail full open', '›')}
+{row('Never transmit toward Ember', 'reports go only home, as a narrow beam', '›')}
+<button class="primary">Send it new orders</button>""", at_year((25, 30, '11,400 kt'), Y_SN))
+
+Y_ORD = round(Y_SN + d_e, 1)
+def move(title, sub, takes, report):
+    return action(title, sub, tstack(f'report Year {report:.0f}', clock((report - Y_SN) * 5)) + f'<span class="takes">{takes}</span>')
+SENT_MOVE = f"""<div class="phone">{at_year((25, 30, '11,400 kt'), Y_SN)}<div class="sheet">
+<div class="sh"><button class="backlink">‹ Sentinel</button><span class="mono kind">NEW ORDERS · EMBER</span></div>
+<h3 class="lead">Move the sentinel?</h3>
+<p class="whyline">Any order arrives in Year {Y_ORD:.0f}. It will have been acting alone for {Y_ORD - Y_SA:.0f} Years by then.</p>
+<div class="sec">WHERE IT COULD GO · MOVED BY ITS SAIL ON EMBER’S WIND</div>
+{move('Close in on the band', 'Match its orbit and fly among the bodies. They would likely notice.', 'takes 0.3 Years', Y_ORD + .3 + d_e)}
+{move('Rise over the pole', 'See the whole band at once, from above. Quiet.', 'takes 2 Years', Y_ORD + 2 + d_e)}
+{move('Withdraw to the brown dwarfs', 'Watch from 1,500 AU out. Safest, and sees far less.', 'takes decades', Y_ORD + 40 + d_e)}
+{move('Stay where it is', 'Keep watching from just outside the band.', 'no change', Y_ORD + d_e)}
+{TALK}
+</div></div>"""
+
+# ---------- A far mind meets them first: the builders notice our sentinel ----------
+# Our order (sent Year 449) reaches the sentinel in 458.2. It closes in on the band. A stretch of the band tilts
+# as one and throws Ember's light at it: three flashes. One body leaves the band and matches its orbit. The sentinel
+# follows its standing order and withdraws, before we know any of it. Its reports home are a narrow beam, but the
+# builders stood beside the transmitter: the beam points at Veyra.
+Y_N0 = Y_ORD; Y_FLASH = round(Y_N0 + .4, 1); Y_NLAST = round(Y_N0 + .7, 1)
+Y_NSEE, Y_NNOW = round(Y_FLASH + d_e, 1), round(Y_NLAST + d_e, 1)
+def noticed_svg(w, h, cx, cy, k, labels=True):
+    s = [flyby(w, h, cx, cy, k, False, 13, path=False).split('>', 1)[1].rsplit('</svg>', 1)[0]]
+    tilt = .4; pos = lambda a, r=.5: (cx + r * k * math.cos(math.radians(a)), cy + r * k * tilt * math.sin(math.radians(a)))
+    sx, sy = pos(-12, .56)
+    for a in range(-165, -118, 3):       # the stretch that turned, across the band: drawn bold
+        x, y = pos(a); s.append(f'<line x1="{fmt(x - 4)}" y1="{fmt(y + 1)}" x2="{fmt(x + 4)}" y2="{fmt(y - 1)}" stroke="{OTHER}" stroke-width="2.2"></line>')
+    for a in (-158, -142, -126):         # its reflected light, thrown across at the sentinel
+        x, y = pos(a); s.append(f'<line x1="{fmt(x)}" y1="{fmt(y)}" x2="{fmt(sx)}" y2="{fmt(sy)}" stroke="{OTHER}" stroke-width="1" stroke-dasharray="3 3"></line>')
+    fx, fy = sx - 18, sy + 12            # the body that left the band, following
+    s.append(f'<circle cx="{fmt(fx)}" cy="{fmt(fy)}" r="3.5" fill="{OTHER}"></circle><circle cx="{fmt(fx)}" cy="{fmt(fy)}" r="9" fill="none" stroke="{OTHER}" stroke-width=".8" stroke-dasharray="2 2"></circle>')
+    s.append(f'<circle cx="{fmt(sx)}" cy="{fmt(sy)}" r="8" fill="none" stroke="{YOU}" stroke-width="1" stroke-dasharray="2 2"></circle><circle cx="{fmt(sx)}" cy="{fmt(sy)}" r="3" fill="{YOU}"></circle>')
+    s.append(f'<path d="M{fmt(sx + 10)} {fmt(sy - 4)} Q{fmt(sx + 50)} {fmt(sy - 30)} {fmt(min(w - 10, sx + 90))} {fmt(sy - 34)}" fill="none" stroke="{YOU}" stroke-width="1.3" stroke-dasharray="5 3"></path>')
+    if labels:
+        s.append(text(min(w - 10, sx + 90), sy - 42, 'withdrawing', 9, YOU, 'end', 600))
+        s.append(text(fx - 12, fy + 16, 'it follows', 9, OTHER, 'end', 600))
+        s.append(text(pos(-142)[0], pos(-142)[1] - 10, 'three flashes', 9, OTHER, 'middle', 600))
+        s.append(text(cx, cy + 20, 'Ember', 10, INK, 'middle', 600))
+    return f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" font-family="IBM Plex Mono, monospace" role="img" aria-label="A stretch of Ember’s band turned to flash at our sentinel; one body follows it as it withdraws">{"".join(s)}</svg>'
+
+NOTICED_LANDS = f"""<div class="phone cine"><div class="cinetop"><span>Veyra</span><span class="mono">Year {Y_NSEE}</span></div>
+{noticed_svg(390, 300, 170, 150, 300, False)}
+<div class="cinetext"><span class="mono kick">THE SENTINEL REPORTS · FROM EMBER, {d_e:.1f} LIGHT-YEARS</span>
+<h3>They turned toward it.</h3>
+<p class="inscr">A stretch of the band tilted as one and threw Ember’s light at our sentinel. Three flashes, then stillness.</p>
+<p>It happened in Year {Y_FLASH}. We see it now, {d_e:.1f} Years later.</p>
+<div class="cinebtn"><button class="light">See the report</button><button class="ghostlight">Later</button></div></div></div>"""
+
+def logline(year, what, note=''):
+    return f'<div class="ent them"><span class="y mono">Year {year:.1f}</span><span class="t"><b>{what}</b>{f"<span>{note}</span>" if note else ""}</span></div>'
+NOTICED_LOG = tab_screen('Reach', 'REACH', 'SENTINEL · EMBER', f"""<button class="backlink inline">‹ Sentinel</button>
+<div class="art">{noticed_svg(358, 150, 150, 76, 280)}</div>
+<p class="lag mono">Its log, as it reached us. Every line happened {d_e:.1f} Years before we read it.</p>
+<div class="sec">AT EMBER</div>
+{logline(Y_N0, 'Our order arrives. It moves in.')}
+{logline(Y_N0 + .3, 'It enters the band’s orbit', '2,000 km from the nearest body.')}
+{logline(Y_FLASH, 'A stretch of the band turns toward it', 'Three flashes of Ember’s light, 11 seconds apart.')}
+{logline(Y_FLASH, 'One body leaves the band', 'It matches the sentinel’s orbit, 400 km away.')}
+{logline(Y_FLASH + .1, 'Standing order: it withdraws', 'Something approached. Sail full open.')}
+{logline(Y_NLAST, 'The body follows, then stops', 'It is still there as this is sent.')}
+<div class="sec">WHAT THEY NOW KNOW</div>
+<p class="copy small">Our sentinel’s reports are a narrow beam, but they stood beside the transmitter. The beam points at Veyra. Since Year {Y_FLASH}, they know where we are.</p>""", at_year((25, 30, '12,100 kt'), Y_NNOW))
+
+Y_NORD = round(Y_NNOW + d_e, 1)
+NOTICED_NEXT = f"""<div class="phone">{at_year((25, 30, '12,100 kt'), Y_NNOW)}<div class="sheet">
+<div class="sh"><button class="backlink">‹ Log</button><span class="mono kind">SENTINEL · EMBER</span></div>
+<h3 class="lead">They have met our sentinel.</h3>
+<p class="whyline">Any order arrives in Year {Y_NORD:.0f}. By then it will have acted alone for another {Y_NORD - Y_NLAST:.0f} Years.</p>
+<div class="sec">WHAT WE COULD DO · ANY, OR NONE</div>
+{action('Let it keep withdrawing', 'Its standing order, already under way.', '<span class="gy">now</span>')}
+{action('Stop, and watch the one that follows', 'Holds its ground, 400 km from them.', tstack(f'report Year {Y_NORD + d_e:.0f}', clock((Y_NORD + d_e - Y_NNOW) * 5)))}
+{action('Answer their flashes', 'Flash back toward Ember. Lifts its order never to transmit toward them.', tstack(f'from Year {Y_NORD:.0f}', clock((Y_NORD - Y_NNOW) * 5)))}
+{action('Go silent', 'Stops all reports. We lose the view; they already know where the beam pointed.', tstack(f'from Year {Y_NORD:.0f}', clock((Y_NORD - Y_NNOW) * 5)))}
+{action('Knock at Ember from home', 'Our own voice, from Veyra.', tstack(f'arrives in {d_e:.1f} Years', light_clock(d_e)))}
+{TALK}
+</div></div>"""
+
+# ---------- Back after a long absence: 9 hours away is 108 Years ----------
+Y_AW0, Y_AW1 = 340.0, 448.0
+d_f = math.dist(atlas(by_hip['105858']), HOME)
+AWAY_EVENTS = [  # (year, kind, label) for the strip: amber = contact, blue = ours, ink = the sky
+    (352, 'you', 'Second infrared telescope'), (371, 'other', 'Beacon wrote'), (381, 'you', 'Relay station'), (398, 'ink', 'Lantern’s rhythm changed'),
+    (409, 'you', 'Deep archive'), (426, 'other', 'Beacon wrote'), (440, 'other', 'A knock from Frost'), (445.4, 'you', 'The sentinel stopped at Ember')]
+def away_strip(w=358, h=46, now=None):
+    x0, x1, y = 8, w - 8, 22; X = lambda yr: x0 + (yr - Y_AW0) / (Y_AW1 - Y_AW0) * (x1 - x0)
+    col = {'you': YOU, 'other': OTHER, 'ink': INK}
+    s = [f'<line x1="{x0}" y1="{y}" x2="{x1}" y2="{y}" stroke="{INK}" stroke-width="1"></line>']
+    for yr, kind, _ in AWAY_EVENTS:
+        big = kind == 'other'
+        s.append(f'<line x1="{fmt(X(yr))}" y1="{y - (9 if big else 6)}" x2="{fmt(X(yr))}" y2="{y + (9 if big else 6)}" stroke="{col[kind]}" stroke-width="{2 if big else 1.4}"></line>')
+    if now: s.append(f'<circle cx="{fmt(X(now))}" cy="{y}" r="5" fill="{PAPER}" stroke="{INK}" stroke-width="1.5"></circle>')
+    if w > 300: s.append(text(x0, h - 4, f'Year {Y_AW0:.0f}', 9, MUTED) + text(x1, h - 4, f'Year {Y_AW1:.0f}', 9, MUTED, 'end'))
+    return f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" font-family="IBM Plex Mono, monospace" role="img" aria-label="Eight things that happened while you were away, along 108 Years">{"".join(s)}</svg>'
+
+def big(kind, title, when, sub):
+    return f'<button class="bigthing {kind}"><span class="pt"><b>{title}</b><span class="sub">{sub}</span></span><span class="pd mono">{when}</span><span class="chev">›</span></button>'
+WELCOME = tab_screen('Report', 'REPORT', 'WHILE YOU WERE AWAY', f"""<div class="awayhead"><h3>{Y_AW1 - Y_AW0:.0f} Years passed</h3>
+<span class="sub">You were away <span class="rtime">09:00:00</span> · Year {Y_AW0:.0f} → Year {Y_AW1:.0f}</span></div>
+<div class="strip">{away_strip()}</div>
+<div class="sec">THE BIG THINGS</div>
+{big('other', 'A second knock: Frost', 'Year 440', f'Bare, aimed at us, from {d_f:.1f} ly')}
+{big('you', 'The sentinel stopped at Ember', 'Year 445', 'In orbit, just outside the band')}
+{big('other', 'Beacon wrote twice', 'Years 371 · 426', 'The second asks to meet, at Year 500')}
+<div class="sec">WHAT THE MIND DID · UNDER YOUR STANDING ORDERS</div>
+<ul class="did"><li>Started 4 projects from Up next. 3 have finished.</li><li>Held both of Beacon’s messages for you, unanswered.</li><li>Kept the sentinel’s orders. Changed nothing.</li></ul>
+<div class="sec">WAITING FOR YOU · 3</div>
+<p class="copy small">Beacon’s invitation · Frost’s knock · Up next is empty</p>
+<div class="twobtn"><button class="primary ghost">Replay on the map</button><button class="primary">Go through in order</button></div>""", at_year((45, 50, '14,800 kt'), Y_AW1))
+
+Y_RP = 412.0
+REPLAY_BAR = (f'<div class="replay"><button class="play" aria-label="Play">{PLAY_ICON}</button><div class="rtrack">{away_strip(250, 44, Y_RP)}</div>'
+              f'<span class="mono rnow">Year {Y_RP:.0f}</span></div>')
+REPLAY = frame(2, *neighbors(probe=('108870', (Y_RP - Y_SL) / (Y_SA - Y_SL), 'sentinel')), overlay=REPLAY_BAR,
+               panel=('REPLAY · 108 YEARS IN 1 MINUTE', f'YEAR {Y_RP:.0f}', [
+                   row('Deep archive finished', 'Year 409 · everything we know, stored safe', '', marker=True),
+                   row('The sentinel nears Ember', f'{(Y_RP - Y_SL) * .05:.1f} of {d_e:.1f} ly · braking soon', ''),
+                   row('Still to come', 'Beacon writes · Frost knocks · the sentinel stops', '›', 'other')]), year=f'Year {Y_RP:.0f}', res=(45, 50, '14,800 kt'))
+
+def coming(title, sub, years, real):
+    return row(title, sub, tstack(years, real, True))
+Y_NN = 452.0
+NOTHING_NEW = tab_screen('Report', 'REPORT', 'NOTHING NEW', f"""<div class="empty"><svg width="120" height="70" viewBox="0 0 120 70" aria-hidden="true"><circle cx="60" cy="56" r="4" fill="#1F7A96"></circle><path d="M20 56 A40 40 0 0 1 100 56" fill="none" stroke="#171716" stroke-dasharray="3 4" opacity=".5"></path><path d="M36 56 A24 24 0 0 1 84 56" fill="none" stroke="#171716" stroke-dasharray="2 4" opacity=".35"></path></svg>
+<strong>Nothing new since you looked</strong><span>News arrives when its light does. Here is what is already on its way.</span></div>
+<div class="sec">ON ITS WAY · SOONEST FIRST</div>
+{coming('The sentinel’s next report', 'from Ember, once a Year', '1 Year', '00:05:00')}
+{coming('Deep flash watch finishes', 'a project', '3.7 Years', '00:18:30')}
+{coming('Beacon’s earliest reply', 'to our answer of Year 450', f'{2 * d_b - 2:.1f} Years', clock((2 * d_b - 2) * 5))}
+{coming('The meeting with Beacon', 'the date we both agreed to', f'{500 - Y_NN:.0f} Years', clock((500 - Y_NN) * 5))}
+<div class="sec">LAST NEWS</div>
+{row('The sentinel reports: the band still grows', 'Year 451.4', '›')}""", at_year((45, 50, '15,000 kt'), Y_NN))
+
 # ---------- The arrival, as a moment: the screen gives way to the sky ----------
 # Line art in the app's theme, like every other screen: the drawing colors retint with it.
 C_TXT, C_DIM, C_AMB, C_BLUE, C_STAR = INK, MUTED, OTHER, YOU, INK
@@ -2127,9 +2321,9 @@ CHECKLIST = [
                   ('A locked project and what it needs', 'done'), ('Not enough energy or compute', 'done'),
                   ('A project finishes, seen in Projects', 'done'), ('Queue the next project for while you are away', 'done'),
                   ('Cancel a project', 'done')]),
-    ('Report', [('A new result, and the result in full', 'done'), ('Back after a long absence', 'todo'), ('Nothing new yet', 'todo')]),
+    ('Report', [('A new result, and the result in full', 'done'), ('Back after a long absence', 'done'), ('Replaying an absence on the map', 'done'), ('Nothing new yet', 'done')]),
     ('Reach', [('Empty, with standing orders', 'done'), ('Launch a probe: target, arrival and report times', 'done'), ('A probe in flight', 'done'),
-               ('A probe arrives and reports', 'done'), ('Probe types: how to get there, per target', 'done'), ('Compose a message: intent, the mind’s version, approve', 'done'),
+               ('A probe arrives and reports', 'done'), ('Probe types: how to get there, per target', 'done'), ('A sentinel in orbit: watching, and new orders', 'done'), ('Compose a message: intent, the mind’s version, approve', 'done'),
                ('Broadcast: the permanent choice', 'todo'), ('Standing orders editor', 'todo')]),
     ('Mind', [('Charter and character', 'done'), ('Talk it through: the mind’s view, when asked', 'done'), ('Orders for while you are away', 'todo'),
               ('Settings: theme, replay the tour, notifications', 'todo')]),
@@ -2137,7 +2331,7 @@ CHECKLIST = [
                  ('The choice: knock back, broadcast, or stay dark', 'done'), ('Sent: the conversation and its timeline', 'done'),
                  ('The first reply arrives', 'done'), ('A message lands: their signature and words', 'done'), ('Sending: the reply leaves', 'done'), ('The conversation as the gulf between worlds', 'done'), ('Replying: intent, the mind’s version, approve', 'done'), ('Checking a claim: it holds, or it doesn’t', 'done'), ('What we know, both ways', 'done'), ('Their world, as we know it: a drawing that fills in', 'done'),
                  ('We find them first: a clue confirmed', 'done'), ('A broadcast sweeps past', 'todo'), ('A visitor brakes into our system', 'todo'),
-                 ('A far mind met them first', 'todo'), ('Crossed knocks', 'todo'), ('The silent one: no answer, ever', 'todo')]),
+                 ('A far mind met them first', 'done'), ('Crossed knocks', 'todo'), ('The silent one: no answer, ever', 'todo')]),
     ('Stakes · later', [('The strike as first contact', 'later'), ('A launch flare seen toward us', 'later'), ('Wounded: the morning after', 'later'), ('Total loss and a new cohort', 'later')]),
 ]
 def checklist_html(areas=None):
@@ -2217,6 +2411,12 @@ SECTIONS = [
      f'<figure><figcaption><strong>3 · A new project</strong><span>The discovery project is waiting at the top of Know.</span></figcaption>{PICKER_NEW}</figure>'
      '<span class="pinch">back to Home ›</span>'
      f'<figure><figcaption><strong>4 · Home, after</strong><span>The Lantern marker fills in and carries what is now known.</span></figcaption>{HOME_AFTER}</figure>'),
+    ('absence', 'Away', 'Report · coming back after a long absence', f'Nine hours away is 108 Years. The Report opens on what matters: how long it was, the big things, what the mind did under your standing orders, and what is waiting for you. The map can replay it all in a minute. When nothing is new, the Report shows what is already on its way, soonest first.',
+     f'<figure><figcaption><strong>1 · Welcome back</strong><span>108 Years on one strip. The big things first, then what the mind did for you, then what waits.</span></figcaption>{WELCOME}</figure>'
+     '<span class="pinch">replay on the map ›</span>'
+     f'<figure><figcaption><strong>2 · The replay</strong><span>The map, running 108 Years in a minute. Paused here at Year 412, with the sentinel nearly at Ember.</span></figcaption>{REPLAY}</figure>'
+     '<span class="pinch">later, nothing new ›</span>'
+     f'<figure><figcaption><strong>3 · Nothing new yet</strong><span>What is already on its way, with when each will land.</span></figcaption>{NOTHING_NEW}</figure>'),
     ('knock', 'Knock', 'First contact · the knock', f'Year {Y_ARR}. A laser aimed at Veyra arrives from Beacon, carrying nothing but itself. The arrival takes over the screen, one beat at a time, with one low tone per pulse. Then what it tells us, who sent it, and the choice. Assumes a starting sky watch; the tight-beam transmitter is built, the broadcast beacon is not.',
      f'<figure><figcaption><strong>Away · the notification</strong><span>If you are not playing, the knock finds you.</span></figcaption>{LOCK}</figure>'
      '<span class="pinch">open ›</span>'
@@ -2266,6 +2466,18 @@ SECTIONS = [
      f'<figure><figcaption><strong>1 · How to get to Ember</strong><span>Every type compared for one target. Ember is too dim for a starlight sail to brake. Two types are not yet built.</span></figcaption>{TYPES_EMBER}</figure>'
      '<span class="pinch">or Beacon ›</span>'
      f'<figure><figcaption><strong>2 · How to get to Beacon</strong><span>The same list for a bright star: here a starlight sail can stop, quietly and cheaply.</span></figcaption>{TYPES_BEACON}</figure>'),
+    ('sentinel', 'Sentinel', 'Reach · a sentinel at Ember', f'Year {Y_SR:.0f}. A sentinel ordered after the flyby report has crossed at 5% of light speed and braked on its magnetic sail. It orbits Ember just outside the band, and watches. What it sees reaches us {d_e:.1f} Years late, and any order we send takes {d_e:.1f} Years to reach it, so it acts on its standing orders alone.',
+     f'<figure><figcaption><strong>1 · It has stopped</strong><span>The first report from orbit. The drawing shows its braking path curving into orbit.</span></figcaption>{SENT_ARRIVES}</figure>'
+     '<span class="pinch">see what it sees ›</span>'
+     f'<figure><figcaption><strong>2 · What it watches</strong><span>The band up close, years of it. Its standing orders, which it follows alone.</span></figcaption>{SENT_WATCH}</figure>'
+     '<span class="pinch">new orders ›</span>'
+     f'<figure><figcaption><strong>3 · Move it?</strong><span>Where it could go, how long each move takes, and when we would hear. Nothing is chosen for you.</span></figcaption>{SENT_MOVE}</figure>'),
+    ('noticed', 'Noticed', 'First contact · they meet our sentinel', f'Year {Y_NSEE}. We ordered the sentinel to close in on the band. The builders noticed. Their first word was not a message to us but a gesture to our probe: three flashes of their own starlight. The sentinel acted on its standing orders long before we knew. This is contact through a far mind: everything here happened {d_e:.1f} Years before we read it.',
+     f'<figure><figcaption><strong>1 · They turned toward it</strong><span>The report lands. The drawing shows the stretch that turned, its light thrown at our sentinel, and the body that follows.</span></figcaption>{NOTICED_LANDS}</figure>'
+     '<span class="pinch">see the report ›</span>'
+     f'<figure><figcaption><strong>2 · Its log</strong><span>What happened at Ember, line by line, and what the builders now know about us.</span></figcaption>{NOTICED_LOG}</figure>'
+     '<span class="pinch">what now ›</span>'
+     f'<figure><figcaption><strong>3 · What now</strong><span>Orders that arrive {d_e:.1f} Years late, and our own voice from home. Nothing is chosen for you.</span></figcaption>{NOTICED_NEXT}</figure>'),
     ('check', 'Check', 'First contact · checking what they told us', 'Beacon said Ember’s heat is smooth, with no dust. A lie reads exactly like the truth, so the only test is to measure it ourselves. It takes 2 Years, and the answer can go either way. Their view of Ember is older than ours, so a mismatch is strong evidence of a lie, not proof.',
      f'<figure><figcaption><strong>1 · Check it</strong><span>From the finding in their message. Our space telescope, 2 Years.</span></figcaption>{CHECK_START}</figure>'
      '<span class="pinch">if it holds ›</span>'
@@ -2283,9 +2495,9 @@ AREAS = [  # (page, area as named in CHECKLIST, one-line summary, section ids)
     ('onboarding', 'Onboarding', 'Waking on Veyra, what you inherit, and the guided tour.', ['waking', 'tour']),
     ('home', 'Home', 'The map at five zoom levels, star cards and clues, projects in place.', ['zoom', 'local-group', 'clues', 'map']),
     ('projects', 'Projects', 'Starting, running, finishing, queueing and cancelling projects.', ['projects', 'picker', 'upnext']),
-    ('report', 'Report', 'What comes back while you are away.', ['result']),
-    ('reach', 'Reach', 'Beyond Veyra: sending a probe, following it, what it finds, and the kinds of probe.', ['probe', 'flyby', 'probe-types']),
-    ('contact', 'Contact', 'First contact: the knock, the reply, and checking what they told us.', ['knock', 'reply', 'check']),
+    ('report', 'Report', 'What comes back while you are away, and catching up after a long absence.', ['result', 'absence']),
+    ('reach', 'Reach', 'Beyond Veyra: sending a probe, following it, what it finds, and the kinds of probe.', ['probe', 'flyby', 'probe-types', 'sentinel']),
+    ('contact', 'Contact', 'First contact: the knock, the reply, checking what they told us, and the builders meeting our sentinel.', ['knock', 'reply', 'check', 'noticed']),
 ]
 assert sorted(sid for *_, ids in AREAS for sid in ids) == sorted(sid for sid, *_ in SECTIONS), 'every section belongs to exactly one page'
 def nav_pages(current):

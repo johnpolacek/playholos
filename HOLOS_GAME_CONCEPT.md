@@ -22,7 +22,7 @@ Iain M. Banks's Culture books are an inspiration: a powerful Mind responsible fo
 
 **The test, in the user's words:** "I want this game to feel like something that is actually possible." An element passes if current observations permit it. Improbable is acceptable; contradicted is not. It applies to exploration, observation, communication, travel, industry, intelligence gathering, and conflict.
 
-- **Nothing travels faster than light in a way that violates physics (2026-09-28).** No matter, message or influence outruns light. Things that only seem faster carry nothing: entangled particles stay correlated, but no message rides on that. Relativity's real effects are in play: a fast traveler's own clock runs slow, so it ages less than those it left.
+- **Nothing travels faster than light in a way that violates physics (2026-09-28).** No matter, message or influence outruns light. Things that only seem faster carry nothing: entangled particles stay correlated, but no message rides on that. Relativity's real effects are in play: a fast traveler's own clock runs slow, so it ages less than those it left. Warp drives and wormholes are out (2026-09-28): they need negative energy that physics has only seen in traces, and any faster-than-light trip could carry a message into its own past.
 - Speculative engineering is welcome within known physics. Each technology still needs scrutiny.
 - Missions and measurements need physical mechanisms, resources, and elapsed time.
 - Development combines research, experiments, physical validation, and building the infrastructure to use discoveries.
@@ -95,6 +95,7 @@ Shown in the [mocks](explorations/home-mocks/index.html). Their sample civilizat
 - **Projects on the map:** each project appears where it physically is, at the zoom level where that place is visible, with its countdown timer. Off-screen projects get edge markers. Drawings are symbols, not to scale. While building, a project is a blueprint that fills in; when finished it is drawn in full.
 - **Tabs:** Home, Report, Projects, Reach, Mind.
   - **Report:** what happened while you were away. News arrives when its light does.
+    - **Coming back (2026-09-28):** the Report opens on how long you were away, the big things, what the mind did under your standing orders, and what waits for you. The map can replay the absence in a minute. When nothing is new, it shows what is already on its way, soonest first.
   - **Projects:** what you are building and when it finishes, in real time.
   - **Reach:** probes, outposts, colonies, and standing orders for far places.
     - **Probes show their whole journey before launch (2026-09-28):** build, flight at a tenth of light speed, and the report crossing back, each in game years and real time. The launch is visible to anyone watching; in flight a probe is nearly invisible. A flyby can't stop, and nothing can be recalled after launch.
@@ -155,7 +156,7 @@ Shown in the [mocks](explorations/home-mocks/index.html). Their sample civilizat
 - **No guaranteed timing (2026-09-28).** First contact emerges from seeding and behavior; the game does not arrange one early.
 - **A first contact can be a strike (2026-09-28).** No protection. Physics still requires the attacker to have found you first.
 - **Earth's character is random per cohort (2026-09-28),** like any other seat, so no one can plan around it.
-- **Physics notes.** Narrow beams cannot be overheard; broadcasts can. A coasting probe is nearly invisible; braking is bright. Ancient probes must be rare, since none has been found at Sol.
+- **Physics notes.** Narrow beams cannot be overheard, except beside the sender or the target: anyone next to our probe learns which way its reports go, and so where we are. Broadcasts can be overheard anywhere. A coasting probe is nearly invisible; braking is bright. Ancient probes must be rare, since none has been found at Sol.
 - **A knock carries its own evidence.** A frequency tuned to the receiver's motion shows it was aimed. Its send date bounds when the sender found you: they saw light that left you at least one light-time before they sent.
 
 ## Open questions

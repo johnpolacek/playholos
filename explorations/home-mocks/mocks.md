@@ -671,6 +671,60 @@ CLUES · 3 · YEAR 4.4
 - New warm glow · Ember · infrared telescope under way · 14 Years · 01:10:00
 - Oxygen world · Twin · not yet studied · light takes 01:39:37 · ›
 
+## Report · coming back after a long absence
+Nine hours away is 108 Years. The Report opens on what matters: how long it was, the big things, what the mind did under your standing orders, and what is waiting for you. The map can replay it all in a minute. When nothing is new, the Report shows what is already on its way, soonest first.
+
+#### 1 · Welcome back · 108 Years on one strip. The big things first, then what the mind did for you, then what waits.
+Veyra · Year 448.0
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [45%] · MATTER · 14,800 kt · COMPUTE · [50%]
+REPORT · WHILE YOU WERE AWAY
+
+### 108 Years passed
+You were away · 09:00:00 · Year 340 → Year 448
+[drawing: Eight things that happened while you were away, along 108 Years; labels: Year 340, Year 448]
+THE BIG THINGS
+- A second knock: Frost · Bare, aimed at us, from 10.8 ly · Year 440 · ›
+- The sentinel stopped at Ember · In orbit, just outside the band · Year 445 · ›
+- Beacon wrote twice · The second asks to meet, at Year 500 · Years 371 · 426 · ›
+WHAT THE MIND DID · UNDER YOUR STANDING ORDERS
+Started 4 projects from Up next. 3 have finished.
+Held both of Beacon’s messages for you, unanswered.
+Kept the sentinel’s orders. Changed nothing.
+WAITING FOR YOU · 3
+Beacon’s invitation · Frost’s knock · Up next is empty
+[Replay on the map] · [Go through in order]
+replay on the map ›
+
+#### 2 · The replay · The map, running 108 Years in a minute. Paused here at Year 412, with the sentinel nearly at Ember.
+Veyra · Year 412
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [45%] · MATTER · 14,800 kt · COMPUTE · [50%]
+[drawing: Stars view; labels: Veyra, Ember, Epsilon Indi · 00:46:03, Lantern, Gliese 783 A · 00:51:20, Beacon, Beta Hydri, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760, sentinel, 01:15:00, Twin · oxygen world, Sol · 01:39:37, 5 ly]
+[Play]
+[drawing: Eight things that happened while you were away, along 108 Years]
+Year 412
+[World] · [System] · [selected: Stars] · [Region] · [Galaxy]
+REPLAY · 108 YEARS IN 1 MINUTE · YEAR 412
+- Deep archive finished · Year 409 · everything we know, stored safe
+- The sentinel nears Ember · 8.0 of 9.2 ly · braking soon
+- Still to come · Beacon writes · Frost knocks · the sentinel stops · ›
+later, nothing new ›
+
+#### 3 · Nothing new yet · What is already on its way, with when each will land.
+Veyra · Year 452.0
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [45%] · MATTER · 15,000 kt · COMPUTE · [50%]
+REPORT · NOTHING NEW
+Nothing new since you looked · News arrives when its light does. Here is what is already on its way.
+ON ITS WAY · SOONEST FIRST
+- The sentinel’s next report · from Ember, once a Year · 1 Year · 00:05:00
+- Deep flash watch finishes · a project · 3.7 Years · 00:18:30
+- Beacon’s earliest reply · to our answer of Year 450 · 16.6 Years · 01:22:53
+- The meeting with Beacon · the date we both agreed to · 48 Years · 04:00:00
+LAST NEWS
+[The sentinel reports: the band still grows · Year 451.4 · ›]
+
 # Holos · Reach
 
 ## Reach · sending a probe
@@ -851,6 +905,52 @@ Beacon is three times as bright as our star: a sail can brake on its light. Each
 [drawing: Antimatter probe] · Antimatter probe · orbits · The most efficient engine physics allows. · Needs: solar swarm
 [Choose a probe]
 
+## Reach · a sentinel at Ember
+Year 445. A sentinel ordered after the flyby report has crossed at 5% of light speed and braked on its magnetic sail. It orbits Ember just outside the band, and watches. What it sees reaches us 9.2 Years late, and any order we send takes 9.2 Years to reach it, so it acts on its standing orders alone.
+
+#### 1 · It has stopped · The first report from orbit. The drawing shows its braking path curving into orbit.
+Veyra · Year 445.4
+[drawing: Our sentinel in orbit around Ember, outside the band]
+THE SENTINEL REPORTS · FROM EMBER, 9.2 LIGHT-YEARS
+
+### It has stopped.
+After 184 Years crossing, its sail caught Ember’s wind. It is in orbit, just outside the band.
+It settled in Year 436. We are seeing that 9.2 Years later.
+[See what it sees] · [Later]
+see what it sees ›
+
+#### 2 · What it watches · The band up close, years of it. Its standing orders, which it follows alone.
+Veyra · Year 449.0
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [25%] · MATTER · 11,400 kt · COMPUTE · [30%]
+REACH · SENTINEL · EMBER
+[‹ Reach]
+[drawing: Our sentinel in orbit around Ember, outside the band; labels: sentinel, the band, 1 AU, Ember]
+What we see here is 9.2 Years old. Orders we send arrive 9.2 Years from now.
+WHAT IT WATCHES
+The band · Still growing: about 0.3% more light caught each year. · Its bodies · Move in formation, and turn together every 11 days. · A gap · One stretch of the band is empty, as if something was taken away. · Toward us · Nothing. No signal, no change of course.
+ITS STANDING ORDERS · IT ACTS ON THESE ALONE
+- Keep watching the band · report every year · ›
+- If anything comes toward it, withdraw · outward, sail full open · ›
+- Never transmit toward Ember · reports go only home, as a narrow beam · ›
+- Send it new orders
+new orders ›
+
+#### 3 · Move it? · Where it could go, how long each move takes, and when we would hear. Nothing is chosen for you.
+Veyra · Year 449.0
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [25%] · MATTER · 11,400 kt · COMPUTE · [30%]
+[‹ Sentinel] · NEW ORDERS · EMBER
+
+### Move the sentinel?
+Any order arrives in Year 458. It will have been acting alone for 22 Years by then.
+WHERE IT COULD GO · MOVED BY ITS SAIL ON EMBER’S WIND
+- Close in on the band · Match its orbit and fly among the bodies. They would likely notice. · report Year 468 · 01:33:33 · takes 0.3 Years · ›
+- Rise over the pole · See the whole band at once, from above. Quiet. · report Year 469 · 01:42:03 · takes 2 Years · ›
+- Withdraw to the brown dwarfs · Watch from 1,500 AU out. Safest, and sees far less. · report Year 507 · 04:52:03 · takes decades · ›
+- Stay where it is · Keep watching from just outside the band. · report Year 467 · 01:32:03 · no change · ›
+- Talk it through with the mind ›
+
 # Holos · Contact
 
 ## First contact · the knock
@@ -944,10 +1044,10 @@ ENERGY · [40%] · MATTER · 980 kt · COMPUTE · [45%]
 
 ### Answer Beacon?
 They know where we are. They don’t know we heard.
-- Knock back, bare · Tells them we heard. Nothing more. · arrives in 9.3 Years · 00:46:27
-- Knock back, with our charter · Adds: “Keep the lights on. Look before we speak.” · The mind would argue: we lean hidden. · arrives in 9.3 Years · 00:46:27
-- Broadcast · Every star in range hears us, forever. Needs the broadcast beacon: 4 Years. · Announces us
-- Stay dark · Keep watching. They won’t know we heard. · now
+- [drawing: Bare knock] · Knock back, bare · Tells them we heard. Nothing more. · arrives in 9.3 Years · 00:46:27
+- [drawing: Knock with our charter] · Knock back, with our charter · Adds: “Keep the lights on. Look before we speak.” · The mind would argue: we lean hidden. · arrives in 9.3 Years · 00:46:27
+- [drawing: Broadcast] · Broadcast · Every star in range hears us, forever. Needs the broadcast beacon: 4 Years. · Announces us
+- [drawing: Stay dark] · Stay dark · Keep watching. They won’t know we heard. · now
 Earliest reply: Year 49.9, · 01:32:53 · from now. Knocks and broadcasts can’t be taken back.
 [Talk it through with the mind ›] · [Choose an answer]
 or talk it through ›
@@ -1163,6 +1263,55 @@ Year 52.4 · One claim of theirs contradicted · Our own measurement of Ember.
 NOT YET KNOWN
 Their world itself. How many they are. How far they reach. Whether anyone else hears them.
 
+## First contact · they meet our sentinel
+Year 467.8. We ordered the sentinel to close in on the band. The builders noticed. Their first word was not a message to us but a gesture to our probe: three flashes of their own starlight. The sentinel acted on its standing orders long before we knew. This is contact through a far mind: everything here happened 9.2 Years before we read it.
+
+#### 1 · They turned toward it · The report lands. The drawing shows the stretch that turned, its light thrown at our sentinel, and the body that follows.
+Veyra · Year 467.8
+[drawing: A stretch of Ember’s band turned to flash at our sentinel; one body follows it as it withdraws]
+THE SENTINEL REPORTS · FROM EMBER, 9.2 LIGHT-YEARS
+
+### They turned toward it.
+A stretch of the band tilted as one and threw Ember’s light at our sentinel. Three flashes, then stillness.
+It happened in Year 458.6. We see it now, 9.2 Years later.
+[See the report] · [Later]
+see the report ›
+
+#### 2 · Its log · What happened at Ember, line by line, and what the builders now know about us.
+Veyra · Year 468.1
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [25%] · MATTER · 12,100 kt · COMPUTE · [30%]
+REACH · SENTINEL · EMBER
+[‹ Sentinel]
+[drawing: A stretch of Ember’s band turned to flash at our sentinel; one body follows it as it withdraws; labels: withdrawing, it follows, three flashes, Ember]
+Its log, as it reached us. Every line happened 9.2 Years before we read it.
+AT EMBER
+Year 458.2 · Our order arrives. It moves in.
+Year 458.5 · It enters the band’s orbit · 2,000 km from the nearest body.
+Year 458.6 · A stretch of the band turns toward it · Three flashes of Ember’s light, 11 seconds apart.
+Year 458.6 · One body leaves the band · It matches the sentinel’s orbit, 400 km away.
+Year 458.7 · Standing order: it withdraws · Something approached. Sail full open.
+Year 458.9 · The body follows, then stops · It is still there as this is sent.
+WHAT THEY NOW KNOW
+Our sentinel’s reports are a narrow beam, but they stood beside the transmitter. The beam points at Veyra. Since Year 458.6, they know where we are.
+what now ›
+
+#### 3 · What now · Orders that arrive 9.2 Years late, and our own voice from home. Nothing is chosen for you.
+Veyra · Year 468.1
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [25%] · MATTER · 12,100 kt · COMPUTE · [30%]
+[‹ Log] · SENTINEL · EMBER
+
+### They have met our sentinel.
+Any order arrives in Year 477. By then it will have acted alone for another 18 Years.
+WHAT WE COULD DO · ANY, OR NONE
+- Let it keep withdrawing · Its standing order, already under way. · now · ›
+- Stop, and watch the one that follows · Holds its ground, 400 km from them. · report Year 487 · 01:32:03 · ›
+- Answer their flashes · Flash back toward Ember. Lifts its order never to transmit toward them. · from Year 477 · 00:46:00 · ›
+- Go silent · Stops all reports. We lose the view; they already know where the beam pointed. · from Year 477 · 00:46:00 · ›
+- Knock at Ember from home · Our own voice, from Veyra. · arrives in 9.2 Years · 00:46:03 · ›
+- Talk it through with the mind ›
+
 ---
 
 _Appendix: working-session mocks, not the current design._
@@ -1197,17 +1346,19 @@ A project finishes, seen in Projects
 Queue the next project for while you are away
 Cancel a project
 
-### Report · 1 of 3
+### Report · 4 of 4
 A new result, and the result in full
 Back after a long absence
+Replaying an absence on the map
 Nothing new yet
 
-### Reach · 6 of 8
+### Reach · 7 of 9
 Empty, with standing orders
 Launch a probe: target, arrival and report times
 A probe in flight
 A probe arrives and reports
 Probe types: how to get there, per target
+A sentinel in orbit: watching, and new orders
 Compose a message: intent, the mind’s version, approve
 Broadcast: the permanent choice
 Standing orders editor
@@ -1218,7 +1369,7 @@ Talk it through: the mind’s view, when asked
 Orders for while you are away
 Settings: theme, replay the tour, notifications
 
-### Contact · 16 of 21
+### Contact · 17 of 21
 Away: the notification
 The arrival, as a moment
 The knock arrives
