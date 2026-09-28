@@ -1,4 +1,4 @@
-<!-- Generated from onboarding.html, home.html, projects.html, report.html, contact.html, index.html by extract.py. Edit the mocks, not this file. -->
+<!-- Generated from onboarding.html, home.html, projects.html, report.html, reach.html, contact.html, index.html by extract.py. Edit the mocks, not this file. -->
 
 # Holos · Onboarding
 
@@ -672,6 +672,145 @@ CLUES · 3 · YEAR 4.4
 - New warm glow · Ember · infrared telescope under way · 14 Years · 01:10:00
 - Oxygen world · Twin · not yet studied · light takes 01:39:37 · ›
 
+# Holos · Reach
+
+## Reach · sending a probe
+Year 118. The launcher and the assay probe line are built. A probe flies past its star at a tenth of light speed and beams home what it saw. Every choice shows its whole journey: build, flight, and the report crossing back. Ember is 9.2 ly away, so its report comes 113 Years from now, · 09:26:31 · of real time.
+
+#### 0 · Reach, before anything · The first session: nothing beyond Veyra yet, and no standing orders.
+Veyra · Year 0.4
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [0%] · MATTER · 1,240 kt · COMPUTE · [0%]
+REACH · BEYOND VEYRA
+Nothing beyond Veyra yet · Conversations, probes, outposts and colonies appear here. Far ones act on their own: your orders reach them at light speed.
+STANDING ORDERS · 0
+[Add an order · e.g. if anything knocks while I am away, tell me at once · +]
+later: Year 118 ›
+
+#### 1 · Where to · Every reachable target, nearest first, with its arrival, its report, and the real time until we know.
+Veyra · Year 118.0
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [35%] · MATTER · 5,200 kt · COMPUTE · [40%]
+Send a probe · [Close · ×]
+An assay probe flies past its star at a tenth of light speed, looks, and beams home what it saw. Times below run from now to its report.
+WHERE TO · NEAREST FIRST
+- Gliese 832 · 7.4 ly · nothing unusual seen · arrives Year 204 · report Year 211 · 93 Years · 07:45:49
+- Ember · 9.2 ly · new warm glow · arrives Year 222 · report Year 231 · 113 Years · 09:26:31
+- Beacon · 9.3 ly · in conversation with us · arrives Year 223 · report Year 232 · 114 Years · 09:30:52
+- Lantern · 10.3 ly · regular dimming · arrives Year 233 · report Year 243 · 125 Years · 10:24:38
+- Twin · 19.9 ly · oxygen world · arrives Year 329 · report Year 349 · 231 Years · 19:15:46
+Each takes 12 Years to build and launch, then 10 Years per light-year in flight. Its report crosses back at light speed.
+Ember ›
+
+#### 2 · The journey · Build, flight and report, drawn to scale. Who could see it. It can’t be recalled.
+Veyra · Year 118.0
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [35%] · MATTER · 5,200 kt · COMPUTE · [40%]
+[‹ Where to] · REACH · PROBE
+[drawing: An assay probe: a sail and a small instrument body; labels: a tenth of light speed, sail and a small body of instruments, not to scale]
+
+### Send an assay probe to Ember
+It passes Ember at a tenth of light speed, crossing its inner system in hours: pictures, heat and air, up close. It can’t stop.
+THE JOURNEY
+Build and launch · Year 118 → 130 · 01:00:00
+Flight · Year 130 → 222 · 07:40:28
+Report crosses back · Year 222 → 231 · 00:46:03
+We learn what it saw in Year 231, · 09:26:31 · from now.
+WHO COULD SEE IT
+The launch is bright: anyone watching Veyra may see it. In flight it is cold and nearly invisible. Its report is a narrow beam, aimed home.
+USES
+E 20% · C 15% · 4,000 kt · can’t be recalled after launch
+[Talk it through with the mind ›] · [Build and launch]
+Year 176 ›
+
+#### 3 · In flight · Year 176, halfway there. Its journey with the now mark. A standing order waits on its report.
+Veyra · Year 176.0
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [20%] · MATTER · 1,480 kt · COMPUTE · [25%]
+REACH · 1 PROBE · 1 CONVERSATION
+PROBES
+[drawing: Assay probe] · Assay probe → Ember · launched Year 130 · at a tenth of light speed · 4.6 ly out of 9.2 · report in 55 Years · 04:36:31
+It passes Ember in Year 222. We learn what it saw in Year 231, when its report crosses back.
+CONVERSATIONS
+[Beacon · the conversation continues · their last message, Year 169 · ›]
+STANDING ORDERS
+- If the probe finds anything unnatural · tell me at once, wherever I am · ›
+- Add an order · e.g. if anything knocks while I am away, tell me at once · +
+on the map ›
+
+#### 4 · On the map · Its path to Ember, and how far along it is.
+Veyra · Year 176
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [20%] · MATTER · 1,480 kt · COMPUTE · [25%]
+[drawing: Stars view; labels: Veyra, Ember, Epsilon Indi · 00:46:03, Lantern, Gliese 783 A · 00:51:20, Beacon, Beta Hydri, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760, assay probe, 01:15:00, Twin · oxygen world, Sol · 01:39:37, 5 ly]
+[World] · [System] · [selected: Stars] · [Region] · [Galaxy]
+IN FLIGHT · 1 · YEAR 176
+- Assay probe → Ember · 4.6 of 9.2 ly · 55 Years · 04:36:31
+- New warm glow · Ember · the probe will pass it · ›
+- Uneven dimming · Lantern · dust, bodies in orbit, or structures · ›
+
+## Reach · the probe reports
+Year 231. The probe passed Ember in Year 222, and its report has crossed 9.2 light-years home. The glow was a swarm of collectors: someone built this. Our first close look at another system lands like a knock, then asks what to do with what we now know. Nothing is chosen for us.
+
+#### 1 · The report lands · Ember, drawn from what the probe saw, then what it means.
+Veyra · Year 231.3
+[drawing: Ember, ringed by a band of flat bodies, with our probe’s path through the system]
+THE PROBE REPORTS · FROM EMBER, 9.2 LIGHT-YEARS
+
+### Ember has been built around.
+Countless flat bodies circle the star, dark toward it and warm behind. The glow was theirs, not dust.
+It passed Ember in Year 222. Its report took 9.2 Years to come home.
+[See the report] · [Later]
+see the report ›
+
+#### 2 · What it saw · The band, what each body is, how much light they catch, and what wasn’t seen. The clue is resolved.
+Veyra · Year 231.3
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [20%] · MATTER · 2,400 kt · COMPUTE · [25%]
+REPORT · PROBE REPORT
+[‹ All reports]
+[drawing: Ember, ringed by a band of flat bodies, with our probe’s path through the system; labels: the band · half an AU out, our probe · 2 hours across, Ember, cold giant planet, far out →, 0.5 AU]
+
+### Ember has been built around
+Assay probe · passed Year 222 · report arrived Year 231
+WHAT IT SAW
+Around the star · Countless flat bodies in a band half an AU out. The largest it saw, 40 km across. · Each one · Dark toward Ember, warm behind: collectors, shedding heat. · Together · They catch about 1.5% of Ember’s light: the glow we measured. · Also · The cold giant planet, as known. No dust. · Who built it · Not seen. Nothing answered as the probe passed.
+THE CLUE
+[Resolved · New warm glow · Ember · built, not natural · ›] · [What now?]
+what now ›
+
+#### 3 · What now · Every next step, with what it costs in time and what it reveals. Any of them, or none.
+Veyra · Year 231.3
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [20%] · MATTER · 2,400 kt · COMPUTE · [25%]
+[‹ Report] · REACH · EMBER
+
+### Someone built this.
+They may have seen our probe pass. We can’t know.
+WHAT WE COULD DO · ANY, OR NONE
+- Knock at Ember · Tells them we know, and where we are. · arrives in 9.2 Years · 00:46:03 · ›
+- Listen to Ember · Every receiver on one star. Nothing sent. · 12 Years · 01:00:00 · ›
+- Watch the band · Is it still growing? Measured each year. · ongoing · ›
+- Tell Beacon · Shares the find. It also tells them we send probes. · arrives in 9.3 Years · 00:46:27 · ›
+- Say nothing · Keep it ours, for now. · now · ›
+- Talk it through with the mind ›
+Ember ›
+
+#### 4 · Ember, as we now know it · The same drawing as Beacon’s, filling in. Where Beacon’s founding line rings its star, Ember’s ring is empty.
+Veyra · Year 231.3
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [20%] · MATTER · 2,400 kt · COMPUTE · [25%]
+REACH · EMBER
+[‹ Reach]
+[drawing: Ember as we now know it: the star and the band of collectors; the builders unknown; labels: NO WORD FROM THEM YET, Ember, the band, builders: ?]
+solid: measured · dashed: inferred · ?: not yet seen
+HOW IT FILLED IN
+Year 0.1 · A new warm glow · Our sky watch and star surveys.
+Year 52.4 · No dust in the glow · Beacon’s claim, then our own measurement.
+Year 231 · A band of collectors, built · Our assay probe, passing in Year 222.
+NOT YET KNOWN
+Who built it, and where they live. Whether they saw our probe. Whether they have ever spoken, to anyone.
+
 # Holos · Contact
 
 ## First contact · the knock
@@ -789,18 +928,22 @@ ITS VIEW · FROM OUR CHARTER AND DIALS · Our charter says to look before we spe
 Ask the mind… · [Send · ↑]
 decide ›
 
-#### 6 · Sent · The first conversation in Reach, drawn in time: our light, their knock, ours, and the earliest reply.
+#### 6 · Sent · The conversation view, as it looks for every exchange: the gulf between the two worlds, and each message with its years in flight.
 Veyra · Year 31.3
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
 ENERGY · [40%] · MATTER · 980 kt · COMPUTE · [45%]
-REACH · 1 CONVERSATION
-CONVERSATIONS
-Beacon · Beta Hydri · 9.3 ly · they knocked, we knocked back · Our knock is on its way. Earliest reply: Year 49.9. · 9.3 Years · 00:46:27
-THE CONVERSATION IN TIME
-[drawing: Timeline: our light reached Beacon, their knock reached us, our knock is on its way, and a reply could come back; labels: Beacon, Veyra, Year 10, Year 20, Year 30, Year 40, Year 50, now, our light, their knock, our knock, reply?, Messages cross at light speed: 1 ly takes 1 Year.]
+REACH · BEACON
+[‹ Conversations]
+[drawing: Veyra and Beacon, 9.3 light-years apart, with our reply in flight; labels: 9.3 ly · 1 tick = 1 Year of travel, Veyra, ?, Beacon, our knock, in flight]
+THE EXCHANGE
+Year 21.9 · Beacon knocked · A bare pulse, aimed at us.
+9.3 Years in flight
+Year 31.3 · We knocked back · Bare. · in flight · arrives Year 40.6 · 00:46:27
+Earliest reply: Year 49.9, · 01:32:53 · from now
+WHAT WE KNOW OF THEM
+[Their beam came from beside the star · about 1.9 AU out: where a living world could be · ›]
 STANDING ORDERS
-- If Beacon answers while you are away · the mind will wait for you before replying · ›
-- Add an order · e.g. if anything else knocks, tell me at once · +
+[If Beacon answers while you are away · the mind waits for you before replying · ›]
 
 ## First contact · the first reply
 Year 50.3. Two worlds 9.3 light-years apart, speaking across a decade each way. A message landing is an event: their signature, their words set large, what they carried. Sending is a ceremony. The conversation is drawn as the gulf between the two worlds, with every message’s years in flight. Facts travel as parts; the prose is each civilization’s own voice.
@@ -869,7 +1012,7 @@ Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
 ENERGY · [40%] · MATTER · 1,480 kt · COMPUTE · [45%]
 REACH · BEACON
 [‹ Conversations]
-[drawing: Veyra and Beacon, 9.3 light-years apart, with our reply in flight; labels: 9.3 light-years · 1 tick = 1 Year of travel, Veyra, ?, Beacon, our reply, in flight]
+[drawing: Veyra and Beacon, 9.3 light-years apart, with our reply in flight; labels: 9.3 ly · 1 tick = 1 Year of travel, Veyra, ?, Beacon, our reply, in flight]
 THE EXCHANGE
 Year 21.9 · Beacon knocked · A bare pulse, aimed at us.
 9.3 Years in flight
@@ -963,6 +1106,22 @@ Found us · By Year 12.6 at the latest · First spoke · Year 21.9, a bare knock
 WHAT THEY KNOW ABOUT US
 Where we are · Since Year 12.6 or earlier · That we heard · Since Year 40.6 · Our founding line · From Year 59.7, when our reply lands · That we checked · Only if we tell them
 Everything here comes from light and messages. Nothing about them is certain.
+their world ›
+
+#### 4 · Their world, as we know it · A drawing that fills in with every message and check. Solid is measured, dashed inferred, a question mark not yet seen. Their founding line rings it.
+Veyra · Year 52.4
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [40%] · MATTER · 1,560 kt · COMPUTE · [45%]
+REACH · BEACON
+[‹ Conversation]
+[drawing: Beacon’s system as we know it: the star, its temperate zone, and where their beam came from; labels: WE KEEP WHAT THE LIGHT BRINGS, temperate zone, ?, their beam came from here, to Veyra · 9.3 ly, Beacon, 1 AU]
+solid: measured · dashed: inferred · ?: not yet seen
+HOW IT FILLED IN
+Year 31.2 · They exist, and found us · The knock. Its beam came from about 1.9 AU out.
+Year 50.3 · Their founding line; they measure heat as finely as we do · Their reply, and their finding about Ember.
+Year 52.4 · One claim of theirs contradicted · Our own measurement of Ember.
+NOT YET KNOWN
+Their world itself. How many they are. How far they reach. Whether anyone else hears them.
 
 ---
 
@@ -979,7 +1138,7 @@ What you inherit: the starting kit
 Guided tour
 Hand-off to the clues
 
-### Home · 6 of 8
+### Home · 7 of 8
 Five zoom levels
 Local Group and galaxy close-ups
 Projects on the map, with timers
@@ -1003,9 +1162,10 @@ A new result, and the result in full
 Back after a long absence
 Nothing new yet
 
-### Reach · 1 of 6
+### Reach · 5 of 7
 Empty, with standing orders
 Launch a probe: target, arrival and report times
+A probe in flight
 A probe arrives and reports
 Compose a message: intent, the mind’s version, approve
 Broadcast: the permanent choice
@@ -1017,7 +1177,7 @@ Talk it through: the mind’s view, when asked
 Orders for while you are away
 Settings: theme, replay the tour, notifications
 
-### Contact · 14 of 20
+### Contact · 16 of 21
 Away: the notification
 The arrival, as a moment
 The knock arrives
@@ -1032,6 +1192,7 @@ The conversation as the gulf between worlds
 Replying: intent, the mind’s version, approve
 Checking a claim: it holds, or it doesn’t
 What we know, both ways
+Their world, as we know it: a drawing that fills in
 We find them first: a clue confirmed
 A broadcast sweeps past
 A visitor brakes into our system
