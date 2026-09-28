@@ -1,130 +1,6 @@
-<!-- Generated from index.html by extract.py. Edit the mocks, not this file. -->
+<!-- Generated from onboarding.html, home.html, projects.html, report.html, contact.html, index.html by extract.py. Edit the mocks, not this file. -->
 
-# Holos · mocks
-
-## Home · five zoom levels
-One screen, pinched outward: the map changes scale and the panel below follows it. Star positions are real, from HYG and the Gaia census; Veyra, its planets and the game state are sample data. The sample is Year 50, just after the orbital foundry started.
-
-#### 1 · World · Veyra, with what is in motion around it.
-Veyra · Year 50.0
-Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [55%] · MATTER · 50 kt · COMPUTE · [55%]
-[drawing: World view; labels: Deep-field receiver, 00:37:42, Planet survey, 00:41:45, Orbital foundry · L5 →, 02:29:48, ↖ light from Delta Pavonis, Veyra, pinch out: the star system, 5,000 km [world size invented]]
-[selected: World] · [System] · [Stars] · [Region] · [Galaxy]
-IN MOTION · 3 · TIME LEFT
-- Deep-field receiver · in orbit around Veyra · 7.5 Years · 00:37:42
-- Planet survey · 12 nearest stars · from Veyra’s observatories · 8.4 Years · 00:41:45
-- Orbital foundry · at L5 · just started · 30 Years · 02:29:48
-- Leads · 3 · Twin, Ember, Lantern · ›
-pinch out ›
-
-#### 2 · System · Delta Pavonis and its invented planets, to scale inside the belt.
-Veyra · Year 50.0
-Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [55%] · MATTER · 50 kt · COMPUTE · [55%]
-[drawing: System view; labels: habitable zone, Delta Pavonis, Veyra, Orbital foundry · L5, 02:29:48, Deep-field receiver, 00:37:42, Planet survey, 00:41:45, belt, [ice world] 9 AU →, star real · planets invented, 1 AU]
-[World] · [selected: System] · [Stars] · [Region] · [Galaxy]
-DELTA PAVONIS SYSTEM · INVENTED PLANETS
-- Veyra · your world · 1.12 AU · habitable zone
-- [Inner world] · 0.45 AU · unvisited · ›
-- Belt · 2.6–3.2 AU · prospect: metals and ice · ›
-- [Ice world] · 9 AU · beyond this view · ›
-pinch out ›
-
-#### 3 · Stars · Real stars within 15 ly of home. Rings are light-time.
-Veyra · Year 50.0
-Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [55%] · MATTER · 50 kt · COMPUTE · [55%]
-[drawing: Stars view; labels: Veyra, Ember, Epsilon Indi · 00:46:03, Lantern, Gliese 783 A · 00:51:20, Beacon, Beta Hydri, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760, 01:15:00, Twin · oxygen world, Sol · 01:39:37, 5 ly]
-[World] · [System] · [selected: Stars] · [Region] · [Galaxy]
-WITHIN 10 LY · 12 STARS · LIGHT-TIME
-- New warm glow · Ember · dust, cold companions, or waste heat · 00:46:03
-- Uneven dimming · Lantern · dust, bodies in orbit, or structures · 00:51:20
-- Planet survey · 12 nearest · finds what orbits them · 8.4 Years · 00:41:45
-pinch out ›
-
-#### 4 · Region · All 9,494 objects within 100 ly of Sol. Dim red dwarfs are specks.
-Veyra · Year 50.0
-Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [55%] · MATTER · 50 kt · COMPUTE · [55%]
-[drawing: Region view; labels: 100 ly · region edge, 50 ly · civilizations start inside, Twin, Sol, Veyra, 25 ly]
-[World] · [System] · [Stars] · [selected: Region] · [Galaxy]
-THE REGION · 100 LY AROUND TWIN · WHERE V1 PLAYS
-- 1,212 stars inside 50 ly · where civilizations start
-- Oxygen world · Twin · 19.9 ly · light takes 01:39:37 · ›
-- Technosignatures detected · none yet · receivers at baseline · 0
-pinch out ›
-
-#### 5 · Galaxy · Where the region sits. The spiral is illustrative. Icon, top right: the Local Group.
-Veyra · Year 50.0
-Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [55%] · MATTER · 50 kt · COMPUTE · [55%]
-- drawing: Galaxy view; labels: Galactic center, The region · Veyra and Twin, marker not to scale, arm structure illustrative, 10,000 ly
-- Zoom out to the Local Group
-[World] · [System] · [Stars] · [Region] · [selected: Galaxy]
-THE MILKY WAY · FOR SCALE
-- The region · 27,000 ly from the galactic center
-- Light across the region · 200 ly · light takes 16:40:00
-- Beyond 100 ly · visible, not reachable in v1
-
-## Local Group · the galaxy view’s icon
-A small icon in the galaxy view opens our neighboring galaxies at their real positions. Tap one to see its structure.
-
-#### Extra · Local Group · From the galaxy view’s icon. Real positions. Tap a galaxy to look closer.
-Veyra · Year 50.0
-Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [55%] · MATTER · 50 kt · COMPUTE · [55%]
-- drawing: The Local Group view; labels: Milky Way · you, Andromeda, Triangulum, IC 10, NGC 6822, IC 1613, WLM, 2 Mly · 19y 4d, galaxies drawn enlarged, 500,000 ly
-- selected: Back to the Milky Way
-[World] · [System] · [Stars] · [Region] · [selected: Galaxy]
-THE LOCAL GROUP · FOR PERSPECTIVE
-- Andromeda · 2.5 million ly away · 2.5 Million Years · 24y 18d
-- Triangulum · 2.8 million ly away · 2.8 Million Years · 26y 225d
-- Large Magellanic Cloud · orbiting the Milky Way · 162,000 Years · 1y 195d
-- Nothing here is reachable · shown for perspective
-tap Andromeda ›
-
-#### Close-up · Andromeda · A big spiral like ours, but larger, seen nearly edge-on.
-Veyra · Year 50.0
-Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [55%] · MATTER · 50 kt · COMPUTE · [55%]
-- drawing: Andromeda · M31 view; labels: M32, M110, structure drawn from observations, 20,000 ly
-- selected: Back to the Milky Way
-- ‹ Local Group
-[World] · [System] · [Stars] · [Region] · [selected: Galaxy]
-ANDROMEDA · M31 · 2.5 MLY · 24 YR
-- A big spiral, tilted 77° to us · we see it nearly edge-on
-- About 150,000 ly across · roughly 1.5× the Milky Way
-- A ring of young stars · about 30,000 ly from its center
-- Bright companions · M32 and M110
-or ›
-
-#### Close-up · Triangulum · A smaller spiral with loose, patchy arms and no real bulge.
-Veyra · Year 50.0
-Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [55%] · MATTER · 50 kt · COMPUTE · [55%]
-- drawing: Triangulum · M33 view; labels: NGC 604, structure drawn from observations, 10,000 ly
-- selected: Back to the Milky Way
-- ‹ Local Group
-[World] · [System] · [Stars] · [Region] · [selected: Galaxy]
-TRIANGULUM · M33 · 2.8 MLY · 27 YR
-- Loose, patchy spiral arms · almost no central bulge
-- About 60,000 ly across · roughly 0.6× the Milky Way
-- NGC 604 · a star-forming cloud 1,500 ly wide
-or ›
-
-#### Close-up · Large Magellanic Cloud · A dwarf with an off-center bar, orbiting the Milky Way.
-Veyra · Year 50.0
-Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [55%] · MATTER · 50 kt · COMPUTE · [55%]
-- drawing: Large Magellanic Cloud view; labels: Tarantula Nebula, off-center bar, structure drawn from observations, 5,000 ly
-- selected: Back to the Milky Way
-- ‹ Local Group
-[World] · [System] · [Stars] · [Region] · [selected: Galaxy]
-LARGE MAGELLANIC CLOUD · 162,000 LY · 1.5 YR
-- Off-center bar, one main arm · a Magellanic spiral, likely disrupted
-- About 32,000 ly across · orbiting the Milky Way
-- Tarantula Nebula · the Local Group’s most active star nursery
+# Holos · Onboarding
 
 ## First seconds · waking, and what you inherit
 After choosing and naming a civilization. The mind wakes, then sees what Veyra already has: Earth’s instruments and industry today, plus about a century. The kit found the opening clues. Every project goes beyond it.
@@ -267,6 +143,132 @@ TOUR · 6 OF 6
 How you answer these clues is the game. Look closer, listen harder, speak, or send something.
 [Begin]
 
+# Holos · Home
+
+## Home · five zoom levels
+One screen, pinched outward: the map changes scale and the panel below follows it. Star positions are real, from HYG and the Gaia census; Veyra, its planets and the game state are sample data. The sample is Year 50, just after the orbital foundry started.
+
+#### 1 · World · Veyra, with what is in motion around it.
+Veyra · Year 50.0
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [55%] · MATTER · 50 kt · COMPUTE · [55%]
+[drawing: World view; labels: Deep-field receiver, 00:37:42, Planet survey, 00:41:45, Orbital foundry · L5 →, 02:29:48, ↖ light from Delta Pavonis, Veyra, pinch out: the star system, 5,000 km [world size invented]]
+[selected: World] · [System] · [Stars] · [Region] · [Galaxy]
+IN MOTION · 3 · TIME LEFT
+- Deep-field receiver · in orbit around Veyra · 7.5 Years · 00:37:42
+- Planet survey · 12 nearest stars · from Veyra’s observatories · 8.4 Years · 00:41:45
+- Orbital foundry · at L5 · just started · 30 Years · 02:29:48
+- Leads · 3 · Twin, Ember, Lantern · ›
+pinch out ›
+
+#### 2 · System · Delta Pavonis and its invented planets, to scale inside the belt.
+Veyra · Year 50.0
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [55%] · MATTER · 50 kt · COMPUTE · [55%]
+[drawing: System view; labels: habitable zone, Delta Pavonis, Veyra, Orbital foundry · L5, 02:29:48, Deep-field receiver, 00:37:42, Planet survey, 00:41:45, belt, [ice world] 9 AU →, star real · planets invented, 1 AU]
+[World] · [selected: System] · [Stars] · [Region] · [Galaxy]
+DELTA PAVONIS SYSTEM · INVENTED PLANETS
+- Veyra · your world · 1.12 AU · habitable zone
+- [Inner world] · 0.45 AU · unvisited · ›
+- Belt · 2.6–3.2 AU · prospect: metals and ice · ›
+- [Ice world] · 9 AU · beyond this view · ›
+pinch out ›
+
+#### 3 · Stars · Real stars within 15 ly of home. Rings are light-time.
+Veyra · Year 50.0
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [55%] · MATTER · 50 kt · COMPUTE · [55%]
+[drawing: Stars view; labels: Veyra, Ember, Epsilon Indi · 00:46:03, Lantern, Gliese 783 A · 00:51:20, Beacon, Beta Hydri, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760, 01:15:00, Twin · oxygen world, Sol · 01:39:37, 5 ly]
+[World] · [System] · [selected: Stars] · [Region] · [Galaxy]
+WITHIN 10 LY · 12 STARS · LIGHT-TIME
+- New warm glow · Ember · dust, cold companions, or waste heat · 00:46:03
+- Uneven dimming · Lantern · dust, bodies in orbit, or structures · 00:51:20
+- Planet survey · 12 nearest · finds what orbits them · 8.4 Years · 00:41:45
+pinch out ›
+
+#### 4 · Region · All 9,494 objects within 100 ly of Sol. Dim red dwarfs are specks.
+Veyra · Year 50.0
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [55%] · MATTER · 50 kt · COMPUTE · [55%]
+[drawing: Region view; labels: 100 ly · region edge, 50 ly · civilizations start inside, Twin, Sol, Veyra, 25 ly]
+[World] · [System] · [Stars] · [selected: Region] · [Galaxy]
+THE REGION · 100 LY AROUND TWIN · WHERE V1 PLAYS
+- 1,212 stars inside 50 ly · where civilizations start
+- Oxygen world · Twin · 19.9 ly · light takes 01:39:37 · ›
+- Technosignatures detected · none yet · receivers at baseline · 0
+pinch out ›
+
+#### 5 · Galaxy · Where the region sits. The spiral is illustrative. Icon, top right: the Local Group.
+Veyra · Year 50.0
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [55%] · MATTER · 50 kt · COMPUTE · [55%]
+- drawing: Galaxy view; labels: Galactic center, The region · Veyra and Twin, marker not to scale, arm structure illustrative, 10,000 ly
+- Zoom out to the Local Group
+[World] · [System] · [Stars] · [Region] · [selected: Galaxy]
+THE MILKY WAY · FOR SCALE
+- The region · 27,000 ly from the galactic center
+- Light across the region · 200 ly · light takes 16:40:00
+- Beyond 100 ly · visible, not reachable in v1
+
+## Local Group · the galaxy view’s icon
+A small icon in the galaxy view opens our neighboring galaxies at their real positions. Tap one to see its structure.
+
+#### Extra · Local Group · From the galaxy view’s icon. Real positions. Tap a galaxy to look closer.
+Veyra · Year 50.0
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [55%] · MATTER · 50 kt · COMPUTE · [55%]
+- drawing: The Local Group view; labels: Milky Way · you, Andromeda, Triangulum, IC 10, NGC 6822, IC 1613, WLM, 2 Mly · 19y 4d, galaxies drawn enlarged, 500,000 ly
+- selected: Back to the Milky Way
+[World] · [System] · [Stars] · [Region] · [selected: Galaxy]
+THE LOCAL GROUP · FOR PERSPECTIVE
+- Andromeda · 2.5 million ly away · 2.5 Million Years · 24y 18d
+- Triangulum · 2.8 million ly away · 2.8 Million Years · 26y 225d
+- Large Magellanic Cloud · orbiting the Milky Way · 162,000 Years · 1y 195d
+- Nothing here is reachable · shown for perspective
+tap Andromeda ›
+
+#### Close-up · Andromeda · A big spiral like ours, but larger, seen nearly edge-on.
+Veyra · Year 50.0
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [55%] · MATTER · 50 kt · COMPUTE · [55%]
+- drawing: Andromeda · M31 view; labels: M32, M110, structure drawn from observations, 20,000 ly
+- selected: Back to the Milky Way
+- ‹ Local Group
+[World] · [System] · [Stars] · [Region] · [selected: Galaxy]
+ANDROMEDA · M31 · 2.5 MLY · 24 YR
+- A big spiral, tilted 77° to us · we see it nearly edge-on
+- About 150,000 ly across · roughly 1.5× the Milky Way
+- A ring of young stars · about 30,000 ly from its center
+- Bright companions · M32 and M110
+or ›
+
+#### Close-up · Triangulum · A smaller spiral with loose, patchy arms and no real bulge.
+Veyra · Year 50.0
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [55%] · MATTER · 50 kt · COMPUTE · [55%]
+- drawing: Triangulum · M33 view; labels: NGC 604, structure drawn from observations, 10,000 ly
+- selected: Back to the Milky Way
+- ‹ Local Group
+[World] · [System] · [Stars] · [Region] · [selected: Galaxy]
+TRIANGULUM · M33 · 2.8 MLY · 27 YR
+- Loose, patchy spiral arms · almost no central bulge
+- About 60,000 ly across · roughly 0.6× the Milky Way
+- NGC 604 · a star-forming cloud 1,500 ly wide
+or ›
+
+#### Close-up · Large Magellanic Cloud · A dwarf with an off-center bar, orbiting the Milky Way.
+Veyra · Year 50.0
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [55%] · MATTER · 50 kt · COMPUTE · [55%]
+- drawing: Large Magellanic Cloud view; labels: Tarantula Nebula, off-center bar, structure drawn from observations, 5,000 ly
+- selected: Back to the Milky Way
+- ‹ Local Group
+[World] · [System] · [Stars] · [Region] · [selected: Galaxy]
+LARGE MAGELLANIC CLOUD · 162,000 LY · 1.5 YR
+- Off-center bar, one main arm · a Magellanic spiral, likely disrupted
+- About 32,000 ly across · orbiting the Milky Way
+- Tarantula Nebula · the Local Group’s most active star nursery
+
 ## Stars and clues · tap to look closer
 Tap any star on the map for its card. Stars bright in Veyra’s sky carry Veyra’s own names, with the real name beneath; faint ones keep their catalog names, since no one named what they could not see. A clue opens in full: what we see, what it could be, and how long each way of finding out takes.
 
@@ -320,6 +322,49 @@ LEADS · 3 · LIGHT-TIME
 Gliese 832 · Too faint to see by eye, so it has no Veyra name · [Close · ×]
 [drawing: Gliese 832: a red dwarf with one known giant planet; labels: one giant planet, far out, not to scale]
 Distance · 7.4 ly · light takes 7.4 Years · 00:36:54 · Star · Red dwarf, far dimmer than Delta Pavonis · In our sky · Needs a telescope · Aimed here · Nothing yet · [Nothing unusual seen · no clues here yet] · [Aim a project here]
+
+## Projects on the map
+Every project appears where it physically is, with its timer. Things in orbit show at World; things elsewhere around the star show at System; anything off-screen gets an edge marker. Drawings are symbols, not to scale: a kilometer-wide receiver would be smaller than a pixel here.
+
+#### 1 · Building · The receiver fills in as it is built. Each project carries its countdown.
+Veyra · Year 50.0
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [55%] · MATTER · 50 kt · COMPUTE · [55%]
+[drawing: World view; labels: Deep-field receiver, 00:37:42, Planet survey, 00:41:45, Orbital foundry · L5 →, 02:29:48, ↖ light from Delta Pavonis, Veyra, pinch out: the star system, 5,000 km [world size invented]]
+[selected: World] · [System] · [Stars] · [Region] · [Galaxy]
+IN MOTION · 3 · TIME LEFT
+- Deep-field receiver · in orbit around Veyra · 7.5 Years · 00:37:42
+- Planet survey · 12 nearest stars · from Veyra’s observatories · 8.4 Years · 00:41:45
+- Orbital foundry · at L5 · just started · 30 Years · 02:29:48
+- Leads · 3 · Twin, Ember, Lantern · ›
+00:37:42 later ›
+
+#### 2 · Done · Drawn in full, marked done, and listening. The other timers kept running.
+Veyra · Year 57.5
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [35%] · MATTER · 1,250 kt · COMPUTE · [35%]
+[drawing: World view; labels: Deep-field receiver, Done · listening, Planet survey, 00:04:03, Orbital foundry · L5 →, 01:52:06, ↖ light from Delta Pavonis, Veyra, pinch out: the star system, 5,000 km [world size invented]]
+[selected: World] · [System] · [Stars] · [Region] · [Galaxy]
+IN MOTION · 2 · TIME LEFT
+- Done · Deep-field receiver · listening · the radio floor is lower · ›
+- Planet survey · 12 nearest stars · from Veyra’s observatories · 0.8 Years · 00:04:03
+- Orbital foundry · at L5, 60° ahead of Veyra · 22.4 Years · 01:52:06
+- Leads · 3 · Twin, Ember, Lantern · ›
+pinch out ›
+
+#### 3 · System · The foundry at L5, and both projects at Veyra, each with its timer.
+Veyra · Year 50.0
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [55%] · MATTER · 50 kt · COMPUTE · [55%]
+[drawing: System view; labels: habitable zone, Delta Pavonis, Veyra, Orbital foundry · L5, 02:29:48, Deep-field receiver, 00:37:42, Planet survey, 00:41:45, belt, [ice world] 9 AU →, star real · planets invented, 1 AU]
+[World] · [selected: System] · [Stars] · [Region] · [Galaxy]
+DELTA PAVONIS SYSTEM · INVENTED PLANETS
+- Veyra · your world · 1.12 AU · habitable zone
+- [Inner world] · 0.45 AU · unvisited · ›
+- Belt · 2.6–3.2 AU · prospect: metals and ice · ›
+- [Ice world] · 9 AU · beyond this view · ›
+
+# Holos · Projects
 
 ## Projects · starting the first one
 A fresh start on the Projects tab, where time gets explained: what you spend each year, and when things finish. Drawn to match the atlas. Energy and compute are yearly budgets, since neither can be stored at planetary scale; matter is a stockpile, drawn once when a project starts.
@@ -565,46 +610,7 @@ The glow at Ember waits until something else can look.
 Pausing frees the same share and keeps every year of work.
 [Pause the telescope] · [Cancel the telescope]
 
-## Projects on the map
-Every project appears where it physically is, with its timer. Things in orbit show at World; things elsewhere around the star show at System; anything off-screen gets an edge marker. Drawings are symbols, not to scale: a kilometer-wide receiver would be smaller than a pixel here.
-
-#### 1 · Building · The receiver fills in as it is built. Each project carries its countdown.
-Veyra · Year 50.0
-Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [55%] · MATTER · 50 kt · COMPUTE · [55%]
-[drawing: World view; labels: Deep-field receiver, 00:37:42, Planet survey, 00:41:45, Orbital foundry · L5 →, 02:29:48, ↖ light from Delta Pavonis, Veyra, pinch out: the star system, 5,000 km [world size invented]]
-[selected: World] · [System] · [Stars] · [Region] · [Galaxy]
-IN MOTION · 3 · TIME LEFT
-- Deep-field receiver · in orbit around Veyra · 7.5 Years · 00:37:42
-- Planet survey · 12 nearest stars · from Veyra’s observatories · 8.4 Years · 00:41:45
-- Orbital foundry · at L5 · just started · 30 Years · 02:29:48
-- Leads · 3 · Twin, Ember, Lantern · ›
-00:37:42 later ›
-
-#### 2 · Done · Drawn in full, marked done, and listening. The other timers kept running.
-Veyra · Year 57.5
-Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [35%] · MATTER · 1,250 kt · COMPUTE · [35%]
-[drawing: World view; labels: Deep-field receiver, Done · listening, Planet survey, 00:04:03, Orbital foundry · L5 →, 01:52:06, ↖ light from Delta Pavonis, Veyra, pinch out: the star system, 5,000 km [world size invented]]
-[selected: World] · [System] · [Stars] · [Region] · [Galaxy]
-IN MOTION · 2 · TIME LEFT
-- Done · Deep-field receiver · listening · the radio floor is lower · ›
-- Planet survey · 12 nearest stars · from Veyra’s observatories · 0.8 Years · 00:04:03
-- Orbital foundry · at L5, 60° ahead of Veyra · 22.4 Years · 01:52:06
-- Leads · 3 · Twin, Ember, Lantern · ›
-pinch out ›
-
-#### 3 · System · The foundry at L5, and both projects at Veyra, each with its timer.
-Veyra · Year 50.0
-Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [55%] · MATTER · 50 kt · COMPUTE · [55%]
-[drawing: System view; labels: habitable zone, Delta Pavonis, Veyra, Orbital foundry · L5, 02:29:48, Deep-field receiver, 00:37:42, Planet survey, 00:41:45, belt, [ice world] 9 AU →, star real · planets invented, 1 AU]
-[World] · [selected: System] · [Stars] · [Region] · [Galaxy]
-DELTA PAVONIS SYSTEM · INVENTED PLANETS
-- Veyra · your world · 1.12 AU · habitable zone
-- [Inner world] · 0.45 AU · unvisited · ›
-- Belt · 2.6–3.2 AU · prospect: metals and ice · ›
-- [Ice world] · 9 AU · beyond this view · ›
+# Holos · Report
 
 ## First result · the transit watch finishes
 Twenty real minutes after starting it, the transit watch reports. The answer shifts the odds on the Lantern clue and opens a new project aimed at it. Four game years have passed: it is now Year 4.4.
@@ -665,6 +671,8 @@ CLUES · 3 · YEAR 4.4
 - New · Regular dimming · Lantern · dust 55 · ringed planet 30 · something built 15 · ›
 - New warm glow · Ember · infrared telescope under way · 14 Years · 01:10:00
 - Oxygen world · Twin · not yet studied · light takes 01:39:37 · ›
+
+# Holos · Contact
 
 ## First contact · the knock
 Year 31.2. A laser aimed at Veyra arrives from Beacon, carrying nothing but itself. The arrival takes over the screen, one beat at a time, with one low tone per pulse. Then what it tells us, who sent it, and the choice. Assumes a starting sky watch; the tight-beam transmitter is built, the broadcast beacon is not.

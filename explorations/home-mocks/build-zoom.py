@@ -563,7 +563,7 @@ def figure_row(indices):
     return ''.join((f'<span class="pinch">{joins[i - 1]}</span>' if i != indices[0] else '') +
                    f'<figure><figcaption><strong>{CAPTIONS[i][0]}</strong><span>{CAPTIONS[i][1]}</span></figcaption>{frame(i, *views[i], **extras[i])}</figure>' for i in indices)
 figures, lg_figures = figure_row(range(5)), figure_row(range(5, 9))
-def page(title, links, body):
+def page(title, links, body, current=None):
     return f'''<!doctype html>
 <html lang="en">
 <head>
@@ -588,12 +588,17 @@ h2,h3,figcaption strong{{text-wrap:balance}}
 /* The low-fi sketches were drawn with their own hex values. */
 svg [fill="#1D1D1B"]{{fill:var(--ink)}}svg [stroke="#1D1D1B"]{{stroke:var(--ink)}}svg [fill="#F3F1EA"]{{fill:var(--paper)}}svg [stroke="#F3F1EA"]{{stroke:var(--paper)}}
 svg [fill="#CFCBC0"]{{fill:var(--faint)}}svg [stroke="#CFCBC0"]{{stroke:var(--faint)}}svg [fill="#8F8B82"]{{fill:var(--dot)}}svg [fill="#E0DCD1"]{{fill:var(--track)}}
-nav.top{{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:24px;margin:0 -24px;padding:12px 24px;background:var(--page);border-bottom:1px solid var(--frame)}}
-nav.top strong{{font-size:15px;white-space:nowrap}}
+nav.top{{position:sticky;top:0;z-index:20;display:flex;flex-direction:column;gap:6px;margin:0 -24px;padding:10px 24px 8px;background:var(--page);border-bottom:1px solid var(--frame)}}
+.nav1{{display:flex;align-items:center;gap:24px}}
+nav.top strong{{font-size:15px;white-space:nowrap}}nav.top strong a{{color:inherit;text-decoration:none}}
+.pages{{display:flex;gap:2px;flex-grow:1;overflow-x:auto;scrollbar-width:none}}
+.pages a{{padding:6px 10px;font-size:14px;font-weight:500;color:var(--page-ink2);text-decoration:none;white-space:nowrap}}
+.pages a:hover{{color:var(--ink)}}.pages a[aria-current=page]{{color:var(--ink);box-shadow:inset 0 -2px 0 var(--ink)}}
+.pages .minor{{font-size:12px;font-weight:400}}.pages .divider{{width:1px;margin:6px 8px;background:var(--frame);flex-shrink:0}}
 .links{{display:flex;gap:4px;flex-grow:1;overflow-x:auto;scrollbar-width:none}}
 .links a{{padding:8px 12px;border-radius:18px;font-size:13px;color:var(--page-ink2);text-decoration:none;white-space:nowrap}}
 .links a:hover{{color:var(--ink)}}.links a[aria-current=true]{{background:var(--ink);color:var(--page)}}
-section{{padding:32px 0 24px;scroll-margin-top:64px}}
+section{{padding:32px 0 24px;scroll-margin-top:112px}}
 section>h2{{font-size:22px;font-weight:600;margin:0 0 6px}}
 section>p{{margin:0 0 28px;color:var(--page-ink2);font-size:14px;max-width:820px}}
 section>main{{display:flex;flex-wrap:wrap;gap:18px;align-items:center}}
@@ -651,7 +656,7 @@ try{{const t=localStorage.getItem('holos-mock-theme');if(t==='light'||t==='dark'
 <pattern id="hatch" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="4" stroke="{INK}" stroke-width=".8"></line></pattern>
 <pattern id="hatchLight" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="5" stroke="{YOU}" stroke-width=".6" opacity=".45"></line></pattern>
 </defs></svg>
-<nav class="top" aria-label="Mock sections"><strong>Holos · mocks</strong><div class="links">{links}</div><button class="theme" id="theme" aria-pressed="false">Dark mode</button></nav>
+<nav class="top" aria-label="Mocks"><div class="nav1"><strong><a href="index.html">Holos · mocks</a></strong><div class="pages">{nav_pages(current)}</div><button class="theme" id="theme" aria-pressed="false">Dark mode</button></div><div class="links" aria-label="On this page">{links}</div></nav>
 {body}
 <script>
 const button=document.getElementById('theme'),query=matchMedia('(prefers-color-scheme: dark)');
@@ -1868,9 +1873,10 @@ CHECKLIST = [
                  ('A far mind met them first', 'todo'), ('Crossed knocks', 'todo'), ('The silent one: no answer, ever', 'todo')]),
     ('Stakes · later', [('The strike as first contact', 'later'), ('A launch flare seen toward us', 'later'), ('Wounded: the morning after', 'later'), ('Total loss and a new cohort', 'later')]),
 ]
-def checklist_html():
+def checklist_html(areas=None):
     out = ['<div class="checklist">']
     for area, items in CHECKLIST:
+        if areas and area not in areas: continue
         done = sum(state == 'done' for _, state in items)
         out.append(f'<div class="carea"><h3>{area}<span class="mono">{done} of {len(items)}</span></h3><ul>'
                    + ''.join(f'<li class="st-{state.split(":")[0]}"><span class="box" aria-hidden="true"></span><span>{name}</span>'
@@ -1981,6 +1987,20 @@ SECTIONS = [
      f'<figure><figcaption><strong>3 · What we know, both ways</strong><span>The record of the conversation: what we know about Beacon, and what Beacon knows about us.</span></figcaption>{DOSSIER}</figure>'),
 ]
 
+# One page per area of the game, in the checklist's order. Reach and Mind get pages once they have mocks of their own.
+AREAS = [  # (page, area as named in CHECKLIST, one-line summary, section ids)
+    ('onboarding', 'Onboarding', 'Waking on Veyra, what you inherit, and the guided tour.', ['waking', 'tour']),
+    ('home', 'Home', 'The map at five zoom levels, star cards and clues, projects in place.', ['zoom', 'local-group', 'clues', 'map']),
+    ('projects', 'Projects', 'Starting, running, finishing, queueing and cancelling projects.', ['projects', 'picker', 'upnext']),
+    ('report', 'Report', 'What comes back while you are away.', ['result']),
+    ('contact', 'Contact', 'First contact: the knock, the reply, and checking what they told us.', ['knock', 'reply', 'check']),
+]
+assert sorted(sid for *_, ids in AREAS for sid in ids) == sorted(sid for sid, *_ in SECTIONS), 'every section belongs to exactly one page'
+def nav_pages(current):
+    here_is = lambda f: f' aria-current="page"' if f == current else ''
+    return (''.join(f'<a href="{f}.html"{here_is(f + ".html")}>{area}</a>' for f, area, *_ in AREAS) + '<span class="divider" aria-hidden="true"></span>'
+            + ''.join(f'<a class="minor" href="{f}"{here_is(f)}>{label}</a>' for f, label in (('catalog.html', 'Catalog'), ('explorations.html', 'Explorations'), ('type.html', 'Type'))))
+
 # The game-facing sections again, set in holos-game's faces (client/src/style.css):
 # Cinzel for titling caps; readouts stay in IBM Plex Mono. The text face is picked
 # from the nav, so candidates can be compared on the real mocks.
@@ -2010,8 +2030,8 @@ figcaption strong{{font-family:'Cinzel',Georgia,serif;letter-spacing:.05em;font-
 .hud{{line-height:1.15}}
 .face{{flex-shrink:0;height:36px;padding:0 12px;border:1px solid var(--ink);border-radius:18px;background:none;color:var(--ink);font:13px var(--text)}}
 </style>"""
-def typeset(title, links, body):
-    return (page(title, links, body).replace('</head>', tour_css + '\n' + type_css() + '\n</head>')
+def typeset(title, links, body, current=None):
+    return (page(title, links, body, current).replace('</head>', tour_css + '\n' + type_css() + '\n</head>')
             .replace('family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:wght@400;500;600',
                      'family=Cinzel:wght@400;600;700&amp;family=IBM+Plex+Mono:wght@400;500&amp;' + '&amp;'.join(f'family={spec}' for _, spec, _ in TEXT_FACES + MORE_FACES))
             .replace("'IBM Plex Sans',sans-serif", 'var(--text)'))
@@ -2069,7 +2089,7 @@ face.value=root.dataset.face;
 try{const saved=localStorage.getItem('holos-text-face');if(saved)pick(saved)}catch(e){}
 face.addEventListener('change',()=>pick(face.value));
 </script>"""
-type_page = (typeset('Holos · game type', type_links + compare_links, type_body).replace('<html lang="en">', f'<html lang="en" data-face="{TEXT_FACE}">', 1)
+type_page = (typeset('Holos · game type', type_links + compare_links, type_body, 'type.html').replace('<html lang="en">', f'<html lang="en" data-face="{TEXT_FACE}">', 1)
              .replace('</head>', fix_css + '\n</head>')
              .replace('<button class="theme" id="theme"', face_picker + '<button class="theme" id="theme"', 1)
              .replace('</body>', face_js + '\n</body>'))
@@ -2090,11 +2110,34 @@ for PAIR in PAIRS:
     (here / pair_file(PAIR)).write_text(pair_page)
     print(f'{pair_file(PAIR)} · {len(pair_page) / 1024:.0f} KB')
 
-links = ''.join(f'<a href="#{sid}" aria-current="false">{label}</a>' for sid, label, *_ in SECTIONS) + '<span class="divider" aria-hidden="true"></span><a class="minor" href="#checklist" aria-current="false">Checklist</a><a class="minor" href="catalog.html">Catalog ↗</a><a class="minor" href="explorations.html">Explorations ↗</a>'
-body = ''.join(f'<section id="{sid}"><h2>{title}</h2><p>{intro}</p><main>{content}</main></section>' for sid, _, title, intro, content in SECTIONS)
-body += ('<section id="checklist" class="appendix"><h2>Checklist</h2><p>Everything the game needs mocked, and where each stands. Also written to CHECKLIST.md.</p>'
-         + checklist_html() + '</section>')
-site = set_text(page('Holos · mocks', links, body).replace('</head>', tour_css + '\n</head>'), TEXT_FACE)
+by_id = {sid: sec for sid, *sec in SECTIONS}
+section_html = lambda sid: (lambda _, title, intro, content: f'<section id="{sid}"><h2>{title}</h2><p>{intro}</p><main>{content}</main></section>')(*by_id[sid])
+checklist_note = lambda scope: f'<section id="checklist" class="appendix"><h2>Checklist</h2><p>{scope} Also written to CHECKLIST.md.</p>'
+area_pages = []
+for f, area, summary, ids in AREAS:
+    links = ''.join(f'<a href="#{sid}" aria-current="false">{by_id[sid][0]}</a>' for sid in ids) + '<span class="divider" aria-hidden="true"></span><a class="minor" href="#checklist" aria-current="false">Checklist</a>'
+    body = ''.join(section_html(sid) for sid in ids) + checklist_note(f'What {area} needs mocked, and where each stands. The full list is on the <a href="index.html#checklist">overview</a>.') + checklist_html([area]) + '</section>'
+    html = set_text(page(f'Holos · {area}', links, body, f + '.html').replace('</head>', tour_css + '\n</head>'), TEXT_FACE)
+    (here / f'{f}.html').write_text(html)
+    area_pages.append(here / f'{f}.html')
+    print(f'{f}.html · {len(html) / 1024:.0f} KB')
+
+# The overview: a card per page, then the whole checklist.
+tally = {area: (sum(st == 'done' for _, st in items), len(items)) for area, items in CHECKLIST}
+screens = lambda ids: sum(by_id[sid][3].count('<figure') for sid in ids)
+cards = ''.join(f'<a class="acard" href="{f}.html"><strong>{area}</strong><span>{summary}</span>'
+                f'<span class="mono">{screens(ids)} screens · {tally[area][0]} of {tally[area][1]} mocked</span>'
+                f'<span class="secs">{" · ".join(by_id[sid][0] for sid in ids)}</span></a>' for f, area, summary, ids in AREAS)
+cards += ''.join(f'<div class="acard later"><strong>{area}</strong><span>No page yet.</span><span class="mono">{tally[area][0]} of {tally[area][1]} mocked</span></div>'
+                 for area, _ in CHECKLIST if area not in {a for _, a, *_ in AREAS})
+hub_css = """<style>.areas{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.acard{display:flex;flex-direction:column;gap:6px;padding:16px;background:var(--paper);border:1px solid var(--frame);border-radius:10px;color:var(--ink);text-decoration:none;font-size:13px}
+a.acard:hover{border-color:var(--ink)}.acard strong{font-size:18px;font-weight:600}.acard .mono{font-size:11px;color:var(--muted)}.acard .secs{color:var(--page-ink2)}
+.acard.later{background:none;color:var(--page-ink2)}.appendix a{color:var(--ink)}</style>"""
+links = '<a href="#areas" aria-current="false">Areas</a><a href="#checklist" aria-current="false">Checklist</a>'
+body = (f'<section id="areas"><h2>Holos · mocks</h2><p>{sum(screens(ids) for *_, ids in AREAS)} screens across {len(AREAS)} pages, one per area of the game.</p><div class="areas">{cards}</div></section>'
+        + checklist_note('Everything the game needs mocked, and where each stands.') + checklist_html() + '</section>')
+site = set_text(page('Holos · mocks', links, body, 'index.html').replace('</head>', tour_css + '\n' + hub_css + '\n</head>'), TEXT_FACE)
 (here / 'index.html').write_text(site)
 print(f'index.html · {len(site) / 1024:.0f} KB')
 
@@ -2107,23 +2150,23 @@ EXPLORATIONS = [
      + ''.join(f'<li><a href="{pair_file(pr)}">{" vs ".join(pr)} ↗</a><span>Side by side, each with its fixes.</span></li>' for pr in PAIRS) + '</ul>'),
     ('home-layouts', 'Home layouts', 'Sep 26 · Home layouts, low fidelity', 'Three ways to organize the first screen. B, world first, was chosen and carried forward.', lofi),
 ]
-ex_links = ''.join(f'<a href="#{sid}" aria-current="false">{label}</a>' for sid, label, *_ in EXPLORATIONS) + '<span class="divider" aria-hidden="true"></span><a class="minor" href="index.html">‹ Mocks</a>'
+ex_links = ''.join(f'<a href="#{sid}" aria-current="false">{label}</a>' for sid, label, *_ in EXPLORATIONS) + ''
 ex_body = ''.join(f'<section id="{sid}"><h2>{title}</h2><p>{intro}</p><main>{content}</main></section>' for sid, _, title, intro, content in EXPLORATIONS)
 ex_css = "<style>.study{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}.study li{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}.study a{color:var(--ink);font-weight:500}.study span{color:var(--page-ink2);font-size:13px}</style>"
-ex_page = set_text(page('Holos · explorations', ex_links, ex_body).replace('</head>', tour_css + '\n' + ex_css + '\n</head>'), TEXT_FACE)
+ex_page = set_text(page('Holos · explorations', ex_links, ex_body, 'explorations.html').replace('</head>', tour_css + '\n' + ex_css + '\n</head>'), TEXT_FACE)
 (here / 'explorations.html').write_text(ex_page)
 print(f'explorations.html · {len(ex_page) / 1024:.0f} KB')
 
 cat_sections = catalog.sections()
-cat_links = ''.join(f'<a href="#{sid}" aria-current="false">{label}</a>' for sid, label, *_ in cat_sections) + '<span class="divider" aria-hidden="true"></span><a class="minor" href="index.html">‹ Mocks</a>'
+cat_links = ''.join(f'<a href="#{sid}" aria-current="false">{label}</a>' for sid, label, *_ in cat_sections) + ''
 cat_intro = (f'<section id="about" class="intro"><h2>Project catalog</h2><p>{len(catalog.PROJECTS)} projects and {len(catalog.DISCOVERIES)} discovery projects. '
              'Each leads with its why, the benefit to the player, then what it is and the science behind it. Level says how far past today it reaches; '
              'visibility says how much easier it makes you to find. Also written to HOLOS_PROJECTS.md.</p></section>')
 cat_body = cat_intro + ''.join(f'<section id="{sid}"><h2>{label}</h2><p>{blurb}</p>{content}</section>' for sid, label, blurb, content in cat_sections)
-cat_page = set_text(page('Holos · project catalog', cat_links, cat_body).replace('</head>', tour_css + '\n</head>'), TEXT_FACE)
+cat_page = set_text(page('Holos · project catalog', cat_links, cat_body, 'catalog.html').replace('</head>', tour_css + '\n</head>'), TEXT_FACE)
 (here / 'catalog.html').write_text(cat_page)
 print(f'catalog.html · {len(cat_page) / 1024:.0f} KB')
 
 # Plain-text copy for reading, diffing, and LLMs.
 import extract
-extract.main([here / "index.html"])
+extract.combine(area_pages, here / 'mocks.md', checklist_from=here / 'index.html')

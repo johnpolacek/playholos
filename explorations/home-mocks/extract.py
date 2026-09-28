@@ -1,6 +1,7 @@
 """Plain-text copy of the mocks, for reading, searching, diffing, or handing to an LLM.
 
-Usage: python3 extract.py [page.html ...]   (default: index.html → mocks.md)
+Usage: python3 extract.py page.html ...   (each → page.md)
+build-zoom.py joins the area pages into mocks.md with combine().
 
 Keeps section titles, captions, and on-screen text in reading order. Drawings become
 [drawing: label] with their text labels; buttons are [bracketed]; empty bars show their fill.
@@ -121,12 +122,24 @@ def extract(html):
     text = list_rows(re.sub(r'\n{3,}', '\n\n', text).strip())
     return text + '\n'
 
+APPENDIX = '\n---\n\n_Appendix'
+def combine(pages, out, checklist_from=None):
+    """Several pages, in order, as one file; each page's checklist is dropped for the full one."""
+    pages = [Path(p) for p in pages]
+    text = lambda p: extract(p.read_text())
+    parts = [f"# {re.search(r'<title>(.*?)</title>', p.read_text(), re.S).group(1).strip()}\n\n" + text(p).split(APPENDIX)[0].strip() + '\n' for p in pages]
+    if checklist_from:
+        parts.append(APPENDIX.lstrip() + text(Path(checklist_from)).split(APPENDIX, 1)[1])
+    names = ', '.join(p.name for p in pages + ([Path(checklist_from)] if checklist_from else []))
+    out.write_text(f"<!-- Generated from {names} by extract.py. Edit the mocks, not this file. -->\n\n" + '\n'.join(parts))
+    print(f'{out.name} · {out.stat().st_size / 1024:.0f} KB')
+
 def main(pages):
-    here = Path(__file__).resolve().parent
-    for page in pages or [here / 'index.html']:
+    if not pages: sys.exit(__doc__)
+    for page in pages:
         page = Path(page)
         title = re.search(r'<title>(.*?)</title>', page.read_text(), re.S)
-        out = page.with_name('mocks.md' if page.name == 'index.html' else page.stem + '.md')
+        out = page.with_name(page.stem + '.md')
         header = (f"<!-- Generated from {page.name} by extract.py. Edit the mocks, not this file. -->\n\n"
                   f"# {title.group(1).strip() if title else page.stem}\n\n")
         out.write_text(header + extract(page.read_text()))
