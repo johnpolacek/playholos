@@ -83,8 +83,8 @@ KNOW · WHAT WE CAN SEE
 [drawing: Planet survey] · Star surveys · The big planets of the nearest stars, already mapped. The three clues came from here.
 [drawing: Deep-field receiver] · Radio array · A radio telescope as wide as a continent.
 GROW · WHAT WE CAN MAKE
-[drawing: Planetary grid] · Planetary grid · All of each year’s energy: the 100% every project shares.
-[drawing: Cold compute annex] · Data centers · Where the mind runs. All of each year’s compute.
+[drawing: Planetary grid] · Planetary grid · All of each year’s energy, about 100 TW: the 100% every project shares.
+[drawing: Cold compute annex] · Data centers · Where the mind runs: all of each year’s compute, about 10²⁷ operations a second, on 10 TW of their own.
 [drawing: Mines and heavy lift] · Mines and heavy lift · 1,240 kt of matter in orbit, and 40 kt more each year.
 REACH · HOW FAR WE TOUCH
 [drawing: Tight-beam transmitter] · Laser links · Messages across the home system in hours.
@@ -695,9 +695,9 @@ ENERGY · [45%] · MATTER · 15,000 kt · COMPUTE · [50%]
 COMPUTE · YEAR 452
 [‹ Projects]
 50% · of this year’s compute in use
-2 × 10²⁵ of 4 × 10²⁵ operations a second
+2 × 10²⁷ of 4 × 10²⁷ operations a second
 WHERE IT COMES FROM
-[Data centers · what we woke with · 1 × 10²⁵ /s] · [Cold compute annex · run cold: each bit costs less · 3 × 10²⁵ /s]
+[Data centers · what we woke with · 1 × 10²⁷ /s] · [Cold compute annex · run cold: each bit costs less · 3 × 10²⁷ /s]
 WHERE IT GOES
 - The mind itself · always · 20%
 - Deep flash watch · a project · 15%

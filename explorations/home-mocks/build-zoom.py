@@ -3263,10 +3263,10 @@ BUDGET_ENERGY = tab_screen('Projects', 'ENERGY', 'YEAR 452', f"""<button class="
 <p class="copy small">Every watt ends as heat. Past about 1,000 TW on Veyra, the heat alone would warm the planet; beyond that, energy is made in space.</p>""", HUD_BU)
 BUDGET_COMPUTE = tab_screen('Projects', 'COMPUTE', 'YEAR 452', f"""<button class="backlink inline">‹ Projects</button>
 <div class="bignum"><strong>50%</strong><span>of this year’s compute in use</span></div>
-<p class="copy small mono">2 × 10²⁵ of 4 × 10²⁵ operations a second</p>
+<p class="copy small mono">2 × 10²⁷ of 4 × 10²⁷ operations a second</p>
 <div class="sec">WHERE IT COMES FROM</div>
-{row('Data centers', 'what we woke with', '<span class="mono">1 × 10²⁵ /s</span>')}
-{row('Cold compute annex', 'run cold: each bit costs less', '<span class="mono">3 × 10²⁵ /s</span>')}
+{row('Data centers', 'what we woke with', '<span class="mono">1 × 10²⁷ /s</span>')}
+{row('Cold compute annex', 'run cold: each bit costs less', '<span class="mono">3 × 10²⁷ /s</span>')}
 <div class="sec">WHERE IT GOES</div>
 {row('The mind itself', 'always', '<span class="mono">20%</span>')}
 {row('Deep flash watch', 'a project', '<span class="mono">15%</span>')}
