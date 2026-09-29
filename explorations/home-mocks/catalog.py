@@ -11,7 +11,7 @@ stockpile: a project draws its matter once, when it starts. In `cost`, E and C
 are fixed amounts, as percents of the starting grid and data centers (1% of energy is
 1 TW, 1% of compute is 10²⁵ operations a second); as capacity grows, the same project takes a smaller share of each year.
 M is converted to kilotonnes by tier (see matter_tonnes).
-One game year is 5 real minutes. Visibility is what the project adds
+One game year is 5 real minutes. `visibility` holds the project's emissions: what it adds
 to how detectable the civilization is: quiet, noticeable, or loud.
 """
 
@@ -56,9 +56,9 @@ PROJECTS = [
       'Optical SETI at scale, far beyond PANOSETI.', 'grounded', 'quiet',
       reveals=['watch-flashes']),
     P('deep-field-receiver', 'Deep-field receiver', 'know', 1, 12, 'E20 M15 C20',
-      'A radio array ten times the Square Kilometre Array. It can hear a neighbor’s everyday radio out to about 20 light-years, one star at a time.',
-      'Sensitivity grows with collecting area: 10 km² of dishes. The SKA could hear Earth’s cell networks (about 4 GW) to 4 ly in an hour (Sheikh et al. 2025); every seat’s everyday radio is about a hundredth of that by Year 0. Staring longer is untested past about 100 hours.', 'grounded', 'quiet',
-      effect='Lowers the detection floor for radio. Hears a world’s everyday radio to about 20 ly.', reveals=['listen-to']),
+      'A radio array ten times the Square Kilometre Array. It can hear a neighbor’s hum out to about 20 light-years, one star at a time.',
+      'Sensitivity grows with collecting area: 10 km² of dishes. The SKA could hear Earth’s cell networks (about 4 GW) to 4 ly in an hour (Sheikh et al. 2025); every seat’s hum is about a hundredth of that by Year 0. Staring longer is untested past about 100 hours.', 'grounded', 'quiet',
+      effect='Lowers the detection floor for radio. Hears a world’s hum to about 20 ly.', reveals=['listen-to']),
     P('planet-survey', 'Planet survey', 'know', 1, 14, 'E10 C25',
       'Finds Earth-sized planets around the 12 nearest stars. The big ones are already known.',
       'Precise radial velocity and astrometry, beyond today’s reach.', 'grounded', 'quiet',
@@ -92,13 +92,13 @@ PROJECTS = [
       needs=['second-telescope'], reveals=['image-planet']),
     P('solar-lens-observatory', 'Solar lens observatory', 'know', 3, 70, 'E30 M20 C25',
       'Flies a telescope to where our star bends light like a lens. Sees one planet in detail.',
-      'Gravitational lensing by a star; the focal line begins beyond about 550 AU for a Sun-like star (Turyshev and colleagues). It cannot hear a world’s everyday radio: the corona defocuses anything below about 120 GHz (Hippke 2017).', 'plausible', 'quiet',
+      'Gravitational lensing by a star; the focal line begins beyond about 550 AU for a Sun-like star (Turyshev and colleagues). It cannot hear a world’s hum: the corona defocuses anything below about 120 GHz (Hippke 2017).', 'plausible', 'quiet',
       needs=['infrared-telescope', 'launcher'], effect='One target at a time; retargeting takes decades.',
       reveals=['image-planet']),
     P('far-side-array', 'Far-side array', 'know', 3, 30, 'E20 M20 C40',
-      'Radio dishes across a thousand square kilometers of a moon’s far side, shielded from our own noise. Hears a world’s everyday radio anywhere in the region, one star at a time.',
+      'Radio dishes across a thousand square kilometers of a moon’s far side, shielded from our own noise. Hears a world’s hum anywhere in the region, one star at a time.',
       'Lunar far-side radio arrays such as the FARSIDE concept. A hundred times the deep-field receiver’s area is ten times its range.', 'plausible', 'quiet',
-      needs=['deep-field-receiver', 'self-replicating-factory'], effect='Hears a world’s everyday radio to about 200 ly: the whole region.', reveals=['listen-to']),
+      needs=['deep-field-receiver', 'self-replicating-factory'], effect='Hears a world’s hum to about 200 ly: the whole region.', reveals=['listen-to']),
     P('kilometer-array', 'Kilometer interferometer', 'know', 4, 40, 'E35 M40 C35',
       'A fleet of mirrors spread across kilometers: surface maps of nearby planets.',
       'Large-baseline optical interferometry, scaled far beyond today.', 'speculative', 'quiet',
@@ -365,7 +365,7 @@ DISCOVERIES = [
       'Brown-dwarf imaging and spectroscopy.', 'grounded', 'quiet', needs=['infrared-telescope'],
       effect='Appears when a glow looks like companions.'),
     P('listen-to', 'Listen to {star}', 'know', 1, 4, 'E10 C20',
-      'Points the receiver at one star through many of its planet’s days, for its everyday radio and anything aimed. Everyday radio shows where they are, how long their day is and where their transmitters sit, as of when the light left. Never what they are now.',
+      'Points the receiver at one star through many of its planet’s days, for its hum and anything aimed. The hum shows where they are, how long their day is and where their transmitters sit, as of when the light left. Never what they are now.',
       'Targeted SETI. A world’s radio rises and falls as a planet turns its crowded coasts toward us (Saide et al. 2023).', 'grounded', 'quiet', needs=['deep-field-receiver|far-side-array'],
       effect='Opens for any star within about 20 ly once the deep-field receiver is built, and for any star in the region with the far-side array. A clue puts its star first.'),
     P('watch-flashes', 'Watch {star} for flashes', 'know', 1, 6, 'E5 C15',
@@ -500,7 +500,7 @@ WHY = {
     'study-sol': 'Learn whether the oxygen world has a civilization.',
     'map-dust': 'Rings in the dust can show where hidden planets are.',
     'resolve-companions': 'Rule companions in or out as the source of a glow.',
-    'listen-to': 'Hear a neighbor’s everyday radio: where they are, and that they were.',
+    'listen-to': 'Hear a neighbor’s hum: where they are, and that they were.',
     'watch-flashes': 'Confirm or rule out a possible signal.',
     'image-planet': 'See another world for yourself.',
     'survey-wider': 'More worlds to choose from, for study and settling.',
@@ -551,7 +551,7 @@ def card(p, names):
     opens = unlocks(p['id'])
     return (f'<article class="ccard {p["purpose"]}"><header><b>{p["name"]}</b><span class="ctime"><span class="gy">{p["years"]} Years</span> <span class="rtime">{real_time(p["years"])}</span></span></header>'
             f'<p class="why">{p["why"]}</p><p>{p["what"]}</p><p class="basis">{p["basis"]}</p>'
-            f'<div class="tags"><span class="lvl {p["level"]}">{LEVEL_WORDS[p["level"]]}</span><span class="vis {p["visibility"]}">{p["visibility"]}</span><span class="mono">{cost_chips(p)}</span></div>'
+            f'<div class="tags"><span class="lvl {p["level"]}">{LEVEL_WORDS[p["level"]]}</span><span class="vis {p["visibility"]}">emissions {p["visibility"]}</span><span class="mono">{cost_chips(p)}</span></div>'
             + (f'<p class="rel"><b>Needs</b> {need}</p>' if need else '')
             + (f'<p class="rel"><b>Unlocks</b> {", ".join(opens)}</p>' if opens else '')
             + (f'<p class="rel"><b>Effect</b> {p["effect"]}</p>' if p['effect'] else '') + '</article>')
@@ -586,7 +586,7 @@ def markdown():
     out = ['# Holos: project catalog', '',
            'September 28, 2026. A design catalog, generated from `explorations/home-mocks/catalog.py`. Edit the data there, then run `python3 explorations/home-mocks/build-zoom.py`.', '',
            '**Projects are how you know, grow and reach**, and later how you endure. Every entry leads with its **why**: the benefit to the player, in plain words. Each one takes a share of every year’s energy and compute while it runs, draws matter from the stockpile once when it starts, and takes game time that passes as real time. Game time is written in words, like 18 Years; real time is written as a countdown, like `01:30:00`. One Year is `00:05:00`.', '',
-           'Everything here is hard science with speculative engineering. **Level** says how far each reaches: *grounded* is demonstrated or built from demonstrated parts; *plausible* is sound physics with unproven engineering at this scale; *speculative* is allowed by physics but far beyond anything built. **Visibility** is what the project adds to how easily others could detect us.', '',
+           'Everything here is hard science with speculative engineering. **Level** says how far each reaches: *grounded* is demonstrated or built from demonstrated parts; *plausible* is sound physics with unproven engineering at this scale; *speculative* is allowed by physics but far beyond anything built. **Emissions** are what the project adds to how easily others could find us: radio, heat, light and exhaust.', '',
            '## What every civilization starts with', '',
            'Earth’s instruments and industry today, plus about a century. Every project below is an upgrade beyond this kit. The kit found the opening clues, and it catches strong knocks.', '']
     out += [f'- **{name}** ({purpose.title()}): {what} *{basis}*' for purpose, name, _, what, basis in STARTING_KIT]
@@ -604,7 +604,7 @@ def markdown():
             if not group: continue
             out += [f'### {TIERS[tier]}', '']
             for p in group:
-                out += [f'**{p["name"]}** · {p["years"]} Years · `{real_time(p["years"])}` · {LEVEL_WORDS[p["level"]]} · {p["visibility"]}', '',
+                out += [f'**{p["name"]}** · {p["years"]} Years · `{real_time(p["years"])}` · {LEVEL_WORDS[p["level"]]} · emissions {p["visibility"]}', '',
                         f'- **Why:** {p["why"]}',
                         f'- **What:** {p["what"]}',
                         f'- **Basis:** {p["basis"]}',

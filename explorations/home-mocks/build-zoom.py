@@ -551,7 +551,7 @@ PANELS = [
     ('IN MOTION · 3', 'TIME LEFT', [row('Deep-field receiver', 'in orbit around Veyra', tstack('7.5 Years', '00:37:42', True), bar=37), row('Planet survey · 12 nearest stars', 'from Veyra’s observatories', tstack('8.4 Years', '00:41:45', True), bar=40), row('Orbital foundry', 'at L5 · just started', tstack('30 Years', '02:29:48', True), bar=1), row('Leads · 3', 'Twin, Ember, Lantern', '›', 'other')]),
     ('DELTA PAVONIS SYSTEM', 'INVENTED PLANETS', [row('Veyra · your world', '1.12 AU · habitable zone', '', 'you', marker=True), row('[Inner world]', '0.45 AU · unvisited', '›'), row('Belt · 2.6–3.2 AU', 'prospect: metals and ice', '›'), row('[Ice world]', '9 AU · beyond this view', '›')]),
     ('WITHIN 10 LY · 12 STARS', 'LIGHT-TIME', [row('New warm glow · Ember', 'dust, cold companions, or waste heat', light_clock(math.dist(atlas(by_hip['108870']), HOME)), 'other', marker=True), row('Uneven dimming · Lantern', 'dust, bodies in orbit, or structures', light_clock(math.dist(atlas(by_hip['99461']), HOME)), 'other', marker=True), row('Planet survey · 12 nearest', 'finds what orbits them', tstack('8.4 Years', '00:41:45', True), bar=40)]),
-    ('THE REGION · 100 LY AROUND TWIN', 'WHERE V1 PLAYS', [row('1,212 stars inside 50 ly', 'where civilizations start', ''), row('Oxygen world · Twin', '19.9 ly · light takes ' + light_clock(math.dist(HOME, (0, 0, 0))), '›', 'other', marker=True), row('Technosignatures detected', 'none yet · receivers at baseline', '0')]),
+    ('THE REGION · 100 LY AROUND TWIN', 'WHERE V1 PLAYS', [row('1,212 stars inside 50 ly', 'where civilizations start', ''), row('Oxygen world · Twin', '19.9 ly · light takes ' + light_clock(math.dist(HOME, (0, 0, 0))), '›', 'other', marker=True), row('Emissions detected', 'none yet · receivers at baseline', '0')]),
     ('THE MILKY WAY', 'FOR SCALE', [row('The region', '27,000 ly from the galactic center', ''), row('Light across the region', '200 ly · light takes ' + light_clock(200), ''), row('Beyond 100 ly', 'visible, not reachable in v1', '')]),
     ('THE LOCAL GROUP', 'FOR PERSPECTIVE', [row('Andromeda', '2.5 million ly away', tstack('2.5 Million Years', light_clock(2.53e6))), row('Triangulum', '2.8 million ly away', tstack('2.8 Million Years', light_clock(2.80e6))), row('Large Magellanic Cloud', 'orbiting the Milky Way', tstack('162,000 Years', light_clock(1.617e5))), row('Nothing here is reachable', 'shown for perspective', '')]),
     ('ANDROMEDA · M31', '2.5 MLY · 24 YR', [row('A big spiral, tilted 77° to us', 'we see it nearly edge-on', ''), row('About 150,000 ly across', 'roughly 1.5× the Milky Way', ''), row('A ring of young stars', 'about 30,000 ly from its center', ''), row('Bright companions', 'M32 and M110', '')]),
@@ -2439,7 +2439,7 @@ PLATE_FACE = plate_screen('Face', species.plate_face(), f"""<div class="sec">REA
          ('Brows down', 'Attention, not anger.'), ('The mouth', 'Says little. It runs back along the jaw and doesn’t smile.')])}""")
 
 def radio_shell(w=358, h=176):
-    # Veyra's radio, to scale: the loud century is a band now 110 to 210 ly out; inside it, only faint everyday radio.
+    # Veyra's radio, to scale: the loud century is a band now 110 to 210 ly out; inside it, only a faint hum.
     cx, cy, k = 72, h / 2, .78
     s = [stipple(181, 40, w, h)]
     s.append(f'<circle cx="{cx}" cy="{fmt(cy)}" r="{fmt(210 * k)}" fill="url(#hatchLight)"></circle>'
@@ -2459,7 +2459,7 @@ STANDING = f"""<div class="phone"><div class="onb">
 <span class="mono kick">YEAR 0 · WHERE THINGS STAND</span>
 <h3 class="lead">The sky is quiet, and so are we</h3>
 <div class="art">{radio_shell()}</div>
-{ledger([('What we said', 'Our loud radio century, 210 to 110 Years ago, is now 110 to 210 light-years out: past every world that could have woken. Since the Signal War our radio is faint.'),
+{ledger([('What we said', 'Our loud radio century, 210 to 110 Years ago, is now 110 to 210 light-years out: past every world that could have woken. Since the Signal War our hum is faint.'),
          ('Who could hear it', f'No one with ears like ours, even at Ember, {d_ember:.1f} light-years away. Better ears could, one star at a time.'),
          ('What we heard', 'Nothing. The sky watch has listened for 60 Years.'),
          ('What we can’t see', f'Anyone else who woke this morning. Their light takes {d_ember:.1f} Years from Ember, 19.9 from Twin.')])}
@@ -3713,7 +3713,7 @@ CHECKLIST = [
                   ('A locked project and what it needs', 'done'), ('Not enough energy or compute', 'done'),
                   ('A project finishes, seen in Projects', 'done'), ('Queue the next project for while you are away', 'done'),
                   ('Cancel a project', 'done'), ('Budget drilldown: real units behind each share', 'done')]),
-    ('Report', [('A new result, and the result in full', 'done'), ('Everyday radio heard: what overhearing tells', 'done'), ('Back after a long absence', 'done'), ('Replaying an absence on the map', 'done'), ('Nothing new yet', 'done')]),
+    ('Report', [('A new result, and the result in full', 'done'), ('A hum heard: what overhearing tells', 'done'), ('Back after a long absence', 'done'), ('Replaying an absence on the map', 'done'), ('Nothing new yet', 'done')]),
     ('Reach', [('Empty, with standing orders', 'done'), ('Launch a probe: target, arrival and report times', 'done'), ('A probe in flight', 'done'),
                ('A probe arrives and reports', 'done'), ('Probe types: how to get there, per target', 'done'), ('A sentinel in orbit: watching, and new orders', 'done'), ('Compose a message: intent, the mind’s version, approve', 'done'),
                ('Broadcast: the permanent choice', 'done'), ('Standing orders editor', 'done')]),
@@ -3753,9 +3753,9 @@ lofi = re.sub(r'style="([^"]*)"', lambda m: 'style="' + re.sub('|'.join(LOFI), l
 Y_HEARD = 16.4
 HEARD = tab_screen('Report', 'REPORT', 'RESULT', f"""<button class="backlink inline">‹ All reports</button>
 <div class="art">{radio_day()}</div>
-<h3 class="lead">Someone was talking at Twin</h3>
+<h3 class="lead">Twin hums</h3>
 <p class="copy small">Sol · listen to Twin · finished Year {Y_HEARD}</p>
-<p class="copy">Not aimed at us: the everyday radio of a whole world, rising and falling as it turns. It comes from the oxygen world.</p>
+<p class="copy">Not aimed at us: the hum of a whole world’s radio, rising and falling as it turns. It comes from the oxygen world.</p>
 {ledger([('Where', 'The oxygen world, 1 AU from its star. Now pinned exactly.'), ('Their day', '23.9 hours. Three crowded coasts turn toward us each day.'),
          ('As of', 'Light that left 19.9 Years ago.'), ('Can’t say', 'Whether they are still there, what they are now, or whether they have heard us.')])}
 <div class="sec">A CIVILIZATION AT TWIN · BEFORE → NOW</div>
@@ -3828,8 +3828,8 @@ SECTIONS = [
      f'<figure><figcaption><strong>3 · A new project</strong><span>The discovery project is waiting at the top of Know.</span></figcaption>{PICKER_NEW}</figure>'
      '<span class="pinch">back to Home ›</span>'
      f'<figure><figcaption><strong>4 · Home, after</strong><span>The Lantern marker fills in and carries what is now known.</span></figcaption>{HOME_AFTER}</figure>'),
-    ('heard', 'Heard', 'Report · Twin’s everyday radio, heard', f'Year {Y_HEARD}. The deep-field receiver listened to Twin for four Years and heard the oxygen world’s everyday radio: not aimed at anyone, rising and falling as the planet turns. It pins where they are and how long their day is, as of light that left 19.9 Years ago, and says nothing about now. Overhearing is a first contact: presence is certain, as of the light’s age.',
-     f'<figure><figcaption><strong>1 · Heard</strong><span>One day at Twin, folded from four Years of listening. What a world’s radio tells, and what it can’t.</span></figcaption>{HEARD}</figure>'),
+    ('heard', 'Heard', 'Report · Twin’s hum, heard', f'Year {Y_HEARD}. The deep-field receiver listened to Twin for four Years and heard the oxygen world’s hum, its radio aimed at no one, rising and falling as the planet turns. It pins where they are and how long their day is, as of light that left 19.9 Years ago, and says nothing about now. Overhearing is a first contact: presence is certain, as of the light’s age.',
+     f'<figure><figcaption><strong>1 · Heard</strong><span>One day at Twin, folded from four Years of listening. What a hum tells, and what it can’t.</span></figcaption>{HEARD}</figure>'),
     ('absence', 'Away', 'Report · coming back after a long absence', f'Nine hours away is 108 Years. The Report opens on what matters: how long it was, the big things, what the mind did under your standing orders, and what is waiting for you. The map can replay it all in a minute. When nothing is new, the Report shows what is already on its way, soonest first.',
      f'<figure><figcaption><strong>1 · Welcome back</strong><span>108 Years on one strip. The big things first, then what the mind did for you, then what waits.</span></figcaption>{WELCOME}</figure>'
      '<span class="pinch">replay on the map ›</span>'
@@ -4199,7 +4199,7 @@ cat_sections = catalog.sections()
 cat_links = ''.join(f'<a href="#{sid}" aria-current="false">{label}</a>' for sid, label, *_ in cat_sections) + ''
 cat_intro = (f'<section id="about" class="intro"><h2>Project catalog</h2><p>{len(catalog.PROJECTS)} projects and {len(catalog.DISCOVERIES)} discovery projects. '
              'Each leads with its why, the benefit to the player, then what it is and the science behind it. Level says how far past today it reaches; '
-             'visibility says how much easier it makes you to find. Also written to HOLOS_PROJECTS.md.</p></section>')
+             'emissions say how much easier it makes you to find. Also written to HOLOS_PROJECTS.md.</p></section>')
 cat_body = cat_intro + ''.join(f'<section id="{sid}"><h2>{label}</h2><p>{blurb}</p>{content}</section>' for sid, label, blurb, content in cat_sections)
 cat_page = set_text(page('Holos · project catalog', cat_links, cat_body, 'catalog.html').replace('</head>', tour_css + '\n</head>'), TEXT_FACE)
 (here / 'catalog.html').write_text(cat_page)

@@ -131,7 +131,7 @@ YEAR 0 · WHERE THINGS STAND
 
 ### The sky is quiet, and so are we
 [drawing: Veyra’s radio: its loud century now 110 to 210 light-years out, beyond every world that could have woken; labels: Veyra, Ember, Twin, every world that could have woken, our loud century, 110–210 ly out, 50 ly]
-What we said · Our loud radio century, 210 to 110 Years ago, is now 110 to 210 light-years out: past every world that could have woken. Since the Signal War our radio is faint. · Who could hear it · No one with ears like ours, even at Ember, 9.2 light-years away. Better ears could, one star at a time. · What we heard · Nothing. The sky watch has listened for 60 Years. · What we can’t see · Anyone else who woke this morning. Their light takes 9.2 Years from Ember, 19.9 from Twin. · [See what you inherit]
+What we said · Our loud radio century, 210 to 110 Years ago, is now 110 to 210 light-years out: past every world that could have woken. Since the Signal War our hum is faint. · Who could hear it · No one with ears like ours, even at Ember, 9.2 light-years away. Better ears could, one star at a time. · What we heard · Nothing. The sky watch has listened for 60 Years. · What we can’t see · Anyone else who woke this morning. Their light takes 9.2 Years from Ember, 19.9 from Twin. · [See what you inherit]
 see what you inherit ›
 
 #### 5 · What you inherit · The starting kit, grouped by purpose, then the hand-off to the clues and the tour.
@@ -314,7 +314,7 @@ ENERGY · [55%] · MATTER · 50 kt · COMPUTE · [55%]
 THE REGION · 100 LY AROUND TWIN · WHERE V1 PLAYS
 - 1,212 stars inside 50 ly · where civilizations start
 - Oxygen world · Twin · 19.9 ly · light takes 01:39:37 · ›
-- Technosignatures detected · none yet · receivers at baseline · 0
+- Emissions detected · none yet · receivers at baseline · 0
 pinch out ›
 
 #### 5 · Galaxy · Where the region sits. The spiral is illustrative. Icon, top right: the Local Group.
@@ -660,7 +660,7 @@ ENERGY · [65%] · MATTER · 1,720 kt · COMPUTE · [100%]
 [drawing: Deep-field receiver]
 
 ### Listen to Ember
-Hear a neighbor’s everyday radio: where they are, and that they were.
+Hear a neighbor’s hum: where they are, and that they were.
 USES EACH YEAR · IN USE + THIS
 Energy · [52.0%] · [12.0%] · 80%
 Compute · [80.0%] · [0.0%] · [16.0%] · 120%
@@ -685,7 +685,7 @@ Done · Year 18.4 · Infrared telescope · It can now tell dust from companions.
 OPENED · 4 NEW PROJECTS
 Map the dust at Ember · Rings in the dust can show where hidden planets are. · 10 Years · 00:50:00
 Resolve the companions of Ember · Rule companions in or out as the source of a glow. · 14 Years · 01:10:00
-Listen to Ember · Hear a neighbor’s everyday radio: where they are, and that they were. · 4 Years · 00:20:00
+Listen to Ember · Hear a neighbor’s hum: where they are, and that they were. · 4 Years · 00:20:00
 Waste-heat survey · Checks every nearby star at once for signs of big engineering. · 16 Years · 01:20:00
 EACH YEAR YOU CAN SPEND · 2 STILL RUNNING
 Energy · [30%] · 70% free
@@ -829,10 +829,10 @@ CLUES · 3 · YEAR 4.4
 - New warm glow · Ember · infrared telescope under way · 14 Years · 01:10:00
 - Oxygen world · Twin · not yet studied · light takes 01:39:37 · ›
 
-## Report · Twin’s everyday radio, heard
-Year 16.4. The deep-field receiver listened to Twin for four Years and heard the oxygen world’s everyday radio: not aimed at anyone, rising and falling as the planet turns. It pins where they are and how long their day is, as of light that left 19.9 Years ago, and says nothing about now. Overhearing is a first contact: presence is certain, as of the light’s age.
+## Report · Twin’s hum, heard
+Year 16.4. The deep-field receiver listened to Twin for four Years and heard the oxygen world’s hum, its radio aimed at no one, rising and falling as the planet turns. It pins where they are and how long their day is, as of light that left 19.9 Years ago, and says nothing about now. Overhearing is a first contact: presence is certain, as of the light’s age.
 
-#### 1 · Heard · One day at Twin, folded from four Years of listening. What a world’s radio tells, and what it can’t.
+#### 1 · Heard · One day at Twin, folded from four Years of listening. What a hum tells, and what it can’t.
 Veyra · Year 16.4
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
 ENERGY · [35%] · MATTER · 1,310 kt · COMPUTE · [40%]
@@ -840,9 +840,9 @@ REPORT · RESULT
 [‹ All reports]
 [drawing: Radio from Twin over one of its days: three rises as crowded coasts turn toward us; labels: radio from Twin, 0 h, 23.9 h, one day at Twin, a crowded coast]
 
-### Someone was talking at Twin
+### Twin hums
 Sol · listen to Twin · finished Year 16.4
-Not aimed at us: the everyday radio of a whole world, rising and falling as it turns. It comes from the oxygen world.
+Not aimed at us: the hum of a whole world’s radio, rising and falling as it turns. It comes from the oxygen world.
 Where · The oxygen world, 1 AU from its star. Now pinned exactly. · Their day · 23.9 hours. Three crowded coasts turn toward us each day. · As of · Light that left 19.9 Years ago. · Can’t say · Whether they are still there, what they are now, or whether they have heard us.
 A CIVILIZATION AT TWIN · BEFORE → NOW
 Someone was there · [20%] · [100%] · 20 → 100 · seen
@@ -2352,7 +2352,7 @@ Budget drilldown: real units behind each share
 
 ### Report · 5 of 5
 A new result, and the result in full
-Everyday radio heard: what overhearing tells
+A hum heard: what overhearing tells
 Back after a long absence
 Replaying an absence on the map
 Nothing new yet

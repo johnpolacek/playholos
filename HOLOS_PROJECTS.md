@@ -4,7 +4,7 @@ September 28, 2026. A design catalog, generated from `explorations/home-mocks/ca
 
 **Projects are how you know, grow and reach**, and later how you endure. Every entry leads with its **why**: the benefit to the player, in plain words. Each one takes a share of every year’s energy and compute while it runs, draws matter from the stockpile once when it starts, and takes game time that passes as real time. Game time is written in words, like 18 Years; real time is written as a countdown, like `01:30:00`. One Year is `00:05:00`.
 
-Everything here is hard science with speculative engineering. **Level** says how far each reaches: *grounded* is demonstrated or built from demonstrated parts; *plausible* is sound physics with unproven engineering at this scale; *speculative* is allowed by physics but far beyond anything built. **Visibility** is what the project adds to how easily others could detect us.
+Everything here is hard science with speculative engineering. **Level** says how far each reaches: *grounded* is demonstrated or built from demonstrated parts; *plausible* is sound physics with unproven engineering at this scale; *speculative* is allowed by physics but far beyond anything built. **Emissions** are what the project adds to how easily others could find us: radio, heat, light and exhaust.
 
 ## What every civilization starts with
 
@@ -34,7 +34,7 @@ Know: learn what is out there, and answer the clues.
 
 ### Tier 1 · from the planet
 
-**Transit watch** · 4 Years · `00:20:00` · Grounded · quiet
+**Transit watch** · 4 Years · `00:20:00` · Grounded · emissions quiet
 
 - **Why:** Your quickest real answer: is a dimming a pattern or a fluke?
 - **What:** Stares at one star without a break, timing every dip the surveys catch only in passing.
@@ -43,7 +43,7 @@ Know: learn what is out there, and answer the clues.
 - **Needs:** nothing
 - **Can open:** Measure what’s crossing {star}
 
-**Spectrograph bank** · 8 Years · `00:40:00` · Grounded · quiet
+**Spectrograph bank** · 8 Years · `00:40:00` · Grounded · emissions quiet
 
 - **Why:** Reads what anything is made of. Most other Know projects build on it.
 - **What:** Ultra-stable spectrographs: they read gases, and feel small planets tug their stars.
@@ -52,7 +52,7 @@ Know: learn what is out there, and answer the clues.
 - **Needs:** nothing
 - **Unlocks:** Planet survey, Study the air of {planet}, Study the oxygen world
 
-**Deep flash watch** · 6 Years · `00:30:00` · Grounded · quiet
+**Deep flash watch** · 6 Years · `00:30:00` · Grounded · emissions quiet
 
 - **Why:** Hears knocks too faint for the sky watch: quieter senders, or farther ones.
 - **What:** Catches laser flashes a hundred times fainter than the sky watch can, anywhere in the sky.
@@ -61,18 +61,18 @@ Know: learn what is out there, and answer the clues.
 - **Needs:** nothing
 - **Can open:** Watch {star} for flashes
 
-**Deep-field receiver** · 12 Years · `01:00:00` · Grounded · quiet
+**Deep-field receiver** · 12 Years · `01:00:00` · Grounded · emissions quiet
 
 - **Why:** Hear civilizations quieter than you. Without it, the sky stays silent.
-- **What:** A radio array ten times the Square Kilometre Array. It can hear a neighbor’s everyday radio out to about 20 light-years, one star at a time.
-- **Basis:** Sensitivity grows with collecting area: 10 km² of dishes. The SKA could hear Earth’s cell networks (about 4 GW) to 4 ly in an hour (Sheikh et al. 2025); every seat’s everyday radio is about a hundredth of that by Year 0. Staring longer is untested past about 100 hours.
+- **What:** A radio array ten times the Square Kilometre Array. It can hear a neighbor’s hum out to about 20 light-years, one star at a time.
+- **Basis:** Sensitivity grows with collecting area: 10 km² of dishes. The SKA could hear Earth’s cell networks (about 4 GW) to 4 ly in an hour (Sheikh et al. 2025); every seat’s hum is about a hundredth of that by Year 0. Staring longer is untested past about 100 hours.
 - **Uses:** energy 20% a year, compute 20% a year, 300 kt of matter at start
 - **Needs:** nothing
-- **Effect:** Lowers the detection floor for radio. Hears a world’s everyday radio to about 20 ly.
+- **Effect:** Lowers the detection floor for radio. Hears a world’s hum to about 20 ly.
 - **Unlocks:** Pulsar timing array, Far-side array, Early warning array, Outskirts sweep
 - **Can open:** Listen to {star}
 
-**Planet survey** · 14 Years · `01:10:00` · Grounded · quiet
+**Planet survey** · 14 Years · `01:10:00` · Grounded · emissions quiet
 
 - **Why:** Shows which nearby stars have worlds worth studying, visiting or settling.
 - **What:** Finds Earth-sized planets around the 12 nearest stars. The big ones are already known.
@@ -81,7 +81,7 @@ Know: learn what is out there, and answer the clues.
 - **Needs:** Spectrograph bank
 - **Can open:** Study the air of {planet}, Survey the next 50 stars
 
-**Infrared telescope** · 18 Years · `01:30:00` · Grounded · quiet
+**Infrared telescope** · 18 Years · `01:30:00` · Grounded · emissions quiet
 
 - **Why:** Tells you whether a warm glow is natural, or someone’s machines.
 - **What:** A cold telescope many times larger than the one we start with. Tells cold dust from warm companions, and by its spectrum dust, with its mineral bumps, from the smooth glow of machines.
@@ -93,7 +93,7 @@ Know: learn what is out there, and answer the clues.
 
 ### Tier 2 · into space
 
-**Waste-heat survey** · 16 Years · `01:20:00` · Grounded · quiet
+**Waste-heat survey** · 16 Years · `01:20:00` · Grounded · emissions quiet
 
 - **Why:** Checks every nearby star at once for signs of big engineering.
 - **What:** Checks every star in range for heat that nature does not explain.
@@ -103,7 +103,7 @@ Know: learn what is out there, and answer the clues.
 - **Unlocks:** Early warning array
 - **Can open:** Listen to {star}
 
-**Second infrared telescope** · 14 Years · `01:10:00` · Grounded · quiet
+**Second infrared telescope** · 14 Years · `01:10:00` · Grounded · emissions quiet
 
 - **Why:** Doubles your infrared view and sets up the interferometer.
 - **What:** A twin of the first, placed far away, so the two can work as one.
@@ -112,7 +112,7 @@ Know: learn what is out there, and answer the clues.
 - **Needs:** Infrared telescope + Orbital foundry
 - **Unlocks:** Infrared interferometer
 
-**Starshade** · 20 Years · `01:40:00` · Plausible · quiet
+**Starshade** · 20 Years · `01:40:00` · Plausible · emissions quiet
 
 - **Why:** See the planets themselves, not just their stars.
 - **What:** A flower-shaped screen that blocks a star so its planets show.
@@ -121,7 +121,7 @@ Know: learn what is out there, and answer the clues.
 - **Needs:** Infrared telescope + Orbital foundry
 - **Can open:** Image {planet}
 
-**Pulsar timing array** · 20 Years · `01:40:00` · Grounded · quiet
+**Pulsar timing array** · 20 Years · `01:40:00` · Grounded · emissions quiet
 
 - **Why:** Your probes can find their way between stars.
 - **What:** Uses dead stars that tick like clocks to sense gravitational waves and navigate.
@@ -131,7 +131,7 @@ Know: learn what is out there, and answer the clues.
 - **Effect:** Probes can navigate between stars.
 - **Unlocks:** Flyby probe
 
-**Neutrino watch** · 24 Years · `02:00:00` · Grounded · quiet
+**Neutrino watch** · 24 Years · `02:00:00` · Grounded · emissions quiet
 
 - **Why:** Warns of a nearby supernova hours before its light arrives.
 - **What:** Detects neutrinos. Sees into star cores and warns of nearby supernovae.
@@ -141,7 +141,7 @@ Know: learn what is out there, and answer the clues.
 
 ### Tier 3 · self-building industry
 
-**Infrared interferometer** · 40 Years · `03:20:00` · Plausible · quiet
+**Infrared interferometer** · 40 Years · `03:20:00` · Plausible · emissions quiet
 
 - **Why:** Sharp enough to pick out planets and measure them one by one.
 - **What:** Links the two telescopes into one eye as wide as the gap between them. It pins down where a glow sits, so its temperature can be checked against what its star alone could make.
@@ -151,29 +151,29 @@ Know: learn what is out there, and answer the clues.
 - **Unlocks:** Kilometer interferometer
 - **Can open:** Image {planet}
 
-**Solar lens observatory** · 70 Years · `05:50:00` · Plausible · quiet
+**Solar lens observatory** · 70 Years · `05:50:00` · Plausible · emissions quiet
 
 - **Why:** The sharpest view you can get of one chosen world.
 - **What:** Flies a telescope to where our star bends light like a lens. Sees one planet in detail.
-- **Basis:** Gravitational lensing by a star; the focal line begins beyond about 550 AU for a Sun-like star (Turyshev and colleagues). It cannot hear a world’s everyday radio: the corona defocuses anything below about 120 GHz (Hippke 2017).
+- **Basis:** Gravitational lensing by a star; the focal line begins beyond about 550 AU for a Sun-like star (Turyshev and colleagues). It cannot hear a world’s hum: the corona defocuses anything below about 120 GHz (Hippke 2017).
 - **Uses:** energy 30% a year, compute 25% a year, 40 Mt of matter at start
 - **Needs:** Infrared telescope + Launcher
 - **Effect:** One target at a time; retargeting takes decades.
 - **Can open:** Image {planet}
 
-**Far-side array** · 30 Years · `02:30:00` · Plausible · quiet
+**Far-side array** · 30 Years · `02:30:00` · Plausible · emissions quiet
 
 - **Why:** Hear anyone in the region, not only the nearest.
-- **What:** Radio dishes across a thousand square kilometers of a moon’s far side, shielded from our own noise. Hears a world’s everyday radio anywhere in the region, one star at a time.
+- **What:** Radio dishes across a thousand square kilometers of a moon’s far side, shielded from our own noise. Hears a world’s hum anywhere in the region, one star at a time.
 - **Basis:** Lunar far-side radio arrays such as the FARSIDE concept. A hundred times the deep-field receiver’s area is ten times its range.
 - **Uses:** energy 20% a year, compute 40% a year, 40 Mt of matter at start
 - **Needs:** Deep-field receiver + Self-replicating factory
-- **Effect:** Hears a world’s everyday radio to about 200 ly: the whole region.
+- **Effect:** Hears a world’s hum to about 200 ly: the whole region.
 - **Can open:** Listen to {star}
 
 ### Tier 4 · star-scale works
 
-**Kilometer interferometer** · 40 Years · `03:20:00` · Speculative · quiet
+**Kilometer interferometer** · 40 Years · `03:20:00` · Speculative · emissions quiet
 
 - **Why:** Maps of other planets’ surfaces, from home.
 - **What:** A fleet of mirrors spread across kilometers: surface maps of nearby planets.
@@ -188,7 +188,7 @@ Grow: more energy, matter and compute every year, so everything goes faster.
 
 ### Tier 1 · from the planet
 
-**Orbital solar array** · 10 Years · `00:50:00` · Grounded · noticeable
+**Orbital solar array** · 10 Years · `00:50:00` · Grounded · emissions noticeable
 
 - **Why:** More energy every year, so more projects can run at once.
 - **What:** Collectors in orbit that beam power down.
@@ -197,7 +197,7 @@ Grow: more energy, matter and compute every year, so everything goes faster.
 - **Needs:** nothing
 - **Effect:** +20% energy every year.
 
-**Belt prospecting** · 6 Years · `00:30:00` · Grounded · quiet
+**Belt prospecting** · 6 Years · `00:30:00` · Grounded · emissions quiet
 
 - **Why:** Shows where the metal is. Needed before mining.
 - **What:** Finds which belt rocks are worth mining.
@@ -206,7 +206,7 @@ Grow: more energy, matter and compute every year, so everything goes faster.
 - **Needs:** nothing
 - **Unlocks:** Belt mining
 
-**Cold compute annex** · 12 Years · `01:00:00` · Plausible · quiet
+**Cold compute annex** · 12 Years · `01:00:00` · Plausible · emissions quiet
 
 - **Why:** More compute every year: faster answers, smarter probes.
 - **What:** Computers cooled in a planet’s shadow waste less energy per thought.
@@ -216,7 +216,7 @@ Grow: more energy, matter and compute every year, so everything goes faster.
 - **Effect:** +25% compute every year.
 - **Unlocks:** Self-replicating factory, Mind transmitter, Quiet radiators
 
-**Belt mining** · 20 Years · `01:40:00` · Plausible · quiet
+**Belt mining** · 20 Years · `01:40:00` · Plausible · emissions quiet
 
 - **Why:** More matter every year, for building bigger things.
 - **What:** Metals from the belt, hauled to Veyra’s orbit.
@@ -228,7 +228,7 @@ Grow: more energy, matter and compute every year, so everything goes faster.
 
 ### Tier 2 · into space
 
-**Orbital foundry** · 30 Years · `02:30:00` · Plausible · noticeable
+**Orbital foundry** · 30 Years · `02:30:00` · Plausible · emissions noticeable
 
 - **Why:** Unlocks everything too big to launch from Veyra: probes, ships, big telescopes.
 - **What:** Builds large things in space instead of lifting them off Veyra.
@@ -238,7 +238,7 @@ Grow: more energy, matter and compute every year, so everything goes faster.
 - **Effect:** Unlocks large works.
 - **Unlocks:** Second infrared telescope, Starshade, Ice harvest, Habitat ring, Self-replicating factory, Launcher, Laser sail array, Fusion torch ship, Decoy sites, Shielded works, Hunters, Sunshade, Heat shields
 
-**Mass driver** · 24 Years · `02:00:00` · Plausible · quiet
+**Mass driver** · 24 Years · `02:00:00` · Plausible · emissions quiet
 
 - **Why:** Much more matter every year, without lifting it off Veyra.
 - **What:** An electric track that throws cargo off a moon without rockets.
@@ -248,7 +248,7 @@ Grow: more energy, matter and compute every year, so everything goes faster.
 - **Effect:** +300 kt of matter every year, from a moon instead of the planet’s gravity well.
 - **Unlocks:** Habitat ring, Solar swarm, Sand screens
 
-**Ice harvest** · 36 Years · `03:00:00` · Plausible · quiet
+**Ice harvest** · 36 Years · `03:00:00` · Plausible · emissions quiet
 
 - **Why:** Water and fusion fuel. Needed for fusion power.
 - **What:** Water and fuel from the ice world at 9 AU.
@@ -258,7 +258,7 @@ Grow: more energy, matter and compute every year, so everything goes faster.
 - **Effect:** +60 kt of ice every year; supplies fusion fuel.
 - **Unlocks:** Fusion plant
 
-**Fusion plant** · 40 Years · `03:20:00` · Plausible · noticeable
+**Fusion plant** · 40 Years · `03:20:00` · Plausible · emissions noticeable
 
 - **Why:** A big jump in energy every year.
 - **What:** Power from fusing light atoms. A large step up in energy.
@@ -270,7 +270,7 @@ Grow: more energy, matter and compute every year, so everything goes faster.
 
 ### Tier 3 · self-building industry
 
-**Habitat ring** · 60 Years · `05:00:00` · Plausible · noticeable
+**Habitat ring** · 60 Years · `05:00:00` · Plausible · emissions noticeable
 
 - **Why:** A second home in orbit: more compute, and a backup if Veyra is hit.
 - **What:** A spinning ring in orbit: room for more minds and machines.
@@ -280,7 +280,7 @@ Grow: more energy, matter and compute every year, so everything goes faster.
 - **Effect:** +30% compute; a second home in orbit.
 - **Unlocks:** Dispersal outposts, Wandering habitats, Shadow berths
 
-**Self-replicating factory** · 80 Years · `06:40:00` · Speculative · noticeable
+**Self-replicating factory** · 80 Years · `06:40:00` · Speculative · emissions noticeable
 
 - **Why:** Industry that builds itself: matter stops being scarce.
 - **What:** Factories that build copies of themselves from belt rock.
@@ -290,7 +290,7 @@ Grow: more energy, matter and compute every year, so everything goes faster.
 - **Effect:** Matter income doubles about every Year, as fast as physics allows, unless you slow it. Each doubling adds heat others can see.
 - **Unlocks:** Far-side array, Kilometer interferometer, Solar swarm, Seed probe, Seedship, Star laser
 
-**Solar swarm** · 30 Years · `02:30:00` · Speculative · loud
+**Solar swarm** · 30 Years · `02:30:00` · Speculative · emissions loud
 
 - **Why:** Energy up to a whole star’s output, but everyone nearby can see you.
 - **What:** Surrounds the star with collectors: enormous energy, and a heat glow others can see.
@@ -302,7 +302,7 @@ Grow: more energy, matter and compute every year, so everything goes faster.
 
 ### Tier 4 · star-scale works
 
-**Star lifting** · 40 Years · `03:20:00` · Speculative · loud
+**Star lifting** · 40 Years · `03:20:00` · Speculative · emissions loud
 
 - **Why:** The biggest mine there is: the star itself. Very visible.
 - **What:** Pulls gas off the star itself for fuel and raw material.
@@ -317,7 +317,7 @@ Reach: touch other stars. Messages, probes, ships, and strikes.
 
 ### Tier 1 · from the planet
 
-**Tight-beam transmitter** · 6 Years · `00:30:00` · Grounded · quiet
+**Tight-beam transmitter** · 6 Years · `00:30:00` · Grounded · emissions quiet
 
 - **Why:** Talk to one known star without the whole sky hearing.
 - **What:** Sends a private laser message to one known star.
@@ -327,7 +327,7 @@ Reach: touch other stars. Messages, probes, ships, and strikes.
 - **Effect:** Only the target can read it. It still tells them we exist.
 - **Can open:** Reply to {sender}, Tell {recipient} where {civilization} is, Share a key with {civilization}
 
-**Broadcast beacon** · 4 Years · `00:20:00` · Grounded · loud
+**Broadcast beacon** · 4 Years · `00:20:00` · Grounded · emissions loud
 
 - **Why:** Everyone in range learns you exist: friends and threats alike.
 - **What:** Announces us to every star in range, permanently.
@@ -339,7 +339,7 @@ Reach: touch other stars. Messages, probes, ships, and strikes.
 
 ### Tier 2 · into space
 
-**Launcher** · 24 Years · `02:00:00` · Plausible · noticeable
+**Launcher** · 24 Years · `02:00:00` · Plausible · emissions noticeable
 
 - **Why:** Required to send anything to another star.
 - **What:** A launch rail and fuel depot that sends probes out of the system.
@@ -349,7 +349,7 @@ Reach: touch other stars. Messages, probes, ships, and strikes.
 - **Unlocks:** Solar lens observatory, Relay station, Flyby probe, Torch probe, Seedship, Antimatter probe, Pickets
 - **Can open:** Send a probe to {star}
 
-**Relay station** · 20 Years · `01:40:00` · Plausible · quiet
+**Relay station** · 20 Years · `01:40:00` · Plausible · emissions quiet
 
 - **Why:** Your messages and probe reports reach farther, and arrive clearer.
 - **What:** A repeater far from the star that carries messages farther.
@@ -358,7 +358,7 @@ Reach: touch other stars. Messages, probes, ships, and strikes.
 - **Needs:** Launcher
 - **Unlocks:** Mind transmitter
 
-**Flyby probe** · 12 Years · `01:00:00` · Plausible · noticeable
+**Flyby probe** · 12 Years · `01:00:00` · Plausible · emissions noticeable
 
 - **Why:** See a star up close, soonest. The only way to be sure what is there.
 - **What:** Flies past a star at a tenth of light speed, looks the whole way in, and beams home what it saw. Can’t stop.
@@ -371,7 +371,7 @@ Reach: touch other stars. Messages, probes, ships, and strikes.
 
 ### Tier 3 · self-building industry
 
-**Sentinel probe** · 20 Years · `01:40:00` · Plausible · noticeable
+**Sentinel probe** · 20 Years · `01:40:00` · Plausible · emissions noticeable
 
 - **Why:** A permanent watcher at a star you care about.
 - **What:** Brakes with a magnetic sail against interstellar gas, then orbits its star and watches for decades.
@@ -381,7 +381,7 @@ Reach: touch other stars. Messages, probes, ships, and strikes.
 - **Effect:** Stops and stays. Its braking may show.
 - **Unlocks:** Lurker, Seed probe, Share a key with {civilization}
 
-**Lurker** · 20 Years · `01:40:00` · Plausible · quiet
+**Lurker** · 20 Years · `01:40:00` · Plausible · emissions quiet
 
 - **Why:** Watch a star without being noticed.
 - **What:** Brakes like a sentinel, but stops in a system’s cold outskirts and watches from there.
@@ -392,7 +392,7 @@ Reach: touch other stars. Messages, probes, ships, and strikes.
 - **Unlocks:** Close watcher, Line tap, Sleeper, Spoofer
 - **Can open:** Nudge a rock toward {planet}
 
-**Close watcher** · 16 Years · `01:20:00` · Plausible · quiet
+**Close watcher** · 16 Years · `01:20:00` · Plausible · emissions quiet
 
 - **Why:** See what telescopes can’t: vaults, weapons, and which sites are fake.
 - **What:** Moves in from the outskirts to find vaults, count weapons, and tell decoys from real sites.
@@ -402,7 +402,7 @@ Reach: touch other stars. Messages, probes, ships, and strikes.
 - **Effect:** Its reports are light-time old, and its report beam points home.
 - **Unlocks:** Spotter
 
-**Line tap** · 12 Years · `01:00:00` · Plausible · quiet
+**Line tap** · 12 Years · `01:00:00` · Plausible · emissions quiet
 
 - **Why:** Hear what a rival says to someone else.
 - **What:** Sits inside someone’s message beam, where it starts or where it lands, and copies what passes.
@@ -411,7 +411,7 @@ Reach: touch other stars. Messages, probes, ships, and strikes.
 - **Needs:** Lurker
 - **Effect:** Reads everything until the line has a key it lacks. Then only who, when and how much.
 
-**Laser sail array** · 60 Years · `05:00:00` · Speculative · loud
+**Laser sail array** · 60 Years · `05:00:00` · Speculative · emissions loud
 
 - **Why:** Opens the fastest probes, but the beam can be seen.
 - **What:** A huge laser that pushes light sails to a fifth of light speed.
@@ -422,7 +422,7 @@ Reach: touch other stars. Messages, probes, ships, and strikes.
 - **Unlocks:** Starlight sail, Chip swarm, Pellet swarm, Star laser, Deflector laser
 - **Can open:** Feint toward {star}
 
-**Starlight sail** · 10 Years · `00:50:00` · Speculative · quiet
+**Starlight sail** · 10 Years · `00:50:00` · Speculative · emissions quiet
 
 - **Why:** Stop at a bright star, quietly, for almost nothing.
 - **What:** A light sail that brakes on its target star’s light and gravity, then stays.
@@ -431,7 +431,7 @@ Reach: touch other stars. Messages, probes, ships, and strikes.
 - **Needs:** Laser sail array
 - **Effect:** Stops only at bright stars. Nearly invisible.
 
-**Chip swarm** · 4 Years · `00:20:00` · Speculative · loud
+**Chip swarm** · 4 Years · `00:20:00` · Speculative · emissions loud
 
 - **Why:** The fastest look, at many stars at once.
 - **What:** Thousands of gram-sized sails, pushed by the laser array to a fifth of light speed.
@@ -440,7 +440,7 @@ Reach: touch other stars. Messages, probes, ships, and strikes.
 - **Needs:** Laser sail array
 - **Effect:** 5 years per light-year. Can’t stop. The launch beam is visible.
 
-**Torch probe** · 24 Years · `02:00:00` · Speculative · loud
+**Torch probe** · 24 Years · `02:00:00` · Speculative · emissions loud
 
 - **Why:** Get there fast, and stay.
 - **What:** Carries fusion fuel to brake hard: it arrives fast, and stops.
@@ -450,7 +450,7 @@ Reach: touch other stars. Messages, probes, ships, and strikes.
 - **Effect:** About 12 years per light-year. Its exhaust shows for years.
 - **Unlocks:** Heavy impactor, Sleeper
 
-**Seed probe** · 30 Years · `02:30:00` · Speculative · noticeable
+**Seed probe** · 30 Years · `02:30:00` · Speculative · emissions noticeable
 
 - **Why:** Turn one probe into a foothold.
 - **What:** Stops, mines the target’s asteroids, and builds instruments or more probes there.
@@ -459,7 +459,7 @@ Reach: touch other stars. Messages, probes, ships, and strikes.
 - **Needs:** Sentinel probe + Self-replicating factory
 - **Effect:** About 25 years per light-year. Its industry warms up.
 
-**Seedship** · 50 Years · `04:10:00` · Speculative · noticeable
+**Seedship** · 50 Years · `04:10:00` · Speculative · emissions noticeable
 
 - **Why:** Start an outpost at another star that grows on its own.
 - **What:** Carries a factory and a copy of our designs to found an outpost.
@@ -469,7 +469,7 @@ Reach: touch other stars. Messages, probes, ships, and strikes.
 - **Effect:** Founds a colony that acts on its own.
 - **Unlocks:** Far platform, Lifeboats
 
-**Heavy impactor** · 30 Years · `02:30:00` · Speculative · loud
+**Heavy impactor** · 30 Years · `02:30:00` · Speculative · emissions loud
 
 - **Why:** A weapon that can end a planet.
 - **What:** A thousand tonnes of solid metal, thrown by a fusion torch that also steers it onto the planet in the last hours. No warhead: its speed is the weapon.
@@ -480,7 +480,7 @@ Reach: touch other stars. Messages, probes, ships, and strikes.
 - **Unlocks:** Decoys, Spotter, Dead hand
 - **Can open:** Strike {target}, Test-fire at {moon}
 
-**Decoys** · 10 Years · `00:50:00` · Plausible · quiet
+**Decoys** · 10 Years · `00:50:00` · Plausible · emissions quiet
 
 - **Why:** Make every defense guess which bullet matters.
 - **What:** Hollow twins that fly with a real impactor. Pickets cannot tell which one is heavy.
@@ -489,7 +489,7 @@ Reach: touch other stars. Messages, probes, ships, and strikes.
 - **Needs:** Heavy impactor
 - **Effect:** Wastes a deflector laser’s shots. Cheap sand still screens them all.
 
-**Pellet swarm** · 16 Years · `01:20:00` · Speculative · loud
+**Pellet swarm** · 16 Years · `01:20:00` · Speculative · emissions loud
 
 - **Why:** Strip a system’s orbit where screens cannot help.
 - **What:** Thousands of kilogram pellets pushed by the laser array to a fifth of light speed.
@@ -499,7 +499,7 @@ Reach: touch other stars. Messages, probes, ships, and strikes.
 - **Effect:** Screens cannot stop it. Strips a planet’s orbit; the air shields the ground.
 - **Unlocks:** Strike {target}
 
-**Sleeper** · 24 Years · `02:00:00` · Speculative · quiet
+**Sleeper** · 24 Years · `02:00:00` · Speculative · emissions quiet
 
 - **Why:** A gun already inside their system.
 - **What:** A lurker carrying its own impactors, waiting in another system’s outskirts.
@@ -509,7 +509,7 @@ Reach: touch other stars. Messages, probes, ships, and strikes.
 - **Effect:** At a tenth of light speed from 1,000 AU: 52 days of warning, 43 real seconds. Its shot points at the sleeper.
 - **Unlocks:** Strike {target}
 
-**Spoofer** · 12 Years · `01:00:00` · Plausible · quiet
+**Spoofer** · 12 Years · `01:00:00` · Plausible · emissions quiet
 
 - **Why:** Make a rival flinch, and watch what it does.
 - **What:** A lurker near a target’s pickets that fakes a bullet’s glow, to make the target react.
@@ -518,7 +518,7 @@ Reach: touch other stars. Messages, probes, ships, and strikes.
 - **Needs:** Lurker
 - **Effect:** Works on the unprepared. Once caught, the fake shows where the lurker is.
 
-**Spotter** · 16 Years · `01:20:00` · Speculative · quiet
+**Spotter** · 16 Years · `01:20:00` · Speculative · emissions quiet
 
 - **Why:** Hit what moves, and skip what’s fake.
 - **What:** A close watcher that guides an incoming strike with live positions.
@@ -529,7 +529,7 @@ Reach: touch other stars. Messages, probes, ships, and strikes.
 
 ### Tier 4 · star-scale works
 
-**Fusion torch ship** · 90 Years · `07:30:00` · Speculative · loud
+**Fusion torch ship** · 90 Years · `07:30:00` · Speculative · emissions loud
 
 - **Why:** Moves large things between stars. Its exhaust shows for decades.
 - **What:** A large ship with a fusion drive, around a tenth of light speed.
@@ -538,7 +538,7 @@ Reach: touch other stars. Messages, probes, ships, and strikes.
 - **Needs:** Fusion plant + Orbital foundry
 - **Effect:** Its exhaust can be seen for decades.
 
-**Antimatter probe** · 40 Years · `03:20:00` · Speculative · loud
+**Antimatter probe** · 40 Years · `03:20:00` · Speculative · emissions loud
 
 - **Why:** The fastest way to arrive, and stop.
 - **What:** The most efficient engine physics allows: fast out, and a hard stop.
@@ -547,7 +547,7 @@ Reach: touch other stars. Messages, probes, ships, and strikes.
 - **Needs:** Solar swarm + Launcher
 - **Effect:** About 5 years per light-year, and it stops. Its exhaust gives off gamma rays.
 
-**Far platform** · 80 Years · `06:40:00` · Speculative · noticeable
+**Far platform** · 80 Years · `06:40:00` · Speculative · emissions noticeable
 
 - **Why:** Strike without your name on it.
 - **What:** A weapons base founded somewhere empty, so its shots point there instead of home.
@@ -556,7 +556,7 @@ Reach: touch other stars. Messages, probes, ships, and strikes.
 - **Needs:** Seedship
 - **Effect:** Can frame a third civilization. It has its own mind: it may refuse, or strike on its own.
 
-**Star laser** · 50 Years · `04:10:00` · Speculative · quiet
+**Star laser** · 50 Years · `04:10:00` · Speculative · emissions quiet
 
 - **Why:** The only weapon that arrives with no warning.
 - **What:** A sheet of film 100,000 km wide beside our star turns sunlight into laser light, every patch in step: one lens.
@@ -566,7 +566,7 @@ Reach: touch other stars. Messages, probes, ships, and strikes.
 - **Effect:** Arrives with its own light: no warning. Sweep heats a planet; needle hits one known site. Loud when it fires. Firing costs only compute to aim.
 - **Can open:** Paint {star}
 
-**Mind transmitter** · 60 Years · `05:00:00` · Speculative · noticeable
+**Mind transmitter** · 60 Years · `05:00:00` · Speculative · emissions noticeable
 
 - **Why:** Move yourself to a colony, at the speed of light.
 - **What:** Sends the mind itself as a signal to one of our colonies.
@@ -581,7 +581,7 @@ Endure: keep existing. Spread out, remember, stay quiet, see danger coming, and 
 
 ### Tier 1 · from the planet
 
-**Deep vault** · 10 Years · `00:50:00` · Plausible · quiet
+**Deep vault** · 10 Years · `00:50:00` · Plausible · emissions quiet
 
 - **Why:** Your first hedge: the mind survives a hit on Veyra.
 - **What:** A copy of the mind kilometers deep in a moon or large asteroid, kept in step with home by laser link.
@@ -592,7 +592,7 @@ Endure: keep existing. Spread out, remember, stay quiet, see danger coming, and 
 
 ### Tier 2 · into space
 
-**Deep archive** · 20 Years · `01:40:00` · Grounded · quiet
+**Deep archive** · 20 Years · `01:40:00` · Grounded · emissions quiet
 
 - **Why:** If disaster strikes, what you know survives.
 - **What:** Stores everything we know in durable form, somewhere safe.
@@ -601,7 +601,7 @@ Endure: keep existing. Spread out, remember, stay quiet, see danger coming, and 
 - **Needs:** nothing
 - **Unlocks:** Dispersal outposts
 
-**Quiet radiators** · 30 Years · `02:30:00` · Plausible · quiet
+**Quiet radiators** · 30 Years · `02:30:00` · Plausible · emissions quiet
 
 - **Why:** Makes you harder to find.
 - **What:** Points our waste heat away from watchers.
@@ -610,7 +610,7 @@ Endure: keep existing. Spread out, remember, stay quiet, see danger coming, and 
 - **Needs:** Cold compute annex
 - **Effect:** Lowers how visible our works are.
 
-**Comet deflection** · 8 Years · `00:40:00` · Grounded · quiet
+**Comet deflection** · 8 Years · `00:40:00` · Grounded · emissions quiet
 
 - **Why:** No rock, natural or nudged, lands on you.
 - **What:** Keeps interceptors ready to push any rock on a collision course off it, years ahead.
@@ -619,7 +619,7 @@ Endure: keep existing. Spread out, remember, stay quiet, see danger coming, and 
 - **Needs:** nothing
 - **Effect:** A few centimeters per second, a decade early, turns a hit into a miss.
 
-**Decoy sites** · 12 Years · `01:00:00` · Plausible · noticeable
+**Decoy sites** · 12 Years · `01:00:00` · Plausible · emissions noticeable
 
 - **Why:** Make attackers waste their shots.
 - **What:** Heaters on empty rocks that look like our works from light-years away.
@@ -628,7 +628,7 @@ Endure: keep existing. Spread out, remember, stay quiet, see danger coming, and 
 - **Needs:** Orbital foundry
 - **Effect:** Each costs an attacker a bullet; a needle can hit them all; a close watcher sees through them. While lit, each takes 5% energy a year. Pausing frees it.
 
-**Outskirts sweep** · 16 Years · `01:20:00` · Plausible · quiet
+**Outskirts sweep** · 16 Years · `01:20:00` · Plausible · emissions quiet
 
 - **Why:** Find out whether anyone is watching from your own dark.
 - **What:** Searches our own outer system for hidden visitors. It usually finds nothing.
@@ -637,7 +637,7 @@ Endure: keep existing. Spread out, remember, stay quiet, see danger coming, and 
 - **Needs:** Infrared telescope + Deep-field receiver
 - **Effect:** Catches spoofers and sleepers when they act. A find is a first contact.
 
-**Shielded works** · 10 Years · `00:50:00` · Grounded · quiet
+**Shielded works** · 10 Years · `00:50:00` · Grounded · emissions quiet
 
 - **Why:** A stopped strike costs you nothing in orbit.
 - **What:** Radiation shielding for everything in orbit.
@@ -648,7 +648,7 @@ Endure: keep existing. Spread out, remember, stay quiet, see danger coming, and 
 
 ### Tier 3 · self-building industry
 
-**Early warning array** · 40 Years · `03:20:00` · Plausible · quiet
+**Early warning array** · 40 Years · `03:20:00` · Plausible · emissions quiet
 
 - **Why:** See laser launches toward you, and who is building weapons.
 - **What:** Watches nearby stars for the launches that shine toward us, and for weapon works.
@@ -658,7 +658,7 @@ Endure: keep existing. Spread out, remember, stay quiet, see danger coming, and 
 - **Effect:** A laser launch from 10 ly at a fifth of light speed gives decades of warning. Torch launches stay dark: only pickets see those.
 - **Unlocks:** Pickets
 
-**Dispersal outposts** · 70 Years · `05:50:00` · Plausible · noticeable
+**Dispersal outposts** · 70 Years · `05:50:00` · Plausible · emissions noticeable
 
 - **Why:** One strike can no longer end you.
 - **What:** Copies of the civilization on moons and rocks across the system.
@@ -667,7 +667,7 @@ Endure: keep existing. Spread out, remember, stay quiet, see danger coming, and 
 - **Needs:** Habitat ring + Deep archive
 - **Unlocks:** Dead hand
 
-**Pickets** · 30 Years · `02:30:00` · Speculative · quiet
+**Pickets** · 30 Years · `02:30:00` · Speculative · emissions quiet
 
 - **Why:** Know a bullet’s exact path, days before it arrives.
 - **What:** Small cold watchers in a line out to 2,000 AU, toward one feared neighbor. The first line comes with it.
@@ -678,7 +678,7 @@ Endure: keep existing. Spread out, remember, stay quiet, see danger coming, and 
 - **Unlocks:** Sand screens, Deflector laser
 - **Can open:** Guard {planet} against {star}
 
-**Sand screens** · 12 Years · `01:00:00` · Plausible · quiet
+**Sand screens** · 12 Years · `01:00:00` · Plausible · emissions quiet
 
 - **Why:** Stop a planet-killer with a few tonnes of sand.
 - **What:** Depots of sand that throw 10 tonnes into a bullet’s exact path, 10 million km out.
@@ -687,7 +687,7 @@ Endure: keep existing. Spread out, remember, stay quiet, see danger coming, and 
 - **Needs:** Mass driver + Pickets
 - **Effect:** The spray spreads past 100,000 km; under 1% hits the planet. Pellets slip through.
 
-**Deflector laser** · 40 Years · `03:20:00` · Speculative · loud
+**Deflector laser** · 40 Years · `03:20:00` · Speculative · emissions loud
 
 - **Why:** Push a bullet aside at the speed of light.
 - **What:** Burns a bullet’s skin so the escaping vapor pushes it off course.
@@ -696,7 +696,7 @@ Endure: keep existing. Spread out, remember, stay quiet, see danger coming, and 
 - **Needs:** Laser sail array + Pickets
 - **Effect:** Beats a bullet that dodges. Firing lights the line back to the attacker.
 
-**Hunters** · 16 Years · `01:20:00` · Plausible · noticeable
+**Hunters** · 16 Years · `01:20:00` · Plausible · emissions noticeable
 
 - **Why:** Kill what hides in your own system.
 - **What:** Fusion drones that chase intruders in our own system, to ram them or take them intact.
@@ -705,7 +705,7 @@ Endure: keep existing. Spread out, remember, stay quiet, see danger coming, and 
 - **Needs:** Fusion plant + Orbital foundry
 - **Effect:** A captured spy shows its home, orders and designs, unless it destroys itself first. Posture: hunt on sight, watch, or hold fire.
 
-**Sunshade** · 30 Years · `02:30:00` · Plausible · noticeable
+**Sunshade** · 30 Years · `02:30:00` · Plausible · emissions noticeable
 
 - **Why:** Take a star laser’s beam before it reaches you.
 - **What:** Heavy shades over the sites that matter, on the line toward a star laser.
@@ -714,7 +714,7 @@ Endure: keep existing. Spread out, remember, stay quiet, see danger coming, and 
 - **Needs:** Orbital foundry
 - **Effect:** Holds off the sweep for a while; the needle burns through. Too thin to stop a bullet. A shade shows watchers which sites matter.
 
-**Heat shields** · 14 Years · `01:10:00` · Grounded · quiet
+**Heat shields** · 14 Years · `01:10:00` · Grounded · emissions quiet
 
 - **Why:** Your orbit survives a star laser’s sweep.
 - **What:** Reflective shields for works in orbit.
@@ -723,7 +723,7 @@ Endure: keep existing. Spread out, remember, stay quiet, see danger coming, and 
 - **Needs:** Orbital foundry
 - **Effect:** Works in orbit survive a star laser’s sweep. Not the needle.
 
-**Wandering habitats** · 20 Years · `01:40:00` · Plausible · quiet
+**Wandering habitats** · 20 Years · `01:40:00` · Plausible · emissions quiet
 
 - **Why:** Homes that nobody can aim at from light-years away.
 - **What:** Habitats that make small random burns, so where they will be a year ahead is uncertain by 300,000 km.
@@ -732,7 +732,7 @@ Endure: keep existing. Spread out, remember, stay quiet, see danger coming, and 
 - **Needs:** Habitat ring
 - **Effect:** Immune to aim from light-years: needles, blind bullets, pellets. A spotter’s live positions can still guide a bullet in.
 
-**Shadow berths** · 16 Years · `01:20:00` · Plausible · quiet
+**Shadow berths** · 16 Years · `01:20:00` · Plausible · emissions quiet
 
 - **Why:** Hide your works behind a moon.
 - **What:** Parks works behind a moon, as seen from a feared direction.
@@ -743,7 +743,7 @@ Endure: keep existing. Spread out, remember, stay quiet, see danger coming, and 
 
 ### Tier 4 · star-scale works
 
-**Lifeboats** · 50 Years · `04:10:00` · Speculative · noticeable
+**Lifeboats** · 50 Years · `04:10:00` · Speculative · emissions noticeable
 
 - **Why:** Escape before the strike lands.
 - **What:** Seedships kept fueled, each with a copy of the mind, launched the moment a threat is seen.
@@ -752,7 +752,7 @@ Endure: keep existing. Spread out, remember, stay quiet, see danger coming, and 
 - **Needs:** Seedship
 - **Effect:** A coasting lifeboat is nearly invisible, so no attacker can confirm a kill.
 
-**Dead hand** · 60 Years · `05:00:00` · Speculative · quiet
+**Dead hand** · 60 Years · `05:00:00` · Speculative · emissions quiet
 
 - **Why:** Make striking you cost the striker.
 - **What:** Launchers at our outposts that fire back if home goes silent.
@@ -812,8 +812,8 @@ These appear from results, and name their target. Braces mark where a real star,
 
 **Listen to {star}** · Know · 4 Years · `00:20:00` · Grounded
 
-- **Why:** Hear a neighbor’s everyday radio: where they are, and that they were.
-- **What:** Points the receiver at one star through many of its planet’s days, for its everyday radio and anything aimed. Everyday radio shows where they are, how long their day is and where their transmitters sit, as of when the light left. Never what they are now.
+- **Why:** Hear a neighbor’s hum: where they are, and that they were.
+- **What:** Points the receiver at one star through many of its planet’s days, for its hum and anything aimed. The hum shows where they are, how long their day is and where their transmitters sit, as of when the light left. Never what they are now.
 - **Basis:** Targeted SETI. A world’s radio rises and falls as a planet turns its crowded coasts toward us (Saide et al. 2023).
 - **Uses:** energy 10% a year, compute 20% a year
 - **Needs:** Deep-field receiver or Far-side array
