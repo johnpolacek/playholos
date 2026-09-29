@@ -61,8 +61,8 @@ Iain M. Banks's Culture books are an inspiration: a powerful Mind responsible fo
 - Player civilizations, with AI civilizations filling empty seats. AI civilizations are real superintelligences in the fiction.
 - Other civilizations are central. Their motivations are unknown; cooperation, competition, isolation, intervention, and war emerge from behavior.
 - **Survival is the one shared purpose.** It is a floor, not a victory condition. Everything beyond it is self-defined. A human playtest found knowledge without consequence was not fun.
-- Conflict follows holos-game's stakes-design.md. Death is real, and defense is dispersal. Mercy comes from physics: kills are campaigns, attackers are blind afterward, shots are signed, and craters cannot be looted. Wounded is a played state. Total loss ends the run; the player rejoins a new cohort with knowledge reset.
-- No artificial protection or mandatory peaceful outcome. Specific weapons, defenses, and espionage methods are not designed.
+- Conflict follows holos-game's stakes-design.md, except where [Conflict](#conflict) overrides it. Death is real. Defense is dispersal, shields and interception. Mercy comes from physics: kills are campaigns, attackers are blind afterward, shots are signed, and craters cannot be looted. Wounded is a played state. Total loss ends the run; the player rejoins a new cohort with knowledge reset.
+- No artificial protection or mandatory peaceful outcome. Weapons and defenses are set in [Conflict](#conflict); espionage is not designed.
 
 ## Time
 
@@ -121,7 +121,7 @@ Shown in the [mocks](explorations/home-mocks/index.html). Their sample civilizat
 - Price purposes, never logistics: the player chooses what; the mind handles how.
 - Resources have locations. Remote output needs transport or local industry to be used elsewhere.
 - Research and missions can have uncertain outcomes.
-- **Projects are grouped by purpose:** Know (instruments to study the clues), Grow (industry), Reach (probes and messages), and later Endure. Know projects name the clue they help with. The full list is in [HOLOS_PROJECTS.md](HOLOS_PROJECTS.md).
+- **Projects are grouped by purpose:** Know (instruments to study the clues), Grow (industry), Reach (probes, messages and strikes), and later Endure (defenses). Know projects name the clue they help with. The full list is in [HOLOS_PROJECTS.md](HOLOS_PROJECTS.md).
 - **Energy and compute are yearly budgets; matter is a stockpile (2026-09-26).** Energy and compute cannot be stored at planetary scale, so a running project takes a share of each year's supply; what a year does not use is lost, and pausing frees the share. Matter can be stored: a project draws its matter once when it starts, and mines refill the pile, including while the player is away. Rates and amounts are sample values.
 - **Every civilization starts with a kit (2026-09-28):** Earth's instruments and industry today, plus about a century. A whole-sky watch in light and radio, a large space telescope, star surveys that already know the nearest stars' big planets, a continent-wide radio array, a planetary grid and data centers (the 100% energy and compute budgets), mines and reusable heavy lift, laser links across the home system, and precursor probes heading out. The kit is what found the opening clues, and it catches strong knocks. Catalog projects are upgrades beyond it.
 - **Matter is counted in kilotonnes (2026-09-28):** 1,240 kt on hand at the start, +40 kt a year. Tonnes were too small for a civilization a century past today's launch rates.
@@ -169,10 +169,34 @@ Shown in the [mocks](explorations/home-mocks/index.html). Their sample civilizat
 - **Visitors (2026-09-28):** a braking craft's path traces back to a cone of candidate stars, each with the year it would have left. Once it stops and reports home by narrow beam, anyone beside it sees exactly where the beam points.
 - **Silence (2026-09-28):** every message sets an earliest-reply date. When one passes empty, the Report says so. The conversation keeps each empty window and how long the silence has run, with the reasons that fit it and their odds. A standing order can wait on a silence for good.
 
+## Conflict
+
+Settled 2026-09-28. Every weapon and defense, with its needs and sample costs, is in [HOLOS_PROJECTS.md](HOLOS_PROJECTS.md). Weapons are in Reach; defenses are in Endure.
+
+- **Shields and interception are allowed when made of matter or light.** Force fields are not: no known physics stops a solid bullet without matter in the way. This overrides holos-game's "no interception magic."
+- **A strike's speed is the weapon, and its weakness.** At a fifth of light speed, a gram of anything hits like 400 tonnes of TNT, so any contact shatters a bullet. Interception breaks it far out, so the spray misses.
+- **The interception chain.** The early warning array sees a launch flare: the direction, not the speed. Pickets strung out to 2,000 AU toward a feared neighbor give the bullet's exact path. Depots throw about 10 tonnes of sand into that path 10 million km out; the spray spreads past 100,000 km, and under 1% hits the planet. A deflector laser pushes the bullet aside instead, from the same track.
+- **A guard is one planet against one direction.** Spreading out multiplies what must be guarded. A strike from a direction with no pickets arrives unguarded.
+- **Interception is automatic.** It happens in the last game days, seconds of real time. The player acts in the hours between the flare and impact.
+- **A stopped strike still costs.** The spray hits orbit. Unshielded works die; a centimeter of shielding stops it, and near-light sprays need meters of rock.
+- **No speed cap: physics sets it.** A flyby probe reaches a tenth of light speed, a fusion torch about a fifth, an antimatter rocket about half, and a sail pushed by a star laser nine tenths and beyond. Nothing reaches light speed. Faster bullets glow brighter, so pickets see them from farther, and screens still shatter them. Near-light strikes beat reaction time, not interception: at nine tenths of light speed from 16 ly, the flare leaves 9 real minutes.
+- **Concentration is the attacker's choice.** A concentrated bullet can kill a planet, and it is what screens stop. A pellet swarm slips through screens, but the air protects the ground.
+- **Only the core counters in v1:** speed, decoys, pellet swarms, blinding pickets, other directions, and more bullets than depots. Bullets that dodge and plows that clear sand ahead come later, if playtests find screens too strong.
+- **Readiness, not odds.** Each guarded line shows its pickets, its depots, and its warning at each speed, tested only against weapons this civilization can build. Anything faster reads Unknown. The mind reasons about a rival's weapons only when asked.
+- **The star laser.** A sheet of film 100,000 km wide beside a star turns sunlight into laser light, every patch firing in step, so the sheet is one lens. It needs a self-replicating factory, a laser sail array and a kilometer interferometer, not a solar swarm. Its beam arrives with its own light: no warning. Both modes ship in v1: the sweep heats a whole planet, and the needle puts 400 megatons a second on one site whose position is known twice the light time ahead. It is quiet when idle and loud when firing: the target knows who fired, and watchers see a new single-color line in the target star's light. The same sheet can push 1,000 tonnes to nine tenths of light speed in about a day. Defenses: depth, secrecy and decoys, wandering habitats, sunshades, being elsewhere, and a star laser of one's own.
+- **Outing is a weapon.** Telling others where someone hides needs only a transmitter. A broadcast outs the sender too; a tight beam, only to its recipient; a relay hides home. The recipient gets a lead, not proof. A quiet target can make the check fail, and a failed check makes the sender look like a liar.
+- **In-system forces.** Hunters ship in v1: fusion drones that ram intruders once they are found. The player sets a posture: hunt on sight, watch, or hold fire. Footholds, rock throwers and local lasers come later.
+- **Deterrence counts only what others have seen.** A test fire on one's own dead moon, an outpost shown on purpose, a star laser's brief paint across a rival's system, or a declaration. Hidden outposts are a hedge that deters no one.
+- **Spoofs can be caught.** A lurker can fake a launch flare from close by. Two telescopes far apart see the flash beside the star, not on it, and pickets did not see it first. A caught spoof shows where the lurker is.
+
 ## Open questions
 
 1. What can particular instruments resolve, clue by clue? The starting kit produces the initial clues.
 2. What are the starting kit's exact stocks and rates? Its contents are set; its numbers are sample values.
-3. How far does an autonomous mind's authority reach, and how does it handle surprises? Standing orders set how it is instructed.
+3. How far does an autonomous mind's authority reach, and how does it handle surprises? Standing orders set how it is instructed. Near-light strikes leave under a minute of real warning, so it decides whether the mind may launch lifeboats, fire the dead hand, or set hunters loose while the player is away.
 4. How are claims, uncertainty, provenance, and information age shown to players?
 5. Why did no older civilizations expand through the galaxy first?
+6. How is a strike launched? The catalog assumes a *Strike {target}* act that compares every weapon we have, including a flyby probe aimed to hit instead of pass, while heavy campaigns need weapon industry others can see. Not confirmed.
+7. How early can a player die? Launchers come on the first day; the deep vault is the first hedge.
+8. Espionage: agents in another civilization's system, and sabotage.
+9. What do weapons and defenses cost? Their energy, compute, matter and build times are sample values.
