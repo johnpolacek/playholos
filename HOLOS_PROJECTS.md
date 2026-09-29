@@ -573,11 +573,11 @@ Endure: keep existing. Spread out, remember, stay quiet, see danger coming, and 
 **Deep vault** · 10 Years · `00:50:00` · Plausible · quiet
 
 - **Why:** Your first hedge: the mind survives a hit on Veyra.
-- **What:** A running copy of the mind, buried under the rock of a moon or asteroid.
-- **Basis:** Deep rock: heat soaks only tens of meters into it in a decade.
+- **What:** A copy of the mind kilometers deep in a moon or large asteroid, kept in step with home by laser link.
+- **Basis:** Heat soaks only tens of meters into rock in a decade. A heavy impactor can shatter a rock 100 km across; a moon shrugs it off.
 - **Uses:** energy 10% a year, compute 15% a year, 200 kt of matter at start
 - **Needs:** nothing
-- **Effect:** If Veyra is hit, the mind keeps running. A needle can still reach it if its place is known.
+- **Effect:** Running, it takes over at once, but its heat and link can be found. Sleeping, it is cold and hidden, and wakes when home goes silent. A needle reaches it only if its place is known.
 
 ### Tier 2 · the first day
 
@@ -612,10 +612,10 @@ Endure: keep existing. Spread out, remember, stay quiet, see danger coming, and 
 
 - **Why:** Make attackers waste their shots.
 - **What:** Heaters on empty rocks that look like our works from light-years away.
-- **Basis:** Waste heat can be faked with energy; spectra can tell, given time.
-- **Uses:** energy 15% a year, compute 5% a year, 2,000 kt of matter at start
+- **Basis:** Faking a site’s heat takes as much energy as the site gives off. Real works change over time, so decoys must be run like theater.
+- **Uses:** energy 25% a year, compute 5% a year, 2,000 kt of matter at start
 - **Needs:** Orbital foundry
-- **Effect:** Each one costs an attacker a shot, or a needle’s aim.
+- **Effect:** Each costs an attacker a bullet; a needle can afford to hit them all. A close watcher sees through them. Strongest with quiet radiators on the real sites.
 
 **Outskirts sweep** · 16 Years · `01:20:00` · Plausible · quiet
 
@@ -696,11 +696,11 @@ Endure: keep existing. Spread out, remember, stay quiet, see danger coming, and 
 **Sunshade** · 30 Years · `02:30:00` · Plausible · noticeable
 
 - **Why:** Take a star laser’s beam before it reaches you.
-- **What:** A thin screen on the line toward a star laser, taking the beam.
-- **Basis:** Sunshades have been studied for Earth. The beam’s own push shoves it; it needs constant thrust.
+- **What:** Heavy shades over the sites that matter, on the line toward a star laser.
+- **Basis:** Shades at L1 have been studied for cooling Earth, by Roger Angel. The beam pushes a shade off station: one over a whole planet lasts about a week, a heavy one over a site a couple of months.
 - **Uses:** energy 15% a year, compute 10% a year, 80 Mt of matter at start
 - **Needs:** Orbital foundry
-- **Effect:** Works against the sweep. The needle burns through.
+- **Effect:** Holds off the sweep for a while; the needle burns through. Too thin to stop a bullet. A shade shows watchers which sites matter.
 
 **Heat shields** · 14 Years · `01:10:00` · Grounded · quiet
 
@@ -711,13 +711,14 @@ Endure: keep existing. Spread out, remember, stay quiet, see danger coming, and 
 - **Needs:** Orbital foundry
 - **Effect:** Works in orbit survive a star laser’s sweep. Not the needle.
 
-**Wandering habitats** · 20 Years · `01:40:00` · Plausible · noticeable
+**Wandering habitats** · 20 Years · `01:40:00` · Plausible · quiet
 
 - **Why:** Homes that nobody can aim at from light-years away.
-- **What:** Habitats that change orbit at random, so old light cannot aim at them.
-- **Basis:** A needle must know where its target will be twice the light time ahead.
+- **What:** Habitats that make small random burns, so where they will be a year ahead is uncertain by 300,000 km.
+- **Basis:** About 10 m/s of burns a year does it. A bullet sees a habitat too late to steer that far, and a needle must aim twice the light time ahead.
 - **Uses:** energy 20% a year, compute 15% a year, 20 Mt of matter at start
 - **Needs:** Habitat ring
+- **Effect:** Immune to aim from light-years: needles, blind bullets, pellets. A spotter’s live positions can still guide a bullet in.
 
 **Shadow berths** · 16 Years · `01:20:00` · Plausible · quiet
 
