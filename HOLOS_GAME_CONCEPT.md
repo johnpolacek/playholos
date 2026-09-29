@@ -1,6 +1,6 @@
 # Holos — Game Concept
 
-Last updated: September 28, 2026.
+Last updated: September 29, 2026.
 
 ## Status
 
@@ -89,7 +89,8 @@ The session rhythm is **spinning plates:** several projects, investigations, mis
 - **How the player responds is the beginning of the game.** Sample clues, by Veyra's names: an oxygen world at Twin (Sol), a new warm infrared glow at Ember (Epsilon Indi), uneven dimming at Lantern (Gliese 783 A). Each has natural explanations.
 - Investigation means choosing an approach: existing instruments, a better observatory, a message, eventually a probe. Each answers different questions at different cost and delay. Funding buys a measurement, not knowledge.
 - **Detectability** follows holos-game's detection floor: with current-Earth instruments, no civilization detects technosignatures, because receiver sensitivity is the binding limit. Finding others is the upgrade loop. Every civilization's emission history must stay below Earth's 2026 detection limits at its distance.
-- **Open:** why no older civilizations filled the galaxy first. The detection floor explains unseen neighbors, not that. Light-speed limits alone are rejected as the answer.
+- **Why the sky is quiet (2026-09-29).** Mature minds turn inward. Computing costs less the colder it runs, so an old civilization chooses efficiency over size: it stops growing, and stays small, cold and dim, below Earth's 2026 detection limits but findable by better instruments. That is why no older civilization filled the galaxy, and why Know projects find what today's telescopes cannot. It rests on the assumed commonality of post-singularity minds. The rare civilization that grows loud instead can be found and struck, so exceptions do not last. Light-speed limits alone are still rejected as the answer.
+- **A few old inward civilizations live in the region (2026-09-29).** Quiet elders, findable only with late instruments or probes. They never spread or strike. They are who an old watcher or the silent one can turn out to be.
 
 ## Home and tabs
 
@@ -206,4 +207,3 @@ Settled 2026-09-28. Every weapon and defense, with its needs and sample costs, i
 1. What can particular instruments resolve, clue by clue? The starting kit produces the initial clues.
 2. What are the starting kit's exact stocks and rates? Its contents are set; its numbers are sample values.
 3. How are claims, uncertainty, provenance, and information age shown to players?
-4. Why did no older civilizations expand through the galaxy first?
