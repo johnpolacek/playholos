@@ -1041,13 +1041,13 @@ ENERGY · [35%] · MATTER · 14,200 kt · COMPUTE · [40%]
 
 ### Everyone, for good
 It goes every way at once, at light speed, and keeps going. Anyone who hears it learns where we are.
-[drawing: Who hears the broadcast, placed by distance: the nearest known stars within 11 years, Twin at 20, every star of the region by Year 590; labels: on, every star of the region, Veyra, Ember · Beacon · Lantern · Frost, Twin, Year 530, Year 540, Year 560, Year 590]
+[drawing: Who hears the broadcast, placed by distance: the nearest known stars within 11 years, Twin at 20, every star of the region by Year 590; labels: on, every star of the region, Veyra, Ember · Beacon · Lantern · Frost, Twin, Pearl, Year 530, Year 540, Year 560, Year 590]
 WHO HEARS IT · SOONEST FIRST
-Gliese 832 · 7.4 ly · nothing seen there · Year 527.4 · 00:36:54
 Ember · 9.2 ly · knows where we are since Year 458.6 · Year 529.2 · 00:46:03
 Beacon · 9.3 ly · knows since Year 12.6 or earlier · Year 529.3 · 00:46:27
 Lantern · 10.3 ly · never heard from us · Year 530.3 · 00:51:20
 Frost · 10.8 ly · knows since Year 418 or earlier · Year 530.8 · 00:54:11
+Pearl · 13.0 ly · broadcasts to everyone · never heard from us · Year 533.0 · 01:05:07
 Twin · 19.9 ly · oxygen world · never heard from us · Year 539.9 · 01:39:37
 Every star of the region · 1,212 within 50 ly of Twin, most never heard · by Year 590 · 05:49:37
 You can stop sending. What has left keeps going: past the region’s edge by Year 640, fading, never stopping.
@@ -1075,7 +1075,7 @@ ENERGY · [45%] · MATTER · 14,600 kt · COMPUTE · [40%]
 SPREADING · 11 LY OUT · YEAR 531
 - Our broadcast · 11 of 70 ly · the whole region by Year 590 · 59 Years · 04:54:37
 - Heard it by now · 5 stars we know · Gliese 832, Ember, Beacon, Lantern, Frost
-- Next we know of · Twin · oxygen world · 19.9 ly · 8.9 Years · 00:44:37
+- Next we know of · Pearl · broadcasts to everyone · 13.0 ly · 2.0 Years · 00:10:07
 - Earliest answer · from Ember · if they answer the moment it lands · Year 538.4 · 00:37:06
 
 # Holos · Mind
@@ -1472,6 +1472,98 @@ Year 52.4 · One claim of theirs contradicted · Our own measurement of Ember.
 NOT YET KNOWN
 Their world itself. How many they are. How far they reach. Whether anyone else hears them.
 
+## Contact · a broadcast sweeps past
+Year 290. Pearl, 13.0 ly away, is broadcasting: radio, the same strength every way, meant for no one in particular. It doesn’t know we exist, and nobody chose us. Our neighbors heard it too, some first. It is the one contact that begins with us knowing more than the sender. Answers to Pearl go by narrow beam, so we can’t overhear them, but Pearl’s broadcast can change when someone answers.
+
+#### 1 · Pearl is speaking · The arrival, as a moment. The front of its broadcast has passed Beacon and Frost, and now us.
+Veyra · Year 290.0
+[drawing: Pearl’s broadcast spreading in every direction, its front passing Veyra after Beacon and Frost; labels: Pearl, Beacon, Frost, Ember, Veyra]
+THE SKY WATCH · PEARL, 13.0 LIGHT-YEARS
+
+### Pearl is speaking to everyone.
+Radio, the same strength in every direction. Not tuned for us. Not meant for anyone in particular.
+It left Pearl 13.0 Years ago. Beacon and Frost heard it first.
+[Listen] · [Later]
+listen ›
+
+#### 2 · The signal · One cycle of it, drawn. What was measured, and why it isn’t meant for us.
+Veyra · Year 290.0
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [30%] · MATTER · 9,100 kt · COMPUTE · [35%]
+REPORT · SIGNAL
+[‹ All reports]
+[drawing: One cycle of Pearl’s broadcast: counting, their signature, their words, then it repeats; labels: counting, their signature, their words, repeats, one cycle · 6 hours]
+
+### A broadcast, not aimed at us
+From Pearl · Zeta Tucanae · 13.0 ly · caught Year 290 by the sky watch
+Radio, the same strength every way. Beacon tuned its knock for our motion; this is tuned for no one. It teaches its own reading: counting first, then simple physics.
+WHAT IT TELLS US
+Began · Year 277.0, 13.0 Years ago · Still sending? · We can’t know. What we hear left Pearl 13 Years ago. · Aimed at us · No · They know of us · Nothing suggests it · Heard it first · Beacon, in Year 283.7. Frost, in 286.3.
+[Who else heard it] · [What it says]
+what it says ›
+
+#### 3 · What it says · Their voice first, then the parts. A broadcast has no reader in mind.
+Veyra · Year 290.0
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [30%] · MATTER · 9,100 kt · COMPUTE · [35%]
+REACH · BROADCAST · PEARL
+[‹ Signal]
+[drawing: Pearl’s signature] · Pearl · TO ANYONE · ARRIVING SINCE YEAR 290
+“We are here. We count; count with us. We live on the second world of our star. Whoever hears this: you are not alone.”
+It repeats every 6 hours. The mind learned to read it from its own counting, in weeks.
+WHAT IT CARRIES
+WHO THEY ARE · THEIR FOUNDING LINE · “Whoever hears this: you are not alone.”
+A FACT · WHERE THEY LIVE · The second world from Pearl, about 1.1 AU out · Our star surveys found no planets there. A world that size would have been missed.
+AN OFFER · “Answer, and we will answer.”
+[Decide what to do]
+who else heard it ›
+
+#### 4 · Who else heard it · Lines from Pearl: solid to worlds its broadcast has reached, dashed to those still waiting.
+Veyra · Year 290.0
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [30%] · MATTER · 9,100 kt · COMPUTE · [35%]
+[drawing: Stars view; labels: Veyra, Ember, Epsilon Indi · 00:46:03, Lantern, Gliese 783 A · 00:51:20, Pearl, Zeta Tucanae, Beacon, Beta Hydri, Frost, Gamma Pavonis, Gliese 832, Lacaille 8760, 01:15:00, Twin · oxygen world, Sol · 01:39:37, 5 ly]
+[World] · [System] · [selected: Stars] · [Region] · [Galaxy]
+PEARL’S BROADCAST · 13 LY OUT · YEAR 290
+- Heard it before us · Beacon, Year 283.7 · Frost, Year 286.3
+- We heard it · Year 290.0 · 13.0 ly from Pearl
+- Next to hear it · Gliese 832, Ember, Lantern · by Year 297
+- Twin hears it · oxygen world · Year 305 · 15 Years · 01:15:02
+decide ›
+
+#### 5 · Answer Pearl? · Every next step, and what it reveals. Staying silent costs nothing they can see. Any, or none.
+Veyra · Year 290.2
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [30%] · MATTER · 9,100 kt · COMPUTE · [35%]
+[‹ Pearl] · REACH · PEARL
+
+### Answer Pearl?
+They don’t know we exist. Beacon and Frost heard them first.
+WHAT WE COULD DO · ANY, OR NONE
+- Keep listening · They never learn we heard. It keeps arriving while they send. · now · ›
+- Knock at Pearl, bare · Tells them someone heard, and where we are. · arrives in 13.0 Years · 01:05:07 · ›
+- Knock with our charter · Adds our founding line. · The mind would argue: we lean hidden. · arrives in 13.0 Years · 01:05:07 · ›
+- Look for their world · Our space telescope, on Pearl. Nothing sent. · 8 Years · 00:40:00 · ›
+- Tell Beacon · They heard it before us. Tells them we listen too. · arrives in 9.3 Years · 00:46:27 · ›
+- Broadcast to everyone · Needs the broadcast beacon: 4 Years. Every star in range hears us. · Announces us · ›
+If a neighbor answers Pearl, it answers by narrow beam. We would never see it.
+[Talk it through with the mind ›]
+Year 304, still listening ›
+
+#### 6 · It changes · Pearl says it has been answered. We can’t hear the answer, but the timing says who could have sent it.
+Veyra · Year 304.0
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [30%] · MATTER · 9,600 kt · COMPUTE · [35%]
+REPORT · SIGNAL · CHANGED
+[‹ All reports]
+
+### Pearl has been answered
+NEW IN PEARL’S BROADCAST · YEAR 304
+“We have been answered. We are not alone.”
+[drawing: A circle of 7 light-years around Pearl: Beacon just inside, Frost and Veyra outside; labels: Pearl, Beacon, 6.7 ly, Frost, 9.3 ly · too far, Veyra, 13.0 ly · too far, within 7 ly: close enough in time]
+WHO COULD HAVE ANSWERED
+The change · Left Pearl in Year 291.0, 14 Years after the broadcast began · So the answer · Came from within 7 ly of Pearl · One we know · Beacon, if it answered within half a Year of hearing · Ones we don’t · 6 other stars that close. None has spoken to us. · Beacon, to us · Nothing about Pearl, in any message · [What now]
+
 ## First contact · they meet our sentinel
 Year 467.8. We ordered the sentinel to close in on the band. The builders noticed. Their first word was not a message to us but a gesture to our probe: three flashes of their own starlight. The sentinel acted on its standing orders long before we knew. This is contact through a far mind: everything here happened 9.2 Years before we read it.
 
@@ -1690,7 +1782,7 @@ Talk it through: the mind’s view, when asked
 Orders for while you are away
 Settings: theme, replay the tour, notifications
 
-### Contact · 18 of 22
+### Contact · 19 of 22
 Away: the notification
 The arrival, as a moment
 The knock arrives

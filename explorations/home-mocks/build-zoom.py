@@ -254,7 +254,7 @@ def system():
 STAR_NAMES = {'108870': ('Ember', 'Epsilon Indi'), '99461': ('Lantern', 'Gliese 783 A'), '2021': ('Beacon', 'Beta Hydri'),
               '105858': ('Frost', 'Gamma Pavonis'), '1599': ('Pearl', 'Zeta Tucanae'), '106440': (None, 'Gliese 832'), '105090': (None, 'Lacaille 8760')}
 LEADS = ('108870', '99461')
-def neighbors(time_demo=False, after_result=False, select=None, beam=None, probe=None, shell=None):
+def neighbors(time_demo=False, after_result=False, select=None, beam=None, probe=None, shell=None, front=None):
     el = 58; cam, k, origin = camera(el, 205), 11, (195, 196)
     s = [stipple(3, 60)]; labels = Labels([(8, 8, 110, 40)])
     rings = []
@@ -266,6 +266,13 @@ def neighbors(time_demo=False, after_result=False, select=None, beam=None, probe
     if shell:   # a sphere of light around home; seen from any angle, its outline is a circle
         r_ly, shell_label = shell
         s.append(f'<circle cx="{origin[0]}" cy="{origin[1]}" r="{fmt(r_ly * k)}" fill="{YOU}" fill-opacity=".06" stroke="{YOU}" stroke-width="1.4" stroke-dasharray="6 4"></circle>')
+    if front:   # another world's broadcast: a ray to each named star, solid once its front has passed, dashed until then
+        f_hip, f_ly = front
+        fp = atlas(by_hip[f_hip]); fx, fy = project(fp, HOME, cam, k, origin)
+        for hip in [h for h in STAR_NAMES if h != f_hip] + ['99240']:
+            q = atlas(by_hip[hip]); qx, qy = project(q, HOME, cam, k, origin); reached = math.dist(q, fp) <= f_ly + .01
+            s.append(f'<line x1="{fmt(fx)}" y1="{fmt(fy)}" x2="{fmt(qx)}" y2="{fmt(qy)}" stroke="{OTHER}" stroke-width="{1.3 if reached else .8}"' + ('' if reached else ' stroke-dasharray="3 4" opacity=".6"') + '></line>')
+            if reached and hip != '99240': s.append(f'<circle cx="{fmt(qx)}" cy="{fmt(qy)}" r="3.2" fill="{OTHER}"></circle>')
     for p in sorted(stars, key=lambda p: -sum((a - b) * c for a, b, c in zip(p[:3], HOME, (0, 0, 1)))):
         x, y = project(p[:3], HOME, cam, k, origin)
         base = (p[0], HOME[1], p[2])
@@ -276,9 +283,9 @@ def neighbors(time_demo=False, after_result=False, select=None, beam=None, probe
         s.append(f'<circle cx="{fmt(x)}" cy="{fmt(y)}" r="{r}" fill="{INK}"></circle>' if r < 3 else f'<circle cx="{fmt(x)}" cy="{fmt(y)}" r="{r}" fill="{PAPER}" stroke="{INK}" stroke-width="1.2"></circle>')
     s.append(f'<circle cx="{origin[0]}" cy="{origin[1]}" r="4" fill="{YOU}"></circle><circle cx="{origin[0]}" cy="{origin[1]}" r="8" fill="none" stroke="{YOU}"></circle>')
     s.append(labels.place(origin[0], origin[1], 'Veyra', 11, YOU, 600, ((0, 22), (12, 4), (-12, 4))))
-    for hip, (vname, real) in sorted(STAR_NAMES.items(), key=lambda item: item[0] not in LEADS):
+    for hip, (vname, real) in sorted(STAR_NAMES.items(), key=lambda item: not (item[0] in LEADS or (front and item[0] == front[0]))):
         p = atlas(by_hip[hip]); x, y = project(p, HOME, cam, k, origin)
-        d = math.dist(p, HOME); lead = hip in LEADS or hip == beam
+        d = math.dist(p, HOME); lead = hip in LEADS or hip == beam or (front and hip == front[0])
         if hip == beam:
             # A laser aimed at Veyra: a line from the sender, ending in an arrowhead at home.
             ang = math.atan2(origin[1] - y, origin[0] - x); ex, ey = origin[0] - 11 * math.cos(ang), origin[1] - 11 * math.sin(ang)
@@ -295,7 +302,8 @@ def neighbors(time_demo=False, after_result=False, select=None, beam=None, probe
             s.append(f'<circle cx="{fmt(x)}" cy="{fmt(y)}" r="7" fill="none" stroke="{OTHER}" stroke-width="1.5"></circle>')
             spots = ((16, 4), (-16, 4), (0, -17), (0, 25)) if hip == select else ((11, 4), (-11, 4), (0, -12), (0, 20))
             if hip == beam: spots = ((0, -17), (16, 4), (0, 25), (-16, 4)) if hip == select else ((0, -13), (12, 4), (0, 21), (-12, 4))
-            s.append(labels.place(x, y, vname, 10, OTHER, 600, spots, sub=f'{real} · ' + ('aimed at us' if hip == beam else light_clock(d))))
+            if front and hip == front[0]: spots = ((11, 4), (-11, 4), (11, -8), (-11, -8), (0, -12), (0, 20), (14, 16))
+            s.append(labels.place(x, y, vname, 10, OTHER, 600, spots, sub=real if front and hip == front[0] else f'{real} · ' + ('aimed at us' if hip == beam else light_clock(d))))
         else:
             s.append(labels.place(x, y, vname or real, 9, sub=real if vname else None))
     if probe:
@@ -2738,6 +2746,126 @@ MEET_PACT = f"""<div class="phone">{at_year((30, 35, '13,400 kt'), Y_PACT)}<div 
 <button class="primary" disabled>Choose an answer</button>
 </div></div>"""
 
+# ---------- A broadcast sweeps past: Pearl speaks to everyone ----------
+# Year 290. Pearl (Zeta Tucanae), 13.0 ly away, began broadcasting in Year 277.0: radio, the same strength every way,
+# not tuned for anyone's motion. Beacon (6.7 ly from Pearl) heard it in 283.7, Frost in 286.3, us in 290. Any answer to
+# Pearl goes by narrow beam, so we can't overhear it. But Pearl's broadcast can change: in Year 304 we hear it say it was
+# answered. That change left Pearl in 291.0, so whoever answered heard it and replied within 14 Years of its start:
+# they are within 7 ly of Pearl. Of worlds we know, only Beacon, and only if it answered within half a Year.
+PEARL = atlas(by_hip['1599']); d_p = math.dist(PEARL, HOME)
+Y_SW = 290.0; Y_P0 = round(Y_SW - d_p, 1); Y_SWN = 290.2; Y_SWC = 304.0
+def heard_at(hip): return Y_P0 + (math.hypot(*PEARL) if hip == 'sol' else math.dist(atlas(by_hip[hip]), PEARL))
+Y_CH_LEFT = round(Y_SWC - d_p, 1); R_ANS = (Y_CH_LEFT - Y_P0) / 2
+N_NEAR_PEARL = sum(1 for q in CENSUS if .05 < math.dist(q[:3], PEARL) <= R_ANS) - 1   # less Beacon
+PEARL_SEED = 1599
+HUD_SW = at_year((30, 35, '9,100 kt'), Y_SW)
+
+def sweep_sky(w=390, h=300):
+    s = [stipple(171, 110, w, h)]
+    px, py = 318, 62
+    for r, o in ((70, .35), (140, .45), (210, .55)):
+        s.append(f'<circle cx="{px}" cy="{py}" r="{r}" fill="none" stroke="{OTHER}" stroke-width=".9" stroke-dasharray="3 5" opacity="{o}"></circle>')
+    s.append(f'<circle cx="{px}" cy="{py}" r="268" fill="none" stroke="{OTHER}" stroke-width="1.8"></circle>')
+    s.append(f'<circle cx="{px}" cy="{py}" r="6" fill="{PAPER}" stroke="{OTHER}" stroke-width="1.5"></circle>' + text(px - 12, py - 10, 'Pearl', 11, OTHER, 'end', 600))
+    for x, y, name, col in ((208, 150, 'Beacon', INK), (134, 116, 'Frost', INK), (30, 284, 'Ember', MUTED)):
+        s.append(f'<circle cx="{x}" cy="{y}" r="3" fill="{col}"></circle>' + text(x + 7, y + 4, name, 10, col))
+    vx, vy = 96, 232
+    s.append(f'<circle cx="{vx}" cy="{vy}" r="4.5" fill="{YOU}"></circle><circle cx="{vx}" cy="{vy}" r="10" fill="none" stroke="{YOU}" stroke-width="1.2"></circle>' + text(vx + 16, vy + 4, 'Veyra', 11, YOU, 'start', 600))
+    return f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" font-family="IBM Plex Mono, monospace" role="img" aria-label="Pearl’s broadcast spreading in every direction, its front passing Veyra after Beacon and Frost">{"".join(s)}</svg>'
+SWEEP_LANDS = f"""<div class="phone cine"><div class="cinetop"><span>Veyra</span><span class="mono">Year {Y_SW:.1f}</span></div>
+{sweep_sky()}
+<div class="cinetext"><span class="mono kick">THE SKY WATCH · PEARL, {d_p:.1f} LIGHT-YEARS</span>
+<h3>Pearl is speaking to everyone.</h3>
+<p class="inscr">Radio, the same strength in every direction. Not tuned for us. Not meant for anyone in particular.</p>
+<p>It left Pearl {d_p:.1f} Years ago. Beacon and Frost heard it first.</p>
+<div class="cinebtn"><button class="light">Listen</button><button class="ghostlight">Later</button></div></div></div>"""
+
+def primer_strip(w=358, h=74):
+    # One cycle of the broadcast: counting, their signature, their words. Then it repeats.
+    s = [f'<line x1="8" y1="30" x2="{w - 8}" y2="30" stroke="{INK}" stroke-width=".6" opacity=".5"></line>']
+    x = 14
+    for n in range(1, 6):
+        for i in range(n):
+            s.append(f'<line x1="{x}" y1="20" x2="{x}" y2="30" stroke="{OTHER}" stroke-width="1.6"></line>'); x += 4
+        x += 8
+    s.append(text(14, 46, 'counting', 8.5, OTHER))
+    s.append(sigil(PEARL_SEED, OTHER, x + 20, 26, 17)); s.append(text(x + 20, 58, 'their signature', 8.5, OTHER, 'middle'))
+    x += 50
+    rng = random.Random(8)
+    x2 = x
+    while x2 < w - 60:
+        s.append(f'<line x1="{x2}" y1="{30 - rng.choice((4, 7, 10))}" x2="{x2}" y2="30" stroke="{OTHER}" stroke-width="1"></line>'); x2 += 3
+    s.append(text((x + x2) / 2, 46, 'their words', 8.5, OTHER, 'middle'))
+    s.append(f'<path d="M{w - 50} 30 H{w - 12} M{w - 12} 30 l-5 -4 M{w - 12} 30 l-5 4" fill="none" stroke="{INK}" stroke-width="1"></path>' + text(w - 8, 46, 'repeats', 8.5, INK, 'end'))
+    s.append(text(8, h - 4, 'one cycle · 6 hours', 8, MUTED))
+    return f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" font-family="IBM Plex Mono, monospace" role="img" aria-label="One cycle of Pearl’s broadcast: counting, their signature, their words, then it repeats">{"".join(s)}</svg>'
+SWEEP_SIGNAL = tab_screen('Report', 'REPORT', 'SIGNAL', f"""<button class="backlink inline">‹ All reports</button>
+<div class="art">{primer_strip()}</div>
+<h3 class="lead">A broadcast, not aimed at us</h3>
+<p class="copy small">From Pearl · Zeta Tucanae · {d_p:.1f} ly · caught Year {Y_SW:.0f} by the sky watch</p>
+<p class="copy">Radio, the same strength every way. Beacon tuned its knock for our motion; this is tuned for no one. It teaches its own reading: counting first, then simple physics.</p>
+<div class="sec">WHAT IT TELLS US</div>
+{ledger([('Began', f'Year {Y_P0:.1f}, {d_p:.1f} Years ago'), ('Still sending?', f'We can’t know. What we hear left Pearl {d_p:.0f} Years ago.'), ('Aimed at us', 'No'),
+         ('They know of us', 'Nothing suggests it'), ('Heard it first', f'Beacon, in Year {heard_at("2021"):.1f}. Frost, in {heard_at("105858"):.1f}.')])}
+<div class="twobtn"><button class="primary ghost">Who else heard it</button><button class="primary">What it says</button></div>""", HUD_SW)
+
+SWEEP_READ = tab_screen('Reach', 'REACH', 'BROADCAST · PEARL', f"""<button class="backlink inline">‹ Signal</button>
+<div class="speech"><div class="speaker">{sigil_svg(PEARL_SEED, OTHER, 44, 'Pearl’s signature')}<span><b>Pearl</b><span class="mono">TO ANYONE · ARRIVING SINCE YEAR {Y_SW:.0f}</span></span></div>
+<p class="big">“We are here. We count; count with us. We live on the second world of our star. Whoever hears this: you are not alone.”</p>
+<p class="untr">It repeats every 6 hours. The mind learned to read it from its own counting, in weeks.</p></div>
+<div class="sec">WHAT IT CARRIES</div>
+{part('WHO THEY ARE · THEIR FOUNDING LINE', '<b class="inscribed">“Whoever hears this: you are not alone.”</b>')}
+{part('A FACT · WHERE THEY LIVE', '<b>The second world from Pearl, about 1.1 AU out</b><span class="sub">Our star surveys found no planets there. A world that size would have been missed.</span>')}
+{part('AN OFFER', '<b>“Answer, and we will answer.”</b>')}
+<button class="primary">Decide what to do</button>""", HUD_SW)
+
+SWEEP_MAP = frame(2, *neighbors(front=('1599', d_p)), panel=(f'PEARL’S BROADCAST · {d_p:.0f} LY OUT', f'YEAR {Y_SW:.0f}', [
+    row('Heard it before us', f'Beacon, Year {heard_at("2021"):.1f} · Frost, Year {heard_at("105858"):.1f}', '', 'other', marker=True),
+    row('We heard it', f'Year {Y_SW:.1f} · {d_p:.1f} ly from Pearl', '', 'you', marker=True),
+    row('Next to hear it', f'Gliese 832, Ember, Lantern · by Year {heard_at("99461"):.0f}', ''),
+    row('Twin hears it', f'oxygen world · Year {heard_at("sol"):.0f}', tstack(f'{heard_at("sol") - Y_SW:.0f} Years', clock((heard_at('sol') - Y_SW) * 5), True), 'other')]),
+    year=f'Year {Y_SW:.1f}', res=(30, 35, '9,100 kt'))
+
+SWEEP_NEXT = f"""<div class="phone">{at_year((30, 35, '9,100 kt'), Y_SWN)}<div class="sheet">
+<div class="sh"><button class="backlink">‹ Pearl</button><span class="mono kind">REACH · PEARL</span></div>
+<h3 class="lead">Answer Pearl?</h3>
+<p class="whyline">They don’t know we exist. Beacon and Frost heard them first.</p>
+<div class="sec">WHAT WE COULD DO · ANY, OR NONE</div>
+{action('Keep listening', 'They never learn we heard. It keeps arriving while they send.', '<span class="gy">now</span>')}
+{action('Knock at Pearl, bare', 'Tells them someone heard, and where we are.', tstack(f'arrives in {d_p:.1f} Years', light_clock(d_p)))}
+{action('Knock with our charter', 'Adds our founding line. <span class="warnline">The mind would argue: we lean hidden.</span>', tstack(f'arrives in {d_p:.1f} Years', light_clock(d_p)))}
+{action('Look for their world', 'Our space telescope, on Pearl. Nothing sent.', tstack('8 Years', clock(8 * 5)))}
+{action('Tell Beacon', 'They heard it before us. Tells them we listen too.', tstack(f'arrives in {d_b:.1f} Years', light_clock(d_b)))}
+{action_('Broadcast to everyone', 'Needs the broadcast beacon: 4 Years. Every star in range hears us.', '<span class="vischip loud">Announces us</span>')}
+<p class="copy small">If a neighbor answers Pearl, it answers by narrow beam. We would never see it.</p>
+{TALK}
+</div></div>"""
+
+def reach_circle(w=358, h=182):
+    # Who could have answered Pearl in time: anyone inside the circle.
+    cx, cy, k = 96, 86, 10
+    s = [stipple(181, 40, w, h), f'<circle cx="{cx}" cy="{cy}" r="{fmt(R_ANS * k)}" fill="{OTHER}" fill-opacity=".07" stroke="{OTHER}" stroke-width="1.3" stroke-dasharray="5 3"></circle>']
+    s.append(f'<circle cx="{cx}" cy="{cy}" r="5" fill="{PAPER}" stroke="{OTHER}" stroke-width="1.5"></circle>' + text(cx, cy + 18, 'Pearl', 9.5, OTHER, 'middle', 600))
+    def put(hip, ang, name, col, sub):
+        r = math.dist(atlas(by_hip[hip]), PEARL) * k; a = math.radians(ang); x, y = cx + r * math.cos(a), cy + r * math.sin(a)
+        s.append(f'<circle cx="{fmt(x)}" cy="{fmt(y)}" r="3.5" fill="{col}"></circle>' + text(x + 8, y + 4, name, 9.5, col, 'start', 600) + text(x + 8, y + 15, sub, 8, MUTED))
+    put('2021', -128, 'Beacon', OTHER, f'{math.dist(atlas(by_hip["2021"]), PEARL):.1f} ly')
+    put('105858', 22, 'Frost', INK, f'{math.dist(atlas(by_hip["105858"]), PEARL):.1f} ly · too far')
+    put('99240', -14, 'Veyra', YOU, f'{d_p:.1f} ly · too far')
+    s.append(text(cx, cy + R_ANS * k + 14, f'within {R_ANS:.0f} ly: close enough in time', 8.5, OTHER, 'middle'))
+    return f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" font-family="IBM Plex Mono, monospace" role="img" aria-label="A circle of 7 light-years around Pearl: Beacon just inside, Frost and Veyra outside">{"".join(s)}</svg>'
+SWEEP_CHANGED = tab_screen('Report', 'REPORT', 'SIGNAL · CHANGED', f"""<button class="backlink inline">‹ All reports</button>
+<h3 class="lead">Pearl has been answered</h3>
+<div class="voice"><span class="mono">NEW IN PEARL’S BROADCAST · YEAR {Y_SWC:.0f}</span><p>“We have been answered. We are not alone.”</p></div>
+<div class="art">{reach_circle()}</div>
+<div class="sec">WHO COULD HAVE ANSWERED</div>
+{ledger([('The change', f'Left Pearl in Year {Y_CH_LEFT:.1f}, {Y_CH_LEFT - Y_P0:.0f} Years after the broadcast began'),
+         ('So the answer', f'Came from within {R_ANS:.0f} ly of Pearl'),
+         ('One we know', f'Beacon, if it answered within half a Year of hearing'),
+         ('Ones we don’t', f'{N_NEAR_PEARL} other stars that close. None has spoken to us.'),
+         ('Beacon, to us', 'Nothing about Pearl, in any message')])}
+<button class="primary">What now</button>""", at_year((30, 35, '9,600 kt'), Y_SWC))
+
 # ---------- Broadcasting: the permanent choice ----------
 # Year 520. The broadcast beacon is built. A knock goes to one star; a broadcast goes every way at once and carries its
 # own address. Every star of the region (50 ly around Sol, so up to 69.9 ly from Veyra) hears it by Year 590, and it
@@ -2746,9 +2874,10 @@ Y_BC = 520.0; Y_BM = 531.0
 HUD_BC = at_year((35, 40, '14,200 kt'), Y_BC)
 d_sol = math.dist(HOME, (0, 0, 0)); R_REGION = d_sol + 50
 HEARD = [  # (name, hip, what we know, tone)
-    ('Gliese 832', '106440', 'nothing seen there', ''), ('Ember', '108870', f'knows where we are since Year {Y_FLASH}', 'other'),
+    ('Ember', '108870', f'knows where we are since Year {Y_FLASH}', 'other'),
     ('Beacon', '2021', f'knows since Year {Y_FOUND:.1f} or earlier', 'other'), ('Lantern', '99461', 'never heard from us', 'other'),
-    ('Frost', '105858', f'knows since Year {440 - 2 * d_f:.0f} or earlier', 'other'), ('Twin', 'sol', 'oxygen world · never heard from us', 'other')]
+    ('Frost', '105858', f'knows since Year {440 - 2 * d_f:.0f} or earlier', 'other'), ('Pearl', '1599', 'broadcasts to everyone · never heard from us', 'other'),
+    ('Twin', 'sol', 'oxygen world · never heard from us', 'other')]
 def dist_to(hip): return d_sol if hip == 'sol' else math.dist(atlas(by_hip[hip]), HOME)
 def hear_row(name, hip, known, tone):
     d = dist_to(hip)
@@ -2785,7 +2914,7 @@ def hears_drawing():
     for name, hip, _, tone in HEARD:
         x = X(dist_to(hip)); col = OTHER if tone else INK
         s.append(f'<circle cx="{fmt(x)}" cy="{y}" r="2.6" fill="{PAPER}" stroke="{col}" stroke-width="1.2"></circle>')
-    s.append(text(X(d_sol), y + 14, 'Twin', 8.5, OTHER, 'middle', 600))
+    s.append(text(X(d_sol) + 4, y + 14, 'Twin', 8.5, OTHER, 'middle', 600) + text(X(dist_to('1599')) - 4, y + 14, 'Pearl', 8.5, OTHER, 'middle', 600))
     for ly in (10, 20, 40, R_REGION):
         s.append(text(X(ly), h - 4, f'Year {Y_BC + ly:.0f}', 8, MUTED, 'middle' if ly < R_REGION else 'end'))
     return f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" font-family="IBM Plex Mono, monospace" role="img" aria-label="Who hears the broadcast, placed by distance: the nearest known stars within 11 years, Twin at 20, every star of the region by Year 590">{"".join(s)}</svg>'
@@ -2821,7 +2950,7 @@ r_bm = Y_BM - Y_BC
 BC_MAP = frame(2, *neighbors(shell=(r_bm, f'our broadcast · {r_bm:.0f} ly')), panel=(f'SPREADING · {r_bm:.0f} LY OUT', f'YEAR {Y_BM:.0f}', [
     row('Our broadcast', f'{r_bm:.0f} of {R_REGION:.0f} ly · the whole region by Year {Y_BC + R_REGION:.0f}', tstack(f'{Y_BC + R_REGION - Y_BM:.0f} Years', clock((Y_BC + R_REGION - Y_BM) * 5), True), 'you', bar=round(r_bm / R_REGION * 100)),
     row('Heard it by now · 5 stars we know', 'Gliese 832, Ember, Beacon, Lantern, Frost', ''),
-    row('Next we know of · Twin', f'oxygen world · {d_sol:.1f} ly', tstack(f'{Y_BC + d_sol - Y_BM:.1f} Years', clock((Y_BC + d_sol - Y_BM) * 5), True), 'other', marker=True),
+    row('Next we know of · Pearl', f'broadcasts to everyone · {dist_to("1599"):.1f} ly', tstack(f'{Y_BC + dist_to("1599") - Y_BM:.1f} Years', clock((Y_BC + dist_to('1599') - Y_BM) * 5), True), 'other', marker=True),
     row('Earliest answer · from Ember', 'if they answer the moment it lands', tstack(f'Year {Y_BC + 2 * dist_to("108870"):.1f}', clock((Y_BC + 2 * dist_to('108870') - Y_BM) * 5), True))]),
     year=f'Year {Y_BM:.1f}', res=(45, 40, '14,600 kt'))
 
@@ -2846,7 +2975,7 @@ CHECKLIST = [
     ('Contact', [('Away: the notification', 'done'), ('The arrival, as a moment', 'done'), ('The knock arrives', 'done'), ('The signal in full: what it tells us', 'done'), ('Who sent it: the star card', 'done'),
                  ('The choice: knock back, broadcast, or stay dark', 'done'), ('Sent: the conversation and its timeline', 'done'),
                  ('The first reply arrives', 'done'), ('A message lands: their signature and words', 'done'), ('Sending: the reply leaves', 'done'), ('The conversation as the gulf between worlds', 'done'), ('Replying: intent, the mind’s version, approve', 'done'), ('Checking a claim: it holds, or it doesn’t', 'done'), ('What we know, both ways', 'done'), ('Their world, as we know it: a drawing that fills in', 'done'),
-                 ('We find them first: a clue confirmed', 'done'), ('A broadcast sweeps past', 'todo'), ('A visitor brakes into our system', 'todo'),
+                 ('We find them first: a clue confirmed', 'done'), ('A broadcast sweeps past', 'done'), ('A visitor brakes into our system', 'todo'),
                  ('A far mind met them first', 'done'), ('A meeting in person: how, where, and talking live', 'done'), ('Crossed knocks', 'todo'), ('The silent one: no answer, ever', 'todo')]),
     ('Stakes · later', [('The strike as first contact', 'later'), ('A launch flare seen toward us', 'later'), ('Wounded: the morning after', 'later'), ('Total loss and a new cohort', 'later')]),
 ]
@@ -3007,6 +3136,18 @@ SECTIONS = [
 ]
 
 SECTIONS += [
+    ('swept', 'Overheard', 'Contact · a broadcast sweeps past', f'Year {Y_SW:.0f}. Pearl, {d_p:.1f} ly away, is broadcasting: radio, the same strength every way, meant for no one in particular. It doesn’t know we exist, and nobody chose us. Our neighbors heard it too, some first. It is the one contact that begins with us knowing more than the sender. Answers to Pearl go by narrow beam, so we can’t overhear them, but Pearl’s broadcast can change when someone answers.',
+     f'<figure><figcaption><strong>1 · Pearl is speaking</strong><span>The arrival, as a moment. The front of its broadcast has passed Beacon and Frost, and now us.</span></figcaption>{SWEEP_LANDS}</figure>'
+     '<span class="pinch">listen ›</span>'
+     f'<figure><figcaption><strong>2 · The signal</strong><span>One cycle of it, drawn. What was measured, and why it isn’t meant for us.</span></figcaption>{SWEEP_SIGNAL}</figure>'
+     '<span class="pinch">what it says ›</span>'
+     f'<figure><figcaption><strong>3 · What it says</strong><span>Their voice first, then the parts. A broadcast has no reader in mind.</span></figcaption>{SWEEP_READ}</figure>'
+     '<span class="pinch">who else heard it ›</span>'
+     f'<figure><figcaption><strong>4 · Who else heard it</strong><span>Lines from Pearl: solid to worlds its broadcast has reached, dashed to those still waiting.</span></figcaption>{SWEEP_MAP}</figure>'
+     '<span class="pinch">decide ›</span>'
+     f'<figure><figcaption><strong>5 · Answer Pearl?</strong><span>Every next step, and what it reveals. Staying silent costs nothing they can see. Any, or none.</span></figcaption>{SWEEP_NEXT}</figure>'
+     f'<span class="pinch">Year {Y_SWC:.0f}, still listening ›</span>'
+     f'<figure><figcaption><strong>6 · It changes</strong><span>Pearl says it has been answered. We can’t hear the answer, but the timing says who could have sent it.</span></figcaption>{SWEEP_CHANGED}</figure>'),
     ('choose', 'Choosing', 'Before Year 0 · choosing a civilization', 'Three candidates from the generator, each a real star with an invented world and people, and the mind they wake as. All three start equal: the same kit, stocks and budgets. They differ in character and place. The player looks closer at one, names it, and accepts its founding line. Then it wakes.',
      f'<figure><figcaption><strong>1 · Three candidates</strong><span>Star, world, people, founding line and character, side by side. None is selected.</span></figcaption>{CHOOSE}</figure>'
      '<span class="pinch">tap Veyra ›</span>'
@@ -3053,7 +3194,7 @@ AREAS = [  # (page, area as named in CHECKLIST, one-line summary, section ids)
     ('report', 'Report', 'What comes back while you are away, and catching up after a long absence.', ['result', 'absence']),
     ('reach', 'Reach', 'Beyond Veyra: sending a probe, following it, what it finds, the kinds of probe, and broadcasting.', ['probe', 'flyby', 'probe-types', 'sentinel', 'broadcast']),
     ('mind', 'Mind', 'Standing orders: what the mind does while you are away, at home and far away.', ['orders']),
-    ('contact', 'Contact', 'First contact: the knock, the reply, checking what they told us, and the builders meeting our sentinel, and meeting Beacon’s emissary.', ['knock', 'reply', 'check', 'noticed', 'meeting']),
+    ('contact', 'Contact', 'First contact: the knock, the reply, checking what they told us, and the builders meeting our sentinel, overhearing Pearl, and meeting Beacon’s emissary.', ['knock', 'reply', 'check', 'swept', 'noticed', 'meeting']),
 ]
 assert sorted(sid for *_, ids in AREAS for sid in ids) == sorted(sid for sid, *_ in SECTIONS), 'every section belongs to exactly one page'
 def nav_pages(current):
