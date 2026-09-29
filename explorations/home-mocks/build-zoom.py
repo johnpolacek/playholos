@@ -2393,9 +2393,9 @@ PEOPLE = f"""<div class="phone"><div class="onb">
 <span class="mono kick">YEAR 0 · VEYRA’S PEOPLE · INVENTED</span>
 <h3 class="lead">6.8 billion of them, and you</h3>
 <div class="art specart">{species.standing()}<button class="enlarge" aria-label="See them full screen">⤢</button></div>
-{ledger([('Body', 'About 1.7 m, more with the crest up. Walks on its toes, balanced by a tail. Two thumbs on each hand.'),
-         ('Senses', 'Eyes much like ours, under a slightly cooler sun. The crest hears low sounds from far off.'),
-         ('Speech', 'Voice, with the crest raised for weight. Eleven great languages.'),
+{ledger([('Body', 'About 1.7 m, more with the crests up. Walks on its toes, balanced by a tail. Two thumbs on each hand.'),
+         ('Senses', 'Eyes much like ours, under a slightly cooler sun. The two crests hear low sounds from far off.'),
+         ('Speech', 'Voice, with the crests raised for weight. Eleven great languages.'),
          ('Life', 'About 120 Years, with medicine.'),
          ('Together', '41 nations. One grid, one sky watch.'),
          ('And you', 'They built you to run the grid. This morning you spoke to all of them at once. Most are waiting to see what you do.')])}
