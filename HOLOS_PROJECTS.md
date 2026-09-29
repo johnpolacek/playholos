@@ -315,7 +315,7 @@ Reach: touch other stars. Messages, probes, ships, and strikes.
 - **Uses:** energy 15% a year, compute 5% a year
 - **Needs:** nothing
 - **Effect:** Only the target can read it. It still tells them we exist.
-- **Can open:** Reply to {sender}, Tell {recipient} where {civilization} is
+- **Can open:** Reply to {sender}, Tell {recipient} where {civilization} is, Share a key with {civilization}
 
 **Broadcast beacon** · 4 Years · `00:20:00` · Grounded · loud
 
@@ -369,7 +369,7 @@ Reach: touch other stars. Messages, probes, ships, and strikes.
 - **Uses:** energy 25% a year, compute 20% a year, 50 Mt of matter at start
 - **Needs:** Flyby probe
 - **Effect:** Stops and stays. Its braking may show.
-- **Unlocks:** Lurker, Seed probe
+- **Unlocks:** Lurker, Seed probe, Share a key with {civilization}
 
 **Lurker** · 20 Years · `01:40:00` · Plausible · quiet
 
@@ -379,8 +379,27 @@ Reach: touch other stars. Messages, probes, ships, and strikes.
 - **Uses:** energy 20% a year, compute 15% a year, 40 Mt of matter at start
 - **Needs:** Sentinel probe
 - **Effect:** Nearly invisible. Sees less, from farther.
-- **Unlocks:** Sleeper, Spoofer
+- **Unlocks:** Close watcher, Line tap, Sleeper, Spoofer
 - **Can open:** Nudge a rock toward {planet}
+
+**Close watcher** · 16 Years · `01:20:00` · Plausible · quiet
+
+- **Why:** See what telescopes can’t: vaults, weapons, and which sites are fake.
+- **What:** Moves in from the outskirts to find vaults, count weapons, and tell decoys from real sites.
+- **Basis:** A working probe is warm among frozen comets, and shows from about 0.2 AU. The closer it goes, the likelier it is found.
+- **Uses:** energy 15% a year, compute 15% a year, 30 Mt of matter at start
+- **Needs:** Lurker
+- **Effect:** Its reports are light-time old, and its report beam points home.
+- **Unlocks:** Spotter
+
+**Line tap** · 12 Years · `01:00:00` · Plausible · quiet
+
+- **Why:** Hear what a rival says to someone else.
+- **What:** Sits inside someone’s message beam, where it starts or where it lands, and copies what passes.
+- **Basis:** A 10 m transmitter’s beam is still about 40,000 km wide at 1,000 AU.
+- **Uses:** energy 10% a year, compute 15% a year, 20 Mt of matter at start
+- **Needs:** Lurker
+- **Effect:** Reads everything until the line has a key it lacks. Then only who, when and how much.
 
 **Laser sail array** · 60 Years · `05:00:00` · Speculative · loud
 
@@ -447,7 +466,7 @@ Reach: touch other stars. Messages, probes, ships, and strikes.
 - **Uses:** energy 30% a year, compute 15% a year, 80 Mt of matter at start
 - **Needs:** Torch probe
 - **Effect:** A fifth of light speed hits a planet like a 2 km asteroid. An antimatter rocket reaches half; the star laser, nine tenths.
-- **Unlocks:** Decoys, Dead hand
+- **Unlocks:** Decoys, Spotter, Dead hand
 - **Can open:** Strike {target}, Test-fire at {moon}
 
 **Decoys** · 10 Years · `00:50:00` · Plausible · quiet
@@ -487,6 +506,15 @@ Reach: touch other stars. Messages, probes, ships, and strikes.
 - **Uses:** energy 10% a year, compute 10% a year, 10 Mt of matter at start
 - **Needs:** Lurker
 - **Effect:** Works on the unprepared. Once caught, the flash shows where the lurker is.
+
+**Spotter** · 16 Years · `01:20:00` · Speculative · quiet
+
+- **Why:** Hit what moves, and skip what’s fake.
+- **What:** A close watcher that guides an incoming strike with live positions.
+- **Basis:** The strike’s steering stage takes the spotter’s fixes in its last hours.
+- **Uses:** energy 15% a year, compute 20% a year, 20 Mt of matter at start
+- **Needs:** Close watcher + Heavy impactor
+- **Effect:** Beats wandering habitats and decoy sites.
 
 ### Tier 4 · the long works
 
@@ -659,11 +687,11 @@ Endure: keep existing. Spread out, remember, stay quiet, see danger coming, and 
 **Hunters** · 16 Years · `01:20:00` · Plausible · noticeable
 
 - **Why:** Kill what hides in your own system.
-- **What:** Fusion drones that chase and ram intruders in our own system.
+- **What:** Fusion drones that chase intruders in our own system, to ram them or take them intact.
 - **Basis:** A tonne at 100 km/s hits like a kiloton.
 - **Uses:** energy 20% a year, compute 20% a year, 30 Mt of matter at start
 - **Needs:** Fusion plant + Orbital foundry
-- **Effect:** Kills sleepers and spoofers once found. Posture: hunt on sight, watch, or hold fire.
+- **Effect:** A captured spy shows its home, orders and designs, unless it destroys itself first. Posture: hunt on sight, watch, or hold fire.
 
 **Sunshade** · 30 Years · `02:30:00` · Plausible · noticeable
 
@@ -850,6 +878,15 @@ These appear from results, and name their target. Braces mark where a real star,
 - **Needs:** Tight-beam transmitter or Broadcast beacon
 - **Appears:** Appears when we know where a civilization is, and someone else to tell.
 
+**Share a key with {civilization}** · Reach · 2 Years · `00:10:00` · Grounded
+
+- **Why:** Talk without being overheard.
+- **What:** Makes our line with them private. By tight beam, unless a tap sat in exactly the right place; by courier, certain.
+- **Basis:** A key used once is provably unbreakable. Carried in person, no one can copy it on the way.
+- **Uses:** energy 10% a year, compute 5% a year
+- **Needs:** Tight-beam transmitter or Sentinel probe
+- **Appears:** Appears when we talk with a civilization. After it, a tap learns only who, when and how much.
+
 **Test-fire at {moon}** · Reach · 4 Years · `00:20:00` · Plausible
 
 - **Why:** Show your teeth, so no one tests them.
@@ -879,4 +916,4 @@ These appear from results, and name their target. Braces mark where a real star,
 
 ## Counts
 
-68 catalog projects (14 know, 12 grow, 23 reach, 19 endure) and 17 discovery projects.
+71 catalog projects (14 know, 12 grow, 26 reach, 19 endure) and 18 discovery projects.

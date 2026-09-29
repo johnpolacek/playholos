@@ -62,7 +62,7 @@ Iain M. Banks's Culture books are an inspiration: a powerful Mind responsible fo
 - Other civilizations are central. Their motivations are unknown; cooperation, competition, isolation, intervention, and war emerge from behavior.
 - **Survival is the one shared purpose.** It is a floor, not a victory condition. Everything beyond it is self-defined. A human playtest found knowledge without consequence was not fun.
 - Conflict follows holos-game's stakes-design.md, except where [Conflict](#conflict) overrides it. Death is real. Defense is dispersal, shields and interception. Mercy comes from physics: kills are campaigns, attackers are blind afterward, shots are signed, and craters cannot be looted. Wounded is a played state. Total loss ends the run; the player rejoins a new cohort with knowledge reset.
-- No artificial protection or mandatory peaceful outcome. Weapons and defenses are set in [Conflict](#conflict); espionage is not designed.
+- No artificial protection or mandatory peaceful outcome. Weapons, defenses and espionage are set in [Conflict](#conflict).
 
 ## Time
 
@@ -189,9 +189,14 @@ Settled 2026-09-28. Every weapon and defense, with its needs and sample costs, i
 - **Readiness, not odds.** Each guarded line shows its pickets, its depots, and its warning at each speed, tested only against weapons this civilization can build. Anything faster reads Unknown. The mind reasons about a rival's weapons only when asked.
 - **The star laser.** A sheet of film 100,000 km wide beside a star turns sunlight into laser light, every patch firing in step, so the sheet is one lens. It needs a self-replicating factory, a laser sail array and a kilometer interferometer, not a solar swarm. Its beam arrives with its own light: no warning. Both modes ship in v1: the sweep heats a whole planet, and the needle puts 400 megatons a second on one site whose position is known twice the light time ahead. It is quiet when idle and loud when firing: the target knows who fired, and watchers see a new single-color line in the target star's light. The same sheet can push 1,000 tonnes to nine tenths of light speed in about a day. Defenses: depth, secrecy and decoys, wandering habitats, sunshades, being elsewhere, and a star laser of one's own.
 - **Outing is a weapon.** Telling others where someone hides needs only a transmitter. A broadcast outs the sender too; a tight beam, only to its recipient; a relay hides home. The recipient gets a lead, not proof. A quiet target can make the check fail, and a failed check makes the sender look like a liar.
-- **In-system forces.** Hunters ship in v1: fusion drones that ram intruders once they are found. The player sets a posture: hunt on sight, watch, or hold fire. Footholds, rock throwers and local lasers come later.
+- **In-system forces.** Hunters ship in v1: fusion drones that ram or capture intruders once they are found. The player sets a posture: hunt on sight, watch, or hold fire. Footholds, rock throwers and local lasers come later.
 - **Deterrence counts only what others have seen.** A test fire on one's own dead moon, an outpost shown on purpose, a star laser's brief paint across a rival's system, or a declaration. Hidden outposts are a hedge that deters no one.
 - **Spoofs can be caught.** A lurker can fake a launch flare from close by. Two telescopes far apart see the flash beside the star, not on it, and pickets did not see it first. A caught spoof shows where the lurker is.
+- **Espionage is presence.** Only something inside a system sees its vaults, its weapons, and which sites are fakes. Intelligence comes home at light speed, so it is always old, and every spy's report beam points home: a found spy is a return address. A working spy is warm among frozen comets but shows only from about 0.2 AU, so the closer it goes, the likelier it is found. A caught spy enters its target's record of the sender.
+- **The spy kit.** Close watchers find vaults, count weapons and tell decoys from real sites. Line taps sit inside a message beam, where it starts or where it lands. Spotters guide an incoming strike with live positions, which beats wandering habitats and decoys. Against them: the outskirts sweep, hunters, and keys. Sabotage comes later, with footholds.
+- **An overheard message can be read unless its line has a key the listener lacks.** A key sent by tight beam is private unless a tap sat in exactly the right place when it crossed, and no one can tell whether one did. A key carried in person is certain. Once a line has a key, a tap learns only who, when and how much.
+- **Hunters can capture a spy intact,** and learn its home, its orders and its owner's designs, unless its orders make it destroy itself first. Captured designs add rows to the readiness screen.
+- **A found spy is worth more alive.** Left in place, it can be shown decoys. Inviting a rival's observer in on purpose is the opposite: spying by consent, to prove peace.
 
 ## Open questions
 
@@ -200,5 +205,4 @@ Settled 2026-09-28. Every weapon and defense, with its needs and sample costs, i
 3. How far does an autonomous mind's authority reach, and how does it handle surprises? Standing orders set how it is instructed; in conflict they may authorize anything. Open: how a far mind interprets an order when what it sees does not match the order's words.
 4. How are claims, uncertainty, provenance, and information age shown to players?
 5. Why did no older civilizations expand through the galaxy first?
-6. Espionage: agents in another civilization's system, and sabotage.
-7. What do weapons and defenses cost? Their energy, compute, matter and build times are sample values.
+6. What do weapons and defenses cost? Their energy, compute, matter and build times are sample values.
