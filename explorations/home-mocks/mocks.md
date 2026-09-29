@@ -1161,6 +1161,66 @@ FAR AWAY · THE SENTINEL AT EMBER
 - If anything comes toward it, withdraw · outward, sail full open · ›
 - Never transmit toward Ember · reports go only home, as a narrow beam · ›
 
+## Mind · settings
+Year 452. The clock never stops, so the setting that matters most is what may reach you while it runs: 8 hours of sleep is 96 Years. Each kind of notice says what it would have sent during your last absence. Quiet hours hold everything except someone new, then send one notice in the morning. Theme and the tour replay live here too.
+
+#### 1 · Settings · What wakes you, tested on your last absence. Quiet hours, theme, and the tour.
+Veyra · Year 452.0
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [45%] · MATTER · 15,000 kt · COMPUTE · [50%]
+MIND · SETTINGS
+WAKE ME FOR
+Someone new speaks · a knock or broadcast from a world we haven’t heard · even in quiet hours · last time: Frost, 6:20 AM · [selected: Someone new speaks]
+Messages from those we know · last time: 2 from Beacon, held until morning · [selected: Messages from those we know]
+Our far minds · the sentinel, probes · last time: the sentinel stopped · [selected: Our far minds]
+Results in the Report · last time: 3 projects finished · [Results in the Report]
+QUIET HOURS
+11:00 PM to 7:00 AM · 96 Years pass. One notice at 7:00 with what happened. · [selected: 11:00 PM to 7:00 AM]
+THEME
+[selected: System] · [Light] · [Dark]
+[Replay the tour · 6 stops, on your map as it is now · ›]
+that night ›
+
+#### 2 · The morning after · Only someone new woke you. Everything else waited for one notice at 7:00.
+Tuesday, September 29 · 7:00
+HOLOS · VEYRA · 7:00 · 96 Years passed while you slept · Beacon wrote twice. The sentinel stopped at Ember. 3 things wait for you.
+HOLOS · VEYRA · 6:20 · Frost is knocking · A bare signal, aimed at us, from 10.8 light-years. Someone new: this one woke you.
+replay the tour ›
+
+#### 3 · Replaying the tour · The same six stops, on your map as it is now. The silence stop tells what has changed since Year 0.
+Veyra · Year 452.0
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [45%] · MATTER · 15,000 kt · COMPUTE · [50%]
+[drawing: Stars view; labels: Veyra, Ember, Epsilon Indi · 00:46:03, Lantern, Gliese 783 A · 00:51:20, Beacon, Beta Hydri, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760, 01:15:00, Twin · oxygen world, Sol · 01:39:37, 5 ly]
+[World] · [System] · [selected: Stars] · [Region] · [Galaxy]
+LEADS AND CONTACTS · 5 · YEAR 452
+- Beacon · in conversation · since Year 31 · ›
+- Ember · the builders · a sentinel watches them · ›
+- Frost · one knock · Year 440 · ›
+- Pearl · Lantern · Twin · heard, visited, and not yet · ›
+REPLAY · 2 OF 6
+
+### The silence, then and now
+At Year 0, about 1,200 stars and no one heard. Since then, five have spoken or been seen: Beacon, Ember, Frost, Pearl and Lantern.
+[Close] · [Next]
+theme: dark ›
+
+#### 4 · Dark · The same screen after choosing Dark. Drawings retint with the theme.
+Veyra · Year 452.0
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [45%] · MATTER · 15,000 kt · COMPUTE · [50%]
+MIND · SETTINGS
+WAKE ME FOR
+Someone new speaks · a knock or broadcast from a world we haven’t heard · even in quiet hours · last time: Frost, 6:20 AM · [selected: Someone new speaks]
+Messages from those we know · last time: 2 from Beacon, held until morning · [selected: Messages from those we know]
+Our far minds · the sentinel, probes · last time: the sentinel stopped · [selected: Our far minds]
+Results in the Report · last time: 3 projects finished · [Results in the Report]
+QUIET HOURS
+11:00 PM to 7:00 AM · 96 Years pass. One notice at 7:00 with what happened. · [selected: 11:00 PM to 7:00 AM]
+THEME
+[System] · [Light] · [selected: Dark]
+[Replay the tour · 6 stops, on your map as it is now · ›]
+
 # Holos · Contact
 
 ## First contact · the knock
@@ -2003,7 +2063,7 @@ Compose a message: intent, the mind’s version, approve
 Broadcast: the permanent choice
 Standing orders editor
 
-### Mind · 3 of 4
+### Mind · 4 of 4
 Charter and character
 Talk it through: the mind’s view, when asked
 Orders for while you are away

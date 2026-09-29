@@ -75,7 +75,9 @@ One shared clock advances continuously, including offline. **5 real minutes = 1 
 | 8 hours | 96 years |
 | 24 hours | 288 years |
 
-The session rhythm is **spinning plates:** several projects, investigations, missions, and relationships at once. Attention comes from decision points, surprising observations, competing resource demands, and autonomous minds asking for guidance. Players leave guidance for their absence, and AI acts on it. Notification rules are not specified.
+The session rhythm is **spinning plates:** several projects, investigations, missions, and relationships at once. Attention comes from decision points, surprising observations, competing resource demands, and autonomous minds asking for guidance. Players leave guidance for their absence, and AI acts on it.
+
+- **What wakes you (2026-09-28):** notices are chosen by kind, and each kind shows what it would have sent during the last absence. Quiet hours hold everything except a world speaking to us for the first time, then send one summary; 8 hours asleep is 96 Years.
 
 - **Standing orders (2026-09-28):** written like a message. The player says what they want; the mind shows exactly what it will do (when, if, do, otherwise) and which order it overrides, then tries it on the player's last absence. Orders for a far mind cross at light speed, can't be recalled, and are read in that mind's own moment. Until one lands, the far mind follows the orders it has.
 
@@ -163,6 +165,9 @@ Shown in the [mocks](explorations/home-mocks/index.html). Their sample civilizat
 - **Earth's character is random per cohort (2026-09-28),** like any other seat, so no one can plan around it.
 - **Physics notes.** Narrow beams cannot be overheard, except beside the sender or the target: anyone next to our probe learns which way its reports go, and so where we are. Broadcasts can be overheard anywhere. A coasting probe is nearly invisible; braking is bright. Ancient probes must be rare, since none has been found at Sol.
 - **A knock carries its own evidence.** A frequency tuned to the receiver's motion shows it was aimed. Its send date bounds when the sender found you: they saw light that left you at least one light-time before they sent.
+- **Timing is evidence too (2026-09-28).** An answer to someone else's broadcast goes by narrow beam and can't be overheard, but the broadcast can change to say it was answered; how soon the change arrives bounds how far away the answerer is. A message that lands before any reply could have is known to have crossed, not answered. Every launch and every braking is a flare someone may have logged.
+- **Visitors (2026-09-28):** a braking craft's path traces back to a cone of candidate stars, each with the year it would have left. Once it stops and reports home by narrow beam, anyone beside it sees exactly where the beam points.
+- **Silence (2026-09-28):** every message sets an earliest-reply date. When one passes empty, the Report says so. The conversation keeps each empty window and how long the silence has run, with the reasons that fit it and their odds. A standing order can wait on a silence for good.
 
 ## Open questions
 

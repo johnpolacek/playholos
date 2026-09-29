@@ -2353,6 +2353,9 @@ tour_css = tour_css.replace('</style>', '''.gthumb{display:block;width:56px;heig
 .say.them .mono{color:var(--other);font-style:normal}.say.them .chip{font-style:normal;margin-top:4px}
 .went{align-self:flex-end;margin-top:-5px;font-size:9.5px;letter-spacing:.06em;color:var(--muted)}
 .charter .sub{font-size:12px;color:var(--muted);line-height:1.4}
+.tg{flex-shrink:0;position:relative;width:40px;height:24px;border-radius:12px;background:var(--track)}.tg::after{content:'';position:absolute;left:3px;top:3px;width:18px;height:18px;border-radius:50%;background:var(--muted);box-shadow:0 1px 2px var(--shadow)}
+.tg.on{background:var(--ink)}.tg.on::after{left:19px;background:var(--paper)}.setrow{display:flex;align-items:center;gap:12px;min-height:50px;border-bottom:1px solid var(--rowline)}.setrow .rt{display:flex;flex-direction:column;gap:2px;flex-grow:1;font-size:14px}.setrow .sub{font-size:11px;color:var(--muted)}.setrow .tag{font-size:10.5px;color:var(--other)}
+.phone.dark{--page-ink2:#A9A59C;--paper:#121314;--ink:#E6E3DB;--muted:#9C988F;--faint:#34363A;--panel:#17181A;--track:#2A2B2E;--fill2:#BDB9AF;--rowline:#26282B;--you:#5BB8D6;--other:#E0A24A;--shadow:rgba(0,0,0,.5);color:var(--ink)}
 .hearrow{display:grid;grid-template-columns:9px 1fr auto;gap:10px;align-items:center;padding:6px 0;border-bottom:1px solid var(--rowline)}.hearrow .pt{font-size:13.5px}.hearrow .sub{font-size:11px;color:var(--muted)}
 </style>''')
 
@@ -3073,6 +3076,40 @@ SILENT_KNOWN = tab_screen('Reach', 'REACH', 'FROST', f"""<button class="backlink
 <div class="sec">NOT YET KNOWN</div>
 <p class="copy small">Whether anyone is still there. Why they knocked. Why they stopped.</p>""", HUD_SN)
 
+# ---------- Mind settings: what wakes you, quiet hours, theme, the tour ----------
+# Year 452, just after the long absence. The clock never stops, so the one setting that matters most is what may
+# reach you while it runs: 8 hours of sleep is 96 Years. Each kind of notice says what it would have sent last time.
+Y_SET = 452.0
+HUD_SET = at_year((45, 50, '15,000 kt'), Y_SET)
+def setrow(title, sub, on, tag=''):
+    return (f'<div class="setrow"><span class="rt"><span>{title}</span><span class="sub">{sub}</span>{f"<span class=tag>{tag}</span>" if tag else ""}</span>'
+            f'<button class="tg{" on" if on else ""}" role="switch" aria-checked="{str(on).lower()}" aria-label="{title}"></button></div>')
+def settings_body(theme):
+    seg = ''.join(f'<button class="{"on" if t == theme else ""}" aria-pressed="{str(t == theme).lower()}">{t}</button>' for t in ('System', 'Light', 'Dark'))
+    return f"""<div class="sec">WAKE ME FOR</div>
+{setrow('Someone new speaks', 'a knock or broadcast from a world we haven’t heard', True, 'even in quiet hours · last time: Frost, 6:20 AM')}
+{setrow('Messages from those we know', 'last time: 2 from Beacon, held until morning', True)}
+{setrow('Our far minds', 'the sentinel, probes · last time: the sentinel stopped', True)}
+{setrow('Results in the Report', 'last time: 3 projects finished', False)}
+<div class="sec">QUIET HOURS</div>
+{setrow('11:00 PM to 7:00 AM', '96 Years pass. One notice at 7:00 with what happened.', True)}
+<div class="sec">THEME</div>
+<div class="seg">{seg}</div>
+{row('Replay the tour', '6 stops, on your map as it is now', '›')}"""
+SETTINGS = tab_screen('Mind', 'MIND', 'SETTINGS', settings_body('System'), HUD_SET)
+SETTINGS_DARK = tab_screen('Mind', 'MIND', 'SETTINGS', settings_body('Dark'), HUD_SET).replace('<div class="phone">', '<div class="phone dark">', 1)
+
+LOCK_MORNING = f"""<div class="phone cine lock"><div class="locktime"><span>Tuesday, September 29</span><strong>7:00</strong></div>
+<div class="notif"><span class="app"><i></i>HOLOS · VEYRA<span>7:00</span></span><b>96 Years passed while you slept</b><span>Beacon wrote twice. The sentinel stopped at Ember. 3 things wait for you.</span></div>
+<div class="notif" style="margin-top:8px"><span class="app"><i></i>HOLOS · VEYRA<span>6:20</span></span><b>Frost is knocking</b><span>A bare signal, aimed at us, from {d_f:.1f} light-years. Someone new: this one woke you.</span></div></div>"""
+
+REPLAY_TOUR = tour(frame(2, *neighbors(), panel=('LEADS AND CONTACTS · 5', f'YEAR {Y_SET:.0f}', [
+    row('Beacon · in conversation', 'since Year 31', '›', 'other', marker=True), row('Ember · the builders', 'a sentinel watches them', '›', 'other', marker=True),
+    row('Frost · one knock', f'Year {440}', '›', 'other', marker=True), row('Pearl · Lantern · Twin', 'heard, visited, and not yet', '›', 'other')]),
+    year=f'Year {Y_SET:.1f}', res=(45, 50, '15,000 kt')), 2, 6, 'The silence, then and now',
+    'At Year 0, about 1,200 stars and no one heard. Since then, five have spoken or been seen: Beacon, Ember, Frost, Pearl and Lantern.',
+    (4, 106, 382, 396), 520).replace('TOUR · 2 OF 6', 'REPLAY · 2 OF 6').replace('>Skip tour<', '>Close<')
+
 # ---------- A broadcast sweeps past: Pearl speaks to everyone ----------
 # Year 290. Pearl (Zeta Tucanae), 13.0 ly away, began broadcasting in Year 277.0: radio, the same strength every way,
 # not tuned for anyone's motion. Beacon (6.7 ly from Pearl) heard it in 283.7, Frost in 286.3, us in 290. Any answer to
@@ -3298,7 +3335,7 @@ CHECKLIST = [
                ('A probe arrives and reports', 'done'), ('Probe types: how to get there, per target', 'done'), ('A sentinel in orbit: watching, and new orders', 'done'), ('Compose a message: intent, the mind’s version, approve', 'done'),
                ('Broadcast: the permanent choice', 'done'), ('Standing orders editor', 'done')]),
     ('Mind', [('Charter and character', 'done'), ('Talk it through: the mind’s view, when asked', 'done'), ('Orders for while you are away', 'done'),
-              ('Settings: theme, replay the tour, notifications', 'todo')]),
+              ('Settings: theme, replay the tour, notifications', 'done')]),
     ('Contact', [('Away: the notification', 'done'), ('The arrival, as a moment', 'done'), ('The knock arrives', 'done'), ('The signal in full: what it tells us', 'done'), ('Who sent it: the star card', 'done'),
                  ('The choice: knock back, broadcast, or stay dark', 'done'), ('Sent: the conversation and its timeline', 'done'),
                  ('The first reply arrives', 'done'), ('A message lands: their signature and words', 'done'), ('Sending: the reply leaves', 'done'), ('The conversation as the gulf between worlds', 'done'), ('Replying: intent, the mind’s version, approve', 'done'), ('Checking a claim: it holds, or it doesn’t', 'done'), ('What we know, both ways', 'done'), ('Their world, as we know it: a drawing that fills in', 'done'),
@@ -3463,6 +3500,14 @@ SECTIONS = [
 ]
 
 SECTIONS += [
+    ('settings', 'Settings', 'Mind · settings', f'Year {Y_SET:.0f}. The clock never stops, so the setting that matters most is what may reach you while it runs: 8 hours of sleep is 96 Years. Each kind of notice says what it would have sent during your last absence. Quiet hours hold everything except someone new, then send one notice in the morning. Theme and the tour replay live here too.',
+     f'<figure><figcaption><strong>1 · Settings</strong><span>What wakes you, tested on your last absence. Quiet hours, theme, and the tour.</span></figcaption>{SETTINGS}</figure>'
+     '<span class="pinch">that night ›</span>'
+     f'<figure><figcaption><strong>2 · The morning after</strong><span>Only someone new woke you. Everything else waited for one notice at 7:00.</span></figcaption>{LOCK_MORNING}</figure>'
+     '<span class="pinch">replay the tour ›</span>'
+     f'<figure><figcaption><strong>3 · Replaying the tour</strong><span>The same six stops, on your map as it is now. The silence stop tells what has changed since Year 0.</span></figcaption>{REPLAY_TOUR}</figure>'
+     '<span class="pinch">theme: dark ›</span>'
+     f'<figure><figcaption><strong>4 · Dark</strong><span>The same screen after choosing Dark. Drawings retint with the theme.</span></figcaption>{SETTINGS_DARK}</figure>'),
     ('silent', 'Silent', 'Contact · the silent one', f'Frost knocked once, in Year {Y_FK}, and never again. We answered, knocked with our charter, and broadcast; every window where a reply could have come passed empty. The screens have to show an absence: what didn’t arrive and when it could have, how long the silence has run, and what could explain it. By Year {Y_FNOW:.0f} it is {Y_FNOW - Y_FK:.0f} Years long.',
      f'<figure><figcaption><strong>1 · Nothing came</strong><span>Year {Y_F1R + .1:.1f}. The earliest reply to our answer was due, and didn’t arrive.</span></figcaption>{SILENT_FIRST}</figure>'
      f'<span class="pinch">Year {Y_FNOW:.0f} ›</span>'
@@ -3548,7 +3593,7 @@ AREAS = [  # (page, area as named in CHECKLIST, one-line summary, section ids)
     ('projects', 'Projects', 'Starting, running, finishing, queueing and cancelling projects.', ['projects', 'picker', 'upnext']),
     ('report', 'Report', 'What comes back while you are away, and catching up after a long absence.', ['result', 'absence']),
     ('reach', 'Reach', 'Beyond Veyra: sending a probe, following it, what it finds, the kinds of probe, and broadcasting.', ['probe', 'flyby', 'probe-types', 'sentinel', 'broadcast']),
-    ('mind', 'Mind', 'Standing orders: what the mind does while you are away, at home and far away.', ['orders']),
+    ('mind', 'Mind', 'Standing orders near and far, and settings: what wakes you, quiet hours, theme, the tour.', ['orders', 'settings']),
     ('contact', 'Contact', 'First contact: the knock, the reply, checking what they told us, and the builders meeting our sentinel, crossed knocks with Ember, a visitor from Lantern, overhearing Pearl, meeting Beacon’s emissary, and Frost’s silence.', ['knock', 'reply', 'check', 'visitor', 'swept', 'noticed', 'crossed', 'meeting', 'silent']),
 ]
 assert sorted(sid for *_, ids in AREAS for sid in ids) == sorted(sid for sid, *_ in SECTIONS), 'every section belongs to exactly one page'
