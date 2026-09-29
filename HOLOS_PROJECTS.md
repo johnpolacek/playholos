@@ -64,12 +64,12 @@ Know: learn what is out there, and answer the clues.
 **Deep-field receiver** · 12 Years · `01:00:00` · Grounded · quiet
 
 - **Why:** Hear civilizations quieter than you. Without it, the sky stays silent.
-- **What:** A radio array far beyond the one we start with. Quiet neighbors stay hidden until you have it.
-- **Basis:** Sensitivity grows with collecting area; this is many times the Square Kilometre Array.
+- **What:** A radio array ten times the Square Kilometre Array. It can hear a neighbor’s everyday radio out to about 20 light-years, one star at a time.
+- **Basis:** Sensitivity grows with collecting area: 10 km² of dishes. The SKA could hear Earth’s cell networks (about 4 GW) to 4 ly in an hour (Sheikh et al. 2025); every seat leaks about a hundredth of that by Year 0. Staring longer is untested past about 100 hours.
 - **Uses:** energy 20% a year, compute 20% a year, 300 kt of matter at start
 - **Needs:** nothing
-- **Effect:** Lowers the detection floor for radio.
-- **Unlocks:** Pulsar timing array, Early warning array, Outskirts sweep
+- **Effect:** Lowers the detection floor for radio. Hears present-day leakage to about 20 ly.
+- **Unlocks:** Pulsar timing array, Far-side array, Early warning array, Outskirts sweep
 - **Can open:** Listen to {star}
 
 **Planet survey** · 14 Years · `01:10:00` · Grounded · quiet
@@ -155,11 +155,21 @@ Know: learn what is out there, and answer the clues.
 
 - **Why:** The sharpest view you can get of one chosen world.
 - **What:** Flies a telescope to where our star bends light like a lens. Sees one planet in detail.
-- **Basis:** Gravitational lensing by a star; the focal line begins beyond about 550 AU for a Sun-like star (Turyshev and colleagues).
+- **Basis:** Gravitational lensing by a star; the focal line begins beyond about 550 AU for a Sun-like star (Turyshev and colleagues). It cannot hear radio leakage: the corona defocuses anything below about 120 GHz (Hippke 2017).
 - **Uses:** energy 30% a year, compute 25% a year, 40 Mt of matter at start
 - **Needs:** Infrared telescope + Launcher
 - **Effect:** One target at a time; retargeting takes decades.
 - **Can open:** Image {planet}
+
+**Far-side array** · 30 Years · `02:30:00` · Plausible · quiet
+
+- **Why:** Hear anyone in the region, not only the nearest.
+- **What:** Radio dishes across a thousand square kilometers of a moon’s far side, shielded from our own noise. Hears a world’s everyday radio anywhere in the region, one star at a time.
+- **Basis:** Lunar far-side radio arrays such as the FARSIDE concept. A hundred times the deep-field receiver’s area is ten times its range.
+- **Uses:** energy 20% a year, compute 40% a year, 40 Mt of matter at start
+- **Needs:** Deep-field receiver + Self-replicating factory
+- **Effect:** Hears present-day leakage to about 200 ly: the whole region.
+- **Can open:** Listen to {star}
 
 ### Tier 4 · star-scale works
 
@@ -278,7 +288,7 @@ Grow: more energy, matter and compute every year, so everything goes faster.
 - **Uses:** energy 30% a year, compute 30% a year, 60 Mt of matter at start
 - **Needs:** Orbital foundry + Cold compute annex
 - **Effect:** Matter income doubles about every Year, as fast as physics allows, unless you slow it. Each doubling adds heat others can see.
-- **Unlocks:** Kilometer interferometer, Solar swarm, Seed probe, Seedship, Star laser
+- **Unlocks:** Far-side array, Kilometer interferometer, Solar swarm, Seed probe, Seedship, Star laser
 
 **Solar swarm** · 30 Years · `02:30:00` · Speculative · loud
 
@@ -800,14 +810,14 @@ These appear from results, and name their target. Braces mark where a real star,
 - **Needs:** Infrared telescope
 - **Appears:** Appears when a glow looks like companions.
 
-**Listen to {star}** · Know · 12 Years · `01:00:00` · Grounded
+**Listen to {star}** · Know · 4 Years · `00:20:00` · Grounded
 
-- **Why:** Your best chance to hear a quiet neighbor.
-- **What:** Points every receiver at one star for years.
-- **Basis:** Targeted radio and optical SETI.
-- **Uses:** energy 15% a year, compute 20% a year
-- **Needs:** Deep-field receiver
-- **Appears:** Appears when heat or light at a star is unexplained.
+- **Why:** Hear a neighbor’s everyday radio: where they are, and that they were.
+- **What:** Points the receiver at one star through many of its planet’s days, for leakage and anything aimed. Leakage shows where they are, how long their day is and where their transmitters sit, as of when the light left. Never what they are now.
+- **Basis:** Targeted SETI. Leakage rises and falls as a planet turns its crowded coasts toward us (Saide et al. 2023).
+- **Uses:** energy 10% a year, compute 20% a year
+- **Needs:** Deep-field receiver or Far-side array
+- **Appears:** Opens for any star within about 20 ly once the deep-field receiver is built, and for any star in the region with the far-side array. A clue puts its star first.
 
 **Watch {star} for flashes** · Know · 6 Years · `00:30:00` · Grounded
 
@@ -928,4 +938,4 @@ These appear from results, and name their target. Braces mark where a real star,
 
 ## Counts
 
-71 catalog projects (14 know, 12 grow, 26 reach, 19 endure) and 19 discovery projects.
+72 catalog projects (15 know, 12 grow, 26 reach, 19 endure) and 19 discovery projects.

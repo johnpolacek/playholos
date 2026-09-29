@@ -1254,6 +1254,22 @@ RESULT = tab_screen('Report', 'REPORT', 'RESULT', f"""<button class="backlink in
 <div class="sec">NOW OPEN</div>
 {discovery_card(mc, 'the transit watch')}""", HUD44)
 
+def leak_day():
+    # Twin's radio over one of its days, folded: it rises as each crowded coast turns toward us.
+    w, h, x0, x1, base = 358, 150, 34, 346, 118
+    s = [f'<line x1="{x0}" y1="18" x2="{x0}" y2="{base}" stroke="{INK}" stroke-width=".8"></line><line x1="{x0}" y1="{base}" x2="{x1}" y2="{base}" stroke="{INK}" stroke-width=".8"></line>',
+         text(x0 + 4, 24, 'radio from Twin', 9), text(x0, base + 16, '0 h', 9), text(x1, base + 16, '23.9 h', 9, MUTED, 'end'),
+         text((x0 + x1) / 2, base + 16, 'one day at Twin', 9, OTHER, 'middle')]
+    peaks = [(.13, 58, .05), (.47, 40, .07), (.78, 50, .06)]   # three crowded coasts
+    rng = random.Random(11); pts = []
+    for i in range(0, 400):
+        t = i / 399; y = 8 + sum(a * math.exp(-((t - c) / wd) ** 2) for c, a, wd in peaks) + (rng.random() - .5) * 5
+        pts.append(f'{fmt(x0 + t * (x1 - x0))},{fmt(base - y)}')
+    s.append(f'<polyline points="{" ".join(pts)}" fill="none" stroke="{OTHER}" stroke-width="1.1"></polyline>')
+    for c, a, _ in peaks:
+        s.append(f'<line x1="{fmt(x0 + c * (x1 - x0))}" y1="{fmt(base - a - 12)}" x2="{fmt(x0 + c * (x1 - x0))}" y2="{fmt(base - a - 20)}" stroke="{OTHER}" stroke-width=".8"></line>')
+    s.append(text(x0 + .13 * (x1 - x0) + 12, base - 58, 'a crowded coast', 8.5, OTHER))
+    return f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" font-family="IBM Plex Mono, monospace" role="img" aria-label="Radio from Twin over one of its days: three rises as crowded coasts turn toward us">{"".join(s)}</svg>'
 def new_card_in_picker():
     p = mc
     return (f'<button class="pcard fresh"><span class="thumb">{ICONS["transit"]}</span><span class="pt"><span class="newtag">New · from the transit watch</span><b>{p["name"]}</b><span class="sub">{p["why"]}</span>'
@@ -3697,7 +3713,7 @@ CHECKLIST = [
                   ('A locked project and what it needs', 'done'), ('Not enough energy or compute', 'done'),
                   ('A project finishes, seen in Projects', 'done'), ('Queue the next project for while you are away', 'done'),
                   ('Cancel a project', 'done'), ('Budget drilldown: real units behind each share', 'done')]),
-    ('Report', [('A new result, and the result in full', 'done'), ('Back after a long absence', 'done'), ('Replaying an absence on the map', 'done'), ('Nothing new yet', 'done')]),
+    ('Report', [('A new result, and the result in full', 'done'), ('Leakage heard: what overhearing tells', 'done'), ('Back after a long absence', 'done'), ('Replaying an absence on the map', 'done'), ('Nothing new yet', 'done')]),
     ('Reach', [('Empty, with standing orders', 'done'), ('Launch a probe: target, arrival and report times', 'done'), ('A probe in flight', 'done'),
                ('A probe arrives and reports', 'done'), ('Probe types: how to get there, per target', 'done'), ('A sentinel in orbit: watching, and new orders', 'done'), ('Compose a message: intent, the mind’s version, approve', 'done'),
                ('Broadcast: the permanent choice', 'done'), ('Standing orders editor', 'done')]),
@@ -3733,6 +3749,18 @@ LOFI = {'#F3F1EA': 'var(--paper)', '#1D1D1B': 'var(--ink)', '#6B6860': 'var(--mu
         '#EBE8DF': 'var(--panel)', '#DCD8CE': 'var(--rowline)', '#8F8B82': 'var(--dot)', '#1F7A96': 'var(--you)', '#A8620F': 'var(--other)'}
 lofi = (here / 'lofi.html').read_text().split('-->', 1)[1]
 lofi = re.sub(r'style="([^"]*)"', lambda m: 'style="' + re.sub('|'.join(LOFI), lambda c: LOFI[c.group(0)], m.group(1)) + '"', lofi)
+
+Y_HEARD = 16.4
+HEARD = tab_screen('Report', 'REPORT', 'RESULT', f"""<button class="backlink inline">‹ All reports</button>
+<div class="art">{leak_day()}</div>
+<h3 class="lead">Someone was talking at Twin</h3>
+<p class="copy small">Sol · listen to Twin · finished Year {Y_HEARD}</p>
+<p class="copy">Not aimed at us: the everyday radio of a whole world, rising and falling as it turns. It comes from the oxygen world.</p>
+{ledger([('Where', 'The oxygen world, 1 AU from its star. Now pinned exactly.'), ('Their day', '23.9 hours. Three crowded coasts turn toward us each day.'),
+         ('As of', 'Light that left 19.9 Years ago.'), ('Can’t say', 'Whether they are still there, what they are now, or whether they have heard us.')])}
+<div class="sec">A CIVILIZATION AT TWIN · BEFORE → NOW</div>
+{odds('Someone was there', 20, 100, ' · seen')}
+<div class="twobtn"><button class="primary ghost">Keep listening</button><button class="primary">What now?</button></div>""", at_year((35, 40, '1,310 kt'), Y_HEARD))
 
 SECTIONS = [
     ('zoom', 'Zoom levels', 'Home · five zoom levels', 'One screen, pinched outward: the map changes scale and the panel below follows it. Star positions are real, from HYG and the Gaia census; Veyra, its planets and the game state are sample data. The sample is Year 50, just after the orbital foundry started.', figures),
@@ -3800,6 +3828,8 @@ SECTIONS = [
      f'<figure><figcaption><strong>3 · A new project</strong><span>The discovery project is waiting at the top of Know.</span></figcaption>{PICKER_NEW}</figure>'
      '<span class="pinch">back to Home ›</span>'
      f'<figure><figcaption><strong>4 · Home, after</strong><span>The Lantern marker fills in and carries what is now known.</span></figcaption>{HOME_AFTER}</figure>'),
+    ('heard', 'Heard', 'Report · leakage heard at Twin', f'Year {Y_HEARD}. The deep-field receiver listened to Twin for four Years and heard the oxygen world’s everyday radio: not aimed at anyone, rising and falling as the planet turns. It pins where they are and how long their day is, as of light that left 19.9 Years ago, and says nothing about now. Overhearing is a first contact: presence is certain, as of the light’s age.',
+     f'<figure><figcaption><strong>1 · Heard</strong><span>One day at Twin, folded from four Years of listening. What leakage tells, and what it can’t.</span></figcaption>{HEARD}</figure>'),
     ('absence', 'Away', 'Report · coming back after a long absence', f'Nine hours away is 108 Years. The Report opens on what matters: how long it was, the big things, what the mind did under your standing orders, and what is waiting for you. The map can replay it all in a minute. When nothing is new, the Report shows what is already on its way, soonest first.',
      f'<figure><figcaption><strong>1 · Welcome back</strong><span>108 Years on one strip. The big things first, then what the mind did for you, then what waits.</span></figcaption>{WELCOME}</figure>'
      '<span class="pinch">replay on the map ›</span>'
@@ -3997,7 +4027,7 @@ AREAS = [  # (page, area as named in CHECKLIST, one-line summary, section ids)
     ('onboarding', 'Onboarding', 'Choosing a civilization, waking on it, what you inherit, and the guided tour.', ['choose', 'waking', 'tour']),
     ('home', 'Home', 'The map at five zoom levels, star cards and clues, projects in place.', ['zoom', 'local-group', 'clues', 'map']),
     ('projects', 'Projects', 'Starting, running, finishing, queueing and cancelling projects, and the real units behind each share.', ['projects', 'picker', 'upnext', 'budgets']),
-    ('report', 'Report', 'What comes back while you are away, and catching up after a long absence.', ['result', 'absence']),
+    ('report', 'Report', 'What comes back while you are away, and catching up after a long absence.', ['result', 'heard', 'absence']),
     ('reach', 'Reach', 'Beyond Veyra: sending a probe, following it, what it finds, the kinds of probe, and broadcasting.', ['probe', 'flyby', 'probe-types', 'sentinel', 'broadcast']),
     ('mind', 'Mind', 'Standing orders near and far, and settings: what wakes you, quiet hours, theme, the tour.', ['orders', 'settings']),
     ('stakes', 'Stakes', 'What keeps us safe, what a strike would cost and reveal, and orders for danger. Peace is a way to play.', ['readiness', 'strike', 'danger-orders', 'struck', 'lost']),

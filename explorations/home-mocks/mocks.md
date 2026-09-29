@@ -660,7 +660,7 @@ ENERGY · [65%] · MATTER · 1,720 kt · COMPUTE · [100%]
 [drawing: Deep-field receiver]
 
 ### Listen to Ember
-Your best chance to hear a quiet neighbor.
+Hear a neighbor’s everyday radio: where they are, and that they were.
 USES EACH YEAR · IN USE + THIS
 Energy · [52.0%] · [12.0%] · 80%
 Compute · [80.0%] · [0.0%] · [16.0%] · 120%
@@ -685,7 +685,7 @@ Done · Year 18.4 · Infrared telescope · It can now tell dust from companions.
 OPENED · 4 NEW PROJECTS
 Map the dust at Ember · Rings in the dust can show where hidden planets are. · 10 Years · 00:50:00
 Resolve the companions of Ember · Rule companions in or out as the source of a glow. · 14 Years · 01:10:00
-Listen to Ember · Your best chance to hear a quiet neighbor. · 12 Years · 01:00:00
+Listen to Ember · Hear a neighbor’s everyday radio: where they are, and that they were. · 4 Years · 00:20:00
 Waste-heat survey · Checks every nearby star at once for signs of big engineering. · 16 Years · 01:20:00
 EACH YEAR YOU CAN SPEND · 2 STILL RUNNING
 Energy · [30%] · 70% free
@@ -828,6 +828,25 @@ CLUES · 3 · YEAR 4.4
 - New · Regular dimming · Lantern · dust 55 · ringed planet 30 · something built 15 · ›
 - New warm glow · Ember · infrared telescope under way · 14 Years · 01:10:00
 - Oxygen world · Twin · not yet studied · light takes 01:39:37 · ›
+
+## Report · leakage heard at Twin
+Year 16.4. The deep-field receiver listened to Twin for four Years and heard the oxygen world’s everyday radio: not aimed at anyone, rising and falling as the planet turns. It pins where they are and how long their day is, as of light that left 19.9 Years ago, and says nothing about now. Overhearing is a first contact: presence is certain, as of the light’s age.
+
+#### 1 · Heard · One day at Twin, folded from four Years of listening. What leakage tells, and what it can’t.
+Veyra · Year 16.4
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [35%] · MATTER · 1,310 kt · COMPUTE · [40%]
+REPORT · RESULT
+[‹ All reports]
+[drawing: Radio from Twin over one of its days: three rises as crowded coasts turn toward us; labels: radio from Twin, 0 h, 23.9 h, one day at Twin, a crowded coast]
+
+### Someone was talking at Twin
+Sol · listen to Twin · finished Year 16.4
+Not aimed at us: the everyday radio of a whole world, rising and falling as it turns. It comes from the oxygen world.
+Where · The oxygen world, 1 AU from its star. Now pinned exactly. · Their day · 23.9 hours. Three crowded coasts turn toward us each day. · As of · Light that left 19.9 Years ago. · Can’t say · Whether they are still there, what they are now, or whether they have heard us.
+A CIVILIZATION AT TWIN · BEFORE → NOW
+Someone was there · [20%] · [100%] · 20 → 100 · seen
+[Keep listening] · [What now?]
 
 ## Report · coming back after a long absence
 Nine hours away is 108 Years. The Report opens on what matters: how long it was, the big things, what the mind did under your standing orders, and what is waiting for you. The map can replay it all in a minute. When nothing is new, the Report shows what is already on its way, soonest first.
@@ -2331,8 +2350,9 @@ Queue the next project for while you are away
 Cancel a project
 Budget drilldown: real units behind each share
 
-### Report · 4 of 4
+### Report · 5 of 5
 A new result, and the result in full
+Leakage heard: what overhearing tells
 Back after a long absence
 Replaying an absence on the map
 Nothing new yet
