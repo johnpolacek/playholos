@@ -2267,6 +2267,7 @@ NOTHING_NEW = tab_screen('Report', 'REPORT', 'NOTHING NEW', f"""<div class="empt
 {coming('The sentinel’s next report', 'from Ember, once a Year', '1 Year', '00:05:00')}
 {coming('Deep flash watch finishes', 'a project', '3.7 Years', '00:18:30')}
 {coming('Their emissary’s earliest answer', 'our answer of Year 450 passes it on its way', f'{Y_EM_REPLY - Y_NN:.1f} Years', clock((Y_EM_REPLY - Y_NN) * 5))}
+{coming('Frost’s earliest reply', 'to our answer of Year 448.5', f'{448.5 + 2 * d_f - Y_NN:.1f} Years', clock((448.5 + 2 * d_f - Y_NN) * 5))}
 {coming('Beacon’s earliest reply', 'to our answer of Year 450', f'{2 * d_b - 2:.1f} Years', clock((2 * d_b - 2) * 5))}
 {coming('The meeting with Beacon', 'the date we both agreed to', f'{500 - Y_NN:.0f} Years', clock((500 - Y_NN) * 5))}
 <div class="sec">LAST NEWS</div>
@@ -2977,6 +2978,101 @@ CROSS_GULF = tab_screen('Reach', 'REACH', 'EMBER', f"""<button class="backlink i
 <div class="sec">WHAT WE KNOW OF THEM</div>
 {row('Their band can aim Ember’s light', f'at our sentinel, then at us, {Y_EK - Y_FLASH:.1f} Years apart', '›', 'other', marker=True)}""", at_year((25, 30, '12,100 kt'), Y_ECHO))
 
+# ---------- The silent one: Frost knocked once, and never again ----------
+# Frost (Gamma Pavonis) knocked bare in Year 429.2, having found us by 418.4. We answered at 448.5, knocked with our
+# charter at 471, and our broadcast reached them in 530.8. Every earliest reply came and went empty. By Year 560 the
+# silence is 131 Years long. Silence isn't an answer: we only know what didn't arrive, and every reason fits it.
+Y_FK = round(440 - d_f, 1); Y_F1, Y_F2, Y_FNOW = 448.5, 471.0, 560.0; Y_FBC = 520.0   # our broadcast
+Y_F1R, Y_F2R, Y_FBR = round(Y_F1 + 2 * d_f, 1), round(Y_F2 + 2 * d_f, 1), round(Y_FBC + 2 * d_f, 1)
+HUD_S1 = at_year((25, 30, '12,300 kt'), round(Y_F1R + .1, 1)); HUD_SN = at_year((40, 45, '15,800 kt'), Y_FNOW)
+
+FROST_EMPTY = (f'<svg width="150" height="70" viewBox="0 0 150 70" aria-hidden="true"><circle cx="16" cy="40" r="5" fill="{YOU}"></circle>'
+               f'<line x1="24" y1="40" x2="124" y2="40" stroke="{INK}" stroke-width=".8" stroke-dasharray="2 4"></line>'
+               f'<circle cx="74" cy="40" r="11" fill="none" stroke="{OTHER}" stroke-width="1.1" stroke-dasharray="3 3"></circle>'
+               f'<text x="74" y="44" font-size="11" fill="{OTHER}" text-anchor="middle" font-family="IBM Plex Mono, monospace">?</text>'
+               f'<circle cx="134" cy="40" r="6" fill="{PAPER}" stroke="{INK}" stroke-width="1.3"></circle></svg>')
+SILENT_FIRST = tab_screen('Report', 'REPORT', 'NOTHING FROM FROST', f"""<div class="empty">{FROST_EMPTY}
+<strong>Nothing from Frost</strong><span>The earliest reply to our answer would have reached us in Year {Y_F1R}. Nothing came.</span></div>
+<div class="sec">THE EXCHANGE SO FAR</div>
+{ent('them', Y_FK, 'Frost knocked', 'Bare, aimed at us.')}
+{gap(f'{d_f:.1f} Years in flight. We were away; the mind held it.')}
+{ent('us', Y_F1, 'We knocked back', 'Bare.', f'<span class="fly mono">landed Year {Y_F1 + d_f:.1f}</span>')}
+{gap(f'Earliest reply: Year {Y_F1R}. Nothing.')}
+<p class="copy small">We only know what didn’t arrive. A reply could still come, at any time.</p>
+{row('Keep listening for Frost', 'the sky watch hears it whenever it comes', '›')}""", HUD_S1)
+
+def silence_strip(w=358, h=62):
+    x0, x1, y, Y0, Y1 = 10, w - 10, 26, 425, 565
+    X = lambda yr: x0 + (yr - Y0) / (Y1 - Y0) * (x1 - x0)
+    s = [f'<line x1="{x0}" y1="{y}" x2="{x1}" y2="{y}" stroke="{INK}" stroke-width=".8" opacity=".6"></line>',
+         f'<rect x="{fmt(X(Y_FK))}" y="{y - 3}" width="{fmt(X(Y_FNOW) - X(Y_FK))}" height="6" fill="url(#hatch)" opacity=".35"></rect>']
+    s.append(f'<line x1="{fmt(X(Y_FK))}" y1="{y - 12}" x2="{fmt(X(Y_FK))}" y2="{y + 12}" stroke="{OTHER}" stroke-width="2.2"></line>' + text(X(Y_FK), y - 16, 'their knock', 8, OTHER, 'start', 600))
+    for yr in (Y_F1, Y_F2, Y_FBC):
+        s.append(f'<line x1="{fmt(X(yr))}" y1="{y - 7}" x2="{fmt(X(yr))}" y2="{y + 7}" stroke="{YOU}" stroke-width="1.8"></line>')
+    for yr in (Y_F1R, Y_F2R, Y_FBR):
+        s.append(f'<circle cx="{fmt(X(yr))}" cy="{y}" r="5" fill="{PAPER}" stroke="{OTHER}" stroke-width="1.1" stroke-dasharray="2 2"></circle>')
+    s.append(f'<circle cx="{fmt(X(Y_FNOW))}" cy="{y}" r="4" fill="{PAPER}" stroke="{INK}" stroke-width="1.5"></circle>' + text(X(Y_FNOW), y - 12, 'now', 8, INK, 'middle'))
+    s.append(text(x0, h - 14, f'Year {Y0}', 8, MUTED) + text(x1, h - 14, f'Year {Y1}', 8, MUTED, 'end'))
+    lx = 64
+    for mark, lab in (('you', 'we spoke'), ('empty', 'a reply could have come')):
+        s.append((f'<line x1="{lx}" y1="{h - 20}" x2="{lx}" y2="{h - 11}" stroke="{YOU}" stroke-width="1.8"></line>' if mark == 'you'
+                  else f'<circle cx="{lx}" cy="{h - 15}" r="4" fill="{PAPER}" stroke="{OTHER}" stroke-width="1" stroke-dasharray="2 2"></circle>') + text(lx + 8, h - 12, lab, 8, MUTED))
+        lx += 22 + len(lab) * 5.2
+    return f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" font-family="IBM Plex Mono, monospace" role="img" aria-label="Frost’s one knock in Year 429, our three messages after it, and three empty windows where a reply could have come">{"".join(s)}</svg>'
+SILENT_LONG = tab_screen('Reach', 'REACH', 'FROST', f"""<button class="backlink inline">‹ Conversations</button>
+<div class="awayhead"><h3>Silent for {Y_FNOW - Y_FK:.0f} Years</h3><span class="sub">Since their only knock · <span class="rtime">{clock((Y_FNOW - Y_FK) * 5)}</span> of real time</span></div>
+<div class="strip">{silence_strip()}</div>
+<div class="sec">THE EXCHANGE</div>
+{ent('them', Y_FK, 'Frost knocked', f'Bare, aimed at us. They found us by Year {Y_FK - d_f:.0f}.')}
+{ent('us', Y_F1, 'We knocked back', 'Bare.')}
+{gap(f'Earliest reply, Year {Y_F1R}: nothing')}
+{ent('us', Y_F2, 'We knocked with our charter', '“Keep the lights on. Look before we speak.”')}
+{gap(f'Earliest reply, Year {Y_F2R}: nothing')}
+{ent('us', Y_FBC, 'Our broadcast', f'Reached them in Year {Y_FBC + d_f:.1f}.')}
+{gap(f'Earliest reply, Year {Y_FBR}: nothing')}
+{row('If Frost ever speaks, wake me', f'a standing order · waiting since Year {Y_F2:.0f}', '›')}""", HUD_SN)
+
+SILENT_WHY = f"""<div class="phone">{HUD_SN}<div class="sheet">
+<div class="sh"><button class="backlink">‹ Frost</button><span class="mono kind">REACH · FROST</span></div>
+<h3 class="lead">Why the silence?</h3>
+<p class="whyline">We know only what didn’t arrive. Every reason below fits it.</p>
+<div class="sec">WHAT IT COULD BE · ODDS</div>
+<div class="oddswide">{odds_now('They heard, and chose silence', 40)}{odds_now('Gone, or changed past answering', 25)}{odds_now('An automatic knock, no one home', 20)}{odds_now('Taking their time', 10)}{odds_now('Too faint for our receivers', 5)}</div>
+<p class="copy small">Beacon heard the same: one knock from Frost, then nothing, as its emissary told us in Year 500. Frost’s star shows no change we can see.</p>
+<div class="sec">WHAT WE COULD DO · ANY, OR NONE</div>
+{action('Look closer', 'A waste-heat survey on Frost. Nothing sent.', tstack('20 Years', clock(20 * 5)))}
+{action('Send a flyby probe', f'It passes Frost and reports home in Year {Y_FNOW + 12 + 10 * d_f + d_f:.0f}.', tstack(f'{12 + 11 * d_f:.0f} Years', clock((12 + 11 * d_f) * 5)))}
+{action('Knock again', 'Each knock says we are still here.', tstack(f'arrives in {d_f:.1f} Years', light_clock(d_f)))}
+{action('Stop, and keep the order', 'If Frost ever speaks, the mind wakes you.', '<span class="gy">now</span>')}
+{TALK}
+</div></div>"""
+
+def frost_portrait():
+    w, h, cx, cy, k, tilt = 358, 242, 179, 138, 48, .42
+    s = [stipple(231, 70, w, h), f'<defs><path id="ring-frost" d="M{cx - 124},{cy} A124,124 0 0,1 {cx + 124},{cy}"></path></defs>']
+    s.append(f'<path d="M{cx - 112},{cy} A112,112 0 0,1 {cx + 112},{cy}" fill="none" stroke="{OTHER}" stroke-width=".8" stroke-dasharray="2 5"></path>')
+    s.append(f'<text font-size="9.5" letter-spacing="3.5" fill="{MUTED}" text-anchor="middle"><textPath href="#ring-frost" startOffset="50%">ONE KNOCK, THEN NOTHING</textPath></text>')
+    for au in (1.2, 2.1):
+        s.append(f'<ellipse cx="{cx}" cy="{cy}" rx="{fmt(au * k)}" ry="{fmt(au * k * tilt)}" fill="none" stroke="{INK}" stroke-width=".7" stroke-dasharray="2 4" opacity=".45"></ellipse>')
+    s.append(text(cx + 2.1 * k + 4, cy + 4, 'temperate zone', 8.5, MUTED))
+    s.append(f'<circle cx="{cx}" cy="{cy}" r="11" fill="{PAPER}" stroke="{INK}" stroke-width="1.4"></circle><circle cx="{cx}" cy="{cy}" r="17" fill="none" stroke="{INK}" stroke-width=".6" stroke-dasharray="2 3"></circle>')
+    a = math.radians(160); ox, oy = cx + 1.4 * k * math.cos(a), cy + 1.4 * k * tilt * math.sin(a)
+    s.append(f'<circle cx="{fmt(ox)}" cy="{fmt(oy)}" r="9" fill="none" stroke="{OTHER}" stroke-width="1" stroke-dasharray="2 2"></circle><circle cx="{fmt(ox)}" cy="{fmt(oy)}" r="2.6" fill="{OTHER}"></circle>')
+    s.append(text(ox, oy - 14, '?', 11, OTHER, 'middle', 600) + text(ox - 12, oy + 18, 'their knock', 8.5, OTHER, 'end') + text(ox - 12, oy + 29, 'came from here', 8.5, OTHER, 'end'))
+    s.append(f'<line x1="{fmt(ox - 4)}" y1="{fmt(oy + 4)}" x2="22" y2="{h - 22}" stroke="{OTHER}" stroke-width="1.2" stroke-dasharray="4 3"></line><path d="M22 {h - 22} l3 -8 M22 {h - 22} l8 -3" stroke="{OTHER}" stroke-width="1.2" fill="none"></path>')
+    s.append(text(30, h - 8, f'to Veyra · {d_f:.1f} ly', 8.5, OTHER, 'start', 600) + text(cx, cy + 32, 'Frost', 10, INK, 'middle', 600))
+    s.append(text(w - 8, h - 8, '1 AU', 8.5, MUTED, 'end') + f'<line x1="{w - 8 - k}" y1="{h - 20}" x2="{w - 8}" y2="{h - 20}" stroke="{INK}" stroke-width="1"></line>')
+    return f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" font-family="IBM Plex Mono, monospace" role="img" aria-label="Frost as we know it: the star, its temperate zone, and where their one knock came from">{"".join(s)}</svg>'
+SILENT_KNOWN = tab_screen('Reach', 'REACH', 'FROST', f"""<button class="backlink inline">‹ Frost</button>
+<div class="art">{frost_portrait()}</div>
+<p class="legend mono">solid: measured · dashed: inferred · ?: not yet seen</p>
+<div class="sec">HOW IT FILLED IN</div>
+{learned('440', 'They exist, and found us', 'Their knock. It came from 1.4 AU out.')}
+{learned(Y_F1R, 'No reply to ours', 'The first empty window.')}
+{learned('500', 'Beacon heard the same silence', 'Beacon’s emissary.')}
+<div class="sec">NOT YET KNOWN</div>
+<p class="copy small">Whether anyone is still there. Why they knocked. Why they stopped.</p>""", HUD_SN)
+
 # ---------- A broadcast sweeps past: Pearl speaks to everyone ----------
 # Year 290. Pearl (Zeta Tucanae), 13.0 ly away, began broadcasting in Year 277.0: radio, the same strength every way,
 # not tuned for anyone's motion. Beacon (6.7 ly from Pearl) heard it in 283.7, Frost in 286.3, us in 290. Any answer to
@@ -3207,7 +3303,7 @@ CHECKLIST = [
                  ('The choice: knock back, broadcast, or stay dark', 'done'), ('Sent: the conversation and its timeline', 'done'),
                  ('The first reply arrives', 'done'), ('A message lands: their signature and words', 'done'), ('Sending: the reply leaves', 'done'), ('The conversation as the gulf between worlds', 'done'), ('Replying: intent, the mind’s version, approve', 'done'), ('Checking a claim: it holds, or it doesn’t', 'done'), ('What we know, both ways', 'done'), ('Their world, as we know it: a drawing that fills in', 'done'),
                  ('We find them first: a clue confirmed', 'done'), ('A broadcast sweeps past', 'done'), ('A visitor brakes into our system', 'done'),
-                 ('A far mind met them first', 'done'), ('A meeting in person: how, where, and talking live', 'done'), ('Crossed knocks', 'done'), ('The silent one: no answer, ever', 'todo')]),
+                 ('A far mind met them first', 'done'), ('A meeting in person: how, where, and talking live', 'done'), ('Crossed knocks', 'done'), ('The silent one: no answer, ever', 'done')]),
     ('Stakes · later', [('The strike as first contact', 'later'), ('A launch flare seen toward us', 'later'), ('Wounded: the morning after', 'later'), ('Total loss and a new cohort', 'later')]),
 ]
 def checklist_html(areas=None):
@@ -3367,6 +3463,14 @@ SECTIONS = [
 ]
 
 SECTIONS += [
+    ('silent', 'Silent', 'Contact · the silent one', f'Frost knocked once, in Year {Y_FK}, and never again. We answered, knocked with our charter, and broadcast; every window where a reply could have come passed empty. The screens have to show an absence: what didn’t arrive and when it could have, how long the silence has run, and what could explain it. By Year {Y_FNOW:.0f} it is {Y_FNOW - Y_FK:.0f} Years long.',
+     f'<figure><figcaption><strong>1 · Nothing came</strong><span>Year {Y_F1R + .1:.1f}. The earliest reply to our answer was due, and didn’t arrive.</span></figcaption>{SILENT_FIRST}</figure>'
+     f'<span class="pinch">Year {Y_FNOW:.0f} ›</span>'
+     f'<figure><figcaption><strong>2 · The silence</strong><span>The conversation, as it looks after {Y_FNOW - Y_FK:.0f} Years. Each empty circle is a window a reply could have filled.</span></figcaption>{SILENT_LONG}</figure>'
+     '<span class="pinch">why ›</span>'
+     f'<figure><figcaption><strong>3 · Why the silence?</strong><span>Every reason that fits, with odds, and what we could do. Nothing is chosen for you.</span></figcaption>{SILENT_WHY}</figure>'
+     '<span class="pinch">Frost ›</span>'
+     f'<figure><figcaption><strong>4 · Frost, as we know it</strong><span>The same drawing as Beacon’s and Ember’s. Its ring holds no founding line, only the silence.</span></figcaption>{SILENT_KNOWN}</figure>'),
     ('crossed', 'Crossed', 'Contact · crossed knocks', f'Year {Y_EKA}. Right after the sentinel’s report, we knock at Ember from home. A tenth of a Year later, Ember’s knock arrives: sent in Year {Y_EK}, the moment they found our sentinel’s beam. The two passed each other {X_AU:,} AU out. Neither is an answer, and each side has to work that out from timing alone.',
      f'<figure><figcaption><strong>1 · Ember is knocking</strong><span>The arrival, as a moment. Their flashes come in as ours goes out.</span></figcaption>{CROSS_LANDS}</figure>'
      '<span class="pinch">see both knocks ›</span>'
@@ -3445,7 +3549,7 @@ AREAS = [  # (page, area as named in CHECKLIST, one-line summary, section ids)
     ('report', 'Report', 'What comes back while you are away, and catching up after a long absence.', ['result', 'absence']),
     ('reach', 'Reach', 'Beyond Veyra: sending a probe, following it, what it finds, the kinds of probe, and broadcasting.', ['probe', 'flyby', 'probe-types', 'sentinel', 'broadcast']),
     ('mind', 'Mind', 'Standing orders: what the mind does while you are away, at home and far away.', ['orders']),
-    ('contact', 'Contact', 'First contact: the knock, the reply, checking what they told us, and the builders meeting our sentinel, crossed knocks with Ember, a visitor from Lantern, overhearing Pearl, and meeting Beacon’s emissary.', ['knock', 'reply', 'check', 'visitor', 'swept', 'noticed', 'crossed', 'meeting']),
+    ('contact', 'Contact', 'First contact: the knock, the reply, checking what they told us, and the builders meeting our sentinel, crossed knocks with Ember, a visitor from Lantern, overhearing Pearl, meeting Beacon’s emissary, and Frost’s silence.', ['knock', 'reply', 'check', 'visitor', 'swept', 'noticed', 'crossed', 'meeting', 'silent']),
 ]
 assert sorted(sid for *_, ids in AREAS for sid in ids) == sorted(sid for sid, *_ in SECTIONS), 'every section belongs to exactly one page'
 def nav_pages(current):

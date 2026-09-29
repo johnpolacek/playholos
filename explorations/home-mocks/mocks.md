@@ -778,6 +778,7 @@ ON ITS WAY · SOONEST FIRST
 - The sentinel’s next report · from Ember, once a Year · 1 Year · 00:05:00
 - Deep flash watch finishes · a project · 3.7 Years · 00:18:30
 - Their emissary’s earliest answer · our answer of Year 450 passes it on its way · 6.8 Years · 00:34:00
+- Frost’s earliest reply · to our answer of Year 448.5 · 18.2 Years · 01:30:52
 - Beacon’s earliest reply · to our answer of Year 450 · 16.6 Years · 01:22:53
 - The meeting with Beacon · the date we both agreed to · 48 Years · 04:00:00
 LAST NEWS
@@ -1874,6 +1875,83 @@ OUR ANSWER
 - Decline · It stays or leaves as its own orders say. · now
 [Talk it through with the mind ›] · [Choose an answer]
 
+## Contact · the silent one
+Frost knocked once, in Year 429.2, and never again. We answered, knocked with our charter, and broadcast; every window where a reply could have come passed empty. The screens have to show an absence: what didn’t arrive and when it could have, how long the silence has run, and what could explain it. By Year 560 it is 131 Years long.
+
+#### 1 · Nothing came · Year 470.3. The earliest reply to our answer was due, and didn’t arrive.
+Veyra · Year 470.3
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [25%] · MATTER · 12,300 kt · COMPUTE · [30%]
+REPORT · NOTHING FROM FROST
+[drawing; labels: ?] · Nothing from Frost · The earliest reply to our answer would have reached us in Year 470.2. Nothing came.
+THE EXCHANGE SO FAR
+Year 429.2 · Frost knocked · Bare, aimed at us.
+10.8 Years in flight. We were away; the mind held it.
+Year 448.5 · We knocked back · Bare. · landed Year 459.3
+Earliest reply: Year 470.2. Nothing.
+We only know what didn’t arrive. A reply could still come, at any time.
+[Keep listening for Frost · the sky watch hears it whenever it comes · ›]
+Year 560 ›
+
+#### 2 · The silence · The conversation, as it looks after 131 Years. Each empty circle is a window a reply could have filled.
+Veyra · Year 560.0
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [40%] · MATTER · 15,800 kt · COMPUTE · [45%]
+REACH · FROST
+[‹ Conversations]
+
+### Silent for 131 Years
+Since their only knock · 10:54:00 · of real time
+[drawing: Frost’s one knock in Year 429, our three messages after it, and three empty windows where a reply could have come; labels: their knock, now, Year 425, Year 565, we spoke, a reply could have come]
+THE EXCHANGE
+Year 429.2 · Frost knocked · Bare, aimed at us. They found us by Year 418.
+Year 448.5 · We knocked back · Bare.
+Earliest reply, Year 470.2: nothing
+Year 471.0 · We knocked with our charter · “Keep the lights on. Look before we speak.”
+Earliest reply, Year 492.7: nothing
+Year 520.0 · Our broadcast · Reached them in Year 530.8.
+Earliest reply, Year 541.7: nothing
+[If Frost ever speaks, wake me · a standing order · waiting since Year 471 · ›]
+why ›
+
+#### 3 · Why the silence? · Every reason that fits, with odds, and what we could do. Nothing is chosen for you.
+Veyra · Year 560.0
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [40%] · MATTER · 15,800 kt · COMPUTE · [45%]
+[‹ Frost] · REACH · FROST
+
+### Why the silence?
+We know only what didn’t arrive. Every reason below fits it.
+WHAT IT COULD BE · ODDS
+They heard, and chose silence · [40%] · 40
+Gone, or changed past answering · [25%] · 25
+An automatic knock, no one home · [20%] · 20
+Taking their time · [10%] · 10
+Too faint for our receivers · [5%] · 5
+Beacon heard the same: one knock from Frost, then nothing, as its emissary told us in Year 500. Frost’s star shows no change we can see.
+WHAT WE COULD DO · ANY, OR NONE
+- Look closer · A waste-heat survey on Frost. Nothing sent. · 20 Years · 01:40:00 · ›
+- Send a flyby probe · It passes Frost and reports home in Year 691. · 131 Years · 10:56:03 · ›
+- Knock again · Each knock says we are still here. · arrives in 10.8 Years · 00:54:11 · ›
+- Stop, and keep the order · If Frost ever speaks, the mind wakes you. · now · ›
+- Talk it through with the mind ›
+Frost ›
+
+#### 4 · Frost, as we know it · The same drawing as Beacon’s and Ember’s. Its ring holds no founding line, only the silence.
+Veyra · Year 560.0
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [40%] · MATTER · 15,800 kt · COMPUTE · [45%]
+REACH · FROST
+[‹ Frost]
+[drawing: Frost as we know it: the star, its temperate zone, and where their one knock came from; labels: ONE KNOCK, THEN NOTHING, temperate zone, ?, their knock, came from here, to Veyra · 10.8 ly, Frost, 1 AU]
+solid: measured · dashed: inferred · ?: not yet seen
+HOW IT FILLED IN
+Year 440 · They exist, and found us · Their knock. It came from 1.4 AU out.
+Year 470.2 · No reply to ours · The first empty window.
+Year 500 · Beacon heard the same silence · Beacon’s emissary.
+NOT YET KNOWN
+Whether anyone is still there. Why they knocked. Why they stopped.
+
 ---
 
 _Appendix: working-session mocks, not the current design._
@@ -1931,7 +2009,7 @@ Talk it through: the mind’s view, when asked
 Orders for while you are away
 Settings: theme, replay the tour, notifications
 
-### Contact · 21 of 22
+### Contact · 22 of 22
 Away: the notification
 The arrival, as a moment
 The knock arrives
