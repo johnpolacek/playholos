@@ -1045,7 +1045,7 @@ It goes every way at once, at light speed, and keeps going. Anyone who hears it 
 WHO HEARS IT · SOONEST FIRST
 Ember · 9.2 ly · knows where we are since Year 458.6 · Year 529.2 · 00:46:03
 Beacon · 9.3 ly · knows since Year 12.6 or earlier · Year 529.3 · 00:46:27
-Lantern · 10.3 ly · never heard from us · Year 530.3 · 00:51:20
+Lantern · 10.3 ly · its visitor came in Year 192 · never heard from us · Year 530.3 · 00:51:20
 Frost · 10.8 ly · knows since Year 418 or earlier · Year 530.8 · 00:54:11
 Pearl · 13.0 ly · broadcasts to everyone · never heard from us · Year 533.0 · 01:05:07
 Twin · 19.9 ly · oxygen world · never heard from us · Year 539.9 · 01:39:37
@@ -1472,6 +1472,93 @@ Year 52.4 · One claim of theirs contradicted · Our own measurement of Ember.
 NOT YET KNOWN
 Their world itself. How many they are. How far they reach. Whether anyone else hears them.
 
+## Contact · a visitor brakes into our system
+Year 190. A craft flares 5,000 AU out, braking toward our belt. It coasted in unseen; braking is bright. No one announced it, unlike Beacon’s emissary. Its path, traced back, points toward Lantern, give or take 8°. Once it stops it reports home by narrow beam, and since we stand beside the transmitter, we see exactly where the beam points. The same physics told Ember’s builders where we are.
+
+#### 1 · Something is braking · The arrival, as a moment. Its exhaust flares ahead of it, toward our belt.
+Veyra · Year 190.0
+[drawing: A craft braking into our system, its exhaust flaring ahead of it, toward our belt]
+THE SKY WATCH · SOMETHING IS SLOWING DOWN
+
+### Something is braking into our system.
+A point of fire, 5,000 AU out and brightening. Its light is shifted blue: it is coming toward us, and slowing.
+No one told us to expect it.
+[See what we know] · [Later]
+see what we know ›
+
+#### 2 · The signal · Its speed, measured and falling. What it is, when it stops, and what we can’t tell.
+Veyra · Year 190.0
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [20%] · MATTER · 1,900 kt · COMPUTE · [25%]
+REPORT · SIGNAL
+[‹ All reports]
+[drawing: The visitor’s speed, falling from 8% of light: measured points, and the line to a stop in Year 192; labels: measured, if it keeps braking, stops · Year 192, 8%, 0, Year 190, Year 192, its speed, as a share of light speed]
+
+### A craft, braking
+Seen Year 190 by the sky watch · 5,000 AU out, and closing
+WHAT IT TELLS US
+What · A craft braking with a fusion torch. Its exhaust shows helium. · Speed · 8% of light, falling steadily · Stops · About Year 192, in our belt, if it keeps braking · Before this · It coasted in cold. Nothing saw it coming. · Came from · Somewhere behind it: toward Lantern, to within 8° · Sent for us? · Can’t tell. A probe to a promising star needs no one there.
+[Its path] · [What now]
+its path ›
+
+#### 3 · Where it came from · Its path traced back, as wide as the uncertainty. Each candidate star, and when it would have left.
+Veyra · Year 190.0
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [20%] · MATTER · 1,900 kt · COMPUTE · [25%]
+[drawing: Stars view; labels: Veyra, Ember, Epsilon Indi · 00:46:03, Lantern, Gliese 783 A · 00:51:20, Beacon, Beta Hydri, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760, Gliese 784, its path, traced back, 01:15:00, Twin · oxygen world, Sol · 01:39:37, 5 ly]
+[World] · [System] · [selected: Stars] · [Region] · [Galaxy]
+WHERE IT CAME FROM · WITHIN 8°
+- Gliese 784 · 7.3 ly · if from there, it left in Year 99
+- Lantern · 10.3 ly · if from there, it left in Year 62
+- 3 stars, 32 to 42 ly · if from one of these, it left before we woke
+- A brightening at Lantern, Year 72.4 · logged, never explained · a launch would fit · ›
+what now ›
+
+#### 4 · What now · Every next step and what it reveals. Any, or none. Nothing is chosen for you.
+Veyra · Year 190.2
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [20%] · MATTER · 1,900 kt · COMPUTE · [25%]
+[‹ Signal] · REACH · THE VISITOR
+
+### It stops here in two Years.
+Whoever sent it will learn what it sees. If home is Lantern, 10.3 Years after it sends.
+WHAT WE COULD DO · ANY, OR NONE
+- Watch it · Every instrument on it. Nothing it could notice. · now · ›
+- Signal it · A laser flash at it. Tells it, and whoever reads its reports, that we saw. · now · ›
+- Send an inspector · A small craft to sit beside it. It would see ours as well as we see it. · 4 Years · 00:20:00 · ›
+- Knock at Lantern · Asks whose it is. Tells Lantern we exist, if it didn’t know. · arrives in 10.3 Years · 00:51:20 · ›
+- Leave it be · It stops, and does what it came for. · now · ›
+If it reports home by narrow beam, we will be beside the transmitter: we would see where the beam points.
+[Talk it through with the mind ›]
+Year 192 ›
+
+#### 5 · It has stopped · Its report home is a narrow beam. Beside it, we see where it points.
+Veyra · Year 192.1
+[drawing: The visitor stopped in our belt, sending a narrow beam away from us]
+THE VISITOR · IN OUR BELT
+
+### It has stopped, and it is talking.
+A narrow beam, not at us. Past us, toward Lantern, to within a thousandth of a degree.
+We are beside the transmitter, so we can see where it points. What it says, we can’t yet read.
+[What we know now] · [Later]
+what we know now ›
+
+#### 6 · The visitor, as we know it · Its home, its launch, and what Lantern will learn from it. The Lantern clue moves.
+Veyra · Year 192.2
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [20%] · MATTER · 1,950 kt · COMPUTE · [25%]
+REACH · THE VISITOR
+[‹ Reach]
+
+### The visitor, as we know it
+In our belt since Year 192.1 · 2.9 AU out
+WHAT WE KNOW ABOUT IT
+Its home · Lantern, from where its beam points · Launched · About Year 62, at 8% of light · Seen leaving · The brightening we logged at Lantern, Year 72.4 · If sent for us · Lantern saw us by Year 52 · Doing · Sitting still. Its beam runs a few hours a day.
+WHAT LANTERN LEARNS FROM IT
+First report · Lands at Lantern in Year 202.4 · Our system · Whatever it can see from the belt · That we watched · Only if we signaled it
+THE CLUE
+[Uneven dimming · Lantern · someone there, or something sent from there · ›] · [What now]
+
 ## Contact · a broadcast sweeps past
 Year 290. Pearl, 13.0 ly away, is broadcasting: radio, the same strength every way, meant for no one in particular. It doesn’t know we exist, and nobody chose us. Our neighbors heard it too, some first. It is the one contact that begins with us knowing more than the sender. Answers to Pearl go by narrow beam, so we can’t overhear them, but Pearl’s broadcast can change when someone answers.
 
@@ -1612,6 +1699,68 @@ WHAT WE COULD DO · ANY, OR NONE
 - Go silent · Stops all reports. We lose the view; they already know where the beam pointed. · from Year 477 · 00:46:00 · ›
 - Knock at Ember from home · Our own voice, from Veyra. · arrives in 9.2 Years · 00:46:03 · ›
 - Talk it through with the mind ›
+
+## Contact · crossed knocks
+Year 468.2. Right after the sentinel’s report, we knock at Ember from home. A tenth of a Year later, Ember’s knock arrives: sent in Year 459.0, the moment they found our sentinel’s beam. The two passed each other 3,500 AU out. Neither is an answer, and each side has to work that out from timing alone.
+
+#### 1 · Ember is knocking · The arrival, as a moment. Their flashes come in as ours goes out.
+Veyra · Year 468.2
+[drawing: Ember’s flashes arriving at Veyra as our own knock leaves, the two passing each other]
+THE SKY WATCH · EMBER, 9.2 LIGHT-YEARS
+
+### Ember is knocking.
+Three flashes, 11 seconds apart: the pattern they showed our sentinel. Their band threw Ember’s own light at us.
+It left Ember in Year 459.0. Our knock left here · 00:00:30 · ago. The two passed each other just outside our system.
+[See both knocks] · [Later]
+see both knocks ›
+
+#### 2 · Two knocks, crossing · Years against distance, zoomed in so light lines slope. The timing shows ours can’t be an answer, to us and to them.
+Veyra · Year 468.2
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [25%] · MATTER · 12,100 kt · COMPUTE · [30%]
+REACH · EMBER
+[‹ Reach]
+
+### Two knocks, crossing
+Neither answers the other. Each was sent without knowing of the other.
+[drawing: Two knocks crossing: Ember’s, sent in Year 459, and ours, sent in 468.1, passing just outside our system; labels: Veyra, Ember, 459, 468.1, 477.3, they flash our sentinel, their knock, our knock, they cross, 3,500 AU out, earliest answer to theirs · 477.4, ours lands · 477.3, years ↑ · distance →]
+Theirs · Sent Year 459.0, from the band. Arrived 468.2. · Ours · Sent Year 468.1. Lands at Ember 477.3. · They crossed · Year 468.2, 3,500 AU from us · What Ember can tell · Ours lands 0.1 Years before any answer to theirs could. The timing says it crossed. · Our sentinel · Saw their beam leave. Its report came in with the knock.
+decide ›
+
+#### 3 · What now · An echo reads as an answer; ours alone doesn’t. Any, or none. Nothing is chosen for you.
+Veyra · Year 468.3
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [25%] · MATTER · 12,100 kt · COMPUTE · [30%]
+[‹ Both knocks] · REACH · EMBER
+
+### Ember knocked. Ours is already on its way.
+Both knocks carry nothing but themselves.
+WHAT WE COULD DO · ANY, OR NONE
+- Echo their knock · Send their own three flashes back, so it reads as an answer. Lands just behind ours. · arrives in 9.2 Years · 00:46:03 · ›
+- Let ours stand · It says we know where they are. Its timing says it isn’t an answer. · now · ›
+- Knock with our charter · Adds our founding line. · The mind would argue: we lean hidden. · arrives in 9.2 Years · 00:46:03 · ›
+- Say nothing more · Our first knock is already on its way. · now · ›
+- Tell Beacon · That Ember knows where we are, and knocked. · arrives in 9.3 Years · 00:46:27 · ›
+- Talk it through with the mind ›
+echo it ›
+
+#### 4 · The conversation · Ember’s exchange so far, as it looks after echoing theirs: two of ours in flight.
+Veyra · Year 468.3
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [25%] · MATTER · 12,100 kt · COMPUTE · [30%]
+REACH · EMBER
+[‹ Conversations]
+[drawing: Veyra and Ember, 9.2 light-years apart, with our knock and our echo in flight; labels: 9.2 ly · 1 tick = 1 Year of travel, Veyra, Ember, our knock, and our echo, in flight]
+THE EXCHANGE
+Year 458.6 · They flashed at our sentinel · Three flashes of Ember’s light.
+0.4 Years later, before we knew any of it:
+Year 459.0 · Ember knocked · The same three flashes, aimed at us.
+9.2 Years in flight. It crossed ours 3,500 AU out.
+Year 468.1 · We knocked · Bare. Sent before theirs arrived. · in flight · lands Year 477.3
+Year 468.3 · We echoed theirs · Their three flashes, sent back. · in flight · lands Year 477.5 · 00:46:03
+Earliest reply to our echo: Year 486.7
+WHAT WE KNOW OF THEM
+[Their band can aim Ember’s light · at our sentinel, then at us, 0.4 Years apart · ›]
 
 ## Contact · meeting Beacon
 Beacon’s second letter asked to meet in Year 500. Its emissary, one of their minds aboard a torch craft launched in Year 405, was already coming. Answering, the player sees every way to meet, each with what it needs: meet the emissary here, host one of their minds, send one of ours, or meet halfway. Here we meet the emissary beside our ice world. Light crosses between us in about an hour: the first conversation with no Years between the lines.
@@ -1782,7 +1931,7 @@ Talk it through: the mind’s view, when asked
 Orders for while you are away
 Settings: theme, replay the tour, notifications
 
-### Contact · 19 of 22
+### Contact · 21 of 22
 Away: the notification
 The arrival, as a moment
 The knock arrives

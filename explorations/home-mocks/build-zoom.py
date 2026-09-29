@@ -254,7 +254,7 @@ def system():
 STAR_NAMES = {'108870': ('Ember', 'Epsilon Indi'), '99461': ('Lantern', 'Gliese 783 A'), '2021': ('Beacon', 'Beta Hydri'),
               '105858': ('Frost', 'Gamma Pavonis'), '1599': ('Pearl', 'Zeta Tucanae'), '106440': (None, 'Gliese 832'), '105090': (None, 'Lacaille 8760')}
 LEADS = ('108870', '99461')
-def neighbors(time_demo=False, after_result=False, select=None, beam=None, probe=None, shell=None, front=None):
+def neighbors(time_demo=False, after_result=False, select=None, beam=None, probe=None, shell=None, front=None, trace=None):
     el = 58; cam, k, origin = camera(el, 205), 11, (195, 196)
     s = [stipple(3, 60)]; labels = Labels([(8, 8, 110, 40)])
     rings = []
@@ -313,6 +313,17 @@ def neighbors(time_demo=False, after_result=False, select=None, beam=None, probe
         s.append(f'<line x1="{origin[0]}" y1="{origin[1]}" x2="{fmt(tx)}" y2="{fmt(ty)}" stroke="{YOU}" stroke-width="1.2" stroke-dasharray="4 3"></line>')
         s.append(f'<line x1="{origin[0]}" y1="{origin[1]}" x2="{fmt(px)}" y2="{fmt(py)}" stroke="{YOU}" stroke-width="2"></line><circle cx="{fmt(px)}" cy="{fmt(py)}" r="3.5" fill="{YOU}"></circle>')
         s.append(labels.place(px, py, label, 9, YOU, 600, ((8, 4), (-8, 4), (0, 16), (8, -8), (-8, -8), (0, -10), (10, 14), (-10, 14))))
+    if trace:   # a visitor's path traced back from home, as a wedge the width of its uncertainty
+        t_hip, t_deg, t_label = trace
+        tx, ty = project(atlas(by_hip[t_hip]), HOME, cam, k, origin); a0 = math.atan2(ty - origin[1], tx - origin[0]); L = 260
+        e = [(origin[0] + L * math.cos(a0 + sg * math.radians(t_deg)), origin[1] + L * math.sin(a0 + sg * math.radians(t_deg))) for sg in (-1, 1)]
+        s.append(f'<path d="M{origin[0]} {origin[1]} L{fmt(e[0][0])} {fmt(e[0][1])} L{fmt(e[1][0])} {fmt(e[1][1])} Z" fill="{OTHER}" fill-opacity=".08" stroke="none"></path>')
+        s.append(f'<line x1="{origin[0]}" y1="{origin[1]}" x2="{fmt(origin[0] + L * math.cos(a0))}" y2="{fmt(origin[1] + L * math.sin(a0))}" stroke="{OTHER}" stroke-width="1.2" stroke-dasharray="5 4"></line>')
+        gx, gy = project(atlas(by_hip['99701']), HOME, cam, k, origin)
+        s.append(f'<circle cx="{fmt(gx)}" cy="{fmt(gy)}" r="6" fill="none" stroke="{INK}" stroke-width=".9" stroke-dasharray="2 2"></circle>')
+        lx_, ly_ = gx - 58, gy + 56   # crowded near Lantern: a leader down to open space
+        s.append(f'<line x1="{fmt(gx - 4)}" y1="{fmt(gy + 5)}" x2="{fmt(lx_ + 6)}" y2="{fmt(ly_ - 10)}" stroke="{INK}" stroke-width=".6"></line>' + text(lx_, ly_, 'Gliese 784', 9, INK, 'middle'))
+        s.append(labels.place(origin[0] + 150 * math.cos(a0), origin[1] + 150 * math.sin(a0), t_label, 9, OTHER, 600, ((10, -8), (-10, -8), (10, 14), (-10, 14))))
     if time_demo:
         ex_, ey_ = project(atlas(by_hip['108870']), HOME, cam, k, origin)
         s.append(f'<line x1="{origin[0]}" y1="{origin[1]}" x2="{fmt(ex_)}" y2="{fmt(ey_)}" stroke="{YOU}" stroke-width="1.6" stroke-dasharray="5 4"></line>')
@@ -2746,6 +2757,226 @@ MEET_PACT = f"""<div class="phone">{at_year((30, 35, '13,400 kt'), Y_PACT)}<div 
 <button class="primary" disabled>Choose an answer</button>
 </div></div>"""
 
+# ---------- A visitor brakes into our system: something from Lantern ----------
+# Year 190. A fusion torch flares 5,000 AU out: a craft braking at a steady rate from 8% of light, to stop in our belt in
+# Year 192. It coasted in cold, unseen. Traced back, its path points toward Lantern to within 8°: Gliese 784, Lantern,
+# and three stars 32 to 42 ly out, which would mean it left before we woke. Our sky watch logged a brightening at Lantern
+# in Year 72.4 and never explained it. Once stopped, it reports home by narrow beam; we are beside the transmitter, so
+# we see exactly where the beam points: Lantern. If it was sent for us, Lantern saw us by about Year 52.
+V_SPEED = .08; d_l = math.dist(atlas(by_hip['99461']), HOME)
+Y_V1, Y_VN, Y_VS = 190.0, 190.2, 192.0
+def v_launch(D): return Y_VS - 3 - (D - .12) / V_SPEED    # a Year to reach speed, two to brake
+Y_VL = v_launch(d_l); Y_VLS = round(Y_VL + d_l, 1); Y_VR = round(Y_VS + .1 + d_l, 1)
+d_g784 = math.dist(atlas(by_hip['99701']), HOME)
+HUD_V = at_year((20, 25, '1,900 kt'), Y_V1)
+
+def visitor_sky(w=390, h=300):
+    # Our system seen tilted: the star, Veyra's orbit, the belt, and the visitor's flare closing on the belt.
+    cx, cy, k, tilt = 170, 196, 44, .38
+    s = [stipple(191, 90, w, h)]
+    rng = random.Random(9)
+    for _ in range(260):
+        a = rng.random() * 2 * math.pi; rr = (2.6 + rng.random() * .6) * k
+        s.append(f'<circle cx="{fmt(cx + rr * math.cos(a))}" cy="{fmt(cy + rr * tilt * math.sin(a))}" r=".7" fill="{INK}" opacity=".5"></circle>')
+    s.append(f'<ellipse cx="{cx}" cy="{cy}" rx="{1.12 * k}" ry="{fmt(1.12 * k * tilt)}" fill="none" stroke="{YOU}" stroke-width="1"></ellipse>')
+    s.append(f'<circle cx="{cx}" cy="{cy}" r="6" fill="{PAPER}" stroke="{INK}" stroke-width="1.3"></circle>')
+    vx, vy = cx + 1.12 * k * math.cos(math.radians(70)), cy + 1.12 * k * tilt * math.sin(math.radians(70))
+    s.append(f'<circle cx="{fmt(vx)}" cy="{fmt(vy)}" r="3.5" fill="{YOU}"></circle>')
+    bx, by = cx + 2.9 * k * math.cos(math.radians(-35)), cy + 2.9 * k * tilt * math.sin(math.radians(-35))
+    fx, fy = 322, 70
+    s.append(f'<path d="M{w + 6} -6 Q{fx + 30} {fy - 40} {fx} {fy}" fill="none" stroke="{OTHER}" stroke-width="1" stroke-dasharray="2 5" opacity=".6"></path>')
+    s.append(f'<path d="M{fx} {fy} L{fmt(bx)} {fmt(by)}" fill="none" stroke="{OTHER}" stroke-width=".8" stroke-dasharray="4 4" opacity=".7"></path>')
+    ang = math.atan2(by - fy, bx - fx)                  # braking: the exhaust points ahead, down the path
+    for spread, ln, op in ((0, 48, .9), (.12, 40, .5), (-.12, 40, .5)):
+        s.append(f'<line x1="{fx}" y1="{fy}" x2="{fmt(fx + ln * math.cos(ang + spread))}" y2="{fmt(fy + ln * math.sin(ang + spread))}" stroke="{OTHER}" stroke-width="2" opacity="{op}"></line>')
+    s.append(f'<circle cx="{fx}" cy="{fy}" r="9" fill="{OTHER}" opacity=".25"></circle><circle cx="{fx}" cy="{fy}" r="4" fill="{OTHER}"></circle>')
+    return f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" role="img" aria-label="A craft braking into our system, its exhaust flaring ahead of it, toward our belt">{"".join(s)}</svg>'
+VISIT_LANDS = f"""<div class="phone cine"><div class="cinetop"><span>Veyra</span><span class="mono">Year {Y_V1:.1f}</span></div>
+{visitor_sky()}
+<div class="cinetext"><span class="mono kick">THE SKY WATCH · SOMETHING IS SLOWING DOWN</span>
+<h3>Something is braking into our system.</h3>
+<p class="inscr">A point of fire, 5,000 AU out and brightening. Its light is shifted blue: it is coming toward us, and slowing.</p>
+<p>No one told us to expect it.</p>
+<div class="cinebtn"><button class="light">See what we know</button><button class="ghostlight">Later</button></div></div></div>"""
+
+def speed_chart(w=358, h=108):
+    x0, x1, y0, y1 = 34, w - 14, h - 22, 12
+    X = lambda yr: x0 + (yr - Y_V1) / (Y_VS + .3 - Y_V1) * (x1 - x0); Y = lambda v: y0 - v / 9 * (y0 - y1)
+    s = [f'<line x1="{x0}" y1="{y0}" x2="{x1}" y2="{y0}" stroke="{INK}" stroke-width=".7"></line><line x1="{x0}" y1="{y0}" x2="{x0}" y2="{y1}" stroke="{INK}" stroke-width=".7"></line>']
+    s.append(f'<line x1="{fmt(X(Y_V1))}" y1="{fmt(Y(8))}" x2="{fmt(X(Y_VS))}" y2="{fmt(Y(0))}" stroke="{OTHER}" stroke-width="1.2" stroke-dasharray="4 3"></line>')
+    for i in range(9):
+        yr = Y_V1 + i * .025; s.append(f'<circle cx="{fmt(X(yr))}" cy="{fmt(Y(8 - 4 * (yr - Y_V1)))}" r="2.4" fill="{OTHER}"></circle>')
+    s.append(f'<circle cx="{fmt(X(Y_VS))}" cy="{fmt(Y(0))}" r="4" fill="{PAPER}" stroke="{OTHER}" stroke-width="1.4"></circle>')
+    s.append(text(X(Y_V1) + 4, Y(8) + 16, 'measured', 8.5, OTHER, 'start', 600) + text(X(191.1), Y(3.6) - 6, 'if it keeps braking', 8.5, OTHER, 'start'))
+    s.append(text(X(Y_VS), Y(0) - 22, f'stops · Year {Y_VS:.0f}', 8.5, OTHER, 'middle', 600))
+    s.append(text(x0 - 4, Y(8) + 3, '8%', 8, MUTED, 'end') + text(x0 - 4, Y(0) + 3, '0', 8, MUTED, 'end') + text(x0, h - 6, f'Year {Y_V1:.0f}', 8, MUTED) + text(x1, h - 6, f'Year {Y_VS + .3:.0f}', 8, MUTED, 'end'))
+    s.append(text(x0 + 4, y1 + 2, 'its speed, as a share of light speed', 8, MUTED))
+    return f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" font-family="IBM Plex Mono, monospace" role="img" aria-label="The visitor’s speed, falling from 8% of light: measured points, and the line to a stop in Year 192">{"".join(s)}</svg>'
+VISIT_SIGNAL = tab_screen('Report', 'REPORT', 'SIGNAL', f"""<button class="backlink inline">‹ All reports</button>
+<div class="art">{speed_chart()}</div>
+<h3 class="lead">A craft, braking</h3>
+<p class="copy small">Seen Year {Y_V1:.0f} by the sky watch · 5,000 AU out, and closing</p>
+<div class="sec">WHAT IT TELLS US</div>
+{ledger([('What', 'A craft braking with a fusion torch. Its exhaust shows helium.'), ('Speed', '8% of light, falling steadily'),
+         ('Stops', f'About Year {Y_VS:.0f}, in our belt, if it keeps braking'), ('Before this', 'It coasted in cold. Nothing saw it coming.'),
+         ('Came from', 'Somewhere behind it: toward Lantern, to within 8°'), ('Sent for us?', 'Can’t tell. A probe to a promising star needs no one there.')])}
+<div class="twobtn"><button class="primary ghost">Its path</button><button class="primary">What now</button></div>""", HUD_V)
+
+VISIT_MAP = frame(2, *neighbors(trace=('99461', 8, 'its path, traced back')), panel=('WHERE IT CAME FROM', 'WITHIN 8°', [
+    row(f'Gliese 784 · {d_g784:.1f} ly', f'if from there, it left in Year {v_launch(d_g784):.0f}', ''),
+    row(f'Lantern · {d_l:.1f} ly', f'if from there, it left in Year {Y_VL:.0f}', '', 'other', marker=True),
+    row('3 stars, 32 to 42 ly', 'if from one of these, it left before we woke', ''),
+    row(f'A brightening at Lantern, Year {Y_VLS}', 'logged, never explained · a launch would fit', '›', 'other')]),
+    year=f'Year {Y_V1:.1f}', res=(20, 25, '1,900 kt'))
+
+VISIT_NEXT = f"""<div class="phone">{at_year((20, 25, '1,900 kt'), Y_VN)}<div class="sheet">
+<div class="sh"><button class="backlink">‹ Signal</button><span class="mono kind">REACH · THE VISITOR</span></div>
+<h3 class="lead">It stops here in two Years.</h3>
+<p class="whyline">Whoever sent it will learn what it sees. If home is Lantern, {d_l:.1f} Years after it sends.</p>
+<div class="sec">WHAT WE COULD DO · ANY, OR NONE</div>
+{action('Watch it', 'Every instrument on it. Nothing it could notice.', '<span class="gy">now</span>')}
+{action('Signal it', 'A laser flash at it. Tells it, and whoever reads its reports, that we saw.', '<span class="gy">now</span>')}
+{action('Send an inspector', 'A small craft to sit beside it. It would see ours as well as we see it.', tstack('4 Years', clock(4 * 5)))}
+{action('Knock at Lantern', 'Asks whose it is. Tells Lantern we exist, if it didn’t know.', tstack(f'arrives in {d_l:.1f} Years', light_clock(d_l)))}
+{action('Leave it be', 'It stops, and does what it came for.', '<span class="gy">now</span>')}
+<p class="copy small">If it reports home by narrow beam, we will be beside the transmitter: we would see where the beam points.</p>
+{TALK}
+</div></div>"""
+
+def parked_svg(w=390, h=300):
+    # The visitor parked among the belt's rocks, its narrow beam leaving for home.
+    s = [stipple(201, 70, w, h)]
+    rng = random.Random(21)
+    for _ in range(38):
+        x, y, r = rng.random() * w, 150 + (rng.random() - .5) * 150, 2 + rng.random() * 9
+        pts = ' '.join(f'{fmt(x + r * (0.7 + .5 * rng.random()) * math.cos(a))},{fmt(y + r * (0.7 + .5 * rng.random()) * math.sin(a))}' for a in [i * math.pi / 3 for i in range(6)])
+        s.append(f'<polygon points="{pts}" fill="{PAPER}" stroke="{INK}" stroke-width=".8" opacity=".75"></polygon>')
+    ex, ey = 150, 176
+    s.append(f'<circle cx="{ex}" cy="{ey}" r="34" fill="{PAPER}" stroke="none"></circle>')
+    s.append(f'<g transform="translate({ex} {ey}) scale(1.9)" fill="none" stroke="{OTHER}" stroke-width="1.1"><path d="M-12 -6 L6 -6 L12 0 L6 6 L-12 6 Z"></path><circle cx="-3" cy="0" r="3"></circle><line x1="12" y1="0" x2="16" y2="-4"></line></g>')
+    s.append(f'<line x1="{ex + 30}" y1="{ey - 8}" x2="{w + 4}" y2="30" stroke="{OTHER}" stroke-width="1.6"></line>')
+    s.append(f'<line x1="{ex + 30}" y1="{ey - 8}" x2="{w + 4}" y2="30" stroke="{OTHER}" stroke-width="7" opacity=".12"></line>')
+    return f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" role="img" aria-label="The visitor stopped in our belt, sending a narrow beam away from us">{"".join(s)}</svg>'
+VISIT_STOPPED = f"""<div class="phone cine"><div class="cinetop"><span>Veyra</span><span class="mono">Year {Y_VS + .1:.1f}</span></div>
+{parked_svg()}
+<div class="cinetext"><span class="mono kick">THE VISITOR · IN OUR BELT</span>
+<h3>It has stopped, and it is talking.</h3>
+<p class="inscr">A narrow beam, not at us. Past us, toward Lantern, to within a thousandth of a degree.</p>
+<p>We are beside the transmitter, so we can see where it points. What it says, we can’t yet read.</p>
+<div class="cinebtn"><button class="light">What we know now</button><button class="ghostlight">Later</button></div></div></div>"""
+
+VISIT_KNOWN = tab_screen('Reach', 'REACH', 'THE VISITOR', f"""<button class="backlink inline">‹ Reach</button>
+<h3 class="lead">The visitor, as we know it</h3>
+<p class="copy small">In our belt since Year {Y_VS + .1:.1f} · 2.9 AU out</p>
+<div class="sec">WHAT WE KNOW ABOUT IT</div>
+{ledger([('Its home', 'Lantern, from where its beam points'), ('Launched', f'About Year {Y_VL:.0f}, at 8% of light'),
+         ('Seen leaving', f'The brightening we logged at Lantern, Year {Y_VLS}'), ('If sent for us', f'Lantern saw us by Year {Y_VL - d_l:.0f}'),
+         ('Doing', 'Sitting still. Its beam runs a few hours a day.')])}
+<div class="sec">WHAT LANTERN LEARNS FROM IT</div>
+{ledger([('First report', f'Lands at Lantern in Year {Y_VR}'), ('Our system', 'Whatever it can see from the belt'),
+         ('That we watched', 'Only if we signaled it')])}
+<div class="sec">THE CLUE</div>
+{row('Uneven dimming · Lantern', 'someone there, or something sent from there', '›', 'other', marker=True)}
+<button class="primary">What now</button>""", at_year((20, 25, '1,950 kt'), Y_VS + .2))
+
+# ---------- Crossed knocks: Ember and Veyra knock at once ----------
+# Ember's builders found us in Year 458.6, standing beside our sentinel's beam. At 459.0 a stretch of their band threw
+# Ember's own light at Veyra: three flashes, the pattern they showed the sentinel. It arrives in 468.2, a tenth of a Year
+# after we knocked at Ember from home (the sentinel's "what now", Year 468.1). The two crossed 3,500 AU out; neither
+# answers the other. Ours lands at Ember in 477.3, a tenth of a Year before any answer to theirs could, so the timing
+# shows it crossed theirs. The sentinel, beside the band, saw their beam leave; its report arrives with the knock.
+Y_EK = round(Y_NLAST + .1, 1); Y_EKA = round(Y_EK + d_e, 1); Y_OK = Y_NNOW; Y_OKL = round(Y_OK + d_e, 1)
+Y_EKR = round(Y_EK + 2 * d_e, 1); Y_ECHO = round(Y_EKA + .1, 1); Y_ECHOL = round(Y_ECHO + d_e, 1)
+X_AU = round((Y_EK + d_e - Y_OK) / 2 * 63241 / 100) * 100     # where they crossed, in AU from us
+HUD_X = at_year((25, 30, '12,100 kt'), Y_EKA)
+
+def cross_sky(w=390, h=300):
+    s = [stipple(211, 110, w, h)]
+    vx, vy, ex, ey = 64, 250, 320, 78
+    s.append(f'<line x1="{vx}" y1="{vy}" x2="{ex}" y2="{ey}" stroke="{INK}" stroke-width=".6" stroke-dasharray="2 5" opacity=".5"></line>')
+    s.append(f'<ellipse cx="{ex}" cy="{ey}" rx="30" ry="10" fill="none" stroke="{OTHER}" stroke-width="1" stroke-dasharray="3 2"></ellipse><circle cx="{ex}" cy="{ey}" r="6" fill="{PAPER}" stroke="{INK}" stroke-width="1.3"></circle>')
+    dx, dy = (ex - vx) / math.dist((vx, vy), (ex, ey)), (ey - vy) / math.dist((vx, vy), (ex, ey))
+    for i in range(3):                                      # their three flashes, arriving
+        t0 = 16 + i * 14
+        s.append(f'<line x1="{fmt(vx + t0 * dx)}" y1="{fmt(vy + t0 * dy)}" x2="{fmt(vx + (t0 + 8) * dx)}" y2="{fmt(vy + (t0 + 8) * dy)}" stroke="{OTHER}" stroke-width="3.2"></line>')
+    ox, oy = vx + 26 * dx - 5 * dy, vy + 26 * dy + 5 * dx   # ours, just leaving, beside them
+    s.append(f'<line x1="{fmt(ox)}" y1="{fmt(oy)}" x2="{fmt(ox + 14 * dx)}" y2="{fmt(oy + 14 * dy)}" stroke="{YOU}" stroke-width="3.2"></line>')
+    s.append(f'<circle cx="{vx}" cy="{vy}" r="5" fill="{YOU}"></circle><circle cx="{vx}" cy="{vy}" r="11" fill="none" stroke="{YOU}" stroke-width="1.2"></circle>')
+    return f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" role="img" aria-label="Ember’s flashes arriving at Veyra as our own knock leaves, the two passing each other">{"".join(s)}</svg>'
+CROSS_LANDS = f"""<div class="phone cine"><div class="cinetop"><span>Veyra</span><span class="mono">Year {Y_EKA}</span></div>
+{cross_sky()}
+<div class="cinetext"><span class="mono kick">THE SKY WATCH · EMBER, {d_e:.1f} LIGHT-YEARS</span>
+<h3>Ember is knocking.</h3>
+<p class="inscr">Three flashes, 11 seconds apart: the pattern they showed our sentinel. Their band threw Ember’s own light at us.</p>
+<p>It left Ember in Year {Y_EK}. Our knock left here <span class="rtime">00:00:30</span> ago. The two passed each other just outside our system.</p>
+<div class="cinebtn"><button class="light">See both knocks</button><button class="ghostlight">Later</button></div></div></div>"""
+
+def cross_spacetime(w=358, h=232):
+    # Years up, distance across, zoomed in so light lines slope: 9.2 Years across in 9.2 ly.
+    x0, x1, yb, yt, Y0, Y1 = 44, 300, h - 22, 22, 456, 480
+    X = lambda ly: x0 + ly / d_e * (x1 - x0); Yp = lambda yr: yb - (yr - Y0) / (Y1 - Y0) * (yb - yt)
+    L = lambda ly, yr: f'{fmt(X(ly))},{fmt(Yp(yr))}'
+    s = [f'<line x1="{x0}" y1="{yb}" x2="{x0}" y2="{yt}" stroke="{YOU}" stroke-width="1"></line><line x1="{x1}" y1="{yb}" x2="{x1}" y2="{yt}" stroke="{OTHER}" stroke-width="1"></line>',
+         text(x0, yt - 6, 'Veyra', 9, YOU, 'middle', 600), text(x1, yt - 6, 'Ember', 9, OTHER, 'middle', 600)]
+    for yr in (Y_EK, Y_OK, Y_OKL): s.append(text(x0 - 5, Yp(yr) + 3, f'{yr:g}', 8, MUTED, 'end'))
+    s.append(f'<circle cx="{x1}" cy="{fmt(Yp(Y_FLASH))}" r="3" fill="{OTHER}"></circle>' + text(x1 - 6, Yp(Y_FLASH) + 12, 'they flash our sentinel', 8, OTHER, 'end'))
+    s.append(f'<path d="M{L(d_e, Y_EK)} L{L(0, Y_EKA)}" fill="none" stroke="{OTHER}" stroke-width="1.8"></path>')
+    s.append(text(X(d_e * .55), Yp(Y_EK + d_e * .45) + 14, 'their knock', 8.5, OTHER, 'middle', 600))
+    s.append(f'<path d="M{L(0, Y_OK)} L{L(d_e, Y_OKL)}" fill="none" stroke="{YOU}" stroke-width="1.8"></path>' + text(X(d_e * .45), Yp(Y_OK + d_e * .45) - 8, 'our knock', 8.5, YOU, 'middle', 600))
+    s.append(f'<circle cx="{x0}" cy="{fmt(Yp(Y_OK + .05))}" r="4.5" fill="none" stroke="{INK}" stroke-width="1.2"></circle>' + text(x0 + 44, Yp(Y_OK + .05) + 3, f'they cross, {X_AU:,} AU out', 8.5, INK, 'start', 600))
+    s.append(f'<line x1="{x1 - 8}" y1="{fmt(Yp(Y_EKR))}" x2="{x1 + 8}" y2="{fmt(Yp(Y_EKR))}" stroke="{OTHER}" stroke-width="1.4"></line>')
+    s.append(text(x1 - 6, Yp(Y_EKR) - 6, f'earliest answer to theirs · {Y_EKR}', 8, OTHER, 'end') + text(x1 - 6, Yp(Y_OKL) + 12, f'ours lands · {Y_OKL}', 8, YOU, 'end', 600))
+    s.append(text(x0, h - 3, 'years ↑ · distance →', 8, MUTED))
+    return f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" font-family="IBM Plex Mono, monospace" role="img" aria-label="Two knocks crossing: Ember’s, sent in Year 459, and ours, sent in 468.1, passing just outside our system">{"".join(s)}</svg>'
+CROSS_TIME = tab_screen('Reach', 'REACH', 'EMBER', f"""<button class="backlink inline">‹ Reach</button>
+<h3 class="lead">Two knocks, crossing</h3>
+<p class="copy small">Neither answers the other. Each was sent without knowing of the other.</p>
+<div class="art">{cross_spacetime()}</div>
+{ledger([('Theirs', f'Sent Year {Y_EK}, from the band. Arrived {Y_EKA}.'), ('Ours', f'Sent Year {Y_OK}. Lands at Ember {Y_OKL}.'),
+         ('They crossed', f'Year {Y_EKA}, {X_AU:,} AU from us'),
+         ('What Ember can tell', f'Ours lands 0.1 Years before any answer to theirs could. The timing says it crossed.'),
+         ('Our sentinel', 'Saw their beam leave. Its report came in with the knock.')])}""", HUD_X)
+
+CROSS_NEXT = f"""<div class="phone">{at_year((25, 30, '12,100 kt'), Y_ECHO)}<div class="sheet">
+<div class="sh"><button class="backlink">‹ Both knocks</button><span class="mono kind">REACH · EMBER</span></div>
+<h3 class="lead">Ember knocked. Ours is already on its way.</h3>
+<p class="whyline">Both knocks carry nothing but themselves.</p>
+<div class="sec">WHAT WE COULD DO · ANY, OR NONE</div>
+{action('Echo their knock', 'Send their own three flashes back, so it reads as an answer. Lands just behind ours.', tstack(f'arrives in {d_e:.1f} Years', light_clock(d_e)))}
+{action('Let ours stand', 'It says we know where they are. Its timing says it isn’t an answer.', '<span class="gy">now</span>')}
+{action('Knock with our charter', 'Adds our founding line. <span class="warnline">The mind would argue: we lean hidden.</span>', tstack(f'arrives in {d_e:.1f} Years', light_clock(d_e)))}
+{action('Say nothing more', 'Our first knock is already on its way.', '<span class="gy">now</span>')}
+{action('Tell Beacon', 'That Ember knows where we are, and knocked.', tstack(f'arrives in {d_b:.1f} Years', light_clock(d_b)))}
+{TALK}
+</div></div>"""
+
+def gulf_ember():
+    w, h = 358, 106; vx, ex, y = 44, 312, 56
+    s = [stipple(221, 50, w, h), f'<line x1="{vx + 26}" y1="{y}" x2="{ex - 30}" y2="{y}" stroke="{INK}" stroke-width=".8" stroke-dasharray="2 4"></line>']
+    for k_ in range(1, 10):
+        x = vx + 26 + (ex - 30 - vx - 26) * k_ / d_e
+        s.append(f'<line x1="{fmt(x)}" y1="{y - 3}" x2="{fmt(x)}" y2="{y + 3}" stroke="{INK}" stroke-width=".7" opacity=".6"></line>')
+    s.append(text((vx + ex) / 2, y + 20, f'{d_e:.1f} ly · 1 tick = 1 Year of travel', 9, MUTED, 'middle'))
+    s.append(f'<circle cx="{vx}" cy="{y}" r="22" fill="{PAPER}" stroke="{INK}" stroke-width="1.3"></circle><path d="M{vx - 16} {y - 6} q10 -8 20 0 q6 5 12 1 M{vx - 18} {y + 8} q12 6 22 -2" fill="none" stroke="{INK}" stroke-width=".8"></path>')
+    s.append(text(vx, y + 38, 'Veyra', 10, YOU, 'middle', 600))
+    s.append(f'<ellipse cx="{ex}" cy="{y}" rx="28" ry="9" fill="none" stroke="{OTHER}" stroke-width="1" stroke-dasharray="3 2"></ellipse><circle cx="{ex}" cy="{y}" r="7" fill="{PAPER}" stroke="{INK}" stroke-width="1.3"></circle>')
+    s.append(text(ex, y + 38, 'Ember', 10, OTHER, 'middle', 600))
+    for dx_ in (4, 12): s.append(f'<circle cx="{vx + 26 + dx_}" cy="{y}" r="3.5" fill="{YOU}"></circle>')
+    s.append(text(vx + 26, y - 12, 'our knock, and our echo, in flight', 9, YOU, 'start', 600))
+    return f'<svg width="{w}" height="{h - 8}" viewBox="0 8 {w} {h - 8}" font-family="IBM Plex Mono, monospace" role="img" aria-label="Veyra and Ember, 9.2 light-years apart, with our knock and our echo in flight">{"".join(s)}</svg>'
+CROSS_GULF = tab_screen('Reach', 'REACH', 'EMBER', f"""<button class="backlink inline">‹ Conversations</button>
+<div class="art gulfart">{gulf_ember()}</div>
+<div class="sec">THE EXCHANGE</div>
+{ent('them', Y_FLASH, 'They flashed at our sentinel', 'Three flashes of Ember’s light.')}
+{gap('0.4 Years later, before we knew any of it:')}
+{ent('them', Y_EK, 'Ember knocked', 'The same three flashes, aimed at us.')}
+{gap(f'{d_e:.1f} Years in flight. It crossed ours {X_AU:,} AU out.')}
+{ent('us', Y_OK, 'We knocked', 'Bare. Sent before theirs arrived.', f'<span class="fly mono">in flight · lands Year {Y_OKL}</span>')}
+{ent('us live', Y_ECHO, 'We echoed theirs', 'Their three flashes, sent back.', f'<span class="fly mono">in flight · lands Year {Y_ECHOL} · {light_clock(d_e)}</span>')}
+{gap(f'Earliest reply to our echo: Year {Y_ECHOL + d_e:.1f}')}
+<div class="sec">WHAT WE KNOW OF THEM</div>
+{row('Their band can aim Ember’s light', f'at our sentinel, then at us, {Y_EK - Y_FLASH:.1f} Years apart', '›', 'other', marker=True)}""", at_year((25, 30, '12,100 kt'), Y_ECHO))
+
 # ---------- A broadcast sweeps past: Pearl speaks to everyone ----------
 # Year 290. Pearl (Zeta Tucanae), 13.0 ly away, began broadcasting in Year 277.0: radio, the same strength every way,
 # not tuned for anyone's motion. Beacon (6.7 ly from Pearl) heard it in 283.7, Frost in 286.3, us in 290. Any answer to
@@ -2875,7 +3106,7 @@ HUD_BC = at_year((35, 40, '14,200 kt'), Y_BC)
 d_sol = math.dist(HOME, (0, 0, 0)); R_REGION = d_sol + 50
 HEARD = [  # (name, hip, what we know, tone)
     ('Ember', '108870', f'knows where we are since Year {Y_FLASH}', 'other'),
-    ('Beacon', '2021', f'knows since Year {Y_FOUND:.1f} or earlier', 'other'), ('Lantern', '99461', 'never heard from us', 'other'),
+    ('Beacon', '2021', f'knows since Year {Y_FOUND:.1f} or earlier', 'other'), ('Lantern', '99461', f'its visitor came in Year {Y_VS:.0f} · never heard from us', 'other'),
     ('Frost', '105858', f'knows since Year {440 - 2 * d_f:.0f} or earlier', 'other'), ('Pearl', '1599', 'broadcasts to everyone · never heard from us', 'other'),
     ('Twin', 'sol', 'oxygen world · never heard from us', 'other')]
 def dist_to(hip): return d_sol if hip == 'sol' else math.dist(atlas(by_hip[hip]), HOME)
@@ -2975,8 +3206,8 @@ CHECKLIST = [
     ('Contact', [('Away: the notification', 'done'), ('The arrival, as a moment', 'done'), ('The knock arrives', 'done'), ('The signal in full: what it tells us', 'done'), ('Who sent it: the star card', 'done'),
                  ('The choice: knock back, broadcast, or stay dark', 'done'), ('Sent: the conversation and its timeline', 'done'),
                  ('The first reply arrives', 'done'), ('A message lands: their signature and words', 'done'), ('Sending: the reply leaves', 'done'), ('The conversation as the gulf between worlds', 'done'), ('Replying: intent, the mind’s version, approve', 'done'), ('Checking a claim: it holds, or it doesn’t', 'done'), ('What we know, both ways', 'done'), ('Their world, as we know it: a drawing that fills in', 'done'),
-                 ('We find them first: a clue confirmed', 'done'), ('A broadcast sweeps past', 'done'), ('A visitor brakes into our system', 'todo'),
-                 ('A far mind met them first', 'done'), ('A meeting in person: how, where, and talking live', 'done'), ('Crossed knocks', 'todo'), ('The silent one: no answer, ever', 'todo')]),
+                 ('We find them first: a clue confirmed', 'done'), ('A broadcast sweeps past', 'done'), ('A visitor brakes into our system', 'done'),
+                 ('A far mind met them first', 'done'), ('A meeting in person: how, where, and talking live', 'done'), ('Crossed knocks', 'done'), ('The silent one: no answer, ever', 'todo')]),
     ('Stakes · later', [('The strike as first contact', 'later'), ('A launch flare seen toward us', 'later'), ('Wounded: the morning after', 'later'), ('Total loss and a new cohort', 'later')]),
 ]
 def checklist_html(areas=None):
@@ -3136,6 +3367,26 @@ SECTIONS = [
 ]
 
 SECTIONS += [
+    ('crossed', 'Crossed', 'Contact · crossed knocks', f'Year {Y_EKA}. Right after the sentinel’s report, we knock at Ember from home. A tenth of a Year later, Ember’s knock arrives: sent in Year {Y_EK}, the moment they found our sentinel’s beam. The two passed each other {X_AU:,} AU out. Neither is an answer, and each side has to work that out from timing alone.',
+     f'<figure><figcaption><strong>1 · Ember is knocking</strong><span>The arrival, as a moment. Their flashes come in as ours goes out.</span></figcaption>{CROSS_LANDS}</figure>'
+     '<span class="pinch">see both knocks ›</span>'
+     f'<figure><figcaption><strong>2 · Two knocks, crossing</strong><span>Years against distance, zoomed in so light lines slope. The timing shows ours can’t be an answer, to us and to them.</span></figcaption>{CROSS_TIME}</figure>'
+     '<span class="pinch">decide ›</span>'
+     f'<figure><figcaption><strong>3 · What now</strong><span>An echo reads as an answer; ours alone doesn’t. Any, or none. Nothing is chosen for you.</span></figcaption>{CROSS_NEXT}</figure>'
+     '<span class="pinch">echo it ›</span>'
+     f'<figure><figcaption><strong>4 · The conversation</strong><span>Ember’s exchange so far, as it looks after echoing theirs: two of ours in flight.</span></figcaption>{CROSS_GULF}</figure>'),
+    ('visitor', 'Visitor', 'Contact · a visitor brakes into our system', f'Year {Y_V1:.0f}. A craft flares 5,000 AU out, braking toward our belt. It coasted in unseen; braking is bright. No one announced it, unlike Beacon’s emissary. Its path, traced back, points toward Lantern, give or take 8°. Once it stops it reports home by narrow beam, and since we stand beside the transmitter, we see exactly where the beam points. The same physics told Ember’s builders where we are.',
+     f'<figure><figcaption><strong>1 · Something is braking</strong><span>The arrival, as a moment. Its exhaust flares ahead of it, toward our belt.</span></figcaption>{VISIT_LANDS}</figure>'
+     '<span class="pinch">see what we know ›</span>'
+     f'<figure><figcaption><strong>2 · The signal</strong><span>Its speed, measured and falling. What it is, when it stops, and what we can’t tell.</span></figcaption>{VISIT_SIGNAL}</figure>'
+     '<span class="pinch">its path ›</span>'
+     f'<figure><figcaption><strong>3 · Where it came from</strong><span>Its path traced back, as wide as the uncertainty. Each candidate star, and when it would have left.</span></figcaption>{VISIT_MAP}</figure>'
+     '<span class="pinch">what now ›</span>'
+     f'<figure><figcaption><strong>4 · What now</strong><span>Every next step and what it reveals. Any, or none. Nothing is chosen for you.</span></figcaption>{VISIT_NEXT}</figure>'
+     f'<span class="pinch">Year {Y_VS:.0f} ›</span>'
+     f'<figure><figcaption><strong>5 · It has stopped</strong><span>Its report home is a narrow beam. Beside it, we see where it points.</span></figcaption>{VISIT_STOPPED}</figure>'
+     '<span class="pinch">what we know now ›</span>'
+     f'<figure><figcaption><strong>6 · The visitor, as we know it</strong><span>Its home, its launch, and what Lantern will learn from it. The Lantern clue moves.</span></figcaption>{VISIT_KNOWN}</figure>'),
     ('swept', 'Overheard', 'Contact · a broadcast sweeps past', f'Year {Y_SW:.0f}. Pearl, {d_p:.1f} ly away, is broadcasting: radio, the same strength every way, meant for no one in particular. It doesn’t know we exist, and nobody chose us. Our neighbors heard it too, some first. It is the one contact that begins with us knowing more than the sender. Answers to Pearl go by narrow beam, so we can’t overhear them, but Pearl’s broadcast can change when someone answers.',
      f'<figure><figcaption><strong>1 · Pearl is speaking</strong><span>The arrival, as a moment. The front of its broadcast has passed Beacon and Frost, and now us.</span></figcaption>{SWEEP_LANDS}</figure>'
      '<span class="pinch">listen ›</span>'
@@ -3194,7 +3445,7 @@ AREAS = [  # (page, area as named in CHECKLIST, one-line summary, section ids)
     ('report', 'Report', 'What comes back while you are away, and catching up after a long absence.', ['result', 'absence']),
     ('reach', 'Reach', 'Beyond Veyra: sending a probe, following it, what it finds, the kinds of probe, and broadcasting.', ['probe', 'flyby', 'probe-types', 'sentinel', 'broadcast']),
     ('mind', 'Mind', 'Standing orders: what the mind does while you are away, at home and far away.', ['orders']),
-    ('contact', 'Contact', 'First contact: the knock, the reply, checking what they told us, and the builders meeting our sentinel, overhearing Pearl, and meeting Beacon’s emissary.', ['knock', 'reply', 'check', 'swept', 'noticed', 'meeting']),
+    ('contact', 'Contact', 'First contact: the knock, the reply, checking what they told us, and the builders meeting our sentinel, crossed knocks with Ember, a visitor from Lantern, overhearing Pearl, and meeting Beacon’s emissary.', ['knock', 'reply', 'check', 'visitor', 'swept', 'noticed', 'crossed', 'meeting']),
 ]
 assert sorted(sid for *_, ids in AREAS for sid in ids) == sorted(sid for sid, *_ in SECTIONS), 'every section belongs to exactly one page'
 def nav_pages(current):
