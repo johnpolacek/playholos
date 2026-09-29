@@ -6,7 +6,7 @@ the game state, and the galaxy's arm structure are invented or illustrative.
 """
 import csv, math, random, struct
 from pathlib import Path
-import catalog
+import catalog, species
 
 here = Path(__file__).resolve().parent
 root = here.parents[1]
@@ -2389,38 +2389,10 @@ ORIGINS = f"""<div class="phone"><div class="onb">
 <button class="primary">Who they are</button>
 </div></div>"""
 
-def veyran():
-    # One of Veyra's people, standing, at 94 px a meter: toe-walking, a balancing tail, a crest that hears, two thumbs.
-    w, h, g = 358, 232, 214
-    s = [stipple(171, 30, w, h), f'<line x1="14" y1="{g}" x2="{w - 14}" y2="{g}" stroke="{INK}" stroke-width=".8"></line>']
-    tube = lambda d, wd=9: (f'<path d="{d}" fill="none" stroke="{INK}" stroke-width="{wd}" stroke-linejoin="round" stroke-linecap="round"></path>'
-                            f'<path d="{d}" fill="none" stroke="{PAPER}" stroke-width="{wd - 2.6}" stroke-linejoin="round" stroke-linecap="round"></path>')
-    shape = lambda d: f'<path d="{d}" fill="{PAPER}" stroke="{INK}" stroke-width="1.3" stroke-linejoin="round"></path>'
-    s.append(tube('M150 102 L156 126 L168 138', 7))                                   # far arm
-    s.append(tube('M134 150 L146 174 L134 196 L144 212'))                              # far leg: knee forward, then up on the toes
-    s.append(shape('M132 138 C112 160 82 186 40 204 C80 198 120 180 142 158 Z'))        # tail
-    s.append(shape('M126 150 C118 120 124 96 144 86 C162 80 176 92 174 112 C172 134 162 152 146 158 C138 160 130 158 126 150 Z'))   # body
-    s.append(tube('M146 152 L160 174 L148 196 L160 212', 10))                          # near leg
-    s.append(f'<path d="M136 212 H150 M154 213 H168" stroke="{INK}" stroke-width="1.6" stroke-linecap="round"></path>')
-    s.append(tube('M158 92 L168 72', 10))                                              # neck
-    s.append(shape('M166 62 C156 50 150 40 154 28 C166 34 174 46 174 58 Z'))            # crest, a fan of skin
-    s.append(f'<path d="M158 34 L168 58 M162 40 L170 58" stroke="{INK}" stroke-width=".7"></path>')
-    s.append(shape('M162 70 C160 58 172 52 186 55 C197 58 202 65 197 71 C190 77 172 78 162 70 Z'))   # head
-    s.append(f'<circle cx="185" cy="63" r="2.2" fill="{INK}"></circle><path d="M188 71 L197 70" stroke="{INK}" stroke-width=".8"></path>')
-    s.append(tube('M160 100 L172 124 L186 130', 7))                                    # near arm
-    s.append(f'<path d="M186 130 l8 1 M186 130 l7 4 M186 129 l4 -6 M185 131 l1 7" stroke="{INK}" stroke-width="1.3" stroke-linecap="round"></path>')   # two fingers, two thumbs
-    for (x, y), (tx, ty), lab in (((158, 34), (212, 30), 'crest: hearing and mood'), ((194, 127), (212, 118), 'two thumbs a hand'),
-                                  ((166, 212), (212, 198), 'walks on its toes'), ((66, 194), (22, 170), 'tail for balance')):
-        s.append(f'<line x1="{x}" y1="{y}" x2="{tx - 3 if tx > x else tx + 40}" y2="{ty - 3}" stroke="{MUTED}" stroke-width=".6"></line>' + text(tx, ty, lab, 9, MUTED))
-    m, bx = 94, 334
-    s.append(f'<line x1="{bx}" y1="{g}" x2="{bx}" y2="{g - m}" stroke="{INK}" stroke-width="1"></line><line x1="{bx - 4}" y1="{g - m}" x2="{bx + 4}" y2="{g - m}" stroke="{INK}" stroke-width="1"></line>'
-             + text(bx - 6, g - m + 4, '1 m', 9, INK, 'end'))
-    s.append(text(w - 14, g + 14, 'invented', 8.5, MUTED, 'end'))
-    return f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" font-family="IBM Plex Mono, monospace" role="img" aria-label="One of Veyra’s people, standing, with a one-meter scale">{"".join(s)}</svg>'
 PEOPLE = f"""<div class="phone"><div class="onb">
 <span class="mono kick">YEAR 0 · VEYRA’S PEOPLE · INVENTED</span>
 <h3 class="lead">6.8 billion of them, and you</h3>
-<div class="art">{veyran()}</div>
+<div class="art specart">{species.standing()}<button class="enlarge" aria-label="See them full screen">⤢</button></div>
 {ledger([('Body', 'About 1.7 m, more with the crest up. Walks on its toes, balanced by a tail. Two thumbs on each hand.'),
          ('Senses', 'Eyes much like ours, under a slightly cooler sun. The crest hears low sounds from far off.'),
          ('Speech', 'Voice, with the crest raised for weight. Eleven great languages.'),
@@ -2429,6 +2401,16 @@ PEOPLE = f"""<div class="phone"><div class="onb">
          ('And you', 'They built you to run the grid. This morning you spoke to all of them at once. Most are waiting to see what you do.')])}
 <p class="copy small">Keeping them alive is the floor. What else they are for is yours to decide.</p>
 <button class="primary">Where things stand</button>
+</div></div>"""
+
+PLATE = f"""<div class="phone"><div class="onb plate">
+<button class="backlink inline">‹ Who they are</button>
+<span class="mono kick">VEYRANS · AN ADULT · INVENTED</span>
+<div class="platefig">{species.plate()}</div>
+{ledger([('Height', '1.7 m; 2 m with the crest raised'), ('Mass', 'About 60 kg, most of it in the thighs and tail'),
+         ('Gait', 'On the toes, tail out behind. They sit back on it.'), ('Hands', 'Two fingers, two opposed thumbs. They hold with either pair.'),
+         ('Crest', 'A fan of stiff rays under skin. It turns to sound, and its spots flush with mood.')])}
+<p class="copy small">Drawn by the mind from 6.8 billion of them. Veyra’s star is real; its people are not.</p>
 </div></div>"""
 
 def radio_shell(w=358, h=176):
@@ -2460,7 +2442,10 @@ STANDING = f"""<div class="phone"><div class="onb">
 </div></div>"""
 
 # ---------- Styles for the screens below ----------
-tour_css = tour_css.replace('</style>', '''.hist{display:flex;flex-direction:column}.hrow{display:grid;grid-template-columns:86px 1fr;gap:10px;align-items:baseline;padding:4px 0;border-bottom:1px solid var(--rowline);font-size:13px}
+tour_css = tour_css.replace('</style>', '''.specart{position:relative}.enlarge{position:absolute;top:8px;right:8px;width:30px;height:30px;border:1px solid var(--ink);border-radius:15px;background:var(--paper);text-align:center;font-size:15px}
+.specrow{display:grid;grid-template-columns:56px 1fr 10px;gap:12px;align-items:center;margin-top:8px;padding:6px 10px 6px 6px;border:1px solid var(--faint);border-radius:12px;background:var(--paper)}.specrow .thumb{overflow:hidden}.specrow .sub{font-size:11.5px;color:var(--muted)}.specrow .chev{color:var(--muted)}
+.onb.plate{background:var(--paper);padding-top:20px}.platefig{margin:10px 0 6px}.platefig svg{display:block}
+.hist{display:flex;flex-direction:column}.hrow{display:grid;grid-template-columns:86px 1fr;gap:10px;align-items:baseline;padding:4px 0;border-bottom:1px solid var(--rowline);font-size:13px}
 .hrow>.mono{font-size:10.5px;color:var(--muted);text-align:right}.hrow .pt{gap:1px}.hrow .pt b{font-weight:500}.hrow .sub{font-size:11.5px;color:var(--muted);line-height:1.35}
 .hrow.moved{border-left:2px solid var(--you);margin-left:-8px;padding-left:6px;grid-template-columns:86px 1fr}.dialtag{align-self:flex-start;margin-top:2px;padding:0 6px;border:1px solid var(--you);border-radius:8px;font-size:10px;color:var(--you)}
 .hrow.now{border-bottom:0}.hrow.now .mono,.hrow.now b{color:var(--you)}.onb .strip{margin:4px 0 2px}
@@ -2587,8 +2572,8 @@ CIV_FULL = f"""<div class="phone"><div class="onb">
 {ledger([('Star · real', 'Delta Pavonis. Yellow, a little older and brighter than the Sun.'),
          ('World · invented', 'Continents and seas, about Earth’s size, in the habitable zone.'),
          ('Surveys', 'No world this size, this far out, could have been found there yet.'),
-         ('People · invented', 'Upright, two-handed, land-born. Many nations, one world.'),
          ('In its sky', 'Beacon, the brightest star. It has its own names for five more.')])}
+<button class="specrow"><span class="thumb">{species.thumb(56)}</span><span class="pt"><b>Veyrans · invented</b><span class="sub">Upright, toe-walking, two thumbs a hand. Many nations, one world.</span></span><span class="chev">›</span></button>
 <div class="sec">THE MIND IT WAKES AS</div>
 <div class="charter"><span class="mono">FOUNDING LINE</span><strong>“Keep the lights on. Look before we speak.”</strong></div>
 <div class="minidials">{dials(VEYRA_DIALS)}</div>
@@ -3694,7 +3679,7 @@ BC_MAP = frame(2, *neighbors(shell=(r_bm, f'our broadcast · {r_bm:.0f} ly')), p
 CHECKLIST = [
     ('Onboarding', [('Choose your civilization: three candidates', 'done'), ('Name it and accept its charter', 'done'),
                     ('Landing: the first seconds on Veyra', 'done'), ('Where we come from: the history, and what set each dial', 'done'),
-                    ('Who they are: the people, drawn in full', 'done'), ('Where things stand at Year 0', 'done'), ('What you inherit: the starting kit', 'done'), ('Guided tour', 'done'),
+                    ('Who they are: the people, drawn to scale', 'done'), ('The people full screen, and as a thumb', 'done'), ('Where things stand at Year 0', 'done'), ('What you inherit: the starting kit', 'done'), ('Guided tour', 'done'),
                     ('Hand-off to the clues', 'done')]),
     ('Home', [('Five zoom levels', 'done'), ('Local Group and galaxy close-ups', 'done'), ('Projects on the map, with timers', 'done'),
               ('Clue marker after a result', 'done'), ('Tap a star: its card', 'done'), ('A clue in full: what we know, odds, next steps', 'done'),
@@ -3748,7 +3733,9 @@ SECTIONS = [
      '<span class="pinch">where we come from ›</span>'
      f'<figure><figcaption><strong>2 · Where we come from</strong><span>The history on a log scale. The star is real; the rest is invented. Each dial has one cause, marked in blue.</span></figcaption>{ORIGINS}</figure>'
      '<span class="pinch">who they are ›</span>'
-     f'<figure><figcaption><strong>3 · Who they are</strong><span>The people drawn in full, to scale: body, senses, speech, how they live, and how they see the mind they built.</span></figcaption>{PEOPLE}</figure>'
+     f'<figure><figcaption><strong>3 · Who they are</strong><span>The people drawn to scale: body, senses, speech, how they live, and how they see the mind they built. ⤢ opens the plate.</span></figcaption>{PEOPLE}</figure>'
+     '<span class="pinch">tap ⤢ ›</span>'
+     f'<figure><figcaption><strong>3b · Full screen</strong><span>A naturalist’s plate: the body called out, and the crest, eye, hand and foot magnified from the same drawing.</span></figcaption>{PLATE}</figure>'
      '<span class="pinch">where things stand ›</span>'
      f'<figure><figcaption><strong>4 · Where things stand</strong><span>Year 0: our radio already sent and how loud it was, what we have heard, and whose waking we can’t see yet.</span></figcaption>{STANDING}</figure>'
      '<span class="pinch">see what you inherit ›</span>'
@@ -3957,7 +3944,7 @@ SECTIONS += [
     ('choose', 'Choosing', 'Before Year 0 · choosing a civilization', 'Three candidates from the generator, each a real star with an invented world and people, and the mind they wake as. All three start equal: the same kit, stocks and budgets. They differ in character and place. The player looks closer at one, names it, and accepts its founding line. Then it wakes.',
      f'<figure><figcaption><strong>1 · Three candidates</strong><span>Star, world, people, founding line and character, side by side. None is selected.</span></figcaption>{CHOOSE}</figure>'
      '<span class="pinch">tap Veyra ›</span>'
-     f'<figure><figcaption><strong>2 · Up close</strong><span>What is real and what is invented, why surveys allow it, and the mind it wakes as.</span></figcaption>{CIV_FULL}</figure>'
+     f'<figure><figcaption><strong>2 · Up close</strong><span>What is real and what is invented, why surveys allow it, its people as a thumb, and the mind it wakes as.</span></figcaption>{CIV_FULL}</figure>'
      '<span class="pinch">choose ›</span>'
      f'<figure><figcaption><strong>3 · Name it, and accept its charter</strong><span>The name is its people’s own, and can change. The founding line is how the mind will reason when asked.</span></figcaption>{CIV_NAME}</figure>'),
     ('orders', 'Standing orders', 'Mind · standing orders, near and far', f'Year {Y_SO}, just back from 108 Years away. Standing orders are how the mind acts without you. Each is written the way a message is: you say what you want, the mind shows exactly what it will do, and tries it on your last absence. Orders for a far mind cross at light speed, so they land late and are followed alone. Opens from the Mind tab, and from Reach for far places.',

@@ -26,14 +26,14 @@ Cautious · Bold
 Tap one to see it up close. Nothing is chosen until you name it.
 tap Veyra ›
 
-#### 2 · Up close · What is real and what is invented, why surveys allow it, and the mind it wakes as.
+#### 2 · Up close · What is real and what is invented, why surveys allow it, its people as a thumb, and the mind it wakes as.
 [‹ All three]
 [drawing: Veyra, drawn in line]
 
 ### Veyra
 Delta Pavonis · 19.9 ly from Sol
 [drawing: Delta Pavonis, its habitable zone, and Veyra’s orbit within it; labels: Veyra · invented, Delta Pavonis · real, habitable zone, 1 AU]
-Star · real · Delta Pavonis. Yellow, a little older and brighter than the Sun. · World · invented · Continents and seas, about Earth’s size, in the habitable zone. · Surveys · No world this size, this far out, could have been found there yet. · People · invented · Upright, two-handed, land-born. Many nations, one world. · In its sky · Beacon, the brightest star. It has its own names for five more.
+Star · real · Delta Pavonis. Yellow, a little older and brighter than the Sun. · World · invented · Continents and seas, about Earth’s size, in the habitable zone. · Surveys · No world this size, this far out, could have been found there yet. · In its sky · Beacon, the brightest star. It has its own names for five more. · [[drawing: A Veyran, head and crest] · Veyrans · invented · Upright, toe-walking, two thumbs a hand. Many nations, one world. · ›]
 THE MIND IT WAKES AS
 FOUNDING LINE · “Keep the lights on. Look before we speak.”
 Open · Hidden
@@ -93,14 +93,21 @@ The star is real. Everything on Veyra is invented. Each blue mark set where one 
 [Who they are]
 who they are ›
 
-#### 3 · Who they are · The people drawn in full, to scale: body, senses, speech, how they live, and how they see the mind they built.
+#### 3 · Who they are · The people drawn to scale: body, senses, speech, how they live, and how they see the mind they built. ⤢ opens the plate.
 YEAR 0 · VEYRA’S PEOPLE · INVENTED
 
 ### 6.8 billion of them, and you
-[drawing: One of Veyra’s people, standing, with a one-meter scale; labels: crest: hearing and mood, two thumbs a hand, walks on its toes, tail for balance, 1 m, invented]
+[drawing: One of Veyra’s people; labels: 1 m] · [See them full screen · ⤢]
 Body · About 1.7 m, more with the crest up. Walks on its toes, balanced by a tail. Two thumbs on each hand. · Senses · Eyes much like ours, under a slightly cooler sun. The crest hears low sounds from far off. · Speech · Voice, with the crest raised for weight. Eleven great languages. · Life · About 120 Years, with medicine. · Together · 41 nations. One grid, one sky watch. · And you · They built you to run the grid. This morning you spoke to all of them at once. Most are waiting to see what you do.
 Keeping them alive is the floor. What else they are for is yours to decide.
 [Where things stand]
+tap ⤢ ›
+
+#### 3b · Full screen · A naturalist’s plate: the body called out, and the crest, eye, hand and foot magnified from the same drawing.
+[‹ Who they are] · VEYRANS · AN ADULT · INVENTED
+[drawing: Plate: one of Veyra’s people, with the crest, eye, hand and foot magnified; labels: Crest: hears far off, Spots flush with mood, The lamp of the founding line, Sash and pouch, Tail: balance, Eye, Two thumbs, Heavy thigh, Hock spur, On its toes, 1 m, 2 m, crest ×2, eye ×3, hand ×3, foot ×3]
+Height · 1.7 m; 2 m with the crest raised · Mass · About 60 kg, most of it in the thighs and tail · Gait · On the toes, tail out behind. They sit back on it. · Hands · Two fingers, two opposed thumbs. They hold with either pair. · Crest · A fan of stiff rays under skin. It turns to sound, and its spots flush with mood.
+Drawn by the mind from 6.8 billion of them. Veyra’s star is real; its people are not.
 where things stand ›
 
 #### 4 · Where things stand · Year 0: our radio already sent and how loud it was, what we have heard, and whose waking we can’t see yet.
@@ -2276,12 +2283,13 @@ _Appendix: working-session mocks, not the current design._
 ## Checklist
 Everything the game needs mocked, and where each stands. Also written to CHECKLIST.md.
 
-### Onboarding · 9 of 9
+### Onboarding · 10 of 10
 Choose your civilization: three candidates
 Name it and accept its charter
 Landing: the first seconds on Veyra
 Where we come from: the history, and what set each dial
-Who they are: the people, drawn in full
+Who they are: the people, drawn to scale
+The people full screen, and as a thumb
 Where things stand at Year 0
 What you inherit: the starting kit
 Guided tour
