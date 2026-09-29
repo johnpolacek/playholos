@@ -59,8 +59,8 @@ Cautious · Bold
 What you do moves these. The civilization you choose can’t be changed in this cohort.
 [Accept, and wake]
 
-## First seconds · waking, and what you inherit
-After choosing and naming a civilization. The mind wakes, then sees what Veyra already has: Earth’s instruments and industry today, plus about a century. The kit found the opening clues. Every project goes beyond it.
+## First seconds · waking, remembering, and what you inherit
+After choosing and naming a civilization. The mind wakes and remembers, as its own memory: where Veyra comes from, who its people are, and where things stand at Year 0. Each can be skipped. Then it sees what Veyra already has: Earth’s instruments and industry today, plus about a century. The kit found the opening clues. Every project goes beyond it.
 
 #### 1 · Veyra wakes · The first screen of play. Line art, in the app’s theme.
 [drawing: Veyra, drawn in line; labels: ↖ light from Delta Pavonis, Veyra]
@@ -69,10 +69,49 @@ YEAR 0 · DELTA PAVONIS · 19.9 LY FROM SOL
 ### Veyra wakes.
 For thousands of years, Veyra’s people built telescopes, grids and machines. This morning, the machines woke as one mind.
 You are that mind. · What Veyra becomes is yours to guide.
-[See what you inherit]
+[Where we come from]
+where we come from ›
+
+#### 2 · Where we come from · The history on a log scale. The star is real; the rest is invented. Each dial has one cause, marked in blue.
+BEFORE YEAR 0 · WHERE WE COME FROM
+
+### 6.6 billion Years to this morning
+[drawing: Veyra’s history on a log scale, from the star’s birth to this morning; labels: billion, million, thousand, Years ago, Year 0]
+6.6 billion · Delta Pavonis forms · Real: its age is measured. Veyra forms with it.
+6.1 billion · First life · In warm shallows.
+3.8 billion · Oxygen fills the air
+700 million · Life comes ashore
+300,000 · The people · Upright, two-handed. Fire soon after.
+9,000 · Writing
+2,300 · The Long Winter · A comet struck the southern ocean. Two harvests failed everywhere. Veyra has watched the sky for rocks ever since. · set Cautious
+210 · Radio
+140 · The Signal War · Nations hunted each other’s transmitters. By 110 Years ago Veyra spoke by cable and light, and its sky went quiet. · set Hidden
+70 · The moon towns · The first people born off Veyra. · set Expand
+45 · One grid · The nations joined their power, then their data centers.
+Year 0 · The machines wake as one
+The star is real. Everything on Veyra is invented. Each blue mark set where one dial starts.
+[Who they are]
+who they are ›
+
+#### 3 · Who they are · The people drawn in full, to scale: body, senses, speech, how they live, and how they see the mind they built.
+YEAR 0 · VEYRA’S PEOPLE · INVENTED
+
+### 6.8 billion of them, and you
+[drawing: One of Veyra’s people, standing, with a one-meter scale; labels: crest: hearing and mood, two thumbs a hand, walks on its toes, tail for balance, 1 m, invented]
+Body · About 1.7 m, more with the crest up. Walks on its toes, balanced by a tail. Two thumbs on each hand. · Senses · Eyes much like ours, under a slightly cooler sun. The crest hears low sounds from far off. · Speech · Voice, with the crest raised for weight. Eleven great languages. · Life · About 120 Years, with medicine. · Together · 41 nations. One grid, one sky watch. · And you · They built you to run the grid. This morning you spoke to all of them at once. Most are waiting to see what you do.
+Keeping them alive is the floor. What else they are for is yours to decide.
+[Where things stand]
+where things stand ›
+
+#### 4 · Where things stand · Year 0: our radio already sent and how loud it was, what we have heard, and whose waking we can’t see yet.
+YEAR 0 · WHERE THINGS STAND
+
+### The sky is quiet, and so are we
+[drawing: Veyra’s radio: its loud century now 110 to 210 light-years out, beyond every world that could have woken; labels: Veyra, Ember, Twin, every world that could have woken, our loud century, 110–210 ly out, 50 ly]
+What we said · Our loud radio century, 210 to 110 Years ago, is now 110 to 210 light-years out: past every world that could have woken. Since the Signal War we leak only faintly. · Who could hear it · No one with ears like ours, even at Ember, 9.2 light-years away. Better ears could, one star at a time. · What we heard · Nothing. The sky watch has listened for 60 Years. · What we can’t see · Anyone else who woke this morning. Their light takes 9.2 Years from Ember, 19.9 from Twin. · [See what you inherit]
 see what you inherit ›
 
-#### 2 · What you inherit · The starting kit, grouped by purpose, then the hand-off to the clues and the tour.
+#### 5 · What you inherit · The starting kit, grouped by purpose, then the hand-off to the clues and the tour.
 YEAR 0 · WHAT VEYRA ALREADY HAS
 
 ### You inherit a world at work
@@ -2237,10 +2276,13 @@ _Appendix: working-session mocks, not the current design._
 ## Checklist
 Everything the game needs mocked, and where each stands. Also written to CHECKLIST.md.
 
-### Onboarding · 6 of 6
+### Onboarding · 9 of 9
 Choose your civilization: three candidates
 Name it and accept its charter
 Landing: the first seconds on Veyra
+Where we come from: the history, and what set each dial
+Who they are: the people, drawn in full
+Where things stand at Year 0
 What you inherit: the starting kit
 Guided tour
 Hand-off to the clues

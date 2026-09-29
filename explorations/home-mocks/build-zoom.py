@@ -2326,7 +2326,7 @@ WAKE = f"""<div class="phone"><div class="wake">
 <h3>Veyra wakes.</h3>
 <p>For thousands of years, Veyra’s people built telescopes, grids and machines. This morning, the machines woke as one mind.</p>
 <p><b>You are that mind.</b> What Veyra becomes is yours to guide.</p>
-<button class="primary">See what you inherit</button></div></div></div>"""
+<button class="primary">Where we come from</button></div></div></div>"""
 
 KIT_GROUPS = {'know': 'KNOW · WHAT WE CAN SEE', 'grow': 'GROW · WHAT WE CAN MAKE', 'reach': 'REACH · HOW FAR WE TOUCH'}
 def kit_rows(purpose):
@@ -2341,8 +2341,130 @@ INHERIT = f"""<div class="phone"><div class="onb">
 <button class="primary">See what we found</button>
 </div></div>"""
 
+# ---------- Before waking: where Veyra comes from, who its people are, and where things stand at Year 0 ----------
+# The star's age is real (Delta Pavonis, about 6.6 billion years). Everything on the planet is invented, and each
+# dial has one cause in the history. The Signal War sets how loudly Veyra leaked: radio began 210 Years ago and went
+# quiet 110 Years ago, so its loud shell is now 110 to 210 ly out, past every seat (all lie within 70 ly of Veyra).
+HISTORY = [  # (years ago, what, detail, dial it moved)
+    (6.6e9, 'Delta Pavonis forms', 'Real: its age is measured. Veyra forms with it.', None),
+    (6.1e9, 'First life', 'In warm shallows.', None),
+    (3.8e9, 'Oxygen fills the air', '', None),
+    (7e8, 'Life comes ashore', '', None),
+    (3e5, 'The people', 'Upright, two-handed. Fire soon after.', None),
+    (9e3, 'Writing', '', None),
+    (2.3e3, 'The Long Winter', 'A comet struck the southern ocean. Two harvests failed everywhere. Veyra has watched the sky for rocks ever since.', 'Cautious'),
+    (210, 'Radio', '', None),
+    (140, 'The Signal War', 'Nations hunted each other’s transmitters. By 110 Years ago Veyra spoke by cable and light, and its sky went quiet.', 'Hidden'),
+    (70, 'The moon towns', 'The first people born off Veyra.', 'Expand'),
+    (45, 'One grid', 'The nations joined their power, then their data centers.', None),
+]
+def ago(y):
+    if y >= 1e9: return f'{y / 1e9:g} billion'
+    if y >= 1e6: return f'{y / 1e6:g} million'
+    return f'{y:,.0f}'
+def history_strip(w=358, h=58):
+    # Log time, from the star's birth to this morning: each event a tick, those that set a dial in blue.
+    x0, x1, y = 10, w - 14, 22; lo, hi = 0, math.log10(1e10)
+    X = lambda yr: x1 - (math.log10(max(yr, 1)) - lo) / (hi - lo) * (x1 - x0)
+    s = [f'<line x1="{x0}" y1="{y}" x2="{x1}" y2="{y}" stroke="{INK}" stroke-width=".8"></line>']
+    for yr, *_, dial in HISTORY:
+        col = YOU if dial else INK
+        s.append(f'<line x1="{fmt(X(yr))}" y1="{y - (8 if dial else 5)}" x2="{fmt(X(yr))}" y2="{y + (8 if dial else 5)}" stroke="{col}" stroke-width="{1.8 if dial else 1}"></line>')
+    s.append(f'<circle cx="{x1}" cy="{y}" r="4" fill="{YOU}"></circle>')
+    for yr, lab in ((1e9, 'billion'), (1e6, 'million'), (1e3, 'thousand'), (1, 'Years ago')):
+        s.append(text(X(yr), y + 22, lab, 8, MUTED, 'middle' if yr > 1 else 'end'))
+    s.append(text(x1, y - 10, 'Year 0', 8.5, YOU, 'end', 600))
+    return f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" font-family="IBM Plex Mono, monospace" role="img" aria-label="Veyra’s history on a log scale, from the star’s birth to this morning">{"".join(s)}</svg>'
+def history_row(yr, what, detail, dial):
+    tag = f'<span class="dialtag">set {dial}</span>' if dial else ''
+    body = f'<b>{what}</b>' + (f'<span class="sub">{detail}</span>' if detail else '')
+    return f'<div class="hrow{" moved" if dial else ""}"><span class="mono">{ago(yr)}</span><span class="pt">{body}{tag}</span></div>'
+ORIGINS = f"""<div class="phone"><div class="onb">
+<span class="mono kick">BEFORE YEAR 0 · WHERE WE COME FROM</span>
+<h3 class="lead">6.6 billion Years to this morning</h3>
+<div class="strip">{history_strip()}</div>
+<div class="hist">{''.join(history_row(*h) for h in HISTORY)}</div>
+<div class="hrow now"><span class="mono">Year 0</span><span class="pt"><b>The machines wake as one</b></span></div>
+<p class="copy small">The star is real. Everything on Veyra is invented. Each blue mark set where one dial starts.</p>
+<button class="primary">Who they are</button>
+</div></div>"""
+
+def veyran():
+    # One of Veyra's people, standing, at 94 px a meter: toe-walking, a balancing tail, a crest that hears, two thumbs.
+    w, h, g = 358, 232, 214
+    s = [stipple(171, 30, w, h), f'<line x1="14" y1="{g}" x2="{w - 14}" y2="{g}" stroke="{INK}" stroke-width=".8"></line>']
+    tube = lambda d, wd=9: (f'<path d="{d}" fill="none" stroke="{INK}" stroke-width="{wd}" stroke-linejoin="round" stroke-linecap="round"></path>'
+                            f'<path d="{d}" fill="none" stroke="{PAPER}" stroke-width="{wd - 2.6}" stroke-linejoin="round" stroke-linecap="round"></path>')
+    shape = lambda d: f'<path d="{d}" fill="{PAPER}" stroke="{INK}" stroke-width="1.3" stroke-linejoin="round"></path>'
+    s.append(tube('M150 102 L156 126 L168 138', 7))                                   # far arm
+    s.append(tube('M134 150 L146 174 L134 196 L144 212'))                              # far leg: knee forward, then up on the toes
+    s.append(shape('M132 138 C112 160 82 186 40 204 C80 198 120 180 142 158 Z'))        # tail
+    s.append(shape('M126 150 C118 120 124 96 144 86 C162 80 176 92 174 112 C172 134 162 152 146 158 C138 160 130 158 126 150 Z'))   # body
+    s.append(tube('M146 152 L160 174 L148 196 L160 212', 10))                          # near leg
+    s.append(f'<path d="M136 212 H150 M154 213 H168" stroke="{INK}" stroke-width="1.6" stroke-linecap="round"></path>')
+    s.append(tube('M158 92 L168 72', 10))                                              # neck
+    s.append(shape('M166 62 C156 50 150 40 154 28 C166 34 174 46 174 58 Z'))            # crest, a fan of skin
+    s.append(f'<path d="M158 34 L168 58 M162 40 L170 58" stroke="{INK}" stroke-width=".7"></path>')
+    s.append(shape('M162 70 C160 58 172 52 186 55 C197 58 202 65 197 71 C190 77 172 78 162 70 Z'))   # head
+    s.append(f'<circle cx="185" cy="63" r="2.2" fill="{INK}"></circle><path d="M188 71 L197 70" stroke="{INK}" stroke-width=".8"></path>')
+    s.append(tube('M160 100 L172 124 L186 130', 7))                                    # near arm
+    s.append(f'<path d="M186 130 l8 1 M186 130 l7 4 M186 129 l4 -6 M185 131 l1 7" stroke="{INK}" stroke-width="1.3" stroke-linecap="round"></path>')   # two fingers, two thumbs
+    for (x, y), (tx, ty), lab in (((158, 34), (212, 30), 'crest: hearing and mood'), ((194, 127), (212, 118), 'two thumbs a hand'),
+                                  ((166, 212), (212, 198), 'walks on its toes'), ((66, 194), (22, 170), 'tail for balance')):
+        s.append(f'<line x1="{x}" y1="{y}" x2="{tx - 3 if tx > x else tx + 40}" y2="{ty - 3}" stroke="{MUTED}" stroke-width=".6"></line>' + text(tx, ty, lab, 9, MUTED))
+    m, bx = 94, 334
+    s.append(f'<line x1="{bx}" y1="{g}" x2="{bx}" y2="{g - m}" stroke="{INK}" stroke-width="1"></line><line x1="{bx - 4}" y1="{g - m}" x2="{bx + 4}" y2="{g - m}" stroke="{INK}" stroke-width="1"></line>'
+             + text(bx - 6, g - m + 4, '1 m', 9, INK, 'end'))
+    s.append(text(w - 14, g + 14, 'invented', 8.5, MUTED, 'end'))
+    return f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" font-family="IBM Plex Mono, monospace" role="img" aria-label="One of Veyra’s people, standing, with a one-meter scale">{"".join(s)}</svg>'
+PEOPLE = f"""<div class="phone"><div class="onb">
+<span class="mono kick">YEAR 0 · VEYRA’S PEOPLE · INVENTED</span>
+<h3 class="lead">6.8 billion of them, and you</h3>
+<div class="art">{veyran()}</div>
+{ledger([('Body', 'About 1.7 m, more with the crest up. Walks on its toes, balanced by a tail. Two thumbs on each hand.'),
+         ('Senses', 'Eyes much like ours, under a slightly cooler sun. The crest hears low sounds from far off.'),
+         ('Speech', 'Voice, with the crest raised for weight. Eleven great languages.'),
+         ('Life', 'About 120 Years, with medicine.'),
+         ('Together', '41 nations. One grid, one sky watch.'),
+         ('And you', 'They built you to run the grid. This morning you spoke to all of them at once. Most are waiting to see what you do.')])}
+<p class="copy small">Keeping them alive is the floor. What else they are for is yours to decide.</p>
+<button class="primary">Where things stand</button>
+</div></div>"""
+
+def radio_shell(w=358, h=176):
+    # Veyra's radio, to scale: the loud century is a band now 110 to 210 ly out; inside it, only faint leakage.
+    cx, cy, k = 72, h / 2, .78
+    s = [stipple(181, 40, w, h)]
+    s.append(f'<circle cx="{cx}" cy="{fmt(cy)}" r="{fmt(210 * k)}" fill="url(#hatchLight)"></circle>'
+             f'<circle cx="{cx}" cy="{fmt(cy)}" r="{fmt(110 * k)}" fill="{PAPER}"></circle>'
+             f'<circle cx="{cx}" cy="{fmt(cy)}" r="{fmt(110 * k)}" fill="none" stroke="{YOU}" stroke-width=".8" stroke-dasharray="2 3"></circle>'
+             f'<circle cx="{cx}" cy="{fmt(cy)}" r="{fmt(70 * k)}" fill="none" stroke="{INK}" stroke-width=".6" stroke-dasharray="1 3"></circle>')
+    s.append(f'<circle cx="{cx}" cy="{fmt(cy)}" r="3.5" fill="{YOU}"></circle>' + text(cx - 6, cy + 16, 'Veyra', 9, YOU, 'middle', 600))
+    for name, d, a in (('Ember', d_ember, -30), ('Twin', 19.9, 40)):
+        x, y = cx + d * k * math.cos(math.radians(a)), cy + d * k * math.sin(math.radians(a))
+        s.append(f'<circle cx="{fmt(x)}" cy="{fmt(y)}" r="2" fill="{INK}"></circle>' + text(x + 5, y + 3, name, 8.5, INK))
+    s.append(f'<line x1="{fmt(cx + 70 * k * .72)}" y1="{fmt(cy + 70 * k * .69)}" x2="{fmt(cx + 70 * k * .72 + 14)}" y2="{fmt(cy + 70 * k * .69 + 10)}" stroke="{MUTED}" stroke-width=".6"></line>'
+             + text(cx + 70 * k * .72 + 17, cy + 70 * k * .69 + 14, 'every world that could have woken', 8, MUTED))
+    s.append(text(cx + 160 * k, cy - 52, 'our loud century', 9, YOU, 'middle', 600) + text(cx + 160 * k, cy - 40, '110–210 ly out', 8.5, YOU, 'middle'))
+    s.append(f'<line x1="{cx}" y1="{h - 8}" x2="{fmt(cx + 50 * k)}" y2="{h - 8}" stroke="{INK}" stroke-width="1"></line>' + text(cx, h - 12, '50 ly', 8.5, INK))
+    return f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" font-family="IBM Plex Mono, monospace" role="img" aria-label="Veyra’s radio: its loud century now 110 to 210 light-years out, beyond every world that could have woken">{"".join(s)}</svg>'
+STANDING = f"""<div class="phone"><div class="onb">
+<span class="mono kick">YEAR 0 · WHERE THINGS STAND</span>
+<h3 class="lead">The sky is quiet, and so are we</h3>
+<div class="art">{radio_shell()}</div>
+{ledger([('What we said', 'Our loud radio century, 210 to 110 Years ago, is now 110 to 210 light-years out: past every world that could have woken. Since the Signal War we leak only faintly.'),
+         ('Who could hear it', f'No one with ears like ours, even at Ember, {d_ember:.1f} light-years away. Better ears could, one star at a time.'),
+         ('What we heard', 'Nothing. The sky watch has listened for 60 Years.'),
+         ('What we can’t see', f'Anyone else who woke this morning. Their light takes {d_ember:.1f} Years from Ember, 19.9 from Twin.')])}
+<button class="primary">See what you inherit</button>
+</div></div>"""
+
 # ---------- Styles for the screens below ----------
-tour_css = tour_css.replace('</style>', '''.gthumb{display:block;width:56px;height:56px}.civ{display:grid;grid-template-columns:56px 1fr 10px;gap:12px;align-items:start;padding:10px 12px;border:1px solid var(--faint);border-radius:12px;background:var(--paper);width:100%;box-sizing:border-box}
+tour_css = tour_css.replace('</style>', '''.hist{display:flex;flex-direction:column}.hrow{display:grid;grid-template-columns:86px 1fr;gap:10px;align-items:baseline;padding:4px 0;border-bottom:1px solid var(--rowline);font-size:13px}
+.hrow>.mono{font-size:10.5px;color:var(--muted);text-align:right}.hrow .pt{gap:1px}.hrow .pt b{font-weight:500}.hrow .sub{font-size:11.5px;color:var(--muted);line-height:1.35}
+.hrow.moved{border-left:2px solid var(--you);margin-left:-8px;padding-left:6px;grid-template-columns:86px 1fr}.dialtag{align-self:flex-start;margin-top:2px;padding:0 6px;border:1px solid var(--you);border-radius:8px;font-size:10px;color:var(--you)}
+.hrow.now{border-bottom:0}.hrow.now .mono,.hrow.now b{color:var(--you)}.onb .strip{margin:4px 0 2px}
+.gthumb{display:block;width:56px;height:56px}.civ{display:grid;grid-template-columns:56px 1fr 10px;gap:12px;align-items:start;padding:10px 12px;border:1px solid var(--faint);border-radius:12px;background:var(--paper);width:100%;box-sizing:border-box}
 .civ .pt{gap:3px}.civ .pt b{font-size:17px}.civ .sub{font-size:11.5px;color:var(--muted);line-height:1.35}.civ q{font-size:13px;font-style:italic;margin:2px 0 0}.civ .chev{color:var(--muted);align-self:center}
 .minidials .dial{grid-template-columns:54px 1fr 54px;font-size:10.5px;padding:3px 0}.minidials .dial s{width:9px;height:9px;top:-3.5px}
 .namefield{display:flex;flex-direction:column;gap:4px;padding:10px 12px;border:1.5px solid var(--ink);border-radius:10px;background:var(--paper)}.namefield b{font-size:24px;font-weight:600}
@@ -3571,7 +3693,8 @@ BC_MAP = frame(2, *neighbors(shell=(r_bm, f'our broadcast · {r_bm:.0f} ly')), p
 # ---------- Mock checklist: everything to mock, and where each stands ----------
 CHECKLIST = [
     ('Onboarding', [('Choose your civilization: three candidates', 'done'), ('Name it and accept its charter', 'done'),
-                    ('Landing: the first seconds on Veyra', 'done'), ('What you inherit: the starting kit', 'done'), ('Guided tour', 'done'),
+                    ('Landing: the first seconds on Veyra', 'done'), ('Where we come from: the history, and what set each dial', 'done'),
+                    ('Who they are: the people, drawn in full', 'done'), ('Where things stand at Year 0', 'done'), ('What you inherit: the starting kit', 'done'), ('Guided tour', 'done'),
                     ('Hand-off to the clues', 'done')]),
     ('Home', [('Five zoom levels', 'done'), ('Local Group and galaxy close-ups', 'done'), ('Projects on the map, with timers', 'done'),
               ('Clue marker after a result', 'done'), ('Tap a star: its card', 'done'), ('A clue in full: what we know, odds, next steps', 'done'),
@@ -3620,10 +3743,16 @@ lofi = re.sub(r'style="([^"]*)"', lambda m: 'style="' + re.sub('|'.join(LOFI), l
 SECTIONS = [
     ('zoom', 'Zoom levels', 'Home · five zoom levels', 'One screen, pinched outward: the map changes scale and the panel below follows it. Star positions are real, from HYG and the Gaia census; Veyra, its planets and the game state are sample data. The sample is Year 50, just after the orbital foundry started.', figures),
     ('local-group', 'Local Group', 'Local Group · the galaxy view’s icon', 'A small icon in the galaxy view opens our neighboring galaxies at their real positions. Tap one to see its structure.', lg_figures),
-    ('waking', 'Waking', 'First seconds · waking, and what you inherit', 'After choosing and naming a civilization. The mind wakes, then sees what Veyra already has: Earth’s instruments and industry today, plus about a century. The kit found the opening clues. Every project goes beyond it.',
+    ('waking', 'Waking', 'First seconds · waking, remembering, and what you inherit', 'After choosing and naming a civilization. The mind wakes and remembers, as its own memory: where Veyra comes from, who its people are, and where things stand at Year 0. Each can be skipped. Then it sees what Veyra already has: Earth’s instruments and industry today, plus about a century. The kit found the opening clues. Every project goes beyond it.',
      f'<figure><figcaption><strong>1 · Veyra wakes</strong><span>The first screen of play. Line art, in the app’s theme.</span></figcaption>{WAKE}</figure>'
+     '<span class="pinch">where we come from ›</span>'
+     f'<figure><figcaption><strong>2 · Where we come from</strong><span>The history on a log scale. The star is real; the rest is invented. Each dial has one cause, marked in blue.</span></figcaption>{ORIGINS}</figure>'
+     '<span class="pinch">who they are ›</span>'
+     f'<figure><figcaption><strong>3 · Who they are</strong><span>The people drawn in full, to scale: body, senses, speech, how they live, and how they see the mind they built.</span></figcaption>{PEOPLE}</figure>'
+     '<span class="pinch">where things stand ›</span>'
+     f'<figure><figcaption><strong>4 · Where things stand</strong><span>Year 0: our radio already sent and how loud it was, what we have heard, and whose waking we can’t see yet.</span></figcaption>{STANDING}</figure>'
      '<span class="pinch">see what you inherit ›</span>'
-     f'<figure><figcaption><strong>2 · What you inherit</strong><span>The starting kit, grouped by purpose, then the hand-off to the clues and the tour.</span></figcaption>{INHERIT}</figure>'),
+     f'<figure><figcaption><strong>5 · What you inherit</strong><span>The starting kit, grouped by purpose, then the hand-off to the clues and the tour.</span></figcaption>{INHERIT}</figure>'),
     ('tour', 'Tour', 'First session · the guided tour', 'Six stops after landing, before anything is under way. The rest of Home is left to discovery. The Projects stop is where time gets explained. Skippable, and replayable from the Mind tab.', tour_figures),
     ('clues', 'Clues', 'Stars and clues · tap to look closer', 'Tap any star on the map for its card. Stars bright in Veyra’s sky carry Veyra’s own names, with the real name beneath; faint ones keep their catalog names, since no one named what they could not see. A clue opens in full: what we see, what it could be, and how long each way of finding out takes.',
      f'<figure><figcaption><strong>1 · Tap a star</strong><span>Ember has a clue. Its card opens over the map, which stays visible above.</span></figcaption>{STAR_EMBER}</figure>'
