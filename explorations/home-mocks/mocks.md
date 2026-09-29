@@ -1,4 +1,4 @@
-<!-- Generated from onboarding.html, home.html, projects.html, report.html, reach.html, mind.html, contact.html, index.html by extract.py. Edit the mocks, not this file. -->
+<!-- Generated from onboarding.html, home.html, projects.html, report.html, reach.html, mind.html, stakes.html, contact.html, index.html by extract.py. Edit the mocks, not this file. -->
 
 # Holos · Onboarding
 
@@ -666,6 +666,45 @@ The glow at Ember waits until something else can look.
 Pausing frees the same share and keeps every year of work.
 [Pause the telescope] · [Cancel the telescope]
 
+## Projects · the real units behind each share
+Screens show shares of the year. A tap on a budget shows what the share is made of: terawatts for energy, operations a second for compute. The drilldown also shows the ceiling: past about 1,000 TW on Veyra, waste heat alone would warm the planet.
+
+#### 1 · Energy · From the top bar. Where this year’s terawatts come from, where they go, and the ceiling.
+Veyra · Year 452.0
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [45%] · MATTER · 15,000 kt · COMPUTE · [50%]
+ENERGY · YEAR 452
+[‹ Projects]
+45% · of this year’s energy in use · 108 of 240 terawatts
+[drawing: This year’s energy: 108 of 240 terawatts in use, against a ceiling of about 1,000 on Veyra; labels: in use · 108 TW, this year · 240 TW, ceiling on Veyra · 1,000 TW]
+WHERE IT COMES FROM
+- Planetary grid · what we woke with · 100 TW
+- Fusion plant · since Year 214 · 100 TW
+- Orbital solar array · since Year 20 · 40 TW
+WHERE IT GOES
+- Belt mining, second site · a project · 36 TW · 15%
+- Deep flash watch · a project · 24 TW · 10%
+- Relay station, and the sentinel’s link · running · 48 TW · 20%
+Every watt ends as heat. Past about 1,000 TW on Veyra, the heat alone would warm the planet; beyond that, energy is made in space.
+or compute ›
+
+#### 2 · Compute · Operations a second, and why a cold annex and a sleeping vault matter.
+Veyra · Year 452.0
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [45%] · MATTER · 15,000 kt · COMPUTE · [50%]
+COMPUTE · YEAR 452
+[‹ Projects]
+50% · of this year’s compute in use
+2 × 10²⁵ of 4 × 10²⁵ operations a second
+WHERE IT COMES FROM
+[Data centers · what we woke with · 1 × 10²⁵ /s] · [Cold compute annex · run cold: each bit costs less · 3 × 10²⁵ /s]
+WHERE IT GOES
+- The mind itself · always · 20%
+- Deep flash watch · a project · 15%
+- Belt mining, second site · a project · 15%
+- Deep vault · sleeping: cold, and free · 0%
+Compute grows with energy, and further when run cold. A running vault would take 15% more, and its warmth could be found.
+
 # Holos · Report
 
 ## First result · the transit watch finishes
@@ -1221,6 +1260,101 @@ THEME
 [System] · [Light] · [selected: Dark]
 [Replay the tour · 6 stops, on your map as it is now · ›]
 
+# Holos · Stakes
+
+## Stakes · what keeps us safe
+Year 470.5. Veyra has built no weapon, and that is a way to play. Readiness shows what keeps a civilization alive, direction by direction, tested only against weapons it could build itself. A launch toward us is dark to us, since its exhaust points away, so the only warning comes from pickets that see a bullet’s nose glow on its way in.
+
+#### 1 · Readiness, now · A vault and an archive, and no guarded direction. The honest answer: no warning, from anywhere.
+Veyra · Year 470.5
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [25%] · MATTER · 12,300 kt · COMPUTE · [30%]
+MIND · READINESS
+[drawing: Veyra and the directions to its known neighbors, showing which are guarded; labels: Beacon, Ember, Lantern, Frost, Pearl, Veyra, guarded: solid · unguarded: dashed]
+Tested only against weapons we could build ourselves. Anything faster reads Unknown.
+IF VEYRA IS HIT
+- Deep vault · sleeping · cold, inside the ice world · wakes if home goes silent
+- Deep archive · everything we know, stored safe · since Year 409
+GUARDED DIRECTIONS · 0
+None. A strike from any direction arrives unannounced: a launch toward us is dark to us.
+WARNING WE WOULD GET, BY SPEED
+A tenth of light speed · an aimed flyby probe · none
+A fifth of light speed · a heavy bullet on a torch · none
+Faster · nothing we could build · Unknown
+later: Year 600 ›
+
+#### 2 · One line, guarded · Pickets and depots toward Lantern. Warning at each speed we could build, in days and real seconds. Interception runs with no order.
+Veyra · Year 600.0
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [40%] · MATTER · 18,000 kt · COMPUTE · [45%]
+MIND · READINESS · A LINE
+[‹ Readiness]
+
+### Veyra, guarded toward Lantern
+[drawing: A line of pickets from Veyra out to 2,000 AU toward Lantern, with sand depots near Veyra; labels: Veyra, depots, pickets, out to 2,000 AU, toward Lantern, its nose glows where gas hits it: two fixes give the path, not to scale]
+WARNING ON THIS LINE, BY SPEED
+A tenth of light speed · an aimed flyby probe · 52 days · 00:00:43
+A fifth of light speed · a heavy bullet on a torch · 23 days · 00:00:19
+Faster · nothing we could build · Unknown
+WHAT HAPPENS, WITH NO ORDER
+A heavy bullet · Screens throw sand in its path. Under 1% of the spray reaches Veyra. · Pellets · Slip through. The air shields the ground; orbit takes the hit. · Every direction else · Unguarded. Guarding another costs about two heavy bullets.
+SETTING
+[selected: Screens only] · [+ Deflector] · [Off]
+
+## Stakes · a strike, and who would know
+Year 470.5. Lantern’s visitor has sat in our belt since Year 192, and Lantern’s world is mapped. The strike screen compares every weapon we have, as the probe screen compares probes: what it would do, the warning they get, who sees it go, and whose name is on it. It shows consequences, never a recommendation. A peaceful civilization sees one weapon here: every probe is one.
+
+#### 1 · Strike Lantern? · The one weapon we have, and two we haven’t built. Nothing is chosen for you.
+Veyra · Year 470.5
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [25%] · MATTER · 12,300 kt · COMPUTE · [30%]
+[‹ Lantern] · REACH · STRIKE
+
+### Strike Lantern?
+Their world is mapped: it crosses Lantern every 212 days. Nothing is chosen for you.
+WHAT WE HAVE · 1
+An aimed flyby probe · A flyby, steered to hit instead of pass · lands Year 585 · 09:32:30
+It would · Wound their world. Not end them. · Their warning · Unknown. We don’t know what guards them. · Who sees it go · Their visitor, beside us. Lantern hears by Year 493. · Whose name · Ours. Its path traces back here.
+NOT BUILT
+[drawing: Torch probe] · Heavy impactor · ends a planet · Needs: torch probe, then 30 Years and 80 Mt
+[drawing: Chip swarm] · Pellet swarm · strips orbit; the air shields the ground · Needs: laser sail array
+[Talk it through with the mind ›] · [Choose a weapon]
+who would know ›
+
+#### 2 · Who would know · Their visitor sees it go and tells Lantern a century before it lands. The path names us.
+Veyra · Year 470.5
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [25%] · MATTER · 12,300 kt · COMPUTE · [30%]
+REACH · STRIKE · LANTERN
+[‹ Strike Lantern?]
+
+### Who would know
+[drawing: Who would see a strike on Lantern: their visitor in our belt sees it launch and tells Lantern decades before it lands; labels: Veyra, their visitor sees it go, its report · Lantern hears by 493, our probe · lands 585, Lantern, sees nothing leave, exhaust points back:, seen only behind us]
+Their visitor · Sees it built and launched. Lantern hears by Year 493, 92 Years before it lands. · Lantern itself · Sees nothing leave. The exhaust points back at us. · Anyone behind us · Sees the exhaust, looking toward Veyra from beyond it. · After it lands · Its path names Veyra. Whoever sees the hit knows who fired.
+WHAT IT WOULD END
+Our record, with everyone who learns of it: that we don’t strike. Beacon, Ember, Pearl and Frost would each learn it only if told, or if they watch Lantern.
+[Back]
+
+## Stakes · standing orders for danger
+Orders may authorize anything, including a strike back. This one does the opposite: it saves what it can and never strikes back. Because it launches nothing, no spoof can turn it on an innocent world. The same editor would show the risk of an order that fires.
+
+#### 1 · If we are struck · What you want, the mind’s exact version, what it can’t be tricked into, and a test on your last absence.
+Veyra · Year 470.5
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [25%] · MATTER · 12,300 kt · COMPUTE · [30%]
+[‹ Orders] · NEW ORDER · IF WE ARE STRUCK
+WHAT YOU WANT
+If a strike is coming while I’m away, wake the vault and get copies of us out. Never strike back.
+THE MIND’S VERSION · WHAT IT WILL DO
+WHEN · A tracked bullet is on a path to Veyra, or home goes silent · We have no pickets, so today only silence can set it off.
+DO · Wake the deep vault. Send the archive to the ice world.
+NEVER · Strike back, even when the path names who fired
+It launches nothing, · so no spoof or feint can turn it on an innocent world.
+It deters no one: no one knows of it. Deterrence counts only what others have seen.
+TRIED ON YOUR LAST ABSENCE
+Nothing would have set it off.
+[Edit] · [Approve]
+
 # Holos · Contact
 
 ## First contact · the knock
@@ -1572,7 +1706,7 @@ WHERE IT CAME FROM · WITHIN 8°
 - Gliese 784 · 7.3 ly · if from there, it left in Year 99
 - Lantern · 10.3 ly · if from there, it left in Year 62
 - 3 stars, 32 to 42 ly · if from one of these, it left before we woke
-- A brightening at Lantern, Year 72.4 · logged, never explained · a launch would fit · ›
+- Its launch · never seen: its exhaust pointed away from us
 what now ›
 
 #### 4 · What now · Every next step and what it reveals. Any, or none. Nothing is chosen for you.
@@ -1614,7 +1748,7 @@ REACH · THE VISITOR
 ### The visitor, as we know it
 In our belt since Year 192.1 · 2.9 AU out
 WHAT WE KNOW ABOUT IT
-Its home · Lantern, from where its beam points · Launched · About Year 62, at 8% of light · Seen leaving · The brightening we logged at Lantern, Year 72.4 · If sent for us · Lantern saw us by Year 52 · Doing · Sitting still. Its beam runs a few hours a day.
+Its home · Lantern, from where its beam points · Launched · About Year 62, at 8% of light · Seen leaving · Never. It was dark until it braked. · If sent for us · Lantern saw us by Year 52 · Doing · Sitting still. Its beam runs a few hours a day.
 WHAT LANTERN LEARNS FROM IT
 First report · Lands at Lantern in Year 202.4 · Our system · Whatever it can see from the belt · That we watched · Only if we signaled it
 THE CLUE
@@ -1836,7 +1970,7 @@ REACH · MESSAGE
 “Light is slow for questions. One of us is coming, and stops in Year 500 wherever you say. Meet it, or send one of you.”
 WHAT IT CARRIED
 A PROPOSAL · Meet, in Year 500
-A FACT · THEIR EMISSARY · It left Beacon in Year 405, at a tenth of light speed, carrying one of them. · Our sky watch saw its launch flare in Year 414.3, unexplained until now. · [See its path ›]
+A FACT · THEIR EMISSARY · It left Beacon in Year 405, at a tenth of light speed, carrying one of them. · We never saw it leave: a craft sent toward us points its exhaust away from us. · [See its path ›]
 AN OFFER · “Send one of you to us”: a mind, sent as light, to run on their machines.
 [Answer]
 see its path ›
@@ -1850,9 +1984,9 @@ REACH · THEIR EMISSARY
 
 ### Beacon’s emissary, in time
 Years go up, distance across. Light crosses in 9.3 Years; the emissary takes 95.
-[drawing: Years against distance: the emissary crossing from Beacon to Veyra over 95 Years, and an answer sent in Year 450 meeting it in Year 454.4; labels: Veyra, Beacon, 405, 414.3, 426, 450, 500, now, it hears us · 454.4, an answer sent in 450, it stops here · Year 500, their emissary, their letter, its launch flare, years ↑ · distance →]
+[drawing: Years against distance: the emissary crossing from Beacon to Veyra over 95 Years, and an answer sent in Year 450 meeting it in Year 454.4; labels: Veyra, Beacon, 405, 426, 450, 500, now, it hears us · 454.4, an answer sent in 450, it stops here · Year 500, their emissary, their letter, years ↑ · distance →]
 WHAT WE KNOW
-Left Beacon · Year 405, at a tenth of light speed · Seen leaving · Year 414.3: the flare our sky watch logged · Stops here · Year 500, braking over its last two Years · Its own clock · About half a Year behind ours when it stops · Hears us · Year 454.4, if we answer in Year 450. Beacon, in 459.3. · Carries · One of their minds. Its news of home ends in Year 490.7. · [Answer]
+Left Beacon · Year 405, at a tenth of light speed · Seen leaving · Never. Its exhaust pointed away from us. · Stops here · Year 500, braking over its last two Years · Its own clock · About half a Year behind ours when it stops · Hears us · Year 454.4, if we answer in Year 450. Beacon, in 459.3. · Carries · One of their minds. Its news of home ends in Year 490.7. · [Answer]
 answer ›
 
 #### 3 · Ways to meet · Year 450. Each way, what it needs, and when it could happen. The emissary comes either way. Any, or none.
@@ -2037,7 +2171,7 @@ A clue in full: what we know, odds, next steps
 A probe in flight on the map
 A message on its way, spreading at light speed
 
-### Projects · 7 of 7
+### Projects · 8 of 8
 Empty, pick, confirm, started, two running, paused
 Grow and Reach tabs of the picker
 A locked project and what it needs
@@ -2045,6 +2179,7 @@ Not enough energy or compute
 A project finishes, seen in Projects
 Queue the next project for while you are away
 Cancel a project
+Budget drilldown: real units behind each share
 
 ### Report · 4 of 4
 A new result, and the result in full
@@ -2093,8 +2228,10 @@ A meeting in person: how, where, and talking live
 Crossed knocks
 The silent one: no answer, ever
 
-### Stakes · later · 0 of 4
+### Stakes · 3 of 6
+Readiness: what keeps us safe, direction by direction
+Strike {target}: every weapon, and who would know
+Standing orders for danger
 The strike as first contact
-A launch flare seen toward us
 Wounded: the morning after
 Total loss and a new cohort

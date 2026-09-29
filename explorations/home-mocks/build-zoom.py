@@ -2356,6 +2356,9 @@ tour_css = tour_css.replace('</style>', '''.gthumb{display:block;width:56px;heig
 .tg{flex-shrink:0;position:relative;width:40px;height:24px;border-radius:12px;background:var(--track)}.tg::after{content:'';position:absolute;left:3px;top:3px;width:18px;height:18px;border-radius:50%;background:var(--muted);box-shadow:0 1px 2px var(--shadow)}
 .tg.on{background:var(--ink)}.tg.on::after{left:19px;background:var(--paper)}.setrow{display:flex;align-items:center;gap:12px;min-height:50px;border-bottom:1px solid var(--rowline)}.setrow .rt{display:flex;flex-direction:column;gap:2px;flex-grow:1;font-size:14px}.setrow .sub{font-size:11px;color:var(--muted)}.setrow .tag{font-size:10.5px;color:var(--other)}
 .phone.dark{--page-ink2:#A9A59C;--paper:#121314;--ink:#E6E3DB;--muted:#9C988F;--faint:#34363A;--panel:#17181A;--track:#2A2B2E;--fill2:#BDB9AF;--rowline:#26282B;--you:#5BB8D6;--other:#E0A24A;--shadow:rgba(0,0,0,.5);color:var(--ink)}
+.warnrow{display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:baseline;padding:6px 0;border-bottom:1px solid var(--rowline);font-size:13px}.warnrow .sub{font-size:11px;color:var(--muted)}.warnrow .pd{font-size:12px;text-align:right}.warnrow .unk{color:var(--other)}
+.weapon{display:flex;flex-direction:column;gap:6px;padding:10px 12px;border:1.5px solid var(--ink);border-radius:10px;background:var(--paper)}.weapon header{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}.weapon header b{font-size:15px}.weapon .facts{margin:0}
+.bignum{display:flex;align-items:baseline;gap:10px;margin:8px 0 2px}.bignum strong{font:600 30px 'IBM Plex Mono',monospace;letter-spacing:-.02em}.bignum span{font-size:12px;color:var(--muted)}
 .hearrow{display:grid;grid-template-columns:9px 1fr auto;gap:10px;align-items:center;padding:6px 0;border-bottom:1px solid var(--rowline)}.hearrow .pt{font-size:13.5px}.hearrow .sub{font-size:11px;color:var(--muted)}
 </style>''')
 
@@ -2593,7 +2596,7 @@ ORDERS_AFTER = tab_screen('Mind', 'MIND', 'STANDING ORDERS', f"""<div class="sec
 
 # ---------- Meeting Beacon: their emissary, and talking live ----------
 # Beacon's second letter (sent 416.7, held for us at 426) asks to meet in Year 500. Its emissary, a Beacon mind on a
-# torch craft, left in Year 405 at a tenth of light speed; its launch flare reached our sky watch in 414.3, unexplained
+# torch craft, left in Year 405 at a tenth of light speed; we never saw it leave, since a craft sent toward us points its exhaust away from us,
 # until now. Our answer (450) passes it on its way (Y_EM_HEARS) and reaches Beacon in 459.3. It brakes over its last
 # two Years, bright, and stops beside the ice world, 9 AU out: a round trip of light there is 2.5 hours, under a
 # tenth of a second of real time. Its clock ran slow by 0.5% for 95 Years: about half a Year.
@@ -2608,9 +2611,8 @@ def meet_spacetime(w=358, h=236):
     L = lambda ly, yr: f'{fmt(X(ly))},{fmt(Yp(yr))}'
     s = [f'<line x1="{x0}" y1="{yb}" x2="{x0}" y2="{yt}" stroke="{YOU}" stroke-width="1"></line><line x1="{x1}" y1="{yb}" x2="{x1}" y2="{yt}" stroke="{OTHER}" stroke-width="1"></line>',
          text(x0, yt - 5, 'Veyra', 9, YOU, 'middle', 600), text(x1, yt - 5, 'Beacon', 9, OTHER, 'middle', 600)]
-    for yr in (405, Y_EM_SEEN, Y_INV, 450, 500): s.append(text(x0 - 5, Yp(yr) + 3, f'{yr:g}', 8, MUTED, 'end'))
-    for yr in (Y_EM_SEEN, Y_INV): s.append(f'<circle cx="{x0}" cy="{fmt(Yp(yr))}" r="2.5" fill="{OTHER}"></circle>')
-    s.append(f'<path d="M{L(d_b, Y_EM_L)} L{L(0, Y_EM_L + d_b)}" fill="none" stroke="{OTHER}" stroke-width=".9" stroke-dasharray="2 2"></path>')
+    for yr in (405, Y_INV, 450, 500): s.append(text(x0 - 5, Yp(yr) + 3, f'{yr:g}', 8, MUTED, 'end'))
+    s.append(f'<circle cx="{x0}" cy="{fmt(Yp(Y_INV))}" r="2.5" fill="{OTHER}"></circle>')
     s.append(f'<path d="M{L(d_b, Y_INV_SENT)} L{L(0, Y_INV)}" fill="none" stroke="{OTHER}" stroke-width=".9"></path>')
     s.append(f'<path d="M{L(d_b, Y_EM_L)} L{L(.1, Y_EM_L + (d_b - .1) / .1)} Q{L(0, 499)} {L(0, Y_EM_A)}" fill="none" stroke="{OTHER}" stroke-width="1.8"></path>')
     s.append(f'<line x1="{x0}" y1="{fmt(Yp(448.3))}" x2="{x1}" y2="{fmt(Yp(448.3))}" stroke="{INK}" stroke-width=".6" stroke-dasharray="1 3"></line>' + text(x1 + 4, Yp(448.3) + 3, 'now', 8, INK))
@@ -2622,14 +2624,14 @@ def meet_spacetime(w=358, h=236):
     s.append(f'<circle cx="{x0}" cy="{fmt(Yp(Y_EM_A))}" r="3.5" fill="{OTHER}"></circle>' + text(x0 + 8, Yp(Y_EM_A) + 3, 'it stops here · Year 500', 8.5, OTHER, 'start', 600))
     s.append(text(X(1.5) + 8, Yp(Y_EM_L + (d_b - 1.5) / .1) + 3, 'their emissary', 8.5, OTHER, 'start', 600))
     s.append(text(X(d_b / 2), Yp((Y_INV_SENT + Y_INV) / 2) - 5, 'their letter', 8, OTHER, 'middle'))
-    s.append(text(x1 - 4, yb + 12, 'its launch flare', 8, OTHER, 'end') + text(x0, h - 3, 'years ↑ · distance →', 8, MUTED))
+    s.append(text(x0, h - 3, 'years ↑ · distance →', 8, MUTED))
     return f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" font-family="IBM Plex Mono, monospace" role="img" aria-label="Years against distance: the emissary crossing from Beacon to Veyra over 95 Years, and an answer sent in Year 450 meeting it in Year 454.4">{"".join(s)}</svg>'
 MEET_INVITE = tab_screen('Reach', 'REACH', 'MESSAGE', f"""<button class="backlink inline">‹ Beacon</button>
 <div class="speech"><div class="speaker">{sigil_svg(BEACON_SEED, OTHER, 44, 'Beacon’s signature')}<span><b>Beacon</b><span class="mono">SENT YEAR {Y_INV_SENT} · ARRIVED YEAR {Y_INV:.0f} · HELD FOR YOU</span></span></div>
 <p class="big">{INVITE_VOICE}</p></div>
 <div class="sec">WHAT IT CARRIED</div>
 {part('A PROPOSAL', '<b>Meet, in Year 500</b>')}
-{part('A FACT · THEIR EMISSARY', f'<b>It left Beacon in Year {Y_EM_L:.0f}, at a tenth of light speed, carrying one of them.</b><span class="sub">Our sky watch saw its launch flare in Year {Y_EM_SEEN}, unexplained until now.</span><button class="chip">See its path ›</button>')}
+{part('A FACT · THEIR EMISSARY', f'<b>It left Beacon in Year {Y_EM_L:.0f}, at a tenth of light speed, carrying one of them.</b><span class="sub">We never saw it leave: a craft sent toward us points its exhaust away from us.</span><button class="chip">See its path ›</button>')}
 {part('AN OFFER', '<b>“Send one of you to us”: a mind, sent as light, to run on their machines.</b>')}
 <button class="primary">Answer</button>""", at_year((45, 50, '14,800 kt'), 448.3))
 
@@ -2638,7 +2640,7 @@ MEET_PATH = tab_screen('Reach', 'REACH', 'THEIR EMISSARY', f"""<button class="ba
 <p class="copy small">Years go up, distance across. Light crosses in {d_b:.1f} Years; the emissary takes 95.</p>
 <div class="art">{meet_spacetime()}</div>
 <div class="sec">WHAT WE KNOW</div>
-{ledger([('Left Beacon', f'Year {Y_EM_L:.0f}, at a tenth of light speed'), ('Seen leaving', f'Year {Y_EM_SEEN}: the flare our sky watch logged'),
+{ledger([('Left Beacon', f'Year {Y_EM_L:.0f}, at a tenth of light speed'), ('Seen leaving', 'Never. Its exhaust pointed away from us.'),
          ('Stops here', f'Year {Y_EM_A:.0f}, braking over its last two Years'), ('Its own clock', 'About half a Year behind ours when it stops'),
          ('Hears us', f'Year {Y_EM_HEARS}, if we answer in Year {Y_ANS:.0f}. Beacon, in {Y_ANS + d_b:.1f}.'),
          ('Carries', f'One of their minds. Its news of home ends in Year {Y_EM_A - d_b:.1f}.')])}
@@ -2764,7 +2766,7 @@ MEET_PACT = f"""<div class="phone">{at_year((30, 35, '13,400 kt'), Y_PACT)}<div 
 # ---------- A visitor brakes into our system: something from Lantern ----------
 # Year 190. A fusion torch flares 5,000 AU out: a craft braking at a steady rate from 8% of light, to stop in our belt in
 # Year 192. It coasted in cold, unseen. Traced back, its path points toward Lantern to within 8°: Gliese 784, Lantern,
-# and three stars 32 to 42 ly out, which would mean it left before we woke. Our sky watch logged a brightening at Lantern
+# and three stars 32 to 42 ly out, which would mean it left before we woke. Its launch was dark to us: its exhaust pointed away. (Lantern
 # in Year 72.4 and never explained it. Once stopped, it reports home by narrow beam; we are beside the transmitter, so
 # we see exactly where the beam points: Lantern. If it was sent for us, Lantern saw us by about Year 52.
 V_SPEED = .08; d_l = math.dist(atlas(by_hip['99461']), HOME)
@@ -2830,7 +2832,7 @@ VISIT_MAP = frame(2, *neighbors(trace=('99461', 8, 'its path, traced back')), pa
     row(f'Gliese 784 · {d_g784:.1f} ly', f'if from there, it left in Year {v_launch(d_g784):.0f}', ''),
     row(f'Lantern · {d_l:.1f} ly', f'if from there, it left in Year {Y_VL:.0f}', '', 'other', marker=True),
     row('3 stars, 32 to 42 ly', 'if from one of these, it left before we woke', ''),
-    row(f'A brightening at Lantern, Year {Y_VLS}', 'logged, never explained · a launch would fit', '›', 'other')]),
+    row('Its launch', 'never seen: its exhaust pointed away from us', '')]),
     year=f'Year {Y_V1:.1f}', res=(20, 25, '1,900 kt'))
 
 VISIT_NEXT = f"""<div class="phone">{at_year((20, 25, '1,900 kt'), Y_VN)}<div class="sheet">
@@ -2874,7 +2876,7 @@ VISIT_KNOWN = tab_screen('Reach', 'REACH', 'THE VISITOR', f"""<button class="bac
 <p class="copy small">In our belt since Year {Y_VS + .1:.1f} · 2.9 AU out</p>
 <div class="sec">WHAT WE KNOW ABOUT IT</div>
 {ledger([('Its home', 'Lantern, from where its beam points'), ('Launched', f'About Year {Y_VL:.0f}, at 8% of light'),
-         ('Seen leaving', f'The brightening we logged at Lantern, Year {Y_VLS}'), ('If sent for us', f'Lantern saw us by Year {Y_VL - d_l:.0f}'),
+         ('Seen leaving', 'Never. It was dark until it braked.'), ('If sent for us', f'Lantern saw us by Year {Y_VL - d_l:.0f}'),
          ('Doing', 'Sitting still. Its beam runs a few hours a day.')])}
 <div class="sec">WHAT LANTERN LEARNS FROM IT</div>
 {ledger([('First report', f'Lands at Lantern in Year {Y_VR}'), ('Our system', 'Whatever it can see from the belt'),
@@ -3110,6 +3112,168 @@ REPLAY_TOUR = tour(frame(2, *neighbors(), panel=('LEADS AND CONTACTS · 5', f'YE
     'At Year 0, about 1,200 stars and no one heard. Since then, five have spoken or been seen: Beacon, Ember, Frost, Pearl and Lantern.',
     (4, 106, 382, 396), 520).replace('TOUR · 2 OF 6', 'REPLAY · 2 OF 6').replace('>Skip tour<', '>Close<')
 
+# ---------- Stakes: what keeps us safe, a strike and who would know, and orders for danger ----------
+# Veyra at Year 470.5 has built no weapon. It holds a sleeping deep vault and the deep archive, and nothing guards any
+# direction. The one strike it could make is a flyby probe aimed to hit, and the one mapped target is Lantern, whose
+# world crosses its star every 212 days. A launch toward a target is dark to it (the exhaust points away), so warning
+# can only come from pickets that see a bullet's nose glow. Numbers follow HOLOS_PROJECTS: a fix 1,000 AU out.
+Y_SK = 470.5; HUD_SK = at_year((25, 30, '12,300 kt'), Y_SK)
+FIX_LY = 1000 / 63241
+def warn_years(v): return FIX_LY * (1 / v - 1)
+def warnrow(title, sub, v=None):
+    if v is None: right = '<span class="unk">Unknown</span>'
+    elif v == 0: right = '<span class="gy">none</span>'
+    else: right = tstack(f'{warn_years(v) * 365.25:.0f} days', clock(warn_years(v) * 5))
+    return f'<div class="warnrow"><span class="pt"><span>{title}</span><span class="sub">{sub}</span></span><span></span><span class="pd">{right}</span></div>'
+
+def guard_svg(lines=(), w=358, h=164):
+    # Veyra at the center; each known neighbor in its real direction. A guarded direction is a solid wedge.
+    cx, cy, R = 179, 86, 58
+    s = [stipple(241, 40, w, h), f'<circle cx="{cx}" cy="{cy}" r="{R}" fill="none" stroke="{INK}" stroke-width=".7" stroke-dasharray="2 4" opacity=".6"></circle>']
+    cam = camera(58, 205)
+    for hip, name in (('2021', 'Beacon'), ('108870', 'Ember'), ('99461', 'Lantern'), ('105858', 'Frost'), ('1599', 'Pearl')):
+        x, y = project(atlas(by_hip[hip]), HOME, cam, 1, (0, 0)); a = math.atan2(y, x)
+        px, py = cx + R * math.cos(a), cy + R * math.sin(a)
+        if name in lines:
+            s.append(f'<path d="M{cx} {cy} L{fmt(cx + (R + 8) * math.cos(a - .12))} {fmt(cy + (R + 8) * math.sin(a - .12))} L{fmt(cx + (R + 8) * math.cos(a + .12))} {fmt(cy + (R + 8) * math.sin(a + .12))} Z" fill="{YOU}" fill-opacity=".25" stroke="{YOU}" stroke-width="1.2"></path>')
+        s.append(f'<line x1="{cx}" y1="{cy}" x2="{fmt(px)}" y2="{fmt(py)}" stroke="{OTHER}" stroke-width=".7" stroke-dasharray="3 3" opacity=".7"></line><circle cx="{fmt(px)}" cy="{fmt(py)}" r="3" fill="{OTHER}"></circle>')
+        s.append(text(px + 14 * math.cos(a), py + 14 * math.sin(a) + 3, name, 9, OTHER, 'middle', 600))
+    s.append(f'<circle cx="{cx}" cy="{cy}" r="5" fill="{YOU}"></circle>' + text(cx, cy - 10, 'Veyra', 9, YOU, 'middle', 600))
+    s.append(text(8, 12, 'guarded: solid · unguarded: dashed', 8, MUTED))
+    return f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" font-family="IBM Plex Mono, monospace" role="img" aria-label="Veyra and the directions to its known neighbors, showing which are guarded">{"".join(s)}</svg>'
+
+READY_NOW = tab_screen('Mind', 'MIND', 'READINESS', f"""<div class="art">{guard_svg()}</div>
+<p class="copy small">Tested only against weapons we could build ourselves. Anything faster reads Unknown.</p>
+<div class="sec">IF VEYRA IS HIT</div>
+{row('Deep vault · sleeping', 'cold, inside the ice world · wakes if home goes silent', '', 'you', marker=True)}
+{row('Deep archive', 'everything we know, stored safe · since Year 409', '', 'you', marker=True)}
+<div class="sec">GUARDED DIRECTIONS · 0</div>
+<p class="lag mono">None. A strike from any direction arrives unannounced: a launch toward us is dark to us.</p>
+<div class="sec">WARNING WE WOULD GET, BY SPEED</div>
+{warnrow('A tenth of light speed', 'an aimed flyby probe', 0)}
+{warnrow('A fifth of light speed', 'a heavy bullet on a torch', 0)}
+{warnrow('Faster', 'nothing we could build', None)}""", HUD_SK)
+
+Y_RL = 600.0
+def picket_svg(w=358, h=110):
+    x0, x1, y = 24, 336, 44
+    s = [stipple(251, 30, w, h), f'<line x1="{x0}" y1="{y}" x2="{x1}" y2="{y}" stroke="{YOU}" stroke-width=".8" stroke-dasharray="2 4"></line>']
+    s.append(f'<circle cx="{x0}" cy="{y}" r="9" fill="{PAPER}" stroke="{INK}" stroke-width="1.2"></circle>' + text(x0, y + 24, 'Veyra', 9, YOU, 'middle', 600))
+    for i, x in enumerate((44, 52, 60)):
+        s.append(f'<rect x="{x - 3}" y="{y - 14}" width="6" height="6" fill="{PAPER}" stroke="{YOU}" stroke-width="1"></rect>')
+    s.append(text(52, y - 20, 'depots', 8.5, YOU, 'middle', 600))
+    for k in range(6):
+        x = 110 + k * 44
+        s.append(f'<circle cx="{x}" cy="{y}" r="3" fill="{PAPER}" stroke="{YOU}" stroke-width="1.2"></circle>')
+    s.append(text(220, y - 12, 'pickets, out to 2,000 AU', 8.5, YOU, 'middle', 600))
+    s.append(f'<path d="M{w - 4} {y} H{x1 + 6} M{x1 + 6} {y} l6 -4 M{x1 + 6} {y} l6 4" fill="none" stroke="{OTHER}" stroke-width="1"></path>' + text(w - 6, y + 16, 'toward Lantern', 8.5, OTHER, 'end', 600))
+    s.append(text(8, y + 44, 'its nose glows where gas hits it: two fixes give the path', 8, MUTED))
+    s.append(text(w - 8, h - 6, 'not to scale', 8, MUTED, 'end'))
+    return f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" font-family="IBM Plex Mono, monospace" role="img" aria-label="A line of pickets from Veyra out to 2,000 AU toward Lantern, with sand depots near Veyra">{"".join(s)}</svg>'
+READY_LINE = tab_screen('Mind', 'MIND', 'READINESS · A LINE', f"""<button class="backlink inline">‹ Readiness</button>
+<h3 class="lead">Veyra, guarded toward Lantern</h3>
+<div class="art">{picket_svg()}</div>
+<div class="sec">WARNING ON THIS LINE, BY SPEED</div>
+{warnrow('A tenth of light speed', 'an aimed flyby probe', .1)}
+{warnrow('A fifth of light speed', 'a heavy bullet on a torch', .2)}
+{warnrow('Faster', 'nothing we could build', None)}
+<div class="sec">WHAT HAPPENS, WITH NO ORDER</div>
+{ledger([('A heavy bullet', 'Screens throw sand in its path. Under 1% of the spray reaches Veyra.'), ('Pellets', 'Slip through. The air shields the ground; orbit takes the hit.'),
+         ('Every direction else', 'Unguarded. Guarding another costs about two heavy bullets.')])}
+<div class="sec">SETTING</div>
+<div class="seg"><button class="on" aria-pressed="true">Screens only</button><button aria-pressed="false" disabled>+ Deflector</button><button aria-pressed="false" disabled>Off</button></div>""",
+    at_year((40, 45, '18,000 kt'), Y_RL))
+
+d_lant = math.dist(atlas(by_hip['99461']), HOME)
+Y_SL_LAUNCH = Y_SK + 12; Y_SL_HIT = round(Y_SL_LAUNCH + d_lant / .1, 0); Y_SL_TOLD = round(Y_SL_LAUNCH + d_lant, 1)
+STRIKE_PICK = f"""<div class="phone">{HUD_SK}<div class="sheet">
+<div class="sh"><button class="backlink">‹ Lantern</button><span class="mono kind">REACH · STRIKE</span></div>
+<h3 class="lead">Strike Lantern?</h3>
+<p class="whyline">Their world is mapped: it crosses Lantern every 212 days. Nothing is chosen for you.</p>
+<div class="sec">WHAT WE HAVE · 1</div>
+<div class="weapon"><header><span class="pt"><b>An aimed flyby probe</b><span class="sub">A flyby, steered to hit instead of pass</span></span><span class="pd">{tstack(f'lands Year {Y_SL_HIT:.0f}', clock((Y_SL_HIT - Y_SK) * 5))}</span></header>
+{ledger([('It would', 'Wound their world. Not end them.'), ('Their warning', 'Unknown. We don’t know what guards them.'),
+         ('Who sees it go', f'Their visitor, beside us. Lantern hears by Year {Y_SL_TOLD:.0f}.'), ('Whose name', 'Ours. Its path traces back here.')])}</div>
+<div class="sec">NOT BUILT</div>
+<div class="ptypes">
+<div class="ptype locked"><span class="kthumb">{ICONS['torch']}</span><span class="pt"><b>Heavy impactor</b><span class="sub">ends a planet</span><span class="needs">Needs: torch probe, then 30 Years and 80 Mt</span></span><span class="pd"></span></div>
+<div class="ptype locked"><span class="kthumb">{ICONS['chips']}</span><span class="pt"><b>Pellet swarm</b><span class="sub">strips orbit; the air shields the ground</span><span class="needs">Needs: laser sail array</span></span><span class="pd"></span></div>
+</div>
+{TALK}
+<button class="primary" disabled>Choose a weapon</button>
+</div></div>"""
+
+def strike_who_svg(w=358, h=128):
+    vx, lx, y = 40, 320, 60
+    s = [stipple(261, 40, w, h)]
+    s.append(f'<ellipse cx="{vx}" cy="{y}" rx="30" ry="11" fill="none" stroke="{INK}" stroke-width=".7" stroke-dasharray="1 3"></ellipse><circle cx="{vx}" cy="{y}" r="6" fill="{YOU}"></circle>' + text(vx, y + 28, 'Veyra', 9, YOU, 'middle', 600))
+    s.append(f'<circle cx="{vx + 24}" cy="{y - 8}" r="3.5" fill="{OTHER}"></circle>' + text(vx + 30, y - 26, 'their visitor sees it go', 8.5, OTHER, 'start', 600))
+    s.append(f'<path d="M{vx + 28} {y - 10} Q{(vx + lx) / 2} {y - 36} {lx - 8} {y - 4}" fill="none" stroke="{OTHER}" stroke-width="1" stroke-dasharray="4 3"></path>' + text((vx + lx) / 2 + 60, y - 44, f'its report · Lantern hears by {Y_SL_TOLD:.0f}', 8, OTHER, 'middle'))
+    s.append(f'<line x1="{vx + 10}" y1="{y + 4}" x2="{lx - 8}" y2="{y + 4}" stroke="{YOU}" stroke-width="1.4" stroke-dasharray="6 4"></line>' + text((vx + lx) / 2, y + 18, f'our probe · lands {Y_SL_HIT:.0f}', 8.5, YOU, 'middle', 600))
+    s.append(f'<circle cx="{lx}" cy="{y}" r="6" fill="{PAPER}" stroke="{OTHER}" stroke-width="1.4"></circle>' + text(lx, y + 28, 'Lantern', 9, OTHER, 'middle', 600) + text(w - 4, y + 40, 'sees nothing leave', 8, MUTED, 'end'))
+    s.append(f'<path d="M{vx - 8} {y + 4} H8" stroke="{OTHER}" stroke-width="2.4" opacity=".5"></path>' + text(8, y + 44, 'exhaust points back:', 8, MUTED) + text(8, y + 55, 'seen only behind us', 8, MUTED))
+    return f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" font-family="IBM Plex Mono, monospace" role="img" aria-label="Who would see a strike on Lantern: their visitor in our belt sees it launch and tells Lantern decades before it lands">{"".join(s)}</svg>'
+STRIKE_WHO = tab_screen('Reach', 'REACH', 'STRIKE · LANTERN', f"""<button class="backlink inline">‹ Strike Lantern?</button>
+<h3 class="lead">Who would know</h3>
+<div class="art">{strike_who_svg()}</div>
+{ledger([('Their visitor', f'Sees it built and launched. Lantern hears by Year {Y_SL_TOLD:.0f}, {Y_SL_HIT - Y_SL_TOLD:.0f} Years before it lands.'),
+         ('Lantern itself', 'Sees nothing leave. The exhaust points back at us.'), ('Anyone behind us', 'Sees the exhaust, looking toward Veyra from beyond it.'),
+         ('After it lands', 'Its path names Veyra. Whoever sees the hit knows who fired.')])}
+<div class="sec">WHAT IT WOULD END</div>
+<p class="copy small">Our record, with everyone who learns of it: that we don’t strike. Beacon, Ember, Pearl and Frost would each learn it only if told, or if they watch Lantern.</p>
+<button class="primary">Back</button>""", HUD_SK)
+
+DANGER_ORDER = f"""<div class="phone">{HUD_SK}<div class="sheet">
+<div class="sh"><button class="backlink">‹ Orders</button><span class="mono kind">NEW ORDER · IF WE ARE STRUCK</span></div>
+<div class="sec">WHAT YOU WANT</div>
+<div class="intent">If a strike is coming while I’m away, wake the vault and get copies of us out. Never strike back.<i></i></div>
+<div class="sec">THE MIND’S VERSION · WHAT IT WILL DO</div>
+{part('WHEN', '<b>A tracked bullet is on a path to Veyra, or home goes silent</b><span class="sub">We have no pickets, so today only silence can set it off.</span>')}
+{part('DO', '<b>Wake the deep vault. Send the archive to the ice world.</b>')}
+{part('NEVER', '<b>Strike back, even when the path names who fired</b>')}
+<ul class="left"><li><b>It launches nothing,</b> so no spoof or feint can turn it on an innocent world.</li><li><b>It deters no one:</b> no one knows of it. Deterrence counts only what others have seen.</li></ul>
+<div class="sec">TRIED ON YOUR LAST ABSENCE</div>
+<p class="copy small">Nothing would have set it off.</p>
+<div class="twobtn"><button class="primary ghost">Edit</button><button class="primary">Approve</button></div>
+</div></div>"""
+
+# ---------- Budget drilldown: the real units behind each share ----------
+# Year 452. Shares on screen; a tap on a budget shows watts and operations a second. Sample values: the starting grid
+# is 100 TW, and waste heat caps energy on Veyra at about ten times that.
+def energy_bar(w=358, h=64):
+    x0, x1, y = 10, w - 10, 26; X = lambda tw: x0 + tw / 1000 * (x1 - x0)
+    s = [f'<rect x="{x0}" y="{y - 7}" width="{x1 - x0}" height="14" fill="none" stroke="{INK}" stroke-width=".6" stroke-dasharray="2 3"></rect>',
+         f'<rect x="{x0}" y="{y - 7}" width="{fmt(X(240) - x0)}" height="14" fill="{YOU}" fill-opacity=".25"></rect>',
+         f'<rect x="{x0}" y="{y - 7}" width="{fmt(X(108) - x0)}" height="14" fill="{YOU}"></rect>',
+         text(X(108) / 2 + x0 / 2, y - 12, 'in use · 108 TW', 8.5, YOU, 'middle', 600), text(X(240), y + 20, 'this year · 240 TW', 8.5, YOU, 'middle'),
+         f'<line x1="{x1}" y1="{y - 12}" x2="{x1}" y2="{y + 12}" stroke="{OTHER}" stroke-width="1.6"></line>' + text(x1, y + 20, 'ceiling on Veyra · 1,000 TW', 8.5, OTHER, 'end', 600)]
+    return f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" font-family="IBM Plex Mono, monospace" role="img" aria-label="This year’s energy: 108 of 240 terawatts in use, against a ceiling of about 1,000 on Veyra">{"".join(s)}</svg>'
+HUD_BU = at_year((45, 50, '15,000 kt'), 452.0)
+BUDGET_ENERGY = tab_screen('Projects', 'ENERGY', 'YEAR 452', f"""<button class="backlink inline">‹ Projects</button>
+<div class="bignum"><strong>45%</strong><span>of this year’s energy in use · 108 of 240 terawatts</span></div>
+<div class="art">{energy_bar()}</div>
+<div class="sec">WHERE IT COMES FROM</div>
+{row('Planetary grid', 'what we woke with', '<span class="mono">100 TW</span>')}
+{row('Fusion plant', 'since Year 214', '<span class="mono">100 TW</span>')}
+{row('Orbital solar array', 'since Year 20', '<span class="mono">40 TW</span>')}
+<div class="sec">WHERE IT GOES</div>
+{row('Belt mining, second site', 'a project', '<span class="mono">36 TW · 15%</span>')}
+{row('Deep flash watch', 'a project', '<span class="mono">24 TW · 10%</span>')}
+{row('Relay station, and the sentinel’s link', 'running', '<span class="mono">48 TW · 20%</span>')}
+<p class="copy small">Every watt ends as heat. Past about 1,000 TW on Veyra, the heat alone would warm the planet; beyond that, energy is made in space.</p>""", HUD_BU)
+BUDGET_COMPUTE = tab_screen('Projects', 'COMPUTE', 'YEAR 452', f"""<button class="backlink inline">‹ Projects</button>
+<div class="bignum"><strong>50%</strong><span>of this year’s compute in use</span></div>
+<p class="copy small mono">2 × 10²⁵ of 4 × 10²⁵ operations a second</p>
+<div class="sec">WHERE IT COMES FROM</div>
+{row('Data centers', 'what we woke with', '<span class="mono">1 × 10²⁵ /s</span>')}
+{row('Cold compute annex', 'run cold: each bit costs less', '<span class="mono">3 × 10²⁵ /s</span>')}
+<div class="sec">WHERE IT GOES</div>
+{row('The mind itself', 'always', '<span class="mono">20%</span>')}
+{row('Deep flash watch', 'a project', '<span class="mono">15%</span>')}
+{row('Belt mining, second site', 'a project', '<span class="mono">15%</span>')}
+{row('Deep vault', 'sleeping: cold, and free', '<span class="mono">0%</span>')}
+<p class="copy small">Compute grows with energy, and further when run cold. A running vault would take 15% more, and its warmth could be found.</p>""", HUD_BU)
+
 # ---------- A broadcast sweeps past: Pearl speaks to everyone ----------
 # Year 290. Pearl (Zeta Tucanae), 13.0 ly away, began broadcasting in Year 277.0: radio, the same strength every way,
 # not tuned for anyone's motion. Beacon (6.7 ly from Pearl) heard it in 283.7, Frost in 286.3, us in 290. Any answer to
@@ -3329,7 +3493,7 @@ CHECKLIST = [
     ('Projects', [('Empty, pick, confirm, started, two running, paused', 'done'), ('Grow and Reach tabs of the picker', 'done'),
                   ('A locked project and what it needs', 'done'), ('Not enough energy or compute', 'done'),
                   ('A project finishes, seen in Projects', 'done'), ('Queue the next project for while you are away', 'done'),
-                  ('Cancel a project', 'done')]),
+                  ('Cancel a project', 'done'), ('Budget drilldown: real units behind each share', 'done')]),
     ('Report', [('A new result, and the result in full', 'done'), ('Back after a long absence', 'done'), ('Replaying an absence on the map', 'done'), ('Nothing new yet', 'done')]),
     ('Reach', [('Empty, with standing orders', 'done'), ('Launch a probe: target, arrival and report times', 'done'), ('A probe in flight', 'done'),
                ('A probe arrives and reports', 'done'), ('Probe types: how to get there, per target', 'done'), ('A sentinel in orbit: watching, and new orders', 'done'), ('Compose a message: intent, the mind’s version, approve', 'done'),
@@ -3341,7 +3505,8 @@ CHECKLIST = [
                  ('The first reply arrives', 'done'), ('A message lands: their signature and words', 'done'), ('Sending: the reply leaves', 'done'), ('The conversation as the gulf between worlds', 'done'), ('Replying: intent, the mind’s version, approve', 'done'), ('Checking a claim: it holds, or it doesn’t', 'done'), ('What we know, both ways', 'done'), ('Their world, as we know it: a drawing that fills in', 'done'),
                  ('We find them first: a clue confirmed', 'done'), ('A broadcast sweeps past', 'done'), ('A visitor brakes into our system', 'done'),
                  ('A far mind met them first', 'done'), ('A meeting in person: how, where, and talking live', 'done'), ('Crossed knocks', 'done'), ('The silent one: no answer, ever', 'done')]),
-    ('Stakes · later', [('The strike as first contact', 'later'), ('A launch flare seen toward us', 'later'), ('Wounded: the morning after', 'later'), ('Total loss and a new cohort', 'later')]),
+    ('Stakes', [('Readiness: what keeps us safe, direction by direction', 'done'), ('Strike {target}: every weapon, and who would know', 'done'),
+                ('Standing orders for danger', 'done'), ('The strike as first contact', 'later'), ('Wounded: the morning after', 'later'), ('Total loss and a new cohort', 'later')]),
 ]
 def checklist_html(areas=None):
     out = ['<div class="checklist">']
@@ -3500,6 +3665,20 @@ SECTIONS = [
 ]
 
 SECTIONS += [
+    ('readiness', 'Readiness', 'Stakes · what keeps us safe', f'Year {Y_SK}. Veyra has built no weapon, and that is a way to play. Readiness shows what keeps a civilization alive, direction by direction, tested only against weapons it could build itself. A launch toward us is dark to us, since its exhaust points away, so the only warning comes from pickets that see a bullet’s nose glow on its way in.',
+     f'<figure><figcaption><strong>1 · Readiness, now</strong><span>A vault and an archive, and no guarded direction. The honest answer: no warning, from anywhere.</span></figcaption>{READY_NOW}</figure>'
+     f'<span class="pinch">later: Year {Y_RL:.0f} ›</span>'
+     f'<figure><figcaption><strong>2 · One line, guarded</strong><span>Pickets and depots toward Lantern. Warning at each speed we could build, in days and real seconds. Interception runs with no order.</span></figcaption>{READY_LINE}</figure>'),
+    ('strike', 'Strike', 'Stakes · a strike, and who would know', f'Year {Y_SK}. Lantern’s visitor has sat in our belt since Year {Y_VS:.0f}, and Lantern’s world is mapped. The strike screen compares every weapon we have, as the probe screen compares probes: what it would do, the warning they get, who sees it go, and whose name is on it. It shows consequences, never a recommendation. A peaceful civilization sees one weapon here: every probe is one.',
+     f'<figure><figcaption><strong>1 · Strike Lantern?</strong><span>The one weapon we have, and two we haven’t built. Nothing is chosen for you.</span></figcaption>{STRIKE_PICK}</figure>'
+     '<span class="pinch">who would know ›</span>'
+     f'<figure><figcaption><strong>2 · Who would know</strong><span>Their visitor sees it go and tells Lantern a century before it lands. The path names us.</span></figcaption>{STRIKE_WHO}</figure>'),
+    ('danger-orders', 'If struck', 'Stakes · standing orders for danger', 'Orders may authorize anything, including a strike back. This one does the opposite: it saves what it can and never strikes back. Because it launches nothing, no spoof can turn it on an innocent world. The same editor would show the risk of an order that fires.',
+     f'<figure><figcaption><strong>1 · If we are struck</strong><span>What you want, the mind’s exact version, what it can’t be tricked into, and a test on your last absence.</span></figcaption>{DANGER_ORDER}</figure>'),
+    ('budgets', 'Budgets', 'Projects · the real units behind each share', 'Screens show shares of the year. A tap on a budget shows what the share is made of: terawatts for energy, operations a second for compute. The drilldown also shows the ceiling: past about 1,000 TW on Veyra, waste heat alone would warm the planet.',
+     f'<figure><figcaption><strong>1 · Energy</strong><span>From the top bar. Where this year’s terawatts come from, where they go, and the ceiling.</span></figcaption>{BUDGET_ENERGY}</figure>'
+     '<span class="pinch">or compute ›</span>'
+     f'<figure><figcaption><strong>2 · Compute</strong><span>Operations a second, and why a cold annex and a sleeping vault matter.</span></figcaption>{BUDGET_COMPUTE}</figure>'),
     ('settings', 'Settings', 'Mind · settings', f'Year {Y_SET:.0f}. The clock never stops, so the setting that matters most is what may reach you while it runs: 8 hours of sleep is 96 Years. Each kind of notice says what it would have sent during your last absence. Quiet hours hold everything except someone new, then send one notice in the morning. Theme and the tour replay live here too.',
      f'<figure><figcaption><strong>1 · Settings</strong><span>What wakes you, tested on your last absence. Quiet hours, theme, and the tour.</span></figcaption>{SETTINGS}</figure>'
      '<span class="pinch">that night ›</span>'
@@ -3590,10 +3769,11 @@ SECTIONS += [
 AREAS = [  # (page, area as named in CHECKLIST, one-line summary, section ids)
     ('onboarding', 'Onboarding', 'Choosing a civilization, waking on it, what you inherit, and the guided tour.', ['choose', 'waking', 'tour']),
     ('home', 'Home', 'The map at five zoom levels, star cards and clues, projects in place.', ['zoom', 'local-group', 'clues', 'map']),
-    ('projects', 'Projects', 'Starting, running, finishing, queueing and cancelling projects.', ['projects', 'picker', 'upnext']),
+    ('projects', 'Projects', 'Starting, running, finishing, queueing and cancelling projects, and the real units behind each share.', ['projects', 'picker', 'upnext', 'budgets']),
     ('report', 'Report', 'What comes back while you are away, and catching up after a long absence.', ['result', 'absence']),
     ('reach', 'Reach', 'Beyond Veyra: sending a probe, following it, what it finds, the kinds of probe, and broadcasting.', ['probe', 'flyby', 'probe-types', 'sentinel', 'broadcast']),
     ('mind', 'Mind', 'Standing orders near and far, and settings: what wakes you, quiet hours, theme, the tour.', ['orders', 'settings']),
+    ('stakes', 'Stakes', 'What keeps us safe, what a strike would cost and reveal, and orders for danger. Peace is a way to play.', ['readiness', 'strike', 'danger-orders']),
     ('contact', 'Contact', 'First contact: the knock, the reply, checking what they told us, and the builders meeting our sentinel, crossed knocks with Ember, a visitor from Lantern, overhearing Pearl, meeting Beacon’s emissary, and Frost’s silence.', ['knock', 'reply', 'check', 'visitor', 'swept', 'noticed', 'crossed', 'meeting', 'silent']),
 ]
 assert sorted(sid for *_, ids in AREAS for sid in ids) == sorted(sid for sid, *_ in SECTIONS), 'every section belongs to exactly one page'
