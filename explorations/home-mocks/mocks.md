@@ -33,7 +33,7 @@ tap Veyra ›
 ### Veyra
 Delta Pavonis · 19.9 ly from Sol
 [drawing: Delta Pavonis, its habitable zone, and Veyra’s orbit within it; labels: Veyra · invented, Delta Pavonis · real, habitable zone, 1 AU]
-Star · real · Delta Pavonis. Yellow, a little older and brighter than the Sun. · World · invented · Continents and seas, about Earth’s size, in the habitable zone. · Surveys · No world this size, this far out, could have been found there yet. · In its sky · Beacon, the brightest star. It has its own names for five more. · [[drawing: A Veyran, head and crest] · Veyrans · invented · Upright, toe-walking, two thumbs a hand. Many nations, one world. · ›]
+Star · real · Delta Pavonis. Yellow, a little older and brighter than the Sun. · World · invented · Continents and seas, about Earth’s size, in the habitable zone. · Surveys · No world this size, this far out, could have been found there yet. · In its sky · Beacon, the brightest star. It has its own names for five more. · [[drawing: A Veyran, face and crests] · Veyrans · invented · Upright, toe-walking, two crests, two thumbs a hand. Many nations, one world. · ›]
 THE MIND IT WAKES AS
 FOUNDING LINE · “Keep the lights on. Look before we speak.”
 Open · Hidden
@@ -103,11 +103,27 @@ Keeping them alive is the floor. What else they are for is yours to decide.
 [Where things stand]
 tap ⤢ ›
 
-#### 3b · Full screen · A naturalist’s plate: the body called out, and the crest, eye, hand and foot magnified from the same drawing.
+#### 3b · Full screen · A naturalist’s plate, side on: the body called out, and the crest, eye, hand and foot magnified from the same drawing.
 [‹ Who they are] · VEYRANS · AN ADULT · INVENTED
+[selected: Side] · [Front] · [Face]
 [drawing: Plate: one of Veyra’s people, with the crest, eye, hand and foot magnified; labels: Crest: hears far off, Spots flush with mood, The lamp of the founding line, Sash and pouch, Tail: balance, Eye, Two thumbs, Heavy thigh, Hock spur, On its toes, 1 m, 2 m, crest ×2, eye ×3, hand ×3, foot ×3]
-Height · 1.7 m; 2 m with the crest raised · Mass · About 60 kg, most of it in the thighs and tail · Gait · On the toes, tail out behind. They sit back on it. · Hands · Two fingers, two opposed thumbs. They hold with either pair. · Crest · A fan of stiff rays under skin. It turns to sound, and its spots flush with mood.
+Height · 1.7 m; 2 m with the crests raised · Mass · About 60 kg, most of it in the thighs and tail · Gait · On the toes, tail out behind. They sit back on it. · Hands · Two fingers, two opposed thumbs. They hold with either pair.
 Drawn by the mind from 6.8 billion of them. Veyra’s star is real; its people are not.
+Front ›
+
+#### 3c · Front · The same body facing us: the paired crests spread like a crown, eyes forward, thighs splayed.
+[‹ Who they are] · VEYRANS · AN ADULT · INVENTED
+[Side] · [selected: Front] · [Face]
+[drawing: Front view: one of Veyra’s people, facing us; labels: 1 m, 2 m, Two crests, Eyes face forward, The lamp, Pouch, Tail, behind, Long mouth, Two thumbs, Heavy thighs, On its toes]
+Crests · A pair, one each side of the head, like ears. Turning them finds where a sound comes from. · Eyes · Facing forward, so their fields overlap: they judge distance as we do. · Build · Narrow shoulders, a deep chest, and hips and thighs built to stand all day.
+Face ›
+
+#### 3d · Face · A portrait, front on and a little from above, with its parts named and how to read it.
+[‹ Who they are] · VEYRANS · AN ADULT · INVENTED
+[Side] · [Front] · [selected: Face]
+[drawing: The face in close-up, with its parts named; labels: Crest rays, Mood spots, Ear, Brow ridge, Mouth, jaw-long, Throat folds, Crown scales, Slit pupil, Blue iris, Nostril slits, Sash]
+READING A FACE
+Crests up, turned · Listening to you, or to something behind you. · Spots flushed · Strong feeling. Which one, the rest of the face says. · Brows down · Attention, not anger. · The mouth · Says little. It runs back along the jaw and doesn’t smile.
 where things stand ›
 
 #### 4 · Where things stand · Year 0: our radio already sent and how loud it was, what we have heard, and whose waking we can’t see yet.
@@ -2289,7 +2305,7 @@ Name it and accept its charter
 Landing: the first seconds on Veyra
 Where we come from: the history, and what set each dial
 Who they are: the people, drawn to scale
-The people full screen, and as a thumb
+The people full screen: side, front and face, and as a thumb
 Where things stand at Year 0
 What you inherit: the starting kit
 Guided tour

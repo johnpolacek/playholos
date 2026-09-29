@@ -130,16 +130,17 @@ def hand(fig, wrist, reach=1.0):
         n = math.hypot(bx - ax, by - ay); ux, uy = (bx - ax) / n, (by - ay) / n
         fig.out.append(f'<path d="M{f(bx)} {f(by)} l{f(ux * 1.3)} {f(uy * 1.3)}" {stroke(1.1)}></path>')
 
-def crest(fig, base, scale=1.0):
+SIDE_RAYS = ([-58, -74, -90, -105, -120, -136, -152, -168], [17, 24, 28, 30, 29, 26, 21, 14])
+def crest(fig, base, scale=1.0, rays=SIDE_RAYS, root=2):
+    # One of the paired crests: a fan of stiff rays under skin, one each side of the head, like ears.
     bx, by = base
-    angles = [-58, -74, -90, -105, -120, -136, -152, -168]
-    lengths = [17, 24, 28, 30, 29, 26, 21, 14]
+    angles, lengths = rays
     tips = [(bx + L * scale * math.cos(math.radians(a)), by + L * scale * math.sin(math.radians(a))) for a, L in zip(angles, lengths)]
-    d = f'M{f(bx + 2)} {f(by + 1)} L{f(tips[0][0])} {f(tips[0][1])}'
+    d = f'M{f(bx + root)} {f(by + root / 2)} L{f(tips[0][0])} {f(tips[0][1])}'
     for (x1, y1), (x2, y2) in zip(tips, tips[1:]):
         cx, cy = (x1 + x2) / 2 + (bx - (x1 + x2) / 2) * .16, (y1 + y2) / 2 + (by - (y1 + y2) / 2) * .16
         d += f' Q{f(cx)} {f(cy)} {f(x2)} {f(y2)}'
-    d += f' L{f(bx - 2)} {f(by + 2)} Z'
+    d += f' L{f(bx - root)} {f(by + root)} Z'
     fig.shape(d)
     if fig.detail >= 1:
         for (tx, ty), a in zip(tips, angles):   # rays: stiff at the root, fine at the tip
@@ -181,6 +182,7 @@ def draw(uid, detail=2):
     fig.out.append(f'<path d="M1.5 -27 l-3 3.4" {stroke(1.1)}></path>')   # the spur at the hock
     neck = Part([(9, -144), (14, -158), (20, -168), (24, -173)], [16, 12, 10.5, 10], per=10)
     fig.part(neck, rings=6, pebbles=3)
+    crest(fig, (25, -182), .9, ([a + 10 for a in SIDE_RAYS[0]], SIDE_RAYS[1]))   # the far crest, peeking past the near one
     crest(fig, (22, -179))
     head = Part([(15, -177), (25, -181), (37, -179.5), (47, -175.5), (54, -172)], [13, 18, 15.5, 10, 4.2], per=12)
     fig.part(head, rings=0, pebbles=5 if detail >= 2 else 0)
@@ -209,10 +211,6 @@ def svg(width, height, view, detail=2, extra='', label='One of Veyra’s people'
     # Drawn inline, not through <use>: the theme retints colors by attribute, which doesn't reach into <use> clones.
     return (f'<svg width="{width}" height="{height}" viewBox="{" ".join(f(v) for v in view)}" font-family="IBM Plex Mono, monospace" role="img" aria-label="{label}">'
             f'<defs>{defs}</defs>{body}{extra}</svg>')
-
-def thumb(size=56):
-    # A portrait: the head and crest, for cards and lists.
-    return svg(size, size, (-6, -214, 66, 66), detail=1, label='A Veyran, head and crest')
 
 def shadow():
     return f'<ellipse cx="4" cy="0" rx="26" ry="2.6" fill="{INK}" opacity=".12"></ellipse>'
@@ -256,3 +254,142 @@ def plate(width=358):
     ex.append(inset(-98, 34, 24, 2.1, (16, -194), 'crest ×2') + inset(-40, 34, 24, 3.2, (39, -178), 'eye ×3')
               + inset(18, 34, 24, 3.2, (42, -110), 'hand ×3') + inset(76, 34, 24, 3, (15, -5), 'foot ×3'))
     return svg(width, width * vh / vw, (vx, vy, vw, vh), detail=2, extra=''.join(ex), label='Plate: one of Veyra’s people, with the crest, eye, hand and foot magnified')
+
+
+# ---------- Front view and face: the same body, facing us ----------
+# Front on, the snout points at the viewer and foreshortens to a round muzzle; the eyes face forward; the two crests
+# spread up and out like a crown. Symmetric about x = 0, same centimeters, ground at y = 0.
+def front_rays(side):
+    angles = [-84, -70, -57, -44, -31, -18, -6]
+    lengths = [22, 28, 30, 29, 26, 21, 14]
+    return ([a if side > 0 else -180 - a for a in angles], lengths)
+
+def front_hand(fig, wrist, s):
+    wx, wy = wrist
+    fig.part(Part([(wx, wy - 1), (wx + s * .4, wy + 2.4), (wx + s * .3, wy + 5)], [4.6, 5.6, 5], per=6), shade=False)
+    digits = [[(wx + s * 1.3, wy + 5), (wx + s * 1.9, wy + 9), (wx + s * 1.5, wy + 12.6)],     # two fingers, hanging
+              [(wx - s * .6, wy + 5.2), (wx - s * .8, wy + 9.2), (wx - s * .2, wy + 12.4)],
+              [(wx - s * 2, wy + 1.6), (wx - s * 4.6, wy + 3.6), (wx - s * 5.8, wy + 6.8)],   # two thumbs, turned in
+              [(wx - s * 1.8, wy + 3.4), (wx - s * 3.8, wy + 6.6), (wx - s * 4.2, wy + 10)]]
+    for pts in digits:
+        fig.part(Part(pts, [2.1, 1.7, 1.1], per=6), shade=False, rings=2 if fig.detail >= 2 else 0)
+        (ax, ay), (bx, by) = pts[-2], pts[-1]; n = math.hypot(bx - ax, by - ay)
+        fig.out.append(f'<path d="M{f(bx)} {f(by)} l{f((bx - ax) / n * 1.2)} {f((by - ay) / n * 1.2)}" {stroke(1.1)}></path>')
+
+def front_head(fig, detail):
+    """The face, front on and a little from above, so the long muzzle runs down toward us. Detail 3 adds the portrait's scales and iris."""
+    for sd in (-1, 1):
+        crest(fig, (sd * 9, -190), 1.0, front_rays(sd), root=2.6)
+    fig.part(Part([(0, -146), (0, -156), (0, -166)], [17, 13.5, 12], per=8), rings=5 if detail < 3 else 0, pebbles=3)   # neck
+    if detail >= 2:   # throat folds
+        fig.out.append(''.join(f'<path d="M{f(-6 + k * .3)} {f(-155.4 + k * 2.6)} Q0 {f(-153.2 + k * 2.6)} {f(6 - k * .3)} {f(-155.4 + k * 2.6)}" {stroke(.5, " opacity=\".75\"")}></path>' for k in range(4)))
+    skull = ('M0 -197 C7.5 -197 12.6 -193.4 13.4 -187.6 L13 -182 C12.6 -178.4 10.8 -175.4 8.2 -173.2 '
+             'C6 -171.2 5 -167 4.4 -162.6 C3.9 -159.6 2.2 -158 0 -158 C-2.2 -158 -3.9 -159.6 -4.4 -162.6 '
+             'C-5 -167 -6 -171.2 -8.2 -173.2 C-10.8 -175.4 -12.6 -178.4 -13 -182 L-13.4 -187.6 C-12.6 -193.4 -7.5 -197 0 -197 Z')
+    fig.shape(skull)
+    if detail >= 3:   # tiled scales over the crown, larger at the brow
+        for row, (y, n, r) in enumerate(((-194.6, 5, 1.2), (-192.4, 6, 1.15), (-190.2, 7, 1.05))):
+            for k in range(n):
+                x = (k - (n - 1) / 2) * r * 2.05 + (.5 if row % 2 else 0)
+                fig.out.append(f'<path d="M{f(x - r)} {f(y)} A{f(r)} {f(r)} 0 0 0 {f(x + r)} {f(y)}" {stroke(.45, " opacity=\".8\"")}></path>')
+        for sd in (-1, 1):   # cheek plates
+            for x, y, r in ((10.6, -180.6, 1.1), (9.2, -177.4, 1), (11.6, -184, .9), (7.2, -175, .8)):
+                fig.out.append(f'<path d="M{f(sd * (x - r))} {f(y)} A{f(r)} {f(r)} 0 0 0 {f(sd * (x + r))} {f(y)}" {stroke(.4, " opacity=\".8\"")}></path>')
+    elif detail >= 1:
+        fig.out.append(f'<path d="M-6 -194 Q0 -196 6 -194 M-7.6 -191.6 Q0 -193.8 7.6 -191.6" {stroke(.45, " opacity=\".7\"")}></path>')
+    fig.outline(skull, 1.4)
+    for sd in (-1, 1):
+        fig.out.append(f'<path d="M{sd * 12.8} -188.6 q{sd * -1.8} 1.8 {sd * -.7} 4.4" {stroke(.8)}></path>')                          # ear opening at the crest root
+        fig.out.append(f'<path d="M{sd * 2.1} -181.6 Q{sd * 2.9} -171 {sd * 2.3} -161.4" {stroke(.6, " opacity=\".8\"")}></path>')   # the ridge down the muzzle
+        fig.out.append(f'<path d="M{sd * 4.3} -160.8 Q{sd * 6.4} -165.2 {sd * 7.4} -170.2 Q{sd * 8.6} -172.4 {sd * 10.4} -173.6" {stroke(1)}></path>')   # the long mouth, running back along the jaw
+        fig.out.append(f'<path d="M{sd * .9} -160.4 l{sd * 1.2} -1.6" {stroke(1)}></path>')                                                # nostril slit
+        ex, ey = sd * 7.2, -182
+        eye = f'M{f(ex - sd * 3.4)} {f(ey + .6)} Q{f(ex)} {f(ey - 2.8)} {f(ex + sd * 3.4)} {f(ey - 1.2)} Q{f(ex + sd * .4)} {f(ey + 2.6)} {f(ex - sd * 3.4)} {f(ey + .6)} Z'
+        fig.out.append(f'<path d="{eye}" fill="{PAPER}" {stroke(1)[len("fill=\"none\" "):]}></path>')
+        fig.out.append(f'<clipPath id="{fig.uid}e{sd + 1}"><path d="{eye}"></path></clipPath><g clip-path="url(#{fig.uid}e{sd + 1})">'
+                       + (f'<circle cx="{f(ex + sd * .2)}" cy="{f(ey - .4)}" r="2" fill="none" stroke="{YOU}" stroke-width="2.2" vector-effect="non-scaling-stroke" opacity=".6"></circle>' if detail >= 3 else '')
+                       + f'<circle cx="{f(ex + sd * .2)}" cy="{f(ey - .4)}" r="2" {stroke(.6)}></circle>'
+                       + f'<ellipse cx="{f(ex + sd * .2)}" cy="{f(ey - .4)}" rx=".5" ry="1.8" fill="{INK}"></ellipse></g>'
+                       + f'<circle cx="{f(ex + sd * .2 + .7)}" cy="{f(ey - 1.3)}" r=".4" fill="{PAPER}"></circle>')
+        brow = f'M{f(sd * 2.2)} {f(-183.6)} L{f(sd * 11.6)} {f(-187.4)} L{f(sd * 11)} {f(-185.2)} L{f(sd * 3)} {f(-182.2)} Z'   # heavy brow, angled down to the middle
+        fig.out.append(f'<path d="{brow}" fill="{PAPER}" {stroke(1.1)[len("fill=\"none\" "):]}></path>')
+        if detail >= 2:
+            fig.out.append(f'<path d="M{f(ex - sd * 3)} {f(ey + 2)} Q{f(ex)} {f(ey + 3.6)} {f(ex + sd * 3.4)} {f(ey + .6)}" {stroke(.45, " opacity=\".8\"")}></path>')   # lower lid fold
+
+def draw_front(uid, detail=2):
+    fig = Figure(uid, detail)
+    tail = Part([(-4, -78), (-20, -52), (-36, -24), (-52, -8), (-64, -3)], [12, 9, 6, 3, .8], per=12)   # swept out behind, left
+    fig.part(tail, rings=10, pebbles=6, bands=True)
+    torso = Part([(0, -86), (0, -102), (0, -121), (0, -137), (0, -150)], [32, 38, 39, 34, 21], per=14)
+    fig.part(torso, rings=9, ring_from=.08, ring_to=.9, pebbles=6)
+    if detail >= 2:   # belly plates down the midline
+        fig.out.append(''.join(f'<path d="M-5 {y} Q0 {y + 1.6} 5 {y}" {stroke(.55, " opacity=\".8\"")}></path>' for y in range(-140, -92, 5)))
+    for sd in (-1, 1):   # heavy thighs splay out over the belly; knees forward, so the shins read short
+        fig.part(Part([(sd * 9, -98), (sd * 15, -82), (sd * 16, -64), (sd * 14.5, -46), (sd * 13.5, -28), (sd * 14, -4)], [22, 21, 14, 10.5, 9, 7], per=12), rings=10, pebbles=10)
+        fig.out.append(f'<path d="M{sd * 17.4} -28 l{sd * 2.6} 2.4" {stroke(1.1)}></path>')   # hock spur
+        for a, L in ((90 - sd * 30, 8), (90, 9), (90 + sd * 26, 7)):   # toes, foreshortened toward us
+            r = math.radians(a); tip = (sd * 14 + L * math.cos(r), -5 + L * math.sin(r) * .6)
+            fig.part(Part([(sd * 14, -6), tip], [4.8, 2.8], per=4), shade=False)
+            fig.out.append(f'<path d="M{f(tip[0])} {f(tip[1])} l{f(math.cos(r) * 1.2)} {f(.9)}" {stroke(1.1)}></path>')
+    sash = Part([(15, -146), (5, -128), (-6, -110), (-15, -96)], [4.2] * 4, per=10, cap=False)
+    fig.part(sash, rings=10, shade=False)
+    fig.out.append(f'<rect x="-18.5" y="-102" width="9" height="11" rx="1.6" fill="{PAPER}" transform="rotate(-30 -14 -96)" {stroke(1.2)[len("fill=\"none\" "):]}></rect>')
+    fig.out.append(f'<circle cx="5.6" cy="-128.6" r="2.6" fill="{YOU}"></circle><circle cx="5.6" cy="-128.6" r="4.4" {stroke(.7)}></circle>')
+    for sd in (-1, 1):
+        fig.part(Part([(sd * 17, -143), (sd * 24, -131), (sd * 27.5, -118), (sd * 27.5, -109), (sd * 27, -104)], [10.5, 10, 6.8, 5.8, 4.8], per=8), rings=6, pebbles=5)
+        fig.out.append(f'<path d="M{sd * 27.5 - 2.6} -108.4 h5.2 M{sd * 27.2 - 2.6} -105.6 h5.2" {stroke(.9)}></path>' if sd > 0 else '')   # wrist band, one arm
+        front_hand(fig, (sd * 27, -104), sd)
+    front_head(fig, detail)
+    return fig.svg_defs(), ''.join(fig.out)
+
+def draw_face(uid):
+    fig = Figure(uid, 3)
+    torso = Part([(0, -128), (0, -140), (0, -150)], [36, 33, 20], per=10)
+    fig.part(torso, rings=4, pebbles=4)
+    sash = Part([(15, -146), (9, -136), (3, -126)], [4.2] * 3, per=8, cap=False)
+    fig.part(sash, rings=6, shade=False)
+    front_head(fig, 3)
+    return fig.svg_defs(), ''.join(fig.out)
+
+def svg_of(drawer, width, height, view, extra='', label=''):
+    _uids[0] += 1; uid = f'vey{_uids[0]}'
+    defs, body = drawer(uid)
+    return (f'<svg width="{width}" height="{height}" viewBox="{" ".join(f(v) for v in view)}" font-family="IBM Plex Mono, monospace" role="img" aria-label="{label}">'
+            f'<defs>{defs}</defs>{body}{extra}</svg>')
+
+def callouts(left, right, lx, rx, fs):
+    tw = lambda t: len(t) * fs * .6; out = []
+    for (px, py), ty, lab in left:
+        out.append(f'<circle cx="{px}" cy="{py}" r="{fs * .17:.2f}" fill="{INK}"></circle><path d="M{px} {py} L{f(lx + tw(lab) + fs * .35)} {f(ty - fs * .3)}" {stroke(.5)}></path>'
+                   f'<text x="{lx}" y="{ty}" font-size="{fs}" fill="{INK}">{lab}</text>')
+    for (px, py), ty, lab in right:
+        out.append(f'<circle cx="{px}" cy="{py}" r="{fs * .17:.2f}" fill="{INK}"></circle><path d="M{px} {py} L{f(rx - fs * .35)} {f(ty - fs * .3)}" {stroke(.5)}></path>'
+                   f'<text x="{rx}" y="{ty}" font-size="{fs}" fill="{INK}">{lab}</text>')
+    return ''.join(out)
+
+def plate_front(width=358):
+    vx, vy, vw, vh = -130, -226, 238, 238
+    ex = shadow().replace('cx="4"', 'cx="0"').replace('rx="26"', 'rx="30"') + f'<line x1="{vx}" y1="0" x2="{vx + vw}" y2="0" {stroke(.9)}></line>'
+    ex += f'<path d="M-124 0 V-200 M-126 -200 H-122" {stroke(.9)}></path>' + ''.join(f'<path d="M-124 {-k * 10} h{2.4 if k % 5 else 4}" {stroke(.6)}></path>' for k in range(1, 20))
+    ex += f'<text x="-121" y="-98" font-size="4.6" fill="{MUTED}">1 m</text><text x="-121" y="-198" font-size="4.6" fill="{MUTED}">2 m</text>'
+    ex += callouts([((-26, -208), -214, 'Two crests'), ((-7.2, -182), -178, 'Eyes face forward'),
+                    ((5.6, -129), -150, 'The lamp'), ((-14, -96), -120, 'Pouch'), ((-52, -7), -40, 'Tail, behind')],
+                   [((8, -171), -170, 'Long mouth'), ((31, -97), -106, 'Two thumbs'),
+                    ((17, -80), -80, 'Heavy thighs'), ((15, -3), -20, 'On its toes')], -120, 40, 5.8)
+    return svg_of(lambda u: draw_front(u, 2), width, width * vh / vw, (vx, vy, vw, vh), ex, 'Front view: one of Veyra’s people, facing us')
+
+def portrait(width=358, height=358):
+    vw = 84; vh = vw * height / width
+    return svg_of(draw_face, width, height, (-vw / 2, -230, vw, vh), label='Portrait: a Veyran face, front on, crests raised')
+
+def plate_face(width=358):
+    vw, vh = 100, 100
+    ex = callouts([((-22, -212), -222, 'Crest rays'), ((-18, -203), -212, 'Mood spots'), ((-12.8, -186), -196, 'Ear'),
+                   ((-8, -186), -186, 'Brow ridge'), ((-7.2, -171), -174, 'Mouth, jaw-long'), ((-4, -152), -154, 'Throat folds')],
+                  [((4, -194), -222, 'Crown scales'), ((7.4, -182.4), -190, 'Slit pupil'), ((9, -180.8), -182, 'Blue iris'),
+                   ((1.2, -160.6), -164, 'Nostril slits'), ((10, -140), -144, 'Sash')], -49, 25, 2.7)
+    return svg_of(draw_face, width, width, (-50, -232, vw, vh), ex, 'The face in close-up, with its parts named')
+
+def thumb(size=56):
+    # A portrait: the face and crests, for cards and lists.
+    return svg_of(lambda u: draw_front(u, 1), size, size, (-30, -214, 60, 60), label='A Veyran, face and crests')

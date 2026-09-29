@@ -2403,15 +2403,24 @@ PEOPLE = f"""<div class="phone"><div class="onb">
 <button class="primary">Where things stand</button>
 </div></div>"""
 
-PLATE = f"""<div class="phone"><div class="onb plate">
+def plate_seg(on): return '<div class="seg">' + ''.join(f'<button class="on">{t}</button>' if t == on else f'<button>{t}</button>' for t in ('Side', 'Front', 'Face')) + '</div>'
+def plate_screen(on, art, notes):
+    return f"""<div class="phone"><div class="onb plate">
 <button class="backlink inline">‹ Who they are</button>
 <span class="mono kick">VEYRANS · AN ADULT · INVENTED</span>
-<div class="platefig">{species.plate()}</div>
-{ledger([('Height', '1.7 m; 2 m with the crest raised'), ('Mass', 'About 60 kg, most of it in the thighs and tail'),
-         ('Gait', 'On the toes, tail out behind. They sit back on it.'), ('Hands', 'Two fingers, two opposed thumbs. They hold with either pair.'),
-         ('Crest', 'A fan of stiff rays under skin. It turns to sound, and its spots flush with mood.')])}
-<p class="copy small">Drawn by the mind from 6.8 billion of them. Veyra’s star is real; its people are not.</p>
+{plate_seg(on)}
+<div class="platefig">{art}</div>
+{notes}
 </div></div>"""
+PLATE = plate_screen('Side', species.plate(), f"""{ledger([('Height', '1.7 m; 2 m with the crests raised'), ('Mass', 'About 60 kg, most of it in the thighs and tail'),
+         ('Gait', 'On the toes, tail out behind. They sit back on it.'), ('Hands', 'Two fingers, two opposed thumbs. They hold with either pair.')])}
+<p class="copy small">Drawn by the mind from 6.8 billion of them. Veyra’s star is real; its people are not.</p>""")
+PLATE_FRONT = plate_screen('Front', species.plate_front(), f"""{ledger([('Crests', 'A pair, one each side of the head, like ears. Turning them finds where a sound comes from.'),
+         ('Eyes', 'Facing forward, so their fields overlap: they judge distance as we do.'),
+         ('Build', 'Narrow shoulders, a deep chest, and hips and thighs built to stand all day.')])}""")
+PLATE_FACE = plate_screen('Face', species.plate_face(), f"""<div class="sec">READING A FACE</div>
+{ledger([('Crests up, turned', 'Listening to you, or to something behind you.'), ('Spots flushed', 'Strong feeling. Which one, the rest of the face says.'),
+         ('Brows down', 'Attention, not anger.'), ('The mouth', 'Says little. It runs back along the jaw and doesn’t smile.')])}""")
 
 def radio_shell(w=358, h=176):
     # Veyra's radio, to scale: the loud century is a band now 110 to 210 ly out; inside it, only faint leakage.
@@ -2444,7 +2453,7 @@ STANDING = f"""<div class="phone"><div class="onb">
 # ---------- Styles for the screens below ----------
 tour_css = tour_css.replace('</style>', '''.specart{position:relative}.enlarge{position:absolute;top:8px;right:8px;width:30px;height:30px;border:1px solid var(--ink);border-radius:15px;background:var(--paper);text-align:center;font-size:15px}
 .specrow{display:grid;grid-template-columns:56px 1fr 10px;gap:12px;align-items:center;margin-top:8px;padding:6px 10px 6px 6px;border:1px solid var(--faint);border-radius:12px;background:var(--paper)}.specrow .thumb{overflow:hidden}.specrow .sub{font-size:11.5px;color:var(--muted)}.specrow .chev{color:var(--muted)}
-.onb.plate{background:var(--paper);padding-top:20px}.platefig{margin:10px 0 6px}.platefig svg{display:block}
+.onb.plate{background:var(--paper);padding-top:20px}.onb.plate .seg{margin:10px 0 0}.platefig{margin:10px 0 6px}.platefig svg{display:block}
 .hist{display:flex;flex-direction:column}.hrow{display:grid;grid-template-columns:86px 1fr;gap:10px;align-items:baseline;padding:4px 0;border-bottom:1px solid var(--rowline);font-size:13px}
 .hrow>.mono{font-size:10.5px;color:var(--muted);text-align:right}.hrow .pt{gap:1px}.hrow .pt b{font-weight:500}.hrow .sub{font-size:11.5px;color:var(--muted);line-height:1.35}
 .hrow.moved{border-left:2px solid var(--you);margin-left:-8px;padding-left:6px;grid-template-columns:86px 1fr}.dialtag{align-self:flex-start;margin-top:2px;padding:0 6px;border:1px solid var(--you);border-radius:8px;font-size:10px;color:var(--you)}
@@ -2573,7 +2582,7 @@ CIV_FULL = f"""<div class="phone"><div class="onb">
          ('World · invented', 'Continents and seas, about Earth’s size, in the habitable zone.'),
          ('Surveys', 'No world this size, this far out, could have been found there yet.'),
          ('In its sky', 'Beacon, the brightest star. It has its own names for five more.')])}
-<button class="specrow"><span class="thumb">{species.thumb(56)}</span><span class="pt"><b>Veyrans · invented</b><span class="sub">Upright, toe-walking, two thumbs a hand. Many nations, one world.</span></span><span class="chev">›</span></button>
+<button class="specrow"><span class="thumb">{species.thumb(56)}</span><span class="pt"><b>Veyrans · invented</b><span class="sub">Upright, toe-walking, two crests, two thumbs a hand. Many nations, one world.</span></span><span class="chev">›</span></button>
 <div class="sec">THE MIND IT WAKES AS</div>
 <div class="charter"><span class="mono">FOUNDING LINE</span><strong>“Keep the lights on. Look before we speak.”</strong></div>
 <div class="minidials">{dials(VEYRA_DIALS)}</div>
@@ -3679,7 +3688,7 @@ BC_MAP = frame(2, *neighbors(shell=(r_bm, f'our broadcast · {r_bm:.0f} ly')), p
 CHECKLIST = [
     ('Onboarding', [('Choose your civilization: three candidates', 'done'), ('Name it and accept its charter', 'done'),
                     ('Landing: the first seconds on Veyra', 'done'), ('Where we come from: the history, and what set each dial', 'done'),
-                    ('Who they are: the people, drawn to scale', 'done'), ('The people full screen, and as a thumb', 'done'), ('Where things stand at Year 0', 'done'), ('What you inherit: the starting kit', 'done'), ('Guided tour', 'done'),
+                    ('Who they are: the people, drawn to scale', 'done'), ('The people full screen: side, front and face, and as a thumb', 'done'), ('Where things stand at Year 0', 'done'), ('What you inherit: the starting kit', 'done'), ('Guided tour', 'done'),
                     ('Hand-off to the clues', 'done')]),
     ('Home', [('Five zoom levels', 'done'), ('Local Group and galaxy close-ups', 'done'), ('Projects on the map, with timers', 'done'),
               ('Clue marker after a result', 'done'), ('Tap a star: its card', 'done'), ('A clue in full: what we know, odds, next steps', 'done'),
@@ -3735,7 +3744,11 @@ SECTIONS = [
      '<span class="pinch">who they are ›</span>'
      f'<figure><figcaption><strong>3 · Who they are</strong><span>The people drawn to scale: body, senses, speech, how they live, and how they see the mind they built. ⤢ opens the plate.</span></figcaption>{PEOPLE}</figure>'
      '<span class="pinch">tap ⤢ ›</span>'
-     f'<figure><figcaption><strong>3b · Full screen</strong><span>A naturalist’s plate: the body called out, and the crest, eye, hand and foot magnified from the same drawing.</span></figcaption>{PLATE}</figure>'
+     f'<figure><figcaption><strong>3b · Full screen</strong><span>A naturalist’s plate, side on: the body called out, and the crest, eye, hand and foot magnified from the same drawing.</span></figcaption>{PLATE}</figure>'
+     '<span class="pinch">Front ›</span>'
+     f'<figure><figcaption><strong>3c · Front</strong><span>The same body facing us: the paired crests spread like a crown, eyes forward, thighs splayed.</span></figcaption>{PLATE_FRONT}</figure>'
+     '<span class="pinch">Face ›</span>'
+     f'<figure><figcaption><strong>3d · Face</strong><span>A portrait, front on and a little from above, with its parts named and how to read it.</span></figcaption>{PLATE_FACE}</figure>'
      '<span class="pinch">where things stand ›</span>'
      f'<figure><figcaption><strong>4 · Where things stand</strong><span>Year 0: our radio already sent and how loud it was, what we have heard, and whose waking we can’t see yet.</span></figcaption>{STANDING}</figure>'
      '<span class="pinch">see what you inherit ›</span>'
