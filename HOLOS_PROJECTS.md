@@ -552,7 +552,7 @@ Reach: touch other stars. Messages, probes, ships, and strikes.
 - **Basis:** Diffraction: an aperture that wide holds a beam to 4 km across 16 ly. Forward’s crewed sail design needed a laser this size.
 - **Uses:** energy 30% a year, compute 40% a year, 2,000 Mt of matter at start
 - **Needs:** Self-replicating factory + Laser sail array + Kilometer interferometer
-- **Effect:** Arrives with its own light: no warning. Sweep heats a planet; needle hits one known site. Loud when it fires.
+- **Effect:** Arrives with its own light: no warning. Sweep heats a planet; needle hits one known site. Loud when it fires. Firing costs only compute to aim.
 - **Can open:** Paint {star}
 
 **Mind transmitter** · 60 Years · `05:00:00` · Speculative · noticeable
@@ -577,7 +577,7 @@ Endure: keep existing. Spread out, remember, stay quiet, see danger coming, and 
 - **Basis:** Heat soaks only tens of meters into rock in a decade. A heavy impactor can shatter a rock 100 km across; a moon shrugs it off.
 - **Uses:** energy 10% a year, compute 15% a year, 200 kt of matter at start
 - **Needs:** nothing
-- **Effect:** Running, it takes over at once, but its heat and link can be found. Sleeping, it is cold and hidden, and wakes when home goes silent. A needle reaches it only if its place is known.
+- **Effect:** Running, it takes over at once and takes 10% compute a year, but its heat and link can be found. Sleeping, it is cold, hidden and free, and wakes when home goes silent. A needle reaches it only if its place is known.
 
 ### Tier 2 · the first day
 
@@ -612,10 +612,10 @@ Endure: keep existing. Spread out, remember, stay quiet, see danger coming, and 
 
 - **Why:** Make attackers waste their shots.
 - **What:** Heaters on empty rocks that look like our works from light-years away.
-- **Basis:** Faking a site’s heat takes as much energy as the site gives off. Real works change over time, so decoys must be run like theater.
+- **Basis:** Faking a site’s heat takes as much energy as the site gives off, so decoys pair with quiet radiators on the real sites. Real works change, so decoys must be run like theater.
 - **Uses:** energy 25% a year, compute 5% a year, 2,000 kt of matter at start
 - **Needs:** Orbital foundry
-- **Effect:** Each costs an attacker a bullet; a needle can afford to hit them all. A close watcher sees through them. Strongest with quiet radiators on the real sites.
+- **Effect:** Each costs an attacker a bullet; a needle can hit them all; a close watcher sees through them. While lit, each takes 5% energy a year. Pausing frees it.
 
 **Outskirts sweep** · 16 Years · `01:20:00` · Plausible · quiet
 
@@ -659,12 +659,13 @@ Endure: keep existing. Spread out, remember, stay quiet, see danger coming, and 
 **Pickets** · 30 Years · `02:30:00` · Speculative · quiet
 
 - **Why:** Know a bullet’s exact path, days before it arrives.
-- **What:** Small cold watchers in a line out to 2,000 AU, toward one feared neighbor.
+- **What:** Small cold watchers in a line out to 2,000 AU, toward one feared neighbor. The first line comes with it.
 - **Basis:** A dark bullet still glows faintly where interstellar gas strikes its nose. Two fixes, far apart, give its exact path.
-- **Uses:** energy 15% a year, compute 20% a year, 30 Mt of matter at start
+- **Uses:** energy 15% a year, compute 20% a year, 20 Mt of matter at start
 - **Needs:** Launcher + Early warning array
 - **Effect:** One line guards one planet against one direction. At a fifth of light speed: 23 days of warning, 19 real seconds.
 - **Unlocks:** Sand screens, Deflector laser
+- **Can open:** Guard {planet} against {star}
 
 **Sand screens** · 12 Years · `01:00:00` · Plausible · quiet
 
@@ -843,12 +844,12 @@ These appear from results, and name their target. Braces mark where a real star,
 - **Needs:** Flyby probe
 - **Appears:** Appears for every star with an open clue.
 
-**Strike {target}** · Reach · 4 Years · `00:20:00` · Plausible
+**Strike {target}** · Reach · 12 Years · `01:00:00` · Plausible
 
 - **Why:** Hit them, knowing what it costs and who will know.
-- **What:** Every weapon you have is compared: arrival, the warning they get, who sees the launch, and whose name is on it.
+- **What:** Every weapon you have is compared: its cost, arrival, the warning they get, who sees the launch, and whose name is on it. Shown here: an aimed flyby. A heavy bullet takes 10 Years and 10 Mt; a pellet volley 4 Years of laser; a sleeper, nothing more; the star laser, compute while it fires.
 - **Basis:** Any weapon you have built, including a flyby probe aimed to hit instead of pass.
-- **Uses:** energy 20% a year, compute 10% a year, 4,000 kt of matter at start
+- **Uses:** energy 20% a year, compute 15% a year, 4,000 kt of matter at start
 - **Needs:** Flyby probe or Heavy impactor or Pellet swarm or Sleeper
 - **Appears:** Appears when you know where a civilization is and have mapped its planet. A shot aimed only at a star misses.
 
@@ -888,12 +889,12 @@ These appear from results, and name their target. Braces mark where a real star,
 - **Needs:** Tight-beam transmitter or Sentinel probe
 - **Appears:** Appears when we talk with a civilization. After it, a tap learns only who, when and how much.
 
-**Test-fire at {moon}** · Reach · 4 Years · `00:20:00` · Plausible
+**Test-fire at {moon}** · Reach · 10 Years · `00:50:00` · Plausible
 
 - **Why:** Show your teeth, so no one tests them.
 - **What:** Hits one of our own dead moons, so watchers see what we can do.
 - **Basis:** An impact flash, visible to anyone watching closely.
-- **Uses:** energy 20% a year, compute 5% a year, 40 Mt of matter at start
+- **Uses:** energy 10% a year, compute 5% a year, 10 Mt of matter at start
 - **Needs:** Heavy impactor
 - **Appears:** When its prerequisite finishes.
 
@@ -902,9 +903,18 @@ These appear from results, and name their target. Braces mark where a real star,
 - **Why:** Show them you can reach them at light speed.
 - **What:** A brief, low-power pass of the star laser across their system.
 - **Basis:** A thousandth of a sun blinds any instrument looking our way.
-- **Uses:** energy 5% a year, compute 10% a year
+- **Uses:** compute 10% a year
 - **Needs:** Star laser
 - **Appears:** Shows we can reach them at light speed. They may read it as an attack.
+
+**Guard {planet} against {star}** · Endure · 20 Years · `01:40:00` · Speculative
+
+- **Why:** Guard another world, or another direction.
+- **What:** One more line of pickets toward a feared star, and depots near the planet it guards.
+- **Basis:** One line guards one planet against one direction.
+- **Uses:** energy 10% a year, compute 10% a year, 20 Mt of matter at start
+- **Needs:** Pickets
+- **Appears:** Appears for every planet we hold and every star we fear. About the cost of two heavy bullets.
 
 **Reply to {sender}** · Reach · 2 Years · `00:10:00` · Grounded
 
@@ -917,4 +927,4 @@ These appear from results, and name their target. Braces mark where a real star,
 
 ## Counts
 
-71 catalog projects (14 know, 12 grow, 26 reach, 19 endure) and 18 discovery projects.
+71 catalog projects (14 know, 12 grow, 26 reach, 19 endure) and 19 discovery projects.
