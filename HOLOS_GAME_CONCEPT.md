@@ -126,7 +126,7 @@ Shown in the [mocks](explorations/home-mocks/index.html). Their sample civilizat
 - Research and missions can have uncertain outcomes.
 - **Projects are grouped by purpose:** Know (instruments to study the clues), Grow (industry), Reach (probes, messages and strikes), and later Endure (defenses). Know projects name the clue they help with. The full list is in [HOLOS_PROJECTS.md](HOLOS_PROJECTS.md).
 - **Energy and compute are yearly budgets; matter is a stockpile (2026-09-26).** Energy and compute cannot be stored at planetary scale, so a running project takes a share of each year's supply; what a year does not use is lost, and pausing frees the share. Matter can be stored: a project draws its matter once when it starts, and mines refill the pile, including while the player is away. Rates and amounts are sample values.
-- **Every civilization starts with a kit (2026-09-28):** Earth's instruments and industry today, plus about a century. A whole-sky watch in light and radio, a large space telescope, star surveys that already know the nearest stars' big planets, a continent-wide radio array, a planetary grid and data centers (the 100% energy and compute budgets), mines and reusable heavy lift, laser links across the home system, and precursor probes heading out. The kit is what found the opening clues, and it catches strong knocks. Catalog projects are upgrades beyond it.
+- **Every civilization starts with a kit (2026-09-28):** Earth's instruments and industry today, plus about a century. A whole-sky watch in light and radio, a large space telescope, star surveys that already know the nearest stars' big planets, a continent-wide radio array, a planetary grid of about 100 TW and data centers doing about 10²⁷ operations a second on 10 TW of their own (the 100% energy and compute budgets), mines and reusable heavy lift, laser links across the home system, and precursor probes heading out. The kit is what found the opening clues, and it catches strong knocks. Catalog projects are upgrades beyond it.
 - **Matter is counted in kilotonnes (2026-09-28):** 1,240 kt on hand at the start, +40 kt a year. Tonnes were too small for a civilization a century past today's launch rates.
 - **Over budget, the game stops and offers ways forward (2026-09-26).** A project that would take energy or compute past 100% cannot start. The player can start it when there is room (it joins Up next), pause something to make room, or grow capacity first. No option is suggested. Projects never silently slow each other down.
 - **Up next starts projects on its own (2026-09-26).** Queued projects start as soon as their energy, compute and matter fit, top first, including while the player is away.
@@ -208,5 +208,4 @@ Settled 2026-09-28. Every weapon and defense, with its needs and sample costs, i
 
 ## Open questions
 
-1. What are the starting kit's exact stocks and rates, including compute in operations per second? Its contents are set; its numbers are sample values.
-2. How are claims, uncertainty, provenance, and information age shown to players?
+1. How are claims, uncertainty, provenance, and information age shown to players?

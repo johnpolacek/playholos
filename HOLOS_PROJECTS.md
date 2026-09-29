@@ -14,8 +14,8 @@ Earth’s instruments and industry today, plus about a century. Every project be
 - **Space telescope** (Know): One large telescope for light and heat. *JWST today; the Habitable Worlds Observatory is planned for the 2040s.*
 - **Star surveys** (Know): The big planets of the nearest stars, already mapped. The three clues came from here. *Gaia, HARPS, TESS and PLATO.*
 - **Radio array** (Know): A radio telescope as wide as a continent. *The Square Kilometre Array, under construction.*
-- **Planetary grid** (Grow): All of each year’s energy: the 100% every project shares. *Today’s grids, a century further on.*
-- **Data centers** (Grow): Where the mind runs. All of each year’s compute. *Today’s data centers, a century further on.*
+- **Planetary grid** (Grow): All of each year’s energy, about 100 TW: the 100% every project shares. *Today’s grids, a century further on.*
+- **Data centers** (Grow): Where the mind runs: all of each year’s compute, about 10²⁷ operations a second, on 10 TW of their own. *Today’s data centers, a century further on: chips about 100 times as efficient, drawing 200 times today’s 50 GW.*
 - **Mines and heavy lift** (Grow): 1,240 kt of matter in orbit, and 40 kt more each year. *Reusable heavy lift, as Starship is being built to do.*
 - **Laser links** (Reach): Messages across the home system in hours. *NASA’s DSOC laser link, tested from deep space in 2023.*
 - **Precursor probes** (Reach): Two probes heading out. The farthest is 900 AU away. *Voyager 1 is about 170 AU out today.*
@@ -25,7 +25,7 @@ Earth’s instruments and industry today, plus about a century. Every project be
 - **Building unlocks** follow fixed chains: you need the tools first. The foundry comes before anything large in space; a launcher before any probe.
 - **Discovery projects** appear only when a result opens them, and target a specific star or planet. They are listed at the end.
 - Locked projects stay visible with the reason: “Needs: orbital foundry.”
-- **Energy and compute are yearly budgets;** neither can be stored at planetary scale, so a running project takes a share of every year’s supply, and pausing frees it. **Percentages are of the starting budgets:** 1% of energy is 1 TW. As capacity grows, the same project takes a smaller share. **Matter is a stockpile:** a project draws its matter once when it starts. Amounts are sample values, in kilotonnes (kt) and megatonnes (Mt).
+- **Energy and compute are yearly budgets;** neither can be stored at planetary scale, so a running project takes a share of every year’s supply, and pausing frees it. **Percentages are of the starting budgets:** 1% of energy is 1 TW, and 1% of compute is 10²⁵ operations a second. As capacity grows, the same project takes a smaller share. **Matter is a stockpile:** a project draws its matter once when it starts. Amounts are sample values, in kilotonnes (kt) and megatonnes (Mt).
 - **Tiers are stages,** not clock times: from the planet, while matter is lifted off it; into space, once the foundry builds there; self-building industry, once factories copy themselves and matter compounds; and star-scale works.
 
 ## Know
