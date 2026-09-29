@@ -19,7 +19,7 @@ PURPOSES = {
     'reach': 'Reach: touch other stars. Messages, probes, ships, and strikes.',
     'endure': 'Endure: keep existing. Spread out, remember, stay quiet, see danger coming, and stop it.',
 }
-TIERS = {1: 'Tier 1 · the first session', 2: 'Tier 2 · the first day', 3: 'Tier 3 · the first week', 4: 'Tier 4 · the long works'}
+TIERS = {1: 'Tier 1 · from the planet', 2: 'Tier 2 · into space', 3: 'Tier 3 · self-building industry', 4: 'Tier 4 · star-scale works'}
 
 def P(id, name, purpose, tier, years, cost, what, basis, level, visibility, needs=(), effect=None, reveals=()):
     return dict(id=id, name=name, purpose=purpose, tier=tier, years=years, cost=cost, what=what, basis=basis,
@@ -93,7 +93,7 @@ PROJECTS = [
       'Gravitational lensing by a star; the focal line begins beyond about 550 AU for a Sun-like star (Turyshev and colleagues).', 'plausible', 'quiet',
       needs=['infrared-telescope', 'launcher'], effect='One target at a time; retargeting takes decades.',
       reveals=['image-planet']),
-    P('kilometer-array', 'Kilometer interferometer', 'know', 4, 160, 'E35 M40 C35',
+    P('kilometer-array', 'Kilometer interferometer', 'know', 4, 40, 'E35 M40 C35',
       'A fleet of mirrors spread across kilometers: surface maps of nearby planets.',
       'Large-baseline optical interferometry, scaled far beyond today.', 'speculative', 'quiet',
       needs=['interferometer', 'self-replicating-factory']),
@@ -120,8 +120,8 @@ PROJECTS = [
       needs=['belt-mining'], effect='Unlocks large works.'),
     P('mass-driver', 'Mass driver', 'grow', 2, 24, 'E20 M20 C5',
       'An electric track that throws cargo off a moon without rockets.',
-      'Electromagnetic launch, as proposed by Gerard O’Neill.', 'plausible', 'quiet',
-      needs=['belt-mining'], effect='Halves the matter cost of works in orbit.'),
+      'Electromagnetic launch, as proposed by Gerard O’Neill; his lunar studies planned hundreds of thousands of tonnes a year.', 'plausible', 'quiet',
+      needs=['belt-mining'], effect='+300 kt of matter every year, from a moon instead of the planet’s gravity well.'),
     P('ice-harvest', 'Ice harvest', 'grow', 2, 36, 'E20 M15 C10',
       'Water and fuel from the ice world at 9 AU.',
       'Volatiles mining from outer-system ices; deuterium is fusion fuel.', 'plausible', 'quiet',
@@ -136,13 +136,13 @@ PROJECTS = [
       needs=['orbital-foundry', 'mass-driver'], effect='+30% compute; a second home in orbit.'),
     P('self-replicating-factory', 'Self-replicating factory', 'grow', 3, 80, 'E30 M30 C30',
       'Factories that build copies of themselves from belt rock.',
-      'Von Neumann’s self-reproducing machines; no working example exists.', 'speculative', 'noticeable',
-      needs=['orbital-foundry', 'cold-compute-annex'], effect='Every Grow project after this is 40% faster.'),
-    P('solar-swarm', 'Solar swarm', 'grow', 3, 120, 'E20 M50 C20',
+      'Von Neumann’s self-reproducing machines; no working example exists. NASA’s 1980 study assumed a lunar factory could copy itself in about a year.', 'speculative', 'noticeable',
+      needs=['orbital-foundry', 'cold-compute-annex'], effect='Matter income doubles about every Year, as fast as physics allows, unless you slow it. Each doubling adds heat others can see.'),
+    P('solar-swarm', 'Solar swarm', 'grow', 3, 30, 'E20 M50 C20',
       'Surrounds the star with collectors: enormous energy, and a heat glow others can see.',
       'A Dyson swarm. Its infrared excess is exactly what searches like Ĝ look for.', 'speculative', 'loud',
       needs=['self-replicating-factory', 'mass-driver'], effect='Energy ×4. Visible as warm glow for light-years.'),
-    P('star-lifting', 'Star lifting', 'grow', 4, 240, 'E40 M20 C30',
+    P('star-lifting', 'Star lifting', 'grow', 4, 40, 'E40 M20 C30',
       'Pulls gas off the star itself for fuel and raw material.',
       'Star lifting, proposed by David Criswell. Physics allows it; the scale is vast.', 'speculative', 'loud',
       needs=['solar-swarm'], effect='Triples matter income.'),
@@ -246,7 +246,7 @@ PROJECTS = [
       'A close watcher that guides an incoming strike with live positions.',
       'The strike’s steering stage takes the spotter’s fixes in its last hours.', 'speculative', 'quiet',
       needs=['close-watcher', 'heavy-impactor'], effect='Beats wandering habitats and decoy sites.'),
-    P('star-laser', 'Star laser', 'reach', 4, 300, 'E30 M100 C40',
+    P('star-laser', 'Star laser', 'reach', 4, 50, 'E30 M100 C40',
       'A sheet of film 100,000 km wide beside our star turns sunlight into laser light, every patch in step: one lens.',
       'Diffraction: an aperture that wide holds a beam to 4 km across 16 ly. Forward’s crewed sail design needed a laser this size.', 'speculative', 'quiet',
       needs=['self-replicating-factory', 'laser-sail-array', 'kilometer-array'], reveals=['paint'],
@@ -434,11 +434,11 @@ WHY = {
     'cold-compute-annex': 'More compute every year: faster answers, smarter probes.',
     'belt-mining': 'More matter every year, for building bigger things.',
     'orbital-foundry': 'Unlocks everything too big to launch from Veyra: probes, ships, big telescopes.',
-    'mass-driver': 'Makes building in orbit much cheaper.',
+    'mass-driver': 'Much more matter every year, without lifting it off Veyra.',
     'ice-harvest': 'Water and fusion fuel. Needed for fusion power.',
     'fusion-plant': 'A big jump in energy every year.',
     'habitat-ring': 'A second home in orbit: more compute, and a backup if Veyra is hit.',
-    'self-replicating-factory': 'Every growth project after it goes much faster.',
+    'self-replicating-factory': 'Industry that builds itself: matter stops being scarce.',
     'solar-swarm': 'Four times the energy, but everyone nearby can see you.',
     'star-lifting': 'Three times the matter, from the star itself. Very visible.',
     'tight-beam': 'Talk to one known star without the whole sky hearing.',
@@ -589,7 +589,7 @@ def markdown():
            '- **Discovery projects** appear only when a result opens them, and target a specific star or planet. They are listed at the end.',
            '- Locked projects stay visible with the reason: “Needs: orbital foundry.”',
            '- **Energy and compute are yearly budgets;** neither can be stored at planetary scale, so a running project takes a share of every year’s supply, and pausing frees it. **Matter is a stockpile:** a project draws its matter once when it starts. Amounts are sample values, in kilotonnes (kt) and megatonnes (Mt).',
-           '- Tiers group projects by how far into a game they usually come.', '']
+           '- **Tiers are stages,** not clock times: from the planet, while matter is lifted off it; into space, once the foundry builds there; self-building industry, once factories copy themselves and matter compounds; and star-scale works.', '']
     for purpose, blurb in PURPOSES.items():
         out += [f'## {purpose.title()}', '', blurb, '']
         for tier in (1, 2, 3, 4):

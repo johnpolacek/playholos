@@ -26,13 +26,13 @@ Earth’s instruments and industry today, plus about a century. Every project be
 - **Discovery projects** appear only when a result opens them, and target a specific star or planet. They are listed at the end.
 - Locked projects stay visible with the reason: “Needs: orbital foundry.”
 - **Energy and compute are yearly budgets;** neither can be stored at planetary scale, so a running project takes a share of every year’s supply, and pausing frees it. **Matter is a stockpile:** a project draws its matter once when it starts. Amounts are sample values, in kilotonnes (kt) and megatonnes (Mt).
-- Tiers group projects by how far into a game they usually come.
+- **Tiers are stages,** not clock times: from the planet, while matter is lifted off it; into space, once the foundry builds there; self-building industry, once factories copy themselves and matter compounds; and star-scale works.
 
 ## Know
 
 Know: learn what is out there, and answer the clues.
 
-### Tier 1 · the first session
+### Tier 1 · from the planet
 
 **Transit watch** · 4 Years · `00:20:00` · Grounded · quiet
 
@@ -91,7 +91,7 @@ Know: learn what is out there, and answer the clues.
 - **Unlocks:** Waste-heat survey, Second infrared telescope, Starshade, Solar lens observatory, Outskirts sweep, Study the oxygen world
 - **Can open:** Map the dust at {star}, Resolve the companions of {star}, Listen to {star}
 
-### Tier 2 · the first day
+### Tier 2 · into space
 
 **Waste-heat survey** · 16 Years · `01:20:00` · Grounded · quiet
 
@@ -139,7 +139,7 @@ Know: learn what is out there, and answer the clues.
 - **Uses:** energy 15% a year, compute 15% a year, 6,000 kt of matter at start
 - **Needs:** nothing
 
-### Tier 3 · the first week
+### Tier 3 · self-building industry
 
 **Infrared interferometer** · 40 Years · `03:20:00` · Plausible · quiet
 
@@ -161,9 +161,9 @@ Know: learn what is out there, and answer the clues.
 - **Effect:** One target at a time; retargeting takes decades.
 - **Can open:** Image {planet}
 
-### Tier 4 · the long works
+### Tier 4 · star-scale works
 
-**Kilometer interferometer** · 160 Years · `13:20:00` · Speculative · quiet
+**Kilometer interferometer** · 40 Years · `03:20:00` · Speculative · quiet
 
 - **Why:** Maps of other planets’ surfaces, from home.
 - **What:** A fleet of mirrors spread across kilometers: surface maps of nearby planets.
@@ -176,7 +176,7 @@ Know: learn what is out there, and answer the clues.
 
 Grow: more energy, matter and compute every year, so everything goes faster.
 
-### Tier 1 · the first session
+### Tier 1 · from the planet
 
 **Orbital solar array** · 10 Years · `00:50:00` · Grounded · noticeable
 
@@ -216,7 +216,7 @@ Grow: more energy, matter and compute every year, so everything goes faster.
 - **Effect:** +120 kt of matter every year.
 - **Unlocks:** Orbital foundry, Mass driver
 
-### Tier 2 · the first day
+### Tier 2 · into space
 
 **Orbital foundry** · 30 Years · `02:30:00` · Plausible · noticeable
 
@@ -230,12 +230,12 @@ Grow: more energy, matter and compute every year, so everything goes faster.
 
 **Mass driver** · 24 Years · `02:00:00` · Plausible · quiet
 
-- **Why:** Makes building in orbit much cheaper.
+- **Why:** Much more matter every year, without lifting it off Veyra.
 - **What:** An electric track that throws cargo off a moon without rockets.
-- **Basis:** Electromagnetic launch, as proposed by Gerard O’Neill.
+- **Basis:** Electromagnetic launch, as proposed by Gerard O’Neill; his lunar studies planned hundreds of thousands of tonnes a year.
 - **Uses:** energy 20% a year, compute 5% a year, 4,000 kt of matter at start
 - **Needs:** Belt mining
-- **Effect:** Halves the matter cost of works in orbit.
+- **Effect:** +300 kt of matter every year, from a moon instead of the planet’s gravity well.
 - **Unlocks:** Habitat ring, Solar swarm, Sand screens
 
 **Ice harvest** · 36 Years · `03:00:00` · Plausible · quiet
@@ -258,7 +258,7 @@ Grow: more energy, matter and compute every year, so everything goes faster.
 - **Effect:** +60% energy every year.
 - **Unlocks:** Laser sail array, Torch probe, Fusion torch ship, Hunters
 
-### Tier 3 · the first week
+### Tier 3 · self-building industry
 
 **Habitat ring** · 60 Years · `05:00:00` · Plausible · noticeable
 
@@ -272,15 +272,15 @@ Grow: more energy, matter and compute every year, so everything goes faster.
 
 **Self-replicating factory** · 80 Years · `06:40:00` · Speculative · noticeable
 
-- **Why:** Every growth project after it goes much faster.
+- **Why:** Industry that builds itself: matter stops being scarce.
 - **What:** Factories that build copies of themselves from belt rock.
-- **Basis:** Von Neumann’s self-reproducing machines; no working example exists.
+- **Basis:** Von Neumann’s self-reproducing machines; no working example exists. NASA’s 1980 study assumed a lunar factory could copy itself in about a year.
 - **Uses:** energy 30% a year, compute 30% a year, 60 Mt of matter at start
 - **Needs:** Orbital foundry + Cold compute annex
-- **Effect:** Every Grow project after this is 40% faster.
+- **Effect:** Matter income doubles about every Year, as fast as physics allows, unless you slow it. Each doubling adds heat others can see.
 - **Unlocks:** Kilometer interferometer, Solar swarm, Seed probe, Seedship, Star laser
 
-**Solar swarm** · 120 Years · `10:00:00` · Speculative · loud
+**Solar swarm** · 30 Years · `02:30:00` · Speculative · loud
 
 - **Why:** Four times the energy, but everyone nearby can see you.
 - **What:** Surrounds the star with collectors: enormous energy, and a heat glow others can see.
@@ -290,9 +290,9 @@ Grow: more energy, matter and compute every year, so everything goes faster.
 - **Effect:** Energy ×4. Visible as warm glow for light-years.
 - **Unlocks:** Star lifting, Antimatter probe
 
-### Tier 4 · the long works
+### Tier 4 · star-scale works
 
-**Star lifting** · 240 Years · `20:00:00` · Speculative · loud
+**Star lifting** · 40 Years · `03:20:00` · Speculative · loud
 
 - **Why:** Three times the matter, from the star itself. Very visible.
 - **What:** Pulls gas off the star itself for fuel and raw material.
@@ -305,7 +305,7 @@ Grow: more energy, matter and compute every year, so everything goes faster.
 
 Reach: touch other stars. Messages, probes, ships, and strikes.
 
-### Tier 1 · the first session
+### Tier 1 · from the planet
 
 **Tight-beam transmitter** · 6 Years · `00:30:00` · Grounded · quiet
 
@@ -327,7 +327,7 @@ Reach: touch other stars. Messages, probes, ships, and strikes.
 - **Effect:** Everyone who can hear, will. It cannot be taken back.
 - **Unlocks:** Tell {recipient} where {civilization} is
 
-### Tier 2 · the first day
+### Tier 2 · into space
 
 **Launcher** · 24 Years · `02:00:00` · Plausible · noticeable
 
@@ -359,7 +359,7 @@ Reach: touch other stars. Messages, probes, ships, and strikes.
 - **Unlocks:** Sentinel probe, Send a probe to {star}
 - **Can open:** Strike {target}
 
-### Tier 3 · the first week
+### Tier 3 · self-building industry
 
 **Sentinel probe** · 20 Years · `01:40:00` · Plausible · noticeable
 
@@ -516,7 +516,7 @@ Reach: touch other stars. Messages, probes, ships, and strikes.
 - **Needs:** Close watcher + Heavy impactor
 - **Effect:** Beats wandering habitats and decoy sites.
 
-### Tier 4 · the long works
+### Tier 4 · star-scale works
 
 **Fusion torch ship** · 90 Years · `07:30:00` · Speculative · loud
 
@@ -545,7 +545,7 @@ Reach: touch other stars. Messages, probes, ships, and strikes.
 - **Needs:** Seedship
 - **Effect:** Can frame a third civilization. It has its own mind: it may refuse, or strike on its own.
 
-**Star laser** · 300 Years · `1d 01:00:00` · Speculative · quiet
+**Star laser** · 50 Years · `04:10:00` · Speculative · quiet
 
 - **Why:** The only weapon that arrives with no warning.
 - **What:** A sheet of film 100,000 km wide beside our star turns sunlight into laser light, every patch in step: one lens.
@@ -568,7 +568,7 @@ Reach: touch other stars. Messages, probes, ships, and strikes.
 
 Endure: keep existing. Spread out, remember, stay quiet, see danger coming, and stop it.
 
-### Tier 1 · the first session
+### Tier 1 · from the planet
 
 **Deep vault** · 10 Years · `00:50:00` · Plausible · quiet
 
@@ -579,7 +579,7 @@ Endure: keep existing. Spread out, remember, stay quiet, see danger coming, and 
 - **Needs:** nothing
 - **Effect:** Running, it takes over at once and takes 10% compute a year, but its heat and link can be found. Sleeping, it is cold, hidden and free, and wakes when home goes silent. A needle reaches it only if its place is known.
 
-### Tier 2 · the first day
+### Tier 2 · into space
 
 **Deep archive** · 20 Years · `01:40:00` · Grounded · quiet
 
@@ -635,7 +635,7 @@ Endure: keep existing. Spread out, remember, stay quiet, see danger coming, and 
 - **Needs:** Orbital foundry
 - **Effect:** Orbit shrugs off the spray from a stopped strike. Near-light sprays need meters of rock.
 
-### Tier 3 · the first week
+### Tier 3 · self-building industry
 
 **Early warning array** · 40 Years · `03:20:00` · Plausible · quiet
 
@@ -730,7 +730,7 @@ Endure: keep existing. Spread out, remember, stay quiet, see danger coming, and 
 - **Needs:** Habitat ring
 - **Effect:** Protects against one direction at a time.
 
-### Tier 4 · the long works
+### Tier 4 · star-scale works
 
 **Lifeboats** · 50 Years · `04:10:00` · Speculative · noticeable
 
