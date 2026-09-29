@@ -157,6 +157,17 @@ Shown in the [mocks](explorations/home-mocks/index.html). Their sample civilizat
 - **A received message reads voice first, then parts (2026-09-28).** The sender's prose comes first, as the mind reads it; the parts follow as facts. A finding shows how it would move our odds if true, and how to check it ourselves. When composing, the mind lists what will travel, what was left out and why, and how the recipient will read it.
 - **A claim can be checked, at a cost in time (2026-09-28).** Checking uses our own instruments and lands in the Report. It can hold or fail. A failed check shows how likely a lie is against honest causes like older light, never a verdict. Each conversation keeps a record both ways: what we know about them, and what they know about us.
 - Civilizations may conceal, spy, and break promises within physical limits. No universal visibility or guaranteed detection.
+
+## What we know, and how we know it
+
+Settled 2026-09-29.
+
+- **Every fact has a source:** *seen* by our own instruments or probes, *told* by a message, always under the sender's name (*Beacon says…*), or *inferred* by the mind from the other two. Drawings show seen as solid, inferred as dashed, told as an outline in the sender's color, and not yet seen as a question mark.
+- **Age is when the light left, not when it arrived.** Every fact carries its moment: *light that left 9.2 Years ago*, *as of Year 52.4*. Facts age as the clock runs but never fade on their own, because whether 9 Years is stale depends on the thing. When age matters, the mind says so in words: *fresh dust can appear within months*. A star card shows both moments: what we see, and their now, which we cannot see yet.
+- **Odds only where explanations compete.** A clue or a failed check shows percentages across named explanations. A single fact shows its source and age, never a probability. Only presence makes something certain.
+- **Trust starts at zero and moves with the record and the evidence.** A stranger's claim shows how it would move our odds if true, and moves nothing. A sender's trust rises as claims check out and falls when they fail; big claims weigh more than small ones, so ten small truths don't buy one big lie. Other evidence counts too: a caught spy or spoof, a broken promise, a claim that happens to serve the sender. Above zero, a claim moves our odds partway toward it; below zero, their saying it counts against it. The screen shows the arithmetic: *if true, waste heat 10→60 · Beacon's record, 3 of 3 held · counted at half · now 10→35*. There is no hidden score: trust is the record, weighed by the mind, and a wary mind's dials discount told facts more than a trusting one's.
+- **Our odds alone are one tap away.** Any odds that include told facts can be shown without them, so the player always sees how much of the picture rests on someone else's word. Our own check still settles a claim; trust only covers the wait.
+- **Every fact can be traced.** Tapping it shows the trail: the instrument or message, when it left, when it arrived, and who passed it on. A tip-off shows the whole chain: *Beacon says Pearl said…*. Superseded facts stay in each world's history of how it filled in.
 - Accepted directions: attached observations, shared research, proposals, agreements, joint exploration, and eventually joint settlements. Not designed.
 
 ## First contact
@@ -210,4 +221,4 @@ Settled 2026-09-28. Every weapon and defense, with its needs and sample costs, i
 
 ## Open questions
 
-1. How are claims, uncertainty, provenance, and information age shown to players?
+None open. Claims, uncertainty, provenance and information age were settled 2026-09-29 in [What we know, and how we know it](#what-we-know-and-how-we-know-it).
