@@ -442,7 +442,7 @@ Reach: touch other stars. Messages, probes, ships, and strikes.
 **Heavy impactor** · 30 Years · `02:30:00` · Speculative · loud
 
 - **Why:** A weapon that can end a planet.
-- **What:** A thousand tonnes of solid metal, thrown at a star system by a fusion torch. No warhead: its speed is the weapon.
+- **What:** A thousand tonnes of solid metal, thrown by a fusion torch that also steers it onto the planet in the last hours. No warhead: its speed is the weapon.
 - **Basis:** Kinetic energy: at a fifth of light speed, each kilogram carries about 400 kilotons.
 - **Uses:** energy 30% a year, compute 15% a year, 80 Mt of matter at start
 - **Needs:** Torch probe
@@ -821,7 +821,7 @@ These appear from results, and name their target. Braces mark where a real star,
 - **Basis:** Any weapon you have built, including a flyby probe aimed to hit instead of pass.
 - **Uses:** energy 20% a year, compute 10% a year, 4,000 kt of matter at start
 - **Needs:** Flyby probe or Heavy impactor or Pellet swarm or Sleeper
-- **Appears:** Appears when you know where a civilization is.
+- **Appears:** Appears when you know where a civilization is and have mapped its planet. A shot aimed only at a star misses.
 
 **Feint toward {star}** · Reach · 4 Years · `00:20:00` · Plausible
 
