@@ -1254,7 +1254,7 @@ RESULT = tab_screen('Report', 'REPORT', 'RESULT', f"""<button class="backlink in
 <div class="sec">NOW OPEN</div>
 {discovery_card(mc, 'the transit watch')}""", HUD44)
 
-def leak_day():
+def radio_day():
     # Twin's radio over one of its days, folded: it rises as each crowded coast turns toward us.
     w, h, x0, x1, base = 358, 150, 34, 346, 118
     s = [f'<line x1="{x0}" y1="18" x2="{x0}" y2="{base}" stroke="{INK}" stroke-width=".8"></line><line x1="{x0}" y1="{base}" x2="{x1}" y2="{base}" stroke="{INK}" stroke-width=".8"></line>',
@@ -2359,7 +2359,7 @@ INHERIT = f"""<div class="phone"><div class="onb">
 
 # ---------- Before waking: where Veyra comes from, who its people are, and where things stand at Year 0 ----------
 # The star's age is real (Delta Pavonis, about 6.6 billion years). Everything on the planet is invented, and each
-# dial has one cause in the history. The Signal War sets how loudly Veyra leaked: radio began 210 Years ago and went
+# dial has one cause in the history. The Signal War is why Veyra went quiet: radio began 210 Years ago and went
 # quiet 110 Years ago, so its loud shell is now 110 to 210 ly out, past every seat (all lie within 70 ly of Veyra).
 HISTORY = [  # (years ago, what, detail, dial it moved)
     (6.6e9, 'Delta Pavonis forms', 'Real: its age is measured. Veyra forms with it.', None),
@@ -2439,7 +2439,7 @@ PLATE_FACE = plate_screen('Face', species.plate_face(), f"""<div class="sec">REA
          ('Brows down', 'Attention, not anger.'), ('The mouth', 'Says little. It runs back along the jaw and doesn’t smile.')])}""")
 
 def radio_shell(w=358, h=176):
-    # Veyra's radio, to scale: the loud century is a band now 110 to 210 ly out; inside it, only faint leakage.
+    # Veyra's radio, to scale: the loud century is a band now 110 to 210 ly out; inside it, only faint everyday radio.
     cx, cy, k = 72, h / 2, .78
     s = [stipple(181, 40, w, h)]
     s.append(f'<circle cx="{cx}" cy="{fmt(cy)}" r="{fmt(210 * k)}" fill="url(#hatchLight)"></circle>'
@@ -2459,7 +2459,7 @@ STANDING = f"""<div class="phone"><div class="onb">
 <span class="mono kick">YEAR 0 · WHERE THINGS STAND</span>
 <h3 class="lead">The sky is quiet, and so are we</h3>
 <div class="art">{radio_shell()}</div>
-{ledger([('What we said', 'Our loud radio century, 210 to 110 Years ago, is now 110 to 210 light-years out: past every world that could have woken. Since the Signal War we leak only faintly.'),
+{ledger([('What we said', 'Our loud radio century, 210 to 110 Years ago, is now 110 to 210 light-years out: past every world that could have woken. Since the Signal War our radio is faint.'),
          ('Who could hear it', f'No one with ears like ours, even at Ember, {d_ember:.1f} light-years away. Better ears could, one star at a time.'),
          ('What we heard', 'Nothing. The sky watch has listened for 60 Years.'),
          ('What we can’t see', f'Anyone else who woke this morning. Their light takes {d_ember:.1f} Years from Ember, 19.9 from Twin.')])}
@@ -3713,7 +3713,7 @@ CHECKLIST = [
                   ('A locked project and what it needs', 'done'), ('Not enough energy or compute', 'done'),
                   ('A project finishes, seen in Projects', 'done'), ('Queue the next project for while you are away', 'done'),
                   ('Cancel a project', 'done'), ('Budget drilldown: real units behind each share', 'done')]),
-    ('Report', [('A new result, and the result in full', 'done'), ('Leakage heard: what overhearing tells', 'done'), ('Back after a long absence', 'done'), ('Replaying an absence on the map', 'done'), ('Nothing new yet', 'done')]),
+    ('Report', [('A new result, and the result in full', 'done'), ('Everyday radio heard: what overhearing tells', 'done'), ('Back after a long absence', 'done'), ('Replaying an absence on the map', 'done'), ('Nothing new yet', 'done')]),
     ('Reach', [('Empty, with standing orders', 'done'), ('Launch a probe: target, arrival and report times', 'done'), ('A probe in flight', 'done'),
                ('A probe arrives and reports', 'done'), ('Probe types: how to get there, per target', 'done'), ('A sentinel in orbit: watching, and new orders', 'done'), ('Compose a message: intent, the mind’s version, approve', 'done'),
                ('Broadcast: the permanent choice', 'done'), ('Standing orders editor', 'done')]),
@@ -3752,7 +3752,7 @@ lofi = re.sub(r'style="([^"]*)"', lambda m: 'style="' + re.sub('|'.join(LOFI), l
 
 Y_HEARD = 16.4
 HEARD = tab_screen('Report', 'REPORT', 'RESULT', f"""<button class="backlink inline">‹ All reports</button>
-<div class="art">{leak_day()}</div>
+<div class="art">{radio_day()}</div>
 <h3 class="lead">Someone was talking at Twin</h3>
 <p class="copy small">Sol · listen to Twin · finished Year {Y_HEARD}</p>
 <p class="copy">Not aimed at us: the everyday radio of a whole world, rising and falling as it turns. It comes from the oxygen world.</p>
@@ -3828,8 +3828,8 @@ SECTIONS = [
      f'<figure><figcaption><strong>3 · A new project</strong><span>The discovery project is waiting at the top of Know.</span></figcaption>{PICKER_NEW}</figure>'
      '<span class="pinch">back to Home ›</span>'
      f'<figure><figcaption><strong>4 · Home, after</strong><span>The Lantern marker fills in and carries what is now known.</span></figcaption>{HOME_AFTER}</figure>'),
-    ('heard', 'Heard', 'Report · leakage heard at Twin', f'Year {Y_HEARD}. The deep-field receiver listened to Twin for four Years and heard the oxygen world’s everyday radio: not aimed at anyone, rising and falling as the planet turns. It pins where they are and how long their day is, as of light that left 19.9 Years ago, and says nothing about now. Overhearing is a first contact: presence is certain, as of the light’s age.',
-     f'<figure><figcaption><strong>1 · Heard</strong><span>One day at Twin, folded from four Years of listening. What leakage tells, and what it can’t.</span></figcaption>{HEARD}</figure>'),
+    ('heard', 'Heard', 'Report · Twin’s everyday radio, heard', f'Year {Y_HEARD}. The deep-field receiver listened to Twin for four Years and heard the oxygen world’s everyday radio: not aimed at anyone, rising and falling as the planet turns. It pins where they are and how long their day is, as of light that left 19.9 Years ago, and says nothing about now. Overhearing is a first contact: presence is certain, as of the light’s age.',
+     f'<figure><figcaption><strong>1 · Heard</strong><span>One day at Twin, folded from four Years of listening. What a world’s radio tells, and what it can’t.</span></figcaption>{HEARD}</figure>'),
     ('absence', 'Away', 'Report · coming back after a long absence', f'Nine hours away is 108 Years. The Report opens on what matters: how long it was, the big things, what the mind did under your standing orders, and what is waiting for you. The map can replay it all in a minute. When nothing is new, the Report shows what is already on its way, soonest first.',
      f'<figure><figcaption><strong>1 · Welcome back</strong><span>108 Years on one strip. The big things first, then what the mind did for you, then what waits.</span></figcaption>{WELCOME}</figure>'
      '<span class="pinch">replay on the map ›</span>'

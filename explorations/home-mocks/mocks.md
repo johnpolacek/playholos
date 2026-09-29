@@ -131,7 +131,7 @@ YEAR 0 · WHERE THINGS STAND
 
 ### The sky is quiet, and so are we
 [drawing: Veyra’s radio: its loud century now 110 to 210 light-years out, beyond every world that could have woken; labels: Veyra, Ember, Twin, every world that could have woken, our loud century, 110–210 ly out, 50 ly]
-What we said · Our loud radio century, 210 to 110 Years ago, is now 110 to 210 light-years out: past every world that could have woken. Since the Signal War we leak only faintly. · Who could hear it · No one with ears like ours, even at Ember, 9.2 light-years away. Better ears could, one star at a time. · What we heard · Nothing. The sky watch has listened for 60 Years. · What we can’t see · Anyone else who woke this morning. Their light takes 9.2 Years from Ember, 19.9 from Twin. · [See what you inherit]
+What we said · Our loud radio century, 210 to 110 Years ago, is now 110 to 210 light-years out: past every world that could have woken. Since the Signal War our radio is faint. · Who could hear it · No one with ears like ours, even at Ember, 9.2 light-years away. Better ears could, one star at a time. · What we heard · Nothing. The sky watch has listened for 60 Years. · What we can’t see · Anyone else who woke this morning. Their light takes 9.2 Years from Ember, 19.9 from Twin. · [See what you inherit]
 see what you inherit ›
 
 #### 5 · What you inherit · The starting kit, grouped by purpose, then the hand-off to the clues and the tour.
@@ -829,10 +829,10 @@ CLUES · 3 · YEAR 4.4
 - New warm glow · Ember · infrared telescope under way · 14 Years · 01:10:00
 - Oxygen world · Twin · not yet studied · light takes 01:39:37 · ›
 
-## Report · leakage heard at Twin
+## Report · Twin’s everyday radio, heard
 Year 16.4. The deep-field receiver listened to Twin for four Years and heard the oxygen world’s everyday radio: not aimed at anyone, rising and falling as the planet turns. It pins where they are and how long their day is, as of light that left 19.9 Years ago, and says nothing about now. Overhearing is a first contact: presence is certain, as of the light’s age.
 
-#### 1 · Heard · One day at Twin, folded from four Years of listening. What leakage tells, and what it can’t.
+#### 1 · Heard · One day at Twin, folded from four Years of listening. What a world’s radio tells, and what it can’t.
 Veyra · Year 16.4
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
 ENERGY · [35%] · MATTER · 1,310 kt · COMPUTE · [40%]
@@ -2352,7 +2352,7 @@ Budget drilldown: real units behind each share
 
 ### Report · 5 of 5
 A new result, and the result in full
-Leakage heard: what overhearing tells
+Everyday radio heard: what overhearing tells
 Back after a long absence
 Replaying an absence on the map
 Nothing new yet
