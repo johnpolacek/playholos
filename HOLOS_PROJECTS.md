@@ -25,7 +25,7 @@ Earth’s instruments and industry today, plus about a century. Every project be
 - **Building unlocks** follow fixed chains: you need the tools first. The foundry comes before anything large in space; a launcher before any probe.
 - **Discovery projects** appear only when a result opens them, and target a specific star or planet. They are listed at the end.
 - Locked projects stay visible with the reason: “Needs: orbital foundry.”
-- **Energy and compute are yearly budgets;** neither can be stored at planetary scale, so a running project takes a share of every year’s supply, and pausing frees it. **Matter is a stockpile:** a project draws its matter once when it starts. Amounts are sample values, in kilotonnes (kt) and megatonnes (Mt).
+- **Energy and compute are yearly budgets;** neither can be stored at planetary scale, so a running project takes a share of every year’s supply, and pausing frees it. **Percentages are of the starting budgets:** 1% of energy is 1 TW. As capacity grows, the same project takes a smaller share. **Matter is a stockpile:** a project draws its matter once when it starts. Amounts are sample values, in kilotonnes (kt) and megatonnes (Mt).
 - **Tiers are stages,** not clock times: from the planet, while matter is lifted off it; into space, once the foundry builds there; self-building industry, once factories copy themselves and matter compounds; and star-scale works.
 
 ## Know
@@ -84,7 +84,7 @@ Know: learn what is out there, and answer the clues.
 **Infrared telescope** · 18 Years · `01:30:00` · Grounded · quiet
 
 - **Why:** Tells you whether a warm glow is natural, or someone’s machines.
-- **What:** A cold telescope many times larger than the one we start with. Tells cold dust from warm companions.
+- **What:** A cold telescope many times larger than the one we start with. Tells cold dust from warm companions, and by its spectrum dust, with its mineral bumps, from the smooth glow of machines.
 - **Basis:** Cryogenic infrared telescopes, like JWST at far larger scale.
 - **Uses:** energy 25% a year, compute 15% a year, 200 kt of matter at start
 - **Needs:** nothing
@@ -144,7 +144,7 @@ Know: learn what is out there, and answer the clues.
 **Infrared interferometer** · 40 Years · `03:20:00` · Plausible · quiet
 
 - **Why:** Sharp enough to pick out planets and measure them one by one.
-- **What:** Links the two telescopes into one eye as wide as the gap between them.
+- **What:** Links the two telescopes into one eye as wide as the gap between them. It pins down where a glow sits, so its temperature can be checked against what its star alone could make.
 - **Basis:** Space interferometer concepts such as LIFE.
 - **Uses:** energy 25% a year, compute 30% a year, 40 Mt of matter at start
 - **Needs:** Second infrared telescope
@@ -282,24 +282,24 @@ Grow: more energy, matter and compute every year, so everything goes faster.
 
 **Solar swarm** · 30 Years · `02:30:00` · Speculative · loud
 
-- **Why:** Four times the energy, but everyone nearby can see you.
+- **Why:** Energy up to a whole star’s output, but everyone nearby can see you.
 - **What:** Surrounds the star with collectors: enormous energy, and a heat glow others can see.
-- **Basis:** A Dyson swarm. Its infrared excess is exactly what searches like Ĝ look for.
+- **Basis:** A Dyson swarm. A full one takes about Mercury’s mass; Armstrong and Sandberg found self-copying industry could build it in decades. Its infrared excess is what searches like Ĝ look for.
 - **Uses:** energy 20% a year, compute 20% a year, 100 Mt of matter at start
 - **Needs:** Self-replicating factory + Mass driver
-- **Effect:** Energy ×4. Visible as warm glow for light-years.
+- **Effect:** Energy doubles about every Year as collectors copy themselves, up to the whole star: about four trillion times the starting grid for a Sun-like star. Compute can grow with it. Each doubling doubles the glow.
 - **Unlocks:** Star lifting, Antimatter probe
 
 ### Tier 4 · star-scale works
 
 **Star lifting** · 40 Years · `03:20:00` · Speculative · loud
 
-- **Why:** Three times the matter, from the star itself. Very visible.
+- **Why:** The biggest mine there is: the star itself. Very visible.
 - **What:** Pulls gas off the star itself for fuel and raw material.
 - **Basis:** Star lifting, proposed by David Criswell. Physics allows it; the scale is vast.
 - **Uses:** energy 40% a year, compute 30% a year, 400 Mt of matter at start
 - **Needs:** Solar swarm
-- **Effect:** Triples matter income.
+- **Effect:** The star becomes the mine: it holds more matter than every planet around it combined.
 
 ## Reach
 
@@ -757,8 +757,8 @@ These appear from results, and name their target. Braces mark where a real star,
 **Measure what’s crossing {star}** · Know · 8 Years · `00:40:00` · Grounded
 
 - **Why:** Learn what keeps dimming that star: a planet, dust, or something built.
-- **What:** Works out the size and orbit of whatever keeps dimming the star.
-- **Basis:** Transit timing and depth analysis.
+- **What:** Works out the size, orbit and color of whatever keeps dimming the star. Dust dims blue light more than red; a solid object dims every color equally.
+- **Basis:** Transit timing, depth and color, as used in 2018 to show Boyajian’s star was dimmed by dust.
 - **Uses:** energy 10% a year, compute 15% a year
 - **Needs:** Transit watch
 - **Appears:** Appears when a dimming repeats.
@@ -776,7 +776,7 @@ These appear from results, and name their target. Braces mark where a real star,
 
 - **Why:** Learn whether the oxygen world has a civilization.
 - **What:** Oxygen, methane, water: and maybe gases only industry makes.
-- **Basis:** Biosignatures and technosignatures such as CFCs and nitrogen dioxide.
+- **Basis:** Methane beside oxygen means life; CFCs or nitrogen dioxide mean industry. Earth-level nitrogen dioxide takes hundreds of hours to see at this distance.
 - **Uses:** energy 15% a year, compute 20% a year
 - **Needs:** Spectrograph bank + Infrared telescope
 - **Appears:** Appears from the oxygen clue. Earth is 19.9 ly away.

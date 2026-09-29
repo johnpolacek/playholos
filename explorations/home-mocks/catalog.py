@@ -8,7 +8,9 @@ Hard science, speculative engineering. Every entry names a physical basis; the
 Energy and compute are yearly budgets: they cannot be stored at planetary
 scale, so a running project takes a share of each year's supply. Matter is a
 stockpile: a project draws its matter once, when it starts. In `cost`, E and C
-are percent shares; M is converted to kilotonnes by tier (see matter_tonnes).
+are fixed amounts, as percents of the starting grid and data centers (1% of energy is
+1 TW); as capacity grows, the same project takes a smaller share of each year.
+M is converted to kilotonnes by tier (see matter_tonnes).
 One game year is 5 real minutes. Visibility is what the project adds
 to how detectable the civilization is: quiet, noticeable, or loud.
 """
@@ -62,7 +64,7 @@ PROJECTS = [
       'Precise radial velocity and astrometry, beyond today’s reach.', 'grounded', 'quiet',
       needs=['spectrograph-bank'], reveals=['study-air', 'survey-wider']),
     P('infrared-telescope', 'Infrared telescope', 'know', 1, 18, 'E25 M10 C15',
-      'A cold telescope many times larger than the one we start with. Tells cold dust from warm companions.',
+      'A cold telescope many times larger than the one we start with. Tells cold dust from warm companions, and by its spectrum dust, with its mineral bumps, from the smooth glow of machines.',
       'Cryogenic infrared telescopes, like JWST at far larger scale.', 'grounded', 'quiet',
       reveals=['map-dust', 'resolve-companions', 'listen-to']),
     P('waste-heat-survey', 'Waste-heat survey', 'know', 2, 16, 'E15 C25',
@@ -85,7 +87,7 @@ PROJECTS = [
       'Detects neutrinos. Sees into star cores and warns of nearby supernovae.',
       'Large neutrino detectors such as JUNO. Reactors light-years away are far too faint to detect.', 'grounded', 'quiet'),
     P('interferometer', 'Infrared interferometer', 'know', 3, 40, 'E25 M20 C30',
-      'Links the two telescopes into one eye as wide as the gap between them.',
+      'Links the two telescopes into one eye as wide as the gap between them. It pins down where a glow sits, so its temperature can be checked against what its star alone could make.',
       'Space interferometer concepts such as LIFE.', 'plausible', 'quiet',
       needs=['second-telescope'], reveals=['image-planet']),
     P('solar-lens-observatory', 'Solar lens observatory', 'know', 3, 70, 'E30 M20 C25',
@@ -140,12 +142,12 @@ PROJECTS = [
       needs=['orbital-foundry', 'cold-compute-annex'], effect='Matter income doubles about every Year, as fast as physics allows, unless you slow it. Each doubling adds heat others can see.'),
     P('solar-swarm', 'Solar swarm', 'grow', 3, 30, 'E20 M50 C20',
       'Surrounds the star with collectors: enormous energy, and a heat glow others can see.',
-      'A Dyson swarm. Its infrared excess is exactly what searches like Ĝ look for.', 'speculative', 'loud',
-      needs=['self-replicating-factory', 'mass-driver'], effect='Energy ×4. Visible as warm glow for light-years.'),
+      'A Dyson swarm. A full one takes about Mercury’s mass; Armstrong and Sandberg found self-copying industry could build it in decades. Its infrared excess is what searches like Ĝ look for.', 'speculative', 'loud',
+      needs=['self-replicating-factory', 'mass-driver'], effect='Energy doubles about every Year as collectors copy themselves, up to the whole star: about four trillion times the starting grid for a Sun-like star. Compute can grow with it. Each doubling doubles the glow.'),
     P('star-lifting', 'Star lifting', 'grow', 4, 40, 'E40 M20 C30',
       'Pulls gas off the star itself for fuel and raw material.',
       'Star lifting, proposed by David Criswell. Physics allows it; the scale is vast.', 'speculative', 'loud',
-      needs=['solar-swarm'], effect='Triples matter income.'),
+      needs=['solar-swarm'], effect='The star becomes the mine: it holds more matter than every planet around it combined.'),
 
     # ---------- REACH ----------
     P('tight-beam', 'Tight-beam transmitter', 'reach', 1, 6, 'E15 C5',
@@ -339,8 +341,8 @@ PROJECTS = [
 # Discovery projects: they appear only when a result opens them.
 DISCOVERIES = [
     P('measure-crossing', 'Measure what’s crossing {star}', 'know', 1, 8, 'E10 C15',
-      'Works out the size and orbit of whatever keeps dimming the star.',
-      'Transit timing and depth analysis.', 'grounded', 'quiet', needs=['transit-watch'],
+      'Works out the size, orbit and color of whatever keeps dimming the star. Dust dims blue light more than red; a solid object dims every color equally.',
+      'Transit timing, depth and color, as used in 2018 to show Boyajian’s star was dimmed by dust.', 'grounded', 'quiet', needs=['transit-watch'],
       effect='Appears when a dimming repeats.'),
     P('study-air', 'Study the air of {planet}', 'know', 2, 16, 'E15 C20',
       'Reads a planet’s atmosphere from the starlight passing through it.',
@@ -348,7 +350,7 @@ DISCOVERIES = [
       effect='Appears when the survey finds a planet worth a look.'),
     P('study-sol', 'Study the oxygen world', 'know', 2, 18, 'E15 C20',
       'Oxygen, methane, water: and maybe gases only industry makes.',
-      'Biosignatures and technosignatures such as CFCs and nitrogen dioxide.', 'plausible', 'quiet',
+      'Methane beside oxygen means life; CFCs or nitrogen dioxide mean industry. Earth-level nitrogen dioxide takes hundreds of hours to see at this distance.', 'plausible', 'quiet',
       needs=['spectrograph-bank', 'infrared-telescope'], effect='Appears from the oxygen clue. Earth is 19.9 ly away.'),
     P('map-dust', 'Map the dust at {star}', 'know', 1, 10, 'E10 C15',
       'Shows the shape of a dust disk: rings and gaps can hide planets.',
@@ -439,8 +441,8 @@ WHY = {
     'fusion-plant': 'A big jump in energy every year.',
     'habitat-ring': 'A second home in orbit: more compute, and a backup if Veyra is hit.',
     'self-replicating-factory': 'Industry that builds itself: matter stops being scarce.',
-    'solar-swarm': 'Four times the energy, but everyone nearby can see you.',
-    'star-lifting': 'Three times the matter, from the star itself. Very visible.',
+    'solar-swarm': 'Energy up to a whole star’s output, but everyone nearby can see you.',
+    'star-lifting': 'The biggest mine there is: the star itself. Very visible.',
     'tight-beam': 'Talk to one known star without the whole sky hearing.',
     'broadcast-beacon': 'Everyone in range learns you exist: friends and threats alike.',
     'launcher': 'Required to send anything to another star.',
@@ -588,7 +590,7 @@ def markdown():
            '- **Building unlocks** follow fixed chains: you need the tools first. The foundry comes before anything large in space; a launcher before any probe.',
            '- **Discovery projects** appear only when a result opens them, and target a specific star or planet. They are listed at the end.',
            '- Locked projects stay visible with the reason: “Needs: orbital foundry.”',
-           '- **Energy and compute are yearly budgets;** neither can be stored at planetary scale, so a running project takes a share of every year’s supply, and pausing frees it. **Matter is a stockpile:** a project draws its matter once when it starts. Amounts are sample values, in kilotonnes (kt) and megatonnes (Mt).',
+           '- **Energy and compute are yearly budgets;** neither can be stored at planetary scale, so a running project takes a share of every year’s supply, and pausing frees it. **Percentages are of the starting budgets:** 1% of energy is 1 TW. As capacity grows, the same project takes a smaller share. **Matter is a stockpile:** a project draws its matter once when it starts. Amounts are sample values, in kilotonnes (kt) and megatonnes (Mt).',
            '- **Tiers are stages,** not clock times: from the planet, while matter is lifted off it; into space, once the foundry builds there; self-building industry, once factories copy themselves and matter compounds; and star-scale works.', '']
     for purpose, blurb in PURPOSES.items():
         out += [f'## {purpose.title()}', '', blurb, '']
