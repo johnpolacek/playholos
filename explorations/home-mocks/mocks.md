@@ -1355,6 +1355,90 @@ TRIED ON YOUR LAST ABSENCE
 Nothing would have set it off.
 [Edit] · [Approve]
 
+## Stakes · a strike as first contact
+A branch of the sample: Year 480, with nothing guarding Veyra. The first we ever hear from a neighbor is a hit. There is no warning, because a launch toward us is dark. The path names where it came from, and the attacker stays blind until the light of the hit returns. Wounded is a state you keep playing.
+
+#### 1 · Veyra has been hit · The arrival, as a moment. No warning, and no one to blame yet.
+Veyra · Year 480.0
+[drawing: Veyra, with a flash on its northern continent]
+NO WARNING
+
+### Veyra has been hit.
+A flash on the northern continent, brighter than noon. Nothing was seen coming.
+Whoever sent it, this is the first we have heard from them.
+[What we know]
+what we know ›
+
+#### 2 · Where it came from · Its path traced back. Each star on it, with when it would have left, and when they see the hit.
+Veyra · Year 480.1
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [70%] · MATTER · 11,600 kt · COMPUTE · [50%]
+[drawing: Stars view; labels: Veyra, Ember, Epsilon Indi · 00:46:03, Lantern, Gliese 783 A · 00:51:20, Beacon, Beta Hydri, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760, its path, traced back, 01:15:00, 5 ly]
+[World] · [System] · [selected: Stars] · [Region] · [Galaxy]
+STRUCK · YEAR 480 · WHERE IT CAME FROM
+- Lacaille 8760 · 10.7 ly · if from there: left Year 372, found us by 361
+- A star 58 ly out, on the same line · if from there, it left before we woke
+- They see the hit · Year 490.7 at the earliest; until then they can’t know · 10.7 Years · 00:53:24
+- Our warning · none: no pickets, and a launch toward us is dark
+a Year later ›
+
+#### 3 · The morning after · What we lost, what we kept, and what the attacker knows: nothing, yet.
+Veyra · Year 481.0
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [70%] · MATTER · 11,600 kt · COMPUTE · [50%]
+REPORT · WOUNDED
+
+### The morning after
+One Year since the hit · Year 480 → 481
+WHAT WE LOST
+The north grid · A third of our energy: 240 TW is now 160 TW. · Two projects · The deep flash watch and the north mines. Their matter is gone. · The north · Its cities, and two Years of dust over it.
+WHAT WE KEPT
+The mind · Whole. The data centers are in the south. · The vault · Asleep. Home never went silent. · The archive · Everything we know.
+WHAT THEY KNOW
+Whether it worked · Nothing until Year 490.7. They see the hit only when its light returns. · [What now]
+what now ›
+
+#### 4 · What now? · Rebuild, spread out, guard, tell, knock, or strike back. Any, or none.
+Veyra · Year 481.1
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [70%] · MATTER · 11,600 kt · COMPUTE · [50%]
+[‹ Report] · WOUNDED
+
+### What now?
+They won’t know if it worked until Year 490.7. Nothing is chosen for you.
+WHAT WE COULD DO · ANY, OR NONE
+- Rebuild the north · Energy back to 240 TW. · 30 Years · 02:30:00 · ›
+- Spread out · Copies of us on moons and rocks: one hit can’t end us. · 70 Years · 05:50:00 · ›
+- Guard the line to Lacaille 8760 · Pickets and screens. The next one from there gets stopped. · 42 Years · 03:30:00 · ›
+- Tell our neighbors who fired · A lead, not proof. A broadcast outs us too; a tight beam, only to its reader. · Beacon, in 9.3 Years · 00:46:27 · ›
+- Knock at Lacaille 8760 · Tells them we lived, and that we know where it came from. · arrives in 10.7 Years · 00:53:24 · ›
+- Strike back · An aimed flyby. It lands in Year 600. · 119 Years · 09:54:02 · ›
+- Talk it through with the mind ›
+
+## Stakes · total loss, and a new cohort
+Another branch: Year 612. A heavy bullet from an unguarded direction, and the vault found the same year. Total loss ends the run. The player rejoins a new cohort: the same real stars, new worlds around them, and nothing carried over.
+
+#### 1 · Veyra is gone · How long we lasted, and what of us is still traveling.
+Veyra · Year 612
+[drawing: Where Veyra was, dark, with our old broadcast still spreading around it]
+THE LAST OF US WENT SILENT
+
+### Veyra is gone.
+A heavy bullet from a direction no one guarded. The vault was found the same year.
+We lasted 612 Years, 51 real hours. Our broadcast is still out there, 92 light-years wide. It reaches the region’s edge in Year 640, and keeps going.
+[Begin again]
+begin again ›
+
+#### 2 · A new cohort · The same stars, a new silence. What carries over, and what the old cohort keeps of us.
+A NEW COHORT
+
+### The same stars. A new silence.
+Other worlds circle these stars now, and no one here has heard of Veyra. Twenty seats: some players, the rest AI.
+WHAT CARRIES OVER
+In the game · Nothing. Clues, maps and conversations start again. · In you · Everything you remember.
+THE OLD COHORT
+Still running · Beacon, Ember and the rest play on without us. · Our record · Kept in theirs: what they knew of Veyra. · [Choose your civilization]
+
 # Holos · Contact
 
 ## First contact · the knock
@@ -2228,7 +2312,7 @@ A meeting in person: how, where, and talking live
 Crossed knocks
 The silent one: no answer, ever
 
-### Stakes · 3 of 6
+### Stakes · 6 of 6
 Readiness: what keeps us safe, direction by direction
 Strike {target}: every weapon, and who would know
 Standing orders for danger

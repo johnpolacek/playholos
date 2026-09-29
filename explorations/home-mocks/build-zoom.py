@@ -319,10 +319,11 @@ def neighbors(time_demo=False, after_result=False, select=None, beam=None, probe
         e = [(origin[0] + L * math.cos(a0 + sg * math.radians(t_deg)), origin[1] + L * math.sin(a0 + sg * math.radians(t_deg))) for sg in (-1, 1)]
         s.append(f'<path d="M{origin[0]} {origin[1]} L{fmt(e[0][0])} {fmt(e[0][1])} L{fmt(e[1][0])} {fmt(e[1][1])} Z" fill="{OTHER}" fill-opacity=".08" stroke="none"></path>')
         s.append(f'<line x1="{origin[0]}" y1="{origin[1]}" x2="{fmt(origin[0] + L * math.cos(a0))}" y2="{fmt(origin[1] + L * math.sin(a0))}" stroke="{OTHER}" stroke-width="1.2" stroke-dasharray="5 4"></line>')
-        gx, gy = project(atlas(by_hip['99701']), HOME, cam, k, origin)
-        s.append(f'<circle cx="{fmt(gx)}" cy="{fmt(gy)}" r="6" fill="none" stroke="{INK}" stroke-width=".9" stroke-dasharray="2 2"></circle>')
-        lx_, ly_ = gx - 58, gy + 56   # crowded near Lantern: a leader down to open space
-        s.append(f'<line x1="{fmt(gx - 4)}" y1="{fmt(gy + 5)}" x2="{fmt(lx_ + 6)}" y2="{fmt(ly_ - 10)}" stroke="{INK}" stroke-width=".6"></line>' + text(lx_, ly_, 'Gliese 784', 9, INK, 'middle'))
+        if t_hip == '99461':
+            gx, gy = project(atlas(by_hip['99701']), HOME, cam, k, origin)
+            s.append(f'<circle cx="{fmt(gx)}" cy="{fmt(gy)}" r="6" fill="none" stroke="{INK}" stroke-width=".9" stroke-dasharray="2 2"></circle>')
+            lx_, ly_ = gx - 58, gy + 56   # crowded near Lantern: a leader down to open space
+            s.append(f'<line x1="{fmt(gx - 4)}" y1="{fmt(gy + 5)}" x2="{fmt(lx_ + 6)}" y2="{fmt(ly_ - 10)}" stroke="{INK}" stroke-width=".6"></line>' + text(lx_, ly_, 'Gliese 784', 9, INK, 'middle'))
         s.append(labels.place(origin[0] + 150 * math.cos(a0), origin[1] + 150 * math.sin(a0), t_label, 9, OTHER, 600, ((10, -8), (-10, -8), (10, 14), (-10, 14))))
     if time_demo:
         ex_, ey_ = project(atlas(by_hip['108870']), HOME, cam, k, origin)
@@ -3274,6 +3275,91 @@ BUDGET_COMPUTE = tab_screen('Projects', 'COMPUTE', 'YEAR 452', f"""<button class
 {row('Deep vault', 'sleeping: cold, and free', '<span class="mono">0%</span>')}
 <p class="copy small">Compute grows with energy, and further when run cold. A running vault would take 15% more, and its warmth could be found.</p>""", HUD_BU)
 
+# ---------- Struck: a strike as first contact, and the morning after ----------
+# A branch of the sample, Year 480: nothing guards Veyra. A tonne-class probe at a tenth of light speed hits the north
+# continent, about 100 megatons, with no warning: a launch toward us is dark. Its path traces back to Lacaille 8760,
+# 10.7 ly, or to a star 58 ly out that would mean it left before we woke. Attackers are blind: they see the hit only
+# when its light returns, in Year 490.7.
+Y_HIT = 480.0; d_lac = math.dist(atlas(by_hip['105090']), HOME)
+Y_HIT_L = round(Y_HIT - 1 - d_lac / .1); Y_HIT_SEEN = round(Y_HIT + d_lac, 1)
+def struck_svg(w=390, h=300):
+    s = [stipple(271, 90, w, h), globe(5, 195, 170, 118, .62, 120, 1.1)]
+    fx, fy = 150, 106
+    for r, o in ((46, .25), (30, .45), (16, .8)):
+        s.append(f'<circle cx="{fx}" cy="{fy}" r="{r}" fill="{OTHER}" opacity="{o * .5}"></circle>')
+    for a in range(0, 360, 30):
+        ra = math.radians(a); s.append(f'<line x1="{fmt(fx + 18 * math.cos(ra))}" y1="{fmt(fy + 18 * math.sin(ra))}" x2="{fmt(fx + 34 * math.cos(ra))}" y2="{fmt(fy + 34 * math.sin(ra))}" stroke="{OTHER}" stroke-width="1.4"></line>')
+    s.append(f'<circle cx="{fx}" cy="{fy}" r="6" fill="{PAPER}" stroke="{OTHER}" stroke-width="2"></circle>')
+    return f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" role="img" aria-label="Veyra, with a flash on its northern continent">{"".join(s)}</svg>'
+STRUCK_LANDS = f"""<div class="phone cine"><div class="cinetop"><span>Veyra</span><span class="mono">Year {Y_HIT:.1f}</span></div>
+{struck_svg()}
+<div class="cinetext"><span class="mono kick">NO WARNING</span>
+<h3>Veyra has been hit.</h3>
+<p class="inscr">A flash on the northern continent, brighter than noon. Nothing was seen coming.</p>
+<p>Whoever sent it, this is the first we have heard from them.</p>
+<div class="cinebtn"><button class="light">What we know</button></div></div></div>"""
+
+STRUCK_MAP = frame(2, *neighbors(trace=('105090', 2, 'its path, traced back')), panel=('STRUCK · YEAR 480', 'WHERE IT CAME FROM', [
+    row(f'Lacaille 8760 · {d_lac:.1f} ly', f'if from there: left Year {Y_HIT_L:.0f}, found us by {Y_HIT_L - d_lac:.0f}', '', 'other', marker=True),
+    row('A star 58 ly out, on the same line', 'if from there, it left before we woke', ''),
+    row('They see the hit', f'Year {Y_HIT_SEEN} at the earliest; until then they can’t know', tstack(f'{d_lac:.1f} Years', light_clock(d_lac))),
+    row('Our warning', 'none: no pickets, and a launch toward us is dark', '')]),
+    year=f'Year {Y_HIT + .1:.1f}', res=(70, 50, '11,600 kt'))
+
+WOUNDED = tab_screen('Report', 'REPORT', 'WOUNDED', f"""<div class="awayhead"><h3>The morning after</h3><span class="sub">One Year since the hit · Year {Y_HIT:.0f} → {Y_HIT + 1:.0f}</span></div>
+<div class="sec">WHAT WE LOST</div>
+{ledger([('The north grid', 'A third of our energy: 240 TW is now 160 TW.'), ('Two projects', 'The deep flash watch and the north mines. Their matter is gone.'),
+         ('The north', 'Its cities, and two Years of dust over it.')])}
+<div class="sec">WHAT WE KEPT</div>
+{ledger([('The mind', 'Whole. The data centers are in the south.'), ('The vault', 'Asleep. Home never went silent.'), ('The archive', 'Everything we know.')])}
+<div class="sec">WHAT THEY KNOW</div>
+{ledger([('Whether it worked', f'Nothing until Year {Y_HIT_SEEN}. They see the hit only when its light returns.')])}
+<button class="primary">What now</button>""", at_year((70, 50, '11,600 kt'), Y_HIT + 1))
+
+WOUNDED_NEXT = f"""<div class="phone">{at_year((70, 50, '11,600 kt'), Y_HIT + 1.1)}<div class="sheet">
+<div class="sh"><button class="backlink">‹ Report</button><span class="mono kind">WOUNDED</span></div>
+<h3 class="lead">What now?</h3>
+<p class="whyline">They won’t know if it worked until Year {Y_HIT_SEEN}. Nothing is chosen for you.</p>
+<div class="sec">WHAT WE COULD DO · ANY, OR NONE</div>
+{action('Rebuild the north', 'Energy back to 240 TW.', tstack('30 Years', clock(30 * 5)))}
+{action('Spread out', 'Copies of us on moons and rocks: one hit can’t end us.', tstack('70 Years', clock(70 * 5)))}
+{action('Guard the line to Lacaille 8760', 'Pickets and screens. The next one from there gets stopped.', tstack('42 Years', clock(42 * 5)))}
+{action('Tell our neighbors who fired', 'A lead, not proof. A broadcast outs us too; a tight beam, only to its reader.', tstack(f'Beacon, in {d_b:.1f} Years', light_clock(d_b)))}
+{action('Knock at Lacaille 8760', 'Tells them we lived, and that we know where it came from.', tstack(f'arrives in {d_lac:.1f} Years', light_clock(d_lac)))}
+{action('Strike back', f'An aimed flyby. It lands in Year {Y_HIT + 1 + 12 + d_lac / .1:.0f}.', tstack(f'{12 + d_lac / .1:.0f} Years', clock((12 + d_lac / .1) * 5)))}
+{TALK}
+</div></div>"""
+
+# ---------- Total loss, and a new cohort ----------
+# Another branch: Year 612, a heavy bullet from an unguarded direction, and the vault found by a spy. Our broadcast of
+# Year 520 is still spreading: 92 ly wide now, the region's edge in Year 640, and on.
+Y_END = 612.0
+def lost_svg(w=390, h=300):
+    s = [stipple(281, 110, w, h)]
+    for i, r in enumerate((150, 190, 232, 276)):
+        s.append(f'<circle cx="195" cy="160" r="{r}" fill="none" stroke="{YOU}" stroke-width="1" stroke-dasharray="4 5" opacity="{fmt(.7 - i * .15)}"></circle>')
+    s.append(f'<circle cx="195" cy="160" r="46" fill="{PAPER}" stroke="{INK}" stroke-width="1.2" stroke-dasharray="2 3"></circle>')
+    s.append(f'<circle cx="195" cy="160" r="3" fill="{INK}" opacity=".5"></circle>')
+    return f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" role="img" aria-label="Where Veyra was, dark, with our old broadcast still spreading around it">{"".join(s)}</svg>'
+LOST = f"""<div class="phone cine"><div class="cinetop"><span>Veyra</span><span class="mono">Year {Y_END:.0f}</span></div>
+{lost_svg()}
+<div class="cinetext"><span class="mono kick">THE LAST OF US WENT SILENT</span>
+<h3>Veyra is gone.</h3>
+<p class="inscr">A heavy bullet from a direction no one guarded. The vault was found the same year.</p>
+<p>We lasted {Y_END:.0f} Years, {Y_END * 5 / 60:.0f} real hours. Our broadcast is still out there, {Y_END - 520:.0f} light-years wide. It reaches the region’s edge in Year 640, and keeps going.</p>
+<div class="cinebtn"><button class="light">Begin again</button></div></div></div>"""
+
+NEW_COHORT = f"""<div class="phone"><div class="onb">
+<span class="mono kick">A NEW COHORT</span>
+<h3 class="lead">The same stars. A new silence.</h3>
+<p class="copy">Other worlds circle these stars now, and no one here has heard of Veyra. Twenty seats: some players, the rest AI.</p>
+<div class="sec">WHAT CARRIES OVER</div>
+{ledger([('In the game', 'Nothing. Clues, maps and conversations start again.'), ('In you', 'Everything you remember.')])}
+<div class="sec">THE OLD COHORT</div>
+{ledger([('Still running', 'Beacon, Ember and the rest play on without us.'), ('Our record', 'Kept in theirs: what they knew of Veyra.')])}
+<button class="primary">Choose your civilization</button>
+</div></div>"""
+
 # ---------- A broadcast sweeps past: Pearl speaks to everyone ----------
 # Year 290. Pearl (Zeta Tucanae), 13.0 ly away, began broadcasting in Year 277.0: radio, the same strength every way,
 # not tuned for anyone's motion. Beacon (6.7 ly from Pearl) heard it in 283.7, Frost in 286.3, us in 290. Any answer to
@@ -3506,7 +3592,7 @@ CHECKLIST = [
                  ('We find them first: a clue confirmed', 'done'), ('A broadcast sweeps past', 'done'), ('A visitor brakes into our system', 'done'),
                  ('A far mind met them first', 'done'), ('A meeting in person: how, where, and talking live', 'done'), ('Crossed knocks', 'done'), ('The silent one: no answer, ever', 'done')]),
     ('Stakes', [('Readiness: what keeps us safe, direction by direction', 'done'), ('Strike {target}: every weapon, and who would know', 'done'),
-                ('Standing orders for danger', 'done'), ('The strike as first contact', 'later'), ('Wounded: the morning after', 'later'), ('Total loss and a new cohort', 'later')]),
+                ('Standing orders for danger', 'done'), ('The strike as first contact', 'done'), ('Wounded: the morning after', 'done'), ('Total loss and a new cohort', 'done')]),
 ]
 def checklist_html(areas=None):
     out = ['<div class="checklist">']
@@ -3665,6 +3751,18 @@ SECTIONS = [
 ]
 
 SECTIONS += [
+    ('struck', 'Struck', 'Stakes · a strike as first contact', f'A branch of the sample: Year {Y_HIT:.0f}, with nothing guarding Veyra. The first we ever hear from a neighbor is a hit. There is no warning, because a launch toward us is dark. The path names where it came from, and the attacker stays blind until the light of the hit returns. Wounded is a state you keep playing.',
+     f'<figure><figcaption><strong>1 · Veyra has been hit</strong><span>The arrival, as a moment. No warning, and no one to blame yet.</span></figcaption>{STRUCK_LANDS}</figure>'
+     '<span class="pinch">what we know ›</span>'
+     f'<figure><figcaption><strong>2 · Where it came from</strong><span>Its path traced back. Each star on it, with when it would have left, and when they see the hit.</span></figcaption>{STRUCK_MAP}</figure>'
+     '<span class="pinch">a Year later ›</span>'
+     f'<figure><figcaption><strong>3 · The morning after</strong><span>What we lost, what we kept, and what the attacker knows: nothing, yet.</span></figcaption>{WOUNDED}</figure>'
+     '<span class="pinch">what now ›</span>'
+     f'<figure><figcaption><strong>4 · What now?</strong><span>Rebuild, spread out, guard, tell, knock, or strike back. Any, or none.</span></figcaption>{WOUNDED_NEXT}</figure>'),
+    ('lost', 'Lost', 'Stakes · total loss, and a new cohort', f'Another branch: Year {Y_END:.0f}. A heavy bullet from an unguarded direction, and the vault found the same year. Total loss ends the run. The player rejoins a new cohort: the same real stars, new worlds around them, and nothing carried over.',
+     f'<figure><figcaption><strong>1 · Veyra is gone</strong><span>How long we lasted, and what of us is still traveling.</span></figcaption>{LOST}</figure>'
+     '<span class="pinch">begin again ›</span>'
+     f'<figure><figcaption><strong>2 · A new cohort</strong><span>The same stars, a new silence. What carries over, and what the old cohort keeps of us.</span></figcaption>{NEW_COHORT}</figure>'),
     ('readiness', 'Readiness', 'Stakes · what keeps us safe', f'Year {Y_SK}. Veyra has built no weapon, and that is a way to play. Readiness shows what keeps a civilization alive, direction by direction, tested only against weapons it could build itself. A launch toward us is dark to us, since its exhaust points away, so the only warning comes from pickets that see a bullet’s nose glow on its way in.',
      f'<figure><figcaption><strong>1 · Readiness, now</strong><span>A vault and an archive, and no guarded direction. The honest answer: no warning, from anywhere.</span></figcaption>{READY_NOW}</figure>'
      f'<span class="pinch">later: Year {Y_RL:.0f} ›</span>'
@@ -3773,7 +3871,7 @@ AREAS = [  # (page, area as named in CHECKLIST, one-line summary, section ids)
     ('report', 'Report', 'What comes back while you are away, and catching up after a long absence.', ['result', 'absence']),
     ('reach', 'Reach', 'Beyond Veyra: sending a probe, following it, what it finds, the kinds of probe, and broadcasting.', ['probe', 'flyby', 'probe-types', 'sentinel', 'broadcast']),
     ('mind', 'Mind', 'Standing orders near and far, and settings: what wakes you, quiet hours, theme, the tour.', ['orders', 'settings']),
-    ('stakes', 'Stakes', 'What keeps us safe, what a strike would cost and reveal, and orders for danger. Peace is a way to play.', ['readiness', 'strike', 'danger-orders']),
+    ('stakes', 'Stakes', 'What keeps us safe, what a strike would cost and reveal, and orders for danger. Peace is a way to play.', ['readiness', 'strike', 'danger-orders', 'struck', 'lost']),
     ('contact', 'Contact', 'First contact: the knock, the reply, checking what they told us, and the builders meeting our sentinel, crossed knocks with Ember, a visitor from Lantern, overhearing Pearl, meeting Beacon’s emissary, and Frost’s silence.', ['knock', 'reply', 'check', 'visitor', 'swept', 'noticed', 'crossed', 'meeting', 'silent']),
 ]
 assert sorted(sid for *_, ids in AREAS for sid in ids) == sorted(sid for sid, *_ in SECTIONS), 'every section belongs to exactly one page'
