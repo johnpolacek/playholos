@@ -337,7 +337,7 @@ Reach: touch other stars. Messages, probes, ships, and strikes.
 - **Uses:** energy 25% a year, compute 10% a year, 5,000 kt of matter at start
 - **Needs:** Orbital foundry
 - **Unlocks:** Solar lens observatory, Relay station, Flyby probe, Torch probe, Seedship, Antimatter probe, Pickets
-- **Can open:** Send a probe to {star}, Feint toward {star}
+- **Can open:** Send a probe to {star}
 
 **Relay station** · 20 Years · `01:40:00` · Plausible · quiet
 
@@ -408,8 +408,9 @@ Reach: touch other stars. Messages, probes, ships, and strikes.
 - **Basis:** Beamed sail propulsion, as in Breakthrough Starshot.
 - **Uses:** energy 50% a year, compute 15% a year, 40 Mt of matter at start
 - **Needs:** Fusion plant + Orbital foundry
-- **Effect:** Pushes chip swarms and starlight sails. The beam is visible.
+- **Effect:** Pushes chip swarms and starlight sails. The beam shines past them, toward their target.
 - **Unlocks:** Starlight sail, Chip swarm, Pellet swarm, Star laser, Deflector laser
+- **Can open:** Feint toward {star}
 
 **Starlight sail** · 10 Years · `00:50:00` · Speculative · quiet
 
@@ -501,11 +502,11 @@ Reach: touch other stars. Messages, probes, ships, and strikes.
 **Spoofer** · 12 Years · `01:00:00` · Plausible · quiet
 
 - **Why:** Make a rival flinch, and watch what it does.
-- **What:** A lurker that fakes a launch flare from close by, to make a target react.
-- **Basis:** A laser flash. Two telescopes far apart see it beside the star, not on it.
+- **What:** A lurker near a target’s pickets that fakes a bullet’s glow, to make the target react.
+- **Basis:** A faint moving light. A real bullet crosses picket after picket on one straight line; a fake glows beside it.
 - **Uses:** energy 10% a year, compute 10% a year, 10 Mt of matter at start
 - **Needs:** Lurker
-- **Effect:** Works on the unprepared. Once caught, the flash shows where the lurker is.
+- **Effect:** Works on the unprepared. Once caught, the fake shows where the lurker is.
 
 **Spotter** · 16 Years · `01:20:00` · Speculative · quiet
 
@@ -639,12 +640,12 @@ Endure: keep existing. Spread out, remember, stay quiet, see danger coming, and 
 
 **Early warning array** · 40 Years · `03:20:00` · Plausible · quiet
 
-- **Why:** See ships launch toward you, years before they could arrive.
-- **What:** Watches nearby stars for the flare of ships launching toward us.
-- **Basis:** Fusion and laser launches are bright. The faster the strike, the less warning its flare gives.
+- **Why:** See laser launches toward you, and who is building weapons.
+- **What:** Watches nearby stars for the launches that shine toward us, and for weapon works.
+- **Basis:** A torch sent at us points its exhaust away, so it stays dark. A laser that pushes a sail shines on past it toward the target, and weapon industry glows.
 - **Uses:** energy 20% a year, compute 25% a year, 40 Mt of matter at start
 - **Needs:** Waste-heat survey + Deep-field receiver
-- **Effect:** Gives a launch’s direction, not its speed.
+- **Effect:** A laser launch from 10 ly at a fifth of light speed gives decades of warning. Torch launches stay dark: only pickets see those.
 - **Unlocks:** Pickets
 
 **Dispersal outposts** · 70 Years · `05:50:00` · Plausible · noticeable
@@ -856,10 +857,10 @@ These appear from results, and name their target. Braces mark where a real star,
 **Feint toward {star}** · Reach · 4 Years · `00:20:00` · Plausible
 
 - **Why:** Test their nerve, and see what they do.
-- **What:** A real launch flare with nothing behind it.
-- **Basis:** A launch’s power shows; its payload does not.
+- **What:** Fires the laser array toward them with nothing on it.
+- **Basis:** A launch laser’s beam shows; what it pushes does not.
 - **Uses:** energy 30% a year, compute 5% a year
-- **Needs:** Launcher
+- **Needs:** Laser sail array
 - **Appears:** Appears when you know where a civilization is. They must stay on alert until the slowest bullet would have passed.
 
 **Nudge a rock toward {planet}** · Reach · 20 Years · `01:40:00` · Plausible

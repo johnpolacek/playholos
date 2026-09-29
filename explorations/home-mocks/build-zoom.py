@@ -1941,7 +1941,7 @@ PROBE_CONFIRM = f"""<div class="phone">{HUD_P0}<div class="sheet">
 {journey('108870')}
 <p class="copy small">We learn what it saw in Year {R_e:.0f}, <span class="rtime">{clock((R_e - Y_PB) * 5)}</span> from now.</p>
 <div class="sec">WHO COULD SEE IT</div>
-<p class="copy small">The launch is bright: anyone watching Veyra may see it. In flight it is cold and nearly invisible. Its report is a narrow beam, aimed home.</p>
+<p class="copy small">The launch is bright behind it and dark ahead: Ember sees nothing leave. In flight it is cold and nearly invisible. Its report is a narrow beam, aimed home.</p>
 <div class="sec">USES</div>
 <p class="copy small mono">{cost_short(to_)} · can’t be recalled after launch</p>
 {TALK}

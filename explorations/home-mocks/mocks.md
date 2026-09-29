@@ -869,7 +869,7 @@ Flight · Year 130 → 222 · 07:40:28
 Report crosses back · Year 222 → 231 · 00:46:03
 We learn what it saw in Year 231, · 09:26:31 · from now.
 WHO COULD SEE IT
-The launch is bright: anyone watching Veyra may see it. In flight it is cold and nearly invisible. Its report is a narrow beam, aimed home.
+The launch is bright behind it and dark ahead: Ember sees nothing leave. In flight it is cold and nearly invisible. Its report is a narrow beam, aimed home.
 USES
 E 20% · C 15% · 4,000 kt · can’t be recalled after launch
 [Talk it through with the mind ›] · [Build and launch]
