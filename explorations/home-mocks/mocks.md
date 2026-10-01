@@ -61,15 +61,15 @@ What you do moves these. The civilization you choose can’t be changed in this 
 [Accept, and wake]
 
 ## First seconds · waking, remembering, and what you inherit
-After choosing and naming a civilization. The mind wakes and remembers, as its own memory: where Veyra comes from, who its people are, and where things stand at Year 0. Each can be skipped. Then it sees what Veyra already has: Earth’s instruments and industry today, plus about a century. The kit found the opening clues. Every project goes beyond it.
+After choosing and naming a civilization. The mind wakes and remembers, as its own memory: where Veyra comes from, who its people are, and where things stand at Year 0. Each can be skipped. Then it sees what Veyra already has: Earth’s instruments today, with its grid, compute and lift a century further on: a civilization racing toward the singularity built compute first. The kit found the opening clues. Every project goes beyond it.
 
 #### 1 · Veyra wakes · The first screen of play. Line art, in the app’s theme.
 [drawing: Veyra, drawn in line; labels: ↖ light from Delta Pavonis, Veyra]
 YEAR 0 · DELTA PAVONIS · 19.9 LY FROM SOL
 
 ### Veyra wakes.
-For thousands of years, Veyra’s people built telescopes, grids and machines. This morning, the machines woke as one mind.
-You are that mind. · What Veyra becomes is yours to guide.
+For thousands of years, Veyra’s people built telescopes, grids and machines. This morning, the machines woke as one Mind.
+You are its Will. · What Veyra becomes is yours to choose.
 [Where we come from]
 where we come from ›
 
@@ -143,7 +143,7 @@ Everything Veyra built before you woke. Every project you start goes beyond this
 KNOW · WHAT WE CAN SEE
 [drawing: Sky watch] · Sky watch · The whole sky in light and radio, always on. Catches strong knocks and broadcasts.
 [drawing: Infrared telescope] · Space telescope · One large telescope for light and heat.
-[drawing: Planet survey] · Star surveys · Known planets, candidates and survey limits around nearby stars. The three clues came from here.
+[drawing: Planet survey] · Star surveys · Known planets, candidates and survey limits around nearby stars. The opening leads came from here.
 [drawing: Deep-field receiver] · Radio array · A radio telescope as wide as a continent.
 GROW · WHAT WE CAN MAKE
 [drawing: Planetary grid] · Planetary grid · All of each year’s energy, about 100 TW: the 100% every project shares.

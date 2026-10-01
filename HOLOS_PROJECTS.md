@@ -10,11 +10,11 @@ Science constraints and source links are in [the research baseline](HOLOS_GAME_C
 
 ## What every civilization starts with
 
-Earth’s instruments and industry today, plus about a century. Every project below is an upgrade beyond this kit. The kit found the opening clues, and it catches strong knocks.
+Earth’s instruments today, with its grid, compute and lift a century further on: a civilization racing toward the singularity built compute first. Every project below is an upgrade beyond this kit. The kit found the opening clues, and it catches strong knocks.
 
 - **Sky watch** (Know): The whole sky in light and radio, always on. Catches strong knocks and broadcasts. *Whole-sky surveys such as Rubin and CHIME; PANOSETI is being built to catch nanosecond flashes.*
 - **Space telescope** (Know): One large telescope for light and heat. *JWST today; the Habitable Worlds Observatory is planned for the 2040s.*
-- **Star surveys** (Know): Known planets, candidates and survey limits around nearby stars. The three clues came from here. *Gaia, HARPS, TESS and PLATO.*
+- **Star surveys** (Know): Known planets, candidates and survey limits around nearby stars. The opening leads came from here. *Gaia, HARPS, TESS and PLATO.*
 - **Radio array** (Know): A radio telescope as wide as a continent. *The Square Kilometre Array, under construction.*
 - **Planetary grid** (Grow): All of each year’s energy, about 100 TW: the 100% every project shares. *Today’s grids, a century further on.*
 - **Data centers** (Grow): Where the mind runs: all of each year’s compute, about 10²⁷ operations a second, on 10 TW of their own. *Today’s data centers, a century further on: chips about 100 times as efficient, drawing 200 times today’s 50 GW.*

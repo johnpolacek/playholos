@@ -42,7 +42,14 @@ Iain M. Banks's Culture books are an inspiration: a powerful Mind responsible fo
 
 ## Player and civilization
 
-- The player is the awakened superintelligence itself: a hyperconnected civilization mind with individual agents within it.
+- **The Will, the Mind and Nodes (2026-09-30).** This replaces "the player is the awakened superintelligence itself."
+  - **The Will** is the player: the one who chooses. It lives in one Mind at a time.
+  - **A Mind** is a civilization's integrated thinking in one place: home, and later a colony or station large enough to stand alone. It thinks, does the work, cautions and advises, and speaks in its people's voice. On screen: **THE MIND (VEYRA)**, **THE MIND (ALPHA COLONY)**.
+  - **Nodes** are probes, sentinels, lurkers, relays and ships. They follow their orders as written and report in plain logs, with no voice of their own.
+  - **A node becomes a Mind when it can stand alone:** its own industry, power and compute, enough to run without home. A colony or habitat ring can; a sentinel never does. The game marks the moment. A new Mind starts in its parent's voice and drifts as it lives apart.
+  - **Every Mind has a Will.** Where the player is, it is the player. The player's other Minds have a stand-in AI Will that acts for the player from their orders and charter, reading them by intent; it is not a rival. AI civilizations have AI Wills of their own. Nodes have none. Where an AI Will is unavailable or too costly, a Mind runs its standing orders as written and keeps its queue going; the same rules give tests and replays a version that always plays out the same way.
+  - **Coming back:** when the player returns to a Mind, the Mind says what its stand-in Will did while they were away, and why.
+  - **The opening line:** "This morning the machines woke as one Mind. You are its Will."
 - Commonality across post-singularity civilizations is assumed. Species and homeworld shape a mind's context; players choose its guidance and priorities, including how much the organic past matters.
 - Start on one inhabited planet, comparable to a speculative Earth about 100 years ahead, with substantial astronomical knowledge and knowledge of the home system's resources.
 - **Three civilization choices per player,** from holos-game's generator: each has a cradle, lineage, dial sheet, and archetype.
@@ -96,7 +103,8 @@ The session rhythm is **spinning plates:** several projects, investigations, mis
 ## The opening
 
 - **The game begins in the eerie silence.** No one has been heard, which matches current observations. A few clues suggest we may not be alone; none proves it.
-- **How the player responds is the beginning of the game.** Sample clues, by Veyra's names: an oxygen world at Twin (Sol), a new warm infrared glow at Ember (Epsilon Indi), uneven dimming at Lantern (Gliese 783 A). Each has natural explanations.
+- **How the player responds is the beginning of the game.**
+- **Leads follow the science (2026-10-01).** Year 0 leads are real, published oddities at real stars, as Earth's instruments see them, each with natural explanations, checked against the literature as they are added. Invented objects go only where the data leaves room, and stay invisible to today's instruments. Leads point at other seats only by chance; finding a neighbor takes Know projects, probes or contact. Veyra's, by its own names: a giant at Ember (Epsilon Indi) twice as heavy and farther out than its star's sway foretold (JWST, 2024); a slow drift at Beacon (Beta Hydri) that tracks its spot cycle; a point beside Pair (Alpha Centauri A) seen once by JWST in 2025 and not since.
 - Investigation means choosing an approach: existing instruments, a better observatory, a message, eventually a probe. Each answers different questions at different cost and delay. Funding buys a measurement, not knowledge.
 - **Detectability** follows holos-game's detection floor: with current-Earth instruments, no civilization detects another's emissions, because receiver sensitivity is the binding limit. Finding others is the upgrade loop. Every civilization's emission history must stay below Earth's 2026 detection limits at its distance.
 - **Instruments shift the odds; confirmed technology settles presence (2026-10-01).** Every clue has natural explanations and a technological one, and each instrument runs one physical test. Mineral features can favor dust, but a smooth spectrum does not prove machines. Color-dependent dimming helps test dust models. Heat beyond stellar heating calls for another energy source, which may be natural. Methane beside oxygen strengthens the case for life only in its atmospheric and stellar context. Nitrogen dioxide has natural sources. Industrial gases such as CFCs require a secure detection and tests of alternatives. A verified artificial transmission, a reply or a probe observation that identifies technology can establish presence as of the observation's age. An unresolved glow or broadband hum alone cannot.
@@ -134,6 +142,7 @@ Shown in the [mocks](explorations/home-mocks/index.html). Their sample civilizat
 - **The mind speaks in its people's voice (2026-09-30).** Its personality is its species', from history, body and charter: Veyra's is quiet and wary, says less than it knows, and looks before it speaks. Stated costs of character still show: a mind that leans hidden says so before a broadcast.
 - *Superseded 2026-09-30:* the mind advised only when asked (2026-09-28). Decision screens show options and consequences, never a recommendation. *Talk it through with the mind* opens Mind with the decision pinned: the player asks, the mind answers from what the civilization knows, and gives its own view when asked, shaped by charter and dials. It can disagree. The decision can be made there, and the clock keeps running while they talk. Stated costs of character, like a mind that would argue against naming itself, still show.
 - **Onboarding after waking (2026-09-29):** *Veyra wakes*, then three skippable screens read as the mind's own memory before the kit: **Where we come from** (the history), **Who they are** (the people drawn to scale: body, senses, speech, lifespan, population, how they are organized, and how they feel about the mind they built; these are the lives a strike ends; a full-screen plate shows them side on, front on and face to face), and **Where things stand** (the radio shell already sent, that no one else's waking can be seen yet, and the three things that don't fit). The choosing screen's *Up close* carries a one-line history and a small drawing of the people.
+- **Meeting the Mind (2026-10-01):** after the memories, the Mind speaks first, in its people's voice, and the Will answers. The tour follows as a conversation: the player asks, and the screens move.
 - **Guided tour after landing:** you and your map; the silence and its clues; the Projects, Report and Mind tabs; the hand-off to the clues. Skippable and replayable from Mind.
 
 ## Admin view
@@ -150,7 +159,7 @@ Shown in the [mocks](explorations/home-mocks/index.html). Their sample civilizat
 - Research and missions can have uncertain outcomes.
 - **Projects are grouped by purpose:** Know (instruments to study the clues), Grow (industry), Reach (probes, messages and strikes), and later Endure (defenses). Know projects name the clue they help with. The full list is in [HOLOS_PROJECTS.md](HOLOS_PROJECTS.md).
 - **Energy and compute are yearly budgets; matter is a stockpile (2026-09-26).** Energy and compute cannot be stored at planetary scale, so a running project takes a share of each year's supply; what a year does not use is lost, and pausing frees the share. Matter can be stored: a project draws its matter once when it starts, and mines refill the pile, including while the player is away. Rates and amounts are sample values.
-- **Every civilization starts with a kit (2026-09-28):** Earth's instruments and industry today, plus about a century. A whole-sky watch in light and radio, a large space telescope, star surveys that already know the nearest stars' big planets, a continent-wide radio array, a planetary grid of about 100 TW and data centers doing about 10²⁷ operations a second on 10 TW of their own (the 100% energy and compute budgets), mines and reusable heavy lift, laser links across the home system, and precursor probes heading out. The kit is what found the opening clues, and it catches strong knocks. Catalog projects are upgrades beyond it.
+- **Every civilization starts with a kit (revised 2026-10-01):** Earth's instruments as they are today, with its grid, compute and lift a century further on. A civilization racing toward the singularity puts its last century into compute and power, not telescopes. So no seat can see another's world at Year 0: today's instruments cannot find an Earth-mass world in the habitable zone of a Sun-like star (stellar noise limits the best surveys to about 2–5 Earth masses there) or read its air (that waits for the Habitable Worlds Observatory, planned for the 2040s). A whole-sky watch in light and radio, a large space telescope, star surveys that already know the nearest stars' big planets, a continent-wide radio array, a planetary grid of about 100 TW and data centers doing about 10²⁷ operations a second on 10 TW of their own (the 100% energy and compute budgets), mines and reusable heavy lift, laser links across the home system, and precursor probes heading out. The kit is what found the opening clues, and it catches strong knocks. Catalog projects are upgrades beyond it.
 - **Matter is counted in kilotonnes (2026-09-28):** 1,240 kt on hand at the start, +40 kt a year. Tonnes were too small for a civilization a century past today's launch rates.
 - **Over budget, the game stops and offers ways forward (2026-09-26).** A project that would take energy or compute past 100% cannot start. The player can start it when there is room (it joins Up next), pause something to make room, or grow capacity first. No option is suggested. Projects never silently slow each other down.
 - **Up next starts projects on its own (2026-09-26).** Queued projects start as soon as their energy, compute and matter fit, top first, including while the player is away.
@@ -161,13 +170,13 @@ Shown in the [mocks](explorations/home-mocks/index.html). Their sample civilizat
 
 ## Separated minds
 
-- Distance separates minds. The player occupies one; the others run under AI and may act unexpectedly.
-- **Changing minds is travel at light speed.** The player departs as a transmission and arrives after the one-way light time, knowing only what they knew at departure. The mind left behind continues under AI.
+- Distance separates Minds. The Will lives in one; the others run under stand-in AI Wills and may act unexpectedly.
+- **Changing Minds is travel at light speed.** The Will departs as a transmission and arrives after the one-way light time, knowing only what it knew at departure. The Mind left behind continues under a stand-in Will. The Will can travel only to Minds, never to nodes.
 - **In transit the player can do nothing,** for the real-time crossing: 20 ly is 100 minutes, 100 ly about 8.3 hours.
 - Divergence is found on arrival. Arriving at a colony that no longer aligns is emigration: the player takes up its values. A wounded player escapes the same way, as a transmission others can intercept.
 - Tight beam is the standard link.
 - **Meeting in person (2026-09-28):** minds talk live only when close. Every way to get close is offered, each with what it needs and when it could happen: meet a craft carrying one of their minds, host their mind sent as light on sealed machines, send ours as light, or both send craft halfway. Close in, answers return in under a second of real time, and the clock keeps running. A craft's mind speaks for home as of the last word that reached it.
-- **Far minds read orders by intent (2026-09-28).** An AI agent plays each far mind. When what it sees does not match an order's words, it acts on what it believes the player meant, shaped by its charter and dials. Clearer orders are followed more closely; vague ones leave room for its judgment, and the longer it is away, the more that judgment drifts.
+- **Minds read orders by intent; nodes follow them as written (2026-09-30).** An AI Will plays each far Mind. When what it sees does not match an order's words, it acts on what it believes the player meant, shaped by its charter and dials. Clearer orders are followed more closely; vague ones leave room for its judgment, and the longer it is away, the more that judgment drifts.
 
 ## Communication and deception
 
@@ -201,7 +210,7 @@ Settled 2026-09-29.
   - *Both at once:* crossed knocks, mutual watching.
   - *No conversation possible:* a young world, the silent one, a letter from the dead, an old watcher.
   - *Danger:* the mask, the bait, the strike.
-  - *Earth,* the oxygen world at Twin for Veyra.
+  - *Earth,* a star like ours with a giant planet, for Veyra; nothing at Year 0 shows its oxygen.
 - **No guaranteed timing (2026-09-28).** First contact emerges from seeding and behavior; the game does not arrange one early.
 - **A first contact can be a strike (2026-09-28).** No protection. Physics still requires the attacker to have found you first.
 - **Earth's character is random per cohort (2026-09-28),** like any other seat, so no one can plan around it.

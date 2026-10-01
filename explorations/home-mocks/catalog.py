@@ -27,13 +27,13 @@ def P(id, name, purpose, tier, years, cost, what, basis, level, visibility, need
     return dict(id=id, name=name, purpose=purpose, tier=tier, years=years, cost=cost, what=what, basis=basis,
                 level=level, visibility=visibility, needs=list(needs), effect=effect, reveals=list(reveals))
 
-# What every civilization starts with: Earth's instruments and industry today, plus about a century.
+# What every civilization starts with: Earth's instruments today; its grid, compute and lift a century further on.
 # Catalog projects are upgrades beyond it. (purpose, name, icon key, what it gives you, basis)
 STARTING_KIT = [
     ('know', 'Sky watch', 'skywatch', 'The whole sky in light and radio, always on. Catches strong knocks and broadcasts.',
      'Whole-sky surveys such as Rubin and CHIME; PANOSETI is being built to catch nanosecond flashes.'),
     ('know', 'Space telescope', 'ir', 'One large telescope for light and heat.', 'JWST today; the Habitable Worlds Observatory is planned for the 2040s.'),
-    ('know', 'Star surveys', 'survey', 'Known planets, candidates and survey limits around nearby stars. The three clues came from here.', 'Gaia, HARPS, TESS and PLATO.'),
+    ('know', 'Star surveys', 'survey', 'Known planets, candidates and survey limits around nearby stars. The opening leads came from here.', 'Gaia, HARPS, TESS and PLATO.'),
     ('know', 'Radio array', 'receiver', 'A radio telescope as wide as a continent.', 'The Square Kilometre Array, under construction.'),
     ('grow', 'Planetary grid', 'grid', 'All of each year’s energy, about 100 TW: the 100% every project shares.', 'Today’s grids, a century further on.'),
     ('grow', 'Data centers', 'annex', 'Where the mind runs: all of each year’s compute, about 10²⁷ operations a second, on 10 TW of their own.', 'Today’s data centers, a century further on: chips about 100 times as efficient, drawing 200 times today’s 50 GW.'),
@@ -599,7 +599,7 @@ def markdown():
            'Everything here is hard science with speculative engineering. **Level** says how far each reaches: *grounded* is demonstrated or built from demonstrated parts; *plausible* is sound physics with unproven engineering at this scale; *speculative* is allowed by physics but far beyond anything built. **Emissions** are what the project adds to how easily others could find us: radio, heat, light and exhaust.', '',
            'Science constraints and source links are in [the research baseline](HOLOS_GAME_CONCEPT.md#research-baseline-october-1-2026). Costs and durations are illustrative. Radio ranges and star laser performance still need physical validation.', '',
            '## What every civilization starts with', '',
-           'Earth’s instruments and industry today, plus about a century. Every project below is an upgrade beyond this kit. The kit found the opening clues, and it catches strong knocks.', '']
+           'Earth’s instruments today, with its grid, compute and lift a century further on: a civilization racing toward the singularity built compute first. Every project below is an upgrade beyond this kit. The kit found the opening clues, and it catches strong knocks.', '']
     out += [f'- **{name}** ({purpose.title()}): {what} *{basis}*' for purpose, name, _, what, basis in STARTING_KIT]
     out += ['',
            '## How unlocks work', '',

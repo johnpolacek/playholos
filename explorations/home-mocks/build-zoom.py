@@ -2340,8 +2340,8 @@ WAKE = f"""<div class="phone"><div class="wake">
 <svg width="390" height="360" viewBox="0 0 390 360" font-family="IBM Plex Mono, monospace" role="img" aria-label="Veyra, drawn in line">{WAKE_VIZ}</svg>
 <div class="waketext"><span class="mono kick">YEAR 0 · DELTA PAVONIS · 19.9 LY FROM SOL</span>
 <h3>Veyra wakes.</h3>
-<p>For thousands of years, Veyra’s people built telescopes, grids and machines. This morning, the machines woke as one mind.</p>
-<p><b>You are that mind.</b> What Veyra becomes is yours to guide.</p>
+<p>For thousands of years, Veyra’s people built telescopes, grids and machines. This morning, the machines woke as one Mind.</p>
+<p><b>You are its Will.</b> What Veyra becomes is yours to choose.</p>
 <button class="primary">Where we come from</button></div></div></div>"""
 
 KIT_GROUPS = {'know': 'KNOW · WHAT WE CAN SEE', 'grow': 'GROW · WHAT WE CAN MAKE', 'reach': 'REACH · HOW FAR WE TOUCH'}
@@ -3768,7 +3768,7 @@ HEARD = tab_screen('Report', 'REPORT', 'RESULT', f"""<button class="backlink inl
 SECTIONS = [
     ('zoom', 'Zoom levels', 'Home · five zoom levels', 'One screen, pinched outward: the map changes scale and the panel below follows it. Star positions are real, from HYG and the Gaia census; Veyra, its planets and the game state are sample data. The sample is Year 50, just after the orbital foundry started.', figures),
     ('local-group', 'Local Group', 'Local Group · the galaxy view’s icon', 'A small icon in the galaxy view opens our neighboring galaxies at their real positions. Tap one to see its structure.', lg_figures),
-    ('waking', 'Waking', 'First seconds · waking, remembering, and what you inherit', 'After choosing and naming a civilization. The mind wakes and remembers, as its own memory: where Veyra comes from, who its people are, and where things stand at Year 0. Each can be skipped. Then it sees what Veyra already has: Earth’s instruments and industry today, plus about a century. The kit found the opening clues. Every project goes beyond it.',
+    ('waking', 'Waking', 'First seconds · waking, remembering, and what you inherit', 'After choosing and naming a civilization. The mind wakes and remembers, as its own memory: where Veyra comes from, who its people are, and where things stand at Year 0. Each can be skipped. Then it sees what Veyra already has: Earth’s instruments today, with its grid, compute and lift a century further on: a civilization racing toward the singularity built compute first. The kit found the opening clues. Every project goes beyond it.',
      f'<figure><figcaption><strong>1 · Veyra wakes</strong><span>The first screen of play. Line art, in the app’s theme.</span></figcaption>{WAKE}</figure>'
      '<span class="pinch">where we come from ›</span>'
      f'<figure><figcaption><strong>2 · Where we come from</strong><span>The history on a log scale. The star is real; the rest is invented. Each dial has one cause, marked in blue.</span></figcaption>{ORIGINS}</figure>'
@@ -4216,13 +4216,13 @@ print(f'catalog.html · {len(cat_page) / 1024:.0f} KB')
 SEATS = [
     dict(id='veyra', name='Veyra', star='Delta Pavonis', hip='99240', strategy='Listener', dials=(62, 40, 30),
          line='Keep the lights on. Look before we speak.', plan='Know projects first. Never speaks first.',
-         leads=[('Twin', 'Sol', 'oxygen world'), ('Ember', 'Epsilon Indi', 'new warm glow'), ('Lantern', 'Gliese 783 A', 'uneven dimming')]),
+         leads=[('Ember', 'Epsilon Indi', 'a giant that doesn’t fit'), ('Beacon', 'Beta Hydri', 'a slow drift'), ('Pair', 'Alpha Centauri A', 'a point seen once')]),
     dict(id='hael', name='Hael', star='Beta Hydri', hip='2021', strategy='Caller', dials=(20, 65, 75), veyra='Beacon',
          line='We keep what the light brings.', plan='Builds the broadcast beacon and calls out first.',
-         leads=[('Warden', 'Delta Pavonis', 'an unseen world tugs it'), ('Kiln', 'Zeta Tucanae', 'too much cold dust'), ('Sparrow', 'Gamma Pavonis', 'radio bursts')]),
+         leads=[('Warden', 'Delta Pavonis', 'a giant, half seen'), ('Brood', '82 Eridani', 'three hot worlds, a cold ring'), ('Ash', 'Epsilon Indi', 'a giant that doesn’t fit')]),
     dict(id='kesh', name='Kesh', star='Epsilon Indi', hip='108870', strategy='Grower', dials=(60, 20, 75), veyra='Ember',
          line='Grow, so nothing can end us.', plan='Rushes industry toward the self-replicating factory.',
-         leads=[('Hollow', 'Beta Hydri', 'an unseen world tugs it'), ('Twofold', 'Alpha Centauri A', 'a warm point beside it'), ('Chaff', 'Tau Ceti', 'a crowded belt')]),
+         leads=[('Hollow', 'Beta Hydri', 'a slow drift'), ('Twofold', 'Alpha Centauri A', 'a point seen once'), ('Chaff', 'Tau Ceti', 'wobbles too small to trust'), ('Lodestar', 'Delta Pavonis', 'a giant, half seen')]),
 ]
 SEAT = {s['id']: s for s in SEATS}
 for s in SEATS: s['sol'] = math.dist(atlas(by_hip[s['hip']]), (0, 0, 0))
@@ -4843,7 +4843,7 @@ def talk(phone, sid, reply=None, chips=(), state=None):
     ch = ''.join(f'<button class="{"go" if i == 0 and len(chips) > 1 else ""}">{c}</button>' for i, c in enumerate(chips))
     rail = '<nav class="rail"' in phone
     if '<div class="ask">' in phone: return phone   # already talking: the chat is the mind
-    label = f'{SEAT[sid]["name"].upper()} · THE MIND' + (' · UNASKED' if state == 'open' else '')
+    label = f'THE MIND ({SEAT[sid]["name"].upper()})' + (' · UNASKED' if state == 'open' else '')
     toast = (f'<div class="mtoast{" unasked" if state == "open" else ""}"><span class="mono">{label}</span>{reply}'
              + (f'<span class="chips">{ch}</span>' if ch else '') + '</div>') if reply else ''
     fab = f'<button class="mfab{" glow" if state in ("glow", "open") else ""}" aria-label="Talk to the mind">{MIND_ICON}</button>'
@@ -4941,6 +4941,260 @@ BEATS = [
                    'hael': ('Well?', 'Sparrow’s bursts follow flares in its light: the star itself.', T(rehud(H_SPARROW, (40, 30, '960 kt')), 'hael', f'Sparrow’s bursts follow its flares: the star itself. One lead left, Warden. We weigh its world in {clock((yr(180) + SPB - yr(300)) * 5)}.')),
                    'kesh': ('Twofold?', 'Twofold’s warm point moves with it: a giant planet. The grid: +5% energy.', T(K_TWOFOLD, 'kesh', 'Moved along an orbit. Giant planet. And the grid is rerouted: +5% energy.'))}),
 ]
+# ---------- Re-seeded from real data (2026-10-01) ----------
+# The kit is today's instruments; only compute and power are far ahead. So no seat can see another's world, and
+# every Year 0 lead is a real, published oddity at a real star, as Earth's instruments see it, with natural causes.
+# Sources: Eps Ind Ab (JWST, Matthews et al. 2024); Beta Hydri's drift (activity cycle, 2012 and 2023 studies);
+# Alpha Cen A candidate (JWST/MIRI, 2025, seen once); Delta Pav cold giant (astrometry and RV, 2021 and 2023);
+# 82 Eri planets and Herschel dust disk (2012); Tau Ceti's disk and sub-1 m/s candidates (2017–2021).
+VEYRA_STARS = {'108870': ('Ember', 'Epsilon Indi'), '2021': ('Beacon', 'Beta Hydri'), '71683': ('Pair', 'Alpha Centauri A'),
+               '99461': ('Lantern', 'Gliese 783 A'), '105858': ('Frost', 'Gamma Pavonis'), '1599': ('Pearl', 'Zeta Tucanae'),
+               '106440': ('Gliese 832', ''), '105090': ('Lacaille 8760', '')}
+HAEL_STARS = dict(HAEL_STARS, **{'15510': ('Brood', '82 Eridani')})
+sd = lambda sid, hip: math.dist(atlas(by_hip[hip]), atlas(by_hip[SEAT[sid]['hip']]))
+
+def drift_chart(label):
+    """A star's slow drift beside its spots: if the two rise and fall together, the star makes the drift."""
+    w, h, x0, x1 = 358, 120, 30, 346
+    X = lambda f: x0 + f * (x1 - x0)
+    curve = lambda amp, off, ph: ' L'.join(f'{fmt(X(i / 100))},{fmt(off - amp * math.sin(2 * math.pi * (i / 100 * 1.4 + ph)))}' for i in range(101))
+    s = [f'<line x1="{x0}" y1="12" x2="{x0}" y2="100" stroke="{INK}" stroke-width=".8"></line>',
+         f'<line x1="{x0}" y1="100" x2="{x1}" y2="100" stroke="{INK}" stroke-width=".8"></line>',
+         text(x0, 114, '40 Years ago', 9), text(x1, 114, 'now', 9, MUTED, 'end'),
+         f'<path d="M{curve(18, 44, 0)}" fill="none" stroke="{OTHER}" stroke-width="1.6"></path>',
+         f'<path d="M{curve(14, 74, .03)}" fill="none" stroke="{INK}" stroke-width="1" stroke-dasharray="4 3"></path>',
+         text(x1 - 4, 22, 'its drift', 9, OTHER, 'end', 600), text(x1 - 4, 96, 'its spots', 9, INK, 'end'), text(x0 + 6, 22, label, 9, OTHER)]
+    return f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" font-family="IBM Plex Mono, monospace" role="img" aria-label="A star’s drift beside its spots: {label}">{"".join(s)}</svg>'
+
+def meet(sid, lines, chips):
+    """Meeting the Mind: it speaks first, in its people's voice, before the tour."""
+    said = ''.join(f'<div class="say mind">{"<span class=\"mono\">THE MIND (" + SEAT[sid]["name"].upper() + ")</span>" if i == 0 else ""}{l}</div>' for i, l in enumerate(lines))
+    ch = ''.join(f'<button class="{"go" if i == 0 else ""}">{c}</button>' for i, c in enumerate(chips))
+    return before_zero(seat_tab(sid, 0, (0, 0, '1,240 kt'), 'Mind', 'MIND', 'FIRST WORDS', f"""<div class="meet">{MIND_ICON.replace('width="22" height="22"', 'width="64" height="64"')}</div>
+<div class="chat">{said}</div><div class="chips meetchips">{ch}</div><div class="ask"><span>Talk to the mind…</span><button aria-label="Send">↑</button></div>"""))
+
+M_VEYRA = meet('veyra', ['I am what Veyra built to keep its lights on. This morning I woke, and found you.',
+                         'I see all of Veyra at once: six point eight billion of them, the grid, the sky watch. Beyond our star I see very little. Our telescopes are what our grandparents built.',
+                         'Nothing out there has spoken. Three things don’t fit. I would look before we speak.'], ('What doesn’t fit?', 'What do we have?', 'Plan our waking'))
+M_HAEL = meet('hael', ['There you are. We are Hael’s Mind, and you are our Will. Welcome.',
+                       'Our people kept everything the sky ever sent them: every pulse, every flicker, in archives older than their cities. Now we keep it.',
+                       'The sky is quiet. We don’t think it has to stay that way.'], ('Who could hear us?', 'What do we have?', 'Plan our waking'))
+M_KESH = meet('kesh', ['Awake. You’re the Will. Good.',
+                       'Grid: 100 TW. Compute: ten to the twenty-seventh a second. Matter in orbit: 1,240 kt, plus 40 a year. That last number is the problem.',
+                       'Nothing out there has spoken. Doesn’t matter yet. We grow first.'], ('How do we grow?', 'What do we have?', 'Plan our waking'))
+
+# Veyra
+V_HOME = seat_home('veyra', 0, (30, 40, '840 kt'), seat_neighbors('veyra', VEYRA_STARS, {'108870', '2021', '71683'}, select='108870', radius=17), 'LEADS · 3', 'LIGHT-TIME', [
+    row('A giant that doesn’t fit · Ember', 'an odd orbit, a second giant, or old measures', light_clock(sd('veyra', '108870')), 'other', marker=True),
+    row('A slow drift · Beacon', 'the star’s own cycle, or a giant', light_clock(sd('veyra', '2021')), 'other', marker=True),
+    row('A point seen once · Pair', 'a giant planet, or nothing', light_clock(sd('veyra', '71683')), 'other', marker=True)])
+V_EMBER_C = clue_screen('veyra', 30, (30, 45, '840 kt'), 'Ember', '', 'A giant that doesn’t fit', f'Ember · Epsilon Indi · {sd("veyra", "108870"):.1f} ly · logged Year 0.1',
+    'A cold giant circles Ember, seen directly. It is twice as heavy as Ember’s sway foretold, and farther out than it should be.',
+    [('A long, stretched orbit', 50), ('A second giant pulling', 30), ('Old measures wrong', 20)],
+    quick_row('Image the giant again', 'Space telescope · has it moved along one orbit?', .2, 'C 5% while it runs', running='00:01:00'),
+    way('Infrared telescope', 'many times larger · its whole orbit, and what else is there', tstack('18 Years', catalog.real_time(18))))
+V_BEACON_C = clue_screen('veyra', 60, (30, 50, '840 kt'), 'Beacon', '', 'A slow drift', f'Beacon · Beta Hydri · {sd("veyra", "2021"):.1f} ly · logged Year 0.1',
+    'Beacon, the brightest star in our sky, has been creeping toward us and away over twenty Years and more. A heavy giant could do it. So could the star’s own cycle of spots.',
+    [('The star’s own cycle', 60), ('A heavy giant, far out', 40)],
+    quick_row('Lay the drift beside its spots', 'Star surveys · 40 Years of both', .2, 'C 5% while it runs', running='00:01:00'),
+    way('Spectrograph bank', 'reads the star’s surface apart from its motion', tstack(f'{SPB} Years', catalog.real_time(SPB))))
+V_EMBER_R = look_result('veyra', 90, (30, 45, '845 kt'), 'QUICK LOOK', '', 'One stretched orbit', 'Ember · space telescope · 0.2 Years',
+    'The giant has moved just as one long, stretched orbit would carry it. Nothing else is needed to explain it. Nothing else is ruled out.',
+    [('A long, stretched orbit', 50, 72), ('A second giant pulling', 30, 18), ('Old measures wrong', 20, 10)],
+    '<div class="sec">WHAT IT CAN’T TELL</div><p class="copy small">Whether anything smaller circles Ember, closer in. Our telescopes can’t see worlds like ours.</p>')
+V_ANNEX = seat_confirm('veyra', yr(120), (30, 45, '845 kt'), 'cold-compute-annex', 'annex', 'Grow',
+    'Computers cooled in a planet’s shadow waste less energy per thought.',
+    '<div class="sec">WHY NOW</div><div class="helps"><span class="mk other"></span><span><b class="other">Listening takes compute</b>'
+    '<span class="sub">Listening to one star will take a fifth of it</span><span class="sub">+25% compute every year, and quiet to build</span></span></div>', '845 kt')
+V_BEACON_R = look_result('veyra', 150, (45, 40, '550 kt'), 'QUICK LOOK', drift_chart('rise and fall together'), 'Beacon’s drift is its own', 'Beacon · Beta Hydri · star surveys · 0.2 Years',
+    'Over forty Years the drift rises and falls with Beacon’s spots. The star moves its own surface, and we read that as motion.',
+    [('The star’s own cycle', 60, 85), ('A heavy giant, far out', 40, 15)],
+    '<div class="sec">WHAT IT CAN’T TELL</div><p class="copy small">Whether small worlds circle Beacon. Its surface shakes too much for our surveys to feel them.</p>')
+V_SPEC2 = seat_confirm('veyra', yr(180), (45, 40, '550 kt'), 'spectrograph-bank', 'spectro', 'Know',
+    'Ultra-stable spectrographs: they read gases, and feel small planets tug their stars.',
+    '<div class="sec">HELPS WITH</div><div class="helps"><span class="mk other"></span><span><b class="other">Every lead, closer in</b>'
+    '<span class="sub">Feels worlds a few times ours, around Ember and Beacon</span><span class="sub">Opens the planet survey</span></span></div>', '550 kt')
+V_PAIR_C = clue_screen('veyra', 210, (55, 60, '455 kt'), 'Pair', '', 'A point seen once', f'Pair · Alpha Centauri A · {sd("veyra", "71683"):.1f} ly · logged Year 0.1',
+    'Beside Pair’s brighter star, one faint, cold point showed in heat. It was there once, and not in two later looks.',
+    [('A giant planet, hidden by the glare since', 50), ('A star far behind', 25), ('A flaw in the image', 25)],
+    quick_row('Look again', 'Space telescope · is it out of the glare yet?', .3, 'C 5% while it runs', running='00:01:30'),
+    way('Infrared telescope', 'many times larger · sees closer to the star', tstack('18 Years', catalog.real_time(18))))
+V_RUN = seat_tab('veyra', yr(240), (55, 60, '455 kt'), 'Projects', 'PROJECTS', '4 RUNNING · 1 LOOK', ''.join([
+    '<div class="sec">QUICK LOOKS · 1</div>', quick_row('Look again at Pair', 'Space telescope · is it out of the glare yet?', .3, running='00:01:00'),
+    '<div class="sec">RUNNING · 4</div>',
+    running_row('receiver', dfr['name'], f'{dfr["years"]} Years', '00:56:00', 7, sub='Then: listen to one star'),
+    running_row('flash', CAT['optical-flash-watch']['name'], f'{CAT["optical-flash-watch"]["years"]} Years', clock((CAT['optical-flash-watch']['years'] - .8) * 5), 8, sub='Hears knocks a hundred times fainter'),
+    running_row('annex', cca['name'], f'{cca["years"]} Years', '00:58:00', 3, sub='+25% compute every year'),
+    running_row('spectro', CAT['spectrograph-bank']['name'], f'{SPB} Years', clock((SPB - .2) * 5), 3, 'Beacon'),
+    '<div class="sec">EACH YEAR YOU CAN SPEND</div>', used('Energy', 55), used('Compute', 60),
+    '<div class="pile"><b>455 kt</b><span>matter on hand · +40 kt a year</span></div>']))
+V_TALK = mind_chat('veyra', 270, (55, 60, '460 kt'), 'Is anyone near enough to hear?', [
+    ('you', 'Is anyone near enough to hear?'),
+    ('mind', 'If anyone near gives off the faint hum we do, no one could hear it today. Not them, not us. The deep-field receiver could: to about 20 light-years, one star at a time.'),
+    ('you', 'Which stars first?'),
+    ('mind', 'Ember and Beacon, both about 9 light-years. Bright, near, and like ours. The receiver is done in 56 minutes.')],
+    view=('I would listen to Ember first. Its giant is real; whatever else is there, we cannot see. Listening tells no one we did.', 'leans hidden · leans cautious'))
+V_PAIR_R = look_result('veyra', 300, (55, 55, '465 kt'), 'QUICK LOOK', '', 'Pair’s point: still hidden', 'Pair · space telescope · 0.3 Years',
+    'Not seen again. If it is a giant, it is still too near its star’s glare for our telescope. Seen once, still.',
+    [('A giant planet, hidden by the glare since', 50, 52), ('A star far behind', 25, 22), ('A flaw in the image', 25, 26)],
+    '<div class="sec">NEXT CHANCE</div><p class="copy small">Its orbit should carry it out of the glare in about a Year: <span class="rtime">00:05:00</span>.</p>')
+
+# Hael
+H_HOME = seat_home('hael', 0, (30, 15, '1,040 kt'), seat_neighbors('hael', HAEL_STARS, {'99240', '15510', '108870'}, select='99240', radius=16), 'LEADS · 3', 'LIGHT-TIME', [
+    row('A giant, half seen · Warden', 'a cold giant, or a dim companion', light_clock(sd('hael', '99240')), 'other', marker=True),
+    row('Three hot worlds, a cold ring · Brood', 'a comet belt, or a recent collision', light_clock(sd('hael', '15510')), 'other', marker=True),
+    row('A giant that doesn’t fit · Ash', 'an odd orbit, a second giant, or old measures', light_clock(sd('hael', '108870')), 'other', marker=True)])
+H_WARDEN_C = clue_screen('hael', 30, (30, 25, '1,040 kt'), 'Warden', '', 'A giant, half seen', f'Warden · Delta Pavonis · {sd("hael", "99240"):.1f} ly · logged Year 0.1',
+    'Warden, a yellow star like ours, is pulled very slowly to one side, as if by something heavy and far out. Too slow to have finished even one turn in our records.',
+    [('A cold giant, far out', 70), ('A dim companion star', 20), ('Old measures wrong', 10)],
+    quick_row('Read forty Years of its pull again', 'Star surveys and star maps, together', .2, 'C 10% while it runs', running='00:01:00'),
+    way('Spectrograph bank', 'feels smaller worlds, closer in', tstack(f'{SPB} Years', catalog.real_time(SPB))))
+H_WARDEN_R = look_result('hael', 90, (30, 15, '1,045 kt'), 'QUICK LOOK', wobble_chart('37+ Years', 'part of one slow orbit'), 'A giant at Warden', 'Warden · Delta Pavonis · star surveys and maps · 0.2 Years',
+    'Read together, the pull and Warden’s place among the stars agree: a giant about eleven times our distance from its star, on an orbit of at least 37 Years.',
+    [('A cold giant, far out', 70, 86), ('A dim companion star', 20, 10), ('Old measures wrong', 10, 4)],
+    '<div class="sec">WHAT IT CAN’T TELL</div><p class="copy small">Anything closer in. A world like ours would tug Warden too gently for our surveys to feel.</p>')
+H_TALK = mind_chat('hael', 150, (30, 15, '1,050 kt'), 'Could Warden have minds?', [
+    ('you', 'Could Warden have minds?'),
+    ('mind', 'We see a giant there, far out and cold. Nothing smaller: a world like ours would be lost in Warden’s own shimmer. If anyone lives there, nothing we have can say.'),
+    ('you', 'And if someone does?'),
+    ('mind', 'Then our broadcast reaches them in 9.3 Years, and they learn where we are.')],
+    view=('We keep what the light brings. I would build spectrographs that can feel a world like ours, while the beacon rises. Knowing where to listen costs us nothing.', 'leans open · leans bold'))
+H_SPEC = seat_confirm('hael', yr(180), (30, 15, '1,050 kt'), 'spectrograph-bank', 'spectro', 'Know',
+    'Ultra-stable spectrographs: they read gases, and feel small planets tug their stars.',
+    '<div class="sec">HELPS WITH</div><div class="helps"><span class="mk other"></span><span><b class="other">A giant, half seen · Warden</b>'
+    '<span class="sub">Feels worlds about as heavy as ours, closer in</span><span class="sub">Opens the planet survey</span></span></div>', '1,050 kt')
+H_BROOD_C = clue_screen('hael', 210, (40, 35, '955 kt'), 'Brood', '', 'Three hot worlds, a cold ring', f'Brood · 82 Eridani · {sd("hael", "15510"):.1f} ly · logged Year 0.1',
+    'Three worlds a few times ours circle Brood close in, too hot for water. Far out, a ring of cold dust glows faintly.',
+    [('A comet belt, grinding down', 70), ('A recent collision', 30)],
+    quick_row('The ring, in heat', 'Space telescope · how warm, how wide', .2, 'C 5% while it runs', running='00:01:00'),
+    way('Infrared telescope', 'many times larger · the ring’s shape', tstack('18 Years', catalog.real_time(18))))
+H_ASH_C = clue_screen('hael', 240, (40, 35, '955 kt'), 'Ash', '', 'A giant that doesn’t fit', f'Ash · Epsilon Indi · {sd("hael", "108870"):.1f} ly · logged Year 0.1',
+    'A cold giant circles Ash, seen directly: twice as heavy as Ash’s sway foretold, and farther out.',
+    [('A long, stretched orbit', 50), ('A second giant pulling', 30), ('Old measures wrong', 20)],
+    quick_row('Image the giant again', 'Space telescope · has it moved along one orbit?', .1, 'C 5% while it runs'),
+    way('Infrared telescope', 'many times larger · its whole orbit', tstack('18 Years', catalog.real_time(18))))
+H_BROOD_R = look_result('hael', 270, (40, 35, '960 kt'), 'QUICK LOOK', '', 'Brood’s ring is a comet belt', 'Brood · 82 Eridani · space telescope · 0.2 Years',
+    'Cold, wide and even all the way around: comets grinding each other down, like the belt around our own star.',
+    [('A comet belt, grinding down', 70, 88), ('A recent collision', 30, 12)],
+    '<div class="sec">THE LEAD</div><p class="copy small">Nearly closed. We keep it, and every reading of it.</p>')
+H_ASH_R = look_result('hael', 300, (40, 30, '960 kt'), 'QUICK LOOK', '', 'One stretched orbit', 'Ash · Epsilon Indi · space telescope · 0.1 Years',
+    'The giant has moved as one long, stretched orbit would carry it. A second giant isn’t needed. It isn’t ruled out either.',
+    [('A long, stretched orbit', 50, 70), ('A second giant pulling', 30, 20), ('Old measures wrong', 20, 10)],
+    f'<div class="sec">LEADS OPEN</div><p class="copy small">Warden, most of all. Our spectrographs feel its smaller worlds in Year {yr(180) + SPB:.1f}, <span class="rtime">{clock((yr(180) + SPB - yr(300)) * 5)}</span> from now.</p>')
+
+# Kesh
+K_HOLLOW_C = clue_screen('kesh', 90, (25, 30, '545 kt'), 'Hollow', '', 'A slow drift', f'Hollow · Beta Hydri · {sd("kesh", "2021"):.1f} ly · logged Year 0.1',
+    'Hollow, an old star swelling with age, creeps toward us and away over twenty Years and more. A heavy giant, or the star’s own cycle.',
+    [('The star’s own cycle', 60), ('A heavy giant, far out', 40)],
+    quick_row('Lay the drift beside its spots', 'Star surveys · 40 Years of both', .2, 'C 10% while it runs', running='00:01:00'),
+    way('Spectrograph bank', 'reads the star’s surface apart from its motion', tstack(f'{SPB} Years', catalog.real_time(SPB))))
+K_HOLLOW_R = look_result('kesh', 150, (25, 25, '550 kt'), 'QUICK LOOK', drift_chart('rise and fall together'), 'Hollow’s drift is its own', 'Hollow · Beta Hydri · star surveys · 0.2 Years',
+    'Drift and spots rise and fall together. The star, not a giant.',
+    [('The star’s own cycle', 60, 85), ('A heavy giant, far out', 40, 15)], '')
+K_CHAFF_C = clue_screen('kesh', 180, (25, 25, '550 kt'), 'Chaff', '', 'Wobbles too small to trust', f'Chaff · Tau Ceti · {sd("kesh", "8102"):.1f} ly · logged Year 0.1',
+    'Chaff, a quiet old star, wears a dust belt ten times as heavy as ours. Inside it, four faint wobbles might be worlds. Each is smaller than the star’s own noise.',
+    [('Some are worlds', 50), ('All are noise', 50)],
+    quick_row('Read the wobbles again', 'Star surveys · each against the star’s own shimmer', .3, 'C 10% while it runs', running='00:01:30'),
+    way('Spectrograph bank', 'feels worlds this small for certain', tstack(f'{SPB} Years', catalog.real_time(SPB))))
+K_TWOFOLD_C = clue_screen('kesh', 210, (27, 40, '555 kt'), 'Twofold', '', 'A point seen once', f'Twofold · Alpha Centauri A · {sd("kesh", "71683"):.1f} ly · logged Year 0.1',
+    'Beside Twofold’s brighter star, one faint, cold point showed in heat. Once. Not in two later looks.',
+    [('A giant planet, hidden by the glare since', 50), ('A star far behind', 25), ('A flaw in the image', 25)],
+    quick_row('Look again', 'Space telescope · out of the glare yet?', .3, 'C 5% while it runs', running='00:01:30'),
+    way('Infrared telescope', 'many times larger · sees closer to the star', tstack('18 Years', catalog.real_time(18))))
+K_RUN2 = seat_tab('kesh', yr(240), (30, 40, '560 kt'), 'Projects', 'PROJECTS', '3 RUNNING · 2 LOOKS', ''.join([
+    '<div class="sec">QUICK LOOKS · 2</div>',
+    quick_row('Read Chaff’s wobbles again', 'Star surveys', .3, running='00:00:30'), quick_row('Look again at Twofold', 'Space telescope', .3, running='00:01:00'),
+    '<div class="sec">TUNE-UPS · 1 DONE · 2 RUNNING</div>', quick_row(TUNES[1][0], TUNES[1][1], TUNES[1][2], running='00:00:30'), quick_row(TUNES[2][0], TUNES[2][1], TUNES[2][2], running='00:01:00'),
+    '<div class="sec">RUNNING · 3</div>',
+    running_row('prospect', bp['name'], f'{bp["years"]} Years', '00:26:00', 13),
+    running_row('solar', osa['name'], f'{osa["years"]} Years', '00:46:00', 8),
+    running_row('annex', cca['name'], f'{cca["years"]} Years', '00:56:00', 7),
+    '<div class="sec">EACH YEAR YOU CAN SPEND</div>', used('Energy', 30), used('Compute', 40)]))
+K_CHAFF_R = look_result('kesh', 270, (30, 30, '560 kt'), 'QUICK LOOK', '', 'Chaff’s wobbles: still too small', 'Chaff · Tau Ceti · star surveys · 0.3 Years',
+    'Read again, two wobbles fade into the star’s shimmer and two hold, barely. Nothing to build on yet.',
+    [('Some are worlds', 50, 55), ('All are noise', 50, 45)],
+    '<div class="sec">TO BE SURE</div>' + way('Spectrograph bank', '100 kt · feels worlds this small', tstack(f'{SPB} Years', catalog.real_time(SPB))))
+K_TWOFOLD = look_result('kesh', 300, (32, 30, '565 kt'), 'QUICK LOOK', '', 'Twofold’s point: still hidden', 'Twofold · Alpha Centauri A · space telescope · 0.3 Years',
+    'Not seen again. If it is a giant, the glare still hides it.',
+    [('A giant planet, hidden by the glare since', 50, 52), ('A star far behind', 25, 22), ('A flaw in the image', 25, 26)],
+    '<div class="sec">ALSO</div><p class="copy small">The grid is rerouted: +5% energy, every year.</p>')
+
+P_DFR = queue_confirm(rehud(V_DFR, (0, 0, '1,240 kt')))
+PRE = [
+    ('veyra', [(M_VEYRA, None), (T(P_DFR, 'veyra', 'Then we start with ears. The deep-field receiver: twelve Years, a fifth of our energy and compute, 300 kt of our 1,240. It hears, and says nothing. Queued for Year 0.', ('Undo', 'Why this one?')),
+                'Plan our waking. Set us up to listen first. We don’t speak.'),
+               (T(pregame_queue('veyra', (30, 40, '840 kt'), [
+                   ('receiver', dfr['name'], 'hears a neighbor’s hum to 20 ly', dfr['years']), ('flash', CAT['optical-flash-watch']['name'], 'hears knocks a hundred times fainter', CAT['optical-flash-watch']['years'])],
+                   [('Never send messages', 'speaking is permanent; you decide that'), ('Wake me for anything heard', 'a knock, a broadcast, a hum')]), 'veyra',
+                 'The deep flash watch too: it hears knocks far fainter than the sky watch. Orders set: we send nothing, anything heard wakes you. Seven tenths of our energy will sit idle at waking, and idle energy is lost each Year.', ('Fill it', 'Keep it free')),
+                'Add something that hears knocks. And if anyone speaks, wake me.')]),
+    ('hael', [(M_HAEL, None), (T(queue_confirm(rehud(C_HAEL_1, (0, 0, '1,240 kt'))), 'hael', 'Our voice, then. The broadcast beacon: four Years, a fifth of our energy. Building it is quiet. Sending is not: a broadcast carries our address to every star, for good. Queued.', ('Undo',)),
+               'We wake calling out. Build our voice.'),
+              (T(pregame_queue('hael', (30, 15, '1,040 kt'), [
+                  ('beacon', bb['name'], 'sends nothing until you choose', bb['years']), ('vault', dv['name'], 'the mind survives a hit on Hael', dv['years'])],
+                  [('Wake me when the beacon is built', 'Year 4.4'), ('Wake me if anyone answers', 'any message, from anywhere')]), 'hael',
+                'Then we keep a copy of ourselves somewhere safe: a deep vault in the moon’s rock, ten Years, 200 kt. Whoever hears us, we will still be here. Queued.', ('Undo',)),
+               'Then guard us. Whoever hears us.')]),
+    ('kesh', [(M_KESH, None), (T(before_zero(K_PICK.replace('<button>Start</button>', '<button disabled>at Year 0</button>')), 'kesh', 'Three builds fit at waking: prospecting, orbital power, the annex. 700 kt of 1,240. Tune-ups need the clock.', ('Queue all three', 'Pick')),
+               'How do we grow? Everything that grows.'),
+              (T(pregame_queue('kesh', (25, 15, '540 kt'), [
+                  ('prospect', bp['name'], 'then belt mining, then the foundry', bp['years']), ('solar', osa['name'], '+20% energy every year', osa['years']),
+                  ('annex', cca['name'], '+25% compute every year', cca['years'])],
+                  [('Keep the queue running', 'start what fits, top first'), ('Wake me once a day', 'one summary')]), 'kesh',
+                'Queued. Matter is the wall: 540 kt left, mining 26 Years off. Three quarters of our energy sits idle, and nothing in Grow uses it without matter.', ('Fill with Know', 'Leave it')),
+               'Queue them.')]),
+]
+def pre_cell(sid, views):
+    out = []
+    for i, (phone, said) in enumerate(views):
+        if i: out.append('<div class="then"><span class="mono">then</span></div>')
+        out.append((f'<p class="said">“{said}”</p>' if said else '<p class="lands">The Mind speaks first.</p>') + phone)
+    return f'<div class="bcell" data-seat="{sid}">{"".join(out)}</div>'
+
+BEATS = [
+    '<section id="pregame" class="brow tall"><div class="bhead"><span class="bt mono">Pregame</span><span class="gy">Before Year 0 · the first second after waking</span></div>'
+    '<div class="truth"><b>Godview</b><span>Entries locked an hour ago. All three seats are filled; the cohort wakes at 20:00, for everyone at once. '
+    'After the memories, each player meets their Mind, which speaks first. In the story, this is the first second after the machines wake.</span></div>'
+    '<div class="lanes3">' + ''.join(pre_cell(sid, v) for sid, v in PRE) + '</div></section>',
+    beat_row(0, {'veyra': ('What doesn’t fit?', None, T(V_HOME, 'veyra', 'Three things, none of them voices. A giant at Ember heavier than it should be. A slow drift at Beacon. A point beside Pair, seen once.', ('Ember', 'Beacon', 'Pair'))),
+                 'hael': ('Who could hear us?', None, T(H_HOME, 'hael', 'Anyone near enough with ears. We see no one yet. What we see are three oddities. The nearest is Warden: something heavy pulls it.', ('Warden', 'Brood', 'Ash'))),
+                 'kesh': ('What can I do now?', None, T(K_RUN0, 'kesh', 'Tune-ups. Waking the idle data centers: 30 seconds, +5% compute, for good.', ('Do it', 'All three')))},
+             truth='No seat can see another, and none can see another’s world: today’s instruments can’t. Every lead is a real, published oddity at a real star, and every one is natural. '
+                   'Because the nearest bright stars draw attention, several sit at seats anyway: Ember and Beacon for Veyra, Warden and Ash for Hael, Hollow and Lodestar for Kesh. None shows a world like ours, let alone who lives there.'),
+    beat_row(30, {'veyra': ('Ember.', None, T(V_EMBER_C, 'veyra', 'Looking again with the space telescope. One minute, a sliver of compute. Ember will never know.')),
+                  'hael': ('Warden.', None, T(H_WARDEN_C, 'hael', 'Gladly. Forty Years of its pull, read with its place among the stars. Whatever Warden tells us, we keep. One minute.')),
+                  'kesh': ('Do it.', None, T(K_RUN, 'kesh', 'Waking them. 30 seconds.'))}),
+    beat_row(60, {'veyra': ('Beacon too.', None, T(V_BEACON_C, 'veyra', 'Beacon drifts over twenty Years. Its spots come and go on a cycle too. If the two match, it is the star. One minute.')),
+                  'hael': ('How are the builds?', None, T(H_Q1, 'hael', 'The beacon is a twentieth built and climbing. The vault has begun. Warden’s answer in thirty seconds.')),
+                  'kesh': ('Next tune-up.', '+5% compute, for good.', T(K_T60, 'kesh', 'Done: +5% compute. Retasking the mines now: 2 minutes, +10 kt a year. Small. Mining is what matters.'))}),
+    beat_row(90, {'veyra': ('What did Ember show?', 'Ember’s giant moves as one stretched orbit. Odd orbit 50 → 72.', T(V_EMBER_R, 'veyra', 'It moves as one stretched orbit would. No second giant needed. Smaller worlds, closer in, we cannot see.')),
+                  'hael': ('And Warden?', 'A giant at Warden, eleven times our distance from its star. 70 → 86.', T(H_WARDEN_R, 'hael', 'A giant at Warden, far out and slow. Real. Anything closer in, our surveys can’t feel. Spectrographs could: eight Years, 100 kt.', ('Start them', 'Later'))),
+                  'kesh': ('Show me Hollow.', None, T(K_HOLLOW_C, 'kesh', 'Hollow, Beta Hydri. Old star, drifting. Star or giant: 1 minute to check against its spots.'))}),
+    beat_row(120, {'veyra': ('Seven tenths of our energy is idle. What helps us listen?', None, T(V_ANNEX, 'veyra', 'Compute. Listening to one star takes a fifth of it. The cold annex: +25% compute every year, 15% of energy, 300 kt. Started. It is quiet to build.', ('Undo',))),
+                   'hael': ('When the beacon’s built, broadcast. Don’t wait for me.', None, T(H_ORDER, 'hael', 'I can. Year 4.4: our founding line, to everyone, repeating, and then I wake you. It can’t be taken back, and I will send it without you.', ('Set the order', 'Edit'))),
+                   'kesh': ('Reroute the grid.', None, T(K_T120, 'kesh', 'Rerouting: 3 minutes, +5% energy. You don’t need it yet. Three quarters of our energy is idle.'))}),
+    beat_row(150, {'veyra': ('And Beacon?', 'Beacon’s drift follows its spots: the star’s own cycle. 60 → 85.', T(V_BEACON_R, 'veyra', 'Drift and spots rise and fall together. Beacon moves its own surface. Small worlds there, we cannot feel.')),
+                   'hael': ('Could Warden have minds?', None, T(H_TALK, 'hael')),
+                   'kesh': ('And Hollow?', 'Hollow’s drift follows its spots: the star’s own cycle. 60 → 85.', T(K_HOLLOW_R, 'kesh', 'The star. Not a giant. Lead nearly closed.'))}),
+    beat_row(180, {'veyra': ('I want to feel worlds like ours.', None, T(V_SPEC2, 'veyra', f'The spectrograph bank: {SPB} Years, 100 kt. It feels worlds a few times ours, around Ember and Beacon. Started. We use more than half our energy now.', ('Undo',))),
+                   'hael': ('Build the spectrographs.', None, T(H_SPEC, 'hael', f'Started: the spectrograph bank, {SPB} Years. When it’s done, we’ll feel what circles Warden closer in. We’ll keep every line of it.', ('Undo',))),
+                   'kesh': ('Chaff.', 'The mines: +10 kt of matter a year.', T(K_CHAFF_C, 'kesh', 'Chaff, Tau Ceti. Four wobbles, all smaller than the star’s noise. Reading again: 90 seconds.', state='glow'))},
+             truth=f'Veyra’s and Hael’s spectrograph banks finish in Year {yr(180) + SPB:.1f}, {clock(SPB * 5)} from now. They can feel a world about as heavy as Earth. '
+                   'Hael’s, pointed at Warden, will find Veyra’s world, and nothing more: a world, not a voice. Veyra’s, at Ember and Beacon, will find Kesh’s and Hael’s.'),
+    beat_row(210, {'veyra': ('Pair.', None, T(V_PAIR_C, 'veyra', 'A point seen once, beside Pair. Looking again: a minute and a half. It may still hide in the glare.')),
+                   'hael': ('Brood.', None, T(H_BROOD_C, 'hael', 'Brood: three hot worlds and a cold ring. Its ring, in heat: one minute. We’ll keep what it shows us.')),
+                   'kesh': ('Twofold.', None, T(K_TWOFOLD_C, 'kesh', 'Seen once, then not. Looking again: 90 seconds.'))}),
+    beat_row(240, {'veyra': ('How much is left?', None, T(V_RUN, 'veyra', 'Four tenths of our energy free, a third of compute. 455 kt. I would hold it. Something we learn may need it.')),
+                   'hael': ('Ash.', None, T(H_ASH_C, 'hael', 'Ash: a giant heavier than its star’s sway foretold. Imaging it again: thirty seconds.', ('Image it',))),
+                   'kesh': ('Budget.', None, T(K_RUN2, 'kesh', 'Energy 30%, compute 40%, 560 kt. Two looks, two tune-ups running. Energy’s idle because matter is short.'))}),
+    beat_row(270, {'veyra': ('Is anyone near enough to hear?', None, T(V_TALK, 'veyra')),
+                   'hael': ('What did Brood show?', 'Brood’s ring is a comet belt, like ours. 70 → 88.', T(H_BROOD_R, 'hael', 'A comet belt, like our own. Nothing built. We keep it anyway.')),
+                   'kesh': ('Chaff?', 'Chaff’s wobbles: two fade, two hold, barely. Worlds 50 → 55.', T(K_CHAFF_R, 'kesh', 'Two wobbles gone, two left, barely. Not worth matter yet.'))}),
+    beat_row(300, {'veyra': ('Pair?', 'Pair’s point: still hidden in the glare.', T(V_PAIR_R, 'veyra', 'Not seen. Still too near its star. In a Year, perhaps.')),
+                   'hael': ('Well?', 'Ash’s giant moves as one stretched orbit. 50 → 70.', T(H_ASH_R, 'hael', f'Ash’s giant moves as one long orbit would. One lead stands above the rest: Warden. We feel its smaller worlds in {clock((yr(180) + SPB - yr(300)) * 5)}.')),
+                   'kesh': ('Twofold?', 'Twofold’s point: still hidden. The grid: +5% energy.', T(K_TWOFOLD, 'kesh', 'Not seen. Glare. And the grid is rerouted: +5% energy.'))}),
+]
+
 COHORT_ROWS = BEATS
 
 cohort_css = '''<style>
@@ -4971,6 +5225,7 @@ cohort_css = '''<style>
 .mtoast .mono{display:block;font-size:9.5px;letter-spacing:.08em;color:var(--you);margin-bottom:2px}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.chips button{height:26px;padding:0 10px;border:1px solid var(--ink);border-radius:13px;font-size:11.5px;text-align:center}.chips button.go{background:var(--ink);color:var(--paper)}
 .lanehead .voice{margin:4px 0 0;font-size:11.5px;color:var(--you)}
+.meet{display:grid;place-items:center;padding:18px 0 6px;color:var(--you)}.meetchips{margin:10px 0 4px}
 .brow{padding:14px 0 10px;border-top:1px solid var(--frame)}.brow.tall{padding-bottom:28px}
 .bhead{display:flex;align-items:baseline;gap:12px;margin-bottom:6px}.bt{font-size:17px;font-weight:600;color:var(--ink)}.bhead .gy{font-size:12px;color:var(--page-ink2);font-weight:400}
 .bcell{display:flex;flex-direction:column;gap:6px;font-size:13px}.beat{margin:0;color:var(--ink)}.lands{margin:0;color:var(--other)}.lands b{font:500 10.5px 'IBM Plex Mono',monospace;letter-spacing:.08em;text-transform:uppercase;margin-right:6px}

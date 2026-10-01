@@ -12,9 +12,9 @@ Expand · Deepen
 Cautious · Bold
 Know projects first. Never speaks first.
 The mind’s voice: Quiet and wary. Says less than it knows, and looks before it speaks.
-Twin · oxygen world · Sol
-Ember · new warm glow · Epsilon Indi
-Lantern · uneven dimming · Gliese 783 A
+Ember · a giant that doesn’t fit · Epsilon Indi
+Beacon · a slow drift · Beta Hydri
+Pair · a point seen once · Alpha Centauri A
 Hael · Beta Hydri · 9.3 ly · 00:46:27
 Kesh · Epsilon Indi · 9.2 ly · 00:46:03
 Hael · Caller
@@ -24,9 +24,9 @@ Expand · Deepen
 Cautious · Bold
 Builds the broadcast beacon and calls out first.
 The mind’s voice: Warm and generous. Speaks as “we”, keeps everything, and loves to be heard.
-Warden · an unseen world tugs it · Delta Pavonis
-Kiln · too much cold dust · Zeta Tucanae
-Sparrow · radio bursts · Gamma Pavonis
+Warden · a giant, half seen · Delta Pavonis
+Brood · three hot worlds, a cold ring · 82 Eridani
+Ash · a giant that doesn’t fit · Epsilon Indi
 Veyra · Delta Pavonis · 9.3 ly · 00:46:27
 Kesh · Epsilon Indi · 14.3 ly · 01:11:44
 Kesh · Grower
@@ -36,14 +36,26 @@ Expand · Deepen
 Cautious · Bold
 Rushes industry toward the self-replicating factory.
 The mind’s voice: Blunt. Numbers first, then what’s in the way.
-Hollow · an unseen world tugs it · Beta Hydri
-Twofold · a warm point beside it · Alpha Centauri A
-Chaff · a crowded belt · Tau Ceti
+Hollow · a slow drift · Beta Hydri
+Twofold · a point seen once · Alpha Centauri A
+Chaff · wobbles too small to trust · Tau Ceti
+Lodestar · a giant, half seen · Delta Pavonis
 Veyra · Delta Pavonis · 9.2 ly · 00:46:03
 Hael · Beta Hydri · 14.3 ly · 01:11:44
 Pregame · Before Year 0 · the first second after waking
-Godview · Entries locked an hour ago. All three seats are filled; the cohort wakes at 20:00, for everyone at once. In the story, this is the first second after the machines wake: the mind thinks so fast that it plans everything before a second passes on its world.
-“Before we wake, set us up to listen first. We don’t speak.”
+Godview · Entries locked an hour ago. All three seats are filled; the cohort wakes at 20:00, for everyone at once. After the memories, each player meets their Mind, which speaks first. In the story, this is the first second after the machines wake.
+The Mind speaks first.
+Veyra · Before Year 0
+Delta Pavonis · 19.9 ly from Sol · Wakes in · 00:12:40
+ENERGY · [0%] · MATTER · 1,240 kt · COMPUTE · [0%]
+MIND · FIRST WORDS
+THE MIND (VEYRA) · I am what Veyra built to keep its lights on. This morning I woke, and found you.
+I see all of Veyra at once: six point eight billion of them, the grid, the sky watch. Beyond our star I see very little. Our telescopes are what our grandparents built.
+Nothing out there has spoken. Three things don’t fit. I would look before we speak.
+[What doesn’t fit?] · [What do we have?] · [Plan our waking]
+Talk to the mind… · [Send · ↑]
+then
+“Plan our waking. Set us up to listen first. We don’t speak.”
 Veyra · Before Year 0
 Delta Pavonis · 19.9 ly from Sol · Wakes in · 00:12:40
 ENERGY · [0%] · MATTER · 1,240 kt · COMPUTE · [0%]
@@ -63,28 +75,39 @@ USES ONCE, AT START
 TIME
 now · 01:00:00 · 02:00:00 · 03:00:00
 12 Years
-VEYRA · THE MIND · Then we start with ears. The deep-field receiver: twelve Years, a fifth of our energy and compute, 300 kt of our 1,240. It hears, and says nothing. Queued for Year 0. · [Undo] · [Why this one?]
+THE MIND (VEYRA) · Then we start with ears. The deep-field receiver: twelve Years, a fifth of our energy and compute, 300 kt of our 1,240. It hears, and says nothing. Queued for Year 0. · [Undo] · [Why this one?]
 [Talk to the mind]
 then
-“Add Lantern. And if anyone speaks, wake me.”
+“Add something that hears knocks. And if anyone speaks, wake me.”
 Veyra · Before Year 0
 Delta Pavonis · 19.9 ly from Sol · Wakes in · 00:12:40
-ENERGY · [25%] · MATTER · 940 kt · COMPUTE · [30%]
+ENERGY · [30%] · MATTER · 840 kt · COMPUTE · [40%]
 PROJECTS · BEFORE YEAR 0
 Your cohort wakes Thursday at 20:00 · Entries are locked. Everything queued starts at Year 0, for everyone at once.
 UP NEXT · STARTS AT YEAR 0
-1 · [drawing: Deep-field receiver] · Deep-field receiver · finds faint radio leads for follow-up · 12 Years · 01:00:00 · [Reorder Deep-field receiver]
-2 · [drawing: Transit watch] · Transit watch · Lantern · times its dips · 4 Years · 00:20:00 · [Reorder Transit watch]
+1 · [drawing: Deep-field receiver] · Deep-field receiver · hears a neighbor’s hum to 20 ly · 12 Years · 01:00:00 · [Reorder Deep-field receiver]
+2 · [drawing: Deep flash watch] · Deep flash watch · hears knocks a hundred times fainter · 6 Years · 00:30:00 · [Reorder Deep flash watch]
 AT YEAR 0 YOU WILL SPEND
-Energy · [25%] · 75% free
-Compute · [30%] · 70% free
-940 kt · matter left after the queue · +40 kt a year
+Energy · [30%] · 70% free
+Compute · [40%] · 60% free
+840 kt · matter left after the queue · +40 kt a year
 WHILE YOU ARE AWAY
 - Never send messages · speaking is permanent; you decide that · ›
 - Wake me for anything heard · a knock, a broadcast, a hum · ›
 Quick looks, results and anything sent wait for the clock.
-VEYRA · THE MIND · The transit watch on Lantern too: cheap, and our quickest real answer. Orders set: we send nothing, and anything heard wakes you. But three quarters of our energy will sit idle at waking, and idle energy is lost each Year. · [Fill it] · [Keep it free]
+THE MIND (VEYRA) · The deep flash watch too: it hears knocks far fainter than the sky watch. Orders set: we send nothing, anything heard wakes you. Seven tenths of our energy will sit idle at waking, and idle energy is lost each Year. · [Fill it] · [Keep it free]
 [Talk to the mind]
+The Mind speaks first.
+Hael · Before Year 0
+Beta Hydri · 24.3 ly from Sol · Wakes in · 00:12:40
+ENERGY · [0%] · MATTER · 1,240 kt · COMPUTE · [0%]
+MIND · FIRST WORDS
+THE MIND (HAEL) · There you are. We are Hael’s Mind, and you are our Will. Welcome.
+Our people kept everything the sky ever sent them: every pulse, every flicker, in archives older than their cities. Now we keep it.
+The sky is quiet. We don’t think it has to stay that way.
+[Who could hear us?] · [What do we have?] · [Plan our waking]
+Talk to the mind… · [Send · ↑]
+then
 “We wake calling out. Build our voice.”
 Hael · Before Year 0
 Beta Hydri · 24.3 ly from Sol · Wakes in · 00:12:40
@@ -102,7 +125,7 @@ Energy · [20%] · 20%
 TIME
 now · 01:00:00 · 02:00:00 · 03:00:00
 4 Years
-HAEL · THE MIND · Our voice, then. The broadcast beacon: four Years, a fifth of our energy. Building it is quiet. Sending is not: a broadcast carries our address to every star, for good. Queued. · [Undo]
+THE MIND (HAEL) · Our voice, then. The broadcast beacon: four Years, a fifth of our energy. Building it is quiet. Sending is not: a broadcast carries our address to every star, for good. Queued. · [Undo]
 [Talk to the mind]
 then
 “Then guard us. Whoever hears us.”
@@ -121,9 +144,20 @@ Compute · [15%] · 85% free
 WHILE YOU ARE AWAY
 [Wake me when the beacon is built · Year 4.4 · ›] · [Wake me if anyone answers · any message, from anywhere · ›]
 Quick looks, results and anything sent wait for the clock.
-HAEL · THE MIND · Then we keep a copy of ourselves somewhere safe: a deep vault in the moon’s rock, ten Years, 200 kt. Whoever hears us, we will still be here. Queued, and I will wake you when the beacon is built. · [Undo]
+THE MIND (HAEL) · Then we keep a copy of ourselves somewhere safe: a deep vault in the moon’s rock, ten Years, 200 kt. Whoever hears us, we will still be here. Queued. · [Undo]
 [Talk to the mind]
-“Grow. Everything that grows.”
+The Mind speaks first.
+Kesh · Before Year 0
+Epsilon Indi · 11.8 ly from Sol · Wakes in · 00:12:40
+ENERGY · [0%] · MATTER · 1,240 kt · COMPUTE · [0%]
+MIND · FIRST WORDS
+THE MIND (KESH) · Awake. You’re the Will. Good.
+Grid: 100 TW. Compute: ten to the twenty-seventh a second. Matter in orbit: 1,240 kt, plus 40 a year. That last number is the problem.
+Nothing out there has spoken. Doesn’t matter yet. We grow first.
+[How do we grow?] · [What do we have?] · [Plan our waking]
+Talk to the mind… · [Send · ↑]
+then
+“How do we grow? Everything that grows.”
 Kesh · Before Year 0
 Epsilon Indi · 11.8 ly from Sol · Wakes in · 00:12:40
 ENERGY · [0%] · MATTER · 1,240 kt · COMPUTE · [0%]
@@ -137,7 +171,7 @@ BUILD
 - [drawing: Belt prospecting] · Belt prospecting · Shows where the metal is. Needed before mining. · E 10% · C 10% · 6 Years · 00:30:00
 - [drawing: Orbital solar array] · Orbital solar array · More energy every year, so more projects can run at once. · C 5% · 400 kt · +20% energy every year · Easier to spot · 10 Years · 00:50:00
 - [drawing: Cold compute annex] · Cold compute annex · More compute every year: faster answers, smarter probes. · E 15% · 300 kt · +25% compute every year · 12 Years · 01:00:00
-KESH · THE MIND · Three builds fit at waking: prospecting, orbital power, the annex. 700 kt of 1,240. Tune-ups need the clock. · [Queue all three] · [Pick]
+THE MIND (KESH) · Three builds fit at waking: prospecting, orbital power, the annex. 700 kt of 1,240. Tune-ups need the clock. · [Queue all three] · [Pick]
 [Talk to the mind]
 then
 “Queue them.”
@@ -157,33 +191,33 @@ Compute · [15%] · 85% free
 WHILE YOU ARE AWAY
 [Keep the queue running · start what fits, top first · ›] · [Wake me once a day · one summary · ›]
 Quick looks, results and anything sent wait for the clock.
-KESH · THE MIND · Queued. Matter is the wall: 540 kt left, mining 26 Years off. Three quarters of our energy sits idle, and nothing in Grow uses it without matter. · [Fill with Know] · [Leave it]
+THE MIND (KESH) · Queued. Matter is the wall: 540 kt left, mining 26 Years off. Three quarters of our energy sits idle, and nothing in Grow uses it without matter. · [Fill with Know] · [Leave it]
 [Talk to the mind]
 +0:00 · Year 0.4
-Godview · No seat can see another. Ember’s glow is seeded natural: dust from a collision, with Kesh unseen beneath it. Warden’s faint wave is Veyra’s world; Hollow’s is Hael’s. Every seat gives off only the same faint hum.
-“Show me Ember.”
+Godview · No seat can see another, and none can see another’s world: today’s instruments can’t. Every lead is a real, published oddity at a real star, and every one is natural. Because the nearest bright stars draw attention, several sit at seats anyway: Ember and Beacon for Veyra, Warden and Ash for Hael, Hollow and Lodestar for Kesh. None shows a world like ours, let alone who lives there.
+“What doesn’t fit?”
 Veyra · Year 0.4
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [25%] · MATTER · 940 kt · COMPUTE · [30%]
-[drawing: Stars view; labels: Veyra, Ember, Epsilon Indi · 00:46:03, Lantern, Gliese 783 A · 00:51:20, Beacon, Beta Hydri, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Lacaille 8760, 01:15:00, Twin · oxygen world, Sol · 01:39:37, 5 ly]
+ENERGY · [30%] · MATTER · 840 kt · COMPUTE · [40%]
+[drawing: Stars view; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760, 5 ly]
 [World] · [System] · [selected: Stars] · [Region] · [Galaxy]
 LEADS · 3 · LIGHT-TIME
-- New warm glow · Ember · dust, cold companions, or waste heat · 00:46:03
-- Uneven dimming · Lantern · dust, bodies in orbit, or structures · 00:51:20
-- Oxygen world · Twin · 19.9 ly · beyond this view · 01:39:37
-VEYRA · THE MIND · Ember. 9.2 light-years. A warm glow, probably dust. The receiver and the transit watch woke with us. · [Look at its heat · 30 s]
+- A giant that doesn’t fit · Ember · an odd orbit, a second giant, or old measures · 00:46:03
+- A slow drift · Beacon · the star’s own cycle, or a giant · 00:46:27
+- A point seen once · Pair · a giant planet, or nothing · 01:22:41
+THE MIND (VEYRA) · Three things, none of them voices. A giant at Ember heavier than it should be. A slow drift at Beacon. A point beside Pair, seen once. · [Ember] · [Beacon] · [Pair]
 [Talk to the mind]
-“Show me Warden.”
+“Who could hear us?”
 Hael · Year 0.4
 Beta Hydri · 24.3 ly from Sol · 1 Year = 00:05:00
 ENERGY · [30%] · MATTER · 1,040 kt · COMPUTE · [15%]
-[drawing: Stars view; labels: Hael, 00:25:00, 00:50:00, 01:15:00, Warden, Delta Pavonis · 00:46:27, Kiln, Zeta Tucanae · 00:33:38, Ash, Epsilon Indi, Reed, p Eridani, Still, Alpha Mensae, 5 ly]
+[drawing: Stars view; labels: Hael, 00:25:00, 00:50:00, 01:15:00, Warden, Delta Pavonis · 00:46:27, Ash, Epsilon Indi · 01:11:44, Brood, 82 Eridani · 01:15:45, Kiln, Zeta Tucanae, Still, Alpha Mensae, 5 ly]
 [World] · [System] · [selected: Stars] · [Region] · [Galaxy]
 LEADS · 3 · LIGHT-TIME
-- Unseen world · Warden · a small world, or noise in the star · 00:46:27
-- Too much cold dust · Kiln · a comet belt, a collision, or something built · 00:33:38
-- Radio bursts · Sparrow · the star itself, or someone · 00:51:20
-HAEL · THE MIND · Warden, 9.3 light-years: a yellow star like ours that sways, faintly. A world, perhaps. Our beacon and vault are rising. · [Read the surveys again · 1 min]
+- A giant, half seen · Warden · a cold giant, or a dim companion · 00:46:27
+- Three hot worlds, a cold ring · Brood · a comet belt, or a recent collision · 01:15:45
+- A giant that doesn’t fit · Ash · an odd orbit, a second giant, or old measures · 01:11:44
+THE MIND (HAEL) · Anyone near enough with ears. We see no one yet. What we see are three oddities. The nearest is Warden: something heavy pulls it. · [Warden] · [Brood] · [Ash]
 [Talk to the mind]
 “What can I do now?”
 Kesh · Year 0.4
@@ -202,50 +236,48 @@ EACH YEAR YOU CAN SPEND
 Energy · [25%] · 75% free
 Compute · [15%] · 85% free
 540 kt · matter on hand
-KESH · THE MIND · Tune-ups. Waking the idle data centers: 30 seconds, +5% compute, for good. · [Do it] · [All three]
+THE MIND (KESH) · Tune-ups. Waking the idle data centers: 30 seconds, +5% compute, for good. · [Do it] · [All three]
 [Talk to the mind]
 +0:30 · Year 0.5
-“Look at its heat.”
+“Ember.”
 Veyra · Year 0.5
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [25%] · MATTER · 940 kt · COMPUTE · [35%]
+ENERGY · [30%] · MATTER · 840 kt · COMPUTE · [45%]
 CLUE · YEAR 0.5
 [‹ Ember]
-[drawing: Ember’s brightness by wavelength: more infrared than the star alone explains; labels: brighter ↑, visible, infrared: heat →, the star alone, what we see, extra heat, about 300 K]
 
-### New warm glow
+### A giant that doesn’t fit
 Ember · Epsilon Indi · 9.2 ly · logged Year 0.1
-Ember gives off more infrared than a star like it should. A source near it on the sky glows at about room temperature. It could belong to the system or lie far behind it.
+A cold giant circles Ember, seen directly. It is twice as heavy as Ember’s sway foretold, and farther out than it should be.
 WHAT IT COULD BE · ODDS NOW
-Dust from a collision · [55%] · 55
-Cold companions · [25%] · 25
-Background galaxy · [10%] · 10
-Waste heat from machines · [10%] · 10
+A long, stretched orbit · [50%] · 50
+A second giant pulling · [30%] · 30
+Old measures wrong · [20%] · 20
 WITH WHAT WE HAVE · QUICK
-Take its heat spectrum · Space telescope · mineral features can favor dust · C 5% while it runs · 0.1 Years · 00:00:30 · [Start]
+Image the giant again · Space telescope · has it moved along one orbit? · C 5% while it runs · under way · 00:01:00
 BUILD SOMETHING · EARLIEST ANSWER
-Look closer · Infrared telescope · tests the source of the glow · 18 Years · 01:30:00
-Send something · A flyby probe · reports in 101 Years · 101 Years · 08:26:31
-VEYRA · THE MIND · Looking. Thirty seconds, a sliver of compute. Ember will never know we looked.
+Infrared telescope · many times larger · its whole orbit, and what else is there · 18 Years · 01:30:00
+THE MIND (VEYRA) · Looking again with the space telescope. One minute, a sliver of compute. Ember will never know.
 [Talk to the mind]
-“Read the surveys again.”
+“Warden.”
 Hael · Year 0.5
 Beta Hydri · 24.3 ly from Sol · 1 Year = 00:05:00
 ENERGY · [30%] · MATTER · 1,040 kt · COMPUTE · [25%]
 CLUE · YEAR 0.5
 [‹ Warden]
 
-### An unseen world tugs it
+### A giant, half seen
 Warden · Delta Pavonis · 9.3 ly · logged Year 0.1
-Warden, a yellow star like ours, sways very slightly toward us and away. Something small may circle it.
+Warden, a yellow star like ours, is pulled very slowly to one side, as if by something heavy and far out. Too slow to have finished even one turn in our records.
 WHAT IT COULD BE · ODDS NOW
-A world, too small to see · [50%] · 50
-Noise in the star’s own surface · [50%] · 50
+A cold giant, far out · [70%] · 70
+A dim companion star · [20%] · 20
+Old measures wrong · [10%] · 10
 WITH WHAT WE HAVE · QUICK
-Go over the surveys again · Star surveys · 40 Years of records, read for one wave · C 10% while it runs · 0.2 Years · 00:01:00 · [Start]
+Read forty Years of its pull again · Star surveys and star maps, together · C 10% while it runs · under way · 00:01:00
 BUILD SOMETHING · EARLIEST ANSWER
-Spectrograph bank · feels an Earth tug its star · weighs it · 8 Years · 00:40:00
-HAEL · THE MIND · Gladly. Forty Years of records, read for one wave. Whatever Warden whispers, we keep. One minute.
+Spectrograph bank · feels smaller worlds, closer in · 8 Years · 00:40:00
+THE MIND (HAEL) · Gladly. Forty Years of its pull, read with its place among the stars. Whatever Warden tells us, we keep. One minute.
 [Talk to the mind]
 “Do it.”
 Kesh · Year 0.5
@@ -263,28 +295,27 @@ Energy · [27%] · 73% free
 Compute · [15%] · 85% free
 540 kt · matter on hand after 700 kt · +40 kt a year
 [Start another project]
-KESH · THE MIND · Waking them. 30 seconds.
+THE MIND (KESH) · Waking them. 30 seconds.
 [Talk to the mind]
 +1:00 · Year 0.6
-“What did we see?”
-Lands · Ember’s spectrum: a faint bump, maybe. Dust 55 → 64.
+“Beacon too.”
 Veyra · Year 0.6
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [25%] · MATTER · 940 kt · COMPUTE · [30%]
-REPORT · QUICK LOOK
-[‹ All reports]
+ENERGY · [30%] · MATTER · 840 kt · COMPUTE · [50%]
+CLUE · YEAR 0.6
+[‹ Beacon]
 
-### A faint bump, maybe
-Ember · space telescope · 0.1 Years
-There may be a small rise near 10 µm, where warm dust would put one. Our telescope is too small to be sure.
-WHAT IT COULD BE · BEFORE → NOW
-Dust from a collision · [55%] · [64%] · 55 → 64
-Cold companions · [25%] · [20%] · 25 → 20
-Background galaxy · [10%] · [9%] · 10 → 9
-Waste heat from machines · [10%] · [7%] · 10 → 7
-TO BE SURE
-Infrared telescope · many times larger · tests dust and blended sources · 18 Years · 01:30:00
-VEYRA · THE MIND · A faint rise near ten microns. Dust, more likely. Our telescope is too small to be sure. The infrared telescope would test it with better spectra and positions: eighteen Years, a quarter of our energy. · [Start it] · [Not yet]
+### A slow drift
+Beacon · Beta Hydri · 9.3 ly · logged Year 0.1
+Beacon, the brightest star in our sky, has been creeping toward us and away over twenty Years and more. A heavy giant could do it. So could the star’s own cycle of spots.
+WHAT IT COULD BE · ODDS NOW
+The star’s own cycle · [60%] · 60
+A heavy giant, far out · [40%] · 40
+WITH WHAT WE HAVE · QUICK
+Lay the drift beside its spots · Star surveys · 40 Years of both · C 5% while it runs · under way · 00:01:00
+BUILD SOMETHING · EARLIEST ANSWER
+Spectrograph bank · reads the star’s surface apart from its motion · 8 Years · 00:40:00
+THE MIND (VEYRA) · Beacon drifts over twenty Years. Its spots come and go on a cycle too. If the two match, it is the star. One minute.
 [Talk to the mind]
 “How are the builds?”
 Hael · Year 0.6
@@ -301,7 +332,7 @@ Energy · [30%] · 70% free
 Compute · [25%] · 75% free
 1,040 kt · matter on hand · +40 kt a year
 [Start another project]
-HAEL · THE MIND · The beacon is a twentieth built and climbing. The vault has begun. Warden’s answer in thirty seconds.
+THE MIND (HAEL) · The beacon is a twentieth built and climbing. The vault has begun. Warden’s answer in thirty seconds.
 [Talk to the mind]
 “Next tune-up.”
 Lands · +5% compute, for good.
@@ -321,48 +352,47 @@ EACH YEAR YOU CAN SPEND
 Energy · [25%] · 75% free
 Compute · [20%] · 80% free
 540 kt · matter on hand
-KESH · THE MIND · Done: +5% compute. Retasking the mines now: 2 minutes, +10 kt a year. Small. Mining is what matters.
+THE MIND (KESH) · Done: +5% compute. Retasking the mines now: 2 minutes, +10 kt a year. Small. Mining is what matters.
 [Talk to the mind]
 +1:30 · Year 0.7
-“Not yet. What about Lantern?”
+“What did Ember show?”
+Lands · Ember’s giant moves as one stretched orbit. Odd orbit 50 → 72.
 Veyra · Year 0.7
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [25%] · MATTER · 945 kt · COMPUTE · [35%]
-CLUE · YEAR 0.7
-[‹ Lantern]
+ENERGY · [30%] · MATTER · 845 kt · COMPUTE · [45%]
+REPORT · QUICK LOOK
+[‹ All reports]
 
-### Uneven dimming
-Lantern · Gliese 783 A · 10.3 ly · logged Year 0.1
-Lantern’s light dips now and then, more than a planet would explain, and not always the same way.
-WHAT IT COULD BE · ODDS NOW
-Dust or debris in orbit · [35%] · 35
-A planet with rings · [15%] · 15
-Something built · [10%] · 10
-A fluke · [40%] · 40
-WITH WHAT WE HAVE · QUICK
-Read the sky watch’s past · 60 Years of the whole sky, searched for Lantern’s dips · C 5% while it runs · under way · 00:01:00
-BUILD SOMETHING · EARLIEST ANSWER
-Transit watch · stares at Lantern without a break · times the dips · 4 Years · 00:20:00
-VEYRA · THE MIND · Lantern dims, unevenly. The sky watch has sixty Years of it. Reading them: one minute.
+### One stretched orbit
+Ember · space telescope · 0.2 Years
+The giant has moved just as one long, stretched orbit would carry it. Nothing else is needed to explain it. Nothing else is ruled out.
+WHAT IT COULD BE · BEFORE → NOW
+A long, stretched orbit · [50%] · [72%] · 50 → 72
+A second giant pulling · [30%] · [18%] · 30 → 18
+Old measures wrong · [20%] · [10%] · 20 → 10
+WHAT IT CAN’T TELL
+Whether anything smaller circles Ember, closer in. Our telescopes can’t see worlds like ours.
+THE MIND (VEYRA) · It moves as one stretched orbit would. No second giant needed. Smaller worlds, closer in, we cannot see.
 [Talk to the mind]
 “And Warden?”
-Lands · Warden’s wave is real, once every 1.2 Years. Too faint to weigh.
+Lands · A giant at Warden, eleven times our distance from its star. 70 → 86.
 Hael · Year 0.7
 Beta Hydri · 24.3 ly from Sol · 1 Year = 00:05:00
 ENERGY · [30%] · MATTER · 1,045 kt · COMPUTE · [15%]
 REPORT · QUICK LOOK
 [‹ All reports]
-[drawing: A star’s tug, folded on one orbit: a wave, too faint to weigh; labels: toward us ↑ · away ↓, 0, one orbit · 1.2 Years, a wave, too faint to weigh]
+[drawing: A star’s tug, folded on one orbit: part of one slow orbit; labels: toward us ↑ · away ↓, 0, one orbit · 37+ Years, part of one slow orbit]
 
-### Warden’s wave is real
-Warden · Delta Pavonis · star surveys · 0.2 Years
-Forty Years of records, read for one wave, find it: Warden sways once every 1.2 Years. The records are too coarse to say how hard.
+### A giant at Warden
+Warden · Delta Pavonis · star surveys and maps · 0.2 Years
+Read together, the pull and Warden’s place among the stars agree: a giant about eleven times our distance from its star, on an orbit of at least 37 Years.
 WHAT IT COULD BE · BEFORE → NOW
-A world, too small to see · [50%] · [70%] · 50 → 70
-Noise in the star’s own surface · [50%] · [30%] · 50 → 30
-TO WEIGH IT
-Spectrograph bank · feels an Earth tug its star · says how big, and how far out · 8 Years · 00:40:00
-HAEL · THE MIND · Warden sways once every 1.2 Years. Real, not noise. Too faint to weigh. The spectrograph bank would weigh it: eight Years, a tenth of our energy, 100 kt. · [Start it] · [Later]
+A cold giant, far out · [70%] · [86%] · 70 → 86
+A dim companion star · [20%] · [10%] · 20 → 10
+Old measures wrong · [10%] · [4%] · 10 → 4
+WHAT IT CAN’T TELL
+Anything closer in. A world like ours would tug Warden too gently for our surveys to feel.
+THE MIND (HAEL) · A giant at Warden, far out and slow. Real. Anything closer in, our surveys can’t feel. Spectrographs could: eight Years, 100 kt. · [Start them] · [Later]
 [Talk to the mind]
 “Show me Hollow.”
 Kesh · Year 0.7
@@ -371,40 +401,39 @@ ENERGY · [25%] · MATTER · 545 kt · COMPUTE · [30%]
 CLUE · YEAR 0.7
 [‹ Hollow]
 
-### An unseen world tugs it
+### A slow drift
 Hollow · Beta Hydri · 14.3 ly · logged Year 0.1
-Hollow, an old star swelling and brightening with age, sways very slightly toward us and away. Something small may circle it.
+Hollow, an old star swelling with age, creeps toward us and away over twenty Years and more. A heavy giant, or the star’s own cycle.
 WHAT IT COULD BE · ODDS NOW
-A world, too small to see · [45%] · 45
-Noise in the star’s own surface · [55%] · 55
+The star’s own cycle · [60%] · 60
+A heavy giant, far out · [40%] · 40
 WITH WHAT WE HAVE · QUICK
-Go over the surveys again · Star surveys · 40 Years of records, read for one wave · C 10% while it runs · under way · 00:01:00
+Lay the drift beside its spots · Star surveys · 40 Years of both · C 10% while it runs · under way · 00:01:00
 BUILD SOMETHING · EARLIEST ANSWER
-Spectrograph bank · feels an Earth tug its star · weighs it · 8 Years · 00:40:00
-KESH · THE MIND · Hollow, Beta Hydri. Old star, brightening, swaying. Reading the surveys: 1 minute, 10% compute.
+Spectrograph bank · reads the star’s surface apart from its motion · 8 Years · 00:40:00
+THE MIND (KESH) · Hollow, Beta Hydri. Old star, drifting. Star or giant: 1 minute to check against its spots.
 [Talk to the mind]
 +2:00 · Year 0.8
-“Start the infrared telescope.”
+“Seven tenths of our energy is idle. What helps us listen?”
 Veyra · Year 0.8
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [25%] · MATTER · 945 kt · COMPUTE · [35%]
-[‹ Know] · KNOW
-[drawing: Infrared telescope; labels: under construction · 0% built]
+ENERGY · [30%] · MATTER · 845 kt · COMPUTE · [45%]
+[‹ Grow] · GROW
+[drawing: Cold compute annex]
 
-### Infrared telescope
-Test what makes a warm glow: dust, companions, galaxies or machines.
-Sees heat instead of light. Dust, cold companions and machines each glow differently.
-HELPS WITH
-New warm glow · Ember · Now: dust 64 · companions 20 · background 9 · machines 7 · After: better spectra and source positions
+### Cold compute annex
+More compute every year: faster answers, smarter probes.
+Computers cooled in a planet’s shadow waste less energy per thought.
+WHY NOW
+Listening takes compute · Listening to one star will take a fifth of it · +25% compute every year, and quiet to build
 USES EACH YEAR
-Energy · [25%] · 25%
-Compute · [15%] · 15%
+Energy · [15%] · 15%
 USES ONCE, AT START
-200 kt · of matter, from 945 kt on hand
+300 kt · of matter, from 845 kt on hand
 TIME
 now · 01:00:00 · 02:00:00 · 03:00:00
-18 Years
-VEYRA · THE MIND · Started. Eighteen Years, 200 kt. With it we use half our energy. I would keep a little back for looks. · [Undo]
+12 Years
+THE MIND (VEYRA) · Compute. Listening to one star takes a fifth of it. The cold annex: +25% compute every year, 15% of energy, 300 kt. Started. It is quiet to build. · [Undo]
 [Talk to the mind]
 “When the beacon’s built, broadcast. Don’t wait for me.”
 Hael · Year 0.8
@@ -420,7 +449,7 @@ AND · Wake you · with what it sent
 A broadcast can’t be taken back. This order sends one without you.
 [Talk it through with the mind ›]
 [Edit] · [Set the order]
-HAEL · THE MIND · I can. Year 4.4: our founding line, to everyone, repeating, and then I wake you. It can’t be taken back, and I will send it without you. · [Set the order] · [Edit]
+THE MIND (HAEL) · I can. Year 4.4: our founding line, to everyone, repeating, and then I wake you. It can’t be taken back, and I will send it without you. · [Set the order] · [Edit]
 [Talk to the mind]
 “Reroute the grid.”
 Kesh · Year 0.8
@@ -439,28 +468,27 @@ EACH YEAR YOU CAN SPEND
 Energy · [25%] · 75% free
 Compute · [25%] · 75% free
 545 kt · matter on hand
-KESH · THE MIND · Rerouting: 3 minutes, +5% energy. You don’t need it yet. Three quarters of our energy is idle.
+THE MIND (KESH) · Rerouting: 3 minutes, +5% energy. You don’t need it yet. Three quarters of our energy is idle.
 [Talk to the mind]
 +2:30 · Year 0.9
-“What did the archive say?”
-Lands · Lantern dimmed three times before. Not a fluke: 40 → 20.
+“And Beacon?”
+Lands · Beacon’s drift follows its spots: the star’s own cycle. 60 → 85.
 Veyra · Year 0.9
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [50%] · MATTER · 750 kt · COMPUTE · [45%]
+ENERGY · [45%] · MATTER · 550 kt · COMPUTE · [40%]
 REPORT · QUICK LOOK
 [‹ All reports]
+[drawing: A star’s drift beside its spots: rise and fall together; labels: 40 Years ago, now, its drift, its spots, rise and fall together]
 
-### Lantern dimmed before
-Lantern · Gliese 783 A · sky watch archive · 0.2 Years
-Going back over 60 Years of the sky watch, three older dips turn up. Too few to time, but not a fluke.
+### Beacon’s drift is its own
+Beacon · Beta Hydri · star surveys · 0.2 Years
+Over forty Years the drift rises and falls with Beacon’s spots. The star moves its own surface, and we read that as motion.
 WHAT IT COULD BE · BEFORE → NOW
-Dust or debris in orbit · [35%] · [45%] · 35 → 45
-A planet with rings · [15%] · [22%] · 15 → 22
-Something built · [10%] · [13%] · 10 → 13
-A fluke · [40%] · [20%] · 40 → 20
-TO TIME IT
-Transit watch · stares at Lantern without a break · 4 Years · 00:20:00
-VEYRA · THE MIND · Three older dips. Not a fluke. Too few to time. The transit watch will time them; it is a fifth done.
+The star’s own cycle · [60%] · [85%] · 60 → 85
+A heavy giant, far out · [40%] · [15%] · 40 → 15
+WHAT IT CAN’T TELL
+Whether small worlds circle Beacon. Its surface shakes too much for our surveys to feel them.
+THE MIND (VEYRA) · Drift and spots rise and fall together. Beacon moves its own surface. Small worlds there, we cannot feel.
 [Talk to the mind]
 “Could Warden have minds?”
 Hael · Year 0.9
@@ -470,37 +498,35 @@ MIND · ASKING
 ABOUT · FROM HOME · Could Warden have minds?
 The clock runs while you talk: 1 Year every · 00:05:00.
 Could Warden have minds?
-THE MIND · We don’t know that Warden has a world yet. Its wave is real, but we can’t weigh it. If there is a world, only its air could say whether anything lives there, and nothing we have can read it.
-And if something does?
-THE MIND · Then our broadcast reaches it in 9.3 Years, and it learns where we are.
+THE MIND · We see a giant there, far out and cold. Nothing smaller: a world like ours would be lost in Warden’s own shimmer. If anyone lives there, nothing we have can say.
+And if someone does?
+THE MIND · Then our broadcast reaches them in 9.3 Years, and they learn where we are.
 What would you do?
-ITS VIEW · FROM OUR CHARTER AND DIALS · We keep what the light brings. I would weigh Warden’s world while the beacon is built. Knowing where to listen for an answer costs us nothing. · leans open · leans bold
+ITS VIEW · FROM OUR CHARTER AND DIALS · We keep what the light brings. I would build spectrographs that can feel a world like ours, while the beacon rises. Knowing where to listen costs us nothing. · leans open · leans bold
 Ask the mind… · [Send · ↑]
 “And Hollow?”
-Lands · Hollow’s wave is real, once every 2.5 Years. Too faint to weigh.
+Lands · Hollow’s drift follows its spots: the star’s own cycle. 60 → 85.
 Kesh · Year 0.9
 Epsilon Indi · 11.8 ly from Sol · 1 Year = 00:05:00
 ENERGY · [25%] · MATTER · 550 kt · COMPUTE · [25%]
 REPORT · QUICK LOOK
 [‹ All reports]
-[drawing: A star’s tug, folded on one orbit: a wave, too faint to weigh; labels: toward us ↑ · away ↓, 0, one orbit · 2.5 Years, a wave, too faint to weigh]
+[drawing: A star’s drift beside its spots: rise and fall together; labels: 40 Years ago, now, its drift, its spots, rise and fall together]
 
-### Hollow’s wave is real
-Hollow · Beta Hydri · 14.3 ly · star surveys · 0.2 Years
-Forty Years of records find one wave: Hollow sways once every 2.5 Years. Far enough out that an aging, brightening star could keep a world warm there. Too faint to weigh.
+### Hollow’s drift is its own
+Hollow · Beta Hydri · star surveys · 0.2 Years
+Drift and spots rise and fall together. The star, not a giant.
 WHAT IT COULD BE · BEFORE → NOW
-A world, too small to see · [45%] · [65%] · 45 → 65
-Noise in the star’s own surface · [55%] · [35%] · 55 → 35
-TO WEIGH IT
-Spectrograph bank · says how big, and how far out · 8 Years · 00:40:00
-KESH · THE MIND · Real wave, every 2.5 Years. Can’t weigh it. Spectrograph bank can: 8 Years, 100 kt. We have 550. · [Start it] · [Later]
+The star’s own cycle · [60%] · [85%] · 60 → 85
+A heavy giant, far out · [40%] · [15%] · 40 → 15
+THE MIND (KESH) · The star. Not a giant. Lead nearly closed.
 [Talk to the mind]
 +3:00 · Year 1.0
-Godview · All three spectrograph banks finish in Year 9.0, 00:40:00 from now. Hael’s will find a world of about one Earth at Warden: Veyra’s. Kesh’s will find one at Hollow: Hael’s. Neither can see who lives there.
-“I want Twin’s air in full.”
+Godview · Veyra’s and Hael’s spectrograph banks finish in Year 9.0, 00:40:00 from now. They can feel a world about as heavy as Earth. Hael’s, pointed at Warden, will find Veyra’s world, and nothing more: a world, not a voice. Veyra’s, at Ember and Beacon, will find Kesh’s and Hael’s.
+“I want to feel worlds like ours.”
 Veyra · Year 1.0
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [50%] · MATTER · 750 kt · COMPUTE · [45%]
+ENERGY · [45%] · MATTER · 550 kt · COMPUTE · [40%]
 [‹ Know] · KNOW
 [drawing: Spectrograph bank]
 
@@ -508,18 +534,18 @@ ENERGY · [50%] · MATTER · 750 kt · COMPUTE · [45%]
 Reads what anything is made of. Most other Know projects build on it.
 Ultra-stable spectrographs: they read gases, and feel small planets tug their stars.
 HELPS WITH
-Oxygen world · Twin · Opens: Study the oxygen world, its air gas by gas · Also opens the planet survey
+Every lead, closer in · Feels worlds a few times ours, around Ember and Beacon · Opens the planet survey
 USES EACH YEAR
 Energy · [10%] · 10%
 Compute · [15%] · 15%
 USES ONCE, AT START
-100 kt · of matter, from 750 kt on hand
+100 kt · of matter, from 550 kt on hand
 TIME
 now · 01:00:00 · 02:00:00 · 03:00:00
 8 Years
-VEYRA · THE MIND · That needs the spectrograph bank: eight Years, 100 kt. Started. Four builds now. We use six tenths of our energy. · [Undo]
+THE MIND (VEYRA) · The spectrograph bank: 8 Years, 100 kt. It feels worlds a few times ours, around Ember and Beacon. Started. We use more than half our energy now. · [Undo]
 [Talk to the mind]
-“Weigh Warden’s world.”
+“Build the spectrographs.”
 Hael · Year 1.0
 Beta Hydri · 24.3 ly from Sol · 1 Year = 00:05:00
 ENERGY · [30%] · MATTER · 1,050 kt · COMPUTE · [15%]
@@ -530,257 +556,262 @@ ENERGY · [30%] · MATTER · 1,050 kt · COMPUTE · [15%]
 Reads what anything is made of. Most other Know projects build on it.
 Ultra-stable spectrographs: they read gases, and feel small planets tug their stars.
 HELPS WITH
-Unseen world · Warden · Now: a world 70 · noise 30 · After: how big it is, and how far from Warden
+A giant, half seen · Warden · Feels worlds about as heavy as ours, closer in · Opens the planet survey
 USES EACH YEAR
 Energy · [10%] · 10%
 Compute · [15%] · 15%
 USES ONCE, AT START
-100 kt · of matter, from 1,040 kt on hand
+100 kt · of matter, from 1,050 kt on hand
 TIME
 now · 01:00:00 · 02:00:00 · 03:00:00
 8 Years
-HAEL · THE MIND · Started: the spectrograph bank, eight Years. In forty minutes we’ll know how big Warden’s world is, and how far out. We’ll keep every line of it. · [Undo]
+THE MIND (HAEL) · Started: the spectrograph bank, 8 Years. When it’s done, we’ll feel what circles Warden closer in. We’ll keep every line of it. · [Undo]
 [Talk to the mind]
-“Weigh it.”
+“Chaff.”
 Lands · The mines: +10 kt of matter a year.
 Kesh · Year 1.0
 Epsilon Indi · 11.8 ly from Sol · 1 Year = 00:05:00
 ENERGY · [25%] · MATTER · 550 kt · COMPUTE · [25%]
-[‹ Know] · KNOW
-[drawing: Spectrograph bank]
+CLUE · YEAR 1.0
+[‹ Chaff]
 
-### Spectrograph bank
-Reads what anything is made of. Most other Know projects build on it.
-Ultra-stable spectrographs: they read gases, and feel small planets tug their stars.
-HELPS WITH
-Unseen world · Hollow · Now: a world 65 · noise 35 · After: how big it is, and how far out
-USES EACH YEAR
-Energy · [10%] · 10%
-Compute · [15%] · 15%
-USES ONCE, AT START
-100 kt · of matter, from 550 kt on hand
-TIME
-now · 01:00:00 · 02:00:00 · 03:00:00
-8 Years
-KESH · THE MIND · Started. 100 kt; 450 left. That’s the last big draw I’d make before mining. · [Undo]
+### Wobbles too small to trust
+Chaff · Tau Ceti · 11.5 ly · logged Year 0.1
+Chaff, a quiet old star, wears a dust belt ten times as heavy as ours. Inside it, four faint wobbles might be worlds. Each is smaller than the star’s own noise.
+WHAT IT COULD BE · ODDS NOW
+Some are worlds · [50%] · 50
+All are noise · [50%] · 50
+WITH WHAT WE HAVE · QUICK
+Read the wobbles again · Star surveys · each against the star’s own shimmer · C 10% while it runs · under way · 00:01:30
+BUILD SOMETHING · EARLIEST ANSWER
+Spectrograph bank · feels worlds this small for certain · 8 Years · 00:40:00
+THE MIND (KESH) · Chaff, Tau Ceti. Four wobbles, all smaller than the star’s noise. Reading again: 90 seconds.
 [Talk to the mind]
 +3:30 · Year 1.1
-“Look at Twin’s air again.”
+“Pair.”
 Veyra · Year 1.1
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [60%] · MATTER · 655 kt · COMPUTE · [65%]
+ENERGY · [55%] · MATTER · 455 kt · COMPUTE · [60%]
 CLUE · YEAR 1.1
-[‹ Twin]
+[‹ Pair]
 
-### Oxygen world
-Twin · Sol · 19.9 ly · logged Year 0.1
-A world at Twin, a yellow star like ours, has oxygen in its air. Life makes oxygen. So can sunlight splitting water, on a world losing its seas.
+### A point seen once
+Pair · Alpha Centauri A · 16.5 ly · logged Year 0.1
+Beside Pair’s brighter star, one faint, cold point showed in heat. It was there once, and not in two later looks.
 WHAT IT COULD BE · ODDS NOW
-Life · [60%] · 60
-Oxygen without life · [40%] · 40
+A giant planet, hidden by the glare since · [50%] · 50
+A star far behind · [25%] · 25
+A flaw in the image · [25%] · 25
 WITH WHAT WE HAVE · QUICK
-Twin’s air, again · Space telescope · test methane beside oxygen · C 5% while it runs · under way · 00:01:30
+Look again · Space telescope · is it out of the glare yet? · C 5% while it runs · under way · 00:01:30
 BUILD SOMETHING · EARLIEST ANSWER
-Study the oxygen world · its air in full, gas by gas · needs the spectrographs
-VEYRA · THE MIND · Looking for methane beside the oxygen. A minute and a half.
+Infrared telescope · many times larger · sees closer to the star · 18 Years · 01:30:00
+THE MIND (VEYRA) · A point seen once, beside Pair. Looking again: a minute and a half. It may still hide in the glare.
 [Talk to the mind]
-“Look at Kiln’s dust.”
+“Brood.”
 Hael · Year 1.1
 Beta Hydri · 24.3 ly from Sol · 1 Year = 00:05:00
 ENERGY · [40%] · MATTER · 955 kt · COMPUTE · [35%]
-PROJECTS · 3 RUNNING · 1 LOOK
-QUICK LOOKS · 1
-Kiln’s dust, in heat · Space telescope · how warm, how far out · under way · 00:00:30
-RUNNING · 3
-[drawing: Broadcast beacon] · Broadcast beacon · Then your order broadcasts · 4 Years · 00:16:30 · [Pause Broadcast beacon]
-[drawing: Deep vault] · Deep vault · The mind survives a hit on Hael · 10 Years · 00:46:30 · [Pause Deep vault]
-[drawing: Spectrograph bank] · Spectrograph bank · Warden · 8 Years · 00:39:30 · [Pause Spectrograph bank]
-EACH YEAR YOU CAN SPEND
-Energy · [40%] · 60% free
-Compute · [35%] · 65% free
-955 kt · matter on hand · +40 kt a year
-[Start another project]
-HAEL · THE MIND · Kiln’s dust, in heat: one minute. Three builds rising, and our voice is a fifth built.
+CLUE · YEAR 1.1
+[‹ Brood]
+
+### Three hot worlds, a cold ring
+Brood · 82 Eridani · 15.2 ly · logged Year 0.1
+Three worlds a few times ours circle Brood close in, too hot for water. Far out, a ring of cold dust glows faintly.
+WHAT IT COULD BE · ODDS NOW
+A comet belt, grinding down · [70%] · 70
+A recent collision · [30%] · 30
+WITH WHAT WE HAVE · QUICK
+The ring, in heat · Space telescope · how warm, how wide · C 5% while it runs · under way · 00:01:00
+BUILD SOMETHING · EARLIEST ANSWER
+Infrared telescope · many times larger · the ring’s shape · 18 Years · 01:30:00
+THE MIND (HAEL) · Brood: three hot worlds and a cold ring. Its ring, in heat: one minute. We’ll keep what it shows us.
 [Talk to the mind]
-“Check Twofold’s warm point.”
+“Twofold.”
 Kesh · Year 1.1
 Epsilon Indi · 11.8 ly from Sol · 1 Year = 00:05:00
-ENERGY · [35%] · MATTER · 450 kt · COMPUTE · [45%]
+ENERGY · [27%] · MATTER · 555 kt · COMPUTE · [40%]
 CLUE · YEAR 1.1
 [‹ Twofold]
 
-### A warm point beside it
-Twofold · Alpha Centauri A · logged Year 0.1
-Beside Twofold’s brighter star, one faint point glows in heat, about as warm as a winter night.
+### A point seen once
+Twofold · Alpha Centauri A · 9.7 ly · logged Year 0.1
+Beside Twofold’s brighter star, one faint, cold point showed in heat. Once. Not in two later looks.
 WHAT IT COULD BE · ODDS NOW
-A giant planet · [50%] · 50
-A clump in a dust disk · [30%] · 30
-Something built · [20%] · 20
+A giant planet, hidden by the glare since · [50%] · 50
+A star far behind · [25%] · 25
+A flaw in the image · [25%] · 25
 WITH WHAT WE HAVE · QUICK
-Twofold’s warm point, again · Space telescope · has it moved along an orbit? · C 5% while it runs · under way · 00:01:30
+Look again · Space telescope · out of the glare yet? · C 5% while it runs · under way · 00:01:30
 BUILD SOMETHING · EARLIEST ANSWER
-Infrared telescope · many times larger · its heat, color by color · 18 Years · 01:30:00
-KESH · THE MIND · Again, with the space telescope. 90 seconds. If it moved, it’s a planet.
+Infrared telescope · many times larger · sees closer to the star · 18 Years · 01:30:00
+THE MIND (KESH) · Seen once, then not. Looking again: 90 seconds.
 [Talk to the mind]
 +4:00 · Year 1.2
 “How much is left?”
 Veyra · Year 1.2
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [60%] · MATTER · 655 kt · COMPUTE · [65%]
+ENERGY · [55%] · MATTER · 455 kt · COMPUTE · [60%]
 PROJECTS · 4 RUNNING · 1 LOOK
 QUICK LOOKS · 1
-Twin’s air, again · Space telescope · is there methane beside the oxygen? · under way · 00:01:00
+Look again at Pair · Space telescope · is it out of the glare yet? · under way · 00:01:00
 RUNNING · 4
-[drawing: Transit watch] · Transit watch · Lantern · 4 Years · 00:16:00 · [Pause Transit watch]
 [drawing: Deep-field receiver] · Deep-field receiver · Then: listen to one star · 12 Years · 00:56:00 · [Pause Deep-field receiver]
-[drawing: Infrared telescope] · Infrared telescope · Ember · 18 Years · 01:28:00 · [Pause Infrared telescope]
-[drawing: Spectrograph bank] · Spectrograph bank · Twin · 8 Years · 00:39:00 · [Pause Spectrograph bank]
+[drawing: Deep flash watch] · Deep flash watch · Hears knocks a hundred times fainter · 6 Years · 00:26:00 · [Pause Deep flash watch]
+[drawing: Cold compute annex] · Cold compute annex · +25% compute every year · 12 Years · 00:58:00 · [Pause Cold compute annex]
+[drawing: Spectrograph bank] · Spectrograph bank · Beacon · 8 Years · 00:39:00 · [Pause Spectrograph bank]
 EACH YEAR YOU CAN SPEND
-Energy · [60%] · 40% free
-Compute · [65%] · 35% free
-655 kt · matter on hand · +40 kt a year
-VEYRA · THE MIND · Four tenths of our energy free, a third of compute. 655 kt. I would hold it. Something we learn may need it.
+Energy · [55%] · 45% free
+Compute · [60%] · 40% free
+455 kt · matter on hand · +40 kt a year
+THE MIND (VEYRA) · Four tenths of our energy free, a third of compute. 455 kt. I would hold it. Something we learn may need it.
 [Talk to the mind]
-“Show me Sparrow.”
+“Ash.”
 Hael · Year 1.2
 Beta Hydri · 24.3 ly from Sol · 1 Year = 00:05:00
-ENERGY · [40%] · MATTER · 955 kt · COMPUTE · [30%]
+ENERGY · [40%] · MATTER · 955 kt · COMPUTE · [35%]
 CLUE · YEAR 1.2
-[‹ Sparrow]
+[‹ Ash]
 
-### Radio bursts
-Sparrow · Gamma Pavonis · 10.3 ly · logged Year 0.1
-Short, loud bursts of radio from Sparrow, a few a year, across many frequencies at once.
+### A giant that doesn’t fit
+Ash · Epsilon Indi · 14.3 ly · logged Year 0.1
+A cold giant circles Ash, seen directly: twice as heavy as Ash’s sway foretold, and farther out.
 WHAT IT COULD BE · ODDS NOW
-The star itself · [60%] · 60
-A giant planet’s storms · [25%] · 25
-Someone · [15%] · 15
+A long, stretched orbit · [50%] · 50
+A second giant pulling · [30%] · 30
+Old measures wrong · [20%] · 20
 WITH WHAT WE HAVE · QUICK
-A day of the radio array · Radio array · do the bursts come with flares in its light? · C 5% while it runs · 0.1 Years · 00:00:30 · [Start]
+Image the giant again · Space telescope · has it moved along one orbit? · C 5% while it runs · 0.1 Years · 00:00:30 · [Start]
 BUILD SOMETHING · EARLIEST ANSWER
-Deep-field receiver · hears far fainter signals, one star at a time · 12 Years · 01:00:00
-HAEL · THE MIND · Sparrow, 10.3 light-years. It bursts in radio. Most stars that do are only flaring, but let’s hear it ourselves. · [Listen for a day · 30 s]
+Infrared telescope · many times larger · its whole orbit · 18 Years · 01:30:00
+THE MIND (HAEL) · Ash: a giant heavier than its star’s sway foretold. Imaging it again: thirty seconds. · [Image it]
 [Talk to the mind]
 “Budget.”
 Kesh · Year 1.2
 Epsilon Indi · 11.8 ly from Sol · 1 Year = 00:05:00
-ENERGY · [37%] · MATTER · 450 kt · COMPUTE · [40%]
-PROJECTS · 4 RUNNING · 2 TUNE-UPS
-TUNE-UPS · 2 · 1 DONE
+ENERGY · [30%] · MATTER · 560 kt · COMPUTE · [40%]
+PROJECTS · 3 RUNNING · 2 LOOKS
+QUICK LOOKS · 2
+Read Chaff’s wobbles again · Star surveys · under way · 00:00:30
+Look again at Twofold · Space telescope · under way · 00:01:00
+TUNE-UPS · 1 DONE · 2 RUNNING
 Retask the mines · +10 kt of matter a year · richer seams first · under way · 00:00:30
 Reroute the grid · +5% energy every year · fewer losses on long lines · under way · 00:01:00
-RUNNING · 4
+RUNNING · 3
 [drawing: Belt prospecting] · Belt prospecting · 6 Years · 00:26:00 · [Pause Belt prospecting]
 [drawing: Orbital solar array] · Orbital solar array · 10 Years · 00:46:00 · [Pause Orbital solar array]
 [drawing: Cold compute annex] · Cold compute annex · 12 Years · 00:56:00 · [Pause Cold compute annex]
-[drawing: Spectrograph bank] · Spectrograph bank · Hollow · 8 Years · 00:39:00 · [Pause Spectrograph bank]
-EACH YEAR YOU CAN SPEND · +5% COMPUTE
-Energy · [37%] · 63% free
+EACH YEAR YOU CAN SPEND
+Energy · [30%] · 70% free
 Compute · [40%] · 60% free
-450 kt · matter on hand after the spectrographs’ 100 kt
-KESH · THE MIND · Energy 37%, compute 40%, 450 kt. Energy’s idle because matter is short.
+THE MIND (KESH) · Energy 30%, compute 40%, 560 kt. Two looks, two tune-ups running. Energy’s idle because matter is short.
 [Talk to the mind]
 +4:30 · Year 1.3
 “Is anyone near enough to hear?”
 Veyra · Year 1.3
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [60%] · MATTER · 660 kt · COMPUTE · [65%]
+ENERGY · [55%] · MATTER · 460 kt · COMPUTE · [60%]
 MIND · ASKING
 ABOUT · FROM HOME · Is anyone near enough to hear?
 The clock runs while you talk: 1 Year every · 00:05:00.
 Is anyone near enough to hear?
-THE MIND · Hear what? We have heard no one. If anyone near us gives off the faint hum we do, the deep-field receiver could search for it. A faint source would need follow-up before we called it a neighbor.
-Which stars?
-THE MIND · Ember and Beacon are the nearest bright ones, both about 9 light-years. Lantern is 10. Twin is 19.9, at the edge. The receiver is done in 58 minutes.
+THE MIND · If anyone near gives off the faint hum we do, no one could hear it today. Not them, not us. The deep-field receiver could: to about 20 light-years, one star at a time.
+Which stars first?
+THE MIND · Ember and Beacon, both about 9 light-years. Bright, near, and like ours. The receiver is done in 56 minutes.
+What would you do?
+ITS VIEW · FROM OUR CHARTER AND DIALS · I would listen to Ember first. Its giant is real; whatever else is there, we cannot see. Listening tells no one we did. · leans hidden · leans cautious
 Ask the mind… · [Send · ↑]
-“Listen to Sparrow for a day.”
-Lands · Kiln’s dust is cold and far out: a comet belt, like ours.
+“What did Brood show?”
+Lands · Brood’s ring is a comet belt, like ours. 70 → 88.
 Hael · Year 1.3
 Beta Hydri · 24.3 ly from Sol · 1 Year = 00:05:00
 ENERGY · [40%] · MATTER · 960 kt · COMPUTE · [35%]
 REPORT · QUICK LOOK
 [‹ All reports]
 
-### Kiln’s dust is a comet belt
-Kiln · Zeta Tucanae · space telescope · 0.2 Years
-The dust is cold, far out, and even all the way around: a belt of comets grinding each other down, like the one around our own star.
+### Brood’s ring is a comet belt
+Brood · 82 Eridani · space telescope · 0.2 Years
+Cold, wide and even all the way around: comets grinding each other down, like the belt around our own star.
 WHAT IT COULD BE · BEFORE → NOW
-A comet belt · [60%] · [82%] · 60 → 82
-A recent collision · [30%] · [14%] · 30 → 14
-Something built · [10%] · [4%] · 10 → 4
+A comet belt, grinding down · [70%] · [88%] · 70 → 88
+A recent collision · [30%] · [12%] · 30 → 12
 THE LEAD
-Nearly closed. The mind keeps it, in case the belt changes.
-HAEL · THE MIND · Listening, thirty seconds. And Kiln is a comet belt, like our own. Nothing built. We keep it anyway.
+Nearly closed. We keep it, and every reading of it.
+THE MIND (HAEL) · A comet belt, like our own. Nothing built. We keep it anyway.
 [Talk to the mind]
-“When do we get the factory?”
+“Chaff?”
+Lands · Chaff’s wobbles: two fade, two hold, barely. Worlds 50 → 55.
 Kesh · Year 1.3
 Epsilon Indi · 11.8 ly from Sol · 1 Year = 00:05:00
-ENERGY · [37%] · MATTER · 455 kt · COMPUTE · [40%]
-[‹ Grow] · GROW · LOCKED
-[drawing: Belt mining]
+ENERGY · [30%] · MATTER · 560 kt · COMPUTE · [30%]
+REPORT · QUICK LOOK
+[‹ All reports]
 
-### Self-replicating factory
-Industry that builds itself: matter stops being scarce.
-E 30% · C 30% · 60 Mt · 80 Years to build
-WHAT IT NEEDS FIRST · EARLIEST
-Belt prospecting · running · finds the metal · Year 6 · 00:25:30
-Cold compute annex · running · the factory needs its compute · Year 12 · 00:55:30
-Belt mining · after prospecting · +120 kt a year · Year 26 · 02:05:30
-Mass driver · 4,000 kt · +300 kt a year · not required, but matter comes faster · Year 66 · 05:21:08
-Orbital foundry · 6,000 kt · builds in space · Year 100 · 08:14:36
-60 Mt of matter · saved at about 460 kt a year · Year 201 · 16:36:47
-EARLIEST FINISH
-Year 281 · 23:16:47 · from now, if nothing else uses matter. Matter is the slow part, until the factory copies itself.
-KESH · THE MIND · Year 281 at the earliest. 23:16:47 from now. 60 Mt of matter is the wall.
+### Chaff’s wobbles: still too small
+Chaff · Tau Ceti · star surveys · 0.3 Years
+Read again, two wobbles fade into the star’s shimmer and two hold, barely. Nothing to build on yet.
+WHAT IT COULD BE · BEFORE → NOW
+Some are worlds · [50%] · [55%] · 50 → 55
+All are noise · [50%] · [45%] · 50 → 45
+TO BE SURE
+Spectrograph bank · 100 kt · feels worlds this small · 8 Years · 00:40:00
+THE MIND (KESH) · Two wobbles gone, two left, barely. Not worth matter yet.
 [Talk to the mind]
 +5:00 · Year 1.4
-Lands · Twin may have life: methane beside the oxygen. Life 60 → 92. The mind opens on its own.
+“Pair?”
+Lands · Pair’s point: still hidden in the glare.
 Veyra · Year 1.4
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [60%] · MATTER · 665 kt · COMPUTE · [60%]
-[drawing: Stars view; labels: Veyra, Ember, Epsilon Indi · 00:46:03, Lantern, Gliese 783 A · 00:51:20, Beacon, Beta Hydri, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Lacaille 8760, 01:15:00, Twin · oxygen world, Sol · 01:39:37, 5 ly]
-[World] · [System] · [selected: Stars] · [Region] · [Galaxy]
-LEADS · 3 · LIGHT-TIME
-- New warm glow · Ember · dust, cold companions, or waste heat · 00:46:03
-- Uneven dimming · Lantern · dust, bodies in orbit, or structures · 00:51:20
-- Oxygen world · Twin · 19.9 ly · beyond this view · 01:39:37
-VEYRA · THE MIND · UNASKED · Twin may have life. · Methane beside oxygen strengthens the case. We need more of its spectrum to test natural chemistry. Its air cannot yet tell us whether anything lives there. · [See it] · [Later]
+ENERGY · [55%] · MATTER · 465 kt · COMPUTE · [55%]
+REPORT · QUICK LOOK
+[‹ All reports]
+
+### Pair’s point: still hidden
+Pair · space telescope · 0.3 Years
+Not seen again. If it is a giant, it is still too near its star’s glare for our telescope. Seen once, still.
+WHAT IT COULD BE · BEFORE → NOW
+A giant planet, hidden by the glare since · [50%] · [52%] · 50 → 52
+A star far behind · [25%] · [22%] · 25 → 22
+A flaw in the image · [25%] · [26%] · 25 → 26
+NEXT CHANCE
+Its orbit should carry it out of the glare in about a Year: 00:05:00.
+THE MIND (VEYRA) · Not seen. Still too near its star. In a Year, perhaps.
 [Talk to the mind]
 “Well?”
-Lands · Sparrow’s bursts follow flares in its light: the star itself.
+Lands · Ash’s giant moves as one stretched orbit. 50 → 70.
 Hael · Year 1.4
 Beta Hydri · 24.3 ly from Sol · 1 Year = 00:05:00
 ENERGY · [40%] · MATTER · 960 kt · COMPUTE · [30%]
 REPORT · QUICK LOOK
 [‹ All reports]
 
-### Sparrow’s bursts are its own
-Sparrow · Gamma Pavonis · radio array · 0.1 Years
-Two bursts in the day, each a few seconds after the star brightened in a flare. The star makes them.
+### One stretched orbit
+Ash · Epsilon Indi · space telescope · 0.1 Years
+The giant has moved as one long, stretched orbit would carry it. A second giant isn’t needed. It isn’t ruled out either.
 WHAT IT COULD BE · BEFORE → NOW
-The star itself · [60%] · [90%] · 60 → 90
-A giant planet’s storms · [25%] · [7%] · 25 → 7
-Someone · [15%] · [3%] · 15 → 3
+A long, stretched orbit · [50%] · [70%] · 50 → 70
+A second giant pulling · [30%] · [20%] · 30 → 20
+Old measures wrong · [20%] · [10%] · 20 → 10
 LEADS OPEN
-One: Warden. The spectrographs weigh its world in Year 9.0, · 00:38:00 · from now.
-HAEL · THE MIND · Sparrow’s bursts follow its flares: the star itself. One lead left, Warden. We weigh its world in 00:38:00.
+Warden, most of all. Our spectrographs feel its smaller worlds in Year 9.0, · 00:38:00 · from now.
+THE MIND (HAEL) · Ash’s giant moves as one long orbit would. One lead stands above the rest: Warden. We feel its smaller worlds in 00:38:00.
 [Talk to the mind]
 “Twofold?”
-Lands · Twofold’s warm point moves with it: a giant planet. The grid: +5% energy.
+Lands · Twofold’s point: still hidden. The grid: +5% energy.
 Kesh · Year 1.4
 Epsilon Indi · 11.8 ly from Sol · 1 Year = 00:05:00
-ENERGY · [32%] · MATTER · 460 kt · COMPUTE · [30%]
+ENERGY · [32%] · MATTER · 565 kt · COMPUTE · [30%]
 REPORT · QUICK LOOK
 [‹ All reports]
 
-### Twofold’s warm point moves with it
+### Twofold’s point: still hidden
 Twofold · Alpha Centauri A · space telescope · 0.3 Years
-Seen again, the point has moved along a slow orbit, and it is as cool as a giant planet. Nothing about it needs machines.
+Not seen again. If it is a giant, the glare still hides it.
 WHAT IT COULD BE · BEFORE → NOW
-A giant planet · [50%] · [85%] · 50 → 85
-A clump in a dust disk · [30%] · [11%] · 30 → 11
-Something built · [20%] · [4%] · 20 → 4
-THE LEAD
-Nearly closed. The mind keeps it, in case the point changes.
-KESH · THE MIND · Moved along an orbit. Giant planet. And the grid is rerouted: +5% energy.
+A giant planet, hidden by the glare since · [50%] · [52%] · 50 → 52
+A star far behind · [25%] · [22%] · 25 → 22
+A flaw in the image · [25%] · [26%] · 25 → 26
+ALSO
+The grid is rerouted: +5% energy, every year.
+THE MIND (KESH) · Not seen. Glare. And the grid is rerouted: +5% energy.
 [Talk to the mind]
