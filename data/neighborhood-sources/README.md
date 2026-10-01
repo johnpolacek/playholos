@@ -25,3 +25,18 @@ Gaia data are distributed under **CC BY-NC 3.0 IGO** ([ESA terms](https://www.co
 - Objects are counted individually, so binary and multiple components count separately. The count is of objects, not systems.
 - Distances are Gaia parallax estimates with their own uncertainty; positions are at epoch J2016.0 (Gaia) or J2000.0 (HYG supplement). Proper motion is not animated.
 - No planets or civilizations are included. Homes in the game are invented planets around these real stars.
+
+## Next catalog migration
+
+Reviewed October 1, 2026. Keep these inputs pinned until Gaia DR4 is released and validated. [ESA's planned DR4 specification](https://www.cosmos.esa.int/web/gaia/dr4) includes 66 months of observations, improved multiple-star models and special bright-star astrometry. This is an upcoming data source, not an update already applied to this census.
+
+Before adopting it:
+
+- Cross-match identities across releases. A Gaia source ID can change, so do not join only on the old ID.
+- Reconcile positions and proper motions at a common epoch. DR4 uses J2017.5, while this census mixes J2016.0 and J2000.0.
+- Recheck the Hipparcos supplement against the new bright-star and multiple-star solutions, including duplicate components and uncertainty at the region boundary.
+- Count catalog objects separately from gravitationally bound systems. Apply host and orbital-stability constraints before reporting eligible civilization sites.
+- Preserve confirmed companions, candidate planets, exclusion limits and invented worlds as distinct records, with study dates, uncertainties and assumptions.
+- Version the rebuilt catalog. Existing cohorts retain their starting catalog. Later discoveries constrain future cohorts.
+
+The [game concept's research baseline](../../HOLOS_GAME_CONCEPT.md#research-baseline-october-1-2026) records the relevant 2026 studies. This atlas census still contains no generated planetary systems.

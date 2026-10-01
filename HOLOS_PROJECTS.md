@@ -1,10 +1,12 @@
 # Holos: project catalog
 
-September 28, 2026. A design catalog, generated from `explorations/home-mocks/catalog.py`. Edit the data there, then run `python3 explorations/home-mocks/build-zoom.py`.
+October 1, 2026. A design catalog, generated from `explorations/home-mocks/catalog.py`. Edit the data there, then run `python3 explorations/home-mocks/build-zoom.py`.
 
 **Projects are how you know, grow and reach**, and later how you endure. Every entry leads with its **why**: the benefit to the player, in plain words. Each one takes a share of every year’s energy and compute while it runs, draws matter from the stockpile once when it starts, and takes game time that passes as real time. Game time is written in words, like 18 Years; real time is written as a countdown, like `01:30:00`. One Year is `00:05:00`.
 
 Everything here is hard science with speculative engineering. **Level** says how far each reaches: *grounded* is demonstrated or built from demonstrated parts; *plausible* is sound physics with unproven engineering at this scale; *speculative* is allowed by physics but far beyond anything built. **Emissions** are what the project adds to how easily others could find us: radio, heat, light and exhaust.
+
+Science constraints and source links are in [the research baseline](HOLOS_GAME_CONCEPT.md#research-baseline-october-1-2026). Costs and durations are illustrative. Radio ranges and star laser performance still need physical validation.
 
 ## What every civilization starts with
 
@@ -12,7 +14,7 @@ Earth’s instruments and industry today, plus about a century. Every project be
 
 - **Sky watch** (Know): The whole sky in light and radio, always on. Catches strong knocks and broadcasts. *Whole-sky surveys such as Rubin and CHIME; PANOSETI is being built to catch nanosecond flashes.*
 - **Space telescope** (Know): One large telescope for light and heat. *JWST today; the Habitable Worlds Observatory is planned for the 2040s.*
-- **Star surveys** (Know): The big planets of the nearest stars, already mapped. The three clues came from here. *Gaia, HARPS, TESS and PLATO.*
+- **Star surveys** (Know): Known planets, candidates and survey limits around nearby stars. The three clues came from here. *Gaia, HARPS, TESS and PLATO.*
 - **Radio array** (Know): A radio telescope as wide as a continent. *The Square Kilometre Array, under construction.*
 - **Planetary grid** (Grow): All of each year’s energy, about 100 TW: the 100% every project shares. *Today’s grids, a century further on.*
 - **Data centers** (Grow): Where the mind runs: all of each year’s compute, about 10²⁷ operations a second, on 10 TW of their own. *Today’s data centers, a century further on: chips about 100 times as efficient, drawing 200 times today’s 50 GW.*
@@ -61,21 +63,21 @@ Know: learn what is out there, and answer the clues.
 - **Needs:** nothing
 - **Can open:** Watch {star} for flashes
 
-**Deep-field receiver** · 12 Years · `01:00:00` · Grounded · emissions quiet
+**Deep-field receiver** · 12 Years · `01:00:00` · Plausible · emissions quiet
 
-- **Why:** Hear civilizations quieter than you. Without it, the sky stays silent.
-- **What:** A radio array ten times the Square Kilometre Array. It can hear a neighbor’s hum out to about 20 light-years, one star at a time.
-- **Basis:** Sensitivity grows with collecting area: 10 km² of dishes. The SKA could hear Earth’s cell networks (about 4 GW) to 4 ly in an hour (Sheikh et al. 2025); every seat’s hum is about a hundredth of that by Year 0. Staring longer is untested past about 100 hours.
+- **Why:** Find faint radio sources and listen for neighbors.
+- **What:** A large radio array for deep surveys and targeted listening. Faint sources need follow-up to tell technology from nature.
+- **Basis:** Broadband surveys with interferometric follow-up, as proposed by Garrett (2026). The 10 km² area and roughly 20 ly reach are provisional design targets. Sensitivity needs an emitted spectrum, receiver noise, bandwidth, integration time and detection threshold.
 - **Uses:** energy 20% a year, compute 20% a year, 300 kt of matter at start
 - **Needs:** nothing
-- **Effect:** Lowers the detection floor for radio. Hears a world’s hum to about 20 ly.
+- **Effect:** Finds radio candidates for targeted checks. Coverage and reach depend on the observing plan.
 - **Unlocks:** Pulsar timing array, Far-side array, Early warning array, Outskirts sweep
-- **Can open:** Listen to {star}
+- **Can open:** Survey the radio sky, Listen to {star}, Check the radio source at {star}
 
 **Planet survey** · 14 Years · `01:10:00` · Grounded · emissions quiet
 
 - **Why:** Shows which nearby stars have worlds worth studying, visiting or settling.
-- **What:** Finds Earth-sized planets around the 12 nearest stars. The big ones are already known.
+- **What:** Searches the 12 nearest stars for small planets, refining known orbits, candidates and exclusion limits.
 - **Basis:** Precise radial velocity and astrometry, beyond today’s reach.
 - **Uses:** energy 10% a year, compute 25% a year
 - **Needs:** Spectrograph bank
@@ -83,8 +85,8 @@ Know: learn what is out there, and answer the clues.
 
 **Infrared telescope** · 18 Years · `01:30:00` · Grounded · emissions quiet
 
-- **Why:** Tells you whether a warm glow is natural, or someone’s machines.
-- **What:** A cold telescope many times larger than the one we start with. Tells cold dust from warm companions, and by its spectrum dust, with its mineral bumps, from the smooth glow of machines.
+- **Why:** Test what makes a warm glow: dust, companions, galaxies or machines.
+- **What:** A cold telescope many times larger than the one we start with. Measures spectra and positions to test dust, companions, background galaxies and machines as the source of a glow.
 - **Basis:** Cryogenic infrared telescopes, like JWST at far larger scale.
 - **Uses:** energy 25% a year, compute 15% a year, 200 kt of matter at start
 - **Needs:** nothing
@@ -96,8 +98,8 @@ Know: learn what is out there, and answer the clues.
 **Waste-heat survey** · 16 Years · `01:20:00` · Grounded · emissions quiet
 
 - **Why:** Checks every nearby star at once for signs of big engineering.
-- **What:** Checks every star in range for heat that nature does not explain.
-- **Basis:** Infrared searches for megastructures, as in the Ĝ survey using WISE.
+- **What:** Searches nearby stars for unusual heat. Each candidate needs checks for dust, companions and unrelated background sources.
+- **Basis:** Infrared surveys using WISE, with source confusion illustrated by JWST follow-up of Hephaistos candidates D and E in 2026.
 - **Uses:** energy 15% a year, compute 25% a year
 - **Needs:** Infrared telescope
 - **Unlocks:** Early warning array
@@ -106,7 +108,7 @@ Know: learn what is out there, and answer the clues.
 **Second infrared telescope** · 14 Years · `01:10:00` · Grounded · emissions quiet
 
 - **Why:** Doubles your infrared view and sets up the interferometer.
-- **What:** A twin of the first, placed far away, so the two can work as one.
+- **What:** A twin of the first, placed far away. Adds coverage and repeat positions to test whether a glow moves with its star. Later, the interferometer combines their light.
 - **Basis:** Interferometry needs at least two separated collectors.
 - **Uses:** energy 20% a year, compute 10% a year, 3,000 kt of matter at start
 - **Needs:** Infrared telescope + Orbital foundry
@@ -144,7 +146,7 @@ Know: learn what is out there, and answer the clues.
 **Infrared interferometer** · 40 Years · `03:20:00` · Plausible · emissions quiet
 
 - **Why:** Sharp enough to pick out planets and measure them one by one.
-- **What:** Links the two telescopes into one eye as wide as the gap between them. It pins down where a glow sits, so its temperature can be checked against what its star alone could make.
+- **What:** Links the telescopes to separate blended sources and measure where a glow sits. Tests background galaxies and companions before attributing excess heat to machines.
 - **Basis:** Space interferometer concepts such as LIFE.
 - **Uses:** energy 25% a year, compute 30% a year, 40 Mt of matter at start
 - **Needs:** Second infrared telescope
@@ -163,13 +165,13 @@ Know: learn what is out there, and answer the clues.
 
 **Far-side array** · 30 Years · `02:30:00` · Plausible · emissions quiet
 
-- **Why:** Hear anyone in the region, not only the nearest.
-- **What:** Radio dishes across a thousand square kilometers of a moon’s far side, shielded from our own noise. Hears a world’s hum anywhere in the region, one star at a time.
-- **Basis:** Lunar far-side radio arrays such as the FARSIDE concept. A hundred times the deep-field receiver’s area is ten times its range.
+- **Why:** Investigate fainter radio sources farther from home.
+- **What:** A thousand square kilometers of radio dishes on a moon’s far side. Extends surveys and targeted listening with less interference from home.
+- **Basis:** Large collecting area at a radio-quiet site. The roughly 200 ly reach is a provisional target, not a validated sensitivity. Frequency, noise, integration time and the source spectrum still matter.
 - **Uses:** energy 20% a year, compute 40% a year, 40 Mt of matter at start
 - **Needs:** Deep-field receiver + Self-replicating factory
-- **Effect:** Hears a world’s hum to about 200 ly: the whole region.
-- **Can open:** Listen to {star}
+- **Effect:** Aims to investigate faint radio sources across the region. A detection still needs source checks.
+- **Can open:** Survey the radio sky, Listen to {star}, Check the radio source at {star}
 
 ### Tier 4 · star-scale works
 
@@ -476,7 +478,7 @@ Reach: touch other stars. Messages, probes, ships, and strikes.
 - **Basis:** Kinetic energy: at a fifth of light speed, each kilogram carries about 400 kilotons.
 - **Uses:** energy 30% a year, compute 15% a year, 80 Mt of matter at start
 - **Needs:** Torch probe
-- **Effect:** A fifth of light speed hits a planet like a 2 km asteroid. An antimatter rocket reaches half; the star laser, nine tenths.
+- **Effect:** A fifth of light speed hits a planet like a 2 km asteroid. An antimatter rocket is modeled at half. Star-laser payload speeds remain unvalidated.
 - **Unlocks:** Decoys, Spotter, Dead hand
 - **Can open:** Strike {target}, Test-fire at {moon}
 
@@ -560,10 +562,10 @@ Reach: touch other stars. Messages, probes, ships, and strikes.
 
 - **Why:** The only weapon that arrives with no warning.
 - **What:** A sheet of film 100,000 km wide beside our star turns sunlight into laser light, every patch in step: one lens.
-- **Basis:** Diffraction: an aperture that wide holds a beam to 4 km across 16 ly. Forward’s crewed sail design needed a laser this size.
+- **Basis:** Coherent beamed energy, far beyond demonstrated engineering. Aperture alone does not set performance. Power, wavelength, losses, phasing, pointing, sail heating and relativistic thrust need a joint calculation.
 - **Uses:** energy 30% a year, compute 40% a year, 2,000 Mt of matter at start
 - **Needs:** Self-replicating factory + Laser sail array + Kilometer interferometer
-- **Effect:** Arrives with its own light: no warning. Sweep heats a planet; needle hits one known site. Loud when it fires. Firing costs only compute to aim.
+- **Effect:** Beam arrives with its own light. Sweep and needle are intended modes. Damage, payload, acceleration time and firing costs remain unvalidated. Firing consumes collected stellar power and produces waste heat.
 - **Can open:** Paint {star}
 
 **Mind transmitter** · 60 Years · `05:00:00` · Speculative · emissions noticeable
@@ -776,18 +778,18 @@ These appear from results, and name their target. Braces mark where a real star,
 
 **Study the air of {planet}** · Know · 16 Years · `01:20:00` · Grounded
 
-- **Why:** Find out whether a planet has life, or could.
-- **What:** Reads a planet’s atmosphere from the starlight passing through it.
-- **Basis:** Transmission spectroscopy, as JWST does today.
+- **Why:** Narrow down the atmospheres a planet could have.
+- **What:** Measures atmospheric gases when a planet transits its star. A null result can exclude an atmosphere model while leaving others possible.
+- **Basis:** Transmission spectroscopy. The 2026 JWST study of TRAPPIST-1 f excludes some H2/He atmospheres without establishing an airless world. Report model assumptions and confidence.
 - **Uses:** energy 15% a year, compute 20% a year
 - **Needs:** Planet survey + Spectrograph bank
-- **Appears:** Appears when the survey finds a planet worth a look.
+- **Appears:** Appears for a transiting planet worth a look. Other viewing geometries need direct imaging.
 
 **Study the oxygen world** · Know · 18 Years · `01:30:00` · Plausible
 
-- **Why:** Learn whether the oxygen world has a civilization.
-- **What:** Oxygen, methane, water: and maybe gases only industry makes.
-- **Basis:** Methane beside oxygen means life; CFCs or nitrogen dioxide mean industry. Earth-level nitrogen dioxide takes hundreds of hours to see at this distance.
+- **Why:** Test the case for life or industry on the oxygen world.
+- **What:** Tests life and industry against natural chemistry, using oxygen, methane, water, carbon monoxide and the star’s radiation.
+- **Basis:** Broad wavelength spectroscopy tests false positives (Krissansen-Totton et al., published 2026). Methane with oxygen can strengthen the case for life. NO2 has natural sources. A claimed industrial gas needs secure identification and tests of alternatives.
 - **Uses:** energy 15% a year, compute 20% a year
 - **Needs:** Spectrograph bank + Infrared telescope
 - **Appears:** Appears from the oxygen clue. Earth is 19.9 ly away.
@@ -803,21 +805,39 @@ These appear from results, and name their target. Braces mark where a real star,
 
 **Resolve the companions of {star}** · Know · 14 Years · `01:10:00` · Grounded
 
-- **Why:** Rule companions in or out as the source of a glow.
-- **What:** Separates cold objects near a star and measures each one.
-- **Basis:** Brown-dwarf imaging and spectroscopy.
+- **Why:** Test whether a glow belongs to the star or lies behind it.
+- **What:** Measures objects close to the star on the sky. Repeated positions test whether they move with it or lie far behind it.
+- **Basis:** Imaging, spectroscopy and common-motion checks. Better angular resolution may require the infrared interferometer.
 - **Uses:** energy 15% a year, compute 15% a year
 - **Needs:** Infrared telescope
-- **Appears:** Appears when a glow looks like companions.
+- **Appears:** Appears when a glow could be a companion or a background source.
+
+**Survey the radio sky** · Know · 8 Years · `00:40:00` · Plausible
+
+- **Why:** Find faint radio sources worth a closer listen.
+- **What:** Integrates selected sky fields for faint broadband sources, then checks their positions against nearby stars.
+- **Basis:** The broadband survey framework proposed by Garrett (2026). Exposure and sky coverage trade off. A candidate is not a confirmed civilization.
+- **Uses:** energy 10% a year, compute 15% a year
+- **Needs:** Deep-field receiver or Far-side array
+- **Appears:** Opens when a receiver is built. Candidates open targeted listening and source checks.
+
+**Check the radio source at {star}** · Know · 4 Years · `00:20:00` · Plausible
+
+- **Why:** Find out whether a radio source is natural or built.
+- **What:** Repeats the observation and tests spectrum, polarization, variability and motion against stars, planets, background galaxies and our own interference.
+- **Basis:** Source discrimination following Garrett (2026). Only evidence that identifies technology establishes civilization presence, as of when the light left.
+- **Uses:** energy 10% a year, compute 20% a year
+- **Needs:** Deep-field receiver or Far-side array
+- **Appears:** Appears after a radio candidate. May strengthen the case, identify a natural source, or leave it unresolved. Nothing sent.
 
 **Listen to {star}** · Know · 4 Years · `00:20:00` · Grounded
 
-- **Why:** Hear a neighbor’s hum: where they are, and that they were.
-- **What:** Points the receiver at one star through many of its planet’s days, for its hum and anything aimed. The hum shows where they are, how long their day is and where their transmitters sit, as of when the light left. Never what they are now.
-- **Basis:** Targeted SETI. A world’s radio rises and falls as a planet turns its crowded coasts toward us (Saide et al. 2023).
+- **Why:** Listen for a neighbor, and measure what is there.
+- **What:** Points the receiver at one star for faint broadband emission and directed signals. Measures position, spectrum and variability. A hum alone leaves natural explanations open.
+- **Basis:** Targeted SETI. Rotation may modulate radio emissions (Saide et al. 2023). A repeating cycle alone does not prove technology or map transmitters.
 - **Uses:** energy 10% a year, compute 20% a year
 - **Needs:** Deep-field receiver or Far-side array
-- **Appears:** Opens for any star within about 20 ly once the deep-field receiver is built, and for any star in the region with the far-side array. A clue puts its star first.
+- **Appears:** Opens when a receiver is built. Distance, sensitivity and exposure determine what it can exclude or detect. A candidate can open a source check.
 
 **Watch {star} for flashes** · Know · 6 Years · `00:30:00` · Grounded
 
@@ -938,4 +958,4 @@ These appear from results, and name their target. Braces mark where a real star,
 
 ## Counts
 
-72 catalog projects (15 know, 12 grow, 26 reach, 19 endure) and 19 discovery projects.
+72 catalog projects (15 know, 12 grow, 26 reach, 19 endure) and 21 discovery projects.

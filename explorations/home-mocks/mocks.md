@@ -23,6 +23,7 @@ Open · Hidden
 Expand · Deepen
 Cautious · Bold
 ›]
+The sky is pinned to this cohort’s catalog. Sael’s rocky world remains allowed by the 2026 surveys of 70 Ophiuchi A. Its climate and people are invented.
 Tap one to see it up close. Nothing is chosen until you name it.
 tap Veyra ›
 
@@ -33,7 +34,7 @@ tap Veyra ›
 ### Veyra
 Delta Pavonis · 19.9 ly from Sol
 [drawing: Delta Pavonis, its habitable zone, and Veyra’s orbit within it; labels: Veyra · invented, Delta Pavonis · real, habitable zone, 1 AU]
-Star · real · Delta Pavonis. Yellow, a little older and brighter than the Sun. · World · invented · Continents and seas, about Earth’s size, in the habitable zone. · Surveys · No world this size, this far out, could have been found there yet. · In its sky · Beacon, the brightest star. It has its own names for five more. · [[drawing: A Veyran, face and crests] · Veyrans · invented · Upright, toe-walking, two crests, two thumbs a hand. Many nations, one world. · ›]
+Star · real · Delta Pavonis. Yellow, a little older and brighter than the Sun. · World · invented · Continents and seas, about Earth’s size, in the habitable zone. · Surveys · An invented world within the adopted survey limits. Candidate planets and uncertain measurements remain separate from confirmed objects. · Catalog · Pinned for this cohort. Later discoveries inform future cohorts. · In its sky · Beacon, the brightest star. It has its own names for five more. · [[drawing: A Veyran, face and crests] · Veyrans · invented · Upright, toe-walking, two crests, two thumbs a hand. Many nations, one world. · ›]
 THE MIND IT WAKES AS
 FOUNDING LINE · “Keep the lights on. Look before we speak.”
 Open · Hidden
@@ -142,7 +143,7 @@ Everything Veyra built before you woke. Every project you start goes beyond this
 KNOW · WHAT WE CAN SEE
 [drawing: Sky watch] · Sky watch · The whole sky in light and radio, always on. Catches strong knocks and broadcasts.
 [drawing: Infrared telescope] · Space telescope · One large telescope for light and heat.
-[drawing: Planet survey] · Star surveys · The big planets of the nearest stars, already mapped. The three clues came from here.
+[drawing: Planet survey] · Star surveys · Known planets, candidates and survey limits around nearby stars. The three clues came from here.
 [drawing: Deep-field receiver] · Radio array · A radio telescope as wide as a continent.
 GROW · WHAT WE CAN MAKE
 [drawing: Planetary grid] · Planetary grid · All of each year’s energy, about 100 TW: the 100% every project shares.
@@ -403,7 +404,7 @@ LEADS · 3 · LIGHT-TIME
 - Oxygen world · Twin · 19.9 ly · beyond this view · 01:39:37
 Ember · Epsilon Indi · [Close · ×]
 [drawing: Ember: an orange dwarf with a cold giant planet and a distant pair of brown dwarfs; labels: extra heat · source unknown, cold giant planet · about 6 Jupiters, brown dwarf pair, 1,500 AU out, not to scale]
-Distance · 9.2 ly · light takes 9.2 Years · 00:46:03 · Star · Orange dwarf, a fifth as bright as Delta Pavonis · In our sky · Easy to see by eye · Aimed here · Nothing yet · [New warm glow · dust 55 · companions 35 · waste heat 10 · ›] · [Aim a project here]
+Distance · 9.2 ly · light takes 9.2 Years · 00:46:03 · Star · Orange dwarf, a fifth as bright as Delta Pavonis · In our sky · Easy to see by eye · Aimed here · Nothing yet · [New warm glow · dust 55 · companions 25 · background 10 · machines 10 · ›] · [Aim a project here]
 tap the clue ›
 
 #### 2 · The clue in full · What we see, the odds, and four ways to find out, each with its earliest answer.
@@ -416,14 +417,15 @@ CLUE · YEAR 0.4
 
 ### New warm glow
 Ember · Epsilon Indi · 9.2 ly · logged Year 0.1
-Ember gives off more infrared than a star like it should. Something near it is glowing at about room temperature.
+Ember gives off more infrared than a star like it should. A source near it on the sky glows at about room temperature. It could belong to the system or lie far behind it.
 WHAT IT COULD BE · ODDS NOW
 Dust from a collision · [55%] · 55
-Cold companions · [35%] · 35
+Cold companions · [25%] · 25
+Background galaxy · [10%] · 10
 Waste heat from machines · [10%] · 10
 HOW TO FIND OUT · EARLIEST ANSWER
-Look closer · Infrared telescope · tells dust from companions · 18 Years · 01:30:00
-Listen harder · Listen to Ember · opens after the telescope · later
+Look closer · Infrared telescope · tests the source of the glow · 18 Years · 01:30:00
+Listen harder · Listen to Ember · needs a radio receiver · later
 Speak · A message, then their reply · tells them we exist · 24.4 Years · 02:02:06
 Send something · A flyby probe · flies 92 Years, reports 9.2 later · 101 Years · 08:26:31
 or tap a faint star ›
@@ -516,10 +518,10 @@ Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
 ENERGY · [0%] · MATTER · 1,240 kt · COMPUTE · [0%]
 Start a project · [Close · ×]
 [selected: Know · 6] · [Grow · 4] · [Reach · 2]
-- [drawing: Infrared telescope] · Infrared telescope · Tells you whether a warm glow is natural, or someone’s machines. · E 25% · C 15% · 200 kt · Ember · 18 Years · 01:30:00
+- [drawing: Infrared telescope] · Infrared telescope · Test what makes a warm glow: dust, companions, galaxies or machines. · E 25% · C 15% · 200 kt · Ember · 18 Years · 01:30:00
 - [drawing: Transit watch] · Transit watch · Your quickest real answer: is a dimming a pattern or a fluke? · E 5% · C 10% · Lantern · 4 Years · 00:20:00
 - [drawing: Spectrograph bank] · Spectrograph bank · Reads what anything is made of. Most other Know projects build on it. · E 10% · C 15% · 100 kt · 8 Years · 00:40:00
-- [drawing: Deep-field receiver] · Deep-field receiver · Hear civilizations quieter than you. Without it, the sky stays silent. · E 20% · C 20% · 300 kt · 12 Years · 01:00:00
+- [drawing: Deep-field receiver] · Deep-field receiver · Find faint radio sources and listen for neighbors. · E 20% · C 20% · 300 kt · 12 Years · 01:00:00
 - [drawing: Deep flash watch] · Deep flash watch · Hears knocks too faint for the sky watch: quieter senders, or farther ones. · E 10% · C 20% · 100 kt · 6 Years · 00:30:00
 - [drawing: Planet survey] · Planet survey · Shows which nearby stars have worlds worth studying, visiting or settling. · E 10% · C 25% · Needs: Spectrograph bank · 14 Years · 01:10:00
 tap a project ›
@@ -535,7 +537,7 @@ ENERGY · [0%] · MATTER · 1,240 kt · COMPUTE · [0%]
 Tells you whether a warm glow is natural, or someone’s machines.
 Sees heat instead of light. Dust, cold companions and machines each glow differently.
 HELPS WITH
-New warm glow · Ember · Now: dust 55 · companions 35 · waste heat 10 · After: can tell dust from companions
+New warm glow · Ember · Now: dust 55 · companions 25 · background 10 · machines 10 · After: tests dust, companions and background sources
 USES EACH YEAR
 Energy · [25%] · 25%
 Compute · [15%] · 15%
@@ -660,7 +662,7 @@ ENERGY · [65%] · MATTER · 1,720 kt · COMPUTE · [100%]
 [drawing: Deep-field receiver]
 
 ### Listen to Ember
-Hear a neighbor’s hum: where they are, and that they were.
+Listen for a neighbor, and measure what is there.
 USES EACH YEAR · IN USE + THIS
 Energy · [52.0%] · [12.0%] · 80%
 Compute · [80.0%] · [0.0%] · [16.0%] · 120%
@@ -684,8 +686,8 @@ PROJECTS · 2 RUNNING · 1 DONE
 Done · Year 18.4 · Infrared telescope · It can now tell dust from companions. · [See what it found at Ember ›]
 OPENED · 4 NEW PROJECTS
 Map the dust at Ember · Rings in the dust can show where hidden planets are. · 10 Years · 00:50:00
-Resolve the companions of Ember · Rule companions in or out as the source of a glow. · 14 Years · 01:10:00
-Listen to Ember · Hear a neighbor’s hum: where they are, and that they were. · 4 Years · 00:20:00
+Resolve the companions of Ember · Test whether a glow belongs to the star or lies behind it. · 14 Years · 01:10:00
+Listen to Ember · Listen for a neighbor, and measure what is there. · 4 Years · 00:20:00
 Waste-heat survey · Checks every nearby star at once for signs of big engineering. · 16 Years · 01:20:00
 EACH YEAR YOU CAN SPEND · 2 STILL RUNNING
 Energy · [30%] · 70% free
@@ -813,7 +815,7 @@ Start a project · [Close · ×]
 [selected: Know · 5] · [Grow · 4] · [Reach · 2]
 - [drawing: Transit watch] · New · from the transit watch · Measure what’s crossing Lantern · Learn what keeps dimming that star: a planet, dust, or something built. · E 10% · C 15% · Lantern · 8 Years · 00:40:00
 - [drawing: Spectrograph bank] · Spectrograph bank · Reads what anything is made of. Most other Know projects build on it. · E 10% · C 15% · 100 kt · 8 Years · 00:40:00
-- [drawing: Deep-field receiver] · Deep-field receiver · Hear civilizations quieter than you. Without it, the sky stays silent. · E 20% · C 20% · 300 kt · 12 Years · 01:00:00
+- [drawing: Deep-field receiver] · Deep-field receiver · Find faint radio sources and listen for neighbors. · E 20% · C 20% · 300 kt · 12 Years · 01:00:00
 - [drawing: Deep flash watch] · Deep flash watch · Hears knocks too faint for the sky watch: quieter senders, or farther ones. · E 10% · C 20% · 100 kt · 6 Years · 00:30:00
 - [drawing: Planet survey] · Planet survey · Shows which nearby stars have worlds worth studying, visiting or settling. · E 10% · C 25% · Needs: Spectrograph bank · 14 Years · 01:10:00
 back to Home ›
@@ -829,24 +831,26 @@ CLUES · 3 · YEAR 4.4
 - New warm glow · Ember · infrared telescope under way · 14 Years · 01:10:00
 - Oxygen world · Twin · not yet studied · light takes 01:39:37 · ›
 
-## Report · Twin’s hum, heard
-Year 16.4. The deep-field receiver listened to Twin for four Years and heard the oxygen world’s hum, its radio aimed at no one, rising and falling as the planet turns. It pins where they are and how long their day is, as of light that left 19.9 Years ago, and says nothing about now. Overhearing is a first contact: presence is certain, as of the light’s age.
+## Report · Twin’s radio candidate
+Year 16.4. The deep-field receiver listened to Twin for four Years and found a repeating broadband source. It is a candidate, not first contact. Follow-up tests spectrum, polarization, motion and interference. Only identifying technology establishes presence, as of the light’s age. Percentages are illustrative game state.
 
-#### 1 · Heard · One day at Twin, folded from four Years of listening. What a hum tells, and what it can’t.
+#### 1 · Heard · A repeating cycle, folded from four Years of listening. What was measured, and what still needs checking.
 Veyra · Year 16.4
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
 ENERGY · [35%] · MATTER · 1,310 kt · COMPUTE · [40%]
 REPORT · RESULT
 [‹ All reports]
-[drawing: Radio from Twin over one of its days: three rises as crowded coasts turn toward us; labels: radio from Twin, 0 h, 23.9 h, one day at Twin, a crowded coast]
+[drawing: Illustrative radio from Twin folded on a 23.9-hour cycle. Its cause is unresolved.; labels: radio from Twin, 0 h, 23.9 h, one repeating cycle, a repeating peak]
 
-### Twin hums
+### A radio source at Twin
 Sol · listen to Twin · finished Year 16.4
-Not aimed at us: the hum of a whole world’s radio, rising and falling as it turns. It comes from the oxygen world.
-Where · The oxygen world, 1 AU from its star. Now pinned exactly. · Their day · 23.9 hours. Three crowded coasts turn toward us each day. · As of · Light that left 19.9 Years ago. · Can’t say · Whether they are still there, what they are now, or whether they have heard us.
-A CIVILIZATION AT TWIN · BEFORE → NOW
-Someone was there · [20%] · [100%] · 20 → 100 · seen
-[Keep listening] · [What now?]
+Faint broadband radio near the oxygen world. It rises and falls on a repeating cycle. A civilization is one explanation. Stellar activity, natural planetary radio and background sources still need testing.
+Where · Near the oxygen world. Further measurements must separate it from its star and background sources. · Repeats · About 23.9 hours. Rotation is one possible cause, not an established day length. · As of · Light that left 19.9 Years ago. · Can’t say · Whether they are still there, what they are now, or whether they have heard us.
+THE RADIO SOURCE · BEFORE → NOW
+Technology · [20%] · [70%] · 20 → 70
+Natural source or interference · [80%] · [30%] · 80 → 30
+Inferred, still unresolved. Check its spectrum, polarization, motion and interference.
+[Keep listening] · [Check the source]
 
 ## Report · coming back after a long absence
 Nine hours away is 108 Years. The Report opens on what matters: how long it was, the big things, what the mind did under your standing orders, and what is waiting for you. The map can replay it all in a minute. When nothing is new, the Report shows what is already on its way, soonest first.
@@ -1009,7 +1013,7 @@ Flyby probe · passed Year 222 · report arrived Year 231
 WHAT IT SAW
 Around the star · Countless flat bodies in a band half an AU out. The largest it saw, 40 km across. · Each one · Dark toward Ember, warm behind: collectors, shedding heat. · Together · They catch about 1.5% of Ember’s light: the glow we measured. · Also · The cold giant planet, as known. No dust. · Who built it · Not seen. Nothing answered as the probe passed.
 THE CLUE
-[Resolved · New warm glow · Ember · built, not natural · ›] · [What now?]
+[Resolved · New warm glow · Ember · built, not natural · ›] · [Check the source]
 what now ›
 
 #### 3 · What now · Every next step, with what it costs in time and what it reveals. Any of them, or none.
@@ -1680,7 +1684,7 @@ One of their words has no match in ours. The mind renders it “keep”: to hold
 WHAT IT CARRIED
 WHO THEY ARE · THEIR FOUNDING LINE · “We keep what the light brings.”
 A QUESTION · “Who are you?”
-A FINDING · EMBER · Ember’s heat is smooth: no dust bump near 10 µm. · If true: dust 35 · companions 15 · machines 50 · [See the finding, and check it ›]
+A FINDING · EMBER · Ember’s heat is smooth: no dust bump near 10 µm. · If true: dust 35 · companions 10 · background 5 · machines 50 · [See the finding, and check it ›]
 [Reply]
 reply ›
 
@@ -1746,7 +1750,7 @@ ENERGY · [45%] · MATTER · 1,480 kt · COMPUTE · [55%]
 
 ### Check Beacon’s claim
 A lie reads exactly like the truth. Only measuring it ourselves can tell them apart.
-THEIR CLAIM · Ember’s heat is smooth. Warm dust would add a bump near 10 µm.
+THEIR CLAIM · Ember’s heat is smooth. Some warm dust models predict a bump near 10 µm.
 HOW
 Point our space telescope at Ember and read its heat, color by color.
 USES EACH YEAR
@@ -1771,7 +1775,8 @@ Checked Year 52.4 with our space telescope
 Our measurement matches theirs: Ember’s heat is smooth, with no dust bump. What they told us was true.
 WHAT IT COULD BE · BEFORE → NOW
 Dust from a collision · [55%] · [35%] · 55 → 35
-Cold companions · [35%] · [15%] · 35 → 15
+Cold companions · [25%] · [10%] · 25 → 10
+Background galaxy · [10%] · [5%] · 10 → 5
 Waste heat from machines · [10%] · [50%] · 10 → 50
 BEACON’S RECORD
 1 of 1 · claims checked have held
@@ -2352,7 +2357,7 @@ Budget drilldown: real units behind each share
 
 ### Report · 5 of 5
 A new result, and the result in full
-A hum heard: what overhearing tells
+A radio candidate: follow-up before confirmation
 Back after a long absence
 Replaying an absence on the map
 Nothing new yet
