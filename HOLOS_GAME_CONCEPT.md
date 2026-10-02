@@ -125,6 +125,7 @@ The session rhythm is **spinning plates:** several projects, investigations, mis
 
 Shown in the [mocks](explorations/home-mocks/index.html). Their sample civilization, Veyra at δ Pavonis, and all game state are sample data.
 
+- **The board is always there (2026-10-01).** Every screen is tied to a place: on the planet, in low orbit, out at the moon, in the system, or among the stars. A 2:1 strip of the map sits under the top bar on every screen and shows that place at the right zoom: a build where it is being built, a lead with the line to its star and its light-time. Screens are sheets over the map: drag down for the full map (Home), up to read. The zoom levels split World into planet and orbit.
 - **Home:** your world first, with what is in motion and the leads below it. Pinch out through five levels: world, system, stars, region, galaxy. An icon in the galaxy view opens the Local Group.
 - **Star names:** stars bright in your civilization's night sky carry its own names, shown translated, with the real name smaller beneath: *Ember*, over *Epsilon Indi*. Faint stars keep their catalog names, since no one named what they could not see. Your own star keeps its real name; it anchors where you are. Names differ by civilization.
 - **Projects on the map:** each project appears where it physically is, at the zoom level where that place is visible, with its countdown timer. Off-screen projects get edge markers. Drawings are symbols, not to scale. While building, a project is a blueprint that fills in; when finished it is drawn in full.
