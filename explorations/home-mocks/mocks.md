@@ -211,7 +211,7 @@ One Year passes every · 00:05:00 · (5 minutes). Your first project will appear
 TOUR · 3 OF 6
 
 ### Projects
-How you know, grow and reach. Each takes a share of every year’s energy and compute, and matter once, at the start. One Year passes every 00:05:00.
+How you know, grow and reach. Each takes a share of every year’s compute, matter once at the start, and energy only if it beams, sends or thinks hard. One Year passes every 00:05:00.
 [Skip tour] · [Next]
 
 #### 4 · Report tab
@@ -517,13 +517,13 @@ Veyra · Year 0.4
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
 ENERGY · [0%] · MATTER · 1,240 kt · COMPUTE · [0%]
 Start a project · [Close · ×]
-[selected: Know · 6] · [Grow · 4] · [Reach · 2]
-- [drawing: Infrared telescope] · Infrared telescope · Test what makes a warm glow: dust, companions, galaxies or machines. · E 25% · C 15% · 200 kt · Ember · 18 Years · 01:30:00
-- [drawing: Transit watch] · Transit watch · Your quickest real answer: is a dimming a pattern or a fluke? · E 5% · C 10% · Lantern · 4 Years · 00:20:00
-- [drawing: Spectrograph bank] · Spectrograph bank · Reads what anything is made of. Most other Know projects build on it. · E 10% · C 15% · 100 kt · 8 Years · 00:40:00
-- [drawing: Deep-field receiver] · Deep-field receiver · Find faint radio sources and listen for neighbors. · E 20% · C 20% · 300 kt · 12 Years · 01:00:00
-- [drawing: Deep flash watch] · Deep flash watch · Hears knocks too faint for the sky watch: quieter senders, or farther ones. · E 10% · C 20% · 100 kt · 6 Years · 00:30:00
-- [drawing: Planet survey] · Planet survey · Shows which nearby stars have worlds worth studying, visiting or settling. · E 10% · C 25% · Needs: Spectrograph bank · 14 Years · 01:10:00
+[selected: Know · 6] · [Grow · 5] · [Reach · 2]
+- [drawing: Infrared telescope] · Infrared telescope · Test what makes a warm glow: dust, companions, galaxies or machines. · C 15% · 200 kt · Ember · 18 Years · 01:30:00
+- [drawing: Transit watch] · Transit watch · Your quickest real answer: is a dimming a pattern or a fluke? · C 10% · Lantern · 4 Years · 00:20:00
+- [drawing: Spectrograph bank] · Spectrograph bank · Reads what anything is made of. Most other Know projects build on it. · C 15% · 100 kt · 8 Years · 00:40:00
+- [drawing: Deep-field receiver] · Deep-field receiver · Find faint radio sources and listen for neighbors. · C 20% · 300 kt · 12 Years · 01:00:00
+- [drawing: Deep flash watch] · Deep flash watch · Hears knocks too faint for the sky watch: quieter senders, or farther ones. · C 20% · 100 kt · 6 Years · 00:30:00
+- [drawing: Planet survey] · Planet survey · Shows which nearby stars have worlds worth studying, visiting or settling. · C 25% · Needs: Spectrograph bank · 14 Years · 01:10:00
 tap a project ›
 
 #### 3 · Confirm · What it does, which clue it helps, what it uses each year, and when it finishes.
@@ -539,7 +539,6 @@ Sees heat instead of light. Dust, cold companions and machines each glow differe
 HELPS WITH
 New warm glow · Ember · Now: dust 55 · companions 25 · background 10 · machines 10 · After: tests dust, companions and background sources
 USES EACH YEAR
-Energy · [25%] · 25%
 Compute · [15%] · 15%
 USES ONCE, AT START
 200 kt · of matter, from 1,240 kt on hand
@@ -552,13 +551,13 @@ start ›
 #### 4 · Started · The drawing fills in as it is built. Its timer runs even while you are away.
 Veyra · Year 0.4
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [25%] · MATTER · 1,040 kt · COMPUTE · [15%]
+ENERGY · [0%] · MATTER · 1,040 kt · COMPUTE · [15%]
 PROJECTS · 1 RUNNING
 [drawing: Infrared telescope; labels: under construction · 0% built]
 Infrared telescope · Done in Year 18.4 · 18 Years · 01:29:47 · [Pause Infrared telescope]
 Helps with: New warm glow · Ember · When done: dust, companions or waste heat, told apart
 EACH YEAR YOU CAN SPEND
-Energy · [25%] · 75% free
+Energy · [0%] · 100% free
 Compute · [15%] · 85% free
 1,040 kt · matter on hand after the telescope’s 200 kt · +40 kt a year
 NEXT 3 HOURS
@@ -570,14 +569,14 @@ start another ›
 #### 5 · Two running · Each takes its share of the year. The quick one finishes first.
 Veyra · Year 0.4
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [30%] · MATTER · 1,040 kt · COMPUTE · [25%]
+ENERGY · [0%] · MATTER · 1,040 kt · COMPUTE · [25%]
 PROJECTS · 2 RUNNING
 RUNNING
 [drawing: Transit watch] · Transit watch · Lantern · 4 Years · 00:19:58 · [Pause Transit watch]
 [drawing: Infrared telescope] · Infrared telescope · Ember · 18 Years · 01:29:16 · [Pause Infrared telescope]
 The transit watch finishes first. Its answer lands in the Report.
 EACH YEAR YOU CAN SPEND
-Energy · [30%] · 70% free
+Energy · [0%] · 100% free
 Compute · [25%] · 75% free
 1,040 kt · matter on hand · the transit watch needs none
 NEXT 3 HOURS
@@ -590,7 +589,7 @@ pause ›
 #### 6 · Paused · Any project can be paused. Progress is kept and its share of the year is freed.
 Veyra · Year 0.4
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [5%] · MATTER · 1,140 kt · COMPUTE · [10%]
+ENERGY · [0%] · MATTER · 1,140 kt · COMPUTE · [10%]
 PROJECTS · 1 RUNNING · 1 PAUSED
 RUNNING
 [drawing: Transit watch] · Transit watch · Lantern · 4 Years · 00:07:31 · [Pause Transit watch]
@@ -598,7 +597,7 @@ PAUSED
 [drawing: Infrared telescope] · Infrared telescope · Ember · Paused · 10.8 Years left · 00:54:00 · [selected: Resume Infrared telescope]
 A paused project keeps its progress and stops using energy and compute, so its share of the year is free. Matter it already used stays built in.
 EACH YEAR YOU CAN SPEND
-Energy · [5%] · 95% free
+Energy · [0%] · 100% free
 Compute · [10%] · 90% free
 1,140 kt · matter on hand · the telescope’s 200 kt stays built in
 NEXT 3 HOURS
@@ -614,13 +613,13 @@ Veyra · Year 0.4
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
 ENERGY · [0%] · MATTER · 1,240 kt · COMPUTE · [0%]
 Start a project · [Close · ×]
-[Know · 6] · [selected: Grow · 4] · [Reach · 2]
-- [drawing: Orbital solar array] · Orbital solar array · More energy every year, so more projects can run at once. · C 5% · 400 kt · +20% energy every year · Easier to spot · 10 Years · 00:50:00
-- [drawing: Belt prospecting] · Belt prospecting · Shows where the metal is. Needed before mining. · E 10% · C 10% · 6 Years · 00:30:00
-- [drawing: Cold compute annex] · Cold compute annex · More compute every year: faster answers, smarter probes. · E 15% · 300 kt · +25% compute every year · 12 Years · 01:00:00
-- [drawing: Belt mining] · Belt mining · More matter every year, for building bigger things. · E 20% · C 10% · +120 kt of matter every year · Needs: Belt prospecting · 20 Years · 01:40:00
+[Know · 6] · [selected: Grow · 5] · [Reach · 2]
+- [drawing: Orbital solar array] · Orbital solar array · More energy every year, so more projects can run at once. · C 5% · 400 kt · +20% energy, for good · Easier to spot · 10 Years · 00:50:00
+- [drawing: Belt prospecting] · Belt prospecting · Shows where the metal is. Needed before mining. · C 10% · 6 Years · 00:30:00
+- [drawing: Cold compute annex] · Cold compute annex · More compute every year: faster answers, smarter probes. · E 2% · 300 kt · +25% compute, for good · 12 Years · 01:00:00
+- [drawing: Belt mining] · Belt mining · More matter every year, for building bigger things. · C 10% · +120 kt of matter every year · Needs: Belt prospecting · 20 Years · 01:40:00
 LATER · NEEDS SOMETHING FIRST
-[[drawing: Orbital foundry] · Orbital foundry · Unlocks everything too big to launch from Veyra: probes, ships, big telescopes. · E 25% · C 10% · 6,000 kt · Unlocks large works · Easier to spot · Needs: Belt mining · 30 Years · 02:30:00]
+[[drawing: Orbital foundry] · Orbital foundry · Unlocks everything too big to launch from Veyra: probes, ships, big telescopes. · C 10% · 6,000 kt · Unlocks large works · Easier to spot · Needs: Belt mining · 30 Years · 02:30:00]
 tap a locked project ›
 
 #### 2 · A locked project · What it needs, in order, and the earliest it could be done.
@@ -632,7 +631,7 @@ ENERGY · [0%] · MATTER · 1,240 kt · COMPUTE · [0%]
 
 ### Orbital foundry
 Unlocks everything too big to launch from Veyra: probes, ships, big telescopes.
-E 25% · C 10% · 6,000 kt · 30 Years to build
+C 10% · 6,000 kt · 30 Years to build
 WHAT IT NEEDS FIRST
 Belt prospecting · ready now · finds the metal · 6 Years · 00:30:00 · [Start]
 Belt mining · after prospecting · +120 kt of matter a year · 20 Years · 01:40:00
@@ -646,31 +645,31 @@ Veyra · Year 0.4
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
 ENERGY · [0%] · MATTER · 1,240 kt · COMPUTE · [0%]
 Start a project · [Close · ×]
-[Know · 6] · [Grow · 4] · [selected: Reach · 2]
-- [drawing: Tight-beam transmitter] · Tight-beam transmitter · Talk to one known star without the whole sky hearing. · E 15% · C 5% · Only the target can read it. It still tells them we exist. · 6 Years · 00:30:00
-- [drawing: Broadcast beacon] · Broadcast beacon · Everyone in range learns you exist: friends and threats alike. · E 20% · Everyone who can hear, will. It cannot be taken back. · Announces us · 4 Years · 00:20:00
+[Know · 6] · [Grow · 5] · [selected: Reach · 2]
+- [drawing: Tight-beam transmitter] · Tight-beam transmitter · Talk to one known star without the whole sky hearing. · C 5% · Only the target can read it. It still tells them we exist. · 6 Years · 00:30:00
+- [drawing: Broadcast beacon] · Broadcast beacon · Everyone in range learns you exist: friends and threats alike. · C 5% · Everyone who can hear, will. It cannot be taken back. Building it takes little power; sending takes about 10% of energy each Year, loud enough for a whole-sky watch 10 ly away. · Announces us · 4 Years · 00:20:00
 LATER · NEEDS SOMETHING FIRST
-- [drawing: Launcher] · Launcher · Required to send anything to another star. · E 25% · C 10% · 5,000 kt · Easier to spot · Needs: Orbital foundry · 24 Years · 02:00:00
-- [drawing: Flyby probe] · Flyby probe · See a star up close, soonest. The only way to be sure what is there. · E 20% · C 15% · 4,000 kt · One look, in passing. · Easier to spot · Needs: Launcher + Pulsar timing array · 12 Years · 01:00:00
+- [drawing: Launcher] · Launcher · Required to send anything to another star. · C 10% · 5,000 kt · Easier to spot · Needs: Orbital foundry · 24 Years · 02:00:00
+- [drawing: Flyby probe] · Flyby probe · See a star up close, soonest. The only way to be sure what is there. · C 15% · 4,000 kt · One look, in passing. · Easier to spot · Needs: Launcher + Pulsar timing array · 12 Years · 01:00:00
 later: Year 22 ›
 
 #### 4 · Not enough compute · Starting Listen to Ember would need 120% of this year’s compute.
 Veyra · Year 22.0
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [65%] · MATTER · 1,720 kt · COMPUTE · [100%]
+ENERGY · [0%] · MATTER · 1,720 kt · COMPUTE · [100%]
 [‹ Know] · KNOW
 [drawing: Deep-field receiver]
 
 ### Listen to Ember
 Listen for a neighbor, and measure what is there.
 USES EACH YEAR · IN USE + THIS
-Energy · [52.0%] · [12.0%] · 80%
+Energy · [0.0%] · [0.0%] · 0%
 Compute · [80.0%] · [0.0%] · [16.0%] · 120%
 In use: pulsar timing array 30 · waste-heat survey 25 · flash watch 20 · map the dust 15 · belt mining 10
 Not enough compute. · Running projects already use all of this year’s supply. Three ways forward:
 - Start when there’s room · The flash watch finishes and frees 20% · in 4 Years · 00:20:00
 - Pause the pulsar timing array · Frees 30% now. It keeps its progress. · now
-- Grow compute first · Cold compute annex · +25% compute every year · 12 Years · 01:00:00
+- Grow compute first · Cold compute annex · +25% compute, for good · 12 Years · 01:00:00
 - Talk it through with the mind ›
 - Choose a way forward
 
@@ -680,7 +679,7 @@ What a finished project leaves behind, how Up next keeps projects starting while
 #### 1 · Done · Year 18.4. The telescope is drawn in full, its result waits in the Report, and it opened four projects.
 Veyra · Year 18.4
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [30%] · MATTER · 1,560 kt · COMPUTE · [40%]
+ENERGY · [0%] · MATTER · 1,560 kt · COMPUTE · [40%]
 PROJECTS · 2 RUNNING · 1 DONE
 [drawing: Infrared telescope; labels: sunshield keeps it cold enough to see heat]
 Done · Year 18.4 · Infrared telescope · It can now tell dust from companions. · [See what it found at Ember ›]
@@ -690,15 +689,15 @@ Resolve the companions of Ember · Test whether a glow belongs to the star or li
 Listen to Ember · Listen for a neighbor, and measure what is there. · 4 Years · 00:20:00
 Waste-heat survey · Checks every nearby star at once for signs of big engineering. · 16 Years · 01:20:00
 EACH YEAR YOU CAN SPEND · 2 STILL RUNNING
-Energy · [30%] · 70% free
+Energy · [0%] · 100% free
 Compute · [40%] · 60% free
-The telescope’s 25% of energy and 15% of compute are free again.
+The telescope’s 15% of compute is free again.
 later: Year 22 ›
 
 #### 2 · Up next · After choosing “Start when there’s room”. Each says what it waits for, and when.
 Veyra · Year 22.0
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [65%] · MATTER · 1,720 kt · COMPUTE · [100%]
+ENERGY · [0%] · MATTER · 1,720 kt · COMPUTE · [100%]
 PROJECTS · 5 RUNNING · 3 UP NEXT
 RUNNING · 5
 [drawing: Deep flash watch] · Deep flash watch · frees 20% compute when done · 4 Years · 00:20:00 · [Pause Deep flash watch]
@@ -715,7 +714,7 @@ or, earlier ›
 #### 3 · Cancel · Year 7.6, from a running project’s menu. The costs are spelled out, with pausing beside it.
 Veyra · Year 7.6
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [55%] · MATTER · 1,190 kt · COMPUTE · [50%]
+ENERGY · [0%] · MATTER · 1,190 kt · COMPUTE · [55%]
 PROJECTS · 3 RUNNING
 RUNNING
 [drawing: Infrared telescope] · Infrared telescope · Ember · 10.8 Years · 00:54:00 · [Pause Infrared telescope]
@@ -724,7 +723,7 @@ RUNNING
 
 ### Cancel the infrared telescope?
 7.2 of its 18 Years of work are lost. · Starting again begins at zero.
-Its 25% of energy and 15% of compute are free at once.
+Its 15% of compute is free at once.
 Half its matter is salvaged: 100 of 200 kt.
 The glow at Ember waits until something else can look.
 Pausing frees the same share and keeps every year of work.
@@ -736,26 +735,27 @@ Screens show shares of the year. A tap on a budget shows what the share is made 
 #### 1 · Energy · From the top bar. Where this year’s terawatts come from, where they go, and the ceiling.
 Veyra · Year 452.0
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [45%] · MATTER · 15,000 kt · COMPUTE · [50%]
+ENERGY · [3%] · MATTER · 15,000 kt · COMPUTE · [50%]
 ENERGY · YEAR 452
 [‹ Projects]
-45% · of this year’s energy in use · 108 of 240 terawatts
-[drawing: This year’s energy: 108 of 240 terawatts in use, against a ceiling of about 1,000 on Veyra; labels: in use · 108 TW, this year · 240 TW, ceiling on Veyra · 1,000 TW]
+3% · of this year’s energy in use · 7 of 240 terawatts
+[drawing: This year’s energy: 7 of 240 terawatts in use, against a ceiling of about 1,000 on Veyra; labels: in use · 7 TW, this year · 240 TW, ceiling on Veyra · 1,000 TW]
 WHERE IT COMES FROM
 - Planetary grid · what we woke with · 100 TW
 - Fusion plant · since Year 214 · 100 TW
 - Orbital solar array · since Year 20 · 40 TW
 WHERE IT GOES
-- Belt mining, second site · a project · 36 TW · 15%
-- Deep flash watch · a project · 24 TW · 10%
-- Relay station, and the sentinel’s link · running · 48 TW · 20%
+- Thinking, run cold · the cold compute annex · 4 TW
+- Building everything · mines, the foundry, lift, the second site · 2 TW
+- Every instrument and link · telescopes, arrays, the sentinel’s beam · under 1 TW
+Most of our energy is free. Building and watching take little; thinking, beams and broadcasts are what use it.
 Every watt ends as heat. Past about 1,000 TW on Veyra, the heat alone would warm the planet; beyond that, energy is made in space.
 or compute ›
 
 #### 2 · Compute · Operations a second, and why a cold annex and a sleeping vault matter.
 Veyra · Year 452.0
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [45%] · MATTER · 15,000 kt · COMPUTE · [50%]
+ENERGY · [3%] · MATTER · 15,000 kt · COMPUTE · [50%]
 COMPUTE · YEAR 452
 [‹ Projects]
 50% · of this year’s compute in use
@@ -777,7 +777,7 @@ Twenty real minutes after starting it, the transit watch reports. The answer shi
 #### 1 · The report · The finished project lands at the top, marked new.
 Veyra · Year 4.4
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [25%] · MATTER · 1,200 kt · COMPUTE · [15%]
+ENERGY · [0%] · MATTER · 1,200 kt · COMPUTE · [25%]
 REPORT · WHILE YOU WERE AWAY
 Year 4.4 · [drawing: Transit watch] · New · Transit watch finished. · Lantern dims every 212 days, and no two dips look the same. · [See the result ›]
 Year 0.4 · [drawing: Infrared telescope] · Infrared telescope started. Done in Year 18.4, · 01:10:00 · from now.
@@ -789,7 +789,7 @@ see the result ›
 #### 2 · The result · Opens inside the Report tab: what was seen, how the odds moved, and what it opens.
 Veyra · Year 4.4
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [25%] · MATTER · 1,200 kt · COMPUTE · [15%]
+ENERGY · [0%] · MATTER · 1,200 kt · COMPUTE · [25%]
 REPORT · RESULT
 [‹ All reports]
 [drawing: Lantern light curve: seven dips, each a different shape; labels: normal brightness, Year 0.4, Year 4.4, one dip every 212 days]
@@ -804,20 +804,20 @@ Something built · [10%] · [15%] · 10 → 15
 A fluke · ruled out · [40%] · [0%] · 40 → 0
 NOW OPEN
 New · from the transit watch · Measure what’s crossing Lantern · Learn what keeps dimming that star: a planet, dust, or something built.
-E 10% · C 15% · 8 Years · 00:40:00 · [Start]
+C 15% · 8 Years · 00:40:00 · [Start]
 start a project ›
 
 #### 3 · A new project · The discovery project is waiting at the top of Know.
 Veyra · Year 4.4
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [25%] · MATTER · 1,200 kt · COMPUTE · [15%]
+ENERGY · [0%] · MATTER · 1,200 kt · COMPUTE · [25%]
 Start a project · [Close · ×]
-[selected: Know · 5] · [Grow · 4] · [Reach · 2]
-- [drawing: Transit watch] · New · from the transit watch · Measure what’s crossing Lantern · Learn what keeps dimming that star: a planet, dust, or something built. · E 10% · C 15% · Lantern · 8 Years · 00:40:00
-- [drawing: Spectrograph bank] · Spectrograph bank · Reads what anything is made of. Most other Know projects build on it. · E 10% · C 15% · 100 kt · 8 Years · 00:40:00
-- [drawing: Deep-field receiver] · Deep-field receiver · Find faint radio sources and listen for neighbors. · E 20% · C 20% · 300 kt · 12 Years · 01:00:00
-- [drawing: Deep flash watch] · Deep flash watch · Hears knocks too faint for the sky watch: quieter senders, or farther ones. · E 10% · C 20% · 100 kt · 6 Years · 00:30:00
-- [drawing: Planet survey] · Planet survey · Shows which nearby stars have worlds worth studying, visiting or settling. · E 10% · C 25% · Needs: Spectrograph bank · 14 Years · 01:10:00
+[selected: Know · 5] · [Grow · 5] · [Reach · 2]
+- [drawing: Transit watch] · New · from the transit watch · Measure what’s crossing Lantern · Learn what keeps dimming that star: a planet, dust, or something built. · C 15% · Lantern · 8 Years · 00:40:00
+- [drawing: Spectrograph bank] · Spectrograph bank · Reads what anything is made of. Most other Know projects build on it. · C 15% · 100 kt · 8 Years · 00:40:00
+- [drawing: Deep-field receiver] · Deep-field receiver · Find faint radio sources and listen for neighbors. · C 20% · 300 kt · 12 Years · 01:00:00
+- [drawing: Deep flash watch] · Deep flash watch · Hears knocks too faint for the sky watch: quieter senders, or farther ones. · C 20% · 100 kt · 6 Years · 00:30:00
+- [drawing: Planet survey] · Planet survey · Shows which nearby stars have worlds worth studying, visiting or settling. · C 25% · Needs: Spectrograph bank · 14 Years · 01:10:00
 back to Home ›
 
 #### 4 · Home, after · The Lantern marker fills in and carries what is now known.
@@ -926,7 +926,7 @@ later: Year 118 ›
 #### 1 · Where to · Every reachable target, nearest first, with its arrival, its report, and the real time until we know.
 Veyra · Year 118.0
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [35%] · MATTER · 5,200 kt · COMPUTE · [40%]
+ENERGY · [5%] · MATTER · 5,200 kt · COMPUTE · [40%]
 Send a probe · [Close · ×]
 A flyby probe flies past its star at a tenth of light speed, looks, and beams home what it saw. Times below run from now to its report.
 [drawing: The five targets placed by distance from Veyra, from Gliese 832 at 7.4 light-years to Twin at 19.9; labels: 5 ly, 10 ly, 15 ly, 20 ly, Veyra, Gliese 832, Ember, Beacon, Lantern, Twin]
@@ -942,7 +942,7 @@ Ember ›
 #### 2 · The journey · Build, flight and report, drawn to scale. Who could see it. It can’t be recalled.
 Veyra · Year 118.0
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [35%] · MATTER · 5,200 kt · COMPUTE · [40%]
+ENERGY · [5%] · MATTER · 5,200 kt · COMPUTE · [40%]
 [‹ Where to] · REACH · PROBE
 [drawing: A flyby probe: a sail and a small instrument body; labels: a tenth of light speed, sail and a small body of instruments, not to scale]
 
@@ -956,7 +956,7 @@ We learn what it saw in Year 231, · 09:26:31 · from now.
 WHO COULD SEE IT
 The launch is bright behind it and dark ahead: Ember sees nothing leave. In flight it is cold and nearly invisible. Its report is a narrow beam, aimed home.
 USES
-E 20% · C 15% · 4,000 kt · can’t be recalled after launch
+C 15% · 4,000 kt · can’t be recalled after launch
 [Talk it through with the mind ›] · [Build and launch]
 Year 176 ›
 
@@ -1003,7 +1003,7 @@ see the report ›
 #### 2 · What it saw · The band, what each body is, how much light they catch, and what wasn’t seen. The clue is resolved.
 Veyra · Year 231.3
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [20%] · MATTER · 2,400 kt · COMPUTE · [25%]
+ENERGY · [5%] · MATTER · 2,400 kt · COMPUTE · [25%]
 REPORT · PROBE REPORT
 [‹ All reports]
 [drawing: Ember, ringed by a band of flat bodies, with our probe’s path through the system; labels: the band · half an AU out, our probe · 2 hours across, Ember, cold giant planet, far out →, 0.5 AU]
@@ -1019,7 +1019,7 @@ what now ›
 #### 3 · What now · Every next step, with what it costs in time and what it reveals. Any of them, or none.
 Veyra · Year 231.3
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [20%] · MATTER · 2,400 kt · COMPUTE · [25%]
+ENERGY · [5%] · MATTER · 2,400 kt · COMPUTE · [25%]
 [‹ Report] · REACH · EMBER
 
 ### Someone built this.
@@ -1036,7 +1036,7 @@ Ember ›
 #### 4 · Ember, as we now know it · The same drawing as Beacon’s, filling in. Where Beacon’s founding line rings its star, Ember’s ring is empty.
 Veyra · Year 231.3
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [20%] · MATTER · 2,400 kt · COMPUTE · [25%]
+ENERGY · [5%] · MATTER · 2,400 kt · COMPUTE · [25%]
 REACH · EMBER
 [‹ Reach]
 [drawing: Ember as we now know it: the star and the band of collectors; the builders unknown; labels: NO WORD FROM THEM YET, Ember, the band, builders: ?]
@@ -1140,7 +1140,7 @@ Year 520. The broadcast beacon is built. A knock goes to one star; a broadcast g
 #### 1 · What will travel · Your words, the mind’s version, and how anyone will read it.
 Veyra · Year 520.0
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [35%] · MATTER · 14,200 kt · COMPUTE · [40%]
+ENERGY · [5%] · MATTER · 14,200 kt · COMPUTE · [40%]
 [‹ Reach] · REACH · BROADCAST
 WHAT YOU WANT TO SAY
 Tell everyone who can hear that we are here, who we are, and that we answer anyone who knocks. Nothing about Beacon or our probes.
@@ -1161,7 +1161,7 @@ who will hear it ›
 #### 2 · Everyone, for good · Who hears it and when, soonest first, and who already knows where we are.
 Veyra · Year 520.0
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [35%] · MATTER · 14,200 kt · COMPUTE · [40%]
+ENERGY · [5%] · MATTER · 14,200 kt · COMPUTE · [40%]
 [‹ Broadcast] · REACH · BROADCAST
 
 ### Everyone, for good
@@ -1211,7 +1211,7 @@ Year 448.2, just back from 108 Years away. Standing orders are how the mind acts
 #### 1 · While you are away · Every order, and what each did last time. Far ones are marked with their light-time.
 Veyra · Year 448.2
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [45%] · MATTER · 14,800 kt · COMPUTE · [50%]
+ENERGY · [5%] · MATTER · 14,800 kt · COMPUTE · [50%]
 MIND · STANDING ORDERS
 What each order did while you were away.
 [drawing: Your last absence, Year 340 to 448, with each time an order acted; labels: Year 340, Year 448, project started, message held, woke you]
@@ -1231,7 +1231,7 @@ add an order ›
 #### 2 · A new order · What you want, the mind’s version, what it overrides, and a test on your last absence.
 Veyra · Year 448.2
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [45%] · MATTER · 14,800 kt · COMPUTE · [50%]
+ENERGY · [5%] · MATTER · 14,800 kt · COMPUTE · [50%]
 [‹ Orders] · NEW ORDER · HERE AT VEYRA
 WHAT YOU WANT
 If Beacon writes about the meeting while I’m away, answer anything about when and where. Wake me for the rest.
@@ -1251,7 +1251,7 @@ or, for the sentinel ›
 #### 3 · An order for a far mind · It crosses to Ember at light speed. Until it lands, the sentinel follows what it has.
 Veyra · Year 448.2
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [45%] · MATTER · 14,800 kt · COMPUTE · [50%]
+ENERGY · [5%] · MATTER · 14,800 kt · COMPUTE · [50%]
 [‹ Orders] · NEW ORDER · THE SENTINEL AT EMBER
 WHAT YOU WANT
 If anything there signals at it, report at once. Don’t wait for the yearly report.
@@ -1291,7 +1291,7 @@ Year 452. The clock never stops, so the setting that matters most is what may re
 #### 1 · Settings · What wakes you, tested on your last absence. Quiet hours, theme, and the tour.
 Veyra · Year 452.0
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [45%] · MATTER · 15,000 kt · COMPUTE · [50%]
+ENERGY · [5%] · MATTER · 15,000 kt · COMPUTE · [50%]
 MIND · SETTINGS
 WAKE ME FOR
 Someone new speaks · a knock or broadcast from a world we haven’t heard · even in quiet hours · last time: Frost, 6:20 AM · [selected: Someone new speaks]
@@ -1332,7 +1332,7 @@ theme: dark ›
 #### 4 · Dark · The same screen after choosing Dark. Drawings retint with the theme.
 Veyra · Year 452.0
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [45%] · MATTER · 15,000 kt · COMPUTE · [50%]
+ENERGY · [5%] · MATTER · 15,000 kt · COMPUTE · [50%]
 MIND · SETTINGS
 WAKE ME FOR
 Someone new speaks · a knock or broadcast from a world we haven’t heard · even in quiet hours · last time: Frost, 6:20 AM · [selected: Someone new speaks]
@@ -1582,7 +1582,7 @@ see the signal ›
 #### 2 · The signal · What was measured, and what it means: they found us years ago.
 Veyra · Year 31.2
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [40%] · MATTER · 980 kt · COMPUTE · [45%]
+ENERGY · [5%] · MATTER · 980 kt · COMPUTE · [45%]
 REPORT · SIGNAL
 [‹ All reports]
 [drawing: Laser pulses from Beacon, each brighter than the star for an instant; labels: Beacon’s starlight, time →, every 3.1 s, each pulse: a billionth of a second]
@@ -1612,7 +1612,7 @@ decide ›
 #### 4 · The choice · Four options, three of them permanent. Nothing is chosen for you; the mind is one tap away.
 Veyra · Year 31.3
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [40%] · MATTER · 980 kt · COMPUTE · [45%]
+ENERGY · [5%] · MATTER · 980 kt · COMPUTE · [45%]
 [‹ Signal] · REACH · BEACON
 
 ### Answer Beacon?
@@ -1644,7 +1644,7 @@ decide ›
 #### 6 · Sent · The conversation view, as it looks for every exchange: the gulf between the two worlds, and each message with its years in flight.
 Veyra · Year 31.3
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [40%] · MATTER · 980 kt · COMPUTE · [45%]
+ENERGY · [5%] · MATTER · 980 kt · COMPUTE · [45%]
 REACH · BEACON
 [‹ Conversations]
 [drawing: Veyra and Beacon, 9.3 light-years apart, with our reply in flight; labels: 9.3 ly · 1 tick = 1 Year of travel, Veyra, ?, Beacon, our knock, in flight]
@@ -1675,7 +1675,7 @@ read what it carried ›
 #### 2 · What they said · Their voice first, set large, with what doesn’t translate. Then the parts.
 Veyra · Year 50.3
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [40%] · MATTER · 1,480 kt · COMPUTE · [45%]
+ENERGY · [5%] · MATTER · 1,480 kt · COMPUTE · [45%]
 REACH · MESSAGE
 [‹ Beacon]
 [drawing: Beacon’s signature] · Beacon · SENT YEAR 41.0 · ARRIVED YEAR 50.3
@@ -1691,7 +1691,7 @@ reply ›
 #### 3 · Our reply · What you want to say, what will travel, what was left out and why, and how it will read. The mind translates; it doesn’t judge.
 Veyra · Year 50.4
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [40%] · MATTER · 1,480 kt · COMPUTE · [45%]
+ENERGY · [5%] · MATTER · 1,480 kt · COMPUTE · [45%]
 [‹ Beacon] · REPLY
 WHAT YOU WANT TO SAY
 Thank them for Ember. Tell them who we are. Ask what else they’ve seen there. Don’t mention our probes.
@@ -1722,7 +1722,7 @@ then ›
 #### 5 · The conversation · The gulf between the worlds, the exchange with its years in flight, what we know of them, and how they have changed us.
 Veyra · Year 50.4
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [40%] · MATTER · 1,480 kt · COMPUTE · [45%]
+ENERGY · [5%] · MATTER · 1,480 kt · COMPUTE · [45%]
 REACH · BEACON
 [‹ Conversations]
 [drawing: Veyra and Beacon, 9.3 light-years apart, with our reply in flight; labels: 9.3 ly · 1 tick = 1 Year of travel, Veyra, ?, Beacon, our reply, in flight]
@@ -1745,7 +1745,7 @@ Beacon said Ember’s heat is smooth, with no dust. A lie reads exactly like the
 #### 1 · Check it · From the finding in their message. Our space telescope, 2 Years.
 Veyra · Year 50.4
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [45%] · MATTER · 1,480 kt · COMPUTE · [55%]
+ENERGY · [5%] · MATTER · 1,480 kt · COMPUTE · [55%]
 [‹ Message] · KNOW · CHECK A CLAIM
 
 ### Check Beacon’s claim
@@ -1754,7 +1754,6 @@ THEIR CLAIM · Ember’s heat is smooth. Some warm dust models predict a bump ne
 HOW
 Point our space telescope at Ember and read its heat, color by color.
 USES EACH YEAR
-Energy · [5%] · 5%
 Compute · [10%] · 10%
 TIME
 2 Years · result in the Report, · 00:10:00 · from now
@@ -1765,7 +1764,7 @@ if it holds ›
 #### 2a · It holds · Our measurement matches theirs. The odds on Ember move, and Beacon’s record grows.
 Veyra · Year 52.4
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [40%] · MATTER · 1,560 kt · COMPUTE · [45%]
+ENERGY · [5%] · MATTER · 1,560 kt · COMPUTE · [45%]
 REPORT · RESULT
 [‹ All reports]
 [drawing: Ember’s heat: their claim against our own measurement; labels: their claim, our measurement, 5 µm, 10 µm, 25 µm]
@@ -1786,7 +1785,7 @@ or if not ›
 #### 2b · It doesn’t · We see the dust. How likely a lie is against three honest causes, and what we could do. Nothing is chosen for us.
 Veyra · Year 52.4
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [40%] · MATTER · 1,560 kt · COMPUTE · [45%]
+ENERGY · [5%] · MATTER · 1,560 kt · COMPUTE · [45%]
 REPORT · RESULT
 [‹ All reports]
 [drawing: Ember’s heat: their claim against our own measurement; labels: their claim, our measurement, 5 µm, 10 µm, 25 µm, ↑ the bump they said wasn’t there]
@@ -1809,7 +1808,7 @@ then ›
 #### 3 · What we know, both ways · The record of the conversation: what we know about Beacon, and what Beacon knows about us.
 Veyra · Year 52.4
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [40%] · MATTER · 1,560 kt · COMPUTE · [45%]
+ENERGY · [5%] · MATTER · 1,560 kt · COMPUTE · [45%]
 REACH · BEACON
 [‹ Conversation]
 
@@ -1825,7 +1824,7 @@ their world ›
 #### 4 · Their world, as we know it · A drawing that fills in with every message and check. Solid is measured, dashed inferred, a question mark not yet seen. Their founding line rings it.
 Veyra · Year 52.4
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [40%] · MATTER · 1,560 kt · COMPUTE · [45%]
+ENERGY · [5%] · MATTER · 1,560 kt · COMPUTE · [45%]
 REACH · BEACON
 [‹ Conversation]
 [drawing: Beacon’s system as we know it: the star, its temperate zone, and where their beam came from; labels: WE KEEP WHAT THE LIGHT BRINGS, temperate zone, ?, their beam came from here, to Veyra · 9.3 ly, Beacon, 1 AU]
@@ -1854,7 +1853,7 @@ see what we know ›
 #### 2 · The signal · Its speed, measured and falling. What it is, when it stops, and what we can’t tell.
 Veyra · Year 190.0
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [20%] · MATTER · 1,900 kt · COMPUTE · [25%]
+ENERGY · [5%] · MATTER · 1,900 kt · COMPUTE · [25%]
 REPORT · SIGNAL
 [‹ All reports]
 [drawing: The visitor’s speed, falling from 8% of light: measured points, and the line to a stop in Year 192; labels: measured, if it keeps braking, stops · Year 192, 8%, 0, Year 190, Year 192, its speed, as a share of light speed]
@@ -1941,7 +1940,7 @@ listen ›
 #### 2 · The signal · One cycle of it, drawn. What was measured, and why it isn’t meant for us.
 Veyra · Year 290.0
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [30%] · MATTER · 9,100 kt · COMPUTE · [35%]
+ENERGY · [5%] · MATTER · 9,100 kt · COMPUTE · [35%]
 REPORT · SIGNAL
 [‹ All reports]
 [drawing: One cycle of Pearl’s broadcast: counting, their signature, their words, then it repeats; labels: counting, their signature, their words, repeats, one cycle · 6 hours]
@@ -1957,7 +1956,7 @@ what it says ›
 #### 3 · What it says · Their voice first, then the parts. A broadcast has no reader in mind.
 Veyra · Year 290.0
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [30%] · MATTER · 9,100 kt · COMPUTE · [35%]
+ENERGY · [5%] · MATTER · 9,100 kt · COMPUTE · [35%]
 REACH · BROADCAST · PEARL
 [‹ Signal]
 [drawing: Pearl’s signature] · Pearl · TO ANYONE · ARRIVING SINCE YEAR 290
@@ -2082,7 +2081,7 @@ see both knocks ›
 #### 2 · Two knocks, crossing · Years against distance, zoomed in so light lines slope. The timing shows ours can’t be an answer, to us and to them.
 Veyra · Year 468.2
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [25%] · MATTER · 12,100 kt · COMPUTE · [30%]
+ENERGY · [5%] · MATTER · 12,100 kt · COMPUTE · [30%]
 REACH · EMBER
 [‹ Reach]
 
@@ -2162,7 +2161,7 @@ answer ›
 #### 3 · Ways to meet · Year 450. Each way, what it needs, and when it could happen. The emissary comes either way. Any, or none.
 Veyra · Year 450.0
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [45%] · MATTER · 14,900 kt · COMPUTE · [50%]
+ENERGY · [5%] · MATTER · 14,900 kt · COMPUTE · [50%]
 [‹ Message] · REACH · BEACON
 
 ### Meet Beacon?
@@ -2181,7 +2180,7 @@ meet it here ›
 #### 4 · Where it stops · Three places, what it would see from each, and how long each answer takes. Nothing is chosen for you.
 Veyra · Year 450.0
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [45%] · MATTER · 14,900 kt · COMPUTE · [50%]
+ENERGY · [5%] · MATTER · 14,900 kt · COMPUTE · [50%]
 [‹ Ways to meet] · REACH · BEACON
 
 ### Where should it stop?
@@ -2208,7 +2207,7 @@ meet it ›
 #### 6 · Talking live · Answers in under a tenth of a second, while the clock runs. It speaks for Beacon as of its last word from home.
 Veyra · Year 500.1
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [30%] · MATTER · 13,400 kt · COMPUTE · [35%]
+ENERGY · [5%] · MATTER · 13,400 kt · COMPUTE · [35%]
 REACH · MEETING · LIVE
 [drawing: Beacon’s signature] · Beacon’s emissary · BESIDE THE ICE WORLD · 1.2 LIGHT-HOURS · LIVE
 Since Year 500.1. Each answer returns in under a tenth of a second. The clock runs: every real minute here is 0.2 Years at home.
@@ -2245,7 +2244,7 @@ Frost knocked once, in Year 429.2, and never again. We answered, knocked with ou
 #### 1 · Nothing came · Year 470.3. The earliest reply to our answer was due, and didn’t arrive.
 Veyra · Year 470.3
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [25%] · MATTER · 12,300 kt · COMPUTE · [30%]
+ENERGY · [5%] · MATTER · 12,300 kt · COMPUTE · [30%]
 REPORT · NOTHING FROM FROST
 [drawing; labels: ?] · Nothing from Frost · The earliest reply to our answer would have reached us in Year 470.2. Nothing came.
 THE EXCHANGE SO FAR
@@ -2260,7 +2259,7 @@ Year 560 ›
 #### 2 · The silence · The conversation, as it looks after 131 Years. Each empty circle is a window a reply could have filled.
 Veyra · Year 560.0
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [40%] · MATTER · 15,800 kt · COMPUTE · [45%]
+ENERGY · [5%] · MATTER · 15,800 kt · COMPUTE · [45%]
 REACH · FROST
 [‹ Conversations]
 
@@ -2281,7 +2280,7 @@ why ›
 #### 3 · Why the silence? · Every reason that fits, with odds, and what we could do. Nothing is chosen for you.
 Veyra · Year 560.0
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [40%] · MATTER · 15,800 kt · COMPUTE · [45%]
+ENERGY · [5%] · MATTER · 15,800 kt · COMPUTE · [45%]
 [‹ Frost] · REACH · FROST
 
 ### Why the silence?
@@ -2304,7 +2303,7 @@ Frost ›
 #### 4 · Frost, as we know it · The same drawing as Beacon’s and Ember’s. Its ring holds no founding line, only the silence.
 Veyra · Year 560.0
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [40%] · MATTER · 15,800 kt · COMPUTE · [45%]
+ENERGY · [5%] · MATTER · 15,800 kt · COMPUTE · [45%]
 REACH · FROST
 [‹ Frost]
 [drawing: Frost as we know it: the star, its temperate zone, and where their one knock came from; labels: ONE KNOCK, THEN NOTHING, temperate zone, ?, their knock, came from here, to Veyra · 10.8 ly, Frost, 1 AU]
