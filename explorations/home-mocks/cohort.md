@@ -4,7 +4,7 @@
 
 ## Cohort playtest · day 1
 One simulated cohort after onboarding and the tour. Three players, three strategies, one shared clock: each lane is one player’s phone, and each row is one moment, so the game moves forward as you scroll. The seats are real stars at their real distances; light takes 00:46:03 from Veyra to Kesh, 00:46:27 to Hael, and 01:11:44 between Hael and Kesh. Godview notes say what is true but no player can see. Earth and AI seats are out of scope.
-The first 15 minutes of play, a row every 30 seconds (0.1 Year), from the moment the clock starts: Year 0, at 20:00. Before it, the pregame: the cohort wakes at a set time, and players queue the opening. Builds, tune-ups and quick looks all queue, so the first results land 30 seconds after the clock starts. Players talk to the mind: each cell gives what the player said and what lands, and the phone shows the result, with the mind’s reply in its people’s voice. Quick looks use what a civilization already has and take seconds; building takes Years. Every phone shows its place on the board in a 2:1 strip of the map under the top bar. A cell with nothing in it is marked: a dead 30 seconds. The session runs 15 minutes, until each player sets a clock and puts the phone down.
+The first 15 minutes of play, a row every 30 seconds (0.1 Year), from the moment the clock starts: Year 0, at 20:00. Before it, the pregame: the cohort wakes at a set time, and players queue the opening. Builds, tune-ups and quick looks all queue, so the first results land 30 seconds after the clock starts. Players talk to the mind: each cell gives what the player said and what lands, and the phone shows the result, with the mind’s reply in its people’s voice. Quick looks use what a civilization already has and take seconds; building takes Years. Every phone shows its place on the board in a 2:1 strip of the map under the top bar. A cell with nothing in it is marked: a dead 30 seconds. The session runs 15 minutes, until each player sets a clock and puts the phone down. Then each player’s next return: Hael at 20:20 when its voice goes out, Veyra at 21:00, Veyra again at 21:25 when its check at Ember lands, and Kesh at 21:31, woken by a world’s first voice.
 Veyra · Listener
 Delta Pavonis · 19.9 ly from Sol · The mocks’ sample civilization · Keep the lights on. Look before we speak.
 Open · Hidden
@@ -301,7 +301,9 @@ Energy · [4%] · 96% free
 Compute · [25%] · 75% free
 540 kt · matter left after the queue · +40 kt a year
 WHILE YOU ARE AWAY
-[Keep the queue running · start what fits, top first · ›] · [Wake me once a day · one summary · ›]
+- Keep the queue running · start what fits, top first · ›
+- Wake me once a day · one summary · ›
+- A world’s first voice wakes you · a knock or a broadcast, aimed at us or not · even in quiet hours · always
 Quick looks and tune-ups queue like builds. Results and anything sent wait for the clock.
 THE MIND (KESH) · Queued: three builds, three tune-ups. Matter is the wall: 540 kt left, mining 26 Years off. Nearly all our energy sits idle: building takes little power. Matter is what’s short. Four leads out there, if you want looks queued too. · [Queue the looks] · [Leave it]
 [Talk to the mind]
@@ -385,6 +387,8 @@ AT YEAR 0 YOU WILL SPEND
 Energy · [0%] · 100% free
 Compute · [10%] · 90% free
 1,240 kt · matter left after the queue · +40 kt a year
+WHILE YOU ARE AWAY
+[A world’s first voice wakes you · a knock or a broadcast, aimed at us or not · even in quiet hours · always]
 Quick looks and tune-ups queue like builds. Results and anything sent wait for the clock.
 THE MIND (VEYRA) · Queued. The first second, I look at all three. Ember answers in thirty seconds, Beacon in a minute. Pair waits for the telescope. · [Undo]
 [Talk to the mind]
@@ -403,7 +407,9 @@ Energy · [0%] · 100% free
 Compute · [20%] · 80% free
 1,040 kt · matter left after the queue · +40 kt a year
 WHILE YOU ARE AWAY
-[Wake me when the beacon is built · Year 4 · ›] · [Wake me if anyone answers · any message, from anywhere · ›]
+- Wake me when the beacon is built · Year 4 · ›
+- Wake me if anyone answers · any message, from anywhere · ›
+- A world’s first voice wakes you · a knock or a broadcast, aimed at us or not · even in quiet hours · always
 Results and anything sent wait for the clock.
 THE MIND (HAEL) · Then we keep a copy of ourselves somewhere safe: a deep vault in the moon’s rock, ten Years, 200 kt. Whoever hears us, we will still be here. Queued. · [Undo]
 [Talk to the mind]
@@ -469,6 +475,7 @@ Compute · [50%] · 50% free
 WHILE YOU ARE AWAY
 - Never send messages · speaking is permanent; you decide that · ›
 - Wake me for anything heard · a knock, a broadcast, a hum · ›
+- A world’s first voice wakes you · a knock or a broadcast, aimed at us or not · even in quiet hours · always
 Quick looks and tune-ups queue like builds. Results and anything sent wait for the clock.
 THE MIND (VEYRA) · The deep flash watch too: it hears knocks far fainter than the sky watch. Orders set: we send nothing, anything heard wakes you. Nearly all our energy will sit idle: instruments draw almost none. Only building or sending would use it. · [Show me Grow] · [Keep it free]
 [Talk to the mind]
@@ -491,7 +498,9 @@ Energy · [0%] · 100% free
 Compute · [35%] · 65% free
 1,040 kt · matter left after the queue · +40 kt a year
 WHILE YOU ARE AWAY
-[Wake me when the beacon is built · Year 4 · ›] · [Wake me if anyone answers · any message, from anywhere · ›]
+- Wake me when the beacon is built · Year 4 · ›
+- Wake me if anyone answers · any message, from anywhere · ›
+- A world’s first voice wakes you · a knock or a broadcast, aimed at us or not · even in quiet hours · always
 Quick looks and tune-ups queue like builds. Results and anything sent wait for the clock.
 THE MIND (HAEL) · Gladly. All three, from the first breath. Ash answers in thirty seconds, Warden in a minute, Brood after Ash, on the same telescope. Whatever they show, we keep. · [Undo]
 [Talk to the mind]
@@ -521,6 +530,7 @@ Compute · [50%] · 50% free
 WHILE YOU ARE AWAY
 - Never send messages · speaking is permanent; you decide that · ›
 - Wake me for anything heard · a knock, a broadcast, a hum · ›
+- A world’s first voice wakes you · a knock or a broadcast, aimed at us or not · even in quiet hours · always
 Quick looks and tune-ups queue like builds. Results and anything sent wait for the clock.
 THE MIND (VEYRA) · Everything is set. When the second ends, the receiver and the flash watch begin, and three looks with them. We say nothing. · [Ready]
 [Talk to the mind]
@@ -543,7 +553,9 @@ Energy · [0%] · 100% free
 Compute · [35%] · 65% free
 1,040 kt · matter left after the queue · +40 kt a year
 WHILE YOU ARE AWAY
-[Wake me when the beacon is built · Year 4 · ›] · [Wake me if anyone answers · any message, from anywhere · ›]
+- Wake me when the beacon is built · Year 4 · ›
+- Wake me if anyone answers · any message, from anywhere · ›
+- A world’s first voice wakes you · a knock or a broadcast, aimed at us or not · even in quiet hours · always
 Quick looks and tune-ups queue like builds. Results and anything sent wait for the clock.
 THE MIND (HAEL) · Our voice and our vault, both building from the first breath, and three looks beside them. In four Years we can be heard. Ready when you are. · [Ready]
 [Talk to the mind]
@@ -567,7 +579,9 @@ Energy · [4%] · 96% free
 Compute · [25%] · 75% free
 540 kt · matter left after the queue · +40 kt a year
 WHILE YOU ARE AWAY
-[Keep the queue running · start what fits, top first · ›] · [Wake me once a day · one summary · ›]
+- Keep the queue running · start what fits, top first · ›
+- Wake me once a day · one summary · ›
+- A world’s first voice wakes you · a knock or a broadcast, aimed at us or not · even in quiet hours · always
 Quick looks and tune-ups queue like builds. Results and anything sent wait for the clock.
 THE MIND (KESH) · Set. Three builds and three tune-ups at 20:00. The first tune-up lands in 30 seconds. · [Ready]
 [Talk to the mind]
@@ -1227,7 +1241,7 @@ Lands · The sky watch hears a burst of radio, a thousandth of a second long.
 Veyra · Year 1.2
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
 ENERGY · [0%] · MATTER · 588 kt · COMPUTE · [80%]
-[drawing: STARS · FROST · 10.8 LY · 00:54:11; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · FROST · 10.8 LY · 00:54:11
+[drawing: STARS · WITHIN 17 LY OF VEYRA; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · WITHIN 17 LY OF VEYRA
 REPORT · HEARD · SKY WATCH
 [‹ All reports]
 [drawing: A radio burst, its low pitches arriving later; labels: high, low, arrival · a third of a second, later →, the burst, one thousandth of a second at each pitch]
@@ -1264,7 +1278,7 @@ Every star of the region · 1,212 within 50 ly of Sol, most never seen closely �
 WHO ALREADY KNOWS WHERE WE ARE
 No one we know of. After this, anyone who listens.
 Sending: E 10% each Year while it sends · you can stop sending; what has left keeps going
-THE MIND (HAEL) · Warden first, in Year 13. Ash in Year 18. Everyone in the region within a lifetime of ours. · [Keep the order]
+THE MIND (HAEL) · Kiln first, in Year 11. Warden in Year 13, where our spectrographs will look. Everyone in the region within a lifetime of ours. · [Keep the order]
 [Talk to the mind]
 “Not yet. Matter first.”
 +6:30 · Year 1.3
@@ -1310,7 +1324,23 @@ BUILD SOMETHING · EARLIEST ANSWER
 Infrared telescope · many times larger · sees closer to the star · 18 Years · 01:30:00
 THE MIND (VEYRA) · Looking again, a minute and a half. A Year on, a giant would have moved out of the glare.
 [Talk to the mind]
-Nothing new. · A dead 30 seconds.
+“If anyone answers, answer with our charter.”
+Hael · Year 1.4
+Beta Hydri · 24.3 ly from Sol · 1 Year = 00:05:00
+ENERGY · [0%] · MATTER · 996 kt · COMPUTE · [45%]
+[drawing: ORBIT · HAEL · THE BEACON WILL SEND FROM HERE; labels: moon, Hael, low orbit, Broadcast beacon · 35%, Deep vault · 14%] · ORBIT · HAEL · THE BEACON WILL SEND FROM HERE
+MIND · NEW ORDER
+WHAT YOU WANT
+If anyone answers, answer with our charter.
+THE MIND’S VERSION
+WHEN · A message aimed at us arrives · from anyone
+DO · Answer · “We heard you. We keep what the light brings.” and our signature
+BY · Our beacon · the only voice we have, and everyone hears it
+An answer by beacon tells everyone that someone answered us, and roughly where they are.
+[Talk it through with the mind ›]
+[Edit] · [Set the order]
+THE MIND (HAEL) · We can. But our beacon speaks to everyone, so answering by it tells everyone who answered us. A tight beam tells only them: 6 Years to build. No answer can reach us before Year 17. · [Build a tight beam for it] · [Answer by the beacon]
+[Talk to the mind]
 “Wake me when the pads are up.”
 Lands · The dead orbit, hauled in: +80 kt.
 Kesh · Year 1.4
@@ -1330,7 +1360,24 @@ THE MIND (KESH) · Set. Five minutes. The daily summary stays. · [Undo]
 [Talk to the mind]
 +7:30 · Year 1.5
 Nothing new. · A dead 30 seconds.
-Nothing new. · A dead 30 seconds.
+“Build a tight beam. Answer by it, not the beacon.”
+Hael · Year 1.5
+Beta Hydri · 24.3 ly from Sol · 1 Year = 00:05:00
+ENERGY · [0%] · MATTER · 1,000 kt · COMPUTE · [50%]
+[drawing: ORBIT · HAEL · 3 BUILDING; labels: moon, Hael, low orbit, Broadcast beacon · 38%, Deep vault · 15%, Tight beam · 0%] · ORBIT · HAEL · 3 BUILDING
+MIND · NEW ORDER
+WHAT YOU WANT
+Build a tight beam. Answer by it, not the beacon.
+THE MIND’S VERSION
+WHEN · A message aimed at us arrives · from anyone
+DO · Answer by tight beam, to its sender only · “We heard you. We keep what the light brings.” and our signature
+IF · The tight beam isn’t built yet · hold the answer until it is, Year 7.5
+AND · Wake you · with what came, and what we sent
+This order sends without you, and what it sends can’t be taken back. Tried on your last absence: nothing answered, so nothing would have gone.
+[Talk it through with the mind ›]
+[Edit] · [Set the order]
+THE MIND (HAEL) · Set, and the tight beam started: 6 Years. It will be ready long before any answer. Whoever answers us hears back, and only they do. · [Undo]
+[Talk to the mind]
 Puts the phone down.
 Thursday · 20:07:30
 HOLOS · IN 00:04:30 · Kesh: the launch complex · You asked to be woken when the pads are up.
@@ -1373,6 +1420,7 @@ MIND · WHAT WAKES YOU
 ORDERS
 - Never send messages · speaking is permanent; you decide that · ›
 - Wake me for anything heard from our galaxy · a knock, a broadcast, a hum · set Year 1.3 · ›
+- A world’s first voice wakes you · a knock or a broadcast, aimed at us or not · even in quiet hours · always
 COMING · SOONEST FIRST · NONE WAKES YOU
 - A Year of listening to Ember · done · what it rules out · Year 2 · 00:01:00
 - Deep flash watch · built · hears knocks a hundred times fainter · Year 6 · 00:21:00
@@ -1390,7 +1438,7 @@ Nothing new. · A dead 30 seconds.
 Lands · Nothing loud at Warden, after a Year of listening.
 Hael · Year 1.9
 Beta Hydri · 24.3 ly from Sol · 1 Year = 00:05:00
-ENERGY · [0%] · MATTER · 1,016 kt · COMPUTE · [35%]
+ENERGY · [0%] · MATTER · 1,016 kt · COMPUTE · [40%]
 [drawing: STARS · WARDEN · 9.3 LY · 00:46:27; labels: Hael, 00:25:00, 00:50:00, 01:15:00, Warden, Delta Pavonis · 00:46:27, Ash, Epsilon Indi · 01:11:44, Brood, 82 Eridani · 01:15:45, Kiln, Zeta Tucanae, Still, Alpha Mensae] · STARS · WARDEN · 9.3 LY · 00:46:27
 REPORT · LONG LOOK
 [‹ All reports]
@@ -1432,16 +1480,17 @@ THE MIND (VEYRA) · No one at Ember louder than ten times our own hum. Quiet, or
 “How long until the beacon?”
 Hael · Year 2
 Beta Hydri · 24.3 ly from Sol · 1 Year = 00:05:00
-ENERGY · [0%] · MATTER · 1,020 kt · COMPUTE · [35%]
+ENERGY · [0%] · MATTER · 1,020 kt · COMPUTE · [40%]
 [drawing: ORBIT · HAEL · 3 BUILDING; labels: moon, Hael, low orbit, Broadcast beacon · 50%, Deep vault · 20%, Spectrograph bank · 16%] · ORBIT · HAEL · 3 BUILDING
-PROJECTS · 3 RUNNING
-RUNNING · 3
+PROJECTS · 4 RUNNING
+RUNNING · 4
 [drawing: Broadcast beacon] · Broadcast beacon · Then your order broadcasts · 4 Years · 00:10:00 · [Pause Broadcast beacon]
 [drawing: Deep vault] · Deep vault · The mind survives a hit on Hael · 10 Years · 00:40:00 · [Pause Deep vault]
 [drawing: Spectrograph bank] · Spectrograph bank · Warden · 8 Years · 00:33:30 · [Pause Spectrograph bank]
+[drawing: Tight-beam transmitter] · Tight-beam transmitter · Then your order can answer · 6 Years · 00:27:30 · [Pause Tight-beam transmitter]
 EACH YEAR YOU CAN SPEND
 Energy · [0%] · 100% free
-Compute · [35%] · 65% free
+Compute · [40%] · 60% free
 1,020 kt · matter on hand · +40 kt a year
 THE MIND (HAEL) · 00:10:00. Then your order sends our founding line, and I wake you.
 [Talk to the mind]
@@ -1524,7 +1573,9 @@ PROJECTS · 4 RUNNING · 1 UP NEXT
 UP NEXT · STARTS ON ITS OWN
 1 · [drawing: Belt mining] · Belt mining · when prospecting is done · +120 kt a year · Year 6 · 00:17:00 · [Reorder Belt mining]
 WHILE YOU ARE AWAY
-[Keep the queue running · start what fits, top first · ›] · [Wake me once a day · one summary · ›]
+- Keep the queue running · start what fits, top first · ›
+- Wake me once a day · one summary · ›
+- A world’s first voice wakes you · a knock or a broadcast, aimed at us or not · even in quiet hours · always
 EACH YEAR YOU CAN SPEND
 Energy · [2%] · 98% free
 Compute · [30%] · 70% free
@@ -1550,3 +1601,587 @@ Godview · The first session ends. Every player has set a clock: Hael for the be
 Away.
 Away.
 Away.
++15:30 → +19:30 · Everyone away · Year 3.1 to Year 3.9
++20:00 · Year 4
+Godview · Sending takes 10% of energy each Year: the first thing in the cohort that truly needs power.
+Away.
+The notice arrives.
+Lands · The broadcast beacon is built. Your order sends the founding line, every way.
+Thursday · 20:20
+HOLOS · NOW · Hael: our voice has gone out · Your order broadcast our founding line at Year 4. It keeps sending.
+Away.
++20:30 · Year 4.1
+Away.
+Opens from the notice.
+Hael · Year 4.1
+Beta Hydri · 24.3 ly from Sol · 1 Year = 00:05:00
+ENERGY · [10%] · MATTER · 1,104 kt · COMPUTE · [35%]
+[drawing: STARS · WITHIN 17 LY OF HAEL; labels: Hael, 00:25:00, 00:50:00, 01:15:00, Warden, Delta Pavonis · 00:46:27, Ash, Epsilon Indi · 01:11:44, Brood, 82 Eridani · 01:15:45, Kiln, Zeta Tucanae, Sparrow, Gamma Pavonis, Still, Alpha Mensae] · STARS · WITHIN 17 LY OF HAEL
+REACH · BROADCAST · SENDING
+[‹ Reach]
+WHAT LEFT · YEAR 4 · REPEATING
+“We are Hael. We keep what the light brings. Answer, and we will keep your words.”
+WHO HEARS IT · SOONEST FIRST
+Kiln · 6.7 ly · Zeta Tucanae · Year 10.7 · 00:33:08
+Warden · 9.3 ly · Delta Pavonis · Year 13.3 · 00:45:57
+Reed · 9.6 ly · p Eridani · Year 13.6 · 00:47:31
+Sparrow · 10.3 ly · Gamma Pavonis · Year 14.3 · 00:50:50
+SENDING
+Since · Year 4 · Gone so far · 36 light-days out, every way · Costs · 10% of energy each Year while it sends · Stop sending? · You can. What has left keeps going.
+THE MIND (HAEL) · Our voice is out, at the speed of light. Nothing can call it back now. We’ll keep every answer.
+[Talk to the mind]
+Away.
++21:00 · Year 4.2
+Away.
+“What does sending cost?”
+Hael · Year 4.2
+Beta Hydri · 24.3 ly from Sol · 1 Year = 00:05:00
+ENERGY · [10%] · MATTER · 1,108 kt · COMPUTE · [35%]
+[drawing: STARS · WITHIN 17 LY OF HAEL; labels: Hael, 00:25:00, 00:50:00, 01:15:00, Warden, Delta Pavonis · 00:46:27, Ash, Epsilon Indi · 01:11:44, Brood, 82 Eridani · 01:15:45, Kiln, Zeta Tucanae, Sparrow, Gamma Pavonis, Still, Alpha Mensae] · STARS · WITHIN 17 LY OF HAEL
+MIND · ASKING
+ABOUT · FROM HOME · What does sending cost?
+The clock runs while you talk: 1 Year every · 00:05:00.
+What does sending cost?
+THE MIND · A tenth of our energy each Year, and that energy sat idle anyway. Stopping wouldn’t call back what has left.
+Who hears us first?
+THE MIND · Kiln, in 00:32:38. Warden a little after. We may never know if anyone was there.
+What would you do?
+ITS VIEW · FROM OUR CHARTER AND DIALS · Keep sending. Our people called for a century and no one answered. Now we can be heard. · leans open · leans bold
+Ask the mind… · [Send · ↑]
+Away.
++21:30 · Year 4.3
+Away.
+“Keep sending. And wake me when our spectrographs feel anything at Warden.”
+Hael · Year 4.3
+Beta Hydri · 24.3 ly from Sol · 1 Year = 00:05:00
+ENERGY · [10%] · MATTER · 1,112 kt · COMPUTE · [35%]
+[drawing: STARS · WARDEN · 9.3 LY · 00:46:27; labels: Hael, 00:25:00, 00:50:00, 01:15:00, Warden, Delta Pavonis · 00:46:27, Ash, Epsilon Indi · 01:11:44, Brood, 82 Eridani · 01:15:45, Kiln, Zeta Tucanae, Still, Alpha Mensae] · STARS · WARDEN · 9.3 LY · 00:46:27
+MIND · NEW ORDER
+WHAT YOU WANT
+Keep sending. And wake me when our spectrographs feel anything at Warden.
+THE MIND’S VERSION
+WHEN · Our spectrographs feel anything at Warden · they’re built in Year 8.7, then watch
+DO · Wake you · with what they felt
+KEEPS · Wake me if anyone answers · answer by tight beam
+[Talk it through with the mind ›]
+[Edit] · [Set the order]
+THE MIND (HAEL) · Still sending. And when the spectrographs feel anything at Warden, I wake you. · [Undo]
+[Talk to the mind]
+Away.
++22:00 · Year 4.4
+Away.
+Puts the phone down.
+Thursday · 20:22
+Away.
++22:30 → +60:00 · Everyone away · Year 4.5 to Year 12
+Godview · Year 6: Veyra’s flash watch is built, quietly. Year 7.5: Hael’s tight beam is built, so its order can answer. Year 8.7: Veyra’s and Hael’s spectrograph banks are built and start watching. Year 9.9: after three of its turns, Veyra’s spectrographs feel a world at Ember. No one is woken: Veyra’s orders wake it only for what is heard. Year 10.5: Kesh’s spectrograph bank, at Lodestar, is built. Year 12, 21:00: Veyra’s receiver is built, and its order wakes Veyra.
++60:00 · Year 12
+The notice arrives.
+Lands · The deep-field receiver is built. Listening to Ember begins.
+Thursday · 21:00
+HOLOS · NOW · Veyra: listening to Ember · As you asked. And while you were away: a world at Ember.
+Away.
+Away.
++60:30 · Year 12.1
+Opens from the notice.
+Veyra · Year 12.1
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [0%] · MATTER · 1,024 kt · COMPUTE · [35%]
+[drawing: ORBIT · VEYRA · 1 BUILDING; labels: moon, Veyra, low orbit, Deep-field receiver, Deep flash watch, Spectrograph bank, Infrared telescope · 64%] · ORBIT · VEYRA · 1 BUILDING
+REPORT · WHILE YOU WERE AWAY
+
+### 10 Years passed
+You were away · 00:49:00 · Year 2.2 → Year 12
+THE BIG THINGS
+- A world at Ember · At least as heavy as ours, where water could be liquid · Year 9.9 · ›
+- The deep-field receiver · Listening to Ember now, as you ordered · Year 12 · ›
+- The flash watch and the spectrograph bank · Both built, both watching · Years 6 · 8.7 · ›
+WHAT THE MIND DID · UNDER YOUR STANDING ORDERS
+Sent nothing.
+Heard nothing from our galaxy, so woke you for nothing until now.
+Started listening to Ember the moment the receiver was built.
+WAITING FOR YOU · 1
+The world at Ember
+THE MIND (VEYRA) · Listening to Ember, as you asked. And our spectrographs felt a world there, while you were away. · [Show me the world]
+[Talk to the mind]
+Away.
+Away.
++61:00 · Year 12.2
+Godview · The world at Ember is Kesh’s. In Year 12.3, Hael’s spectrographs feel Veyra’s world at Warden the same way: a world, not a voice. Hael’s order wakes Hael for it.
+“Show me the world.”
+Veyra · Year 12.2
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [0%] · MATTER · 1,028 kt · COMPUTE · [35%]
+[drawing: STARS · EMBER · 9.2 LY · 00:46:03; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · EMBER · 9.2 LY · 00:46:03
+REPORT · RESULT
+[‹ All reports]
+[drawing: A star’s tug, folded on one orbit: a tug of 15 cm/s; labels: toward us ↑ · away ↓, 0, one orbit · 148 days, a tug of 15 cm/s]
+
+### A world at Ember
+Ember · Epsilon Indi · spectrograph bank · watched 1.2 Years · light that left 9.2 Years ago
+Ember sways toward us and away every 148 days, by 15 cm/s. A world would do that: one at least as heavy as ours, less than half as far from Ember as we are from our star. There, Ember’s dim light would keep water liquid.
+WHAT IT COULD BE · ODDS NOW
+A world, at least as heavy as ours · [92%] · 92
+The star’s own surface · [8%] · 8
+WHAT IT CAN’T TELL
+Its true weight: only the least it could be, since we don’t know its tilt. Its air. Whether anything lives there.
+THE MIND (VEYRA) · A world at Ember, where water could be liquid. We feel its pull, not the world. Nothing yet of a voice.
+[Talk to the mind]
+Away.
+Away.
++61:30 · Year 12.3
+Nothing new. · A dead 30 seconds.
+The notice arrives.
+Lands · Hael’s spectrographs feel a world at Warden.
+Thursday · 21:01:30
+HOLOS · NOW · Hael: a world at Warden · You asked to be woken for anything our spectrographs feel there.
+Away.
++62:00 · Year 12.4
+“And the listening?”
+Veyra · Year 12.4
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [0%] · MATTER · 1,036 kt · COMPUTE · [35%]
+[drawing: ORBIT · VEYRA · THE RECEIVER LISTENS FROM HERE; labels: moon, Veyra, low orbit, Deep-field receiver, Deep flash watch, Spectrograph bank, Infrared telescope · 66%] · ORBIT · VEYRA · THE RECEIVER LISTENS FROM HERE
+PROJECTS · 2 RUNNING
+RUNNING · 2
+[drawing: Deep-field receiver] · Listen to Ember · Faint broadband emission, and anything aimed · since Year 12 · listening · [Pause Listen to Ember]
+[drawing: Infrared telescope] · Infrared telescope · Ember · 18 Years · 00:31:00 · [Pause Infrared telescope]
+EACH YEAR YOU CAN SPEND
+Energy · [0%] · 100% free
+Compute · [35%] · 65% free
+1,036 kt · matter on hand · +40 kt a year
+THE MIND (VEYRA) · Part of every night. A hum as faint as ours, from 9 light-years, would show within a Year, if it is there.
+[Talk to the mind]
+Opens from the notice.
+Hael · Year 12.4
+Beta Hydri · 24.3 ly from Sol · 1 Year = 00:05:00
+ENERGY · [10%] · MATTER · 1,436 kt · COMPUTE · [15%]
+[drawing: STARS · WARDEN · 9.3 LY · 00:46:27; labels: Hael, 00:25:00, 00:50:00, 01:15:00, Warden, Delta Pavonis · 00:46:27, Ash, Epsilon Indi · 01:11:44, Brood, 82 Eridani · 01:15:45, Kiln, Zeta Tucanae, Still, Alpha Mensae] · STARS · WARDEN · 9.3 LY · 00:46:27
+REPORT · RESULT
+[‹ All reports]
+[drawing: A star’s tug, folded on one orbit: a tug of 8 cm/s; labels: toward us ↑ · away ↓, 0, one orbit · 434 days, a tug of 8 cm/s]
+
+### A world at Warden
+Warden · Delta Pavonis · spectrograph bank · watched 3.6 Years · light that left 9.3 Years ago
+Warden sways toward us and away every 434 days, by 8 cm/s, under the slow pull of its giant. A world nearly as heavy as ours would do that, about as far from Warden as we are from our star, where water could be liquid.
+WHAT IT COULD BE · ODDS NOW
+A world, nearly as heavy as ours · [90%] · 90
+Warden’s own surface · [10%] · 10
+WHAT IT CAN’T TELL
+Its true weight, its air, or who lives there. Our voice reaches it in Year 13.3. If anyone there listens, that is when they learn of us.
+THE MIND (HAEL) · A world at Warden, where water could be liquid. We keep it, and every reading of it. Our voice reaches it in a Year. · [Should we knock on it?]
+[Talk to the mind]
+Away.
++62:30 · Year 12.5
+Nothing new. · A dead 30 seconds.
+“Should we knock on it?”
+Hael · Year 12.5
+Beta Hydri · 24.3 ly from Sol · 1 Year = 00:05:00
+ENERGY · [10%] · MATTER · 1,440 kt · COMPUTE · [15%]
+[drawing: STARS · WARDEN · 9.3 LY · 00:46:27; labels: Hael, 00:25:00, 00:50:00, 01:15:00, Warden, Delta Pavonis · 00:46:27, Ash, Epsilon Indi · 01:11:44, Brood, 82 Eridani · 01:15:45, Kiln, Zeta Tucanae, Still, Alpha Mensae] · STARS · WARDEN · 9.3 LY · 00:46:27
+MIND · ASKING
+ABOUT · FROM HOME · Should we knock on it?
+The clock runs while you talk: 1 Year every · 00:05:00.
+Should we knock on it?
+THE MIND · Our voice is already on its way, and gets there first: Year 13.3. A knock sent now, by tight beam, arrives in Year 21.8.
+Then what?
+THE MIND · Then we wait. If anyone there answers, our order answers back by tight beam, and wakes you.
+What would you do?
+ITS VIEW · FROM OUR CHARTER AND DIALS · Let our voice reach them first. It says who we are better than a knock would. · leans open · leans bold
+Ask the mind… · [Send · ↑]
+Away.
++63:00 · Year 12.6
+Godview · The hum is Kesh: the faint hum every seat starts with, 9.2 ly away, inside the receiver’s reach. Kesh’s day is 26 hours.
+Lands · The receiver hears something at Ember.
+Veyra · Year 12.6
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [0%] · MATTER · 1,044 kt · COMPUTE · [35%]
+[drawing: STARS · EMBER · 9.2 LY · 00:46:03; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · EMBER · 9.2 LY · 00:46:03
+REPORT · HEARD · RECEIVER
+[‹ All reports]
+
+### A faint hum at Ember
+Ember · deep-field receiver · 0.6 Years of listening · light that left 9.2 Years ago
+Faint radio across a wide band, steady for months, sitting on Ember closer than the receiver can split. A radio source, not yet a voice.
+WHAT IT COULD BE · ODDS NOW
+Ember’s own radio · [30%] · 30
+A galaxy far behind · [30%] · 30
+Our own interference · [15%] · 15
+Something built · [15%] · 15
+A world’s own aurora · [10%] · 10
+WITH WHAT WE HAVE · QUICK
+Look for a rhythm in it · Deep-field receiver · does it rise and fall with a day? · C 5% while it runs · 0.2 Years · 00:01:00 · [Start]
+WHAT IT CAN’T TELL
+What makes it. A galaxy far behind would stay put while Ember crosses our sky; that takes Years to see.
+THE MIND (VEYRA) · UNASKED · Heard: a hum at Ember · Faint, steady, sitting on Ember. The star, a galaxy far behind, or a world. I can’t tell yet. · [Look for a rhythm]
+[Talk to the mind]
+Away.
+Away.
++63:30 · Year 12.7
+“Look for a rhythm in it.”
+“Let our voice reach them. Wake me if they answer.”
+Away.
++64:00 · Year 12.8
+Nothing new. · A dead 30 seconds.
+Puts the phone down.
+Thursday · 21:04
+Away.
++64:30 · Year 12.9
+“Rhythm?”
+Lands · The hum rises and falls every 26 hours. Something built 15 → 45.
+Veyra · Year 12.9
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [0%] · MATTER · 1,056 kt · COMPUTE · [35%]
+[drawing: STARS · EMBER · 9.2 LY · 00:46:03; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · EMBER · 9.2 LY · 00:46:03
+REPORT · QUICK LOOK
+[‹ All reports]
+[drawing: Brightness, folded on one day: it rises and falls; labels: louder ↑ · fainter ↓, 0, one day · 26 hours, it rises and falls]
+
+### It turns with a day
+Ember · deep-field receiver · 0.2 Years
+The hum rises and falls every 26 hours. Ember turns once in about 35 days, and a galaxy doesn’t turn in a day. Something the size of a world is turning, with its loudest side toward us once a day.
+WHAT IT COULD BE · BEFORE → NOW
+Something built · [15%] · [45%] · 15 → 45
+A world’s own aurora · [10%] · [35%] · 10 → 35
+Ember’s own radio · [30%] · [10%] · 30 → 10
+A galaxy far behind · [30%] · [5%] · 30 → 5
+Our own interference · [15%] · [5%] · 15 → 5
+WHAT IT CAN’T TELL
+Whether it is built. A world’s own aurora turns with its day too. Narrow lines in its spectrum, or a twist in its polarization, would tell.
+TO BE SURE
+Check the radio source at Ember · spectrum, polarization, and whether it moves with Ember · 4 Years · 00:20:00
+THE MIND (VEYRA) · It turns with a day of 26 hours: a world’s day, not a star’s. Built, or a world’s own aurora. A proper check would tell: four Years. · [Check it] · [Later]
+[Talk to the mind]
+Away.
+Away.
++65:00 · Year 13
+“Check it.”
+Veyra · Year 13
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [0%] · MATTER · 1,060 kt · COMPUTE · [55%]
+[drawing: ORBIT · VEYRA · THE RECEIVER LISTENS FROM HERE; labels: moon, Veyra, low orbit, Deep-field receiver, Deep flash watch, Spectrograph bank, Infrared telescope · 69%] · ORBIT · VEYRA · THE RECEIVER LISTENS FROM HERE
+PROJECTS · 3 RUNNING
+RUNNING · 3
+[drawing: Deep-field receiver] · Check the radio source at Ember · Spectrum, polarization, motion · 4 Years · 00:20:00 · [Pause Check the radio source at Ember]
+[drawing: Deep-field receiver] · Listen to Ember · Faint broadband emission, and anything aimed · since Year 12 · listening · [Pause Listen to Ember]
+[drawing: Infrared telescope] · Infrared telescope · Ember · 18 Years · 00:28:00 · [Pause Infrared telescope]
+EACH YEAR YOU CAN SPEND
+Energy · [0%] · 100% free
+Compute · [55%] · 45% free
+1,060 kt · matter on hand · +40 kt a year
+THE MIND (VEYRA) · Checking: spectrum, polarization, and whether it moves with Ember. Twenty minutes. Listening sends nothing. · [Undo]
+[Talk to the mind]
+Away.
+Away.
++65:30 · Year 13.1
+Nothing new. · A dead 30 seconds.
+Away.
+Away.
++66:00 · Year 13.2
+Nothing new. · A dead 30 seconds.
+Away.
+Away.
++66:30 · Year 13.3
+Godview · Hael’s founding line, sent in Year 4, reaches Veyra. Hael doesn’t know it was heard, and can’t, unless Veyra answers; if Veyra did, Hael’s order would answer back by tight beam. Kesh’s sky watch hears it in Year 18.3: a world’s first voice, so it wakes Kesh despite the daily summary.
+Lands · The sky watch hears a broadcast from Beacon.
+Veyra · Year 13.3
+[drawing: Beacon’s signature]
+THE SKY WATCH · BEACON, 9.3 LIGHT-YEARS
+
+### Beacon is speaking to everyone.
+Radio, the same strength in every direction. Not tuned for us. The first voice we have heard.
+It left Beacon in Year 4, 9.3 Years ago.
+[Listen] · [Later]
+Away.
+Away.
++67:00 · Year 13.4
+“Listen.”
+Veyra · Year 13.4
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [0%] · MATTER · 1,076 kt · COMPUTE · [55%]
+[drawing: STARS · BEACON · 9.3 LY · 00:46:27; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · BEACON · 9.3 LY · 00:46:27
+REPORT · SIGNAL
+[‹ All reports]
+[drawing: Beacon’s signature]
+
+### A broadcast, not aimed at us
+From Beacon · Beta Hydri · 9.3 ly · caught Year 13.3 by the sky watch
+Radio, the same strength every way, repeating. It carries its own key: counting first, then the words.
+WHAT IT TELLS US
+Began · Year 4, 9.3 Years ago · Still sending? · We can’t know. What we hear left Beacon 9.3 Years ago. · Aimed at us · No · They know of us · Nothing suggests it · Ember hears it · In Year 18.3, 00:24:44 from now
+THE MIND (VEYRA) · A broadcast from Beacon, to everyone. It left before we woke to listen. Ember will hear it too, in five Years. · [What does it say?]
+[Talk to the mind]
+Away.
+Away.
++67:30 · Year 13.5
+“What does it say?”
+Veyra · Year 13.5
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [0%] · MATTER · 1,080 kt · COMPUTE · [55%]
+[drawing: STARS · BEACON · 9.3 LY · 00:46:27; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · BEACON · 9.3 LY · 00:46:27
+REACH · BROADCAST · BEACON
+[‹ Signal]
+[drawing: Beacon’s signature] · Beacon · TO ANYONE · ARRIVING SINCE YEAR 13.3
+“We are Hael. We keep what the light brings. Answer, and we will keep your words.”
+It repeats. The mind read it from its own counting, in weeks.
+WHAT IT CARRIES · TOLD, UNDER BEACON’S NAME
+WHO THEY ARE · THEIR NAME · Beacon says it is Hael
+THEIR FOUNDING LINE · “We keep what the light brings.”
+AN INVITATION · “Answer, and we will keep your words.”
+THE MIND (VEYRA) · They call themselves Hael. They keep what the light brings, and ask anyone to answer.
+[Talk to the mind]
+Away.
+Away.
++68:00 · Year 13.6
+“Who are they?”
+Veyra · Year 13.6
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [0%] · MATTER · 1,084 kt · COMPUTE · [55%]
+[drawing: STARS · BEACON · 9.3 LY · 00:46:27; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · BEACON · 9.3 LY · 00:46:27
+MIND · ASKING
+ABOUT · FROM HOME · Who are they?
+The clock runs while you talk: 1 Year every · 00:05:00.
+Who are they?
+THE MIND · Beacon says it is Hael. That much they told us. What we saw ourselves: their star, a drift that is its own, and now their voice.
+Do they know we are here?
+THE MIND · Nothing suggests it. Our hum is faint, and their telescopes are like ours were. They called to everyone, not to us.
+What would you do?
+ITS VIEW · FROM OUR CHARTER AND DIALS · I would not answer. They have told everyone where they are; we have told no one. Every Year we stay quiet, we learn and they don’t. · leans hidden · leans cautious
+Ask the mind… · [Send · ↑]
+Away.
+Away.
++68:30 · Year 13.7
+“Don’t answer. If their broadcast changes, wake me. And when the check at Ember is done.”
+Veyra · Year 13.7
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [0%] · MATTER · 1,088 kt · COMPUTE · [55%]
+[drawing: STARS · BEACON · 9.3 LY · 00:46:27; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · BEACON · 9.3 LY · 00:46:27
+MIND · NEW ORDER
+WHAT YOU WANT
+Don’t answer. If their broadcast changes, wake me. And when the check at Ember is done.
+THE MIND’S VERSION
+WHEN · Beacon’s broadcast changes · new words, or it stops
+OR · The check at Ember is done · Year 17
+DO · Wake you · with what changed
+KEEPS · Never send messages
+If anyone answers Beacon, its broadcast may say so. How soon it changes tells how near the answerer is.
+[Talk it through with the mind ›]
+[Edit] · [Set the order]
+THE MIND (VEYRA) · Set. We stay quiet. I wake you if Beacon’s words change, or when Ember’s check is done. · [Undo]
+[Talk to the mind]
+Away.
+Away.
++69:00 · Year 13.8
+Godview · Every seat now has something on another. Hael feels Veyra’s world. Kesh’s spectrographs at Lodestar will feel it too. Veyra holds a world and a hum at Ember, and a voice at Beacon, and has said nothing.
+Puts the phone down.
+Thursday · 21:09
+HOLOS · IN 00:16:00 · Veyra: the check at Ember · Anything new from Beacon wakes you sooner.
+Away.
+Away.
++69:30 → +84:30 · Year 13.9 to Year 16.9
+Godview · Year 14.1: Kesh’s spectrographs feel Veyra’s world at Lodestar. Kesh’s order holds it for the daily summary.
++85:00 · Year 17
+The notice arrives.
+Lands · The check at Ember is done.
+Thursday · 21:25
+HOLOS · NOW · Veyra: the check at Ember is done · Woken, as you asked.
+Away.
+Away.
++85:30 · Year 17.1
+Godview · The lines are Kesh’s ordinary radio: the faint hum every seat starts with. Veyra has overheard Kesh. Kesh has no way to know.
+Opens from the notice.
+Veyra · Year 17.1
+[drawing: Ember, the world we felt, and radio rising from it; labels: Ember, the world · 148-day year · 26-hour day]
+THE CHECK AT EMBER · 9.2 LIGHT-YEARS
+
+### Someone is at Ember.
+Narrow lines inside the hum, the kind nothing natural makes, rising and falling with the world’s year and its day.
+As of light that left 9.2 Years ago. What they are now, we can’t see.
+[See the evidence] · [Later]
+Away.
+Away.
++86:00 · Year 17.2
+“See the evidence.”
+Veyra · Year 17.2
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [0%] · MATTER · 1,228 kt · COMPUTE · [35%]
+[drawing: STARS · EMBER · 9.2 LY · 00:46:03; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · EMBER · 9.2 LY · 00:46:03
+REPORT · CHECKED · PRESENCE
+[‹ All reports]
+
+### Built, on the world at Ember
+Ember · Epsilon Indi · deep-field receiver · 4 Years of checking · light that left 9.2 Years ago
+Inside the hum, a few lines only hertz wide. The narrowest natural radio lines are hundreds of times wider. Their pitch rises and falls every 148 days and every 26 hours, and the source has moved with Ember across our sky.
+WHAT IT ESTABLISHES · SEEN
+Presence · Someone with radio lives on the world at Ember · As of · Light that left 9.2 Years ago · Where · The world we felt: a 148-day year, a 26-hour day · Aimed at us · No. It is their own radio, aimed at no one.
+WHAT IT CAN’T TELL
+Who they are, what they are now, or whether they know of us. We overheard them; they told us nothing.
+THE MIND (VEYRA) · Built, on the world we felt. As of 9.2 Years ago. That is all we can know of now.
+[Talk to the mind]
+Away.
+Away.
++86:30 · Year 17.3
+Godview · Kesh’s spectrographs felt Veyra’s world in Year 14.1. It sits unread in Kesh’s daily summary.
+“Do they know we’re here?”
+Veyra · Year 17.3
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [0%] · MATTER · 1,232 kt · COMPUTE · [35%]
+[drawing: STARS · EMBER · 9.2 LY · 00:46:03; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · EMBER · 9.2 LY · 00:46:03
+MIND · ASKING
+ABOUT · FROM HOME · Do they know we’re here?
+The clock runs while you talk: 1 Year every · 00:05:00.
+Do they know we’re here?
+THE MIND · Nothing says so. Our hum is as faint as theirs, and their telescopes started like ours. But they may have built ears too.
+And Beacon’s voice?
+THE MIND · It reaches Ember in Year 18.3, 00:05:14 from now. Then they will know of Beacon. Not of us.
+What would you do?
+ITS VIEW · FROM OUR CHARTER AND DIALS · Say nothing. We know them, and they don’t know us. Every Year we keep it that way is ours. · leans hidden · leans cautious
+Ask the mind… · [Send · ↑]
+Away.
+Away.
++87:00 · Year 17.4
+“What do we know about them?”
+Veyra · Year 17.4
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [0%] · MATTER · 1,236 kt · COMPUTE · [35%]
+[drawing: STARS · EMBER · 9.2 LY · 00:46:03; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · EMBER · 9.2 LY · 00:46:03
+REACH · EMBER
+[‹ Reach]
+
+### What we know, both ways
+Ember · Epsilon Indi · 9.2 ly · as of Year 17.4
+WHAT WE KNOW ABOUT THEM · ALL SEEN, NOTHING TOLD
+A world · At least as heavy as ours, a 148-day year · Year 9.9 · A day · 26 hours · Radio · A faint hum with narrow lines: built · Year 17 · Their giant · Far out; a leftover in its path, still unexplained · Their name · Unknown. Ember is our name for their star.
+WHAT THEY KNOW ABOUT US
+Of us · Nothing we know of · Of Beacon · From Year 18.3, when its voice arrives
+THE MIND (VEYRA) · More than they know of us. Less than we would like.
+[Talk to the mind]
+Away.
+Away.
++87:30 · Year 17.5
+“Tell no one. Keep listening. Wake me if Ember aims anything at anyone.”
+Veyra · Year 17.5
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [0%] · MATTER · 1,240 kt · COMPUTE · [35%]
+[drawing: STARS · EMBER · 9.2 LY · 00:46:03; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · EMBER · 9.2 LY · 00:46:03
+MIND · NEW ORDER
+WHAT YOU WANT
+Tell no one. Keep listening. Wake me if Ember aims anything at anyone.
+THE MIND’S VERSION
+WHEN · Ember aims anything at anyone · a knock, a beam, or a broadcast
+DO · Wake you
+KEEPS · Never send messages · listening to Ember
+A beam aimed at someone else can’t be overheard from here, unless it points our way. A broadcast can.
+[Talk it through with the mind ›]
+[Edit] · [Set the order]
+THE MIND (VEYRA) · Set. We keep it to ourselves, and keep listening. · [Undo]
+[Talk to the mind]
+Away.
+Away.
++88:00 · Year 17.6
+Godview · The infrared telescope finishes in Year 18.6: Ember’s giant is alone, and the leftover was old measures. It waits in Veyra’s Report.
+Puts the phone down.
+Thursday · 21:28
+Away.
+Away.
++88:30 → +91:00 · Everyone away
++91:30 · Year 18.3
+Godview · Kesh’s order is once a day, but a world’s first voice always wakes. Hael’s founding line has now reached every seat.
+Away.
+Away.
+The notice arrives.
+Lands · The sky watch hears a broadcast from Hollow.
+Thursday · 21:31:30
+HOLOS · NOW · Kesh: a world’s first voice · From Hollow, to everyone. A first voice always wakes you.
++92:00 · Year 18.4
+Away.
+Away.
+Opens from the notice.
+Kesh · Year 18.3
+[drawing: Hollow’s signature]
+THE SKY WATCH · HOLLOW, 14.3 LIGHT-YEARS
+
+### Hollow is speaking to everyone.
+Radio, the same strength in every direction. Not tuned for us. A world’s first voice: it wakes you, whatever your orders say.
+It left Hollow in Year 4, 14.3 Years ago.
+[Listen] · [Later]
++92:30 · Year 18.5
+Away.
+Away.
+“Numbers.”
+Kesh · Year 18.4
+Epsilon Indi · 11.8 ly from Sol · 1 Year = 00:05:00
+ENERGY · [2%] · MATTER · 2,076 kt · COMPUTE · [15%]
+[drawing: STARS · HOLLOW · 14.3 LY · 01:11:44; labels: Kesh, 00:25:00, 00:50:00, 01:15:00, Hollow, Beta Hydri · 01:11:44, Twofold, Alpha Centauri A · 00:48:19, Chaff, Tau Ceti · 00:57:28, Lodestar, Delta Pavonis · 00:46:03, Cinder, Lacaille 8760, Gliese 832] · STARS · HOLLOW · 14.3 LY · 01:11:44
+REPORT · SIGNAL
+[‹ All reports]
+[drawing: Hollow’s signature]
+
+### A broadcast, not aimed at us
+From Hollow · Beta Hydri · 14.3 ly · caught Year 18.3 by the sky watch
+THE NUMBERS
+Began · Year 4, 14.3 Years ago · How loud · About 10 TW, every way · Aimed at us · No · They know of us · Nothing suggests it · Lodestar heard it · In Year 13.3. Our spectrographs feel a world there.
+THE MIND (KESH) · 14.3 light-years. Loud: ten terawatts, every way. Not at us. Lodestar heard it five Years ago. · [What does it say?]
+[Talk to the mind]
++93:00 · Year 18.6
+Away.
+Away.
+“What does it say?”
+Kesh · Year 18.5
+Epsilon Indi · 11.8 ly from Sol · 1 Year = 00:05:00
+ENERGY · [2%] · MATTER · 2,085 kt · COMPUTE · [15%]
+[drawing: STARS · HOLLOW · 14.3 LY · 01:11:44; labels: Kesh, 00:25:00, 00:50:00, 01:15:00, Hollow, Beta Hydri · 01:11:44, Twofold, Alpha Centauri A · 00:48:19, Chaff, Tau Ceti · 00:57:28, Lodestar, Delta Pavonis · 00:46:03, Cinder, Lacaille 8760, Gliese 832] · STARS · HOLLOW · 14.3 LY · 01:11:44
+REACH · BROADCAST · HOLLOW
+[‹ Signal]
+[drawing: Hollow’s signature] · Hollow · TO ANYONE · ARRIVING SINCE YEAR 18.3
+“We are Hael. We keep what the light brings. Answer, and we will keep your words.”
+It repeats. The mind read it from its own counting, in weeks.
+WHAT IT CARRIES · TOLD, UNDER HOLLOW’S NAME
+WHO THEY ARE · THEIR NAME · Hollow says it is Hael
+AN INVITATION · “Answer, and we will keep your words.”
+THE MIND (KESH) · They call themselves Hael. They want answers. They told everyone where they are.
+[Talk to the mind]
++93:30 · Year 18.7
+Away.
+Away.
+“Can they reach us?”
+Kesh · Year 18.6
+Epsilon Indi · 11.8 ly from Sol · 1 Year = 00:05:00
+ENERGY · [2%] · MATTER · 2,094 kt · COMPUTE · [15%]
+[drawing: STARS · LODESTAR · 9.2 LY · 00:46:03; labels: Kesh, 00:25:00, 00:50:00, 01:15:00, Hollow, Beta Hydri · 01:11:44, Twofold, Alpha Centauri A · 00:48:19, Chaff, Tau Ceti · 00:57:28, Lodestar, Delta Pavonis · 00:46:03, Cinder, Lacaille 8760, Gliese 832] · STARS · LODESTAR · 9.2 LY · 00:46:03
+MIND · ASKING
+ABOUT · FROM HOME · Can they reach us?
+The clock runs while you talk: 1 Year every · 00:05:00.
+Can they reach us?
+THE MIND · Not soon. To hit a world you need its orbit, and they don’t know we exist. Their voice tells everyone where they are. That cuts one way.
+Anything else?
+THE MIND · Waiting in your summary: our spectrographs felt a world at Lodestar, Year 14.1. Hollow’s voice reached Lodestar in Year 13.3. If anyone lives there, they heard it five Years ago.
+What would you do?
+ITS VIEW · FROM OUR CHARTER AND DIALS · Say nothing. Grow. Know where Hollow’s world is before anyone knows where we are. · leans hidden · leans bold
+Ask the mind… · [Send · ↑]
++94:00 · Year 18.8
+Away.
+Away.
+“Say nothing. Put anything else from Hollow in the summary.”
+Kesh · Year 18.7
+Epsilon Indi · 11.8 ly from Sol · 1 Year = 00:05:00
+ENERGY · [2%] · MATTER · 2,103 kt · COMPUTE · [15%]
+[drawing: STARS · HOLLOW · 14.3 LY · 01:11:44; labels: Kesh, 00:25:00, 00:50:00, 01:15:00, Hollow, Beta Hydri · 01:11:44, Twofold, Alpha Centauri A · 00:48:19, Chaff, Tau Ceti · 00:57:28, Lodestar, Delta Pavonis · 00:46:03, Cinder, Lacaille 8760, Gliese 832] · STARS · HOLLOW · 14.3 LY · 01:11:44
+MIND · NEW ORDER
+WHAT YOU WANT
+Say nothing. Put anything else from Hollow in the summary.
+THE MIND’S VERSION
+WHEN · Hollow says anything more
+DO · Hold it for your daily summary · don’t wake you
+KEEPS · Wake me once a day · a world’s first voice still wakes you
+[Talk it through with the mind ›]
+[Edit] · [Set the order]
+THE MIND (KESH) · Set. Hollow waits for the summary. A new world’s first voice still wakes you. · [Undo]
+[Talk to the mind]
++94:30 · Year 18.9
+Godview · Three seats, one voice between them. Hael was heard twice and knows nothing of it. Veyra and Kesh both stay quiet, each for its own reasons.
+Away.
+Away.
+Puts the phone down.
+Thursday · 21:34:30
+HOLOS · TOMORROW · 20:00 · Kesh: one summary · Held for it: a world at Lodestar, and anything more from Hollow.

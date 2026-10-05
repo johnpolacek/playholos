@@ -1,6 +1,6 @@
 # Holos — Game Concept
 
-Last updated: October 4, 2026.
+Last updated: October 5, 2026.
 
 ## Status
 
@@ -95,7 +95,8 @@ One shared clock advances continuously, including offline. **5 real minutes = 1 
 
 The session rhythm is **spinning plates:** several projects, investigations, missions, and relationships at once. Attention comes from decision points, surprising observations, competing resource demands, and autonomous minds asking for guidance. Players leave guidance for their absence, and AI acts on it.
 
-- **What wakes you (2026-09-28):** notices are chosen by kind, and each kind shows what it would have sent during the last absence. Quiet hours hold everything except a world speaking to us for the first time, then send one summary; 8 hours asleep is 96 Years.
+- **What wakes you (2026-09-28):** notices are chosen by kind, and each kind shows what it would have sent during the last absence. Quiet hours hold everything except a world's first voice, then send one summary; 8 hours asleep is 96 Years.
+- **A world's first voice always wakes you (2026-10-05).** The first verified message from any world, a knock aimed at us or a broadcast to everyone, wakes the player even in quiet hours or on a once-a-day summary, and can't be turned off. Every list of away orders shows it. A hum is a radio source, not yet a voice, so it follows the player's own orders. After a world's first voice, its later messages follow the player's orders too.
 
 - **Standing orders (2026-09-28):** written like a message. The player says what they want; the mind shows exactly what it will do (when, if, do, otherwise) and which order it overrides, then tries it on the player's last absence. Orders for a far mind cross at light speed, can't be recalled, and are read in that mind's own moment. Until one lands, the far mind follows the orders it has.
 

@@ -241,6 +241,7 @@ Cautious · Bold
 WHILE YOU ARE AWAY
 - Keep running projects · the mind continues what you started · ›
 - Never send messages · speaking is permanent; you decide that · ›
+- A world’s first voice wakes you · a knock or a broadcast, aimed at us or not · even in quiet hours · always
 TOUR · 5 OF 6
 
 ### Mind
@@ -1294,7 +1295,7 @@ Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
 ENERGY · [5%] · MATTER · 15,000 kt · COMPUTE · [50%]
 MIND · SETTINGS
 WAKE ME FOR
-Someone new speaks · a knock or broadcast from a world we haven’t heard · even in quiet hours · last time: Frost, 6:20 AM · [selected: Someone new speaks]
+A world’s first voice · a knock or broadcast from a world we haven’t heard, aimed at us or not · even in quiet hours · can’t be turned off · last time: Frost, 6:20 AM · always
 Messages from those we know · last time: 2 from Beacon, held until morning · [selected: Messages from those we know]
 Our far minds · the sentinel, probes · last time: the sentinel stopped · [selected: Our far minds]
 Results in the Report · last time: 3 projects finished · [Results in the Report]
@@ -1335,7 +1336,7 @@ Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
 ENERGY · [5%] · MATTER · 15,000 kt · COMPUTE · [50%]
 MIND · SETTINGS
 WAKE ME FOR
-Someone new speaks · a knock or broadcast from a world we haven’t heard · even in quiet hours · last time: Frost, 6:20 AM · [selected: Someone new speaks]
+A world’s first voice · a knock or broadcast from a world we haven’t heard, aimed at us or not · even in quiet hours · can’t be turned off · last time: Frost, 6:20 AM · always
 Messages from those we know · last time: 2 from Beacon, held until morning · [selected: Messages from those we know]
 Our far minds · the sentinel, probes · last time: the sentinel stopped · [selected: Our far minds]
 Results in the Report · last time: 3 projects finished · [Results in the Report]

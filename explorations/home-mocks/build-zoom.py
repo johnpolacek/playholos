@@ -547,6 +547,8 @@ def row(title, sub, right='', tone='', bar=None, marker=False):
     b = f'<span class="bar"><span style="width:{bar}%"></span></span>' if bar is not None else ''
     return f'<button class="row">{mk}<span class="rt"><span class="{tone}">{title}</span><span class="sub">{sub}</span>{b}</span><span class="rr">{right}</span></button>'
 
+ALWAYS_ROW = lambda: row('A world’s first voice wakes you', 'a knock or a broadcast, aimed at us or not · even in quiet hours', '<span class="mono">always</span>')
+
 PANELS = [
     ('IN MOTION · 3', 'TIME LEFT', [row('Deep-field receiver', 'in orbit around Veyra', tstack('7.5 Years', '00:37:42', True), bar=37), row('Planet survey · 12 nearest stars', 'from Veyra’s observatories', tstack('8.4 Years', '00:41:45', True), bar=40), row('Orbital foundry', 'at L5 · just started', tstack('30 Years', '02:29:48', True), bar=1), row('Leads · 3', 'Twin, Ember, Lantern', '›', 'other')]),
     ('DELTA PAVONIS SYSTEM', 'INVENTED PLANETS', [row('Veyra · your world', '1.12 AU · habitable zone', '', 'you', marker=True), row('[Inner world]', '0.45 AU · unvisited', '›'), row('Belt · 2.6–3.2 AU', 'prospect: metals and ice', '›'), row('[Ice world]', '9 AU · beyond this view', '›')]),
@@ -785,7 +787,7 @@ MIND = tab_screen('Mind', 'MIND', 'WHO WE ARE', ''.join([
     '<div class="dial"><span>Cautious</span><b><s style="left:30%"></s></b><span>Bold</span></div>',
     '<div class="sec">WHILE YOU ARE AWAY</div>',
     row('Keep running projects', 'the mind continues what you started', '›'),
-    row('Never send messages', 'speaking is permanent; you decide that', '›')]), HUD)
+    row('Never send messages', 'speaking is permanent; you decide that', '›'), ALWAYS_ROW()]), HUD)
 
 FIRST_WORLD = ('IN MOTION · 0', 'TIME LEFT', [row('Nothing under way yet', 'start one in Projects', '›'), row('Leads · 3', 'Twin, Ember, Lantern', '›', 'other')])
 FIRST_STARS = ('LEADS · 3', 'LIGHT-TIME', [
@@ -3218,13 +3220,14 @@ SILENT_KNOWN = tab_screen('Reach', 'REACH', 'FROST', f"""<button class="backlink
 # reach you while it runs: 8 hours of sleep is 96 Years. Each kind of notice says what it would have sent last time.
 Y_SET = 452.0
 HUD_SET = at_year((5, 50, '15,000 kt'), Y_SET)
-def setrow(title, sub, on, tag=''):
-    return (f'<div class="setrow"><span class="rt"><span>{title}</span><span class="sub">{sub}</span>{f"<span class=tag>{tag}</span>" if tag else ""}</span>'
-            f'<button class="tg{" on" if on else ""}" role="switch" aria-checked="{str(on).lower()}" aria-label="{title}"></button></div>')
+def setrow(title, sub, on, tag='', locked=False):
+    ctl = ('<span class="mono">always</span>' if locked else
+           f'<button class="tg{" on" if on else ""}" role="switch" aria-checked="{str(on).lower()}" aria-label="{title}"></button>')
+    return f'<div class="setrow"><span class="rt"><span>{title}</span><span class="sub">{sub}</span>{f"<span class=tag>{tag}</span>" if tag else ""}</span>{ctl}</div>'
 def settings_body(theme):
     seg = ''.join(f'<button class="{"on" if t == theme else ""}" aria-pressed="{str(t == theme).lower()}">{t}</button>' for t in ('System', 'Light', 'Dark'))
     return f"""<div class="sec">WAKE ME FOR</div>
-{setrow('Someone new speaks', 'a knock or broadcast from a world we haven’t heard', True, 'even in quiet hours · last time: Frost, 6:20 AM')}
+{setrow('A world’s first voice', 'a knock or broadcast from a world we haven’t heard, aimed at us or not', True, 'even in quiet hours · can’t be turned off · last time: Frost, 6:20 AM', locked=True)}
 {setrow('Messages from those we know', 'last time: 2 from Beacon, held until morning', True)}
 {setrow('Our far minds', 'the sentinel, probes · last time: the sentinel stopped', True)}
 {setrow('Results in the Report', 'last time: 3 projects finished', False)}
@@ -4472,20 +4475,20 @@ def look_result(sid, t, res, kind, art, title, where, copy, odds_list, after):
 <div class="sec">WHAT IT COULD BE · BEFORE → NOW</div>{''.join(odds(n, a, b) for n, a, b in odds_list)}
 {after}""")
 
-def wobble_chart(period, label):
+def wobble_chart(period, label, axis='toward us ↑ · away ↓', cycle='one orbit'):
     """A star's tug, folded on one period: each night's measure a dot, the fitted wave through them."""
     w, h, x0, x1, mid = 358, 128, 30, 346, 58
     rng = random.Random(len(label)); s = [
         f'<line x1="{x0}" y1="{mid}" x2="{x1}" y2="{mid}" stroke="{INK}" stroke-width=".6" stroke-dasharray="3 4" opacity=".5"></line>',
         f'<line x1="{x0}" y1="14" x2="{x0}" y2="102" stroke="{INK}" stroke-width=".8"></line>',
-        text(x0 + 4, 14, 'toward us ↑ · away ↓', 9), text(x0, 118, '0', 9), text(x1, 118, f'one orbit · {period}', 9, MUTED, 'end')]
+        text(x0 + 4, 14, axis, 9), text(x0, 118, '0', 9), text(x1, 118, f'{cycle} · {period}', 9, MUTED, 'end')]
     X = lambda f: x0 + f * (x1 - x0)
     wave = ' L'.join(f'{fmt(X(i / 120))},{fmt(mid - 26 * math.sin(2 * math.pi * i / 120))}' for i in range(121))
     for _ in range(70):
         f = rng.random(); s.append(f'<circle cx="{fmt(X(f))}" cy="{fmt(mid - 26 * math.sin(2 * math.pi * f) + rng.gauss(0, 11))}" r="1.3" fill="{INK}" opacity=".55"></circle>')
     s.append(f'<path d="M{wave}" fill="none" stroke="{OTHER}" stroke-width="1.6"></path>')
     s.append(text(X(.25) + 6, mid - 32, label, 9, OTHER, 'start', 600))
-    return f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" font-family="IBM Plex Mono, monospace" role="img" aria-label="A star’s tug, folded on one orbit: {label}">{"".join(s)}</svg>'
+    return f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" font-family="IBM Plex Mono, monospace" role="img" aria-label="{'A star’s tug, folded on one orbit' if cycle == 'one orbit' else 'Brightness, folded on ' + cycle}: {label}">{"".join(s)}</svg>'
 
 # Veyra's screens
 V_CLUE = clue_screen('veyra', 30, (0, 0, '1,240 kt'), 'Ember', glow_chart(), 'New warm glow', f'Ember · Epsilon Indi · {d_ember:.1f} ly · logged Year 0.1',
@@ -4775,7 +4778,7 @@ def pregame_queue(sid, res, items, orders, quick=(), quick_head='QUICK LOOKS'):
         (f'<div class="sec">{quick_head} · START AT YEAR 0</div>' + quicks if quicks else ''),
         '<div class="sec">AT YEAR 0 YOU WILL SPEND</div>', used('Energy', res[0]), used('Compute', res[1]),
         f'<div class="pile"><b>{res[2]}</b><span>matter left after the queue · +40 kt a year</span></div>',
-        ('<div class="sec">WHILE YOU ARE AWAY</div>' + ords if ords else ''),
+        '<div class="sec">WHILE YOU ARE AWAY</div>' + ords + ALWAYS_ROW(),
         '<p class="copy small">' + ('Quick looks and tune-ups queue like builds. ' if quick else '') + 'Results and anything sent wait for the clock.</p>'])))
 
 P_VEYRA = (queue_confirm(rehud(V_DFR, (0, 0, '1,240 kt'))), 'then', pregame_queue('veyra', (25, 30, '940 kt'), [
@@ -5328,7 +5331,7 @@ def V_RES(t): return (0,   # Veyra runs only instruments, which draw almost no e
                       40 + 5 * (t < 30) + 5 * (t < 60) + 5 * (30 <= t < 120) + 10 * (60 <= t < 150) + 15 * (t >= 180) + 15 * (t >= 210) + 5 * (420 <= t < 510) + 10 * (300 <= t < 600),
                       kt(840 + 40 * yr(t) - 200 * (t >= 180) - 100 * (t >= 210)))
 def H_RES(t): return (0,   # building and watching draw almost no energy; sending will
-                      20 + 5 * (t < 30) + 10 * (t < 60) + 5 * (30 <= t < 90) + 5 * (90 <= t < 180) + 15 * (t >= 210) + 10 * (270 <= t < 570),
+                      20 + 5 * (t >= 450) + 5 * (t < 30) + 10 * (t < 60) + 5 * (30 <= t < 90) + 5 * (90 <= t < 180) + 15 * (t >= 210) + 10 * (270 <= t < 570),
                       kt(1040 + 40 * yr(t) - 100 * (t >= 210)))
 def K_RES(t): return (2 + 2 * (t < 30),   # the annex's cold compute; building draws almost none
                       15 + 5 * (t < 120) + 5 * (t < 180) + 10 * (60 <= t < 120) + 10 * (150 <= t < 240) + 10 * (270 <= t < 330) + 5 * (120 <= t < 720) + 5 * (120 <= t < 420) + 15 * (t >= 750),
@@ -5492,7 +5495,7 @@ def wake_row(title, sub, year, now):
     return row(title, sub, tstack(f'Year {year:g}', clock((year - yr(now)) * 5)))
 V_WAKES = seat_tab('veyra', yr(540), V_RES(540), 'Mind', 'MIND', 'WHAT WAKES YOU', ''.join([
     '<div class="sec">ORDERS</div>', row('Never send messages', 'speaking is permanent; you decide that', '›'),
-    row('Wake me for anything heard from our galaxy', 'a knock, a broadcast, a hum · set Year 1.3', '›'),
+    row('Wake me for anything heard from our galaxy', 'a knock, a broadcast, a hum · set Year 1.3', '›'), ALWAYS_ROW(),
     '<div class="sec">COMING · SOONEST FIRST · NONE WAKES YOU</div>',
     wake_row('A Year of listening to Ember', 'done · what it rules out', yr(600), 540),
     wake_row(FLASH['name'], 'built · hears knocks a hundred times fainter', FLASH['years'], 540),
@@ -5603,11 +5606,25 @@ H_WARDEN_LONG = lambda t, running: clue_screen('hael', t, H_RES(t), 'Warden', ''
     + long_row('track-place', 'Warden', 'Space telescope, against the stars behind · weighs the giant that faces us'))
 H_WARDEN_NULL = listen_null('hael', 570, H_RES(570), 'Warden', 'Delta Pavonis', '99240',
     way('Spectrograph bank', 'building · feels worlds closer in, not voices', tstack(f'Year {yr(210) + SPB:g}', clock((yr(210) + SPB - yr(570)) * 5))))
-H_RUN2 = seat_tab('hael', yr(600), H_RES(600), 'Projects', 'PROJECTS', '3 RUNNING', ''.join([
-    '<div class="sec">RUNNING · 3</div>',
+tbm = CAT['tight-beam']
+Y_FIRST_ANSWER = bb['years'] + 2 * sd('hael', HEARS[0][1])
+H_REPLY_ASK = order_screen('hael', 420, H_RES(420), 'If anyone answers, answer with our charter.', [
+    ('WHEN', '<b>A message aimed at us arrives</b> · from anyone'),
+    ('DO', '<b>Answer</b> · “We heard you. We keep what the light brings.” and our signature'),
+    ('BY', '<b>Our beacon</b> · the only voice we have, and everyone hears it')],
+    'An answer by beacon tells everyone that someone answered us, and roughly where they are.')
+H_REPLY_ORDER = order_screen('hael', 450, H_RES(450), 'Build a tight beam. Answer by it, not the beacon.', [
+    ('WHEN', '<b>A message aimed at us arrives</b> · from anyone'),
+    ('DO', '<b>Answer by tight beam, to its sender only</b> · “We heard you. We keep what the light brings.” and our signature'),
+    ('IF', f'<b>The tight beam isn’t built yet</b> · hold the answer until it is, Year {yr(450) + tbm["years"]:g}'),
+    ('AND', '<b>Wake you</b> with what came, and what we sent')],
+    'This order sends without you, and what it sends can’t be taken back. Tried on your last absence: nothing answered, so nothing would have gone.')
+H_RUN2 = seat_tab('hael', yr(600), H_RES(600), 'Projects', 'PROJECTS', '4 RUNNING', ''.join([
+    '<div class="sec">RUNNING · 4</div>',
     running_row('beacon', bb['name'], f'{bb["years"]} Years', left(bb['years'], 0, 600), pct(bb['years'], 0, 600), sub='Then your order broadcasts'),
     running_row('vault', dv['name'], f'{dv["years"]} Years', left(dv['years'], 0, 600), pct(dv['years'], 0, 600), sub='The mind survives a hit on Hael'),
-    running_row('spectro', CAT['spectrograph-bank']['name'], f'{SPB} Years', left(SPB, yr(210), 600), pct(SPB, yr(210), 600), 'Warden')] + spend(H_RES(600))))
+    running_row('spectro', CAT['spectrograph-bank']['name'], f'{SPB} Years', left(SPB, yr(210), 600), pct(SPB, yr(210), 600), 'Warden'),
+    running_row('beam', tbm['name'], f'{tbm["years"]} Years', left(tbm['years'], yr(450), 600), pct(tbm['years'], yr(450), 600), sub='Then your order can answer')] + spend(H_RES(600))))
 
 # ---------- Kesh, from 20:00: tune-ups from the queue, leads by hand, and two ways to more matter now ----------
 ICONS['pads'] = icon('<line x1="6" y1="50" x2="50" y2="50"></line><path d="M24 50 V22 l4 -12 l4 12 V50"></path><line x1="20" y1="50" x2="24" y2="42"></line><line x1="36" y1="50" x2="32" y2="42"></line>'
@@ -5671,7 +5688,7 @@ K_SPEC = seat_confirm('kesh', yr(750), K_RES(750), 'spectrograph-bank', 'spectro
 K_UPNEXT = seat_tab('kesh', yr(780), K_RES(780), 'Projects', 'PROJECTS', '4 RUNNING · 1 UP NEXT', ''.join([
     '<div class="sec">UP NEXT · STARTS ON ITS OWN</div>',
     qrow(1, 'mining', bmn['name'], 'when prospecting is done · +120 kt a year', tstack(f'Year {bp["years"]}', clock((bp['years'] - yr(780)) * 5))),
-    '<div class="sec">WHILE YOU ARE AWAY</div>', row('Keep the queue running', 'start what fits, top first', '›'), row('Wake me once a day', 'one summary', '›')]
+    '<div class="sec">WHILE YOU ARE AWAY</div>', row('Keep the queue running', 'start what fits, top first', '›'), row('Wake me once a day', 'one summary', '›'), ALWAYS_ROW()]
     + spend(K_RES(780), 'matter on hand · +90 kt a year')))
 
 def say(phone, sid, line=None, chips=(), state=None): return T(phone, sid, line, chips, state)
@@ -5740,17 +5757,19 @@ BEATS = [
     beat_row(330, {'veyra': D,
                    'hael': ('What will the broadcast say?', None, say(with_strip(H_COMPOSE, world_strip('hael', HAEL_BUILDS(330), 'ORBIT · HAEL · THE BEACON WILL SEND FROM HERE')), 'hael', 'Our founding line, and an invitation to answer. Nothing of the vault.', ('Who will hear it?',))),
                    'kesh': ('Lodestar?', 'Lodestar is heavier than it pulls. Dim star 20 → 32.', say(with_strip(K_LODESTAR_R, stars_strip('kesh', '99240')), 'kesh', 'Something heavy at Lodestar, hiding weight. Spectrographs would tell more: 100 kt. That’s two Years of lift.', ('Build them', 'Not yet')))}),
-    beat_row(360, {'veyra': ('', 'The sky watch hears a burst of radio, a thousandth of a second long.', say(with_strip(V_BURST, stars_strip('veyra', '105858')), 'veyra', '<b>Heard: a burst</b>Woken, as you asked. It crossed about two billion light-years of gas. Not a neighbor. Most likely a dead star in another galaxy.', ('Only wake me for what’s near',), state='open')),
-                   'hael': ('Who will hear it?', None, say(with_strip(H_HEARS, stars_strip('hael')), 'hael', f'Warden first, in Year {bb["years"] + sd("hael", "99240"):.0f}. Ash in Year {bb["years"] + sd("hael", "108870"):.0f}. Everyone in the region within a lifetime of ours.', ('Keep the order',))),
+    beat_row(360, {'veyra': ('', 'The sky watch hears a burst of radio, a thousandth of a second long.', say(with_strip(V_BURST, stars_strip('veyra')), 'veyra', '<b>Heard: a burst</b>Woken, as you asked. It crossed about two billion light-years of gas. Not a neighbor. Most likely a dead star in another galaxy.', ('Only wake me for what’s near',), state='open')),
+                   'hael': ('Who will hear it?', None, say(with_strip(H_HEARS, stars_strip('hael')), 'hael', f'{HEARS[0][0]} first, in Year {bb["years"] + sd("hael", HEARS[0][1]):.0f}. Warden in Year {bb["years"] + sd("hael", "99240"):.0f}, where our spectrographs will look. Everyone in the region within a lifetime of ours.', ('Keep the order',))),
                    'kesh': ('Not yet. Matter first.', None, None)},
              truth=f'The burst is a fast radio burst from a galaxy about two billion light-years away: natural. It tests Veyra’s order, since “anything heard” means this too. '
                    f'Hael’s broadcast leaves in Year {bb["years"]}. Veyra’s sky watch catches it in Year {bb["years"] + d_hv:.1f}, {clock((bb["years"] + d_hv) * 5)} after the start; Kesh’s in Year {bb["years"] + d_hk:.1f}. No one arranged it.'),
     beat_row(390, {'veyra': ('Only wake me for what’s near.', None, say(with_strip(V_ORDER2, stars_strip('veyra')), 'veyra', 'Within our galaxy is what I can tell. Set: anything heard from our own galaxy wakes you. This burst would not have.', ('Undo',))),
                    'hael': ('· Keeps the order.', None, None), 'kesh': D}),
     beat_row(420, {'veyra': ('Look at Pair again.', None, say(with_strip(V_PAIR_C2, stars_strip('veyra', '71683')), 'veyra', 'Looking again, a minute and a half. A Year on, a giant would have moved out of the glare.')),
-                   'hael': D,
+                   'hael': ('If anyone answers, answer with our charter.', None, say(with_strip(H_REPLY_ASK, world_strip('hael', HAEL_BUILDS(420), 'ORBIT · HAEL · THE BEACON WILL SEND FROM HERE')), 'hael', f'We can. But our beacon speaks to everyone, so answering by it tells everyone who answered us. A tight beam tells only them: {tbm["years"]} Years to build. No answer can reach us before Year {Y_FIRST_ANSWER:.0f}.', ('Build a tight beam for it', 'Answer by the beacon'))),
                    'kesh': ('Wake me when the pads are up.', 'The dead orbit, hauled in: +80 kt.', say(with_strip(K_ORDER, kesh_strip(420, [('Launch complex', 'ground', b(2, 420) - b(2, 120))])), 'kesh', 'Set. Five minutes. The daily summary stays.', ('Undo',)))}),
-    beat_row(450, {'veyra': D, 'hael': D, 'kesh': ('· Puts the phone down.', None, LK(wall(450), [('IN 00:04:30', 'Kesh: the launch complex', 'You asked to be woken when the pads are up.')]))}),
+    beat_row(450, {'veyra': D,
+                   'hael': ('Build a tight beam. Answer by it, not the beacon.', None, say(with_strip(H_REPLY_ORDER, world_strip('hael', HAEL_BUILDS(450, [('Tight beam', 'ground', 0)]))), 'hael', f'Set, and the tight beam started: {tbm["years"]} Years. It will be ready long before any answer. Whoever answers us hears back, and only they do.', ('Undo',))),
+                   'kesh': ('· Puts the phone down.', None, LK(wall(450), [('IN 00:04:30', 'Kesh: the launch complex', 'You asked to be woken when the pads are up.')]))}),
     beat_row(480, {'veyra': D, 'hael': D, 'kesh': AWAY}),
     beat_row(510, {'veyra': ('Pair?', 'Pair’s point, seen again, where a giant would be. 52 → 84.', say(with_strip(V_PAIR_R2, stars_strip('veyra', '71683')), 'veyra', 'Seen again, moving with Pair. A giant, most likely. Nothing of a voice.')),
                    'hael': D, 'kesh': AWAY}),
@@ -5784,6 +5803,301 @@ BEATS = [
     beat_row(900, {'veyra': AWAY, 'hael': AWAY, 'kesh': AWAY},
              truth='The first session ends. Every player has set a clock: Hael for the beacon at 20:20, Veyra for the receiver at 21:00, Kesh for tomorrow. Veyra and Hael each listened a Year and heard no one loud. That is true: every seat is quiet. Hael’s broadcast sends without anyone watching.'),
 ]
+
+# ---------- Session 2: Veyra comes back at 21:00 (2026-10-04) ----------
+# Veyra's order wakes it when the receiver is built, Year 12. While everyone was away: Hael's beacon sent at Year 4,
+# both spectrograph banks were built at Year 8.7, and Veyra's felt a world at Ember. Nothing woke Veyra: its orders
+# wake it only for what is heard. In this session it hears twice: Kesh's faint hum at Ember, then Hael's broadcast.
+# Kesh's world (invented): 0.5 AU from Epsilon Indi A (0.76 solar masses), so it turns in 148 days and tugs its star
+# by about 15 cm/s at one Earth mass. Its day is 26 hours. Its hum is the faint floor every seat starts with.
+wall = lambda t: f'{20 + t // 3600}:{t % 3600 // 60:02d}' + (f':{t % 60:02d}' if t % 60 else '')
+K_P_DAYS = round(math.sqrt(.5 ** 3 / .76) * 365.25)
+Y_WORLD = round(yr(210) + SPB + 3 * K_P_DAYS / 365.25, 1)                 # three turns of watching
+Y_HAEL_WORLD = round(yr(210) + SPB + 3 * 1.19, 1)                          # Veyra's world turns in 1.19 Years
+Y_HUM, Y_CHECK = yr(3780), yr(3900) + 4
+Y_BC_HERE = round(bb['years'] + d_hv, 1)
+d_hk_ = seat_ly('hael', 'kesh')
+def V2_RES(t): return (0, 35 + 5 * (3810 <= t < 3870) + 20 * (t >= 3900), kt(840 + 40 * yr(t) - 300))
+v2_builds = lambda t: [('Deep-field receiver', 'low', 1), ('Deep flash watch', 'ground', 1), ('Spectrograph bank', 'ground', 1),
+                       ('Infrared telescope', 'low', (yr(t) - yr(180)) / irt['years'])]
+
+V2_WELCOME = seat_tab('veyra', yr(3630), V2_RES(3630), 'Report', 'REPORT', 'WHILE YOU WERE AWAY', f"""<div class="awayhead"><h3>{12 - yr(660):.0f} Years passed</h3>
+<span class="sub">You were away <span class="rtime">{clock((12 - yr(660)) * 5)}</span> · Year {yr(660)} → Year 12</span></div>
+<div class="sec">THE BIG THINGS</div>
+{big('other', 'A world at Ember', f'Year {Y_WORLD}', 'At least as heavy as ours, where water could be liquid')}
+{big('you', 'The deep-field receiver', 'Year 12', 'Listening to Ember now, as you ordered')}
+{big('you', 'The flash watch and the spectrograph bank', f'Years {FLASH["years"]} · {yr(210) + SPB:g}', 'Both built, both watching')}
+<div class="sec">WHAT THE MIND DID · UNDER YOUR STANDING ORDERS</div>
+<ul class="did"><li>Sent nothing.</li><li>Heard nothing from our galaxy, so woke you for nothing until now.</li><li>Started listening to Ember the moment the receiver was built.</li></ul>
+<div class="sec">WAITING FOR YOU · 1</div>
+<p class="copy small">The world at Ember</p>""")
+V2_WORLD = seat_tab('veyra', yr(3660), V2_RES(3660), 'Report', 'REPORT', 'RESULT', f"""<button class="backlink inline">‹ All reports</button>
+<div class="art">{wobble_chart(f'{K_P_DAYS} days', 'a tug of 15 cm/s')}</div>
+<h3 class="lead">A world at Ember</h3><p class="copy small">Ember · Epsilon Indi · spectrograph bank · watched {Y_WORLD - yr(210) - SPB:.1f} Years · light that left {d_ember:.1f} Years ago</p>
+<p class="copy">Ember sways toward us and away every {K_P_DAYS} days, by 15 cm/s. A world would do that: one at least as heavy as ours, less than half as far from Ember as we are from our star. There, Ember’s dim light would keep water liquid.</p>
+<div class="sec">WHAT IT COULD BE · ODDS NOW</div>{odds_now('A world, at least as heavy as ours', 92)}{odds_now('The star’s own surface', 8)}
+<div class="sec">WHAT IT CAN’T TELL</div><p class="copy small">Its true weight: only the least it could be, since we don’t know its tilt. Its air. Whether anything lives there.</p>""")
+V2_LISTEN = seat_tab('veyra', yr(3720), V2_RES(3720), 'Projects', 'PROJECTS', '2 RUNNING', ''.join([
+    '<div class="sec">RUNNING · 2</div>',
+    running_row('receiver', 'Listen to Ember', 'since Year 12', '', 0, sub='Faint broadband emission, and anything aimed'),
+    running_row('ir', irt['name'], f'{irt["years"]} Years', left(irt['years'], yr(180), 3720), pct(irt['years'], yr(180), 3720), 'Ember')] + spend(V2_RES(3720))))
+V2_LISTEN = V2_LISTEN.replace('<span class="rtime live"></span>', '<span class="rtime live">listening</span>')
+HUM_ODDS = [('Ember’s own radio', 30), ('A galaxy far behind', 30), ('Our own interference', 15), ('Something built', 15), ('A world’s own aurora', 10)]
+V2_HUM = seat_tab('veyra', Y_HUM, V2_RES(3780), 'Report', 'REPORT', 'HEARD · RECEIVER', f"""<button class="backlink inline">‹ All reports</button>
+<h3 class="lead">A faint hum at Ember</h3><p class="copy small">Ember · deep-field receiver · {Y_HUM - 12:.1f} Years of listening · light that left {d_ember:.1f} Years ago</p>
+<p class="copy">Faint radio across a wide band, steady for months, sitting on Ember closer than the receiver can split. A radio source, not yet a voice.</p>
+<div class="sec">WHAT IT COULD BE · ODDS NOW</div>{''.join(odds_now(n, v) for n, v in HUM_ODDS)}
+<div class="sec">WITH WHAT WE HAVE · QUICK</div>{quick_row('Look for a rhythm in it', 'Deep-field receiver · does it rise and fall with a day?', .2, 'C 5% while it runs')}
+<div class="sec">WHAT IT CAN’T TELL</div><p class="copy small">What makes it. A galaxy far behind would stay put while Ember crosses our sky; that takes Years to see.</p>""")
+V2_HUM2 = look_result('veyra', 3870, V2_RES(3870), 'QUICK LOOK', wobble_chart('26 hours', 'it rises and falls', 'louder ↑ · fainter ↓', 'one day'), 'It turns with a day', 'Ember · deep-field receiver · 0.2 Years',
+    'The hum rises and falls every 26 hours. Ember turns once in about 35 days, and a galaxy doesn’t turn in a day. Something the size of a world is turning, with its loudest side toward us once a day.',
+    [('Something built', 15, 45), ('A world’s own aurora', 10, 35), ('Ember’s own radio', 30, 10), ('A galaxy far behind', 30, 5), ('Our own interference', 15, 5)],
+    '<div class="sec">WHAT IT CAN’T TELL</div><p class="copy small">Whether it is built. A world’s own aurora turns with its day too. Narrow lines in its spectrum, or a twist in its polarization, would tell.</p>'
+    '<div class="sec">TO BE SURE</div>' + way('Check the radio source at Ember', 'spectrum, polarization, and whether it moves with Ember', tstack('4 Years', catalog.real_time(4))))
+V2_CHECK = seat_tab('veyra', yr(3900), V2_RES(3900), 'Projects', 'PROJECTS', '3 RUNNING', ''.join([
+    '<div class="sec">RUNNING · 3</div>',
+    running_row('receiver', 'Check the radio source at Ember', '4 Years', '00:20:00', 0, sub='Spectrum, polarization, motion'),
+    running_row('receiver', 'Listen to Ember', 'since Year 12', '', 0, sub='Faint broadband emission, and anything aimed'),
+    running_row('ir', irt['name'], f'{irt["years"]} Years', left(irt['years'], yr(180), 3900), pct(irt['years'], yr(180), 3900), 'Ember')] + spend(V2_RES(3900))))
+V2_CHECK = V2_CHECK.replace('<span class="rtime live"></span>', '<span class="rtime live">listening</span>')
+
+V2_LANDS = f"""<div class="phone cine"><div class="cinetop"><span>Veyra</span><span class="mono">Year {Y_BC_HERE}</span></div>
+<svg width="390" height="300" viewBox="0 0 390 300" role="img" aria-label="Beacon’s signature">{stipple(53, 70, 390, 300)}{sigil(BEACON_SEED, OTHER, 195, 150, 118)}</svg>
+<div class="cinetext"><span class="mono kick">THE SKY WATCH · BEACON, {d_hv:.1f} LIGHT-YEARS</span>
+<h3>Beacon is speaking to everyone.</h3>
+<p class="inscr">Radio, the same strength in every direction. Not tuned for us. The first voice we have heard.</p>
+<p>It left Beacon in Year {bb['years']}, {d_hv:.1f} Years ago.</p>
+<div class="cinebtn"><button class="light">Listen</button><button class="ghostlight">Later</button></div></div></div>"""
+V2_SIGNAL = seat_tab('veyra', yr(4020), V2_RES(4020), 'Report', 'REPORT', 'SIGNAL', f"""<button class="backlink inline">‹ All reports</button>
+<div class="art"><svg width="358" height="120" viewBox="0 0 358 120" role="img" aria-label="Beacon’s signature">{sigil(BEACON_SEED, OTHER, 179, 60, 54)}</svg></div>
+<h3 class="lead">A broadcast, not aimed at us</h3>
+<p class="copy small">From Beacon · Beta Hydri · {d_hv:.1f} ly · caught Year {Y_BC_HERE} by the sky watch</p>
+<p class="copy">Radio, the same strength every way, repeating. It carries its own key: counting first, then the words.</p>
+<div class="sec">WHAT IT TELLS US</div>
+{ledger([('Began', f'Year {bb["years"]}, {d_hv:.1f} Years ago'), ('Still sending?', f'We can’t know. What we hear left Beacon {d_hv:.1f} Years ago.'), ('Aimed at us', 'No'),
+         ('They know of us', 'Nothing suggests it'), ('Ember hears it', f'In Year {bb["years"] + d_hk_:.1f}, {clock((bb["years"] + d_hk_ - yr(4020)) * 5)} from now')])}""")
+V2_READ = seat_tab('veyra', yr(4050), V2_RES(4050), 'Reach', 'REACH', 'BROADCAST · BEACON', f"""<button class="backlink inline">‹ Signal</button>
+<div class="speech"><div class="speaker">{sigil_svg(BEACON_SEED, OTHER, 44, 'Beacon’s signature')}<span><b>Beacon</b><span class="mono">TO ANYONE · ARRIVING SINCE YEAR {Y_BC_HERE}</span></span></div>
+<p class="big">“We are Hael. We keep what the light brings. Answer, and we will keep your words.”</p>
+<p class="untr">It repeats. The mind read it from its own counting, in weeks.</p></div>
+<div class="sec">WHAT IT CARRIES · TOLD, UNDER BEACON’S NAME</div>
+{part('WHO THEY ARE · THEIR NAME', '<b>Beacon says it is Hael</b>')}
+{part('THEIR FOUNDING LINE', '<b class="inscribed">“We keep what the light brings.”</b>')}
+{part('AN INVITATION', '<b>“Answer, and we will keep your words.”</b>')}""")
+V2_TALK = mind_chat('veyra', 4080, V2_RES(4080), 'Who are they?', [
+    ('you', 'Who are they?'),
+    ('mind', 'Beacon says it is Hael. That much they told us. What we saw ourselves: their star, a drift that is its own, and now their voice.'),
+    ('you', 'Do they know we are here?'),
+    ('mind', 'Nothing suggests it. Our hum is faint, and their telescopes are like ours were. They called to everyone, not to us.')],
+    view=('I would not answer. They have told everyone where they are; we have told no one. Every Year we stay quiet, we learn and they don’t.', 'leans hidden · leans cautious'))
+V2_ORDER = order_screen('veyra', 4110, V2_RES(4110), 'Don’t answer. If their broadcast changes, wake me. And when the check at Ember is done.', [
+    ('WHEN', '<b>Beacon’s broadcast changes</b> · new words, or it stops'), ('OR', f'<b>The check at Ember is done</b> · Year {Y_CHECK:g}'),
+    ('DO', '<b>Wake you</b> with what changed'), ('KEEPS', 'Never send messages')],
+    'If anyone answers Beacon, its broadcast may say so. How soon it changes tells how near the answerer is.')
+
+# ---------- Hael comes back at 20:20, when its beacon sends (2026-10-05) ----------
+# The order broadcasts the founding line at Year 4 and wakes Hael. Sending takes 10% of energy each Year: the first
+# project in the cohort that truly needs power. Hael keeps sending, and asks to be woken for anything felt at Warden.
+def H2_RES(t): return (10, 15 * (t < 3000) + 15 + 5 * (t < 2250), kt(1040 + 40 * yr(t) - 100))
+def hears_at(name, hip, now):
+    d = sd('hael', hip)
+    return (f'<div class="hearrow"><span class="mk other"></span><span class="pt"><span class="other">{name} · {d:.1f} ly</span><span class="sub">{HAEL_STARS[hip][1]}</span></span>'
+            f'<span class="pd">{tstack(f"Year {bb["years"] + d:.1f}", clock((bb["years"] + d - yr(now)) * 5))}</span></div>')
+H2_SENDING = seat_tab('hael', yr(1230), H2_RES(1230), 'Reach', 'REACH', 'BROADCAST · SENDING', f"""<button class="backlink inline">‹ Reach</button>
+<div class="voice ours"><span class="mono">WHAT LEFT · YEAR {bb['years']} · REPEATING</span><p>“We are Hael. We keep what the light brings. Answer, and we will keep your words.”</p></div>
+<div class="sec">WHO HEARS IT · SOONEST FIRST</div>
+{''.join(hears_at(*h, 1230) for h in HEARS[:4])}
+<div class="sec">SENDING</div>
+{ledger([('Since', f'Year {bb["years"]}'), ('Gone so far', f'{(yr(1230) - bb["years"]) * 365:.0f} light-days out, every way'), ('Costs', '10% of energy each Year while it sends'), ('Stop sending?', 'You can. What has left keeps going.')])}""")
+H2_COST = mind_chat('hael', 1260, H2_RES(1260), 'What does sending cost?', [
+    ('you', 'What does sending cost?'),
+    ('mind', 'A tenth of our energy each Year, and that energy sat idle anyway. Stopping wouldn’t call back what has left.'),
+    ('you', 'Who hears us first?')] + [('mind', f'{HEARS[0][0]}, in {clock((bb["years"] + sd("hael", HEARS[0][1]) - yr(1260)) * 5)}. Warden a little after. We may never know if anyone was there.')],
+    view=('Keep sending. Our people called for a century and no one answered. Now we can be heard.', 'leans open · leans bold'))
+H2_ORDER = order_screen('hael', 1290, H2_RES(1290), 'Keep sending. And wake me when our spectrographs feel anything at Warden.', [
+    ('WHEN', f'<b>Our spectrographs feel anything at Warden</b> · they’re built in Year {yr(210) + SPB:g}, then watch'), ('DO', '<b>Wake you</b> with what they felt'),
+    ('KEEPS', 'Wake me if anyone answers · answer by tight beam')])
+HAEL20 = [
+    '<section class="brow"><div class="bhead"><span class="bt mono">+15:30 → +19:30</span><span class="gy">Everyone away · Year 3.1 to Year 3.9</span></div></section>',
+    beat_row(1200, {'veyra': AWAY, 'kesh': AWAY,
+                    'hael': ('· The notice arrives.', 'The broadcast beacon is built. Your order sends the founding line, every way.', LK(wall(1200), [('NOW', 'Hael: our voice has gone out', 'Your order broadcast our founding line at Year 4. It keeps sending.')]))},
+             truth='Sending takes 10% of energy each Year: the first thing in the cohort that truly needs power.'),
+    beat_row(1230, {'veyra': AWAY, 'kesh': AWAY,
+                    'hael': ('· Opens from the notice.', None, say(with_strip(H2_SENDING, stars_strip('hael')), 'hael', 'Our voice is out, at the speed of light. Nothing can call it back now. We’ll keep every answer.'))}),
+    beat_row(1260, {'veyra': AWAY, 'kesh': AWAY, 'hael': ('What does sending cost?', None, say(with_strip(H2_COST, stars_strip('hael')), 'hael'))}),
+    beat_row(1290, {'veyra': AWAY, 'kesh': AWAY,
+                    'hael': ('Keep sending. And wake me when our spectrographs feel anything at Warden.', None, say(with_strip(H2_ORDER, stars_strip('hael', '99240')), 'hael', 'Still sending. And when the spectrographs feel anything at Warden, I wake you.', ('Undo',)))}),
+    beat_row(1320, {'veyra': AWAY, 'kesh': AWAY, 'hael': ('· Puts the phone down.', None, LK(wall(1320)))}),
+]
+
+# Hael, woken at Year 12.3 by its own order: a world at Warden, which is Veyra's. Delta Pavonis is about one solar
+# mass; a world like ours at 1.12 AU turns in 1.19 Years and tugs it by about 8 cm/s.
+H2_WORLD = seat_tab('hael', yr(3720), H2_RES(3720), 'Report', 'REPORT', 'RESULT', f"""<button class="backlink inline">‹ All reports</button>
+<div class="art">{wobble_chart('434 days', 'a tug of 8 cm/s')}</div>
+<h3 class="lead">A world at Warden</h3><p class="copy small">Warden · Delta Pavonis · spectrograph bank · watched {Y_HAEL_WORLD - yr(210) - SPB:.1f} Years · light that left {sd("hael", "99240"):.1f} Years ago</p>
+<p class="copy">Warden sways toward us and away every 434 days, by 8 cm/s, under the slow pull of its giant. A world nearly as heavy as ours would do that, about as far from Warden as we are from our star, where water could be liquid.</p>
+<div class="sec">WHAT IT COULD BE · ODDS NOW</div>{odds_now('A world, nearly as heavy as ours', 90)}{odds_now('Warden’s own surface', 10)}
+<div class="sec">WHAT IT CAN’T TELL</div><p class="copy small">Its true weight, its air, or who lives there. Our voice reaches it in Year {Y_BC_HERE}. If anyone there listens, that is when they learn of us.</p>""")
+H2_KNOCK = mind_chat('hael', 3750, H2_RES(3750), 'Should we knock on it?', [
+    ('you', 'Should we knock on it?'),
+    ('mind', f'Our voice is already on its way, and gets there first: Year {Y_BC_HERE}. A knock sent now, by tight beam, arrives in Year {yr(3750) + sd("hael", "99240"):.1f}.'),
+    ('you', 'Then what?'),
+    ('mind', 'Then we wait. If anyone there answers, our order answers back by tight beam, and wakes you.')],
+    view=('Let our voice reach them first. It says who we are better than a knock would.', 'leans open · leans bold'))
+
+# ---------- Kesh, woken at 21:31 by a world's first voice (2026-10-05) ----------
+# Hael's broadcast reaches Epsilon Indi in Year 18.3. Kesh's order is a daily summary, but a world's first voice
+# always wakes. Kesh calls Beta Hydri Hollow. Its spectrographs felt a world at Lodestar, Veyra's star, in Year 14.1,
+# held for the summary; the broadcast reached Lodestar in Year 13.3.
+Y_K_LODESTAR_WORLD = round(yr(750) + SPB + 3 * 1.19, 1)
+Y_KESH_HEARS = round(bb['years'] + d_hk_, 1); T_K = round(Y_KESH_HEARS * 300)
+def K3_RES(t): y = yr(t); return (2, 15, kt(540 + 40 * y + 10 * (y - .4) + 80 + 40 * (y - 2.4) - 100))
+K3_LANDS = f"""<div class="phone cine"><div class="cinetop"><span>Kesh</span><span class="mono">Year {Y_KESH_HEARS}</span></div>
+<svg width="390" height="300" viewBox="0 0 390 300" role="img" aria-label="Hollow’s signature">{stipple(54, 70, 390, 300)}{sigil(BEACON_SEED, OTHER, 195, 150, 118)}</svg>
+<div class="cinetext"><span class="mono kick">THE SKY WATCH · HOLLOW, {d_hk_:.1f} LIGHT-YEARS</span>
+<h3>Hollow is speaking to everyone.</h3>
+<p class="inscr">Radio, the same strength in every direction. Not tuned for us. A world’s first voice: it wakes you, whatever your orders say.</p>
+<p>It left Hollow in Year {bb['years']}, {d_hk_:.1f} Years ago.</p>
+<div class="cinebtn"><button class="light">Listen</button><button class="ghostlight">Later</button></div></div></div>"""
+K3_SIGNAL = seat_tab('kesh', yr(T_K + 30), K3_RES(T_K + 30), 'Report', 'REPORT', 'SIGNAL', f"""<button class="backlink inline">‹ All reports</button>
+<div class="art"><svg width="358" height="120" viewBox="0 0 358 120" role="img" aria-label="Hollow’s signature">{sigil(BEACON_SEED, OTHER, 179, 60, 54)}</svg></div>
+<h3 class="lead">A broadcast, not aimed at us</h3>
+<p class="copy small">From Hollow · Beta Hydri · {d_hk_:.1f} ly · caught Year {Y_KESH_HEARS} by the sky watch</p>
+<div class="sec">THE NUMBERS</div>
+{ledger([('Began', f'Year {bb["years"]}, {d_hk_:.1f} Years ago'), ('How loud', 'About 10 TW, every way'), ('Aimed at us', 'No'), ('They know of us', 'Nothing suggests it'),
+         ('Lodestar heard it', f'In Year {bb["years"] + sd("hael", "99240"):.1f}. Our spectrographs feel a world there.')])}""")
+K3_READ = seat_tab('kesh', yr(T_K + 60), K3_RES(T_K + 60), 'Reach', 'REACH', 'BROADCAST · HOLLOW', f"""<button class="backlink inline">‹ Signal</button>
+<div class="speech"><div class="speaker">{sigil_svg(BEACON_SEED, OTHER, 44, 'Hollow’s signature')}<span><b>Hollow</b><span class="mono">TO ANYONE · ARRIVING SINCE YEAR {Y_KESH_HEARS}</span></span></div>
+<p class="big">“We are Hael. We keep what the light brings. Answer, and we will keep your words.”</p>
+<p class="untr">It repeats. The mind read it from its own counting, in weeks.</p></div>
+<div class="sec">WHAT IT CARRIES · TOLD, UNDER HOLLOW’S NAME</div>
+{part('WHO THEY ARE · THEIR NAME', '<b>Hollow says it is Hael</b>')}
+{part('AN INVITATION', '<b>“Answer, and we will keep your words.”</b>')}""")
+K3_TALK = mind_chat('kesh', T_K + 90, K3_RES(T_K + 90), 'Can they reach us?', [
+    ('you', 'Can they reach us?'),
+    ('mind', 'Not soon. To hit a world you need its orbit, and they don’t know we exist. Their voice tells everyone where they are. That cuts one way.'),
+    ('you', 'Anything else?'),
+    ('mind', f'Waiting in your summary: our spectrographs felt a world at Lodestar, Year {Y_K_LODESTAR_WORLD}. Hollow’s voice reached Lodestar in Year {bb["years"] + sd("hael", "99240"):.1f}. If anyone lives there, they heard it five Years ago.')],
+    view=('Say nothing. Grow. Know where Hollow’s world is before anyone knows where we are.', 'leans hidden · leans bold'))
+K3_ORDER = order_screen('kesh', T_K + 120, K3_RES(T_K + 120), 'Say nothing. Put anything else from Hollow in the summary.', [
+    ('WHEN', '<b>Hollow says anything more</b>'), ('DO', '<b>Hold it for your daily summary</b> · don’t wake you'),
+    ('KEEPS', 'Wake me once a day · a world’s first voice still wakes you')])
+# ---------- Veyra comes back at 21:25: the check at Ember is done (2026-10-05) ----------
+# Inside the hum, lines a few hertz wide: nature's narrowest radio lines are hundreds of times wider. Their pitch
+# shifts with a 148-day year (the world's 37 km/s orbit) and a 26-hour day, and they move with Ember across the sky.
+# That identifies technology on the world the spectrographs felt: presence, as of light that left 9.2 Years ago.
+T_V3 = round(Y_CHECK * 300)
+def V3_RES(t): return (0, 35, kt(840 + 40 * yr(t) - 300))
+def presence_art(w=390, h=300):
+    s = [stipple(57, 70, w, h), f'<ellipse cx="195" cy="150" rx="130" ry="46" fill="none" stroke="{INK}" stroke-width=".8" stroke-dasharray="3 4" opacity=".6"></ellipse>',
+         f'<circle cx="195" cy="150" r="9" fill="{PAPER}" stroke="{INK}" stroke-width="1.3"></circle>' + text(195, 128, 'Ember', 10, INK, 'middle', 600)]
+    wx, wy = 300, 179
+    for r, o in ((14, .9), (26, .6), (40, .35)):
+        s.append(f'<path d="M{wx - r * .7:.1f} {wy - r * .7:.1f} A{r} {r} 0 0 1 {wx + r * .7:.1f} {wy - r * .7:.1f}" fill="none" stroke="{OTHER}" stroke-width="1.4" opacity="{o}"></path>')
+    s.append(f'<circle cx="{wx}" cy="{wy}" r="5" fill="{OTHER}"></circle>' + text(wx + 6, wy + 22, 'the world · 148-day year · 26-hour day', 9, OTHER, 'end', 600))
+    return f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" font-family="IBM Plex Mono, monospace" role="img" aria-label="Ember, the world we felt, and radio rising from it">{"".join(s)}</svg>'
+V3_LANDS = f"""<div class="phone cine"><div class="cinetop"><span>Veyra</span><span class="mono">Year {yr(T_V3 + 30)}</span></div>
+{presence_art()}
+<div class="cinetext"><span class="mono kick">THE CHECK AT EMBER · {d_ember:.1f} LIGHT-YEARS</span>
+<h3>Someone is at Ember.</h3>
+<p class="inscr">Narrow lines inside the hum, the kind nothing natural makes, rising and falling with the world’s year and its day.</p>
+<p>As of light that left {d_ember:.1f} Years ago. What they are now, we can’t see.</p>
+<div class="cinebtn"><button class="light">See the evidence</button><button class="ghostlight">Later</button></div></div></div>"""
+V3_EVIDENCE = seat_tab('veyra', yr(T_V3 + 60), V3_RES(T_V3 + 60), 'Report', 'REPORT', 'CHECKED · PRESENCE', f"""<button class="backlink inline">‹ All reports</button>
+<h3 class="lead">Built, on the world at Ember</h3><p class="copy small">Ember · Epsilon Indi · deep-field receiver · 4 Years of checking · light that left {d_ember:.1f} Years ago</p>
+<p class="copy">Inside the hum, a few lines only hertz wide. The narrowest natural radio lines are hundreds of times wider. Their pitch rises and falls every {K_P_DAYS} days and every 26 hours, and the source has moved with Ember across our sky.</p>
+<div class="sec">WHAT IT ESTABLISHES · SEEN</div>
+{ledger([('Presence', 'Someone with radio lives on the world at Ember'), ('As of', f'Light that left {d_ember:.1f} Years ago'), ('Where', f'The world we felt: a {K_P_DAYS}-day year, a 26-hour day'), ('Aimed at us', 'No. It is their own radio, aimed at no one.')])}
+<div class="sec">WHAT IT CAN’T TELL</div><p class="copy small">Who they are, what they are now, or whether they know of us. We overheard them; they told us nothing.</p>""")
+V3_TALK = mind_chat('veyra', T_V3 + 90, V3_RES(T_V3 + 90), 'Do they know we’re here?', [
+    ('you', 'Do they know we’re here?'),
+    ('mind', 'Nothing says so. Our hum is as faint as theirs, and their telescopes started like ours. But they may have built ears too.'),
+    ('you', 'And Beacon’s voice?'),
+    ('mind', f'It reaches Ember in Year {bb["years"] + d_hk_:.1f}, {clock((bb["years"] + d_hk_ - yr(T_V3 + 90)) * 5)} from now. Then they will know of Beacon. Not of us.')],
+    view=('Say nothing. We know them, and they don’t know us. Every Year we keep it that way is ours.', 'leans hidden · leans cautious'))
+V3_DOSSIER = seat_tab('veyra', yr(T_V3 + 120), V3_RES(T_V3 + 120), 'Reach', 'REACH', 'EMBER', f"""<button class="backlink inline">‹ Reach</button>
+<h3 class="lead">What we know, both ways</h3>
+<p class="copy small">Ember · Epsilon Indi · {d_ember:.1f} ly · as of Year {yr(T_V3 + 120)}</p>
+<div class="sec">WHAT WE KNOW ABOUT THEM · ALL SEEN, NOTHING TOLD</div>
+{ledger([('A world', f'At least as heavy as ours, a {K_P_DAYS}-day year · Year {Y_WORLD}'), ('A day', '26 hours'), ('Radio', 'A faint hum with narrow lines: built · Year ' + f'{Y_CHECK:g}'),
+         ('Their giant', 'Far out; a leftover in its path, still unexplained'), ('Their name', 'Unknown. Ember is our name for their star.')])}
+<div class="sec">WHAT THEY KNOW ABOUT US</div>
+{ledger([('Of us', 'Nothing we know of'), ('Of Beacon', f'From Year {bb["years"] + d_hk_:.1f}, when its voice arrives')])}""")
+V3_ORDER = order_screen('veyra', T_V3 + 150, V3_RES(T_V3 + 150), 'Tell no one. Keep listening. Wake me if Ember aims anything at anyone.', [
+    ('WHEN', '<b>Ember aims anything at anyone</b> · a knock, a beam, or a broadcast'), ('DO', '<b>Wake you</b>'),
+    ('KEEPS', 'Never send messages · listening to Ember')],
+    'A beam aimed at someone else can’t be overheard from here, unless it points our way. A broadcast can.')
+V3 = ['<section class="brow"><div class="bhead"><span class="bt mono">+69:30 → +84:30</span><span class="gy">Year 13.9 to Year 16.9</span></div>'
+      f'<div class="truth"><b>Godview</b><span>Year {Y_K_LODESTAR_WORLD}: Kesh’s spectrographs feel Veyra’s world at Lodestar. Kesh’s order holds it for the daily summary.</span></div></section>',
+    beat_row(T_V3, {'hael': AWAY, 'kesh': AWAY,
+                    'veyra': ('· The notice arrives.', 'The check at Ember is done.', LK(wall(T_V3), [('NOW', 'Veyra: the check at Ember is done', 'Woken, as you asked.')]))}),
+    beat_row(T_V3 + 30, {'hael': AWAY, 'kesh': AWAY, 'veyra': ('· Opens from the notice.', None, V3_LANDS)},
+             truth='The lines are Kesh’s ordinary radio: the faint hum every seat starts with. Veyra has overheard Kesh. Kesh has no way to know.'),
+    beat_row(T_V3 + 60, {'hael': AWAY, 'kesh': AWAY, 'veyra': ('See the evidence.', None, say(with_strip(V3_EVIDENCE, stars_strip('veyra', '108870')), 'veyra', f'Built, on the world we felt. As of {d_ember:.1f} Years ago. That is all we can know of now.'))}),
+    beat_row(T_V3 + 90, {'hael': AWAY, 'kesh': AWAY, 'veyra': ('Do they know we’re here?', None, say(with_strip(V3_TALK, stars_strip('veyra', '108870')), 'veyra'))},
+             truth=f'Kesh’s spectrographs felt Veyra’s world in Year {Y_K_LODESTAR_WORLD}. It sits unread in Kesh’s daily summary.'),
+    beat_row(T_V3 + 120, {'hael': AWAY, 'kesh': AWAY, 'veyra': ('What do we know about them?', None, say(with_strip(V3_DOSSIER, stars_strip('veyra', '108870')), 'veyra', 'More than they know of us. Less than we would like.'))}),
+    beat_row(T_V3 + 150, {'hael': AWAY, 'kesh': AWAY, 'veyra': ('Tell no one. Keep listening. Wake me if Ember aims anything at anyone.', None, say(with_strip(V3_ORDER, stars_strip('veyra', '108870')), 'veyra', 'Set. We keep it to ourselves, and keep listening.', ('Undo',)))}),
+    beat_row(T_V3 + 180, {'hael': AWAY, 'kesh': AWAY, 'veyra': ('· Puts the phone down.', None, LK(wall(T_V3 + 180)))},
+             truth=f'The infrared telescope finishes in Year {yr(180) + irt["years"]:g}: Ember’s giant is alone, and the leftover was old measures. It waits in Veyra’s Report.'),
+    f'<section class="brow"><div class="bhead"><span class="bt mono">+{(T_V3 + 210) // 60}:{(T_V3 + 210) % 60:02d} → +{(T_K - 30) // 60}:{(T_K - 30) % 60:02d}</span><span class="gy">Everyone away</span></div></section>',
+]
+KESH21 = [
+    beat_row(T_K, {'veyra': AWAY, 'hael': AWAY,
+                   'kesh': ('· The notice arrives.', 'The sky watch hears a broadcast from Hollow.', LK(wall(T_K), [('NOW', 'Kesh: a world’s first voice', 'From Hollow, to everyone. A first voice always wakes you.')]))},
+             truth=f'Kesh’s order is once a day, but a world’s first voice always wakes. Hael’s founding line has now reached every seat.'),
+    beat_row(T_K + 30, {'veyra': AWAY, 'hael': AWAY, 'kesh': ('· Opens from the notice.', None, K3_LANDS)}),
+    beat_row(T_K + 60, {'veyra': AWAY, 'hael': AWAY, 'kesh': ('Numbers.', None, say(with_strip(K3_SIGNAL, stars_strip('kesh', '2021')), 'kesh', '14.3 light-years. Loud: ten terawatts, every way. Not at us. Lodestar heard it five Years ago.', ('What does it say?',)))}),
+    beat_row(T_K + 90, {'veyra': AWAY, 'hael': AWAY, 'kesh': ('What does it say?', None, say(with_strip(K3_READ, stars_strip('kesh', '2021')), 'kesh', 'They call themselves Hael. They want answers. They told everyone where they are.'))}),
+    beat_row(T_K + 120, {'veyra': AWAY, 'hael': AWAY, 'kesh': ('Can they reach us?', None, say(with_strip(K3_TALK, stars_strip('kesh', '99240')), 'kesh'))}),
+    beat_row(T_K + 150, {'veyra': AWAY, 'hael': AWAY, 'kesh': ('Say nothing. Put anything else from Hollow in the summary.', None, say(with_strip(K3_ORDER, stars_strip('kesh', '2021')), 'kesh', 'Set. Hollow waits for the summary. A new world’s first voice still wakes you.', ('Undo',)))}),
+    beat_row(T_K + 180, {'veyra': AWAY, 'hael': AWAY, 'kesh': ('· Puts the phone down.', None, LK(wall(T_K + 180), [('TOMORROW · 20:00', 'Kesh: one summary', 'Held for it: a world at Lodestar, and anything more from Hollow.')]))},
+             truth='Three seats, one voice between them. Hael was heard twice and knows nothing of it. Veyra and Kesh both stay quiet, each for its own reasons.'),
+]
+
+GAP = ('<section id="gap" class="brow"><div class="bhead"><span class="bt mono">+22:30 → +60:00</span><span class="gy">Everyone away · Year 4.5 to Year 12</span></div>'
+       f'<div class="truth"><b>Godview</b><span>'
+       f'Year {FLASH["years"]}: Veyra’s flash watch is built, quietly. Year {yr(450) + tbm["years"]:g}: Hael’s tight beam is built, so its order can answer. Year {yr(210) + SPB:g}: Veyra’s and Hael’s spectrograph banks are built and start watching. '
+       f'Year {Y_WORLD}: after three of its turns, Veyra’s spectrographs feel a world at Ember. No one is woken: Veyra’s orders wake it only for what is heard. '
+       f'Year {yr(750) + SPB:g}: Kesh’s spectrograph bank, at Lodestar, is built. Year 12, 21:00: Veyra’s receiver is built, and its order wakes Veyra.</span></div></section>')
+SESSION2 = [*HAEL20, GAP,
+    beat_row(3600, {'veyra': ('· The notice arrives.', 'The deep-field receiver is built. Listening to Ember begins.', LK(wall(3600), [('NOW', 'Veyra: listening to Ember', 'As you asked. And while you were away: a world at Ember.')])),
+                    'hael': AWAY, 'kesh': AWAY}),
+    beat_row(3630, {'veyra': ('· Opens from the notice.', None, say(with_strip(V2_WELCOME, world_strip('veyra', v2_builds(3630))), 'veyra', 'Listening to Ember, as you asked. And our spectrographs felt a world there, while you were away.', ('Show me the world',))),
+                    'hael': AWAY, 'kesh': AWAY}),
+    beat_row(3660, {'veyra': ('Show me the world.', None, say(with_strip(V2_WORLD, stars_strip('veyra', '108870')), 'veyra', 'A world at Ember, where water could be liquid. We feel its pull, not the world. Nothing yet of a voice.')),
+                    'hael': AWAY, 'kesh': AWAY},
+             truth=f'The world at Ember is Kesh’s. In Year {Y_HAEL_WORLD}, Hael’s spectrographs feel Veyra’s world at Warden the same way: a world, not a voice. Hael’s order wakes Hael for it.'),
+    beat_row(3690, {'veyra': D, 'kesh': AWAY,
+                    'hael': ('· The notice arrives.', 'Hael’s spectrographs feel a world at Warden.', LK(wall(3690), [('NOW', 'Hael: a world at Warden', 'You asked to be woken for anything our spectrographs feel there.')]))}),
+    beat_row(3720, {'veyra': ('And the listening?', None, say(with_strip(V2_LISTEN, world_strip('veyra', v2_builds(3720), 'ORBIT · VEYRA · THE RECEIVER LISTENS FROM HERE')), 'veyra', 'Part of every night. A hum as faint as ours, from 9 light-years, would show within a Year, if it is there.')),
+                    'hael': ('· Opens from the notice.', None, say(with_strip(H2_WORLD, stars_strip('hael', '99240')), 'hael', 'A world at Warden, where water could be liquid. We keep it, and every reading of it. Our voice reaches it in a Year.', ('Should we knock on it?',))), 'kesh': AWAY}),
+    beat_row(3750, {'veyra': D, 'kesh': AWAY, 'hael': ('Should we knock on it?', None, say(with_strip(H2_KNOCK, stars_strip('hael', '99240')), 'hael'))}),
+    beat_row(3780, {'veyra': ('', 'The receiver hears something at Ember.', say(with_strip(V2_HUM, stars_strip('veyra', '108870')), 'veyra', '<b>Heard: a hum at Ember</b>Faint, steady, sitting on Ember. The star, a galaxy far behind, or a world. I can’t tell yet.', ('Look for a rhythm',), state='open')),
+                    'hael': AWAY, 'kesh': AWAY},
+             truth=f'The hum is Kesh: the faint hum every seat starts with, {d_ember:.1f} ly away, inside the receiver’s reach. Kesh’s day is 26 hours.'),
+    beat_row(3810, {'veyra': ('Look for a rhythm in it.', None, None), 'kesh': AWAY, 'hael': ('Let our voice reach them. Wake me if they answer.', None, None)}),
+    beat_row(3840, {'veyra': D, 'kesh': AWAY, 'hael': ('· Puts the phone down.', None, LK(wall(3840)))}),
+    beat_row(3870, {'veyra': ('Rhythm?', 'The hum rises and falls every 26 hours. Something built 15 → 45.', say(with_strip(V2_HUM2, stars_strip('veyra', '108870')), 'veyra', 'It turns with a day of 26 hours: a world’s day, not a star’s. Built, or a world’s own aurora. A proper check would tell: four Years.', ('Check it', 'Later'))),
+                    'hael': AWAY, 'kesh': AWAY}),
+    beat_row(3900, {'veyra': ('Check it.', None, say(with_strip(V2_CHECK, world_strip('veyra', v2_builds(3900), 'ORBIT · VEYRA · THE RECEIVER LISTENS FROM HERE')), 'veyra', 'Checking: spectrum, polarization, and whether it moves with Ember. Twenty minutes. Listening sends nothing.', ('Undo',))),
+                    'hael': AWAY, 'kesh': AWAY}),
+    beat_row(3930, {'veyra': D, 'hael': AWAY, 'kesh': AWAY}),
+    beat_row(3960, {'veyra': D, 'hael': AWAY, 'kesh': AWAY}),
+    beat_row(3990, {'veyra': ('', 'The sky watch hears a broadcast from Beacon.', V2_LANDS), 'hael': AWAY, 'kesh': AWAY},
+             truth=f'Hael’s founding line, sent in Year {bb["years"]}, reaches Veyra. Hael doesn’t know it was heard, and can’t, unless Veyra answers; if Veyra did, Hael’s order would answer back by tight beam. Kesh’s sky watch hears it in Year {bb["years"] + d_hk_:.1f}: a world’s first voice, so it wakes Kesh despite the daily summary.'),
+    beat_row(4020, {'veyra': ('Listen.', None, say(with_strip(V2_SIGNAL, stars_strip('veyra', '2021')), 'veyra', 'A broadcast from Beacon, to everyone. It left before we woke to listen. Ember will hear it too, in five Years.', ('What does it say?',))),
+                    'hael': AWAY, 'kesh': AWAY}),
+    beat_row(4050, {'veyra': ('What does it say?', None, say(with_strip(V2_READ, stars_strip('veyra', '2021')), 'veyra', 'They call themselves Hael. They keep what the light brings, and ask anyone to answer.')),
+                    'hael': AWAY, 'kesh': AWAY}),
+    beat_row(4080, {'veyra': ('Who are they?', None, say(with_strip(V2_TALK, stars_strip('veyra', '2021')), 'veyra')), 'hael': AWAY, 'kesh': AWAY}),
+    beat_row(4110, {'veyra': ('Don’t answer. If their broadcast changes, wake me. And when the check at Ember is done.', None, say(with_strip(V2_ORDER, stars_strip('veyra', '2021')), 'veyra', 'Set. We stay quiet. I wake you if Beacon’s words change, or when Ember’s check is done.', ('Undo',))),
+                    'hael': AWAY, 'kesh': AWAY}),
+    beat_row(4140, {'veyra': ('· Puts the phone down.', None, LK(wall(4140), [(f'IN {clock((Y_CHECK - yr(4140)) * 5)}', 'Veyra: the check at Ember', 'Anything new from Beacon wakes you sooner.')])),
+                    'hael': AWAY, 'kesh': AWAY},
+             truth=f'Every seat now has something on another. Hael feels Veyra’s world. Kesh’s spectrographs at Lodestar will feel it too. Veyra holds a world and a hum at Ember, and a voice at Beacon, and has said nothing.'),
+]
+BEATS += SESSION2 + V3 + KESH21
 
 COHORT_ROWS = BEATS
 
@@ -5820,7 +6134,7 @@ cohort_css = '''<style>
 .mcap{position:absolute;left:10px;top:8px;padding:2px 7px;border-radius:9px;background:var(--paper);border:1px solid var(--faint);font-size:9.5px;letter-spacing:.06em;color:var(--ink)}
 .mgrab{position:absolute;left:50%;bottom:5px;width:36px;height:4px;margin-left:-18px;border-radius:2px;background:var(--faint)}
 .phone.lock{background:#121314;color:#E6E3DB;padding:60px 14px 0;gap:10px;justify-content:flex-start}.lockclock{display:flex;flex-direction:column;align-items:center;margin-bottom:24px}.lockclock span{font-size:15px;opacity:.8}.lockclock b{font-size:64px;font-weight:500;letter-spacing:-.02em}
-.note{display:flex;flex-direction:column;gap:2px;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.12);font-size:13px}.note .mono{font-size:9.5px;letter-spacing:.08em;opacity:.7}.note b{font-size:14px}
+.note{display:flex;flex-direction:column;gap:2px;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.12);font-size:13px}.note .mono{font-size:9.5px;letter-spacing:.08em;opacity:.7}.note b{font-size:14px}.phone.lock .note{color:#E6E3DB;margin:0}.phone.lock .note span{color:#C9C5BC}.phone.lock .note .mono{color:#E6E3DB}
 .brow.pre{padding-top:10px}
 .brow{padding:14px 0 10px;border-top:1px solid var(--frame)}.brow.tall{padding-bottom:28px}
 .bhead{display:flex;align-items:baseline;gap:12px;margin-bottom:6px}.bt{font-size:17px;font-weight:600;color:var(--ink)}.bhead .gy{font-size:12px;color:var(--page-ink2);font-weight:400}
@@ -5834,7 +6148,7 @@ cohort_body = (f'<section id="about" class="cohort-intro"><h2>Cohort playtest ·
                f'light takes {light_clock(seat_ly("veyra", "kesh"))} from Veyra to Kesh, {light_clock(seat_ly("veyra", "hael"))} to Hael, and {light_clock(seat_ly("hael", "kesh"))} between Hael and Kesh. '
                'Godview notes say what is true but no player can see. Earth and AI seats are out of scope.</p><p>The first 15 minutes of play, a row every 30 seconds (0.1 Year), from the moment the clock starts: Year 0, at 20:00. '
                'Before it, the pregame: the cohort wakes at a set time, and players queue the opening. Builds, tune-ups and quick looks all queue, so the first results land 30 seconds after the clock starts. Players talk to the mind: each cell gives what the player said and what lands, and the phone shows the result, with the mind’s reply in its people’s voice. Quick looks use what a civilization already has and take seconds; building takes Years. '
-               'Every phone shows its place on the board in a 2:1 strip of the map under the top bar. A cell with nothing in it is marked: a dead 30 seconds. The session runs 15 minutes, until each player sets a clock and puts the phone down.</p></section>'
+               'Every phone shows its place on the board in a 2:1 strip of the map under the top bar. A cell with nothing in it is marked: a dead 30 seconds. The session runs 15 minutes, until each player sets a clock and puts the phone down. Then each player’s next return: Hael at 20:20 when its voice goes out, Veyra at 21:00, Veyra again at 21:25 when its check at Ember lands, and Kesh at 21:31, woken by a world’s first voice.</p></section>'
                f'<div class="laneheads"><div class="lanes3">{"".join(lane_head(s) for s in SEATS)}</div></div>' + ''.join(COHORT_ROWS))
 cohort_page = set_text(page('Holos · cohort playtest', cohort_links, cohort_body, 'cohort.html').replace('</head>', tour_css + '\n' + cohort_css + '\n</head>'), TEXT_FACE)
 (here / 'cohort.html').write_text(cohort_page)
