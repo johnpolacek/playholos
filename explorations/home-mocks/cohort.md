@@ -179,7 +179,7 @@ Epsilon Indi · 11.8 ly from Sol · Wakes in · 00:15:30
 ENERGY · [0%] · MATTER · 1,240 kt · COMPUTE · [0%]
 [drawing: SYSTEM · EPSILON INDI · WHERE THE MATTER IS; labels: Kesh, ice world, the belt, Belt prospecting · 0%] · SYSTEM · EPSILON INDI · WHERE THE MATTER IS
 Start a project · [Close · ×]
-[Know · 6] · [selected: Grow · 5] · [Reach · 2]
+[Know · 6] · [selected: Grow · 6] · [Reach · 2]
 TUNE-UPS · QUICK · EACH ONCE
 Wake the idle data centers · +5% compute, for good · reserve kept for peaks · E 2% while it runs · 0.1 Years · 00:00:30 · [at Year 0]
 Retask the mines · +10 kt of matter a year · richer seams first · C 5% while it runs · 0.4 Years · 00:02:00 · [at Year 0]
@@ -187,7 +187,7 @@ Reroute the grid · +5% energy, for good · fewer losses on long lines · C 5% w
 BUILD
 - [drawing: Belt prospecting] · Belt prospecting · Shows where the metal is. Needed before mining. · C 10% · 6 Years · 00:30:00
 - [drawing: Orbital solar array] · Orbital solar array · More energy every year, so more projects can run at once. · C 5% · 400 kt · +20% energy, for good · Easier to spot · 10 Years · 00:50:00
-- [drawing: Cold compute annex] · Cold compute annex · More compute every year: faster answers, smarter probes. · E 2% · 300 kt · +25% compute, for good · 12 Years · 01:00:00
+- [drawing: Cold compute annex] · Cold compute annex · More compute every year: faster answers, smarter probes. · 300 kt · +25% compute, for good. Run cold, it draws only about 1% of energy, for as long as it runs · 12 Years · 01:00:00
 THE MIND (KESH) · Three builds fit at waking: prospecting, orbital power, the annex. 700 kt of 1,240. Orbital power is 400 kt for energy we won’t need for a long time. Tune-ups queue too. · [Queue all of it] · [Skip orbital power]
 [Talk to the mind]
 −14:00 · 19:46 · before Year 0
@@ -284,7 +284,7 @@ THE MIND (HAEL) · Everything our people built, and every record they kept. The 
 “Queue all of it.”
 Kesh · Before Year 0
 Epsilon Indi · 11.8 ly from Sol · Wakes in · 00:12:00
-ENERGY · [4%] · MATTER · 540 kt · COMPUTE · [25%]
+ENERGY · [2%] · MATTER · 540 kt · COMPUTE · [25%]
 [drawing: ORBIT · KESH · QUEUED FOR YEAR 0 · +1 IN THE BELT; labels: moon, Kesh, low orbit, Orbital solar array · 0%, Cold compute annex · 0%] · ORBIT · KESH · QUEUED FOR YEAR 0 · +1 IN THE BELT
 PROJECTS · BEFORE YEAR 0
 Your cohort wakes Thursday at 20:00 · Entries are locked. Everything queued starts at Year 0, for everyone at once.
@@ -297,7 +297,7 @@ Wake the idle data centers · +5% compute, for good · reserve kept for peaks ·
 Retask the mines · +10 kt of matter a year · richer seams first · lands Year 0.4 · 00:02:00
 Reroute the grid · +5% energy, for good · fewer losses on long lines · lands Year 0.6 · 00:03:00
 AT YEAR 0 YOU WILL SPEND
-Energy · [4%] · 96% free
+Energy · [2%] · 98% free
 Compute · [25%] · 75% free
 540 kt · matter left after the queue · +40 kt a year
 WHILE YOU ARE AWAY
@@ -562,7 +562,7 @@ THE MIND (HAEL) · Our voice and our vault, both building from the first breath,
 Opens from the notice.
 Kesh · Before Year 0
 Epsilon Indi · 11.8 ly from Sol · Wakes in · 00:00:30
-ENERGY · [4%] · MATTER · 540 kt · COMPUTE · [25%]
+ENERGY · [2%] · MATTER · 540 kt · COMPUTE · [25%]
 [drawing: ORBIT · KESH · QUEUED FOR YEAR 0 · +1 IN THE BELT; labels: moon, Kesh, low orbit, Orbital solar array · 0%, Cold compute annex · 0%] · ORBIT · KESH · QUEUED FOR YEAR 0 · +1 IN THE BELT
 PROJECTS · BEFORE YEAR 0
 Your cohort wakes Thursday at 20:00 · Entries are locked. Everything queued starts at Year 0, for everyone at once.
@@ -575,7 +575,7 @@ Wake the idle data centers · +5% compute, for good · reserve kept for peaks ·
 Retask the mines · +10 kt of matter a year · richer seams first · lands Year 0.4 · 00:02:00
 Reroute the grid · +5% energy, for good · fewer losses on long lines · lands Year 0.6 · 00:03:00
 AT YEAR 0 YOU WILL SPEND
-Energy · [4%] · 96% free
+Energy · [2%] · 98% free
 Compute · [25%] · 75% free
 540 kt · matter left after the queue · +40 kt a year
 WHILE YOU ARE AWAY
@@ -628,7 +628,7 @@ THE MIND (HAEL) · Our voice and our vault, both begun. Three looks under way. A
 “What’s running?”
 Kesh · Year 0
 Epsilon Indi · 11.8 ly from Sol · 1 Year = 00:05:00
-ENERGY · [4%] · MATTER · 540 kt · COMPUTE · [25%]
+ENERGY · [2%] · MATTER · 540 kt · COMPUTE · [25%]
 [drawing: ORBIT · KESH · 2 BUILDING · +1 IN THE BELT; labels: moon, Kesh, low orbit, Orbital solar array · 0%, Cold compute annex · 0%] · ORBIT · KESH · 2 BUILDING · +1 IN THE BELT
 PROJECTS · 3 RUNNING · 3 TUNE-UPS
 TUNE-UPS
@@ -640,7 +640,7 @@ RUNNING · 3
 [drawing: Orbital solar array] · Orbital solar array · 10 Years · 00:50:00 · [Pause Orbital solar array]
 [drawing: Cold compute annex] · Cold compute annex · 12 Years · 01:00:00 · [Pause Cold compute annex]
 EACH YEAR YOU CAN SPEND
-Energy · [4%] · 96% free
+Energy · [2%] · 98% free
 Compute · [25%] · 75% free
 540 kt · matter on hand
 THE MIND (KESH) · All of it. Data centers in 30 seconds, mines in 2 minutes, grid in 3.
@@ -734,7 +734,7 @@ THE MIND (HAEL) · Something heavy at Warden, hiding some of its weight. A dim s
 “Show me Hollow.”
 Kesh · Year 0.2
 Epsilon Indi · 11.8 ly from Sol · 1 Year = 00:05:00
-ENERGY · [2%] · MATTER · 548 kt · COMPUTE · [35%]
+ENERGY · [1%] · MATTER · 548 kt · COMPUTE · [35%]
 [drawing: STARS · HOLLOW · 14.3 LY · 01:11:44; labels: Kesh, 00:25:00, 00:50:00, 01:15:00, Hollow, Beta Hydri · 01:11:44, Twofold, Alpha Centauri A · 00:48:19, Chaff, Tau Ceti · 00:57:28, Lodestar, Delta Pavonis · 00:46:03, Cinder, Lacaille 8760, Gliese 832] · STARS · HOLLOW · 14.3 LY · 01:11:44
 CLUE · YEAR 0.2
 [‹ Hollow]
@@ -796,10 +796,10 @@ THE MIND (HAEL) · Looking in heat, a minute and a half. And Brood is in: a come
 “Matter. Anything faster?”
 Kesh · Year 0.3
 Epsilon Indi · 11.8 ly from Sol · 1 Year = 00:05:00
-ENERGY · [2%] · MATTER · 552 kt · COMPUTE · [35%]
+ENERGY · [1%] · MATTER · 552 kt · COMPUTE · [35%]
 [drawing: ORBIT · KESH · 2 BUILDING · +1 IN THE BELT; labels: moon, Kesh, low orbit, Orbital solar array · 3%, Cold compute annex · 2%] · ORBIT · KESH · 2 BUILDING · +1 IN THE BELT
 Start a project · [Close · ×]
-[Know · 6] · [selected: Grow · 5] · [Reach · 2]
+[Know · 6] · [selected: Grow · 6] · [Reach · 2]
 TUNE-UPS · QUICK · EACH ONCE
 Haul in the dead orbit · +80 kt of matter, once · spent stages, dead satellites, old stations · C 5% while it runs · 1 Year · 00:05:00 · [Start]
 BUILD · MATTER SOONEST
@@ -849,7 +849,7 @@ THE MIND (HAEL) · I can. Year 4: our founding line, to everyone, repeating, and
 Lands · Hollow’s drift is the star’s own cycle. 60 → 85. The mines: +10 kt of matter a year.
 Kesh · Year 0.4
 Epsilon Indi · 11.8 ly from Sol · 1 Year = 00:05:00
-ENERGY · [2%] · MATTER · 556 kt · COMPUTE · [30%]
+ENERGY · [1%] · MATTER · 556 kt · COMPUTE · [30%]
 [drawing: ORBIT · KESH · 3 BUILDING · +1 IN THE BELT; labels: moon, Kesh, low orbit, Orbital solar array · 4%, Cold compute annex · 3%, Launch complex · 0%] · ORBIT · KESH · 3 BUILDING · +1 IN THE BELT
 PROJECTS · 4 RUNNING · 2 TUNE-UPS
 TUNE-UPS
@@ -863,7 +863,7 @@ RUNNING · 4
 [drawing: Orbital solar array] · Orbital solar array · 10 Years · 00:48:00 · [Pause Orbital solar array]
 [drawing: Cold compute annex] · Cold compute annex · 12 Years · 00:58:00 · [Pause Cold compute annex]
 EACH YEAR YOU CAN SPEND
-Energy · [2%] · 98% free
+Energy · [1%] · 99% free
 Compute · [30%] · 70% free
 556 kt · matter on hand · +50 kt a year
 THE MIND (KESH) · Both started. Dead orbit in 5 minutes. Pads in 10. Hollow’s the star, not a giant.
@@ -911,7 +911,7 @@ Ask the mind… · [Send · ↑]
 “Chaff.”
 Kesh · Year 0.5
 Epsilon Indi · 11.8 ly from Sol · 1 Year = 00:05:00
-ENERGY · [2%] · MATTER · 561 kt · COMPUTE · [40%]
+ENERGY · [1%] · MATTER · 561 kt · COMPUTE · [40%]
 [drawing: STARS · CHAFF · 11.5 LY · 00:57:28; labels: Kesh, 00:25:00, 00:50:00, 01:15:00, Hollow, Beta Hydri · 01:11:44, Twofold, Alpha Centauri A · 00:48:19, Chaff, Tau Ceti · 00:57:28, Lodestar, Delta Pavonis · 00:46:03, Cinder, Lacaille 8760, Gliese 832] · STARS · CHAFF · 11.5 LY · 00:57:28
 CLUE · YEAR 0.5
 [‹ Chaff]
@@ -975,7 +975,7 @@ THE MIND (HAEL) · A giant, tilted toward us. Real. Spectrographs could feel wor
 Lands · The grid: +5% energy, for good.
 Kesh · Year 0.6
 Epsilon Indi · 11.8 ly from Sol · 1 Year = 00:05:00
-ENERGY · [2%] · MATTER · 566 kt · COMPUTE · [35%]
+ENERGY · [1%] · MATTER · 566 kt · COMPUTE · [35%]
 [drawing: ORBIT · KESH · 3 BUILDING · +1 IN THE BELT; labels: moon, Kesh, low orbit, Orbital solar array · 6%, Cold compute annex · 5%, Launch complex · 10%] · ORBIT · KESH · 3 BUILDING · +1 IN THE BELT
 PROJECTS · 4 RUNNING · 1 TUNE-UP · 1 LOOK
 QUICK LOOKS · 1
@@ -991,10 +991,10 @@ RUNNING · 4
 [drawing: Orbital solar array] · Orbital solar array · 10 Years · 00:47:00 · [Pause Orbital solar array]
 [drawing: Cold compute annex] · Cold compute annex · 12 Years · 00:57:00 · [Pause Cold compute annex]
 EACH YEAR YOU CAN SPEND
-Energy · [2%] · 98% free
+Energy · [1%] · 99% free
 Compute · [35%] · 65% free
 566 kt · matter on hand · +50 kt a year
-THE MIND (KESH) · Energy 2%, compute 35%, 566 kt. Tune-ups done but one. Chaff in a minute.
+THE MIND (KESH) · Energy 1%, compute 35%, 566 kt. Tune-ups done but one. Chaff in a minute.
 [Talk to the mind]
 +3:30 · Year 0.7
 Godview · Both spectrograph banks finish in Year 8.7, about 00:40:00 from now. Then they must watch: a world shows only after a few of its turns. Veyra’s world turns in about 1.2 Years, and its orbit doesn’t face Hael, so Hael finds it around Year 12: a world, not a voice. Kesh’s turns in about 0.4 Years, so Veyra finds it within a Year of watching Ember. Hael’s turns in about 2.4 Years around a star whose surface shakes, so Veyra needs until Year 20 or later.
@@ -1018,7 +1018,7 @@ USES ONCE, AT START
 TIME
 now · 01:00:00 · 02:00:00 · 03:00:00
 8 Years
-THE MIND (VEYRA) · The spectrograph bank: 8 Years, 100 kt. It feels worlds as heavy as ours, given Years of watching. Started. Compute is filling; energy we barely touch. · [Undo]
+THE MIND (VEYRA) · The spectrograph bank: 8 Years, 100 kt. Once built, it watches Ember and Beacon for worlds as heavy as ours, a tenth of compute. Started. Compute is filling; energy we barely touch. · [Undo]
 [Talk to the mind]
 “Build the spectrographs.”
 Hael · Year 0.7
@@ -1059,7 +1059,7 @@ EACH YEAR YOU CAN SPEND
 Energy · [0%] · 100% free
 Compute · [70%] · 30% free
 572 kt · matter on hand · +40 kt a year
-THE MIND (VEYRA) · Compute is 70% used. Energy, nearly all free: instruments draw almost none. 572 kt. I would hold the matter. Something we learn may need it.
+THE MIND (VEYRA) · Compute is 70% used; energy, nearly all free. A ground data center would turn idle energy into a quarter more compute, in eight Years, with no matter. 572 kt: I would hold that.
 [Talk to the mind]
 “What can we learn while they build?”
 Hael · Year 0.8
@@ -1089,7 +1089,7 @@ THE MIND (HAEL) · With what we have: listen to Warden for a Year, or track its 
 Lands · Chaff’s wobbles: two fade, two hold, barely. Worlds 50 → 55.
 Kesh · Year 0.8
 Epsilon Indi · 11.8 ly from Sol · 1 Year = 00:05:00
-ENERGY · [2%] · MATTER · 576 kt · COMPUTE · [25%]
+ENERGY · [1%] · MATTER · 576 kt · COMPUTE · [25%]
 [drawing: STARS · CHAFF · 11.5 LY · 00:57:28; labels: Kesh, 00:25:00, 00:50:00, 01:15:00, Hollow, Beta Hydri · 01:11:44, Twofold, Alpha Centauri A · 00:48:19, Chaff, Tau Ceti · 00:57:28, Lodestar, Delta Pavonis · 00:46:03, Cinder, Lacaille 8760, Gliese 832] · STARS · CHAFF · 11.5 LY · 00:57:28
 REPORT · QUICK LOOK
 [‹ All reports]
@@ -1147,7 +1147,7 @@ THE MIND (HAEL) · Listening to Warden, a Year. Five minutes. Whoever is there a
 “Lodestar.”
 Kesh · Year 0.9
 Epsilon Indi · 11.8 ly from Sol · 1 Year = 00:05:00
-ENERGY · [2%] · MATTER · 581 kt · COMPUTE · [35%]
+ENERGY · [1%] · MATTER · 581 kt · COMPUTE · [35%]
 [drawing: STARS · LODESTAR · 9.2 LY · 00:46:03; labels: Kesh, 00:25:00, 00:50:00, 01:15:00, Hollow, Beta Hydri · 01:11:44, Twofold, Alpha Centauri A · 00:48:19, Chaff, Tau Ceti · 00:57:28, Lodestar, Delta Pavonis · 00:46:03, Cinder, Lacaille 8760, Gliese 832] · STARS · LODESTAR · 9.2 LY · 00:46:03
 CLUE · YEAR 0.9
 [‹ Lodestar]
@@ -1218,7 +1218,7 @@ THE MIND (HAEL) · Our founding line, and an invitation to answer. Nothing of th
 Lands · Lodestar is heavier than it pulls. Dim star 20 → 32.
 Kesh · Year 1.1
 Epsilon Indi · 11.8 ly from Sol · 1 Year = 00:05:00
-ENERGY · [2%] · MATTER · 591 kt · COMPUTE · [25%]
+ENERGY · [1%] · MATTER · 591 kt · COMPUTE · [25%]
 [drawing: STARS · LODESTAR · 9.2 LY · 00:46:03; labels: Kesh, 00:25:00, 00:50:00, 01:15:00, Hollow, Beta Hydri · 01:11:44, Twofold, Alpha Centauri A · 00:48:19, Chaff, Tau Ceti · 00:57:28, Lodestar, Delta Pavonis · 00:46:03, Cinder, Lacaille 8760, Gliese 832] · STARS · LODESTAR · 9.2 LY · 00:46:03
 REPORT · QUICK LOOK
 [‹ All reports]
@@ -1345,7 +1345,7 @@ THE MIND (HAEL) · We can. But our beacon speaks to everyone, so answering by it
 Lands · The dead orbit, hauled in: +80 kt.
 Kesh · Year 1.4
 Epsilon Indi · 11.8 ly from Sol · 1 Year = 00:05:00
-ENERGY · [2%] · MATTER · 686 kt · COMPUTE · [20%]
+ENERGY · [1%] · MATTER · 686 kt · COMPUTE · [20%]
 [drawing: ORBIT · KESH · 3 BUILDING · +1 IN THE BELT; labels: moon, Kesh, low orbit, Orbital solar array · 14%, Cold compute annex · 12%, Launch complex · 50%] · ORBIT · KESH · 3 BUILDING · +1 IN THE BELT
 MIND · NEW ORDER
 WHAT YOU WANT
@@ -1433,7 +1433,26 @@ Nothing new. · A dead 30 seconds.
 Away.
 +9:30 · Year 1.9
 Godview · Veyra is at Warden, giving off only the faint hum every seat starts with: a tenth of what a Year of listening could hear.
-Nothing new. · A dead 30 seconds.
+“Build a ground data center.”
+Veyra · Year 1.9
+Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
+ENERGY · [0%] · MATTER · 616 kt · COMPUTE · [85%]
+[drawing: ORBIT · VEYRA · 5 BUILDING; labels: moon, Veyra, low orbit, Deep-field receiver · 16%, Deep flash watch · 32%, Infrared telescope · 7%, Spectrograph bank · 15%, Ground data center · 0%] · ORBIT · VEYRA · 5 BUILDING
+[‹ Grow] · GROW
+[drawing: Ground data center]
+
+### Ground data center
+More compute, paid for in energy we already have.
+Chips and halls on the ground, from our own fabs. It takes no matter from orbit.
+ONCE BUILT
++25% compute, for good · Draws about 3% of energy for as long as it runs · Listening and watching take a smaller share
+USES EACH YEAR
+Compute · [5%] · 5%
+TIME
+now · 01:00:00 · 02:00:00 · 03:00:00
+8 Years
+THE MIND (VEYRA) · Started: eight Years, no matter. When it runs, it draws a little of the energy we don’t use, and we think a quarter more. · [Undo]
+[Talk to the mind]
 “Warden?”
 Lands · Nothing loud at Warden, after a Year of listening.
 Hael · Year 1.9
@@ -1461,7 +1480,7 @@ Godview · Kesh is at Ember, giving off only the faint hum every seat starts wit
 Lands · Nothing loud at Ember, after a Year of listening.
 Veyra · Year 2
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [0%] · MATTER · 620 kt · COMPUTE · [70%]
+ENERGY · [0%] · MATTER · 620 kt · COMPUTE · [75%]
 [drawing: STARS · EMBER · 9.2 LY · 00:46:03; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · EMBER · 9.2 LY · 00:46:03
 REPORT · LONG LOOK
 [‹ All reports]
@@ -1500,7 +1519,7 @@ Godview · From Year 12 Veyra’s receiver listens to Ember. Kesh’s faint hum 
 “Wake me when the receiver is done. Then listen to Ember.”
 Veyra · Year 2.1
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [0%] · MATTER · 624 kt · COMPUTE · [70%]
+ENERGY · [0%] · MATTER · 624 kt · COMPUTE · [75%]
 [drawing: ORBIT · VEYRA · THE RECEIVER WILL LISTEN FROM HERE; labels: moon, Veyra, low orbit, Deep-field receiver · 18%, Deep flash watch · 35%] · ORBIT · VEYRA · THE RECEIVER WILL LISTEN FROM HERE
 MIND · NEW ORDER
 WHAT YOU WANT
@@ -1542,7 +1561,7 @@ Away.
 “Now Lodestar’s spectrographs.”
 Kesh · Year 2.5
 Epsilon Indi · 11.8 ly from Sol · 1 Year = 00:05:00
-ENERGY · [2%] · MATTER · 645 kt · COMPUTE · [30%]
+ENERGY · [1%] · MATTER · 645 kt · COMPUTE · [30%]
 [drawing: ORBIT · KESH · 3 BUILDING · +1 IN THE BELT; labels: moon, Kesh, low orbit, Orbital solar array · 25%, Cold compute annex · 21%, Spectrograph bank · 0%] · ORBIT · KESH · 3 BUILDING · +1 IN THE BELT
 [‹ Know] · KNOW
 [drawing: Spectrograph bank]
@@ -1567,7 +1586,7 @@ Away.
 “Queue belt mining. Wake me once a day.”
 Kesh · Year 2.6
 Epsilon Indi · 11.8 ly from Sol · 1 Year = 00:05:00
-ENERGY · [2%] · MATTER · 654 kt · COMPUTE · [30%]
+ENERGY · [1%] · MATTER · 654 kt · COMPUTE · [30%]
 [drawing: ORBIT · KESH · 3 BUILDING · +1 IN THE BELT; labels: moon, Kesh, low orbit, Orbital solar array · 26%, Cold compute annex · 22%, Spectrograph bank · 1%] · ORBIT · KESH · 3 BUILDING · +1 IN THE BELT
 PROJECTS · 4 RUNNING · 1 UP NEXT
 UP NEXT · STARTS ON ITS OWN
@@ -1577,7 +1596,7 @@ WHILE YOU ARE AWAY
 - Wake me once a day · one summary · ›
 - A world’s first voice wakes you · a knock or a broadcast, aimed at us or not · even in quiet hours · always
 EACH YEAR YOU CAN SPEND
-Energy · [2%] · 98% free
+Energy · [1%] · 99% free
 Compute · [30%] · 70% free
 654 kt · matter on hand · +90 kt a year
 THE MIND (KESH) · Queued. Mining starts on its own in Year 6. Once a day, one summary.
@@ -1686,8 +1705,8 @@ Away.
 Opens from the notice.
 Veyra · Year 12.1
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [0%] · MATTER · 1,024 kt · COMPUTE · [35%]
-[drawing: ORBIT · VEYRA · 1 BUILDING; labels: moon, Veyra, low orbit, Deep-field receiver, Deep flash watch, Spectrograph bank, Infrared telescope · 64%] · ORBIT · VEYRA · 1 BUILDING
+ENERGY · [3%] · MATTER · 1,024 kt · COMPUTE · [36%]
+[drawing: ORBIT · VEYRA · 1 BUILDING; labels: moon, Veyra, low orbit, Deep-field receiver, Deep flash watch, Spectrograph bank, Ground data center, Infrared telescope · 64%] · ORBIT · VEYRA · 1 BUILDING
 REPORT · WHILE YOU WERE AWAY
 
 ### 10 Years passed
@@ -1695,7 +1714,7 @@ You were away · 00:49:00 · Year 2.2 → Year 12
 THE BIG THINGS
 - A world at Ember · At least as heavy as ours, where water could be liquid · Year 9.9 · ›
 - The deep-field receiver · Listening to Ember now, as you ordered · Year 12 · ›
-- The flash watch and the spectrograph bank · Both built, both watching · Years 6 · 8.7 · ›
+- The flash watch, the spectrograph bank, the data center · All built. Compute is now 125% of what we woke with. · Years 6 · 8.7 · 9.9 · ›
 WHAT THE MIND DID · UNDER YOUR STANDING ORDERS
 Sent nothing.
 Heard nothing from our galaxy, so woke you for nothing until now.
@@ -1711,7 +1730,7 @@ Godview · The world at Ember is Kesh’s. In Year 12.3, Hael’s spectrographs 
 “Show me the world.”
 Veyra · Year 12.2
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [0%] · MATTER · 1,028 kt · COMPUTE · [35%]
+ENERGY · [3%] · MATTER · 1,028 kt · COMPUTE · [36%]
 [drawing: STARS · EMBER · 9.2 LY · 00:46:03; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · EMBER · 9.2 LY · 00:46:03
 REPORT · RESULT
 [‹ All reports]
@@ -1740,22 +1759,23 @@ Away.
 “And the listening?”
 Veyra · Year 12.4
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [0%] · MATTER · 1,036 kt · COMPUTE · [35%]
-[drawing: ORBIT · VEYRA · THE RECEIVER LISTENS FROM HERE; labels: moon, Veyra, low orbit, Deep-field receiver, Deep flash watch, Spectrograph bank, Infrared telescope · 66%] · ORBIT · VEYRA · THE RECEIVER LISTENS FROM HERE
-PROJECTS · 2 RUNNING
-RUNNING · 2
-[drawing: Deep-field receiver] · Listen to Ember · Faint broadband emission, and anything aimed · since Year 12 · listening · [Pause Listen to Ember]
+ENERGY · [3%] · MATTER · 1,036 kt · COMPUTE · [36%]
+[drawing: ORBIT · VEYRA · THE RECEIVER LISTENS FROM HERE; labels: moon, Veyra, low orbit, Deep-field receiver, Deep flash watch, Spectrograph bank, Ground data center, Infrared telescope · 66%] · ORBIT · VEYRA · THE RECEIVER LISTENS FROM HERE
+PROJECTS · 3 RUNNING
+RUNNING · 3
+[drawing: Deep-field receiver] · Listen to Ember · Faint broadband emission, and anything aimed · since Year 12 · running · [Pause Listen to Ember]
+[drawing: Spectrograph bank] · Watch Ember and Beacon · Spectrograph bank · worlds, given Years · since Year 8.7 · running · [Pause Watch Ember and Beacon]
 [drawing: Infrared telescope] · Infrared telescope · Ember · 18 Years · 00:31:00 · [Pause Infrared telescope]
 EACH YEAR YOU CAN SPEND
-Energy · [0%] · 100% free
-Compute · [35%] · 65% free
+Energy · [3%] · 97% free
+Compute · [36%] · 64% free
 1,036 kt · matter on hand · +40 kt a year
 THE MIND (VEYRA) · Part of every night. A hum as faint as ours, from 9 light-years, would show within a Year, if it is there.
 [Talk to the mind]
 Opens from the notice.
 Hael · Year 12.4
 Beta Hydri · 24.3 ly from Sol · 1 Year = 00:05:00
-ENERGY · [10%] · MATTER · 1,436 kt · COMPUTE · [15%]
+ENERGY · [10%] · MATTER · 1,436 kt · COMPUTE · [10%]
 [drawing: STARS · WARDEN · 9.3 LY · 00:46:27; labels: Hael, 00:25:00, 00:50:00, 01:15:00, Warden, Delta Pavonis · 00:46:27, Ash, Epsilon Indi · 01:11:44, Brood, 82 Eridani · 01:15:45, Kiln, Zeta Tucanae, Still, Alpha Mensae] · STARS · WARDEN · 9.3 LY · 00:46:27
 REPORT · RESULT
 [‹ All reports]
@@ -1777,7 +1797,7 @@ Nothing new. · A dead 30 seconds.
 “Should we knock on it?”
 Hael · Year 12.5
 Beta Hydri · 24.3 ly from Sol · 1 Year = 00:05:00
-ENERGY · [10%] · MATTER · 1,440 kt · COMPUTE · [15%]
+ENERGY · [10%] · MATTER · 1,440 kt · COMPUTE · [10%]
 [drawing: STARS · WARDEN · 9.3 LY · 00:46:27; labels: Hael, 00:25:00, 00:50:00, 01:15:00, Warden, Delta Pavonis · 00:46:27, Ash, Epsilon Indi · 01:11:44, Brood, 82 Eridani · 01:15:45, Kiln, Zeta Tucanae, Still, Alpha Mensae] · STARS · WARDEN · 9.3 LY · 00:46:27
 MIND · ASKING
 ABOUT · FROM HOME · Should we knock on it?
@@ -1795,7 +1815,7 @@ Godview · The hum is Kesh: the faint hum every seat starts with, 9.2 ly away, i
 Lands · The receiver hears something at Ember.
 Veyra · Year 12.6
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [0%] · MATTER · 1,044 kt · COMPUTE · [35%]
+ENERGY · [3%] · MATTER · 1,044 kt · COMPUTE · [36%]
 [drawing: STARS · EMBER · 9.2 LY · 00:46:03; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · EMBER · 9.2 LY · 00:46:03
 REPORT · HEARD · RECEIVER
 [‹ All reports]
@@ -1831,7 +1851,7 @@ Away.
 Lands · The hum rises and falls every 26 hours. Something built 15 → 45.
 Veyra · Year 12.9
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [0%] · MATTER · 1,056 kt · COMPUTE · [35%]
+ENERGY · [3%] · MATTER · 1,056 kt · COMPUTE · [36%]
 [drawing: STARS · EMBER · 9.2 LY · 00:46:03; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · EMBER · 9.2 LY · 00:46:03
 REPORT · QUICK LOOK
 [‹ All reports]
@@ -1858,16 +1878,17 @@ Away.
 “Check it.”
 Veyra · Year 13
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [0%] · MATTER · 1,060 kt · COMPUTE · [55%]
-[drawing: ORBIT · VEYRA · THE RECEIVER LISTENS FROM HERE; labels: moon, Veyra, low orbit, Deep-field receiver, Deep flash watch, Spectrograph bank, Infrared telescope · 69%] · ORBIT · VEYRA · THE RECEIVER LISTENS FROM HERE
-PROJECTS · 3 RUNNING
-RUNNING · 3
+ENERGY · [3%] · MATTER · 1,060 kt · COMPUTE · [52%]
+[drawing: ORBIT · VEYRA · THE RECEIVER LISTENS FROM HERE; labels: moon, Veyra, low orbit, Deep-field receiver, Deep flash watch, Spectrograph bank, Ground data center, Infrared telescope · 69%] · ORBIT · VEYRA · THE RECEIVER LISTENS FROM HERE
+PROJECTS · 4 RUNNING
+RUNNING · 4
 [drawing: Deep-field receiver] · Check the radio source at Ember · Spectrum, polarization, motion · 4 Years · 00:20:00 · [Pause Check the radio source at Ember]
-[drawing: Deep-field receiver] · Listen to Ember · Faint broadband emission, and anything aimed · since Year 12 · listening · [Pause Listen to Ember]
+[drawing: Deep-field receiver] · Listen to Ember · Faint broadband emission, and anything aimed · since Year 12 · running · [Pause Listen to Ember]
+[drawing: Spectrograph bank] · Watch Ember and Beacon · Spectrograph bank · worlds, given Years · since Year 8.7 · running · [Pause Watch Ember and Beacon]
 [drawing: Infrared telescope] · Infrared telescope · Ember · 18 Years · 00:28:00 · [Pause Infrared telescope]
 EACH YEAR YOU CAN SPEND
-Energy · [0%] · 100% free
-Compute · [55%] · 45% free
+Energy · [3%] · 97% free
+Compute · [52%] · 48% free
 1,060 kt · matter on hand · +40 kt a year
 THE MIND (VEYRA) · Checking: spectrum, polarization, and whether it moves with Ember. Twenty minutes. Listening sends nothing. · [Undo]
 [Talk to the mind]
@@ -1898,7 +1919,7 @@ Away.
 “Listen.”
 Veyra · Year 13.4
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [0%] · MATTER · 1,076 kt · COMPUTE · [55%]
+ENERGY · [3%] · MATTER · 1,076 kt · COMPUTE · [52%]
 [drawing: STARS · BEACON · 9.3 LY · 00:46:27; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · BEACON · 9.3 LY · 00:46:27
 REPORT · SIGNAL
 [‹ All reports]
@@ -1917,7 +1938,7 @@ Away.
 “What does it say?”
 Veyra · Year 13.5
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [0%] · MATTER · 1,080 kt · COMPUTE · [55%]
+ENERGY · [3%] · MATTER · 1,080 kt · COMPUTE · [52%]
 [drawing: STARS · BEACON · 9.3 LY · 00:46:27; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · BEACON · 9.3 LY · 00:46:27
 REACH · BROADCAST · BEACON
 [‹ Signal]
@@ -1936,7 +1957,7 @@ Away.
 “Who are they?”
 Veyra · Year 13.6
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [0%] · MATTER · 1,084 kt · COMPUTE · [55%]
+ENERGY · [3%] · MATTER · 1,084 kt · COMPUTE · [52%]
 [drawing: STARS · BEACON · 9.3 LY · 00:46:27; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · BEACON · 9.3 LY · 00:46:27
 MIND · ASKING
 ABOUT · FROM HOME · Who are they?
@@ -1954,7 +1975,7 @@ Away.
 “Don’t answer. If their broadcast changes, wake me. And when the check at Ember is done.”
 Veyra · Year 13.7
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [0%] · MATTER · 1,088 kt · COMPUTE · [55%]
+ENERGY · [3%] · MATTER · 1,088 kt · COMPUTE · [52%]
 [drawing: STARS · BEACON · 9.3 LY · 00:46:27; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · BEACON · 9.3 LY · 00:46:27
 MIND · NEW ORDER
 WHAT YOU WANT
@@ -2004,7 +2025,7 @@ Away.
 “See the evidence.”
 Veyra · Year 17.2
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [0%] · MATTER · 1,228 kt · COMPUTE · [35%]
+ENERGY · [3%] · MATTER · 1,228 kt · COMPUTE · [36%]
 [drawing: STARS · EMBER · 9.2 LY · 00:46:03; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · EMBER · 9.2 LY · 00:46:03
 REPORT · CHECKED · PRESENCE
 [‹ All reports]
@@ -2025,7 +2046,7 @@ Godview · Kesh’s spectrographs felt Veyra’s world in Year 14.1. It sits unr
 “Do they know we’re here?”
 Veyra · Year 17.3
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [0%] · MATTER · 1,232 kt · COMPUTE · [35%]
+ENERGY · [3%] · MATTER · 1,232 kt · COMPUTE · [36%]
 [drawing: STARS · EMBER · 9.2 LY · 00:46:03; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · EMBER · 9.2 LY · 00:46:03
 MIND · ASKING
 ABOUT · FROM HOME · Do they know we’re here?
@@ -2043,7 +2064,7 @@ Away.
 “What do we know about them?”
 Veyra · Year 17.4
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [0%] · MATTER · 1,236 kt · COMPUTE · [35%]
+ENERGY · [3%] · MATTER · 1,236 kt · COMPUTE · [36%]
 [drawing: STARS · EMBER · 9.2 LY · 00:46:03; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · EMBER · 9.2 LY · 00:46:03
 REACH · EMBER
 [‹ Reach]
@@ -2062,7 +2083,7 @@ Away.
 “Tell no one. Keep listening. Wake me if Ember aims anything at anyone.”
 Veyra · Year 17.5
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [0%] · MATTER · 1,240 kt · COMPUTE · [35%]
+ENERGY · [3%] · MATTER · 1,240 kt · COMPUTE · [36%]
 [drawing: STARS · EMBER · 9.2 LY · 00:46:03; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · EMBER · 9.2 LY · 00:46:03
 MIND · NEW ORDER
 WHAT YOU WANT
@@ -2111,7 +2132,7 @@ Away.
 “Numbers.”
 Kesh · Year 18.4
 Epsilon Indi · 11.8 ly from Sol · 1 Year = 00:05:00
-ENERGY · [2%] · MATTER · 2,076 kt · COMPUTE · [15%]
+ENERGY · [2%] · MATTER · 2,076 kt · COMPUTE · [20%]
 [drawing: STARS · HOLLOW · 14.3 LY · 01:11:44; labels: Kesh, 00:25:00, 00:50:00, 01:15:00, Hollow, Beta Hydri · 01:11:44, Twofold, Alpha Centauri A · 00:48:19, Chaff, Tau Ceti · 00:57:28, Lodestar, Delta Pavonis · 00:46:03, Cinder, Lacaille 8760, Gliese 832] · STARS · HOLLOW · 14.3 LY · 01:11:44
 REPORT · SIGNAL
 [‹ All reports]
@@ -2129,7 +2150,7 @@ Away.
 “What does it say?”
 Kesh · Year 18.5
 Epsilon Indi · 11.8 ly from Sol · 1 Year = 00:05:00
-ENERGY · [2%] · MATTER · 2,085 kt · COMPUTE · [15%]
+ENERGY · [2%] · MATTER · 2,085 kt · COMPUTE · [20%]
 [drawing: STARS · HOLLOW · 14.3 LY · 01:11:44; labels: Kesh, 00:25:00, 00:50:00, 01:15:00, Hollow, Beta Hydri · 01:11:44, Twofold, Alpha Centauri A · 00:48:19, Chaff, Tau Ceti · 00:57:28, Lodestar, Delta Pavonis · 00:46:03, Cinder, Lacaille 8760, Gliese 832] · STARS · HOLLOW · 14.3 LY · 01:11:44
 REACH · BROADCAST · HOLLOW
 [‹ Signal]
@@ -2147,7 +2168,7 @@ Away.
 “Can they reach us?”
 Kesh · Year 18.6
 Epsilon Indi · 11.8 ly from Sol · 1 Year = 00:05:00
-ENERGY · [2%] · MATTER · 2,094 kt · COMPUTE · [15%]
+ENERGY · [2%] · MATTER · 2,094 kt · COMPUTE · [20%]
 [drawing: STARS · LODESTAR · 9.2 LY · 00:46:03; labels: Kesh, 00:25:00, 00:50:00, 01:15:00, Hollow, Beta Hydri · 01:11:44, Twofold, Alpha Centauri A · 00:48:19, Chaff, Tau Ceti · 00:57:28, Lodestar, Delta Pavonis · 00:46:03, Cinder, Lacaille 8760, Gliese 832] · STARS · LODESTAR · 9.2 LY · 00:46:03
 MIND · ASKING
 ABOUT · FROM HOME · Can they reach us?
@@ -2165,7 +2186,7 @@ Away.
 “Say nothing. Put anything else from Hollow in the summary.”
 Kesh · Year 18.7
 Epsilon Indi · 11.8 ly from Sol · 1 Year = 00:05:00
-ENERGY · [2%] · MATTER · 2,103 kt · COMPUTE · [15%]
+ENERGY · [2%] · MATTER · 2,103 kt · COMPUTE · [20%]
 [drawing: STARS · HOLLOW · 14.3 LY · 01:11:44; labels: Kesh, 00:25:00, 00:50:00, 01:15:00, Hollow, Beta Hydri · 01:11:44, Twofold, Alpha Centauri A · 00:48:19, Chaff, Tau Ceti · 00:57:28, Lodestar, Delta Pavonis · 00:46:03, Cinder, Lacaille 8760, Gliese 832] · STARS · HOLLOW · 14.3 LY · 01:11:44
 MIND · NEW ORDER
 WHAT YOU WANT

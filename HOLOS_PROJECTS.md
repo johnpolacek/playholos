@@ -14,7 +14,7 @@ Earth’s instruments today, with its grid, compute and lift a century further o
 
 - **Sky watch** (Know): The whole sky in light and radio, always on. Catches strong knocks and broadcasts. *Whole-sky surveys such as Rubin and CHIME; PANOSETI is being built to catch nanosecond flashes.*
 - **Space telescope** (Know): One large telescope for light and heat. *JWST today; the Habitable Worlds Observatory is planned for the 2040s.*
-- **Star surveys** (Know): Known planets, candidates and survey limits around nearby stars. The opening leads came from here. *Gaia, HARPS, TESS and PLATO.*
+- **Star surveys** (Know): Known planets, candidates and survey limits around nearby stars. The opening leads came from here. *Gaia’s archive, HARPS, ESPRESSO and TESS. Gaia stopped observing in January 2025; its record is the archive.*
 - **Radio array** (Know): A radio telescope as wide as a continent. *The Square Kilometre Array, under construction.*
 - **Planetary grid** (Grow): All of each year’s energy, about 100 TW: the 100% every project shares. *Today’s grids, a century further on.*
 - **Data centers** (Grow): Where the mind runs: all of each year’s compute, about 10²⁷ operations a second, on 10 TW of their own. *Today’s data centers, a century further on: chips about 100 times as efficient, drawing 200 times today’s 50 GW.*
@@ -29,6 +29,7 @@ Earth’s instruments today, with its grid, compute and lift a century further o
 - **Discovery projects** appear only when a result opens them, and target a specific star or planet. They are listed at the end.
 - Locked projects stay visible with the reason: “Needs: orbital foundry.”
 - **Most projects draw almost no energy.** A radio array or a telescope runs on megawatts to gigawatts, and building at kilotonne to megatonne scale takes gigawatts: well under 1% of a 100 TW grid. Those projects list no energy; compute, matter and time limit them. Energy goes to thinking, beams, broadcasts, antimatter and star-scale works, so only those list it. Some acts cost energy while they run: sending a broadcast, a lit decoy, a laser firing.
+- **Compute runs on energy.** The starting data centers run 100% of compute on 10 TW of their own. Every percent of compute added beyond them draws about 0.1% of energy, for as long as it runs, and about half that run cold. Building more compute is limited by chip factories, so a ground data center can be built again and again.
 - **Energy and compute are yearly budgets;** neither can be stored at planetary scale, so a running project takes a share of every year’s supply, and pausing frees it. **Percentages are of the starting budgets:** 1% of energy is 1 TW, and 1% of compute is 10²⁵ operations a second. As capacity grows, the same project takes a smaller share. **Matter is a stockpile:** a project draws its matter once when it starts. Amounts are sample values, in kilotonnes (kt) and megatonnes (Mt).
 - **Tiers are stages,** not clock times: from the planet, while matter is lifted off it; into space, once the foundry builds there; self-building industry, once factories copy themselves and matter compounds; and star-scale works.
 
@@ -42,7 +43,7 @@ Know: learn what is out there, and answer the clues. Instruments draw almost no 
 
 - **Why:** Your quickest real answer: is a dimming a pattern or a fluke?
 - **What:** Stares at one star without a break, timing every dip the surveys catch only in passing.
-- **Basis:** Continuous photometry, beyond the survey cadence of TESS and PLATO.
+- **Basis:** Continuous photometry, beyond the survey cadence of TESS and the planned PLATO.
 - **Uses:** compute 10% a year
 - **Needs:** nothing
 - **Can open:** Measure what’s crossing {star}
@@ -210,6 +211,15 @@ Grow: more energy, matter and compute every year, so everything goes faster.
 - **Needs:** nothing
 - **Unlocks:** Belt mining
 
+**Ground data center** · 8 Years · `00:40:00` · Grounded · emissions quiet
+
+- **Why:** More compute, paid for in energy we already have.
+- **What:** More chips and halls on the ground, made in the planet’s own fabs, so it takes no matter from orbit. It can be built again.
+- **Basis:** Today’s data centers, a century further on. Chip factories, not power, limit how fast compute grows; each hall adds about 2.5 TW of load.
+- **Uses:** compute 5% a year
+- **Needs:** nothing
+- **Effect:** +25% compute, for good, drawing about 3% of energy for as long as it runs. Build it again for more, until the planet’s waste heat sets the limit.
+
 **Second launch complex** · 2 Years · `00:10:00` · Grounded · emissions quiet
 
 - **Why:** More matter every year, soon: the fastest way to more matter before mining.
@@ -224,9 +234,9 @@ Grow: more energy, matter and compute every year, so everything goes faster.
 - **Why:** More compute every year: faster answers, smarter probes.
 - **What:** Computers cooled in a planet’s shadow waste less energy per thought.
 - **Basis:** Cooler circuits approach the Landauer limit; reversible computing is unproven at scale.
-- **Uses:** energy 2% a year, 300 kt of matter at start
+- **Uses:** 300 kt of matter at start
 - **Needs:** nothing
-- **Effect:** +25% compute, for good.
+- **Effect:** +25% compute, for good. Run cold, it draws only about 1% of energy, for as long as it runs.
 - **Unlocks:** Self-replicating factory, Mind transmitter, Quiet radiators
 
 **Belt mining** · 20 Years · `01:40:00` · Plausible · emissions quiet
@@ -288,9 +298,9 @@ Grow: more energy, matter and compute every year, so everything goes faster.
 - **Why:** A second home in orbit: more compute, and a backup if Veyra is hit.
 - **What:** A spinning ring in orbit: room for more minds and machines.
 - **Basis:** Rotating habitats, as designed in NASA’s 1975 Stanford torus study.
-- **Uses:** energy 3% a year, compute 10% a year, 80 Mt of matter at start
+- **Uses:** compute 10% a year, 80 Mt of matter at start
 - **Needs:** Orbital foundry + Mass driver
-- **Effect:** +30% compute; a second home in orbit.
+- **Effect:** +30% compute, drawing about 3% of energy for as long as it runs; a second home in orbit.
 - **Unlocks:** Dispersal outposts, Wandering habitats, Shadow berths
 
 **Self-replicating factory** · 80 Years · `06:40:00` · Speculative · emissions noticeable
@@ -784,7 +794,7 @@ What we already have, used for one to three Years. Braces mark where the lead’
 - **What:** Points the starting radio array at one star for part of every night through a Year. It can’t hear a faint hum like ours, but it rules out anyone louder: the answer is how loud they aren’t.
 - **Basis:** Searches such as Breakthrough Listen gave nearby stars about 15 minutes each. Broadband sensitivity improves with the square root of observing time, until interference and calibration limit it. The tenfold reach above the hum floor is a sample value.
 - **Uses:** compute 10% a year
-- **Appears:** Appears for any star. Reports a limit: no one there louder than about ten times the faint hum every seat starts with.
+- **Appears:** For any star. Reports a limit: no one there louder than about ten times the faint hum every seat starts with.
 
 **Watch {star} through a Year** · Know · 1 Year · `00:05:00` · Grounded
 
@@ -792,7 +802,7 @@ What we already have, used for one to three Years. Braces mark where the lead’
 - **What:** Images one star about once a month through a Year, in a slice of the space telescope’s time, so other looks still fit. A quick look gives one position; a Year of them traces an arc of the orbit, enough to start weighing what moves.
 - **Basis:** Repeated direct imaging, as JWST’s follow-up of the Alpha Centauri A candidate plans. A giant moves slowly, so monthly visits are enough. A short arc leaves the orbit’s size and tilt uncertain.
 - **Uses:** compute 10% a year
-- **Appears:** Appears for a point or giant seen beside a star.
+- **Appears:** For a point or giant seen beside a star.
 
 **Track {star}’s place for two Years** · Know · 2 Years · `00:10:00` · Grounded
 
@@ -800,7 +810,7 @@ What we already have, used for one to three Years. Braces mark where the lead’
 - **What:** Measures the star’s place against fainter stars behind it, with the space telescope, again and again. A hidden companion shows as a wobble in its path; the longer the record, the smaller the pull it can feel.
 - **Basis:** Relative astrometry, as Hubble’s Fine Guidance Sensors did to a fraction of a milliarcsecond. A giant far out shifts a star 9 light-years away by several milliarcseconds. Gaia measured these stars’ places but stopped observing in January 2025, so its record is an archive, not a live instrument. Combined with old positions, new ones weigh giants whose orbits face us.
 - **Uses:** compute 10% a year
-- **Appears:** Appears for a star with an unexplained pull.
+- **Appears:** For a star with an unexplained pull.
 
 ## Discovery projects
 
@@ -813,7 +823,7 @@ These appear from results, and name their target. Braces mark where a real star,
 - **Basis:** Transit timing, depth and color, as used in 2018 to show Boyajian’s star was dimmed by dust.
 - **Uses:** compute 15% a year
 - **Needs:** Transit watch
-- **Appears:** Appears when a dimming repeats.
+- **Appears:** When a dimming repeats.
 
 **Study the air of {planet}** · Know · 16 Years · `01:20:00` · Grounded
 
@@ -822,7 +832,7 @@ These appear from results, and name their target. Braces mark where a real star,
 - **Basis:** Transmission spectroscopy. The 2026 JWST study of TRAPPIST-1 f excludes some H2/He atmospheres without establishing an airless world. Report model assumptions and confidence.
 - **Uses:** compute 20% a year
 - **Needs:** Planet survey + Spectrograph bank
-- **Appears:** Appears for a transiting planet worth a look. Other viewing geometries need direct imaging.
+- **Appears:** For a transiting planet worth a look. Other viewing geometries need direct imaging.
 
 **Study the oxygen world** · Know · 18 Years · `01:30:00` · Plausible
 
@@ -831,7 +841,7 @@ These appear from results, and name their target. Braces mark where a real star,
 - **Basis:** Broad wavelength spectroscopy tests false positives (Krissansen-Totton et al., published 2026). Methane with oxygen can strengthen the case for life. NO2 has natural sources. A claimed industrial gas needs secure identification and tests of alternatives.
 - **Uses:** compute 20% a year
 - **Needs:** Spectrograph bank + Infrared telescope
-- **Appears:** Appears from the oxygen clue. Earth is 19.9 ly away.
+- **Appears:** From the oxygen clue. Earth is 19.9 ly away.
 
 **Map the dust at {star}** · Know · 10 Years · `00:50:00` · Grounded
 
@@ -840,7 +850,7 @@ These appear from results, and name their target. Braces mark where a real star,
 - **Basis:** Debris-disk imaging, as ALMA and JWST do.
 - **Uses:** compute 15% a year
 - **Needs:** Infrared telescope
-- **Appears:** Appears when a glow looks like dust.
+- **Appears:** When a glow looks like dust.
 
 **Resolve the companions of {star}** · Know · 14 Years · `01:10:00` · Grounded
 
@@ -849,7 +859,7 @@ These appear from results, and name their target. Braces mark where a real star,
 - **Basis:** Imaging, spectroscopy and common-motion checks. Better angular resolution may require the infrared interferometer.
 - **Uses:** compute 15% a year
 - **Needs:** Infrared telescope
-- **Appears:** Appears when a glow could be a companion or a background source.
+- **Appears:** When a glow could be a companion or a background source.
 
 **Survey the radio sky** · Know · 8 Years · `00:40:00` · Plausible
 
@@ -867,7 +877,7 @@ These appear from results, and name their target. Braces mark where a real star,
 - **Basis:** Source discrimination following Garrett (2026). Only evidence that identifies technology establishes civilization presence, as of when the light left.
 - **Uses:** compute 20% a year
 - **Needs:** Deep-field receiver or Far-side array
-- **Appears:** Appears after a radio candidate. May strengthen the case, identify a natural source, or leave it unresolved. Nothing sent.
+- **Appears:** After a radio candidate. May strengthen the case, identify a natural source, or leave it unresolved. Nothing sent.
 
 **Listen to {star}** · Know · 4 Years · `00:20:00` · Grounded
 
@@ -885,7 +895,7 @@ These appear from results, and name their target. Braces mark where a real star,
 - **Basis:** Follow-up of optical SETI candidates.
 - **Uses:** compute 15% a year
 - **Needs:** Deep flash watch
-- **Appears:** Appears after a candidate flash.
+- **Appears:** After a candidate flash.
 
 **Image {planet}** · Know · 30 Years · `02:30:00` · Plausible
 
@@ -894,7 +904,7 @@ These appear from results, and name their target. Braces mark where a real star,
 - **Basis:** Exoplanet imaging with a starshade, interferometer or solar lens.
 - **Uses:** compute 30% a year
 - **Needs:** Starshade or Infrared interferometer or Solar lens observatory
-- **Appears:** Appears when a planet’s air is interesting.
+- **Appears:** When a planet’s air is interesting.
 
 **Survey the next 50 stars** · Know · 30 Years · `02:30:00` · Grounded
 
@@ -912,7 +922,7 @@ These appear from results, and name their target. Braces mark where a real star,
 - **Basis:** Any probe type you have built.
 - **Uses:** compute 15% a year, 4,000 kt of matter at start
 - **Needs:** Flyby probe
-- **Appears:** Appears for every star with an open clue.
+- **Appears:** For every star with an open clue.
 
 **Strike {target}** · Reach · 12 Years · `01:00:00` · Plausible
 
@@ -921,7 +931,7 @@ These appear from results, and name their target. Braces mark where a real star,
 - **Basis:** Any weapon you have built, including a flyby probe aimed to hit instead of pass.
 - **Uses:** compute 15% a year, 4,000 kt of matter at start
 - **Needs:** Flyby probe or Heavy impactor or Pellet swarm or Sleeper
-- **Appears:** Appears when you know where a civilization is and have mapped its planet. A shot aimed only at a star misses.
+- **Appears:** When you know where a civilization is and have mapped its planet. A shot aimed only at a star misses.
 
 **Feint toward {star}** · Reach · 4 Years · `00:20:00` · Plausible
 
@@ -930,7 +940,7 @@ These appear from results, and name their target. Braces mark where a real star,
 - **Basis:** A launch laser’s beam shows; what it pushes does not.
 - **Uses:** energy 5% a year, compute 5% a year
 - **Needs:** Laser sail array
-- **Appears:** Appears when you know where a civilization is. They must stay on alert until the slowest bullet would have passed.
+- **Appears:** When you know where a civilization is. They must stay on alert until the slowest bullet would have passed.
 
 **Nudge a rock toward {planet}** · Reach · 20 Years · `01:40:00` · Plausible
 
@@ -939,7 +949,7 @@ These appear from results, and name their target. Braces mark where a real star,
 - **Basis:** A gravity tractor, studied by NASA for planetary defense, run backward. It looks like nature.
 - **Uses:** compute 10% a year
 - **Needs:** Lurker
-- **Appears:** Appears when a lurker finds a rock passing near an inhabited world.
+- **Appears:** When a lurker finds a rock passing near an inhabited world.
 
 **Tell {recipient} where {civilization} is** · Reach · 2 Years · `00:10:00` · Grounded
 
@@ -948,7 +958,7 @@ These appear from results, and name their target. Braces mark where a real star,
 - **Basis:** Any transmitter. The recipient checks with its own instruments.
 - **Uses:** compute 5% a year
 - **Needs:** Tight-beam transmitter or Broadcast beacon
-- **Appears:** Appears when we know where a civilization is, and someone else to tell.
+- **Appears:** When we know where a civilization is, and someone else to tell.
 
 **Share a key with {civilization}** · Reach · 2 Years · `00:10:00` · Grounded
 
@@ -957,7 +967,7 @@ These appear from results, and name their target. Braces mark where a real star,
 - **Basis:** A key used once is provably unbreakable. Carried in person, no one can copy it on the way.
 - **Uses:** compute 5% a year
 - **Needs:** Tight-beam transmitter or Sentinel probe
-- **Appears:** Appears when we talk with a civilization. After it, a tap learns only who, when and how much.
+- **Appears:** When we talk with a civilization. After it, a tap learns only who, when and how much.
 
 **Test-fire at {moon}** · Reach · 10 Years · `00:50:00` · Plausible
 
@@ -984,7 +994,7 @@ These appear from results, and name their target. Braces mark where a real star,
 - **Basis:** One line guards one planet against one direction.
 - **Uses:** compute 10% a year, 20 Mt of matter at start
 - **Needs:** Pickets
-- **Appears:** Appears for every planet we hold and every star we fear. About the cost of two heavy bullets.
+- **Appears:** For every planet we hold and every star we fear. About the cost of two heavy bullets.
 
 **Reply to {sender}** · Reach · 2 Years · `00:10:00` · Grounded
 
@@ -993,8 +1003,8 @@ These appear from results, and name their target. Braces mark where a real star,
 - **Basis:** Tight-beam laser link.
 - **Uses:** compute 5% a year
 - **Needs:** Tight-beam transmitter
-- **Appears:** Appears when someone speaks to us.
+- **Appears:** When someone speaks to us.
 
 ## Counts
 
-73 catalog projects (15 know, 13 grow, 26 reach, 19 endure), 3 long looks and 21 discovery projects.
+74 catalog projects (15 know, 14 grow, 26 reach, 19 endure), 3 long looks and 21 discovery projects.

@@ -518,7 +518,7 @@ Veyra · Year 0.4
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
 ENERGY · [0%] · MATTER · 1,240 kt · COMPUTE · [0%]
 Start a project · [Close · ×]
-[selected: Know · 6] · [Grow · 5] · [Reach · 2]
+[selected: Know · 6] · [Grow · 6] · [Reach · 2]
 - [drawing: Infrared telescope] · Infrared telescope · Test what makes a warm glow: dust, companions, galaxies or machines. · C 15% · 200 kt · Ember · 18 Years · 01:30:00
 - [drawing: Transit watch] · Transit watch · Your quickest real answer: is a dimming a pattern or a fluke? · C 10% · Lantern · 4 Years · 00:20:00
 - [drawing: Spectrograph bank] · Spectrograph bank · Reads what anything is made of. Most other Know projects build on it. · C 15% · 100 kt · 8 Years · 00:40:00
@@ -614,10 +614,10 @@ Veyra · Year 0.4
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
 ENERGY · [0%] · MATTER · 1,240 kt · COMPUTE · [0%]
 Start a project · [Close · ×]
-[Know · 6] · [selected: Grow · 5] · [Reach · 2]
+[Know · 6] · [selected: Grow · 6] · [Reach · 2]
 - [drawing: Orbital solar array] · Orbital solar array · More energy every year, so more projects can run at once. · C 5% · 400 kt · +20% energy, for good · Easier to spot · 10 Years · 00:50:00
 - [drawing: Belt prospecting] · Belt prospecting · Shows where the metal is. Needed before mining. · C 10% · 6 Years · 00:30:00
-- [drawing: Cold compute annex] · Cold compute annex · More compute every year: faster answers, smarter probes. · E 2% · 300 kt · +25% compute, for good · 12 Years · 01:00:00
+- [drawing: Cold compute annex] · Cold compute annex · More compute every year: faster answers, smarter probes. · 300 kt · +25% compute, for good. Run cold, it draws only about 1% of energy, for as long as it runs · 12 Years · 01:00:00
 - [drawing: Belt mining] · Belt mining · More matter every year, for building bigger things. · C 10% · +120 kt of matter every year · Needs: Belt prospecting · 20 Years · 01:40:00
 LATER · NEEDS SOMETHING FIRST
 [[drawing: Orbital foundry] · Orbital foundry · Unlocks everything too big to launch from Veyra: probes, ships, big telescopes. · C 10% · 6,000 kt · Unlocks large works · Easier to spot · Needs: Belt mining · 30 Years · 02:30:00]
@@ -646,7 +646,7 @@ Veyra · Year 0.4
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
 ENERGY · [0%] · MATTER · 1,240 kt · COMPUTE · [0%]
 Start a project · [Close · ×]
-[Know · 6] · [Grow · 5] · [selected: Reach · 2]
+[Know · 6] · [Grow · 6] · [selected: Reach · 2]
 - [drawing: Tight-beam transmitter] · Tight-beam transmitter · Talk to one known star without the whole sky hearing. · C 5% · Only the target can read it. It still tells them we exist. · 6 Years · 00:30:00
 - [drawing: Broadcast beacon] · Broadcast beacon · Everyone in range learns you exist: friends and threats alike. · C 5% · Everyone who can hear, will. It cannot be taken back. Building it takes little power; sending takes about 10% of energy each Year, loud enough for a whole-sky watch 10 ly away. · Announces us · 4 Years · 00:20:00
 LATER · NEEDS SOMETHING FIRST
@@ -670,7 +670,7 @@ In use: pulsar timing array 30 · waste-heat survey 25 · flash watch 20 · map 
 Not enough compute. · Running projects already use all of this year’s supply. Three ways forward:
 - Start when there’s room · The flash watch finishes and frees 20% · in 4 Years · 00:20:00
 - Pause the pulsar timing array · Frees 30% now. It keeps its progress. · now
-- Grow compute first · Cold compute annex · +25% compute, for good · 12 Years · 01:00:00
+- Grow compute first · Ground data center · +25% compute, drawing 3% of energy · 8 Years · 00:40:00
 - Talk it through with the mind ›
 - Choose a way forward
 
@@ -813,7 +813,7 @@ Veyra · Year 4.4
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
 ENERGY · [0%] · MATTER · 1,200 kt · COMPUTE · [25%]
 Start a project · [Close · ×]
-[selected: Know · 5] · [Grow · 5] · [Reach · 2]
+[selected: Know · 5] · [Grow · 6] · [Reach · 2]
 - [drawing: Transit watch] · New · from the transit watch · Measure what’s crossing Lantern · Learn what keeps dimming that star: a planet, dust, or something built. · C 15% · Lantern · 8 Years · 00:40:00
 - [drawing: Spectrograph bank] · Spectrograph bank · Reads what anything is made of. Most other Know projects build on it. · C 15% · 100 kt · 8 Years · 00:40:00
 - [drawing: Deep-field receiver] · Deep-field receiver · Find faint radio sources and listen for neighbors. · C 20% · 300 kt · 12 Years · 01:00:00

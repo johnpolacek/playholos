@@ -14,6 +14,7 @@ M is converted to kilotonnes by tier (see matter_tonnes).
 One game year is 5 real minutes. `visibility` holds the project's emissions: what it adds
 to how detectable the civilization is: quiet, noticeable, or loud.
 """
+import re
 
 PURPOSES = {
     'know': 'Know: learn what is out there, and answer the clues. Instruments draw almost no energy, so compute, matter and the instrument’s own time limit them.',
@@ -33,7 +34,7 @@ STARTING_KIT = [
     ('know', 'Sky watch', 'skywatch', 'The whole sky in light and radio, always on. Catches strong knocks and broadcasts.',
      'Whole-sky surveys such as Rubin and CHIME; PANOSETI is being built to catch nanosecond flashes.'),
     ('know', 'Space telescope', 'ir', 'One large telescope for light and heat.', 'JWST today; the Habitable Worlds Observatory is planned for the 2040s.'),
-    ('know', 'Star surveys', 'survey', 'Known planets, candidates and survey limits around nearby stars. The opening leads came from here.', 'Gaia, HARPS, TESS and PLATO.'),
+    ('know', 'Star surveys', 'survey', 'Known planets, candidates and survey limits around nearby stars. The opening leads came from here.', 'Gaia’s archive, HARPS, ESPRESSO and TESS. Gaia stopped observing in January 2025; its record is the archive.'),
     ('know', 'Radio array', 'receiver', 'A radio telescope as wide as a continent.', 'The Square Kilometre Array, under construction.'),
     ('grow', 'Planetary grid', 'grid', 'All of each year’s energy, about 100 TW: the 100% every project shares.', 'Today’s grids, a century further on.'),
     ('grow', 'Data centers', 'annex', 'Where the mind runs: all of each year’s compute, about 10²⁷ operations a second, on 10 TW of their own.', 'Today’s data centers, a century further on: chips about 100 times as efficient, drawing 200 times today’s 50 GW.'),
@@ -46,7 +47,7 @@ PROJECTS = [
     # ---------- KNOW ----------
     P('transit-watch', 'Transit watch', 'know', 1, 4, 'C10',
       'Stares at one star without a break, timing every dip the surveys catch only in passing.',
-      'Continuous photometry, beyond the survey cadence of TESS and PLATO.', 'grounded', 'quiet',
+      'Continuous photometry, beyond the survey cadence of TESS and the planned PLATO.', 'grounded', 'quiet',
       reveals=['measure-crossing']),
     P('spectrograph-bank', 'Spectrograph bank', 'know', 1, 8, 'M5 C15',
       'Ultra-stable spectrographs: they read gases, and feel small planets tug their stars.',
@@ -112,14 +113,18 @@ PROJECTS = [
     P('belt-prospecting', 'Belt prospecting', 'grow', 1, 6, 'C10',
       'Finds which belt rocks are worth mining.',
       'Asteroid spectroscopy and sample return, as with OSIRIS-REx and Hayabusa2.', 'grounded', 'quiet'),
+    P('data-center', 'Ground data center', 'grow', 1, 8, 'C5',
+      'More chips and halls on the ground, made in the planet’s own fabs, so it takes no matter from orbit. It can be built again.',
+      'Today’s data centers, a century further on. Chip factories, not power, limit how fast compute grows; each hall adds about 2.5 TW of load.', 'grounded', 'quiet',
+      effect='+25% compute, for good, drawing about 3% of energy for as long as it runs. Build it again for more, until the planet’s waste heat sets the limit.'),
     P('launch-complex', 'Second launch complex', 'grow', 1, 2, 'C5',
       'More pads and ships, flying around the clock. Lift is short of pads and ships, not energy. Built on the ground, so it takes no matter from orbit.',
       'Reusable heavy lift flying many times a day, as Starship is being built to do.', 'grounded', 'quiet',
       effect='+40 kt of matter every year.'),
-    P('cold-compute-annex', 'Cold compute annex', 'grow', 1, 12, 'E2 M15',
+    P('cold-compute-annex', 'Cold compute annex', 'grow', 1, 12, 'M15',
       'Computers cooled in a planet’s shadow waste less energy per thought.',
       'Cooler circuits approach the Landauer limit; reversible computing is unproven at scale.', 'plausible', 'quiet',
-      effect='+25% compute, for good.'),
+      effect='+25% compute, for good. Run cold, it draws only about 1% of energy, for as long as it runs.'),
     P('belt-mining', 'Belt mining', 'grow', 1, 20, 'C10',
       'Metals from the belt, hauled to Veyra’s orbit.',
       'Asteroid mining; no one has done it yet, but every step is known.', 'plausible', 'quiet',
@@ -140,10 +145,10 @@ PROJECTS = [
       'Power from fusing light atoms. A large step up in energy.',
       'Deuterium fusion is physically sound; sustained net power is not yet demonstrated.', 'plausible', 'noticeable',
       needs=['ice-harvest'], effect='+60% energy, for good.'),
-    P('habitat-ring', 'Habitat ring', 'grow', 3, 60, 'E3 M40 C10',
+    P('habitat-ring', 'Habitat ring', 'grow', 3, 60, 'M40 C10',
       'A spinning ring in orbit: room for more minds and machines.',
       'Rotating habitats, as designed in NASA’s 1975 Stanford torus study.', 'plausible', 'noticeable',
-      needs=['orbital-foundry', 'mass-driver'], effect='+30% compute; a second home in orbit.'),
+      needs=['orbital-foundry', 'mass-driver'], effect='+30% compute, drawing about 3% of energy for as long as it runs; a second home in orbit.'),
     P('self-replicating-factory', 'Self-replicating factory', 'grow', 3, 80, 'M30 C30',
       'Factories that build copies of themselves from belt rock.',
       'Von Neumann’s self-reproducing machines; no working example exists. NASA’s 1980 study assumed a lunar factory could copy itself in about a year.', 'speculative', 'noticeable',
@@ -468,6 +473,7 @@ WHY = {
     'orbital-solar-array': 'More energy every year, so more projects can run at once.',
     'belt-prospecting': 'Shows where the metal is. Needed before mining.',
     'launch-complex': 'More matter every year, soon: the fastest way to more matter before mining.',
+    'data-center': 'More compute, paid for in energy we already have.',
     'listen-long': 'Rule out anyone loud at one star, with what we already have.',
     'watch-point': 'See which way a faint point moves.',
     'track-place': 'Feel a smaller pull than the surveys can, given time.',
@@ -637,6 +643,7 @@ def markdown():
            '- **Discovery projects** appear only when a result opens them, and target a specific star or planet. They are listed at the end.',
            '- Locked projects stay visible with the reason: “Needs: orbital foundry.”',
            '- **Most projects draw almost no energy.** A radio array or a telescope runs on megawatts to gigawatts, and building at kilotonne to megatonne scale takes gigawatts: well under 1% of a 100 TW grid. Those projects list no energy; compute, matter and time limit them. Energy goes to thinking, beams, broadcasts, antimatter and star-scale works, so only those list it. Some acts cost energy while they run: sending a broadcast, a lit decoy, a laser firing.',
+           '- **Compute runs on energy.** The starting data centers run 100% of compute on 10 TW of their own. Every percent of compute added beyond them draws about 0.1% of energy, for as long as it runs, and about half that run cold. Building more compute is limited by chip factories, so a ground data center can be built again and again.',
            '- **Energy and compute are yearly budgets;** neither can be stored at planetary scale, so a running project takes a share of every year’s supply, and pausing frees it. **Percentages are of the starting budgets:** 1% of energy is 1 TW, and 1% of compute is 10²⁵ operations a second. As capacity grows, the same project takes a smaller share. **Matter is a stockpile:** a project draws its matter once when it starts. Amounts are sample values, in kilotonnes (kt) and megatonnes (Mt).',
            '- **Tiers are stages,** not clock times: from the planet, while matter is lifted off it; into space, once the foundry builds there; self-building industry, once factories copy themselves and matter compounds; and star-scale works.', '']
     for purpose, blurb in PURPOSES.items():
@@ -658,14 +665,17 @@ def markdown():
                 if p['reveals']: out.append(f'- **Can open:** {", ".join(names[r] for r in p["reveals"])}')
                 out.append('')
     out += ['## Long looks', '', 'What we already have, used for one to three Years. Braces mark where the lead’s star is filled in.', '']
+    def appears(text):
+        t = re.sub(r'^Appears ', '', text)
+        return t[0].upper() + t[1:]
     for p in LONG_LOOKS:
         out += [f'**{p["name"]}** · {p["purpose"].title()} · {p["years"]} {"Year" if p["years"] == 1 else "Years"} · `{real_time(p["years"])}` · {LEVEL_WORDS[p["level"]]}', '',
-                f'- **Why:** {p["why"]}', f'- **What:** {p["what"]}', f'- **Basis:** {p["basis"]}', f'- **Uses:** {cost_text(p)}', f'- **Appears:** {p["effect"]}', '']
+                f'- **Why:** {p["why"]}', f'- **What:** {p["what"]}', f'- **Basis:** {p["basis"]}', f'- **Uses:** {cost_text(p)}', f'- **Appears:** {appears(p["effect"])}', '']
     out += ['## Discovery projects', '', 'These appear from results, and name their target. Braces mark where a real star, planet or sender is filled in.', '']
     for p in DISCOVERIES:
         out += [f'**{p["name"]}** · {p["purpose"].title()} · {p["years"]} Years · `{real_time(p["years"])}` · {LEVEL_WORDS[p["level"]]}', '',
                 f'- **Why:** {p["why"]}', f'- **What:** {p["what"]}', f'- **Basis:** {p["basis"]}', f'- **Uses:** {cost_text(p)}',
-                f'- **Needs:** {need_names(p["needs"])}', f'- **Appears:** {p["effect"] or "When its prerequisite finishes."}', '']
+                f'- **Needs:** {need_names(p["needs"])}', f'- **Appears:** {appears(p["effect"] or "When its prerequisite finishes.")}', '']
     counts = {k: sum(p['purpose'] == k for p in PROJECTS) for k in PURPOSES}
     out += ['## Counts', '', f'{len(PROJECTS)} catalog projects ({", ".join(f"{v} {k}" for k, v in counts.items())}), {len(LONG_LOOKS)} long looks and {len(DISCOVERIES)} discovery projects.', '']
     return '\n'.join(out)
