@@ -310,7 +310,7 @@ Grow: more energy, matter and compute every year, so everything goes faster.
 - **Basis:** Von Neumann’s self-reproducing machines; no working example exists. NASA’s 1980 study assumed a lunar factory could copy itself in about a year.
 - **Uses:** compute 30% a year, 60 Mt of matter at start
 - **Needs:** Orbital foundry + Cold compute annex
-- **Effect:** Matter income doubles about every Year, as fast as physics allows, unless you slow it. Each doubling adds heat others can see.
+- **Effect:** Matter income doubles about every Year, as fast as physics allows unless you set a pace, until the grid can’t feed it: about 100 GJ a tonne. Its heat shows from other stars only once a solar swarm lifts energy toward the star’s output.
 - **Unlocks:** Far-side array, Kilometer interferometer, Solar swarm, Seed probe, Seedship, Star laser
 
 **Solar swarm** · 30 Years · `02:30:00` · Speculative · emissions loud

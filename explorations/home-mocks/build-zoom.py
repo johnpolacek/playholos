@@ -4462,7 +4462,7 @@ def talk(phone, sid, reply=None, chips=(), state=None):
     dock = f'<div class="mfloat{" onrail" if rail else ""}">{toast}{fab}</div>'
     k = phone.rindex('</div>'); return phone[:k] + dock + phone[k:]
 
-def beat_row(t, cells, truth='', flight=''):
+def beat_row(t, cells, truth='', flight='', label=None):
     """One 30-second step. cells: seat id -> (what the player does, what lands or None, phone or None)."""
     y = yr(t)
     out = []
@@ -4473,7 +4473,7 @@ def beat_row(t, cells, truth='', flight=''):
         said = '' if not does else f'<p class="lands">{does[1:].strip()}</p>' if does.startswith('·') else f'<p class="said">“{does}”</p>'
         out.append(f'<div class="bcell" data-seat="{s["id"]}">{said}'
                    f'{f"<p class=\"lands\"><b>Lands</b> {lands}</p>" if lands else ""}{idle}{views}</div>')
-    return (f'<section id="t{t}" class="brow{" tall" if any(c[2] for c in cells.values()) else ""}"><div class="bhead"><span class="bt mono">+{t // 60}:{t % 60:02d}</span>'
+    return (f'<section id="t{t}" class="brow{" tall" if any(c[2] for c in cells.values()) else ""}"><div class="bhead"><span class="bt mono">{label or f"+{t // 60}:{t % 60:02d}"}</span>'
             f'<span class="gy">Year {y}</span></div>'
             + (f'<div class="truth"><b>Godview</b><span>{truth}</span></div>' if truth else '')
             + (f'<div class="flight"><b>In flight</b><span>{flight}</span></div>' if flight else '')
@@ -5106,11 +5106,44 @@ K_SPEC = seat_confirm('kesh', yr(750), K_RES(750), 'spectrograph-bank', 'spectro
     'Ultra-stable spectrographs: they read gases, and feel small planets tug their stars.',
     '<div class="sec">HELPS WITH</div><div class="helps"><span class="mk other"></span><span><b class="other">A giant, half seen · Lodestar</b>'
     '<span class="sub">Feels worlds as heavy as ours, closer in, given Years of watching</span><span class="sub">Opens the planet survey</span></span></div>', kt(K_RES_MATTER_750 := 540 + 40 * yr(750) + 10 * (yr(750) - .4) + 80 + 40 * (yr(750) - 2.4)))
-K_UPNEXT = seat_tab('kesh', yr(780), K_RES(780), 'Projects', 'PROJECTS', '4 RUNNING · 1 UP NEXT', ''.join([
-    '<div class="sec">UP NEXT · STARTS ON ITS OWN</div>',
+# ---------- Kesh's road to the factory, queued at +13:00, and its daily summary at 20:00 on Friday (2026-10-05) ----------
+# Up next runs top first while Kesh sleeps: mining, then the mass driver once 4,000 kt is saved, the foundry once
+# 6,000 kt is saved, then the self-replicating factory once 60 Mt is saved. Once it runs, matter income doubles each
+# Year until the grid can't feed it: about 100 GJ to mine, refine and build each tonne, on Kesh's ~118 free TW.
+srf_, mdr_, ofd_ = CAT['self-replicating-factory'], CAT['mass-driver'], CAT['orbital-foundry']
+def kesh_road_day():
+    y, dt = yr(780), .01
+    stock = 540 + 40 * y + 10 * (y - .4) + 80 + 40 * (y - 2.4) - 100
+    inc, ev, queue, waiting = 90.0, {}, ['driver', 'foundry', 'factory'], None
+    cost = {'driver': catalog.matter_tonnes(mdr_), 'foundry': catalog.matter_tonnes(ofd_), 'factory': catalog.matter_tonnes(srf_)}
+    build = {'driver': mdr_['years'], 'foundry': ofd_['years'], 'factory': srf_['years']}
+    while 'factory_done' not in ev:
+        y = round(y + dt, 2); stock += inc * dt
+        if 'mining_done' not in ev and y >= bp['years'] + bmn['years']: ev['mining_done'] = y; inc += 120
+        if 'driver_start' in ev and 'driver_done' not in ev and y >= ev['driver_start'] + build['driver']: ev['driver_done'] = y; inc += 300
+        if 'foundry_start' in ev and 'foundry_done' not in ev and y >= ev['foundry_start'] + build['foundry']: ev['foundry_done'] = y
+        if 'factory_start' in ev and y >= ev['factory_start'] + build['factory']: ev['factory_done'] = y
+        if queue and 'mining_done' in ev and stock >= cost[queue[0]] and (queue[0] != 'factory' or 'foundry_done' in ev):
+            ev[queue[0] + '_start'] = y; stock -= cost[queue[0]]; queue.pop(0)
+    return ev, inc
+K_EV, K_INC0 = kesh_road_day()
+GRID_TW = 118                                         # 100 TW, +20% from the orbital solar array, less compute's draw
+CEIL_KT = GRID_TW * 1e12 * 3.156e7 / 1e11 / 1e3       # kt a Year at 100 GJ a tonne: watts × seconds ÷ joules a tonne ÷ 1,000
+N_DOUBLE = math.log2(CEIL_KT / K_INC0)
+Y_CEIL = K_EV['factory_done'] + N_DOUBLE
+Y_DAY = 288; T_DAY = 24 * 3600
+GT_ON_HAND = (CEIL_KT * 2 + CEIL_KT * (Y_DAY - Y_CEIL)) / 1e6
+yq = lambda y: tstack(f'about Year {y:.0f}', clock((y - yr(780)) * 5))
+K_UPNEXT = seat_tab('kesh', yr(780), K_RES(780), 'Projects', 'PROJECTS', '4 RUNNING · 4 UP NEXT', ''.join([
+    '<div class="sec">UP NEXT · STARTS ON ITS OWN, TOP FIRST</div>',
     qrow(1, 'mining', bmn['name'], 'when prospecting is done · +120 kt a year', tstack(f'Year {bp["years"]}', clock((bp['years'] - yr(780)) * 5))),
-    '<div class="sec">WHILE YOU ARE AWAY</div>', row('Keep the queue running', 'start what fits, top first', '›'), row('Wake me once a day', 'one summary', '›'), ALWAYS_ROW()]
+    qrow(2, 'driver', mdr_['name'], f'after mining, once {catalog.tonnes(catalog.matter_tonnes(mdr_))} is saved', yq(K_EV['driver_start'])),
+    qrow(3, 'foundry', ofd_['name'], f'once {catalog.tonnes(catalog.matter_tonnes(ofd_))} is saved', yq(K_EV['foundry_start'])),
+    qrow(4, 'mining', srf_['name'], f'once {catalog.tonnes(catalog.matter_tonnes(srf_))} is saved · then matter doubles each Year', yq(K_EV['factory_start'])),
+    '<div class="sec">WHILE YOU ARE AWAY</div>', row('Keep the queue running', 'start what fits, top first', '›'), row('Wake me once a day', 'one summary', '›'),
+    row('Factory pace', 'as fast as physics allows · not set', '›'), ALWAYS_ROW()]
     + spend(K_RES(780), 'matter on hand · +90 kt a year')))
+
 
 def say(phone, sid, line=None, chips=(), state=None): return T(phone, sid, line, chips, state)
 D = ('', None, None)          # a dead 30 seconds
@@ -5217,7 +5250,7 @@ BEATS = [
                    'kesh': ('Now Lodestar’s spectrographs.', None, say(with_strip(K_SPEC, kesh_strip(750, [('Spectrograph bank', 'ground', 0)])), 'kesh', f'Started: {SPB} Years, 100 kt. The pads cover it in a Year and a bit.', ('Undo',)))},
              truth=f'Kesh’s spectrograph bank, pointed at Lodestar, finishes in Year {yr(750) + SPB:g}. Like Hael’s at Warden, it will find Veyra’s world after a few of its turns. Two seats, watching the same star, from opposite sides of it.'),
     beat_row(780, {'veyra': AWAY, 'hael': AWAY,
-                   'kesh': ('Queue belt mining. Wake me once a day.', None, say(with_strip(K_UPNEXT, kesh_strip(780, [('Spectrograph bank', 'ground', b(SPB, 780) - b(SPB, 750))])), 'kesh', f'Queued. Mining starts on its own in Year {bp["years"]}. Once a day, one summary.'))}),
+                   'kesh': ('Queue the road to the factory. Wake me once a day.', None, say(with_strip(K_UPNEXT, kesh_strip(780, [('Spectrograph bank', 'ground', b(SPB, 780) - b(SPB, 750))])), 'kesh', 'Queued, top first, on its own. Once the factory runs, it grows as fast as physics allows, unless you set a pace. Once a day, one summary.', ('Full speed', 'Set a pace')))}),
     beat_row(810, {'veyra': AWAY, 'hael': AWAY, 'kesh': ('· Puts the phone down.', None, LK(wall(810), [('TOMORROW · 20:00', 'Kesh: one summary', 'Year 288 by then.')]))}),
     beat_row(840, {'veyra': AWAY, 'hael': AWAY, 'kesh': AWAY}),
     beat_row(870, {'veyra': AWAY, 'hael': AWAY, 'kesh': AWAY}),
@@ -5520,7 +5553,69 @@ SESSION2 = [*HAEL20, GAP,
                     'hael': AWAY, 'kesh': AWAY},
              truth=f'Every seat now has something on another. Hael feels Veyra’s world. Kesh’s spectrographs at Lodestar will feel it too. Veyra holds a world and a hum at Ember, and a voice at Beacon, and has said nothing.'),
 ]
-BEATS += SESSION2 + V3 + KESH21
+# ---------- Kesh's daily summary at 20:00 on Friday: the road above ran while Kesh slept ----------
+def K4_RES(): return (100, 30, f'{GT_ON_HAND:,.0f} Gt')
+K4_HUD = lambda t: K4_RES()
+K4_SUMMARY = seat_tab('kesh', Y_DAY, K4_RES(), 'Report', 'REPORT', 'ONE SUMMARY', f"""<div class="awayhead"><h3>{Y_DAY - yr(T_K + 180):.0f} Years passed</h3>
+<span class="sub">You were away <span class="rtime">{clock((Y_DAY - yr(T_K + 180)) * 5)}</span> · Year {yr(T_K + 180)} → Year {Y_DAY}</span></div>
+<div class="sec">THE BIG THINGS</div>
+{big('you', 'The self-replicating factory', f'Year {K_EV["factory_done"]:.0f}', f'Matter doubled every Year for {N_DOUBLE:.0f} Years')}
+{big('you', 'The grid is the limit', f'Year {Y_CEIL:.0f}', f'Every watt feeds the factories: {CEIL_KT / 1e6:.0f} Gt a Year')}
+{big('other', 'A world at Lodestar', f'Year {Y_K_LODESTAR_WORLD}', 'Held for this summary, as you ordered')}
+{big('other', 'Hollow, still speaking', f'Since Year {Y_KESH_HEARS}', 'The same words, repeating. Nothing new.')}
+<div class="sec">WHAT THE MIND DID · UNDER YOUR STANDING ORDERS</div>
+<ul class="did"><li>Built the road you queued: mining, Year {K_EV['mining_done']:.0f}; the mass driver, {K_EV['driver_done']:.0f}; the foundry, {K_EV['foundry_done']:.0f}; the factory, {K_EV['factory_done']:.0f}.</li>
+<li>Let the factory grow at full speed: no pace was set.</li><li>Held Hollow for this summary. Sent nothing.</li><li>Started nothing you didn’t queue.</li></ul>
+<div class="sec">WAITING FOR YOU · 2</div>
+<p class="copy small">The grid’s limit · A world at Lodestar</p>""")
+K4_LIMIT = seat_tab('kesh', Y_DAY, K4_RES(), 'Projects', 'ENERGY', f'YEAR {Y_DAY}', f"""<button class="backlink inline">‹ Projects</button>
+<div class="bignum"><strong>100%</strong><span>of this year’s energy in use · {GRID_TW} of {GRID_TW} terawatts</span></div>
+<div class="sec">THE NUMBERS</div>
+{ledger([('Matter', f'{CEIL_KT / 1e6:.0f} Gt a Year, up from {K_INC0:.0f} kt when the factory started'), ('Doubled', f'{N_DOUBLE:.0f} times, Year {K_EV["factory_done"]:.0f} to {Y_CEIL:.0f}'),
+         ('Each tonne', 'About 100 GJ to mine, refine and build'), ('The grid', f'{GRID_TW} TW, every watt to the factories'),
+         ('On hand', f'About {GT_ON_HAND:,.0f} Gt'), ('Our heat', f'{GRID_TW} TW: a thousandth of the sunlight Kesh takes in. Too faint to see from another star.')])}
+<p class="copy small">Matter is no longer the wall. Energy is.</p>""")
+SWARM_YEARS_TO_SEEN = math.log2(1e-4 * 0.22 * 3.828e26 / (GRID_TW * 1e12))
+K4_SWARM = seat_confirm('kesh', Y_DAY, K4_RES(), 'solar-swarm', 'solar', 'Grow',
+    'Collectors around Ember that build copies of themselves from belt rock, and send their power home.',
+    '<div class="sec">HELPS WITH</div><div class="helps"><span class="mk other"></span><span><b class="other">Lifts the grid’s limit</b>'
+    '<span class="sub">Energy doubles every Year, toward Ember’s whole output</span>'
+    f'<span class="sub">Seen: about {SWARM_YEARS_TO_SEEN:.0f} doublings in, its glow passes a ten-thousandth of Ember’s light, enough for a large infrared telescope 10 ly away</span></span></div>',
+    f'{GT_ON_HAND:,.0f} Gt')
+K4_PACE = order_screen('kesh', T_DAY + 90, K4_RES(), 'Start the swarm. Keep our glow below what they can see.', [
+    ('BUILD', f'<b>The solar swarm</b> · {CAT["solar-swarm"]["years"]} Years to seed'),
+    ('PACE', '<b>Double each Year, then hold</b> · just under a ten-thousandth of Ember’s light'),
+    ('HOLDS AT', f'About {1e-4 * 0.22 * 3.828e26 / 1e21:.0f} billion TW · about {1e-4 * 0.22 * 3.828e26 / (GRID_TW * 1e12) / 1e6:.0f} million times our grid'),
+    ('KEEPS', 'Wake me once a day · a world’s first voice still wakes you')],
+    'A sample limit. Telescopes we don’t know of could see less.')
+DAY_NOT_YET = ('· Their day is not mocked yet.', None, None)
+KESH_DAY = [
+    f'<section class="brow"><div class="bhead"><span class="bt mono">+{(T_K + 210) // 60}:{(T_K + 210) % 60:02d} → Friday 19:59</span><span class="gy">Year {yr(T_K + 210)} to Year {Y_DAY}</span></div>'
+    f'<div class="truth"><b>Godview</b><span>Kesh’s road runs on its own. Mining is done in Year {K_EV["mining_done"]:.0f}, the mass driver in {K_EV["driver_done"]:.0f}, the foundry in {K_EV["foundry_done"]:.0f}. '
+    f'The factory starts in Year {K_EV["factory_start"]:.0f}, once 60 Mt is saved, and runs from {K_EV["factory_done"]:.0f}. Its matter doubles every Year until, in Year {Y_CEIL:.0f}, every watt Kesh has goes to feeding it. '
+    'Veyra’s and Hael’s days are not mocked yet; nothing in this summary depends on them.</span></div></section>',
+    beat_row(T_DAY, {'veyra': DAY_NOT_YET, 'hael': DAY_NOT_YET,
+                     'kesh': ('· The summary arrives.', f'Year {Y_DAY}.', LK('20:00', [('NOW', 'Kesh: one summary', f'{Y_DAY - yr(T_K + 180):.0f} Years. The factory runs at the grid’s limit. Hollow still speaks.')]))},
+             label='Friday 20:00', truth=f'A day is {Y_DAY} Years. Energy binds for the first time in the cohort: Kesh’s grid can’t feed more factory.'),
+    beat_row(T_DAY + 30, {'veyra': DAY_NOT_YET, 'hael': DAY_NOT_YET,
+                          'kesh': ('· Opens it.', None, say(with_strip(K4_SUMMARY, system_strip('kesh', [], 'SYSTEM · EPSILON INDI · THE FACTORIES')), 'kesh', f'{Y_DAY - yr(T_K + 180):.0f} Years. The road is built. The factory ran at full speed until the grid ran out.', ('Numbers',)))},
+             label='20:00:30'),
+    beat_row(T_DAY + 60, {'veyra': DAY_NOT_YET, 'hael': DAY_NOT_YET,
+                          'kesh': ('Numbers.', None, say(with_strip(K4_LIMIT, system_strip('kesh', [], 'SYSTEM · EPSILON INDI · THE FACTORIES')), 'kesh', f'{CEIL_KT / 1e6:.0f} Gt a Year. Every watt we have. Matter isn’t the wall now. Energy is.', ('What lifts it?',)))},
+             label='20:01'),
+    beat_row(T_DAY + 90, {'veyra': DAY_NOT_YET, 'hael': DAY_NOT_YET,
+                          'kesh': ('What lifts it?', None, say(with_strip(K4_SWARM, system_strip('kesh', [('Solar swarm', 0)], 'SYSTEM · EPSILON INDI · AROUND EMBER')), 'kesh',
+                                   f'The solar swarm. Energy doubles every Year after. So does our glow: about {SWARM_YEARS_TO_SEEN:.0f} doublings in, a big infrared telescope 10 ly out sees us. Lodestar is 9.2.', ('Start it', 'Set a pace first')))},
+             label='20:01:30'),
+    beat_row(T_DAY + 120, {'veyra': DAY_NOT_YET, 'hael': DAY_NOT_YET,
+                           'kesh': ('Start the swarm. Keep our glow below what they can see.', None, say(with_strip(K4_PACE, system_strip('kesh', [('Solar swarm', 0)], 'SYSTEM · EPSILON INDI · AROUND EMBER')), 'kesh',
+                                    f'Started, with a pace: double, then hold just under what a big telescope could see. That is still about {1e-4 * 0.22 * 3.828e26 / (GRID_TW * 1e12) / 1e6:.0f} million times our grid.', ('Undo',)))},
+             label='20:02', truth='Veyra already knows someone is at Ember, from its radio. A capped swarm keeps Kesh’s heat below that sample limit; Veyra’s infrared telescope could find a swarm only past it.'),
+    beat_row(T_DAY + 150, {'veyra': DAY_NOT_YET, 'hael': DAY_NOT_YET, 'kesh': ('· Puts the phone down.', None, LK('20:02:30', [('TOMORROW · 20:00', 'Kesh: one summary', 'Year 576 by then.')]))},
+             label='20:02:30'),
+]
+
+BEATS += SESSION2 + V3 + KESH21 + KESH_DAY
 
 COHORT_ROWS = BEATS
 

@@ -1583,23 +1583,27 @@ THE MIND (KESH) · Started: 8 Years, 100 kt. The pads cover it in a Year and a b
 +13:00 · Year 2.6
 Away.
 Away.
-“Queue belt mining. Wake me once a day.”
+“Queue the road to the factory. Wake me once a day.”
 Kesh · Year 2.6
 Epsilon Indi · 11.8 ly from Sol · 1 Year = 00:05:00
 ENERGY · [1%] · MATTER · 654 kt · COMPUTE · [30%]
 [drawing: ORBIT · KESH · 3 BUILDING · +1 IN THE BELT; labels: moon, Kesh, low orbit, Orbital solar array · 26%, Cold compute annex · 22%, Spectrograph bank · 1%] · ORBIT · KESH · 3 BUILDING · +1 IN THE BELT
-PROJECTS · 4 RUNNING · 1 UP NEXT
-UP NEXT · STARTS ON ITS OWN
+PROJECTS · 4 RUNNING · 4 UP NEXT
+UP NEXT · STARTS ON ITS OWN, TOP FIRST
 1 · [drawing: Belt mining] · Belt mining · when prospecting is done · +120 kt a year · Year 6 · 00:17:00 · [Reorder Belt mining]
+2 · [drawing: Mass driver] · Mass driver · after mining, once 4,000 kt is saved · about Year 32 · 02:26:33 · [Reorder Mass driver]
+3 · [drawing: Orbital foundry] · Orbital foundry · once 6,000 kt is saved · about Year 58 · 04:36:00 · [Reorder Orbital foundry]
+4 · [drawing: Belt mining] · Self-replicating factory · once 60 Mt is saved · then matter doubles each Year · about Year 175 · 14:24:12 · [Reorder Self-replicating factory]
 WHILE YOU ARE AWAY
 - Keep the queue running · start what fits, top first · ›
 - Wake me once a day · one summary · ›
+- Factory pace · as fast as physics allows · not set · ›
 - A world’s first voice wakes you · a knock or a broadcast, aimed at us or not · even in quiet hours · always
 EACH YEAR YOU CAN SPEND
 Energy · [1%] · 99% free
 Compute · [30%] · 70% free
 654 kt · matter on hand · +90 kt a year
-THE MIND (KESH) · Queued. Mining starts on its own in Year 6. Once a day, one summary.
+THE MIND (KESH) · Queued, top first, on its own. Once the factory runs, it grows as fast as physics allows, unless you set a pace. Once a day, one summary. · [Full speed] · [Set a pace]
 [Talk to the mind]
 +13:30 · Year 2.7
 Away.
@@ -2206,3 +2210,108 @@ Away.
 Puts the phone down.
 Thursday · 21:34:30
 HOLOS · TOMORROW · 20:00 · Kesh: one summary · Held for it: a world at Lodestar, and anything more from Hollow.
++95:00 → Friday 19:59 · Year 19 to Year 288
+Godview · Kesh’s road runs on its own. Mining is done in Year 26, the mass driver in 56, the foundry in 88. The factory starts in Year 175, once 60 Mt is saved, and runs from 255. Its matter doubles every Year until, in Year 272, every watt Kesh has goes to feeding it. Veyra’s and Hael’s days are not mocked yet; nothing in this summary depends on them.
+Friday 20:00 · Year 288
+Godview · A day is 288 Years. Energy binds for the first time in the cohort: Kesh’s grid can’t feed more factory.
+Their day is not mocked yet.
+Their day is not mocked yet.
+The summary arrives.
+Lands · Year 288.
+Thursday · 20:00
+HOLOS · NOW · Kesh: one summary · 269 Years. The factory runs at the grid’s limit. Hollow still speaks.
+20:00:30 · Year 288.1
+Their day is not mocked yet.
+Their day is not mocked yet.
+Opens it.
+Kesh · Year 288
+Epsilon Indi · 11.8 ly from Sol · 1 Year = 00:05:00
+ENERGY · [100%] · MATTER · 685 Gt · COMPUTE · [30%]
+[drawing: SYSTEM · EPSILON INDI · THE FACTORIES; labels: Kesh, ice world, the belt] · SYSTEM · EPSILON INDI · THE FACTORIES
+REPORT · ONE SUMMARY
+
+### 269 Years passed
+You were away · 22:25:30 · Year 18.9 → Year 288
+THE BIG THINGS
+- The self-replicating factory · Matter doubled every Year for 16 Years · Year 255 · ›
+- The grid is the limit · Every watt feeds the factories: 37 Gt a Year · Year 272 · ›
+- A world at Lodestar · Held for this summary, as you ordered · Year 14.1 · ›
+- Hollow, still speaking · The same words, repeating. Nothing new. · Since Year 18.3 · ›
+WHAT THE MIND DID · UNDER YOUR STANDING ORDERS
+Built the road you queued: mining, Year 26; the mass driver, 56; the foundry, 88; the factory, 255.
+Let the factory grow at full speed: no pace was set.
+Held Hollow for this summary. Sent nothing.
+Started nothing you didn’t queue.
+WAITING FOR YOU · 2
+The grid’s limit · A world at Lodestar
+THE MIND (KESH) · 269 Years. The road is built. The factory ran at full speed until the grid ran out. · [Numbers]
+[Talk to the mind]
+20:01 · Year 288.2
+Their day is not mocked yet.
+Their day is not mocked yet.
+“Numbers.”
+Kesh · Year 288
+Epsilon Indi · 11.8 ly from Sol · 1 Year = 00:05:00
+ENERGY · [100%] · MATTER · 685 Gt · COMPUTE · [30%]
+[drawing: SYSTEM · EPSILON INDI · THE FACTORIES; labels: Kesh, ice world, the belt] · SYSTEM · EPSILON INDI · THE FACTORIES
+ENERGY · YEAR 288
+[‹ Projects]
+100% · of this year’s energy in use · 118 of 118 terawatts
+THE NUMBERS
+Matter · 37 Gt a Year, up from 510 kt when the factory started · Doubled · 16 times, Year 255 to 272 · Each tonne · About 100 GJ to mine, refine and build · The grid · 118 TW, every watt to the factories · On hand · About 685 Gt · Our heat · 118 TW: a thousandth of the sunlight Kesh takes in. Too faint to see from another star.
+Matter is no longer the wall. Energy is.
+THE MIND (KESH) · 37 Gt a Year. Every watt we have. Matter isn’t the wall now. Energy is. · [What lifts it?]
+[Talk to the mind]
+20:01:30 · Year 288.3
+Their day is not mocked yet.
+Their day is not mocked yet.
+“What lifts it?”
+Kesh · Year 288
+Epsilon Indi · 11.8 ly from Sol · 1 Year = 00:05:00
+ENERGY · [100%] · MATTER · 685 Gt · COMPUTE · [30%]
+[drawing: SYSTEM · EPSILON INDI · AROUND EMBER; labels: Kesh, ice world, the belt, Solar swarm · 0%] · SYSTEM · EPSILON INDI · AROUND EMBER
+[‹ Grow] · GROW
+[drawing: Orbital solar array]
+
+### Solar swarm
+Energy up to a whole star’s output, but everyone nearby can see you.
+Collectors around Ember that build copies of themselves from belt rock, and send their power home.
+HELPS WITH
+Lifts the grid’s limit · Energy doubles every Year, toward Ember’s whole output · Seen: about 26 doublings in, its glow passes a ten-thousandth of Ember’s light, enough for a large infrared telescope 10 ly away
+USES EACH YEAR
+Compute · [20%] · 20%
+USES ONCE, AT START
+100 Mt · of matter, from 685 Gt on hand
+TIME
+now · 01:00:00 · 02:00:00 · 03:00:00
+30 Years
+THE MIND (KESH) · The solar swarm. Energy doubles every Year after. So does our glow: about 26 doublings in, a big infrared telescope 10 ly out sees us. Lodestar is 9.2. · [Start it] · [Set a pace first]
+[Talk to the mind]
+20:02 · Year 288.4
+Godview · Veyra already knows someone is at Ember, from its radio. A capped swarm keeps Kesh’s heat below that sample limit; Veyra’s infrared telescope could find a swarm only past it.
+Their day is not mocked yet.
+Their day is not mocked yet.
+“Start the swarm. Keep our glow below what they can see.”
+Kesh · Year 288.3
+Epsilon Indi · 11.8 ly from Sol · 1 Year = 00:05:00
+ENERGY · [100%] · MATTER · 685 Gt · COMPUTE · [30%]
+[drawing: SYSTEM · EPSILON INDI · AROUND EMBER; labels: Kesh, ice world, the belt, Solar swarm · 0%] · SYSTEM · EPSILON INDI · AROUND EMBER
+MIND · NEW ORDER
+WHAT YOU WANT
+Start the swarm. Keep our glow below what they can see.
+THE MIND’S VERSION
+BUILD · The solar swarm · 30 Years to seed
+PACE · Double each Year, then hold · just under a ten-thousandth of Ember’s light
+HOLDS AT · About 8 billion TW · about 71 million times our grid
+KEEPS · Wake me once a day · a world’s first voice still wakes you
+A sample limit. Telescopes we don’t know of could see less.
+[Talk it through with the mind ›]
+[Edit] · [Set the order]
+THE MIND (KESH) · Started, with a pace: double, then hold just under what a big telescope could see. That is still about 71 million times our grid. · [Undo]
+[Talk to the mind]
+20:02:30 · Year 288.5
+Their day is not mocked yet.
+Their day is not mocked yet.
+Puts the phone down.
+Thursday · 20:02:30
+HOLOS · TOMORROW · 20:00 · Kesh: one summary · Year 576 by then.

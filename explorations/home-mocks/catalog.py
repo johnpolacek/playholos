@@ -152,7 +152,7 @@ PROJECTS = [
     P('self-replicating-factory', 'Self-replicating factory', 'grow', 3, 80, 'M30 C30',
       'Factories that build copies of themselves from belt rock.',
       'Von Neumann’s self-reproducing machines; no working example exists. NASA’s 1980 study assumed a lunar factory could copy itself in about a year.', 'speculative', 'noticeable',
-      needs=['orbital-foundry', 'cold-compute-annex'], effect='Matter income doubles about every Year, as fast as physics allows, unless you slow it. Each doubling adds heat others can see.'),
+      needs=['orbital-foundry', 'cold-compute-annex'], effect='Matter income doubles about every Year, as fast as physics allows unless you set a pace, until the grid can’t feed it: about 100 GJ a tonne. Its heat shows from other stars only once a solar swarm lifts energy toward the star’s output.'),
     P('solar-swarm', 'Solar swarm', 'grow', 3, 30, 'M50 C20',
       'Surrounds the star with collectors: enormous energy, and a heat glow others can see.',
       'A Dyson swarm. A full one takes about Mercury’s mass; Armstrong and Sandberg found self-copying industry could build it in decades. Its infrared excess is what searches like Ĝ look for.', 'speculative', 'loud',
