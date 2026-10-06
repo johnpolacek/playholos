@@ -178,6 +178,13 @@ Every source the game rests on, grouped by the question it answers. Each entry s
   - Matters: a neighbor's gravity and escape speed, and so its cost of reaching space.
   - Used: [calcs/neighbors.py](calcs/neighbors.py).
 
+## Running the neighbors
+
+- **[Claude API pricing](https://platform.claude.com/docs/en/about-claude/pricing)** · Reference, September 2026 ([batch processing](https://platform.claude.com/docs/en/build-with-claude/batch-processing), [prompt caching](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)).
+  - Per million tokens, in and out: Claude Opus 5.5 $4 and $20, Claude Sonnet 5.5 $2 and $10, Claude Haiku 4.5 $1 and $5. Cached input about a tenth of the input price. The Batch API halves the price for work that can wait.
+  - Matters: what it costs for a model to play each neighbor.
+  - Used: v2 open question 5, [calcs/ai_cost.py](calcs/ai_cost.py).
+
 ## Real masses behind the projects
 
 Anchors for [the project audit](HOLOS_PROJECT_AUDIT.md).
