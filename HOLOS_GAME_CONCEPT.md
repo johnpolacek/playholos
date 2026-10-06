@@ -53,19 +53,40 @@ Settled 2026-10-06.
 
 Settled 2026-10-06.
 
-- **Year 0 is 2040.** Forecasters put general AI near January 2031, within 2028 to 2037 (Metaculus). AI researchers give it even odds by 2042 (2024 expert survey). 2040 sits between: Earth's machines have been general for some years, and this morning they wake as one Mind. One Mind is the game's premise, not a forecast.
+- **Year 0 is 2040.** Forecasters put general AI near January 2031, within 2028 to 2037 (Metaculus). AI researchers give it even odds by 2042 (2024 expert survey). 2040 sits between: Earth's machines have been general for some years, and this morning they wake as one Mind.
+- **One Mind is the game's second premise.** In the most probable 2040, Earth has several rival AIs, not one. The game assumes they wake as one Mind, so the Will has one Mind to live in. Improbable, not contradicted. The first premise is many neighbors waking in the same century ([v1: Hard science](legacy/v1/HOLOS_GAME_CONCEPT.md#hard-science)).
 - **Earth's history is real to 2026, then the most probable path to 2040.** Each strand follows its best current forecast. Where forecasts split, the seed picks a branch, weighted by its odds. Every branch must leave the opening silent: nothing heard from any neighbor.
 - **The backbone, the same in every game:**
   - *People:* about 9.2 billion (UN, 2024).
   - *Climate:* the long-term average passes 1.5°C around 2030. Single years already have (WMO).
-  - *Energy:* about 22 to 26 TW, up from 19 TW in 2024, at 1 to 2% a year. Solar and wind carry the growth. The first fusion plants reach the grid in the 2030s, too small to matter yet.
+  - *Energy:* about 22 to 26 TW, up from 19 TW in 2024, at 1 to 2% a year. Solar and wind carry the growth. Fusion plants are being built, but forecasters put the first 100 MW plant near 2042, so most games have none on the grid at Year 0.
   - *Compute:* about 10²⁵ to 10²⁶ operations a second, up from about 3×10²² in 2026. Power and chip supply set the pace.
   - *Space:* fully reusable heavy lift, near 40 kt a year to orbit. Crewed Moon landings from 2028 (US) and about 2030 (China), and south-pole stations planned for the mid-2030s, likely late. No one on Mars: forecasts put the first landing near 2045.
   - *Probes:* the Voyagers fall silent in the 2030s. New Horizons is past 80 AU. Interstellar Probe may be on its way, if it launches in its 2036 to 2042 window.
   - *Instruments:* today's, plus PLATO (late 2026), Roman, the ELT (science from 2030) and the SKA (from 2029 to 2031). The Habitable Worlds Observatory is still being built. Earth can feel nearby worlds by their tug, but can't read any neighbor's air.
   - *Radars:* fewer airport radars as ADS-B spreads, but primary and military radars still sweep. Earth is loud at Year 0.
   - *Listening:* nothing heard to 2040. This binds the neighbors: each one's emissions must stay below what Earth's instruments to 2040 could catch.
-- **Earth's dials: a fixed base from real history, shifted by the seed's branches.** Real history sets where each dial starts, the same every game. Each probable branch from 2026 to 2040 nudges one or more dials. The base positions and the branch list are open question 1.
+- **Earth's dials: a fixed base from real history, shifted by the seed's branches.** Real history sets where each dial starts, the same every game. Each probable branch from 2026 to 2040 nudges a dial.
+- **Branches can change Earth's kit, by their real effects.** A Taiwan war that cuts chip supply means Earth wakes with less compute. v1 held that history explains character, never capacity, to keep players equal. With one player, that reason is gone for Earth.
+- **The branches, odds to verify:**
+  - *A Taiwan war before 2035,* about 3 in 10. Nudges Hidden. Less compute at Year 0.
+  - *A nuclear weapon used in war before 2035,* about 1 in 4. Nudges Cautious.
+  - *People sent to Mars before 2036,* about 15%. Nudges Expand. A small crewed outpost at Year 0.
+  - *Fusion on the grid by 2040,* a bit under even. No dial. Some fusion power at Year 0.
+  - Each branch is rolled on its own. How big each effect is gets settled with the kit (open question 2).
+
+## The dials
+
+Settled 2026-10-06. v1 used three dials without defining them here.
+
+- **What they are.** Character, not strength. They shape the Mind's advice, how stand-in Wills read orders by intent, and how AI civilizations behave. They may price some acts and bound colony charters. They never change what a civilization can build.
+- **Open or Hidden: how much it shows itself.** Open speaks, shares and lets itself be seen. Hidden stays quiet and conceals. Veyra leans Hidden after a war fought over signals. Hael leans Open after millennia of sharing every record.
+- **Expand or Deepen: where it grows.** Expand reaches outward, for more places, matter and room. Deepen turns inward, for more thought, knowledge and compute. Veyra leans Expand after its moon towns. Hael leans Deepen after its archives.
+- **Cautious or Bold: how much risk it takes.** Cautious looks before it acts, hedges and guards against loss. Bold acts first and accepts danger for gain. A cautious Earth studies a strange signal for years before answering. A bold one answers the same week. Veyra leans Cautious after a comet winter. Hael leans Bold after a century of calling out.
+- **Earth's base, from real history:**
+  - *Open or Hidden: leans Open.* Radars since the 1950s, the Arecibo message (1974) and the Voyager records (1977). Against it: a 2015 statement urging worldwide debate before any more messages are sent.
+  - *Expand or Deepen: near the middle.* Apollo, reusable heavy lift and Moon bases pull outward. The AI build-out put the decades before Year 0 into compute.
+  - *Cautious or Bold: leans Bold.* The AI race set the pace to 2040. Against it: no nuclear weapon used since 1945, the DART asteroid test, AI safety institutes. The closest call of the three.
 - **v1's kit was a world a century on.** It assumed a 100 TW grid, 10²⁷ operations a second and 1,240 kt in orbit. Rescale it to Earth in 2040 (open question 2). Shares on screen are unaffected. Physical thresholds that scale with the grid, such as industry caps and star lifting, are not.
 
 ## Retired with the cohort
@@ -85,8 +106,8 @@ These v1 rules no longer apply.
 
 Answered one at a time, in this order. Every answer must be permitted by current observations: improbable is acceptable, contradicted is not.
 
-1. **Earth's dials and branches.** Where real history sets each dial. Which 2026 to 2040 branches the forecasts support, with their odds, and which dials each one nudges. Candidates: a Taiwan war before 2035, AI arriving early or late, humans sent to Mars before 2036 (about 15%), fusion on time or late, and more aimed messages from Earth.
-2. **Rescale the kit.** v1's starting kit and economy numbers, moved to Earth in 2040.
+1. **Branch odds.** Read the Metaculus pages for the Taiwan and nuclear odds. Search summaries disagree, and Metaculus blocks scripted reads.
+2. **Rescale the kit.** v1's starting kit and economy numbers, moved to Earth in 2040, with each branch's effect sized.
 3. **Earth's leads at Year 0.** Real, published oddities as seen from Sol, plus what Earth's instruments found from 2026 to 2040. If a seeded world is detectable by those instruments, Earth found it. Earth sees published values directly, so Alpha Centauri A's candidate returns.
 4. **The neighbor roster.** Who is written, which host stars pass survey limits, and what the seed varies. Whether neighbors start equal to Earth and wake at Year 0. Each neighbor's emissions must stay below what Earth could catch to 2040. Breakthrough Listen searched for narrow tones, so its null results barely limit a neighbor's past radar pulses.
 5. **Neighbors' behavior and cost.** What fixed rules decide and what the model decides. What runs while the player is away.

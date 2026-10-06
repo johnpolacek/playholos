@@ -113,6 +113,34 @@ Every source the game rests on, grouped by the question it answers. Each entry s
   - Matters: Earth's farthest working probe at Year 0. v1's 900 AU precursor is out of reach by 2040.
   - Used: v2 Year 0 and Earth's road to it.
 
+- **[Metaculus, first 100 MW fusion plant](https://www.metaculus.com/questions/363/)** · Forecast ([0.1% of world energy](https://www.metaculus.com/questions/9464/nuclear-fusion-power-01-of-global-energy/)).
+  - Median about April 2042 for a 100 MW fusion plant in service. About 2051 for fusion to supply 0.1% of world energy.
+  - Matters: most games have no fusion on the grid at Year 0. It corrected an earlier draft that assumed the 2030s.
+  - Used: v2 Year 0 and Earth's road to it, open question 1.
+- **[Metaculus, Chinese invasion of Taiwan](https://www.metaculus.com/questions/11480/china-launches-invasion-of-taiwan/)** · Forecast, read through search summaries.
+  - About 12% by 2028 and roughly 27 to 33% before 2035.
+  - Matters: the likeliest major branch before Year 0.
+  - Used: v2 open question 1. To verify on the page.
+- **[Metaculus, no non-test nuclear detonation before 2035](https://www.metaculus.com/questions/3150/no-non-test-nuclear-detonations-before-2035/)** · Forecast, read through search summaries ([by 2050](https://www.metaculus.com/questions/4779/will-a-nuclear-weapon-be-detonated-as-an-act-of-war-by-2050/)).
+  - About 74% that none is used before 2035, so about 26% that one is. Summaries of the 2050 question disagree with it.
+  - Matters: a branch that would push Earth toward Cautious.
+  - Used: v2 open question 1. To verify on the page.
+
+## Earth's character
+
+- **[Arecibo message](https://en.wikipedia.org/wiki/Arecibo_message)** and **[Voyager Golden Records](https://en.wikipedia.org/wiki/Voyager_Golden_Record)** · History.
+  - Earth's first deliberate messages: a radio burst toward M13 in 1974, and records on two probes leaving the Solar System in 1977.
+  - Matters: Earth chose to be found, at least once. Basis for Earth's lean toward Open.
+  - Used: v2 [The dials](HOLOS_GAME_CONCEPT.md#the-dials).
+- **[Statement regarding METI and Active SETI, 2015](https://setiathome.berkeley.edu/meti_statement_0.html)** · Statement, signed by scientists and others.
+  - Urges "vigorous international debate by a broadly representative body" before any more messages are sent.
+  - Matters: the strongest real pull toward Hidden.
+  - Used: v2 The dials.
+- **[DART](https://en.wikipedia.org/wiki/Double_Asteroid_Redirection_Test)** · Demonstrated, 2022.
+  - The first test of moving an asteroid by impact.
+  - Matters: Earth guards against loss it can see coming. A real pull toward Cautious.
+  - Used: v2 The dials.
+
 ## Seeing worlds
 
 - **[Kaltenegger and Faherty 2021, the Earth transit zone](https://arxiv.org/abs/2107.07936)** · Published, Nature.
@@ -255,7 +283,7 @@ Results the design is waiting on. Check each when its date comes.
 
 ## To check
 
-- Metaculus odds of a Taiwan war before 2035, for the branch list. A search summary gave about one in three. The question may be conditional.
+- Metaculus odds for the branch list: a Taiwan war and a nuclear weapon used before 2035. Metaculus blocks scripted reads, and search summaries disagree. Read the pages by hand.
 - Tau Ceti dust belt tilt in leads.py against MacGregor et al. 2016.
 - Beta Hydri drift: find the 2012 and 2023 primary papers.
 - Earth's aimed messages: transmitter power, frequency and duration from primary sources.
