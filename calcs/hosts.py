@@ -27,6 +27,8 @@ def kind_from_color(bp_rp):
     if bp_rp < 4.5: return 'M'
     return None
 
+G_ABS = {'F': (1.0, 4.6), 'G': (1.5, 6.3), 'K': (3.0, 9.0), 'M': (7.0, 17.0)}
+
 def kind_from_spect(spect):
     m = re.match(r'([OBAFGKM])(\d(\.\d)?)?', spect.strip())
     if not m: return None
@@ -51,6 +53,12 @@ def stars():
         bp, rp = r['BPmag'], r['RPmag']
         white = r['WDprob'] and float(r['WDprob']) > 0.5
         k = None if white or not bp or not rp else kind_from_color(float(bp) - float(rp))
+        # A color that disagrees with the brightness is bad photometry or not a dwarf: absolute G per kind,
+        # roomy enough for subgiants (Pecaut and Mamajek).
+        if k and r['Gmag']:
+            g_abs = float(r['Gmag']) + 5 * math.log10(float(r['Plx']) / 100)
+            low, high = G_ABS[k]
+            if not low <= g_abs <= high: k = None
         num = lambda v: float(v) if v else None
         out.append(dict(id=r['GaiaEDR3'], name='Gaia ' + r['GaiaEDR3'], kind=k, d_pc=d,
                         ra=float(r['RA_ICRS']), dec=float(r['DE_ICRS']), plx=float(r['Plx']), e_plx=float(r['e_Plx']),

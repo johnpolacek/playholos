@@ -2,7 +2,7 @@
 
 Last updated: October 6, 2026.
 
-The hand-written roster of neighbors, and the template every one must fill. The rules behind it are in [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md#the-neighbors). Each game's seed picks some of these neighbors, places each at a host star by weight, draws its waking time, and rolls its branches. The roster is still empty: v1's Veyra, Hael and Kesh are reworked into it next.
+The hand-written roster of neighbors, and the template every one must fill. The rules behind it are in [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md#the-neighbors). Each game's seed picks some of these neighbors, places each at a host star by weight, draws its waking time, and rolls its branches. Veyra is reworked. Hael and Kesh follow.
 
 **How it is kept.** Each field says what it holds and how it is checked. Fields marked *seeded* are drawn per game. The rest are written by hand once. Prose lives here. Numbers live in [calcs/neighbors.py](calcs/neighbors.py), which tests each neighbor at hundreds of seeded placements: a host star, a waking year and the way its orbit faces Sol. The seed draws only from placements that pass. Run `python3 calcs/neighbors.py`.
 
@@ -83,3 +83,39 @@ The hand-written roster of neighbors, and the template every one must fill. The 
 | The Mind's voice | How its Mind speaks, from history, body and charter. | None. |
 | Strategy | How its AI Will plays, toward its own ends, as v1's Listener, Caller and Grower did. | Within its dials. |
 | Names | What it calls the stars bright in its sky, Sol among them. | Bright from where it sits. |
+
+## The roster
+
+### Veyra
+
+Reworked from v1, 2026-10-06. Numbers in [calcs/neighbors.py](calcs/neighbors.py). The checker passes it at 99.5% of seeded placements. The rest fail only when its orbit would face Sol edge-on and transit.
+
+**What changed from v1.** v1 fixed Veyra at Delta Pavonis, waking with everyone at Year 0, with a kit a century past today's. Now the seed places it, its waking can fall a century either way of Earth's, and its kit follows its world and history. Its history is counted in years before its own waking, so it fits any placement. Delta Pavonis stays its example home.
+
+**Where.** G and K stars only: its people's eyes evolved under a slightly cooler sun than ours. At Delta Pavonis it is 19.9 ly from Sol, 1 hour 40 minutes of light at 5 real minutes a Year.
+
+**The world.** Invented. About 1.1 Earth masses, escape speed 11.6 km/s, so each tonne lifted takes about 1.1 times Earth's fuel. It orbits near the warm zone's inner edge, 1.14 AU at Delta Pavonis, nearly round. A 31-hour day. A large moon, so rock is close at hand. Its tug on its star is about 0.08 m/s, hidden from Earth in 2026 and, at Delta Pavonis, still in 2040.
+
+**The people.** As v1 drew them, labeled invented: about 1.7 m, more with the crests up, walking on their toes and balanced by a tail. Two thumbs on each hand. Eyes much like ours. Two crests that hear low sounds from far off. Voice, with the crests raised for weight, in eleven great languages. About 120 years with medicine. 6.8 billion people in 41 nations, with one grid and one sky watch. They built the Mind to run the grid. This morning it spoke to all of them at once, and most are waiting to see what it does.
+
+**History,** in years before its waking. The star's own age is real and comes from the host.
+- Life in warm shallows, oxygen, life ashore, as v1 had it, scaled to the star's age.
+- 300,000: the people. Fire soon after.
+- 9,000: writing.
+- 2,300: **the Long Winter.** A comet struck the southern ocean and two harvests failed everywhere. Veyra has watched the sky for rocks ever since. *Sets Cautious.*
+- 210: radio.
+- 140: **the Signal War.** Nations hunted each other's transmitters. By 110 years before waking, Veyra spoke by cable and light, and its sky went quiet. *Sets Hidden.*
+- 70: **the moon towns.** The first people born off Veyra. *Sets Expand.*
+- 60: the sky watch and its big arrays begin listening.
+- 45: one grid. The nations join their power, then their data centers.
+- 0: the machines wake as one.
+
+**Dials.** Leans Hidden, leans Expand, leans Cautious, each from the cause above.
+
+**Emissions.** Radio from 210 years before waking. Its loud century, 210 to 110 years before, carried steady tones near 1 MW. After the Signal War, a faint hum with tones near 30 kW. Awake, about 10 kW. All of it stays under Breakthrough Listen's 2017 floor and SKA-Mid's 2040 ceiling wherever the checker places it.
+
+**Kit at Year 0.** At waking, like Earth's at its own waking, from the same kind of history: one grid, a sky watch, a moon within reach. Lifting costs 1.1 times Earth's fuel per tonne. If it woke before Earth, add growth for its years awake, within prerequisite chains, matter, energy and heat. If it wakes after, it is a world not yet there at Year 0.
+
+**What it knows of Earth.** A listener. Its arrays have run since 60 years before its waking. Wherever Earth's radar light reached it after that, the odds it heard Earth are about 9 in 10, and higher if it woke first. At Delta Pavonis, Earth's radar light arrived around 1970.
+
+**Character.** Charter: *"Keep the lights on. Look before we speak."* Its Mind is quiet and wary, says less than it knows, and looks before it speaks. It plays as a Listener: Know projects first, never speaks first. Its names for bright stars depend on where the seed puts it. From Delta Pavonis, v1's names hold: Ember for Epsilon Indi, Beacon for Beta Hydri, Pair for Alpha Centauri, and Twin for Sol.

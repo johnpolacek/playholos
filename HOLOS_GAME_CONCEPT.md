@@ -147,7 +147,7 @@ Settled 2026-10-06, from first principles rather than for the game's sake.
 - **Where they live.** Any star within 50 ly that could keep a habitable world for long enough, drawn by weight ([calcs/hosts.py](calcs/hosts.py), [data/hosts-50ly.csv](data/hosts-50ly.csv)).
   - *Weights:* G and K dwarfs 1, late F one half, M dwarfs one tenth. G and K are the known case. Late F stars live 3 to 7 billion years. Rocky worlds close to M dwarfs keep turning out airless, though temperate ones are open.
   - *Dropped:* stars known to be younger than about a billion years, stars whose companion leaves no stable orbit in the warm zone (Holman and Wiegert 1999), and stars where a known planet of 10 Earth masses or more crosses the warm zone.
-  - *What's left:* 975 stars, F 22, G 52, K 119, M 782, worth about 260 G-star equivalents.
+  - *What's left:* 930 stars, F 22, G 52, K 116, M 740, worth about 253 G-star equivalents. Stars whose color and brightness disagree are left out as bad photometry.
   - *Not yet tested:* close binaries Gaia can't split, such as Procyon, Chi Draconis and Zeta Herculis.
 - **How loud they may be.** Earth heard nothing by 2040. If SKA-Mid listened an hour to every star within 50 ly by then, a neighbor's steady tones stayed under about 146 MW at 10 ly, 583 MW at 20 ly and 3.6 GW at 50 ly. Each neighbor's history sets its own loudness under that ceiling.
 

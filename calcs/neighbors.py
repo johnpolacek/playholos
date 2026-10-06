@@ -21,7 +21,11 @@ YEAR_S = 3.156e7
 # Numbers only. Orbits sit at a share of the way across the host's warm zone, so a neighbor fits any host.
 # Emissions are steady tones in watts, timed in years before its own waking: radio_since, loud spans, then its hum.
 # Character sets the odds it heard Earth: 'listener', 'ordinary' or 'inward'.
-ROSTER = []
+ROSTER = [
+    # Veyra: prose in HOLOS_NEIGHBORS.md. v1 set it at Delta Pavonis; now the seed places it.
+    dict(name='Veyra', kinds='GK', world=dict(mass=1.1, hz_share=0.1, e=0.03, day_hours=31, moon='large'),
+         radio_since=210, arrays_since=60, emissions=[(210, 110, 1e6)], hum=3e4, awake=1e4, character='listener'),
+]
 
 # ---------- What Earth's searches could catch ----------
 # Narrowband tones, F_min = SNR x SEFD x sqrt(channel / (2 x stare)). Light Earth received in year T left in T - d.
@@ -89,7 +93,20 @@ def check(n, host, waking, pole_from_sol):
         left = year - host['distance_ly']
         p = tone_at(n, waking, left)
         if p > floor_watts(sefd, chan, stare, host['distance_ly']): fails.append(f'{name} would have heard it: {p / 1e6:,.0f} MW tones')
-    return fails, dict(a=a, tug=k, found_by_2040=k > rv_2040(host))
+    return fails, dict(a=a, tug=k, found_by_2040=k > rv_2040(host), heard=heard_odds(n, host, waking))
+
+# ---------- Did it hear Earth by Year 0? ----------
+# Earth's radars have spread since 1950. They reach a neighbor d years later. It could hear them only once its big
+# arrays were running, arrays_since years before its waking. Odds from Earth's loud past: a listener about 9 in 10,
+# an ordinary neighbor 1 in 2, an inward one 1 in 5. Awake before Year 0, a Mind that looks finds them almost surely.
+HEARD = {'listener': 0.9, 'ordinary': 0.5, 'inward': 0.2}
+def heard_odds(n, host, waking):
+    arrives = 1950 + host['distance_ly']
+    listening_from = waking - n.get('arrays_since', 60)
+    if min(EARTH_WAKES, waking) - max(arrives, listening_from) < 5 and waking > EARTH_WAKES: return 0.0
+    odds = HEARD[n['character']]
+    if waking < EARTH_WAKES - 5 and arrives < EARTH_WAKES: odds = max(odds, 0.5 if n['character'] == 'inward' else 0.95)
+    return odds
 
 def tone_at(n, waking, year):
     """Its steadiest tones, in watts, in a given Earth calendar year: nothing before its radio, its loud years,
@@ -103,6 +120,7 @@ def tone_at(n, waking, year):
 def placements(n, host_rows, tries=200, seed=1):
     rng = random.Random(seed)
     ok, reasons = 0, {}
+    host_rows = [h for h in host_rows if h['kind'] in n.get('kinds', 'FGKM')]   # the seed only draws stars it can live at
     for _ in range(tries):
         host = rng.choices(host_rows, weights=[float(h['weight']) for h in host_rows])[0]
         waking = EARTH_WAKES + 100 * (rng.random() - rng.random())       # a century either way, most near Earth's
@@ -114,6 +132,14 @@ def placements(n, host_rows, tries=200, seed=1):
                 reasons[kind] = reasons.get(kind, 0) + 1
         else: ok += 1
     return ok / tries, reasons
+
+def at(n, host_rows, name, waking=EARTH_WAKES, pole=60):
+    """One placement in detail: a named host, a waking year, a pole angle from Sol's line."""
+    host = next(h for h in host_rows if h['name'] == name)
+    fails, info = check(n, host, waking, pole)
+    print(f"{n['name']} at {name}, {host['distance_ly']:.1f} ly, waking {waking:.0f}: orbit {info['a']:.2f} AU, "
+          f"tug {info['tug']:.2f} m/s{', found by 2040' if info['found_by_2040'] else ''}, heard Earth {info['heard']:.0%}. "
+          + ('Passes.' if not fails else 'Fails: ' + '; '.join(fails)))
 
 def report(host_rows):
     if not ROSTER:
@@ -131,4 +157,9 @@ TEST = dict(name='Test: an Earth twin', kinds='GK', world=dict(mass=1.0, hz_shar
             radio_since=120, emissions=[(90, 10, 2e11)], hum=1e5, character='ordinary')
 
 if __name__ == '__main__':
-    report(load_hosts())
+    rows = load_hosts()
+    report(rows)
+    print()
+    at(ROSTER[0], rows, 'Del Pav')                       # v1's home, waking with Earth
+    at(ROSTER[0], rows, 'Del Pav', waking=1990)          # fifty years before Earth
+    at(ROSTER[0], rows, 'Eps Ind', waking=2090)          # a near K dwarf, fifty years after
