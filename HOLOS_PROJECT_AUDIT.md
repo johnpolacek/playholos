@@ -23,8 +23,8 @@ Every v1 project's cost and effect, checked against physics and real designs, at
 Matter is now real mass in space (settled 2026-10-06). Most instruments and probes become cheap in matter, so build time, compute shares, lift and propellant pace them. The big works stay expensive.
 
 - **Early probes are affordable.** A flyby probe is about 100 t and a sentinel about 500 t, against 250 kt in orbit and 40 kt a year. v1 made them megatonnes.
-- **The self-replicating factory is a 100 t seed.** Its 80 Years now carry the whole gate. Once it runs, matter stops being scarce early. v1 expected that only late in a game.
-- **Heavy bullets are about 0.4 Mt each,** after a fuel works. Strikes come sooner than v1's day and a quarter unless build time or fuel holds them back.
+- **The self-replicating factory is a 100 t seed.** Its prerequisite chain is now the gate: belt prospecting, belt mining and the foundry, so it finishes no sooner than Year 136, about 11 real hours in. Once it runs, matter stops being scarce.
+- **Heavy bullets are about 0.4 Mt each,** after a fuel works. With no matter to save up, the chain alone gates them: the first heavy impactor is ready by Year 186, about 15.5 real hours in, against v1's day and a quarter. v1 set no floor on early death and said to revisit only if playtests show early deaths.
 - **Proposed prices keep v1's Years** except where real trends say otherwise. Build time is now the main pacing lever, and the mocks will test it.
 
 ## Project by project
