@@ -4,7 +4,17 @@ Last updated: October 6, 2026.
 
 The hand-written roster of neighbors, and the template every one must fill. The rules behind it are in [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md#the-neighbors). Each game's seed picks some of these neighbors, places each at a host star by weight, draws its waking time, and rolls its branches. The roster is still empty: v1's Veyra, Hael and Kesh are reworked into it next.
 
-**How it is kept.** Each field says what it holds and how it is checked. Fields marked *seeded* are drawn per game. The rest are written by hand once. A neighbor that fails a check can't be placed. The checks are meant to run as a script, as v1's `leads.py` tested every lead on every build.
+**How it is kept.** Each field says what it holds and how it is checked. Fields marked *seeded* are drawn per game. The rest are written by hand once. Prose lives here. Numbers live in [calcs/neighbors.py](calcs/neighbors.py), which tests each neighbor at hundreds of seeded placements: a host star, a waking year and the way its orbit faces Sol. The seed draws only from placements that pass. Run `python3 calcs/neighbors.py`.
+
+**What the script checks today:**
+- the host kinds its people can live at
+- mass under 10 Earth masses, and fuel per tonne lifted against Earth's
+- orbit stable beside companions
+- no transit seen from Sol
+- its tug under 2026's 1 m/s, and whether Earth found it by 2040
+- its tones under Breakthrough Listen's floor in 2017 and SKA-Mid's in 2040, after light delay Still by hand: the people, the timeline against the star's age, the dials' causes, the kit's growth, and the names.
+
+**Self-test.** An Earth twin with Earth's real radar years, tested as steady tones at their 2×10¹¹ W along the beam, passes only 16% of placements: near Sol, Breakthrough Listen or SKA-Mid would have heard it. Real radar is pulsed and sweeps, so this overstates it, but the point holds: a neighbor as loud as Earth must be far away, or its loud years must have passed Sol before anyone listened.
 
 ## The template
 

@@ -173,6 +173,11 @@ Every source the game rests on, grouped by the question it answers. Each entry s
   - [Epsilon Eridani](https://en.wikipedia.org/wiki/Epsilon_Eridani), 0.4 to 0.8 Gyr. [Kappa¹ Ceti](https://en.wikipedia.org/wiki/Kappa1_Ceti), 0.3 to 0.6 Gyr. The [Ursa Major moving group](https://arxiv.org/abs/2601.08985), about 418 Myr, with Pi¹ Ursae Majoris and Chi¹ Orionis. AU Microscopii, about 20 Myr.
   - Used: dropped as hosts in data/hosts-50ly.csv.
 
+- **[Zeng, Sasselov and Jacobsen 2016, mass and radius of rocky planets](https://arxiv.org/abs/1512.08827)** · Published, ApJ.
+  - Rocky radius grows about as mass to the power 1/3.7, from Earth's own interior model.
+  - Matters: a neighbor's gravity and escape speed, and so its cost of reaching space.
+  - Used: [calcs/neighbors.py](calcs/neighbors.py).
+
 ## Real masses behind the projects
 
 Anchors for [the project audit](HOLOS_PROJECT_AUDIT.md).
