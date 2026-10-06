@@ -25,6 +25,14 @@ ROSTER = [
     # Veyra: prose in HOLOS_NEIGHBORS.md. v1 set it at Delta Pavonis; now the seed places it.
     dict(name='Veyra', kinds='GK', world=dict(mass=1.1, hz_share=0.1, e=0.03, day_hours=31, moon='large'),
          radio_since=210, arrays_since=60, emissions=[(210, 110, 1e6)], hum=3e4, awake=1e4, character='listener'),
+    # Hael: a century of calling, 120 to 20 years before waking, knocks of 10 GW aimed at chosen Sun-like stars.
+    # Sol is one of them about one time in three. Awake, it calls again, the same way.
+    dict(name='Hael', kinds='G', world=dict(mass=0.9, hz_share=0.05, e=0.04, day_hours=19, moon='large'),
+         radio_since=240, arrays_since=200, emissions=[(120, 20, 1e10, 'aimed')], hum=1e4, awake=1e10,
+         awake_aimed=True, aims_at_sol=1 / 3, character='listener'),
+    # Kesh: a super-Earth, hard to leave. Loud for ninety years, then quiet by choice.
+    dict(name='Kesh', kinds='K', world=dict(mass=3.0, hz_share=0.3, e=0.05, day_hours=26, moon='small'),
+         radio_since=180, arrays_since=40, emissions=[(180, 90, 1e7)], hum=1e5, awake=1e5, character='ordinary'),
 ]
 
 # ---------- What Earth's searches could catch ----------
@@ -74,8 +82,8 @@ def load_hosts():
         r['gabs'] = s.get('gabs', 4.67)
     return rows
 
-def check(n, host, waking, pole_from_sol):
-    """Every reason this placement fails. Empty means it passes."""
+def check(n, host, waking, pole_from_sol, sol_targeted=True):
+    """Every reason this placement fails. Empty means it passes. Aimed knocks reach Earth only if Sol was a target."""
     fails = []
     w = n['world']
     if host['kind'] not in n.get('kinds', 'FGKM'): fails.append(f"its people can't live at a {host['kind']} star")
@@ -91,7 +99,7 @@ def check(n, host, waking, pole_from_sol):
     if k > RV_2026: fails.append(f'its tug shows in 2026 data: {k:.2f} m/s')
     for year, name, sefd, chan, stare in SEARCHES:
         left = year - host['distance_ly']
-        p = tone_at(n, waking, left)
+        p = tone_at(n, waking, left, sol_targeted)
         if p > floor_watts(sefd, chan, stare, host['distance_ly']): fails.append(f'{name} would have heard it: {p / 1e6:,.0f} MW tones')
     return fails, dict(a=a, tug=k, found_by_2040=k > rv_2040(host), heard=heard_odds(n, host, waking))
 
@@ -108,14 +116,16 @@ def heard_odds(n, host, waking):
     if waking < EARTH_WAKES - 5 and arrives < EARTH_WAKES: odds = max(odds, 0.5 if n['character'] == 'inward' else 0.95)
     return odds
 
-def tone_at(n, waking, year):
-    """Its steadiest tones, in watts, in a given Earth calendar year: nothing before its radio, its loud years,
-    its hum between them, and once awake whatever it chose to send."""
+def tone_at(n, waking, year, sol_targeted=True):
+    """Its steadiest tones toward Sol, in watts, in a given Earth calendar year: nothing before its radio, its loud
+    years, its hum between them, and once awake whatever it chose to send. Aimed knocks count only if Sol was a target."""
     before = waking - year
     if before > n['radio_since']: return 0
-    for start, end, watts in n['emissions']:
-        if end <= before <= start: return watts
-    return n.get('awake', n['hum']) if before < 0 else n['hum']
+    for start, end, watts, *how in n['emissions']:
+        if end <= before <= start: return watts if sol_targeted or how != ['aimed'] else n['hum']
+    if before < 0:
+        return n.get('awake', n['hum']) if sol_targeted or not n.get('awake_aimed') else n['hum']
+    return n['hum']
 
 def placements(n, host_rows, tries=200, seed=1):
     rng = random.Random(seed)
@@ -125,7 +135,8 @@ def placements(n, host_rows, tries=200, seed=1):
         host = rng.choices(host_rows, weights=[float(h['weight']) for h in host_rows])[0]
         waking = EARTH_WAKES + 100 * (rng.random() - rng.random())       # a century either way, most near Earth's
         pole = math.degrees(math.acos(rng.uniform(-1, 1)))
-        fails, _ = check(n, host, waking, pole)
+        targeted = rng.random() < n.get('aims_at_sol', 1)
+        fails, _ = check(n, host, waking, pole, targeted)
         if fails:
             for f in fails:
                 kind = f.split(':')[0]
@@ -133,10 +144,10 @@ def placements(n, host_rows, tries=200, seed=1):
         else: ok += 1
     return ok / tries, reasons
 
-def at(n, host_rows, name, waking=EARTH_WAKES, pole=60):
+def at(n, host_rows, name, waking=EARTH_WAKES, pole=60, sol_targeted=True):
     """One placement in detail: a named host, a waking year, a pole angle from Sol's line."""
     host = next(h for h in host_rows if h['name'] == name)
-    fails, info = check(n, host, waking, pole)
+    fails, info = check(n, host, waking, pole, sol_targeted)
     print(f"{n['name']} at {name}, {host['distance_ly']:.1f} ly, waking {waking:.0f}: orbit {info['a']:.2f} AU, "
           f"tug {info['tug']:.2f} m/s{', found by 2040' if info['found_by_2040'] else ''}, heard Earth {info['heard']:.0%}. "
           + ('Passes.' if not fails else 'Fails: ' + '; '.join(fails)))
@@ -160,6 +171,11 @@ if __name__ == '__main__':
     rows = load_hosts()
     report(rows)
     print()
-    at(ROSTER[0], rows, 'Del Pav')                       # v1's home, waking with Earth
-    at(ROSTER[0], rows, 'Del Pav', waking=1990)          # fifty years before Earth
-    at(ROSTER[0], rows, 'Eps Ind', waking=2090)          # a near K dwarf, fifty years after
+    veyra, hael, kesh = ROSTER
+    at(veyra, rows, 'Del Pav')                           # v1's home, waking with Earth
+    at(veyra, rows, 'Del Pav', waking=1990)              # fifty years before Earth
+    at(veyra, rows, 'Eps Ind', waking=2090)              # a near K dwarf, fifty years after
+    at(hael, rows, 'Bet Hyi', sol_targeted=False)        # v1's home, Sol not among its targets
+    at(hael, rows, 'Bet Hyi')                            # Sol a target: its call would have reached Earth
+    at(hael, rows, 'Bet Hyi', waking=2140)               # Sol a target, waking late: its call is still on the way
+    at(kesh, rows, 'Eps Ind')                            # v1's home

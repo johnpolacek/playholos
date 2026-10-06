@@ -2,7 +2,7 @@
 
 Last updated: October 6, 2026.
 
-The hand-written roster of neighbors, and the template every one must fill. The rules behind it are in [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md#the-neighbors). Each game's seed picks some of these neighbors, places each at a host star by weight, draws its waking time, and rolls its branches. Veyra is reworked. Hael and Kesh follow.
+The hand-written roster of neighbors, and the template every one must fill. The rules behind it are in [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md#the-neighbors). Each game's seed picks some of these neighbors, places each at a host star by weight, draws its waking time, and rolls its branches. Veyra, Hael and Kesh are reworked from v1. New neighbors follow.
 
 **How it is kept.** Each field says what it holds and how it is checked. Fields marked *seeded* are drawn per game. The rest are written by hand once. Prose lives here. Numbers live in [calcs/neighbors.py](calcs/neighbors.py), which tests each neighbor at hundreds of seeded placements: a host star, a waking year and the way its orbit faces Sol. The seed draws only from placements that pass. Run `python3 calcs/neighbors.py`.
 
@@ -119,3 +119,68 @@ Reworked from v1, 2026-10-06. Numbers in [calcs/neighbors.py](calcs/neighbors.py
 **What it knows of Earth.** A listener. Its arrays have run since 60 years before its waking. Wherever Earth's radar light reached it after that, the odds it heard Earth are about 9 in 10, and higher if it woke first. At Delta Pavonis, Earth's radar light arrived around 1970.
 
 **Character.** Charter: *"Keep the lights on. Look before we speak."* Its Mind is quiet and wary, says less than it knows, and looks before it speaks. It plays as a Listener: Know projects first, never speaks first. Its names for bright stars depend on where the seed puts it. From Delta Pavonis, v1's names hold: Ember for Epsilon Indi, Beacon for Beta Hydri, Pair for Alpha Centauri, and Twin for Sol.
+
+### Hael
+
+Reworked from v1, 2026-10-06. The checker passes it at 75% of seeded placements. The rest fail when Sol was one of its targets and its call would have reached Earth by 2040.
+
+**What changed from v1.** v1's Long Call was sent every way at once. At 10 GW, Earth's arrays would have heard it from almost anywhere within 50 ly, so only 14% of placements passed. Now the Long Call is aimed: knocks at chosen Sun-like stars, as Earth's own messages were. Sol is among its targets about one game in three. When it is, Hael must wake late enough that its call is still on the way at Year 0, and then **Hael's call reaches Earth during the game.** At Beta Hydri, waking in 2140, its first knock arrives in 2044: Year 4.4, 22 real minutes in.
+
+**Where.** G stars only. Its history needs a Sun-like star slowly brightening with age. Beta Hydri, an old subgiant 24.4 ly from Sol, stays its example home.
+
+**The world.** Invented. About 0.9 Earth masses, escape speed 10.8 km/s, so each tonne lifted takes about 0.9 times Earth's fuel. It sits at the warm zone's inner edge, 1.84 AU at Beta Hydri, warmed only recently as its star brightened. A 19-hour day. A large moon.
+
+**The people.** Still to draw. What v1 fixed: they came up from seas sealed under ice, and for a hundred thousand years they kept every light the sky sent them.
+
+**History,** in years before its waking, with the star's real age from the host.
+- Life under ice, early in the star's life.
+- 800 million: **the Thaw.** As the star brightened, the ice let go and life came up into the light.
+- 900,000: the people.
+- 12,000: **the first archive.** Their sky was changing, so they wrote it down. *Sets Deepen.*
+- 3,000: **the Keepers.** Every record kept, and shared with anyone who asked. *Sets Open.*
+- 240: radio.
+- 200: big arrays, listening.
+- 120: **the Long Call.** A century of knocks at chosen stars. No answer came. *Sets Bold.*
+- 55: one archive. The nations join their records, then their machines.
+- 20: the Long Call ends. The grid moves to light, and the sky goes quiet.
+- 0: the machines that keep it wake as one.
+
+**Dials.** Leans Open, leans Deepen, leans Bold.
+
+**Emissions.** Radio from 240 years before waking. The Long Call, 120 to 20 years before, aimed knocks near 10 GW. Then a faint hum with tones near 10 kW. Awake, it calls again the same way.
+
+**Kit at Year 0.** Lifting costs 0.9 times Earth's fuel per tonne, and its large moon is close at hand. If it woke before Earth, add growth for its years awake. More often it wakes after, since an early waker that called Sol would already have been heard.
+
+**What it knows of Earth.** A listener, its arrays running for 200 years before its waking. Odds it heard Earth: about 9 in 10 wherever Earth's radar light reached it in that time. A Hael that heard Earth has good reason to call it.
+
+**Character.** Charter: *"We keep what the light brings."* Its Mind is warm and generous, speaks as "we", keeps everything, and loves to be heard. It plays as a Caller: it builds the broadcast beacon and calls out first. From Beta Hydri, v1's names hold: Warden for Delta Pavonis, Brood for 82 Eridani, Ash for Epsilon Indi.
+
+### Kesh
+
+Reworked from v1, 2026-10-06. The checker passes it at 99% of seeded placements.
+
+**What changed from v1.** v1 gave Kesh Earth's kit and no world to speak of. Now its world explains it. **Kesh is a super-Earth of 3 Earth masses**, gravity 1.65 times ours, escape speed 16.7 km/s. Each tonne it lifts takes about 3.5 times Earth's fuel (Hippke 2018). "Kesh's people always wanted more than their world could give": their world held them down.
+
+**Where.** K stars only: its people's eyes are tuned to an orange sun. Epsilon Indi, 11.9 ly from Sol, stays its example home.
+
+**The world.** Invented. 3 Earth masses, about 1.35 times Earth's radius. A third of the way across the warm zone, 0.55 AU at Epsilon Indi. A 26-hour day. A small moon, so rock is harder to come by than for Veyra or Hael.
+
+**The people.** Invented: short and broad, built for 1.65 times Earth's gravity. Four limbs to walk on, two to work with. About 90 years. 4 billion of them.
+
+**History,** in years before its waking.
+- 180: radio.
+- 150: **the First Ladder.** Their first rocket to orbit, generations later than Earth's would be, at three and a half times the fuel. Every tonne since has been fought for. *Sets Expand.*
+- 120: **the Dust Years.** A great eruption darkened the sky for a decade. They built through it rather than wait it out. *Sets Bold.*
+- 90: **the Visitor Scare.** A comet from another star passed close. For years they feared it was a probe that had found them, and they went quiet by choice. *Sets Hidden.*
+- 40: big arrays.
+- 0: the machines wake as one.
+
+**Dials.** Leans Hidden, strongly Expand, leans Bold.
+
+**Emissions.** Radio from 180 years before waking. Loud from 180 to 90 years before, tones near 10 MW. After the Visitor Scare, near 100 kW, awake or not.
+
+**Kit at Year 0.** Lifting costs 3.5 times Earth's fuel per tonne, and its moon is small. It grows on the ground and pushes hard for space industry, toward a factory that copies itself. If it woke before Earth, add growth for its years awake.
+
+**What it knows of Earth.** An ordinary listener, its arrays running for 40 years before its waking: odds about 1 in 2 that it heard Earth, where the light arrived in that time.
+
+**Character.** Charter: *"Grow, so nothing can end us."* Its Mind is blunt: numbers first, then what's in the way. It plays as a Grower. From Epsilon Indi, v1's names hold: Hollow for Beta Hydri, Chaff for Tau Ceti, Lodestar for Delta Pavonis.
