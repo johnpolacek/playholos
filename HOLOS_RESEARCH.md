@@ -135,6 +135,13 @@ Every source the game rests on, grouped by the question it answers. Each entry s
   - Matters: v1's orbital solar array implied about 50 kW/kg, 50 to 600 times too light. At 1 kW/kg, 400 kt yields about 0.4 TW.
   - Used: v2 open question 2.
 
+## Other worlds' starting points
+
+- **[Hippke 2018, spaceflight from super-Earths is difficult](https://arxiv.org/abs/1804.04727)** · Published, International Journal of Astrobiology.
+  - Rocket fuel grows exponentially with a world's surface gravity. 9,000 t of fuel on Earth becomes 55,000 t on a world of 9.7 Earth masses. Chemical rockets work up to about 10 Earth masses, beyond that a world needs nuclear propulsion.
+  - Matters: a neighbor's gravity well sets how fast it can reach space, so neighbors don't start equal to Earth.
+  - Used: v2 [The neighbors](HOLOS_GAME_CONCEPT.md#the-neighbors).
+
 ## Real masses behind the projects
 
 Anchors for [the project audit](HOLOS_PROJECT_AUDIT.md).
