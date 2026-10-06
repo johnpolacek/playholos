@@ -49,6 +49,12 @@ Settled 2026-10-06.
 - **Earth is the late one.** Every neighbor's loud century ended long before Year 0. Earth's radars still sweep at Year 0, so Earth is the likeliest civilization in the region to have been heard.
 - **The Mind lays out Earth's exposure at waking.** The radar years, every aimed message with its target and arrival, which stars could have heard, and what changed between 2026 and Year 0. It never says who did hear: no one at Year 0 knows that.
 - **The seed doesn't favor stars Earth messaged.** A neighbor lands at a messaged star only by chance.
+- **Replies to Earth's knocks could arrive during the game.** Each message sets the earliest date a reply could reach Earth: the light-time there and back ([calcs/knocks.py](calcs/knocks.py)).
+  - Already passed in silence: Altair (2017), Teegarden's Star (2034.9), TZ Arietis (2039.1).
+  - In the first hour: Luyten's Star at Year 2.5 and 3.1, 12 and 15 real minutes in. Gliese 526 at Year 8.7. Gliese 581 at Year 9.4 and 10.3.
+  - Later: Gliese 49 at Year 27.5, Kappa¹ Ceti at 29.5, Gliese 208 at 37.5, 55 Cancri and HD 10307 at 45.5, 47 Ursae Majoris at 53.7.
+  - Earth's 2003 knock reaches Gliese 208 half a Year after Year 0.
+  - A window almost always passes empty: catching a knock is under 1 in 100. The Mind marks each one, as v1's silence rules say.
 
 ## Year 0 and Earth's road to it
 

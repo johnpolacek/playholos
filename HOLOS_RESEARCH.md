@@ -307,6 +307,21 @@ Anchors for [the project audit](HOLOS_PROJECT_AUDIT.md).
   - Matters: a null result is knowledge, but excluding one air doesn't make a world airless.
   - Used: v1 "A null result is knowledge".
 
+## Earth's leads, as of October 2026
+
+What Sol's own instruments have found nearby. For v2 open question 3.
+
+- **[Alpha Centauri A's candidate, S1](https://arxiv.org/abs/2508.03814)** · 4.4 ly. Imaged once by JWST in August 2024, missed in February and April 2025, with a 52% chance its orbit hid it. JWST looked again in August 2026. Result not yet published: adopt it when it is.
+- **[Barnard's Star](https://ui.adsabs.harvard.edu/abs/2025ApJ...982L...1B/abstract)** · 6 ly. Four sub-Earths confirmed in 2025 after decades of false claims. Basant et al., MAROON-X and ESPRESSO.
+- **[82 Eridani d](https://arxiv.org/abs/2501.17092)** · 19.7 ly. At least 5 Earth masses, 650 days, eccentricity 0.45, swinging through the warm zone of a Sun-like star. Nari et al. 2025. Its air waits for the Habitable Worlds Observatory.
+- **[Fomalhaut's collisions](https://phys.org/news/2025-12-hubble-captures-rare-collision-nearby.html)** · 25 ly. Its "planet" was a dust cloud from a collision, and a second cloud, cs2, appeared in 2023 Hubble images. Kalas and colleagues, December 2025.
+- **[The Wow! signal, revised](https://arxiv.org/abs/2508.10657)** · 1977. Archival Ohio SETI data put it above 250 Jy at 1420.726 MHz, from two fields near 19h26m, −27°. Méndez and colleagues propose a hydrogen cloud brightened by a flare ([part I](https://arxiv.org/abs/2408.08513)).
+- **[3I/ATLAS](https://aasnova.org/2026/01/28/monthly-roundup-interstellar-visitor-3i-atlas/)** · An interstellar comet, found July 2025. Its water is rich in deuterium and it may be older than the Sun ([ESO](https://www.eso.org/public/news/eso2608/)). Its push off course fits ordinary outgassing ([preprint](https://arxiv.org/abs/2511.07450)). A radio search found only human interference ([report](https://www.sciencedaily.com/releases/2026/06/260621060309.htm)).
+- **[Gliese 12 b](https://www.livescience.com/space/exoplanets/nasa-detects-earth-size-planet-just-40-light-years-away-thats-not-a-bad-place-to-hunt-for-life)** · 40 ly. The nearest known transiting, temperate, Earth-size world. Air unknown.
+- **[LHS 1140 b](https://arxiv.org/abs/2403.13265)** · 49 ly. A water world or a small gas world. No helium in four JWST transits (August 2026).
+- **[Terra Hunting Experiment](https://www.iac.es/en/projects/harps3-high-accuracy-radial-velocity-planet-searcher)** · HARPS3 began work in summer 2026 on La Palma: every clear night for ten years, on at least 40 bright Sun-like northern stars. By 2040 its results are in. If a neighbor's world sits in its sample and is heavy enough, Earth found it.
+- Earlier entries also apply: Epsilon Indi Ab, Delta Pavonis, Tau Ceti, Beta Hydri, Epsilon Eridani b, TRAPPIST-1 f and the Earth transit zone, where Teegarden's Star enters about 2050.
+
 ## Reading air
 
 - **[Krissansen-Totton et al., published 2026](https://arxiv.org/abs/2507.14771)** · Published.
