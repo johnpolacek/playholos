@@ -62,7 +62,7 @@ Settled 2026-10-06.
   - *Energy:* about 22 to 26 TW, up from 19 TW in 2024, at 1 to 2% a year. Solar and wind carry the growth. Fusion plants are being built, but forecasters put the first 100 MW plant near 2042, so most games have none on the grid at Year 0.
   - *Compute:* about 10²⁵ to 10²⁶ operations a second, up from about 3×10²² in 2026. Power and chip supply set the pace.
   - *Space:* fully reusable heavy lift, near 40 kt a year to orbit. Crewed Moon landings from 2028 (US) and about 2030 (China), and south-pole stations planned for the mid-2030s, likely late. No one on Mars: forecasts put the first landing near 2045.
-  - *Probes:* the Voyagers fall silent in the 2030s. New Horizons is past 80 AU. Interstellar Probe may be on its way, if it launches in its 2036 to 2042 window.
+  - *Probes:* the Voyagers fall silent in the 2030s, Voyager 1 near 220 AU by 2040. New Horizons is near 100 AU. Interstellar Probe may be on its way, if it launches in its 2036 to 2042 window.
   - *Instruments:* today's, plus PLATO (late 2026), Roman, the ELT (science from 2030) and the SKA (from 2029 to 2031). The Habitable Worlds Observatory is still being built. Earth can feel nearby worlds by their tug, but can't read any neighbor's air.
   - *Radars:* fewer airport radars as ADS-B spreads, but primary and military radars still sweep. Earth is loud at Year 0.
   - *Listening:* nothing heard to 2040. This binds the neighbors: each one's emissions must stay below what Earth's instruments to 2040 could catch.
@@ -87,7 +87,18 @@ Settled 2026-10-06. v1 used three dials without defining them here.
   - *Open or Hidden: leans Open.* Radars since the 1950s, the Arecibo message (1974) and the Voyager records (1977). Against it: a 2015 statement urging worldwide debate before any more messages are sent.
   - *Expand or Deepen: near the middle.* Apollo, reusable heavy lift and Moon bases pull outward. The AI build-out put the decades before Year 0 into compute.
   - *Cautious or Bold: leans Bold.* The AI race set the pace to 2040. Against it: no nuclear weapon used since 1945, the DART asteroid test, AI safety institutes. The closest call of the three.
-- **v1's kit was a world a century on.** It assumed a 100 TW grid, 10²⁷ operations a second and 1,240 kt in orbit. Rescale it to Earth in 2040 (open question 2). Shares on screen are unaffected. Physical thresholds that scale with the grid, such as industry caps and star lifting, are not.
+- **v1's kit was a world a century on.** It assumed a 100 TW grid, 10²⁷ operations a second and 1,240 kt in orbit. See [Earth's kit at Year 0](#earths-kit-at-year-0).
+
+## Earth's kit at Year 0
+
+Settled 2026-10-06. Replaces v1's numbers ([v1: Economy and projects](legacy/v1/HOLOS_GAME_CONCEPT.md#economy-and-projects)). Shares on screen work as v1 set them. 100% now means these amounts.
+
+- **Energy:** about 24 TW. 1% is 0.24 TW.
+- **Compute:** about 10²⁵ operations a second, on about 0.25 TW of its own, about 1% of energy. 1% of compute is 10²³ a second. Chips are about 40 to 100 times as efficient per watt as in 2026.
+- **Matter in orbit:** about 250 kt, plus 40 kt a year from reusable heavy lift.
+- **Instruments and probes:** as in the backbone above.
+- **What moves with the smaller grid.** Compute takes about 1% of energy, not v1's 10%, so even more energy sits idle early. A ground data center's +25% compute draws about 0.25% of energy, not 3%. The industry cap at 100 GJ a tonne falls to about 7.5 Gt a year (v1: 30). Star lifting needs about 200,000 times the grid (v1: 50,000). A Sun-like star's whole output is about 16 trillion times it (v1: four trillion).
+- **Project costs are being checked against physics** in [HOLOS_PROJECT_AUDIT.md](HOLOS_PROJECT_AUDIT.md) (open question 2).
 
 ## Retired with the cohort
 
@@ -107,7 +118,7 @@ These v1 rules no longer apply.
 Answered one at a time, in this order. Every answer must be permitted by current observations: improbable is acceptable, contradicted is not.
 
 1. **Branch odds.** Read the Metaculus pages for the Taiwan and nuclear odds. Search summaries disagree, and Metaculus blocks scripted reads.
-2. **Rescale the kit.** v1's starting kit and economy numbers, moved to Earth in 2040, with each branch's effect sized.
+2. **Reprice the projects.** First decide what matter means: real mass in space, or a pacing currency. Then reprice each project from [the audit](HOLOS_PROJECT_AUDIT.md), and size each branch's effect on the kit.
 3. **Earth's leads at Year 0.** Real, published oddities as seen from Sol, plus what Earth's instruments found from 2026 to 2040. If a seeded world is detectable by those instruments, Earth found it. Earth sees published values directly, so Alpha Centauri A's candidate returns.
 4. **The neighbor roster.** Who is written, which host stars pass survey limits, and what the seed varies. Whether neighbors start equal to Earth and wake at Year 0. Each neighbor's emissions must stay below what Earth could catch to 2040. Breakthrough Listen searched for narrow tones, so its null results barely limit a neighbor's past radar pulses.
 5. **Neighbors' behavior and cost.** What fixed rules decide and what the model decides. What runs while the player is away.

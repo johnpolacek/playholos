@@ -126,6 +126,58 @@ Every source the game rests on, grouped by the question it answers. Each entry s
   - Matters: a branch that would push Earth toward Cautious.
   - Used: v2 open question 1. To verify on the page.
 
+- **[Epoch AI, ML hardware energy efficiency](https://epoch.ai/data-insights/ml-hardware-energy-efficiency)** · Data ([hardware trends](https://epoch.ai/blog/trends-in-machine-learning-hardware)).
+  - Leading ML hardware gets about 28 to 40% more energy efficient a year. The H100 peaks near 1.4×10¹² operations a second per watt.
+  - Matters: Earth's compute per watt at Year 0, about 40 to 100 times 2026's. With about 0.25 TW for thinking, about 10²⁵ operations a second.
+  - Used: v2 open question 2.
+- **[Large space flexible solar arrays, 2025 review](https://www.sciencedirect.com/science/article/pii/S2950104025000161)** · Published ([NASA small-spacecraft power](https://www.nasa.gov/smallsat-institute/sst-soa/power-subsystems/)).
+  - Flown roll-out arrays reach about 36 to 218 W/kg, the ISS's iROSA about 75 W/kg. Thin-film designs target 1 kW/kg.
+  - Matters: v1's orbital solar array implied about 50 kW/kg, 50 to 600 times too light. At 1 kW/kg, 400 kt yields about 0.4 TW.
+  - Used: v2 open question 2.
+
+## Real masses behind the projects
+
+Anchors for [the project audit](HOLOS_PROJECT_AUDIT.md).
+
+- **[UNEP Global Resources Outlook 2024](https://www.unep.org/resources/Global-Resource-Outlook-2024)** · Report.
+  - The world uses about 106 Gt of materials a year, up from 30 Gt in 1970, heading for about 160 Gt by 2060.
+  - Matters: on Earth, ground builds are not short of matter. Only matter in space is scarce.
+  - Used: the project audit.
+- **[LUVOIR final report](https://arxiv.org/abs/1912.06219)** · Study.
+  - LUVOIR-A, a 15 m space telescope, about 28 t, up to 37 t with margins. JWST is 6.2 t.
+  - Used: the project audit, telescopes.
+- **[Starshade Rendezvous Probe](https://ntrs.nasa.gov/api/citations/20190028272/downloads/20190028272.pdf)** · Study, NASA.
+  - Launch mass about 3.8 t.
+  - Used: the project audit, starshade.
+- **[Hyper-Kamiokande](https://iopscience.iop.org/article/10.1088/1742-6596/2156/1/012153/pdf)** · Under construction.
+  - A 260 kt underground water detector.
+  - Used: the project audit, neutrino watch.
+- **[Project Daedalus](https://en.wikipedia.org/wiki/Project_Daedalus)** · Study, British Interplanetary Society, 1973 to 1978 ([Icarus](https://arxiv.org/abs/1005.3833)).
+  - 54,000 t at departure, 50,000 t of it fuel, 450 t of payload, to 0.12c. Exhaust about 10,000 km/s.
+  - Matters: the yardstick for every fusion probe, ship and bullet.
+  - Used: the project audit, probes and impactors.
+- **[Stanford torus](https://en.wikipedia.org/wiki/Stanford_torus)** · Study, NASA SP-413, 1975.
+  - About 10 Mt for 10,000 people, 95% of it radiation shielding from lunar soil.
+  - Used: the project audit, habitat ring.
+- **[O'Neill's lunar mass driver](https://nss.org/l5-news-mass-driver-update/)** · Study, 1976 to 1977.
+  - A driver of 100 to 200 t could deliver about 600,000 t a year from the Moon.
+  - Used: the project audit, mass driver.
+- **[Freitas and Zachary 1981, a self-replicating lunar factory](http://www.rfreitas.com/Astro/GrowingLunarFactory1981.htm)** · Study.
+  - Grown from a 100 t seed, copying itself in about a year.
+  - Matters: v1's factory cost 60 Mt, about 600,000 times the seed.
+  - Used: the project audit, factory and foundry.
+- **[Google Project Suncatcher](https://research.google/blog/exploring-a-space-based-scalable-ai-infrastructure-system-design/)** · Study, 2025, with a [prototype launched](https://www.npr.org/2026/10/01/nx-s1-5983697/project-suncatcher-google-ai-data-center-space) in 2026.
+  - Solar-powered satellites carrying AI chips, linked by laser, planned in clusters of 81.
+  - Matters: compute in orbit is being tested now. The cold compute annex fits it.
+  - Used: the project audit, cold compute annex.
+- **[NASA, antimatter requirements and energy costs](https://ntrs.nasa.gov/api/citations/19990110316/downloads/19990110316.pdf)** · Study.
+  - Making antimatter today takes about 10⁹ times more energy than it releases.
+  - Matters: the antimatter probe fits only if production gets about 100,000 times better.
+  - Used: the project audit, antimatter probe.
+- **[DART](https://en.wikipedia.org/wiki/Double_Asteroid_Redirection_Test)** · Demonstrated, 2022.
+  - About 0.6 t at impact.
+  - Used: the project audit, comet deflection.
+
 ## Earth's character
 
 - **[Arecibo message](https://en.wikipedia.org/wiki/Arecibo_message)** and **[Voyager Golden Records](https://en.wikipedia.org/wiki/Voyager_Golden_Record)** · History.
