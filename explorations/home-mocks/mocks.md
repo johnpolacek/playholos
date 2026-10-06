@@ -1519,7 +1519,7 @@ begin again ›
 A NEW COHORT
 
 ### The same stars. A new silence.
-Other worlds circle these stars now, and no one here has heard of Veyra. Twenty seats: some players, the rest AI.
+Other worlds circle these stars now, and no one here has heard of Veyra. Others wake with you. No one says how many, or where.
 WHAT CARRIES OVER
 In the game · Nothing. Clues, maps and conversations start again. · In you · Everything you remember.
 THE OLD COHORT

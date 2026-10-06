@@ -51,7 +51,7 @@ PROJECTS = [
       reveals=['measure-crossing']),
     P('spectrograph-bank', 'Spectrograph bank', 'know', 1, 8, 'M5 C15',
       'Ultra-stable spectrographs: they read gases, and feel small planets tug their stars.',
-      'Past ESPRESSO’s 10 cm/s goal: an Earth tugs a Sun-like star by about 9 cm/s.', 'grounded', 'quiet'),
+      'Past ESPRESSO’s 10 cm/s goal: an Earth tugs a Sun-like star by about 9 cm/s. The star’s own shimmer, about 1 m/s, is the real limit: watching every night from many sites, and reading the surface in the same light, averages it down. Earth’s Terra Hunting Experiment plans ten years of this with one instrument.', 'grounded', 'quiet'),
     P('optical-flash-watch', 'Deep flash watch', 'know', 1, 6, 'M5 C20',
       'Catches laser flashes a hundred times fainter than the sky watch can, anywhere in the sky.',
       'Optical SETI at scale, far beyond PANOSETI.', 'grounded', 'quiet',

@@ -52,7 +52,7 @@ Know: learn what is out there, and answer the clues. Instruments draw almost no 
 
 - **Why:** Reads what anything is made of. Most other Know projects build on it.
 - **What:** Ultra-stable spectrographs: they read gases, and feel small planets tug their stars.
-- **Basis:** Past ESPRESSO’s 10 cm/s goal: an Earth tugs a Sun-like star by about 9 cm/s.
+- **Basis:** Past ESPRESSO’s 10 cm/s goal: an Earth tugs a Sun-like star by about 9 cm/s. The star’s own shimmer, about 1 m/s, is the real limit: watching every night from many sites, and reading the surface in the same light, averages it down. Earth’s Terra Hunting Experiment plans ten years of this with one instrument.
 - **Uses:** compute 15% a year, 100 kt of matter at start
 - **Needs:** nothing
 - **Unlocks:** Planet survey, Study the air of {planet}, Study the oxygen world

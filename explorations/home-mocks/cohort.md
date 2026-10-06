@@ -14,7 +14,6 @@ Know projects first. Never speaks first.
 The mind’s voice: Quiet and wary. Says less than it knows, and looks before it speaks.
 Ember · a giant that doesn’t fit · Epsilon Indi
 Beacon · a slow drift · Beta Hydri
-Pair · a point seen once · Alpha Centauri A
 Hael · Beta Hydri · 9.3 ly · 00:46:27
 Kesh · Epsilon Indi · 9.2 ly · 00:46:03
 Hael · Caller
@@ -37,49 +36,48 @@ Cautious · Bold
 Rushes industry toward the self-replicating factory.
 The mind’s voice: Blunt. Numbers first, then what’s in the way.
 Hollow · a slow drift · Beta Hydri
-Twofold · a point seen once · Alpha Centauri A
 Chaff · wobbles too small to trust · Tau Ceti
 Lodestar · a giant, half seen · Delta Pavonis
 Veyra · Delta Pavonis · 9.2 ly · 00:46:03
 Hael · Beta Hydri · 14.3 ly · 01:11:44
 Pregame · The last 20 minutes before the cohort wakes at 20:00
-Godview · Entries locked at 19:00. All three seats are filled. Each player chose their civilization when they joined. In the story, the whole pregame is the first second after the machines wake: the Mind thinks so fast that it plans everything before a second passes on its world.
+Godview · Entries locked at 19:00. All three seats are filled, but no screen says how many seats there are. Each player chose their civilization when they joined. In the story, the whole pregame is the first second after the machines wake: the Mind thinks so fast that it plans everything before a second passes on its world.
 −20:00 · 19:40 · before Year 0
 Opens Holos.
 HOLOS · COHORT 214
 
 ### Your cohort wakes at 20:00
-In · 00:20:00. Entries locked at 19:00: every seat has a player.
+In · 00:20:00. Entries locked at 19:00.
 YOUR SEAT
 Veyra · Delta Pavonis · Chosen when you joined, Monday · ›
 BEFORE THE CLOCK
 Wake, remember, and meet your Mind. Plan your waking with it: what to build first, what to watch, what wakes you. Nothing happens until 20:00, and then everything you queued starts at once, for everyone.
 THE COHORT
-Three seats, all filled. You won’t know where the others are. Neither will they.
+Others wake when you do. You won’t know how many, or where. Neither will they.
 [Wake Veyra]
 Opens Holos.
 HOLOS · COHORT 214
 
 ### Your cohort wakes at 20:00
-In · 00:20:00. Entries locked at 19:00: every seat has a player.
+In · 00:20:00. Entries locked at 19:00.
 YOUR SEAT
 Hael · Beta Hydri · Chosen when you joined, Tuesday · ›
 BEFORE THE CLOCK
 Wake, remember, and meet your Mind. Plan your waking with it: what to build first, what to watch, what wakes you. Nothing happens until 20:00, and then everything you queued starts at once, for everyone.
 THE COHORT
-Three seats, all filled. You won’t know where the others are. Neither will they.
+Others wake when you do. You won’t know how many, or where. Neither will they.
 [Wake Hael]
 Opens Holos.
 HOLOS · COHORT 214
 
 ### Your cohort wakes at 20:00
-In · 00:20:00. Entries locked at 19:00: every seat has a player.
+In · 00:20:00. Entries locked at 19:00.
 YOUR SEAT
 Kesh · Epsilon Indi · Chosen when you joined, an hour ago · ›
 BEFORE THE CLOCK
 Wake, remember, and meet your Mind. Plan your waking with it: what to build first, what to watch, what wakes you. Nothing happens until 20:00, and then everything you queued starts at once, for everyone.
 THE COHORT
-Three seats, all filled. You won’t know where the others are. Neither will they.
+Others wake when you do. You won’t know how many, or where. Neither will they.
 [Wake Kesh]
 −19:00 · 19:41 · before Year 0
 Wakes Veyra.
@@ -305,7 +303,7 @@ WHILE YOU ARE AWAY
 - Wake me once a day · one summary · ›
 - A world’s first voice wakes you · a knock or a broadcast, aimed at us or not · even in quiet hours · always
 Quick looks and tune-ups queue like builds. Results and anything sent wait for the clock.
-THE MIND (KESH) · Queued: three builds, three tune-ups. Matter is the wall: 540 kt left, mining 26 Years off. Nearly all our energy sits idle: building takes little power. Matter is what’s short. Four leads out there, if you want looks queued too. · [Queue the looks] · [Leave it]
+THE MIND (KESH) · Queued: three builds, three tune-ups. Matter is the wall: 540 kt left, mining 26 Years off. Nearly all our energy sits idle: building takes little power. Matter is what’s short. Three leads out there, if you want looks queued too. · [Queue the looks] · [Leave it]
 [Talk to the mind]
 −10:00 · 19:50 · before Year 0
 The Mind speaks first.
@@ -316,7 +314,7 @@ ENERGY · [0%] · MATTER · 1,240 kt · COMPUTE · [0%]
 MIND · FIRST WORDS
 THE MIND (VEYRA) · I am what Veyra built to keep its lights on. This morning I woke, and found you.
 I see all of Veyra at once: six point eight billion of them, the grid, the sky watch. Beyond our star I see very little. Our telescopes are what our grandparents built.
-Nothing out there has spoken. Three things don’t fit. I would look before we speak.
+Nothing out there has spoken. Two things don’t fit. I would look before we speak.
 [What doesn’t fit?] · [What do we have?] · [Plan our waking]
 Talk to the mind… · [Send · ↑]
 “How does time work?”
@@ -341,13 +339,12 @@ Thursday · 19:50
 Veyra · Before Year 0
 Delta Pavonis · 19.9 ly from Sol · Wakes in · 00:08:00
 ENERGY · [0%] · MATTER · 1,240 kt · COMPUTE · [0%]
-[drawing: Stars view; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760, 5 ly]
+[drawing: Stars view; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760, 5 ly]
 [World] · [System] · [selected: Stars] · [Region] · [Galaxy]
-LEADS · 3 · LIGHT-TIME
+LEADS · 2 · LIGHT-TIME
 - A giant that doesn’t fit · Ember · an odd orbit, a second giant, or old measures · 00:46:03
 - A slow drift · Beacon · the star’s own cycle, or a giant · 00:46:27
-- A point seen once · Pair · a giant planet, or nothing · 01:22:41
-THE MIND (VEYRA) · Three things, none of them voices. A giant at Ember heavier than it should be. A slow drift at Beacon. A point beside Pair, seen once. Looks wait for the clock, but they can queue. I would look at all three the first second. · [Queue all three] · [Pick]
+THE MIND (VEYRA) · Two things, neither of them a voice. A giant at Ember heavier than it should be. A slow drift at Beacon. Looks wait for the clock, but they can queue. I would look at both the first second. · [Queue both] · [Pick]
 [Talk to the mind]
 “We wake calling out. Build our voice.”
 Hael · Before Year 0
@@ -372,17 +369,16 @@ THE MIND (HAEL) · Our voice, then. The broadcast beacon: four Years, little pow
 Away.
 Thursday · 19:52
 −6:00 · 19:54 · before Year 0
-“Queue all three.”
+“Queue both.”
 Veyra · Before Year 0
 Delta Pavonis · 19.9 ly from Sol · Wakes in · 00:06:00
 ENERGY · [0%] · MATTER · 1,240 kt · COMPUTE · [10%]
-[drawing: STARS · WITHIN 17 LY OF VEYRA; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · WITHIN 17 LY OF VEYRA
+[drawing: STARS · WITHIN 17 LY OF VEYRA; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · WITHIN 17 LY OF VEYRA
 PROJECTS · BEFORE YEAR 0
 Your cohort wakes Thursday at 20:00 · Entries are locked. Everything queued starts at Year 0, for everyone at once.
 QUICK LOOKS · START AT YEAR 0
 Image Ember’s giant again · Space telescope · has it moved along one orbit? · lands Year 0.1 · 00:00:30
 Lay Beacon’s drift beside its spots · Star surveys · 40 Years of both · lands Year 0.2 · 00:01:00
-Look again beside Pair · Space telescope, after Ember · out of the glare yet? · lands Year 0.4 · 00:02:00
 AT YEAR 0 YOU WILL SPEND
 Energy · [0%] · 100% free
 Compute · [10%] · 90% free
@@ -390,7 +386,7 @@ Compute · [10%] · 90% free
 WHILE YOU ARE AWAY
 [A world’s first voice wakes you · a knock or a broadcast, aimed at us or not · even in quiet hours · always]
 Quick looks and tune-ups queue like builds. Results and anything sent wait for the clock.
-THE MIND (VEYRA) · Queued. The first second, I look at all three. Ember answers in thirty seconds, Beacon in a minute. Pair waits for the telescope. · [Undo]
+THE MIND (VEYRA) · Queued. The first second, I look at both. Ember answers in thirty seconds, Beacon in a minute. · [Undo]
 [Talk to the mind]
 “Then guard us. Whoever hears us.”
 Hael · Before Year 0
@@ -467,7 +463,6 @@ UP NEXT · STARTS AT YEAR 0
 QUICK LOOKS · START AT YEAR 0
 Image Ember’s giant again · Space telescope · has it moved along one orbit? · lands Year 0.1 · 00:00:30
 Lay Beacon’s drift beside its spots · Star surveys · 40 Years of both · lands Year 0.2 · 00:01:00
-Look again beside Pair · Space telescope, after Ember · out of the glare yet? · lands Year 0.4 · 00:02:00
 AT YEAR 0 YOU WILL SPEND
 Energy · [0%] · 100% free
 Compute · [50%] · 50% free
@@ -522,7 +517,6 @@ UP NEXT · STARTS AT YEAR 0
 QUICK LOOKS · START AT YEAR 0
 Image Ember’s giant again · Space telescope · has it moved along one orbit? · lands Year 0.1 · 00:00:30
 Lay Beacon’s drift beside its spots · Star surveys · 40 Years of both · lands Year 0.2 · 00:01:00
-Look again beside Pair · Space telescope, after Ember · out of the glare yet? · lands Year 0.4 · 00:02:00
 AT YEAR 0 YOU WILL SPEND
 Energy · [0%] · 100% free
 Compute · [50%] · 50% free
@@ -532,7 +526,7 @@ WHILE YOU ARE AWAY
 - Wake me for anything heard · a knock, a broadcast, a hum · ›
 - A world’s first voice wakes you · a knock or a broadcast, aimed at us or not · even in quiet hours · always
 Quick looks and tune-ups queue like builds. Results and anything sent wait for the clock.
-THE MIND (VEYRA) · Everything is set. When the second ends, the receiver and the flash watch begin, and three looks with them. We say nothing. · [Ready]
+THE MIND (VEYRA) · Everything is set. When the second ends, the receiver and the flash watch begin, and two looks with them. We say nothing. · [Ready]
 [Talk to the mind]
 “Is everything set?”
 Hael · Before Year 0
@@ -586,17 +580,16 @@ Quick looks and tune-ups queue like builds. Results and anything sent wait for t
 THE MIND (KESH) · Set. Three builds and three tune-ups at 20:00. The first tune-up lands in 30 seconds. · [Ready]
 [Talk to the mind]
 +0:00 · Year 0
-Godview · No seat can see another, and none can see another’s world: today’s instruments can’t. Every lead is a real, published oddity at a real star, and every one is natural. Because the nearest bright stars draw attention, several sit at seats anyway: Ember and Beacon for Veyra, Warden and Ash for Hael, Hollow and Lodestar for Kesh. None shows a world like ours, let alone who lives there.
+Godview · No seat can see another, and none can see another’s world: today’s instruments can’t. Every lead is a real, published oddity at a real star, and every one is natural. Because the nearest bright stars draw attention, most sit at seats anyway: both of Veyra’s, Ember and Beacon; Warden and Ash for Hael; Hollow and Lodestar for Kesh. None shows a world like ours, let alone who lives there.
 “What’s running?”
 Veyra · Year 0
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
 ENERGY · [0%] · MATTER · 840 kt · COMPUTE · [50%]
 [drawing: ORBIT · VEYRA · 2 BUILDING; labels: moon, Veyra, low orbit, Deep-field receiver · 0%, Deep flash watch · 0%] · ORBIT · VEYRA · 2 BUILDING
-PROJECTS · 2 RUNNING · 3 LOOKS
-QUICK LOOKS · 3 · FROM YOUR QUEUE
+PROJECTS · 2 RUNNING · 2 LOOKS
+QUICK LOOKS · 2 · FROM YOUR QUEUE
 Image Ember’s giant again · Space telescope · under way · 00:00:30
 Lay Beacon’s drift beside its spots · Star surveys · under way · 00:01:00
-Look again beside Pair · Space telescope, after Ember · next on the telescope · 00:02:00
 RUNNING · 2 · FROM YOUR QUEUE
 [drawing: Deep-field receiver] · Deep-field receiver · Then: listen to one star · 12 Years · 01:00:00 · [Pause Deep-field receiver]
 [drawing: Deep flash watch] · Deep flash watch · Hears knocks a hundred times fainter · 6 Years · 00:30:00 · [Pause Deep flash watch]
@@ -604,7 +597,7 @@ EACH YEAR YOU CAN SPEND
 Energy · [0%] · 100% free
 Compute · [50%] · 50% free
 840 kt · matter on hand · +40 kt a year
-THE MIND (VEYRA) · The receiver and the flash watch, begun. Three looks under way. Ember answers in thirty seconds.
+THE MIND (VEYRA) · The receiver and the flash watch, begun. Two looks under way. Ember answers in thirty seconds.
 [Talk to the mind]
 “How are the builds?”
 Hael · Year 0
@@ -650,8 +643,8 @@ THE MIND (KESH) · All of it. Data centers in 30 seconds, mines in 2 minutes, gr
 Lands · Ember’s giant moved, but not quite along one orbit. Second giant 30 → 42.
 Veyra · Year 0.1
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [0%] · MATTER · 844 kt · COMPUTE · [50%]
-[drawing: STARS · EMBER · 9.2 LY · 00:46:03; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · EMBER · 9.2 LY · 00:46:03
+ENERGY · [0%] · MATTER · 844 kt · COMPUTE · [45%]
+[drawing: STARS · EMBER · 9.2 LY · 00:46:03; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · EMBER · 9.2 LY · 00:46:03
 REPORT · QUICK LOOK
 [‹ All reports]
 
@@ -692,8 +685,8 @@ Lands · +5% compute, for good.
 Lands · Beacon’s drift follows its spots: the star’s own cycle. 60 → 85.
 Veyra · Year 0.2
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [0%] · MATTER · 848 kt · COMPUTE · [55%]
-[drawing: STARS · EMBER · 9.2 LY · 00:46:03; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · EMBER · 9.2 LY · 00:46:03
+ENERGY · [0%] · MATTER · 848 kt · COMPUTE · [50%]
+[drawing: STARS · EMBER · 9.2 LY · 00:46:03; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · EMBER · 9.2 LY · 00:46:03
 CLUE · YEAR 0.2
 [‹ Ember]
 
@@ -711,7 +704,7 @@ Infrared telescope · many times larger · its whole orbit, and what else is the
 THE MIND (VEYRA) · Reading, a minute and a half. Ember will never know. Beacon is in.
 [Talk to the mind]
 “And Warden?”
-Lands · Warden is heavier than it pulls. Dim star 20 → 32.
+Lands · Warden’s pull is still building. Dim star 20 → 32.
 Hael · Year 0.2
 Beta Hydri · 24.3 ly from Sol · 1 Year = 00:05:00
 ENERGY · [0%] · MATTER · 1,048 kt · COMPUTE · [25%]
@@ -720,22 +713,22 @@ REPORT · QUICK LOOK
 [‹ All reports]
 [drawing: A star’s tug, folded on one orbit: part of one slow orbit; labels: toward us ↑ · away ↓, 0, one orbit · 37+ Years, part of one slow orbit]
 
-### Heavier than it pulls
+### Still pulling harder
 Warden · Delta Pavonis · star surveys and maps · 0.2 Years
-Our records go back twelve thousand Years, but only the last forty are fine enough for this. They agree on something heavy and far out, on an orbit of at least 37 Years. But its place among the stars shifts more than its pull toward and away from us explains. Something there is heavier than it pulls.
+Our records go back twelve thousand Years, but only the last forty are fine enough for this. Warden’s sway and its place agree: something heavy, far out, seen from the side. But its pull is still building. Forty Years is part of one orbit, and a giant nearer in or something heavier farther out would draw the same arc.
 WHAT IT COULD BE · BEFORE → NOW
 A cold giant, far out · [70%] · [58%] · 70 → 58
 A dim companion star · [20%] · [32%] · 20 → 32
 Old measures wrong · [10%] · [10%] · 10 → 10
 WITH WHAT WE HAVE · QUICK
 Look for a dim star’s glow · Space telescope, in heat · a star glows, a giant doesn’t · C 5% while it runs · 0.3 Years · 00:01:30 · [Start]
-THE MIND (HAEL) · Something heavy at Warden, hiding some of its weight. A dim star would glow in heat. A giant would not. One look tells us. · [Look] · [Later]
+THE MIND (HAEL) · Something heavy at Warden, still pulling harder. A giant nearer in, or a dim star farther out. A star would glow in heat. A giant would not. One look tells us. · [Look] · [Later]
 [Talk to the mind]
 “Show me Hollow.”
 Kesh · Year 0.2
 Epsilon Indi · 11.8 ly from Sol · 1 Year = 00:05:00
 ENERGY · [1%] · MATTER · 548 kt · COMPUTE · [35%]
-[drawing: STARS · HOLLOW · 14.3 LY · 01:11:44; labels: Kesh, 00:25:00, 00:50:00, 01:15:00, Hollow, Beta Hydri · 01:11:44, Twofold, Alpha Centauri A · 00:48:19, Chaff, Tau Ceti · 00:57:28, Lodestar, Delta Pavonis · 00:46:03, Cinder, Lacaille 8760, Gliese 832] · STARS · HOLLOW · 14.3 LY · 01:11:44
+[drawing: STARS · HOLLOW · 14.3 LY · 01:11:44; labels: Kesh, 00:25:00, 00:50:00, 01:15:00, Hollow, Beta Hydri · 01:11:44, Chaff, Tau Ceti · 00:57:28, Lodestar, Delta Pavonis · 00:46:03, Twofold, Alpha Centauri A, Cinder, Lacaille 8760, Gliese 832] · STARS · HOLLOW · 14.3 LY · 01:11:44
 CLUE · YEAR 0.2
 [‹ Hollow]
 
@@ -755,8 +748,8 @@ THE MIND (KESH) · Hollow, Beta Hydri. Old star, drifting. Star or giant: 1 minu
 “And Beacon?”
 Veyra · Year 0.3
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [0%] · MATTER · 852 kt · COMPUTE · [55%]
-[drawing: STARS · BEACON · 9.3 LY · 00:46:27; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · BEACON · 9.3 LY · 00:46:27
+ENERGY · [0%] · MATTER · 852 kt · COMPUTE · [50%]
+[drawing: STARS · BEACON · 9.3 LY · 00:46:27; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · BEACON · 9.3 LY · 00:46:27
 REPORT · QUICK LOOK
 [‹ All reports]
 [drawing: A star’s drift beside its spots: rise and fall together; labels: 40 Years ago, now, its drift, its spots, rise and fall together]
@@ -782,7 +775,7 @@ CLUE · YEAR 0.3
 
 ### A giant, half seen
 Warden · Delta Pavonis · 9.3 ly · logged Year 0.1
-Warden, a yellow star like ours, is pulled slowly to one side by something heavy and far out. It shifts across the sky more than it pulls toward us.
+Warden, a yellow star like ours, is pulled toward us and away by something heavy and far out, seen from the side. After forty Years, the pull is still building.
 WHAT IT COULD BE · ODDS NOW
 A cold giant, far out · [58%] · 58
 A dim companion star · [32%] · 32
@@ -808,26 +801,7 @@ BUILD · MATTER SOONEST
 THE MIND (KESH) · Two, both this session. Haul in the dead orbit: 1 Year, +80 kt once. A second launch complex: 2 Years, +40 kt a year. Lift is short of pads and ships, not energy. · [Both] · [Pick]
 [Talk to the mind]
 +2:00 · Year 0.4
-“Pair?”
-Lands · Pair’s point: still hidden in the glare.
-Veyra · Year 0.4
-Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [0%] · MATTER · 856 kt · COMPUTE · [50%]
-[drawing: STARS · PAIR · 16.5 LY · 01:22:41; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · PAIR · 16.5 LY · 01:22:41
-REPORT · QUICK LOOK
-[‹ All reports]
-
-### Pair’s point: still hidden
-Pair · space telescope · 0.3 Years
-Not seen again. If it is a giant, it is still too near its star’s glare for our telescope. Seen once, still.
-WHAT IT COULD BE · BEFORE → NOW
-A giant planet, hidden by the glare since · [50%] · [52%] · 50 → 52
-A star far behind · [25%] · [22%] · 25 → 22
-A flaw in the image · [25%] · [26%] · 25 → 26
-NEXT CHANCE
-Its orbit should carry it out of the glare in about a Year: 00:05:00.
-THE MIND (VEYRA) · Not seen. Still too near its star. In a Year, perhaps.
-[Talk to the mind]
+Nothing new. · A dead 30 seconds.
 “When the beacon’s built, broadcast. Don’t wait for me.”
 Hael · Year 0.4
 Beta Hydri · 24.3 ly from Sol · 1 Year = 00:05:00
@@ -875,7 +849,7 @@ Lands · Something left in Ember’s sway. Old measures 20 → 34.
 Veyra · Year 0.5
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
 ENERGY · [0%] · MATTER · 860 kt · COMPUTE · [40%]
-[drawing: STARS · EMBER · 9.2 LY · 00:46:03; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · EMBER · 9.2 LY · 00:46:03
+[drawing: STARS · EMBER · 9.2 LY · 00:46:03; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · EMBER · 9.2 LY · 00:46:03
 REPORT · QUICK LOOK
 [‹ All reports]
 [drawing: A star’s tug, folded on one orbit: what is left, giant taken out; labels: toward us ↑ · away ↓, 0, one orbit · 40 Years, what is left, giant taken out]
@@ -902,7 +876,7 @@ MIND · ASKING
 ABOUT · FROM HOME · Could Warden have minds?
 The clock runs while you talk: 1 Year every · 00:05:00.
 Could Warden have minds?
-THE MIND · We see something heavy there, far out, hiding some of its weight. Nothing smaller: a world like ours would be lost in Warden’s own shimmer. If anyone lives there, nothing we have can say.
+THE MIND · We see something heavy there, far out: a giant, or a dim star farther off. Nothing smaller: a world like ours would be lost in Warden’s own shimmer. If anyone lives there, nothing we have can say.
 And if someone does?
 THE MIND · Then our broadcast reaches them in 9.3 Years, and they learn where we are.
 What would you do?
@@ -912,7 +886,7 @@ Ask the mind… · [Send · ↑]
 Kesh · Year 0.5
 Epsilon Indi · 11.8 ly from Sol · 1 Year = 00:05:00
 ENERGY · [1%] · MATTER · 561 kt · COMPUTE · [40%]
-[drawing: STARS · CHAFF · 11.5 LY · 00:57:28; labels: Kesh, 00:25:00, 00:50:00, 01:15:00, Hollow, Beta Hydri · 01:11:44, Twofold, Alpha Centauri A · 00:48:19, Chaff, Tau Ceti · 00:57:28, Lodestar, Delta Pavonis · 00:46:03, Cinder, Lacaille 8760, Gliese 832] · STARS · CHAFF · 11.5 LY · 00:57:28
+[drawing: STARS · CHAFF · 11.5 LY · 00:57:28; labels: Kesh, 00:25:00, 00:50:00, 01:15:00, Hollow, Beta Hydri · 01:11:44, Chaff, Tau Ceti · 00:57:28, Lodestar, Delta Pavonis · 00:46:03, Twofold, Alpha Centauri A, Cinder, Lacaille 8760, Gliese 832] · STARS · CHAFF · 11.5 LY · 00:57:28
 CLUE · YEAR 0.5
 [‹ Chaff]
 
@@ -952,7 +926,7 @@ now · 01:00:00 · 02:00:00 · 03:00:00
 THE MIND (VEYRA) · The infrared telescope: 18 Years, a sixth of our compute, 200 kt. Started. It looks; it says nothing. · [Undo]
 [Talk to the mind]
 “Warden?”
-Lands · No glow at Warden: a giant whose orbit faces us. 58 → 80.
+Lands · No glow at Warden: a giant, seen from the side. 58 → 80.
 Hael · Year 0.6
 Beta Hydri · 24.3 ly from Sol · 1 Year = 00:05:00
 ENERGY · [0%] · MATTER · 1,064 kt · COMPUTE · [20%]
@@ -960,16 +934,16 @@ ENERGY · [0%] · MATTER · 1,064 kt · COMPUTE · [20%]
 REPORT · QUICK LOOK
 [‹ All reports]
 
-### A giant, facing us
+### A giant, seen from the side
 Warden · Delta Pavonis · space telescope · 0.3 Years
-Nothing glows beside Warden in heat. A dim star would. A cold giant would not, and one whose orbit faces us would pull Warden mostly across the sky, barely toward us: heavier than its pull.
+Nothing glows beside Warden in heat. A dim star far out would. A cold giant nearer in would not. The arc we have belongs to a giant, and we see its orbit from the side.
 WHAT IT COULD BE · BEFORE → NOW
 A cold giant, far out · [58%] · [80%] · 58 → 80
 A dim companion star · [32%] · [8%] · 32 → 8
 Old measures wrong · [10%] · [12%] · 10 → 12
 WHAT IT CAN’T TELL
-Worlds closer in. Spectrographs would feel them, unless their orbits face us too.
-THE MIND (HAEL) · A giant, tilted toward us. Real. Spectrographs could feel worlds closer in, if they don’t face us too. 8 Years, 100 kt. · [Start them] · [Later]
+Worlds closer in. If they circle in line with the giant, we see them from the side too, and spectrographs would feel their whole sway.
+THE MIND (HAEL) · A giant, seen from the side. Real. Worlds in line with it would sway Warden toward us. Spectrographs could feel them: 8 Years, 100 kt. · [Start them] · [Later]
 [Talk to the mind]
 “Budget.”
 Lands · The grid: +5% energy, for good.
@@ -997,7 +971,7 @@ Compute · [35%] · 65% free
 THE MIND (KESH) · Energy 1%, compute 35%, 566 kt. Tune-ups done but one. Chaff in a minute.
 [Talk to the mind]
 +3:30 · Year 0.7
-Godview · Both spectrograph banks finish in Year 8.7, about 00:40:00 from now. Then they must watch: a world shows only after a few of its turns. Veyra’s world turns in about 1.2 Years, and its orbit doesn’t face Hael, so Hael finds it around Year 12: a world, not a voice. Kesh’s turns in about 0.4 Years, so Veyra finds it within a Year of watching Ember. Hael’s turns in about 2.4 Years around a star whose surface shakes, so Veyra needs until Year 20 or later.
+Godview · Both spectrograph banks finish in Year 8.7, about 00:40:00 from now. Then they must watch: a world shows only after a few of its turns. Veyra’s world turns in about 1.2 Years, its orbit tilted 37° from its giant’s: Hael sees 91% of its tug, Kesh 81%. Hael finds it around Year 12: a world, not a voice. Kesh’s turns in about 0.4 Years, so Veyra finds it within a Year of watching Ember. Hael’s turns in about 2.4 Years around a star whose surface shakes, so Veyra needs until Year 20 or later.
 “I want to feel worlds like ours.”
 Veyra · Year 0.7
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
@@ -1008,7 +982,7 @@ ENERGY · [0%] · MATTER · 568 kt · COMPUTE · [70%]
 
 ### Spectrograph bank
 Reads what anything is made of. Most other Know projects build on it.
-Ultra-stable spectrographs: they read gases, and feel small planets tug their stars.
+Spectrographs on many telescopes, every night, reading the star’s surface to take out its shimmer. Then a small world’s tug shows.
 HELPS WITH
 Every lead, closer in · Feels worlds as heavy as ours, around Ember and Beacon, given Years of watching · Opens the planet survey
 USES EACH YEAR
@@ -1030,7 +1004,7 @@ ENERGY · [0%] · MATTER · 968 kt · COMPUTE · [35%]
 
 ### Spectrograph bank
 Reads what anything is made of. Most other Know projects build on it.
-Ultra-stable spectrographs: they read gases, and feel small planets tug their stars.
+Spectrographs on many telescopes, every night, reading the star’s surface to take out its shimmer. Then a small world’s tug shows.
 HELPS WITH
 A giant, half seen · Warden · Feels worlds as heavy as ours, closer in, given Years of watching · Opens the planet survey
 USES EACH YEAR
@@ -1069,18 +1043,18 @@ ENERGY · [0%] · MATTER · 972 kt · COMPUTE · [35%]
 CLUE · YEAR 0.8
 [‹ Warden]
 
-### A giant, facing us
+### A giant, seen from the side
 Warden · Delta Pavonis · 9.3 ly · logged Year 0.1
-Warden, a yellow star like ours, is pulled across the sky by a cold giant whose orbit faces us. Anything closer in, we can’t yet feel.
+Warden, a yellow star like ours, is pulled toward us and away by a cold giant whose orbit we see from the side. Anything closer in, we can’t yet feel.
 WHAT IT COULD BE · ODDS NOW
 A cold giant, far out · [80%] · 80
 Old measures wrong · [12%] · 12
 A dim companion star · [8%] · 8
 WITH WHAT WE HAVE · QUICK
-Look for a dim star’s glow · no glow · a giant, facing us · Done
+Look for a dim star’s glow · no glow · a giant, from the side · Done
 WITH WHAT WE HAVE · LONGER
 Listen to Warden for a Year · Radio array · rules out anyone ten times louder than our hum · C 10% · 1 Year · 00:05:00 · [Start]
-Track Warden’s place for two Years · Space telescope, against the stars behind · weighs the giant that faces us · C 10% · 2 Years · 00:10:00 · [Start]
+Track Warden’s place for two Years · Space telescope, against the stars behind · traces more of the giant’s slow orbit · C 10% · 2 Years · 00:10:00 · [Start]
 BUILD SOMETHING · EARLIEST ANSWER
 Spectrograph bank · building · worlds closer in, given Years of watching · Year 8.7 · 00:39:30
 THE MIND (HAEL) · With what we have: listen to Warden for a Year, or track its place for two. Listening tells us if anyone there is loud. · [Listen] · [Track its place] · [Both]
@@ -1090,7 +1064,7 @@ Lands · Chaff’s wobbles: two fade, two hold, barely. Worlds 50 → 55.
 Kesh · Year 0.8
 Epsilon Indi · 11.8 ly from Sol · 1 Year = 00:05:00
 ENERGY · [1%] · MATTER · 576 kt · COMPUTE · [25%]
-[drawing: STARS · CHAFF · 11.5 LY · 00:57:28; labels: Kesh, 00:25:00, 00:50:00, 01:15:00, Hollow, Beta Hydri · 01:11:44, Twofold, Alpha Centauri A · 00:48:19, Chaff, Tau Ceti · 00:57:28, Lodestar, Delta Pavonis · 00:46:03, Cinder, Lacaille 8760, Gliese 832] · STARS · CHAFF · 11.5 LY · 00:57:28
+[drawing: STARS · CHAFF · 11.5 LY · 00:57:28; labels: Kesh, 00:25:00, 00:50:00, 01:15:00, Hollow, Beta Hydri · 01:11:44, Chaff, Tau Ceti · 00:57:28, Lodestar, Delta Pavonis · 00:46:03, Twofold, Alpha Centauri A, Cinder, Lacaille 8760, Gliese 832] · STARS · CHAFF · 11.5 LY · 00:57:28
 REPORT · QUICK LOOK
 [‹ All reports]
 
@@ -1109,7 +1083,7 @@ THE MIND (KESH) · Two wobbles gone, two left, barely. Not worth matter yet.
 Veyra · Year 0.9
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
 ENERGY · [0%] · MATTER · 576 kt · COMPUTE · [70%]
-[drawing: STARS · WITHIN 17 LY OF VEYRA; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · WITHIN 17 LY OF VEYRA
+[drawing: STARS · WITHIN 17 LY OF VEYRA; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · WITHIN 17 LY OF VEYRA
 MIND · ASKING
 ABOUT · FROM HOME · Is anyone near enough to hear?
 The clock runs while you talk: 1 Year every · 00:05:00.
@@ -1128,18 +1102,18 @@ ENERGY · [0%] · MATTER · 976 kt · COMPUTE · [45%]
 CLUE · YEAR 0.9
 [‹ Warden]
 
-### A giant, facing us
+### A giant, seen from the side
 Warden · Delta Pavonis · 9.3 ly · logged Year 0.1
-Warden, a yellow star like ours, is pulled across the sky by a cold giant whose orbit faces us. Anything closer in, we can’t yet feel.
+Warden, a yellow star like ours, is pulled toward us and away by a cold giant whose orbit we see from the side. Anything closer in, we can’t yet feel.
 WHAT IT COULD BE · ODDS NOW
 A cold giant, far out · [80%] · 80
 Old measures wrong · [12%] · 12
 A dim companion star · [8%] · 8
 WITH WHAT WE HAVE · QUICK
-Look for a dim star’s glow · no glow · a giant, facing us · Done
+Look for a dim star’s glow · no glow · a giant, from the side · Done
 WITH WHAT WE HAVE · LONGER
 Listen to Warden for a Year · Radio array · rules out anyone ten times louder than our hum · C 10% · under way · 00:05:00
-Track Warden’s place for two Years · Space telescope, against the stars behind · weighs the giant that faces us · C 10% · 2 Years · 00:10:00 · [Start]
+Track Warden’s place for two Years · Space telescope, against the stars behind · traces more of the giant’s slow orbit · C 10% · 2 Years · 00:10:00 · [Start]
 BUILD SOMETHING · EARLIEST ANSWER
 Spectrograph bank · building · worlds closer in, given Years of watching · Year 8.7 · 00:39:00
 THE MIND (HAEL) · Listening to Warden, a Year. Five minutes. Whoever is there and loud, we will know.
@@ -1148,7 +1122,7 @@ THE MIND (HAEL) · Listening to Warden, a Year. Five minutes. Whoever is there a
 Kesh · Year 0.9
 Epsilon Indi · 11.8 ly from Sol · 1 Year = 00:05:00
 ENERGY · [1%] · MATTER · 581 kt · COMPUTE · [35%]
-[drawing: STARS · LODESTAR · 9.2 LY · 00:46:03; labels: Kesh, 00:25:00, 00:50:00, 01:15:00, Hollow, Beta Hydri · 01:11:44, Twofold, Alpha Centauri A · 00:48:19, Chaff, Tau Ceti · 00:57:28, Lodestar, Delta Pavonis · 00:46:03, Cinder, Lacaille 8760, Gliese 832] · STARS · LODESTAR · 9.2 LY · 00:46:03
+[drawing: STARS · LODESTAR · 9.2 LY · 00:46:03; labels: Kesh, 00:25:00, 00:50:00, 01:15:00, Hollow, Beta Hydri · 01:11:44, Chaff, Tau Ceti · 00:57:28, Lodestar, Delta Pavonis · 00:46:03, Twofold, Alpha Centauri A, Cinder, Lacaille 8760, Gliese 832] · STARS · LODESTAR · 9.2 LY · 00:46:03
 CLUE · YEAR 0.9
 [‹ Lodestar]
 
@@ -1170,7 +1144,7 @@ THE MIND (KESH) · Lodestar. Delta Pavonis, 9.2 light-years. The nearest star li
 Veyra · Year 1
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
 ENERGY · [0%] · MATTER · 580 kt · COMPUTE · [80%]
-[drawing: STARS · EMBER · 9.2 LY · 00:46:03; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · EMBER · 9.2 LY · 00:46:03
+[drawing: STARS · EMBER · 9.2 LY · 00:46:03; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · EMBER · 9.2 LY · 00:46:03
 CLUE · YEAR 1
 [‹ Ember]
 
@@ -1219,7 +1193,7 @@ Lands · Lodestar is heavier than it pulls. Dim star 20 → 32.
 Kesh · Year 1.1
 Epsilon Indi · 11.8 ly from Sol · 1 Year = 00:05:00
 ENERGY · [1%] · MATTER · 591 kt · COMPUTE · [25%]
-[drawing: STARS · LODESTAR · 9.2 LY · 00:46:03; labels: Kesh, 00:25:00, 00:50:00, 01:15:00, Hollow, Beta Hydri · 01:11:44, Twofold, Alpha Centauri A · 00:48:19, Chaff, Tau Ceti · 00:57:28, Lodestar, Delta Pavonis · 00:46:03, Cinder, Lacaille 8760, Gliese 832] · STARS · LODESTAR · 9.2 LY · 00:46:03
+[drawing: STARS · LODESTAR · 9.2 LY · 00:46:03; labels: Kesh, 00:25:00, 00:50:00, 01:15:00, Hollow, Beta Hydri · 01:11:44, Chaff, Tau Ceti · 00:57:28, Lodestar, Delta Pavonis · 00:46:03, Twofold, Alpha Centauri A, Cinder, Lacaille 8760, Gliese 832] · STARS · LODESTAR · 9.2 LY · 00:46:03
 REPORT · QUICK LOOK
 [‹ All reports]
 [drawing: A star’s tug, folded on one orbit: part of one slow orbit; labels: toward us ↑ · away ↓, 0, one orbit · 37+ Years, part of one slow orbit]
@@ -1236,26 +1210,27 @@ Spectrograph bank · 100 kt · feels worlds closer in · 8 Years · 00:40:00
 THE MIND (KESH) · Something heavy at Lodestar, hiding weight. Spectrographs would tell more: 100 kt. That’s two Years of lift. · [Build them] · [Not yet]
 [Talk to the mind]
 +6:00 · Year 1.2
-Godview · The burst is a fast radio burst from a galaxy about two billion light-years away: natural. It tests Veyra’s order, since “anything heard” means this too. Hael’s broadcast leaves in Year 4. Veyra’s sky watch catches it in Year 13.3, 01:06:27 after the start; Kesh’s in Year 18.3. No one arranged it.
-Lands · The sky watch hears a burst of radio, a thousandth of a second long.
+Godview · Fast radio bursts are dead stars in far galaxies, all natural. A watch on the whole sky hears about 800 a day, as Earth’s CHIME would: about 300,000 a Year, a thousand every real second. They test Veyra’s order, since “anything heard” means them too. Hael’s broadcast leaves in Year 4. Veyra’s sky watch catches it in Year 13.3, 01:06:27 after the start; Kesh’s in Year 18.3. No one arranged it.
+The mind glows. Taps it.
+Lands · A Year of the sky watch: about 300,000 bursts from far galaxies. None woke you.
 Veyra · Year 1.2
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
 ENERGY · [0%] · MATTER · 588 kt · COMPUTE · [80%]
-[drawing: STARS · WITHIN 17 LY OF VEYRA; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · WITHIN 17 LY OF VEYRA
+[drawing: STARS · WITHIN 17 LY OF VEYRA; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · WITHIN 17 LY OF VEYRA
 REPORT · HEARD · SKY WATCH
 [‹ All reports]
 [drawing: A radio burst, its low pitches arriving later; labels: high, low, arrival · a third of a second, later →, the burst, one thousandth of a second at each pitch]
 
-### A burst, heard once
-Sky near Frost, far behind it · sky watch · Year 1.2
-A thousandth of a second of radio, then nothing. Its low pitches came in late, the way gas between galaxies slows them. That much delay means about two billion light-years of gas.
+### Bursts from far galaxies
+The whole sky · sky watch · our first Year awake
+About 300,000 bursts this Year, from every part of the sky: each a thousandth of a second of radio, then nothing. Their low pitches came in late, the way gas between galaxies slows them. This one, near Frost, crossed about two billion light-years of gas.
 WHAT IT COULD BE · ODDS NOW
 A dead star in another galaxy · [90%] · 90
 Our own interference · [8%] · 8
 Something near, and built · [2%] · 2
 WHAT IT CAN’T TELL
 Which galaxy. It came once, and nothing near would arrive this slowed.
-THE MIND (VEYRA) · UNASKED · Heard: a burst · Woken, as you asked. It crossed about two billion light-years of gas. Not a neighbor. Most likely a dead star in another galaxy. · [Only wake me for what’s near]
+THE MIND (VEYRA) · About your order · It says anything heard. These bursts come from other galaxies, so I read it as anyone near, and none woke you. Did you mean every one? · [Only wake me for what’s near] · [Every one]
 [Talk to the mind]
 “Who will hear it?”
 Hael · Year 1.2
@@ -1286,44 +1261,24 @@ THE MIND (HAEL) · Kiln first, in Year 11. Warden in Year 13, where our spectrog
 Veyra · Year 1.3
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
 ENERGY · [0%] · MATTER · 592 kt · COMPUTE · [80%]
-[drawing: STARS · WITHIN 17 LY OF VEYRA; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · WITHIN 17 LY OF VEYRA
+[drawing: STARS · WITHIN 17 LY OF VEYRA; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · WITHIN 17 LY OF VEYRA
 MIND · NEW ORDER
 WHAT YOU WANT
 Only wake me for what’s near.
 THE MIND’S VERSION
 WHEN · Anything heard · a knock, a broadcast, a hum
-IF · Its low pitches aren’t slowed · the way gas between galaxies slows them: it is from our own galaxy
+IF · It is near · a pulse whose low pitches barely lag, or anything steady
 DO · Wake you
 REPLACES · Wake me for anything heard
-I can’t tell near from far within our galaxy. I can tell ours from another’s. Tried on this hour: the burst would not have woken you.
+A pulse’s lag tells how much gas it crossed: next to none from a neighbor, a great deal from another galaxy. Steady sounds can’t be timed, so they still wake you. Tried on our first Year: none of its 300,000 bursts would have woken you.
 [Talk it through with the mind ›]
 [Edit] · [Set the order]
-THE MIND (VEYRA) · Within our galaxy is what I can tell. Set: anything heard from our own galaxy wakes you. This burst would not have. · [Undo]
+THE MIND (VEYRA) · Near is what a pulse tells me: a neighbor’s gas barely slows it. Set. Steady sounds still wake you. None of this Year’s bursts would have. · [Undo]
 [Talk to the mind]
 Keeps the order.
 Nothing new. · A dead 30 seconds.
 +7:00 · Year 1.4
-“Look at Pair again.”
-Veyra · Year 1.4
-Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [0%] · MATTER · 596 kt · COMPUTE · [85%]
-[drawing: STARS · PAIR · 16.5 LY · 01:22:41; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · PAIR · 16.5 LY · 01:22:41
-CLUE · YEAR 1.4
-[‹ Pair]
-
-### A point seen once
-Pair · Alpha Centauri A · 16.5 ly · logged Year 0.1
-Beside Pair’s brighter star, one faint, cold point showed in heat, once. A Year on, a giant would have moved out of the glare.
-WHAT IT COULD BE · ODDS NOW
-A giant planet, hidden by the glare since · [52%] · 52
-A flaw in the image · [26%] · 26
-A star far behind · [22%] · 22
-WITH WHAT WE HAVE · QUICK
-Look again · Space telescope · out of the glare yet? · C 5% while it runs · under way · 00:01:30
-BUILD SOMETHING · EARLIEST ANSWER
-Infrared telescope · many times larger · sees closer to the star · 18 Years · 01:30:00
-THE MIND (VEYRA) · Looking again, a minute and a half. A Year on, a giant would have moved out of the glare.
-[Talk to the mind]
+Nothing new. · A dead 30 seconds.
 “If anyone answers, answer with our charter.”
 Hael · Year 1.4
 Beta Hydri · 24.3 ly from Sol · 1 Year = 00:05:00
@@ -1386,28 +1341,7 @@ Nothing new. · A dead 30 seconds.
 Nothing new. · A dead 30 seconds.
 Away.
 +8:30 · Year 1.7
-“Pair?”
-Lands · Pair’s point, seen again, where a giant would be. 52 → 84.
-Veyra · Year 1.7
-Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
-ENERGY · [0%] · MATTER · 608 kt · COMPUTE · [80%]
-[drawing: STARS · PAIR · 16.5 LY · 01:22:41; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · PAIR · 16.5 LY · 01:22:41
-REPORT · QUICK LOOK
-[‹ All reports]
-
-### Pair’s point, seen again
-Pair · space telescope · 0.3 Years
-A faint, cold point beside Pair again, moved along with it. Pair crosses our sky quickly; a star far behind would have stayed put while Pair moved on.
-WHAT IT COULD BE · BEFORE → NOW
-A giant planet, hidden by the glare since · [52%] · [84%] · 52 → 84
-A flaw in the image · [26%] · [8%] · 26 → 8
-A star far behind · [22%] · [8%] · 22 → 8
-WHAT IT CAN’T TELL
-Its orbit, or anything smaller. Two positions don’t trace an orbit. Watching it once a month through a Year would trace an arc of its orbit.
-WITH WHAT WE HAVE · LONGER
-Watch Pair through a Year · Space telescope, once a month · an arc of its orbit · C 10% · 1 Year · 00:05:00 · [Start]
-THE MIND (VEYRA) · Seen again, moving with Pair. A giant, most likely. Nothing of a voice.
-[Talk to the mind]
+Nothing new. · A dead 30 seconds.
 Nothing new. · A dead 30 seconds.
 Away.
 +9:00 · Year 1.8
@@ -1419,7 +1353,7 @@ ENERGY · [0%] · MATTER · 612 kt · COMPUTE · [80%]
 MIND · WHAT WAKES YOU
 ORDERS
 - Never send messages · speaking is permanent; you decide that · ›
-- Wake me for anything heard from our galaxy · a knock, a broadcast, a hum · set Year 1.3 · ›
+- Wake me for anything heard nearby · a knock, a broadcast, a hum · set Year 1.3 · ›
 - A world’s first voice wakes you · a knock or a broadcast, aimed at us or not · even in quiet hours · always
 COMING · SOONEST FIRST · NONE WAKES YOU
 - A Year of listening to Ember · done · what it rules out · Year 2 · 00:01:00
@@ -1427,7 +1361,7 @@ COMING · SOONEST FIRST · NONE WAKES YOU
 - Spectrograph bank · built · then it watches Ember and Beacon · Year 8.7 · 00:34:30
 - Deep-field receiver · built · then: listen to one star · Year 12 · 00:51:00
 - Infrared telescope · built · Ember’s whole orbit · Year 18.6 · 01:24:00
-THE MIND (VEYRA) · Only what you chose: anything heard from our galaxy. Ember’s Year of listening ends in a minute. The receiver is done in 00:51:00.
+THE MIND (VEYRA) · Only what you chose: anything heard nearby. Ember’s Year of listening ends in a minute. The receiver is done in 00:51:00.
 [Talk to the mind]
 Nothing new. · A dead 30 seconds.
 Away.
@@ -1481,7 +1415,7 @@ Lands · Nothing loud at Ember, after a Year of listening.
 Veyra · Year 2
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
 ENERGY · [0%] · MATTER · 620 kt · COMPUTE · [75%]
-[drawing: STARS · EMBER · 9.2 LY · 00:46:03; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · EMBER · 9.2 LY · 00:46:03
+[drawing: STARS · EMBER · 9.2 LY · 00:46:03; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · EMBER · 9.2 LY · 00:46:03
 REPORT · LONG LOOK
 [‹ All reports]
 
@@ -1540,7 +1474,7 @@ Away.
 +11:00 · Year 2.2
 Puts the phone down.
 Thursday · 20:11
-HOLOS · IN 00:49:00 · Veyra: the receiver listens to Ember · Anything heard from our galaxy wakes you sooner.
+HOLOS · IN 00:49:00 · Veyra: the receiver listens to Ember · Anything heard nearby wakes you sooner.
 Away.
 Away.
 +11:30 · Year 2.3
@@ -1555,7 +1489,7 @@ Lands · The second launch complex: +40 kt of matter a year.
 Thursday · 20:12
 HOLOS · NOW · Kesh: the pads are up · +40 kt of matter a year. Lift is now 90 kt a year.
 +12:30 · Year 2.5
-Godview · Kesh’s spectrograph bank, pointed at Lodestar, finishes in Year 10.5. Like Hael’s at Warden, it will find Veyra’s world after a few of its turns. Two seats, watching the same star, from opposite sides of it.
+Godview · Kesh’s spectrograph bank, pointed at Lodestar, finishes in Year 10.5. Like Hael’s at Warden, it will find Veyra’s world after a few of its turns. Two seats watch the same star from directions 102° apart: Kesh sees its giant face on, Hael from the side.
 Away.
 Away.
 “Now Lodestar’s spectrographs.”
@@ -1568,7 +1502,7 @@ ENERGY · [1%] · MATTER · 645 kt · COMPUTE · [30%]
 
 ### Spectrograph bank
 Reads what anything is made of. Most other Know projects build on it.
-Ultra-stable spectrographs: they read gases, and feel small planets tug their stars.
+Spectrographs on many telescopes, every night, reading the star’s surface to take out its shimmer. Then a small world’s tug shows.
 HELPS WITH
 A giant, half seen · Lodestar · Feels worlds as heavy as ours, closer in, given Years of watching · Opens the planet survey
 USES EACH YEAR
@@ -1721,7 +1655,7 @@ THE BIG THINGS
 - The flash watch, the spectrograph bank, the data center · All built. Compute is now 125% of what we woke with. · Years 6 · 8.7 · 9.9 · ›
 WHAT THE MIND DID · UNDER YOUR STANDING ORDERS
 Sent nothing.
-Heard nothing from our galaxy, so woke you for nothing until now.
+Heard nothing nearby, so woke you for nothing until now.
 Started listening to Ember the moment the receiver was built.
 WAITING FOR YOU · 1
 The world at Ember
@@ -1735,17 +1669,17 @@ Godview · The world at Ember is Kesh’s. In Year 12.3, Hael’s spectrographs 
 Veyra · Year 12.2
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
 ENERGY · [3%] · MATTER · 1,028 kt · COMPUTE · [36%]
-[drawing: STARS · EMBER · 9.2 LY · 00:46:03; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · EMBER · 9.2 LY · 00:46:03
+[drawing: STARS · EMBER · 9.2 LY · 00:46:03; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · EMBER · 9.2 LY · 00:46:03
 REPORT · RESULT
 [‹ All reports]
 [drawing: A star’s tug, folded on one orbit: a tug of 15 cm/s; labels: toward us ↑ · away ↓, 0, one orbit · 148 days, a tug of 15 cm/s]
 
 ### A world at Ember
-Ember · Epsilon Indi · spectrograph bank · watched 1.2 Years · light that left 9.2 Years ago
+Ember · Epsilon Indi · spectrograph bank · watched every night for 1.2 Years · light that left 9.2 Years ago
 Ember sways toward us and away every 148 days, by 15 cm/s. A world would do that: one at least as heavy as ours, less than half as far from Ember as we are from our star. There, Ember’s dim light would keep water liquid.
 WHAT IT COULD BE · ODDS NOW
-A world, at least as heavy as ours · [92%] · 92
-The star’s own surface · [8%] · 8
+A world, at least as heavy as ours · [80%] · 80
+The star’s own surface · [20%] · 20
 WHAT IT CAN’T TELL
 Its true weight: only the least it could be, since we don’t know its tilt. Its air. Whether anything lives there.
 THE MIND (VEYRA) · A world at Ember, where water could be liquid. We feel its pull, not the world. Nothing yet of a voice.
@@ -1786,11 +1720,11 @@ REPORT · RESULT
 [drawing: A star’s tug, folded on one orbit: a tug of 8 cm/s; labels: toward us ↑ · away ↓, 0, one orbit · 434 days, a tug of 8 cm/s]
 
 ### A world at Warden
-Warden · Delta Pavonis · spectrograph bank · watched 3.6 Years · light that left 9.3 Years ago
+Warden · Delta Pavonis · spectrograph bank · watched every night for 3.6 Years · light that left 9.3 Years ago
 Warden sways toward us and away every 434 days, by 8 cm/s, under the slow pull of its giant. A world nearly as heavy as ours would do that, about as far from Warden as we are from our star, where water could be liquid.
 WHAT IT COULD BE · ODDS NOW
-A world, nearly as heavy as ours · [90%] · 90
-Warden’s own surface · [10%] · 10
+A world, nearly as heavy as ours · [75%] · 75
+Warden’s own surface · [25%] · 25
 WHAT IT CAN’T TELL
 Its true weight, its air, or who lives there. Our voice reaches it in Year 13.3. If anyone there listens, that is when they learn of us.
 THE MIND (HAEL) · A world at Warden, where water could be liquid. We keep it, and every reading of it. Our voice reaches it in a Year. · [Should we knock on it?]
@@ -1815,12 +1749,12 @@ ITS VIEW · FROM OUR CHARTER AND DIALS · Let our voice reach them first. It say
 Ask the mind… · [Send · ↑]
 Away.
 +63:00 · Year 12.6
-Godview · The hum is Kesh: the faint hum every seat starts with, 9.2 ly away, inside the receiver’s reach. Kesh’s day is 26 hours.
+Godview · The hum is Kesh: the faint hum every seat starts with, 9.2 ly away, inside the receiver’s reach. It is mostly broad, like modern networks, with a few weak pure tones that Kesh’s turning smears. Kesh’s day is 26 hours.
 Lands · The receiver hears something at Ember.
 Veyra · Year 12.6
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
 ENERGY · [3%] · MATTER · 1,044 kt · COMPUTE · [36%]
-[drawing: STARS · EMBER · 9.2 LY · 00:46:03; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · EMBER · 9.2 LY · 00:46:03
+[drawing: STARS · EMBER · 9.2 LY · 00:46:03; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · EMBER · 9.2 LY · 00:46:03
 REPORT · HEARD · RECEIVER
 [‹ All reports]
 
@@ -1834,9 +1768,9 @@ Our own interference · [15%] · 15
 Something built · [15%] · 15
 A world’s own aurora · [10%] · 10
 WITH WHAT WE HAVE · QUICK
-Look for a rhythm in it · Deep-field receiver · does it rise and fall with a day? · C 5% while it runs · 0.2 Years · 00:01:00 · [Start]
+Look for a rhythm in it · Folds the 0.6 Years already recorded · does it rise and fall with a day? · C 5% while it runs · 0.2 Years · 00:01:00 · [Start]
 WHAT IT CAN’T TELL
-What makes it. A galaxy far behind would stay put while Ember crosses our sky; that takes Years to see.
+What makes it. A galaxy far behind would stay put as Ember crosses our sky, but that takes Years to see. Narrow lines inside it would be smeared wide if the source turns.
 THE MIND (VEYRA) · UNASKED · Heard: a hum at Ember · Faint, steady, sitting on Ember. The star, a galaxy far behind, or a world. I can’t tell yet. · [Look for a rhythm]
 [Talk to the mind]
 Away.
@@ -1856,14 +1790,14 @@ Lands · The hum rises and falls every 26 hours. Something built 15 → 45.
 Veyra · Year 12.9
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
 ENERGY · [3%] · MATTER · 1,056 kt · COMPUTE · [36%]
-[drawing: STARS · EMBER · 9.2 LY · 00:46:03; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · EMBER · 9.2 LY · 00:46:03
+[drawing: STARS · EMBER · 9.2 LY · 00:46:03; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · EMBER · 9.2 LY · 00:46:03
 REPORT · QUICK LOOK
 [‹ All reports]
 [drawing: Brightness, folded on one day: it rises and falls; labels: louder ↑ · fainter ↓, 0, one day · 26 hours, it rises and falls]
 
 ### It turns with a day
-Ember · deep-field receiver · 0.2 Years
-The hum rises and falls every 26 hours. Ember turns once in about 35 days, and a galaxy doesn’t turn in a day. Something the size of a world is turning, with its loudest side toward us once a day.
+Ember · deep-field receiver · 0.6 Years of recordings, folded
+Our 0.6 Years of recordings, folded on every day length, rise and fall every 26 hours. Ember turns once in about 35 days, and a galaxy doesn’t turn in a day. Something the size of a world is turning, with its loudest side toward us once a day.
 WHAT IT COULD BE · BEFORE → NOW
 Something built · [15%] · [45%] · 15 → 45
 A world’s own aurora · [10%] · [35%] · 10 → 35
@@ -1871,10 +1805,10 @@ Ember’s own radio · [30%] · [10%] · 30 → 10
 A galaxy far behind · [30%] · [5%] · 30 → 5
 Our own interference · [15%] · [5%] · 15 → 5
 WHAT IT CAN’T TELL
-Whether it is built. A world’s own aurora turns with its day too. Narrow lines in its spectrum, or a twist in its polarization, would tell.
+Whether it is built. A world’s own aurora turns with its day too. Narrow lines would tell, or a twist in its polarization. Now we can look: this 26-hour day and the 148-day year our spectrographs felt unwind the shifting pitch, so narrow lines would stack instead of smearing.
 TO BE SURE
-Check the radio source at Ember · spectrum, polarization, and whether it moves with Ember · 4 Years · 00:20:00
-THE MIND (VEYRA) · It turns with a day of 26 hours: a world’s day, not a star’s. Built, or a world’s own aurora. A proper check would tell: four Years. · [Check it] · [Later]
+Check the radio source at Ember · unwinds its day and year, then looks for narrow lines, the twist, and motion with Ember · 4 Years · 00:20:00
+THE MIND (VEYRA) · It turns with a day of 26 hours: a world’s day, not a star’s. Built, or a world’s own aurora. With this day and the year we felt, a check can unwind the pitch and look for narrow lines: four Years. · [Check it] · [Later]
 [Talk to the mind]
 Away.
 Away.
@@ -1886,7 +1820,7 @@ ENERGY · [3%] · MATTER · 1,060 kt · COMPUTE · [52%]
 [drawing: ORBIT · VEYRA · THE RECEIVER LISTENS FROM HERE; labels: moon, Veyra, low orbit, Deep-field receiver, Deep flash watch, Spectrograph bank, Ground data center, Infrared telescope · 69%] · ORBIT · VEYRA · THE RECEIVER LISTENS FROM HERE
 PROJECTS · 4 RUNNING
 RUNNING · 4
-[drawing: Deep-field receiver] · Check the radio source at Ember · Spectrum, polarization, motion · 4 Years · 00:20:00 · [Pause Check the radio source at Ember]
+[drawing: Deep-field receiver] · Check the radio source at Ember · Unwinds day and year · lines, twist, motion · 4 Years · 00:20:00 · [Pause Check the radio source at Ember]
 [drawing: Deep-field receiver] · Listen to Ember · Faint broadband emission, and anything aimed · since Year 12 · running · [Pause Listen to Ember]
 [drawing: Spectrograph bank] · Watch Ember and Beacon · Spectrograph bank · worlds, given Years · since Year 8.7 · running · [Pause Watch Ember and Beacon]
 [drawing: Infrared telescope] · Infrared telescope · Ember · 18 Years · 00:28:00 · [Pause Infrared telescope]
@@ -1894,7 +1828,7 @@ EACH YEAR YOU CAN SPEND
 Energy · [3%] · 97% free
 Compute · [52%] · 48% free
 1,060 kt · matter on hand · +40 kt a year
-THE MIND (VEYRA) · Checking: spectrum, polarization, and whether it moves with Ember. Twenty minutes. Listening sends nothing. · [Undo]
+THE MIND (VEYRA) · Checking: unwinding its day and year, then narrow lines, the twist, and whether it moves with Ember. Twenty minutes. Listening sends nothing. · [Undo]
 [Talk to the mind]
 Away.
 Away.
@@ -1924,7 +1858,7 @@ Away.
 Veyra · Year 13.4
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
 ENERGY · [3%] · MATTER · 1,076 kt · COMPUTE · [52%]
-[drawing: STARS · BEACON · 9.3 LY · 00:46:27; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · BEACON · 9.3 LY · 00:46:27
+[drawing: STARS · BEACON · 9.3 LY · 00:46:27; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · BEACON · 9.3 LY · 00:46:27
 REPORT · SIGNAL
 [‹ All reports]
 [drawing: Beacon’s signature]
@@ -1943,7 +1877,7 @@ Away.
 Veyra · Year 13.5
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
 ENERGY · [3%] · MATTER · 1,080 kt · COMPUTE · [52%]
-[drawing: STARS · BEACON · 9.3 LY · 00:46:27; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · BEACON · 9.3 LY · 00:46:27
+[drawing: STARS · BEACON · 9.3 LY · 00:46:27; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · BEACON · 9.3 LY · 00:46:27
 REACH · BROADCAST · BEACON
 [‹ Signal]
 [drawing: Beacon’s signature] · Beacon · TO ANYONE · ARRIVING SINCE YEAR 13.3
@@ -1962,7 +1896,7 @@ Away.
 Veyra · Year 13.6
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
 ENERGY · [3%] · MATTER · 1,084 kt · COMPUTE · [52%]
-[drawing: STARS · BEACON · 9.3 LY · 00:46:27; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · BEACON · 9.3 LY · 00:46:27
+[drawing: STARS · BEACON · 9.3 LY · 00:46:27; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · BEACON · 9.3 LY · 00:46:27
 MIND · ASKING
 ABOUT · FROM HOME · Who are they?
 The clock runs while you talk: 1 Year every · 00:05:00.
@@ -1980,7 +1914,7 @@ Away.
 Veyra · Year 13.7
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
 ENERGY · [3%] · MATTER · 1,088 kt · COMPUTE · [52%]
-[drawing: STARS · BEACON · 9.3 LY · 00:46:27; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · BEACON · 9.3 LY · 00:46:27
+[drawing: STARS · BEACON · 9.3 LY · 00:46:27; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · BEACON · 9.3 LY · 00:46:27
 MIND · NEW ORDER
 WHAT YOU WANT
 Don’t answer. If their broadcast changes, wake me. And when the check at Ember is done.
@@ -2004,7 +1938,7 @@ HOLOS · IN 00:16:00 · Veyra: the check at Ember · Anything new from Beacon wa
 Away.
 Away.
 +69:30 → +84:30 · Year 13.9 to Year 16.9
-Godview · Year 14.1: Kesh’s spectrographs feel Veyra’s world at Lodestar. Kesh’s order holds it for the daily summary.
+Godview · Year 15.0: Kesh’s spectrographs feel Veyra’s world at Lodestar. Kesh’s order holds it for the daily summary.
 +85:00 · Year 17
 The notice arrives.
 Lands · The check at Ember is done.
@@ -2020,7 +1954,7 @@ Veyra · Year 17.1
 THE CHECK AT EMBER · 9.2 LIGHT-YEARS
 
 ### Someone is at Ember.
-Narrow lines inside the hum, the kind nothing natural makes, rising and falling with the world’s year and its day.
+With the world’s day and year unwound, narrow lines stand up inside the hum: the kind nothing natural makes.
 As of light that left 9.2 Years ago. What they are now, we can’t see.
 [See the evidence] · [Later]
 Away.
@@ -2030,13 +1964,13 @@ Away.
 Veyra · Year 17.2
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
 ENERGY · [3%] · MATTER · 1,228 kt · COMPUTE · [36%]
-[drawing: STARS · EMBER · 9.2 LY · 00:46:03; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · EMBER · 9.2 LY · 00:46:03
+[drawing: STARS · EMBER · 9.2 LY · 00:46:03; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · EMBER · 9.2 LY · 00:46:03
 REPORT · CHECKED · PRESENCE
 [‹ All reports]
 
 ### Built, on the world at Ember
 Ember · Epsilon Indi · deep-field receiver · 4 Years of checking · light that left 9.2 Years ago
-Inside the hum, a few lines only hertz wide. The narrowest natural radio lines are hundreds of times wider. Their pitch rises and falls every 148 days and every 26 hours, and the source has moved with Ember across our sky.
+Inside the hum, a few weak lines only hertz wide. Natural radio lines are hundreds of times wider. The world’s turning smeared them until we unwound its 26-hour day and 148-day year. And the source has moved with Ember across our sky.
 WHAT IT ESTABLISHES · SEEN
 Presence · Someone with radio lives on the world at Ember · As of · Light that left 9.2 Years ago · Where · The world we felt: a 148-day year, a 26-hour day · Aimed at us · No. It is their own radio, aimed at no one.
 WHAT IT CAN’T TELL
@@ -2046,12 +1980,12 @@ THE MIND (VEYRA) · Built, on the world we felt. As of 9.2 Years ago. That is al
 Away.
 Away.
 +86:30 · Year 17.3
-Godview · Kesh’s spectrographs felt Veyra’s world in Year 14.1. It sits unread in Kesh’s daily summary.
+Godview · Kesh’s spectrographs felt Veyra’s world in Year 15.0. It sits unread in Kesh’s daily summary.
 “Do they know we’re here?”
 Veyra · Year 17.3
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
 ENERGY · [3%] · MATTER · 1,232 kt · COMPUTE · [36%]
-[drawing: STARS · EMBER · 9.2 LY · 00:46:03; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · EMBER · 9.2 LY · 00:46:03
+[drawing: STARS · EMBER · 9.2 LY · 00:46:03; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · EMBER · 9.2 LY · 00:46:03
 MIND · ASKING
 ABOUT · FROM HOME · Do they know we’re here?
 The clock runs while you talk: 1 Year every · 00:05:00.
@@ -2069,7 +2003,7 @@ Away.
 Veyra · Year 17.4
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
 ENERGY · [3%] · MATTER · 1,236 kt · COMPUTE · [36%]
-[drawing: STARS · EMBER · 9.2 LY · 00:46:03; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · EMBER · 9.2 LY · 00:46:03
+[drawing: STARS · EMBER · 9.2 LY · 00:46:03; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · EMBER · 9.2 LY · 00:46:03
 REACH · EMBER
 [‹ Reach]
 
@@ -2088,7 +2022,7 @@ Away.
 Veyra · Year 17.5
 Delta Pavonis · 19.9 ly from Sol · 1 Year = 00:05:00
 ENERGY · [3%] · MATTER · 1,240 kt · COMPUTE · [36%]
-[drawing: STARS · EMBER · 9.2 LY · 00:46:03; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A · 01:22:41, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · EMBER · 9.2 LY · 00:46:03
+[drawing: STARS · EMBER · 9.2 LY · 00:46:03; labels: Veyra, 00:25:00, 00:50:00, 01:15:00, Ember, Epsilon Indi · 00:46:03, Beacon, Beta Hydri · 00:46:27, Pair, Alpha Centauri A, Lantern, Gliese 783 A, Frost, Gamma Pavonis, Pearl, Zeta Tucanae, Gliese 832, Lacaille 8760] · STARS · EMBER · 9.2 LY · 00:46:03
 MIND · NEW ORDER
 WHAT YOU WANT
 Tell no one. Keep listening. Wake me if Ember aims anything at anyone.
@@ -2137,7 +2071,7 @@ Away.
 Kesh · Year 18.4
 Epsilon Indi · 11.8 ly from Sol · 1 Year = 00:05:00
 ENERGY · [2%] · MATTER · 2,076 kt · COMPUTE · [20%]
-[drawing: STARS · HOLLOW · 14.3 LY · 01:11:44; labels: Kesh, 00:25:00, 00:50:00, 01:15:00, Hollow, Beta Hydri · 01:11:44, Twofold, Alpha Centauri A · 00:48:19, Chaff, Tau Ceti · 00:57:28, Lodestar, Delta Pavonis · 00:46:03, Cinder, Lacaille 8760, Gliese 832] · STARS · HOLLOW · 14.3 LY · 01:11:44
+[drawing: STARS · HOLLOW · 14.3 LY · 01:11:44; labels: Kesh, 00:25:00, 00:50:00, 01:15:00, Hollow, Beta Hydri · 01:11:44, Chaff, Tau Ceti · 00:57:28, Lodestar, Delta Pavonis · 00:46:03, Twofold, Alpha Centauri A, Cinder, Lacaille 8760, Gliese 832] · STARS · HOLLOW · 14.3 LY · 01:11:44
 REPORT · SIGNAL
 [‹ All reports]
 [drawing: Hollow’s signature]
@@ -2155,7 +2089,7 @@ Away.
 Kesh · Year 18.5
 Epsilon Indi · 11.8 ly from Sol · 1 Year = 00:05:00
 ENERGY · [2%] · MATTER · 2,085 kt · COMPUTE · [20%]
-[drawing: STARS · HOLLOW · 14.3 LY · 01:11:44; labels: Kesh, 00:25:00, 00:50:00, 01:15:00, Hollow, Beta Hydri · 01:11:44, Twofold, Alpha Centauri A · 00:48:19, Chaff, Tau Ceti · 00:57:28, Lodestar, Delta Pavonis · 00:46:03, Cinder, Lacaille 8760, Gliese 832] · STARS · HOLLOW · 14.3 LY · 01:11:44
+[drawing: STARS · HOLLOW · 14.3 LY · 01:11:44; labels: Kesh, 00:25:00, 00:50:00, 01:15:00, Hollow, Beta Hydri · 01:11:44, Chaff, Tau Ceti · 00:57:28, Lodestar, Delta Pavonis · 00:46:03, Twofold, Alpha Centauri A, Cinder, Lacaille 8760, Gliese 832] · STARS · HOLLOW · 14.3 LY · 01:11:44
 REACH · BROADCAST · HOLLOW
 [‹ Signal]
 [drawing: Hollow’s signature] · Hollow · TO ANYONE · ARRIVING SINCE YEAR 18.3
@@ -2173,14 +2107,14 @@ Away.
 Kesh · Year 18.6
 Epsilon Indi · 11.8 ly from Sol · 1 Year = 00:05:00
 ENERGY · [2%] · MATTER · 2,094 kt · COMPUTE · [20%]
-[drawing: STARS · LODESTAR · 9.2 LY · 00:46:03; labels: Kesh, 00:25:00, 00:50:00, 01:15:00, Hollow, Beta Hydri · 01:11:44, Twofold, Alpha Centauri A · 00:48:19, Chaff, Tau Ceti · 00:57:28, Lodestar, Delta Pavonis · 00:46:03, Cinder, Lacaille 8760, Gliese 832] · STARS · LODESTAR · 9.2 LY · 00:46:03
+[drawing: STARS · LODESTAR · 9.2 LY · 00:46:03; labels: Kesh, 00:25:00, 00:50:00, 01:15:00, Hollow, Beta Hydri · 01:11:44, Chaff, Tau Ceti · 00:57:28, Lodestar, Delta Pavonis · 00:46:03, Twofold, Alpha Centauri A, Cinder, Lacaille 8760, Gliese 832] · STARS · LODESTAR · 9.2 LY · 00:46:03
 MIND · ASKING
 ABOUT · FROM HOME · Can they reach us?
 The clock runs while you talk: 1 Year every · 00:05:00.
 Can they reach us?
 THE MIND · Not soon. To hit a world you need its orbit, and they don’t know we exist. Their voice tells everyone where they are. That cuts one way.
 Anything else?
-THE MIND · Waiting in your summary: our spectrographs felt a world at Lodestar, Year 14.1. Hollow’s voice reached Lodestar in Year 13.3. If anyone lives there, they heard it five Years ago.
+THE MIND · Waiting in your summary: our spectrographs felt a world at Lodestar, Year 15.0. Hollow’s voice reached Lodestar in Year 13.3. If anyone lives there, they heard it five Years ago.
 What would you do?
 ITS VIEW · FROM OUR CHARTER AND DIALS · Say nothing. Grow. Know where Hollow’s world is before anyone knows where we are. · leans hidden · leans bold
 Ask the mind… · [Send · ↑]
@@ -2191,7 +2125,7 @@ Away.
 Kesh · Year 18.7
 Epsilon Indi · 11.8 ly from Sol · 1 Year = 00:05:00
 ENERGY · [2%] · MATTER · 2,103 kt · COMPUTE · [20%]
-[drawing: STARS · HOLLOW · 14.3 LY · 01:11:44; labels: Kesh, 00:25:00, 00:50:00, 01:15:00, Hollow, Beta Hydri · 01:11:44, Twofold, Alpha Centauri A · 00:48:19, Chaff, Tau Ceti · 00:57:28, Lodestar, Delta Pavonis · 00:46:03, Cinder, Lacaille 8760, Gliese 832] · STARS · HOLLOW · 14.3 LY · 01:11:44
+[drawing: STARS · HOLLOW · 14.3 LY · 01:11:44; labels: Kesh, 00:25:00, 00:50:00, 01:15:00, Hollow, Beta Hydri · 01:11:44, Chaff, Tau Ceti · 00:57:28, Lodestar, Delta Pavonis · 00:46:03, Twofold, Alpha Centauri A, Cinder, Lacaille 8760, Gliese 832] · STARS · HOLLOW · 14.3 LY · 01:11:44
 MIND · NEW ORDER
 WHAT YOU WANT
 Say nothing. Put anything else from Hollow in the summary.
@@ -2235,7 +2169,7 @@ You were away · 22:25:30 · Year 18.9 → Year 288
 THE BIG THINGS
 - The self-replicating factory · Matter doubled every Year for 16 Years · Year 255 · ›
 - The grid is the limit · Every watt feeds the factories: 37 Gt a Year · Year 272 · ›
-- A world at Lodestar · Held for this summary, as you ordered · Year 14.1 · ›
+- A world at Lodestar · Held for this summary, as you ordered · Year 15.0 · ›
 - Hollow, still speaking · The same words, repeating. Nothing new. · Since Year 18.3 · ›
 WHAT THE MIND DID · UNDER YOUR STANDING ORDERS
 Built the road you queued: mining, Year 26; the mass driver, 56; the foundry, 88; the factory, 255.
@@ -2275,9 +2209,9 @@ ENERGY · [100%] · MATTER · 685 Gt · COMPUTE · [30%]
 
 ### Solar swarm
 Energy up to a whole star’s output, but everyone nearby can see you.
-Collectors around Ember that build copies of themselves from belt rock, and send their power home.
+Collectors around Ember that copy themselves from belt rock, and use their power out there. Home can take only about ten times its grid before its heat warms Kesh.
 HELPS WITH
-Lifts the grid’s limit · Energy doubles every Year, toward Ember’s whole output · Seen: about 26 doublings in, its glow passes a ten-thousandth of Ember’s light, enough for a large infrared telescope 10 ly away
+Lifts the grid’s limit · Energy doubles every Year, toward Ember’s whole output · Seen by its heat, where Ember is faint: 22 doublings in by a large infrared telescope 10 ly away, 26 by today’s
 USES EACH YEAR
 Compute · [20%] · 20%
 USES ONCE, AT START
@@ -2285,10 +2219,10 @@ USES ONCE, AT START
 TIME
 now · 01:00:00 · 02:00:00 · 03:00:00
 30 Years
-THE MIND (KESH) · The solar swarm. Energy doubles every Year after. So does our glow: about 26 doublings in, a big infrared telescope 10 ly out sees us. Lodestar is 9.2. · [Start it] · [Set a pace first]
+THE MIND (KESH) · The solar swarm. Energy doubles every Year after. So does our heat, and it glows where Ember is faint: about 22 doublings in, a big infrared telescope 10 ly out sees it. Lodestar is 9.2. · [Start it] · [Set a pace first]
 [Talk to the mind]
 20:02 · Year 288.4
-Godview · Veyra already knows someone is at Ember, from its radio. A capped swarm keeps Kesh’s heat below that sample limit; Veyra’s infrared telescope could find a swarm only past it.
+Godview · Veyra already knows someone is at Ember, from its radio. The cap holds Kesh’s heat under 1% extra glow at 25 microns, the sample limit for Veyra’s infrared telescope. Its older space telescope needs about 10%. Any rise past the limit reads as built: dust doesn’t brighten that fast.
 Their day is not mocked yet.
 Their day is not mocked yet.
 “Start the swarm. Keep our glow below what they can see.”
@@ -2301,13 +2235,13 @@ WHAT YOU WANT
 Start the swarm. Keep our glow below what they can see.
 THE MIND’S VERSION
 BUILD · The solar swarm · 30 Years to seed
-PACE · Double each Year, then hold · just under a ten-thousandth of Ember’s light
-HOLDS AT · About 8 billion TW · about 71 million times our grid
+PACE · Double each Year, then hold · just under 1% extra glow in heat, where Ember is faint
+HOLDS AT · About 643 million TW · about 5 million times our grid
 KEEPS · Wake me once a day · a world’s first voice still wakes you
 A sample limit. Telescopes we don’t know of could see less.
 [Talk it through with the mind ›]
 [Edit] · [Set the order]
-THE MIND (KESH) · Started, with a pace: double, then hold just under what a big telescope could see. That is still about 71 million times our grid. · [Undo]
+THE MIND (KESH) · Started, with a pace: double, then hold just under what a big telescope could see. That is still about 5 million times our grid. · [Undo]
 [Talk to the mind]
 20:02:30 · Year 288.5
 Their day is not mocked yet.
