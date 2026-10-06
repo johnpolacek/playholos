@@ -151,6 +151,28 @@ Every source the game rests on, grouped by the question it answers. Each entry s
   - Matters: the test for whether a binary's warm zone can hold a neighbor's world.
   - Used: v2 open question 4.
 
+- **[Gaia DR3 astrophysical parameters, FLAME](https://www.cosmos.esa.int/web/gaia/dr3)** · Data, via the ESA Gaia archive. Fetched by [calcs/fetch_hosts.py](calcs/fetch_hosts.py).
+  - Isochrone ages, masses and luminosities for many stars within 50 ly.
+  - Matters: luminosity sets each host's warm zone. Ages are used only for F and G stars, since isochrones barely constrain K and M dwarfs: FLAME puts Epsilon Eridani near 7 billion years.
+  - Used: [data/hosts-50ly.csv](data/hosts-50ly.csv).
+- **[NASA Exoplanet Archive, planetary systems composite](https://exoplanetarchive.ipac.caltech.edu/docs/TAP/usingTAP.html)** · Data, fetched October 2026.
+  - 227 known planets within 50 ly, with masses, orbits and eccentricities.
+  - Matters: a host is dropped when a known planet of 10 Earth masses or more crosses its warm zone.
+  - Used: data/hosts-50ly.csv.
+- **[El-Badry, Rix and Heintz 2021, a million binaries from Gaia](https://arxiv.org/abs/2101.05282)** · Published, MNRAS.
+  - Bound pairs agree in parallax and move together within what an orbit allows, about 2.1 km/s at 1,000 AU.
+  - Matters: the test calcs/hosts.py applies to find companions. Their catalog was unreachable on VizieR in October 2026, so the pairs are found directly.
+  - Used: data/hosts-50ly.csv.
+- **[Pecaut and Mamajek 2013](https://arxiv.org/abs/1307.2657)** · Published, ApJS ([table](https://www.pas.rochester.edu/~emamajek/EEM_dwarf_UBVIJHK_colors_Teff.txt)).
+  - Colors along the dwarf sequence: Gaia BP−RP near 0.59 at F5, 0.75 at G0, 0.98 at K0 and 1.84 at M0.
+  - Used: data/hosts-50ly.csv, sorting stars by kind.
+- **[Kopparapu et al. 2013, habitable zones](https://arxiv.org/abs/1301.6674)** · Published, ApJ.
+  - The conservative warm zone, about 0.95 to 1.67 AU for the Sun's luminosity, scaling as its square root.
+  - Used: data/hosts-50ly.csv.
+- **Known young stars within 50 ly** · Published ages.
+  - [Epsilon Eridani](https://en.wikipedia.org/wiki/Epsilon_Eridani), 0.4 to 0.8 Gyr. [Kappa¹ Ceti](https://en.wikipedia.org/wiki/Kappa1_Ceti), 0.3 to 0.6 Gyr. The [Ursa Major moving group](https://arxiv.org/abs/2601.08985), about 418 Myr, with Pi¹ Ursae Majoris and Chi¹ Orionis. AU Microscopii, about 20 Myr.
+  - Used: dropped as hosts in data/hosts-50ly.csv.
+
 ## Real masses behind the projects
 
 Anchors for [the project audit](HOLOS_PROJECT_AUDIT.md).
@@ -422,6 +444,8 @@ Results the design is waiting on. Check each when its date comes.
 
 ## To check
 
+- Close binaries Gaia can't split, such as Procyon, Chi Draconis, Zeta Herculis, Xi Ursae Majoris and 44 Bootis: test their warm zones against the Sixth Catalog of Orbits of Visual Binary Stars (VizieR B/orb6), and cross-check calcs/hosts.py's pairs with the El-Badry catalog, once VizieR is reachable.
+- Ages for K and M dwarfs within 50 ly from activity or spin, beyond the five known young stars.
 - Metaculus odds for the branch list: a Taiwan war and a nuclear weapon used before 2035. Metaculus blocks scripted reads, and search summaries disagree. Read the pages by hand.
 - Tau Ceti dust belt tilt in leads.py against MacGregor et al. 2016.
 - Beta Hydri drift: find the 2012 and 2023 primary papers.
