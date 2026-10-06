@@ -98,7 +98,8 @@ Settled 2026-10-06. Replaces v1's numbers ([v1: Economy and projects](legacy/v1/
 - **Matter in orbit:** about 250 kt, plus 40 kt a year from reusable heavy lift.
 - **Instruments and probes:** as in the backbone above.
 - **What moves with the smaller grid.** Compute takes about 1% of energy, not v1's 10%, so even more energy sits idle early. A ground data center's +25% compute draws about 0.25% of energy, not 3%. The industry cap at 100 GJ a tonne falls to about 7.5 Gt a year (v1: 30). Star lifting needs about 200,000 times the grid (v1: 50,000). A Sun-like star's whole output is about 16 trillion times it (v1: four trillion).
-- **Project costs are being checked against physics** in [HOLOS_PROJECT_AUDIT.md](HOLOS_PROJECT_AUDIT.md) (open question 2).
+- **Matter is real mass in space (2026-10-06).** It is what sits in orbit, on the Moon or in the belt, counted in tonnes. Ground builds draw on Earth's own industry, about 106 Gt of materials a year, and spend no matter. Each project's mass comes from physics or a real design. v1's matter was a pacing currency that grew tenfold per tier. With real masses, most instruments and probes become cheap in matter, and build time, compute shares, lift and propellant pace them. Compute shares already cap how much runs at once.
+- **Project prices are in [HOLOS_PROJECT_AUDIT.md](HOLOS_PROJECT_AUDIT.md)** (open question 2).
 
 ## Retired with the cohort
 
@@ -118,7 +119,7 @@ These v1 rules no longer apply.
 Answered one at a time, in this order. Every answer must be permitted by current observations: improbable is acceptable, contradicted is not.
 
 1. **Branch odds.** Read the Metaculus pages for the Taiwan and nuclear odds. Search summaries disagree, and Metaculus blocks scripted reads.
-2. **Reprice the projects.** First decide what matter means: real mass in space, or a pacing currency. Then reprice each project from [the audit](HOLOS_PROJECT_AUDIT.md), and size each branch's effect on the kit.
+2. **Reprice the projects.** Approve the proposed real-mass prices in [the audit](HOLOS_PROJECT_AUDIT.md), work the calculations it lists, and size each branch's effect on the kit.
 3. **Earth's leads at Year 0.** Real, published oddities as seen from Sol, plus what Earth's instruments found from 2026 to 2040. If a seeded world is detectable by those instruments, Earth found it. Earth sees published values directly, so Alpha Centauri A's candidate returns.
 4. **The neighbor roster.** Who is written, which host stars pass survey limits, and what the seed varies. Whether neighbors start equal to Earth and wake at Year 0. Each neighbor's emissions must stay below what Earth could catch to 2040. Breakthrough Listen searched for narrow tones, so its null results barely limit a neighbor's past radar pulses.
 5. **Neighbors' behavior and cost.** What fixed rules decide and what the model decides. What runs while the player is away.
