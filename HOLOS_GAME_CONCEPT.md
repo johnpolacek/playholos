@@ -172,7 +172,7 @@ Answered one at a time, in this order. Every answer must be permitted by current
 1. **Branch odds.** Read the Metaculus pages for the Taiwan and nuclear odds. Search summaries disagree, and Metaculus blocks scripted reads.
 2. **Settled 2026-10-06:** kinds of matter and the branches' effects. Prices and splits are proposed in [the audit](HOLOS_PROJECT_AUDIT.md), to test in the mocks.
 3. **Settled 2026-10-06:** Earth's leads. See [Earth's leads at Year 0](#earths-leads-at-year-0).
-4. **The neighbor roster.** Who is written, which host stars pass survey limits, and what the seed varies. How loud each neighbor's tones are, which sets who can hear whom. Whether neighbors start equal to Earth and wake at Year 0. Each neighbor's emissions must stay below what Earth could catch to 2040. Breakthrough Listen searched for narrow tones, so its null results barely limit a neighbor's past radar pulses.
+4. **The neighbor roster.** Who is written, in [HOLOS_NEIGHBORS.md](HOLOS_NEIGHBORS.md), and how each one's history sets its world, kit and loudness. The template is drafted. Hosts, timing, count and the loudness ceiling are settled in [The neighbors](#the-neighbors). Close binaries Gaia can't split still need checking against published orbits.
 5. **Neighbors' behavior and cost.** What fixed rules decide and what the model decides. What runs while the player is away.
 6. **How a game starts.** No entry lock. Earth's real history, its people, and meeting the Mind.
 7. **Death and new games.** What carries over, and where variety comes from.
