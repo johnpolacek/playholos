@@ -184,6 +184,10 @@ Every source the game rests on, grouped by the question it answers. Each entry s
   - Per million tokens, in and out: Claude Opus 5.5 $4 and $20, Claude Sonnet 5.5 $2 and $10, Claude Haiku 4.5 $1 and $5. Cached input about a tenth of the input price. The Batch API halves the price for work that can wait.
   - Matters: what it costs for a model to play each neighbor.
   - Used: v2 open question 5, [calcs/ai_cost.py](calcs/ai_cost.py).
+- **[Gemini Developer API pricing](https://ai.google.dev/gemini-api/docs/pricing)** · Reference, October 2026.
+  - Per million tokens, in and out: Gemini 3.5 Flash-Lite $0.30 and $2.50, Gemini 3.1 Flash-Lite $0.25 and $1.50. Batch halves both. Cached input about a tenth, plus $1 per million tokens an hour to keep the cache. Thinking counts as output.
+  - Matters: about a tenth of Claude Haiku 4.5's price for the neighbors' decisions.
+  - Used: v2 open question 5, calcs/ai_cost.py.
 
 ## Real masses behind the projects
 
