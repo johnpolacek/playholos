@@ -37,15 +37,16 @@ Worked in [calcs/early_game.py](calcs/early_game.py). Orders of magnitude from p
 | --- | --- | --- | --- |
 | Big dish, 5 minutes, SEFD 10 Jy | 17 ly | 55 ly | 174 ly |
 | SKA-Mid, 1 hour, SEFD 1.1 Jy | 128 ly | 406 ly | 1,283 ly |
-| Sky watch, 1 day, SEFD 45 Jy | 44 ly | 140 ly | 444 ly |
+| Year 0 sky watch, CHORD-class drift scan, 10 minutes a day, SEFD 12 Jy | 25 ly | 78 ly | 248 ly |
+| All-sky watch project, every direction for a day, SEFD 12 Jy | 86 ly | 272 ly | 860 ly |
 
-- v1 charged 10% of energy for a beacon a sky watch hears at 10 ly. A hundredth of that reaches 44 ly.
+- v1 charged 10% of energy for a beacon a sky watch hears at 10 ly. A hundredth of that reaches 25 ly even with Year 0's drift-scan watch.
 - So speaking costs almost nothing in energy. What it costs is being found.
-- The sky watch row assumes CHIME's sensitivity in every direction at once. CHIME itself sees about 200 square degrees.
+- Year 0's sky watch is a drift scan like CHORD, finished in 2028: each northern direction passes through it for about 10 minutes a day. v1's always-on watch of the whole sky becomes a project, below.
 
 **Belt mining passes.** Metal-rich rock needs melting, about 2 GJ a tonne. Hauling it home by solar-electric thrust, 7.5 km/s at 30 km/s exhaust, costs about 166 GJ a tonne. 120 kt a year takes about 0.6 GW at the belt, about 5 kt of arrays at 137 W/kg. A 10 kt fleet fits.
 
-**The far-side array is a lunar industry project.** 1,000 km² of mesh dishes at an assumed 1 kg/m² is about 1 Mt of lunar metal, made in place as FarView plans. Its SEFD would be about 2×10⁻⁴ Jy, about 60,000 times a big dish. Its reach for a world's hum is still v1's open radio question.
+**The far-side array is a lunar industry project.** 1,000 km² of mesh dishes at an assumed 1 kg/m² is about 1 Mt of lunar metal, made in place as FarView plans. Its SEFD would be about 2×10⁻⁴ Jy, about 60,000 times a big dish. Its reach for a world's hum is worked below.
 
 **Fusion fuel is the gate for every fast craft.** Worked in [calcs/late_game.py](calcs/late_game.py). Fuel per tonne of payload comes from the rocket equation, scaled up 3.9 times because Daedalus needed that much more than one ideal stage. D-He3 exhausts at about 0.035c, D-D at about 0.016c, because most of D-D's energy leaves as neutrons.
 
@@ -69,7 +70,20 @@ Worked in [calcs/early_game.py](calcs/early_game.py). Orders of magnitude from p
 
 **Smaller rules.** Wandering habitats spend about 0.03% of their mass a Year on 10 m/s of random burns. Shadow berths spend 3 to 10% once. Shade and reflective film run near 1 g/m²: all of Earth is 128 Mt. A full solar swarm near 1 AU is about 0.09% of Mercury, 48 doublings from a 1 kt seed.
 
-**Still open:** the helium-3 harvest's mass, the far-side array's reach for a hum, and whether a 2040 sky watch can hear every direction at once.
+**A world's hum is heard by its tones, not its roar.** v1's faint hum, 40 MW spread over 1 GHz, is about 36 pJy per hertz at 10 ly, lost under the radio sources behind it. What carries is a pure tone: a digital TV station keeps a pilot tone of about 7% of its power, so a 1 MW station carries one near 70 kW. For a 100 kW tone, unwound once the world's day and year are known:
+
+| Receiver | 1 day of listening | 1 Year |
+| --- | --- | --- |
+| Big dish | 0.2 ly | 0.8 ly |
+| SKA-Mid | 0.6 ly | 2.5 ly |
+| Far-side array | 47 ly | 206 ly |
+
+- The far-side array's Year of listening matches v1's provisional 200 ly reach.
+- v1's deep-field receiver heard a neighbor at 9 ly within a dozen Years. At SKA-Mid's sensitivity that needs tones near 30 MW for a day's listening, or near 2 MW for a Year's. How loud each neighbor's tones are is set in open question 4.
+
+**An all-sky watch is a project, and cheap in compute.** Elements every 12.5 cm, as the EMBRACE demonstrator uses near 1.2 GHz, over a 100 m square: about 640,000 elements, 1.4 million beams, an SEFD near 12 Jy in every direction above its horizon. Forming every beam and searching each for drifting tones takes about 2×10¹⁹ operations a second, two millionths of Earth's 2040 compute. Two sites cover both hemispheres. EMBRACE's demonstrators reached about 100 m², so this is a hundredfold step.
+
+**The helium-3 harvest is about 150 kt.** Palaszewski's 100 t craft gather 500 kg of helium-3 from Uranus in 38 to 95 days, where it is 1.5×10⁻⁵ of the air, and Uranus's gravity well is far shallower than Jupiter's. That is 13 to 48 kg a Year per tonne of craft, about 10 per tonne once bases and tankers are counted. Daedalus's 1.5 kt a Year needs about 150 kt of system. One fast bullet's 660 kt would take 440 Years at that rate, so fast bullets wait for self-copying industry.
 
 ## Project by project
 
@@ -92,7 +106,7 @@ Proposed prices are matter in orbit, on the Moon or in the belt. Ground builds s
 | Neutrino watch | 6,000 kt | Ground | 0, ground | Hyper-Kamiokande holds 260 kt of water, underground. |
 | Infrared interferometer | 40 Mt | Heavy ×100,000 | 200 t | A few LUVOIR-class mirrors flying in formation, about 100 t. |
 | Solar lens observatory | 40 Mt | Heavy ×100,000+ | 5 t. 30 Years, not 70: about 25 AU a year gets there in about 25. | NASA concept: small sailcraft, about 100 kg each. |
-| Far-side array | 40 Mt | OK, recalculated | About 1 Mt of lunar metal made in place, as FarView plans, at an assumed 1 kg/m². Needs the mass driver line. | Depends on the antenna design. Thin wire antennas weigh little, steel dishes a great deal. |
+| Far-side array | 40 Mt | OK, recalculated | About 1 Mt of lunar metal made in place, as FarView plans, at an assumed 1 kg/m². Needs the mass driver line. Hears a 100 kW tone to 47 ly in a day. | Depends on the antenna design. Thin wire antennas weigh little, steel dishes a great deal. |
 | Kilometer interferometer | 800 Mt | Heavy ×100,000+ | 1 kt | A fleet of large mirrors, thousands of tonnes at most. |
 
 ### Grow
@@ -113,7 +127,7 @@ Proposed prices are matter in orbit, on the Moon or in the belt. Ground builds s
 | Self-replicating factory | 60 Mt | Heavy ×600,000 | 100 t seed. Its 80 Years stay: they are the work of making copying possible. | NASA 1980: a 100 t seed copies itself in about a year. |
 | Solar swarm | 100 Mt | OK, recalculated | About 1 kt seed. A full swarm at 1 g/m² near 1 AU is 2.8×10²⁰ kg, 0.09% of Mercury, about 48 doublings. | Collectors copy themselves, so the seed can be small. |
 | Star lifting | 400 Mt | OK, recalculated | Built by the swarm's own industry. The gate is about 2×10¹⁸ W. | Lifting 300 Gt a year off the Sun takes about 2×10¹⁸ W against its gravity. |
-| Helium-3 harvest, new | none | New | Robotic balloon factories in Jupiter's air, about 1.5 kt of He3 a year. Mass Calc. | Daedalus planned 30 kt over 20 Years. Every fusion probe, ship and fast bullet draws on it. |
+| Helium-3 harvest, new | none | OK, recalculated | About 150 kt of craft, bases and tankers at Uranus for about 1.5 kt of He3 a year, as Palaszewski's craft scale. | Daedalus planned 30 kt over 20 Years from Jupiter. Uranus's shallower gravity is easier. Every fusion probe, ship and fast bullet draws on it. |
 
 ### Reach
 

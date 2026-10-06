@@ -212,6 +212,23 @@ Anchors for [the project audit](HOLOS_PROJECT_AUDIT.md).
   - Matters: a slow D-D bullet's 83 kt of deuterium is cheap in energy and plentiful in the oceans.
   - Used: the project audit, heavy impactor.
 
+- **[Palaszewski 2014, atmospheric mining in the outer solar system](https://ntrs.nasa.gov/api/citations/20140006386/downloads/20140006386.pdf)** · Study, NASA TM-2014-217892 ([2021 update](https://ntrs.nasa.gov/api/citations/20210018165/downloads/Palaszewski_Atmospheric%20Mining%20in%20the%20Outer%20Solar%20System%20ASC.pdf)).
+  - Helium-3 is about 1.5×10⁻⁵ of Uranus's air and 1.9×10⁻⁵ of Neptune's. A 100 t gas-core nuclear aerospacecraft gathers 500 kg in 38 to 95 days. Uranus and Neptune are easier to mine than Jupiter or Saturn.
+  - Matters: a helium-3 harvest of about 1.5 kt a Year is about 150 kt of system.
+  - Used: the project audit, helium-3 harvest.
+- **[CHORD](https://arxiv.org/abs/2607.09374)** · Under construction ([progress](https://spaceq.ca/chord-the-successor-to-chime-readies-for-first-big-test-this-fall/)).
+  - 512 six-meter dishes at 300 to 1,500 MHz, a transit instrument that scans the sky as Earth turns. Complete by the end of 2027, commissioned in 2028.
+  - Matters: Earth's Year 0 sky watch is a drift scan, not an always-on watch of the whole sky.
+  - Used: v2 Earth's kit, the project audit.
+- **[EMBRACE](https://www.researchgate.net/publication/234056794_EMBRACE_Results_from_an_aperture_array_for_radio_astronomy)** · Demonstrated, since 2011 ([SKA mid-frequency aperture array](https://arxiv.org/abs/2008.04583)).
+  - 4,608 elements 12.5 cm apart near 1.2 GHz, forming many independent beams. Demonstrators reached about 100 m².
+  - Matters: an all-sky watch is a hundredfold scale-up of something that works.
+  - Used: the project audit, all-sky watch.
+- **[What exactly is 8-VSB anyway?](https://www.arrl.org/files/file/Technology/TV_Channels/8_Bit_VSB.pdf)** · Reference ([IEEE notes](https://site.ieee.org/scv-ces/files/2015/06/NTSC_8VSB.pdf)).
+  - ATSC digital television keeps a pilot tone 11.3 dB below its average power, about 7%.
+  - Matters: a modern world's radio still carries pure tones, and tones are what a far listener catches.
+  - Used: the project audit, a world's hum.
+
 ## Earth's character
 
 - **[Arecibo message](https://en.wikipedia.org/wiki/Arecibo_message)** and **[Voyager Golden Records](https://en.wikipedia.org/wiki/Voyager_Golden_Record)** · History.

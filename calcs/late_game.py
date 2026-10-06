@@ -52,6 +52,19 @@ def fusion():
         asteroid_km = 2 * (3 * rock_kg / 2500 / (4 * math.pi)) ** (1 / 3) / 1000
         print(f'  {what} hits with {e:.1e} J, like a {asteroid_km:.1f} km asteroid at 20 km/s')
 
+# ---------- Helium-3 harvest ----------
+# Palaszewski (NASA, 2014): a 100 t aerospacecraft mining Uranus, where helium-3 is 1.5e-5 of the air, gathers 500 kg
+# in 38 to 95 days. A 1,000 t craft at Neptune gathers it in about 14 days. Uranus and Neptune sit in shallower gravity
+# wells than Jupiter. Moon bases and transfer craft roughly double the system.
+def he3_harvest(target_kt_a_year=1.5):
+    per_t = {'100 t craft, 95 days': 500 / 95 * 365 / 100, '100 t craft, 38 days': 500 / 38 * 365 / 100,
+             '1,000 t craft, 14 days': 500 / 14 * 365 / 1000}
+    print('Helium-3 harvest: kg a Year per tonne of mining craft: ' + ', '.join(f'{k} {v:.0f}' for k, v in per_t.items()))
+    system = 10                          # kg a Year per tonne of whole system, craft doubled
+    print(f'  At about {system} kg a Year per tonne of system, Daedalus\'s {target_kt_a_year} kt a Year needs about '
+          f'{target_kt_a_year * 1e6 / system / 1e3:,.0f} kt of craft, bases and tankers. One fast bullet\'s 660 kt of He3 '
+          f'at that rate takes {660 / target_kt_a_year:,.0f} Years.')
+
 # ---------- Deflector laser ----------
 # Ablation pushes a bullet sideways: thrust = Cm x power on target, Cm about 1e-4 N/W (Phipps et al.).
 # It must move the bullet one Earth radius plus margin in the time left. The spot is about wavelength x range / aperture,
@@ -109,6 +122,7 @@ def rules():
 
 if __name__ == '__main__':
     fusion(); print()
+    he3_harvest(); print()
     deflector_table(); print()
     antimatter(); print()
     mind(); print()

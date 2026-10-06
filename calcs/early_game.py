@@ -18,7 +18,8 @@ RECEIVERS = [
     # name, SEFD (Jy), channel (Hz), stare (s), what it is
     ('Big dish, 5 minutes', 10, 3, 300, 'Green Bank as Breakthrough Listen uses it: SEFD about 10 Jy'),
     ('SKA-Mid, 1 hour', 1.1, 1, 3600, 'the full SKA-Mid at 1.4 GHz: SEFD about 1.1 Jy'),
-    ('Sky watch, 1 day', 45, 1, 86400, 'CHIME-class area facing every direction at once: SEFD about 45 Jy'),
+    ('Sky watch at Year 0, 10 min', 12, 1, 600, 'CHORD-class drift scan: 512 six-meter dishes, about 10 minutes a day on each northern direction'),
+    ('All-sky watch, 1 day', 12, 1, 86400, 'a dense aperture array, every direction at once, the same sensitivity'),
 ]
 SNR, N_POL = 10, 2
 
@@ -31,9 +32,9 @@ def beacon_range_ly(power, sefd, chan, t):
 def beacon():
     print('Broadcast beacon: range for a steady tone, in light-years')
     shares = (0.001, 0.01, 0.1)
-    print(f"  {'receiver':22}" + ''.join(f'{s:>9.1%}' for s in shares) + '   of 2040 energy')
+    print(f"  {'receiver':30}" + ''.join(f'{s:>9.1%}' for s in shares) + '   of 2040 energy')
     for name, sefd, chan, t, _ in RECEIVERS:
-        print(f'  {name:22}' + ''.join(f'{beacon_range_ly(s * GRID_2040, sefd, chan, t):>9,.0f}' for s in shares))
+        print(f'  {name:30}' + ''.join(f'{beacon_range_ly(s * GRID_2040, sefd, chan, t):>9,.0f}' for s in shares))
     # check against Breakthrough Listen: Price et al. 2020 give about 2e10 W at the nearest stars
     print(f"  check: a big dish's 5-minute floor at 10 ly is {4 * math.pi * (10 * LY) ** 2 * f_min(10, 3, 300):.1e} W")
 
@@ -62,7 +63,38 @@ def far_side(area_km2=1000, kg_per_m2=1.0, efficiency=0.5, t_sys=30):
     print(f'Far-side array, {area_km2:,} km2: about {mass_mt:.0f} Mt of lunar metal at {kg_per_m2} kg/m2, '
           f'SEFD about {sefd:.1e} Jy, {10 / sefd:,.0f} times a big dish')
 
+# ---------- A world's hum: the tones, not the roar ----------
+# A hum spread over 1 GHz is far too faint per hertz to rise above the radio sources behind it.
+# What a far listener can catch are its pure tones: a digital TV station keeps a pilot tone of about 7% of its power,
+# so a 1 MW station carries a tone near 70 kW. Tones smear as the world turns. Once its day and year are known,
+# they can be unwound and stacked. Range grows as the fourth root of the stare.
+def hum(power=4e7, band=1e9, ly=10):
+    s = power / (4 * math.pi * (ly * LY) ** 2 * band) / JY
+    print(f'A {power / 1e6:.0f} MW hum over {band / 1e9:.0f} GHz at {ly} ly: {s * 1e12:.0f} pJy per hertz, far below the background')
+
+def tone_reach(tone=1e5):
+    print(f'A {tone / 1e3:.0f} kW tone: how far each receiver hears it, in light-years')
+    arrays = [('Big dish', 10), ('SKA-Mid', 1.1), ('Far-side array', 2 * 1380 * 30 / 5e8)]
+    stares = [('1 day', 86400), ('1 Year', YEAR)]
+    print(f"  {'':16}" + ''.join(f'{s:>10}' for s, _ in stares))
+    for name, sefd in arrays:
+        print(f'  {name:16}' + ''.join(f'{beacon_range_ly(tone, sefd, 1, t):>10,.1f}' for _, t in stares))
+
+# ---------- An all-sky watch ----------
+# Elements every 12.5 cm, as EMBRACE uses near 1.2 GHz, over a 100 m square, beamformed by FFT to every direction,
+# then each beam searched for drifting tones. Two sites cover both hemispheres.
+def all_sky(side=100, spacing=0.125, bandwidth=1e9, t_sys=30, efficiency=0.7):
+    n = (side / spacing) ** 2
+    beams = 4 * math.pi / (0.3 / side) ** 2
+    fft = 5 * n * math.log2(n) * bandwidth
+    search = 100 * beams * bandwidth * 5 * 30
+    sefd = 2 * 1380 * t_sys / (side ** 2 * efficiency)
+    print(f'All-sky watch, {side} m dense array: {n:,.0f} elements, {beams:,.0f} beams, SEFD about {sefd:.0f} Jy, '
+          f'about {(fft + search):.0e} operations a second: {(fft + search) / 1e25:.0e} of 2040 compute')
+
 if __name__ == '__main__':
     beacon(); print()
     belt(); belt(flow_kt=60); print()
-    far_side()
+    far_side(); print()
+    hum(); tone_reach(); print()
+    all_sky()
