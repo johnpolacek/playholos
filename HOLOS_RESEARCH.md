@@ -178,6 +178,20 @@ Anchors for [the project audit](HOLOS_PROJECT_AUDIT.md).
   - About 0.6 t at impact.
   - Used: the project audit, comet deflection.
 
+- **[Green Bank Telescope proposer's guide](https://greenbankobservatory.org/wp-content/uploads/2017/07/GBTpg.pdf)** · Reference.
+  - At L band, about 2 K/Jy and 20 K, so an SEFD near 10 Jy.
+  - Used: the project audit, beacon range. [calcs/early_game.py](calcs/early_game.py).
+- **[SKA1 science performance](https://www.skao.int/sites/default/files/documents/SKA-TEL-SKO-0000818-01_SKA1_Science_Perform.pdf)** · Reference, SKAO.
+  - The full SKA-Mid reaches about 1,600 m²/K at 1.4 GHz, an SEFD near 1.1 Jy.
+  - Used: the project audit, beacon range.
+- **[Pulsar science with the CHIME telescope](https://arxiv.org/abs/1711.02104)** · Published.
+  - About 8,000 m² of cylinders, a gain near 1.16 K/Jy, a receiver near 30 K, about 200 square degrees in view. An SEFD near 45 Jy with the sky added.
+  - Used: the project audit, the sky watch's sensitivity.
+- **[FarView, 2024](https://arxiv.org/abs/2404.03840)** · Study, Advances in Space Research.
+  - 100,000 dipoles over 200 km² of the lunar far side, made in place from metal in the regolith, by equipment landed from Earth.
+  - Matters: a far-side array is a lunar industry project, not cargo.
+  - Used: the project audit, far-side array.
+
 ## Earth's character
 
 - **[Arecibo message](https://en.wikipedia.org/wiki/Arecibo_message)** and **[Voyager Golden Records](https://en.wikipedia.org/wiki/Voyager_Golden_Record)** · History.

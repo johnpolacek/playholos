@@ -13,10 +13,10 @@ Every v1 project's cost and effect, checked against physics and real designs, at
 - **v1's matter was a pacing currency, not mass.** Each tier multiplied the price by ten, whatever the thing was. Real masses run from 100 kg to gigatonnes, so 28 projects are too heavy, many by a thousand to a million times. A starshade costs 5 Mt in v1. The Starshade Rendezvous design weighs 3.8 t.
 - **On Earth, ground builds don't need matter in orbit.** Earth's economy moves about 106 Gt of materials a year (UNEP, 2024). Five v1 projects are ground builds: spectrographs, flash domes, radio arrays, neutrino tanks and fusion plants.
 - **A few effects are far off.** The orbital solar array delivers 10 to 150 times more than its mass allows. One fusion plant project adds 14 TW, the output of about 36,000 first-generation plants. A ground data center's +25% compute takes 8 Years, while chip stock now grows about threefold a year.
-- **Energy-hungry acts need real calculations.** The beacon's range, antimatter production, the deflector laser, the mind transmitter and the laser sail array. v1 had already flagged the star laser and radio ranges.
+- **Energy-hungry acts need real calculations.** Antimatter production, the deflector laser, the mind transmitter and the laser sail array. The beacon's range is now worked, below. v1 had already flagged the star laser and radio ranges.
 - **14 hold up.** The cold compute annex, the habitat ring, star lifting, chip swarms and the starting instruments are within a few times of real designs.
 
-**Counts:** 14 OK, 28 Heavy, 1 Light, 1 Slow, 5 Ground, 25 Calc.
+**Counts:** 21 OK, 28 Heavy, 1 Light, 1 Slow, 5 Ground, 18 Calc. Seven Calc items have since been worked.
 
 ## What it means for pacing
 
@@ -26,6 +26,28 @@ Matter is now real mass in space (settled 2026-10-06). Most instruments and prob
 - **The self-replicating factory is a 100 t seed.** Its prerequisite chain is now the gate: belt prospecting, belt mining and the foundry, so it finishes no sooner than Year 136, about 11 real hours in. Once it runs, matter stops being scarce.
 - **Heavy bullets are about 0.4 Mt each,** after a fuel works. With no matter to save up, the chain alone gates them: the first heavy impactor is ready by Year 186, about 15.5 real hours in, against v1's day and a quarter. v1 set no floor on early death and said to revisit only if playtests show early deaths.
 - **Proposed prices keep v1's Years** except where real trends say otherwise. Build time is now the main pacing lever, and the mocks will test it.
+
+## Calculations
+
+Worked in [calcs/early_game.py](calcs/early_game.py). Orders of magnitude from published numbers, not designs.
+
+**The broadcast beacon is cheap.** A steady tone sent every way at once, heard when its flux beats a receiver's floor: SNR × SEFD × √(channel ÷ (2 × stare)). The same form puts a big dish's 5-minute floor at 10 ly near 10¹⁰ W, as Breakthrough Listen reports.
+
+| Receiver | 0.1% of energy | 1% | 10% |
+| --- | --- | --- | --- |
+| Big dish, 5 minutes, SEFD 10 Jy | 17 ly | 55 ly | 174 ly |
+| SKA-Mid, 1 hour, SEFD 1.1 Jy | 128 ly | 406 ly | 1,283 ly |
+| Sky watch, 1 day, SEFD 45 Jy | 44 ly | 140 ly | 444 ly |
+
+- v1 charged 10% of energy for a beacon a sky watch hears at 10 ly. A hundredth of that reaches 44 ly.
+- So speaking costs almost nothing in energy. What it costs is being found.
+- The sky watch row assumes CHIME's sensitivity in every direction at once. CHIME itself sees about 200 square degrees.
+
+**Belt mining passes.** Metal-rich rock needs melting, about 2 GJ a tonne. Hauling it home by solar-electric thrust, 7.5 km/s at 30 km/s exhaust, costs about 166 GJ a tonne. 120 kt a year takes about 0.6 GW at the belt, about 5 kt of arrays at 137 W/kg. A 10 kt fleet fits.
+
+**The far-side array is a lunar industry project.** 1,000 km² of mesh dishes at an assumed 1 kg/m² is about 1 Mt of lunar metal, made in place as FarView plans. Its SEFD would be about 2×10⁻⁴ Jy, about 60,000 times a big dish. Its reach for a world's hum is still v1's open radio question.
+
+**Still to calculate:** star lifting's matter, the solar swarm's seed, the launcher, the fusion torch ship, antimatter production, the heavy impactor's fuel supply, decoys, the far platform, the mind transmitter, dispersal outposts, the deflector laser, the sunshade, heat shields, wandering habitats, shadow berths and the dead hand.
 
 ## Project by project
 
@@ -48,7 +70,7 @@ Proposed prices are matter in orbit, on the Moon or in the belt. Ground builds s
 | Neutrino watch | 6,000 kt | Ground | 0, ground | Hyper-Kamiokande holds 260 kt of water, underground. |
 | Infrared interferometer | 40 Mt | Heavy ×100,000 | 200 t | A few LUVOIR-class mirrors flying in formation, about 100 t. |
 | Solar lens observatory | 40 Mt | Heavy ×100,000+ | 5 t. 30 Years, not 70: about 25 AU a year gets there in about 25. | NASA concept: small sailcraft, about 100 kg each. |
-| Far-side array | 40 Mt | Calc | 10 kt if thin antennas. Calc. | Depends on the antenna design. Thin wire antennas weigh little, steel dishes a great deal. |
+| Far-side array | 40 Mt | OK, recalculated | About 1 Mt of lunar metal made in place, as FarView plans, at an assumed 1 kg/m². Needs the mass driver line. | Depends on the antenna design. Thin wire antennas weigh little, steel dishes a great deal. |
 | Kilometer interferometer | 800 Mt | Heavy ×100,000+ | 1 kt | A fleet of large mirrors, thousands of tonnes at most. |
 
 ### Grow
@@ -60,10 +82,10 @@ Proposed prices are matter in orbit, on the Moon or in the belt. Ground builds s
 | Ground data center | 0 | Slow ×10 | 0, ground. 1 Year, not 8. Draws 0.25% of energy. | Chip stock grows about 3× a year now. +25% takes months, not 8 Years. Energy is 0.25%, not 3%. |
 | Second launch complex | 0 | OK | 0, ground. Unchanged. | Starship cadence growth. |
 | Cold compute annex | 300 kt | OK | 100 kt | +25% compute is about 25 GW in orbit. Solar at 0.2 to 1 kW/kg is 25 to 125 kt, plus chips and radiators. Google Suncatcher is testing it. |
-| Belt mining | 0 | Calc | 10 kt fleet for +120 kt a year. Calc. | Unproven. A mining fleet weighs something, so zero matter is too light. |
+| Belt mining | 0 | OK, recalculated | 10 kt fleet for +120 kt a year. Hauling takes about 0.6 GW at the belt, about 5 kt of solar arrays. | Unproven. A mining fleet weighs something, so zero matter is too light. |
 | Orbital foundry | 6,000 kt | Heavy ×100+ | 1 kt | NASA 1980: a 100 t seed factory grows itself. |
 | Mass driver | 4,000 kt | Heavy ×20,000 | 1 kt with its power plant, for +600 kt a year, as O'Neill estimated. | O'Neill: a 100 to 200 t driver throws 600 kt a year. |
-| Ice harvest | 3,000 kt | Calc | 1 kt for +60 kt a year, from Saturn's system or belt ice. Calc. | Earth's nearest ice at 9 AU is Saturn's rings and moons. |
+| Ice harvest | 3,000 kt | OK, recalculated | 5 kt fleet for +60 kt a year of belt ice. About 0.3 GW at the belt. Saturn is too dim for solar power. | Earth's nearest ice at 9 AU is Saturn's rings and moons. |
 | Fusion plant | 5,000 kt | Ground, effect ×35,000 too big | 0, ground. +5% energy over 40 Years: about 3,000 ARC-class plants. | The first ARC plant gives 400 MW. +60% of 24 TW is 14 TW, about 36,000 such plants, built on the ground. |
 | Habitat ring | 80 Mt | OK | 10 Mt, mostly lunar soil, so it needs the mass driver. | Stanford torus: 10 Mt, 95% of it shielding, for 10,000 people. |
 | Self-replicating factory | 60 Mt | Heavy ×600,000 | 100 t seed. Its 80 Years stay: they are the work of making copying possible. | NASA 1980: a 100 t seed copies itself in about a year. |
@@ -75,7 +97,7 @@ Proposed prices are matter in orbit, on the Moon or in the belt. Ground builds s
 | Project | v1 matter | Verdict | Proposed for 2040 | Basis |
 | --- | --- | --- | --- | --- |
 | Tight-beam transmitter | 0 | OK | 0, ground | Laser links like DSOC, scaled up. |
-| Broadcast beacon | 0 | Calc | 0, ground. Range Calc. | Sending is 10% of energy, now 2.4 TW. Range needs a receiver calculation. |
+| Broadcast beacon | 0 | OK, recalculated | 0, ground. Sending 0.1% of energy, not 10%: a sky watch hears it to 44 ly in a day, a big dish to 17 ly in 5 minutes. See Calculations. | Sending is 10% of energy, now 2.4 TW. Range needs a receiver calculation. |
 | Launcher | 5,000 kt | Calc | 10 kt | Depends on what it launches. |
 | Relay station | 3,000 kt | Heavy ×1,000+ | 50 t | A repeater is tonnes, not megatonnes. |
 | Flyby probe | 4,000 kt | Heavy ×100+ | 100 t for a 1 t payload | Daedalus: 54 kt for 450 t to 0.12c. A one-tonne payload needs about 100 t. |
@@ -107,13 +129,13 @@ Proposed prices are matter in orbit, on the Moon or in the belt. Ground builds s
 | --- | --- | --- | --- | --- |
 | Deep vault | 200 kt | OK | 10 kt | A data center dug into rock, with local rock as shielding. |
 | Deep archive | 3,000 kt | Heavy ×1,000+ | 10 t | Archives in fused silica store petabytes in grams. |
-| Quiet radiators | 4,000 kt | Calc | Calc, a share of the works it hides. | Scales with the works it hides. |
+| Quiet radiators | 4,000 kt | OK, a rule | About a tenth of the works it hides, as radiator panels. | Scales with the works it hides. |
 | Early warning array | 40 Mt | Heavy ×1,000+ | 200 t | A few telescopes watching nearby stars. |
 | Dispersal outposts | 70 Mt | Calc | 100 kt: ten vault-sized outposts. Calc. | Copies of the civilization. Size is a design choice. |
 | Comet deflection | 1,000 kt | Heavy ×10,000 | 50 t | DART weighed about 0.6 t at impact. A ready fleet is tens of tonnes. |
-| Decoy sites | 2,000 kt | Calc | 1 kt. Energy Calc. | Heaters drawing what they mimic: 5% of energy is now 1.2 TW. |
+| Decoy sites | 2,000 kt | OK, a rule | 1 kt. While lit, each draws what the works it mimics draw. | Heaters drawing what they mimic: 5% of energy is now 1.2 TW. |
 | Outskirts sweep | 0 | OK | 0 | Telescopes and a few probes. |
-| Shielded works | 3,000 kt | Calc | About as much as the works it shields. Calc. | About a centimeter of shielding over everything in orbit. |
+| Shielded works | 3,000 kt | OK, a rule | As much as the works it shields: a centimeter of aluminum is 27 kg/m². | About a centimeter of shielding over everything in orbit. |
 | Pickets | 20 Mt | Heavy ×1,000+ | 100 t | Small cold watchers, tonnes each. |
 | Sand screens | 10 Mt | Calc | 1 kt of depots and sand | 10 t of sand per throw, plus depots. |
 | Deflector laser | 50 Mt | Calc | Calc. 12 TW. | 50% of energy is now 12 TW. |
