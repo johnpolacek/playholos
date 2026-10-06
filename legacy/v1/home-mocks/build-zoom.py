@@ -9,7 +9,7 @@ from pathlib import Path
 import catalog, species
 
 here = Path(__file__).resolve().parent
-root = here.parents[1]
+root = here.parents[2]
 PC = 3.261563777
 PAPER, INK, MUTED, FAINT, YOU, OTHER = '#FBFAF7', '#171716', '#6B6860', '#CFCBC0', '#1F7A96', '#A8620F'
 ROT = [(-.0548755604, -.8734370902, -.4838350155), (.4941094279, -.4448296300, .7469822445), (-.8676661490, -.1980763734, .4559837762)]
@@ -1151,7 +1151,7 @@ CONFIRM = f"""<div class="phone">{HUD}<div class="sheet">
 </div></div>"""
 
 # ---------- The project catalog, from catalog.py ----------
-(root / 'HOLOS_PROJECTS.md').write_text(catalog.markdown())
+(here.parent / 'HOLOS_PROJECTS.md').write_text(catalog.markdown())
 CATALOG = catalog.html()
 
 # ---------- After starting: the telescope under way, then a second project ----------

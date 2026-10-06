@@ -1,6 +1,6 @@
 # Holos: project catalog
 
-October 3, 2026. A design catalog, generated from `explorations/home-mocks/catalog.py`. Edit the data there, then run `python3 explorations/home-mocks/build-zoom.py`.
+October 3, 2026. A design catalog, generated from `legacy/v1/home-mocks/catalog.py`. Edit the data there, then run `python3 legacy/v1/home-mocks/build-zoom.py`.
 
 **Projects are how you know, grow and reach**, and later how you endure. Every entry leads with its **why**: the benefit to the player, in plain words. Each one takes a share of every year’s energy and compute while it runs, draws matter from the stockpile once when it starts, and takes game time that passes as real time. Game time is written in words, like 18 Years; real time is written as a countdown, like `01:30:00`. One Year is `00:05:00`.
 
