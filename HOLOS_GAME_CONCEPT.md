@@ -116,6 +116,22 @@ Settled 2026-10-06. Replaces v1's numbers ([v1: Economy and projects](legacy/v1/
   - The [audit](HOLOS_PROJECT_AUDIT.md#kinds-of-matter) says how each project's mass splits among them.
 - **Project prices are in [HOLOS_PROJECT_AUDIT.md](HOLOS_PROJECT_AUDIT.md)** (open question 2).
 
+## Earth's leads at Year 0
+
+Settled 2026-10-06. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#earths-leads-as-of-october-2026).
+
+- **Earth's leads are its real ones.** Sol's own published oddities, seen with published values: no projection from another seat. To 2040 they follow the most probable path, and what Earth's instruments would find by then, it found.
+- **Three kinds of lead.**
+  - *Open questions 2040's instruments can't settle,* such as a warm world whose air waits for the Habitable Worlds Observatory.
+  - *Seeded finds from 2026 to 2040.* Terra Hunting, the ELT, Gaia and PLATO find what the seed put within their reach. A find is a neighbor's world only if the seed put a neighbor there. Otherwise it is a natural world.
+  - *Things that change,* such as Fomalhaut's collision clouds or a visitor from another star.
+- **The opening: three leads and a deadline.**
+  - *82 Eridani d,* 19.7 ly. At least 5 Earth masses on a stretched orbit through a Sun-like star's warm zone. Its air is unread.
+  - *One seeded find,* such as a world Terra Hunting felt by 2036.
+  - *Fomalhaut's new cloud,* 25 ly. It drifts and fades, so the first look makes it stranger, as v1 required of one lead.
+  - *The Luyten's Star reply window,* Year 2.5, 12 real minutes in.
+- **Settled leads stay settled.** Alpha Centauri A's candidate is resolved long before 2040. Adopt JWST's August 2026 result when it is published.
+
 ## Retired with the cohort
 
 These v1 rules no longer apply.
@@ -135,7 +151,7 @@ Answered one at a time, in this order. Every answer must be permitted by current
 
 1. **Branch odds.** Read the Metaculus pages for the Taiwan and nuclear odds. Search summaries disagree, and Metaculus blocks scripted reads.
 2. **Settled 2026-10-06:** kinds of matter and the branches' effects. Prices and splits are proposed in [the audit](HOLOS_PROJECT_AUDIT.md), to test in the mocks.
-3. **Earth's leads at Year 0.** Real, published oddities as seen from Sol, plus what Earth's instruments found from 2026 to 2040. If a seeded world is detectable by those instruments, Earth found it. Earth sees published values directly, so Alpha Centauri A's candidate returns.
+3. **Settled 2026-10-06:** Earth's leads. See [Earth's leads at Year 0](#earths-leads-at-year-0).
 4. **The neighbor roster.** Who is written, which host stars pass survey limits, and what the seed varies. How loud each neighbor's tones are, which sets who can hear whom. Whether neighbors start equal to Earth and wake at Year 0. Each neighbor's emissions must stay below what Earth could catch to 2040. Breakthrough Listen searched for narrow tones, so its null results barely limit a neighbor's past radar pulses.
 5. **Neighbors' behavior and cost.** What fixed rules decide and what the model decides. What runs while the player is away.
 6. **How a game starts.** No entry lock. Earth's real history, its people, and meeting the Mind.
