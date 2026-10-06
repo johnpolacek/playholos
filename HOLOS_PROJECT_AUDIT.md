@@ -16,7 +16,7 @@ Every v1 project's cost and effect, checked against physics and real designs, at
 - **Energy-hungry acts need real calculations.** Antimatter production, the deflector laser, the mind transmitter and the laser sail array. The beacon's range is now worked, below. v1 had already flagged the star laser and radio ranges.
 - **14 hold up.** The cold compute annex, the habitat ring, star lifting, chip swarms and the starting instruments are within a few times of real designs.
 
-**Counts:** 21 OK, 28 Heavy, 1 Light, 1 Slow, 5 Ground, 18 Calc. Seven Calc items have since been worked.
+**Counts at first pass:** 14 OK, 28 Heavy, 1 Light, 1 Slow, 5 Ground, 25 Calc. Every Calc item has since been worked except one new project, the helium-3 harvest.
 
 ## What it means for pacing
 
@@ -24,7 +24,7 @@ Matter is now real mass in space (settled 2026-10-06). Most instruments and prob
 
 - **Early probes are affordable.** A flyby probe is about 100 t and a sentinel about 500 t, against 250 kt in orbit and 40 kt a year. v1 made them megatonnes.
 - **The self-replicating factory is a 100 t seed.** Its prerequisite chain is now the gate: belt prospecting, belt mining and the foundry, so it finishes no sooner than Year 136, about 11 real hours in. Once it runs, matter stops being scarce.
-- **Heavy bullets are about 0.4 Mt each,** after a fuel works. With no matter to save up, the chain alone gates them: the first heavy impactor is ready by Year 186, about 15.5 real hours in, against v1's day and a quarter. v1 set no floor on early death and said to revisit only if playtests show early deaths.
+- **Fuel gates the fast bullets.** A 1,000 t bullet at 0.2c needs about 0.66 Mt of helium-3 from a gas giant, so it waits for outer-system industry, later than v1's day and a quarter. A slow D-D bullet at 0.05c needs only ocean deuterium and can come after the prerequisite chain, about Year 186, but it hits like a 0.8 km asteroid, not a 1.9 km one, and pickets see it for years. v1 set no floor on early death and said to revisit only if playtests show early deaths.
 - **Proposed prices keep v1's Years** except where real trends say otherwise. Build time is now the main pacing lever, and the mocks will test it.
 
 ## Calculations
@@ -47,7 +47,29 @@ Worked in [calcs/early_game.py](calcs/early_game.py). Orders of magnitude from p
 
 **The far-side array is a lunar industry project.** 1,000 km² of mesh dishes at an assumed 1 kg/m² is about 1 Mt of lunar metal, made in place as FarView plans. Its SEFD would be about 2×10⁻⁴ Jy, about 60,000 times a big dish. Its reach for a world's hum is still v1's open radio question.
 
-**Still to calculate:** star lifting's matter, the solar swarm's seed, the launcher, the fusion torch ship, antimatter production, the heavy impactor's fuel supply, decoys, the far platform, the mind transmitter, dispersal outposts, the deflector laser, the sunshade, heat shields, wandering habitats, shadow berths and the dead hand.
+**Fusion fuel is the gate for every fast craft.** Worked in [calcs/late_game.py](calcs/late_game.py). Fuel per tonne of payload comes from the rocket equation, scaled up 3.9 times because Daedalus needed that much more than one ideal stage. D-He3 exhausts at about 0.035c, D-D at about 0.016c, because most of D-D's energy leaves as neutrons.
+
+| Trip | D-He3, t of fuel per t | D-D |
+| --- | --- | --- |
+| Bullet, 0.2c | 1,101 | about a million |
+| Bullet, 0.1c | 61 | 1,957 |
+| Bullet, 0.05c | 12 | 83 |
+| Probe, 0.08c and stop | 353 | 82,394 |
+| Probe, 0.04c and stop | 33 | 560 |
+
+- A 1,000 t bullet at 0.2c needs about 0.66 Mt of He3. That is 22 Gt of Jupiter's air, 22 times everything Daedalus planned to harvest in 20 Years.
+- D-D can't reach 0.2c. At 0.05c, a 1,000 t bullet needs 83 kt of deuterium from Earth's oceans and hits like a 0.8 km asteroid. At 0.2c it hits like a 1.9 km one.
+- So the fast heavy bullet is a late weapon, after an outer-system industry. The early weapon is slow, and pickets see it for longer.
+
+**The deflector laser works with a big enough mirror.** Ablation pushes about 10⁻⁴ N per watt that lands (Phipps and colleagues). Moving a 1,000 t bullet at 0.2c one Earth radius aside takes about 9 TW with a 1 km aperture, at any range: the spot grows with range as fast as the time to push does. A 10 km aperture needs about 0.1 TW.
+
+**The antimatter probe needs the swarm.** A 10 t probe to 0.2c and back to rest needs about 1 t of antimatter. Today's production is 10⁻⁹ efficient. Even at 1%, it is 12 Years of all of Earth's 2040 energy.
+
+**Sending a mind is cheap with big optics.** A diffraction-limited laser at 1 µm, 10 photons a bit, an assumed 100 PB mind, 10 ly: with 100 m optics at both ends, about 1.4×10¹⁴ J, under two days at 1 GW. With 10 m optics, 45 Years. v1 charged 30% of energy.
+
+**Smaller rules.** Wandering habitats spend about 0.03% of their mass a Year on 10 m/s of random burns. Shadow berths spend 3 to 10% once. Shade and reflective film run near 1 g/m²: all of Earth is 128 Mt. A full solar swarm near 1 AU is about 0.09% of Mercury, 48 doublings from a 1 kt seed.
+
+**Still open:** the helium-3 harvest's mass, the far-side array's reach for a hum, and whether a 2040 sky watch can hear every direction at once.
 
 ## Project by project
 
@@ -89,8 +111,9 @@ Proposed prices are matter in orbit, on the Moon or in the belt. Ground builds s
 | Fusion plant | 5,000 kt | Ground, effect ×35,000 too big | 0, ground. +5% energy over 40 Years: about 3,000 ARC-class plants. | The first ARC plant gives 400 MW. +60% of 24 TW is 14 TW, about 36,000 such plants, built on the ground. |
 | Habitat ring | 80 Mt | OK | 10 Mt, mostly lunar soil, so it needs the mass driver. | Stanford torus: 10 Mt, 95% of it shielding, for 10,000 people. |
 | Self-replicating factory | 60 Mt | Heavy ×600,000 | 100 t seed. Its 80 Years stay: they are the work of making copying possible. | NASA 1980: a 100 t seed copies itself in about a year. |
-| Solar swarm | 100 Mt | Calc | 10 kt seed. Calc. | Collectors copy themselves, so the seed can be small. |
-| Star lifting | 400 Mt | OK | Energy is the gate, about 2×10¹⁸ W. Matter Calc. | Lifting 300 Gt a year off the Sun takes about 2×10¹⁸ W against its gravity. |
+| Solar swarm | 100 Mt | OK, recalculated | About 1 kt seed. A full swarm at 1 g/m² near 1 AU is 2.8×10²⁰ kg, 0.09% of Mercury, about 48 doublings. | Collectors copy themselves, so the seed can be small. |
+| Star lifting | 400 Mt | OK, recalculated | Built by the swarm's own industry. The gate is about 2×10¹⁸ W. | Lifting 300 Gt a year off the Sun takes about 2×10¹⁸ W against its gravity. |
+| Helium-3 harvest, new | none | New | Robotic balloon factories in Jupiter's air, about 1.5 kt of He3 a year. Mass Calc. | Daedalus planned 30 kt over 20 Years. Every fusion probe, ship and fast bullet draws on it. |
 
 ### Reach
 
@@ -98,30 +121,30 @@ Proposed prices are matter in orbit, on the Moon or in the belt. Ground builds s
 | --- | --- | --- | --- | --- |
 | Tight-beam transmitter | 0 | OK | 0, ground | Laser links like DSOC, scaled up. |
 | Broadcast beacon | 0 | OK, recalculated | 0, ground. Sending 0.1% of energy, not 10%: a sky watch hears it to 44 ly in a day, a big dish to 17 ly in 5 minutes. See Calculations. | Sending is 10% of energy, now 2.4 TW. Range needs a receiver calculation. |
-| Launcher | 5,000 kt | Calc | 10 kt | Depends on what it launches. |
+| Launcher | 5,000 kt | OK | 10 kt of yard and fuel depot. | Depends on what it launches. |
 | Relay station | 3,000 kt | Heavy ×1,000+ | 50 t | A repeater is tonnes, not megatonnes. |
 | Flyby probe | 4,000 kt | Heavy ×100+ | 100 t for a 1 t payload | Daedalus: 54 kt for 450 t to 0.12c. A one-tonne payload needs about 100 t. |
 | Sentinel probe | 50 Mt | Heavy ×1,000 | 500 t: 5 t payload, fusion out, magnetic sail in. | Daedalus-class out, magnetic-sail braking in. |
 | Lurker | 40 Mt | Heavy ×1,000 | 500 t | As sentinel. |
 | Close watcher | 30 Mt | Heavy ×1,000 | 500 t | As sentinel. |
 | Line tap | 20 Mt | Heavy ×1,000 | 500 t | As sentinel. |
-| Laser sail array | 40 Mt | Calc | 0, ground, as Starshot plans. Bursts of 100 GW per gram chip. | Starshot: 100 GW for minutes per gram chip. Array mass depends on design. |
+| Laser sail array | 40 Mt | OK, recalculated | 0, ground, as Starshot plans. About 100 GW for 10 minutes per gram chip, about 6×10¹³ J, stored. | Starshot: 100 GW for minutes per gram chip. Array mass depends on design. |
 | Starlight sail | 10 Mt | Heavy ×1,000,000+ | 1 t | Heller and Hippke: gram to kilogram sails. |
 | Chip swarm | 0 | OK | 0 | Starshot gram chips. |
-| Torch probe | 60 Mt | Heavy ×1,000+ | 500 t for a 3 t payload: about 0.08c, then a stop. | About 0.08c, then stops: a mass ratio near 120, so about 120 t per tonne of payload. |
-| Seed probe | 60 Mt | Heavy ×1,000 | 1.1 kt: a 100 t seed factory, 0.04c, then a stop. | About 0.04c, then stops, carrying a seed factory of about 100 t. |
-| Seedship | 70 Mt | Heavy ×100+ | 10 kt: a 1 kt factory and designs, 0.04c, then a stop. | A 100 t seed factory plus fuel for 0.04c and a stop. |
-| Fusion torch ship | 800 Mt | Calc | About 0.4 Mt per kt of payload for 0.1c and a stop. Calc. | A crewed or mind-carrying ship. Size is a design choice. |
-| Antimatter probe | 200 Mt | Calc | 10 t. Energy is the gate. Calc. | Today 10⁹ joules in per joule of antimatter. Needs about 10⁻⁴ efficiency to fit, unproven. |
-| Heavy impactor | 80 Mt | Heavy ×25 per bullet | 1 Mt fuel works, then about 0.4 Mt per 1,000 t bullet. Fuel supply Calc. | 1,000 t at 0.2c with Daedalus-class exhaust: about 0.4 Mt per bullet. v1 says 10 Mt. |
-| Decoys | 20 Mt | Calc | About 20 kt each: a 50 t shell needs the bullet's speed. Calc. | Each decoy must match the bullet's speed, so its fuel scales with its mass. |
+| Torch probe | 60 Mt | Heavy ×60, recalculated | About 1 kt for a 3 t payload, 0.6 kt of it He3. | About 0.08c, then stops: a mass ratio near 120, so about 120 t per tonne of payload. |
+| Seed probe | 60 Mt | Heavy ×20, recalculated | About 3.3 kt: a 100 t seed and 2 kt of He3. Or 56 kt of ocean deuterium at D-D. | About 0.04c, then stops, carrying a seed factory of about 100 t. |
+| Seedship | 70 Mt | Heavy ×2, recalculated | About 33 kt for a 1 kt factory and designs. | A 100 t seed factory plus fuel for 0.04c and a stop. |
+| Fusion torch ship | 800 Mt | OK, recalculated | About 1.1 Mt per kt of payload at 0.1c and a stop, 0.66 Mt of it He3. | A crewed or mind-carrying ship. Size is a design choice. |
+| Antimatter probe | 200 Mt | Recalculated: needs the swarm | About 1 t of antimatter for a 10 t probe. Even at 1% production efficiency, ten million times today's, that is 12 Years of all 2040 energy. Needs the solar swarm. | Today 10⁹ joules in per joule of antimatter. Needs about 10⁻⁴ efficiency to fit, unproven. |
+| Heavy impactor | 80 Mt | Recalculated: fuel is the gate | At 0.2c, 1.1 Mt of D-He3 per bullet, 0.66 Mt of it He3: 22 times Daedalus's whole harvest. At 0.1c, 61 kt. A D-D bullet at 0.05c needs 83 kt of ocean deuterium and hits like a 0.8 km asteroid. | 1,000 t at 0.2c with Daedalus-class exhaust: about 0.4 Mt per bullet. v1 says 10 Mt. |
+| Decoys | 20 Mt | Heavy ×4,000, recalculated | About 5.5 kt each: a 5 t shell with fuel for the bullet's 0.2c. | Each decoy must match the bullet's speed, so its fuel scales with its mass. |
 | Pellet swarm | 10 Mt | Heavy ×1,000 | 5 t of pellets. Energy fits: 1.2 TW for 16 Years. | Thousands of kilogram pellets weigh a few tonnes. Energy fits: 1.2 TW for 16 Years. |
-| Sleeper | 50 Mt | Calc | About 1 Mt: a lurker and two bullets. | A lurker plus a few bullets. |
+| Sleeper | 50 Mt | Heavy ×12, recalculated | About 4 Mt: two 1,000 t bullets with fuel for 0.1c, carried there at 0.04c and stopped. | A lurker plus a few bullets. |
 | Spoofer | 10 Mt | Heavy ×1,000 | 500 t | A lurker with a lamp. |
-| Far platform | 400 Mt | Calc | Calc | A weapons base far away. Size is a design choice. |
+| Far platform | 400 Mt | Heavy ×12, recalculated | A seedship, about 33 kt, that builds its own launchers and fuel on site over decades. | A weapons base far away. Size is a design choice. |
 | Spotter | 20 Mt | Heavy ×1,000 | 500 t | A close watcher. |
 | Star laser | 2,000 Mt | OK, physics still open | 2 Gt. Physics still open. | A 100,000 km film covers about 8×10¹⁵ m². At 0.25 g/m² that is 2 Gt. |
-| Mind transmitter | 0 | Calc | 0. Energy Calc. | Depends on how many bits a mind is, and the link. |
+| Mind transmitter | 0 | Recalculated: cheap | About 1 GW for under two days with 100 m optics at both ends, for an assumed 100 PB mind. Needs a receiver at the colony. | Depends on how many bits a mind is, and the link. |
 
 ### Endure
 
@@ -131,18 +154,18 @@ Proposed prices are matter in orbit, on the Moon or in the belt. Ground builds s
 | Deep archive | 3,000 kt | Heavy ×1,000+ | 10 t | Archives in fused silica store petabytes in grams. |
 | Quiet radiators | 4,000 kt | OK, a rule | About a tenth of the works it hides, as radiator panels. | Scales with the works it hides. |
 | Early warning array | 40 Mt | Heavy ×1,000+ | 200 t | A few telescopes watching nearby stars. |
-| Dispersal outposts | 70 Mt | Calc | 100 kt: ten vault-sized outposts. Calc. | Copies of the civilization. Size is a design choice. |
+| Dispersal outposts | 70 Mt | OK, a rule | 100 kt: ten vault-sized outposts. | Copies of the civilization. Size is a design choice. |
 | Comet deflection | 1,000 kt | Heavy ×10,000 | 50 t | DART weighed about 0.6 t at impact. A ready fleet is tens of tonnes. |
 | Decoy sites | 2,000 kt | OK, a rule | 1 kt. While lit, each draws what the works it mimics draw. | Heaters drawing what they mimic: 5% of energy is now 1.2 TW. |
 | Outskirts sweep | 0 | OK | 0 | Telescopes and a few probes. |
 | Shielded works | 3,000 kt | OK, a rule | As much as the works it shields: a centimeter of aluminum is 27 kg/m². | About a centimeter of shielding over everything in orbit. |
 | Pickets | 20 Mt | Heavy ×1,000+ | 100 t | Small cold watchers, tonnes each. |
-| Sand screens | 10 Mt | Calc | 1 kt of depots and sand | 10 t of sand per throw, plus depots. |
-| Deflector laser | 50 Mt | Calc | Calc. 12 TW. | 50% of energy is now 12 TW. |
+| Sand screens | 10 Mt | OK | 1 kt of depots and sand. | 10 t of sand per throw, plus depots. |
+| Deflector laser | 50 Mt | OK, recalculated | About 9 TW for under an hour per bullet with a 1 km aperture, at any range. A 10 km aperture needs about 0.1 TW. A 1 km mirror at 1 kg/m² is about 1 kt. | 50% of energy is now 12 TW. |
 | Hunters | 30 Mt | Heavy ×1,000 | 200 t | Fusion drones, tonnes to tens of tonnes each. |
-| Sunshade | 80 Mt | Calc | Calc. Shading all of Earth at 1 g/m² is 130 Mt. | Scales with the area shaded. |
-| Heat shields | 30 Mt | Calc | Calc | Scales with the area shielded. |
-| Wandering habitats | 20 Mt | Calc | Calc, fuel for the burns. | Scales with the habitats moved. |
-| Shadow berths | 20 Mt | Calc | Calc, fuel only. | Parking orbits behind a moon cost fuel, not structure. |
-| Lifeboats | 400 Mt | Calc | 50 kt: five seedships. | Several seedships kept fueled. |
-| Dead hand | 400 Mt | Calc | Calc, launchers plus bullets. | Launchers at outposts. |
+| Sunshade | 80 Mt | OK, a rule | 1 g/m² of shade: all of Earth 128 Mt, one 100 km site about 8 kt. | Scales with the area shaded. |
+| Heat shields | 30 Mt | OK, a rule | Reflective film near 1 g/m² over the works' area. | Scales with the area shielded. |
+| Wandering habitats | 20 Mt | OK, a rule | 0.03% of the habitat's mass in propellant a year, for 10 m/s of random burns. | Scales with the habitats moved. |
+| Shadow berths | 20 Mt | OK, a rule | 3 to 10% of the works' mass in propellant, once. | Parking orbits behind a moon cost fuel, not structure. |
+| Lifeboats | 400 Mt | OK, recalculated | About 165 kt: five seedships. | Several seedships kept fueled. |
+| Dead hand | 400 Mt | OK, a rule | Each ready bullet as the heavy impactor, plus about 10 kt of launcher at each outpost. | Launchers at outposts. |

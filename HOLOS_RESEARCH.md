@@ -192,6 +192,26 @@ Anchors for [the project audit](HOLOS_PROJECT_AUDIT.md).
   - Matters: a far-side array is a lunar industry project, not cargo.
   - Used: the project audit, far-side array.
 
+- **[Phipps et al., Review: Laser-Ablation Propulsion](https://www.researchgate.net/publication/225005755_Review_Laser-Ablation_Propulsion)** · Published, Journal of Propulsion and Power ([debris removal](https://arxiv.org/abs/1110.3835)).
+  - Ablation thrust runs about 10⁻⁵ to 10⁻⁴ N per watt that lands, near 10⁻⁴ at its best.
+  - Matters: the deflector laser needs about 9 TW with a 1 km mirror, or 0.1 TW with a 10 km one.
+  - Used: the project audit, deflector laser. [calcs/late_game.py](calcs/late_game.py).
+- **[Mahaffy et al. 1998, Galileo probe](https://link.springer.com/article/10.1023/A:1005091806594)** · Published ([helium abundance](https://agupubs.onlinelibrary.wiley.com/doi/10.1029/98JE00695)).
+  - Jupiter's ³He/⁴He is (1.66 ± 0.05)×10⁻⁴. Helium is about 24% of its air by mass.
+  - Matters: about 30 g of helium-3 per thousand tonnes of Jupiter's air. Every fast fusion craft is gated by it.
+  - Used: the project audit, heavy impactor and helium-3 harvest.
+- **[Project Daedalus, fuel](https://en.wikipedia.org/wiki/Project_Daedalus)** · Study.
+  - Its helium-3 was to be mined from Jupiter's air by balloon-borne robotic factories over 20 years. Stages: 46,000 t and 4,000 t of propellant.
+  - Matters: 111 t of fuel per tonne of payload to 0.12c, about 3.9 times one ideal stage. The audit scales every fusion trip by that.
+  - Used: the project audit, all fusion craft.
+- **[NASA, antimatter production efficiency](https://ntrs.nasa.gov/api/citations/19990110316/downloads/19990110316.pdf)** · Study.
+  - Accelerator production is about 10⁻⁹ efficient.
+  - Used: the project audit, antimatter probe needs the swarm.
+- **[Heavy water production](https://energyeducation.ca/encyclopedia/Heavy_water)** · Reference.
+  - About one hydrogen atom in 6,500 in seawater is deuterium. Electrolysis takes about 850 kWh per kg of heavy water, the costly route.
+  - Matters: a slow D-D bullet's 83 kt of deuterium is cheap in energy and plentiful in the oceans.
+  - Used: the project audit, heavy impactor.
+
 ## Earth's character
 
 - **[Arecibo message](https://en.wikipedia.org/wiki/Arecibo_message)** and **[Voyager Golden Records](https://en.wikipedia.org/wiki/Voyager_Golden_Record)** · History.
