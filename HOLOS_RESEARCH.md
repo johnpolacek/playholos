@@ -229,6 +229,11 @@ Anchors for [the project audit](HOLOS_PROJECT_AUDIT.md).
   - Matters: a modern world's radio still carries pure tones, and tones are what a far listener catches.
   - Used: the project audit, a world's hum.
 
+- **[Neely 2025, the economic effects of a potential armed conflict over Taiwan](https://www.stlouisfed.org/-/media/project/frbstl/stlouisfed/publications/review/pdfs/2025/feb/economic-effects-of-potential-armed-conflict-over-taiwan.pdf)** · Published, Federal Reserve Bank of St. Louis Review ([Rhodium Group](https://rhg.com/research/taiwan-economic-disruptions/)).
+  - Taiwan makes 92% of the most advanced logic chips. Domestic suppliers elsewhere have very limited room to replace them. Rhodium puts a blockade's immediate cost above $2 trillion.
+  - Matters: a Taiwan war before 2035 leaves Earth with about half its compute at Year 0.
+  - Used: v2 branches, [calcs/branches.py](calcs/branches.py).
+
 ## Earth's character
 
 - **[Arecibo message](https://en.wikipedia.org/wiki/Arecibo_message)** and **[Voyager Golden Records](https://en.wikipedia.org/wiki/Voyager_Golden_Record)** · History.

@@ -85,6 +85,16 @@ Worked in [calcs/early_game.py](calcs/early_game.py). Orders of magnitude from p
 
 **The helium-3 harvest is about 150 kt.** Palaszewski's 100 t craft gather 500 kg of helium-3 from Uranus in 38 to 95 days, where it is 1.5×10⁻⁵ of the air, and Uranus's gravity well is far shallower than Jupiter's. That is 13 to 48 kg a Year per tonne of craft, about 10 per tonne once bases and tankers are counted. Daedalus's 1.5 kt a Year needs about 150 kt of system. One fast bullet's 660 kt would take 440 Years at that rate, so fast bullets wait for self-copying industry.
 
+## Kinds of matter
+
+Settled 2026-10-06: metal, rock, ice and helium-3. Every proposed mass splits by these rules.
+
+- **Metal by default:** instruments, craft structure, film, factories, launchers and every payload.
+- **Rock:** shielding, sand, and anything built on the Moon from its soil. The habitat ring is 95% rock, 5% metal. The far-side array is lunar metal smelted from rock, so it counts as rock.
+- **Ice:** water, propellant for small burns, and deuterium. A slow D-D bullet's fuel is all ice.
+- **D-He3 fusion fuel:** 60% helium-3, 40% deuterium as ice, by mass. A torch probe's 1 kt is about 0.6 kt of helium-3 and 0.4 kt of ice.
+- **Ground builds:** none. They draw on Earth's own industry.
+
 ## Project by project
 
 Proposed prices are matter in orbit, on the Moon or in the belt. Ground builds spend none. Compute shares stay as v1 set them.

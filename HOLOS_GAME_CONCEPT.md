@@ -70,11 +70,11 @@ Settled 2026-10-06.
 - **Earth's dials: a fixed base from real history, shifted by the seed's branches.** Real history sets where each dial starts, the same every game. Each probable branch from 2026 to 2040 nudges a dial.
 - **Branches can change Earth's kit, by their real effects.** A Taiwan war that cuts chip supply means Earth wakes with less compute. v1 held that history explains character, never capacity, to keep players equal. With one player, that reason is gone for Earth.
 - **The branches, odds to verify:**
-  - *A Taiwan war before 2035,* about 3 in 10. Nudges Hidden. Less compute at Year 0.
-  - *A nuclear weapon used in war before 2035,* about 1 in 4. Nudges Cautious.
-  - *People sent to Mars before 2036,* about 15%. Nudges Expand. A small crewed outpost at Year 0.
-  - *Fusion on the grid by 2040,* a bit under even. No dial. Some fusion power at Year 0.
-  - Each branch is rolled on its own. How big each effect is gets settled with the kit (open question 2).
+  - *A Taiwan war before 2035,* about 3 in 10. Nudges Hidden. Taiwan makes about 92% of the most advanced logic chips, and a new fab takes 3 to 4 Years, so Earth wakes with about half its compute: a fifth to all of it, depending on how fast fabs come back ([calcs/branches.py](calcs/branches.py)).
+  - *A nuclear weapon used in war before 2035,* about 1 in 4. Nudges Cautious. Limited use leaves the kit as it is. A full exchange is far rarer and is not a branch.
+  - *People sent to Mars before 2036,* about 15%. Nudges Expand. A small crewed outpost at Year 0, a few ships' cargo, about 1 kt of metal.
+  - *Fusion on the grid by 2040,* a bit under even. No dial. The first plants are too small to change Earth's energy, but the fusion build-out is open from Year 0.
+  - Each branch is rolled on its own.
 
 ## The dials
 
@@ -101,7 +101,13 @@ Settled 2026-10-06. Replaces v1's numbers ([v1: Economy and projects](legacy/v1/
 - **The sky watch is a drift scan.** Like CHORD, finished in 2028: each northern direction passes through it for about 10 minutes a day. v1's always-on watch of the whole sky becomes a project: dense aperture arrays on two continents ([the audit](HOLOS_PROJECT_AUDIT.md#calculations)).
 - **What moves with the smaller grid.** Compute takes about 1% of energy, not v1's 10%, so even more energy sits idle early. A ground data center's +25% compute draws about 0.25% of energy, not 3%. The industry cap at 100 GJ a tonne falls to about 7.5 Gt a year (v1: 30). Star lifting needs about 200,000 times the grid (v1: 50,000). A Sun-like star's whole output is about 16 trillion times it (v1: four trillion).
 - **Matter is real mass in space (2026-10-06).** It is what sits in orbit, on the Moon or in the belt, counted in tonnes. Ground builds draw on Earth's own industry, about 106 Gt of materials a year, and spend no matter. Each project's mass comes from physics or a real design. v1's matter was a pacing currency that grew tenfold per tier. With real masses, most instruments and probes become cheap in matter, and build time, compute shares, lift and propellant pace them. Compute shares already cap how much runs at once.
-- **Helium-3 is its own stock (2026-10-06).** Every fast fusion craft burns it, and Earth has almost none. A harvest at Uranus adds a yearly income, shown beside matter. More kinds of matter may follow (open question 2).
+- **Four kinds of matter (2026-10-06).** Each comes from its own place and gates its own works.
+  - *Metal:* structure, machines, film. From the belt, or lifted from Earth as finished goods.
+  - *Rock:* shielding, sand and anything built on the Moon from its soil. From the Moon, by mass driver.
+  - *Ice:* water, propellant and deuterium. From belt ice, or lifted from Earth's oceans.
+  - *Helium-3:* fast fusion fuel. Earth has almost none. From Uranus's air, by a harvest.
+  - Earth's lift carries any kind, 40 kt a year in all, mostly as metal. The 250 kt in orbit at Year 0 is metal.
+  - The [audit](HOLOS_PROJECT_AUDIT.md#kinds-of-matter) says how each project's mass splits among them.
 - **Project prices are in [HOLOS_PROJECT_AUDIT.md](HOLOS_PROJECT_AUDIT.md)** (open question 2).
 
 ## Retired with the cohort
@@ -122,7 +128,7 @@ These v1 rules no longer apply.
 Answered one at a time, in this order. Every answer must be permitted by current observations: improbable is acceptable, contradicted is not.
 
 1. **Branch odds.** Read the Metaculus pages for the Taiwan and nuclear odds. Search summaries disagree, and Metaculus blocks scripted reads.
-2. **Kinds of matter, and branch effects.** Which kinds to track beside helium-3, such as metal, rock and ice, and how each project's mass splits among them. Size each branch's effect on the kit. Prices are proposed in [the audit](HOLOS_PROJECT_AUDIT.md).
+2. **Settled 2026-10-06:** kinds of matter and the branches' effects. Prices and splits are proposed in [the audit](HOLOS_PROJECT_AUDIT.md), to test in the mocks.
 3. **Earth's leads at Year 0.** Real, published oddities as seen from Sol, plus what Earth's instruments found from 2026 to 2040. If a seeded world is detectable by those instruments, Earth found it. Earth sees published values directly, so Alpha Centauri A's candidate returns.
 4. **The neighbor roster.** Who is written, which host stars pass survey limits, and what the seed varies. How loud each neighbor's tones are, which sets who can hear whom. Whether neighbors start equal to Earth and wake at Year 0. Each neighbor's emissions must stay below what Earth could catch to 2040. Breakthrough Listen searched for narrow tones, so its null results barely limit a neighbor's past radar pulses.
 5. **Neighbors' behavior and cost.** What fixed rules decide and what the model decides. What runs while the player is away.
