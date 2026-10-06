@@ -6,7 +6,9 @@ Last updated: October 6, 2026.
 
 This is v2, begun October 6, 2026: a single-player game on Earth. v1, the multiplayer cohort design, is frozen in [legacy/v1](legacy/v1/README.md). Where v2 says nothing, v1's rules still hold. Where they disagree, v2 wins.
 
-v2 grows one question at a time, and each answer is dated. Later user clarifications take precedence. There are no v2 mocks yet; v1's mocks show v1.
+v2 grows one question at a time, and each answer is dated. Later user clarifications take precedence. There are no v2 mocks yet. v1's mocks show v1.
+
+**Evidence first (2026-10-06).** Everything starts from real data and published research, the most current included. Only then comes hard-science speculation, from the best evidence we have now. Preliminary results are marked as such, with what would change if the full paper differs. Every source goes into [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md), with what it found and where the design uses it.
 
 ## Core premise
 
@@ -26,7 +28,25 @@ Iain M. Banks's Culture books remain an inspiration. This does not authorize dep
 - **Every other civilization is seeded and run by AI.** They are real superintelligences in the fiction, each with its own AI Will, as v1 set.
 - **Neighbors are a hand-written roster.** Each has a people, a world, a history and a voice. Each game's seed picks which of them wake, at which eligible stars, and with what dials. Veyra, Hael and Kesh from v1 are the first three. Every placement still passes the survey limits at its star.
 - **The clock is unchanged.** 5 real minutes = 1 Year. It runs offline, with no pause. Light delay stays real waiting.
-- **Earth's loud past follows science and what is likely.** Earth's radio history is real, so Earth need not start as faint as v1's equal floor. Whether any neighbor heard it is set by physics and how likely it is, not by drama. The details are open question 1.
+- **Earth's loud past follows science and what is likely.** Earth's radio history is real, so Earth need not start as faint as v1's equal floor. Whether any neighbor heard it is set by physics and how likely it is, not by drama. See [Earth's loud past](#earths-loud-past).
+
+## Earth's loud past
+
+Settled 2026-10-06.
+
+- **Earth's emissions are its real ones up to 2026.** After that they follow Earth's invented century to Year 0, written from the best current forecasts (open question 1). The neighbors' histories stay invented.
+- **What gives Earth away, strongest evidence first:**
+  - *Radars.* Earth's strongest steady leakage. Its early-warning radars run about 2×10⁸ W per transmitter near 400 MHz, a hundred times more along the beam. A month's stare with an SKA-class array hears them to about 200 pc (Loeb and Zaldarriaga 2007). Preliminary results (Saide, Garrett and colleagues, RAS National Astronomy Meeting, July 2025): airport radars worldwide add up to about 2×10¹⁵ W, and a dish like Green Bank's could hear them to about 200 ly. Military radars sweep past an observer like a lighthouse, peaking near 10¹⁴ W. The full paper is in preparation. Its observing times may move the odds below.
+  - *Broadcast and cell.* Weak. Cell towers leak about 4 GW in all, which a dish like Green Bank's could not hear even within 10 ly (Saide et al. 2023).
+  - *Planetary radar.* The loudest of all, but aimed at asteroids and planets for hours at a time (Sheikh et al. 2025). It rarely sweeps a given star.
+  - *Aimed messages.* About twenty, from 1983 on, each lasting hours. Targets within 50 ly: Altair (1983), Gliese 49, Gliese 208, 55 Cancri, HD 10307 and 47 Ursae Majoris (Teen Age Message, 2001, and Cosmic Call 2, 2003), Gliese 581 (2008 and 2009), Teegarden's Star, TZ Arietis and Kappa¹ Ceti (2009), Gliese 526 (2013) and Luyten's Star (2017). To hear one, a listener had to be watching Sol in those hours, at that frequency.
+  - *Earth crossing the Sun.* About 75 stars within 100 ly sit where Earth transits the Sun and Earth's radio has already reached (Kaltenegger and Faherty 2021). A transit shows a rocky world in the warm zone, not who lives there.
+- **Physics lets every neighbor hear Earth. Whether one did depends on whether, and how long, it looked.** Earth's radar signal has been spreading since the 1950s and is still being sent, so it crossed every neighbor while that neighbor had instruments like today's. Odds come from distance and character: a near, curious neighbor stares at Sol for days, as Project Ozma stared at Tau Ceti and Epsilon Eridani in 1960. A far or inward one gives Sol a survey glance, or nothing.
+- **Sample odds, until the radar paper is out:** a listening neighbor, near or far, about 9 in 10. An ordinary one, about 1 in 2. An inward or growth-first one, about 1 in 5. Catching an aimed message, under 1 in 100. If the full paper needs long stares for airport radar, the ordinary and inward odds fall.
+- **What a long listen reveals.** The radars' pitch shifts with Earth's turning and its orbit, so a listener recovers Earth's day, its orbit, and where it is (Loeb and Zaldarriaga 2007). Under v1's aiming rule, that is enough to aim a strike. A neighbor that heard Earth may start the game with Earth already mapped.
+- **Earth is the late one.** Every neighbor's loud century ended long before Year 0. Earth's radars still sweep in 2026, so Earth is the likeliest civilization in the region to have been heard. When Earth's own radars go quiet is open question 1.
+- **The Mind lays out Earth's exposure at waking.** The radar years, every aimed message with its target and arrival, which stars could have heard, and how the invented century changed it. It never says who did hear: no one at Year 0 knows that.
+- **The seed doesn't favor stars Earth messaged.** A neighbor lands at a messaged star only by chance.
 
 ## Retired with the cohort
 
@@ -35,7 +55,7 @@ These v1 rules no longer apply.
 - Cohorts, their scheduled start, the entry lock, and the cross-cohort rule ([v1: The region](legacy/v1/HOLOS_GAME_CONCEPT.md#the-region), [v1: Time](legacy/v1/HOLOS_GAME_CONCEPT.md#time)).
 - Three civilization choices per player, and the choosing screen ([v1: Player and civilization](legacy/v1/HOLOS_GAME_CONCEPT.md#player-and-civilization)).
 - Earth run by AI, the paid Earth seat ([v1: Homeworlds](legacy/v1/HOLOS_GAME_CONCEPT.md#homeworlds)), and Earth's random character per cohort ([v1: First contact](legacy/v1/HOLOS_GAME_CONCEPT.md#first-contact)).
-- Total loss sending the player to a new cohort ([v1: Population, purpose, and stakes](legacy/v1/HOLOS_GAME_CONCEPT.md#population-purpose-and-stakes)). Total loss ends the game, and the next game has a new seed. What carries over is open question 7.
+- Total loss sending the player to a new cohort ([v1: Population, purpose, and stakes](legacy/v1/HOLOS_GAME_CONCEPT.md#population-purpose-and-stakes)). Total loss ends the game, and the next game has a new seed. What carries over is open question 6.
 
 ## Carried, reworded
 
@@ -45,11 +65,11 @@ These v1 rules no longer apply.
 
 Answered one at a time, in this order. Every answer must be permitted by current observations: improbable is acceptable, contradicted is not.
 
-1. **Earth's loud past.** The radar era, 1950s to 2030s: who could hear it, and with what stare time. Messages Earth aimed at nearby stars, such as Cosmic Call, Teen Age Message and A Message from Earth, with targets, power and dates checked against sources. For each neighbor, the odds it heard Earth before Year 0.
-2. **Year 0's date, and Earth's invented century.** What happens on Earth from 2026 to Year 0. Why Earth's telescopes are still today's. Where Earth's dials come from.
-3. **Earth's leads at Year 0.** Real, published oddities as seen from Sol, and which few open the game. Earth sees published values directly; Alpha Centauri A's candidate returns.
-4. **The neighbor roster.** Who is written, which host stars pass survey limits, and what the seed varies. Whether neighbors start equal to Earth and wake at Year 0.
-5. **Neighbors' behavior and cost.** What fixed rules decide and what the model decides. What runs while the player is away.
-6. **How a game starts.** No entry lock. Earth's real history, its people, and meeting the Mind.
-7. **Death and new games.** What carries over, and where variety comes from.
-8. **First mock: Earth's first 15 minutes.** One phone, with a godview lane for the neighbors.
+1. **Year 0's date, and Earth's invented century.** What happens on Earth from 2026 to Year 0, from the best current forecasts. When its radars go quiet. Why Earth's telescopes are still today's. Where Earth's dials come from.
+2. **Earth's leads at Year 0.** Real, published oddities as seen from Sol, and which few open the game. Earth sees published values directly, so Alpha Centauri A's candidate returns.
+3. **The neighbor roster.** Who is written, which host stars pass survey limits, and what the seed varies. Whether neighbors start equal to Earth and wake at Year 0. Breakthrough Listen searched for narrow tones, so its null results barely limit a neighbor's past radar pulses. Check each neighbor's loud century against the searches that could have caught it.
+4. **Neighbors' behavior and cost.** What fixed rules decide and what the model decides. What runs while the player is away.
+5. **How a game starts.** No entry lock. Earth's real history, its people, and meeting the Mind.
+6. **Death and new games.** What carries over, and where variety comes from.
+7. **First mock: Earth's first 15 minutes.** One phone, with a godview lane for the neighbors.
+8. **Recheck v1's research baseline.** Newer work bears on it: the radar preprint above, and an August 2026 preprint on the waste heat of cold computing (v1's "Why the sky is quiet").
