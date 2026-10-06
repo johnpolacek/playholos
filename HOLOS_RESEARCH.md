@@ -142,6 +142,15 @@ Every source the game rests on, grouped by the question it answers. Each entry s
   - Matters: a neighbor's gravity well sets how fast it can reach space, so neighbors don't start equal to Earth.
   - Used: v2 [The neighbors](HOLOS_GAME_CONCEPT.md#the-neighbors).
 
+- **[Hot Rocks Survey](https://www.stsci.edu/jwst/phase2-public/3730.pdf)** · JWST program 3730, results 2024 to 2026 ([II](https://arxiv.org/abs/2503.19772), [GJ 3929 b](https://arxiv.org/abs/2508.12516), [VI](https://arxiv.org/abs/2609.30552)).
+  - Most hot rocky planets around M dwarfs show no atmosphere, which maps the "cosmic shoreline". A few, like GJ 357 b, don't fit simple models. Temperate M-dwarf worlds remain open.
+  - Matters: M dwarfs are weighted low as neighbor hosts, not excluded. [calcs/hosts.py](calcs/hosts.py).
+  - Used: v2 open question 4.
+- **[Holman and Wiegert 1999](https://arxiv.org/abs/astro-ph/9809315)** · Published, AJ.
+  - A planet around one star of a binary stays stable inside a critical distance set by the binary's separation, mass ratio and eccentricity: about 0.46 of the separation for a circular, equal-mass pair, less as eccentricity grows.
+  - Matters: the test for whether a binary's warm zone can hold a neighbor's world.
+  - Used: v2 open question 4.
+
 ## Real masses behind the projects
 
 Anchors for [the project audit](HOLOS_PROJECT_AUDIT.md).
