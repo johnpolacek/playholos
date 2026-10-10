@@ -58,7 +58,7 @@ The hand-written roster of neighbors, and the template every one must fill. The 
 | --- | --- | --- |
 | Loud years | When its radio was loudest, how loud, and why and when it went quiet. | Below what Earth's searches could catch at its distance, through 2026 and through 2040, after the light delay. |
 | Its hum at Year 0 | Its steady tones, in watts. | Under the ceiling: about 146 MW at 10 ly, 583 MW at 20 ly, 3.6 GW at 50 ly. |
-| Since waking | What it has built and sent, if it woke before Earth. | Whatever light of it reached Earth by 2040 stays below Earth's limits. |
+| Since waking | What it has built and sent, if it woke before Earth, and the heat of its computing. | Whatever light of it reached Earth by 2040 stays below Earth's limits: radio as above, mid-infrared glow under about 10% of its star's, and cold far-infrared glow under about 7×10¹⁹ W at 10 pc, scaled by distance squared (Garrett 2026). |
 
 ### Kit at Year 0
 

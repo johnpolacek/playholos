@@ -38,10 +38,10 @@ Every source the game rests on, grouped by the question it answers. Each entry s
   - Broadband surveys followed by interferometric source discrimination. Its roughly 100 pc reach assumes emissions far stronger than Earth's today.
   - Matters: the model for surveying, then investigating. It does not validate v1's receiver ranges.
   - Used: v1 "Survey, then investigate", deep-field receiver.
-- **[Isolating Broadband Radio Technosignatures, May 2026](https://arxiv.org/abs/2605.10212)** · Preprint, MNRAS.
-  - A framework for picking planetary-scale broadband leakage out of natural sources.
-  - Matters: may sharpen v1's survey and hum rules. Not yet reviewed for the design.
-  - Used: not yet. On the watch list.
+- **[Garrett 2026, isolating broadband radio technosignatures](https://arxiv.org/abs/2605.10212)** · Preprint, May 2026.
+  - Narrowband searches may file a civilization's broadband leakage as noise. Wide-field surveys, then interferometric follow-up, could find leakage from a Kardashev Type I civilization to about 100 pc, judged by brightness temperature, polarization, spectral structure, scintillation and position on a nearby star.
+  - Matters: Type I leakage is vastly louder than a world like Earth's, so this doesn't reach v2's faint neighbors. It supports v2's finding that their tones, not their broad hum, are what carries.
+  - Used: v2 [the project audit](HOLOS_PROJECT_AUDIT.md#calculations), a world's hum.
 - **[CHIME/FRB first catalog, 2021](https://arxiv.org/abs/2106.04352)** · Published, ApJS.
   - About 800 fast radio bursts per sky per day above its threshold.
   - Matters: the sky is never silent. A watch on everything hears far galaxies first.
@@ -401,10 +401,11 @@ What Sol's own instruments have found nearby. For v2 open question 3.
 
 ## Why the sky is quiet: computing and heat
 
-- **[Slysh haloes, August 2026](https://arxiv.org/abs/2608.31153)** · Preprint.
-  - The energy cost of computing falls with temperature, so mature minds may compute cold, far from their star, near the 2.7 K floor. Their waste heat would glow grey in the far infrared and submillimetre, not the mid-infrared older searches watched. Archival surveys of nearby stars could limit such haloes to about 10²⁰ W.
-  - Matters: it tests v1's "mature minds turn inward" directly. It may make cold minds findable by a different instrument than v1 assumed.
-  - Used: not yet. v2 open question 9.
+- **[Garrett 2026, Slysh haloes](https://arxiv.org/abs/2608.31153)** · Preprint, August 2026.
+  - The energy cost of computing falls with temperature, so mature minds may compute cold, far from their star, at about 5 to 28 K. Their waste heat glows grey and line-free in the far infrared and submillimetre, not the mid-infrared older searches watched. A thin-film halo of 10²⁰ W at 12 K weighs about 2×10²⁰ kg, a fraction of Ceres.
+  - Herschel's DEBRIS (446 stars within 45 pc) and DUNES (133 within 25 pc) at 100 µm, and JCMT's SONS (100 within 50 pc) at 850 µm, can be read as limits: about 7×10¹⁹ W at 10 pc, 10⁻⁷ to 10⁻⁵ of a star's light. ALMA and NOEMA suit compact haloes around M dwarfs.
+  - Matters: v1's cold, inward minds stay hidden at Earth's scale, but a neighbor that grew large would show. A cold halo can pass for a debris disk until several wavelengths are compared.
+  - Used: v2 [Why the sky is quiet, rechecked](HOLOS_GAME_CONCEPT.md#why-the-sky-is-quiet-rechecked), the neighbor template.
 - **[Wright et al. 2014, the Ĝ search](https://arxiv.org/abs/1408.1133)** · Published ([framework](https://arxiv.org/abs/1408.1134)).
   - Waste-heat searches, their natural contaminants, and why no one behavior can be assigned to all civilizations.
   - Used: alpha-1 theory evaluation. v1 "Why the sky is quiet".
@@ -454,9 +455,9 @@ What Sol's own instruments have found nearby. For v2 open question 3.
 Results the design is waiting on. Check each when its date comes.
 
 - **Saide, Garrett and Heeralall-Issur, "Modelling Earth's Radio Leakage: Detectability of Civilian and Military Radar Systems"** · in preparation. Its observing times set v2's odds of Earth being heard.
-- **[Gaia DR4](https://www.cosmos.esa.int/web/gaia/dr4)** · planned. Rebuild the census after release and validation, per v1's migration notes.
-- **Isolating Broadband Radio Technosignatures** and **Slysh haloes** · to review for the design (v2 open question 9).
+- **[Gaia DR4](https://www.cosmos.esa.int/web/gaia/dr4)** · release set for December 2, 2026, with the first large set of planets found by astrometry. Rebuild the census after release and validation, per v1's migration notes, and recheck the host list and leads.
 - **Epsilon Indi Ab's atmosphere** · two 2026 preprints. Feed Earth's leads (v2 open question 3).
+- **JWST's August 2026 look at Alpha Centauri A** · not yet published. Adopt the result for candidate S1.
 
 ## To check
 

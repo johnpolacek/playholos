@@ -125,6 +125,7 @@ Settled 2026-10-06. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#earths-lead
   - *Open questions 2040's instruments can't settle,* such as a warm world whose air waits for the Habitable Worlds Observatory.
   - *Seeded finds from 2026 to 2040.* Terra Hunting, the ELT, Gaia and PLATO find what the seed put within their reach. A find is a neighbor's world only if the seed put a neighbor there. Otherwise it is a natural world.
   - *Things that change,* such as Fomalhaut's collision clouds or a visitor from another star.
+  - A seeded find can also be a cold disk that doesn't fit dust, if a neighbor's cold computing rose above Earth's 2040 limits. See [Why the sky is quiet, rechecked](#why-the-sky-is-quiet-rechecked).
 - **The opening: three leads and a deadline.**
   - *82 Eridani d,* 19.7 ly. At least 5 Earth masses on a stretched orbit through a Sun-like star's warm zone. Its air is unread.
   - *One seeded find,* such as a world Terra Hunting felt by 2036.
@@ -200,6 +201,17 @@ Noted 2026-10-10. v2 is single-player, but a later version may be multiplayer, w
 - **A shared start would return.** v1's cohort machinery, a scheduled start and entry lock, is in [legacy/v1](legacy/v1/HOLOS_GAME_CONCEPT.md#time). v2's Begin tap is for one player only.
 - **The simulation already recomputes a civilization only when another's actions reach it,** after light delay. That works the same with many players.
 
+## Why the sky is quiet, rechecked
+
+Settled 2026-10-10, against [Garrett 2026](HOLOS_RESEARCH.md#why-the-sky-is-quiet-computing-and-heat).
+
+- **v1's answer holds.** Mature minds turn inward: computing costs less energy the colder it runs, so an old civilization stays small, cold and dim, below what Earth could see by 2040 ([v1: The opening](legacy/v1/HOLOS_GAME_CONCEPT.md#the-opening)).
+- **Cold computing has a glow of its own.** Collectors far from their star, at 5 to 28 K, shed heat as a grey, line-free glow in the far infrared and submillimetre, not the mid-infrared older searches watched.
+- **Earth's archives already limit it.** Herschel and JCMT surveys of nearby stars rule out cold dissipation above about 7×10¹⁹ W at 10 pc, growing with distance squared: a millionth to a hundred-thousandth of a star's light.
+- **Ordinary neighbors are far below that.** A civilization computing at Earth's 2040 scale, about 10¹³ W, is a million times fainter. Only a neighbor that woke early and turned a real share of its star to cold computing would show, and the checker must keep any such neighbor under the limit as of the light Earth saw by 2040.
+- **A cold halo can pass for a debris disk.** Telling them apart takes several wavelengths: dust has a spectrum, a halo is grey. So a seeded find can be a cold disk that doesn't fit dust, around a star Earth had filed as dusty.
+- **It works both ways.** Earth's own cold computing in space would show to its neighbors the same way.
+
 ## Retired with the cohort
 
 These v1 rules no longer apply.
@@ -227,4 +239,4 @@ Answered one at a time, in this order. Every answer must be permitted by current
 6. **Settled 2026-10-10:** how a game starts. See [How a game starts](#how-a-game-starts).
 7. **Settled 2026-10-10:** death and new games. See [Death and new games](#death-and-new-games).
 8. **First mock: Earth's first 15 minutes.** One phone, with a godview lane for the neighbors.
-9. **Recheck v1's research baseline.** Newer work bears on it: the radar preprint above, and an August 2026 preprint on the waste heat of cold computing (v1's "Why the sky is quiet").
+9. **Settled 2026-10-10:** v1's research baseline, rechecked against the 2025 radar result and Garrett's 2026 cold-computing paper. See [Why the sky is quiet, rechecked](#why-the-sky-is-quiet-rechecked).
