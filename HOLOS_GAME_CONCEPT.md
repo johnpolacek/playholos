@@ -6,7 +6,7 @@ Last updated: October 6, 2026.
 
 This is v2, begun October 6, 2026: a single-player game on Earth. v1, the multiplayer cohort design, is frozen in [legacy/v1](legacy/v1/README.md). Where v2 says nothing, v1's rules still hold. Where they disagree, v2 wins.
 
-v2 grows one question at a time, and each answer is dated. Later user clarifications take precedence. There are no v2 mocks yet. v1's mocks show v1.
+v2 grows one question at a time, and each answer is dated. Later user clarifications take precedence. The first v2 mock is [Earth's first 15 minutes](explorations/v2-mocks/index.html), built by `python3 explorations/v2-mocks/build.py`. v1's mocks show v1.
 
 **Evidence first (2026-10-06).** Everything starts from real data and published research, the most current included. Only then comes hard-science speculation, from the best evidence we have now. Preliminary results are marked as such, with what would change if the full paper differs. Every source goes into [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md), with what it found and where the design uses it.
 
@@ -53,7 +53,7 @@ Settled 2026-10-06.
   - In the first hour: Luyten's Star at Year 2.3 and 2.9, 11 and 14 real minutes in. Gliese 526 at Year 9.0. Gliese 581 at Year 9.9 and 10.8.
   - Later: Gliese 49 at Year 27.2, Kappa¹ Ceti at 30.4, Gliese 208 at 38.0, 55 Cancri at 45.6, HD 10307 at 46.6, 47 Ursae Majoris at 52.3.
   - Distances are Gaia DR3's, or Hipparcos's for Altair and HD 10307.
-  - Two knocks are still on the way at Year 0: Kappa¹ Ceti's arrives at Year 0.1, Gliese 208's at Year 0.8.
+  - Seven sends are still on the way at Year 0, to five stars. Kappa¹ Ceti's arrives at Year 0.1 and Gliese 208's at 0.8. 55 Cancri's arrive at Year 4.6 and 13.7, HD 10307's at 5.1, and 47 Ursae Majoris's at 7.0 and 8.8. Corrected 2026-10-10: an earlier count gave two.
   - Most windows pass empty. The Mind marks each one, as v1's silence rules say.
 
 ## Stars Earth knocked on
@@ -61,7 +61,7 @@ Settled 2026-10-06.
 Settled 2026-10-10. Numbers in [calcs/neighbors.py](calcs/neighbors.py).
 
 - **The seed sometimes puts a neighbor where Earth knocked.** In one game in five, if a drawn neighbor can live at a messaged star, the seed places it there.
-  - By chance alone, about one game in 13 has someone at a messaged star. With the nudge, about one in four.
+  - By chance alone, about one game in 10 has someone at a messaged star. With the nudge, about 3 in 10. Measured on 1,000 drawn games ([calcs/seed.py](calcs/seed.py)), replacing an earlier estimate of one in 13 and one in four.
   - It is a game choice, not physics. It contradicts nothing: Earth chose those stars because they might have planets.
 - **Seven messaged stars can host a neighbor.** Luyten's Star, TZ Arietis, Gliese 526, Gliese 581, Gliese 49, Gliese 208, and 55 Cancri B.
   - 55 Cancri A has a giant crossing its warm zone. Its companion B sat in the same beam.
@@ -222,6 +222,20 @@ Settled 2026-10-10.
 - **Planning.** The player queues builds, looks, standing orders and what wakes them. Nothing happens yet.
 - **Begin.** When the player taps Begin, Year 0 starts and everything queued starts at once. From then on the clock runs, offline too, at 5 real minutes a Year.
 
+## The seed, drawn
+
+Built 2026-10-10 in [calcs/seed.py](calcs/seed.py), from the rules above. Two of its rules are new and still open.
+
+- **One number gives one game.** `python3 calcs/seed.py 10` prints it: Earth's branches and their years, what a Taiwan branch left of compute, then each neighbor's star, waking year, what it knows of Earth and what it does about it.
+- **A neighbor acts once its Mind is awake.** Its reaction to hearing Earth is rolled from its table at its waking or its first hearing, whichever is later. One that wakes during the game reacts then.
+- **Earth's seeded find.** If a drawn neighbor's world tugs hard enough for Earth's planet hunters by 2040, that world is the find. Otherwise the seed adds a natural world at a bright northern Sun-like star.
+- **Open: keeping the opening silent.** A rolled knock, answer or call that would have reached Earth before Year 0 is rolled again. Nothing else in the rules stops one.
+- **Open: half a Year to act on news.** A sample. It sets when a neighbor's answer leaves, and so when it arrives.
+- **What 400 drawn games look like** (`python3 calcs/seed.py stats`):
+  - A median of 9 neighbors, from 3 to 30. A hunter in a little over half.
+  - Earth's seeded find is a neighbor's own world in nearly half.
+  - A neighbor's signal reaches Earth in the first 15 minutes in about 1 game in 20, and in the first hour in about 1 in 4. Most are answers to Earth's radars.
+
 ## Death and new games
 
 Settled 2026-10-10.
@@ -279,5 +293,13 @@ Answered one at a time, in this order. Every answer must be permitted by current
 5. **Settled 2026-10-10:** how neighbors play and what it costs. See [How neighbors play](#how-neighbors-play).
 6. **Settled 2026-10-10:** how a game starts. See [How a game starts](#how-a-game-starts).
 7. **Settled 2026-10-10:** death and new games. See [Death and new games](#death-and-new-games).
-8. **First mock: Earth's first 15 minutes.** One phone, with a godview lane for the neighbors.
+8. **First mock built 2026-10-10:** [Earth's first 15 minutes](explorations/v2-mocks/index.html), one phone with a godview lane, on one drawn game. A plain-text copy is in [index.md](explorations/v2-mocks/index.md). It raises these, all open:
+   - Does a real instrument already half built, the Habitable Worlds Observatory, cost fewer Years?
+   - Can the Will quiet Earth's radars, and what does a listener learn when they stop?
+   - What stops a ground data center every Year? It costs no matter and almost no energy.
+   - What is energy for, early? Thinking takes 1% of it and nothing else draws on it.
+   - Is matter meant to be free early? Nothing in the first hour costs more than 10 kt of 250.
+   - What does Year 0's drift-scan sky watch catch of a neighbor's knock, before the all-sky watch is built?
+   - The two open seed rules in [The seed, drawn](#the-seed-drawn).
+   - 13 of the 31 half-minutes had nothing new for the player.
 9. **Settled 2026-10-10:** v1's research baseline, rechecked against the 2025 radar result and Garrett's 2026 cold-computing paper. See [Why the sky is quiet, rechecked](#why-the-sky-is-quiet-rechecked).

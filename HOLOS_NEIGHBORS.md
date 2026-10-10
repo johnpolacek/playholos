@@ -93,7 +93,7 @@ Still by hand: the people, the timeline against the star's age, the dials' cause
 
 ## The roster
 
-Thirty neighbors. Each game's seed draws 3 to 30 of them and places each one. The example home shows one placement that passes. "Passes" is the share of seeded placements the checker accepts.
+Thirty neighbors. Each game's seed draws 3 to 30 of them and places each one: `python3 calcs/seed.py 7` prints one drawn game. The example home shows one placement that passes. "Passes" is the share of seeded placements the checker accepts.
 
 | Neighbor | Disposition | World | Hosts | Example home | Passes |
 | --- | --- | --- | --- | --- | --- |

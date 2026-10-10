@@ -54,6 +54,10 @@ Every source the game rests on, grouped by the question it answers. Each entry s
   - Earth's aimed messages from 1974 on, with targets and arrival dates. Within 50 ly: Altair, Gliese 49, Gliese 208, 55 Cancri, HD 10307, 47 Ursae Majoris, Gliese 581, Teegarden's Star, TZ Arietis, Kappa¹ Ceti, Gliese 526, Luyten's Star.
   - Matters: Earth's real knocks. Each lasted hours, so being heard needs a listener watching Sol at that moment.
   - Used: v2 Earth's loud past. Check transmitter power and duration in primary sources.
+- **[Sónar Calling GJ 273b](https://www.scientificamerican.com/article/interstellar-message-beamed-to-nearby-exoplanet)** · News, Scientific American, 2017 ([Space.com](https://www.space.com/38803-meti-signal-beamed-habitable-alien-planet.html)).
+  - Sent to Luyten's Star on October 16 to 18, 2017, from the EISCAT dish in Tromsø, Norway, near 930 MHz: a science and maths tutorial and 33 short pieces of music. A second batch followed in 2018.
+  - Matters: it sets Earth's first reply window in play, Year 2.3.
+  - Used: the v2 mock's window screen at minute 11.
 
 ## Earth to Year 0: forecasts
 
@@ -390,7 +394,7 @@ What Sol's own instruments have found nearby. For v2 open question 3.
 - **[Alpha Centauri A's candidate, S1](https://arxiv.org/abs/2508.03814)** · 4.4 ly. Imaged once by JWST in August 2024, missed in February and April 2025, with a 52% chance its orbit hid it. JWST looked again in August 2026. Result not yet published: adopt it when it is.
 - **[Barnard's Star](https://ui.adsabs.harvard.edu/abs/2025ApJ...982L...1B/abstract)** · 6 ly. Four sub-Earths confirmed in 2025 after decades of false claims. Basant et al., MAROON-X and ESPRESSO.
 - **[82 Eridani d](https://arxiv.org/abs/2501.17092)** · 19.7 ly. At least 5 Earth masses, 650 days, eccentricity 0.45, swinging through the warm zone of a Sun-like star. Nari et al. 2025. Its air waits for the Habitable Worlds Observatory.
-- **[Fomalhaut's collisions](https://phys.org/news/2025-12-hubble-captures-rare-collision-nearby.html)** · 25 ly. Its "planet" was a dust cloud from a collision, and a second cloud, cs2, appeared in 2023 Hubble images. Kalas and colleagues, December 2025.
+- **[Fomalhaut's collisions](https://phys.org/news/2025-12-hubble-captures-rare-collision-nearby.html)** · 25 ly. Its "planet" was a dust cloud from a collision, and a second cloud, cs2, appeared in 2023 Hubble images. Kalas and colleagues, December 2025. Theory expected one such collision in 100,000 years or longer, and two were seen in 20, close together on the belt's inner side ([ESA release](https://www.esa.int/Science_Exploration/Space_Science/Hubble_sees_asteroids_colliding_around_nearby_star)). Used: the v2 mock's Fomalhaut screen. Its third cloud is the seed's, not real.
 - **[The Wow! signal, revised](https://arxiv.org/abs/2508.10657)** · 1977. Archival Ohio SETI data put it above 250 Jy at 1420.726 MHz, from two fields near 19h26m, −27°. Méndez and colleagues propose a hydrogen cloud brightened by a flare ([part I](https://arxiv.org/abs/2408.08513)).
 - **[3I/ATLAS](https://aasnova.org/2026/01/28/monthly-roundup-interstellar-visitor-3i-atlas/)** · An interstellar comet, found July 2025. Its water is rich in deuterium and it may be older than the Sun ([ESO](https://www.eso.org/public/news/eso2608/)). Its push off course fits ordinary outgassing ([preprint](https://arxiv.org/abs/2511.07450)). A radio search found only human interference ([report](https://www.sciencedaily.com/releases/2026/06/260621060309.htm)).
 - **[Gliese 12 b](https://www.livescience.com/space/exoplanets/nasa-detects-earth-size-planet-just-40-light-years-away-thats-not-a-bad-place-to-hunt-for-life)** · 40 ly. The nearest known transiting, temperate, Earth-size world. Air unknown.
