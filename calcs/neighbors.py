@@ -8,7 +8,7 @@ Sources are in HOLOS_RESEARCH.md.
 """
 import csv, math, random
 from pathlib import Path
-import hosts, knocks
+import binaries, hosts, knocks
 
 ROOT = Path(__file__).resolve().parents[1]
 LY = 9.4607e15
@@ -134,6 +134,7 @@ def load_hosts():
     star_list = hosts.stars(); hosts.name_from_hyg(star_list)
     pairs = hosts.companions(star_list)
     known = hosts.planets()
+    close = binaries.close_orbits(star_list)
     by_id = {s['id']: s for s in star_list}
     for r in rows:
         r['luminosity'] = float(r['luminosity']); r['distance_ly'] = float(r['distance_ly'])
@@ -142,6 +143,7 @@ def load_hosts():
         r['north'] = s.get('dec', -90) > -20
         r['companions'] = [(o, sep) for o, sep in pairs.get(r['id'], [])]
         r['gabs'] = s.get('gabs', 4.67)
+        r['orbits'] = close.get(r['id'], [])                   # published orbits of pairs Gaia can't split
         r['planets'] = {(p['pl_name'], float(p['pl_bmasse']), float(p['pl_orbsmax']), float(p['pl_orbeccen'] or 0))
                         for p in known.get(r['id'], []) + known.get(r['name'], []) + known.get(f"HIP {s.get('hip')}", [])
                         if p['pl_bmasse'] and p['pl_orbsmax']}
@@ -163,6 +165,9 @@ def check(n, host, waking, pole_from_sol, sol_targeted=True):
     for o, sep in host['companions']:
         m1, m2 = hosts.mass_from_gabs(host['gabs']), hosts.mass_from_gabs(o['gabs'])
         if a * (1 + w.get('e', 0)) > hosts.critical_a(m2 / (m1 + m2)) * sep: fails.append('its orbit is unstable beside a companion')
+    if host['orbits'] and not binaries.zone_left(hosts.mass_from_gabs(host['gabs']), a * (1 - w.get('e', 0)),
+                                                 a * (1 + w.get('e', 0)), host['orbits']):
+        fails.append('its orbit is unstable beside a close companion')
     m_star = star_mass(host['luminosity'])
     # Known planets: small ones 10 mutual Hill radii from its orbit, since packed systems tighter than that eventually
     # go unstable (Chambers et al. 1996). A giant, 2√3, the limit for two planets (Gladman 1993). Gaps use both

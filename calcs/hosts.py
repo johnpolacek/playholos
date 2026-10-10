@@ -69,7 +69,7 @@ def stars():
     for r in csv.DictReader((CACHE / 'hygdata_v41.csv').open()):
         if not r['hip'] or not r['dist'] or not 0 < float(r['dist']) <= PC_50LY or float(r['mag']) > gaia_bright + 2: continue
         k = kind_from_spect(r['spect'])
-        if not k: continue
+        if not k or not G_ABS[k][0] - 0.5 <= float(r['absmag']) <= G_ABS[k][1] + 2: continue    # giants, or a wrong type
         ra, dec = float(r['ra']) * 15, float(r['dec'])
         if any(angle(g, ra, dec) < 0.1 and abs(g['d_pc'] / float(r['dist']) - 1) < 0.15 for g in gaia): continue
         name = r['proper'] or (f"{r['bf']}".strip() or f"HIP {r['hip']}")
@@ -117,6 +117,13 @@ YOUNG = {
     '27913': 'Chi1 Orionis, Ursa Major group, about 0.4 Gyr',
     '102409': 'AU Microscopii, about 0.02 Gyr',
     '113283': 'TW Piscis Austrini, Fomalhaut B, about 0.44 Gyr',
+    '25647': 'AB Doradus, about 0.15 Gyr',
+}
+
+# Stars whose companion became a white dwarf too recently: as a giant, it scorched the warm zone, and too little time
+# has passed since for minds.
+SCORCHED = {
+    '37279': 'Procyon: B became a white dwarf 1.37 Gyr ago, in a system about 2.7 Gyr old (Bond et al. 2015)',
 }
 
 # ---------- Ages, from Gaia DR3 FLAME ----------
@@ -153,7 +160,9 @@ def mass_from_gabs(g):
     return max(0.08, min(1.6, 10 ** (-0.1 * (g - 4.67))))
 
 def critical_a(mu, e=0.5):
-    """Holman and Wiegert 1999: the widest stable orbit around one star, as a share of the binary's separation."""
+    """Holman and Wiegert 1999: the widest stable orbit around one star, as a share of the binary's separation.
+    Their fit covers e up to 0.8. Beyond it, scale with the closest approach, a(1 - e)."""
+    if e > 0.8: return critical_a(mu, 0.8) * (1 - e) / 0.2
     return 0.464 - 0.380 * mu - 0.631 * e + 0.586 * mu * e + 0.150 * e * e - 0.198 * mu * e * e
 
 # ---------- Known planets ----------
@@ -172,21 +181,27 @@ def hz(lum):
 def main():
     s_list = stars()
     name_from_hyg(s_list)
-    ages, pl, pairs = flame(), planets(), companions(s_list)
+    import binaries
+    ages, pl, pairs, close = flame(), planets(), companions(s_list), binaries.close_orbits(s_list)
     kept, dropped = [], collections.Counter()
     for s in [s for s in s_list if s['kind']]:
         f = ages.get(s['id'], {})
         lum = float(f['lum_flame']) if f.get('lum_flame') else s.get('lum') or 10 ** (-0.4 * (s['gabs'] - 4.67))
         inner, outer = hz(lum)
         why = None
-        if s.get('hip') in YOUNG or s['id'].replace('HIP ', '') in YOUNG:
+        hips = {s.get('hip'), s['id'].replace('HIP ', '')} | {o.get('hip') for o, _ in pairs.get(s['id'], [])}
+        if hips & set(YOUNG):                                      # a young star's companions are young too
             why = 'younger than 1 Gyr'
+        elif hips & set(SCORCHED):
+            why = 'a white dwarf companion scorched the warm zone'
         elif s['kind'] in 'FG' and f.get('age_flame_upper') and float(f['age_flame_upper']) < 1.0:
             why = 'younger than 1 Gyr'
         for o, sep in pairs.get(s['id'], []):
             m1, m2 = mass_from_gabs(s['gabs']), mass_from_gabs(o['gabs'])
             if critical_a(m2 / (m1 + m2)) * sep < inner:
                 why = why or 'companion too close for a stable warm zone'
+        if s['id'] in close and not binaries.zone_left(mass_from_gabs(s['gabs']), inner, outer, close[s['id']]):
+            why = why or 'a close companion leaves no stable warm zone (ORB6, SB9)'
         for p in pl.get(s['id'], []) + pl.get(s['name'], []):
             m, a = p['pl_bmasse'], p['pl_orbsmax']
             if not m or not a or float(m) < 10: continue

@@ -45,5 +45,18 @@ def main():
         'QUERY': 'SELECT source_id1, source_id2, sep_AU FROM "J/MNRAS/506/2269/table" '
                  f'WHERE source_id1 IN ({id_list}) OR source_id2 IN ({id_list})'}, 'elbadry-50ly.csv')
 
+def close_binaries():
+    """Orbits of close pairs: ORB6 for visual binaries (USNO and GSU), SB9 for spectroscopic ones (VizieR B/sb9)."""
+    for name in ('orb6orbits.txt', 'orb6format.txt'):
+        if (CACHE / name).exists(): print(f'{name}: cached'); continue
+        with urllib.request.urlopen(f'https://www.astro.gsu.edu/wds/orb6/{name}', timeout=300) as resp:
+            (CACHE / name).write_bytes(resp.read())
+        print(f'{name}: downloaded')
+    for table, out in (('main', 'sb9-main.csv'), ('orbits', 'sb9-orbits.csv')):
+        post('https://tapvizier.cds.unistra.fr/TAPVizieR/tap/sync', {
+            'REQUEST': 'doQuery', 'LANG': 'ADQL', 'FORMAT': 'csv', 'MAXREC': '100000',
+            'QUERY': f'SELECT * FROM "B/sb9/{table}"'}, out)
+
 if __name__ == '__main__':
     main()
+    close_binaries()

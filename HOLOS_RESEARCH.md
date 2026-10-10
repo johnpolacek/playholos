@@ -417,6 +417,24 @@ What Sol's own instruments have found nearby. For v2 open question 3.
 - **Habitable-zone planets near Sol** · Mixed. Proxima b, GJ 1061 d, GJ 273 b, Teegarden b, TRAPPIST-1 e, LHS 1140 b, TOI-700 d, Ross 128 b and GJ 1002 b and c, each with what is and isn't established.
   - Used: the atlas's player-site overlay. Sources in [data/player-sites/README.md](data/player-sites/README.md).
 
+- **[Sixth Catalog of Orbits of Visual Binary Stars, ORB6](https://www.astro.gsu.edu/wds/orb6.html)** · Reference, kept by the US Naval Observatory and Georgia State University.
+  - About 4,000 orbits of visual, interferometric and astrometric pairs, each graded 1, definitive, to 5, indeterminate, with 9 for wobble-only orbits.
+  - Used: [calcs/binaries.py](calcs/binaries.py). Grade 5 orbits are skipped.
+- **[Pourbaix et al. 2004, SB9](https://doi.org/10.1051/0004-6361:20041213)** · Published, A&A. The Ninth Catalogue of Spectroscopic Binary Orbits, [VizieR B/sb9](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=B/sb9).
+  - About 4,000 spectroscopic pairs with period, eccentricity and velocity amplitudes.
+  - Used: close pairs in calcs/binaries.py, and to confirm wobble-only orbits.
+- **[Bond et al. 2015, the Procyon system](https://arxiv.org/abs/1510.00485)** · Published, ApJ.
+  - Masses 1.478 and 0.592 Suns. Procyon A is about 2.7 billion years old. B became a white dwarf 1.37 billion years ago, from a star of about 2 Suns.
+  - Matters: B's giant phase scorched A's warm zone, too recently for minds since.
+  - Used: Procyon dropped as a host.
+- **[Soubiran et al. 2018, radial velocity standard stars](https://doi.org/10.1051/0004-6361/201832795)** · Published, A&A.
+  - 107 Piscium's velocity is steady to about a meter per second. Later work finds it single (Halbwachs et al. 2018).
+  - Matters: Hipparcos's 1997 wobble orbit for it, which implies a brown dwarf tugging at about 2 km/s, can't be real.
+  - Used: the rule that wobble-only orbits need backing. 107 Piscium kept as a host.
+- **[Bell, Mamajek and Naylor 2015, ages of young moving groups](https://arxiv.org/abs/1508.05955)** · Published, MNRAS.
+  - The AB Doradus moving group is about 150 million years old.
+  - Used: AB Doradus and its companions dropped as hosts, too young.
+
 ## Kinds of worlds
 
 What a neighbor's world can plausibly be, beyond an Earth twin. Each roster entry cites the ones it uses.
@@ -582,7 +600,9 @@ Results the design is waiting on. Check each when its date comes.
 
 ## To check
 
-- Close binaries Gaia can't split, such as Procyon, Chi Draconis, Zeta Herculis, Xi Ursae Majoris, 44 Bootis and Mu Cassiopeiae: test their warm zones against the Sixth Catalog of Orbits of Visual Binary Stars (VizieR B/orb6), and cross-check calcs/hosts.py's pairs with the El-Badry catalog, once VizieR is reachable.
+- Cross-check calcs/hosts.py's wide pairs with the El-Badry catalog. VizieR is reachable again as of 2026-10-10.
+- Other white dwarf companions that may have scorched a warm zone, such as Gliese 86 B. Only Procyon is handled.
+- Companion masses in calcs/binaries.py are rough: dynamical masses depend on distance cubed, and white dwarfs read as light from their brightness.
 - Ages for K and M dwarfs within 50 ly from activity or spin, beyond the six known young stars. Xi Bootis A may be young: FLAME gives 4.75 Gyr, its fast spin suggests far less.
 - Smith and Lissauer 2009, Icarus: confirm the lifetime of Earth-mass systems near 9 to 10 mutual Hill radii, for the checker's spacing rule.
 - Metaculus odds for the branch list: a Taiwan war and a nuclear weapon used before 2035. Metaculus blocks scripted reads, and search summaries disagree. Read the pages by hand.
