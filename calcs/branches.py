@@ -25,9 +25,20 @@ def stock_2040(war_year=None, cut=0.9, outage=4, catch_up=True):
 
 def taiwan():
     base = stock_2040()
-    print('A Taiwan war: compute at Year 0, as a share of the no-war path')
+    print('An invasion of Taiwan: compute at Year 0, as a share of the no-war path')
     for war in (2028, 2032, 2035):
         print(f'  war in {war}: fabs catch up {stock_2040(war) / base:.0%}, curve slides back {stock_2040(war, catch_up=False) / base:.0%}')
 
+# ---------- A blockade of Taiwan, without invasion ----------
+# The fabs survive, but chips stop shipping while it lasts. About a year, as a sample: an assumption, since no
+# modern blockade of a chip maker has happened.
+def blockade():
+    base = stock_2040()
+    print('A blockade of Taiwan for a year: compute at Year 0, as a share of the no-blockade path')
+    for year in (2028, 2032, 2035):
+        print(f'  blockade in {year}: output catches up {stock_2040(year, outage=1) / base:.0%}, '
+              f'curve slides back {stock_2040(year, outage=1, catch_up=False) / base:.0%}')
+
 if __name__ == '__main__':
     taiwan()
+    blockade()

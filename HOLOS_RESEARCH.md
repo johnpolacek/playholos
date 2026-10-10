@@ -124,7 +124,7 @@ Every source the game rests on, grouped by the question it answers. Each entry s
 - **[Metaculus, China blockades Taiwan](https://www.metaculus.com/questions/12309/china-engages-in-a-blockade-against-taiwan/)** · Forecast, read on the page 2026-10-10.
   - A full-scale blockade before 2030, 30%. Before 2035, 46%. From 101 forecasters.
   - Matters: a blockade cuts chip exports without an invasion, and forecasters think it nearly twice as likely.
-  - Used: v2 open question 1, a possible blockade branch.
+  - Used: v2 [Year 0 and Earth's road to it](HOLOS_GAME_CONCEPT.md#year-0-and-earths-road-to-it), the blockade branch.
 - **[Metaculus, no non-test nuclear detonation before 2035](https://www.metaculus.com/questions/3150/no-non-test-nuclear-detonations-before-2035/)** · Forecast, read on the page 2026-10-10 ([by 2050](https://www.metaculus.com/questions/4779/will-a-nuclear-weapon-be-detonated-as-an-act-of-war-by-2050/)).
   - 76% that none is used before 2035, so 24% that one is, from 193 forecasters. 34% for one used in war by 2050, from 532. The two agree.
   - Matters: a branch that would push Earth toward Cautious.
