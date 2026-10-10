@@ -152,6 +152,22 @@ Settled 2026-10-06, from first principles rather than for the game's sake.
   - *Not yet tested:* close binaries Gaia can't split, such as Procyon, Chi Draconis and Zeta Herculis.
 - **How loud they may be.** Earth heard nothing by 2040. If SKA-Mid listened an hour to every star within 50 ly by then, a neighbor's steady tones stayed under about 146 MW at 10 ly, 583 MW at 20 ly and 3.6 GW at 50 ly. Each neighbor's history sets its own loudness under that ceiling.
 
+## Hostility
+
+Settled 2026-10-10. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#hostility).
+
+- **The evidence first.** A quiet sky fits minds hiding from killers as well as minds hiding by caution. The newest game theory finds first strikes rational only for an attacker that accepts the strike may be its last, and everyone hiding is the stable outcome wherever strikes are easier to see than hiders (Dam 2026). In Holos strikes are easy to see: exhaust from behind, laser launches ahead, braking glow, and a direction that names the sender. They also need a helium-3 industry, take decades, and rarely kill every Mind. So hiding and watching beat striking.
+- **Then Banks.** Most advanced minds are tolerant, curious and generous. Some meddle, openly or covertly. Aggressors exist but are few. The oldest turn inward.
+- **One disposition per neighbor,** shaded by its dials:
+  - *Watchers, about 55%:* hide, watch, and speak on their own terms.
+  - *Contacters, about 25%:* Culture-like, open and generous, and they interfere for others' good, sometimes covertly.
+  - *Inward, about 15%:* mostly uninterested in anyone else.
+  - *Hunters, about 5%:* strike first, out of fear or belief, when they judge they won't be seen.
+  - Every disposition strikes back if struck, as its dials allow.
+- **Contacters may interfere covertly,** with the probes and close watchers the physics allows. A hidden watcher in Earth's outer system might warn of a hunter's launch, or tell others where the hunter is.
+- **Some neighbors are dead.** A few died before Year 0, by their own war or collapse, or by a hunter's strike. Their probes, last broadcasts or ruins remain. A world killed by a strike is drawn only in a game that has a hunter.
+- **Earth is the loud one.** A hunter that has found Earth has an obvious target.
+
 ## How neighbors play
 
 Settled 2026-10-10. Costs in [calcs/ai_cost.py](calcs/ai_cost.py), prices in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#running-the-neighbors).
