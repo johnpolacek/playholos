@@ -81,7 +81,9 @@ The hand-written roster of neighbors, and the template every one must fill. The 
 | --- | --- | --- |
 | Charter | Its founding line, in its own voice. | None. |
 | The Mind's voice | How its Mind speaks, from history, body and charter. | None. |
-| Strategy | How its AI Will plays, toward its own ends, as v1's Listener, Caller and Grower did. | Within its dials. |
+| Strategy | How it plays, toward its own ends, as v1's Listener, Caller and Grower did: the weighted sets its life script's build order is drawn from. | Within its dials. Timings follow Earth's rules. |
+| Reaction tables | For each kind of news that can reach it, a few responses with odds from its dials and charter. See [How neighbors play](HOLOS_GAME_CONCEPT.md#how-neighbors-play). | Every response is a move the rules allow. |
+| Voice bank | Its lines for each typed message part, written once by a strong model from its prose, then reviewed. | Reads as its Mind's voice. |
 | Names | What it calls the stars bright in its sky, Sol among them. | Bright from where it sits. |
 
 ## The roster

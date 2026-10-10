@@ -25,7 +25,7 @@ Iain M. Banks's Culture books remain an inspiration. This does not authorize dep
 ## Settled 2026-10-06
 
 - **Single player, on Earth.** The player is Earth's Will. There are no cohorts and no other players. This answers v1's first objection to Earth as a home: only one player could have it.
-- **Every other civilization is seeded and run by AI.** They are real superintelligences in the fiction, each with its own AI Will, as v1 set.
+- **Every other civilization is seeded and run by the game.** They are real superintelligences in the fiction. They play from scripts drawn from their own character, not live models. See [How neighbors play](#how-neighbors-play).
 - **Neighbors are a hand-written roster.** Each has a people, a world, a history and a voice. Each game's seed picks which of them wake, at which eligible stars, and with what dials. Veyra, Hael and Kesh from v1 are the first three. Every placement still passes the survey limits at its star.
 - **Neighbors play like players.** Each AI Will plays its own strategy toward its own ends, as the v1 cohort playtest's Listener, Caller and Grower did. There is still no floor on early death ([v1: Conflict](legacy/v1/HOLOS_GAME_CONCEPT.md#conflict)): danger comes from what neighbors choose and what physics allows, revisited only if playtests show early deaths.
 - **The clock is unchanged.** 5 real minutes = 1 Year. It runs offline, with no pause. Light delay stays real waiting.
@@ -151,6 +151,19 @@ Settled 2026-10-06, from first principles rather than for the game's sake.
   - *Not yet tested:* close binaries Gaia can't split, such as Procyon, Chi Draconis and Zeta Herculis.
 - **How loud they may be.** Earth heard nothing by 2040. If SKA-Mid listened an hour to every star within 50 ly by then, a neighbor's steady tones stayed under about 146 MW at 10 ly, 583 MW at 20 ly and 3.6 GW at 50 ly. Each neighbor's history sets its own loudness under that ceiling.
 
+## How neighbors play
+
+Settled 2026-10-10. Costs in [calcs/ai_cost.py](calcs/ai_cost.py), prices in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#running-the-neighbors).
+
+- **Decisions follow news.** Nothing outruns light, so a neighbor can only change course when something new reaches it: a knock, a broadcast, a launch seen, a probe arriving, a strike, a plan step ending. Between those, it follows its plan, as standing orders.
+- **Fully scripted.**
+  - *A life script, set at seeding:* its build order, drawn from weighted sets by its strategy. Timings follow the same rules as Earth's: prerequisite chains, matter, energy and heat.
+  - *Reaction tables:* for each kind of news, a few responses with odds from its dials and charter. A Hidden, Cautious neighbor that hears a knock might stay silent and watch 60% of the time, build pickets 30%, and knock back 10%. The seed rolls it.
+  - *Voice banks:* its messages are typed parts, as v1 set, rendered in its own voice from lines written once at build time by a strong model and reviewed by hand.
+- **Simulated ahead.** Neighbors play out from the seed. Only Earth is unpredictable, so the game recomputes a neighbor only when Earth's actions reach it, after their light delay. The same seed and the same player actions give the same game, for tests and replays.
+- **A live model only for live talks.** When a neighbor's mind is close enough to talk live, by craft or a mind sent as light, a model speaks for it from its character and what it knows.
+- **The model: Claude Haiku 5.5,** for live talks and for Earth's Mind, checked in playtests. About $1.18 a month for a busy player's Mind, under a cent per live talk, about $14 once for every voice bank, and nothing for neighbors in play.
+
 ## Retired with the cohort
 
 These v1 rules no longer apply.
@@ -158,6 +171,7 @@ These v1 rules no longer apply.
 - Cohorts, their scheduled start, the entry lock, and the cross-cohort rule ([v1: The region](legacy/v1/HOLOS_GAME_CONCEPT.md#the-region), [v1: Time](legacy/v1/HOLOS_GAME_CONCEPT.md#time)).
 - Three civilization choices per player, and the choosing screen ([v1: Player and civilization](legacy/v1/HOLOS_GAME_CONCEPT.md#player-and-civilization)).
 - Earth run by AI, the paid Earth seat ([v1: Homeworlds](legacy/v1/HOLOS_GAME_CONCEPT.md#homeworlds)), and Earth's random character per cohort ([v1: First contact](legacy/v1/HOLOS_GAME_CONCEPT.md#first-contact)).
+- Neighbors as live AI Wills, run by a model ([v1: Player and civilization](legacy/v1/HOLOS_GAME_CONCEPT.md#player-and-civilization)). See [How neighbors play](#how-neighbors-play).
 - Identical starts, and every seat waking at the same moment ([v1: Player and civilization](legacy/v1/HOLOS_GAME_CONCEPT.md#player-and-civilization)). See [The neighbors](#the-neighbors).
 - Total loss sending the player to a new cohort ([v1: Population, purpose, and stakes](legacy/v1/HOLOS_GAME_CONCEPT.md#population-purpose-and-stakes)). Total loss ends the game, and the next game has a new seed. What carries over is open question 7.
 
@@ -173,7 +187,7 @@ Answered one at a time, in this order. Every answer must be permitted by current
 2. **Settled 2026-10-06:** kinds of matter and the branches' effects. Prices and splits are proposed in [the audit](HOLOS_PROJECT_AUDIT.md), to test in the mocks.
 3. **Settled 2026-10-06:** Earth's leads. See [Earth's leads at Year 0](#earths-leads-at-year-0).
 4. **The neighbor roster.** Who is written, in [HOLOS_NEIGHBORS.md](HOLOS_NEIGHBORS.md), and how each one's history sets its world, kit and loudness. The template is drafted. Hosts, timing, count and the loudness ceiling are settled in [The neighbors](#the-neighbors). Close binaries Gaia can't split still need checking against published orbits.
-5. **Neighbors' behavior and cost.** What fixed rules decide and what the model decides. What runs while the player is away.
+5. **Settled 2026-10-10:** how neighbors play and what it costs. See [How neighbors play](#how-neighbors-play).
 6. **How a game starts.** No entry lock. Earth's real history, its people, and meeting the Mind.
 7. **Death and new games.** What carries over, and where variety comes from.
 8. **First mock: Earth's first 15 minutes.** One phone, with a godview lane for the neighbors.
