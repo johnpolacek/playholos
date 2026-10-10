@@ -1,6 +1,6 @@
 # Holos · Research
 
-Last updated: October 6, 2026.
+Last updated: October 10, 2026.
 
 Every source the game rests on, grouped by the question it answers. Each entry says what it found, why it matters to Holos, and where the design uses it. The rules are in [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md). The atlas's own data sources (ephemeris, star catalogs, galaxies) are in the [README's scientific scope](README.md#scientific-scope) and the `data/*/README.md` files.
 
@@ -417,6 +417,109 @@ What Sol's own instruments have found nearby. For v2 open question 3.
 - **Habitable-zone planets near Sol** · Mixed. Proxima b, GJ 1061 d, GJ 273 b, Teegarden b, TRAPPIST-1 e, LHS 1140 b, TOI-700 d, Ross 128 b and GJ 1002 b and c, each with what is and isn't established.
   - Used: the atlas's player-site overlay. Sources in [data/player-sites/README.md](data/player-sites/README.md).
 
+## Kinds of worlds
+
+What a neighbor's world can plausibly be, beyond an Earth twin. Each roster entry cites the ones it uses.
+
+- **[Lobo, Shields, Palubski and Wolf 2023, terminator habitability](https://iopscience.iop.org/article/10.3847/1538-4357/aca970)** · Published, ApJ 945:161.
+  - A locked dry land world can have a scorching day side, a frozen night side and a temperate twilight band. On an ocean world, heat transport erases that contrast. Wet worlds can still have more habitable area at lower light, and may dry out as water freezes on the night side.
+  - Matters: locked M-dwarf neighbors should mostly be dry.
+  - Used: Tavi, Ystra, Corra and Mirr, in the roster in [HOLOS_NEIGHBORS.md](HOLOS_NEIGHBORS.md#the-roster).
+- **[Abe, Abe-Ouchi, Sleep and Zahnle 2011, dry planets](https://doi.org/10.1089/ast.2010.0545)** · Published, Astrobiology.
+  - A land planet keeps liquid water at its poles up to 170% of Earth's sunlight, against 135% for an ocean planet. It freezes at 77% of Earth's light, against 90%.
+  - Matters: dry worlds have a wider warm zone.
+  - Used: Quessa.
+- **[Pierrehumbert 2011, eyeball Earth](https://doi.org/10.1088/2041-8205/726/1/L8)** · Published, ApJL.
+  - A locked, mostly frozen planet can keep one stable pool of open water under its fixed sun.
+  - Caveat: written for Gliese 581g, which is no longer accepted as real ([Robertson et al. 2014](https://doi.org/10.1126/science.1253253)). The climate result stands as a general case.
+  - Used: Ombe.
+- **[Leconte, Wu, Menou and Murray 2015, asynchronous rotation](https://arxiv.org/abs/1502.01952)** · Published, Science.
+  - Tides in a planet's air can keep a warm world from locking. With 1 bar of air, only around stars above about 0.5 to 0.7 Suns. With 10 bars, down to about 0.3 Suns.
+  - Matters: turning worlds at M dwarfs need thick air and a brighter M dwarf.
+  - Used: Hesk, Wenn and Lusk, and the checker's brightness floor, 0.03 Suns of light.
+- **[Barnes 2017, tidal locking](https://arxiv.org/abs/1708.02981)** · Published, Celestial Mechanics and Dynamical Astronomy.
+  - Locking is possible for most planets in the warm zones of G, K and M dwarfs, if they start spinning slowly and have no moon.
+  - Matters: locked worlds are a normal case, not an oddity.
+  - Used: the roster's mix of locked and turning worlds.
+- **[Luger and Barnes 2015, water loss at M dwarfs](https://arxiv.org/abs/1411.7412)** · Published, Astrobiology.
+  - A young M dwarf's long bright phase can hold its warm-zone planets in a runaway greenhouse for hundreds of millions of years. They can lose several oceans.
+  - Matters: M-dwarf worlds that kept life are likely dry, and M dwarfs stay low-weight hosts.
+  - Used: the dry M-dwarf worlds, and the host weights.
+- **[Yang, Boué, Fabrycky and Abbot 2014, slow rotation](https://arxiv.org/abs/1404.4992)** · Published, ApJL.
+  - Slow rotators build thick clouds over their noon side and stay Earth-like at nearly twice the light of fast rotators.
+  - Used: Sere.
+- **[Cowan and Abbot 2014, super-Earths need not be water worlds](https://iopscience.iop.org/article/10.1088/0004-637X/781/1/27)** · Published, ApJ.
+  - A planet with plate tectonics keeps dry land if its water is under about 0.2% of its mass, at any size, since deeper seafloors push more water into the mantle.
+  - Used: Varn, Sabe, Lusk and Kesh's continents.
+- **[Schulze-Makuch, Heller and Guinan 2020, superhabitable worlds](https://doi.org/10.1089/ast.2019.2161)** · Published, Astrobiology.
+  - A world better for life than Earth: a K dwarf 5 to 8 billion years old, a planet up to 1.5 Earth masses, a little warmer, with shallow seas and a large moon.
+  - Used: Ilm.
+- **[Williams and Pollard 2002, eccentric orbits](https://doi.org/10.1017/S1473550402001064)** · Published, International Journal of Astrobiology.
+  - Long-term climate depends mostly on the light averaged over a whole orbit. Their models ran an Earth twin at eccentricities up to 0.4.
+  - Used: Tolle.
+- **[Bolmont, Libert, Leconte and Selsis 2016, limits of the mean-flux rule](https://arxiv.org/abs/1604.06091)** · Published, A&A.
+  - The averaging rule breaks down at high eccentricity: above 0.6 around a Sun-like star, a planet freezes near its far point.
+  - Matters: Tolle's 0.3 is safely inside.
+  - Used: Tolle.
+- **[Armstrong et al. 2014, obliquity swings](https://arxiv.org/abs/1404.3686)** · Published, Astrobiology.
+  - Fast, large swings in tilt weaken ice-albedo feedback. The swings alone push the warm zone's cold edge out by up to 20%.
+  - Used: Odun.
+- **[Li and Batygin 2014, a moonless Earth's tilt](https://arxiv.org/abs/1404.7505)** · Published, ApJ.
+  - Without a moon, tilt wanders fast between 0 and 45 degrees, but takes about 2 billion years to reach extremes. Slow enough not to preclude habitability.
+  - Related: [Laskar, Joutel and Robutel 1993](https://doi.org/10.1038/361615a0) found the Moon holds Earth's tilt to ±1.3 degrees. [Lissauer, Barnes and Chambers 2012](https://doi.org/10.1016/j.icarus.2011.10.013) found a moonless Earth's range typically 20 to 25 degrees over hundreds of millions of years.
+  - Used: Odun.
+- **[Zahnle and Catling 2017, the cosmic shoreline](https://arxiv.org/abs/1702.03386)** · Published, ApJ.
+  - Bodies with and without air split along a line where sunlight scales as escape speed to the fourth power.
+  - Matters: a small world keeps its air only with modest light.
+  - Used: Ruun.
+- **[Buchhave et al. 2012, small planets at all metallicities](https://www.nature.com/articles/nature11121)** · Published, Nature.
+  - Giant planets favor metal-rich stars. Small planets form around stars with a wide range of metals.
+  - Used: Ruun, at a metal-poor star.
+- **[Sato, Cuntz, Guerra Olvera, Jack and Schröder 2014, F stars](https://arxiv.org/abs/1312.7431)** · Published, International Journal of Astrobiology.
+  - Ultraviolet damage to DNA at Earth-like distances from F stars is 2.5 to 7.1 times the Sun's with no air, less with air.
+  - Used: Faen.
+- **[Kiang et al. 2007, photosynthesis under other stars](https://doi.org/10.1089/ast.2006.0108)** · Published, Astrobiology.
+  - Pigments should peak in near infrared under M dwarfs, red-orange under K stars, blue under early F.
+  - Used: Tavi.
+- **[Claudi et al. 2021, cyanobacteria under M-dwarf light](https://doi.org/10.3390/life11010010)** · Published, Life.
+  - Cyanobacteria grew under simulated M-dwarf light about as well as under sunlight.
+  - Used: the M-dwarf worlds' life.
+- **[Howard et al. 2018, a naked-eye superflare from Proxima](https://arxiv.org/abs/1804.02001)** · Published, ApJL.
+  - Proxima brightened about 68 times. At least 5 such flares a year could cut an Earth-like ozone layer by 90% within 5 years.
+  - Used: Vesh.
+- **[Günther et al. 2020, flares in TESS's first data](https://arxiv.org/abs/1901.00443)** · Published, AJ.
+  - Flares on about 30% of mid-to-late M dwarfs, 5% of early M dwarfs, and under 1% of F, G and K stars.
+  - Matters: a strike's flash at an M dwarf would be filed as a flare.
+  - Used: Tavi, Corra, Mirr.
+- **[Heller and Barnes 2013, exomoon habitability](https://arxiv.org/abs/1209.5323)** · Published, Astrobiology.
+  - Starlight, planet light and tidal heat set an inner "habitable edge" for moons. Moons beyond about 10 planetary radii can be habitable.
+  - Not used yet: radial-velocity surveys would see most warm giants around near stars. Held for a neighbor on a moon of a known giant.
+- **[Greaves et al. 2004, Tau Ceti's debris disk](https://people.ast.cam.ac.uk/~wyatt/gwhd04.pdf)** · Published, MNRAS.
+  - A disk out to about 55 AU with at least ten times the dust of the Kuiper belt, around a star older than the Sun.
+  - Used: Ulan.
+- **[Kershenbaum 2020, The Zoologist's Guide to the Galaxy](https://openlibrary.org/isbn/9780241406793)** · Book, Viking.
+  - Natural selection is universal, so Earth's animals predict alien bodies, senses and societies.
+  - Used: the strange neighbors, Ystra and Hesk most.
+- **[Frank, Carroll-Nellenback, Alberti and Kleidon 2018, the Anthropocene generalized](https://doi.org/10.1089/ast.2017.1671)** · Published, Astrobiology.
+  - Models coupling a civilization to its planet show a soft landing, a boom and die-off, or collapse.
+  - Used: Anwe.
+- **[Lin, Gonzalez Abad and Loeb 2014, industrial pollution](https://iopscience.iop.org/article/10.1088/2041-8205/792/1/L7)** · Published, ApJL.
+  - CFCs in an Earth-like planet's air could be detected or ruled out at about 10 times Earth's level, in about 1.2 to 1.7 days of JWST time for a planet around a white dwarf.
+  - Used: Anwe's polluted sky, a seeded find for later telescopes.
+- **[Chambers, Wetherill and Boss 1996, multi-planet stability](https://doi.org/10.1006/icar.1996.0019)** · Published, Icarus.
+  - Instability time grows exponentially with spacing. Systems packed tighter than about 10 mutual Hill radii eventually go unstable.
+  - Used: the checker's spacing from known small planets.
+- **[Gladman 1993, two close planets](https://doi.org/10.1006/icar.1993.1169)** · Published, Icarus.
+  - Two planets never meet if their orbits are more than 2√3 mutual Hill radii apart.
+  - Used: the checker's spacing from known giants.
+- **[NASA Exoplanet Archive, composite planet table](https://exoplanetarchive.ipac.caltech.edu/)** · Reference.
+  - Discovery method and radial-velocity amplitude for each known planet within 50 ly.
+  - Matters: Barnard's Star, Tau Ceti, Proxima and 82 Eridani already show planets at 0.2 to 0.5 m/s, so an invented world there must tug less.
+  - Used: the checker's per-star 2026 floor.
+- **[Mamajek 2012, Fomalhaut's age](https://arxiv.org/abs/1206.6353)** · Published, ApJL.
+  - Fomalhaut and its companion TW Piscis Austrini are about 440 million years old.
+  - Used: TW PsA is dropped as a host, too young.
+
 ## Why the sky is quiet: computing and heat
 
 - **[Garrett 2026, Slysh haloes](https://arxiv.org/abs/2608.31153)** · Preprint, August 2026.
@@ -479,8 +582,9 @@ Results the design is waiting on. Check each when its date comes.
 
 ## To check
 
-- Close binaries Gaia can't split, such as Procyon, Chi Draconis, Zeta Herculis, Xi Ursae Majoris and 44 Bootis: test their warm zones against the Sixth Catalog of Orbits of Visual Binary Stars (VizieR B/orb6), and cross-check calcs/hosts.py's pairs with the El-Badry catalog, once VizieR is reachable.
-- Ages for K and M dwarfs within 50 ly from activity or spin, beyond the five known young stars.
+- Close binaries Gaia can't split, such as Procyon, Chi Draconis, Zeta Herculis, Xi Ursae Majoris, 44 Bootis and Mu Cassiopeiae: test their warm zones against the Sixth Catalog of Orbits of Visual Binary Stars (VizieR B/orb6), and cross-check calcs/hosts.py's pairs with the El-Badry catalog, once VizieR is reachable.
+- Ages for K and M dwarfs within 50 ly from activity or spin, beyond the six known young stars. Xi Bootis A may be young: FLAME gives 4.75 Gyr, its fast spin suggests far less.
+- Smith and Lissauer 2009, Icarus: confirm the lifetime of Earth-mass systems near 9 to 10 mutual Hill radii, for the checker's spacing rule.
 - Metaculus odds for the branch list: a Taiwan war and a nuclear weapon used before 2035. Metaculus blocks scripted reads, and search summaries disagree. Read the pages by hand.
 - Tau Ceti dust belt tilt in leads.py against MacGregor et al. 2016.
 - Beta Hydri drift: find the 2012 and 2023 primary papers.

@@ -116,6 +116,7 @@ YOUNG = {
     '42438': 'Pi1 Ursae Majoris, Ursa Major group, about 0.4 Gyr',
     '27913': 'Chi1 Orionis, Ursa Major group, about 0.4 Gyr',
     '102409': 'AU Microscopii, about 0.02 Gyr',
+    '113283': 'TW Piscis Austrini, Fomalhaut B, about 0.44 Gyr',
 }
 
 # ---------- Ages, from Gaia DR3 FLAME ----------

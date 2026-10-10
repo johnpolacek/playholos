@@ -39,7 +39,7 @@ def main():
     post('https://exoplanetarchive.ipac.caltech.edu/TAP/sync', {
         'format': 'csv',
         'query': 'SELECT hostname, hd_name, hip_name, gaia_dr3_id, sy_dist, pl_name, pl_bmasse, pl_orbsmax, pl_orbeccen, '
-                 'st_lum, st_age FROM pscomppars WHERE sy_dist < 15.33'}, 'exoplanets-50ly.csv')
+                 'st_lum, st_age, discoverymethod, pl_rvamp FROM pscomppars WHERE sy_dist < 15.33'}, 'exoplanets-50ly.csv')
     post('https://tapvizier.cds.unistra.fr/TAPVizieR/tap/sync', {
         'REQUEST': 'doQuery', 'LANG': 'ADQL', 'FORMAT': 'csv',
         'QUERY': 'SELECT source_id1, source_id2, sep_AU FROM "J/MNRAS/506/2269/table" '

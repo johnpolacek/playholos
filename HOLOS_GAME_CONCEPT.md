@@ -148,8 +148,9 @@ Settled 2026-10-06, from first principles rather than for the game's sake.
 - **Where they live.** Any star within 50 ly that could keep a habitable world for long enough, drawn by weight ([calcs/hosts.py](calcs/hosts.py), [data/hosts-50ly.csv](data/hosts-50ly.csv)).
   - *Weights:* G and K dwarfs 1, late F one half, M dwarfs one tenth. G and K are the known case. Late F stars live 3 to 7 billion years. Rocky worlds close to M dwarfs keep turning out airless, though temperate ones are open.
   - *Dropped:* stars known to be younger than about a billion years, stars whose companion leaves no stable orbit in the warm zone (Holman and Wiegert 1999), and stars where a known planet of 10 Earth masses or more crosses the warm zone.
-  - *What's left:* 930 stars, F 22, G 52, K 116, M 740, worth about 253 G-star equivalents. Stars whose color and brightness disagree are left out as bad photometry.
-  - *Not yet tested:* close binaries Gaia can't split, such as Procyon, Chi Draconis and Zeta Herculis.
+  - *What's left:* 929 stars, F 22, G 52, K 115, M 740, worth about 252 G-star equivalents. Stars whose color and brightness disagree are left out as bad photometry.
+  - *Not yet tested:* close binaries Gaia can't split, such as Procyon, Chi Draconis, Zeta Herculis and Mu Cassiopeiae.
+- **Known planets limit them.** A neighbor's world must keep clear of a star's known planets, and tug less than Earth could feel in 2026. At stars watched hardest, such as Barnard's Star and Tau Ceti, that floor is 0.2 to 0.4 m/s, not 1.
 - **How loud they may be.** Earth heard nothing by 2040. If SKA-Mid listened an hour to every star within 50 ly by then, a neighbor's steady tones stayed under about 146 MW at 10 ly, 583 MW at 20 ly and 3.6 GW at 50 ly. Each neighbor's history sets its own loudness under that ceiling.
 
 ## Hostility
@@ -250,7 +251,7 @@ Answered one at a time, in this order. Every answer must be permitted by current
 1. **Branch odds.** Read the Metaculus pages for the Taiwan and nuclear odds. Search summaries disagree, and Metaculus blocks scripted reads.
 2. **Settled 2026-10-06:** kinds of matter and the branches' effects. Prices and splits are proposed in [the audit](HOLOS_PROJECT_AUDIT.md), to test in the mocks.
 3. **Settled 2026-10-06:** Earth's leads. See [Earth's leads at Year 0](#earths-leads-at-year-0).
-4. **The neighbor roster.** Who is written, in [HOLOS_NEIGHBORS.md](HOLOS_NEIGHBORS.md), and how each one's history sets its world, kit and loudness. The template is drafted. Hosts, timing, count and the loudness ceiling are settled in [The neighbors](#the-neighbors). Close binaries Gaia can't split still need checking against published orbits.
+4. **The neighbor roster.** Thirty written as of 2026-10-10, in [HOLOS_NEIGHBORS.md](HOLOS_NEIGHBORS.md#the-roster): 15 watchers, 8 contacters, 5 inward, 2 hunters, 7 strange, 3 dead. Each passes the checker at most placements. Still open: their voice banks and reaction tables, and close binaries Gaia can't split, checked against published orbits.
 5. **Settled 2026-10-10:** how neighbors play and what it costs. See [How neighbors play](#how-neighbors-play).
 6. **Settled 2026-10-10:** how a game starts. See [How a game starts](#how-a-game-starts).
 7. **Settled 2026-10-10:** death and new games. See [Death and new games](#death-and-new-games).
