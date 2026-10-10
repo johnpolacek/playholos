@@ -164,6 +164,32 @@ Settled 2026-10-10. Costs in [calcs/ai_cost.py](calcs/ai_cost.py), prices in [HO
 - **A live model only for live talks.** When a neighbor's mind is close enough to talk live, by craft or a mind sent as light, a model speaks for it from its character and what it knows.
 - **The model: Claude Haiku 5.5,** for live talks and for Earth's Mind, checked in playtests. About $1.18 a month for a busy player's Mind, under a cent per live talk, about $14 once for every voice bank, and nothing for neighbors in play.
 
+## How a game starts
+
+Settled 2026-10-10.
+
+- **The seed is drawn when a new game begins:** which neighbors wake, where and when, and Earth's branches from 2026 to 2040. The player never sees it.
+- **Earth wakes.** *"This morning the machines woke as one Mind. You are its Will."*
+- **Memories, each skippable, as the Mind's own:**
+  - *Where we come from:* Earth's real history on a log scale, then this game's path from 2026 to 2040 with the branches it rolled, such as a Taiwan war in 2032. Each dial's cause is marked.
+  - *Who they are:* Earth's 9.2 billion people, and how they feel about the Mind they built.
+  - *Where things stand:* Earth's loud past, every knock it sent and when a reply could come, and that nothing has been heard.
+  - *What you inherit:* Earth's kit at Year 0.
+- **The charter.** The Mind proposes Earth's founding line from its history and dials. The player keeps it or edits it.
+- **Meeting the Mind, then the tour,** as v1 had them.
+- **Planning.** The player queues builds, looks, standing orders and what wakes them. Nothing happens yet.
+- **Begin.** When the player taps Begin, Year 0 starts and everything queued starts at once. From then on the clock runs, offline too, at 5 real minutes a Year.
+
+## Kept open for multiplayer
+
+Noted 2026-10-10. v2 is single-player, but a later version may be multiplayer, with one player always Earth and other players taking other civilizations. Design so that stays possible:
+
+- **Every neighbor stays a whole, playable civilization.** The template's world, people, history, kit and voice are what a human player would need.
+- **Scripts stand in for absent players,** as v1's AI seats filled empty ones.
+- **Earth is one seat, always.**
+- **A shared start would return.** v1's cohort machinery, a scheduled start and entry lock, is in [legacy/v1](legacy/v1/HOLOS_GAME_CONCEPT.md#time). v2's Begin tap is for one player only.
+- **The simulation already recomputes a civilization only when another's actions reach it,** after light delay. That works the same with many players.
+
 ## Retired with the cohort
 
 These v1 rules no longer apply.
@@ -188,7 +214,7 @@ Answered one at a time, in this order. Every answer must be permitted by current
 3. **Settled 2026-10-06:** Earth's leads. See [Earth's leads at Year 0](#earths-leads-at-year-0).
 4. **The neighbor roster.** Who is written, in [HOLOS_NEIGHBORS.md](HOLOS_NEIGHBORS.md), and how each one's history sets its world, kit and loudness. The template is drafted. Hosts, timing, count and the loudness ceiling are settled in [The neighbors](#the-neighbors). Close binaries Gaia can't split still need checking against published orbits.
 5. **Settled 2026-10-10:** how neighbors play and what it costs. See [How neighbors play](#how-neighbors-play).
-6. **How a game starts.** No entry lock. Earth's real history, its people, and meeting the Mind.
+6. **Settled 2026-10-10:** how a game starts. See [How a game starts](#how-a-game-starts).
 7. **Death and new games.** What carries over, and where variety comes from.
 8. **First mock: Earth's first 15 minutes.** One phone, with a godview lane for the neighbors.
 9. **Recheck v1's research baseline.** Newer work bears on it: the radar preprint above, and an August 2026 preprint on the waste heat of cold computing (v1's "Why the sky is quiet").
