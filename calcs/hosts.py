@@ -83,14 +83,30 @@ def name_from_hyg(star_list):
     hyg = [r for r in csv.DictReader((CACHE / 'hygdata_v41.csv').open()) if r['dist'] and 0 < float(r['dist']) <= PC_50LY * 1.1]
     cells = collections.defaultdict(list)
     for r in hyg: cells[(round(float(r['ra']) * 15), round(float(r['dec'])))].append(r)
+    # Gaia's G runs brighter than HYG's V, most for red stars. Within a pair, match brightest to brightest, one to one.
+    g_minus_v = {'F': 0.0, 'G': -0.15, 'K': -0.35, 'M': -1.2}
+    options = []
     for s in star_list:
         if not s['id'].isdigit(): continue
         for dra in (-1, 0, 1):
             for dde in (-1, 0, 1):
                 for r in cells[(round(s['ra']) + dra, round(s['dec']) + dde)]:
                     if angle(s, float(r['ra']) * 15, float(r['dec'])) < 0.1 and abs(float(r['dist']) / s['d_pc'] - 1) < 0.1:
-                        s['name'] = r['proper'] or ' '.join(r['bf'].split()) or r['gl'] or s['name']
-                        s['hip'] = r['hip']
+                        options.append((abs(float(r['absmag']) + g_minus_v.get(s['kind'], -0.5) - s['gabs']), s['id'], r))
+    named, taken = set(), set()
+    by_id = {s['id']: s for s in star_list}
+    for _, sid, r in sorted(options, key=lambda o: o[0]):
+        if sid in named or r['id'] in taken: continue
+        s = by_id[sid]
+        s['name'] = r['proper'] or ' '.join(r['bf'].split()) or r['gl'] or s['name']
+        s['hip'] = r['hip']
+        named.add(sid); taken.add(r['id'])
+    same = collections.defaultdict(list)                      # HYG names both stars of some pairs alike: 61 Cyg
+    for s in star_list:
+        if s['id'] in named: same[s['name']].append(s)
+    for name, pair in same.items():
+        if len(pair) > 1:
+            for letter, s in zip('ABCD', sorted(pair, key=lambda s: s['gabs'])): s['name'] = f'{name} {letter}'
 
 # Known young stars within 50 ly. Gaia's FLAME ages are isochrone ages, which barely constrain K and M dwarfs:
 # FLAME puts Epsilon Eridani near 7 billion years, where its spin and activity say 0.4 to 0.8.
