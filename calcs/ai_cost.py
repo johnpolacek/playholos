@@ -2,7 +2,7 @@
 
 Neighbors play from seeded life scripts, weighted reaction tables and prewritten voice banks: no model at run time.
 A model is used in three places only: writing the voice banks once, live talks with a neighbor's mind, and Earth's
-own Mind, which the player talks to. Prices are first-party rates as of October 2026, per million tokens:
+own Mind, which the player talks to. Prices are first-party rates as of October 10, 2026, per million tokens:
 Anthropic's and Google's pricing pages. Token counts and how often things happen are assumptions to test.
 """
 
@@ -10,6 +10,7 @@ MODELS = {
     # name: (input, cached input, output) in dollars per million tokens. Thinking counts as output.
     'Claude Opus 5.5': (4.00, 0.20, 20.00),
     'Claude Haiku 4.5': (1.00, 0.10, 5.00),
+    'Claude Haiku 5.5': (0.10, 0.01, 0.50),      # prompts up to 100,000 tokens, released October 7, 2026
     'Gemini 3.1 Flash-Lite': (0.25, 0.025, 1.50),
 }
 
