@@ -442,6 +442,30 @@ What Sol's own instruments have found nearby. For v2 open question 3.
 - **[Bell, Mamajek and Naylor 2015, ages of young moving groups](https://arxiv.org/abs/1508.05955)** · Published, MNRAS.
   - The AB Doradus moving group is about 150 million years old.
   - Used: AB Doradus and its companions dropped as hosts, too young.
+- **Ages of nearby stars, checked 2026-10-10.** Every F, G and K host was matched against published ages, and M hosts against young-group lists. Tables were read on VizieR that day, and two were read a second time as a check. 25 hosts left the list.
+- **[Mamajek and Hillenbrand 2008](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/ApJ/687/1264)** · Published, ApJ 687, 1264.
+  - Ages from calcium emission and spin for 103 Sun-like dwarfs within 16 pc. HD 166 is 0.2 billion years old, HD 17925 0.1 to 0.2, Xi Boötis A 0.2, HD 37394 0.4 to 0.8.
+  - Matters: Gaia's FLAME ages miss young cool stars. FLAME gives HD 166 9.6 billion years and Xi Boötis A 4.75.
+  - Used: the YOUNG list in [calcs/hosts.py](calcs/hosts.py).
+- **[Gagné et al. 2018, BANYAN Σ](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/ApJ/856/23)** · Published, ApJ 856, 23, with group ages from [Gagné and Faherty 2018](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/ApJ/862/138).
+  - Confirmed members of nearby young groups. Beta Pictoris is 24 million years old, AB Doradus about 150 million.
+  - Used: AT Microscopii A and B, GJ 2036 A and B, Wolf 1225 A and B and GJ 2060 C dropped as hosts.
+- **[Eisenbeiss et al. 2013, the Hercules-Lyra association](https://arxiv.org/abs/1312.4045)** · Published, A&A 556, A53.
+  - Members by lithium, spin and activity. The group is 257 ± 46 million years old. HD 166 and HD 17925 belong. HD 37394 is too old for it, near 0.5 billion.
+  - Used: the YOUNG list.
+- **Age compilations** · Published. [Vican 2012](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/AJ/143/135), [Stanford-Moore et al. 2020, BAFFLES](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/ApJ/898/27), [Sierchio et al. 2014](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/ApJ/785/33), [Gáspár, Rieke and Balog 2013](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/ApJ/768/25), [Montesinos et al. 2016](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/A+A/593/A51), [Wright et al. 2011](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/ApJ/743/48), [López-Santiago et al. 2010](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/A+A/514/A97), [Torres et al. 2006](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/A+A/460/695), [Riedel et al. 2017](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/AJ/153/95), [Casagrande et al. 2011](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/A+A/530/A138).
+  - Ages from activity, X-rays, spin, lithium and position on the main sequence. Together they put 111 Tauri near 0.3 billion years, Zeta Doradus 0.5, HD 29697 0.25, HD 74576 0.5, HD 98712 A 0.3 and HD 61606 A 0.45.
+  - Matters: no one method is safe alone. Activity ages fail for metal-poor stars such as Gamma Pavonis, and main-sequence position barely dates a K dwarf.
+  - Used: the YOUNG list. A star is dropped only when its estimates agree it is under a billion years. HD 61606 A rests on activity alone and is the weakest.
+- **[Mamajek et al. 2013, Fomalhaut C](https://arxiv.org/abs/1310.0764)** · Published, AJ 146, 154.
+  - The red dwarf LP 876-10 shares Fomalhaut's motion from 0.77 pc away. The system is 440 ± 40 million years old.
+  - Used: dropped as a host.
+- **[Riedel et al. 2011, AP Columbae](https://arxiv.org/abs/1108.5318)** · Published, AJ 142, 104.
+  - A red dwarf 28 ly away with lithium, 12 to 50 million years old.
+  - Used: dropped as a host.
+- **[King et al. 2003, the Ursa Major group](https://iopscience.iop.org/article/10.1086/368241)** · Published, AJ 125, 1980.
+  - Members by motion, brightness and activity. The group is about 0.4 to 0.5 billion years old.
+  - Used: not for drops. It lists Zeta Trianguli Australis and Gamma Leporis as likely members, but their own ages read older. See To check.
 
 ## Kinds of worlds
 
@@ -611,7 +635,11 @@ Results the design is waiting on. Check each when its date comes.
 - Cross-check calcs/hosts.py's wide pairs with the El-Badry catalog. VizieR is reachable again as of 2026-10-10.
 - Other white dwarf companions that may have scorched a warm zone, such as Gliese 86 B. Only Procyon is handled.
 - Companion masses in calcs/binaries.py are rough: dynamical masses depend on distance cubed, and white dwarfs read as light from their brightness.
-- Ages for K and M dwarfs within 50 ly from activity or spin, beyond the six known young stars. Xi Bootis A may be young: FLAME gives 4.75 Gyr, its fast spin suggests far less.
+- Borderline ages, kept as hosts for now. Where does "about a billion years" cut? HD 82106 reads 0.45 to 0.9 billion years, 58 Eridani 0.45 to 1.3 ([Egeland et al. 2015](https://arxiv.org/abs/1507.03611) spin it slower), Zeta Trianguli Australis 0.3 to 1.7, HD 4391 0.8 to 1.2, 61 Ursae Majoris 0.8 to 1.7. HD 221503 is a candidate member of a 210 million year group ([Thao et al. 2024](https://arxiv.org/abs/2406.05234)). About a dozen more read 1 to 2.
+- Gliese 208, a star Earth knocked on, has no published age. Its 12.3 day spin and X-rays suggest under a billion years. If so it leaves the host list, and six knocked stars can host a neighbor, not seven.
+- Red dwarf ages. Only confirmed young-group members were dropped. Gliese 393 is listed in AB Doradus but [Amado et al. 2021](https://arxiv.org/abs/2105.13785) put it older than 0.7 billion years. About 15 more are unconfirmed group candidates, and about 20 field red dwarfs carry ages of 25 to 300 million years in Riedel et al. 2017, such as AD Leonis.
+- 31 of the F, G and K hosts have no published age in any table opened, mostly K companions.
+- calcs/hosts.py pairs companions only within 20,000 AU. AT Microscopii and Fomalhaut C sit wider from their primaries and needed their own entries.
 - Smith and Lissauer 2009, Icarus: confirm the lifetime of Earth-mass systems near 9 to 10 mutual Hill radii, for the checker's spacing rule.
 - Tau Ceti dust belt tilt in leads.py against MacGregor et al. 2016.
 - Beta Hydri drift: find the 2012 and 2023 primary papers.

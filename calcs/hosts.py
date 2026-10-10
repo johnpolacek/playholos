@@ -118,6 +118,24 @@ YOUNG = {
     '102409': 'AU Microscopii, about 0.02 Gyr',
     '113283': 'TW Piscis Austrini, Fomalhaut B, about 0.44 Gyr',
     '25647': 'AB Doradus, about 0.15 Gyr',
+    # Added 2026-10-10 from a cross-check against published ages and young-group lists (HOLOS_RESEARCH.md, Ages of
+    # nearby stars). Keys are Hipparcos numbers, or Gaia ids for stars without one.
+    '544': 'HD 166 (Gl 5), Hercules-Lyra, about 0.2 Gyr',
+    '13402': 'HD 17925 (Gl 117), Hercules-Lyra, about 0.15 Gyr',
+    '72659': 'Xi Bootis A, about 0.25 Gyr',
+    '26779': 'HD 37394 (Gl 211), about 0.5 Gyr',
+    '25278': '111 Tauri, about 0.3 Gyr',
+    '23693': 'Zeta Doradus, about 0.5 Gyr',
+    '21818': 'HD 29697 (Gl 174), about 0.25 Gyr',
+    '42808': 'HD 74576 (Gl 320), about 0.5 Gyr',
+    '55454': 'HD 98712 (Gl 425 A), about 0.3 Gyr',
+    '37349': 'HD 61606 (Gl 282 A), about 0.45 Gyr, from activity alone: the weakest entry',
+    '102141': 'AT Microscopii, Beta Pictoris group, about 0.02 Gyr',
+    '22738': 'GJ 2036, AB Doradus group, about 0.15 Gyr',
+    '110526': 'Wolf 1225 (Gl 856), AB Doradus group, about 0.15 Gyr',
+    '6623351805412369024': 'Fomalhaut C, about 0.44 Gyr',
+    '2886233695250041216': 'AP Columbae, Argus, about 0.04 Gyr',
+    '5605469299570245504': 'GJ 2060 C, AB Doradus group, about 0.15 Gyr',
 }
 
 # Stars whose companion became a white dwarf too recently: as a giant, it scorched the warm zone, and too little time
@@ -189,7 +207,7 @@ def main():
         lum = float(f['lum_flame']) if f.get('lum_flame') else s.get('lum') or 10 ** (-0.4 * (s['gabs'] - 4.67))
         inner, outer = hz(lum)
         why = None
-        hips = {s.get('hip'), s['id'].replace('HIP ', '')} | {o.get('hip') for o, _ in pairs.get(s['id'], [])}
+        hips = {s.get('hip'), s['id'].replace('HIP ', '')} | {x for o, _ in pairs.get(s['id'], []) for x in (o.get('hip'), o['id'])}
         if hips & set(YOUNG):                                      # a young star's companions are young too
             why = 'younger than 1 Gyr'
         elif hips & set(SCORCHED):

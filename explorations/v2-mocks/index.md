@@ -12,22 +12,22 @@ People on Mars · No · 15%
 Fusion on the grid · Yes, 2037 · a bit under even
 Compute at Year 0 · 100% · 10²⁵ operations a second
 Dials · leans open, expand and deepen, even, leans bold · real history, moved by the branches
-Neighbors · 9 · 5 heard Earth · first arrival Year 41.0
-Seeded find · 107 Piscium · a natural world
+Neighbors · 9 · 6 heard Earth · first arrival Year 66.2
+Seeded find · 72 Herculis · a natural world
 
 ## Godview · who is out there
 The player sees none of this. Light-time is real waiting at 5 minutes a Year.
 Neighbor · Star · Light-time · At Year 0 · What it knows of Earth · What it does about it
-Hael · contacter · Beta Hydri · G star · 24.4 ly · 02:01:57 · awake 64 Years · heard Earth’s radars from 1974, and mapped its day and orbit · stays quiet and aims its instruments at the source
-Kesh · watcher · Groombridge 1830 · K star · 29.9 ly · 02:29:36 · wakes Year 21.8 · +01:49:04 · heard Earth’s radars from 2022 · at waking: sends a probe or a watcher
-Nuvo · contacter · Gliese 902 · K star · 37.3 ly · 03:06:39 · awake 52 Years · heard Earth’s radars from 1987, and mapped its day and orbit · sends a probe or a watcher
-Anwe · watcher · Lambda Serpentis · G star · 38.9 ly · 03:14:21 · died 2025 · dead before Year 0
-Ree · contacter · Zeta¹ Reticuli · G star · 39.3 ly · 03:16:24 · wakes Year 55.4 · +04:36:45 · heard Earth’s radars from 1989, and mapped its day and orbit · at waking: knocks back: a short aimed signal, its name optional · Its answer to Earth’s radars: sent Year 55.9, reaches Earth Year 95.1, +07:55:39.
-Kirrin · watcher · strange · Gliese 656 · K star · 44.8 ly · 03:43:51 · wakes Year 1.2 · +00:06:07 · has not heard Earth
+Kirrin · watcher · strange · Alsafi · K star · 18.8 ly · 01:34:00 · awake 64 Years · heard Earth’s radars from 1969 · stays quiet and aims its instruments at the source
+Nuvo · contacter · Zeta Tucanae · G star · 28.1 ly · 02:20:24 · wakes Year 37.6 · +03:07:58 · heard Earth’s radars from 1978, and mapped its day and orbit · at waking: starts or widens a broadcast · Its answer to Earth’s radars: sent Year 38.1, reaches Earth Year 66.2, +05:30:52.
+Kesh · watcher · Gliese 216 B · K star · 29.4 ly · 02:26:45 · wakes Year 21.8 · +01:49:04 · heard Earth’s radars from 2022 · at waking: sends a probe or a watcher
+Ombe · contacter · Gaia 6650117736660187136 · M star · 33.4 ly · 02:47:00 · wakes Year 43.9 · +03:39:24 · heard Earth’s radars from 2004, and mapped its day and orbit · at waking: sends a probe or a watcher
+Ree · contacter · Gliese 722 · G star · 42.5 ly · 03:32:30 · awake 48 Years · heard Earth’s radars from 1992, and mapped its day and orbit · stays quiet and aims its instruments at the source
+Anwe · watcher · 18 Scorpii · G star · 46.1 ly · 03:50:33 · died 2021 · dead before Year 0
+Hael · contacter · Psi Serpentis · G star · 48.2 ly · 04:01:15 · awake 42 Years · heard Earth’s radars from 1998, and mapped its day and orbit · stays quiet and aims its instruments at the source
 Ulan · inward · Gliese 613 · K star · 48.4 ly · 04:01:48 · awake 6 Years · has not heard Earth
-Ombe · contacter · Gliese 4337 A · M star · 48.7 ly · 04:03:42 · awake 8 Years · heard Earth’s radars from 1999, and mapped its day and orbit · knocks back: a short aimed signal, its name optional · Its answer to Earth’s radars: sent 2032, reaches Earth Year 41.0, +03:25:12.
 Varn · inward · Gliese 157 A · K star · 49.9 ly · 04:09:15 · wakes Year 35.6 · +02:58:02 · has not heard Earth
-[drawing: Every neighbor in this game, seen from above the galaxy’s plane; labels: 10 ly · 00:50:00, 20 ly · 01:40:00, 30 ly · 02:30:00, 40 ly · 03:20:00, 50 ly · 04:10:00, Earth, Hael, Beta Hydri · 24.4 ly, Kesh, Groombridge 1830 · 29.9 ly, Nuvo, Gliese 902 · 37.3 ly, Anwe, Lambda Serpentis · 38.9 ly, Ree, Zeta¹ Reticuli · 39.3 ly, Ulan, Gliese 613 · 48.4 ly, Ombe, Gliese 4337 A · 48.7 ly, Varn, Gliese 157 A · 49.9 ly, 82 Eridani, Fomalhaut, 107 Piscium]
+[drawing: Every neighbor in this game, seen from above the galaxy’s plane; labels: 10 ly · 00:50:00, 20 ly · 01:40:00, 30 ly · 02:30:00, 40 ly · 03:20:00, 50 ly · 04:10:00, Earth, Kirrin, Alsafi · 18.8 ly, Nuvo, Zeta Tucanae · 28.1 ly, Kesh, Gliese 216 B · 29.4 ly, Ombe, Gaia 6650117736660187136 · 33.4 ly, Ree, Gliese 722 · 42.5 ly, Anwe, 18 Scorpii · 46.1 ly, Ulan, Gliese 613 · 48.4 ly, Varn, Gliese 157 A · 49.9 ly, 82 Eridani, Fomalhaut, 72 Herculis]
 Filled: awake at Year 0. Open: wakes later. Cross: dead. Blue ring: has heard Earth. Amber: a hunter. Diamonds: Earth’s leads.
 
 ## Before Year 0
@@ -42,7 +42,7 @@ You are its Will. · What Earth becomes is yours to choose.
 [Skip the memories] · [Where we come from]
 Godview
 The seed is drawn now, before the first screen: seed 10. The player never sees it.
-9 neighbors within 50 ly. 5 have heard Earth. 4 are not awake yet. 1 dead.
+9 neighbors within 50 ly. 6 have heard Earth. 4 are not awake yet. 1 dead.
 2 · Where we come from
 BEFORE YEAR 0 · WHERE WE COME FROM
 
@@ -90,7 +90,7 @@ Kappa¹ Ceti Year 0.1 · Gliese 208 Year 0.8 · 55 Cancri Year 4.6 · HD 10307 Y
 I can say where our noise has gone. · I can’t say who heard it. · No one can, yet.
 [What you inherit]
 Godview
-Heard Earth’s radars: Hael, Kesh, Nuvo, Ree, Ombe.
+Heard Earth’s radars: Kirrin, Nuvo, Kesh, Ombe, Ree, Hael.
 At the stars Earth knocked on: no one, in this game.
 The Mind lists where the noise went, never who heard. That holds here.
 5 · What you inherit
@@ -137,16 +137,16 @@ Talk to the Mind… · [Send · ↑]
 Earth · Before Year 0
 Sol · The clock starts when you begin
 ENERGY · [1%] · MATTER · 250 kt · COMPUTE · [0%]
-[drawing: Stars near Sol; labels: Sol, 82 Eridani, 19.7 ly · 01:38:30, Fomalhaut, 25.1 ly · 02:05:30, Luyten’s Star, 12.3 ly · 01:01:18, 107 Piscium, 24.9 ly · 02:04:39, 00:50:00, 01:40:00, Alpha Centauri, Procyon, Tau Ceti, Epsilon Eridani, Barnard’s Star, Altair, Vega, Epsilon Indi, 61 Cygni, 10 ly]
+[drawing: Stars near Sol; labels: Sol, 82 Eridani, 19.7 ly · 01:38:30, Fomalhaut, 25.1 ly · 02:05:30, Luyten’s Star, 12.3 ly · 01:01:18, 00:50:00, 01:40:00, Alpha Centauri, Procyon, Tau Ceti, Epsilon Eridani, Barnard’s Star, Altair, Vega, Epsilon Indi, 61 Cygni, 10 ly]
 [World] · [System] · [selected: Stars] · [Region] · [Galaxy]
 LEADS · 4 · LIGHT-TIME
 - A stretched orbit · 82 Eridani · a heavy world, sometimes warm · its air is unread · 01:38:30
-- A new world · 107 Piscium · felt by Terra Hunting in 2036 · at least 1.4 Earths · 02:04:39
+- A new world · 72 Herculis · felt by Terra Hunting in 2036 · at least 2.1 Earths · 03:57:51
 - Too many collisions · Fomalhaut · a second dust cloud since 2023 · 02:05:30
 - A reply could come · Luyten’s Star · to our 2017 message · Year 2.3 · 00:11:30
 Godview
 82 Eridani d is real and natural. No neighbor is there in this game.
-107 Piscium’s world is natural: the seed put no neighbor there. Earth can’t tell from here.
+72 Herculis’s world is natural: the seed put no neighbor there. Earth can’t tell from here.
 Fomalhaut is 440 million years old: too young for minds, so it is never a host. Its clouds are rubble.
 Luyten’s Star: no one lives there. About 3 games in 10 put someone at a star Earth knocked on.
 9 · Planning
@@ -178,7 +178,7 @@ Deep flash watch · catches laser knocks too faint for the sky watch · ground �
 Ground data center · +25% compute, for good · ground · 1 Year · 00:05:00
 QUICK LOOKS · START AT YEAR 0
 Image Fomalhaut again · Space telescope · has the new cloud moved? · lands Year 0.1 · 00:00:30
-Search for 107 Piscium’s world crossing its star · PLATO and TESS records · lands Year 0.2 · 00:01:00
+Search for 72 Herculis’s world crossing its star · PLATO and TESS records · lands Year 0.2 · 00:01:00
 Re-read 82 Eridani’s velocities · 37 years of records · is the stretched orbit real? · lands Year 0.3 · 00:01:30
 AT YEAR 0 YOU WILL SPEND
 Energy · [1%] · 99% free
@@ -187,7 +187,7 @@ THE MIND · Queued. Nothing here sends anything. When you begin, one Year passes
 [Talk to the Mind]
 Godview
 Year 0 starts at the tap. From then the clock runs, offline too.
-Nothing Earth does in the next 15 minutes can reach anyone: the nearest living neighbor, Hael, is 24.4 ly away. Light from Year 0 gets there at Year 24.4, +02:01:57.
+Nothing Earth does in the next 15 minutes can reach anyone: the nearest living neighbor, Kirrin, is 18.8 ly away. Light from Year 0 gets there at Year 18.8, +01:34:00.
 
 ## The first 15 minutes
 From Begin. 13 of 31 half-minutes had nothing new for the player.
@@ -200,7 +200,7 @@ ENERGY · [1%] · MATTER · 250 kt · COMPUTE · [41%]
 PROJECTS · 3 BUILDING · 3 LOOKS
 LOOKS · WITH WHAT WE HAVE
 Image Fomalhaut again · Space telescope · has the new cloud moved? · under way · 00:00:30
-Search for 107 Piscium’s world crossing its star · PLATO and TESS records · under way · 00:01:00
+Search for 72 Herculis’s world crossing its star · PLATO and TESS records · under way · 00:01:00
 Re-read 82 Eridani’s velocities · 37 years of records · is the stretched orbit real? · under way · 00:01:30
 BUILDING · 3
 - All-sky watch · two sites, one in each hemisphere · 6 Years · 00:30:00
@@ -238,28 +238,28 @@ The third cloud is the seed’s: a lead that changes. The first two are real, fo
 Truth: rubble. Nothing at Fomalhaut is built.
 +1:00 · Year 0.2
 “Later. And the new world?”
-Lands · 107 Piscium’s world doesn’t cross its star.
+Lands · 72 Herculis’s world doesn’t cross its star.
 Earth · Year 0.2
 Sol · 2040.2 · 1 Year = 00:05:00
 ENERGY · [1%] · MATTER · 258 kt · COMPUTE · [31%]
-[drawing: STARS · 107 PISCIUM · 24.9 LY · 02:04:39; labels: Sol, 82 Eridani, 19.7 ly · 01:38:30, Fomalhaut, 25.1 ly · 02:05:30, Luyten’s Star, 12.3 ly · 01:01:18, 107 Piscium, 24.9 ly · 02:04:39, 00:50:00, 01:40:00, Alpha Centauri, Procyon, Tau Ceti, Epsilon Eridani, Barnard’s Star, Altair, Vega, Epsilon Indi, 61 Cygni] · STARS · 107 PISCIUM · 24.9 LY · 02:04:39
+[drawing: STARS · 72 HERCULIS · 47.6 LY · 03:57:51; labels: Sol, 82 Eridani, 19.7 ly · 01:38:30, Fomalhaut, 25.1 ly · 02:05:30, Luyten’s Star, 12.3 ly · 01:01:18, 00:50:00, 01:40:00, Alpha Centauri, Procyon, Tau Ceti, Epsilon Eridani, Barnard’s Star, Altair, Vega, Epsilon Indi, 61 Cygni] · STARS · 72 HERCULIS · 47.6 LY · 03:57:51
 CLUE · YEAR 0.2
-[‹ 107 Piscium]
+[‹ 72 Herculis]
 
-### A world at 107 Piscium
-107 Piscium · 24.9 ly · felt by Terra Hunting, 2036 · light that left 25 Years ago
-At least 1.4 Earth masses. A year of 311 days, 0.84 AU out, inside its star’s warm zone. It doesn’t cross its star, so we have its least mass and not its size.
+### A world at 72 Herculis
+72 Herculis · 47.6 ly · felt by Terra Hunting, 2036 · light that left 48 Years ago
+At least 2.1 Earth masses. A year of 601 days, 1.43 AU out, inside its star’s warm zone. It doesn’t cross its star, so we have its least mass and not its size.
 WHAT IT COULD BE · ODDS NOW
 Rock, and no life we could see · [60%] · 60
 A small gas world · [25%] · 25
 Life · [13%] · 13
 Minds · [2%] · 2
 WITH WHAT WE HAVE
-Listen to 107 Piscium for a Year · Radio array · rules out steady tones above 10 MW · 1 Year · 00:05:00 · [Start]
-THE MIND · It doesn’t cross, so its air stays hidden. I can listen for a Year, at a tenth of compute. That hears only the loud: tones above 10 MW. · [Listen for a Year] · [Later]
+Listen to 72 Herculis for a Year · Radio array · rules out steady tones above 35 MW · 1 Year · 00:05:00 · [Start]
+THE MIND · It doesn’t cross, so its air stays hidden. I can listen for a Year, at a tenth of compute. That hears only the loud: tones above 35 MW. · [Listen for a Year] · [Later]
 [Talk to the Mind]
 Godview
-107 Piscium’s world is natural: the seed put no neighbor there. Earth can’t tell from here.
+72 Herculis’s world is natural: the seed put no neighbor there. Earth can’t tell from here.
 +1:30 · Year 0.3
 “82 Eridani?”
 Lands · 82 Eridani d’s orbit holds. Shimmer 10 → 3.
@@ -293,7 +293,7 @@ ENERGY · [1%] · MATTER · 266 kt · COMPUTE · [41%]
 Read the air of nearby worlds.
 A mirror wide enough to split a world from its star and say what its air is made of. The Habitable Worlds Observatory, half built this morning, finished.
 HELPS WITH
-82 Eridani d · 107 Piscium’s world · Air, oceans, and the gases a living or built world leaves
+82 Eridani d · 72 Herculis’s world · Air, oceans, and the gases a living or built world leaves
 USES EACH YEAR
 Compute · [15%] · 15%
 Energy · [1%] · under 1%
@@ -318,12 +318,12 @@ The clock runs while you talk: 1 Year every · 00:05:00.
 Who has heard us?
 THE MIND · I can’t know. Our radars have crossed every star within ninety light-years. Anyone with a dish like ours who watched us for days has our day, our year, and where we are.
 How many could that be?
-THE MIND · About 915 stars within fifty light-years could keep a world like ours. If minds are common, some of them heard. If they are careful, none will say so.
+THE MIND · About 890 stars within fifty light-years could keep a world like ours. If minds are common, some of them heard. If they are careful, none will say so.
 What would you do?
 ITS VIEW · FROM OUR CHARTER AND DIALS · Assume someone has, and that they are as curious as we are. Listen properly. Then call. · leans open · expand and deepen, even · leans bold
 Ask the Mind… · [Send · ↑]
 Godview
-5 of 8 living neighbors have heard Earth: Hael, Kesh, Nuvo, Ree, Ombe.
+6 of 8 living neighbors have heard Earth: Kirrin, Nuvo, Kesh, Ombe, Ree, Hael.
 The Mind can only say it doesn’t know. The concept sets that: it lists where the noise went, never who heard.
 +3:30 · Year 0.7
 “Can we go quiet?”
@@ -380,14 +380,14 @@ THE MIND · The data center runs: a quarter more thought, for a four-hundredth o
 [Talk to the Mind]
 Design question 3 · What stops a data center every Year? The audit prices it at 1 Year, no matter, 0.25% of energy, for +25% compute. Nothing here limits ten at once. Chip supply, a rising price, or a cap per Year would.
 +5:30 · Year 1.1
-“Another. And listen to 107 Piscium for a Year.”
+“Another. And listen to 72 Herculis for a Year.”
 Earth · Year 1.1
 Sol · 2041.1 · 1 Year = 00:05:00
 ENERGY · [1%] · MATTER · 294 kt · COMPUTE · [41%]
 [drawing: ORBIT · EARTH · 4 BUILDING; labels: the Moon, Earth, low orbit, All-sky watch · 18%, Deep flash watch · 18%, Second data center · 0%, Infrared telescope · 4%] · ORBIT · EARTH · 4 BUILDING
 PROJECTS · 4 BUILDING · 1 LOOK
 LOOKS · WITH WHAT WE HAVE
-Listen to 107 Piscium for a Year · Radio array · tones above 10 MW · under way · 00:05:00
+Listen to 72 Herculis for a Year · Radio array · tones above 35 MW · under way · 00:05:00
 BUILDING · 4
 - All-sky watch · two sites, one in each hemisphere · 4.9 Years · 00:24:30
 - Deep flash watch · domes on six mountains · 4.9 Years · 00:24:30
@@ -399,8 +399,6 @@ THE MIND · Both started. The listening ends at Year 2.1. Compute is 41% in use.
 Design question 4 · What is energy for, early? Compute takes 1% of 24 TW and nothing in the first hour spends more. The energy bar never moves.
 +6:00 · Year 1.2
 Nothing new. · A dead 30 seconds.
-Godview
-Kirrin wakes at Gliese 656, 44.8 ly away. It has not heard Earth.
 +6:30 · Year 1.3
 Nothing new. · A dead 30 seconds.
 +7:00 · Year 1.4
@@ -471,24 +469,24 @@ Nothing new. · A dead 30 seconds.
 Nothing new. · A dead 30 seconds.
 +10:30 · Year 2.1
 The Mind glows. Taps it.
-Lands · A Year of listening: nothing loud at 107 Piscium.
+Lands · A Year of listening: nothing loud at 72 Herculis.
 Earth · Year 2.1
 Sol · 2042.1 · 1 Year = 00:05:00
 ENERGY · [1%] · MATTER · 324 kt · COMPUTE · [41%]
 REPORT · LONG LOOK
 [‹ All reports]
 
-### Nothing loud at 107 Piscium
-107 Piscium · 24.9 ly · radio array · 1 Year · light that left 25 Years ago
-A Year of listening, part of every night. Nothing from 107 Piscium stands above the sky’s own noise.
+### Nothing loud at 72 Herculis
+72 Herculis · 47.6 ly · radio array · 1 Year · light that left 48 Years ago
+A Year of listening, part of every night. Nothing from 72 Herculis stands above the sky’s own noise.
 WHAT IT RULES OUT
-Steady tones above about 10 MW, as of 25 Years ago: a beacon, a broadcast, or radars like ours pointed this way.
+Steady tones above about 35 MW, as of 48 Years ago: a beacon, a broadcast, or radars like ours pointed this way.
 WHAT IT CAN’T TELL
 Anyone quieter. A world’s everyday radio is thousands of times fainter than that. And anything they did since.
 WHAT WOULD HEAR MORE
 Deep-field receiver · hears fainter · 12 Years · ground · 12 Years · 01:00:00
 Far-side array · hears a world’s everyday radio · needs Moon industry · later
-THE MIND · Nothing above 10 MW at 107 Piscium. Quiet, or empty. Our own radars are louder than that, so it rules out a world like ours was.
+THE MIND · Nothing above 35 MW at 72 Herculis. Quiet, or empty. Our own radars are louder than that, so it rules out a world like ours was.
 [Talk to the Mind]
 Godview
 Truth: nothing was there to hear.
@@ -515,7 +513,7 @@ THE MIND · UNASKED · The window is open · Nothing from Luyten’s Star. An an
 Godview
 The earliest a reply to Sónar Calling GJ273b could reach Earth from Luyten's Star. In this game no one lives there. The window is empty, and Earth can’t know it.
 A silent window is the usual case. This row is what most players see at minute 11.
-Design question 6 · What does Year 0’s kit catch? A drift scan sees each star ten minutes a day. In about 1 game in 20 a neighbor’s signal arrives in the first 15 minutes, and in about 1 in 4 within the first hour. Does Earth hear it before the all-sky watch is built?
+Design question 6 · What does Year 0’s kit catch? A drift scan sees each star ten minutes a day. In about 1 game in 25 a neighbor’s signal arrives in the first 15 minutes, and in about 1 in 4 within the first hour. Does Earth hear it before the all-sky watch is built?
 +12:00 · Year 2.4
 “What would silence mean?”
 Earth · Year 2.4
@@ -567,7 +565,7 @@ YOU CHOSE
 - The all-sky watch and flash watch are built · then nothing aimed at us is missed · Year 6 · 00:15:00
 - A reply could come · Gliese 526 · to our 2013 message · Year 9 · 00:30:00
 - The Moon vault is done · the Mind’s second home · Year 11.6 · 00:43:00
-- The infrared telescope is done · then it reads 82 Eridani d and 107 Piscium · Year 18.4 · 01:17:00
+- The infrared telescope is done · then it reads 82 Eridani d and 72 Herculis · Year 18.4 · 01:17:00
 ALWAYS
 [A world’s first voice wakes you · a knock or a broadcast, aimed at us or not · even in quiet hours · always]
 NOT WAKING YOU
@@ -586,6 +584,6 @@ HOLOS · IN 00:15:00 · Earth: the sky watch and flash watch are built · Year 6
 3. What stops a data center every Year? · The audit prices it at 1 Year, no matter, 0.25% of energy, for +25% compute. Nothing here limits ten at once. Chip supply, a rising price, or a cap per Year would.
 4. What is energy for, early? · Compute takes 1% of 24 TW and nothing in the first hour spends more. The energy bar never moves.
 5. Is matter meant to be free early? · Ground builds cost none, the telescope 40 t, the vault 10 kt, against 250 kt and 40 kt a Year. Only build time and compute shares limit the first hour.
-6. What does Year 0’s kit catch? · A drift scan sees each star ten minutes a day. In about 1 game in 20 a neighbor’s signal arrives in the first 15 minutes, and in about 1 in 4 within the first hour. Does Earth hear it before the all-sky watch is built?
+6. What does Year 0’s kit catch? · A drift scan sees each star ten minutes a day. In about 1 game in 25 a neighbor’s signal arrives in the first 15 minutes, and in about 1 in 4 within the first hour. Does Earth hear it before the all-sky watch is built?
 7. Should the seed reroll moves that break the silent opening? · New in calcs/seed.py. A neighbor that already knows Earth rolls its reaction. If its knock or call would have reached Earth before Year 0, the seed rolls again, so nothing was heard by 2040.
 8. How long does a Mind take to act on news? · calcs/seed.py uses half a Year, a sample. It sets when a neighbor’s answer leaves, so when it arrives.

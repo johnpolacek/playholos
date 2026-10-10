@@ -168,8 +168,8 @@ Settled 2026-10-06, from first principles rather than for the game's sake.
   - *Years since waking:* growth under the same limits as Earth's, from prerequisite chains, matter, energy and heat.
 - **Where they live.** Any star within 50 ly that could keep a habitable world for long enough, drawn by weight ([calcs/hosts.py](calcs/hosts.py), [data/hosts-50ly.csv](data/hosts-50ly.csv)).
   - *Weights:* G and K dwarfs 1, late F one half, M dwarfs one tenth. G and K are the known case. Late F stars live 3 to 7 billion years. Rocky worlds close to M dwarfs keep turning out airless, though temperate ones are open.
-  - *Dropped:* stars known to be younger than about a billion years, with their companions. Stars whose companion leaves no stable orbit in the warm zone (Holman and Wiegert 1999), whether Gaia splits the pair or only a published orbit shows it (ORB6, SB9). Procyon, whose white dwarf companion was a giant 1.4 billion years ago (Bond et al. 2015). Giant stars. And stars where a known planet of 10 Earth masses or more crosses the warm zone.
-  - *What's left:* 915 stars, F 18, G 51, K 112, M 734, worth about 245 G-star equivalents. Stars whose color and brightness disagree are left out as bad photometry.
+  - *Dropped:* stars known to be younger than about a billion years, with their companions. Checked 2026-10-10 against published ages and young-group lists: 25 more left, among them Xi Boötis A and HD 166. Gaia's own ages miss young cool stars. Stars whose companion leaves no stable orbit in the warm zone (Holman and Wiegert 1999), whether Gaia splits the pair or only a published orbit shows it (ORB6, SB9). Procyon, whose white dwarf companion was a giant 1.4 billion years ago (Bond et al. 2015). Giant stars. And stars where a known planet of 10 Earth masses or more crosses the warm zone.
+  - *What's left:* 890 stars, F 16, G 49, K 102, M 723, worth about 231 G-star equivalents. Stars whose color and brightness disagree are left out as bad photometry.
   - *Close pairs Gaia can't split,* tested 2026-10-10 against 114 published orbits ([calcs/binaries.py](calcs/binaries.py)). Eleven hosts lost their warm zone, among them Chi Draconis, Zeta Herculis and Porrima. Others keep part of it, such as Mu Cassiopeiae A, 0.64 to 0.99 AU. The checker tests every placement against them.
   - *Wobble-only orbits need backing.* An orbit seen only in a star's wobble, implying a tug over 1 km/s, counts only if a spectroscopic orbit confirms it. Velocity surveys of bright near stars would have seen it. That clears 107 Piscium, whose velocity is steady to about 1 m/s (Soubiran et al. 2018), and 61 Cygni A.
 - **Known planets limit them.** A neighbor's world must keep clear of a star's known planets, and tug less than Earth could feel in 2026. At stars watched hardest, such as Barnard's Star and Tau Ceti, that floor is 0.2 to 0.4 m/s, not 1.
@@ -234,7 +234,7 @@ Built 2026-10-10 in [calcs/seed.py](calcs/seed.py), from the rules above. Two of
 - **What 400 drawn games look like** (`python3 calcs/seed.py stats`):
   - A median of 9 neighbors, from 3 to 30. A hunter in a little over half.
   - Earth's seeded find is a neighbor's own world in nearly half.
-  - A neighbor's signal reaches Earth in the first 15 minutes in about 1 game in 20, and in the first hour in about 1 in 4. Most are answers to Earth's radars.
+  - A neighbor's signal reaches Earth in the first 15 minutes in about 1 game in 25, and in the first hour in about 1 in 4. Most are answers to Earth's radars.
 
 ## Death and new games
 

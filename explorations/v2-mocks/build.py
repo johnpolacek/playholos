@@ -17,7 +17,7 @@ Q_RADAR = ask('Can the Will quiet Earth’s radars?', 'A player on a loud Earth 
 Q_DC = ask('What stops a data center every Year?', 'The audit prices it at 1 Year, no matter, 0.25% of energy, for +25% compute. Nothing here limits ten at once. Chip supply, a rising price, or a cap per Year would.')
 Q_ENERGY = ask('What is energy for, early?', 'Compute takes 1% of 24 TW and nothing in the first hour spends more. The energy bar never moves.')
 Q_MATTER = ask('Is matter meant to be free early?', 'Ground builds cost none, the telescope 40 t, the vault 10 kt, against 250 kt and 40 kt a Year. Only build time and compute shares limit the first hour.')
-Q_CATCH = ask('What does Year 0’s kit catch?', 'A drift scan sees each star ten minutes a day. In about 1 game in 20 a neighbor’s signal arrives in the first 15 minutes, and in about 1 in 4 within the first hour. Does Earth hear it before the all-sky watch is built?')
+Q_CATCH = ask('What does Year 0’s kit catch?', 'A drift scan sees each star ten minutes a day. In about 1 game in 25 a neighbor’s signal arrives in the first 15 minutes, and in about 1 in 4 within the first hour. Does Earth hear it before the all-sky watch is built?')
 
 # ---------- Godview: who is out there ----------
 MOVE = reactions.MOVES
