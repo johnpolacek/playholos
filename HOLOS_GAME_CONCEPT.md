@@ -85,7 +85,7 @@ Settled 2026-10-06.
 - **The backbone, the same in every game:**
   - *People:* about 9.2 billion (UN, 2024).
   - *Climate:* the long-term average passes 1.5°C around 2030. Single years already have (WMO).
-  - *Energy:* about 22 to 26 TW, up from 19 TW in 2024, at 1 to 2% a year. Solar and wind carry the growth. Fusion plants are being built, but forecasters put the first 100 MW plant near 2042, so most games have none on the grid at Year 0.
+  - *Energy:* about 22 to 26 TW, up from 19 TW in 2024, at 1 to 2% a year. Solar and wind carry the growth. Fusion plants are being built, but forecasters put the first 100 MW plant near mid-2041, so most games have none on the grid at Year 0.
   - *Compute:* about 10²⁵ to 10²⁶ operations a second, up from about 3×10²² in 2026. Power and chip supply set the pace.
   - *Space:* fully reusable heavy lift, near 40 kt a year to orbit. Crewed Moon landings from 2028 (US) and about 2030 (China), and south-pole stations planned for the mid-2030s, likely late. No one on Mars: forecasts put the first landing near 2045.
   - *Probes:* the Voyagers fall silent in the 2030s, Voyager 1 near 220 AU by 2040. New Horizons is near 100 AU. Interstellar Probe may be on its way, if it launches in its 2036 to 2042 window.
@@ -94,9 +94,9 @@ Settled 2026-10-06.
   - *Listening:* nothing heard to 2040. This binds the neighbors: each one's emissions must stay below what Earth's instruments to 2040 could catch.
 - **Earth's dials: a fixed base from real history, shifted by the seed's branches.** Real history sets where each dial starts, the same every game. Each probable branch from 2026 to 2040 nudges a dial.
 - **Branches can change Earth's kit, by their real effects.** A Taiwan war that cuts chip supply means Earth wakes with less compute. v1 held that history explains character, never capacity, to keep players equal. With one player, that reason is gone for Earth.
-- **The branches, odds to verify:**
-  - *A Taiwan war before 2035,* about 3 in 10. Nudges Hidden. Taiwan makes about 92% of the most advanced logic chips, and a new fab takes 3 to 4 Years, so Earth wakes with about half its compute: a fifth to all of it, depending on how fast fabs come back ([calcs/branches.py](calcs/branches.py)).
-  - *A nuclear weapon used in war before 2035,* about 1 in 4. Nudges Cautious. Limited use leaves the kit as it is. A full exchange is far rarer and is not a branch.
+- **The branches, odds read from Metaculus on 2026-10-10:**
+  - *A Taiwan war before 2035,* about 1 in 4: 26% for a full-scale invasion. Nudges Hidden. Taiwan makes about 92% of the most advanced logic chips, and a new fab takes 3 to 4 Years, so Earth wakes with about half its compute: a fifth to all of it, depending on how fast fabs come back ([calcs/branches.py](calcs/branches.py)).
+  - *A nuclear weapon used in war before 2035,* about 1 in 4: 24%. Nudges Cautious. Limited use leaves the kit as it is. A full exchange is far rarer and is not a branch.
   - *People sent to Mars before 2036,* about 15%. Nudges Expand. A small crewed outpost at Year 0, a few ships' cargo, about 1 kt of metal.
   - *Fusion on the grid by 2040,* a bit under even. No dial. The first plants are too small to change Earth's energy, but the fusion build-out is open from Year 0.
   - Each branch is rolled on its own.
@@ -270,7 +270,7 @@ These v1 rules no longer apply.
 
 Answered one at a time, in this order. Every answer must be permitted by current observations: improbable is acceptable, contradicted is not.
 
-1. **Branch odds.** Read the Metaculus pages for the Taiwan and nuclear odds. Search summaries disagree, and Metaculus blocks scripted reads.
+1. **Branch odds.** Read on the Metaculus pages 2026-10-10: invasion of Taiwan 26% and nuclear use 24% before 2035. Still open: whether a blockade of Taiwan, 46% before 2035, becomes its own branch.
 2. **Settled 2026-10-06:** kinds of matter and the branches' effects. Prices and splits are proposed in [the audit](HOLOS_PROJECT_AUDIT.md), to test in the mocks.
 3. **Settled 2026-10-06:** Earth's leads. See [Earth's leads at Year 0](#earths-leads-at-year-0).
 4. **The neighbor roster.** Thirty written as of 2026-10-10, in [HOLOS_NEIGHBORS.md](HOLOS_NEIGHBORS.md#the-roster): 15 watchers, 8 contacters, 5 inward, 2 hunters, 7 strange, 3 dead. Each passes the checker at most placements. Reaction tables, voice briefs and small voice banks are written: 1,110 lines, in [data/voices/](data/voices/). Close binaries are checked against published orbits. Still open: full banks once the mocks show what players read most.

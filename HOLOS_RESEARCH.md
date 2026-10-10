@@ -58,7 +58,7 @@ Every source the game rests on, grouped by the question it answers. Each entry s
 ## Earth to Year 0: forecasts
 
 - **[Metaculus, date of the first general AI system](https://www.metaculus.com/questions/5121/date-of-artificial-general-intelligence/)** · Forecast, community median ([summary](https://aitoolsreview.co.uk/insights/agi-timeline-predictions-2026)).
-  - Median about January 2031 at the latest reading, with a range of April 2028 to July 2037. It was January 2033 in early 2026 and about 2070 in 2020.
+  - Median 5 January 2031, range April 2028 to April 2037, from about 1,900 forecasters, read on the page 2026-10-10. It was January 2033 in early 2026 and about 2070 in 2020.
   - Matters: the forecasters' date for Earth's Mind waking.
   - Used: v2 [Year 0 and Earth's road to it](HOLOS_GAME_CONCEPT.md#year-0-and-earths-road-to-it).
 - **[Grace et al., 2024 Expert Survey on Progress in AI](https://aiimpacts.org/wp-content/uploads/2026/09/ESPAI2024.pdf)** · Survey of 1,580 AI researchers, published September 2026.
@@ -101,7 +101,7 @@ Every source the game rests on, grouped by the question it answers. Each entry s
   - Matters: where people are off Earth at Year 0. Plans like these usually slip.
   - Used: v2 Year 0 and Earth's road to it.
 - **[Metaculus, first humans on Mars](https://www.metaculus.com/questions/3515/date-first-human-lands-on-mars/)** · Forecast.
-  - Median about July 2045, within November 2037 to August 2060. About 15% for humans sent before 2036.
+  - Median January 2046, range February 2038 to October 2060, from 392 forecasters, read on the page 2026-10-10. About 15% for humans sent before 2036, from an earlier summary.
   - Matters: no one on Mars at Year 0 in the most probable path. A seeded branch can send them.
   - Used: v2 Year 0 and Earth's road to it, open question 1.
 - **[Commonwealth Fusion Systems, ARC](https://cfs.energy/technology/arc/)** · Plan ([grid application](https://cfs.energy/news-and-media/commonwealth-fusion-systems-becomes-first-fusion-company-to-apply-to-pjm-interconnection-the-largest-u.s.-wholesale-electricity-market)).
@@ -114,17 +114,21 @@ Every source the game rests on, grouped by the question it answers. Each entry s
   - Used: v2 Year 0 and Earth's road to it.
 
 - **[Metaculus, first 100 MW fusion plant](https://www.metaculus.com/questions/363/)** · Forecast ([0.1% of world energy](https://www.metaculus.com/questions/9464/nuclear-fusion-power-01-of-global-energy/)).
-  - Median about April 2042 for a 100 MW fusion plant in service. About 2051 for fusion to supply 0.1% of world energy.
+  - Median July 2041 for a 100 MW fusion plant in service, range March 2034 to July 2053, from 256 forecasters. July 2047 for fusion to supply 0.1% of world energy, range September 2039 to May 2058, from 99. Read on the pages 2026-10-10.
   - Matters: most games have no fusion on the grid at Year 0. It corrected an earlier draft that assumed the 2030s.
   - Used: v2 Year 0 and Earth's road to it, open question 1.
-- **[Metaculus, Chinese invasion of Taiwan](https://www.metaculus.com/questions/11480/china-launches-invasion-of-taiwan/)** · Forecast, read through search summaries.
-  - About 12% by 2028 and roughly 27 to 33% before 2035.
+- **[Metaculus, Chinese invasion of Taiwan](https://www.metaculus.com/questions/11480/china-launches-invasion-of-taiwan/)** · Forecast, read on the page 2026-10-10.
+  - A full-scale invasion before 2028, 5%. Before 2030, 15%. Before 2035, 26%. From 974 forecasters. Earlier search summaries, 12% by 2028 and 27 to 33% by 2035, were out of date.
   - Matters: the likeliest major branch before Year 0.
-  - Used: v2 open question 1. To verify on the page.
-- **[Metaculus, no non-test nuclear detonation before 2035](https://www.metaculus.com/questions/3150/no-non-test-nuclear-detonations-before-2035/)** · Forecast, read through search summaries ([by 2050](https://www.metaculus.com/questions/4779/will-a-nuclear-weapon-be-detonated-as-an-act-of-war-by-2050/)).
-  - About 74% that none is used before 2035, so about 26% that one is. Summaries of the 2050 question disagree with it.
+  - Used: v2 [Year 0 and Earth's road to it](HOLOS_GAME_CONCEPT.md#year-0-and-earths-road-to-it), the branches.
+- **[Metaculus, China blockades Taiwan](https://www.metaculus.com/questions/12309/china-engages-in-a-blockade-against-taiwan/)** · Forecast, read on the page 2026-10-10.
+  - A full-scale blockade before 2030, 30%. Before 2035, 46%. From 101 forecasters.
+  - Matters: a blockade cuts chip exports without an invasion, and forecasters think it nearly twice as likely.
+  - Used: v2 open question 1, a possible blockade branch.
+- **[Metaculus, no non-test nuclear detonation before 2035](https://www.metaculus.com/questions/3150/no-non-test-nuclear-detonations-before-2035/)** · Forecast, read on the page 2026-10-10 ([by 2050](https://www.metaculus.com/questions/4779/will-a-nuclear-weapon-be-detonated-as-an-act-of-war-by-2050/)).
+  - 76% that none is used before 2035, so 24% that one is, from 193 forecasters. 34% for one used in war by 2050, from 532. The two agree.
   - Matters: a branch that would push Earth toward Cautious.
-  - Used: v2 open question 1. To verify on the page.
+  - Used: v2 [Year 0 and Earth's road to it](HOLOS_GAME_CONCEPT.md#year-0-and-earths-road-to-it), the branches.
 
 - **[Epoch AI, ML hardware energy efficiency](https://epoch.ai/data-insights/ml-hardware-energy-efficiency)** · Data ([hardware trends](https://epoch.ai/blog/trends-in-machine-learning-hardware)).
   - Leading ML hardware gets about 28 to 40% more energy efficient a year. The H100 peaks near 1.4×10¹² operations a second per watt.
@@ -605,7 +609,6 @@ Results the design is waiting on. Check each when its date comes.
 - Companion masses in calcs/binaries.py are rough: dynamical masses depend on distance cubed, and white dwarfs read as light from their brightness.
 - Ages for K and M dwarfs within 50 ly from activity or spin, beyond the six known young stars. Xi Bootis A may be young: FLAME gives 4.75 Gyr, its fast spin suggests far less.
 - Smith and Lissauer 2009, Icarus: confirm the lifetime of Earth-mass systems near 9 to 10 mutual Hill radii, for the checker's spacing rule.
-- Metaculus odds for the branch list: a Taiwan war and a nuclear weapon used before 2035. Metaculus blocks scripted reads, and search summaries disagree. Read the pages by hand.
 - Tau Ceti dust belt tilt in leads.py against MacGregor et al. 2016.
 - Beta Hydri drift: find the 2012 and 2023 primary papers.
 - Earth's aimed messages: transmitter power, frequency and duration from primary sources.
