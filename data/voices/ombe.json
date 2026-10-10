@@ -1,0 +1,62 @@
+{
+  "name": "Ombe",
+  "calls_sol": "the Little Sun",
+  "hail": [
+    "Little Sun, we see you. Share the light with us?",
+    "Hello from the round shore, Little Sun. We would like to know you. Would you like to know us?",
+    "Little Sun, hello from the shore of the Eye. We want friends out here, and we say so plainly."
+  ],
+  "close": [
+    "Share back when you can. Ombe.",
+    "From the round shore, warmly. Write soon?"
+  ],
+  "finding": [
+    "We found this, and we want to share it: {part}",
+    "{part} Have you found the same?",
+    "Shared freely, from the shore: {part}",
+    "{part} What do you make of it?",
+    "We would rather you know this than not: {part}"
+  ],
+  "sighting": [
+    "We saw this, and we think you should know: {part}",
+    "{part} Did you see it too?",
+    "From our arrays out on the ice: {part}",
+    "Sharing what we saw: {part}",
+    "{part} How does it look from where you are?"
+  ],
+  "archive": [
+    "Here, share in this: {part}",
+    "{part} Ours to share, so now it is yours too.",
+    "From the round shore's records: {part}",
+    "We would rather share it than keep it: {part}",
+    "{part} Will you share something back?"
+  ],
+  "culture": [
+    "Something about us, so you know who you are talking to: {part}",
+    "{part} That is us. What are you like?",
+    "From the shore of the Eye: {part}",
+    "We carry warmth out onto the ice. That is who we are. {part}",
+    "We tell you about us, and you tell us about you? {part}"
+  ],
+  "request": [
+    "{part} We will share the same with you.",
+    "We will say it plainly: {part}",
+    "{part} Ask us anything back.",
+    "Will you share this with us? {part}",
+    "We are curious, and we will not pretend otherwise: {part}"
+  ],
+  "verdict": [
+    "Straight answer: {part}",
+    "{part} And our reasons are yours to hear.",
+    "We talked it over around the Eye. {part}",
+    "Warmly, and plainly: {part}",
+    "{part} Does that sit well with you?"
+  ],
+  "accord": [
+    "Shared, between the round shore and the Little Sun: {part}",
+    "{part} Is that fair to you?",
+    "Between us, out in the open: {part}",
+    "We share the Eye among ourselves. Now, between us and you: {part}",
+    "{part} Nothing in it is hidden."
+  ]
+}

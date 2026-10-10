@@ -1,0 +1,62 @@
+{
+  "name": "Iru",
+  "calls_sol": "the Third",
+  "hail": [
+    "Both peoples of Iru greet you. Two voices, one world. Why not three?",
+    "The Sea Iru and the Hill Iru greet the Third, together. We speak for both, and only for both.",
+    "From the tidal flats and from the hills, both of us greet you, Third."
+  ],
+  "close": [
+    "Spoken for both. Iru.",
+    "The Sea Iru and the Hill Iru, in Concord."
+  ],
+  "finding": [
+    "Found by one people, checked by the other: {part}",
+    "We found, that is, both of us found: {part}",
+    "{part} Sea and Hill measured it, each in its own way.",
+    "Checked from the shore and from the heights: {part}",
+    "{part} Two kinds of mind, one answer."
+  ],
+  "sighting": [
+    "Seen by both peoples: {part}",
+    "{part} The shore saw it, and the hills saw it.",
+    "Our two watches agree: {part}",
+    "{part} We each looked. We each saw the same.",
+    "Sea Iru and Hill Iru, watching together: {part}"
+  ],
+  "archive": [
+    "From the Concord's records, kept by both: {part}",
+    "{part} The Sea Iru kept this, and the Hill Iru kept it too.",
+    "Our shared record: {part}",
+    "{part} Each people holds a copy. We send it together.",
+    "Two archives, one account: {part}"
+  ],
+  "culture": [
+    "About us, which is to say, about both of us: {part}",
+    "{part} We say we. We mean both.",
+    "Of the Sea Iru and the Hill Iru together: {part}",
+    "Since the Concord, this is true of both of us: {part}",
+    "{part} Two peoples, one world. It took practice."
+  ],
+  "request": [
+    "Both of us ask: {part}",
+    "{part} The Sea Iru and the Hill Iru will read your reply together.",
+    "We ask with two voices: {part}",
+    "{part} Both of us agreed to ask it. That is not nothing.",
+    "On behalf of Sea and Hill alike: {part}"
+  ],
+  "verdict": [
+    "Both of us agree: {part}",
+    "{part} Sea and Hill are of one mind on this.",
+    "Weighed by the Sea Iru, weighed by the Hill Iru: {part}",
+    "Our joint judgment: {part}",
+    "{part} This is said for both, as the Concord requires."
+  ],
+  "accord": [
+    "{part} Both peoples stand behind this.",
+    "We know accords. Ours has held a long time. {part}",
+    "In the spirit of the Concord: {part}",
+    "Sea and Hill, together, on this accord: {part}",
+    "{part} Each of us holds a veto. Neither used it."
+  ]
+}

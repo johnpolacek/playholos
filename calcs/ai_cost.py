@@ -19,6 +19,8 @@ def turn(model, cached, fresh, out):
     return (cached * c + fresh * i + out * o) / 1e6
 
 # ---------- Once, at build time: voice banks ----------
+# Written in Claude Code on a subscription, the banks cost no API money: small banks were written that way on
+# 2026-10-10. The figure below is what the same work would cost through the API, from a build script.
 # Each neighbor's voice: about 300 lines across the message parts, written by the strongest model from the neighbor's
 # prose, then reviewed by hand. About 20,000 tokens in and 20,000 out per neighbor, for a roster of 30.
 ROSTER = 30
@@ -40,7 +42,8 @@ def mind_day(model):
     return TURNS_A_DAY * turn(model, 10000, 3000, 400) + REPORTS_A_DAY * turn(model, 10000, 6000, 800)
 
 if __name__ == '__main__':
-    print(f'Once: voice banks for {ROSTER} neighbors, written by Claude Opus 5.5: ${voice_banks():.2f}')
+    print(f'Once: voice banks for {ROSTER} neighbors, written by Claude Opus 5.5 through the API: ${voice_banks():.2f}.'
+          ' Written in Claude Code on a subscription: no API cost.')
     print('Neighbors in play: $0. They run on scripts, tables and voice banks.')
     print()
     print(f"  {'model':24}{'a live talk':>14}{'Mind, a day':>14}{'Mind, a month':>16}")

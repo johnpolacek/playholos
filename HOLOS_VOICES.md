@@ -6,17 +6,28 @@ Briefs for each neighbor's voice bank. A voice bank is the prose a neighbor's me
 
 ## What a bank holds
 
-- About 40 lines for each of the seven part kinds: finding, sighting, archive, culture, request, verdict and accord. About 300 lines a neighbor, as [calcs/ai_cost.py](calcs/ai_cost.py) prices it.
-- A hail: the first words it sends a stranger.
-- Lines with a slot for the part they frame: *"We saw {sighting}. We are still looking."*
+- **Lines for each of the seven part kinds.** A part is a typed fact. A line is the neighbor's words around it.
+  - *finding:* a result it measured or worked out. "Ember's glow is smooth at 290 K."
+  - *sighting:* something it saw, at a place and time. "A launch from Epsilon Indi, Year 31.2."
+  - *archive:* records or knowledge it shares.
+  - *culture:* something about itself: its history, its people, its art.
+  - *request:* a question, or something it asks for.
+  - *verdict:* its judgment: yes, no, a warning, an assessment.
+  - *accord:* an agreement it proposes, accepts or ends.
+- **Hails:** the first words it sends a stranger. **Closes:** how it signs off.
+- **A slot, `{part}`,** marks where the part goes, once in every part line: *"We saw this: {part} We are still looking."* The part brings its own final period or question mark, so nothing follows the slot directly. Hails and closes have no slot.
+- **Small banks now, full banks later.** Settled 2026-10-10: 5 lines per part kind, 3 hails and 2 closes, about 40 lines a neighbor, in [data/voices/](data/voices/). Enough for the first mocks. Full banks, about 40 lines per kind, come once the mocks show what players read most.
+- **Checked by** `python3 calcs/voices.py`: counts, slots, length, punctuation, repeats, and each voice's own rules.
 
 ## Rules for every voice
 
 - **Facts live in the parts.** A line frames a part and never adds a fact about the world or the game. Flavor about itself, from its prose, is fine.
+- **A line fits any part of its kind.** A verdict line must read right whether the verdict is yes or no. An accord line, whether the accord is offered, accepted or ended. A sighting line, whatever was seen.
 - **Its own world's images,** not Earth's. A neighbor that has heard Earth for years may borrow Earth's words, and it shows.
 - **Short enough for a phone.** One or two sentences a line.
 - **The same in a lie.** A forged part is read in the same voice as a true one.
-- **Plain punctuation:** periods, commas, colons, question marks. No em dashes or semicolons.
+- **Plain punctuation:** periods, commas, colons, question marks. No exclamation marks, em dashes or semicolons.
+- **No line shared between neighbors.** Each voice is its own.
 - **Calls Sol** by its own name for it. If the seed places it where Sol isn't bright enough to have a name, it uses a catalog number of its own.
 
 ## The briefs
@@ -259,7 +270,7 @@ Briefs for each neighbor's voice bank. A voice bank is the prose a neighbor's me
 - **Calls Sol:** Friend.
 - **Never:** leaves a message unanswered.
 - **Lines:**
-  - *Hail:* "Friend! We can't easily come to you, so we'll speak. A lot."
+  - *Hail:* "Friend, we can't easily come to you, so we'll speak. A lot."
   - *Request:* "Tell us everything. Start anywhere."
   - *Verdict:* "Friend, no. But keep talking."
 
@@ -292,7 +303,7 @@ Briefs for each neighbor's voice bank. A voice bank is the prose a neighbor's me
 - **Calls Sol:** the Bright Child.
 - **Never:** admits a covert act, and never stops offering.
 - **Lines:**
-  - *Hail:* "Bright Child! You've been loud for a while. Lovely to meet you properly."
+  - *Hail:* "Bright Child, you've been loud for a while. Lovely to meet you properly."
   - *Request:* "What do you need? Don't be shy. We have plenty."
   - *Verdict:* "We could, but we'd rather not. Trust us on this one."
 

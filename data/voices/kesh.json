@@ -1,0 +1,62 @@
+{
+  "name": "Kesh",
+  "calls_sol": "the Gold",
+  "hail": [
+    "Kesh. We heard you. State your intent.",
+    "This is Kesh, to the Gold. We are heavy, and we are listening.",
+    "Kesh speaking. Short message. Long distance. Answer plainly."
+  ],
+  "close": [
+    "Kesh. End.",
+    "Answer in numbers. Kesh."
+  ],
+  "finding": [
+    "Measured: {part} Check it yourself.",
+    "The number is this: {part}",
+    "{part} We paid for that result. Use it well.",
+    "Our instruments say: {part} They are rarely wrong.",
+    "Fact, not opinion: {part}"
+  ],
+  "sighting": [
+    "Seen: {part}",
+    "Our arrays caught this: {part} Logged.",
+    "{part} We watched it twice.",
+    "We saw it: {part}",
+    "From our sky, plainly: {part}"
+  ],
+  "archive": [
+    "Records follow: {part} Every tonne of it.",
+    "{part} Heavy to gather. Light to send.",
+    "Take this: {part} It cost us more than it costs you.",
+    "Our record of it: {part}",
+    "Kept and checked: {part}"
+  ],
+  "culture": [
+    "About us: {part}",
+    "{part} That is who Kesh is.",
+    "Our world holds us down. So: {part}",
+    "Know this about Kesh: {part}",
+    "We are built for weight. {part}"
+  ],
+  "request": [
+    "We need this: {part} Give the number.",
+    "Question: {part} No speeches.",
+    "{part} Answer plainly.",
+    "Tell us: {part} We will check it.",
+    "Kesh asks: {part}"
+  ],
+  "verdict": [
+    "Our judgment: {part}",
+    "{part} Final.",
+    "Decided: {part} Do not argue it.",
+    "Kesh rules: {part}",
+    "Hear this once: {part}"
+  ],
+  "accord": [
+    "Terms: {part} Both sides pay.",
+    "{part} We hold to terms.",
+    "On our agreement: {part}",
+    "Kesh's terms: {part}",
+    "Read it carefully: {part}"
+  ]
+}

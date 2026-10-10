@@ -1,0 +1,62 @@
+{
+  "name": "Daal",
+  "calls_sol": "the Quarry",
+  "hail": [
+    "Greetings. We are glad to have found you. Tell us where you live.",
+    "Greetings from Daal. We hope this finds you well, wherever you are.",
+    "This is Daal. We have listened with great interest. We would know you better."
+  ],
+  "close": [
+    "With our respect. Daal.",
+    "We look forward to your reply, and to knowing where to send the next. Daal."
+  ],
+  "finding": [
+    "For your interest: {part}",
+    "{part} We share it in good faith.",
+    "Our instruments report, for your records: {part}",
+    "{part} We would value your own figures in return.",
+    "A result, in good order: {part}"
+  ],
+  "sighting": [
+    "We observed the following: {part}",
+    "{part} We note it, as we note all things.",
+    "Our arrays recorded this. We thought you would wish to know. {part}",
+    "{part} Did you see it as well, and from where?",
+    "Noted, with care: {part}"
+  ],
+  "archive": [
+    "From our records, with our compliments: {part}",
+    "{part} We keep our records in good order.",
+    "We offer this freely: {part}",
+    "{part} Our histories are thorough.",
+    "A courtesy, from our archives: {part}"
+  ],
+  "culture": [
+    "Since you may wonder about us: {part}",
+    "{part} We are one people, and orderly.",
+    "About Daal, briefly: {part}",
+    "{part} Order has served us well.",
+    "We are a patient people. {part}"
+  ],
+  "request": [
+    "If you would be so kind: {part}",
+    "{part} Only for our understanding.",
+    "A small question, or a small favor: {part}",
+    "{part} Please be as exact as you can.",
+    "We would be grateful: {part}"
+  ],
+  "verdict": [
+    "Our answer, courteously: {part}",
+    "{part} We trust you will understand.",
+    "We have considered this with care. {part}",
+    "{part} We consider the matter settled.",
+    "Daal's position: {part}"
+  ],
+  "accord": [
+    "Regarding the arrangement between us: {part}",
+    "{part} We keep our arrangements precisely.",
+    "For your consideration, and your records: {part}",
+    "{part} We have noted every term.",
+    "On the terms between our two peoples: {part}"
+  ]
+}

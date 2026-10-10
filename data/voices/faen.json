@@ -1,0 +1,62 @@
+{
+  "name": "Faen",
+  "calls_sol": "the Patient Sun",
+  "hail": [
+    "Patient Sun, you have so much time. We have less. We would understand you while we can.",
+    "We are Faen. Nothing lasts, so we listen closely while we are here. Greetings, Patient Sun.",
+    "From under a hot white sun, greetings to the Patient Sun. We will speak slowly, and listen more."
+  ],
+  "close": [
+    "Nothing lasts. Understand it while it does. Faen.",
+    "Go slowly, Patient Sun. You can. Faen."
+  ],
+  "finding": [
+    "This much we understand: {part}",
+    "Measured under our white sun: {part}",
+    "We took our time with this: {part}",
+    "{part} Understanding is what we keep, since nothing else stays.",
+    "{part} We set it down calmly, as we set down everything."
+  ],
+  "sighting": [
+    "We saw this, and set it down: {part}",
+    "Our sky showed us this: {part}",
+    "{part} We watched it with the patience we have left.",
+    "We saw this: {part} Like all news, it is old by the time it reaches you.",
+    "{part} We looked a long while, and we are sure of it."
+  ],
+  "archive": [
+    "What we know, before it is lost: {part}",
+    "{part} Keep it longer than we can.",
+    "From our records, which will not last forever: {part}",
+    "Our reckoners kept this: {part}",
+    "Knowledge outlives those who gather it. Take this: {part}"
+  ],
+  "culture": [
+    "Since the Reckoning, we have known this about ourselves: {part}",
+    "{part} We learned early that nothing lasts.",
+    "Something of us, while there is still an us: {part}",
+    "We live at dawn and dusk, in the shade. {part}",
+    "This is what grew under a sun that does not wait: {part}"
+  ],
+  "request": [
+    "We ask, without hurry: {part}",
+    "{part} Answer when it suits you. You have the time.",
+    "{part} We ask because we would understand you while we can.",
+    "Patient Sun, we ask this of you: {part}",
+    "{part} Take the time you need. We will spend what time we have."
+  ],
+  "verdict": [
+    "We have thought on it long: {part}",
+    "Without fear, and without hope: {part}",
+    "{part} We have made our peace with it.",
+    "Having weighed what lasts and what does not: {part}",
+    "{part} We say it calmly, and we will not say it twice."
+  ],
+  "accord": [
+    "On what binds us, for as long as it does: {part}",
+    "{part} Nothing lasts. We make and end agreements knowing that.",
+    "{part} We will keep our part for as long as there is one.",
+    "We have considered what this is worth while it lasts: {part}",
+    "Every accord ends, some sooner. {part}"
+  ]
+}

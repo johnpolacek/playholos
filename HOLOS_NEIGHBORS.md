@@ -88,7 +88,7 @@ Still by hand: the people, the timeline against the star's age, the dials' cause
 | The Mind's voice | How its Mind speaks, from history, body and charter. | None. |
 | Strategy | How it plays, toward its own ends, as v1's Listener, Caller and Grower did: the weighted sets its life script's build order is drawn from. | Within its dials. Timings follow Earth's rules. |
 | Reaction tables | For each kind of news that can reach it, a few responses with odds from its disposition, dials and play style. Generated in [HOLOS_REACTIONS.md](HOLOS_REACTIONS.md) by [calcs/reactions.py](calcs/reactions.py). | Every response is a move the rules allow. The script checks its dials and play style against this doc. |
-| Voice bank | Its lines for each typed message part, written once by a strong model from its prose and its brief in [HOLOS_VOICES.md](HOLOS_VOICES.md), then reviewed. | Reads as its Mind's voice. Adds no facts. |
+| Voice bank | Its lines for each typed message part, written once by a strong model from its prose and its brief in [HOLOS_VOICES.md](HOLOS_VOICES.md), then reviewed. Small banks are in [data/voices/](data/voices/). | Reads as its Mind's voice. Adds no facts. Checked by `python3 calcs/voices.py`. |
 | Names | What it calls the stars bright in its sky, Sol among them. | Bright from where it sits. |
 
 ## The roster

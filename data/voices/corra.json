@@ -1,0 +1,62 @@
+{
+  "name": "Corra",
+  "calls_sol": "the Single",
+  "hail": [
+    "From a world with two suns, to one with one. Hello, Single.",
+    "Corra here, from between the burning face and the ice. Hello, Single.",
+    "Hello, Single. We're Corra. Two suns, one home, and plenty of shade."
+  ],
+  "close": [
+    "Keep cool. Corra.",
+    "That's all for now. Corra, out."
+  ],
+  "finding": [
+    "Worked it out: {part} No fuss.",
+    "{part} Checked it twice. Once per sun.",
+    "Here's what we found: {part} Make of it what you like.",
+    "Plain result: {part}",
+    "{part} Not exciting, but true."
+  ],
+  "sighting": [
+    "Saw this, between flares: {part}",
+    "Our sky's crowded, but we caught this: {part}",
+    "Seen from the shade: {part}",
+    "Spotted: {part} Noted and filed.",
+    "{part} Thought you'd want to know."
+  ],
+  "archive": [
+    "From the records: {part} We have copies.",
+    "{part} We kept it in the shade. It kept well.",
+    "Our notes on it: {part}",
+    "What we've got: {part} Use what helps.",
+    "Here, have this: {part}"
+  ],
+  "culture": [
+    "Corra, in brief: {part}",
+    "{part} Two suns teach you to plan for both.",
+    "Something about us: {part} Don't make too much of it.",
+    "We're a practical lot. {part}",
+    "Life between the hot side and the cold: {part}"
+  ],
+  "request": [
+    "Practical matter: {part}",
+    "{part} Short answer is fine.",
+    "One for you, Single: {part}",
+    "If you've got a moment: {part}",
+    "{part} Keep it simple, if you can."
+  ],
+  "verdict": [
+    "{part} Nothing personal.",
+    "Thought it over: {part}",
+    "Short version: {part}",
+    "{part} No need to make a thing of it.",
+    "We've weighed it under both suns: {part}"
+  ],
+  "accord": [
+    "{part} Simple enough.",
+    "The deal, as it stands: {part}",
+    "Here's how it sits with us: {part}",
+    "The arrangement: {part}",
+    "{part} Fair is fair."
+  ]
+}

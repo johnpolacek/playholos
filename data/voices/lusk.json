@@ -1,0 +1,62 @@
+{
+  "name": "Lusk",
+  "calls_sol": "the High Gold",
+  "hail": [
+    "We found you from above the clouds, High Gold. Hello.",
+    "Lusk here, up over the deck where the stars are. Hello, High Gold.",
+    "High Gold, hello from the high air. We're Lusk. The view is wonderful up here."
+  ],
+  "close": [
+    "Off we glide. Lusk.",
+    "Back under the clouds now. Lusk."
+  ],
+  "finding": [
+    "Quick one: {part} Neat, isn't it?",
+    "{part} Right. Next thing.",
+    "Found it, up high: {part}",
+    "Fresh from above the deck: {part}",
+    "Oh, and this: {part}"
+  ],
+  "sighting": [
+    "Seen from above the clouds: {part}",
+    "Look, look: {part}",
+    "{part} We almost missed it, gliding past something else.",
+    "Our balloons caught this: {part}",
+    "Up where the sky is clear: {part}"
+  ],
+  "archive": [
+    "From our flight logs: {part}",
+    "{part} We have more, somewhere. Ask later.",
+    "Here, catch: {part}",
+    "Pulled from the logs on the way past: {part}",
+    "{part} That's the record. Shall we talk about something else?"
+  ],
+  "culture": [
+    "Quick sketch of us: {part}",
+    "{part} We're people of the high air, mostly.",
+    "Since the first flights over the clouds, this is us: {part}",
+    "Something about Lusk, between glides: {part}",
+    "{part} Now tell us something about you."
+  ],
+  "request": [
+    "Quick one for you: {part}",
+    "{part} And while you're at it, what's your sky like?",
+    "Something for you, from up high: {part}",
+    "{part} Then tell us something else. Anything.",
+    "{part} Soon would be lovely."
+  ],
+  "verdict": [
+    "Decided, from up high: {part}",
+    "{part} Now, on to brighter things.",
+    "Seen from above, it's this: {part}",
+    "Quick answer: {part}",
+    "{part} Moving on."
+  ],
+  "accord": [
+    "Here's where we've landed: {part}",
+    "About our arrangement: {part}",
+    "{part} The air's clearer for it.",
+    "On the pact, quickly: {part}",
+    "{part} Now, what else is new?"
+  ]
+}
