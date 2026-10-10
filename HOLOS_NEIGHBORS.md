@@ -134,6 +134,7 @@ Thirty neighbors. Each game's seed draws 3 to 30 of them and places each one. Th
 - **Strategies.** v1's Listener, Caller and Grower, plus two:
   - *Thinker:* cold computing and Deepen projects first. Speaks rarely.
   - *Hunter:* Know projects to find targets, a quiet industry, then dark bullets.
+- **Stars Earth knocked on.** In one game in five, the seed puts a drawn neighbor at a star Earth messaged, if one fits. The checker lists who fits at each and their odds of catching the knock. See [Stars Earth knocked on](HOLOS_GAME_CONCEPT.md#stars-earth-knocked-on).
 - **Dead neighbors have no Mind.** The game plays what they left: a last broadcast, ruins, dead machines in orbit, a polluted sky.
 - **Worlds follow the research.** Locked worlds around M dwarfs are mostly dry, since dry worlds keep a warm twilight band (Lobo et al. 2023). Turning M-dwarf worlds have thick air (Leconte et al. 2015). Sources are in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#kinds-of-worlds).
 

@@ -44,17 +44,35 @@ Settled 2026-10-06.
   - *Aimed messages.* About twenty, from 1983 on, each lasting hours. Targets within 50 ly: Altair (1983), Gliese 49, Gliese 208, 55 Cancri, HD 10307 and 47 Ursae Majoris (Teen Age Message, 2001, and Cosmic Call 2, 2003), Gliese 581 (2008 and 2009), Teegarden's Star, TZ Arietis and Kappa¹ Ceti (2009), Gliese 526 (2013) and Luyten's Star (2017). To hear one, a listener had to be watching Sol in those hours, at that frequency.
   - *Earth crossing the Sun.* About 75 stars within 100 ly sit where Earth transits the Sun and Earth's radio has already reached (Kaltenegger and Faherty 2021). A transit shows a rocky world in the warm zone, not who lives there.
 - **Physics lets every neighbor hear Earth. Whether one did depends on whether, and how long, it looked.** Earth's radar signal has been spreading since the 1950s and is still being sent, so it crossed every neighbor while that neighbor had instruments like today's. Odds come from distance and character: a near, curious neighbor stares at Sol for days, as Project Ozma stared at Tau Ceti and Epsilon Eridani in 1960. A far or inward one gives Sol a survey glance, or nothing.
-- **Sample odds, until the radar paper is out:** a listening neighbor, near or far, about 9 in 10. An ordinary one, about 1 in 2. An inward or growth-first one, about 1 in 5. Catching an aimed message, under 1 in 100. If the full paper needs long stares for airport radar, the ordinary and inward odds fall.
+- **Sample odds, until the radar paper is out:** a listening neighbor, near or far, about 9 in 10. An ordinary one, about 1 in 2. An inward or growth-first one, about 1 in 5. Catching an aimed message, under 1 in 100, unless it was already keeping a beam on Sol. See [Stars Earth knocked on](#stars-earth-knocked-on). If the full paper needs long stares for airport radar, the ordinary and inward odds fall.
 - **What a long listen reveals.** The radars' pitch shifts with Earth's turning and its orbit, so a listener recovers Earth's day, its orbit, and where it is (Loeb and Zaldarriaga 2007). Under v1's aiming rule, that is enough to aim a strike. A neighbor that heard Earth may start the game with Earth already mapped.
 - **Earth is the late one.** Every neighbor's loud century ended long before Year 0. Earth's radars still sweep at Year 0, so Earth is the likeliest civilization in the region to have been heard.
 - **The Mind lays out Earth's exposure at waking.** The radar years, every aimed message with its target and arrival, which stars could have heard, and what changed between 2026 and Year 0. It never says who did hear: no one at Year 0 knows that.
-- **The seed doesn't favor stars Earth messaged.** A neighbor lands at a messaged star only by chance.
 - **Replies to Earth's knocks could arrive during the game.** Each message sets the earliest date a reply could reach Earth: the light-time there and back ([calcs/knocks.py](calcs/knocks.py)).
   - Already passed in silence: Altair (2017), Teegarden's Star (2034.9), TZ Arietis (2039.1).
   - In the first hour: Luyten's Star at Year 2.5 and 3.1, 12 and 15 real minutes in. Gliese 526 at Year 8.7. Gliese 581 at Year 9.4 and 10.3.
   - Later: Gliese 49 at Year 27.5, Kappa¹ Ceti at 29.5, Gliese 208 at 37.5, 55 Cancri and HD 10307 at 45.5, 47 Ursae Majoris at 53.7.
   - Earth's 2003 knock reaches Gliese 208 half a Year after Year 0.
-  - A window almost always passes empty: catching a knock is under 1 in 100. The Mind marks each one, as v1's silence rules say.
+  - Most windows pass empty. The Mind marks each one, as v1's silence rules say.
+
+## Stars Earth knocked on
+
+Settled 2026-10-10. Numbers in [calcs/neighbors.py](calcs/neighbors.py).
+
+- **The seed sometimes puts a neighbor where Earth knocked.** In one game in five, if a drawn neighbor can live at a messaged star, the seed places it there.
+  - By chance alone, about one game in 13 has someone at a messaged star. With the nudge, about one in four.
+  - It is a game choice, not physics. It contradicts nothing: Earth chose those stars because they might have planets.
+- **Seven messaged stars can host a neighbor.** Luyten's Star, TZ Arietis, Gliese 526, Gliese 581, Gliese 49, Gliese 208, and 55 Cancri B.
+  - 55 Cancri A has a giant crossing its warm zone. Its companion B sat in the same beam.
+  - Altair, 47 Ursae Majoris, Kappa¹ Ceti, HD 10307 and Teegarden's Star can't host one.
+  - Six are M dwarfs, so mostly M-dwarf neighbors fit. Gliese 208, a dim K star, fits 15 of the 30.
+- **Who catches a knock.** A knock lasts hours. Only a neighbor already keeping a beam on Sol catches it.
+  - That means it heard Earth's radars first, and its arrays were running when the knock arrived.
+  - Then a listener catches it about 3 times in 4, an ordinary one 1 in 2, an inward one 1 in 10.
+  - Otherwise, under 1 in 100. A neighbor that died before it arrived catches nothing.
+  - These odds are invented, like the radar odds, until better evidence.
+- **What it does next follows its disposition.** A contacter likely replies. A watcher replies on its own terms, if at all. An inward one rarely bothers. A hunter learns Earth is eager to be found.
+- **A passed window isn't closed.** TZ Arietis's earliest reply was due in 2039. A neighbor there may have held its reply, and it can still come.
 
 ## Year 0 and Earth's road to it
 

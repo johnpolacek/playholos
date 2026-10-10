@@ -8,7 +8,7 @@ Sources are in HOLOS_RESEARCH.md.
 """
 import csv, math, random
 from pathlib import Path
-import hosts
+import hosts, knocks
 
 ROOT = Path(__file__).resolve().parents[1]
 LY = 9.4607e15
@@ -211,6 +211,42 @@ def tone_at(n, waking, year, sol_targeted=True):
         return n.get('awake', n['hum']) if sol_targeted or not n.get('awake_aimed') else n['hum']
     return n['hum']
 
+# ---------- Stars Earth knocked on ----------
+# Earth's aimed messages, by the host-list name of the star each was aimed at. 55 Cancri A is dropped as a host, since
+# a known giant crosses its warm zone, but its companion B sat in the same beam. Altair, 47 Ursae Majoris, Kappa1 Ceti,
+# HD 10307 and Teegarden's Star can't host a neighbor. In about one game in five, if a drawn neighbor passes at one of
+# these stars, the seed puts it there, so Earth's real knocks sometimes have someone to hear them.
+KNOCKED = {"Luyten's Star": "Luyten's Star", 'TZ Arietis': 'Gl 83.1', 'Gliese 526': 'Gl 526', 'Gliese 581': 'Gl 581',
+           'Gliese 49': 'Gl 49', 'Gliese 208': 'Gl 208', '55 Cancri': 'Gl 324B'}
+KNOCKED_SHARE = 0.2
+
+# A knock lasts hours, so only a neighbor already keeping a beam on Sol catches it: one that heard Earth's radars,
+# with its arrays running when the knock arrived. Then a listener catches it about 3 times in 4, an ordinary one
+# 1 in 2, an inward one 1 in 10. Otherwise, under 1 in 100.
+CATCH = {'listener': 0.75, 'ordinary': 0.5, 'inward': 0.1}
+def caught_odds(n, host, waking, arrives):
+    if n.get('dies') is not None and arrives > waking - n['dies']: return 0.0
+    if arrives < waking - n.get('arrays_since', 60): return 0.01
+    return heard_odds(n, host, waking) * CATCH[n['character']] + 0.01
+
+def knocked_report(host_rows, tries=100):
+    by_name = {h['name']: h for h in host_rows}
+    print('At the stars Earth knocked on, who can live there:')
+    for target, name in KNOCKED.items():
+        h = by_name[name]
+        sent = min(s for m, s, tg, ly in knocks.KNOCKS if tg == target)
+        arrives, year = sent + h['distance_ly'], sent + 2 * h['distance_ly'] - EARTH_WAKES
+        fits = []
+        for n in ROSTER:
+            rng, ok, caught = random.Random(2), 0, 0.0
+            for _ in range(tries):
+                waking = EARTH_WAKES + 100 * (rng.random() - rng.random())
+                pole = math.degrees(math.acos(rng.uniform(-1, 1)))
+                if not check(n, h, waking, pole)[0]: ok += 1; caught += caught_odds(n, h, waking, arrives)
+            if ok > tries / 2: fits.append(f"{n['name']} {caught / ok:.0%}")
+        print(f"  {target} ({name}, {h['kind']}, {h['distance_ly']:.1f} ly): knock arrives {arrives:.0f}, reply by Year {year:.1f}. "
+              f"{len(fits)} fit, with odds of catching the knock: {', '.join(fits)}")
+
 def placements(n, host_rows, tries=200, seed=1):
     rng = random.Random(seed)
     ok, reasons, homes = 0, {}, set()
@@ -262,6 +298,8 @@ TEST = dict(name='Test: an Earth twin', kinds='GK', world=dict(mass=1.0, hz_shar
 if __name__ == '__main__':
     rows = load_hosts()
     report(rows)
+    print()
+    knocked_report(rows)
     print()
     veyra, hael, kesh = ROSTER[:3]
     at(veyra, rows, 'Del Pav')                           # v1's home, waking with Earth
