@@ -178,6 +178,24 @@ Every source the game rests on, grouped by the question it answers. Each entry s
   - Matters: a neighbor's gravity and escape speed, and so its cost of reaching space.
   - Used: [calcs/neighbors.py](calcs/neighbors.py).
 
+## Hostility
+
+- **[Dam 2026, First Attack, Final Offensive: the Dark Forest on an Open Roster](https://arxiv.org/abs/2609.12003)** · Preprint, September 2026.
+  - When no one can know how many others are out there, a first strike is rational only if the attacker accepts it may be its last attack. Mutual aggression is not an equilibrium. Everyone hiding is, whenever strikes are more visible to unfound watchers than hiders are to hunters.
+  - Matters: the physics of Holos makes strikes visible to third parties. Exhaust shows from behind, laser launches shine ahead, braking glows, and a strike's direction names its sender. So the quiet sky fits a region where most minds hide and watch, and strike-first minds are rare.
+  - Used: v2 open question 4, the roster's hostility.
+- **[Brin 1983, The Great Silence](https://www.researchgate.net/publication/234496344_The_'Great_Silence'_The_Controversy_Concerning_Extraterrestrial_Intelligent_Life)** · Published, QJRAS 24, 283.
+  - The "deadly probes" idea: hostile machines that silence others fit the Fermi paradox, but would leave no one to find. Liu Cixin's "dark forest" later took the idea up ([overview](https://en.wikipedia.org/wiki/Dark_forest_hypothesis)).
+  - Matters: hostility can explain silence, but a region of wholly hostile minds leaves nothing to play. Holos's premise, many minds waking in one century, sits better with hiding than with killing.
+  - Used: v2 open question 4.
+- **[Tan 2025, Beyond the Dark Forest](https://philarchive.org/archive/TANBTD-2)** · Essay.
+  - Criticizes the dark forest for assuming cheap interstellar war, static equilibria and fixed technology.
+  - Used: v2 open question 4.
+- **[Iain M. Banks, the Culture](https://en.wikipedia.org/wiki/Culture_series)** · Fiction, the stated inspiration ([Joseph Heath, Why the Culture Wins](https://josephheath.substack.com/p/why-the-culture-wins-an-appreciation)).
+  - Advanced minds are mostly tolerant, curious and generous. Contact studies younger civilizations and sometimes interferes, overtly or covertly, through Special Circumstances. Aggressive powers exist, but they are few, and they lose. The oldest civilizations Sublime and leave the galaxy's affairs.
+  - Matters: past the physics, Holos's neighbors take their range of character from here.
+  - Used: v2 open question 4.
+
 ## Running the neighbors
 
 - **[Claude API pricing](https://platform.claude.com/docs/en/about-claude/pricing)** · Reference, September 2026 ([batch processing](https://platform.claude.com/docs/en/build-with-claude/batch-processing), [prompt caching](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)).
