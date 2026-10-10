@@ -307,7 +307,7 @@ Anchors for [the project audit](HOLOS_PROJECT_AUDIT.md).
 
 - **[Neely 2025, the economic effects of a potential armed conflict over Taiwan](https://www.stlouisfed.org/-/media/project/frbstl/stlouisfed/publications/review/pdfs/2025/feb/economic-effects-of-potential-armed-conflict-over-taiwan.pdf)** · Published, Federal Reserve Bank of St. Louis Review ([Rhodium Group](https://rhg.com/research/taiwan-economic-disruptions/)).
   - Taiwan makes 92% of the most advanced logic chips. Domestic suppliers elsewhere have very limited room to replace them. Rhodium puts a blockade's immediate cost above $2 trillion.
-  - Matters: a Taiwan war before 2035 leaves Earth with about half its compute at Year 0.
+  - Matters: an invasion of Taiwan before 2035 leaves Earth with about half its compute at Year 0. A year's blockade leaves two-thirds to all of it.
   - Used: v2 branches, [calcs/branches.py](calcs/branches.py).
 
 ## Earth's character
