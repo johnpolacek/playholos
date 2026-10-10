@@ -180,6 +180,16 @@ Settled 2026-10-10.
 - **Planning.** The player queues builds, looks, standing orders and what wakes them. Nothing happens yet.
 - **Begin.** When the player taps Begin, Year 0 starts and everything queued starts at once. From then on the clock runs, offline too, at 5 real minutes a Year.
 
+## Death and new games
+
+Settled 2026-10-10.
+
+- **A game ends only when no Mind of Earth's survives anywhere.** While a deep vault, a colony, a habitat or a lifeboat still runs as a Mind, the Will escapes to it as a transmission, as v1 had it, and play goes on from there. Earth itself can die first.
+- **Nothing carries into a new game's world.** A new seed is a new universe: other neighbors, other placements, other branches. Carrying over what neighbors were like would hand the player hidden character.
+- **An archive of past games,** kept outside play: how each went, who was met, how it ended.
+- **One game at a time.** Abandoning a game ends it. One clock keeps each game's stakes real and the Mind's cost per player predictable.
+- **Variety comes from the seed:** which neighbors and how many, where and when they wake, each one's branches and reaction rolls, and Earth's own branches to 2040.
+
 ## Kept open for multiplayer
 
 Noted 2026-10-10. v2 is single-player, but a later version may be multiplayer, with one player always Earth and other players taking other civilizations. Design so that stays possible:
@@ -199,7 +209,7 @@ These v1 rules no longer apply.
 - Earth run by AI, the paid Earth seat ([v1: Homeworlds](legacy/v1/HOLOS_GAME_CONCEPT.md#homeworlds)), and Earth's random character per cohort ([v1: First contact](legacy/v1/HOLOS_GAME_CONCEPT.md#first-contact)).
 - Neighbors as live AI Wills, run by a model ([v1: Player and civilization](legacy/v1/HOLOS_GAME_CONCEPT.md#player-and-civilization)). See [How neighbors play](#how-neighbors-play).
 - Identical starts, and every seat waking at the same moment ([v1: Player and civilization](legacy/v1/HOLOS_GAME_CONCEPT.md#player-and-civilization)). See [The neighbors](#the-neighbors).
-- Total loss sending the player to a new cohort ([v1: Population, purpose, and stakes](legacy/v1/HOLOS_GAME_CONCEPT.md#population-purpose-and-stakes)). Total loss ends the game, and the next game has a new seed. What carries over is open question 7.
+- Total loss sending the player to a new cohort ([v1: Population, purpose, and stakes](legacy/v1/HOLOS_GAME_CONCEPT.md#population-purpose-and-stakes)). See [Death and new games](#death-and-new-games).
 
 ## Carried, reworded
 
@@ -215,6 +225,6 @@ Answered one at a time, in this order. Every answer must be permitted by current
 4. **The neighbor roster.** Who is written, in [HOLOS_NEIGHBORS.md](HOLOS_NEIGHBORS.md), and how each one's history sets its world, kit and loudness. The template is drafted. Hosts, timing, count and the loudness ceiling are settled in [The neighbors](#the-neighbors). Close binaries Gaia can't split still need checking against published orbits.
 5. **Settled 2026-10-10:** how neighbors play and what it costs. See [How neighbors play](#how-neighbors-play).
 6. **Settled 2026-10-10:** how a game starts. See [How a game starts](#how-a-game-starts).
-7. **Death and new games.** What carries over, and where variety comes from.
+7. **Settled 2026-10-10:** death and new games. See [Death and new games](#death-and-new-games).
 8. **First mock: Earth's first 15 minutes.** One phone, with a godview lane for the neighbors.
 9. **Recheck v1's research baseline.** Newer work bears on it: the radar preprint above, and an August 2026 preprint on the waste heat of cold computing (v1's "Why the sky is quiet").
