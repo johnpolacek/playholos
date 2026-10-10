@@ -458,7 +458,7 @@ Added 2026-10-10. **Inward, strange.** The checker passes it at 90% of seeded pl
 
 **Kit at Year 0.** Lifting costs 0.7 times Earth's fuel per tonne. No moon. It builds compute, cold and close.
 
-**What it knows of Earth.** Inward, it rarely listens, its arrays running from 20 years before its waking. Odds it heard Earth: about 1 in 5 wherever Earth's radar light reached it in that time. At Luyten's Star, that light arrived around 1962. Earth knocked here. "Sónar Calling GJ273b" was sent in 2017 and 2018 and arrived in 2030. A reply could reach Earth by 2042.5, Year 2.5. Ystra probably won't send one.
+**What it knows of Earth.** Inward, it rarely listens, its arrays running from 20 years before its waking. Odds it heard Earth: about 1 in 5 wherever Earth's radar light reached it in that time. At Luyten's Star, that light arrived around 1962. Earth knocked here. "Sónar Calling GJ273b" was sent in 2017 and 2018 and arrived in 2030. A reply could reach Earth by 2042.3, Year 2.3. Ystra probably won't send one.
 
 **Character.** Charter: *"We are enough."* Its Mind says only "we". It struggles with the idea that a single voice is someone. Inward: mostly uninterested in anyone else. It plays as a Thinker.
 
@@ -984,6 +984,6 @@ Added 2026-10-10. **Watcher.** The checker passes it at 96% of seeded placements
 
 **Kit at Year 0.** Lifting costs 0.7 times Earth's fuel per tonne. No moon. Slow and steady growth.
 
-**What it knows of Earth.** An ordinary listener, its arrays running from 40 years before its waking. Odds it heard Earth: about 1 in 2 wherever Earth's radar light reached it in that time. At Gliese 526, that light arrived around 1968. Earth knocked here. "Lone Signal" was sent in 2013 and arrived in 2031. A reply could reach Earth by 2048.7, Year 8.7.
+**What it knows of Earth.** An ordinary listener, its arrays running from 40 years before its waking. Odds it heard Earth: about 1 in 2 wherever Earth's radar light reached it in that time. At Gliese 526, that light arrived around 1968. Earth knocked here. "Lone Signal" was sent in 2013 and arrived in 2031. A reply could reach Earth by 2049.0, Year 9.0.
 
 **Character.** Charter: *"Small and steady."* Its Mind is modest and literal. A watcher. It plays as a Listener.

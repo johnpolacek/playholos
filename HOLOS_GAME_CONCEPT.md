@@ -49,10 +49,11 @@ Settled 2026-10-06.
 - **Earth is the late one.** Every neighbor's loud century ended long before Year 0. Earth's radars still sweep at Year 0, so Earth is the likeliest civilization in the region to have been heard.
 - **The Mind lays out Earth's exposure at waking.** The radar years, every aimed message with its target and arrival, which stars could have heard, and what changed between 2026 and Year 0. It never says who did hear: no one at Year 0 knows that.
 - **Replies to Earth's knocks could arrive during the game.** Each message sets the earliest date a reply could reach Earth: the light-time there and back ([calcs/knocks.py](calcs/knocks.py)).
-  - Already passed in silence: Altair (2017), Teegarden's Star (2034.9), TZ Arietis (2039.1).
-  - In the first hour: Luyten's Star at Year 2.5 and 3.1, 12 and 15 real minutes in. Gliese 526 at Year 8.7. Gliese 581 at Year 9.4 and 10.3.
-  - Later: Gliese 49 at Year 27.5, Kappa¹ Ceti at 29.5, Gliese 208 at 37.5, 55 Cancri and HD 10307 at 45.5, 47 Ursae Majoris at 53.7.
-  - Earth's 2003 knock reaches Gliese 208 half a Year after Year 0.
+  - Already passed in silence: Altair (2017.1), Teegarden's Star (2034.9), TZ Arietis (2039.0).
+  - In the first hour: Luyten's Star at Year 2.3 and 2.9, 11 and 14 real minutes in. Gliese 526 at Year 9.0. Gliese 581 at Year 9.9 and 10.8.
+  - Later: Gliese 49 at Year 27.2, Kappa¹ Ceti at 30.4, Gliese 208 at 38.0, 55 Cancri at 45.6, HD 10307 at 46.6, 47 Ursae Majoris at 52.3.
+  - Distances are Gaia DR3's, or Hipparcos's for Altair and HD 10307.
+  - Two knocks are still on the way at Year 0: Kappa¹ Ceti's arrives at Year 0.1, Gliese 208's at Year 0.8.
   - Most windows pass empty. The Mind marks each one, as v1's silence rules say.
 
 ## Stars Earth knocked on
@@ -148,7 +149,7 @@ Settled 2026-10-06. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#earths-lead
   - *82 Eridani d,* 19.7 ly. At least 5 Earth masses on a stretched orbit through a Sun-like star's warm zone. Its air is unread.
   - *One seeded find,* such as a world Terra Hunting felt by 2036.
   - *Fomalhaut's new cloud,* 25 ly. It drifts and fades, so the first look makes it stranger, as v1 required of one lead.
-  - *The Luyten's Star reply window,* Year 2.5, 12 real minutes in.
+  - *The Luyten's Star reply window,* Year 2.3, 11 real minutes in.
 - **Settled leads stay settled.** Alpha Centauri A's candidate is resolved long before 2040. Adopt JWST's August 2026 result when it is published.
 
 ## The neighbors
