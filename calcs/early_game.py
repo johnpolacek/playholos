@@ -92,7 +92,21 @@ def all_sky(side=100, spacing=0.125, bandwidth=1e9, t_sys=30, efficiency=0.7):
     print(f'All-sky watch, {side} m dense array: {n:,.0f} elements, {beams:,.0f} beams, SEFD about {sefd:.0f} Jy, '
           f'about {(fft + search):.0e} operations a second: {(fft + search) / 1e25:.0e} of 2040 compute')
 
+# ---------- Growing compute ----------
+# Earth's compute went from about 3e22 operations a second in 2026 to about 1e25 in 2040. That pace already holds the
+# fabs built along the way, so it is what chips allow. Thinking draws about 0.25 TW of 24 at Year 0, and a data
+# center's draw grows with its chips. So the fabs set how fast compute grows, and the grid sets how far.
+def compute_growth(start=3e22, end=1e25, years=14, share=0.25 / 24, step=1.5):
+    pace = (end / start) ** (1 / years)
+    print(f'Compute grew {pace:.2f} times a year from 2026 to 2040. One ground data center a Year, each +{step - 1:.0%}:')
+    for n in (1, 2, 3, 6, 11):
+        print(f'  after {n:2}: {step ** n:5.1f} times the thought, drawing {share * step ** n:5.1%} of Year 0 energy')
+    tenth, wall = (math.log(x / share) / math.log(step) for x in (0.1, 1))
+    print(f'  a tenth of energy after {math.ceil(tenth)} data centers. Number {math.floor(wall) + 1} would need more than the whole grid: '
+          f'about Year {wall:.0f}, {wall * 5:.0f} real minutes at full pace.')
+
 if __name__ == '__main__':
+    compute_growth(); print()
     beacon(); print()
     belt(); belt(flow_kt=60); print()
     far_side(); print()

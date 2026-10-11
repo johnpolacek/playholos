@@ -13,9 +13,9 @@ YEARS = lambda y: f'{y:g} {"Year" if y == 1 else "Years"}'
 ASKS = []          # design questions the mock raises, in the order the timeline raises them
 def ask(q, why): ASKS.append((q, why)); return len(ASKS)
 Q_HWO = ask('Does a half-built real instrument cost fewer Years?', 'The Habitable Worlds Observatory is under construction at Year 0. Here it is the infrared telescope at its full 18 Years.')
-SETTLED = [('Can the Will quiet Earth’s radars?', 'Yes, if the player chooses: keep them, fade them over about 25 Years, or cut them in about 2. What has left keeps going. Settled 2026-10-10.')]
-Q_DC = ask('What stops a data center every Year?', 'The audit prices it at 1 Year, no matter, 0.25% of energy, for +25% compute. Nothing here limits ten at once. Chip supply, a rising price, or a cap per Year would.')
-Q_ENERGY = ask('What is energy for, early?', 'Compute takes 1% of 24 TW and nothing in the first hour spends more. The energy bar never moves.')
+SETTLED = [('Can the Will quiet Earth’s radars?', 'Yes, if the player chooses: keep them, fade them over about 25 Years, or cut them in about 2. What has left keeps going. Settled 2026-10-10.'),
+           ('What stops a data center every Year?', 'Chips set the pace: the fabs fill one a Year, each +50% compute. Energy sets the ceiling, near a hundredfold. Settled 2026-10-10.'),
+           ('What is energy for, early?', 'Thought. Each data center draws its share, and the twelfth would need more than Earth has. Settled 2026-10-10, by the rule above.')]
 Q_MATTER = ask('Is matter meant to be free early?', 'Ground builds cost none, the telescope 40 t, the vault 10 kt, against 250 kt and 40 kt a Year. Only build time and compute shares limit the first hour.')
 Q_CATCH = ask('What does Year 0’s kit catch?', 'A drift scan sees each star ten minutes a day. In about 1 game in 25 a neighbor’s signal arrives in the first 15 minutes, and in about 1 in 4 within the first hour. Does Earth hear it before the all-sky watch is built?')
 
@@ -205,7 +205,7 @@ P_PLAN = chat(0, 'What should we start with?', [
     view=('Build the all-sky watch and the flash watch, so nothing aimed at us is missed. Add a data center: it is cheap. Start no transmitter.' if CAUTIOUS or HIDDEN else
           'Build the all-sky watch and the flash watch. Add a data center. Then decide about a beacon: we are already loud, and a voice is cheap.'), pre=True)
 QUEUE_BUILDS = [('All-sky watch', 'hears a knock or a broadcast from anywhere, at any hour · ground', SKY_YEARS), ('Deep flash watch', 'catches laser knocks too faint for the sky watch · ground', FLASH_YEARS),
-                ('Ground data center', '+25% compute, for good · ground', DC_YEARS)]
+                ('Ground data center', '+50% compute, for good · the fabs fill one a Year', DC_YEARS)]
 LOOKS = [('Image Fomalhaut again', 'Space telescope · has the new cloud moved?', .1), (f'Search for {F["star"]}’s world crossing its star', 'PLATO and TESS records', .2),
          ('Re-read 82 Eridani’s velocities', '37 years of records · is the stretched orbit real?', .3)]
 P_QUEUE = tab(0, 'Projects', 'PROJECTS', 'BEFORE YEAR 0', ''.join([
@@ -225,8 +225,7 @@ def running(t, looks=(), right=None):
         if land > y: rows.append(quick(n, s, tstack('under way', clock(land - y), True)))
     rows += list(looks)
     bl = [prow('All-sky watch', 'two sites, one in each hemisphere', SKY_YEARS, t), prow('Deep flash watch', 'domes on six mountains', FLASH_YEARS, t)]
-    bl.append(prow('Ground data center', '+25% compute', DC_YEARS, t))
-    if y >= 1.1: bl.append(prow('Second data center', '+25% compute', DC_YEARS, t, 1.1))
+    bl += [prow(name, '+50% compute', DC_YEARS, t, s) for name, s in DCS if s <= round(y, 2) < s + 1.1]
     if y >= .4: bl.append(prow('Infrared telescope', 'reads the air of nearby worlds', IR_YEARS, t, .4))
     if y >= 1.6: bl.append(prow('Deep vault', 'in the Moon’s rock', VAULT_YEARS, t, 1.6))
     if .8 <= y: bl.append(prow('Quiet the radars', f'the last sweep leaves at Year {CUT_Y:g}', CUT_YEARS, t, .8))
@@ -350,6 +349,7 @@ def quiet_truths():
         if p not in spared: out.append(f"{p['name']} wakes at Year {p['waking'] - Y0:.1f}, while sweeps still pass it until Year {CUT_Y + p['d']:.1f}. It can still find them.")
     return out
 DC_DONE_SCREEN = running(300)
+N_TENTH = math.ceil(math.log(10 / THINK) / math.log(DC_STEP)); TENTH_Y = N_TENTH + .1      # the standing order's centers finish at Years 2.1, 3.1, ...
 SECOND = running(330, [quick(f'Listen to {F["star"]} for a Year', f'Radio array · tones above {FLOOR}', tstack('under way', clock(1), True))])
 FEAR_CHAT = chat(420, 'What should we fear?', [
     ('you', 'What should we fear?'),
@@ -388,7 +388,7 @@ SILENCE_CHAT = chat(720, 'What would silence mean?', [
 def wake_row(title, sub, year, now): return row(title, sub, tstack(f'Year {year:g}', clock(year - now)))
 WAKES = tab(900, 'Mind', 'MIND', 'WHAT WAKES YOU', ''.join([
     SEC('YOU CHOSE'), wake_row('The all-sky watch and flash watch are built', 'then nothing aimed at us is missed', 6, 3), wake_row('A reply could come · Gliese 526', 'to our 2013 message', 9.0, 3),
-    wake_row('The Moon vault is done', 'the Mind’s second home', 11.6, 3), wake_row('The infrared telescope is done', f'then it reads 82 Eridani d and {F["star"]}', 18.4, 3),
+    wake_row('Thinking draws a tenth of our energy', f'{N_TENTH} data centers in', TENTH_Y, 3), wake_row('The Moon vault is done', 'the Mind’s second home', 11.6, 3), wake_row('The infrared telescope is done', f'then it reads 82 Eridani d and {F["star"]}', 18.4, 3),
     SEC('ALWAYS'), row('A world’s first voice wakes you', 'a knock or a broadcast, aimed at us or not · even in quiet hours', '<span class="mono">always</span>'),
     SEC('NOT WAKING YOU'), quick('Data centers finishing', 'in the daily summary', ''), quick('Windows that pass in silence', 'in the daily summary', '')]))
 LOCK = lockscreen('16:40', [('IN 00:15:00', 'Earth: the sky watch and flash watch are built', 'Year 6. Anything heard wakes you sooner.')])
@@ -462,9 +462,11 @@ BEATS = [
          talk(RADAR_CHOICE, f'Started. {YEARS(CUT_YEARS)}, no matter. The last sweep leaves at Year {CUT_Y:g}. Its absence reaches Alpha Centauri at Year {CUT_Y + 4.3:.1f}, and fifty light-years at Year {CUT_Y + 50:.1f}.', ('Undo',)),
          quiet_truths()),
     beat(270),
-    beat(300, '· The Mind glows. Taps it.', 'The data center is running. Compute +25%.',
-         talk(DC_DONE_SCREEN, 'The data center runs: a quarter more thought, for a four-hundredth of our energy and no matter. I can start another.', ('Another', 'Not now'), 'glow'), question=Q_DC),
-    beat(330, f'Another. And listen to {F["star"]} for a Year.', None, talk(SECOND, f'Both started. The listening ends at Year 2.1. Compute is {res(330)[1]}% in use. Energy, 1%.', ('Undo',)), question=Q_ENERGY),
+    beat(300, '· The Mind glows. Taps it.', 'The data center is running. Compute +50%.',
+         talk(DC_DONE_SCREEN, 'The data center runs: half again as much thought, for half a percent more of our energy. The fabs fill one a Year. I can keep them coming.', ('Keep them coming', 'Just one more', 'Not now'), 'glow'), settled=1),
+    beat(330, f'Keep them coming. And listen to {F["star"]} for a Year.', None,
+         talk(SECOND, f'Set. One a Year, as the fabs allow. Thinking draws {res(330)[0]:g}% of our energy now, and a tenth by Year {TENTH_Y:g}. The twelfth would need more than Earth has.', ('Undo',)),
+         ['A standing order, the player’s. Without it compute never grows on its own.', f'At full pace the grid becomes the wall near Year 11, +{clock(11)}. Then more thought needs more energy, or colder chips in orbit.'], settled=2),
     beat(360), beat(390),
     beat(420, 'What should we fear?', None, FEAR_CHAT,
          [(f"Hunters in this game: {', '.join(p['name'] + ' at ' + p['star'] + ', ' + state(p) for p in NB if p['n']['disposition'] == 'hunter')}." if any(p['n']['disposition'] == 'hunter' for p in NB) else 'No hunter was drawn in this game. About half of games have one.'),
@@ -487,7 +489,7 @@ BEATS = [
          ['Earth now gives off a faint hum, like every neighbor. Nothing that already left is changed.']),
     beat(870, '· The Mind glows. Taps it.', 'The second window opens. Nothing heard.',
          talk(window_screen(870, 1), 'The second window, for our 2018 message. Silent too. I’ll hold the array there until Year 3, as you ordered, then give it back to the sky.', state='glow')),
-    beat(900, 'Wake me for the big things.', None, talk(WAKES, 'Set. Four things wake you, and any first voice. The next is at Year 6, fifteen minutes from now.', ('Undo',))),
+    beat(900, 'Wake me for the big things.', None, talk(WAKES, 'Set. Five things wake you, and any first voice. The next is at Year 6, fifteen minutes from now.', ('Undo',))),
     beat(930, '· Puts the phone down.', None, LOCK, label='+15:30'),
 ]
 PLAYED = 31

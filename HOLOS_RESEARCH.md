@@ -78,6 +78,10 @@ Every source the game rests on, grouped by the question it answers. Each entry s
   - About 27.6 million H100-equivalents sold by June 2026, roughly 3×10²² operations a second. The stock grows about 3.4× a year. 15 million of them draw over 10 GW.
   - Matters: where Earth's compute starts, and how fast it can grow before power binds.
   - Used: v2 [Year 0 and Earth's road to it](HOLOS_GAME_CONCEPT.md#year-0-and-earths-road-to-it).
+- **TSMC's Arizona fabs** · News ([Data Center Dynamics](https://www.datacenterdynamics.com/en/news/covid-and-labor-shortages-lead-to-construction-delays-at-tsmcs-arizona-chip-fab/), [New Electronics](https://www.newelectronics.co.uk/content/news/tsmc-looks-to-compress-arizona-fab-construction-into-just-two-years)).
+  - The first fab broke ground in June 2021 and made 4 nm chips from late 2024, about three and a half years. The second began in April 2025 and aims at about two.
+  - Matters: how fast chip supply can be added. A leading-edge fab takes 2 to 4 years.
+  - Used: v2 [Growing compute](HOLOS_GAME_CONCEPT.md#growing-compute), the chip fab project. And the Taiwan branches in calcs/branches.py, which take 3 to 4.
 - **[IEA, Energy and AI, 2025](https://iea.blob.core.windows.net/assets/de9dea13-b07d-42c5-a398-d1b3ae17d866/EnergyandAI.pdf)** · Report.
   - Data centers used about 415 TWh in 2024 and reach about 945 TWh by 2030 and 1,200 TWh by 2035 in the base case. Accelerated servers grow about 30% a year.
   - Matters: how much of Earth's power thinking takes by Year 0.

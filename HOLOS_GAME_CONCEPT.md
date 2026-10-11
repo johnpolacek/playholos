@@ -147,7 +147,7 @@ Settled 2026-10-06. Replaces v1's numbers ([v1: Economy and projects](legacy/v1/
 - **Matter in orbit:** about 250 kt, plus 40 kt a year from reusable heavy lift.
 - **Instruments and probes:** as in the backbone above.
 - **The sky watch is a drift scan.** Like CHORD, finished in 2028: each northern direction passes through it for about 10 minutes a day. v1's always-on watch of the whole sky becomes a project: dense aperture arrays on two continents ([the audit](HOLOS_PROJECT_AUDIT.md#calculations)).
-- **What moves with the smaller grid.** Compute takes about 1% of energy, not v1's 10%, so even more energy sits idle early. A ground data center's +25% compute draws about 0.25% of energy, not 3%. The industry cap at 100 GJ a tonne falls to about 7.5 Gt a year (v1: 30). Star lifting needs about 200,000 times the grid (v1: 50,000). A Sun-like star's whole output is about 16 trillion times it (v1: four trillion).
+- **What moves with the smaller grid.** Compute takes about 1% of energy, not v1's 10%, so even more energy sits idle early. A ground data center's +50% compute draws about 0.5% of energy at first: see [Growing compute](#growing-compute). The industry cap at 100 GJ a tonne falls to about 7.5 Gt a year (v1: 30). Star lifting needs about 200,000 times the grid (v1: 50,000). A Sun-like star's whole output is about 16 trillion times it (v1: four trillion).
 - **Matter is real mass in space (2026-10-06).** It is what sits in orbit, on the Moon or in the belt, counted in tonnes. Ground builds draw on Earth's own industry, about 106 Gt of materials a year, and spend no matter. Each project's mass comes from physics or a real design. v1's matter was a pacing currency that grew tenfold per tier. With real masses, most instruments and probes become cheap in matter, and build time, compute shares, lift and propellant pace them. Compute shares already cap how much runs at once.
 - **Four kinds of matter (2026-10-06).** Each comes from its own place and gates its own works.
   - *Metal:* structure, machines, film. From the belt, or lifted from Earth as finished goods.
@@ -157,6 +157,20 @@ Settled 2026-10-06. Replaces v1's numbers ([v1: Economy and projects](legacy/v1/
   - Earth's lift carries any kind, 40 kt a year in all, mostly as metal. The 250 kt in orbit at Year 0 is metal.
   - The [audit](HOLOS_PROJECT_AUDIT.md#kinds-of-matter) says how each project's mass splits among them.
 - **Project prices are in [HOLOS_PROJECT_AUDIT.md](HOLOS_PROJECT_AUDIT.md)** (open question 2).
+
+## Growing compute
+
+Settled 2026-10-10. Numbers in [calcs/early_game.py](calcs/early_game.py). Replaces the audit's unlimited data center.
+
+- **Chips set the pace.** Earth's compute grew about 1.5 times a year from 2026 to 2040, as fast as chips could be made, new fabs included. So at Year 0 the fabs fill one ground data center a Year, and each adds half again to Earth's compute.
+- **Energy sets the ceiling.** Thinking draws about 1% of Earth's energy at Year 0, and each data center draws in proportion to its chips.
+  - After 6 data centers, thinking draws a tenth of the grid. After 11, nine tenths, for 86 times the thought.
+  - The twelfth would need more than Earth has. At full pace that is about Year 11, under an hour of play.
+- **So early energy is for thought.** It sits idle only until compute grows into it.
+- **Past the ceiling.** More thought then needs more energy, or colder chips. Computing costs less energy the colder it runs, which is what the cold compute annex in orbit is for.
+- **Faster than one a Year needs new fabs.** A leading-edge fab takes 2 to 4 years. A chip fab project, about 3 Years, adds a second line. Sample.
+- **Only if the player chooses.** One at a time, or a standing order to keep them coming. Compute never grows on its own.
+- **A Taiwan branch lowers where compute starts, not the pace.** An assumption, until the mocks test a branch game.
 
 ## Earth's leads at Year 0
 
@@ -317,8 +331,7 @@ Answered one at a time, in this order. Every answer must be permitted by current
 8. **First mock built 2026-10-10:** [Earth's first 15 minutes](explorations/v2-mocks/index.html), one phone with a godview lane, on one drawn game. A plain-text copy is in [index.md](explorations/v2-mocks/index.md). It raises these, all open:
    - Does a real instrument already half built, the Habitable Worlds Observatory, cost fewer Years?
    - **Settled 2026-10-10:** the Will may quiet Earth's radars. See [Quieting Earth's radars](#quieting-earths-radars).
-   - What stops a ground data center every Year? It costs no matter and almost no energy.
-   - What is energy for, early? Thinking takes 1% of it and nothing else draws on it.
+   - **Settled 2026-10-10:** chips set the pace of compute and energy sets its ceiling. That also says what energy is for early. See [Growing compute](#growing-compute).
    - Is matter meant to be free early? Nothing in the first hour costs more than 10 kt of 250.
    - What does Year 0's drift-scan sky watch catch of a neighbor's knock, before the all-sky watch is built?
    - The two open seed rules in [The seed, drawn](#the-seed-drawn).

@@ -145,15 +145,21 @@ def rail(active):
 
 # Compute in use, as a share of what Earth has that Year. Shares are v1's: a choice of how much thought goes in.
 # (start Year, end Year, share): the queue at Year 0, then what the player starts.
-DC_DONE = (1.0, 2.1)                           # two ground data centers, each +25% compute
-USES = [(0, 6, 1), (0, 6, 20), (0, 1.0, 5), (0, .1, 5), (0, .2, 5), (0, .3, 5),            # sky watch, flash watch, data center, three looks
-        (.4, 18.4, 15), (.8, 2.8, 5), (1.1, 2.1, 10), (1.1, 2.1, 5), (1.6, 11.6, 15), (1.8, 3.0, 10)]    # telescope, quieting the radars, a Year's listening, data center, vault, Luyten watch
+# Ground data centers: the fabs fill one a Year, each +50% compute, and thinking's draw on energy grows with it.
+# The first is queued before Year 0. A standing order at Year 1.1 keeps them coming.
+DC_STEP = 1.5
+DCS = [('Ground data center', 0), ('Second data center', 1.1), ('Third data center', 2.1)]
+DC_DONE = tuple(s + 1 for _, s in DCS)
+THINK = 100 * .25 / GRID_TW                    # thinking's share of energy at Year 0, in percent
+USES = [(0, 6, 1), (0, 6, 20), (0, .1, 5), (0, .2, 5), (0, .3, 5),                         # sky watch, flash watch, three looks
+        (.4, 18.4, 15), (.8, 2.8, 5), (1.1, 2.1, 10), (1.6, 11.6, 15), (1.8, 3.0, 10)]     # telescope, quieting the radars, a Year's listening, vault, Luyten watch
+USES += [(s, s + 1, 5) for _, s in DCS]
 def res(t):
     y = t / 300
-    grown = 1 + .25 * sum(y >= d for d in DC_DONE)
+    grown = DC_STEP ** sum(y >= d for d in DC_DONE)
     used = sum(s for a, b, s in USES if a <= y < b) / grown
     matter = ORBIT_KT + LIFT_KT * y - .04 * (y >= .4) - 10 * (y >= 1.6)
-    return (1, round(used), f'{matter:,.0f} kt')
+    return (round(THINK * grown, 1), round(used), f'{matter:,.0f} kt')
 def hud(t, r=None, pre=False):
     e, c, m = r or res(t)
     when = 'Before Year 0' if pre else f'Year {yr(t)}'
@@ -169,7 +175,7 @@ def row(title, sub, right='', tone='', bar=None, marker=False):
     return f'<button class="row">{mk}<span class="rt"><span class="{tone}">{title}</span><span class="sub">{sub}</span>{b}</span><span class="rr">{right}</span></button>'
 def quick(title, sub, right): return f'<div class="row quick"><span class="rt"><span><b>{title}</b></span><span class="sub">{sub}</span></span><span class="rr">{right}</span></div>'
 def done_tag(): return '<span class="newtag donetag">Done</span>'
-def used(name, pct): return f'<div class="cap"><span>{name}</span><b class="use"><s style="width:{pct}%"></s></b><span class="mono">{100 - pct}% free</span></div>'
+def used(name, pct): return f'<div class="cap"><span>{name}</span><b class="use"><s style="width:{pct}%"></s></b><span class="mono">{100 - pct:g}% free</span></div>'
 def share(name, pct, label=None): return f'<div class="cap"><span>{name}</span><b class="use"><s style="width:{pct}%"></s></b><span class="mono">{label or f"{pct}%"}</span></div>'
 def odds(name, before, after): return f'<div class="odds"><span>{name}</span><b><s class="before" style="width:{before}%"></s><s class="after" style="width:{after}%"></s></b><span class="mono">{before} → {after}</span></div>'
 def odds_now(name, pct): return f'<div class="odds"><span>{name}</span><b><s class="after" style="width:{pct}%;height:100%;top:0"></s></b><span class="mono">{pct}</span></div>'
@@ -323,8 +329,8 @@ def world_strip(items, caption=None):
     return strip(''.join(s), caption or 'ORBIT · EARTH' + (f' · {sum(b < 1 for *_, b in items)} BUILDING' if items else ''))
 b = lambda years, t, start=0: max(0.0, min(1.0, (t / 300 - start) / years))
 def builds(t, extra=()):
-    out = [('All-sky watch', 'ground', b(6, t)), ('Deep flash watch', 'ground', b(6, t)), ('Data center', 'ground', b(1, t))]
-    if t >= 330: out.append(('Second data center', 'ground', b(1, t, 1.1)))
+    out = [('All-sky watch', 'ground', b(6, t)), ('Deep flash watch', 'ground', b(6, t))]
+    out += [(name.replace('Ground d', 'D'), 'ground', b(1, t, s)) for name, s in DCS if s <= round(t / 300, 2) < s + 1.1]
     if t >= 120: out.append(('Infrared telescope', 'low', b(18, t, .4)))
     if t >= 480: out.append(('Deep vault', 'moon', b(10, t, 1.6)))
-    return [x for x in out if not (x[0] == 'Data center' and t >= 330) and not (x[0] == 'Second data center' and t >= 690)] + list(extra)
+    return out + list(extra)

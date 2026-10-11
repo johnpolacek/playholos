@@ -44,6 +44,8 @@ Worked in [calcs/early_game.py](calcs/early_game.py). Orders of magnitude from p
 - So speaking costs almost nothing in energy. What it costs is being found.
 - Year 0's sky watch is a drift scan like CHORD, finished in 2028: each northern direction passes through it for about 10 minutes a day. v1's always-on watch of the whole sky becomes a project, below.
 
+**Compute grows as fast as chips are made, until energy runs out.** From 3×10²² operations a second in 2026 to 10²⁵ in 2040 is 1.51 times a year. One ground data center a Year at +50% keeps that pace. Thinking draws 0.25 TW of 24 at Year 0, and the draw grows with the chips: a tenth of the grid after 6 data centers, nine tenths after 11. The twelfth doesn't fit, about Year 11.
+
 **Belt mining passes.** Metal-rich rock needs melting, about 2 GJ a tonne. Hauling it home by solar-electric thrust, 7.5 km/s at 30 km/s exhaust, costs about 166 GJ a tonne. 120 kt a year takes about 0.6 GW at the belt, about 5 kt of arrays at 137 W/kg. A 10 kt fleet fits.
 
 **The far-side array is a lunar industry project.** 1,000 km² of mesh dishes at an assumed 1 kg/m² is about 1 Mt of lunar metal, made in place as FarView plans. Its SEFD would be about 2×10⁻⁴ Jy, about 60,000 times a big dish. Its reach for a world's hum is worked below.
@@ -125,7 +127,8 @@ Proposed prices are matter in orbit, on the Moon or in the belt. Ground builds s
 | --- | --- | --- | --- | --- |
 | Orbital solar array | 400 kt | Light ×10 to 150 | Split in two. A ground solar build-out: 0 matter, +20% energy in 10 Years, about 5× today's install rate. An orbital array at tier 2: 10 Mt for +20%, at 1 kW/kg and half lost beaming it down. | Flown arrays 75 to 218 W/kg, target 1 kW/kg. +20% of 24 TW is 4.8 TW: 5 to 60 Mt. |
 | Belt prospecting | 0 | OK | 5 t | Small survey probes. |
-| Ground data center | 0 | Slow ×10 | 0, ground. 1 Year, not 8. Draws 0.25% of energy. | Chip stock grows about 3× a year now. +25% takes months, not 8 Years. Energy is 0.25%, not 3%. |
+| Ground data center | 0 | Slow ×10 | 0, ground. 1 Year, not 8, for +50% compute. One at a time: the fabs' output. Each draws its share of energy, 0.5% of the grid for the first. Settled 2026-10-10. | Compute grew 1.5× a year from 2026 to 2040, fabs included. Thinking draws 1% of energy at Year 0, so the twelfth data center would need more than the grid. |
+| Chip fabs, new | none | Sample | 0, ground. About 3 Years. A second line: two data centers a Year. | A leading-edge fab takes 2 to 4 years from groundbreaking to volume. |
 | Second launch complex | 0 | OK | 0, ground. Unchanged. | Starship cadence growth. |
 | Cold compute annex | 300 kt | OK | 100 kt | +25% compute is about 25 GW in orbit. Solar at 0.2 to 1 kW/kg is 25 to 125 kt, plus chips and radiators. Google Suncatcher is testing it. |
 | Belt mining | 0 | OK, recalculated | 10 kt fleet for +120 kt a year. Hauling takes about 0.6 GW at the belt, about 5 kt of solar arrays. | Unproven. A mining fleet weighs something, so zero matter is too light. |
