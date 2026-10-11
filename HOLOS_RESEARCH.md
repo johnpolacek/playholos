@@ -359,7 +359,8 @@ Anchors for [the project audit](HOLOS_PROJECT_AUDIT.md).
 - **[Habitable Worlds Observatory](https://habitableworldsobservatory.org/home)** · Study, NASA, planned for the 2040s.
   - A large space telescope built to image Earth-size worlds and read their air.
   - Matters: no seat can read another's air at Year 0. That waits for an instrument of this class.
-  - Used: v1 starting kit. v2: still being built at Year 0.
+  - Status in October 2026: no formal launch date. NASA aims at the 2040s, and one projection says 2041. The 2027 budget request asks $5 million for it, against $150 million enacted for 2026. Cost is put at $11 billion or more ([Wikipedia](https://en.wikipedia.org/wiki/Habitable_Worlds_Observatory), [Johns Hopkins](https://washingtondc.jhu.edu/news/habitable-worlds-observatory)).
+  - Used: v1 starting kit. v2: still being built at Year 0. How far along is open, in the mock's questions.
 
 ## The leads: real oddities at real stars
 
