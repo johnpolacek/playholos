@@ -105,8 +105,23 @@ def compute_growth(start=3e22, end=1e25, years=14, share=0.25 / 24, step=1.5):
     print(f'  a tenth of energy after {math.ceil(tenth)} data centers. Number {math.floor(wall) + 1} would need more than the whole grid: '
           f'about Year {wall:.0f}, {wall * 5:.0f} real minutes at full pace.')
 
+# ---------- Matter in orbit at Year 0 ----------
+# About 17,400 t is in orbit in October 2026: 77% payloads and 22% spent rocket bodies by mass, and about 18% of the
+# satellites up are dead (ESA). About 3,200 t reached orbit in 2025, and lift reaches about 40 kt a year by 2040.
+# Low-orbit craft such as Starlink's are built for about five years and then brought down. So most of what is up in
+# 2040 is recent and working. What the Will can build from is what is spare.
+def orbit_stock(now_kt=17.4, lift_2025=3.2, lift_2040=40, life=5, spare_kt=20):
+    g = (lift_2040 / lift_2025) ** (1 / 15)
+    launched = [lift_2025 * g ** k for k in range(1, 15)]            # 2026 to 2039
+    print(f'Lift grows {g:.2f} times a year. Launched 2026 to 2039: {sum(launched):.0f} kt, on top of {now_kt} kt up in 2026.')
+    print(f'  If craft last {life} years, about {sum(launched[-life:]):.0f} kt is up at Year 0, nearly all of it working.')
+    print(f"  Spent stages are {0.22 * now_kt:.1f} kt of today's mass. Sample for Year 0: {spare_kt} kt spare, as depots, spent stages and dead craft.")
+    for name, kt in (('Deep vault', 10), ('Launcher', 10), ('Cold compute annex', 100)):
+        print(f'  {name}, {kt} kt: {kt / spare_kt:.1f} times the spare stock, {kt / lift_2040:.2g} Years of lift')
+
 if __name__ == '__main__':
     compute_growth(); print()
+    orbit_stock(); print()
     beacon(); print()
     belt(); belt(flow_kt=60); print()
     far_side(); print()

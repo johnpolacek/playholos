@@ -100,7 +100,7 @@ YEAR 0 · WHAT EARTH ALREADY HAS
 KNOW · WHAT WE CAN SEE
 Sky watch · A drift scan. Each northern direction, ten minutes a day. · Telescopes · The ELT on the ground, Roman and an aging JWST in space. They feel worlds by their tug. None can read a rocky world’s air. · Radio array · The SKA, on two continents. · Records · Ten years of Terra Hunting. Gaia, PLATO, and every survey before.
 GROW · WHAT WE CAN MAKE
-Energy · 24 TW. Thinking takes about 1% of it. · Compute · 10²⁵ operations a second. · Matter · 250 kt in orbit, 40 kt more each Year. Ground builds need none. · Places · Small stations at the Moon’s south pole. No one on Mars.
+Energy · 24 TW. Thinking takes about 1% of it. · Compute · 10²⁵ operations a second. · Matter · 20 kt spare in orbit: depots, spent stages, dead craft. 40 kt more each Year. · Places · Small stations at the Moon’s south pole. No one on Mars.
 REACH · HOW FAR WE TOUCH
 Laser links · Messages across the home system in hours. · Probes · Voyager 1, silent, 220 AU out.
 The instruments are today’s. · The Mind is not.
@@ -125,7 +125,7 @@ The line is the Mind’s proposal. Three are written so far, picked by the dials
 7 · Meeting the Mind
 Earth · Before Year 0
 Sol · The clock starts when you begin
-ENERGY · [1%] · MATTER · 250 kt · COMPUTE · [0%]
+ENERGY · [1%] · MATTER · 20 kt · COMPUTE · [0%]
 MIND · FIRST WORDS
 THE MIND · I am what you built: every grid, every dish, every data center, thinking as one since this morning. You are my Will.
 I see all of Earth at once. Past the Sun’s edge I see only what our telescopes see: a quiet sky, and a few things that don’t fit.
@@ -136,7 +136,7 @@ Talk to the Mind… · [Send · ↑]
 “What doesn’t fit?”
 Earth · Before Year 0
 Sol · The clock starts when you begin
-ENERGY · [1%] · MATTER · 250 kt · COMPUTE · [0%]
+ENERGY · [1%] · MATTER · 20 kt · COMPUTE · [0%]
 [drawing: Stars near Sol; labels: Sol, 82 Eridani, 19.7 ly · 01:38:30, Fomalhaut, 25.1 ly · 02:05:30, Luyten’s Star, 12.3 ly · 01:01:18, 00:50:00, 01:40:00, Alpha Centauri, Procyon, Tau Ceti, Epsilon Eridani, Barnard’s Star, Altair, Vega, Epsilon Indi, 61 Cygni, 10 ly]
 [World] · [System] · [selected: Stars] · [Region] · [Galaxy]
 LEADS · 4 · LIGHT-TIME
@@ -153,7 +153,7 @@ Luyten’s Star: no one lives there. About 3 games in 10 put someone at a star E
 “Plan our waking.”
 Earth · Before Year 0
 Sol · The clock starts when you begin
-ENERGY · [1%] · MATTER · 250 kt · COMPUTE · [0%]
+ENERGY · [1%] · MATTER · 20 kt · COMPUTE · [0%]
 MIND · ASKING
 ABOUT · What should we start with?
 What should we start with?
@@ -169,7 +169,7 @@ The Mind advises from the charter and dials. It queues nothing until told.
 “Queue that.”
 Earth · Before Year 0
 Sol · The clock starts when you begin
-ENERGY · [1%] · MATTER · 250 kt · COMPUTE · [0%]
+ENERGY · [1%] · MATTER · 20 kt · COMPUTE · [0%]
 PROJECTS · BEFORE YEAR 0
 Nothing has started · Everything queued starts at Year 0, the moment you begin.
 UP NEXT · STARTS AT YEAR 0
@@ -195,7 +195,7 @@ From Begin. 12 of 31 half-minutes had nothing new for the player.
 “What’s running?”
 Earth · Year 0
 Sol · 2040.0 · 1 Year = 00:05:00
-ENERGY · [1.0%] · MATTER · 250 kt · COMPUTE · [41%]
+ENERGY · [1.0%] · MATTER · 20 kt · COMPUTE · [41%]
 [drawing: ORBIT · EARTH · 3 BUILDING; labels: the Moon, Earth, low orbit, All-sky watch · 0%, Deep flash watch · 0%, Data center · 0%] · ORBIT · EARTH · 3 BUILDING
 PROJECTS · 3 BUILDING · 3 LOOKS
 LOOKS · WITH WHAT WE HAVE
@@ -215,7 +215,7 @@ The clock starts. The seed rolled every neighbor’s plan before this. Only Eart
 Lands · Fomalhaut has a third cloud. Chance 30 → 5.
 Earth · Year 0.1
 Sol · 2040.1 · 1 Year = 00:05:00
-ENERGY · [1.0%] · MATTER · 254 kt · COMPUTE · [36%]
+ENERGY · [1.0%] · MATTER · 24 kt · COMPUTE · [36%]
 REPORT · QUICK LOOK
 [‹ All reports]
 [drawing: Fomalhaut’s dust belt, with three collision clouds near its inner edge; labels: Fomalhaut, the dust belt · 133 AU out, first · 2004 to 2014, second · 2023, fading, third · new, not to scale]
@@ -241,7 +241,7 @@ Truth: rubble. Nothing at Fomalhaut is built.
 Lands · 72 Herculis’s world doesn’t cross its star.
 Earth · Year 0.2
 Sol · 2040.2 · 1 Year = 00:05:00
-ENERGY · [1.0%] · MATTER · 258 kt · COMPUTE · [31%]
+ENERGY · [1.0%] · MATTER · 28 kt · COMPUTE · [31%]
 [drawing: STARS · 72 HERCULIS · 47.6 LY · 03:57:51; labels: Sol, 82 Eridani, 19.7 ly · 01:38:30, Fomalhaut, 25.1 ly · 02:05:30, Luyten’s Star, 12.3 ly · 01:01:18, 00:50:00, 01:40:00, Alpha Centauri, Procyon, Tau Ceti, Epsilon Eridani, Barnard’s Star, Altair, Vega, Epsilon Indi, 61 Cygni] · STARS · 72 HERCULIS · 47.6 LY · 03:57:51
 CLUE · YEAR 0.2
 [‹ 72 Herculis]
@@ -265,7 +265,7 @@ Godview
 Lands · 82 Eridani d’s orbit holds. Shimmer 10 → 3.
 Earth · Year 0.3
 Sol · 2040.3 · 1 Year = 00:05:00
-ENERGY · [1.0%] · MATTER · 262 kt · COMPUTE · [26%]
+ENERGY · [1.0%] · MATTER · 32 kt · COMPUTE · [26%]
 REPORT · QUICK LOOK
 [‹ All reports]
 [drawing: 82 Eridani: three hot worlds, the warm zone, and d’s stretched orbit through it; labels: three hot worlds, warm zone, d · farthest, 1.96 AU, nearest, 0.74 AU]
@@ -285,7 +285,7 @@ THE MIND · The orbit is real. What the world is, nothing we own can say. A tele
 “Build it.”
 Earth · Year 0.4
 Sol · 2040.4 · 1 Year = 00:05:00
-ENERGY · [1.0%] · MATTER · 266 kt · COMPUTE · [41%]
+ENERGY · [1.0%] · MATTER · 36 kt · COMPUTE · [41%]
 [drawing: ORBIT · EARTH · WHERE IT WILL BE BUILT; labels: the Moon, Earth, low orbit, All-sky watch · 7%, Deep flash watch · 7%, Data center · 40%, Infrared telescope · 0%] · ORBIT · EARTH · WHERE IT WILL BE BUILT
 [‹ Know] · KNOW
 
@@ -298,11 +298,11 @@ USES EACH YEAR
 Compute · [15%] · 15%
 Energy · [1%] · under 1%
 USES ONCE, AT START
-40 t · of metal, from 266 kt in orbit
+40 t · of metal, from 36 kt spare in orbit
 TIME
 now · 01:00:00 · 02:00:00 · 03:00:00
 18 Years
-THE MIND · Started. Eighteen Years, a sixth of our compute, forty tonnes of the 266 kilotonnes in orbit. It looks. It says nothing. · [Undo]
+THE MIND · Started. Eighteen Years, a sixth of our compute, forty tonnes of the 36 kilotonnes we have spare. It looks. It says nothing. · [Undo]
 [Talk to the Mind]
 Design question 1 · Does a half-built real instrument cost fewer Years? The Habitable Worlds Observatory is under construction at Year 0. Here it is the infrared telescope at its full 18 Years.
 +2:30 · Year 0.5
@@ -311,7 +311,7 @@ Nothing new. · A dead 30 seconds.
 “Who has heard us?”
 Earth · Year 0.6
 Sol · 2040.6 · 1 Year = 00:05:00
-ENERGY · [1.0%] · MATTER · 274 kt · COMPUTE · [41%]
+ENERGY · [1.0%] · MATTER · 44 kt · COMPUTE · [41%]
 MIND · ASKING
 ABOUT · Who has heard us?
 The clock runs while you talk: 1 Year every · 00:05:00.
@@ -329,7 +329,7 @@ The Mind can only say it doesn’t know. The concept sets that: it lists where t
 “Can we go quiet?”
 Earth · Year 0.7
 Sol · 2040.7 · 1 Year = 00:05:00
-ENERGY · [1.0%] · MATTER · 278 kt · COMPUTE · [41%]
+ENERGY · [1.0%] · MATTER · 48 kt · COMPUTE · [41%]
 MIND · ASKING
 ABOUT · Can we go quiet?
 The clock runs while you talk: 1 Year every · 00:05:00.
@@ -347,7 +347,7 @@ Settled · Can the Will quiet Earth’s radars? Yes, if the player chooses: keep
 “Cut them. And send nothing new without me.”
 Earth · Year 0.8
 Sol · 2040.8 · 1 Year = 00:05:00
-ENERGY · [1.0%] · MATTER · 282 kt · COMPUTE · [46%]
+ENERGY · [1.0%] · MATTER · 52 kt · COMPUTE · [46%]
 MIND · EARTH’S RADARS
 WHAT YOU WANT
 Cut them. And send nothing new without me.
@@ -379,7 +379,7 @@ The Mind glows. Taps it.
 Lands · The data center is running. Compute +50%.
 Earth · Year 1
 Sol · 2041.0 · 1 Year = 00:05:00
-ENERGY · [1.6%] · MATTER · 290 kt · COMPUTE · [27%]
+ENERGY · [1.6%] · MATTER · 60 kt · COMPUTE · [27%]
 [drawing: ORBIT · EARTH · 3 BUILDING; labels: the Moon, Earth, low orbit, All-sky watch · 17%, Deep flash watch · 17%, Data center, Infrared telescope · 3%] · ORBIT · EARTH · 3 BUILDING
 PROJECTS · 4 BUILDING
 BUILDING · 4
@@ -398,7 +398,7 @@ Settled · What stops a data center every Year? Chips set the pace: the fabs fil
 “Keep them coming. And listen to 72 Herculis for a Year.”
 Earth · Year 1.1
 Sol · 2041.1 · 1 Year = 00:05:00
-ENERGY · [1.6%] · MATTER · 294 kt · COMPUTE · [37%]
+ENERGY · [1.6%] · MATTER · 64 kt · COMPUTE · [37%]
 [drawing: ORBIT · EARTH · 4 BUILDING; labels: the Moon, Earth, low orbit, All-sky watch · 18%, Deep flash watch · 18%, Second data center · 0%, Infrared telescope · 4%] · ORBIT · EARTH · 4 BUILDING
 PROJECTS · 5 BUILDING · 1 LOOK
 LOOKS · WITH WHAT WE HAVE
@@ -423,7 +423,7 @@ Nothing new. · A dead 30 seconds.
 “What should we fear?”
 Earth · Year 1.4
 Sol · 2041.4 · 1 Year = 00:05:00
-ENERGY · [1.6%] · MATTER · 306 kt · COMPUTE · [37%]
+ENERGY · [1.6%] · MATTER · 76 kt · COMPUTE · [37%]
 MIND · ASKING
 ABOUT · What should we fear?
 The clock runs while you talk: 1 Year every · 00:05:00.
@@ -443,7 +443,7 @@ Nothing new. · A dead 30 seconds.
 “Build the vault.”
 Earth · Year 1.6
 Sol · 2041.6 · 1 Year = 00:05:00
-ENERGY · [1.6%] · MATTER · 304 kt · COMPUTE · [47%]
+ENERGY · [1.6%] · MATTER · 74 kt · COMPUTE · [47%]
 [drawing: ORBIT · EARTH · WHERE IT WILL BE BUILT; labels: the Moon, Earth, low orbit, All-sky watch · 27%, Deep flash watch · 27%, Second data center · 50%, Infrared telescope · 7%, Deep vault · 0%] · ORBIT · EARTH · WHERE IT WILL BE BUILT
 [‹ Endure] · ENDURE
 
@@ -456,20 +456,23 @@ USES EACH YEAR
 Compute · [15%] · 15%
 Energy · [1%] · under 1%
 USES ONCE, AT START
-10 kt · of metal, from 314 kt in orbit
+10 kt · of metal, from 84 kt spare in orbit
 TIME
 now · 01:00:00 · 02:00:00 · 03:00:00
 10 Years
-THE MIND · Started. Ten Years, ten kilotonnes, a seventh of our compute. Until it is done, all of me is here. · [Undo]
+THE MIND · Started. Ten Years, a seventh of our compute, and ten of the 84 kilotonnes we have spare. Until it is done, all of me is here. · [Undo]
 [Talk to the Mind]
-Design question 2 · Is matter meant to be free early? Ground builds cost none, the telescope 40 t, the vault 10 kt, against 250 kt and 40 kt a Year. Only build time and compute shares limit the first hour.
+Godview
+Asked for at Year 0, the vault would have taken half the spare stock.
+Design question 2 · Is all of Earth’s lift spare? Lift adds 40 kt a Year, so the 20 kt stock is 130 kt by minute 15. But craft in low orbit last about five years. Keeping 124 kt of them flying takes about 25 kt a Year.
+Settled · Is matter meant to be free early? No. Matter is only what is spare in orbit: about 20 kt at Year 0, plus 40 kt a Year of lift. Working satellites don’t count. Settled 2026-10-10.
 +8:30 · Year 1.7
 Nothing new. · A dead 30 seconds.
 +9:00 · Year 1.8
 “Watch Luyten’s Star through the window.”
 Earth · Year 1.8
 Sol · 2041.8 · 1 Year = 00:05:00
-ENERGY · [1.6%] · MATTER · 312 kt · COMPUTE · [54%]
+ENERGY · [1.6%] · MATTER · 82 kt · COMPUTE · [54%]
 MIND · NEW ORDER
 WHAT YOU WANT
 Watch Luyten’s Star through the window.
@@ -490,7 +493,7 @@ The Mind glows. Taps it.
 Lands · A Year of listening: nothing loud at 72 Herculis.
 Earth · Year 2.1
 Sol · 2042.1 · 1 Year = 00:05:00
-ENERGY · [2.3%] · MATTER · 324 kt · COMPUTE · [32%]
+ENERGY · [2.3%] · MATTER · 94 kt · COMPUTE · [32%]
 REPORT · LONG LOOK
 [‹ All reports]
 
@@ -515,7 +518,7 @@ The Mind opens on its own.
 Lands · The first reply window at Luyten’s Star opens. Nothing heard.
 Earth · Year 2.3
 Sol · 2042.3 · 1 Year = 00:05:00
-ENERGY · [2.3%] · MATTER · 332 kt · COMPUTE · [32%]
+ENERGY · [2.3%] · MATTER · 102 kt · COMPUTE · [32%]
 REPORT · A WINDOW OPENS
 [‹ All reports]
 [drawing: Two messages out to Luyten’s Star and the earliest replies back; labels: 2020, 2030, 2040, at Luyten’s Star · 12.3 ly, sent, now]
@@ -536,7 +539,7 @@ Design question 3 · What does Year 0’s kit catch? A drift scan sees each star
 “What would silence mean?”
 Earth · Year 2.4
 Sol · 2042.4 · 1 Year = 00:05:00
-ENERGY · [2.3%] · MATTER · 336 kt · COMPUTE · [32%]
+ENERGY · [2.3%] · MATTER · 106 kt · COMPUTE · [32%]
 MIND · ASKING
 ABOUT · What would silence mean?
 The clock runs while you talk: 1 Year every · 00:05:00.
@@ -560,7 +563,7 @@ The Mind glows. Taps it.
 Lands · The second window opens. Nothing heard.
 Earth · Year 2.9
 Sol · 2042.9 · 1 Year = 00:05:00
-ENERGY · [2.3%] · MATTER · 356 kt · COMPUTE · [29%]
+ENERGY · [2.3%] · MATTER · 126 kt · COMPUTE · [29%]
 REPORT · A WINDOW OPENS
 [‹ All reports]
 [drawing: Two messages out to Luyten’s Star and the earliest replies back; labels: 2020, 2030, 2040, at Luyten’s Star · 12.3 ly, sent, now]
@@ -579,7 +582,7 @@ The earliest a reply to Sónar Calling GJ273b could reach Earth from Luyten's St
 “Wake me for the big things.”
 Earth · Year 3
 Sol · 2043.0 · 1 Year = 00:05:00
-ENERGY · [2.3%] · MATTER · 360 kt · COMPUTE · [25%]
+ENERGY · [2.3%] · MATTER · 130 kt · COMPUTE · [25%]
 MIND · WHAT WAKES YOU
 YOU CHOSE
 - The all-sky watch and flash watch are built · then nothing aimed at us is missed · Year 6 · 00:15:00
@@ -603,8 +606,9 @@ HOLOS · IN 00:15:00 · Earth: the sky watch and flash watch are built · Year 6
 Settled: Can the Will quiet Earth’s radars? · Yes, if the player chooses: keep them, fade them over about 25 Years, or cut them in about 2. What has left keeps going. Settled 2026-10-10.
 Settled: What stops a data center every Year? · Chips set the pace: the fabs fill one a Year, each +50% compute. Energy sets the ceiling, near a hundredfold. Settled 2026-10-10.
 Settled: What is energy for, early? · Thought. Each data center draws its share, and the twelfth would need more than Earth has. Settled 2026-10-10, by the rule above.
+Settled: Is matter meant to be free early? · No. Matter is only what is spare in orbit: about 20 kt at Year 0, plus 40 kt a Year of lift. Working satellites don’t count. Settled 2026-10-10.
 1. Does a half-built real instrument cost fewer Years? · The Habitable Worlds Observatory is under construction at Year 0. Here it is the infrared telescope at its full 18 Years.
-2. Is matter meant to be free early? · Ground builds cost none, the telescope 40 t, the vault 10 kt, against 250 kt and 40 kt a Year. Only build time and compute shares limit the first hour.
+2. Is all of Earth’s lift spare? · Lift adds 40 kt a Year, so the 20 kt stock is 130 kt by minute 15. But craft in low orbit last about five years. Keeping 124 kt of them flying takes about 25 kt a Year.
 3. What does Year 0’s kit catch? · A drift scan sees each star ten minutes a day. In about 1 game in 25 a neighbor’s signal arrives in the first 15 minutes, and in about 1 in 4 within the first hour. Does Earth hear it before the all-sky watch is built?
 4. Should the seed reroll moves that break the silent opening? · New in calcs/seed.py. A neighbor that already knows Earth rolls its reaction. If its knock or call would have reached Earth before Year 0, the seed rolls again, so nothing was heard by 2040.
 5. How long does a Mind take to act on news? · calcs/seed.py uses half a Year, a sample. It sets when a neighbor’s answer leaves, so when it arrives.

@@ -87,7 +87,7 @@ CAUTIOUS, HIDDEN = DIALS[2] < 44, DIALS[0] > 56
 CHARTER = ('We were loud by accident. Be quiet on purpose.' if HIDDEN else
            'We came close to ending ourselves. Look first, then speak as one.' if CAUTIOUS else
            'We have always called out. Now find who answers.')
-GRID_TW, ORBIT_KT, LIFT_KT = 24, 250, 40
+GRID_TW, SPARE_KT, LIFT_KT = 24, 20, 40       # matter is what is spare in orbit: depots, spent stages, dead craft
 COMPUTE = 1e25 * E['compute']
 def sci(x):
     e = math.floor(math.log10(x)); m = x / 10 ** e
@@ -158,7 +158,7 @@ def res(t):
     y = t / 300
     grown = DC_STEP ** sum(y >= d for d in DC_DONE)
     used = sum(s for a, b, s in USES if a <= y < b) / grown
-    matter = ORBIT_KT + LIFT_KT * y - .04 * (y >= .4) - 10 * (y >= 1.6)
+    matter = SPARE_KT + LIFT_KT * y - .04 * (y >= .4) - 10 * (y >= 1.6)
     return (round(THINK * grown, 1), round(used), f'{matter:,.0f} kt')
 def hud(t, r=None, pre=False):
     e, c, m = r or res(t)
@@ -200,7 +200,7 @@ def chat(t, about, lines, view=None, strip='', pre=False):
     if view: said += f'<div class="say you">What would you do?</div><div class="say mind"><span class="mono">ITS VIEW · FROM OUR CHARTER AND DIALS</span>{view}<span class="dials">{DIAL_WORDS}</span></div>'
     clockline = '' if pre else '<p class="clockline">The clock runs while you talk: 1 Year every <span class="rtime">00:05:00</span>.</p>'
     return tab(t, 'Mind', 'MIND', 'ASKING', f'<div class="pinned"><span class="mono">ABOUT</span><b>{about}</b></div>{clockline}<div class="chat">{said}</div>'
-               '<div class="ask"><span>Ask the Mind…</span><button aria-label="Send">↑</button></div>', strip, pre, (1, 0, f'{ORBIT_KT} kt') if pre else None)
+               '<div class="ask"><span>Ask the Mind…</span><button aria-label="Send">↑</button></div>', strip, pre, (1, 0, f'{SPARE_KT} kt') if pre else None)
 def order(t, want, parts, warn='', strip=''):
     return tab(t, 'Mind', 'MIND', 'NEW ORDER', SEC('WHAT YOU WANT') + f'<div class="intent">{want}<i></i></div>' + SEC('THE MIND’S VERSION')
                + ''.join(part(k, v) for k, v in parts) + (f'<p class="warnline">{warn}</p>' if warn else '')

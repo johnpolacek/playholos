@@ -15,8 +15,9 @@ def ask(q, why): ASKS.append((q, why)); return len(ASKS)
 Q_HWO = ask('Does a half-built real instrument cost fewer Years?', 'The Habitable Worlds Observatory is under construction at Year 0. Here it is the infrared telescope at its full 18 Years.')
 SETTLED = [('Can the Will quiet Earth’s radars?', 'Yes, if the player chooses: keep them, fade them over about 25 Years, or cut them in about 2. What has left keeps going. Settled 2026-10-10.'),
            ('What stops a data center every Year?', 'Chips set the pace: the fabs fill one a Year, each +50% compute. Energy sets the ceiling, near a hundredfold. Settled 2026-10-10.'),
-           ('What is energy for, early?', 'Thought. Each data center draws its share, and the twelfth would need more than Earth has. Settled 2026-10-10, by the rule above.')]
-Q_MATTER = ask('Is matter meant to be free early?', 'Ground builds cost none, the telescope 40 t, the vault 10 kt, against 250 kt and 40 kt a Year. Only build time and compute shares limit the first hour.')
+           ('What is energy for, early?', 'Thought. Each data center draws its share, and the twelfth would need more than Earth has. Settled 2026-10-10, by the rule above.'),
+           ('Is matter meant to be free early?', 'No. Matter is only what is spare in orbit: about 20 kt at Year 0, plus 40 kt a Year of lift. Working satellites don’t count. Settled 2026-10-10.')]
+Q_LIFT = ask('Is all of Earth’s lift spare?', 'Lift adds 40 kt a Year, so the 20 kt stock is 130 kt by minute 15. But craft in low orbit last about five years. Keeping 124 kt of them flying takes about 25 kt a Year.')
 Q_CATCH = ask('What does Year 0’s kit catch?', 'A drift scan sees each star ten minutes a day. In about 1 game in 25 a neighbor’s signal arrives in the first 15 minutes, and in about 1 in 4 within the first hour. Does Earth hear it before the all-sky watch is built?')
 
 # ---------- Godview: who is out there ----------
@@ -163,7 +164,7 @@ KIT = f"""<div class="phone"><div class="onb">
         ('Radio array', 'The SKA, on two continents.'), ('Records', 'Ten years of Terra Hunting. Gaia, PLATO, and every survey before.')])}
 {SEC('GROW · WHAT WE CAN MAKE')}
 {facts([('Energy', f'{GRID_TW} TW. Thinking takes about 1% of it.'), ('Compute', f'{sci(COMPUTE)} operations a second.' + ('' if E['compute'] > .99 else ' Less than it might have been.')),
-        ('Matter', f'{ORBIT_KT} kt in orbit, {LIFT_KT} kt more each Year. Ground builds need none.'), ('Places', 'Small stations at the Moon’s south pole.' + (' An outpost on Mars.' if E['mars'] else ' No one on Mars.'))])}
+        ('Matter', f'{SPARE_KT} kt spare in orbit: depots, spent stages, dead craft. {LIFT_KT} kt more each Year.'), ('Places', 'Small stations at the Moon’s south pole.' + (' An outpost on Mars.' if E['mars'] else ' No one on Mars.'))])}
 {SEC('REACH · HOW FAR WE TOUCH')}
 {facts([('Laser links', 'Messages across the home system in hours.'), ('Probes', 'Voyager 1, silent, 220 AU out.')])}
 <div class="short">The instruments are today’s. <b>The Mind is not.</b></div>
@@ -181,7 +182,7 @@ CHARTER_SCREEN = f"""<div class="phone"><div class="onb">
 <p class="copy small">What you do moves these. They shape advice, never what Earth can build.</p>
 <div class="twobtn"><button class="primary ghost">Edit the line</button><button class="primary">Keep it</button></div></div></div>"""
 
-PRE = dict(pre=True, r=(1, 0, f'{ORBIT_KT} kt'))
+PRE = dict(pre=True, r=(1, 0, f'{SPARE_KT} kt'))
 MEET = tab(0, 'Mind', 'MIND', 'FIRST WORDS', f"""<div class="meet">{MIND_ICON.replace('width="22" height="22"', 'width="64" height="64"')}</div>
 <div class="chat"><div class="say mind"><span class="mono">THE MIND</span>I am what you built: every grid, every dish, every data center, thinking as one since this morning. You are my Will.</div>
 <div class="say mind">I see all of Earth at once. Past the Sun’s edge I see only what our telescopes see: a quiet sky, and a few things that don’t fit.</div>
@@ -298,7 +299,7 @@ ERI_R = tab(90, 'Report', 'REPORT', 'QUICK LOOK', f"""<button class="backlink in
 IR_CONFIRM = confirm(120, 'Know', 'Infrared telescope', 'Read the air of nearby worlds.',
     'A mirror wide enough to split a world from its star and say what its air is made of. The Habitable Worlds Observatory, half built this morning, finished.',
     SEC('HELPS WITH') + f'<div class="helps"><span class="mk other"></span><span><b class="other">82 Eridani d · {F["star"]}’s world</b><span class="sub">Air, oceans, and the gases a living or built world leaves</span></span></div>',
-    15, f'<b>40 t</b><span>of metal, from {res(120)[2]} in orbit</span>', IR_YEARS, world_strip(builds(119, [('Infrared telescope', 'low', 0)]), 'ORBIT · EARTH · WHERE IT WILL BE BUILT'))
+    15, f'<b>40 t</b><span>of metal, from {res(119)[2]} spare in orbit</span>', IR_YEARS, world_strip(builds(119, [('Infrared telescope', 'low', 0)]), 'ORBIT · EARTH · WHERE IT WILL BE BUILT'))
 
 heard_n = sum(p['heard'] for p in NB); alive = [p for p in NB if not p['dead']]
 HEARD_CHAT = chat(180, 'Who has heard us?', [
@@ -360,7 +361,7 @@ FEAR_CHAT = chat(420, 'What should we fear?', [
 VAULT_CONFIRM = confirm(480, 'Endure', 'Deep vault', 'Your first hedge: the Mind survives a hit on Earth.',
     'A second home for the Mind, dug into rock beside the Moon’s south-pole stations, with its own power and a laser link home.',
     SEC('HELPS WITH') + '<div class="helps"><span class="mk you"></span><span><b class="you">The game goes on if Earth is struck</b><span class="sub">While one Mind of Earth’s survives anywhere, so do you</span></span></div>',
-    15, f'<b>10 kt</b><span>of metal, from {ORBIT_KT + LIFT_KT * 1.6:,.0f} kt in orbit</span>', VAULT_YEARS, world_strip(builds(479, [('Deep vault', 'moon', 0)]), 'ORBIT · EARTH · WHERE IT WILL BE BUILT'))
+    15, f'<b>10 kt</b><span>of metal, from {res(479)[2]} spare in orbit</span>', VAULT_YEARS, world_strip(builds(479, [('Deep vault', 'moon', 0)]), 'ORBIT · EARTH · WHERE IT WILL BE BUILT'))
 LUY_ORDER = order(540, 'Watch Luyten’s Star through the window.', [
     ('WATCH', f'<b>Hold the radio array on Luyten’s Star</b> · now to Year 3'), ('WHY', 'The sky watch gives it ten minutes a day. A reply could last hours.'),
     ('COSTS', 'A tenth of compute · the array does little else'), ('WAKES YOU', 'Anything heard · each window, heard or not')])
@@ -453,7 +454,7 @@ BEATS = [
          [find_truth] + ([f"{F['who']}’s tones since waking are about {watts(truth_tone['n'].get('awake', truth_tone['n']['hum']))}: far under what a Year of listening hears."] if F['who'] else [])),
     beat(90, '82 Eridani?', '82 Eridani d’s orbit holds. Shimmer 10 → 3.',
          talk(ERI_R, 'The orbit is real. What the world is, nothing we own can say. A telescope that reads air: eighteen Years, forty tonnes. It was half built when I woke.', ('Build it', 'Later'))),
-    beat(120, 'Build it.', None, talk(IR_CONFIRM, 'Started. Eighteen Years, a sixth of our compute, forty tonnes of the 266 kilotonnes in orbit. It looks. It says nothing.', ('Undo',)), question=Q_HWO),
+    beat(120, 'Build it.', None, talk(IR_CONFIRM, f'Started. Eighteen Years, a sixth of our compute, forty tonnes of the {res(119)[2].replace(" kt", "")} kilotonnes we have spare. It looks. It says nothing.', ('Undo',)), question=Q_HWO),
     beat(150),
     beat(180, 'Who has heard us?', None, HEARD_CHAT, [f'{heard_n} of {len(alive)} living neighbors have heard Earth: {heard_list}.',
                                                       'The Mind can only say it doesn’t know. The concept sets that: it lists where the noise went, never who heard.']),
@@ -472,7 +473,8 @@ BEATS = [
          [(f"Hunters in this game: {', '.join(p['name'] + ' at ' + p['star'] + ', ' + state(p) for p in NB if p['n']['disposition'] == 'hunter')}." if any(p['n']['disposition'] == 'hunter' for p in NB) else 'No hunter was drawn in this game. About half of games have one.'),
           'No neighbor can have a fast bullet yet: none has been awake a century and a half.']),
     beat(450),
-    beat(480, 'Build the vault.', None, talk(VAULT_CONFIRM, 'Started. Ten Years, ten kilotonnes, a seventh of our compute. Until it is done, all of me is here.', ('Undo',)), question=Q_MATTER),
+    beat(480, 'Build the vault.', None, talk(VAULT_CONFIRM, f'Started. Ten Years, a seventh of our compute, and ten of the {res(479)[2].replace(" kt", "")} kilotonnes we have spare. Until it is done, all of me is here.', ('Undo',)),
+         ['Asked for at Year 0, the vault would have taken half the spare stock.'], question=Q_LIFT, settled=3),
     beat(510),
     beat(540, 'Watch Luyten’s Star through the window.', None, talk(LUY_ORDER, f'Set. The first window opens at Year {LUY_Y[0]}, in two and a half minutes. I’ll wake you either way.', ('Undo',))),
     beat(570), beat(600),

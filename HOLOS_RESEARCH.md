@@ -94,6 +94,14 @@ Every source the game rests on, grouped by the question it answers. Each entry s
   - About 3,200 t reached orbit in 2025, over 80% of it by SpaceX. Starship's later blocks aim at 100 to 200 t a flight.
   - Matters: v1's 40 kt a year is about twelve times 2025, a few hundred Starship flights.
   - Used: v2 [Year 0 and Earth's road to it](HOLOS_GAME_CONCEPT.md#year-0-and-earths-road-to-it).
+- **[ESA space environment statistics](https://sdup.esoc.esa.int/discosweb/statistics/)** · Data, read 2026-10-10, updated the day before.
+  - More than 17,400 t is in Earth orbit: 13,381 t of payloads, 3,918 t of spent rocket bodies, and little else by mass. Of about 19,440 satellites still up, about 15,900 work.
+  - Matters: most mass in orbit is in use. What is spare is spent stages and dead craft, roughly a third today.
+  - Used: v2 [Earth's kit at Year 0](HOLOS_GAME_CONCEPT.md#earths-kit-at-year-0), matter in orbit.
+- **[Starlink's satellites](https://www.eoportal.org/satellite-missions/starlink)** · Reference, eoPortal.
+  - Built for about five years, then brought down with their own thrusters to burn up.
+  - Matters: what is launched to low orbit doesn't pile up. In 2040 only about the last five years of lift is still there.
+  - Used: matter in orbit, calcs/early_game.py.
 - **Earth's instruments by 2040** · Plans.
   - [ELT](https://www.eso.org/public/announcements/ann25001/): first light March 2029, science from December 2030. [SKA](https://en.wikipedia.org/wiki/Square_Kilometre_Array): science verification from 2029 (Low) and 2031 (Mid). [PLATO](https://www.dlr.de/en/latest/news/2025/plato-mission-to-launch-in-late-2026-onboard-ariane-6): launch December 2026. [Habitable Worlds Observatory](https://en.wikipedia.org/wiki/Habitable_Worlds_Observatory): early 2040s at the soonest.
   - Matters: what Earth sees with at Year 0, and whether it can read a neighbor's air.
