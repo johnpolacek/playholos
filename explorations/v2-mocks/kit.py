@@ -152,7 +152,7 @@ DCS = [('Ground data center', 0), ('Second data center', 1.1), ('Third data cent
 DC_DONE = tuple(s + 1 for _, s in DCS)
 THINK = 100 * .25 / GRID_TW                    # thinking's share of energy at Year 0, in percent
 USES = [(0, 6, 1), (0, 6, 20), (0, .1, 5), (0, .2, 5), (0, .3, 5),                         # sky watch, flash watch, three looks
-        (.4, 18.4, 15), (.8, 2.8, 5), (1.1, 2.1, 10), (1.6, 11.6, 15), (1.7, 3.7, 5), (1.8, 3.0, 10)]     # telescope, radars, a Year's listening, vault, launch complex, Luyten watch
+        (.4, 8.4, 15), (.8, 2.8, 5), (1.1, 2.1, 10), (1.6, 11.6, 15), (1.7, 3.7, 5), (1.8, 3.0, 10)]     # telescope, radars, a Year's listening, vault, launch complex, Luyten watch
 USES += [(s, s + 1, 5) for _, s in DCS]
 def res(t):
     y = t / 300
@@ -331,7 +331,7 @@ b = lambda years, t, start=0: max(0.0, min(1.0, (t / 300 - start) / years))
 def builds(t, extra=()):
     out = [('All-sky watch', 'ground', b(6, t)), ('Deep flash watch', 'ground', b(6, t))]
     out += [(name.replace('Ground d', 'D'), 'ground', b(1, t, s)) for name, s in DCS if s <= round(t / 300, 2) < s + 1.1]
-    if t >= 120: out.append(('Infrared telescope', 'low', b(18, t, .4)))
+    if t >= 120: out.append(('Infrared telescope', 'low', b(8, t, .4)))
     if t >= 480: out.append(('Deep vault', 'moon', b(10, t, 1.6)))
     if t >= 510: out.append(('Launch complex', 'ground', b(2, t, 1.7)))
     return out + list(extra)

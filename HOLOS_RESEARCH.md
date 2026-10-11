@@ -78,6 +78,18 @@ Every source the game rests on, grouped by the question it answers. Each entry s
   - About 27.6 million H100-equivalents sold by June 2026, roughly 3×10²² operations a second. The stock grows about 3.4× a year. 15 million of them draw over 10 GW.
   - Matters: where Earth's compute starts, and how fast it can grow before power binds.
   - Used: v2 [Year 0 and Earth's road to it](HOLOS_GAME_CONCEPT.md#year-0-and-earths-road-to-it).
+- **[McKinsey 2019, Modular construction: from projects to products](https://www.mckinsey.com/capabilities/operations/our-insights/modular-construction-from-projects-to-products)** · Report.
+  - Building from factory-made modules can cut a project's schedule by 20 to 50%, and its cost by up to 20%. The study covers buildings.
+  - Matters: a real basis for a project that makes ground builds faster.
+  - Used: v2 [Build times](HOLOS_GAME_CONCEPT.md#build-times), factory-built works.
+- **[NASA, in-Space Assembled Telescope study, 2019](https://ntrs.nasa.gov/citations/20190001286)** · Study, for the 2020 decadal survey.
+  - Assembly in space is a workable way to build observatories. It removes the limit of one rocket's fairing, scales up, and looks like the only way past 15 m mirrors. No schedule saving is quantified in what was read.
+  - Matters: an orbital yard makes larger works possible. That it also makes them faster is this project's speculation.
+  - Used: v2 Build times, the orbital yard.
+- **Flagship telescope build times** · History ([Hubble](https://en.wikipedia.org/wiki/Hubble_Space_Telescope), [Webb](https://en.wikipedia.org/wiki/James_Webb_Space_Telescope)).
+  - Hubble was funded in 1977 and launched in 1990. Webb's construction began in 2004 and it launched in December 2021.
+  - Matters: the standard time for a telescope of this class, about 18 Years.
+  - Used: v2 Build times. Not reread this session: dates from memory, to confirm.
 - **TSMC's Arizona fabs** · News ([Data Center Dynamics](https://www.datacenterdynamics.com/en/news/covid-and-labor-shortages-lead-to-construction-delays-at-tsmcs-arizona-chip-fab/), [New Electronics](https://www.newelectronics.co.uk/content/news/tsmc-looks-to-compress-arizona-fab-construction-into-just-two-years)).
   - The first fab broke ground in June 2021 and made 4 nm chips from late 2024, about three and a half years. The second began in April 2025 and aims at about two.
   - Matters: how fast chip supply can be added. A leading-edge fab takes 2 to 4 years.

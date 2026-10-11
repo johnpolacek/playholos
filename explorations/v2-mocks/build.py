@@ -12,8 +12,8 @@ FLOOR = watts(year_floor(D))
 YEARS = lambda y: f'{y:g} {"Year" if y == 1 else "Years"}'
 ASKS = []          # design questions the mock raises, in the order the timeline raises them
 def ask(q, why): ASKS.append((q, why)); return len(ASKS)
-Q_HWO = ask('Does a half-built real instrument cost fewer Years?', 'The Habitable Worlds Observatory is under construction at Year 0. Here it is the infrared telescope at its full 18 Years.')
-SETTLED = [('Can the Will quiet Earth’s radars?', 'Yes, if the player chooses: keep them, fade them over about 25 Years, or cut them in about 2. What has left keeps going. Settled 2026-10-10.'),
+SETTLED = [('Does a half-built real instrument cost fewer Years?', 'It costs what its real schedule leaves: about 8 Years for the Habitable Worlds Observatory. Build times are standard, from the science, and the player can invest in projects that build faster. Settled 2026-10-10.'),
+           ('Can the Will quiet Earth’s radars?', 'Yes, if the player chooses: keep them, fade them over about 25 Years, or cut them in about 2. What has left keeps going. Settled 2026-10-10.'),
            ('What stops a data center every Year?', 'Chips set the pace: the fabs fill one a Year, each +50% compute. Energy sets the ceiling, near a hundredfold. Settled 2026-10-10.'),
            ('What is energy for, early?', 'Thought. Each data center draws its share, and the twelfth would need more than Earth has. Settled 2026-10-10, by the rule above.'),
            ('Is matter meant to be free early?', 'No. Matter is only what is spare in orbit: about 20 kt at Year 0. Working satellites don’t count. Settled 2026-10-10.'),
@@ -197,7 +197,7 @@ LEAD_ROWS = [
     row('A reply could come · Luyten’s Star', 'to our 2017 message', tstack(f'Year {LUY_Y[0]}', clock(LUY_Y[0])), 'other', marker=True)]
 P_LEADS = home(0, 'LEADS · 4', 'LIGHT-TIME', LEAD_ROWS, **PRE)
 
-SKY_YEARS, FLASH_YEARS, DC_YEARS, IR_YEARS, VAULT_YEARS = 6, 6, 1, 18, 10
+SKY_YEARS, FLASH_YEARS, DC_YEARS, IR_YEARS, VAULT_YEARS = 6, 6, 1, 8, 10          # the telescope is under way at Year 0: 8 Years are left of 18
 P_PLAN = chat(0, 'What should we start with?', [
     ('you', 'What should we start with?'),
     ('mind', 'Ears. Our sky watch sees each star for ten minutes a day. A knock lasts hours. One could pass and we would never know.'),
@@ -298,7 +298,7 @@ ERI_R = tab(90, 'Report', 'REPORT', 'QUICK LOOK', f"""<button class="backlink in
 {SEC('WHAT WOULD SETTLE IT')}{quick('Infrared telescope', f'reads its air · {IR_YEARS} Years · 40 t', '<span class="start">' + tstack(YEARS(IR_YEARS), clock(IR_YEARS)) + '<button>Start</button></span>')}""")
 
 IR_CONFIRM = confirm(120, 'Know', 'Infrared telescope', 'Read the air of nearby worlds.',
-    'A mirror wide enough to split a world from its star and say what its air is made of. The Habitable Worlds Observatory, half built this morning, finished.',
+    'A mirror wide enough to split a world from its star and say what its air is made of. The Habitable Worlds Observatory, under way for years, finished.',
     SEC('HELPS WITH') + f'<div class="helps"><span class="mk other"></span><span><b class="other">82 Eridani d · {F["star"]}’s world</b><span class="sub">Air, oceans, and the gases a living or built world leaves</span></span></div>',
     15, f'<b>40 t</b><span>of metal, from {res(119)[2]} spare in orbit</span>', IR_YEARS, world_strip(builds(119, [('Infrared telescope', 'low', 0)]), 'ORBIT · EARTH · WHERE IT WILL BE BUILT'))
 
@@ -393,8 +393,10 @@ SILENCE_CHAT = chat(720, 'What would silence mean?', [
     ('mind', 'Then they chose. Some would answer at once. Some would watch us for Years first. Some would never answer. From here, all three look like tonight.')])
 def wake_row(title, sub, year, now): return row(title, sub, tstack(f'Year {year:g}', clock(year - now)))
 WAKES = tab(900, 'Mind', 'MIND', 'WHAT WAKES YOU', ''.join([
-    SEC('YOU CHOSE'), wake_row('The all-sky watch and flash watch are built', 'then nothing aimed at us is missed', 6, 3), wake_row('A reply could come · Gliese 526', 'to our 2013 message', 9.0, 3),
-    wake_row('Thinking draws a tenth of our energy', f'{N_TENTH} data centers in', TENTH_Y, 3), wake_row('The Moon vault is done', 'the Mind’s second home', 11.6, 3), wake_row('The infrared telescope is done', f'then it reads 82 Eridani d and {F["star"]}', 18.4, 3),
+    SEC('YOU CHOSE'), ''.join(wake_row(title, sub_, y, 3) for y, title, sub_ in sorted([
+        (6, 'The all-sky watch and flash watch are built', 'then nothing aimed at us is missed'), (9.0, 'A reply could come · Gliese 526', 'to our 2013 message'),
+        (TENTH_Y, 'Thinking draws a tenth of our energy', f'{N_TENTH} data centers in'), (11.6, 'The Moon vault is done', 'the Mind’s second home'),
+        (.4 + IR_YEARS, 'The infrared telescope is done', f'then it reads 82 Eridani d and {F["star"]}')])),
     SEC('ALWAYS'), row('A world’s first voice wakes you', 'a knock or a broadcast, aimed at us or not · even in quiet hours', '<span class="mono">always</span>'),
     SEC('NOT WAKING YOU'), quick('Data centers finishing', 'in the daily summary', ''), quick('Windows that pass in silence', 'in the daily summary', '')]))
 LOCK = lockscreen('16:40', [('IN 00:15:00', 'Earth: the sky watch and flash watch are built', 'Year 6. Anything heard wakes you sooner.')])
@@ -458,30 +460,31 @@ BEATS = [
          talk(find_clue(60), f'It doesn’t cross, so its air stays hidden. I can listen for a Year, at a tenth of compute. That hears only the loud: tones above {FLOOR}.', ('Listen for a Year', 'Later')),
          [find_truth] + ([f"{F['who']}’s tones since waking are about {watts(truth_tone['n'].get('awake', truth_tone['n']['hum']))}: far under what a Year of listening hears."] if F['who'] else [])),
     beat(90, '82 Eridani?', '82 Eridani d’s orbit holds. Shimmer 10 → 3.',
-         talk(ERI_R, 'The orbit is real. What the world is, nothing we own can say. A telescope that reads air: eighteen Years, forty tonnes. It was half built when I woke.', ('Build it', 'Later'))),
-    beat(120, 'Build it.', None, talk(IR_CONFIRM, f'Started. Eighteen Years, a sixth of our compute, forty tonnes of the {res(119)[2].replace(" kt", "")} kilotonnes we have spare. It looks. It says nothing.', ('Undo',)), question=Q_HWO),
+         talk(ERI_R, 'The orbit is real. What the world is, nothing we own can say. The telescope that reads air was under way when I woke. Eight Years are left on it, and forty tonnes.', ('Build it', 'Later'))),
+    beat(120, 'Build it.', None, talk(IR_CONFIRM, f'Started. Eight Years, a sixth of our compute, forty tonnes of the {res(119)[2].replace(" kt", "")} kilotonnes we have spare. An orbital yard would shorten every build up there.', ('Undo',)),
+         ['A second telescope of its class would take the full 18 Years. This one was under way.'], settled=0),
     beat(150),
     beat(180, 'Who has heard us?', None, HEARD_CHAT, [f'{heard_n} of {len(alive)} living neighbors have heard Earth: {heard_list}.',
                                                       'The Mind can only say it doesn’t know. The concept sets that: it lists where the noise went, never who heard.']),
-    beat(210, 'Can we go quiet?', None, QUIET_CHAT, ['The Mind gives its view and waits. Quieting is the player’s to choose, never the Mind’s.'], settled=0),
+    beat(210, 'Can we go quiet?', None, QUIET_CHAT, ['The Mind gives its view and waits. Quieting is the player’s to choose, never the Mind’s.'], settled=1),
     beat(240, 'Cut them. And send nothing new without me.', None,
          talk(RADAR_CHOICE, f'Started. {YEARS(CUT_YEARS)}, no matter. The last sweep leaves at Year {CUT_Y:g}. Its absence reaches Alpha Centauri at Year {CUT_Y + 4.3:.1f}, and fifty light-years at Year {CUT_Y + 50:.1f}.', ('Undo',)),
          quiet_truths()),
     beat(270),
     beat(300, '· The Mind glows. Taps it.', 'The data center is running. Compute +50%.',
-         talk(DC_DONE_SCREEN, 'The data center runs: half again as much thought, for half a percent more of our energy. The fabs fill one a Year. I can keep them coming.', ('Keep them coming', 'Just one more', 'Not now'), 'glow'), settled=1),
+         talk(DC_DONE_SCREEN, 'The data center runs: half again as much thought, for half a percent more of our energy. The fabs fill one a Year. I can keep them coming.', ('Keep them coming', 'Just one more', 'Not now'), 'glow'), settled=2),
     beat(330, f'Keep them coming. And listen to {F["star"]} for a Year.', None,
          talk(SECOND, f'Set. One a Year, as the fabs allow. Thinking draws {res(330)[0]:g}% of our energy now, and a tenth by Year {TENTH_Y:g}. The twelfth would need more than Earth has.', ('Undo',)),
-         ['A standing order, the player’s. Without it compute never grows on its own.', f'At full pace the grid becomes the wall near Year 11, +{clock(11)}. Then more thought needs more energy, or colder chips in orbit.'], settled=2),
+         ['A standing order, the player’s. Without it compute never grows on its own.', f'At full pace the grid becomes the wall near Year 11, +{clock(11)}. Then more thought needs more energy, or colder chips in orbit.'], settled=3),
     beat(360), beat(390),
     beat(420, 'What should we fear?', None, FEAR_CHAT,
          [(f"Hunters in this game: {', '.join(p['name'] + ' at ' + p['star'] + ', ' + state(p) for p in NB if p['n']['disposition'] == 'hunter')}." if any(p['n']['disposition'] == 'hunter' for p in NB) else 'No hunter was drawn in this game. About half of games have one.'),
           'No neighbor can have a fast bullet yet: none has been awake a century and a half.']),
     beat(450),
     beat(480, 'Build the vault.', None, talk(VAULT_CONFIRM, f'Started. Ten Years, and ten of the {res(479)[2].replace(" kt", "")} kilotonnes we have spare. Lift brings fifteen more a Year. A launch complex would bring forty on top.', ('Build a launch complex', 'Undo')),
-         ['Asked for at Year 0, the vault would have taken half the spare stock.'], settled=3),
+         ['Asked for at Year 0, the vault would have taken half the spare stock.'], settled=4),
     beat(510, 'Build a launch complex.', None, talk(LAUNCH_CONFIRM, 'Started. Two Years, no matter, a twentieth of our compute. From Year 3.7 lift brings fifty-five kilotonnes a Year.', ('Undo',)),
-         ['Lift is short of pads and ships, not energy: 40 kt a Year burns about half a gigawatt of propellant.'], settled=4),
+         ['Lift is short of pads and ships, not energy: 40 kt a Year burns about half a gigawatt of propellant.'], settled=5),
     beat(540, 'Watch Luyten’s Star through the window.', None, talk(LUY_ORDER, f'Set. The first window opens at Year {LUY_Y[0]}, in two and a half minutes. I’ll wake you either way.', ('Undo',))),
     beat(570), beat(600),
     beat(630, f'· The Mind glows. Taps it.', f'A Year of listening: nothing loud at {F["star"]}.',

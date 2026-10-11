@@ -110,7 +110,7 @@ Proposed prices are matter in orbit, on the Moon or in the belt. Ground builds s
 | Deep flash watch | 100 kt | Ground | 0, ground | PANOSETI-style ground domes. |
 | Deep-field receiver | 300 kt | Ground | 0, ground | An SKA-class ground array. |
 | Planet survey | 0 | OK | 0 | Existing telescopes and archives. |
-| Infrared telescope | 200 kt | Heavy ×5,000 | 40 t | LUVOIR-A, the largest studied, 28 to 37 t. JWST 6.2 t. |
+| Infrared telescope | 200 kt | Heavy ×5,000 | 40 t. 18 Years new. On Earth the Habitable Worlds Observatory is under way at Year 0: about 8 Years left. | LUVOIR-A, the largest studied, 28 to 37 t. JWST 6.2 t. |
 | Waste-heat survey | 0 | OK | 0 | Existing telescopes and archives. |
 | Second infrared telescope | 3,000 kt | Heavy ×100,000 | 60 t, with the stage to reach its far station | A LUVOIR-class twin, tens of tonnes. |
 | Starshade | 5,000 kt | Heavy ×1,000,000 | 10 t | Starshade Rendezvous design, 3.8 t at launch. |
@@ -128,6 +128,8 @@ Proposed prices are matter in orbit, on the Moon or in the belt. Ground builds s
 | Orbital solar array | 400 kt | Light ×10 to 150 | Split in two. A ground solar build-out: 0 matter, +20% energy in 10 Years, about 5× today's install rate. An orbital array at tier 2: 10 Mt for +20%, at 1 kW/kg and half lost beaming it down. | Flown arrays 75 to 218 W/kg, target 1 kW/kg. +20% of 24 TW is 4.8 TW: 5 to 60 Mt. |
 | Belt prospecting | 0 | OK | 5 t | Small survey probes. |
 | Ground data center | 0 | Slow ×10 | 0, ground. 1 Year, not 8, for +50% compute. One at a time: the fabs' output. Each draws its share of energy, 0.5% of the grid for the first. Settled 2026-10-10. | Compute grew 1.5× a year from 2026 to 2040, fabs included. Thinking draws 1% of energy at Year 0, so the twelfth data center would need more than the grid. |
+| Factory-built works, new | none | Sample | 0, ground. Ground builds take about a third less. Its own Years to be priced. | Modular building cuts schedules 20 to 50% (McKinsey 2019). |
+| Orbital yard, new | none | Sample | About 1 kt. Builds in orbit take about a quarter less, and larger ones become possible. Its own Years to be priced. | NASA's 2019 study: assembly in space is workable, and the only way past 15 m mirrors. The speed-up is speculation. |
 | Chip fabs, new | none | Sample | 0, ground. About 3 Years. A second line: two data centers a Year. | A leading-edge fab takes 2 to 4 years from groundbreaking to volume. |
 | Launch complex | 0 | OK | 0, ground. 2 Years. +40 kt a Year of lift, all of it spare. One at a time. Settled 2026-10-10: Earth's spare lift starts at 15 kt a Year. | Starship cadence growth. Propellant is about 400 GJ a tonne lifted: half a gigawatt for 40 kt a year. |
 | Cold compute annex | 300 kt | OK | 100 kt | +25% compute is about 25 GW in orbit. Solar at 0.2 to 1 kW/kg is 25 to 125 kt, plus chips and radiators. Google Suncatcher is testing it. |

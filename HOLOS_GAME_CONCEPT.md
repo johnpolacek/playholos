@@ -181,6 +181,17 @@ Settled 2026-10-10. Numbers in [calcs/early_game.py](calcs/early_game.py). Repla
 - **Only if the player chooses.** One at a time, or a standing order to keep them coming. Compute never grows on its own.
 - **A Taiwan branch lowers where compute starts, not the pace.** An assumption, until the mocks test a branch game.
 
+## Build times
+
+Settled 2026-10-10. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#earth-to-year-0-forecasts).
+
+- **One standard time per project, from the science.** It is how long works of that kind take. A flagship space telescope takes about 18 Years: Hubble took 13 from funding to launch, Webb about 17 from the start of construction. The time is the same in every game. The seed doesn't roll it.
+- **A real work under way at Year 0 costs what is left of it.** The Habitable Worlds Observatory has about 8 Years left: NASA aims it at the 2040s, and flagships slip. A second telescope of its class takes the full 18. The 8 is a sample.
+- **The player can invest to build faster.** Other projects make building more efficient. Each speeds one kind of work, for everything built after it. Their own Years and costs are still to be priced.
+  - *Factory-built works,* on the ground: ground builds take about a third less. Modular building cuts schedules by 20 to 50% (McKinsey 2019).
+  - *An orbital yard:* builds in orbit take about a quarter less, and larger ones become possible. NASA's 2019 study found assembly in space workable, and the only way past 15 m mirrors. The speed-up itself is speculation.
+- **The same pattern everywhere.** A standard pace from the science, and a project that raises it: chip fabs for compute, launch complexes for lift, factories and yards for building.
+
 ## Earth's leads at Year 0
 
 Settled 2026-10-06. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#earths-leads-as-of-october-2026).
@@ -338,7 +349,7 @@ Answered one at a time, in this order. Every answer must be permitted by current
 6. **Settled 2026-10-10:** how a game starts. See [How a game starts](#how-a-game-starts).
 7. **Settled 2026-10-10:** death and new games. See [Death and new games](#death-and-new-games).
 8. **First mock built 2026-10-10:** [Earth's first 15 minutes](explorations/v2-mocks/index.html), one phone with a godview lane, on one drawn game. A plain-text copy is in [index.md](explorations/v2-mocks/index.md). It raises these, all open:
-   - Does a real instrument already half built, the Habitable Worlds Observatory, cost fewer Years?
+   - **Settled 2026-10-10:** build times are standard, a work under way costs what is left, and the player can invest to build faster. See [Build times](#build-times).
    - **Settled 2026-10-10:** the Will may quiet Earth's radars. See [Quieting Earth's radars](#quieting-earths-radars).
    - **Settled 2026-10-10:** chips set the pace of compute and energy sets its ceiling. That also says what energy is for early. See [Growing compute](#growing-compute).
    - **Settled 2026-10-10:** matter is only what is spare in orbit, about 20 kt at Year 0. See [Earth's kit at Year 0](#earths-kit-at-year-0).

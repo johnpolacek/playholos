@@ -278,8 +278,8 @@ A small gas world · [50%] · [52%] · 50 → 52
 Rock, with seasons that freeze and thaw · [40%] · [45%] · 40 → 45
 Not a world: the star’s own shimmer · [10%] · [3%] · 10 → 3
 WHAT WOULD SETTLE IT
-Infrared telescope · reads its air · 18 Years · 40 t · 18 Years · 01:30:00 · [Start]
-THE MIND · The orbit is real. What the world is, nothing we own can say. A telescope that reads air: eighteen Years, forty tonnes. It was half built when I woke. · [Build it] · [Later]
+Infrared telescope · reads its air · 8 Years · 40 t · 8 Years · 00:40:00 · [Start]
+THE MIND · The orbit is real. What the world is, nothing we own can say. The telescope that reads air was under way when I woke. Eight Years are left on it, and forty tonnes. · [Build it] · [Later]
 [Talk to the Mind]
 +2:00 · Year 0.4
 “Build it.”
@@ -291,7 +291,7 @@ ENERGY · [1.0%] · MATTER · 26 kt · COMPUTE · [41%]
 
 ### Infrared telescope
 Read the air of nearby worlds.
-A mirror wide enough to split a world from its star and say what its air is made of. The Habitable Worlds Observatory, half built this morning, finished.
+A mirror wide enough to split a world from its star and say what its air is made of. The Habitable Worlds Observatory, under way for years, finished.
 HELPS WITH
 82 Eridani d · 72 Herculis’s world · Air, oceans, and the gases a living or built world leaves
 USES EACH YEAR
@@ -301,10 +301,12 @@ USES ONCE, AT START
 40 t · of metal, from 26 kt spare in orbit
 TIME
 now · 01:00:00 · 02:00:00 · 03:00:00
-18 Years
-THE MIND · Started. Eighteen Years, a sixth of our compute, forty tonnes of the 26 kilotonnes we have spare. It looks. It says nothing. · [Undo]
+8 Years
+THE MIND · Started. Eight Years, a sixth of our compute, forty tonnes of the 26 kilotonnes we have spare. An orbital yard would shorten every build up there. · [Undo]
 [Talk to the Mind]
-Design question 1 · Does a half-built real instrument cost fewer Years? The Habitable Worlds Observatory is under construction at Year 0. Here it is the infrared telescope at its full 18 Years.
+Godview
+A second telescope of its class would take the full 18 Years. This one was under way.
+Settled · Does a half-built real instrument cost fewer Years? It costs what its real schedule leaves: about 8 Years for the Habitable Worlds Observatory. Build times are standard, from the science, and the player can invest in projects that build faster. Settled 2026-10-10.
 +2:30 · Year 0.5
 Nothing new. · A dead 30 seconds.
 +3:00 · Year 0.6
@@ -380,13 +382,13 @@ Lands · The data center is running. Compute +50%.
 Earth · Year 1
 Sol · 2041.0 · 1 Year = 00:05:00
 ENERGY · [1.6%] · MATTER · 35 kt · COMPUTE · [27%]
-[drawing: ORBIT · EARTH · 3 BUILDING; labels: the Moon, Earth, low orbit, All-sky watch · 17%, Deep flash watch · 17%, Data center, Infrared telescope · 3%] · ORBIT · EARTH · 3 BUILDING
+[drawing: ORBIT · EARTH · 3 BUILDING; labels: the Moon, Earth, low orbit, All-sky watch · 17%, Deep flash watch · 17%, Data center, Infrared telescope · 8%] · ORBIT · EARTH · 3 BUILDING
 PROJECTS · 4 BUILDING
 BUILDING · 4
 - All-sky watch · two sites, one in each hemisphere · 5 Years · 00:25:00
 - Deep flash watch · domes on six mountains · 5 Years · 00:25:00
 - Ground data center · +50% compute · Done
-- Infrared telescope · reads the air of nearby worlds · 17.4 Years · 01:27:00
+- Infrared telescope · reads the air of nearby worlds · 7.4 Years · 00:37:00
 - Quiet the radars · the last sweep leaves at Year 2.8 · 1.8 Years · 00:09:00
 EACH YEAR YOU CAN SPEND
 Energy · [1.6%] · 98.4% free
@@ -399,7 +401,7 @@ Settled · What stops a data center every Year? Chips set the pace: the fabs fil
 Earth · Year 1.1
 Sol · 2041.1 · 1 Year = 00:05:00
 ENERGY · [1.6%] · MATTER · 36 kt · COMPUTE · [37%]
-[drawing: ORBIT · EARTH · 4 BUILDING; labels: the Moon, Earth, low orbit, All-sky watch · 18%, Deep flash watch · 18%, Second data center · 0%, Infrared telescope · 4%] · ORBIT · EARTH · 4 BUILDING
+[drawing: ORBIT · EARTH · 4 BUILDING; labels: the Moon, Earth, low orbit, All-sky watch · 18%, Deep flash watch · 18%, Second data center · 0%, Infrared telescope · 9%] · ORBIT · EARTH · 4 BUILDING
 PROJECTS · 5 BUILDING · 1 LOOK
 LOOKS · WITH WHAT WE HAVE
 Listen to 72 Herculis for a Year · Radio array · tones above 35 MW · under way · 00:05:00
@@ -407,7 +409,7 @@ BUILDING · 5
 - All-sky watch · two sites, one in each hemisphere · 4.9 Years · 00:24:30
 - Deep flash watch · domes on six mountains · 4.9 Years · 00:24:30
 - Second data center · +50% compute · 1 Year · 00:05:00
-- Infrared telescope · reads the air of nearby worlds · 17.3 Years · 01:26:30
+- Infrared telescope · reads the air of nearby worlds · 7.3 Years · 00:36:30
 - Quiet the radars · the last sweep leaves at Year 2.8 · 1.7 Years · 00:08:30
 THE MIND · Set. One a Year, as the fabs allow. Thinking draws 1.6% of our energy now, and a tenth by Year 6.1. The twelfth would need more than Earth has. · [Undo]
 [Talk to the Mind]
@@ -444,7 +446,7 @@ Nothing new. · A dead 30 seconds.
 Earth · Year 1.6
 Sol · 2041.6 · 1 Year = 00:05:00
 ENERGY · [1.6%] · MATTER · 34 kt · COMPUTE · [47%]
-[drawing: ORBIT · EARTH · WHERE IT WILL BE BUILT; labels: the Moon, Earth, low orbit, All-sky watch · 27%, Deep flash watch · 27%, Second data center · 50%, Infrared telescope · 7%, Deep vault · 0%] · ORBIT · EARTH · WHERE IT WILL BE BUILT
+[drawing: ORBIT · EARTH · WHERE IT WILL BE BUILT; labels: the Moon, Earth, low orbit, All-sky watch · 27%, Deep flash watch · 27%, Second data center · 50%, Infrared telescope · 15%, Deep vault · 0%] · ORBIT · EARTH · WHERE IT WILL BE BUILT
 [‹ Endure] · ENDURE
 
 ### Deep vault
@@ -470,7 +472,7 @@ Settled · Is matter meant to be free early? No. Matter is only what is spare in
 Earth · Year 1.7
 Sol · 2041.7 · 1 Year = 00:05:00
 ENERGY · [1.6%] · MATTER · 35 kt · COMPUTE · [51%]
-[drawing: ORBIT · EARTH · WHERE IT WILL BE BUILT; labels: the Moon, Earth, low orbit, All-sky watch · 28%, Deep flash watch · 28%, Second data center · 60%, Infrared telescope · 7%, Deep vault · 1%, Launch complex · 0%] · ORBIT · EARTH · WHERE IT WILL BE BUILT
+[drawing: ORBIT · EARTH · WHERE IT WILL BE BUILT; labels: the Moon, Earth, low orbit, All-sky watch · 28%, Deep flash watch · 28%, Second data center · 60%, Infrared telescope · 16%, Deep vault · 1%, Launch complex · 0%] · ORBIT · EARTH · WHERE IT WILL BE BUILT
 [‹ Grow] · GROW
 
 ### Launch complex
@@ -557,7 +559,7 @@ THE MIND · UNASKED · The window is open · Nothing from Luyten’s Star. An an
 Godview
 The earliest a reply to Sónar Calling GJ273b could reach Earth from Luyten's Star. In this game no one lives there. The window is empty, and Earth can’t know it.
 A silent window is the usual case. This row is what most players see at minute 11.
-Design question 2 · What does Year 0’s kit catch? A drift scan sees each star ten minutes a day. In about 1 game in 25 a neighbor’s signal arrives in the first 15 minutes, and in about 1 in 4 within the first hour. Does Earth hear it before the all-sky watch is built?
+Design question 1 · What does Year 0’s kit catch? A drift scan sees each star ten minutes a day. In about 1 game in 25 a neighbor’s signal arrives in the first 15 minutes, and in about 1 in 4 within the first hour. Does Earth hear it before the all-sky watch is built?
 +12:00 · Year 2.4
 “What would silence mean?”
 Earth · Year 2.4
@@ -609,10 +611,10 @@ ENERGY · [2.3%] · MATTER · 55 kt · COMPUTE · [27%]
 MIND · WHAT WAKES YOU
 YOU CHOSE
 - The all-sky watch and flash watch are built · then nothing aimed at us is missed · Year 6 · 00:15:00
-- A reply could come · Gliese 526 · to our 2013 message · Year 9 · 00:30:00
 - Thinking draws a tenth of our energy · 6 data centers in · Year 6.1 · 00:15:30
+- The infrared telescope is done · then it reads 82 Eridani d and 72 Herculis · Year 8.4 · 00:27:00
+- A reply could come · Gliese 526 · to our 2013 message · Year 9 · 00:30:00
 - The Moon vault is done · the Mind’s second home · Year 11.6 · 00:43:00
-- The infrared telescope is done · then it reads 82 Eridani d and 72 Herculis · Year 18.4 · 01:17:00
 ALWAYS
 [A world’s first voice wakes you · a knock or a broadcast, aimed at us or not · even in quiet hours · always]
 NOT WAKING YOU
@@ -626,12 +628,12 @@ Saturday · 16:40
 HOLOS · IN 00:15:00 · Earth: the sky watch and flash watch are built · Year 6. Anything heard wakes you sooner.
 
 ## Questions this mock raises
+Settled: Does a half-built real instrument cost fewer Years? · It costs what its real schedule leaves: about 8 Years for the Habitable Worlds Observatory. Build times are standard, from the science, and the player can invest in projects that build faster. Settled 2026-10-10.
 Settled: Can the Will quiet Earth’s radars? · Yes, if the player chooses: keep them, fade them over about 25 Years, or cut them in about 2. What has left keeps going. Settled 2026-10-10.
 Settled: What stops a data center every Year? · Chips set the pace: the fabs fill one a Year, each +50% compute. Energy sets the ceiling, near a hundredfold. Settled 2026-10-10.
 Settled: What is energy for, early? · Thought. Each data center draws its share, and the twelfth would need more than Earth has. Settled 2026-10-10, by the rule above.
 Settled: Is matter meant to be free early? · No. Matter is only what is spare in orbit: about 20 kt at Year 0. Working satellites don’t count. Settled 2026-10-10.
 Settled: Is all of Earth’s lift spare? · No. About 15 kt a Year is spare of 40. The rest keeps Earth’s craft flying. The player can spend to raise it: a launch complex adds 40 kt a Year. Settled 2026-10-10.
-1. Does a half-built real instrument cost fewer Years? · The Habitable Worlds Observatory is under construction at Year 0. Here it is the infrared telescope at its full 18 Years.
-2. What does Year 0’s kit catch? · A drift scan sees each star ten minutes a day. In about 1 game in 25 a neighbor’s signal arrives in the first 15 minutes, and in about 1 in 4 within the first hour. Does Earth hear it before the all-sky watch is built?
-3. Should the seed reroll moves that break the silent opening? · New in calcs/seed.py. A neighbor that already knows Earth rolls its reaction. If its knock or call would have reached Earth before Year 0, the seed rolls again, so nothing was heard by 2040.
-4. How long does a Mind take to act on news? · calcs/seed.py uses half a Year, a sample. It sets when a neighbor’s answer leaves, so when it arrives.
+1. What does Year 0’s kit catch? · A drift scan sees each star ten minutes a day. In about 1 game in 25 a neighbor’s signal arrives in the first 15 minutes, and in about 1 in 4 within the first hour. Does Earth hear it before the all-sky watch is built?
+2. Should the seed reroll moves that break the silent opening? · New in calcs/seed.py. A neighbor that already knows Earth rolls its reaction. If its knock or call would have reached Earth before Year 0, the seed rolls again, so nothing was heard by 2040.
+3. How long does a Mind take to act on news? · calcs/seed.py uses half a Year, a sample. It sets when a neighbor’s answer leaves, so when it arrives.
