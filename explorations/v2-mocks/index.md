@@ -19,7 +19,7 @@ Seeded find · 72 Herculis · a natural world
 The player sees none of this. Light-time is real waiting at 5 minutes a Year.
 Neighbor · Star · Light-time · At Year 0 · What it knows of Earth · What it does about it
 Kirrin · watcher · strange · Alsafi · K star · 18.8 ly · 01:34:00 · awake 64 Years · heard Earth’s radars from 1969 · stays quiet and aims its instruments at the source
-Nuvo · contacter · Zeta Tucanae · G star · 28.1 ly · 02:20:24 · wakes Year 37.6 · +03:07:58 · heard Earth’s radars from 1978, and mapped its day and orbit · at waking: starts or widens a broadcast · Its answer to Earth’s radars: sent Year 38.1, reaches Earth Year 66.2, +05:30:52.
+Nuvo · contacter · Zeta Tucanae · G star · 28.1 ly · 02:20:24 · wakes Year 37.6 · +03:07:58 · heard Earth’s radars from 1978, and mapped its day and orbit · at waking: starts or widens a broadcast · Its answer to Earth’s radars: sent Year 38.1, reaches Earth Year 66.2, +05:30:52. Year 0’s sky watch would miss it. The all-sky watch catches it.
 Kesh · watcher · Gliese 216 B · K star · 29.4 ly · 02:26:45 · wakes Year 21.8 · +01:49:04 · heard Earth’s radars from 2022 · at waking: sends a probe or a watcher
 Ombe · contacter · Gaia 6650117736660187136 · M star · 33.4 ly · 02:47:00 · wakes Year 43.9 · +03:39:24 · heard Earth’s radars from 2004, and mapped its day and orbit · at waking: sends a probe or a watcher
 Ree · contacter · Gliese 722 · G star · 42.5 ly · 03:32:30 · awake 48 Years · heard Earth’s radars from 1992, and mapped its day and orbit · stays quiet and aims its instruments at the source
@@ -165,6 +165,7 @@ ITS VIEW · FROM OUR CHARTER AND DIALS · Build the all-sky watch and the flash 
 Ask the Mind… · [Send · ↑]
 Godview
 The Mind advises from the charter and dials. It queues nothing until told.
+Its advice is sound. Across games, Year 0’s sky watch catches about 1 in 5 of the signals that arrive in the first hour. The all-sky watch catches about 4 in 5.
 10 · The queue, and Begin
 “Queue that.”
 Earth · Before Year 0
@@ -559,7 +560,8 @@ THE MIND · UNASKED · The window is open · Nothing from Luyten’s Star. An an
 Godview
 The earliest a reply to Sónar Calling GJ273b could reach Earth from Luyten's Star. In this game no one lives there. The window is empty, and Earth can’t know it.
 A silent window is the usual case. This row is what most players see at minute 11.
-Design question 1 · What does Year 0’s kit catch? A drift scan sees each star ten minutes a day. In about 1 game in 25 a neighbor’s signal arrives in the first 15 minutes, and in about 1 in 4 within the first hour. Does Earth hear it before the all-sky watch is built?
+Had someone answered, the array held on the star would have heard it. The sky watch alone gives Luyten’s Star ten minutes a day.
+Settled · What does Year 0’s kit catch? Physics decides: the star’s place in the sky, the hours looked, and loudness. Year 0’s sky watch catches about 1 early signal in 5. A sender that hears nothing tries again, and the player can spend more on ears. Settled 2026-10-10.
 +12:00 · Year 2.4
 “What would silence mean?”
 Earth · Year 2.4
@@ -633,7 +635,7 @@ Settled: Can the Will quiet Earth’s radars? · Yes, if the player chooses: kee
 Settled: What stops a data center every Year? · Chips set the pace: the fabs fill one a Year, each +50% compute. Energy sets the ceiling, near a hundredfold. Settled 2026-10-10.
 Settled: What is energy for, early? · Thought. Each data center draws its share, and the twelfth would need more than Earth has. Settled 2026-10-10, by the rule above.
 Settled: Is matter meant to be free early? · No. Matter is only what is spare in orbit: about 20 kt at Year 0. Working satellites don’t count. Settled 2026-10-10.
+Settled: What does Year 0’s kit catch? · Physics decides: the star’s place in the sky, the hours looked, and loudness. Year 0’s sky watch catches about 1 early signal in 5. A sender that hears nothing tries again, and the player can spend more on ears. Settled 2026-10-10.
 Settled: Is all of Earth’s lift spare? · No. About 15 kt a Year is spare of 40. The rest keeps Earth’s craft flying. The player can spend to raise it: a launch complex adds 40 kt a Year. Settled 2026-10-10.
-1. What does Year 0’s kit catch? · A drift scan sees each star ten minutes a day. In about 1 game in 25 a neighbor’s signal arrives in the first 15 minutes, and in about 1 in 4 within the first hour. Does Earth hear it before the all-sky watch is built?
-2. Should the seed reroll moves that break the silent opening? · New in calcs/seed.py. A neighbor that already knows Earth rolls its reaction. If its knock or call would have reached Earth before Year 0, the seed rolls again, so nothing was heard by 2040.
-3. How long does a Mind take to act on news? · calcs/seed.py uses half a Year, a sample. It sets when a neighbor’s answer leaves, so when it arrives.
+1. Should the seed reroll moves that break the silent opening? · New in calcs/seed.py. A neighbor that already knows Earth rolls its reaction. If its knock or call would have reached Earth before Year 0, the seed rolls again, so nothing was heard by 2040.
+2. How long does a Mind take to act on news? · calcs/seed.py uses half a Year, a sample. It sets when a neighbor’s answer leaves, so when it arrives.

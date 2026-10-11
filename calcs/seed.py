@@ -17,6 +17,23 @@ NUCLEAR, MARS, FUSION = 0.24, 0.15, 0.45
 SENDS = ('knock', 'answer', 'call', 'gift', 'mask')
 THINKS = 0.5        # Years a Mind takes to act on news: a sample, until life scripts set it
 
+# ---------- What reaches Earth, and what Year 0's kit would catch of it ----------
+# A neighbor's knock is taken to be like Earth's own. Cosmic Call sent about 150 kW from a 70 m dish at 5 GHz, about
+# 1e12 W along the beam, for about four hours a star. Earth sent its knocks again a Year or so later, so a knock is
+# sent twice. A call is a steady broadcast at 1% of an Earth-scale grid, a sample. Hael's Long Call is its own 10 GW.
+# Year 0's sky watch is a drift scan: each direction north of -20 degrees, ten minutes a day. The all-sky watch, once
+# built, sees every direction at every hour.
+KNOCK_W, KNOCK_HOURS, AGAIN, CALL_W = 1e12, 4, 1.0, 2.4e11
+def catches(p, i, seed):
+    d, steady = p['d'], i['move'] in ('call', 'broadcast')
+    watts = i.get('watts') or (CALL_W if steady else p['n']['awake'] if p['n'].get('awake_aimed') else KNOCK_W)
+    rng = random.Random(f"{seed}:{p['name']}:{i['what']}")
+    overlap = 1.0 if steady else (KNOCK_HOURS + 1 / 6) / 24
+    loud = watts >= nb.floor_watts(12, 1, 600, d)
+    i.update(watts=watts, steady=steady, north=p['host']['north'], loud=loud,
+             kit0=p['host']['north'] and loud and any(rng.random() < overlap for _ in range(1 if steady else 2)),
+             allsky=watts >= nb.floor_watts(12, 1, 86400 if steady else KNOCK_HOURS * 3600, d))
+
 def roll(rng, table, news, arrives_ok):
     """One move from a neighbor's table for this news. arrives_ok(move) is False if it would break the silent opening."""
     for _ in range(50):
@@ -91,6 +108,7 @@ def draw(seed, rows=None):
             if move in SENDS: p['inbound'].append(dict(what=what, move=move, sent=t + THINKS, year=t + THINKS + d - Y0))
         for start, end, watts, *how in n['emissions'] if dead else []:   # a dead world's last broadcast
             if end == n['dies']: p['inbound'].append(dict(what='its last broadcast', move='broadcast', sent=w - start, year=w - start + d - Y0, watts=watts))
+        for i in p['inbound']: catches(p, i, seed)
         out.append(p)
     # Earth's seeded find: a neighbor's world if one tugs hard enough, else a natural world at a Terra Hunting star.
     found = [p for p in out if p['found_by_2040']]
@@ -113,7 +131,8 @@ def report(g):
         print(f"  {p['name']:7} {n['disposition']:9} {p['host']['name']:22} {p['host']['kind']} {p['d']:5.1f} ly  {state:18} {p['dials']}  {knows}"
               + ''.join(f". Caught {c['msg']} in {c['arrives']:.0f}, then: {c['move']}" for c in p['caught'])
               + (f". Tug {p['tug']:.2f} m/s: Earth found its world" if p['found_by_2040'] else ''))
-        for i in p['inbound']: print(f"          on its way: {i['what']} ({i['move']}), sent {year(i['sent'])}, arrives Year {i['year']:.1f}")
+        for i in p['inbound']: print(f"          on its way: {i['what']} ({i['move']}), sent {year(i['sent'])}, arrives Year {i['year']:.1f}. "
+                                     f"Year 0's sky watch {'catches' if i['kit0'] else 'misses'} it, the all-sky watch {'catches' if i['allsky'] else 'misses'} it.")
     if g['natural']: print(f"  Seeded find: a natural world at {g['natural']['name']}, {g['natural']['distance_ly']:.1f} ly.")
 
 def stats(rows, n=400):
@@ -132,6 +151,8 @@ def stats(rows, n=400):
             if p['dead']: continue
             living += 1; heard += p['heard']
             for cut in spared: spared[cut] += (not p['heard']) and p['waking'] > Y0 + cut + p['d']
+    # What Earth's ears catch of the signals that arrive in the first hour
+    early = [i for s in range(1, n + 1) for p in draw(s, rows)['neighbors'] for i in p['inbound'] if 0 < i['year'] < 12]
     median = sorted(counts)[n // 2]
     print(f"The lowest seed with the median count, for the mocks: {counts.index(median) + 1}.")
     print(f"{n} games. Neighbors: median {median}, from {min(counts)} to {max(counts)}. A hunter in {hunter / n:.0%}. "
@@ -139,6 +160,10 @@ def stats(rows, n=400):
           f"A neighbor's signal reaches Earth in the first 15 minutes in {in15 / n:.1%}, in the first hour in {in60 / n:.0%}: an answer to Earth's radars or knocks, or a dead world's last broadcast.")
     print(f"Earth's radars: {heard / living:.0%} of living neighbors heard them by Year 0. If the last sweep leaves by Year 3, {spared[3] / living:.0%} "
           f"wake after it has passed them, about 1 in {living / spared[3]:.0f}. By Year 30, {spared[30] / living:.0%}, about 1 in {living / spared[30]:.0f}.")
+    k = len(early)
+    print(f"Earth's ears: of {k} signals arriving in the first hour, Year 0's sky watch catches {sum(i['kit0'] for i in early) / k:.0%}. "
+          f"{sum(not i['north'] for i in early) / k:.0%} come from its blind southern sky, and {sum(i['north'] and not i['loud'] for i in early) / k:.0%} are too faint for it. "
+          f"The all-sky watch would catch {sum(i['allsky'] for i in early) / k:.0%}.")
 
 if __name__ == '__main__':
     rows = nb.load_hosts()

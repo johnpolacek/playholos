@@ -31,6 +31,7 @@ Each neighbor's reaction tables, from [How neighbors play](HOLOS_GAME_CONCEPT.md
 - **struck.** It is struck.
 - **tipoff.** A third party tells it about someone.
 - **quiet.** A world it was listening to goes quiet: its radars stop within a few years.
+- **silence.** Its own knock or call goes unanswered: the reply window passes with nothing heard.
 
 ## Moves
 
@@ -80,6 +81,7 @@ Watcher, leans Hidden, leans Expand, leans Cautious. Plays as a Listener.
 | struck | guard 51%, hide 29%, strike 14%, answer 6% |
 | tipoff | watch 71%, guard 12%, hide 9%, probe 7%, other 1% |
 | quiet | watch 76%, probe 10%, guard 8%, other 6% |
+| silence | watch 76%, probe 11%, hide 10%, other 4% |
 
 ### Hael
 
@@ -98,6 +100,7 @@ Contacter, leans Open, leans Deepen, leans Bold. Plays as a Caller. Its Long Cal
 | struck | strike 30%, guard 29%, answer 26%, warn 15% |
 | tipoff | knock 34%, watch 22%, warn 22%, gift 12%, probe 11% |
 | quiet | knock 53%, probe 19%, watch 17%, gift 11% |
+| silence | knock 53%, call 24%, probe 12%, watch 10% |
 
 ### Kesh
 
@@ -116,6 +119,7 @@ Watcher, leans Hidden, strongly Expand, leans Bold. Plays as a Grower. Every ton
 | struck | guard 47%, strike 30%, hide 17%, answer 5% |
 | tipoff | watch 49%, probe 24%, guard 17%, hide 8%, other 3% |
 | quiet | watch 50%, probe 34%, guard 10%, other 6% |
+| silence | watch 48%, probe 36%, hide 8%, knock 8% |
 
 ### Tavi
 
@@ -134,6 +138,7 @@ Watcher, leans Hidden, leans Deepen, leans Cautious. Plays as a Listener.
 | struck | guard 48%, hide 31%, strike 15%, answer 6% |
 | tipoff | watch 78%, guard 10%, hide 9%, other 4% |
 | quiet | watch 84%, guard 7%, other 10% |
+| silence | watch 83%, hide 9%, other 8% |
 
 ### Ombe
 
@@ -152,6 +157,7 @@ Contacter, leans Open, leans Expand, leans Bold. Plays as a Caller.
 | struck | guard 32%, strike 29%, answer 25%, warn 15% |
 | tipoff | knock 32%, warn 20%, probe 20%, watch 17%, gift 10% |
 | quiet | knock 46%, probe 33%, watch 12%, gift 8% |
+| silence | knock 52%, probe 24%, call 15%, watch 8% |
 
 ### Sere
 
@@ -170,6 +176,7 @@ Watcher, leans Hidden, leans Deepen, leans Cautious. Plays as a Grower.
 | struck | guard 52%, hide 28%, strike 14%, answer 6% |
 | tipoff | watch 70%, guard 14%, hide 10%, other 5% |
 | quiet | watch 78%, guard 10%, probe 7%, hide 5%, other 1% |
+| silence | watch 78%, hide 11%, probe 7%, other 4% |
 
 ### Ilm
 
@@ -188,6 +195,7 @@ Contacter, leans Hidden, leans Deepen, leans Cautious. Plays as a Listener. Its 
 | struck | guard 48%, warn 26%, strike 13%, answer 13% |
 | tipoff | watch 50%, warn 31%, probe 9%, knock 5%, gift 5% |
 | quiet | watch 57%, probe 24%, knock 12%, gift 7% |
+| silence | watch 56%, probe 24%, knock 19%, other 1% |
 
 ### Varn
 
@@ -206,6 +214,7 @@ Inward, leans Open, strongly Deepen, leans Cautious. Plays as a Thinker. It answ
 | struck | guard 66%, strike 14%, hide 14%, answer 6% |
 | tipoff | ignore 61%, watch 35%, other 4% |
 | quiet | ignore 68%, watch 30%, other 2% |
+| silence | ignore 75%, watch 25% |
 
 ### Quessa
 
@@ -224,6 +233,7 @@ Watcher, strongly Hidden, leans Deepen, leans Cautious. Plays as a Listener. It 
 | struck | guard 42%, hide 40%, strike 13%, other 4% |
 | tipoff | watch 83%, hide 8%, guard 6%, other 2% |
 | quiet | watch 89%, other 11% |
+| silence | watch 87%, hide 9%, other 4% |
 
 ### Daal
 
@@ -242,6 +252,7 @@ Hunter, strongly Hidden, leans Expand, strongly Bold. Plays as a Hunter. A mask 
 | struck | strike 82%, hide 10%, guard 8% |
 | tipoff | strike 58%, watch 21%, probe 15%, hide 6% |
 | quiet | strike 51%, watch 22%, probe 21%, hide 6% |
+| silence | strike 36%, watch 30%, mask 27%, hide 7% |
 
 ### Ystra
 
@@ -260,6 +271,7 @@ Inward, leans Hidden, strongly Deepen, leans Cautious. Plays as a Thinker. When 
 | struck | guard 57%, hide 29%, strike 12%, other 2% |
 | tipoff | ignore 60%, watch 37%, other 3% |
 | quiet | ignore 65%, watch 32%, other 3% |
+| silence | ignore 74%, watch 26% |
 
 ### Nuvo
 
@@ -278,6 +290,7 @@ Contacter, strongly Open, leans Expand, leans Bold. Plays as a Caller. It shares
 | struck | answer 32%, guard 28%, strike 25%, warn 15% |
 | tipoff | knock 37%, warn 19%, probe 16%, gift 14%, watch 14% |
 | quiet | knock 54%, probe 25%, gift 12%, watch 9% |
+| silence | knock 58%, call 18%, probe 18%, watch 6% |
 
 ### Pelle
 
@@ -300,6 +313,7 @@ Watcher, leans Hidden, leans Deepen, strongly Cautious. Plays as a Listener.
 | struck | guard 56%, hide 31%, strike 8%, answer 5% |
 | tipoff | watch 78%, guard 11%, hide 8%, other 3% |
 | quiet | watch 85%, guard 7%, other 8% |
+| silence | watch 86%, hide 9%, other 5% |
 
 ### Ruun
 
@@ -318,6 +332,7 @@ Contacter, leans Open, strongly Expand, leans Bold. Plays as a Caller. Its gifts
 | struck | guard 35%, strike 27%, answer 23%, warn 14% |
 | tipoff | knock 28%, probe 26%, warn 18%, watch 15%, gift 13% |
 | quiet | probe 41%, knock 38%, gift 11%, watch 10% |
+| silence | knock 46%, probe 32%, call 14%, watch 8% |
 
 ### Faen
 
@@ -336,6 +351,7 @@ Inward, leans Open, strongly Deepen, leans Cautious. Plays as a Thinker.
 | struck | guard 65%, strike 14%, hide 13%, answer 7% |
 | tipoff | ignore 61%, watch 35%, other 4% |
 | quiet | ignore 68%, watch 30%, other 2% |
+| silence | ignore 75%, watch 25% |
 
 ### Corra
 
@@ -354,6 +370,7 @@ Watcher, leans Hidden, leans Expand, leans Cautious. Plays as a Grower.
 | struck | guard 56%, hide 26%, strike 13%, answer 5% |
 | tipoff | watch 62%, guard 17%, hide 11%, probe 9%, other 1% |
 | quiet | watch 68%, probe 14%, guard 12%, hide 5%, other 1% |
+| silence | watch 69%, probe 15%, hide 12%, other 4% |
 
 ### Lusk
 
@@ -372,6 +389,7 @@ Watcher, leans Hidden, leans Expand, leans Bold. Plays as a Listener.
 | struck | strike 37%, guard 35%, hide 21%, answer 7% |
 | tipoff | watch 65%, probe 14%, guard 10%, hide 8%, other 3% |
 | quiet | watch 67%, probe 20%, guard 7%, other 7% |
+| silence | watch 64%, probe 20%, hide 8%, knock 8% |
 
 ### Iru
 
@@ -390,6 +408,7 @@ Contacter, leans Open, leans Expand, leans Cautious. Plays as a Caller. Its warn
 | struck | guard 45%, answer 28%, warn 17%, strike 11% |
 | tipoff | warn 29%, watch 28%, knock 19%, probe 14%, gift 11% |
 | quiet | knock 34%, probe 30%, watch 24%, gift 12% |
+| silence | knock 43%, probe 24%, watch 19%, call 13% |
 
 ### Anwe
 
@@ -412,6 +431,7 @@ Watcher, leans Hidden, leans Expand, leans Cautious. Plays as a Grower.
 | struck | guard 56%, hide 26%, strike 13%, answer 5% |
 | tipoff | watch 62%, guard 17%, hide 11%, probe 9%, other 1% |
 | quiet | watch 68%, probe 14%, guard 12%, hide 5%, other 1% |
+| silence | watch 69%, probe 15%, hide 12%, other 4% |
 
 ### Vesh
 
@@ -430,6 +450,7 @@ Hunter, strongly Hidden, leans Expand, strongly Cautious. Plays as a Hunter. It 
 | struck | hide 43%, guard 34%, strike 23% |
 | tipoff | watch 58%, hide 21%, strike 13%, probe 8% |
 | quiet | watch 58%, hide 21%, strike 11%, probe 11% |
+| silence | watch 55%, mask 21%, hide 18%, strike 6% |
 
 ### Sabe
 
@@ -448,6 +469,7 @@ Contacter, strongly Open, leans Deepen, leans Bold. Plays as a Caller. It would 
 | struck | answer 33%, strike 26%, guard 25%, warn 16% |
 | tipoff | knock 41%, warn 21%, watch 18%, gift 15%, probe 5% |
 | quiet | knock 64%, watch 13%, gift 13%, probe 9% |
+| silence | knock 61%, call 25%, watch 8%, probe 6% |
 
 ### Ulan
 
@@ -466,6 +488,7 @@ Inward, leans Hidden, strongly Deepen, leans Cautious. Plays as a Thinker.
 | struck | guard 56%, hide 29%, strike 12%, other 3% |
 | tipoff | ignore 54%, watch 43%, other 3% |
 | quiet | ignore 59%, watch 37%, other 4% |
+| silence | ignore 69%, watch 31% |
 
 ### Mirr
 
@@ -488,6 +511,7 @@ Watcher, leans Hidden, leans Deepen, strongly Cautious. Plays as a Listener.
 | struck | guard 56%, hide 31%, strike 8%, answer 5% |
 | tipoff | watch 78%, guard 11%, hide 8%, other 3% |
 | quiet | watch 85%, guard 7%, other 8% |
+| silence | watch 86%, hide 9%, other 5% |
 
 ### Ree
 
@@ -506,6 +530,7 @@ Contacter, strongly Open, leans Expand, leans Bold. Plays as a Caller. It warns 
 | struck | answer 30%, guard 26%, strike 23%, warn 21% |
 | tipoff | knock 31%, warn 24%, probe 19%, gift 15%, watch 11% |
 | quiet | knock 46%, probe 33%, gift 13%, watch 8% |
+| silence | knock 53%, probe 25%, call 17%, watch 6% |
 
 ### Hesk
 
@@ -524,6 +549,7 @@ Inward, leans Hidden, strongly Deepen, leans Cautious. Plays as a Thinker. Its a
 | struck | guard 57%, hide 29%, strike 12%, other 2% |
 | tipoff | ignore 54%, watch 43%, other 3% |
 | quiet | ignore 59%, watch 37%, other 4% |
+| silence | ignore 69%, watch 31% |
 
 ### Arro
 
@@ -542,6 +568,7 @@ Watcher, leans Hidden, leans Expand, leans Bold. Plays as a Grower.
 | struck | guard 39%, strike 35%, hide 20%, answer 6% |
 | tipoff | watch 56%, probe 18%, guard 14%, hide 9%, other 3% |
 | quiet | watch 58%, probe 26%, guard 9%, other 7% |
+| silence | watch 55%, probe 27%, hide 9%, knock 9% |
 
 ### Wenn
 
@@ -560,3 +587,4 @@ Watcher, leans Hidden, leans Deepen, leans Cautious. Plays as a Listener.
 | struck | guard 48%, hide 31%, strike 15%, answer 6% |
 | tipoff | watch 78%, guard 10%, hide 9%, other 4% |
 | quiet | watch 84%, guard 7%, other 10% |
+| silence | watch 83%, hide 9%, other 8% |

@@ -17,8 +17,8 @@ SETTLED = [('Does a half-built real instrument cost fewer Years?', 'It costs wha
            ('What stops a data center every Year?', 'Chips set the pace: the fabs fill one a Year, each +50% compute. Energy sets the ceiling, near a hundredfold. Settled 2026-10-10.'),
            ('What is energy for, early?', 'Thought. Each data center draws its share, and the twelfth would need more than Earth has. Settled 2026-10-10, by the rule above.'),
            ('Is matter meant to be free early?', 'No. Matter is only what is spare in orbit: about 20 kt at Year 0. Working satellites don’t count. Settled 2026-10-10.'),
+           ('What does Year 0’s kit catch?', 'Physics decides: the star’s place in the sky, the hours looked, and loudness. Year 0’s sky watch catches about 1 early signal in 5. A sender that hears nothing tries again, and the player can spend more on ears. Settled 2026-10-10.'),
            ('Is all of Earth’s lift spare?', 'No. About 15 kt a Year is spare of 40. The rest keeps Earth’s craft flying. The player can spend to raise it: a launch complex adds 40 kt a Year. Settled 2026-10-10.')]
-Q_CATCH = ask('What does Year 0’s kit catch?', 'A drift scan sees each star ten minutes a day. In about 1 game in 25 a neighbor’s signal arrives in the first 15 minutes, and in about 1 in 4 within the first hour. Does Earth hear it before the all-sky watch is built?')
 
 # ---------- Godview: who is out there ----------
 MOVE = reactions.MOVES
@@ -36,7 +36,8 @@ def does(p):
     if not p['heard']: return ''
     return (f"{MOVE[p['on_hum']]}" if p['knows'] <= Y0 else f"at waking: {MOVE[p['on_hum']]}")
 def inbound(p):
-    return ' '.join(f"{i['what'][0].upper() + i['what'][1:]}: sent {seedmod.year(i['sent'])}, reaches Earth Year {i['year']:.1f}, +{clock(i['year'])}." for i in p['inbound'] if i['year'] > 0)
+    return ' '.join(f"{i['what'][0].upper() + i['what'][1:]}: sent {seedmod.year(i['sent'])}, reaches Earth Year {i['year']:.1f}, +{clock(i['year'])}. "
+                    f"Year 0’s sky watch would {'catch' if i['kit0'] else 'miss'} it. The all-sky watch {'catches' if i['allsky'] else 'misses'} it." for i in p['inbound'] if i['year'] > 0)
 TONE = {'watcher': '', 'contacter': 'you', 'inward': '', 'hunter': 'other'}
 def roster_table():
     head = '<tr><th>Neighbor</th><th>Star</th><th>Light-time</th><th>At Year 0</th><th>What it knows of Earth</th><th>What it does about it</th></tr>'
@@ -444,7 +445,8 @@ PREGAME = [
     pre_row(8, 'The leads', P_LEADS, [(f'82 Eridani: {eri_who["name"]} lives there.' if eri_who else '82 Eridani d is real and natural. No neighbor is there in this game.'), find_truth,
                                       'Fomalhaut is 440 million years old: too young for minds, so it is never a host. Its clouds are rubble.',
                                       ('Luyten’s Star: ' + (f'''{who_at("Luyten's Star")["name"]} lives there.''' if who_at("Luyten's Star") else 'no one lives there. About 3 games in 10 put someone at a star Earth knocked on.'))], said='What doesn’t fit?'),
-    pre_row(9, 'Planning', P_PLAN, ['The Mind advises from the charter and dials. It queues nothing until told.'], said='Plan our waking.'),
+    pre_row(9, 'Planning', P_PLAN, ['The Mind advises from the charter and dials. It queues nothing until told.',
+                                    'Its advice is sound. Across games, Year 0’s sky watch catches about 1 in 5 of the signals that arrive in the first hour. The all-sky watch catches about 4 in 5.'], said='Plan our waking.'),
     pre_row(10, 'The queue, and Begin', P_QUEUE, ['Year 0 starts at the tap. From then the clock runs, offline too.',
                                                  f'Nothing Earth does in the next 15 minutes can reach anyone: the nearest living neighbor, {nearest["name"]}, is {nearest["d"]:.1f} ly away. Light from Year 0 gets there at Year {nearest["d"]:.1f}, +{clock(nearest["d"])}.' if nearest else ''], said='Queue that.'),
 ]
@@ -484,7 +486,7 @@ BEATS = [
     beat(480, 'Build the vault.', None, talk(VAULT_CONFIRM, f'Started. Ten Years, and ten of the {res(479)[2].replace(" kt", "")} kilotonnes we have spare. Lift brings fifteen more a Year. A launch complex would bring forty on top.', ('Build a launch complex', 'Undo')),
          ['Asked for at Year 0, the vault would have taken half the spare stock.'], settled=4),
     beat(510, 'Build a launch complex.', None, talk(LAUNCH_CONFIRM, 'Started. Two Years, no matter, a twentieth of our compute. From Year 3.7 lift brings fifty-five kilotonnes a Year.', ('Undo',)),
-         ['Lift is short of pads and ships, not energy: 40 kt a Year burns about half a gigawatt of propellant.'], settled=5),
+         ['Lift is short of pads and ships, not energy: 40 kt a Year burns about half a gigawatt of propellant.'], settled=6),
     beat(540, 'Watch Luyten’s Star through the window.', None, talk(LUY_ORDER, f'Set. The first window opens at Year {LUY_Y[0]}, in two and a half minutes. I’ll wake you either way.', ('Undo',))),
     beat(570), beat(600),
     beat(630, f'· The Mind glows. Taps it.', f'A Year of listening: nothing loud at {F["star"]}.',
@@ -493,7 +495,7 @@ BEATS = [
     beat(660),
     beat(690, '· The Mind opens on its own.', f'The first reply window at Luyten’s Star opens. Nothing heard.',
          talk(window_screen(690, 0), '<b>The window is open</b>Nothing from Luyten’s Star. An answer today would mean someone was listening in 2030 and replied at once.', ('Keep watching', 'What would silence mean?'), 'open'),
-         ['A silent window is the usual case. This row is what most players see at minute 11.'], question=Q_CATCH),
+         ['A silent window is the usual case. This row is what most players see at minute 11.', 'Had someone answered, the array held on the star would have heard it. The sky watch alone gives Luyten’s Star ten minutes a day.'], settled=5),
     beat(720, 'What would silence mean?', None, SILENCE_CHAT),
     beat(750), beat(780), beat(810),
     beat(840, '', 'The last radar sweep has left Earth. Ninety years of them are still on their way out.', None,

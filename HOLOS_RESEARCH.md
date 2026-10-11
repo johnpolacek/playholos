@@ -59,6 +59,11 @@ Every source the game rests on, grouped by the question it answers. Each entry s
   - Earth's aimed messages from 1974 on, with targets and arrival dates. Within 50 ly: Altair, Gliese 49, Gliese 208, 55 Cancri, HD 10307, 47 Ursae Majoris, Gliese 581, Teegarden's Star, TZ Arietis, Kappa¹ Ceti, Gliese 526, Luyten's Star.
   - Matters: Earth's real knocks. Each lasted hours, so being heard needs a listener watching Sol at that moment.
   - Used: v2 Earth's loud past. Check transmitter power and duration in primary sources.
+- **[Cosmic Call](https://en.wikipedia.org/wiki/Cosmic_Call)** · Reference, with [Zaitsev's review of messaging](https://arxiv.org/abs/physics/0610031).
+  - Sent in 1999 and 2003 from the 70 m dish at Evpatoria: about 150 kW at 5.01 GHz. The 1999 sessions ran about four hours a star.
+  - A 70 m dish at that frequency concentrates 150 kW into about 10¹² W along the beam. That last step is this project's arithmetic.
+  - Matters: how strong and how long a knock is. A neighbor's knock is taken to be like Earth's.
+  - Used: v2 [What Earth hears](HOLOS_GAME_CONCEPT.md#what-earth-hears), calcs/seed.py.
 - **[Sónar Calling GJ 273b](https://www.scientificamerican.com/article/interstellar-message-beamed-to-nearby-exoplanet)** · News, Scientific American, 2017 ([Space.com](https://www.space.com/38803-meti-signal-beamed-habitable-alien-planet.html)).
   - Sent to Luyten's Star on October 16 to 18, 2017, from the EISCAT dish in Tromsø, Norway, near 930 MHz: a science and maths tutorial and 33 short pieces of music. A second batch followed in 2018.
   - Matters: it sets Earth's first reply window in play, Year 2.3.
@@ -673,5 +678,5 @@ Results the design is waiting on. Check each when its date comes.
 - Smith and Lissauer 2009, Icarus: confirm the lifetime of Earth-mass systems near 9 to 10 mutual Hill radii, for the checker's spacing rule.
 - Tau Ceti dust belt tilt in leads.py against MacGregor et al. 2016.
 - Beta Hydri drift: find the 2012 and 2023 primary papers.
-- Earth's aimed messages: transmitter power, frequency and duration from primary sources.
+- Earth's aimed messages: transmitter power, frequency and duration from primary sources. Cosmic Call is logged. The others are not.
 - Primary links for the classic propulsion and space-industry studies.

@@ -96,6 +96,25 @@ Settled 2026-10-10. Numbers from `python3 calcs/seed.py stats`. Sources in [HOLO
 - **What is left.** A faint hum, like every neighbor's: phones, satellites and links, too weak to hear from another star without a far-side array.
 - **It can be undone.** The radars can be turned back on. The quiet years have left too.
 
+## What Earth hears
+
+Settled 2026-10-10. Numbers from `python3 calcs/seed.py stats`.
+
+- **Physics decides what Earth catches.** Three things: whether the star is in the instrument's sky, whether it is looking in those hours, and whether the signal is above its floor.
+- **A neighbor's knock is taken to be like Earth's own.** Cosmic Call sent about 10¹² W along its beam, for about four hours a star. A call is a steady broadcast.
+- **Year 0's sky watch misses most of them.** It sees each direction north of −20° for ten minutes a day. That is 63% of host stars, and a four-hour knock overlaps its pass about one time in six.
+  - Of the signals that reach Earth in the first hour, it catches about 1 in 5.
+  - About a third come from the southern sky it never sees. About 1 in 8 are too faint for it.
+  - The all-sky watch would catch about 4 in 5.
+- **A sender that hears nothing tries again.** A knock is sent twice, about a Year apart, as Earth's own were. If its reply window then passes in silence, that is news to the sender, and it rolls its table ([HOLOS_REACTIONS.md](HOLOS_REACTIONS.md)): a contacter most often knocks again. So a missed knock is delayed, not lost.
+- **The player can spend more on ears.**
+  - *Hold the radio array on one star:* it hears whatever comes from there, for a share of compute.
+  - *The all-sky watch:* every direction at every hour.
+  - *The deep flash watch:* knocks sent as laser flashes.
+  - *A larger watch hears fainter:* four times the collecting area reaches twice as far.
+  - *The deep-field receiver, then the far-side array:* a world's everyday radio.
+- **The Mind can't report what it didn't hear.** A missed knock leaves no trace on Earth.
+
 ## Year 0 and Earth's road to it
 
 Settled 2026-10-06.
@@ -354,7 +373,7 @@ Answered one at a time, in this order. Every answer must be permitted by current
    - **Settled 2026-10-10:** chips set the pace of compute and energy sets its ceiling. That also says what energy is for early. See [Growing compute](#growing-compute).
    - **Settled 2026-10-10:** matter is only what is spare in orbit, about 20 kt at Year 0. See [Earth's kit at Year 0](#earths-kit-at-year-0).
    - **Settled 2026-10-10:** about 15 kt a Year of lift is spare, and the player can spend to raise it. See [Earth's kit at Year 0](#earths-kit-at-year-0).
-   - What does Year 0's drift-scan sky watch catch of a neighbor's knock, before the all-sky watch is built?
+   - **Settled 2026-10-10:** physics decides what Earth catches, a sender that hears nothing tries again, and the player can spend more on ears. See [What Earth hears](#what-earth-hears).
    - The two open seed rules in [The seed, drawn](#the-seed-drawn).
    - 12 of the 31 half-minutes had nothing new for the player.
 9. **Settled 2026-10-10:** v1's research baseline, rechecked against the 2025 radar result and Garrett's 2026 cold-computing paper. See [Why the sky is quiet, rechecked](#why-the-sky-is-quiet-rechecked).

@@ -24,6 +24,7 @@ NEWS = {
     'struck': 'It is struck.',
     'tipoff': 'A third party tells it about someone.',
     'quiet': 'A world it was listening to goes quiet: its radars stop within a few years.',
+    'silence': 'Its own knock or call goes unanswered: the reply window passes with nothing heard.',
 }
 MOVES = {
     'watch': 'stays quiet and aims its instruments at the source',
@@ -55,6 +56,7 @@ BASE = {
         'struck': B(guard=40, strike=30, hide=20, answer=10),
         'tipoff': B(watch=60, guard=15, hide=10, probe=10, knock=5),
         'quiet': B(watch=65, probe=15, guard=10, hide=5, knock=5),
+        'silence': B(watch=60, knock=15, probe=15, hide=10),
     },
     'contacter': {
         'hum': B(knock=35, watch=30, probe=15, call=10, gift=10),
@@ -68,6 +70,7 @@ BASE = {
         'struck': B(guard=40, strike=25, answer=20, warn=15),
         'tipoff': B(watch=30, warn=25, knock=20, probe=15, gift=10),
         'quiet': B(knock=35, probe=30, watch=25, gift=10),          # are you still there?
+        'silence': B(knock=45, probe=25, watch=20, call=10),        # try again
     },
     'inward': {
         'hum': B(ignore=60, watch=35, knock=5),
@@ -81,6 +84,7 @@ BASE = {
         'struck': B(guard=50, strike=25, hide=20, answer=5),
         'tipoff': B(ignore=60, watch=35, guard=5),
         'quiet': B(ignore=65, watch=30, hide=5),
+        'silence': B(ignore=75, watch=25),
     },
     'hunter': {
         'hum': B(watch=50, strike=35, hide=10, probe=5),
@@ -94,6 +98,7 @@ BASE = {
         'struck': B(strike=50, guard=30, hide=20),
         'tipoff': B(watch=45, strike=30, probe=15, hide=10),
         'quiet': B(watch=45, strike=25, probe=20, hide=10),         # it woke, or it died: either way, look
+        'silence': B(watch=50, mask=25, strike=15, hide=10),
     },
 }
 
