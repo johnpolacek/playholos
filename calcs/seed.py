@@ -125,11 +125,20 @@ def stats(rows, n=400):
         counts.append(len(ns)); knocked += any(p['host']['name'] in nb.KNOCKED.values() for p in ns); caught += any(p['caught'] for p in ns)
         in15 += any(y < 3 for y in arr); in60 += any(y < 12 for y in arr)
         hunter += any(p['n']['disposition'] == 'hunter' for p in ns); find += bool(g['found'])
+    # Quieting Earth's radars: a neighbor that wakes after the last radar light has passed it never finds them.
+    living = heard = 0; spared = {3: 0, 30: 0}
+    for s in range(1, n + 1):
+        for p in draw(s, rows)['neighbors']:
+            if p['dead']: continue
+            living += 1; heard += p['heard']
+            for cut in spared: spared[cut] += (not p['heard']) and p['waking'] > Y0 + cut + p['d']
     median = sorted(counts)[n // 2]
     print(f"The lowest seed with the median count, for the mocks: {counts.index(median) + 1}.")
     print(f"{n} games. Neighbors: median {median}, from {min(counts)} to {max(counts)}. A hunter in {hunter / n:.0%}. "
           f"Someone at a knocked star in {knocked / n:.0%}, a knock caught in {caught / n:.0%}. Earth's seeded find is a neighbor's world in {find / n:.0%}. "
           f"A neighbor's signal reaches Earth in the first 15 minutes in {in15 / n:.1%}, in the first hour in {in60 / n:.0%}: an answer to Earth's radars or knocks, or a dead world's last broadcast.")
+    print(f"Earth's radars: {heard / living:.0%} of living neighbors heard them by Year 0. If the last sweep leaves by Year 3, {spared[3] / living:.0%} "
+          f"wake after it has passed them, about 1 in {living / spared[3]:.0f}. By Year 30, {spared[30] / living:.0%}, about 1 in {living / spared[30]:.0f}.")
 
 if __name__ == '__main__':
     rows = nb.load_hosts()

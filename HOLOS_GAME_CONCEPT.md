@@ -75,6 +75,27 @@ Settled 2026-10-10. Numbers in [calcs/neighbors.py](calcs/neighbors.py).
 - **What it does next follows its disposition.** A contacter likely replies. A watcher replies on its own terms, if at all. An inward one rarely bothers. A hunter learns Earth is eager to be found.
 - **A passed window isn't closed.** TZ Arietis's earliest reply was due in 2039. A neighbor there may have held its reply, and it can still come.
 
+## Quieting Earth's radars
+
+Settled 2026-10-10. Numbers from `python3 calcs/seed.py stats`. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#hearing-technology-by-radio).
+
+- **The Will may quiet Earth's radars, if the player chooses.** The Mind gives its view and waits. It never quiets them on its own.
+- **What has left keeps going.** Ninety years of sweeps are out there, and nothing recalls them. Quiet only shortens what comes after.
+- **Three settings.** Years are samples.
+  - *Keep:* the default. Earth sounds as it did. No listener learns that it woke.
+  - *Fade,* about 25 Years: reads as a world growing out of radar. Slow to help.
+  - *Cut,* about 2 Years: the last sweep leaves soonest. Every listener hears Earth stop.
+- **What it costs.** Ground work: no matter, almost no energy, a small share of compute. It moves Earth toward Hidden. Missile launches are already watched by heat from orbit, and aircraft already fly on transponders, so a Mind can retire the radars. That last step is speculation.
+- **What it buys.** A neighbor that starts looking after the last sweep has passed it never hears one.
+  - 69% of living neighbors heard Earth before Year 0. For them nothing changes.
+  - If the last sweep leaves by Year 3, about 1 neighbor in 9 wakes too late to hear it. By Year 30, about 1 in 26.
+  - So the gain shrinks every Year the player waits.
+- **What it reveals.** Silence travels at light speed. A neighbor listening to Earth hears the radars stop one light-time later, and learns the date. It can't tell waking from dying.
+  - That is news, and it rolls its reaction table: "a world it was listening to goes quiet" ([HOLOS_REACTIONS.md](HOLOS_REACTIONS.md)). A watcher mostly watches harder. A contacter may knock to ask if anyone is left.
+  - A fade over decades is not news.
+- **What is left.** A faint hum, like every neighbor's: phones, satellites and links, too weak to hear from another star without a far-side array.
+- **It can be undone.** The radars can be turned back on. The quiet years have left too.
+
 ## Year 0 and Earth's road to it
 
 Settled 2026-10-06.
@@ -295,11 +316,11 @@ Answered one at a time, in this order. Every answer must be permitted by current
 7. **Settled 2026-10-10:** death and new games. See [Death and new games](#death-and-new-games).
 8. **First mock built 2026-10-10:** [Earth's first 15 minutes](explorations/v2-mocks/index.html), one phone with a godview lane, on one drawn game. A plain-text copy is in [index.md](explorations/v2-mocks/index.md). It raises these, all open:
    - Does a real instrument already half built, the Habitable Worlds Observatory, cost fewer Years?
-   - Can the Will quiet Earth's radars, and what does a listener learn when they stop?
+   - **Settled 2026-10-10:** the Will may quiet Earth's radars. See [Quieting Earth's radars](#quieting-earths-radars).
    - What stops a ground data center every Year? It costs no matter and almost no energy.
    - What is energy for, early? Thinking takes 1% of it and nothing else draws on it.
    - Is matter meant to be free early? Nothing in the first hour costs more than 10 kt of 250.
    - What does Year 0's drift-scan sky watch catch of a neighbor's knock, before the all-sky watch is built?
    - The two open seed rules in [The seed, drawn](#the-seed-drawn).
-   - 13 of the 31 half-minutes had nothing new for the player.
+   - 12 of the 31 half-minutes had nothing new for the player.
 9. **Settled 2026-10-10:** v1's research baseline, rechecked against the 2025 radar result and Garrett's 2026 cold-computing paper. See [Why the sky is quiet, rechecked](#why-the-sky-is-quiet-rechecked).

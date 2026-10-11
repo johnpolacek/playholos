@@ -21,11 +21,16 @@ Every source the game rests on, grouped by the question it answers. Each entry s
 - **[Saide, Garrett and Heeralall-Issur 2023](https://academic.oup.com/mnras/article/522/2/2393/7028804)** · Published, MNRAS.
   - Cell towers leak about 4 GW at peak, periodic and direction dependent. A Green Bank-class dish could not hear it within 10 ly.
   - Matters: broadband leakage alone doesn't give a world away. Basis for v1's faint hum.
-  - Used: v2 Earth's loud past. v1 "A world's hum can be heard".
+  - Its authors dispute that Earth is going radio quiet on its own: strong broadcast towers fade, but phones, radars and satellites replace them ([SETI Institute summary](https://www.seti.org/news/can-et-detect-us/)).
+  - Used: v2 Earth's loud past. v1 "A world's hum can be heard". v2 [Quieting Earth's radars](HOLOS_GAME_CONCEPT.md#quieting-earths-radars): a fade is the Will's choice, not the default path.
 - **[Sheikh et al. 2025, Earth detecting Earth](https://arxiv.org/abs/2502.02614)** · Published, AJ.
   - Earth's detectable signatures, seen with present-day Earth instruments, span 13 orders of magnitude. Planetary radar reaches a thousand times farther than the best non-radio signature.
   - Matters: radio, not heat or air, is how worlds like Earth are found first.
   - Used: v2 Earth's loud past. v1 "Why Earth hears none of it today".
+- **[Space-Based Infrared System](https://www.ssc.spaceforce.mil/Newsroom/Article/3124862/sbirs-geo-6-launch-closes-out-two-decades-of-progress-in-missile-warning-tracki)** · US Space Force release, 2022.
+  - Six infrared satellites in high orbit, with others, detect and track missile launches anywhere on Earth by their heat. A successor, Next-Gen OPIR, is being built.
+  - Matters: Earth's loudest radars watch for the same launches. Warning by heat from orbit gives a Mind a way to retire them. That they could be retired is this project's inference, not the source's.
+  - Used: v2 [Quieting Earth's radars](HOLOS_GAME_CONCEPT.md#quieting-earths-radars).
 - **[Forgan and Nichol 2010, a failure of serendipity](https://arxiv.org/abs/1007.0850)** · Published, International Journal of Astrobiology.
   - Two human-like civilizations placed at random in the galaxy overhear each other about one time in ten million.
   - Matters: why the game needs its one "what if", many neighbors in the same century.

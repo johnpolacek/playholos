@@ -147,7 +147,7 @@ def rail(active):
 # (start Year, end Year, share): the queue at Year 0, then what the player starts.
 DC_DONE = (1.0, 2.1)                           # two ground data centers, each +25% compute
 USES = [(0, 6, 1), (0, 6, 20), (0, 1.0, 5), (0, .1, 5), (0, .2, 5), (0, .3, 5),            # sky watch, flash watch, data center, three looks
-        (.4, 18.4, 15), (1.1, 2.1, 10), (1.1, 2.1, 5), (1.6, 11.6, 15), (1.8, 3.0, 10)]    # telescope, a Year's listening, data center, vault, Luyten watch
+        (.4, 18.4, 15), (.8, 2.8, 5), (1.1, 2.1, 10), (1.1, 2.1, 5), (1.6, 11.6, 15), (1.8, 3.0, 10)]    # telescope, quieting the radars, a Year's listening, data center, vault, Luyten watch
 def res(t):
     y = t / 300
     grown = 1 + .25 * sum(y >= d for d in DC_DONE)

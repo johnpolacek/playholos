@@ -13,7 +13,7 @@ YEARS = lambda y: f'{y:g} {"Year" if y == 1 else "Years"}'
 ASKS = []          # design questions the mock raises, in the order the timeline raises them
 def ask(q, why): ASKS.append((q, why)); return len(ASKS)
 Q_HWO = ask('Does a half-built real instrument cost fewer Years?', 'The Habitable Worlds Observatory is under construction at Year 0. Here it is the infrared telescope at its full 18 Years.')
-Q_RADAR = ask('Can the Will quiet Earth’s radars?', 'A player on a loud Earth asks this in the first minutes. It needs a rule: what going quiet costs, how long it takes, and what a listener learns when ninety years of radar stop in 2040.')
+SETTLED = [('Can the Will quiet Earth’s radars?', 'Yes, if the player chooses: keep them, fade them over about 25 Years, or cut them in about 2. What has left keeps going. Settled 2026-10-10.')]
 Q_DC = ask('What stops a data center every Year?', 'The audit prices it at 1 Year, no matter, 0.25% of energy, for +25% compute. Nothing here limits ten at once. Chip supply, a rising price, or a cap per Year would.')
 Q_ENERGY = ask('What is energy for, early?', 'Compute takes 1% of 24 TW and nothing in the first hour spends more. The energy bar never moves.')
 Q_MATTER = ask('Is matter meant to be free early?', 'Ground builds cost none, the telescope 40 t, the vault 10 kt, against 250 kt and 40 kt a Year. Only build time and compute shares limit the first hour.')
@@ -229,6 +229,7 @@ def running(t, looks=(), right=None):
     if y >= 1.1: bl.append(prow('Second data center', '+25% compute', DC_YEARS, t, 1.1))
     if y >= .4: bl.append(prow('Infrared telescope', 'reads the air of nearby worlds', IR_YEARS, t, .4))
     if y >= 1.6: bl.append(prow('Deep vault', 'in the Moon’s rock', VAULT_YEARS, t, 1.6))
+    if .8 <= y: bl.append(prow('Quiet the radars', f'the last sweep leaves at Year {CUT_Y:g}', CUT_YEARS, t, .8))
     n_run = sum('newtag' not in x for x in bl)
     e, c, m = res(t)
     return tab(t, 'Projects', 'PROJECTS', right or f'{n_run} BUILDING' + (f' · {len(rows)} LOOK{"S" if len(rows) > 1 else ""}' if rows else ''), ''.join([
@@ -308,16 +309,46 @@ HEARD_CHAT = chat(180, 'Who has heard us?', [
     ('mind', f'About {len(ROWS):,} stars within fifty light-years could keep a world like ours. If minds are common, some of them heard. If they are careful, none will say so.')],
     view=('Assume someone has. Build ears before voices, and decide what we would say before anyone asks.' if CAUTIOUS or HIDDEN else
           'Assume someone has, and that they are as curious as we are. Listen properly. Then call.'))
+CUT_YEARS, FADE_YEARS = 2, 25                  # samples
+CUT_Y = .8 + CUT_YEARS                         # the Year the last sweep leaves, in this playthrough
 QUIET_CHAT = chat(210, 'Can we go quiet?', [
     ('you', 'Can we go quiet?'),
-    ('mind', 'In part. Aircraft can fly on transponders alone, and most already do. The warning radars are the loudest, and nations keep those for each other, not for the sky.'),
+    ('mind', 'If you choose it. Launches are already watched by heat from orbit, and aircraft fly on transponders. The radars can go.'),
     ('you', 'And what already left?'),
-    ('mind', 'Still going. Ninety years of it, and I can’t call it back. If the radars stop now, a listener sees them stop. That says something woke here in 2040.')],
-    view=('Leave them as they are. A sudden silence is a signal too. Send nothing new until we can hear properly.' if CAUTIOUS or HIDDEN else
-          'Leave them. We are found or we are not. Quiet now would only look like fear.'))
-RADAR_ORDER = order(240, 'Leave the radars. Send nothing new without me.', [
-    ('RADARS', '<b>Keep sweeping, as they are</b> · no change a listener could see'), ('MESSAGES', '<b>Nothing aimed, nothing broadcast</b> · until you say'),
-    ('KEEPS', 'A world’s first voice still wakes you')])
+    ('mind', 'Still going. Ninety years of it, and nothing recalls it. Quiet only shortens what comes after. And every listener hears us stop.')],
+    view=('Cut them. Those who heard us have us already. Those who have not need never learn.' if HIDDEN else
+          'Fade them over decades. A slow dimming looks like any world growing up. A sudden dark says someone decided.' if CAUTIOUS else
+          'Leave them. We are found or we are not. Going dark now would only look like fear.'))
+def choice(title, sub_, right, on=False):
+    return (f'<button class="choice{" on" if on else ""}" role="radio" aria-checked="{str(on).lower()}"><span class="radio"></span>'
+            f'<span class="pt"><b>{title}</b><span class="sub">{sub_}</span></span><span class="pd">{right}</span></button>')
+RADAR_CHOICE = tab(240, 'Mind', 'MIND', 'EARTH’S RADARS', ''.join([
+    SEC('WHAT YOU WANT'), '<div class="intent">Cut them. And send nothing new without me.<i></i></div>',
+    SEC('EARTH’S RADARS · YOURS TO CHOOSE'), '<div class="choices" role="radiogroup">',
+    choice('Keep them', 'Earth sounds as it did yesterday. No listener learns that we woke.', '<span class="mono">as now</span>'),
+    choice('Fade them', 'Reads as a world growing out of radar. Slow to help.', tstack(YEARS(FADE_YEARS), clock(FADE_YEARS))),
+    choice('Cut them', 'Every listener hears us stop, one light-time later.', tstack(YEARS(CUT_YEARS), clock(CUT_YEARS)), True), '</div>',
+    SEC('WHAT IT CAN’T DO'), '<p class="copy small">Recall what left. Ninety years of sweeps keep going, and anyone they have passed may have us already.</p>',
+    SEC('WHAT IT BUYS'), '<p class="copy small">A listener who starts looking after the last sweep has passed never hears one. The sooner it leaves, the more of them.</p>',
+    part('ALSO', '<b>Nothing aimed, nothing broadcast</b> · until you say')]))
+# Godview on the cut: who hears the radars stop, and who wakes too late to hear them at all.
+def quiet_truths():
+    out = []
+    for p in NB:
+        if not p['heard']: continue
+        y = CUT_Y + p['d']
+        if p['waking'] - Y0 > y: out.append(f"{p['name']}, {p['d']:.1f} ly: asleep when they stop at Year {y:.1f}. It wakes at Year {p['waking'] - Y0:.1f} to find Earth dark."); continue
+        t = reactions.table(p['name'])['quiet']; moves, odds_ = zip(*t)
+        move = random.Random(f"{SEED}:{p['name']}:quiet").choices(moves, weights=odds_)[0]
+        if move == 'strike': move = 'watch'            # gate: a first strike waits for a soft target and an unseen launch
+        sends = f" That reaches Earth at Year {y + seedmod.THINKS + p['d']:.1f}." if move in seedmod.SENDS else ''
+        out.append(f"{p['name']}, {p['d']:.1f} ly: hears them stop at Year {y:.1f}, +{clock(y)}. It can’t tell waking from dying. It {MOVE[move]}.{sends}")
+    late = [p for p in NB if not p['dead'] and not p['heard'] and p['waking'] > Y0]
+    spared = [p for p in late if p['waking'] - Y0 > CUT_Y + p['d']]
+    out.append('Wakes after the last sweep has passed, and never hears one: ' + (', '.join(p['name'] for p in spared) if spared else 'no one in this game') + '. Across games, about 1 neighbor in 9.')
+    for p in late:
+        if p not in spared: out.append(f"{p['name']} wakes at Year {p['waking'] - Y0:.1f}, while sweeps still pass it until Year {CUT_Y + p['d']:.1f}. It can still find them.")
+    return out
 DC_DONE_SCREEN = running(300)
 SECOND = running(330, [quick(f'Listen to {F["star"]} for a Year', f'Radio array · tones above {FLOOR}', tstack('under way', clock(1), True))])
 FEAR_CHAT = chat(420, 'What should we fear?', [
@@ -363,9 +394,10 @@ WAKES = tab(900, 'Mind', 'MIND', 'WHAT WAKES YOU', ''.join([
 LOCK = lockscreen('16:40', [('IN 00:15:00', 'Earth: the sky watch and flash watch are built', 'Year 6. Anything heard wakes you sooner.')])
 
 # ---------- The rows ----------
-def godcell(notes=(), question=None):
+def godcell(notes=(), question=None, settled=None):
     g = ''.join(f'<li>{n}</li>' for n in notes)
     q = f'<div class="dq"><b>Design question {question}</b><span>{ASKS[question - 1][0]} {ASKS[question - 1][1]}</span></div>' if question else ''
+    if settled is not None: q += f'<div class="dq done"><b>Settled</b><span>{SETTLED[settled][0]} {SETTLED[settled][1]}</span></div>'
     return (f'<div class="god"><b>Godview</b><ul>{g}</ul></div>' if g else '') + q
 def cell(said, lands, phone):
     idle = '' if said or lands or phone else '<p class="beat idle">Nothing new. <span>A dead 30 seconds.</span></p>'
@@ -376,12 +408,12 @@ def pre_row(n, title, phone, notes=(), said=''):
     return (f'<section class="brow pre"><div class="bhead"><span class="bt mono">{n}</span><span class="gy">{title}</span></div>'
             f'<div class="v2grid">{cell(said, None, phone)}<div class="gcell">{godcell(notes)}</div></div></section>')
 DEAD = 0
-def beat(t, said='', lands=None, phone=None, notes=(), question=None, label=None):
+def beat(t, said='', lands=None, phone=None, notes=(), question=None, label=None, settled=None):
     global DEAD
     DEAD += not (said or lands or phone)
     seeded = truths((t - 30) / 300 if t else -1e9, t / 300) if t else []
     return (f'<section id="t{t}" class="brow{" tall" if phone else ""}"><div class="bhead"><span class="bt mono">{label or f"+{t // 60}:{t % 60:02d}"}</span><span class="gy">Year {yr(t)}</span></div>'
-            f'<div class="v2grid">{cell(said, lands, phone)}<div class="gcell">{godcell(seeded + list(notes), question)}</div></div></section>')
+            f'<div class="v2grid">{cell(said, lands, phone)}<div class="gcell">{godcell(seeded + list(notes), question, settled)}</div></div></section>')
 
 nearest = alive[0] if alive else None
 heard_list = ', '.join(p['name'] for p in NB if p['heard']) or 'no one'
@@ -425,8 +457,10 @@ BEATS = [
     beat(150),
     beat(180, 'Who has heard us?', None, HEARD_CHAT, [f'{heard_n} of {len(alive)} living neighbors have heard Earth: {heard_list}.',
                                                       'The Mind can only say it doesn’t know. The concept sets that: it lists where the noise went, never who heard.']),
-    beat(210, 'Can we go quiet?', None, QUIET_CHAT, question=Q_RADAR),
-    beat(240, 'Leave the radars. Send nothing new without me.', None, talk(RADAR_ORDER, 'Set. Nothing new leaves Earth without you. The old noise keeps going.', ('Undo',))),
+    beat(210, 'Can we go quiet?', None, QUIET_CHAT, ['The Mind gives its view and waits. Quieting is the player’s to choose, never the Mind’s.'], settled=0),
+    beat(240, 'Cut them. And send nothing new without me.', None,
+         talk(RADAR_CHOICE, f'Started. {YEARS(CUT_YEARS)}, no matter. The last sweep leaves at Year {CUT_Y:g}. Its absence reaches Alpha Centauri at Year {CUT_Y + 4.3:.1f}, and fifty light-years at Year {CUT_Y + 50:.1f}.', ('Undo',)),
+         quiet_truths()),
     beat(270),
     beat(300, '· The Mind glows. Taps it.', 'The data center is running. Compute +25%.',
          talk(DC_DONE_SCREEN, 'The data center runs: a quarter more thought, for a four-hundredth of our energy and no matter. I can start another.', ('Another', 'Not now'), 'glow'), question=Q_DC),
@@ -448,7 +482,9 @@ BEATS = [
          talk(window_screen(690, 0), '<b>The window is open</b>Nothing from Luyten’s Star. An answer today would mean someone was listening in 2030 and replied at once.', ('Keep watching', 'What would silence mean?'), 'open'),
          ['A silent window is the usual case. This row is what most players see at minute 11.'], question=Q_CATCH),
     beat(720, 'What would silence mean?', None, SILENCE_CHAT),
-    beat(750), beat(780), beat(810), beat(840),
+    beat(750), beat(780), beat(810),
+    beat(840, '', 'The last radar sweep has left Earth. Ninety years of them are still on their way out.', None,
+         ['Earth now gives off a faint hum, like every neighbor. Nothing that already left is changed.']),
     beat(870, '· The Mind glows. Taps it.', 'The second window opens. Nothing heard.',
          talk(window_screen(870, 1), 'The second window, for our 2018 message. Silent too. I’ll hold the array there until Year 3, as you ordered, then give it back to the sky.', state='glow')),
     beat(900, 'Wake me for the big things.', None, talk(WAKES, 'Set. Four things wake you, and any first voice. The next is at Year 6, fifteen minutes from now.', ('Undo',))),
@@ -476,7 +512,8 @@ V2_CSS = '''
 .godmap{max-width:560px;margin:14px 0 0;padding:8px;border:1px solid var(--frame);border-radius:10px;background:var(--paper)}.godmap svg{display:block;max-width:100%;height:auto}
 .key{margin:6px 4px 2px;font-size:11.5px;color:var(--muted)}
 .asks{max-width:820px;display:flex;flex-direction:column;gap:8px;margin:0;padding:0;list-style:none}.asks li{padding:10px 14px;border:1px solid var(--other);border-left-width:4px;border-radius:10px;background:var(--paper);font-size:13.5px;line-height:1.4}
-.asks b{display:block}.asks span{color:var(--page-ink2)}
+.asks b{display:block}.asks span{color:var(--page-ink2)}.asks.done{margin-bottom:8px}.asks.done li,.dq.done{border-color:var(--you)}.dq.done>b{color:var(--you)}
+.choice .pt{display:flex;flex-direction:column;gap:2px}.choice .sub{font-size:11.5px;color:var(--muted);line-height:1.35}
 .row.quick{cursor:default}.quick .rt b{font-weight:500}.onb .row{min-height:44px}.onb .facts{margin-bottom:0}
 .bhead .gy{font-size:13px}.brow.pre .bt{min-width:22px}
 nav.top .theme{margin-left:auto}
@@ -536,6 +573,7 @@ Earth’s past, its knocks and its leads are real. Clue odds, compute shares and
 <section class="intro"><h2>The first 15 minutes</h2><p>From Begin. {DEAD} of {PLAYED} half-minutes had nothing new for the player.</p></section>
 {''.join(BEATS)}
 <section id="asks" class="intro"><h2>Questions this mock raises</h2>
+<ol class="asks done">{''.join(f'<li><b>Settled: {q}</b><span>{why}</span></li>' for q, why in SETTLED)}</ol>
 <ol class="asks">{''.join(f'<li><b>{i + 1}. {q}</b><span>{why}</span></li>' for i, (q, why) in enumerate(ASKS))}</ol></section>'''
 out = page('Holos v2 · Earth’s first 15 minutes', body)
 (here / 'index.html').write_text(out)

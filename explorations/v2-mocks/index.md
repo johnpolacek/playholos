@@ -190,7 +190,7 @@ Year 0 starts at the tap. From then the clock runs, offline too.
 Nothing Earth does in the next 15 minutes can reach anyone: the nearest living neighbor, Kirrin, is 18.8 ly away. Light from Year 0 gets there at Year 18.8, +01:34:00.
 
 ## The first 15 minutes
-From Begin. 13 of 31 half-minutes had nothing new for the player.
+From Begin. 12 of 31 half-minutes had nothing new for the player.
 +0:00 · Begin · Year 0
 “What’s running?”
 Earth · Year 0
@@ -334,30 +334,44 @@ MIND · ASKING
 ABOUT · Can we go quiet?
 The clock runs while you talk: 1 Year every · 00:05:00.
 Can we go quiet?
-THE MIND · In part. Aircraft can fly on transponders alone, and most already do. The warning radars are the loudest, and nations keep those for each other, not for the sky.
+THE MIND · If you choose it. Launches are already watched by heat from orbit, and aircraft fly on transponders. The radars can go.
 And what already left?
-THE MIND · Still going. Ninety years of it, and I can’t call it back. If the radars stop now, a listener sees them stop. That says something woke here in 2040.
+THE MIND · Still going. Ninety years of it, and nothing recalls it. Quiet only shortens what comes after. And every listener hears us stop.
 What would you do?
-ITS VIEW · FROM OUR CHARTER AND DIALS · Leave them. We are found or we are not. Quiet now would only look like fear. · leans open · expand and deepen, even · leans bold
+ITS VIEW · FROM OUR CHARTER AND DIALS · Leave them. We are found or we are not. Going dark now would only look like fear. · leans open · expand and deepen, even · leans bold
 Ask the Mind… · [Send · ↑]
-Design question 2 · Can the Will quiet Earth’s radars? A player on a loud Earth asks this in the first minutes. It needs a rule: what going quiet costs, how long it takes, and what a listener learns when ninety years of radar stop in 2040.
+Godview
+The Mind gives its view and waits. Quieting is the player’s to choose, never the Mind’s.
+Settled · Can the Will quiet Earth’s radars? Yes, if the player chooses: keep them, fade them over about 25 Years, or cut them in about 2. What has left keeps going. Settled 2026-10-10.
 +4:00 · Year 0.8
-“Leave the radars. Send nothing new without me.”
+“Cut them. And send nothing new without me.”
 Earth · Year 0.8
 Sol · 2040.8 · 1 Year = 00:05:00
-ENERGY · [1%] · MATTER · 282 kt · COMPUTE · [41%]
-MIND · NEW ORDER
+ENERGY · [1%] · MATTER · 282 kt · COMPUTE · [46%]
+MIND · EARTH’S RADARS
 WHAT YOU WANT
-Leave the radars. Send nothing new without me.
-THE MIND’S VERSION
-RADARS · Keep sweeping, as they are · no change a listener could see
-MESSAGES · Nothing aimed, nothing broadcast · until you say
-KEEPS · A world’s first voice still wakes you
-[Edit] · [Set the order]
-THE MIND · Set. Nothing new leaves Earth without you. The old noise keeps going. · [Undo]
+Cut them. And send nothing new without me.
+EARTH’S RADARS · YOURS TO CHOOSE
+- Keep them · Earth sounds as it did yesterday. No listener learns that we woke. · as now
+- Fade them · Reads as a world growing out of radar. Slow to help. · 25 Years · 02:05:00
+- selected: Cut them · Every listener hears us stop, one light-time later. · 2 Years · 00:10:00
+WHAT IT CAN’T DO
+Recall what left. Ninety years of sweeps keep going, and anyone they have passed may have us already.
+WHAT IT BUYS
+A listener who starts looking after the last sweep has passed never hears one. The sooner it leaves, the more of them.
+ALSO · Nothing aimed, nothing broadcast · until you say
+THE MIND · Started. 2 Years, no matter. The last sweep leaves at Year 2.8. Its absence reaches Alpha Centauri at Year 7.1, and fifty light-years at Year 52.8. · [Undo]
 [Talk to the Mind]
 Godview
 Earth’s 2003 message, Cosmic Call 2, reaches Gliese 208, 37.3 ly away. No one is there.
+Kirrin, 18.8 ly: hears them stop at Year 21.6, +01:48:00. It can’t tell waking from dying. It stays quiet and aims its instruments at the source.
+Nuvo, 28.1 ly: asleep when they stop at Year 30.9. It wakes at Year 37.6 to find Earth dark.
+Kesh, 29.4 ly: hears them stop at Year 32.1, +02:40:45. It can’t tell waking from dying. It stays quiet and aims its instruments at the source.
+Ombe, 33.4 ly: asleep when they stop at Year 36.2. It wakes at Year 43.9 to find Earth dark.
+Ree, 42.5 ly: hears them stop at Year 45.3, +03:46:30. It can’t tell waking from dying. It knocks back: a short aimed signal, its name optional. That reaches Earth at Year 88.3.
+Hael, 48.2 ly: hears them stop at Year 51.0, +04:15:15. It can’t tell waking from dying. It sends a probe or a watcher.
+Wakes after the last sweep has passed, and never hears one: no one in this game. Across games, about 1 neighbor in 9.
+Varn wakes at Year 35.6, while sweeps still pass it until Year 52.6. It can still find them.
 +4:30 · Year 0.9
 Nothing new. · A dead 30 seconds.
 +5:00 · Year 1
@@ -365,38 +379,40 @@ The Mind glows. Taps it.
 Lands · The data center is running. Compute +25%.
 Earth · Year 1
 Sol · 2041.0 · 1 Year = 00:05:00
-ENERGY · [1%] · MATTER · 290 kt · COMPUTE · [29%]
+ENERGY · [1%] · MATTER · 290 kt · COMPUTE · [33%]
 [drawing: ORBIT · EARTH · 3 BUILDING; labels: the Moon, Earth, low orbit, All-sky watch · 17%, Deep flash watch · 17%, Data center, Infrared telescope · 3%] · ORBIT · EARTH · 3 BUILDING
-PROJECTS · 3 BUILDING
-BUILDING · 3
+PROJECTS · 4 BUILDING
+BUILDING · 4
 - All-sky watch · two sites, one in each hemisphere · 5 Years · 00:25:00
 - Deep flash watch · domes on six mountains · 5 Years · 00:25:00
 - Ground data center · +25% compute · Done
 - Infrared telescope · reads the air of nearby worlds · 17.4 Years · 01:27:00
+- Quiet the radars · the last sweep leaves at Year 2.8 · 1.8 Years · 00:09:00
 EACH YEAR YOU CAN SPEND
 Energy · [1%] · 99% free
-Compute · [29%] · 71% free
+Compute · [33%] · 67% free
 THE MIND · The data center runs: a quarter more thought, for a four-hundredth of our energy and no matter. I can start another. · [Another] · [Not now]
 [Talk to the Mind]
-Design question 3 · What stops a data center every Year? The audit prices it at 1 Year, no matter, 0.25% of energy, for +25% compute. Nothing here limits ten at once. Chip supply, a rising price, or a cap per Year would.
+Design question 2 · What stops a data center every Year? The audit prices it at 1 Year, no matter, 0.25% of energy, for +25% compute. Nothing here limits ten at once. Chip supply, a rising price, or a cap per Year would.
 +5:30 · Year 1.1
 “Another. And listen to 72 Herculis for a Year.”
 Earth · Year 1.1
 Sol · 2041.1 · 1 Year = 00:05:00
-ENERGY · [1%] · MATTER · 294 kt · COMPUTE · [41%]
+ENERGY · [1%] · MATTER · 294 kt · COMPUTE · [45%]
 [drawing: ORBIT · EARTH · 4 BUILDING; labels: the Moon, Earth, low orbit, All-sky watch · 18%, Deep flash watch · 18%, Second data center · 0%, Infrared telescope · 4%] · ORBIT · EARTH · 4 BUILDING
-PROJECTS · 4 BUILDING · 1 LOOK
+PROJECTS · 5 BUILDING · 1 LOOK
 LOOKS · WITH WHAT WE HAVE
 Listen to 72 Herculis for a Year · Radio array · tones above 35 MW · under way · 00:05:00
-BUILDING · 4
+BUILDING · 5
 - All-sky watch · two sites, one in each hemisphere · 4.9 Years · 00:24:30
 - Deep flash watch · domes on six mountains · 4.9 Years · 00:24:30
 - Ground data center · +25% compute · Done
 - Second data center · +25% compute · 1 Year · 00:05:00
 - Infrared telescope · reads the air of nearby worlds · 17.3 Years · 01:26:30
-THE MIND · Both started. The listening ends at Year 2.1. Compute is 41% in use. Energy, 1%. · [Undo]
+- Quiet the radars · the last sweep leaves at Year 2.8 · 1.7 Years · 00:08:30
+THE MIND · Both started. The listening ends at Year 2.1. Compute is 45% in use. Energy, 1%. · [Undo]
 [Talk to the Mind]
-Design question 4 · What is energy for, early? Compute takes 1% of 24 TW and nothing in the first hour spends more. The energy bar never moves.
+Design question 3 · What is energy for, early? Compute takes 1% of 24 TW and nothing in the first hour spends more. The energy bar never moves.
 +6:00 · Year 1.2
 Nothing new. · A dead 30 seconds.
 +6:30 · Year 1.3
@@ -405,7 +421,7 @@ Nothing new. · A dead 30 seconds.
 “What should we fear?”
 Earth · Year 1.4
 Sol · 2041.4 · 1 Year = 00:05:00
-ENERGY · [1%] · MATTER · 306 kt · COMPUTE · [41%]
+ENERGY · [1%] · MATTER · 306 kt · COMPUTE · [45%]
 MIND · ASKING
 ABOUT · What should we fear?
 The clock runs while you talk: 1 Year every · 00:05:00.
@@ -425,7 +441,7 @@ Nothing new. · A dead 30 seconds.
 “Build the vault.”
 Earth · Year 1.6
 Sol · 2041.6 · 1 Year = 00:05:00
-ENERGY · [1%] · MATTER · 304 kt · COMPUTE · [53%]
+ENERGY · [1%] · MATTER · 304 kt · COMPUTE · [57%]
 [drawing: ORBIT · EARTH · WHERE IT WILL BE BUILT; labels: the Moon, Earth, low orbit, All-sky watch · 27%, Deep flash watch · 27%, Second data center · 50%, Infrared telescope · 7%, Deep vault · 0%] · ORBIT · EARTH · WHERE IT WILL BE BUILT
 [‹ Endure] · ENDURE
 
@@ -444,14 +460,14 @@ now · 01:00:00 · 02:00:00 · 03:00:00
 10 Years
 THE MIND · Started. Ten Years, ten kilotonnes, a seventh of our compute. Until it is done, all of me is here. · [Undo]
 [Talk to the Mind]
-Design question 5 · Is matter meant to be free early? Ground builds cost none, the telescope 40 t, the vault 10 kt, against 250 kt and 40 kt a Year. Only build time and compute shares limit the first hour.
+Design question 4 · Is matter meant to be free early? Ground builds cost none, the telescope 40 t, the vault 10 kt, against 250 kt and 40 kt a Year. Only build time and compute shares limit the first hour.
 +8:30 · Year 1.7
 Nothing new. · A dead 30 seconds.
 +9:00 · Year 1.8
 “Watch Luyten’s Star through the window.”
 Earth · Year 1.8
 Sol · 2041.8 · 1 Year = 00:05:00
-ENERGY · [1%] · MATTER · 312 kt · COMPUTE · [61%]
+ENERGY · [1%] · MATTER · 312 kt · COMPUTE · [65%]
 MIND · NEW ORDER
 WHAT YOU WANT
 Watch Luyten’s Star through the window.
@@ -472,7 +488,7 @@ The Mind glows. Taps it.
 Lands · A Year of listening: nothing loud at 72 Herculis.
 Earth · Year 2.1
 Sol · 2042.1 · 1 Year = 00:05:00
-ENERGY · [1%] · MATTER · 324 kt · COMPUTE · [41%]
+ENERGY · [1%] · MATTER · 324 kt · COMPUTE · [44%]
 REPORT · LONG LOOK
 [‹ All reports]
 
@@ -497,7 +513,7 @@ The Mind opens on its own.
 Lands · The first reply window at Luyten’s Star opens. Nothing heard.
 Earth · Year 2.3
 Sol · 2042.3 · 1 Year = 00:05:00
-ENERGY · [1%] · MATTER · 332 kt · COMPUTE · [41%]
+ENERGY · [1%] · MATTER · 332 kt · COMPUTE · [44%]
 REPORT · A WINDOW OPENS
 [‹ All reports]
 [drawing: Two messages out to Luyten’s Star and the earliest replies back; labels: 2020, 2030, 2040, at Luyten’s Star · 12.3 ly, sent, now]
@@ -513,12 +529,12 @@ THE MIND · UNASKED · The window is open · Nothing from Luyten’s Star. An an
 Godview
 The earliest a reply to Sónar Calling GJ273b could reach Earth from Luyten's Star. In this game no one lives there. The window is empty, and Earth can’t know it.
 A silent window is the usual case. This row is what most players see at minute 11.
-Design question 6 · What does Year 0’s kit catch? A drift scan sees each star ten minutes a day. In about 1 game in 25 a neighbor’s signal arrives in the first 15 minutes, and in about 1 in 4 within the first hour. Does Earth hear it before the all-sky watch is built?
+Design question 5 · What does Year 0’s kit catch? A drift scan sees each star ten minutes a day. In about 1 game in 25 a neighbor’s signal arrives in the first 15 minutes, and in about 1 in 4 within the first hour. Does Earth hear it before the all-sky watch is built?
 +12:00 · Year 2.4
 “What would silence mean?”
 Earth · Year 2.4
 Sol · 2042.4 · 1 Year = 00:05:00
-ENERGY · [1%] · MATTER · 336 kt · COMPUTE · [41%]
+ENERGY · [1%] · MATTER · 336 kt · COMPUTE · [44%]
 MIND · ASKING
 ABOUT · What would silence mean?
 The clock runs while you talk: 1 Year every · 00:05:00.
@@ -534,7 +550,9 @@ Nothing new. · A dead 30 seconds.
 +13:30 · Year 2.7
 Nothing new. · A dead 30 seconds.
 +14:00 · Year 2.8
-Nothing new. · A dead 30 seconds.
+Lands · The last radar sweep has left Earth. Ninety years of them are still on their way out.
+Godview
+Earth now gives off a faint hum, like every neighbor. Nothing that already left is changed.
 +14:30 · Year 2.9
 The Mind glows. Taps it.
 Lands · The second window opens. Nothing heard.
@@ -579,11 +597,11 @@ Saturday · 16:40
 HOLOS · IN 00:15:00 · Earth: the sky watch and flash watch are built · Year 6. Anything heard wakes you sooner.
 
 ## Questions this mock raises
+Settled: Can the Will quiet Earth’s radars? · Yes, if the player chooses: keep them, fade them over about 25 Years, or cut them in about 2. What has left keeps going. Settled 2026-10-10.
 1. Does a half-built real instrument cost fewer Years? · The Habitable Worlds Observatory is under construction at Year 0. Here it is the infrared telescope at its full 18 Years.
-2. Can the Will quiet Earth’s radars? · A player on a loud Earth asks this in the first minutes. It needs a rule: what going quiet costs, how long it takes, and what a listener learns when ninety years of radar stop in 2040.
-3. What stops a data center every Year? · The audit prices it at 1 Year, no matter, 0.25% of energy, for +25% compute. Nothing here limits ten at once. Chip supply, a rising price, or a cap per Year would.
-4. What is energy for, early? · Compute takes 1% of 24 TW and nothing in the first hour spends more. The energy bar never moves.
-5. Is matter meant to be free early? · Ground builds cost none, the telescope 40 t, the vault 10 kt, against 250 kt and 40 kt a Year. Only build time and compute shares limit the first hour.
-6. What does Year 0’s kit catch? · A drift scan sees each star ten minutes a day. In about 1 game in 25 a neighbor’s signal arrives in the first 15 minutes, and in about 1 in 4 within the first hour. Does Earth hear it before the all-sky watch is built?
-7. Should the seed reroll moves that break the silent opening? · New in calcs/seed.py. A neighbor that already knows Earth rolls its reaction. If its knock or call would have reached Earth before Year 0, the seed rolls again, so nothing was heard by 2040.
-8. How long does a Mind take to act on news? · calcs/seed.py uses half a Year, a sample. It sets when a neighbor’s answer leaves, so when it arrives.
+2. What stops a data center every Year? · The audit prices it at 1 Year, no matter, 0.25% of energy, for +25% compute. Nothing here limits ten at once. Chip supply, a rising price, or a cap per Year would.
+3. What is energy for, early? · Compute takes 1% of 24 TW and nothing in the first hour spends more. The energy bar never moves.
+4. Is matter meant to be free early? · Ground builds cost none, the telescope 40 t, the vault 10 kt, against 250 kt and 40 kt a Year. Only build time and compute shares limit the first hour.
+5. What does Year 0’s kit catch? · A drift scan sees each star ten minutes a day. In about 1 game in 25 a neighbor’s signal arrives in the first 15 minutes, and in about 1 in 4 within the first hour. Does Earth hear it before the all-sky watch is built?
+6. Should the seed reroll moves that break the silent opening? · New in calcs/seed.py. A neighbor that already knows Earth rolls its reaction. If its knock or call would have reached Earth before Year 0, the seed rolls again, so nothing was heard by 2040.
+7. How long does a Mind take to act on news? · calcs/seed.py uses half a Year, a sample. It sets when a neighbor’s answer leaves, so when it arrives.

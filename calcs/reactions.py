@@ -23,6 +23,7 @@ NEWS = {
     'strike_seen': 'It sees a strike on someone else.',
     'struck': 'It is struck.',
     'tipoff': 'A third party tells it about someone.',
+    'quiet': 'A world it was listening to goes quiet: its radars stop within a few years.',
 }
 MOVES = {
     'watch': 'stays quiet and aims its instruments at the source',
@@ -53,6 +54,7 @@ BASE = {
         'strike_seen': B(watch=40, hide=30, guard=25, warn=5),
         'struck': B(guard=40, strike=30, hide=20, answer=10),
         'tipoff': B(watch=60, guard=15, hide=10, probe=10, knock=5),
+        'quiet': B(watch=65, probe=15, guard=10, hide=5, knock=5),
     },
     'contacter': {
         'hum': B(knock=35, watch=30, probe=15, call=10, gift=10),
@@ -65,6 +67,7 @@ BASE = {
         'strike_seen': B(warn=40, watch=25, guard=20, probe=10, hide=5),
         'struck': B(guard=40, strike=25, answer=20, warn=15),
         'tipoff': B(watch=30, warn=25, knock=20, probe=15, gift=10),
+        'quiet': B(knock=35, probe=30, watch=25, gift=10),          # are you still there?
     },
     'inward': {
         'hum': B(ignore=60, watch=35, knock=5),
@@ -77,6 +80,7 @@ BASE = {
         'strike_seen': B(watch=40, guard=30, ignore=20, hide=10),
         'struck': B(guard=50, strike=25, hide=20, answer=5),
         'tipoff': B(ignore=60, watch=35, guard=5),
+        'quiet': B(ignore=65, watch=30, hide=5),
     },
     'hunter': {
         'hum': B(watch=50, strike=35, hide=10, probe=5),
@@ -89,6 +93,7 @@ BASE = {
         'strike_seen': B(watch=50, hide=30, guard=20),
         'struck': B(strike=50, guard=30, hide=20),
         'tipoff': B(watch=45, strike=30, probe=15, hide=10),
+        'quiet': B(watch=45, strike=25, probe=20, hide=10),         # it woke, or it died: either way, look
     },
 }
 
@@ -147,6 +152,7 @@ GATES = [
     'Anyone may strike back when struck, if it has the weapons. Until then a rolled strike queues the weapon projects.',
     'A neighbor reacts to a knock only if it caught the knock. See [Stars Earth knocked on](HOLOS_GAME_CONCEPT.md#stars-earth-knocked-on).',
     'Dead neighbors have no table. Pelle\'s Testament, Anwe\'s air and Mirr\'s ruins are scripted.',
+    'A neighbor reacts to a world going quiet only if it was listening to that world. It can\'t tell waking from dying. A fade over decades is not news.',
 ]
 
 def table(name):
