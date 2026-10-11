@@ -4,7 +4,7 @@
 
 ## Earth’s first 15 minutes
 One player, one phone. Each row is one moment: what the player says to the Mind, what lands, and the screen. Beside it, godview: what is true in this game that the player can’t see. The first rows are before Year 0, with no clock. Then a row every 30 seconds, 0.1 Year, from the tap on Begin to minute 15.
-The game is one real draw. The neighbors, their stars, their waking years and what each knows of Earth come from the seed, and every placement passes the checker. Earth’s past, its knocks and its leads are real. Clue odds, compute shares and the Mind’s lines are samples. Amber boxes are questions this mock raises.
+The game is one real draw. The neighbors, their stars, their waking years and what each knows of Earth come from the seed, and every placement passes the checker. Earth’s past, its knocks and its leads are real. Clue odds, compute shares and the Mind’s lines are samples. Amber boxes are questions this mock raises. Blue boxes are ones since settled.
 Seed · 10 · one draw of calcs/seed.py
 Taiwan · Neither · invasion 26% · blockade 20% · neither 54%
 Nuclear use · No · 24%
@@ -12,7 +12,7 @@ People on Mars · No · 15%
 Fusion on the grid · Yes, 2037 · a bit under even
 Compute at Year 0 · 100% · 10²⁵ operations a second
 Dials · leans open, expand and deepen, even, leans bold · real history, moved by the branches
-Neighbors · 9 · 5 heard Earth · first arrival Year 81.5
+Neighbors · 9 · 5 heard Earth · first arrival Year 81.0
 Seeded find · Gliese 611 A · a natural world
 
 ## Godview · who is out there
@@ -23,10 +23,10 @@ Varn · inward · Guniibuu · K star · 19.4 ly · 01:37:06 · awake 21 Years ·
 Kesh · watcher · Gliese 216 B · K star · 29.4 ly · 02:26:45 · wakes Year 21.8 · +01:49:04 · has not heard Earth
 Anwe · watcher · 61 Ursae Majoris · G star · 31.2 ly · 02:36:09 · died 1986 · dead before Year 0
 Nuvo · contacter · Gliese 86 · K star · 35.1 ly · 02:55:30 · wakes Year 58.4 · +04:51:55 · has not heard Earth
-Hael · contacter · Lambda Serpentis · G star · 38.9 ly · 03:14:21 · awake 46 Years · heard Earth’s radars from 1989, and mapped its day and orbit · knocks back: a short aimed signal, its name optional · Its knock reached Earth in 2033 and 2034. No one was listening. If still unanswered at Year 34.3, it stays quiet and aims its instruments at the source.
-Ree · contacter · Zeta Trianguli Australis · F star · 39.4 ly · 03:16:48 · awake 48 Years · heard Earth’s radars from 1989, and mapped its day and orbit · knocks back: a short aimed signal, its name optional · Its knock reached Earth in 2031 and 2032. No one was listening. If still unanswered at Year 32.8, it stays quiet and aims its instruments at the source.
+Hael · contacter · Lambda Serpentis · G star · 38.9 ly · 03:14:21 · awake 46 Years · heard Earth’s radars from 1989, and mapped its day and orbit · knocks back: a short aimed signal, its name optional · Its knock reached Earth in 2033 and 2034. No one was listening. If still unanswered at Year 34.0, it stays quiet and aims its instruments at the source.
+Ree · contacter · Zeta Trianguli Australis · F star · 39.4 ly · 03:16:48 · awake 48 Years · heard Earth’s radars from 1989, and mapped its day and orbit · knocks back: a short aimed signal, its name optional · Its knock reached Earth in 2031 and 2032. No one was listening. If still unanswered at Year 32.6, it stays quiet and aims its instruments at the source.
 Kirrin · watcher · strange · Gliese 775 · K star · 41.5 ly · 03:27:21 · wakes Year 70.5 · +05:52:43 · has not heard Earth
-Ombe · contacter · Gliese 843 · M star · 42.1 ly · 03:30:36 · awake 66 Years · heard Earth’s radars from 1992, and mapped its day and orbit · knocks back: a short aimed signal, its name optional · Its knock reached Earth in 2035 and 2036. No one was listening. If still unanswered at Year 38.9, it knocks back: a short aimed signal, its name optional. Its answer to Earth’s radars, tried again: sent Year 39.4, reaches Earth Year 81.5, +06:47:24. Year 0’s sky watch would miss it. The all-sky watch catches it.
+Ombe · contacter · Gliese 843 · M star · 42.1 ly · 03:30:36 · awake 66 Years · heard Earth’s radars from 1992, and mapped its day and orbit · knocks back: a short aimed signal, its name optional · Its knock reached Earth in 2034 and 2035. No one was listening. If still unanswered at Year 38.6, it knocks back: a short aimed signal, its name optional. Its answer to Earth’s radars, tried again: sent Year 38.9, reaches Earth Year 81.0, +06:44:54. Year 0’s sky watch would miss it. The all-sky watch catches it.
 [drawing: Every neighbor in this game, seen from above the galaxy’s plane; labels: 10 ly · 00:50:00, 20 ly · 01:40:00, 30 ly · 02:30:00, 40 ly · 03:20:00, 50 ly · 04:10:00, Earth, Ulan, Tau Ceti · 11.9 ly, Varn, Guniibuu · 19.4 ly, Kesh, Gliese 216 B · 29.4 ly, Anwe, 61 Ursae Majoris · 31.2 ly, Nuvo, Gliese 86 · 35.1 ly, Hael, Lambda Serpentis · 38.9 ly, Ree, Zeta Trianguli Australis · 39.4 ly, Kirrin, Gliese 775 · 41.5 ly, Ombe, Gliese 843 · 42.1 ly, 82 Eridani, Fomalhaut, Gliese 611 A, Luyten’s Star]
 Filled: awake at Year 0. Open: wakes later. Cross: dead. Blue ring: has heard Earth. Amber: a hunter. Diamonds: Earth’s leads.
 
@@ -93,7 +93,7 @@ Godview
 Heard Earth’s radars: Ulan, Varn, Hael, Ree, Ombe.
 At the stars Earth knocked on: no one, in this game.
 The Mind lists where the noise went, never who heard. That holds here.
-Before Year 0, 6 knocks reached Earth unheard: Hael’s in 2033 and 2034, Ree’s in 2031 and 2032, Ombe’s in 2035 and 2036. Nothing recorded them, so no archive holds them.
+Before Year 0, 6 knocks reached Earth unheard: Hael’s in 2033 and 2034, Ree’s in 2031 and 2032, Ombe’s in 2034 and 2035. Nothing recorded them, so no archive holds them.
 Settled · What happened to knocks that arrived before Year 0? They happened, and Earth missed them. Only a knock Earth would have caught is rolled again. The sender, unanswered, may try again. Nothing was recorded, so no archive holds them. Settled 2026-10-10.
 5 · What you inherit
 YEAR 0 · WHAT EARTH ALREADY HAS
@@ -372,10 +372,11 @@ Earth’s 2003 message, Cosmic Call 2, reaches Gliese 208, 37.3 ly away. No one 
 Ulan, 11.9 ly: hears them stop at Year 14.7, +01:13:33. It can’t tell waking from dying. It nothing new: keeps its plan.
 Varn, 19.4 ly: hears them stop at Year 22.2, +01:51:06. It can’t tell waking from dying. It nothing new: keeps its plan.
 Hael, 38.9 ly: hears them stop at Year 41.7, +03:28:21. It can’t tell waking from dying. It sends a probe or a watcher.
-Ree, 39.4 ly: hears them stop at Year 42.2, +03:30:48. It can’t tell waking from dying. It knocks back: a short aimed signal, its name optional. That reaches Earth at Year 82.0.
+Ree, 39.4 ly: hears them stop at Year 42.2, +03:30:48. It can’t tell waking from dying. It knocks back: a short aimed signal, its name optional. It takes a quarter of a Year to act, so that reaches Earth at Year 81.8.
 Ombe, 42.1 ly: hears them stop at Year 44.9, +03:44:36. It can’t tell waking from dying. It sends a probe or a watcher.
 Wakes after the last sweep has passed, and never hears one: Nuvo, Kirrin. Across games, about 1 neighbor in 9.
 Kesh wakes at Year 21.8, while sweeps still pass it until Year 32.1. It can still find them.
+Settled · How long does a Mind take to act on news? Its Cautious or Bold dial sets it: a tenth of a Year if strongly Bold, a quarter if it leans Bold, a Year if it leans Cautious, two if strongly Cautious. Settled 2026-10-11.
 +4:30 · Year 0.9
 Nothing new. · A dead 30 seconds.
 +5:00 · Year 1
@@ -639,4 +640,5 @@ Settled: Is matter meant to be free early? · No. Matter is only what is spare i
 Settled: What does Year 0’s kit catch? · Physics decides: the star’s place in the sky, the hours looked, and loudness. Year 0’s sky watch catches about 1 early signal in 4. A sender that hears nothing tries again, and the player can spend more on ears. Settled 2026-10-10.
 Settled: What happened to knocks that arrived before Year 0? · They happened, and Earth missed them. Only a knock Earth would have caught is rolled again. The sender, unanswered, may try again. Nothing was recorded, so no archive holds them. Settled 2026-10-10.
 Settled: Is all of Earth’s lift spare? · No. About 15 kt a Year is spare of 40. The rest keeps Earth’s craft flying. The player can spend to raise it: a launch complex adds 40 kt a Year. Settled 2026-10-10.
-1. How long does a Mind take to act on news? · calcs/seed.py uses half a Year, a sample. It sets when a neighbor’s answer leaves, so when it arrives.
+Settled: How long does a Mind take to act on news? · Its Cautious or Bold dial sets it: a tenth of a Year if strongly Bold, a quarter if it leans Bold, a Year if it leans Cautious, two if strongly Cautious. Settled 2026-10-11.
+None are open.

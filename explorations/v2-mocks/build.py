@@ -19,7 +19,8 @@ SETTLED = [('Does a half-built real instrument cost fewer Years?', 'It costs wha
            ('Is matter meant to be free early?', 'No. Matter is only what is spare in orbit: about 20 kt at Year 0. Working satellites don’t count. Settled 2026-10-10.'),
            ('What does Year 0’s kit catch?', 'Physics decides: the star’s place in the sky, the hours looked, and loudness. Year 0’s sky watch catches about 1 early signal in 4. A sender that hears nothing tries again, and the player can spend more on ears. Settled 2026-10-10.'),
            ('What happened to knocks that arrived before Year 0?', 'They happened, and Earth missed them. Only a knock Earth would have caught is rolled again. The sender, unanswered, may try again. Nothing was recorded, so no archive holds them. Settled 2026-10-10.'),
-           ('Is all of Earth’s lift spare?', 'No. About 15 kt a Year is spare of 40. The rest keeps Earth’s craft flying. The player can spend to raise it: a launch complex adds 40 kt a Year. Settled 2026-10-10.')]
+           ('Is all of Earth’s lift spare?', 'No. About 15 kt a Year is spare of 40. The rest keeps Earth’s craft flying. The player can spend to raise it: a launch complex adds 40 kt a Year. Settled 2026-10-10.'),
+           ('How long does a Mind take to act on news?', 'Its Cautious or Bold dial sets it: a tenth of a Year if strongly Bold, a quarter if it leans Bold, a Year if it leans Cautious, two if strongly Cautious. Settled 2026-10-11.')]
 
 # ---------- Godview: who is out there ----------
 MOVE = reactions.MOVES
@@ -350,7 +351,7 @@ def quiet_truths():
         t = reactions.table(p['name'])['quiet']; moves, odds_ = zip(*t)
         move = random.Random(f"{SEED}:{p['name']}:quiet").choices(moves, weights=odds_)[0]
         if move == 'strike': move = 'watch'            # gate: a first strike waits for a soft target and an unseen launch
-        sends = f" That reaches Earth at Year {y + seedmod.THINKS + p['d']:.1f}." if move in seedmod.SENDS else ''
+        sends = f" It takes {reactions.span(p['thinks'])} to act, so that reaches Earth at Year {y + p['thinks'] + p['d']:.1f}." if move in seedmod.SENDS else ''
         out.append(f"{p['name']}, {p['d']:.1f} ly: hears them stop at Year {y:.1f}, +{clock(y)}. It can’t tell waking from dying. It {MOVE[move]}.{sends}")
     late = [p for p in NB if not p['dead'] and not p['heard'] and p['waking'] > Y0]
     spared = [p for p in late if p['waking'] - Y0 > CUT_Y + p['d']]
@@ -459,7 +460,6 @@ PREGAME = [
     pre_row(10, 'The queue, and Begin', P_QUEUE, ['Year 0 starts at the tap. From then the clock runs, offline too.',
                                                  f'Nothing Earth does in the next 15 minutes can reach anyone: the nearest living neighbor, {nearest["name"]}, is {nearest["d"]:.1f} ly away. Light from Year 0 gets there at Year {nearest["d"]:.1f}, +{clock(nearest["d"])}.' if nearest else ''], said='Queue that.'),
 ]
-ask('How long does a Mind take to act on news?', 'calcs/seed.py uses half a Year, a sample. It sets when a neighbor’s answer leaves, so when it arrives.')
 BEATS = [
     beat(0, 'What’s running?', None, talk(running(0), 'The sky watch, the flash watch and a data center, begun. Three looks under way. Fomalhaut answers in thirty seconds.'),
          ['The clock starts. The seed rolled every neighbor’s plan before this. Only Earth’s choices are open.'], label='+0:00 · Begin'),
@@ -479,7 +479,7 @@ BEATS = [
     beat(210, 'Can we go quiet?', None, QUIET_CHAT, ['The Mind gives its view and waits. Quieting is the player’s to choose, never the Mind’s.'], settled=1),
     beat(240, 'Cut them. And send nothing new without me.', None,
          talk(RADAR_CHOICE, f'Started. {YEARS(CUT_YEARS)}, no matter. The last sweep leaves at Year {CUT_Y:g}. Its absence reaches Alpha Centauri at Year {CUT_Y + 4.3:.1f}, and fifty light-years at Year {CUT_Y + 50:.1f}.', ('Undo',)),
-         quiet_truths()),
+         quiet_truths(), settled=8),
     beat(270),
     beat(300, '· The Mind glows. Taps it.', 'The data center is running. Compute +50%.',
          talk(DC_DONE_SCREEN, 'The data center runs: half again as much thought, for half a percent more of our energy. The fabs fill one a Year. I can keep them coming.', ('Keep them coming', 'Just one more', 'Not now'), 'glow'), settled=2),
@@ -586,7 +586,7 @@ body = f'''<section id="about" class="intro"><h2>Earth’s first 15 minutes</h2>
 <p>One player, one phone. Each row is one moment: what the player says to the Mind, what lands, and the screen. Beside it, godview: what is true in this game that the player can’t see.
 The first rows are before Year 0, with no clock. Then a row every 30 seconds, 0.1 Year, from the tap on Begin to minute 15.</p>
 <p>The game is one real draw. The neighbors, their stars, their waking years and what each knows of Earth come from the seed, and every placement passes the checker.
-Earth’s past, its knocks and its leads are real. Clue odds, compute shares and the Mind’s lines are samples. Amber boxes are questions this mock raises.</p>
+Earth’s past, its knocks and its leads are real. Clue odds, compute shares and the Mind’s lines are samples. Amber boxes are questions this mock raises. Blue boxes are ones since settled.</p>
 <div class="seedcard">{SEEDCARD}</div></section>
 <section id="godview" class="intro"><h2>Godview · who is out there</h2>
 <p>The player sees none of this. Light-time is real waiting at 5 minutes a Year.</p>
@@ -597,7 +597,7 @@ Earth’s past, its knocks and its leads are real. Clue odds, compute shares and
 {''.join(BEATS)}
 <section id="asks" class="intro"><h2>Questions this mock raises</h2>
 <ol class="asks done">{''.join(f'<li><b>Settled: {q}</b><span>{why}</span></li>' for q, why in SETTLED)}</ol>
-<ol class="asks">{''.join(f'<li><b>{i + 1}. {q}</b><span>{why}</span></li>' for i, (q, why) in enumerate(ASKS))}</ol></section>'''
+{('<ol class="asks">' + ''.join(f'<li><b>{i + 1}. {q}</b><span>{why}</span></li>' for i, (q, why) in enumerate(ASKS)) + '</ol>') if ASKS else '<p>None are open.</p>'}</section>'''
 out = page('Holos v2 · Earth’s first 15 minutes', body)
 (here / 'index.html').write_text(out)
 print(f'index.html · {len(out) / 1024:.0f} KB · seed {SEED} · {len(NB)} neighbors · {DEAD} dead half-minutes of {PLAYED}')

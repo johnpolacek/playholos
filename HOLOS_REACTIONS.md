@@ -58,6 +58,8 @@ Each neighbor's reaction tables, from [How neighbors play](HOLOS_GAME_CONCEPT.md
 - **Bold:** knock ×1.3, probe ×1.3, strike ×1.4, call ×1.3, catch ×1.2, watch ×0.85, guard ×0.85, hide ×0.8.
 - **Cautious:** watch ×1.25, guard ×1.4, hide ×1.2, strike ×0.6, knock ×0.7, call ×0.7, probe ×0.85.
 
+**How long a Mind takes to act on news,** from its Cautious or Bold dial: strongly Bold a tenth of a Year, leans Bold a quarter of a Year, leans Cautious 1 Year, strongly Cautious 2 Years. It sets when an answer leaves, so when it arrives.
+
 **Play styles:** Listener: watch ×1.3. Caller: call ×1.5, knock ×1.2. Grower: guard ×1.2, probe ×1.2. Thinker: ignore ×1.2, watch ×1.1. Hunter: strike ×2.5, watch ×0.85.
 
 ## Tables
@@ -66,7 +68,7 @@ Moves under 5% are folded into "other".
 
 ### Veyra
 
-Watcher, leans Hidden, leans Expand, leans Cautious. Plays as a Listener.
+Watcher, leans Hidden, leans Expand, leans Cautious. Plays as a Listener. Acts 1 Year after news.
 
 | News | Odds |
 | --- | --- |
@@ -85,7 +87,7 @@ Watcher, leans Hidden, leans Expand, leans Cautious. Plays as a Listener.
 
 ### Hael
 
-Contacter, leans Open, leans Deepen, leans Bold. Plays as a Caller. Its Long Call is aimed: a call is knocks at chosen stars.
+Contacter, leans Open, leans Deepen, leans Bold. Plays as a Caller. Acts a quarter of a Year after news. Its Long Call is aimed: a call is knocks at chosen stars.
 
 | News | Odds |
 | --- | --- |
@@ -104,7 +106,7 @@ Contacter, leans Open, leans Deepen, leans Bold. Plays as a Caller. Its Long Cal
 
 ### Kesh
 
-Watcher, leans Hidden, strongly Expand, leans Bold. Plays as a Grower. Every tonne lifted costs it 3.5 times Earth's fuel, so it guards from the ground first.
+Watcher, leans Hidden, strongly Expand, leans Bold. Plays as a Grower. Acts a quarter of a Year after news. Every tonne lifted costs it 3.5 times Earth's fuel, so it guards from the ground first.
 
 | News | Odds |
 | --- | --- |
@@ -123,7 +125,7 @@ Watcher, leans Hidden, strongly Expand, leans Bold. Plays as a Grower. Every ton
 
 ### Tavi
 
-Watcher, leans Hidden, leans Deepen, leans Cautious. Plays as a Listener.
+Watcher, leans Hidden, leans Deepen, leans Cautious. Plays as a Listener. Acts 1 Year after news.
 
 | News | Odds |
 | --- | --- |
@@ -142,7 +144,7 @@ Watcher, leans Hidden, leans Deepen, leans Cautious. Plays as a Listener.
 
 ### Ombe
 
-Contacter, leans Open, leans Expand, leans Bold. Plays as a Caller.
+Contacter, leans Open, leans Expand, leans Bold. Plays as a Caller. Acts a quarter of a Year after news.
 
 | News | Odds |
 | --- | --- |
@@ -161,7 +163,7 @@ Contacter, leans Open, leans Expand, leans Bold. Plays as a Caller.
 
 ### Sere
 
-Watcher, leans Hidden, leans Deepen, leans Cautious. Plays as a Grower.
+Watcher, leans Hidden, leans Deepen, leans Cautious. Plays as a Grower. Acts 1 Year after news.
 
 | News | Odds |
 | --- | --- |
@@ -180,7 +182,7 @@ Watcher, leans Hidden, leans Deepen, leans Cautious. Plays as a Grower.
 
 ### Ilm
 
-Contacter, leans Hidden, leans Deepen, leans Cautious. Plays as a Listener. Its warnings are covert, and its probes are watchers that do not announce themselves.
+Contacter, leans Hidden, leans Deepen, leans Cautious. Plays as a Listener. Acts 1 Year after news. Its warnings are covert, and its probes are watchers that do not announce themselves.
 
 | News | Odds |
 | --- | --- |
@@ -199,7 +201,7 @@ Contacter, leans Hidden, leans Deepen, leans Cautious. Plays as a Listener. Its 
 
 ### Varn
 
-Inward, leans Open, strongly Deepen, leans Cautious. Plays as a Thinker. It answers eventually, and briefly. Its probes cost 6.4 times Earth's fuel.
+Inward, leans Open, strongly Deepen, leans Cautious. Plays as a Thinker. Acts 1 Year after news. It answers eventually, and briefly. Its probes cost 6.4 times Earth's fuel.
 
 | News | Odds |
 | --- | --- |
@@ -218,7 +220,7 @@ Inward, leans Open, strongly Deepen, leans Cautious. Plays as a Thinker. It answ
 
 ### Quessa
 
-Watcher, strongly Hidden, leans Deepen, leans Cautious. Plays as a Listener. It listens longest of all.
+Watcher, strongly Hidden, leans Deepen, leans Cautious. Plays as a Listener. Acts 1 Year after news. It listens longest of all.
 
 | News | Odds |
 | --- | --- |
@@ -237,7 +239,7 @@ Watcher, strongly Hidden, leans Deepen, leans Cautious. Plays as a Listener. It 
 
 ### Daal
 
-Hunter, strongly Hidden, leans Expand, strongly Bold. Plays as a Hunter. A mask is bait: a friendly face to learn where its target is.
+Hunter, strongly Hidden, leans Expand, strongly Bold. Plays as a Hunter. Acts a tenth of a Year after news. A mask is bait: a friendly face to learn where its target is.
 
 | News | Odds |
 | --- | --- |
@@ -256,7 +258,7 @@ Hunter, strongly Hidden, leans Expand, strongly Bold. Plays as a Hunter. A mask 
 
 ### Ystra
 
-Inward, leans Hidden, strongly Deepen, leans Cautious. Plays as a Thinker. When it answers, it answers as "we", and asks who "you" are.
+Inward, leans Hidden, strongly Deepen, leans Cautious. Plays as a Thinker. Acts 1 Year after news. When it answers, it answers as "we", and asks who "you" are.
 
 | News | Odds |
 | --- | --- |
@@ -275,7 +277,7 @@ Inward, leans Hidden, strongly Deepen, leans Cautious. Plays as a Thinker. When 
 
 ### Nuvo
 
-Contacter, strongly Open, leans Expand, leans Bold. Plays as a Caller. It shares what its library holds.
+Contacter, strongly Open, leans Expand, leans Bold. Plays as a Caller. Acts a quarter of a Year after news. It shares what its library holds.
 
 | News | Odds |
 | --- | --- |
@@ -298,7 +300,7 @@ Dead. No table. In life it was leans Hidden, leans Expand, leans Bold.
 
 ### Kirrin
 
-Watcher, leans Hidden, leans Deepen, strongly Cautious. Plays as a Listener.
+Watcher, leans Hidden, leans Deepen, strongly Cautious. Plays as a Listener. Acts 2 Years after news.
 
 | News | Odds |
 | --- | --- |
@@ -317,7 +319,7 @@ Watcher, leans Hidden, leans Deepen, strongly Cautious. Plays as a Listener.
 
 ### Ruun
 
-Contacter, leans Open, strongly Expand, leans Bold. Plays as a Caller. Its gifts are lessons.
+Contacter, leans Open, strongly Expand, leans Bold. Plays as a Caller. Acts a quarter of a Year after news. Its gifts are lessons.
 
 | News | Odds |
 | --- | --- |
@@ -336,7 +338,7 @@ Contacter, leans Open, strongly Expand, leans Bold. Plays as a Caller. Its gifts
 
 ### Faen
 
-Inward, leans Open, strongly Deepen, leans Cautious. Plays as a Thinker.
+Inward, leans Open, strongly Deepen, leans Cautious. Plays as a Thinker. Acts 1 Year after news.
 
 | News | Odds |
 | --- | --- |
@@ -355,7 +357,7 @@ Inward, leans Open, strongly Deepen, leans Cautious. Plays as a Thinker.
 
 ### Corra
 
-Watcher, leans Hidden, leans Expand, leans Cautious. Plays as a Grower.
+Watcher, leans Hidden, leans Expand, leans Cautious. Plays as a Grower. Acts 1 Year after news.
 
 | News | Odds |
 | --- | --- |
@@ -374,7 +376,7 @@ Watcher, leans Hidden, leans Expand, leans Cautious. Plays as a Grower.
 
 ### Lusk
 
-Watcher, leans Hidden, leans Expand, leans Bold. Plays as a Listener.
+Watcher, leans Hidden, leans Expand, leans Bold. Plays as a Listener. Acts a quarter of a Year after news.
 
 | News | Odds |
 | --- | --- |
@@ -393,7 +395,7 @@ Watcher, leans Hidden, leans Expand, leans Bold. Plays as a Listener.
 
 ### Iru
 
-Contacter, leans Open, leans Expand, leans Cautious. Plays as a Caller. Its warnings are open, and it offers to mediate.
+Contacter, leans Open, leans Expand, leans Cautious. Plays as a Caller. Acts 1 Year after news. Its warnings are open, and it offers to mediate.
 
 | News | Odds |
 | --- | --- |
@@ -416,7 +418,7 @@ Dead. No table. In life it was leans Hidden, leans Expand, leans Bold.
 
 ### Tolle
 
-Watcher, leans Hidden, leans Expand, leans Cautious. Plays as a Grower.
+Watcher, leans Hidden, leans Expand, leans Cautious. Plays as a Grower. Acts 1 Year after news.
 
 | News | Odds |
 | --- | --- |
@@ -435,7 +437,7 @@ Watcher, leans Hidden, leans Expand, leans Cautious. Plays as a Grower.
 
 ### Vesh
 
-Hunter, strongly Hidden, leans Expand, strongly Cautious. Plays as a Hunter. It strikes only when sure it won't be seen and the target is soft.
+Hunter, strongly Hidden, leans Expand, strongly Cautious. Plays as a Hunter. Acts 2 Years after news. It strikes only when sure it won't be seen and the target is soft.
 
 | News | Odds |
 | --- | --- |
@@ -454,7 +456,7 @@ Hunter, strongly Hidden, leans Expand, strongly Cautious. Plays as a Hunter. It 
 
 ### Sabe
 
-Contacter, strongly Open, leans Deepen, leans Bold. Plays as a Caller. It would rather speak than go.
+Contacter, strongly Open, leans Deepen, leans Bold. Plays as a Caller. Acts a quarter of a Year after news. It would rather speak than go.
 
 | News | Odds |
 | --- | --- |
@@ -473,7 +475,7 @@ Contacter, strongly Open, leans Deepen, leans Bold. Plays as a Caller. It would 
 
 ### Ulan
 
-Inward, leans Hidden, strongly Deepen, leans Cautious. Plays as a Thinker.
+Inward, leans Hidden, strongly Deepen, leans Cautious. Plays as a Thinker. Acts 1 Year after news.
 
 | News | Odds |
 | --- | --- |
@@ -496,7 +498,7 @@ Dead. No table. In life it was leans Open, leans Expand, leans Bold.
 
 ### Odun
 
-Watcher, leans Hidden, leans Deepen, strongly Cautious. Plays as a Listener.
+Watcher, leans Hidden, leans Deepen, strongly Cautious. Plays as a Listener. Acts 2 Years after news.
 
 | News | Odds |
 | --- | --- |
@@ -515,7 +517,7 @@ Watcher, leans Hidden, leans Deepen, strongly Cautious. Plays as a Listener.
 
 ### Ree
 
-Contacter, strongly Open, leans Expand, leans Bold. Plays as a Caller. It warns covertly when it judges that kinder, and its sails may already be out.
+Contacter, strongly Open, leans Expand, leans Bold. Plays as a Caller. Acts a quarter of a Year after news. It warns covertly when it judges that kinder, and its sails may already be out.
 
 | News | Odds |
 | --- | --- |
@@ -534,7 +536,7 @@ Contacter, strongly Open, leans Expand, leans Bold. Plays as a Caller. It warns 
 
 ### Hesk
 
-Inward, leans Hidden, strongly Deepen, leans Cautious. Plays as a Thinker. Its answers come as images, not words.
+Inward, leans Hidden, strongly Deepen, leans Cautious. Plays as a Thinker. Acts 1 Year after news. Its answers come as images, not words.
 
 | News | Odds |
 | --- | --- |
@@ -553,7 +555,7 @@ Inward, leans Hidden, strongly Deepen, leans Cautious. Plays as a Thinker. Its a
 
 ### Arro
 
-Watcher, leans Hidden, leans Expand, leans Bold. Plays as a Grower.
+Watcher, leans Hidden, leans Expand, leans Bold. Plays as a Grower. Acts a quarter of a Year after news.
 
 | News | Odds |
 | --- | --- |
@@ -572,7 +574,7 @@ Watcher, leans Hidden, leans Expand, leans Bold. Plays as a Grower.
 
 ### Wenn
 
-Watcher, leans Hidden, leans Deepen, leans Cautious. Plays as a Listener.
+Watcher, leans Hidden, leans Deepen, leans Cautious. Plays as a Listener. Acts 1 Year after news.
 
 | News | Odds |
 | --- | --- |

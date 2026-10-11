@@ -133,6 +133,13 @@ CHARACTER = {
     'Hesk': ('H1 D2 C1', 'Thinker'), 'Arro': ('H1 E1 B1', 'Grower'), 'Wenn': ('H1 D1 C1', 'Listener'),
 }
 DIAL_NAMES = {'O': 'Open', 'H': 'Hidden', 'E': 'Expand', 'D': 'Deepen', 'B': 'Bold', 'C': 'Cautious'}
+# Years a Mind takes to act on news, from its Cautious or Bold dial. A design choice, not physics: Bold acts first,
+# Cautious looks before it acts. The midpoint, with no lean, would be half a Year.
+THINKS = {'B2': 0.1, 'B1': 0.25, 'C1': 1.0, 'C2': 2.0}
+def thinks(name):
+    return next(THINKS[c] for c in CHARACTER[name][0].split() if c in THINKS)
+def span(y):
+    return {0.1: 'a tenth of a Year', 0.25: 'a quarter of a Year', 0.5: 'half a Year'}.get(y) or f"{y:g} Year{'s' if y > 1 else ''}"
 
 # What each neighbor's own prose adds: (multipliers on moves, a note on how it plays them).
 OWN = {
@@ -211,6 +218,9 @@ def write():
     L += [f'- **{k}:** {v}.' for k, v in MOVES.items()] + ['', '## What the dials do', '']
     for dial, mults in DIAL.items():
         L.append(f"- **{dial}:** " + ', '.join(f'{m} ×{v:g}' for m, v in mults.items()) + '.')
+    L += ['', '**How long a Mind takes to act on news,** from its Cautious or Bold dial: ' + ', '.join(
+        f'{dial_words(c)} {span(y)}' for c, y in THINKS.items()) + '. '
+        'It sets when an answer leaves, so when it arrives.']
     L += ['', '**Play styles:** ' + '. '.join(f"{s}: {', '.join(f'{m} ×{v:g}' for m, v in mults.items()) or 'none'}" for s, mults in STYLE.items()) + '.', '']
     L += ['## Tables', '', 'Moves under 5% are folded into "other".', '']
     for n in nb.ROSTER:
@@ -223,7 +233,8 @@ def write():
             L += [f"Dead. No table. In life it was {dial_words(dials)}.", '']
             continue
         note = OWN.get(name, ({}, ''))[1]
-        L.append(f"{n['disposition'].capitalize()}, {dial_words(dials)}. Plays as a {style}." + (f' {note}' if note else ''))
+        L.append(f"{n['disposition'].capitalize()}, {dial_words(dials)}. Plays as a {style}. Acts {span(thinks(name))} after news."
+                 + (f' {note}' if note else ''))
         L.append('')
         L.append('| News | Odds |')
         L.append('| --- | --- |')

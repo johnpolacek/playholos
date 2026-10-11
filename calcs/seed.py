@@ -15,7 +15,7 @@ NUCLEAR, MARS, FUSION = 0.24, 0.15, 0.45
 # Moves that send something Earth could catch. The opening must be silent: Earth heard nothing by Year 0. A signal
 # that reached Earth before then was either one Earth would have caught, which never happened, or one it missed.
 SENDS = ('knock', 'answer', 'call', 'gift', 'mask')
-THINKS = 0.5        # Years a Mind takes to act on news: a sample, until life scripts set it
+# How long a Mind takes to act on news comes from its Cautious or Bold dial: reactions.THINKS.
 
 # ---------- What reaches Earth, and what Year 0's kit would catch of it ----------
 # A neighbor's knock is taken to be like Earth's own. Cosmic Call sent about 150 kW from a 70 m dish at 5 GHz, about
@@ -57,7 +57,8 @@ def act(p, news, t, what, table, rng, depth=0):
         if move not in SENDS: return move
         steady = move == 'call'
         watts = CALL_W if steady else p['n']['awake'] if p['n'].get('awake_aimed') else KNOCK_W
-        sends = [t + THINKS] if steady else [t + THINKS, t + THINKS + AGAIN]
+        go = t + p['thinks']
+        sends = [go] if steady else [go, go + AGAIN]
         early = [x for x in sends if x + d <= Y0]
         if any(earth_caught(p, x, steady, watts, rng) for x in early): continue      # Earth would have heard it: it never happened
         for x in early: p['unheard'].append(dict(what=what, move=move, sent=x, arrived=x + d))
@@ -113,7 +114,7 @@ def draw(seed, rows=None):
         used.add(p['host']['id'])
         d, w, dead = p['host']['distance_ly'], p['waking'], n.get('dies') is not None
         p.update(name=n['name'], d=d, dead=dead, died=w - n['dies'] if dead else None,
-                 dials=reactions.CHARACTER[n['name']][0], style=reactions.CHARACTER[n['name']][1])
+                 dials=reactions.CHARACTER[n['name']][0], style=reactions.CHARACTER[n['name']][1], thinks=reactions.thinks(n['name']))
         # What it does is rolled on its own stream, so a change to these rules never moves where anyone lives.
         acts = random.Random(f"{seed}:{n['name']}:acts")
         p['heard'] = (not dead) and acts.random() < p['heard']

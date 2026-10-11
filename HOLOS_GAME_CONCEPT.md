@@ -280,6 +280,7 @@ Settled 2026-10-10. Costs in [calcs/ai_cost.py](calcs/ai_cost.py), prices in [HO
   - *Reaction tables:* for each kind of news, a few responses with odds from its dials and charter. A Hidden, Cautious neighbor that hears a knock might stay silent and watch 60% of the time, build pickets 30%, and knock back 10%. The seed rolls it.
   - *Voice banks:* its messages are typed parts, as v1 set, rendered in its own voice from lines written once at build time by a strong model and reviewed by hand.
   - *Settled 2026-10-10:* each table is a base for its disposition, shifted by its dials, its play style and its own prose. Tables in [HOLOS_REACTIONS.md](HOLOS_REACTIONS.md), from [calcs/reactions.py](calcs/reactions.py). Voice briefs in [HOLOS_VOICES.md](HOLOS_VOICES.md).
+  - *Settled 2026-10-11:* how long a Mind takes to act on news comes from its Cautious or Bold dial. Strongly Bold: a tenth of a Year. Leans Bold: a quarter. Leans Cautious: a Year. Strongly Cautious: two. It sets when an answer leaves, and so when it arrives: Hael answers Earth's radars a quarter of a Year after hearing them, and Kirrin takes two Years. A design choice, not physics, like the odds.
 - **Simulated ahead.** Neighbors play out from the seed. Only Earth is unpredictable, so the game recomputes a neighbor only when Earth's actions reach it, after their light delay. The same seed and the same player actions give the same game, for tests and replays.
 - **A live model only for live talks.** When a neighbor's mind is close enough to talk live, by craft or a mind sent as light, a model speaks for it from its character and what it knows.
 - **The model: Claude Haiku 5.5,** for live talks and for Earth's Mind, checked in playtests. About $1.18 a month for a busy player's Mind, under a cent per live talk, nothing for voice banks written in Claude Code on a subscription (about $14 through the API), and nothing for neighbors in play.
@@ -303,17 +304,17 @@ Settled 2026-10-10.
 
 ## The seed, drawn
 
-Built 2026-10-10 in [calcs/seed.py](calcs/seed.py), from the rules above. One of its rules is still open.
+Built 2026-10-10 in [calcs/seed.py](calcs/seed.py), from the rules above.
 
 - **One number gives one game.** `python3 calcs/seed.py 10` prints it: Earth's branches and their years, what a Taiwan branch left of compute, then each neighbor's star, waking year, what it knows of Earth and what it does about it.
 - **A neighbor acts once its Mind is awake.** Its reaction to hearing Earth is rolled from its table at its waking or its first hearing, whichever is later. One that wakes during the game reacts then.
 - **Earth's seeded find.** If a drawn neighbor's world tugs hard enough for Earth's planet hunters by 2040, that world is the find. Otherwise the seed adds a natural world at a bright northern Sun-like star.
 - **Keeping the opening silent.** Settled 2026-10-10 in [What Earth hears](#what-earth-hears): a signal that reached Earth before Year 0 was missed, or it never happened.
-- **Open: half a Year to act on news.** A sample. It sets when a neighbor's answer leaves, and so when it arrives.
+- **How long a Mind takes to act on news.** Settled 2026-10-11 in [How neighbors play](#how-neighbors-play): its Cautious or Bold dial sets it.
 - **What 400 drawn games look like** (`python3 calcs/seed.py stats`):
   - A median of 9 neighbors, from 3 to 30. A hunter in a little over half.
   - Earth's seeded find is a neighbor's own world in nearly half.
-  - A neighbor's signal reaches Earth in the first 15 minutes in about 1 game in 14, and in the first hour in over 1 in 4. Most are answers to Earth's radars.
+  - A neighbor's signal reaches Earth in the first 15 minutes in about 1 game in 13, and in the first hour in over 1 in 4. Most are answers to Earth's radars.
 
 ## Death and new games
 
@@ -380,6 +381,6 @@ Answered one at a time, in this order. Every answer must be permitted by current
    - **Settled 2026-10-10:** about 15 kt a Year of lift is spare, and the player can spend to raise it. See [Earth's kit at Year 0](#earths-kit-at-year-0).
    - **Settled 2026-10-10:** physics decides what Earth catches, a sender that hears nothing tries again, and the player can spend more on ears. See [What Earth hears](#what-earth-hears).
    - **Settled 2026-10-10:** knocks before Year 0 happened, and Earth missed them. See [What Earth hears](#what-earth-hears).
-   - Still open: how long a Mind takes to act on news. Half a Year is a sample.
+   - **Settled 2026-10-11:** a Mind's Cautious or Bold dial sets how long it takes to act on news. See [How neighbors play](#how-neighbors-play).
    - 11 of the 31 half-minutes had nothing new for the player.
 9. **Settled 2026-10-10:** v1's research baseline, rechecked against the 2025 radar result and Garrett's 2026 cold-computing paper. See [Why the sky is quiet, rechecked](#why-the-sky-is-quiet-rechecked).
