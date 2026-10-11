@@ -17,7 +17,8 @@ SETTLED = [('Does a half-built real instrument cost fewer Years?', 'It costs wha
            ('What stops a data center every Year?', 'Chips set the pace: the fabs fill one a Year, each +50% compute. Energy sets the ceiling, near a hundredfold. Settled 2026-10-10.'),
            ('What is energy for, early?', 'Thought. Each data center draws its share, and the twelfth would need more than Earth has. Settled 2026-10-10, by the rule above.'),
            ('Is matter meant to be free early?', 'No. Matter is only what is spare in orbit: about 20 kt at Year 0. Working satellites don’t count. Settled 2026-10-10.'),
-           ('What does Year 0’s kit catch?', 'Physics decides: the star’s place in the sky, the hours looked, and loudness. Year 0’s sky watch catches about 1 early signal in 5. A sender that hears nothing tries again, and the player can spend more on ears. Settled 2026-10-10.'),
+           ('What does Year 0’s kit catch?', 'Physics decides: the star’s place in the sky, the hours looked, and loudness. Year 0’s sky watch catches about 1 early signal in 4. A sender that hears nothing tries again, and the player can spend more on ears. Settled 2026-10-10.'),
+           ('What happened to knocks that arrived before Year 0?', 'They happened, and Earth missed them. Only a knock Earth would have caught is rolled again. The sender, unanswered, may try again. Nothing was recorded, so no archive holds them. Settled 2026-10-10.'),
            ('Is all of Earth’s lift spare?', 'No. About 15 kt a Year is spare of 40. The rest keeps Earth’s craft flying. The player can spend to raise it: a launch complex adds 40 kt a Year. Settled 2026-10-10.')]
 
 # ---------- Godview: who is out there ----------
@@ -32,6 +33,12 @@ def knows(p):
     out = f"heard Earth’s radars from {p['heard_since']:.0f}"
     if p['n']['character'] == 'listener': out += ', and mapped its day and orbit'
     return out
+def unheard(p):
+    if not p['unheard']: return ''
+    years = sorted({f"{u['arrived']:.0f}" for u in p['unheard']})
+    a = p['after_silence']
+    then = '' if not a else (f" If still unanswered at Year {a['at'] - Y0:.1f}, it {MOVE[a['move']]}." if a['at'] > Y0 else f" Unanswered by {a['at']:.0f}, it {MOVE[a['move']]}.")
+    return f"Its knock reached Earth in {' and '.join(years)}. No one was listening.{then}"
 def does(p):
     if not p['heard']: return ''
     return (f"{MOVE[p['on_hum']]}" if p['knows'] <= Y0 else f"at waking: {MOVE[p['on_hum']]}")
@@ -45,7 +52,7 @@ def roster_table():
         f'<tr><td><b>{p["name"]}</b><span class="sub {TONE[p["n"]["disposition"]]}">{p["n"]["disposition"]}{" · strange" if p["n"].get("strange") else ""}</span></td>'
         f'<td>{p["star"]}<span class="sub">{p["host"]["kind"]} star</span></td><td class="mono">{p["d"]:.1f} ly<span class="sub">{clock(p["d"])}</span></td>'
         f'<td>{state(p)}</td><td>{knows(p)}{"".join(f". Catches {c["msg"]}, Year {c["arrives"] - Y0:.1f}" for c in p["caught"])}</td>'
-        f'<td>{does(p)}{"<span class=sub>" + inbound(p) + "</span>" if inbound(p) else ""}</td></tr>' for p in NB)
+        f'<td>{does(p)}{"<span class=sub>" + " ".join(x for x in (unheard(p), inbound(p)) if x) + "</span>" if unheard(p) or inbound(p) else ""}</td></tr>' for p in NB)
     return f'<table class="roster">{head}{rows}</table>'
 
 def god_map(w=560, h=470):
@@ -413,9 +420,10 @@ def cell(said, lands, phone):
     s = '' if not said else f'<p class="lands">{said[1:].strip()}</p>' if said.startswith('·') else f'<p class="said">“{said}”</p>'
     l = f'<p class="lands"><b>Lands</b> {lands}</p>' if lands else ''
     return f'<div class="bcell">{s}{l}{idle}{phone or ""}</div>'
-def pre_row(n, title, phone, notes=(), said=''):
+N_UNHEARD = sum(len(p['unheard']) for p in NB)
+def pre_row(n, title, phone, notes=(), said='', settled=None):
     return (f'<section class="brow pre"><div class="bhead"><span class="bt mono">{n}</span><span class="gy">{title}</span></div>'
-            f'<div class="v2grid">{cell(said, None, phone)}<div class="gcell">{godcell(notes)}</div></div></section>')
+            f'<div class="v2grid">{cell(said, None, phone)}<div class="gcell">{godcell(notes, None, settled)}</div></div></section>')
 DEAD = 0
 def beat(t, said='', lands=None, phone=None, notes=(), question=None, label=None, settled=None):
     global DEAD
@@ -438,7 +446,8 @@ PREGAME = [
     pre_row(3, 'Who they are', PEOPLE),
     pre_row(4, 'Where things stand', STAND, [f'Heard Earth’s radars: {heard_list}.',
                                             'At the stars Earth knocked on: ' + (', '.join(f"{p['name']} at {AT[p['host']['name']]}" for p in NB if p['host']['name'] in AT) or 'no one, in this game') + '.',
-                                            'The Mind lists where the noise went, never who heard. That holds here.']),
+                                            'The Mind lists where the noise went, never who heard. That holds here.',
+                                            ('Before Year 0, ' + str(N_UNHEARD) + ' knocks reached Earth unheard: ' + ', '.join(f"{p['name']}’s in {' and '.join(sorted({format(u['arrived'], '.0f') for u in p['unheard']}))}" for p in NB if p['unheard']) + '. Nothing recorded them, so no archive holds them.') if N_UNHEARD else 'No knock reached Earth before Year 0 in this game. About 1 game in 4 has one that Earth missed.'], settled=6),
     pre_row(5, 'What you inherit', KIT, ['Energy is 99% idle at Year 0, and nothing in the first 15 minutes changes that.']),
     pre_row(6, 'The charter', CHARTER_SCREEN, [f'The dials: {DIAL_WORDS}. The base is real history. This game’s branches moved it.', 'The line is the Mind’s proposal. Three are written so far, picked by the dials.']),
     pre_row(7, 'Meeting the Mind', MEET),
@@ -446,11 +455,10 @@ PREGAME = [
                                       'Fomalhaut is 440 million years old: too young for minds, so it is never a host. Its clouds are rubble.',
                                       ('Luyten’s Star: ' + (f'''{who_at("Luyten's Star")["name"]} lives there.''' if who_at("Luyten's Star") else 'no one lives there. About 3 games in 10 put someone at a star Earth knocked on.'))], said='What doesn’t fit?'),
     pre_row(9, 'Planning', P_PLAN, ['The Mind advises from the charter and dials. It queues nothing until told.',
-                                    'Its advice is sound. Across games, Year 0’s sky watch catches about 1 in 5 of the signals that arrive in the first hour. The all-sky watch catches about 4 in 5.'], said='Plan our waking.'),
+                                    'Its advice is sound. Across games, Year 0’s sky watch catches about a quarter of the signals that arrive in the first hour. The all-sky watch catches about 9 in 10.'], said='Plan our waking.'),
     pre_row(10, 'The queue, and Begin', P_QUEUE, ['Year 0 starts at the tap. From then the clock runs, offline too.',
                                                  f'Nothing Earth does in the next 15 minutes can reach anyone: the nearest living neighbor, {nearest["name"]}, is {nearest["d"]:.1f} ly away. Light from Year 0 gets there at Year {nearest["d"]:.1f}, +{clock(nearest["d"])}.' if nearest else ''], said='Queue that.'),
 ]
-ask('Should the seed reroll moves that break the silent opening?', 'New in calcs/seed.py. A neighbor that already knows Earth rolls its reaction. If its knock or call would have reached Earth before Year 0, the seed rolls again, so nothing was heard by 2040.')
 ask('How long does a Mind take to act on news?', 'calcs/seed.py uses half a Year, a sample. It sets when a neighbor’s answer leaves, so when it arrives.')
 BEATS = [
     beat(0, 'What’s running?', None, talk(running(0), 'The sky watch, the flash watch and a data center, begun. Three looks under way. Fomalhaut answers in thirty seconds.'),
@@ -486,7 +494,7 @@ BEATS = [
     beat(480, 'Build the vault.', None, talk(VAULT_CONFIRM, f'Started. Ten Years, and ten of the {res(479)[2].replace(" kt", "")} kilotonnes we have spare. Lift brings fifteen more a Year. A launch complex would bring forty on top.', ('Build a launch complex', 'Undo')),
          ['Asked for at Year 0, the vault would have taken half the spare stock.'], settled=4),
     beat(510, 'Build a launch complex.', None, talk(LAUNCH_CONFIRM, 'Started. Two Years, no matter, a twentieth of our compute. From Year 3.7 lift brings fifty-five kilotonnes a Year.', ('Undo',)),
-         ['Lift is short of pads and ships, not energy: 40 kt a Year burns about half a gigawatt of propellant.'], settled=6),
+         ['Lift is short of pads and ships, not energy: 40 kt a Year burns about half a gigawatt of propellant.'], settled=7),
     beat(540, 'Watch Luyten’s Star through the window.', None, talk(LUY_ORDER, f'Set. The first window opens at Year {LUY_Y[0]}, in two and a half minutes. I’ll wake you either way.', ('Undo',))),
     beat(570), beat(600),
     beat(630, f'· The Mind glows. Taps it.', f'A Year of listening: nothing loud at {F["star"]}.',

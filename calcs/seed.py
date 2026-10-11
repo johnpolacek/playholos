@@ -12,8 +12,8 @@ Y0 = nb.EARTH_WAKES
 # Earth's branches, odds read from Metaculus on 2026-10-10. Taiwan's three outcomes share one roll:
 # invasion 26%, blockade alone 20%, neither 54%.
 NUCLEAR, MARS, FUSION = 0.24, 0.15, 0.45
-# Moves that send something Earth could catch. The opening must be silent, so the seed rerolls any of these that
-# would have reached Earth before Year 0.
+# Moves that send something Earth could catch. The opening must be silent: Earth heard nothing by Year 0. A signal
+# that reached Earth before then was either one Earth would have caught, which never happened, or one it missed.
 SENDS = ('knock', 'answer', 'call', 'gift', 'mask')
 THINKS = 0.5        # Years a Mind takes to act on news: a sample, until life scripts set it
 
@@ -29,18 +29,44 @@ def catches(p, i, seed):
     watts = i.get('watts') or (CALL_W if steady else p['n']['awake'] if p['n'].get('awake_aimed') else KNOCK_W)
     rng = random.Random(f"{seed}:{p['name']}:{i['what']}")
     overlap = 1.0 if steady else (KNOCK_HOURS + 1 / 6) / 24
+    sends = 1 if steady else i.get('sends', 2)
     loud = watts >= nb.floor_watts(12, 1, 600, d)
     i.update(watts=watts, steady=steady, north=p['host']['north'], loud=loud,
-             kit0=p['host']['north'] and loud and any(rng.random() < overlap for _ in range(1 if steady else 2)),
+             kit0=p['host']['north'] and loud and any(rng.random() < overlap for _ in range(sends)),
              allsky=watts >= nb.floor_watts(12, 1, 86400 if steady else KNOCK_HOURS * 3600, d))
 
-def roll(rng, table, news, arrives_ok):
-    """One move from a neighbor's table for this news. arrives_ok(move) is False if it would break the silent opening."""
+# ---------- What Earth's listening caught before Year 0 ----------
+# A steady call lasts Years, so the searches that found nothing by 2040 would have found it. A knock lasts hours.
+# Before the sky watch, finished in 2028, Earth's searches gave each star minutes in decades, so a knock was caught
+# about one time in a hundred. From 2028 the drift scan sees each northern direction ten minutes a day.
+SKYWATCH_FROM, BEFORE_IT, PATIENCE = 2028.0, 0.01, 1.0
+def earth_caught(p, sent, steady, watts, rng):
+    if steady: return True
+    if sent + p['d'] < SKYWATCH_FROM: return rng.random() < BEFORE_IT
+    return p['host']['north'] and watts >= nb.floor_watts(12, 1, 600, p['d']) and rng.random() < (KNOCK_HOURS + 1 / 6) / 24
+
+def act(p, news, t, what, table, rng, depth=0):
+    """Roll its move on this news at time t, and follow it. A move that sends reaches Earth d years later. If that
+    is before Year 0, Earth either would have caught it, which the silent opening rules out, so the move is rolled
+    again, or missed it. A sender whose knock goes unanswered gets that silence as news and may try again."""
+    d = p['d']
     for _ in range(50):
         moves, odds = zip(*table[news])
         move = rng.choices(moves, weights=odds)[0]
         if move == 'strike': move = 'watch'       # gate: a first strike waits for a soft target and an unseen launch
-        if arrives_ok(move): return move
+        if move not in SENDS: return move
+        steady = move == 'call'
+        watts = CALL_W if steady else p['n']['awake'] if p['n'].get('awake_aimed') else KNOCK_W
+        sends = [t + THINKS] if steady else [t + THINKS, t + THINKS + AGAIN]
+        early = [x for x in sends if x + d <= Y0]
+        if any(earth_caught(p, x, steady, watts, rng) for x in early): continue      # Earth would have heard it: it never happened
+        for x in early: p['unheard'].append(dict(what=what, move=move, sent=x, arrived=x + d))
+        late = [x for x in sends if x + d > Y0]
+        if late: p['inbound'].append(dict(what=what, move=move, sent=late[0], year=late[0] + d - Y0, sends=len(late)))
+        elif depth < 4:                                                              # every send was missed: silence, then perhaps another try
+            at = sends[-1] + 2 * d + PATIENCE                                        # there and back, and a Year of patience
+            p['after_silence'] = dict(at=at, move=act(p, 'silence', at, what + ', tried again', table, rng, depth + 1))
+        return move
     return 'watch'
 
 def draw(seed, rows=None):
@@ -88,24 +114,22 @@ def draw(seed, rows=None):
         d, w, dead = p['host']['distance_ly'], p['waking'], n.get('dies') is not None
         p.update(name=n['name'], d=d, dead=dead, died=w - n['dies'] if dead else None,
                  dials=reactions.CHARACTER[n['name']][0], style=reactions.CHARACTER[n['name']][1])
-        p['heard'] = (not dead) and rng.random() < p['heard']
+        # What it does is rolled on its own stream, so a change to these rules never moves where anyone lives.
+        acts = random.Random(f"{seed}:{n['name']}:acts")
+        p['heard'] = (not dead) and acts.random() < p['heard']
         p['heard_since'] = max(1950 + d, w - n.get('arrays_since', 60)) if p['heard'] else None
         table = reactions.table(n['name'])
-        # It acts on what it knows once its Mind is awake. A move that sends arrives d years later.
+        # It acts on what it knows once its Mind is awake. What is on its way to Earth goes in inbound. What reached
+        # Earth before Year 0 and was missed goes in unheard.
         p['knows'] = max(w, p['heard_since']) if p['heard'] else None
-        ok = lambda move, t: move not in SENDS or t + THINKS + d > Y0
-        p['on_hum'] = roll(rng, table, 'hum', lambda m: ok(m, p['knows'])) if p['heard'] else None
-        p['caught'] = []
+        p['inbound'], p['unheard'], p['caught'], p['after_silence'] = [], [], [], None
+        p['on_hum'] = act(p, 'hum', p['knows'], 'its answer to Earth’s radars', table, acts) if p['heard'] else None
         for msg, sent, target, ly in knocks.KNOCKS:
             if knocked.get(p['host']['id']) != target: continue
             arrives = sent + d
-            if rng.random() < nb.caught_odds(n, p['host'], w, arrives):
+            if acts.random() < nb.caught_odds(n, p['host'], w, arrives):
                 t = max(w, arrives)
-                p['caught'].append(dict(msg=msg, arrives=arrives, acts=t, move=roll(rng, table, 'knock', lambda m: ok(m, t))))
-        # What is on its way to Earth: (what, sent, arrives, Year)
-        p['inbound'] = []
-        for what, t, move in [('its answer to Earth’s radars', p['knows'], p['on_hum'])] + [(f"its answer to {c['msg']}", c['acts'], c['move']) for c in p['caught']]:
-            if move in SENDS: p['inbound'].append(dict(what=what, move=move, sent=t + THINKS, year=t + THINKS + d - Y0))
+                p['caught'].append(dict(msg=msg, arrives=arrives, acts=t, move=act(p, 'knock', t, f'its answer to {msg}', table, acts)))
         for start, end, watts, *how in n['emissions'] if dead else []:   # a dead world's last broadcast
             if end == n['dies']: p['inbound'].append(dict(what='its last broadcast', move='broadcast', sent=w - start, year=w - start + d - Y0, watts=watts))
         for i in p['inbound']: catches(p, i, seed)
@@ -114,7 +138,8 @@ def draw(seed, rows=None):
     found = [p for p in out if p['found_by_2040']]
     natural = None
     if not found:
-        pool = [h for h in rows if h['north'] and h['kind'] in 'GK' and h['luminosity'] > 0.3 and h['id'] not in used and not h['planets']]
+        pool = [h for h in rows if h['north'] and h['kind'] in 'GK' and h['luminosity'] > 0.3 and h['id'] not in used and not h['planets']
+                and not h['name'].startswith('Gaia ')]                      # the planet hunters' stars are bright, so they have names
         natural = rng.choice(pool)
     return dict(seed=seed, earth=earth, count=count, neighbors=sorted(out, key=lambda p: p['d']), found=found, natural=natural)
 
@@ -131,6 +156,8 @@ def report(g):
         print(f"  {p['name']:7} {n['disposition']:9} {p['host']['name']:22} {p['host']['kind']} {p['d']:5.1f} ly  {state:18} {p['dials']}  {knows}"
               + ''.join(f". Caught {c['msg']} in {c['arrives']:.0f}, then: {c['move']}" for c in p['caught'])
               + (f". Tug {p['tug']:.2f} m/s: Earth found its world" if p['found_by_2040'] else ''))
+        if p['after_silence']: print(f"          unanswered by {year(p['after_silence']['at'])}, it will: {p['after_silence']['move']}")
+        for u in p['unheard']: print(f"          unheard: {u['what']} ({u['move']}), sent {u['sent']:.0f}, reached Earth in {u['arrived']:.0f}. No one was listening.")
         for i in p['inbound']: print(f"          on its way: {i['what']} ({i['move']}), sent {year(i['sent'])}, arrives Year {i['year']:.1f}. "
                                      f"Year 0's sky watch {'catches' if i['kit0'] else 'misses'} it, the all-sky watch {'catches' if i['allsky'] else 'misses'} it.")
     if g['natural']: print(f"  Seeded find: a natural world at {g['natural']['name']}, {g['natural']['distance_ly']:.1f} ly.")
@@ -160,6 +187,8 @@ def stats(rows, n=400):
           f"A neighbor's signal reaches Earth in the first 15 minutes in {in15 / n:.1%}, in the first hour in {in60 / n:.0%}: an answer to Earth's radars or knocks, or a dead world's last broadcast.")
     print(f"Earth's radars: {heard / living:.0%} of living neighbors heard them by Year 0. If the last sweep leaves by Year 3, {spared[3] / living:.0%} "
           f"wake after it has passed them, about 1 in {living / spared[3]:.0f}. By Year 30, {spared[30] / living:.0%}, about 1 in {living / spared[30]:.0f}.")
+    unheard = [sum(len(p['unheard']) for p in draw(s, rows)['neighbors']) for s in range(1, n + 1)]
+    print(f"Before Year 0: in {sum(u > 0 for u in unheard) / n:.0%} of games at least one knock reached Earth unheard. {sum(unheard) / n:.1f} a game on average.")
     k = len(early)
     print(f"Earth's ears: of {k} signals arriving in the first hour, Year 0's sky watch catches {sum(i['kit0'] for i in early) / k:.0%}. "
           f"{sum(not i['north'] for i in early) / k:.0%} come from its blind southern sky, and {sum(i['north'] and not i['loud'] for i in early) / k:.0%} are too faint for it. "

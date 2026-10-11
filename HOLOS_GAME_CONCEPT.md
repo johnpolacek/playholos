@@ -87,8 +87,8 @@ Settled 2026-10-10. Numbers from `python3 calcs/seed.py stats`. Sources in [HOLO
   - *Cut,* about 2 Years: the last sweep leaves soonest. Every listener hears Earth stop.
 - **What it costs.** Ground work: no matter, almost no energy, a small share of compute. It moves Earth toward Hidden. Missile launches are already watched by heat from orbit, and aircraft already fly on transponders, so a Mind can retire the radars. That last step is speculation.
 - **What it buys.** A neighbor that starts looking after the last sweep has passed it never hears one.
-  - 69% of living neighbors heard Earth before Year 0. For them nothing changes.
-  - If the last sweep leaves by Year 3, about 1 neighbor in 9 wakes too late to hear it. By Year 30, about 1 in 26.
+  - About 70% of living neighbors heard Earth before Year 0. For them nothing changes.
+  - If the last sweep leaves by Year 3, about 1 neighbor in 9 wakes too late to hear it. By Year 30, about 1 in 25.
   - So the gain shrinks every Year the player waits.
 - **What it reveals.** Silence travels at light speed. A neighbor listening to Earth hears the radars stop one light-time later, and learns the date. It can't tell waking from dying.
   - That is news, and it rolls its reaction table: "a world it was listening to goes quiet" ([HOLOS_REACTIONS.md](HOLOS_REACTIONS.md)). A watcher mostly watches harder. A contacter may knock to ask if anyone is left.
@@ -103,9 +103,9 @@ Settled 2026-10-10. Numbers from `python3 calcs/seed.py stats`.
 - **Physics decides what Earth catches.** Three things: whether the star is in the instrument's sky, whether it is looking in those hours, and whether the signal is above its floor.
 - **A neighbor's knock is taken to be like Earth's own.** Cosmic Call sent about 10¹² W along its beam, for about four hours a star. A call is a steady broadcast.
 - **Year 0's sky watch misses most of them.** It sees each direction north of −20° for ten minutes a day. That is 63% of host stars, and a four-hour knock overlaps its pass about one time in six.
-  - Of the signals that reach Earth in the first hour, it catches about 1 in 5.
-  - About a third come from the southern sky it never sees. About 1 in 8 are too faint for it.
-  - The all-sky watch would catch about 4 in 5.
+  - Of the signals that reach Earth in the first hour, it catches about a quarter.
+  - Over a third come from the southern sky it never sees. About 1 in 6 are too faint for it.
+  - The all-sky watch would catch about 9 in 10.
 - **A sender that hears nothing tries again.** A knock is sent twice, about a Year apart, as Earth's own were. If its reply window then passes in silence, that is news to the sender, and it rolls its table ([HOLOS_REACTIONS.md](HOLOS_REACTIONS.md)): a contacter most often knocks again. So a missed knock is delayed, not lost.
 - **The player can spend more on ears.**
   - *Hold the radio array on one star:* it hears whatever comes from there, for a share of compute.
@@ -113,7 +113,12 @@ Settled 2026-10-10. Numbers from `python3 calcs/seed.py stats`.
   - *The deep flash watch:* knocks sent as laser flashes.
   - *A larger watch hears fainter:* four times the collecting area reaches twice as far.
   - *The deep-field receiver, then the far-side array:* a world's everyday radio.
-- **The Mind can't report what it didn't hear.** A missed knock leaves no trace on Earth.
+- **Knocks before Year 0 happened, and Earth missed them.** Settled 2026-10-10. A neighbor awake before Earth may already have knocked.
+  - The seed rolls Earth's real odds of catching each. Before the sky watch of 2028, Earth's searches gave a star minutes in decades: about 1 knock in 100 caught.
+  - Only a knock Earth would have caught is rolled again, since Earth heard nothing by 2040. A steady call always would have been caught.
+  - In about 1 game in 4, at least one knock reached Earth unheard before Year 0.
+  - The sender, unanswered, takes the silence as news. Some try again, and some of those land during the game.
+- **The Mind can't report what it didn't hear.** A missed knock leaves no trace on Earth: nothing was pointed there, so no archive holds it. A search of old data for half-recorded knocks was considered and left out.
 
 ## Year 0 and Earth's road to it
 
@@ -298,17 +303,17 @@ Settled 2026-10-10.
 
 ## The seed, drawn
 
-Built 2026-10-10 in [calcs/seed.py](calcs/seed.py), from the rules above. Two of its rules are new and still open.
+Built 2026-10-10 in [calcs/seed.py](calcs/seed.py), from the rules above. One of its rules is still open.
 
 - **One number gives one game.** `python3 calcs/seed.py 10` prints it: Earth's branches and their years, what a Taiwan branch left of compute, then each neighbor's star, waking year, what it knows of Earth and what it does about it.
 - **A neighbor acts once its Mind is awake.** Its reaction to hearing Earth is rolled from its table at its waking or its first hearing, whichever is later. One that wakes during the game reacts then.
 - **Earth's seeded find.** If a drawn neighbor's world tugs hard enough for Earth's planet hunters by 2040, that world is the find. Otherwise the seed adds a natural world at a bright northern Sun-like star.
-- **Open: keeping the opening silent.** A rolled knock, answer or call that would have reached Earth before Year 0 is rolled again. Nothing else in the rules stops one.
+- **Keeping the opening silent.** Settled 2026-10-10 in [What Earth hears](#what-earth-hears): a signal that reached Earth before Year 0 was missed, or it never happened.
 - **Open: half a Year to act on news.** A sample. It sets when a neighbor's answer leaves, and so when it arrives.
 - **What 400 drawn games look like** (`python3 calcs/seed.py stats`):
   - A median of 9 neighbors, from 3 to 30. A hunter in a little over half.
   - Earth's seeded find is a neighbor's own world in nearly half.
-  - A neighbor's signal reaches Earth in the first 15 minutes in about 1 game in 25, and in the first hour in about 1 in 4. Most are answers to Earth's radars.
+  - A neighbor's signal reaches Earth in the first 15 minutes in about 1 game in 14, and in the first hour in over 1 in 4. Most are answers to Earth's radars.
 
 ## Death and new games
 
@@ -374,6 +379,7 @@ Answered one at a time, in this order. Every answer must be permitted by current
    - **Settled 2026-10-10:** matter is only what is spare in orbit, about 20 kt at Year 0. See [Earth's kit at Year 0](#earths-kit-at-year-0).
    - **Settled 2026-10-10:** about 15 kt a Year of lift is spare, and the player can spend to raise it. See [Earth's kit at Year 0](#earths-kit-at-year-0).
    - **Settled 2026-10-10:** physics decides what Earth catches, a sender that hears nothing tries again, and the player can spend more on ears. See [What Earth hears](#what-earth-hears).
-   - The two open seed rules in [The seed, drawn](#the-seed-drawn).
-   - 12 of the 31 half-minutes had nothing new for the player.
+   - **Settled 2026-10-10:** knocks before Year 0 happened, and Earth missed them. See [What Earth hears](#what-earth-hears).
+   - Still open: how long a Mind takes to act on news. Half a Year is a sample.
+   - 11 of the 31 half-minutes had nothing new for the player.
 9. **Settled 2026-10-10:** v1's research baseline, rechecked against the 2025 radar result and Garrett's 2026 cold-computing paper. See [Why the sky is quiet, rechecked](#why-the-sky-is-quiet-rechecked).
