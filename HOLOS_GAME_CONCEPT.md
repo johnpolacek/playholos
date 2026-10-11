@@ -209,7 +209,7 @@ Settled 2026-10-10. Numbers in [calcs/early_game.py](calcs/early_game.py). Repla
 
 Settled 2026-10-10. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#earth-to-year-0-forecasts).
 
-- **One standard time per project, from the science.** It is how long works of that kind take. A flagship space telescope takes about 18 Years: Hubble took 13 from funding to launch, Webb about 17 from the start of construction. The time is the same in every game. The seed doesn't roll it.
+- **One standard time per project, from the science.** It is how long works of that kind take. A flagship space telescope takes about 18 Years: Hubble took 12 from first funding to launch, Webb 18 from its prime contract. The time is the same in every game. The seed doesn't roll it.
 - **A real work under way at Year 0 costs what is left of it.** The Habitable Worlds Observatory has about 8 Years left: NASA aims it at the 2040s, and flagships slip. A second telescope of its class takes the full 18. The 8 is a sample.
 - **The player can invest to build faster.** Other projects make building more efficient. Each speeds one kind of work, for everything built after it. Their own Years and costs are still to be priced.
   - *Factory-built works,* on the ground: ground builds take about a third less. Modular building cuts schedules by 20 to 50% (McKinsey 2019).

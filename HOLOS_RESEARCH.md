@@ -92,9 +92,10 @@ Every source the game rests on, grouped by the question it answers. Each entry s
   - Matters: an orbital yard makes larger works possible. That it also makes them faster is this project's speculation.
   - Used: v2 Build times, the orbital yard.
 - **Flagship telescope build times** · History ([Hubble](https://en.wikipedia.org/wiki/Hubble_Space_Telescope), [Webb](https://en.wikipedia.org/wiki/James_Webb_Space_Telescope)).
-  - Hubble was funded in 1977 and launched in 1990. Webb's construction began in 2004 and it launched in December 2021.
-  - Matters: the standard time for a telescope of this class, about 18 Years.
-  - Used: v2 Build times. Not reread this session: dates from memory, to confirm.
+  - Hubble: Congress approved its first funding for 1978. Its mirror was begun in 1979. Its intended launch was 1983. It launched on April 24, 1990: 12 years.
+  - Webb: first designs in 1996, prime contract in 2003, construction complete in November 2016, launched December 25, 2021: 18 years from the contract.
+  - Matters: the standard time for a telescope of this class, about 18 Years. Webb is the nearer match in size.
+  - Used: v2 Build times. Reread 2026-10-11. An earlier note gave Hubble 13 years and Webb 17 from a 2004 construction start, from memory. The pages don't give that start.
 - **TSMC's Arizona fabs** · News ([Data Center Dynamics](https://www.datacenterdynamics.com/en/news/covid-and-labor-shortages-lead-to-construction-delays-at-tsmcs-arizona-chip-fab/), [New Electronics](https://www.newelectronics.co.uk/content/news/tsmc-looks-to-compress-arizona-fab-construction-into-just-two-years)).
   - The first fab broke ground in June 2021 and made 4 nm chips from late 2024, about three and a half years. The second began in April 2025 and aims at about two.
   - Matters: how fast chip supply can be added. A leading-edge fab takes 2 to 4 years.
