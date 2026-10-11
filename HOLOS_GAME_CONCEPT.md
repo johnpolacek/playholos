@@ -149,6 +149,11 @@ Settled 2026-10-06. Replaces v1's numbers ([v1: Economy and projects](legacy/v1/
   - *The spare stock* is depots, spent stages and dead craft. In 2026 spent stages are 22% of the 17,400 t in orbit, and about 18% of satellites are dead (ESA). The 20 kt is a sample.
   - *So matter is a choice from the start.* A deep vault is half the stock. A cold compute annex is two and a half Years of lift.
   - v1's tune-up, hauling in the dead orbit, is folded into this stock.
+- **Lift:** about 15 kt a Year is spare, of 40. Settled 2026-10-10.
+  - *Most lift already has a job.* Keeping about 124 kt of working craft flying, at five years each, takes about 25 kt a year.
+  - *The player can spend to raise it.* A launch complex is a ground build: 2 Years, a small share of compute, no matter. It adds 40 kt a Year, all of it spare. One at a time, as ship yards allow. Sample.
+  - *Lift is short of pads and ships, not energy.* Propellant for 40 kt a year is about half a gigawatt.
+  - *Beyond lift:* the Moon's mass driver and belt mining bring far more, later.
 - **Instruments and probes:** as in the backbone above.
 - **The sky watch is a drift scan.** Like CHORD, finished in 2028: each northern direction passes through it for about 10 minutes a day. v1's always-on watch of the whole sky becomes a project: dense aperture arrays on two continents ([the audit](HOLOS_PROJECT_AUDIT.md#calculations)).
 - **What moves with the smaller grid.** Compute takes about 1% of energy, not v1's 10%, so even more energy sits idle early. A ground data center's +50% compute draws about 0.5% of energy at first: see [Growing compute](#growing-compute). The industry cap at 100 GJ a tonne falls to about 7.5 Gt a year (v1: 30). Star lifting needs about 200,000 times the grid (v1: 50,000). A Sun-like star's whole output is about 16 trillion times it (v1: four trillion).
@@ -158,7 +163,7 @@ Settled 2026-10-06. Replaces v1's numbers ([v1: Economy and projects](legacy/v1/
   - *Rock:* shielding, sand and anything built on the Moon from its soil. From the Moon, by mass driver.
   - *Ice:* water, propellant and deuterium. From belt ice, or lifted from Earth's oceans.
   - *Helium-3:* fast fusion fuel. Earth has almost none. From Uranus's air, by a harvest.
-  - Earth's lift carries any kind, 40 kt a year in all, mostly as metal. The 20 kt spare at Year 0 is metal.
+  - Earth's lift carries any kind, mostly as metal. The 20 kt spare at Year 0 is metal.
   - The [audit](HOLOS_PROJECT_AUDIT.md#kinds-of-matter) says how each project's mass splits among them.
 - **Project prices are in [HOLOS_PROJECT_AUDIT.md](HOLOS_PROJECT_AUDIT.md)** (open question 2).
 
@@ -337,7 +342,7 @@ Answered one at a time, in this order. Every answer must be permitted by current
    - **Settled 2026-10-10:** the Will may quiet Earth's radars. See [Quieting Earth's radars](#quieting-earths-radars).
    - **Settled 2026-10-10:** chips set the pace of compute and energy sets its ceiling. That also says what energy is for early. See [Growing compute](#growing-compute).
    - **Settled 2026-10-10:** matter is only what is spare in orbit, about 20 kt at Year 0. See [Earth's kit at Year 0](#earths-kit-at-year-0).
-   - Is all 40 kt a Year of lift spare? Keeping Earth's working craft flying takes about 25 kt a Year of it.
+   - **Settled 2026-10-10:** about 15 kt a Year of lift is spare, and the player can spend to raise it. See [Earth's kit at Year 0](#earths-kit-at-year-0).
    - What does Year 0's drift-scan sky watch catch of a neighbor's knock, before the all-sky watch is built?
    - The two open seed rules in [The seed, drawn](#the-seed-drawn).
    - 12 of the 31 half-minutes had nothing new for the player.

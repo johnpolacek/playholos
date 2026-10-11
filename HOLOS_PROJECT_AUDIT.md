@@ -22,7 +22,7 @@ Every v1 project's cost and effect, checked against physics and real designs, at
 
 Matter is now real mass in space (settled 2026-10-06). Most instruments and probes become cheap in matter, so build time, compute shares, lift and propellant pace them. The big works stay expensive.
 
-- **Early probes are affordable.** A flyby probe is about 100 t and a sentinel about 500 t, against 20 kt spare in orbit and 40 kt a year. v1 made them megatonnes.
+- **Early probes are affordable.** A flyby probe is about 100 t and a sentinel about 500 t, against 20 kt spare in orbit and 15 kt a year of spare lift. v1 made them megatonnes.
 - **The self-replicating factory is a 100 t seed.** Its prerequisite chain is now the gate: belt prospecting, belt mining and the foundry, so it finishes no sooner than Year 136, about 11 real hours in. Once it runs, matter stops being scarce.
 - **Fuel gates the fast bullets.** A 1,000 t bullet at 0.2c needs about 0.66 Mt of helium-3 from a gas giant, so it waits for outer-system industry, later than v1's day and a quarter. A slow D-D bullet at 0.05c needs only ocean deuterium and can come after the prerequisite chain, about Year 186, but it hits like a 0.8 km asteroid, not a 1.9 km one, and pickets see it for years. v1 set no floor on early death and said to revisit only if playtests show early deaths.
 - **Proposed prices keep v1's Years** except where real trends say otherwise. Build time is now the main pacing lever, and the mocks will test it.
@@ -129,7 +129,7 @@ Proposed prices are matter in orbit, on the Moon or in the belt. Ground builds s
 | Belt prospecting | 0 | OK | 5 t | Small survey probes. |
 | Ground data center | 0 | Slow ×10 | 0, ground. 1 Year, not 8, for +50% compute. One at a time: the fabs' output. Each draws its share of energy, 0.5% of the grid for the first. Settled 2026-10-10. | Compute grew 1.5× a year from 2026 to 2040, fabs included. Thinking draws 1% of energy at Year 0, so the twelfth data center would need more than the grid. |
 | Chip fabs, new | none | Sample | 0, ground. About 3 Years. A second line: two data centers a Year. | A leading-edge fab takes 2 to 4 years from groundbreaking to volume. |
-| Second launch complex | 0 | OK | 0, ground. Unchanged. | Starship cadence growth. |
+| Launch complex | 0 | OK | 0, ground. 2 Years. +40 kt a Year of lift, all of it spare. One at a time. Settled 2026-10-10: Earth's spare lift starts at 15 kt a Year. | Starship cadence growth. Propellant is about 400 GJ a tonne lifted: half a gigawatt for 40 kt a year. |
 | Cold compute annex | 300 kt | OK | 100 kt | +25% compute is about 25 GW in orbit. Solar at 0.2 to 1 kW/kg is 25 to 125 kt, plus chips and radiators. Google Suncatcher is testing it. |
 | Belt mining | 0 | OK, recalculated | 10 kt fleet for +120 kt a year. Hauling takes about 0.6 GW at the belt, about 5 kt of solar arrays. | Unproven. A mining fleet weighs something, so zero matter is too light. |
 | Orbital foundry | 6,000 kt | Heavy ×100+ | 1 kt | NASA 1980: a 100 t seed factory grows itself. |

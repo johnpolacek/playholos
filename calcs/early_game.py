@@ -116,8 +116,15 @@ def orbit_stock(now_kt=17.4, lift_2025=3.2, lift_2040=40, life=5, spare_kt=20):
     print(f'Lift grows {g:.2f} times a year. Launched 2026 to 2039: {sum(launched):.0f} kt, on top of {now_kt} kt up in 2026.')
     print(f'  If craft last {life} years, about {sum(launched[-life:]):.0f} kt is up at Year 0, nearly all of it working.')
     print(f"  Spent stages are {0.22 * now_kt:.1f} kt of today's mass. Sample for Year 0: {spare_kt} kt spare, as depots, spent stages and dead craft.")
+    up = sum(launched[-life:]); upkeep = up / life; spare_lift = lift_2040 - upkeep
+    print(f'  Keeping {up:.0f} kt flying takes {upkeep:.0f} kt of lift a year. Spare lift: about {spare_lift:.0f} kt a Year.')
     for name, kt in (('Deep vault', 10), ('Launcher', 10), ('Cold compute annex', 100)):
-        print(f'  {name}, {kt} kt: {kt / spare_kt:.1f} times the spare stock, {kt / lift_2040:.2g} Years of lift')
+        print(f'  {name}, {kt} kt: {kt / spare_kt:.1f} times the spare stock, {kt / spare_lift:.1f} Years of spare lift')
+    # What lift spends. A fully reusable heavy lifter burns about 4,600 t of methane and oxygen for 100 to 150 t to
+    # orbit, about 1,000 t of it methane at 50 MJ/kg. Order of magnitude: lift is short of pads and ships, not energy.
+    gj_per_t = 1000e3 * 50e6 / 125 / 1e9
+    print(f'  Propellant: about {gj_per_t:.0f} GJ a tonne lifted. {lift_2040} kt a year is {lift_2040 * 1e3 * gj_per_t * 1e9 / YEAR / 1e9:.1f} GW, '
+          f'{lift_2040 * 1e3 * gj_per_t * 1e9 / YEAR / GRID_2040:.4%} of the grid.')
 
 if __name__ == '__main__':
     compute_growth(); print()

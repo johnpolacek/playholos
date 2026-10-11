@@ -16,8 +16,8 @@ Q_HWO = ask('Does a half-built real instrument cost fewer Years?', 'The Habitabl
 SETTLED = [('Can the Will quiet Earth’s radars?', 'Yes, if the player chooses: keep them, fade them over about 25 Years, or cut them in about 2. What has left keeps going. Settled 2026-10-10.'),
            ('What stops a data center every Year?', 'Chips set the pace: the fabs fill one a Year, each +50% compute. Energy sets the ceiling, near a hundredfold. Settled 2026-10-10.'),
            ('What is energy for, early?', 'Thought. Each data center draws its share, and the twelfth would need more than Earth has. Settled 2026-10-10, by the rule above.'),
-           ('Is matter meant to be free early?', 'No. Matter is only what is spare in orbit: about 20 kt at Year 0, plus 40 kt a Year of lift. Working satellites don’t count. Settled 2026-10-10.')]
-Q_LIFT = ask('Is all of Earth’s lift spare?', 'Lift adds 40 kt a Year, so the 20 kt stock is 130 kt by minute 15. But craft in low orbit last about five years. Keeping 124 kt of them flying takes about 25 kt a Year.')
+           ('Is matter meant to be free early?', 'No. Matter is only what is spare in orbit: about 20 kt at Year 0. Working satellites don’t count. Settled 2026-10-10.'),
+           ('Is all of Earth’s lift spare?', 'No. About 15 kt a Year is spare of 40. The rest keeps Earth’s craft flying. The player can spend to raise it: a launch complex adds 40 kt a Year. Settled 2026-10-10.')]
 Q_CATCH = ask('What does Year 0’s kit catch?', 'A drift scan sees each star ten minutes a day. In about 1 game in 25 a neighbor’s signal arrives in the first 15 minutes, and in about 1 in 4 within the first hour. Does Earth hear it before the all-sky watch is built?')
 
 # ---------- Godview: who is out there ----------
@@ -164,7 +164,7 @@ KIT = f"""<div class="phone"><div class="onb">
         ('Radio array', 'The SKA, on two continents.'), ('Records', 'Ten years of Terra Hunting. Gaia, PLATO, and every survey before.')])}
 {SEC('GROW · WHAT WE CAN MAKE')}
 {facts([('Energy', f'{GRID_TW} TW. Thinking takes about 1% of it.'), ('Compute', f'{sci(COMPUTE)} operations a second.' + ('' if E['compute'] > .99 else ' Less than it might have been.')),
-        ('Matter', f'{SPARE_KT} kt spare in orbit: depots, spent stages, dead craft. {LIFT_KT} kt more each Year.'), ('Places', 'Small stations at the Moon’s south pole.' + (' An outpost on Mars.' if E['mars'] else ' No one on Mars.'))])}
+        ('Matter', f'{SPARE_KT} kt spare in orbit: depots, spent stages, dead craft. Lift brings {LIFT_KT} kt more each Year.'), ('Places', 'Small stations at the Moon’s south pole.' + (' An outpost on Mars.' if E['mars'] else ' No one on Mars.'))])}
 {SEC('REACH · HOW FAR WE TOUCH')}
 {facts([('Laser links', 'Messages across the home system in hours.'), ('Probes', 'Voyager 1, silent, 220 AU out.')])}
 <div class="short">The instruments are today’s. <b>The Mind is not.</b></div>
@@ -229,6 +229,7 @@ def running(t, looks=(), right=None):
     bl += [prow(name, '+50% compute', DC_YEARS, t, s) for name, s in DCS if s <= round(y, 2) < s + 1.1]
     if y >= .4: bl.append(prow('Infrared telescope', 'reads the air of nearby worlds', IR_YEARS, t, .4))
     if y >= 1.6: bl.append(prow('Deep vault', 'in the Moon’s rock', VAULT_YEARS, t, 1.6))
+    if y >= 1.7: bl.append(prow('Launch complex', '+40 kt of lift a Year', 2, t, 1.7))
     if .8 <= y: bl.append(prow('Quiet the radars', f'the last sweep leaves at Year {CUT_Y:g}', CUT_YEARS, t, .8))
     n_run = sum('newtag' not in x for x in bl)
     e, c, m = res(t)
@@ -362,6 +363,10 @@ VAULT_CONFIRM = confirm(480, 'Endure', 'Deep vault', 'Your first hedge: the Mind
     'A second home for the Mind, dug into rock beside the Moon’s south-pole stations, with its own power and a laser link home.',
     SEC('HELPS WITH') + '<div class="helps"><span class="mk you"></span><span><b class="you">The game goes on if Earth is struck</b><span class="sub">While one Mind of Earth’s survives anywhere, so do you</span></span></div>',
     15, f'<b>10 kt</b><span>of metal, from {res(479)[2]} spare in orbit</span>', VAULT_YEARS, world_strip(builds(479, [('Deep vault', 'moon', 0)]), 'ORBIT · EARTH · WHERE IT WILL BE BUILT'))
+LAUNCH_CONFIRM = confirm(510, 'Grow', 'Launch complex', 'More matter every Year, soon.',
+    'More pads and ships, flying around the clock. All of what it lifts is spare: nothing up there depends on it yet.',
+    SEC('GIVES') + '<div class="helps"><span class="mk you"></span><span><b class="you">+40 kt of lift a Year</b><span class="sub">Spare lift goes from 15 kt a Year to 55</span></span></div>',
+    5, '<b>None</b><span>a ground build, from Earth’s own industry</span>', 2, world_strip(builds(509, [('Launch complex', 'ground', 0)]), 'ORBIT · EARTH · WHERE IT WILL BE BUILT'))
 LUY_ORDER = order(540, 'Watch Luyten’s Star through the window.', [
     ('WATCH', f'<b>Hold the radio array on Luyten’s Star</b> · now to Year 3'), ('WHY', 'The sky watch gives it ten minutes a day. A reply could last hours.'),
     ('COSTS', 'A tenth of compute · the array does little else'), ('WAKES YOU', 'Anything heard · each window, heard or not')])
@@ -473,9 +478,10 @@ BEATS = [
          [(f"Hunters in this game: {', '.join(p['name'] + ' at ' + p['star'] + ', ' + state(p) for p in NB if p['n']['disposition'] == 'hunter')}." if any(p['n']['disposition'] == 'hunter' for p in NB) else 'No hunter was drawn in this game. About half of games have one.'),
           'No neighbor can have a fast bullet yet: none has been awake a century and a half.']),
     beat(450),
-    beat(480, 'Build the vault.', None, talk(VAULT_CONFIRM, f'Started. Ten Years, a seventh of our compute, and ten of the {res(479)[2].replace(" kt", "")} kilotonnes we have spare. Until it is done, all of me is here.', ('Undo',)),
-         ['Asked for at Year 0, the vault would have taken half the spare stock.'], question=Q_LIFT, settled=3),
-    beat(510),
+    beat(480, 'Build the vault.', None, talk(VAULT_CONFIRM, f'Started. Ten Years, and ten of the {res(479)[2].replace(" kt", "")} kilotonnes we have spare. Lift brings fifteen more a Year. A launch complex would bring forty on top.', ('Build a launch complex', 'Undo')),
+         ['Asked for at Year 0, the vault would have taken half the spare stock.'], settled=3),
+    beat(510, 'Build a launch complex.', None, talk(LAUNCH_CONFIRM, 'Started. Two Years, no matter, a twentieth of our compute. From Year 3.7 lift brings fifty-five kilotonnes a Year.', ('Undo',)),
+         ['Lift is short of pads and ships, not energy: 40 kt a Year burns about half a gigawatt of propellant.'], settled=4),
     beat(540, 'Watch Luyten’s Star through the window.', None, talk(LUY_ORDER, f'Set. The first window opens at Year {LUY_Y[0]}, in two and a half minutes. I’ll wake you either way.', ('Undo',))),
     beat(570), beat(600),
     beat(630, f'· The Mind glows. Taps it.', f'A Year of listening: nothing loud at {F["star"]}.',

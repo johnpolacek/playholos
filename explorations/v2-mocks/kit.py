@@ -87,7 +87,7 @@ CAUTIOUS, HIDDEN = DIALS[2] < 44, DIALS[0] > 56
 CHARTER = ('We were loud by accident. Be quiet on purpose.' if HIDDEN else
            'We came close to ending ourselves. Look first, then speak as one.' if CAUTIOUS else
            'We have always called out. Now find who answers.')
-GRID_TW, SPARE_KT, LIFT_KT = 24, 20, 40       # matter is what is spare in orbit: depots, spent stages, dead craft
+GRID_TW, SPARE_KT, LIFT_KT = 24, 20, 15       # matter is what is spare in orbit, and lift is what is spare of 40 kt a Year
 COMPUTE = 1e25 * E['compute']
 def sci(x):
     e = math.floor(math.log10(x)); m = x / 10 ** e
@@ -152,7 +152,7 @@ DCS = [('Ground data center', 0), ('Second data center', 1.1), ('Third data cent
 DC_DONE = tuple(s + 1 for _, s in DCS)
 THINK = 100 * .25 / GRID_TW                    # thinking's share of energy at Year 0, in percent
 USES = [(0, 6, 1), (0, 6, 20), (0, .1, 5), (0, .2, 5), (0, .3, 5),                         # sky watch, flash watch, three looks
-        (.4, 18.4, 15), (.8, 2.8, 5), (1.1, 2.1, 10), (1.6, 11.6, 15), (1.8, 3.0, 10)]     # telescope, quieting the radars, a Year's listening, vault, Luyten watch
+        (.4, 18.4, 15), (.8, 2.8, 5), (1.1, 2.1, 10), (1.6, 11.6, 15), (1.7, 3.7, 5), (1.8, 3.0, 10)]     # telescope, radars, a Year's listening, vault, launch complex, Luyten watch
 USES += [(s, s + 1, 5) for _, s in DCS]
 def res(t):
     y = t / 300
@@ -318,7 +318,7 @@ def world_strip(items, caption=None):
         done = built >= 1; col = INK if done else YOU; dash = '' if done else ' stroke-dasharray="2 2"'
         if where == 'ground':
             s.append(f'<path d="M{fmt(x - 7)} {fmt(y + 1)} L{fmt(x)} {fmt(y - 11)} L{fmt(x + 7)} {fmt(y + 1)} Z" fill="{INK if done else PAPER}" stroke="{col}" stroke-width="1.1"{dash}></path>')
-            ly, anchor, lx = y + 16 + (n[where] - 1) // 3 * 12, 'middle', x
+            ly, anchor, lx = (y + 16 if n[where] <= 3 else y - 17), 'middle', x          # a second row of labels sits above the ground
         elif where == 'low':
             s.append(f'<rect x="{fmt(x - 6)}" y="{fmt(y - 6)}" width="12" height="12" fill="{PAPER}" stroke="{col}" stroke-width="1.1"{dash}></rect>')
             ly, anchor, lx = y - 12 - (n[where] - 1) % 2 * 12, 'middle', x
@@ -333,4 +333,5 @@ def builds(t, extra=()):
     out += [(name.replace('Ground d', 'D'), 'ground', b(1, t, s)) for name, s in DCS if s <= round(t / 300, 2) < s + 1.1]
     if t >= 120: out.append(('Infrared telescope', 'low', b(18, t, .4)))
     if t >= 480: out.append(('Deep vault', 'moon', b(10, t, 1.6)))
+    if t >= 510: out.append(('Launch complex', 'ground', b(2, t, 1.7)))
     return out + list(extra)
