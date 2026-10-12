@@ -12,22 +12,22 @@ People on Mars · No · 15%
 Fusion on the grid · Yes, 2037 · a bit under even
 Compute at Year 0 · 100% · 10²⁵ operations a second
 Dials · leans open, expand and deepen, even, leans bold · real history, moved by the branches
-Neighbors · 9 · 3 heard Earth · first arrival Year 8.5
+Neighbors · 9 · 3 heard Earth · first arrival Year 16.9
 Seeded find · Gliese 432 A · Varn’s world
 
 ## Godview · who is out there
 The player sees none of this. Light-time is real waiting at 5 minutes a Year.
 Neighbor · Star · Light-time · At Year 0 · What it knows of Earth · What it does about it
 Anwe · watcher · Rigil Kentaurus · G star · 4.3 ly · 00:21:36 · died 1986 · dead before Year 0
+Ombe · contacter · Gliese 1128 · M star · 21.2 ly · 01:46:03 · awake 49 Years · heard Earth’s radars from 1971, and mapped its day and orbit · knocks back: a short aimed signal, its name optional · Its knock reached Earth in 2012 and 2013. No one was listening. Unanswered by 2035, it knocks back: a short aimed signal, its name optional. Its answer to Earth’s radars, tried again: sent 2036, reaches Earth Year 16.9, +01:24:21. Year 0’s sky watch would miss it. The all-sky watch catches it.
 Kesh · watcher · Gliese 216 B · K star · 29.4 ly · 02:26:45 · wakes Year 66.9 · +05:34:42 · has not heard Earth
 Varn · inward · Gliese 432 A · K star · 31.2 ly · 02:35:54 · wakes Year 57.6 · +04:47:48 · has not heard Earth
 Kirrin · watcher · strange · 12 Ophiuchi · K star · 32.3 ly · 02:41:21 · wakes Year 81.2 · +06:45:52 · has not heard Earth
 Nuvo · contacter · 20 Leonis Minoris · G star · 48.7 ly · 04:03:27 · awake 1 Year · has not heard Earth
 Hael · contacter · Gliese 1021 · G star · 49.1 ly · 04:05:24 · awake 29 Years · heard Earth’s radars from 1999, and mapped its day and orbit · knocks back: a short aimed signal, its name optional · Its answer to Earth’s radars: sent 2011, reaches Earth Year 19.9, +01:39:35. Year 0’s sky watch would miss it. The all-sky watch misses it.
-Ombe · contacter · Gliese 4338 B · M star · 49.1 ly · 04:05:33 · awake 44 Years · heard Earth’s radars from 1999, and mapped its day and orbit · knocks back: a short aimed signal, its name optional · Its answer to Earth’s radars: sent 1999, reaches Earth Year 8.5, +00:42:21. Year 0’s sky watch would miss it. The all-sky watch catches it.
 Ulan · inward · Gliese 52 · K star · 49.1 ly · 04:05:42 · wakes Year 29.4 · +02:27:01 · has not heard Earth
 Ree · contacter · 19 Draconis · F star · 49.9 ly · 04:09:42 · awake 21 Years · heard Earth’s radars from 2000, and mapped its day and orbit · knocks back: a short aimed signal, its name optional · Its answer to Earth’s radars: sent 2020, reaches Earth Year 29.6, +02:28:13. Year 0’s sky watch would miss it. The all-sky watch catches it.
-[drawing: Every neighbor in this game, seen from above the galaxy’s plane; labels: 10 ly · 00:50:00, 20 ly · 01:40:00, 30 ly · 02:30:00, 40 ly · 03:20:00, 50 ly · 04:10:00, Earth, Anwe, Rigil Kentaurus · 4.3 ly, Kesh, Gliese 216 B · 29.4 ly, Varn, Gliese 432 A · 31.2 ly, Kirrin, 12 Ophiuchi · 32.3 ly, Nuvo, 20 Leonis Minoris · 48.7 ly, Hael, Gliese 1021 · 49.1 ly, Ombe, Gliese 4338 B · 49.1 ly, Ulan, Gliese 52 · 49.1 ly, Ree, 19 Draconis · 49.9 ly, 82 Eridani, Fomalhaut, Gliese 432 A, Luyten’s Star]
+[drawing: Every neighbor in this game, seen from above the galaxy’s plane; labels: 10 ly · 00:50:00, 20 ly · 01:40:00, 30 ly · 02:30:00, 40 ly · 03:20:00, 50 ly · 04:10:00, Earth, Anwe, Rigil Kentaurus · 4.3 ly, Ombe, Gliese 1128 · 21.2 ly, Kesh, Gliese 216 B · 29.4 ly, Varn, Gliese 432 A · 31.2 ly, Kirrin, 12 Ophiuchi · 32.3 ly, Nuvo, 20 Leonis Minoris · 48.7 ly, Hael, Gliese 1021 · 49.1 ly, Ulan, Gliese 52 · 49.1 ly, Ree, 19 Draconis · 49.9 ly, 82 Eridani, Fomalhaut, Gliese 432 A, Luyten’s Star]
 Filled: awake at Year 0. Open: wakes later. Cross: dead. Blue ring: has heard Earth. Amber: a hunter. Diamonds: Earth’s leads.
 
 ## Before Year 0
@@ -90,10 +90,10 @@ Kappa¹ Ceti Year 0.1 · Gliese 208 Year 0.8 · 55 Cancri Year 4.6 · HD 10307 Y
 I can say where our noise has gone. · I can’t say who heard it. · No one can, yet.
 [What you inherit]
 Godview
-Heard Earth’s radars: Hael, Ombe, Ree.
+Heard Earth’s radars: Ombe, Hael, Ree.
 At the stars Earth knocked on: no one, in this game.
 The Mind lists where the noise went, never who heard. That holds here.
-No knock reached Earth before Year 0 in this game. About 1 game in 5 has one that Earth missed.
+Before Year 0, 2 knocks reached Earth unheard: Ombe’s in 2012 and 2013. Nothing recorded them, so no archive holds them.
 Settled · What happened to knocks that arrived before Year 0? They happened, and Earth missed them. Only a knock Earth would have caught is rolled again. The sender, unanswered, may try again. Nothing was recorded, so no archive holds them. Settled 2026-10-10.
 5 · What you inherit
 YEAR 0 · WHAT EARTH ALREADY HAS
@@ -190,7 +190,7 @@ THE MIND · Queued. Nothing here sends anything. When you begin, one Year passes
 [Talk to the Mind]
 Godview
 Year 0 starts at the tap. From then the clock runs, offline too.
-Nothing Earth does in the next 15 minutes can reach anyone: the nearest living neighbor, Kesh, is 29.4 ly away. Light from Year 0 gets there at Year 29.4, +02:26:45.
+Nothing Earth does in the next 15 minutes can reach anyone: the nearest living neighbor, Ombe, is 21.2 ly away. Light from Year 0 gets there at Year 21.2, +01:46:03.
 
 ## The first 15 minutes
 From Begin. 11 of 31 half-minutes had nothing new for the player.
@@ -324,12 +324,12 @@ The clock runs while you talk: 1 Year every · 00:05:00.
 Who has heard us?
 THE MIND · I can’t know. Our radars have crossed every star within ninety light-years. Anyone with a dish like ours who watched us for days has our day, our year, and where we are.
 How many could that be?
-THE MIND · About 888 stars within fifty light-years could keep a world like ours. If minds are common, some of them heard. If they are careful, none will say so.
+THE MIND · About 859 stars within fifty light-years could keep a world like ours. If minds are common, some of them heard. If they are careful, none will say so.
 What would you do?
 ITS VIEW · FROM OUR CHARTER AND DIALS · Assume someone has, and that they are as curious as we are. Listen properly. Then call. · leans open · expand and deepen, even · leans bold
 Ask the Mind… · [Send · ↑]
 Godview
-3 of 8 living neighbors have heard Earth: Hael, Ombe, Ree.
+3 of 8 living neighbors have heard Earth: Ombe, Hael, Ree.
 The Mind can only say it doesn’t know. The concept sets that: it lists where the noise went, never who heard.
 +3:30 · Year 0.7
 “Can we go quiet?”
@@ -370,8 +370,8 @@ THE MIND · Started. 2 Years, no matter. The last sweep leaves at Year 2.8. Its 
 [Talk to the Mind]
 Godview
 Earth’s 2003 message, Cosmic Call 2, reaches Gliese 208, 37.3 ly away. No one is there.
+Ombe, 21.2 ly: hears them stop at Year 24.0, +02:00:03. It can’t tell waking from dying. It sends a probe or a watcher.
 Hael, 49.1 ly: hears them stop at Year 51.9, +04:19:24. It can’t tell waking from dying. It sends a probe or a watcher.
-Ombe, 49.1 ly: hears them stop at Year 51.9, +04:19:33. It can’t tell waking from dying. It sends a probe or a watcher.
 Ree, 49.9 ly: hears them stop at Year 52.7, +04:23:42. It can’t tell waking from dying. It knocks back: a short aimed signal, its name optional. It takes a quarter of a Year to act, so that reaches Earth at Year 102.9.
 Wakes after the last sweep has passed, and never hears one: Kesh, Varn, Kirrin. Across games, about 1 neighbor in 9.
 Ulan wakes at Year 29.4, while sweeps still pass it until Year 51.9. It can still find them.

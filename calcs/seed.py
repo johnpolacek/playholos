@@ -137,7 +137,7 @@ def draw(seed, rows=None):
         for msg, sent, target, ly in knocks.KNOCKS:
             if knocked.get(p['host']['id']) != target: continue
             arrives = sent + d
-            if acts.random() < nb.caught_odds(n, p['host'], w, arrives):
+            if not dead and acts.random() < nb.caught_odds(n, p['host'], w, arrives):   # a dead world has no reactions written
                 t = max(w, arrives)
                 p['caught'].append(dict(msg=msg, arrives=arrives, acts=t, move=act(p, 'knock', t, f'its answer to {msg}', table, acts)))
         for start, end, watts, *how in n['emissions'] if dead else []:   # a dead world's last broadcast

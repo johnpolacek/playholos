@@ -61,12 +61,13 @@ Settled 2026-10-06.
 Settled 2026-10-10. Numbers in [calcs/neighbors.py](calcs/neighbors.py).
 
 - **The seed sometimes puts a neighbor where Earth knocked.** In one game in five, if a drawn neighbor can live at a messaged star, the seed places it there.
-  - By chance alone, about one game in 10 has someone at a messaged star. With the nudge, about 3 in 10. Measured on 1,000 drawn games ([calcs/seed.py](calcs/seed.py)), replacing an earlier estimate of one in 13 and one in four.
+  - By chance alone, about one game in 27 has someone at a messaged star. With the nudge, about 1 in 5, and a knock is caught in about 1 in 10. Measured on 1,000 drawn games ([calcs/seed.py](calcs/seed.py)), 2026-10-12. Before Gliese 208 left the host list it was one in 10 and 3 in 10.
   - It is a game choice, not physics. It contradicts nothing: Earth chose those stars because they might have planets.
-- **Seven messaged stars can host a neighbor.** Luyten's Star, TZ Arietis, Gliese 526, Gliese 581, Gliese 49, Gliese 208, and 55 Cancri B.
+- **Six messaged stars can host a neighbor.** Luyten's Star, TZ Arietis, Gliese 526, Gliese 581, Gliese 49, and 55 Cancri B.
   - 55 Cancri A has a giant crossing its warm zone. Its companion B sat in the same beam.
   - Altair, 47 Ursae Majoris, Kappa¹ Ceti, HD 10307 and Teegarden's Star can't host one.
-  - Six are M dwarfs, so mostly M-dwarf neighbors fit. Gliese 208, a dim K star, fits 15 of the 30.
+  - Gliese 208 can't either, from 2026-10-12. It turns every 12.3 days, which dates it near half a billion years (Engle 2024, Grandjean et al. 2021). Earth's 2003 message still arrives there at Year 0.8. No one is home.
+  - All six are M dwarfs, so only neighbors that can live at one fit: 9 of the 30.
 - **Who catches a knock.** A knock lasts hours. Only a neighbor already keeping a beam on Sol catches it.
   - That means it heard Earth's radars first, and its arrays were running when the knock arrived.
   - Then a listener catches it about 3 times in 4, an ordinary one 1 in 2, an inward one 1 in 10.
@@ -88,7 +89,7 @@ Settled 2026-10-10. Numbers from `python3 calcs/seed.py stats`. Sources in [HOLO
 - **What it costs.** Ground work: no matter, almost no energy, a small share of compute. It moves Earth toward Hidden. Missile launches are already watched by heat from orbit, and aircraft already fly on transponders, so a Mind can retire the radars. That last step is speculation.
 - **What it buys.** A neighbor that starts looking after the last sweep has passed it never hears one.
   - About 70% of living neighbors heard Earth before Year 0. For them nothing changes.
-  - If the last sweep leaves by Year 3, about 1 neighbor in 9 wakes too late to hear it. By Year 30, about 1 in 24.
+  - If the last sweep leaves by Year 3, about 1 neighbor in 9 wakes too late to hear it. By Year 30, about 1 in 23.
   - So the gain shrinks every Year the player waits.
 - **What it reveals.** Silence travels at light speed. A neighbor listening to Earth hears the radars stop one light-time later, and learns the date. It can't tell waking from dying.
   - That is news, and it rolls its reaction table: "a world it was listening to goes quiet" ([HOLOS_REACTIONS.md](HOLOS_REACTIONS.md)). A watcher mostly watches harder. A contacter may knock to ask if anyone is left.
@@ -102,7 +103,7 @@ Settled 2026-10-10. Numbers from `python3 calcs/seed.py stats`.
 
 - **Physics decides what Earth catches.** Three things: whether the star is in the instrument's sky, whether it is looking in those hours, and whether the signal is above its floor.
 - **A neighbor's knock is taken to be like Earth's own.** Cosmic Call sent about 10¹² W along its beam, for about four hours a star. A call is a steady broadcast.
-- **Year 0's sky watch misses most of them.** It sees each direction north of −20° for ten minutes a day. That is 63% of host stars, and a four-hour knock overlaps its pass about one time in six.
+- **Year 0's sky watch misses most of them.** It sees each direction north of −20° for ten minutes a day. That is 62% of host stars by weight, and a four-hour knock overlaps its pass about one time in six.
   - Of the signals that reach Earth in the first hour, it catches about 1 in 5.
   - About 4 in 10 come from the southern sky it never sees. About 1 in 7 are too faint for it.
   - The all-sky watch would catch about 9 in 10.
@@ -252,9 +253,15 @@ Settled 2026-10-06, from first principles rather than for the game's sake.
   - *Years since waking:* growth under the same limits as Earth's, from prerequisite chains, matter, energy and heat.
 - **Where they live.** Any star within 50 ly that could keep a habitable world for long enough, drawn by weight ([calcs/hosts.py](calcs/hosts.py), [data/hosts-50ly.csv](data/hosts-50ly.csv)).
   - *Weights:* G and K dwarfs 1, late F one half, M dwarfs one tenth. G and K are the known case. Late F stars live 3 to 7 billion years. Rocky worlds close to M dwarfs keep turning out airless, though temperate ones are open.
-  - *Dropped:* stars known to be younger than about a billion years, with their companions. Checked 2026-10-10 against published ages and young-group lists: 25 more left, among them Xi Boötis A and HD 166. Gaia's own ages miss young cool stars. Stars whose companion leaves no stable orbit in the warm zone (Holman and Wiegert 1999), whether Gaia splits the pair or only a published orbit shows it (ORB6, SB9). Stars with a white dwarf companion, judged in [calcs/scorch.py](calcs/scorch.py): see the next bullet. Giant stars. And stars where a known planet of 10 Earth masses or more crosses the warm zone.
+  - *Dropped:* stars known to be younger than about a billion years, with their companions. Checked 2026-10-10 against published ages and young-group lists: 25 more left, among them Xi Boötis A and HD 166. Gaia's own ages miss young cool stars. Borderline ages were settled 2026-10-12: see the next bullet. Stars whose companion leaves no stable orbit in the warm zone (Holman and Wiegert 1999), whether Gaia splits the pair or only a published orbit shows it (ORB6, SB9). Stars with a white dwarf companion, judged in [calcs/scorch.py](calcs/scorch.py): see the next bullet. Giant stars. And stars where a known planet of 10 Earth masses or more crosses the warm zone.
+  - *How sure "young" must be,* settled 2026-10-12. A star leaves only when every published age is under a billion years, error bars included. An age that straddles a billion is improbable, not contradicted, so the star stays.
+    - Ages counted: spin, activity, X-rays, lithium, surface gravity, and the age of a star it is bound to. At least one must come from a method built for that kind of star.
+    - Not counted: where a K or M star sits on the main sequence, which barely moves in ten billion years. Survey pipeline fits. Assumed defaults. Spin set by a close companion's tides.
+    - 29 stars left: HD 82106, Gliese 208, 25 red dwarfs, and two bound companions. Among the red dwarfs are Ross 154, AD Leonis, EV Lacertae and YZ Canis Minoris, all fast-spinning flare stars.
+    - Kept: 58 Eridani, 0.45 to 1.3 billion years. Gliese 338 A and B, 0.65 to 1.3. GJ 3417 A, listed as under 0.3 but turning once in 54 days, which reads 3.9. Three dim K stars whose only ages push a Sun-like relation onto redder stars.
+    - Set aside: dropping on the middle estimate, which would also take 58 Eridani. And leaving the list as it was.
   - *White dwarf companions,* settled 2026-10-11 ([calcs/scorch.py](calcs/scorch.py)). A white dwarf was a giant first, and lit its partner's warm zone from closer in than the pair sits now. Sixteen stars have one. A scorched zone restarts the same billion-year clock as a young star. 40 Eridani C leaves: its zone took about 18 times Earth's sunlight 0.12 billion years ago. Procyon and GJ 3991 leave because their zones hold no stable orbit. Gliese 86, Stein 2051 A and Gliese 283 B stay: scorched, but 1.25 to 1.9 billion years ago. Improbable, not contradicted: no paper found says such a zone stays dead. The other ten took under Earth's own sunlight.
-  - *What's left:* 888 stars, F 16, G 49, K 102, M 721, worth about 231 G-star equivalents. Stars whose color and brightness disagree are left out as bad photometry.
+  - *What's left:* 859 stars, F 16, G 49, K 100, M 694, worth about 226 G-star equivalents. Stars whose color and brightness disagree are left out as bad photometry.
   - *Close pairs Gaia can't split,* tested 2026-10-10 against 114 published orbits ([calcs/binaries.py](calcs/binaries.py)). Eleven hosts lost their warm zone, among them Chi Draconis, Zeta Herculis and Porrima. Others keep part of it, such as Mu Cassiopeiae A, 0.64 to 0.99 AU. The checker tests every placement against them.
   - *Wobble-only orbits need backing.* An orbit seen only in a star's wobble, implying a tug over 1 km/s, counts only if a spectroscopic orbit confirms it. Velocity surveys of bright near stars would have seen it. That clears 107 Piscium, whose velocity is steady to about 1 m/s (Soubiran et al. 2018), and 61 Cygni A.
 - **Known planets limit them.** A neighbor's world must keep clear of a star's known planets, and tug less than Earth could feel in 2026. At stars watched hardest, such as Barnard's Star and Tau Ceti, that floor is 0.2 to 0.4 m/s, not 1.
@@ -376,7 +383,7 @@ Answered one at a time, in this order. Every answer must be permitted by current
 1. **Settled 2026-10-10:** branch odds, read on the Metaculus pages. Taiwan is one roll: invasion 26%, blockade alone about 20%, neither 54%. Nuclear use 24%. See [Year 0 and Earth's road to it](#year-0-and-earths-road-to-it).
 2. **Settled 2026-10-06:** kinds of matter and the branches' effects. Prices and splits are proposed in [the audit](HOLOS_PROJECT_AUDIT.md), to test in the mocks.
 3. **Settled 2026-10-06:** Earth's leads. See [Earth's leads at Year 0](#earths-leads-at-year-0).
-4. **The neighbor roster.** Thirty written as of 2026-10-10, in [HOLOS_NEIGHBORS.md](HOLOS_NEIGHBORS.md#the-roster): 15 watchers, 8 contacters, 5 inward, 2 hunters, 7 strange, 3 dead. Each passes the checker at most placements. Reaction tables, voice briefs and small voice banks are written: 1,110 lines, in [data/voices/](data/voices/). Close binaries are checked against published orbits. Still open: full banks once the mocks show what players read most.
+4. **The neighbor roster.** Thirty written as of 2026-10-10, in [HOLOS_NEIGHBORS.md](HOLOS_NEIGHBORS.md#the-roster): 15 watchers, 8 contacters, 5 inward, 2 hunters, 7 strange, 3 dead. Each passes the checker at most placements. Reaction tables, voice briefs and small voice banks are written: 1,110 lines, in [data/voices/](data/voices/). Close binaries are checked against published orbits. The host list was rechecked for white dwarf companions on 2026-10-11 and for borderline ages on 2026-10-12, leaving 859 stars. Still open: full banks once the mocks show what players read most.
 5. **Settled 2026-10-10:** how neighbors play and what it costs. See [How neighbors play](#how-neighbors-play).
 6. **Settled 2026-10-10:** how a game starts. See [How a game starts](#how-a-game-starts).
 7. **Settled 2026-10-10:** death and new games. See [Death and new games](#death-and-new-games).

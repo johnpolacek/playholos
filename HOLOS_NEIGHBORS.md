@@ -97,36 +97,36 @@ Thirty neighbors. Each game's seed draws 3 to 30 of them and places each one: `p
 
 | Neighbor | Disposition | World | Hosts | Example home | Passes |
 | --- | --- | --- | --- | --- | --- |
-| Veyra | watcher | Earth-like world | GK | Delta Pavonis | 96% |
+| Veyra | watcher | Earth-like world | GK | Delta Pavonis | 94% |
 | Hael | contacter | thawed world | G | Beta Hydri | 69% |
 | Kesh | watcher | super-Earth | K | Epsilon Indi | 98% |
-| Tavi | watcher, strange | locked dry world | M | Ross 128 | 87% |
+| Tavi | watcher, strange | locked dry world | M | Ross 128 | 86% |
 | Ombe | contacter | locked eyeball world | M | Groombridge 34 A | 72% |
-| Sere | watcher | slow-turning world | GK | 70 Ophiuchi A | 96% |
-| Ilm | contacter | superhabitable world | GK | 61 Cygni A | 96% |
-| Varn | inward | heavy super-Earth | K | Gliese 673 | 95% |
-| Quessa | watcher, strange | dry small world | GK | Toliman | 96% |
-| Daal | hunter | Earth-like world | GK | Groombridge 1618 | 96% |
+| Sere | watcher | slow-turning world | GK | 70 Ophiuchi A | 94% |
+| Ilm | contacter | superhabitable world | GK | 61 Cygni A | 94% |
+| Varn | inward | heavy super-Earth | K | Gliese 673 | 96% |
+| Quessa | watcher, strange | dry small world | GK | Toliman | 94% |
+| Daal | hunter | Earth-like world | GK | Groombridge 1618 | 93% |
 | Ystra | inward, strange | locked dry world | M | Luyten's Star | 90% |
-| Nuvo | contacter | Earth-like world | GK | 36 Ophiuchi C | 96% |
+| Nuvo | contacter | Earth-like world | GK | 36 Ophiuchi C | 94% |
 | Pelle | watcher, dead | Earth-like world | K | HD 16160 | 97% |
 | Kirrin | watcher, strange | heavy world | K | HR 7703 | 98% |
 | Ruun | contacter | small old world | G | HD 102365 | 88% |
 | Faen | inward | Earth-like world under a hot sun | F | Gamma Serpentis | 100% |
-| Corra | watcher | locked heavy world | M | Struve 2398 A | 62% |
+| Corra | watcher | locked heavy world | M | Struve 2398 A | 60% |
 | Lusk | watcher | cloudy super-Earth | KM | Gliese 570 A | 98% |
 | Iru | contacter, strange | small world, two peoples | K | 107 Piscium | 98% |
 | Anwe | watcher, dead | Earth-like world | G | Achird | 88% |
 | Tolle | watcher | eccentric world | G | Zeta Tucanae | 90% |
-| Vesh | hunter, strange | locked world | M | Lalande 21185 | 84% |
-| Sabe | contacter | heavy super-Earth | GK | HD 4628 | 96% |
+| Vesh | hunter, strange | locked world | M | Lalande 21185 | 82% |
+| Sabe | contacter | heavy super-Earth | GK | HD 4628 | 94% |
 | Ulan | inward | bombarded world | K | Tau Ceti | 98% |
 | Mirr | watcher, dead | locked world, struck | M | Gliese 412 A | 88% |
 | Odun | watcher | cold world, tilt swings | K | Keid | 97% |
 | Ree | contacter | Earth-like world | FG | Chara | 94% |
-| Hesk | inward, strange | slow-turning world | M | Lacaille 8760 | 97% |
-| Arro | watcher | Earth-like world | GK | Gliese 666 A | 96% |
-| Wenn | watcher | small slow world | M | Gliese 526 | 97% |
+| Hesk | inward, strange | slow-turning world | M | Lacaille 8760 | 96% |
+| Arro | watcher | Earth-like world | GK | Gliese 666 A | 94% |
+| Wenn | watcher | small slow world | M | Gliese 526 | 96% |
 
 - **Dispositions.** Watchers 15, 50%. Contacters 8, 27%. Inward 5, 17%. Hunters 2, 7%. Near the targets of 55, 25, 15 and 5, from [Hostility](HOLOS_GAME_CONCEPT.md#hostility).
 - **Strange ones.** Seven, about 1 in 4: bodies, senses or societies unlike ours, each with an Earth precedent.
@@ -140,7 +140,7 @@ Thirty neighbors. Each game's seed draws 3 to 30 of them and places each one: `p
 
 ### Veyra
 
-Reworked from v1, 2026-10-06. **Watcher**, from 2026-10-10. Numbers in [calcs/neighbors.py](calcs/neighbors.py). The checker passes it at 96% of seeded placements. The rest fail when its orbit would face Sol edge-on and transit, or crowd a known planet.
+Reworked from v1, 2026-10-06. **Watcher**, from 2026-10-10. Numbers in [calcs/neighbors.py](calcs/neighbors.py). The checker passes it at 94% of seeded placements. The rest fail when its orbit would face Sol edge-on and transit, or crowd a known planet.
 
 **What changed from v1.** v1 fixed Veyra at Delta Pavonis, waking with everyone at Year 0, with a kit a century past today's. Now the seed places it, its waking can fall a century either way of Earth's, and its kit follows its world and history. Its history is counted in years before its own waking, so it fits any placement. Delta Pavonis stays its example home.
 
@@ -239,7 +239,7 @@ Reworked from v1, 2026-10-06. **Watcher**, from 2026-10-10. The checker passes i
 
 ### Tavi
 
-Added 2026-10-10. **Watcher, strange.** The checker passes it at 87% of seeded placements, at 155 different stars.
+Added 2026-10-10. **Watcher, strange.** The checker passes it at 86% of seeded placements, at 154 different stars.
 
 **Where.** M dwarfs only. Its people see in the far red and near infrared, the light of a dim red sun. At Ross 128 it is 11.0 ly from Sol, 55 minutes of light at 5 real minutes a Year.
 
@@ -267,7 +267,7 @@ Added 2026-10-10. **Watcher, strange.** The checker passes it at 87% of seeded p
 
 ### Ombe
 
-Added 2026-10-10. **Contacter.** The checker passes it at 72% of seeded placements, at 127 different stars.
+Added 2026-10-10. **Contacter.** The checker passes it at 72% of seeded placements, at 130 different stars.
 
 **Where.** M dwarfs only. Its life grew under a red sun that never moves. At Groombridge 34 A it is 11.6 ly from Sol, 58 minutes of light at 5 real minutes a Year.
 
@@ -296,7 +296,7 @@ Added 2026-10-10. **Contacter.** The checker passes it at 72% of seeded placemen
 
 ### Sere
 
-Added 2026-10-10. **Watcher.** The checker passes it at 96% of seeded placements, at 111 different stars.
+Added 2026-10-10. **Watcher.** The checker passes it at 94% of seeded placements, at 105 different stars.
 
 **Where.** G and K stars. It needs a bright enough sun for its long days. At 70 Ophiuchi A it is 16.7 ly from Sol, 1 hour 23 minutes of light at 5 real minutes a Year.
 
@@ -324,7 +324,7 @@ Added 2026-10-10. **Watcher.** The checker passes it at 96% of seeded placements
 
 ### Ilm
 
-Added 2026-10-10. **Contacter.** The checker passes it at 96% of seeded placements, at 111 different stars.
+Added 2026-10-10. **Contacter.** The checker passes it at 94% of seeded placements, at 106 different stars.
 
 **Where.** G and K stars. Its people were made for long, steady orange light. At 61 Cygni A it is 11.4 ly from Sol, 57 minutes of light at 5 real minutes a Year.
 
@@ -354,7 +354,7 @@ Added 2026-10-10. **Contacter.** The checker passes it at 96% of seeded placemen
 
 ### Varn
 
-Added 2026-10-10. **Inward.** The checker passes it at 95% of seeded placements, at 84 different stars.
+Added 2026-10-10. **Inward.** The checker passes it at 96% of seeded placements, at 89 different stars.
 
 **Where.** K stars only. At Gliese 673 it is 25.2 ly from Sol, 2 hours 6 minutes of light at 5 real minutes a Year.
 
@@ -381,7 +381,7 @@ Added 2026-10-10. **Inward.** The checker passes it at 95% of seeded placements,
 
 ### Quessa
 
-Added 2026-10-10. **Watcher, strange.** The checker passes it at 96% of seeded placements, at 111 different stars.
+Added 2026-10-10. **Watcher, strange.** The checker passes it at 94% of seeded placements, at 106 different stars.
 
 **Where.** G and K stars. At Toliman, Alpha Centauri B it is 4.3 ly from Sol, 22 minutes of light at 5 real minutes a Year.
 
@@ -409,7 +409,7 @@ Added 2026-10-10. **Watcher, strange.** The checker passes it at 96% of seeded p
 
 ### Daal
 
-Added 2026-10-10. **Hunter.** The checker passes it at 96% of seeded placements, at 110 different stars.
+Added 2026-10-10. **Hunter.** The checker passes it at 93% of seeded placements, at 105 different stars.
 
 **Where.** G and K stars. At Groombridge 1618 it is 15.9 ly from Sol, 1 hour 19 minutes of light at 5 real minutes a Year.
 
@@ -437,7 +437,7 @@ Added 2026-10-10. **Hunter.** The checker passes it at 96% of seeded placements,
 
 ### Ystra
 
-Added 2026-10-10. **Inward, strange.** The checker passes it at 90% of seeded placements, at 161 different stars.
+Added 2026-10-10. **Inward, strange.** The checker passes it at 90% of seeded placements, at 158 different stars.
 
 **Where.** M dwarfs only. At Luyten's Star it is 12.3 ly from Sol, 1 hour 1 minutes of light at 5 real minutes a Year.
 
@@ -464,7 +464,7 @@ Added 2026-10-10. **Inward, strange.** The checker passes it at 90% of seeded pl
 
 ### Nuvo
 
-Added 2026-10-10. **Contacter.** The checker passes it at 96% of seeded placements, at 111 different stars.
+Added 2026-10-10. **Contacter.** The checker passes it at 94% of seeded placements, at 106 different stars.
 
 **Where.** G and K stars. At 36 Ophiuchi C it is 19.4 ly from Sol, 1 hour 37 minutes of light at 5 real minutes a Year.
 
@@ -492,7 +492,7 @@ Added 2026-10-10. **Contacter.** The checker passes it at 96% of seeded placemen
 
 ### Pelle
 
-Added 2026-10-10. **Watcher, dead.** The checker passes it at 97% of seeded placements, at 85 different stars.
+Added 2026-10-10. **Watcher, dead.** The checker passes it at 97% of seeded placements, at 88 different stars.
 
 **Where.** K stars only. At HD 16160 it is 23.6 ly from Sol, 1 hour 58 minutes of light at 5 real minutes a Year.
 
@@ -520,7 +520,7 @@ Added 2026-10-10. **Watcher, dead.** The checker passes it at 97% of seeded plac
 
 ### Kirrin
 
-Added 2026-10-10. **Watcher, strange.** The checker passes it at 98% of seeded placements, at 86 different stars.
+Added 2026-10-10. **Watcher, strange.** The checker passes it at 98% of seeded placements, at 89 different stars.
 
 **Where.** K stars only. At HR 7703 it is 19.6 ly from Sol, 1 hour 38 minutes of light at 5 real minutes a Year.
 
@@ -602,7 +602,7 @@ Added 2026-10-10. **Inward.** The checker passes it at 100% of seeded placements
 
 ### Corra
 
-Added 2026-10-10. **Watcher.** The checker passes it at 62% of seeded placements, at 110 different stars.
+Added 2026-10-10. **Watcher.** The checker passes it at 60% of seeded placements, at 111 different stars.
 
 **Where.** M dwarfs only. At Struve 2398 A it is 11.4 ly from Sol, 57 minutes of light at 5 real minutes a Year.
 
@@ -630,7 +630,7 @@ Added 2026-10-10. **Watcher.** The checker passes it at 62% of seeded placements
 
 ### Lusk
 
-Added 2026-10-10. **Watcher.** The checker passes it at 98% of seeded placements, at 96 different stars.
+Added 2026-10-10. **Watcher.** The checker passes it at 98% of seeded placements, at 100 different stars.
 
 **Where.** K stars and the brightest M dwarfs. Its air, several times as thick as Earth's, keeps it turning at stars of about half the Sun's mass or more, where thin air would let it lock (Leconte et al. 2015). At Gliese 570 A it is 19.2 ly from Sol, 1 hour 36 minutes of light at 5 real minutes a Year.
 
@@ -658,7 +658,7 @@ Added 2026-10-10. **Watcher.** The checker passes it at 98% of seeded placements
 
 ### Iru
 
-Added 2026-10-10. **Contacter, strange.** The checker passes it at 98% of seeded placements, at 86 different stars.
+Added 2026-10-10. **Contacter, strange.** The checker passes it at 98% of seeded placements, at 89 different stars.
 
 **Where.** K stars only. At 107 Piscium it is 24.9 ly from Sol, 2 hours 5 minutes of light at 5 real minutes a Year.
 
@@ -741,7 +741,7 @@ Added 2026-10-10. **Watcher.** The checker passes it at 90% of seeded placements
 
 ### Vesh
 
-Added 2026-10-10. **Hunter, strange.** The checker passes it at 84% of seeded placements, at 150 different stars.
+Added 2026-10-10. **Hunter, strange.** The checker passes it at 82% of seeded placements, at 147 different stars.
 
 **Where.** M dwarfs only. At Lalande 21185 it is 8.3 ly from Sol, 42 minutes of light at 5 real minutes a Year.
 
@@ -769,7 +769,7 @@ Added 2026-10-10. **Hunter, strange.** The checker passes it at 84% of seeded pl
 
 ### Sabe
 
-Added 2026-10-10. **Contacter.** The checker passes it at 96% of seeded placements, at 111 different stars.
+Added 2026-10-10. **Contacter.** The checker passes it at 94% of seeded placements, at 106 different stars.
 
 **Where.** G and K stars. At HD 4628 it is 24.2 ly from Sol, 2 hours 1 minutes of light at 5 real minutes a Year.
 
@@ -797,7 +797,7 @@ Added 2026-10-10. **Contacter.** The checker passes it at 96% of seeded placemen
 
 ### Ulan
 
-Added 2026-10-10. **Inward.** The checker passes it at 98% of seeded placements, at 86 different stars.
+Added 2026-10-10. **Inward.** The checker passes it at 98% of seeded placements, at 89 different stars.
 
 **Where.** K stars only. At Tau Ceti it is 11.9 ly from Sol, 1 hour 0 minutes of light at 5 real minutes a Year.
 
@@ -852,7 +852,7 @@ Added 2026-10-10. **Watcher, dead.** The checker passes it at 88% of seeded plac
 
 ### Odun
 
-Added 2026-10-10. **Watcher.** The checker passes it at 97% of seeded placements, at 86 different stars.
+Added 2026-10-10. **Watcher.** The checker passes it at 97% of seeded placements, at 89 different stars.
 
 **Where.** K stars only. At Keid, 40 Eridani A it is 16.3 ly from Sol, 1 hour 22 minutes of light at 5 real minutes a Year.
 
@@ -908,7 +908,7 @@ Added 2026-10-10. **Contacter.** The checker passes it at 94% of seeded placemen
 
 ### Hesk
 
-Added 2026-10-10. **Inward, strange.** The checker passes it at 97% of seeded placements, at 87 different stars.
+Added 2026-10-10. **Inward, strange.** The checker passes it at 96% of seeded placements, at 85 different stars.
 
 **Where.** The brightest M dwarfs only, about half the Sun's mass or more. Its air, several times as thick as Earth's, keeps its world turning slowly, where thin air would let it lock (Leconte et al. 2015). At Lacaille 8760 it is 12.9 ly from Sol, 1 hour 5 minutes of light at 5 real minutes a Year.
 
@@ -935,7 +935,7 @@ Added 2026-10-10. **Inward, strange.** The checker passes it at 97% of seeded pl
 
 ### Arro
 
-Added 2026-10-10. **Watcher.** The checker passes it at 96% of seeded placements, at 111 different stars.
+Added 2026-10-10. **Watcher.** The checker passes it at 94% of seeded placements, at 106 different stars.
 
 **Where.** G and K stars. At Gliese 666 A it is 28.7 ly from Sol, 2 hours 23 minutes of light at 5 real minutes a Year.
 
@@ -963,7 +963,7 @@ Added 2026-10-10. **Watcher.** The checker passes it at 96% of seeded placements
 
 ### Wenn
 
-Added 2026-10-10. **Watcher.** The checker passes it at 97% of seeded placements, at 87 different stars.
+Added 2026-10-10. **Watcher.** The checker passes it at 96% of seeded placements, at 85 different stars.
 
 **Where.** The brightest M dwarfs only. Like Hesk's, its thick air keeps it turning (Leconte et al. 2015). At Gliese 526 it is 17.7 ly from Sol, 1 hour 29 minutes of light at 5 real minutes a Year.
 

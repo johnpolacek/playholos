@@ -552,6 +552,50 @@ What Sol's own instruments have found nearby. For v2 open question 3.
 - **[King et al. 2003, the Ursa Major group](https://iopscience.iop.org/article/10.1086/368241)** · Published, AJ 125, 1980.
   - Members by motion, brightness and activity. The group is about 0.4 to 0.5 billion years old.
   - Used: not for drops. It lists Zeta Trianguli Australis and Gamma Leporis as likely members, but their own ages read older. See To check.
+- **Borderline ages, settled 2026-10-12.** A star leaves the host list only when every published age is under a billion years, error bars included. A straddling age stays: improbable, not contradicted. 29 stars left, and 859 remain.
+  - Ages counted: spin, activity, X-rays, lithium, surface gravity, and the age of a star it is bound to. At least one must come from a method built for that kind of star.
+  - Not counted: main-sequence position for K and M stars, survey pipeline fits, assumed defaults, and the spin or activity of a star whose close companion's tides set it.
+  - An activity relation fit to Sun-like stars and pushed onto a redder one can keep a star, but can't drop one alone. That is a judgment call, made to keep the bar for dropping high.
+  - Set aside: drop when the middle estimate is under a billion, which would also drop 58 Eridani. And leaving the list as it was.
+  - How it was checked: the tables saved on 2026-10-10 were reread for every host. A search agent then ran VizieR's age search at each candidate's position. I reread the rows that decide an outcome. Rows marked agent were not reread by me.
+- **[Shkolnik, Liu and Reid 2009](https://arxiv.org/abs/0904.3323)** · Published, ApJ 699, 649. Ages read from the copies in [Shkolnik et al. 2012](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/ApJ/758/56) and Riedel et al. 2017.
+  - Spectra of 185 nearby red dwarfs as bright in X-rays as the Pleiades. Gravity, lithium and hydrogen emission set an upper age for each. 144 are under 300 million years.
+  - Close pairs shine in X-rays from tides, not youth, so the paper leaves them out. Eleven with no hydrogen emission are likely over 400 million years.
+  - Matters: these are upper limits from methods built for red dwarfs. For several stars it is the only age.
+  - Used: AD Leonis, EV Lacertae, G 227-22, OT Serpentis, GJ 1167 A, GJ 3304 A and B, Gl 82, CW Ursae Majoris, GJ 3372 B, 1RXS J193528.9+374605, G 36-26, GJ 4337 A, GJ 4338 B, GT Pegasi and NLTT 26114 dropped as hosts.
+  - Weakest: GJ 3304, 1RXS J193528.9+374605 and G 36-26 rest on this paper alone. The second is a possible close pair.
+- **[Engle 2024, Living with a Red Dwarf](https://arxiv.org/abs/2310.04302)** · Published, ApJ 960, 62. Tables read on [VizieR](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/ApJ/960/62), 2026-10-12.
+  - Ages for red dwarfs from how fast they spin. Gliese 208 turns in 12.29 days: 0.47 billion years, 0.52 from its X-rays. AD Leonis 0.17, OT Serpentis 0.15, CW Ursae Majoris 0.35, EV Lacertae 0.89.
+  - It also reads old where others read young: GJ 3417 A turns in 54.5 days, 3.9 billion years. GJ 358 2.96, GJ 669 A 1.9, GJ 382 1.9. Gliese 338 A and B read 0.93 and 0.97, with an X-ray age of 1.01.
+  - Matters: Gliese 208 had no age on 2026-10-10. It has three, all under a billion. Earth knocked on it in 2003.
+  - Used: Gliese 208 and its bound red dwarf dropped as hosts. Six knocked stars can host a neighbor, not seven. GJ 3417 A, GJ 358, GJ 669 A and B, GJ 382 and Gliese 338 stay.
+  - Eight more red dwarfs read under a billion with error bars, and nothing counted reads over: DT Virginis 0.14, Ross 154 0.19, GJ 569 A 0.64, DS Leonis 0.72, LP 735-29 0.78, YZ Canis Minoris 0.81, GJ 4274 0.89, GJ 3142 0.91. All dropped. GJ 3142 rests on this table alone, 0.84 to 0.97: the weakest entry.
+  - Gl 79 reads 0.86 here, but 1.08 from activity and 2.0 from X-rays in older tables. It stays.
+  - Not counted: CC Eridani and FK Aquarii spin with their close companions, every 1.56 and 4.08 days ([SB9](https://sb9.astro.ulb.ac.be/)). Tides set that spin, not age.
+  - BL Lyncis: the journal table gives 7.85 days and 0.35 billion years. The preprint table gives 16.4 days and 1.07, and [Shan et al. 2024](https://arxiv.org/abs/2401.09550) adopt 16.4. It stays, with VV Lyncis. Agent.
+- **[Grandjean et al. 2021](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/A+A/650/A39)** · Published, A&A 650, A39. Rows read on VizieR, 2026-10-12.
+  - Gliese 208 is 400 million years old, between 150 and 800. HD 82106 is 500 ± 100.
+  - Used: both dropped. HD 82106's other ages from spin, activity and X-rays run 0.2 to 0.9 billion years, in ten tables. Agent for eight of them.
+- **[Isaacson et al. 2024](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/ApJS/274/35)** · Published, ApJS 274, 35. Rows read on VizieR, 2026-10-12.
+  - Activity ages: HD 111631 1.88 billion years, Gliese 208 0.03.
+  - Matters: both stars are redder than the relation was built for. Mamajek and Hillenbrand 2008 fit it to F7 through K2 stars only.
+  - Used: HD 111631 stays. So do BD+30 2512 and HD 75632 A, whose only ages push that relation onto late K stars. HD 223778's activity comes from a companion on a 7.75 day orbit, so it stays too.
+- **[Torres and Ribas 2002](https://arxiv.org/abs/astro-ph/0111167)** and **[Torres et al. 2022](https://arxiv.org/abs/2210.16322)** · Published, both in ApJ. Abstracts read 2026-10-12.
+  - YY Geminorum is Castor C, bound to Castor A and B. Fits to A and B give about 370 million years, then 290 with measured sizes.
+  - Used: YY Geminorum dropped as a host.
+- **Other ages for the dropped red dwarfs** · Published. Agent, read on VizieR, not reread by me. [Brandt et al. 2014](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/ApJ/794/159), [Meshkat et al. 2017](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/AJ/154/245) after Bowler et al. 2015, [Lafrenière et al. 2007](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/ApJ/670/1367), [Galicher et al. 2016](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/A+A/594/A63).
+  - AD Leonis 0.18 and 0.19 billion years. Gl 82 0.03 to 0.1. GT Pegasi 0.1 to 0.3. G 227-22 0.53. GJ 3372 B 0.4. GJ 1167 A 0.045. GJ 4337 A 0.08. NLTT 26114 0.09.
+  - Used: none reads a billion or more, so the drops stand.
+- **Ages that back the eight** · Published. Abstract read by me for Burgasser. The rest agent, from paper text and VizieR.
+  - DT Virginis is Ross 458: 150 to 800 million years ([Burgasser et al. 2010](https://arxiv.org/abs/1009.5722)), under a billion ([Goldman et al. 2010](https://arxiv.org/abs/1002.2637)).
+  - Ross 154 spins fast enough to be under a billion ([Wargelin et al. 2008](https://arxiv.org/abs/0712.2791)).
+  - GJ 569's brown dwarf pair: 300 to 800 million years ([Zapatero Osorio et al. 2004](https://arxiv.org/abs/astro-ph/0407334)), about 100 ([Simon et al. 2006](https://arxiv.org/abs/astro-ph/0603165)), 460 to 510 ([Dupuy et al. 2010](https://arxiv.org/abs/1007.4197)), 440 ([Dupuy and Liu 2017](https://arxiv.org/abs/1703.05775)).
+  - DS Leonis: 0.06 to 0.7 billion years in four tables. YZ Canis Minoris: 0.02 to 0.5 in eight. GJ 4274: 0.12 and 0.22. LP 735-29: 0.01 from activity.
+  - Used: the drops stand. Ross 154 is 9.7 ly away, the nearest star to leave the list.
+- **[Maldonado et al. 2020](https://arxiv.org/abs/2010.14867)** · Published, A&A 644, A68. Agent.
+  - Ages for red dwarfs from their place on the main sequence: AD Leonis 8.0 ± 4.1 billion years, EV Lacertae 7.7 ± 4.2, Gliese 208 9.4 ± 3.8. The paper warns the method has important limits for red dwarfs.
+  - Matters: a red dwarf barely moves on the main sequence in ten billion years. These ages can't tell young from old.
+  - Used: not counted. The same holds for Mann et al. 2015, Yee et al. 2017 and Gaia's own fits.
 
 ## Kinds of worlds
 
@@ -724,9 +768,10 @@ Results the design is waiting on. Check each when its date comes.
 - Wide white dwarf pairs are projected separations. True orbits may be up to twice as wide, which cuts the light by up to four.
 - The host list names the red dwarf LDS 678 B as Gl 754.1A. The white dwarf is A.
 - Companion masses in calcs/binaries.py are rough: dynamical masses depend on distance cubed, and white dwarfs read as light from their brightness.
-- Borderline ages, kept as hosts for now. Where does "about a billion years" cut? HD 82106 reads 0.45 to 0.9 billion years, 58 Eridani 0.45 to 1.3 ([Egeland et al. 2015](https://arxiv.org/abs/1507.03611) spin it slower), Zeta Trianguli Australis 0.3 to 1.7, HD 4391 0.8 to 1.2, 61 Ursae Majoris 0.8 to 1.7. HD 221503 is a candidate member of a 210 million year group ([Thao et al. 2024](https://arxiv.org/abs/2406.05234)). About a dozen more read 1 to 2.
-- Gliese 208, a star Earth knocked on, has no published age. Its 12.3 day spin and X-rays suggest under a billion years. If so it leaves the host list, and six knocked stars can host a neighbor, not seven.
-- Red dwarf ages. Only confirmed young-group members were dropped. Gliese 393 is listed in AB Doradus but [Amado et al. 2021](https://arxiv.org/abs/2105.13785) put it older than 0.7 billion years. About 15 more are unconfirmed group candidates, and about 20 field red dwarfs carry ages of 25 to 300 million years in Riedel et al. 2017, such as AD Leonis.
+- Borderline ages were settled 2026-10-12. Still open: GJ 3142, 1RXS J193528.9+374605, G 36-26 and GJ 3304 were each dropped on one source. HD 221503 is a candidate member of a 210 million year group ([Thao et al. 2024](https://arxiv.org/abs/2406.05234)) and stays until someone dates it.
+- Red dwarfs faster than a few days' spin were checked only where Engle 2024 or Shkolnik et al. 2009 list them. Other rotation tables may date more. From memory, not reread: fully convective red dwarfs can keep a fast spin for two to three billion years, so a spin age alone may read too young for them. Check Medina et al. 2022 and Pass et al. 2024.
+- BL Lyncis: which spin is right, 7.85 or 16.4 days? It decides whether it and VV Lyncis stay.
+- About 15 red dwarfs are unconfirmed young-group candidates with no age of their own. They stay. Gliese 393 is listed in AB Doradus but [Amado et al. 2021](https://arxiv.org/abs/2105.13785) put it older than 0.7 billion years.
 - 31 of the F, G and K hosts have no published age in any table opened, mostly K companions.
 - calcs/hosts.py pairs companions only within 20,000 AU. AT Microscopii and Fomalhaut C sit wider from their primaries and needed their own entries.
 - Smith and Lissauer 2009, Icarus: confirm the lifetime of Earth-mass systems near 9 to 10 mutual Hill radii, for the checker's spacing rule.
