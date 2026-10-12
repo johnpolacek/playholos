@@ -324,7 +324,11 @@ Settled 2026-10-10.
     - The mock needs about nine more landings: seven looks and two arrivals.
     - Set aside: part-way reports from long looks and builds. They would teach the player to ignore what lands.
     - The Mind offers looks and never queues them unasked, as v1 had it.
-  - Open: how the looks are spread across the 15 minutes.
+  - *How the looks are spread,* settled 2026-10-12: four more are queued at Begin, and three are offered as follow-ups to what lands.
+    - Seven looks queued at Begin on three instruments would all land by about 4:30, and leave 5:30 to 10:00 empty.
+    - The early minutes fill themselves, which leaves room to meet the Mind.
+    - A follow-up is a real choice: it spends an instrument the next lead also wants.
+    - Set aside: everything queued at Begin with longer looks, and an offer at every landing.
 
 ## The seed, drawn
 
@@ -408,5 +412,5 @@ Answered one at a time, in this order. Every answer must be permitted by current
    - **Settled 2026-10-10:** knocks before Year 0 happened, and Earth missed them. See [What Earth hears](#what-earth-hears).
    - **Settled 2026-10-11:** a Mind's Cautious or Bold dial sets how long it takes to act on news. See [How neighbors play](#how-neighbors-play).
    - **Priced 2026-10-11:** chip fabs, factory-built works, the orbital yard and the all-sky watch. See [Build times](#build-times) and [Growing compute](#growing-compute).
-   - **Settled 2026-10-12:** 11 of the 31 half-minutes had nothing new for the player. That is a flaw: v1's first-session rule holds in v2. See [How a game starts](#how-a-game-starts). What may land is settled too: looks, and Earth's old messages arriving. Open: how the looks are spread.
+   - **Settled 2026-10-12:** 11 of the 31 half-minutes had nothing new for the player. That is a flaw: v1's first-session rule holds in v2. See [How a game starts](#how-a-game-starts). What may land is settled too: looks, and Earth's old messages arriving. Four more looks are queued at Begin and three are offered as follow-ups.
 9. **Settled 2026-10-10:** v1's research baseline, rechecked against the 2025 radar result and Garrett's 2026 cold-computing paper. See [Why the sky is quiet, rechecked](#why-the-sky-is-quiet-rechecked).
