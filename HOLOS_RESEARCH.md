@@ -100,6 +100,27 @@ Every source the game rests on, grouped by the question it answers. Each entry s
   - The first fab broke ground in June 2021 and made 4 nm chips from late 2024, about three and a half years. The second began in April 2025 and aims at about two.
   - Matters: how fast chip supply can be added. A leading-edge fab takes 2 to 4 years.
   - Used: v2 [Growing compute](HOLOS_GAME_CONCEPT.md#growing-compute), the chip fab project. And the Taiwan branches in calcs/branches.py, which take 3 to 4.
+- **ASML's tool output** · Company plans ([Bits&Chips](https://bits-chips.com/article/asml-hints-at-60-billion-euros-in-sales-by-2030/), [Gigazine, February 2026](https://gigazine.net/gsc_news/en/20260225-asml-chip-advance)).
+  - ASML is the only maker of the EUV machines that print the finest chips. Its plan is capacity for 90 of them a year by 2025 to 2026, and 20 of the newer High-NA kind by 2027 to 2028.
+  - Each machine should print about 330 wafers an hour by 2030, up from 220 in 2026.
+  - Matters: what limits a crash build of chip fabs. Buildings take 2 to 4 years, and the tools come from one firm.
+  - Used: v2 [Growing compute](HOLOS_GAME_CONCEPT.md#growing-compute), the chip fab project's 3 Years and its one extra line.
+- **Liberty ships** · History ([Thompson, summarized at the University of Houston](https://uh.edu/~odonnell/econ2370/ships.html), [Richmond Shipyards](https://en.wikipedia.org/wiki/Richmond_Shipyards)).
+  - The first ships in each yard took over six months from keel to delivery. By late 1943, thirty days. Sixteen yards delivered 2,699 ships in four years. Labor productivity rose about 40% a year.
+  - Kaiser began his first Richmond yard in December 1940 and laid its first keel in April 1941.
+  - Matters: a yard stands up in months, and the speed comes over two to three years of repeating one design.
+  - Used: v2 [Build times](HOLOS_GAME_CONCEPT.md#build-times), factory-built works: 3 Years. Its third off is McKinsey's range, since ground works differ from one another more than ships did.
+- **Building stations in orbit** · History ([ESA, Building the ISS](https://www.esa.int/Science_Exploration/Human_and_Robotic_Exploration/International_Space_Station/Building_the_International_Space_Station3), [Tiangong](https://en.wikipedia.org/wiki/Tiangong_space_station)).
+  - The ISS weighs almost 400 t. Its first part flew on November 20, 1998, and assembly took more than 40 missions, to 2011.
+  - Tiangong is about 100 t. Three modules flew on April 29, 2021, July 24, 2022 and October 31, 2022.
+  - Matters: with heavy lift, mass reaches orbit in months. The ISS's 13 years were the Shuttle's pace. Design and fitting out set the time.
+  - Used: v2 Build times, the orbital yard: 1 kt and 5 Years, a sample between the two. The ISS's end date is from a search summary, not a page read.
+- **How long big radio arrays take** · History and plans ([CHIME](https://en.wikipedia.org/wiki/Canadian_Hydrogen_Intensity_Mapping_Experiment), [DSA-2000 in Physics Today](https://physicstoday.aip.org/news/a-radio-telescope-array-takes-shape-with-private-funds), [DSA-2000 talk, 2025](https://indico.astron.nl/event/411/contributions/3730/), [SKA](https://en.wikipedia.org/wiki/Square_Kilometre_Array)).
+  - CHIME: built from 2015 to August 2017. 8,000 m², 1,024 receivers.
+  - DSA-2000: 2,000 dishes of 5 m over 285 km², about $200 million. Construction planned from 2026, first light in 2027. Its funding was not final in September 2025.
+  - SKA: construction began on December 5, 2022. SKA-Low's 131,000 antennas are not expected complete until about 2030.
+  - Matters: a large ground array takes 2 to 8 years. The big ones are slowed by count and by many partners.
+  - Used: v2 [What Earth hears](HOLOS_GAME_CONCEPT.md#what-earth-hears), the all-sky watch: 6 Years for 1.28 million small elements at two sites.
 - **[IEA, Energy and AI, 2025](https://iea.blob.core.windows.net/assets/de9dea13-b07d-42c5-a398-d1b3ae17d866/EnergyandAI.pdf)** · Report.
   - Data centers used about 415 TWh in 2024 and reach about 945 TWh by 2030 and 1,200 TWh by 2035 in the base case. Accelerated servers grow about 30% a year.
   - Matters: how much of Earth's power thinking takes by Year 0.
@@ -681,3 +702,5 @@ Results the design is waiting on. Check each when its date comes.
 - Beta Hydri drift: find the 2012 and 2023 primary papers.
 - Earth's aimed messages: transmitter power, frequency and duration from primary sources. Cosmic Call is logged. The others are not.
 - Primary links for the classic propulsion and space-industry studies.
+- The ISS's assembly end in 2011 and DSA-2000's survey start in 2028, from pages read rather than search summaries.
+- The orbital yard's quarter off builds in orbit is speculation. Look for a study that puts a number on assembly in space against folding for launch.

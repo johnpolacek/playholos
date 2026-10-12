@@ -1,6 +1,6 @@
 # Holos · Project audit
 
-Last updated: October 6, 2026.
+Last updated: October 11, 2026.
 
 Every v1 project's cost and effect, checked against physics and real designs, at Earth's 2040 scale. This is the working basis for v2's project catalog. Nothing here is settled until [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md) says so. v1's catalog is in [legacy/v1/HOLOS_PROJECTS.md](legacy/v1/HOLOS_PROJECTS.md). Sources are in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md).
 
@@ -85,6 +85,13 @@ Worked in [calcs/early_game.py](calcs/early_game.py). Orders of magnitude from p
 
 **An all-sky watch is a project, and cheap in compute.** Elements every 12.5 cm, as the EMBRACE demonstrator uses near 1.2 GHz, over a 100 m square: about 640,000 elements, 1.4 million beams, an SEFD near 12 Jy in every direction above its horizon. Forming every beam and searching each for drifting tones takes about 2×10¹⁹ operations a second, two millionths of Earth's 2040 compute. Two sites cover both hemispheres. EMBRACE's demonstrators reached about 100 m², so this is a hundredfold step.
 
+**The projects that raise a pace, priced.** Each follows the same pattern: a standard pace from the science, and a project that raises it. Compute shares are samples, as v1 set them: how much thought goes into the work.
+
+- *Chip fabs, 3 Years.* Eleven data centers fit under the grid. One line of fabs fills them by Year 11, a second line by Year 7, a third by Year 6.7. So one extra line is worth building and a third is not, until energy grows.
+- *Factory-built works, 3 Years, a third off ground builds.* A project of P Years that cuts later builds by a share c gets a work of T Years done sooner only if T is over P ÷ c: here 9 Years. The all-sky watch, 6 Years, is better started at once. The deep-field receiver, 12, is done a Year sooner after the factory. Fusion plants, 40, ten Years sooner.
+- *Orbital yard, 5 Years, a quarter off builds in orbit.* Waiting pays for works over 20 Years: the launcher a Year sooner, the foundry two and a half, the habitat ring ten. A new infrared telescope, 18, comes out even. Its other worth is size: works too large to launch whole.
+- *All-sky watch, 6 Years.* 1.28 million elements at two sites: ten times SKA-Low's antenna count and 1,250 times CHIME's receivers, on 2.5 times CHIME's area. CHIME took 2 years to build and SKA-Low takes about 8. Six is a sample between them.
+
 **The helium-3 harvest is about 150 kt.** Palaszewski's 100 t craft gather 500 kg of helium-3 from Uranus in 38 to 95 days, where it is 1.5×10⁻⁵ of the air, and Uranus's gravity well is far shallower than Jupiter's. That is 13 to 48 kg a Year per tonne of craft, about 10 per tonne once bases and tankers are counted. Daedalus's 1.5 kt a Year needs about 150 kt of system. One fast bullet's 660 kt would take 440 Years at that rate, so fast bullets wait for self-copying industry.
 
 ## Kinds of matter
@@ -109,6 +116,7 @@ Proposed prices are matter in orbit, on the Moon or in the belt. Ground builds s
 | Spectrograph bank | 100 kt | Ground | 0, ground | Spectrographs on ground telescopes, tonnes each. |
 | Deep flash watch | 100 kt | Ground | 0, ground | PANOSETI-style ground domes. |
 | Deep-field receiver | 300 kt | Ground | 0, ground | An SKA-class ground array. |
+| All-sky watch, new | none | Sample | 0, ground. 6 Years, 1% of compute. Two sites, 1.28 million elements. Every direction at every hour. Priced 2026-10-11. | CHIME was built in 2 years and DSA-2000 plans about 2. SKA-Low takes about 8 for 131,000 antennas. The watch has ten times SKA-Low's count, in elements a tenth the size. See the calculation above. |
 | Planet survey | 0 | OK | 0 | Existing telescopes and archives. |
 | Infrared telescope | 200 kt | Heavy ×5,000 | 40 t. 18 Years new. On Earth the Habitable Worlds Observatory is under way at Year 0: about 8 Years left. | LUVOIR-A, the largest studied, 28 to 37 t. JWST 6.2 t. |
 | Waste-heat survey | 0 | OK | 0 | Existing telescopes and archives. |
@@ -128,9 +136,9 @@ Proposed prices are matter in orbit, on the Moon or in the belt. Ground builds s
 | Orbital solar array | 400 kt | Light ×10 to 150 | Split in two. A ground solar build-out: 0 matter, +20% energy in 10 Years, about 5× today's install rate. An orbital array at tier 2: 10 Mt for +20%, at 1 kW/kg and half lost beaming it down. | Flown arrays 75 to 218 W/kg, target 1 kW/kg. +20% of 24 TW is 4.8 TW: 5 to 60 Mt. |
 | Belt prospecting | 0 | OK | 5 t | Small survey probes. |
 | Ground data center | 0 | Slow ×10 | 0, ground. 1 Year, not 8, for +50% compute. One at a time: the fabs' output. Each draws its share of energy, 0.5% of the grid for the first. Settled 2026-10-10. | Compute grew 1.5× a year from 2026 to 2040, fabs included. Thinking draws 1% of energy at Year 0, so the twelfth data center would need more than the grid. |
-| Factory-built works, new | none | Sample | 0, ground. Ground builds take about a third less. Its own Years to be priced. | Modular building cuts schedules 20 to 50% (McKinsey 2019). |
-| Orbital yard, new | none | Sample | About 1 kt. Builds in orbit take about a quarter less, and larger ones become possible. Its own Years to be priced. | NASA's 2019 study: assembly in space is workable, and the only way past 15 m mirrors. The speed-up is speculation. |
-| Chip fabs, new | none | Sample | 0, ground. About 3 Years. A second line: two data centers a Year. | A leading-edge fab takes 2 to 4 years from groundbreaking to volume. |
+| Factory-built works, new | none | Sample | 0, ground. 3 Years, 5% of compute. Ground builds started after it take a third less. Data centers keep the fabs' pace. Priced 2026-10-11. | Modular building cuts schedules 20 to 50% (McKinsey 2019). Liberty ships took over six months each at first and thirty days by late 1943. Kaiser's first Richmond yard laid a keel four months after it was begun. |
+| Orbital yard, new | none | Sample | 1 kt. 5 Years, 10% of compute. Builds in orbit started after it take a quarter less, and works too large to launch whole become possible. It assembles what Earth lifts. The foundry, later, makes parts in space. Priced 2026-10-11. | The ISS, almost 400 t, took over 40 flights from 1998 to 2011. Tiangong, about 100 t, took three launches in 18 months. 1 kt is under a month of Earth's spare lift, so fitting out sets the time, not lift. NASA's 2019 study: assembly in space is workable, and the only way past 15 m mirrors. The speed-up is speculation. |
+| Chip fabs, new | none | Sample | 0, ground. 3 Years, 10% of compute. A second line: two data centers a Year. The eleven that fit are full by Year 7, not 11. A third line gains a third of a Year. Priced 2026-10-11. | A leading-edge fab takes 2 to 4 years. One firm makes the tools that print the finest chips, about 90 a year. The chip stock grew 3.4× a year in 2026, so two lines' 2.25× has been seen. |
 | Launch complex | 0 | OK | 0, ground. 2 Years. +40 kt a Year of lift, all of it spare. One at a time. Settled 2026-10-10: Earth's spare lift starts at 15 kt a Year. | Starship cadence growth. Propellant is about 400 GJ a tonne lifted: half a gigawatt for 40 kt a year. |
 | Cold compute annex | 300 kt | OK | 100 kt | +25% compute is about 25 GW in orbit. Solar at 0.2 to 1 kW/kg is 25 to 125 kt, plus chips and radiators. Google Suncatcher is testing it. |
 | Belt mining | 0 | OK, recalculated | 10 kt fleet for +120 kt a year. Hauling takes about 0.6 GW at the belt, about 5 kt of solar arrays. | Unproven. A mining fleet weighs something, so zero matter is too light. |

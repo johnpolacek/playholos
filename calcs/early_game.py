@@ -126,9 +126,43 @@ def orbit_stock(now_kt=17.4, lift_2025=3.2, lift_2040=40, life=5, spare_kt=20):
     print(f'  Propellant: about {gj_per_t:.0f} GJ a tonne lifted. {lift_2040} kt a year is {lift_2040 * 1e3 * gj_per_t * 1e9 / YEAR / 1e9:.1f} GW, '
           f'{lift_2040 * 1e3 * gj_per_t * 1e9 / YEAR / GRID_2040:.4%} of the grid.')
 
+# ---------- Pricing the projects that raise a pace ----------
+# Chip fabs: a second line of fabs fills a second data center a Year. Only so many data centers fit under the grid,
+# so a faster line only reaches that ceiling sooner.
+def wall_year(fits, more_lines=()):
+    """The Year the last data center that fits is done, at one a Year for each line of fabs."""
+    t = done = 0.0; lines = 1; ups = sorted(more_lines)
+    while True:
+        nxt = ups[0] if ups else math.inf
+        if t + (fits - done) / lines <= nxt: return t + (fits - done) / lines
+        done += (nxt - t) * lines; t = nxt; lines += 1; ups.pop(0)
+
+# Works that speed building: one that takes P Years and cuts later builds by a share c gets a work of T Years done
+# sooner only if P + (1 - c) * T < T, so only if T > P / c. Shorter works are better started at once.
+GROUND = [('Launch complex', 2), ('Chip fabs', 3), ('All-sky watch', 6), ('Deep flash watch', 6), ('Spectrograph bank', 8),
+          ('Ground solar build-out', 10), ('Deep-field receiver', 12), ('Fusion plants', 40)]
+ORBIT = [('Cold compute annex', 12), ('A new infrared telescope', 18), ('Starshade', 20), ('Launcher', 24), ('Orbital foundry', 30), ('Habitat ring', 60)]
+def raise_the_pace(share=0.25 / 24, step=1.5, fab=3, factory=(3, 1 / 3), yard=(5, 1 / 4)):
+    fits = math.floor(math.log(1 / share) / math.log(step))
+    one, two, three = wall_year(fits), wall_year(fits, [fab]), wall_year(fits, [fab, 2 * fab])
+    print(f'Chip fabs, {fab} Years a line. {fits} data centers fit under the grid. One line fills them by Year {one:.0f}, '
+          f'a second line by Year {two:.0f}, a third by Year {three:.1f}.')
+    print(f'  Two lines make compute grow {step ** 2:.2f} times a Year. The chip stock grew 3.4 times a year in 2026.')
+    for name, (own, cut), works in (('Factory-built works', factory, GROUND), ('Orbital yard', yard, ORBIT)):
+        print(f'{name}, {own} Years, later builds {cut:.0%} shorter. Waiting for it pays only for works over {own / cut:.0f} Years.')
+        for work, t in works:
+            after = t * (1 - cut)
+            print(f'  {work:26} {t:3} Years, then {after:4.1f}. Started at once: Year {t}. After it: Year {own + after:.1f}.')
+    # The all-sky watch against real arrays: CHIME, built 2015 to 2017. SKA-Low, begun December 2022, done about 2030.
+    side, spacing, sites = 100, 0.125, 2
+    elements = sites * (side / spacing) ** 2
+    print(f'All-sky watch: {elements / 1e6:.2f} million elements at {sites} sites, {elements / 131072:.0f} times SKA-Low\'s antenna count and '
+          f'{elements / 1024:,.0f} times CHIME\'s receivers, on {sites * side ** 2 / 8000:.1f} times CHIME\'s area.')
+
 if __name__ == '__main__':
     compute_growth(); print()
     orbit_stock(); print()
+    raise_the_pace(); print()
     beacon(); print()
     belt(); belt(flow_kt=60); print()
     far_side(); print()

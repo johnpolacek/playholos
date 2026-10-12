@@ -212,7 +212,7 @@ P_PLAN = chat(0, 'What should we start with?', [
     ('mind', 'Ears. Our sky watch sees each star for ten minutes a day. A knock lasts hours. One could pass and we would never know.'),
     ('you', 'And the leads?'),
     ('mind', 'Each has a first look we can take with what we have. They cost seconds of your time. I would take all three the moment we wake.')],
-    view=('Build the all-sky watch and the flash watch, so nothing aimed at us is missed. Add a data center: it is cheap. Start no transmitter.' if CAUTIOUS or HIDDEN else
+    view=('Build the all-sky watch and the flash watch, so little aimed at us is missed. Add a data center: it is cheap. Start no transmitter.' if CAUTIOUS or HIDDEN else
           'Build the all-sky watch and the flash watch. Add a data center. Then decide about a beacon: we are already loud, and a voice is cheap.'), pre=True)
 QUEUE_BUILDS = [('All-sky watch', 'hears a knock or a broadcast from anywhere, at any hour · ground', SKY_YEARS), ('Deep flash watch', 'catches laser knocks too faint for the sky watch · ground', FLASH_YEARS),
                 ('Ground data center', '+50% compute, for good · the fabs fill one a Year', DC_YEARS)]
@@ -403,7 +403,7 @@ SILENCE_CHAT = chat(720, 'What would silence mean?', [
 def wake_row(title, sub, year, now): return row(title, sub, tstack(f'Year {year:g}', clock(year - now)))
 WAKES = tab(900, 'Mind', 'MIND', 'WHAT WAKES YOU', ''.join([
     SEC('YOU CHOSE'), ''.join(wake_row(title, sub_, y, 3) for y, title, sub_ in sorted([
-        (6, 'The all-sky watch and flash watch are built', 'then nothing aimed at us is missed'), (9.0, 'A reply could come · Gliese 526', 'to our 2013 message'),
+        (6, 'The all-sky watch and flash watch are built', 'then little aimed at us is missed'), (9.0, 'A reply could come · Gliese 526', 'to our 2013 message'),
         (TENTH_Y, 'Thinking draws a tenth of our energy', f'{N_TENTH} data centers in'), (11.6, 'The Moon vault is done', 'the Mind’s second home'),
         (.4 + IR_YEARS, 'The infrared telescope is done', f'then it reads 82 Eridani d and {F["star"]}')])),
     SEC('ALWAYS'), row('A world’s first voice wakes you', 'a knock or a broadcast, aimed at us or not · even in quiet hours', '<span class="mono">always</span>'),

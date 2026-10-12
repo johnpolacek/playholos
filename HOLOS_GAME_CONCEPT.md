@@ -109,7 +109,7 @@ Settled 2026-10-10. Numbers from `python3 calcs/seed.py stats`.
 - **A sender that hears nothing tries again.** A knock is sent twice, about a Year apart, as Earth's own were. If its reply window then passes in silence, that is news to the sender, and it rolls its table ([HOLOS_REACTIONS.md](HOLOS_REACTIONS.md)): a contacter most often knocks again. So a missed knock is delayed, not lost.
 - **The player can spend more on ears.**
   - *Hold the radio array on one star:* it hears whatever comes from there, for a share of compute.
-  - *The all-sky watch:* every direction at every hour.
+  - *The all-sky watch:* every direction at every hour. A ground build at two sites: 6 Years, a hundredth of compute. Real arrays took 2 to 8 years. Priced 2026-10-11.
   - *The deep flash watch:* knocks sent as laser flashes.
   - *A larger watch hears fainter:* four times the collecting area reaches twice as far.
   - *The deep-field receiver, then the far-side array:* a world's everyday radio.
@@ -201,7 +201,8 @@ Settled 2026-10-10. Numbers in [calcs/early_game.py](calcs/early_game.py). Repla
   - The twelfth would need more than Earth has. At full pace that is about Year 11, under an hour of play.
 - **So early energy is for thought.** It sits idle only until compute grows into it.
 - **Past the ceiling.** More thought then needs more energy, or colder chips. Computing costs less energy the colder it runs, which is what the cold compute annex in orbit is for.
-- **Faster than one a Year needs new fabs.** A leading-edge fab takes 2 to 4 years. A chip fab project, about 3 Years, adds a second line. Sample.
+- **Faster than one a Year needs new fabs.** A chip fab project adds a second line: 3 Years, a tenth of compute, no matter. Priced 2026-10-11. A leading-edge fab takes 2 to 4 years, and one firm makes the tools that print the finest chips, about 90 a year. Two lines make compute grow 2.25 times a Year. The chip stock grew 3.4 times a year in 2026, so that pace has been seen.
+  - *It only reaches the ceiling sooner.* Eleven data centers fit under the grid. One line fills them by Year 11, two by Year 7. A third line gains a third of a Year.
 - **Only if the player chooses.** One at a time, or a standing order to keep them coming. Compute never grows on its own.
 - **A Taiwan branch lowers where compute starts, not the pace.** An assumption, until the mocks test a branch game.
 
@@ -211,9 +212,10 @@ Settled 2026-10-10. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#earth-to-ye
 
 - **One standard time per project, from the science.** It is how long works of that kind take. A flagship space telescope takes about 18 Years: Hubble took 12 from first funding to launch, Webb 18 from its prime contract. The time is the same in every game. The seed doesn't roll it.
 - **A real work under way at Year 0 costs what is left of it.** The Habitable Worlds Observatory has about 8 Years left: NASA aims it at the 2040s, and flagships slip. A second telescope of its class takes the full 18. The 8 is a sample.
-- **The player can invest to build faster.** Other projects make building more efficient. Each speeds one kind of work, for everything built after it. Their own Years and costs are still to be priced.
-  - *Factory-built works,* on the ground: ground builds take about a third less. Modular building cuts schedules by 20 to 50% (McKinsey 2019).
-  - *An orbital yard:* builds in orbit take about a quarter less, and larger ones become possible. NASA's 2019 study found assembly in space workable, and the only way past 15 m mirrors. The speed-up itself is speculation.
+- **The player can invest to build faster.** Other projects make building more efficient. Each speeds one kind of work, for everything started after it. Priced 2026-10-11 in [calcs/early_game.py](calcs/early_game.py). Compute shares are samples.
+  - *Factory-built works,* on the ground: 3 Years, a twentieth of compute, no matter. Ground builds then take a third less. Modular building cuts schedules by 20 to 50% (McKinsey 2019). Liberty ships took over six months each at first and thirty days by late 1943.
+  - *An orbital yard:* 5 Years, a tenth of compute, 1 kt. Builds in orbit then take a quarter less, and works too large to launch whole become possible. The ISS took 13 years at the Shuttle's pace, and Tiangong 18 months. NASA's 2019 study found assembly in space workable, and the only way past 15 m mirrors. The speed-up itself is speculation.
+  - *Waiting for one rarely pays early.* A work is done sooner by waiting only if it would take over 9 Years on the ground, or over 20 in orbit. So the all-sky watch is better started at once. The deep-field receiver and fusion plants come sooner after the factory. The yard pays for the launcher, the foundry and the habitat ring.
 - **The same pattern everywhere.** A standard pace from the science, and a project that raises it: chip fabs for compute, launch complexes for lift, factories and yards for building.
 
 ## Earth's leads at Year 0
@@ -382,5 +384,6 @@ Answered one at a time, in this order. Every answer must be permitted by current
    - **Settled 2026-10-10:** physics decides what Earth catches, a sender that hears nothing tries again, and the player can spend more on ears. See [What Earth hears](#what-earth-hears).
    - **Settled 2026-10-10:** knocks before Year 0 happened, and Earth missed them. See [What Earth hears](#what-earth-hears).
    - **Settled 2026-10-11:** a Mind's Cautious or Bold dial sets how long it takes to act on news. See [How neighbors play](#how-neighbors-play).
+   - **Priced 2026-10-11:** chip fabs, factory-built works, the orbital yard and the all-sky watch. See [Build times](#build-times) and [Growing compute](#growing-compute).
    - 11 of the 31 half-minutes had nothing new for the player.
 9. **Settled 2026-10-10:** v1's research baseline, rechecked against the 2025 radar result and Garrett's 2026 cold-computing paper. See [Why the sky is quiet, rechecked](#why-the-sky-is-quiet-rechecked).

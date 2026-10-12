@@ -614,7 +614,7 @@ Sol · 2043.0 · 1 Year = 00:05:00
 ENERGY · [2.3%] · MATTER · 55 kt · COMPUTE · [27%]
 MIND · WHAT WAKES YOU
 YOU CHOSE
-- The all-sky watch and flash watch are built · then nothing aimed at us is missed · Year 6 · 00:15:00
+- The all-sky watch and flash watch are built · then little aimed at us is missed · Year 6 · 00:15:00
 - Thinking draws a tenth of our energy · 6 data centers in · Year 6.1 · 00:15:30
 - The infrared telescope is done · then it reads 82 Eridani d and Gliese 611 A · Year 8.4 · 00:27:00
 - A reply could come · Gliese 526 · to our 2013 message · Year 9 · 00:30:00
