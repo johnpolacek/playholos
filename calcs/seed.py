@@ -5,7 +5,7 @@ each already knows of Earth. Run: python3 calcs/seed.py 7   (no number: one line
 The rules are HOLOS_GAME_CONCEPT.md's: Year 0 and Earth's road to it, The neighbors, Stars Earth knocked on, How
 neighbors play. Every placement passes calcs/neighbors.py. The same seed always gives the same game.
 """
-import math, random, sys
+import hashlib, math, random, sys
 import branches, knocks, neighbors as nb, reactions
 
 Y0 = nb.EARTH_WAKES
@@ -70,6 +70,11 @@ def act(p, news, t, what, table, rng, depth=0):
         return move
     return 'watch'
 
+def keyed(*parts):
+    """A number between 0 and 1 that depends only on its parts. Placement uses it with each star's id, so a star
+    leaving the host list moves only a neighbor that lived there."""
+    return (int.from_bytes(hashlib.blake2b(':'.join(map(str, parts)).encode(), digest_size=8).digest(), 'big') + 1) / (2 ** 64 + 2)
+
 def draw(seed, rows=None):
     rows = rows or nb.load_hosts()
     rng = random.Random(seed)
@@ -93,15 +98,19 @@ def draw(seed, rows=None):
     used, out = set(), []
 
     def place(n, pool):
-        for _ in range(300):
-            host = rng.choices(pool, weights=[float(h['weight']) for h in pool])[0]
+        # Stars in a weighted random order, heavier ones sooner, that depends only on the seed, the neighbor and
+        # each star's id. Then a few tries at each star, on that star's own stream.
+        order = sorted(pool, key=lambda h: math.log(keyed(seed, n['name'], h['id'])) / float(h['weight']), reverse=True)
+        for host in order[:100]:
             if host['id'] in used: continue
-            waking = Y0 + 100 * (rng.random() - rng.random())           # a century either way, most near Earth's
-            if n.get('dies') is not None and waking - n['dies'] > Y0: continue   # the dead died before Year 0
-            pole = math.degrees(math.acos(rng.uniform(-1, 1)))
-            targeted = rng.random() < n.get('aims_at_sol', 1)
-            fails, info = nb.check(n, host, waking, pole, targeted)
-            if not fails: return dict(n=n, host=host, waking=waking, pole=pole, targeted=targeted, **info)
+            rng = random.Random(f"{seed}:{n['name']}:{host['id']}")
+            for _ in range(3):
+                waking = Y0 + 100 * (rng.random() - rng.random())           # a century either way, most near Earth's
+                if n.get('dies') is not None and waking - n['dies'] > Y0: continue   # the dead died before Year 0
+                pole = math.degrees(math.acos(rng.uniform(-1, 1)))
+                targeted = rng.random() < n.get('aims_at_sol', 1)
+                fails, info = nb.check(n, host, waking, pole, targeted)
+                if not fails: return dict(n=n, host=host, waking=waking, pole=pole, targeted=targeted, **info)
 
     for n in picks:
         fits = [h for h in rows if h['kind'] in n.get('kinds', 'FGKM') and h['luminosity'] >= n.get('min_lum', 0)]
@@ -141,7 +150,7 @@ def draw(seed, rows=None):
     if not found:
         pool = [h for h in rows if h['north'] and h['kind'] in 'GK' and h['luminosity'] > 0.3 and h['id'] not in used and not h['planets']
                 and not h['name'].startswith('Gaia ')]                      # the planet hunters' stars are bright, so they have names
-        natural = rng.choice(pool)
+        natural = max(pool, key=lambda h: keyed(seed, 'find', h['id']))
     return dict(seed=seed, earth=earth, count=count, neighbors=sorted(out, key=lambda p: p['d']), found=found, natural=natural)
 
 def year(t): return f"Year {t - Y0:.1f}" if t >= Y0 else f'{t:.0f}'

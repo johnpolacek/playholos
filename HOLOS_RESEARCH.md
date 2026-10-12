@@ -490,15 +490,15 @@ What Sol's own instruments have found nearby. For v2 open question 3.
   - Used: close pairs in calcs/binaries.py, and to confirm wobble-only orbits.
 - **[Bond et al. 2015, the Procyon system](https://arxiv.org/abs/1510.00485)** · Published, ApJ.
   - Masses 1.478 and 0.592 Suns. Procyon A is about 2.7 billion years old. B became a white dwarf 1.37 billion years ago, from a star of about 2 Suns.
-  - Matters: B's giant phase scorched A's warm zone, too recently for minds since.
-  - Used: Procyon dropped as a host.
+  - Matters: B's giant phase put about 55 times Earth's sunlight on A's warm zone, and the pair was then too close for a stable orbit there.
+  - Used: Procyon dropped as a host, in calcs/scorch.py.
 - **White dwarf companions within 50 ly** · Catalogs, gathered 2026-10-11 ([Toonen et al. 2017](https://arxiv.org/abs/1703.06893), [Holberg et al. 2013](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/MNRAS/435/2077), [O'Brien et al. 2024](https://arxiv.org/abs/2312.02735), [Giammichele et al. 2012](https://arxiv.org/abs/1202.5581), [Kirkpatrick et al. 2024](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/ApJS/271/55)).
   - Fifteen possible hosts have a white dwarf companion, from 0.11 AU to 13,400 AU away. Separations, white dwarf masses, cooling ages and progenitor masses are in [calcs/scorch.py](calcs/scorch.py).
   - Gaia's own white dwarf flag misses two: 40 Eridani B and WD 1917-077 score under one half.
   - Three more are only suspected, from barium or an unseen mass: Xi Ursae Majoris, Alpha Fornacis and Iota Ursae Majoris ([Fuhrmann et al. 2016](https://academic.oup.com/mnras/article/459/2/1682/2595128)). None is a host.
   - No paper found works out the light a giant companion throws on the other star's warm zone, or a separation below which that zone is sterilized.
   - Matters: which hosts had their warm zone scorched, and how long ago.
-  - Used: calcs/scorch.py. Table values were read by a research agent from VizieR and ar5iv extracts. The Gliese 86 and 40 Eridani values below were reread from the abstracts.
+  - Used: calcs/scorch.py and the host list. Settled 2026-10-11: a scorched zone restarts the billion-year clock. 40 Eridani C and GJ 3991 left the list. Table values were read by a research agent from VizieR and ar5iv extracts. The Gliese 86 and 40 Eridani values below were reread from the abstracts.
 - **Gliese 86** · Published ([Farihi et al. 2013](https://arxiv.org/abs/1212.5601), [Brandt et al. 2019](https://arxiv.org/abs/1811.07285), [Zeng et al. 2022](https://arxiv.org/abs/2112.06394), [Fuhrmann et al. 2014](https://www.osti.gov/biblio/22357151)).
   - The white dwarf is 8,180 K and 0.54 to 0.59 Suns, 1.25 billion years cooled. Its orbit is 22 to 24 AU across with eccentricity 0.43 to 0.53.
   - It came from a star of 1.4 to 1.9 Suns. The pair then sat about 14 AU apart, with a closest approach near 9 AU. The host's disk was cut at about 2 AU.

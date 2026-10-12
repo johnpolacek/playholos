@@ -88,7 +88,7 @@ Settled 2026-10-10. Numbers from `python3 calcs/seed.py stats`. Sources in [HOLO
 - **What it costs.** Ground work: no matter, almost no energy, a small share of compute. It moves Earth toward Hidden. Missile launches are already watched by heat from orbit, and aircraft already fly on transponders, so a Mind can retire the radars. That last step is speculation.
 - **What it buys.** A neighbor that starts looking after the last sweep has passed it never hears one.
   - About 70% of living neighbors heard Earth before Year 0. For them nothing changes.
-  - If the last sweep leaves by Year 3, about 1 neighbor in 9 wakes too late to hear it. By Year 30, about 1 in 25.
+  - If the last sweep leaves by Year 3, about 1 neighbor in 9 wakes too late to hear it. By Year 30, about 1 in 24.
   - So the gain shrinks every Year the player waits.
 - **What it reveals.** Silence travels at light speed. A neighbor listening to Earth hears the radars stop one light-time later, and learns the date. It can't tell waking from dying.
   - That is news, and it rolls its reaction table: "a world it was listening to goes quiet" ([HOLOS_REACTIONS.md](HOLOS_REACTIONS.md)). A watcher mostly watches harder. A contacter may knock to ask if anyone is left.
@@ -103,8 +103,8 @@ Settled 2026-10-10. Numbers from `python3 calcs/seed.py stats`.
 - **Physics decides what Earth catches.** Three things: whether the star is in the instrument's sky, whether it is looking in those hours, and whether the signal is above its floor.
 - **A neighbor's knock is taken to be like Earth's own.** Cosmic Call sent about 10¹² W along its beam, for about four hours a star. A call is a steady broadcast.
 - **Year 0's sky watch misses most of them.** It sees each direction north of −20° for ten minutes a day. That is 63% of host stars, and a four-hour knock overlaps its pass about one time in six.
-  - Of the signals that reach Earth in the first hour, it catches about a quarter.
-  - Over a third come from the southern sky it never sees. About 1 in 6 are too faint for it.
+  - Of the signals that reach Earth in the first hour, it catches about 1 in 5.
+  - About 4 in 10 come from the southern sky it never sees. About 1 in 7 are too faint for it.
   - The all-sky watch would catch about 9 in 10.
 - **A sender that hears nothing tries again.** A knock is sent twice, about a Year apart, as Earth's own were. If its reply window then passes in silence, that is news to the sender, and it rolls its table ([HOLOS_REACTIONS.md](HOLOS_REACTIONS.md)): a contacter most often knocks again. So a missed knock is delayed, not lost.
 - **The player can spend more on ears.**
@@ -116,7 +116,7 @@ Settled 2026-10-10. Numbers from `python3 calcs/seed.py stats`.
 - **Knocks before Year 0 happened, and Earth missed them.** Settled 2026-10-10. A neighbor awake before Earth may already have knocked.
   - The seed rolls Earth's real odds of catching each. Before the sky watch of 2028, Earth's searches gave a star minutes in decades: about 1 knock in 100 caught.
   - Only a knock Earth would have caught is rolled again, since Earth heard nothing by 2040. A steady call always would have been caught.
-  - In about 1 game in 4, at least one knock reached Earth unheard before Year 0.
+  - In about 1 game in 5, at least one knock reached Earth unheard before Year 0.
   - The sender, unanswered, takes the silence as news. Some try again, and some of those land during the game.
 - **The Mind can't report what it didn't hear.** A missed knock leaves no trace on Earth: nothing was pointed there, so no archive holds it. A search of old data for half-recorded knocks was considered and left out.
 
@@ -252,8 +252,9 @@ Settled 2026-10-06, from first principles rather than for the game's sake.
   - *Years since waking:* growth under the same limits as Earth's, from prerequisite chains, matter, energy and heat.
 - **Where they live.** Any star within 50 ly that could keep a habitable world for long enough, drawn by weight ([calcs/hosts.py](calcs/hosts.py), [data/hosts-50ly.csv](data/hosts-50ly.csv)).
   - *Weights:* G and K dwarfs 1, late F one half, M dwarfs one tenth. G and K are the known case. Late F stars live 3 to 7 billion years. Rocky worlds close to M dwarfs keep turning out airless, though temperate ones are open.
-  - *Dropped:* stars known to be younger than about a billion years, with their companions. Checked 2026-10-10 against published ages and young-group lists: 25 more left, among them Xi Boötis A and HD 166. Gaia's own ages miss young cool stars. Stars whose companion leaves no stable orbit in the warm zone (Holman and Wiegert 1999), whether Gaia splits the pair or only a published orbit shows it (ORB6, SB9). Procyon, whose white dwarf companion was a giant 1.4 billion years ago (Bond et al. 2015). Giant stars. And stars where a known planet of 10 Earth masses or more crosses the warm zone.
-  - *What's left:* 890 stars, F 16, G 49, K 102, M 723, worth about 231 G-star equivalents. Stars whose color and brightness disagree are left out as bad photometry.
+  - *Dropped:* stars known to be younger than about a billion years, with their companions. Checked 2026-10-10 against published ages and young-group lists: 25 more left, among them Xi Boötis A and HD 166. Gaia's own ages miss young cool stars. Stars whose companion leaves no stable orbit in the warm zone (Holman and Wiegert 1999), whether Gaia splits the pair or only a published orbit shows it (ORB6, SB9). Stars with a white dwarf companion, judged in [calcs/scorch.py](calcs/scorch.py): see the next bullet. Giant stars. And stars where a known planet of 10 Earth masses or more crosses the warm zone.
+  - *White dwarf companions,* settled 2026-10-11 ([calcs/scorch.py](calcs/scorch.py)). A white dwarf was a giant first, and lit its partner's warm zone from closer in than the pair sits now. Sixteen stars have one. A scorched zone restarts the same billion-year clock as a young star. 40 Eridani C leaves: its zone took about 18 times Earth's sunlight 0.12 billion years ago. Procyon and GJ 3991 leave because their zones hold no stable orbit. Gliese 86, Stein 2051 A and Gliese 283 B stay: scorched, but 1.25 to 1.9 billion years ago. Improbable, not contradicted: no paper found says such a zone stays dead. The other ten took under Earth's own sunlight.
+  - *What's left:* 888 stars, F 16, G 49, K 102, M 721, worth about 231 G-star equivalents. Stars whose color and brightness disagree are left out as bad photometry.
   - *Close pairs Gaia can't split,* tested 2026-10-10 against 114 published orbits ([calcs/binaries.py](calcs/binaries.py)). Eleven hosts lost their warm zone, among them Chi Draconis, Zeta Herculis and Porrima. Others keep part of it, such as Mu Cassiopeiae A, 0.64 to 0.99 AU. The checker tests every placement against them.
   - *Wobble-only orbits need backing.* An orbit seen only in a star's wobble, implying a tug over 1 km/s, counts only if a spectroscopic orbit confirms it. Velocity surveys of bright near stars would have seen it. That clears 107 Piscium, whose velocity is steady to about 1 m/s (Soubiran et al. 2018), and 61 Cygni A.
 - **Known planets limit them.** A neighbor's world must keep clear of a star's known planets, and tug less than Earth could feel in 2026. At stars watched hardest, such as Barnard's Star and Tau Ceti, that floor is 0.2 to 0.4 m/s, not 1.
@@ -316,10 +317,11 @@ Built 2026-10-10 in [calcs/seed.py](calcs/seed.py), from the rules above.
 - **Earth's seeded find.** If a drawn neighbor's world tugs hard enough for Earth's planet hunters by 2040, that world is the find. Otherwise the seed adds a natural world at a bright northern Sun-like star.
 - **Keeping the opening silent.** Settled 2026-10-10 in [What Earth hears](#what-earth-hears): a signal that reached Earth before Year 0 was missed, or it never happened.
 - **How long a Mind takes to act on news.** Settled 2026-10-11 in [How neighbors play](#how-neighbors-play): its Cautious or Bold dial sets it.
+- **A star leaving the list moves only who lived there.** Built 2026-10-11. Each neighbor tries stars in an order set by the seed, its name and each star's id, so the host list can be corrected without reshuffling every game.
 - **What 400 drawn games look like** (`python3 calcs/seed.py stats`):
   - A median of 9 neighbors, from 3 to 30. A hunter in a little over half.
   - Earth's seeded find is a neighbor's own world in nearly half.
-  - A neighbor's signal reaches Earth in the first 15 minutes in about 1 game in 13, and in the first hour in over 1 in 4. Most are answers to Earth's radars.
+  - A neighbor's signal reaches Earth in the first 15 minutes in about 1 game in 10, and in the first hour in about 1 in 4. Most are answers to Earth's radars.
 
 ## Death and new games
 

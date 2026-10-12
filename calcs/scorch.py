@@ -19,6 +19,7 @@ import math
 import hosts
 
 RUNAWAY = 1.06 - 0.35       # Earth sunlights that tip even the zone's outer edge into runaway
+CLOCK = 1.0                 # Gyr after a scorching before minds, the same clock as a young star. Settled 2026-10-11.
 
 # host Gaia DR3 id: (name, white dwarf, separation AU, eccentricity or None if projected, white dwarf mass,
 #                    progenitor mass, Gyr since it became a white dwarf)
@@ -44,17 +45,21 @@ PAIRS = {
 def tip(m_wd):
     return max(2500.0, 59250 * (m_wd - 0.522))
 
-def judge(star, pair):
+def judge(star, pair, zone=None):
     """Light on the zone at the giant's tip, the orbit then, and whether the zone held its planets then and now."""
     name, wd, a, e, m_wd, m_prog, since = pair
     m = hosts.mass_from_gabs(star['gabs'])
     a0 = a * (m + m_wd) / (m + m_prog)
     light = tip(m_wd) / a0 ** 2 / (math.sqrt(1 - e * e) if e is not None else 1)
-    inner, outer = hosts.hz(star.get('lum') or 10 ** (-0.4 * (star['gabs'] - 4.67)))
+    inner, outer = zone or hosts.hz(star.get('lum') or 10 ** (-0.4 * (star['gabs'] - 4.67)))
     ecc = e if e is not None else 0.5
     held_then = hosts.critical_a(m_prog / (m + m_prog), ecc) * a0 > outer
     held_now = hosts.critical_a(m_wd / (m + m_wd), ecc) * a > outer
-    return dict(name=name, wd=wd, a=a, a0=a0, projected=e is None, light=light, since=since, held_then=held_then, held_now=held_now)
+    why = ('a close white dwarf leaves no stable warm zone' if not held_now else
+           'its warm zone held no planets while its companion was a giant' if not held_then else
+           'a giant companion scorched the warm zone under 1 Gyr ago' if light >= RUNAWAY and since < CLOCK else None)
+    return dict(name=name, wd=wd, a=a, a0=a0, projected=e is None, light=light, since=since, held_then=held_then, held_now=held_now,
+                scorched=light >= RUNAWAY, why=why)
 
 def table():
     by = {s['id']: s for s in hosts.stars()}
@@ -63,7 +68,7 @@ def table():
 if __name__ == '__main__':
     print(f"{'host':14} {'white dwarf':17} {'apart now':>11} {'then':>7} {'light at the tip':>17} {'Gyr since':>10}  zone held planets")
     for i, j in sorted(table().items(), key=lambda kv: -kv[1]['light']):
-        mark = 'every warm orbit ran away' if j['light'] >= RUNAWAY else ''
+        mark = ('DROPPED: ' + j['why']) if j['why'] else 'scorched, and over a billion years since' if j['scorched'] else ''
         print(f"{j['name']:14} {j['wd']:17} {j['a']:8,.1f} AU{'*' if j['projected'] else ' '} {j['a0']:6,.1f} {j['light']:13,.2f} x Earth {j['since']:9.2f}  "
               f"{'yes' if j['held_then'] else 'NO then'}{'' if j['held_now'] else ', NO now'}  {mark}")
     print('* projected on the sky, not an orbit.')

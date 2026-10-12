@@ -138,11 +138,9 @@ YOUNG = {
     '5605469299570245504': 'GJ 2060 C, AB Doradus group, about 0.15 Gyr',
 }
 
-# Stars whose companion became a white dwarf too recently: as a giant, it scorched the warm zone, and too little time
-# has passed since for minds.
-SCORCHED = {
-    '37279': 'Procyon: B became a white dwarf 1.37 Gyr ago, in a system about 2.7 Gyr old (Bond et al. 2015)',
-}
+# Stars with a white dwarf companion are judged in calcs/scorch.py: the companion was a giant first, and lit the warm
+# zone from closer in. A star leaves the list if its zone could not hold planets then or now, or if the zone was
+# scorched under a billion years ago: the same clock as a young star.
 
 # ---------- Ages, from Gaia DR3 FLAME ----------
 def flame():
@@ -199,7 +197,7 @@ def hz(lum):
 def main():
     s_list = stars()
     name_from_hyg(s_list)
-    import binaries
+    import binaries, scorch
     ages, pl, pairs, close = flame(), planets(), companions(s_list), binaries.close_orbits(s_list)
     kept, dropped = [], collections.Counter()
     for s in [s for s in s_list if s['kind']]:
@@ -210,8 +208,8 @@ def main():
         hips = {s.get('hip'), s['id'].replace('HIP ', '')} | {x for o, _ in pairs.get(s['id'], []) for x in (o.get('hip'), o['id'])}
         if hips & set(YOUNG):                                      # a young star's companions are young too
             why = 'younger than 1 Gyr'
-        elif hips & set(SCORCHED):
-            why = 'a white dwarf companion scorched the warm zone'
+        elif s['id'] in scorch.PAIRS:
+            why = scorch.judge(s, scorch.PAIRS[s['id']], (inner, outer))['why']
         elif s['kind'] in 'FG' and f.get('age_flame_upper') and float(f['age_flame_upper']) < 1.0:
             why = 'younger than 1 Gyr'
         for o, sep in pairs.get(s['id'], []):

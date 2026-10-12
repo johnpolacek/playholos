@@ -17,7 +17,7 @@ SETTLED = [('Does a half-built real instrument cost fewer Years?', 'It costs wha
            ('What stops a data center every Year?', 'Chips set the pace: the fabs fill one a Year, each +50% compute. Energy sets the ceiling, near a hundredfold. Settled 2026-10-10.'),
            ('What is energy for, early?', 'Thought. Each data center draws its share, and the twelfth would need more than Earth has. Settled 2026-10-10, by the rule above.'),
            ('Is matter meant to be free early?', 'No. Matter is only what is spare in orbit: about 20 kt at Year 0. Working satellites don’t count. Settled 2026-10-10.'),
-           ('What does Year 0’s kit catch?', 'Physics decides: the star’s place in the sky, the hours looked, and loudness. Year 0’s sky watch catches about 1 early signal in 4. A sender that hears nothing tries again, and the player can spend more on ears. Settled 2026-10-10.'),
+           ('What does Year 0’s kit catch?', 'Physics decides: the star’s place in the sky, the hours looked, and loudness. Year 0’s sky watch catches about 1 early signal in 5. A sender that hears nothing tries again, and the player can spend more on ears. Settled 2026-10-10.'),
            ('What happened to knocks that arrived before Year 0?', 'They happened, and Earth missed them. Only a knock Earth would have caught is rolled again. The sender, unanswered, may try again. Nothing was recorded, so no archive holds them. Settled 2026-10-10.'),
            ('Is all of Earth’s lift spare?', 'No. About 15 kt a Year is spare of 40. The rest keeps Earth’s craft flying. The player can spend to raise it: a launch complex adds 40 kt a Year. Settled 2026-10-10.'),
            ('How long does a Mind take to act on news?', 'Its Cautious or Bold dial sets it: a tenth of a Year if strongly Bold, a quarter if it leans Bold, a Year if it leans Cautious, two if strongly Cautious. Settled 2026-10-11.')]
@@ -27,7 +27,7 @@ MOVE = reactions.MOVES
 def state(p):
     if p['dead']: return f"died {p['died']:.0f}"
     w = p['waking']
-    return f'awake {Y0 - w:.0f} Years' if w < Y0 else f'wakes Year {w - Y0:.1f} · +{clock(w - Y0)}'
+    return f"awake {Y0 - w:.0f} Year{'' if round(Y0 - w) == 1 else 's'}" if w < Y0 else f'wakes Year {w - Y0:.1f} · +{clock(w - Y0)}'
 def knows(p):
     if p['dead']: return 'dead before Year 0'
     if not p['heard']: return 'has not heard Earth'
@@ -62,17 +62,20 @@ def god_map(w=560, h=470):
     for ly in (10, 20, 30, 40, 50):
         s.append(f'<circle cx="{cx}" cy="{cy}" r="{ly * k:.1f}" fill="none" stroke="{INK}" stroke-width=".7" stroke-dasharray="3 4" opacity=".4"></circle>')
         s.append(text(cx + 3, cy - ly * k - 3, f'{ly} ly · {clock(ly)}', 8.5))
+        labels.boxes.append((cx + 3, cy - ly * k - 12, 90, 11))                      # ring labels hold their place
     P = lambda xyz: (cx + k * xyz[0], cy + k * xyz[2])
-    s.append(f'<circle cx="{cx}" cy="{cy}" r="4" fill="{YOU}"></circle><circle cx="{cx}" cy="{cy}" r="8" fill="none" stroke="{YOU}"></circle>' + labels.place(cx, cy, 'Earth', 11, YOU, 600, ((0, 22),)))
+    # Every marker holds its place too, so no label is set over another star.
+    labels.boxes += [(x - 8, y - 8, 16, 16) for x, y in [P(host_xyz(p['host'])) for p in NB] + [P(LEADS[key]['xyz']) for key in ('eri', 'fom', 'find', 'luy')]]
+    s.append(f'<circle cx="{cx}" cy="{cy}" r="4" fill="{YOU}"></circle><circle cx="{cx}" cy="{cy}" r="8" fill="none" stroke="{YOU}"></circle>' + labels.place(cx, cy, 'Earth', 11, YOU, 600, ((0, 22), (-13, 4), (0, -14), (13, 4))))
     for p in NB:
         x, y = P(host_xyz(p['host'])); hunter = p['n']['disposition'] == 'hunter'
         mark = (f'<path d="M{x - 5:.1f} {y - 5:.1f} L{x + 5:.1f} {y + 5:.1f} M{x + 5:.1f} {y - 5:.1f} L{x - 5:.1f} {y + 5:.1f}" stroke="{INK}" stroke-width="1.4"></path>' if p['dead'] else
                 f'<circle cx="{x:.1f}" cy="{y:.1f}" r="5" fill="{PAPER if p["waking"] > Y0 else (OTHER if hunter else INK)}" stroke="{OTHER if hunter else INK}" stroke-width="1.5"></circle>')
         if p['heard']: mark += f'<circle cx="{x:.1f}" cy="{y:.1f}" r="9" fill="none" stroke="{YOU}" stroke-width="1" stroke-dasharray="2 2"></circle>'
-        s.append(mark + labels.place(x, y, p['name'], 10, OTHER if hunter else INK, 600, ((13, 4), (-13, 4), (0, -13), (0, 22), (13, -12), (-13, -12), (13, 20), (-13, 20), (0, -26), (0, 36)), sub=f'{p["star"]} · {p["d"]:.1f} ly'))
+        s.append(mark + labels.place(x, y, p['name'], 10, OTHER if hunter else INK, 600, ((13, 4), (-13, 4), (0, -26), (0, 22), (13, -12), (-13, -12), (13, 20), (-13, 20), (0, 36), (24, 4), (-24, 4)), sub=f'{p["star"]} · {p["d"]:.1f} ly'))
     for key in ('eri', 'fom', 'find', 'luy'):
         x, y = P(LEADS[key]['xyz'])
-        s.append(f'<rect x="{x - 3:.1f}" y="{y - 3:.1f}" width="6" height="6" fill="none" stroke="{OTHER}" stroke-width="1.2" transform="rotate(45 {x:.1f} {y:.1f})"></rect>' + labels.place(x, y, LEADS[key]['name'], 8.5, OTHER, None, ((9, 3), (-9, 3), (0, -9), (0, 16))))
+        s.append(f'<rect x="{x - 3:.1f}" y="{y - 3:.1f}" width="6" height="6" fill="none" stroke="{OTHER}" stroke-width="1.2" transform="rotate(45 {x:.1f} {y:.1f})"></rect>' + labels.place(x, y, LEADS[key]['name'], 8.5, OTHER, None, ((10, 3), (-10, 3), (0, -11), (0, 18), (10, -8), (-10, -8), (10, 14), (-10, 14))))
     return (f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" font-family="IBM Plex Mono, monospace" role="img" aria-label="Every neighbor in this game, seen from above the galaxy’s plane">{"".join(s)}</svg>'
             '<p class="key">Filled: awake at Year 0. Open: wakes later. Cross: dead. Blue ring: has heard Earth. Amber: a hunter. Diamonds: Earth’s leads.</p>')
 
@@ -448,7 +451,7 @@ PREGAME = [
     pre_row(4, 'Where things stand', STAND, [f'Heard Earth’s radars: {heard_list}.',
                                             'At the stars Earth knocked on: ' + (', '.join(f"{p['name']} at {AT[p['host']['name']]}" for p in NB if p['host']['name'] in AT) or 'no one, in this game') + '.',
                                             'The Mind lists where the noise went, never who heard. That holds here.',
-                                            ('Before Year 0, ' + str(N_UNHEARD) + ' knocks reached Earth unheard: ' + ', '.join(f"{p['name']}’s in {' and '.join(sorted({format(u['arrived'], '.0f') for u in p['unheard']}))}" for p in NB if p['unheard']) + '. Nothing recorded them, so no archive holds them.') if N_UNHEARD else 'No knock reached Earth before Year 0 in this game. About 1 game in 4 has one that Earth missed.'], settled=6),
+                                            ('Before Year 0, ' + str(N_UNHEARD) + ' knocks reached Earth unheard: ' + ', '.join(f"{p['name']}’s in {' and '.join(sorted({format(u['arrived'], '.0f') for u in p['unheard']}))}" for p in NB if p['unheard']) + '. Nothing recorded them, so no archive holds them.') if N_UNHEARD else 'No knock reached Earth before Year 0 in this game. About 1 game in 5 has one that Earth missed.'], settled=6),
     pre_row(5, 'What you inherit', KIT, ['Energy is 99% idle at Year 0, and nothing in the first 15 minutes changes that.']),
     pre_row(6, 'The charter', CHARTER_SCREEN, [f'The dials: {DIAL_WORDS}. The base is real history. This game’s branches moved it.', 'The line is the Mind’s proposal. Three are written so far, picked by the dials.']),
     pre_row(7, 'Meeting the Mind', MEET),
@@ -456,7 +459,7 @@ PREGAME = [
                                       'Fomalhaut is 440 million years old: too young for minds, so it is never a host. Its clouds are rubble.',
                                       ('Luyten’s Star: ' + (f'''{who_at("Luyten's Star")["name"]} lives there.''' if who_at("Luyten's Star") else 'no one lives there. About 3 games in 10 put someone at a star Earth knocked on.'))], said='What doesn’t fit?'),
     pre_row(9, 'Planning', P_PLAN, ['The Mind advises from the charter and dials. It queues nothing until told.',
-                                    'Its advice is sound. Across games, Year 0’s sky watch catches about a quarter of the signals that arrive in the first hour. The all-sky watch catches about 9 in 10.'], said='Plan our waking.'),
+                                    'Its advice is sound. Across games, Year 0’s sky watch catches about 1 in 5 of the signals that arrive in the first hour. The all-sky watch catches about 9 in 10.'], said='Plan our waking.'),
     pre_row(10, 'The queue, and Begin', P_QUEUE, ['Year 0 starts at the tap. From then the clock runs, offline too.',
                                                  f'Nothing Earth does in the next 15 minutes can reach anyone: the nearest living neighbor, {nearest["name"]}, is {nearest["d"]:.1f} ly away. Light from Year 0 gets there at Year {nearest["d"]:.1f}, +{clock(nearest["d"])}.' if nearest else ''], said='Queue that.'),
 ]
