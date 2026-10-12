@@ -314,6 +314,11 @@ Settled 2026-10-10.
 - **Meeting the Mind, then the tour,** as v1 had them.
 - **Planning.** The player queues builds, looks, standing orders and what wakes them. Nothing happens yet.
 - **Begin.** When the player taps Begin, Year 0 starts and everything queued starts at once. From then on the clock runs, offline too, at 5 real minutes a Year.
+- **The first session keeps v1's rhythm.** Settled 2026-10-12. About 15 minutes of play from Begin, the first result within 30 seconds, and something real landing about every minute. It ends on a timer the player sets, 45 to 60 minutes out.
+  - The first mock kept it for 90 seconds. Then nothing landed for 3.5 minutes, and later for 5.5. Eleven of its 31 half-minutes held nothing.
+  - Why: v2 took build times from real works, so the shortest build is a Year, and the opening's three looks all land by 1:30.
+  - Quiet of that length is a flaw, not the pace. Set aside: dropping the rule and shortening the session, and a Mind that speaks up on a timer.
+  - Open: what may land in those minutes.
 
 ## The seed, drawn
 
@@ -397,5 +402,5 @@ Answered one at a time, in this order. Every answer must be permitted by current
    - **Settled 2026-10-10:** knocks before Year 0 happened, and Earth missed them. See [What Earth hears](#what-earth-hears).
    - **Settled 2026-10-11:** a Mind's Cautious or Bold dial sets how long it takes to act on news. See [How neighbors play](#how-neighbors-play).
    - **Priced 2026-10-11:** chip fabs, factory-built works, the orbital yard and the all-sky watch. See [Build times](#build-times) and [Growing compute](#growing-compute).
-   - 11 of the 31 half-minutes had nothing new for the player.
+   - **Settled 2026-10-12:** 11 of the 31 half-minutes had nothing new for the player. That is a flaw: v1's first-session rule holds in v2. See [How a game starts](#how-a-game-starts). Open: what may land in those minutes.
 9. **Settled 2026-10-10:** v1's research baseline, rechecked against the 2025 radar result and Garrett's 2026 cold-computing paper. See [Why the sky is quiet, rechecked](#why-the-sky-is-quiet-rechecked).
