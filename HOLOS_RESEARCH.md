@@ -454,9 +454,27 @@ What Sol's own instruments have found nearby. For v2 open question 3.
 - **[Fomalhaut's collisions](https://phys.org/news/2025-12-hubble-captures-rare-collision-nearby.html)** · 25 ly. Its "planet" was a dust cloud from a collision, and a second cloud, cs2, appeared in 2023 Hubble images. Kalas and colleagues, December 2025. Theory expected one such collision in 100,000 years or longer, and two were seen in 20, close together on the belt's inner side ([ESA release](https://www.esa.int/Science_Exploration/Space_Science/Hubble_sees_asteroids_colliding_around_nearby_star)). Used: the v2 mock's Fomalhaut screen. Its third cloud is the seed's, not real.
 - **[The Wow! signal, revised](https://arxiv.org/abs/2508.10657)** · 1977. Archival Ohio SETI data put it above 250 Jy at 1420.726 MHz, from two fields near 19h26m, −27°. Méndez and colleagues propose a hydrogen cloud brightened by a flare ([part I](https://arxiv.org/abs/2408.08513)).
 - **[3I/ATLAS](https://aasnova.org/2026/01/28/monthly-roundup-interstellar-visitor-3i-atlas/)** · An interstellar comet, found July 2025. Its water is rich in deuterium and it may be older than the Sun ([ESO](https://www.eso.org/public/news/eso2608/)). Its push off course fits ordinary outgassing ([preprint](https://arxiv.org/abs/2511.07450)). A radio search found only human interference ([report](https://www.sciencedaily.com/releases/2026/06/260621060309.htm)).
-- **[Gliese 12 b](https://www.livescience.com/space/exoplanets/nasa-detects-earth-size-planet-just-40-light-years-away-thats-not-a-bad-place-to-hunt-for-life)** · 40 ly. The nearest known transiting, temperate, Earth-size world. Air unknown.
-- **[LHS 1140 b](https://arxiv.org/abs/2403.13265)** · 49 ly. A water world or a small gas world. No helium in four JWST transits (August 2026).
+- **Gliese 12 b** · 39.7 ly. Published: [Kuzuhara et al. 2024](https://arxiv.org/abs/2405.14708), ApJL 967, L21, and [Turner et al. 2025](https://arxiv.org/abs/2506.20564). Abstracts read 2026-10-12.
+  - A world 0.93 to 0.96 Earth radii and about 0.95 Earth masses, every 12.76 days around a quiet M3 star. About 315 K with no air. Rocky, and unlikely to have kept its first gas.
+  - Matters: the nearest known temperate Earth-size world that crosses its star. Its air is unread.
+  - Used: a re-read in the first mock, and a follow-up look at its day side.
+- **[LHS 1140 b](https://arxiv.org/abs/2403.13265)** · 48.8 ly. Damiano et al. 2024. Abstract read 2026-10-12.
+  - JWST's crossing spectrum rules out hydrogen-rich air, which leaves a water world. It favors heavier air, perhaps nitrogen, with modest confidence. No helium in four JWST transits (August 2026).
+  - Corrected 2026-10-12: this log had it as a water world or a small gas world. The 2024 paper already rules the gas world out.
+  - Used: a follow-up re-read in the first mock.
 - **[Terra Hunting Experiment](https://www.iac.es/en/projects/harps3-high-accuracy-radial-velocity-planet-searcher)** · HARPS3 began work in summer 2026 on La Palma: every clear night for ten years, on at least 40 bright Sun-like northern stars. By 2040 its results are in. If a neighbor's world sits in its sample and is heavy enough, Earth found it.
+- **Barnard's Star, more detail** · Published. [Basant et al. 2025](https://arxiv.org/abs/2503.08095) and [Stefanov et al. 2025](https://arxiv.org/abs/2410.00577), A&A 693, L3. Abstracts read 2026-10-12.
+  - Four worlds at 2.34, 3.15, 4.12 and 6.74 days, 0.19 to 0.34 Earth masses. Nothing over 0.57 Earths in its warm zone, 10 to 42 days. No crossings in TESS data.
+  - Used: a re-read in the first mock. Its 2040 limit, a third of an Earth, is the mock's.
+- **Day-side heat as a test for air** · Published. [Greene et al. 2023](https://arxiv.org/abs/2303.14849) and [Zieba et al. 2023](https://arxiv.org/abs/2306.10150). Abstracts read 2026-10-12.
+  - JWST measured the day-side glow of TRAPPIST-1 b and c at 15 microns. b is most likely bare rock. c has no thick carbon dioxide air.
+  - Matters: a real way to ask a red star's rocky world whether it has air, without reading the air itself.
+  - Used: the Gliese 12 b follow-up in the first mock. Its cool day side is the mock's.
+- **Looks in the first mock, added 2026-10-12.** Seven looks and two arrivals fill the first session's quiet half-minutes.
+  - Real, as logged here: Gliese 12 b, Barnard's four worlds, Tau Ceti's four signals, Epsilon Indi's giant, LHS 1140 b, Fomalhaut's clouds.
+  - The mock's own: what each look finds in 2040. Which two Tau Ceti signals hold, the limit inside Epsilon Indi's giant, Gliese 12 b's cool day side, how firm LHS 1140 b's air is, and Fomalhaut's shared orbit.
+  - Real arrivals: Earth's 2009 message reaches Kappa¹ Ceti at Year 0.1, and its 2003 message reaches Gliese 208 at Year 0.8.
+  - Godview labels each one, so no invented result reads as real.
 - Earlier entries also apply: Epsilon Indi Ab, Delta Pavonis, Tau Ceti, Beta Hydri, Epsilon Eridani b, TRAPPIST-1 f and the Earth transit zone, where Teegarden's Star enters about 2050.
 
 ## Reading air
@@ -773,6 +791,7 @@ Results the design is waiting on. Check each when its date comes.
 - BL Lyncis: which spin is right, 7.85 or 16.4 days? It decides whether it and VV Lyncis stay.
 - About 15 red dwarfs are unconfirmed young-group candidates with no age of their own. They stay. Gliese 393 is listed in AB Doradus but [Amado et al. 2021](https://arxiv.org/abs/2105.13785) put it older than 0.7 billion years.
 - 31 of the F, G and K hosts have no published age in any table opened, mostly K companions.
+- The first mock's looks land on a game clock, not on real telescope schedules. A real space telescope can't point near the Sun, so a star is out of reach for months each year. Check whether Fomalhaut can be imaged in January 2040, and whether seasons should set when a look can start.
 - calcs/hosts.py pairs companions only within 20,000 AU. AT Microscopii and Fomalhaut C sit wider from their primaries and needed their own entries.
 - Smith and Lissauer 2009, Icarus: confirm the lifetime of Earth-mass systems near 9 to 10 mutual Hill radii, for the checker's spacing rule.
 - Tau Ceti dust belt tilt in leads.py against MacGregor et al. 2016.

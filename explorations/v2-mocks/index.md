@@ -161,7 +161,7 @@ ABOUT · What should we start with?
 What should we start with?
 THE MIND · Ears. Our sky watch sees each star for ten minutes a day. A knock lasts hours. One could pass and we would never know.
 And the leads?
-THE MIND · Each has a first look we can take with what we have. They cost seconds of your time. I would take all three the moment we wake.
+THE MIND · Each has a first look we can take with what we have. They cost seconds of your time. I would take all three the moment we wake, and re-read four older puzzles behind them.
 What would you do?
 ITS VIEW · FROM OUR CHARTER AND DIALS · Build the all-sky watch and the flash watch. Add a data center. Then decide about a beacon: we are already loud, and a voice is cheap. · leans open · expand and deepen, even · leans bold
 Ask the Mind… · [Send · ↑]
@@ -183,9 +183,8 @@ QUICK LOOKS · START AT YEAR 0
 Image Fomalhaut again · Space telescope · has the new cloud moved? · lands Year 0.1 · 00:00:30
 Search for Gliese 432 A’s world crossing its star · PLATO and TESS records · lands Year 0.2 · 00:01:00
 Re-read 82 Eridani’s velocities · 37 years of records · is the stretched orbit real? · lands Year 0.3 · 00:01:30
-AT YEAR 0 YOU WILL SPEND
-Energy · [1%] · 99% free
-Compute · [41%] · 59% free
+FOUR OLDER PUZZLES · RE-READ IN TURN
+Re-read four older puzzles · Gliese 12 b · Barnard’s Star · Tau Ceti · Epsilon Indi · Year 0.5 to 1.2 · 00:06:00
 THE MIND · Queued. Nothing here sends anything. When you begin, one Year passes every five of your minutes, and I keep going while you’re away. · [Begin · Year 0 starts now] · [Change the queue]
 [Talk to the Mind]
 Godview
@@ -193,7 +192,7 @@ Year 0 starts at the tap. From then the clock runs, offline too.
 Nothing Earth does in the next 15 minutes can reach anyone: the nearest living neighbor, Ombe, is 21.2 ly away. Light from Year 0 gets there at Year 21.2, +01:46:03.
 
 ## The first 15 minutes
-From Begin. 11 of 31 half-minutes had nothing new for the player.
+From Begin. 4 of 31 half-minutes had nothing new for the player.
 +0:00 · Begin · Year 0
 “What’s running?”
 Earth · Year 0
@@ -205,17 +204,19 @@ LOOKS · WITH WHAT WE HAVE
 Image Fomalhaut again · Space telescope · has the new cloud moved? · under way · 00:00:30
 Search for Gliese 432 A’s world crossing its star · PLATO and TESS records · under way · 00:01:00
 Re-read 82 Eridani’s velocities · 37 years of records · is the stretched orbit real? · under way · 00:01:30
+4 more in line · Gliese 12 b · Barnard’s Star · Tau Ceti · Epsilon Indi · queued
 BUILDING · 3
 - All-sky watch · two sites, one in each hemisphere · 6 Years · 00:30:00
 - Deep flash watch · domes on six mountains · 6 Years · 00:30:00
 - Ground data center · +50% compute · 1 Year · 00:05:00
-THE MIND · The sky watch, the flash watch and a data center, begun. Three looks under way. Fomalhaut answers in thirty seconds.
+THE MIND · The sky watch, the flash watch and a data center, begun. Three looks under way, four re-reads in line. Fomalhaut answers in thirty seconds, as our 2009 message reaches Kappa¹ Ceti.
 [Talk to the Mind]
 Godview
 The clock starts. The seed rolled every neighbor’s plan before this. Only Earth’s choices are open.
 +0:30 · Year 0.1
 “What did Fomalhaut show?”
 Lands · Fomalhaut has a third cloud. Chance 30 → 5.
+Arrives · Our 2009 message reaches Kappa¹ Ceti, 30.3 ly away.
 Earth · Year 0.1
 Sol · 2040.1 · 1 Year = 00:05:00
 ENERGY · [1.0%] · MATTER · 22 kt · COMPUTE · [36%]
@@ -239,6 +240,7 @@ Godview
 Earth’s 2009 message, RuBisCo Stars, reaches Kappa¹ Ceti, 30.3 ly away. No one is there.
 The third cloud is the seed’s: a lead that changes. The first two are real, found in 2004 and 2023.
 Truth: rubble. Nothing at Fomalhaut is built.
+Kappa¹ Ceti is under a billion years old: too young for minds, so it is never a host.
 +1:00 · Year 0.2
 “Later. And the new world?”
 Lands · Gliese 432 A’s world doesn’t cross its star.
@@ -312,9 +314,33 @@ Godview
 A second telescope of its class would take the full 18 Years. This one was under way.
 Settled · Does a half-built real instrument cost fewer Years? It costs what its real schedule leaves: about 8 Years for the Habitable Worlds Observatory. Build times are standard, from the science, and the player can invest in projects that build faster. A speed-up also shortens the part left of a work under way. Settled 2026-10-10 and 10-11.
 +2:30 · Year 0.5
-Nothing new. · A dead 30 seconds.
+The Mind glows. Taps it.
+Lands · No thick air on Gliese 12 b. A thick blanket 15 → 2.
+Earth · Year 0.5
+Sol · 2040.5 · 1 Year = 00:05:00
+ENERGY · [1.0%] · MATTER · 27 kt · COMPUTE · [41%]
+REPORT · QUICK LOOK
+[‹ All reports]
+
+### No thick air on Gliese 12 b
+Gliese 12 · 39.7 ly · crossing records · 0.3 Years · every crossing since 2024
+A world Earth’s size, warmer than ours, crossing a quiet red star every 12.8 days. Sixteen years of crossings show no thick blanket of gas. Air as thin as ours would hide in the noise.
+WHAT IT COULD BE · BEFORE → NOW
+Bare rock · [50%] · [58%] · 50 → 58
+Thin air, like ours or Venus’s · [35%] · [40%] · 35 → 40
+A thick blanket of gas · [15%] · [2%] · 15 → 2
+WITH WHAT WE HAVE · NEXT
+Watch its day side · Space telescope · air carries heat away, so a cool day side means air · 0.2 Years · 00:01:00 · [Start]
+THE MIND · No thick air. Bare rock, or air as thin as ours: its crossings can’t tell. Its heat could. The space telescope has been free since Fomalhaut. · [Watch its day side] · [Later]
+[Talk to the Mind]
+Godview
+Real: Gliese 12 b, found in 2024. Earth’s size, 12.8 days, a quiet red star. Its air was unread in 2026. What the re-read finds is the mock’s.
+No one lives at Gliese 12 in this game.
+The player says Later. The telescope stays idle until minute 6.
+Settled · What fills the quiet half-minutes? Looks, and Earth’s old messages reaching their stars. Something real lands about every minute for the first 15. Four more looks are queued at Begin, and three are offered as follow-ups. Settled 2026-10-12.
 +3:00 · Year 0.6
 “Who has heard us?”
+Lands · Barnard’s Star: four small worlds hold, and no fifth. The Mind glows. It keeps.
 Earth · Year 0.6
 Sol · 2040.6 · 1 Year = 00:05:00
 ENERGY · [1.0%] · MATTER · 29 kt · COMPUTE · [41%]
@@ -329,6 +355,8 @@ What would you do?
 ITS VIEW · FROM OUR CHARTER AND DIALS · Assume someone has, and that they are as curious as we are. Listen properly. Then call. · leans open · expand and deepen, even · leans bold
 Ask the Mind… · [Send · ↑]
 Godview
+Real: four worlds smaller than Earth at Barnard’s Star, confirmed in 2025. Nothing over 0.57 Earths in its warm zone then. A third of an Earth by 2040 is the mock’s.
+No one lives at Barnard’s Star in this game.
 3 of 8 living neighbors have heard Earth: Ombe, Hael, Ree.
 The Mind can only say it doesn’t know. The concept sets that: it lists where the noise went, never who heard.
 +3:30 · Year 0.7
@@ -351,6 +379,7 @@ The Mind gives its view and waits. Quieting is the player’s to choose, never t
 Settled · Can the Will quiet Earth’s radars? Yes, if the player chooses: keep them, fade them over about 25 Years, or cut them in about 2. What has left keeps going. Settled 2026-10-10.
 +4:00 · Year 0.8
 “Cut them. And send nothing new without me.”
+Arrives · Our 2003 message reaches Gliese 208, 37.3 ly away.
 Earth · Year 0.8
 Sol · 2040.8 · 1 Year = 00:05:00
 ENERGY · [1.0%] · MATTER · 32 kt · COMPUTE · [46%]
@@ -366,7 +395,7 @@ Recall what left. Ninety years of sweeps keep going, and anyone they have passed
 WHAT IT BUYS
 A listener who starts looking after the last sweep has passed never hears one. The sooner it leaves, the more of them.
 ALSO · Nothing aimed, nothing broadcast · until you say
-THE MIND · Started. 2 Years, no matter. The last sweep leaves at Year 2.8. Its absence reaches Alpha Centauri at Year 7.1, and fifty light-years at Year 52.8. · [Undo]
+THE MIND · Started. 2 Years, no matter. The last sweep leaves at Year 2.8. Its absence reaches Alpha Centauri at Year 7.1, and fifty light-years at Year 52.8. What we sent keeps arriving: our 2003 message reached Gliese 208 this season. · [Undo]
 [Talk to the Mind]
 Godview
 Earth’s 2003 message, Cosmic Call 2, reaches Gliese 208, 37.3 ly away. No one is there.
@@ -375,9 +404,29 @@ Hael, 49.1 ly: hears them stop at Year 51.9, +04:19:24. It can’t tell waking f
 Ree, 49.9 ly: hears them stop at Year 52.7, +04:23:42. It can’t tell waking from dying. It knocks back: a short aimed signal, its name optional. It takes a quarter of a Year to act, so that reaches Earth at Year 102.9.
 Wakes after the last sweep has passed, and never hears one: Kesh, Varn, Kirrin. Across games, about 1 neighbor in 9.
 Ulan wakes at Year 29.4, while sweeps still pass it until Year 51.9. It can still find them.
+Gliese 208 turns every 12.3 days, which dates it near half a billion years: too young for minds, so it is never a host.
 Settled · How long does a Mind take to act on news? Its Cautious or Bold dial sets it: a tenth of a Year if strongly Bold, a quarter if it leans Bold, a Year if it leans Cautious, two if strongly Cautious. Settled 2026-10-11.
 +4:30 · Year 0.9
-Nothing new. · A dead 30 seconds.
+Taps the Mind. Two reports wait.
+Lands · Two of Tau Ceti’s four signals hold.
+Earth · Year 0.9
+Sol · 2040.9 · 1 Year = 00:05:00
+ENERGY · [1.0%] · MATTER · 33 kt · COMPUTE · [46%]
+REPORTS · 2 NEW
+NEW
+- Two of Tau Ceti’s four signals hold · Tau Ceti · 11.9 ly · two worlds, and two tricks of the star · New
+- Barnard’s Star: four worlds, no fifth · Barnard’s Star · 6.0 ly · warm zone empty down to a third of Earth · New
+EARLIER
+- No thick air on Gliese 12 b · Gliese 12 · 39.7 ly · Year 0.5
+- The stretched orbit is real · 82 Eridani · 19.7 ly · Year 0.3
+- Gliese 432 A’s world doesn’t cross · Gliese 432 A · 31.2 ly · Year 0.2
+- A third cloud at Fomalhaut · Fomalhaut · 25.1 ly · Year 0.1
+THE MIND · Two of Tau Ceti’s four keep time. The outer one sits at the cold edge of its warm zone, twelve light-years off. The telescope you started could see it. And Barnard’s Star has no fifth world.
+[Talk to the Mind]
+Godview
+Real: four faint signals at Tau Ceti, claimed in 2017 and never confirmed. Which two hold is the mock’s.
+No one lives at Tau Ceti in this game.
+Results pile up while the player talks. Nothing is lost: they wait in Reports.
 +5:00 · Year 1
 The Mind glows. Taps it.
 Lands · The data center is running. Compute +50%.
@@ -385,16 +434,15 @@ Earth · Year 1
 Sol · 2041.0 · 1 Year = 00:05:00
 ENERGY · [1.6%] · MATTER · 35 kt · COMPUTE · [27%]
 [drawing: ORBIT · EARTH · 3 BUILDING; labels: the Moon, Earth, low orbit, All-sky watch · 17%, Deep flash watch · 17%, Data center, Infrared telescope · 8%] · ORBIT · EARTH · 3 BUILDING
-PROJECTS · 4 BUILDING
+PROJECTS · 4 BUILDING · 1 LOOK
+LOOKS · WITH WHAT WE HAVE
+Re-read Epsilon Indi’s sway · Velocity records · is its giant alone? · under way · 00:01:00
 BUILDING · 4
 - All-sky watch · two sites, one in each hemisphere · 5 Years · 00:25:00
 - Deep flash watch · domes on six mountains · 5 Years · 00:25:00
 - Ground data center · +50% compute · Done
 - Infrared telescope · reads the air of nearby worlds · 7.4 Years · 00:37:00
 - Quiet the radars · the last sweep leaves at Year 2.8 · 1.8 Years · 00:09:00
-EACH YEAR YOU CAN SPEND
-Energy · [1.6%] · 98.4% free
-Compute · [27%] · 73% free
 THE MIND · The data center runs: half again as much thought, for half a percent more of our energy. The fabs fill one a Year. I can keep them coming. · [Keep them coming] · [Just one more] · [Not now]
 [Talk to the Mind]
 Settled · What stops a data center every Year? Chips set the pace: the fabs fill one a Year, each +50% compute. Energy sets the ceiling, near a hundredfold. Settled 2026-10-10.
@@ -404,8 +452,9 @@ Earth · Year 1.1
 Sol · 2041.1 · 1 Year = 00:05:00
 ENERGY · [1.6%] · MATTER · 36 kt · COMPUTE · [37%]
 [drawing: ORBIT · EARTH · 4 BUILDING; labels: the Moon, Earth, low orbit, All-sky watch · 18%, Deep flash watch · 18%, Second data center · 0%, Infrared telescope · 9%] · ORBIT · EARTH · 4 BUILDING
-PROJECTS · 5 BUILDING · 1 LOOK
+PROJECTS · 5 BUILDING · 2 LOOKS
 LOOKS · WITH WHAT WE HAVE
+Re-read Epsilon Indi’s sway · Velocity records · is its giant alone? · under way · 00:00:30
 Listen to Gliese 432 A for a Year · Radio array · tones above 15 MW · under way · 00:05:00
 BUILDING · 5
 - All-sky watch · two sites, one in each hemisphere · 4.9 Years · 00:24:30
@@ -420,9 +469,48 @@ A standing order, the player’s. Without it compute never grows on its own.
 At full pace the grid becomes the wall near Year 11, +00:55:00. Then more thought needs more energy, or colder chips in orbit.
 Settled · What is energy for, early? Thought. Each data center draws its share, and the twelfth would need more than Earth has. Settled 2026-10-10, by the rule above.
 +6:00 · Year 1.2
-Nothing new. · A dead 30 seconds.
+The Mind glows. Taps it.
+Lands · One giant explains Epsilon Indi. Nothing large hides inside its orbit.
+Earth · Year 1.2
+Sol · 2041.2 · 1 Year = 00:05:00
+ENERGY · [1.6%] · MATTER · 38 kt · COMPUTE · [37%]
+REPORT · QUICK LOOK
+[‹ All reports]
+
+### One giant explains Epsilon Indi
+Epsilon Indi · 11.9 ly · velocity records · 0.3 Years · velocities, and 17 years of images
+Its giant was imaged in 2023, heavier and farther out than the star’s sway had said. With every record since, one world fits: six Jupiters, far out. Nothing heavier than Saturn hides inside its orbit.
+WHAT IT COULD BE · BEFORE → NOW
+One giant, and nothing else large · [70%] · [90%] · 70 → 90
+A second, smaller giant · [30%] · [10%] · 30 → 10
+THE SPACE TELESCOPE IS IDLE · ONE STAR AT A TIME
+Watch Gliese 12 b’s day side · is it cooler than bare rock? · 0.2 Years · 00:01:00 · [Start]
+Watch Fomalhaut through a Year · monthly · do the clouds share one orbit? · 1 Year · 00:05:00 · [Start]
+THE MIND · One giant, and nothing large inside it. Dull, and worth knowing. The space telescope has sat idle since Fomalhaut. Two looks want it, and it takes one star at a time. · [Gliese 12 b first] · [Fomalhaut first] · [Leave it idle]
+[Talk to the Mind]
+Godview
+Real: Epsilon Indi’s giant, imaged in 2023, about six Jupiters. The limit inside its orbit is the mock’s.
+No one lives at Epsilon Indi in this game.
+This was the last look queued at Begin. From here every landing is one the player chose to chase.
 +6:30 · Year 1.3
-Nothing new. · A dead 30 seconds.
+“Gliese 12 b first. Then Fomalhaut.”
+Earth · Year 1.3
+Sol · 2041.3 · 1 Year = 00:05:00
+ENERGY · [1.6%] · MATTER · 39 kt · COMPUTE · [37%]
+MIND · NEW ORDER
+WHAT YOU WANT
+Gliese 12 b first. Then Fomalhaut.
+THE MIND’S VERSION
+LOOK · Watch Gliese 12 b’s day side · space telescope · 0.2 Years
+THEN · Watch Fomalhaut through a Year · monthly, from Year 1.5
+WHY IN TURN · The telescope points at one star at a time.
+COSTS · Telescope time. No matter, almost no compute.
+[Edit] · [Set the order]
+THE MIND · Set. Gliese 12 b answers in a minute. Fomalhaut starts when the telescope frees, and reports at Year 2.5. · [Undo]
+[Talk to the Mind]
+Godview
+One instrument, one look at a time. The quick look first costs Fomalhaut a fifth of a Year.
+The Mind named both uses and waited. The order is the player’s.
 +7:00 · Year 1.4
 “What should we fear?”
 Earth · Year 1.4
@@ -442,9 +530,32 @@ Godview
 No hunter was drawn in this game. About half of games have one.
 No neighbor can have a fast bullet yet: none has been awake a century and a half.
 +7:30 · Year 1.5
-Nothing new. · A dead 30 seconds.
+The Mind glows. Taps it.
+Lands · Gliese 12 b’s day side runs cool. Thin air 40 → 62.
+Earth · Year 1.5
+Sol · 2041.5 · 1 Year = 00:05:00
+ENERGY · [1.6%] · MATTER · 42 kt · COMPUTE · [37%]
+REPORT · QUICK LOOK
+[‹ All reports]
+
+### Gliese 12 b’s day side runs cool
+Gliese 12 · 39.7 ly · space telescope · 0.2 Years · four passes behind its star
+Bare rock facing its star would glow at its hottest. This world glows cooler. Something carries heat away from the day side, and air does that.
+WHAT IT COULD BE · BEFORE → NOW
+Thin air, like ours or Venus’s · [40%] · [62%] · 40 → 62
+Bare rock · [58%] · [36%] · 58 → 36
+A thick blanket of gas · [2%] · [2%] · 2 → 2
+WHAT WOULD SETTLE IT
+What the air is made of. That needs a wider mirror than any we have or are building.
+WITH WHAT WE HAVE · NEXT
+Re-read LHS 1140 b’s crossings · Crossing records · the other warm world of a red star · 0.2 Years · 00:01:00 · [Start]
+THE MIND · Cooler than bare rock should be. Something moves its heat. I would not call it air yet: four passes, and a red star’s flares can fool us. LHS 1140 b can be asked from the records. · [Re-read LHS 1140 b] · [Later]
+[Talk to the Mind]
+Godview
+The cool day side is the mock’s. The method is real: the space telescope took the day-side heat of TRAPPIST-1’s inner worlds this way.
+Truth: thin air, and no one there. No one lives at Gliese 12 in this game.
 +8:00 · Year 1.6
-“Build the vault.”
+“Yes. And build the vault.”
 Earth · Year 1.6
 Sol · 2041.6 · 1 Year = 00:05:00
 ENERGY · [1.6%] · MATTER · 34 kt · COMPUTE · [47%]
@@ -468,6 +579,7 @@ THE MIND · Started. Ten Years, and ten of the 44 kilotonnes we have spare. Lift
 [Talk to the Mind]
 Godview
 Asked for at Year 0, the vault would have taken half the spare stock.
+The re-read of LHS 1140 b starts too. The crossing records have been free since Year 0.5.
 Settled · Is matter meant to be free early? No. Matter is only what is spare in orbit: about 20 kt at Year 0. Working satellites don’t count. Settled 2026-10-10.
 +8:30 · Year 1.7
 “Build a launch complex.”
@@ -497,6 +609,7 @@ Lift is short of pads and ships, not energy: 40 kt a Year burns about half a gig
 Settled · Is all of Earth’s lift spare? No. About 15 kt a Year is spare of 40. The rest keeps Earth’s craft flying. The player can spend to raise it: a launch complex adds 40 kt a Year. Settled 2026-10-10.
 +9:00 · Year 1.8
 “Watch Luyten’s Star through the window.”
+Lands · LHS 1140 b keeps a heavy air. The Mind glows. It keeps.
 Earth · Year 1.8
 Sol · 2041.8 · 1 Year = 00:05:00
 ENERGY · [1.6%] · MATTER · 37 kt · COMPUTE · [57%]
@@ -512,7 +625,27 @@ WAKES YOU · Anything heard · each window, heard or not
 THE MIND · Set. The first window opens at Year 2.3, in two and a half minutes. I’ll wake you either way. · [Undo]
 [Talk to the Mind]
 +9:30 · Year 1.9
-Nothing new. · A dead 30 seconds.
+Taps the Mind.
+Earth · Year 1.9
+Sol · 2041.9 · 1 Year = 00:05:00
+ENERGY · [1.6%] · MATTER · 38 kt · COMPUTE · [57%]
+REPORT · QUICK LOOK
+[‹ All reports]
+
+### LHS 1140 b keeps a heavy air
+LHS 1140 · 48.8 ly · crossing records · 0.2 Years · every crossing since 2017
+In 2024 its crossings ruled out a puffed-up world of hydrogen, and hinted at heavier air over water. Sixteen more years firm the hint: nitrogen or carbon dioxide, on a world that is part ocean.
+WHAT IT COULD BE · BEFORE → NOW
+Water, under heavy air · [55%] · [78%] · 55 → 78
+Water, frozen over and airless · [35%] · [20%] · 35 → 20
+A small gas world · [10%] · [2%] · 10 → 2
+WHAT IT CAN’T TELL
+Whether anything lives in that water. Air like this forms without life.
+THE MIND · Heavy air over water, most likely, forty-nine light-years off. Two red stars’ worlds may hold air. Neither says anything lives there.
+[Talk to the Mind]
+Godview
+Real: in 2024 the space telescope ruled out a hydrogen world at LHS 1140 b and hinted at heavier air. How firm that is by 2040 is the mock’s.
+No one lives at LHS 1140 in this game.
 +10:00 · Year 2
 Nothing new. · A dead 30 seconds.
 +10:30 · Year 2.1
@@ -577,7 +710,28 @@ And if someone was?
 THE MIND · Then they chose. Some would answer at once. Some would watch us for Years first. Some would never answer. From here, all three look like tonight.
 Ask the Mind… · [Send · ↑]
 +12:30 · Year 2.5
-Nothing new. · A dead 30 seconds.
+The Mind glows. Taps it.
+Lands · A Year of Fomalhaut: its three clouds share one orbit.
+Earth · Year 2.5
+Sol · 2042.5 · 1 Year = 00:05:00
+ENERGY · [2.3%] · MATTER · 47 kt · COMPUTE · [34%]
+REPORT · LONG LOOK
+[‹ All reports]
+
+### Fomalhaut’s clouds share one orbit
+Fomalhaut · 25.1 ly · space telescope, monthly · 1 Year · light that left 25 Years ago
+Twelve images, a month apart. All three clouds drift along one path and spread as dust does. One body broke up there long ago, and its pieces keep colliding.
+WHAT IT COULD BE · BEFORE → NOW
+Rubble from one old breakup · [64%] · [86%] · 64 → 86
+A hidden planet stirring the belt · [23%] · [11%] · 23 → 11
+Chance · [5%] · [1%] · 5 → 1
+Something moving rocks · [8%] · [2%] · 8 → 2
+WHAT IT RULES OUT
+Three unrelated collisions. Not a small planet shepherding the pieces: that waits for a sharper image.
+THE MIND · One orbit for all three. Rubble, almost surely. Fomalhaut is 440 million years old: too young for anyone to be moving rocks.
+[Talk to the Mind]
+Godview
+Truth: rubble, as the first look guessed. A lead can close dull.
 +13:00 · Year 2.6
 Nothing new. · A dead 30 seconds.
 +13:30 · Year 2.7
@@ -640,4 +794,5 @@ Settled: What does Year 0’s kit catch? · Physics decides: the star’s place 
 Settled: What happened to knocks that arrived before Year 0? · They happened, and Earth missed them. Only a knock Earth would have caught is rolled again. The sender, unanswered, may try again. Nothing was recorded, so no archive holds them. Settled 2026-10-10.
 Settled: Is all of Earth’s lift spare? · No. About 15 kt a Year is spare of 40. The rest keeps Earth’s craft flying. The player can spend to raise it: a launch complex adds 40 kt a Year. Settled 2026-10-10.
 Settled: How long does a Mind take to act on news? · Its Cautious or Bold dial sets it: a tenth of a Year if strongly Bold, a quarter if it leans Bold, a Year if it leans Cautious, two if strongly Cautious. Settled 2026-10-11.
+Settled: What fills the quiet half-minutes? · Looks, and Earth’s old messages reaching their stars. Something real lands about every minute for the first 15. Four more looks are queued at Begin, and three are offered as follow-ups. Settled 2026-10-12.
 None are open.

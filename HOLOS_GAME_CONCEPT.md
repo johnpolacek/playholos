@@ -237,6 +237,16 @@ Settled 2026-10-06. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#earths-lead
   - *One seeded find,* such as a world Terra Hunting felt by 2036.
   - *Fomalhaut's new cloud,* 25 ly. It drifts and fades, so the first look makes it stranger, as v1 required of one lead.
   - *The Luyten's Star reply window,* Year 2.3, 11 real minutes in.
+- **Four older puzzles are re-read behind the opening looks.** Added 2026-10-12, to keep the first session's rhythm. Each is a real oddity as of 2026. What a re-read finds in 2040 is the mock's sample.
+  - *Gliese 12 b,* 39.7 ly. A world Earth's size, 12.8 days around a quiet red star. Its air is unread.
+  - *Barnard's Star,* 6 ly. Four worlds smaller than Earth, confirmed in 2025. Nothing over 0.57 Earths in its warm zone then.
+  - *Tau Ceti,* 11.9 ly. Four faint signals claimed in 2017 and never confirmed.
+  - *Epsilon Indi's giant,* 11.9 ly. Imaged in 2023, heavier and farther out than its star's sway had said.
+  - Why a re-read can find something: the Mind reads old records better than their first readers did. That is the game's premise, not a result.
+- **Three follow-ups the first mock offers.** Each spends an instrument, so they run in turn.
+  - Gliese 12 b's day side, with the space telescope. A cool day side means air carries heat away. The space telescope read TRAPPIST-1's inner worlds this way in 2023.
+  - LHS 1140 b's crossings, re-read. In 2024 they ruled out a hydrogen world and hinted at heavier air over water.
+  - Fomalhaut through a Year, monthly. It closes the lead as rubble.
 - **Settled leads stay settled.** Alpha Centauri A's candidate is resolved long before 2040. Adopt JWST's August 2026 result when it is published.
 
 ## The neighbors
@@ -329,6 +339,11 @@ Settled 2026-10-10.
     - The early minutes fill themselves, which leaves room to meet the Mind.
     - A follow-up is a real choice: it spends an instrument the next lead also wants.
     - Set aside: everything queued at Begin with longer looks, and an offer at every landing.
+  - *The mock, rebuilt 2026-10-12:* 4 of 31 half-minutes are quiet, down from 11. No two landings are more than 90 seconds apart.
+    - Queued at Begin: re-reads of Gliese 12 b, Barnard's Star, Tau Ceti and Epsilon Indi. They wait behind the opening looks, since each archive takes one look at a time.
+    - Offered as follow-ups: Gliese 12 b's day side, LHS 1140 b, and Fomalhaut through a Year.
+    - Arrivals: the 2009 message at Kappa¹ Ceti, 0:30. The 2003 message at Gliese 208, 4:00.
+    - Results pile up while the player talks, and wait in Reports.
 
 ## The seed, drawn
 
@@ -412,5 +427,5 @@ Answered one at a time, in this order. Every answer must be permitted by current
    - **Settled 2026-10-10:** knocks before Year 0 happened, and Earth missed them. See [What Earth hears](#what-earth-hears).
    - **Settled 2026-10-11:** a Mind's Cautious or Bold dial sets how long it takes to act on news. See [How neighbors play](#how-neighbors-play).
    - **Priced 2026-10-11:** chip fabs, factory-built works, the orbital yard and the all-sky watch. See [Build times](#build-times) and [Growing compute](#growing-compute).
-   - **Settled 2026-10-12:** 11 of the 31 half-minutes had nothing new for the player. That is a flaw: v1's first-session rule holds in v2. See [How a game starts](#how-a-game-starts). What may land is settled too: looks, and Earth's old messages arriving. Four more looks are queued at Begin and three are offered as follow-ups.
+   - **Settled 2026-10-12:** 11 of the 31 half-minutes had nothing new for the player. That is a flaw: v1's first-session rule holds in v2. See [How a game starts](#how-a-game-starts). What may land is settled too: looks, and Earth's old messages arriving. Four more looks are queued at Begin and three are offered as follow-ups. The rebuilt mock has 4 quiet half-minutes.
 9. **Settled 2026-10-10:** v1's research baseline, rechecked against the 2025 radar result and Garrett's 2026 cold-computing paper. See [Why the sky is quiet, rechecked](#why-the-sky-is-quiet-rechecked).
