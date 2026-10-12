@@ -137,8 +137,9 @@ def wall_year(fits, more_lines=()):
         if t + (fits - done) / lines <= nxt: return t + (fits - done) / lines
         done += (nxt - t) * lines; t = nxt; lines += 1; ups.pop(0)
 
-# Works that speed building: one that takes P Years and cuts later builds by a share c gets a work of T Years done
-# sooner only if P + (1 - c) * T < T, so only if T > P / c. Shorter works are better started at once.
+# Works that speed building: one that takes P Years cuts a share c off everything not yet built. Settled 2026-10-11:
+# that is later works, and the part left of works under way. So a work of T Years begun at Year 0 is done at
+# P + (1 - c) * (T - P), or at T if it is done first. Starting at once is never worse than waiting.
 GROUND = [('Launch complex', 2), ('Chip fabs', 3), ('All-sky watch', 6), ('Deep flash watch', 6), ('Spectrograph bank', 8),
           ('Ground solar build-out', 10), ('Deep-field receiver', 12), ('Fusion plants', 40)]
 ORBIT = [('Cold compute annex', 12), ('A new infrared telescope', 18), ('Starshade', 20), ('Launcher', 24), ('Orbital foundry', 30), ('Habitat ring', 60)]
@@ -149,10 +150,10 @@ def raise_the_pace(share=0.25 / 24, step=1.5, fab=3, factory=(3, 1 / 3), yard=(5
           f'a second line by Year {two:.0f}, a third by Year {three:.1f}.')
     print(f'  Two lines make compute grow {step ** 2:.2f} times a Year. The chip stock grew 3.4 times a year in 2026.')
     for name, (own, cut), works in (('Factory-built works', factory, GROUND), ('Orbital yard', yard, ORBIT)):
-        print(f'{name}, {own} Years, later builds {cut:.0%} shorter. Waiting for it pays only for works over {own / cut:.0f} Years.')
+        print(f'{name}, {own} Years, {cut:.0%} off whatever is not yet built. Both begun at Year 0:')
         for work, t in works:
-            after = t * (1 - cut)
-            print(f'  {work:26} {t:3} Years, then {after:4.1f}. Started at once: Year {t}. After it: Year {own + after:.1f}.')
+            done = t if t <= own else own + (1 - cut) * (t - own)
+            print(f'  {work:26} {t:3} Years alone, done at Year {done:4.1f} with it. Begun after it: {t * (1 - cut):4.1f} Years.')
     # The all-sky watch against real arrays: CHIME, built 2015 to 2017. SKA-Low, begun December 2022, done about 2030.
     side, spacing, sites = 100, 0.125, 2
     elements = sites * (side / spacing) ** 2

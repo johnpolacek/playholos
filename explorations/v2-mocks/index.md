@@ -305,11 +305,11 @@ USES ONCE, AT START
 TIME
 now · 01:00:00 · 02:00:00 · 03:00:00
 8 Years
-THE MIND · Started. Eight Years, a sixth of our compute, forty tonnes of the 26 kilotonnes we have spare. An orbital yard would shorten every build up there. · [Undo]
+THE MIND · Started. Eight Years, a sixth of our compute, forty tonnes of the 26 kilotonnes we have spare. An orbital yard would shorten every build up there, this one included. · [Undo]
 [Talk to the Mind]
 Godview
 A second telescope of its class would take the full 18 Years. This one was under way.
-Settled · Does a half-built real instrument cost fewer Years? It costs what its real schedule leaves: about 8 Years for the Habitable Worlds Observatory. Build times are standard, from the science, and the player can invest in projects that build faster. Settled 2026-10-10.
+Settled · Does a half-built real instrument cost fewer Years? It costs what its real schedule leaves: about 8 Years for the Habitable Worlds Observatory. Build times are standard, from the science, and the player can invest in projects that build faster. A speed-up also shortens the part left of a work under way. Settled 2026-10-10 and 10-11.
 +2:30 · Year 0.5
 Nothing new. · A dead 30 seconds.
 +3:00 · Year 0.6
@@ -632,7 +632,7 @@ Saturday · 16:40
 HOLOS · IN 00:15:00 · Earth: the sky watch and flash watch are built · Year 6. Anything heard wakes you sooner.
 
 ## Questions this mock raises
-Settled: Does a half-built real instrument cost fewer Years? · It costs what its real schedule leaves: about 8 Years for the Habitable Worlds Observatory. Build times are standard, from the science, and the player can invest in projects that build faster. Settled 2026-10-10.
+Settled: Does a half-built real instrument cost fewer Years? · It costs what its real schedule leaves: about 8 Years for the Habitable Worlds Observatory. Build times are standard, from the science, and the player can invest in projects that build faster. A speed-up also shortens the part left of a work under way. Settled 2026-10-10 and 10-11.
 Settled: Can the Will quiet Earth’s radars? · Yes, if the player chooses: keep them, fade them over about 25 Years, or cut them in about 2. What has left keeps going. Settled 2026-10-10.
 Settled: What stops a data center every Year? · Chips set the pace: the fabs fill one a Year, each +50% compute. Energy sets the ceiling, near a hundredfold. Settled 2026-10-10.
 Settled: What is energy for, early? · Thought. Each data center draws its share, and the twelfth would need more than Earth has. Settled 2026-10-10, by the rule above.

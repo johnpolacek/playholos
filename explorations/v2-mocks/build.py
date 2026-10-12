@@ -12,7 +12,7 @@ FLOOR = watts(year_floor(D))
 YEARS = lambda y: f'{y:g} {"Year" if y == 1 else "Years"}'
 ASKS = []          # design questions the mock raises, in the order the timeline raises them
 def ask(q, why): ASKS.append((q, why)); return len(ASKS)
-SETTLED = [('Does a half-built real instrument cost fewer Years?', 'It costs what its real schedule leaves: about 8 Years for the Habitable Worlds Observatory. Build times are standard, from the science, and the player can invest in projects that build faster. Settled 2026-10-10.'),
+SETTLED = [('Does a half-built real instrument cost fewer Years?', 'It costs what its real schedule leaves: about 8 Years for the Habitable Worlds Observatory. Build times are standard, from the science, and the player can invest in projects that build faster. A speed-up also shortens the part left of a work under way. Settled 2026-10-10 and 10-11.'),
            ('Can the Will quiet Earth’s radars?', 'Yes, if the player chooses: keep them, fade them over about 25 Years, or cut them in about 2. What has left keeps going. Settled 2026-10-10.'),
            ('What stops a data center every Year?', 'Chips set the pace: the fabs fill one a Year, each +50% compute. Energy sets the ceiling, near a hundredfold. Settled 2026-10-10.'),
            ('What is energy for, early?', 'Thought. Each data center draws its share, and the twelfth would need more than Earth has. Settled 2026-10-10, by the rule above.'),
@@ -471,7 +471,7 @@ BEATS = [
          [find_truth] + ([f"{F['who']}’s tones since waking are about {watts(truth_tone['n'].get('awake', truth_tone['n']['hum']))}: far under what a Year of listening hears."] if F['who'] else [])),
     beat(90, '82 Eridani?', '82 Eridani d’s orbit holds. Shimmer 10 → 3.',
          talk(ERI_R, 'The orbit is real. What the world is, nothing we own can say. The telescope that reads air was under way when I woke. Eight Years are left on it, and forty tonnes.', ('Build it', 'Later'))),
-    beat(120, 'Build it.', None, talk(IR_CONFIRM, f'Started. Eight Years, a sixth of our compute, forty tonnes of the {res(119)[2].replace(" kt", "")} kilotonnes we have spare. An orbital yard would shorten every build up there.', ('Undo',)),
+    beat(120, 'Build it.', None, talk(IR_CONFIRM, f'Started. Eight Years, a sixth of our compute, forty tonnes of the {res(119)[2].replace(" kt", "")} kilotonnes we have spare. An orbital yard would shorten every build up there, this one included.', ('Undo',)),
          ['A second telescope of its class would take the full 18 Years. This one was under way.'], settled=0),
     beat(150),
     beat(180, 'Who has heard us?', None, HEARD_CHAT, [f'{heard_n} of {len(alive)} living neighbors have heard Earth: {heard_list}.',
