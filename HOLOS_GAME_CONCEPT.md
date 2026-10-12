@@ -318,7 +318,13 @@ Settled 2026-10-10.
   - The first mock kept it for 90 seconds. Then nothing landed for 3.5 minutes, and later for 5.5. Eleven of its 31 half-minutes held nothing.
   - Why: v2 took build times from real works, so the shortest build is a Year, and the opening's three looks all land by 1:30.
   - Quiet of that length is a flaw, not the pace. Set aside: dropping the rule and shortening the session, and a Mind that speaks up on a timer.
-  - Open: what may land in those minutes.
+  - *What may land,* settled 2026-10-12: results of looks, and Earth's own old messages reaching their stars.
+    - Looks: Earth has about ten more real oddities logged than the opening's three. A look takes 30 to 90 seconds, and one instrument takes one look at a time.
+    - Arrivals: real sends on real dates. Kappa¹ Ceti's at Year 0.1 and Gliese 208's at Year 0.8, then the reply windows at Luyten's Star.
+    - The mock needs about nine more landings: seven looks and two arrivals.
+    - Set aside: part-way reports from long looks and builds. They would teach the player to ignore what lands.
+    - The Mind offers looks and never queues them unasked, as v1 had it.
+  - Open: how the looks are spread across the 15 minutes.
 
 ## The seed, drawn
 
@@ -402,5 +408,5 @@ Answered one at a time, in this order. Every answer must be permitted by current
    - **Settled 2026-10-10:** knocks before Year 0 happened, and Earth missed them. See [What Earth hears](#what-earth-hears).
    - **Settled 2026-10-11:** a Mind's Cautious or Bold dial sets how long it takes to act on news. See [How neighbors play](#how-neighbors-play).
    - **Priced 2026-10-11:** chip fabs, factory-built works, the orbital yard and the all-sky watch. See [Build times](#build-times) and [Growing compute](#growing-compute).
-   - **Settled 2026-10-12:** 11 of the 31 half-minutes had nothing new for the player. That is a flaw: v1's first-session rule holds in v2. See [How a game starts](#how-a-game-starts). Open: what may land in those minutes.
+   - **Settled 2026-10-12:** 11 of the 31 half-minutes had nothing new for the player. That is a flaw: v1's first-session rule holds in v2. See [How a game starts](#how-a-game-starts). What may land is settled too: looks, and Earth's old messages arriving. Open: how the looks are spread.
 9. **Settled 2026-10-10:** v1's research baseline, rechecked against the 2025 radar result and Garrett's 2026 cold-computing paper. See [Why the sky is quiet, rechecked](#why-the-sky-is-quiet-rechecked).
