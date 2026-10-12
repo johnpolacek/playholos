@@ -492,6 +492,35 @@ What Sol's own instruments have found nearby. For v2 open question 3.
   - Masses 1.478 and 0.592 Suns. Procyon A is about 2.7 billion years old. B became a white dwarf 1.37 billion years ago, from a star of about 2 Suns.
   - Matters: B's giant phase scorched A's warm zone, too recently for minds since.
   - Used: Procyon dropped as a host.
+- **White dwarf companions within 50 ly** · Catalogs, gathered 2026-10-11 ([Toonen et al. 2017](https://arxiv.org/abs/1703.06893), [Holberg et al. 2013](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/MNRAS/435/2077), [O'Brien et al. 2024](https://arxiv.org/abs/2312.02735), [Giammichele et al. 2012](https://arxiv.org/abs/1202.5581), [Kirkpatrick et al. 2024](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/ApJS/271/55)).
+  - Fifteen possible hosts have a white dwarf companion, from 0.11 AU to 13,400 AU away. Separations, white dwarf masses, cooling ages and progenitor masses are in [calcs/scorch.py](calcs/scorch.py).
+  - Gaia's own white dwarf flag misses two: 40 Eridani B and WD 1917-077 score under one half.
+  - Three more are only suspected, from barium or an unseen mass: Xi Ursae Majoris, Alpha Fornacis and Iota Ursae Majoris ([Fuhrmann et al. 2016](https://academic.oup.com/mnras/article/459/2/1682/2595128)). None is a host.
+  - No paper found works out the light a giant companion throws on the other star's warm zone, or a separation below which that zone is sterilized.
+  - Matters: which hosts had their warm zone scorched, and how long ago.
+  - Used: calcs/scorch.py. Table values were read by a research agent from VizieR and ar5iv extracts. The Gliese 86 and 40 Eridani values below were reread from the abstracts.
+- **Gliese 86** · Published ([Farihi et al. 2013](https://arxiv.org/abs/1212.5601), [Brandt et al. 2019](https://arxiv.org/abs/1811.07285), [Zeng et al. 2022](https://arxiv.org/abs/2112.06394), [Fuhrmann et al. 2014](https://www.osti.gov/biblio/22357151)).
+  - The white dwarf is 8,180 K and 0.54 to 0.59 Suns, 1.25 billion years cooled. Its orbit is 22 to 24 AU across with eccentricity 0.43 to 0.53.
+  - It came from a star of 1.4 to 1.9 Suns. The pair then sat about 14 AU apart, with a closest approach near 9 AU. The host's disk was cut at about 2 AU.
+  - The system's age is disputed: 2.65 billion years (Farihi) or about 10 (Fuhrmann, Zeng).
+  - Matters: the hardest-hit K host. Its warm zone took about 17 times Earth's sunlight at the giant's tip, 1.25 billion years ago, and kept stable orbits throughout.
+  - Used: calcs/scorch.py.
+- **[Bond et al. 2017, 40 Eridani B](https://arxiv.org/abs/1709.00478)** · Published, ApJ. With [Mason et al. 2017](https://arxiv.org/abs/1707.03635) for the orbit.
+  - The white dwarf is 0.573 Suns and cooled about 122 million years ago. The system is about 1.8 billion years old.
+  - 40 Eridani C orbits the white dwarf at about 34.5 AU. 40 Eridani A sits about 417 AU off.
+  - Matters: C's zone took about 18 times Earth's sunlight, very recently. A's took about 6% more than its own star gives.
+  - Used: calcs/scorch.py.
+- **Other close white dwarf pairs** · Published ([Sahu et al. 2017](https://arxiv.org/abs/1706.02037), [O'Brien et al. 2026](https://arxiv.org/abs/2607.11320)).
+  - Stein 2051 B is 0.675 Suns by light deflection, about 1.9 billion years cooled, about 57 AU from its red dwarf on the sky.
+  - GJ 3991's white dwarf was first seen directly in 2026. It orbits the red dwarf every 15 days at 0.11 AU, about 4 billion years cooled. The red dwarf was inside the giant.
+  - Matters: Stein 2051 A's zone took about 28 times Earth's sunlight. GJ 3991 has no stable warm zone at all.
+  - Used: calcs/scorch.py. GJ 3991 leaves the host list on the stability rule.
+- **How bright a giant gets, and how its orbit widens** · Reviews ([Karakas and Lattanzio 2014](https://arxiv.org/abs/1405.0062), [Kratter and Perets 2012](https://arxiv.org/abs/1204.2014), [Veras 2016](https://arxiv.org/abs/1601.05419)).
+  - At the tip of its giant life a star's light follows the mass of its core: L = 59,250 × (M − 0.522) Suns, after Paczyński 1970. A 0.6 Sun core gives about 4,600 Suns.
+  - Slow mass loss widens the orbit by the ratio of total mass before to after, and leaves its shape alone.
+  - In test runs a dying star's own planets were captured by the companion about one time in ten.
+  - Matters: the two rules calcs/scorch.py uses. The 2,500 Sun floor for the first giant branch is from memory, to confirm.
+  - Used: calcs/scorch.py.
 - **[Soubiran et al. 2018, radial velocity standard stars](https://doi.org/10.1051/0004-6361/201832795)** · Published, A&A.
   - 107 Piscium's velocity is steady to about a meter per second. Later work finds it single (Halbwachs et al. 2018).
   - Matters: Hipparcos's 1997 wobble orbit for it, which implies a brown dwarf tugging at about 2 km/s, can't be real.
@@ -690,7 +719,10 @@ Results the design is waiting on. Check each when its date comes.
 ## To check
 
 - Cross-check calcs/hosts.py's wide pairs with the El-Badry catalog. VizieR is reachable again as of 2026-10-10.
-- Other white dwarf companions that may have scorched a warm zone, such as Gliese 86 B. Only Procyon is handled.
+- White dwarf companions: the tip of the first giant branch, about 2,500 Suns, is from memory. Confirm it, and how long a giant stays near its tip.
+- Gliese 283 A's mass: 0.62 to 0.66 Suns from its light, 1.11 in one table. Check Kirkpatrick et al. 2024.
+- Wide white dwarf pairs are projected separations. True orbits may be up to twice as wide, which cuts the light by up to four.
+- The host list names the red dwarf LDS 678 B as Gl 754.1A. The white dwarf is A.
 - Companion masses in calcs/binaries.py are rough: dynamical masses depend on distance cubed, and white dwarfs read as light from their brightness.
 - Borderline ages, kept as hosts for now. Where does "about a billion years" cut? HD 82106 reads 0.45 to 0.9 billion years, 58 Eridani 0.45 to 1.3 ([Egeland et al. 2015](https://arxiv.org/abs/1507.03611) spin it slower), Zeta Trianguli Australis 0.3 to 1.7, HD 4391 0.8 to 1.2, 61 Ursae Majoris 0.8 to 1.7. HD 221503 is a candidate member of a 210 million year group ([Thao et al. 2024](https://arxiv.org/abs/2406.05234)). About a dozen more read 1 to 2.
 - Gliese 208, a star Earth knocked on, has no published age. Its 12.3 day spin and X-rays suggest under a billion years. If so it leaves the host list, and six knocked stars can host a neighbor, not seven.
