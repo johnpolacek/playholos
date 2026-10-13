@@ -148,17 +148,19 @@ def rail(active):
 # Ground data centers: the fabs fill one a Year, each +50% compute, and thinking's draw on energy grows with it.
 # The first is queued before Year 0. A standing order at Year 1.1 keeps them coming.
 DC_STEP = 1.5
-DCS = [('Ground data center', 0), ('Second data center', 1.1), ('Third data center', 2.1)]
+# The standing order from Year 1.1 keeps them coming, one a Year. Eleven fit under the grid: the last is done at Year 11.1.
+DCS = [(f'{o} data center', 0 if i == 0 else i + .1) for i, o in enumerate(('Ground', 'Second', 'Third', 'Fourth', 'Fifth', 'Sixth', 'Seventh', 'Eighth', 'Ninth', 'Tenth', 'Eleventh'))]
 DC_DONE = tuple(s + 1 for _, s in DCS)
 THINK = 100 * .25 / GRID_TW                    # thinking's share of energy at Year 0, in percent
 USES = [(0, 6, 1), (0, 6, 20), (0, .1, 5), (0, .2, 5), (0, .3, 5),                         # sky watch, flash watch, three looks
         (.4, 8.4, 15), (.8, 2.8, 5), (1.1, 2.1, 10), (1.6, 11.6, 15), (1.7, 3.7, 5), (1.8, 3.0, 10)]     # telescope, radars, a Year's listening, vault, launch complex, Luyten watch
 USES += [(s, s + 1, 5) for _, s in DCS]
+USES += [(6.3, 11.3, 10), (6.3, 25.5, 10), (8.5, 12.5, 10)]           # the second hour: the orbital yard, the launcher, the telescope's reads
 def res(t):
     y = t / 300
     grown = DC_STEP ** sum(y >= d for d in DC_DONE)
     used = sum(s for a, b, s in USES if a <= y < b) / grown
-    matter = SPARE_KT + LIFT_KT * y - .04 * (y >= .4) - 10 * (y >= 1.6)
+    matter = SPARE_KT + LIFT_KT * y - .04 * (y >= .4) - 10 * (y >= 1.6) + 40 * max(0, y - 3.7) - 11 * (y >= 6.3)      # the launch complex lifts from Year 3.7. The yard and launcher take 11 kt
     return (round(THINK * grown, 1), round(used), f'{matter:,.0f} kt')
 def hud(t, r=None, pre=False):
     e, c, m = r or res(t)

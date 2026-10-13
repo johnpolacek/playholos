@@ -499,6 +499,11 @@ What Sol's own instruments have found nearby. For v2 open question 3.
   - The mock's own: what each look finds in 2040. Which two Tau Ceti signals hold, the limit inside Epsilon Indi's giant, Gliese 12 b's cool day side, how firm LHS 1140 b's air is, and Fomalhaut's shared orbit.
   - Real arrivals: Earth's 2009 message reaches Kappa¹ Ceti at Year 0.1, and its 2003 message reaches Gliese 208 at Year 0.8.
   - Godview labels each one, so no invented result reads as real.
+- **Looks in the second mock, added 2026-10-13.** The first hour away: the infrared telescope reads three worlds and finds a fourth.
+  - Real, as logged here: oxygen with methane reads as life only in context (Krissansen-Totton et al.). Nitrogen dioxide has natural sources (Kopparapu et al. 2021). Long-lived industrial gases show in the mid-infrared (Lin et al. 2014). Daedalus was designed for 12% of light speed and Starshot for 20%.
+  - The mock's own: what each read finds. Life and a trace of nitrogen dioxide at Gliese 432 A's world. A world at Alpha Centauri A with several times the carbon dioxide it should hold. 82 Eridani d as a small gas world. A Year a read, and a fifth of a Year to image a near star's warm zone.
+  - From memory, not reread: carbon dioxide put into air stays for centuries to millennia. And which gases the Habitable Worlds Observatory's mirror can read.
+  - Depends on a pending result: this game's dead world orbits Alpha Centauri A at 1.45 AU. If JWST's August 2026 look confirms a giant in that warm zone, the checker must treat it as a known planet, and the seed could not put a world there.
 - Earlier entries also apply: Epsilon Indi Ab, Delta Pavonis, Tau Ceti, Beta Hydri, Epsilon Eridani b, TRAPPIST-1 f and the Earth transit zone, where Teegarden's Star enters about 2050.
 
 ## Reading air
@@ -846,5 +851,6 @@ Results the design is waiting on. Check each when its date comes.
 - HD 221503 is a candidate member of a 210 million year group ([Thao et al. 2024](https://arxiv.org/abs/2406.05234)) and stays until someone dates it.
 - Red dwarfs just above the main-sequence gap: does activity date them under a billion years? It decides AD Leonis, GT Pegasi and GJ 4337 A. Check West et al. 2008 and cluster X-ray studies.
 - Telescope seasons. Fomalhaut sits 56° from the Sun on January 1, and comes within 85° to 135° only from late May, near Year 0.39. JWST points only in that range: from memory, not reread. A telescope like Hubble, which avoids only the 50° around the Sun, could image it in January. That limit is from memory too. Decide which telescope Earth has in 2040, and whether seasons set when a look can start.
+- The second mock: a source for how long added carbon dioxide stays in air, and for which gases the Habitable Worlds Observatory is designed to read.
 - Earth's aimed messages: the power of the 1983, 2008, 2009 Canberra and 2013 sends is in no source found. Hirabayashi's books may hold the first.
 - Working links for Project Daedalus's 1978 report and Criswell 1985.

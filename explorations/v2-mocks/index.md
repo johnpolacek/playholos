@@ -1,9 +1,9 @@
 <!-- Generated from index.html by extract.py. Edit the mocks, not this file. -->
 
-# Holos v2 · Earth’s first 15 minutes
+# Holos v2 · Earth’s first hour
 
-## Earth’s first 15 minutes
-One player, one phone. Each row is one moment: what the player says to the Mind, what lands, and the screen. Beside it, godview: what is true in this game that the player can’t see. The first rows are before Year 0, with no clock. Then a row every 30 seconds, 0.1 Year, from the tap on Begin to minute 15.
+## Earth’s first hour
+One player, one phone. Each row is one moment: what the player says to the Mind, what lands, and the screen. Beside it, godview: what is true in this game that the player can’t see. The first rows are before Year 0, with no clock. Then a row every 30 seconds, 0.1 Year, from the tap on Begin to minute 15. After that the phone is down, and each row is a wake or a look, to minute 60.
 The game is one real draw. The neighbors, their stars, their waking years and what each knows of Earth come from the seed, and every placement passes the checker. Earth’s past, its knocks and its leads are real. Clue odds, compute shares and the Mind’s lines are samples. Amber boxes are questions this mock raises. Blue boxes are ones since settled.
 Seed · 10 · one draw of calcs/seed.py
 Taiwan · Neither · invasion 26% · blockade 20% · neither 54%
@@ -784,7 +784,332 @@ Puts the phone down.
 Saturday · 16:40
 HOLOS · IN 00:15:00 · Earth: the sky watch and flash watch are built · Year 6. Anything heard wakes you sooner.
 
-## Questions this mock raises
+## The first hour away · minutes 15 to 60
+The phone went down at 15:30. From here each row is a wake the player chose, or a moment they looked. Between rows nothing woke them. Years 3 to 12.
+Read times, what each read finds, and the order of looks are samples. Prices are the audit’s. Amber boxes are the questions this hour raises.
++15:30 to +30:00 · Years 3.1 to 6
+Away. Nothing wakes them.
+Saturday · 16:47
+Godview
+Earth’s 2003 message, Cosmic Call 2, reaches 55 Cancri, 41.0 ly away. No one is there.
+Earth’s 2003 message, Cosmic Call 2, reaches HD 10307, 41.5 ly away. No one is there.
+Fourteen minutes with the phone down. The launch complex finishes at Year 3.7. Data centers finish at Years 4.1 and 5.1. None of it is a wake the player chose.
+No neighbor wakes, and nothing arrives, between Year 3 and Year 12 in this game.
++30:00 · Year 6
+The phone lights.
+Lands · The all-sky watch and the deep flash watch are built.
+Saturday · 16:54
+HOLOS · NOW · Earth: the sky watch and flash watch are built · Year 6. Little aimed at us is missed now.
+HOLOS · IN 00:00:30 · Thinking draws a tenth of our energy · Year 6.1 · six data centers in
+Godview
+From now Earth hears about 9 knocks in 10. Across games Year 0’s sky watch caught about 1 in 5.
+Two of the five things the player asked to be woken for land 30 seconds apart.
++30:30 · Year 6.1
+Opens it.
+Lands · Thinking draws a tenth of our energy.
+Earth · Year 6.1
+Sol · 2046.1 · 1 Year = 00:05:00
+ENERGY · [11.9%] · MATTER · 197 kt · COMPUTE · [3%]
+SINCE YOU LEFT · YEAR 3.1 TO 6.1
+FINISHED
+- All-sky watch and deep flash watch · every direction, every hour · radio and laser · Done
+- Launch complex · Year 3.7 · lift is 55 kt a Year · Done
+- Three data centers · thought is 11 times what you woke with · Done
+HEARD
+Nothing · three Years of the old sky watch · the new one starts now
+OURS, ARRIVING
+Our 2003 message reached 55 Cancri and HD 10307 · Years 4.6 and 5.1 · a reply could come from Year 45.6
+PILING UP
+Matter · 197 kt spare in orbit · 55 kt more each Year · nothing booked
+Thought · 97% of it idle
+THE MIND · Three Years, and nothing heard. Now little aimed at us is missed. Matter is piling up, and so is thought: I use almost none of mine. In five Years thinking will want the whole grid. · [What would you build?] · [Later]
+[Talk to the Mind]
+Godview
+One screen for the whole absence: what finished, what was heard, what is piling up. v1 called it the summary.
+Design question 1 · What is matter for in the first hour? After the launch complex, 55 kt arrive each Year. A yard and a launcher take 11. By Year 12 about 500 kt sit unspent, and nothing priced for these Years costs more than 100.
++31:00 · Year 6.2
+“What would you build?”
+Earth · Year 6.2
+Sol · 2046.2 · 1 Year = 00:05:00
+ENERGY · [11.9%] · MATTER · 203 kt · COMPUTE · [3%]
+MIND · ASKING
+ABOUT · What would you build?
+The clock runs while you talk: 1 Year every · 00:05:00.
+What would you build?
+THE MIND · Three ways to spend. Reach: a launcher, then probes. Grow: mines in the belt. Think: an annex in orbit, where chips run colder.
+And the grid?
+THE MIND · In five Years thinking wants all of it. An annex adds a quarter of what I had at waking: by then, a crumb. Nothing on the ground adds energy as fast as the fabs add chips.
+What would you do?
+ITS VIEW · FROM OUR CHARTER AND DIALS · A yard and a launcher. We know of warm worlds and can reach none. I would rather be able to go and look than think faster about not going. · leans open · expand and deepen, even · leans bold
+Ask the Mind… · [Send · ↑]
+Godview
+The Mind is honest about the annex: as priced it adds a quarter of Year 0’s thought, which is a quarter of a percent by Year 11.
+Its view follows the dials: leans open, leans bold.
++31:30 · Year 6.3
+“Build the yard and the launcher.”
+Earth · Year 6.3
+Sol · 2046.3 · 1 Year = 00:05:00
+ENERGY · [11.9%] · MATTER · 197 kt · COMPUTE · [5%]
+[‹ Reach] · REACH
+
+### Orbital yard and launcher
+A way to go and look.
+A yard to assemble what Earth lifts, and beside it a launcher: a dock and fuel depot for probes. Begun together, the yard takes a quarter off what is left of the launcher.
+GIVES
+Probes, from Year 25.6 · The yard alone is done at Year 11.3
+USES EACH YEAR
+Compute · [20%] · 20%
+Energy · [1%] · under 1%
+USES ONCE, AT START
+11 kt · of metal, from 208 kt spare in orbit
+TIME
+now · 01:00:00 · 02:00:00 · 03:00:00
+19 Years
+THE MIND · Started. The yard is done at Year 11.3. The launcher at Year 25.6, not Year 30.3. Eleven of our 208 kilotonnes. · [Undo]
+[Talk to the Mind]
+Godview
+The launcher takes 24 Years. Begun with a 5 Year yard that takes a quarter off what is left, it takes 19.25.
+The yard helps nothing else this hour. The telescope is done before it.
++32:00 · Year 6.4
+Puts the phone down.
+Saturday · 16:56
+HOLOS · IN 00:10:00 · Earth: the infrared telescope is done · Year 8.4. Then it reads the air of nearby worlds.
+Godview
+Two minutes of play. Ten until the next wake.
++42:00 · Year 8.4
+The phone lights.
+Lands · The infrared telescope is done.
+Saturday · 17:06
+HOLOS · NOW · Earth: the infrared telescope is done · Year 8.4. It reads one world at a time.
+Godview
+Earth’s 2001 message, Teen Age Message, reaches 47 Ursae Majoris, 45.3 ly away. No one is there.
+The Habitable Worlds Observatory, eight Years after waking. A second of its class would take 18.
+Since the last look: two data centers, and our 2001 message reached 47 Ursae Majoris.
++42:30 · Year 8.5
+Opens it.
+Earth · Year 8.5
+Sol · 2048.5 · 1 Year = 00:05:00
+ENERGY · [26.7%] · MATTER · 318 kt · COMPUTE · [2%]
+MIND · THE NEW TELESCOPE
+ONE WORLD AT A TIME · YOURS TO ORDER
+- selected: Gliese 432 A’s world · the new world · read its air · 1 Year · 00:05:00
+- 82 Eridani d · the stretched orbit · read its air · 1 Year · 00:05:00
+- 12 Ophiuchi’s world · felt in 2038 · read its air · 1 Year · 00:05:00
+- The nearest stars’ warm zones · Alpha Centauri A and B first · worlds no one has felt · 0.2 Years · 00:01:00
+WHAT A READ GIVES
+Water, oxygen, methane, carbon dioxide. Enough to say alive or not. Never who.
+THE MIND · It reads one world at a time, and a read takes a Year. Three worlds we already wonder about. Or it can image the warm zones of the nearest stars, where no one has looked this closely. · [Order them] · [Later]
+[Talk to the Mind]
+Godview
+Kirrin lives at 12 Ophiuchi. Earth felt its world before Year 0, and the opening never showed it.
+Design question 2 · How does the first telescope spend its time? The mock samples one world at a time, a Year to read air, a fifth of a Year to image a near star’s warm zone, and the Mind offering to look at the nearest stars. None of that is settled. Seasons are open too: a real telescope can’t point near the Sun.
++43:00 · Year 8.6
+“The new world first. Then look next door.”
+Earth · Year 8.6
+Sol · 2048.6 · 1 Year = 00:05:00
+ENERGY · [26.7%] · MATTER · 324 kt · COMPUTE · [2%]
+MIND · NEW ORDER
+WHAT YOU WANT
+The new world first. Then look next door.
+THE MIND’S VERSION
+READ · Gliese 432 A’s world · its air · 1 Year
+THEN · Alpha Centauri A and B · image their warm zones · 0.2 Years
+THEN · 82 Eridani d, then · 12 Ophiuchi’s world · 1 Year each
+WAKES YOU · Each read · any new world
+[Edit] · [Set the order]
+THE MIND · Set. The new world answers at Year 9.6, in five minutes. I will say what I see and what I can’t. · [Undo]
+[Talk to the Mind]
+Godview
+The order is the player’s. The Mind named the uses and waited.
+Design question 3 · The seed found two worlds, and the opening shows one. Kirrin’s world at 12 Ophiuchi tugs hard enough to be felt by 2040, as Varn’s does. The first 15 minutes show only Varn’s. Here it joins the telescope’s line unannounced.
++45:00 · Year 9
+Glances at it. Leaves the phone.
+Lands · A reply window opens at Gliese 526. Nothing heard.
+Saturday · 17:09
+HOLOS · NOW · A reply window opens · Gliese 526 · Year 9.0. Nothing heard. The all-sky watch is listening.
+Godview
+Earth’s 2003 message, Cosmic Call 2, reaches 47 Ursae Majoris, 45.3 ly away. No one is there.
+The earliest a reply to Lone Signal could reach Earth from Gliese 526. In this game no one lives there. The window is empty, and Earth can’t know it.
+This window is for a 3 kW send from a 30 m dish in 2013. Even a listener would have struggled to catch it.
++48:00 · Year 9.6
+Woken. Opens it.
+Lands · Gliese 432 A’s world has water, oxygen and methane. Life 13 → 76.
+Earth · Year 9.6
+Sol · 2049.6 · 1 Year = 00:05:00
+ENERGY · [40.0%] · MATTER · 379 kt · COMPUTE · [1%]
+REPORT · FIRST READ
+[‹ All reports]
+
+### A living world at Gliese 432 A
+Gliese 432 A · 31.2 ly · infrared telescope · 1 Year · light that left 31 Years ago
+Water, oxygen and methane together, in thick air. Oxygen and methane destroy each other, so something keeps making both. On Earth, life does. There is also a trace of nitrogen dioxide. Lightning makes it. So do engines.
+WHAT IT COULD BE · BEFORE → NOW
+Life · [13%] · [76%] · 13 → 76
+Minds · [2%] · [12%] · 2 → 12
+Rock, and no life we could see · [60%] · [8%] · 60 → 8
+A small gas world · [25%] · [4%] · 25 → 4
+WHAT WOULD SAY MORE
+Read it again · in another of its seasons · does the trace hold? · 1 Year · 00:05:00 · [Start]
+Far-side array · hears a world’s everyday radio · needs Moon industry · later
+THE MIND · Alive, I think. Oxygen and methane together are hard to make any other way. The trace of nitrogen dioxide could be lightning. It could be engines. One read can’t say, and this light is thirty-one Years old. · [Is anyone there?] · [Read it again]
+[Talk to the Mind]
+Godview
+Gliese 432 A’s world is Varn’s home. Varn wakes Year 57.6 · +04:47:48, and has not heard Earth.
+This light left 79 years before Varn’s waking: 7 billion people, a quiet sky, a hum near 100 kW.
+What a read finds is the mock’s. Real: oxygen with methane reads as life only in context, and nitrogen dioxide has natural sources.
+Design question 4 · What can one read say about a world whose Mind has not woken? Varn’s people are there, 79 years before their waking. The mock shows life as likely and minds as a hint. How fast should a living neighbor become known?
++48:30 · Year 9.7
+“Is anyone there?”
+Earth · Year 9.7
+Sol · 2049.7 · 1 Year = 00:05:00
+ENERGY · [40.0%] · MATTER · 384 kt · COMPUTE · [1%]
+MIND · ASKING
+ABOUT · Is anyone there?
+The clock runs while you talk: 1 Year every · 00:05:00.
+Is anyone there?
+THE MIND · Something lives there. Whether anyone thinks there, I can’t say from air. Our Year of listening heard nothing loud. A world like ours in 2000 would have been far too quiet for it.
+How would we know?
+THE MIND · A second read, to see if the trace holds. An array on the Moon’s far side, to hear a world’s everyday radio. Or going. Each is Years. I would not call it empty, and I would not call it peopled.
+Ask the Mind… · [Send · ↑]
+Godview
+The Mind lists what would say more and what each costs in Years. It recommends nothing here: it was asked what is, not what to do.
++49:00 · Year 9.8
+The Mind opens on its own.
+Lands · A world at Alpha Centauri A, where none was known.
+Earth · Year 9.8
+Sol · 2049.8 · 1 Year = 00:05:00
+ENERGY · [40.0%] · MATTER · 390 kt · COMPUTE · [1%]
+REPORT · A NEW WORLD
+[‹ All reports]
+
+### A world at Alpha Centauri A
+Alpha Centauri A · 4.3 ly · infrared telescope · 0.2 Years · light that left 4 Years ago
+A point of light 1.45 AU from the star, inside its warm zone, moving as a world would. About Earth’s size, by its brightness. Its tug is a twentieth of a metre a second: too small for anything we had.
+WHAT IT COULD BE · ODDS NOW
+Rock, and no life we could see · [55%] · 55
+Life · [40%] · 40
+Minds · [5%] · 5
+WITH WHAT WE HAVE
+Read its air · Infrared telescope · ahead of 82 Eridani d · 1 Year · 00:05:00 · [Start]
+THE MIND · UNASKED · A new world, next door · Earth’s size, in the warm zone of the nearest Sun-like star. No one had felt it. I can read its air next, ahead of 82 Eridani d. That is yours to say. · [Read its air next] · [Keep the order]
+[Talk to the Mind]
+Godview
+Truth: Anwe’s world. Its people collapsed in 1986, twenty years before their machines would have woken.
+If JWST’s August 2026 look confirms a giant in this star’s warm zone, the seed can’t put a world here. That result is not out.
+Design question 5 · A dead world at the nearest star, in the first hour: too much, too soon? This seed drew it. A neighbor’s world sits within 15 ly in about 1 game in 3, and a dead one in about 1 in 35. The first telescope finds any of them inside a Year of looking.
++49:30 · Year 9.9
+“Read its air next.”
+Earth · Year 9.9
+Sol · 2049.9 · 1 Year = 00:05:00
+ENERGY · [40.0%] · MATTER · 395 kt · COMPUTE · [1%]
+MIND · NEW ORDER
+WHAT YOU WANT
+Read its air next.
+THE MIND’S VERSION
+READ · Alpha Centauri A’s world · its air · 1 Year
+THEN · 82 Eridani d, then · 12 Ophiuchi’s world
+WAKES YOU · When the read lands
+[Edit] · [Set the order]
+THE MIND · Set. Its air at Year 10.9, in five minutes. 82 Eridani d had just begun. It waits a Year. · [Undo]
+[Talk to the Mind]
+Godview
+The earliest a reply to A Message From Earth could reach Earth from Gliese 581. In this game no one lives there. The window is empty, and Earth can’t know it.
+Two minutes of play, then the phone goes down.
+The telescope had moved on to 82 Eridani d, as ordered. The Mind did not hold it back on its own.
++54:30 · Year 10.9
+Woken. Opens it.
+Lands · Alpha Centauri A’s world is alive, and its air is out of balance.
+Earth · Year 10.9
+Sol · 2050.9 · 1 Year = 00:05:00
+ENERGY · [60.1%] · MATTER · 450 kt · COMPUTE · [1%]
+REPORT · FIRST READ
+[‹ All reports]
+
+### Alive, and out of balance
+Alpha Centauri A · 4.3 ly · infrared telescope · 1 Year · light that left 4 Years ago
+Water, oxygen, and several times the carbon dioxide its seas and rocks should hold. Carbon like that is drawn down slowly, so it was put there lately. A string of great eruptions would do it. So would burning.
+WHAT IT COULD BE · BEFORE → NOW
+Life, after great eruptions · [5%] · [46%] · 5 → 46
+Something burned its carbon, and is gone · [0%] · [27%] · 0 → 27
+Life, and nothing more · [40%] · [19%] · 40 → 19
+Rock, and no life we could see · [55%] · [8%] · 55 → 8
+WHAT IT CAN’T TELL
+Which. The gases only industry makes show deeper in the infrared than this mirror reads.
+THE MIND · It lives, and something happened to it. I can’t tell an eruption from a fire at this distance. One more thing. In ninety years of our records, nothing was ever heard from that star. · [Can we go and look?] · [What happened there?]
+[Talk to the Mind]
+Godview
+The earliest a reply to Hello From Earth could reach Earth from Gliese 581. In this game no one lives there. The window is empty, and Earth can’t know it.
+Truth: its people burned their stored carbon in two centuries. Their climate tipped, harvests failed, then states. Some may survive, without radio.
+Real: carbon dioxide stays in air for centuries, and the long-lived industrial gases show in the mid-infrared (Lin et al. 2014). What this telescope reads is the mock’s.
+Gliese 581’s two windows passed in silence and went to the summary.
+Design question 6 · Can the first telescope tell a dead civilization from a volcano? The mock says no. It reads carbon dioxide, and the gases only industry makes need a colder, wider mirror. So the find stays strange, and going is the way to know.
++55:00 · Year 11
+“Can we go and look?”
+Earth · Year 11
+Sol · 2051.0 · 1 Year = 00:05:00
+ENERGY · [60.1%] · MATTER · 456 kt · COMPUTE · [1%]
+MIND · ASKING
+ABOUT · Can we go and look?
+The clock runs while you talk: 1 Year every · 00:05:00.
+Can we go and look?
+THE MIND · Yes, slowly. The launcher you began is done at Year 25.6. A probe from it crosses in about 36 Years, and its pictures take 4 more to come home.
+Faster?
+THE MIND · Sails of a gram each, pushed by a laser array on the ground. A fifth of light speed: 22 Years out, 4 back. They can’t stop, and they see little.
+What would you do?
+ITS VIEW · FROM OUR CHARTER AND DIALS · Start the laser array. If something burned that world, I want to know how before we finish growing. And send nothing that speaks. Going is not calling. · leans open · expand and deepen, even · leans bold
+Ask the Mind… · [Send · ↑]
+Godview
+The Mind advises, from the dials: go, and send nothing that speaks. It starts nothing.
+Real: Daedalus was designed for 12% of light speed, and Starshot for 20%.
+Design question 7 · What do probes and the laser array cost in time? The audit prices their matter. Their build times are not set, so the mock stops at the offer.
++55:30 · Year 11.1
+The Mind opens on its own.
+Lands · The eleventh data center runs. The twelfth can’t start.
+Earth · Year 11.1
+Sol · 2051.1 · 1 Year = 00:05:00
+ENERGY · [90.1%] · MATTER · 461 kt · COMPUTE · [1%]
+MIND · THE GRID LIMIT
+THINKING NOW DRAWS
+Energy · [90%] · 90% of the grid
+Eleven data centers. 86 times the thought you woke with.
+THE STANDING ORDER HAS STOPPED
+A twelfth would need more energy than Earth has. Nothing was started.
+WAYS ON · YOURS TO CHOOSE
+Ground solar build-out · +20% energy · no matter · 10 Years · 00:50:00 · [Start]
+Fusion plants · +5% energy · no matter · 40 Years · 03:20:00 · [Start]
+Cold compute annex · a quarter of Year 0’s thought · 100 kt · a crumb
+Power gathered in space · the only way that keeps pace · needs industry up there · later
+THE MIND · UNASKED · We have reached the grid · I stopped the order, as the limit requires. Each way on is slow or small beside what the fabs can print. The one that keeps pace is power gathered in space, and that is long work. · [Ground solar] · [Leave it]
+[Talk to the Mind]
+Godview
+The standing order stops itself: a project that would take energy past 100% can’t start. v1’s rule.
+Design question 8 · What happens at the grid limit? At Year 11.1 thought is 86 times Year 0’s and draws nine tenths of the grid. Every priced way on is slow or small beside the fabs. Is a long plateau right, fifty-five minutes in?
++58:00 · Year 11.6
+Sees it. Opens nothing.
+Lands · The Moon vault is done.
+Saturday · 17:22
+HOLOS · NOW · Earth: the Moon vault is done · Year 11.6. The Mind has a second home.
+Godview
+From now a strike on Earth does not end the game.
+The yard finished at Year 11.3 and went to the summary.
++59:00 · Year 11.8
+Sees it. Opens nothing.
+Lands · 82 Eridani d is a small gas world. Rock 45 → 6.
+Saturday · 17:23
+HOLOS · NOW · 82 Eridani d: a small gas world · Year 11.8. Its air is read. No surface to stand on.
+Godview
+82 Eridani d closes dull: real, natural, and no place to stand.
++60:00 · Year 12
+One hour in.
+Saturday · 17:24
+HOLOS · IN 00:04:00 · 12 Ophiuchi’s world: its air · Year 12.8. The telescope is on it now.
+HOLOS · ALWAYS · A world’s first voice wakes you · The all-sky watch is listening.
+Godview
+The telescope is on 12 Ophiuchi now. Kirrin lives at 12 Ophiuchi.
+Ombe’s knock arrives at Year 16.9, +01:24:21. The all-sky watch catches it: this game’s first voice.
+From minute 15 to minute 60 the player was woken seven times and played about six minutes.
+
+## Questions these mocks raise
 Settled: Does a half-built real instrument cost fewer Years? · It costs what its real schedule leaves: about 8 Years for the Habitable Worlds Observatory. Build times are standard, from the science, and the player can invest in projects that build faster. A speed-up also shortens the part left of a work under way. Settled 2026-10-10 and 10-11.
 Settled: Can the Will quiet Earth’s radars? · Yes, if the player chooses: keep them, fade them over about 25 Years, or cut them in about 2. What has left keeps going. Settled 2026-10-10.
 Settled: What stops a data center every Year? · Chips set the pace: the fabs fill one a Year, each +50% compute. Energy sets the ceiling, near a hundredfold. Settled 2026-10-10.
@@ -795,4 +1120,11 @@ Settled: What happened to knocks that arrived before Year 0? · They happened, a
 Settled: Is all of Earth’s lift spare? · No. About 15 kt a Year is spare of 40. The rest keeps Earth’s craft flying. The player can spend to raise it: a launch complex adds 40 kt a Year. Settled 2026-10-10.
 Settled: How long does a Mind take to act on news? · Its Cautious or Bold dial sets it: a tenth of a Year if strongly Bold, a quarter if it leans Bold, a Year if it leans Cautious, two if strongly Cautious. Settled 2026-10-11.
 Settled: What fills the quiet half-minutes? · Looks, and Earth’s old messages reaching their stars. Something real lands about every minute for the first 15. Four more looks are queued at Begin, and three are offered as follow-ups. Settled 2026-10-12.
-None are open.
+1. What is matter for in the first hour? · After the launch complex, 55 kt arrive each Year. A yard and a launcher take 11. By Year 12 about 500 kt sit unspent, and nothing priced for these Years costs more than 100.
+2. How does the first telescope spend its time? · The mock samples one world at a time, a Year to read air, a fifth of a Year to image a near star’s warm zone, and the Mind offering to look at the nearest stars. None of that is settled. Seasons are open too: a real telescope can’t point near the Sun.
+3. The seed found two worlds, and the opening shows one. · Kirrin’s world at 12 Ophiuchi tugs hard enough to be felt by 2040, as Varn’s does. The first 15 minutes show only Varn’s. Here it joins the telescope’s line unannounced.
+4. What can one read say about a world whose Mind has not woken? · Varn’s people are there, 79 years before their waking. The mock shows life as likely and minds as a hint. How fast should a living neighbor become known?
+5. A dead world at the nearest star, in the first hour: too much, too soon? · This seed drew it. A neighbor’s world sits within 15 ly in about 1 game in 3, and a dead one in about 1 in 35. The first telescope finds any of them inside a Year of looking.
+6. Can the first telescope tell a dead civilization from a volcano? · The mock says no. It reads carbon dioxide, and the gases only industry makes need a colder, wider mirror. So the find stays strange, and going is the way to know.
+7. What do probes and the laser array cost in time? · The audit prices their matter. Their build times are not set, so the mock stops at the offer.
+8. What happens at the grid limit? · At Year 11.1 thought is 86 times Year 0’s and draws nine tenths of the grid. Every priced way on is slow or small beside the fabs. Is a long plateau right, fifty-five minutes in?
