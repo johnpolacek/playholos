@@ -169,7 +169,7 @@ From 2026-10-13, a mission sent to find out is an inquiry, and what it sends hom
 | Lurker | 40 Mt | Heavy ×1,000 | 500 t | As sentinel. |
 | Close watcher | 30 Mt | Heavy ×1,000 | 500 t | As sentinel. |
 | Line tap | 20 Mt | Heavy ×1,000 | 500 t | As sentinel. |
-| Laser sail array | 40 Mt | OK, recalculated | 0, ground, as Starshot plans. About 100 GW for 10 minutes per gram chip, about 6×10¹³ J, stored. | Starshot: 100 GW for minutes per gram chip. Array mass depends on design. |
+| Laser sail array | 40 Mt | OK, recalculated | 0, ground, as Starshot plans. About 100 GW for 10 minutes per gram chip, about 6×10¹³ J, stored. 25 Years, not 60. Priced 2026-10-13. | Starshot: 100 GW for minutes per gram chip. Array mass depends on design. |
 | Starlight sail | 10 Mt | Heavy ×1,000,000+ | 1 t | Heller and Hippke: gram to kilogram sails. |
 | Chip swarm | 0 | OK | 0 | Starshot gram chips. |
 | Torch probe | 60 Mt | Heavy ×60, recalculated | About 1 kt for a 3 t payload, 0.6 kt of it He3. | About 0.08c, then stops: a mass ratio near 120, so about 120 t per tonne of payload. |

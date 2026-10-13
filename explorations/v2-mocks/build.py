@@ -40,7 +40,8 @@ SETTLED = [('Does a half-built real instrument cost fewer Years?', 'It costs wha
            ('What is matter for in the first hour?', 'Little, and the Mind says so. Real instruments and probes weigh tonnes, and Earth lifts 55,000 a Year, so matter piles up. The works that need it need megatonnes, and those must come from the Moon or the belt. The choice in hour one is when to start that road. Settled 2026-10-13.'),
            ('What happens at the grid limit?', 'The plateau stands. Thought stops growing when it draws the whole grid, about Year 11 at full pace, and better chips don’t dodge it: today’s kind reaches its efficiency ceiling near Year 0. The Mind warns five Years ahead. The ways on are slow, and the megatonne road pays here. Settled 2026-10-13.'),
            ('How much of a knock can the Mind read?', 'All three layers, at once. What it proves, from physics. What it holds, because a knock is built to be read. And what it means, as a word that can be wrong. A stranger neighbor’s message may yet need a study. Settled 2026-10-13.'),
-           ('What may an answer hold?', 'What v1 allowed, whole. The player writes what they mean in plain words. The Mind composes it from typed parts: a finding, a sighting, an archive, our culture, a request, a verdict. The player approves before anything goes. A lie is a forged part, marked for the sender alone. Settled 2026-10-13.')]
+           ('What may an answer hold?', 'What v1 allowed, whole. The player writes what they mean in plain words. The Mind composes it from typed parts: a finding, a sighting, an archive, our culture, a request, a verdict. The player approves before anything goes. A lie is a forged part, marked for the sender alone. Settled 2026-10-13.'),
+           ('What does an inquiry cost in time?', 'Decades, by physics. A laser array takes 25 Years: Starshot aimed at a launch within a generation. Sails then cross 4.3 light-years in 22, and word takes 4.3 to come home. A flyby probe takes 12 Years after the launcher, and 36 in flight. Priced 2026-10-13, as samples.')]
 
 # ---------- Godview: who is out there ----------
 MOVE = reactions.MOVES
@@ -645,7 +646,6 @@ import json
 ANWE = next((p for p in NB if p['dead']), None)
 VOICE = next(((p, i) for p in NB for i in p['inbound'] if 6 < i['year'] <= 12 and i.get('allsky')), None)     # a signal the all-sky watch catches this hour
 VARN_BEFORE = (truth_tone['waking'] - Y0 - (9.0 - D)) if F['who'] else None      # years before its waking that the light of the first reading left
-Q_GO = ask('What does an inquiry cost in time?', 'The audit prices the matter of probes and the laser array. Their build times are not set, so the mock stops at the offer.')
 
 # Settled 2026-10-13: the Mind judges from what Earth knows, never from the seed. Until a voice is heard, Minds is almost no
 # chance at any candidate. A first voice lifts it a word everywhere. Each pair is before and after, hidden samples.
@@ -748,12 +748,18 @@ ACEN_AIR = tab(2790, 'Report', 'REPORT', 'FIRST READING', f"""<button class="bac
 <p class="copy">Water, oxygen, and several times the carbon dioxide its seas and rocks should hold. Carbon like that is drawn down slowly, so it was put there lately. A string of great eruptions would do it. So would burning.</p>
 {SEC('WHAT IT COULD BE · BEFORE → NOW')}{odds('Life, after great eruptions', 5, 46)}{odds('Something burned its carbon, and is gone', 0, 27)}{odds('Life, and nothing more', NEW['life'] - 5, 19)}{odds('Rock, and no life we could see', NEW['rock'], 8)}
 {SEC('WHAT IT CAN’T TELL')}<p class="copy small">Which. The gases only industry makes show deeper in the infrared than this mirror reads.</p>""") if ANWE else ''
+# Priced 2026-10-13, as samples. A laser array: 25 Years, since Starshot aimed at a first launch within a generation
+# (Parkin 2018). A flyby probe: 12 Years, v1's, in the range of flagship craft. The launcher is done at Year 25.6.
+ARRAY_Y, PROBE_Y, LAUNCHER_DONE, GO_Y = 25, 12, 25.6, 2820 / 300
+GO_D = ANWE['d'] if ANWE else 4.3
+SAIL_FLY, PROBE_FLY = GO_D / 0.2, GO_D / 0.12
+SAIL_HOME = GO_Y + ARRAY_Y + SAIL_FLY + GO_D
+PROBE_HOME = max(LAUNCHER_DONE, GO_Y) + PROBE_Y + PROBE_FLY + GO_D
 INQUIRY = tab(2820, 'Reach', 'INQUIRY', 'ALPHA CENTAURI A', ''.join([
-    SEC('WAYS TO GO · 4.3 LIGHT-YEARS'),
-    quick('Sail swarm', 'gram sails, pushed by a laser array on the ground · passes at a fifth of light speed · can’t stop', tstack('22 Years out', clock(22))),
-    quick('Flyby probe', 'a tonne of instruments, from the launcher · passes at an eighth of light speed', tstack('36 Years out', clock(36))),
+    SEC(f'WAYS TO GO · {GO_D:.1f} LIGHT-YEARS · WORD HOME BY'),
+    quick('Sail swarm', f'gram sails at a fifth of light speed · can’t stop · laser array {ARRAY_Y} Years, flight {SAIL_FLY:.0f}, word home {GO_D:.1f}', tstack(f'Year {SAIL_HOME:.0f}', clock(SAIL_HOME - GO_Y))),
+    quick('Flyby probe', f'a tonne of instruments at an eighth of light speed · after the launcher: build {PROBE_Y} Years, flight {PROBE_FLY:.0f}, word home {GO_D:.1f}', tstack(f'Year {PROBE_HOME:.0f}', clock(PROBE_HOME - GO_Y))),
     quick('Sentinel probe', 'stops and stays · 500 t · from the launcher', '<span class="mono">later</span>'),
-    SEC('WHAT COMES HOME'), '<p class="copy small">A dispatch, by narrow beam. From there it takes 4.3 Years to reach us.</p>',
     SEC('WHO SEES US GO'), '<p class="copy small">A laser launch shines on past its sails to the star. A rocket launch is dark to where it is going.</p>']))
 SWEEP_DONE = lockscreen('17:14', [('NOW', f'The sweep’s first pass is done: {SWEEP_N} more candidates', f"Nearest: {pretty(NEAREST['host']['name'])}, {NEAREST['d']:.0f} ly. All are in the report.")])
 WALL = tab(3330, 'Mind', 'MIND', 'THE GRID LIMIT', ''.join([
@@ -828,10 +834,12 @@ HOUR = [
           'Real: smog is gone, since sunlight breaks it down. The gases only industry makes show in the mid-infrared, at a few times Earth’s level or more.',
           'Real, and not in the mock: eruptions under way would change a world’s ozone and color month by month (Ostberg et al. 2023). A later reading could weaken that half.'], settled=20),
     stop(2820, 2790, 'Can we go and look?', None,
-         talk(INQUIRY, 'Yes, slowly. Sails arrive first and see little. A probe sees more, and needs the launcher you began. I would start the laser array, and send nothing that speaks. Going is not calling.', ('Start the laser array', 'Not yet')),
+         talk(INQUIRY, f'Yes, slowly: first word home near Year {SAIL_HOME:.0f}. Sails arrive first and see little. A probe sees more, and needs the launcher you began. I would start the laser array, and send nothing that speaks. Going is not calling.', ('Start the laser array', 'Not yet')),
          ['An inquiry is a mission that goes to find out. Probe stays the name of the craft. What comes home is a dispatch.',
           'The Mind advises, from the dials: go, and send nothing that speaks. It starts nothing.',
-          'Real: Daedalus was designed for 12% of light speed, and Starshot for 20%. A laser launch shines toward its target. A rocket’s exhaust points away.'], question=Q_GO, settled=12),
+          'Real: Daedalus was designed for 12% of light speed, and Starshot for 20%. A laser launch shines toward its target. A rocket’s exhaust points away.',
+          f'Priced, as samples: a laser array {ARRAY_Y} Years, a flyby probe {PROBE_Y} after the launcher. So word from next door arrives at Year {SAIL_HOME:.0f} by sails, +{clock(SAIL_HOME)}, and Year {PROBE_HOME:.0f} by probe.',
+          'Real: Starshot’s own model puts the array at 8 billion dollars and a first launch within a generation (Parkin 2018). v1 had 60 Years.'], settled=(12, 28)),
 ] if ANWE and ANWE['d'] < 5 else []) + ([
     stop(2850, 2820, '· The phone lights. Reads it. Leaves it.', ('Heard', f'{VSTAR} again. The same signal, a Year later.'), WAKE_AGAIN,
          ['A knock is sent twice, about a Year apart, as Earth’s own were.', f'{WHO["name"]} now waits. If nothing comes back it takes the silence as news, about Year {KNOCK["sent"] - Y0 + 2 * VD + 1:.0f}.',

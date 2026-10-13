@@ -979,6 +979,11 @@ What a neighbor's world can plausibly be, beyond an Earth twin. Each roster entr
   - Used: v1 tight beam, laser links.
 - **Classic propulsion studies** · Study. Links found by an agent, 2026-10-13.
   - Breakthrough Starshot, gram-scale beamed sails: [Lubin 2016](https://arxiv.org/abs/1604.01356), JBIS 69, 40, and [Parkin 2018](https://arxiv.org/abs/1805.01306), Acta Astronautica 152, 370.
+    - Abstracts read by me, 2026-10-13. Parkin: the aim is "a first launch to Alpha Centauri within the next generation". The cost-optimal design for a fifth of light speed is a 4.1 m sail pushed for 9 minutes, with 8.0 billion dollars of ground beam director and 6 million dollars of energy a sail. That assumes lasers at a cent a watt.
+    - A precursor at a hundredth of light speed: 517 million dollars. Lubin: wafer craft could pass a quarter of light speed.
+    - From a search summary, not read: Starshot paused in 2024 to restructure, and a former team lead wrote in March 2026 that its first phase found no show-stopper.
+    - Matters: the builders' own aim is a generation, not v1's 60 Years.
+    - Used: v2 [Build times](HOLOS_GAME_CONCEPT.md#build-times), the laser sail array at 25 Years. Turning "a generation" into 25 is this project's.
   - Project Daedalus, fusion rockets: the British Interplanetary Society's 1978 final report ([reprint](https://www.bis-space.com/shop/product/project-daedalus-demonstrating-the-engineering-feasibility-of-interstellar-travel/)). Project Icarus: [Long et al. 2010](https://arxiv.org/abs/1005.3833).
   - Magnetic sail: [Zubrin and Andrews 1991](https://doi.org/10.2514/3.26230), J. Spacecraft and Rockets 28, 197, and [Zubrin and Martin 2000](http://www.niac.usra.edu/files/studies/final_report/320Zubrin.pdf), a NASA study.
   - Corrected 2026-10-13: this log said a magnetic sail brakes at about 20 years per light-year. No paper found says so. Braking takes from under a year to centuries, by speed, sail size and mass: 95% of light speed to 4% in about 320 days with a 100 km sail (Zubrin 2000), or 5% of light speed to rest in 40 to 300 years ([Perakis and Hein 2016](https://arxiv.org/abs/1603.03015)).

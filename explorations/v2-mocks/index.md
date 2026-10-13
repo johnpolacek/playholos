@@ -1141,22 +1141,22 @@ Earth · Year 9.4
 Sol · 2049.4 · 1 Year = 00:05:00
 ENERGY · [40.0%] · MATTER · 368 kt · COMPUTE · [2%]
 INQUIRY · ALPHA CENTAURI A
-WAYS TO GO · 4.3 LIGHT-YEARS
-Sail swarm · gram sails, pushed by a laser array on the ground · passes at a fifth of light speed · can’t stop · 22 Years out · 01:50:00
-Flyby probe · a tonne of instruments, from the launcher · passes at an eighth of light speed · 36 Years out · 03:00:00
+WAYS TO GO · 4.3 LIGHT-YEARS · WORD HOME BY
+Sail swarm · gram sails at a fifth of light speed · can’t stop · laser array 25 Years, flight 22, word home 4.3 · Year 60 · 04:14:36
+Flyby probe · a tonne of instruments at an eighth of light speed · after the launcher: build 12 Years, flight 36, word home 4.3 · Year 78 · 05:42:36
 Sentinel probe · stops and stays · 500 t · from the launcher · later
-WHAT COMES HOME
-A dispatch, by narrow beam. From there it takes 4.3 Years to reach us.
 WHO SEES US GO
 A laser launch shines on past its sails to the star. A rocket launch is dark to where it is going.
-THE MIND · Yes, slowly. Sails arrive first and see little. A probe sees more, and needs the launcher you began. I would start the laser array, and send nothing that speaks. Going is not calling. · [Start the laser array] · [Not yet]
+THE MIND · Yes, slowly: first word home near Year 60. Sails arrive first and see little. A probe sees more, and needs the launcher you began. I would start the laser array, and send nothing that speaks. Going is not calling. · [Start the laser array] · [Not yet]
 [Talk to the Mind]
 Godview
 An inquiry is a mission that goes to find out. Probe stays the name of the craft. What comes home is a dispatch.
 The Mind advises, from the dials: go, and send nothing that speaks. It starts nothing.
 Real: Daedalus was designed for 12% of light speed, and Starshot for 20%. A laser launch shines toward its target. A rocket’s exhaust points away.
-Design question 1 · What does an inquiry cost in time? The audit prices the matter of probes and the laser array. Their build times are not set, so the mock stops at the offer.
+Priced, as samples: a laser array 25 Years, a flyby probe 12 after the launcher. So word from next door arrives at Year 60 by sails, +05:01:36, and Year 78 by probe.
+Real: Starshot’s own model puts the array at 8 billion dollars and a first launch within a generation (Parkin 2018). v1 had 60 Years.
 Settled · What is an inquiry? A mission that goes to find out: a sail swarm, a flyby probe, a sentinel. Probe stays the name of the craft. What comes home is a dispatch. Settled 2026-10-13.
+Settled · What does an inquiry cost in time? Decades, by physics. A laser array takes 25 Years: Starshot aimed at a launch within a generation. Sails then cross 4.3 light-years in 22, and word takes 4.3 to come home. A flyby probe takes 12 Years after the launcher, and 36 in flight. Priced 2026-10-13, as samples.
 +47:30 · Year 9.5
 The phone lights. Reads it. Leaves it.
 Heard · Gliese 4338 B again. The same signal, a Year later.
@@ -1255,4 +1255,5 @@ Settled: What is matter for in the first hour? · Little, and the Mind says so. 
 Settled: What happens at the grid limit? · The plateau stands. Thought stops growing when it draws the whole grid, about Year 11 at full pace, and better chips don’t dodge it: today’s kind reaches its efficiency ceiling near Year 0. The Mind warns five Years ahead. The ways on are slow, and the megatonne road pays here. Settled 2026-10-13.
 Settled: How much of a knock can the Mind read? · All three layers, at once. What it proves, from physics. What it holds, because a knock is built to be read. And what it means, as a word that can be wrong. A stranger neighbor’s message may yet need a study. Settled 2026-10-13.
 Settled: What may an answer hold? · What v1 allowed, whole. The player writes what they mean in plain words. The Mind composes it from typed parts: a finding, a sighting, an archive, our culture, a request, a verdict. The player approves before anything goes. A lie is a forged part, marked for the sender alone. Settled 2026-10-13.
-1. What does an inquiry cost in time? · The audit prices the matter of probes and the laser array. Their build times are not set, so the mock stops at the offer.
+Settled: What does an inquiry cost in time? · Decades, by physics. A laser array takes 25 Years: Starshot aimed at a launch within a generation. Sails then cross 4.3 light-years in 22, and word takes 4.3 to come home. A flyby probe takes 12 Years after the launcher, and 36 in flight. Priced 2026-10-13, as samples.
+None are open.
