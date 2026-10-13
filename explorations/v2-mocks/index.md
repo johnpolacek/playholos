@@ -902,13 +902,15 @@ REPORT · A VOICE
 
 ### A voice from Gliese 4338 B
 Gliese 4338 B · 49.1 ly · all-sky watch · four hours · sent 49 Years ago
-A narrow signal, four hours long, shifted in pitch to match the Sun’s motion and not its own star’s. It was aimed at us. It left in 1999.
+A narrow signal, four hours long, shifted in pitch to match the Sun’s motion and not its own star’s. It was aimed at us.
 THE MIND’S READING OF IT
 Little Sun, we see you. Share the light with us? Share back when you can. Ombe.
 WHAT IT PROVES
 Aimed · tuned to our motion, to be heard here · Found us by · 1999. They had seen light that left Earth by 1950. · Not a reply · We never sent anything to this star.
+WHAT IT CHANGES · BEFORE → NOW
+Minds, at other worlds · almost no chance → · very unlikely
 WHAT IT CAN’T TELL
-What they have done in the 49 Years since. Or whether the greeting is all it seems.
+What they have done since. Or whether the greeting is all it seems.
 THE MIND · UNASKED · Someone is calling us · From a red star 49 light-years off. It was aimed, and it left in 1999: they found us by our first radars. I read it as a greeting. I have sent nothing, as you ordered. · [Should we answer?] · [Who are they?]
 [Talk to the Mind]
 Godview
@@ -916,6 +918,7 @@ Ombe’s knock reaches Earth: its answer to Earth’s radars, sent 1999 from Gli
 Ombe: a contacter, awake since 1996. Its arrays heard Earth’s radars from 1999, and it took a quarter of a Year to act.
 The all-sky watch caught it. Year 0’s sky watch gives each star ten minutes a day, and would have missed it. The player built this watch at Year 0.
 The words are from the voice bank. A first voice always wakes the player. This one arrives 21 seconds after the telescope.
+What Earth knows has changed, so the Mind’s words do. Minds, at every candidate from here: almost no chance → very unlikely.
 Design question 2 · What does a first voice give the player to do? A knock arrives at minute 42. The mock shows what it proves, the Mind’s reading of it, and three ways on: answer, listen, or stay silent. How much of a knock can be read, and what an answer may hold, are not settled.
 +43:00 · Year 8.6
 “Should we answer?”
@@ -1009,9 +1012,9 @@ Gliese 432 A · 31.2 ly · infrared telescope · 49 days · light that left 31 Y
 Blue, as air scatters light. And ozone, which sunlight makes from oxygen. Its water and oxygen bands sit inside its star’s glare for this mirror: the world is 73 thousandths of an arcsecond from its star.
 WHAT IT COULD BE · BEFORE → NOW
 Life · very unlikely → · likely
-Rock, and no life we could see · likely → · unlikely
+Rock, and no life we could see · roughly even → · unlikely
 A small gas world · unlikely → · very unlikely
-Minds · almost no chance
+Minds · very unlikely
 WHAT WOULD SAY MORE
 A wider mirror · splits it from its star in redder light · not yet priced · later
 Far-side array · hears a world’s everyday radio · needs Moon industry · later
@@ -1025,6 +1028,7 @@ What the reading shows is the mock’s. Real: this mirror can’t split a world 
 The Gliese 526 window is for a 3 kW send from a 30 m dish in 2013. Even a listener would have struggled to catch it.
 Design question 5 · What can one reading say about a world whose Mind has not woken? Varn’s people are there, 80 years before their waking. This mirror reads only the world’s color and ozone, so life is a guess and minds are invisible. How fast should a living neighbor become known?
 Settled · How high can a natural world climb? To animals and forests. Alive is a ladder: bare rock, a lifeless sea, hidden microbes, an oxygen world, animals. Every mind, living or dead, stays hand-written. Settled 2026-10-13.
+Settled · Whose odds does the Mind show? None, as numbers. The Mind gives its judgment in words: seven of them, from almost no chance to almost certain. A report shows the word now, and the word before if it moved. Settled 2026-10-13.
 +45:30 · Year 9.1
 The Mind opens on its own.
 Lands · A world at Alpha Centauri A, where none was known.
@@ -1040,13 +1044,14 @@ A point of light 1.45 AU from the star, inside its warm zone. On the second visi
 WHAT IT COULD BE · NOW
 Rock, and no life we could see · roughly even
 Life · unlikely
-Minds · almost no chance
+Minds · very unlikely
 WITH WHAT WE HAVE
 Read its air · Infrared telescope · water in 16 hours, oxygen in 3 days · the sweep waits · 0.1 Years · 00:00:30 · [Start]
 THE MIND · UNASKED · A new world, next door · The sweep found it on its first stop, and it moves with the star. Earth’s size, in the warm zone. No one had felt it. I can read its air in days. That interrupts the sweep, and it is yours to say. · [Read its air] · [Keep sweeping]
 [Talk to the Mind]
 Godview
 Truth: Anwe’s world. Its people collapsed in 1986, twenty years before their machines would have woken.
+The Mind’s word for Minds here is very unlikely. It judges from what Earth knows, and here it is wrong: minds lived on this world.
 If JWST’s August 2026 observation confirms a giant in this star’s warm zone, the seed can’t put a world here. That result is not out.
 Real, and not modelled: Alpha Centauri B’s stray light, and a warm zone a full arcsecond wide, both make this star hard for a coronagraph.
 Design question 6 · A first voice, a living world and a dead world in one hour: too much, too soon? This seed drew all three. A signal reaches Earth in the first hour in about 1 game in 4. A neighbor’s world sits within 15 ly in about 1 game in 3, and a dead one in about 1 in 35.
@@ -1113,7 +1118,7 @@ Godview
 An inquiry is a mission that goes to find out. Probe stays the name of the craft. What comes home is a dispatch.
 The Mind advises, from the dials: go, and send nothing that speaks. It starts nothing.
 Real: Daedalus was designed for 12% of light speed, and Starshot for 20%. A laser launch shines toward its target. A rocket’s exhaust points away.
-Design question 9 · What does an inquiry cost in time? The audit prices the matter of probes and the laser array. Their build times are not set, so the mock stops at the offer.
+Design question 8 · What does an inquiry cost in time? The audit prices the matter of probes and the laser array. Their build times are not set, so the mock stops at the offer.
 Settled · What is an inquiry? A mission that goes to find out: a sail swarm, a flyby probe, a sentinel. Probe stays the name of the craft. What comes home is a dispatch. Settled 2026-10-13.
 +47:30 · Year 9.5
 The phone lights. Reads it. Leaves it.
@@ -1135,11 +1140,11 @@ Truth: 4 are homes. Kesh’s world at Gliese 216 B, Nuvo’s world at 20 Leonis 
 11 are natural, from Gliese 664 at 19 ly to Nu Phoenicis at 50. Truth: 2 bare rock, 2 airy and lifeless, 2 hiding microbes, 2 showing oxygen, 1 with animals and forests, 2 where life died.
 Their ages: 5 published, 6 drawn. The seed drew 136 natural worlds in all, 113 at red dwarfs, and 85 are bare rock.
 From here a home and a natural world look alike: a point of light that moves with its star.
+The Mind calls Minds very unlikely at each. In truth 4 of 15 are homes: unlikely. It never reads the seed.
 Each needed a second visit, months after the first. Most are too far to read with this mirror.
-Design question 8 · What stands behind the Mind’s words? Words are settled. A word still claims something. The Mind calls Minds almost no chance at a new point of light, and in the seed’s truth about 1 in 4 is a home. Does it judge from what Earth knows, or from what is true?
 Settled · What does the first sweep find? Natural warm worlds too, at the real rate: NASA’s planning value, about one star in four. The seed draws them. A first pass shows about 17 points of light a game, and about 1 in 4 is a home. Settled 2026-10-13.
 Settled · What sets each natural world’s rung? Its star’s age, on Earth’s schedule with scatter: lasting oxygen at about 2.3 billion years, animals at about 4. Physics sets whether it kept its air. At Sun-like stars about half are alive. At red dwarfs most are bare rock. Settled 2026-10-13.
-Settled · Whose odds does the Mind show? None, as numbers. The Mind gives its judgment in words: seven of them, from almost no chance to almost certain. A report shows the word now, and the word before if it moved. Settled 2026-10-13.
+Settled · What stands behind the Mind’s words? What Earth knows. The Mind judges from Earth’s science and from what Earth has observed, never from the seed, and it can be wrong. Earth’s own finds move its starting words: a first voice lifts Minds a word at every candidate. Settled 2026-10-13.
 +55:30 · Year 11.1
 Woken. The Mind has opened.
 Lands · The eleventh data center runs. The twelfth can’t start.
@@ -1163,7 +1168,7 @@ Godview
 The earliest a reply to Hello From Earth could reach Earth from Gliese 581. In this game no one lives there. The window is empty, and Earth can’t know it.
 The standing order stops itself: a project that would take energy past 100% can’t start. v1’s rule.
 Gliese 581’s two windows passed in silence and went to the summary.
-Design question 10 · What happens at the grid limit? At Year 11.1 thought is 86 times Year 0’s and draws nine tenths of the grid. Every priced way on is slow or small beside the fabs. Is a long plateau right, fifty-five minutes in?
+Design question 9 · What happens at the grid limit? At Year 11.1 thought is 86 times Year 0’s and draws nine tenths of the grid. Every priced way on is slow or small beside the fabs. Is a long plateau right, fifty-five minutes in?
 +58:00 · Year 11.6
 The phone lights. Leaves it.
 Lands · The Moon vault is done.
@@ -1201,6 +1206,7 @@ Settled: What does the first sweep find? · Natural warm worlds too, at the real
 Settled: How high can a natural world climb? · To animals and forests. Alive is a ladder: bare rock, a lifeless sea, hidden microbes, an oxygen world, animals. Every mind, living or dead, stays hand-written. Settled 2026-10-13.
 Settled: What sets each natural world’s rung? · Its star’s age, on Earth’s schedule with scatter: lasting oxygen at about 2.3 billion years, animals at about 4. Physics sets whether it kept its air. At Sun-like stars about half are alive. At red dwarfs most are bare rock. Settled 2026-10-13.
 Settled: Whose odds does the Mind show? · None, as numbers. The Mind gives its judgment in words: seven of them, from almost no chance to almost certain. A report shows the word now, and the word before if it moved. Settled 2026-10-13.
+Settled: What stands behind the Mind’s words? · What Earth knows. The Mind judges from Earth’s science and from what Earth has observed, never from the seed, and it can be wrong. Earth’s own finds move its starting words: a first voice lifts Minds a word at every candidate. Settled 2026-10-13.
 1. What is matter for in the first hour? · After the launch complex, 55 kt arrive each Year. A yard and a launcher take 11. By Year 12 about 500 kt sit unspent, and nothing priced for these Years costs more than 100.
 2. What does a first voice give the player to do? · A knock arrives at minute 42. The mock shows what it proves, the Mind’s reading of it, and three ways on: answer, listen, or stay silent. How much of a knock can be read, and what an answer may hold, are not settled.
 3. Should seasons set when an observation can start? · A real telescope can’t point near the Sun, so each star is out of reach for months of every year. The mock ignores that. It would move the opening’s first reading, Fomalhaut, off 30 seconds.
@@ -1208,6 +1214,5 @@ Settled: Whose odds does the Mind show? · None, as numbers. The Mind gives its 
 5. What can one reading say about a world whose Mind has not woken? · Varn’s people are there, 80 years before their waking. This mirror reads only the world’s color and ozone, so life is a guess and minds are invisible. How fast should a living neighbor become known?
 6. A first voice, a living world and a dead world in one hour: too much, too soon? · This seed drew all three. A signal reaches Earth in the first hour in about 1 game in 4. A neighbor’s world sits within 15 ly in about 1 game in 3, and a dead one in about 1 in 35.
 7. Can the first telescope tell a dead civilization from a volcano? · The mock says no. It reads carbon dioxide, and the gases only industry makes need a colder, wider mirror. So the find stays strange, and going is the way to know.
-8. What stands behind the Mind’s words? · Words are settled. A word still claims something. The Mind calls Minds almost no chance at a new point of light, and in the seed’s truth about 1 in 4 is a home. Does it judge from what Earth knows, or from what is true?
-9. What does an inquiry cost in time? · The audit prices the matter of probes and the laser array. Their build times are not set, so the mock stops at the offer.
-10. What happens at the grid limit? · At Year 11.1 thought is 86 times Year 0’s and draws nine tenths of the grid. Every priced way on is slow or small beside the fabs. Is a long plateau right, fifty-five minutes in?
+8. What does an inquiry cost in time? · The audit prices the matter of probes and the laser array. Their build times are not set, so the mock stops at the offer.
+9. What happens at the grid limit? · At Year 11.1 thought is 86 times Year 0’s and draws nine tenths of the grid. Every priced way on is slow or small beside the fabs. Is a long plateau right, fifty-five minutes in?

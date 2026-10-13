@@ -321,7 +321,16 @@ Settled 2026-10-13.
   - *A number that is a measurement stays a number:* a distance, a time, a mass.
   - *Known cost.* People read such words differently, and nearer to even than meant (Budescu et al. 2014). One fixed scale, used everywhere, is the guard.
   - Set aside: odds the Mind reasons out from what Earth knows, shown as numbers. And odds that match the seed's truth.
-- **Open:** seasons, and what stands behind the Mind's words: what Earth knows, or what is true.
+- **The Mind judges from what Earth knows, and it can be wrong.** Settled 2026-10-13.
+  - *It never reads the seed.* Its words come from Earth's science at Year 0, and from what Earth has observed since: readings, findings, voices, dispatches.
+  - *Example.* At a new point of light it says Minds, almost no chance. In the seed's truth about 1 such point in 4 is a home.
+  - *Why it starts there.* No search has found anyone ([Price et al. 2020](HOLOS_RESEARCH.md#hearing-technology-by-radio)), and the science leans to rare minds (Kipping 2020). For life it leans the other way (Kipping 2025).
+  - *Earth's own finds move its starting words.* After a first voice, Minds starts a word higher at every candidate: very unlikely. The voice's report shows that change.
+  - *It can be wrong.* In the mock's game it reads Alpha Centauri A's air as eruptions, roughly even. The truth is burning, which it calls unlikely.
+  - *So the premise holds.* The Mind can't tell the player how many are out there. Its words climb toward the truth only as Earth finds it.
+  - *Samples:* each starting word, and how far one voice moves Minds. In the mock a voice leaves Life's word where it was.
+  - Set aside: words that follow the seed's real frequencies, and words written by hand for each report with no rule.
+- **Open:** seasons.
 
 ## The neighbors
 
@@ -525,6 +534,6 @@ Answered one at a time, in this order. Every answer must be permitted by current
     - **Settled 2026-10-13:** alive is a ladder, and a natural world climbs no higher than animals and forests. Every mind stays hand-written. See [How Earth learns](#how-earth-learns).
     - **Settled 2026-10-13:** its star's age sets a natural world's rung, on Earth's schedule with scatter, and physics says whether it kept its air. In this game the sweep's 11 natural worlds are 5 alive, 2 where life died, 2 airy and lifeless, 2 bare rock. See [How Earth learns](#how-earth-learns).
     - **Settled 2026-10-13:** the Mind gives its judgment in words, never in numbers. Both mocks now show words. See [How Earth learns](#how-earth-learns).
-    - **What stands behind the Mind's words?** A word still claims something. The Mind calls Minds almost no chance at a new point of light, and in the seed's truth about 1 in 4 is a home.
+    - **Settled 2026-10-13:** the Mind judges from what Earth knows, never from the seed, and it can be wrong. A first voice lifts Minds a word at every candidate. In this game it calls Minds very unlikely at the sweep's 15 points of light, and 4 are homes. See [How Earth learns](#how-earth-learns).
     - **What does an inquiry cost in time?** The matter of probes and the laser array is priced. Their build times are not.
     - **What happens at the grid limit?** At Year 11.1 thought is 86 times Year 0's and draws nine tenths of the grid. Every priced way on is slow or small.

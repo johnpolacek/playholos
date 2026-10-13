@@ -838,6 +838,7 @@ What a neighbor's world can plausibly be, beyond an Earth twin. Each roster entr
   - Matters: on the one world we know, life is microbes for most of its history, shows in the air for between a ninth and a half of it, and has had radio for 130 years of 4.5 billion.
   - Matters: the game's premise puts a mind at about 1 warm world in 18. Minds can't be commoner than life, so in this game most warm worlds that can hold life do.
   - Used since: v2 [How Earth learns](HOLOS_GAME_CONCEPT.md#how-earth-learns), the ladder and the rung draw in calcs/seed.py.
+  - Used since 2026-10-13: the Mind's starting words. It judges from what Earth knows, so Kipping 2020 and Sandberg et al. stand behind Minds, almost no chance, and Kipping 2025 behind a higher word for Life. Price et al. 2020, logged under [Hearing technology by radio](#hearing-technology-by-radio), is the null result it starts from. The words themselves are this project's samples.
 
 - **Saying how likely in words, checked 2026-10-13.** For the Mind's reports.
   - **ICD 203, the US intelligence community's analytic standard** · Read in a [secondary copy](https://github.com/MISP/misp-taxonomies/tree/main/estimative-language), not the directive. Seven terms: almost no chance 1 to 5%, very unlikely 5 to 20%, unlikely 20 to 45%, roughly even chance 45 to 55%, likely 55 to 80%, very likely 80 to 95%, almost certain 95 to 99%.
