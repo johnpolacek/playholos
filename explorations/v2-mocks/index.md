@@ -1251,7 +1251,9 @@ Godview
 The laser array has been building since Year 9.4: the player tapped Start at minute 47. It is done at Year 34.4.
 Dates, as priced: ground solar Year 22, the mirror 25.5, the foundry 34.5, the driver 36, belt mining 38. The yard, done at Year 11.3, takes a quarter off the two built in orbit.
 Nothing here competes. Matter, energy and thought all have room, so the only choice is whether to start.
-Design question 1 · What is 86 times the thought for? At the grid limit Earth thinks 86 times faster than at Year 0, and every work on offer takes under a hundredth of it. Five long works start at once here, for 2 kt of 511. Nothing is scarce but Years.
+Settled since: thought buys speed, down to two thirds of a work’s standard time. This mock still runs every work at standard pace. At the floor the mirror would be done at Year 21 and the driver at Year 28.
+Design question 1 · How much thought does a work want? Thought now buys speed, down to a floor. But every work on offer still takes under a hundredth of what Earth has at the grid limit. Until each work wants an amount in scale with its size, nothing competes for thought, and the limit costs nothing.
+Settled · What is 86 times the thought for? Speed. More thought shortens a work, down to a floor physics sets: about two thirds of its standard time. Space missions that could not miss a launch window took 53 months, against 64 to 84 for the rest. Rock from the Moon and flight between stars are physical, and thought shortens neither. Settled 2026-10-13.
 +1:00:30 · Year 12.1
 Puts the phone down.
 Saturday · 17:25
@@ -1584,7 +1586,8 @@ Settled: What happens at the grid limit? · The plateau stands. Thought stops gr
 Settled: How much of a knock can the Mind read? · All three layers, at once. What it proves, from physics. What it holds, because a knock is built to be read. And what it means, as a word that can be wrong. A stranger neighbor’s message may yet need a study. Settled 2026-10-13.
 Settled: What may an answer hold? · What v1 allowed, whole. The player writes what they mean in plain words. The Mind composes it from typed parts: a finding, a sighting, an archive, our culture, a request, a verdict. The player approves before anything goes. A lie is a forged part, marked for the sender alone. Settled 2026-10-13.
 Settled: What does an inquiry cost in time? · Decades, by physics. A laser array takes 25 Years: Starshot aimed at a launch within a generation. Sails then cross 4.3 light-years in 22, and word takes 4.3 to come home. A flyby probe takes 12 Years after the launcher, and 36 in flight. Priced 2026-10-13, as samples.
-1. What is 86 times the thought for? · At the grid limit Earth thinks 86 times faster than at Year 0, and every work on offer takes under a hundredth of it. Five long works start at once here, for 2 kt of 511. Nothing is scarce but Years.
+Settled: What is 86 times the thought for? · Speed. More thought shortens a work, down to a floor physics sets: about two thirds of its standard time. Space missions that could not miss a launch window took 53 months, against 64 to 84 for the rest. Rock from the Moon and flight between stars are physical, and thought shortens neither. Settled 2026-10-13.
+1. How much thought does a work want? · Thought now buys speed, down to a floor. But every work on offer still takes under a hundredth of what Earth has at the grid limit. Until each work wants an amount in scale with its size, nothing competes for thought, and the limit costs nothing.
 2. Is the plateau too quiet, and too long? · From minute 60 to minute 110 nothing wakes the player. Thought stays one size for 40 Years, 3.3 hours of play, until power from orbit.
 3. A knock Earth can’t hear: should a candidate world earn a listen? · Hael’s knock is ten gigawatts from 49 ly, under the all-sky watch’s floor. A deep-field receiver held on that star would have caught it, and the sweep had marked a world there. Nothing told Earth to listen.
 4. What can the player do with a suspicion? · Smog at four worlds, from Year 26. Proof waits for the far-side array, 16 Years on. A knock sent now would reach Gliese 432 A’s people as their Mind wakes.

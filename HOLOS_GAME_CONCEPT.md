@@ -233,6 +233,15 @@ Settled 2026-10-10. Numbers in [calcs/early_game.py](calcs/early_game.py). Repla
   - *The Mind warns five Years ahead.* The choice is to keep buying thought at full pace, or to grow energy first.
   - *It is where the megatonne road pays.* See [Earth's kit at Year 0](#earths-kit-at-year-0).
   - Set aside: a new kind of chip as a project, which nothing read so far supports. And slower fabs, so the first hour never reaches the grid.
+- **Thought buys speed, down to a floor physics sets.** Settled 2026-10-13. Numbers from `python3 calcs/early_game.py`. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#earth-to-year-0-forecasts).
+  - *Why it was asked.* The third mock showed 99% of Earth's thought idle at the grid limit. A limit on something no one uses costs nothing.
+  - *The rule.* Part of a build is planning, and part is physical work. Thought shrinks the first and never the second.
+  - *The floor: two thirds of the standard time,* a sample. NASA science missions took 64 months from design to launch, against a plan of 50. Those with a launch window they could not miss took about 53, which the study calls a lower limit (Joumier, Freaner, Bitten and Emmons 2012).
+  - *What that gives.* Half the thought costs a third more time. Four times the thought saves a quarter. Past ten times there is almost nothing more to gain.
+  - *What thought never shortens.* Rock leaving the Moon, flight between stars, and light coming home.
+  - *It adds to the method projects.* Factories and yards change how a thing is built. Thought plans the same build better.
+  - *Not set:* how much thought each work wants. Until that scales with a work's size, nothing competes for thought. The third mock still runs every work at standard pace.
+  - Set aside: thought that buys knowing only, and thought as a gate that larger works must pass.
 - **Faster than one a Year needs new fabs.** A chip fab project adds a second line: 3 Years, a tenth of compute, no matter. Priced 2026-10-11. A leading-edge fab takes 2 to 4 years, and one firm makes the tools that print the finest chips, about 90 a year. Two lines make compute grow 2.25 times a Year. The chip stock grew 3.4 times a year in 2026, so that pace has been seen.
   - *It only reaches the ceiling sooner.* Eleven data centers fit under the grid. One line fills them by Year 11, two by Year 7. A third line gains a third of a Year.
 - **Only if the player chooses.** One at a time, or a standing order to keep them coming. Compute never grows on its own.
@@ -638,7 +647,8 @@ Answered one at a time, in this order. Every answer must be permitted by current
     - *What it shows.* Fifty minutes with no wake. Smog at four worlds at Year 26, each of them a home. A second voice at Year 30, and a first answer, 21 Years late. Sails launched at Year 34. Radio from two worlds at Year 42: the first proof of minds by Earth's own instruments. Power from orbit at Year 50. Word from Alpha Centauri at Year 60.
     - *The plateau, as played:* 40 Years, 3.3 hours, from the grid limit to a twelfth data center.
     - *One knock is never heard.* Hael's, at Year 20, is under the all-sky watch's floor. A deep-field receiver held on that star would have caught it.
-    - **What is 86 times the thought for?** At the grid limit every work on offer takes under a hundredth of Earth's thought. Five long works start at once, for 2 kt of 511. Nothing is scarce but Years.
+    - **Settled 2026-10-13:** thought buys speed, down to a floor physics sets. See [Growing compute](#growing-compute).
+    - **How much thought does a work want?** Every work on offer still takes under a hundredth of what Earth has at the grid limit. Until each wants an amount in scale with its size, nothing competes for thought.
     - **Is the plateau too quiet, and too long?** Nothing wakes the player from minute 60 to minute 110, and thought is flat for 3.3 hours.
     - **A knock Earth can't hear: should a candidate world earn a listen?** The sweep had marked a world at the star that called. Nothing told Earth to listen there.
     - **What can the player do with a suspicion?** Smog at four worlds, and proof 16 Years off. A knock sent then would reach Gliese 432 A's people as their Mind wakes.

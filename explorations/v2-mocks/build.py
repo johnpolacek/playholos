@@ -41,7 +41,8 @@ SETTLED = [('Does a half-built real instrument cost fewer Years?', 'It costs wha
            ('What happens at the grid limit?', 'The plateau stands. Thought stops growing when it draws the whole grid, about Year 11 at full pace, and better chips don’t dodge it: today’s kind reaches its efficiency ceiling near Year 0. The Mind warns five Years ahead. The ways on are slow, and the megatonne road pays here. Settled 2026-10-13.'),
            ('How much of a knock can the Mind read?', 'All three layers, at once. What it proves, from physics. What it holds, because a knock is built to be read. And what it means, as a word that can be wrong. A stranger neighbor’s message may yet need a study. Settled 2026-10-13.'),
            ('What may an answer hold?', 'What v1 allowed, whole. The player writes what they mean in plain words. The Mind composes it from typed parts: a finding, a sighting, an archive, our culture, a request, a verdict. The player approves before anything goes. A lie is a forged part, marked for the sender alone. Settled 2026-10-13.'),
-           ('What does an inquiry cost in time?', 'Decades, by physics. A laser array takes 25 Years: Starshot aimed at a launch within a generation. Sails then cross 4.3 light-years in 22, and word takes 4.3 to come home. A flyby probe takes 12 Years after the launcher, and 36 in flight. Priced 2026-10-13, as samples.')]
+           ('What does an inquiry cost in time?', 'Decades, by physics. A laser array takes 25 Years: Starshot aimed at a launch within a generation. Sails then cross 4.3 light-years in 22, and word takes 4.3 to come home. A flyby probe takes 12 Years after the launcher, and 36 in flight. Priced 2026-10-13, as samples.'),
+           ('What is 86 times the thought for?', 'Speed. More thought shortens a work, down to a floor physics sets: about two thirds of its standard time. Space missions that could not miss a launch window took 53 months, against 64 to 84 for the rest. Rock from the Moon and flight between stars are physical, and thought shortens neither. Settled 2026-10-13.')]
 
 # ---------- Godview: who is out there ----------
 MOVE = reactions.MOVES
@@ -899,7 +900,7 @@ def long_rows():
     if not (ANWE and VOICE and VOICE2 and FAINT and F['who'] and len(SMOG_HITS) >= 2): return []
     R = ROAD; WHO2, K2 = VOICE2; V2D = WHO2['d']; SENT2 = int(K2['sent']); WHOF, KF = FAINT
     B2 = json.loads((here.parents[1] / 'data' / 'voices' / f"{WHO2['name'].lower()}.json").read_text())
-    q_thought = ask('What is 86 times the thought for?', 'At the grid limit Earth thinks 86 times faster than at Year 0, and every work on offer takes under a hundredth of it. Five long works start at once here, for 2 kt of 511. Nothing is scarce but Years.')
+    q_thought = ask('How much thought does a work want?', 'Thought now buys speed, down to a floor. But every work on offer still takes under a hundredth of what Earth has at the grid limit. Until each work wants an amount in scale with its size, nothing competes for thought, and the limit costs nothing.')
     q_quiet = ask('Is the plateau too quiet, and too long?', f'From minute 60 to minute 110 nothing wakes the player. Thought stays one size for {PLATEAU:.0f} Years, {PLATEAU * 5 / 60:.1f} hours of play, until power from orbit.')
     q_faint = ask('A knock Earth can’t hear: should a candidate world earn a listen?', f'{WHOF["name"]}’s knock is ten gigawatts from {WHOF["d"]:.0f} ly, under the all-sky watch’s floor. A deep-field receiver held on that star would have caught it, and the sweep had marked a world there. Nothing told Earth to listen.')
     q_suspect = ask('What can the player do with a suspicion?', f'Smog at {NUM[len(SMOG_HITS)]} worlds, from Year {R["mirror"] + SMOG_DAYS / 365.25:.0f}. Proof waits for the far-side array, {R["fifth"] - R["mirror"] - 1:.0f} Years on. A knock sent now would reach {F["star"]}’s people as their Mind wakes.')
@@ -1000,7 +1001,8 @@ def long_rows():
              talk(long_order, f'Set. Five works, for 2 of our {res(t0)[2].replace(" kt", "")} kilotonnes and almost none of my thought. The first is done in ten Years. A twelfth data center waits on two of them.', ('Undo',)),
              [f'The laser array has been building since Year 9.4: the player tapped Start at minute 47. It is done at Year {R["array"]:.1f}.',
               f'Dates, as priced: ground solar Year {R["solar"]:.0f}, the mirror {R["mirror"]:.1f}, the foundry {R["foundry"]:.1f}, the driver {R["driver"]:.0f}, belt mining {R["mining"]:.0f}. The yard, done at Year 11.3, takes a quarter off the two built in orbit.',
-              'Nothing here competes. Matter, energy and thought all have room, so the only choice is whether to start.'], question=q_thought, label=HMS(t0)),
+              'Nothing here competes. Matter, energy and thought all have room, so the only choice is whether to start.',
+              f'Settled since: thought buys speed, down to two thirds of a work’s standard time. This mock still runs every work at standard pace. At the floor the mirror would be done at Year {12 + early_game.paced(13.5, 1e9):.0f} and the driver at Year {12 + early_game.paced(24, 1e9):.0f}.'], question=q_thought, settled=29, label=HMS(t0)),
         stop(t0 + 30, t0, '· Puts the phone down.', None, sleep,
              ['The next wake is fifty minutes off. In the first hour the player was woken six times.',
               f'Thought is flat from Year 11.1 until a twelfth data center, at about Year {R["dc12"]:.0f}: {PLATEAU:.0f} Years.'], question=q_quiet, label=HMS(t0 + 30)),

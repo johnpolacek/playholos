@@ -234,6 +234,19 @@ Every source the game rests on, grouped by the question it answers. Each entry s
   - Its own caution: it assumes no new kind of chip.
   - From a search summary, not read: computing's efficiency doubled every 1.6 years until 2000, and about every 2.6 since.
   - Used: the same.
+- **How far thinking can speed a build, checked 2026-10-13.** For the question of what thought is for. I read each abstract myself, and the text of the first, which I pulled out of its PDF.
+  - **[Joumier, Freaner, Bitten and Emmons 2012](https://ntrs.nasa.gov/api/citations/20120009487/downloads/20120009487.pdf)** · Conference slides, ESA, NASA and the Aerospace Corporation. Science missions, from the start of design to launch.
+    - NASA: planned 49.6 months, took 64.1, a 31% overrun. ESA: planned 61.6, took 83.6. By size at NASA: small 52, medium 61, large 83.
+    - Planetary missions, which can't miss their launch window, took about 53 at both agencies. The slides: about 53 months "appears to be the minimum schedule that is achievable", a guide to "an un-compressible lower limit".
+    - Their reading: a clear and urgent goal shared by everyone is one way to hold a schedule.
+  - **[Flyvbjerg 2014, megaprojects](https://arxiv.org/abs/1409.0003)** · Published overview. The iron law: over budget, over time, over and over again.
+  - **[Cantarelli, Molin and van Wee 2012](https://arxiv.org/abs/1307.2178)** · Published, Transport Policy. Dutch transport projects overrun by 16.5% on average, and most of it arises before building starts.
+  - **[Erdil and Besiroglu 2023](https://arxiv.org/abs/2309.11690)** · Preprint, Epoch AI. Whether automating thought could multiply growth tenfold turns on a few open questions, one of them physical bottlenecks in production.
+  - From search summaries, not read: Flyvbjerg's set of 16,000 projects, 8.5% on budget and on time. A scheduling firm treats squeezing a schedule by more than 25% as trouble.
+  - From general knowledge, not a source read: Amdahl's law. Speeding one part of a job helps only as far as the rest allows.
+  - Matters: real builds run a third to a half over their best case, and the loss is in planning and rework. That is the part thought can take away. The floor is what even urgent, well-run missions needed.
+  - This project's own: two thirds as the floor for every kind of work, from one data set on space missions. And Amdahl's form for what lies between.
+  - Used: v2 [Growing compute](HOLOS_GAME_CONCEPT.md#growing-compute), calcs/early_game.py and the third mock.
   - Used: v2 open question 2.
 - **[Large space flexible solar arrays, 2025 review](https://www.sciencedirect.com/science/article/pii/S2950104025000161)** · Published ([NASA small-spacecraft power](https://www.nasa.gov/smallsat-institute/sst-soa/power-subsystems/)).
   - Flown roll-out arrays reach about 36 to 218 W/kg, the ISS's iROSA about 75 W/kg. Thin-film designs target 1 kW/kg.

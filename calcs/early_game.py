@@ -204,8 +204,29 @@ def long_roads(early=6.2, reading=9.4, yard=11.3, ly=4.32):
     print(f'  The grid limit is reached at about Year 11. Ground solar adds a fifth by Year 21. Power from orbit, from about Year {y:.0f}: '
           f'{y - 11:.0f} Years at the limit, {(y - 11) * 5 / 60:.1f} hours of play.')
 
+# ---------- Thought buys speed ----------
+# Settled 2026-10-13. More thought shortens a work, down to a floor physics sets. The form is Amdahl's: the part of a
+# build that is planning shrinks as thought grows, and the part that is physical work does not.
+# The floor is a sample, from one real data set. NASA science missions took 64 months from design to launch against a
+# plan of 50, and ESA's 84 against 62. Missions with a launch window they could not miss took about 53, which the
+# study calls a lower limit that can't be compressed (Joumier, Freaner, Bitten and Emmons 2012). 53 months is two
+# thirds of what large missions took, and five sixths of the average. So a floor of two thirds.
+FLOOR = 2 / 3
+def paced(years, s=1.0, floor=FLOOR):
+    """Years a work takes when given s times the thought its standard pace needs. Under 1 it runs slower than standard."""
+    return years * (floor + (1 - floor) / s)
+
+def thought_speed():
+    print(f'Thought buys speed, down to a floor of {FLOOR:.0%} of the standard time. A work given s times its standard thought:')
+    print('  ' + ''.join(f'{f"{s:g}x":>9}' for s in (0.5, 1, 2, 4, 10, 86)))
+    for name, t in (('A 15 m mirror', ROADS['mirror']), ('Mass driver', ROADS['driver']), ('Laser sail array', ROADS['array']), ('One fifth of the far-side array', ROADS['far_side'] / 5)):
+        print('  ' + ''.join(f'{paced(t, s):9.1f}' for s in (0.5, 1, 2, 4, 10, 86)) + f'  Years · {name}')
+    print('  Half the thought costs a third more time. Four times the thought saves a quarter. Past ten times, almost nothing more.')
+    print('  Rock from the Moon and flight between stars are physical. Thought shortens neither.')
+
 if __name__ == '__main__':
     long_roads(); print()
+    thought_speed(); print()
     compute_growth(); print()
     orbit_stock(); print()
     raise_the_pace(); print()
