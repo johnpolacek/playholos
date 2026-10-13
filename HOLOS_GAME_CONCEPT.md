@@ -69,7 +69,7 @@ Settled 2026-10-10. Numbers in [calcs/neighbors.py](calcs/neighbors.py).
   - Altair, 47 Ursae Majoris, Kappa¹ Ceti, HD 10307 and Teegarden's Star can't host one.
   - Gliese 208 can't either, from 2026-10-12. It turns every 12.3 days, which dates it near half a billion years (Engle 2024, Grandjean et al. 2021). Earth's 2003 message still arrives there at Year 0.8. No one is home.
   - All six are M dwarfs, so only neighbors that can live at one fit: 9 of the 30.
-- **Who catches a knock.** A knock lasts hours. Only a neighbor already keeping a beam on Sol catches it.
+- **Who catches a knock.** A knock lasts hours at most. Only a neighbor already keeping a beam on Sol catches it.
   - That means it heard Earth's radars first, and its arrays were running when the knock arrived.
   - Then a listener catches it about 3 times in 4, an ordinary one 1 in 2, an inward one 1 in 10.
   - Otherwise, under 1 in 100. A neighbor that died before it arrived catches nothing.
