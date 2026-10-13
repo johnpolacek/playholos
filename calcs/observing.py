@@ -60,3 +60,7 @@ if __name__ == '__main__':
         seen = 'inside the glare' if o['seen_h'] is None else f"{o['seen_h']:.1f} hours" if o['seen_h'] < 48 else f"{o['seen_h'] / 24:.0f} days"
         print(f"{name:34} {ly:5.1f} {o['sep']:5.0f}   {seen:>12} {tell(o['water']):>16} {tell(o['oxygen']):>16} {tell(o['ozone']):>16}")
     print('One Year is 5 minutes of play, so a day is under a second and two months are 50 seconds.')
+    import neighbors as nb, seed
+    stars, days = seed.first_pass(nb.load_hosts())
+    print(f"The search: this mirror can split the middle of the warm zone at {stars} of the hosts within 50 ly. Up to {seed.PASS_H} hours each, enough to "
+          f"see an Earth twin there, a first pass takes {days:.0f} days.")

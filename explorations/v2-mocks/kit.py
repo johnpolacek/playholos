@@ -98,11 +98,15 @@ def dials(v=DIALS):
     return ''.join(f'<div class="dial"><span>{a}</span><b><s style="left:{p}%"></s></b><span>{b}</span></div>' for (a, b), p in zip(ends, v))
 
 # ---------- Earth's seeded find ----------
-# A neighbor's world if one tugs hard enough for Earth's planet hunters by 2040, else a natural world the seed adds.
+# A neighbor's world if one tugs hard enough for Earth's planet hunters by 2040, else the nearest natural world
+# that does, else a natural world the seed adds.
 def make_find():
     if G['found']:
         p = G['found'][0]; h = p['host']; mass = p['n']['world']['mass']; a = p['a']; k = p['tug']; who = p['name']
         msini = mass * math.sin(math.radians(p['pole']))
+    elif G['felt']:
+        w = G['felt'][0]; h = w['host']; who = None; mass, a, k = w['mass'], w['a'], w['tug']
+        msini = mass * math.sin(math.radians(w['pole']))
     else:
         h = G['natural']; who = None
         a = h['hz_in'] + 0.4 * (h['hz_out'] - h['hz_in']); floor = nb.rv_2040(h)

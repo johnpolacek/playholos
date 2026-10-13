@@ -1,12 +1,12 @@
-"""Draw one game from a seed number: Earth's branches to 2040, who is out there, where, when each wakes, and what
-each already knows of Earth. Run: python3 calcs/seed.py 7   (no number: one line for each of the first 40 seeds.
+"""Draw one game from a seed number: Earth's branches to 2040, who is out there, where, when each wakes, what
+each already knows of Earth, and the natural warm worlds at other stars. Run: python3 calcs/seed.py 7   (no number: one line for each of the first 40 seeds.
 'stats': what 400 games look like.)
 
 The rules are HOLOS_GAME_CONCEPT.md's: Year 0 and Earth's road to it, The neighbors, Stars Earth knocked on, How
 neighbors play. Every placement passes calcs/neighbors.py. The same seed always gives the same game.
 """
 import hashlib, math, random, sys
-import branches, knocks, neighbors as nb, reactions
+import branches, knocks, neighbors as nb, observing, reactions
 
 Y0 = nb.EARTH_WAKES
 # Earth's branches, odds read from Metaculus on 2026-10-10. Taiwan's three outcomes share one roll:
@@ -74,6 +74,39 @@ def keyed(*parts):
     """A number between 0 and 1 that depends only on its parts. Placement uses it with each star's id, so a star
     leaving the host list moves only a neighbor that lived there."""
     return (int.from_bytes(hashlib.blake2b(':'.join(map(str, parts)).encode(), digest_size=8).digest(), 'big') + 1) / (2 ** 64 + 2)
+
+# ---------- Natural warm worlds ----------
+# Settled 2026-10-13: the seed draws them at the real rate. NASA plans its telescope on 0.24 rocky worlds in each
+# star's warm zone, 0.6 to 1.4 Earths wide, the same at every kind of star (Stark et al. 2019, from the SAG13 average
+# of Kepler's counts: 0.08 to 0.70). Small ones are commoner, and so are wide orbits: per step of ln R as R^-0.19, per
+# step of ln P as P^0.26. A world narrower than 0.8 / sqrt(a) Earths, a in Sun-twin AU, can't hold its air and is not
+# counted. Orbits are circular. Rock's mass grows as R^3.7 (Zeng et al. 2016).
+# A sample: at most one to a star, and none beside a neighbor's world.
+ETA, R_MIN, R_MAX = 0.24, 0.6, 1.4
+def power(u, lo, hi, k): return (lo ** k + u * (hi ** k - lo ** k)) ** (1 / k)
+def warm_world(seed, host):
+    """This star's natural warm world, or None. It passes the checks a neighbor's world does: a stable orbit, no
+    transit seen from Sol, no tug in 2026 data. One draw, on the star's own stream, so no other star moves it."""
+    if keyed(seed, 'natural', host['id']) >= ETA: return None
+    rng = random.Random(f"{seed}:natural:{host['id']}")
+    while True:
+        x, radius = power(rng.random(), 0.95, 1.67, 0.39), power(rng.random(), R_MIN, R_MAX, -0.19)
+        if radius >= 0.8 * x ** -0.5: break
+    a, mass, pole = x * math.sqrt(host['luminosity']), radius ** 3.7, math.degrees(math.acos(rng.uniform(-1, 1)))
+    fails, k = nb.orbit_fails(host, mass, a, 0, pole)
+    return dict(host=host, d=host['distance_ly'], a=a, radius=radius, mass=mass, pole=pole, tug=k, fails=fails,
+                felt=k > nb.rv_2040(host), **sight(host, radius, a))
+
+# The infrared telescope's search. Its first pass gives a star up to a day, a sample: enough to see an Earth twin of a
+# Sun twin out to about 50 ly. A fainter world waits for a deeper pass.
+PASS_H = 24
+def first_pass(rows):
+    """How many hosts the mirror can split at the middle of the warm zone, and the days one pass of them takes."""
+    hours = [observing.observe(h['distance_ly'] / 3.2616, 1.0, 1.31 * math.sqrt(h['luminosity']), h['luminosity'])['seen_h'] for h in rows]
+    return sum(t is not None for t in hours), sum(min(t, PASS_H) for t in hours if t is not None) / 24
+def sight(host, radius, a):
+    o = observing.observe(host['distance_ly'] / 3.2616, radius, a, host['luminosity'])
+    return dict(sep=o['sep'], seen_h=o['seen_h'], split=o['seen_h'] is not None, swept=o['seen_h'] is not None and o['seen_h'] <= PASS_H)
 
 def draw(seed, rows=None):
     rows = rows or nb.load_hosts()
@@ -144,14 +177,20 @@ def draw(seed, rows=None):
             if end == n['dies']: p['inbound'].append(dict(what='its last broadcast', move='broadcast', sent=w - start, year=w - start + d - Y0, watts=watts))
         for i in p['inbound']: catches(p, i, seed)
         out.append(p)
-    # Earth's seeded find: a neighbor's world if one tugs hard enough, else a natural world at a Terra Hunting star.
-    found = [p for p in out if p['found_by_2040']]
+    for p in out: p.update(sight(p['host'], p['n']['world']['mass'] ** (1 / 3.7), p['a']))
+    drawn = [w for w in (warm_world(seed, h) for h in rows if h['id'] not in used) if w]
+    worlds = sorted((w for w in drawn if not w['fails']), key=lambda w: w['d'])
+    # Earth's finds at Year 0: every world whose tug shows by 2040, a neighbor's or a natural one. If the draw gives
+    # none, the seed adds a natural world at a Terra Hunting star, so the opening always has a find.
+    found, felt = [p for p in out if p['found_by_2040']], [w for w in worlds if w['felt']]
     natural = None
-    if not found:
-        pool = [h for h in rows if h['north'] and h['kind'] in 'GK' and h['luminosity'] > 0.3 and h['id'] not in used and not h['planets']
+    if not found and not felt:
+        taken = used | {w['host']['id'] for w in drawn}
+        pool = [h for h in rows if h['north'] and h['kind'] in 'GK' and h['luminosity'] > 0.3 and h['id'] not in taken and not h['planets']
                 and not h['name'].startswith('Gaia ')]                      # the planet hunters' stars are bright, so they have names
         natural = max(pool, key=lambda h: keyed(seed, 'find', h['id']))
-    return dict(seed=seed, earth=earth, count=count, neighbors=sorted(out, key=lambda p: p['d']), found=found, natural=natural)
+    return dict(seed=seed, earth=earth, count=count, neighbors=sorted(out, key=lambda p: p['d']), found=found, natural=natural,
+                worlds=worlds, felt=felt, ruled_out=[w for w in drawn if w['fails']])
 
 def year(t): return f"Year {t - Y0:.1f}" if t >= Y0 else f'{t:.0f}'
 
@@ -171,16 +210,27 @@ def report(g):
         for i in p['inbound']: print(f"          on its way: {i['what']} ({i['move']}), sent {year(i['sent'])}, arrives Year {i['year']:.1f}. "
                                      f"Year 0's sky watch {'catches' if i['kit0'] else 'misses'} it, the all-sky watch {'catches' if i['allsky'] else 'misses'} it.")
     if g['natural']: print(f"  Seeded find: a natural world at {g['natural']['name']}, {g['natural']['distance_ly']:.1f} ly.")
+    w = g['worlds']; first = [x for x in w if x['swept'] and not x['felt']]
+    print(f"  Natural warm worlds: {len(w)}, {sum(x['host']['kind'] == 'M' for x in w)} of them at red dwarfs. {len(g['ruled_out'])} more drawn and ruled out by what Earth already knows.")
+    print('  Felt by Year 0: ' + (', '.join(f"{x['host']['name']} ({x['d']:.1f} ly, {x['tug']:.2f} m/s)" for x in g['felt']) or 'none') + '.')
+    print(f"  The telescope can split {sum(x['split'] for x in w)} from their stars. Its first pass sees {len(first)} not felt before: "
+          + ', '.join(f"{x['host']['name']} ({x['d']:.1f} ly, {x['radius']:.2f} Earths wide)" for x in first) + '.')
+    homes = [p for p in g['neighbors'] if p['swept']]
+    print(f"  The same pass sees {len(homes)} neighbors' worlds: " + ', '.join(f"{p['name']} at {p['host']['name']}" for p in homes) + '.')
 
 def stats(rows, n=400):
     """What many draws look like: how many neighbors, and how often Earth's first hour holds something."""
     counts, knocked, caught, in15, in60, hunter, find = [], 0, 0, 0, 0, 0, 0
+    warm, felt, finds, split, first, homes, points = [], [], [], [], [], [], []
     for s in range(1, n + 1):
         g = draw(s, rows); ns = g['neighbors']
         arr = [i['year'] for p in ns for i in p['inbound'] if i['year'] > 0]
         counts.append(len(ns)); knocked += any(p['host']['name'] in nb.KNOCKED.values() for p in ns); caught += any(p['caught'] for p in ns)
         in15 += any(y < 3 for y in arr); in60 += any(y < 12 for y in arr)
         hunter += any(p['n']['disposition'] == 'hunter' for p in ns); find += bool(g['found'])
+        w = g['worlds']; warm.append(len(w)); felt.append(len(g['felt'])); finds.append(len(g['found']) + len(g['felt']))
+        split.append(sum(x['split'] for x in w)); first.append(sum(x['swept'] and not x['felt'] for x in w)); homes.append(sum(p['swept'] for p in ns))
+        points.append(sum(x['swept'] for x in w) + homes[-1])
     # Quieting Earth's radars: a neighbor that wakes after the last radar light has passed it never finds them.
     living = heard = 0; spared = {3: 0, 30: 0}
     for s in range(1, n + 1):
@@ -199,6 +249,11 @@ def stats(rows, n=400):
           f"wake after it has passed them, about 1 in {living / spared[3]:.0f}. By Year 30, {spared[30] / living:.0%}, about 1 in {living / spared[30]:.0f}.")
     unheard = [sum(len(p['unheard']) for p in draw(s, rows)['neighbors']) for s in range(1, n + 1)]
     print(f"Before Year 0: in {sum(u > 0 for u in unheard) / n:.0%} of games at least one knock reached Earth unheard. {sum(unheard) / n:.1f} a game on average.")
+    mid = lambda v: f"median {sorted(v)[n // 2]}, from {min(v)} to {max(v)}"
+    print(f"Natural warm worlds a game: {mid(warm)}. Felt by Year 0: {mid(felt)}. Earth's finds at Year 0, with neighbors' worlds: {mid(finds)}. "
+          f"None in {sum(f == 0 for f in finds) / n:.1%}, where the seed adds one.")
+    print(f"Natural worlds the infrared telescope can split from their stars: {mid(split)}. Seen on its first pass and not felt before: {mid(first)}. "
+          f"Neighbors' worlds seen on that pass: {mid(homes)}. The pass shows {sum(points) / n:.0f} points of light on average, and about 1 in {sum(points) / sum(homes):.0f} is a home.")
     k = len(early)
     print(f"Earth's ears: of {k} signals arriving in the first hour, Year 0's sky watch catches {sum(i['kit0'] for i in early) / k:.0%}. "
           f"{sum(not i['north'] for i in early) / k:.0%} come from its blind southern sky, and {sum(i['north'] and not i['loud'] for i in early) / k:.0%} are too faint for it. "

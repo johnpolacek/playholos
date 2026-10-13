@@ -267,7 +267,7 @@ Settled 2026-10-13.
   - *The trade is real.* The same instrument hours spread wide go shallow, and an observation takes the instrument away from its sweep.
   - *Candidates can be wrong.* Hephaistos's best waste-heat candidates turned out to be background galaxies.
   - *Already searches, under other names:* the sky watch and all-sky watch, which never stop. The audit's Planet survey and Waste-heat survey. Terra Hunting, which felt this game's new world.
-  - *Sample, in the mocks:* at Year 0 the space telescope sweeps near stars for cold worlds and dust, and the radio array sweeps them for tones. The infrared telescope, once built, sweeps the nearest stars' warm zones, a fifth of a Year a star. Its first stop finds the world at Alpha Centauri A.
+  - *Sample, in the mocks:* at Year 0 the space telescope sweeps near stars for cold worlds and dust, and the radio array sweeps them for tones. The infrared telescope, once built, sweeps the nearest stars' warm zones, up to a day a star. Its first stop finds the world at Alpha Centauri A.
   - Set aside: a search as a one-off order like an observation, and no new kind at all.
 - **An inquiry goes there.** Settled 2026-10-13. A mission sent to find out: a sail swarm, a flyby probe, a sentinel. Probe stays the name of the craft. What comes home is a dispatch, by narrow beam, one light-time later.
   - *One screen compares the ways to go,* as v1's Send a probe screen did: when each arrives, what it can see, and who sees it leave.
@@ -279,12 +279,22 @@ Settled 2026-10-13.
   - *Reach matters as much as time.* A mirror can't split a world too close to its star in our sky: 56 thousandths of an arcsecond in green light, 84 at oxygen's band, 104 at water's, for a 6.5 m mirror.
   - *In this game:* Alpha Centauri A's world is seen in minutes, with water in 16 hours and oxygen in 3 days. 82 Eridani d gives water in 3 days. Gliese 432 A's world, 73 thousandths from its star, gives only its color and ozone, in 49 days. 12 Ophiuchi's can be seen and not read.
   - *On the game clock* a day is under a second. So a reading lands within the minute it is ordered, or not at all.
-  - *The sweep.* A first pass of the 164 stars on NASA's list takes about six weeks. A candidate needs a second visit, weeks to months later, to show it moves with its star.
+  - *The sweep.* The mirror can split the middle of the warm zone at 110 of the 880 hosts. A first pass gives each up to a day, a sample, and takes about eight weeks. A candidate needs a second visit, weeks to months later, to show it moves with its star.
+  - NASA's own list has 164 stars because it reaches past 50 ly. The seed draws nothing out there.
   - *What this means for neighbors.* The mirror can split a warm world from any Sun-like star within 50 ly. A red dwarf's world sits too close in.
   - *Samples:* how the noise splits between starlight and dust, the mirror's size, and a month for carbon dioxide, which has no published time.
   - Seasons are left out for now. A real telescope can't point near the Sun, so a star is out of reach for months each year. That is its own question.
   - Set aside: one fixed time for each kind of observation, everywhere.
-- **Open:** seasons, and what a sweep finds besides neighbors' worlds.
+- **A sweep finds natural warm worlds too, at the real rate.** Settled 2026-10-13. The seed draws them, in [calcs/seed.py](calcs/seed.py).
+  - *The rate.* NASA plans its telescope on 0.24 rocky worlds in each star's warm zone, 0.6 to 1.4 Earths wide, the same at every kind of star (Stark et al. 2019). Kepler's counts allow 0.08 to 0.70.
+  - *The draw.* Each host with no neighbor gets a world at that chance. Small ones are commoner, and so are wider orbits, as Kepler found. Orbits are circular.
+  - *The same checks as a neighbor's world.* A stable orbit, no transit seen from Sol, no tug in 2026 data. About 60 draws a game fail and are dropped, most at red dwarfs, where a fifth of worlds would tug over 1 m/s.
+  - *What a game holds.* About 150 natural warm worlds, 120 of them at red dwarfs. The mirror can split about 18 from their stars. Its first pass sees about 10 it had not felt before, and about 4 neighbors' worlds.
+  - *So about 1 point of light in 4 is a home.* From Earth the two look alike: a point that moves with its star.
+  - *Some are felt before Year 0.* A natural world that tugs hard enough for the planet hunters by 2040 is one of Earth's finds: about 2 a game, and none in 1 game in 10.
+  - *Samples:* at most one warm world a star, none beside a neighbor's world, and a day a star on the first pass.
+  - Set aside: a sweep that finds only neighbors' worlds, and a sweep that finds cold giants and dust alone.
+- **Open:** seasons, and how many natural warm worlds are alive.
 
 ## The neighbors
 
@@ -392,13 +402,15 @@ Built 2026-10-10 in [calcs/seed.py](calcs/seed.py), from the rules above.
 
 - **One number gives one game.** `python3 calcs/seed.py 10` prints it: Earth's branches and their years, what a Taiwan branch left of compute, then each neighbor's star, waking year, what it knows of Earth and what it does about it.
 - **A neighbor acts once its Mind is awake.** Its reaction to hearing Earth is rolled from its table at its waking or its first hearing, whichever is later. One that wakes during the game reacts then.
-- **Earth's seeded find.** If a drawn neighbor's world tugs hard enough for Earth's planet hunters by 2040, that world is the find. Otherwise the seed adds a natural world at a bright northern Sun-like star.
+- **Earth's finds.** Every drawn world that tugs hard enough for Earth's planet hunters by 2040 is a find, a neighbor's or a natural one. A median of 3 a game, from 0 to 9. If a game draws none, 1 in 22, the seed adds a natural world at a bright northern Sun-like star.
+  - The opening leads with a neighbor's world if one was found, else the nearest natural one.
 - **Keeping the opening silent.** Settled 2026-10-10 in [What Earth hears](#what-earth-hears): a signal that reached Earth before Year 0 was missed, or it never happened.
 - **How long a Mind takes to act on news.** Settled 2026-10-11 in [How neighbors play](#how-neighbors-play): its Cautious or Bold dial sets it.
 - **A star leaving the list moves only who lived there.** Built 2026-10-11. Each neighbor tries stars in an order set by the seed, its name and each star's id, so the host list can be corrected without reshuffling every game.
 - **What 400 drawn games look like** (`python3 calcs/seed.py stats`):
   - A median of 9 neighbors, from 3 to 30. A hunter in a little over half.
-  - Earth's seeded find is a neighbor's own world in nearly half.
+  - A neighbor's own world is among Earth's finds in nearly half.
+  - About 150 natural warm worlds, from 118 to 178. The infrared telescope's first pass shows about 17 points of light, and about 1 in 4 is a home.
   - A neighbor's signal reaches Earth in the first 15 minutes in about 1 game in 10, and in the first hour in about 1 in 4. Most are answers to Earth's radars.
 
 ## Death and new games
@@ -476,10 +488,11 @@ Answered one at a time, in this order. Every answer must be permitted by current
     - **What is matter for in the first hour?** After the launch complex, 55 kt arrive each Year. By Year 12 about 500 kt sit unspent.
     - **What does a first voice give the player to do?** The mock shows what a knock proves, the Mind's reading of it, and three ways on: answer, listen, or stay silent. How much of a knock can be read, and what an answer may hold, are not settled.
     - **Should seasons set when an observation can start?** A real telescope can't point near the Sun. It would move the opening's first reading off 30 seconds.
-    - **The seed found two worlds, and the opening shows one.** Kirrin's world at 12 Ophiuchi was felt by 2040 too.
-    - **What can one reading say about a world whose Mind has not woken?** Varn's people are there, 79 years before their waking. This mirror reads only the world's color and ozone.
+    - **The seed found two worlds, and the opening shows one.** Kirrin's world at 12 Ophiuchi was felt by 2040 too. Across games Earth has felt about three worlds by Year 0, and about two are natural.
+    - **What can one reading say about a world whose Mind has not woken?** Varn's people are there, 80 years before their waking. This mirror reads only the world's color and ozone.
     - **A first voice, a living world and a dead world in one hour: too much, too soon?** A signal reaches Earth in the first hour in about 1 game in 4. A neighbor's world sits within 15 ly in about 1 game in 3, a dead one in about 1 in 35.
     - **Can the first telescope tell a dead civilization from a volcano?** The mock says no, so going is the way to know.
-    - **The first sweep finds a point of light at most neighbors' stars. What else does it find?** In this game that is five neighbors' worlds within months, and no natural ones, because the seed draws none.
+    - **Settled 2026-10-13:** a sweep finds natural warm worlds too, at the real rate. In this game its first pass shows 15 new points of light: 4 homes and 11 natural worlds. See [How Earth learns](#how-earth-learns).
+    - **How many natural warm worlds are alive?** The seed gives each an orbit and a size, and nothing else. What a reading finds there is not drawn. No measured rate exists.
     - **What does an inquiry cost in time?** The matter of probes and the laser array is priced. Their build times are not.
     - **What happens at the grid limit?** At Year 11.1 thought is 86 times Year 0's and draws nine tenths of the grid. Every priced way on is slow or small.

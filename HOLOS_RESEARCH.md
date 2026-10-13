@@ -538,6 +538,20 @@ What Sol's own instruments have found nearby. For v2 open question 3.
   - This project's own: how the noise splits between starlight and dust at the calibration point, and using the water figure as if it were for an Earth twin at 10 pc.
   - Used: v2 [How Earth learns](HOLOS_GAME_CONCEPT.md#how-earth-learns), and the second mock.
 
+- **How common warm rocky worlds are, checked 2026-10-13.** For the natural worlds in [calcs/seed.py](calcs/seed.py). I read the two abstracts and the text of Stark et al. 2019 myself.
+  - **[Stark et al. 2019](https://arxiv.org/abs/1904.11988)** · Published. NASA's planning value: 0.24 (+0.46, −0.16) worlds a star, 0.6 to 1.4 Earths wide, between 0.95 and 1.67 AU for a Sun twin, scaled by the square root of the star's brightness. It comes from the SAG13 average of Kepler's counts.
+    - The same value is used at every kind of star, red dwarfs included.
+    - Small worlds are commoner and so are long periods: per step of ln R and ln P the count goes as 0.38 × R^−0.19 × P^0.26.
+    - A world narrower than 0.8 / √a Earths is left out, as too small to hold air. Orbits are circular.
+  - **[Bryson et al. 2021](https://arxiv.org/abs/2010.14812)** · Published. Kepler's own count for Sun-like stars, 4800 to 6300 K: 0.37 (+0.48, −0.21) to 0.60 (+0.90, −0.36) worlds a star, 0.5 to 1.5 Earths wide, in the conservative warm zone. The two ends are two ways to fill in what Kepler missed.
+    - With 95% confidence, about 4 such worlds orbit G and K dwarfs within 10 pc, and the nearest is about 6 pc away.
+  - **[Dressing and Charbonneau 2015](https://arxiv.org/abs/1501.01623)** · Published. Red dwarfs: 0.16 (+0.17, −0.07) worlds of 1 to 1.5 Earths and 0.12 (+0.10, −0.05) of 1.5 to 2 Earths in each conservative warm zone.
+  - Matters: every figure allows a warm rocky world at between one star in ten and most stars. The seed takes NASA's 0.24, the lowest central value, so its sweep matches what the real telescope is sized for.
+  - Check against Bryson: the seed's games hold about 8 natural worlds at G and K hosts within 10 pc, and the nearest sits about 3.6 pc away. I read Bryson's 4 and 6 pc as cautious bounds, not central values. That reading is mine.
+  - This project's own: at most one warm world a star, none beside a neighbor's world, and a first pass of up to a day a star.
+  - Not read: newer counts for red dwarfs. From memory, Bergsten et al. 2023 found fewer than Dressing and Charbonneau.
+  - Used: v2 [How Earth learns](HOLOS_GAME_CONCEPT.md#how-earth-learns), [The seed, drawn](HOLOS_GAME_CONCEPT.md#the-seed-drawn), and the second mock.
+
 ## Where neighbors can live
 
 - **[Li et al., March 2026, 70 Ophiuchi](https://arxiv.org/abs/2603.20044)** · Preprint.
@@ -886,7 +900,10 @@ Results the design is waiting on. Check each when its date comes.
 - Telescope seasons. Fomalhaut sits 56° from the Sun on January 1, and comes within 85° to 135° only from late May, near Year 0.39. JWST points only in that range: from memory, not reread. A telescope like Hubble, which avoids only the 50° around the Sun, could image it in January. That limit is from memory too. Decide which telescope Earth has in 2040, and whether seasons set when an observation can start.
 - calcs/observing.py: the split of noise between leaked starlight and dust is an estimate. Find a published count-rate budget for an Earth twin at 10 pc.
 - Alpha Centauri A's warm zone is a full arcsecond wide, perhaps past a coronagraph's outer edge, and B's light leaks in. Neither is modelled. Check the outer working angle of the telescope's designs.
-- The seed draws no natural warm worlds, so every candidate a sweep finds is a neighbor's. Real surveys expect natural ones to be common. Find the rate, and decide whether the seed should draw them.
+- Natural warm worlds: the seed treats every red dwarf as watched to 1 m/s, which drops a fifth of their worlds. Real coverage is patchy. Find which of the 715 have been watched that well.
+- Natural warm worlds: three bright hosts have only a Gaia name, and the seed lets Earth's planet hunters feel a world there by 2040. A star no survey has named is unlikely to be on their list.
+- Natural warm worlds: NASA's 164 targets reach 23.3 pc, about 76 ly. The seed draws nothing past 50 ly, so the game's sweep covers 110 stars.
+- Natural warm worlds: read Bergsten et al. 2023 for the red dwarf rate.
 - The second mock: a source for how long added carbon dioxide stays in air, and for which gases the Habitable Worlds Observatory is designed to read.
 - Earth's aimed messages: the power of the 1983, 2008, 2009 Canberra and 2013 sends is in no source found. Hirabayashi's books may hold the first.
 - Working links for Project Daedalus's 1978 report and Criswell 1985.

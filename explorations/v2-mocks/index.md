@@ -964,7 +964,7 @@ ONE WORLD AT A TIME · YOURS TO ORDER
 - 82 Eridani d · wide and bright · water, then oxygen · 11 days · 00:00:09
 - 12 Ophiuchi’s world · close in and faint · seen, not read · out of reach
 WHEN IDLE · ITS SEARCH
-The warm zones of 164 near stars · nearest first · a first pass takes about six weeks · [Set]
+The warm zones of 110 near stars · nearest first · a first pass takes about eight weeks · [Set]
 WHAT SETS THE TIME
 How bright the world is from here, and how far it sits from its star’s glare.
 THE MIND · It can split a world from its star only when they sit far enough apart in our sky. 82 Eridani d is wide and bright: days. The new world is close in. I can read its color and its ozone, not its water. · [Order them] · [Later]
@@ -973,7 +973,7 @@ Godview
 Earth’s 2003 message, Cosmic Call 2, reaches 47 Ursae Majoris, 45.3 ly away. No one is there.
 Kirrin lives at 12 Ophiuchi. Earth felt its world before Year 0, and the opening never showed it.
 Times are from calcs/observing.py. A day of telescope time is under a second of play.
-Design question 4 · The seed found two worlds, and the opening shows one. Kirrin’s world at 12 Ophiuchi tugs hard enough to be felt by 2040, as Varn’s does. The first 15 minutes show only Varn’s. Here it appears among the telescope’s choices unannounced.
+Design question 4 · The seed found two worlds, and the opening shows one. Kirrin’s world at 12 Ophiuchi tugs hard enough to be felt by 2040, as Varn’s does. The first 15 minutes show only Varn’s. Here it appears among the telescope’s choices unannounced. Across games Earth has felt about three worlds by Year 0, and about two of them are natural.
 Settled · What sets how long an observation takes? Physics. A nearer or larger world is brighter, so its reading comes sooner: hours at Alpha Centauri, days at 82 Eridani. A world too close to its star in our sky can’t be read at all. Seasons are left out for now. Settled 2026-10-13.
 +44:30 · Year 8.9
 “The new world first. Then let it sweep.”
@@ -985,7 +985,7 @@ WHAT YOU WANT
 The new world first. Then let it sweep.
 THE MIND’S VERSION
 OBSERVE · Gliese 432 A’s world · its color and ozone · 49 days
-WHEN IDLE · Search the warm zones of 164 near stars · nearest first
+WHEN IDLE · Search the warm zones of 110 near stars · nearest first
 WHY · An observation holds the telescope. The sweep takes whatever time is left.
 WAKES YOU · Each reading · any candidate
 [Edit] · [Set the order]
@@ -1125,15 +1125,17 @@ Ombe now waits. If nothing comes back it takes the silence as news, about Year 5
 Five and a half minutes of play since the telescope was done. Then the phone goes down.
 +49:30 · Year 9.9
 The phone lights. Leaves it.
-Lands · The sweep’s first pass is done. 4 more points of light in warm zones.
+Lands · The sweep’s first pass is done. 15 more points of light in warm zones.
 Saturday · 17:14
-HOLOS · NOW · The sweep’s first pass is done: 4 more candidates · Gliese 216 B · 20 Leonis Minoris · Gliese 1021 · 19 Draconis
+HOLOS · NOW · The sweep’s first pass is done: 15 more candidates · Nearest: Gliese 664, 19 ly. All are in the report.
 Godview
 The earliest a reply to A Message From Earth could reach Earth from Gliese 581. In this game no one lives there. The window is empty, and Earth can’t know it.
-Truth: Kesh’s world at Gliese 216 B, Nuvo’s world at 20 Leonis Minoris, Hael’s world at Gliese 1021, Ree’s world at 19 Draconis. Every one is a neighbor’s home.
-Each needed a second visit, months after the first, to show it moves with its star.
-A candidate is a point of light, not a reading. Most are too far to read with this mirror.
-Design question 8 · The first sweep finds a point of light at most neighbors’ stars. What else does it find? This mirror can split a warm world from any Sun-like star within 50 ly. In this game that is five neighbors’ worlds within six weeks, and no natural ones, because the seed draws none. The real telescope is sized to find about 25 such worlds among a hundred or so stars.
+Truth: 4 are homes. Kesh’s world at Gliese 216 B, Nuvo’s world at 20 Leonis Minoris, Hael’s world at Gliese 1021, Ree’s world at 19 Draconis.
+11 are natural, from Gliese 664 at 19 ly to Nu Phoenicis at 50. The seed drew 136 in all, 113 at red dwarfs.
+From here a home and a natural world look alike: a point of light that moves with its star.
+Each needed a second visit, months after the first. Most are too far to read with this mirror.
+Design question 8 · How many natural warm worlds are alive? The seed now draws about 150 a game, most at red dwarfs this mirror can’t split. It gives each an orbit and a size, and nothing else. What a reading finds there, bare rock, sea or life, is not drawn. No measured rate exists.
+Settled · What does the first sweep find? Natural warm worlds too, at the real rate: NASA’s planning value, about one star in four. The seed draws them. A first pass shows about 17 points of light a game, and about 1 in 4 is a home. Settled 2026-10-13.
 +55:30 · Year 11.1
 Woken. The Mind has opened.
 Lands · The eleventh data center runs. The twelfth can’t start.
@@ -1191,13 +1193,14 @@ Settled: How do studies run? · On their own. The Mind works through the data it
 Settled: What is a search? · A standing order for an idle instrument. Each has a sweep it falls back to: the player sets it once, and any observation interrupts it. A search returns candidates. Settled 2026-10-13.
 Settled: What is an inquiry? · A mission that goes to find out: a sail swarm, a flyby probe, a sentinel. Probe stays the name of the craft. What comes home is a dispatch. Settled 2026-10-13.
 Settled: What sets how long an observation takes? · Physics. A nearer or larger world is brighter, so its reading comes sooner: hours at Alpha Centauri, days at 82 Eridani. A world too close to its star in our sky can’t be read at all. Seasons are left out for now. Settled 2026-10-13.
+Settled: What does the first sweep find? · Natural warm worlds too, at the real rate: NASA’s planning value, about one star in four. The seed draws them. A first pass shows about 17 points of light a game, and about 1 in 4 is a home. Settled 2026-10-13.
 1. What is matter for in the first hour? · After the launch complex, 55 kt arrive each Year. A yard and a launcher take 11. By Year 12 about 500 kt sit unspent, and nothing priced for these Years costs more than 100.
 2. What does a first voice give the player to do? · A knock arrives at minute 42. The mock shows what it proves, the Mind’s reading of it, and three ways on: answer, listen, or stay silent. How much of a knock can be read, and what an answer may hold, are not settled.
 3. Should seasons set when an observation can start? · A real telescope can’t point near the Sun, so each star is out of reach for months of every year. The mock ignores that. It would move the opening’s first reading, Fomalhaut, off 30 seconds.
-4. The seed found two worlds, and the opening shows one. · Kirrin’s world at 12 Ophiuchi tugs hard enough to be felt by 2040, as Varn’s does. The first 15 minutes show only Varn’s. Here it appears among the telescope’s choices unannounced.
+4. The seed found two worlds, and the opening shows one. · Kirrin’s world at 12 Ophiuchi tugs hard enough to be felt by 2040, as Varn’s does. The first 15 minutes show only Varn’s. Here it appears among the telescope’s choices unannounced. Across games Earth has felt about three worlds by Year 0, and about two of them are natural.
 5. What can one reading say about a world whose Mind has not woken? · Varn’s people are there, 80 years before their waking. This mirror reads only the world’s color and ozone, so life is a guess and minds are invisible. How fast should a living neighbor become known?
 6. A first voice, a living world and a dead world in one hour: too much, too soon? · This seed drew all three. A signal reaches Earth in the first hour in about 1 game in 4. A neighbor’s world sits within 15 ly in about 1 game in 3, and a dead one in about 1 in 35.
 7. Can the first telescope tell a dead civilization from a volcano? · The mock says no. It reads carbon dioxide, and the gases only industry makes need a colder, wider mirror. So the find stays strange, and going is the way to know.
-8. The first sweep finds a point of light at most neighbors’ stars. What else does it find? · This mirror can split a warm world from any Sun-like star within 50 ly. In this game that is five neighbors’ worlds within six weeks, and no natural ones, because the seed draws none. The real telescope is sized to find about 25 such worlds among a hundred or so stars.
+8. How many natural warm worlds are alive? · The seed now draws about 150 a game, most at red dwarfs this mirror can’t split. It gives each an orbit and a size, and nothing else. What a reading finds there, bare rock, sea or life, is not drawn. No measured rate exists.
 9. What does an inquiry cost in time? · The audit prices the matter of probes and the laser array. Their build times are not set, so the mock stops at the offer.
 10. What happens at the grid limit? · At Year 11.1 thought is 86 times Year 0’s and draws nine tenths of the grid. Every priced way on is slow or small beside the fabs. Is a long plateau right, fifty-five minutes in?

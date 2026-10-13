@@ -154,6 +154,30 @@ def load_hosts():
                                          for p in rv if p['pl_rvamp'] or (p['pl_bmasse'] and p['pl_orbsmax'])])
     return rows
 
+def orbit_fails(host, mass, a, e, pole):
+    """Why a world of this mass can't sit on this orbit at this star, unseen from Sol by 2026. And its tug, in m/s.
+    A neighbor's world and a natural one pass the same checks."""
+    fails = []
+    for o, sep in host['companions']:
+        m1, m2 = hosts.mass_from_gabs(host['gabs']), hosts.mass_from_gabs(o['gabs'])
+        if a * (1 + e) > hosts.critical_a(m2 / (m1 + m2)) * sep: fails.append('its orbit is unstable beside a companion')
+    if host['orbits'] and not binaries.zone_left(hosts.mass_from_gabs(host['gabs']), a * (1 - e),
+                                                 a * (1 + e), host['orbits']):
+        fails.append('its orbit is unstable beside a close companion')
+    m_star = star_mass(host['luminosity'])
+    # Known planets: small ones 10 mutual Hill radii from its orbit, since packed systems tighter than that eventually
+    # go unstable (Chambers et al. 1996). A giant, 2√3, the limit for two planets (Gladman 1993). Gaps use both
+    # eccentricities.
+    for pname, pm, pa, pe in host['planets']:
+        hill = ((mass + pm) * M_EARTH / (3 * m_star * M_SUN)) ** (1 / 3) * (a + pa) / 2
+        gap = pa * (1 - pe) - a * (1 + e) if pa > a else a * (1 - e) - pa * (1 + pe)
+        if gap < (10 if pm < 10 else 2 * 3 ** 0.5) * hill: fails.append(f'too close to known planet {pname}')
+    r_star = R_SUN * host['luminosity'] ** 0.5 / (m_star ** 0.5) if m_star > 0.6 else R_SUN * m_star
+    if abs(math.cos(math.radians(pole))) < r_star / (a * 1.496e11): fails.append('it would transit, seen from Sol')
+    k = tug(mass, a, m_star, math.sin(math.radians(pole)))
+    if k > host.get('rv_floor', RV_2026): fails.append(f'its tug shows in 2026 data: {k:.2f} m/s')
+    return fails, k
+
 def check(n, host, waking, pole_from_sol, sol_targeted=True):
     """Every reason this placement fails. Empty means it passes. Aimed knocks reach Earth only if Sol was a target."""
     fails = []
@@ -162,24 +186,8 @@ def check(n, host, waking, pole_from_sol, sol_targeted=True):
     if host['luminosity'] < n.get('min_lum', 0): fails.append('too dim: its world would lock')
     a = host['hz_in'] + w['hz_share'] * (host['hz_out'] - host['hz_in'])
     if w['mass'] > 10: fails.append('too heavy to leave by rocket')
-    for o, sep in host['companions']:
-        m1, m2 = hosts.mass_from_gabs(host['gabs']), hosts.mass_from_gabs(o['gabs'])
-        if a * (1 + w.get('e', 0)) > hosts.critical_a(m2 / (m1 + m2)) * sep: fails.append('its orbit is unstable beside a companion')
-    if host['orbits'] and not binaries.zone_left(hosts.mass_from_gabs(host['gabs']), a * (1 - w.get('e', 0)),
-                                                 a * (1 + w.get('e', 0)), host['orbits']):
-        fails.append('its orbit is unstable beside a close companion')
-    m_star = star_mass(host['luminosity'])
-    # Known planets: small ones 10 mutual Hill radii from its orbit, since packed systems tighter than that eventually
-    # go unstable (Chambers et al. 1996). A giant, 2√3, the limit for two planets (Gladman 1993). Gaps use both
-    # eccentricities.
-    for pname, pm, pa, pe in host['planets']:
-        hill = ((w['mass'] + pm) * M_EARTH / (3 * m_star * M_SUN)) ** (1 / 3) * (a + pa) / 2
-        gap = pa * (1 - pe) - a * (1 + w.get('e', 0)) if pa > a else a * (1 - w.get('e', 0)) - pa * (1 + pe)
-        if gap < (10 if pm < 10 else 2 * 3 ** 0.5) * hill: fails.append(f'too close to known planet {pname}')
-    r_star = R_SUN * host['luminosity'] ** 0.5 / (m_star ** 0.5) if m_star > 0.6 else R_SUN * m_star
-    if abs(math.cos(math.radians(pole_from_sol))) < r_star / (a * 1.496e11): fails.append('it would transit, seen from Sol')
-    k = tug(w['mass'], a, m_star, math.sin(math.radians(pole_from_sol)))
-    if k > host.get('rv_floor', RV_2026): fails.append(f'its tug shows in 2026 data: {k:.2f} m/s')
+    orbit, k = orbit_fails(host, w['mass'], a, w.get('e', 0), pole_from_sol)
+    fails += orbit
     for year, name, sefd, chan, stare in SEARCHES:
         left = year - host['distance_ly']
         p = tone_at(n, waking, left, sol_targeted)
