@@ -862,7 +862,7 @@ ENERGY · [11.9%] · MATTER · 197 kt · COMPUTE · [6%]
 A way to go and look.
 A yard to assemble what Earth lifts, and beside it a launcher: a dock and fuel depot for probes. Begun together, the yard takes a quarter off what is left of the launcher.
 GIVES
-Probes, from Year 25.6 · The yard alone is done at Year 11.3
+Inquiries by probe, from Year 25.6 · The yard alone is done at Year 11.3
 USES EACH YEAR
 Compute · [20%] · 20%
 Energy · [1%] · under 1%
@@ -1148,20 +1148,23 @@ Design question 7 · Can the first telescope tell a dead civilization from a vol
 Earth · Year 11.3
 Sol · 2051.3 · 1 Year = 00:05:00
 ENERGY · [90.1%] · MATTER · 472 kt · COMPUTE · [1%]
-MIND · ASKING
-ABOUT · Can we go and look?
-The clock runs while you talk: 1 Year every · 00:05:00.
-Can we go and look?
-THE MIND · Yes, slowly. The launcher you began is done at Year 25.6. A probe from it crosses in about 36 Years, and its pictures take 4 more to come home.
-Faster?
-THE MIND · Sails of a gram each, pushed by a laser array on the ground. A fifth of light speed: 22 Years out, 4 back. They can’t stop, and they see little.
-What would you do?
-ITS VIEW · FROM OUR CHARTER AND DIALS · Start the laser array. If something burned that world, I want to know how before we finish growing. And send nothing that speaks. Going is not calling. · leans open · expand and deepen, even · leans bold
-Ask the Mind… · [Send · ↑]
+INQUIRY · ALPHA CENTAURI A
+WAYS TO GO · 4.3 LIGHT-YEARS
+Sail swarm · gram sails, pushed by a laser array on the ground · passes at a fifth of light speed · can’t stop · 22 Years out · 01:50:00
+Flyby probe · a tonne of instruments, from the launcher · passes at an eighth of light speed · 36 Years out · 03:00:00
+Sentinel probe · stops and stays · 500 t · from the launcher · later
+WHAT COMES HOME
+A dispatch, by narrow beam. From there it takes 4.3 Years to reach us.
+WHO SEES US GO
+A laser launch shines on past its sails to the star. A rocket launch is dark to where it is going.
+THE MIND · Yes, slowly. Sails arrive first and see little. A probe sees more, and needs the launcher you began. I would start the laser array, and send nothing that speaks. Going is not calling. · [Start the laser array] · [Not yet]
+[Talk to the Mind]
 Godview
+An inquiry is a mission that goes to find out. Probe stays the name of the craft. What comes home is a dispatch.
 The Mind advises, from the dials: go, and send nothing that speaks. It starts nothing.
-Real: Daedalus was designed for 12% of light speed, and Starshot for 20%.
-Design question 8 · What do probes and the laser array cost in time? The audit prices their matter. Their build times are not set, so the mock stops at the offer.
+Real: Daedalus was designed for 12% of light speed, and Starshot for 20%. A laser launch shines toward its target. A rocket’s exhaust points away.
+Design question 8 · What does an inquiry cost in time? The audit prices the matter of probes and the laser array. Their build times are not set, so the mock stops at the offer.
+Settled · What is an inquiry? A mission that goes to find out: a sail swarm, a flyby probe, a sentinel. Probe stays the name of the craft. What comes home is a dispatch. Settled 2026-10-13.
 +58:00 · Year 11.6
 The phone lights. Leaves it.
 Lands · The Moon vault is done.
@@ -1193,6 +1196,7 @@ Settled: How long does a Mind take to act on news? · Its Cautious or Bold dial 
 Settled: What fills the quiet half-minutes? · Findings from the Mind’s studies, readings from observations, and Earth’s old messages reaching their stars. Something real lands about every minute for the first 15. Settled 2026-10-12.
 Settled: How do studies run? · On their own. The Mind works through the data it holds, and thought is their budget: more of it means faster findings and less left for builds. An observation is still the player’s to order. Settled 2026-10-13.
 Settled: What is a search? · A standing order for an idle instrument. Each has a sweep it falls back to: the player sets it once, and any observation interrupts it. A search returns candidates. Settled 2026-10-13.
+Settled: What is an inquiry? · A mission that goes to find out: a sail swarm, a flyby probe, a sentinel. Probe stays the name of the craft. What comes home is a dispatch. Settled 2026-10-13.
 1. What is matter for in the first hour? · After the launch complex, 55 kt arrive each Year. A yard and a launcher take 11. By Year 12 about 500 kt sit unspent, and nothing priced for these Years costs more than 100.
 2. What does a first voice give the player to do? · A knock arrives at minute 42. The mock shows what it proves, the Mind’s reading of it, and three ways on: answer, listen, or stay silent. How much of a knock can be read, and what an answer may hold, are not settled.
 3. How long does an observation or a sweep take? · The mock samples a Year for a reading of air, and a fifth of a Year a star for the telescope’s sweep of near warm zones. Neither is set by distance or brightness yet. Seasons are open too: a real telescope can’t point near the Sun.
@@ -1200,5 +1204,5 @@ Settled: What is a search? · A standing order for an idle instrument. Each has 
 5. What can one reading say about a world whose Mind has not woken? · Varn’s people are there, 79 years before their waking. The mock shows life as likely and minds as a hint. How fast should a living neighbor become known?
 6. A first voice, a living world and a dead world in one hour: too much, too soon? · This seed drew all three. A signal reaches Earth in the first hour in about 1 game in 4. A neighbor’s world sits within 15 ly in about 1 game in 3, and a dead one in about 1 in 35.
 7. Can the first telescope tell a dead civilization from a volcano? · The mock says no. It reads carbon dioxide, and the gases only industry makes need a colder, wider mirror. So the find stays strange, and going is the way to know.
-8. What do probes and the laser array cost in time? · The audit prices their matter. Their build times are not set, so the mock stops at the offer.
+8. What does an inquiry cost in time? · The audit prices the matter of probes and the laser array. Their build times are not set, so the mock stops at the offer.
 9. What happens at the grid limit? · At Year 11.1 thought is 86 times Year 0’s and draws nine tenths of the grid. Every priced way on is slow or small beside the fabs. Is a long plateau right, fifty-five minutes in?

@@ -156,6 +156,8 @@ From 2026-10-13, Planet survey and Waste-heat survey are searches: standing orde
 
 ### Reach
 
+From 2026-10-13, a mission sent to find out is an inquiry, and what it sends home is a dispatch. The craft below keep their names. See [How Earth learns](HOLOS_GAME_CONCEPT.md#how-earth-learns).
+
 | Project | v1 matter | Verdict | Proposed for 2040 | Basis |
 | --- | --- | --- | --- | --- |
 | Tight-beam transmitter | 0 | OK | 0, ground | Laser links like DSOC, scaled up. |

@@ -269,7 +269,11 @@ Settled 2026-10-13.
   - *Already searches, under other names:* the sky watch and all-sky watch, which never stop. The audit's Planet survey and Waste-heat survey. Terra Hunting, which felt this game's new world.
   - *Sample, in the mocks:* at Year 0 the space telescope sweeps near stars for cold worlds and dust, and the radio array sweeps them for tones. The infrared telescope, once built, sweeps the nearest stars' warm zones, a fifth of a Year a star. Its first stop finds the world at Alpha Centauri A.
   - Set aside: a search as a one-off order like an observation, and no new kind at all.
-- **Open:** whether an inquiry names every mission that goes, and what sets how long an observation or a sweep takes.
+- **An inquiry goes there.** Settled 2026-10-13. A mission sent to find out: a sail swarm, a flyby probe, a sentinel. Probe stays the name of the craft. What comes home is a dispatch, by narrow beam, one light-time later.
+  - *One screen compares the ways to go,* as v1's Send a probe screen did: when each arrives, what it can see, and who sees it leave.
+  - Set aside: an inquiry as a question pinned on a place, which the Mind then pursues by every means. Worth its own round later. And leaving the word unused.
+- **Four words for what comes back.** A search returns a candidate. An observation returns a reading. A study returns a finding. An inquiry returns a dispatch.
+- **Open:** what sets how long an observation or a sweep takes.
 
 ## The neighbors
 
@@ -430,7 +434,7 @@ These v1 rules no longer apply.
 
 ## Carried, reworded
 
-- **No screen shows how many civilizations there are.** v1 hid the seat count. v2 hides the roster's size and the seed's picks. Who is out there, and how many, is learned only by looking: Know projects, probes and contact.
+- **No screen shows how many civilizations there are.** v1 hid the seat count. v2 hides the roster's size and the seed's picks. Who is out there, and how many, is learned only by looking: Know projects, inquiries and contact.
 - **Looks are observations, and what comes back is a reading.** Settled 2026-10-13. An observation is one pointed use of an instrument: an image, a listen, a watch. v1's quick look and long look are a quick and a long observation. A study returns a finding. Ordinary uses of the word look stay.
 
 ## Open questions
@@ -464,5 +468,5 @@ Answered one at a time, in this order. Every answer must be permitted by current
     - **What can one reading say about a world whose Mind has not woken?** Varn's people are there, 79 years before their waking.
     - **A first voice, a living world and a dead world in one hour: too much, too soon?** A signal reaches Earth in the first hour in about 1 game in 4. A neighbor's world sits within 15 ly in about 1 game in 3, a dead one in about 1 in 35.
     - **Can the first telescope tell a dead civilization from a volcano?** The mock says no, so going is the way to know.
-    - **What do probes and the laser array cost in time?** Their matter is priced. Their build times are not.
+    - **What does an inquiry cost in time?** The matter of probes and the laser array is priced. Their build times are not.
     - **What happens at the grid limit?** At Year 11.1 thought is 86 times Year 0's and draws nine tenths of the grid. Every priced way on is slow or small.

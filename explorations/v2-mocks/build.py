@@ -23,7 +23,8 @@ SETTLED = [('Does a half-built real instrument cost fewer Years?', 'It costs wha
            ('How long does a Mind take to act on news?', 'Its Cautious or Bold dial sets it: a tenth of a Year if strongly Bold, a quarter if it leans Bold, a Year if it leans Cautious, two if strongly Cautious. Settled 2026-10-11.'),
            ('What fills the quiet half-minutes?', 'Findings from the Mind’s studies, readings from observations, and Earth’s old messages reaching their stars. Something real lands about every minute for the first 15. Settled 2026-10-12.'),
            ('How do studies run?', 'On their own. The Mind works through the data it holds, and thought is their budget: more of it means faster findings and less left for builds. An observation is still the player’s to order. Settled 2026-10-13.'),
-           ('What is a search?', 'A standing order for an idle instrument. Each has a sweep it falls back to: the player sets it once, and any observation interrupts it. A search returns candidates. Settled 2026-10-13.')]
+           ('What is a search?', 'A standing order for an idle instrument. Each has a sweep it falls back to: the player sets it once, and any observation interrupts it. A search returns candidates. Settled 2026-10-13.'),
+           ('What is an inquiry?', 'A mission that goes to find out: a sail swarm, a flyby probe, a sentinel. Probe stays the name of the craft. What comes home is a dispatch. Settled 2026-10-13.')]
 
 # ---------- Godview: who is out there ----------
 MOVE = reactions.MOVES
@@ -626,13 +627,13 @@ Q_TWO = ask('The seed found two worlds, and the opening shows one.', 'Kirrin’s
 Q_ASLEEP = ask('What can one reading say about a world whose Mind has not woken?', f'Varn’s people are there, {VARN_BEFORE:.0f} years before their waking. The mock shows life as likely and minds as a hint. How fast should a living neighbor become known?' if F['who'] else 'In this game the find is natural.')
 Q_NEAR = ask('A first voice, a living world and a dead world in one hour: too much, too soon?', 'This seed drew all three. A signal reaches Earth in the first hour in about 1 game in 4. A neighbor’s world sits within 15 ly in about 1 game in 3, and a dead one in about 1 in 35.')
 Q_DEAD = ask('Can the first telescope tell a dead civilization from a volcano?', 'The mock says no. It reads carbon dioxide, and the gases only industry makes need a colder, wider mirror. So the find stays strange, and going is the way to know.')
-Q_GO = ask('What do probes and the laser array cost in time?', 'The audit prices their matter. Their build times are not set, so the mock stops at the offer.')
+Q_GO = ask('What does an inquiry cost in time?', 'The audit prices the matter of probes and the laser array. Their build times are not set, so the mock stops at the offer.')
 Q_WALL = ask('What happens at the grid limit?', 'At Year 11.1 thought is 86 times Year 0’s and draws nine tenths of the grid. Every priced way on is slow or small beside the fabs. Is a long plateau right, fifty-five minutes in?')
 
-def stop(t, since, said='', lands=None, phone=None, notes=(), question=None, label=None, years=None):
+def stop(t, since, said='', lands=None, phone=None, notes=(), question=None, label=None, years=None, settled=None):
     seeded = truths(since / 300, t / 300)
     return (f'<section id="t{t}" class="brow{" tall" if phone else ""}"><div class="bhead"><span class="bt mono">{label or f"+{t // 60}:{t % 60:02d}"}</span><span class="gy">{years or f"Year {yr(t)}"}</span></div>'
-            f'<div class="v2grid">{cell(said, lands, phone)}<div class="gcell">{godcell(seeded + list(notes), question)}</div></div></section>')
+            f'<div class="v2grid">{cell(said, lands, phone)}<div class="gcell">{godcell(seeded + list(notes), question, settled)}</div></div></section>')
 
 AWAY_DARK = lockscreen('16:47', [])
 WAKE_6 = lockscreen('16:54', [('NOW', 'Earth: the sky watch and flash watch are built', 'Year 6. Little aimed at us is missed now.'), ('IN 00:00:30', 'Thinking draws a tenth of our energy', 'Year 6.1 · six data centers in')])
@@ -650,7 +651,7 @@ BUILD_CHAT = chat(1860, 'What would you build?', [
     view='A yard and a launcher. We know of warm worlds and can reach none. I would rather be able to go and look than think faster about not going.')
 YARD_CONFIRM = confirm(1890, 'Reach', 'Orbital yard and launcher', 'A way to go and look.',
     'A yard to assemble what Earth lifts, and beside it a launcher: a dock and fuel depot for probes. Begun together, the yard takes a quarter off what is left of the launcher.',
-    SEC('GIVES') + '<div class="helps"><span class="mk you"></span><span><b class="you">Probes, from Year 25.6</b><span class="sub">The yard alone is done at Year 11.3</span></span></div>',
+    SEC('GIVES') + '<div class="helps"><span class="mk you"></span><span><b class="you">Inquiries by probe, from Year 25.6</b><span class="sub">The yard alone is done at Year 11.3</span></span></div>',
     20, f'<b>11 kt</b><span>of metal, from {res(1889)[2]} spare in orbit</span>', 19)
 SLEEP_2 = lockscreen('16:56', [('IN 00:10:00', 'Earth: the infrared telescope is done', 'Year 8.4. Then it reads the air of nearby worlds.')])
 WAKE_SCOPE = lockscreen('17:06', [('NOW', 'Earth: the infrared telescope is done', 'Year 8.4. It reads one world at a time.')])
@@ -710,12 +711,13 @@ ACEN_AIR = tab(3360, 'Report', 'REPORT', 'FIRST READING', f"""<button class="bac
 <p class="copy">Water, oxygen, and several times the carbon dioxide its seas and rocks should hold. Carbon like that is drawn down slowly, so it was put there lately. A string of great eruptions would do it. So would burning.</p>
 {SEC('WHAT IT COULD BE · BEFORE → NOW')}{odds('Life, after great eruptions', 5, 46)}{odds('Something burned its carbon, and is gone', 0, 27)}{odds('Life, and nothing more', 40, 19)}{odds('Rock, and no life we could see', 55, 8)}
 {SEC('WHAT IT CAN’T TELL')}<p class="copy small">Which. The gases only industry makes show deeper in the infrared than this mirror reads.</p>""") if ANWE else ''
-GO_CHAT = chat(3390, 'Can we go and look?', [
-    ('you', 'Can we go and look?'),
-    ('mind', 'Yes, slowly. The launcher you began is done at Year 25.6. A probe from it crosses in about 36 Years, and its pictures take 4 more to come home.'),
-    ('you', 'Faster?'),
-    ('mind', 'Sails of a gram each, pushed by a laser array on the ground. A fifth of light speed: 22 Years out, 4 back. They can’t stop, and they see little.')],
-    view='Start the laser array. If something burned that world, I want to know how before we finish growing. And send nothing that speaks. Going is not calling.')
+INQUIRY = tab(3390, 'Reach', 'INQUIRY', 'ALPHA CENTAURI A', ''.join([
+    SEC('WAYS TO GO · 4.3 LIGHT-YEARS'),
+    quick('Sail swarm', 'gram sails, pushed by a laser array on the ground · passes at a fifth of light speed · can’t stop', tstack('22 Years out', clock(22))),
+    quick('Flyby probe', 'a tonne of instruments, from the launcher · passes at an eighth of light speed', tstack('36 Years out', clock(36))),
+    quick('Sentinel probe', 'stops and stays · 500 t · from the launcher', '<span class="mono">later</span>'),
+    SEC('WHAT COMES HOME'), '<p class="copy small">A dispatch, by narrow beam. From there it takes 4.3 Years to reach us.</p>',
+    SEC('WHO SEES US GO'), '<p class="copy small">A laser launch shines on past its sails to the star. A rocket launch is dark to where it is going.</p>']))
 WALL = tab(3330, 'Mind', 'MIND', 'THE GRID LIMIT', ''.join([
     SEC('THINKING NOW DRAWS'), share('Energy', 90, '90% of the grid'), '<p class="copy small">Eleven data centers. 86 times the thought you woke with.</p>',
     SEC('THE STANDING ORDER HAS STOPPED'), '<p class="copy small">A twelfth would need more energy than Earth has. Nothing was started.</p>',
@@ -785,8 +787,11 @@ HOUR = [
          talk(ACEN_AIR, 'It lives, and something happened to it. I can’t tell an eruption from a fire at this distance. One more thing. In ninety years of our records, nothing was ever heard from that star.', ('Can we go and look?', 'What happened there?'), 'glow'),
          ['Truth: its people burned their stored carbon in two centuries. Their climate tipped, harvests failed, then states. Some may survive, without radio.',
           'Real: carbon dioxide stays in air for centuries, and the long-lived industrial gases show in the mid-infrared (Lin et al. 2014). What this telescope reads is the mock’s.'], question=Q_DEAD),
-    stop(3390, 3360, 'Can we go and look?', None, GO_CHAT,
-         ['The Mind advises, from the dials: go, and send nothing that speaks. It starts nothing.', 'Real: Daedalus was designed for 12% of light speed, and Starshot for 20%.'], question=Q_GO),
+    stop(3390, 3360, 'Can we go and look?', None,
+         talk(INQUIRY, 'Yes, slowly. Sails arrive first and see little. A probe sees more, and needs the launcher you began. I would start the laser array, and send nothing that speaks. Going is not calling.', ('Start the laser array', 'Not yet')),
+         ['An inquiry is a mission that goes to find out. Probe stays the name of the craft. What comes home is a dispatch.',
+          'The Mind advises, from the dials: go, and send nothing that speaks. It starts nothing.',
+          'Real: Daedalus was designed for 12% of light speed, and Starshot for 20%. A laser launch shines toward its target. A rocket’s exhaust points away.'], question=Q_GO, settled=12),
 ] if ANWE and ANWE['d'] < 5 else []) + [
     stop(3480, 3390, '· The phone lights. Leaves it.', 'The Moon vault is done.', WAKE_VAULT,
          ['From now a strike on Earth does not end the game.', 'The yard finished at Year 11.3 and went to the summary.']),
