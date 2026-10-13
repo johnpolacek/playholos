@@ -347,6 +347,14 @@ Settled 2026-10-13.
   - *Samples:* a neighbor's smog is taken to be like Earth's, from its first radio on. Times are scaled from one published point for each mirror: Earth's peak for the first telescope, today's level for the 15 m. No listening campaign runs past a Year.
   - *Not priced:* a 15 m mirror. The far-side array needs Moon industry.
   - Set aside: a floor, where some instrument within reach in the first hours can always tell. And minds never read from afar.
+- **The first telescope reads a dead world's strange air, and not its cause.** Settled 2026-10-13. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#reading-air).
+  - *What a collapse leaves.* Radio stops at once. Smog clears, since sunlight breaks it down. Burned carbon stays: a fifth to a third is still in the air after 2 to 20 centuries (Archer et al. 2009).
+  - *Carbon dioxide alone is no sign of industry* (Haqq-Misra et al. 2025). Even with smog beside it, it is a tentative one. Great eruptions leave the same excess.
+  - *The gases only industry makes* last from decades to tens of thousands of years, and show in the mid-infrared. An interferometer reads them at a few times Earth's level or more.
+  - *So proof needs that interferometer, or going.* A flyby that sees the surface is the most conclusive.
+  - *The Mind says so.* It gives eruptions and burning as competing words, and names what would tell.
+  - *Real, and not used yet:* eruptions under way change a world's ozone and color month by month (Ostberg et al. 2023). Later readings could weaken "eruptions now", never "eruptions long ago".
+  - Set aside: a mark only industry leaves that the first telescope can read. And a dead world that reads as an ordinary living one.
 - **Open:** seasons.
 
 ## The neighbors
@@ -546,7 +554,7 @@ Answered one at a time, in this order. Every answer must be permitted by current
     - **The seed found two worlds, and the opening shows one.** Kirrin's world at 12 Ophiuchi was felt by 2040 too. Across games Earth has felt about three worlds by Year 0, and about two are natural.
     - **Settled 2026-10-13:** a living neighbor becomes known as fast as physics allows. In this game nothing Earth holds at Year 9 can tell Varn's world from a natural one. A far-side array would, in 5 hours. See [How Earth learns](#how-earth-learns).
     - **A first voice, a living world and a dead world in one hour: too much, too soon?** A signal reaches Earth in the first hour in about 1 game in 4. A neighbor's world sits within 15 ly in about 1 game in 3, a dead one in about 1 in 35.
-    - **Can the first telescope tell a dead civilization from a volcano?** The mock says no, so going is the way to know.
+    - **Settled 2026-10-13:** the first telescope reads a dead world's strange air, and not its cause. Proof needs an infrared interferometer, or going. See [How Earth learns](#how-earth-learns).
     - **Settled 2026-10-13:** a sweep finds natural warm worlds too, at the real rate. In this game its first pass shows 15 new points of light: 4 homes and 11 natural worlds. See [How Earth learns](#how-earth-learns).
     - **Settled 2026-10-13:** alive is a ladder, and a natural world climbs no higher than animals and forests. Every mind stays hand-written. See [How Earth learns](#how-earth-learns).
     - **Settled 2026-10-13:** its star's age sets a natural world's rung, on Earth's schedule with scatter, and physics says whether it kept its air. In this game the sweep's 11 natural worlds are 5 alive, 2 where life died, 2 airy and lifeless, 2 bare rock. See [How Earth learns](#how-earth-learns).

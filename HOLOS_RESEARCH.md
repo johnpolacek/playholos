@@ -502,7 +502,7 @@ What Sol's own instruments have found nearby. For v2 open question 3.
 - **Observations in the second mock, added 2026-10-13.** The first hour away: the infrared telescope reads three worlds and finds a fourth.
   - Real, as logged here: oxygen with methane reads as life only in context (Krissansen-Totton et al.). Nitrogen dioxide has natural sources (Kopparapu et al. 2021). Long-lived industrial gases show in the mid-infrared (Lin et al. 2014). Daedalus was designed for 12% of light speed and Starshot for 20%.
   - The mock's own: what each reading shows. Life and a trace of nitrogen dioxide at Gliese 432 A's world. A world at Alpha Centauri A with several times the carbon dioxide it should hold. 82 Eridani d as a small gas world. A Year a reading, and a fifth of a Year to image a near star's warm zone.
-  - From memory, not reread: carbon dioxide put into air stays for centuries to millennia. And which gases the Habitable Worlds Observatory's mirror can read.
+  - Checked 2026-10-13, see "What a dead world leaves" under [Reading air](#reading-air): carbon dioxide put into air stays for centuries to millennia, and the telescope's light runs from about 0.2 to 1.8 microns.
   - Depends on a pending result: this game's dead world orbits Alpha Centauri A at 1.45 AU. If JWST's August 2026 observation confirms a giant in that warm zone, the checker must treat it as a known planet, and the seed could not put a world there.
 - **Searches, settled 2026-10-13.** A search is a standing order for an idle instrument, and it returns candidates.
   - Real sweeps already logged here: Breakthrough Listen on 1,327 near stars (Price et al. 2020), Project Hephaistos on millions of stars for waste heat, and the Terra Hunting Experiment on 40 bright stars for ten years.
@@ -573,7 +573,23 @@ What Sol's own instruments have found nearby. For v2 open question 3.
   - Matters: by radio, Earth's ground arrays hear a quiet neighbor almost never. A far-side array hears nearly all. By light, the first telescope reads smog only next door, and smog is not proof.
   - Check: the two smog points do not quite agree. Scaled by the fourth power of mirror width, Kopparapu's point gives a 6 m mirror about 310 hours at 5.7 ly for today's level. Sheikh's 300 hours is for the peak, so it is the more cautious by a few times. Each mirror uses its own published point.
   - This project's own: a neighbor's smog taken to be like Earth's from its first radio on, at the peak for the first telescope and at today's level for the 15 m mirror. Times at other worlds and distances scaled from those two points. A Year's cap on one listening campaign. The two-month cap on one target is Stark et al. 2019's.
+  - Added the same day, from the text of Haqq-Misra et al.: whether a 6 m mirror can read today's level of nitrogen dioxide "remains to be calculated". So Sheikh's one point is all the first telescope's smog times rest on.
   - Used: v2 [How Earth learns](HOLOS_GAME_CONCEPT.md#how-earth-learns), calcs/signs.py and the second mock.
+
+- **What a dead world leaves, checked 2026-10-13.** For the question of telling a dead civilization from a volcano. I read each abstract myself, and the text of Haqq-Misra et al. and of Kopparapu et al.
+  - **[Archer et al. 2009](https://doi.org/10.1146/annurev.earth.031208.100206)** · Published, Annual Review of Earth and Planetary Sciences. Burned carbon settles between air, sea and land within a few centuries. Models agree that 20 to 35% stays in the air after that, 2 to 20 centuries on. Dissolving seabed chalk draws it down further over 3,000 to 7,000 years.
+  - **[Haqq-Misra, Kopparapu and Profitiliotis 2025](https://arxiv.org/abs/2511.20329)** · Published, ApJL. Read in the text.
+    - The Habitable Worlds Observatory: a mirror of about 6 to 8 m, reading from about 0.2 to 1.8 microns.
+    - Carbon dioxide "itself would not be a technosignature". With nitrogen dioxide rising beside it, it is a tentative one, and natural causes must be ruled out first. Two of the ten futures show only that pair, modestly raised, and "may be unconvincing".
+    - A mid-infrared interferometer reads from about 4 to 18.5 microns. Two CFCs stand out in five futures. The weakest of those holds about three times today's level: today is 0.23 and 0.52 parts per billion.
+    - The most conclusive way is a flyby that takes sharp images of the surface. No single mission is likely to settle it.
+  - **[Kopparapu et al. 2021](https://arxiv.org/abs/2102.05027)** · Read in the text: the main loss of nitrogen dioxide is sunlight breaking it apart. Lightning, wildfire and soil bacteria make it without industry.
+  - **[Ostberg et al. 2023](https://arxiv.org/abs/2309.15972)** · Accepted, AJ. Great eruptions under way, modelled on four Earth-like worlds over eight years with monthly spectra from 0.2 to 2.0 microns, change the ozone, oxygen and water features and the slope of the spectrum. Ozone and slope are the clearest signs.
+  - Already logged: Schwieterman et al. 2024 for how long the industrial gases last, and Lin et al. 2014 for reading them.
+  - From general knowledge, not a source read: nitrogen oxides last hours to days in Earth's lower air. The two commonest CFCs last about 50 and 100 years.
+  - Matters: a dead world keeps its carbon for thousands of years and loses its smog at once. The first telescope reads the carbon and nothing that only industry makes. So it reads strange air, and not its cause.
+  - Not used yet: watching a world's ozone and color for eruptions under way.
+  - Used: v2 [How Earth learns](HOLOS_GAME_CONCEPT.md#how-earth-learns), and the second mock's Alpha Centauri A reading.
 
 ## Where neighbors can live
 
@@ -977,6 +993,5 @@ Results the design is waiting on. Check each when its date comes.
 - The rung draw ignores a warm zone's outward drift as its star brightens. It matters for F stars and old G stars.
 - Nguyen et al. 2026 give fitted shorelines by star kind, mass and age. Read the paper and see whether they should replace the single line.
 - The dates of animals and forests on Earth are from memory. Find a source.
-- The second mock: a source for how long added carbon dioxide stays in air, and for which gases the Habitable Worlds Observatory is designed to read.
 - Earth's aimed messages: the power of the 1983, 2008, 2009 Canberra and 2013 sends is in no source found. Hirabayashi's books may hold the first.
 - Working links for Project Daedalus's 1978 report and Criswell 1985.
