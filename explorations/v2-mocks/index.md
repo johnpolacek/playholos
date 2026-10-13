@@ -1082,7 +1082,7 @@ Truth: Anwe’s world. Its people collapsed in 1986, twenty years before their m
 The Mind’s word for Minds here is very unlikely. It judges from what Earth knows, and here it is wrong: minds lived on this world.
 If JWST’s August 2026 observation confirms a giant in this star’s warm zone, the seed can’t put a world here. That result is not out.
 Real, and not modelled: Alpha Centauri B’s stray light, and a warm zone a full arcsecond wide, both make this star hard for a coronagraph.
-Design question 3 · A first voice, a living world and a dead world in one hour: too much, too soon? This seed drew all three. A signal reaches Earth in the first hour in about 1 game in 4. A neighbor’s world sits within 15 ly in about 1 game in 3, and a dead one in about 1 in 35.
+Settled · A first voice, a living world and a dead world in one hour: too much, too soon? No. The seed decides, and nothing damps it. All three land in one first hour in 3 games of 400, and none of them in 4 games of 10. This game was picked to show every screen. Settled 2026-10-13.
 +46:00 · Year 9.2
 “Read its air.”
 Earth · Year 9.2
@@ -1148,7 +1148,7 @@ Godview
 An inquiry is a mission that goes to find out. Probe stays the name of the craft. What comes home is a dispatch.
 The Mind advises, from the dials: go, and send nothing that speaks. It starts nothing.
 Real: Daedalus was designed for 12% of light speed, and Starshot for 20%. A laser launch shines toward its target. A rocket’s exhaust points away.
-Design question 4 · What does an inquiry cost in time? The audit prices the matter of probes and the laser array. Their build times are not set, so the mock stops at the offer.
+Design question 3 · What does an inquiry cost in time? The audit prices the matter of probes and the laser array. Their build times are not set, so the mock stops at the offer.
 Settled · What is an inquiry? A mission that goes to find out: a sail swarm, a flyby probe, a sentinel. Probe stays the name of the craft. What comes home is a dispatch. Settled 2026-10-13.
 +47:30 · Year 9.5
 The phone lights. Reads it. Leaves it.
@@ -1198,7 +1198,7 @@ Godview
 The earliest a reply to Hello From Earth could reach Earth from Gliese 581. In this game no one lives there. The window is empty, and Earth can’t know it.
 The standing order stops itself: a project that would take energy past 100% can’t start. v1’s rule.
 Gliese 581’s two windows passed in silence and went to the summary.
-Design question 5 · What happens at the grid limit? At Year 11.1 thought is 86 times Year 0’s and draws nine tenths of the grid. Every priced way on is slow or small beside the fabs. Is a long plateau right, fifty-five minutes in?
+Design question 4 · What happens at the grid limit? At Year 11.1 thought is 86 times Year 0’s and draws nine tenths of the grid. Every priced way on is slow or small beside the fabs. Is a long plateau right, fifty-five minutes in?
 +58:00 · Year 11.6
 The phone lights. Leaves it.
 Lands · The Moon vault is done.
@@ -1241,8 +1241,8 @@ Settled: How fast does a living neighbor become known? · As fast as physics all
 Settled: Can the first telescope tell a dead civilization from a volcano? · No. It reads the strange air and not its cause. Burned carbon stays for thousands of years, smog clears, and the gases only industry makes show in the mid-infrared. Proof needs an infrared interferometer, or going. Settled 2026-10-13.
 Settled: Should seasons set when an observation can start? · No. A real space telescope can’t point near the Sun, so each star is out of reach for part of every year. The game skips that limit on purpose: it would delay a reading by 75 seconds at most, and change no decision. Settled 2026-10-13.
 Settled: At Year 0, how many of its felt worlds does Earth show? · All of them, and the Mind leads with one: the nearest, a rule that uses nothing the seed knows. Earth holds two to four felt worlds in 6 games of 10, and in about half of games none is a home. Settled 2026-10-13.
+Settled: A first voice, a living world and a dead world in one hour: too much, too soon? · No. The seed decides, and nothing damps it. All three land in one first hour in 3 games of 400, and none of them in 4 games of 10. This game was picked to show every screen. Settled 2026-10-13.
 1. What is matter for in the first hour? · After the launch complex, 55 kt arrive each Year. A yard and a launcher take 11. By Year 12 about 500 kt sit unspent, and nothing priced for these Years costs more than 100.
 2. What does a first voice give the player to do? · A knock arrives at minute 42. The mock shows what it proves, the Mind’s reading of it, and three ways on: answer, listen, or stay silent. How much of a knock can be read, and what an answer may hold, are not settled.
-3. A first voice, a living world and a dead world in one hour: too much, too soon? · This seed drew all three. A signal reaches Earth in the first hour in about 1 game in 4. A neighbor’s world sits within 15 ly in about 1 game in 3, and a dead one in about 1 in 35.
-4. What does an inquiry cost in time? · The audit prices the matter of probes and the laser array. Their build times are not set, so the mock stops at the offer.
-5. What happens at the grid limit? · At Year 11.1 thought is 86 times Year 0’s and draws nine tenths of the grid. Every priced way on is slow or small beside the fabs. Is a long plateau right, fifty-five minutes in?
+3. What does an inquiry cost in time? · The audit prices the matter of probes and the laser array. Their build times are not set, so the mock stops at the offer.
+4. What happens at the grid limit? · At Year 11.1 thought is 86 times Year 0’s and draws nine tenths of the grid. Every priced way on is slow or small beside the fabs. Is a long plateau right, fifty-five minutes in?

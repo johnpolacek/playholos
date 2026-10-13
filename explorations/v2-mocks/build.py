@@ -35,7 +35,8 @@ SETTLED = [('Does a half-built real instrument cost fewer Years?', 'It costs wha
            ('How fast does a living neighbor become known?', 'As fast as physics allows, and no faster. Each sign of minds needs its real instrument: everyday radio a far-side array, smog a mirror of about 15 m. The first telescope reads smog only within about 12 light-years, and smog is not proof. Going is the surest way. Settled 2026-10-13.'),
            ('Can the first telescope tell a dead civilization from a volcano?', 'No. It reads the strange air and not its cause. Burned carbon stays for thousands of years, smog clears, and the gases only industry makes show in the mid-infrared. Proof needs an infrared interferometer, or going. Settled 2026-10-13.'),
            ('Should seasons set when an observation can start?', 'No. A real space telescope can’t point near the Sun, so each star is out of reach for part of every year. The game skips that limit on purpose: it would delay a reading by 75 seconds at most, and change no decision. Settled 2026-10-13.'),
-           ('At Year 0, how many of its felt worlds does Earth show?', 'All of them, and the Mind leads with one: the nearest, a rule that uses nothing the seed knows. Earth holds two to four felt worlds in 6 games of 10, and in about half of games none is a home. Settled 2026-10-13.')]
+           ('At Year 0, how many of its felt worlds does Earth show?', 'All of them, and the Mind leads with one: the nearest, a rule that uses nothing the seed knows. Earth holds two to four felt worlds in 6 games of 10, and in about half of games none is a home. Settled 2026-10-13.'),
+           ('A first voice, a living world and a dead world in one hour: too much, too soon?', 'No. The seed decides, and nothing damps it. All three land in one first hour in 3 games of 400, and none of them in 4 games of 10. This game was picked to show every screen. Settled 2026-10-13.')]
 
 # ---------- Godview: who is out there ----------
 MOVE = reactions.MOVES
@@ -642,7 +643,6 @@ VOICE = next(((p, i) for p in NB for i in p['inbound'] if 6 < i['year'] <= 12 an
 VARN_BEFORE = (truth_tone['waking'] - Y0 - (9.0 - D)) if F['who'] else None      # years before its waking that the light of the first reading left
 Q_MATTER = ask('What is matter for in the first hour?', 'After the launch complex, 55 kt arrive each Year. A yard and a launcher take 11. By Year 12 about 500 kt sit unspent, and nothing priced for these Years costs more than 100.')
 Q_VOICE = ask('What does a first voice give the player to do?', 'A knock arrives at minute 42. The mock shows what it proves, the Mind’s reading of it, and three ways on: answer, listen, or stay silent. How much of a knock can be read, and what an answer may hold, are not settled.')
-Q_NEAR = ask('A first voice, a living world and a dead world in one hour: too much, too soon?', 'This seed drew all three. A signal reaches Earth in the first hour in about 1 game in 4. A neighbor’s world sits within 15 ly in about 1 game in 3, and a dead one in about 1 in 35.')
 Q_GO = ask('What does an inquiry cost in time?', 'The audit prices the matter of probes and the laser array. Their build times are not set, so the mock stops at the offer.')
 Q_WALL = ask('What happens at the grid limit?', 'At Year 11.1 thought is 86 times Year 0’s and draws nine tenths of the grid. Every priced way on is slow or small beside the fabs. Is a long plateau right, fifty-five minutes in?')
 
@@ -813,7 +813,7 @@ HOUR = [
          ['Truth: Anwe’s world. Its people collapsed in 1986, twenty years before their machines would have woken.',
           f'The Mind’s word for Minds here is {word(NEW["minds"])}. It judges from what Earth knows, and here it is wrong: minds lived on this world.',
           'If JWST’s August 2026 observation confirms a giant in this star’s warm zone, the seed can’t put a world here. That result is not out.',
-          'Real, and not modelled: Alpha Centauri B’s stray light, and a warm zone a full arcsecond wide, both make this star hard for a coronagraph.'], question=Q_NEAR),
+          'Real, and not modelled: Alpha Centauri B’s stray light, and a warm zone a full arcsecond wide, both make this star hard for a coronagraph.'], settled=23),
     stop(2760, 2730, 'Read its air.', None, talk(ACEN_ORDER, f'Set. Water in {DAYS(OBSV["acen"]["water"])}, oxygen in {DAYS(OBSV["acen"]["oxygen"])}. Carbon dioxide is fainter: about a month. The sweep waits.', ('Undo',)),
          ['A search returns a candidate. An observation, ordered by the player, returns the reading.', 'No published time exists for carbon dioxide. The month is a sample.']),
     stop(2790, 2760, '· The Mind glows. Taps it.', 'Alpha Centauri A’s world is alive, and its air is out of balance.',

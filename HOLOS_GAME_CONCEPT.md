@@ -467,6 +467,11 @@ Built 2026-10-10 in [calcs/seed.py](calcs/seed.py), from the rules above.
 
 - **One number gives one game.** `python3 calcs/seed.py 10` prints it: Earth's branches and their years, what a Taiwan branch left of compute, then each neighbor's star, waking year, what it knows of Earth and what it does about it.
 - **A neighbor acts once its Mind is awake.** Its reaction to hearing Earth is rolled from its table at its waking or its first hearing, whichever is later. One that wakes during the game reacts then.
+- **Nothing damps the first hour.** Settled 2026-10-13. The seed decides what lands in it, however much or little.
+  - *What 400 games hold in their first hour:* a signal reaches Earth in 27%. A neighbor's home is among Earth's finds in 46%. A dead world sits within 15 ly in 3%.
+  - *All three together:* 3 games of 400. *None of the three:* 4 games of 10.
+  - The mock's game is one of the loud ones, picked to show every screen.
+  - Set aside: a cap of one such event in the first hour, and a more typical game for the mock.
 - **Earth's finds.** Every drawn world that tugs hard enough for Earth's planet hunters by 2040 is a find, a neighbor's or a natural one. A median of 3 a game, from 0 to 9. If a game draws none, 1 in 22, the seed adds a natural world at a bright northern Sun-like star.
   - **The opening shows every one, and the Mind leads with the nearest.** Settled 2026-10-13.
     - *Earth knows what it has felt,* and the Mind speaks from what Earth knows. So none is held back.
@@ -565,7 +570,7 @@ Answered one at a time, in this order. Every answer must be permitted by current
     - **Settled 2026-10-13:** seasons are left out on purpose. A real telescope can't point near the Sun, and the game skips that limit. See [How Earth learns](#how-earth-learns).
     - **Settled 2026-10-13:** Earth shows every world it has felt from Year 0, and the Mind leads with the nearest. See [The seed, drawn](#the-seed-drawn).
     - **Settled 2026-10-13:** a living neighbor becomes known as fast as physics allows. In this game nothing Earth holds at Year 9 can tell Varn's world from a natural one. A far-side array would, in 5 hours. See [How Earth learns](#how-earth-learns).
-    - **A first voice, a living world and a dead world in one hour: too much, too soon?** A signal reaches Earth in the first hour in about 1 game in 4. A neighbor's world sits within 15 ly in about 1 game in 3, a dead one in about 1 in 35.
+    - **Settled 2026-10-13:** a loud first hour is left as the seed draws it. See [The seed, drawn](#the-seed-drawn).
     - **Settled 2026-10-13:** the first telescope reads a dead world's strange air, and not its cause. Proof needs an infrared interferometer, or going. See [How Earth learns](#how-earth-learns).
     - **Settled 2026-10-13:** a sweep finds natural warm worlds too, at the real rate. In this game its first pass shows 15 new points of light: 4 homes and 11 natural worlds. See [How Earth learns](#how-earth-learns).
     - **Settled 2026-10-13:** alive is a ladder, and a natural world climbs no higher than animals and forests. Every mind stays hand-written. See [How Earth learns](#how-earth-learns).
