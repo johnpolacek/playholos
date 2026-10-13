@@ -107,6 +107,9 @@ def name_from_hyg(star_list):
     for name, pair in same.items():
         if len(pair) > 1:
             for letter, s in zip('ABCD', sorted(pair, key=lambda s: s['gabs'])): s['name'] = f'{name} {letter}'
+    # HYG files the white dwarf Gliese 754.1 A's name under its red dwarf companion, LDS 678 B. The red dwarf is B.
+    for s in star_list:
+        if s['id'] == '4201781696994082944': s['name'] = 'Gl 754.1B'
 
 # Known young stars within 50 ly. Gaia's FLAME ages are isochrone ages, which barely constrain K and M dwarfs:
 # FLAME puts Epsilon Eridani near 7 billion years, where its spin and activity say 0.4 to 0.8.
@@ -142,33 +145,22 @@ YOUNG = {
     # main-sequence position for K and M stars, survey pipeline fits, assumed defaults, and the spin or activity of a
     # star whose close companion's tides set it. An activity relation fit to Sun-like stars and pushed onto a redder
     # one can keep a star, but can't drop one alone. Sources in HOLOS_RESEARCH.md, Ages of nearby stars.
+    # Corrected 2026-10-13: spin, activity and X-rays don't date a fully convective red dwarf, under about 0.35 Suns.
+    # Those stay fast and active for billions of years (Pass et al. 2024, Medina et al. 2022), so 15 red dwarfs dropped
+    # the day before on such ages alone are hosts again, Ross 154 and EV Lacertae among them. Those below stay out:
+    # each is heavier than that, or is dated by a bound star, its brightness above the main sequence, or its gravity.
     '46580': 'HD 82106 (Gl 349), 0.2 to 0.9 Gyr from spin, activity and X-rays',
     '26335': 'Gliese 208, 0.15 to 0.8 Gyr, near 0.5 from its 12.3 day spin. Earth knocked here',
     '625453654702751872': 'AD Leonis (Gl 388), 0.025 to 0.5 Gyr',
-    '112460': 'EV Lacertae (Gl 873), 0.025 to 0.95 Gyr',
-    '2161121135533953536': 'G 227-22, 0.09 to 0.5 Gyr',
     '75187': 'OT Serpentis (GJ 9520), 0.015 to 0.15 Gyr',
-    '1461125613285603840': 'GJ 1167 A, 0.045 to 0.3 Gyr',
-    '157915472050611456': 'GJ 3304 B, with A',
-    '157915536473892224': 'GJ 3304 A, 0.06 to 0.3 Gyr, from one source',
-    '9291': 'Gl 82, 0.03 to 0.3 Gyr',
-    '758200712885953280': 'CW Ursae Majoris (GJ 3647), 0.025 to 0.35 Gyr',
-    '269066953631488384': 'GJ 3372 B, 0.04 to 0.4 Gyr',
-    '2051984436005124480': '1RXS J193528.9+374605, 0.02 to 0.3 Gyr, from one source',
-    '89593331327905536': 'G 36-26, 0.09 to 0.3 Gyr, from one source',
     '1923896725839633024': 'GJ 4337 A, 0.02 to 0.3 Gyr',
-    '1923896622760418176': 'GJ 4338 B, 0.04 to 0.3 Gyr',
+    '1923896622760418176': 'GJ 4338 B, with GJ 4337 A',
     '112909': 'GT Pegasi (Gl 875.1), 0.02 to 0.3 Gyr',
-    '3968118399284369280': 'NLTT 26114, 0.025 to 0.3 Gyr',
     '892348454394856064': 'YY Geminorum (Castor C), 0.29 to 0.37 Gyr, the age of Castor A and B',
     '63510': 'DT Virginis (Gl 494, Ross 458), 0.13 to 0.8 Gyr',
-    '92403': 'Ross 154, 0.2 Gyr from its 2.9 day spin',
     '72944': 'GJ 569 A, 0.1 to 0.8 Gyr, with its brown dwarf pair',
     '53985': 'DS Leonis (Gl 410), 0.06 to 0.8 Gyr',
-    '3530383784971799680': 'LP 735-29, 0.01 to 0.84 Gyr',
-    '37766': 'YZ Canis Minoris (Gl 285), 0.02 to 0.87 Gyr',
-    '2595284016771502080': 'GJ 4274, 0.12 to 0.96 Gyr',
-    '2507016253701863040': 'GJ 3142 (LHS 1358), 0.84 to 0.97 Gyr, from one source: the weakest entry',
+    '37766': 'YZ Canis Minoris (Gl 285), 0.02 to 0.5 Gyr: brighter than the main sequence, as a star still settling is',
 }
 
 # Stars with a white dwarf companion are judged in calcs/scorch.py: the companion was a giant first, and lit the warm

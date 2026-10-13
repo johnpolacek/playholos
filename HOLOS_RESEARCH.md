@@ -424,13 +424,19 @@ Anchors for [the project audit](HOLOS_PROJECT_AUDIT.md).
   - Four candidate signals under 4 Earth masses, at 20, 49, 160 and 642 days, after modeling color-dependent stellar noise.
   - Used: v1 lead "Chaff", leads.py.
 - **[MacGregor et al. 2016, Tau Ceti's dust belt](https://arxiv.org/abs/1607.02513)** · Published, ApJ.
-  - ALMA imaged the cold dust belt. leads.py takes its tilt, about 35°, as the plane of the candidate planets.
-  - Used: leads.py. Check the adopted tilt against the paper's fit.
+  - ALMA imaged the cold dust belt: nearly face-on, inner edge near 6 AU, and broad. It did not fit the tilt. It took 35° from the paper below.
+  - Used: leads.py.
+- **[Lawler et al. 2014, Tau Ceti's belt with Herschel](https://arxiv.org/abs/1408.2791)** · Published, MNRAS. Abstract read by an agent, 2026-10-13.
+  - The belt is tilted 35° ± 10° from face-on.
+  - Corrected 2026-10-13: this log credited the 35° to MacGregor et al. 2016. It is Lawler's.
+  - Used: leads.py takes it as the plane of the candidate planets.
 - **[Pepe et al. 2011, 82 Eridani](https://arxiv.org/abs/1108.3447)** · Published, A&A.
   - Three super-Earths at 0.12, 0.20 and 0.35 AU around HD 20794, found by their tug.
   - Used: v1 lead "Brood", leads.py.
-- **Beta Hydri's slow drift** · Published, primary sources to find.
-  - A long radial-velocity trend once read as a companion. CES and HARPS data from 2012 and a 2023 study tie it to the star's magnetic cycle. A [2025 study](https://www.aanda.org/articles/aa/full_html/2025/06/aa54730-25/aa54730-25.html) finds a cycle of about 12 years.
+- **Beta Hydri's slow drift** · Published. Primary papers read by an agent, 2026-10-13: [Endl et al. 2002](https://arxiv.org/abs/astro-ph/0207512), [Zechmeister et al. 2013](https://arxiv.org/abs/1211.7263), [Laliotis et al. 2023](https://arxiv.org/abs/2302.10310), [Metcalfe et al. 2007](https://arxiv.org/abs/0704.1606).
+  - Endl found a steady drift in its velocity and read it as a distant companion. Zechmeister found the drift smaller and unsteady, and said it might follow the star's magnetic cycle. Laliotis suspects the same and could not confirm it.
+  - The star's activity cycle is about 12 years (Metcalfe). The velocity signal runs 12 to 15 years.
+  - Corrected 2026-10-13: this log said two studies tie the drift to the magnetic cycle. They suspect it. None shows it. A [2025 study](https://www.aanda.org/articles/aa/full_html/2025/06/aa54730-25/aa54730-25.html) also finds a cycle of about 12 years.
   - Used: v1 lead "Beacon", leads.py.
 - **[Llop-Sayson et al., September 2026, Epsilon Eridani b](https://arxiv.org/abs/2609.19131)** · Preprint.
   - About 0.91 ± 0.06 Jupiter masses. The imaging interpretation depends on the model.
@@ -537,8 +543,15 @@ What Sol's own instruments have found nearby. For v2 open question 3.
   - At the tip of its giant life a star's light follows the mass of its core: L = 59,250 × (M − 0.522) Suns, after Paczyński 1970. A 0.6 Sun core gives about 4,600 Suns.
   - Slow mass loss widens the orbit by the ratio of total mass before to after, and leaves its shape alone.
   - In test runs a dying star's own planets were captured by the companion about one time in ten.
-  - Matters: the two rules calcs/scorch.py uses. The 2,500 Sun floor for the first giant branch is from memory, to confirm.
+  - Matters: the two rules calcs/scorch.py uses.
+  - Checked 2026-10-13, agent, from the papers' text and tables. The relation is Karakas and Lattanzio's equation 2, for the core's mass and the peak light between pulses.
+  - The first giant branch tops out near 2,500 Suns for a star like the Sun ([Kalirai et al. 2014](https://arxiv.org/abs/1312.4544), [Schröder and Smith 2008](https://arxiv.org/abs/0801.4031): 2,730). It is lower for heavier stars: about 1,600 at 2 Suns, and only 140 at 3, which light helium without a flash.
+  - So the 2,500 floor fits only stars that began under about 1.5 Suns. In scorch.py it applies to three white dwarfs, all of that kind. No outcome changes.
+  - How long: a dying star of 1.5 to 2.6 Suns shines above 2,500 Suns for 1 to 2 million years (Kalirai et al. 2014, table 3).
   - Used: calcs/scorch.py.
+- **Gliese 283 A's mass, checked 2026-10-13** · Published. Agent, from tables. [Subasavage et al. 2017](https://arxiv.org/abs/1706.00709), [Giammichele et al. 2012](https://arxiv.org/abs/1202.5581), [O'Brien et al. 2024](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/MNRAS/527/8687), [Kirkpatrick et al. 2024](https://arxiv.org/abs/2312.03639).
+  - Six values from its light run 0.60 to 0.66 Suns, with a cooling age of 1.3 to 1.6 billion years. The 1.11 in Kirkpatrick's table traces to one 2001 gravitational redshift.
+  - Used: scorch.py keeps 0.64 Suns and 1.5 billion years. Even at 1.11, Gliese 283 B would stay: scorched harder, but still over a billion years ago.
 - **[Soubiran et al. 2018, radial velocity standard stars](https://doi.org/10.1051/0004-6361/201832795)** · Published, A&A.
   - 107 Piscium's velocity is steady to about a meter per second. Later work finds it single (Halbwachs et al. 2018).
   - Matters: Hipparcos's 1997 wobble orbit for it, which implies a brown dwarf tugging at about 2 km/s, can't be real.
@@ -570,7 +583,7 @@ What Sol's own instruments have found nearby. For v2 open question 3.
 - **[King et al. 2003, the Ursa Major group](https://iopscience.iop.org/article/10.1086/368241)** · Published, AJ 125, 1980.
   - Members by motion, brightness and activity. The group is about 0.4 to 0.5 billion years old.
   - Used: not for drops. It lists Zeta Trianguli Australis and Gamma Leporis as likely members, but their own ages read older. See To check.
-- **Borderline ages, settled 2026-10-12.** A star leaves the host list only when every published age is under a billion years, error bars included. A straddling age stays: improbable, not contradicted. 29 stars left, and 859 remain.
+- **Borderline ages, settled 2026-10-12.** A star leaves the host list only when every published age is under a billion years, error bars included. A straddling age stays: improbable, not contradicted. 29 stars left on 2026-10-12. Sixteen came back the next day: see the correction below.
   - Ages counted: spin, activity, X-rays, lithium, surface gravity, and the age of a star it is bound to. At least one must come from a method built for that kind of star.
   - Not counted: main-sequence position for K and M stars, survey pipeline fits, assumed defaults, and the spin or activity of a star whose close companion's tides set it.
   - An activity relation fit to Sun-like stars and pushed onto a redder one can keep a star, but can't drop one alone. That is a judgment call, made to keep the bar for dropping high.
@@ -614,6 +627,20 @@ What Sol's own instruments have found nearby. For v2 open question 3.
   - Ages for red dwarfs from their place on the main sequence: AD Leonis 8.0 ± 4.1 billion years, EV Lacertae 7.7 ± 4.2, Gliese 208 9.4 ± 3.8. The paper warns the method has important limits for red dwarfs.
   - Matters: a red dwarf barely moves on the main sequence in ten billion years. These ages can't tell young from old.
   - Used: not counted. The same holds for Mann et al. 2015, Yee et al. 2017 and Gaia's own fits.
+- **Correction, 2026-10-13: spin and activity don't date a small red dwarf.** Found while clearing the to-check list.
+  - **[Pass et al. 2024](https://arxiv.org/abs/2401.10167)** · Published. Abstract read. Fully convective red dwarfs, 0.08 to 0.35 Suns, stay fast-spinning and active for billions of years, then slow abruptly. When depends mostly on mass.
+  - **[Medina et al. 2022](https://arxiv.org/abs/2205.02331)** · Published. Abstract read. 219 single stars of 0.1 to 0.3 Suns within 15 pc. They leave the most active state at 2.4 ± 0.3 billion years on average. Those turning in under 10 days average 2.0 ± 1.2 billion years by their motions: 0.6 ± 0.3 at 0.2 to 0.3 Suns, 2.3 ± 1.3 at 0.1 to 0.2.
+  - Matters: Shkolnik et al. 2009 set their 300 million year limit from X-rays as bright as the Pleiades. Engle 2024 dates by spin. For a fully convective star neither can say under a billion.
+  - The test for fully convective: fainter than the gap in the main sequence near absolute G 10, where red dwarfs turn fully convective, near type M3 ([Jao et al. 2018](https://arxiv.org/abs/1806.07792), abstract read).
+  - Used: 15 red dwarfs dropped on 2026-10-12 are hosts again, with one bound companion. Ross 154, EV Lacertae, GJ 4274, G 227-22, GJ 1167 A, GJ 3304 A and B, Gl 82, CW Ursae Majoris, GJ 3372 B and GJ 3371 A, LP 735-29, G 36-26, NLTT 26114, GJ 3142. And 1RXS J193528.9+374605, whose one source marks it a possible close pair.
+  - Still out, 13 stars. Heavier than 0.35 Suns: HD 82106, Gliese 208 and its companion, AD Leonis, OT Serpentis, DT Virginis, DS Leonis, GJ 569 A, GT Pegasi, GJ 4337 A with GJ 4338 B. Dated by a bound star: YY Geminorum. Dated by its brightness above the main sequence: YZ Canis Minoris ([Kerr et al. 2021](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/ApJ/917/23), agent).
+  - Weakest of those: GT Pegasi and GJ 4337 A sit just above the gap, where activity may also outlast a billion years. AD Leonis is the same kind of star.
+  - Gl 82 has four young-group candidacies that disagree on the group. Unconfirmed candidates stay, as on 2026-10-10.
+- **[El-Badry, Rix and Heintz 2021](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/MNRAS/506/2269)** · Published, MNRAS 506, 2269. Catalog queried on VizieR, 2026-10-13.
+  - 114 wide pairs touch the 50 ly census. [calcs/hosts.py](calcs/hosts.py) finds all but two, and neither of those holds a star that can host.
+  - hosts.py pairs 33 more that the catalog lacks: close pairs and known triples such as 36 Ophiuchi, Gliese 2 and 4, and 55 Cancri. Each matches in distance and motion.
+  - No catalog pair in the census is wider than 20,000 AU, so that limit loses nothing here.
+  - Used: no change to the host list. Gliese 208's red dwarf companion, 1,793 AU out, is not in the catalog but matches in distance and motion.
 
 ## Kinds of worlds
 
@@ -707,6 +734,11 @@ What a neighbor's world can plausibly be, beyond an Earth twin. Each roster entr
 - **[Chambers, Wetherill and Boss 1996, multi-planet stability](https://doi.org/10.1006/icar.1996.0019)** · Published, Icarus.
   - Instability time grows exponentially with spacing. Systems packed tighter than about 10 mutual Hill radii eventually go unstable.
   - Used: the checker's spacing from known small planets.
+- **[Smith and Lissauer 2009, closely spaced planets](https://ui.adsabs.harvard.edu/abs/2009Icar..201..381S/abstract)** · Published, Icarus 201, 381. Abstract read by an agent, 2026-10-13. Its fits are quoted in [Lissauer and Gavino 2021](https://arxiv.org/abs/2104.13657) and [Obertas et al. 2017](https://arxiv.org/abs/1703.08426).
+  - Three Earth-mass planets last a billion years at about 8.1 mutual Hill radii, and ten billion at about 8.8. Five planets reach ten billion years near 9. Five are less stable than three at the same spacing.
+  - Obertas et al. find five planets survive ten billion orbits from 8.6 to 13, with dips near 9.5, 10.6 and 11.8.
+  - Matters: the checker asks for 10. That is on the safe side: it turns away a few placements that would hold, and lets through none that would not.
+  - Used: the checker's spacing rule stays at 10.
 - **[Gladman 1993, two close planets](https://doi.org/10.1006/icar.1993.1169)** · Published, Icarus.
   - Two planets never meet if their orbits are more than 2√3 mutual Hill radii apart.
   - Used: the checker's spacing from known giants.
@@ -780,22 +812,13 @@ Results the design is waiting on. Check each when its date comes.
 
 ## To check
 
-- Cross-check calcs/hosts.py's wide pairs with the El-Badry catalog. VizieR is reachable again as of 2026-10-10.
-- White dwarf companions: the tip of the first giant branch, about 2,500 Suns, is from memory. Confirm it, and how long a giant stays near its tip.
-- Gliese 283 A's mass: 0.62 to 0.66 Suns from its light, 1.11 in one table. Check Kirkpatrick et al. 2024.
 - Wide white dwarf pairs are projected separations. True orbits may be up to twice as wide, which cuts the light by up to four.
-- The host list names the red dwarf LDS 678 B as Gl 754.1A. The white dwarf is A.
 - Companion masses in calcs/binaries.py are rough: dynamical masses depend on distance cubed, and white dwarfs read as light from their brightness.
-- Borderline ages were settled 2026-10-12. Still open: GJ 3142, 1RXS J193528.9+374605, G 36-26 and GJ 3304 were each dropped on one source. HD 221503 is a candidate member of a 210 million year group ([Thao et al. 2024](https://arxiv.org/abs/2406.05234)) and stays until someone dates it.
-- Red dwarfs faster than a few days' spin were checked only where Engle 2024 or Shkolnik et al. 2009 list them. Other rotation tables may date more. From memory, not reread: fully convective red dwarfs can keep a fast spin for two to three billion years, so a spin age alone may read too young for them. Check Medina et al. 2022 and Pass et al. 2024.
-- BL Lyncis: which spin is right, 7.85 or 16.4 days? It decides whether it and VV Lyncis stay.
 - About 15 red dwarfs are unconfirmed young-group candidates with no age of their own. They stay. Gliese 393 is listed in AB Doradus but [Amado et al. 2021](https://arxiv.org/abs/2105.13785) put it older than 0.7 billion years.
 - 31 of the F, G and K hosts have no published age in any table opened, mostly K companions.
-- The first mock's looks land on a game clock, not on real telescope schedules. A real space telescope can't point near the Sun, so a star is out of reach for months each year. Check whether Fomalhaut can be imaged in January 2040, and whether seasons should set when a look can start.
-- calcs/hosts.py pairs companions only within 20,000 AU. AT Microscopii and Fomalhaut C sit wider from their primaries and needed their own entries.
-- Smith and Lissauer 2009, Icarus: confirm the lifetime of Earth-mass systems near 9 to 10 mutual Hill radii, for the checker's spacing rule.
-- Tau Ceti dust belt tilt in leads.py against MacGregor et al. 2016.
-- Beta Hydri drift: find the 2012 and 2023 primary papers.
+- HD 221503 is a candidate member of a 210 million year group ([Thao et al. 2024](https://arxiv.org/abs/2406.05234)) and stays until someone dates it.
+- Red dwarfs just above the main-sequence gap: does activity date them under a billion years? It decides AD Leonis, GT Pegasi and GJ 4337 A. Check West et al. 2008 and cluster X-ray studies.
+- Telescope seasons. Fomalhaut sits 56° from the Sun on January 1, and comes within 85° to 135° only from late May, near Year 0.39. JWST points only in that range: from memory, not reread. A telescope like Hubble, which avoids only the 50° around the Sun, could image it in January. That limit is from memory too. Decide which telescope Earth has in 2040, and whether seasons set when a look can start.
 - Earth's aimed messages: transmitter power, frequency and duration from primary sources. Cosmic Call is logged. The others are not.
 - Primary links for the classic propulsion and space-industry studies.
 - The ISS's assembly end in 2011 and DSA-2000's survey start in 2028, from pages read rather than search summaries.

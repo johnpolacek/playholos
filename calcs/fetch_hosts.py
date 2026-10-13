@@ -42,8 +42,8 @@ def main():
                  'st_lum, st_age, discoverymethod, pl_rvamp FROM pscomppars WHERE sy_dist < 15.33'}, 'exoplanets-50ly.csv')
     post('https://tapvizier.cds.unistra.fr/TAPVizieR/tap/sync', {
         'REQUEST': 'doQuery', 'LANG': 'ADQL', 'FORMAT': 'csv',
-        'QUERY': 'SELECT source_id1, source_id2, sep_AU FROM "J/MNRAS/506/2269/table" '
-                 f'WHERE source_id1 IN ({id_list}) OR source_id2 IN ({id_list})'}, 'elbadry-50ly.csv')
+        'QUERY': 'SELECT Source1, Source2, sepAU, R, BinType FROM "J/MNRAS/506/2269/catalog" '
+                 f'WHERE Source1 IN ({id_list}) OR Source2 IN ({id_list})'}, 'elbadry-50ly.csv')
 
 def close_binaries():
     """Orbits of close pairs: ORB6 for visual binaries (USNO and GSU), SB9 for spectroscopic ones (VizieR B/sb9)."""

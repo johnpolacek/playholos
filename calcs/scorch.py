@@ -6,7 +6,9 @@ than the pair sits today, because the orbit widened as it shed mass. No publishe
 the other star's warm zone, so this does, to an order of magnitude.
 
 - Tip luminosity from the core it left: L = 59,250 x (M - 0.522) Suns (Paczynski 1970, as given by Karakas and
-  Lattanzio 2014), and never under about 2,500, the tip of the first giant branch.
+  Lattanzio 2014), and never under about 2,500, the tip of the first giant branch for a star that began under about
+  1.5 Suns (Kalirai et al. 2014). Heavier stars top out lower there, but their cores put them above the floor anyway.
+  A dying star shines above 2,500 Suns for 1 to 2 million years.
 - Orbit then: a0 = a x (M_host + M_wd) / (M_host + M_progenitor), for slow mass loss (Hadjidemetriou 1963).
 - Light on the zone: L / a0^2 in Earth sunlights, averaged over the orbit where its shape is known.
 - A warm zone runs from about 1.06 Earth sunlights at its inner edge to 0.35 at its outer (Kopparapu et al. 2013).
