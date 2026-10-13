@@ -184,8 +184,15 @@ def quick(title, sub, right): return f'<div class="row quick"><span class="rt"><
 def done_tag(): return '<span class="newtag donetag">Done</span>'
 def used(name, pct): return f'<div class="cap"><span>{name}</span><b class="use"><s style="width:{pct}%"></s></b><span class="mono">{100 - pct:g}% free</span></div>'
 def share(name, pct, label=None): return f'<div class="cap"><span>{name}</span><b class="use"><s style="width:{pct}%"></s></b><span class="mono">{label or f"{pct}%"}</span></div>'
-def odds(name, before, after): return f'<div class="odds"><span>{name}</span><b><s class="before" style="width:{before}%"></s><s class="after" style="width:{after}%"></s></b><span class="mono">{before} → {after}</span></div>'
-def odds_now(name, pct): return f'<div class="odds"><span>{name}</span><b><s class="after" style="width:{pct}%;height:100%;top:0"></s></b><span class="mono">{pct}</span></div>'
+# The Mind gives its judgment in words, never in numbers. Settled 2026-10-13. Seven words, after the US intelligence
+# community's standard (ICD 203). The number behind each word is the mock's sample, and no screen shows it.
+WORDS = ((5, 'almost no chance'), (20, 'very unlikely'), (44, 'unlikely'), (55, 'roughly even'), (79, 'likely'), (94, 'very likely'), (100, 'almost certain'))
+def word(p): return next(w for top, w in WORDS if p <= top)
+def moved(before, after): return word(after) if word(before) == word(after) else f'{word(before) if before else "new"} → {word(after)}'
+def odds(name, before, after):
+    was = '' if word(before) == word(after) else f'<span>{word(before) if before else "new"} → </span>'
+    return f'<div class="judge"><span>{name}</span><span class="jw">{was}<b>{word(after)}</b></span></div>'
+def odds_now(name, pct): return f'<div class="judge"><span>{name}</span><span class="jw"><b>{word(pct)}</b></span></div>'
 def part(kind, body): return f'<div class="part"><span class="mono pk">{kind}</span>{body}</div>'
 def facts(rows): return '<dl class="facts wide ledger">' + ''.join(f'<dt>{k}</dt><dd>{v}</dd>' for k, v in rows) + '</dl>'
 SEC = lambda s: f'<div class="sec">{s}</div>'

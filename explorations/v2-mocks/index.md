@@ -4,7 +4,7 @@
 
 ## Earth’s first hour
 One player, one phone. Each row is one moment: what the player says to the Mind, what lands, and the screen. Beside it, godview: what is true in this game that the player can’t see. The first rows are before Year 0, with no clock. Then a row every 30 seconds, 0.1 Year, from the tap on Begin to minute 15. After that the phone is down, and each row is a wake or a check-in, to minute 60.
-The game is one real draw. The neighbors, their stars, their waking years and what each knows of Earth come from the seed, and every placement passes the checker. Earth’s past, its knocks and its leads are real. Clue odds, compute shares and the Mind’s lines are samples. Amber boxes are questions this mock raises. Blue boxes are ones since settled.
+The game is one real draw. The neighbors, their stars, their waking years and what each knows of Earth come from the seed, and every placement passes the checker. Earth’s past, its knocks and its leads are real. The Mind’s judgments, compute shares and its lines are samples. Amber boxes are questions this mock raises. Blue boxes are ones since settled.
 Seed · 10 · one draw of calcs/seed.py
 Taiwan · Neither · invasion 26% · blockade 20% · neither 54%
 Nuclear use · No · 24%
@@ -220,7 +220,7 @@ The clock starts. The seed rolled every neighbor’s plan before this. Only Eart
 Studies run on their own, on the thought the player set. An observation waits to be ordered. An idle instrument sweeps, as the player set.
 +0:30 · Year 0.1
 “What did Fomalhaut show?”
-Lands · Fomalhaut has a third cloud. Chance 30 → 5.
+Lands · Fomalhaut has a third cloud. Chance: unlikely → almost no chance.
 Arrives · Our 2009 message reaches Kappa¹ Ceti, 30.3 ly away.
 Earth · Year 0.1
 Sol · 2040.1 · 1 Year = 00:05:00
@@ -233,10 +233,10 @@ REPORT · READING
 Fomalhaut · 25.1 ly · space telescope · 0.1 Years · light that left 25 Years ago
 The cloud found in 2023 has spread and faded, as dust does. A new one sits beside it. Three collisions seen in 36 years, where theory expected one in a hundred thousand years.
 WHAT IT COULD BE · BEFORE → NOW
-Rubble from one old breakup · [50%] · [64%] · 50 → 64
-A hidden planet stirring the belt · [15%] · [23%] · 15 → 23
-Chance · [30%] · [5%] · 30 → 5
-Something moving rocks · [5%] · [8%] · 5 → 8
+Rubble from one old breakup · roughly even → · likely
+A hidden planet stirring the belt · very unlikely → · unlikely
+Chance · unlikely → · almost no chance
+Something moving rocks · almost no chance → · very unlikely
 WITH WHAT WE HAVE · LONGER
 Watch Fomalhaut through a Year · Space telescope, monthly · do the clouds share one orbit? · 1 Year · 00:05:00 · [Start]
 THE MIND · A third cloud. Chance can’t carry three. The likeliest is dull: one old breakup, still grinding itself down. A Year of watching would say if they share an orbit. · [Watch it] · [Later]
@@ -259,11 +259,11 @@ CLUE · YEAR 0.2
 ### A world at Gliese 432 A
 Gliese 432 A · 31.2 ly · felt by ESPRESSO, 2034 · light that left 31 Years ago
 At least 3.2 Earth masses. A year of 244 days, 0.70 AU out, inside its star’s warm zone. It doesn’t cross its star, so we have its least mass and not its size.
-WHAT IT COULD BE · ODDS NOW
-Rock, and no life we could see · [60%] · 60
-A small gas world · [25%] · 25
-Life · [13%] · 13
-Minds · [2%] · 2
+WHAT IT COULD BE · NOW
+Rock, and no life we could see · likely
+A small gas world · unlikely
+Life · very unlikely
+Minds · almost no chance
 WITH WHAT WE HAVE
 Listen to Gliese 432 A for a Year · Radio array · rules out steady tones above 15 MW · 1 Year · 00:05:00 · [Start]
 THE MIND · It doesn’t cross, so its air stays hidden. I can listen for a Year, at a tenth of compute. That hears only the loud: tones above 15 MW. · [Listen for a Year] · [Later]
@@ -273,7 +273,7 @@ Gliese 432 A’s world is Varn’s home. Varn wakes Year 57.6 · +04:47:48, and 
 Varn’s tones since waking are about 10 kW: far under what a Year of listening hears.
 +1:30 · Year 0.3
 “82 Eridani?”
-Lands · 82 Eridani d’s orbit holds. Shimmer 10 → 3.
+Lands · 82 Eridani d’s orbit holds. Shimmer: very unlikely → almost no chance.
 Earth · Year 0.3
 Sol · 2040.3 · 1 Year = 00:05:00
 ENERGY · [1.0%] · MATTER · 24 kt · COMPUTE · [36%]
@@ -285,9 +285,9 @@ REPORT · FINDING
 82 Eridani · 19.7 ly · the Mind’s study · 37 years of velocities
 Every record fits one orbit: 648 days, swinging from 0.74 to 1.96 AU. It is in the warm zone for 30% of its year. The rest it spends too cold, then briefly too hot.
 WHAT IT COULD BE · BEFORE → NOW
-A small gas world · [50%] · [52%] · 50 → 52
-Rock, with seasons that freeze and thaw · [40%] · [45%] · 40 → 45
-Not a world: the star’s own shimmer · [10%] · [3%] · 10 → 3
+A small gas world · roughly even
+Rock, with seasons that freeze and thaw · unlikely → · roughly even
+Not a world: the star’s own shimmer · very unlikely → · almost no chance
 WHAT WOULD SETTLE IT
 Infrared telescope · reads its air · 8 Years · 40 t · 8 Years · 00:40:00 · [Start]
 THE MIND · The orbit is real. What the world is, nothing we own can say. The telescope that reads air was under way when I woke. Eight Years are left on it, and forty tonnes. · [Build it] · [Later]
@@ -320,7 +320,7 @@ A second telescope of its class would take the full 18 Years. This one was under
 Settled · Does a half-built real instrument cost fewer Years? It costs what its real schedule leaves: about 8 Years for the Habitable Worlds Observatory. Build times are standard, from the science, and the player can invest in projects that build faster. A speed-up also shortens the part left of a work under way. Settled 2026-10-10 and 10-11.
 +2:30 · Year 0.5
 The Mind glows. Taps it.
-Lands · No thick air on Gliese 12 b. A thick blanket 15 → 2.
+Lands · No thick air on Gliese 12 b. A thick blanket: very unlikely → almost no chance.
 Earth · Year 0.5
 Sol · 2040.5 · 1 Year = 00:05:00
 ENERGY · [1.0%] · MATTER · 27 kt · COMPUTE · [51%]
@@ -331,9 +331,9 @@ REPORT · FINDING
 Gliese 12 · 39.7 ly · the Mind’s study · every crossing since 2024
 A world Earth’s size, warmer than ours, crossing a quiet red star every 12.8 days. Sixteen years of crossings show no thick blanket of gas. Air as thin as ours would hide in the noise.
 WHAT IT COULD BE · BEFORE → NOW
-Bare rock · [50%] · [58%] · 50 → 58
-Thin air, like ours or Venus’s · [35%] · [40%] · 35 → 40
-A thick blanket of gas · [15%] · [2%] · 15 → 2
+Bare rock · roughly even → · likely
+Thin air, like ours or Venus’s · unlikely
+A thick blanket of gas · very unlikely → · almost no chance
 WITH WHAT WE HAVE · NEXT
 Watch its day side · Space telescope · air carries heat away, so a cool day side means air · 0.2 Years · 00:01:00 · [Start]
 THE MIND · No thick air. Bare rock, or air as thin as ours: its crossings can’t tell. Its heat could. The space telescope is back on its sweep, and this would interrupt it. · [Watch its day side] · [Later]
@@ -486,8 +486,8 @@ REPORT · FINDING
 Epsilon Indi · 11.9 ly · the Mind’s study · velocities, and 17 years of images
 Its giant was imaged in 2023, heavier and farther out than the star’s sway had said. With every record since, one world fits: six Jupiters, far out. Nothing heavier than Saturn hides inside its orbit.
 WHAT IT COULD BE · BEFORE → NOW
-One giant, and nothing else large · [70%] · [90%] · 70 → 90
-A second, smaller giant · [30%] · [10%] · 30 → 10
+One giant, and nothing else large · likely → · very likely
+A second, smaller giant · unlikely → · very unlikely
 THE SPACE TELESCOPE IS SWEEPING · ONE STAR AT A TIME
 Watch Gliese 12 b’s day side · is it cooler than bare rock? · 0.2 Years · 00:01:00 · [Start]
 Watch Fomalhaut through a Year · monthly · do the clouds share one orbit? · 1 Year · 00:05:00 · [Start]
@@ -536,7 +536,7 @@ No hunter was drawn in this game. About half of games have one.
 No neighbor can have a fast bullet yet: none has been awake a century and a half.
 +7:30 · Year 1.5
 The Mind glows. Taps it.
-Lands · Gliese 12 b’s day side runs cool. Thin air 40 → 62.
+Lands · Gliese 12 b’s day side runs cool. Thin air: unlikely → likely.
 Earth · Year 1.5
 Sol · 2041.5 · 1 Year = 00:05:00
 ENERGY · [1.6%] · MATTER · 42 kt · COMPUTE · [44%]
@@ -547,9 +547,9 @@ REPORT · READING
 Gliese 12 · 39.7 ly · space telescope · 0.2 Years · four passes behind its star
 Bare rock facing its star would glow at its hottest. This world glows cooler. Something carries heat away from the day side, and air does that.
 WHAT IT COULD BE · BEFORE → NOW
-Thin air, like ours or Venus’s · [40%] · [62%] · 40 → 62
-Bare rock · [58%] · [36%] · 58 → 36
-A thick blanket of gas · [2%] · [2%] · 2 → 2
+Thin air, like ours or Venus’s · unlikely → · likely
+Bare rock · likely → · unlikely
+A thick blanket of gas · almost no chance
 WHAT WOULD SETTLE IT
 What the air is made of. That needs a wider mirror than any we have or are building.
 THE MIND IS STUDYING NEXT
@@ -641,9 +641,9 @@ REPORT · FINDING
 LHS 1140 · 48.8 ly · the Mind’s study · every crossing since 2017
 In 2024 its crossings ruled out a puffed-up world of hydrogen, and hinted at heavier air over water. Sixteen more years firm the hint: nitrogen or carbon dioxide, on a world that is part ocean.
 WHAT IT COULD BE · BEFORE → NOW
-Water, under heavy air · [55%] · [78%] · 55 → 78
-Water, frozen over and airless · [35%] · [20%] · 35 → 20
-A small gas world · [10%] · [2%] · 10 → 2
+Water, under heavy air · roughly even → · likely
+Water, frozen over and airless · unlikely → · very unlikely
+A small gas world · very unlikely → · almost no chance
 WHAT IT CAN’T TELL
 Whether anything lives in that water. Air like this forms without life.
 THE MIND · Heavy air over water, most likely, forty-nine light-years off. Two red stars’ worlds may hold air. Neither says anything lives there.
@@ -727,10 +727,10 @@ REPORT · READING · 1 YEAR
 Fomalhaut · 25.1 ly · space telescope, monthly · 1 Year · light that left 25 Years ago
 Twelve images, a month apart. All three clouds drift along one path and spread as dust does. One body broke up there long ago, and its pieces keep colliding.
 WHAT IT COULD BE · BEFORE → NOW
-Rubble from one old breakup · [64%] · [86%] · 64 → 86
-A hidden planet stirring the belt · [23%] · [11%] · 23 → 11
-Chance · [5%] · [1%] · 5 → 1
-Something moving rocks · [8%] · [2%] · 8 → 2
+Rubble from one old breakup · likely → · very likely
+A hidden planet stirring the belt · unlikely → · very unlikely
+Chance · almost no chance
+Something moving rocks · very unlikely → · almost no chance
 WHAT IT RULES OUT
 Three unrelated collisions. Not a small planet shepherding the pieces: that waits for a sharper image.
 THE MIND · One orbit for all three. Rubble, almost surely. Fomalhaut is 440 million years old: too young for anyone to be moving rocks.
@@ -996,7 +996,7 @@ One observation ordered, and the telescope’s standing search set. The player p
 Design question 3 · Should seasons set when an observation can start? A real telescope can’t point near the Sun, so each star is out of reach for months of every year. The mock ignores that. It would move the opening’s first reading, Fomalhaut, off 30 seconds.
 +45:00 · Year 9
 The Mind glows. Taps it.
-Lands · Gliese 432 A’s world is blue, with ozone. Life 13 → 44.
+Lands · Gliese 432 A’s world is blue, with ozone. Life: very unlikely → likely.
 Lands · A reply window opens at Gliese 526. Nothing heard.
 Earth · Year 9
 Sol · 2049.0 · 1 Year = 00:05:00
@@ -1008,10 +1008,10 @@ REPORT · FIRST READING
 Gliese 432 A · 31.2 ly · infrared telescope · 49 days · light that left 31 Years ago
 Blue, as air scatters light. And ozone, which sunlight makes from oxygen. Its water and oxygen bands sit inside its star’s glare for this mirror: the world is 73 thousandths of an arcsecond from its star.
 WHAT IT COULD BE · BEFORE → NOW
-Life · [13%] · [44%] · 13 → 44
-Rock, and no life we could see · [60%] · [36%] · 60 → 36
-A small gas world · [25%] · [16%] · 25 → 16
-Minds · [2%] · [4%] · 2 → 4
+Life · very unlikely → · likely
+Rock, and no life we could see · likely → · unlikely
+A small gas world · unlikely → · very unlikely
+Minds · almost no chance
 WHAT WOULD SAY MORE
 A wider mirror · splits it from its star in redder light · not yet priced · later
 Far-side array · hears a world’s everyday radio · needs Moon industry · later
@@ -1037,10 +1037,10 @@ REPORT · CANDIDATE
 ### A world at Alpha Centauri A
 Alpha Centauri A · 4.3 ly · infrared telescope, on its sweep · two visits, weeks apart · light that left 4 Years ago
 A point of light 1.45 AU from the star, inside its warm zone. On the second visit it had moved with the star. About Earth’s size, by its brightness. Its tug is a twentieth of a metre a second: too small for anything we had.
-WHAT IT COULD BE · ODDS NOW
-Rock, and no life we could see · [55%] · 55
-Life · [40%] · 40
-Minds · [5%] · 5
+WHAT IT COULD BE · NOW
+Rock, and no life we could see · roughly even
+Life · unlikely
+Minds · almost no chance
 WITH WHAT WE HAVE
 Read its air · Infrared telescope · water in 16 hours, oxygen in 3 days · the sweep waits · 0.1 Years · 00:00:30 · [Start]
 THE MIND · UNASKED · A new world, next door · The sweep found it on its first stop, and it moves with the star. Earth’s size, in the warm zone. No one had felt it. I can read its air in days. That interrupts the sweep, and it is yours to say. · [Read its air] · [Keep sweeping]
@@ -1081,10 +1081,10 @@ REPORT · FIRST READING
 Alpha Centauri A · 4.3 ly · infrared telescope · about a month · light that left 4 Years ago
 Water, oxygen, and several times the carbon dioxide its seas and rocks should hold. Carbon like that is drawn down slowly, so it was put there lately. A string of great eruptions would do it. So would burning.
 WHAT IT COULD BE · BEFORE → NOW
-Life, after great eruptions · [5%] · [46%] · 5 → 46
-Something burned its carbon, and is gone · [0%] · [27%] · 0 → 27
-Life, and nothing more · [40%] · [19%] · 40 → 19
-Rock, and no life we could see · [55%] · [8%] · 55 → 8
+Life, after great eruptions · almost no chance → · roughly even
+Something burned its carbon, and is gone · new → · unlikely
+Life, and nothing more · unlikely → · very unlikely
+Rock, and no life we could see · roughly even → · very unlikely
 WHAT IT CAN’T TELL
 Which. The gases only industry makes show deeper in the infrared than this mirror reads.
 THE MIND · It lives, and something happened to it. I can’t tell an eruption from a fire at this distance. One more thing. In ninety years of our records, nothing was ever heard from that star. · [Can we go and look?] · [What happened there?]
@@ -1136,9 +1136,10 @@ Truth: 4 are homes. Kesh’s world at Gliese 216 B, Nuvo’s world at 20 Leonis 
 Their ages: 5 published, 6 drawn. The seed drew 136 natural worlds in all, 113 at red dwarfs, and 85 are bare rock.
 From here a home and a natural world look alike: a point of light that moves with its star.
 Each needed a second visit, months after the first. Most are too far to read with this mirror.
-Design question 8 · Should the Mind’s odds match what the seed really holds? Across games about 1 point of light in 4 is a home, and about 4 in 10 are living natural worlds. Of the points that show oxygen, nearly half would be homes. The Mind’s reports say Minds 5 and Life 40. It can’t know how many neighbors there are. So whose odds are these?
+Design question 8 · What stands behind the Mind’s words? Words are settled. A word still claims something. The Mind calls Minds almost no chance at a new point of light, and in the seed’s truth about 1 in 4 is a home. Does it judge from what Earth knows, or from what is true?
 Settled · What does the first sweep find? Natural warm worlds too, at the real rate: NASA’s planning value, about one star in four. The seed draws them. A first pass shows about 17 points of light a game, and about 1 in 4 is a home. Settled 2026-10-13.
 Settled · What sets each natural world’s rung? Its star’s age, on Earth’s schedule with scatter: lasting oxygen at about 2.3 billion years, animals at about 4. Physics sets whether it kept its air. At Sun-like stars about half are alive. At red dwarfs most are bare rock. Settled 2026-10-13.
+Settled · Whose odds does the Mind show? None, as numbers. The Mind gives its judgment in words: seven of them, from almost no chance to almost certain. A report shows the word now, and the word before if it moved. Settled 2026-10-13.
 +55:30 · Year 11.1
 Woken. The Mind has opened.
 Lands · The eleventh data center runs. The twelfth can’t start.
@@ -1199,6 +1200,7 @@ Settled: What sets how long an observation takes? · Physics. A nearer or larger
 Settled: What does the first sweep find? · Natural warm worlds too, at the real rate: NASA’s planning value, about one star in four. The seed draws them. A first pass shows about 17 points of light a game, and about 1 in 4 is a home. Settled 2026-10-13.
 Settled: How high can a natural world climb? · To animals and forests. Alive is a ladder: bare rock, a lifeless sea, hidden microbes, an oxygen world, animals. Every mind, living or dead, stays hand-written. Settled 2026-10-13.
 Settled: What sets each natural world’s rung? · Its star’s age, on Earth’s schedule with scatter: lasting oxygen at about 2.3 billion years, animals at about 4. Physics sets whether it kept its air. At Sun-like stars about half are alive. At red dwarfs most are bare rock. Settled 2026-10-13.
+Settled: Whose odds does the Mind show? · None, as numbers. The Mind gives its judgment in words: seven of them, from almost no chance to almost certain. A report shows the word now, and the word before if it moved. Settled 2026-10-13.
 1. What is matter for in the first hour? · After the launch complex, 55 kt arrive each Year. A yard and a launcher take 11. By Year 12 about 500 kt sit unspent, and nothing priced for these Years costs more than 100.
 2. What does a first voice give the player to do? · A knock arrives at minute 42. The mock shows what it proves, the Mind’s reading of it, and three ways on: answer, listen, or stay silent. How much of a knock can be read, and what an answer may hold, are not settled.
 3. Should seasons set when an observation can start? · A real telescope can’t point near the Sun, so each star is out of reach for months of every year. The mock ignores that. It would move the opening’s first reading, Fomalhaut, off 30 seconds.
@@ -1206,6 +1208,6 @@ Settled: What sets each natural world’s rung? · Its star’s age, on Earth’
 5. What can one reading say about a world whose Mind has not woken? · Varn’s people are there, 80 years before their waking. This mirror reads only the world’s color and ozone, so life is a guess and minds are invisible. How fast should a living neighbor become known?
 6. A first voice, a living world and a dead world in one hour: too much, too soon? · This seed drew all three. A signal reaches Earth in the first hour in about 1 game in 4. A neighbor’s world sits within 15 ly in about 1 game in 3, and a dead one in about 1 in 35.
 7. Can the first telescope tell a dead civilization from a volcano? · The mock says no. It reads carbon dioxide, and the gases only industry makes need a colder, wider mirror. So the find stays strange, and going is the way to know.
-8. Should the Mind’s odds match what the seed really holds? · Across games about 1 point of light in 4 is a home, and about 4 in 10 are living natural worlds. Of the points that show oxygen, nearly half would be homes. The Mind’s reports say Minds 5 and Life 40. It can’t know how many neighbors there are. So whose odds are these?
+8. What stands behind the Mind’s words? · Words are settled. A word still claims something. The Mind calls Minds almost no chance at a new point of light, and in the seed’s truth about 1 in 4 is a home. Does it judge from what Earth knows, or from what is true?
 9. What does an inquiry cost in time? · The audit prices the matter of probes and the laser array. Their build times are not set, so the mock stops at the offer.
 10. What happens at the grid limit? · At Year 11.1 thought is 86 times Year 0’s and draws nine tenths of the grid. Every priced way on is slow or small beside the fabs. Is a long plateau right, fifty-five minutes in?

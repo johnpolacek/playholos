@@ -314,7 +314,14 @@ Settled 2026-10-13.
   - *Earth's pace is taken as typical.* One school says Earth was fast, and most living worlds are still microbes. The pace is the number to turn if so.
   - *Not modelled:* a warm zone drifts outward as its star brightens, so an old Sun-like star's world may have thawed late.
   - Set aside: fixed odds at every star, and fixed odds by star kind.
-- **Open:** seasons, and whether the Mind's odds should match what the seed holds.
+- **The Mind gives its judgment in words, never in numbers.** Settled 2026-10-13.
+  - *A report still lists what a thing could be.* Each explanation carries a word. If a reading moved it, the word before shows too: Life, very unlikely → likely.
+  - *Seven words,* a sample, after the scale US intelligence analysts use: almost no chance, very unlikely, unlikely, roughly even, likely, very likely, almost certain.
+  - *This replaces v1's percentages.* The rest of v1's rule holds ([v1: What we know, and how we know it](legacy/v1/HOLOS_GAME_CONCEPT.md#what-we-know-and-how-we-know-it)): explanations compete, and each instrument runs one test.
+  - *A number that is a measurement stays a number:* a distance, a time, a mass.
+  - *Known cost.* People read such words differently, and nearer to even than meant (Budescu et al. 2014). One fixed scale, used everywhere, is the guard.
+  - Set aside: odds the Mind reasons out from what Earth knows, shown as numbers. And odds that match the seed's truth.
+- **Open:** seasons, and what stands behind the Mind's words: what Earth knows, or what is true.
 
 ## The neighbors
 
@@ -479,6 +486,7 @@ These v1 rules no longer apply.
 ## Carried, reworded
 
 - **No screen shows how many civilizations there are.** v1 hid the seat count. v2 hides the roster's size and the seed's picks. Who is out there, and how many, is learned only by looking: Know projects, inquiries and contact.
+- **Odds are words.** Settled 2026-10-13. v1 showed percentages across named explanations. v2 shows one of seven words for each. See [How Earth learns](#how-earth-learns).
 - **Looks are observations, and what comes back is a reading.** Settled 2026-10-13. An observation is one pointed use of an instrument: an image, a listen, a watch. v1's quick look and long look are a quick and a long observation. A study returns a finding. Ordinary uses of the word look stay.
 
 ## Open questions
@@ -516,6 +524,7 @@ Answered one at a time, in this order. Every answer must be permitted by current
     - **Settled 2026-10-13:** a sweep finds natural warm worlds too, at the real rate. In this game its first pass shows 15 new points of light: 4 homes and 11 natural worlds. See [How Earth learns](#how-earth-learns).
     - **Settled 2026-10-13:** alive is a ladder, and a natural world climbs no higher than animals and forests. Every mind stays hand-written. See [How Earth learns](#how-earth-learns).
     - **Settled 2026-10-13:** its star's age sets a natural world's rung, on Earth's schedule with scatter, and physics says whether it kept its air. In this game the sweep's 11 natural worlds are 5 alive, 2 where life died, 2 airy and lifeless, 2 bare rock. See [How Earth learns](#how-earth-learns).
-    - **Should the Mind's odds match what the seed really holds?** About 1 point of light in 4 is a home, and about 4 in 10 are living natural worlds. The Mind's reports say Minds 5 and Life 40, and it can't know how many neighbors there are.
+    - **Settled 2026-10-13:** the Mind gives its judgment in words, never in numbers. Both mocks now show words. See [How Earth learns](#how-earth-learns).
+    - **What stands behind the Mind's words?** A word still claims something. The Mind calls Minds almost no chance at a new point of light, and in the seed's truth about 1 in 4 is a home.
     - **What does an inquiry cost in time?** The matter of probes and the laser array is priced. Their build times are not.
     - **What happens at the grid limit?** At Year 11.1 thought is 86 times Year 0's and draws nine tenths of the grid. Every priced way on is slow or small.

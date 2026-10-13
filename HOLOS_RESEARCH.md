@@ -839,6 +839,13 @@ What a neighbor's world can plausibly be, beyond an Earth twin. Each roster entr
   - Matters: the game's premise puts a mind at about 1 warm world in 18. Minds can't be commoner than life, so in this game most warm worlds that can hold life do.
   - Used since: v2 [How Earth learns](HOLOS_GAME_CONCEPT.md#how-earth-learns), the ladder and the rung draw in calcs/seed.py.
 
+- **Saying how likely in words, checked 2026-10-13.** For the Mind's reports.
+  - **ICD 203, the US intelligence community's analytic standard** · Read in a [secondary copy](https://github.com/MISP/misp-taxonomies/tree/main/estimative-language), not the directive. Seven terms: almost no chance 1 to 5%, very unlikely 5 to 20%, unlikely 20 to 45%, roughly even chance 45 to 55%, likely 55 to 80%, very likely 80 to 95%, almost certain 95 to 99%.
+  - **[Budescu et al. 2014](https://www.nature.com/articles/nclimate2194)** · Published, Nature Climate Change. I read the abstract. Across 24 countries and 17 languages, people read the climate panel's likelihood words as nearer to 50% than meant. Adding number ranges fixed much of it.
+  - From a search summary, not read: a Monash study found readers matched the seven terms' ranges 32% of the time with no guide, and 66% with the ranges shown inline.
+  - Matters: words alone are read loosely. The game shows words only, by choice, so it uses one fixed scale everywhere.
+  - Used: v2 [How Earth learns](HOLOS_GAME_CONCEPT.md#how-earth-learns), and both mocks.
+
 - **What sets a natural world's rung, checked 2026-10-13.** For the rung draw in [calcs/seed.py](calcs/seed.py). I read each abstract myself, and the formulas in the text of Pass et al.
   - **[Pass, Charbonneau and Vanderburg 2025](https://arxiv.org/abs/2504.01182)** · Published, ApJL. The shoreline as a formula: a world keeps air when 4 log10 of its escape speed in km/s, minus log10 of its lifetime dose of far ultraviolet and X-rays in Earth units, minus 3.16, is above zero. Mars sits on the line.
     - The dose, after Zahnle and Catling: the star's brightness to the power 0.4, over the orbit's size squared.
