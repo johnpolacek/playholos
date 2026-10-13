@@ -147,15 +147,13 @@ YOUNG = {
     # one can keep a star, but can't drop one alone. Sources in HOLOS_RESEARCH.md, Ages of nearby stars.
     # Corrected 2026-10-13: spin, activity and X-rays don't date a fully convective red dwarf, under about 0.35 Suns.
     # Those stay fast and active for billions of years (Pass et al. 2024, Medina et al. 2022), so 15 red dwarfs dropped
-    # the day before on such ages alone are hosts again, Ross 154 and EV Lacertae among them. Those below stay out:
-    # each is heavier than that, or is dated by a bound star, its brightness above the main sequence, or its gravity.
+    # the day before on such ages alone are hosts again, Ross 154 and EV Lacertae among them.
+    # And a fast spin dates no red dwarf: it says only that the star has not yet settled onto the slow sequence, and
+    # about a quarter of 0.35 to 0.5 Sun stars are still fast at 0.7 billion years (Douglas et al. 2017, 2019). So
+    # AD Leonis, GT Pegasi, GJ 4337 A with GJ 4338 B, and OT Serpentis are hosts again too. Those below stay out: each
+    # is dated by a slow, settled spin, by a bound companion, or by its brightness above the main sequence.
     '46580': 'HD 82106 (Gl 349), 0.2 to 0.9 Gyr from spin, activity and X-rays',
     '26335': 'Gliese 208, 0.15 to 0.8 Gyr, near 0.5 from its 12.3 day spin. Earth knocked here',
-    '625453654702751872': 'AD Leonis (Gl 388), 0.025 to 0.5 Gyr',
-    '75187': 'OT Serpentis (GJ 9520), 0.015 to 0.15 Gyr',
-    '1923896725839633024': 'GJ 4337 A, 0.02 to 0.3 Gyr',
-    '1923896622760418176': 'GJ 4338 B, with GJ 4337 A',
-    '112909': 'GT Pegasi (Gl 875.1), 0.02 to 0.3 Gyr',
     '892348454394856064': 'YY Geminorum (Castor C), 0.29 to 0.37 Gyr, the age of Castor A and B',
     '63510': 'DT Virginis (Gl 494, Ross 458), 0.13 to 0.8 Gyr',
     '72944': 'GJ 569 A, 0.1 to 0.8 Gyr, with its brown dwarf pair',
