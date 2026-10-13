@@ -368,6 +368,17 @@ Anchors for [the project audit](HOLOS_PROJECT_AUDIT.md).
   - 100,000 dipoles over 200 km² of the lunar far side, made in place from metal in the regolith, by equipment landed from Earth.
   - Matters: a far-side array is a lunar industry project, not cargo.
   - Used: the project audit, far-side array.
+- **The long roads, checked 2026-10-13.** For v2's build times of the works that megatonnes and far hearing wait on. I read each page or abstract named here myself.
+  - **FarView, above.** Abstract reread: the full array "will take 4 - 8 years to build", and is meant for the 2030s. It listens at low pitch, for the early universe. Its mass is not in the abstract.
+    - The game's far-side array is five times the area and built for higher pitch, so it needs a real collecting surface: about 1 Mt at an assumed 1 kg/m². That is this project's, and far beyond FarView.
+  - **[LUVOIR, the 15 m telescope study](https://en.wikipedia.org/wiki/Large_Ultraviolet_Optical_Infrared_Surveyor)** · Reference page, read. If funded it would launch about 2039. The teams reported in 2019. Lifetime cost for the 15 m design: 18 to 24 billion dollars.
+    - From a search summary, not read: the 2020 survey chose a telescope of about 6 m instead, and judged the larger one unlikely before the late 2040s.
+  - **[Kolm, mass driver update](https://nss.org/l5-news-mass-driver-update/)** · L5 News, 1980. Read on the page: a lunar mass driver "several kilometers long, designed conservatively with present technology" should deliver 600,000 tons a year, assuming ten years of operation. No build time is given.
+  - **[Hein, Matheson and Fries 2018](https://arxiv.org/abs/1810.03836)** and **[Calla, Fries and Welch 2018](https://arxiv.org/abs/1808.05099)** · Preprints on asteroid mining, abstracts read. What decides it is how much each craft processes, how many craft fly, and how often. A small craft brings 100 kg of water a trip, and over a hundred must work for five years to break even.
+  - From general knowledge, not a source read: OSIRIS-REx took 7 years from launch to its sample's return, and Hayabusa2 took 6.
+  - Not found: any real schedule for a mass driver, for megatonnes of lunar metal a year, or for mining the belt. v1's 24, 30 and 20 Years stand unchecked.
+  - Matters: only the telescope and the far-side array have a builder's own date behind them. The rest are v1's times, kept and flagged.
+  - Used: v2 [Build times](HOLOS_GAME_CONCEPT.md#build-times), calcs/early_game.py and the project audit.
 
 - **[Phipps et al., Review: Laser-Ablation Propulsion](https://www.researchgate.net/publication/225005755_Review_Laser-Ablation_Propulsion)** · Published, Journal of Propulsion and Power ([debris removal](https://arxiv.org/abs/1110.3835)).
   - Ablation thrust runs about 10⁻⁵ to 10⁻⁴ N per watt that lands, near 10⁻⁴ at its best.
@@ -1010,6 +1021,8 @@ Results the design is waiting on. Check each when its date comes.
 - **JWST's August 2026 observation of Alpha Centauri A** · observed August 11 and 12, programme 12628. Not published as of 2026-10-13. Adopt the result for candidate S1.
 
 ## To check
+
+- The long roads: a real schedule for a lunar mass driver, for lunar metal at megatonnes a year, and for belt mining. FarView's mass. LUVOIR's schedule at source.
 
 - Companion masses in calcs/binaries.py are rough: dynamical masses depend on distance cubed, and white dwarfs read as light from their brightness.
 - About 15 red dwarfs are unconfirmed young-group candidates with no age of their own. They stay. Gliese 393 is listed in AB Doradus but [Amado et al. 2021](https://arxiv.org/abs/2105.13785) put it older than 0.7 billion years.

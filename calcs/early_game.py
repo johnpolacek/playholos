@@ -160,7 +160,51 @@ def raise_the_pace(share=0.25 / 24, step=1.5, fab=3, factory=(3, 1 / 3), yard=(5
     print(f'All-sky watch: {elements / 1e6:.2f} million elements at {sites} sites, {elements / 131072:.0f} times SKA-Low\'s antenna count and '
           f'{elements / 1024:,.0f} times CHIME\'s receivers, on {sites * side ** 2 / 8000:.1f} times CHIME\'s area.')
 
+# ---------- The long roads ----------
+# Priced 2026-10-13, as samples, each against the best real plan found. Sources are in HOLOS_RESEARCH.md.
+# - A new telescope with a 15 m mirror: 18 Years, the flagship standard. Its study aimed at a launch about 2039, from a
+#   2019 report. About 40 t.
+# - A laser sail array: 25 Years. Starshot aimed at a first launch within a generation.
+# - A mass driver on the Moon: v1's 24 Years. O'Neill's group gave a rate, 600 kt a year, and no build time.
+# - An orbital foundry: v1's 30 Years. It turns thrown rock into works.
+# - A far-side array: v1's 30 Years, after the Moon's mine exists. FarView plans 4 to 8 years for a fifth of the area,
+#   in far lighter antennas.
+# - Belt prospecting and mining: v1's 6 and 20 Years. Nothing like it has flown. 120 kt a year.
+# - Power from orbit: about 10 Mt for a fifth more energy, so its pace is the pace matter arrives.
+ROADS = dict(mirror=18, array=25, driver=24, foundry=30, far_side=30, prospect=6, mining=20)
+DRIVER_KT, MINING_KT, ORBIT_POWER_MT = 600, 120, 10
+
+def finish(start, years, helper=None, cut=0.0):
+    """The Year a work is done. A speed-up that is done at `helper` takes `cut` off whatever is not yet built."""
+    if helper is None or helper >= start + years: return start + years
+    built = max(0, helper - start)
+    return max(start, helper) + (years - built) * (1 - cut)
+
+def long_roads(early=6.2, reading=9.4, yard=11.3, ly=4.32):
+    """The mock's game: works begun when the Mind first offers them, at Year 6.2 and Year 9.4, with the yard done at 11.3."""
+    mirror = finish(reading, ROADS['mirror'], yard, 0.25)
+    array = finish(reading, ROADS['array']); word = array + ly / 0.2 + ly
+    driver = finish(early, ROADS['driver']); foundry = finish(early, ROADS['foundry'], yard, 0.25)
+    mining = finish(early, ROADS['prospect']) + ROADS['mining']
+    far = driver + ROADS['far_side']
+    rock = lambda y: DRIVER_KT * max(0, y - driver) + MINING_KT * max(0, y - mining)        # kt thrown or hauled by Year y
+    y = max(driver, foundry)
+    while rock(y) < ORBIT_POWER_MT * 1000: y += 0.1
+    print(f'The long roads, in the mock\'s game. Begun at Year {early} or Year {reading}, with the yard done at Year {yard}:')
+    for name, when, note in (
+        ('A 15 m mirror', mirror, f'begun Year {reading}. Reads smog at most worlds it can split, in days to weeks'),
+        ('Mass driver on the Moon', driver, f'begun Year {early}. Then {DRIVER_KT} kt of rock a Year'),
+        ('Orbital foundry', foundry, f'begun Year {early}. Turns rock into works'),
+        ('Belt mining', mining, f'prospecting from Year {early}. Then {MINING_KT} kt a Year'),
+        ('Laser sail array', array, f'begun Year {reading}. Sails\' word from {ly} ly is home at Year {word:.0f}'),
+        (f'{ORBIT_POWER_MT} Mt in orbit', y, 'enough for power from orbit: a fifth more energy'),
+        ('Far-side array', far, 'begun when the driver is done. Hears a 100 kW tone to 47 ly in a day')):
+        print(f'  {name:26} Year {when:5.1f}  +{int(when * 5 // 60)}:{int(when * 5 % 60):02d} of play  {note}')
+    print(f'  The grid limit is reached at about Year 11. Ground solar adds a fifth by Year 21. Power from orbit, from about Year {y:.0f}: '
+          f'{y - 11:.0f} Years at the limit, {(y - 11) * 5 / 60:.1f} hours of play.')
+
 if __name__ == '__main__':
+    long_roads(); print()
     compute_growth(); print()
     orbit_stock(); print()
     raise_the_pace(); print()

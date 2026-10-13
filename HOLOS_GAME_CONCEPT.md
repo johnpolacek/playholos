@@ -201,7 +201,7 @@ Settled 2026-10-06. Replaces v1's numbers ([v1: Economy and projects](legacy/v1/
   - *Megatonnes can't come from Earth.* 10 Mt is 180 Years of lift. A mass driver on the Moon throws 600 kt a Year, by O'Neill's estimate, and belt mining brings 120.
   - *So the choice in the first hour is when to start that road:* mines, then a driver. The Mind lays it out and waits.
   - *The first 15 minutes do use matter.* Earth starts with 20 kt, and a vault or a launcher costs 10.
-  - *Not priced:* v2's build times for belt mining and the mass driver. v1 had 20 and 24 Years.
+  - *Priced 2026-10-13:* belt mining and the mass driver keep v1's 20 and 24 Years, and the driver no longer waits for the belt. See [Build times](#build-times).
   - Set aside: hiding matter until a megatonne work is on offer, and shrinking Earth's lift so matter stays scarce.
 - **Instruments and probes:** as in the backbone above.
 - **The sky watch is a drift scan.** Like CHORD, finished in 2028: each northern direction passes through it for about 10 minutes a day. v1's always-on watch of the whole sky becomes a project: dense aperture arrays on two continents ([the audit](HOLOS_PROJECT_AUDIT.md#calculations)).
@@ -258,6 +258,18 @@ Settled 2026-10-10. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#earth-to-ye
   - *A flyby probe:* 12 Years after the launcher, v1's time, in the range of flagship craft. *A sentinel probe:* 20, v1's.
   - *What an inquiry to the nearest star costs.* Begun at Year 9.4: the array is done at Year 34, sails arrive at Year 56, and their word is home at Year 60. A probe's word is home at Year 78.
   - *Flight and light set most of it.* 4.3 ly is 22 Years at a fifth of light speed, 36 at an eighth, and 4.3 more for word to come back.
+- **The long roads, priced 2026-10-13.** Samples, each against the best real plan found. Numbers from `python3 calcs/early_game.py`. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#real-masses-behind-the-projects).
+  - *A new telescope with a 15 m mirror:* 18 Years, the flagship standard, about 40 t. Its study aimed at a launch about 2039, from a 2019 report. It needs no assembly in space: that is the only way only past 15 m.
+  - *A mass driver on the Moon:* 24 Years, v1's, and 1 kt, which Earth can lift. Then 600 kt of rock a Year. O'Neill's group gave that rate and no build time, so nothing real checks the 24.
+  - *It no longer waits for belt mining.* v1 made it wait because it cost 4,000 kt. At 1 kt it can start in the first hour.
+  - *An orbital foundry:* 30 Years, v1's, 1 kt. It turns thrown rock into works.
+  - *Belt prospecting, then mining:* 6 and 20 Years, v1's. Then 120 kt a Year. Nothing like it has flown.
+  - *A far-side array:* 30 Years, v1's, begun once the driver's mine exists. About 1 Mt of metal made in place. FarView plans 4 to 8 years for a fifth of the area, in far lighter antennas.
+  - *Power from orbit:* about 10 Mt for a fifth more energy, so its pace is the pace rock arrives.
+  - *The mock's game, each begun when the Mind first offers it.* The mirror: Year 23. Driver and foundry: Year 30. Belt mining: Year 32. Laser array: Year 34. Ten megatonnes in orbit: Year 45. Far-side array: Year 60.
+  - *So the plateau lasts about 34 Years:* 2.8 hours of play, from the grid limit at Year 11 to power from orbit at about Year 45. Ground solar adds a fifth at Year 21.
+  - *And the far-side array arrives about when Varn wakes,* Year 57.6. Earth can read Varn's smog from Year 23, and hear its everyday radio only from Year 60.
+  - *A smaller array hears less, sooner.* One fifth the size hears 6 in 10 of the living homes a first pass sees, against 9 in 10, and Varn in 5 days. Whether it may grow in stages is open.
 
 ## Earth's leads at Year 0
 
@@ -380,7 +392,7 @@ Settled 2026-10-13.
   - *About 1 living neighbor in 8 is out of reach of all of these.* What is left is its own voice, or going.
   - *In the mock's game:* Varn's world, 31 ly off, 80 years before its waking. A far-side array would hear it in 5 hours and a 15 m mirror would read its smog in 5 days. Earth has neither at Year 9.
   - *Samples:* a neighbor's smog is taken to be like Earth's, from its first radio on. Times are scaled from one published point for each mirror: Earth's peak for the first telescope, today's level for the 15 m. No listening campaign runs past a Year.
-  - *Not priced:* a 15 m mirror. The far-side array needs Moon industry.
+  - *Priced 2026-10-13:* a 15 m mirror, 18 Years. A far-side array, 30 Years after a Moon mass driver. See [Build times](#build-times).
   - Set aside: a floor, where some instrument within reach in the first hours can always tell. And minds never read from afar.
 - **The first telescope reads a dead world's strange air, and not its cause.** Settled 2026-10-13. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#reading-air).
   - *What a collapse leaves.* Radio stops at once. Smog clears, since sunlight breaks it down. Burned carbon stays: a fifth to a third is still in the air after 2 to 20 centuries (Archer et al. 2009).

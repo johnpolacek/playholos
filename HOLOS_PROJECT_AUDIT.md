@@ -118,7 +118,7 @@ Proposed prices are matter in orbit, on the Moon or in the belt. Ground builds s
 | Deep-field receiver | 300 kt | Ground | 0, ground | An SKA-class ground array. |
 | All-sky watch, new | none | Sample | 0, ground. 6 Years, 1% of compute. Two sites, 1.28 million elements. Every direction at every hour. Priced 2026-10-11. | CHIME was built in 2 years and DSA-2000 plans about 2. SKA-Low takes about 8 for 131,000 antennas. The watch has ten times SKA-Low's count, in elements a tenth the size. See the calculation above. |
 | Planet survey | 0 | OK | 0 | Existing telescopes and archives. |
-| Infrared telescope | 200 kt | Heavy ×5,000 | 40 t. 18 Years new. On Earth the Habitable Worlds Observatory is under way at Year 0: about 8 Years left. | LUVOIR-A, the largest studied, 28 to 37 t. JWST 6.2 t. |
+| Infrared telescope | 200 kt | Heavy ×5,000 | 40 t. 18 Years new, and a new one can carry a 15 m mirror. Priced 2026-10-13. On Earth the Habitable Worlds Observatory is under way at Year 0: about 8 Years left. | LUVOIR-A, the largest studied, 28 to 37 t. JWST 6.2 t. |
 | Waste-heat survey | 0 | OK | 0 | Existing telescopes and archives. |
 | Second infrared telescope | 3,000 kt | Heavy ×100,000 | 60 t, with the stage to reach its far station | A LUVOIR-class twin, tens of tonnes. |
 | Starshade | 5,000 kt | Heavy ×1,000,000 | 10 t | Starshade Rendezvous design, 3.8 t at launch. |
@@ -126,7 +126,7 @@ Proposed prices are matter in orbit, on the Moon or in the belt. Ground builds s
 | Neutrino watch | 6,000 kt | Ground | 0, ground | Hyper-Kamiokande holds 260 kt of water, underground. |
 | Infrared interferometer | 40 Mt | Heavy ×100,000 | 200 t | A few LUVOIR-class mirrors flying in formation, about 100 t. |
 | Solar lens observatory | 40 Mt | Heavy ×100,000+ | 5 t. 30 Years, not 70: about 25 AU a year gets there in about 25. | NASA concept: small sailcraft, about 100 kg each. |
-| Far-side array | 40 Mt | OK, recalculated | About 1 Mt of lunar metal made in place, as FarView plans, at an assumed 1 kg/m². Needs the mass driver line. Hears a 100 kW tone to 47 ly in a day. | Depends on the antenna design. Thin wire antennas weigh little, steel dishes a great deal. |
+| Far-side array | 40 Mt | OK, recalculated | About 1 Mt of lunar metal made in place, as FarView plans, at an assumed 1 kg/m². Needs the mass driver line. Hears a 100 kW tone to 47 ly in a day. 30 Years, v1's. Priced 2026-10-13. | Depends on the antenna design. Thin wire antennas weigh little, steel dishes a great deal. |
 | Kilometer interferometer | 800 Mt | Heavy ×100,000+ | 1 kt | A fleet of large mirrors, thousands of tonnes at most. |
 
 From 2026-10-13, Planet survey and Waste-heat survey are searches: standing orders for instruments Earth already has, not builds. See [How Earth learns](HOLOS_GAME_CONCEPT.md#how-earth-learns).
@@ -143,9 +143,9 @@ From 2026-10-13, Planet survey and Waste-heat survey are searches: standing orde
 | Chip fabs, new | none | Sample | 0, ground. 3 Years, 10% of compute. A second line: two data centers a Year. The eleven that fit are full by Year 7, not 11. A third line gains a third of a Year. Priced 2026-10-11. | A leading-edge fab takes 2 to 4 years. One firm makes the tools that print the finest chips, about 90 a year. The chip stock grew 3.4× a year in 2026, so two lines' 2.25× has been seen. |
 | Launch complex | 0 | OK | 0, ground. 2 Years. +40 kt a Year of lift, all of it spare. One at a time. Settled 2026-10-10: Earth's spare lift starts at 15 kt a Year. | Starship cadence growth. Propellant is about 400 GJ a tonne lifted: half a gigawatt for 40 kt a year. |
 | Cold compute annex | 300 kt | OK | 100 kt | +25% compute is about 25 GW in orbit. Solar at 0.2 to 1 kW/kg is 25 to 125 kt, plus chips and radiators. Google Suncatcher is testing it. |
-| Belt mining | 0 | OK, recalculated | 10 kt fleet for +120 kt a year. Hauling takes about 0.6 GW at the belt, about 5 kt of solar arrays. | Unproven. A mining fleet weighs something, so zero matter is too light. |
+| Belt mining | 0 | OK, recalculated | 10 kt fleet for +120 kt a year. Hauling takes about 0.6 GW at the belt, about 5 kt of solar arrays. 20 Years after 6 of prospecting, v1's. Priced 2026-10-13. | Unproven. A mining fleet weighs something, so zero matter is too light. |
 | Orbital foundry | 6,000 kt | Heavy ×100+ | 1 kt | NASA 1980: a 100 t seed factory grows itself. |
-| Mass driver | 4,000 kt | Heavy ×20,000 | 1 kt with its power plant, for +600 kt a year, as O'Neill estimated. | O'Neill: a 100 to 200 t driver throws 600 kt a year. |
+| Mass driver | 4,000 kt | Heavy ×20,000 | 1 kt with its power plant, for +600 kt a year, as O'Neill estimated. 24 Years, v1's. It no longer needs belt mining. Priced 2026-10-13. | O'Neill: a 100 to 200 t driver throws 600 kt a year. |
 | Ice harvest | 3,000 kt | OK, recalculated | 5 kt fleet for +60 kt a year of belt ice. About 0.3 GW at the belt. Saturn is too dim for solar power. | Earth's nearest ice at 9 AU is Saturn's rings and moons. |
 | Fusion plant | 5,000 kt | Ground, effect ×35,000 too big | 0, ground. +5% energy over 40 Years: about 3,000 ARC-class plants. | The first ARC plant gives 400 MW. +60% of 24 TW is 14 TW, about 36,000 such plants, built on the ground. |
 | Habitat ring | 80 Mt | OK | 10 Mt, mostly lunar soil, so it needs the mass driver. | Stanford torus: 10 Mt, 95% of it shielding, for 10,000 people. |

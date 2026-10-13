@@ -733,7 +733,7 @@ AIR_R = tab(2700, 'Report', 'REPORT', 'FIRST READING', f"""<button class="backli
 <p class="copy small">{F['star']} · {D:.1f} ly · infrared telescope · {DAYS(OBSV['find']['ozone'])} · light that left {D:.0f} Years ago</p>
 <p class="copy">Blue, as air scatters light. And ozone, which sunlight makes from oxygen. Its water and oxygen bands sit inside its star’s glare for this mirror: the world is {OBSV['find']['sep']:.0f} thousandths of an arcsecond from its star.</p>
 {SEC('WHAT IT COULD BE · BEFORE → NOW')}{odds('Life', *AIR['life'])}{odds('Rock, and no life we could see', *AIR['rock'])}{odds('A small gas world', *AIR['gas'])}{odds('Minds', *AIR['minds'])}
-{SEC('WHAT WOULD SAY MORE')}{quick('A 15 m mirror', f'its water and oxygen · smog, if there is any, {WITHIN(SMOG_WIDE)} · not priced', '<span class="mono">later</span>')}{quick('Far-side array', f'everyday radio, if there is any, {WITHIN(FAR_HUM)} · needs Moon industry', '<span class="mono">later</span>')}""")
+{SEC('WHAT WOULD SAY MORE')}{quick('A 15 m mirror', f'its water and oxygen · smog, if there is any, {WITHIN(SMOG_WIDE)}', START(18))}{quick('Far-side array', f'everyday radio, if there is any, {WITHIN(FAR_HUM)} · needs a Moon mass driver first', '<span class="mono">later</span>')}""")
 ACEN_R = tab(2730, 'Report', 'REPORT', 'CANDIDATE', f"""<button class="backlink inline">‹ All reports</button>
 <h3 class="lead">A world at Alpha Centauri A</h3>
 <p class="copy small">Alpha Centauri A · {ANWE['d']:.1f} ly · infrared telescope, on its sweep · two visits, weeks apart · light that left 4 Years ago</p>
@@ -815,7 +815,9 @@ HOUR = [
          talk(AIR_R, 'Blue, with ozone. Ozone means oxygen, and oxygen usually means life, though sunlight alone can make some. I can’t read its water. It sits too close to its star for this mirror.', (), 'glow'),
          ([find_truth, f'This light left {VARN_BEFORE:.0f} years before Varn’s waking: 7 billion people, a quiet sky, a hum near 100 kW.',
            f'Physics alone. A far-side array would hear that hum {WITHIN(SIGNS["Far-side array"])}, and a 15 m mirror would read its smog {WITHIN(SIGNS["smog 15 m"])}. Earth has neither. Its own mirror would need over two months.',
-           'Across games the first telescope can read smog at 1 living home in 10 of those a first pass sees. A far-side array hears 9 in 10.'] if F['who'] else ['Truth: alive, and no one there.'])
+           'Across games the first telescope can read smog at 1 living home in 10 of those a first pass sees. A far-side array hears 9 in 10.',
+           'Priced, as samples: a 15 m mirror takes 18 Years, so Year 23 if begun now, with the yard’s help. A far-side array takes 30 after a Moon mass driver, itself 24: Year 60 at the soonest in this game.',
+           f'Varn wakes at Year {truth_tone["waking"] - Y0:.1f}. So Earth can read its smog decades before, and hear its hum only about when it wakes.'] if F['who'] else ['Truth: alive, and no one there.'])
          + ['What the reading shows is the mock’s. Real: this mirror can’t split a world closer than 84 thousandths of an arcsecond in oxygen’s light, or 104 in water’s.',
             'The Gliese 526 window is for a 3 kW send from a 30 m dish in 2013. Even a listener would have struggled to catch it.'], settled=(15, 17, 19)),
 ] + ([
