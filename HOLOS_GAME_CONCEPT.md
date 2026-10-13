@@ -236,9 +236,9 @@ Settled 2026-10-06. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#earths-lead
 - **The opening: three leads and a deadline.**
   - *82 Eridani d,* 19.7 ly. At least 5 Earth masses on a stretched orbit through a Sun-like star's warm zone. Its air is unread.
   - *One seeded find,* such as a world Terra Hunting felt by 2036.
-  - *Fomalhaut's new cloud,* 25 ly. It drifts and fades, so the first look makes it stranger, as v1 required of one lead.
+  - *Fomalhaut's new cloud,* 25 ly. It drifts and fades, so the first observation makes it stranger, as v1 required of one lead.
   - *The Luyten's Star reply window,* Year 2.3, 11 real minutes in.
-- **Four older puzzles are re-read behind the opening looks.** Added 2026-10-12, to keep the first session's rhythm. Each is a real oddity as of 2026. What a re-read finds in 2040 is the mock's sample.
+- **Four older puzzles are re-read behind the opening observations.** Added 2026-10-12, to keep the first session's rhythm. Each is a real oddity as of 2026. What a re-read finds in 2040 is the mock's sample.
   - *Gliese 12 b,* 39.7 ly. A world Earth's size, 12.8 days around a quiet red star. Its air is unread.
   - *Barnard's Star,* 6 ly. Four worlds smaller than Earth, confirmed in 2025. Nothing over 0.57 Earths in its warm zone then.
   - *Tau Ceti,* 11.9 ly. Four faint signals claimed in 2017 and never confirmed.
@@ -248,7 +248,7 @@ Settled 2026-10-06. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#earths-lead
   - Gliese 12 b's day side, with the space telescope. A cool day side means air carries heat away. The space telescope read TRAPPIST-1's inner worlds this way in 2023.
   - LHS 1140 b's crossings, re-read. In 2024 they ruled out a hydrogen world and hinted at heavier air over water.
   - Fomalhaut through a Year, monthly. It closes the lead as rubble.
-- **Settled leads stay settled.** Alpha Centauri A's candidate is resolved long before 2040. Adopt JWST's August 2026 result when it is published. As of 2026-10-13 it is not: the telescope looked on August 11 and 12, and no paper is out. A bright background star blocks the next try until about 2030.
+- **Settled leads stay settled.** Alpha Centauri A's candidate is resolved long before 2040. Adopt JWST's August 2026 result when it is published. As of 2026-10-13 it is not: the telescope observed on August 11 and 12, and no paper is out. A bright background star blocks the next try until about 2030.
 
 ## The neighbors
 
@@ -326,25 +326,25 @@ Settled 2026-10-10.
   - *What you inherit:* Earth's kit at Year 0.
 - **The charter.** The Mind proposes Earth's founding line from its history and dials. The player keeps it or edits it.
 - **Meeting the Mind, then the tour,** as v1 had them.
-- **Planning.** The player queues builds, looks, standing orders and what wakes them. Nothing happens yet.
+- **Planning.** The player queues builds, observations, standing orders and what wakes them. Nothing happens yet.
 - **Begin.** When the player taps Begin, Year 0 starts and everything queued starts at once. From then on the clock runs, offline too, at 5 real minutes a Year.
 - **The first session keeps v1's rhythm.** Settled 2026-10-12. About 15 minutes of play from Begin, the first result within 30 seconds, and something real landing about every minute. It ends on a timer the player sets, 45 to 60 minutes out.
   - The first mock kept it for 90 seconds. Then nothing landed for 3.5 minutes, and later for 5.5. Eleven of its 31 half-minutes held nothing.
-  - Why: v2 took build times from real works, so the shortest build is a Year, and the opening's three looks all land by 1:30.
+  - Why: v2 took build times from real works, so the shortest build is a Year, and the opening's three observations all land by 1:30.
   - Quiet of that length is a flaw, not the pace. Set aside: dropping the rule and shortening the session, and a Mind that speaks up on a timer.
-  - *What may land,* settled 2026-10-12: results of looks, and Earth's own old messages reaching their stars.
-    - Looks: Earth has about ten more real oddities logged than the opening's three. A look takes 30 to 90 seconds, and one instrument takes one look at a time.
+  - *What may land,* settled 2026-10-12: readings from observations, and Earth's own old messages reaching their stars.
+    - Observations: Earth has about ten more real oddities logged than the opening's three. An observation takes 30 to 90 seconds, and one instrument makes one at a time.
     - Arrivals: real sends on real dates. Kappa¹ Ceti's at Year 0.1 and Gliese 208's at Year 0.8, then the reply windows at Luyten's Star.
-    - The mock needs about nine more landings: seven looks and two arrivals.
-    - Set aside: part-way reports from long looks and builds. They would teach the player to ignore what lands.
-    - The Mind offers looks and never queues them unasked, as v1 had it.
-  - *How the looks are spread,* settled 2026-10-12: four more are queued at Begin, and three are offered as follow-ups to what lands.
-    - Seven looks queued at Begin on three instruments would all land by about 4:30, and leave 5:30 to 10:00 empty.
+    - The mock needs about nine more landings: seven observations and two arrivals.
+    - Set aside: part-way reports from long observations and builds. They would teach the player to ignore what lands.
+    - The Mind offers observations and never queues them unasked, as v1 had it.
+  - *How the observations are spread,* settled 2026-10-12: four more are queued at Begin, and three are offered as follow-ups to what lands.
+    - Seven observations queued at Begin on three instruments would all land by about 4:30, and leave 5:30 to 10:00 empty.
     - The early minutes fill themselves, which leaves room to meet the Mind.
     - A follow-up is a real choice: it spends an instrument the next lead also wants.
-    - Set aside: everything queued at Begin with longer looks, and an offer at every landing.
+    - Set aside: everything queued at Begin with longer observations, and an offer at every landing.
   - *The mock, rebuilt 2026-10-12:* 4 of 31 half-minutes are quiet, down from 11. No two landings are more than 90 seconds apart.
-    - Queued at Begin: re-reads of Gliese 12 b, Barnard's Star, Tau Ceti and Epsilon Indi. They wait behind the opening looks, since each archive takes one look at a time.
+    - Queued at Begin: re-reads of Gliese 12 b, Barnard's Star, Tau Ceti and Epsilon Indi. They wait behind the opening observations, since each archive takes one at a time.
     - Offered as follow-ups: Gliese 12 b's day side, LHS 1140 b, and Fomalhaut through a Year.
     - Arrivals: the 2009 message at Kappa¹ Ceti, 0:30. The 2003 message at Gliese 208, 4:00.
     - Results pile up while the player talks, and wait in Reports.
@@ -409,6 +409,7 @@ These v1 rules no longer apply.
 ## Carried, reworded
 
 - **No screen shows how many civilizations there are.** v1 hid the seat count. v2 hides the roster's size and the seed's picks. Who is out there, and how many, is learned only by looking: Know projects, probes and contact.
+- **Looks are observations, and what comes back is a reading.** Settled 2026-10-13. An observation is one pointed use of an instrument: an image, a listen, a watch. v1's quick look and long look are a quick and a long observation. Ordinary uses of the word look stay.
 
 ## Open questions
 
@@ -431,14 +432,14 @@ Answered one at a time, in this order. Every answer must be permitted by current
    - **Settled 2026-10-10:** knocks before Year 0 happened, and Earth missed them. See [What Earth hears](#what-earth-hears).
    - **Settled 2026-10-11:** a Mind's Cautious or Bold dial sets how long it takes to act on news. See [How neighbors play](#how-neighbors-play).
    - **Priced 2026-10-11:** chip fabs, factory-built works, the orbital yard and the all-sky watch. See [Build times](#build-times) and [Growing compute](#growing-compute).
-   - **Settled 2026-10-12:** 11 of the 31 half-minutes had nothing new for the player. That is a flaw: v1's first-session rule holds in v2. See [How a game starts](#how-a-game-starts). What may land is settled too: looks, and Earth's old messages arriving. Four more looks are queued at Begin and three are offered as follow-ups. The rebuilt mock has 4 quiet half-minutes.
+   - **Settled 2026-10-12:** 11 of the 31 half-minutes had nothing new for the player. That is a flaw: v1's first-session rule holds in v2. See [How a game starts](#how-a-game-starts). What may land is settled too: readings from observations, and Earth's old messages arriving. Four more observations are queued at Begin and three are offered as follow-ups. The rebuilt mock has 4 quiet half-minutes.
 9. **Settled 2026-10-10:** v1's research baseline, rechecked against the 2025 radar result and Garrett's 2026 cold-computing paper. See [Why the sky is quiet, rechecked](#why-the-sky-is-quiet-rechecked).
-10. **Second mock built 2026-10-13:** [the first hour away](explorations/v2-mocks/index.html#hour), minutes 15 to 60, on the same game. The phone is down, the player is woken seven times and plays about seven minutes. Read times and what each read finds are samples. In this game a contacter's knock reaches Earth at minute 42, and the all-sky watch the player built catches it. It raises these, all open:
+10. **Second mock built 2026-10-13:** [the first hour away](explorations/v2-mocks/index.html#hour), minutes 15 to 60, on the same game. The phone is down, the player is woken seven times and plays about seven minutes. How long a reading takes and what each one shows are samples. In this game a contacter's knock reaches Earth at minute 42, and the all-sky watch the player built catches it. It raises these, all open:
     - **What is matter for in the first hour?** After the launch complex, 55 kt arrive each Year. By Year 12 about 500 kt sit unspent.
     - **What does a first voice give the player to do?** The mock shows what a knock proves, the Mind's reading of it, and three ways on: answer, listen, or stay silent. How much of a knock can be read, and what an answer may hold, are not settled.
-    - **How does the first telescope spend its time?** The mock samples one world at a time, a Year a read, and the Mind offering to image the nearest stars. Seasons are part of this.
+    - **How does the first telescope spend its time?** The mock samples one world at a time, a Year a reading, and the Mind offering to image the nearest stars. Seasons are part of this.
     - **The seed found two worlds, and the opening shows one.** Kirrin's world at 12 Ophiuchi was felt by 2040 too.
-    - **What can one read say about a world whose Mind has not woken?** Varn's people are there, 79 years before their waking.
+    - **What can one reading say about a world whose Mind has not woken?** Varn's people are there, 79 years before their waking.
     - **A first voice, a living world and a dead world in one hour: too much, too soon?** A signal reaches Earth in the first hour in about 1 game in 4. A neighbor's world sits within 15 ly in about 1 game in 3, a dead one in about 1 in 35.
     - **Can the first telescope tell a dead civilization from a volcano?** The mock says no, so going is the way to know.
     - **What do probes and the laser array cost in time?** Their matter is priced. Their build times are not.

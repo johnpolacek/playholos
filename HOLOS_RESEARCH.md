@@ -16,7 +16,7 @@ Every source the game rests on, grouped by the question it answers. Each entry s
   - Used: v2 [Earth's loud past](HOLOS_GAME_CONCEPT.md#earths-loud-past). v1 "Why Earth hears none of it today".
 - **Saide, Garrett and colleagues, airport and military radar** · Preliminary, [RAS National Astronomy Meeting, July 2025](https://ras.ac.uk/news-and-press/research-highlights/how-airports-heathrow-and-gatwick-could-help-aliens-spot-earth) ([summary](https://www.sci.news/astronomy/civilian-military-radar-leakage-alien-civilizations-14055.html)).
   - Airport radars worldwide add up to about 2×10¹⁵ W. A dish like Green Bank's could hear them to about 200 ly. Military radars sweep past an observer like a lighthouse, peaking near 10¹⁴ W, and look clearly artificial. Modeled from Barnard's Star, HD 48948, HD 40307, AU Microscopii, HD 216520 and LHS 475.
-  - Matters: a brief survey look at Sol may be enough to hear Earth. It raised v2's sample odds.
+  - Matters: a brief survey observation of Sol may be enough to hear Earth. It raised v2's sample odds.
   - Used: v2 Earth's loud past. On the watch list: the full paper sets the observing times.
 - **[Saide, Garrett and Heeralall-Issur 2023](https://academic.oup.com/mnras/article/522/2/2393/7028804)** · Published, MNRAS.
   - Cell towers leak about 4 GW at peak, periodic and direction dependent. A Green Bank-class dish could not hear it within 10 ly.
@@ -472,7 +472,7 @@ Anchors for [the project audit](HOLOS_PROJECT_AUDIT.md).
 
 What Sol's own instruments have found nearby. For v2 open question 3.
 
-- **[Alpha Centauri A's candidate, S1](https://arxiv.org/abs/2508.03814)** · 4.4 ly. Imaged once by JWST in August 2024, missed in February and April 2025, with a 52% chance its orbit hid it. JWST looked again on August 11 and 12, 2026: [programme 12628](https://www.stsci.edu/jwst-program-info/program/?program=12628), 4.5 hours with its mid-infrared spectrometer, seeking ammonia in the planet's light. The data are archived and no result is published as of 2026-10-13. The proposal says a bright background star blocks any further try until about 2030. Agent, from STScI's pages. Adopt the result when it is out.
+- **[Alpha Centauri A's candidate, S1](https://arxiv.org/abs/2508.03814)** · 4.4 ly. Imaged once by JWST in August 2024, missed in February and April 2025, with a 52% chance its orbit hid it. JWST observed it again on August 11 and 12, 2026: [programme 12628](https://www.stsci.edu/jwst-program-info/program/?program=12628), 4.5 hours with its mid-infrared spectrometer, seeking ammonia in the planet's light. The data are archived and no result is published as of 2026-10-13. The proposal says a bright background star blocks any further try until about 2030. Agent, from STScI's pages. Adopt the result when it is out.
 - **[Barnard's Star](https://ui.adsabs.harvard.edu/abs/2025ApJ...982L...1B/abstract)** · 6 ly. Four sub-Earths confirmed in 2025 after decades of false claims. Basant et al., MAROON-X and ESPRESSO.
 - **[82 Eridani d](https://arxiv.org/abs/2501.17092)** · 19.7 ly. At least 5 Earth masses, 650 days, eccentricity 0.45, swinging through the warm zone of a Sun-like star. Nari et al. 2025. Its air waits for the Habitable Worlds Observatory.
 - **[Fomalhaut's collisions](https://phys.org/news/2025-12-hubble-captures-rare-collision-nearby.html)** · 25 ly. Its "planet" was a dust cloud from a collision, and a second cloud, cs2, appeared in 2023 Hubble images. Kalas and colleagues, December 2025. Theory expected one such collision in 100,000 years or longer, and two were seen in 20, close together on the belt's inner side ([ESA release](https://www.esa.int/Science_Exploration/Space_Science/Hubble_sees_asteroids_colliding_around_nearby_star)). Used: the v2 mock's Fomalhaut screen. Its third cloud is the seed's, not real.
@@ -481,7 +481,7 @@ What Sol's own instruments have found nearby. For v2 open question 3.
 - **Gliese 12 b** · 39.7 ly. Published: [Kuzuhara et al. 2024](https://arxiv.org/abs/2405.14708), ApJL 967, L21, and [Turner et al. 2025](https://arxiv.org/abs/2506.20564). Abstracts read 2026-10-12.
   - A world 0.93 to 0.96 Earth radii and about 0.95 Earth masses, every 12.76 days around a quiet M3 star. About 315 K with no air. Rocky, and unlikely to have kept its first gas.
   - Matters: the nearest known temperate Earth-size world that crosses its star. Its air is unread.
-  - Used: a re-read in the first mock, and a follow-up look at its day side.
+  - Used: a re-read in the first mock, and a follow-up observation of its day side.
 - **[LHS 1140 b](https://arxiv.org/abs/2403.13265)** · 48.8 ly. Damiano et al. 2024. Abstract read 2026-10-12.
   - JWST's crossing spectrum rules out hydrogen-rich air, which leaves a water world. It favors heavier air, perhaps nitrogen, with modest confidence. No helium in four JWST transits (August 2026).
   - Corrected 2026-10-12: this log had it as a water world or a small gas world. The 2024 paper already rules the gas world out.
@@ -494,16 +494,16 @@ What Sol's own instruments have found nearby. For v2 open question 3.
   - JWST measured the day-side glow of TRAPPIST-1 b and c at 15 microns. b is most likely bare rock. c has no thick carbon dioxide air.
   - Matters: a real way to ask a red star's rocky world whether it has air, without reading the air itself.
   - Used: the Gliese 12 b follow-up in the first mock. Its cool day side is the mock's.
-- **Looks in the first mock, added 2026-10-12.** Seven looks and two arrivals fill the first session's quiet half-minutes.
+- **Observations in the first mock, added 2026-10-12.** Seven observations and two arrivals fill the first session's quiet half-minutes.
   - Real, as logged here: Gliese 12 b, Barnard's four worlds, Tau Ceti's four signals, Epsilon Indi's giant, LHS 1140 b, Fomalhaut's clouds.
-  - The mock's own: what each look finds in 2040. Which two Tau Ceti signals hold, the limit inside Epsilon Indi's giant, Gliese 12 b's cool day side, how firm LHS 1140 b's air is, and Fomalhaut's shared orbit.
+  - The mock's own: the reading each observation returns in 2040. Which two Tau Ceti signals hold, the limit inside Epsilon Indi's giant, Gliese 12 b's cool day side, how firm LHS 1140 b's air is, and Fomalhaut's shared orbit.
   - Real arrivals: Earth's 2009 message reaches Kappa¹ Ceti at Year 0.1, and its 2003 message reaches Gliese 208 at Year 0.8.
   - Godview labels each one, so no invented result reads as real.
-- **Looks in the second mock, added 2026-10-13.** The first hour away: the infrared telescope reads three worlds and finds a fourth.
+- **Observations in the second mock, added 2026-10-13.** The first hour away: the infrared telescope reads three worlds and finds a fourth.
   - Real, as logged here: oxygen with methane reads as life only in context (Krissansen-Totton et al.). Nitrogen dioxide has natural sources (Kopparapu et al. 2021). Long-lived industrial gases show in the mid-infrared (Lin et al. 2014). Daedalus was designed for 12% of light speed and Starshot for 20%.
-  - The mock's own: what each read finds. Life and a trace of nitrogen dioxide at Gliese 432 A's world. A world at Alpha Centauri A with several times the carbon dioxide it should hold. 82 Eridani d as a small gas world. A Year a read, and a fifth of a Year to image a near star's warm zone.
+  - The mock's own: what each reading shows. Life and a trace of nitrogen dioxide at Gliese 432 A's world. A world at Alpha Centauri A with several times the carbon dioxide it should hold. 82 Eridani d as a small gas world. A Year a reading, and a fifth of a Year to image a near star's warm zone.
   - From memory, not reread: carbon dioxide put into air stays for centuries to millennia. And which gases the Habitable Worlds Observatory's mirror can read.
-  - Depends on a pending result: this game's dead world orbits Alpha Centauri A at 1.45 AU. If JWST's August 2026 look confirms a giant in that warm zone, the checker must treat it as a known planet, and the seed could not put a world there.
+  - Depends on a pending result: this game's dead world orbits Alpha Centauri A at 1.45 AU. If JWST's August 2026 observation confirms a giant in that warm zone, the checker must treat it as a known planet, and the seed could not put a world there.
 - Earlier entries also apply: Epsilon Indi Ab, Delta Pavonis, Tau Ceti, Beta Hydri, Epsilon Eridani b, TRAPPIST-1 f and the Earth transit zone, where Teegarden's Star enters about 2050.
 
 ## Reading air
@@ -852,7 +852,7 @@ Results the design is waiting on. Check each when its date comes.
 - **Saide, Garrett and Heeralall-Issur, "Modelling Earth's Radio Leakage: Detectability of Civilian and Military Radar Systems"** · in preparation. Its observing times set v2's odds of Earth being heard.
 - **[Gaia DR4](https://www.cosmos.esa.int/web/gaia/dr4)** · release set for December 2, 2026, with the first large set of planets found by astrometry. Rebuild the census after release and validation, per v1's migration notes, and recheck the host list and leads.
 - **Epsilon Indi Ab's atmosphere** · two 2026 preprints. Feed Earth's leads (v2 open question 3).
-- **JWST's August 2026 look at Alpha Centauri A** · observed August 11 and 12, programme 12628. Not published as of 2026-10-13. Adopt the result for candidate S1.
+- **JWST's August 2026 observation of Alpha Centauri A** · observed August 11 and 12, programme 12628. Not published as of 2026-10-13. Adopt the result for candidate S1.
 
 ## To check
 
@@ -863,7 +863,7 @@ Results the design is waiting on. Check each when its date comes.
 - Stars dated by a slow spin: Gliese 208, DS Leonis and HD 82106. From memory, not reread: K and early M dwarfs stall in their spin-down between about 0.7 and 1.3 billion years (Curtis et al. 2019, 2020). If so, a spin like the Hyades' may not rule out a little over a billion.
 - YZ Canis Minoris stays out on one table's age from its brightness. Read Kerr et al. 2021 for the basis. Its mass and size are ordinary for its type.
 - DT Virginis stays out on its companion Ross 458 C. That signature can also come from heavy elements.
-- Telescope seasons. Fomalhaut sits 56° from the Sun on January 1, and comes within 85° to 135° only from late May, near Year 0.39. JWST points only in that range: from memory, not reread. A telescope like Hubble, which avoids only the 50° around the Sun, could image it in January. That limit is from memory too. Decide which telescope Earth has in 2040, and whether seasons set when a look can start.
+- Telescope seasons. Fomalhaut sits 56° from the Sun on January 1, and comes within 85° to 135° only from late May, near Year 0.39. JWST points only in that range: from memory, not reread. A telescope like Hubble, which avoids only the 50° around the Sun, could image it in January. That limit is from memory too. Decide which telescope Earth has in 2040, and whether seasons set when an observation can start.
 - The second mock: a source for how long added carbon dioxide stays in air, and for which gases the Habitable Worlds Observatory is designed to read.
 - Earth's aimed messages: the power of the 1983, 2008, 2009 Canberra and 2013 sends is in no source found. Hirabayashi's books may hold the first.
 - Working links for Project Daedalus's 1978 report and Criswell 1985.

@@ -152,7 +152,7 @@ DC_STEP = 1.5
 DCS = [(f'{o} data center', 0 if i == 0 else i + .1) for i, o in enumerate(('Ground', 'Second', 'Third', 'Fourth', 'Fifth', 'Sixth', 'Seventh', 'Eighth', 'Ninth', 'Tenth', 'Eleventh'))]
 DC_DONE = tuple(s + 1 for _, s in DCS)
 THINK = 100 * .25 / GRID_TW                    # thinking's share of energy at Year 0, in percent
-USES = [(0, 6, 1), (0, 6, 20), (0, .1, 5), (0, .2, 5), (0, .3, 5),                         # sky watch, flash watch, three looks
+USES = [(0, 6, 1), (0, 6, 20), (0, .1, 5), (0, .2, 5), (0, .3, 5),                         # sky watch, flash watch, three observations
         (.4, 8.4, 15), (.8, 2.8, 5), (1.1, 2.1, 10), (1.6, 11.6, 15), (1.7, 3.7, 5), (1.8, 3.0, 10)]     # telescope, radars, a Year's listening, vault, launch complex, Luyten watch
 USES += [(s, s + 1, 5) for _, s in DCS]
 USES += [(6.3, 11.3, 10), (6.3, 25.5, 10), (8.5, 12.5, 10)]           # the second hour: the orbital yard, the launcher, the telescope's reads
