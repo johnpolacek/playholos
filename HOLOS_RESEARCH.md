@@ -74,6 +74,14 @@ Every source the game rests on, grouped by the question it answers. Each entry s
   - A 70 m dish at that frequency concentrates 150 kW into about 10¹² W along the beam. That last step is this project's arithmetic.
   - Matters: how strong and how long a knock is. A neighbor's knock is taken to be like Earth's.
   - Used: v2 [What Earth hears](HOLOS_GAME_CONCEPT.md#what-earth-hears), calcs/seed.py.
+- **How much of a message can be read, checked 2026-10-13.** For the open question on what a first voice gives the player to do. Not used yet.
+  - **[Busch and Reddick 2011, testing message designs](https://arxiv.org/abs/0911.3976)** · Published, in Vakoch's Communication With Extraterrestrial Intelligence. I read the abstract. A blind test: one author coded a 75-kilobit message, the other deciphered it, and the reading was accurate. A message built to be read can be read.
+    - From a search summary, not read: the same paper says neither the Arecibo message nor Cosmic Call was ever tested this way.
+  - **[A Sign in Space, ESA 2024](https://blogs.esa.int/to-mars-and-back/?p=745)** · Agency blog, 23 October 2024. Read on the page. A made-up alien message, sent from a Mars orbiter in May 2023.
+    - About 5,000 volunteers pulled the message out of the raw signal in 10 days.
+    - Its content was decoded on 7 June 2024, a year later, by two people: five amino acids, drawn as a diagram.
+    - What it means is still open. The artist: they "found the ingredients of the recipe, but now it is time to interpret it".
+  - Matters: reading a message has three layers. That it was sent, and how: at once. What it holds: fast if it was built to be read, a year if not. What it means: a judgment, and still open after the rest is done.
 - **[Sónar Calling GJ 273b](https://www.scientificamerican.com/article/interstellar-message-beamed-to-nearby-exoplanet)** · News, Scientific American, 2017 ([Space.com](https://www.space.com/38803-meti-signal-beamed-habitable-alien-planet.html)).
   - Sent to Luyten's Star on October 16 to 18, 2017, from the EISCAT dish in Tromsø, Norway, near 930 MHz: a science and maths tutorial and 33 short pieces of music. A second batch followed in 2018.
   - Matters: it sets Earth's first reply window in play, Year 2.3.
