@@ -1,7 +1,7 @@
 """How long the infrared telescope takes to find a warm world and to read its air. Run: python3 calcs/observing.py
 
 Settled 2026-10-13: physics sets it. A nearer or larger world is brighter, so its reading comes sooner. Seasons, when a
-star sits too near the Sun to point at, are left out for now. Sources are in HOLOS_RESEARCH.md, "Reading air".
+star sits too near the Sun to point at, are left out on purpose. Sources are in HOLOS_RESEARCH.md, "Reading air".
 
 - Brightness. A world in reflected light gives off sunlight in proportion to its area and the light it receives:
   f = R^2 x S x (10 / d)^2, in units of an Earth twin of a Sun twin at 10 pc. R in Earths, S in Earth sunlights, d in pc.

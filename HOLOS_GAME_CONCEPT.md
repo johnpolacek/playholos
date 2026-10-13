@@ -284,7 +284,7 @@ Settled 2026-10-13.
   - NASA's own list has 164 stars because it reaches past 50 ly. The seed draws nothing out there.
   - *What this means for neighbors.* The mirror can split a warm world from any Sun-like star within 50 ly. A red dwarf's world sits too close in.
   - *Samples:* how the noise splits between starlight and dust, the mirror's size, and a month for carbon dioxide, which has no published time.
-  - Seasons are left out for now. A real telescope can't point near the Sun, so a star is out of reach for months each year. That is its own question.
+  - Seasons are left out on purpose. See the real limits the game skips, below.
   - Set aside: one fixed time for each kind of observation, everywhere.
 - **A sweep finds natural warm worlds too, at the real rate.** Settled 2026-10-13. The seed draws them, in [calcs/seed.py](calcs/seed.py).
   - *The rate.* NASA plans its telescope on 0.24 rocky worlds in each star's warm zone, 0.6 to 1.4 Earths wide, the same at every kind of star (Stark et al. 2019). Kepler's counts allow 0.08 to 0.70.
@@ -355,7 +355,11 @@ Settled 2026-10-13.
   - *The Mind says so.* It gives eruptions and burning as competing words, and names what would tell.
   - *Real, and not used yet:* eruptions under way change a world's ozone and color month by month (Ostberg et al. 2023). Later readings could weaken "eruptions now", never "eruptions long ago".
   - Set aside: a mark only industry leaves that the first telescope can read. And a dead world that reads as an ordinary living one.
-- **Open:** seasons.
+- **Real limits the game skips, on purpose.** A rule the player must learn should change a decision. These would not.
+  - *Seasons.* Settled 2026-10-13. A space telescope can't point near the Sun. The planned one may point 45° to 135° from it (Spohn, Stark and Savransky 2026), so a star on the Sun's path is out of reach twice a year, 90 days each time.
+    - In play that is a wait of 75 seconds at most. Real astronomers care because the real survey has a few years. Here telescope time is plentiful.
+    - It contradicts nothing observed. It is a simplification.
+    - Set aside: seasons by the telescope's real limits, and deciding later.
 
 ## The neighbors
 
@@ -550,7 +554,7 @@ Answered one at a time, in this order. Every answer must be permitted by current
     - **Settled 2026-10-13:** physics sets how long an observation or a sweep takes. See [How Earth learns](#how-earth-learns).
     - **What is matter for in the first hour?** After the launch complex, 55 kt arrive each Year. By Year 12 about 500 kt sit unspent.
     - **What does a first voice give the player to do?** The mock shows what a knock proves, the Mind's reading of it, and three ways on: answer, listen, or stay silent. How much of a knock can be read, and what an answer may hold, are not settled.
-    - **Should seasons set when an observation can start?** A real telescope can't point near the Sun. It would move the opening's first reading off 30 seconds.
+    - **Settled 2026-10-13:** seasons are left out on purpose. A real telescope can't point near the Sun, and the game skips that limit. See [How Earth learns](#how-earth-learns).
     - **The seed found two worlds, and the opening shows one.** Kirrin's world at 12 Ophiuchi was felt by 2040 too. Across games Earth has felt about three worlds by Year 0, and about two are natural.
     - **Settled 2026-10-13:** a living neighbor becomes known as fast as physics allows. In this game nothing Earth holds at Year 9 can tell Varn's world from a natural one. A far-side array would, in 5 hours. See [How Earth learns](#how-earth-learns).
     - **A first voice, a living world and a dead world in one hour: too much, too soon?** A signal reaches Earth in the first hour in about 1 game in 4. A neighbor's world sits within 15 ly in about 1 game in 3, a dead one in about 1 in 35.
