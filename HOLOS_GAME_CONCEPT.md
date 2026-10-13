@@ -433,12 +433,13 @@ Answered one at a time, in this order. Every answer must be permitted by current
    - **Priced 2026-10-11:** chip fabs, factory-built works, the orbital yard and the all-sky watch. See [Build times](#build-times) and [Growing compute](#growing-compute).
    - **Settled 2026-10-12:** 11 of the 31 half-minutes had nothing new for the player. That is a flaw: v1's first-session rule holds in v2. See [How a game starts](#how-a-game-starts). What may land is settled too: looks, and Earth's old messages arriving. Four more looks are queued at Begin and three are offered as follow-ups. The rebuilt mock has 4 quiet half-minutes.
 9. **Settled 2026-10-10:** v1's research baseline, rechecked against the 2025 radar result and Garrett's 2026 cold-computing paper. See [Why the sky is quiet, rechecked](#why-the-sky-is-quiet-rechecked).
-10. **Second mock built 2026-10-13:** [the first hour away](explorations/v2-mocks/index.html#hour), minutes 15 to 60, on the same game. The phone is down, the player is woken seven times and plays about six minutes. Read times and what each read finds are samples. It raises these, all open:
+10. **Second mock built 2026-10-13:** [the first hour away](explorations/v2-mocks/index.html#hour), minutes 15 to 60, on the same game. The phone is down, the player is woken seven times and plays about seven minutes. Read times and what each read finds are samples. In this game a contacter's knock reaches Earth at minute 42, and the all-sky watch the player built catches it. It raises these, all open:
     - **What is matter for in the first hour?** After the launch complex, 55 kt arrive each Year. By Year 12 about 500 kt sit unspent.
+    - **What does a first voice give the player to do?** The mock shows what a knock proves, the Mind's reading of it, and three ways on: answer, listen, or stay silent. How much of a knock can be read, and what an answer may hold, are not settled.
     - **How does the first telescope spend its time?** The mock samples one world at a time, a Year a read, and the Mind offering to image the nearest stars. Seasons are part of this.
     - **The seed found two worlds, and the opening shows one.** Kirrin's world at 12 Ophiuchi was felt by 2040 too.
     - **What can one read say about a world whose Mind has not woken?** Varn's people are there, 79 years before their waking.
-    - **A dead world at the nearest star, in the first hour: too much, too soon?** A neighbor's world sits within 15 ly in about 1 game in 3, a dead one in about 1 in 35.
+    - **A first voice, a living world and a dead world in one hour: too much, too soon?** A signal reaches Earth in the first hour in about 1 game in 4. A neighbor's world sits within 15 ly in about 1 game in 3, a dead one in about 1 in 35.
     - **Can the first telescope tell a dead civilization from a volcano?** The mock says no, so going is the way to know.
     - **What do probes and the laser array cost in time?** Their matter is priced. Their build times are not.
     - **What happens at the grid limit?** At Year 11.1 thought is 86 times Year 0's and draws nine tenths of the grid. Every priced way on is slow or small.

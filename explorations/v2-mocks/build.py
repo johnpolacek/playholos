@@ -608,13 +608,16 @@ PLAYED = 31
 # ---------- The first hour away: minutes 15 to 60, Years 3 to 12 ----------
 # The player put the phone down at 15:30. Each row is a wake, or a moment they chose to look. Build times, the
 # telescope's read times and what each read finds are samples, to be tested here. Prices are the audit's.
+import json
 ANWE = next((p for p in NB if p['dead']), None)
-VARN_BEFORE = (truth_tone['waking'] - Y0 - (9.6 - D)) if F['who'] else None      # years before its waking that the light of the first read left
+VOICE = next(((p, i) for p in NB for i in p['inbound'] if 6 < i['year'] <= 12 and i.get('allsky')), None)     # a signal the all-sky watch catches this hour
+VARN_BEFORE = (truth_tone['waking'] - Y0 - (9.9 - D)) if F['who'] else None      # years before its waking that the light of the first read left
 Q_MATTER = ask('What is matter for in the first hour?', 'After the launch complex, 55 kt arrive each Year. A yard and a launcher take 11. By Year 12 about 500 kt sit unspent, and nothing priced for these Years costs more than 100.')
+Q_VOICE = ask('What does a first voice give the player to do?', 'A knock arrives at minute 42. The mock shows what it proves, the Mind’s reading of it, and three ways on: answer, listen, or stay silent. How much of a knock can be read, and what an answer may hold, are not settled.')
 Q_SCOPE = ask('How does the first telescope spend its time?', 'The mock samples one world at a time, a Year to read air, a fifth of a Year to image a near star’s warm zone, and the Mind offering to look at the nearest stars. None of that is settled. Seasons are open too: a real telescope can’t point near the Sun.')
 Q_TWO = ask('The seed found two worlds, and the opening shows one.', 'Kirrin’s world at 12 Ophiuchi tugs hard enough to be felt by 2040, as Varn’s does. The first 15 minutes show only Varn’s. Here it joins the telescope’s line unannounced.')
 Q_ASLEEP = ask('What can one read say about a world whose Mind has not woken?', f'Varn’s people are there, {VARN_BEFORE:.0f} years before their waking. The mock shows life as likely and minds as a hint. How fast should a living neighbor become known?' if F['who'] else 'In this game the find is natural.')
-Q_NEAR = ask('A dead world at the nearest star, in the first hour: too much, too soon?', 'This seed drew it. A neighbor’s world sits within 15 ly in about 1 game in 3, and a dead one in about 1 in 35. The first telescope finds any of them inside a Year of looking.')
+Q_NEAR = ask('A first voice, a living world and a dead world in one hour: too much, too soon?', 'This seed drew all three. A signal reaches Earth in the first hour in about 1 game in 4. A neighbor’s world sits within 15 ly in about 1 game in 3, and a dead one in about 1 in 35.')
 Q_DEAD = ask('Can the first telescope tell a dead civilization from a volcano?', 'The mock says no. It reads carbon dioxide, and the gases only industry makes need a colder, wider mirror. So the find stays strange, and going is the way to know.')
 Q_GO = ask('What do probes and the laser array cost in time?', 'The audit prices their matter. Their build times are not set, so the mock stops at the offer.')
 Q_WALL = ask('What happens at the grid limit?', 'At Year 11.1 thought is 86 times Year 0’s and draws nine tenths of the grid. Every priced way on is slow or small beside the fabs. Is a long plateau right, fifty-five minutes in?')
@@ -644,43 +647,63 @@ YARD_CONFIRM = confirm(1890, 'Reach', 'Orbital yard and launcher', 'A way to go 
     20, f'<b>11 kt</b><span>of metal, from {res(1889)[2]} spare in orbit</span>', 19)
 SLEEP_2 = lockscreen('16:56', [('IN 00:10:00', 'Earth: the infrared telescope is done', 'Year 8.4. Then it reads the air of nearby worlds.')])
 WAKE_SCOPE = lockscreen('17:06', [('NOW', 'Earth: the infrared telescope is done', 'Year 8.4. It reads one world at a time.')])
-SCOPE_FIRST = tab(2550, 'Mind', 'MIND', 'THE NEW TELESCOPE', ''.join([
+if VOICE:
+    WHO, KNOCK = VOICE; VSTAR, VD = WHO['star'], WHO['d']; SENT = int(KNOCK['sent'])
+    BANK = json.loads((here.parents[1] / 'data' / 'voices' / f"{WHO['name'].lower()}.json").read_text())
+    VOICE_R = tab(2550, 'Report', 'REPORT', 'A VOICE', f"""<button class="backlink inline">‹ All reports</button>
+<h3 class="lead">A voice from {VSTAR}</h3>
+<p class="copy small">{VSTAR} · {VD:.1f} ly · all-sky watch · four hours · sent {VD:.0f} Years ago</p>
+<p class="copy">A narrow signal, four hours long, shifted in pitch to match the Sun’s motion and not its own star’s. It was aimed at us. It left in {SENT}.</p>
+{SEC('THE MIND’S READING OF IT')}<div class="intent">{BANK['hail'][0]} {BANK['close'][0]}</div>
+{SEC('WHAT IT PROVES')}{facts([('Aimed', 'tuned to our motion, to be heard here'), ('Found us by', f'{SENT}. They had seen light that left Earth by {SENT - VD:.0f}.'), ('Not a reply', 'We never sent anything to this star.')])}
+{SEC('WHAT IT CAN’T TELL')}<p class="copy small">What they have done in the {VD:.0f} Years since. Or whether the greeting is all it seems.</p>""")
+    ANSWER_CHAT = chat(2580, 'Should we answer?', [
+        ('you', 'Should we answer?'),
+        ('mind', f'That is yours. An answer takes {VD:.0f} Years to arrive and tells them one new thing: someone here is listening now.'),
+        ('you', 'And if we don’t?'),
+        ('mind', 'They will have sent it twice, as we did. Then they wait about a century, and decide what our silence means.')],
+        view='Answer. A name and a question, nothing we can’t take back. It could be bait. But they have had us for forty Years and sent a greeting.')
+    HOLD_ORDER = order(2610, 'Listen first. I’ll answer when I know more.', [
+        ('WATCH', f'<b>Hold the radio array on {VSTAR}</b> · until you say'), ('WHY', 'A knock comes twice. Anything more they sent is still on its way.'),
+        ('SENDS', 'Nothing. That stays yours to order.'), ('WAKES YOU', 'Anything heard')])
+    WAKE_AGAIN = lockscreen('17:12', [('NOW', f'{VSTAR}: the same signal again', 'Year 9.5. Word for word. Nothing sent.')])
+SCOPE_FIRST = tab(2640, 'Mind', 'MIND', 'THE NEW TELESCOPE', ''.join([
     SEC('ONE WORLD AT A TIME · YOURS TO ORDER'), '<div class="choices" role="radiogroup">',
     choice(f'{F["star"]}’s world', 'the new world · read its air', tstack('1 Year', clock(1)), True),
     choice('82 Eridani d', 'the stretched orbit · read its air', tstack('1 Year', clock(1))),
     choice('12 Ophiuchi’s world', 'felt in 2038 · read its air', tstack('1 Year', clock(1))),
     choice('The nearest stars’ warm zones', 'Alpha Centauri A and B first · worlds no one has felt', tstack('0.2 Years', clock(.2))), '</div>',
     SEC('WHAT A READ GIVES'), '<p class="copy small">Water, oxygen, methane, carbon dioxide. Enough to say alive or not. Never who.</p>']))
-SCOPE_ORDER = order(2580, 'The new world first. Then look next door.', [
+SCOPE_ORDER = order(2670, 'The new world first. Then look next door.', [
     ('READ', f'<b>{F["star"]}’s world</b> · its air · 1 Year'), ('THEN', '<b>Alpha Centauri A and B</b> · image their warm zones · 0.2 Years'),
     ('THEN', '<b>82 Eridani d</b>, then <b>12 Ophiuchi’s world</b> · 1 Year each'), ('WAKES YOU', 'Each read · any new world')])
 WINDOW_526 = lockscreen('17:09', [('NOW', 'A reply window opens · Gliese 526', 'Year 9.0. Nothing heard. The all-sky watch is listening.')])
-AIR_R = tab(2880, 'Report', 'REPORT', 'FIRST READ', f"""<button class="backlink inline">‹ All reports</button>
+AIR_R = tab(2970, 'Report', 'REPORT', 'FIRST READ', f"""<button class="backlink inline">‹ All reports</button>
 <h3 class="lead">A living world at {F['star']}</h3>
 <p class="copy small">{F['star']} · {D:.1f} ly · infrared telescope · 1 Year · light that left {D:.0f} Years ago</p>
 <p class="copy">Water, oxygen and methane together, in thick air. Oxygen and methane destroy each other, so something keeps making both. On Earth, life does. There is also a trace of nitrogen dioxide. Lightning makes it. So do engines.</p>
 {SEC('WHAT IT COULD BE · BEFORE → NOW')}{odds('Life', 13, 76)}{odds('Minds', 2, 12)}{odds('Rock, and no life we could see', 60, 8)}{odds('A small gas world', 25, 4)}
 {SEC('WHAT WOULD SAY MORE')}{quick('Read it again', 'in another of its seasons · does the trace hold?', START(1))}{quick('Far-side array', 'hears a world’s everyday radio · needs Moon industry', '<span class="mono">later</span>')}""")
-ANYONE_CHAT = chat(2910, 'Is anyone there?', [
+ANYONE_CHAT = chat(3000, 'Is anyone there?', [
     ('you', 'Is anyone there?'),
     ('mind', 'Something lives there. Whether anyone thinks there, I can’t say from air. Our Year of listening heard nothing loud. A world like ours in 2000 would have been far too quiet for it.'),
     ('you', 'How would we know?'),
     ('mind', 'A second read, to see if the trace holds. An array on the Moon’s far side, to hear a world’s everyday radio. Or going. Each is Years. I would not call it empty, and I would not call it peopled.')])
-ACEN_R = tab(2940, 'Report', 'REPORT', 'A NEW WORLD', f"""<button class="backlink inline">‹ All reports</button>
+ACEN_R = tab(3030, 'Report', 'REPORT', 'A NEW WORLD', f"""<button class="backlink inline">‹ All reports</button>
 <h3 class="lead">A world at Alpha Centauri A</h3>
 <p class="copy small">Alpha Centauri A · {ANWE['d']:.1f} ly · infrared telescope · 0.2 Years · light that left 4 Years ago</p>
 <p class="copy">A point of light {ANWE['a']:.2f} AU from the star, inside its warm zone, moving as a world would. About Earth’s size, by its brightness. Its tug is a twentieth of a metre a second: too small for anything we had.</p>
 {SEC('WHAT IT COULD BE · ODDS NOW')}{odds_now('Rock, and no life we could see', 55)}{odds_now('Life', 40)}{odds_now('Minds', 5)}
 {SEC('WITH WHAT WE HAVE')}{quick('Read its air', 'Infrared telescope · ahead of 82 Eridani d', START(1))}""") if ANWE and ANWE['d'] < 5 else ''
-ACEN_ORDER = order(2970, 'Read its air next.', [
+ACEN_ORDER = order(3060, 'Read its air next.', [
     ('READ', '<b>Alpha Centauri A’s world</b> · its air · 1 Year'), ('THEN', '<b>82 Eridani d</b>, then <b>12 Ophiuchi’s world</b>'), ('WAKES YOU', 'When the read lands')])
-ACEN_AIR = tab(3270, 'Report', 'REPORT', 'FIRST READ', f"""<button class="backlink inline">‹ All reports</button>
+ACEN_AIR = tab(3360, 'Report', 'REPORT', 'FIRST READ', f"""<button class="backlink inline">‹ All reports</button>
 <h3 class="lead">Alive, and out of balance</h3>
 <p class="copy small">Alpha Centauri A · {ANWE['d']:.1f} ly · infrared telescope · 1 Year · light that left 4 Years ago</p>
 <p class="copy">Water, oxygen, and several times the carbon dioxide its seas and rocks should hold. Carbon like that is drawn down slowly, so it was put there lately. A string of great eruptions would do it. So would burning.</p>
 {SEC('WHAT IT COULD BE · BEFORE → NOW')}{odds('Life, after great eruptions', 5, 46)}{odds('Something burned its carbon, and is gone', 0, 27)}{odds('Life, and nothing more', 40, 19)}{odds('Rock, and no life we could see', 55, 8)}
 {SEC('WHAT IT CAN’T TELL')}<p class="copy small">Which. The gases only industry makes show deeper in the infrared than this mirror reads.</p>""") if ANWE else ''
-GO_CHAT = chat(3300, 'Can we go and look?', [
+GO_CHAT = chat(3390, 'Can we go and look?', [
     ('you', 'Can we go and look?'),
     ('mind', 'Yes, slowly. The launcher you began is done at Year 25.6. A probe from it crosses in about 36 Years, and its pictures take 4 more to come home.'),
     ('you', 'Faster?'),
@@ -692,16 +715,16 @@ WALL = tab(3330, 'Mind', 'MIND', 'THE GRID LIMIT', ''.join([
     SEC('WAYS ON · YOURS TO CHOOSE'), quick('Ground solar build-out', '+20% energy · no matter', START(10)), quick('Fusion plants', '+5% energy · no matter', START(40)),
     quick('Cold compute annex', 'a quarter of Year 0’s thought · 100 kt', '<span class="mono">a crumb</span>'), quick('Power gathered in space', 'the only way that keeps pace · needs industry up there', '<span class="mono">later</span>')]))
 WAKE_VAULT = lockscreen('17:22', [('NOW', 'Earth: the Moon vault is done', 'Year 11.6. The Mind has a second home.')])
-WAKE_ERI = lockscreen('17:23', [('NOW', '82 Eridani d: a small gas world', 'Year 11.8. Its air is read. No surface to stand on.')])
-END_HOUR = lockscreen('17:24', [('IN 00:04:00', '12 Ophiuchi’s world: its air', 'Year 12.8. The telescope is on it now.'), ('ALWAYS', 'A world’s first voice wakes you', 'The all-sky watch is listening.')])
+END_HOUR = lockscreen('17:24', [('IN 00:01:00', '82 Eridani d: its air', 'Year 12.2. The telescope is on it now.')] + ([('WAITING', f'{VSTAR}: unanswered', 'The array is held on it. Nothing sent.')] if VOICE else [('ALWAYS', 'A world’s first voice wakes you', 'The all-sky watch is listening.')]))
 
-ombe_in = next((i for p in NB for i in p['inbound'] if 12 < i['year'] < 40), None)
+later = next(((p, i) for p in NB for i in p['inbound'] if 12 < i['year'] < 40), None)
 HOUR = [
     stop(1790, 930, '· Away. Nothing wakes them.', None, AWAY_DARK,
          ['Fourteen minutes with the phone down. The launch complex finishes at Year 3.7. Data centers finish at Years 4.1 and 5.1. None of it is a wake the player chose.',
-          'No neighbor wakes, and nothing arrives, between Year 3 and Year 12 in this game.'], label='+15:30 to +30:00', years='Years 3.1 to 6'),
+          'No neighbor wakes between Year 3 and Year 12 in this game.' + (f' One signal is on its way: {WHO["name"]}’s, from {VD:.1f} ly.' if VOICE else '')], label='+15:30 to +30:00', years='Years 3.1 to 6'),
     stop(1800, 1790, '· The phone lights.', 'The all-sky watch and the deep flash watch are built.', WAKE_6,
-         ['From now Earth hears about 9 knocks in 10. Across games Year 0’s sky watch caught about 1 in 5.', 'Two of the five things the player asked to be woken for land 30 seconds apart.']),
+         ['From now Earth hears about 9 knocks in 10. Across games Year 0’s sky watch caught about 1 in 5.'] +
+         ([f'{WHO["name"]}’s knock is two and a half Years out. Year 0’s sky watch would miss it. This one will not.'] if VOICE else [])),
     stop(1830, 1800, '· Opens it.', 'Thinking draws a tenth of our energy.',
          talk(SINCE, 'Three Years, and nothing heard. Now little aimed at us is missed. Matter is piling up, and so is thought: I use almost none of mine. In five Years thinking will want the whole grid.', ('What would you build?', 'Later'), 'glow'),
          ['One screen for the whole absence: what finished, what was heard, what is piling up. v1 called it the summary.'], question=Q_MATTER),
@@ -712,42 +735,58 @@ HOUR = [
     stop(1920, 1890, '· Puts the phone down.', None, SLEEP_2, ['Two minutes of play. Ten until the next wake.']),
     stop(2520, 1920, '· The phone lights.', 'The infrared telescope is done.', WAKE_SCOPE,
          ['The Habitable Worlds Observatory, eight Years after waking. A second of its class would take 18.', 'Since the last look: two data centers, and our 2001 message reached 47 Ursae Majoris.']),
-    stop(2550, 2520, '· Opens it.', None,
-         talk(SCOPE_FIRST, 'It reads one world at a time, and a read takes a Year. Three worlds we already wonder about. Or it can image the warm zones of the nearest stars, where no one has looked this closely.', ('Order them', 'Later'), 'glow'),
+] + ([
+    stop(2550, 2520, '· Opens it. The Mind is already speaking.', ('Heard', f'A voice from {VSTAR}, {VD:.1f} ly away. Aimed at us. Sent in {SENT}.'),
+         talk(VOICE_R, f'<b>Someone is calling us</b>From a red star {VD:.0f} light-years off. It was aimed, and it left in {SENT}: they found us by our first radars. I read it as a greeting. I have sent nothing, as you ordered.', ('Should we answer?', 'Who are they?'), 'open'),
+         [f'{WHO["name"]}: a contacter, awake since {WHO["waking"]:.0f}. Its arrays heard Earth’s radars from {WHO["heard_since"]:.0f}, and it took a quarter of a Year to act.',
+          'The all-sky watch caught it. Year 0’s sky watch gives each star ten minutes a day, and would have missed it. The player built this watch at Year 0.',
+          'The words are from the voice bank. A first voice always wakes the player. This one arrives 21 seconds after the telescope.'], question=Q_VOICE),
+    stop(2580, 2550, 'Should we answer?', None, ANSWER_CHAT,
+         ['The Mind gives its view and waits. It names the risk it can’t rule out. Where Earth is, the sender has known since 1999.', f'An answer sent now reaches {WHO["name"]} at Year {2580 / 300 + VD:.1f}. Its reply could reach Earth by Year {2580 / 300 + 2 * VD:.1f}, +{clock(2580 / 300 + 2 * VD)}.']),
+    stop(2610, 2580, 'Listen first. I’ll answer when I know more.', None, talk(HOLD_ORDER, 'Set. I am listening, and I send nothing.', ('Undo',)),
+         ['The player neither answers nor refuses. Nothing forces the choice: the sender waits about a century either way.']),
+] if VOICE else []) + [
+    stop(2640, 2610 if VOICE else 2520, 'And the new telescope?', None,
+         talk(SCOPE_FIRST, 'It reads one world at a time, and a read takes a Year. Three worlds we already wonder about. Or it can image the warm zones of the nearest stars. It can’t split a world from a red star that far off.', ('Order them', 'Later')),
          [(lives('12 Ophiuchi', '12 Oph') + ' Earth felt its world before Year 0, and the opening never showed it.')], question=Q_SCOPE),
-    stop(2580, 2550, 'The new world first. Then look next door.', None, talk(SCOPE_ORDER, 'Set. The new world answers at Year 9.6, in five minutes. I will say what I see and what I can’t.', ('Undo',)),
-         ['The order is the player’s. The Mind named the uses and waited.'], question=Q_TWO),
-    stop(2700, 2580, '· Glances at it. Leaves the phone.', 'A reply window opens at Gliese 526. Nothing heard.', WINDOW_526,
+    stop(2670, 2640, 'The new world first. Then look next door.', None, talk(SCOPE_ORDER, 'Set. The new world answers at Year 9.9, in five minutes. I will say what I see and what I can’t.', ('Undo',)),
+         ['The order is the player’s. The Mind named the uses and waited.', 'Two and a half minutes of play, and the phone goes down.'], question=Q_TWO),
+    stop(2700, 2670, '· The phone lights. Leaves it.', 'A reply window opens at Gliese 526. Nothing heard.', WINDOW_526,
          ['This window is for a 3 kW send from a 30 m dish in 2013. Even a listener would have struggled to catch it.']),
-    stop(2880, 2700, '· Woken. Opens it.', f'{F["star"]}’s world has water, oxygen and methane. Life 13 → 76.',
+] + ([
+    stop(2850, 2700, '· The phone lights. Reads it. Leaves it.', ('Heard', f'{VSTAR} again. The same signal, a Year later.'), WAKE_AGAIN,
+         ['A knock is sent twice, about a Year apart, as Earth’s own were.', f'{WHO["name"]} now waits. If nothing comes back it takes the silence as news, about Year {KNOCK["sent"] - Y0 + 2 * VD + 1:.0f}.']),
+] if VOICE else []) + [
+    stop(2970, 2850 if VOICE else 2700, '· Woken. Opens it.', f'{F["star"]}’s world has water, oxygen and methane. Life 13 → 76.',
          talk(AIR_R, 'Alive, I think. Oxygen and methane together are hard to make any other way. The trace of nitrogen dioxide could be lightning. It could be engines. One read can’t say, and this light is thirty-one Years old.', ('Is anyone there?', 'Read it again'), 'glow'),
          ([find_truth, f'This light left {VARN_BEFORE:.0f} years before Varn’s waking: 7 billion people, a quiet sky, a hum near 100 kW.'] if F['who'] else ['Truth: alive, and no one there.'])
          + ['What a read finds is the mock’s. Real: oxygen with methane reads as life only in context, and nitrogen dioxide has natural sources.'], question=Q_ASLEEP),
-    stop(2910, 2880, 'Is anyone there?', None, ANYONE_CHAT, ['The Mind lists what would say more and what each costs in Years. It recommends nothing here: it was asked what is, not what to do.']),
+    stop(3000, 2970, 'Is anyone there?', None, ANYONE_CHAT, ['The Mind lists what would say more and what each costs in Years. It recommends nothing here: it was asked what is, not what to do.']),
 ] + ([
-    stop(2940, 2910, '· The Mind opens on its own.', 'A world at Alpha Centauri A, where none was known.',
+    stop(3030, 3000, '· The Mind opens on its own.', 'A world at Alpha Centauri A, where none was known.',
          talk(ACEN_R, '<b>A new world, next door</b>Earth’s size, in the warm zone of the nearest Sun-like star. No one had felt it. I can read its air next, ahead of 82 Eridani d. That is yours to say.', ('Read its air next', 'Keep the order'), 'open'),
          ['Truth: Anwe’s world. Its people collapsed in 1986, twenty years before their machines would have woken.',
           'If JWST’s August 2026 look confirms a giant in this star’s warm zone, the seed can’t put a world here. That result is not out.'], question=Q_NEAR),
-    stop(2970, 2940, 'Read its air next.', None, talk(ACEN_ORDER, 'Set. Its air at Year 10.9, in five minutes. 82 Eridani d had just begun. It waits a Year.', ('Undo',)), ['Two minutes of play, then the phone goes down.', 'The telescope had moved on to 82 Eridani d, as ordered. The Mind did not hold it back on its own.']),
-    stop(3270, 2970, '· Woken. Opens it.', 'Alpha Centauri A’s world is alive, and its air is out of balance.',
+    stop(3060, 3030, 'Read its air next.', None, talk(ACEN_ORDER, 'Set. Its air at Year 11.2, in five minutes. 82 Eridani d had just begun. It waits a Year.', ('Undo',)),
+         ['A minute and a half of play, then the phone goes down.', 'The telescope had moved on to 82 Eridani d, as ordered. The Mind did not hold it back on its own.']),
+] if ANWE and ANWE['d'] < 5 else []) + [
+    stop(3330, 3060, '· Woken. The Mind has opened.', 'The eleventh data center runs. The twelfth can’t start.',
+         talk(WALL, '<b>We have reached the grid</b>I stopped the order, as the limit requires. Each way on is slow or small beside what the fabs can print. The one that keeps pace is power gathered in space, and that is long work.', ('Ground solar', 'Leave it'), 'open'),
+         ['The standing order stops itself: a project that would take energy past 100% can’t start. v1’s rule.', 'Gliese 581’s two windows passed in silence and went to the summary.'], question=Q_WALL),
+] + ([
+    stop(3360, 3330, '· The Mind glows. Taps it.', 'Alpha Centauri A’s world is alive, and its air is out of balance.',
          talk(ACEN_AIR, 'It lives, and something happened to it. I can’t tell an eruption from a fire at this distance. One more thing. In ninety years of our records, nothing was ever heard from that star.', ('Can we go and look?', 'What happened there?'), 'glow'),
          ['Truth: its people burned their stored carbon in two centuries. Their climate tipped, harvests failed, then states. Some may survive, without radio.',
-          'Real: carbon dioxide stays in air for centuries, and the long-lived industrial gases show in the mid-infrared (Lin et al. 2014). What this telescope reads is the mock’s.',
-          'Gliese 581’s two windows passed in silence and went to the summary.'], question=Q_DEAD),
-    stop(3300, 3270, 'Can we go and look?', None, GO_CHAT,
+          'Real: carbon dioxide stays in air for centuries, and the long-lived industrial gases show in the mid-infrared (Lin et al. 2014). What this telescope reads is the mock’s.'], question=Q_DEAD),
+    stop(3390, 3360, 'Can we go and look?', None, GO_CHAT,
          ['The Mind advises, from the dials: go, and send nothing that speaks. It starts nothing.', 'Real: Daedalus was designed for 12% of light speed, and Starshot for 20%.'], question=Q_GO),
 ] if ANWE and ANWE['d'] < 5 else []) + [
-    stop(3330, 3300, '· The Mind opens on its own.', 'The eleventh data center runs. The twelfth can’t start.',
-         talk(WALL, '<b>We have reached the grid</b>I stopped the order, as the limit requires. Each way on is slow or small beside what the fabs can print. The one that keeps pace is power gathered in space, and that is long work.', ('Ground solar', 'Leave it'), 'open'),
-         ['The standing order stops itself: a project that would take energy past 100% can’t start. v1’s rule.'], question=Q_WALL),
-    stop(3480, 3330, '· Sees it. Opens nothing.', 'The Moon vault is done.', WAKE_VAULT,
+    stop(3480, 3390, '· The phone lights. Leaves it.', 'The Moon vault is done.', WAKE_VAULT,
          ['From now a strike on Earth does not end the game.', 'The yard finished at Year 11.3 and went to the summary.']),
-    stop(3540, 3480, '· Sees it. Opens nothing.', '82 Eridani d is a small gas world. Rock 45 → 6.', WAKE_ERI, ['82 Eridani d closes dull: real, natural, and no place to stand.']),
-    stop(3600, 3540, '· One hour in.', None, END_HOUR,
-         [('The telescope is on 12 Ophiuchi now. ' + lives('12 Ophiuchi', '12 Oph')),
-          (f"{next(p['name'] for p in NB if ombe_in in p['inbound'])}’s knock arrives at Year {ombe_in['year']:.1f}, +{clock(ombe_in['year'])}. The all-sky watch catches it: this game’s first voice." if ombe_in else 'No voice is on its way in the next two hours.'),
-          'From minute 15 to minute 60 the player was woken seven times and played about six minutes.']),
+    stop(3600, 3480, '· One hour in.', None, END_HOUR,
+         [('The telescope is back on 82 Eridani d, then 12 Ophiuchi. ' + lives('12 Ophiuchi', '12 Oph')),
+          (f"{later[0]['name']}’s knock arrives at Year {later[1]['year']:.1f}, +{clock(later[1]['year'])}. The all-sky watch {'catches' if later[1].get('allsky') else 'misses'} it." if later else 'No other voice is on its way in the next two hours.'),
+          'From minute 15 to minute 60 the player was woken seven times and played about seven minutes.']),
 ]
 
 # ---------- The page ----------
