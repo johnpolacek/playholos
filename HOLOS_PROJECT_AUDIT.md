@@ -129,6 +129,8 @@ Proposed prices are matter in orbit, on the Moon or in the belt. Ground builds s
 | Far-side array | 40 Mt | OK, recalculated | About 1 Mt of lunar metal made in place, as FarView plans, at an assumed 1 kg/m². Needs the mass driver line. Hears a 100 kW tone to 47 ly in a day. | Depends on the antenna design. Thin wire antennas weigh little, steel dishes a great deal. |
 | Kilometer interferometer | 800 Mt | Heavy ×100,000+ | 1 kt | A fleet of large mirrors, thousands of tonnes at most. |
 
+From 2026-10-13, Planet survey and Waste-heat survey are searches: standing orders for instruments Earth already has, not builds. See [How Earth learns](HOLOS_GAME_CONCEPT.md#how-earth-learns).
+
 ### Grow
 
 | Project | v1 matter | Verdict | Proposed for 2040 | Basis |

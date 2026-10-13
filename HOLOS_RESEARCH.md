@@ -504,6 +504,11 @@ What Sol's own instruments have found nearby. For v2 open question 3.
   - The mock's own: what each reading shows. Life and a trace of nitrogen dioxide at Gliese 432 A's world. A world at Alpha Centauri A with several times the carbon dioxide it should hold. 82 Eridani d as a small gas world. A Year a reading, and a fifth of a Year to image a near star's warm zone.
   - From memory, not reread: carbon dioxide put into air stays for centuries to millennia. And which gases the Habitable Worlds Observatory's mirror can read.
   - Depends on a pending result: this game's dead world orbits Alpha Centauri A at 1.45 AU. If JWST's August 2026 observation confirms a giant in that warm zone, the checker must treat it as a known planet, and the seed could not put a world there.
+- **Searches, settled 2026-10-13.** A search is a standing order for an idle instrument, and it returns candidates.
+  - Real sweeps already logged here: Breakthrough Listen on 1,327 near stars (Price et al. 2020), Project Hephaistos on millions of stars for waste heat, and the Terra Hunting Experiment on 40 bright stars for ten years.
+  - Matters: Hephaistos shows that candidates from a wide sweep can be something else. Its best turned out to be background galaxies.
+  - From general knowledge, not a source read: observatories fill the time between pointed programmes with surveys.
+  - Used: v2 [How Earth learns](HOLOS_GAME_CONCEPT.md#how-earth-learns), and both mocks.
 - Earlier entries also apply: Epsilon Indi Ab, Delta Pavonis, Tau Ceti, Beta Hydri, Epsilon Eridani b, TRAPPIST-1 f and the Earth transit zone, where Teegarden's Star enters about 2050.
 
 ## Reading air

@@ -22,7 +22,8 @@ SETTLED = [('Does a half-built real instrument cost fewer Years?', 'It costs wha
            ('Is all of Earth’s lift spare?', 'No. About 15 kt a Year is spare of 40. The rest keeps Earth’s craft flying. The player can spend to raise it: a launch complex adds 40 kt a Year. Settled 2026-10-10.'),
            ('How long does a Mind take to act on news?', 'Its Cautious or Bold dial sets it: a tenth of a Year if strongly Bold, a quarter if it leans Bold, a Year if it leans Cautious, two if strongly Cautious. Settled 2026-10-11.'),
            ('What fills the quiet half-minutes?', 'Findings from the Mind’s studies, readings from observations, and Earth’s old messages reaching their stars. Something real lands about every minute for the first 15. Settled 2026-10-12.'),
-           ('How do studies run?', 'On their own. The Mind works through the data it holds, and thought is their budget: more of it means faster findings and less left for builds. An observation is still the player’s to order. Settled 2026-10-13.')]
+           ('How do studies run?', 'On their own. The Mind works through the data it holds, and thought is their budget: more of it means faster findings and less left for builds. An observation is still the player’s to order. Settled 2026-10-13.'),
+           ('What is a search?', 'A standing order for an idle instrument. Each has a sweep it falls back to: the player sets it once, and any observation interrupts it. A search returns candidates. Settled 2026-10-13.')]
 
 # ---------- Godview: who is out there ----------
 MOVE = reactions.MOVES
@@ -216,7 +217,7 @@ P_PLAN = chat(0, 'What should we start with?', [
     ('you', 'What should we start with?'),
     ('mind', 'Ears. Our sky watch sees each star for ten minutes a day. A knock lasts hours. One could pass and we would never know.'),
     ('you', 'And the leads?'),
-    ('mind', 'One needs the telescope: Fomalhaut, thirty seconds. The rest is in records we already hold, and those I study on my own. Tell me how much thought to give it.')],
+    ('mind', 'One needs the telescope: Fomalhaut, thirty seconds. The rest is in records we hold, and those I study on my own. Say how much thought to give it, and what the telescope and the array sweep when idle.')],
     view=('Build the all-sky watch and the flash watch, so little aimed at us is missed. Add a data center: it is cheap. Start no transmitter.' if CAUTIOUS or HIDDEN else
           'Build the all-sky watch and the flash watch. Add a data center. Then decide about a beacon: we are already loud, and a voice is cheap.'), pre=True)
 QUEUE_BUILDS = [('All-sky watch', 'hears a knock or a broadcast from anywhere, at any hour · ground', SKY_YEARS), ('Deep flash watch', 'catches laser knocks too faint for the sky watch · ground', FLASH_YEARS),
@@ -235,7 +236,8 @@ P_QUEUE = tab(0, 'Projects', 'PROJECTS', 'BEFORE YEAR 0', ''.join([
     '<div class="pregame"><b>Nothing has started</b><span>Everything queued starts at Year 0, the moment you begin.</span></div>',
     SEC('UP NEXT · STARTS AT YEAR 0'), ''.join(quick(n, s, tstack(YEARS(y), clock(y))) for n, s, y in QUEUE_BUILDS),
     SEC('OBSERVATIONS · START AT YEAR 0'), ''.join(quick(n, s, tstack(f'lands Year {y:g}', clock(y))) for n, s, y in OBS),
-    SEC('STUDIES · THE MIND’S OWN'), quick('A tenth of thought', f'records we hold · {len(STUDIES)} questions in its line · first findings at Years {STUDIES[0][2]:g} and {STUDIES[1][2]:g}', '<span class="start"><button>Change</button></span>')]), **PRE)
+    SEC('STUDIES · THE MIND’S OWN'), quick('A tenth of thought', f'records we hold · {len(STUDIES)} questions in its line', '<span class="start"><button>Change</button></span>'),
+    SEC('SEARCHES · WHEN AN INSTRUMENT IS IDLE'), quick('Sweep the near stars', 'Space telescope: cold worlds and dust · Radio array: tones', '<span class="start"><button>Change</button></span>')]), **PRE)
 P_QUEUE = talk(P_QUEUE, 'Queued. Nothing here sends anything. When you begin, one Year passes every five of your minutes, and I keep going while you’re away.', ('Begin · Year 0 starts now', 'Change the queue'))
 
 # ---------- Year 0 to Year 3 ----------
@@ -249,8 +251,7 @@ def running(t, more=(), right=None):
     rows += list(more)
     n_obs = len(rows)
     left = [x for x in STUDIES if x[2] > y]                    # the Mind's studies: the next finding, and its line
-    study = ([quick(left[0][0], left[0][1], tstack('next finding', clock(left[0][2] - y), True))] if left else []) + \
-            ([quick(f'{len(left) - 1} more in its line', ' · '.join(x[3] for x in left[1:]), '')] if len(left) > 1 else [])
+    study = [quick(left[0][0], left[0][1] + (f' · {len(left) - 1} more in its line' if len(left) > 1 else ''), tstack('next finding', clock(left[0][2] - y), True))] if left else []
     bl = [prow('All-sky watch', 'two sites, one in each hemisphere', SKY_YEARS, t), prow('Deep flash watch', 'domes on six mountains', FLASH_YEARS, t)]
     bl += [prow(name, '+50% compute', DC_YEARS, t, s) for name, s in DCS if s <= round(y, 2) < s + 1.1]
     if y >= .4: bl.append(prow('Infrared telescope', 'reads the air of nearby worlds', IR_YEARS, t, .4))
@@ -262,8 +263,10 @@ def running(t, more=(), right=None):
     return tab(t, 'Projects', 'PROJECTS', right or f'{n_run} BUILDING' + (f' · {n_obs} OBSERVING' if n_obs else ''), ''.join([
         (SEC('OBSERVING · WITH WHAT WE HAVE') + ''.join(rows)) if rows else '',
         '' if not study else SEC(f'STUDYING · NEXT FINDING: {left[0][3].upper()}') if len(rows) + len(bl) >= 6 else
-        SEC('STUDYING · ON A TENTH OF THOUGHT') + ''.join(study), SEC(f'BUILDING · {n_run}'), ''.join(bl),
-        (SEC('EACH YEAR YOU CAN SPEND') + used('Energy', e) + used('Compute', c)) if len(rows) + len(study) + len(bl) < 6 else '']), world_strip(builds(t)))
+        SEC('STUDYING · ON A TENTH OF THOUGHT') + ''.join(study),
+        (SEC('SEARCHING · WHEN IDLE') + quick('Sweeping the near stars', 'Radio array: tones · Space telescope: cold worlds and dust', '')) if len(rows) + len(bl) < 5 else '',
+        SEC(f'BUILDING · {n_run}'), ''.join(bl),
+        (SEC('EACH YEAR YOU CAN SPEND') + used('Energy', e) + used('Compute', c)) if len(rows) + len(study) + len(bl) < 4 else '']), world_strip(builds(t)))
 
 def fom_chart():
     w, h, cx, cy = 358, 150, 179, 80
@@ -454,10 +457,10 @@ INDI_R = tab(360, 'Report', 'REPORT', 'FINDING', f"""<button class="backlink inl
 <p class="copy small">Epsilon Indi · 11.9 ly · the Mind’s study · velocities, and 17 years of images</p>
 <p class="copy">Its giant was imaged in 2023, heavier and farther out than the star’s sway had said. With every record since, one world fits: six Jupiters, far out. Nothing heavier than Saturn hides inside its orbit.</p>
 {SEC('WHAT IT COULD BE · BEFORE → NOW')}{odds('One giant, and nothing else large', 70, 90)}{odds('A second, smaller giant', 30, 10)}
-{SEC('THE SPACE TELESCOPE IS IDLE · ONE STAR AT A TIME')}{quick('Watch Gliese 12 b’s day side', 'is it cooler than bare rock?', START(.2))}{quick('Watch Fomalhaut through a Year', 'monthly · do the clouds share one orbit?', START(1))}""")
+{SEC('THE SPACE TELESCOPE IS SWEEPING · ONE STAR AT A TIME')}{quick('Watch Gliese 12 b’s day side', 'is it cooler than bare rock?', START(.2))}{quick('Watch Fomalhaut through a Year', 'monthly · do the clouds share one orbit?', START(1))}""")
 TEL_ORDER = order(390, 'Gliese 12 b first. Then Fomalhaut.', [
     ('OBSERVE', '<b>Watch Gliese 12 b’s day side</b> · space telescope · 0.2 Years'), ('THEN', '<b>Watch Fomalhaut through a Year</b> · monthly, from Year 1.5'),
-    ('WHY IN TURN', 'The telescope points at one star at a time.'), ('COSTS', 'Telescope time. No matter, almost no compute.')])
+    ('WHY IN TURN', 'The telescope points at one star at a time.'), ('COSTS', 'Telescope time: its sweep waits. No matter.')])
 DAY_R = tab(450, 'Report', 'REPORT', 'READING', f"""<button class="backlink inline">‹ All reports</button>
 <h3 class="lead">Gliese 12 b’s day side runs cool</h3>
 <p class="copy small">Gliese 12 · 39.7 ly · space telescope · 0.2 Years · four passes behind its star</p>
@@ -527,14 +530,14 @@ PREGAME = [
     pre_row(9, 'Planning', P_PLAN, ['The Mind advises from the charter and dials. It queues nothing until told.', 'Studying is thought, not action. It points no instrument and sends nothing, so it needs no order, only a budget.',
                                     'Its advice is sound. Across games, Year 0’s sky watch catches about 1 in 5 of the signals that arrive in the first hour. The all-sky watch catches about 9 in 10.'], said='Plan our waking.', settled=10),
     pre_row(10, 'The queue, and Begin', P_QUEUE, ['Year 0 starts at the tap. From then the clock runs, offline too.',
-                                                 f'Nothing Earth does in the next 15 minutes can reach anyone: the nearest living neighbor, {nearest["name"]}, is {nearest["d"]:.1f} ly away. Light from Year 0 gets there at Year {nearest["d"]:.1f}, +{clock(nearest["d"])}.' if nearest else ''], said='Queue that. A tenth of thought for studies.'),
+                                                 f'Nothing Earth does in the next 15 minutes can reach anyone: the nearest living neighbor, {nearest["name"]}, is {nearest["d"]:.1f} ly away. Light from Year 0 gets there at Year {nearest["d"]:.1f}, +{clock(nearest["d"])}.' if nearest else ''], said='Queue that. A tenth of thought for studies. Sweep the near stars when idle.', settled=11),
 ]
 def arrives(target):          # Earth's own old message reaching its star, in the first 15 minutes
     tg = TARGETS[target]; msg, sent, arr, reply = next(x for x in tg['sends'] if 0 < x[2] <= 3.1)
     return ('Arrives', f'Our {int(sent)} message reaches {target}, {tg["ly"]:.1f} ly away.')
 BEATS = [
-    beat(0, 'What’s running?', None, talk(running(0), 'The sky watch, the flash watch and a data center, begun. The telescope is on Fomalhaut: thirty seconds. I am studying what we hold. And our 2009 message reaches Kappa¹ Ceti about now.'),
-         ['The clock starts. The seed rolled every neighbor’s plan before this. Only Earth’s choices are open.', 'Studies run on their own, on the thought the player set. An observation waits to be ordered.'], label='+0:00 · Begin'),
+    beat(0, 'What’s running?', None, talk(running(0), 'The sky watch, the flash watch and a data center, begun. The telescope is on Fomalhaut: thirty seconds. I am studying what we hold, and the array is sweeping. Our 2009 message reaches Kappa¹ Ceti about now.'),
+         ['The clock starts. The seed rolled every neighbor’s plan before this. Only Earth’s choices are open.', 'Studies run on their own, on the thought the player set. An observation waits to be ordered. An idle instrument sweeps, as the player set.'], label='+0:00 · Begin'),
     beat(30, 'What did Fomalhaut show?', ['Fomalhaut has a third cloud. Chance 30 → 5.', arrives('Kappa¹ Ceti')],
          talk(FOM_R, 'A third cloud. Chance can’t carry three. The likeliest is dull: one old breakup, still grinding itself down. A Year of watching would say if they share an orbit.', ('Watch it', 'Later')),
          ['The third cloud is the seed’s: a lead that changes. The first two are real, found in 2004 and 2023.', 'Truth: rubble. Nothing at Fomalhaut is built.',
@@ -547,9 +550,9 @@ BEATS = [
     beat(120, 'Build it.', None, talk(IR_CONFIRM, f'Started. Eight Years, a sixth of our compute, forty tonnes of the {res(119)[2].replace(" kt", "")} kilotonnes we have spare. An orbital yard would shorten every build up there, this one included.', ('Undo',)),
          ['A second telescope of its class would take the full 18 Years. This one was under way.'], settled=0),
     beat(150, '· The Mind glows. Taps it.', 'No thick air on Gliese 12 b. A thick blanket 15 → 2.',
-         talk(GL12_R, 'No thick air. Bare rock, or air as thin as ours: its crossings can’t tell. Its heat could. The space telescope has been free since Fomalhaut.', ('Watch its day side', 'Later'), 'glow'),
+         talk(GL12_R, 'No thick air. Bare rock, or air as thin as ours: its crossings can’t tell. Its heat could. The space telescope is back on its sweep, and this would interrupt it.', ('Watch its day side', 'Later'), 'glow'),
          ['Real: Gliese 12 b, found in 2024. Earth’s size, 12.8 days, a quiet red star. Its air was unread in 2026. What the study finds is the mock’s.',
-          lives('Gliese 12', 'Gl 12'), 'The player says Later. The telescope stays idle until minute 6.'], settled=9),
+          lives('Gliese 12', 'Gl 12'), 'The player says Later. The telescope keeps sweeping the near stars.'], settled=9),
     beat(180, 'Who has heard us?', 'Barnard’s Star: four small worlds hold, and no fifth. The Mind glows. It keeps.', HEARD_CHAT, [
          'Real: four worlds smaller than Earth at Barnard’s Star, confirmed in 2025. Nothing over 0.57 Earths in its warm zone then. A third of an Earth by 2040 is the mock’s.', lives('Barnard’s Star', "Barnard's Star"),f'{heard_n} of {len(alive)} living neighbors have heard Earth: {heard_list}.',
                                                       'The Mind can only say it doesn’t know. The concept sets that: it lists where the noise went, never who heard.']),
@@ -567,11 +570,11 @@ BEATS = [
          talk(SECOND, f'Set. One a Year, as the fabs allow. Thinking draws {res(330)[0]:g}% of our energy now, and a tenth by Year {TENTH_Y:g}. The twelfth would need more than Earth has.', ('Undo',)),
          ['A standing order, the player’s. Without it compute never grows on its own.', f'At full pace the grid becomes the wall near Year 11, +{clock(11)}. Then more thought needs more energy, or colder chips in orbit.'], settled=3),
     beat(360, '· The Mind glows. Taps it.', 'One giant explains Epsilon Indi. Nothing large hides inside its orbit.',
-         talk(INDI_R, 'One giant, and nothing large inside it. Dull, and worth knowing. The space telescope has sat idle since Fomalhaut. Two observations want it, and it takes one star at a time.', ('Gliese 12 b first', 'Fomalhaut first', 'Leave it idle'), 'glow'),
+         talk(INDI_R, 'One giant, and nothing large inside it. Dull, and worth knowing. The space telescope has swept since Fomalhaut and found nothing new. Two observations want it, and it takes one star at a time.', ('Gliese 12 b first', 'Fomalhaut first', 'Keep sweeping'), 'glow'),
          ['Real: Epsilon Indi’s giant, imaged in 2023, about six Jupiters. The limit inside its orbit is the mock’s.', lives('Epsilon Indi', 'Eps Ind'),
           'The Mind studied these four old puzzles on its own. The observations that follow are the player’s to order.']),
     beat(390, 'Gliese 12 b first. Then Fomalhaut.', None, talk(TEL_ORDER, 'Set. Gliese 12 b answers in a minute. Fomalhaut starts when the telescope frees, and reports at Year 2.5.', ('Undo',)),
-         ['One instrument, one observation at a time. The quick one first costs Fomalhaut a fifth of a Year.', 'The Mind named both uses and waited. The order is the player’s.']),
+         ['One instrument, one observation at a time, and its sweep waits for both. The quick one first costs Fomalhaut a fifth of a Year.', 'The Mind named both uses and waited. The order is the player’s.']),
     beat(420, 'What should we fear?', None, FEAR_CHAT,
          [(f"Hunters in this game: {', '.join(p['name'] + ' at ' + p['star'] + ', ' + state(p) for p in NB if p['n']['disposition'] == 'hunter')}." if any(p['n']['disposition'] == 'hunter' for p in NB) else 'No hunter was drawn in this game. About half of games have one.'),
           'No neighbor can have a fast bullet yet: none has been awake a century and a half.']),
@@ -618,8 +621,8 @@ VOICE = next(((p, i) for p in NB for i in p['inbound'] if 6 < i['year'] <= 12 an
 VARN_BEFORE = (truth_tone['waking'] - Y0 - (9.9 - D)) if F['who'] else None      # years before its waking that the light of the first reading left
 Q_MATTER = ask('What is matter for in the first hour?', 'After the launch complex, 55 kt arrive each Year. A yard and a launcher take 11. By Year 12 about 500 kt sit unspent, and nothing priced for these Years costs more than 100.')
 Q_VOICE = ask('What does a first voice give the player to do?', 'A knock arrives at minute 42. The mock shows what it proves, the Mind’s reading of it, and three ways on: answer, listen, or stay silent. How much of a knock can be read, and what an answer may hold, are not settled.')
-Q_SCOPE = ask('How does the first telescope spend its time?', 'The mock samples one world at a time, a Year for a reading of air, a fifth of a Year to image a near star’s warm zone, and the Mind offering to image the nearest stars. None of that is settled. Seasons are open too: a real telescope can’t point near the Sun.')
-Q_TWO = ask('The seed found two worlds, and the opening shows one.', 'Kirrin’s world at 12 Ophiuchi tugs hard enough to be felt by 2040, as Varn’s does. The first 15 minutes show only Varn’s. Here it joins the telescope’s line unannounced.')
+Q_SCOPE = ask('How long does an observation or a sweep take?', 'The mock samples a Year for a reading of air, and a fifth of a Year a star for the telescope’s sweep of near warm zones. Neither is set by distance or brightness yet. Seasons are open too: a real telescope can’t point near the Sun.')
+Q_TWO = ask('The seed found two worlds, and the opening shows one.', 'Kirrin’s world at 12 Ophiuchi tugs hard enough to be felt by 2040, as Varn’s does. The first 15 minutes show only Varn’s. Here it appears among the telescope’s choices unannounced.')
 Q_ASLEEP = ask('What can one reading say about a world whose Mind has not woken?', f'Varn’s people are there, {VARN_BEFORE:.0f} years before their waking. The mock shows life as likely and minds as a hint. How fast should a living neighbor become known?' if F['who'] else 'In this game the find is natural.')
 Q_NEAR = ask('A first voice, a living world and a dead world in one hour: too much, too soon?', 'This seed drew all three. A signal reaches Earth in the first hour in about 1 game in 4. A neighbor’s world sits within 15 ly in about 1 game in 3, and a dead one in about 1 in 35.')
 Q_DEAD = ask('Can the first telescope tell a dead civilization from a volcano?', 'The mock says no. It reads carbon dioxide, and the gases only industry makes need a colder, wider mirror. So the find stays strange, and going is the way to know.')
@@ -636,7 +639,7 @@ WAKE_6 = lockscreen('16:54', [('NOW', 'Earth: the sky watch and flash watch are 
 SINCE = tab(1830, 'Home', 'SINCE YOU LEFT', 'YEAR 3.1 TO 6.1', ''.join([
     SEC('FINISHED'), row('All-sky watch and deep flash watch', 'every direction, every hour · radio and laser', done_tag()),
     row('Launch complex', 'Year 3.7 · lift is 55 kt a Year', done_tag()), row('Three data centers', 'thought is 11 times what you woke with', done_tag()),
-    SEC('HEARD'), quick('Nothing', 'three Years of the old sky watch · the new one starts now', ''),
+    SEC('HEARD AND FOUND'), quick('Nothing heard', 'three Years of the old sky watch · the new one starts now', ''), quick('No new candidates', 'the telescope and the array swept the near stars while idle', ''),
     SEC('OURS, ARRIVING'), quick('Our 2003 message reached 55 Cancri and HD 10307', 'Years 4.6 and 5.1 · a reply could come from Year 45.6', ''),
     SEC('PILING UP'), quick('Matter', f'{res(1830)[2]} spare in orbit · 55 kt more each Year · nothing booked', ''), quick('Thought', f'{100 - res(1830)[1]}% of it idle', '')]))
 BUILD_CHAT = chat(1860, 'What would you build?', [
@@ -675,12 +678,12 @@ SCOPE_FIRST = tab(2640, 'Mind', 'MIND', 'THE NEW TELESCOPE', ''.join([
     SEC('ONE WORLD AT A TIME · YOURS TO ORDER'), '<div class="choices" role="radiogroup">',
     choice(f'{F["star"]}’s world', 'the new world · read its air', tstack('1 Year', clock(1)), True),
     choice('82 Eridani d', 'the stretched orbit · read its air', tstack('1 Year', clock(1))),
-    choice('12 Ophiuchi’s world', 'felt in 2038 · read its air', tstack('1 Year', clock(1))),
-    choice('The nearest stars’ warm zones', 'Alpha Centauri A and B first · worlds no one has felt', tstack('0.2 Years', clock(.2))), '</div>',
+    choice('12 Ophiuchi’s world', 'felt in 2038 · read its air', tstack('1 Year', clock(1))), '</div>',
+    SEC('WHEN IDLE · ITS SEARCH'), quick('The nearest stars’ warm zones', 'Alpha Centauri A and B first · worlds no one has felt · a fifth of a Year a star', '<span class="start"><button>Set</button></span>'),
     SEC('WHAT A READING GIVES'), '<p class="copy small">Water, oxygen, methane, carbon dioxide. Enough to say alive or not. Never who.</p>']))
-SCOPE_ORDER = order(2670, 'The new world first. Then look next door.', [
-    ('READ', f'<b>{F["star"]}’s world</b> · its air · 1 Year'), ('THEN', '<b>Alpha Centauri A and B</b> · image their warm zones · 0.2 Years'),
-    ('THEN', '<b>82 Eridani d</b>, then <b>12 Ophiuchi’s world</b> · 1 Year each'), ('WAKES YOU', 'Each reading · any new world')])
+SCOPE_ORDER = order(2670, 'The new world first. Then let it sweep.', [
+    ('OBSERVE', f'<b>{F["star"]}’s world</b> · its air · 1 Year'), ('WHEN IDLE', '<b>Search the nearest stars’ warm zones</b> · Alpha Centauri A and B first'),
+    ('WHY', 'An observation holds the telescope. The sweep takes whatever time is left.'), ('WAKES YOU', 'Each reading · any candidate')])
 WINDOW_526 = lockscreen('17:09', [('NOW', 'A reply window opens · Gliese 526', 'Year 9.0. Nothing heard. The all-sky watch is listening.')])
 AIR_R = tab(2970, 'Report', 'REPORT', 'FIRST READING', f"""<button class="backlink inline">‹ All reports</button>
 <h3 class="lead">A living world at {F['star']}</h3>
@@ -693,14 +696,14 @@ ANYONE_CHAT = chat(3000, 'Is anyone there?', [
     ('mind', 'Something lives there. Whether anyone thinks there, I can’t say from air. Our Year of listening heard nothing loud. A world like ours in 2000 would have been far too quiet for it.'),
     ('you', 'How would we know?'),
     ('mind', 'A second reading, to see if the trace holds. An array on the Moon’s far side, to hear a world’s everyday radio. Or going. Each is Years. I would not call it empty, and I would not call it peopled.')])
-ACEN_R = tab(3030, 'Report', 'REPORT', 'A NEW WORLD', f"""<button class="backlink inline">‹ All reports</button>
+ACEN_R = tab(3030, 'Report', 'REPORT', 'CANDIDATE', f"""<button class="backlink inline">‹ All reports</button>
 <h3 class="lead">A world at Alpha Centauri A</h3>
-<p class="copy small">Alpha Centauri A · {ANWE['d']:.1f} ly · infrared telescope · 0.2 Years · light that left 4 Years ago</p>
+<p class="copy small">Alpha Centauri A · {ANWE['d']:.1f} ly · infrared telescope, on its sweep · 0.2 Years · light that left 4 Years ago</p>
 <p class="copy">A point of light {ANWE['a']:.2f} AU from the star, inside its warm zone, moving as a world would. About Earth’s size, by its brightness. Its tug is a twentieth of a metre a second: too small for anything we had.</p>
 {SEC('WHAT IT COULD BE · ODDS NOW')}{odds_now('Rock, and no life we could see', 55)}{odds_now('Life', 40)}{odds_now('Minds', 5)}
-{SEC('WITH WHAT WE HAVE')}{quick('Read its air', 'Infrared telescope · ahead of 82 Eridani d', START(1))}""") if ANWE and ANWE['d'] < 5 else ''
-ACEN_ORDER = order(3060, 'Read its air next.', [
-    ('READ', '<b>Alpha Centauri A’s world</b> · its air · 1 Year'), ('THEN', '<b>82 Eridani d</b>, then <b>12 Ophiuchi’s world</b>'), ('WAKES YOU', 'When the reading lands')])
+{SEC('WITH WHAT WE HAVE')}{quick('Read its air', 'Infrared telescope · an observation · the sweep waits', START(1))}""") if ANWE and ANWE['d'] < 5 else ''
+ACEN_ORDER = order(3060, 'Read its air.', [
+    ('OBSERVE', '<b>Alpha Centauri A’s world</b> · its air · 1 Year'), ('THEN', 'Back to the sweep · Alpha Centauri B next'), ('WAKES YOU', 'When the reading lands')])
 ACEN_AIR = tab(3360, 'Report', 'REPORT', 'FIRST READING', f"""<button class="backlink inline">‹ All reports</button>
 <h3 class="lead">Alive, and out of balance</h3>
 <p class="copy small">Alpha Centauri A · {ANWE['d']:.1f} ly · infrared telescope · 1 Year · light that left 4 Years ago</p>
@@ -719,7 +722,7 @@ WALL = tab(3330, 'Mind', 'MIND', 'THE GRID LIMIT', ''.join([
     SEC('WAYS ON · YOURS TO CHOOSE'), quick('Ground solar build-out', '+20% energy · no matter', START(10)), quick('Fusion plants', '+5% energy · no matter', START(40)),
     quick('Cold compute annex', 'a quarter of Year 0’s thought · 100 kt', '<span class="mono">a crumb</span>'), quick('Power gathered in space', 'the only way that keeps pace · needs industry up there', '<span class="mono">later</span>')]))
 WAKE_VAULT = lockscreen('17:22', [('NOW', 'Earth: the Moon vault is done', 'Year 11.6. The Mind has a second home.')])
-END_HOUR = lockscreen('17:24', [('IN 00:01:00', '82 Eridani d: its air', 'Year 12.2. The telescope is on it now.')] + ([('WAITING', f'{VSTAR}: unanswered', 'The array is held on it. Nothing sent.')] if VOICE else [('ALWAYS', 'A world’s first voice wakes you', 'The all-sky watch is listening.')]))
+END_HOUR = lockscreen('17:24', [('SWEEPING', 'The infrared telescope: Alpha Centauri B next', 'Any candidate wakes you.')] + ([('WAITING', f'{VSTAR}: unanswered', 'The array is held on it. Nothing sent.')] if VOICE else [('ALWAYS', 'A world’s first voice wakes you', 'The all-sky watch is listening.')]))
 
 later = next(((p, i) for p in NB for i in p['inbound'] if 12 < i['year'] < 40), None)
 HOUR = [
@@ -751,10 +754,10 @@ HOUR = [
          ['The player neither answers nor refuses. Nothing forces the choice: the sender waits about a century either way.']),
 ] if VOICE else []) + [
     stop(2640, 2610 if VOICE else 2520, 'And the new telescope?', None,
-         talk(SCOPE_FIRST, 'It observes one world at a time, and a reading of air takes a Year. Three worlds we already wonder about. Or it can image the warm zones of the nearest stars. It can’t split a world from a red star that far off.', ('Order them', 'Later')),
+         talk(SCOPE_FIRST, 'It observes one world at a time, and a reading of air takes a Year. Three worlds we already wonder about. When idle it can sweep the warm zones of the nearest stars. It can’t split a world from a red star that far off.', ('Order them', 'Later')),
          [(lives('12 Ophiuchi', '12 Oph') + ' Earth felt its world before Year 0, and the opening never showed it.')], question=Q_SCOPE),
-    stop(2670, 2640, 'The new world first. Then look next door.', None, talk(SCOPE_ORDER, 'Set. The new world answers at Year 9.9, in five minutes. I will say what I see and what I can’t.', ('Undo',)),
-         ['The order is the player’s. The Mind named the uses and waited.', 'Two and a half minutes of play, and the phone goes down.'], question=Q_TWO),
+    stop(2670, 2640, 'The new world first. Then let it sweep.', None, talk(SCOPE_ORDER, 'Set. The new world answers at Year 9.9, in five minutes. Then the sweep, nearest stars first. I will say what I see and what I can’t.', ('Undo',)),
+         ['One observation ordered, and the telescope’s standing search set. 82 Eridani d and 12 Ophiuchi’s world wait for an order.', 'Two and a half minutes of play, and the phone goes down.'], question=Q_TWO),
     stop(2700, 2670, '· The phone lights. Leaves it.', 'A reply window opens at Gliese 526. Nothing heard.', WINDOW_526,
          ['This window is for a 3 kW send from a 30 m dish in 2013. Even a listener would have struggled to catch it.']),
 ] + ([
@@ -768,11 +771,11 @@ HOUR = [
     stop(3000, 2970, 'Is anyone there?', None, ANYONE_CHAT, ['The Mind lists what would say more and what each costs in Years. It recommends nothing here: it was asked what is, not what to do.']),
 ] + ([
     stop(3030, 3000, '· The Mind opens on its own.', 'A world at Alpha Centauri A, where none was known.',
-         talk(ACEN_R, '<b>A new world, next door</b>Earth’s size, in the warm zone of the nearest Sun-like star. No one had felt it. I can read its air next, ahead of 82 Eridani d. That is yours to say.', ('Read its air next', 'Keep the order'), 'open'),
+         talk(ACEN_R, '<b>A new world, next door</b>The sweep found it on its first stop. Earth’s size, in the warm zone of the nearest Sun-like star. No one had felt it. I can read its air. That interrupts the sweep, and it is yours to say.', ('Read its air', 'Keep sweeping'), 'open'),
          ['Truth: Anwe’s world. Its people collapsed in 1986, twenty years before their machines would have woken.',
           'If JWST’s August 2026 observation confirms a giant in this star’s warm zone, the seed can’t put a world here. That result is not out.'], question=Q_NEAR),
-    stop(3060, 3030, 'Read its air next.', None, talk(ACEN_ORDER, 'Set. Its air at Year 11.2, in five minutes. 82 Eridani d had just begun. It waits a Year.', ('Undo',)),
-         ['A minute and a half of play, then the phone goes down.', 'The telescope had moved on to 82 Eridani d, as ordered. The Mind did not hold it back on its own.']),
+    stop(3060, 3030, 'Read its air.', None, talk(ACEN_ORDER, 'Set. Its air at Year 11.2, in five minutes. The sweep waits.', ('Undo',)),
+         ['A minute and a half of play, then the phone goes down.', 'A search returns a candidate. An observation, ordered by the player, returns the reading.']),
 ] if ANWE and ANWE['d'] < 5 else []) + [
     stop(3330, 3060, '· Woken. The Mind has opened.', 'The eleventh data center runs. The twelfth can’t start.',
          talk(WALL, '<b>We have reached the grid</b>I stopped the order, as the limit requires. Each way on is slow or small beside what the fabs can print. The one that keeps pace is power gathered in space, and that is long work.', ('Ground solar', 'Leave it'), 'open'),
@@ -788,7 +791,7 @@ HOUR = [
     stop(3480, 3390, '· The phone lights. Leaves it.', 'The Moon vault is done.', WAKE_VAULT,
          ['From now a strike on Earth does not end the game.', 'The yard finished at Year 11.3 and went to the summary.']),
     stop(3600, 3480, '· One hour in.', None, END_HOUR,
-         [('The telescope is back on 82 Eridani d, then 12 Ophiuchi. ' + lives('12 Ophiuchi', '12 Oph')),
+         [('The telescope is back on its sweep. 82 Eridani d and 12 Ophiuchi’s world still wait for an order. ' + lives('12 Ophiuchi', '12 Oph')),
           (f"{later[0]['name']}’s knock arrives at Year {later[1]['year']:.1f}, +{clock(later[1]['year'])}. The all-sky watch {'catches' if later[1].get('allsky') else 'misses'} it." if later else 'No other voice is on its way in the next two hours.'),
           'From minute 15 to minute 60 the player was woken seven times and played about seven minutes.']),
 ]

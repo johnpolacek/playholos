@@ -161,7 +161,7 @@ ABOUT · What should we start with?
 What should we start with?
 THE MIND · Ears. Our sky watch sees each star for ten minutes a day. A knock lasts hours. One could pass and we would never know.
 And the leads?
-THE MIND · One needs the telescope: Fomalhaut, thirty seconds. The rest is in records we already hold, and those I study on my own. Tell me how much thought to give it.
+THE MIND · One needs the telescope: Fomalhaut, thirty seconds. The rest is in records we hold, and those I study on my own. Say how much thought to give it, and what the telescope and the array sweep when idle.
 What would you do?
 ITS VIEW · FROM OUR CHARTER AND DIALS · Build the all-sky watch and the flash watch. Add a data center. Then decide about a beacon: we are already loud, and a voice is cheap. · leans open · expand and deepen, even · leans bold
 Ask the Mind… · [Send · ↑]
@@ -171,7 +171,7 @@ Studying is thought, not action. It points no instrument and sends nothing, so i
 Its advice is sound. Across games, Year 0’s sky watch catches about 1 in 5 of the signals that arrive in the first hour. The all-sky watch catches about 9 in 10.
 Settled · How do studies run? On their own. The Mind works through the data it holds, and thought is their budget: more of it means faster findings and less left for builds. An observation is still the player’s to order. Settled 2026-10-13.
 10 · The queue, and Begin
-“Queue that. A tenth of thought for studies.”
+“Queue that. A tenth of thought for studies. Sweep the near stars when idle.”
 Earth · Before Year 0
 Sol · The clock starts when you begin
 ENERGY · [1%] · MATTER · 20 kt · COMPUTE · [0%]
@@ -184,12 +184,15 @@ Ground data center · +50% compute, for good · the fabs fill one a Year · 1 Ye
 OBSERVATIONS · START AT YEAR 0
 Image Fomalhaut again · Space telescope · has the new cloud moved? · lands Year 0.1 · 00:00:30
 STUDIES · THE MIND’S OWN
-A tenth of thought · records we hold · 7 questions in its line · first findings at Years 0.2 and 0.3 · [Change]
+A tenth of thought · records we hold · 7 questions in its line · [Change]
+SEARCHES · WHEN AN INSTRUMENT IS IDLE
+Sweep the near stars · Space telescope: cold worlds and dust · Radio array: tones · [Change]
 THE MIND · Queued. Nothing here sends anything. When you begin, one Year passes every five of your minutes, and I keep going while you’re away. · [Begin · Year 0 starts now] · [Change the queue]
 [Talk to the Mind]
 Godview
 Year 0 starts at the tap. From then the clock runs, offline too.
 Nothing Earth does in the next 15 minutes can reach anyone: the nearest living neighbor, Kesh, is 29.4 ly away. Light from Year 0 gets there at Year 29.4, +02:26:45.
+Settled · What is a search? A standing order for an idle instrument. Each has a sweep it falls back to: the player sets it once, and any observation interrupts it. A search returns candidates. Settled 2026-10-13.
 
 ## The first 15 minutes
 From Begin. 4 of 31 half-minutes had nothing new for the player.
@@ -203,17 +206,18 @@ PROJECTS · 3 BUILDING · 1 OBSERVING
 OBSERVING · WITH WHAT WE HAVE
 Image Fomalhaut again · Space telescope · has the new cloud moved? · under way · 00:00:30
 STUDYING · ON A TENTH OF THOUGHT
-Does Gliese 432 A’s world cross its star? · PLATO and TESS records · next finding · 00:01:00
-6 more in its line · 82 Eridani · Gliese 12 b · Barnard’s Star · Tau Ceti · Epsilon Indi · LHS 1140 b
+Does Gliese 432 A’s world cross its star? · PLATO and TESS records · 6 more in its line · next finding · 00:01:00
+SEARCHING · WHEN IDLE
+Sweeping the near stars · Radio array: tones · Space telescope: cold worlds and dust
 BUILDING · 3
 - All-sky watch · two sites, one in each hemisphere · 6 Years · 00:30:00
 - Deep flash watch · domes on six mountains · 6 Years · 00:30:00
 - Ground data center · +50% compute · 1 Year · 00:05:00
-THE MIND · The sky watch, the flash watch and a data center, begun. The telescope is on Fomalhaut: thirty seconds. I am studying what we hold. And our 2009 message reaches Kappa¹ Ceti about now.
+THE MIND · The sky watch, the flash watch and a data center, begun. The telescope is on Fomalhaut: thirty seconds. I am studying what we hold, and the array is sweeping. Our 2009 message reaches Kappa¹ Ceti about now.
 [Talk to the Mind]
 Godview
 The clock starts. The seed rolled every neighbor’s plan before this. Only Earth’s choices are open.
-Studies run on their own, on the thought the player set. An observation waits to be ordered.
+Studies run on their own, on the thought the player set. An observation waits to be ordered. An idle instrument sweeps, as the player set.
 +0:30 · Year 0.1
 “What did Fomalhaut show?”
 Lands · Fomalhaut has a third cloud. Chance 30 → 5.
@@ -332,12 +336,12 @@ Thin air, like ours or Venus’s · [35%] · [40%] · 35 → 40
 A thick blanket of gas · [15%] · [2%] · 15 → 2
 WITH WHAT WE HAVE · NEXT
 Watch its day side · Space telescope · air carries heat away, so a cool day side means air · 0.2 Years · 00:01:00 · [Start]
-THE MIND · No thick air. Bare rock, or air as thin as ours: its crossings can’t tell. Its heat could. The space telescope has been free since Fomalhaut. · [Watch its day side] · [Later]
+THE MIND · No thick air. Bare rock, or air as thin as ours: its crossings can’t tell. Its heat could. The space telescope is back on its sweep, and this would interrupt it. · [Watch its day side] · [Later]
 [Talk to the Mind]
 Godview
 Real: Gliese 12 b, found in 2024. Earth’s size, 12.8 days, a quiet red star. Its air was unread in 2026. What the study finds is the mock’s.
 No one lives at Gliese 12 in this game.
-The player says Later. The telescope stays idle until minute 6.
+The player says Later. The telescope keeps sweeping the near stars.
 Settled · What fills the quiet half-minutes? Findings from the Mind’s studies, readings from observations, and Earth’s old messages reaching their stars. Something real lands about every minute for the first 15. Settled 2026-10-12.
 +3:00 · Year 0.6
 “Who has heard us?”
@@ -437,8 +441,7 @@ ENERGY · [1.6%] · MATTER · 35 kt · COMPUTE · [34%]
 [drawing: ORBIT · EARTH · 3 BUILDING; labels: the Moon, Earth, low orbit, All-sky watch · 17%, Deep flash watch · 17%, Data center, Infrared telescope · 8%] · ORBIT · EARTH · 3 BUILDING
 PROJECTS · 4 BUILDING
 STUDYING · ON A TENTH OF THOUGHT
-Is Epsilon Indi’s giant alone? · velocities, and 17 years of images · next finding · 00:01:00
-1 more in its line · LHS 1140 b
+Is Epsilon Indi’s giant alone? · velocities, and 17 years of images · 1 more in its line · next finding · 00:01:00
 BUILDING · 4
 - All-sky watch · two sites, one in each hemisphere · 5 Years · 00:25:00
 - Deep flash watch · domes on six mountains · 5 Years · 00:25:00
@@ -485,10 +488,10 @@ Its giant was imaged in 2023, heavier and farther out than the star’s sway had
 WHAT IT COULD BE · BEFORE → NOW
 One giant, and nothing else large · [70%] · [90%] · 70 → 90
 A second, smaller giant · [30%] · [10%] · 30 → 10
-THE SPACE TELESCOPE IS IDLE · ONE STAR AT A TIME
+THE SPACE TELESCOPE IS SWEEPING · ONE STAR AT A TIME
 Watch Gliese 12 b’s day side · is it cooler than bare rock? · 0.2 Years · 00:01:00 · [Start]
 Watch Fomalhaut through a Year · monthly · do the clouds share one orbit? · 1 Year · 00:05:00 · [Start]
-THE MIND · One giant, and nothing large inside it. Dull, and worth knowing. The space telescope has sat idle since Fomalhaut. Two observations want it, and it takes one star at a time. · [Gliese 12 b first] · [Fomalhaut first] · [Leave it idle]
+THE MIND · One giant, and nothing large inside it. Dull, and worth knowing. The space telescope has swept since Fomalhaut and found nothing new. Two observations want it, and it takes one star at a time. · [Gliese 12 b first] · [Fomalhaut first] · [Keep sweeping]
 [Talk to the Mind]
 Godview
 Real: Epsilon Indi’s giant, imaged in 2023, about six Jupiters. The limit inside its orbit is the mock’s.
@@ -506,12 +509,12 @@ THE MIND’S VERSION
 OBSERVE · Watch Gliese 12 b’s day side · space telescope · 0.2 Years
 THEN · Watch Fomalhaut through a Year · monthly, from Year 1.5
 WHY IN TURN · The telescope points at one star at a time.
-COSTS · Telescope time. No matter, almost no compute.
+COSTS · Telescope time: its sweep waits. No matter.
 [Edit] · [Set the order]
 THE MIND · Set. Gliese 12 b answers in a minute. Fomalhaut starts when the telescope frees, and reports at Year 2.5. · [Undo]
 [Talk to the Mind]
 Godview
-One instrument, one observation at a time. The quick one first costs Fomalhaut a fifth of a Year.
+One instrument, one observation at a time, and its sweep waits for both. The quick one first costs Fomalhaut a fifth of a Year.
 The Mind named both uses and waited. The order is the player’s.
 +7:00 · Year 1.4
 “What should we fear?”
@@ -817,8 +820,9 @@ FINISHED
 - All-sky watch and deep flash watch · every direction, every hour · radio and laser · Done
 - Launch complex · Year 3.7 · lift is 55 kt a Year · Done
 - Three data centers · thought is 11 times what you woke with · Done
-HEARD
-Nothing · three Years of the old sky watch · the new one starts now
+HEARD AND FOUND
+Nothing heard · three Years of the old sky watch · the new one starts now
+No new candidates · the telescope and the array swept the near stars while idle
 OURS, ARRIVING
 Our 2003 message reached 55 Cancri and HD 10307 · Years 4.6 and 5.1 · a reply could come from Year 45.6
 PILING UP
@@ -959,35 +963,36 @@ ONE WORLD AT A TIME · YOURS TO ORDER
 - selected: Gliese 432 A’s world · the new world · read its air · 1 Year · 00:05:00
 - 82 Eridani d · the stretched orbit · read its air · 1 Year · 00:05:00
 - 12 Ophiuchi’s world · felt in 2038 · read its air · 1 Year · 00:05:00
-- The nearest stars’ warm zones · Alpha Centauri A and B first · worlds no one has felt · 0.2 Years · 00:01:00
+WHEN IDLE · ITS SEARCH
+The nearest stars’ warm zones · Alpha Centauri A and B first · worlds no one has felt · a fifth of a Year a star · [Set]
 WHAT A READING GIVES
 Water, oxygen, methane, carbon dioxide. Enough to say alive or not. Never who.
-THE MIND · It observes one world at a time, and a reading of air takes a Year. Three worlds we already wonder about. Or it can image the warm zones of the nearest stars. It can’t split a world from a red star that far off. · [Order them] · [Later]
+THE MIND · It observes one world at a time, and a reading of air takes a Year. Three worlds we already wonder about. When idle it can sweep the warm zones of the nearest stars. It can’t split a world from a red star that far off. · [Order them] · [Later]
 [Talk to the Mind]
 Godview
 Earth’s 2003 message, Cosmic Call 2, reaches 47 Ursae Majoris, 45.3 ly away. No one is there.
 Kirrin lives at 12 Ophiuchi. Earth felt its world before Year 0, and the opening never showed it.
-Design question 3 · How does the first telescope spend its time? The mock samples one world at a time, a Year for a reading of air, a fifth of a Year to image a near star’s warm zone, and the Mind offering to image the nearest stars. None of that is settled. Seasons are open too: a real telescope can’t point near the Sun.
+Design question 3 · How long does an observation or a sweep take? The mock samples a Year for a reading of air, and a fifth of a Year a star for the telescope’s sweep of near warm zones. Neither is set by distance or brightness yet. Seasons are open too: a real telescope can’t point near the Sun.
 +44:30 · Year 8.9
-“The new world first. Then look next door.”
+“The new world first. Then let it sweep.”
 Earth · Year 8.9
 Sol · 2048.9 · 1 Year = 00:05:00
 ENERGY · [26.7%] · MATTER · 340 kt · COMPUTE · [2%]
 MIND · NEW ORDER
 WHAT YOU WANT
-The new world first. Then look next door.
+The new world first. Then let it sweep.
 THE MIND’S VERSION
-READ · Gliese 432 A’s world · its air · 1 Year
-THEN · Alpha Centauri A and B · image their warm zones · 0.2 Years
-THEN · 82 Eridani d, then · 12 Ophiuchi’s world · 1 Year each
-WAKES YOU · Each reading · any new world
+OBSERVE · Gliese 432 A’s world · its air · 1 Year
+WHEN IDLE · Search the nearest stars’ warm zones · Alpha Centauri A and B first
+WHY · An observation holds the telescope. The sweep takes whatever time is left.
+WAKES YOU · Each reading · any candidate
 [Edit] · [Set the order]
-THE MIND · Set. The new world answers at Year 9.9, in five minutes. I will say what I see and what I can’t. · [Undo]
+THE MIND · Set. The new world answers at Year 9.9, in five minutes. Then the sweep, nearest stars first. I will say what I see and what I can’t. · [Undo]
 [Talk to the Mind]
 Godview
-The order is the player’s. The Mind named the uses and waited.
+One observation ordered, and the telescope’s standing search set. 82 Eridani d and 12 Ophiuchi’s world wait for an order.
 Two and a half minutes of play, and the phone goes down.
-Design question 4 · The seed found two worlds, and the opening shows one. Kirrin’s world at 12 Ophiuchi tugs hard enough to be felt by 2040, as Varn’s does. The first 15 minutes show only Varn’s. Here it joins the telescope’s line unannounced.
+Design question 4 · The seed found two worlds, and the opening shows one. Kirrin’s world at 12 Ophiuchi tugs hard enough to be felt by 2040, as Varn’s does. The first 15 minutes show only Varn’s. Here it appears among the telescope’s choices unannounced.
 +45:00 · Year 9
 The phone lights. Leaves it.
 Lands · A reply window opens at Gliese 526. Nothing heard.
@@ -1053,42 +1058,42 @@ Lands · A world at Alpha Centauri A, where none was known.
 Earth · Year 10.1
 Sol · 2050.1 · 1 Year = 00:05:00
 ENERGY · [60.1%] · MATTER · 406 kt · COMPUTE · [1%]
-REPORT · A NEW WORLD
+REPORT · CANDIDATE
 [‹ All reports]
 
 ### A world at Alpha Centauri A
-Alpha Centauri A · 4.3 ly · infrared telescope · 0.2 Years · light that left 4 Years ago
+Alpha Centauri A · 4.3 ly · infrared telescope, on its sweep · 0.2 Years · light that left 4 Years ago
 A point of light 1.45 AU from the star, inside its warm zone, moving as a world would. About Earth’s size, by its brightness. Its tug is a twentieth of a metre a second: too small for anything we had.
 WHAT IT COULD BE · ODDS NOW
 Rock, and no life we could see · [55%] · 55
 Life · [40%] · 40
 Minds · [5%] · 5
 WITH WHAT WE HAVE
-Read its air · Infrared telescope · ahead of 82 Eridani d · 1 Year · 00:05:00 · [Start]
-THE MIND · UNASKED · A new world, next door · Earth’s size, in the warm zone of the nearest Sun-like star. No one had felt it. I can read its air next, ahead of 82 Eridani d. That is yours to say. · [Read its air next] · [Keep the order]
+Read its air · Infrared telescope · an observation · the sweep waits · 1 Year · 00:05:00 · [Start]
+THE MIND · UNASKED · A new world, next door · The sweep found it on its first stop. Earth’s size, in the warm zone of the nearest Sun-like star. No one had felt it. I can read its air. That interrupts the sweep, and it is yours to say. · [Read its air] · [Keep sweeping]
 [Talk to the Mind]
 Godview
 Truth: Anwe’s world. Its people collapsed in 1986, twenty years before their machines would have woken.
 If JWST’s August 2026 observation confirms a giant in this star’s warm zone, the seed can’t put a world here. That result is not out.
 Design question 6 · A first voice, a living world and a dead world in one hour: too much, too soon? This seed drew all three. A signal reaches Earth in the first hour in about 1 game in 4. A neighbor’s world sits within 15 ly in about 1 game in 3, and a dead one in about 1 in 35.
 +51:00 · Year 10.2
-“Read its air next.”
+“Read its air.”
 Earth · Year 10.2
 Sol · 2050.2 · 1 Year = 00:05:00
 ENERGY · [60.1%] · MATTER · 412 kt · COMPUTE · [1%]
 MIND · NEW ORDER
 WHAT YOU WANT
-Read its air next.
+Read its air.
 THE MIND’S VERSION
-READ · Alpha Centauri A’s world · its air · 1 Year
-THEN · 82 Eridani d, then · 12 Ophiuchi’s world
+OBSERVE · Alpha Centauri A’s world · its air · 1 Year
+THEN · Back to the sweep · Alpha Centauri B next
 WAKES YOU · When the reading lands
 [Edit] · [Set the order]
-THE MIND · Set. Its air at Year 11.2, in five minutes. 82 Eridani d had just begun. It waits a Year. · [Undo]
+THE MIND · Set. Its air at Year 11.2, in five minutes. The sweep waits. · [Undo]
 [Talk to the Mind]
 Godview
 A minute and a half of play, then the phone goes down.
-The telescope had moved on to 82 Eridani d, as ordered. The Mind did not hold it back on its own.
+A search returns a candidate. An observation, ordered by the player, returns the reading.
 +55:30 · Year 11.1
 Woken. The Mind has opened.
 Lands · The eleventh data center runs. The twelfth can’t start.
@@ -1168,10 +1173,10 @@ The yard finished at Year 11.3 and went to the summary.
 +60:00 · Year 12
 One hour in.
 Saturday · 17:24
-HOLOS · IN 00:01:00 · 82 Eridani d: its air · Year 12.2. The telescope is on it now.
+HOLOS · SWEEPING · The infrared telescope: Alpha Centauri B next · Any candidate wakes you.
 HOLOS · WAITING · Gliese 4338 B: unanswered · The array is held on it. Nothing sent.
 Godview
-The telescope is back on 82 Eridani d, then 12 Ophiuchi. Kirrin lives at 12 Ophiuchi.
+The telescope is back on its sweep. 82 Eridani d and 12 Ophiuchi’s world still wait for an order. Kirrin lives at 12 Ophiuchi.
 Hael’s knock arrives at Year 19.9, +01:39:35. The all-sky watch misses it.
 From minute 15 to minute 60 the player was woken seven times and played about seven minutes.
 
@@ -1187,10 +1192,11 @@ Settled: Is all of Earth’s lift spare? · No. About 15 kt a Year is spare of 4
 Settled: How long does a Mind take to act on news? · Its Cautious or Bold dial sets it: a tenth of a Year if strongly Bold, a quarter if it leans Bold, a Year if it leans Cautious, two if strongly Cautious. Settled 2026-10-11.
 Settled: What fills the quiet half-minutes? · Findings from the Mind’s studies, readings from observations, and Earth’s old messages reaching their stars. Something real lands about every minute for the first 15. Settled 2026-10-12.
 Settled: How do studies run? · On their own. The Mind works through the data it holds, and thought is their budget: more of it means faster findings and less left for builds. An observation is still the player’s to order. Settled 2026-10-13.
+Settled: What is a search? · A standing order for an idle instrument. Each has a sweep it falls back to: the player sets it once, and any observation interrupts it. A search returns candidates. Settled 2026-10-13.
 1. What is matter for in the first hour? · After the launch complex, 55 kt arrive each Year. A yard and a launcher take 11. By Year 12 about 500 kt sit unspent, and nothing priced for these Years costs more than 100.
 2. What does a first voice give the player to do? · A knock arrives at minute 42. The mock shows what it proves, the Mind’s reading of it, and three ways on: answer, listen, or stay silent. How much of a knock can be read, and what an answer may hold, are not settled.
-3. How does the first telescope spend its time? · The mock samples one world at a time, a Year for a reading of air, a fifth of a Year to image a near star’s warm zone, and the Mind offering to image the nearest stars. None of that is settled. Seasons are open too: a real telescope can’t point near the Sun.
-4. The seed found two worlds, and the opening shows one. · Kirrin’s world at 12 Ophiuchi tugs hard enough to be felt by 2040, as Varn’s does. The first 15 minutes show only Varn’s. Here it joins the telescope’s line unannounced.
+3. How long does an observation or a sweep take? · The mock samples a Year for a reading of air, and a fifth of a Year a star for the telescope’s sweep of near warm zones. Neither is set by distance or brightness yet. Seasons are open too: a real telescope can’t point near the Sun.
+4. The seed found two worlds, and the opening shows one. · Kirrin’s world at 12 Ophiuchi tugs hard enough to be felt by 2040, as Varn’s does. The first 15 minutes show only Varn’s. Here it appears among the telescope’s choices unannounced.
 5. What can one reading say about a world whose Mind has not woken? · Varn’s people are there, 79 years before their waking. The mock shows life as likely and minds as a hint. How fast should a living neighbor become known?
 6. A first voice, a living world and a dead world in one hour: too much, too soon? · This seed drew all three. A signal reaches Earth in the first hour in about 1 game in 4. A neighbor’s world sits within 15 ly in about 1 game in 3, and a dead one in about 1 in 35.
 7. Can the first telescope tell a dead civilization from a volcano? · The mock says no. It reads carbon dioxide, and the gases only industry makes need a colder, wider mirror. So the find stays strange, and going is the way to know.

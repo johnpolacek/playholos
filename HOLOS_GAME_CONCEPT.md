@@ -262,7 +262,14 @@ Settled 2026-10-13.
   - *What limits it.* Data. Once the records are read, more thought finds little until new readings arrive. This is reasoning, not yet a rule.
   - *Sample:* a tenth of thought, and about one finding a minute in the first session.
   - Set aside: studies in the Mind's own order with no budget, and studies the player orders one by one.
-- **Open:** whether a search is its own kind of order, whether an inquiry names every mission that goes, and what sets how long an observation takes.
+- **A search is a standing order for an idle instrument.** Settled 2026-10-13. Each instrument has a sweep it falls back to: many targets, one kind of sign. The player sets it once. Any observation interrupts it. What comes back is a candidate.
+  - *Why:* real observatories don't idle. Between pointed work they sweep, as Breakthrough Listen swept 1,327 near stars and Terra Hunting watches 40 for ten years.
+  - *The trade is real.* The same instrument hours spread wide go shallow, and an observation takes the instrument away from its sweep.
+  - *Candidates can be wrong.* Hephaistos's best waste-heat candidates turned out to be background galaxies.
+  - *Already searches, under other names:* the sky watch and all-sky watch, which never stop. The audit's Planet survey and Waste-heat survey. Terra Hunting, which felt this game's new world.
+  - *Sample, in the mocks:* at Year 0 the space telescope sweeps near stars for cold worlds and dust, and the radio array sweeps them for tones. The infrared telescope, once built, sweeps the nearest stars' warm zones, a fifth of a Year a star. Its first stop finds the world at Alpha Centauri A.
+  - Set aside: a search as a one-off order like an observation, and no new kind at all.
+- **Open:** whether an inquiry names every mission that goes, and what sets how long an observation or a sweep takes.
 
 ## The neighbors
 
@@ -340,7 +347,7 @@ Settled 2026-10-10.
   - *What you inherit:* Earth's kit at Year 0.
 - **The charter.** The Mind proposes Earth's founding line from its history and dials. The player keeps it or edits it.
 - **Meeting the Mind, then the tour,** as v1 had them.
-- **Planning.** The player queues builds, observations, standing orders and what wakes them, and sets how much thought goes to studies. Nothing happens yet.
+- **Planning.** The player queues builds, observations, standing orders and what wakes them, sets how much thought goes to studies, and sets what each instrument searches when idle. Nothing happens yet.
 - **Begin.** When the player taps Begin, Year 0 starts and everything queued starts at once. From then on the clock runs, offline too, at 5 real minutes a Year.
 - **The first session keeps v1's rhythm.** Settled 2026-10-12. About 15 minutes of play from Begin, the first result within 30 seconds, and something real landing about every minute. It ends on a timer the player sets, 45 to 60 minutes out.
   - The first mock kept it for 90 seconds. Then nothing landed for 3.5 minutes, and later for 5.5. Eleven of its 31 half-minutes held nothing.
@@ -452,7 +459,7 @@ Answered one at a time, in this order. Every answer must be permitted by current
 10. **Second mock built 2026-10-13:** [the first hour away](explorations/v2-mocks/index.html#hour), minutes 15 to 60, on the same game. The phone is down, the player is woken seven times and plays about seven minutes. How long a reading takes and what each one shows are samples. In this game a contacter's knock reaches Earth at minute 42, and the all-sky watch the player built catches it. It raises these, all open:
     - **What is matter for in the first hour?** After the launch complex, 55 kt arrive each Year. By Year 12 about 500 kt sit unspent.
     - **What does a first voice give the player to do?** The mock shows what a knock proves, the Mind's reading of it, and three ways on: answer, listen, or stay silent. How much of a knock can be read, and what an answer may hold, are not settled.
-    - **How does the first telescope spend its time?** The mock samples one world at a time, a Year a reading, and the Mind offering to image the nearest stars. Seasons are part of this.
+    - **How long does an observation or a sweep take?** The mock samples a Year for a reading of air and a fifth of a Year a star for the sweep. Neither follows distance or brightness yet. Seasons are part of this.
     - **The seed found two worlds, and the opening shows one.** Kirrin's world at 12 Ophiuchi was felt by 2040 too.
     - **What can one reading say about a world whose Mind has not woken?** Varn's people are there, 79 years before their waking.
     - **A first voice, a living world and a dead world in one hour: too much, too soon?** A signal reaches Earth in the first hour in about 1 game in 4. A neighbor's world sits within 15 ly in about 1 game in 3, a dead one in about 1 in 35.
