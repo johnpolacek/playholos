@@ -37,7 +37,8 @@ SETTLED = [('Does a half-built real instrument cost fewer Years?', 'It costs wha
            ('Should seasons set when an observation can start?', 'No. A real space telescope can’t point near the Sun, so each star is out of reach for part of every year. The game skips that limit on purpose: it would delay a reading by 75 seconds at most, and change no decision. Settled 2026-10-13.'),
            ('At Year 0, how many of its felt worlds does Earth show?', 'All of them, and the Mind leads with one: the nearest, a rule that uses nothing the seed knows. Earth holds two to four felt worlds in 6 games of 10, and in about half of games none is a home. Settled 2026-10-13.'),
            ('A first voice, a living world and a dead world in one hour: too much, too soon?', 'No. The seed decides, and nothing damps it. All three land in one first hour in 3 games of 400, and none of them in 4 games of 10. This game was picked to show every screen. Settled 2026-10-13.'),
-           ('What is matter for in the first hour?', 'Little, and the Mind says so. Real instruments and probes weigh tonnes, and Earth lifts 55,000 a Year, so matter piles up. The works that need it need megatonnes, and those must come from the Moon or the belt. The choice in hour one is when to start that road. Settled 2026-10-13.')]
+           ('What is matter for in the first hour?', 'Little, and the Mind says so. Real instruments and probes weigh tonnes, and Earth lifts 55,000 a Year, so matter piles up. The works that need it need megatonnes, and those must come from the Moon or the belt. The choice in hour one is when to start that road. Settled 2026-10-13.'),
+           ('What happens at the grid limit?', 'The plateau stands. Thought stops growing when it draws the whole grid, about Year 11 at full pace, and better chips don’t dodge it: today’s kind reaches its efficiency ceiling near Year 0. The Mind warns five Years ahead. The ways on are slow, and the megatonne road pays here. Settled 2026-10-13.')]
 
 # ---------- Godview: who is out there ----------
 MOVE = reactions.MOVES
@@ -644,7 +645,6 @@ VOICE = next(((p, i) for p in NB for i in p['inbound'] if 6 < i['year'] <= 12 an
 VARN_BEFORE = (truth_tone['waking'] - Y0 - (9.0 - D)) if F['who'] else None      # years before its waking that the light of the first reading left
 Q_VOICE = ask('What does a first voice give the player to do?', 'A knock arrives at minute 42. The mock shows what it proves, the Mind’s reading of it, and three ways on: answer, listen, or stay silent. How much of a knock can be read, and what an answer may hold, are not settled.')
 Q_GO = ask('What does an inquiry cost in time?', 'The audit prices the matter of probes and the laser array. Their build times are not set, so the mock stops at the offer.')
-Q_WALL = ask('What happens at the grid limit?', 'At Year 11.1 thought is 86 times Year 0’s and draws nine tenths of the grid. Every priced way on is slow or small beside the fabs. Is a long plateau right, fifty-five minutes in?')
 
 # Settled 2026-10-13: the Mind judges from what Earth knows, never from the seed. Until a voice is heard, Minds is almost no
 # chance at any candidate. A first voice lifts it a word everywhere. Each pair is before and after, hidden samples.
@@ -843,7 +843,9 @@ HOUR = [
           'Each needed a second visit, months after the first. Most are too far to read with this mirror.'], settled=(14, 16, 18)),
     stop(3330, 2970, '· Woken. The Mind has opened.', 'The eleventh data center runs. The twelfth can’t start.',
          talk(WALL, '<b>We have reached the grid</b>I stopped the order, as the limit requires. Each way on is slow or small beside what the fabs can print. The one that keeps pace is power gathered in space, and that is long work.', ('Ground solar', 'Leave it'), 'open'),
-         ['The standing order stops itself: a project that would take energy past 100% can’t start. v1’s rule.', 'Gliese 581’s two windows passed in silence and went to the summary.'], question=Q_WALL),
+         ['The standing order stops itself: a project that would take energy past 100% can’t start. v1’s rule.', 'Gliese 581’s two windows passed in silence and went to the summary.',
+          'Real: today’s kind of chip can get about 200 times more efficient than 2023’s, and no more (Ho et al. 2023). At 28 to 40% a year that ceiling arrives between 2039 and 2044. So the wall is energy, not chips.',
+          'The Mind warned at Year 6.1, five Years before. This player kept buying thought at full pace.'], settled=25),
 
     stop(3480, 3330, '· The phone lights. Leaves it.', 'The Moon vault is done.', WAKE_VAULT,
          ['From now a strike on Earth does not end the game.', 'The yard finished at Year 11.3 and went to the summary.']),

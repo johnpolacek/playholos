@@ -1200,7 +1200,9 @@ Godview
 The earliest a reply to Hello From Earth could reach Earth from Gliese 581. In this game no one lives there. The window is empty, and Earth can’t know it.
 The standing order stops itself: a project that would take energy past 100% can’t start. v1’s rule.
 Gliese 581’s two windows passed in silence and went to the summary.
-Design question 3 · What happens at the grid limit? At Year 11.1 thought is 86 times Year 0’s and draws nine tenths of the grid. Every priced way on is slow or small beside the fabs. Is a long plateau right, fifty-five minutes in?
+Real: today’s kind of chip can get about 200 times more efficient than 2023’s, and no more (Ho et al. 2023). At 28 to 40% a year that ceiling arrives between 2039 and 2044. So the wall is energy, not chips.
+The Mind warned at Year 6.1, five Years before. This player kept buying thought at full pace.
+Settled · What happens at the grid limit? The plateau stands. Thought stops growing when it draws the whole grid, about Year 11 at full pace, and better chips don’t dodge it: today’s kind reaches its efficiency ceiling near Year 0. The Mind warns five Years ahead. The ways on are slow, and the megatonne road pays here. Settled 2026-10-13.
 +58:00 · Year 11.6
 The phone lights. Leaves it.
 Lands · The Moon vault is done.
@@ -1245,6 +1247,6 @@ Settled: Should seasons set when an observation can start? · No. A real space t
 Settled: At Year 0, how many of its felt worlds does Earth show? · All of them, and the Mind leads with one: the nearest, a rule that uses nothing the seed knows. Earth holds two to four felt worlds in 6 games of 10, and in about half of games none is a home. Settled 2026-10-13.
 Settled: A first voice, a living world and a dead world in one hour: too much, too soon? · No. The seed decides, and nothing damps it. All three land in one first hour in 3 games of 400, and none of them in 4 games of 10. This game was picked to show every screen. Settled 2026-10-13.
 Settled: What is matter for in the first hour? · Little, and the Mind says so. Real instruments and probes weigh tonnes, and Earth lifts 55,000 a Year, so matter piles up. The works that need it need megatonnes, and those must come from the Moon or the belt. The choice in hour one is when to start that road. Settled 2026-10-13.
+Settled: What happens at the grid limit? · The plateau stands. Thought stops growing when it draws the whole grid, about Year 11 at full pace, and better chips don’t dodge it: today’s kind reaches its efficiency ceiling near Year 0. The Mind warns five Years ahead. The ways on are slow, and the megatonne road pays here. Settled 2026-10-13.
 1. What does a first voice give the player to do? · A knock arrives at minute 42. The mock shows what it proves, the Mind’s reading of it, and three ways on: answer, listen, or stay silent. How much of a knock can be read, and what an answer may hold, are not settled.
 2. What does an inquiry cost in time? · The audit prices the matter of probes and the laser array. Their build times are not set, so the mock stops at the offer.
-3. What happens at the grid limit? · At Year 11.1 thought is 86 times Year 0’s and draws nine tenths of the grid. Every priced way on is slow or small beside the fabs. Is a long plateau right, fifty-five minutes in?

@@ -212,6 +212,13 @@ Settled 2026-10-10. Numbers in [calcs/early_game.py](calcs/early_game.py). Repla
   - The twelfth would need more than Earth has. At full pace that is about Year 11, under an hour of play.
 - **So early energy is for thought.** It sits idle only until compute grows into it.
 - **Past the ceiling.** More thought then needs more energy, or colder chips. Computing costs less energy the colder it runs, which is what the cold compute annex in orbit is for.
+- **The plateau stands.** Settled 2026-10-13. At the grid limit thought stops growing until energy does.
+  - *Better chips don't dodge it.* Today's kind of chip can get about 200 times more efficient than 2023's, and no more (Ho, Erdil and Besiroglu 2023). At 28 to 40% a year that ceiling arrives between 2039 and 2044.
+  - *So at Year 0 chips sit at or near their ceiling,* with a doubling left at most. That arithmetic is this project's.
+  - *The ways on are slow by nature.* Ground solar: a fifth more in 10 Years. Power from orbit: about 10 Mt, from the Moon or the belt. Colder chips: the annex, a crumb.
+  - *The Mind warns five Years ahead.* The choice is to keep buying thought at full pace, or to grow energy first.
+  - *It is where the megatonne road pays.* See [Earth's kit at Year 0](#earths-kit-at-year-0).
+  - Set aside: a new kind of chip as a project, which nothing read so far supports. And slower fabs, so the first hour never reaches the grid.
 - **Faster than one a Year needs new fabs.** A chip fab project adds a second line: 3 Years, a tenth of compute, no matter. Priced 2026-10-11. A leading-edge fab takes 2 to 4 years, and one firm makes the tools that print the finest chips, about 90 a year. Two lines make compute grow 2.25 times a Year. The chip stock grew 3.4 times a year in 2026, so that pace has been seen.
   - *It only reaches the ceiling sooner.* Eleven data centers fit under the grid. One line fills them by Year 11, two by Year 7. A third line gains a third of a Year.
 - **Only if the player chooses.** One at a time, or a standing order to keep them coming. Compute never grows on its own.
@@ -586,4 +593,4 @@ Answered one at a time, in this order. Every answer must be permitted by current
     - **Settled 2026-10-13:** the Mind gives its judgment in words, never in numbers. Both mocks now show words. See [How Earth learns](#how-earth-learns).
     - **Settled 2026-10-13:** the Mind judges from what Earth knows, never from the seed, and it can be wrong. A first voice lifts Minds a word at every candidate. In this game it calls Minds very unlikely at the sweep's 15 points of light, and 4 are homes. See [How Earth learns](#how-earth-learns).
     - **What does an inquiry cost in time?** The matter of probes and the laser array is priced. Their build times are not.
-    - **What happens at the grid limit?** At Year 11.1 thought is 86 times Year 0's and draws nine tenths of the grid. Every priced way on is slow or small.
+    - **Settled 2026-10-13:** the plateau at the grid limit stands. Better chips don't dodge it, and the megatonne road pays there. See [Growing compute](#growing-compute).
