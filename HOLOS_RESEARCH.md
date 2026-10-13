@@ -211,6 +211,15 @@ Every source the game rests on, grouped by the question it answers. Each entry s
 - **[Epoch AI, ML hardware energy efficiency](https://epoch.ai/data-insights/ml-hardware-energy-efficiency)** · Data ([hardware trends](https://epoch.ai/blog/trends-in-machine-learning-hardware)).
   - Leading ML hardware gets about 28 to 40% more energy efficient a year. The H100 peaks near 1.4×10¹² operations a second per watt.
   - Matters: Earth's compute per watt at Year 0, about 40 to 100 times 2026's. With about 0.25 TW for thinking, about 10²⁵ operations a second.
+- **[Ho, Erdil and Besiroglu 2023, limits of today's chips](https://arxiv.org/abs/2312.08595)** · Preprint, Epoch AI. I read the abstract, 2026-10-13.
+  - Today's kind of chip can become about 200 times more efficient than 2023's, and no more: about 4.7×10¹⁵ operations a joule at 4-bit precision. That counts the energy to switch a transistor, to charge its wires, and what leaks.
+  - Matters: at 28 to 40% a year that ceiling is reached between 2039 and 2044. So at Year 0 chips sit at or near it, with a doubling left at most. That arithmetic is this project's.
+  - Used: v2 [Growing compute](HOLOS_GAME_CONCEPT.md#growing-compute), as support for energy setting the ceiling, and for the open question on the grid limit.
+- **[Hobbhahn and Besiroglu 2022, predicting GPU performance](https://epoch.ai/blog/predicting-gpu-performance)** · Epoch AI report. Read on the page, 2026-10-13.
+  - Chips of today's kind stop improving between 2027 and 2035, when transistors can shrink no further, near 0.7 nm. The two limits fall at about 2030 and 2033.
+  - Its own caution: it assumes no new kind of chip.
+  - From a search summary, not read: computing's efficiency doubled every 1.6 years until 2000, and about every 2.6 since.
+  - Used: the same.
   - Used: v2 open question 2.
 - **[Large space flexible solar arrays, 2025 review](https://www.sciencedirect.com/science/article/pii/S2950104025000161)** · Published ([NASA small-spacecraft power](https://www.nasa.gov/smallsat-institute/sst-soa/power-subsystems/)).
   - Flown roll-out arrays reach about 36 to 218 W/kg, the ISS's iROSA about 75 W/kg. Thin-film designs target 1 kW/kg.
