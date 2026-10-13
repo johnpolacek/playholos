@@ -247,6 +247,16 @@ Every source the game rests on, grouped by the question it answers. Each entry s
   - Matters: real builds run a third to a half over their best case, and the loss is in planning and rework. That is the part thought can take away. The floor is what even urgent, well-run missions needed.
   - This project's own: two thirds as the floor for every kind of work, from one data set on space missions. And Amdahl's form for what lies between.
   - Used: v2 [Growing compute](HOLOS_GAME_CONCEPT.md#growing-compute), calcs/early_game.py and the third mock.
+- **Real prices for the works, checked 2026-10-13.** For how much thought each work wants.
+  - **[The Square Kilometre Array, Oxford physics](https://www.physics.ox.ac.uk/research/group/square-kilometre-array-ska)** · Group page, read. Phase 1 and its first ten years of running "will cost around €1.9 billion".
+  - **[NASA 2024, space-based solar power](https://www.nasa.gov/organizations/otps/space-based-solar-power-report)** · Agency page, read. A system that could start in 2050 would cost more than ground alternatives, with launch and manufacturing the main costs.
+    - From a search summary, not read: 12 to 80 times the cost of ground power for each unit of electricity, for two designs of 2 GW.
+  - Already logged: LUVOIR-A at 18 to 24 billion dollars over its life, and Starshot's ground beam director at 8 billion.
+  - From a search summary, not read: the 2020 survey's telescope of about 6 m, now the Habitable Worlds Observatory, at about 11 billion dollars.
+  - Not found: a real price for a lunar mass driver, a far-side array at the game's size, belt mining, or megatonnes of power from orbit.
+  - Matters: only works of today's kind have a price. At today's prices power from orbit at grid scale would cost thousands of flagships, which says nothing about one built from lunar rock. So megatonne works take samples.
+  - This project's own: one flagship as 0.15 of Year 0's thought, and every megatonne number.
+  - Used: v2 [Growing compute](HOLOS_GAME_CONCEPT.md#growing-compute) and calcs/early_game.py.
   - Used: v2 open question 2.
 - **[Large space flexible solar arrays, 2025 review](https://www.sciencedirect.com/science/article/pii/S2950104025000161)** · Published ([NASA small-spacecraft power](https://www.nasa.gov/smallsat-institute/sst-soa/power-subsystems/)).
   - Flown roll-out arrays reach about 36 to 218 W/kg, the ISS's iROSA about 75 W/kg. Thin-film designs target 1 kW/kg.

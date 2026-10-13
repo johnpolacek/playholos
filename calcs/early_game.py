@@ -224,9 +224,39 @@ def thought_speed():
     print('  Half the thought costs a third more time. Four times the thought saves a quarter. Past ten times, almost nothing more.')
     print('  Rock from the Moon and flight between stars are physical. Thought shortens neither.')
 
+# ---------- How much thought a work wants ----------
+# Settled 2026-10-13: in scale with real cost. A work wants thought as its real cousin costs money, counted in
+# flagships: one flagship is the Habitable Worlds Observatory, about 11 billion dollars. Four works have a real price.
+# The megatonne works have none, so theirs are samples, in round numbers, to be tuned.
+# One number ties the scale to the game: the first telescope takes 0.15 of Year 0's thought, the mocks' own share.
+FLAGSHIP_THOUGHT = 0.15
+WANTS = {  # work: (flagships, where the number comes from)
+    'All-sky watch': (0.2, 'the SKA: about 1.9 billion euros with ten years of running'),
+    'Deep-field receiver': (0.2, 'the SKA again'),
+    'Infrared telescope': (1.0, 'the Habitable Worlds Observatory: about 11 billion dollars'),
+    'A 15 m mirror': (2.0, 'LUVOIR-A: 18 to 24 billion dollars over its life'),
+    'Laser sail array': (0.7, 'Starshot: 8 billion dollars for the ground beam director'),
+    'Launcher': (10, 'sample'), 'Belt mining': (20, 'sample'), 'Mass driver': (30, 'sample'), 'Orbital foundry': (30, 'sample'),
+    'Far-side array, one fifth': (40, 'sample'), 'Power from orbit': (200, 'sample')}
+LIMIT_THOUGHT = 1.5 ** 11                # eleven data centers fit under the grid
+
+def at_the_limit(running=('A 15 m mirror', 'Laser sail array', 'Launcher', 'Belt mining', 'Mass driver', 'Orbital foundry')):
+    room = LIMIT_THOUGHT / FLAGSHIP_THOUGHT
+    print(f'How much thought a work wants, in flagships. At Year 0 Earth has thought for {1 / FLAGSHIP_THOUGHT:.1f} flagships at standard pace. At the grid limit, for {room:.0f}.')
+    for name, (f, src) in WANTS.items():
+        print(f'  {name:26} {f:6g}   {f / room:6.1%} of thought at the limit   {src}')
+    want = sum(WANTS[n][0] for n in running); s = room / want
+    print(f'  The third mock\'s works at Year 12 want {want:.0f} flagships together. Split evenly, each gets {s:.1f} times its want and takes {paced(1, s):.0%} of its standard time.')
+    for name in ('Mass driver', 'Power from orbit'):
+        f = WANTS[name][0]
+        print(f'  To push {name.lower()} to ten times its want takes {10 * f / room:.0%} of all thought at the limit, for {paced(1, 10):.0%} of its time.')
+    later = want - WANTS['A 15 m mirror'][0] - WANTS['Laser sail array'][0] + WANTS['Far-side array, one fifth'][0] + WANTS['Power from orbit'][0]
+    print(f'  From Year 36, with a fifth of the far-side array and power from orbit under way, the works want {later:.0f}: {later / room:.0%} of thought at the limit.')
+
 if __name__ == '__main__':
     long_roads(); print()
     thought_speed(); print()
+    at_the_limit(); print()
     compute_growth(); print()
     orbit_stock(); print()
     raise_the_pace(); print()
