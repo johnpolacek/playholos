@@ -238,17 +238,31 @@ Settled 2026-10-06. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#earths-lead
   - *One seeded find,* such as a world Terra Hunting felt by 2036.
   - *Fomalhaut's new cloud,* 25 ly. It drifts and fades, so the first observation makes it stranger, as v1 required of one lead.
   - *The Luyten's Star reply window,* Year 2.3, 11 real minutes in.
-- **Four older puzzles are re-read behind the opening observations.** Added 2026-10-12, to keep the first session's rhythm. Each is a real oddity as of 2026. What a re-read finds in 2040 is the mock's sample.
+- **Four older puzzles are studied from Begin.** Added 2026-10-12, to keep the first session's rhythm. From 2026-10-13 they are studies, which the Mind runs on its own: see [How Earth learns](#how-earth-learns). Each is a real oddity as of 2026. What a study finds in 2040 is the mock's sample.
   - *Gliese 12 b,* 39.7 ly. A world Earth's size, 12.8 days around a quiet red star. Its air is unread.
   - *Barnard's Star,* 6 ly. Four worlds smaller than Earth, confirmed in 2025. Nothing over 0.57 Earths in its warm zone then.
   - *Tau Ceti,* 11.9 ly. Four faint signals claimed in 2017 and never confirmed.
   - *Epsilon Indi's giant,* 11.9 ly. Imaged in 2023, heavier and farther out than its star's sway had said.
-  - Why a re-read can find something: the Mind reads old records better than their first readers did. That is the game's premise, not a result.
-- **Three follow-ups the first mock offers.** Each spends an instrument, so they run in turn.
+  - Why a study can find something: the Mind reads old records better than their first readers did. That is the game's premise, not a result.
+- **What follows in the first mock.** Two observations the Mind offers, which spend the telescope in turn, and one more study.
   - Gliese 12 b's day side, with the space telescope. A cool day side means air carries heat away. The space telescope read TRAPPIST-1's inner worlds this way in 2023.
-  - LHS 1140 b's crossings, re-read. In 2024 they ruled out a hydrogen world and hinted at heavier air over water.
+  - LHS 1140 b's crossings, studied. In 2024 they ruled out a hydrogen world and hinted at heavier air over water.
   - Fomalhaut through a Year, monthly. It closes the lead as rubble.
 - **Settled leads stay settled.** Alpha Centauri A's candidate is resolved long before 2040. Adopt JWST's August 2026 result when it is published. As of 2026-10-13 it is not: the telescope observed on August 11 and 12, and no paper is out. A bright background star blocks the next try until about 2030.
+
+## How Earth learns
+
+Settled 2026-10-13.
+
+- **Four ways to learn, from widest to closest.** A search sweeps many targets for one kind of sign. An observation points one instrument at one target. A study works through data already in hand. An inquiry goes there.
+- **An observation is ordered.** One instrument, one target at a time. What comes back is a reading. The Mind offers observations and never starts one unasked.
+- **A study runs on its own.** The Mind works through the data Earth holds: old records at first, then each new reading as it lands. What comes back is a finding. Settled 2026-10-13.
+  - *Thought is its budget.* The player sets a share of compute for studies. More means faster findings, and less left for builds.
+  - *Why this is not acting unasked.* A study points no instrument, builds nothing and sends nothing. The Mind says what it is studying next.
+  - *What limits it.* Data. Once the records are read, more thought finds little until new readings arrive. This is reasoning, not yet a rule.
+  - *Sample:* a tenth of thought, and about one finding a minute in the first session.
+  - Set aside: studies in the Mind's own order with no budget, and studies the player orders one by one.
+- **Open:** whether a search is its own kind of order, whether an inquiry names every mission that goes, and what sets how long an observation takes.
 
 ## The neighbors
 
@@ -326,26 +340,27 @@ Settled 2026-10-10.
   - *What you inherit:* Earth's kit at Year 0.
 - **The charter.** The Mind proposes Earth's founding line from its history and dials. The player keeps it or edits it.
 - **Meeting the Mind, then the tour,** as v1 had them.
-- **Planning.** The player queues builds, observations, standing orders and what wakes them. Nothing happens yet.
+- **Planning.** The player queues builds, observations, standing orders and what wakes them, and sets how much thought goes to studies. Nothing happens yet.
 - **Begin.** When the player taps Begin, Year 0 starts and everything queued starts at once. From then on the clock runs, offline too, at 5 real minutes a Year.
 - **The first session keeps v1's rhythm.** Settled 2026-10-12. About 15 minutes of play from Begin, the first result within 30 seconds, and something real landing about every minute. It ends on a timer the player sets, 45 to 60 minutes out.
   - The first mock kept it for 90 seconds. Then nothing landed for 3.5 minutes, and later for 5.5. Eleven of its 31 half-minutes held nothing.
   - Why: v2 took build times from real works, so the shortest build is a Year, and the opening's three observations all land by 1:30.
   - Quiet of that length is a flaw, not the pace. Set aside: dropping the rule and shortening the session, and a Mind that speaks up on a timer.
-  - *What may land,* settled 2026-10-12: readings from observations, and Earth's own old messages reaching their stars.
+  - *What may land,* settled 2026-10-12: readings from observations, findings from studies, and Earth's own old messages reaching their stars.
     - Observations: Earth has about ten more real oddities logged than the opening's three. An observation takes 30 to 90 seconds, and one instrument makes one at a time.
     - Arrivals: real sends on real dates. Kappa¹ Ceti's at Year 0.1 and Gliese 208's at Year 0.8, then the reply windows at Luyten's Star.
     - The mock needs about nine more landings: seven observations and two arrivals.
     - Set aside: part-way reports from long observations and builds. They would teach the player to ignore what lands.
     - The Mind offers observations and never queues them unasked, as v1 had it.
   - *How the observations are spread,* settled 2026-10-12: four more are queued at Begin, and three are offered as follow-ups to what lands.
+    - *Revised 2026-10-13:* the four are studies of old records, so they run on their own from Begin. Observations are still offered as follow-ups, and the player orders each.
     - Seven observations queued at Begin on three instruments would all land by about 4:30, and leave 5:30 to 10:00 empty.
     - The early minutes fill themselves, which leaves room to meet the Mind.
     - A follow-up is a real choice: it spends an instrument the next lead also wants.
     - Set aside: everything queued at Begin with longer observations, and an offer at every landing.
   - *The mock, rebuilt 2026-10-12:* 4 of 31 half-minutes are quiet, down from 11. No two landings are more than 90 seconds apart.
-    - Queued at Begin: re-reads of Gliese 12 b, Barnard's Star, Tau Ceti and Epsilon Indi. They wait behind the opening observations, since each archive takes one at a time.
-    - Offered as follow-ups: Gliese 12 b's day side, LHS 1140 b, and Fomalhaut through a Year.
+    - Studied from Begin, on a tenth of thought: Gliese 432 A's crossings, 82 Eridani, Gliese 12 b, Barnard's Star, Tau Ceti, Epsilon Indi, then LHS 1140 b.
+    - Offered as observations: Gliese 12 b's day side, and Fomalhaut through a Year.
     - Arrivals: the 2009 message at Kappa¹ Ceti, 0:30. The 2003 message at Gliese 208, 4:00.
     - Results pile up while the player talks, and wait in Reports.
 
@@ -409,7 +424,7 @@ These v1 rules no longer apply.
 ## Carried, reworded
 
 - **No screen shows how many civilizations there are.** v1 hid the seat count. v2 hides the roster's size and the seed's picks. Who is out there, and how many, is learned only by looking: Know projects, probes and contact.
-- **Looks are observations, and what comes back is a reading.** Settled 2026-10-13. An observation is one pointed use of an instrument: an image, a listen, a watch. v1's quick look and long look are a quick and a long observation. Ordinary uses of the word look stay.
+- **Looks are observations, and what comes back is a reading.** Settled 2026-10-13. An observation is one pointed use of an instrument: an image, a listen, a watch. v1's quick look and long look are a quick and a long observation. A study returns a finding. Ordinary uses of the word look stay.
 
 ## Open questions
 
@@ -432,7 +447,7 @@ Answered one at a time, in this order. Every answer must be permitted by current
    - **Settled 2026-10-10:** knocks before Year 0 happened, and Earth missed them. See [What Earth hears](#what-earth-hears).
    - **Settled 2026-10-11:** a Mind's Cautious or Bold dial sets how long it takes to act on news. See [How neighbors play](#how-neighbors-play).
    - **Priced 2026-10-11:** chip fabs, factory-built works, the orbital yard and the all-sky watch. See [Build times](#build-times) and [Growing compute](#growing-compute).
-   - **Settled 2026-10-12:** 11 of the 31 half-minutes had nothing new for the player. That is a flaw: v1's first-session rule holds in v2. See [How a game starts](#how-a-game-starts). What may land is settled too: readings from observations, and Earth's old messages arriving. Four more observations are queued at Begin and three are offered as follow-ups. The rebuilt mock has 4 quiet half-minutes.
+   - **Settled 2026-10-12:** 11 of the 31 half-minutes had nothing new for the player. That is a flaw: v1's first-session rule holds in v2. See [How a game starts](#how-a-game-starts). What may land is settled too: readings from observations, findings from studies, and Earth's old messages arriving. Studies run on their own from Begin, and observations are offered as follow-ups. The rebuilt mock has 4 quiet half-minutes.
 9. **Settled 2026-10-10:** v1's research baseline, rechecked against the 2025 radar result and Garrett's 2026 cold-computing paper. See [Why the sky is quiet, rechecked](#why-the-sky-is-quiet-rechecked).
 10. **Second mock built 2026-10-13:** [the first hour away](explorations/v2-mocks/index.html#hour), minutes 15 to 60, on the same game. The phone is down, the player is woken seven times and plays about seven minutes. How long a reading takes and what each one shows are samples. In this game a contacter's knock reaches Earth at minute 42, and the all-sky watch the player built catches it. It raises these, all open:
     - **What is matter for in the first hour?** After the launch complex, 55 kt arrive each Year. By Year 12 about 500 kt sit unspent.

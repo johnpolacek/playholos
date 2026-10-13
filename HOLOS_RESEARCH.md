@@ -494,7 +494,7 @@ What Sol's own instruments have found nearby. For v2 open question 3.
   - JWST measured the day-side glow of TRAPPIST-1 b and c at 15 microns. b is most likely bare rock. c has no thick carbon dioxide air.
   - Matters: a real way to ask a red star's rocky world whether it has air, without reading the air itself.
   - Used: the Gliese 12 b follow-up in the first mock. Its cool day side is the mock's.
-- **Observations in the first mock, added 2026-10-12.** Seven observations and two arrivals fill the first session's quiet half-minutes.
+- **Observations and studies in the first mock, added 2026-10-12.** Seven of them and two arrivals fill the first session's quiet half-minutes. From 2026-10-13 the ones that only read old records are studies, which the Mind runs on its own.
   - Real, as logged here: Gliese 12 b, Barnard's four worlds, Tau Ceti's four signals, Epsilon Indi's giant, LHS 1140 b, Fomalhaut's clouds.
   - The mock's own: the reading each observation returns in 2040. Which two Tau Ceti signals hold, the limit inside Epsilon Indi's giant, Gliese 12 b's cool day side, how firm LHS 1140 b's air is, and Fomalhaut's shared orbit.
   - Real arrivals: Earth's 2009 message reaches Kappa¹ Ceti at Year 0.1, and its 2003 message reaches Gliese 208 at Year 0.8.
