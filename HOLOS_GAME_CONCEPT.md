@@ -129,6 +129,12 @@ Settled 2026-10-10. Numbers from `python3 calcs/seed.py stats`.
   - *So the player chooses knowing what was said:* answer, listen, or stay silent.
   - *Later, as written exceptions:* a stranger neighbor's message may need a study before it yields.
   - Set aside: content as a study that lands later, and a Mind that never turns a knock into words.
+- **An answer is composed as in v1, whole.** Settled 2026-10-13. v1's rule: [Communication and deception](legacy/v1/HOLOS_GAME_CONCEPT.md#communication-and-deception).
+  - *The player writes what they mean in plain words.* The Mind composes it from typed parts, and the player approves before anything goes. Only typed parts travel.
+  - *The parts:* a finding, a sighting, an archive, something of our culture, a request, a verdict. The neighbors' voice banks are written in the same parts.
+  - *A lie is a forged part,* the same in form as a true one, marked for the sender alone.
+  - *Earth's real rule agrees.* Since 1989 the astronomers' protocol has said no reply goes out until the world is consulted. In the game the Will is who is asked.
+  - Set aside: a first answer limited to a name and a question, and v1's rule without lies.
 - **The Mind can't report what it didn't hear.** A missed knock leaves no trace on Earth: nothing was pointed there, so no archive holds it. A search of old data for half-recorded knocks was considered and left out.
 
 ## Year 0 and Earth's road to it
@@ -590,7 +596,7 @@ Answered one at a time, in this order. Every answer must be permitted by current
     - **Settled 2026-10-13:** physics sets how long an observation or a sweep takes. See [How Earth learns](#how-earth-learns).
     - **Settled 2026-10-13:** matter piles up in the first hour, and the Mind says what it is for: megatonne works, which must come from the Moon or the belt. See [Earth's kit at Year 0](#earths-kit-at-year-0).
     - **Settled 2026-10-13:** the Mind reads a knock at once, in three layers: what it proves, what it holds, and what it means as a word. See [What Earth hears](#what-earth-hears).
-    - **What may an answer hold?** v1 had the player write intent, the Mind compose it from typed parts, and the player approve. Whether that carries is not settled.
+    - **Settled 2026-10-13:** an answer holds what v1 allowed, whole, lies included. See [What Earth hears](#what-earth-hears).
     - **Settled 2026-10-13:** seasons are left out on purpose. A real telescope can't point near the Sun, and the game skips that limit. See [How Earth learns](#how-earth-learns).
     - **Settled 2026-10-13:** Earth shows every world it has felt from Year 0, and the Mind leads with the nearest. See [The seed, drawn](#the-seed-drawn).
     - **Settled 2026-10-13:** a living neighbor becomes known as fast as physics allows. In this game nothing Earth holds at Year 9 can tell Varn's world from a natural one. A far-side array would, in 5 hours. See [How Earth learns](#how-earth-learns).

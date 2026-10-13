@@ -39,7 +39,8 @@ SETTLED = [('Does a half-built real instrument cost fewer Years?', 'It costs wha
            ('A first voice, a living world and a dead world in one hour: too much, too soon?', 'No. The seed decides, and nothing damps it. All three land in one first hour in 3 games of 400, and none of them in 4 games of 10. This game was picked to show every screen. Settled 2026-10-13.'),
            ('What is matter for in the first hour?', 'Little, and the Mind says so. Real instruments and probes weigh tonnes, and Earth lifts 55,000 a Year, so matter piles up. The works that need it need megatonnes, and those must come from the Moon or the belt. The choice in hour one is when to start that road. Settled 2026-10-13.'),
            ('What happens at the grid limit?', 'The plateau stands. Thought stops growing when it draws the whole grid, about Year 11 at full pace, and better chips don’t dodge it: today’s kind reaches its efficiency ceiling near Year 0. The Mind warns five Years ahead. The ways on are slow, and the megatonne road pays here. Settled 2026-10-13.'),
-           ('How much of a knock can the Mind read?', 'All three layers, at once. What it proves, from physics. What it holds, because a knock is built to be read. And what it means, as a word that can be wrong. A stranger neighbor’s message may yet need a study. Settled 2026-10-13.')]
+           ('How much of a knock can the Mind read?', 'All three layers, at once. What it proves, from physics. What it holds, because a knock is built to be read. And what it means, as a word that can be wrong. A stranger neighbor’s message may yet need a study. Settled 2026-10-13.'),
+           ('What may an answer hold?', 'What v1 allowed, whole. The player writes what they mean in plain words. The Mind composes it from typed parts: a finding, a sighting, an archive, our culture, a request, a verdict. The player approves before anything goes. A lie is a forged part, marked for the sender alone. Settled 2026-10-13.')]
 
 # ---------- Godview: who is out there ----------
 MOVE = reactions.MOVES
@@ -644,7 +645,6 @@ import json
 ANWE = next((p for p in NB if p['dead']), None)
 VOICE = next(((p, i) for p in NB for i in p['inbound'] if 6 < i['year'] <= 12 and i.get('allsky')), None)     # a signal the all-sky watch catches this hour
 VARN_BEFORE = (truth_tone['waking'] - Y0 - (9.0 - D)) if F['who'] else None      # years before its waking that the light of the first reading left
-Q_VOICE = ask('What may an answer hold?', 'A knock arrives at minute 42. The Mind reads it at once and offers three ways on: answer, listen, or stay silent. v1 had the player write intent, the Mind compose it from typed parts, and the player approve. Whether that carries is not settled.')
 Q_GO = ask('What does an inquiry cost in time?', 'The audit prices the matter of probes and the laser array. Their build times are not set, so the mock stops at the offer.')
 
 # Settled 2026-10-13: the Mind judges from what Earth knows, never from the seed. Until a voice is heard, Minds is almost no
@@ -792,9 +792,10 @@ HOUR = [
           'The words are from the voice bank. A first voice always wakes the player. This one arrives 21 seconds after the telescope.',
           f'What Earth knows has changed, so the Mind’s words do. Minds, at every candidate from here: {moved(*MINDS)}.',
           f'Three layers, read at once: what it proves, what it holds, what it means. The last is a judgment and can be wrong. Truth: {WHO["name"]} means it.',
-          'Real: a message built to be read was deciphered accurately in a blind test (Busch and Reddick 2011). A puzzle message took a year to decode, and its meaning is still open (A Sign in Space, 2023).'], question=Q_VOICE, settled=26),
+          'Real: a message built to be read was deciphered accurately in a blind test (Busch and Reddick 2011). A puzzle message took a year to decode, and its meaning is still open (A Sign in Space, 2023).'], settled=(26, 27)),
     stop(2580, 2550, 'Should we answer?', None, ANSWER_CHAT,
-         ['The Mind gives its view and waits. It names the risk it can’t rule out. Where Earth is, the sender has known since 1999.', f'An answer sent now reaches {WHO["name"]} at Year {2580 / 300 + VD:.1f}. Its reply could reach Earth by Year {2580 / 300 + 2 * VD:.1f}, +{clock(2580 / 300 + 2 * VD)}.']),
+         ['The Mind gives its view and waits. It names the risk it can’t rule out. Where Earth is, the sender has known since 1999.',
+          'An answer is composed as in v1: intent in plain words, typed parts, and the player’s approval. Real: since 1989 the astronomers’ own protocol says no reply goes out before the world is consulted. Here the Will is who is asked.', f'An answer sent now reaches {WHO["name"]} at Year {2580 / 300 + VD:.1f}. Its reply could reach Earth by Year {2580 / 300 + 2 * VD:.1f}, +{clock(2580 / 300 + 2 * VD)}.']),
     stop(2610, 2580, 'Listen first. I’ll answer when I know more.', None, talk(HOLD_ORDER, 'Set. I am listening, and I send nothing.', ('Undo',)),
          ['The player neither answers nor refuses. Nothing forces the choice: the sender waits about a century either way.']),
 ] if VOICE else []) + [

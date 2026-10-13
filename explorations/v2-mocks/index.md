@@ -950,8 +950,8 @@ The words are from the voice bank. A first voice always wakes the player. This o
 What Earth knows has changed, so the Mind’s words do. Minds, at every candidate from here: almost no chance → very unlikely.
 Three layers, read at once: what it proves, what it holds, what it means. The last is a judgment and can be wrong. Truth: Ombe means it.
 Real: a message built to be read was deciphered accurately in a blind test (Busch and Reddick 2011). A puzzle message took a year to decode, and its meaning is still open (A Sign in Space, 2023).
-Design question 1 · What may an answer hold? A knock arrives at minute 42. The Mind reads it at once and offers three ways on: answer, listen, or stay silent. v1 had the player write intent, the Mind compose it from typed parts, and the player approve. Whether that carries is not settled.
 Settled · How much of a knock can the Mind read? All three layers, at once. What it proves, from physics. What it holds, because a knock is built to be read. And what it means, as a word that can be wrong. A stranger neighbor’s message may yet need a study. Settled 2026-10-13.
+Settled · What may an answer hold? What v1 allowed, whole. The player writes what they mean in plain words. The Mind composes it from typed parts: a finding, a sighting, an archive, our culture, a request, a verdict. The player approves before anything goes. A lie is a forged part, marked for the sender alone. Settled 2026-10-13.
 +43:00 · Year 8.6
 “Should we answer?”
 Earth · Year 8.6
@@ -969,6 +969,7 @@ ITS VIEW · FROM OUR CHARTER AND DIALS · Answer. A name and a question, nothing
 Ask the Mind… · [Send · ↑]
 Godview
 The Mind gives its view and waits. It names the risk it can’t rule out. Where Earth is, the sender has known since 1999.
+An answer is composed as in v1: intent in plain words, typed parts, and the player’s approval. Real: since 1989 the astronomers’ own protocol says no reply goes out before the world is consulted. Here the Will is who is asked.
 An answer sent now reaches Ombe at Year 57.7. Its reply could reach Earth by Year 106.8, +08:54:06.
 +43:30 · Year 8.7
 “Listen first. I’ll answer when I know more.”
@@ -1154,7 +1155,7 @@ Godview
 An inquiry is a mission that goes to find out. Probe stays the name of the craft. What comes home is a dispatch.
 The Mind advises, from the dials: go, and send nothing that speaks. It starts nothing.
 Real: Daedalus was designed for 12% of light speed, and Starshot for 20%. A laser launch shines toward its target. A rocket’s exhaust points away.
-Design question 2 · What does an inquiry cost in time? The audit prices the matter of probes and the laser array. Their build times are not set, so the mock stops at the offer.
+Design question 1 · What does an inquiry cost in time? The audit prices the matter of probes and the laser array. Their build times are not set, so the mock stops at the offer.
 Settled · What is an inquiry? A mission that goes to find out: a sail swarm, a flyby probe, a sentinel. Probe stays the name of the craft. What comes home is a dispatch. Settled 2026-10-13.
 +47:30 · Year 9.5
 The phone lights. Reads it. Leaves it.
@@ -1253,5 +1254,5 @@ Settled: A first voice, a living world and a dead world in one hour: too much, t
 Settled: What is matter for in the first hour? · Little, and the Mind says so. Real instruments and probes weigh tonnes, and Earth lifts 55,000 a Year, so matter piles up. The works that need it need megatonnes, and those must come from the Moon or the belt. The choice in hour one is when to start that road. Settled 2026-10-13.
 Settled: What happens at the grid limit? · The plateau stands. Thought stops growing when it draws the whole grid, about Year 11 at full pace, and better chips don’t dodge it: today’s kind reaches its efficiency ceiling near Year 0. The Mind warns five Years ahead. The ways on are slow, and the megatonne road pays here. Settled 2026-10-13.
 Settled: How much of a knock can the Mind read? · All three layers, at once. What it proves, from physics. What it holds, because a knock is built to be read. And what it means, as a word that can be wrong. A stranger neighbor’s message may yet need a study. Settled 2026-10-13.
-1. What may an answer hold? · A knock arrives at minute 42. The Mind reads it at once and offers three ways on: answer, listen, or stay silent. v1 had the player write intent, the Mind compose it from typed parts, and the player approve. Whether that carries is not settled.
-2. What does an inquiry cost in time? · The audit prices the matter of probes and the laser array. Their build times are not set, so the mock stops at the offer.
+Settled: What may an answer hold? · What v1 allowed, whole. The player writes what they mean in plain words. The Mind composes it from typed parts: a finding, a sighting, an archive, our culture, a request, a verdict. The player approves before anything goes. A lie is a forged part, marked for the sender alone. Settled 2026-10-13.
+1. What does an inquiry cost in time? · The audit prices the matter of probes and the laser array. Their build times are not set, so the mock stops at the offer.
