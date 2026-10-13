@@ -83,6 +83,10 @@ Every source the game rests on, grouped by the question it answers. Each entry s
     - What it means is still open. The artist: they "found the ingredients of the recipe, but now it is time to interpret it".
   - Matters: reading a message has three layers. That it was sent, and how: at once. What it holds: fast if it was built to be read, a year if not. What it means: a judgment, and still open after the rest is done.
   - Used: v2 [What Earth hears](HOLOS_GAME_CONCEPT.md#what-earth-hears), and the second mock's voice report.
+- **[IAA SETI committee, position paper on sending communications](https://setileague.org/iaaseti/position.htm)** · Read on the page, 2026-10-13. For the open question on what an answer may hold.
+  - It quotes Principle 8 of the 1989 Declaration of Principles: "No response to a signal or other evidence of extraterrestrial intelligence should be sent until appropriate international consultations have taken place."
+  - From a search summary, not read: a revision in 2025 keeps that rule. It is a statement of principles, not law.
+  - Matters: Earth's own standing rule is that no reply goes out unasked. In the game the Will is who is asked, which is v1's approval step.
 - **[Sónar Calling GJ 273b](https://www.scientificamerican.com/article/interstellar-message-beamed-to-nearby-exoplanet)** · News, Scientific American, 2017 ([Space.com](https://www.space.com/38803-meti-signal-beamed-habitable-alien-planet.html)).
   - Sent to Luyten's Star on October 16 to 18, 2017, from the EISCAT dish in Tromsø, Norway, near 930 MHz: a science and maths tutorial and 33 short pieces of music. A second batch followed in 2018.
   - Matters: it sets Earth's first reply window in play, Year 2.3.
