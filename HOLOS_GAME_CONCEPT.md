@@ -181,6 +181,14 @@ Settled 2026-10-06. Replaces v1's numbers ([v1: Economy and projects](legacy/v1/
   - *The player can spend to raise it.* A launch complex is a ground build: 2 Years, a small share of compute, no matter. It adds 40 kt a Year, all of it spare. One at a time, as ship yards allow. Sample.
   - *Lift is short of pads and ships, not energy.* Propellant for 40 kt a year is about half a gigawatt.
   - *Beyond lift:* the Moon's mass driver and belt mining bring far more, later.
+- **Matter piles up in the first hour, and the Mind says what it is for.** Settled 2026-10-13. Masses are the audit's ([HOLOS_PROJECT_AUDIT.md](HOLOS_PROJECT_AUDIT.md)).
+  - *Why it piles up.* Real instruments and probes weigh tonnes to a few kilotonnes. After one launch complex Earth lifts 55 kt a Year. By Year 12 about 500 kt sit unspent.
+  - *What needs matter needs megatonnes.* Power from orbit, for a fifth more energy: about 10 Mt. The far-side array: about 1 Mt of lunar metal. A habitat ring: 10 Mt.
+  - *Megatonnes can't come from Earth.* 10 Mt is 180 Years of lift. A mass driver on the Moon throws 600 kt a Year, by O'Neill's estimate, and belt mining brings 120.
+  - *So the choice in the first hour is when to start that road:* mines, then a driver. The Mind lays it out and waits.
+  - *The first 15 minutes do use matter.* Earth starts with 20 kt, and a vault or a launcher costs 10.
+  - *Not priced:* v2's build times for belt mining and the mass driver. v1 had 20 and 24 Years.
+  - Set aside: hiding matter until a megatonne work is on offer, and shrinking Earth's lift so matter stays scarce.
 - **Instruments and probes:** as in the backbone above.
 - **The sky watch is a drift scan.** Like CHORD, finished in 2028: each northern direction passes through it for about 10 minutes a day. v1's always-on watch of the whole sky becomes a project: dense aperture arrays on two continents ([the audit](HOLOS_PROJECT_AUDIT.md#calculations)).
 - **What moves with the smaller grid.** Compute takes about 1% of energy, not v1's 10%, so even more energy sits idle early. A ground data center's +50% compute draws about 0.5% of energy at first: see [Growing compute](#growing-compute). The industry cap at 100 GJ a tonne falls to about 7.5 Gt a year (v1: 30). Star lifting needs about 200,000 times the grid (v1: 50,000). A Sun-like star's whole output is about 16 trillion times it (v1: four trillion).
@@ -565,7 +573,7 @@ Answered one at a time, in this order. Every answer must be permitted by current
 9. **Settled 2026-10-10:** v1's research baseline, rechecked against the 2025 radar result and Garrett's 2026 cold-computing paper. See [Why the sky is quiet, rechecked](#why-the-sky-is-quiet-rechecked).
 10. **Second mock built 2026-10-13:** [the first hour away](explorations/v2-mocks/index.html#hour), minutes 15 to 60, on the same game. The phone is down, the player is woken six times and plays about eight minutes. In this game a contacter's knock reaches Earth at minute 42, and the all-sky watch the player built catches it. Then the new telescope gives a partial reading of one living world and finds a dead one next door, all inside five minutes. What each reading shows is a sample.
     - **Settled 2026-10-13:** physics sets how long an observation or a sweep takes. See [How Earth learns](#how-earth-learns).
-    - **What is matter for in the first hour?** After the launch complex, 55 kt arrive each Year. By Year 12 about 500 kt sit unspent.
+    - **Settled 2026-10-13:** matter piles up in the first hour, and the Mind says what it is for: megatonne works, which must come from the Moon or the belt. See [Earth's kit at Year 0](#earths-kit-at-year-0).
     - **What does a first voice give the player to do?** The mock shows what a knock proves, the Mind's reading of it, and three ways on: answer, listen, or stay silent. How much of a knock can be read, and what an answer may hold, are not settled.
     - **Settled 2026-10-13:** seasons are left out on purpose. A real telescope can't point near the Sun, and the game skips that limit. See [How Earth learns](#how-earth-learns).
     - **Settled 2026-10-13:** Earth shows every world it has felt from Year 0, and the Mind leads with the nearest. See [The seed, drawn](#the-seed-drawn).

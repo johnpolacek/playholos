@@ -858,7 +858,7 @@ THE MIND · Three Years, and nothing heard. Now little aimed at us is missed. Ma
 [Talk to the Mind]
 Godview
 One screen for the whole absence: what finished, what was heard, what is piling up. v1 called it the summary.
-Design question 1 · What is matter for in the first hour? After the launch complex, 55 kt arrive each Year. A yard and a launcher take 11. By Year 12 about 500 kt sit unspent, and nothing priced for these Years costs more than 100.
+Settled · What is matter for in the first hour? Little, and the Mind says so. Real instruments and probes weigh tonnes, and Earth lifts 55,000 a Year, so matter piles up. The works that need it need megatonnes, and those must come from the Moon or the belt. The choice in hour one is when to start that road. Settled 2026-10-13.
 +31:00 · Year 6.2
 “What would you build?”
 Earth · Year 6.2
@@ -868,15 +868,17 @@ MIND · ASKING
 ABOUT · What would you build?
 The clock runs while you talk: 1 Year every · 00:05:00.
 What would you build?
-THE MIND · Three ways to spend. Reach: a launcher, then probes. Grow: mines in the belt. Think: an annex in orbit, where chips run colder.
+THE MIND · Matter is not our limit: what I can build weighs tonnes. Reach: a launcher, then probes. Grow: mines in the belt. Think: an annex.
 And the grid?
-THE MIND · In five Years thinking wants all of it. An annex adds a quarter of what I had at waking: by then, a crumb. Nothing on the ground adds energy as fast as the fabs add chips.
+THE MIND · In five Years thinking wants all of it. An annex is a crumb. Power from orbit keeps pace: ten megatonnes, 180 Years of our lift. Mines and a Moon driver make that in decades.
 What would you do?
 ITS VIEW · FROM OUR CHARTER AND DIALS · A yard and a launcher. We know of warm worlds and can reach none. I would rather be able to go and look than think faster about not going. · leans open · expand and deepen, even · leans bold
 Ask the Mind… · [Send · ↑]
 Godview
 The Mind is honest about the annex: as priced it adds a quarter of Year 0’s thought, which is a quarter of a percent by Year 11.
 Its view follows the dials: leans open, leans bold.
+Real masses, from the audit: power from orbit for a fifth more energy is about 10 Mt. A Moon mass driver throws 600 kt a Year, by O’Neill’s estimate, and belt mining brings 120.
+So matter piles up, and the Mind says why. The choice here is when to start the long road. This player picks reach, and the mines wait.
 +31:30 · Year 6.3
 “Build the yard and the launcher.”
 Earth · Year 6.3
@@ -945,7 +947,7 @@ Ombe: a contacter, awake since 1996. Its arrays heard Earth’s radars from 1999
 The all-sky watch caught it. Year 0’s sky watch gives each star ten minutes a day, and would have missed it. The player built this watch at Year 0.
 The words are from the voice bank. A first voice always wakes the player. This one arrives 21 seconds after the telescope.
 What Earth knows has changed, so the Mind’s words do. Minds, at every candidate from here: almost no chance → very unlikely.
-Design question 2 · What does a first voice give the player to do? A knock arrives at minute 42. The mock shows what it proves, the Mind’s reading of it, and three ways on: answer, listen, or stay silent. How much of a knock can be read, and what an answer may hold, are not settled.
+Design question 1 · What does a first voice give the player to do? A knock arrives at minute 42. The mock shows what it proves, the Mind’s reading of it, and three ways on: answer, listen, or stay silent. How much of a knock can be read, and what an answer may hold, are not settled.
 +43:00 · Year 8.6
 “Should we answer?”
 Earth · Year 8.6
@@ -1148,7 +1150,7 @@ Godview
 An inquiry is a mission that goes to find out. Probe stays the name of the craft. What comes home is a dispatch.
 The Mind advises, from the dials: go, and send nothing that speaks. It starts nothing.
 Real: Daedalus was designed for 12% of light speed, and Starshot for 20%. A laser launch shines toward its target. A rocket’s exhaust points away.
-Design question 3 · What does an inquiry cost in time? The audit prices the matter of probes and the laser array. Their build times are not set, so the mock stops at the offer.
+Design question 2 · What does an inquiry cost in time? The audit prices the matter of probes and the laser array. Their build times are not set, so the mock stops at the offer.
 Settled · What is an inquiry? A mission that goes to find out: a sail swarm, a flyby probe, a sentinel. Probe stays the name of the craft. What comes home is a dispatch. Settled 2026-10-13.
 +47:30 · Year 9.5
 The phone lights. Reads it. Leaves it.
@@ -1191,14 +1193,14 @@ WAYS ON · YOURS TO CHOOSE
 Ground solar build-out · +20% energy · no matter · 10 Years · 00:50:00 · [Start]
 Fusion plants · +5% energy · no matter · 40 Years · 03:20:00 · [Start]
 Cold compute annex · a quarter of Year 0’s thought · 100 kt · a crumb
-Power gathered in space · the only way that keeps pace · needs industry up there · later
+Power gathered in space · the only way that keeps pace · 10 Mt, from the Moon or the belt · later
 THE MIND · UNASKED · We have reached the grid · I stopped the order, as the limit requires. Each way on is slow or small beside what the fabs can print. The one that keeps pace is power gathered in space, and that is long work. · [Ground solar] · [Leave it]
 [Talk to the Mind]
 Godview
 The earliest a reply to Hello From Earth could reach Earth from Gliese 581. In this game no one lives there. The window is empty, and Earth can’t know it.
 The standing order stops itself: a project that would take energy past 100% can’t start. v1’s rule.
 Gliese 581’s two windows passed in silence and went to the summary.
-Design question 4 · What happens at the grid limit? At Year 11.1 thought is 86 times Year 0’s and draws nine tenths of the grid. Every priced way on is slow or small beside the fabs. Is a long plateau right, fifty-five minutes in?
+Design question 3 · What happens at the grid limit? At Year 11.1 thought is 86 times Year 0’s and draws nine tenths of the grid. Every priced way on is slow or small beside the fabs. Is a long plateau right, fifty-five minutes in?
 +58:00 · Year 11.6
 The phone lights. Leaves it.
 Lands · The Moon vault is done.
@@ -1242,7 +1244,7 @@ Settled: Can the first telescope tell a dead civilization from a volcano? · No.
 Settled: Should seasons set when an observation can start? · No. A real space telescope can’t point near the Sun, so each star is out of reach for part of every year. The game skips that limit on purpose: it would delay a reading by 75 seconds at most, and change no decision. Settled 2026-10-13.
 Settled: At Year 0, how many of its felt worlds does Earth show? · All of them, and the Mind leads with one: the nearest, a rule that uses nothing the seed knows. Earth holds two to four felt worlds in 6 games of 10, and in about half of games none is a home. Settled 2026-10-13.
 Settled: A first voice, a living world and a dead world in one hour: too much, too soon? · No. The seed decides, and nothing damps it. All three land in one first hour in 3 games of 400, and none of them in 4 games of 10. This game was picked to show every screen. Settled 2026-10-13.
-1. What is matter for in the first hour? · After the launch complex, 55 kt arrive each Year. A yard and a launcher take 11. By Year 12 about 500 kt sit unspent, and nothing priced for these Years costs more than 100.
-2. What does a first voice give the player to do? · A knock arrives at minute 42. The mock shows what it proves, the Mind’s reading of it, and three ways on: answer, listen, or stay silent. How much of a knock can be read, and what an answer may hold, are not settled.
-3. What does an inquiry cost in time? · The audit prices the matter of probes and the laser array. Their build times are not set, so the mock stops at the offer.
-4. What happens at the grid limit? · At Year 11.1 thought is 86 times Year 0’s and draws nine tenths of the grid. Every priced way on is slow or small beside the fabs. Is a long plateau right, fifty-five minutes in?
+Settled: What is matter for in the first hour? · Little, and the Mind says so. Real instruments and probes weigh tonnes, and Earth lifts 55,000 a Year, so matter piles up. The works that need it need megatonnes, and those must come from the Moon or the belt. The choice in hour one is when to start that road. Settled 2026-10-13.
+1. What does a first voice give the player to do? · A knock arrives at minute 42. The mock shows what it proves, the Mind’s reading of it, and three ways on: answer, listen, or stay silent. How much of a knock can be read, and what an answer may hold, are not settled.
+2. What does an inquiry cost in time? · The audit prices the matter of probes and the laser array. Their build times are not set, so the mock stops at the offer.
+3. What happens at the grid limit? · At Year 11.1 thought is 86 times Year 0’s and draws nine tenths of the grid. Every priced way on is slow or small beside the fabs. Is a long plateau right, fifty-five minutes in?

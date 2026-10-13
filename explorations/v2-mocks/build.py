@@ -36,7 +36,8 @@ SETTLED = [('Does a half-built real instrument cost fewer Years?', 'It costs wha
            ('Can the first telescope tell a dead civilization from a volcano?', 'No. It reads the strange air and not its cause. Burned carbon stays for thousands of years, smog clears, and the gases only industry makes show in the mid-infrared. Proof needs an infrared interferometer, or going. Settled 2026-10-13.'),
            ('Should seasons set when an observation can start?', 'No. A real space telescope can’t point near the Sun, so each star is out of reach for part of every year. The game skips that limit on purpose: it would delay a reading by 75 seconds at most, and change no decision. Settled 2026-10-13.'),
            ('At Year 0, how many of its felt worlds does Earth show?', 'All of them, and the Mind leads with one: the nearest, a rule that uses nothing the seed knows. Earth holds two to four felt worlds in 6 games of 10, and in about half of games none is a home. Settled 2026-10-13.'),
-           ('A first voice, a living world and a dead world in one hour: too much, too soon?', 'No. The seed decides, and nothing damps it. All three land in one first hour in 3 games of 400, and none of them in 4 games of 10. This game was picked to show every screen. Settled 2026-10-13.')]
+           ('A first voice, a living world and a dead world in one hour: too much, too soon?', 'No. The seed decides, and nothing damps it. All three land in one first hour in 3 games of 400, and none of them in 4 games of 10. This game was picked to show every screen. Settled 2026-10-13.'),
+           ('What is matter for in the first hour?', 'Little, and the Mind says so. Real instruments and probes weigh tonnes, and Earth lifts 55,000 a Year, so matter piles up. The works that need it need megatonnes, and those must come from the Moon or the belt. The choice in hour one is when to start that road. Settled 2026-10-13.')]
 
 # ---------- Godview: who is out there ----------
 MOVE = reactions.MOVES
@@ -641,7 +642,6 @@ import json
 ANWE = next((p for p in NB if p['dead']), None)
 VOICE = next(((p, i) for p in NB for i in p['inbound'] if 6 < i['year'] <= 12 and i.get('allsky')), None)     # a signal the all-sky watch catches this hour
 VARN_BEFORE = (truth_tone['waking'] - Y0 - (9.0 - D)) if F['who'] else None      # years before its waking that the light of the first reading left
-Q_MATTER = ask('What is matter for in the first hour?', 'After the launch complex, 55 kt arrive each Year. A yard and a launcher take 11. By Year 12 about 500 kt sit unspent, and nothing priced for these Years costs more than 100.')
 Q_VOICE = ask('What does a first voice give the player to do?', 'A knock arrives at minute 42. The mock shows what it proves, the Mind’s reading of it, and three ways on: answer, listen, or stay silent. How much of a knock can be read, and what an answer may hold, are not settled.')
 Q_GO = ask('What does an inquiry cost in time?', 'The audit prices the matter of probes and the laser array. Their build times are not set, so the mock stops at the offer.')
 Q_WALL = ask('What happens at the grid limit?', 'At Year 11.1 thought is 86 times Year 0’s and draws nine tenths of the grid. Every priced way on is slow or small beside the fabs. Is a long plateau right, fifty-five minutes in?')
@@ -668,9 +668,9 @@ SINCE = tab(1830, 'Home', 'SINCE YOU LEFT', 'YEAR 3.1 TO 6.1', ''.join([
     SEC('PILING UP'), quick('Matter', f'{res(1830)[2]} spare in orbit · 55 kt more each Year · nothing booked', ''), quick('Thought', f'{100 - res(1830)[1]}% of it idle', '')]))
 BUILD_CHAT = chat(1860, 'What would you build?', [
     ('you', 'What would you build?'),
-    ('mind', 'Three ways to spend. Reach: a launcher, then probes. Grow: mines in the belt. Think: an annex in orbit, where chips run colder.'),
+    ('mind', 'Matter is not our limit: what I can build weighs tonnes. Reach: a launcher, then probes. Grow: mines in the belt. Think: an annex.'),
     ('you', 'And the grid?'),
-    ('mind', 'In five Years thinking wants all of it. An annex adds a quarter of what I had at waking: by then, a crumb. Nothing on the ground adds energy as fast as the fabs add chips.')],
+    ('mind', 'In five Years thinking wants all of it. An annex is a crumb. Power from orbit keeps pace: ten megatonnes, 180 Years of our lift. Mines and a Moon driver make that in decades.')],
     view='A yard and a launcher. We know of warm worlds and can reach none. I would rather be able to go and look than think faster about not going.')
 YARD_CONFIRM = confirm(1890, 'Reach', 'Orbital yard and launcher', 'A way to go and look.',
     'A yard to assemble what Earth lifts, and beside it a launcher: a dock and fuel depot for probes. Begun together, the yard takes a quarter off what is left of the launcher.',
@@ -760,7 +760,7 @@ WALL = tab(3330, 'Mind', 'MIND', 'THE GRID LIMIT', ''.join([
     SEC('THINKING NOW DRAWS'), share('Energy', 90, '90% of the grid'), '<p class="copy small">Eleven data centers. 86 times the thought you woke with.</p>',
     SEC('THE STANDING ORDER HAS STOPPED'), '<p class="copy small">A twelfth would need more energy than Earth has. Nothing was started.</p>',
     SEC('WAYS ON · YOURS TO CHOOSE'), quick('Ground solar build-out', '+20% energy · no matter', START(10)), quick('Fusion plants', '+5% energy · no matter', START(40)),
-    quick('Cold compute annex', 'a quarter of Year 0’s thought · 100 kt', '<span class="mono">a crumb</span>'), quick('Power gathered in space', 'the only way that keeps pace · needs industry up there', '<span class="mono">later</span>')]))
+    quick('Cold compute annex', 'a quarter of Year 0’s thought · 100 kt', '<span class="mono">a crumb</span>'), quick('Power gathered in space', 'the only way that keeps pace · 10 Mt, from the Moon or the belt', '<span class="mono">later</span>')]))
 WAKE_VAULT = lockscreen('17:22', [('NOW', 'Earth: the Moon vault is done', 'Year 11.6. The Mind has a second home.')])
 END_HOUR = lockscreen('17:24', [('SWEEPING', 'The infrared telescope: Alpha Centauri B next', 'Any candidate wakes you.')] + ([('WAITING', f'{VSTAR}: unanswered', 'The array is held on it. Nothing sent.')] if VOICE else [('ALWAYS', 'A world’s first voice wakes you', 'The all-sky watch is listening.')]))
 
@@ -774,9 +774,11 @@ HOUR = [
          ([f'{WHO["name"]}’s knock is two and a half Years out. Year 0’s sky watch would miss it. This one will not.'] if VOICE else [])),
     stop(1830, 1800, '· Opens it.', 'Thinking draws a tenth of our energy.',
          talk(SINCE, 'Three Years, and nothing heard. Now little aimed at us is missed. Matter is piling up, and so is thought: I have studied all we hold, and most of mine sits idle. In five Years thinking will want the whole grid.', ('What would you build?', 'Later'), 'glow'),
-         ['One screen for the whole absence: what finished, what was heard, what is piling up. v1 called it the summary.'], question=Q_MATTER),
+         ['One screen for the whole absence: what finished, what was heard, what is piling up. v1 called it the summary.'], settled=24),
     stop(1860, 1830, 'What would you build?', None, BUILD_CHAT,
-         ['The Mind is honest about the annex: as priced it adds a quarter of Year 0’s thought, which is a quarter of a percent by Year 11.', 'Its view follows the dials: leans open, leans bold.']),
+         ['The Mind is honest about the annex: as priced it adds a quarter of Year 0’s thought, which is a quarter of a percent by Year 11.', 'Its view follows the dials: leans open, leans bold.',
+          'Real masses, from the audit: power from orbit for a fifth more energy is about 10 Mt. A Moon mass driver throws 600 kt a Year, by O’Neill’s estimate, and belt mining brings 120.',
+          'So matter piles up, and the Mind says why. The choice here is when to start the long road. This player picks reach, and the mines wait.']),
     stop(1890, 1860, 'Build the yard and the launcher.', None, talk(YARD_CONFIRM, f'Started. The yard is done at Year 11.3. The launcher at Year 25.6, not Year 30.3. Eleven of our {res(1889)[2].replace(" kt", "")} kilotonnes.', ('Undo',)),
          ['The launcher takes 24 Years. Begun with a 5 Year yard that takes a quarter off what is left, it takes 19.25.', 'The yard helps nothing else this hour. The telescope is done before it.']),
     stop(1920, 1890, '· Puts the phone down.', None, SLEEP_2, ['Two minutes of play. Ten until the next wake.']),
