@@ -552,6 +552,9 @@ What Sol's own instruments have found nearby. For v2 open question 3.
 - **Gliese 283 A's mass, checked 2026-10-13** · Published. Agent, from tables. [Subasavage et al. 2017](https://arxiv.org/abs/1706.00709), [Giammichele et al. 2012](https://arxiv.org/abs/1202.5581), [O'Brien et al. 2024](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/MNRAS/527/8687), [Kirkpatrick et al. 2024](https://arxiv.org/abs/2312.03639).
   - Six values from its light run 0.60 to 0.66 Suns, with a cooling age of 1.3 to 1.6 billion years. The 1.11 in Kirkpatrick's table traces to one 2001 gravitational redshift.
   - Used: scorch.py keeps 0.64 Suns and 1.5 billion years. Even at 1.11, Gliese 283 B would stay: scorched harder, but still over a billion years ago.
+- **Wide white dwarf pairs seen only on the sky, reasoned 2026-10-13.** A pair's true size is at least what the sky shows, so the true light is at most what scorch.py computes.
+  - The pairs it marks scorched this way, Stein 2051 A and Gliese 283 B, are kept anyway: over a billion years have passed.
+  - The pairs it marks unscorched can only have had less light. So no outcome can flip, and this is no longer a to-check.
 - **[Soubiran et al. 2018, radial velocity standard stars](https://doi.org/10.1051/0004-6361/201832795)** · Published, A&A.
   - 107 Piscium's velocity is steady to about a meter per second. Later work finds it single (Halbwachs et al. 2018).
   - Matters: Hipparcos's 1997 wobble orbit for it, which implies a brown dwarf tugging at about 2 km/s, can't be real.
@@ -812,7 +815,6 @@ Results the design is waiting on. Check each when its date comes.
 
 ## To check
 
-- Wide white dwarf pairs are projected separations. True orbits may be up to twice as wide, which cuts the light by up to four.
 - Companion masses in calcs/binaries.py are rough: dynamical masses depend on distance cubed, and white dwarfs read as light from their brightness.
 - About 15 red dwarfs are unconfirmed young-group candidates with no age of their own. They stay. Gliese 393 is listed in AB Doradus but [Amado et al. 2021](https://arxiv.org/abs/2105.13785) put it older than 0.7 billion years.
 - 31 of the F, G and K hosts have no published age in any table opened, mostly K companions.
