@@ -1024,6 +1024,7 @@ This light left 80 years before Varn’s waking: 7 billion people, a quiet sky, 
 What the reading shows is the mock’s. Real: this mirror can’t split a world closer than 84 thousandths of an arcsecond in oxygen’s light, or 104 in water’s.
 The Gliese 526 window is for a 3 kW send from a 30 m dish in 2013. Even a listener would have struggled to catch it.
 Design question 5 · What can one reading say about a world whose Mind has not woken? Varn’s people are there, 80 years before their waking. This mirror reads only the world’s color and ozone, so life is a guess and minds are invisible. How fast should a living neighbor become known?
+Settled · How high can a natural world climb? To animals and forests. Alive is a ladder: bare rock, a lifeless sea, hidden microbes, an oxygen world, animals. Every mind, living or dead, stays hand-written. Settled 2026-10-13.
 +45:30 · Year 9.1
 The Mind opens on its own.
 Lands · A world at Alpha Centauri A, where none was known.
@@ -1134,7 +1135,7 @@ Truth: 4 are homes. Kesh’s world at Gliese 216 B, Nuvo’s world at 20 Leonis 
 11 are natural, from Gliese 664 at 19 ly to Nu Phoenicis at 50. The seed drew 136 in all, 113 at red dwarfs.
 From here a home and a natural world look alike: a point of light that moves with its star.
 Each needed a second visit, months after the first. Most are too far to read with this mirror.
-Design question 8 · How many natural warm worlds are alive? The seed now draws about 150 a game, most at red dwarfs this mirror can’t split. It gives each an orbit and a size, and nothing else. What a reading finds there, bare rock, sea or life, is not drawn. No measured rate exists.
+Design question 8 · What sets each natural world’s rung? The seed draws about 150 natural warm worlds a game, and gives each an orbit and a size. Which rung of the ladder it stands on is not drawn. Earth took about 2 billion years to show oxygen and about 4 to grow animals. No rate is measured elsewhere.
 Settled · What does the first sweep find? Natural warm worlds too, at the real rate: NASA’s planning value, about one star in four. The seed draws them. A first pass shows about 17 points of light a game, and about 1 in 4 is a home. Settled 2026-10-13.
 +55:30 · Year 11.1
 Woken. The Mind has opened.
@@ -1194,6 +1195,7 @@ Settled: What is a search? · A standing order for an idle instrument. Each has 
 Settled: What is an inquiry? · A mission that goes to find out: a sail swarm, a flyby probe, a sentinel. Probe stays the name of the craft. What comes home is a dispatch. Settled 2026-10-13.
 Settled: What sets how long an observation takes? · Physics. A nearer or larger world is brighter, so its reading comes sooner: hours at Alpha Centauri, days at 82 Eridani. A world too close to its star in our sky can’t be read at all. Seasons are left out for now. Settled 2026-10-13.
 Settled: What does the first sweep find? · Natural warm worlds too, at the real rate: NASA’s planning value, about one star in four. The seed draws them. A first pass shows about 17 points of light a game, and about 1 in 4 is a home. Settled 2026-10-13.
+Settled: How high can a natural world climb? · To animals and forests. Alive is a ladder: bare rock, a lifeless sea, hidden microbes, an oxygen world, animals. Every mind, living or dead, stays hand-written. Settled 2026-10-13.
 1. What is matter for in the first hour? · After the launch complex, 55 kt arrive each Year. A yard and a launcher take 11. By Year 12 about 500 kt sit unspent, and nothing priced for these Years costs more than 100.
 2. What does a first voice give the player to do? · A knock arrives at minute 42. The mock shows what it proves, the Mind’s reading of it, and three ways on: answer, listen, or stay silent. How much of a knock can be read, and what an answer may hold, are not settled.
 3. Should seasons set when an observation can start? · A real telescope can’t point near the Sun, so each star is out of reach for months of every year. The mock ignores that. It would move the opening’s first reading, Fomalhaut, off 30 seconds.
@@ -1201,6 +1203,6 @@ Settled: What does the first sweep find? · Natural warm worlds too, at the real
 5. What can one reading say about a world whose Mind has not woken? · Varn’s people are there, 80 years before their waking. This mirror reads only the world’s color and ozone, so life is a guess and minds are invisible. How fast should a living neighbor become known?
 6. A first voice, a living world and a dead world in one hour: too much, too soon? · This seed drew all three. A signal reaches Earth in the first hour in about 1 game in 4. A neighbor’s world sits within 15 ly in about 1 game in 3, and a dead one in about 1 in 35.
 7. Can the first telescope tell a dead civilization from a volcano? · The mock says no. It reads carbon dioxide, and the gases only industry makes need a colder, wider mirror. So the find stays strange, and going is the way to know.
-8. How many natural warm worlds are alive? · The seed now draws about 150 a game, most at red dwarfs this mirror can’t split. It gives each an orbit and a size, and nothing else. What a reading finds there, bare rock, sea or life, is not drawn. No measured rate exists.
+8. What sets each natural world’s rung? · The seed draws about 150 natural warm worlds a game, and gives each an orbit and a size. Which rung of the ladder it stands on is not drawn. Earth took about 2 billion years to show oxygen and about 4 to grow animals. No rate is measured elsewhere.
 9. What does an inquiry cost in time? · The audit prices the matter of probes and the laser array. Their build times are not set, so the mock stops at the offer.
 10. What happens at the grid limit? · At Year 11.1 thought is 86 times Year 0’s and draws nine tenths of the grid. Every priced way on is slow or small beside the fabs. Is a long plateau right, fifty-five minutes in?

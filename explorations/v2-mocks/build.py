@@ -26,7 +26,8 @@ SETTLED = [('Does a half-built real instrument cost fewer Years?', 'It costs wha
            ('What is a search?', 'A standing order for an idle instrument. Each has a sweep it falls back to: the player sets it once, and any observation interrupts it. A search returns candidates. Settled 2026-10-13.'),
            ('What is an inquiry?', 'A mission that goes to find out: a sail swarm, a flyby probe, a sentinel. Probe stays the name of the craft. What comes home is a dispatch. Settled 2026-10-13.'),
            ('What sets how long an observation takes?', 'Physics. A nearer or larger world is brighter, so its reading comes sooner: hours at Alpha Centauri, days at 82 Eridani. A world too close to its star in our sky can’t be read at all. Seasons are left out for now. Settled 2026-10-13.'),
-           ('What does the first sweep find?', 'Natural warm worlds too, at the real rate: NASA’s planning value, about one star in four. The seed draws them. A first pass shows about 17 points of light a game, and about 1 in 4 is a home. Settled 2026-10-13.')]
+           ('What does the first sweep find?', 'Natural warm worlds too, at the real rate: NASA’s planning value, about one star in four. The seed draws them. A first pass shows about 17 points of light a game, and about 1 in 4 is a home. Settled 2026-10-13.'),
+           ('How high can a natural world climb?', 'To animals and forests. Alive is a ladder: bare rock, a lifeless sea, hidden microbes, an oxygen world, animals. Every mind, living or dead, stays hand-written. Settled 2026-10-13.')]
 
 # ---------- Godview: who is out there ----------
 MOVE = reactions.MOVES
@@ -629,7 +630,7 @@ Q_TWO = ask('The seed found two worlds, and the opening shows one.', 'Kirrin’s
 Q_ASLEEP = ask('What can one reading say about a world whose Mind has not woken?', f'Varn’s people are there, {VARN_BEFORE:.0f} years before their waking. This mirror reads only the world’s color and ozone, so life is a guess and minds are invisible. How fast should a living neighbor become known?' if F['who'] else 'In this game the find is natural.')
 Q_NEAR = ask('A first voice, a living world and a dead world in one hour: too much, too soon?', 'This seed drew all three. A signal reaches Earth in the first hour in about 1 game in 4. A neighbor’s world sits within 15 ly in about 1 game in 3, and a dead one in about 1 in 35.')
 Q_DEAD = ask('Can the first telescope tell a dead civilization from a volcano?', 'The mock says no. It reads carbon dioxide, and the gases only industry makes need a colder, wider mirror. So the find stays strange, and going is the way to know.')
-Q_ALIVE = ask('How many natural warm worlds are alive?', 'The seed now draws about 150 a game, most at red dwarfs this mirror can’t split. It gives each an orbit and a size, and nothing else. What a reading finds there, bare rock, sea or life, is not drawn. No measured rate exists.')
+Q_ALIVE = ask('What sets each natural world’s rung?', 'The seed draws about 150 natural warm worlds a game, and gives each an orbit and a size. Which rung of the ladder it stands on is not drawn. Earth took about 2 billion years to show oxygen and about 4 to grow animals. No rate is measured elsewhere.')
 Q_GO = ask('What does an inquiry cost in time?', 'The audit prices the matter of probes and the laser array. Their build times are not set, so the mock stops at the offer.')
 Q_WALL = ask('What happens at the grid limit?', 'At Year 11.1 thought is 86 times Year 0’s and draws nine tenths of the grid. Every priced way on is slow or small beside the fabs. Is a long plateau right, fifty-five minutes in?')
 
@@ -775,7 +776,7 @@ HOUR = [
          talk(AIR_R, 'Blue, with ozone. Ozone means oxygen, and oxygen usually means life, though sunlight alone can make some. I can’t read its water. It sits too close to its star for this mirror.', (), 'glow'),
          ([find_truth, f'This light left {VARN_BEFORE:.0f} years before Varn’s waking: 7 billion people, a quiet sky, a hum near 100 kW.'] if F['who'] else ['Truth: alive, and no one there.'])
          + ['What the reading shows is the mock’s. Real: this mirror can’t split a world closer than 84 thousandths of an arcsecond in oxygen’s light, or 104 in water’s.',
-            'The Gliese 526 window is for a 3 kW send from a 30 m dish in 2013. Even a listener would have struggled to catch it.'], question=Q_ASLEEP),
+            'The Gliese 526 window is for a 3 kW send from a 30 m dish in 2013. Even a listener would have struggled to catch it.'], question=Q_ASLEEP, settled=15),
 ] + ([
     stop(2730, 2700, '· The Mind opens on its own.', 'A world at Alpha Centauri A, where none was known.',
          talk(ACEN_R, '<b>A new world, next door</b>The sweep found it on its first stop, and it moves with the star. Earth’s size, in the warm zone. No one had felt it. I can read its air in days. That interrupts the sweep, and it is yours to say.', ('Read its air', 'Keep sweeping'), 'open'),

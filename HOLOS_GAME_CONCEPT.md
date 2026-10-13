@@ -294,7 +294,15 @@ Settled 2026-10-13.
   - *Some are felt before Year 0.* A natural world that tugs hard enough for the planet hunters by 2040 is one of Earth's finds: about 2 a game, and none in 1 game in 10.
   - *Samples:* at most one warm world a star, none beside a neighbor's world, and a day a star on the first pass.
   - Set aside: a sweep that finds only neighbors' worlds, and a sweep that finds cold giants and dust alone.
-- **Open:** seasons, and how many natural warm worlds are alive.
+- **Alive is a ladder, and a natural world climbs no higher than animals and forests.** Settled 2026-10-13. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#kinds-of-worlds).
+  - *The rungs.* Bare rock. Air and sea with no life. Hidden microbes. An oxygen world. Animals and forests. A world whose life died is one more.
+  - *Every mind stays hand-written,* living or dead, with industry or without. The seed never draws one.
+  - *Why.* Earth's life has been microbes for most of 4.2 billion years, and its radio is 130 years old. A natural draw would almost never land on minds.
+  - *What the first mirror tells apart.* No air, water without oxygen, and oxygen. Hidden microbes read as a lifeless sea, and animals as an oxygen world.
+  - *The premise makes life common.* It puts a mind at about 1 warm world in 18. Minds can't be commoner than life, so most worlds that can hold life do.
+  - *Later:* stone-age worlds and old ruins can join the roster as written entries.
+  - Set aside: minds without industry drawn by the seed, and every rung drawn, ruins included.
+- **Open:** seasons, and what sets each natural world's rung.
 
 ## The neighbors
 
@@ -493,6 +501,7 @@ Answered one at a time, in this order. Every answer must be permitted by current
     - **A first voice, a living world and a dead world in one hour: too much, too soon?** A signal reaches Earth in the first hour in about 1 game in 4. A neighbor's world sits within 15 ly in about 1 game in 3, a dead one in about 1 in 35.
     - **Can the first telescope tell a dead civilization from a volcano?** The mock says no, so going is the way to know.
     - **Settled 2026-10-13:** a sweep finds natural warm worlds too, at the real rate. In this game its first pass shows 15 new points of light: 4 homes and 11 natural worlds. See [How Earth learns](#how-earth-learns).
-    - **How many natural warm worlds are alive?** The seed gives each an orbit and a size, and nothing else. What a reading finds there is not drawn. No measured rate exists.
+    - **Settled 2026-10-13:** alive is a ladder, and a natural world climbs no higher than animals and forests. Every mind stays hand-written. See [How Earth learns](#how-earth-learns).
+    - **What sets each natural world's rung?** The seed gives each an orbit and a size, and nothing else. Earth took about 2 billion years to show oxygen and about 4 to grow animals. No rate is measured for other worlds.
     - **What does an inquiry cost in time?** The matter of probes and the laser array is priced. Their build times are not.
     - **What happens at the grid limit?** At Year 11.1 thought is 86 times Year 0's and draws nine tenths of the grid. Every priced way on is slow or small.
