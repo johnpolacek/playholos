@@ -1050,7 +1050,7 @@ A small gas world · unlikely → · very unlikely
 Minds · very unlikely
 WHAT WOULD SAY MORE
 A 15 m mirror · its water and oxygen · smog, if there is any, in 5 days · 18 Years · 01:30:00 · [Start]
-Far-side array · everyday radio, if there is any, in 5 hours · needs a Moon mass driver first · later
+Far-side array · everyday radio, if there is any, in 5 days with its first fifth · needs a Moon mass driver · later
 THE MIND · Blue, with ozone. Ozone means oxygen, and oxygen usually means life, though sunlight alone can make some. I can’t read its water. It sits too close to its star for this mirror.
 [Talk to the Mind]
 Godview
@@ -1059,8 +1059,8 @@ Gliese 432 A’s world is Varn’s home. Varn wakes Year 57.6 · +04:47:48, and 
 This light left 80 years before Varn’s waking: 7 billion people, a quiet sky, a hum near 100 kW.
 Physics alone. A far-side array would hear that hum in 5 hours, and a 15 m mirror would read its smog in 5 days. Earth has neither. Its own mirror would need over two months.
 Across games the first telescope can read smog at 1 living home in 10 of those a first pass sees. A far-side array hears 9 in 10.
-Priced, as samples: a 15 m mirror takes 18 Years, so Year 23 if begun now, with the yard’s help. A far-side array takes 30 after a Moon mass driver, itself 24: Year 60 at the soonest in this game.
-Varn wakes at Year 57.6. So Earth can read its smog decades before, and hear its hum only about when it wakes.
+Priced, as samples: a 15 m mirror takes 18 Years, so Year 23 if begun now, with the yard’s help. A far-side array grows a fifth every 6 Years, after a Moon mass driver that takes 24.
+So its first fifth could be done at Year 36, and would hear this hum in 5 days. Varn wakes at Year 57.6.
 What the reading shows is the mock’s. Real: this mirror can’t split a world closer than 84 thousandths of an arcsecond in oxygen’s light, or 104 in water’s.
 The Gliese 526 window is for a 3 kW send from a 30 m dish in 2013. Even a listener would have struggled to catch it.
 Settled · How high can a natural world climb? To animals and forests. Alive is a ladder: bare rock, a lifeless sea, hidden microbes, an oxygen world, animals. Every mind, living or dead, stays hand-written. Settled 2026-10-13.

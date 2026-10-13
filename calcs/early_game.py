@@ -168,7 +168,7 @@ def raise_the_pace(share=0.25 / 24, step=1.5, fab=3, factory=(3, 1 / 3), yard=(5
 # - A mass driver on the Moon: v1's 24 Years. O'Neill's group gave a rate, 600 kt a year, and no build time.
 # - An orbital foundry: v1's 30 Years. It turns thrown rock into works.
 # - A far-side array: v1's 30 Years, after the Moon's mine exists. FarView plans 4 to 8 years for a fifth of the area,
-#   in far lighter antennas.
+#   in far lighter antennas. Settled 2026-10-13: it grows in fifths, 6 Years each, and each hears farther.
 # - Belt prospecting and mining: v1's 6 and 20 Years. Nothing like it has flown. 120 kt a year.
 # - Power from orbit: about 10 Mt for a fifth more energy, so its pace is the pace matter arrives.
 ROADS = dict(mirror=18, array=25, driver=24, foundry=30, far_side=30, prospect=6, mining=20)
@@ -186,7 +186,7 @@ def long_roads(early=6.2, reading=9.4, yard=11.3, ly=4.32):
     array = finish(reading, ROADS['array']); word = array + ly / 0.2 + ly
     driver = finish(early, ROADS['driver']); foundry = finish(early, ROADS['foundry'], yard, 0.25)
     mining = finish(early, ROADS['prospect']) + ROADS['mining']
-    far = driver + ROADS['far_side']
+    far = driver + ROADS['far_side']; fifth = driver + ROADS['far_side'] / 5      # it grows in fifths: settled 2026-10-13
     rock = lambda y: DRIVER_KT * max(0, y - driver) + MINING_KT * max(0, y - mining)        # kt thrown or hauled by Year y
     y = max(driver, foundry)
     while rock(y) < ORBIT_POWER_MT * 1000: y += 0.1
@@ -198,8 +198,9 @@ def long_roads(early=6.2, reading=9.4, yard=11.3, ly=4.32):
         ('Belt mining', mining, f'prospecting from Year {early}. Then {MINING_KT} kt a Year'),
         ('Laser sail array', array, f'begun Year {reading}. Sails\' word from {ly} ly is home at Year {word:.0f}'),
         (f'{ORBIT_POWER_MT} Mt in orbit', y, 'enough for power from orbit: a fifth more energy'),
-        ('Far-side array', far, 'begun when the driver is done. Hears a 100 kW tone to 47 ly in a day')):
-        print(f'  {name:26} Year {when:5.1f}  +{int(when * 5 // 60)}:{int(when * 5 % 60):02d} of play  {note}')
+        ('Far-side array, first fifth', fifth, 'begun when the driver is done. Hears a 100 kW tone to 21 ly in a day'),
+        ('Far-side array, whole', far, 'a fifth every 6 Years. Hears a 100 kW tone to 47 ly in a day')):
+        print(f'  {name:28} Year {when:5.1f}  +{int(when * 5 // 60)}:{int(when * 5 % 60):02d} of play  {note}')
     print(f'  The grid limit is reached at about Year 11. Ground solar adds a fifth by Year 21. Power from orbit, from about Year {y:.0f}: '
           f'{y - 11:.0f} Years at the limit, {(y - 11) * 5 / 60:.1f} hours of play.')
 

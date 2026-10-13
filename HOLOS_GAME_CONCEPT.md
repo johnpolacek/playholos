@@ -268,8 +268,16 @@ Settled 2026-10-10. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#earth-to-ye
   - *Power from orbit:* about 10 Mt for a fifth more energy, so its pace is the pace rock arrives.
   - *The mock's game, each begun when the Mind first offers it.* The mirror: Year 23. Driver and foundry: Year 30. Belt mining: Year 32. Laser array: Year 34. Ten megatonnes in orbit: Year 45. Far-side array: Year 60.
   - *So the plateau lasts about 34 Years:* 2.8 hours of play, from the grid limit at Year 11 to power from orbit at about Year 45. Ground solar adds a fifth at Year 21.
-  - *And the far-side array arrives about when Varn wakes,* Year 57.6. Earth can read Varn's smog from Year 23, and hear its everyday radio only from Year 60.
-  - *A smaller array hears less, sooner.* One fifth the size hears 6 in 10 of the living homes a first pass sees, against 9 in 10, and Varn in 5 days. Whether it may grow in stages is open.
+  - *The whole far-side array arrives about when Varn wakes,* Year 57.6. Its first fifth arrives 24 Years sooner.
+- **The far-side array grows in stages.** Settled 2026-10-13. Numbers from `python3 calcs/signs.py stats`.
+  - *Five fifths, 6 Years each.* FarView's builders give 4 to 8 years for an array of about that area, and plan it as a core that grows outward.
+  - *Each fifth hears farther.* Reach grows as the square root of the collecting area, as for Earth's other ears ([What Earth hears](#what-earth-hears)).
+  - *What each stage hears within a Year,* of the living homes a first pass sees: 6 in 10 with one fifth, 7 with two, 8 with three, and 9 with all five.
+  - *A 100 kW tone:* heard to 21 ly in a day by the first fifth, and to 47 by the whole.
+  - *The decision it gives:* how much to build before listening, and where to point what is built.
+  - *In the mock's game* the first fifth is done at Year 36 and hears Varn's everyday radio in 5 days, 21 Years before Varn wakes.
+  - *Counted as Earth sees the neighbors at Year 9.* By Year 36 more have woken, and the shares will differ.
+  - Set aside: whole or nothing, and leaving it open until a third mock.
 
 ## Earth's leads at Year 0
 

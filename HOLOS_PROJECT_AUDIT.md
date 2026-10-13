@@ -126,7 +126,7 @@ Proposed prices are matter in orbit, on the Moon or in the belt. Ground builds s
 | Neutrino watch | 6,000 kt | Ground | 0, ground | Hyper-Kamiokande holds 260 kt of water, underground. |
 | Infrared interferometer | 40 Mt | Heavy ×100,000 | 200 t | A few LUVOIR-class mirrors flying in formation, about 100 t. |
 | Solar lens observatory | 40 Mt | Heavy ×100,000+ | 5 t. 30 Years, not 70: about 25 AU a year gets there in about 25. | NASA concept: small sailcraft, about 100 kg each. |
-| Far-side array | 40 Mt | OK, recalculated | About 1 Mt of lunar metal made in place, as FarView plans, at an assumed 1 kg/m². Needs the mass driver line. Hears a 100 kW tone to 47 ly in a day. 30 Years, v1's. Priced 2026-10-13. | Depends on the antenna design. Thin wire antennas weigh little, steel dishes a great deal. |
+| Far-side array | 40 Mt | OK, recalculated | About 1 Mt of lunar metal made in place, as FarView plans, at an assumed 1 kg/m². Needs the mass driver line. Hears a 100 kW tone to 47 ly in a day. 30 Years, v1's. Priced 2026-10-13. It grows in fifths, 6 Years each, and the first hears a 100 kW tone to 21 ly in a day. Settled 2026-10-13. | Depends on the antenna design. Thin wire antennas weigh little, steel dishes a great deal. |
 | Kilometer interferometer | 800 Mt | Heavy ×100,000+ | 1 kt | A fleet of large mirrors, thousands of tonnes at most. |
 
 From 2026-10-13, Planet survey and Waste-heat survey are searches: standing orders for instruments Earth already has, not builds. See [How Earth learns](HOLOS_GAME_CONCEPT.md#how-earth-learns).

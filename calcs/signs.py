@@ -26,6 +26,10 @@ import early_game as eg, neighbors as nb, observing, seed
 # name, SEFD in Jy: the radio array Earth holds at Year 0, the SKA-class ground build, and the Moon's far side
 EARS = (('Radio array, held', 10), ('Deep-field receiver', 1.1), ('Far-side array', 2 * 1380 * 30 / 5e8))
 LISTEN_CAP = 365.25                      # days: the longest single listening campaign, a sample
+# Settled 2026-10-13: the far-side array grows in stages. Each fifth takes 6 Years, FarView's builders say 4 to 8 for
+# an array that size, and each hears farther: reach grows as the square root of the collecting area.
+FAR_FIFTHS, FIFTH_YEARS = 5, 6
+def far_sefd(fifths): return EARS[2][1] * FAR_FIFTHS / fifths
 SMOG = ((6.5, 300, 5.71 / 3.2616), (15, 400, 10))           # mirror in metres, its published hours, and at how many parsecs
 LOOK = 9.0                               # the Year the first pass ends
 
@@ -81,6 +85,18 @@ def stats(rows, n=400):
                 six, fifteen = (isinstance(r[k], float) and r[k] < math.inf for k in ('smog 6.5 m', 'smog 15 m'))
                 bag['smog6'] += six; bag['smog15'] += fifteen
                 bag['none'] += r['Far-side array'] is None and not fifteen
+    stage = {k: [0, 0] for k in range(1, FAR_FIFTHS + 1)}
+    for s in range(1, n + 1):
+        for p in seed.draw(s, rows)['neighbors']:
+            if p['dead']: continue
+            watts = read(p)['watts']
+            for k in stage:
+                ok = listen_days(watts, p['d'], far_sefd(k)) is not None
+                stage[k][0] += ok; stage[k][1] += ok and p['swept']
+    print(f"The far-side array in fifths, {FIFTH_YEARS} Years each. Heard within a Year, of all living neighbors and of those the first pass sees:")
+    for k, (a, b) in stage.items():
+        print(f"  {k} fifth{'s' if k > 1 else ' '}: {a / tot['living']:4.0%} and {b / homes['living']:4.0%} · a 100 kW tone to {eg.beacon_range_ly(1e5, far_sefd(k), 1, 86400):3.0f} ly in a day, "
+              f"a 10 kW tone to {eg.beacon_range_ly(1e4, far_sefd(k), 1, eg.YEAR):3.0f} ly in a Year")
     for label, b in (('all living neighbors', tot), ('those the first pass sees', homes)):
         L = b['living']; share = lambda k: 'none' if not b[k] else f'1 in {L / b[k]:,.0f}' if b[k] / L < 0.02 else f'{b[k] / L:.0%}'
         print(f"Across {n} games, {label}: {L / n:.1f} a game, as Earth sees them at Year {LOOK:.0f}.")
