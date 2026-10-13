@@ -302,7 +302,19 @@ Settled 2026-10-13.
   - *The premise makes life common.* It puts a mind at about 1 warm world in 18. Minds can't be commoner than life, so most worlds that can hold life do.
   - *Later:* stone-age worlds and old ruins can join the roster as written entries.
   - Set aside: minds without industry drawn by the seed, and every rung drawn, ruins included.
-- **Open:** seasons, and what sets each natural world's rung.
+- **A natural world's rung comes from its star's age, and physics says whether it kept its air.** Settled 2026-10-13. Built in [calcs/seed.py](calcs/seed.py).
+  - *Air.* A world keeps its air if it sits on the airy side of the cosmic shoreline: the line through Mars that divides the Solar System's airy worlds from its bare ones. Small worlds and harsh young stars lose (Zahnle and Catling 2017).
+  - *Red dwarfs are harsh.* Their warm zones sit close in, and the dimmest stay active about three times longer than the old estimate (Pass et al. 2025). Most of their warm worlds come out bare rock.
+  - *Age.* Earth had lasting oxygen at 2.3 billion years old, and air rich enough to read, with animals and forests, at about 4. A world follows that schedule at its own pace.
+  - *Published ages where they exist.* 53 hosts have one from asteroseismology or spin (Ware et al. 2026). The rest are drawn evenly from 1 to 10.5 billion years, as nearby stars formed.
+  - *What a game holds.* Of about 150 natural worlds: 90 bare rock, 15 airy and lifeless, 36 alive, 9 where life died.
+  - *At Sun-like stars* about half are alive, and 4 in 10 show oxygen. At red dwarfs about 7 in 10 are bare rock.
+  - *So oxygen does not unmask a neighbor.* Of the points of light a first pass shows, about 5 natural worlds show oxygen, beside about 4 or 5 homes.
+  - *Samples:* life started on 3 airy worlds in 4, and died on 1 in 5 of those. Each world's pace varies by a factor of 1.6. Each world's luck at the shoreline is half a power of ten.
+  - *Earth's pace is taken as typical.* One school says Earth was fast, and most living worlds are still microbes. The pace is the number to turn if so.
+  - *Not modelled:* a warm zone drifts outward as its star brightens, so an old Sun-like star's world may have thawed late.
+  - Set aside: fixed odds at every star, and fixed odds by star kind.
+- **Open:** seasons, and whether the Mind's odds should match what the seed holds.
 
 ## The neighbors
 
@@ -419,6 +431,7 @@ Built 2026-10-10 in [calcs/seed.py](calcs/seed.py), from the rules above.
   - A median of 9 neighbors, from 3 to 30. A hunter in a little over half.
   - A neighbor's own world is among Earth's finds in nearly half.
   - About 150 natural warm worlds, from 118 to 178. The infrared telescope's first pass shows about 17 points of light, and about 1 in 4 is a home.
+  - Of the natural worlds, 6 in 10 are bare rock and about 1 in 4 is alive. Of the 12 a first pass sees, 7 are alive and 5 show oxygen.
   - A neighbor's signal reaches Earth in the first 15 minutes in about 1 game in 10, and in the first hour in about 1 in 4. Most are answers to Earth's radars.
 
 ## Death and new games
@@ -502,6 +515,7 @@ Answered one at a time, in this order. Every answer must be permitted by current
     - **Can the first telescope tell a dead civilization from a volcano?** The mock says no, so going is the way to know.
     - **Settled 2026-10-13:** a sweep finds natural warm worlds too, at the real rate. In this game its first pass shows 15 new points of light: 4 homes and 11 natural worlds. See [How Earth learns](#how-earth-learns).
     - **Settled 2026-10-13:** alive is a ladder, and a natural world climbs no higher than animals and forests. Every mind stays hand-written. See [How Earth learns](#how-earth-learns).
-    - **What sets each natural world's rung?** The seed gives each an orbit and a size, and nothing else. Earth took about 2 billion years to show oxygen and about 4 to grow animals. No rate is measured for other worlds.
+    - **Settled 2026-10-13:** its star's age sets a natural world's rung, on Earth's schedule with scatter, and physics says whether it kept its air. In this game the sweep's 11 natural worlds are 5 alive, 2 where life died, 2 airy and lifeless, 2 bare rock. See [How Earth learns](#how-earth-learns).
+    - **Should the Mind's odds match what the seed really holds?** About 1 point of light in 4 is a home, and about 4 in 10 are living natural worlds. The Mind's reports say Minds 5 and Life 40, and it can't know how many neighbors there are.
     - **What does an inquiry cost in time?** The matter of probes and the laser array is priced. Their build times are not.
     - **What happens at the grid limit?** At Year 11.1 thought is 86 times Year 0's and draws nine tenths of the grid. Every priced way on is slow or small.

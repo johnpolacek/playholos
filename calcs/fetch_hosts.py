@@ -3,6 +3,7 @@
 - Gaia DR3 FLAME ages for every census star within 50 ly (ESA Gaia archive).
 - Known planets within 50 ly (NASA Exoplanet Archive, pscomppars).
 - Wide binaries among those stars (El-Badry, Rix and Heintz 2021, via VizieR).
+- Published ages of the Habitable Worlds Observatory's target stars (the HAges Catalog, Ware et al. 2026, via Zenodo).
 Builds read the cached files and never fetch.
 """
 import csv, math, urllib.parse, urllib.request
@@ -45,6 +46,16 @@ def main():
         'QUERY': 'SELECT Source1, Source2, sepAU, R, BinType FROM "J/MNRAS/506/2269/catalog" '
                  f'WHERE Source1 IN ({id_list}) OR Source2 IN ({id_list})'}, 'elbadry-50ly.csv')
 
+def ages():
+    """The HAges Catalog, public release v1: ages from asteroseismology and spin for 127 of 659 target stars."""
+    (CACHE / 'hages').mkdir(exist_ok=True)
+    for part in ('Overview', 'Gyrochronology', 'Asteroseismology'):
+        name = f'HAges_Catalog_{part}.csv'
+        if (CACHE / 'hages' / name).exists(): print(f'{name}: cached'); continue
+        with urllib.request.urlopen(f'https://zenodo.org/api/records/19227788/files/{name}/content', timeout=300) as resp:
+            (CACHE / 'hages' / name).write_bytes(resp.read())
+        print(f'{name}: downloaded')
+
 def close_binaries():
     """Orbits of close pairs: ORB6 for visual binaries (USNO and GSU), SB9 for spectroscopic ones (VizieR B/sb9)."""
     for name in ('orb6orbits.txt', 'orb6format.txt'):
@@ -60,3 +71,4 @@ def close_binaries():
 if __name__ == '__main__':
     main()
     close_binaries()
+    ages()

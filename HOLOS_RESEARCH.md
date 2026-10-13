@@ -837,6 +837,25 @@ What a neighbor's world can plausibly be, beyond an Earth twin. Each roster entr
   - From memory, not checked: Earth's air gained oxygen about 2.4 billion years ago, animals appear about 0.6 billion years ago, and our species is about 300,000 years old.
   - Matters: on the one world we know, life is microbes for most of its history, shows in the air for between a ninth and a half of it, and has had radio for 130 years of 4.5 billion.
   - Matters: the game's premise puts a mind at about 1 warm world in 18. Minds can't be commoner than life, so in this game most warm worlds that can hold life do.
+  - Used since: v2 [How Earth learns](HOLOS_GAME_CONCEPT.md#how-earth-learns), the ladder and the rung draw in calcs/seed.py.
+
+- **What sets a natural world's rung, checked 2026-10-13.** For the rung draw in [calcs/seed.py](calcs/seed.py). I read each abstract myself, and the formulas in the text of Pass et al.
+  - **[Pass, Charbonneau and Vanderburg 2025](https://arxiv.org/abs/2504.01182)** · Published, ApJL. The shoreline as a formula: a world keeps air when 4 log10 of its escape speed in km/s, minus log10 of its lifetime dose of far ultraviolet and X-rays in Earth units, minus 3.16, is above zero. Mars sits on the line.
+    - The dose, after Zahnle and Catling: the star's brightness to the power 0.4, over the orbit's size squared.
+    - Fully convective red dwarfs stay active longer than that assumes: 2.1 to 3.1 times the dose. Only their largest rocky planets are likely to keep air.
+    - Already airless by measurement: LHS 3844 b, TRAPPIST-1 b and c, LTT 1445 A b, GJ 1132 b and others.
+  - **[Ji et al. 2025](https://arxiv.org/abs/2504.19872)** · Published. No single clean line: how much water and carbon a world starts with blurs it. Heavier worlds at heavier stars keep air more easily.
+  - **[Nguyen et al. 2026](https://arxiv.org/abs/2608.23912)** · Accepted, ApJL. JWST finds thick air on some lava worlds and bare rock on some cooler red dwarf planets. Two boundaries, not one, with fits by star kind, mass and age. Not used yet: its fits could replace the simple line.
+  - **[Ware et al. 2026, the HAges Catalog](https://arxiv.org/abs/2605.12647)** · Accepted, ApJ. Data at [Zenodo](https://doi.org/10.5281/zenodo.19227788). Published ages from asteroseismology and spin for 127 of the 659 stars the Habitable Worlds Observatory is likeliest to observe. Past about 6 billion years, spin ages run about 47% low.
+    - 161 of the 880 hosts are in it, and 53 have an age: 2 F, 12 G, 23 K, 16 M. Of the 110 the mirror can split, 35.
+    - Alpha Centauri A has 20 ages, 4.2 to 6.7 billion years. Beta Virginis has two, 3.2 and 4.0.
+    - Gaia's own ages do not agree with it. On the 9 hosts that have both, the median gap is 4.7 billion years.
+  - **[Cukanovaite et al. 2023](https://doi.org/10.1093/mnras/stad1020)** · Published, MNRAS. White dwarfs within 40 pc fit an even rate of star birth over the last 10.5 billion years.
+  - **[Poulton et al. 2021](https://doi.org/10.1038/s41586-021-03393-7)** · Published, Nature. Oxygen first rose about 2.43 billion years ago, swung for 200 million years, and stayed from about 2.22.
+  - Not evidence: Radica 2026, arXiv 2603.29743, is an April 1 paper. A search summary reported its claim that red dwarf planets keep air as a finding.
+  - Matters: air is decided by physics, and age by data where data exists. What the seed adds are four samples: whether life started, whether it died, each world's pace, and its luck at the shoreline.
+  - This project's own: Earth's pace taken as typical, and the 0.5 spread at the shoreline.
+  - Used: v2 [How Earth learns](HOLOS_GAME_CONCEPT.md#how-earth-learns), data/hosts-50ly.csv, calcs/seed.py and the second mock.
 
 ## Why the sky is quiet: computing and heat
 
@@ -921,6 +940,12 @@ Results the design is waiting on. Check each when its date comes.
 - Natural warm worlds: three bright hosts have only a Gaia name, and the seed lets Earth's planet hunters feel a world there by 2040. A star no survey has named is unlikely to be on their list.
 - Natural warm worlds: NASA's 164 targets reach 23.3 pc, about 76 ly. The seed draws nothing past 50 ly, so the game's sweep covers 110 stars.
 - Natural warm worlds: read Bergsten et al. 2023 for the red dwarf rate.
+- Gaia's FLAME ages differ from asteroseismic and spin ages by a median of 4.7 billion years on 9 hosts. calcs/hosts.py still drops an F or G star as young when FLAME's upper bound is under a billion years. Recheck each such drop against the HAges Catalog.
+- 58 Eridani has six spin ages from 0.43 to 1.1 billion years. It stays a host under the rule, since two reach a billion.
+- The rung draw takes Earth's pace as typical. The hard-steps school says Earth was fast. Decide the pace's spread and its lean.
+- The rung draw ignores a warm zone's outward drift as its star brightens. It matters for F stars and old G stars.
+- Nguyen et al. 2026 give fitted shorelines by star kind, mass and age. Read the paper and see whether they should replace the single line.
+- The dates of animals and forests on Earth are from memory. Find a source.
 - The second mock: a source for how long added carbon dioxide stays in air, and for which gases the Habitable Worlds Observatory is designed to read.
 - Earth's aimed messages: the power of the 1983, 2008, 2009 Canberra and 2013 sends is in no source found. Hirabayashi's books may hold the first.
 - Working links for Project Daedalus's 1978 report and Criswell 1985.

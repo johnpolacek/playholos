@@ -138,6 +138,7 @@ def load_hosts():
     by_id = {s['id']: s for s in star_list}
     for r in rows:
         r['luminosity'] = float(r['luminosity']); r['distance_ly'] = float(r['distance_ly'])
+        r['age'], r['age_by'] = (float(r['age_pub_gyr']), r['age_pub_by']) if r.get('age_pub_gyr') else (None, None)
         r['hz_in'], r['hz_out'] = hosts.hz(r['luminosity'])     # the CSV rounds dim stars' zones to zero
         s = by_id.get(r['id'], {})
         r['north'] = s.get('dec', -90) > -20

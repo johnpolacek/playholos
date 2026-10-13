@@ -94,8 +94,45 @@ def warm_world(seed, host):
         if radius >= 0.8 * x ** -0.5: break
     a, mass, pole = x * math.sqrt(host['luminosity']), radius ** 3.7, math.degrees(math.acos(rng.uniform(-1, 1)))
     fails, k = nb.orbit_fails(host, mass, a, 0, pole)
-    return dict(host=host, d=host['distance_ly'], a=a, radius=radius, mass=mass, pole=pole, tug=k, fails=fails,
-                felt=k > nb.rv_2040(host), **sight(host, radius, a))
+    w = dict(host=host, d=host['distance_ly'], a=a, radius=radius, mass=mass, pole=pole, tug=k, fails=fails,
+             felt=k > nb.rv_2040(host), **sight(host, radius, a))
+    return dict(w, **rung(seed, w))
+
+# ---------- What lives on a natural world ----------
+# Settled 2026-10-13: alive is a ladder, and a natural world climbs no higher than animals and forests. Its star's age
+# sets the rung, on Earth's schedule with scatter. Whether it kept its air comes from physics. Sources are in
+# HOLOS_RESEARCH.md, "Kinds of worlds".
+# - Air. The cosmic shoreline (Zahnle and Catling 2017, as written by Pass et al. 2025): a world keeps its air when
+#   4 log10(escape speed in km/s) - log10(lifetime dose of far ultraviolet and X-rays, Earth = 1) - 3.16 is above zero.
+#   Mars sits on the line. The dose is L^0.4 / a^2, and 3.1 times that at a fully convective red dwarf, one fainter
+#   than absolute G 10 (Pass et al. 2025). The line is broad (Ji et al. 2025), so each world has its own luck: 0.5 in
+#   the log, a sample.
+# - Life. Kipping 2025 gives 13 to 1 that life starts fast where conditions allow, and not how often they allow. Here
+#   it started on 3 airy worlds in 4, and later died out on 1 in 5 of those: both samples.
+# - Pace. Earth had lasting oxygen at 2.3 billion years old (Poulton et al. 2021), and air rich enough to read, with
+#   animals and forests, at about 4.0 (Reinhard et al. 2017). Each world runs faster or slower by its own factor, 1.6
+#   at one sigma: a sample.
+# - Age. A published age from asteroseismology or spin (Ware et al. 2026). Where none exists, drawn evenly from 1 to
+#   10.5 billion years (Cukanovaite et al. 2023), and no more than the star's main-sequence life.
+RUNGS = ('bare rock', 'airy and lifeless', 'hiding microbes', 'showing oxygen', 'with animals and forests', 'where life died')
+ALIVE = RUNGS[2:5]
+SHORE_LUCK, STARTED, DIED, PACE = 0.5, 0.75, 0.2, math.log(1.6)
+OXYGEN_AT, RICH_AT, OLDEST = 2.3, 4.0, 10.5
+def shoreline(host, radius, mass, a):
+    """How far a world sits on the airy side of the cosmic shoreline, in the log. Negative: its air is probably gone."""
+    dose = host['luminosity'] ** 0.4 / a ** 2 * (3.1 if host['kind'] == 'M' and host['gabs'] > 10 else 1)
+    return 4 * math.log10(11.19 * math.sqrt(mass / radius)) - math.log10(dose) - 3.16
+def rung(seed, w):
+    """The truth of a natural world: its age, whether it kept its air, and how far its life has come."""
+    host = w['host']; rng = random.Random(f"{seed}:rung:{host['id']}")
+    u_age, luck, u_start, u_died, pace = rng.random(), rng.gauss(0, SHORE_LUCK), rng.random(), rng.random(), math.exp(rng.gauss(0, PACE))
+    age = host['age'] or 1 + u_age * (min(OLDEST, max(2.0, 10 * host['luminosity'] ** -0.75)) - 1)
+    shore = shoreline(host, w['radius'], w['mass'], w['a'])
+    if shore + luck <= 0: r = RUNGS[0]
+    elif u_start >= STARTED: r = RUNGS[1]
+    elif u_died < DIED: r = RUNGS[5]
+    else: r = RUNGS[2] if age < OXYGEN_AT * pace else RUNGS[3] if age < RICH_AT * pace else RUNGS[4]
+    return dict(age=age, age_by=host['age_by'] or 'drawn', shore=shore, rung=r)
 
 # The infrared telescope's search. Its first pass gives a star up to a day, a sample: enough to see an Earth twin of a
 # Sun twin out to about 50 ly. A fainter world waits for a deeper pass.
@@ -215,6 +252,8 @@ def report(g):
     print('  Felt by Year 0: ' + (', '.join(f"{x['host']['name']} ({x['d']:.1f} ly, {x['tug']:.2f} m/s)" for x in g['felt']) or 'none') + '.')
     print(f"  The telescope can split {sum(x['split'] for x in w)} from their stars. Its first pass sees {len(first)} not felt before: "
           + ', '.join(f"{x['host']['name']} ({x['d']:.1f} ly, {x['radius']:.2f} Earths wide)" for x in first) + '.')
+    for x in first: print(f"    {x['host']['name']:22} {x['host']['kind']} {x['d']:5.1f} ly  {x['age']:4.1f} Gyr ({x['age_by']})  shoreline {x['shore']:+.2f}  {x['rung']}")
+    print('  All natural worlds: ' + ', '.join(f"{sum(x['rung'] == r for x in w)} {r}" for r in RUNGS) + '.')
     homes = [p for p in g['neighbors'] if p['swept']]
     print(f"  The same pass sees {len(homes)} neighbors' worlds: " + ', '.join(f"{p['name']} at {p['host']['name']}" for p in homes) + '.')
 
@@ -222,6 +261,7 @@ def stats(rows, n=400):
     """What many draws look like: how many neighbors, and how often Earth's first hour holds something."""
     counts, knocked, caught, in15, in60, hunter, find = [], 0, 0, 0, 0, 0, 0
     warm, felt, finds, split, first, homes, points = [], [], [], [], [], [], []
+    rungs, seen_rungs, sun_rungs = {r: 0 for r in RUNGS}, {r: 0 for r in RUNGS}, {r: 0 for r in RUNGS}
     for s in range(1, n + 1):
         g = draw(s, rows); ns = g['neighbors']
         arr = [i['year'] for p in ns for i in p['inbound'] if i['year'] > 0]
@@ -231,6 +271,8 @@ def stats(rows, n=400):
         w = g['worlds']; warm.append(len(w)); felt.append(len(g['felt'])); finds.append(len(g['found']) + len(g['felt']))
         split.append(sum(x['split'] for x in w)); first.append(sum(x['swept'] and not x['felt'] for x in w)); homes.append(sum(p['swept'] for p in ns))
         points.append(sum(x['swept'] for x in w) + homes[-1])
+        for x in w:
+            rungs[x['rung']] += 1; seen_rungs[x['rung']] += x['swept']; sun_rungs[x['rung']] += x['host']['kind'] != 'M'
     # Quieting Earth's radars: a neighbor that wakes after the last radar light has passed it never finds them.
     living = heard = 0; spared = {3: 0, 30: 0}
     for s in range(1, n + 1):
@@ -254,6 +296,10 @@ def stats(rows, n=400):
           f"None in {sum(f == 0 for f in finds) / n:.1%}, where the seed adds one.")
     print(f"Natural worlds the infrared telescope can split from their stars: {mid(split)}. Seen on its first pass and not felt before: {mid(first)}. "
           f"Neighbors' worlds seen on that pass: {mid(homes)}. The pass shows {sum(points) / n:.0f} points of light on average, and about 1 in {sum(points) / sum(homes):.0f} is a home.")
+    share = lambda d: ', '.join(f"{r} {d[r] / sum(d.values()):.0%}" for r in RUNGS)
+    print(f"What natural worlds are: {share(rungs)}. At Sun-like stars: {share(sun_rungs)}. Among those the first pass sees: {share(seen_rungs)}.")
+    print(f"Living natural worlds a game: {sum(rungs[r] for r in ALIVE) / n:.0f} of {sum(rungs.values()) / n:.0f}. Among those the first pass sees: "
+          f"{sum(seen_rungs[r] for r in ALIVE) / n:.1f} of {sum(seen_rungs.values()) / n:.1f}, and {seen_rungs[RUNGS[3]] / n + seen_rungs[RUNGS[4]] / n:.1f} show oxygen.")
     k = len(early)
     print(f"Earth's ears: of {k} signals arriving in the first hour, Year 0's sky watch catches {sum(i['kit0'] for i in early) / k:.0%}. "
           f"{sum(not i['north'] for i in early) / k:.0%} come from its blind southern sky, and {sum(i['north'] and not i['loud'] for i in early) / k:.0%} are too faint for it. "

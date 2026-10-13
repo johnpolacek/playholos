@@ -172,6 +172,19 @@ def flame():
         rows[r['source_id']] = r
     return rows
 
+# ---------- Ages good enough to date a world, from the HAges Catalog ----------
+# Ware et al. 2026 compile published ages for the Habitable Worlds Observatory's 659 likeliest targets, from the two
+# methods that reach about 20%: asteroseismology and spin. 127 stars have one. Asteroseismology is preferred: for
+# stars past about 6 Gyr, spin ages run about 47% low. Gaia's FLAME ages above are not used for this. On the 9 hosts
+# that have both, the two differ by a median of 4.7 Gyr.
+def published_ages():
+    out = {}
+    for r in csv.DictReader((CACHE / 'hages' / 'HAges_Catalog_Overview.csv').open(encoding='utf-8-sig')):
+        sid = r['gaia_dr3_id'].replace('Gaia DR3', '').strip()
+        if r['med_age_seis']: out[sid] = (float(r['med_age_seis']), 'asteroseismology')
+        elif r['med_age_gyro']: out[sid] = (float(r['med_age_gyro']), 'spin')
+    return out
+
 # ---------- Wide binaries, found in the census ----------
 # A pair counts as bound when its parallaxes agree within 3 sigma and its motion across the sky differs by less than
 # a bound orbit allows: about 2.1 km/s at 1,000 AU, falling as the square root of the separation (El-Badry et al. 2021).
@@ -222,7 +235,7 @@ def main():
     name_from_hyg(s_list)
     import binaries, scorch
     ages, pl, pairs, close = flame(), planets(), companions(s_list), binaries.close_orbits(s_list)
-    kept, dropped = [], collections.Counter()
+    kept, dropped, dated = [], collections.Counter(), published_ages()
     for s in [s for s in s_list if s['kind']]:
         f = ages.get(s['id'], {})
         lum = float(f['lum_flame']) if f.get('lum_flame') else s.get('lum') or 10 ** (-0.4 * (s['gabs'] - 4.67))
@@ -256,10 +269,11 @@ def main():
     out = ROOT / 'data' / 'hosts-50ly.csv'
     with out.open('w', newline='') as fh:
         w = csv.writer(fh)
-        w.writerow(['id', 'name', 'kind', 'distance_ly', 'luminosity', 'warm_zone_au', 'age_gyr', 'weight'])
+        w.writerow(['id', 'name', 'kind', 'distance_ly', 'luminosity', 'warm_zone_au', 'age_gyr', 'weight', 'age_pub_gyr', 'age_pub_by'])
         for s in sorted(kept, key=lambda s: s['d_pc']):
             w.writerow([s['id'], s['name'], s['kind'], f"{s['d_pc'] * LY_PC:.2f}", f"{s['lum']:.3g}",
-                        f"{s['hz_in']:.2f}-{s['hz_out']:.2f}", s['age'][:4] if s['age'] else '', s['weight']])
+                        f"{s['hz_in']:.2f}-{s['hz_out']:.2f}", s['age'][:4] if s['age'] else '', s['weight'], *dated.get(s['id'], ('', ''))])
+    print(f"  {sum(s['id'] in dated for s in kept)} hosts have a published age from asteroseismology or spin (HAges).")
     print(f'  wrote {out.relative_to(ROOT)}')
 
 # ---------- How loud a neighbor may be ----------

@@ -27,7 +27,8 @@ SETTLED = [('Does a half-built real instrument cost fewer Years?', 'It costs wha
            ('What is an inquiry?', 'A mission that goes to find out: a sail swarm, a flyby probe, a sentinel. Probe stays the name of the craft. What comes home is a dispatch. Settled 2026-10-13.'),
            ('What sets how long an observation takes?', 'Physics. A nearer or larger world is brighter, so its reading comes sooner: hours at Alpha Centauri, days at 82 Eridani. A world too close to its star in our sky can’t be read at all. Seasons are left out for now. Settled 2026-10-13.'),
            ('What does the first sweep find?', 'Natural warm worlds too, at the real rate: NASA’s planning value, about one star in four. The seed draws them. A first pass shows about 17 points of light a game, and about 1 in 4 is a home. Settled 2026-10-13.'),
-           ('How high can a natural world climb?', 'To animals and forests. Alive is a ladder: bare rock, a lifeless sea, hidden microbes, an oxygen world, animals. Every mind, living or dead, stays hand-written. Settled 2026-10-13.')]
+           ('How high can a natural world climb?', 'To animals and forests. Alive is a ladder: bare rock, a lifeless sea, hidden microbes, an oxygen world, animals. Every mind, living or dead, stays hand-written. Settled 2026-10-13.'),
+           ('What sets each natural world’s rung?', 'Its star’s age, on Earth’s schedule with scatter: lasting oxygen at about 2.3 billion years, animals at about 4. Physics sets whether it kept its air. At Sun-like stars about half are alive. At red dwarfs most are bare rock. Settled 2026-10-13.')]
 
 # ---------- Godview: who is out there ----------
 MOVE = reactions.MOVES
@@ -489,7 +490,8 @@ FOMYEAR_R = tab(750, 'Report', 'REPORT', 'READING · 1 YEAR', f"""<button class=
 def godcell(notes=(), question=None, settled=None):
     g = ''.join(f'<li>{n}</li>' for n in notes)
     q = f'<div class="dq"><b>Design question {question}</b><span>{ASKS[question - 1][0]} {ASKS[question - 1][1]}</span></div>' if question else ''
-    if settled is not None: q += f'<div class="dq done"><b>Settled</b><span>{SETTLED[settled][0]} {SETTLED[settled][1]}</span></div>'
+    for i in ([] if settled is None else [settled] if isinstance(settled, int) else settled):
+        q += f'<div class="dq done"><b>Settled</b><span>{SETTLED[i][0]} {SETTLED[i][1]}</span></div>'
     return (f'<div class="god"><b>Godview</b><ul>{g}</ul></div>' if g else '') + q
 def cell(said, lands, phone):
     idle = '' if said or lands or phone else '<p class="beat idle">Nothing new. <span>A dead 30 seconds.</span></p>'
@@ -630,7 +632,7 @@ Q_TWO = ask('The seed found two worlds, and the opening shows one.', 'Kirrin’s
 Q_ASLEEP = ask('What can one reading say about a world whose Mind has not woken?', f'Varn’s people are there, {VARN_BEFORE:.0f} years before their waking. This mirror reads only the world’s color and ozone, so life is a guess and minds are invisible. How fast should a living neighbor become known?' if F['who'] else 'In this game the find is natural.')
 Q_NEAR = ask('A first voice, a living world and a dead world in one hour: too much, too soon?', 'This seed drew all three. A signal reaches Earth in the first hour in about 1 game in 4. A neighbor’s world sits within 15 ly in about 1 game in 3, and a dead one in about 1 in 35.')
 Q_DEAD = ask('Can the first telescope tell a dead civilization from a volcano?', 'The mock says no. It reads carbon dioxide, and the gases only industry makes need a colder, wider mirror. So the find stays strange, and going is the way to know.')
-Q_ALIVE = ask('What sets each natural world’s rung?', 'The seed draws about 150 natural warm worlds a game, and gives each an orbit and a size. Which rung of the ladder it stands on is not drawn. Earth took about 2 billion years to show oxygen and about 4 to grow animals. No rate is measured elsewhere.')
+Q_ODDS = ask('Should the Mind’s odds match what the seed really holds?', 'Across games about 1 point of light in 4 is a home, and about 4 in 10 are living natural worlds. Of the points that show oxygen, nearly half would be homes. The Mind’s reports say Minds 5 and Life 40. It can’t know how many neighbors there are. So whose odds are these?')
 Q_GO = ask('What does an inquiry cost in time?', 'The audit prices the matter of probes and the laser array. Their build times are not set, so the mock stops at the offer.')
 Q_WALL = ask('What happens at the grid limit?', 'At Year 11.1 thought is 86 times Year 0’s and draws nine tenths of the grid. Every priced way on is slow or small beside the fabs. Is a long plateau right, fifty-five minutes in?')
 
@@ -691,6 +693,7 @@ SWEEP_N = len(HOMES) + len(WILD)
 PASS_STARS, PASS_DAYS = seedmod.first_pass(ROWS)
 PASS_WEEKS = ('', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten')[round(PASS_DAYS / 7)]
 NEAREST = min(HOMES + WILD, key=lambda x: x['d'])
+WILD_TRUTH = 'Truth: ' + ', '.join(f"{n} {r}" for r in seedmod.RUNGS for n in [sum(w['rung'] == r for w in WILD)] if n) + '.'
 SCOPE_FIRST = tab(2640, 'Mind', 'MIND', 'THE NEW TELESCOPE', ''.join([
     SEC('ONE WORLD AT A TIME · YOURS TO ORDER'), '<div class="choices" role="radiogroup">',
     choice(f'{F["star"]}’s world', f'close to its star in our sky · color and ozone only', tstack(DAYS(OBSV['find']['ozone']), clock(OBSV['find']['ozone'] / 365.25)), True),
@@ -801,9 +804,10 @@ HOUR = [
 ] if VOICE else []) + [
     stop(2970, 2850 if VOICE else 2700, '· The phone lights. Leaves it.', f'The sweep’s first pass is done. {SWEEP_N} more points of light in warm zones.', SWEEP_DONE,
          [f'Truth: {len(HOMES)} are homes. ' + ', '.join(f"{p['name']}’s world at {p['star']}" for p in HOMES) + '.',
-          f'{len(WILD)} are natural, from {pretty(WILD[0]["host"]["name"])} at {WILD[0]["d"]:.0f} ly to {pretty(WILD[-1]["host"]["name"])} at {WILD[-1]["d"]:.0f}. The seed drew {len(G["worlds"])} in all, {sum(w["host"]["kind"] == "M" for w in G["worlds"])} at red dwarfs.',
+          f'{len(WILD)} are natural, from {pretty(WILD[0]["host"]["name"])} at {WILD[0]["d"]:.0f} ly to {pretty(WILD[-1]["host"]["name"])} at {WILD[-1]["d"]:.0f}. ' + WILD_TRUTH,
+          f'Their ages: {sum(w["age_by"] != "drawn" for w in WILD)} published, {sum(w["age_by"] == "drawn" for w in WILD)} drawn. The seed drew {len(G["worlds"])} natural worlds in all, {sum(w["host"]["kind"] == "M" for w in G["worlds"])} at red dwarfs, and {sum(w["rung"] == "bare rock" for w in G["worlds"])} are bare rock.',
           'From here a home and a natural world look alike: a point of light that moves with its star.',
-          'Each needed a second visit, months after the first. Most are too far to read with this mirror.'], question=Q_ALIVE, settled=14),
+          'Each needed a second visit, months after the first. Most are too far to read with this mirror.'], question=Q_ODDS, settled=(14, 16)),
     stop(3330, 2970, '· Woken. The Mind has opened.', 'The eleventh data center runs. The twelfth can’t start.',
          talk(WALL, '<b>We have reached the grid</b>I stopped the order, as the limit requires. Each way on is slow or small beside what the fabs can print. The one that keeps pace is power gathered in space, and that is long work.', ('Ground solar', 'Leave it'), 'open'),
          ['The standing order stops itself: a project that would take energy past 100% can’t start. v1’s rule.', 'Gliese 581’s two windows passed in silence and went to the summary.'], question=Q_WALL),
