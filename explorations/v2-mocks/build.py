@@ -8,6 +8,7 @@ Odds on clue screens, compute shares and the Mind's lines are samples, to be tes
 from kit import *
 
 F, D = FIND, FIND['d']
+F2 = FINDS[1] if len(FINDS) > 1 else None          # the next nearest world Earth has felt, if it holds more than one
 FLOOR = watts(year_floor(D))
 YEARS = lambda y: f'{y:g} {"Year" if y == 1 else "Years"}'
 ASKS = []          # design questions the mock raises, in the order the timeline raises them
@@ -33,7 +34,8 @@ SETTLED = [('Does a half-built real instrument cost fewer Years?', 'It costs wha
            ('What stands behind the Mind’s words?', 'What Earth knows. The Mind judges from Earth’s science and from what Earth has observed, never from the seed, and it can be wrong. Earth’s own finds move its starting words: a first voice lifts Minds a word at every candidate. Settled 2026-10-13.'),
            ('How fast does a living neighbor become known?', 'As fast as physics allows, and no faster. Each sign of minds needs its real instrument: everyday radio a far-side array, smog a mirror of about 15 m. The first telescope reads smog only within about 12 light-years, and smog is not proof. Going is the surest way. Settled 2026-10-13.'),
            ('Can the first telescope tell a dead civilization from a volcano?', 'No. It reads the strange air and not its cause. Burned carbon stays for thousands of years, smog clears, and the gases only industry makes show in the mid-infrared. Proof needs an infrared interferometer, or going. Settled 2026-10-13.'),
-           ('Should seasons set when an observation can start?', 'No. A real space telescope can’t point near the Sun, so each star is out of reach for part of every year. The game skips that limit on purpose: it would delay a reading by 75 seconds at most, and change no decision. Settled 2026-10-13.')]
+           ('Should seasons set when an observation can start?', 'No. A real space telescope can’t point near the Sun, so each star is out of reach for part of every year. The game skips that limit on purpose: it would delay a reading by 75 seconds at most, and change no decision. Settled 2026-10-13.'),
+           ('At Year 0, how many of its felt worlds does Earth show?', 'All of them, and the Mind leads with one: the nearest, a rule that uses nothing the seed knows. Earth holds two to four felt worlds in 6 games of 10, and in about half of games none is a home. Settled 2026-10-13.')]
 
 # ---------- Godview: who is out there ----------
 MOVE = reactions.MOVES
@@ -78,7 +80,7 @@ def god_map(w=560, h=470):
         labels.boxes.append((cx + 3, cy - ly * k - 12, 90, 11))                      # ring labels hold their place
     P = lambda xyz: (cx + k * xyz[0], cy + k * xyz[2])
     # Every marker holds its place too, so no label is set over another star.
-    labels.boxes += [(x - 8, y - 8, 16, 16) for x, y in [P(host_xyz(p['host'])) for p in NB] + [P(LEADS[key]['xyz']) for key in ('eri', 'fom', 'find', 'luy')]]
+    labels.boxes += [(x - 8, y - 8, 16, 16) for x, y in [P(host_xyz(p['host'])) for p in NB] + [P(LEADS[key]['xyz']) for key in LEADS]]
     s.append(f'<circle cx="{cx}" cy="{cy}" r="4" fill="{YOU}"></circle><circle cx="{cx}" cy="{cy}" r="8" fill="none" stroke="{YOU}"></circle>' + labels.place(cx, cy, 'Earth', 11, YOU, 600, ((0, 22), (-13, 4), (0, -14), (13, 4))))
     for p in NB:
         x, y = P(host_xyz(p['host'])); hunter = p['n']['disposition'] == 'hunter'
@@ -86,7 +88,7 @@ def god_map(w=560, h=470):
                 f'<circle cx="{x:.1f}" cy="{y:.1f}" r="5" fill="{PAPER if p["waking"] > Y0 else (OTHER if hunter else INK)}" stroke="{OTHER if hunter else INK}" stroke-width="1.5"></circle>')
         if p['heard']: mark += f'<circle cx="{x:.1f}" cy="{y:.1f}" r="9" fill="none" stroke="{YOU}" stroke-width="1" stroke-dasharray="2 2"></circle>'
         s.append(mark + labels.place(x, y, p['name'], 10, OTHER if hunter else INK, 600, ((13, 4), (-13, 4), (0, -26), (0, 22), (13, -12), (-13, -12), (13, 20), (-13, 20), (0, 36), (24, 4), (-24, 4)), sub=f'{p["star"]} · {p["d"]:.1f} ly'))
-    for key in ('eri', 'fom', 'find', 'luy'):
+    for key in LEADS:
         x, y = P(LEADS[key]['xyz'])
         s.append(f'<rect x="{x - 3:.1f}" y="{y - 3:.1f}" width="6" height="6" fill="none" stroke="{OTHER}" stroke-width="1.2" transform="rotate(45 {x:.1f} {y:.1f})"></rect>' + labels.place(x, y, LEADS[key]['name'], 8.5, OTHER, None, ((10, 3), (-10, 3), (0, -11), (0, 18), (10, -8), (-10, -8), (10, 14), (-10, 14))))
     return (f'<svg width="{w}" height="{h}" viewBox="0 0 {w} {h}" font-family="IBM Plex Mono, monospace" role="img" aria-label="Every neighbor in this game, seen from above the galaxy’s plane">{"".join(s)}</svg>'
@@ -217,10 +219,10 @@ MEET = tab(0, 'Mind', 'MIND', 'FIRST WORDS', f"""<div class="meet">{MIND_ICON.re
 
 LEAD_ROWS = [
     row('A stretched orbit · 82 Eridani', 'a heavy world, sometimes warm · its air is unread', clock(19.7), 'other', marker=True),
-    row(f'A new world · {F["star"]}', f'felt by {F["by"]} in {F["found"]} · at least {EARTHS(F["msini"])} Earths', clock(D), 'other', marker=True),
+    *(row(f'A new world · {f["star"]}', f'felt by {f["by"]} in {f["found"]} · at least {EARTHS(f["msini"])} Earths', clock(f['d']), 'other', marker=True) for f in FINDS),
     row('Too many collisions · Fomalhaut', 'a second dust cloud since 2023', clock(25.1), 'other', marker=True),
     row('A reply could come · Luyten’s Star', 'to our 2017 message', tstack(f'Year {LUY_Y[0]}', clock(LUY_Y[0])), 'other', marker=True)]
-P_LEADS = home(0, 'LEADS · 4', 'LIGHT-TIME', LEAD_ROWS, **PRE)
+P_LEADS = home(0, f'LEADS · {len(LEAD_ROWS)}', 'LIGHT-TIME', LEAD_ROWS, **PRE)
 
 SKY_YEARS, FLASH_YEARS, DC_YEARS, IR_YEARS, VAULT_YEARS = 6, 6, 1, 8, 10          # the telescope is under way at Year 0: 8 Years are left of 18
 P_PLAN = chat(0, 'What should we start with?', [
@@ -235,7 +237,7 @@ QUEUE_BUILDS = [('All-sky watch', 'hears a knock or a broadcast from anywhere, a
 OBS = [('Image Fomalhaut again', 'Space telescope · has the new cloud moved?', .1)]
 # Studies: the Mind works through data Earth already holds, on its own, on the share of thought the player sets.
 # What it asks, the data, the Year its finding lands, and a short name for the line. The order is the Mind's.
-STUDIES = [(f'Does {F["star"]}’s world cross its star?', 'PLATO and TESS records', .2, F['star']),
+STUDIES = [(f'Does {F["star"]}’s world cross its star?' if not F2 else 'Do the new worlds cross their stars?', 'PLATO and TESS records', .2, F['star']),
            ('Is 82 Eridani’s stretched orbit real?', '37 years of velocities', .3, '82 Eridani'),
            ('Does Gliese 12 b keep air?', 'every crossing since 2024', .5, 'Gliese 12 b'),
            ('Has Barnard’s Star a fifth world?', '22 years of velocities', .6, 'Barnard’s Star'),
@@ -322,14 +324,15 @@ FOM_R = tab(30, 'Report', 'REPORT', 'READING', f"""<button class="backlink inlin
 {SEC('WITH WHAT WE HAVE · LONGER')}{quick('Watch Fomalhaut through a Year', 'Space telescope, monthly · do the clouds share one orbit?', '<span class="start">' + tstack('1 Year', clock(1)) + '<button>Start</button></span>')}""")
 
 FIND_ODDS = [('Rock, and no life we could see', 60), ('A small gas world', 25), ('Life', 13), ('Minds', 2)]
-def find_clue(t, listening=None):
-    if listening is None: q = quick(f'Listen to {F["star"]} for a Year', f'Radio array · rules out steady tones above {FLOOR}', '<span class="start">' + tstack('1 Year', clock(1)) + '<button>Start</button></span>')
-    else: q = quick(f'Listen to {F["star"]} for a Year', f'Radio array · rules out steady tones above {FLOOR}', tstack('under way', clock(listening), True))
-    return tab(t, 'Home', 'CLUE', f'YEAR {yr(t)}', f"""<button class="backlink inline">‹ {F['star']}</button>
-<h3 class="lead">A world at {F['star']}</h3><p class="copy small">{F['star']} · {D:.1f} ly · felt by {F['by']}, {F['found']} · light that left {D:.0f} Years ago</p>
-<p class="copy">At least {EARTHS(F['msini'])} Earth masses. A year of {F['period']:.0f} days, {F['a']:.2f} AU out, inside its star’s warm zone. It doesn’t cross its star, so we have its least mass and not its size.</p>
+def find_clue(t, listening=None, f=F, key='find', busy=None):
+    if busy: q = quick(f'Listen to {f["star"]} for a Year', f'Radio array · {busy}', '<span class="start">' + tstack('1 Year', clock(1)) + '<button>Queue</button></span>')
+    elif listening is None: q = quick(f'Listen to {f["star"]} for a Year', f'Radio array · rules out steady tones above {FLOOR}', '<span class="start">' + tstack('1 Year', clock(1)) + '<button>Start</button></span>')
+    else: q = quick(f'Listen to {f["star"]} for a Year', f'Radio array · rules out steady tones above {FLOOR}', tstack('under way', clock(listening), True))
+    return tab(t, 'Home', 'CLUE', f'YEAR {yr(t)}', f"""<button class="backlink inline">‹ {f['star']}</button>
+<h3 class="lead">A world at {f['star']}</h3><p class="copy small">{f['star']} · {f['d']:.1f} ly · felt by {f['by']}, {f['found']} · light that left {f['d']:.0f} Years ago</p>
+<p class="copy">At least {EARTHS(f['msini'])} Earth masses. A year of {f['period']:.0f} days, {f['a']:.2f} AU out, inside its star’s warm zone. It doesn’t cross its star, so we have its least mass and not its size.</p>
 {SEC('WHAT IT COULD BE · NOW')}{''.join(odds_now(n, p) for n, p in FIND_ODDS)}
-{SEC('WITH WHAT WE HAVE')}{q}""", stars_strip('find'))
+{SEC('WITH WHAT WE HAVE')}{q}""", stars_strip(key))
 
 ERI_R = tab(90, 'Report', 'REPORT', 'FINDING', f"""<button class="backlink inline">‹ All reports</button>
 <div class="art">{eri_chart()}</div><h3 class="lead">The stretched orbit is real</h3>
@@ -536,6 +539,8 @@ PREGAME = [
     pre_row(6, 'The charter', CHARTER_SCREEN, [f'The dials: {DIAL_WORDS}. The base is real history. This game’s branches moved it.', 'The line is the Mind’s proposal. Three are written so far, picked by the dials.']),
     pre_row(7, 'Meeting the Mind', MEET),
     pre_row(8, 'The leads', P_LEADS, [(f'82 Eridani: {eri_who["name"]} lives there.' if eri_who else '82 Eridani d is real and natural. No neighbor is there in this game.'), find_truth,
+                                      *((f"{f['star']}’s world is {f['who']}’s home too." if f['who'] else f"{f['star']}’s world is natural.") for f in FINDS[1:]),
+                                      f'Earth holds {("no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine")[len(FINDS)]} felt world{"s" if len(FINDS) != 1 else ""} at Year 0, and the list shows every one. The Mind leads with the nearest: a rule that uses nothing the seed knows.',
                                       'Fomalhaut is 440 million years old: too young for minds, so it is never a host. Its clouds are rubble.',
                                       ('Luyten’s Star: ' + (f'''{who_at("Luyten's Star")["name"]} lives there.''' if who_at("Luyten's Star") else 'no one lives there. About 3 games in 10 put someone at a star Earth knocked on.'))], said='What doesn’t fit?'),
     pre_row(9, 'Planning', P_PLAN, ['The Mind advises from the charter and dials. It queues nothing until told.', 'Studying is thought, not action. It points no instrument and sends nothing, so it needs no order, only a budget.',
@@ -553,8 +558,8 @@ BEATS = [
          talk(FOM_R, 'A third cloud. Chance can’t carry three. The likeliest is dull: one old breakup, still grinding itself down. A Year of watching would say if they share an orbit.', ('Watch it', 'Later')),
          ['The third cloud is the seed’s: a lead that changes. The first two are real, found in 2004 and 2023.', 'Truth: rubble. Nothing at Fomalhaut is built.',
           'Kappa¹ Ceti is under a billion years old: too young for minds, so it is never a host.']),
-    beat(60, 'Later. And the new world?', f'{F["star"]}’s world doesn’t cross its star.',
-         talk(find_clue(60), f'It doesn’t cross, so its air stays hidden. I can listen for a Year, at a tenth of compute. That hears only the loud: tones above {FLOOR}.', ('Listen for a Year', 'Later')),
+    beat(60, 'Later. And the new worlds?' if F2 else 'Later. And the new world?', 'Neither new world crosses its star.' if F2 else f'{F["star"]}’s world doesn’t cross its star.',
+         talk(find_clue(60), ('The nearer one first. ' if F2 else '') + f'It doesn’t cross, so its air stays hidden. I can listen for a Year, at a tenth of compute. That hears only the loud: tones above {FLOOR}.', ('Listen for a Year', 'Later')),
          [find_truth] + ([f"{F['who']}’s tones since waking are about {watts(truth_tone['n'].get('awake', truth_tone['n']['hum']))}: far under what a Year of listening hears."] if F['who'] else [])),
     beat(90, '82 Eridani?', f'82 Eridani d’s orbit holds. Shimmer: {moved(10, 3)}.',
          talk(ERI_R, 'The orbit is real. What the world is, nothing we own can say. The telescope that reads air was under way when I woke. Eight Years are left on it, and forty tonnes.', ('Build it', 'Later'))),
@@ -613,7 +618,12 @@ BEATS = [
     beat(750, '· The Mind glows. Taps it.', 'A Year of Fomalhaut: its three clouds share one orbit.',
          talk(FOMYEAR_R, 'One orbit for all three. Rubble, almost surely. Fomalhaut is 440 million years old: too young for anyone to be moving rocks.', state='glow'),
          ['Truth: rubble, as the first reading suggested. A lead can close dull.']),
-    beat(780), beat(810),
+    (beat(780, 'And the other new world?', None,
+          talk(find_clue(780, f=F2, key='find2', busy='free at Year 3, after the Luyten windows'),
+               f'{F2["star"]}, a little farther and lighter. It doesn’t cross either. The array is on Luyten’s Star until Year 3. I can listen here next, if you say so.', ('Queue it', 'Later')),
+          [(f"Truth: {F2['star']}’s world is {F2['who']}’s home." if F2['who'] else f"Truth: {F2['star']}’s world is natural."),
+           'The Mind led with the nearer world. This one was on the list from Year 0, and the player comes to it in a quiet half-minute.',
+           'The Mind offers and waits. The array is the player’s to point.']) if F2 else beat(780)), beat(810),
     beat(840, '', 'The last radar sweep has left Earth. Ninety years of them are still on their way out.', None,
          ['Earth now gives off a faint hum, like every neighbor. Nothing that already left is changed.']),
     beat(870, '· The Mind glows. Taps it.', 'The second window opens. Nothing heard.',
@@ -632,7 +642,6 @@ VOICE = next(((p, i) for p in NB for i in p['inbound'] if 6 < i['year'] <= 12 an
 VARN_BEFORE = (truth_tone['waking'] - Y0 - (9.0 - D)) if F['who'] else None      # years before its waking that the light of the first reading left
 Q_MATTER = ask('What is matter for in the first hour?', 'After the launch complex, 55 kt arrive each Year. A yard and a launcher take 11. By Year 12 about 500 kt sit unspent, and nothing priced for these Years costs more than 100.')
 Q_VOICE = ask('What does a first voice give the player to do?', 'A knock arrives at minute 42. The mock shows what it proves, the Mind’s reading of it, and three ways on: answer, listen, or stay silent. How much of a knock can be read, and what an answer may hold, are not settled.')
-Q_TWO = ask('The seed found two worlds, and the opening shows one.', 'Kirrin’s world at 12 Ophiuchi tugs hard enough to be felt by 2040, as Varn’s does. The first 15 minutes show only Varn’s. Here it appears among the telescope’s choices unannounced. Across games Earth has felt about three worlds by Year 0, and about two of them are natural.')
 Q_NEAR = ask('A first voice, a living world and a dead world in one hour: too much, too soon?', 'This seed drew all three. A signal reaches Earth in the first hour in about 1 game in 4. A neighbor’s world sits within 15 ly in about 1 game in 3, and a dead one in about 1 in 35.')
 Q_GO = ask('What does an inquiry cost in time?', 'The audit prices the matter of probes and the laser array. Their build times are not set, so the mock stops at the offer.')
 Q_WALL = ask('What happens at the grid limit?', 'At Year 11.1 thought is 86 times Year 0’s and draws nine tenths of the grid. Every priced way on is slow or small beside the fabs. Is a long plateau right, fifty-five minutes in?')
@@ -787,8 +796,8 @@ HOUR = [
 ] if VOICE else []) + [
     stop(2640, 2610 if VOICE else 2520, 'And the new telescope?', None,
          talk(SCOPE_FIRST, 'It can split a world from its star only when they sit far enough apart in our sky. 82 Eridani d is wide and bright: days. The new world is close in. I can read its color and its ozone, not its water.', ('Order them', 'Later')),
-         [(lives('12 Ophiuchi', '12 Oph') + ' Earth felt its world before Year 0, and the opening never showed it.'),
-          'Times are from calcs/observing.py. A day of telescope time is under a second of play.'], question=Q_TWO, settled=13),
+         [(lives('12 Ophiuchi', '12 Oph') + ' Earth has held its world as a lead since Year 0.'),
+          'Times are from calcs/observing.py. A day of telescope time is under a second of play.'], settled=(13, 22)),
     stop(2670, 2640, 'The new world first. Then let it sweep.', None, talk(SCOPE_ORDER, f'Set. Its color and ozone in {DAYS(OBSV["find"]["ozone"])}: about forty seconds. Then the sweep, nearest stars first. I will say what I see and what I can’t.', ('Undo',)),
          ['One observation ordered, and the telescope’s standing search set. The player passes over 82 Eridani d, the easier target.'], settled=21),
     stop(2700, 2670, '· The Mind glows. Taps it.', [f'{F["star"]}’s world is blue, with ozone. Life: {moved(*AIR['life'])}.', 'A reply window opens at Gliese 526. Nothing heard.'],

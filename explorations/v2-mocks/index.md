@@ -27,7 +27,7 @@ Hael · contacter · Gliese 1021 · G star · 49.1 ly · 04:05:24 · awake 29 Ye
 Ombe · contacter · Gliese 4338 B · M star · 49.1 ly · 04:05:33 · awake 44 Years · heard Earth’s radars from 1999, and mapped its day and orbit · knocks back: a short aimed signal, its name optional · Its answer to Earth’s radars: sent 1999, reaches Earth Year 8.5, +00:42:21. Year 0’s sky watch would miss it. The all-sky watch catches it.
 Ulan · inward · Gliese 52 · K star · 49.1 ly · 04:05:42 · wakes Year 29.4 · +02:27:01 · has not heard Earth
 Ree · contacter · 19 Draconis · F star · 49.9 ly · 04:09:42 · awake 21 Years · heard Earth’s radars from 2000, and mapped its day and orbit · knocks back: a short aimed signal, its name optional · Its answer to Earth’s radars: sent 2020, reaches Earth Year 29.6, +02:28:13. Year 0’s sky watch would miss it. The all-sky watch catches it.
-[drawing: Every neighbor in this game, seen from above the galaxy’s plane; labels: 10 ly · 00:50:00, 20 ly · 01:40:00, 30 ly · 02:30:00, 40 ly · 03:20:00, 50 ly · 04:10:00, Earth, Anwe, Rigil Kentaurus · 4.3 ly, Kesh, Gliese 216 B · 29.4 ly, Varn, Gliese 432 A · 31.2 ly, Kirrin, 12 Ophiuchi · 32.3 ly, Nuvo, 20 Leonis Minoris · 48.7 ly, Hael, Gliese 1021 · 49.1 ly, Ombe, Gliese 4338 B · 49.1 ly, Ulan, Gliese 52 · 49.1 ly, Ree, 19 Draconis · 49.9 ly, 82 Eridani, Fomalhaut, Gliese 432 A, Luyten’s Star]
+[drawing: Every neighbor in this game, seen from above the galaxy’s plane; labels: 10 ly · 00:50:00, 20 ly · 01:40:00, 30 ly · 02:30:00, 40 ly · 03:20:00, 50 ly · 04:10:00, Earth, Anwe, Rigil Kentaurus · 4.3 ly, Kesh, Gliese 216 B · 29.4 ly, Varn, Gliese 432 A · 31.2 ly, Kirrin, 12 Ophiuchi · 32.3 ly, Nuvo, 20 Leonis Minoris · 48.7 ly, Hael, Gliese 1021 · 49.1 ly, Ombe, Gliese 4338 B · 49.1 ly, Ulan, Gliese 52 · 49.1 ly, Ree, 19 Draconis · 49.9 ly, 82 Eridani, Fomalhaut, Luyten’s Star, Gliese 432 A, 12 Ophiuchi]
 Filled: awake at Year 0. Open: wakes later. Cross: dead. Blue ring: has heard Earth. Amber: a hunter. Diamonds: Earth’s leads.
 
 ## Before Year 0
@@ -139,16 +139,19 @@ Talk to the Mind… · [Send · ↑]
 Earth · Before Year 0
 Sol · The clock starts when you begin
 ENERGY · [1%] · MATTER · 20 kt · COMPUTE · [0%]
-[drawing: Stars near Sol; labels: Sol, 82 Eridani, 19.7 ly · 01:38:30, Fomalhaut, 25.1 ly · 02:05:30, Luyten’s Star, 12.3 ly · 01:01:18, Gliese 432 A →, 31.2 ly · 02:35:54 · beyond this view, 00:50:00, 01:40:00, Alpha Centauri, Procyon, Tau Ceti, Epsilon Eridani, Barnard’s Star, Altair, Vega, Epsilon Indi, 61 Cygni, 10 ly]
+[drawing: Stars near Sol; labels: Sol, 82 Eridani, 19.7 ly · 01:38:30, Fomalhaut, 25.1 ly · 02:05:30, Luyten’s Star, 12.3 ly · 01:01:18, Gliese 432 A →, 31.2 ly · 02:35:54 · beyond this view, 12 Ophiuchi, 32.3 ly · 02:41:21 · beyond this view, 00:50:00, 01:40:00, Alpha Centauri, Procyon, Tau Ceti, Epsilon Eridani, Barnard’s Star, Altair, Vega, Epsilon Indi, 61 Cygni, 10 ly]
 [World] · [System] · [selected: Stars] · [Region] · [Galaxy]
-LEADS · 4 · LIGHT-TIME
+LEADS · 5 · LIGHT-TIME
 - A stretched orbit · 82 Eridani · a heavy world, sometimes warm · its air is unread · 01:38:30
 - A new world · Gliese 432 A · felt by ESPRESSO in 2034 · at least 3.2 Earths · 02:35:54
+- A new world · 12 Ophiuchi · felt by Terra Hunting in 2036 · at least 1.1 Earths · 02:41:21
 - Too many collisions · Fomalhaut · a second dust cloud since 2023 · 02:05:30
 - A reply could come · Luyten’s Star · to our 2017 message · Year 2.3 · 00:11:30
 Godview
 82 Eridani d is real and natural. No neighbor is there in this game.
 Gliese 432 A’s world is Varn’s home. Varn wakes Year 57.6 · +04:47:48, and has not heard Earth.
+12 Ophiuchi’s world is Kirrin’s home too.
+Earth holds two felt worlds at Year 0, and the list shows every one. The Mind leads with the nearest: a rule that uses nothing the seed knows.
 Fomalhaut is 440 million years old: too young for minds, so it is never a host. Its clouds are rubble.
 Luyten’s Star: no one lives there. About 3 games in 10 put someone at a star Earth knocked on.
 9 · Planning
@@ -195,7 +198,7 @@ Nothing Earth does in the next 15 minutes can reach anyone: the nearest living n
 Settled · What is a search? A standing order for an idle instrument. Each has a sweep it falls back to: the player sets it once, and any observation interrupts it. A search returns candidates. Settled 2026-10-13.
 
 ## The first 15 minutes
-From Begin. 4 of 31 half-minutes had nothing new for the player.
+From Begin. 3 of 31 half-minutes had nothing new for the player.
 +0:00 · Begin · Year 0
 “What’s running?”
 Earth · Year 0
@@ -206,7 +209,7 @@ PROJECTS · 3 BUILDING · 1 OBSERVING
 OBSERVING · WITH WHAT WE HAVE
 Image Fomalhaut again · Space telescope · has the new cloud moved? · under way · 00:00:30
 STUDYING · ON A TENTH OF THOUGHT
-Does Gliese 432 A’s world cross its star? · PLATO and TESS records · 6 more in its line · next finding · 00:01:00
+Do the new worlds cross their stars? · PLATO and TESS records · 6 more in its line · next finding · 00:01:00
 SEARCHING · WHEN IDLE
 Sweeping the near stars · Radio array: tones · Space telescope: cold worlds and dust
 BUILDING · 3
@@ -247,12 +250,12 @@ The third cloud is the seed’s: a lead that changes. The first two are real, fo
 Truth: rubble. Nothing at Fomalhaut is built.
 Kappa¹ Ceti is under a billion years old: too young for minds, so it is never a host.
 +1:00 · Year 0.2
-“Later. And the new world?”
-Lands · Gliese 432 A’s world doesn’t cross its star.
+“Later. And the new worlds?”
+Lands · Neither new world crosses its star.
 Earth · Year 0.2
 Sol · 2040.2 · 1 Year = 00:05:00
 ENERGY · [1.0%] · MATTER · 23 kt · COMPUTE · [36%]
-[drawing: STARS · GLIESE 432 A · 31.2 LY · 02:35:54; labels: Sol, 82 Eridani, 19.7 ly · 01:38:30, Fomalhaut, 25.1 ly · 02:05:30, Luyten’s Star, 12.3 ly · 01:01:18, Gliese 432 A →, 31.2 ly · 02:35:54 · beyond this view, 00:50:00, 01:40:00, Alpha Centauri, Procyon, Tau Ceti, Epsilon Eridani, Barnard’s Star, Altair, Vega, Epsilon Indi, 61 Cygni] · STARS · GLIESE 432 A · 31.2 LY · 02:35:54
+[drawing: STARS · GLIESE 432 A · 31.2 LY · 02:35:54; labels: Sol, 82 Eridani, 19.7 ly · 01:38:30, Fomalhaut, 25.1 ly · 02:05:30, Luyten’s Star, 12.3 ly · 01:01:18, Gliese 432 A →, 31.2 ly · 02:35:54 · beyond this view, 12 Ophiuchi, 32.3 ly · 02:41:21 · beyond this view, 00:50:00, 01:40:00, Alpha Centauri, Procyon, Tau Ceti, Epsilon Eridani, Barnard’s Star, Altair, Vega, Epsilon Indi, 61 Cygni] · STARS · GLIESE 432 A · 31.2 LY · 02:35:54
 CLUE · YEAR 0.2
 [‹ Gliese 432 A]
 
@@ -266,7 +269,7 @@ Life · very unlikely
 Minds · almost no chance
 WITH WHAT WE HAVE
 Listen to Gliese 432 A for a Year · Radio array · rules out steady tones above 15 MW · 1 Year · 00:05:00 · [Start]
-THE MIND · It doesn’t cross, so its air stays hidden. I can listen for a Year, at a tenth of compute. That hears only the loud: tones above 15 MW. · [Listen for a Year] · [Later]
+THE MIND · The nearer one first. It doesn’t cross, so its air stays hidden. I can listen for a Year, at a tenth of compute. That hears only the loud: tones above 15 MW. · [Listen for a Year] · [Later]
 [Talk to the Mind]
 Godview
 Gliese 432 A’s world is Varn’s home. Varn wakes Year 57.6 · +04:47:48, and has not heard Earth.
@@ -738,7 +741,30 @@ THE MIND · One orbit for all three. Rubble, almost surely. Fomalhaut is 440 mil
 Godview
 Truth: rubble, as the first reading suggested. A lead can close dull.
 +13:00 · Year 2.6
-Nothing new. · A dead 30 seconds.
+“And the other new world?”
+Earth · Year 2.6
+Sol · 2042.6 · 1 Year = 00:05:00
+ENERGY · [2.3%] · MATTER · 49 kt · COMPUTE · [38%]
+[drawing: STARS · 12 OPHIUCHI · 32.3 LY · 02:41:21; labels: Sol, 82 Eridani, 19.7 ly · 01:38:30, Fomalhaut, 25.1 ly · 02:05:30, Luyten’s Star, 12.3 ly · 01:01:18, Gliese 432 A →, 31.2 ly · 02:35:54 · beyond this view, 12 Ophiuchi, 32.3 ly · 02:41:21 · beyond this view, 00:50:00, 01:40:00, Alpha Centauri, Procyon, Tau Ceti, Epsilon Eridani, Barnard’s Star, Altair, Vega, Epsilon Indi, 61 Cygni] · STARS · 12 OPHIUCHI · 32.3 LY · 02:41:21
+CLUE · YEAR 2.6
+[‹ 12 Ophiuchi]
+
+### A world at 12 Ophiuchi
+12 Ophiuchi · 32.3 ly · felt by Terra Hunting, 2036 · light that left 32 Years ago
+At least 1.1 Earth masses. A year of 258 days, 0.74 AU out, inside its star’s warm zone. It doesn’t cross its star, so we have its least mass and not its size.
+WHAT IT COULD BE · NOW
+Rock, and no life we could see · likely
+A small gas world · unlikely
+Life · very unlikely
+Minds · almost no chance
+WITH WHAT WE HAVE
+Listen to 12 Ophiuchi for a Year · Radio array · free at Year 3, after the Luyten windows · 1 Year · 00:05:00 · [Queue]
+THE MIND · 12 Ophiuchi, a little farther and lighter. It doesn’t cross either. The array is on Luyten’s Star until Year 3. I can listen here next, if you say so. · [Queue it] · [Later]
+[Talk to the Mind]
+Godview
+Truth: 12 Ophiuchi’s world is Kirrin’s home.
+The Mind led with the nearer world. This one was on the list from Year 0, and the player comes to it in a quiet half-minute.
+The Mind offers and waits. The array is the player’s to point.
 +13:30 · Year 2.7
 Nothing new. · A dead 30 seconds.
 +14:00 · Year 2.8
@@ -974,10 +1000,10 @@ THE MIND · It can split a world from its star only when they sit far enough apa
 [Talk to the Mind]
 Godview
 Earth’s 2003 message, Cosmic Call 2, reaches 47 Ursae Majoris, 45.3 ly away. No one is there.
-Kirrin lives at 12 Ophiuchi. Earth felt its world before Year 0, and the opening never showed it.
+Kirrin lives at 12 Ophiuchi. Earth has held its world as a lead since Year 0.
 Times are from calcs/observing.py. A day of telescope time is under a second of play.
-Design question 3 · The seed found two worlds, and the opening shows one. Kirrin’s world at 12 Ophiuchi tugs hard enough to be felt by 2040, as Varn’s does. The first 15 minutes show only Varn’s. Here it appears among the telescope’s choices unannounced. Across games Earth has felt about three worlds by Year 0, and about two of them are natural.
 Settled · What sets how long an observation takes? Physics. A nearer or larger world is brighter, so its reading comes sooner: hours at Alpha Centauri, days at 82 Eridani. A world too close to its star in our sky can’t be read at all. Seasons are left out for now. Settled 2026-10-13.
+Settled · At Year 0, how many of its felt worlds does Earth show? All of them, and the Mind leads with one: the nearest, a rule that uses nothing the seed knows. Earth holds two to four felt worlds in 6 games of 10, and in about half of games none is a home. Settled 2026-10-13.
 +44:30 · Year 8.9
 “The new world first. Then let it sweep.”
 Earth · Year 8.9
@@ -1056,7 +1082,7 @@ Truth: Anwe’s world. Its people collapsed in 1986, twenty years before their m
 The Mind’s word for Minds here is very unlikely. It judges from what Earth knows, and here it is wrong: minds lived on this world.
 If JWST’s August 2026 observation confirms a giant in this star’s warm zone, the seed can’t put a world here. That result is not out.
 Real, and not modelled: Alpha Centauri B’s stray light, and a warm zone a full arcsecond wide, both make this star hard for a coronagraph.
-Design question 4 · A first voice, a living world and a dead world in one hour: too much, too soon? This seed drew all three. A signal reaches Earth in the first hour in about 1 game in 4. A neighbor’s world sits within 15 ly in about 1 game in 3, and a dead one in about 1 in 35.
+Design question 3 · A first voice, a living world and a dead world in one hour: too much, too soon? This seed drew all three. A signal reaches Earth in the first hour in about 1 game in 4. A neighbor’s world sits within 15 ly in about 1 game in 3, and a dead one in about 1 in 35.
 +46:00 · Year 9.2
 “Read its air.”
 Earth · Year 9.2
@@ -1122,7 +1148,7 @@ Godview
 An inquiry is a mission that goes to find out. Probe stays the name of the craft. What comes home is a dispatch.
 The Mind advises, from the dials: go, and send nothing that speaks. It starts nothing.
 Real: Daedalus was designed for 12% of light speed, and Starshot for 20%. A laser launch shines toward its target. A rocket’s exhaust points away.
-Design question 5 · What does an inquiry cost in time? The audit prices the matter of probes and the laser array. Their build times are not set, so the mock stops at the offer.
+Design question 4 · What does an inquiry cost in time? The audit prices the matter of probes and the laser array. Their build times are not set, so the mock stops at the offer.
 Settled · What is an inquiry? A mission that goes to find out: a sail swarm, a flyby probe, a sentinel. Probe stays the name of the craft. What comes home is a dispatch. Settled 2026-10-13.
 +47:30 · Year 9.5
 The phone lights. Reads it. Leaves it.
@@ -1172,7 +1198,7 @@ Godview
 The earliest a reply to Hello From Earth could reach Earth from Gliese 581. In this game no one lives there. The window is empty, and Earth can’t know it.
 The standing order stops itself: a project that would take energy past 100% can’t start. v1’s rule.
 Gliese 581’s two windows passed in silence and went to the summary.
-Design question 6 · What happens at the grid limit? At Year 11.1 thought is 86 times Year 0’s and draws nine tenths of the grid. Every priced way on is slow or small beside the fabs. Is a long plateau right, fifty-five minutes in?
+Design question 5 · What happens at the grid limit? At Year 11.1 thought is 86 times Year 0’s and draws nine tenths of the grid. Every priced way on is slow or small beside the fabs. Is a long plateau right, fifty-five minutes in?
 +58:00 · Year 11.6
 The phone lights. Leaves it.
 Lands · The Moon vault is done.
@@ -1214,9 +1240,9 @@ Settled: What stands behind the Mind’s words? · What Earth knows. The Mind ju
 Settled: How fast does a living neighbor become known? · As fast as physics allows, and no faster. Each sign of minds needs its real instrument: everyday radio a far-side array, smog a mirror of about 15 m. The first telescope reads smog only within about 12 light-years, and smog is not proof. Going is the surest way. Settled 2026-10-13.
 Settled: Can the first telescope tell a dead civilization from a volcano? · No. It reads the strange air and not its cause. Burned carbon stays for thousands of years, smog clears, and the gases only industry makes show in the mid-infrared. Proof needs an infrared interferometer, or going. Settled 2026-10-13.
 Settled: Should seasons set when an observation can start? · No. A real space telescope can’t point near the Sun, so each star is out of reach for part of every year. The game skips that limit on purpose: it would delay a reading by 75 seconds at most, and change no decision. Settled 2026-10-13.
+Settled: At Year 0, how many of its felt worlds does Earth show? · All of them, and the Mind leads with one: the nearest, a rule that uses nothing the seed knows. Earth holds two to four felt worlds in 6 games of 10, and in about half of games none is a home. Settled 2026-10-13.
 1. What is matter for in the first hour? · After the launch complex, 55 kt arrive each Year. A yard and a launcher take 11. By Year 12 about 500 kt sit unspent, and nothing priced for these Years costs more than 100.
 2. What does a first voice give the player to do? · A knock arrives at minute 42. The mock shows what it proves, the Mind’s reading of it, and three ways on: answer, listen, or stay silent. How much of a knock can be read, and what an answer may hold, are not settled.
-3. The seed found two worlds, and the opening shows one. · Kirrin’s world at 12 Ophiuchi tugs hard enough to be felt by 2040, as Varn’s does. The first 15 minutes show only Varn’s. Here it appears among the telescope’s choices unannounced. Across games Earth has felt about three worlds by Year 0, and about two of them are natural.
-4. A first voice, a living world and a dead world in one hour: too much, too soon? · This seed drew all three. A signal reaches Earth in the first hour in about 1 game in 4. A neighbor’s world sits within 15 ly in about 1 game in 3, and a dead one in about 1 in 35.
-5. What does an inquiry cost in time? · The audit prices the matter of probes and the laser array. Their build times are not set, so the mock stops at the offer.
-6. What happens at the grid limit? · At Year 11.1 thought is 86 times Year 0’s and draws nine tenths of the grid. Every priced way on is slow or small beside the fabs. Is a long plateau right, fifty-five minutes in?
+3. A first voice, a living world and a dead world in one hour: too much, too soon? · This seed drew all three. A signal reaches Earth in the first hour in about 1 game in 4. A neighbor’s world sits within 15 ly in about 1 game in 3, and a dead one in about 1 in 35.
+4. What does an inquiry cost in time? · The audit prices the matter of probes and the laser array. Their build times are not set, so the mock stops at the offer.
+5. What happens at the grid limit? · At Year 11.1 thought is 86 times Year 0’s and draws nine tenths of the grid. Every priced way on is slow or small beside the fabs. Is a long plateau right, fifty-five minutes in?

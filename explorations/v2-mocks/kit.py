@@ -100,12 +100,12 @@ def dials(v=DIALS):
 # ---------- Earth's seeded find ----------
 # A neighbor's world if one tugs hard enough for Earth's planet hunters by 2040, else the nearest natural world
 # that does, else a natural world the seed adds.
-def make_find():
-    if G['found']:
-        p = G['found'][0]; h = p['host']; mass = p['n']['world']['mass']; a = p['a']; k = p['tug']; who = p['name']
+def find_of(src=None):
+    if src and 'n' in src:
+        p = src; h = p['host']; mass = p['n']['world']['mass']; a = p['a']; k = p['tug']; who = p['name']
         msini = mass * math.sin(math.radians(p['pole']))
-    elif G['felt']:
-        w = G['felt'][0]; h = w['host']; who = None; mass, a, k = w['mass'], w['a'], w['tug']
+    elif src:
+        w = src; h = w['host']; who = None; mass, a, k = w['mass'], w['a'], w['tug']
         msini = mass * math.sin(math.radians(w['pole']))
     else:
         h = G['natural']; who = None
@@ -115,7 +115,10 @@ def make_find():
     north = h['north'] and h['kind'] in 'GK'
     return dict(host=h, star=pretty(h['name']), d=h['distance_ly'], who=who, mass=mass, msini=msini, a=a, tug=k, period=period,
                 by='Terra Hunting' if north else 'ESPRESSO', found=2036 if north else 2034, xyz=host_xyz(h))
-FIND = make_find()
+# Settled 2026-10-13: Earth holds every world it has felt, from Year 0, and the Mind leads with one. The lead is picked
+# by what Earth knows, never by what the seed knows: the nearest, a sample. So a home never leads because it is a home.
+FINDS = sorted((find_of(x) for x in G['found'] + G['felt']), key=lambda f: f['d']) or [find_of()]
+FIND = FINDS[0]
 EARTHS = lambda m: f'{m:.1f}'.rstrip('0').rstrip('.')
 
 # 82 Eridani d (Nari et al. 2025): at least 5.8 Earth masses, 647.6 days, e 0.45, 1.354 AU. How much of its year is warm?
@@ -265,7 +268,8 @@ class Labels:
 NAMED = {'71683': 'Alpha Centauri', '32349': 'Sirius', '37279': 'Procyon', '8102': 'Tau Ceti', '16537': 'Epsilon Eridani', '87937': 'Barnard’s Star',
          '97649': 'Altair', '91262': 'Vega', '108870': 'Epsilon Indi', '104214': '61 Cygni'}
 LEADS = {'eri': dict(name='82 Eridani', xyz=hip_xyz('15510'), d=19.7), 'fom': dict(name='Fomalhaut', xyz=hip_xyz('113368'), d=25.1),
-         'luy': dict(name='Luyten’s Star', xyz=hip_xyz('36208'), d=LUY['ly']), 'find': dict(name=FIND['star'], xyz=FIND['xyz'], d=FIND['d'])}
+         'luy': dict(name='Luyten’s Star', xyz=hip_xyz('36208'), d=LUY['ly']), 'find': dict(name=FIND['star'], xyz=FIND['xyz'], d=FIND['d']),
+         **{f'find{i}': dict(name=f['star'], xyz=f['xyz'], d=f['d']) for i, f in enumerate(FINDS[1:], 2)}}
 MAP_R = 27            # a lead farther than this sits at the map's edge, marked as beyond the view
 def sol_map(select=None, height=360):
     el = 58; cam, k, origin = camera(el, 205), 172 / MAP_R, (195, 196)

@@ -236,7 +236,7 @@ Settled 2026-10-06. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#earths-lead
   - A seeded find can also be a cold disk that doesn't fit dust, if a neighbor's cold computing rose above Earth's 2040 limits. See [Why the sky is quiet, rechecked](#why-the-sky-is-quiet-rechecked).
 - **The opening: three leads and a deadline.**
   - *82 Eridani d,* 19.7 ly. At least 5 Earth masses on a stretched orbit through a Sun-like star's warm zone. Its air is unread.
-  - *One seeded find,* such as a world Terra Hunting felt by 2036.
+  - *Every world Earth has felt,* such as one Terra Hunting felt by 2036. Settled 2026-10-13: all are on the list from Year 0. See [The seed, drawn](#the-seed-drawn).
   - *Fomalhaut's new cloud,* 25 ly. It drifts and fades, so the first observation makes it stranger, as v1 required of one lead.
   - *The Luyten's Star reply window,* Year 2.3, 11 real minutes in.
 - **Four older puzzles are studied from Begin.** Added 2026-10-12, to keep the first session's rhythm. From 2026-10-13 they are studies, which the Mind runs on its own: see [How Earth learns](#how-earth-learns). Each is a real oddity as of 2026. What a study finds in 2040 is the mock's sample.
@@ -468,7 +468,15 @@ Built 2026-10-10 in [calcs/seed.py](calcs/seed.py), from the rules above.
 - **One number gives one game.** `python3 calcs/seed.py 10` prints it: Earth's branches and their years, what a Taiwan branch left of compute, then each neighbor's star, waking year, what it knows of Earth and what it does about it.
 - **A neighbor acts once its Mind is awake.** Its reaction to hearing Earth is rolled from its table at its waking or its first hearing, whichever is later. One that wakes during the game reacts then.
 - **Earth's finds.** Every drawn world that tugs hard enough for Earth's planet hunters by 2040 is a find, a neighbor's or a natural one. A median of 3 a game, from 0 to 9. If a game draws none, 1 in 22, the seed adds a natural world at a bright northern Sun-like star.
-  - The opening leads with a neighbor's world if one was found, else the nearest natural one.
+  - **The opening shows every one, and the Mind leads with the nearest.** Settled 2026-10-13.
+    - *Earth knows what it has felt,* and the Mind speaks from what Earth knows. So none is held back.
+    - *The lead uses nothing the seed knows.* It is the nearest, a sample. Before, a neighbor's world led whenever one was found, which told the player the lead was special.
+    - *So the lead is a home in 1 game in 4,* not in nearly half. A home is still among the finds in nearly half.
+    - *What a game holds at Year 0:* none in 1 game in 22, one in 1 in 7, two to four in 6 in 10, five or more in 2 in 10.
+    - *The decision it gives:* where to hold the radio array, and what to study first.
+    - *In the mock's game* Earth holds two, at Gliese 432 A and 12 Ophiuchi. The player comes to the second at minute 13, in what was a quiet half-minute. Three are left.
+    - *Not designed yet:* a list of five or more. On the mock's phone a sixth lead would scroll.
+    - Set aside: all as a plain list with no lead, and one at Year 0 with the rest appearing later.
 - **Keeping the opening silent.** Settled 2026-10-10 in [What Earth hears](#what-earth-hears): a signal that reached Earth before Year 0 was missed, or it never happened.
 - **How long a Mind takes to act on news.** Settled 2026-10-11 in [How neighbors play](#how-neighbors-play): its Cautious or Bold dial sets it.
 - **A star leaving the list moves only who lived there.** Built 2026-10-11. Each neighbor tries stars in an order set by the seed, its name and each star's id, so the host list can be corrected without reshuffling every game.
@@ -555,7 +563,7 @@ Answered one at a time, in this order. Every answer must be permitted by current
     - **What is matter for in the first hour?** After the launch complex, 55 kt arrive each Year. By Year 12 about 500 kt sit unspent.
     - **What does a first voice give the player to do?** The mock shows what a knock proves, the Mind's reading of it, and three ways on: answer, listen, or stay silent. How much of a knock can be read, and what an answer may hold, are not settled.
     - **Settled 2026-10-13:** seasons are left out on purpose. A real telescope can't point near the Sun, and the game skips that limit. See [How Earth learns](#how-earth-learns).
-    - **The seed found two worlds, and the opening shows one.** Kirrin's world at 12 Ophiuchi was felt by 2040 too. Across games Earth has felt about three worlds by Year 0, and about two are natural.
+    - **Settled 2026-10-13:** Earth shows every world it has felt from Year 0, and the Mind leads with the nearest. See [The seed, drawn](#the-seed-drawn).
     - **Settled 2026-10-13:** a living neighbor becomes known as fast as physics allows. In this game nothing Earth holds at Year 9 can tell Varn's world from a natural one. A far-side array would, in 5 hours. See [How Earth learns](#how-earth-learns).
     - **A first voice, a living world and a dead world in one hour: too much, too soon?** A signal reaches Earth in the first hour in about 1 game in 4. A neighbor's world sits within 15 ly in about 1 game in 3, a dead one in about 1 in 35.
     - **Settled 2026-10-13:** the first telescope reads a dead world's strange air, and not its cause. Proof needs an infrared interferometer, or going. See [How Earth learns](#how-earth-learns).
