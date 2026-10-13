@@ -38,7 +38,8 @@ SETTLED = [('Does a half-built real instrument cost fewer Years?', 'It costs wha
            ('At Year 0, how many of its felt worlds does Earth show?', 'All of them, and the Mind leads with one: the nearest, a rule that uses nothing the seed knows. Earth holds two to four felt worlds in 6 games of 10, and in about half of games none is a home. Settled 2026-10-13.'),
            ('A first voice, a living world and a dead world in one hour: too much, too soon?', 'No. The seed decides, and nothing damps it. All three land in one first hour in 3 games of 400, and none of them in 4 games of 10. This game was picked to show every screen. Settled 2026-10-13.'),
            ('What is matter for in the first hour?', 'Little, and the Mind says so. Real instruments and probes weigh tonnes, and Earth lifts 55,000 a Year, so matter piles up. The works that need it need megatonnes, and those must come from the Moon or the belt. The choice in hour one is when to start that road. Settled 2026-10-13.'),
-           ('What happens at the grid limit?', 'The plateau stands. Thought stops growing when it draws the whole grid, about Year 11 at full pace, and better chips don’t dodge it: today’s kind reaches its efficiency ceiling near Year 0. The Mind warns five Years ahead. The ways on are slow, and the megatonne road pays here. Settled 2026-10-13.')]
+           ('What happens at the grid limit?', 'The plateau stands. Thought stops growing when it draws the whole grid, about Year 11 at full pace, and better chips don’t dodge it: today’s kind reaches its efficiency ceiling near Year 0. The Mind warns five Years ahead. The ways on are slow, and the megatonne road pays here. Settled 2026-10-13.'),
+           ('How much of a knock can the Mind read?', 'All three layers, at once. What it proves, from physics. What it holds, because a knock is built to be read. And what it means, as a word that can be wrong. A stranger neighbor’s message may yet need a study. Settled 2026-10-13.')]
 
 # ---------- Godview: who is out there ----------
 MOVE = reactions.MOVES
@@ -643,7 +644,7 @@ import json
 ANWE = next((p for p in NB if p['dead']), None)
 VOICE = next(((p, i) for p in NB for i in p['inbound'] if 6 < i['year'] <= 12 and i.get('allsky')), None)     # a signal the all-sky watch catches this hour
 VARN_BEFORE = (truth_tone['waking'] - Y0 - (9.0 - D)) if F['who'] else None      # years before its waking that the light of the first reading left
-Q_VOICE = ask('What does a first voice give the player to do?', 'A knock arrives at minute 42. The mock shows what it proves, the Mind’s reading of it, and three ways on: answer, listen, or stay silent. How much of a knock can be read, and what an answer may hold, are not settled.')
+Q_VOICE = ask('What may an answer hold?', 'A knock arrives at minute 42. The Mind reads it at once and offers three ways on: answer, listen, or stay silent. v1 had the player write intent, the Mind compose it from typed parts, and the player approve. Whether that carries is not settled.')
 Q_GO = ask('What does an inquiry cost in time?', 'The audit prices the matter of probes and the laser array. Their build times are not set, so the mock stops at the offer.')
 
 # Settled 2026-10-13: the Mind judges from what Earth knows, never from the seed. Until a voice is heard, Minds is almost no
@@ -683,12 +684,11 @@ if VOICE:
     BANK = json.loads((here.parents[1] / 'data' / 'voices' / f"{WHO['name'].lower()}.json").read_text())
     VOICE_R = tab(2550, 'Report', 'REPORT', 'A VOICE', f"""<button class="backlink inline">‹ All reports</button>
 <h3 class="lead">A voice from {VSTAR}</h3>
-<p class="copy small">{VSTAR} · {VD:.1f} ly · all-sky watch · four hours · sent {VD:.0f} Years ago</p>
-<p class="copy">A narrow signal, four hours long, shifted in pitch to match the Sun’s motion and not its own star’s. It was aimed at us.</p>
-{SEC('THE MIND’S READING OF IT')}<div class="intent">{BANK['hail'][0]} {BANK['close'][0]}</div>
-{SEC('WHAT IT PROVES')}{facts([('Aimed', 'tuned to our motion, to be heard here'), ('Found us by', f'{SENT}. They had seen light that left Earth by {SENT - VD:.0f}.'), ('Not a reply', 'We never sent anything to this star.')])}
-{SEC('WHAT IT CHANGES · BEFORE → NOW')}{odds('Minds, at other worlds', *MINDS)}
-{SEC('WHAT IT CAN’T TELL')}<p class="copy small">What they have done since. Or whether the greeting is all it seems.</p>""")
+<p class="copy small">{VSTAR} · {VD:.1f} ly · all-sky watch · sent {VD:.0f} Years ago</p>
+{SEC('WHAT IT PROVES')}{facts([('Aimed', 'four hours long, tuned to our motion'), ('Found us by', f'{SENT}. They had seen light that left Earth by {SENT - VD:.0f}.'), ('Not a reply', 'We never sent anything to this star.')])}
+{SEC('WHAT IT HOLDS · READ AT ONCE')}<div class="intent">{BANK['hail'][0]} {BANK['close'][0]}</div><p class="copy small">It opens with a primer, as ours did. The words are mine for theirs.</p>
+{SEC('WHAT IT MEANS')}{odds_now('A greeting, meant as it reads', 65)}{odds_now('Bait, or a test of us', 22)}
+{SEC('WHAT IT CHANGES · BEFORE → NOW')}{odds('Minds, at other worlds', *MINDS)}""")
     ANSWER_CHAT = chat(2580, 'Should we answer?', [
         ('you', 'Should we answer?'),
         ('mind', f'That is yours. An answer takes {VD:.0f} Years to arrive and tells them one new thing: someone here is listening now.'),
@@ -790,7 +790,9 @@ HOUR = [
          [f'{WHO["name"]}: a contacter, awake since {WHO["waking"]:.0f}. Its arrays heard Earth’s radars from {WHO["heard_since"]:.0f}, and it took a quarter of a Year to act.',
           'The all-sky watch caught it. Year 0’s sky watch gives each star ten minutes a day, and would have missed it. The player built this watch at Year 0.',
           'The words are from the voice bank. A first voice always wakes the player. This one arrives 21 seconds after the telescope.',
-          f'What Earth knows has changed, so the Mind’s words do. Minds, at every candidate from here: {moved(*MINDS)}.'], question=Q_VOICE),
+          f'What Earth knows has changed, so the Mind’s words do. Minds, at every candidate from here: {moved(*MINDS)}.',
+          f'Three layers, read at once: what it proves, what it holds, what it means. The last is a judgment and can be wrong. Truth: {WHO["name"]} means it.',
+          'Real: a message built to be read was deciphered accurately in a blind test (Busch and Reddick 2011). A puzzle message took a year to decode, and its meaning is still open (A Sign in Space, 2023).'], question=Q_VOICE, settled=26),
     stop(2580, 2550, 'Should we answer?', None, ANSWER_CHAT,
          ['The Mind gives its view and waits. It names the risk it can’t rule out. Where Earth is, the sender has known since 1999.', f'An answer sent now reaches {WHO["name"]} at Year {2580 / 300 + VD:.1f}. Its reply could reach Earth by Year {2580 / 300 + 2 * VD:.1f}, +{clock(2580 / 300 + 2 * VD)}.']),
     stop(2610, 2580, 'Listen first. I’ll answer when I know more.', None, talk(HOLD_ORDER, 'Set. I am listening, and I send nothing.', ('Undo',)),

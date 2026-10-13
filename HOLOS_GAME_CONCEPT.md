@@ -121,6 +121,14 @@ Settled 2026-10-10. Numbers from `python3 calcs/seed.py stats`.
   - Only a knock Earth would have caught is rolled again, since Earth heard nothing by 2040. A steady call always would have been caught.
   - In about 1 game in 5, at least one knock reached Earth unheard before Year 0.
   - The sender, unanswered, takes the silence as news. Some try again, and some of those land during the game.
+- **The Mind reads a knock at once, in three layers.** Settled 2026-10-13. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#hearing-technology-by-radio).
+  - *What it proves.* Physics: it was aimed, when it left, and how early the sender had found us. v1's rule ([First contact](legacy/v1/HOLOS_GAME_CONCEPT.md#first-contact)).
+  - *What it holds.* A knock is built to be read, and opens with a primer, as Earth's own did. The Mind gives its content in its own words for theirs.
+  - *What it means.* A judgment, in words: a greeting meant as it reads, or bait. It can be wrong.
+  - *Why at once.* The one blind test of a message built to be read ended in an accurate reading (Busch and Reddick 2011). A message built as a puzzle took 10 days to extract and a year to decode, and its meaning is still open (A Sign in Space).
+  - *So the player chooses knowing what was said:* answer, listen, or stay silent.
+  - *Later, as written exceptions:* a stranger neighbor's message may need a study before it yields.
+  - Set aside: content as a study that lands later, and a Mind that never turns a knock into words.
 - **The Mind can't report what it didn't hear.** A missed knock leaves no trace on Earth: nothing was pointed there, so no archive holds it. A search of old data for half-recorded knocks was considered and left out.
 
 ## Year 0 and Earth's road to it
@@ -581,7 +589,8 @@ Answered one at a time, in this order. Every answer must be permitted by current
 10. **Second mock built 2026-10-13:** [the first hour away](explorations/v2-mocks/index.html#hour), minutes 15 to 60, on the same game. The phone is down, the player is woken six times and plays about eight minutes. In this game a contacter's knock reaches Earth at minute 42, and the all-sky watch the player built catches it. Then the new telescope gives a partial reading of one living world and finds a dead one next door, all inside five minutes. What each reading shows is a sample.
     - **Settled 2026-10-13:** physics sets how long an observation or a sweep takes. See [How Earth learns](#how-earth-learns).
     - **Settled 2026-10-13:** matter piles up in the first hour, and the Mind says what it is for: megatonne works, which must come from the Moon or the belt. See [Earth's kit at Year 0](#earths-kit-at-year-0).
-    - **What does a first voice give the player to do?** The mock shows what a knock proves, the Mind's reading of it, and three ways on: answer, listen, or stay silent. How much of a knock can be read, and what an answer may hold, are not settled.
+    - **Settled 2026-10-13:** the Mind reads a knock at once, in three layers: what it proves, what it holds, and what it means as a word. See [What Earth hears](#what-earth-hears).
+    - **What may an answer hold?** v1 had the player write intent, the Mind compose it from typed parts, and the player approve. Whether that carries is not settled.
     - **Settled 2026-10-13:** seasons are left out on purpose. A real telescope can't point near the Sun, and the game skips that limit. See [How Earth learns](#how-earth-learns).
     - **Settled 2026-10-13:** Earth shows every world it has felt from Year 0, and the Mind leads with the nearest. See [The seed, drawn](#the-seed-drawn).
     - **Settled 2026-10-13:** a living neighbor becomes known as fast as physics allows. In this game nothing Earth holds at Year 9 can tell Varn's world from a natural one. A far-side array would, in 5 hours. See [How Earth learns](#how-earth-learns).

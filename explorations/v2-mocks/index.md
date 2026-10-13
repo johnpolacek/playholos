@@ -929,16 +929,17 @@ REPORT · A VOICE
 [‹ All reports]
 
 ### A voice from Gliese 4338 B
-Gliese 4338 B · 49.1 ly · all-sky watch · four hours · sent 49 Years ago
-A narrow signal, four hours long, shifted in pitch to match the Sun’s motion and not its own star’s. It was aimed at us.
-THE MIND’S READING OF IT
-Little Sun, we see you. Share the light with us? Share back when you can. Ombe.
+Gliese 4338 B · 49.1 ly · all-sky watch · sent 49 Years ago
 WHAT IT PROVES
-Aimed · tuned to our motion, to be heard here · Found us by · 1999. They had seen light that left Earth by 1950. · Not a reply · We never sent anything to this star.
+Aimed · four hours long, tuned to our motion · Found us by · 1999. They had seen light that left Earth by 1950. · Not a reply · We never sent anything to this star.
+WHAT IT HOLDS · READ AT ONCE
+Little Sun, we see you. Share the light with us? Share back when you can. Ombe.
+It opens with a primer, as ours did. The words are mine for theirs.
+WHAT IT MEANS
+A greeting, meant as it reads · likely
+Bait, or a test of us · unlikely
 WHAT IT CHANGES · BEFORE → NOW
 Minds, at other worlds · almost no chance → · very unlikely
-WHAT IT CAN’T TELL
-What they have done since. Or whether the greeting is all it seems.
 THE MIND · UNASKED · Someone is calling us · From a red star 49 light-years off. It was aimed, and it left in 1999: they found us by our first radars. I read it as a greeting. I have sent nothing, as you ordered. · [Should we answer?] · [Who are they?]
 [Talk to the Mind]
 Godview
@@ -947,7 +948,10 @@ Ombe: a contacter, awake since 1996. Its arrays heard Earth’s radars from 1999
 The all-sky watch caught it. Year 0’s sky watch gives each star ten minutes a day, and would have missed it. The player built this watch at Year 0.
 The words are from the voice bank. A first voice always wakes the player. This one arrives 21 seconds after the telescope.
 What Earth knows has changed, so the Mind’s words do. Minds, at every candidate from here: almost no chance → very unlikely.
-Design question 1 · What does a first voice give the player to do? A knock arrives at minute 42. The mock shows what it proves, the Mind’s reading of it, and three ways on: answer, listen, or stay silent. How much of a knock can be read, and what an answer may hold, are not settled.
+Three layers, read at once: what it proves, what it holds, what it means. The last is a judgment and can be wrong. Truth: Ombe means it.
+Real: a message built to be read was deciphered accurately in a blind test (Busch and Reddick 2011). A puzzle message took a year to decode, and its meaning is still open (A Sign in Space, 2023).
+Design question 1 · What may an answer hold? A knock arrives at minute 42. The Mind reads it at once and offers three ways on: answer, listen, or stay silent. v1 had the player write intent, the Mind compose it from typed parts, and the player approve. Whether that carries is not settled.
+Settled · How much of a knock can the Mind read? All three layers, at once. What it proves, from physics. What it holds, because a knock is built to be read. And what it means, as a word that can be wrong. A stranger neighbor’s message may yet need a study. Settled 2026-10-13.
 +43:00 · Year 8.6
 “Should we answer?”
 Earth · Year 8.6
@@ -1248,5 +1252,6 @@ Settled: At Year 0, how many of its felt worlds does Earth show? · All of them,
 Settled: A first voice, a living world and a dead world in one hour: too much, too soon? · No. The seed decides, and nothing damps it. All three land in one first hour in 3 games of 400, and none of them in 4 games of 10. This game was picked to show every screen. Settled 2026-10-13.
 Settled: What is matter for in the first hour? · Little, and the Mind says so. Real instruments and probes weigh tonnes, and Earth lifts 55,000 a Year, so matter piles up. The works that need it need megatonnes, and those must come from the Moon or the belt. The choice in hour one is when to start that road. Settled 2026-10-13.
 Settled: What happens at the grid limit? · The plateau stands. Thought stops growing when it draws the whole grid, about Year 11 at full pace, and better chips don’t dodge it: today’s kind reaches its efficiency ceiling near Year 0. The Mind warns five Years ahead. The ways on are slow, and the megatonne road pays here. Settled 2026-10-13.
-1. What does a first voice give the player to do? · A knock arrives at minute 42. The mock shows what it proves, the Mind’s reading of it, and three ways on: answer, listen, or stay silent. How much of a knock can be read, and what an answer may hold, are not settled.
+Settled: How much of a knock can the Mind read? · All three layers, at once. What it proves, from physics. What it holds, because a knock is built to be read. And what it means, as a word that can be wrong. A stranger neighbor’s message may yet need a study. Settled 2026-10-13.
+1. What may an answer hold? · A knock arrives at minute 42. The Mind reads it at once and offers three ways on: answer, listen, or stay silent. v1 had the player write intent, the Mind compose it from typed parts, and the player approve. Whether that carries is not settled.
 2. What does an inquiry cost in time? · The audit prices the matter of probes and the laser array. Their build times are not set, so the mock stops at the offer.
