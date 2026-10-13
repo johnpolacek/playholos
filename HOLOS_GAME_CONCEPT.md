@@ -634,4 +634,15 @@ Answered one at a time, in this order. Every answer must be permitted by current
     - **Settled 2026-10-13:** the Mind gives its judgment in words, never in numbers. Both mocks now show words. See [How Earth learns](#how-earth-learns).
     - **Settled 2026-10-13:** the Mind judges from what Earth knows, never from the seed, and it can be wrong. A first voice lifts Minds a word at every candidate. In this game it calls Minds very unlikely at the sweep's 15 points of light, and 4 are homes. See [How Earth learns](#how-earth-learns).
     - **Priced 2026-10-13:** what an inquiry costs in time. A laser array takes 25 Years, and word from 4.3 ly comes home near Year 60. See [Build times](#build-times). Every question this mock raised is now closed.
+11. **Third mock built 2026-10-13:** [the long roads](explorations/v2-mocks/index.html#long), hours 1 to 5, Years 12 to 60, on the same game. The player starts five long works at Year 12 and is woken ten times in four hours.
+    - *What it shows.* Fifty minutes with no wake. Smog at four worlds at Year 26, each of them a home. A second voice at Year 30, and a first answer, 21 Years late. Sails launched at Year 34. Radio from two worlds at Year 42: the first proof of minds by Earth's own instruments. Power from orbit at Year 50. Word from Alpha Centauri at Year 60.
+    - *The plateau, as played:* 40 Years, 3.3 hours, from the grid limit to a twelfth data center.
+    - *One knock is never heard.* Hael's, at Year 20, is under the all-sky watch's floor. A deep-field receiver held on that star would have caught it.
+    - **What is 86 times the thought for?** At the grid limit every work on offer takes under a hundredth of Earth's thought. Five long works start at once, for 2 kt of 511. Nothing is scarce but Years.
+    - **Is the plateau too quiet, and too long?** Nothing wakes the player from minute 60 to minute 110, and thought is flat for 3.3 hours.
+    - **A knock Earth can't hear: should a candidate world earn a listen?** The sweep had marked a world at the star that called. Nothing told Earth to listen there.
+    - **What can the player do with a suspicion?** Smog at four worlds, and proof 16 Years off. A knock sent then would reach Gliese 432 A's people as their Mind wakes.
+    - **What does a late answer cost?** A sender waits one round trip, then takes silence as news. To be on time, Earth's answer had to leave within a Year of the knock.
+    - **Earth has proof of minds who don't know they are heard. What may it do?** v1 filed a young world under no conversation possible.
+    - **How much can a flyby show?** What sails see of a surface, passing at a fifth of light speed, is the mock's.
     - **Settled 2026-10-13:** the plateau at the grid limit stands. Better chips don't dodge it, and the megatonne road pays there. See [Growing compute](#growing-compute).
