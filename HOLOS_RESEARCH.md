@@ -821,6 +821,23 @@ What a neighbor's world can plausibly be, beyond an Earth twin. Each roster entr
   - Fomalhaut and its companion TW Piscis Austrini are about 440 million years old.
   - Used: TW PsA is dropped as a host, too young.
 
+- **How common life and minds are, checked 2026-10-13.** For the open question on natural warm worlds. I read each abstract myself unless a line says otherwise. Nothing here is used yet.
+  - **[Kipping 2025](https://arxiv.org/abs/2504.05993)** · Accepted, Astrobiology. Life started so early on Earth that a fast start is favored 13 to 1 over a slow one, now that the last common ancestor is dated to 4.2 billion years ago. His caution: this is for Earth-like conditions, which may themselves be rare.
+  - **[Moody et al. 2024](https://doi.org/10.1038/s41559-024-02461-1)** · Published, Nature Ecology and Evolution. The last common ancestor of all life lived about 4.2 billion years ago, between 4.09 and 4.33.
+  - **[Kipping 2020](https://arxiv.org/abs/2005.09008)** · Published, PNAS. Rerun Earth's clock and life should often start again. Intelligence is another matter: rare is slightly favored, at 3 to 2.
+  - **[Snyder-Beattie et al. 2021](https://doi.org/10.1089/ast.2019.2149)** · Published, Astrobiology. The hard-steps case: the big transitions each take longer, on average, than Earth lasts, so intelligent life is exceptionally rare.
+  - **[Mills et al. 2024](https://arxiv.org/abs/2408.10293)** · Preprint. A search says Science Advances published it in 2025, which I did not confirm. The other case: no hard steps. Each step waited for the planet to allow it, such as enough oxygen, and humans arose on time.
+  - **[Reinhard et al. 2017](https://arxiv.org/abs/1702.01137)** · Published, Astrobiology. Oxygen and ozone were a poor sign of Earth's life for all but the last 500 million years. Methane was hard to see for most of the last 2.5 billion. A world can be full of life and show nothing in its air.
+  - **[Schwieterman et al. 2024](https://arxiv.org/abs/2405.11149)** · Published, ApJ. Read in the paper's text: sulfur hexafluoride lasts about 1,000 years in air, and the perfluorocarbons 2,000 to 50,000.
+  - **[Stevens et al. 2016](https://arxiv.org/abs/1507.08530)** · Published. A civilization that destroys itself leaves signs. Some fade faster than its radio era lasted. Others persist far longer.
+  - **[Sandberg et al. 2018](https://arxiv.org/abs/1806.02404)** · Preprint. With honest error bars on every factor, there is a substantial chance no one else is in the observable universe. So the game's many neighbors are improbable. Nothing observed contradicts them.
+  - **[Schmidt and Frank 2018](https://arxiv.org/abs/1804.03748)** · Published. An industrial age leaves a clear but thin layer in rock, much like natural climate events.
+  - From a search summary, not read: Glidden et al. 2025, on TRAPPIST-1 e. Four transits neither show nor rule out air. Air like Venus's or Mars's is disfavored, hydrogen air is excluded, and nitrogen air is allowed.
+  - From memory, abstract not found: Chopra and Lineweaver 2016, the Gaian bottleneck. Most young wet worlds freeze or overheat within about a billion years unless life steadies them, so early extinction is the usual outcome.
+  - From memory, not checked: Earth's air gained oxygen about 2.4 billion years ago, animals appear about 0.6 billion years ago, and our species is about 300,000 years old.
+  - Matters: on the one world we know, life is microbes for most of its history, shows in the air for between a ninth and a half of it, and has had radio for 130 years of 4.5 billion.
+  - Matters: the game's premise puts a mind at about 1 warm world in 18. Minds can't be commoner than life, so in this game most warm worlds that can hold life do.
+
 ## Why the sky is quiet: computing and heat
 
 - **[Garrett 2026, Slysh haloes](https://arxiv.org/abs/2608.31153)** · Preprint, August 2026.
