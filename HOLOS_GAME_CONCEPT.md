@@ -273,7 +273,18 @@ Settled 2026-10-13.
   - *One screen compares the ways to go,* as v1's Send a probe screen did: when each arrives, what it can see, and who sees it leave.
   - Set aside: an inquiry as a question pinned on a place, which the Mind then pursues by every means. Worth its own round later. And leaving the word unused.
 - **Four words for what comes back.** A search returns a candidate. An observation returns a reading. A study returns a finding. An inquiry returns a dispatch.
-- **Open:** what sets how long an observation or a sweep takes.
+- **Physics sets how long an observation or a sweep takes.** Settled 2026-10-13. A nearer or larger world is brighter, so its reading comes sooner. The numbers are in [calcs/observing.py](calcs/observing.py).
+  - *The rule.* A warm world's brightness goes as its area over its distance squared. Time grows as distance squared where starlight sets the noise, and as its fourth power where dust does (Stark et al. 2014).
+  - *Calibrated on published figures.* An Earth twin at 10 pc is first seen in 3.2 hours. A search for water takes about 22 days for a 6 m mirror, and oxygen four times that. No target gets more than two months.
+  - *Reach matters as much as time.* A mirror can't split a world too close to its star in our sky: 56 thousandths of an arcsecond in green light, 84 at oxygen's band, 104 at water's, for a 6.5 m mirror.
+  - *In this game:* Alpha Centauri A's world is seen in minutes, with water in 16 hours and oxygen in 3 days. 82 Eridani d gives water in 3 days. Gliese 432 A's world, 73 thousandths from its star, gives only its color and ozone, in 49 days. 12 Ophiuchi's can be seen and not read.
+  - *On the game clock* a day is under a second. So a reading lands within the minute it is ordered, or not at all.
+  - *The sweep.* A first pass of the 164 stars on NASA's list takes about six weeks. A candidate needs a second visit, weeks to months later, to show it moves with its star.
+  - *What this means for neighbors.* The mirror can split a warm world from any Sun-like star within 50 ly. A red dwarf's world sits too close in.
+  - *Samples:* how the noise splits between starlight and dust, the mirror's size, and a month for carbon dioxide, which has no published time.
+  - Seasons are left out for now. A real telescope can't point near the Sun, so a star is out of reach for months each year. That is its own question.
+  - Set aside: one fixed time for each kind of observation, everywhere.
+- **Open:** seasons, and what a sweep finds besides neighbors' worlds.
 
 ## The neighbors
 
@@ -460,13 +471,15 @@ Answered one at a time, in this order. Every answer must be permitted by current
    - **Priced 2026-10-11:** chip fabs, factory-built works, the orbital yard and the all-sky watch. See [Build times](#build-times) and [Growing compute](#growing-compute).
    - **Settled 2026-10-12:** 11 of the 31 half-minutes had nothing new for the player. That is a flaw: v1's first-session rule holds in v2. See [How a game starts](#how-a-game-starts). What may land is settled too: readings from observations, findings from studies, and Earth's old messages arriving. Studies run on their own from Begin, and observations are offered as follow-ups. The rebuilt mock has 4 quiet half-minutes.
 9. **Settled 2026-10-10:** v1's research baseline, rechecked against the 2025 radar result and Garrett's 2026 cold-computing paper. See [Why the sky is quiet, rechecked](#why-the-sky-is-quiet-rechecked).
-10. **Second mock built 2026-10-13:** [the first hour away](explorations/v2-mocks/index.html#hour), minutes 15 to 60, on the same game. The phone is down, the player is woken seven times and plays about seven minutes. How long a reading takes and what each one shows are samples. In this game a contacter's knock reaches Earth at minute 42, and the all-sky watch the player built catches it. It raises these, all open:
+10. **Second mock built 2026-10-13:** [the first hour away](explorations/v2-mocks/index.html#hour), minutes 15 to 60, on the same game. The phone is down, the player is woken six times and plays about eight minutes. In this game a contacter's knock reaches Earth at minute 42, and the all-sky watch the player built catches it. Then the new telescope gives a partial reading of one living world and finds a dead one next door, all inside five minutes. What each reading shows is a sample.
+    - **Settled 2026-10-13:** physics sets how long an observation or a sweep takes. See [How Earth learns](#how-earth-learns).
     - **What is matter for in the first hour?** After the launch complex, 55 kt arrive each Year. By Year 12 about 500 kt sit unspent.
     - **What does a first voice give the player to do?** The mock shows what a knock proves, the Mind's reading of it, and three ways on: answer, listen, or stay silent. How much of a knock can be read, and what an answer may hold, are not settled.
-    - **How long does an observation or a sweep take?** The mock samples a Year for a reading of air and a fifth of a Year a star for the sweep. Neither follows distance or brightness yet. Seasons are part of this.
+    - **Should seasons set when an observation can start?** A real telescope can't point near the Sun. It would move the opening's first reading off 30 seconds.
     - **The seed found two worlds, and the opening shows one.** Kirrin's world at 12 Ophiuchi was felt by 2040 too.
-    - **What can one reading say about a world whose Mind has not woken?** Varn's people are there, 79 years before their waking.
+    - **What can one reading say about a world whose Mind has not woken?** Varn's people are there, 79 years before their waking. This mirror reads only the world's color and ozone.
     - **A first voice, a living world and a dead world in one hour: too much, too soon?** A signal reaches Earth in the first hour in about 1 game in 4. A neighbor's world sits within 15 ly in about 1 game in 3, a dead one in about 1 in 35.
     - **Can the first telescope tell a dead civilization from a volcano?** The mock says no, so going is the way to know.
+    - **The first sweep finds a point of light at most neighbors' stars. What else does it find?** In this game that is five neighbors' worlds within months, and no natural ones, because the seed draws none.
     - **What does an inquiry cost in time?** The matter of probes and the laser array is priced. Their build times are not.
     - **What happens at the grid limit?** At Year 11.1 thought is 86 times Year 0's and draws nine tenths of the grid. Every priced way on is slow or small.

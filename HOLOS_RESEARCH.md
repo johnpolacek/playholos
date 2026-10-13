@@ -523,6 +523,21 @@ What Sol's own instruments have found nearby. For v2 open question 3.
   - Nitrogen dioxide as an industrial sign, with its natural sources and detection limits.
   - Used: v1 "Instruments shift the odds".
 
+- **How long a reading takes, checked 2026-10-13.** For [calcs/observing.py](calcs/observing.py). Agent, from papers and tables, with quotes. I read the report, not the papers.
+  - **[Stark et al. 2014](https://arxiv.org/abs/1409.5128)** · Published. Exposure time is signal to noise squared, times the planet's light plus twice the background, over the planet's light squared. The planet and the star's leaked light fall with distance squared. Zodiacal dust does not.
+  - **[Alei et al. 2025](https://arxiv.org/abs/2512.05279)** · Preprint, revised January 2026. An Earth twin of a Sun twin at 10 pc is first seen at signal to noise 7 in 3.2 hours, with a 7.87 m mirror and 3 zodis of dust.
+  - **[Stark et al. 2024](https://arxiv.org/abs/2405.19418)** · Published. A water search takes 22 days on average for a 6 m telescope's first 18 candidates, and 3.5 days at 9 m. Bandpass 20%, raw contrast 1e-10, inner working angle about 3.5 wavelengths over the mirror.
+  - **[Stark et al. 2019](https://arxiv.org/abs/1904.11988)** · Published. Two years of telescope time for the survey, and no target over two months.
+  - **[Stark et al. 2025](https://arxiv.org/abs/2502.18556)** · Report of the yield working group. Oxygen on one poor target, HIP 32439 at 18 pc, would take about 200 days.
+  - **[Latouf et al. 2023](https://arxiv.org/abs/2311.16015) and [2024](https://arxiv.org/abs/2411.15089)** · Published. Oxygen needs signal to noise 8, ozone's green band 14 to 19. Methane at Earth's level is not detectable at any signal to noise up to 20.
+  - **[Mamajek and Stapelfeldt 2024](https://arxiv.org/abs/2402.12414)** · NASA's target list: 164 stars from 1.33 to 23.3 pc. Alpha Centauri A and B are both on it, tier B. A's Earth twin sits 926 thousandths of an arcsecond out, with B 5.3 arcseconds away.
+  - **[Sirbu et al. 2023](https://ntrs.nasa.gov/citations/20230013128)** · Conference paper. Alpha Centauri is the top target for direct imaging if the companion's leaked light can be suppressed.
+  - **[NASA's page on the telescope](https://science.nasa.gov/astrophysics/programs/habitable-worlds-observatory/)** · April 2026. It aims to image 25 potentially habitable worlds. No mirror size, contrast or wavelength range is fixed yet.
+  - Matters: readings take hours to weeks, which is seconds of play. And a world close to its star in our sky can't be read at all, which hides most of a K star's warm zone at 30 ly.
+  - Not found: any published time for carbon dioxide or methane on an Earth twin, or any time for Alpha Centauri A.
+  - This project's own: how the noise splits between starlight and dust at the calibration point, and using the water figure as if it were for an Earth twin at 10 pc.
+  - Used: v2 [How Earth learns](HOLOS_GAME_CONCEPT.md#how-earth-learns), and the second mock.
+
 ## Where neighbors can live
 
 - **[Li et al., March 2026, 70 Ophiuchi](https://arxiv.org/abs/2603.20044)** · Preprint.
@@ -869,6 +884,9 @@ Results the design is waiting on. Check each when its date comes.
 - YZ Canis Minoris stays out on one table's age from its brightness. Read Kerr et al. 2021 for the basis. Its mass and size are ordinary for its type.
 - DT Virginis stays out on its companion Ross 458 C. That signature can also come from heavy elements.
 - Telescope seasons. Fomalhaut sits 56° from the Sun on January 1, and comes within 85° to 135° only from late May, near Year 0.39. JWST points only in that range: from memory, not reread. A telescope like Hubble, which avoids only the 50° around the Sun, could image it in January. That limit is from memory too. Decide which telescope Earth has in 2040, and whether seasons set when an observation can start.
+- calcs/observing.py: the split of noise between leaked starlight and dust is an estimate. Find a published count-rate budget for an Earth twin at 10 pc.
+- Alpha Centauri A's warm zone is a full arcsecond wide, perhaps past a coronagraph's outer edge, and B's light leaks in. Neither is modelled. Check the outer working angle of the telescope's designs.
+- The seed draws no natural warm worlds, so every candidate a sweep finds is a neighbor's. Real surveys expect natural ones to be common. Find the rate, and decide whether the seed should draw them.
 - The second mock: a source for how long added carbon dioxide stays in air, and for which gases the Habitable Worlds Observatory is designed to read.
 - Earth's aimed messages: the power of the 1983, 2008, 2009 Canberra and 2013 sends is in no source found. Hirabayashi's books may hold the first.
 - Working links for Project Daedalus's 1978 report and Criswell 1985.
