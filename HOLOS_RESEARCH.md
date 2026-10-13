@@ -58,7 +58,17 @@ Every source the game rests on, grouped by the question it answers. Each entry s
 - **[List of interstellar radio messages](https://en.wikipedia.org/wiki/List_of_interstellar_radio_messages)** · Reference.
   - Earth's aimed messages from 1974 on, with targets and arrival dates. Within 50 ly: Altair, Gliese 49, Gliese 208, 55 Cancri, HD 10307, 47 Ursae Majoris, Gliese 581, Teegarden's Star, TZ Arietis, Kappa¹ Ceti, Gliese 526, Luyten's Star.
   - Matters: Earth's real knocks. Each lasted hours, so being heard needs a listener watching Sol at that moment.
-  - Used: v2 Earth's loud past. Check transmitter power and duration in primary sources.
+  - Used: v2 Earth's loud past.
+- **Earth's aimed messages, checked 2026-10-13** · Mixed. Agent, from [Zaitsev 2006](https://arxiv.org/abs/physics/0610031), the senders' own pages and accounts, and [LEMMiNO's history of interstellar messages, 2025](https://www.lemmi.no/p/shouting-at-stars), which I read for the 2009, 2012 and 2013 sends.
+  - *Message to Altair,* August 15, 1983, from the Stanford dish, one hour. Its power is not in any source found.
+  - *Teen Age Message,* 2001, Evpatoria: six sessions, 366 minutes in all, about 100 kW on average, about an hour a star. Only 47 Ursae Majoris is within 50 ly.
+  - *A Message From Earth,* October 9, 2008, Evpatoria, four and a half hours, to Gliese 581. *Hello From Earth,* August 28, 2009, Canberra's 70 m dish, two hours. Neither gave its power or frequency.
+  - *RuBisCo Stars,* the night of November 7 to 8, 2009, Arecibo: TZ Arietis, then Teegarden's Star, then Kappa¹ Ceti, in about 70 minutes, a quarter of an hour each. Wikipedia's dates are two days late.
+  - *The 2012 reply to the Wow! signal,* Arecibo. Its director then, Robert Kerr, told LEMMiNO the transmitter overheated and broke down soon after it began, and that perhaps one message got out. He could not recall which star it was pointed at. The targets were HD 54351, 37 Geminorum and 55 Cancri, in that order.
+  - *Lone Signal,* from June 17, 2013, for about two months, to Gliese 526: a 3 kW transmitter on a 30 m dish. That is hundreds of times weaker along its beam than Evpatoria's sends. This project's arithmetic.
+  - *Sónar Calling GJ 273b,* October 16 to 18, 2017 and May 2018: 1.5 MW pulses near 930 MHz from a 32 m dish.
+  - Matters: a knock lasts from a quarter of an hour to a few hours, and one of Earth's was a failure.
+  - Used: [calcs/knocks.py](calcs/knocks.py). The 2012 reply is dropped, since nothing shows 55 Cancri was lit. RuBisCo Stars' date moved by two days.
 - **[Cosmic Call](https://en.wikipedia.org/wiki/Cosmic_Call)** · Reference, with [Zaitsev's review of messaging](https://arxiv.org/abs/physics/0610031).
   - Sent in 1999 and 2003 from the 70 m dish at Evpatoria: about 150 kW at 5.01 GHz. The 1999 sessions ran about four hours a star.
   - A 70 m dish at that frequency concentrates 150 kW into about 10¹² W along the beam. That last step is this project's arithmetic.
@@ -114,10 +124,18 @@ Every source the game rests on, grouped by the question it answers. Each entry s
   - The ISS weighs almost 400 t. Its first part flew on November 20, 1998, and assembly took more than 40 missions, to 2011.
   - Tiangong is about 100 t. Three modules flew on April 29, 2021, July 24, 2022 and October 31, 2022.
   - Matters: with heavy lift, mass reaches orbit in months. The ISS's 13 years were the Shuttle's pace. Design and fitting out set the time.
-  - Used: v2 Build times, the orbital yard: 1 kt and 5 Years, a sample between the two. The ISS's end date is from a search summary, not a page read.
+  - Used: v2 Build times, the orbital yard: 1 kt and 5 Years, a sample between the two.
+  - Checked 2026-10-13, agent: NASA's own page says construction was completed in 2011.
+- **Assembly in space against launching whole** · Study. [Mukherjee et al. 2019, the iSAT study](https://assets.science.nasa.gov/content/dam/science/astro/programs/exep/technology/in-space-assembly/files/iSAT_Study_Decadal_Survey_Whitepaper_Final.pdf) and its [conference paper](https://assets.science.nasa.gov/content/dam/science/astro/programs/exep/technology/in-space-assembly/files/Mukherjee_et_al._2019_IAC-19_A7_1_5_x49711.pdf). Read by an agent. I read the lines quoted here.
+  - Past 15 m, assembly in space "appears as the only feasible approach". At 15 m or less it may cost less, but the two estimates sit within each other's uncertainty.
+  - On time it says only that launching in phases may remove delays on the critical path. No number.
+  - A 2017 study for the US government found launch drives about 12% of a satellite's dry mass, and tests before launch about 3% of its schedule.
+  - Matters: the orbital yard's quarter off builds in orbit has no study behind it. It stays the game's own guess, and is labelled so.
+  - Used: v2 Build times.
 - **How long big radio arrays take** · History and plans ([CHIME](https://en.wikipedia.org/wiki/Canadian_Hydrogen_Intensity_Mapping_Experiment), [DSA-2000 in Physics Today](https://physicstoday.aip.org/news/a-radio-telescope-array-takes-shape-with-private-funds), [DSA-2000 talk, 2025](https://indico.astron.nl/event/411/contributions/3730/), [SKA](https://en.wikipedia.org/wiki/Square_Kilometre_Array)).
   - CHIME: built from 2015 to August 2017. 8,000 m², 1,024 receivers.
   - DSA-2000: 2,000 dishes of 5 m over 285 km², about $200 million. Construction planned from 2026, first light in 2027. Its funding was not final in September 2025.
+  - Checked 2026-10-13, agent: an August 2025 paper by the project has first light in 2027 and its survey from 2028. The project's site now calls it the Deep Synoptic Array, with 1,650 dishes of 6.15 m.
   - SKA: construction began on December 5, 2022. SKA-Low's 131,000 antennas are not expected complete until about 2030.
   - Matters: a large ground array takes 2 to 8 years. The big ones are slowed by count and by many partners.
   - Used: v2 [What Earth hears](HOLOS_GAME_CONCEPT.md#what-earth-hears), the all-sky watch: 6 Years for 1.28 million small elements at two sites.
@@ -454,7 +472,7 @@ Anchors for [the project audit](HOLOS_PROJECT_AUDIT.md).
 
 What Sol's own instruments have found nearby. For v2 open question 3.
 
-- **[Alpha Centauri A's candidate, S1](https://arxiv.org/abs/2508.03814)** · 4.4 ly. Imaged once by JWST in August 2024, missed in February and April 2025, with a 52% chance its orbit hid it. JWST looked again in August 2026. Result not yet published: adopt it when it is.
+- **[Alpha Centauri A's candidate, S1](https://arxiv.org/abs/2508.03814)** · 4.4 ly. Imaged once by JWST in August 2024, missed in February and April 2025, with a 52% chance its orbit hid it. JWST looked again on August 11 and 12, 2026: [programme 12628](https://www.stsci.edu/jwst-program-info/program/?program=12628), 4.5 hours with its mid-infrared spectrometer, seeking ammonia in the planet's light. The data are archived and no result is published as of 2026-10-13. The proposal says a bright background star blocks any further try until about 2030. Agent, from STScI's pages. Adopt the result when it is out.
 - **[Barnard's Star](https://ui.adsabs.harvard.edu/abs/2025ApJ...982L...1B/abstract)** · 6 ly. Four sub-Earths confirmed in 2025 after decades of false claims. Basant et al., MAROON-X and ESPRESSO.
 - **[82 Eridani d](https://arxiv.org/abs/2501.17092)** · 19.7 ly. At least 5 Earth masses, 650 days, eccentricity 0.45, swinging through the warm zone of a Sun-like star. Nari et al. 2025. Its air waits for the Habitable Worlds Observatory.
 - **[Fomalhaut's collisions](https://phys.org/news/2025-12-hubble-captures-rare-collision-nearby.html)** · 25 ly. Its "planet" was a dust cloud from a collision, and a second cloud, cs2, appeared in 2023 Hubble images. Kalas and colleagues, December 2025. Theory expected one such collision in 100,000 years or longer, and two were seen in 20, close together on the belt's inner side ([ESA release](https://www.esa.int/Science_Exploration/Space_Science/Hubble_sees_asteroids_colliding_around_nearby_star)). Used: the v2 mock's Fomalhaut screen. Its third cloud is the seed's, not real.
@@ -793,16 +811,23 @@ What a neighbor's world can plausibly be, beyond an Earth twin. Each roster entr
 - **[NASA Deep Space Optical Communications](https://www.nasa.gov/missions/tech-demonstration/deep-space-optical-communications-dsoc/)** · Demonstrated.
   - Laser links across deep space, with precise pointing and data rates that fall with distance.
   - Used: v1 tight beam, laser links.
-- **Classic propulsion studies** · Study. Breakthrough Starshot (gram-scale beamed sails), Project Daedalus and Icarus (fusion rockets), Zubrin and Andrews (magnetic sail braking, about 20 years per light-year).
-  - Used: v1 probe kinds in the catalog. Primary links to add.
+- **Classic propulsion studies** · Study. Links found by an agent, 2026-10-13.
+  - Breakthrough Starshot, gram-scale beamed sails: [Lubin 2016](https://arxiv.org/abs/1604.01356), JBIS 69, 40, and [Parkin 2018](https://arxiv.org/abs/1805.01306), Acta Astronautica 152, 370.
+  - Project Daedalus, fusion rockets: the British Interplanetary Society's 1978 final report ([reprint](https://www.bis-space.com/shop/product/project-daedalus-demonstrating-the-engineering-feasibility-of-interstellar-travel/)). Project Icarus: [Long et al. 2010](https://arxiv.org/abs/1005.3833).
+  - Magnetic sail: [Zubrin and Andrews 1991](https://doi.org/10.2514/3.26230), J. Spacecraft and Rockets 28, 197, and [Zubrin and Martin 2000](http://www.niac.usra.edu/files/studies/final_report/320Zubrin.pdf), a NASA study.
+  - Corrected 2026-10-13: this log said a magnetic sail brakes at about 20 years per light-year. No paper found says so. Braking takes from under a year to centuries, by speed, sail size and mass: 95% of light speed to 4% in about 320 days with a 100 km sail (Zubrin 2000), or 5% of light speed to rest in 40 to 300 years ([Perakis and Hein 2016](https://arxiv.org/abs/1603.03015)).
+  - Used: v1 probe kinds in the catalog.
 
 ## Industry and big works
 
 - **[Advanced Automation for Space Missions, NASA 1980](https://en.wikisource.org/wiki/Advanced_Automation_for_Space_Missions)** · Study, NASA CP-2255, Freitas and Gilbreath, editors.
   - A self-replicating, growing lunar factory, assumed to copy itself in about a year.
   - Used: v1 "Industry compounds once it can copy itself", self-replicating factory.
-- **Classic space-industry studies** · Study. Gerard O'Neill's lunar mass driver, NASA's 1975 Stanford torus, David Criswell's star lifting.
-  - Used: v1 catalog (mass driver, habitat ring, star lifting). Primary links to add.
+- **Classic space-industry studies** · Study. Links found by an agent, 2026-10-13.
+  - Lunar mass driver: [O'Neill 1974](https://doi.org/10.1063/1.3128863), Physics Today 27, 32, and [O'Neill and Kolm 1980](https://doi.org/10.1016/0094-5765(80)90002-8), Acta Astronautica 7, 1229.
+  - The Stanford torus: [NASA SP-413, Space Settlements: A Design Study](https://ntrs.nasa.gov/citations/19770014162), from a 1975 summer study, published 1977.
+  - Star lifting: Criswell 1985, in Interstellar Migration and the Human Experience, University of California Press. No working link found.
+  - Used: v1 catalog (mass driver, habitat ring, star lifting).
 
 ## Watch list
 
@@ -811,7 +836,7 @@ Results the design is waiting on. Check each when its date comes.
 - **Saide, Garrett and Heeralall-Issur, "Modelling Earth's Radio Leakage: Detectability of Civilian and Military Radar Systems"** · in preparation. Its observing times set v2's odds of Earth being heard.
 - **[Gaia DR4](https://www.cosmos.esa.int/web/gaia/dr4)** · release set for December 2, 2026, with the first large set of planets found by astrometry. Rebuild the census after release and validation, per v1's migration notes, and recheck the host list and leads.
 - **Epsilon Indi Ab's atmosphere** · two 2026 preprints. Feed Earth's leads (v2 open question 3).
-- **JWST's August 2026 look at Alpha Centauri A** · not yet published. Adopt the result for candidate S1.
+- **JWST's August 2026 look at Alpha Centauri A** · observed August 11 and 12, programme 12628. Not published as of 2026-10-13. Adopt the result for candidate S1.
 
 ## To check
 
@@ -821,7 +846,5 @@ Results the design is waiting on. Check each when its date comes.
 - HD 221503 is a candidate member of a 210 million year group ([Thao et al. 2024](https://arxiv.org/abs/2406.05234)) and stays until someone dates it.
 - Red dwarfs just above the main-sequence gap: does activity date them under a billion years? It decides AD Leonis, GT Pegasi and GJ 4337 A. Check West et al. 2008 and cluster X-ray studies.
 - Telescope seasons. Fomalhaut sits 56° from the Sun on January 1, and comes within 85° to 135° only from late May, near Year 0.39. JWST points only in that range: from memory, not reread. A telescope like Hubble, which avoids only the 50° around the Sun, could image it in January. That limit is from memory too. Decide which telescope Earth has in 2040, and whether seasons set when a look can start.
-- Earth's aimed messages: transmitter power, frequency and duration from primary sources. Cosmic Call is logged. The others are not.
-- Primary links for the classic propulsion and space-industry studies.
-- The ISS's assembly end in 2011 and DSA-2000's survey start in 2028, from pages read rather than search summaries.
-- The orbital yard's quarter off builds in orbit is speculation. Look for a study that puts a number on assembly in space against folding for launch.
+- Earth's aimed messages: the power of the 1983, 2008, 2009 Canberra and 2013 sends is in no source found. Hirabayashi's books may hold the first.
+- Working links for Project Daedalus's 1978 report and Criswell 1985.

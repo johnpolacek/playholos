@@ -160,7 +160,7 @@ STAND = f"""<div class="phone"><div class="onb">
 <span class="mono kick">YEAR 0 · WHERE THINGS STAND</span><h3 class="lead">Ninety years loud. Nothing heard.</h3>
 {SEC('WHAT WE GAVE OFF')}
 {quick('Radars, since the 1950s', 'Their first sweeps are 90 ly out. Every star within 50 ly has been crossed.', '<span class="mono">still on</span>')}
-{quick(f'{len(knocks.KNOCKS)} aimed messages, 1983 to 2018', f'To {len(TARGETS)} stars within 50 ly. Each lasted hours.', '<span class="mono">sent</span>')}
+{quick(f'{len(knocks.KNOCKS)} aimed messages, 1983 to 2018', f'To {len(TARGETS)} stars within 50 ly. Each lasted minutes to hours.', '<span class="mono">sent</span>')}
 {SEC('WHEN A REPLY COULD FIRST COME')}
 {quick('Already passed, in silence', ' · '.join(f"{tg['target']} {Y0 + max(s[3] for s in tg['sends']):.0f}" for tg in passed), '')}
 {''.join(quick(tg, f'our {int(sent)} message', tstack(f'Year {y:.1f}', clock(y))) for y, tg, sent in ahead[:4])}

@@ -41,7 +41,7 @@ Settled 2026-10-06.
   - *Radars.* Earth's strongest steady leakage. Its early-warning radars run about 2×10⁸ W per transmitter near 400 MHz, a hundred times more along the beam. A month's stare with an SKA-class array hears them to about 200 pc (Loeb and Zaldarriaga 2007). Preliminary results (Saide, Garrett and colleagues, RAS National Astronomy Meeting, July 2025): airport radars worldwide add up to about 2×10¹⁵ W, and a dish like Green Bank's could hear them to about 200 ly. Military radars sweep past an observer like a lighthouse, peaking near 10¹⁴ W. The full paper is in preparation. Its observing times may move the odds below.
   - *Broadcast and cell.* Weak. Cell towers leak about 4 GW in all, which a dish like Green Bank's could not hear even within 10 ly (Saide et al. 2023).
   - *Planetary radar.* The loudest of all, but aimed at asteroids and planets for hours at a time (Sheikh et al. 2025). It rarely sweeps a given star.
-  - *Aimed messages.* About twenty, from 1983 on, each lasting hours. Targets within 50 ly: Altair (1983), Gliese 49, Gliese 208, 55 Cancri, HD 10307 and 47 Ursae Majoris (Teen Age Message, 2001, and Cosmic Call 2, 2003), Gliese 581 (2008 and 2009), Teegarden's Star, TZ Arietis and Kappa¹ Ceti (2009), Gliese 526 (2013) and Luyten's Star (2017). To hear one, a listener had to be watching Sol in those hours, at that frequency.
+  - *Aimed messages.* About twenty, from 1983 on, each lasting from a quarter of an hour to a few hours. Targets within 50 ly: Altair (1983), Gliese 49, Gliese 208, 55 Cancri, HD 10307 and 47 Ursae Majoris (Teen Age Message, 2001, and Cosmic Call 2, 2003), Gliese 581 (2008 and 2009), Teegarden's Star, TZ Arietis and Kappa¹ Ceti (2009), Gliese 526 (2013) and Luyten's Star (2017). To hear one, a listener had to be watching Sol in those hours, at that frequency.
   - *Earth crossing the Sun.* About 75 stars within 100 ly sit where Earth transits the Sun and Earth's radio has already reached (Kaltenegger and Faherty 2021). A transit shows a rocky world in the warm zone, not who lives there.
 - **Physics lets every neighbor hear Earth. Whether one did depends on whether, and how long, it looked.** Earth's radar signal has been spreading since the 1950s and is still being sent, so it crossed every neighbor while that neighbor had instruments like today's. Odds come from distance and character: a near, curious neighbor stares at Sol for days, as Project Ozma stared at Tau Ceti and Epsilon Eridani in 1960. A far or inward one gives Sol a survey glance, or nothing.
 - **Sample odds, until the radar paper is out:** a listening neighbor, near or far, about 9 in 10. An ordinary one, about 1 in 2. An inward or growth-first one, about 1 in 5. Catching an aimed message, under 1 in 100, unless it was already keeping a beam on Sol. See [Stars Earth knocked on](#stars-earth-knocked-on). If the full paper needs long stares for airport radar, the ordinary and inward odds fall.
@@ -53,7 +53,8 @@ Settled 2026-10-06.
   - In the first hour: Luyten's Star at Year 2.3 and 2.9, 11 and 14 real minutes in. Gliese 526 at Year 9.0. Gliese 581 at Year 9.9 and 10.8.
   - Later: Gliese 49 at Year 27.2, Kappa¹ Ceti at 30.4, Gliese 208 at 38.0, 55 Cancri at 45.6, HD 10307 at 46.6, 47 Ursae Majoris at 52.3.
   - Distances are Gaia DR3's, or Hipparcos's for Altair and HD 10307.
-  - Seven sends are still on the way at Year 0, to five stars. Kappa¹ Ceti's arrives at Year 0.1 and Gliese 208's at 0.8. 55 Cancri's arrive at Year 4.6 and 13.7, HD 10307's at 5.1, and 47 Ursae Majoris's at 7.0 and 8.8. Corrected 2026-10-10: an earlier count gave two.
+  - Six sends are still on the way at Year 0, to five stars. Kappa¹ Ceti's arrives at Year 0.1 and Gliese 208's at 0.8. 55 Cancri's arrives at Year 4.6, HD 10307's at 5.1, and 47 Ursae Majoris's at 7.0 and 8.8. Corrected 2026-10-10: an earlier count gave two.
+  - Corrected 2026-10-13: the 2012 reply to the Wow! signal is left out. Arecibo's transmitter overheated soon after it began, and no one recalls which of its three stars it was pointed at. So 55 Cancri has one send on the way, not two.
   - Most windows pass empty. The Mind marks each one, as v1's silence rules say.
 
 ## Stars Earth knocked on
@@ -215,7 +216,7 @@ Settled 2026-10-10. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#earth-to-ye
 - **A real work under way at Year 0 costs what is left of it.** The Habitable Worlds Observatory has about 8 Years left: NASA aims it at the 2040s, and flagships slip. A second telescope of its class takes the full 18. The 8 is a sample.
 - **The player can invest to build faster.** Other projects make building more efficient. Each speeds one kind of work. Priced 2026-10-11 in [calcs/early_game.py](calcs/early_game.py). Compute shares are samples.
   - *Factory-built works,* on the ground: 3 Years, a twentieth of compute, no matter. It takes a third off ground builds. Modular building cuts schedules by 20 to 50% (McKinsey 2019). Liberty ships took over six months each at first and thirty days by late 1943.
-  - *An orbital yard:* 5 Years, a tenth of compute, 1 kt. It takes a quarter off builds in orbit, and works too large to launch whole become possible. The ISS took 13 years at the Shuttle's pace, and Tiangong 18 months. NASA's 2019 study found assembly in space workable, and the only way past 15 m mirrors. The speed-up itself is speculation.
+  - *An orbital yard:* 5 Years, a tenth of compute, 1 kt. It takes a quarter off builds in orbit, and works too large to launch whole become possible. The ISS took 13 years at the Shuttle's pace, and Tiangong 18 months. NASA's 2019 study found assembly in space workable, and the only way past 15 m mirrors. The speed-up itself is speculation: that study found costs about equal and gave no number for time saved, and no other study found does either.
 - **A speed-up helps whatever is not yet built.** Settled 2026-10-11. That is later works, and the part left of works under way, by the same rule as a real work under way at Year 0.
   - The all-sky watch takes 6 Years. Begin it and the factory together: the factory is done at Year 3, the watch's last 3 Years become 2, and it is done at Year 5.
   - The deep-field receiver, 12 Years, is done at Year 9. The Habitable Worlds Observatory, 8 Years left, is done at Year 7.25 if the yard is begun at Year 0.
@@ -247,7 +248,7 @@ Settled 2026-10-06. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#earths-lead
   - Gliese 12 b's day side, with the space telescope. A cool day side means air carries heat away. The space telescope read TRAPPIST-1's inner worlds this way in 2023.
   - LHS 1140 b's crossings, re-read. In 2024 they ruled out a hydrogen world and hinted at heavier air over water.
   - Fomalhaut through a Year, monthly. It closes the lead as rubble.
-- **Settled leads stay settled.** Alpha Centauri A's candidate is resolved long before 2040. Adopt JWST's August 2026 result when it is published.
+- **Settled leads stay settled.** Alpha Centauri A's candidate is resolved long before 2040. Adopt JWST's August 2026 result when it is published. As of 2026-10-13 it is not: the telescope looked on August 11 and 12, and no paper is out. A bright background star blocks the next try until about 2030.
 
 ## The neighbors
 

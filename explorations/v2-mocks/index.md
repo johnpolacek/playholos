@@ -77,7 +77,7 @@ YEAR 0 · WHERE THINGS STAND
 ### Ninety years loud. Nothing heard.
 WHAT WE GAVE OFF
 Radars, since the 1950s · Their first sweeps are 90 ly out. Every star within 50 ly has been crossed. · still on
-16 aimed messages, 1983 to 2018 · To 12 stars within 50 ly. Each lasted hours. · sent
+15 aimed messages, 1983 to 2018 · To 12 stars within 50 ly. Each lasted minutes to hours. · sent
 WHEN A REPLY COULD FIRST COME
 Already passed, in silence · Altair 2017 · Teegarden's Star 2035 · TZ Arietis 2039
 Luyten's Star · our 2017 message · Year 2.3 · 00:11:33
@@ -85,7 +85,7 @@ Luyten's Star · our 2018 message · Year 2.9 · 00:14:27
 Gliese 526 · our 2013 message · Year 9.0 · 00:44:48
 Gliese 581 · our 2008 message · Year 9.9 · 00:49:21
 Later · Gliese 49 Year 27 · Kappa¹ Ceti Year 30 · Gliese 208 Year 38 · 55 Cancri Year 46 · HD 10307 Year 47 · 47 Ursae Majoris Year 52
-STILL ON THEIR WAY OUT · 7
+STILL ON THEIR WAY OUT · 6
 Kappa¹ Ceti Year 0.1 · Gliese 208 Year 0.8 · 55 Cancri Year 4.6 · HD 10307 Year 5.1 · 47 Ursae Majoris Year 7.0
 I can say where our noise has gone. · I can’t say who heard it. · No one can, yet.
 [What you inherit]
