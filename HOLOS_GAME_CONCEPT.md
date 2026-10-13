@@ -115,6 +115,7 @@ Settled 2026-10-10. Numbers from `python3 calcs/seed.py stats`.
   - *The deep flash watch:* knocks sent as laser flashes.
   - *A larger watch hears fainter:* four times the collecting area reaches twice as far.
   - *The deep-field receiver, then the far-side array:* a world's everyday radio.
+    - *Checked 2026-10-13:* at the roster's tones the deep-field receiver hears about 1 living neighbor in 460. The far-side array is the one that hears them. See [How Earth learns](#how-earth-learns).
 - **Knocks before Year 0 happened, and Earth missed them.** Settled 2026-10-10. A neighbor awake before Earth may already have knocked.
   - The seed rolls Earth's real odds of catching each. Before the sky watch of 2028, Earth's searches gave a star minutes in decades: about 1 knock in 100 caught.
   - Only a knock Earth would have caught is rolled again, since Earth heard nothing by 2040. A steady call always would have been caught.
@@ -330,6 +331,22 @@ Settled 2026-10-13.
   - *So the premise holds.* The Mind can't tell the player how many are out there. Its words climb toward the truth only as Earth finds it.
   - *Samples:* each starting word, and how far one voice moves Minds. In the mock a voice leaves Life's word where it was.
   - Set aside: words that follow the seed's real frequencies, and words written by hand for each report with no rule.
+- **A living neighbor becomes known as fast as physics allows, and no faster.** Settled 2026-10-13. Numbers from `python3 calcs/signs.py stats`. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#reading-air).
+  - *Each sign of minds needs its real instrument.* Nothing is hurried, and nothing guarantees a neighbor is known by any Year.
+    - *Aimed radio:* a knock, or a radar beam. The all-sky watch hears it from any of the hosts.
+    - *Everyday radio:* pure tones of about 10 to 100 kW. Only a far-side array hears them: hours for the nearer hosts, months for the farthest.
+    - *Smog:* nitrogen dioxide, from burning. The first telescope reads Earth's 1980 peak within about 12 ly. A 15 m mirror reads today's level in days to weeks at most worlds it can split.
+    - *Industrial gases:* in the mid-infrared, for an interferometer, at levels well above Earth's. No time is published for Earth's level.
+    - *City lights:* out of reach. Earth's own would show to 0.04 ly.
+    - *Going:* a flyby or a probe is the surest way (Haqq-Misra et al. 2025).
+  - *Smog is not proof.* Lightning and soil make it too, and clouds can mimic it. It moves the Mind's word.
+  - *What a game holds.* A first pass sees about 4 living homes. The first telescope can read smog at 1 in 10 of them, a 15 m mirror at 8 in 10. A far-side array hears 9 in 10 within a Year.
+  - *Earth's ground arrays hear almost none.* Held on a star for a Year, an SKA-class deep-field receiver hears about 1 living neighbor in 460. Their loud years are mostly over, as seen from here.
+  - *About 1 living neighbor in 8 is out of reach of all of these.* What is left is its own voice, or going.
+  - *In the mock's game:* Varn's world, 31 ly off, 80 years before its waking. A far-side array would hear it in 5 hours and a 15 m mirror would read its smog in 5 days. Earth has neither at Year 9.
+  - *Samples:* a neighbor's smog is taken to be like Earth's, from its first radio on. Times are scaled from one published point for each mirror: Earth's peak for the first telescope, today's level for the 15 m. No listening campaign runs past a Year.
+  - *Not priced:* a 15 m mirror. The far-side array needs Moon industry.
+  - Set aside: a floor, where some instrument within reach in the first hours can always tell. And minds never read from afar.
 - **Open:** seasons.
 
 ## The neighbors
@@ -527,7 +544,7 @@ Answered one at a time, in this order. Every answer must be permitted by current
     - **What does a first voice give the player to do?** The mock shows what a knock proves, the Mind's reading of it, and three ways on: answer, listen, or stay silent. How much of a knock can be read, and what an answer may hold, are not settled.
     - **Should seasons set when an observation can start?** A real telescope can't point near the Sun. It would move the opening's first reading off 30 seconds.
     - **The seed found two worlds, and the opening shows one.** Kirrin's world at 12 Ophiuchi was felt by 2040 too. Across games Earth has felt about three worlds by Year 0, and about two are natural.
-    - **What can one reading say about a world whose Mind has not woken?** Varn's people are there, 80 years before their waking. This mirror reads only the world's color and ozone.
+    - **Settled 2026-10-13:** a living neighbor becomes known as fast as physics allows. In this game nothing Earth holds at Year 9 can tell Varn's world from a natural one. A far-side array would, in 5 hours. See [How Earth learns](#how-earth-learns).
     - **A first voice, a living world and a dead world in one hour: too much, too soon?** A signal reaches Earth in the first hour in about 1 game in 4. A neighbor's world sits within 15 ly in about 1 game in 3, a dead one in about 1 in 35.
     - **Can the first telescope tell a dead civilization from a volcano?** The mock says no, so going is the way to know.
     - **Settled 2026-10-13:** a sweep finds natural warm worlds too, at the real rate. In this game its first pass shows 15 new points of light: 4 homes and 11 natural worlds. See [How Earth learns](#how-earth-learns).

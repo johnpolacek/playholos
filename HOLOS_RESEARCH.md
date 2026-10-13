@@ -552,6 +552,29 @@ What Sol's own instruments have found nearby. For v2 open question 3.
   - Not read: newer counts for red dwarfs. From memory, Bergsten et al. 2023 found fewer than Dressing and Charbonneau.
   - Used: v2 [How Earth learns](HOLOS_GAME_CONCEPT.md#how-earth-learns), [The seed, drawn](HOLOS_GAME_CONCEPT.md#the-seed-drawn), and the second mock.
 
+- **Signs of minds, checked 2026-10-13.** For [calcs/signs.py](calcs/signs.py): what Earth can read of a living neighbor from afar, and with what. I read each abstract myself, and Table 2 and the scaling passages in the text of Sheikh et al.
+  - **[Sheikh et al. 2025, Earth detecting Earth](https://arxiv.org/abs/2502.02614)** · Published, AJ 169, 118. How far today's Earth instruments would detect today's Earth, sign by sign.
+    - Aimed planetary radar 12,000 ly. Deep Space Network 65 ly. Phone networks, 4 GW at peak, 4.0 ly with the SKA and MeerKAT together. A Voyager-like transmitter 0.97 ly.
+    - Nitrogen dioxide 5.7 ly: 300 hours on a mirror like the Habitable Worlds Observatory's, cloud-free, scaled from Kopparapu et al. 2021. That is for Earth's 1980 peak of 113 parts per billion, two to three times today's. The paper takes each sign at its strongest.
+    - City lights 0.036 ly: 300 hours on a 6 m mirror. Heat islands 0.0005 ly. Satellites in transit 0.00002 ly.
+    - Already logged under [Hearing technology by radio](#hearing-technology-by-radio) for its headline. The distances are new here.
+  - **[Kopparapu et al. 2021](https://arxiv.org/abs/2102.05027)** · Published, ApJ. Earth's level of nitrogen dioxide, on an Earth twin of a Sun twin at 10 pc, shows at signal to noise 5 in about 400 hours on a 15 m mirror, in light of 0.2 to 0.7 microns, cloud-free.
+    - Clouds and aerosols cut that, and can mimic the feature. It has living sources as well as industrial ones.
+    - Levels were three times higher in Earth's past. Cooler stars destroy less of it, so the same output shows more.
+    - In the infrared, at red dwarfs, it takes several hundred hours.
+  - **[Beatty 2022, city lights](https://arxiv.org/abs/2105.09990)** · Published, MNRAS. An Earth twin's city lights are not detectable by the 15 m or 4 m designs. Proxima b's would show at twelve times Earth's in 300 hours. At near Sun-like stars a tenth of the surface must be city.
+  - **[Haqq-Misra, Kopparapu and Profitiliotis 2025](https://arxiv.org/abs/2511.20329)** · Published, ApJL 995, L22. Ten modelled futures for Earth, as stand-ins for other worlds.
+    - The Habitable Worlds Observatory could show raised carbon dioxide with nitrogen dioxide in up to eight of the ten.
+    - A mid-infrared interferometer could show carbon dioxide with two CFCs in four of them, and with a further gas in one.
+    - Two futures show nothing except to a solar-lens mission. A flyby or a probe is the most conclusive way.
+  - **[Schwieterman et al. 2024](https://arxiv.org/abs/2405.11149)** · Published, ApJ 969, 20. Logged above for how long these gases last. Its detection times are for 1 to 100 parts per million, far above Earth's level, as a world being warmed on purpose would hold.
+  - **[Dressing et al. 2026, the telescope's discovery space](https://arxiv.org/abs/2608.11294)** · Preprint, to be submitted. I read the abstract: 70 science cases. From a search summary, not read: one case is a search for signs of technology, credited to Kopparapu et al. 2026.
+  - Not found: any published time for industrial gases at Earth's level, or for nitrogen dioxide on a 6 m mirror beyond Sheikh's one point.
+  - Matters: by radio, Earth's ground arrays hear a quiet neighbor almost never. A far-side array hears nearly all. By light, the first telescope reads smog only next door, and smog is not proof.
+  - Check: the two smog points do not quite agree. Scaled by the fourth power of mirror width, Kopparapu's point gives a 6 m mirror about 310 hours at 5.7 ly for today's level. Sheikh's 300 hours is for the peak, so it is the more cautious by a few times. Each mirror uses its own published point.
+  - This project's own: a neighbor's smog taken to be like Earth's from its first radio on, at the peak for the first telescope and at today's level for the 15 m mirror. Times at other worlds and distances scaled from those two points. A Year's cap on one listening campaign. The two-month cap on one target is Stark et al. 2019's.
+  - Used: v2 [How Earth learns](HOLOS_GAME_CONCEPT.md#how-earth-learns), calcs/signs.py and the second mock.
+
 ## Where neighbors can live
 
 - **[Li et al., March 2026, 70 Ophiuchi](https://arxiv.org/abs/2603.20044)** · Preprint.

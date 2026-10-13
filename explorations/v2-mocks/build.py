@@ -30,7 +30,8 @@ SETTLED = [('Does a half-built real instrument cost fewer Years?', 'It costs wha
            ('How high can a natural world climb?', 'To animals and forests. Alive is a ladder: bare rock, a lifeless sea, hidden microbes, an oxygen world, animals. Every mind, living or dead, stays hand-written. Settled 2026-10-13.'),
            ('What sets each natural world’s rung?', 'Its star’s age, on Earth’s schedule with scatter: lasting oxygen at about 2.3 billion years, animals at about 4. Physics sets whether it kept its air. At Sun-like stars about half are alive. At red dwarfs most are bare rock. Settled 2026-10-13.'),
            ('Whose odds does the Mind show?', 'None, as numbers. The Mind gives its judgment in words: seven of them, from almost no chance to almost certain. A report shows the word now, and the word before if it moved. Settled 2026-10-13.'),
-           ('What stands behind the Mind’s words?', 'What Earth knows. The Mind judges from Earth’s science and from what Earth has observed, never from the seed, and it can be wrong. Earth’s own finds move its starting words: a first voice lifts Minds a word at every candidate. Settled 2026-10-13.')]
+           ('What stands behind the Mind’s words?', 'What Earth knows. The Mind judges from Earth’s science and from what Earth has observed, never from the seed, and it can be wrong. Earth’s own finds move its starting words: a first voice lifts Minds a word at every candidate. Settled 2026-10-13.'),
+           ('How fast does a living neighbor become known?', 'As fast as physics allows, and no faster. Each sign of minds needs its real instrument: everyday radio a far-side array, smog a mirror of about 15 m. The first telescope reads smog only within about 12 light-years, and smog is not proof. Going is the surest way. Settled 2026-10-13.')]
 
 # ---------- Godview: who is out there ----------
 MOVE = reactions.MOVES
@@ -631,7 +632,6 @@ Q_MATTER = ask('What is matter for in the first hour?', 'After the launch comple
 Q_VOICE = ask('What does a first voice give the player to do?', 'A knock arrives at minute 42. The mock shows what it proves, the Mind’s reading of it, and three ways on: answer, listen, or stay silent. How much of a knock can be read, and what an answer may hold, are not settled.')
 Q_SEASON = ask('Should seasons set when an observation can start?', 'A real telescope can’t point near the Sun, so each star is out of reach for months of every year. The mock ignores that. It would move the opening’s first reading, Fomalhaut, off 30 seconds.')
 Q_TWO = ask('The seed found two worlds, and the opening shows one.', 'Kirrin’s world at 12 Ophiuchi tugs hard enough to be felt by 2040, as Varn’s does. The first 15 minutes show only Varn’s. Here it appears among the telescope’s choices unannounced. Across games Earth has felt about three worlds by Year 0, and about two of them are natural.')
-Q_ASLEEP = ask('What can one reading say about a world whose Mind has not woken?', f'Varn’s people are there, {VARN_BEFORE:.0f} years before their waking. This mirror reads only the world’s color and ozone, so life is a guess and minds are invisible. How fast should a living neighbor become known?' if F['who'] else 'In this game the find is natural.')
 Q_NEAR = ask('A first voice, a living world and a dead world in one hour: too much, too soon?', 'This seed drew all three. A signal reaches Earth in the first hour in about 1 game in 4. A neighbor’s world sits within 15 ly in about 1 game in 3, and a dead one in about 1 in 35.')
 Q_DEAD = ask('Can the first telescope tell a dead civilization from a volcano?', 'The mock says no. It reads carbon dioxide, and the gases only industry makes need a colder, wider mirror. So the find stays strange, and going is the way to know.')
 Q_GO = ask('What does an inquiry cost in time?', 'The audit prices the matter of probes and the laser array. Their build times are not set, so the mock stops at the offer.')
@@ -690,10 +690,16 @@ if VOICE:
         ('WATCH', f'<b>Hold the radio array on {VSTAR}</b> · until you say'), ('WHY', 'A knock comes twice. Anything more they sent is still on its way.'),
         ('SENDS', 'Nothing. That stays yours to order.'), ('WAKES YOU', 'Anything heard')])
     WAKE_AGAIN = lockscreen('17:12', [('NOW', f'{VSTAR}: the same signal again', 'Year 9.5. Word for word. Nothing sent.')])
-import observing
+import observing, signs
 OBSV = {k: observing.observe(ly / 3.2616, r, a, lum) for k, ly, r, a, lum in (
     ('find', D, 1.5, F['a'], F['host']['luminosity']), ('eri', 19.7, 2.0, 1.354, 0.66), ('acen', ANWE['d'] if ANWE else 4.3, 0.97, ANWE['a'] if ANWE else 1.2, 1.52))}
 DAYS = lambda d: f'{d * 24:.0f} hours' if d < 2 else f'{d:.0f} days'
+# Settled 2026-10-13: physics alone. What the next instruments would need at the find, if it gives off what Earth does:
+# a far-side array on a 100 kW tone, and each mirror on Earth's level of smog. From calcs/signs.py.
+WITHIN = lambda x: f'in {signs.tell(x)}' if isinstance(x, float) and x < math.inf else 'out of reach'
+FAR_HUM = signs.listen_days(1e5, D, signs.EARS[2][1])
+SMOG_NOW, SMOG_WIDE = (signs.smog_days(*m, D / 3.2616, 1.5, F['a'], F['host']['luminosity']) for m in signs.SMOG)
+SIGNS = signs.read(truth_tone) if F['who'] else None
 # What the search's first pass shows, beyond the worlds Earth holds already: neighbors' homes, and natural worlds.
 NEAR_ACEN = bool(ANWE and ANWE['d'] < 5)
 HOMES = [p for p in NB if p['swept'] and not p['found_by_2040'] and not (p is ANWE and NEAR_ACEN)]
@@ -718,7 +724,7 @@ AIR_R = tab(2700, 'Report', 'REPORT', 'FIRST READING', f"""<button class="backli
 <p class="copy small">{F['star']} · {D:.1f} ly · infrared telescope · {DAYS(OBSV['find']['ozone'])} · light that left {D:.0f} Years ago</p>
 <p class="copy">Blue, as air scatters light. And ozone, which sunlight makes from oxygen. Its water and oxygen bands sit inside its star’s glare for this mirror: the world is {OBSV['find']['sep']:.0f} thousandths of an arcsecond from its star.</p>
 {SEC('WHAT IT COULD BE · BEFORE → NOW')}{odds('Life', *AIR['life'])}{odds('Rock, and no life we could see', *AIR['rock'])}{odds('A small gas world', *AIR['gas'])}{odds('Minds', *AIR['minds'])}
-{SEC('WHAT WOULD SAY MORE')}{quick('A wider mirror', 'splits it from its star in redder light · not yet priced', '<span class="mono">later</span>')}{quick('Far-side array', 'hears a world’s everyday radio · needs Moon industry', '<span class="mono">later</span>')}""")
+{SEC('WHAT WOULD SAY MORE')}{quick('A 15 m mirror', f'its water and oxygen · smog, if there is any, {WITHIN(SMOG_WIDE)} · not priced', '<span class="mono">later</span>')}{quick('Far-side array', f'everyday radio, if there is any, {WITHIN(FAR_HUM)} · needs Moon industry', '<span class="mono">later</span>')}""")
 ACEN_R = tab(2730, 'Report', 'REPORT', 'CANDIDATE', f"""<button class="backlink inline">‹ All reports</button>
 <h3 class="lead">A world at Alpha Centauri A</h3>
 <p class="copy small">Alpha Centauri A · {ANWE['d']:.1f} ly · infrared telescope, on its sweep · two visits, weeks apart · light that left 4 Years ago</p>
@@ -787,9 +793,11 @@ HOUR = [
          ['One observation ordered, and the telescope’s standing search set. The player passes over 82 Eridani d, the easier target.'], question=Q_SEASON),
     stop(2700, 2670, '· The Mind glows. Taps it.', [f'{F["star"]}’s world is blue, with ozone. Life: {moved(*AIR['life'])}.', 'A reply window opens at Gliese 526. Nothing heard.'],
          talk(AIR_R, 'Blue, with ozone. Ozone means oxygen, and oxygen usually means life, though sunlight alone can make some. I can’t read its water. It sits too close to its star for this mirror.', (), 'glow'),
-         ([find_truth, f'This light left {VARN_BEFORE:.0f} years before Varn’s waking: 7 billion people, a quiet sky, a hum near 100 kW.'] if F['who'] else ['Truth: alive, and no one there.'])
+         ([find_truth, f'This light left {VARN_BEFORE:.0f} years before Varn’s waking: 7 billion people, a quiet sky, a hum near 100 kW.',
+           f'Physics alone. A far-side array would hear that hum {WITHIN(SIGNS["Far-side array"])}, and a 15 m mirror would read its smog {WITHIN(SIGNS["smog 15 m"])}. Earth has neither. Its own mirror would need over two months.',
+           'Across games the first telescope can read smog at 1 living home in 10 of those a first pass sees. A far-side array hears 9 in 10.'] if F['who'] else ['Truth: alive, and no one there.'])
          + ['What the reading shows is the mock’s. Real: this mirror can’t split a world closer than 84 thousandths of an arcsecond in oxygen’s light, or 104 in water’s.',
-            'The Gliese 526 window is for a 3 kW send from a 30 m dish in 2013. Even a listener would have struggled to catch it.'], question=Q_ASLEEP, settled=(15, 17)),
+            'The Gliese 526 window is for a 3 kW send from a 30 m dish in 2013. Even a listener would have struggled to catch it.'], settled=(15, 17, 19)),
 ] + ([
     stop(2730, 2700, '· The Mind opens on its own.', 'A world at Alpha Centauri A, where none was known.',
          talk(ACEN_R, '<b>A new world, next door</b>The sweep found it on its first stop, and it moves with the star. Earth’s size, in the warm zone. No one had felt it. I can read its air in days. That interrupts the sweep, and it is yours to say.', ('Read its air', 'Keep sweeping'), 'open'),
