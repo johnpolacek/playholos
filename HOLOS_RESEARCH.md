@@ -576,6 +576,15 @@ What Sol's own instruments have found nearby. For v2 open question 3.
   - Added the same day, from the text of Haqq-Misra et al.: whether a 6 m mirror can read today's level of nitrogen dioxide "remains to be calculated". So Sheikh's one point is all the first telescope's smog times rest on.
   - Used: v2 [How Earth learns](HOLOS_GAME_CONCEPT.md#how-earth-learns), calcs/signs.py and the second mock.
 
+- **Telescope seasons, checked 2026-10-13.** For the open question on whether seasons set when an observation can start. Not used yet.
+  - **[Spohn, Stark and Savransky 2026](https://arxiv.org/abs/2604.22023)** · Accepted, JATIS. I read the abstract and Table 1 in the text. How far from the Sun each space telescope may point:
+    - JWST 85° to 135°, 40% of the sky at once. Roman 54° to 126°, 59%. HabEx 45° to 135°, 71%. LUVOIR 45° to 180°, 85%.
+    - The Habitable Worlds Observatory, nominal: 45° to 135°, 71% of the sky at once.
+    - Its yield of worlds drops sharply when the allowed band is narrower than 90°. Each extra reading required of a world costs about 22% of the yield.
+  - **[JWST field of regard, STScI](https://jwst-docs.stsci.edu/jwst-observatory-characteristics/jwst-target-viewing-constraints/jwst-field-of-regard-for)** · Read on the page. 85° to 135° from the Sun, about 39% of the sky on any day, and all of it within 6 months.
+  - This project's arithmetic from the nominal limits: a star on the Sun's path is out of reach twice a year, 90 days each time, near the Sun and opposite it. A star more than 45° off that path is always in reach: 29% of the sky.
+  - In play, at 5 minutes a Year: at most 75 seconds out of reach, twice a Year.
+
 - **What a dead world leaves, checked 2026-10-13.** For the question of telling a dead civilization from a volcano. I read each abstract myself, and the text of Haqq-Misra et al. and of Kopparapu et al.
   - **[Archer et al. 2009](https://doi.org/10.1146/annurev.earth.031208.100206)** · Published, Annual Review of Earth and Planetary Sciences. Burned carbon settles between air, sea and land within a few centuries. Models agree that 20 to 35% stays in the air after that, 2 to 20 centuries on. Dissolving seabed chalk draws it down further over 3,000 to 7,000 years.
   - **[Haqq-Misra, Kopparapu and Profitiliotis 2025](https://arxiv.org/abs/2511.20329)** · Published, ApJL. Read in the text.
@@ -980,7 +989,7 @@ Results the design is waiting on. Check each when its date comes.
 - Stars dated by a slow spin: Gliese 208, DS Leonis and HD 82106. From memory, not reread: K and early M dwarfs stall in their spin-down between about 0.7 and 1.3 billion years (Curtis et al. 2019, 2020). If so, a spin like the Hyades' may not rule out a little over a billion.
 - YZ Canis Minoris stays out on one table's age from its brightness. Read Kerr et al. 2021 for the basis. Its mass and size are ordinary for its type.
 - DT Virginis stays out on its companion Ross 458 C. That signature can also come from heavy elements.
-- Telescope seasons. Fomalhaut sits 56° from the Sun on January 1, and comes within 85° to 135° only from late May, near Year 0.39. JWST points only in that range: from memory, not reread. A telescope like Hubble, which avoids only the 50° around the Sun, could image it in January. That limit is from memory too. Decide which telescope Earth has in 2040, and whether seasons set when an observation can start.
+- Telescope seasons: recompute Fomalhaut's 56° from the Sun on January 1, which I worked out earlier and did not recheck. With the planned limits, 45° to 135°, it is in reach that day.
 - calcs/observing.py: the split of noise between leaked starlight and dust is an estimate. Find a published count-rate budget for an Earth twin at 10 pc.
 - Alpha Centauri A's warm zone is a full arcsecond wide, perhaps past a coronagraph's outer edge, and B's light leaks in. Neither is modelled. Check the outer working angle of the telescope's designs.
 - Natural warm worlds: the seed treats every red dwarf as watched to 1 m/s, which drops a fifth of their worlds. Real coverage is patchy. Find which of the 715 have been watched that well.
