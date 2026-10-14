@@ -473,6 +473,17 @@ Settled 2026-10-13.
     - At 49 ly a pixel is about 13 km. The build, 8 Years, and its want, half a flagship, are samples.
   - *Earth has knocked on stars with no sign of life,* as Cosmic Call did. A suspicion is more than Earth had then.
   - Set aside: only listening and looking until proof, and knocks gated by the Mind's judgment.
+- **A picture shows everything larger than a pixel, and nothing smaller.** Settled 2026-10-14. Numbers from `python3 calcs/signs.py pictures`.
+  - *Physics sets the pixel. The seed's world fills it.* The Mind names only what is larger than a pixel.
+  - *A solar lens:* about 25 km a pixel at 30 pc, 13 km at 49 ly. Cities and cleared land show. Dams and roads don't.
+  - *A sail flyby:* optics of about 0.4 arcseconds on each sail (Eubanks et al. 2026).
+    - With about 300 sails arriving and the world's orbit known to 100,000 km, one passes within a world's width: about 20 m a pixel.
+    - Others miss by up to 100,000 km: about 200 m. The closest pass lasts under a minute.
+    - So roads and dams show. Single buildings don't.
+  - *Earth's own telescopes:* a world is less than one pixel. They read its light, never its shapes.
+  - *What it means for play.* A lens shows a living world with industry. A world whose minds are gone looks merely alive to it. Sails see the ruins.
+  - *The sizes are round figures from Earth's surface:* cities about 30 km across, lakes behind dams 10, dams 1, street grids 0.1, roads 0.03.
+  - Set aside: a fixed list of what each way shows, and hand-written samples.
 
 ## The neighbors
 
@@ -706,5 +717,5 @@ Answered one at a time, in this order. Every answer must be permitted by current
     - **Settled 2026-10-14:** a suspicion opens the whole kit, and the Mind lists the ways. In the mock the player sends a solar lens to Gliese 1021, the smog world too far for the first fifth. Its picture comes at Year 45.7: Earth's first sight of Hael's people. See [How Earth learns](#how-earth-learns).
     - **What does a late answer cost?** A sender waits one round trip, then takes silence as news. To be on time, Earth's answer had to leave within a Year of the knock.
     - **Earth has proof of minds who don't know they are heard. What may it do?** v1 filed a young world under no conversation possible.
-    - **How much can a lens picture or a flyby show?** What a lens sees at 13 km a pixel, and what sails see passing at a fifth of light speed, are the mock's.
+    - **Settled 2026-10-14:** a picture shows everything larger than a pixel. The lens and the dispatch now follow the rule. The swarm is a thousand sails, six days of laser. See [How Earth learns](#how-earth-learns).
     - **Settled 2026-10-13:** the plateau at the grid limit stands. Better chips don't dodge it, and the megatonne road pays there. See [Growing compute](#growing-compute).

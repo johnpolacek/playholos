@@ -1027,6 +1027,13 @@ What a neighbor's world can plausibly be, beyond an Earth twin. Each roster entr
     - Matters: a lens is the one way short of going to see a suspected world's surface, within a few decades. One craft serves one star.
     - This project's arithmetic: 548 AU at 150 km/s is 17 Years. A pixel scales with distance, so about 13 km at 49 ly. The dive toward the Sun before that is not timed.
     - Used: v2 [How Earth learns](HOLOS_GAME_CONCEPT.md#how-earth-learns), a suspicion opens the whole kit. `calcs/signs.py closer`, and the third mock's lens to Gliese 1021.
+- **[Eubanks et al. 2026, science from the in situ exploration of the Proxima system](https://arxiv.org/abs/2604.20182)** · Preprint, April 2026. Read in the arXiv HTML, 2026-10-14.
+  - A swarm of 3.6 g laser-sail probes at 0.2c. About 1,000 launched over a 6-day boost, about 300 left to talk to Earth.
+  - Each probe is a 4 m disk with 169 annular 200 mm apertures, phased to give "sub-arc-second resolutions at optical wavelengths". The search summary put it at about 0.4 arcseconds.
+  - "With 300 probes, the total ephemeris error needs to be 100,000 km so that at least one probe passes within a diameter of the target planet." At the closest distance, one resolution element is about 20 m.
+  - "Imagery during a near-relativistic flyby will be very difficult." The close pass lasts under a minute, and images are stacked from many short exposures. Not all the raw data can ever be sent home.
+  - Matters: a real figure for what a flyby sees, 20 m at best and about 200 m at a miss of 100,000 km.
+  - Used: v2 [How Earth learns](HOLOS_GAME_CONCEPT.md#how-earth-learns), a picture shows everything larger than a pixel. `calcs/signs.py pictures`, and the third mock's dispatch.
 - **[NASA Deep Space Optical Communications](https://www.nasa.gov/missions/tech-demonstration/deep-space-optical-communications-dsoc/)** · Demonstrated.
   - Laser links across deep space, with precise pointing and data rates that fall with distance.
   - Used: v1 tight beam, laser links.

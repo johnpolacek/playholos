@@ -1,4 +1,4 @@
-"""What Earth can read of a neighbor's world from afar, and with what. Run: python3 calcs/signs.py 10   ('stats': 400 games, 'receiver': a receiver split among stars, 'closer': ways to know more)
+"""What Earth can read of a neighbor's world from afar, and with what. Run: python3 calcs/signs.py 10   ('stats': 400 games, 'receiver': a receiver split among stars, 'closer': ways to know more, 'pictures': what each shows)
 
 Settled 2026-10-13: physics alone. Each sign of minds needs its real instrument, however long that takes. Nothing is
 hurried, and nothing guarantees a neighbor is known by any Year. Sources are in HOLOS_RESEARCH.md, "Reading air".
@@ -77,6 +77,33 @@ def look_closer(now=22.3, array_done=27.7):
         print(f'  {star:13} {d:4.1f} ly · lens Year {w["lens"]:.0f}, {lens_km(d / 3.2616):.0f} km a pixel · interferometer Year {w["interferometer"]:.0f} · '
               f'sails\' word Year {w["sails"]:.0f} · a knock lands Year {w["knock_lands"]:.0f}, a reply from Year {w["reply"]:.0f}')
 
+# Settled 2026-10-14: what a picture shows. Physics sets the pixel size, and the seed's world fills the pixels. The Mind
+# names only what is larger than a pixel.
+# - A lens: about 25 km a pixel for an exo-Earth at 30 pc (NASA NIAC 2020), scaling with distance.
+# - A sail flyby: sub-arcsecond optics, about 0.4 arcseconds, so about 20 m from 10,000 km. With about 300 sails and the
+#   target's orbit known to 100,000 km, at least one passes within a world's diameter. The swarm's sails aimed at other
+#   planets miss by up to 100,000 km: about 200 m (Eubanks et al. 2026). The closest pass lasts under a minute.
+# - Earth's own telescopes: a world is less than one pixel. They read its light, never its shapes.
+# The sizes below are round figures from Earth's own surface: how wide each thing is.
+FLYBY_ARCSEC = 0.4
+def flyby_km(miss_km): return miss_km * FLYBY_ARCSEC / 206265
+FEATURES = (  # what, how wide in km, the kinds of world that have it
+    ('continents and seas', 1000, 'all'), ('cloud and ice', 300, 'air'), ('land colored by life', 100, 'life'),
+    ('cleared land with straight edges', 30, 'industry'), ('cities', 30, 'industry'),
+    ('lakes behind dams', 10, 'built'), ('dams', 1, 'built'), ('street grids', 0.1, 'built'), ('roads', 0.03, 'built'), ('single buildings', 0.01, 'built'))
+KINDS = dict(bare={'all'}, airy={'all', 'air'}, living={'all', 'air', 'life'}, industrial={'all', 'air', 'life', 'industry', 'built'},
+             collapsed={'all', 'air', 'life', 'built'})        # a world whose minds are gone: cleared land and grey cities grow over
+def shows(kind, pixel_km):
+    """What a picture shows of a world of this kind, at this pixel size: everything larger than a pixel."""
+    return [what for what, km, has in FEATURES if has in KINDS[kind] and km > pixel_km]
+
+def pictures():
+    print('What a picture shows: everything larger than a pixel.')
+    for way, px in (('Lens, 31 ly', lens_km(31 / 3.2616)), ('Lens, 49 ly', lens_km(49 / 3.2616)), ('Sails, typical pass', flyby_km(1e5)), ('Sails, nearest pass', flyby_km(1e4))):
+        print(f'  {way:20} {px * 1000:7,.0f} m a pixel')
+        for kind in ('living', 'industrial', 'collapsed'):
+            print(f'    {kind:11} ' + ', '.join(shows(kind, px)))
+
 def listen_days(watts, ly, sefd):
     """Days of listening to hear a steady tone, or None if a Year is not enough."""
     if not watts: return None
@@ -153,4 +180,5 @@ if __name__ == '__main__':
     if sys.argv[1:] == ['stats']: stats(rows)
     elif sys.argv[1:] == ['receiver']: receiver_split()
     elif sys.argv[1:] == ['closer']: look_closer()
+    elif sys.argv[1:] == ['pictures']: pictures()
     else: report(seed.draw(int(sys.argv[1]) if sys.argv[1:] else 10, rows))

@@ -1392,7 +1392,7 @@ Godview
 Settled 2026-10-14: a suspicion opens the whole kit. The player may do anything v1 allows, at any world, and the Mind says what each act risks.
 Real: a craft at the Sun’s focal line, beyond 548 AU, pictures an exo-Earth at 30 pc at about 25 km a pixel in six months (Turyshev, NASA 2020). It flies at about 150 km/s: 17 Years out.
 The interferometer is v1’s 40 Years, unchecked. The lens’s build of 8 Years is a sample.
-Settled · What can the player do with a suspicion? Anything v1 allows, at any world: listen, look, go or knock. The Mind says what it knows, what each act risks, and when each answers. For four smog worlds at Year 22: radio from the nearer ones by Year 34, a solar lens picture of one world by Year 46 to 48, sails’ word after Year 200. Settled 2026-10-14.
+Settled · What does a picture show? Everything larger than a pixel, and nothing smaller. Physics sets the pixel, and the seed’s world fills it. A solar lens: about 25 km at 30 pc, so cities and cleared land, never roads. The nearest sail of a swarm: about 20 m, so roads and dams, never single buildings. Settled 2026-10-14.
 +1:52:19 · Year 22.5
 “Send a lens to Gliese 1021. First in line.”
 Earth · Year 22.5
@@ -1423,12 +1423,12 @@ MIND · NEW ORDER
 WHAT YOU WANT
 Launch the sails.
 THE MIND’S VERSION
-INQUIRY · Sail swarm to Alpha Centauri A · a hundred gram sails · nine minutes each
+INQUIRY · Sail swarm to Alpha Centauri A · a thousand gram sails · nine minutes each
 ARRIVES · Year 49 · they pass in hours and can’t stop
 WORD HOME · Year 54 · one dispatch, by narrow beam
 SHOWS US · The beam shines on past the sails, toward that star and whatever lies behind it
 [Edit] · [Set the order]
-THE MIND · Launched. A hundred sails, nine minutes of light each. They pass Alpha Centauri at Year 49. Word is home at Year 54. That light can’t be called back.
+THE MIND · Launched. A thousand sails, nine minutes of light each, six days in all. They pass Alpha Centauri at Year 49. Word is home at Year 54. That light can’t be called back.
 [Talk to the Mind]
 Godview
 The earliest a reply to Cosmic Call 2 could reach Earth from Gliese 49. In this game no one lives there. The window is empty, and Earth can’t know it.
@@ -1583,20 +1583,20 @@ REPORT · A PICTURE
 
 ### A picture of Gliese 1021’s world
 Gliese 1021 · 49.1 ly · solar lens at 548 AU · half a Year · about 13 km a pixel · light that left 49 Years ago
-Seas, cloud and a polar cap. On the land, patches with straight edges that don’t follow the ground. Grey spreads at the mouths of rivers.
+Continents and seas, cloud and ice, land colored by life, cleared land with straight edges, and cities.
 WHAT IT COULD BE · BEFORE → NOW
 Minds, at Gliese 1021’s world · likely → · very likely
 Land shaped by weather alone · unlikely → · almost no chance
-WHAT IT CAN’T TELL
-Who they are, or whether they have heard us. One picture, 49 Years old.
-THE MIND · UNASKED · A picture of their world · Straight edges on the land, and grey at the river mouths. I think someone shaped it. It does not say whether they know of us. · [What else can it see?] · [Later]
+WHAT IT CAN’T SHOW
+Anything under 13 km: lakes behind dams, dams, street grids, roads, single buildings. Who they are, or whether they have heard us.
+THE MIND · UNASKED · A picture of their world · Cleared land with straight edges, and grey spreads the size of cities. I think someone shaped it. Nothing under 13 km shows. · [What else can it see?] · [Later]
 [Talk to the Mind]
 Godview
 The earliest a reply to Cosmic Call 2 could reach Earth from 55 Cancri. In this game no one lives there. The window is empty, and Earth can’t know it.
 Truth: Hael’s people. Their knock at Year 19.9 went unheard. This is Earth’s first sight of them.
 The light left 49 Years ago, about 2037. A pixel is about 13 km, scaled from NASA’s 25 km at 30 pc.
-What the picture shows is the mock’s sample.
-Design question 4 · How much can a lens picture or a flyby show? A lens at the Sun’s focal line pictures one world at about ten kilometres a pixel. Sails pass at a fifth of light speed and send one dispatch. What each shows of a surface is the mock’s.
+Settled 2026-10-14: physics sets the pixel, and the seed’s world fills it. The Mind names only what is larger than a pixel.
+Settled · What can the player do with a suspicion? Anything v1 allows, at any world: listen, look, go or knock. The Mind says what it knows, what each act risks, and when each answers. For four smog worlds at Year 22: radio from the nearer ones by Year 34, a solar lens picture of one world by Year 46 to 48, sails’ word after Year 200. Settled 2026-10-14.
 +4:27:57 · Year 53.6
 The Mind opens on its own.
 Dispatch · Word from Alpha Centauri A. Built things, under forest. No lights.
@@ -1607,8 +1607,8 @@ REPORT · A DISPATCH
 [‹ All reports]
 
 ### Word from Alpha Centauri A
-Sail swarm · passed at a fifth of light speed, Year 49 · sent 4.3 Years ago
-Straight lines under forest: roads, dams, the grids of streets. No lights on the night side. No radio, from a hundred sails listening as they passed.
+Sail swarm · passed at a fifth of light speed, Year 49 · nearest sail 10,000 km off, about 19 m a pixel · sent 4.3 Years ago
+Straight lines under forest: roads, dams, the grids of streets. No lights on the night side. No radio, from the sails listening as they passed.
 WHAT IT COULD BE · BEFORE → NOW
 Minds, once, and gone or few · unlikely → · almost certain
 Life, after great eruptions · roughly even → · almost no chance
@@ -1621,9 +1621,11 @@ Godview
 The earliest a reply to Teen Age Message could reach Earth from 47 Ursae Majoris. In this game no one lives there. The window is empty, and Earth can’t know it.
 The earliest a reply to Cosmic Call 2 could reach Earth from HD 10307. In this game no one lives there. The window is empty, and Earth can’t know it.
 Truth: Anwe’s people collapsed in 1986. The sails saw their world 110 years on. Some may survive, without radio.
+Real: sub-arcsecond optics on each sail. With about 300 arriving and the world’s orbit known to 100,000 km, one passes within a world’s width: about 19 m a pixel. Others miss by up to 100,000 km, about 194 m (Eubanks et al. 2026).
+So roads and dams show, and single buildings do not. A lens would have shown this world as merely alive.
 An inquiry begun at minute 47 answers at 4:27:57. In between, the question could not be settled from Earth.
 Varn wakes at Year 57.6, 4 Years from now. That light reaches Earth at Year 89.
-Design question 4 · How much can a lens picture or a flyby show? A lens at the Sun’s focal line pictures one world at about ten kilometres a pixel. Sails pass at a fifth of light speed and send one dispatch. What each shows of a surface is the mock’s.
+Settled · What can the player do with a suspicion? Anything v1 allows, at any world: listen, look, go or knock. The Mind says what it knows, what each act risks, and when each answers. For four smog worlds at Year 22: radio from the nearer ones by Year 34, a solar lens picture of one world by Year 46 to 48, sails’ word after Year 200. Settled 2026-10-14.
 
 ## Questions these mocks raise
 Settled: Does a half-built real instrument cost fewer Years? · It costs what its real schedule leaves: about 8 Years for the Habitable Worlds Observatory. Build times are standard, from the science, and the player can invest in projects that build faster. A speed-up also shortens the part left of a work under way. Settled 2026-10-10 and 10-11.
@@ -1660,8 +1662,8 @@ Settled: How much thought does a work want? · As its real cousin costs money, c
 Settled: How is thought split among works? · By an order the player sets. A new work joins the end of the line. The Mind gives each work its want, in order, then pushes each in turn to ten times its want. So no work stops because another is first. The order moves the mirror and the sails by four to five Years, and power from orbit by about one: rock from the Moon sets that pace. Settled 2026-10-14.
 Settled: A knock Earth can’t hear: should a candidate world earn a listen? · The Mind advises it. When the sweep marks worlds, it says a deep-field receiver would hear their knocks about three times farther than the all-sky watch. The player decides. The Mind never builds it on its own. Settled 2026-10-14.
 Settled: One receiver, many marked worlds: how does it share its watch? · It is split. The player names the stars it holds, and each part hears less far, as real dish arrays do. On one star it hears a ten gigawatt knock to 117 ly. On four, to 59. On more than eleven, no farther than the all-sky watch. A dish array can’t hold scattered stars at full reach. Settled 2026-10-14.
+Settled: What does a picture show? · Everything larger than a pixel, and nothing smaller. Physics sets the pixel, and the seed’s world fills it. A solar lens: about 25 km at 30 pc, so cities and cleared land, never roads. The nearest sail of a swarm: about 20 m, so roads and dams, never single buildings. Settled 2026-10-14.
 Settled: What can the player do with a suspicion? · Anything v1 allows, at any world: listen, look, go or knock. The Mind says what it knows, what each act risks, and when each answers. For four smog worlds at Year 22: radio from the nearer ones by Year 34, a solar lens picture of one world by Year 46 to 48, sails’ word after Year 200. Settled 2026-10-14.
 1. Is the plateau too quiet, and too long? · From minute 60 to minute 95 nothing wakes the player. Thought stays one size for 34 Years, 2.8 hours of play, until power from orbit.
 2. What does a late answer cost? · The player answers 21 Years after the first knock. A sender waits one round trip, then takes silence as news. Ombe’s wait ends about 20 Years before the answer lands.
 3. Earth has proof of minds who don’t know they are heard. What may it do? · Tones from a world decades before its Mind wakes. v1 filed a young world under no conversation possible.
-4. How much can a lens picture or a flyby show? · A lens at the Sun’s focal line pictures one world at about ten kilometres a pixel. Sails pass at a fifth of light speed and send one dispatch. What each shows of a surface is the mock’s.

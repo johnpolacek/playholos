@@ -47,6 +47,7 @@ SETTLED = [('Does a half-built real instrument cost fewer Years?', 'It costs wha
            ('How is thought split among works?', 'By an order the player sets. A new work joins the end of the line. The Mind gives each work its want, in order, then pushes each in turn to ten times its want. So no work stops because another is first. The order moves the mirror and the sails by four to five Years, and power from orbit by about one: rock from the Moon sets that pace. Settled 2026-10-14.'),
            ('A knock Earth can’t hear: should a candidate world earn a listen?', 'The Mind advises it. When the sweep marks worlds, it says a deep-field receiver would hear their knocks about three times farther than the all-sky watch. The player decides. The Mind never builds it on its own. Settled 2026-10-14.'),
            ('One receiver, many marked worlds: how does it share its watch?', 'It is split. The player names the stars it holds, and each part hears less far, as real dish arrays do. On one star it hears a ten gigawatt knock to 117 ly. On four, to 59. On more than eleven, no farther than the all-sky watch. A dish array can’t hold scattered stars at full reach. Settled 2026-10-14.'),
+           ('What does a picture show?', 'Everything larger than a pixel, and nothing smaller. Physics sets the pixel, and the seed’s world fills it. A solar lens: about 25 km at 30 pc, so cities and cleared land, never roads. The nearest sail of a swarm: about 20 m, so roads and dams, never single buildings. Settled 2026-10-14.'),
            ('What can the player do with a suspicion?', 'Anything v1 allows, at any world: listen, look, go or knock. The Mind says what it knows, what each act risks, and when each answers. For four smog worlds at Year 22: radio from the nearer ones by Year 34, a solar lens picture of one world by Year 46 to 48, sails’ word after Year 200. Settled 2026-10-14.')]
 
 # ---------- Godview: who is out there ----------
@@ -915,7 +916,6 @@ def long_rows():
     q_quiet = ask('Is the plateau too quiet, and too long?', f'From minute 60 to minute {AT(R["solar"]) // 60} nothing wakes the player. Thought stays one size for {PLATEAU:.0f} Years, {PLATEAU * 5 / 60:.1f} hours of play, until power from orbit.')
     q_late = ask('What does a late answer cost?', f'The player answers {K2["year"] - KNOCK["year"]:.0f} Years after the first knock. A sender waits one round trip, then takes silence as news. {WHO["name"]}’s wait ends about {K2["year"] + VD - (KNOCK["sent"] - Y0 + 2 * VD + 1):.0f} Years before the answer lands.')
     q_unaware = ask('Earth has proof of minds who don’t know they are heard. What may it do?', 'Tones from a world decades before its Mind wakes. v1 filed a young world under no conversation possible.')
-    q_dispatch = ask('How much can a lens picture or a flyby show?', 'A lens at the Sun’s focal line pictures one world at about ten kilometres a pixel. Sails pass at a fifth of light speed and send one dispatch. What each shows of a surface is the mock’s.')
 
     # --- Year 12: the long roads
     t0 = 3600
@@ -966,12 +966,15 @@ def long_rows():
     lens_order = order(tall + 60, f'Send a lens to {FAR["star"]}. First in line.', [
         ('BUILD', f'<b>Solar lens</b> · one craft, for {FAR["star"]} only'), ('FLIES', f'From Year {LENS_GO:.0f} · past the Sun, then {signs.LENS_FLIGHT:.0f} Years out to 548 AU'),
         ('LOOKS', 'Half a Year · a picture of the surface'), ('WAKES YOU', 'When the picture is made')])
+    LENS_PX = signs.lens_km(FAR['d'] / 3.2616)                                                 # the rule: physics sets the pixel, the seed fills it
+    LENS_SEES = signs.shows('industrial', LENS_PX)
+    LENS_MISSES = [what for what, km, has in signs.FEATURES if has in signs.KINDS['industrial'] and km <= LENS_PX]
     lens_r = tab(AT(LENS_END), 'Report', 'REPORT', 'A PICTURE', f"""<button class="backlink inline">‹ All reports</button>
 <h3 class="lead">A picture of {FAR['star']}’s world</h3>
 <p class="copy small">{FAR['star']} · {FAR['d']:.1f} ly · solar lens at 548 AU · half a Year · about {signs.lens_km(FAR['d'] / 3.2616):.0f} km a pixel · light that left {FAR['d']:.0f} Years ago</p>
-<p class="copy">Seas, cloud and a polar cap. On the land, patches with straight edges that don’t follow the ground. Grey spreads at the mouths of rivers.</p>
+<p class="copy">{LENS_SEES[0].capitalize()}, {', '.join(LENS_SEES[1:-1])}, and {LENS_SEES[-1]}.</p>
 {SEC('WHAT IT COULD BE · BEFORE → NOW')}{odds(f'Minds, at {FAR["star"]}’s world', 60, 94)}{odds('Land shaped by weather alone', 30, 5)}
-{SEC('WHAT IT CAN’T TELL')}<p class="copy small">Who they are, or whether they have heard us. One picture, {FAR['d']:.0f} Years old.</p>""")
+{SEC('WHAT IT CAN’T SHOW')}<p class="copy small">Anything under {LENS_PX:.0f} km: {', '.join(LENS_MISSES)}. Who they are, or whether they have heard us.</p>""")
     # --- Year 29.6: a second voice, and an answer
     tv = AT(K2['year'])
     voice2 = tab(tv, 'Report', 'REPORT', 'A VOICE', f"""<button class="backlink inline">‹ All reports</button>
@@ -988,7 +991,7 @@ def long_rows():
     # --- the laser array, and the sails
     ts = AT(R['array'])
     sails = order(ts, 'Launch the sails.', [
-        ('INQUIRY', f'<b>Sail swarm to Alpha Centauri A</b> · a hundred gram sails · nine minutes each'), ('ARRIVES', f'Year {R["array"] + SAIL_FLY:.0f} · they pass in hours and can’t stop'),
+        ('INQUIRY', f'<b>Sail swarm to Alpha Centauri A</b> · a thousand gram sails · nine minutes each'), ('ARRIVES', f'Year {R["array"] + SAIL_FLY:.0f} · they pass in hours and can’t stop'),
         ('WORD HOME', f'Year {HOME:.0f} · one dispatch, by narrow beam'), ('SHOWS US', 'The beam shines on past the sails, toward that star and whatever lies behind it')])
     # --- the mass driver, and the far-side array's first fifth
     td = AT(R['driver'])
@@ -1021,8 +1024,8 @@ def long_rows():
     th = AT(HOME)
     dispatch = tab(th, 'Report', 'REPORT', 'A DISPATCH', f"""<button class="backlink inline">‹ All reports</button>
 <h3 class="lead">Word from Alpha Centauri A</h3>
-<p class="copy small">Sail swarm · passed at a fifth of light speed, Year {R['array'] + SAIL_FLY:.0f} · sent {GO_D:.1f} Years ago</p>
-<p class="copy">Straight lines under forest: roads, dams, the grids of streets. No lights on the night side. No radio, from a hundred sails listening as they passed.</p>
+<p class="copy small">Sail swarm · passed at a fifth of light speed, Year {R['array'] + SAIL_FLY:.0f} · nearest sail 10,000 km off, about {signs.flyby_km(1e4) * 1000:.0f} m a pixel · sent {GO_D:.1f} Years ago</p>
+<p class="copy">Straight lines under forest: roads, dams, the grids of streets. No lights on the night side. No radio, from the sails listening as they passed.</p>
 {SEC('WHAT IT COULD BE · BEFORE → NOW')}{odds('Minds, once, and gone or few', 27, 97)}{odds('Life, after great eruptions', 46, 2)}{odds('Minds, living there now in numbers', 2, 4)}
 {SEC('WHAT IT CAN’T TELL')}<p class="copy small">When it ended, or whether anyone is left. The sails passed in hours and can’t go back.</p>""")
     at = lambda t, since, *a, **k: (t, a, k)
@@ -1081,7 +1084,7 @@ def long_rows():
               f'{WHO["name"]} waited one round trip, to about Year {KNOCK["sent"] - Y0 + 2 * VD + 1:.0f} by its own clock, then took the silence as news. A contacter most often knocks again.',
               f'To be on time, Earth’s answer had to leave within a Year of the knock. “Listen first” spent that.'], question=q_late, label=HMS(tv + 30)),
         at(ts, tv + 30, 'Launch the sails.', 'The laser array is done.',
-             talk(sails, f'Launched. A hundred sails, nine minutes of light each. They pass Alpha Centauri at Year {R["array"] + SAIL_FLY:.0f}. Word is home at Year {HOME:.0f}. That light can’t be called back.'),
+             talk(sails, f'Launched. A thousand sails, nine minutes of light each, six days in all. They pass Alpha Centauri at Year {R["array"] + SAIL_FLY:.0f}. Word is home at Year {HOME:.0f}. That light can’t be called back.'),
              ['Real: a laser launch shines on past its sails. Who lies behind the target, along the beam, is not modelled yet.',
               f'The array took {R["array"] - 9.4:.0f} Years, against {ARRAY_Y} at standard pace. Starshot aimed at a first launch within a generation.'], label=HMS(ts)),
         at(td, ts, 'Start the far-side array.', 'The Moon’s mass driver is done.',
@@ -1098,10 +1101,10 @@ def long_rows():
               'The first proof of minds by Earth’s own instruments: ' + f'{R["fifth"]:.0f} Years in, {HMS(tf)[1:]} of play. Two voices came first.',
               'A world that stays silent in this list is not cleared. Its hum may be too faint for one fifth.'], question=q_unaware, label=HMS(tf + AT(got_days / 365.25) + 30)),
         at(AT(LENS_END), 0, '· The Mind opens on its own.', ('Picture', f'The lens at {FAR["star"]}: straight edges on the land. Minds: {moved(60, 94)}.'),
-           talk(lens_r, f'<b>A picture of their world</b>Straight edges on the land, and grey at the river mouths. I think someone shaped it. It does not say whether they know of us.', ('What else can it see?', 'Later'), 'open'),
+           talk(lens_r, f'<b>A picture of their world</b>Cleared land with straight edges, and grey spreads the size of cities. I think someone shaped it. Nothing under {LENS_PX:.0f} km shows.', ('What else can it see?', 'Later'), 'open'),
            [(f'Truth: {FAR["who"]}’s people. Their knock at Year {KF["year"]:.1f} went unheard. This is Earth’s first sight of them.' if FAR['who'] == WHOF['name'] else f'Truth: {FAR["who"]}’s people.'),
             f'The light left {FAR["d"]:.0f} Years ago, about {Y0 + LENS_END - FAR["d"]:.0f}. A pixel is about {signs.lens_km(FAR["d"] / 3.2616):.0f} km, scaled from NASA’s 25 km at 30 pc.',
-            'What the picture shows is the mock’s sample.'], question=q_dispatch, label=HMS(AT(LENS_END))),
+            'Settled 2026-10-14: physics sets the pixel, and the seed’s world fills it. The Mind names only what is larger than a pixel.'], settled=35, label=HMS(AT(LENS_END))),
         at(tp, tf + AT(got_days / 365.25) + 30, '· The phone lights. Opens it.', 'Power from orbit: a fifth more energy.',
              talk(power, f'The first arrays are beaming down. With the ground’s fifth, that is room for a twelfth data center. I have been this size for {tp / 300 - 11.1:.0f} Years.', ('Start it', 'Not yet'), 'glow'),
              [f'Ten megatonnes: {eg_years(R["power"] - R["driver"])} of the driver’s rock, and 180 Years of Earth’s lift.',
@@ -1109,8 +1112,10 @@ def long_rows():
         at(th, tp, '· The Mind opens on its own.', ('Dispatch', 'Word from Alpha Centauri A. Built things, under forest. No lights.'),
              talk(dispatch, '<b>They were here</b>Roads and dams under forest, and no lights. The carbon in that air was theirs. I can’t say when it ended, or whether anyone is left. Our own air once read the same.', ('What happened there?', 'Send a probe that stays'), 'open'),
              ['Truth: Anwe’s people collapsed in 1986. The sails saw their world 110 years on. Some may survive, without radio.',
+              f'Real: sub-arcsecond optics on each sail. With about 300 arriving and the world’s orbit known to 100,000 km, one passes within a world’s width: about {signs.flyby_km(1e4) * 1000:.0f} m a pixel. Others miss by up to 100,000 km, about {signs.flyby_km(1e5) * 1000:.0f} m (Eubanks et al. 2026).',
+              'So roads and dams show, and single buildings do not. A lens would have shown this world as merely alive.',
               f'An inquiry begun at minute 47 answers at {HMS(th)[1:]}. In between, the question could not be settled from Earth.',
-              (f'{F["who"]} woke at Year {truth_tone["waking"] - Y0:.1f}, {HOME - (truth_tone["waking"] - Y0):.0f} Years ago.' if truth_tone['waking'] - Y0 < HOME else f'{F["who"]} wakes at Year {truth_tone["waking"] - Y0:.1f}, {truth_tone["waking"] - Y0 - HOME:.0f} Years from now.') + f' That light reaches Earth at Year {truth_tone["waking"] - Y0 + D:.0f}.'], question=q_dispatch, label=HMS(th)),
+              (f'{F["who"]} woke at Year {truth_tone["waking"] - Y0:.1f}, {HOME - (truth_tone["waking"] - Y0):.0f} Years ago.' if truth_tone['waking'] - Y0 < HOME else f'{F["who"]} wakes at Year {truth_tone["waking"] - Y0:.1f}, {truth_tone["waking"] - Y0 - HOME:.0f} Years from now.') + f' That light reaches Earth at Year {truth_tone["waking"] - Y0 + D:.0f}.'], settled=35, label=HMS(th)),
     ], key=lambda r: r[0])
     # rows run in time order, each counting what happened since the one before: paced dates can reorder them
     return [stop(t, prev, *a, **k) for (t, a, k), prev in zip(rows, [t0] + [r[0] for r in rows])]
