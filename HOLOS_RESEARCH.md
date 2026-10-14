@@ -1031,7 +1031,27 @@ What a neighbor's world can plausibly be, beyond an Earth twin. Each roster entr
   - Used: v1 star laser, near-light sails.
 - **[Heller and Hippke 2017](https://arxiv.org/abs/1701.08803)** · Published, ApJL.
   - A sail can brake on starlight and gravity at a bright star: about 4.6% of light speed to park at Proxima via Alpha Centauri A and B.
-  - Used: v1 starlight sail, catalog.
+  - Read again 2026-10-14. The probe is 86 grams: a 10 g payload on a sail 316 m across, as thin as graphene. It passes 5 star widths from the star.
+  - The Sun alone can launch or catch such a sail at up to about 11,500 km/s, 3.8% of light speed. So a sail braking into Sol takes about 115 Years from Alpha Centauri.
+  - Why it matters: a probe can be tiny and stop with no rocket, but only slowly.
+  - Used: v1 starlight sail, catalog. The open question on neighbor probes, 2026-10-14.
+- **[Gros 2017, magnetic sails](https://arxiv.org/abs/1707.02801)** · Published, Journal of Physics Communications.
+  - A superconducting loop, about 50 km across, brakes on interstellar protons. The gas is so thin that a fast stop at Proxima needs about a thousand tonnes. A 1.5 t craft stops only from slow speeds, over about 10,000 years.
+  - Earlier drag estimates by Zubrin and Andrews were about three times too hopeful, by Freeland's check.
+  - Why it matters: a magnetic sail can't stop a small, fast probe.
+  - Used: the open question on neighbor probes, 2026-10-14.
+- **[Hoang et al. 2017](https://arxiv.org/abs/1608.05284)** · Published, ApJ.
+  - At a fifth of light speed, gas and dust erode a gram probe's front by about half a millimetre. A shield about 1 mm thick of graphite, strong and slow to melt, protects it. Lubin's group coats the edge with beryllium instead, by a secondhand quote.
+  - Why it matters: what a small probe's front is made of. Impact energy falls with the square of speed, so a braking sail at 4% of light speed takes about 25 times less.
+  - Used: the open question on neighbor probes, 2026-10-14.
+- **[Atwater et al. 2018, Nature Materials 17, 861](https://experts.umn.edu/en/publications/materials-challenges-for-the-starshot-lightsail/)** · Published.
+  - A laser sail at a fifth of light speed needs materials with extreme properties. Later designs layer molybdenum disulfide, an atom-thin reflector, between films of silicon nitride that shed heat ([arXiv 2106.03558](https://arxiv.org/pdf/2106.03558)). Only the abstract and summaries were read.
+  - Why it matters: a laser sail reflects one color. A sail braking on a star must reflect its whole spectrum, a harder material problem.
+  - Used: the open question on neighbor probes, 2026-10-14.
+- **[Haqq-Misra and Kopparapu 2012](https://arxiv.org/abs/1111.1212)** · Published, Acta Astronautica.
+  - Searches of the Solar System are too incomplete to rule out alien probes. Few could find one 1 to 10 m across, by press accounts of the paper ([Universe Today](https://www.universetoday.com/90789/alien-artifacts-may-be-here-just-hard-to-find)). Only the abstract was read.
+  - Why it matters: v1 reasoned that ancient probes must be rare, since none has been found at Sol. That holds only for large ones.
+  - Used: the open question on neighbor probes, 2026-10-14.
 - **[Hippke 2017, the Sun's lens](https://arxiv.org/abs/1706.05570)** · Published, Acta Astronautica.
   - The solar corona defocuses the Sun's gravitational lens below about 120 GHz, so the lens cannot hear a world's low-frequency hum.
   - Used: v1 "The Sun's lens cannot be assumed to amplify the low-frequency hum", catalog.
