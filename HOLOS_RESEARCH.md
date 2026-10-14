@@ -1040,6 +1040,9 @@ What a neighbor's world can plausibly be, beyond an Earth twin. Each roster entr
 - **Classic propulsion studies** · Study. Links found by an agent, 2026-10-13.
   - Breakthrough Starshot, gram-scale beamed sails: [Lubin 2016](https://arxiv.org/abs/1604.01356), JBIS 69, 40, and [Parkin 2018](https://arxiv.org/abs/1805.01306), Acta Astronautica 152, 370.
     - Abstracts read by me, 2026-10-13. Parkin: the aim is "a first launch to Alpha Centauri within the next generation". The cost-optimal design for a fifth of light speed is a 4.1 m sail pushed for 9 minutes, with 8.0 billion dollars of ground beam director and 6 million dollars of energy a sail. That assumes lasers at a cent a watt.
+    - Parkin's full text, read in the arXiv HTML 2026-10-14: 200 GW of laser at 1.06 microns, a filled array 2.7 km across, 480 s of beam a sail. The sail starts 60,000 km up, reflects 70% and absorbs about a hundred-millionth.
+    - Matters: the 30% the sail passes goes on toward the target. This project's arithmetic: as the beam stops, it lights a spot 0.05 AU across at Alpha Centauri, 150 times the Sun's light there in the same nanometre. Past the target the cone is under 5 arcseconds wide, and no star within 50 ly is expected in it.
+    - Used: v2 [How Earth learns](HOLOS_GAME_CONCEPT.md#how-earth-learns), who sees a laser launch. `calcs/early_game.py` launch_glare(), and the third mock's sails.
     - A precursor at a hundredth of light speed: 517 million dollars. Lubin: wafer craft could pass a quarter of light speed.
     - From a search summary, not read: Starshot paused in 2024 to restructure, and a former team lead wrote in March 2026 that its first phase found no show-stopper.
     - Matters: the builders' own aim is a generation, not v1's 60 Years.

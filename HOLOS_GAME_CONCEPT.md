@@ -489,6 +489,13 @@ Settled 2026-10-13.
     - At 49 ly a pixel is about 13 km. The build, 8 Years, and its want, half a flagship, are samples.
   - *Earth has knocked on stars with no sign of life,* as Cosmic Call did. A suspicion is more than Earth had then.
   - Set aside: only listening and looking until proof, and knocks gated by the Mind's judgment.
+- **A laser launch is seen by its target, and no one else.** Found 2026-10-14. Numbers from `python3 calcs/early_game.py`.
+  - *Why.* A sail reflects 70% of its beam and passes 30% forward (Parkin 2018). That light goes on to the target star.
+  - *How bright.* As each sail's beam stops, a spot 0.05 AU across at Alpha Centauri gets 150 times the Sun's light there in that nanometre. A laser's line is narrower still.
+    - Earlier in the pulse the spot is wider and fainter, so the whole system is lit for a moment.
+  - *No one behind it.* Past the target the cone is under 5 arcseconds wide. No star within 50 ly is expected in it.
+  - *So it is news to the target:* something is coming, 17 Years before the sails at 4.3 ly. An awake Mind there catches it, as it would a knock. A people catches it only if it watches Sol in that color.
+  - *The Mind says so before a launch,* when the target is a candidate.
 - **A picture shows everything larger than a pixel, and nothing smaller.** Settled 2026-10-14. Numbers from `python3 calcs/signs.py pictures`.
   - *Physics sets the pixel. The seed's world fills it.* The Mind names only what is larger than a pixel.
   - *A solar lens:* about 25 km a pixel at 30 pc, 13 km at 49 ly. Cities and cleared land show. Dams and roads don't.

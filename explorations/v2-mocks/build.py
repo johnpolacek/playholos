@@ -995,7 +995,7 @@ def long_rows():
     ts = AT(R['array'])
     sails = order(ts, 'Launch the sails.', [
         ('INQUIRY', f'<b>Sail swarm to Alpha Centauri A</b> · a thousand gram sails · nine minutes each'), ('ARRIVES', f'Year {R["array"] + SAIL_FLY:.0f} · they pass in hours and can’t stop'),
-        ('WORD HOME', f'Year {HOME:.0f} · one dispatch, by narrow beam'), ('SHOWS US', 'The beam shines on past the sails, toward that star and whatever lies behind it')])
+        ('WORD HOME', f'Year {HOME:.0f} · one dispatch, by narrow beam'), ('SHOWS US', f'Each sail’s glare reaches that star in {GO_D:.1f} Years: minutes of our laser’s color, brighter there than our Sun in it. No one beyond is in the beam')])
     # --- the mass driver, and the far-side array's first fifth
     td = AT(R['driver'])
     driver = tab(td, 'Projects', 'PROJECTS', f'YEAR {R["driver"]:.0f}', ''.join([
@@ -1112,7 +1112,8 @@ def long_rows():
               'Settled 2026-10-14: a late answer costs nothing extra. Its tables carry the cost. ' + (lambda t: f"On silence, {WHO['name']} rolls " + ', '.join(f'{m} {p:.0%}' for m, p in t['silence'] if p >= .05) + '. On an answer, ' + ', '.join(f'{m} {p:.0%}' for m, p in t['reply'] if p >= .05) + '.')(reactions.table(WHO['name']))], settled=37, label=HMS(tv + 30)),
         at(ts, tv + 30, 'Launch the sails.', 'The laser array is done.',
              talk(sails, f'Launched. A thousand sails, nine minutes of light each, six days in all. They pass Alpha Centauri at Year {R["array"] + SAIL_FLY:.0f}. Word is home at Year {HOME:.0f}. That light can’t be called back.'),
-             ['Real: a laser launch shines on past its sails. Who lies behind the target, along the beam, is not modelled yet.',
+             ['Real: a third of each sail’s beam passes it and goes on (Parkin 2018: 200 GW, a 2.7 km array, a sail that reflects 70%). At the target, as the beam stops, that is a spot 0.05 AU across, 150 times the Sun’s light there in the same nanometre. Past the target the cone is under 5 arcseconds wide, and no star is in it.',
+              'So a laser launch is seen by its target, and only there: news of something coming, 17 Years before the sails. An awake Mind there catches it, as it would a knock. Here no one is left to see it.',
               f'The array took {R["array"] - GO_Y:.0f} Years, against {ARRAY_Y} at standard pace. Starshot aimed at a first launch within a generation.'], label=HMS(ts)),
         at(td, ts, 'Start the far-side array.', 'The Moon’s mass driver is done.',
              talk(driver, f'Started: its first fifth, {R["fifth"] - R["driver"]:.1f} Years at the end of the line. Rock is leaving the Moon now, 600 kilotonnes a Year. Ten megatonnes for power from orbit by Year {R["power"]:.0f}.', ('Undo',)),

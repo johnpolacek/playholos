@@ -1414,12 +1414,13 @@ THE MIND’S VERSION
 INQUIRY · Sail swarm to Alpha Centauri A · a thousand gram sails · nine minutes each
 ARRIVES · Year 46 · they pass in hours and can’t stop
 WORD HOME · Year 51 · one dispatch, by narrow beam
-SHOWS US · The beam shines on past the sails, toward that star and whatever lies behind it
+SHOWS US · Each sail’s glare reaches that star in 4.3 Years: minutes of our laser’s color, brighter there than our Sun in it. No one beyond is in the beam
 [Edit] · [Set the order]
 THE MIND · Launched. A thousand sails, nine minutes of light each, six days in all. They pass Alpha Centauri at Year 46. Word is home at Year 51. That light can’t be called back.
 [Talk to the Mind]
 Godview
-Real: a laser launch shines on past its sails. Who lies behind the target, along the beam, is not modelled yet.
+Real: a third of each sail’s beam passes it and goes on (Parkin 2018: 200 GW, a 2.7 km array, a sail that reflects 70%). At the target, as the beam stops, that is a spot 0.05 AU across, 150 times the Sun’s light there in the same nanometre. Past the target the cone is under 5 arcseconds wide, and no star is in it.
+So a laser launch is seen by its target, and only there: news of something coming, 17 Years before the sails. An awake Mind there catches it, as it would a knock. Here no one is left to see it.
 The array took 18 Years, against 25 at standard pace. Starshot aimed at a first launch within a generation.
 +2:24:48 · Year 29
 “Start the far-side array.”
