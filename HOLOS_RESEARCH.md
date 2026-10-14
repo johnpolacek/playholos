@@ -834,6 +834,12 @@ What Sol's own instruments have found nearby. For v2 open question 3.
 
 What a neighbor's world can plausibly be, beyond an Earth twin. Each roster entry cites the ones it uses.
 
+- **Earth's own dates for animals and forests, checked 2026-10-14.** For the rung draw's schedule.
+  - **[Bobrovskiy et al. 2018, Science](https://marum.de/en/558-million-year-old-fat-reveals-earliest-known-animal.html)**, read on MARUM's page: cholesterol in a Dickinsonia fossil from the White Sea makes it an animal, about 558 million years ago.
+  - **Stein et al. 2019, Current Biology**, from news coverage ([Yale e360](https://e360.yale.edu/digest/scientists-find-the-worlds-oldest-known-forest-dating-back-386-million-years), [EarthSky](https://earthsky.org/earth/oldest-forest-new-york-fossil-trees)), not read at source: fossil roots of the oldest known forest, in Cairo, New York, about 386 million years ago.
+  - Matters: Earth was about 3.98 billion years old with its first known animals, and 4.15 with forests. The rung draw's "animals at about 4 billion years" fits both.
+  - Used: v2 [How Earth learns](HOLOS_GAME_CONCEPT.md#how-earth-learns), the rung from a star's age.
+
 - **[Lobo, Shields, Palubski and Wolf 2023, terminator habitability](https://iopscience.iop.org/article/10.3847/1538-4357/aca970)** · Published, ApJ 945:161.
   - A locked dry land world can have a scorching day side, a frozen night side and a temperate twilight band. On an ocean world, heat transport erases that contrast. Wet worlds can still have more habitable area at lower light, and may dry out as water freezes on the night side.
   - Matters: locked M-dwarf neighbors should mostly be dry.
@@ -1080,11 +1086,12 @@ Results the design is waiting on. Check each when its date comes.
 - About 15 red dwarfs are unconfirmed young-group candidates with no age of their own. They stay. Gliese 393 is listed in AB Doradus but [Amado et al. 2021](https://arxiv.org/abs/2105.13785) put it older than 0.7 billion years.
 - 31 of the F, G and K hosts have no published age in any table opened, mostly K companions.
 - HD 221503 is a candidate member of a 210 million year group ([Thao et al. 2024](https://arxiv.org/abs/2406.05234)) and stays until someone dates it.
-- Stars dated by a slow spin: Gliese 208, DS Leonis and HD 82106. From memory, not reread: K and early M dwarfs stall in their spin-down between about 0.7 and 1.3 billion years (Curtis et al. 2019, 2020). If so, a spin like the Hyades' may not rule out a little over a billion.
+- Stars dated by a slow spin: Gliese 208, DS Leonis and HD 82106. Confirmed 2026-10-14, abstract read: K and M dwarfs do stall. Stars in Praesepe (670 million years), NGC 6811 (1 billion) and NGC 752 (1.4 billion) sit on one slow sequence, and stars of 0.55 Suns stay stalled at least 1.3 billion years ([Curtis et al. 2020](https://arxiv.org/abs/2010.02272), ApJ 904, 140). Still to do: compare each star's period with Praesepe's sequence at its mass. Only a period on that sequence, or slower, leaves its age open past a billion.
 - YZ Canis Minoris stays out on one table's age from its brightness. Read Kerr et al. 2021 for the basis. Its mass and size are ordinary for its type.
 - DT Virginis stays out on its companion Ross 458 C. That signature can also come from heavy elements.
 - calcs/observing.py: the split of noise between leaked starlight and dust is an estimate. Find a published count-rate budget for an Earth twin at 10 pc.
-- Alpha Centauri A's warm zone is a full arcsecond wide, perhaps past a coronagraph's outer edge, and B's light leaks in. Neither is modelled. Check the outer working angle of the telescope's designs.
+- Alpha Centauri A's warm zone is a full arcsecond wide, perhaps past a coronagraph's outer edge, and B's light leaks in. Neither is modelled. Check the outer working angle of the telescope's designs. Searched 2026-10-14: the first design case is a 6 m off-axis mirror, but no working angles were found in text I could read. The systems paper, [arXiv 2602.11046](https://arxiv.org/abs/2602.11046), has no HTML version.
+- JWST's August 2026 look at the Alpha Centauri A candidate. Searched 2026-10-14: no result published yet. If it confirms a giant in the warm zone, the seed can't put a world there.
 - Natural warm worlds: the seed treats every red dwarf as watched to 1 m/s, which drops a fifth of their worlds. Real coverage is patchy. Find which of the 715 have been watched that well.
 - Natural warm worlds: three bright hosts have only a Gaia name, and the seed lets Earth's planet hunters feel a world there by 2040. A star no survey has named is unlikely to be on their list.
 - Natural warm worlds: NASA's 164 targets reach 23.3 pc, about 76 ly. The seed draws nothing past 50 ly, so the game's sweep covers 110 stars.
@@ -1094,6 +1101,5 @@ Results the design is waiting on. Check each when its date comes.
 - The rung draw takes Earth's pace as typical. The hard-steps school says Earth was fast. Decide the pace's spread and its lean.
 - The rung draw ignores a warm zone's outward drift as its star brightens. It matters for F stars and old G stars.
 - Nguyen et al. 2026 give fitted shorelines by star kind, mass and age. Read the paper and see whether they should replace the single line.
-- The dates of animals and forests on Earth are from memory. Find a source.
 - Earth's aimed messages: the power of the 1983, 2008, 2009 Canberra and 2013 sends is in no source found. Hirabayashi's books may hold the first.
 - Working links for Project Daedalus's 1978 report and Criswell 1985.
