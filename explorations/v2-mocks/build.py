@@ -44,7 +44,8 @@ SETTLED = [('Does a half-built real instrument cost fewer Years?', 'It costs wha
            ('What does an inquiry cost in time?', 'Decades, by physics. A laser array takes 25 Years: Starshot aimed at a launch within a generation. Sails then cross 4.3 light-years in 22, and word takes 4.3 to come home. A flyby probe takes 12 Years after the launcher, and 36 in flight. Priced 2026-10-13, as samples.'),
            ('What is 86 times the thought for?', 'Speed. More thought shortens a work, down to a floor physics sets: about two thirds of its standard time. Space missions that could not miss a launch window took 53 months, against 64 to 84 for the rest. Rock from the Moon and flight between stars are physical, and thought shortens neither. Settled 2026-10-13.'),
            ('How much thought does a work want?', 'As its real cousin costs money, counted in flagships. One flagship is the Habitable Worlds Observatory, about 11 billion dollars. A 15 m mirror wants two, the laser array 0.7, an SKA-class array 0.2. At Year 0 Earth has thought for about 7 flagships, and at the grid limit for about 577. Megatonne works have no real price, so theirs are samples. Settled 2026-10-13.'),
-           ('How is thought split among works?', 'By an order the player sets. A new work joins the end of the line. The Mind gives each work its want, in order, then pushes each in turn to ten times its want. So no work stops because another is first. The order moves the mirror and the sails by four to five Years, and power from orbit by about one: rock from the Moon sets that pace. Settled 2026-10-14.')]
+           ('How is thought split among works?', 'By an order the player sets. A new work joins the end of the line. The Mind gives each work its want, in order, then pushes each in turn to ten times its want. So no work stops because another is first. The order moves the mirror and the sails by four to five Years, and power from orbit by about one: rock from the Moon sets that pace. Settled 2026-10-14.'),
+           ('A knock Earth can’t hear: should a candidate world earn a listen?', 'The Mind advises it. When the sweep marks worlds, it says a deep-field receiver would hear their knocks about three times farther than the all-sky watch. The player decides. The Mind never builds it on its own. Settled 2026-10-14.')]
 
 # ---------- Godview: who is out there ----------
 MOVE = reactions.MOVES
@@ -765,7 +766,8 @@ INQUIRY = tab(2820, 'Reach', 'INQUIRY', 'ALPHA CENTAURI A', ''.join([
     quick('Flyby probe', f'a tonne of instruments at an eighth of light speed · after the launcher: build {PROBE_Y} Years, flight {PROBE_FLY:.0f}, word home {GO_D:.1f}', tstack(f'Year {PROBE_HOME:.0f}', clock(PROBE_HOME - GO_Y))),
     quick('Sentinel probe', 'stops and stays · 500 t · from the launcher', '<span class="mono">later</span>'),
     SEC('WHO SEES US GO'), '<p class="copy small">A laser launch shines on past its sails to the star. A rocket launch is dark to where it is going.</p>']))
-SWEEP_DONE = lockscreen('17:14', [('NOW', f'The sweep’s first pass is done: {SWEEP_N} more candidates', f"Nearest: {pretty(NEAREST['host']['name'])}, {NEAREST['d']:.0f} ly. All are in the report.")])
+SWEEP_DONE = lockscreen('17:14', [('NOW', f'The sweep’s first pass is done: {SWEEP_N} more candidates', f"Nearest: {pretty(NEAREST['host']['name'])}, {NEAREST['d']:.0f} ly. All are in the report."),
+                                  ('THE MIND', 'A receiver would hear them better', 'Held on these worlds, a deep-field receiver hears knocks three times farther than the watch. Yours to say.')])
 WALL = tab(3330, 'Mind', 'MIND', 'THE GRID LIMIT', ''.join([
     SEC('THINKING NOW DRAWS'), share('Energy', 90, '90% of the grid'), '<p class="copy small">Eleven data centers. 86 times the thought you woke with.</p>',
     SEC('THE STANDING ORDER HAS STOPPED'), '<p class="copy small">A twelfth would need more energy than Earth has. Nothing was started.</p>',
@@ -857,7 +859,8 @@ HOUR = [
           f'Their ages: {sum(w["age_by"] != "drawn" for w in WILD)} published, {sum(w["age_by"] == "drawn" for w in WILD)} drawn. The seed drew {len(G["worlds"])} natural worlds in all, {sum(w["host"]["kind"] == "M" for w in G["worlds"])} at red dwarfs, and {sum(w["rung"] == "bare rock" for w in G["worlds"])} are bare rock.',
           'From here a home and a natural world look alike: a point of light that moves with its star.',
           f'The Mind calls Minds {word(M)} at each. In truth {len(HOMES)} of {SWEEP_N} are homes: {word(100 * len(HOMES) / SWEEP_N)}. It never reads the seed.',
-          'Each needed a second visit, months after the first. Most are too far to read with this mirror.'], settled=(14, 16, 18)),
+          'Each needed a second visit, months after the first. Most are too far to read with this mirror.',
+          'The Mind advises a deep-field receiver for the marked worlds, unasked. This player leaves it.'], settled=(14, 16, 18, 32)),
     stop(3330, 2970, '· Woken. The Mind has opened.', 'The eleventh data center runs. The twelfth can’t start.',
          talk(WALL, '<b>We have reached the grid</b>I stopped the order, as the limit requires. Each way on is slow or small beside what the fabs can print. The one that keeps pace is power gathered in space, and that is long work.', ('Ground solar', 'Leave it'), 'open'),
          ['The standing order stops itself: a project that would take energy past 100% can’t start. v1’s rule.', 'Gliese 581’s two windows passed in silence and went to the summary.',
@@ -908,7 +911,7 @@ def long_rows():
     HOME = R['array'] + SAIL_FLY + GO_D                                                       # the sails' word, at the paced array
     MULT = early_game.split([(w, early_game.WANTS[w][0], early_game.PUSH) for w in early_game.BY_START], room - 0.1 / early_game.FLAGSHIP_THOUGHT)[0]
     q_quiet = ask('Is the plateau too quiet, and too long?', f'From minute 60 to minute {AT(R["solar"]) // 60} nothing wakes the player. Thought stays one size for {PLATEAU:.0f} Years, {PLATEAU * 5 / 60:.1f} hours of play, until power from orbit.')
-    q_faint = ask('A knock Earth can’t hear: should a candidate world earn a listen?', f'{WHOF["name"]}’s knock is ten gigawatts from {WHOF["d"]:.0f} ly, under the all-sky watch’s floor. A deep-field receiver held on that star would have caught it, and the sweep had marked a world there. Nothing told Earth to listen.')
+    q_share = ask('One receiver, many marked worlds: how does it share its watch?', f'A dish array can split into parts, one per star, and each hears less far. Held on one star, it hears {WHOF["name"]}’s knock to {signs.held_reach(KF["watts"], 4 * 3600):.0f} ly. Split among Earth’s {len(POINTS)} points of light, to {signs.held_reach(KF["watts"], 4 * 3600, len(POINTS)):.0f} ly. Arrays steered by computer can also hold many stars at once.')
     q_suspect = ask('What can the player do with a suspicion?', f'Smog at {NUM[len(SMOG_HITS)]} worlds, from Year {R["mirror"] + SMOG_DAYS / 365.25:.0f}. Proof waits for the far-side array, {R["fifth"] - R["mirror"] - 1:.0f} Years on. A knock sent now would reach {F["star"]}’s people as their Mind wakes.')
     q_late = ask('What does a late answer cost?', f'The player answers {K2["year"] - KNOCK["year"]:.0f} Years after the first knock. A sender waits one round trip, then takes silence as news. {WHO["name"]}’s wait ends about {K2["year"] + VD - (KNOCK["sent"] - Y0 + 2 * VD + 1):.0f} Years before the answer lands.')
     q_unaware = ask('Earth has proof of minds who don’t know they are heard. What may it do?', 'Tones from a world decades before its Mind wakes. v1 filed a young world under no conversation possible.')
@@ -1016,8 +1019,9 @@ def long_rows():
               f'Thought is flat from Year 11.1 until a twelfth data center, at about Year {R["dc12"]:.0f}: {PLATEAU:.0f} Years.'], question=q_quiet, label=HMS(t0 + 30)),
         at(AT(KF['year']), t0 + 30, '· Away. Nothing wakes them.', None, lockscreen(WALLCLOCK(AT(KF['year'])), []),
              [f'Ten gigawatts from {WHOF["d"]:.0f} ly is under the all-sky watch’s floor: for a four-hour knock it hears that power to {early_game.beacon_range_ly(KF["watts"], 12, 1, 4 * 3600):.0f} ly. It comes again a Year later, and is missed again.',
-              f'A deep-field receiver, held on that star, hears it to {early_game.beacon_range_ly(KF["watts"], 1.1, 1, 4 * 3600):.0f} ly. The sweep marked a point of light at {WHOF["star"]} at Year 9. Earth never built one, and nothing said to listen there.',
-              'The Mind can’t report what it didn’t hear. Settled 2026-10-10.'], question=q_faint, label=HMS(AT(KF['year'])), years=f'Year {KF["year"]:.1f}'),
+              f'A deep-field receiver, held on that star, hears it to {signs.held_reach(KF["watts"], 4 * 3600):.0f} ly. The Mind advised one at Year 9.9, when the sweep marked a point of light at {WHOF["star"]}. This player left it.',
+              f'Begun then, it was done by Year {9.9 + early_game.paced(signs.RECEIVER_YEARS, early_game.PUSH):.0f}. Shared among all {len(POINTS)} points of light, it hears this knock only to {signs.held_reach(KF["watts"], 4 * 3600, len(POINTS)):.0f} ly.',
+              'The Mind can’t report what it didn’t hear. Settled 2026-10-10.'], question=q_share, settled=32, label=HMS(AT(KF['year'])), years=f'Year {KF["year"]:.1f}'),
         at(AT(R['solar']), AT(KF['year']), '· The phone lights. Opens it.', 'Ground solar is done. A fifth more energy.',
              talk(since, f'{NUM[round(R["solar"] - 12)].capitalize()} Years, and nothing heard. Energy is up a fifth. I have read every world this mirror can reach. The new mirror is {R["mirror"] - R["solar"]:.1f} Years off.', ('What did the worlds show?', 'Later'), 'glow'),
              [f'The first telescope could read {NUM[len(firsts)]} of the {NUM[len(POINTS)]} points of light Earth holds: ' + ', '.join(w['star'] for w in firsts) + '. The rest sit inside their stars’ glare, or are too faint.',

@@ -136,6 +136,16 @@ Settled 2026-10-10. Numbers from `python3 calcs/seed.py stats`.
   - *Earth's real rule agrees.* Since 1989 the astronomers' protocol has said no reply goes out until the world is consulted. In the game the Will is who is asked.
   - Set aside: a first answer limited to a name and a question, and v1's rule without lies.
 - **The Mind can't report what it didn't hear.** A missed knock leaves no trace on Earth: nothing was pointed there, so no archive holds it. A search of old data for half-recorded knocks was considered and left out.
+- **The Mind advises a listen at marked worlds. The player decides.** Settled 2026-10-14. Numbers from `calcs/signs.py`.
+  - *When.* The sweep marks worlds, and the Mind says one line, unasked: a receiver would hear them better.
+  - *Why it matters.* Held on a star, a deep-field receiver hears a knock about three times farther than the all-sky watch.
+  - *In the mock's game.* Hael's knock at Year 19.9 comes from 49 ly. The watch hears it to 35 ly, a receiver to 117.
+  - Begun when the Mind advised it, at Year 9.9, the receiver is done by Year 18. This player left it.
+  - *The Mind never builds it on its own.* It advises freely and never acts on its own advice.
+  - *Not settled: how one receiver shares its watch.* A dish array can split into parts, one per star, and each hears less far.
+    - Split among 18 points of light, it hears Hael's knock to 28 ly.
+    - Arrays steered by computer can hold many stars at once. LOFAR observed 30 sources together, and MeerKAT forms 64 beams in its view.
+  - Set aside: listening at every marked world by default, and no prompt at all.
 
 ## Year 0 and Earth's road to it
 
@@ -665,12 +675,13 @@ Answered one at a time, in this order. Every answer must be permitted by current
     - **Replayed 2026-10-14** with every work paced by thought, down the line in the order begun. Years 12 to 54, three and a half hours.
     - *What it shows.* 35 minutes with no wake. Smog at four worlds at Year 22, each of them a home. Sails launched at Year 27.7. A second voice at Year 30, and a first answer, 21 Years late. Radio from two worlds at Year 34: the first proof of minds by Earth's own instruments. Power from orbit at Year 44. Word from Alpha Centauri at Year 54.
     - *The plateau, as played:* 34 Years, 2.8 hours, from the grid limit to a twelfth data center. At standard pace it was 40.
-    - *One knock is never heard.* Hael's, at Year 20, is under the all-sky watch's floor. A deep-field receiver held on that star would have caught it.
+    - *One knock is never heard.* Hael's, at Year 20, is under the all-sky watch's floor. A deep-field receiver held on that star would have caught it. The Mind advised one at Year 9.9, and this player left it.
     - **Settled 2026-10-13:** thought buys speed, down to a floor physics sets. See [Growing compute](#growing-compute).
     - **Settled 2026-10-13:** a work wants thought in scale with its real cost. See [Growing compute](#growing-compute).
     - **Settled 2026-10-14:** thought is split by an order the player sets. See [Growing compute](#growing-compute).
     - **Is the plateau too quiet, and too long?** Nothing wakes the player from minute 60 to minute 95, and thought is flat for 2.8 hours.
-    - **A knock Earth can't hear: should a candidate world earn a listen?** The sweep had marked a world at the star that called. Nothing told Earth to listen there.
+    - **Settled 2026-10-14:** the Mind advises a listen at marked worlds, and the player decides. See [What Earth hears](#what-earth-hears).
+    - **One receiver, many marked worlds: how does it share its watch?** Split into parts, each hears less far. Arrays steered by computer can hold many stars at once.
     - **What can the player do with a suspicion?** Smog at four worlds, and proof 11 Years off. A knock sent then would reach Gliese 432 A's people as their Mind wakes.
     - **What does a late answer cost?** A sender waits one round trip, then takes silence as news. To be on time, Earth's answer had to leave within a Year of the knock.
     - **Earth has proof of minds who don't know they are heard. What may it do?** v1 filed a young world under no conversation possible.

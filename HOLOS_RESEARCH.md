@@ -88,6 +88,16 @@ Every source the game rests on, grouped by the question it answers. Each entry s
   - From a search summary, not read: a revision in 2025 keeps that rule. It is a statement of principles, not law.
   - Matters: Earth's own standing rule is that no reply goes out unasked. In the game the Will is who is asked, which is v1's approval step.
   - Used: v2 [What Earth hears](HOLOS_GAME_CONCEPT.md#what-earth-hears).
+- **Holding many stars at once, checked 2026-10-14.** For the question of how one deep-field receiver shares its watch among the sweep's marked worlds.
+  - **[van Haarlem et al. 2013, LOFAR](https://arxiv.org/abs/1305.3550)** · Published, A&A 556, A2. Abstract read.
+    - Digital beam-forming gives rapid repointing and "the potential for multiple simultaneous observations".
+  - **[Moldón et al. 2015, LOFAR long baseline calibrator survey](https://arxiv.org/abs/1411.2743)** · Published, A&A 574, A73. Abstract read.
+    - It observed "30 different sources in each of the 12 sets of pointings per hour", with LOFAR's multi-beaming.
+  - **[Czech et al. 2021, Breakthrough Listen MeerKAT target selection](https://arxiv.org/abs/2103.16250)** · Published, PASP. Abstract read.
+    - The survey forms and processes "64 coherent beams simultaneously", anywhere within the field of view, alongside other projects.
+  - From search summaries, not read at source: the SKA can run up to 16 subarrays at once, and SKA-Low plans 16 to 24 station beams. In LOFAR, the bandwidth is shared among the beams.
+  - Matters: a receiver can hold more than one star. A dish array split into parts gives each a share of the area, so each hears less far: reach falls as the square root of the number of parts.
+  - Used: v2 [What Earth hears](HOLOS_GAME_CONCEPT.md#what-earth-hears), `calcs/signs.py` (held_reach), and the third mock's question on sharing a receiver.
 - **[Sónar Calling GJ 273b](https://www.scientificamerican.com/article/interstellar-message-beamed-to-nearby-exoplanet)** · News, Scientific American, 2017 ([Space.com](https://www.space.com/38803-meti-signal-beamed-habitable-alien-planet.html)).
   - Sent to Luyten's Star on October 16 to 18, 2017, from the EISCAT dish in Tromsø, Norway, near 930 MHz: a science and maths tutorial and 33 short pieces of music. A second batch followed in 2018.
   - Matters: it sets Earth's first reply window in play, Year 2.3.

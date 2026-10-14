@@ -33,6 +33,15 @@ def far_sefd(fifths): return EARS[2][1] * FAR_FIFTHS / fifths
 SMOG = ((6.5, 300, 5.71 / 3.2616), (15, 400, 10))           # mirror in metres, its published hours, and at how many parsecs
 LOOK = 9.0                               # the Year the first pass ends
 
+# Settled 2026-10-14: when the sweep marks a world, the Mind advises a deep-field receiver, and the player decides.
+# A dish array can split into parts, one per star (the SKA plans up to 16). Each part has a share of the area, so it
+# hears less far: reach falls as the square root of the number of stars held. Arrays steered by computer can also form
+# many beams at once (LOFAR, MeerKAT). How the game shares one receiver among many stars is not yet settled.
+RECEIVER_YEARS = 12                      # the first mock's price for a deep-field receiver
+def held_reach(watts, seconds, stars=1):
+    """Light-years at which a deep-field receiver split among `stars` hears a knock of `watts` lasting `seconds`."""
+    return eg.beacon_range_ly(watts, EARS[1][1] * stars, 1, seconds)
+
 def listen_days(watts, ly, sefd):
     """Days of listening to hear a steady tone, or None if a Year is not enough."""
     if not watts: return None

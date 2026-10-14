@@ -1173,6 +1173,7 @@ The phone lights. Leaves it.
 Lands · The sweep’s first pass is done. 15 more points of light in warm zones.
 Saturday · 17:14
 HOLOS · NOW · The sweep’s first pass is done: 15 more candidates · Nearest: Gliese 664, 19 ly. All are in the report.
+HOLOS · THE MIND · A receiver would hear them better · Held on these worlds, a deep-field receiver hears knocks three times farther than the watch. Yours to say.
 Godview
 The earliest a reply to A Message From Earth could reach Earth from Gliese 581. In this game no one lives there. The window is empty, and Earth can’t know it.
 Truth: 4 are homes. Kesh’s world at Gliese 216 B, Nuvo’s world at 20 Leonis Minoris, Hael’s world at Gliese 1021, Ree’s world at 19 Draconis.
@@ -1181,9 +1182,11 @@ Their ages: 5 published, 6 drawn. The seed drew 136 natural worlds in all, 113 a
 From here a home and a natural world look alike: a point of light that moves with its star.
 The Mind calls Minds very unlikely at each. In truth 4 of 15 are homes: unlikely. It never reads the seed.
 Each needed a second visit, months after the first. Most are too far to read with this mirror.
+The Mind advises a deep-field receiver for the marked worlds, unasked. This player leaves it.
 Settled · What does the first sweep find? Natural warm worlds too, at the real rate: NASA’s planning value, about one star in four. The seed draws them. A first pass shows about 17 points of light a game, and about 1 in 4 is a home. Settled 2026-10-13.
 Settled · What sets each natural world’s rung? Its star’s age, on Earth’s schedule with scatter: lasting oxygen at about 2.3 billion years, animals at about 4. Physics sets whether it kept its air. At Sun-like stars about half are alive. At red dwarfs most are bare rock. Settled 2026-10-13.
 Settled · What stands behind the Mind’s words? What Earth knows. The Mind judges from Earth’s science and from what Earth has observed, never from the seed, and it can be wrong. Earth’s own finds move its starting words: a first voice lifts Minds a word at every candidate. Settled 2026-10-13.
+Settled · A knock Earth can’t hear: should a candidate world earn a listen? The Mind advises it. When the sweep marks worlds, it says a deep-field receiver would hear their knocks about three times farther than the all-sky watch. The player decides. The Mind never builds it on its own. Settled 2026-10-14.
 +55:30 · Year 11.1
 Woken. The Mind has opened.
 Lands · The eleventh data center runs. The twelfth can’t start.
@@ -1293,9 +1296,11 @@ Saturday · 18:04
 Godview
 Hael’s knock reaches Earth: its answer to Earth’s radars, sent 2011 from Gliese 1021.
 Ten gigawatts from 49 ly is under the all-sky watch’s floor: for a four-hour knock it hears that power to 35 ly. It comes again a Year later, and is missed again.
-A deep-field receiver, held on that star, hears it to 117 ly. The sweep marked a point of light at Gliese 1021 at Year 9. Earth never built one, and nothing said to listen there.
+A deep-field receiver, held on that star, hears it to 117 ly. The Mind advised one at Year 9.9, when the sweep marked a point of light at Gliese 1021. This player left it.
+Begun then, it was done by Year 18. Shared among all 18 points of light, it hears this knock only to 28 ly.
 The Mind can’t report what it didn’t hear. Settled 2026-10-10.
-Design question 2 · A knock Earth can’t hear: should a candidate world earn a listen? Hael’s knock is ten gigawatts from 49 ly, under the all-sky watch’s floor. A deep-field receiver held on that star would have caught it, and the sweep had marked a world there. Nothing told Earth to listen.
+Design question 2 · One receiver, many marked worlds: how does it share its watch? A dish array can split into parts, one per star, and each hears less far. Held on one star, it hears Hael’s knock to 117 ly. Split among Earth’s 18 points of light, to 28 ly. Arrays steered by computer can also hold many stars at once.
+Settled · A knock Earth can’t hear: should a candidate world earn a listen? The Mind advises it. When the sweep marks worlds, it says a deep-field receiver would hear their knocks about three times farther than the all-sky watch. The player decides. The Mind never builds it on its own. Settled 2026-10-14.
 +1:47:15 · Year 21.4
 “Read the worlds we felt first. Then every world it can.”
 Lands · The 15 m mirror is done.
@@ -1588,8 +1593,9 @@ Settled: What does an inquiry cost in time? · Decades, by physics. A laser arra
 Settled: What is 86 times the thought for? · Speed. More thought shortens a work, down to a floor physics sets: about two thirds of its standard time. Space missions that could not miss a launch window took 53 months, against 64 to 84 for the rest. Rock from the Moon and flight between stars are physical, and thought shortens neither. Settled 2026-10-13.
 Settled: How much thought does a work want? · As its real cousin costs money, counted in flagships. One flagship is the Habitable Worlds Observatory, about 11 billion dollars. A 15 m mirror wants two, the laser array 0.7, an SKA-class array 0.2. At Year 0 Earth has thought for about 7 flagships, and at the grid limit for about 577. Megatonne works have no real price, so theirs are samples. Settled 2026-10-13.
 Settled: How is thought split among works? · By an order the player sets. A new work joins the end of the line. The Mind gives each work its want, in order, then pushes each in turn to ten times its want. So no work stops because another is first. The order moves the mirror and the sails by four to five Years, and power from orbit by about one: rock from the Moon sets that pace. Settled 2026-10-14.
+Settled: A knock Earth can’t hear: should a candidate world earn a listen? · The Mind advises it. When the sweep marks worlds, it says a deep-field receiver would hear their knocks about three times farther than the all-sky watch. The player decides. The Mind never builds it on its own. Settled 2026-10-14.
 1. Is the plateau too quiet, and too long? · From minute 60 to minute 95 nothing wakes the player. Thought stays one size for 34 Years, 2.8 hours of play, until power from orbit.
-2. A knock Earth can’t hear: should a candidate world earn a listen? · Hael’s knock is ten gigawatts from 49 ly, under the all-sky watch’s floor. A deep-field receiver held on that star would have caught it, and the sweep had marked a world there. Nothing told Earth to listen.
+2. One receiver, many marked worlds: how does it share its watch? · A dish array can split into parts, one per star, and each hears less far. Held on one star, it hears Hael’s knock to 117 ly. Split among Earth’s 18 points of light, to 28 ly. Arrays steered by computer can also hold many stars at once.
 3. What can the player do with a suspicion? · Smog at four worlds, from Year 22. Proof waits for the far-side array, 11 Years on. A knock sent now would reach Gliese 432 A’s people as their Mind wakes.
 4. What does a late answer cost? · The player answers 21 Years after the first knock. A sender waits one round trip, then takes silence as news. Ombe’s wait ends about 20 Years before the answer lands.
 5. Earth has proof of minds who don’t know they are heard. What may it do? · Tones from a world decades before its Mind wakes. v1 filed a young world under no conversation possible.
