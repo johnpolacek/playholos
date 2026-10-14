@@ -683,6 +683,16 @@ What Sol's own instruments have found nearby. For v2 open question 3.
 - **Habitable-zone planets near Sol** · Mixed. Proxima b, GJ 1061 d, GJ 273 b, Teegarden b, TRAPPIST-1 e, LHS 1140 b, TOI-700 d, Ross 128 b and GJ 1002 b and c, each with what is and isn't established.
   - Used: the atlas's player-site overlay. Sources in [data/player-sites/README.md](data/player-sites/README.md).
 
+- **HD 10307's distance, checked 2026-10-14** · Gaia EDR3, in the GCNS census: 68.02 ± 0.37 mas. Its neighbors' errors are 0.02 to 0.04.
+  - ORB6 lists a companion on a 19.5-year orbit, 0.61 arcseconds wide, grade 4. A pull like that spoils a parallax fit.
+  - Hipparcos puts the star at 41.6 ly, as calcs/knocks.py had it. Gaia's value puts it at 48.
+  - Why it matters: the knock list called HD 10307 missing from Gaia, so it was ruled out as a host. It was there, under a Gaia number.
+  - Used: calcs/hosts.py takes Hipparcos's distance. HD 10307 joins the knocked stars that can host a neighbor. See HOLOS_GAME_CONCEPT.md, Stars Earth knocked on.
+- **Common names for Gaia stars, rechecked 2026-10-14** · From HYG v4.1.
+  - HYG's old parallaxes for faint red dwarfs run 20 to 30% off Gaia's: it puts GJ 1061 at 4.3 pc, where Gaia has 3.7. A 10% match left them unnamed.
+  - Matching within a third in distance, then falling back to HD and HIP numbers, names 89 more hosts. 231 faint red dwarfs keep their Gaia numbers.
+  - Why it matters: a second game led with "Gaia 1661568850770761600", a naked-eye K dwarf that is HD 122064.
+  - Used: calcs/hosts.py, name_from_hyg.
 - **[Sixth Catalog of Orbits of Visual Binary Stars, ORB6](https://www.astro.gsu.edu/wds/orb6.html)** · Reference, kept by the US Naval Observatory and Georgia State University.
   - About 4,000 orbits of visual, interferometric and astrometric pairs, each graded 1, definitive, to 5, indeterminate, with 9 for wobble-only orbits.
   - Used: [calcs/binaries.py](calcs/binaries.py). Grade 5 orbits are skipped.
@@ -1096,7 +1106,9 @@ Results the design is waiting on. Check each when its date comes.
 - Alpha Centauri A's warm zone is a full arcsecond wide, perhaps past a coronagraph's outer edge, and B's light leaks in. Neither is modelled. Check the outer working angle of the telescope's designs. Searched 2026-10-14: the first design case is a 6 m off-axis mirror, but no working angles were found in text I could read. The systems paper, [arXiv 2602.11046](https://arxiv.org/abs/2602.11046), has no HTML version.
 - JWST's August 2026 look at the Alpha Centauri A candidate. Searched 2026-10-14: no result published yet. If it confirms a giant in the warm zone, the seed can't put a world there.
 - Natural warm worlds: the seed treats every red dwarf as watched to 1 m/s, which drops a fifth of their worlds. Real coverage is patchy. Find which of the 715 have been watched that well.
-- Natural warm worlds: three bright hosts have only a Gaia name, and the seed lets Earth's planet hunters feel a world there by 2040. A star no survey has named is unlikely to be on their list.
+- Closed 2026-10-14: the bright hosts with only a Gaia name have HD names. HYG had them, and the match was too tight. See Where neighbors can live.
+- HYG names GJ 1214 "Onkaria". Check the spelling against the IAU's list of star names.
+- Gliese 428: Gaia sees one star where HYG lists A and B. The match names it B. Check which it is.
 - Natural warm worlds: NASA's 164 targets reach 23.3 pc, about 76 ly. The seed draws nothing past 50 ly, so the game's sweep covers 110 stars.
 - Gaia's FLAME ages differ from asteroseismic and spin ages by a median of 4.7 billion years on 9 hosts. calcs/hosts.py still drops an F or G star as young when FLAME's upper bound is under a billion years. Recheck each such drop against the HAges Catalog.
 - 58 Eridani has six spin ages from 0.43 to 1.1 billion years. It stays a host under the rule, since two reach a billion.

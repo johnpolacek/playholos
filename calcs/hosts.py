@@ -79,7 +79,9 @@ def stars():
     return out
 
 def name_from_hyg(star_list):
-    """Give Gaia stars their common names: HYG within a tenth of a degree and 10% in distance."""
+    """Give Gaia stars their common names: HYG within a tenth of a degree and a third in distance. HYG's old parallaxes
+    for faint red dwarfs are often that far off: it puts GJ 1061 at 4.3 pc, where Gaia has 3.7. A star with no proper,
+    Bayer, Flamsteed or Gliese name takes its HD number, then its HIP number."""
     hyg = [r for r in csv.DictReader((CACHE / 'hygdata_v41.csv').open()) if r['dist'] and 0 < float(r['dist']) <= PC_50LY * 1.1]
     cells = collections.defaultdict(list)
     for r in hyg: cells[(round(float(r['ra']) * 15), round(float(r['dec'])))].append(r)
@@ -91,14 +93,14 @@ def name_from_hyg(star_list):
         for dra in (-1, 0, 1):
             for dde in (-1, 0, 1):
                 for r in cells[(round(s['ra']) + dra, round(s['dec']) + dde)]:
-                    if angle(s, float(r['ra']) * 15, float(r['dec'])) < 0.1 and abs(float(r['dist']) / s['d_pc'] - 1) < 0.1:
+                    if angle(s, float(r['ra']) * 15, float(r['dec'])) < 0.1 and abs(float(r['dist']) / s['d_pc'] - 1) < 0.35:
                         options.append((abs(float(r['absmag']) + g_minus_v.get(s['kind'], -0.5) - s['gabs']), s['id'], r))
     named, taken = set(), set()
     by_id = {s['id']: s for s in star_list}
     for _, sid, r in sorted(options, key=lambda o: o[0]):
         if sid in named or r['id'] in taken: continue
         s = by_id[sid]
-        s['name'] = r['proper'] or ' '.join(r['bf'].split()) or r['gl'] or s['name']
+        s['name'] = r['proper'] or ' '.join(r['bf'].split()) or r['gl'] or (r['hd'] and f"HD {r['hd']}") or (r['hip'] and f"HIP {r['hip']}") or s['name']
         s['hip'] = r['hip']
         named.add(sid); taken.add(r['id'])
     same = collections.defaultdict(list)                      # HYG names both stars of some pairs alike: 61 Cyg
@@ -230,15 +232,26 @@ def hz(lum):
     """Conservative warm zone, after Kopparapu et al. 2013, in AU."""
     return 0.95 * math.sqrt(lum), 1.67 * math.sqrt(lum)
 
+# Gaia's parallax for HD 10307 is 68.0 mas, with an error 15 times its neighbors': it is an astrometric binary with a
+# 20-year orbit. Hipparcos has 78.5 mas, and calcs/knocks.py uses it too, since Earth knocked on this star in 2003.
+# FLAME's luminosity scales with the distance squared.
+HIPPARCOS = {'348515297330773120': ('HD 10307', 12.74)}
+def hipparcos(star_list):
+    for s in star_list:
+        if s['id'] in HIPPARCOS:
+            name, d = HIPPARCOS[s['id']]
+            s.update(name=name, lum_scale=(d / s['d_pc']) ** 2, gabs=s['gabs'] + 5 * math.log10(d / s['d_pc']), d_pc=d, plx=1000 / d)
+
 def main():
     s_list = stars()
     name_from_hyg(s_list)
+    hipparcos(s_list)
     import binaries, scorch
     ages, pl, pairs, close = flame(), planets(), companions(s_list), binaries.close_orbits(s_list)
     kept, dropped, dated = [], collections.Counter(), published_ages()
     for s in [s for s in s_list if s['kind']]:
         f = ages.get(s['id'], {})
-        lum = float(f['lum_flame']) if f.get('lum_flame') else s.get('lum') or 10 ** (-0.4 * (s['gabs'] - 4.67))
+        lum = float(f['lum_flame']) * s.get('lum_scale', 1) if f.get('lum_flame') else s.get('lum') or 10 ** (-0.4 * (s['gabs'] - 4.67))
         inner, outer = hz(lum)
         why = None
         hips = {s.get('hip'), s['id'].replace('HIP ', '')} | {x for o, _ in pairs.get(s['id'], []) for x in (o.get('hip'), o['id'])}

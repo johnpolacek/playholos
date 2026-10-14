@@ -1,8 +1,8 @@
 """When could a reply to each message Earth aimed at a nearby star first arrive? Run: python3 calcs/knocks.py
 
 Targets within 50 ly, from the list of interstellar radio messages (see HOLOS_RESEARCH.md). Distances are Gaia DR3's,
-as the census in calcs/hosts.py has them, so they match calcs/neighbors.py. Altair is too bright for Gaia and HD 10307
-is missing from its census, so those two are Hipparcos's. Year 0 is 2040.0, and one Year is 5 real minutes.
+as the census in calcs/hosts.py has them, so they match calcs/neighbors.py. Altair is too bright for Gaia, and Gaia's
+parallax for HD 10307 is spoiled by its companion, so those two are Hipparcos's. The census takes HD 10307's too. Year 0 is 2040.0, and one Year is 5 real minutes.
 """
 YEAR_0 = 2040.0
 

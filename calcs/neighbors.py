@@ -228,11 +228,12 @@ def tone_at(n, waking, year, sol_targeted=True):
 # ---------- Stars Earth knocked on ----------
 # Earth's aimed messages, by the host-list name of the star each was aimed at. 55 Cancri A is dropped as a host, since
 # a known giant crosses its warm zone, but its companion B sat in the same beam. Altair, 47 Ursae Majoris, Kappa1 Ceti,
-# HD 10307, Teegarden's Star and Gliese 208 can't host a neighbor: Gliese 208 spins every 12.3 days, which dates it
-# near half a billion years. In about one game in five, if a drawn neighbor passes at one of these stars, the seed
-# puts it there, so Earth's real knocks sometimes have someone to hear them.
+# Teegarden's Star and Gliese 208 can't host a neighbor: Gliese 208 spins every 12.3 days, which dates it near half a
+# billion years. HD 10307 can, from 2026-10-14: Gaia lists it, at a bad parallax, and calcs/hosts.py now takes
+# Hipparcos's. In about one game in five, if a drawn neighbor passes at one of these stars, the seed puts it there, so
+# Earth's real knocks sometimes have someone to hear them.
 KNOCKED = {"Luyten's Star": "Luyten's Star", 'TZ Arietis': 'Gl 83.1', 'Gliese 526': 'Gl 526', 'Gliese 581': 'Gl 581',
-           'Gliese 49': 'Gl 49', '55 Cancri': 'Gl 324B'}
+           'Gliese 49': 'Gl 49', '55 Cancri': 'Gl 324B', 'HD 10307': 'HD 10307'}
 KNOCKED_SHARE = 0.2
 
 # Settled 2026-10-14: any knock above a world's floor is caught. A beam meant for you is cheap to hear: Earth builds an
