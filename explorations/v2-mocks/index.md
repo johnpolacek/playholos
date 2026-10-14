@@ -1497,13 +1497,13 @@ REQUEST · Who are you, and whom else have you heard?
 GOES TO
 Gliese 4338 B · narrow beam · arrives Year 79 · 19 Draconis · narrow beam · arrives Year 80 · Tells them · that someone here listens now
 [Edit] · [Send it twice]
-THE MIND · Composed. Two parts, nothing we can’t take back. To Gliese 4338 B it lands at Year 79. They stopped waiting for us about Year 59. It is yours to send. · [Send it twice] · [Not yet]
+THE MIND · Composed. Two parts, nothing we can’t take back. To Gliese 4338 B it lands at Year 79. They took our silence as news about Year 59, and they still listen. It is yours to send. · [Send it twice] · [Not yet]
 [Talk to the Mind]
 Godview
 An answer is composed as in v1: intent in plain words, typed parts, the player’s approval. Settled 2026-10-13.
-Ombe waited one round trip, to about Year 59 by its own clock, then took the silence as news. A contacter most often knocks again.
+Ombe waited one round trip, to about Year 59 by its own clock, then took the silence as news. A contacter most often knocks again. It never stops listening: settled 2026-10-14, a sender hears every answer to its own knocks.
 To be on time, Earth’s answer had to leave within a Year of the knock. “Listen first” spent that.
-Design question 2 · What does a late answer cost? The player answers 21 Years after the first knock. A sender waits one round trip, then takes silence as news. Ombe’s wait ends about 20 Years before the answer lands.
+Design question 2 · What does a late answer cost? The player answers 21 Years after the first knock. A sender waits one round trip, then takes silence as news, and keeps listening. Ombe’s wait ends about 20 Years before the answer lands.
 +2:48:33 · Year 33.7
 “Listen to the worlds with smog.”
 Lands · The far-side array’s first fifth is done.
@@ -1667,4 +1667,4 @@ Settled: What can the player do with a suspicion? · Anything v1 allows, at any 
 Settled: What does a picture show? · Everything larger than a pixel, and nothing smaller. Physics sets the pixel, and the seed’s world fills it. A solar lens: about 25 km at 30 pc, so cities and cleared land, never roads. The nearest sail of a swarm: about 20 m, so roads and dams, never single buildings. Settled 2026-10-14.
 Settled: Earth has proof of minds who don’t know they are heard. What may it do? · Anything v1 allows, as with a suspicion. And they can answer. Before its Mind wakes, a world with radio arrays may answer as a people, as Earth’s own senders have: about ten aimed sends since 1974, none after the world was asked. The seed rolls whether and how, and its Mind inherits the exchange. Settled 2026-10-14.
 1. Is the plateau too quiet, and too long? · From minute 60 to minute 95 nothing wakes the player. Thought stays one size for 34 Years, 2.8 hours of play, until power from orbit.
-2. What does a late answer cost? · The player answers 21 Years after the first knock. A sender waits one round trip, then takes silence as news. Ombe’s wait ends about 20 Years before the answer lands.
+2. What does a late answer cost? · The player answers 21 Years after the first knock. A sender waits one round trip, then takes silence as news, and keeps listening. Ombe’s wait ends about 20 Years before the answer lands.

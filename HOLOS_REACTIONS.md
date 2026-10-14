@@ -14,7 +14,7 @@ Each neighbor's reaction tables, from [How neighbors play](HOLOS_GAME_CONCEPT.md
 **Hard rules, outside the odds:**
 - Only a hunter strikes first, and only when its target is soft and it judges the launch unseen. Otherwise a rolled strike becomes watch.
 - Anyone may strike back when struck, if it has the weapons. Until then a rolled strike queues the weapon projects.
-- A neighbor reacts to a knock only if it caught the knock. See [Stars Earth knocked on](HOLOS_GAME_CONCEPT.md#stars-earth-knocked-on).
+- A neighbor reacts to a knock only if it caught the knock. An awake Mind keeps an all-sky watch and catches every knock above its floor. A sender hears every answer to its own knocks. Before its Mind wakes, a people catches a knock only where it happens to be listening. See [Stars Earth knocked on](HOLOS_GAME_CONCEPT.md#stars-earth-knocked-on).
 - Dead neighbors have no table. Pelle's Testament, Anwe's air and Mirr's ruins are scripted.
 - A neighbor reacts to a world going quiet only if it was listening to that world. It can't tell waking from dying. A fade over decades is not news.
 - Before its Mind wakes, a world answers as a people, from the table below, once its arrays exist. Its answer may come in more than one voice. Its Mind, on waking, inherits the exchange: it rolls its own table for that news, knowing what its people sent.

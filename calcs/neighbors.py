@@ -235,12 +235,19 @@ KNOCKED = {"Luyten's Star": "Luyten's Star", 'TZ Arietis': 'Gl 83.1', 'Gliese 52
            'Gliese 49': 'Gl 49', '55 Cancri': 'Gl 324B'}
 KNOCKED_SHARE = 0.2
 
-# A knock lasts hours, so only a neighbor already keeping a beam on Sol catches it: one that heard Earth's radars,
-# with its arrays running when the knock arrived. Then a listener catches it about 3 times in 4, an ordinary one
-# 1 in 2, an inward one 1 in 10. Otherwise, under 1 in 100.
+# Settled 2026-10-14: any knock above a world's floor is caught. A beam meant for you is cheap to hear: Earth builds an
+# all-sky watch in 6 Years for a hundredth of its thought, so an awake Mind keeps one, and it catches every knock above
+# that watch's floor. A sender also listens to every star it knocked, for good. Earth's knocks are taken at Cosmic
+# Call's 1e12 W for four hours: the floor at 50 ly is about 2e10 W. Lone Signal was hundreds of times weaker but ran
+# for two months, and Sónar Calling was about 1e11 W at 12 ly: both clear the floor at their stars.
+# Before its Mind wakes, a people catches a knock only where it happens to listen: one that heard Earth's radars, with
+# its arrays running when the knock arrived. Then a listener catches it about 3 times in 4, an ordinary one 1 in 2,
+# an inward one 1 in 10. Otherwise, under 1 in 100. Settled 2026-10-10, and kept for peoples.
 CATCH = {'listener': 0.75, 'ordinary': 0.5, 'inward': 0.1}
-def caught_odds(n, host, waking, arrives):
+WATCH_SEFD = 12                          # an all-sky watch like Earth's: every direction, every hour
+def caught_odds(n, host, waking, arrives, watts=1e12, hours=4):
     if n.get('dies') is not None and arrives > waking - n['dies']: return 0.0
+    if arrives >= waking: return 1.0 if watts >= floor_watts(WATCH_SEFD, 1, hours * 3600, host['distance_ly']) else 0.01
     if arrives < waking - n.get('arrays_since', 60): return 0.01
     return heard_odds(n, host, waking) * CATCH[n['character']] + 0.01
 

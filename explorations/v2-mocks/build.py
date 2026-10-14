@@ -915,7 +915,7 @@ def long_rows():
     HOME = R['array'] + SAIL_FLY + GO_D                                                       # the sails' word, at the paced array
     MULT = early_game.split([(w, early_game.WANTS[w][0], early_game.PUSH) for w in early_game.BY_START], room - 0.1 / early_game.FLAGSHIP_THOUGHT)[0]
     q_quiet = ask('Is the plateau too quiet, and too long?', f'From minute 60 to minute {AT(R["solar"]) // 60} nothing wakes the player. Thought stays one size for {PLATEAU:.0f} Years, {PLATEAU * 5 / 60:.1f} hours of play, until power from orbit.')
-    q_late = ask('What does a late answer cost?', f'The player answers {K2["year"] - KNOCK["year"]:.0f} Years after the first knock. A sender waits one round trip, then takes silence as news. {WHO["name"]}’s wait ends about {K2["year"] + VD - (KNOCK["sent"] - Y0 + 2 * VD + 1):.0f} Years before the answer lands.')
+    q_late = ask('What does a late answer cost?', f'The player answers {K2["year"] - KNOCK["year"]:.0f} Years after the first knock. A sender waits one round trip, then takes silence as news, and keeps listening. {WHO["name"]}’s wait ends about {K2["year"] + VD - (KNOCK["sent"] - Y0 + 2 * VD + 1):.0f} Years before the answer lands.')
 
     # --- Year 12: the long roads
     t0 = 3600
@@ -1079,9 +1079,9 @@ def long_rows():
               'The first home among the sweep’s points to be proven, and by its own voice. Earth’s instruments have proven none.',
               f'{WHO["name"]}’s knock has gone unanswered for {K2["year"] - KNOCK["year"]:.0f} Years.'], label=HMS(tv)),
         at(tv + 30, tv, 'Answer them both. Our name, and one question.', None,
-             talk(answer, f'Composed. Two parts, nothing we can’t take back. To {VSTAR} it lands at Year {K2["year"] + .1 + VD:.0f}. They stopped waiting for us about Year {KNOCK["sent"] - Y0 + 2 * VD + 1:.0f}. It is yours to send.', ('Send it twice', 'Not yet')),
+             talk(answer, f'Composed. Two parts, nothing we can’t take back. To {VSTAR} it lands at Year {K2["year"] + .1 + VD:.0f}. They took our silence as news about Year {KNOCK["sent"] - Y0 + 2 * VD + 1:.0f}, and they still listen. It is yours to send.', ('Send it twice', 'Not yet')),
              ['An answer is composed as in v1: intent in plain words, typed parts, the player’s approval. Settled 2026-10-13.',
-              f'{WHO["name"]} waited one round trip, to about Year {KNOCK["sent"] - Y0 + 2 * VD + 1:.0f} by its own clock, then took the silence as news. A contacter most often knocks again.',
+              f'{WHO["name"]} waited one round trip, to about Year {KNOCK["sent"] - Y0 + 2 * VD + 1:.0f} by its own clock, then took the silence as news. A contacter most often knocks again. It never stops listening: settled 2026-10-14, a sender hears every answer to its own knocks.',
               f'To be on time, Earth’s answer had to leave within a Year of the knock. “Listen first” spent that.'], question=q_late, label=HMS(tv + 30)),
         at(ts, tv + 30, 'Launch the sails.', 'The laser array is done.',
              talk(sails, f'Launched. A thousand sails, nine minutes of light each, six days in all. They pass Alpha Centauri at Year {R["array"] + SAIL_FLY:.0f}. Word is home at Year {HOME:.0f}. That light can’t be called back.'),
