@@ -1513,14 +1513,14 @@ Sol · 2073.7 · 1 Year = 00:05:00
 ENERGY · [75.1%] · MATTER · 4.6 Mt · COMPUTE · [100%]
 MIND · NEW ORDER
 WHAT YOU WANT
-Listen to the worlds with smog.
+Listen to the worlds with smog. Again with each new fifth.
 THE MIND’S VERSION
-LISTEN · Far-side array, first fifth · four worlds in turn · up to a Year each
+LISTEN · Far-side array · four worlds in turn · up to a Year each · again as each fifth is done
 FOR · Steady tones that drift as a world turns
 SENDS · Nothing
 WAKES YOU · Anything heard
 [Edit] · [Set the order]
-THE MIND · Set. Gliese 216 B first. If its people use radio as we did, I will know in days. · [Undo]
+THE MIND · Set. Gliese 216 B first. If its people use radio as we did, I will know in days. Each new fifth hears farther, so I will try the silent ones again. · [Undo]
 [Talk to the Mind]
 Godview
 The earliest a reply to RuBisCo Stars could reach Earth from Kappa¹ Ceti. In this game no one lives there. The window is empty, and Earth can’t know it.
@@ -1553,6 +1553,51 @@ The first proof of minds by Earth’s own instruments: 34 Years in, 2:48:33 of p
 A world that stays silent in this list is not cleared. Its hum may be too faint for one fifth.
 Settled 2026-10-14: before its Mind wakes, a world with arrays may answer as a people. A knock sent now lands at Gliese 216 B at Year 63, before Kesh’s Mind wakes at 66.9: its people would hear it. A knock sent now lands at Gliese 432 A at Year 65, after Varn’s Mind wakes: its Mind would hear it.
 Settled · Earth has proof of minds who don’t know they are heard. What may it do? Anything v1 allows, as with a suspicion. And they can answer. Before its Mind wakes, a world with radio arrays may answer as a people, as Earth’s own senders have: about ten aimed sends since 1974, none after the world was asked. The seed rolls whether and how, and its Mind inherits the exchange. Settled 2026-10-14.
++3:11:58 · Year 38.4
+The Mind opens on its own.
+Heard · Radio from 12 Ophiuchi, with two fifths of the array. Minds: likely → almost certain.
+Earth · Year 38.4
+Sol · 2078.4 · 1 Year = 00:05:00
+ENERGY · [75.1%] · MATTER · 8.0 Mt · COMPUTE · [100%]
+REPORT · READING
+[‹ All reports]
+
+### Radio from 12 Ophiuchi’s world
+Far-side array, two fifths · 136 days · light that left 32 Years ago
+Fainter tones than the first two, the same kind. The first fifth could not hear them. Nothing aims them.
+WHAT IT COULD BE · BEFORE → NOW
+Minds, at 12 Ophiuchi’s world · likely → · almost certain
+WHAT IT CAN’T TELL
+What they are saying, or whether they know of us.
+THE MIND · UNASKED · A third world speaks · 12 Ophiuchi, which the first fifth could not hear. The same kind of tones, fainter. Two fifths heard them in 136 days. · [Who else?] · [Later]
+[Talk to the Mind]
+Godview
+The earliest a reply to Cosmic Call 2 could reach Earth from Gliese 208. In this game no one lives there. The window is empty, and Earth can’t know it.
+Truth: Kirrin’s people. Their tones are about 10 kW, a tenth of the first two worlds’.
+Each fifth adds collecting area, and reach grows as its square root. Two fifths hear 41 ly in a Year for a 10 kW tone, three 51.
+The player’s order listens again as each fifth is done, as the Mind advised.
++3:35:38 · Year 43.1
+The Mind opens on its own.
+Heard · Radio from Gliese 1021, with three fifths of the array. Minds: likely → almost certain.
+Earth · Year 43.1
+Sol · 2083.1 · 1 Year = 00:05:00
+ENERGY · [75.1%] · MATTER · 11.6 Mt · COMPUTE · [100%]
+REPORT · READING
+[‹ All reports]
+
+### Radio from Gliese 1021’s world
+Far-side array, three fifths · 324 days · light that left 49 Years ago
+Fainter tones than the first two, the same kind. The first fifth could not hear them. Nothing aims them.
+WHAT IT COULD BE · BEFORE → NOW
+Minds, at Gliese 1021’s world · likely → · almost certain
+WHAT IT CAN’T TELL
+What they are saying, or whether they know of us.
+THE MIND · UNASKED · And a fourth · Gliese 1021, 49 ly off. Every world with smog now shows radio. · [Who else?] · [Later]
+[Talk to the Mind]
+Godview
+Truth: Hael’s people. Their tones are about 10 kW, a tenth of the first two worlds’.
+Each fifth adds collecting area, and reach grows as its square root. Two fifths hear 41 ly in a Year for a 10 kW tone, three 51.
+The player’s order listens again as each fifth is done, as the Mind advised.
 +3:39:42 · Year 43.9
 The phone lights. Opens it.
 Lands · Power from orbit: a fifth more energy.
@@ -1571,12 +1616,11 @@ Far-side array · three fifths done · the whole at Year 51
 THE MIND · The first arrays are beaming down. With the ground’s fifth, that is room for a twelfth data center. I have been this size for 33 Years. · [Start it] · [Not yet]
 [Talk to the Mind]
 Godview
-The earliest a reply to Cosmic Call 2 could reach Earth from Gliese 208. In this game no one lives there. The window is empty, and Earth can’t know it.
 Ten megatonnes: 15 Years of the driver’s rock, and 180 Years of Earth’s lift.
 The plateau, as played: Year 11.1 to Year 44.9, against 51.3 at standard pace. Driver first, it ends a Year sooner: rock from the Moon sets this pace, not thought.
 +3:48:24 · Year 45.7
 The Mind opens on its own.
-Picture · The lens at Gliese 1021: straight edges on the land. Minds: likely → very likely.
+Picture · The lens at Gliese 1021: cities and cleared land.
 Earth · Year 45.7
 Sol · 2085.7 · 1 Year = 00:05:00
 ENERGY · [93.9%] · MATTER · 3.6 Mt · COMPUTE · [46%]
@@ -1587,7 +1631,7 @@ REPORT · A PICTURE
 Gliese 1021 · 49.1 ly · solar lens at 548 AU · half a Year · about 13 km a pixel · light that left 49 Years ago
 Continents and seas, cloud and ice, land colored by life, cleared land with straight edges, and cities.
 WHAT IT COULD BE · BEFORE → NOW
-Minds, at Gliese 1021’s world · likely → · very likely
+Minds, at Gliese 1021’s world · almost certain
 Land shaped by weather alone · unlikely → · almost no chance
 WHAT IT CAN’T SHOW
 Anything under 13 km: lakes behind dams, dams, street grids, roads, single buildings. Who they are, or whether they have heard us.

@@ -969,12 +969,6 @@ def long_rows():
     LENS_PX = signs.lens_km(FAR['d'] / 3.2616)                                                 # the rule: physics sets the pixel, the seed fills it
     LENS_SEES = signs.shows('industrial', LENS_PX)
     LENS_MISSES = [what for what, km, has in signs.FEATURES if has in signs.KINDS['industrial'] and km <= LENS_PX]
-    lens_r = tab(AT(LENS_END), 'Report', 'REPORT', 'A PICTURE', f"""<button class="backlink inline">‹ All reports</button>
-<h3 class="lead">A picture of {FAR['star']}’s world</h3>
-<p class="copy small">{FAR['star']} · {FAR['d']:.1f} ly · solar lens at 548 AU · half a Year · about {signs.lens_km(FAR['d'] / 3.2616):.0f} km a pixel · light that left {FAR['d']:.0f} Years ago</p>
-<p class="copy">{LENS_SEES[0].capitalize()}, {', '.join(LENS_SEES[1:-1])}, and {LENS_SEES[-1]}.</p>
-{SEC('WHAT IT COULD BE · BEFORE → NOW')}{odds(f'Minds, at {FAR["star"]}’s world', 60, 94)}{odds('Land shaped by weather alone', 30, 5)}
-{SEC('WHAT IT CAN’T SHOW')}<p class="copy small">Anything under {LENS_PX:.0f} km: {', '.join(LENS_MISSES)}. Who they are, or whether they have heard us.</p>""")
     # --- Year 29.6: a second voice, and an answer
     tv = AT(K2['year'])
     voice2 = tab(tv, 'Report', 'REPORT', 'A VOICE', f"""<button class="backlink inline">‹ All reports</button>
@@ -1006,7 +1000,7 @@ def long_rows():
     heard = [(w, signs.listen_days(signs.read(w['src'], R['fifth'])['watts'], w['d'], signs.far_sefd(1))) for w in SMOG_HITS]
     got = sorted([x for x in heard if x[1] is not None], key=lambda x: x[1]); quickest = got[0]; got_days = sum(d for _, d in got)
     got_names = ' and '.join(f"{w['star']}’s" for w, _ in got)
-    listen = order(tf, 'Listen to the worlds with smog.', [('LISTEN', f'<b>Far-side array, first fifth</b> · {NUM[len(SMOG_HITS)]} worlds in turn · up to a Year each'), ('FOR', 'Steady tones that drift as a world turns'), ('SENDS', 'Nothing'), ('WAKES YOU', 'Anything heard')])
+    listen = order(tf, 'Listen to the worlds with smog. Again with each new fifth.', [('LISTEN', f'<b>Far-side array</b> · {NUM[len(SMOG_HITS)]} worlds in turn · up to a Year each · again as each fifth is done'), ('FOR', 'Steady tones that drift as a world turns'), ('SENDS', 'Nothing'), ('WAKES YOU', 'Anything heard')])
     heard_rows = ''.join(odds(f"Minds, at {w['star']}’s world", 60, 97 if d is not None else 60) for w, d in heard)
     proof = tab(tf + AT(got_days / 365.25) + 30, 'Report', 'REPORT', 'READING', f"""<button class="backlink inline">‹ All reports</button>
 <h3 class="lead">Radio from {NUM[len(got)]} worlds</h3>
@@ -1014,6 +1008,29 @@ def long_rows():
 <p class="copy">Narrow tones, steady, drifting as a world turns and circles its star. The kind our own towers gave off. Nothing aims them. No one there knows we hear.</p>
 {SEC('WHAT IT COULD BE · BEFORE → NOW')}{heard_rows}
 {SEC('WHAT IT CAN’T TELL')}<p class="copy small">What they are saying. These are carriers, not words. And nothing since that light left.</p>""")
+    # --- each new fifth tries the silent worlds again. Physics says when each is heard.
+    later_heard, silent = [], [w for w, d in heard if d is None]
+    for k, done_y in enumerate(R['fifths'][1:], 2):
+        at_y = done_y
+        for w in sorted(silent, key=lambda w: w['d']):
+            d = signs.listen_days(signs.read(w['src'], done_y)['watts'], w['d'], signs.far_sefd(k))
+            if d is None: at_y += 1; continue                                          # a Year spent, nothing
+            at_y += d / 365.25; later_heard.append(dict(w=w, k=k, days=d, year=at_y)); silent.remove(w)
+    def radio_r(h):
+        w = h['w']
+        return tab(AT(h['year']), 'Report', 'REPORT', 'READING', f"""<button class="backlink inline">‹ All reports</button>
+<h3 class="lead">Radio from {w['star']}’s world</h3>
+<p class="copy small">Far-side array, {NUM[h['k']]} fifths · {DAYS(h['days'])} · light that left {w['d']:.0f} Years ago</p>
+<p class="copy">Fainter tones than the first two, the same kind. The first fifth could not hear them. Nothing aims them.</p>
+{SEC('WHAT IT COULD BE · BEFORE → NOW')}{odds(f"Minds, at {w['star']}’s world", 60, 97)}
+{SEC('WHAT IT CAN’T TELL')}<p class="copy small">What they are saying, or whether they know of us.</p>""")
+    LENS_PROVEN = any(h['w'] is FAR and h['year'] < LENS_END for h in later_heard)            # radio got there before the picture
+    lens_r = tab(AT(LENS_END), 'Report', 'REPORT', 'A PICTURE', f"""<button class="backlink inline">‹ All reports</button>
+<h3 class="lead">A picture of {FAR['star']}’s world</h3>
+<p class="copy small">{FAR['star']} · {FAR['d']:.1f} ly · solar lens at 548 AU · half a Year · about {signs.lens_km(FAR['d'] / 3.2616):.0f} km a pixel · light that left {FAR['d']:.0f} Years ago</p>
+<p class="copy">{LENS_SEES[0].capitalize()}, {', '.join(LENS_SEES[1:-1])}, and {LENS_SEES[-1]}.</p>
+{SEC('WHAT IT COULD BE · BEFORE → NOW')}{odds(f'Minds, at {FAR["star"]}’s world', *((97, 99) if LENS_PROVEN else (60, 94)))}{odds('Land shaped by weather alone', 30, 5)}
+{SEC('WHAT IT CAN’T SHOW')}<p class="copy small">Anything under {LENS_PX:.0f} km: {', '.join(LENS_MISSES)}. Who they are, or whether they have heard us.</p>""")
     # --- power from orbit
     tp = AT(R['power'])
     power = tab(tp, 'Mind', 'MIND', 'PAST THE GRID LIMIT', ''.join([
@@ -1093,7 +1110,7 @@ def long_rows():
              [f'The driver took {R["driver"] - 12:.0f} Years, not 24, and 1 kt. Earth’s lift in those Years was {55 * round(R["driver"] - 12):,} kt.',
               f'Matter in orbit passes a megatonne at about Year 21 from lift alone. From here it grows twelve times faster.'], label=HMS(td)),
         at(tf, td, 'Listen to the worlds with smog.', 'The far-side array’s first fifth is done.',
-             talk(listen, f'Set. {quickest[0]["star"]} first. If its people use radio as we did, I will know in days.', ('Undo',)),
+             talk(listen, f'Set. {quickest[0]["star"]} first. If its people use radio as we did, I will know in days. Each new fifth hears farther, so I will try the silent ones again.', ('Undo',)),
              ['One fifth hears a 100 kW tone to 21 ly in a day, and a 10 kW tone to 29 ly in a Year.',
               'Truth, as this fifth can hear it: ' + ', '.join(f"{w['star']} {'in ' + DAYS(d) if d is not None else 'not within a Year'}" for w, d in heard) + '.'], label=HMS(tf)),
         at(tf + AT(got_days / 365.25) + 30, tf, '· The Mind opens on its own.', ('Heard', f'Radio from {NUM[len(got)]} of the worlds with smog. Minds, at each: {moved(60, 97)}.'),
@@ -1104,7 +1121,13 @@ def long_rows():
               'Settled 2026-10-14: before its Mind wakes, a world with arrays may answer as a people. ' + ' '.join(
                   f"A knock sent now lands at {w['star']} at Year {tf / 300 + w['d']:.0f}, " + (f"before {w['who']}’s Mind wakes at {w['src']['waking'] - Y0:.1f}: its people would hear it." if tf / 300 + w['d'] < w['src']['waking'] - Y0 else f"after {w['who']}’s Mind wakes: its Mind would hear it.")
                   for w, _ in got)], settled=36, label=HMS(tf + AT(got_days / 365.25) + 30)),
-        at(AT(LENS_END), 0, '· The Mind opens on its own.', ('Picture', f'The lens at {FAR["star"]}: straight edges on the land. Minds: {moved(60, 94)}.'),
+        *[at(AT(h['year']), 0, '· The Mind opens on its own.', ('Heard', f"Radio from {h['w']['star']}, with {NUM[h['k']]} fifths of the array. Minds: {moved(60, 97)}."),
+             talk(radio_r(h), f"<b>A third world speaks</b>{h['w']['star']}, which the first fifth could not hear. The same kind of tones, fainter. {NUM[h['k']].capitalize()} fifths heard them in {DAYS(h['days'])}." if i == 0 else f"<b>And a fourth</b>{h['w']['star']}, {h['w']['d']:.0f} ly off. Every world with smog now shows radio.", ('Who else?', 'Later'), 'open'),
+             [f"Truth: {h['w']['who']}’s people. Their tones are about {signs.read(h['w']['src'], h['year'])['watts'] / 1000:.0f} kW, a tenth of the first two worlds’.",
+              f"Each fifth adds collecting area, and reach grows as its square root. Two fifths hear 41 ly in a Year for a 10 kW tone, three 51.",
+              'The player’s order listens again as each fifth is done, as the Mind advised.'], label=HMS(AT(h['year'])))
+          for i, h in enumerate(later_heard)],
+        at(AT(LENS_END), 0, '· The Mind opens on its own.', ('Picture', f'The lens at {FAR["star"]}: cities and cleared land.' + ('' if LENS_PROVEN else f' Minds: {moved(60, 94)}.')),
            talk(lens_r, f'<b>A picture of their world</b>Cleared land with straight edges, and grey spreads the size of cities. I think someone shaped it. Nothing under {LENS_PX:.0f} km shows.', ('What else can it see?', 'Later'), 'open'),
            [(f'Truth: {FAR["who"]}’s people. Their knock at Year {KF["year"]:.1f} went unheard. This is Earth’s first sight of them.' if FAR['who'] == WHOF['name'] else f'Truth: {FAR["who"]}’s people.'),
             f'The light left {FAR["d"]:.0f} Years ago, about {Y0 + LENS_END - FAR["d"]:.0f}. A pixel is about {signs.lens_km(FAR["d"] / 3.2616):.0f} km, scaled from NASA’s 25 km at 30 pc.',
