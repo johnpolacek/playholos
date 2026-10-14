@@ -696,6 +696,14 @@ Begun 2026-10-14. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#outposts-and-
   - *How much it could matter.* A neighbor's nearest other host star is a median 4.5 ly away. If every living neighbor sent one colony the moment it woke, at v1's times, one would land by Year 0 in 54% of games, and by Year 60 in 97%. An upper bound.
   - *The theory.* Expansion can fill the galaxy far faster than its age (Hart 1975, Carroll-Nellenback et al. 2019), or slowly (Newman and Sagan 1981). If only some settlements choose to spread, empty regions remain (Landis 1998).
   - Set aside: neighbors who stay home, and neighbors who spread only in answer to news.
+- **The seed rolls whether a neighbor spreads, weighted by its dial, and each colony rolls again.** Settled 2026-10-14. Built in [calcs/seed.py](calcs/seed.py).
+  - *Why.* Dials tilt every neighbor choice as odds. A roll at each colony is Landis's percolation: some branches stop, and quiet pockets form.
+  - *Odds, samples:* strongly Expand 80%, leans Expand 60%, leans Deepen 25%, strongly Deepen 10%. A colony keeps its parent's dials. About 4 living neighbors in 10 spread.
+  - *Pace, samples from Earth's own:* the first seed ship 40 Years after waking, as Earth's launcher and a sentinel take. Then one every 20 Years, to the nearest free star, at a tenth of light speed. A colony stands alone as a Mind 20 Years after landing (Metzger et al. 2013).
+  - *Never to Sol, or to a star another neighbor holds.* Stars past 50 ly are not followed.
+  - *What a game holds, on 400 games.* A colony has landed before Year 0 in 17%. By Year 60, in 71%, a median of 1. By Year 300, in 95%, a median of 38: the region fills, as Hart's argument expects.
+  - *In seed 11,* Hael has held Proxima Centauri since Year -6.4. In seed 10, Ombe holds its companion GJ 4337 A.
+  - Still open: what Earth can see of a colony.
 
 ## Death and new games
 
@@ -807,4 +815,5 @@ Answered one at a time, in this order. Every answer must be permitted by current
     - **Settled 2026-10-14:** a neighbor's probe is a rocket, v1's, bright as it brakes. Small dark sails were set aside to keep the game simple. See [How neighbors play](#how-neighbors-play).
 13. **Earth's outposts and colonies, begun 2026-10-14.** See [Outposts and colonies](#outposts-and-colonies).
     - **Settled 2026-10-14:** people may go anywhere physics allows, at real prices. Nothing artificial limits the Will, since Holos tests the Fermi paradox.
-    - **Settled 2026-10-14:** neighbors may spread too, by the same physics and prices, when their scripts choose. Still open: what decides whether and how fast.
+    - **Settled 2026-10-14:** neighbors may spread too, by the same physics and prices, when their scripts choose.
+    - **Settled 2026-10-14:** the seed rolls whether each neighbor spreads, weighted by its dial, and each colony rolls again. Still open: what Earth can see of a colony.

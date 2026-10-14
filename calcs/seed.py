@@ -80,6 +80,46 @@ def probe_trip(p, t, what):
     launch = t + p['thinks'] + ROCKET_BUILD
     return dict(what=what, kind='rocket', bright=True, launch=launch, arrives=launch + p['d'] / ROCKET_V, year=launch + p['d'] / ROCKET_V - Y0)
 
+# ---------- Spreading ----------
+# Settled 2026-10-14: neighbors may spread by the same physics and prices as Earth. The seed rolls whether a Mind
+# sends colonies, weighted by its Expand or Deepen dial, and each colony, once it stands alone as a Mind, rolls again
+# with its parent's dials. That is Landis's percolation (1998): some branches stop, and quiet pockets form.
+# Samples, all of them: the odds; a first seed ship 40 Years after waking, as Earth's own launcher and a sentinel take;
+# one more every 20 Years, to the nearest free star in the census; a tenth of light speed, v1's; and a colony standing
+# alone 20 Years after it lands, as Metzger et al. 2013 bootstrap the Moon's industry. No colony goes to Sol, or to a
+# star another neighbor holds. Stars past 50 ly are not in the census, so spreading there is not followed.
+SPREAD = {'E2': 0.8, 'E1': 0.6, 'D1': 0.25, 'D2': 0.1}
+FIRST_SHIP, EVERY, SHIP_V, STANDS, HORIZON = 40, 20, 0.1, 20, Y0 + 300
+_CENSUS = []
+def census():
+    if not _CENSUS:
+        import hosts
+        st = hosts.stars(); hosts.name_from_hyg(st); hosts.hipparcos(st)
+        for x in st:
+            ra, de, d = math.radians(x['ra']), math.radians(x['dec']), x['d_pc'] * 3.2616
+            _CENSUS.append(dict(id=x['id'], name=x['name'], kind=x['kind'], d=d, xyz=(d * math.cos(de) * math.cos(ra), d * math.cos(de) * math.sin(ra), d * math.sin(de))))
+    return _CENSUS
+def spread(seed, neighbors):
+    stars = {x['id']: x for x in census()}
+    taken = {p['host']['id'] for p in neighbors}
+    queue = [dict(name=p['name'], root=p['name'], star=stars[p['host']['id']], stands=p['waking'], dials=p['dials'], depth=0) for p in neighbors if not p['dead']]
+    colonies = []
+    while queue:
+        m = queue.pop(0)
+        if keyed(seed, 'spread', m['root'], m['star']['id']) >= SPREAD[m['dials'].split()[1]]: continue
+        t = m['stands'] + FIRST_SHIP
+        for x in sorted(stars.values(), key=lambda x: math.dist(x['xyz'], m['star']['xyz'])):
+            if t > HORIZON: break
+            if x['id'] in taken: continue
+            hop = math.dist(x['xyz'], m['star']['xyz'])
+            if hop < 0.1: continue                                         # its own star's companions are home ground
+            taken.add(x['id'])
+            c = dict(root=m['root'], parent=m['name'], star=x, sent=t, lands=t + hop / SHIP_V, stands=t + hop / SHIP_V + STANDS, hop=hop, depth=m['depth'] + 1)
+            colonies.append(c)
+            if c['stands'] < HORIZON: queue.append(dict(name=f"{m['root']} {len(colonies)}", root=m['root'], star=x, stands=c['stands'], dials=m['dials'], depth=c['depth']))
+            t += EVERY
+    return sorted(colonies, key=lambda c: c['lands'])
+
 def keyed(*parts):
     """A number between 0 and 1 that depends only on its parts. Placement uses it with each star's id, so a star
     leaving the host list moves only a neighbor that lived there."""
@@ -241,7 +281,8 @@ def draw(seed, rows=None):
         pool = [h for h in rows if h['north'] and h['kind'] in 'GK' and h['luminosity'] > 0.3 and h['id'] not in taken and not h['planets']
                 and not h['name'].startswith('Gaia ')]                      # the planet hunters' stars are bright, so they have names
         natural = max(pool, key=lambda h: keyed(seed, 'find', h['id']))
-    return dict(seed=seed, earth=earth, count=count, neighbors=sorted(out, key=lambda p: p['d']), found=found, natural=natural,
+    colonies = spread(seed, out)                                        # keyed draws only, so nothing above moves
+    return dict(seed=seed, earth=earth, count=count, neighbors=sorted(out, key=lambda p: p['d']), found=found, natural=natural, colonies=colonies,
                 worlds=worlds, felt=felt, ruled_out=[w for w in drawn if w['fails']])
 
 def year(t): return f"Year {t - Y0:.1f}" if t >= Y0 else f'{t:.0f}'

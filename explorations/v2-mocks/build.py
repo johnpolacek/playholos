@@ -77,8 +77,11 @@ def unheard(p):
 def does(p):
     if not p['heard']: return ''
     return (f"{MOVE[p['on_hum']]}" if p['knows'] <= Y0 else f"at waking: {MOVE[p['on_hum']]}")
+def colonies(p):
+    cs = [c for c in G['colonies'] if c['root'] == p['name'] and c['lands'] < Y0 + 60]
+    return ' '.join(f"{'Its colony' if c['depth'] == 1 else 'A colony of its colony'} at {pretty(c['star']['name'])}, {c['hop']:.1f} ly from its parent, lands {seedmod.year(c['lands'])}." for c in cs[:3]) + (f' {len(cs) - 3} more by Year 60.' if len(cs) > 3 else '')
 def inbound(p):
-    return ' '.join(f"Its {q['kind']} probe, sent {q['what']}, reaches Sol at Year {q['year']:.1f}: {'bright as it brakes' if q['bright'] else 'dark'}." for q in p.get('probes', ())) + ' ' * bool(p.get('probes')) + ' '.join(f"{i['what'][0].upper() + i['what'][1:]}: sent {seedmod.year(i['sent'])}, reaches Earth Year {i['year']:.1f}, +{clock(i['year'])}. "
+    return (colonies(p) + ' ' if colonies(p) else '') + ' '.join(f"Its {q['kind']} probe, sent {q['what']}, reaches Sol at Year {q['year']:.1f}: {'bright as it brakes' if q['bright'] else 'dark'}." for q in p.get('probes', ())) + ' ' * bool(p.get('probes')) + ' '.join(f"{i['what'][0].upper() + i['what'][1:]}: sent {seedmod.year(i['sent'])}, reaches Earth Year {i['year']:.1f}, +{clock(i['year'])}. "
                     f"Year 0’s sky watch would {'catch' if i['kit0'] else 'miss'} it. The all-sky watch {'catches' if i['allsky'] else 'misses'} it." for i in p['inbound'] if i['year'] > 0)
 TONE = {'watcher': '', 'contacter': 'you', 'inward': '', 'hunter': 'other'}
 def roster_table():

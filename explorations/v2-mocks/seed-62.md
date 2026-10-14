@@ -20,10 +20,10 @@ A check on the mocks, built on another game. The mocks’ own game is · seed 10
 The player sees none of this. Light-time is real waiting at 5 minutes a Year.
 Neighbor · Star · Light-time · At Year 0 · What it knows of Earth · What it does about it
 Sere · watcher · Alpha Centauri B · K star · 4.3 ly · 00:21:36 · wakes Year 78.0 · +06:30:13 · has not heard Earth
-Quessa · watcher · strange · Gliese 216 B · K star · 29.4 ly · 02:26:45 · awake 21 Years · heard Earth’s radars from 1979, and mapped its day and orbit · stays quiet and aims its instruments at the source
+Quessa · watcher · strange · Gliese 216 B · K star · 29.4 ly · 02:26:45 · awake 21 Years · heard Earth’s radars from 1979, and mapped its day and orbit · stays quiet and aims its instruments at the source · Its colony at Gamma Leporis, 0.3 ly from its parent, lands Year 22.3.
 Veyra · watcher · HD 10307 · G star · 41.5 ly · 03:27:45 · awake 16 Years · heard Earth’s radars from 1992, and mapped its day and orbit. Catches Cosmic Call 2, Year 5.1 · stays quiet and aims its instruments at the source · Its answer to Cosmic Call 2: sent Year 6.1, reaches Earth Year 47.6, +03:58:03. Year 0’s sky watch would catch it. The all-sky watch catches it.
 Tolle · watcher · Theta Ursae Majoris · G star · 44.2 ly · 03:40:54 · wakes Year 74.8 · +06:14:00 · has not heard Earth
-Hesk · inward · strange · HD 281621 · M star · 45.4 ly · 03:47:03 · awake 41 Years · heard Earth’s radars from 1995 · nothing new: keeps its plan
+Hesk · inward · strange · HD 281621 · M star · 45.4 ly · 03:47:03 · awake 41 Years · heard Earth’s radars from 1995 · nothing new: keeps its plan · Its colony at Gaia 121254932585133568, 5.7 ly from its parent, lands Year 56.7.
 [drawing: Every neighbor in this game, seen from above the galaxy’s plane; labels: 10 ly · 00:50:00, 20 ly · 01:40:00, 30 ly · 02:30:00, 40 ly · 03:20:00, 50 ly · 04:10:00, Earth, Sere, Alpha Centauri B · 4.3 ly, Quessa, Gliese 216 B · 29.4 ly, Veyra, HD 10307 · 41.5 ly, Tolle, Theta Ursae Majoris · 44.2 ly, Hesk, HD 281621 · 45.4 ly, 82 Eridani, Fomalhaut, Luyten’s Star, Gliese 75, HD 122064, Gliese 675, Gliese 611 A, 31 Aquilae]
 Filled: awake at Year 0. Open: wakes later. Cross: dead. Blue ring: has heard Earth. Amber: a hunter. Diamonds: Earth’s leads.
 
