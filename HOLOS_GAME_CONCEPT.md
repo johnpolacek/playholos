@@ -10,6 +10,8 @@ v2 grows one question at a time, and each answer is dated. Later user clarificat
 
 **Evidence first (2026-10-06).** Everything starts from real data and published research, the most current included. Only then comes hard-science speculation, from the best evidence we have now. Preliminary results are marked as such, with what would change if the full paper differs. Every source goes into [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md), with what it found and where the design uses it.
 
+**Nothing artificial limits the Will (2026-10-14).** The Will may do anything physics allows, at its real price. Holos is a test of the Fermi paradox: if expansion is possible, why is the sky quiet? So a limit on what Earth can do must come from physics or cost, never from a game rule.
+
 ## Core premise
 
 Holos is a single-player, hard science fiction browser game. You are the Will of Earth's Mind, on the morning Earth's machines wake as one, and you guide what Earth becomes.
@@ -600,8 +602,9 @@ Settled 2026-10-10. Costs in [calcs/ai_cost.py](calcs/ai_cost.py), prices in [HO
   - *How often.* On 1,000 games, a rolled probe reaches Sol by Year 60 in 3. None arrives before Year 0, so none breaks Earth's quiet opening. Probes rolled in answer to the player's acts come on top.
   - *In seed 11:* Hael's rocket, rolled on silence in 2003, reaches Sol at Year 26.2.
   - *v1 reasoned that ancient probes must be rare, since none has been found.* That holds only for big ones. Searches would miss a probe 1 to 10 m across (Haqq-Misra and Kopparapu 2012).
-  - Set aside the same day, to keep the game simple: small dark sails, chosen by a Hidden sender's dials. Physics allows them. But the Sun can catch a sail only below 3.8% of light speed (Heller and Hippke 2017), so one takes about 115 Years from Alpha Centauri and almost never arrives in play.
-  - Also set aside: hunting for hidden watchers at the Sun's lens points and Earth's co-orbital asteroids, and probes that build. Logged as research.
+  - Set aside for neighbors the same day, to keep the game simple: small dark sails, chosen by a Hidden sender's dials. Physics allows them. But the Sun can catch a sail only below 3.8% of light speed (Heller and Hippke 2017), so one takes about 115 Years from Alpha Centauri and almost never arrives in play.
+  - Also set aside for neighbors: relays at the Sun's lens points, lurkers on Earth's co-orbital asteroids, and probes that build. Logged as research.
+  - *The Will may still build or search for any of these,* at their real prices. Nothing artificial limits the Will.
 - **Simulated ahead.** Neighbors play out from the seed. Only Earth is unpredictable, so the game recomputes a neighbor only when Earth's actions reach it, after their light delay. The same seed and the same player actions give the same game, for tests and replays.
 - **A live model only for live talks.** When a neighbor's mind is close enough to talk live, by craft or a mind sent as light, a model speaks for it from its character and what it knows.
 - **The model: Claude Haiku 5.5,** for live talks and for Earth's Mind, checked in playtests. About $1.18 a month for a busy player's Mind, under a cent per live talk, nothing for voice banks written in Claude Code on a subscription (about $14 through the API), and nothing for neighbors in play.
@@ -674,6 +677,18 @@ Built 2026-10-10 in [calcs/seed.py](calcs/seed.py), from the rules above.
   - About 150 natural warm worlds, from 118 to 178. The infrared telescope's first pass shows about 17 points of light, and about 1 in 4 is a home.
   - Of the natural worlds, 6 in 10 are bare rock and about 1 in 4 is alive. Of the 12 a first pass sees, 7 are alive and 5 show oxygen.
   - A neighbor's signal reaches Earth in the first 15 minutes in about 1 game in 10, and in the first hour in about 1 in 4. Most are answers to Earth's radars.
+
+## Outposts and colonies
+
+Begun 2026-10-14. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#outposts-and-colonies).
+
+- **People may go anywhere physics allows, at real prices.** Settled 2026-10-14, by the rule that nothing artificial limits the Will.
+  - *A machine seed is cheapest.* About 12 tonnes landed on the Moon could bootstrap its industry in about 20 years (Metzger et al. 2013).
+  - *People cost more.* About 110 settlers keep a Mars settlement going (Salotti 2020). A ring for 10,000 weighs about 10 million tons (the Stanford torus, NASA 1975). That is the scale of the game's Moon road.
+  - *People to another star cost billions of tonnes and centuries.* The 2025 winning design, Chrysalis: 2.4 billion tonnes, about 2,400 people, about 400 years to Alpha Centauri. Over 100,000 aboard keep knowledge alive (Hein et al. 2012).
+  - *Frozen embryos weigh far less,* but artificial wombs don't exist yet (Crowl et al. 2012). Building them is research Earth could do first.
+  - *A colony that can stand alone is a Mind,* as v1 had it: its own industry, power and thought.
+  - Set aside: Minds only beyond the home system, and Minds only everywhere.
 
 ## Death and new games
 
@@ -781,5 +796,7 @@ Answered one at a time, in this order. Every answer must be permitted by current
     - **Settled 2026-10-14:** before its Mind wakes, a world with arrays may answer as a people, and its Mind inherits the exchange. See [How neighbors play](#how-neighbors-play).
     - **Settled 2026-10-14:** a picture shows everything larger than a pixel. The lens and the dispatch now follow the rule. The swarm is a thousand sails, six days of laser. See [How Earth learns](#how-earth-learns).
     - **Settled 2026-10-13:** the plateau at the grid limit stands. Better chips don't dodge it, and the megatonne road pays there. See [Growing compute](#growing-compute).
+13. **Earth's outposts and colonies, begun 2026-10-14.** See [Outposts and colonies](#outposts-and-colonies).
+    - **Settled 2026-10-14:** people may go anywhere physics allows, at real prices. Nothing artificial limits the Will, since Holos tests the Fermi paradox.
 12. **The mocks on other games, 2026-10-14:** [seed 11](explorations/v2-mocks/seed-11.html), with no voice, five felt worlds and a living neighbor next door, and [seed 62](explorations/v2-mocks/seed-62.html), where the first mirror can read no felt world. The first hour now runs on any seed. It raised one question:
     - **Settled 2026-10-14:** a neighbor's probe is a rocket, v1's, bright as it brakes. Small dark sails were set aside to keep the game simple. See [How neighbors play](#how-neighbors-play).
