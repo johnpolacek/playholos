@@ -562,6 +562,12 @@ Settled 2026-10-10. Costs in [calcs/ai_cost.py](calcs/ai_cost.py), prices in [HO
   - *Its Mind inherits the exchange.* On waking it knows who knocked and what its people sent, and rolls its own table.
   - *In the mock's game:* a knock sent at Year 34 lands at Kesh's world at Year 63, before its Mind wakes at 66.9. Its people would hear it.
   - Set aside: only the Mind answers, once awake. And v1's rule, no conversation with a young world, which now means a world without arrays.
+- **A late answer costs nothing extra.** Settled 2026-10-14.
+  - *A sender listens for good,* so a late answer is always heard. See [Stars Earth knocked on](#stars-earth-knocked-on).
+  - *Its own tables carry the cost.* After one round trip of silence it rolls its silence table. By the time the answer lands it may have knocked again, or turned to others. Then it rolls its table for an answer, like any other.
+  - *In the mock's game:* Ombe's knock reached Earth at Year 8.5, and Earth answers at Year 29.7. Ombe takes the silence as news about Year 59: knock again 52%, probe 24%, call 15%. The answer lands at Year 79: answer 61%, gift 20%, probe 13%.
+  - *The Mind says what the sender has likely done,* from those tables, in words.
+  - Set aside: a trust score that falls with lateness, and one that falls only after the sender gave up.
 - **Simulated ahead.** Neighbors play out from the seed. Only Earth is unpredictable, so the game recomputes a neighbor only when Earth's actions reach it, after their light delay. The same seed and the same player actions give the same game, for tests and replays.
 - **A live model only for live talks.** When a neighbor's mind is close enough to talk live, by craft or a mind sent as light, a model speaks for it from its character and what it knows.
 - **The model: Claude Haiku 5.5,** for live talks and for Earth's Mind, checked in playtests. About $1.18 a month for a busy player's Mind, under a cent per live talk, nothing for voice banks written in Claude Code on a subscription (about $14 through the API), and nothing for neighbors in play.
@@ -734,7 +740,7 @@ Answered one at a time, in this order. Every answer must be permitted by current
     - **Settled 2026-10-14:** the Mind advises a listen at marked worlds, and the player decides. See [What Earth hears](#what-earth-hears).
     - **Settled 2026-10-14:** one receiver is split among the stars it holds, and each part hears less far. See [What Earth hears](#what-earth-hears).
     - **Settled 2026-10-14:** a suspicion opens the whole kit, and the Mind lists the ways. In the mock the player sends a solar lens to Gliese 1021, the smog world too far for the first fifth. Its picture comes at Year 45.7: Earth's first sight of Hael's people. See [How Earth learns](#how-earth-learns).
-    - **What does a late answer cost?** A sender waits one round trip, then takes silence as news. To be on time, Earth's answer had to leave within a Year of the knock.
+    - **Settled 2026-10-14:** a late answer costs nothing extra. A sender listens for good, and its own tables carry the cost. See [How neighbors play](#how-neighbors-play).
     - **Settled 2026-10-14:** before its Mind wakes, a world with arrays may answer as a people, and its Mind inherits the exchange. See [How neighbors play](#how-neighbors-play).
     - **Settled 2026-10-14:** a picture shows everything larger than a pixel. The lens and the dispatch now follow the rule. The swarm is a thousand sails, six days of laser. See [How Earth learns](#how-earth-learns).
     - **Settled 2026-10-13:** the plateau at the grid limit stands. Better chips don't dodge it, and the megatonne road pays there. See [Growing compute](#growing-compute).
