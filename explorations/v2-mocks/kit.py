@@ -150,8 +150,8 @@ TABS = ['Home', 'Report', 'Projects', 'Reach', 'Mind']
 def rail(active):
     return '<nav class="rail" aria-label="Main">' + ''.join(f'<button class="on" aria-current="page">{t}</button>' if t == active else f'<button>{t}</button>' for t in TABS) + '</nav>'
 
-# Compute in use, as a share of what Earth has that Year. Shares are v1's: a choice of how much thought goes in.
-# (start Year, end Year, share): the queue at Year 0, then what the player starts.
+# Compute in use: settled 2026-10-14, thought goes down the player's line, and the share in use is what the line takes.
+# calcs/early_game.py paces every build. Studies, observations and data centers keep a set share (SET_ASIDE there).
 # Ground data centers: the fabs fill one a Year, each +50% compute, and thinking's draw on energy grows with it.
 # The first is queued before Year 0. A standing order at Year 1.1 keeps them coming.
 DC_STEP = 1.5
@@ -160,14 +160,12 @@ DCS = [(f'{o} data center', 0 if i == 0 else i + .1) for i, o in enumerate(('Gro
 DC_DONE = tuple(s + 1 for _, s in DCS)
 THINK = 100 * .25 / GRID_TW                    # thinking's share of energy at Year 0, in percent
 STUDY_SHARE = 10                               # percent of thought the player gives the Mind's studies. A sample
-USES = [(0, 6, 1), (0, 6, 20), (0, .1, 5), (0, 99, STUDY_SHARE),                           # sky watch, flash watch, one observation, the studies
-        (.4, 8.4, 15), (.8, 2.8, 5), (1.1, 2.1, 10), (1.6, 11.6, 15), (1.7, 3.7, 5), (1.8, 3.0, 10)]     # telescope, radars, a Year's listening, vault, launch complex, Luyten watch
-USES += [(s, s + 1, 5) for _, s in DCS]
-USES += [(6.3, 11.3, 10), (6.3, 25.5, 10), (8.5, 12.5, 10)]           # the second hour: the orbital yard, the launcher, the telescope's reads
 # Hours 1 to 5, the third mock: the long roads, priced 2026-10-13 in calcs/early_game.py. The laser array is begun at
 # Year 9.4 and the rest at Year 12, with the yard done. Settled 2026-10-14: thought goes down the player's line, and this
 # player keeps the order begun. From Year 12 every work is paced by the thought that line gives it (early_game.replay).
-YARD_DONE, LONG_START = 11.3, 12.0
+FH, FH_LEFT, FH_SPARE = eg.first_hour(show=False)                                 # the first hour, paced: settled 2026-10-14
+FH = {k: round(v, 2) for k, v in FH.items()}
+YARD_DONE, LONG_START = FH['Orbital yard'], 12.0
 PACED = {k: v if k == 'spare' else round(v, 2) for k, v in eg.replay(eg.BY_START, start=LONG_START, show=False).items()}
 ROAD = dict(array=PACED['Laser sail array'], solar=PACED['Ground solar'], mirror=PACED['A 15 m mirror'], launcher=PACED['Launcher'],
             driver=PACED['Mass driver'], foundry=PACED['Orbital foundry'], prospect=PACED['Belt prospecting'], mining=PACED['Belt mining'],
@@ -175,12 +173,14 @@ ROAD = dict(array=PACED['Laser sail array'], solar=PACED['Ground solar'], mirror
             power=PACED['Power from orbit'])
 def rock(y): return eg.DRIVER_KT * max(0, y - ROAD['driver']) + eg.MINING_KT * max(0, y - ROAD['mining'])       # kt thrown or hauled by Year y
 ROAD['dc12'] = ROAD['power'] + 1                                                                               # then a twelfth data center fits
-def spare(y): return next((idle for at, idle in PACED['spare'] if at >= y), PACED['spare'][-1][1])           # share of thought idle, from Year 12
+def spare(y):                                                                                                  # share of thought idle
+    track = FH_SPARE if y < LONG_START else PACED['spare']
+    return next((idle for at, idle in track if at >= y), track[-1][1])
 def res(t):
     y = t / 300
     grown = DC_STEP ** (sum(y >= d for d in DC_DONE) + (y >= ROAD['dc12']))
     grid = (1.2 if y >= ROAD['solar'] else 1) * (1.2 if y >= ROAD['power'] else 1)         # ground solar, then power from orbit: a fifth more each
-    used = sum(s for a, b, s in USES if a <= y < b) / grown if y < LONG_START else 100 * (1 - spare(y))
+    used = 100 * (1 - spare(y))                                                                     # the line uses what it can, and the rest is idle
     matter = SPARE_KT + LIFT_KT * y - .04 * (y >= .4) - 10 * (y >= 1.6) + 40 * max(0, y - 3.7) - 11 * (y >= 6.3)      # the launch complex lifts from Year 3.7. The yard and launcher take 11 kt
     if y > LONG_START: matter += rock(y) - 2 - eg.ORBIT_POWER_MT * 1000 * (y >= ROAD['power'])                       # the driver and foundry take 2 kt. Power from orbit takes ten megatonnes
     return (round(THINK * grown / grid, 1), round(used), f'{matter:,.0f} kt' if matter < 2000 else f'{matter / 1000:.1f} Mt')

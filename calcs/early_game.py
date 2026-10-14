@@ -271,10 +271,11 @@ def split(line, room, push=PUSH):
         more = min(want * (most - 1), room); give[name] += more; room -= more
     return {name: give[name] / want for name, want, _ in line}, room
 
-def replay(order, start=12.0, dt=0.01, studies=0.1, show=True):
-    """The third mock's game from Year 12, every work paced by the thought the player's order gives it.
-    Standard Years left at Year 12 are the mock's: the launcher and the laser array were begun earlier."""
-    left = {'Launcher': 25.55 - start, 'Laser sail array': 34.4 - start, 'Ground solar': 10, 'A 15 m mirror': ROADS['mirror'] * 0.75,
+def replay(order, start=12.0, dt=0.01, studies=0.1, show=True, early=None):
+    """The third mock's game from Year 12, every work paced by the thought the player's order gives it. The launcher
+    and the laser array were begun earlier: `early` gives their standard Years left at Year 12, from first_hour()."""
+    early = early or first_hour(show=False)[1]
+    left = {'Launcher': early['Launcher'], 'Laser sail array': early['Laser sail array'], 'Ground solar': 10, 'A 15 m mirror': ROADS['mirror'] * 0.75,
             'Mass driver': ROADS['driver'], 'Orbital foundry': ROADS['foundry'] * 0.75, 'Belt mining': ROADS['prospect'] + ROADS['mining']}
     line = [w for w in order if w in left]
     done, fifths, y, first, dc12, spare = {}, 0, start, None, math.inf, []
@@ -305,6 +306,46 @@ def replay(order, start=12.0, dt=0.01, studies=0.1, show=True):
     done['spare'] = spare
     return done
 
+# ---------- The first hour, paced ----------
+# Settled 2026-10-14 for the mocks: one replay from Year 0. The first two mocks' builds are paced by the same line,
+# in the order begun. Thought grows with each data center: 1.5 times, done at Year 1, 2.1, 3.1 and so on to 11.1. Data
+# centers are paced by the fabs, and observations by physics, so neither is in the line: their thought is set aside.
+# Wants of the first hour's works, in flagships. The all-sky watch and the telescope are real-priced above. The rest
+# are samples: the mocks' own shares of Year 0's thought, turned into flagships.
+WANTS.update({'Deep flash watch': (0.1, 'sample'), 'Moon vault': (1.0, 'sample: the mocks\' 15% of Year 0'),
+              'Launch complex': (0.3, 'sample: the mocks\' 5%'), 'Orbital yard': (0.7, 'sample: the mocks\' 10%')})
+DC_DONE = (1.0,) + tuple(i + 1.1 for i in range(1, 11))
+# (work, start Year, standard Years): the mocks' starts. The telescope has 8 Years left of its real schedule at Year 0.4.
+# Paced, the telescope is done at Year 6.1, so the player reads Alpha Centauri A and starts the laser array at Year 7.
+FIRST_HOUR = (('All-sky watch', 0, 6), ('Deep flash watch', 0, 6), ('Infrared telescope', 0.4, 8), ('Moon vault', 1.6, 10),
+              ('Launch complex', 1.7, 2), ('Orbital yard', 6.3, 5), ('Launcher', 6.3, 24), ('Laser sail array', 7.0, ROADS['array']))
+SET_ASIDE = ((0, 99, 0.10), (0, 0.1, 0.05), (0.8, 2.8, 0.05), (1.1, 2.1, 0.10), (1.8, 3.0, 0.10), (6.2, 10.2, 0.10)) \
+    + tuple((d - 1, d, 0.05) for d in DC_DONE)              # studies, observations, a Year's listening, the telescope's reads, the data centers
+def first_hour(until=12.0, dt=0.005, show=True):
+    """Years 0 to 12, every build paced by the line. Returns when each is done, standard Years left at `until`, and
+    the share of thought idle through the hour, as (Year, share)."""
+    left = {w: years for w, _, years in FIRST_HOUR}; start = {w: t for w, t, _ in FIRST_HOUR}
+    done, y, shown, spare = {}, 0.0, {}, []
+    while y < until:
+        room = 1.5 ** sum(y >= d for d in DC_DONE) / FLAGSHIP_THOUGHT - sum(share for a, b, share in SET_ASIDE if a <= y < b) / FLAGSHIP_THOUGHT
+        line = [w for w, t, _ in FIRST_HOUR if t <= y and w not in done]
+        s, idle = split([(w, WANTS[w][0], PUSH) for w in line], room)
+        spare.append((y, idle / (room + sum(share for a, b, share in SET_ASIDE if a <= y < b) / FLAGSHIP_THOUGHT)))
+        for w in line:
+            if w not in shown: shown[w] = (y, s[w])
+            left[w] -= dt / paced(1, s[w])
+            if w == 'Launcher' and 'Orbital yard' in done and not done.get('yard cut'): left[w] *= 0.75; done['yard cut'] = y
+            if left[w] <= 0: done[w] = y
+        y += dt
+    done.pop('yard cut', None)
+    if show:
+        print(f'The first hour, paced by the line in the order begun. Standard dates in brackets.')
+        std = dict(zip([w for w, *_ in FIRST_HOUR], (6, 6, 8.4, 11.6, 3.7, 11.3, 25.55, 32)))
+        for w, *_ in FIRST_HOUR:
+            when = f'Year {done[w]:5.1f}' if w in done else f'{left[w]:.1f} standard Years left at Year {until:g}'
+            print(f'  {w:20} {when:36} [{std[w]}]   first given {shown[w][1]:.1f} times its want')
+    return done, left, spare
+
 FIFTHS_TOTAL = 5
 BY_START = ('Launcher', 'Laser sail array', 'Ground solar', 'A 15 m mirror', 'Mass driver', 'Orbital foundry', 'Belt mining')
 MATTER_FIRST = ('Mass driver', 'Belt mining', 'Orbital foundry', 'Launcher', 'Laser sail array', 'Ground solar', 'A 15 m mirror')
@@ -319,6 +360,7 @@ if __name__ == '__main__':
     long_roads(); print()
     thought_speed(); print()
     at_the_limit(); print()
+    first_hour(); print()
     thought_split(); print()
     compute_growth(); print()
     orbit_stock(); print()

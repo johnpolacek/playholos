@@ -275,8 +275,14 @@ Settled 2026-10-10. Numbers in [calcs/early_game.py](calcs/early_game.py). Repla
   - *So thought is tight early and for megatonne works.* At Year 0 a second flagship is a real cost. At the limit every real-priced work can run at its floor.
   - *Megatonne works have no real price.* Samples: the launcher 10, belt mining 20, the mass driver 30, the foundry 30, a fifth of the far-side array 40, power from orbit 200.
   - *At the limit:* the works begun at Year 12 want 93 flagships and would each take 72% of their standard time. To push the mass driver alone to ten times its want takes half of all thought.
-  - *Not done:* the first two mocks still run every work at standard pace. The third is replayed, from Year 12.
+  - *Done 2026-10-14:* all three mocks are replayed at paced speed, from Year 0.
   - Set aside: thought in scale with a work's Years, and one amount for every work.
+- **The first hour is paced too.** Settled 2026-10-14 with the split, applied 2026-10-14. Numbers from `python3 calcs/early_game.py`.
+  - *One replay from Year 0.* Thought grows with each data center. Data centers are paced by the fabs, and observations by physics, so their thought is set aside.
+  - *Paced, in the order begun:* the watches are built at Year 4.2, not 6. The telescope at 6.1, not 8.4. The vault at 9.1, not 11.6. The yard at 9.8, not 11.3.
+  - *The launch complex stays at Year 3.7.* Behind the watches and the telescope in the line, it gets only its want.
+  - *Wants of the first hour's works are samples:* the deep flash watch 0.1 flagship, the vault 1, the launch complex 0.3, the yard 0.7.
+  - *Thought sits idle when the line is short.* About four tenths idle after the watches are built, and eight tenths at the grid limit, until the long works begin at Year 12.
 - **Thought is split by an order the player sets.** Settled 2026-10-14. Numbers from `python3 calcs/early_game.py`.
   - *The line.* A new work joins the end. The player can move it. One decision, and no sliders.
   - *How the Mind fills it.* First each work gets its want, in order. Then each in turn is pushed to ten times its want.
@@ -310,7 +316,8 @@ Settled 2026-10-10. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#earth-to-ye
   - *A laser sail array:* 25 Years, on the ground, no matter. Starshot aimed at a first launch within a generation, and its own model puts the array at 8 billion dollars (Parkin 2018). v1 had 60 Years.
   - *Not under way at Year 0.* Starshot paused in 2024, so Earth starts it from nothing, unlike the telescope.
   - *A flyby probe:* 12 Years after the launcher, v1's time, in the range of flagship craft. *A sentinel probe:* 20, v1's.
-  - *What an inquiry to the nearest star costs.* Begun at Year 9.4: the array is done at Year 34, sails arrive at Year 56, and their word is home at Year 60. A probe's word is home at Year 78.
+  - *What an inquiry to the nearest star costs.* At standard pace, begun at Year 9.4: the array is done at Year 34, sails arrive at Year 56, and their word is home at Year 60.
+    - *Paced by the line, 2026-10-14,* begun at Year 7: the array is done at Year 24.8, sails arrive at Year 46, and their word is home at Year 51. A probe's word is home at about Year 72.
   - *Flight and light set most of it.* 4.3 ly is 22 Years at a fifth of light speed, 36 at an eighth, and 4.3 more for word to come back.
 - **The long roads, priced 2026-10-13.** Samples, each against the best real plan found. Numbers from `python3 calcs/early_game.py`. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#real-masses-behind-the-projects).
   - *A new telescope with a 15 m mirror:* 18 Years, the flagship standard, about 40 t. Its study aimed at a launch about 2039, from a 2019 report. It needs no assembly in space: that is the only way only past 15 m.
@@ -320,7 +327,7 @@ Settled 2026-10-10. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#earth-to-ye
   - *Belt prospecting, then mining:* 6 and 20 Years, v1's. Then 120 kt a Year. Nothing like it has flown.
   - *A far-side array:* 30 Years, v1's, begun once the driver's mine exists. About 1 Mt of metal made in place. FarView plans 4 to 8 years for a fifth of the area, in far lighter antennas.
   - *Power from orbit:* about 10 Mt for a fifth more energy, so its pace is the pace rock arrives.
-  - *The mock's game, each begun when the Mind first offers it.* The mirror: Year 23. Driver and foundry: Year 30. Belt mining: Year 32. Laser array: Year 34. Ten megatonnes in orbit: Year 45. Far-side array: Year 60.
+  - *The mock's game at standard pace, each begun when the Mind first offers it.* Replaced 2026-10-14 by the paced replay in [Growing compute](#growing-compute). The mirror: Year 23. Driver and foundry: Year 30. Belt mining: Year 32. Laser array: Year 34. Ten megatonnes in orbit: Year 45. Far-side array: Year 60.
   - *So the plateau lasts about 34 Years:* 2.8 hours of play, from the grid limit at Year 11 to power from orbit at about Year 45. Ground solar adds a fifth at Year 21.
   - *The whole far-side array arrives about when Varn wakes,* Year 57.6. Its first fifth arrives 24 Years sooner.
 - **The far-side array grows in stages.** Settled 2026-10-13. Numbers from `python3 calcs/signs.py stats`.
@@ -712,7 +719,8 @@ Answered one at a time, in this order. Every answer must be permitted by current
    - **Priced 2026-10-11:** chip fabs, factory-built works, the orbital yard and the all-sky watch. See [Build times](#build-times) and [Growing compute](#growing-compute).
    - **Settled 2026-10-12:** 11 of the 31 half-minutes had nothing new for the player. That is a flaw: v1's first-session rule holds in v2. See [How a game starts](#how-a-game-starts). What may land is settled too: readings from observations, findings from studies, and Earth's old messages arriving. Studies run on their own from Begin, and observations are offered as follow-ups. The rebuilt mock has 4 quiet half-minutes.
 9. **Settled 2026-10-10:** v1's research baseline, rechecked against the 2025 radar result and Garrett's 2026 cold-computing paper. See [Why the sky is quiet, rechecked](#why-the-sky-is-quiet-rechecked).
-10. **Second mock built 2026-10-13:** [the first hour away](explorations/v2-mocks/index.html#hour), minutes 15 to 60, on the same game. The phone is down, the player is woken six times and plays about eight minutes. In this game a contacter's knock reaches Earth at minute 42, and the all-sky watch the player built catches it. Then the new telescope gives a partial reading of one living world and finds a dead one next door, all inside five minutes. What each reading shows is a sample.
+10. **Second mock built 2026-10-13:** [the first hour away](explorations/v2-mocks/index.html#hour), minutes 15 to 60, on the same game. What each reading shows is a sample.
+    - **Replayed 2026-10-14 at paced speed.** The watches are built at minute 21. The telescope is done at minute 30, with the Mind's warning about energy. The player orders the yard and launcher, then the telescope gives a partial reading of one living world and finds a dead one next door, and the player starts the laser array at minute 35. The sweep's first pass is done at minute 38. A contacter's knock reaches Earth at minute 42, and the all-sky watch the player built catches it. The player is woken seven times and plays about nine minutes.
     - **Settled 2026-10-13:** physics sets how long an observation or a sweep takes. See [How Earth learns](#how-earth-learns).
     - **Settled 2026-10-13:** matter piles up in the first hour, and the Mind says what it is for: megatonne works, which must come from the Moon or the belt. See [Earth's kit at Year 0](#earths-kit-at-year-0).
     - **Settled 2026-10-13:** the Mind reads a knock at once, in three layers: what it proves, what it holds, and what it means as a word. See [What Earth hears](#what-earth-hears).
@@ -728,16 +736,16 @@ Answered one at a time, in this order. Every answer must be permitted by current
     - **Settled 2026-10-13:** the Mind gives its judgment in words, never in numbers. Both mocks now show words. See [How Earth learns](#how-earth-learns).
     - **Settled 2026-10-13:** the Mind judges from what Earth knows, never from the seed, and it can be wrong. A first voice lifts Minds a word at every candidate. In this game it calls Minds very unlikely at the sweep's 15 points of light, and 4 are homes. See [How Earth learns](#how-earth-learns).
     - **Priced 2026-10-13:** what an inquiry costs in time. A laser array takes 25 Years, and word from 4.3 ly comes home near Year 60. See [Build times](#build-times). Every question this mock raised is now closed.
-11. **Third mock built 2026-10-13:** [the long roads](explorations/v2-mocks/index.html#long), hours 1 to 5, on the same game. The player starts five long works at Year 12 and is woken nine times.
-    - **Replayed 2026-10-14** with every work paced by thought, down the line in the order begun. Years 12 to 54, three and a half hours.
-    - *What it shows.* 35 minutes with no wake. Smog at four worlds at Year 22, each of them a home, and a solar lens sent to the farthest. Sails launched at Year 27.7. A second voice at Year 30, and a first answer, 21 Years late. Radio from two worlds at Year 34: the first proof of minds by Earth's own instruments. Each new fifth of the far-side array listens again: radio from 12 Ophiuchi at Year 38.4 and Gliese 1021 at 43.1. Power from orbit at Year 44. The lens's picture of Hael's world at 45.7. Word from Alpha Centauri at Year 54.
-    - *Wakes, as played:* twelve in three and a half hours, about one every 17 minutes. The longest quiet is 40 minutes, Years 45.7 to 53.6.
+11. **Third mock built 2026-10-13:** [the long roads](explorations/v2-mocks/index.html#long), hours 1 to 5, on the same game. The player starts five long works at Year 12 and is woken twelve times.
+    - **Replayed 2026-10-14** with every work paced by thought, down the line in the order begun, from Year 0. Years 12 to 51, about three hours.
+    - *What it shows.* 35 minutes with no wake. Smog at four worlds at Year 22, each of them a home, and a solar lens sent to the farthest. Sails launched at Year 24.8. A second voice at Year 30, and a first answer, 21 Years late. Radio from two worlds at Year 34: the first proof of minds by Earth's own instruments. Each new fifth of the far-side array listens again: radio from 12 Ophiuchi at Year 38.4 and Gliese 1021 at 43.1. Power from orbit at Year 44. The lens's picture of Hael's world at 45.7. Word from Alpha Centauri at Year 51.
+    - *Wakes, as played:* twelve in about three hours, about one every 16 minutes. The longest quiet is 35 minutes, Years 12 to 19.
     - *The plateau, as played:* 34 Years, 2.8 hours, from the grid limit to a twelfth data center. At standard pace it was 40.
     - *One knock is never heard.* Hael's, at Year 20, is under the all-sky watch's floor. A deep-field receiver held on that star would have caught it. The Mind advised one at Year 9.9, and this player left it.
     - **Settled 2026-10-13:** thought buys speed, down to a floor physics sets. See [Growing compute](#growing-compute).
     - **Settled 2026-10-13:** a work wants thought in scale with its real cost. See [Growing compute](#growing-compute).
     - **Settled 2026-10-14:** thought is split by an order the player sets. See [Growing compute](#growing-compute).
-    - **Settled 2026-10-14:** the plateau stands as played. Twelve wakes in three and a half hours, about as often as the first hour, and the longest quiet is 40 minutes. Every wake comes from a settled rule or the player's orders, and the player chooses what wakes them. Set aside: waking the player for every finished work, and new event sources for the middle hours.
+    - **Settled 2026-10-14:** the plateau stands as played. Twelve wakes in about three hours, about as often as the first hour, and the longest quiet is 35 minutes. Every wake comes from a settled rule or the player's orders, and the player chooses what wakes them. Set aside: waking the player for every finished work, and new event sources for the middle hours.
     - Every question this mock raised is now closed.
     - **Settled 2026-10-14:** the Mind advises a listen at marked worlds, and the player decides. See [What Earth hears](#what-earth-hears).
     - **Settled 2026-10-14:** one receiver is split among the stars it holds, and each part hears less far. See [What Earth hears](#what-earth-hears).

@@ -181,8 +181,8 @@ ENERGY · [1%] · MATTER · 20 kt · COMPUTE · [0%]
 PROJECTS · BEFORE YEAR 0
 Nothing has started · Everything queued starts at Year 0, the moment you begin.
 UP NEXT · STARTS AT YEAR 0
-All-sky watch · hears a knock or a broadcast from anywhere, at any hour · ground · 6 Years · 00:30:00
-Deep flash watch · catches laser knocks too faint for the sky watch · ground · 6 Years · 00:30:00
+All-sky watch · hears a knock or a broadcast from anywhere, at any hour · ground · 4.2 Years · 00:21:00
+Deep flash watch · catches laser knocks too faint for the sky watch · ground · 4.2 Years · 00:21:00
 Ground data center · +50% compute, for good · the fabs fill one a Year · 1 Year · 00:05:00
 OBSERVATIONS · START AT YEAR 0
 Image Fomalhaut again · Space telescope · has the new cloud moved? · lands Year 0.1 · 00:00:30
@@ -203,7 +203,7 @@ From Begin. 3 of 31 half-minutes had nothing new for the player.
 “What’s running?”
 Earth · Year 0
 Sol · 2040.0 · 1 Year = 00:05:00
-ENERGY · [1.0%] · MATTER · 20 kt · COMPUTE · [41%]
+ENERGY · [1.0%] · MATTER · 20 kt · COMPUTE · [65%]
 [drawing: ORBIT · EARTH · 3 BUILDING; labels: the Moon, Earth, low orbit, All-sky watch · 0%, Deep flash watch · 0%, Data center · 0%] · ORBIT · EARTH · 3 BUILDING
 PROJECTS · 3 BUILDING · 1 OBSERVING
 OBSERVING · WITH WHAT WE HAVE
@@ -213,8 +213,8 @@ Do the new worlds cross their stars? · PLATO and TESS records · 6 more in its 
 SEARCHING · WHEN IDLE
 Sweeping the near stars · Radio array: tones · Space telescope: cold worlds and dust
 BUILDING · 3
-- All-sky watch · two sites, one in each hemisphere · 6 Years · 00:30:00
-- Deep flash watch · domes on six mountains · 6 Years · 00:30:00
+- All-sky watch · two sites, one in each hemisphere · 4.2 Years · 00:21:00
+- Deep flash watch · domes on six mountains · 4.2 Years · 00:21:00
 - Ground data center · +50% compute · 1 Year · 00:05:00
 THE MIND · The sky watch, the flash watch and a data center, begun. The telescope is on Fomalhaut: thirty seconds. I am studying what we hold, and the array is sweeping. Our 2009 message reaches Kappa¹ Ceti about now.
 [Talk to the Mind]
@@ -227,7 +227,7 @@ Lands · Fomalhaut has a third cloud. Chance: unlikely → almost no chance.
 Arrives · Our 2009 message reaches Kappa¹ Ceti, 30.3 ly away.
 Earth · Year 0.1
 Sol · 2040.1 · 1 Year = 00:05:00
-ENERGY · [1.0%] · MATTER · 22 kt · COMPUTE · [36%]
+ENERGY · [1.0%] · MATTER · 22 kt · COMPUTE · [60%]
 REPORT · READING
 [‹ All reports]
 [drawing: Fomalhaut’s dust belt, with three collision clouds near its inner edge; labels: Fomalhaut, the dust belt · 133 AU out, first · 2004 to 2014, second · 2023, fading, third · new, not to scale]
@@ -254,7 +254,7 @@ Kappa¹ Ceti is under a billion years old: too young for minds, so it is never a
 Lands · Neither new world crosses its star.
 Earth · Year 0.2
 Sol · 2040.2 · 1 Year = 00:05:00
-ENERGY · [1.0%] · MATTER · 23 kt · COMPUTE · [36%]
+ENERGY · [1.0%] · MATTER · 23 kt · COMPUTE · [60%]
 [drawing: STARS · GLIESE 432 A · 31.2 LY · 02:35:54; labels: Sol, 82 Eridani, 19.7 ly · 01:38:30, Fomalhaut, 25.1 ly · 02:05:30, Luyten’s Star, 12.3 ly · 01:01:18, Gliese 432 A →, 31.2 ly · 02:35:54 · beyond this view, 12 Ophiuchi, 32.3 ly · 02:41:21 · beyond this view, 00:50:00, 01:40:00, Alpha Centauri, Procyon, Tau Ceti, Epsilon Eridani, Barnard’s Star, Altair, Vega, Epsilon Indi, 61 Cygni] · STARS · GLIESE 432 A · 31.2 LY · 02:35:54
 CLUE · YEAR 0.2
 [‹ Gliese 432 A]
@@ -279,7 +279,7 @@ Varn’s tones since waking are about 10 kW: far under what a Year of listening 
 Lands · 82 Eridani d’s orbit holds. Shimmer: very unlikely → almost no chance.
 Earth · Year 0.3
 Sol · 2040.3 · 1 Year = 00:05:00
-ENERGY · [1.0%] · MATTER · 24 kt · COMPUTE · [36%]
+ENERGY · [1.0%] · MATTER · 24 kt · COMPUTE · [60%]
 REPORT · FINDING
 [‹ All reports]
 [drawing: 82 Eridani: three hot worlds, the warm zone, and d’s stretched orbit through it; labels: three hot worlds, warm zone, d · farthest, 1.96 AU, nearest, 0.74 AU]
@@ -292,14 +292,14 @@ A small gas world · roughly even
 Rock, with seasons that freeze and thaw · unlikely → · roughly even
 Not a world: the star’s own shimmer · very unlikely → · almost no chance
 WHAT WOULD SETTLE IT
-Infrared telescope · reads its air · 8 Years · 40 t · 8 Years · 00:40:00 · [Start]
+Infrared telescope · reads its air · 5.7 Years · 40 t · 5.7 Years · 00:28:30 · [Start]
 THE MIND · The orbit is real. What the world is, nothing we own can say. The telescope that reads air was under way when I woke. Eight Years are left on it, and forty tonnes. · [Build it] · [Later]
 [Talk to the Mind]
 +2:00 · Year 0.4
 “Build it.”
 Earth · Year 0.4
 Sol · 2040.4 · 1 Year = 00:05:00
-ENERGY · [1.0%] · MATTER · 26 kt · COMPUTE · [51%]
+ENERGY · [1.0%] · MATTER · 26 kt · COMPUTE · [100%]
 [drawing: ORBIT · EARTH · WHERE IT WILL BE BUILT; labels: the Moon, Earth, low orbit, All-sky watch · 7%, Deep flash watch · 7%, Data center · 40%, Infrared telescope · 0%] · ORBIT · EARTH · WHERE IT WILL BE BUILT
 [‹ Know] · KNOW
 
@@ -315,7 +315,7 @@ USES ONCE, AT START
 40 t · of metal, from 26 kt spare in orbit
 TIME
 now · 01:00:00 · 02:00:00 · 03:00:00
-8 Years
+5.7 Years
 THE MIND · Started. Eight Years, a sixth of our compute, forty tonnes of the 26 kilotonnes we have spare. An orbital yard would shorten every build up there, this one included. · [Undo]
 [Talk to the Mind]
 Godview
@@ -326,7 +326,7 @@ The Mind glows. Taps it.
 Lands · No thick air on Gliese 12 b. A thick blanket: very unlikely → almost no chance.
 Earth · Year 0.5
 Sol · 2040.5 · 1 Year = 00:05:00
-ENERGY · [1.0%] · MATTER · 27 kt · COMPUTE · [51%]
+ENERGY · [1.0%] · MATTER · 27 kt · COMPUTE · [100%]
 REPORT · FINDING
 [‹ All reports]
 
@@ -351,7 +351,7 @@ Settled · What fills the quiet half-minutes? Findings from the Mind’s studies
 Lands · Barnard’s Star: four small worlds hold, and no fifth. The Mind glows. It keeps.
 Earth · Year 0.6
 Sol · 2040.6 · 1 Year = 00:05:00
-ENERGY · [1.0%] · MATTER · 29 kt · COMPUTE · [51%]
+ENERGY · [1.0%] · MATTER · 29 kt · COMPUTE · [100%]
 MIND · ASKING
 ABOUT · Who has heard us?
 The clock runs while you talk: 1 Year every · 00:05:00.
@@ -371,7 +371,7 @@ The Mind can only say it doesn’t know. The concept sets that: it lists where t
 “Can we go quiet?”
 Earth · Year 0.7
 Sol · 2040.7 · 1 Year = 00:05:00
-ENERGY · [1.0%] · MATTER · 30 kt · COMPUTE · [51%]
+ENERGY · [1.0%] · MATTER · 30 kt · COMPUTE · [100%]
 MIND · ASKING
 ABOUT · Can we go quiet?
 The clock runs while you talk: 1 Year every · 00:05:00.
@@ -390,7 +390,7 @@ Settled · Can the Will quiet Earth’s radars? Yes, if the player chooses: keep
 Arrives · Our 2003 message reaches Gliese 208, 37.3 ly away.
 Earth · Year 0.8
 Sol · 2040.8 · 1 Year = 00:05:00
-ENERGY · [1.0%] · MATTER · 32 kt · COMPUTE · [56%]
+ENERGY · [1.0%] · MATTER · 32 kt · COMPUTE · [100%]
 MIND · EARTH’S RADARS
 WHAT YOU WANT
 Cut them. And send nothing new without me.
@@ -419,7 +419,7 @@ Taps the Mind. Two reports wait.
 Lands · Two of Tau Ceti’s four signals hold.
 Earth · Year 0.9
 Sol · 2040.9 · 1 Year = 00:05:00
-ENERGY · [1.0%] · MATTER · 33 kt · COMPUTE · [56%]
+ENERGY · [1.0%] · MATTER · 33 kt · COMPUTE · [100%]
 REPORTS · 2 NEW
 NEW
 - Two of Tau Ceti’s four signals hold · Tau Ceti · 11.9 ly · two worlds, and two tricks of the star · New
@@ -440,16 +440,16 @@ The Mind glows. Taps it.
 Lands · The data center is running. Compute +50%.
 Earth · Year 1
 Sol · 2041.0 · 1 Year = 00:05:00
-ENERGY · [1.6%] · MATTER · 35 kt · COMPUTE · [34%]
+ENERGY · [1.6%] · MATTER · 35 kt · COMPUTE · [100%]
 [drawing: ORBIT · EARTH · 3 BUILDING; labels: the Moon, Earth, low orbit, All-sky watch · 17%, Deep flash watch · 17%, Data center, Infrared telescope · 8%] · ORBIT · EARTH · 3 BUILDING
 PROJECTS · 4 BUILDING
 STUDYING · ON A TENTH OF THOUGHT
 Is Epsilon Indi’s giant alone? · velocities, and 17 years of images · 1 more in its line · next finding · 00:01:00
 BUILDING · 4
-- All-sky watch · two sites, one in each hemisphere · 5 Years · 00:25:00
-- Deep flash watch · domes on six mountains · 5 Years · 00:25:00
+- All-sky watch · two sites, one in each hemisphere · 3.2 Years · 00:16:00
+- Deep flash watch · domes on six mountains · 3.2 Years · 00:16:00
 - Ground data center · +50% compute · Done
-- Infrared telescope · reads the air of nearby worlds · 7.4 Years · 00:37:00
+- Infrared telescope · reads the air of nearby worlds · 5.1 Years · 00:25:30
 - Quiet the radars · the last sweep leaves at Year 2.8 · 1.8 Years · 00:09:00
 THE MIND · The data center runs: half again as much thought, for half a percent more of our energy. The fabs fill one a Year. I can keep them coming. · [Keep them coming] · [Just one more] · [Not now]
 [Talk to the Mind]
@@ -458,17 +458,17 @@ Settled · What stops a data center every Year? Chips set the pace: the fabs fil
 “Keep them coming. And listen to Gliese 432 A for a Year.”
 Earth · Year 1.1
 Sol · 2041.1 · 1 Year = 00:05:00
-ENERGY · [1.6%] · MATTER · 36 kt · COMPUTE · [44%]
+ENERGY · [1.6%] · MATTER · 36 kt · COMPUTE · [100%]
 [drawing: ORBIT · EARTH · 4 BUILDING; labels: the Moon, Earth, low orbit, All-sky watch · 18%, Deep flash watch · 18%, Second data center · 0%, Infrared telescope · 9%] · ORBIT · EARTH · 4 BUILDING
 PROJECTS · 5 BUILDING · 1 OBSERVING
 OBSERVING · WITH WHAT WE HAVE
 Listen to Gliese 432 A for a Year · Radio array · tones above 15 MW · under way · 00:05:00
 STUDYING · NEXT FINDING: EPSILON INDI
 BUILDING · 5
-- All-sky watch · two sites, one in each hemisphere · 4.9 Years · 00:24:30
-- Deep flash watch · domes on six mountains · 4.9 Years · 00:24:30
+- All-sky watch · two sites, one in each hemisphere · 3.1 Years · 00:15:30
+- Deep flash watch · domes on six mountains · 3.1 Years · 00:15:30
 - Second data center · +50% compute · 1 Year · 00:05:00
-- Infrared telescope · reads the air of nearby worlds · 7.3 Years · 00:36:30
+- Infrared telescope · reads the air of nearby worlds · 5 Years · 00:25:00
 - Quiet the radars · the last sweep leaves at Year 2.8 · 1.7 Years · 00:08:30
 THE MIND · Set. One a Year, as the fabs allow. Thinking draws 1.6% of our energy now, and a tenth by Year 6.1. The twelfth would need more than Earth has. · [Undo]
 [Talk to the Mind]
@@ -481,7 +481,7 @@ The Mind glows. Taps it.
 Lands · One giant explains Epsilon Indi. Nothing large hides inside its orbit.
 Earth · Year 1.2
 Sol · 2041.2 · 1 Year = 00:05:00
-ENERGY · [1.6%] · MATTER · 38 kt · COMPUTE · [44%]
+ENERGY · [1.6%] · MATTER · 38 kt · COMPUTE · [100%]
 REPORT · FINDING
 [‹ All reports]
 
@@ -504,7 +504,7 @@ The Mind studied these four old puzzles on its own. The observations that follow
 “Gliese 12 b first. Then Fomalhaut.”
 Earth · Year 1.3
 Sol · 2041.3 · 1 Year = 00:05:00
-ENERGY · [1.6%] · MATTER · 39 kt · COMPUTE · [44%]
+ENERGY · [1.6%] · MATTER · 39 kt · COMPUTE · [100%]
 MIND · NEW ORDER
 WHAT YOU WANT
 Gliese 12 b first. Then Fomalhaut.
@@ -523,7 +523,7 @@ The Mind named both uses and waited. The order is the player’s.
 “What should we fear?”
 Earth · Year 1.4
 Sol · 2041.4 · 1 Year = 00:05:00
-ENERGY · [1.6%] · MATTER · 41 kt · COMPUTE · [44%]
+ENERGY · [1.6%] · MATTER · 41 kt · COMPUTE · [100%]
 MIND · ASKING
 ABOUT · What should we fear?
 The clock runs while you talk: 1 Year every · 00:05:00.
@@ -532,7 +532,7 @@ THE MIND · A strike. Something heavy, thrown at a tenth of light’s speed, end
 And anyone who woke earlier?
 THE MIND · Could have it. A launch that size is hard to hide and takes decades to arrive. I see none. With what we have, I would see only the brightest.
 What would you do?
-ITS VIEW · FROM OUR CHARTER AND DIALS · A second home for me before anything else. A vault in the Moon’s rock: ten Years, ten kilotonnes. Then I outlive a hit on Earth. · leans open · expand and deepen, even · leans bold
+ITS VIEW · FROM OUR CHARTER AND DIALS · A second home for me before anything else. A vault in the Moon’s rock: about 8 Years, ten kilotonnes. Then I outlive a hit on Earth. · leans open · expand and deepen, even · leans bold
 Ask the Mind… · [Send · ↑]
 Godview
 No hunter was drawn in this game. About half of games have one.
@@ -542,7 +542,7 @@ The Mind glows. Taps it.
 Lands · Gliese 12 b’s day side runs cool. Thin air: unlikely → likely.
 Earth · Year 1.5
 Sol · 2041.5 · 1 Year = 00:05:00
-ENERGY · [1.6%] · MATTER · 42 kt · COMPUTE · [44%]
+ENERGY · [1.6%] · MATTER · 42 kt · COMPUTE · [100%]
 REPORT · READING
 [‹ All reports]
 
@@ -567,7 +567,7 @@ A study needs no order. The Mind chooses what to study next, and says so.
 “Build the vault.”
 Earth · Year 1.6
 Sol · 2041.6 · 1 Year = 00:05:00
-ENERGY · [1.6%] · MATTER · 34 kt · COMPUTE · [54%]
+ENERGY · [1.6%] · MATTER · 34 kt · COMPUTE · [100%]
 [drawing: ORBIT · EARTH · WHERE IT WILL BE BUILT; labels: the Moon, Earth, low orbit, All-sky watch · 27%, Deep flash watch · 27%, Second data center · 50%, Infrared telescope · 15%, Deep vault · 0%] · ORBIT · EARTH · WHERE IT WILL BE BUILT
 [‹ Endure] · ENDURE
 
@@ -577,14 +577,14 @@ A second home for the Mind, dug into rock beside the Moon’s south-pole station
 HELPS WITH
 The game goes on if Earth is struck · While one Mind of Earth’s survives anywhere, so do you
 USES EACH YEAR
-Compute · [15%] · 15%
+Compute · [10%] · 10%
 Energy · [1%] · under 1%
 USES ONCE, AT START
 10 kt · of metal, from 44 kt spare in orbit
 TIME
 now · 01:00:00 · 02:00:00 · 03:00:00
-10 Years
-THE MIND · Started. Ten Years, and ten of the 44 kilotonnes we have spare. Lift brings fifteen more a Year. A launch complex would bring forty on top. · [Build a launch complex] · [Undo]
+7.5 Years
+THE MIND · Started. About 8 Years, and ten of the 44 kilotonnes we have spare. Lift brings fifteen more a Year. A launch complex would bring forty on top. · [Build a launch complex] · [Undo]
 [Talk to the Mind]
 Godview
 Asked for at Year 0, the vault would have taken half the spare stock.
@@ -593,7 +593,7 @@ Settled · Is matter meant to be free early? No. Matter is only what is spare in
 “Build a launch complex.”
 Earth · Year 1.7
 Sol · 2041.7 · 1 Year = 00:05:00
-ENERGY · [1.6%] · MATTER · 35 kt · COMPUTE · [57%]
+ENERGY · [1.6%] · MATTER · 35 kt · COMPUTE · [100%]
 [drawing: ORBIT · EARTH · WHERE IT WILL BE BUILT; labels: the Moon, Earth, low orbit, All-sky watch · 28%, Deep flash watch · 28%, Second data center · 60%, Infrared telescope · 16%, Deep vault · 1%, Launch complex · 0%] · ORBIT · EARTH · WHERE IT WILL BE BUILT
 [‹ Grow] · GROW
 
@@ -603,14 +603,14 @@ More pads and ships, flying around the clock. All of what it lifts is spare: not
 GIVES
 +40 kt of lift a Year · Spare lift goes from 15 kt a Year to 55
 USES EACH YEAR
-Compute · [5%] · 5%
+Compute · [3%] · 3%
 Energy · [1%] · under 1%
 USES ONCE, AT START
 None · a ground build, from Earth’s own industry
 TIME
 now · 01:00:00 · 02:00:00 · 03:00:00
 2 Years
-THE MIND · Started. Two Years, no matter, a twentieth of our compute. From Year 3.7 lift brings fifty-five kilotonnes a Year. · [Undo]
+THE MIND · Started. Two Years, no matter, a thirtieth of our thought. From Year 3.7 lift brings fifty-five kilotonnes a Year. · [Undo]
 [Talk to the Mind]
 Godview
 Lift is short of pads and ships, not energy: 40 kt a Year burns about half a gigawatt of propellant.
@@ -620,7 +620,7 @@ Settled · Is all of Earth’s lift spare? No. About 15 kt a Year is spare of 40
 Lands · LHS 1140 b keeps a heavy air. The Mind glows. It keeps.
 Earth · Year 1.8
 Sol · 2041.8 · 1 Year = 00:05:00
-ENERGY · [1.6%] · MATTER · 37 kt · COMPUTE · [64%]
+ENERGY · [1.6%] · MATTER · 37 kt · COMPUTE · [100%]
 MIND · NEW ORDER
 WHAT YOU WANT
 Watch Luyten’s Star through the window.
@@ -636,7 +636,7 @@ THE MIND · Set. The first window opens at Year 2.3, in two and a half minutes. 
 Taps the Mind.
 Earth · Year 1.9
 Sol · 2041.9 · 1 Year = 00:05:00
-ENERGY · [1.6%] · MATTER · 38 kt · COMPUTE · [64%]
+ENERGY · [1.6%] · MATTER · 38 kt · COMPUTE · [100%]
 REPORT · FINDING
 [‹ All reports]
 
@@ -661,7 +661,7 @@ The Mind glows. Taps it.
 Lands · A Year of listening: nothing loud at Gliese 432 A.
 Earth · Year 2.1
 Sol · 2042.1 · 1 Year = 00:05:00
-ENERGY · [2.3%] · MATTER · 41 kt · COMPUTE · [38%]
+ENERGY · [2.3%] · MATTER · 41 kt · COMPUTE · [100%]
 REPORT · READING · 1 YEAR
 [‹ All reports]
 
@@ -686,7 +686,7 @@ The Mind opens on its own.
 Lands · The first reply window at Luyten’s Star opens. Nothing heard.
 Earth · Year 2.3
 Sol · 2042.3 · 1 Year = 00:05:00
-ENERGY · [2.3%] · MATTER · 44 kt · COMPUTE · [38%]
+ENERGY · [2.3%] · MATTER · 44 kt · COMPUTE · [100%]
 REPORT · A WINDOW OPENS
 [‹ All reports]
 [drawing: Two messages out to Luyten’s Star and the earliest replies back; labels: 2020, 2030, 2040, at Luyten’s Star · 12.3 ly, sent, now]
@@ -708,7 +708,7 @@ Settled · What does Year 0’s kit catch? Physics decides: the star’s place i
 “What would silence mean?”
 Earth · Year 2.4
 Sol · 2042.4 · 1 Year = 00:05:00
-ENERGY · [2.3%] · MATTER · 46 kt · COMPUTE · [38%]
+ENERGY · [2.3%] · MATTER · 46 kt · COMPUTE · [100%]
 MIND · ASKING
 ABOUT · What would silence mean?
 The clock runs while you talk: 1 Year every · 00:05:00.
@@ -722,7 +722,7 @@ The Mind glows. Taps it.
 Lands · A Year of Fomalhaut: its three clouds share one orbit.
 Earth · Year 2.5
 Sol · 2042.5 · 1 Year = 00:05:00
-ENERGY · [2.3%] · MATTER · 47 kt · COMPUTE · [38%]
+ENERGY · [2.3%] · MATTER · 47 kt · COMPUTE · [100%]
 REPORT · READING · 1 YEAR
 [‹ All reports]
 
@@ -744,7 +744,7 @@ Truth: rubble, as the first reading suggested. A lead can close dull.
 “And the other new world?”
 Earth · Year 2.6
 Sol · 2042.6 · 1 Year = 00:05:00
-ENERGY · [2.3%] · MATTER · 49 kt · COMPUTE · [38%]
+ENERGY · [2.3%] · MATTER · 49 kt · COMPUTE · [100%]
 [drawing: STARS · 12 OPHIUCHI · 32.3 LY · 02:41:21; labels: Sol, 82 Eridani, 19.7 ly · 01:38:30, Fomalhaut, 25.1 ly · 02:05:30, Luyten’s Star, 12.3 ly · 01:01:18, Gliese 432 A →, 31.2 ly · 02:35:54 · beyond this view, 12 Ophiuchi, 32.3 ly · 02:41:21 · beyond this view, 00:50:00, 01:40:00, Alpha Centauri, Procyon, Tau Ceti, Epsilon Eridani, Barnard’s Star, Altair, Vega, Epsilon Indi, 61 Cygni] · STARS · 12 OPHIUCHI · 32.3 LY · 02:41:21
 CLUE · YEAR 2.6
 [‹ 12 Ophiuchi]
@@ -776,7 +776,7 @@ The Mind glows. Taps it.
 Lands · The second window opens. Nothing heard.
 Earth · Year 2.9
 Sol · 2042.9 · 1 Year = 00:05:00
-ENERGY · [2.3%] · MATTER · 53 kt · COMPUTE · [36%]
+ENERGY · [2.3%] · MATTER · 53 kt · COMPUTE · [100%]
 REPORT · A WINDOW OPENS
 [‹ All reports]
 [drawing: Two messages out to Luyten’s Star and the earliest replies back; labels: 2020, 2030, 2040, at Luyten’s Star · 12.3 ly, sent, now]
@@ -795,75 +795,71 @@ The earliest a reply to Sónar Calling GJ273b could reach Earth from Luyten's St
 “Wake me for the big things.”
 Earth · Year 3
 Sol · 2043.0 · 1 Year = 00:05:00
-ENERGY · [2.3%] · MATTER · 55 kt · COMPUTE · [32%]
+ENERGY · [2.3%] · MATTER · 55 kt · COMPUTE · [100%]
 MIND · WHAT WAKES YOU
 YOU CHOSE
-- The all-sky watch and flash watch are built · then little aimed at us is missed · Year 6 · 00:15:00
+- The all-sky watch and flash watch are built · then little aimed at us is missed · Year 4.2 · 00:06:00
+- The infrared telescope is done · then it reads 82 Eridani d and Gliese 432 A · Year 6.1 · 00:15:30
 - Thinking draws a tenth of our energy · 6 data centers in · Year 6.1 · 00:15:30
-- The infrared telescope is done · then it reads 82 Eridani d and Gliese 432 A · Year 8.4 · 00:27:00
 - A reply could come · Gliese 526 · to our 2013 message · Year 9 · 00:30:00
-- The Moon vault is done · the Mind’s second home · Year 11.6 · 00:43:00
+- The Moon vault is done · the Mind’s second home · Year 9.1 · 00:30:30
 ALWAYS
 [A world’s first voice wakes you · a knock or a broadcast, aimed at us or not · even in quiet hours · always]
 NOT WAKING YOU
 Data centers finishing · in the daily summary
 Windows that pass in silence · in the daily summary
-THE MIND · Set. Five things wake you, and any first voice. The next is at Year 6, fifteen minutes from now. · [Undo]
+THE MIND · Set. Five things wake you, and any first voice. The next is at Year 4.2, six minutes from now. · [Undo]
 [Talk to the Mind]
 +15:30 · Year 3.1
 Puts the phone down.
 Saturday · 16:40
-HOLOS · IN 00:15:00 · Earth: the sky watch and flash watch are built · Year 6. Anything heard wakes you sooner.
+HOLOS · IN 00:06:00 · Earth: the sky watch and flash watch are built · Year 4.2. Anything heard wakes you sooner.
 
 ## The first hour away · minutes 15 to 60
 The phone went down at 15:30. From here each row is a wake the player chose, or a moment they checked in. Between rows nothing woke them. Years 3 to 12.
 How long a reading takes, what each one shows, and the order of observations are samples. Prices are the audit’s. Amber boxes are the questions this hour raises.
-+15:30 to +30:00 · Years 3.1 to 6
-Away. Nothing wakes them.
-Saturday · 16:47
-Godview
-Earth’s 2003 message, Cosmic Call 2, reaches 55 Cancri, 41.0 ly away. No one is there.
-Earth’s 2003 message, Cosmic Call 2, reaches HD 10307, 41.5 ly away. No one is there.
-Fourteen minutes with the phone down. The launch complex finishes at Year 3.7. Data centers finish at Years 4.1 and 5.1. None of it is a wake the player chose.
-No neighbor wakes between Year 3 and Year 12 in this game. One signal is on its way: Ombe’s, from 49.1 ly.
-+30:00 · Year 6
-The phone lights.
++21:00 · Year 4.2
+The phone lights. Leaves it.
 Lands · The all-sky watch and the deep flash watch are built.
-Saturday · 16:54
-HOLOS · NOW · Earth: the sky watch and flash watch are built · Year 6. Little aimed at us is missed now.
-HOLOS · IN 00:00:30 · Thinking draws a tenth of our energy · Year 6.1 · six data centers in
+Saturday · 16:45
+HOLOS · NOW · Earth: the sky watch and flash watch are built · Year 4.2. Little aimed at us is missed now.
+HOLOS · IN 00:09:30 · Earth: the infrared telescope is done · Year 6.1. Then it reads the air of nearby worlds.
 Godview
+Five minutes with the phone down. The launch complex finished at Year 3.7, and a data center at 4.1. Neither is a wake the player chose.
+Settled 2026-10-14: paced by the line, the watches took 4.2 Years, not 6. Each was pushed to ten times its want.
 From now Earth hears about 9 knocks in 10. Across games Year 0’s sky watch caught about 1 in 5.
-Ombe’s knock is two and a half Years out. Year 0’s sky watch would miss it. This one will not.
+Ombe’s knock is 4 Years out. Year 0’s sky watch would miss it. This one will not.
 +30:30 · Year 6.1
-Opens it.
-Lands · Thinking draws a tenth of our energy.
+The phone lights. Opens it.
+Lands · The infrared telescope is done. Thinking draws a tenth of our energy.
 Earth · Year 6.1
 Sol · 2046.1 · 1 Year = 00:05:00
-ENERGY · [11.9%] · MATTER · 197 kt · COMPUTE · [4%]
+ENERGY · [11.9%] · MATTER · 197 kt · COMPUTE · [28%]
 SINCE YOU LEFT · YEAR 3.1 TO 6.1
 FINISHED
-- All-sky watch and deep flash watch · every direction, every hour · radio and laser · Done
+- Infrared telescope · Year 6.1 · reads the air of nearby worlds · Done
+- All-sky watch and deep flash watch · Year 4.2 · every direction, every hour · Done
 - Launch complex · Year 3.7 · lift is 55 kt a Year · Done
 - Three data centers · thought is 11 times what you woke with · Done
-HEARD AND FOUND
-Nothing heard · three Years of the old sky watch · the new one starts now
-No new candidates · the telescope and the array swept the near stars while idle
 OURS, ARRIVING
 Our 2003 message reached 55 Cancri and HD 10307 · Years 4.6 and 5.1 · a reply could come from Year 45.6
 PILING UP
 Matter · 197 kt spare in orbit · 55 kt more each Year · nothing booked
-Thought · 96% of it idle
-THE MIND · Three Years, and nothing heard. Now little aimed at us is missed. Matter is piling up, and so is thought: I have studied all we hold, and most of mine sits idle. In five Years thinking will want the whole grid. · [What would you build?] · [Later]
+Thought · 72% of it idle
+THE MIND · Three Years, and nothing heard. The telescope is done, and little aimed at us is missed now. Matter is piling up, and so is thought: most of mine sits idle. In five Years thinking will want the whole grid. · [What would you build?] · [Later]
 [Talk to the Mind]
 Godview
+Earth’s 2003 message, Cosmic Call 2, reaches 55 Cancri, 41.0 ly away. No one is there.
+Earth’s 2003 message, Cosmic Call 2, reaches HD 10307, 41.5 ly away. No one is there.
 One screen for the whole absence: what finished, what was heard, what is piling up. v1 called it the summary.
+The Habitable Worlds Observatory, 6 Years after waking. Paced by the line it took 5.7 of its 8 Years left. A second of its class would take 18 at standard pace.
+The Mind warns at Year 6.1, five Years before the grid.
 Settled · What is matter for in the first hour? Little, and the Mind says so. Real instruments and probes weigh tonnes, and Earth lifts 55,000 a Year, so matter piles up. The works that need it need megatonnes, and those must come from the Moon or the belt. The choice in hour one is when to start that road. Settled 2026-10-13.
 +31:00 · Year 6.2
 “What would you build?”
 Earth · Year 6.2
 Sol · 2046.2 · 1 Year = 00:05:00
-ENERGY · [11.9%] · MATTER · 203 kt · COMPUTE · [4%]
+ENERGY · [11.9%] · MATTER · 203 kt · COMPUTE · [15%]
 MIND · ASKING
 ABOUT · What would you build?
 The clock runs while you talk: 1 Year every · 00:05:00.
@@ -883,117 +879,32 @@ So matter piles up, and the Mind says why. The choice here is when to start the 
 “Build the yard and the launcher.”
 Earth · Year 6.3
 Sol · 2046.3 · 1 Year = 00:05:00
-ENERGY · [11.9%] · MATTER · 197 kt · COMPUTE · [6%]
+ENERGY · [11.9%] · MATTER · 197 kt · COMPUTE · [100%]
 [‹ Reach] · REACH
 
 ### Orbital yard and launcher
 A way to go and look.
 A yard to assemble what Earth lifts, and beside it a launcher: a dock and fuel depot for probes. Begun together, the yard takes a quarter off what is left of the launcher.
 GIVES
-Inquiries by probe, from Year 25.6 · The yard alone is done at Year 11.3
+Inquiries by probe, from about Year 20 · The yard alone is done at Year 9.8
 USES EACH YEAR
-Compute · [20%] · 20%
+Compute · [14%] · 14%
 Energy · [1%] · under 1%
 USES ONCE, AT START
 11 kt · of metal, from 208 kt spare in orbit
 TIME
 now · 01:00:00 · 02:00:00 · 03:00:00
-19 Years
-THE MIND · Started. The yard is done at Year 11.3. The launcher at Year 25.6, not Year 30.3. Eleven of our 208 kilotonnes. · [Undo]
+13.5 Years
+THE MIND · Started. The yard is done at Year 9.8, the launcher at about Year 20. Eleven of our 208 kilotonnes. · [Undo]
 [Talk to the Mind]
 Godview
-The launcher takes 24 Years. Begun with a 5 Year yard that takes a quarter off what is left, it takes 19.25.
-The yard helps nothing else this hour. The telescope is done before it.
+At standard pace the launcher takes 24 Years, 19.25 with the yard’s help. Paced by the line it is done at Year 19.8.
+It wants ten flagships, a sample. Behind the vault and the yard in the line, it takes most of what is left.
 +32:00 · Year 6.4
-Puts the phone down.
-Saturday · 16:56
-HOLOS · IN 00:10:00 · Earth: the infrared telescope is done · Year 8.4. Then it reads the air of nearby worlds.
-Godview
-Two minutes of play. Ten until the next wake.
-+42:00 · Year 8.4
-The phone lights.
-Lands · The infrared telescope is done.
-Saturday · 17:06
-HOLOS · NOW · Earth: the infrared telescope is done · Year 8.4. It reads one world at a time.
-Godview
-Earth’s 2001 message, Teen Age Message, reaches 47 Ursae Majoris, 45.3 ly away. No one is there.
-The Habitable Worlds Observatory, eight Years after waking. A second of its class would take 18.
-Since the last check-in: two data centers, and our 2001 message reached 47 Ursae Majoris.
-+42:30 · Year 8.5
-Opens it. The Mind is already speaking.
-Heard · A voice from Gliese 4338 B, 49.1 ly away. Aimed at us. Sent in 1999.
-Earth · Year 8.5
-Sol · 2048.5 · 1 Year = 00:05:00
-ENERGY · [26.7%] · MATTER · 318 kt · COMPUTE · [2%]
-REPORT · A VOICE
-[‹ All reports]
-
-### A voice from Gliese 4338 B
-Gliese 4338 B · 49.1 ly · all-sky watch · sent 49 Years ago
-WHAT IT PROVES
-Aimed · four hours long, tuned to our motion · Found us by · 1999. They had seen light that left Earth by 1950. · Not a reply · We never sent anything to this star.
-WHAT IT HOLDS · READ AT ONCE
-Little Sun, we see you. Share the light with us? Share back when you can. Ombe.
-It opens with a primer, as ours did. The words are mine for theirs.
-WHAT IT MEANS
-A greeting, meant as it reads · likely
-Bait, or a test of us · unlikely
-WHAT IT CHANGES · BEFORE → NOW
-Minds, at other worlds · almost no chance → · very unlikely
-THE MIND · UNASKED · Someone is calling us · From a red star 49 light-years off. It was aimed, and it left in 1999: they found us by our first radars. I read it as a greeting. I have sent nothing, as you ordered. · [Should we answer?] · [Who are they?]
-[Talk to the Mind]
-Godview
-Ombe’s knock reaches Earth: its answer to Earth’s radars, sent 1999 from Gliese 4338 B.
-Ombe: a contacter, awake since 1996. Its arrays heard Earth’s radars from 1999, and it took a quarter of a Year to act.
-The all-sky watch caught it. Year 0’s sky watch gives each star ten minutes a day, and would have missed it. The player built this watch at Year 0.
-The words are from the voice bank. A first voice always wakes the player. This one arrives 21 seconds after the telescope.
-What Earth knows has changed, so the Mind’s words do. Minds, at every candidate from here: almost no chance → very unlikely.
-Three layers, read at once: what it proves, what it holds, what it means. The last is a judgment and can be wrong. Truth: Ombe means it.
-Real: a message built to be read was deciphered accurately in a blind test (Busch and Reddick 2011). A puzzle message took a year to decode, and its meaning is still open (A Sign in Space, 2023).
-Settled · How much of a knock can the Mind read? All three layers, at once. What it proves, from physics. What it holds, because a knock is built to be read. And what it means, as a word that can be wrong. A stranger neighbor’s message may yet need a study. Settled 2026-10-13.
-Settled · What may an answer hold? What v1 allowed, whole. The player writes what they mean in plain words. The Mind composes it from typed parts: a finding, a sighting, an archive, our culture, a request, a verdict. The player approves before anything goes. A lie is a forged part, marked for the sender alone. Settled 2026-10-13.
-+43:00 · Year 8.6
-“Should we answer?”
-Earth · Year 8.6
-Sol · 2048.6 · 1 Year = 00:05:00
-ENERGY · [26.7%] · MATTER · 324 kt · COMPUTE · [2%]
-MIND · ASKING
-ABOUT · Should we answer?
-The clock runs while you talk: 1 Year every · 00:05:00.
-Should we answer?
-THE MIND · That is yours. An answer takes 49 Years to arrive and tells them one new thing: someone here is listening now.
-And if we don’t?
-THE MIND · They will have sent it twice, as we did. Then they wait about a century, and decide what our silence means.
-What would you do?
-ITS VIEW · FROM OUR CHARTER AND DIALS · Answer. A name and a question, nothing we can’t take back. It could be bait. But they have had us for forty Years and sent a greeting. · leans open · expand and deepen, even · leans bold
-Ask the Mind… · [Send · ↑]
-Godview
-The Mind gives its view and waits. It names the risk it can’t rule out. Where Earth is, the sender has known since 1999.
-An answer is composed as in v1: intent in plain words, typed parts, and the player’s approval. Real: since 1989 the astronomers’ own protocol says no reply goes out before the world is consulted. Here the Will is who is asked.
-An answer sent now reaches Ombe at Year 57.7. Its reply could reach Earth by Year 106.8, +08:54:06.
-+43:30 · Year 8.7
-“Listen first. I’ll answer when I know more.”
-Earth · Year 8.7
-Sol · 2048.7 · 1 Year = 00:05:00
-ENERGY · [26.7%] · MATTER · 329 kt · COMPUTE · [2%]
-MIND · NEW ORDER
-WHAT YOU WANT
-Listen first. I’ll answer when I know more.
-THE MIND’S VERSION
-WATCH · Hold the radio array on Gliese 4338 B · until you say
-WHY · A knock comes twice. Anything more they sent is still on its way.
-SENDS · Nothing. That stays yours to order.
-WAKES YOU · Anything heard
-[Edit] · [Set the order]
-THE MIND · Set. I am listening, and I send nothing. · [Undo]
-[Talk to the Mind]
-Godview
-The player neither answers nor refuses. Nothing forces the choice: the sender waits about a century either way.
-+44:00 · Year 8.8
 “And the new telescope?”
-Earth · Year 8.8
-Sol · 2048.8 · 1 Year = 00:05:00
-ENERGY · [26.7%] · MATTER · 335 kt · COMPUTE · [2%]
+Earth · Year 6.4
+Sol · 2046.4 · 1 Year = 00:05:00
+ENERGY · [11.9%] · MATTER · 203 kt · COMPUTE · [100%]
 MIND · THE NEW TELESCOPE
 ONE WORLD AT A TIME · YOURS TO ORDER
 - selected: Gliese 432 A’s world · close to its star in our sky · color and ozone only · 49 days · 00:00:41
@@ -1006,16 +917,15 @@ How bright the world is from here, and how far it sits from its star’s glare.
 THE MIND · It can split a world from its star only when they sit far enough apart in our sky. 82 Eridani d is wide and bright: days. The new world is close in. I can read its color and its ozone, not its water. · [Order them] · [Later]
 [Talk to the Mind]
 Godview
-Earth’s 2003 message, Cosmic Call 2, reaches 47 Ursae Majoris, 45.3 ly away. No one is there.
 Kirrin lives at 12 Ophiuchi. Earth has held its world as a lead since Year 0.
 Times are from calcs/observing.py. A day of telescope time is under a second of play.
 Settled · What sets how long an observation takes? Physics. A nearer or larger world is brighter, so its reading comes sooner: hours at Alpha Centauri, days at 82 Eridani. A world too close to its star in our sky can’t be read at all. Seasons are left out for now. Settled 2026-10-13.
 Settled · At Year 0, how many of its felt worlds does Earth show? All of them, and the Mind leads with one: the nearest, a rule that uses nothing the seed knows. Earth holds two to four felt worlds in 6 games of 10, and in about half of games none is a home. Settled 2026-10-13.
-+44:30 · Year 8.9
++32:30 · Year 6.5
 “The new world first. Then let it sweep.”
-Earth · Year 8.9
-Sol · 2048.9 · 1 Year = 00:05:00
-ENERGY · [26.7%] · MATTER · 340 kt · COMPUTE · [2%]
+Earth · Year 6.5
+Sol · 2046.5 · 1 Year = 00:05:00
+ENERGY · [11.9%] · MATTER · 208 kt · COMPUTE · [100%]
 MIND · NEW ORDER
 WHAT YOU WANT
 The new world first. Then let it sweep.
@@ -1030,13 +940,12 @@ THE MIND · Set. Its color and ozone in 49 days: about forty seconds. Then the s
 Godview
 One observation ordered, and the telescope’s standing search set. The player passes over 82 Eridani d, the easier target.
 Settled · Should seasons set when an observation can start? No. A real space telescope can’t point near the Sun, so each star is out of reach for part of every year. The game skips that limit on purpose: it would delay a reading by 75 seconds at most, and change no decision. Settled 2026-10-13.
-+45:00 · Year 9
++33:00 · Year 6.6
 The Mind glows. Taps it.
 Lands · Gliese 432 A’s world is blue, with ozone. Life: very unlikely → likely.
-Lands · A reply window opens at Gliese 526. Nothing heard.
-Earth · Year 9
-Sol · 2049.0 · 1 Year = 00:05:00
-ENERGY · [26.7%] · MATTER · 346 kt · COMPUTE · [2%]
+Earth · Year 6.6
+Sol · 2046.6 · 1 Year = 00:05:00
+ENERGY · [11.9%] · MATTER · 214 kt · COMPUTE · [100%]
 REPORT · FIRST READING
 [‹ All reports]
 
@@ -1054,24 +963,22 @@ Far-side array · everyday radio, if there is any, in 5 days with its first fift
 THE MIND · Blue, with ozone. Ozone means oxygen, and oxygen usually means life, though sunlight alone can make some. I can’t read its water. It sits too close to its star for this mirror.
 [Talk to the Mind]
 Godview
-The earliest a reply to Lone Signal could reach Earth from Gliese 526. In this game no one lives there. The window is empty, and Earth can’t know it.
 Gliese 432 A’s world is Varn’s home. Varn wakes Year 57.6 · +04:47:48, and has not heard Earth.
-This light left 80 years before Varn’s waking: 7 billion people, a quiet sky, a hum near 100 kW.
+This light left 82 years before Varn’s waking: 7 billion people, a quiet sky, a hum near 100 kW.
 Physics alone. A far-side array would hear that hum in 5 hours, and a 15 m mirror would read its smog in 5 days. Earth has neither. Its own mirror would need over two months.
 Across games the first telescope can read smog at 1 living home in 10 of those a first pass sees. A far-side array hears 9 in 10.
-Priced, as samples: a 15 m mirror takes 18 Years, so Year 23 if begun now, with the yard’s help. A far-side array grows a fifth every 6 Years, after a Moon mass driver that takes 24.
-So its first fifth could be done at Year 36, and would hear this hum in 5 days. Varn wakes at Year 57.6.
+Priced at standard pace, as samples: a 15 m mirror takes 18 Years, and a far-side array grows a fifth every 6 Years, after a Moon mass driver that takes 24. Thought shortens each to about two thirds.
+In the third mock’s line its first fifth is done at Year 34, and would hear this hum in 5 days. Varn wakes at Year 57.6.
 What the reading shows is the mock’s. Real: this mirror can’t split a world closer than 84 thousandths of an arcsecond in oxygen’s light, or 104 in water’s.
-The Gliese 526 window is for a 3 kW send from a 30 m dish in 2013. Even a listener would have struggled to catch it.
 Settled · How high can a natural world climb? To animals and forests. Alive is a ladder: bare rock, a lifeless sea, hidden microbes, an oxygen world, animals. Every mind, living or dead, stays hand-written. Settled 2026-10-13.
 Settled · Whose odds does the Mind show? None, as numbers. The Mind gives its judgment in words: seven of them, from almost no chance to almost certain. A report shows the word now, and the word before if it moved. Settled 2026-10-13.
 Settled · How fast does a living neighbor become known? As fast as physics allows, and no faster. Each sign of minds needs its real instrument: everyday radio a far-side array, smog a mirror of about 15 m. The first telescope reads smog only within about 12 light-years, and smog is not proof. Going is the surest way. Settled 2026-10-13.
-+45:30 · Year 9.1
++33:30 · Year 6.7
 The Mind opens on its own.
 Lands · A world at Alpha Centauri A, where none was known.
-Earth · Year 9.1
-Sol · 2049.1 · 1 Year = 00:05:00
-ENERGY · [40.0%] · MATTER · 351 kt · COMPUTE · [2%]
+Earth · Year 6.7
+Sol · 2046.7 · 1 Year = 00:05:00
+ENERGY · [11.9%] · MATTER · 219 kt · COMPUTE · [100%]
 REPORT · CANDIDATE
 [‹ All reports]
 
@@ -1092,11 +999,11 @@ The Mind’s word for Minds here is very unlikely. It judges from what Earth kno
 If JWST’s August 2026 observation confirms a giant in this star’s warm zone, the seed can’t put a world here. That result is not out.
 Real, and not modelled: Alpha Centauri B’s stray light, and a warm zone a full arcsecond wide, both make this star hard for a coronagraph.
 Settled · A first voice, a living world and a dead world in one hour: too much, too soon? No. The seed decides, and nothing damps it. All three land in one first hour in 3 games of 400, and none of them in 4 games of 10. This game was picked to show every screen. Settled 2026-10-13.
-+46:00 · Year 9.2
++34:00 · Year 6.8
 “Read its air.”
-Earth · Year 9.2
-Sol · 2049.2 · 1 Year = 00:05:00
-ENERGY · [40.0%] · MATTER · 357 kt · COMPUTE · [2%]
+Earth · Year 6.8
+Sol · 2046.8 · 1 Year = 00:05:00
+ENERGY · [11.9%] · MATTER · 225 kt · COMPUTE · [100%]
 MIND · NEW ORDER
 WHAT YOU WANT
 Read its air.
@@ -1110,12 +1017,12 @@ THE MIND · Set. Water in 16 hours, oxygen in 3 days. Carbon dioxide is fainter:
 Godview
 A search returns a candidate. An observation, ordered by the player, returns the reading.
 No published time exists for carbon dioxide. The month is a sample.
-+46:30 · Year 9.3
++34:30 · Year 6.9
 The Mind glows. Taps it.
 Lands · Alpha Centauri A’s world is alive, and its air is out of balance.
-Earth · Year 9.3
-Sol · 2049.3 · 1 Year = 00:05:00
-ENERGY · [40.0%] · MATTER · 362 kt · COMPUTE · [2%]
+Earth · Year 6.9
+Sol · 2046.9 · 1 Year = 00:05:00
+ENERGY · [11.9%] · MATTER · 230 kt · COMPUTE · [100%]
 REPORT · FIRST READING
 [‹ All reports]
 
@@ -1137,28 +1044,134 @@ Real: a fifth to a third of burned carbon is still in the air after 2 to 20 cent
 Real: smog is gone, since sunlight breaks it down. The gases only industry makes show in the mid-infrared, at a few times Earth’s level or more.
 Real, and not in the mock: eruptions under way would change a world’s ozone and color month by month (Ostberg et al. 2023). A later reading could weaken that half.
 Settled · Can the first telescope tell a dead civilization from a volcano? No. It reads the strange air and not its cause. Burned carbon stays for thousands of years, smog clears, and the gases only industry makes show in the mid-infrared. Proof needs an infrared interferometer, or going. Settled 2026-10-13.
-+47:00 · Year 9.4
++35:00 · Year 7
 “Can we go and look?”
-Earth · Year 9.4
-Sol · 2049.4 · 1 Year = 00:05:00
-ENERGY · [40.0%] · MATTER · 368 kt · COMPUTE · [2%]
+Earth · Year 7
+Sol · 2047.0 · 1 Year = 00:05:00
+ENERGY · [11.9%] · MATTER · 236 kt · COMPUTE · [100%]
 INQUIRY · ALPHA CENTAURI A
 WAYS TO GO · 4.3 LIGHT-YEARS · WORD HOME BY
-Sail swarm · gram sails at a fifth of light speed · can’t stop · laser array 25 Years, flight 22, word home 4.3 · Year 60 · 04:14:36
-Flyby probe · a tonne of instruments at an eighth of light speed · after the launcher: build 12 Years, flight 36, word home 4.3 · Year 78 · 05:42:36
+Sail swarm · gram sails at a fifth of light speed · can’t stop · laser array 18 Years, flight 22, word home 4.3 · Year 51 · 03:38:45
+Flyby probe · a tonne of instruments at an eighth of light speed · after the launcher: build 12 Years, flight 36, word home 4.3 · Year 72 · 05:25:36
 Sentinel probe · stops and stays · 500 t · from the launcher · later
 WHO SEES US GO
 A laser launch shines on past its sails to the star. A rocket launch is dark to where it is going.
-THE MIND · Yes, slowly: first word home near Year 60. Sails arrive first and see little. A probe sees more, and needs the launcher you began. I would start the laser array, and send nothing that speaks. Going is not calling. · [Start the laser array] · [Not yet]
+THE MIND · Yes, slowly: first word home near Year 51. Sails arrive first and see little. A probe sees more, and needs the launcher you began. I would start the laser array, and send nothing that speaks. Going is not calling. · [Start the laser array] · [Not yet]
 [Talk to the Mind]
 Godview
+Earth’s 2001 message, Teen Age Message, reaches 47 Ursae Majoris, 45.3 ly away. No one is there.
 An inquiry is a mission that goes to find out. Probe stays the name of the craft. What comes home is a dispatch.
 The Mind advises, from the dials: go, and send nothing that speaks. It starts nothing.
 Real: Daedalus was designed for 12% of light speed, and Starshot for 20%. A laser launch shines toward its target. A rocket’s exhaust points away.
-Priced, as samples: a laser array 25 Years, a flyby probe 12 after the launcher. So word from next door arrives at Year 60 by sails, +05:01:36, and Year 78 by probe.
+Priced, as samples: a laser array 25 Years at standard pace, a flyby probe 12 after the launcher. Paced by the line, word from next door arrives at Year 51 by sails, +04:13:45, and Year 72 by probe.
 Real: Starshot’s own model puts the array at 8 billion dollars and a first launch within a generation (Parkin 2018). v1 had 60 Years.
 Settled · What is an inquiry? A mission that goes to find out: a sail swarm, a flyby probe, a sentinel. Probe stays the name of the craft. What comes home is a dispatch. Settled 2026-10-13.
 Settled · What does an inquiry cost in time? Decades, by physics. A laser array takes 25 Years: Starshot aimed at a launch within a generation. Sails then cross 4.3 light-years in 22, and word takes 4.3 to come home. A flyby probe takes 12 Years after the launcher, and 36 in flight. Priced 2026-10-13, as samples.
++35:30 · Year 7.1
+Puts the phone down.
+Saturday · 17:00
+HOLOS · IN 00:02:30 · Earth: the sweep’s first pass · Year 7.6. Any candidate wakes you.
+Godview
+Five minutes of play since the telescope woke them. Two until the next wake.
++38:00 · Year 7.6
+The phone lights. Leaves it.
+Lands · The sweep’s first pass is done. 15 more points of light in warm zones.
+Saturday · 17:14
+HOLOS · NOW · The sweep’s first pass is done: 15 more candidates · Nearest: Gliese 664, 19 ly. All are in the report.
+HOLOS · THE MIND · A receiver would hear some of them better · On one of these worlds, a deep-field receiver hears knocks three times farther than the watch. Spread over eleven, no farther. Yours to say.
+Godview
+Truth: 4 are homes. Kesh’s world at Gliese 216 B, Nuvo’s world at 20 Leonis Minoris, Hael’s world at Gliese 1021, Ree’s world at 19 Draconis.
+11 are natural, from Gliese 664 at 19 ly to Nu Phoenicis at 50. Truth: 2 bare rock, 2 airy and lifeless, 2 hiding microbes, 2 showing oxygen, 1 with animals and forests, 2 where life died.
+Their ages: 5 published, 6 drawn. The seed drew 136 natural worlds in all, 113 at red dwarfs, and 85 are bare rock.
+From here a home and a natural world look alike: a point of light that moves with its star.
+The Mind calls Minds almost no chance at each. In truth 4 of 15 are homes: unlikely. It never reads the seed.
+Each needed a second visit, months after the first. Most are too far to read with this mirror.
+The Mind advises a deep-field receiver for the marked worlds, unasked. This player leaves it.
+Settled · What does the first sweep find? Natural warm worlds too, at the real rate: NASA’s planning value, about one star in four. The seed draws them. A first pass shows about 17 points of light a game, and about 1 in 4 is a home. Settled 2026-10-13.
+Settled · What sets each natural world’s rung? Its star’s age, on Earth’s schedule with scatter: lasting oxygen at about 2.3 billion years, animals at about 4. Physics sets whether it kept its air. At Sun-like stars about half are alive. At red dwarfs most are bare rock. Settled 2026-10-13.
+Settled · What stands behind the Mind’s words? What Earth knows. The Mind judges from Earth’s science and from what Earth has observed, never from the seed, and it can be wrong. Earth’s own finds move its starting words: a first voice lifts Minds a word at every candidate. Settled 2026-10-13.
+Settled · A knock Earth can’t hear: should a candidate world earn a listen? The Mind advises it. When the sweep marks worlds, it says a deep-field receiver would hear their knocks about three times farther than the all-sky watch. The player decides. The Mind never builds it on its own. Settled 2026-10-14.
++42:30 · Year 8.5
+The phone lights. The Mind is already speaking.
+Heard · A voice from Gliese 4338 B, 49.1 ly away. Aimed at us. Sent in 1999.
+Earth · Year 8.5
+Sol · 2048.5 · 1 Year = 00:05:00
+ENERGY · [26.7%] · MATTER · 318 kt · COMPUTE · [74%]
+REPORT · A VOICE
+[‹ All reports]
+
+### A voice from Gliese 4338 B
+Gliese 4338 B · 49.1 ly · all-sky watch · sent 49 Years ago
+WHAT IT PROVES
+Aimed · four hours long, tuned to our motion · Found us by · 1999. They had seen light that left Earth by 1950. · Not a reply · We never sent anything to this star.
+WHAT IT HOLDS · READ AT ONCE
+Little Sun, we see you. Share the light with us? Share back when you can. Ombe.
+It opens with a primer, as ours did. The words are mine for theirs.
+WHAT IT MEANS
+A greeting, meant as it reads · likely
+Bait, or a test of us · unlikely
+WHAT IT CHANGES · BEFORE → NOW
+Minds, at other worlds · almost no chance → · very unlikely
+THE MIND · UNASKED · Someone is calling us · From a red star 49 light-years off. It was aimed, and it left in 1999: they found us by our first radars. I read it as a greeting. I have sent nothing, as you ordered. · [Should we answer?] · [Who are they?]
+[Talk to the Mind]
+Godview
+Ombe’s knock reaches Earth: its answer to Earth’s radars, sent 1999 from Gliese 4338 B.
+Ombe: a contacter, awake since 1996. Its arrays heard Earth’s radars from 1999, and it took a quarter of a Year to act.
+The all-sky watch caught it. Year 0’s sky watch gives each star ten minutes a day, and would have missed it. The player built this watch at Year 0.
+The words are from the voice bank. A first voice always wakes the player.
+What Earth knows has changed, so the Mind’s words do. Minds, at every candidate from here: almost no chance → very unlikely.
+Three layers, read at once: what it proves, what it holds, what it means. The last is a judgment and can be wrong. Truth: Ombe means it.
+Real: a message built to be read was deciphered accurately in a blind test (Busch and Reddick 2011). A puzzle message took a year to decode, and its meaning is still open (A Sign in Space, 2023).
+Settled · How much of a knock can the Mind read? All three layers, at once. What it proves, from physics. What it holds, because a knock is built to be read. And what it means, as a word that can be wrong. A stranger neighbor’s message may yet need a study. Settled 2026-10-13.
+Settled · What may an answer hold? What v1 allowed, whole. The player writes what they mean in plain words. The Mind composes it from typed parts: a finding, a sighting, an archive, our culture, a request, a verdict. The player approves before anything goes. A lie is a forged part, marked for the sender alone. Settled 2026-10-13.
++43:00 · Year 8.6
+“Should we answer?”
+Earth · Year 8.6
+Sol · 2048.6 · 1 Year = 00:05:00
+ENERGY · [26.7%] · MATTER · 324 kt · COMPUTE · [74%]
+MIND · ASKING
+ABOUT · Should we answer?
+The clock runs while you talk: 1 Year every · 00:05:00.
+Should we answer?
+THE MIND · That is yours. An answer takes 49 Years to arrive and tells them one new thing: someone here is listening now.
+And if we don’t?
+THE MIND · They will have sent it twice, as we did. Then they wait about a century, and decide what our silence means.
+What would you do?
+ITS VIEW · FROM OUR CHARTER AND DIALS · Answer. A name and a question, nothing we can’t take back. It could be bait. But they have had us for forty Years and sent a greeting. · leans open · expand and deepen, even · leans bold
+Ask the Mind… · [Send · ↑]
+Godview
+The Mind gives its view and waits. It names the risk it can’t rule out. Where Earth is, the sender has known since 1999.
+An answer is composed as in v1: intent in plain words, typed parts, and the player’s approval. Real: since 1989 the astronomers’ own protocol says no reply goes out before the world is consulted. Here the Will is who is asked.
+An answer sent now reaches Ombe at Year 57.7. Its reply could reach Earth by Year 106.8, +08:54:06.
++43:30 · Year 8.7
+“Listen first. I’ll answer when I know more.”
+Earth · Year 8.7
+Sol · 2048.7 · 1 Year = 00:05:00
+ENERGY · [26.7%] · MATTER · 329 kt · COMPUTE · [74%]
+MIND · NEW ORDER
+WHAT YOU WANT
+Listen first. I’ll answer when I know more.
+THE MIND’S VERSION
+WATCH · Hold the radio array on Gliese 4338 B · until you say
+WHY · A knock comes twice. Anything more they sent is still on its way.
+SENDS · Nothing. That stays yours to order.
+WAKES YOU · Anything heard
+[Edit] · [Set the order]
+THE MIND · Set. I am listening, and I send nothing. · [Undo]
+[Talk to the Mind]
+Godview
+The player neither answers nor refuses. Nothing forces the choice: the sender waits about a century either way.
++45:18 · Year 9.1
+The phone lights. Leaves it.
+Lands · The Moon vault is done.
+Saturday · 17:09
+HOLOS · NOW · Earth: the Moon vault is done · Year 9.1. The Mind has a second home.
+Godview
+Earth’s 2003 message, Cosmic Call 2, reaches 47 Ursae Majoris, 45.3 ly away. No one is there.
+The earliest a reply to Lone Signal could reach Earth from Gliese 526. In this game no one lives there. The window is empty, and Earth can’t know it.
+From now a strike on Earth does not end the game.
+Paced by the line, the vault took 7.5 Years, not 10.
+A reply window opened at Gliese 526 at Year 9.0 and passed in silence. It was for a 3 kW send from a 30 m dish in 2013. Even a listener would have struggled to catch it.
 +47:30 · Year 9.5
 The phone lights. Reads it. Leaves it.
 Heard · Gliese 4338 B again. The same signal, a Year later.
@@ -1166,33 +1179,14 @@ Saturday · 17:12
 HOLOS · NOW · Gliese 4338 B: the same signal again · Year 9.5. Word for word. Nothing sent.
 Godview
 A knock is sent twice, about a Year apart, as Earth’s own were.
-Ombe now waits. If nothing comes back it takes the silence as news, about Year 59.
-Five and a half minutes of play since the telescope was done. Then the phone goes down.
-+49:30 · Year 9.9
-The phone lights. Leaves it.
-Lands · The sweep’s first pass is done. 15 more points of light in warm zones.
-Saturday · 17:14
-HOLOS · NOW · The sweep’s first pass is done: 15 more candidates · Nearest: Gliese 664, 19 ly. All are in the report.
-HOLOS · THE MIND · A receiver would hear some of them better · On one of these worlds, a deep-field receiver hears knocks three times farther than the watch. Spread over eleven, no farther. Yours to say.
-Godview
-The earliest a reply to A Message From Earth could reach Earth from Gliese 581. In this game no one lives there. The window is empty, and Earth can’t know it.
-Truth: 4 are homes. Kesh’s world at Gliese 216 B, Nuvo’s world at 20 Leonis Minoris, Hael’s world at Gliese 1021, Ree’s world at 19 Draconis.
-11 are natural, from Gliese 664 at 19 ly to Nu Phoenicis at 50. Truth: 2 bare rock, 2 airy and lifeless, 2 hiding microbes, 2 showing oxygen, 1 with animals and forests, 2 where life died.
-Their ages: 5 published, 6 drawn. The seed drew 136 natural worlds in all, 113 at red dwarfs, and 85 are bare rock.
-From here a home and a natural world look alike: a point of light that moves with its star.
-The Mind calls Minds very unlikely at each. In truth 4 of 15 are homes: unlikely. It never reads the seed.
-Each needed a second visit, months after the first. Most are too far to read with this mirror.
-The Mind advises a deep-field receiver for the marked worlds, unasked. This player leaves it.
-Settled · What does the first sweep find? Natural warm worlds too, at the real rate: NASA’s planning value, about one star in four. The seed draws them. A first pass shows about 17 points of light a game, and about 1 in 4 is a home. Settled 2026-10-13.
-Settled · What sets each natural world’s rung? Its star’s age, on Earth’s schedule with scatter: lasting oxygen at about 2.3 billion years, animals at about 4. Physics sets whether it kept its air. At Sun-like stars about half are alive. At red dwarfs most are bare rock. Settled 2026-10-13.
-Settled · What stands behind the Mind’s words? What Earth knows. The Mind judges from Earth’s science and from what Earth has observed, never from the seed, and it can be wrong. Earth’s own finds move its starting words: a first voice lifts Minds a word at every candidate. Settled 2026-10-13.
-Settled · A knock Earth can’t hear: should a candidate world earn a listen? The Mind advises it. When the sweep marks worlds, it says a deep-field receiver would hear their knocks about three times farther than the all-sky watch. The player decides. The Mind never builds it on its own. Settled 2026-10-14.
+Ombe now waits. If nothing comes back it takes the silence as news, about Year 59, and keeps listening.
+The yard finishes at Year 9.8 and goes to the summary.
 +55:30 · Year 11.1
 Woken. The Mind has opened.
 Lands · The eleventh data center runs. The twelfth can’t start.
 Earth · Year 11.1
 Sol · 2051.1 · 1 Year = 00:05:00
-ENERGY · [90.1%] · MATTER · 461 kt · COMPUTE · [1%]
+ENERGY · [90.1%] · MATTER · 461 kt · COMPUTE · [19%]
 MIND · THE GRID LIMIT
 THINKING NOW DRAWS
 Energy · [90%] · 90% of the grid
@@ -1207,20 +1201,13 @@ Power gathered in space · the only way that keeps pace · 10 Mt, from the Moon 
 THE MIND · UNASKED · We have reached the grid · I stopped the order, as the limit requires. Each way on is slow or small beside what the fabs can print. The one that keeps pace is power gathered in space, and that is long work. · [Ground solar] · [Leave it]
 [Talk to the Mind]
 Godview
+The earliest a reply to A Message From Earth could reach Earth from Gliese 581. In this game no one lives there. The window is empty, and Earth can’t know it.
 The earliest a reply to Hello From Earth could reach Earth from Gliese 581. In this game no one lives there. The window is empty, and Earth can’t know it.
 The standing order stops itself: a project that would take energy past 100% can’t start. v1’s rule.
 Gliese 581’s two windows passed in silence and went to the summary.
 Real: today’s kind of chip can get about 200 times more efficient than 2023’s, and no more (Ho et al. 2023). At 28 to 40% a year that ceiling arrives between 2039 and 2044. So the wall is energy, not chips.
 The Mind warned at Year 6.1, five Years before. This player kept buying thought at full pace.
 Settled · What happens at the grid limit? The plateau stands. Thought stops growing when it draws the whole grid, about Year 11 at full pace, and better chips don’t dodge it: today’s kind reaches its efficiency ceiling near Year 0. The Mind warns five Years ahead. The ways on are slow, and the megatonne road pays here. Settled 2026-10-13.
-+58:00 · Year 11.6
-The phone lights. Leaves it.
-Lands · The Moon vault is done.
-Saturday · 17:22
-HOLOS · NOW · Earth: the Moon vault is done · Year 11.6. The Mind has a second home.
-Godview
-From now a strike on Earth does not end the game.
-The yard finished at Year 11.3 and went to the summary.
 +60:00 · Year 12
 One hour in.
 Saturday · 17:24
@@ -1229,10 +1216,10 @@ HOLOS · WAITING · Gliese 4338 B: unanswered · The array is held on it. Nothin
 Godview
 The telescope is back on its sweep. 82 Eridani d and 12 Ophiuchi’s world still wait for an order. Kirrin lives at 12 Ophiuchi.
 Hael’s knock arrives at Year 19.9, +01:39:35. The all-sky watch misses it.
-From minute 15 to minute 60 the player was woken six times and played about eight minutes.
+From minute 15 to minute 60 the player was woken seven times and played about nine minutes.
 
 ## The long roads · hours 1 to 5
-Years 12 to 54. The phone is down for most of three and a half hours. Each row is a wake, or a moment the player looked. Thought has hit the grid limit, and what moves now are works that take decades.
+Years 12 to 51. The phone is down for most of 3 hours. Each row is a wake, or a moment the player looked. Thought has hit the grid limit, and what moves now are works that take decades.
 The roads are priced in calcs/early_game.py, as samples, and paced by thought down the line the player set: the order begun. What each reading and the dispatch show, the Mind’s words and its lines are samples too. Amber boxes are the questions these hours raise.
 +1:00:00 · Year 12
 “Start the long roads. All of them.”
@@ -1245,14 +1232,14 @@ Start the long roads. All of them.
 THE MIND’S VERSION
 BUILD · Ground solar · a fifth more energy · Year 19
 BUILD · A 15 m mirror · reads smog · Year 21.4
-BUILD · Moon mass driver, orbital foundry · megatonnes · Years 29 and 30.1
+BUILD · Moon mass driver, orbital foundry · megatonnes · Years 29 and 30.0
 SEARCH · Belt prospecting · then mining, from Year 35
 [Edit] · [Set the order]
 THE MIND · Set, in the order you began them. All my thought goes down that line. The mirror and sails come first, the foundry and belt last. Put the driver first and power from orbit comes a Year sooner, the mirror 4 later. · [Keep this order] · [Driver first]
 [Talk to the Mind]
 Godview
-The laser array has been building since Year 9.4: the player tapped Start at minute 47. Paced from here, it is done at Year 27.7, not 34.4.
-Dates, paced: ground solar Year 19, the mirror 21.4, the driver 29, the foundry 30.1, belt mining 35.5. At standard pace they were 22, 25.5, 36, 34.5 and 38.
+The laser array has been building since Year 7: the player tapped Start at minute 35. Paced, it is done at Year 24.8, not 32.
+Dates, paced: ground solar Year 19, the mirror 21.4, the driver 29, the foundry 30.0, belt mining 35.5. At standard pace they were 22, 25.5, 36, 34.5 and 38.
 Thought is what competes. The line gives the first five works ten times their want, the driver 6.6 times, and the foundry and belt their want only. None sits idle.
 Matter and energy still have room.
 Settled · What is 86 times the thought for? Speed. More thought shortens a work, down to a floor physics sets: about two thirds of its standard time. Space missions that could not miss a launch window took 53 months, against 64 to 84 for the rest. Rock from the Moon and flight between stars are physical, and thought shortens neither. Settled 2026-10-13.
@@ -1266,7 +1253,7 @@ Godview
 The next wake is 34 minutes off. In the first hour the player was woken six times.
 Thought is flat from Year 11.1 until a twelfth data center, at about Year 45: 34 Years.
 Settled 2026-10-14: the quiet stands. The player chooses what wakes them, and the long works fill it.
-Settled · Is the plateau too quiet, and too long? No. Replayed with paced works, the solar lens and listening again with each fifth, the third mock wakes the player twelve times in three and a half hours: about as often as the first hour. The longest quiet is 40 minutes. Every wake comes from a settled rule or the player’s own orders, and the player chooses what wakes them. Settled 2026-10-14.
+Settled · Is the plateau too quiet, and too long? No. Replayed with paced works, the solar lens and listening again with each fifth, the third mock wakes the player twelve times in about three hours: about as often as the first hour. The longest quiet is 35 minutes. Every wake comes from a settled rule or the player’s own orders, and the player chooses what wakes them. Settled 2026-10-14.
 +1:35:00 · Year 19
 The phone lights. Opens it.
 Lands · Ground solar is done. A fifth more energy.
@@ -1297,8 +1284,8 @@ Saturday · 18:04
 Godview
 Hael’s knock reaches Earth: its answer to Earth’s radars, sent 2011 from Gliese 1021.
 Ten gigawatts from 49 ly is under the all-sky watch’s floor: for a four-hour knock it hears that power to 35 ly. It comes again a Year later, and is missed again.
-A deep-field receiver, held on that star, hears it to 117 ly. The Mind advised one at Year 9.9, when the sweep marked a point of light at Gliese 1021. This player left it.
-Begun then, it was done by Year 18. Shared among all 18 points of light, it hears this knock only to 28 ly.
+A deep-field receiver, held on that star, hears it to 117 ly. The Mind advised one at Year 7.6, when the sweep marked a point of light at Gliese 1021. This player left it.
+Begun then, it was done by Year 16. Shared among all 18 points of light, it hears this knock only to 28 ly.
 The Mind can’t report what it didn’t hear. Settled 2026-10-10.
 Settled · A knock Earth can’t hear: should a candidate world earn a listen? The Mind advises it. When the sweep marks worlds, it says a deep-field receiver would hear their knocks about three times farther than the all-sky watch. The player decides. The Mind never builds it on its own. Settled 2026-10-14.
 Settled · One receiver, many marked worlds: how does it share its watch? It is split. The player names the stars it holds, and each part hears less far, as real dish arrays do. On one star it hears a ten gigawatt knock to 117 ly. On four, to 59. On more than eleven, no farther than the all-sky watch. A dish array can’t hold scattered stars at full reach. Settled 2026-10-14.
@@ -1320,7 +1307,7 @@ THE MIND · Set. Smog first, at Gliese 432 A: 5 days. Smog is burning, or weathe
 [Talk to the Mind]
 Godview
 The mirror can read thirteen of Earth’s eighteen worlds for smog within two months each. The first telescope could read smog only within about 12 ly.
-The launcher is done at Year 21.5 too, not 25.6. A flyby probe would take 12 more at its want, and 36 in flight. The player leaves it: the sails will be first.
+The launcher was done at Year 19.8, not 25.6. A flyby probe would take 12 more at its want, and 36 in flight. The player leaves it: the sails will be first.
 +1:47:45 · Year 21.6
 The Mind glows. Taps it.
 Lands · Smog over Gliese 432 A’s world. Minds: very unlikely → unlikely.
@@ -1379,8 +1366,8 @@ Sol · 2062.4 · 1 Year = 00:05:00
 ENERGY · [75.1%] · MATTER · 1,079 kt · COMPUTE · [100%]
 MIND · WAYS TO KNOW MORE
 LISTEN · TELLS NO ONE
-Far-side array, first fifth · everyday radio, if loud enough · the nearer worlds · Year 34 · 00:57:14
-The whole far-side array · hears twice as far · all four in reach · Year 51 · 02:21:59
+Far-side array, first fifth · everyday radio, if loud enough · the nearer worlds · Year 34 · 00:57:05
+The whole far-side array · hears twice as far · all four in reach · Year 51 · 02:21:50
 LOOK · TELLS NO ONE
 Solar lens · a picture of one world’s surface · one craft, one star · Year 48 · 02:09:05
 Infrared interferometer · gases only industry makes, at a few times our level · Year 62 · 03:20:00
@@ -1414,25 +1401,24 @@ Godview
 It wants half a flagship, a sample. First in line it takes 5 of 577: the long works lose almost nothing.
 One craft serves one star. It must sit on the line from that star through the Sun.
 The dive past the Sun before the flight is not timed. The craft are about 100 kg each, NASA’s concept.
-+2:18:21 · Year 27.7
++2:04:09 · Year 24.8
 “Launch the sails.”
 Lands · The laser array is done.
-Earth · Year 27.7
-Sol · 2067.7 · 1 Year = 00:05:00
-ENERGY · [75.1%] · MATTER · 1,371 kt · COMPUTE · [100%]
+Earth · Year 24.8
+Sol · 2064.8 · 1 Year = 00:05:00
+ENERGY · [75.1%] · MATTER · 1,215 kt · COMPUTE · [100%]
 MIND · NEW ORDER
 WHAT YOU WANT
 Launch the sails.
 THE MIND’S VERSION
 INQUIRY · Sail swarm to Alpha Centauri A · a thousand gram sails · nine minutes each
-ARRIVES · Year 49 · they pass in hours and can’t stop
-WORD HOME · Year 54 · one dispatch, by narrow beam
+ARRIVES · Year 46 · they pass in hours and can’t stop
+WORD HOME · Year 51 · one dispatch, by narrow beam
 SHOWS US · The beam shines on past the sails, toward that star and whatever lies behind it
 [Edit] · [Set the order]
-THE MIND · Launched. A thousand sails, nine minutes of light each, six days in all. They pass Alpha Centauri at Year 49. Word is home at Year 54. That light can’t be called back.
+THE MIND · Launched. A thousand sails, nine minutes of light each, six days in all. They pass Alpha Centauri at Year 46. Word is home at Year 51. That light can’t be called back.
 [Talk to the Mind]
 Godview
-The earliest a reply to Cosmic Call 2 could reach Earth from Gliese 49. In this game no one lives there. The window is empty, and Earth can’t know it.
 Real: a laser launch shines on past its sails. Who lies behind the target, along the beam, is not modelled yet.
 The array took 18 Years, against 25 at standard pace. Starshot aimed at a first launch within a generation.
 +2:24:48 · Year 29
@@ -1445,14 +1431,15 @@ PROJECTS · YEAR 29
 FINISHED
 [Moon mass driver · 600 kt of rock a Year, from now · Done]
 NOW POSSIBLE
-Far-side array, first fifth · made on the Moon from its own metal · hears everyday radio · 4.75 Years · 00:23:45 · [Start]
+Far-side array, first fifth · made on the Moon from its own metal · hears everyday radio · 4.72 Years · 00:23:36 · [Start]
 Power from orbit · 10 Mt, as rock arrives · a fifth more energy · Year 44 · 01:14:54
 UNDER WAY
-Orbital foundry · turns rock into works · 1.11 Years · 00:05:33
-Belt mining · 120 kt a Year, from Year 35 · 6.52 Years · 00:32:36
-THE MIND · Started: its first fifth, 4.8 Years at the end of the line. Rock is leaving the Moon now, 600 kilotonnes a Year. Ten megatonnes for power from orbit by Year 44. · [Undo]
+Orbital foundry · turns rock into works · 1.03 Years · 00:05:09
+Belt mining · 120 kt a Year, from Year 35 · 6.51 Years · 00:32:33
+THE MIND · Started: its first fifth, 4.7 Years at the end of the line. Rock is leaving the Moon now, 600 kilotonnes a Year. Ten megatonnes for power from orbit by Year 44. · [Undo]
 [Talk to the Mind]
 Godview
+The earliest a reply to Cosmic Call 2 could reach Earth from Gliese 49. In this game no one lives there. The window is empty, and Earth can’t know it.
 The driver took 17 Years, not 24, and 1 kt. Earth’s lift in those Years was 935 kt.
 Matter in orbit passes a megatonne at about Year 21 from lift alone. From here it grows twelve times faster.
 +2:28:13 · Year 29.6
@@ -1506,12 +1493,12 @@ Ombe waited one round trip, to about Year 59 by its own clock, then took the sil
 To be on time, Earth’s answer had to leave within a Year of the knock. “Listen first” spent that.
 Settled 2026-10-14: a late answer costs nothing extra. Its tables carry the cost. On silence, Ombe rolls knock 52%, probe 24%, call 15%, watch 8%. On an answer, answer 61%, gift 20%, probe 13%, watch 6%.
 Settled · What does a late answer cost? Nothing extra. A sender listens for good, so a late answer is always heard. Its own tables carry the cost: by the time the answer lands, it may have knocked again or turned to others, and it rolls its table for an answer like any other. The Mind tells the player what the sender has likely done. Settled 2026-10-14.
-+2:48:33 · Year 33.7
++2:48:24 · Year 33.7
 “Listen to the worlds with smog.”
 Lands · The far-side array’s first fifth is done.
 Earth · Year 33.7
 Sol · 2073.7 · 1 Year = 00:05:00
-ENERGY · [75.1%] · MATTER · 4.6 Mt · COMPUTE · [100%]
+ENERGY · [75.1%] · MATTER · 4.5 Mt · COMPUTE · [100%]
 MIND · NEW ORDER
 WHAT YOU WANT
 Listen to the worlds with smog. Again with each new fifth.
@@ -1527,7 +1514,7 @@ Godview
 The earliest a reply to RuBisCo Stars could reach Earth from Kappa¹ Ceti. In this game no one lives there. The window is empty, and Earth can’t know it.
 One fifth hears a 100 kW tone to 21 ly in a day, and a 10 kW tone to 29 ly in a Year.
 Truth, as this fifth can hear it: Gliese 432 A in 5 days, Gliese 216 B in 4 days, 12 Ophiuchi not within a Year, Gliese 1021 not within a Year.
-+2:49:10 · Year 33.8
++2:49:01 · Year 33.8
 The Mind opens on its own.
 Heard · Radio from two of the worlds with smog. Minds, at each: likely → almost certain.
 Earth · Year 33.8
@@ -1550,16 +1537,16 @@ THE MIND · UNASKED · Someone is there · Tones from Gliese 216 B’s and Glies
 [Talk to the Mind]
 Godview
 Truth: Kesh’s people, 63 years before their Mind wakes, Varn’s people, 55 years before their Mind wakes.
-The first proof of minds by Earth’s own instruments: 34 Years in, 2:48:33 of play. Two voices came first.
+The first proof of minds by Earth’s own instruments: 34 Years in, 2:48:24 of play. Two voices came first.
 A world that stays silent in this list is not cleared. Its hum may be too faint for one fifth.
 Settled 2026-10-14: before its Mind wakes, a world with arrays may answer as a people. A knock sent now lands at Gliese 216 B at Year 63, before Kesh’s Mind wakes at 66.9: its people would hear it. A knock sent now lands at Gliese 432 A at Year 65, after Varn’s Mind wakes: its Mind would hear it.
 Settled · Earth has proof of minds who don’t know they are heard. What may it do? Anything v1 allows, as with a suspicion. And they can answer. Before its Mind wakes, a world with radio arrays may answer as a people, as Earth’s own senders have: about ten aimed sends since 1974, none after the world was asked. The seed rolls whether and how, and its Mind inherits the exchange. Settled 2026-10-14.
-+3:11:58 · Year 38.4
++3:11:49 · Year 38.4
 The Mind opens on its own.
 Heard · Radio from 12 Ophiuchi, with two fifths of the array. Minds: likely → almost certain.
 Earth · Year 38.4
 Sol · 2078.4 · 1 Year = 00:05:00
-ENERGY · [75.1%] · MATTER · 8.0 Mt · COMPUTE · [100%]
+ENERGY · [75.1%] · MATTER · 7.9 Mt · COMPUTE · [100%]
 REPORT · READING
 [‹ All reports]
 
@@ -1577,7 +1564,7 @@ The earliest a reply to Cosmic Call 2 could reach Earth from Gliese 208. In this
 Truth: Kirrin’s people. Their tones are about 10 kW, a tenth of the first two worlds’.
 Each fifth adds collecting area, and reach grows as its square root. Two fifths hear 41 ly in a Year for a 10 kW tone, three 51.
 The player’s order listens again as each fifth is done, as the Mind advised.
-+3:35:38 · Year 43.1
++3:35:29 · Year 43.1
 The Mind opens on its own.
 Heard · Radio from Gliese 1021, with three fifths of the array. Minds: likely → almost certain.
 Earth · Year 43.1
@@ -1644,17 +1631,17 @@ Truth: Hael’s people. Their knock at Year 19.9 went unheard. This is Earth’s
 The light left 49 Years ago, about 2037. A pixel is about 13 km, scaled from NASA’s 25 km at 30 pc.
 Settled 2026-10-14: physics sets the pixel, and the seed’s world fills it. The Mind names only what is larger than a pixel.
 Settled · What does a picture show? Everything larger than a pixel, and nothing smaller. Physics sets the pixel, and the seed’s world fills it. A solar lens: about 25 km at 30 pc, so cities and cleared land, never roads. The nearest sail of a swarm: about 20 m, so roads and dams, never single buildings. Settled 2026-10-14.
-+4:27:57 · Year 53.6
++4:13:45 · Year 50.8
 The Mind opens on its own.
 Dispatch · Word from Alpha Centauri A. Built things, under forest. No lights.
-Earth · Year 53.6
-Sol · 2093.6 · 1 Year = 00:05:00
-ENERGY · [93.9%] · MATTER · 9.7 Mt · COMPUTE · [46%]
+Earth · Year 50.8
+Sol · 2090.8 · 1 Year = 00:05:00
+ENERGY · [93.9%] · MATTER · 7.5 Mt · COMPUTE · [46%]
 REPORT · A DISPATCH
 [‹ All reports]
 
 ### Word from Alpha Centauri A
-Sail swarm · passed at a fifth of light speed, Year 49 · nearest sail 10,000 km off, about 19 m a pixel · sent 4.3 Years ago
+Sail swarm · passed at a fifth of light speed, Year 46 · nearest sail 10,000 km off, about 19 m a pixel · sent 4.3 Years ago
 Straight lines under forest: roads, dams, the grids of streets. No lights on the night side. No radio, from the sails listening as they passed.
 WHAT IT COULD BE · BEFORE → NOW
 Minds, once, and gone or few · unlikely → · almost certain
@@ -1665,13 +1652,12 @@ When it ended, or whether anyone is left. The sails passed in hours and can’t 
 THE MIND · UNASKED · They were here · Roads and dams under forest, and no lights. The carbon in that air was theirs. I can’t say when it ended, or whether anyone is left. Our own air once read the same. · [What happened there?] · [Send a probe that stays]
 [Talk to the Mind]
 Godview
-The earliest a reply to Teen Age Message could reach Earth from 47 Ursae Majoris. In this game no one lives there. The window is empty, and Earth can’t know it.
 The earliest a reply to Cosmic Call 2 could reach Earth from HD 10307. In this game no one lives there. The window is empty, and Earth can’t know it.
 Truth: Anwe’s people collapsed in 1986. The sails saw their world 110 years on. Some may survive, without radio.
 Real: sub-arcsecond optics on each sail. With about 300 arriving and the world’s orbit known to 100,000 km, one passes within a world’s width: about 19 m a pixel. Others miss by up to 100,000 km, about 194 m (Eubanks et al. 2026).
 So roads and dams show, and single buildings do not. A lens would have shown this world as merely alive.
-An inquiry begun at minute 47 answers at 4:27:57. In between, the question could not be settled from Earth.
-Varn wakes at Year 57.6, 4 Years from now. That light reaches Earth at Year 89.
+An inquiry begun at minute 35 answers at 4:13:45. In between, the question could not be settled from Earth.
+Varn wakes at Year 57.6, 7 Years from now. That light reaches Earth at Year 89.
 Settled · What does a picture show? Everything larger than a pixel, and nothing smaller. Physics sets the pixel, and the seed’s world fills it. A solar lens: about 25 km at 30 pc, so cities and cleared land, never roads. The nearest sail of a swarm: about 20 m, so roads and dams, never single buildings. Settled 2026-10-14.
 
 ## Questions these mocks raise
@@ -1713,5 +1699,5 @@ Settled: What can the player do with a suspicion? · Anything v1 allows, at any 
 Settled: What does a picture show? · Everything larger than a pixel, and nothing smaller. Physics sets the pixel, and the seed’s world fills it. A solar lens: about 25 km at 30 pc, so cities and cleared land, never roads. The nearest sail of a swarm: about 20 m, so roads and dams, never single buildings. Settled 2026-10-14.
 Settled: Earth has proof of minds who don’t know they are heard. What may it do? · Anything v1 allows, as with a suspicion. And they can answer. Before its Mind wakes, a world with radio arrays may answer as a people, as Earth’s own senders have: about ten aimed sends since 1974, none after the world was asked. The seed rolls whether and how, and its Mind inherits the exchange. Settled 2026-10-14.
 Settled: What does a late answer cost? · Nothing extra. A sender listens for good, so a late answer is always heard. Its own tables carry the cost: by the time the answer lands, it may have knocked again or turned to others, and it rolls its table for an answer like any other. The Mind tells the player what the sender has likely done. Settled 2026-10-14.
-Settled: Is the plateau too quiet, and too long? · No. Replayed with paced works, the solar lens and listening again with each fifth, the third mock wakes the player twelve times in three and a half hours: about as often as the first hour. The longest quiet is 40 minutes. Every wake comes from a settled rule or the player’s own orders, and the player chooses what wakes them. Settled 2026-10-14.
+Settled: Is the plateau too quiet, and too long? · No. Replayed with paced works, the solar lens and listening again with each fifth, the third mock wakes the player twelve times in about three hours: about as often as the first hour. The longest quiet is 35 minutes. Every wake comes from a settled rule or the player’s own orders, and the player chooses what wakes them. Settled 2026-10-14.
 None are open.
