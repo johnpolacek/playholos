@@ -689,6 +689,13 @@ Begun 2026-10-14. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#outposts-and-
   - *Frozen embryos weigh far less,* but artificial wombs don't exist yet (Crowl et al. 2012). Building them is research Earth could do first.
   - *A colony that can stand alone is a Mind,* as v1 had it: its own industry, power and thought.
   - Set aside: Minds only beyond the home system, and Minds only everywhere.
+- **Neighbors may spread too, by the same physics and prices.** Settled 2026-10-14.
+  - *Why.* Holos tests the Fermi paradox. A quiet sky must come from neighbors' choices and costs, never from a rule. Neighbors already play like players.
+  - *When their scripts choose.* Spreading joins each neighbor's life script.
+  - *What it built before Year 0 stays below what Earth could see by 2040,* as everything else must.
+  - *How much it could matter.* A neighbor's nearest other host star is a median 4.5 ly away. If every living neighbor sent one colony the moment it woke, at v1's times, one would land by Year 0 in 54% of games, and by Year 60 in 97%. An upper bound.
+  - *The theory.* Expansion can fill the galaxy far faster than its age (Hart 1975, Carroll-Nellenback et al. 2019), or slowly (Newman and Sagan 1981). If only some settlements choose to spread, empty regions remain (Landis 1998).
+  - Set aside: neighbors who stay home, and neighbors who spread only in answer to news.
 
 ## Death and new games
 
@@ -800,3 +807,4 @@ Answered one at a time, in this order. Every answer must be permitted by current
     - **Settled 2026-10-14:** a neighbor's probe is a rocket, v1's, bright as it brakes. Small dark sails were set aside to keep the game simple. See [How neighbors play](#how-neighbors-play).
 13. **Earth's outposts and colonies, begun 2026-10-14.** See [Outposts and colonies](#outposts-and-colonies).
     - **Settled 2026-10-14:** people may go anywhere physics allows, at real prices. Nothing artificial limits the Will, since Holos tests the Fermi paradox.
+    - **Settled 2026-10-14:** neighbors may spread too, by the same physics and prices, when their scripts choose. Still open: what decides whether and how fast.

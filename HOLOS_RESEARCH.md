@@ -1163,6 +1163,19 @@ Gathered 2026-10-14 for the round on Earth's outposts and colonies.
   - A colony founded from frozen embryos needs much less speed and mass. Frozen adults would suffer cosmic rays on a long trip. Artificial wombs don't exist yet.
   - Used: the colonies round, 2026-10-14.
 
+- **[Hart 1975, and Newman and Sagan 1981](https://ar5iv.labs.arxiv.org/html/1902.04450)** · Published, QJRAS 16, 128, and Icarus 46, 293. Read through the review in Carroll-Nellenback et al. 2019.
+  - Hart: a spacefaring species fills the galaxy in a few million years, short beside its age, so none exists. Tipler 1980 agreed.
+  - Newman and Sagan: with slow population growth the wave crawls, and filling the galaxy takes about as long as its age, or longer.
+  - Used: the spread round, 2026-10-14.
+- **[Carroll-Nellenback et al. 2019, the Aurora effect](https://arxiv.org/abs/1902.04450v1)** · Published, AJ 158, 117.
+  - With conservative ship speeds and launch rates, settlement fills the galaxy well within its age. Stars' own motions speed the front. Settlements that fail, or end, can leave the galaxy partly filled in a steady state.
+  - Why it matters: an empty neighborhood is possible without a ban, if settling often fails or settlements end.
+  - Used: the spread round, 2026-10-14.
+- **[Landis 1998, percolation](https://bis-space.com/shop/?p=13987)** · Published, JBIS 51, 163. Abstract and summaries only.
+  - Each colony spreads with some chance P, else stays. Below a critical P, spreading stops, ringed by colonies that chose to stay. Above it, it spans the galaxy but leaves empty pockets. His example used P of a third.
+  - Why it matters: a choice made by each settlement, not each species, can leave Earth in a quiet pocket.
+  - Used: the spread round, 2026-10-14.
+
 ## Watch list
 
 Results the design is waiting on. Check each when its date comes.
