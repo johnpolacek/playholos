@@ -598,7 +598,8 @@ Settled 2026-10-10. Costs in [calcs/ai_cost.py](calcs/ai_cost.py), prices in [HO
   - *The Mind says what the sender has likely done,* from those tables, in words.
   - Set aside: a trust score that falls with lateness, and one that falls only after the sender gave up.
 - **A neighbor's probe is a rocket.** Settled 2026-10-14. Built in [calcs/seed.py](calcs/seed.py). Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#travel-sails-and-lenses).
-  - *v1's sentinel:* 20 Years to build, a tenth of light speed. Its exhaust points at Sol as it brakes, so the watches see it.
+  - *v1's sentinel:* 20 Years to build, a tenth of light speed. It brakes on a fusion flame pointed at Sol.
+  - *Corrected 2026-10-14: its flame is X-rays, and shows only close in.* Fusion exhaust fades past about a light-year for a ship of a million tonnes (Zubrin 1995). A sentinel is far smaller, so it shows later. Earth needs an X-ray sky watch to see it, a work the Will can start. Before, this said the watches see it.
   - *How often.* On 1,000 games, a rolled probe reaches Sol by Year 60 in 3. None arrives before Year 0, so none breaks Earth's quiet opening. Probes rolled in answer to the player's acts come on top.
   - *In seed 11:* Hael's rocket, rolled on silence in 2003, reaches Sol at Year 26.2.
   - *v1 reasoned that ancient probes must be rare, since none has been found.* That holds only for big ones. Searches would miss a probe 1 to 10 m across (Haqq-Misra and Kopparapu 2012).
@@ -704,7 +705,13 @@ Begun 2026-10-14. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#outposts-and-
   - *A companion within a light-year is home ground,* like Proxima to Alpha Centauri A. Gaia's distance errors between companions would also misdirect such hops.
   - *What a game holds, on 400 games.* A colony has landed before Year 0 in 12%. By Year 60, in 68%, a median of 1. By Year 300, in 95%, a median of 41: the region fills, as Hart's argument expects. A hop is a median 3.9 ly.
   - *In seed 11,* Kesh settles GJ 4352 at Year 39, and Hael reaches Barnard's Star, 6 ly from Sol, at Year 56.6. In seed 10, Ombe's first colony lands at Year 18.9.
-  - Still open: what Earth can see of a colony.
+- **Earth sees of a colony what physics gives.** Settled 2026-10-14. Built in [calcs/seed.py](calcs/seed.py). Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#outposts-and-colonies).
+  - *Its ship, almost never.* A fusion rocket's glow is X-rays, and it fades past about a light-year (Zubrin 1995). No neighbor's colony ship comes that close to Sol.
+    - An antimatter rocket would show for hundreds of light-years, but only along its exhaust. No neighbor flies one.
+  - *Its radio, once it stands alone, is its parent Mind's toward Sol.* A sample. Earth hears it with the same instruments and limits as any home.
+    - By Year 60, in 400 games: 61 colonies' radio reaches Earth. The all-sky watch hears none. A far-side array, held a Year on the right star, would hear one in 6% of games.
+  - *Its heat stays far under any search's limit for centuries.* Searches rule out only near-complete Dyson spheres within 100 pc.
+  - *So spreading is mostly unseen early,* and a quiet sky can hide a filling region. That is the Fermi test, played honestly.
 
 ## Death and new games
 
@@ -813,8 +820,9 @@ Answered one at a time, in this order. Every answer must be permitted by current
     - **Settled 2026-10-14:** a picture shows everything larger than a pixel. The lens and the dispatch now follow the rule. The swarm is a thousand sails, six days of laser. See [How Earth learns](#how-earth-learns).
     - **Settled 2026-10-13:** the plateau at the grid limit stands. Better chips don't dodge it, and the megatonne road pays there. See [Growing compute](#growing-compute).
 12. **The mocks on other games, 2026-10-14:** [seed 11](explorations/v2-mocks/seed-11.html), with no voice, five felt worlds and a living neighbor next door, and [seed 62](explorations/v2-mocks/seed-62.html), where the first mirror can read no felt world. The first hour now runs on any seed. It raised one question:
-    - **Settled 2026-10-14:** a neighbor's probe is a rocket, v1's, bright as it brakes. Small dark sails were set aside to keep the game simple. See [How neighbors play](#how-neighbors-play).
+    - **Settled 2026-10-14:** a neighbor's probe is a rocket, v1's. Small dark sails were set aside to keep the game simple. Its braking flame is X-rays and shows only close in, corrected the same day. See [How neighbors play](#how-neighbors-play).
 13. **Earth's outposts and colonies, begun 2026-10-14.** See [Outposts and colonies](#outposts-and-colonies).
     - **Settled 2026-10-14:** people may go anywhere physics allows, at real prices. Nothing artificial limits the Will, since Holos tests the Fermi paradox.
     - **Settled 2026-10-14:** neighbors may spread too, by the same physics and prices, when their scripts choose.
-    - **Settled 2026-10-14:** the seed rolls whether each neighbor spreads, weighted by its dial, and each colony rolls again. Still open: what Earth can see of a colony.
+    - **Settled 2026-10-14:** the seed rolls whether each neighbor spreads, weighted by its dial, and each colony rolls again.
+    - **Settled 2026-10-14:** Earth sees of a colony what physics gives: almost never its ship, its radio as its parent's, and no heat for centuries.

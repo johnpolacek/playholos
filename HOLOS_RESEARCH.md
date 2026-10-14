@@ -1185,6 +1185,13 @@ Gathered 2026-10-14 for the round on Earth's outposts and colonies.
   - Why it matters: only very large works are ruled out near Sol. A young colony's heat is far below any limit.
   - Used: what Earth can see of a colony, 2026-10-14.
 
+- **Zubrin 1995, starship signatures** · Published, ASP Conference Series 74, and JBIS 49, 297. Read through [Centauri Dreams](https://www.centauri-dreams.org/2012/08/20/to-detect-a-starship/) and [its sequel](https://www.centauri-dreams.org/2012/08/21/seti-starship-radiation-signatures/).
+  - A fusion rocket's X-rays are detectable within about a light-year, and fade into noise by 10. His standard ship weighs a million tonnes.
+  - An antimatter photon rocket, its light focused within 30 degrees, shows to about 300 ly for Hubble, but only along its exhaust.
+  - A ship braking on a magnetic sail from a tenth of light speed radiates near 12 kHz. A 6 km antenna in space hears a million-tonne ship at 400 ly, a 10,000-tonne one at 40.
+  - Why it matters: Earth almost never sees a neighbor's ship. It corrected the probe rule: a braking flame shows only close in.
+  - Used: what Earth can see of a colony, and the probe rule, 2026-10-14.
+
 ## Watch list
 
 Results the design is waiting on. Check each when its date comes.

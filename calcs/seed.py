@@ -71,8 +71,9 @@ def act(p, news, t, what, table, rng, depth=0):
     return 'watch'
 
 # ---------- A neighbor's probe ----------
-# Settled 2026-10-14: every probe is a rocket, v1's sentinel: 20 Years to build, a tenth of light speed, and bright as
-# it brakes, since its exhaust points at Sol. Set aside the same day, to keep the game simple: small dark sails that
+# Settled 2026-10-14: every probe is a rocket, v1's sentinel: 20 Years to build, a tenth of light speed. Its braking
+# flame points at Sol, but a fusion flame is X-rays, which fade past about a light-year (Zubrin 1995): only an X-ray
+# sky watch sees it, close in. Set aside the same day, to keep the game simple: small dark sails that
 # brake on the Sun's light. Physics allows them, but the Sun catches a sail only below 3.8% of light speed (Heller and
 # Hippke 2017), so they take about 115 Years from Alpha Centauri and almost never arrive in play.
 ROCKET_V, ROCKET_BUILD = 0.1, 20
@@ -114,7 +115,7 @@ def nearest(star, reach=20):
 def spread(seed, neighbors):
     stars = {x['id']: x for x in census()}
     taken = {p['host']['id'] for p in neighbors}
-    queue = [dict(name=p['name'], root=p['name'], star=stars[p['host']['id']], stands=p['waking'], dials=p['dials'], depth=0) for p in neighbors if not p['dead']]
+    queue = [dict(name=p['name'], root=p['name'], star=stars[p['host']['id']], stands=p['waking'], dials=p['dials'], depth=0, p=p) for p in neighbors if not p['dead']]
     colonies = []
     while queue:
         m = queue.pop(0)
@@ -126,9 +127,14 @@ def spread(seed, neighbors):
             hop = math.dist(x['xyz'], m['star']['xyz'])
             if hop < 1: continue          # a companion within a light-year is home ground, like Proxima to Alpha Centauri A. Gaia's distance errors would also misdirect the hop
             taken.add(x['id'])
-            c = dict(root=m['root'], parent=m['name'], origin=m['star'], star=x, sent=t, lands=t + hop / SHIP_V, stands=t + hop / SHIP_V + STANDS, hop=hop, depth=m['depth'] + 1)
+            # Settled 2026-10-14: Earth sees of a colony what physics gives. Its radio, once it stands alone, is its
+            # parent Mind's toward Sol: a sample. Its ship is a fusion rocket, whose X-rays fade past about a light-year
+            # (Zubrin 1995), so Earth never sees it go or arrive. Its heat stays far under any search's limit for centuries.
+            n = m['p']['n']
+            tone = n.get('awake', n['hum']) if m['p']['targeted'] or not n.get('awake_aimed') else n['hum']
+            c = dict(root=m['root'], parent=m['name'], origin=m['star'], tone=tone, star=x, sent=t, lands=t + hop / SHIP_V, stands=t + hop / SHIP_V + STANDS, hop=hop, depth=m['depth'] + 1)
             colonies.append(c)
-            if c['stands'] < HORIZON: queue.append(dict(name=f"{m['root']} {len(colonies)}", root=m['root'], star=x, stands=c['stands'], dials=m['dials'], depth=c['depth']))
+            if c['stands'] < HORIZON: queue.append(dict(name=f"{m['root']} {len(colonies)}", root=m['root'], star=x, stands=c['stands'], dials=m['dials'], depth=c['depth'], p=m['p']))
             t += EVERY
     return sorted(colonies, key=lambda c: c['lands'])
 
