@@ -731,7 +731,7 @@ Answered one at a time, in this order. Every answer must be permitted by current
 11. **Third mock built 2026-10-13:** [the long roads](explorations/v2-mocks/index.html#long), hours 1 to 5, on the same game. The player starts five long works at Year 12 and is woken nine times.
     - **Replayed 2026-10-14** with every work paced by thought, down the line in the order begun. Years 12 to 54, three and a half hours.
     - *What it shows.* 35 minutes with no wake. Smog at four worlds at Year 22, each of them a home, and a solar lens sent to the farthest. Sails launched at Year 27.7. A second voice at Year 30, and a first answer, 21 Years late. Radio from two worlds at Year 34: the first proof of minds by Earth's own instruments. Each new fifth of the far-side array listens again: radio from 12 Ophiuchi at Year 38.4 and Gliese 1021 at 43.1. Power from orbit at Year 44. The lens's picture of Hael's world at 45.7. Word from Alpha Centauri at Year 54.
-    - *Wakes, as played:* thirteen in three and a half hours, about one every 16 minutes. The longest quiet is 40 minutes, Years 45.7 to 53.6.
+    - *Wakes, as played:* twelve in three and a half hours, about one every 17 minutes. The longest quiet is 40 minutes, Years 45.7 to 53.6.
     - *The plateau, as played:* 34 Years, 2.8 hours, from the grid limit to a twelfth data center. At standard pace it was 40.
     - *One knock is never heard.* Hael's, at Year 20, is under the all-sky watch's floor. A deep-field receiver held on that star would have caught it. The Mind advised one at Year 9.9, and this player left it.
     - **Settled 2026-10-13:** thought buys speed, down to a floor physics sets. See [Growing compute](#growing-compute).
