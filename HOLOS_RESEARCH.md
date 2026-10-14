@@ -1191,6 +1191,28 @@ Gathered 2026-10-14 for the round on Earth's outposts and colonies.
   - A ship braking on a magnetic sail from a tenth of light speed radiates near 12 kHz. A 6 km antenna in space hears a million-tonne ship at 400 ly, a 10,000-tonne one at 40.
   - Why it matters: Earth almost never sees a neighbor's ship. It corrected the probe rule: a braking flame shows only close in.
   - Used: what Earth can see of a colony, and the probe rule, 2026-10-14.
+  - The sequel post also gives a 30 km antenna hearing a 10,000-tonne ship at 200 ly. The 12 kHz assumes 1 ion per cubic cm, ten times the gas near Sol. A reader's comment there notes the solar wind's cutoff near Earth, about 24 kHz.
+  - Corrected 2026-10-14: these ranges leave out the gas's absorption, as far as the accounts read show. At these frequencies the gas around Sol swallows the radio within a few thousand AU, by this project's arithmetic below. The design had offered an antenna to hear sails braking, on Zubrin's ranges.
+- **[Perakis and Hein 2016, magnetic and electric sails](https://arxiv.org/abs/1603.03015)** · Published, Acta Astronautica. Read in [ar5iv](https://ar5iv.arxiv.org/html/1603.03015), 2026-10-14.
+  - A magnetic sail alone brakes an 8,250 kg craft from 5% of light speed in about 39.7 years. That needed a loop 1,000 km in radius, which the authors call unrealistic. Their other cases keep it to 50 km.
+  - Its drag fades as the craft slows, "asymptotically", so the end of braking is slow. An electric sail helps there: 29 years together.
+  - Their drag law, Eq. 1, goes as speed to the 4/3, by this project's check of its units.
+  - Why it matters: a sail brakes the fast part well, and the slow end poorly. So a Mind finishes on its rocket.
+  - Used: how a colony ship brakes, 2026-10-14. `calcs/seed.py` BRAKE.
+- **[Redfield and Falcon 2008, electron densities](https://ar5iv.arxiv.org/html/0804.1802)** · Published, ApJ. Through a search summary.
+  - The Local Interstellar Cloud holds about 0.12 ± 0.04 free electrons per cubic cm, from seven sight lines.
+  - Used: the absorption arithmetic below, 2026-10-14.
+- **[Redfield and Linsky 2008, the local clouds](https://arxiv.org/abs/0804.0161)** · Published, ApJ. Abstract read, and a search summary.
+  - The Local Interstellar Cloud "may be the cloud that immediately surrounds" the Solar System. Its temperature is about 7,500 ± 1,300 K.
+  - Used: the absorption arithmetic below, 2026-10-14.
+- **Low-frequency opacity of the sky** · [FARSIDE study, 2019](https://arxiv.org/pdf/1911.08649), and [a sky model with absorption, 2021](https://arxiv.org/pdf/2104.03170). Through a search summary.
+  - Warm ionized gas makes the whole sky opaque near 1 MHz over long paths. The galaxy's radio spectrum turns over near 3 MHz. Absorption grows as density squared, and steeply as frequency falls.
+  - Used: the absorption arithmetic below, 2026-10-14.
+- **This project's arithmetic: a sail's radio in the gas, 2026-10-14.** Script kept out of the repo, a throwaway check.
+  - Free-free absorption, Rybicki and Lightman eq. 5.19b with the classical Gaunt factor. At 12 kHz in Local Cloud gas, radio fades by e every 2,000 AU at 0.12 electrons per cubic cm, or 5,000 AU at 0.07. The hot, thin Local Bubble barely absorbs it.
+  - Where the sail's field balances the gas's push, electrons circle at about 6 times the gas's own cutoff at 10% of light speed, whatever the density. Zubrin's 12 kHz at 1 per cubic cm is 1.3 times it. Both sit where absorption is strong.
+  - Sol sits in such gas, so every path out crosses some. A tenth of a parsec of it cuts the signal 50 to 40,000 times.
+  - Used: Earth can't hear a sail brake, 2026-10-14.
 
 ## Watch list
 

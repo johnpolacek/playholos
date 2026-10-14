@@ -89,9 +89,16 @@ def probe_trip(p, t, what):
 # one more every 20 Years, to the nearest free star in the census; a tenth of light speed, v1's; and a colony standing
 # alone 20 Years after it lands, as Metzger et al. 2013 bootstrap the Moon's industry. No colony goes to Sol, or to a
 # star another neighbor holds. Targets come from the census to 100 ly, so a neighbor near 50 ly isn't pushed inward.
+# Settled 2026-10-14: a colony ship brakes on a magnetic sail, a loop that drags on the gas between stars. It needs no
+# fuel, but drags less as it slows, as speed to the 4/3: an 8 t craft with a 1000 km loop takes about 40 years to stop
+# from 5% of light speed (Perakis and Hein 2016). So a Mind sails down to 2% of light speed and finishes on its rocket,
+# at twice its mass or less. A sample, from their case with the drag cut threefold (Freeland, through Gros 2017): the
+# sail takes about 16 Years over 0.7 ly, and the burn about 2. A trip is BRAKE Years longer than its cruise.
+# The sail's radio is born just above the gas's own cutoff, so the gas swallows it within a few thousand AU (Redfield
+# and Falcon 2008, and this project's arithmetic). Zubrin 1995's range left that out. Earth never hears one brake.
 CENSUS_PC = 100 / 3.2616
 SPREAD = {'E2': 0.8, 'E1': 0.6, 'D1': 0.25, 'D2': 0.1}
-FIRST_SHIP, EVERY, SHIP_V, STANDS, HORIZON = 40, 20, 0.1, 20, Y0 + 300
+FIRST_SHIP, EVERY, SHIP_V, BRAKE, STANDS, HORIZON = 40, 20, 0.1, 10, 20, Y0 + 300
 _CENSUS = []
 def census():
     if not _CENSUS:
@@ -128,11 +135,13 @@ def spread(seed, neighbors):
             if hop < 1: continue          # a companion within a light-year is home ground, like Proxima to Alpha Centauri A. Gaia's distance errors would also misdirect the hop
             taken.add(x['id'])
             # Settled 2026-10-14: Earth sees of a colony what physics gives. Its radio, once it stands alone, is its
-            # parent Mind's toward Sol: a sample. Its ship is a fusion rocket, whose X-rays fade past about a light-year
-            # (Zubrin 1995), so Earth never sees it go or arrive. Its heat stays far under any search's limit for centuries.
+            # parent Mind's toward Sol: a sample. Its ship's fusion X-rays fade past about a light-year (Zubrin 1995), and
+            # its sail's radio dies in the gas, so Earth never sees it go or arrive. Its heat stays far under any
+            # search's limit for centuries.
             n = m['p']['n']
             tone = n.get('awake', n['hum']) if m['p']['targeted'] or not n.get('awake_aimed') else n['hum']
-            c = dict(root=m['root'], parent=m['name'], origin=m['star'], tone=tone, star=x, sent=t, lands=t + hop / SHIP_V, stands=t + hop / SHIP_V + STANDS, hop=hop, depth=m['depth'] + 1)
+            lands = t + hop / SHIP_V + BRAKE
+            c = dict(root=m['root'], parent=m['name'], origin=m['star'], tone=tone, star=x, sent=t, lands=lands, stands=lands + STANDS, hop=hop, depth=m['depth'] + 1)
             colonies.append(c)
             if c['stands'] < HORIZON: queue.append(dict(name=f"{m['root']} {len(colonies)}", root=m['root'], star=x, stands=c['stands'], dials=m['dials'], depth=c['depth'], p=m['p']))
             t += EVERY
