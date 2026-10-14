@@ -700,9 +700,10 @@ Begun 2026-10-14. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#outposts-and-
   - *Why.* Dials tilt every neighbor choice as odds. A roll at each colony is Landis's percolation: some branches stop, and quiet pockets form.
   - *Odds, samples:* strongly Expand 80%, leans Expand 60%, leans Deepen 25%, strongly Deepen 10%. A colony keeps its parent's dials. About 4 living neighbors in 10 spread.
   - *Pace, samples from Earth's own:* the first seed ship 40 Years after waking, as Earth's launcher and a sentinel take. Then one every 20 Years, to the nearest free star, at a tenth of light speed. A colony stands alone as a Mind 20 Years after landing (Metzger et al. 2013).
-  - *Never to Sol, or to a star another neighbor holds.* Stars past 50 ly are not followed.
-  - *What a game holds, on 400 games.* A colony has landed before Year 0 in 17%. By Year 60, in 71%, a median of 1. By Year 300, in 95%, a median of 38: the region fills, as Hart's argument expects.
-  - *In seed 11,* Hael has held Proxima Centauri since Year -6.4. In seed 10, Ombe holds its companion GJ 4337 A.
+  - *Never to Sol, or to a star another neighbor holds.* Targets come from Gaia's census to 100 ly, so a neighbor near 50 ly isn't pushed inward.
+  - *A companion within a light-year is home ground,* like Proxima to Alpha Centauri A. Gaia's distance errors between companions would also misdirect such hops.
+  - *What a game holds, on 400 games.* A colony has landed before Year 0 in 12%. By Year 60, in 68%, a median of 1. By Year 300, in 95%, a median of 41: the region fills, as Hart's argument expects. A hop is a median 3.9 ly.
+  - *In seed 11,* Kesh settles GJ 4352 at Year 39, and Hael reaches Barnard's Star, 6 ly from Sol, at Year 56.6. In seed 10, Ombe's first colony lands at Year 18.9.
   - Still open: what Earth can see of a colony.
 
 ## Death and new games

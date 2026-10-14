@@ -42,14 +42,15 @@ def angle(s, ra, dec):
          math.cos(math.radians(s['dec'])) * math.cos(math.radians(dec)) * math.cos(math.radians(s['ra'] - ra)))
     return math.degrees(math.acos(max(-1, min(1, c))))
 
-def stars():
-    """Every object within 50 ly, Gaia first, bright Hipparcos stars from HYG where Gaia has none.
+def stars(radius_pc=None):
+    """Every object within 50 ly, or radius_pc, Gaia first, bright Hipparcos stars from HYG where Gaia has none.
     Possible hosts carry a kind. The rest, white dwarfs and brown dwarfs among them, still count as companions."""
+    radius_pc = radius_pc or PC_50LY
     out = []
     for r in csv.DictReader((CACHE / 'gcns-100ly.csv').open()):
         xyz = (float(r['xcoord50']), float(r['ycoord50']), float(r['zcoord50']))
         d = math.dist((0, 0, 0), xyz)
-        if d > PC_50LY: continue
+        if d > radius_pc: continue
         bp, rp = r['BPmag'], r['RPmag']
         white = r['WDprob'] and float(r['WDprob']) > 0.5
         k = None if white or not bp or not rp else kind_from_color(float(bp) - float(rp))
@@ -67,7 +68,7 @@ def stars():
     gaia = list(out)
     gaia_bright = 2.1                       # GCNS has nothing brighter; HYG fills these in
     for r in csv.DictReader((CACHE / 'hygdata_v41.csv').open()):
-        if not r['hip'] or not r['dist'] or not 0 < float(r['dist']) <= PC_50LY or float(r['mag']) > gaia_bright + 2: continue
+        if not r['hip'] or not r['dist'] or not 0 < float(r['dist']) <= radius_pc or float(r['mag']) > gaia_bright + 2: continue
         k = kind_from_spect(r['spect'])
         if not k or not G_ABS[k][0] - 0.5 <= float(r['absmag']) <= G_ABS[k][1] + 2: continue    # giants, or a wrong type
         ra, dec = float(r['ra']) * 15, float(r['dec'])
@@ -78,11 +79,11 @@ def stars():
                         pmde=float(r['pmdec']), gabs=float(r['absmag']), lum=float(r['lum'])))
     return out
 
-def name_from_hyg(star_list):
+def name_from_hyg(star_list, radius_pc=None):
     """Give Gaia stars their common names: HYG within a tenth of a degree and a third in distance. HYG's old parallaxes
     for faint red dwarfs are often that far off: it puts GJ 1061 at 4.3 pc, where Gaia has 3.7. A star with no proper,
     Bayer, Flamsteed or Gliese name takes its HD number, then its HIP number."""
-    hyg = [r for r in csv.DictReader((CACHE / 'hygdata_v41.csv').open()) if r['dist'] and 0 < float(r['dist']) <= PC_50LY * 1.1]
+    hyg = [r for r in csv.DictReader((CACHE / 'hygdata_v41.csv').open()) if r['dist'] and 0 < float(r['dist']) <= (radius_pc or PC_50LY) * 1.1]
     cells = collections.defaultdict(list)
     for r in hyg: cells[(round(float(r['ra']) * 15), round(float(r['dec'])))].append(r)
     # Gaia's G runs brighter than HYG's V, most for red stars. Within a pair, match brightest to brightest, one to one.

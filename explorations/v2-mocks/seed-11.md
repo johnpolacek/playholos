@@ -19,7 +19,7 @@ A check on the mocks, built on another game. The mocks’ own game is · seed 10
 ## Godview · who is out there
 The player sees none of this. Light-time is real waiting at 5 minutes a Year.
 Neighbor · Star · Light-time · At Year 0 · What it knows of Earth · What it does about it
-Hael · contacter · Alpha Centauri A · G star · 4.3 ly · 00:21:36 · awake 48 Years · heard Earth’s radars from 1954, and mapped its day and orbit · sends knowledge unasked · Its gift reached Earth in 1996 and 1997. No one was listening. Unanswered by 2003, it sends a probe or a watcher. Its colony at Proxima Centauri, 0.2 ly from its parent, lands 2034. Its rocket probe, sent after silence, reaches Sol at Year 26.2: bright as it brakes.
+Hael · contacter · Alpha Centauri A · G star · 4.3 ly · 00:21:36 · awake 48 Years · heard Earth’s radars from 1954, and mapped its day and orbit · sends knowledge unasked · Its gift reached Earth in 1996 and 1997. No one was listening. Unanswered by 2003, it sends a probe or a watcher. Its colony at Barnard's Star, 6.5 ly from its parent, lands Year 56.6. Its rocket probe, sent after silence, reaches Sol at Year 26.2: bright as it brakes.
 Iru · contacter · strange · Gliese 570 A · K star · 19.2 ly · 01:36:00 · wakes Year 30.9 · +02:34:17 · heard Earth’s radars from 1969, and mapped its day and orbit · at waking: sends a probe or a watcher · Its rocket probe, sent its answer to Earth’s radars, reaches Sol at Year 243.9: bright as it brakes.
 Pelle · watcher · Mu Herculis · K star · 27.2 ly · 02:16:00 · died 1992 · dead before Year 0
 Tavi · watcher · strange · Gliese 618 A · M star · 27.8 ly · 02:18:48 · awake 26 Years · has not heard Earth

@@ -87,18 +87,30 @@ def probe_trip(p, t, what):
 # Samples, all of them: the odds; a first seed ship 40 Years after waking, as Earth's own launcher and a sentinel take;
 # one more every 20 Years, to the nearest free star in the census; a tenth of light speed, v1's; and a colony standing
 # alone 20 Years after it lands, as Metzger et al. 2013 bootstrap the Moon's industry. No colony goes to Sol, or to a
-# star another neighbor holds. Stars past 50 ly are not in the census, so spreading there is not followed.
+# star another neighbor holds. Targets come from the census to 100 ly, so a neighbor near 50 ly isn't pushed inward.
+CENSUS_PC = 100 / 3.2616
 SPREAD = {'E2': 0.8, 'E1': 0.6, 'D1': 0.25, 'D2': 0.1}
 FIRST_SHIP, EVERY, SHIP_V, STANDS, HORIZON = 40, 20, 0.1, 20, Y0 + 300
 _CENSUS = []
 def census():
     if not _CENSUS:
         import hosts
-        st = hosts.stars(); hosts.name_from_hyg(st); hosts.hipparcos(st)
+        st = hosts.stars(CENSUS_PC); hosts.name_from_hyg(st, CENSUS_PC); hosts.hipparcos(st)
         for x in st:
             ra, de, d = math.radians(x['ra']), math.radians(x['dec']), x['d_pc'] * 3.2616
             _CENSUS.append(dict(id=x['id'], name=x['name'], kind=x['kind'], d=d, xyz=(d * math.cos(de) * math.cos(ra), d * math.cos(de) * math.sin(ra), d * math.sin(de))))
     return _CENSUS
+_CELLS = {}
+def nearest(star, reach=20):
+    """Census stars by distance from star: those within reach ly first, from a grid, then the rest, rarely needed."""
+    if not _CELLS:
+        for x in census(): _CELLS.setdefault(tuple(int(c // 10) for c in x['xyz']), []).append(x)
+    cx, k = [int(c // 10) for c in star['xyz']], reach // 10 + 1
+    near = [x for i in range(-k, k + 1) for j in range(-k, k + 1) for l in range(-k, k + 1) for x in _CELLS.get((cx[0] + i, cx[1] + j, cx[2] + l), ())]
+    near = sorted((x for x in near if math.dist(x['xyz'], star['xyz']) <= reach), key=lambda x: math.dist(x['xyz'], star['xyz']))
+    yield from near
+    seen = {x['id'] for x in near}
+    yield from (x for x in sorted(census(), key=lambda x: math.dist(x['xyz'], star['xyz'])) if x['id'] not in seen)
 def spread(seed, neighbors):
     stars = {x['id']: x for x in census()}
     taken = {p['host']['id'] for p in neighbors}
@@ -108,13 +120,13 @@ def spread(seed, neighbors):
         m = queue.pop(0)
         if keyed(seed, 'spread', m['root'], m['star']['id']) >= SPREAD[m['dials'].split()[1]]: continue
         t = m['stands'] + FIRST_SHIP
-        for x in sorted(stars.values(), key=lambda x: math.dist(x['xyz'], m['star']['xyz'])):
+        for x in nearest(m['star']):
             if t > HORIZON: break
             if x['id'] in taken: continue
             hop = math.dist(x['xyz'], m['star']['xyz'])
-            if hop < 0.1: continue                                         # its own star's companions are home ground
+            if hop < 1: continue          # a companion within a light-year is home ground, like Proxima to Alpha Centauri A. Gaia's distance errors would also misdirect the hop
             taken.add(x['id'])
-            c = dict(root=m['root'], parent=m['name'], star=x, sent=t, lands=t + hop / SHIP_V, stands=t + hop / SHIP_V + STANDS, hop=hop, depth=m['depth'] + 1)
+            c = dict(root=m['root'], parent=m['name'], origin=m['star'], star=x, sent=t, lands=t + hop / SHIP_V, stands=t + hop / SHIP_V + STANDS, hop=hop, depth=m['depth'] + 1)
             colonies.append(c)
             if c['stands'] < HORIZON: queue.append(dict(name=f"{m['root']} {len(colonies)}", root=m['root'], star=x, stands=c['stands'], dials=m['dials'], depth=c['depth']))
             t += EVERY
