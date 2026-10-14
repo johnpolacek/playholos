@@ -47,8 +47,9 @@ SETTLED = [('Does a half-built real instrument cost fewer Years?', 'It costs wha
            ('How is thought split among works?', 'By an order the player sets. A new work joins the end of the line. The Mind gives each work its want, in order, then pushes each in turn to ten times its want. So no work stops because another is first. The order moves the mirror and the sails by four to five Years, and power from orbit by about one: rock from the Moon sets that pace. Settled 2026-10-14.'),
            ('A knock Earth can’t hear: should a candidate world earn a listen?', 'The Mind advises it. When the sweep marks worlds, it says a deep-field receiver would hear their knocks about three times farther than the all-sky watch. The player decides. The Mind never builds it on its own. Settled 2026-10-14.'),
            ('One receiver, many marked worlds: how does it share its watch?', 'It is split. The player names the stars it holds, and each part hears less far, as real dish arrays do. On one star it hears a ten gigawatt knock to 117 ly. On four, to 59. On more than eleven, no farther than the all-sky watch. A dish array can’t hold scattered stars at full reach. Settled 2026-10-14.'),
+           ('What can the player do with a suspicion?', 'Anything v1 allows, at any world: listen, look, go or knock. The Mind says what it knows, what each act risks, and when each answers. For four smog worlds at Year 22: radio from the nearer ones by Year 34, a solar lens picture of one world by Year 46 to 48, sails’ word after Year 200. Settled 2026-10-14.'),
            ('What does a picture show?', 'Everything larger than a pixel, and nothing smaller. Physics sets the pixel, and the seed’s world fills it. A solar lens: about 25 km at 30 pc, so cities and cleared land, never roads. The nearest sail of a swarm: about 20 m, so roads and dams, never single buildings. Settled 2026-10-14.'),
-           ('What can the player do with a suspicion?', 'Anything v1 allows, at any world: listen, look, go or knock. The Mind says what it knows, what each act risks, and when each answers. For four smog worlds at Year 22: radio from the nearer ones by Year 34, a solar lens picture of one world by Year 46 to 48, sails’ word after Year 200. Settled 2026-10-14.')]
+           ('Earth has proof of minds who don’t know they are heard. What may it do?', 'Anything v1 allows, as with a suspicion. And they can answer. Before its Mind wakes, a world with radio arrays may answer as a people, as Earth’s own senders have: about ten aimed sends since 1974, none after the world was asked. The seed rolls whether and how, and its Mind inherits the exchange. Settled 2026-10-14.')]
 
 # ---------- Godview: who is out there ----------
 MOVE = reactions.MOVES
@@ -915,7 +916,6 @@ def long_rows():
     MULT = early_game.split([(w, early_game.WANTS[w][0], early_game.PUSH) for w in early_game.BY_START], room - 0.1 / early_game.FLAGSHIP_THOUGHT)[0]
     q_quiet = ask('Is the plateau too quiet, and too long?', f'From minute 60 to minute {AT(R["solar"]) // 60} nothing wakes the player. Thought stays one size for {PLATEAU:.0f} Years, {PLATEAU * 5 / 60:.1f} hours of play, until power from orbit.')
     q_late = ask('What does a late answer cost?', f'The player answers {K2["year"] - KNOCK["year"]:.0f} Years after the first knock. A sender waits one round trip, then takes silence as news. {WHO["name"]}’s wait ends about {K2["year"] + VD - (KNOCK["sent"] - Y0 + 2 * VD + 1):.0f} Years before the answer lands.')
-    q_unaware = ask('Earth has proof of minds who don’t know they are heard. What may it do?', 'Tones from a world decades before its Mind wakes. v1 filed a young world under no conversation possible.')
 
     # --- Year 12: the long roads
     t0 = 3600
@@ -1099,7 +1099,10 @@ def long_rows():
              talk(proof, f'<b>Someone is there</b>Tones from {got_names} worlds, the kind our own towers gave off. No one aimed them, and no one there knows we hear. The light is about {quickest[0]["d"]:.0f} Years old.', ('What do we do?', 'Who else?'), 'open'),
              ['Truth: ' + ', '.join(f"{w['who']}’s people, {seen(w, R['fifth']):.0f} years before their Mind wakes" for w, _ in got) + '.',
               'The first proof of minds by Earth’s own instruments: ' + f'{R["fifth"]:.0f} Years in, {HMS(tf)[1:]} of play. Two voices came first.',
-              'A world that stays silent in this list is not cleared. Its hum may be too faint for one fifth.'], question=q_unaware, label=HMS(tf + AT(got_days / 365.25) + 30)),
+              'A world that stays silent in this list is not cleared. Its hum may be too faint for one fifth.',
+              'Settled 2026-10-14: before its Mind wakes, a world with arrays may answer as a people. ' + ' '.join(
+                  f"A knock sent now lands at {w['star']} at Year {tf / 300 + w['d']:.0f}, " + (f"before {w['who']}’s Mind wakes at {w['src']['waking'] - Y0:.1f}: its people would hear it." if tf / 300 + w['d'] < w['src']['waking'] - Y0 else f"after {w['who']}’s Mind wakes: its Mind would hear it.")
+                  for w, _ in got)], settled=36, label=HMS(tf + AT(got_days / 365.25) + 30)),
         at(AT(LENS_END), 0, '· The Mind opens on its own.', ('Picture', f'The lens at {FAR["star"]}: straight edges on the land. Minds: {moved(60, 94)}.'),
            talk(lens_r, f'<b>A picture of their world</b>Cleared land with straight edges, and grey spreads the size of cities. I think someone shaped it. Nothing under {LENS_PX:.0f} km shows.', ('What else can it see?', 'Later'), 'open'),
            [(f'Truth: {FAR["who"]}’s people. Their knock at Year {KF["year"]:.1f} went unheard. This is Earth’s first sight of them.' if FAR['who'] == WHOF['name'] else f'Truth: {FAR["who"]}’s people.'),

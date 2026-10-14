@@ -465,7 +465,7 @@ Anchors for [the project audit](HOLOS_PROJECT_AUDIT.md).
 - **[Statement regarding METI and Active SETI, 2015](https://setiathome.berkeley.edu/meti_statement_0.html)** · Statement, signed by scientists and others.
   - Urges "vigorous international debate by a broadly representative body" before any more messages are sent.
   - Matters: the strongest real pull toward Hidden.
-  - Used: v2 The dials.
+  - Used: v2 The dials. And v2 [How neighbors play](HOLOS_GAME_CONCEPT.md#how-neighbors-play), settled 2026-10-14: a people may answer before its Mind wakes. Earth's own record, about ten aimed sends from 1974 to 2018 with none after the world was asked, is from the "Earth's aimed messages" entry above. The people's odds are this project's.
 - **[DART](https://en.wikipedia.org/wiki/Double_Asteroid_Redirection_Test)** · Demonstrated, 2022.
   - The first test of moving an asteroid by impact.
   - Matters: Earth guards against loss it can see coming. A real pull toward Cautious.

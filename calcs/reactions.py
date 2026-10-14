@@ -159,12 +159,36 @@ OWN = {
     'Quessa': (dict(watch=1.2), 'It listens longest of all.'),
 }
 
+# Settled 2026-10-14: before its Mind wakes, a world with arrays answers as a people. Earth is the only example: about
+# ten aimed sends from 1974 to 2018, from dishes in four countries, by private groups and single institutions, and none
+# after the world was asked. In 2015 scientists signed a statement asking for a worldwide discussion first. So a people
+# answers readily, sometimes in more than one voice, and often not at all. Only its Open or Hidden dial applies: a
+# culture leans open or closed before its Mind does. Odds and the delay are design choices, not physics.
+PEOPLE = {
+    'knock': B(answer=35, knock=15, watch=50),
+    'broadcast': B(watch=70, answer=20, knock=10),
+    'reply': B(answer=55, watch=45),
+}
+PEOPLE_THINKS = 2.0                      # Years: a people argues before it sends, and some senders don't wait
+def people_table(dials):
+    out = {}
+    for news, weights in PEOPLE.items():
+        w = dict(weights)
+        for code in dials.split():
+            if code[0] in 'OH':
+                for move, m in DIAL[DIAL_NAMES[code[0]]].items():
+                    if move in w: w[move] *= m ** int(code[1])
+        total = sum(w.values())
+        out[news] = sorted(((m, v / total) for m, v in w.items()), key=lambda kv: -kv[1])
+    return out
+
 GATES = [
     'Only a hunter strikes first, and only when its target is soft and it judges the launch unseen. Otherwise a rolled strike becomes watch.',
     'Anyone may strike back when struck, if it has the weapons. Until then a rolled strike queues the weapon projects.',
     'A neighbor reacts to a knock only if it caught the knock. See [Stars Earth knocked on](HOLOS_GAME_CONCEPT.md#stars-earth-knocked-on).',
     'Dead neighbors have no table. Pelle\'s Testament, Anwe\'s air and Mirr\'s ruins are scripted.',
     'A neighbor reacts to a world going quiet only if it was listening to that world. It can\'t tell waking from dying. A fade over decades is not news.',
+    'Before its Mind wakes, a world answers as a people, from the table below, once its arrays exist. Its answer may come in more than one voice. Its Mind, on waking, inherits the exchange: it rolls its own table for that news, knowing what its people sent.',
 ]
 
 def table(name):
@@ -222,7 +246,14 @@ def write():
         f'{dial_words(c)} {span(y)}' for c, y in THINKS.items()) + '. '
         'It sets when an answer leaves, so when it arrives.']
     L += ['', '**Play styles:** ' + '. '.join(f"{s}: {', '.join(f'{m} ×{v:g}' for m, v in mults.items()) or 'none'}" for s, mults in STYLE.items()) + '.', '']
-    L += ['## Tables', '', 'Moves under 5% are folded into "other".', '']
+    L += ['## Before a Mind wakes', '',
+          'Settled 2026-10-14. A world with arrays hears a knock and may answer as a people, the way Earth\'s own senders have: about ten aimed sends from 1974 to 2018, '
+          'from dishes in four countries, none after the world was asked. Only the Open or Hidden dial applies. '
+          f'A people acts {span(PEOPLE_THINKS)} after news.', '', '| Lean | News | Odds |', '| --- | --- | --- |']
+    for lean in ('O2', 'O1', 'H1', 'H2'):
+        for news, odds in people_table(lean).items():
+            L.append(f'| {dial_words(lean)} | {news} | ' + ', '.join(f'{m} {p:.0%}' for m, p in odds) + ' |')
+    L += ['', '## Tables', '', 'Moves under 5% are folded into "other".', '']
     for n in nb.ROSTER:
         name = n['name']
         dials, style = CHARACTER[name]

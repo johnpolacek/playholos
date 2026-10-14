@@ -543,6 +543,16 @@ Settled 2026-10-10. Costs in [calcs/ai_cost.py](calcs/ai_cost.py), prices in [HO
   - *Voice banks:* its messages are typed parts, as v1 set, rendered in its own voice from lines written once at build time by a strong model and reviewed by hand.
   - *Settled 2026-10-10:* each table is a base for its disposition, shifted by its dials, its play style and its own prose. Tables in [HOLOS_REACTIONS.md](HOLOS_REACTIONS.md), from [calcs/reactions.py](calcs/reactions.py). Voice briefs in [HOLOS_VOICES.md](HOLOS_VOICES.md).
   - *Settled 2026-10-11:* how long a Mind takes to act on news comes from its Cautious or Bold dial. Strongly Bold: a tenth of a Year. Leans Bold: a quarter. Leans Cautious: a Year. Strongly Cautious: two. It sets when an answer leaves, and so when it arrives: Hael answers Earth's radars a quarter of a Year after hearing them, and Kirrin takes two Years. A design choice, not physics, like the odds.
+- **Before its Mind wakes, a world answers as a people.** Settled 2026-10-14. Table in [HOLOS_REACTIONS.md](HOLOS_REACTIONS.md#before-a-mind-wakes).
+  - *Why.* In v2 a world has radio arrays decades before its Mind wakes. It is like Earth today: people who can hear, and can send.
+  - *Earth is the only example.* About ten aimed sends from 1974 to 2018, from dishes in four countries, by private groups and single institutions. None waited for the world to be asked.
+    - In 2015 scientists signed a statement asking for a worldwide discussion first. Some urge waiting, and some send anyway.
+  - *So a people answers readily, sometimes in more than one voice, and often not at all.* A neither-leaning people answers or knocks back half the time, and keeps it the other half.
+  - *Only the Open or Hidden dial applies.* A culture leans open or closed before its Mind does.
+  - *A people takes 2 Years to act,* a sample. It argues before it sends.
+  - *Its Mind inherits the exchange.* On waking it knows who knocked and what its people sent, and rolls its own table.
+  - *In the mock's game:* a knock sent at Year 34 lands at Kesh's world at Year 63, before its Mind wakes at 66.9. Its people would hear it.
+  - Set aside: only the Mind answers, once awake. And v1's rule, no conversation with a young world, which now means a world without arrays.
 - **Simulated ahead.** Neighbors play out from the seed. Only Earth is unpredictable, so the game recomputes a neighbor only when Earth's actions reach it, after their light delay. The same seed and the same player actions give the same game, for tests and replays.
 - **A live model only for live talks.** When a neighbor's mind is close enough to talk live, by craft or a mind sent as light, a model speaks for it from its character and what it knows.
 - **The model: Claude Haiku 5.5,** for live talks and for Earth's Mind, checked in playtests. About $1.18 a month for a busy player's Mind, under a cent per live talk, nothing for voice banks written in Claude Code on a subscription (about $14 through the API), and nothing for neighbors in play.
@@ -716,6 +726,6 @@ Answered one at a time, in this order. Every answer must be permitted by current
     - **Settled 2026-10-14:** one receiver is split among the stars it holds, and each part hears less far. See [What Earth hears](#what-earth-hears).
     - **Settled 2026-10-14:** a suspicion opens the whole kit, and the Mind lists the ways. In the mock the player sends a solar lens to Gliese 1021, the smog world too far for the first fifth. Its picture comes at Year 45.7: Earth's first sight of Hael's people. See [How Earth learns](#how-earth-learns).
     - **What does a late answer cost?** A sender waits one round trip, then takes silence as news. To be on time, Earth's answer had to leave within a Year of the knock.
-    - **Earth has proof of minds who don't know they are heard. What may it do?** v1 filed a young world under no conversation possible.
+    - **Settled 2026-10-14:** before its Mind wakes, a world with arrays may answer as a people, and its Mind inherits the exchange. See [How neighbors play](#how-neighbors-play).
     - **Settled 2026-10-14:** a picture shows everything larger than a pixel. The lens and the dispatch now follow the rule. The swarm is a thousand sails, six days of laser. See [How Earth learns](#how-earth-learns).
     - **Settled 2026-10-13:** the plateau at the grid limit stands. Better chips don't dodge it, and the megatonne road pays there. See [Growing compute](#growing-compute).

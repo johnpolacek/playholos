@@ -17,6 +17,7 @@ Each neighbor's reaction tables, from [How neighbors play](HOLOS_GAME_CONCEPT.md
 - A neighbor reacts to a knock only if it caught the knock. See [Stars Earth knocked on](HOLOS_GAME_CONCEPT.md#stars-earth-knocked-on).
 - Dead neighbors have no table. Pelle's Testament, Anwe's air and Mirr's ruins are scripted.
 - A neighbor reacts to a world going quiet only if it was listening to that world. It can't tell waking from dying. A fade over decades is not news.
+- Before its Mind wakes, a world answers as a people, from the table below, once its arrays exist. Its answer may come in more than one voice. Its Mind, on waking, inherits the exchange: it rolls its own table for that news, knowing what its people sent.
 
 ## News
 
@@ -61,6 +62,25 @@ Each neighbor's reaction tables, from [How neighbors play](HOLOS_GAME_CONCEPT.md
 **How long a Mind takes to act on news,** from its Cautious or Bold dial: strongly Bold a tenth of a Year, leans Bold a quarter of a Year, leans Cautious 1 Year, strongly Cautious 2 Years. It sets when an answer leaves, so when it arrives.
 
 **Play styles:** Listener: watch ×1.3. Caller: call ×1.5, knock ×1.2. Grower: guard ×1.2, probe ×1.2. Thinker: ignore ×1.2, watch ×1.1. Hunter: strike ×2.5, watch ×0.85.
+
+## Before a Mind wakes
+
+Settled 2026-10-14. A world with arrays hears a knock and may answer as a people, the way Earth's own senders have: about ten aimed sends from 1974 to 2018, from dishes in four countries, none after the world was asked. Only the Open or Hidden dial applies. A people acts 2 Years after news.
+
+| Lean | News | Odds |
+| --- | --- | --- |
+| strongly Open | knock | answer 48%, watch 31%, knock 21% |
+| strongly Open | broadcast | watch 51%, answer 33%, knock 16% |
+| strongly Open | reply | answer 73%, watch 27% |
+| leans Open | knock | answer 42%, watch 40%, knock 18% |
+| leans Open | broadcast | watch 61%, answer 26%, knock 13% |
+| leans Open | reply | answer 65%, watch 35% |
+| leans Hidden | knock | watch 67%, answer 25%, knock 9% |
+| leans Hidden | broadcast | watch 82%, answer 13%, knock 5% |
+| leans Hidden | reply | watch 60%, answer 40% |
+| strongly Hidden | knock | watch 80%, answer 16%, knock 4% |
+| strongly Hidden | broadcast | watch 90%, answer 7%, knock 2% |
+| strongly Hidden | reply | watch 74%, answer 26% |
 
 ## Tables
 

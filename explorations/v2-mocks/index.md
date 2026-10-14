@@ -1392,7 +1392,7 @@ Godview
 Settled 2026-10-14: a suspicion opens the whole kit. The player may do anything v1 allows, at any world, and the Mind says what each act risks.
 Real: a craft at the Sun’s focal line, beyond 548 AU, pictures an exo-Earth at 30 pc at about 25 km a pixel in six months (Turyshev, NASA 2020). It flies at about 150 km/s: 17 Years out.
 The interferometer is v1’s 40 Years, unchecked. The lens’s build of 8 Years is a sample.
-Settled · What does a picture show? Everything larger than a pixel, and nothing smaller. Physics sets the pixel, and the seed’s world fills it. A solar lens: about 25 km at 30 pc, so cities and cleared land, never roads. The nearest sail of a swarm: about 20 m, so roads and dams, never single buildings. Settled 2026-10-14.
+Settled · What can the player do with a suspicion? Anything v1 allows, at any world: listen, look, go or knock. The Mind says what it knows, what each act risks, and when each answers. For four smog worlds at Year 22: radio from the nearer ones by Year 34, a solar lens picture of one world by Year 46 to 48, sails’ word after Year 200. Settled 2026-10-14.
 +1:52:19 · Year 22.5
 “Send a lens to Gliese 1021. First in line.”
 Earth · Year 22.5
@@ -1550,7 +1550,8 @@ Godview
 Truth: Kesh’s people, 63 years before their Mind wakes, Varn’s people, 55 years before their Mind wakes.
 The first proof of minds by Earth’s own instruments: 34 Years in, 2:48:33 of play. Two voices came first.
 A world that stays silent in this list is not cleared. Its hum may be too faint for one fifth.
-Design question 3 · Earth has proof of minds who don’t know they are heard. What may it do? Tones from a world decades before its Mind wakes. v1 filed a young world under no conversation possible.
+Settled 2026-10-14: before its Mind wakes, a world with arrays may answer as a people. A knock sent now lands at Gliese 216 B at Year 63, before Kesh’s Mind wakes at 66.9: its people would hear it. A knock sent now lands at Gliese 432 A at Year 65, after Varn’s Mind wakes: its Mind would hear it.
+Settled · Earth has proof of minds who don’t know they are heard. What may it do? Anything v1 allows, as with a suspicion. And they can answer. Before its Mind wakes, a world with radio arrays may answer as a people, as Earth’s own senders have: about ten aimed sends since 1974, none after the world was asked. The seed rolls whether and how, and its Mind inherits the exchange. Settled 2026-10-14.
 +3:39:42 · Year 43.9
 The phone lights. Opens it.
 Lands · Power from orbit: a fifth more energy.
@@ -1596,7 +1597,7 @@ The earliest a reply to Cosmic Call 2 could reach Earth from 55 Cancri. In this 
 Truth: Hael’s people. Their knock at Year 19.9 went unheard. This is Earth’s first sight of them.
 The light left 49 Years ago, about 2037. A pixel is about 13 km, scaled from NASA’s 25 km at 30 pc.
 Settled 2026-10-14: physics sets the pixel, and the seed’s world fills it. The Mind names only what is larger than a pixel.
-Settled · What can the player do with a suspicion? Anything v1 allows, at any world: listen, look, go or knock. The Mind says what it knows, what each act risks, and when each answers. For four smog worlds at Year 22: radio from the nearer ones by Year 34, a solar lens picture of one world by Year 46 to 48, sails’ word after Year 200. Settled 2026-10-14.
+Settled · What does a picture show? Everything larger than a pixel, and nothing smaller. Physics sets the pixel, and the seed’s world fills it. A solar lens: about 25 km at 30 pc, so cities and cleared land, never roads. The nearest sail of a swarm: about 20 m, so roads and dams, never single buildings. Settled 2026-10-14.
 +4:27:57 · Year 53.6
 The Mind opens on its own.
 Dispatch · Word from Alpha Centauri A. Built things, under forest. No lights.
@@ -1625,7 +1626,7 @@ Real: sub-arcsecond optics on each sail. With about 300 arriving and the world�
 So roads and dams show, and single buildings do not. A lens would have shown this world as merely alive.
 An inquiry begun at minute 47 answers at 4:27:57. In between, the question could not be settled from Earth.
 Varn wakes at Year 57.6, 4 Years from now. That light reaches Earth at Year 89.
-Settled · What can the player do with a suspicion? Anything v1 allows, at any world: listen, look, go or knock. The Mind says what it knows, what each act risks, and when each answers. For four smog worlds at Year 22: radio from the nearer ones by Year 34, a solar lens picture of one world by Year 46 to 48, sails’ word after Year 200. Settled 2026-10-14.
+Settled · What does a picture show? Everything larger than a pixel, and nothing smaller. Physics sets the pixel, and the seed’s world fills it. A solar lens: about 25 km at 30 pc, so cities and cleared land, never roads. The nearest sail of a swarm: about 20 m, so roads and dams, never single buildings. Settled 2026-10-14.
 
 ## Questions these mocks raise
 Settled: Does a half-built real instrument cost fewer Years? · It costs what its real schedule leaves: about 8 Years for the Habitable Worlds Observatory. Build times are standard, from the science, and the player can invest in projects that build faster. A speed-up also shortens the part left of a work under way. Settled 2026-10-10 and 10-11.
@@ -1662,8 +1663,8 @@ Settled: How much thought does a work want? · As its real cousin costs money, c
 Settled: How is thought split among works? · By an order the player sets. A new work joins the end of the line. The Mind gives each work its want, in order, then pushes each in turn to ten times its want. So no work stops because another is first. The order moves the mirror and the sails by four to five Years, and power from orbit by about one: rock from the Moon sets that pace. Settled 2026-10-14.
 Settled: A knock Earth can’t hear: should a candidate world earn a listen? · The Mind advises it. When the sweep marks worlds, it says a deep-field receiver would hear their knocks about three times farther than the all-sky watch. The player decides. The Mind never builds it on its own. Settled 2026-10-14.
 Settled: One receiver, many marked worlds: how does it share its watch? · It is split. The player names the stars it holds, and each part hears less far, as real dish arrays do. On one star it hears a ten gigawatt knock to 117 ly. On four, to 59. On more than eleven, no farther than the all-sky watch. A dish array can’t hold scattered stars at full reach. Settled 2026-10-14.
-Settled: What does a picture show? · Everything larger than a pixel, and nothing smaller. Physics sets the pixel, and the seed’s world fills it. A solar lens: about 25 km at 30 pc, so cities and cleared land, never roads. The nearest sail of a swarm: about 20 m, so roads and dams, never single buildings. Settled 2026-10-14.
 Settled: What can the player do with a suspicion? · Anything v1 allows, at any world: listen, look, go or knock. The Mind says what it knows, what each act risks, and when each answers. For four smog worlds at Year 22: radio from the nearer ones by Year 34, a solar lens picture of one world by Year 46 to 48, sails’ word after Year 200. Settled 2026-10-14.
+Settled: What does a picture show? · Everything larger than a pixel, and nothing smaller. Physics sets the pixel, and the seed’s world fills it. A solar lens: about 25 km at 30 pc, so cities and cleared land, never roads. The nearest sail of a swarm: about 20 m, so roads and dams, never single buildings. Settled 2026-10-14.
+Settled: Earth has proof of minds who don’t know they are heard. What may it do? · Anything v1 allows, as with a suspicion. And they can answer. Before its Mind wakes, a world with radio arrays may answer as a people, as Earth’s own senders have: about ten aimed sends since 1974, none after the world was asked. The seed rolls whether and how, and its Mind inherits the exchange. Settled 2026-10-14.
 1. Is the plateau too quiet, and too long? · From minute 60 to minute 95 nothing wakes the player. Thought stays one size for 34 Years, 2.8 hours of play, until power from orbit.
 2. What does a late answer cost? · The player answers 21 Years after the first knock. A sender waits one round trip, then takes silence as news. Ombe’s wait ends about 20 Years before the answer lands.
-3. Earth has proof of minds who don’t know they are heard. What may it do? · Tones from a world decades before its Mind wakes. v1 filed a young world under no conversation possible.
