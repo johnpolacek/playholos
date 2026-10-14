@@ -71,17 +71,14 @@ def act(p, news, t, what, table, rng, depth=0):
     return 'watch'
 
 # ---------- A neighbor's probe ----------
-# Settled 2026-10-14: the sender's dials choose. An Open sender sends a rocket, v1's sentinel: 20 Years to build, a
-# tenth of light speed, and bright as it brakes, since its exhaust points at Sol. A Hidden sender sends a small sail,
-# grams on a sail hundreds of metres wide, braking on the Sun's light. The Sun can catch a sail only below 3.8% of
-# light speed (Heller and Hippke 2017), and it brakes dark. Searches of the Solar System would miss even a probe 1 to
-# 10 m across (Haqq-Misra and Kopparapu 2012). The sail's build of 5 Years is a sample.
-ROCKET_V, ROCKET_BUILD, SAIL_V, SAIL_BUILD = 0.1, 20, 0.038, 5
+# Settled 2026-10-14: every probe is a rocket, v1's sentinel: 20 Years to build, a tenth of light speed, and bright as
+# it brakes, since its exhaust points at Sol. Set aside the same day, to keep the game simple: small dark sails that
+# brake on the Sun's light. Physics allows them, but the Sun catches a sail only below 3.8% of light speed (Heller and
+# Hippke 2017), so they take about 115 Years from Alpha Centauri and almost never arrive in play.
+ROCKET_V, ROCKET_BUILD = 0.1, 20
 def probe_trip(p, t, what):
-    rocket = p['dials'].startswith('O')
-    v, build = (ROCKET_V, ROCKET_BUILD) if rocket else (SAIL_V, SAIL_BUILD)
-    launch = t + p['thinks'] + build
-    return dict(what=what, kind='rocket' if rocket else 'sail', bright=rocket, launch=launch, arrives=launch + p['d'] / v, year=launch + p['d'] / v - Y0)
+    launch = t + p['thinks'] + ROCKET_BUILD
+    return dict(what=what, kind='rocket', bright=True, launch=launch, arrives=launch + p['d'] / ROCKET_V, year=launch + p['d'] / ROCKET_V - Y0)
 
 def keyed(*parts):
     """A number between 0 and 1 that depends only on its parts. Placement uses it with each star's id, so a star

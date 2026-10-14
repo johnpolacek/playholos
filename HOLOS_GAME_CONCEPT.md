@@ -595,18 +595,13 @@ Settled 2026-10-10. Costs in [calcs/ai_cost.py](calcs/ai_cost.py), prices in [HO
   - *In the mock's game:* Ombe's knock reached Earth at Year 8.5, and Earth answers at Year 29.7. Ombe takes the silence as news about Year 59: knock again 52%, probe 24%, call 15%. The answer lands at Year 79: answer 61%, gift 20%, probe 13%.
   - *The Mind says what the sender has likely done,* from those tables, in words.
   - Set aside: a trust score that falls with lateness, and one that falls only after the sender gave up.
-- **A neighbor's probe: the sender's dials choose.** Settled 2026-10-14. Built in [calcs/seed.py](calcs/seed.py). Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#travel-sails-and-lenses).
-  - *Why there is a choice.* A probe must slow down to stop. Physics gives two real ways, and each has a price.
-  - *An Open sender sends a rocket,* v1's sentinel: 20 Years to build, a tenth of light speed. Its exhaust points at Sol as it brakes, so the watches see it.
-  - *A Hidden sender sends a small sail:* grams on a sail hundreds of metres wide, braking on the Sun's light and gravity.
-    - The Sun can catch a sail only below 3.8% of light speed (Heller and Hippke 2017). From Alpha Centauri that is about 115 Years.
-    - It brakes dark. Searches of the Solar System would miss even a probe 1 to 10 m across (Haqq-Misra and Kopparapu 2012).
-    - Its build of 5 Years is a sample.
-  - *Small means slow, and fast means seen.* A magnetic sail can't stop a small fast probe: a quick stop needs about a thousand tonnes (Gros 2017).
-  - *How often.* On 1,000 games, a rolled probe reaches Sol by Year 60 in 2. None arrives before Year 0, so none breaks Earth's quiet opening. Probes rolled in answer to the player's acts come on top.
-  - *In seed 11:* Hael leans Open. Its rocket, rolled on silence in 2003, reaches Sol at Year 26.2, bright.
-  - *v1 reasoned that ancient probes must be rare, since none has been found.* That holds only for big ones.
-  - Set aside: bright arrivals only, as v1 had it, and small dark sails only.
+- **A neighbor's probe is a rocket.** Settled 2026-10-14. Built in [calcs/seed.py](calcs/seed.py). Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#travel-sails-and-lenses).
+  - *v1's sentinel:* 20 Years to build, a tenth of light speed. Its exhaust points at Sol as it brakes, so the watches see it.
+  - *How often.* On 1,000 games, a rolled probe reaches Sol by Year 60 in 3. None arrives before Year 0, so none breaks Earth's quiet opening. Probes rolled in answer to the player's acts come on top.
+  - *In seed 11:* Hael's rocket, rolled on silence in 2003, reaches Sol at Year 26.2.
+  - *v1 reasoned that ancient probes must be rare, since none has been found.* That holds only for big ones. Searches would miss a probe 1 to 10 m across (Haqq-Misra and Kopparapu 2012).
+  - Set aside the same day, to keep the game simple: small dark sails, chosen by a Hidden sender's dials. Physics allows them. But the Sun can catch a sail only below 3.8% of light speed (Heller and Hippke 2017), so one takes about 115 Years from Alpha Centauri and almost never arrives in play.
+  - Also set aside: hunting for hidden watchers at the Sun's lens points and Earth's co-orbital asteroids, and probes that build. Logged as research.
 - **Simulated ahead.** Neighbors play out from the seed. Only Earth is unpredictable, so the game recomputes a neighbor only when Earth's actions reach it, after their light delay. The same seed and the same player actions give the same game, for tests and replays.
 - **A live model only for live talks.** When a neighbor's mind is close enough to talk live, by craft or a mind sent as light, a model speaks for it from its character and what it knows.
 - **The model: Claude Haiku 5.5,** for live talks and for Earth's Mind, checked in playtests. About $1.18 a month for a busy player's Mind, under a cent per live talk, nothing for voice banks written in Claude Code on a subscription (about $14 through the API), and nothing for neighbors in play.
@@ -787,4 +782,4 @@ Answered one at a time, in this order. Every answer must be permitted by current
     - **Settled 2026-10-14:** a picture shows everything larger than a pixel. The lens and the dispatch now follow the rule. The swarm is a thousand sails, six days of laser. See [How Earth learns](#how-earth-learns).
     - **Settled 2026-10-13:** the plateau at the grid limit stands. Better chips don't dodge it, and the megatonne road pays there. See [Growing compute](#growing-compute).
 12. **The mocks on other games, 2026-10-14:** [seed 11](explorations/v2-mocks/seed-11.html), with no voice, five felt worlds and a living neighbor next door, and [seed 62](explorations/v2-mocks/seed-62.html), where the first mirror can read no felt world. The first hour now runs on any seed. It raised one question:
-    - **Settled 2026-10-14:** a neighbor's probe follows its sender's dials. Open senders send rockets, fast and bright. Hidden senders send gram sails, slow and dark. See [How neighbors play](#how-neighbors-play).
+    - **Settled 2026-10-14:** a neighbor's probe is a rocket, v1's, bright as it brakes. Small dark sails were set aside to keep the game simple. See [How neighbors play](#how-neighbors-play).
