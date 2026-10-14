@@ -1176,6 +1176,15 @@ Gathered 2026-10-14 for the round on Earth's outposts and colonies.
   - Why it matters: a choice made by each settlement, not each species, can leave Earth in a quiet pocket.
   - Used: the spread round, 2026-10-14.
 
+- **[Suazo et al. 2024, Project Hephaistos II](https://arxiv.org/pdf/2405.02927)** · Published, MNRAS 531, 695.
+  - About five million stars screened in Gaia, 2MASS and WISE for the warm glow of partial Dyson spheres. Seven candidates, all M dwarfs, with infrared excess hard to explain. More study needed, such as checking for young dust disks.
+  - Why it matters: waste heat from works around a star is searchable, and nothing confirmed has turned up.
+  - Used: what Earth can see of a colony, 2026-10-14.
+- **[Upper limits on Dyson spheres within 100 pc, 2022](https://arxiv.org/pdf/2201.11123v1)** · Preprint, through [Centauri Dreams](https://www.centauri-dreams.org/2022/01/20/the-dyson-sphere-search/).
+  - From Gaia DR2 and AllWISE: under about 2 in 100,000 stars within 100 pc could host a 300 K Dyson sphere 90% complete. Limits are weaker for less complete ones.
+  - Why it matters: only very large works are ruled out near Sol. A young colony's heat is far below any limit.
+  - Used: what Earth can see of a colony, 2026-10-14.
+
 ## Watch list
 
 Results the design is waiting on. Check each when its date comes.
