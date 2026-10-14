@@ -1,4 +1,4 @@
-"""What Earth can read of a neighbor's world from afar, and with what. Run: python3 calcs/signs.py 10   ('stats': 400 games, 'receiver': a receiver split among stars)
+"""What Earth can read of a neighbor's world from afar, and with what. Run: python3 calcs/signs.py 10   ('stats': 400 games, 'receiver': a receiver split among stars, 'closer': ways to know more)
 
 Settled 2026-10-13: physics alone. Each sign of minds needs its real instrument, however long that takes. Nothing is
 hurried, and nothing guarantees a neighbor is known by any Year. Sources are in HOLOS_RESEARCH.md, "Reading air".
@@ -51,6 +51,31 @@ def receiver_split(watts=1e10, seconds=4 * 3600):
     for n in (1, 2, 4, 8, 11, 18):
         print(f'  {n:2} star{"s" if n > 1 else " "}: {held_reach(watts, seconds, n):4.0f} ly, {held_reach(watts, seconds, n) / watch:.1f} times the all-sky watch\'s {watch:.0f} ly')
     print(f'  Held on more than {(held_reach(watts, seconds) / watch) ** 2:.0f} stars, it hears no farther than the watch, which hears every star at every hour.')
+
+# Settled 2026-10-14: a suspicion opens the whole kit. The player may do anything v1 allows, at any world, and the Mind
+# says what it knows and what each act risks. The ways to know more, and when each answers:
+# - A solar lens: a craft at the Sun's focal line, beyond 548 AU, pictures one world's surface. For an exo-Earth at 30 pc,
+#   about 25 km a pixel in six months of looking, from a perihelion at about 150 km/s (Turyshev, NASA NIAC Phase III,
+#   2020). One craft serves one star. Its build, 8 Years, and its want are samples. The flight is physics.
+# - An infrared interferometer: gases only industry makes, at a few times Earth's level. v1's 40 Years, unchecked.
+# - Sails from the laser array, and a knock: light-speed arithmetic.
+AU_KM, LENS_AU, LENS_KMS = 1.496e8, 548, 150
+LENS_BUILD, LENS_LOOK, INTERFEROMETER_YEARS = 8, 0.5, 40
+LENS_FLIGHT = LENS_AU * AU_KM / LENS_KMS / 3.156e7                      # Years from perihelion to the focal line
+def lens_km(d_pc): return 25 * d_pc / 30                               # a pixel's width on the world: it scales with distance
+
+def ways_to_know(d, now, array_done, pace=1.0):
+    """When each way answers for a world d ly away, from Year `now`. `pace`: the share of standard time a build takes."""
+    lens = now + LENS_BUILD * pace + LENS_FLIGHT + LENS_LOOK
+    return dict(lens=lens, interferometer=now + INTERFEROMETER_YEARS * pace, sails=max(now, array_done) + d / 0.2 + d,
+                knock_lands=now + d, reply=now + 2 * d)
+
+def look_closer(now=22.3, array_done=27.7):
+    print(f'Ways to know more about a suspected world, from Year {now}. A lens flies {LENS_FLIGHT:.1f} Years to {LENS_AU} AU and looks for half a Year.')
+    for star, d in (('Gliese 216 B', 29.4), ('Gliese 432 A', 31.2), ('12 Ophiuchi', 32.3), ('Gliese 1021', 49.1)):
+        w = ways_to_know(d, now, array_done)
+        print(f'  {star:13} {d:4.1f} ly · lens Year {w["lens"]:.0f}, {lens_km(d / 3.2616):.0f} km a pixel · interferometer Year {w["interferometer"]:.0f} · '
+              f'sails\' word Year {w["sails"]:.0f} · a knock lands Year {w["knock_lands"]:.0f}, a reply from Year {w["reply"]:.0f}')
 
 def listen_days(watts, ly, sefd):
     """Days of listening to hear a steady tone, or None if a Year is not enough."""
@@ -127,4 +152,5 @@ if __name__ == '__main__':
     rows = nb.load_hosts()
     if sys.argv[1:] == ['stats']: stats(rows)
     elif sys.argv[1:] == ['receiver']: receiver_split()
+    elif sys.argv[1:] == ['closer']: look_closer()
     else: report(seed.draw(int(sys.argv[1]) if sys.argv[1:] else 10, rows))

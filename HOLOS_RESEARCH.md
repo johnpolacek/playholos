@@ -1019,6 +1019,14 @@ What a neighbor's world can plausibly be, beyond an Earth twin. Each roster entr
 - **Solar gravitational lens mission** · Study ([NASA concept](https://www.nasa.gov/general/direct-multipixel-imaging-and-spectroscopy-of-an-exoplanet-with-a-solar-gravitational-lens-mission/), [geometry and travel](https://science.nasa.gov/universe/exoplanets/want-to-see-the-surface-of-another-earth-use-our-sun/)).
   - The focal line starts beyond about 550 AU for a Sun-like star. Turyshev and colleagues.
   - Used: v1 catalog.
+  - **[Turyshev et al. 2020, NIAC Phase III](https://arxiv.org/abs/2002.11871)**, with [NASA's page](https://www.nasa.gov/general/direct-multipixel-imaging-and-spectroscopy-of-an-exoplanet-with-a-solar-gravitational-lens-mission/), read 2026-10-14.
+    - The strong region of the lens lies beyond 547.6 AU. A probe with a 1 m telescope images an exoplanet at 30 pc.
+    - NASA's page: an exo-Earth at 30 pc at about 25 km a pixel in 6 months of integration. The abstract says 10 km. A perihelion speed of about 150 km/s.
+    - Small sailcraft fly together and can watch several planets of one system at once.
+    - From a search summary, not read: a 2022 paper finds even a 40 cm telescope enough, with weeks to months of looking.
+    - Matters: a lens is the one way short of going to see a suspected world's surface, within a few decades. One craft serves one star.
+    - This project's arithmetic: 548 AU at 150 km/s is 17 Years. A pixel scales with distance, so about 13 km at 49 ly. The dive toward the Sun before that is not timed.
+    - Used: v2 [How Earth learns](HOLOS_GAME_CONCEPT.md#how-earth-learns), a suspicion opens the whole kit. `calcs/signs.py closer`, and the third mock's lens to Gliese 1021.
 - **[NASA Deep Space Optical Communications](https://www.nasa.gov/missions/tech-demonstration/deep-space-optical-communications-dsoc/)** · Demonstrated.
   - Laser links across deep space, with precise pointing and data rates that fall with distance.
   - Used: v1 tight beam, laser links.

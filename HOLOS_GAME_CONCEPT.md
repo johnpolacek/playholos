@@ -460,6 +460,19 @@ Settled 2026-10-13.
     - In play that is a wait of 75 seconds at most. Real astronomers care because the real survey has a few years. Here telescope time is plentiful.
     - It contradicts nothing observed. It is a simplification.
     - Set aside: seasons by the telescope's real limits, and deciding later.
+- **A suspicion opens the whole kit.** Settled 2026-10-14. Numbers from `python3 calcs/signs.py closer`. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#travel-sails-and-lenses).
+  - *The player may do anything v1 allows, at any world.* Listen, look, go or knock.
+  - *The Mind lists the ways and what each risks,* with when each answers. It advises, and the player decides.
+  - *The mock's game, smog at four worlds at Year 22:*
+    - Listen, telling no one: the far-side array's first fifth by Year 34, the whole array by Year 51.
+    - Look, telling no one: a solar lens pictures one world by Year 46 to 48. An infrared interferometer reads industry's gases by Year 62.
+    - Go: sails' word comes home after Year 200.
+    - Knock: it lands from Year 52, and they learn we are here.
+  - *The solar lens.* A craft beyond 548 AU, on the line from a star through the Sun, pictures that star's world. NASA's concept: an exo-Earth at 30 pc, about 25 km a pixel, in six months of looking (Turyshev and colleagues, 2020).
+    - It flies at about 150 km/s from a dive past the Sun: 17 Years out. One craft serves one star.
+    - At 49 ly a pixel is about 13 km. The build, 8 Years, and its want, half a flagship, are samples.
+  - *Earth has knocked on stars with no sign of life,* as Cosmic Call did. A suspicion is more than Earth had then.
+  - Set aside: only listening and looking until proof, and knocks gated by the Mind's judgment.
 
 ## The neighbors
 
@@ -690,8 +703,8 @@ Answered one at a time, in this order. Every answer must be permitted by current
     - **Is the plateau too quiet, and too long?** Nothing wakes the player from minute 60 to minute 95, and thought is flat for 2.8 hours.
     - **Settled 2026-10-14:** the Mind advises a listen at marked worlds, and the player decides. See [What Earth hears](#what-earth-hears).
     - **Settled 2026-10-14:** one receiver is split among the stars it holds, and each part hears less far. See [What Earth hears](#what-earth-hears).
-    - **What can the player do with a suspicion?** Smog at four worlds, and proof 11 Years off. A knock sent then would reach Gliese 432 A's people as their Mind wakes.
+    - **Settled 2026-10-14:** a suspicion opens the whole kit, and the Mind lists the ways. In the mock the player sends a solar lens to Gliese 1021, the smog world too far for the first fifth. Its picture comes at Year 45.7: Earth's first sight of Hael's people. See [How Earth learns](#how-earth-learns).
     - **What does a late answer cost?** A sender waits one round trip, then takes silence as news. To be on time, Earth's answer had to leave within a Year of the knock.
     - **Earth has proof of minds who don't know they are heard. What may it do?** v1 filed a young world under no conversation possible.
-    - **How much can a flyby show?** What sails see of a surface, passing at a fifth of light speed, is the mock's.
+    - **How much can a lens picture or a flyby show?** What a lens sees at 13 km a pixel, and what sails see passing at a fifth of light speed, are the mock's.
     - **Settled 2026-10-13:** the plateau at the grid limit stands. Better chips don't dodge it, and the megatonne road pays there. See [Growing compute](#growing-compute).

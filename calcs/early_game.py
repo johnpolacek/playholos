@@ -261,6 +261,7 @@ def at_the_limit(running=('A 15 m mirror', 'Laser sail array', 'Launcher', 'Belt
 # Power from orbit is paced by rock arriving, so it takes its want and no more.
 PUSH = 10
 WANTS['Ground solar'] = (20, 'sample')
+WANTS['Solar lens'] = (0.5, 'sample: a few small sailcraft')
 def split(line, room, push=PUSH):
     """line: (name, want, most) in the player's order, most = how many times its want it can use. Returns {name: s}, idle."""
     give = {}

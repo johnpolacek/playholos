@@ -46,7 +46,8 @@ SETTLED = [('Does a half-built real instrument cost fewer Years?', 'It costs wha
            ('How much thought does a work want?', 'As its real cousin costs money, counted in flagships. One flagship is the Habitable Worlds Observatory, about 11 billion dollars. A 15 m mirror wants two, the laser array 0.7, an SKA-class array 0.2. At Year 0 Earth has thought for about 7 flagships, and at the grid limit for about 577. Megatonne works have no real price, so theirs are samples. Settled 2026-10-13.'),
            ('How is thought split among works?', 'By an order the player sets. A new work joins the end of the line. The Mind gives each work its want, in order, then pushes each in turn to ten times its want. So no work stops because another is first. The order moves the mirror and the sails by four to five Years, and power from orbit by about one: rock from the Moon sets that pace. Settled 2026-10-14.'),
            ('A knock Earth can’t hear: should a candidate world earn a listen?', 'The Mind advises it. When the sweep marks worlds, it says a deep-field receiver would hear their knocks about three times farther than the all-sky watch. The player decides. The Mind never builds it on its own. Settled 2026-10-14.'),
-           ('One receiver, many marked worlds: how does it share its watch?', 'It is split. The player names the stars it holds, and each part hears less far, as real dish arrays do. On one star it hears a ten gigawatt knock to 117 ly. On four, to 59. On more than eleven, no farther than the all-sky watch. A dish array can’t hold scattered stars at full reach. Settled 2026-10-14.')]
+           ('One receiver, many marked worlds: how does it share its watch?', 'It is split. The player names the stars it holds, and each part hears less far, as real dish arrays do. On one star it hears a ten gigawatt knock to 117 ly. On four, to 59. On more than eleven, no farther than the all-sky watch. A dish array can’t hold scattered stars at full reach. Settled 2026-10-14.'),
+           ('What can the player do with a suspicion?', 'Anything v1 allows, at any world: listen, look, go or knock. The Mind says what it knows, what each act risks, and when each answers. For four smog worlds at Year 22: radio from the nearer ones by Year 34, a solar lens picture of one world by Year 46 to 48, sails’ word after Year 200. Settled 2026-10-14.')]
 
 # ---------- Godview: who is out there ----------
 MOVE = reactions.MOVES
@@ -912,10 +913,9 @@ def long_rows():
     HOME = R['array'] + SAIL_FLY + GO_D                                                       # the sails' word, at the paced array
     MULT = early_game.split([(w, early_game.WANTS[w][0], early_game.PUSH) for w in early_game.BY_START], room - 0.1 / early_game.FLAGSHIP_THOUGHT)[0]
     q_quiet = ask('Is the plateau too quiet, and too long?', f'From minute 60 to minute {AT(R["solar"]) // 60} nothing wakes the player. Thought stays one size for {PLATEAU:.0f} Years, {PLATEAU * 5 / 60:.1f} hours of play, until power from orbit.')
-    q_suspect = ask('What can the player do with a suspicion?', f'Smog at {NUM[len(SMOG_HITS)]} worlds, from Year {R["mirror"] + SMOG_DAYS / 365.25:.0f}. Proof waits for the far-side array, {R["fifth"] - R["mirror"] - 1:.0f} Years on. A knock sent now would reach {F["star"]}’s people as their Mind wakes.')
     q_late = ask('What does a late answer cost?', f'The player answers {K2["year"] - KNOCK["year"]:.0f} Years after the first knock. A sender waits one round trip, then takes silence as news. {WHO["name"]}’s wait ends about {K2["year"] + VD - (KNOCK["sent"] - Y0 + 2 * VD + 1):.0f} Years before the answer lands.')
     q_unaware = ask('Earth has proof of minds who don’t know they are heard. What may it do?', 'Tones from a world decades before its Mind wakes. v1 filed a young world under no conversation possible.')
-    q_dispatch = ask('How much can a flyby show?', 'Sails pass at a fifth of light speed and send one dispatch. What they can see of a surface in those hours is the mock’s.')
+    q_dispatch = ask('How much can a lens picture or a flyby show?', 'A lens at the Sun’s focal line pictures one world at about ten kilometres a pixel. Sails pass at a fifth of light speed and send one dispatch. What each shows of a surface is the mock’s.')
 
     # --- Year 12: the long roads
     t0 = 3600
@@ -952,6 +952,26 @@ def long_rows():
 {SEC('WITH SMOG')}{hit_rows}
 {SEC('WITHOUT')}<p class="copy small">{NUM[len(SMOGGED) - len(SMOG_HITS)].capitalize()} worlds, some with oxygen and none with smog. So it is not ordinary weather.</p>
 {SEC('MINDS, AT EACH WORLD WITH SMOG · BEFORE → NOW')}{odds('Minds', 42, 52)}""")
+    # --- what can we do now: the whole kit, and a lens
+    FAR = max(SMOG_HITS, key=lambda w: w['d'])
+    LENS_GO = tall / 300 + early_game.paced(signs.LENS_BUILD, early_game.PUSH); LENS_END = LENS_GO + signs.LENS_FLIGHT + signs.LENS_LOOK
+    LENS_LATE = tall / 300 + signs.LENS_BUILD + signs.LENS_FLIGHT + signs.LENS_LOOK                      # at the end of the line
+    ways = tab(tall + 30, 'Mind', 'MIND', 'WAYS TO KNOW MORE', ''.join([
+        SEC('LISTEN · TELLS NO ONE'), quick('Far-side array, first fifth', 'everyday radio, if loud enough · the nearer worlds', tstack(f'Year {R["fifth"]:.0f}', clock(R['fifth'] - tall / 300), True)),
+        quick('The whole far-side array', f'hears twice as far · all {NUM[len(SMOG_HITS)]} in reach', tstack(f'Year {R["fifths"][-1]:.0f}', clock(R['fifths'][-1] - tall / 300), True)),
+        SEC('LOOK · TELLS NO ONE'), quick('Solar lens', 'a picture of one world’s surface · one craft, one star', tstack(f'Year {LENS_LATE:.0f}', clock(LENS_LATE - tall / 300))),
+        quick('Infrared interferometer', 'gases only industry makes, at a few times our level', tstack(f'Year {tall / 300 + signs.INTERFEROMETER_YEARS:.0f}', clock(signs.INTERFEROMETER_YEARS))),
+        SEC('GO OR CALL'), quick('Sail swarm', f'passes in hours · word home after Year {min(signs.ways_to_know(w["d"], tall / 300, R["array"])["sails"] for w in SMOG_HITS) // 100 * 100:.0f}', ''),
+        quick('A knock', f'lands from Year {tall / 300 + min(w["d"] for w in SMOG_HITS):.0f} · they learn we are here', '')]))
+    lens_order = order(tall + 60, f'Send a lens to {FAR["star"]}. First in line.', [
+        ('BUILD', f'<b>Solar lens</b> · one craft, for {FAR["star"]} only'), ('FLIES', f'From Year {LENS_GO:.0f} · past the Sun, then {signs.LENS_FLIGHT:.0f} Years out to 548 AU'),
+        ('LOOKS', 'Half a Year · a picture of the surface'), ('WAKES YOU', 'When the picture is made')])
+    lens_r = tab(AT(LENS_END), 'Report', 'REPORT', 'A PICTURE', f"""<button class="backlink inline">‹ All reports</button>
+<h3 class="lead">A picture of {FAR['star']}’s world</h3>
+<p class="copy small">{FAR['star']} · {FAR['d']:.1f} ly · solar lens at 548 AU · half a Year · about {signs.lens_km(FAR['d'] / 3.2616):.0f} km a pixel · light that left {FAR['d']:.0f} Years ago</p>
+<p class="copy">Seas, cloud and a polar cap. On the land, patches with straight edges that don’t follow the ground. Grey spreads at the mouths of rivers.</p>
+{SEC('WHAT IT COULD BE · BEFORE → NOW')}{odds(f'Minds, at {FAR["star"]}’s world', 60, 94)}{odds('Land shaped by weather alone', 30, 5)}
+{SEC('WHAT IT CAN’T TELL')}<p class="copy small">Who they are, or whether they have heard us. One picture, {FAR['d']:.0f} Years old.</p>""")
     # --- Year 29.6: a second voice, and an answer
     tv = AT(K2['year'])
     voice2 = tab(tv, 'Report', 'REPORT', 'A VOICE', f"""<button class="backlink inline">‹ All reports</button>
@@ -1039,7 +1059,17 @@ def long_rows():
              talk(smog_all, f'<b>{NUM[len(SMOG_HITS)].capitalize()} worlds with smog</b>And {NUM[len(SMOGGED) - len(SMOG_HITS)]} without, some of them living. So it is not weather. It may still be something I don’t know. Proof is radio, and the ear for that is {R["fifth"] - tall / 300:.0f} Years off.', ('What can we do now?', 'Later'), 'open'),
              ['Truth: every one is a home. ' + ', '.join(f"{w['who']} at {w['star']}" for w in SMOG_HITS) + '.',
               f'{WHOF["name"]} is among them: the world whose knock went unheard at Year {KF["year"]:.0f}.' if any(w['who'] == WHOF['name'] for w in SMOG_HITS) else 'None of them has called.',
-              f'A knock sent now reaches {F["star"]} at Year {tall / 300 + D:.0f}. {F["who"]} wakes at Year {truth_tone["waking"] - Y0:.1f}, and its people have had arrays for {truth_tone["n"]["arrays_since"]} years by then.'], question=q_suspect, label=HMS(tall)),
+              f'A knock sent now reaches {F["star"]} at Year {tall / 300 + D:.0f}. {F["who"]} wakes at Year {truth_tone["waking"] - Y0:.1f}, and its people have had arrays for {truth_tone["n"]["arrays_since"]} years by then.'], label=HMS(tall)),
+        at(tall + 30, tall, 'What can we do now?', None,
+           talk(ways, f'Listen first: it tells no one. The first fifth hears the nearer worlds by Year {R["fifth"]:.0f}, if they use radio as we did. {FAR["star"]} is too far for it. A lens could picture that world by Year {LENS_LATE:.0f}.', (f'Send a lens to {FAR["star"]}', 'Listen only'), 'open'),
+           ['Settled 2026-10-14: a suspicion opens the whole kit. The player may do anything v1 allows, at any world, and the Mind says what each act risks.',
+            f'Real: a craft at the Sun’s focal line, beyond 548 AU, pictures an exo-Earth at 30 pc at about 25 km a pixel in six months (Turyshev, NASA 2020). It flies at about 150 km/s: {signs.LENS_FLIGHT:.0f} Years out.',
+            'The interferometer is v1’s 40 Years, unchecked. The lens’s build of 8 Years is a sample.'], settled=34, label=HMS(tall + 30)),
+        at(tall + 60, tall + 30, f'Send a lens to {FAR["star"]}. First in line.', None,
+           talk(lens_order, f'Set, first in line. It leaves at Year {LENS_GO:.0f} and looks from Year {LENS_END - signs.LENS_LOOK:.0f}. At the end of the line it would leave at Year {tall / 300 + signs.LENS_BUILD:.0f}. The other works barely slow.', ('Undo',)),
+           [f'It wants half a flagship, a sample. First in line it takes {0.5 * early_game.PUSH:.0f} of {room:.0f}: the long works lose almost nothing.',
+            'One craft serves one star. It must sit on the line from that star through the Sun.',
+            'The dive past the Sun before the flight is not timed. The craft are about 100 kg each, NASA’s concept.'], label=HMS(tall + 60)),
         at(tv, tall, '· The phone lights. The Mind is already speaking.', ('Heard', f'A second voice, from {WHO2["star"]}, {V2D:.1f} ly away. Aimed at us. Sent in {SENT2}.'),
              talk(voice2, f'<b>A second voice</b>From {WHO2["star"]}, where the sweep marked a point of light twenty Years ago. That point is a home. Two have called now, and we have answered neither.', ('Answer them both', 'Keep listening'), 'open'),
              [f'{WHO2["name"]}: a contacter, awake since {WHO2["waking"]:.0f}. Its arrays heard Earth’s radars from {WHO2["heard_since"]:.0f}.',
@@ -1067,6 +1097,11 @@ def long_rows():
              ['Truth: ' + ', '.join(f"{w['who']}’s people, {seen(w, R['fifth']):.0f} years before their Mind wakes" for w, _ in got) + '.',
               'The first proof of minds by Earth’s own instruments: ' + f'{R["fifth"]:.0f} Years in, {HMS(tf)[1:]} of play. Two voices came first.',
               'A world that stays silent in this list is not cleared. Its hum may be too faint for one fifth.'], question=q_unaware, label=HMS(tf + AT(got_days / 365.25) + 30)),
+        at(AT(LENS_END), 0, '· The Mind opens on its own.', ('Picture', f'The lens at {FAR["star"]}: straight edges on the land. Minds: {moved(60, 94)}.'),
+           talk(lens_r, f'<b>A picture of their world</b>Straight edges on the land, and grey at the river mouths. I think someone shaped it. It does not say whether they know of us.', ('What else can it see?', 'Later'), 'open'),
+           [(f'Truth: {FAR["who"]}’s people. Their knock at Year {KF["year"]:.1f} went unheard. This is Earth’s first sight of them.' if FAR['who'] == WHOF['name'] else f'Truth: {FAR["who"]}’s people.'),
+            f'The light left {FAR["d"]:.0f} Years ago, about {Y0 + LENS_END - FAR["d"]:.0f}. A pixel is about {signs.lens_km(FAR["d"] / 3.2616):.0f} km, scaled from NASA’s 25 km at 30 pc.',
+            'What the picture shows is the mock’s sample.'], question=q_dispatch, label=HMS(AT(LENS_END))),
         at(tp, tf + AT(got_days / 365.25) + 30, '· The phone lights. Opens it.', 'Power from orbit: a fifth more energy.',
              talk(power, f'The first arrays are beaming down. With the ground’s fifth, that is room for a twelfth data center. I have been this size for {tp / 300 - 11.1:.0f} Years.', ('Start it', 'Not yet'), 'glow'),
              [f'Ten megatonnes: {eg_years(R["power"] - R["driver"])} of the driver’s rock, and 180 Years of Earth’s lift.',
