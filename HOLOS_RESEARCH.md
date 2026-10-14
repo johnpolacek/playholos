@@ -617,7 +617,10 @@ What Sol's own instruments have found nearby. For v2 open question 3.
   - Matters: every figure allows a warm rocky world at between one star in ten and most stars. The seed takes NASA's 0.24, the lowest central value, so its sweep matches what the real telescope is sized for.
   - Check against Bryson: the seed's games hold about 8 natural worlds at G and K hosts within 10 pc, and the nearest sits about 3.6 pc away. I read Bryson's 4 and 6 pc as cautious bounds, not central values. That reading is mine.
   - This project's own: at most one warm world a star, none beside a neighbor's world, and a first pass of up to a day a star.
-  - Not read: newer counts for red dwarfs. From memory, Bergsten et al. 2023 found fewer than Dressing and Charbonneau.
+  - **[Bergsten et al. 2023](https://arxiv.org/abs/2310.11613)** · Published, AJ 166, 234. Abstract read 2026-10-14.
+    - Red dwarfs, worlds of 0.5 to 1.5 Earths: 8.58% (−8.22, +17.94) in the conservative warm zone, 14.22% (−12.71, +24.96) in the optimistic one.
+    - "The current Kepler sample does not offer evidence to support an increase" from Sun-like stars to red dwarfs. Gaia's updated star sizes left no reliable Earth-sized candidate in the conservative zone.
+    - Matters: it supports one rate at every kind of star, as settled. Its central value is a third of the seed's 0.24, though its error bars reach 26%. Flagged, not changed: the rate is a settled decision.
   - Used: v2 [How Earth learns](HOLOS_GAME_CONCEPT.md#how-earth-learns), [The seed, drawn](HOLOS_GAME_CONCEPT.md#the-seed-drawn), and the second mock.
 
 - **Signs of minds, checked 2026-10-13.** For [calcs/signs.py](calcs/signs.py): what Earth can read of a living neighbor from afar, and with what. I read each abstract myself, and Table 2 and the scaling passages in the text of Sheikh et al.
@@ -1095,7 +1098,6 @@ Results the design is waiting on. Check each when its date comes.
 - Natural warm worlds: the seed treats every red dwarf as watched to 1 m/s, which drops a fifth of their worlds. Real coverage is patchy. Find which of the 715 have been watched that well.
 - Natural warm worlds: three bright hosts have only a Gaia name, and the seed lets Earth's planet hunters feel a world there by 2040. A star no survey has named is unlikely to be on their list.
 - Natural warm worlds: NASA's 164 targets reach 23.3 pc, about 76 ly. The seed draws nothing past 50 ly, so the game's sweep covers 110 stars.
-- Natural warm worlds: read Bergsten et al. 2023 for the red dwarf rate.
 - Gaia's FLAME ages differ from asteroseismic and spin ages by a median of 4.7 billion years on 9 hosts. calcs/hosts.py still drops an F or G star as young when FLAME's upper bound is under a billion years. Recheck each such drop against the HAges Catalog.
 - 58 Eridani has six spin ages from 0.43 to 1.1 billion years. It stays a host under the rule, since two reach a billion.
 - The rung draw takes Earth's pace as typical. The hard-steps school says Earth was fast. Decide the pace's spread and its lean.
