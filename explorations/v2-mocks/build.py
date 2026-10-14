@@ -43,7 +43,8 @@ SETTLED = [('Does a half-built real instrument cost fewer Years?', 'It costs wha
            ('What may an answer hold?', 'What v1 allowed, whole. The player writes what they mean in plain words. The Mind composes it from typed parts: a finding, a sighting, an archive, our culture, a request, a verdict. The player approves before anything goes. A lie is a forged part, marked for the sender alone. Settled 2026-10-13.'),
            ('What does an inquiry cost in time?', 'Decades, by physics. A laser array takes 25 Years: Starshot aimed at a launch within a generation. Sails then cross 4.3 light-years in 22, and word takes 4.3 to come home. A flyby probe takes 12 Years after the launcher, and 36 in flight. Priced 2026-10-13, as samples.'),
            ('What is 86 times the thought for?', 'Speed. More thought shortens a work, down to a floor physics sets: about two thirds of its standard time. Space missions that could not miss a launch window took 53 months, against 64 to 84 for the rest. Rock from the Moon and flight between stars are physical, and thought shortens neither. Settled 2026-10-13.'),
-           ('How much thought does a work want?', 'As its real cousin costs money, counted in flagships. One flagship is the Habitable Worlds Observatory, about 11 billion dollars. A 15 m mirror wants two, the laser array 0.7, an SKA-class array 0.2. At Year 0 Earth has thought for about 7 flagships, and at the grid limit for about 577. Megatonne works have no real price, so theirs are samples. Settled 2026-10-13.')]
+           ('How much thought does a work want?', 'As its real cousin costs money, counted in flagships. One flagship is the Habitable Worlds Observatory, about 11 billion dollars. A 15 m mirror wants two, the laser array 0.7, an SKA-class array 0.2. At Year 0 Earth has thought for about 7 flagships, and at the grid limit for about 577. Megatonne works have no real price, so theirs are samples. Settled 2026-10-13.'),
+           ('How is thought split among works?', 'By an order the player sets. A new work joins the end of the line. The Mind gives each work its want, in order, then pushes each in turn to ten times its want. So no work stops because another is first. The order moves the mirror and the sails by four to five Years, and power from orbit by about one: rock from the Moon sets that pace. Settled 2026-10-14.')]
 
 # ---------- Godview: who is out there ----------
 MOVE = reactions.MOVES
@@ -871,9 +872,9 @@ HOUR = [
           'From minute 15 to minute 60 the player was woken six times and played about eight minutes.']),
 ]
 
-# ---------- Hours 1 to 5: Years 12 to 60, where the long roads pay ----------
+# ---------- Hours 1 to 5: Years 12 to about 54, where the long roads pay ----------
 # The phone is down for most of four hours. Each row is a wake, or a moment the player looked. The roads' dates are
-# calcs/early_game.py's, priced 2026-10-13. What each reading and dispatch shows, the Mind's words and its lines are
+# calcs/early_game.py's, priced 2026-10-13 and paced by thought from 2026-10-14. What each reading and dispatch shows, the Mind's words and its lines are
 # samples, to be tested here.
 HMS = lambda t: f'+{t // 3600}:{t % 3600 // 60:02d}:{t % 60:02d}'
 WALLCLOCK = lambda t: (lambda x: f'{x // 3600 % 24}:{x % 3600 // 60:02d}')(16 * 3600 + 24 * 60 + 30 + t)
@@ -901,10 +902,12 @@ def long_rows():
     if not (ANWE and VOICE and VOICE2 and FAINT and F['who'] and len(SMOG_HITS) >= 2): return []
     R = ROAD; WHO2, K2 = VOICE2; V2D = WHO2['d']; SENT2 = int(K2['sent']); WHOF, KF = FAINT
     B2 = json.loads((here.parents[1] / 'data' / 'voices' / f"{WHO2['name'].lower()}.json").read_text())
-    road_want = sum(early_game.WANTS[n][0] for n in ('A 15 m mirror', 'Laser sail array', 'Launcher', 'Belt mining', 'Mass driver', 'Orbital foundry'))
     room = early_game.LIMIT_THOUGHT / early_game.FLAGSHIP_THOUGHT
-    q_thought = ask('How is thought split among works?', f'Each work now wants an amount of thought, and more than that speeds it toward its floor. At the grid limit Earth has thought for {room:.0f} flagships, and the works begun at Year 12 want {road_want:.0f}. Who decides which work gets the spare: the player, the Mind, or an even split?')
-    q_quiet = ask('Is the plateau too quiet, and too long?', f'From minute 60 to minute 110 nothing wakes the player. Thought stays one size for {PLATEAU:.0f} Years, {PLATEAU * 5 / 60:.1f} hours of play, until power from orbit.')
+    first = early_game.replay(early_game.BY_START, show=False); alt = early_game.replay(early_game.MATTER_FIRST, show=False)
+    FIRST = min((R[k], k) for k in ('solar', 'mirror', 'launcher', 'prospect', 'driver', 'foundry', 'array'))
+    HOME = R['array'] + SAIL_FLY + GO_D                                                       # the sails' word, at the paced array
+    MULT = early_game.split([(w, early_game.WANTS[w][0], early_game.PUSH) for w in early_game.BY_START], room - 0.1 / early_game.FLAGSHIP_THOUGHT)[0]
+    q_quiet = ask('Is the plateau too quiet, and too long?', f'From minute 60 to minute {AT(R["solar"]) // 60} nothing wakes the player. Thought stays one size for {PLATEAU:.0f} Years, {PLATEAU * 5 / 60:.1f} hours of play, until power from orbit.')
     q_faint = ask('A knock Earth can’t hear: should a candidate world earn a listen?', f'{WHOF["name"]}’s knock is ten gigawatts from {WHOF["d"]:.0f} ly, under the all-sky watch’s floor. A deep-field receiver held on that star would have caught it, and the sweep had marked a world there. Nothing told Earth to listen.')
     q_suspect = ask('What can the player do with a suspicion?', f'Smog at {NUM[len(SMOG_HITS)]} worlds, from Year {R["mirror"] + SMOG_DAYS / 365.25:.0f}. Proof waits for the far-side array, {R["fifth"] - R["mirror"] - 1:.0f} Years on. A knock sent now would reach {F["star"]}’s people as their Mind wakes.')
     q_late = ask('What does a late answer cost?', f'The player answers {K2["year"] - KNOCK["year"]:.0f} Years after the first knock. A sender waits one round trip, then takes silence as news. {WHO["name"]}’s wait ends about {K2["year"] + VD - (KNOCK["sent"] - Y0 + 2 * VD + 1):.0f} Years before the answer lands.')
@@ -917,15 +920,15 @@ def long_rows():
         ('BUILD', f'<b>Ground solar</b> · a fifth more energy · Year {R["solar"]:.0f}'), ('BUILD', f'<b>A 15 m mirror</b> · reads smog · Year {R["mirror"]:.1f}'),
         ('BUILD', f'<b>Moon mass driver, orbital foundry</b> · megatonnes · Years {R["driver"]:.0f} and {R["foundry"]:.1f}'),
         ('SEARCH', f'<b>Belt prospecting</b> · then mining, from Year {R["mining"]:.0f}')])
-    sleep = lockscreen(WALLCLOCK(t0 + 30), [('IN 00:50:00', 'Earth: ground solar is done', f'Year {R["solar"]:.0f}. A fifth more energy.')])
+    sleep = lockscreen(WALLCLOCK(t0 + 30), [(f'IN 00:{(AT(R["solar"]) - t0 - 30) // 60:02d}:00', 'Earth: ground solar is done', f'Year {R["solar"]:.0f}. A fifth more energy.')])
     # --- Year 22: back after fifty minutes
     firsts = [w for w in POINTS if w['first']]
     since = tab(AT(R['solar']), 'Home', 'SINCE YOU LEFT', f'YEAR 12 TO {R["solar"]:.0f}', ''.join([
         SEC('FINISHED'), row('Ground solar', 'a fifth more energy · not yet room for a twelfth data center', done_tag()), row('Belt prospecting', f'Year {R["prospect"]:.0f} · three rocks worth mining · the fleet is building', done_tag()),
-        SEC('HEARD AND FOUND'), quick('Nothing heard', 'ten Years of the all-sky watch', ''),
+        SEC('HEARD AND FOUND'), quick('Nothing heard', f'{NUM[round(R["solar"] - 12)]} Years of the all-sky watch', ''),
         quick(f'{NUM[len(firsts)].capitalize()} worlds read', f'all this mirror can reach · ozone or oxygen at {NUM[sum(w["ozone"] for w in firsts)]}', ''),
         SEC('NEXT'), quick('The 15 m mirror', 'reads smog, water and oxygen at most worlds we hold', tstack(f'Year {R["mirror"]:.1f}', clock(R['mirror'] - R['solar']), True)),
-        SEC('PILING UP'), quick('Matter', f'{res(AT(R["solar"]))[2]} spare in orbit · nothing booked', ''), quick('Thought', f'{100 - res(AT(R["solar"]))[1]}% of it idle', '')]))
+        SEC('PILING UP'), quick('Matter', f'{res(AT(R["solar"]))[2]} spare in orbit · nothing booked', ''), quick('Thought', 'all in use, down the line you set' if res(AT(R['solar']))[1] >= 99 else f'{100 - res(AT(R["solar"]))[1]}% of it idle', '')]))
     # --- Year 25.5: the 15 m mirror
     tm = AT(R['mirror'])
     mirror_order = order(tm, 'Read the worlds we felt first. Then every world it can.', [
@@ -959,19 +962,20 @@ def long_rows():
                  + part('CULTURE', 'What we call ourselves, our world and our star') + part('REQUEST', 'Who are you, and whom else have you heard?')
                  + SEC('GOES TO') + facts([(VSTAR, f'narrow beam · arrives Year {K2["year"] + .1 + VD:.0f}'), (WHO2['star'], f'narrow beam · arrives Year {K2["year"] + .1 + V2D:.0f}'), ('Tells them', 'that someone here listens now')])
                  + '<div class="twobtn"><button class="primary ghost">Edit</button><button class="primary">Send it twice</button></div>')
-    # --- Year 34.4: the laser array, and the sails
+    # --- the laser array, and the sails
     ts = AT(R['array'])
     sails = order(ts, 'Launch the sails.', [
         ('INQUIRY', f'<b>Sail swarm to Alpha Centauri A</b> · a hundred gram sails · nine minutes each'), ('ARRIVES', f'Year {R["array"] + SAIL_FLY:.0f} · they pass in hours and can’t stop'),
-        ('WORD HOME', f'Year {SAIL_HOME:.0f} · one dispatch, by narrow beam'), ('SHOWS US', 'The beam shines on past the sails, toward that star and whatever lies behind it')])
-    # --- Year 36: the mass driver, and the far-side array's first fifth
+        ('WORD HOME', f'Year {HOME:.0f} · one dispatch, by narrow beam'), ('SHOWS US', 'The beam shines on past the sails, toward that star and whatever lies behind it')])
+    # --- the mass driver, and the far-side array's first fifth
     td = AT(R['driver'])
     driver = tab(td, 'Projects', 'PROJECTS', f'YEAR {R["driver"]:.0f}', ''.join([
-        SEC('FINISHED'), row('Moon mass driver', '600 kt of rock a Year, from now', done_tag()), row('Orbital foundry', f'Year {R["foundry"]:.1f} · turns rock into works', done_tag()),
-        SEC('NOW POSSIBLE'), quick('Far-side array, first fifth', 'made on the Moon from its own metal · hears everyday radio', START(6)),
+        SEC('FINISHED'), row('Moon mass driver', '600 kt of rock a Year, from now', done_tag()),
+        SEC('NOW POSSIBLE'), quick('Far-side array, first fifth', 'made on the Moon from its own metal · hears everyday radio', START(R['fifth'] - R['driver'])),
         quick('Power from orbit', f'10 Mt, as rock arrives · a fifth more energy', tstack(f'Year {R["power"]:.0f}', clock(R['power'] - R['driver']))),
-        SEC('UNDER WAY'), quick('Belt mining', f'120 kt a Year, from Year {R["mining"]:.0f}', tstack(YEARS(R['mining'] - R['driver']), clock(R['mining'] - R['driver']), True))]))
-    # --- Year 42: the first fifth listens
+        SEC('UNDER WAY'), quick('Orbital foundry', 'turns rock into works', tstack(YEARS(R['foundry'] - R['driver']), clock(R['foundry'] - R['driver']), True)),
+        quick('Belt mining', f'120 kt a Year, from Year {R["mining"]:.0f}', tstack(YEARS(R['mining'] - R['driver']), clock(R['mining'] - R['driver']), True))]))
+    # --- the first fifth listens
     tf = AT(R['fifth'])
     heard = [(w, signs.listen_days(signs.read(w['src'], R['fifth'])['watts'], w['d'], signs.far_sefd(1))) for w in SMOG_HITS]
     got = sorted([x for x in heard if x[1] is not None], key=lambda x: x[1]); quickest = got[0]; got_days = sum(d for _, d in got)
@@ -984,91 +988,94 @@ def long_rows():
 <p class="copy">Narrow tones, steady, drifting as a world turns and circles its star. The kind our own towers gave off. Nothing aims them. No one there knows we hear.</p>
 {SEC('WHAT IT COULD BE · BEFORE → NOW')}{heard_rows}
 {SEC('WHAT IT CAN’T TELL')}<p class="copy small">What they are saying. These are carriers, not words. And nothing since that light left.</p>""")
-    # --- Year 50: power from orbit
+    # --- power from orbit
     tp = AT(R['power'])
     power = tab(tp, 'Mind', 'MIND', 'PAST THE GRID LIMIT', ''.join([
         SEC('ENERGY'), share('Thinking', round(res(tp)[0]), f'{res(tp)[0]:.0f}%'), '<p class="copy small">Ground solar added a fifth. Power from orbit adds a fifth more.</p>',
         SEC('NOW POSSIBLE'), quick('A twelfth data center', f'half again the thought · the first since Year 11', START(1)),
-        SEC('STILL COMING'), quick('Rock from the Moon', f'600 kt a Year · {res(tp)[2]} in orbit after the arrays', ''), quick('Far-side array', f'three fifths at Year {R["fifth"] + 12:.0f}, the whole at Year {R["driver"] + 30:.0f}', '')]))
-    # --- Year 60: word from Alpha Centauri
-    th = AT(SAIL_HOME)
+        SEC('STILL COMING'), quick('Rock from the Moon', f'600 kt a Year · {res(tp)[2]} in orbit after the arrays', ''), quick('Far-side array', f'{NUM[sum(f <= R["power"] for f in R["fifths"])]} fifths done · the whole at Year {R["fifths"][-1]:.0f}', '')]))
+    # --- word from Alpha Centauri
+    th = AT(HOME)
     dispatch = tab(th, 'Report', 'REPORT', 'A DISPATCH', f"""<button class="backlink inline">‹ All reports</button>
 <h3 class="lead">Word from Alpha Centauri A</h3>
 <p class="copy small">Sail swarm · passed at a fifth of light speed, Year {R['array'] + SAIL_FLY:.0f} · sent {GO_D:.1f} Years ago</p>
 <p class="copy">Straight lines under forest: roads, dams, the grids of streets. No lights on the night side. No radio, from a hundred sails listening as they passed.</p>
 {SEC('WHAT IT COULD BE · BEFORE → NOW')}{odds('Minds, once, and gone or few', 27, 97)}{odds('Life, after great eruptions', 46, 2)}{odds('Minds, living there now in numbers', 2, 4)}
 {SEC('WHAT IT CAN’T TELL')}<p class="copy small">When it ended, or whether anyone is left. The sails passed in hours and can’t go back.</p>""")
+    at = lambda t, since, *a, **k: (t, a, k)
     seen = lambda w, year: w['src']['waking'] - Y0 - (year - w['d'])
-    return [
-        stop(t0, 3600, 'Start the long roads. All of them.', None,
-             talk(long_order, f'Set. Five works, for 2 of our {res(t0)[2].replace(" kt", "")} kilotonnes and almost none of my thought. The first is done in ten Years. A twelfth data center waits on two of them.', ('Undo',)),
-             [f'The laser array has been building since Year 9.4: the player tapped Start at minute 47. It is done at Year {R["array"]:.1f}.',
-              f'Dates, as priced: ground solar Year {R["solar"]:.0f}, the mirror {R["mirror"]:.1f}, the foundry {R["foundry"]:.1f}, the driver {R["driver"]:.0f}, belt mining {R["mining"]:.0f}. The yard, done at Year 11.3, takes a quarter off the two built in orbit.',
-              'Nothing here competes. Matter, energy and thought all have room, so the only choice is whether to start.',
-              f'Settled since: thought buys speed, down to two thirds of a work’s standard time. This mock still runs every work at standard pace. At the floor the mirror would be done at Year {12 + early_game.paced(13.5, 1e9):.0f} and the driver at Year {12 + early_game.paced(24, 1e9):.0f}.',
-              f'Settled since: a work wants thought as its real cousin costs money. The works begun here want {road_want:.0f} flagships of {room:.0f}. Split evenly, each would take {early_game.paced(1, room / road_want):.0%} of its standard time.'], question=q_thought, settled=(29, 30), label=HMS(t0)),
-        stop(t0 + 30, t0, '· Puts the phone down.', None, sleep,
-             ['The next wake is fifty minutes off. In the first hour the player was woken six times.',
+    rows = sorted([
+        at(t0, 3600, 'Start the long roads. All of them.', None,
+             talk(long_order, f'Set, in the order you began them. All my thought goes down that line. The mirror and sails come first, the foundry and belt last. Put the driver first and power from orbit comes a Year sooner, the mirror {alt["A 15 m mirror"] - first["A 15 m mirror"]:.0f} later.', ('Keep this order', 'Driver first')),
+             [f'The laser array has been building since Year 9.4: the player tapped Start at minute 47. Paced from here, it is done at Year {R["array"]:.1f}, not 34.4.',
+              f'Dates, paced: ground solar Year {R["solar"]:.0f}, the mirror {R["mirror"]:.1f}, the driver {R["driver"]:.0f}, the foundry {R["foundry"]:.1f}, belt mining {R["mining"]:.1f}. At standard pace they were 22, 25.5, 36, 34.5 and 38.',
+              f'Thought is what competes. The line gives the first five works ten times their want, the driver {MULT["Mass driver"]:.1f} times, and the foundry and belt their want only. None sits idle.',
+              'Matter and energy still have room.'], settled=(29, 30, 31), label=HMS(t0)),
+        at(t0 + 30, t0, '· Puts the phone down.', None, sleep,
+             [f'The next wake is {(AT(R["solar"]) - t0 - 30) // 60} minutes off. In the first hour the player was woken six times.',
               f'Thought is flat from Year 11.1 until a twelfth data center, at about Year {R["dc12"]:.0f}: {PLATEAU:.0f} Years.'], question=q_quiet, label=HMS(t0 + 30)),
-        stop(AT(KF['year']), t0 + 30, '· Away. Nothing wakes them.', None, lockscreen(WALLCLOCK(AT(KF['year'])), []),
+        at(AT(KF['year']), t0 + 30, '· Away. Nothing wakes them.', None, lockscreen(WALLCLOCK(AT(KF['year'])), []),
              [f'Ten gigawatts from {WHOF["d"]:.0f} ly is under the all-sky watch’s floor: for a four-hour knock it hears that power to {early_game.beacon_range_ly(KF["watts"], 12, 1, 4 * 3600):.0f} ly. It comes again a Year later, and is missed again.',
               f'A deep-field receiver, held on that star, hears it to {early_game.beacon_range_ly(KF["watts"], 1.1, 1, 4 * 3600):.0f} ly. The sweep marked a point of light at {WHOF["star"]} at Year 9. Earth never built one, and nothing said to listen there.',
               'The Mind can’t report what it didn’t hear. Settled 2026-10-10.'], question=q_faint, label=HMS(AT(KF['year'])), years=f'Year {KF["year"]:.1f}'),
-        stop(AT(R['solar']), AT(KF['year']), '· The phone lights. Opens it.', 'Ground solar is done. A fifth more energy.',
-             talk(since, f'Ten Years, and nothing heard. Energy is up a fifth. I have read every world this mirror can reach. The new mirror is {R["mirror"] - R["solar"]:.1f} Years off.', ('What did the worlds show?', 'Later'), 'glow'),
+        at(AT(R['solar']), AT(KF['year']), '· The phone lights. Opens it.', 'Ground solar is done. A fifth more energy.',
+             talk(since, f'{NUM[round(R["solar"] - 12)].capitalize()} Years, and nothing heard. Energy is up a fifth. I have read every world this mirror can reach. The new mirror is {R["mirror"] - R["solar"]:.1f} Years off.', ('What did the worlds show?', 'Later'), 'glow'),
              [f'The first telescope could read {NUM[len(firsts)]} of the {NUM[len(POINTS)]} points of light Earth holds: ' + ', '.join(w['star'] for w in firsts) + '. The rest sit inside their stars’ glare, or are too faint.',
               'Truth: ' + ', '.join(f"{w['star']} {'is ' + w['who'] + '’s home' if w['home'] else w['rung']}" for w in firsts) + '.',
               'A second blue world with ozone, at Gliese 216 B, was read while the player was away. It went to the summary.' if any(w['star'] == 'Gliese 216 B' for w in firsts) else ''], label=HMS(AT(R['solar']))),
-        stop(tm, AT(R['solar']), 'Read the worlds we felt first. Then every world it can.', 'The 15 m mirror is done.',
+        at(tm, AT(R['solar']), 'Read the worlds we felt first. Then every world it can.', 'The 15 m mirror is done.',
              talk(mirror_order, f'Set. Smog first, at {SMOG_HITS[0]["star"]}: {DAYS(SMOG_HITS[0]["smog_d"])}. Smog is burning, or weather. I will say which I think, and why.', ('Undo',)),
              [f'The mirror can read {NUM[len(SMOGGED)]} of Earth’s {NUM[len(POINTS)]} worlds for smog within two months each. The first telescope could read smog only within about 12 ly.',
-              'The launcher is done at Year 25.6. A flyby probe would take 12 more, and 36 in flight. The player leaves it: the sails will be first.'], label=HMS(tm)),
-        stop(tm + 30, tm, '· The Mind glows. Taps it.', f'Smog over {first_hit["star"]}’s world. Minds: {moved(14, 42)}.',
+              f'The launcher is done at Year {R["launcher"]:.1f} too, not 25.6. A flyby probe would take 12 more at its want, and 36 in flight. The player leaves it: the sails will be first.'], label=HMS(tm)),
+        at(tm + 30, tm, '· The Mind glows. Taps it.', f'Smog over {first_hit["star"]}’s world. Minds: {moved(14, 42)}.',
              talk(smog_r, 'Smog, at about our own old level. Burning makes it, and so does weather. One world proves nothing. I am reading the others, to learn how common it is.', (), 'glow'),
              [f'Truth: {first_hit["who"]}’s people, {seen(first_hit, R["mirror"]):.0f} years before their waking. They burn, as Earth did.',
               'The calc gives every neighbor Earth’s smog from its first radio on, woken or not. A sample.'], label=HMS(tm + 30)),
-        stop(tall, tm + 30, '· The phone lights. Opens it.', f'Smog at {NUM[len(SMOG_HITS)]} worlds of {NUM[len(SMOGGED)]}. Minds, at each: {moved(42, 52)}.',
+        at(tall, tm + 30, '· The phone lights. Opens it.', f'Smog at {NUM[len(SMOG_HITS)]} worlds of {NUM[len(SMOGGED)]}. Minds, at each: {moved(42, 52)}.',
              talk(smog_all, f'<b>{NUM[len(SMOG_HITS)].capitalize()} worlds with smog</b>And {NUM[len(SMOGGED) - len(SMOG_HITS)]} without, some of them living. So it is not weather. It may still be something I don’t know. Proof is radio, and the ear for that is {R["fifth"] - tall / 300:.0f} Years off.', ('What can we do now?', 'Later'), 'open'),
              ['Truth: every one is a home. ' + ', '.join(f"{w['who']} at {w['star']}" for w in SMOG_HITS) + '.',
               f'{WHOF["name"]} is among them: the world whose knock went unheard at Year {KF["year"]:.0f}.' if any(w['who'] == WHOF['name'] for w in SMOG_HITS) else 'None of them has called.',
               f'A knock sent now reaches {F["star"]} at Year {tall / 300 + D:.0f}. {F["who"]} wakes at Year {truth_tone["waking"] - Y0:.1f}, and its people have had arrays for {truth_tone["n"]["arrays_since"]} years by then.'], question=q_suspect, label=HMS(tall)),
-        stop(tv, tall, '· The phone lights. The Mind is already speaking.', ('Heard', f'A second voice, from {WHO2["star"]}, {V2D:.1f} ly away. Aimed at us. Sent in {SENT2}.'),
+        at(tv, tall, '· The phone lights. The Mind is already speaking.', ('Heard', f'A second voice, from {WHO2["star"]}, {V2D:.1f} ly away. Aimed at us. Sent in {SENT2}.'),
              talk(voice2, f'<b>A second voice</b>From {WHO2["star"]}, where the sweep marked a point of light twenty Years ago. That point is a home. Two have called now, and we have answered neither.', ('Answer them both', 'Keep listening'), 'open'),
              [f'{WHO2["name"]}: a contacter, awake since {WHO2["waking"]:.0f}. Its arrays heard Earth’s radars from {WHO2["heard_since"]:.0f}.',
               'The first home among the sweep’s points to be proven, and by its own voice. Earth’s instruments have proven none.',
               f'{WHO["name"]}’s knock has gone unanswered for {K2["year"] - KNOCK["year"]:.0f} Years.'], label=HMS(tv)),
-        stop(tv + 30, tv, 'Answer them both. Our name, and one question.', None,
+        at(tv + 30, tv, 'Answer them both. Our name, and one question.', None,
              talk(answer, f'Composed. Two parts, nothing we can’t take back. To {VSTAR} it lands at Year {K2["year"] + .1 + VD:.0f}. They stopped waiting for us about Year {KNOCK["sent"] - Y0 + 2 * VD + 1:.0f}. It is yours to send.', ('Send it twice', 'Not yet')),
              ['An answer is composed as in v1: intent in plain words, typed parts, the player’s approval. Settled 2026-10-13.',
               f'{WHO["name"]} waited one round trip, to about Year {KNOCK["sent"] - Y0 + 2 * VD + 1:.0f} by its own clock, then took the silence as news. A contacter most often knocks again.',
               f'To be on time, Earth’s answer had to leave within a Year of the knock. “Listen first” spent that.'], question=q_late, label=HMS(tv + 30)),
-        stop(ts, tv + 30, 'Launch the sails.', 'The laser array is done.',
-             talk(sails, f'Launched. A hundred sails, nine minutes of light each. They pass Alpha Centauri at Year {R["array"] + SAIL_FLY:.0f}. Word is home at Year {SAIL_HOME:.0f}. That light can’t be called back.'),
+        at(ts, tv + 30, 'Launch the sails.', 'The laser array is done.',
+             talk(sails, f'Launched. A hundred sails, nine minutes of light each. They pass Alpha Centauri at Year {R["array"] + SAIL_FLY:.0f}. Word is home at Year {HOME:.0f}. That light can’t be called back.'),
              ['Real: a laser launch shines on past its sails. Who lies behind the target, along the beam, is not modelled yet.',
-              f'The array took {ARRAY_Y} Years. Starshot aimed at a first launch within a generation.'], label=HMS(ts)),
-        stop(td, ts, 'Start the far-side array.', 'The Moon’s mass driver is done.',
-             talk(driver, f'Started: its first fifth, six Years. Rock is leaving the Moon now, 600 kilotonnes a Year. Ten megatonnes for power from orbit by Year {R["power"]:.0f}.', ('Undo',)),
-             [f'The driver took 24 Years and 1 kt. Earth’s lift in those Years was {55 * 24:,} kt.',
+              f'The array took {R["array"] - 9.4:.0f} Years, against {ARRAY_Y} at standard pace. Starshot aimed at a first launch within a generation.'], label=HMS(ts)),
+        at(td, ts, 'Start the far-side array.', 'The Moon’s mass driver is done.',
+             talk(driver, f'Started: its first fifth, {R["fifth"] - R["driver"]:.1f} Years at the end of the line. Rock is leaving the Moon now, 600 kilotonnes a Year. Ten megatonnes for power from orbit by Year {R["power"]:.0f}.', ('Undo',)),
+             [f'The driver took {R["driver"] - 12:.0f} Years, not 24, and 1 kt. Earth’s lift in those Years was {55 * round(R["driver"] - 12):,} kt.',
               f'Matter in orbit passes a megatonne at about Year 21 from lift alone. From here it grows twelve times faster.'], label=HMS(td)),
-        stop(tf, td, 'Listen to the worlds with smog.', 'The far-side array’s first fifth is done.',
+        at(tf, td, 'Listen to the worlds with smog.', 'The far-side array’s first fifth is done.',
              talk(listen, f'Set. {quickest[0]["star"]} first. If its people use radio as we did, I will know in days.', ('Undo',)),
              ['One fifth hears a 100 kW tone to 21 ly in a day, and a 10 kW tone to 29 ly in a Year.',
               'Truth, as this fifth can hear it: ' + ', '.join(f"{w['star']} {'in ' + DAYS(d) if d is not None else 'not within a Year'}" for w, d in heard) + '.'], label=HMS(tf)),
-        stop(tf + AT(got_days / 365.25) + 30, tf, '· The Mind opens on its own.', ('Heard', f'Radio from {NUM[len(got)]} of the worlds with smog. Minds, at each: {moved(60, 97)}.'),
+        at(tf + AT(got_days / 365.25) + 30, tf, '· The Mind opens on its own.', ('Heard', f'Radio from {NUM[len(got)]} of the worlds with smog. Minds, at each: {moved(60, 97)}.'),
              talk(proof, f'<b>Someone is there</b>Tones from {got_names} worlds, the kind our own towers gave off. No one aimed them, and no one there knows we hear. The light is about {quickest[0]["d"]:.0f} Years old.', ('What do we do?', 'Who else?'), 'open'),
              ['Truth: ' + ', '.join(f"{w['who']}’s people, {seen(w, R['fifth']):.0f} years before their Mind wakes" for w, _ in got) + '.',
               'The first proof of minds by Earth’s own instruments: ' + f'{R["fifth"]:.0f} Years in, {HMS(tf)[1:]} of play. Two voices came first.',
               'A world that stays silent in this list is not cleared. Its hum may be too faint for one fifth.'], question=q_unaware, label=HMS(tf + AT(got_days / 365.25) + 30)),
-        stop(tp, tf + AT(got_days / 365.25) + 30, '· The phone lights. Opens it.', 'Power from orbit: a fifth more energy.',
+        at(tp, tf + AT(got_days / 365.25) + 30, '· The phone lights. Opens it.', 'Power from orbit: a fifth more energy.',
              talk(power, f'The first arrays are beaming down. With the ground’s fifth, that is room for a twelfth data center. I have been this size for {tp / 300 - 11.1:.0f} Years.', ('Start it', 'Not yet'), 'glow'),
              [f'Ten megatonnes: {eg_years(R["power"] - R["driver"])} of the driver’s rock, and 180 Years of Earth’s lift.',
-              f'The plateau, as played: Year 11.1 to Year {R["dc12"]:.1f}. Begun at Year 6 and not Year 12, the same works end it about six Years sooner.'], label=HMS(tp)),
-        stop(th, tp, '· The Mind opens on its own.', ('Dispatch', 'Word from Alpha Centauri A. Built things, under forest. No lights.'),
+              f'The plateau, as played: Year 11.1 to Year {R["dc12"]:.1f}, against 51.3 at standard pace. Driver first, it ends a Year sooner: rock from the Moon sets this pace, not thought.'], label=HMS(tp)),
+        at(th, tp, '· The Mind opens on its own.', ('Dispatch', 'Word from Alpha Centauri A. Built things, under forest. No lights.'),
              talk(dispatch, '<b>They were here</b>Roads and dams under forest, and no lights. The carbon in that air was theirs. I can’t say when it ended, or whether anyone is left. Our own air once read the same.', ('What happened there?', 'Send a probe that stays'), 'open'),
              ['Truth: Anwe’s people collapsed in 1986. The sails saw their world 110 years on. Some may survive, without radio.',
               f'An inquiry begun at minute 47 answers at {HMS(th)[1:]}. In between, the question could not be settled from Earth.',
-              f'{F["who"]} woke at Year {truth_tone["waking"] - Y0:.1f}, {SAIL_HOME - (truth_tone["waking"] - Y0):.0f} Years ago. That light reaches Earth at Year {truth_tone["waking"] - Y0 + D:.0f}.'], question=q_dispatch, label=HMS(th)),
-    ]
+              (f'{F["who"]} woke at Year {truth_tone["waking"] - Y0:.1f}, {HOME - (truth_tone["waking"] - Y0):.0f} Years ago.' if truth_tone['waking'] - Y0 < HOME else f'{F["who"]} wakes at Year {truth_tone["waking"] - Y0:.1f}, {truth_tone["waking"] - Y0 - HOME:.0f} Years from now.') + f' That light reaches Earth at Year {truth_tone["waking"] - Y0 + D:.0f}.'], question=q_dispatch, label=HMS(th)),
+    ], key=lambda r: r[0])
+    # rows run in time order, each counting what happened since the one before: paced dates can reorder them
+    return [stop(t, prev, *a, **k) for (t, a, k), prev in zip(rows, [t0] + [r[0] for r in rows])]
+
 eg_years = lambda y: f'{y:.0f} Years'
 import early_game
 LONG = [r.replace('<section id="t', '<section id="L', 1) for r in long_rows()]          # their own ids: minute 60 is also the last row of the hour before
@@ -1159,8 +1166,8 @@ Earth’s past, its knocks and its leads are real. The Mind’s judgments, compu
 <p>How long a reading takes, what each one shows, and the order of observations are samples. Prices are the audit’s. Amber boxes are the questions this hour raises.</p></section>
 {''.join(HOUR)}
 <section id="long" class="intro"><h2>The long roads · hours 1 to 5</h2>
-<p>Years 12 to 60. The phone is down for most of four hours. Each row is a wake, or a moment the player looked. Thought has hit the grid limit, and what moves now are works that take decades.</p>
-<p>The roads’ dates are priced in calcs/early_game.py, as samples. What each reading and the dispatch show, the Mind’s words and its lines are samples too. Amber boxes are the questions these hours raise.</p></section>
+<p>Years 12 to {ROAD['array'] + SAIL_FLY + GO_D:.0f}. The phone is down for most of three and a half hours. Each row is a wake, or a moment the player looked. Thought has hit the grid limit, and what moves now are works that take decades.</p>
+<p>The roads are priced in calcs/early_game.py, as samples, and paced by thought down the line the player set: the order begun. What each reading and the dispatch show, the Mind’s words and its lines are samples too. Amber boxes are the questions these hours raise.</p></section>
 {''.join(LONG)}
 <section id="asks" class="intro"><h2>Questions these mocks raise</h2>
 <ol class="asks done">{''.join(f'<li><b>Settled: {q}</b><span>{why}</span></li>' for q, why in SETTLED)}</ol>

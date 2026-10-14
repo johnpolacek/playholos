@@ -248,8 +248,18 @@ Settled 2026-10-10. Numbers in [calcs/early_game.py](calcs/early_game.py). Repla
   - *So thought is tight early and for megatonne works.* At Year 0 a second flagship is a real cost. At the limit every real-priced work can run at its floor.
   - *Megatonne works have no real price.* Samples: the launcher 10, belt mining 20, the mass driver 30, the foundry 30, a fifth of the far-side array 40, power from orbit 200.
   - *At the limit:* the works begun at Year 12 want 93 flagships and would each take 72% of their standard time. To push the mass driver alone to ten times its want takes half of all thought.
-  - *Not done:* the three mocks still run every work at standard pace. Replaying them needs a rule for how thought is split.
+  - *Not done:* the first two mocks still run every work at standard pace. The third is replayed, from Year 12.
   - Set aside: thought in scale with a work's Years, and one amount for every work.
+- **Thought is split by an order the player sets.** Settled 2026-10-14. Numbers from `python3 calcs/early_game.py`.
+  - *The line.* A new work joins the end. The player can move it. One decision, and no sliders.
+  - *How the Mind fills it.* First each work gets its want, in order. Then each in turn is pushed to ten times its want.
+    - This project's reading. So no work stops because another is first.
+    - Ten times is where a work stops gaining: 70% of its time, against a floor of 67%.
+  - *What is left over sits idle,* and the Mind says so. Power from orbit takes its want and no more, since rock arrives at its own pace.
+  - *What the order changes, in the third mock's game.* In the order begun, the mirror and launcher are done at about Year 21.5, the sails launched at 27.7, power from orbit at 43.9.
+  - Driver, belt and foundry first: the mirror waits until 25.5, the sails until 33.1, and power from orbit comes at 42.9.
+  - *So the order moves small works by Years, and matter's road by about one.* Rock from the Moon sets that pace, not thought.
+  - Set aside: an even split, which leaves the player nothing to decide. And a share for each work, retuned at every new one.
 - **Faster than one a Year needs new fabs.** A chip fab project adds a second line: 3 Years, a tenth of compute, no matter. Priced 2026-10-11. A leading-edge fab takes 2 to 4 years, and one firm makes the tools that print the finest chips, about 90 a year. Two lines make compute grow 2.25 times a Year. The chip stock grew 3.4 times a year in 2026, so that pace has been seen.
   - *It only reaches the ceiling sooner.* Eleven data centers fit under the grid. One line fills them by Year 11, two by Year 7. A third line gains a third of a Year.
 - **Only if the player chooses.** One at a time, or a standing order to keep them coming. Compute never grows on its own.
@@ -651,16 +661,17 @@ Answered one at a time, in this order. Every answer must be permitted by current
     - **Settled 2026-10-13:** the Mind gives its judgment in words, never in numbers. Both mocks now show words. See [How Earth learns](#how-earth-learns).
     - **Settled 2026-10-13:** the Mind judges from what Earth knows, never from the seed, and it can be wrong. A first voice lifts Minds a word at every candidate. In this game it calls Minds very unlikely at the sweep's 15 points of light, and 4 are homes. See [How Earth learns](#how-earth-learns).
     - **Priced 2026-10-13:** what an inquiry costs in time. A laser array takes 25 Years, and word from 4.3 ly comes home near Year 60. See [Build times](#build-times). Every question this mock raised is now closed.
-11. **Third mock built 2026-10-13:** [the long roads](explorations/v2-mocks/index.html#long), hours 1 to 5, Years 12 to 60, on the same game. The player starts five long works at Year 12 and is woken nine times in four hours.
-    - *What it shows.* Fifty minutes with no wake. Smog at four worlds at Year 26, each of them a home. A second voice at Year 30, and a first answer, 21 Years late. Sails launched at Year 34. Radio from two worlds at Year 42: the first proof of minds by Earth's own instruments. Power from orbit at Year 50. Word from Alpha Centauri at Year 60.
-    - *The plateau, as played:* 40 Years, 3.3 hours, from the grid limit to a twelfth data center.
+11. **Third mock built 2026-10-13:** [the long roads](explorations/v2-mocks/index.html#long), hours 1 to 5, on the same game. The player starts five long works at Year 12 and is woken nine times.
+    - **Replayed 2026-10-14** with every work paced by thought, down the line in the order begun. Years 12 to 54, three and a half hours.
+    - *What it shows.* 35 minutes with no wake. Smog at four worlds at Year 22, each of them a home. Sails launched at Year 27.7. A second voice at Year 30, and a first answer, 21 Years late. Radio from two worlds at Year 34: the first proof of minds by Earth's own instruments. Power from orbit at Year 44. Word from Alpha Centauri at Year 54.
+    - *The plateau, as played:* 34 Years, 2.8 hours, from the grid limit to a twelfth data center. At standard pace it was 40.
     - *One knock is never heard.* Hael's, at Year 20, is under the all-sky watch's floor. A deep-field receiver held on that star would have caught it.
     - **Settled 2026-10-13:** thought buys speed, down to a floor physics sets. See [Growing compute](#growing-compute).
     - **Settled 2026-10-13:** a work wants thought in scale with its real cost. See [Growing compute](#growing-compute).
-    - **How is thought split among works?** Each work wants an amount, and more than that speeds it toward its floor. Who decides which work gets the spare is not settled.
-    - **Is the plateau too quiet, and too long?** Nothing wakes the player from minute 60 to minute 110, and thought is flat for 3.3 hours.
+    - **Settled 2026-10-14:** thought is split by an order the player sets. See [Growing compute](#growing-compute).
+    - **Is the plateau too quiet, and too long?** Nothing wakes the player from minute 60 to minute 95, and thought is flat for 2.8 hours.
     - **A knock Earth can't hear: should a candidate world earn a listen?** The sweep had marked a world at the star that called. Nothing told Earth to listen there.
-    - **What can the player do with a suspicion?** Smog at four worlds, and proof 16 Years off. A knock sent then would reach Gliese 432 A's people as their Mind wakes.
+    - **What can the player do with a suspicion?** Smog at four worlds, and proof 11 Years off. A knock sent then would reach Gliese 432 A's people as their Mind wakes.
     - **What does a late answer cost?** A sender waits one round trip, then takes silence as news. To be on time, Earth's answer had to leave within a Year of the knock.
     - **Earth has proof of minds who don't know they are heard. What may it do?** v1 filed a young world under no conversation possible.
     - **How much can a flyby show?** What sails see of a surface, passing at a fifth of light speed, is the mock's.

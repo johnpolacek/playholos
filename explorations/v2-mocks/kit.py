@@ -165,22 +165,22 @@ USES = [(0, 6, 1), (0, 6, 20), (0, .1, 5), (0, 99, STUDY_SHARE),                
 USES += [(s, s + 1, 5) for _, s in DCS]
 USES += [(6.3, 11.3, 10), (6.3, 25.5, 10), (8.5, 12.5, 10)]           # the second hour: the orbital yard, the launcher, the telescope's reads
 # Hours 1 to 5, the third mock: the long roads, priced 2026-10-13 in calcs/early_game.py. The laser array is begun at
-# Year 9.4 and the rest at Year 12, with the yard done. Compute shares are samples, in Year 0's thought.
+# Year 9.4 and the rest at Year 12, with the yard done. Settled 2026-10-14: thought goes down the player's line, and this
+# player keeps the order begun. From Year 12 every work is paced by the thought that line gives it (early_game.replay).
 YARD_DONE, LONG_START = 11.3, 12.0
-ROAD = dict(array=9.4 + eg.ROADS['array'], solar=LONG_START + 10, mirror=eg.finish(LONG_START, eg.ROADS['mirror'], YARD_DONE, .25),
-            driver=LONG_START + eg.ROADS['driver'], foundry=eg.finish(LONG_START, eg.ROADS['foundry'], YARD_DONE, .25), prospect=LONG_START + eg.ROADS['prospect'])
-ROAD['mining'] = ROAD['prospect'] + eg.ROADS['mining']
-ROAD['fifth'] = ROAD['driver'] + eg.ROADS['far_side'] / 5
+PACED = {k: v if k == 'spare' else round(v, 2) for k, v in eg.replay(eg.BY_START, start=LONG_START, show=False).items()}
+ROAD = dict(array=PACED['Laser sail array'], solar=PACED['Ground solar'], mirror=PACED['A 15 m mirror'], launcher=PACED['Launcher'],
+            driver=PACED['Mass driver'], foundry=PACED['Orbital foundry'], prospect=PACED['Belt prospecting'], mining=PACED['Belt mining'],
+            fifth=PACED['Far-side array, fifth 1'], fifths=[PACED[f'Far-side array, fifth {k}'] for k in range(1, eg.FIFTHS_TOTAL + 1)],
+            power=PACED['Power from orbit'])
 def rock(y): return eg.DRIVER_KT * max(0, y - ROAD['driver']) + eg.MINING_KT * max(0, y - ROAD['mining'])       # kt thrown or hauled by Year y
-ROAD['power'] = next(y / 10 for y in range(120, 2000) if rock(y / 10) >= eg.ORBIT_POWER_MT * 1000)            # ten megatonnes: power from orbit
 ROAD['dc12'] = ROAD['power'] + 1                                                                               # then a twelfth data center fits
-USES += [(9.4, ROAD['array'], 10), (LONG_START, ROAD['solar'], 5), (LONG_START, ROAD['mirror'], 15), (LONG_START, ROAD['driver'], 5), (LONG_START, ROAD['foundry'], 10),
-         (LONG_START, ROAD['prospect'], 10), (ROAD['prospect'], ROAD['mining'], 10), (ROAD['driver'], ROAD['driver'] + eg.ROADS['far_side'], 40), (ROAD['power'], ROAD['dc12'], 5)]
+def spare(y): return next((idle for at, idle in PACED['spare'] if at >= y), PACED['spare'][-1][1])           # share of thought idle, from Year 12
 def res(t):
     y = t / 300
     grown = DC_STEP ** (sum(y >= d for d in DC_DONE) + (y >= ROAD['dc12']))
     grid = (1.2 if y >= ROAD['solar'] else 1) * (1.2 if y >= ROAD['power'] else 1)         # ground solar, then power from orbit: a fifth more each
-    used = sum(s for a, b, s in USES if a <= y < b) / grown
+    used = sum(s for a, b, s in USES if a <= y < b) / grown if y < LONG_START else 100 * (1 - spare(y))
     matter = SPARE_KT + LIFT_KT * y - .04 * (y >= .4) - 10 * (y >= 1.6) + 40 * max(0, y - 3.7) - 11 * (y >= 6.3)      # the launch complex lifts from Year 3.7. The yard and launcher take 11 kt
     if y > LONG_START: matter += rock(y) - 2 - eg.ORBIT_POWER_MT * 1000 * (y >= ROAD['power'])                       # the driver and foundry take 2 kt. Power from orbit takes ten megatonnes
     return (round(THINK * grown / grid, 1), round(used), f'{matter:,.0f} kt' if matter < 2000 else f'{matter / 1000:.1f} Mt')

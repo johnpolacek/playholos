@@ -253,10 +253,72 @@ def at_the_limit(running=('A 15 m mirror', 'Laser sail array', 'Launcher', 'Belt
     later = want - WANTS['A 15 m mirror'][0] - WANTS['Laser sail array'][0] + WANTS['Far-side array, one fifth'][0] + WANTS['Power from orbit'][0]
     print(f'  From Year 36, with a fifth of the far-side array and power from orbit under way, the works want {later:.0f}: {later / room:.0%} of thought at the limit.')
 
+# ---------- How thought is split ----------
+# Settled 2026-10-14: by an order the player sets. A new work joins the end of the line, and the player can move it.
+# This project's reading of the rule: the Mind first gives each work its want, in that order, so no work stops
+# because another is first. Then it pushes them, in the same order, to ten times their want. Past ten times a work
+# gains almost nothing (thought_speed), so the Mind stops there. What is left over sits idle, and the Mind says so.
+# Power from orbit is paced by rock arriving, so it takes its want and no more.
+PUSH = 10
+WANTS['Ground solar'] = (20, 'sample')
+def split(line, room, push=PUSH):
+    """line: (name, want, most) in the player's order, most = how many times its want it can use. Returns {name: s}, idle."""
+    give = {}
+    for name, want, most in line:
+        give[name] = min(want, room); room -= give[name]
+    for name, want, most in line:
+        more = min(want * (most - 1), room); give[name] += more; room -= more
+    return {name: give[name] / want for name, want, _ in line}, room
+
+def replay(order, start=12.0, dt=0.01, studies=0.1, show=True):
+    """The third mock's game from Year 12, every work paced by the thought the player's order gives it.
+    Standard Years left at Year 12 are the mock's: the launcher and the laser array were begun earlier."""
+    left = {'Launcher': 25.55 - start, 'Laser sail array': 34.4 - start, 'Ground solar': 10, 'A 15 m mirror': ROADS['mirror'] * 0.75,
+            'Mass driver': ROADS['driver'], 'Orbital foundry': ROADS['foundry'] * 0.75, 'Belt mining': ROADS['prospect'] + ROADS['mining']}
+    line = [w for w in order if w in left]
+    done, fifths, y, first, dc12, spare = {}, 0, start, None, math.inf, []
+    rock = lambda y: DRIVER_KT * max(0, y - done.get('Mass driver', math.inf)) + MINING_KT * max(0, y - done.get('Belt mining', math.inf))
+    while y < 80 and fifths < FIFTHS_TOTAL:
+        room = 1.5 ** (11 + (y >= dc12)) / FLAGSHIP_THOUGHT - studies / FLAGSHIP_THOUGHT
+        s, idle = split([(w, WANTS[w.split(' (')[0]][0], 1 if w == 'Power from orbit' else PUSH) for w in line], room)
+        if first is None: first = dict(s, idle=idle)
+        spare.append((y, idle / room))
+        for w in list(line):
+            if w == 'Power from orbit':
+                if rock(y) >= ORBIT_POWER_MT * 1000: done[w] = y; line.remove(w); dc12 = y + 1
+                continue
+            left[w] -= dt / paced(1, s[w])
+            if w == 'Belt mining' and 'Belt prospecting' not in done and left[w] <= ROADS['mining']: done['Belt prospecting'] = y
+            if left[w] <= 0:
+                line.remove(w)
+                if w != 'Far-side array, one fifth': done[w] = y
+                if w == 'Mass driver': line += ['Far-side array, one fifth', 'Power from orbit']; left['Far-side array, one fifth'] = ROADS['far_side'] / 5
+                if w == 'Far-side array, one fifth':
+                    fifths += 1; done[f'Far-side array, fifth {fifths}'] = y
+                    if fifths < FIFTHS_TOTAL: line.append(w); left[w] = ROADS['far_side'] / 5
+        y += dt
+    if show:
+        print('  At Year 12: ' + ', '.join(f'{w.lower()} {first[w]:.1f}x' for w in order if w in first) + f'. Idle: {first["idle"]:.0f} flagships.')
+        for w, when in sorted(((w, v) for w, v in done.items() if w != 'spare'), key=lambda x: x[1]):
+            print(f'    {w:30} Year {when:5.1f}')
+    done['spare'] = spare
+    return done
+
+FIFTHS_TOTAL = 5
+BY_START = ('Launcher', 'Laser sail array', 'Ground solar', 'A 15 m mirror', 'Mass driver', 'Orbital foundry', 'Belt mining')
+MATTER_FIRST = ('Mass driver', 'Belt mining', 'Orbital foundry', 'Launcher', 'Laser sail array', 'Ground solar', 'A 15 m mirror')
+def thought_split():
+    print(f'How thought is split: by the player\'s order. Each work gets its want in that order, then each is pushed to {PUSH} times its want.')
+    for name, order in (('In the order begun, the default', BY_START), ('Matter first: driver, belt, foundry', MATTER_FIRST)):
+        print(f'  {name}:'); d = replay(order)
+        print(f'    The plateau ends at Year {d["Power from orbit"] + 1:.1f}: {d["Power from orbit"] + 1 - 11.1:.0f} Years, {(d["Power from orbit"] + 1 - 11.1) * 5 / 60:.1f} hours of play.')
+    print('  The order moves the small works by Years, and matter\'s road by about one. Rock from the Moon sets that pace.')
+
 if __name__ == '__main__':
     long_roads(); print()
     thought_speed(); print()
     at_the_limit(); print()
+    thought_split(); print()
     compute_growth(); print()
     orbit_stock(); print()
     raise_the_pace(); print()
