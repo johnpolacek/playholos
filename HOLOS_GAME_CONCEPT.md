@@ -737,7 +737,8 @@ Answered one at a time, in this order. Every answer must be permitted by current
     - **Settled 2026-10-13:** thought buys speed, down to a floor physics sets. See [Growing compute](#growing-compute).
     - **Settled 2026-10-13:** a work wants thought in scale with its real cost. See [Growing compute](#growing-compute).
     - **Settled 2026-10-14:** thought is split by an order the player sets. See [Growing compute](#growing-compute).
-    - **Is the plateau too quiet, and too long?** Nothing wakes the player from minute 60 to minute 95, and thought is flat for 2.8 hours.
+    - **Settled 2026-10-14:** the plateau stands as played. Twelve wakes in three and a half hours, about as often as the first hour, and the longest quiet is 40 minutes. Every wake comes from a settled rule or the player's orders, and the player chooses what wakes them. Set aside: waking the player for every finished work, and new event sources for the middle hours.
+    - Every question this mock raised is now closed.
     - **Settled 2026-10-14:** the Mind advises a listen at marked worlds, and the player decides. See [What Earth hears](#what-earth-hears).
     - **Settled 2026-10-14:** one receiver is split among the stars it holds, and each part hears less far. See [What Earth hears](#what-earth-hears).
     - **Settled 2026-10-14:** a suspicion opens the whole kit, and the Mind lists the ways. In the mock the player sends a solar lens to Gliese 1021, the smog world too far for the first fifth. Its picture comes at Year 45.7: Earth's first sight of Hael's people. See [How Earth learns](#how-earth-learns).

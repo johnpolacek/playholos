@@ -1265,7 +1265,8 @@ HOLOS · IN 00:34:00 · Earth: ground solar is done · Year 19. A fifth more ene
 Godview
 The next wake is 34 minutes off. In the first hour the player was woken six times.
 Thought is flat from Year 11.1 until a twelfth data center, at about Year 45: 34 Years.
-Design question 1 · Is the plateau too quiet, and too long? From minute 60 to minute 95 nothing wakes the player. Thought stays one size for 34 Years, 2.8 hours of play, until power from orbit.
+Settled 2026-10-14: the quiet stands. The player chooses what wakes them, and the long works fill it.
+Settled · Is the plateau too quiet, and too long? No. Replayed with paced works, the solar lens and listening again with each fifth, the third mock wakes the player twelve times in three and a half hours: about as often as the first hour. The longest quiet is 40 minutes. Every wake comes from a settled rule or the player’s own orders, and the player chooses what wakes them. Settled 2026-10-14.
 +1:35:00 · Year 19
 The phone lights. Opens it.
 Lands · Ground solar is done. A fifth more energy.
@@ -1712,4 +1713,5 @@ Settled: What can the player do with a suspicion? · Anything v1 allows, at any 
 Settled: What does a picture show? · Everything larger than a pixel, and nothing smaller. Physics sets the pixel, and the seed’s world fills it. A solar lens: about 25 km at 30 pc, so cities and cleared land, never roads. The nearest sail of a swarm: about 20 m, so roads and dams, never single buildings. Settled 2026-10-14.
 Settled: Earth has proof of minds who don’t know they are heard. What may it do? · Anything v1 allows, as with a suspicion. And they can answer. Before its Mind wakes, a world with radio arrays may answer as a people, as Earth’s own senders have: about ten aimed sends since 1974, none after the world was asked. The seed rolls whether and how, and its Mind inherits the exchange. Settled 2026-10-14.
 Settled: What does a late answer cost? · Nothing extra. A sender listens for good, so a late answer is always heard. Its own tables carry the cost: by the time the answer lands, it may have knocked again or turned to others, and it rolls its table for an answer like any other. The Mind tells the player what the sender has likely done. Settled 2026-10-14.
-1. Is the plateau too quiet, and too long? · From minute 60 to minute 95 nothing wakes the player. Thought stays one size for 34 Years, 2.8 hours of play, until power from orbit.
+Settled: Is the plateau too quiet, and too long? · No. Replayed with paced works, the solar lens and listening again with each fifth, the third mock wakes the player twelve times in three and a half hours: about as often as the first hour. The longest quiet is 40 minutes. Every wake comes from a settled rule or the player’s own orders, and the player chooses what wakes them. Settled 2026-10-14.
+None are open.

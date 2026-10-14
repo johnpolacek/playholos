@@ -50,7 +50,8 @@ SETTLED = [('Does a half-built real instrument cost fewer Years?', 'It costs wha
            ('What can the player do with a suspicion?', 'Anything v1 allows, at any world: listen, look, go or knock. The Mind says what it knows, what each act risks, and when each answers. For four smog worlds at Year 22: radio from the nearer ones by Year 34, a solar lens picture of one world by Year 46 to 48, sails’ word after Year 200. Settled 2026-10-14.'),
            ('What does a picture show?', 'Everything larger than a pixel, and nothing smaller. Physics sets the pixel, and the seed’s world fills it. A solar lens: about 25 km at 30 pc, so cities and cleared land, never roads. The nearest sail of a swarm: about 20 m, so roads and dams, never single buildings. Settled 2026-10-14.'),
            ('Earth has proof of minds who don’t know they are heard. What may it do?', 'Anything v1 allows, as with a suspicion. And they can answer. Before its Mind wakes, a world with radio arrays may answer as a people, as Earth’s own senders have: about ten aimed sends since 1974, none after the world was asked. The seed rolls whether and how, and its Mind inherits the exchange. Settled 2026-10-14.'),
-           ('What does a late answer cost?', 'Nothing extra. A sender listens for good, so a late answer is always heard. Its own tables carry the cost: by the time the answer lands, it may have knocked again or turned to others, and it rolls its table for an answer like any other. The Mind tells the player what the sender has likely done. Settled 2026-10-14.')]
+           ('What does a late answer cost?', 'Nothing extra. A sender listens for good, so a late answer is always heard. Its own tables carry the cost: by the time the answer lands, it may have knocked again or turned to others, and it rolls its table for an answer like any other. The Mind tells the player what the sender has likely done. Settled 2026-10-14.'),
+           ('Is the plateau too quiet, and too long?', 'No. Replayed with paced works, the solar lens and listening again with each fifth, the third mock wakes the player twelve times in three and a half hours: about as often as the first hour. The longest quiet is 40 minutes. Every wake comes from a settled rule or the player’s own orders, and the player chooses what wakes them. Settled 2026-10-14.')]
 
 # ---------- Godview: who is out there ----------
 MOVE = reactions.MOVES
@@ -915,7 +916,6 @@ def long_rows():
     FIRST = min((R[k], k) for k in ('solar', 'mirror', 'launcher', 'prospect', 'driver', 'foundry', 'array'))
     HOME = R['array'] + SAIL_FLY + GO_D                                                       # the sails' word, at the paced array
     MULT = early_game.split([(w, early_game.WANTS[w][0], early_game.PUSH) for w in early_game.BY_START], room - 0.1 / early_game.FLAGSHIP_THOUGHT)[0]
-    q_quiet = ask('Is the plateau too quiet, and too long?', f'From minute 60 to minute {AT(R["solar"]) // 60} nothing wakes the player. Thought stays one size for {PLATEAU:.0f} Years, {PLATEAU * 5 / 60:.1f} hours of play, until power from orbit.')
 
     # --- Year 12: the long roads
     t0 = 3600
@@ -1056,7 +1056,7 @@ def long_rows():
               'Matter and energy still have room.'], settled=(29, 30, 31), label=HMS(t0)),
         at(t0 + 30, t0, '· Puts the phone down.', None, sleep,
              [f'The next wake is {(AT(R["solar"]) - t0 - 30) // 60} minutes off. In the first hour the player was woken six times.',
-              f'Thought is flat from Year 11.1 until a twelfth data center, at about Year {R["dc12"]:.0f}: {PLATEAU:.0f} Years.'], question=q_quiet, label=HMS(t0 + 30)),
+              f'Thought is flat from Year 11.1 until a twelfth data center, at about Year {R["dc12"]:.0f}: {PLATEAU:.0f} Years.', 'Settled 2026-10-14: the quiet stands. The player chooses what wakes them, and the long works fill it.'], settled=38, label=HMS(t0 + 30)),
         at(AT(KF['year']), t0 + 30, '· Away. Nothing wakes them.', None, lockscreen(WALLCLOCK(AT(KF['year'])), []),
              [f'Ten gigawatts from {WHOF["d"]:.0f} ly is under the all-sky watch’s floor: for a four-hour knock it hears that power to {early_game.beacon_range_ly(KF["watts"], 12, 1, 4 * 3600):.0f} ly. It comes again a Year later, and is missed again.',
               f'A deep-field receiver, held on that star, hears it to {signs.held_reach(KF["watts"], 4 * 3600):.0f} ly. The Mind advised one at Year 9.9, when the sweep marked a point of light at {WHOF["star"]}. This player left it.',
