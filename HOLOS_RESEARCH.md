@@ -1136,6 +1136,33 @@ What a neighbor's world can plausibly be, beyond an Earth twin. Each roster entr
   - Star lifting: Criswell 1985, in Interstellar Migration and the Human Experience, University of California Press. No working link found.
   - Used: v1 catalog (mass driver, habitat ring, star lifting).
 
+## Outposts and colonies
+
+Gathered 2026-10-14 for the round on Earth's outposts and colonies.
+
+- **[Metzger et al. 2013, bootstrapping space industry](https://arxiv.org/abs/1612.03238)** · Published, Journal of Aerospace Engineering.
+  - About 12 tonnes landed on the Moon over about 20 years could bootstrap a lunar industry. It ends with 156 t of assets and 60 robots, or 40,000 t and 100,000 robots if 41 t are launched. Teleoperated first, then autonomous. Further analysis needed, the authors say.
+  - Why it matters: a machine colony starts from tonnes, not megatonnes.
+  - Used: the colonies round, 2026-10-14.
+- **[Salotti 2020, minimum settlers](https://www.sciencealert.com/this-is-the-bare-minimum-number-of-people-you-d-need-to-colonise-mars)** · Published, Scientific Reports. Read through press accounts.
+  - About 110 people could keep a Mars settlement going, by a model that counts the work of living there. The number depends on how work is shared.
+  - Why it matters: the smallest real colony of people.
+  - Used: the colonies round, 2026-10-14.
+- **The Stanford torus, NASA SP-413** · Study, 1975. Through [NSS](https://nss.org/stanford-torus-space-settlement/) and [Vice](https://www.vice.com/en/article/the-first-cities-in-space-0000701-v22n8).
+  - A ring 1.8 km across, spinning once a minute for Earth's gravity, for 10,000 people. About 10 million tons, shielded with lunar material.
+  - Why it matters: people in space cost megatonnes, the scale of the game's Moon road.
+  - Used: the colonies round, 2026-10-14.
+- **[Project Hyperion results, i4is 2025](https://i4is.org/project-hyperion-winners-announced/)** · Design competition.
+  - The winner, Chrysalis: 58 km long, 2.4 billion tonnes. By press accounts, 2,400 people on a trip of about 400 years to Alpha Centauri.
+  - Why it matters: a ship of people to another star costs billions of tonnes and centuries.
+  - Used: the colonies round, 2026-10-14.
+- **[Hein et al. 2012, world ships](https://bis-space.com/shop/?p=9401)** · Published, JBIS 65, 119. Abstract only.
+  - Over 100,000 people keep knowledge alive on board. Reliability needs automatic repair. A world ship needs a space-colony civilization behind it first.
+  - Used: the colonies round, 2026-10-14.
+- **[Crowl, Hunt and Hein 2012, embryo colonies](https://bis-space.com/shop/?p=9471)** · Published, JBIS 65, 283. Abstract only.
+  - A colony founded from frozen embryos needs much less speed and mass. Frozen adults would suffer cosmic rays on a long trip. Artificial wombs don't exist yet.
+  - Used: the colonies round, 2026-10-14.
+
 ## Watch list
 
 Results the design is waiting on. Check each when its date comes.
