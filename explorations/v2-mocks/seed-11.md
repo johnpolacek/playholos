@@ -996,23 +996,147 @@ Settled · How high can a natural world climb? To animals and forests. Alive is 
 Settled · Whose odds does the Mind show? None, as numbers. The Mind gives its judgment in words: seven of them, from almost no chance to almost certain. A report shows the word now, and the word before if it moved. Settled 2026-10-13.
 Settled · How fast does a living neighbor become known? As fast as physics allows, and no faster. Each sign of minds needs its real instrument: everyday radio a far-side array, smog a mirror of about 15 m. The first telescope reads smog only within about 12 light-years, and smog is not proof. Going is the surest way. Settled 2026-10-13.
 +35:30 · Year 7.1
-Puts the phone down.
-Saturday · 17:00
-HOLOS · IN 00:04:30 · Earth: the sweep’s first pass · Year 8.0. Any candidate wakes you.
+The Mind opens on its own.
+Lands · A world at Alpha Centauri A, where none was known.
+Earth · Year 7.1
+Sol · 2047.1 · 1 Year = 00:05:00
+ENERGY · [11.9%] · MATTER · 241 kt · COMPUTE · [100%]
+REPORT · CANDIDATE
+[‹ All reports]
+
+### A world at Alpha Centauri A
+Alpha Centauri A · 4.3 ly · infrared telescope, on its sweep · two visits, weeks apart · light that left 4 Years ago
+A point of light 1.22 AU from the star, inside its warm zone. On the second visit it had moved with the star. About Earth’s size, by its brightness. Its tug is under a tenth of a metre a second: too small for anything we had.
+WHAT IT COULD BE · NOW
+Rock, and no life we could see · likely
+Life · unlikely
+Minds · almost no chance
+WITH WHAT WE HAVE
+Read its air · Infrared telescope · water in 9 hours, oxygen in 34 hours · the sweep waits · 0.1 Years · 00:00:30 · [Start]
+THE MIND · UNASKED · A new world, next door · The sweep found it on its first stop, and it moves with the star. Earth’s size, in the warm zone. No one had felt it. I can read its air in days. That interrupts the sweep, and it is yours to say. · [Read its air] · [Keep sweeping]
+[Talk to the Mind]
 Godview
-Three minutes of play since the telescope woke them. Four until the next wake.
+Truth: Hael’s world. A contacter, awake 48 Years. It heard Earth’s radars from 1954, and mapped its day and orbit.
+Before Year 0 Hael sent Earth two gifts, arriving in 1996 and 1997. No one was listening.
+The Mind’s word for Minds here is almost no chance. It judges from what Earth knows.
+Alpha Centauri B has a small world too, found the next day. Truth: natural, where life died.
+Real, and not modelled: Alpha Centauri B’s stray light, and a warm zone a full arcsecond wide, both make this star hard for a coronagraph.
++36:00 · Year 7.2
+“Read its air.”
+Earth · Year 7.2
+Sol · 2047.2 · 1 Year = 00:05:00
+ENERGY · [11.9%] · MATTER · 247 kt · COMPUTE · [100%]
+MIND · NEW ORDER
+WHAT YOU WANT
+Read its air.
+THE MIND’S VERSION
+OBSERVE · Alpha Centauri A’s world · water, oxygen, then smog · about 10 days
+THEN · Back to the sweep
+WAKES YOU · When the reading lands
+[Edit] · [Set the order]
+THE MIND · Set. Water in 9 hours, oxygen in 34 hours, smog in 10 days. The sweep waits. · [Undo]
+[Talk to the Mind]
+Godview
+Times are physics: calcs/observing.py for water and oxygen, calcs/signs.py for smog. At 4.3 ly every one is quick.
++36:30 · Year 7.3
+The Mind glows. Taps it.
+Lands · Alpha Centauri A’s world has oxygen, and smog. Minds: almost no chance → unlikely.
+Earth · Year 7.3
+Sol · 2047.3 · 1 Year = 00:05:00
+ENERGY · [11.9%] · MATTER · 252 kt · COMPUTE · [100%]
+REPORT · FIRST READING
+[‹ All reports]
+
+### Oxygen, and smog
+Alpha Centauri A · 4.3 ly · infrared telescope · 10 days · light that left 4 Years ago
+Water and oxygen: a living world. And nitrogen dioxide, at about the level our own air held in 1980. Burning makes it. So do lightning and soil, and a cloud deck can pass for it.
+WHAT IT COULD BE · BEFORE → NOW
+Life · unlikely → · very likely
+Minds · almost no chance → · unlikely
+Rock, and no life we could see · likely → · almost no chance
+WHAT IT CAN’T TELL
+Whether anyone burns it. Smog is a hint, not proof. And nothing since this light left, four Years ago.
+THE MIND · Oxygen, and smog at about our own old level. Burning makes it, and so does weather. I would not call it minds yet. Our radio array can’t hear a world’s everyday radio this far, so silence says little. · [What can we do now?] · [Later]
+[Talk to the Mind]
+Godview
+Truth: Hael’s people burn, as Earth did. The calc gives every neighbor Earth’s smog from its first radio on, woken or not. A sample.
+Settled 2026-10-13: the first telescope reads smog only within about 12 ly. Here it takes 10 days.
+Their everyday radio is about 10 kW. A Year of the radio array hears only tones above 291 kW. A far-side array would hear it in minutes.
+Smog at a world this close moves Minds two words. It is still a hint: lightning and soil make it too.
+Settled · How fast does a living neighbor become known? As fast as physics allows, and no faster. Each sign of minds needs its real instrument: everyday radio a far-side array, smog a mirror of about 15 m. The first telescope reads smog only within about 12 light-years, and smog is not proof. Going is the surest way. Settled 2026-10-13.
+Settled · Can the first telescope tell a dead civilization from a volcano? No. It reads the strange air and not its cause. Burned carbon stays for thousands of years, smog clears, and the gases only industry makes show in the mid-infrared. Proof needs an infrared interferometer, or going. Settled 2026-10-13.
++37:00 · Year 7.4
+“What can we do now?”
+Earth · Year 7.4
+Sol · 2047.4 · 1 Year = 00:05:00
+ENERGY · [11.9%] · MATTER · 258 kt · COMPUTE · [100%]
+MIND · WAYS TO KNOW MORE
+LISTEN · TELLS NO ONE
+Radio array, held a Year · tones above 291 kW · a world’s everyday radio is fainter · Year 8.4 · 00:05:00
+Far-side array, first fifth · everyday radio, in minutes · after a Moon mass driver · Year 34 · 02:11:33
+LOOK · TELLS NO ONE
+Solar lens · a picture at about 1 km a pixel · cities, cleared land, lakes behind dams · Year 31 · 01:57:05
+A 15 m mirror · smog in hours, and its air in finer detail · Year 21 · 01:10:24
+GO · THEY SEE IT COME
+Sail swarm · the launch lights their sky, 17 Years ahead of the sails · Year 51 · 03:38:15
+CALL · THEY LEARN WE SEE THEM
+A knock · lands at Year 11.7 · an answer could come by Year 16 · Year 16 · 00:43:12
+THE MIND · UNASKED · Listen first, if you want them not to know: but our array can’t hear their everyday radio, and the ear that can is 26 Years off. A lens pictures their land by Year 31. A knock lands at Year 12. · [What would you do?] · [Knock]
+[Talk to the Mind]
+Godview
+Settled 2026-10-14: a suspicion opens the whole kit. The Mind says what each act tells them, and when each answers.
+At 4.3 ly a lens pixel is about 1.1 km: cities, cleared land and lakes behind dams, not dams themselves. Scaled from NASA’s 25 km at 30 pc.
+Next door a knock and its answer take 8.6 Years: 0:43:12 of play. A conversation here runs at the pace of a long evening.
+Settled 2026-10-14: a laser launch is seen by its target. Hael is awake, so it would see the sails coming.
+Design question 1 · A neighbor sends a probe to Sol. What arrives, when, and does Earth see it? In this game Hael rolled one in 2003, after Earth missed its gifts. On v1’s times, a 20-Year build and a tenth of light speed, it reaches Sol at Year 26. v1 says braking is bright, and a watcher may brake dark. Across games, one arrives by Year 60 in 1 game of 200.
+Settled · What can the player do with a suspicion? Anything v1 allows, at any world: listen, look, go or knock. The Mind says what it knows, what each act risks, and when each answers. For four smog worlds at Year 22: radio from the nearer ones by Year 34, a solar lens picture of one world by Year 46 to 48, sails’ word after Year 200. Settled 2026-10-14.
+Settled · What does a picture show? Everything larger than a pixel, and nothing smaller. Physics sets the pixel, and the seed’s world fills it. A solar lens: about 25 km at 30 pc, so cities and cleared land, never roads. The nearest sail of a swarm: about 20 m, so roads and dams, never single buildings. Settled 2026-10-14.
++37:30 · Year 7.5
+“Knock. Our name, and that we see them.”
+Earth · Year 7.5
+Sol · 2047.5 · 1 Year = 00:05:00
+ENERGY · [11.9%] · MATTER · 263 kt · COMPUTE · [100%]
+MIND · NEW MESSAGE
+WHAT YOU WANT
+Knock. Our name, and that we see them.
+THE MIND’S VERSION · TYPED PARTS
+CULTURE · What we call ourselves, our world and our star
+SIGHTING · Your air: water, oxygen, and smog like ours in 1980
+GOES TO
+Alpha Centauri A · narrow beam · arrives Year 11.9 · Tells them · that someone here sees them, and is awake
+[Edit] · [Send it twice]
+THE MIND · Composed. Two parts, nothing we can’t take back. It lands at Year 11.9. If anyone there listens and answers at once, we hear by Year 16. It is yours to send. · [Send it twice] · [Not yet]
+[Talk to the Mind]
+Godview
+Had the player asked, the Mind’s view from the charter and dials would be: “Knock. If they listen, they have had our radars for decades. A knock adds one thing: that we see them. Then start the sails.” This player knocks without asking.
+An answer, or a knock, is composed as in v1: intent in plain words, typed parts, and the player’s approval. Settled 2026-10-13.
+Earth sends nothing new without the player. This is the player’s order.
+Settled · What may an answer hold? What v1 allowed, whole. The player writes what they mean in plain words. The Mind composes it from typed parts: a finding, a sighting, an archive, our culture, a request, a verdict. The player approves before anything goes. A lie is a forged part, marked for the sender alone. Settled 2026-10-13.
++38:00 · Year 7.6
+“Send it twice.”
+Lands · Our knock leaves for Alpha Centauri A. It lands at Year 11.9, and again a Year later.
+Godview
+Hael’s all-sky watch catches it at Year 11.9: any knock above a world’s floor is caught. Settled 2026-10-14.
+To Hael this is a late answer to its gifts. It rolls its table for an answer: answer 63%, gift 23%, watch 7%, probe 7%. The seed rolls: replies with message parts: findings, records, questions, offers.
+Sent a quarter of a Year after the knock lands, it reaches Earth at Year 16.5, +01:22:27. The all-sky watch catches it. Its first words: “We kept your light. Now we keep your voice. Welcome, Record 4,112.”
++38:30 · Year 7.7
+Puts the phone down.
+Saturday · 17:03
+HOLOS · IN 00:01:30 · Earth: the sweep’s first pass · Year 8.0. Any candidate wakes you.
+Godview
+Six minutes of play since the telescope woke them. One until the next wake.
 +40:00 · Year 8
 The phone lights. Leaves it.
-Lands · The sweep’s first pass is done. 13 more points of light in warm zones.
+Lands · The sweep’s first pass is done. 12 more points of light in warm zones.
 Saturday · 17:04
-HOLOS · NOW · The sweep’s first pass is done: 13 more candidates · Nearest: Alpha Centauri A, 4 ly. All are in the report.
+HOLOS · NOW · The sweep’s first pass is done: 12 more candidates · Nearest: Alpha Centauri B, 4 ly. All are in the report.
 HOLOS · THE MIND · A receiver would hear some of them better · On one of these worlds, a deep-field receiver hears knocks three times farther than the watch. Spread over eleven, no farther. Yours to say.
 Godview
-Truth: 5 are homes. Hael’s world at Alpha Centauri A, Iru’s world at Gliese 570 A, Pelle’s world at Mu Herculis, Ruun’s world at 11 Leonis Minoris, Anwe’s world at Zeta² Reticuli.
+Truth: 4 are homes. Iru’s world at Gliese 570 A, Pelle’s world at Mu Herculis, Ruun’s world at 11 Leonis Minoris, Anwe’s world at Zeta² Reticuli.
 8 are natural, from Alpha Centauri B at 4 ly to Nu² Lupi at 48. Truth: 1 bare rock, 1 airy and lifeless, 1 hiding microbes, 3 with animals and forests, 2 where life died.
 Their ages: 2 published, 6 drawn. The seed drew 157 natural worlds in all, 127 at red dwarfs, and 92 are bare rock.
 From here a home and a natural world look alike: a point of light that moves with its star.
-The Mind calls Minds almost no chance at each. In truth 5 of 13 are homes: unlikely. It never reads the seed.
+The Mind calls Minds almost no chance at each. In truth 4 of 12 are homes: unlikely. It never reads the seed.
 Each needed a second visit, months after the first. Most are too far to read with this mirror.
 The Mind advises a deep-field receiver for the marked worlds, unasked. This player leaves it.
 Settled · What does the first sweep find? Natural warm worlds too, at the real rate: NASA’s planning value, about one star in four. The seed draws them. A first pass shows about 17 points of light a game, and about 1 in 4 is a home. Settled 2026-10-13.
@@ -1033,17 +1157,18 @@ A reply window opened at Gliese 526 at Year 9.0 and passed in silence. It was fo
 +60:00 · Year 12
 One hour in.
 Saturday · 17:24
-HOLOS · SWEEPING · The infrared telescope: Alpha Centauri B next · Any candidate wakes you.
-HOLOS · ALWAYS · A world’s first voice wakes you · The all-sky watch is listening.
+HOLOS · SWEEPING · The infrared telescope: its second pass · Any candidate wakes you.
+HOLOS · SENT · Alpha Centauri A: our knock lands at Year 11.9 · An answer could come by Year 16. The all-sky watch is listening.
 Godview
 The earliest a reply to A Message From Earth could reach Earth from Gliese 581. In this game no one lives there. The window is empty, and Earth can’t know it.
 The earliest a reply to Hello From Earth could reach Earth from Gliese 581. In this game no one lives there. The window is empty, and Earth can’t know it.
 Wenn wakes at Gliese 3371 A, 44.0 ly away. It already knows Earth, and stays quiet and aims its instruments at the source.
 Sabe wakes at 72 Herculis, 47.6 ly away. It already knows Earth, and knocks back: a short aimed signal, its name optional.
 The telescope is back on its sweep. 82 Eridani d still waits for an order. HD 122064’s world, Gliese 505 A’s world, Gliese 675’s world and 72 Herculis’s world wait for a better mirror.
+Hael’s answer is on its way: it reaches Earth at Year 16.5, +01:22:27, in answer to our knock.
 The grid limit comes at Year 12.1, just past this hour: twelve data centers, at 130 times the thought Earth woke with. The Taiwan branch started Earth lower on the same curve, and the grid caps the same height.
 No other voice is on its way in the next two hours.
-From minute 15 to minute 60 the player was woken four times and played about four minutes.
+From minute 15 to minute 60 the player was woken four times and played about six minutes.
 
 ## The long roads · hours 1 to 5
 Not mocked for this game. The third mock is written for seed 10’s: its rows need a dead world next door, two voices and a missed knock.
@@ -1088,4 +1213,4 @@ Settled: What does a picture show? · Everything larger than a pixel, and nothin
 Settled: Earth has proof of minds who don’t know they are heard. What may it do? · Anything v1 allows, as with a suspicion. And they can answer. Before its Mind wakes, a world with radio arrays may answer as a people, as Earth’s own senders have: about ten aimed sends since 1974, none after the world was asked. The seed rolls whether and how, and its Mind inherits the exchange. Settled 2026-10-14.
 Settled: What does a late answer cost? · Nothing extra. A sender listens for good, so a late answer is always heard. Its own tables carry the cost: by the time the answer lands, it may have knocked again or turned to others, and it rolls its table for an answer like any other. The Mind tells the player what the sender has likely done. Settled 2026-10-14.
 Settled: Is the plateau too quiet, and too long? · No. Replayed with paced works, the solar lens and listening again with each fifth, the third mock wakes the player twelve times in about three hours: about as often as the first hour. The longest quiet is 35 minutes. Every wake comes from a settled rule or the player’s own orders, and the player chooses what wakes them. Settled 2026-10-14.
-None are open.
+1. A neighbor sends a probe to Sol. What arrives, when, and does Earth see it? · In this game Hael rolled one in 2003, after Earth missed its gifts. On v1’s times, a 20-Year build and a tenth of light speed, it reaches Sol at Year 26. v1 says braking is bright, and a watcher may brake dark. Across games, one arrives by Year 60 in 1 game of 200.

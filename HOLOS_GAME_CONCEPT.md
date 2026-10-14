@@ -494,6 +494,13 @@ Settled 2026-10-13.
     - It flies at about 150 km/s from a dive past the Sun: 17 Years out. One craft serves one star.
     - At 49 ly a pixel is about 13 km. The build, 8 Years, and its want, half a flagship, are samples.
   - *Earth has knocked on stars with no sign of life,* as Cosmic Call did. A suspicion is more than Earth had then.
+  - *Next door, in a second game, seed 11.* Hael lives at Alpha Centauri A, awake since 1992.
+    - The sweep's first stop finds its world at Year 7.1. The first mirror reads oxygen and smog in 10 days.
+    - Its everyday radio, about 10 kW, is under what a Year of Earth's array hears: 290 kW.
+    - So the ways differ: radio by Year 34, a lens picture at about 1 km a pixel by Year 31, sails' word by 51.
+    - A knock and its answer take 8.6 Years: 43 minutes of play. The mock's player knocks at Year 7.6.
+    - To Hael it is a late answer to its gifts of 1992. Its answer reaches Earth at Year 16.5.
+    - In about 3 games of 10 the first mirror can read smog at a living home within the first hour.
   - Set aside: only listening and looking until proof, and knocks gated by the Mind's judgment.
 - **A laser launch is seen by its target, and no one else.** Found 2026-10-14. Numbers from `python3 calcs/early_game.py`.
   - *Why.* A sail reflects 70% of its beam and passes 30% forward (Parkin 2018). That light goes on to the target star.
@@ -767,3 +774,5 @@ Answered one at a time, in this order. Every answer must be permitted by current
     - **Settled 2026-10-14:** before its Mind wakes, a world with arrays may answer as a people, and its Mind inherits the exchange. See [How neighbors play](#how-neighbors-play).
     - **Settled 2026-10-14:** a picture shows everything larger than a pixel. The lens and the dispatch now follow the rule. The swarm is a thousand sails, six days of laser. See [How Earth learns](#how-earth-learns).
     - **Settled 2026-10-13:** the plateau at the grid limit stands. Better chips don't dodge it, and the megatonne road pays there. See [Growing compute](#growing-compute).
+12. **The mocks on other games, 2026-10-14:** [seed 11](explorations/v2-mocks/seed-11.html), with no voice, five felt worlds and a living neighbor next door, and [seed 62](explorations/v2-mocks/seed-62.html), where the first mirror can read no felt world. The first hour now runs on any seed. It raises one question, open:
+    - A neighbor sends a probe to Sol. What arrives, when, and does Earth see it? In seed 11 Hael rolled one in 2003. On v1's times it reaches Sol at Year 26. Across games one arrives by Year 60 in 1 game of 200.

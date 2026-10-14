@@ -666,7 +666,9 @@ VOICE = next(((p, i) for p in NB for i in p['inbound'] if 6 < i['year'] <= 12 an
 T_SCOPE = round(IR_Y * 10) * 30
 T = lambda k: T_SCOPE + 30 * k
 ACEN_ON = bool(ANWE and ANWE['d'] < 5)                                        # a dead world next door: the rows that read it
-T_SLEEP = T(10) if ACEN_ON else T(6)
+LIVE = next((p for p in NB if not p['dead'] and p['swept'] and not p['found_by_2040'] and p['d'] < 5), None)       # a living world next door
+LIVE_ON = bool(LIVE) and not ACEN_ON
+T_SLEEP = T(10) if ACEN_ON else T(12) if LIVE_ON else T(6)
 VARN_BEFORE = (truth_tone['waking'] - Y0 - (T(5) / 300 - D)) if F['who'] else None      # years before its waking that the light of the first reading left
 
 # Settled 2026-10-13: the Mind judges from what Earth knows, never from the seed. Until a voice is heard, Minds is almost no
@@ -754,7 +756,7 @@ SMOG_NOW, SMOG_WIDE = (signs.smog_days(*m, FD / 3.2616, FO['radius'], FO['a'], F
 SIGNS = signs.read(truth_tone) if F['who'] else None
 # What the search's first pass shows, beyond the worlds Earth holds already: neighbors' homes, and natural worlds.
 NEAR_ACEN = bool(ANWE and ANWE['d'] < 5)
-HOMES = [p for p in NB if p['swept'] and not p['found_by_2040'] and not (p is ANWE and NEAR_ACEN)]
+HOMES = [p for p in NB if p['swept'] and not p['found_by_2040'] and not (p is ANWE and NEAR_ACEN) and not (p is LIVE and LIVE_ON)]
 WILD = [w for w in G['worlds'] if w['swept'] and not w['felt']]
 SWEEP_N = len(HOMES) + len(WILD)
 PASS_STARS, PASS_DAYS = seedmod.first_pass(ROWS)
@@ -857,6 +859,105 @@ WALL = tab(T_WALL, 'Mind', 'MIND', 'THE GRID LIMIT', ''.join([
 WAKE_VAULT = lockscreen(CLOCK_AT(T_VAULT), [('NOW', 'Earth: the Moon vault is done', f'Year {VAULT_Y:.1f}. The Mind has a second home.')])
 END_HOUR = lockscreen('17:24', [('SWEEPING', 'The infrared telescope: Alpha Centauri B next', 'Any candidate wakes you.')] + ([('WAITING', f'{VSTAR}: unanswered', 'The array is held on it. Nothing sent.')] if VOICE else [('ALWAYS', 'A world’s first voice wakes you', 'The all-sky watch is listening.')]))
 
+# ---------- A living world next door ----------
+# Settled 2026-10-13 and 10-14: the first telescope reads smog only within about 12 ly, smog is not proof, and a
+# suspicion opens the whole kit. Here a neighbor awake for decades lives at the nearest star the sweep visits. Its
+# reading and the Mind's words are samples. In about 3 games of 10 the first telescope can read smog at a living home.
+LIVE_ROWS = []
+if LIVE_ON:
+    import random as _r
+    LS, LD, LW = LIVE['star'], LIVE['d'], LIVE['name']
+    LO = observing.observe(LD / 3.2616, LIVE['n']['world']['mass'] ** (1 / 3.7), LIVE['a'], LIVE['host']['luminosity'])
+    LSIG = signs.read(LIVE, T(8) / 300); LSMOG = LSIG['industry'] and LSIG['smog 6.5 m']
+    M0 = MINDS[1] if VOICE else MINDS[0]
+    L_FLOOR = year_floor(LD)
+    # Earth's knock, sent twice from Year 7.5. To a sender, any message from Earth is a late answer to its own, so it
+    # rolls its table for an answer (settled 2026-10-14). Its all-sky watch catches it: any knock above the floor is.
+    KNOCK_Y = T(11) / 300; LANDS_Y = KNOCK_Y + LD
+    # Before its Mind wakes, its people hear it only if their arrays run and they happen to listen (settled 2026-10-14).
+    sent_first = bool(LIVE['unheard']) or LIVE['on_hum'] in seedmod.SENDS
+    AWAKE = Y0 + LANDS_Y >= LIVE['waking']
+    _rng = _r.Random(f'{SEED}:{LW}:earth-knock')
+    CATCH = 1.0 if AWAKE else 1 - (1 - nb.caught_odds(LIVE['n'], LIVE['host'], LIVE['waking'], Y0 + LANDS_Y)) ** 2
+    HEARD_K = _rng.random() < CATCH
+    TABLE = (reactions.table(LW) if AWAKE else reactions.people_table(LIVE['dials']))['reply' if sent_first else 'knock']
+    LMOVE = _rng.choices(*zip(*TABLE))[0] if HEARD_K else 'watch'
+    BACK_Y = LANDS_Y + (LIVE['thinks'] if AWAKE else reactions.PEOPLE_THINKS) + LD
+    LBANK = json.loads((here.parents[1] / 'data' / 'voices' / f'{LW.lower()}.json').read_text())
+    LENS_PX_L = signs.lens_km(LD / 3.2616); LENS_Y_L = T(9) / 300 + eg.paced(signs.LENS_BUILD, eg.PUSH) + signs.LENS_FLIGHT + signs.LENS_LOOK
+    SAILS_L = ROAD['array'] + LD / 0.2 + LD
+    PROBES = [t for t in ([LIVE['knows']] if LIVE['on_hum'] == 'probe' else []) + ([LIVE['after_silence']['at']] if LIVE['after_silence'] and LIVE['after_silence']['move'] == 'probe' else [])]
+    PROBE_V1 = [t + LIVE['thinks'] + 20 + LD / 0.1 - Y0 for t in PROBES]          # v1: a sentinel builds in 20 Years and flies at a tenth of light speed
+    L_CAND = tab(T(6), 'Report', 'REPORT', 'CANDIDATE', f"""<button class="backlink inline">‹ All reports</button>
+<h3 class="lead">A world at {LS}</h3>
+<p class="copy small">{LS} · {LD:.1f} ly · infrared telescope, on its sweep · two visits, weeks apart · light that left 4 Years ago</p>
+<p class="copy">A point of light {LIVE['a']:.2f} AU from the star, inside its warm zone. On the second visit it had moved with the star. About Earth’s size, by its brightness. Its tug is under a tenth of a metre a second: too small for anything we had.</p>
+{SEC('WHAT IT COULD BE · NOW')}{odds_now('Rock, and no life we could see', NEW['rock'])}{odds_now('Life', NEW['life'])}{odds_now('Minds', NEW['minds'])}
+{SEC('WITH WHAT WE HAVE')}{quick('Read its air', f'Infrared telescope · water in {DAYS(LO["water"])}, oxygen in {DAYS(LO["oxygen"])} · the sweep waits', START(.1))}""")
+    L_ORDER = order(T(7), 'Read its air.', [
+        ('OBSERVE', f'<b>{LS}’s world</b> · water, oxygen, then smog · about {DAYS(max(LO["oxygen"], LSMOG or 0))}'), ('THEN', 'Back to the sweep'), ('WAKES YOU', 'When the reading lands')])
+    L_AIR_ODDS = [('Life', NEW['life'], 90), ('Minds', M0, 33), ('Rock, and no life we could see', NEW['rock'], 3)] if LSMOG else [('Life', NEW['life'], 88), ('Minds', M0, M0), ('Rock, and no life we could see', NEW['rock'], 5)]
+    L_AIR = tab(T(8), 'Report', 'REPORT', 'FIRST READING', f"""<button class="backlink inline">‹ All reports</button>
+<h3 class="lead">{'Oxygen, and smog' if LSMOG else 'Water and oxygen'}</h3>
+<p class="copy small">{LS} · {LD:.1f} ly · infrared telescope · {DAYS(max(LO['oxygen'], LSMOG or 0))} · light that left 4 Years ago</p>
+<p class="copy">Water and oxygen: a living world. {'And nitrogen dioxide, at about the level our own air held in 1980. Burning makes it. So do lightning and soil, and a cloud deck can pass for it.' if LSMOG else 'No smog this mirror can see.'}</p>
+{SEC('WHAT IT COULD BE · BEFORE → NOW')}{''.join(odds(*r) for r in L_AIR_ODDS)}
+{SEC('WHAT IT CAN’T TELL')}<p class="copy small">Whether anyone burns it. Smog is a hint, not proof. And nothing since this light left, four Years ago.</p>""")
+    L_WAYS = tab(T(9), 'Mind', 'MIND', 'WAYS TO KNOW MORE', ''.join([
+        SEC('LISTEN · TELLS NO ONE'), quick('Radio array, held a Year', f'tones above {watts(L_FLOOR)} · a world’s everyday radio is fainter', tstack(f'Year {T(9) / 300 + 1:.1f}', clock(1))),
+        quick('Far-side array, first fifth', 'everyday radio, in minutes · after a Moon mass driver', tstack(f'Year {ROAD["fifth"]:.0f}', clock(ROAD['fifth'] - T(9) / 300))),
+        SEC('LOOK · TELLS NO ONE'), quick('Solar lens', f'a picture at about {LENS_PX_L:.0f} km a pixel · cities, cleared land, lakes behind dams', tstack(f'Year {LENS_Y_L:.0f}', clock(LENS_Y_L - T(9) / 300))),
+        quick('A 15 m mirror', 'smog in hours, and its air in finer detail', tstack(f'Year {ROAD["mirror"]:.0f}', clock(ROAD['mirror'] - T(9) / 300))),
+        SEC('GO · THEY SEE IT COME'), quick('Sail swarm', 'the launch lights their sky, 17 Years ahead of the sails', tstack(f'Year {SAILS_L:.0f}', clock(SAILS_L - T(9) / 300))),
+        SEC('CALL · THEY LEARN WE SEE THEM'), quick('A knock', f'lands at Year {T(9) / 300 + LD:.1f} · an answer could come by Year {T(9) / 300 + 2 * LD:.0f}', tstack(f'Year {T(9) / 300 + 2 * LD:.0f}', clock(2 * LD)))]))
+    L_VIEW = ('Listen and look first. A knock can’t be taken back, and they are close enough to come.' if CAUTIOUS or HIDDEN else
+              'Knock. If they listen, they have had our radars for decades. A knock adds one thing: that we see them. Then start the sails.')
+    L_KNOCK = tab(T(10), 'Mind', 'MIND', 'NEW MESSAGE', SEC('WHAT YOU WANT') + '<div class="intent">Knock. Our name, and that we see them.<i></i></div>' + SEC('THE MIND’S VERSION · TYPED PARTS')
+                  + part('CULTURE', 'What we call ourselves, our world and our star') + part('SIGHTING', 'Your air: water, oxygen, and smog like ours in 1980')
+                  + SEC('GOES TO') + facts([(LS, f'narrow beam · arrives Year {LANDS_Y:.1f}'), ('Tells them', 'that someone here sees them, and is awake')])
+                  + '<div class="twobtn"><button class="primary ghost">Edit</button><button class="primary">Send it twice</button></div>')
+    Q_PROBE = ask('A neighbor sends a probe to Sol. What arrives, when, and does Earth see it?',
+                  f'In this game {LW} rolled one in {PROBES[0]:.0f}, after Earth missed its gifts. On v1’s times, a 20-Year build and a tenth of light speed, it reaches Sol at Year {PROBE_V1[0]:.0f}. v1 says braking is bright, and a watcher may brake dark. Across games, one arrives by Year 60 in 1 game of 200.' if PROBES else
+                  'The seed rolls probes, and nothing yet says when one arrives or what Earth sees.')
+    END_HOUR = lockscreen('17:24', [('SWEEPING', 'The infrared telescope: its second pass', 'Any candidate wakes you.'),
+                                    ('SENT', f'{LS}: our knock lands at Year {LANDS_Y:.1f}', f'An answer could come by Year {LANDS_Y + LD:.0f}. The all-sky watch is listening.')])
+    LIVE_ROWS = [
+        stop(T(6), T(5), '· The Mind opens on its own.', f'A world at {LS}, where none was known.',
+             talk(L_CAND, '<b>A new world, next door</b>The sweep found it on its first stop, and it moves with the star. Earth’s size, in the warm zone. No one had felt it. I can read its air in days. That interrupts the sweep, and it is yours to say.', ('Read its air', 'Keep sweeping'), 'open'),
+             [f'Truth: {LW}’s world. A {LIVE["n"]["disposition"]}, {state(LIVE).split(" · ")[0]}. It {knows(LIVE)}.',
+              *( [f'Before Year 0 {LW} sent Earth {"two gifts" if len(LIVE["unheard"]) == 2 else "signals"}, arriving in {AND([format(u["arrived"], ".0f") for u in LIVE["unheard"]])}. No one was listening.'] if LIVE['unheard'] else []),
+              f'The Mind’s word for Minds here is {word(NEW["minds"])}. It judges from what Earth knows.',
+              *([f'{pretty(w["host"]["name"])} has a small world too, found the next day. Truth: natural, {w["rung"]}.' for w in G['worlds'] if w['swept'] and w['d'] < 5][:1]),
+              'Real, and not modelled: Alpha Centauri B’s stray light, and a warm zone a full arcsecond wide, both make this star hard for a coronagraph.']),
+        stop(T(7), T(6), 'Read its air.', None, talk(L_ORDER, f'Set. Water in {DAYS(LO["water"])}, oxygen in {DAYS(LO["oxygen"])}' + (f', smog in {DAYS(LSMOG)}' if LSMOG else '') + '. The sweep waits.', ('Undo',)),
+             [f'Times are physics: calcs/observing.py for water and oxygen, calcs/signs.py for smog. At {LD:.1f} ly every one is quick.']),
+        stop(T(8), T(7), '· The Mind glows. Taps it.', (f'{LS}’s world has oxygen, and smog. Minds: {moved(M0, 33)}.' if LSMOG else f'{LS}’s world has water and oxygen. Life: {moved(NEW["life"], 88)}.'),
+             talk(L_AIR, ('Oxygen, and smog at about our own old level. Burning makes it, and so does weather. I would not call it minds yet. Our radio array can’t hear a world’s everyday radio this far, so silence says little.' if LSMOG else
+                          'Water and oxygen, next door. Alive, most likely. Nothing in this light says more.'), ('What can we do now?', 'Later'), 'glow'),
+             [f'Truth: {LW}’s people burn, as Earth did. The calc gives every neighbor Earth’s smog from its first radio on, woken or not. A sample.' if LSMOG else f'Truth: {LW}’s people do not burn.',
+              f'Settled 2026-10-13: the first telescope reads smog only within about 12 ly. Here it takes {DAYS(LSMOG)}.' if LSMOG else 'Their smog is gone, or never was.',
+              f'Their everyday radio is about {watts(LSIG["watts"])}. A Year of the radio array hears only tones above {watts(L_FLOOR)}. A far-side array would hear it in minutes.',
+              'Smog at a world this close moves Minds two words. It is still a hint: lightning and soil make it too.'], settled=(19, 20)),
+        stop(T(9), T(8), 'What can we do now?', None,
+             talk(L_WAYS, f'Listen first, if you want them not to know: but our array can’t hear their everyday radio, and the ear that can is {ROAD["fifth"] - T(9) / 300:.0f} Years off. A lens pictures their land by Year {LENS_Y_L:.0f}. A knock lands at Year {T(9) / 300 + LD:.0f}.', ('What would you do?', 'Knock'), 'open'),
+             ['Settled 2026-10-14: a suspicion opens the whole kit. The Mind says what each act tells them, and when each answers.',
+              f'At {LD:.1f} ly a lens pixel is about {LENS_PX_L:.1f} km: cities, cleared land and lakes behind dams, not dams themselves. Scaled from NASA’s 25 km at 30 pc.',
+              f'Next door a knock and its answer take {2 * LD:.1f} Years: {clock(2 * LD)[1:]} of play. A conversation here runs at the pace of a long evening.',
+              f'Settled 2026-10-14: a laser launch is seen by its target. {LW} is awake, so it would see the sails coming.'], question=Q_PROBE, settled=(34, 35)),
+        stop(T(10), T(9), 'Knock. Our name, and that we see them.', None,
+             talk(L_KNOCK, f'Composed. Two parts, nothing we can’t take back. It lands at Year {LANDS_Y:.1f}. If anyone there listens and answers at once, we hear by Year {LANDS_Y + LD:.0f}. It is yours to send.', ('Send it twice', 'Not yet')),
+             [f'Had the player asked, the Mind’s view from the charter and dials would be: “{L_VIEW}” This player knocks without asking.',
+              'An answer, or a knock, is composed as in v1: intent in plain words, typed parts, and the player’s approval. Settled 2026-10-13.',
+              'Earth sends nothing new without the player. This is the player’s order.'], settled=27),
+        stop(T(11), T(10), 'Send it twice.', f'Our knock leaves for {LS}. It lands at Year {LANDS_Y:.1f}, and again a Year later.', None,
+             ([f'{LW}’s all-sky watch catches it at Year {LANDS_Y:.1f}: any knock above a world’s floor is caught. Settled 2026-10-14.',
+               (f'To {LW} this is a late answer to its gifts. It rolls its table for an answer: ' if sent_first else f'{LW} rolls its table for a knock: ') + ', '.join(f'{m} {q:.0%}' for m, q in TABLE if q >= .05) + f'. The seed rolls: {MOVE[LMOVE]}.',
+               (f'Sent {reactions.span(LIVE["thinks"])} after the knock lands, it reaches Earth at Year {BACK_Y:.1f}, +{clock(BACK_Y)}. The all-sky watch catches it. Its first words: “{LBANK["hail"][0]}”' if LMOVE in seedmod.SENDS else
+                f'Nothing comes back. {LW} {MOVE[LMOVE]}.')] if AWAKE else
+              [f'It lands at Year {LANDS_Y:.1f}, {LIVE["waking"] - Y0 - LANDS_Y:.0f} Years before {LW}’s Mind wakes. Its people hear it only if their arrays run and they happen to listen. Sent twice, the odds are {CATCH:.0%}.',
+               (f'{"Its people have no arrays until " + format(LIVE["waking"] - LIVE["n"]["arrays_since"], ".0f") + ". " if Y0 + LANDS_Y < LIVE["waking"] - LIVE["n"]["arrays_since"] else ""}No one hears it. Its Mind wakes at Year {LIVE["waking"] - Y0:.1f} knowing nothing of Earth’s knock.' if not HEARD_K else
+                f'Its people hear it. They roll their table: ' + ', '.join(f'{m} {q:.0%}' for m, q in TABLE) + f'. The seed rolls: {MOVE[LMOVE]}.' + (f' Argued over for {reactions.span(reactions.PEOPLE_THINKS)}, it reaches Earth at Year {BACK_Y:.1f}.' if LMOVE in seedmod.SENDS else ''))])),
+    ]
 later = next(((p, i) for p in NB for i in p['inbound'] if 12 < i['year'] < 40), None)
 HOUR = [
     stop(T_WATCH, 930, '· The phone lights. Leaves it.', 'The all-sky watch and the deep flash watch are built.', WAKE_6,
@@ -913,7 +1014,7 @@ HOUR = [
           'Real: Daedalus was designed for 12% of light speed, and Starshot for 20%. A laser launch shines toward its target. A rocket’s exhaust points away.',
           f'Priced, as samples: a laser array {ARRAY_Y} Years at standard pace, a flyby probe {PROBE_Y} after the launcher. Paced by the line, word from next door arrives at Year {SAIL_HOME:.0f} by sails, +{clock(SAIL_HOME)}, and Year {PROBE_HOME:.0f} by probe.',
           'Real: Starshot’s own model puts the array at 8 billion dollars and a first launch within a generation (Parkin 2018). v1 had 60 Years.'], settled=(12, 28)),
-] if ACEN_ON else []) + [
+] if ACEN_ON else []) + LIVE_ROWS + [
     stop(T_SLEEP, T(9) if ACEN_ON else T(5), '· Puts the phone down.', None, SLEEP_2, [f'{NUMW[(T_SLEEP - T_SCOPE) // 60].capitalize()} minutes of play since the telescope woke them. {NUMW[(T_SWEEP - T_SLEEP) // 60].capitalize()} until the next wake.']),
     stop(T_SWEEP, T_SLEEP, '· The phone lights. Leaves it.', f'The sweep’s first pass is done. {SWEEP_N} more points of light in warm zones.', SWEEP_DONE,
          [f'Truth: {len(HOMES)} are homes. ' + ', '.join(f"{p['name']}’s world at {p['star']}" for p in HOMES) + '.',
@@ -955,6 +1056,7 @@ HOUR = [
 ]) + [
     stop(3600, T_WALL if T_WALL <= 3600 else 2850 if VOICE else T_VAULT, '· One hour in.', None, END_HOUR,
          ['The telescope is back on its sweep.' + ('' if FO is ERI else ' 82 Eridani d still waits for an order.') + (f" {AND([f['star'] + '’s world' for f in UNREAD])} {'waits' if len(UNREAD) == 1 else 'wait'} for a better mirror." if UNREAD else ''),
+          *([f'{LW}’s {LMOVE} is on its way: it reaches Earth at Year {BACK_Y:.1f}, +{clock(BACK_Y)}, in answer to our knock.'] if LIVE_ON and HEARD_K and LMOVE in seedmod.SENDS else []),
           *([f'The grid limit comes at Year {WALL_Y:.1f}, just past this hour: {NUMW[N_DC]} data centers, at {DC_STEP ** N_DC:.0f} times the thought Earth woke with. The Taiwan branch started Earth lower on the same curve, and the grid caps the same height.'] if T_WALL > 3600 else []),
           (f"{later[0]['name']}’s knock arrives at Year {later[1]['year']:.1f}, +{clock(later[1]['year'])}. The all-sky watch {'catches' if later[1].get('allsky') else 'misses'} it." if later else 'No other voice is on its way in the next two hours.'),
           f'From minute 15 to minute 60 the player was woken {NUMW[WOKEN()]} times and played about {NUMW[round(PLAYED_MIN())]} minutes.']),
