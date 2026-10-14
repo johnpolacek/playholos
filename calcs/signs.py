@@ -1,4 +1,4 @@
-"""What Earth can read of a neighbor's world from afar, and with what. Run: python3 calcs/signs.py 10   ('stats': 400 games)
+"""What Earth can read of a neighbor's world from afar, and with what. Run: python3 calcs/signs.py 10   ('stats': 400 games, 'receiver': a receiver split among stars)
 
 Settled 2026-10-13: physics alone. Each sign of minds needs its real instrument, however long that takes. Nothing is
 hurried, and nothing guarantees a neighbor is known by any Year. Sources are in HOLOS_RESEARCH.md, "Reading air".
@@ -34,13 +34,23 @@ SMOG = ((6.5, 300, 5.71 / 3.2616), (15, 400, 10))           # mirror in metres, 
 LOOK = 9.0                               # the Year the first pass ends
 
 # Settled 2026-10-14: when the sweep marks a world, the Mind advises a deep-field receiver, and the player decides.
-# A dish array can split into parts, one per star (the SKA plans up to 16). Each part has a share of the area, so it
-# hears less far: reach falls as the square root of the number of stars held. Arrays steered by computer can also form
-# many beams at once (LOFAR, MeerKAT). How the game shares one receiver among many stars is not yet settled.
+# Settled 2026-10-14: the receiver is split. The player names the stars it holds, and each part hears less far. It is
+# the full SKA-Mid, a dish array, and real dish arrays split into parts this way (the SKA plans up to 16). Each part has
+# a share of the area, so reach falls as the square root of the number of stars held. A dish array can't hold scattered
+# stars at full reach: the beams it forms at once must lie inside each dish's view, about a degree at 1.4 GHz for a
+# 15 m dish. Arrays of fixed antennas can (LOFAR), at low frequencies, sharing their bandwidth. Like every ground ear,
+# a part hears its star only while that star is above the horizon.
 RECEIVER_YEARS = 12                      # the first mock's price for a deep-field receiver
 def held_reach(watts, seconds, stars=1):
     """Light-years at which a deep-field receiver split among `stars` hears a knock of `watts` lasting `seconds`."""
     return eg.beacon_range_ly(watts, EARS[1][1] * stars, 1, seconds)
+
+def receiver_split(watts=1e10, seconds=4 * 3600):
+    watch = eg.beacon_range_ly(watts, 12, 1, seconds)
+    print(f'A deep-field receiver split among the stars it holds. A {watts:.0e} W knock lasting {seconds / 3600:g} hours is heard to:')
+    for n in (1, 2, 4, 8, 11, 18):
+        print(f'  {n:2} star{"s" if n > 1 else " "}: {held_reach(watts, seconds, n):4.0f} ly, {held_reach(watts, seconds, n) / watch:.1f} times the all-sky watch\'s {watch:.0f} ly')
+    print(f'  Held on more than {(held_reach(watts, seconds) / watch) ** 2:.0f} stars, it hears no farther than the watch, which hears every star at every hour.')
 
 def listen_days(watts, ly, sefd):
     """Days of listening to hear a steady tone, or None if a Year is not enough."""
@@ -116,4 +126,5 @@ def stats(rows, n=400):
 if __name__ == '__main__':
     rows = nb.load_hosts()
     if sys.argv[1:] == ['stats']: stats(rows)
+    elif sys.argv[1:] == ['receiver']: receiver_split()
     else: report(seed.draw(int(sys.argv[1]) if sys.argv[1:] else 10, rows))

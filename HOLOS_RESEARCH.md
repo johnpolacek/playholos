@@ -97,7 +97,8 @@ Every source the game rests on, grouped by the question it answers. Each entry s
     - The survey forms and processes "64 coherent beams simultaneously", anywhere within the field of view, alongside other projects.
   - From search summaries, not read at source: the SKA can run up to 16 subarrays at once, and SKA-Low plans 16 to 24 station beams. In LOFAR, the bandwidth is shared among the beams.
   - Matters: a receiver can hold more than one star. A dish array split into parts gives each a share of the area, so each hears less far: reach falls as the square root of the number of parts.
-  - Used: v2 [What Earth hears](HOLOS_GAME_CONCEPT.md#what-earth-hears), `calcs/signs.py` (held_reach), and the third mock's question on sharing a receiver.
+  - This project's arithmetic: a 15 m dish at 1.4 GHz sees about a degree of sky, so a dish array's simultaneous beams can't reach scattered stars. MeerKAT's 64 beams lie inside its view. LOFAR's fixed antennas see the whole sky.
+  - Used: v2 [What Earth hears](HOLOS_GAME_CONCEPT.md#what-earth-hears), settled 2026-10-14: the receiver is split. `calcs/signs.py receiver`, and the third mock's Hael row.
 - **[Sónar Calling GJ 273b](https://www.scientificamerican.com/article/interstellar-message-beamed-to-nearby-exoplanet)** · News, Scientific American, 2017 ([Space.com](https://www.space.com/38803-meti-signal-beamed-habitable-alien-planet.html)).
   - Sent to Luyten's Star on October 16 to 18, 2017, from the EISCAT dish in Tromsø, Norway, near 930 MHz: a science and maths tutorial and 33 short pieces of music. A second batch followed in 2018.
   - Matters: it sets Earth's first reply window in play, Year 2.3.

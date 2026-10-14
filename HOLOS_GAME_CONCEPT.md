@@ -137,15 +137,23 @@ Settled 2026-10-10. Numbers from `python3 calcs/seed.py stats`.
   - Set aside: a first answer limited to a name and a question, and v1's rule without lies.
 - **The Mind can't report what it didn't hear.** A missed knock leaves no trace on Earth: nothing was pointed there, so no archive holds it. A search of old data for half-recorded knocks was considered and left out.
 - **The Mind advises a listen at marked worlds. The player decides.** Settled 2026-10-14. Numbers from `calcs/signs.py`.
-  - *When.* The sweep marks worlds, and the Mind says one line, unasked: a receiver would hear them better.
-  - *Why it matters.* Held on a star, a deep-field receiver hears a knock about three times farther than the all-sky watch.
+  - *When.* The sweep marks worlds, and the Mind says one line, unasked: a receiver would hear some of them better.
+  - *Why it matters.* Held on one star, a deep-field receiver hears a knock about three times farther than the all-sky watch.
   - *In the mock's game.* Hael's knock at Year 19.9 comes from 49 ly. The watch hears it to 35 ly, a receiver to 117.
   - Begun when the Mind advised it, at Year 9.9, the receiver is done by Year 18. This player left it.
   - *The Mind never builds it on its own.* It advises freely and never acts on its own advice.
-  - *Not settled: how one receiver shares its watch.* A dish array can split into parts, one per star, and each hears less far.
-    - Split among 18 points of light, it hears Hael's knock to 28 ly.
-    - Arrays steered by computer can hold many stars at once. LOFAR observed 30 sources together, and MeerKAT forms 64 beams in its view.
   - Set aside: listening at every marked world by default, and no prompt at all.
+- **One receiver is split among the stars it holds.** Settled 2026-10-14. Numbers from `python3 calcs/signs.py receiver`.
+  - *The player names the stars.* Each part has a share of the dishes, so each hears less far.
+  - *Reach falls as the square root of the stars held.* A ten gigawatt knock lasting four hours:
+    - One star: 117 ly. Four: 59. Eighteen: 28.
+    - Past eleven stars it hears no farther than the all-sky watch, which hears every star at every hour.
+  - *So the choice is which few to hold.* The Mind gives the reach for each choice.
+  - *Why split, and not all at once.* The receiver is the full SKA-Mid, a dish array. Real dish arrays split into parts, and the SKA plans up to 16.
+    - The beams a dish array forms at once must lie inside each dish's view: about a degree at 1.4 GHz. Marked worlds are scattered.
+    - Arrays of fixed antennas can hold scattered stars at once (LOFAR), at low frequencies and sharing their bandwidth.
+  - *Like every ground ear,* a part hears its star only while that star is above the horizon.
+  - Set aside: one star at a time in an order, and every marked world at once at full reach.
 
 ## Year 0 and Earth's road to it
 
@@ -681,7 +689,7 @@ Answered one at a time, in this order. Every answer must be permitted by current
     - **Settled 2026-10-14:** thought is split by an order the player sets. See [Growing compute](#growing-compute).
     - **Is the plateau too quiet, and too long?** Nothing wakes the player from minute 60 to minute 95, and thought is flat for 2.8 hours.
     - **Settled 2026-10-14:** the Mind advises a listen at marked worlds, and the player decides. See [What Earth hears](#what-earth-hears).
-    - **One receiver, many marked worlds: how does it share its watch?** Split into parts, each hears less far. Arrays steered by computer can hold many stars at once.
+    - **Settled 2026-10-14:** one receiver is split among the stars it holds, and each part hears less far. See [What Earth hears](#what-earth-hears).
     - **What can the player do with a suspicion?** Smog at four worlds, and proof 11 Years off. A knock sent then would reach Gliese 432 A's people as their Mind wakes.
     - **What does a late answer cost?** A sender waits one round trip, then takes silence as news. To be on time, Earth's answer had to leave within a Year of the knock.
     - **Earth has proof of minds who don't know they are heard. What may it do?** v1 filed a young world under no conversation possible.

@@ -1173,7 +1173,7 @@ The phone lights. Leaves it.
 Lands · The sweep’s first pass is done. 15 more points of light in warm zones.
 Saturday · 17:14
 HOLOS · NOW · The sweep’s first pass is done: 15 more candidates · Nearest: Gliese 664, 19 ly. All are in the report.
-HOLOS · THE MIND · A receiver would hear them better · Held on these worlds, a deep-field receiver hears knocks three times farther than the watch. Yours to say.
+HOLOS · THE MIND · A receiver would hear some of them better · On one of these worlds, a deep-field receiver hears knocks three times farther than the watch. Spread over eleven, no farther. Yours to say.
 Godview
 The earliest a reply to A Message From Earth could reach Earth from Gliese 581. In this game no one lives there. The window is empty, and Earth can’t know it.
 Truth: 4 are homes. Kesh’s world at Gliese 216 B, Nuvo’s world at 20 Leonis Minoris, Hael’s world at Gliese 1021, Ree’s world at 19 Draconis.
@@ -1299,8 +1299,8 @@ Ten gigawatts from 49 ly is under the all-sky watch’s floor: for a four-hour k
 A deep-field receiver, held on that star, hears it to 117 ly. The Mind advised one at Year 9.9, when the sweep marked a point of light at Gliese 1021. This player left it.
 Begun then, it was done by Year 18. Shared among all 18 points of light, it hears this knock only to 28 ly.
 The Mind can’t report what it didn’t hear. Settled 2026-10-10.
-Design question 2 · One receiver, many marked worlds: how does it share its watch? A dish array can split into parts, one per star, and each hears less far. Held on one star, it hears Hael’s knock to 117 ly. Split among Earth’s 18 points of light, to 28 ly. Arrays steered by computer can also hold many stars at once.
 Settled · A knock Earth can’t hear: should a candidate world earn a listen? The Mind advises it. When the sweep marks worlds, it says a deep-field receiver would hear their knocks about three times farther than the all-sky watch. The player decides. The Mind never builds it on its own. Settled 2026-10-14.
+Settled · One receiver, many marked worlds: how does it share its watch? It is split. The player names the stars it holds, and each part hears less far, as real dish arrays do. On one star it hears a ten gigawatt knock to 117 ly. On four, to 59. On more than eleven, no farther than the all-sky watch. A dish array can’t hold scattered stars at full reach. Settled 2026-10-14.
 +1:47:15 · Year 21.4
 “Read the worlds we felt first. Then every world it can.”
 Lands · The 15 m mirror is done.
@@ -1371,7 +1371,7 @@ Godview
 Truth: every one is a home. Varn at Gliese 432 A, Kesh at Gliese 216 B, Kirrin at 12 Ophiuchi, Hael at Gliese 1021.
 Hael is among them: the world whose knock went unheard at Year 20.
 A knock sent now reaches Gliese 432 A at Year 53. Varn wakes at Year 57.6, and its people have had arrays for 30 years by then.
-Design question 3 · What can the player do with a suspicion? Smog at four worlds, from Year 22. Proof waits for the far-side array, 11 Years on. A knock sent now would reach Gliese 432 A’s people as their Mind wakes.
+Design question 2 · What can the player do with a suspicion? Smog at four worlds, from Year 22. Proof waits for the far-side array, 11 Years on. A knock sent now would reach Gliese 432 A’s people as their Mind wakes.
 +2:18:21 · Year 27.7
 “Launch the sails.”
 Lands · The laser array is done.
@@ -1462,7 +1462,7 @@ Godview
 An answer is composed as in v1: intent in plain words, typed parts, the player’s approval. Settled 2026-10-13.
 Ombe waited one round trip, to about Year 59 by its own clock, then took the silence as news. A contacter most often knocks again.
 To be on time, Earth’s answer had to leave within a Year of the knock. “Listen first” spent that.
-Design question 4 · What does a late answer cost? The player answers 21 Years after the first knock. A sender waits one round trip, then takes silence as news. Ombe’s wait ends about 20 Years before the answer lands.
+Design question 3 · What does a late answer cost? The player answers 21 Years after the first knock. A sender waits one round trip, then takes silence as news. Ombe’s wait ends about 20 Years before the answer lands.
 +2:48:33 · Year 33.7
 “Listen to the worlds with smog.”
 Lands · The far-side array’s first fifth is done.
@@ -1509,7 +1509,7 @@ Godview
 Truth: Kesh’s people, 63 years before their Mind wakes, Varn’s people, 55 years before their Mind wakes.
 The first proof of minds by Earth’s own instruments: 34 Years in, 2:48:33 of play. Two voices came first.
 A world that stays silent in this list is not cleared. Its hum may be too faint for one fifth.
-Design question 5 · Earth has proof of minds who don’t know they are heard. What may it do? Tones from a world decades before its Mind wakes. v1 filed a young world under no conversation possible.
+Design question 4 · Earth has proof of minds who don’t know they are heard. What may it do? Tones from a world decades before its Mind wakes. v1 filed a young world under no conversation possible.
 +3:39:42 · Year 43.9
 The phone lights. Opens it.
 Lands · Power from orbit: a fifth more energy.
@@ -1558,7 +1558,7 @@ The earliest a reply to Cosmic Call 2 could reach Earth from HD 10307. In this g
 Truth: Anwe’s people collapsed in 1986. The sails saw their world 110 years on. Some may survive, without radio.
 An inquiry begun at minute 47 answers at 4:27:57. In between, the question could not be settled from Earth.
 Varn wakes at Year 57.6, 4 Years from now. That light reaches Earth at Year 89.
-Design question 6 · How much can a flyby show? Sails pass at a fifth of light speed and send one dispatch. What they can see of a surface in those hours is the mock’s.
+Design question 5 · How much can a flyby show? Sails pass at a fifth of light speed and send one dispatch. What they can see of a surface in those hours is the mock’s.
 
 ## Questions these mocks raise
 Settled: Does a half-built real instrument cost fewer Years? · It costs what its real schedule leaves: about 8 Years for the Habitable Worlds Observatory. Build times are standard, from the science, and the player can invest in projects that build faster. A speed-up also shortens the part left of a work under way. Settled 2026-10-10 and 10-11.
@@ -1594,9 +1594,9 @@ Settled: What is 86 times the thought for? · Speed. More thought shortens a wor
 Settled: How much thought does a work want? · As its real cousin costs money, counted in flagships. One flagship is the Habitable Worlds Observatory, about 11 billion dollars. A 15 m mirror wants two, the laser array 0.7, an SKA-class array 0.2. At Year 0 Earth has thought for about 7 flagships, and at the grid limit for about 577. Megatonne works have no real price, so theirs are samples. Settled 2026-10-13.
 Settled: How is thought split among works? · By an order the player sets. A new work joins the end of the line. The Mind gives each work its want, in order, then pushes each in turn to ten times its want. So no work stops because another is first. The order moves the mirror and the sails by four to five Years, and power from orbit by about one: rock from the Moon sets that pace. Settled 2026-10-14.
 Settled: A knock Earth can’t hear: should a candidate world earn a listen? · The Mind advises it. When the sweep marks worlds, it says a deep-field receiver would hear their knocks about three times farther than the all-sky watch. The player decides. The Mind never builds it on its own. Settled 2026-10-14.
+Settled: One receiver, many marked worlds: how does it share its watch? · It is split. The player names the stars it holds, and each part hears less far, as real dish arrays do. On one star it hears a ten gigawatt knock to 117 ly. On four, to 59. On more than eleven, no farther than the all-sky watch. A dish array can’t hold scattered stars at full reach. Settled 2026-10-14.
 1. Is the plateau too quiet, and too long? · From minute 60 to minute 95 nothing wakes the player. Thought stays one size for 34 Years, 2.8 hours of play, until power from orbit.
-2. One receiver, many marked worlds: how does it share its watch? · A dish array can split into parts, one per star, and each hears less far. Held on one star, it hears Hael’s knock to 117 ly. Split among Earth’s 18 points of light, to 28 ly. Arrays steered by computer can also hold many stars at once.
-3. What can the player do with a suspicion? · Smog at four worlds, from Year 22. Proof waits for the far-side array, 11 Years on. A knock sent now would reach Gliese 432 A’s people as their Mind wakes.
-4. What does a late answer cost? · The player answers 21 Years after the first knock. A sender waits one round trip, then takes silence as news. Ombe’s wait ends about 20 Years before the answer lands.
-5. Earth has proof of minds who don’t know they are heard. What may it do? · Tones from a world decades before its Mind wakes. v1 filed a young world under no conversation possible.
-6. How much can a flyby show? · Sails pass at a fifth of light speed and send one dispatch. What they can see of a surface in those hours is the mock’s.
+2. What can the player do with a suspicion? · Smog at four worlds, from Year 22. Proof waits for the far-side array, 11 Years on. A knock sent now would reach Gliese 432 A’s people as their Mind wakes.
+3. What does a late answer cost? · The player answers 21 Years after the first knock. A sender waits one round trip, then takes silence as news. Ombe’s wait ends about 20 Years before the answer lands.
+4. Earth has proof of minds who don’t know they are heard. What may it do? · Tones from a world decades before its Mind wakes. v1 filed a young world under no conversation possible.
+5. How much can a flyby show? · Sails pass at a fifth of light speed and send one dispatch. What they can see of a surface in those hours is the mock’s.
