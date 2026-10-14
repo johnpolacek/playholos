@@ -796,7 +796,7 @@ Answered one at a time, in this order. Every answer must be permitted by current
     - **Settled 2026-10-14:** before its Mind wakes, a world with arrays may answer as a people, and its Mind inherits the exchange. See [How neighbors play](#how-neighbors-play).
     - **Settled 2026-10-14:** a picture shows everything larger than a pixel. The lens and the dispatch now follow the rule. The swarm is a thousand sails, six days of laser. See [How Earth learns](#how-earth-learns).
     - **Settled 2026-10-13:** the plateau at the grid limit stands. Better chips don't dodge it, and the megatonne road pays there. See [Growing compute](#growing-compute).
-13. **Earth's outposts and colonies, begun 2026-10-14.** See [Outposts and colonies](#outposts-and-colonies).
-    - **Settled 2026-10-14:** people may go anywhere physics allows, at real prices. Nothing artificial limits the Will, since Holos tests the Fermi paradox.
 12. **The mocks on other games, 2026-10-14:** [seed 11](explorations/v2-mocks/seed-11.html), with no voice, five felt worlds and a living neighbor next door, and [seed 62](explorations/v2-mocks/seed-62.html), where the first mirror can read no felt world. The first hour now runs on any seed. It raised one question:
     - **Settled 2026-10-14:** a neighbor's probe is a rocket, v1's, bright as it brakes. Small dark sails were set aside to keep the game simple. See [How neighbors play](#how-neighbors-play).
+13. **Earth's outposts and colonies, begun 2026-10-14.** See [Outposts and colonies](#outposts-and-colonies).
+    - **Settled 2026-10-14:** people may go anywhere physics allows, at real prices. Nothing artificial limits the Will, since Holos tests the Fermi paradox.
