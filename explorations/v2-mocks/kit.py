@@ -50,7 +50,9 @@ GEN = dict(And='Andromedae', Aql='Aquilae', Aqr='Aquarii', Ara='Arae', Ari='Arie
            Pup='Puppis', Ret='Reticuli', Scl='Sculptoris', Sco='Scorpii', Ser='Serpentis', Sex='Sextantis', Sge='Sagittae', Sgr='Sagittarii', Tau='Tauri',
            Tel='Telescopii', TrA='Trianguli Australis', Tri='Trianguli', Tuc='Tucanae', UMa='Ursae Majoris', UMi='Ursae Minoris', Vel='Velorum', Vir='Virginis',
            Vol='Volantis', Vul='Vulpeculae')
+IAU = {'Rigil Kentaurus': 'Alpha Centauri A', 'Toliman': 'Alpha Centauri B'}     # the names people say for the pair
 def pretty(name):
+    if name in IAU: return IAU[name]
     m = re.match(r'^(Gl|GJ|NN|Wo) ?(\d+\.?\d*) ?([ABC]?)$', name)
     if m: return f'Gliese {m.group(2)}' + (f' {m.group(3)}' if m.group(3) else '')
     m = re.match(r'^(\d+)? ?([A-Z][a-z]{1,2})? ?(\d)? ?([A-Z][A-Za-z]{2})( [ABC])?$', name)
@@ -101,25 +103,44 @@ def dials(v=DIALS):
 # A neighbor's world if one tugs hard enough for Earth's planet hunters by 2040, else the nearest natural world
 # that does, else a natural world the seed adds.
 def find_of(src=None):
+    # The truth behind each: its width, and its rung if natural. A home's rung is its people's: oxygen, and minds.
     if src and 'n' in src:
         p = src; h = p['host']; mass = p['n']['world']['mass']; a = p['a']; k = p['tug']; who = p['name']
-        msini = mass * math.sin(math.radians(p['pole']))
+        msini = mass * math.sin(math.radians(p['pole'])); radius = mass ** (1 / 3.7); rung = 'dead' if p['dead'] else 'home'
     elif src:
         w = src; h = w['host']; who = None; mass, a, k = w['mass'], w['a'], w['tug']
-        msini = mass * math.sin(math.radians(w['pole']))
+        msini = mass * math.sin(math.radians(w['pole'])); radius, rung = w['radius'], w['rung']
     else:
         h = G['natural']; who = None
         a = h['hz_in'] + 0.4 * (h['hz_out'] - h['hz_in']); floor = nb.rv_2040(h)
         msini = 1.5 * floor / nb.tug(1, a, nb.star_mass(h['luminosity']), 1); k = 1.5 * floor; mass = msini / 0.87
+        radius = mass ** (1 / 3.7); rung = seedmod.rung(SEED, dict(host=h, radius=radius, mass=mass, a=a))['rung']
     period = math.sqrt(a ** 3 / nb.star_mass(h['luminosity'])) * 365.25
     north = h['north'] and h['kind'] in 'GK'
     return dict(host=h, star=pretty(h['name']), d=h['distance_ly'], who=who, mass=mass, msini=msini, a=a, tug=k, period=period,
-                by='Terra Hunting' if north else 'ESPRESSO', found=2036 if north else 2034, xyz=host_xyz(h))
+                by='Terra Hunting' if north else 'ESPRESSO', found=2036 if north else 2034, xyz=host_xyz(h), radius=radius, rung=rung)
 # Settled 2026-10-13: Earth holds every world it has felt, from Year 0, and the Mind leads with one. The lead is picked
 # by what Earth knows, never by what the seed knows: the nearest, a sample. So a home never leads because it is a home.
 FINDS = sorted((find_of(x) for x in G['found'] + G['felt']), key=lambda f: f['d']) or [find_of()]
 FIND = FINDS[0]
+
+# What the first infrared telescope can read of a world, from calcs/observing.py: water then oxygen where the world sits
+# wide of its star in our sky, only color and ozone where it sits close in, or nothing where it is faint or in the glare.
+import observing
+def first_read(f):
+    o = observing.observe(f['d'] / 3.2616, f['radius'], f['a'], f['host']['luminosity'])
+    ok = lambda k: isinstance(o[k], float) and o[k] < math.inf
+    if ok('water'): return dict(o, mode='wide', days=o['oxygen'] if ok('oxygen') else o['water'], what='water, then oxygen' if ok('oxygen') else 'water only')
+    if ok('ozone'): return dict(o, mode='close', days=o['ozone'], what='color and ozone only')
+    return dict(o, mode=None, days=None, what='seen, not read' if o['seen_h'] else 'inside its star’s glare')
+# What that reading shows, by the truth. The first mirror tells apart no air, water without oxygen, and oxygen. Hidden
+# microbes read as a lifeless sea, and animals as an oxygen world (settled 2026-10-13). A world whose life died reads as a
+# lifeless sea: its oxygen is gone in a few million years, a sample.
+def shows(f):
+    r = f['rung']
+    return 'oxygen' if r in ('home', 'showing oxygen', 'with animals and forests') else 'bare' if r == 'bare rock' else 'dead' if r == 'dead' else 'sea'
 EARTHS = lambda m: f'{m:.1f}'.rstrip('0').rstrip('.')
+def earths(m, unit='Earth'): n = EARTHS(m); return f'{n} {unit}' if n == '1' else f'{n} {unit}s' if unit == 'Earth' else f'{n} {unit}es'
 
 # 82 Eridani d (Nari et al. 2025): at least 5.8 Earth masses, 647.6 days, e 0.45, 1.354 AU. How much of its year is warm?
 def warm_share(a=1.354, e=0.45, lum=0.66):
@@ -156,17 +177,20 @@ def rail(active):
 # The first is queued before Year 0. A standing order at Year 1.1 keeps them coming.
 DC_STEP = 1.5
 # The standing order from Year 1.1 keeps them coming, one a Year. Eleven fit under the grid: the last is done at Year 11.1.
-DCS = [(f'{o} data center', 0 if i == 0 else i + .1) for i, o in enumerate(('Ground', 'Second', 'Third', 'Fourth', 'Fifth', 'Sixth', 'Seventh', 'Eighth', 'Ninth', 'Tenth', 'Eleventh'))]
+# A Taiwan branch starts Earth lower on the same curve: a twelfth center fits, a Year later (early_game.centers).
+SCALE = E['compute']; N_DC = eg.centers(SCALE)
+ORD = ('Ground', 'Second', 'Third', 'Fourth', 'Fifth', 'Sixth', 'Seventh', 'Eighth', 'Ninth', 'Tenth', 'Eleventh', 'Twelfth', 'Thirteenth')
+DCS = [(f'{o} data center', 0 if i == 0 else i + .1) for i, o in enumerate(ORD[:N_DC])]
 DC_DONE = tuple(s + 1 for _, s in DCS)
-THINK = 100 * .25 / GRID_TW                    # thinking's share of energy at Year 0, in percent
+THINK = 100 * .25 / GRID_TW * SCALE            # thinking's share of energy at Year 0, in percent
 STUDY_SHARE = 10                               # percent of thought the player gives the Mind's studies. A sample
 # Hours 1 to 5, the third mock: the long roads, priced 2026-10-13 in calcs/early_game.py. The laser array is begun at
 # Year 9.4 and the rest at Year 12, with the yard done. Settled 2026-10-14: thought goes down the player's line, and this
 # player keeps the order begun. From Year 12 every work is paced by the thought that line gives it (early_game.replay).
-FH, FH_LEFT, FH_SPARE = eg.first_hour(show=False)                                 # the first hour, paced: settled 2026-10-14
+FH, FH_LEFT, FH_SPARE = eg.first_hour(show=False, scale=SCALE)                    # the first hour, paced: settled 2026-10-14
 FH = {k: round(v, 2) for k, v in FH.items()}
 YARD_DONE, LONG_START = FH['Orbital yard'], 12.0
-PACED = {k: v if k == 'spare' else round(v, 2) for k, v in eg.replay(eg.BY_START, start=LONG_START, show=False).items()}
+PACED = {k: v if k == 'spare' else round(v, 2) for k, v in eg.replay(eg.BY_START, start=LONG_START, show=False, scale=SCALE).items()}
 ROAD = dict(array=PACED['Laser sail array'], solar=PACED['Ground solar'], mirror=PACED['A 15 m mirror'], launcher=PACED['Launcher'],
             driver=PACED['Mass driver'], foundry=PACED['Orbital foundry'], prospect=PACED['Belt prospecting'], mining=PACED['Belt mining'],
             fifth=PACED['Far-side array, fifth 1'], fifths=[PACED[f'Far-side array, fifth {k}'] for k in range(1, eg.FIFTHS_TOTAL + 1)],

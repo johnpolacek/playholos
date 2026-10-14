@@ -260,6 +260,11 @@ WANTS = {  # work: (flagships, where the number comes from)
     'Launcher': (10, 'sample'), 'Belt mining': (20, 'sample'), 'Mass driver': (30, 'sample'), 'Orbital foundry': (30, 'sample'),
     'Far-side array, one fifth': (40, 'sample'), 'Power from orbit': (200, 'sample')}
 LIMIT_THOUGHT = 1.5 ** 11                # eleven data centers fit under the grid
+# A game whose Taiwan branch cut Earth's compute starts lower on the same curve: scale is Year 0's compute over the
+# no-branch path's. Thinking's draw on energy scales with it, so the grid holds 96 times full Year 0 thought, and the
+# fabs keep filling a center a Year until the next would pass that. At 67%, twelve fit, a Year later, at the same height.
+GRID_ROOM = 24 / 0.25
+def centers(scale=1.0): return int(math.log(GRID_ROOM / scale) / math.log(1.5))
 
 def at_the_limit(running=('A 15 m mirror', 'Laser sail array', 'Launcher', 'Belt mining', 'Mass driver', 'Orbital foundry')):
     room = LIMIT_THOUGHT / FLAGSHIP_THOUGHT
@@ -292,17 +297,18 @@ def split(line, room, push=PUSH):
         more = min(want * (most - 1), room); give[name] += more; room -= more
     return {name: give[name] / want for name, want, _ in line}, room
 
-def replay(order, start=12.0, dt=0.01, studies=0.1, show=True, early=None):
+def replay(order, start=12.0, dt=0.01, studies=0.1, show=True, early=None, scale=1.0):
     """The third mock's game from Year 12, every work paced by the thought the player's order gives it. The launcher
     and the laser array were begun earlier: `early` gives their standard Years left at Year 12, from first_hour()."""
-    early = early or first_hour(show=False)[1]
+    early = early or first_hour(show=False, scale=scale)[1]
+    n = centers(scale)
     left = {'Launcher': early['Launcher'], 'Laser sail array': early['Laser sail array'], 'Ground solar': 10, 'A 15 m mirror': ROADS['mirror'] * 0.75,
             'Mass driver': ROADS['driver'], 'Orbital foundry': ROADS['foundry'] * 0.75, 'Belt mining': ROADS['prospect'] + ROADS['mining']}
     line = [w for w in order if w in left]
     done, fifths, y, first, dc12, spare = {}, 0, start, None, math.inf, []
     rock = lambda y: DRIVER_KT * max(0, y - done.get('Mass driver', math.inf)) + MINING_KT * max(0, y - done.get('Belt mining', math.inf))
     while y < 80 and fifths < FIFTHS_TOTAL:
-        room = 1.5 ** (11 + (y >= dc12)) / FLAGSHIP_THOUGHT - studies / FLAGSHIP_THOUGHT
+        room = scale * 1.5 ** (min(n, sum(y >= d for d in dc_done(n))) + (y >= dc12)) / FLAGSHIP_THOUGHT - studies / FLAGSHIP_THOUGHT
         s, idle = split([(w, WANTS[w.split(' (')[0]][0], 1 if w == 'Power from orbit' else PUSH) for w in line], room)
         if first is None: first = dict(s, idle=idle)
         spare.append((y, idle / room))
@@ -335,23 +341,26 @@ def replay(order, start=12.0, dt=0.01, studies=0.1, show=True, early=None):
 # are samples: the mocks' own shares of Year 0's thought, turned into flagships.
 WANTS.update({'Deep flash watch': (0.1, 'sample'), 'Moon vault': (1.0, 'sample: the mocks\' 15% of Year 0'),
               'Launch complex': (0.3, 'sample: the mocks\' 5%'), 'Orbital yard': (0.7, 'sample: the mocks\' 10%')})
-DC_DONE = (1.0,) + tuple(i + 1.1 for i in range(1, 11))
+def dc_done(n=11): return (1.0,) + tuple(i + 1.1 for i in range(1, n))
+DC_DONE = dc_done()
 # (work, start Year, standard Years): the mocks' starts. The telescope has 8 Years left of its real schedule at Year 0.4.
 # Paced, the telescope is done at Year 6.1, so the player reads Alpha Centauri A and starts the laser array at Year 7.
 FIRST_HOUR = (('All-sky watch', 0, 6), ('Deep flash watch', 0, 6), ('Infrared telescope', 0.4, 8), ('Moon vault', 1.6, 10),
               ('Launch complex', 1.7, 2), ('Orbital yard', 6.3, 5), ('Launcher', 6.3, 24), ('Laser sail array', 7.0, ROADS['array']))
-SET_ASIDE = ((0, 99, 0.10), (0, 0.1, 0.05), (0.8, 2.8, 0.05), (1.1, 2.1, 0.10), (1.8, 3.0, 0.10), (6.2, 10.2, 0.10)) \
-    + tuple((d - 1, d, 0.05) for d in DC_DONE)              # studies, observations, a Year's listening, the telescope's reads, the data centers
-def first_hour(until=12.0, dt=0.005, show=True):
+SET_ASIDE_BASE = ((0, 99, 0.10), (0, 0.1, 0.05), (0.8, 2.8, 0.05), (1.1, 2.1, 0.10), (1.8, 3.0, 0.10), (6.2, 10.2, 0.10))
+def set_aside(dcs=DC_DONE): return SET_ASIDE_BASE + tuple((d - 1, d, 0.05) for d in dcs)    # studies, observations, a Year's listening, the telescope's reads, the data centers
+SET_ASIDE = set_aside()
+def first_hour(until=12.0, dt=0.005, show=True, scale=1.0):
     """Years 0 to 12, every build paced by the line. Returns when each is done, standard Years left at `until`, and
-    the share of thought idle through the hour, as (Year, share)."""
+    the share of thought idle through the hour, as (Year, share). scale: Year 0's compute over the no-branch path's."""
     left = {w: years for w, _, years in FIRST_HOUR}; start = {w: t for w, t, _ in FIRST_HOUR}
     done, y, shown, spare = {}, 0.0, {}, []
+    dcs = dc_done(centers(scale)); aside = set_aside(dcs)
     while y < until:
-        room = 1.5 ** sum(y >= d for d in DC_DONE) / FLAGSHIP_THOUGHT - sum(share for a, b, share in SET_ASIDE if a <= y < b) / FLAGSHIP_THOUGHT
+        room = scale * 1.5 ** sum(y >= d for d in dcs) / FLAGSHIP_THOUGHT - sum(share for a, b, share in aside if a <= y < b) / FLAGSHIP_THOUGHT
         line = [w for w, t, _ in FIRST_HOUR if t <= y and w not in done]
         s, idle = split([(w, WANTS[w][0], PUSH) for w in line], room)
-        spare.append((y, idle / (room + sum(share for a, b, share in SET_ASIDE if a <= y < b) / FLAGSHIP_THOUGHT)))
+        spare.append((y, idle / (room + sum(share for a, b, share in aside if a <= y < b) / FLAGSHIP_THOUGHT)))
         for w in line:
             if w not in shown: shown[w] = (y, s[w])
             left[w] -= dt / paced(1, s[w])

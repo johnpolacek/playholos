@@ -14,11 +14,12 @@ Compute at Year 0 · 100% · 10²⁵ operations a second
 Dials · leans open, expand and deepen, even, leans bold · real history, moved by the branches
 Neighbors · 9 · 3 heard Earth · first arrival Year 8.5
 Seeded find · Gliese 432 A · Varn’s world
+The same mocks on other games, to find what assumes this one: seed 11, with no voice, five felt worlds and a living neighbor next door. · Seed 62, where the first telescope can read none of its felt worlds.
 
 ## Godview · who is out there
 The player sees none of this. Light-time is real waiting at 5 minutes a Year.
 Neighbor · Star · Light-time · At Year 0 · What it knows of Earth · What it does about it
-Anwe · watcher · Rigil Kentaurus · G star · 4.3 ly · 00:21:36 · died 1986 · dead before Year 0
+Anwe · watcher · Alpha Centauri A · G star · 4.3 ly · 00:21:36 · died 1986 · dead before Year 0
 Kesh · watcher · Gliese 216 B · K star · 29.4 ly · 02:26:45 · wakes Year 66.9 · +05:34:42 · has not heard Earth
 Varn · inward · Gliese 432 A · K star · 31.2 ly · 02:35:54 · wakes Year 57.6 · +04:47:48 · has not heard Earth
 Kirrin · watcher · strange · 12 Ophiuchi · K star · 32.3 ly · 02:41:21 · wakes Year 81.2 · +06:45:52 · has not heard Earth
@@ -27,7 +28,7 @@ Hael · contacter · Gliese 1021 · G star · 49.1 ly · 04:05:24 · awake 29 Ye
 Ombe · contacter · Gliese 4338 B · M star · 49.1 ly · 04:05:33 · awake 44 Years · heard Earth’s radars from 1999, and mapped its day and orbit · knocks back: a short aimed signal, its name optional · Its answer to Earth’s radars: sent 1999, reaches Earth Year 8.5, +00:42:21. Year 0’s sky watch would miss it. The all-sky watch catches it.
 Ulan · inward · Gliese 52 · K star · 49.1 ly · 04:05:42 · wakes Year 29.4 · +02:27:01 · has not heard Earth
 Ree · contacter · 19 Draconis · F star · 49.9 ly · 04:09:42 · awake 21 Years · heard Earth’s radars from 2000, and mapped its day and orbit · knocks back: a short aimed signal, its name optional · Its answer to Earth’s radars: sent 2020, reaches Earth Year 29.6, +02:28:13. Year 0’s sky watch would miss it. The all-sky watch catches it.
-[drawing: Every neighbor in this game, seen from above the galaxy’s plane; labels: 10 ly · 00:50:00, 20 ly · 01:40:00, 30 ly · 02:30:00, 40 ly · 03:20:00, 50 ly · 04:10:00, Earth, Anwe, Rigil Kentaurus · 4.3 ly, Kesh, Gliese 216 B · 29.4 ly, Varn, Gliese 432 A · 31.2 ly, Kirrin, 12 Ophiuchi · 32.3 ly, Nuvo, 20 Leonis Minoris · 48.7 ly, Hael, Gliese 1021 · 49.1 ly, Ombe, Gliese 4338 B · 49.1 ly, Ulan, Gliese 52 · 49.1 ly, Ree, 19 Draconis · 49.9 ly, 82 Eridani, Fomalhaut, Luyten’s Star, Gliese 432 A, 12 Ophiuchi]
+[drawing: Every neighbor in this game, seen from above the galaxy’s plane; labels: 10 ly · 00:50:00, 20 ly · 01:40:00, 30 ly · 02:30:00, 40 ly · 03:20:00, 50 ly · 04:10:00, Earth, Anwe, Alpha Centauri A · 4.3 ly, Kesh, Gliese 216 B · 29.4 ly, Varn, Gliese 432 A · 31.2 ly, Kirrin, 12 Ophiuchi · 32.3 ly, Nuvo, 20 Leonis Minoris · 48.7 ly, Hael, Gliese 1021 · 49.1 ly, Ombe, Gliese 4338 B · 49.1 ly, Ulan, Gliese 52 · 49.1 ly, Ree, 19 Draconis · 49.9 ly, 82 Eridani, Fomalhaut, Luyten’s Star, Gliese 432 A, 12 Ophiuchi]
 Filled: awake at Year 0. Open: wakes later. Cross: dead. Blue ring: has heard Earth. Amber: a hunter. Diamonds: Earth’s leads.
 
 ## Before Year 0
@@ -872,7 +873,7 @@ ITS VIEW · FROM OUR CHARTER AND DIALS · A yard and a launcher. We know of warm
 Ask the Mind… · [Send · ↑]
 Godview
 The Mind is honest about the annex: as priced it adds a quarter of Year 0’s thought, which is a quarter of a percent by Year 11.
-Its view follows the dials: leans open, leans bold.
+Its view follows the dials: leans open, expand and deepen, even, leans bold.
 Real masses, from the audit: power from orbit for a fifth more energy is about 10 Mt. A Moon mass driver throws 600 kt a Year, by O’Neill’s estimate, and belt mining brings 120.
 So matter piles up, and the Mind says why. The choice here is when to start the long road. This player picks reach, and the mines wait.
 +31:30 · Year 6.3
@@ -907,7 +908,7 @@ Sol · 2046.4 · 1 Year = 00:05:00
 ENERGY · [11.9%] · MATTER · 203 kt · COMPUTE · [100%]
 MIND · THE NEW TELESCOPE
 ONE WORLD AT A TIME · YOURS TO ORDER
-- selected: Gliese 432 A’s world · close to its star in our sky · color and ozone only · 49 days · 00:00:41
+- selected: Gliese 432 A’s world · close to its star in our sky · color and ozone only · 49 days · 00:00:40
 - 82 Eridani d · wide and bright · water, then oxygen · 11 days · 00:00:09
 - 12 Ophiuchi’s world · close in and faint · seen, not read · out of reach
 WHEN IDLE · ITS SEARCH
@@ -1076,7 +1077,7 @@ Five minutes of play since the telescope woke them. Two until the next wake.
 +38:00 · Year 7.6
 The phone lights. Leaves it.
 Lands · The sweep’s first pass is done. 15 more points of light in warm zones.
-Saturday · 17:14
+Saturday · 17:02
 HOLOS · NOW · The sweep’s first pass is done: 15 more candidates · Nearest: Gliese 664, 19 ly. All are in the report.
 HOLOS · THE MIND · A receiver would hear some of them better · On one of these worlds, a deep-field receiver hears knocks three times farther than the watch. Spread over eleven, no farther. Yours to say.
 Godview
@@ -1214,9 +1215,9 @@ Saturday · 17:24
 HOLOS · SWEEPING · The infrared telescope: Alpha Centauri B next · Any candidate wakes you.
 HOLOS · WAITING · Gliese 4338 B: unanswered · The array is held on it. Nothing sent.
 Godview
-The telescope is back on its sweep. 82 Eridani d and 12 Ophiuchi’s world still wait for an order. Kirrin lives at 12 Ophiuchi.
+The telescope is back on its sweep. 82 Eridani d still waits for an order. 12 Ophiuchi’s world waits for a better mirror.
 Hael’s knock arrives at Year 19.9, +01:39:35. The all-sky watch misses it.
-From minute 15 to minute 60 the player was woken seven times and played about nine minutes.
+From minute 15 to minute 60 the player was woken seven times and played about eight minutes.
 
 ## The long roads · hours 1 to 5
 Years 12 to 51. The phone is down for most of 3 hours. Each row is a wake, or a moment the player looked. Thought has hit the grid limit, and what moves now are works that take decades.
@@ -1250,7 +1251,7 @@ Puts the phone down.
 Saturday · 17:25
 HOLOS · IN 00:34:00 · Earth: ground solar is done · Year 19. A fifth more energy.
 Godview
-The next wake is 34 minutes off. In the first hour the player was woken six times.
+The next wake is 34 minutes off. In the first hour the player was woken seven times.
 Thought is flat from Year 11.1 until a twelfth data center, at about Year 45: 34 Years.
 Settled 2026-10-14: the quiet stands. The player chooses what wakes them, and the long works fill it.
 Settled · Is the plateau too quiet, and too long? No. Replayed with paced works, the solar lens and listening again with each fifth, the third mock wakes the player twelve times in about three hours: about as often as the first hour. The longest quiet is 35 minutes. Every wake comes from a settled rule or the player’s own orders, and the player chooses what wakes them. Settled 2026-10-14.

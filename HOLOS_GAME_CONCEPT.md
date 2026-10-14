@@ -62,13 +62,14 @@ Settled 2026-10-06.
 Settled 2026-10-10. Numbers in [calcs/neighbors.py](calcs/neighbors.py).
 
 - **The seed sometimes puts a neighbor where Earth knocked.** In one game in five, if a drawn neighbor can live at a messaged star, the seed places it there.
-  - By chance alone, about one game in 27 has someone at a messaged star. With the nudge, about 1 in 5, and a knock is caught in about 1 in 7. Measured on 1,000 drawn games ([calcs/seed.py](calcs/seed.py)), 2026-10-14. It was 1 in 10 before awake Minds caught every knock. Before Gliese 208 left the host list it was one in 10 and 3 in 10.
+  - By chance alone, about one game in 10 has someone at a messaged star. With the nudge, about 3 in 10, and a knock is caught in about 1 in 5. Measured on 1,000 drawn games ([calcs/seed.py](calcs/seed.py)), 2026-10-14, after HD 10307 joined. Before, 1 in 27, 1 in 5 and 1 in 7. It was 1 in 10 before awake Minds caught every knock. Before Gliese 208 left the host list it was one in 10 and 3 in 10.
   - It is a game choice, not physics. It contradicts nothing: Earth chose those stars because they might have planets.
-- **Six messaged stars can host a neighbor.** Luyten's Star, TZ Arietis, Gliese 526, Gliese 581, Gliese 49, and 55 Cancri B.
+- **Seven messaged stars can host a neighbor.** Luyten's Star, TZ Arietis, Gliese 526, Gliese 581, Gliese 49, 55 Cancri B, and HD 10307.
   - 55 Cancri A has a giant crossing its warm zone. Its companion B sat in the same beam.
-  - Altair, 47 Ursae Majoris, Kappa¹ Ceti, HD 10307 and Teegarden's Star can't host one.
+  - Altair, 47 Ursae Majoris, Kappa¹ Ceti and Teegarden's Star can't host one.
+  - *HD 10307 can, from 2026-10-14.* It was thought missing from Gaia's census. Gaia lists it, at a parallax its unseen companion spoils: 48 ly, against Hipparcos's 41.6. The census now takes Hipparcos's, as the knock list did.
   - Gliese 208 can't either, from 2026-10-12. It turns every 12.3 days, which dates it near half a billion years (Engle 2024, Grandjean et al. 2021). Earth's 2003 message still arrives there at Year 0.8. No one is home.
-  - All six are M dwarfs, so only neighbors that can live at one fit: 9 of the 30.
+  - Six are M dwarfs, where 9 of the 30 neighbors can live. HD 10307 is a Sun-like star, where 13 can.
 - **Any knock above a world's floor is caught.** Revised 2026-10-14. Numbers in [calcs/neighbors.py](calcs/neighbors.py).
   - *Why.* Hearing faint things is costly: a hum, smog, everyday radio. Hearing a beam meant for you is not.
     - Earth builds an all-sky watch in 6 Years, for a hundredth of its thought. It hears a Cosmic Call-strength knock, 10¹² W for four hours, to about 390 ly.
@@ -296,7 +297,10 @@ Settled 2026-10-10. Numbers in [calcs/early_game.py](calcs/early_game.py). Repla
 - **Faster than one a Year needs new fabs.** A chip fab project adds a second line: 3 Years, a tenth of compute, no matter. Priced 2026-10-11. A leading-edge fab takes 2 to 4 years, and one firm makes the tools that print the finest chips, about 90 a year. Two lines make compute grow 2.25 times a Year. The chip stock grew 3.4 times a year in 2026, so that pace has been seen.
   - *It only reaches the ceiling sooner.* Eleven data centers fit under the grid. One line fills them by Year 11, two by Year 7. A third line gains a third of a Year.
 - **Only if the player chooses.** One at a time, or a standing order to keep them coming. Compute never grows on its own.
-- **A Taiwan branch lowers where compute starts, not the pace.** An assumption, until the mocks test a branch game.
+- **A Taiwan branch lowers where compute starts, not the pace.** Tested 2026-10-14 on a second game, seed 11: a blockade left 67% of compute.
+  - *This project's reading:* thinking's draw on energy falls with the chips, so the grid caps the same height. A twelfth data center fits, and the limit comes a Year later, at Year 12.1.
+  - *Builds run slower while thought is short.* The telescope is done at Year 6.5, not 6.1, and the vault at 9.4, not 9.1.
+  - *The long roads barely move.* Rock from the Moon sets their pace, not thought.
 
 ## Build times
 
@@ -416,6 +420,8 @@ Settled 2026-10-13.
   - *Every mind stays hand-written,* living or dead, with industry or without. The seed never draws one.
   - *Why.* Earth's life has been microbes for most of 4.2 billion years, and its radio is 130 years old. A natural draw would almost never land on minds.
   - *What the first mirror tells apart.* No air, water without oxygen, and oxygen. Hidden microbes read as a lifeless sea, and animals as an oxygen world.
+  - *A world whose life died reads as a lifeless sea.* Its oxygen is gone in a few million years. A sample, from 2026-10-14.
+  - *Which reading a game opens with.* Measured on 300 games, 2026-10-14. At the nearest felt world it can read, the first mirror reads water and oxygen in 6 games of 10. It reads only color and ozone in 1 in 17, as in the mocks' game. In 3 of 10 it can read no felt world, and the player reads 82 Eridani d.
   - *The premise makes life common.* It puts a mind at about 1 warm world in 18. Minds can't be commoner than life, so most worlds that can hold life do.
   - *Later:* stone-age worlds and old ruins can join the roster as written entries.
   - Set aside: minds without industry drawn by the seed, and every rung drawn, ruins included.
