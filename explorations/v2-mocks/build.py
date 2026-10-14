@@ -53,7 +53,8 @@ SETTLED = [('Does a half-built real instrument cost fewer Years?', 'It costs wha
            ('What does a picture show?', 'Everything larger than a pixel, and nothing smaller. Physics sets the pixel, and the seed’s world fills it. A solar lens: about 25 km at 30 pc, so cities and cleared land, never roads. The nearest sail of a swarm: about 20 m, so roads and dams, never single buildings. Settled 2026-10-14.'),
            ('Earth has proof of minds who don’t know they are heard. What may it do?', 'Anything v1 allows, as with a suspicion. And they can answer. Before its Mind wakes, a world with radio arrays may answer as a people, as Earth’s own senders have: about ten aimed sends since 1974, none after the world was asked. The seed rolls whether and how, and its Mind inherits the exchange. Settled 2026-10-14.'),
            ('What does a late answer cost?', 'Nothing extra. A sender listens for good, so a late answer is always heard. Its own tables carry the cost: by the time the answer lands, it may have knocked again or turned to others, and it rolls its table for an answer like any other. The Mind tells the player what the sender has likely done. Settled 2026-10-14.'),
-           ('Is the plateau too quiet, and too long?', 'No. Replayed with paced works, the solar lens and listening again with each fifth, the third mock wakes the player twelve times in about three hours: about as often as the first hour. The longest quiet is 35 minutes. Every wake comes from a settled rule or the player’s own orders, and the player chooses what wakes them. Settled 2026-10-14.')]
+           ('Is the plateau too quiet, and too long?', 'No. Replayed with paced works, the solar lens and listening again with each fifth, the third mock wakes the player twelve times in about three hours: about as often as the first hour. The longest quiet is 35 minutes. Every wake comes from a settled rule or the player’s own orders, and the player chooses what wakes them. Settled 2026-10-14.'),
+           ('A neighbor sends a probe to Sol. What arrives, and does Earth see it?', 'The sender’s dials choose. An open sender sends a rocket: v1’s 20-Year build, a tenth of light speed, bright as it brakes. A hidden one sends a sail of grams that brakes on the Sun’s light, below 3.8% of light speed, and dark. Small means slow, and fast means seen. Settled 2026-10-14.')]
 
 # ---------- Godview: who is out there ----------
 MOVE = reactions.MOVES
@@ -72,12 +73,12 @@ def unheard(p):
     years = sorted({f"{u['arrived']:.0f}" for u in p['unheard']})
     a = p['after_silence']
     then = '' if not a else (f" If still unanswered at Year {a['at'] - Y0:.1f}, it {MOVE[a['move']]}." if a['at'] > Y0 else f" Unanswered by {a['at']:.0f}, it {MOVE[a['move']]}.")
-    return f"Its knock reached Earth in {' and '.join(years)}. No one was listening.{then}"
+    return f"Its {' and '.join(sorted({u['move'] for u in p['unheard']}))} reached Earth in {' and '.join(years)}. No one was listening.{then}"
 def does(p):
     if not p['heard']: return ''
     return (f"{MOVE[p['on_hum']]}" if p['knows'] <= Y0 else f"at waking: {MOVE[p['on_hum']]}")
 def inbound(p):
-    return ' '.join(f"{i['what'][0].upper() + i['what'][1:]}: sent {seedmod.year(i['sent'])}, reaches Earth Year {i['year']:.1f}, +{clock(i['year'])}. "
+    return ' '.join(f"Its {q['kind']} probe, sent {q['what']}, reaches Sol at Year {q['year']:.1f}: {'bright as it brakes' if q['bright'] else 'dark'}." for q in p.get('probes', ())) + ' ' * bool(p.get('probes')) + ' '.join(f"{i['what'][0].upper() + i['what'][1:]}: sent {seedmod.year(i['sent'])}, reaches Earth Year {i['year']:.1f}, +{clock(i['year'])}. "
                     f"Year 0’s sky watch would {'catch' if i['kit0'] else 'miss'} it. The all-sky watch {'catches' if i['allsky'] else 'misses'} it." for i in p['inbound'] if i['year'] > 0)
 TONE = {'watcher': '', 'contacter': 'you', 'inward': '', 'hunter': 'other'}
 def roster_table():
@@ -886,8 +887,6 @@ if LIVE_ON:
     LBANK = json.loads((here.parents[1] / 'data' / 'voices' / f'{LW.lower()}.json').read_text())
     LENS_PX_L = signs.lens_km(LD / 3.2616); LENS_Y_L = T(9) / 300 + eg.paced(signs.LENS_BUILD, eg.PUSH) + signs.LENS_FLIGHT + signs.LENS_LOOK
     SAILS_L = ROAD['array'] + LD / 0.2 + LD
-    PROBES = [t for t in ([LIVE['knows']] if LIVE['on_hum'] == 'probe' else []) + ([LIVE['after_silence']['at']] if LIVE['after_silence'] and LIVE['after_silence']['move'] == 'probe' else [])]
-    PROBE_V1 = [t + LIVE['thinks'] + 20 + LD / 0.1 - Y0 for t in PROBES]          # v1: a sentinel builds in 20 Years and flies at a tenth of light speed
     L_CAND = tab(T(6), 'Report', 'REPORT', 'CANDIDATE', f"""<button class="backlink inline">‹ All reports</button>
 <h3 class="lead">A world at {LS}</h3>
 <p class="copy small">{LS} · {LD:.1f} ly · infrared telescope, on its sweep · two visits, weeks apart · light that left 4 Years ago</p>
@@ -916,9 +915,6 @@ if LIVE_ON:
                   + part('CULTURE', 'What we call ourselves, our world and our star') + part('SIGHTING', 'Your air: water, oxygen, and smog like ours in 1980')
                   + SEC('GOES TO') + facts([(LS, f'narrow beam · arrives Year {LANDS_Y:.1f}'), ('Tells them', 'that someone here sees them, and is awake')])
                   + '<div class="twobtn"><button class="primary ghost">Edit</button><button class="primary">Send it twice</button></div>')
-    Q_PROBE = ask('A neighbor sends a probe to Sol. What arrives, when, and does Earth see it?',
-                  f'In this game {LW} rolled one in {PROBES[0]:.0f}, after Earth missed its gifts. On v1’s times, a 20-Year build and a tenth of light speed, it reaches Sol at Year {PROBE_V1[0]:.0f}. v1 says braking is bright, and a watcher may brake dark. Across games, one arrives by Year 60 in 1 game of 200.' if PROBES else
-                  'The seed rolls probes, and nothing yet says when one arrives or what Earth sees.')
     END_HOUR = lockscreen('17:24', [('SWEEPING', 'The infrared telescope: its second pass', 'Any candidate wakes you.'),
                                     ('SENT', f'{LS}: our knock lands at Year {LANDS_Y:.1f}', f'An answer could come by Year {LANDS_Y + LD:.0f}. The all-sky watch is listening.')])
     LIVE_ROWS = [
@@ -943,7 +939,8 @@ if LIVE_ON:
              ['Settled 2026-10-14: a suspicion opens the whole kit. The Mind says what each act tells them, and when each answers.',
               f'At {LD:.1f} ly a lens pixel is about {LENS_PX_L:.1f} km: cities, cleared land and lakes behind dams, not dams themselves. Scaled from NASA’s 25 km at 30 pc.',
               f'Next door a knock and its answer take {2 * LD:.1f} Years: {clock(2 * LD)[1:]} of play. A conversation here runs at the pace of a long evening.',
-              f'Settled 2026-10-14: a laser launch is seen by its target. {LW} is awake, so it would see the sails coming.'], question=Q_PROBE, settled=(34, 35)),
+              f'Settled 2026-10-14: a laser launch is seen by its target. {LW} is awake, so it would see the sails coming.',
+              *[f'{LW}’s {q["kind"]}, sent {q["what"]}, reaches Sol at Year {q["year"]:.1f}, +{clock(q["year"])}. ' + ('Its exhaust points at us as it brakes: the watches will see it.' if q['bright'] else 'It brakes dark on the Sun’s light.') for q in LIVE['probes'] if q['year'] < 100]], settled=(34, 35, 39)),
         stop(T(10), T(9), 'Knock. Our name, and that we see them.', None,
              talk(L_KNOCK, f'Composed. Two parts, nothing we can’t take back. It lands at Year {LANDS_Y:.1f}. If anyone there listens and answers at once, we hear by Year {LANDS_Y + LD:.0f}. It is yours to send.', ('Send it twice', 'Not yet')),
              [f'Had the player asked, the Mind’s view from the charter and dials would be: “{L_VIEW}” This player knocks without asking.',

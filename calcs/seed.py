@@ -70,6 +70,19 @@ def act(p, news, t, what, table, rng, depth=0):
         return move
     return 'watch'
 
+# ---------- A neighbor's probe ----------
+# Settled 2026-10-14: the sender's dials choose. An Open sender sends a rocket, v1's sentinel: 20 Years to build, a
+# tenth of light speed, and bright as it brakes, since its exhaust points at Sol. A Hidden sender sends a small sail,
+# grams on a sail hundreds of metres wide, braking on the Sun's light. The Sun can catch a sail only below 3.8% of
+# light speed (Heller and Hippke 2017), and it brakes dark. Searches of the Solar System would miss even a probe 1 to
+# 10 m across (Haqq-Misra and Kopparapu 2012). The sail's build of 5 Years is a sample.
+ROCKET_V, ROCKET_BUILD, SAIL_V, SAIL_BUILD = 0.1, 20, 0.038, 5
+def probe_trip(p, t, what):
+    rocket = p['dials'].startswith('O')
+    v, build = (ROCKET_V, ROCKET_BUILD) if rocket else (SAIL_V, SAIL_BUILD)
+    launch = t + p['thinks'] + build
+    return dict(what=what, kind='rocket' if rocket else 'sail', bright=rocket, launch=launch, arrives=launch + p['d'] / v, year=launch + p['d'] / v - Y0)
+
 def keyed(*parts):
     """A number between 0 and 1 that depends only on its parts. Placement uses it with each star's id, so a star
     leaving the host list moves only a neighbor that lived there."""
@@ -213,6 +226,11 @@ def draw(seed, rows=None):
         for start, end, watts, *how in n['emissions'] if dead else []:   # a dead world's last broadcast
             if end == n['dies']: p['inbound'].append(dict(what='its last broadcast', move='broadcast', sent=w - start, year=w - start + d - Y0, watts=watts))
         for i in p['inbound']: catches(p, i, seed)
+        # Probes it rolled, and when each reaches Sol. Pure arithmetic on moves already rolled, so no draw moves.
+        p['probes'] = [probe_trip(p, t, what) for t, move, what in
+                       ([(p['knows'], p['on_hum'], 'its answer to Earth’s radars')] if p['heard'] else [])
+                       + ([(p['after_silence']['at'], p['after_silence']['move'], 'after silence')] if p['after_silence'] else [])
+                       + [(c['acts'], c['move'], f"its answer to {c['msg']}") for c in p['caught']] if move == 'probe']
         out.append(p)
     for p in out: p.update(sight(p['host'], p['n']['world']['mass'] ** (1 / 3.7), p['a']))
     drawn = [w for w in (warm_world(seed, h) for h in rows if h['id'] not in used) if w]

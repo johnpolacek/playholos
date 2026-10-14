@@ -1048,6 +1048,40 @@ What a neighbor's world can plausibly be, beyond an Earth twin. Each roster entr
   - A laser sail at a fifth of light speed needs materials with extreme properties. Later designs layer molybdenum disulfide, an atom-thin reflector, between films of silicon nitride that shed heat ([arXiv 2106.03558](https://arxiv.org/pdf/2106.03558)). Only the abstract and summaries were read.
   - Why it matters: a laser sail reflects one color. A sail braking on a star must reflect its whole spectrum, a harder material problem.
   - Used: the open question on neighbor probes, 2026-10-14.
+- **[Gillon 2014, the Sun's focal regions](https://arxiv.org/abs/1309.7586)** · Published, Acta Astronautica.
+  - Probes from nearby stars could link home at low power through stellar gravitational lenses. So look for relays beyond 550 AU from the Sun, on the line opposite each of the nearest stars. A 2021 follow-up picks Wolf 359 as the best target ([arXiv 2111.05334](https://arxiv.org/pdf/2111.05334)).
+  - Critics: a builder could hide it, and a focal link would leak too little to see.
+  - Why it matters: it names where a hidden watcher's relay would sit.
+  - Used: speculative options for neighbor probes, 2026-10-14.
+- **[Kerby and Wright 2021](https://arxiv.org/abs/2109.08657v2)** · Published, AJ 162, 252.
+  - A relay at a star's gravitational focus gains about 120 dB. Drift from the star's wobble is metres a second a year, fixable over centuries. The Sun and Barnard's Star make good hosts. Alpha Centauri and Sirius do not, by press accounts, since companions disturb them.
+  - Why it matters: relays are engineering, not new physics.
+  - Used: speculative options for neighbor probes, 2026-10-14.
+- **[Benford 2019, "Looking for Lurkers"](https://arxiv.org/pdf/1903.09582)** · Preprint, later in AJ by one account.
+  - Earth's co-orbital asteroids, such as 2016 HO3, offer a hidden probe material, a stable anchor and cover. None has been searched by SETI or planetary radar. A critic notes these orbits are not stable over a thousand years.
+  - Used: speculative options for neighbor probes, 2026-10-14.
+- **[Freitas and Valdes 1980](https://rfreitas.com/Astro/SearchIcarus1980.htm)** · Published, Icarus 42, 442.
+  - A photographic search of the Earth-Moon L4 and L5 regions in 1979 found nothing, to about 14th magnitude. A 1983 follow-up added the other Lagrange points and found nothing.
+  - Why it matters: the only real searches for probes near Earth reached only large, bright objects.
+  - Used: speculative options for neighbor probes, 2026-10-14.
+- **[Freitas 1980, a self-reproducing probe](https://www.rfreitas.com/Astro/ReproJBISJuly1980.htm)** · Published, JBIS 33, 251.
+  - REPRO, by summaries: fusion powered, mining Jupiter for helium-3, half its payload a seed that builds a new probe every 500 years. About 10 billion kg. It credits Bracewell with the first serious proposal for material probes.
+  - Why it matters: copying probes break no law. Their mass and pace are the limit.
+  - Used: speculative options for neighbor probes, 2026-10-14.
+- **[Forward 1984, roundtrip laser sails](https://www.centauri-dreams.org/2005/05/18/fine-tuning-the-interstellar-lightsail/)** · Published, Journal of Spacecraft and Rockets 21, 187. Read through summaries only.
+  - A sail in three parts. At the target the outer ring detaches and reflects the home laser back onto the inner sail, which brakes.
+  - Why it matters: fast, able to stop, no rocket. But the sender's laser shines on the target for years, so the target sees it.
+  - Used: speculative options for neighbor probes, 2026-10-14.
+- **[Frisbee 2003, antimatter rockets](https://ntrs.nasa.gov/citations/20060043411)** · Conference paper, AIAA. Numbers through Centauri Dreams only.
+  - A 40 ly mission in 100 years needs a multi-stage craft of millions of tonnes, radiators thousands of km long, and antimatter made at efficiencies near a billionth.
+  - Why it matters: allowed by physics, absurd in cost. Its gamma rays make it bright.
+  - Used: speculative options for neighbor probes, 2026-10-14.
+- **Bussard's interstellar ramjet** · Fishback 1969, through [Centauri Dreams](https://www.centauri-dreams.org/2020/04/03/the-interstellar-ramjet-at-60/).
+  - Scooped interstellar gas gives only about 1 N of thrust a square kilometre of intake, before drag. Drag may exceed thrust. No definitive paper was found.
+  - Used: set aside for neighbor probes, 2026-10-14.
+- **Starwisp** · Forward 1985, corrected by Landis, through [Centauri Dreams](https://www.centauri-dreams.org/2008/10/21/remembering-starwisp/).
+  - A wire-mesh sail pushed by microwaves. Wires that thin absorb microwaves instead of reflecting them, and burn. The idea of a microwave sail stands. That design does not.
+  - Used: set aside for neighbor probes, 2026-10-14.
 - **[Haqq-Misra and Kopparapu 2012](https://arxiv.org/abs/1111.1212)** · Published, Acta Astronautica.
   - Searches of the Solar System are too incomplete to rule out alien probes. Few could find one 1 to 10 m across, by press accounts of the paper ([Universe Today](https://www.universetoday.com/90789/alien-artifacts-may-be-here-just-hard-to-find)). Only the abstract was read.
   - Why it matters: v1 reasoned that ancient probes must be rare, since none has been found at Sol. That holds only for large ones.

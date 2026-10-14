@@ -1059,9 +1059,9 @@ Settled 2026-10-14: a suspicion opens the whole kit. The Mind says what each act
 At 4.3 ly a lens pixel is about 1.1 km: cities, cleared land and lakes behind dams, not dams themselves. Scaled from NASA’s 25 km at 30 pc.
 Next door a knock and its answer take 8.6 Years: 0:43:12 of play. A conversation here runs at the pace of a long evening.
 Settled 2026-10-14: a laser launch is seen by its target. Sere is awake, so it would see the sails coming.
-Design question 1 · A neighbor sends a probe to Sol. What arrives, when, and does Earth see it? The seed rolls probes, and nothing yet says when one arrives or what Earth sees.
 Settled · What can the player do with a suspicion? Anything v1 allows, at any world: listen, look, go or knock. The Mind says what it knows, what each act risks, and when each answers. For four smog worlds at Year 22: radio from the nearer ones by Year 34, a solar lens picture of one world by Year 46 to 48, sails’ word after Year 200. Settled 2026-10-14.
 Settled · What does a picture show? Everything larger than a pixel, and nothing smaller. Physics sets the pixel, and the seed’s world fills it. A solar lens: about 25 km at 30 pc, so cities and cleared land, never roads. The nearest sail of a swarm: about 20 m, so roads and dams, never single buildings. Settled 2026-10-14.
+Settled · A neighbor sends a probe to Sol. What arrives, and does Earth see it? The sender’s dials choose. An open sender sends a rocket: v1’s 20-Year build, a tenth of light speed, bright as it brakes. A hidden one sends a sail of grams that brakes on the Sun’s light, below 3.8% of light speed, and dark. Small means slow, and fast means seen. Settled 2026-10-14.
 +35:30 · Year 7.1
 “Knock. Our name, and that we see them.”
 Earth · Year 7.1
@@ -1205,4 +1205,5 @@ Settled: What does a picture show? · Everything larger than a pixel, and nothin
 Settled: Earth has proof of minds who don’t know they are heard. What may it do? · Anything v1 allows, as with a suspicion. And they can answer. Before its Mind wakes, a world with radio arrays may answer as a people, as Earth’s own senders have: about ten aimed sends since 1974, none after the world was asked. The seed rolls whether and how, and its Mind inherits the exchange. Settled 2026-10-14.
 Settled: What does a late answer cost? · Nothing extra. A sender listens for good, so a late answer is always heard. Its own tables carry the cost: by the time the answer lands, it may have knocked again or turned to others, and it rolls its table for an answer like any other. The Mind tells the player what the sender has likely done. Settled 2026-10-14.
 Settled: Is the plateau too quiet, and too long? · No. Replayed with paced works, the solar lens and listening again with each fifth, the third mock wakes the player twelve times in about three hours: about as often as the first hour. The longest quiet is 35 minutes. Every wake comes from a settled rule or the player’s own orders, and the player chooses what wakes them. Settled 2026-10-14.
-1. A neighbor sends a probe to Sol. What arrives, when, and does Earth see it? · The seed rolls probes, and nothing yet says when one arrives or what Earth sees.
+Settled: A neighbor sends a probe to Sol. What arrives, and does Earth see it? · The sender’s dials choose. An open sender sends a rocket: v1’s 20-Year build, a tenth of light speed, bright as it brakes. A hidden one sends a sail of grams that brakes on the Sun’s light, below 3.8% of light speed, and dark. Small means slow, and fast means seen. Settled 2026-10-14.
+None are open.
