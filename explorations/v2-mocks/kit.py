@@ -191,6 +191,13 @@ FH, FH_LEFT, FH_SPARE = eg.first_hour(show=False, scale=SCALE)                  
 FH = {k: round(v, 2) for k, v in FH.items()}
 YARD_DONE, LONG_START = FH['Orbital yard'], 12.0
 PACED = {k: v if k == 'spare' else round(v, 2) for k, v in eg.replay(eg.BY_START, start=LONG_START, show=False, scale=SCALE).items()}
+# The third mock's player also starts a seed ship at the solar wake, last in the line, so the long roads barely move.
+# Settled 2026-10-15: drive 30 Years, ship 18 in the yard, deuterium works 5 and then 8 kt a Year. Only seed 10 mocks it.
+SEED_SHIP_Y = round(PACED['Ground solar'] + 0.2, 1) if SEED == 10 else None
+if SEED_SHIP_Y:
+    PACED = {k: v if k == 'spare' else round(v, 2) for k, v in eg.replay(eg.BY_START, start=LONG_START, show=False, scale=SCALE, extra=[
+        (SEED_SHIP_Y, 'Fusion drive', eg.ROADS['fusion_drive']), (SEED_SHIP_Y, 'Seed ship', eg.ROADS['seed_ship'] * 0.75),
+        (SEED_SHIP_Y, 'Deuterium works', eg.D_WORKS_YEARS)]).items()}
 ROAD = dict(array=PACED['Laser sail array'], solar=PACED['Ground solar'], mirror=PACED['A 15 m mirror'], launcher=PACED['Launcher'],
             driver=PACED['Mass driver'], foundry=PACED['Orbital foundry'], prospect=PACED['Belt prospecting'], mining=PACED['Belt mining'],
             fifth=PACED['Far-side array, fifth 1'], fifths=[PACED[f'Far-side array, fifth {k}'] for k in range(1, eg.FIFTHS_TOTAL + 1)],

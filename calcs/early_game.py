@@ -293,7 +293,10 @@ PUSH = 10
 WANTS['Ground solar'] = (20, 'sample')
 WANTS['Solar lens'] = (0.5, 'sample: a few small sailcraft')
 WANTS['X-ray sky watch'] = (0.05, 'sample: a small mission, of Einstein Probe and Swift\'s class')
-WANTS['Fusion drive'] = (10, 'sample: no real price exists')
+# Wants for the seed ship's works, samples: no real price exists for any of them.
+WANTS.update({'Fusion drive': (10, 'sample: no real price exists'), 'Seed ship': (5, 'sample'),
+              'Deuterium works': (1, 'sample: twenty-four Bruce plants'), 'Seed ship line': (2, 'sample')})
+D_WORKS_YEARS, D_WORKS_KT = 5, 8          # Bruce took 4 to 5 years. Twenty-four of its peak make about 8 kt of deuterium a Year
 def split(line, room, push=PUSH):
     """line: (name, want, most) in the player's order, most = how many times its want it can use. Returns {name: s}, idle."""
     give = {}
@@ -303,7 +306,7 @@ def split(line, room, push=PUSH):
         more = min(want * (most - 1), room); give[name] += more; room -= more
     return {name: give[name] / want for name, want, _ in line}, room
 
-def replay(order, start=12.0, dt=0.01, studies=0.1, show=True, early=None, scale=1.0):
+def replay(order, start=12.0, dt=0.01, studies=0.1, show=True, early=None, scale=1.0, extra=()):
     """The third mock's game from Year 12, every work paced by the thought the player's order gives it. The launcher
     and the laser array were begun earlier: `early` gives their standard Years left at Year 12, from first_hour()."""
     early = early or first_hour(show=False, scale=scale)[1]
@@ -313,7 +316,11 @@ def replay(order, start=12.0, dt=0.01, studies=0.1, show=True, early=None, scale
     line = [w for w in order if w in left]
     done, fifths, y, first, dc12, spare = {}, 0, start, None, math.inf, []
     rock = lambda y: DRIVER_KT * max(0, y - done.get('Mass driver', math.inf)) + MINING_KT * max(0, y - done.get('Belt mining', math.inf))
-    while y < 80 and fifths < FIFTHS_TOTAL:
+    extra = sorted(extra)                                       # (Year, work, standard Years): works the player adds later, and keeps last in the line
+    added = {w for _, w, _ in extra}
+    while y < 80 and (fifths < FIFTHS_TOTAL or extra or any(w in line for w in added)):
+        while extra and extra[0][0] <= y + 1e-9:
+            _, w, years = extra.pop(0); line.append(w); left[w] = years
         room = scale * 1.5 ** (min(n, sum(y >= d for d in dc_done(n))) + (y >= dc12)) / FLAGSHIP_THOUGHT - studies / FLAGSHIP_THOUGHT
         s, idle = split([(w, WANTS[w.split(' (')[0]][0], 1 if w == 'Power from orbit' else PUSH) for w in line], room)
         if first is None: first = dict(s, idle=idle)
@@ -327,10 +334,11 @@ def replay(order, start=12.0, dt=0.01, studies=0.1, show=True, early=None, scale
             if left[w] <= 0:
                 line.remove(w)
                 if w != 'Far-side array, one fifth': done[w] = y
-                if w == 'Mass driver': line += ['Far-side array, one fifth', 'Power from orbit']; left['Far-side array, one fifth'] = ROADS['far_side'] / 5
+                k = next((i for i, x in enumerate(line) if x in added), len(line))                 # before the works added later
+                if w == 'Mass driver': line[k:k] = ['Far-side array, one fifth', 'Power from orbit']; left['Far-side array, one fifth'] = ROADS['far_side'] / 5
                 if w == 'Far-side array, one fifth':
                     fifths += 1; done[f'Far-side array, fifth {fifths}'] = y
-                    if fifths < FIFTHS_TOTAL: line.append(w); left[w] = ROADS['far_side'] / 5
+                    if fifths < FIFTHS_TOTAL: line.insert(k, w); left[w] = ROADS['far_side'] / 5
         y += dt
     if show:
         print('  At Year 12: ' + ', '.join(f'{w.lower()} {first[w]:.1f}x' for w in order if w in first) + f'. Idle: {first["idle"]:.0f} flagships.')

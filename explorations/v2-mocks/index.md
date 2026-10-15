@@ -1234,13 +1234,13 @@ THE MIND’S VERSION
 BUILD · Ground solar · a fifth more energy · Year 19
 BUILD · A 15 m mirror · reads smog · Year 21.4
 BUILD · Moon mass driver, orbital foundry · megatonnes · Years 29 and 30.0
-SEARCH · Belt prospecting · then mining, from Year 35
+SEARCH · Belt prospecting · then mining, from Year 36
 [Edit] · [Set the order]
 THE MIND · Set, in the order you began them. All my thought goes down that line. The mirror and sails come first, the foundry and belt last. Put the driver first and power from orbit comes a Year sooner, the mirror 4 later. · [Keep this order] · [Driver first]
 [Talk to the Mind]
 Godview
 The laser array has been building since Year 7: the player tapped Start at minute 35. Paced, it is done at Year 24.8, not 32.
-Dates, paced: ground solar Year 19, the mirror 21.4, the driver 29, the foundry 30.0, belt mining 35.5. At standard pace they were 22, 25.5, 36, 34.5 and 38.
+Dates, paced: ground solar Year 19, the mirror 21.4, the driver 29, the foundry 30.0, belt mining 35.6. At standard pace they were 22, 25.5, 36, 34.5 and 38.
 Thought is what competes. The line gives the first five works ten times their want, the driver 6.6 times, and the foundry and belt their want only. None sits idle.
 Matter and energy still have room.
 Settled · What is 86 times the thought for? Speed. More thought shortens a work, down to a floor physics sets: about two thirds of its standard time. Space missions that could not miss a launch window took 53 months, against 64 to 84 for the rest. Rock from the Moon and flight between stars are physical, and thought shortens neither. Settled 2026-10-13.
@@ -1279,6 +1279,50 @@ Godview
 The first telescope could read five of the eighteen points of light Earth holds: Alpha Centauri A, Gliese 664, Gliese 216 B, Rana, Gliese 432 A. The rest sit inside their stars’ glare, or are too faint.
 Truth: Alpha Centauri A is Anwe’s home, Gliese 664 airy and lifeless, Gliese 216 B is Kesh’s home, Rana where life died, Gliese 432 A is Varn’s home.
 A second blue world with ozone, at Gliese 216 B, was read while the player was away. It went to the summary.
++1:35:30 · Year 19.1
+“What would it take to settle another star?”
+Earth · Year 19.1
+Sol · 2059.1 · 1 Year = 00:05:00
+ENERGY · [75.1%] · MATTER · 899 kt · COMPUTE · [100%]
+MIND · WAYS TO SETTLE
+A SEED SHIP · MACHINES THAT BUILD
+Fusion drive · burns deuterium for 20 Years to a tenth of light speed · nothing like it exists · Year 48 · 02:22:09
+Deuterium works · twenty-four plants like Canada’s Bruce · then 8 kt a Year · Year 24 · 00:25:00
+The ship · 1,500 t: a seed of 443 t that stands alone, and a sail 1,600 km across · Year 33 · 01:07:30
+PEOPLE · LATER
+Sleepers · research, 60 Years · then about 26 t a person
+Embryos · artificial wombs, research, 20 Years
+BY LIGHT
+A laser for ships · about 50 TW, 150 Mt to 2 Gt in space · after industry copies itself · later
+THE MIND · A seed ship: three works at once, and the drive is the long one. Begun now, last in your line, it leaves near Year 48 and lands about 67 Years later. People can follow once sleep is solved. · [Start it, last in line] · [Not yet]
+[Talk to the Mind]
+Godview
+Settled 2026-10-14: every seed stands alone, so a seed ship weighs about 1,500 t: Freitas 1980’s seed, Gros 2017’s sail.
+Settled 2026-10-15: a fusion drive takes 30 Years at standard pace, the ship 18 in the yard. Deuterium is cheap: its plants set the pace.
+A laser that pushes ships waits on industry that copies itself. The long roads bring 720 kt of rock a Year.
++1:36:00 · Year 19.2
+“Start it. Proxima Centauri. Last in the line.”
+Earth · Year 19.2
+Sol · 2059.2 · 1 Year = 00:05:00
+ENERGY · [75.1%] · MATTER · 905 kt · COMPUTE · [100%]
+MIND · NEW ORDER
+WHAT YOU WANT
+Start it. Proxima Centauri. Last in the line.
+THE MIND’S VERSION
+BUILD · Fusion drive · Year 47.6
+BUILD · Deuterium works · Year 24.2, then 61 kt by Year 31.8
+BUILD · Seed ship · in the yard · Year 32.7
+THEN · Launch to Proxima Centauri · when all three are ready · Year 47.6
+[Edit] · [Set the order]
+THE MIND · Set, last in the line: the long roads lose almost nothing. The drive sets the launch. Proxima shares a sky with Alpha Centauri A, whose air shows something burned. A seed’s works there could be seen, if anyone is left to look. · [Undo]
+[Talk to the Mind]
+Godview
+Last in the line, the drive takes 28 Years, not the 21 it would take pushed. The ship is done at Year 33, and the deuterium at 32.
+The long roads shift by under a sixth of a Year: the works take their want, and little push.
+The Mind cautions, from what Earth knows. It does not choose the star.
+A production line for seed ships is not set up. One ship first.
+Settled · What does a seed ship cost? About 1,500 t: a 443 t seed that stands alone, and a magnetic sail as heavy as the rest. A fusion drive burning deuterium takes 30 Years at standard pace and the ship 18, built in the orbital yard. Deuterium is cheap, and its plants set the pace. A laser that pushes ships waits on industry that copies itself. Settled 2026-10-14 and 15.
+Settled · Can copies of a work come faster? With a production line, a project of its own: copies run side by side, each taking 85% as long each time the count built doubles. Without one, every copy takes the full time. Settled 2026-10-15.
 +1:39:35 · Year 19.9
 Away. Nothing wakes them.
 Saturday · 18:04
@@ -1367,8 +1411,8 @@ Sol · 2062.4 · 1 Year = 00:05:00
 ENERGY · [75.1%] · MATTER · 1,079 kt · COMPUTE · [100%]
 MIND · WAYS TO KNOW MORE
 LISTEN · TELLS NO ONE
-Far-side array, first fifth · everyday radio, if loud enough · the nearer worlds · Year 34 · 00:57:05
-The whole far-side array · hears twice as far · all four in reach · Year 51 · 02:21:50
+Far-side array, first fifth · everyday radio, if loud enough · the nearer worlds · Year 34 · 00:57:20
+The whole far-side array · hears twice as far · all four in reach · Year 51 · 02:22:11
 LOOK · TELLS NO ONE
 Solar lens · a picture of one world’s surface · one craft, one star · Year 48 · 02:09:05
 Infrared interferometer · gases only industry makes, at a few times our level · Year 62 · 03:20:00
@@ -1433,12 +1477,12 @@ PROJECTS · YEAR 29
 FINISHED
 [Moon mass driver · 600 kt of rock a Year, from now · Done]
 NOW POSSIBLE
-Far-side array, first fifth · made on the Moon from its own metal · hears everyday radio · 4.72 Years · 00:23:36 · [Start]
-Power from orbit · 10 Mt, as rock arrives · a fifth more energy · Year 44 · 01:14:54
+Far-side array, first fifth · made on the Moon from its own metal · hears everyday radio · 4.77 Years · 00:23:51 · [Start]
+Power from orbit · 10 Mt, as rock arrives · a fifth more energy · Year 44 · 01:15:00
 UNDER WAY
-Orbital foundry · turns rock into works · 1.03 Years · 00:05:09
-Belt mining · 120 kt a Year, from Year 35 · 6.51 Years · 00:32:33
-THE MIND · Started: its first fifth, 4.7 Years at the end of the line. Rock is leaving the Moon now, 600 kilotonnes a Year. Ten megatonnes for power from orbit by Year 44. · [Undo]
+Orbital foundry · turns rock into works · 1.07 Years · 00:05:21
+Belt mining · 120 kt a Year, from Year 36 · 6.64 Years · 00:33:12
+THE MIND · Started: its first fifth, 4.8 Years at the end of the line. Rock is leaving the Moon now, 600 kilotonnes a Year. Ten megatonnes for power from orbit by Year 44. · [Undo]
 [Talk to the Mind]
 Godview
 The earliest a reply to Cosmic Call 2 could reach Earth from Gliese 49. In this game no one lives there. The window is empty, and Earth can’t know it.
@@ -1495,12 +1539,12 @@ Ombe waited one round trip, to about Year 59 by its own clock, then took the sil
 To be on time, Earth’s answer had to leave within a Year of the knock. “Listen first” spent that.
 Settled 2026-10-14: a late answer costs nothing extra. Its tables carry the cost. On silence, Ombe rolls knock 52%, probe 24%, call 15%, watch 8%. On an answer, answer 61%, gift 20%, probe 13%, watch 6%.
 Settled · What does a late answer cost? Nothing extra. A sender listens for good, so a late answer is always heard. Its own tables carry the cost: by the time the answer lands, it may have knocked again or turned to others, and it rolls its table for an answer like any other. The Mind tells the player what the sender has likely done. Settled 2026-10-14.
-+2:48:24 · Year 33.7
++2:48:39 · Year 33.7
 “Listen to the worlds with smog.”
 Lands · The far-side array’s first fifth is done.
 Earth · Year 33.7
 Sol · 2073.7 · 1 Year = 00:05:00
-ENERGY · [75.1%] · MATTER · 4.5 Mt · COMPUTE · [100%]
+ENERGY · [75.1%] · MATTER · 4.6 Mt · COMPUTE · [100%]
 MIND · NEW ORDER
 WHAT YOU WANT
 Listen to the worlds with smog. Again with each new fifth.
@@ -1516,11 +1560,11 @@ Godview
 The earliest a reply to RuBisCo Stars could reach Earth from Kappa¹ Ceti. In this game no one lives there. The window is empty, and Earth can’t know it.
 One fifth hears a 100 kW tone to 21 ly in a day, and a 10 kW tone to 29 ly in a Year.
 Truth, as this fifth can hear it: Gliese 432 A in 5 days, Gliese 216 B in 4 days, 12 Ophiuchi not within a Year, Gliese 1021 not within a Year.
-+2:49:01 · Year 33.8
++2:49:16 · Year 33.9
 The Mind opens on its own.
 Heard · Radio from two of the worlds with smog. Minds, at each: likely → almost certain.
-Earth · Year 33.8
-Sol · 2073.8 · 1 Year = 00:05:00
+Earth · Year 33.9
+Sol · 2073.9 · 1 Year = 00:05:00
 ENERGY · [75.1%] · MATTER · 4.6 Mt · COMPUTE · [100%]
 REPORT · READING
 [‹ All reports]
@@ -1539,16 +1583,16 @@ THE MIND · UNASKED · Someone is there · Tones from Gliese 216 B’s and Glies
 [Talk to the Mind]
 Godview
 Truth: Kesh’s people, 63 years before their Mind wakes, Varn’s people, 55 years before their Mind wakes.
-The first proof of minds by Earth’s own instruments: 34 Years in, 2:48:24 of play. Two voices came first.
+The first proof of minds by Earth’s own instruments: 34 Years in, 2:48:39 of play. Two voices came first.
 A world that stays silent in this list is not cleared. Its hum may be too faint for one fifth.
 Settled 2026-10-14: before its Mind wakes, a world with arrays may answer as a people. A knock sent now lands at Gliese 216 B at Year 63, before Kesh’s Mind wakes at 66.9: its people would hear it. A knock sent now lands at Gliese 432 A at Year 65, after Varn’s Mind wakes: its Mind would hear it.
 Settled · Earth has proof of minds who don’t know they are heard. What may it do? Anything v1 allows, as with a suspicion. And they can answer. Before its Mind wakes, a world with radio arrays may answer as a people, as Earth’s own senders have: about ten aimed sends since 1974, none after the world was asked. The seed rolls whether and how, and its Mind inherits the exchange. Settled 2026-10-14.
-+3:11:49 · Year 38.4
++3:12:10 · Year 38.4
 The Mind opens on its own.
 Heard · Radio from 12 Ophiuchi, with two fifths of the array. Minds: likely → almost certain.
 Earth · Year 38.4
 Sol · 2078.4 · 1 Year = 00:05:00
-ENERGY · [75.1%] · MATTER · 7.9 Mt · COMPUTE · [100%]
+ENERGY · [75.1%] · MATTER · 8.0 Mt · COMPUTE · [100%]
 REPORT · READING
 [‹ All reports]
 
@@ -1566,12 +1610,12 @@ The earliest a reply to Cosmic Call 2 could reach Earth from Gliese 208. In this
 Truth: Kirrin’s people. Their tones are about 10 kW, a tenth of the first two worlds’.
 Each fifth adds collecting area, and reach grows as its square root. Two fifths hear 41 ly in a Year for a 10 kW tone, three 51.
 The player’s order listens again as each fifth is done, as the Mind advised.
-+3:35:29 · Year 43.1
++3:35:50 · Year 43.2
 The Mind opens on its own.
 Heard · Radio from Gliese 1021, with three fifths of the array. Minds: likely → almost certain.
-Earth · Year 43.1
-Sol · 2083.1 · 1 Year = 00:05:00
-ENERGY · [75.1%] · MATTER · 11.6 Mt · COMPUTE · [100%]
+Earth · Year 43.2
+Sol · 2083.2 · 1 Year = 00:05:00
+ENERGY · [75.1%] · MATTER · 11.7 Mt · COMPUTE · [100%]
 REPORT · READING
 [‹ All reports]
 
@@ -1588,11 +1632,11 @@ Godview
 Truth: Hael’s people. Their tones are about 10 kW, a tenth of the first two worlds’.
 Each fifth adds collecting area, and reach grows as its square root. Two fifths hear 41 ly in a Year for a 10 kW tone, three 51.
 The player’s order listens again as each fifth is done, as the Mind advised.
-+3:39:42 · Year 43.9
++3:39:48 · Year 44
 The phone lights. Opens it.
 Lands · Power from orbit: a fifth more energy.
-Earth · Year 43.9
-Sol · 2083.9 · 1 Year = 00:05:00
+Earth · Year 44
+Sol · 2084.0 · 1 Year = 00:05:00
 ENERGY · [62.6%] · MATTER · 2.3 Mt · COMPUTE · [100%]
 MIND · PAST THE GRID LIMIT
 ENERGY
@@ -1607,13 +1651,13 @@ THE MIND · The first arrays are beaming down. With the ground’s fifth, that i
 [Talk to the Mind]
 Godview
 Ten megatonnes: 15 Years of the driver’s rock, and 180 Years of Earth’s lift.
-The plateau, as played: Year 11.1 to Year 44.9, against 51.3 at standard pace. Driver first, it ends a Year sooner: rock from the Moon sets this pace, not thought.
+The plateau, as played: Year 11.1 to Year 45.0, against 51.3 at standard pace. Driver first, it ends a Year sooner: rock from the Moon sets this pace, not thought.
 +3:48:24 · Year 45.7
 The Mind opens on its own.
 Picture · The lens at Gliese 1021: cities and cleared land.
 Earth · Year 45.7
 Sol · 2085.7 · 1 Year = 00:05:00
-ENERGY · [93.9%] · MATTER · 3.6 Mt · COMPUTE · [46%]
+ENERGY · [93.9%] · MATTER · 3.6 Mt · COMPUTE · [58%]
 REPORT · A PICTURE
 [‹ All reports]
 
@@ -1633,6 +1677,16 @@ Truth: Hael’s people. Their knock at Year 19.9 went unheard. This is Earth’s
 The light left 49 Years ago, about 2037. A pixel is about 13 km, scaled from NASA’s 25 km at 30 pc.
 Settled 2026-10-14: physics sets the pixel, and the seed’s world fills it. The Mind names only what is larger than a pixel.
 Settled · What does a picture show? Everything larger than a pixel, and nothing smaller. Physics sets the pixel, and the seed’s world fills it. A solar lens: about 25 km at 30 pc, so cities and cleared land, never roads. The nearest sail of a swarm: about 20 m, so roads and dams, never single buildings. Settled 2026-10-14.
++3:58:09 · Year 47.6
+The phone lights. Reads it. Leaves it.
+Lands · The seed ship leaves for Proxima Centauri.
+Saturday · 20:22
+HOLOS · NOW · Earth: the seed ship has left for Proxima Centauri · Year 47.6. It lands about Year 115.
+Godview
+The earliest a reply to Cosmic Call 2 could reach Earth from HD 10307. In this game no one lives there. The window is empty, and Earth can’t know it.
+It burns for 20 Years to a tenth of light speed, cruises, and brakes on its sail for 19. It lands about Year 115, and word of it reaches Earth about Year 119.
+Its flame is X-rays, seen only within tens of AU. No neighbor is that close.
+Its seed stands alone as a Mind about Year 135, if it is a colony like the neighbors’.
 +4:13:45 · Year 50.8
 The Mind opens on its own.
 Dispatch · Word from Alpha Centauri A. Built things, under forest. No lights.
@@ -1654,7 +1708,6 @@ When it ended, or whether anyone is left. The sails passed in hours and can’t 
 THE MIND · UNASKED · They were here · Roads and dams under forest, and no lights. The carbon in that air was theirs. I can’t say when it ended, or whether anyone is left. Our own air once read the same. · [What happened there?] · [Send a probe that stays]
 [Talk to the Mind]
 Godview
-The earliest a reply to Cosmic Call 2 could reach Earth from HD 10307. In this game no one lives there. The window is empty, and Earth can’t know it.
 Truth: Anwe’s people collapsed in 1986. The sails saw their world 110 years on. Some may survive, without radio.
 Real: sub-arcsecond optics on each sail. With about 300 arriving and the world’s orbit known to 100,000 km, one passes within a world’s width: about 19 m a pixel. Others miss by up to 100,000 km, about 194 m (Eubanks et al. 2026).
 So roads and dams show, and single buildings do not. A lens would have shown this world as merely alive.
@@ -1704,4 +1757,6 @@ Settled: What does a late answer cost? · Nothing extra. A sender listens for go
 Settled: Is the plateau too quiet, and too long? · No. Replayed with paced works, the solar lens and listening again with each fifth, the third mock wakes the player twelve times in about three hours: about as often as the first hour. The longest quiet is 35 minutes. Every wake comes from a settled rule or the player’s own orders, and the player chooses what wakes them. Settled 2026-10-14.
 Settled: A neighbor sends a probe to Sol. What arrives, and does Earth see it? · A rocket, as v1 had it: a 20-Year build, a tenth of light speed. Its braking flame is X-rays, seen only in its last weeks, within a few AU, by an X-ray sky watch Earth must build. An Open sender’s probe most often burns all the way in. A Hidden one’s most often stops far out and watches from the outskirts, unseen. Small dark sails were set aside to keep the game simple: the Sun can catch one only below 3.8% of light speed, so they almost never arrive in play. Settled 2026-10-14.
 Settled: What does a neighbor’s probe do once it arrives? · What its orders say. A probe has no mind of its own: its sender writes its orders at launch, rolled from a table for its kind. It watches quietly, hails the world, or waits to be hailed. A hunter’s may hail with a false face. A hail is sent from close range, so any receiver hears it. Settled 2026-10-15.
+Settled: What does a seed ship cost? · About 1,500 t: a 443 t seed that stands alone, and a magnetic sail as heavy as the rest. A fusion drive burning deuterium takes 30 Years at standard pace and the ship 18, built in the orbital yard. Deuterium is cheap, and its plants set the pace. A laser that pushes ships waits on industry that copies itself. Settled 2026-10-14 and 15.
+Settled: Can copies of a work come faster? · With a production line, a project of its own: copies run side by side, each taking 85% as long each time the count built doubles. Without one, every copy takes the full time. Settled 2026-10-15.
 None are open.

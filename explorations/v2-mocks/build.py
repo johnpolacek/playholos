@@ -15,6 +15,7 @@ FLOOR = watts(year_floor(D))
 YEARS = lambda y: f'{y:g} {"Year" if y == 1 else "Years"}'
 ASKS = []          # design questions the mock raises, in the order the timeline raises them
 def ask(q, why): ASKS.append((q, why)); return len(ASKS)
+def card(q): return next(i for i, (x, _) in enumerate(SETTLED) if x.startswith(q))      # a settled card by its question
 SETTLED = [('Does a half-built real instrument cost fewer Years?', 'It costs what its real schedule leaves: about 8 Years for the Habitable Worlds Observatory. Build times are standard, from the science, and the player can invest in projects that build faster. A speed-up also shortens the part left of a work under way. Settled 2026-10-10 and 10-11.'),
            ('Can the Will quiet Earth’s radars?', 'Yes, if the player chooses: keep them, fade them over about 25 Years, or cut them in about 2. What has left keeps going. Settled 2026-10-10.'),
            ('What stops a data center every Year?', 'Chips set the pace: the fabs fill one a Year, each +50% compute. Energy sets the ceiling, near a hundredfold. Settled 2026-10-10.'),
@@ -55,7 +56,9 @@ SETTLED = [('Does a half-built real instrument cost fewer Years?', 'It costs wha
            ('What does a late answer cost?', 'Nothing extra. A sender listens for good, so a late answer is always heard. Its own tables carry the cost: by the time the answer lands, it may have knocked again or turned to others, and it rolls its table for an answer like any other. The Mind tells the player what the sender has likely done. Settled 2026-10-14.'),
            ('Is the plateau too quiet, and too long?', 'No. Replayed with paced works, the solar lens and listening again with each fifth, the third mock wakes the player twelve times in about three hours: about as often as the first hour. The longest quiet is 35 minutes. Every wake comes from a settled rule or the player’s own orders, and the player chooses what wakes them. Settled 2026-10-14.'),
            ('A neighbor sends a probe to Sol. What arrives, and does Earth see it?', 'A rocket, as v1 had it: a 20-Year build, a tenth of light speed. Its braking flame is X-rays, seen only in its last weeks, within a few AU, by an X-ray sky watch Earth must build. An Open sender’s probe most often burns all the way in. A Hidden one’s most often stops far out and watches from the outskirts, unseen. Small dark sails were set aside to keep the game simple: the Sun can catch one only below 3.8% of light speed, so they almost never arrive in play. Settled 2026-10-14.'),
-           ('What does a neighbor’s probe do once it arrives?', 'What its orders say. A probe has no mind of its own: its sender writes its orders at launch, rolled from a table for its kind. It watches quietly, hails the world, or waits to be hailed. A hunter’s may hail with a false face. A hail is sent from close range, so any receiver hears it. Settled 2026-10-15.')]
+           ('What does a neighbor’s probe do once it arrives?', 'What its orders say. A probe has no mind of its own: its sender writes its orders at launch, rolled from a table for its kind. It watches quietly, hails the world, or waits to be hailed. A hunter’s may hail with a false face. A hail is sent from close range, so any receiver hears it. Settled 2026-10-15.'),
+           ('What does a seed ship cost?', 'About 1,500 t: a 443 t seed that stands alone, and a magnetic sail as heavy as the rest. A fusion drive burning deuterium takes 30 Years at standard pace and the ship 18, built in the orbital yard. Deuterium is cheap, and its plants set the pace. A laser that pushes ships waits on industry that copies itself. Settled 2026-10-14 and 15.'),
+           ('Can copies of a work come faster?', 'With a production line, a project of its own: copies run side by side, each taking 85% as long each time the count built doubles. Without one, every copy takes the full time. Settled 2026-10-15.')]
 
 # ---------- Godview: who is out there ----------
 MOVE = reactions.MOVES
@@ -1150,7 +1153,7 @@ def next_door_rows():
               'Where it stops, about twenty times the Moon’s distance, is the mock’s.',
               *(['The words are from the voice bank. The parts are the mock’s.'] if HAIL else ['Real: a 6 m mirror splits about 1.5 km at that distance in near-infrared light.']),
               f'{LW}’s {"gift" if GIFT else "answer"} came at Year {BACK_Y:.1f} and its probe at {q["year"]:.1f}. Earth’s answer, had the player sent one at once, would have reached Hael at Year {t3 / 300 + LD:.1f}.'],
-             settled=len(SETTLED) - 1, label=HMS(t7)),
+             settled=card('What does a neighbor’s probe do'), label=HMS(t7)),
     ]
     return rows
 
@@ -1205,6 +1208,22 @@ def long_rows():
         quick(f'{NUM[len(firsts)].capitalize()} worlds read', f'all this mirror can reach · ozone or oxygen at {NUM[sum(w["ozone"] for w in firsts)]}', ''),
         SEC('NEXT'), quick('The 15 m mirror', 'reads smog, water and oxygen at most worlds we hold', tstack(f'Year {R["mirror"]:.1f}', clock(R['mirror'] - R['solar']), True)),
         SEC('PILING UP'), quick('Matter', f'{res(AT(R["solar"]))[2]} spare in orbit · nothing booked', ''), quick('Thought', 'all in use, down the line you set' if res(AT(R['solar']))[1] >= 99 else f'{100 - res(AT(R["solar"]))[1]}% of it idle', '')]))
+    # --- Year 19.2: a seed ship, last in the line. Settled 2026-10-14 and 15: a stand-alone seed, a sail, deuterium.
+    ts0 = AT(SEED_SHIP_Y)
+    DRIVE_Y, SHIP_Y, WORKS_Y = PACED['Fusion drive'], PACED['Seed ship'], PACED['Deuterium works']
+    FUEL_KT = 61; FUEL_Y = WORKS_Y + FUEL_KT / early_game.D_WORKS_KT; LAUNCH_Y = max(DRIVE_Y, SHIP_Y, FUEL_Y)
+    PX = 4.24; LAND_Y = LAUNCH_Y + PX / seedmod.SHIP_V + seedmod.BURN + seedmod.BRAKE
+    settle = tab(ts0 - 30, 'Mind', 'MIND', 'WAYS TO SETTLE', ''.join([
+        SEC('A SEED SHIP · MACHINES THAT BUILD'),
+        quick('Fusion drive', 'burns deuterium for 20 Years to a tenth of light speed · nothing like it exists', tstack(f'Year {DRIVE_Y:.0f}', clock(DRIVE_Y - ts0 / 300))),
+        quick('Deuterium works', f'twenty-four plants like Canada’s Bruce · then {early_game.D_WORKS_KT} kt a Year', tstack(f'Year {WORKS_Y:.0f}', clock(WORKS_Y - ts0 / 300))),
+        quick('The ship', '1,500 t: a seed of 443 t that stands alone, and a sail 1,600 km across', tstack(f'Year {SHIP_Y:.0f}', clock(SHIP_Y - ts0 / 300))),
+        SEC('PEOPLE · LATER'), quick('Sleepers', 'research, 60 Years · then about 26 t a person', ''), quick('Embryos', 'artificial wombs, research, 20 Years', ''),
+        SEC('BY LIGHT'), quick('A laser for ships', 'about 50 TW, 150 Mt to 2 Gt in space · after industry copies itself', '<span class="mono">later</span>')]))
+    seed_o = order(ts0, 'Start it. Proxima Centauri. Last in the line.', [
+        ('BUILD', f'<b>Fusion drive</b> · Year {DRIVE_Y:.1f}'), ('BUILD', f'<b>Deuterium works</b> · Year {WORKS_Y:.1f}, then {FUEL_KT} kt by Year {FUEL_Y:.1f}'),
+        ('BUILD', f'<b>Seed ship</b> · in the yard · Year {SHIP_Y:.1f}'), ('THEN', f'<b>Launch to Proxima Centauri</b> · when all three are ready · Year {LAUNCH_Y:.1f}')])
+    gone = lockscreen(WALLCLOCK(AT(LAUNCH_Y)), [('NOW', 'Earth: the seed ship has left for Proxima Centauri', f'Year {LAUNCH_Y:.1f}. It lands about Year {LAND_Y:.0f}.')])
     # --- Year 25.5: the 15 m mirror
     tm = AT(R['mirror'])
     mirror_order = order(tm, 'Read the worlds we felt first. Then every world it can.', [
@@ -1340,6 +1359,21 @@ def long_rows():
              [f'The first telescope could read {NUM[len(firsts)]} of the {NUM[len(POINTS)]} points of light Earth holds: ' + ', '.join(w['star'] for w in firsts) + '. The rest sit inside their stars’ glare, or are too faint.',
               'Truth: ' + ', '.join(f"{w['star']} {'is ' + w['who'] + '’s home' if w['home'] else w['rung']}" for w in firsts) + '.',
               'A second blue world with ozone, at Gliese 216 B, was read while the player was away. It went to the summary.' if any(w['star'] == 'Gliese 216 B' for w in firsts) else ''], label=HMS(AT(R['solar']))),
+        at(ts0 - 30, AT(R['solar']), 'What would it take to settle another star?', None,
+             talk(settle, f'A seed ship: three works at once, and the drive is the long one. Begun now, last in your line, it leaves near Year {LAUNCH_Y:.0f} and lands about {LAND_Y - LAUNCH_Y:.0f} Years later. People can follow once sleep is solved.', ('Start it, last in line', 'Not yet')),
+             ['Settled 2026-10-14: every seed stands alone, so a seed ship weighs about 1,500 t: Freitas 1980’s seed, Gros 2017’s sail.',
+              'Settled 2026-10-15: a fusion drive takes 30 Years at standard pace, the ship 18 in the yard. Deuterium is cheap: its plants set the pace.',
+              'A laser that pushes ships waits on industry that copies itself. The long roads bring 720 kt of rock a Year.'], label=HMS(ts0 - 30)),
+        at(ts0, ts0 - 30, 'Start it. Proxima Centauri. Last in the line.', None,
+             talk(seed_o, f'Set, last in the line: the long roads lose almost nothing. The drive sets the launch. Proxima shares a sky with Alpha Centauri A, whose air shows something burned. A seed’s works there could be seen, if anyone is left to look.', ('Undo',)),
+             [f'Last in the line, the drive takes {DRIVE_Y - SEED_SHIP_Y:.0f} Years, not the 21 it would take pushed. The ship is done at Year {SHIP_Y:.0f}, and the deuterium at {FUEL_Y:.0f}.',
+              'The long roads shift by under a sixth of a Year: the works take their want, and little push.',
+              'The Mind cautions, from what Earth knows. It does not choose the star.',
+              'A production line for seed ships is not set up. One ship first.'], settled=(card('What does a seed ship cost'), card('Can copies of a work')), label=HMS(ts0)),
+        *([at(AT(LAUNCH_Y), 0, '· The phone lights. Reads it. Leaves it.', f'The seed ship leaves for Proxima Centauri.', gone,
+              [f'It burns for 20 Years to a tenth of light speed, cruises, and brakes on its sail for 19. It lands about Year {LAND_Y:.0f}, and word of it reaches Earth about Year {LAND_Y + PX:.0f}.',
+               'Its flame is X-rays, seen only within tens of AU. No neighbor is that close.',
+               f'Its seed stands alone as a Mind about Year {LAND_Y + seedmod.STANDS:.0f}, if it is a colony like the neighbors’.'], label=HMS(AT(LAUNCH_Y)))] if LAUNCH_Y < HOME else []),
         at(tm, AT(R['solar']), 'Read the worlds we felt first. Then every world it can.', 'The 15 m mirror is done.',
              talk(mirror_order, f'Set. Smog first, at {SMOG_HITS[0]["star"]}: {DAYS(SMOG_HITS[0]["smog_d"])}. Smog is burning, or weather. I will say which I think, and why.', ('Undo',)),
              [f'The mirror can read {NUM[len(SMOGGED)]} of Earth’s {NUM[len(POINTS)]} worlds for smog within two months each. The first telescope could read smog only within about 12 ly.',
