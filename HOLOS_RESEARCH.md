@@ -1408,8 +1408,19 @@ Results the design is waiting on. Check each when its date comes.
   - HD 82106, BP-RP 1.21: TESS gives 11.1 ± 1.2 days ([Schmitt et al. 2026](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/A+A/709/A180)). An older estimate gives 13.3. Praesepe: 10.7 to 11.3, and NGC 6811 the same. NGC 752, at 1.4 billion, spins slower. So it sits on the stalled sequence or past it, and its age is open past a billion. A host again. Its ten published ages, 0.2 to 0.9, all come from spin or what follows spin.
   - Not corrected: Praesepe is metal-rich. The verdict for HD 82106 rests on one TESS period and one estimate.
   - Used: calcs/hosts.py, 2026-10-15. 881 hosts.
-- YZ Canis Minoris stays out on one table's age from its brightness. Read Kerr et al. 2021 for the basis. Its mass and size are ordinary for its type.
-- DT Virginis stays out on its companion Ross 458 C. That signature can also come from heavy elements.
+- Closed 2026-10-15: YZ Canis Minoris stays out. It is too bright for its colour, and nothing but youth explains it well.
+  - [Kerr et al. 2021](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/ApJ/917/23), table 1, queried on VizieR: 91% likely under 50 million years, fitted at 36.5. It sits in none of their groups.
+  - My check against [Mamajek's dwarf table](https://www.pas.rochester.edu/~emamajek/EEM_dwarf_UBVIJHK_colors_Teff.txt): at BP-RP 3.00 a settled dwarf has absolute G 11.44. YZ CMi has 10.80, from Gaia DR3. That is 0.64 magnitudes too bright.
+  - Corrected: its size is not ordinary. Its radius, 0.37 Suns (Cifuentes et al. 2020), is about 1.5 times a settled dwarf's of its colour. Its mass, 0.36, is computed from that radius.
+  - Kerr et al. name unseen twins as their main false alarm. A twin adds up to 0.76 magnitudes. Gaia's fit quality, RUWE 1.35, sits just under the usual 1.4 alarm.
+  - My reasoning, not a paper's: a twin is unlikely. Imaging surveys of young red dwarfs looked at it (Bowler et al. 2015, Meshkat et al. 2017), and CARMENES models its velocities as one spotted star ([Baroch et al. 2020](https://arxiv.org/abs/2006.16608)). A twin too close to image would show two sets of lines.
+  - My calculation: it moves at U -19, V -22, W -8 km/s, about 10 km/s from the beta Pictoris group. Not a member, despite Nakajima and Morino 2012.
+  - Not ruled out: extra metals and dark spots also brighten a red dwarf for its colour, by part of this.
+- Closed 2026-10-15: DT Virginis stays out. JWST finds its companion light for its temperature, so young.
+  - [Burgasser et al. 2010](https://arxiv.org/abs/1009.5722), as summarized by the 2025 paper: 150 to 800 million years. No lithium and a light companion set the floor. Ross 458 A's activity sets the ceiling.
+  - [Ross 458 c with JWST, 2025](https://arxiv.org/abs/2509.22803) · Preprint. Read through a summary of the text. Surface gravity log g 4.1 to 4.6, and 5 to 16 Jupiters, by four methods. Its retrieval finds metals like the host's, within 1 sigma, so the low gravity isn't heavy elements in disguise.
+  - From memory, not checked: an old field T dwarf has log g near 5. BANYAN puts the system in no young group, 99.9% field.
+  - So the worry under this item fails. The drop stands.
 - calcs/observing.py: the split of noise between leaked starlight and dust is an estimate. Find a published count-rate budget for an Earth twin at 10 pc.
 - Alpha Centauri A's warm zone is a full arcsecond wide, perhaps past a coronagraph's outer edge, and B's light leaks in. Neither is modelled. Check the outer working angle of the telescope's designs. Searched 2026-10-14: the first design case is a 6 m off-axis mirror, but no working angles were found in text I could read. The systems paper, [arXiv 2602.11046](https://arxiv.org/abs/2602.11046), has no HTML version.
 - JWST's August 2026 look at the Alpha Centauri A candidate. Searched 2026-10-14 and 10-15: no result published yet. The team predicted S1 visible again in 2026 or 2027 ([AAS Nova](https://aasnova.org/2025/08/11/potential-discovery-of-a-world-next-door/)). If it confirms a giant in the warm zone, the seed can't put a world there.
