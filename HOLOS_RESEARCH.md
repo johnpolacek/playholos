@@ -1363,9 +1363,18 @@ Gathered 2026-10-15 by a research agent. Tags as it reported: read means the sou
 - **Suspended animation** · [SpaceWorks for NASA, 2014](https://www.nasa.gov/sites/default/files/files/NIAC_Torpor_Habitat_for_Human_Stasis.pdf), read: torpor for 1 to 6 months would halve a Mars ship's mass. ESA 2019: about a third lighter. Human trials perhaps in the mid-2030s, by press.
   - No whole mammal has been frozen and revived. Rat kidneys were vitrified for up to 100 days and transplanted ([Han et al. 2023](https://doi.org/10.1038/s41467-023-38824-8), abstract).
   - Used: the people ship question, 2026-10-15.
+- **Biosphere 2, 1991 to 1993** · Through [Britannica](https://www.britannica.com/topic/Biosphere-2) and Nelson 1996, by search summaries.
+  - Sealed with eight people, its oxygen fell from 20.9% to about 14% in 16 months, and air was pumped in. Soil microbes used it, and the concrete took up the carbon dioxide.
+  - Why it matters: no closed life support has yet run for years. Awake crews and slow world ships depend on it.
+  - Used: the list of unproven cases, 2026-10-15.
+- **[FlyWire, the fruit fly connectome, 2024](https://www.nih.gov/news-events/nih-research-matters/complete-wiring-map-adult-fruit-fly-brain)** · Nature, through the NIH's summary.
+  - The whole adult fly brain mapped: about 140,000 neurons and over 50 million synapses. A human brain has about 86 billion neurons.
+  - Why it matters: copying a human mind is far beyond any scan made.
+  - Used: the list of unproven cases, 2026-10-15.
 - **This project's arithmetic: people ships, 2026-10-15.** `calcs/early_game.py` people_ships().
   - 500 people at 1,000 t each, with a sail as heavy again, to a tenth of light speed: 1 Mt dry and 11 Mt of deuterium, 2.7 Years of the Year 0 grid to make. About 69 Years to Alpha Centauri. By laser, about 6,000 Years of the grid.
   - The same crew at a hundredth of light speed, braking by rocket: 0.5 Mt dry, 0.3 Mt of deuterium, about 440 Years.
+  - 500 sleepers at about 3 cubic metres each, shielded by 10 t of water a square metre, with a sail as heavy: about 13,000 t dry and 150 kt of deuterium.
 
 ## Watch list
 

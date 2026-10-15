@@ -454,6 +454,12 @@ def people_ships(crew=500, t_each=1000, ly=4.37, grid_tw=24):
     trip = ly / 0.1 + 10 + 15
     print(f'  Embryos on a seed ship: under a tonne of bank, a {trip:.0f}-Year trip. 30 Gy at 0.35 to 0.5 mGy a day lasts '
           f'{30 / 0.5e-3 / 365.25:.0f} to {30 / 0.35e-3 / 365.25:.0f} years. No womb yet carries a mammal from conception to birth.')
+    # Settled 2026-10-15: sleepers work. Packed at about 3 cubic metres each, 500 fill a sphere about 14 m across. To hold
+    # the dose near NASA's 0.6 Sv career limit over 70 Years, about 10 t a square metre of water (Globus and Strout 2017
+    # give 6 to 7 for 20 mSv a year). Samples, and this project's arithmetic.
+    r = (3 * 3 * crew / (4 * math.pi)) ** (1 / 3); sleeper_dry = 2 * (4 * math.pi * r * r * 10 + 0.5 * crew)    # shield, pods, and a sail as heavy
+    print(f'  {crew} sleepers at 0.1 of light speed: about {sleeper_dry:,.0f} t dry with its sail, {sleeper_dry / crew:.0f} t a person. '
+          f'{(math.exp(0.1 * C / ve) - 1) * sleeper_dry / 1e3:,.0f} kt of deuterium. About {trip:.0f} Years to arrive.')
     for v in (0.1, 0.01):
         fast = v >= 0.05
         ratio = math.exp(v * C / ve) ** (1 if fast else 2)          # a slow ship can't brake on a sail, so it burns both ways

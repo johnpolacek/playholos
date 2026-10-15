@@ -728,7 +728,11 @@ Begun 2026-10-14. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#outposts-and-
   - *The same crew at a hundredth:* 0.5 Mt and 0.3 Mt of deuterium, but about 440 Years. Chrysalis, Hyperion's 2025 winner, is 2.4 billion t and about 400 years.
   - *How many people:* 98 suffice under strict breeding rules (Marin and Beluffi 2018). Studies favor villages of 500 to 1,000, with a frozen bank for diversity.
   - *Suspended animation:* no whole mammal has been frozen and revived. Months of torpor may be tried on people in the 2030s.
-  - Still open: how the game treats biology not yet proven.
+- **Unproven biology and technology: case by case.** Settled 2026-10-15.
+  - *Artificial wombs and sleepers work,* as research. Both look likely. Samples: wombs 20 Years at standard pace, decades-long sleep 60.
+  - *Sleepers make people cheap.* 500 asleep pack into a sphere about 14 m across. With about 10 t of water a square metre for shield, and a sail as heavy, the ship is about 13,000 t: 26 t a person, against 2,000 awake. About 150 kt of deuterium. This project's arithmetic, samples.
+    - They still need a seed to build their home before they wake.
+  - Set aside: a rule for all unproven science at once, odds the seed rolls, and leaving sleep out.
 - **Neighbors may spread too, by the same physics and prices.** Settled 2026-10-14.
   - *Why.* Holos tests the Fermi paradox. A quiet sky must come from neighbors' choices and costs, never from a rule. Neighbors already play like players.
   - *When their scripts choose.* Spreading joins each neighbor's life script.
@@ -901,6 +905,7 @@ Answered one at a time, in this order. Every answer must be permitted by current
     - **Settled 2026-10-15:** a fusion drive takes 30 Years at standard pace, and burns 20 to reach a tenth of light speed. Every trip gains 10 Years for speeding up, probes' too.
     - **Settled 2026-10-15:** a seed ship takes 18 Years at standard pace, built in the orbital yard. The drive sets the launch.
     - **Settled 2026-10-15:** a production line is a project for one kind of work. Copies then run side by side, each 85% as long per doubling of the count. Without one, every copy takes the full time.
+    - **Settled 2026-10-15:** unproven biology is judged case by case. Artificial wombs and sleepers work, as research. Sleepers make a ship of people about 26 t a person.
     - **Mocked 2026-10-14:** [seed 11, next door](explorations/v2-mocks/seed-11.html#next). Hael answers Earth's knock at Year 16.5, the Mind reads its tables for silence, the player builds an X-ray watch, and it catches Hael's probe 29 days out, at Year 36. It raised one question: what does a neighbor's probe do once it arrives?
     - **Settled 2026-10-15:** what its orders say, rolled by its sender at launch: watch, hail, or wait to be hailed. Hael's probe hails.
 13. **Earth's outposts and colonies, begun 2026-10-14.** See [Outposts and colonies](#outposts-and-colonies).
