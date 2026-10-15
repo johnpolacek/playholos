@@ -970,6 +970,7 @@ What a neighbor's world can plausibly be, beyond an Earth twin. Each roster entr
     - Planets differ: some may never gain oxygen, others faster than Earth.
     - Its test: with no hard steps, early-Earth, oxygen and modern air should all be common, and a world's age should say which. Technosignatures should be common on old enough Earth-like worlds.
   - **[Watson 2025](https://doi.org/10.1098/rstb.2024.0105)** · Published, Philosophical Transactions B 380. I read the abstract. A hard-steps defender's update: each step was a whole-Earth change lasting hundreds of millions of years, tied to the two great ice ages. That leaves two or three hard steps to humans. Searches may find early-Earth air, and rarely oxygen air like later Earth's.
+  - Used 2026-10-15: v2 [How Earth learns](HOLOS_GAME_CONCEPT.md#how-earth-learns), Earth's pace is typical. Mills et al. stand behind it. Snyder-Beattie et al. and Watson are the view set aside, and stay in the Mind's starting words.
   - **[Reinhard et al. 2017](https://arxiv.org/abs/1702.01137)** · Published, Astrobiology. Oxygen and ozone were a poor sign of Earth's life for all but the last 500 million years. Methane was hard to see for most of the last 2.5 billion. A world can be full of life and show nothing in its air.
   - **[Schwieterman et al. 2024](https://arxiv.org/abs/2405.11149)** · Published, ApJ. Read in the paper's text: sulfur hexafluoride lasts about 1,000 years in air, and the perfluorocarbons 2,000 to 50,000.
   - **[Stevens et al. 2016](https://arxiv.org/abs/1507.08530)** · Published. A civilization that destroys itself leaves signs. Some fade faster than its radio era lasted. Others persist far longer.
@@ -1419,7 +1420,6 @@ Results the design is waiting on. Check each when its date comes.
 - Natural warm worlds: NASA's 164 targets reach 23.3 pc, about 76 ly. The seed draws nothing past 50 ly, so the game's sweep covers 110 stars.
 - Gaia's FLAME ages differ from asteroseismic and spin ages by a median of 4.7 billion years on 9 hosts. Closed 2026-10-15: calcs/hosts.py's rule that drops an F or G star when FLAME's upper bound is under a billion years drops none. Within 50 ly no F or G star has an upper bound under 2 billion.
 - 58 Eridani has six spin ages from 0.43 to 1.1 billion years. It stays a host under the rule, since two reach a billion.
-- The rung draw takes Earth's pace as typical. The hard-steps school says Earth was fast. Decide the pace's spread and its lean.
 - The rung draw ignores a warm zone's outward drift as its star brightens. It matters for F stars and old G stars.
 - Nguyen et al. 2026 give fitted shorelines by star kind, mass and age. Read the paper and see whether they should replace the single line.
 - Earth's aimed messages: the power of the 1983, 2008, 2009 Canberra and 2013 sends is in no source found. Hirabayashi's books may hold the first.

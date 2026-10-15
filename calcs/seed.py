@@ -227,7 +227,8 @@ def warm_world(seed, host):
 #   it started on 3 airy worlds in 4, and later died out on 1 in 5 of those: both samples.
 # - Pace. Earth had lasting oxygen at 2.3 billion years old (Poulton et al. 2021), and air rich enough to read, with
 #   animals and forests, at about 4.0 (Reinhard et al. 2017). Each world runs faster or slower by its own factor, 1.6
-#   at one sigma: a sample.
+#   at one sigma: a sample. Settled 2026-10-15: Earth's pace is typical, with no hard steps, as Mills et al. 2025 argue.
+#   Oxygen as a long shot would leave about 3 natural worlds with animals a game, fewer than its minds.
 # - Age. A published age from asteroseismology or spin (Ware et al. 2026). Where none exists, drawn evenly from 1 to
 #   10.5 billion years (Cukanovaite et al. 2023), and no more than the star's main-sequence life.
 RUNGS = ('bare rock', 'airy and lifeless', 'hiding microbes', 'showing oxygen', 'with animals and forests', 'where life died')

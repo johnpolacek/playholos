@@ -445,7 +445,11 @@ Settled 2026-10-13.
   - *At Sun-like stars* about half are alive, and 4 in 10 show oxygen. At red dwarfs about 7 in 10 are bare rock.
   - *So oxygen does not unmask a neighbor.* Of the points of light a first pass shows, about 5 natural worlds show oxygen, beside about 4 or 5 homes.
   - *Samples:* life started on 3 airy worlds in 4, and died on 1 in 5 of those. Each world's pace varies by a factor of 1.6. Each world's luck at the shoreline is half a power of ten.
-  - *Earth's pace is taken as typical.* One school says Earth was fast, and most living worlds are still microbes. The pace is the number to turn if so.
+  - *Earth's pace is typical.* Settled 2026-10-15. Each step waits for its world to allow it, mostly for oxygen, so a world's age says how far its life has come. This is what Mills et al. 2025 predict if there are no hard steps.
+    - *Why not hard steps.* If oxygen were a long shot, a game would hold about 3 natural worlds with animals beside 11 minds. Every mind's world had animals first, so the premise would break. Measured on 200 games.
+    - *So oxygen stays a coin flip.* A first pass sees about 5 natural oxygen worlds beside about 5 homes.
+    - *The Mind still reasons from Earth's split science.* Hard steps remain a live view in 2040, so its starting words are unchanged.
+    - Set aside: oxygen as a long shot (Snyder-Beattie et al. 2021, Watson 2025), and a wider spread of ×2.5, which changes a first pass by less than one world.
   - *Not modelled:* a warm zone drifts outward as its star brightens, so an old Sun-like star's world may have thawed late.
   - Set aside: fixed odds at every star, and fixed odds by star kind.
 - **The Mind gives its judgment in words, never in numbers.** Settled 2026-10-13.
