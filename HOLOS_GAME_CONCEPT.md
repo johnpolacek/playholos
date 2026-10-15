@@ -599,7 +599,11 @@ Settled 2026-10-10. Costs in [calcs/ai_cost.py](calcs/ai_cost.py), prices in [HO
   - Set aside: a trust score that falls with lateness, and one that falls only after the sender gave up.
 - **A neighbor's probe is a rocket.** Settled 2026-10-14. Built in [calcs/seed.py](calcs/seed.py). Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#travel-sails-and-lenses).
   - *v1's sentinel:* 20 Years to build, a tenth of light speed. It brakes on a fusion flame pointed at Sol.
-  - *Corrected 2026-10-14: its flame is X-rays, and shows only close in.* Fusion exhaust fades past about a light-year for a ship of a million tonnes (Zubrin 1995). A sentinel is far smaller, so it shows later. Earth needs an X-ray sky watch to see it, a work the Will can start. Before, this said the watches see it.
+  - *Corrected 2026-10-14: its flame is X-rays, and shows only close in.* Earth needs an X-ray sky watch to see it, a work the Will can start. Before, this said the watches see it.
+    - *Corrected again the same day: close in means its last weeks.* A wide-field watch like Einstein Probe sees a drive of a terawatt within about 3 AU. Zubrin's 60 TW ship shows within about 22. This project's arithmetic.
+    - Braking at a hundredth of a gravity, a probe covers its last 10 AU in about 64 days.
+    - Zubrin's "within a light-year" came from a focusing step that adds no photons, by a reading of his scanned paper.
+    - *No such watch is confirmed for 2040.* Einstein Probe, SVOM and MAXI end by about 2031. Swift is coming down. THESEUS lost its slot.
   - *How often.* On 1,000 games, a rolled probe reaches Sol by Year 60 in 3. None arrives before Year 0, so none breaks Earth's quiet opening. Probes rolled in answer to the player's acts come on top.
   - *In seed 11:* Hael's rocket, rolled on silence in 2003, reaches Sol at Year 26.2.
   - *v1 reasoned that ancient probes must be rare, since none has been found.* That holds only for big ones. Searches would miss a probe 1 to 10 m across (Haqq-Misra and Kopparapu 2012).
@@ -700,31 +704,29 @@ Begun 2026-10-14. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#outposts-and-
 - **The seed rolls whether a neighbor spreads, weighted by its dial, and each colony rolls again.** Settled 2026-10-14. Built in [calcs/seed.py](calcs/seed.py).
   - *Why.* Dials tilt every neighbor choice as odds. A roll at each colony is Landis's percolation: some branches stop, and quiet pockets form.
   - *Odds, samples:* strongly Expand 80%, leans Expand 60%, leans Deepen 25%, strongly Deepen 10%. A colony keeps its parent's dials. About 4 living neighbors in 10 spread.
-  - *Pace, samples from Earth's own:* the first seed ship 40 Years after waking, as Earth's launcher and a sentinel take. Then one every 20 Years, to the nearest free star, at a tenth of light speed, and 10 Years more to brake. A colony stands alone as a Mind 20 Years after landing (Metzger et al. 2013).
+  - *Pace, samples from Earth's own:* the first seed ship 40 Years after waking, as Earth's launcher and a sentinel take. Then one every 20 Years, to the nearest free star, at a tenth of light speed, and 15 Years more to brake. A colony stands alone as a Mind 20 Years after landing (Metzger et al. 2013).
   - *Never to Sol, or to a star another neighbor holds.* Targets come from Gaia's census to 100 ly, so a neighbor near 50 ly isn't pushed inward.
   - *A companion within a light-year is home ground,* like Proxima to Alpha Centauri A. Gaia's distance errors between companions would also misdirect such hops.
-  - *What a game holds, on 400 games.* A colony has landed before Year 0 in 5%. By Year 60, in 56%, a median of 1. By Year 300, in 95%, a median of 36: the region fills, as Hart's argument expects. A hop is a median 3.6 ly.
-  - *In seed 11,* Kesh settles GJ 4352 at Year 49, and Hael reaches Barnard's Star, 6 ly from Sol, at Year 66.6. In seed 10, Ombe's first colony lands at Year 28.9.
+  - *What a game holds, on 400 games.* A colony has landed before Year 0 in 3%. By Year 60, in 52%, a median of 1. By Year 300, in 95%, a median of 34: the region fills, as Hart's argument expects. A hop is a median 3.4 ly.
+  - *In seed 11,* Kesh settles GJ 4352 at Year 54, and Hael reaches Barnard's Star, 6 ly from Sol, at Year 71.6. In seed 10, Ombe's first colony lands at Year 33.9.
 - **Earth sees of a colony what physics gives.** Settled 2026-10-14. Built in [calcs/seed.py](calcs/seed.py). Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#outposts-and-colonies).
-  - *Its ship, almost never.* A fusion rocket's glow is X-rays, and it fades past about a light-year (Zubrin 1995). No neighbor's colony ship comes that close to Sol.
+  - *Its ship, never.* It brakes on a magnetic sail, whose radio dies in the gas between stars, below. A fusion launch shows in X-rays only within tens of AU of its home.
     - An antimatter rocket would show for hundreds of light-years, but only along its exhaust. No neighbor flies one.
-    - Its magnetic sail's radio dies in the gas between stars, below.
   - *Its radio, once it stands alone, is its parent Mind's toward Sol.* A sample. Earth hears it with the same instruments and limits as any home.
-    - By Year 60, in 400 games: 30 colonies' radio reaches Earth. The all-sky watch hears none. A far-side array, held a Year on the right star, would hear one in 3% of games.
+    - By Year 60, in 400 games: 24 colonies' radio reaches Earth. The all-sky watch hears none. A far-side array, held a Year on the right star, would hear one in 2.5% of games.
   - *Its heat stays far under any search's limit for centuries.* Searches rule out only near-complete Dyson spheres within 100 pc.
   - *So spreading is mostly unseen early,* and a quiet sky can hide a filling region. That is the Fermi test, played honestly.
-- **A colony ship brakes on a magnetic sail, and finishes on its rocket.** Settled 2026-10-14. Built in [calcs/seed.py](calcs/seed.py).
-  - *What it is.* A loop of wire, tens of km across, carrying a current. Its field drags on the thin gas between stars, so braking needs no fuel.
-  - *Why it finishes on a rocket.* The drag fades as the ship slows. An 8-tonne craft with a loop 1,000 km across takes about 40 years to stop from 5% of light speed (Perakis and Hein 2016).
-    - So a Mind sails down to 2% of light speed, then burns. The burn costs at most its own mass in fuel again.
-    - A sample, from their case with the drag cut threefold, as Freeland's check found: the sail takes about 16 Years over 0.7 ly, and the burn about 2. A trip runs 10 Years longer than its cruise.
-    - Real braking times run from years to decades, by loop size and ship mass.
+- **A colony ship brakes on a magnetic sail.** Settled 2026-10-14. Built in [calcs/seed.py](calcs/seed.py).
+  - *What it is.* A loop of wire carrying a current. Its field drags on the thin gas between stars, so braking needs no fuel.
+  - *How long.* Gros 2017's case: a 1,500-tonne craft, half of it a loop 1,600 km across, stops from a tenth of light speed in 0.37 ly and about 19 years. The star's wind finishes the last 100 km/s.
+    - So a trip runs 15 Years longer than its cruise.
+  - *Corrected the same day:* this first said a Mind sails down to 2% of light speed and finishes on its rocket, 10 Years more. That came from a case far smaller than Gros's: 8 tonnes on a 1,000 km loop (Perakis and Hein 2016).
   - *Corrected 2026-10-14: Earth can't hear one brake.* The question that settled this offered an antenna in deep space to hear sails braking, from Zubrin 1995.
     - The sail's radio is born just above the gas's own cutoff. Warm gas like that around Sol swallows it within a few thousand AU.
     - Sol sits in such gas, the Local Interstellar Cloud. Its density is from Redfield and Falcon 2008. The absorption is this project's arithmetic, from textbook physics.
     - Zubrin's ranges, 40 to 400 ly, left that absorption out, as far as the accounts read show.
     - The Will may still build such an antenna. It would hear nothing from other stars.
-  - Set aside: braking on the rocket alone, and on the sail alone.
+  - Set aside: braking on the rocket alone.
 
 ## Death and new games
 
@@ -839,4 +841,4 @@ Answered one at a time, in this order. Every answer must be permitted by current
     - **Settled 2026-10-14:** neighbors may spread too, by the same physics and prices, when their scripts choose.
     - **Settled 2026-10-14:** the seed rolls whether each neighbor spreads, weighted by its dial, and each colony rolls again.
     - **Settled 2026-10-14:** Earth sees of a colony what physics gives: almost never its ship, its radio as its parent's, and no heat for centuries.
-    - **Settled 2026-10-14:** a colony ship brakes on a magnetic sail and finishes on its rocket, 10 Years more a trip. Corrected the same day: its sail's radio dies in the gas, so Earth can't hear it.
+    - **Settled 2026-10-14:** a colony ship brakes on a magnetic sail, 15 Years more a trip, by Gros 2017's case. Corrected the same day: its sail's radio dies in the gas, so Earth can't hear it.

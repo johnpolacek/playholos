@@ -1038,8 +1038,10 @@ What a neighbor's world can plausibly be, beyond an Earth twin. Each roster entr
 - **[Gros 2017, magnetic sails](https://arxiv.org/abs/1707.02801)** · Published, Journal of Physics Communications.
   - A superconducting loop, about 50 km across, brakes on interstellar protons. The gas is so thin that a fast stop at Proxima needs about a thousand tonnes. A 1.5 t craft stops only from slow speeds, over about 10,000 years.
   - Earlier drag estimates by Zubrin and Andrews were about three times too hopeful, by Freeland's check.
-  - Why it matters: a magnetic sail can't stop a small, fast probe.
-  - Used: the open question on neighbor probes, 2026-10-14.
+  - Read in [ar5iv](https://ar5iv.labs.arxiv.org/html/1707.02801), 2026-10-14. The Proxima case: a 1,500 t craft, about half of it sail, a loop 1,600 km across at about 420 kA. It stops from a tenth of light speed in 0.37 ly and about 19 years, at 0.1 protons per cubic cm. The trip takes about 58 years. The star's wind or light finishes the last 100 km/s.
+  - A research agent's reading of the full paper: a 100-year trip needs 400 t and a 430 km loop, and the loop must grow as the gas thins.
+  - Why it matters: a magnetic sail can't stop a small, fast probe. A big ship stops in about 19 years, with no fuel.
+  - Used: the open question on neighbor probes, 2026-10-14. How a colony ship brakes, 2026-10-14: `calcs/seed.py` BRAKE, 15 Years over the cruise.
 - **[Hoang et al. 2017](https://arxiv.org/abs/1608.05284)** · Published, ApJ.
   - At a fifth of light speed, gas and dust erode a gram probe's front by about half a millimetre. A shield about 1 mm thick of graphite, strong and slow to melt, protects it. Lubin's group coats the edge with beryllium instead, by a secondhand quote.
   - Why it matters: what a small probe's front is made of. Impact energy falls with the square of speed, so a braking sail at 4% of light speed takes about 25 times less.
@@ -1193,12 +1195,15 @@ Gathered 2026-10-14 for the round on Earth's outposts and colonies.
   - Used: what Earth can see of a colony, and the probe rule, 2026-10-14.
   - The sequel post also gives a 30 km antenna hearing a 10,000-tonne ship at 200 ly. The 12 kHz assumes 1 ion per cubic cm, ten times the gas near Sol. A reader's comment there notes the solar wind's cutoff near Earth, about 24 kHz.
   - Corrected 2026-10-14: these ranges leave out the gas's absorption, as far as the accounts read show. At these frequencies the gas around Sol swallows the radio within a few thousand AU, by this project's arithmetic below. The design had offered an antenna to hear sails braking, on Zubrin's ranges.
+  - Read in full the same day by a research agent, by OCR of the [ADS scan](https://articles.adsabs.harvard.edu/pdf/1995ASPC...74..487Z). His ship: a million tonnes at a tenth of light speed, exhaust at 8% of light speed, 0.005 g, 600 TW of jet. Its X-rays are assumed, not derived: 10% of the jet, 60 TW at 1 to 100 keV.
+  - A source of 1 TW per keV at 1 ly gives 0.02 photons an hour on a square metre. This project checked that.
+  - Corrected 2026-10-14: his "within one light-year" then multiplies by focusing a 1 m aperture to 1 cm. Focusing cuts background but adds no photons. So the range is not supported. The probe rule now uses the arithmetic in "Seeing a fusion drive" below.
 - **[Perakis and Hein 2016, magnetic and electric sails](https://arxiv.org/abs/1603.03015)** · Published, Acta Astronautica. Read in [ar5iv](https://ar5iv.arxiv.org/html/1603.03015), 2026-10-14.
   - A magnetic sail alone brakes an 8,250 kg craft from 5% of light speed in about 39.7 years. That needed a loop 1,000 km in radius, which the authors call unrealistic. Their other cases keep it to 50 km.
   - Its drag fades as the craft slows, "asymptotically", so the end of braking is slow. An electric sail helps there: 29 years together.
   - Their drag law, Eq. 1, goes as speed to the 4/3, by this project's check of its units.
-  - Why it matters: a sail brakes the fast part well, and the slow end poorly. So a Mind finishes on its rocket.
-  - Used: how a colony ship brakes, 2026-10-14. `calcs/seed.py` BRAKE.
+  - Why it matters: a sail brakes the fast part well, and the slow end poorly.
+  - Used, then replaced the same day: BRAKE was first set from this small case, with a rocket finish. Gros 2017's 1,500 t case replaced it.
 - **[Redfield and Falcon 2008, electron densities](https://ar5iv.arxiv.org/html/0804.1802)** · Published, ApJ. Through a search summary.
   - The Local Interstellar Cloud holds about 0.12 ± 0.04 free electrons per cubic cm, from seven sight lines.
   - Used: the absorption arithmetic below, 2026-10-14.
@@ -1213,6 +1218,85 @@ Gathered 2026-10-14 for the round on Earth's outposts and colonies.
   - Where the sail's field balances the gas's push, electrons circle at about 6 times the gas's own cutoff at 10% of light speed, whatever the density. Zubrin's 12 kHz at 1 per cubic cm is 1.3 times it. Both sit where absorption is strong.
   - Sol sits in such gas, so every path out crosses some. A tenth of a parsec of it cuts the signal 50 to 40,000 times.
   - Used: Earth can't hear a sail brake, 2026-10-14.
+
+### Seeing a fusion drive
+
+Gathered 2026-10-14 by a research agent, for whether Earth sees a neighbor's probe arrive. Tags as it reported: read means the paper itself.
+
+- **[Shubov 2021, D-He3 losses](https://arxiv.org/abs/2104.06251)** · Preprint. Read in part.
+  - X-rays from the hot fuel take 0.41 of fusion power at 50 keV, 0.25 at 70, 0.19 at 100. The best burn runs at 60 to 70 keV. With the field's own radiation, losses take 50 to 75%.
+  - Used: the probe rule, 2026-10-14.
+- **[Xie 2024, D-D losses](https://arxiv.org/abs/2410.18054)** · Preprint. Read.
+  - In D-D fuel, X-ray losses match the useful fusion power at 45 to 72 keV.
+  - Why it matters: a fusion drive shines X-rays by its nature, near 60 keV. About 6% falls in Einstein Probe's band and 70% in 15 to 150 keV, by the agent's arithmetic.
+  - Used: the probe rule, 2026-10-14.
+- **Lamontagne 2018, JBIS 71, 450** · Abstract only, through the agent. No link kept.
+  - Neutrons and X-rays escaping: nearly zero for Daedalus, whose pellets absorb their own X-rays, 220 GW for l'Espérance, 8,400 GW for Firefly. An open nozzle lets up to 97% escape.
+  - Why it matters: how bright a drive is depends on its design, from nothing to more than its jet.
+  - Used: the probe rule, 2026-10-14.
+- **X-ray sky monitors, now and planned** · Mission pages and papers, through the agent.
+  - Einstein Probe, launched January 2024: 0.5 to 4 keV, 3,600 square degrees, 2.6e-11 erg/s/cm² in 1,000 s. Three years planned, five hoped.
+  - SVOM, June 2024, three years. MAXI ends with the ISS, about 2030. Swift's science mostly stopped in February 2026, and its reboost was called off. eROSITA has been in safe mode since 2022.
+  - eXTP, China, about 2030, dropped its wide-field monitor. THESEUS lost ESA's M7 slot in June 2026. HiZ-GUNDAM is not approved.
+  - Why it matters: no wide-field X-ray watch is confirmed for 2040.
+  - Used: the probe rule, 2026-10-14. Earth must build its own.
+- **This project's arithmetic: how close a drive shows, 2026-10-14.** Script kept out of the repo.
+  - Brightness falls as distance squared. With 6% of a drive's X-rays in Einstein Probe's band, its 1,000 s limit sees 1 TW within about 3 AU, and Zubrin's 60 TW within about 22. Long stacking roughly triples that.
+  - A 100 t probe braking at a hundredth of a gravity, exhaust 10,600 km/s, runs about 50 GW of jet. A 1,000 t one about 0.5 TW.
+  - At that braking, the last 1,000 AU take 640 days, the last 100 AU 200 days, the last 10 AU 64 days.
+  - Its radiators' heat glows too: 3.5 GW at 1,000 K is about magnitude 16 at 1 AU and 21 at 10 AU, bolometric.
+  - Used: the probe rule, 2026-10-14. A probe shows only in its last weeks.
+
+### Pricing a seed ship
+
+Gathered 2026-10-14 by a research agent, for Earth's first seed ship.
+
+- **[NASA 1980, a self-copying lunar factory](https://nss.org/wp-content/uploads/2017/07/1982-Self-Replicating-Lunar-Factory.pdf)** · Study, CP-2255, chapter 5. Read.
+  - A seed of 100 t, by subsystem estimates 63 to 146 t, drawing 0.5 to 12 MW. It unfolds in a year, then makes 100 t a year of itself.
+  - 90 to 96% closure is called realistic. Chips and bearings, 4 to 10%, come from Earth.
+  - Why it matters: the best-known seed can't stand alone light-years from home.
+  - Used: the seed ship question, 2026-10-14.
+- **[Freitas 1980, REPRO](https://www.rfreitas.com/Astro/ReproJBISJuly1980.htm)** · Published, JBIS 33, 251. Read, the author's web copy.
+  - A 443 t SEED lands on a jovian moon, with 412 MW of reactors. It grows to a 346,000 t factory in 500 years.
+  - Why it matters: the only stand-alone interstellar seed found.
+  - Used: the seed ship question, 2026-10-14.
+- **[Borgue and Hein 2021](https://arxiv.org/abs/2005.12303)** · Published, Acta Astronautica. Read.
+  - A 70 kg asteroid probe that can make 47 kg of itself. Its electronics and solar rolls come from Earth.
+  - Used: not yet. Too small for an industry seed.
+- **Project Daedalus** · BIS 1978, through Wikipedia and Centauri Dreams only.
+  - 54,000 t at launch, 50,000 t of fuel, 450 t of payload, 0.12 of light speed, a flyby. Exhaust 10,600 km/s.
+  - About 30,000 t of helium-3, mined at Jupiter by balloon factories over 20 years.
+  - Its 50 t beryllium shield, 9 mm thick, faces the dust.
+  - Used: the seed ship question, 2026-10-14.
+- **[Swinney et al. 2020, Project Icarus](https://zenodo.org/record/3747274)** · Published. Table 1 read. Each design carries 150 t.
+  - Firefly, burning deuterium: 24,000 t, mass ratio 3.25 to reach 4.7% of light speed and 3.25 again to brake. Exhaust 11,970 km/s. 1,600 t of its 2,200 t dry is radiators.
+  - Ghost: 187,587 t, with a 1,785 t magnetic sail braking from 5% of light speed over 36 years. Dropped as its mass grew.
+  - Endeavour, on helium-3: 25,238 t, mass ratio 20.4, 8.25% of light speed. Unfinished.
+  - Why it matters: real designs to stop at a star weigh tens of thousands of tonnes, mostly fuel.
+  - Used: the seed ship question, 2026-10-14.
+- **[Crawford 2015, lunar helium-3](https://arxiv.org/abs/1410.6865)** · Published. Read.
+  - 4.2 parts per billion on average, about 10 at most measured. About 200,000 t in two rich maria, to 3 m deep.
+  - Why it matters: a ship's load of helium-3 would mean mining about a trillion tonnes of lunar soil. The agent's arithmetic.
+  - Used: the seed ship question, 2026-10-14.
+- **Palaszewski, outer planet mining** · NASA Glenn, [2015](https://ntrs.nasa.gov/citations/20150006664) and [2020](https://ntrs.nasa.gov/citations/20205004479). Read.
+  - Helium-3 is 1.5e-5 of Uranus's air by mass. 5,000 t of fuel over 10 years needs 20,000 to 110,000 t of vehicles.
+  - Used: the seed ship question, 2026-10-14.
+- **[Andrews and Zubrin 1990, magnetic sails](https://ntrs.nasa.gov/citations/19910012840)** · Published, JBIS. Read by the agent.
+  - A 3,100 km loop at 1.35 MA, 950 t, brakes 1,000 t from half of light speed in 18.8 years. Slow below 3,000 km/s.
+  - Gros finds their drag about four times too high. Freeland 2015 traced a threefold error to an integration, by a summary.
+  - Used: how a colony ship brakes, 2026-10-14.
+- **Lubin 2016, scaling** · Read by the agent, same paper as above.
+  - A 10 km array at 50 to 70 GW pushes 100 kg to about 1% of light speed. Speed grows as the square root of power times array size, over the fourth root of mass.
+  - The agent's arithmetic: 1,000 t at a tenth of light speed needs about 50 TW from a 100 km array.
+  - Used: the seed ship question, 2026-10-14.
+- **Forward 1984, sizes** · Through a secondary page only.
+  - Rendezvous: 71 t inside a 710 t ring, 100 km across, 7.2 TW out and 26 TW to brake, through a 1,000 km lens. These figures may be garbled: 7.2 TW would take about 40 years.
+  - Used: the seed ship question, 2026-10-14.
+- **This project's arithmetic: pushing a seed ship, 2026-10-14.**
+  - Light pushes at best twice its power over c. So 1,500 t at a tenth of light speed needs at least 6.7e21 J of light: about 9 Years of Earth's whole 24 TW grid.
+  - A fusion ship starts at its mass ratio times its dry mass: about 12 on deuterium at Firefly's exhaust, about 17 on helium-3 at Daedalus's. Braking on a sail needs no more.
+  - Deuterium is 3.5e-5 of seawater by mass. 40,000 t needs about a billion tonnes of water processed.
+  - Used: the seed ship question, 2026-10-14.
 
 ## Watch list
 

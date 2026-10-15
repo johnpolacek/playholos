@@ -72,10 +72,12 @@ def act(p, news, t, what, table, rng, depth=0):
 
 # ---------- A neighbor's probe ----------
 # Settled 2026-10-14: every probe is a rocket, v1's sentinel: 20 Years to build, a tenth of light speed. Its braking
-# flame points at Sol, but a fusion flame is X-rays, which fade past about a light-year (Zubrin 1995): only an X-ray
-# sky watch sees it, close in. Set aside the same day, to keep the game simple: small dark sails that
-# brake on the Sun's light. Physics allows them, but the Sun catches a sail only below 3.8% of light speed (Heller and
-# Hippke 2017), so they take about 115 Years from Alpha Centauri and almost never arrive in play.
+# flame points at Sol, but a fusion flame is X-rays. A wide-field X-ray watch like Einstein Probe sees a drive of a
+# terawatt only within about 3 AU, and Zubrin's own 60 TW ship within about 22: its last weeks (this project's
+# arithmetic). No such watch is confirmed past about 2031, so Earth must build one.
+# Set aside the same day, to keep the game simple: small dark sails that brake on the Sun's light. Physics allows
+# them, but the Sun catches a sail only below 3.8% of light speed (Heller and Hippke 2017), so they take about 115
+# Years from Alpha Centauri and almost never arrive in play.
 ROCKET_V, ROCKET_BUILD = 0.1, 20
 def probe_trip(p, t, what):
     launch = t + p['thinks'] + ROCKET_BUILD
@@ -89,16 +91,16 @@ def probe_trip(p, t, what):
 # one more every 20 Years, to the nearest free star in the census; a tenth of light speed, v1's; and a colony standing
 # alone 20 Years after it lands, as Metzger et al. 2013 bootstrap the Moon's industry. No colony goes to Sol, or to a
 # star another neighbor holds. Targets come from the census to 100 ly, so a neighbor near 50 ly isn't pushed inward.
-# Settled 2026-10-14: a colony ship brakes on a magnetic sail, a loop that drags on the gas between stars. It needs no
-# fuel, but drags less as it slows, as speed to the 4/3: an 8 t craft with a 1000 km loop takes about 40 years to stop
-# from 5% of light speed (Perakis and Hein 2016). So a Mind sails down to 2% of light speed and finishes on its rocket,
-# at twice its mass or less. A sample, from their case with the drag cut threefold (Freeland, through Gros 2017): the
-# sail takes about 16 Years over 0.7 ly, and the burn about 2. A trip is BRAKE Years longer than its cruise.
+# Settled 2026-10-14: a colony ship brakes on a magnetic sail, a loop that drags on the gas between stars, with no
+# fuel. Gros 2017's case: a 1,500 t craft, half of it a loop 1,600 km across, stops from a tenth of light speed in
+# 0.37 ly and about 19 years, at 0.1 protons per cubic cm. The star's wind finishes the last 100 km/s. So a trip is
+# BRAKE Years longer than its cruise. Corrected the same day: this said a Mind finishes on its rocket from 2% of light
+# speed, from a case far smaller than Gros's.
 # The sail's radio is born just above the gas's own cutoff, so the gas swallows it within a few thousand AU (Redfield
 # and Falcon 2008, and this project's arithmetic). Zubrin 1995's range left that out. Earth never hears one brake.
 CENSUS_PC = 100 / 3.2616
 SPREAD = {'E2': 0.8, 'E1': 0.6, 'D1': 0.25, 'D2': 0.1}
-FIRST_SHIP, EVERY, SHIP_V, BRAKE, STANDS, HORIZON = 40, 20, 0.1, 10, 20, Y0 + 300
+FIRST_SHIP, EVERY, SHIP_V, BRAKE, STANDS, HORIZON = 40, 20, 0.1, 15, 20, Y0 + 300
 _CENSUS = []
 def census():
     if not _CENSUS:
