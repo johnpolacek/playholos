@@ -26,7 +26,7 @@ for row in rows:
     mag = float(row['mag'])
     ci = float(row['ci']) if row['ci'] else .65
     points.extend([*pos,mag,ci])
-    name = row['proper'] or row['gl'] or row['bf'].strip() or ('HIP '+row['hip'] if row['hip'] else 'HYG '+row['id'])
+    name = {'Onkaria': 'Orkaria'}.get(row['proper'], row['proper']) or row['gl']        # HYG's typo: the IAU's name is Orkaria (2023) or row['bf'].strip() or ('HIP '+row['hip'] if row['hip'] else 'HYG '+row['id'])
     if row['proper'] or d < 12 or mag < 3:
         searchable.append(dict(id=int(row['id']),name=name,hip=row['hip'],gl=row['gl'],
             pos=[round(v,6) for v in pos],distance=round(d*pc_to_ly,5),

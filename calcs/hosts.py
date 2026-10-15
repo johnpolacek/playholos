@@ -79,6 +79,8 @@ def stars(radius_pc=None):
                         pmde=float(r['pmdec']), gabs=float(r['absmag']), lum=float(r['lum'])))
     return out
 
+# HYG's proper names, corrected against the IAU's list. GJ 1214 is Orkaria (NameExoWorlds, 2023).
+HYG_FIX = {'Onkaria': 'Orkaria'}
 def name_from_hyg(star_list, radius_pc=None):
     """Give Gaia stars their common names: HYG within a tenth of a degree and a third in distance. HYG's old parallaxes
     for faint red dwarfs are often that far off: it puts GJ 1061 at 4.3 pc, where Gaia has 3.7. A star with no proper,
@@ -101,7 +103,7 @@ def name_from_hyg(star_list, radius_pc=None):
     for _, sid, r in sorted(options, key=lambda o: o[0]):
         if sid in named or r['id'] in taken: continue
         s = by_id[sid]
-        s['name'] = r['proper'] or ' '.join(r['bf'].split()) or r['gl'] or (r['hd'] and f"HD {r['hd']}") or (r['hip'] and f"HIP {r['hip']}") or s['name']
+        s['name'] = HYG_FIX.get(r['proper'], r['proper']) or ' '.join(r['bf'].split()) or r['gl'] or (r['hd'] and f"HD {r['hd']}") or (r['hip'] and f"HIP {r['hip']}") or s['name']
         s['hip'] = r['hip']
         named.add(sid); taken.add(r['id'])
     same = collections.defaultdict(list)                      # HYG names both stars of some pairs alike: 61 Cyg
