@@ -722,6 +722,13 @@ Begun 2026-10-14. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#outposts-and-
   - *Frozen embryos weigh far less,* but artificial wombs don't exist yet (Crowl et al. 2012). Building them is research Earth could do first.
   - *A colony that can stand alone is a Mind,* as v1 had it: its own industry, power and thought.
   - Set aside: Minds only beyond the home system, and Minds only everywhere.
+- **What a ship of people costs, priced 2026-10-15.** Numbers from `python3 calcs/early_game.py`. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#ships-that-carry-people).
+  - *Frozen embryos on a seed ship:* under a tonne of bank, so the ship's price barely moves. Frozen cells may last 160 to 235 years of deep-space radiation, by mouse sperm on the ISS. But no womb yet carries a mammal from conception to birth: the human gap runs from about day 14 to week 22.
+  - *A crew of 500 at a tenth of light speed:* about 1,000 t of ship and shield each, and a sail as heavy again. 1 Mt dry, 11 Mt of deuterium, about 69 Years to Alpha Centauri. By laser it would take about 6,000 Years of Earth's grid.
+  - *The same crew at a hundredth:* 0.5 Mt and 0.3 Mt of deuterium, but about 440 Years. Chrysalis, Hyperion's 2025 winner, is 2.4 billion t and about 400 years.
+  - *How many people:* 98 suffice under strict breeding rules (Marin and Beluffi 2018). Studies favor villages of 500 to 1,000, with a frozen bank for diversity.
+  - *Suspended animation:* no whole mammal has been frozen and revived. Months of torpor may be tried on people in the 2030s.
+  - Still open: how the game treats biology not yet proven.
 - **Neighbors may spread too, by the same physics and prices.** Settled 2026-10-14.
   - *Why.* Holos tests the Fermi paradox. A quiet sky must come from neighbors' choices and costs, never from a rule. Neighbors already play like players.
   - *When their scripts choose.* Spreading joins each neighbor's life script.

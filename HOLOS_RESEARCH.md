@@ -1329,6 +1329,44 @@ Gathered 2026-10-14 by a research agent, for Earth's first seed ship.
   - Deuterium is 3.5e-5 of seawater by mass. 40,000 t needs about a billion tonnes of water processed.
   - Used: the seed ship question, 2026-10-14.
 
+### Ships that carry people
+
+Gathered 2026-10-15 by a research agent. Tags as it reported: read means the source itself.
+
+- **[Partridge et al. 2017, EXTEND](https://europepmc.org/article/PMC/PMC5414058)** · Published, Nature Communications. Read.
+  - Eight lambs grew in a fluid-filled bag for up to 28 days, from 105 to 120 days of a 145-day gestation: like a human born at 22 to 24 weeks. Runs ended by protocol, not failure.
+  - The FDA's advisers met on first human trials in September 2023 ([MIT Technology Review](https://www.technologyreview.com/2023/09/29/1080538/)). No trial found begun by October 2026.
+  - Used: the people ship question, 2026-10-15.
+- **Embryos grown outside a body** · Abstracts and press.
+  - Mouse: from day 5.5 to day 11 of about 20, stopping when the embryo needs blood ([Aguilera-Castrejon et al. 2021](https://doi.org/10.1038/s41586-021-03416-3)). Monkey: to day 25 ([Gong et al. 2023](https://doi.org/10.1016/j.cell.2023.04.020)). Human: about 13 days, stopped by the 14-day rule ([Deglincerti et al. 2016](https://doi.org/10.1038/nature17948)).
+  - Why it matters: no mammal has gone from conception to birth outside a womb. The gap in humans runs from about day 14 to week 22.
+  - Used: the people ship question, 2026-10-15.
+- **[Wakayama et al. 2021, mouse sperm on the ISS](https://europepmc.org/article/PMC/PMC8195474)** · Published, Science Advances. Read.
+  - Freeze-dried sperm spent up to 5 years 10 months on the ISS, at 0.41 mGy a day. 168 pups were born, as often as from ground samples. On the ground, sperm took 30 Gy of x-rays and still gave pups. The authors estimate 201 years on the ISS.
+  - The agent's arithmetic: 164 to 235 years in deep space. X-rays are not heavy ions, and sperm are not embryos.
+  - A 2023 study grew 720 frozen mouse embryos to blastocysts on the ISS, but carried none to birth ([iScience](https://doi.org/10.1016/j.isci.2023.108177)).
+  - Used: the people ship question, 2026-10-15.
+- **The longest-frozen embryo** · Press. A boy born July 2025 from an embryo frozen in 1994, 11,148 days ([ABC7](https://abc7ny.com/post/worlds-oldest-baby-ohio-couple-welcomes-boy-born-embryo-frozen-1994/17397568/)).
+- **Deep-space radiation** · MSL's RAD in cruise to Mars: 1.8 mSv a day, about 0.67 Sv a year ([Zeitlin et al. 2013](https://doi.org/10.1126/science.1235989), abstract). Globus and Strout 2017: 20 mSv a year in deep space needs 6 to 7 t a square metre of water, or 10 to 11 of regolith ([NSS](https://nss.org/wp-content/uploads/2018/01/NSS-JOURNAL-Orbital-Space-Settlement-Radiation-Shielding.pdf), read).
+- **Founding crews** · Through [Hein et al. 2020](https://arxiv.org/abs/2005.04100), read, and abstracts.
+  - Moore 2003: a kin-based crew of 80 to 180 for about 200 years. HERITAGE 2017: that crew shrinks by two thirds and inbreeds without a frozen bank ([arXiv 1708.08649](https://arxiv.org/abs/1708.08649)).
+  - [Marin and Beluffi 2018](https://arxiv.org/abs/1806.03856): 98 people suffice for 6,300 years under strict breeding rules. 25 couples fail half the time.
+  - Smith 2014: 14,000 to 44,000, for a 150-year trip with disasters.
+  - Hein 2020's reading: crews built from villages of 500 to 1,000.
+  - Used: the people ship question, 2026-10-15.
+- **Shielding a crew** · Stanford torus, [NASA SP-413](https://nss.org/settlement/nasa/75SummerStudy/Chapt4.html), read: 4.5 t a square metre, 9.9 Mt of shield for 10,000 people, about 990 t each. Hein 2020: shielding is over 90% of a world ship.
+  - At a tenth of light speed, gas hits as 4.7 MeV protons. Under a millimetre of hull stops them (NIST PSTAR). Semyonov: 1 to 2 cm of titanium up to 0.3 of light speed ([arXiv physics/0610030](https://arxiv.org/abs/physics/0610030), read). Dust is the harder problem, with no crewed sizing found.
+  - Used: the people ship question, 2026-10-15.
+- **World ships** · Hein et al. 2012: 100,000 people, 10 Mt dry and 50 Mt of propellant, 1% of light speed, about 600 t a person. Bond and Martin 1984: 250,000 people at hundreds of billions of tonnes. Both through Hein 2020's table. Chrysalis, Hyperion's 2025 winner: 2.4 billion t and about 400 years. Press gives its crew as 600 or 2,400.
+  - No published design of a crewed ship at a tenth of light speed with its mass was found.
+  - Used: the people ship question, 2026-10-15.
+- **Suspended animation** · [SpaceWorks for NASA, 2014](https://www.nasa.gov/sites/default/files/files/NIAC_Torpor_Habitat_for_Human_Stasis.pdf), read: torpor for 1 to 6 months would halve a Mars ship's mass. ESA 2019: about a third lighter. Human trials perhaps in the mid-2030s, by press.
+  - No whole mammal has been frozen and revived. Rat kidneys were vitrified for up to 100 days and transplanted ([Han et al. 2023](https://doi.org/10.1038/s41467-023-38824-8), abstract).
+  - Used: the people ship question, 2026-10-15.
+- **This project's arithmetic: people ships, 2026-10-15.** `calcs/early_game.py` people_ships().
+  - 500 people at 1,000 t each, with a sail as heavy again, to a tenth of light speed: 1 Mt dry and 11 Mt of deuterium, 2.7 Years of the Year 0 grid to make. About 69 Years to Alpha Centauri. By laser, about 6,000 Years of the grid.
+  - The same crew at a hundredth of light speed, braking by rocket: 0.5 Mt dry, 0.3 Mt of deuterium, about 440 Years.
+
 ## Watch list
 
 Results the design is waiting on. Check each when its date comes.

@@ -441,6 +441,30 @@ def production_line():
     print('  Seed ships, 18 Years standard: ' + ', '.join(f'copy {n} {copy_years(18, n):.1f}' for n in (1, 2, 4, 8, 16, 32)) + '.')
     print(f'  Check: 2,710 Liberty ships at {LEARN:.0%} predict {1 / copy_years(1, 2710):.1f} times faster. They went from 230 days to 39: {230 / 39:.1f}.')
 
+# ---------- Ships that carry people ----------
+# Priced 2026-10-15 from a research agent's sources, logged in HOLOS_RESEARCH.md, "Ships that carry people". Shielding
+# is most of a crewed ship: the Stanford torus carries about 990 t of shield a person, and Hein 2012's world ship about
+# 600 t a person in all. Samples: a crew of 500, as world ship studies' village modules, at 1,000 t a person.
+def people_ships(crew=500, t_each=1000, ly=4.37, grid_tw=24):
+    ve = 1.2e7; grid_year = grid_tw * 1e12 * YEAR
+    dry = crew * t_each
+    print(f'Ships that carry people, to {ly} ly.')
+    # Frozen embryos ride a seed ship. Wakayama 2021: sperm took 30 Gy of x-rays and still gave pups. Deep space gives
+    # 0.35 to 0.5 mGy a day (MSL RAD, OLTARIS), so 165 to 235 years unshielded, if embryos are like sperm.
+    trip = ly / 0.1 + 10 + 15
+    print(f'  Embryos on a seed ship: under a tonne of bank, a {trip:.0f}-Year trip. 30 Gy at 0.35 to 0.5 mGy a day lasts '
+          f'{30 / 0.5e-3 / 365.25:.0f} to {30 / 0.35e-3 / 365.25:.0f} years. No womb yet carries a mammal from conception to birth.')
+    for v in (0.1, 0.01):
+        fast = v >= 0.05
+        ratio = math.exp(v * C / ve) ** (1 if fast else 2)          # a slow ship can't brake on a sail, so it burns both ways
+        dry = crew * t_each * (2 if fast else 1)                    # a fast one carries a sail as heavy as the rest, as Gros's case
+        fuel = (ratio - 1) * dry
+        light = dry * 1e3 * v * C * C / 2
+        t = ly / v + (25 if v >= 0.05 else 2)
+        print(f'  {crew} people at {v:g} of light speed: {dry / 1e6:.1f} Mt dry, mass ratio {ratio:.2f}, {fuel / 1e6:.1f} Mt of deuterium '
+              f'({fuel * 5 / 1e6:.0f} Mt of heavy water, {fuel * 5e3 * 36e9 / grid_year:.1f} Years of the grid to make). '
+              f'By laser: {light / grid_year:,.0f} Years of the grid. About {t:.0f} Years to arrive.')
+
 if __name__ == '__main__':
     long_roads(); print()
     thought_speed(); print()
@@ -457,4 +481,5 @@ if __name__ == '__main__':
     hum(); tone_reach(); print()
     all_sky(); print()
     seed_ship(); print()
-    production_line()
+    production_line(); print()
+    people_ships()
