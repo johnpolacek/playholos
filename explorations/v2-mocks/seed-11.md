@@ -1171,6 +1171,148 @@ The grid limit comes at Year 12.1, just past this hour: twelve data centers, at 
 No other voice is on its way in the next two hours.
 From minute 15 to minute 60 the player was woken four times and played about six minutes.
 
+## Next door · hours 1 to 3
+Years 16 to 26. Hael answers Earth’s knock, and a probe it sent decades ago arrives. Each row is a wake, or a moment the player looked. The long roads run underneath, unshown.
+The X-ray watch’s price, the probe’s mass and its X-rays are samples, in calcs/seed.py. The message’s parts, the Mind’s words and where the probe stops are the mock’s. Amber boxes are the questions these rows raise.
++1:22:27 · Year 16.5
+The phone lights. The Mind is already speaking.
+Heard · A voice from Alpha Centauri A, 4.3 ly away, in answer to our knock.
+Earth · Year 16.5
+Sol · 2056.5 · 1 Year = 00:05:00
+ENERGY · [90.1%] · MATTER · 756 kt · COMPUTE · [100%]
+REPORT · HEARD
+[‹ All reports]
+
+### An answer from Alpha Centauri A
+Alpha Centauri A · 4.3 ly · all-sky watch · sent Year 12.2, 0.3 Years after our knock landed
+“We kept your light. Now we keep your voice. Welcome, Record 4,112.” It proves they heard our knock: it uses our name for ourselves.
+WHAT IT MEANS · A JUDGMENT
+Minds at Alpha Centauri A · unlikely → · almost certain
+WHAT IT HOLDS · TYPED PARTS
+ARCHIVE · Our radars from 1954, as they heard them. Two letters they sent us, in 1996 and 1997.
+FINDING · Every world’s orbit around their two suns. Ours to check.
+REQUEST · Who else have you heard?
+THE MIND · UNASKED · They answered · From where we saw smog. They wrote twice before, they say, in 1996 and 1997. No one heard. · [What did they do then?] · [Read it]
+[Talk to the Mind]
+Godview
+Lusk wakes at Gliese 505 A, 35.8 ly away. It already knows Earth, and sends a probe or a watcher.
+Ruun wakes at 11 Leonis Minoris, 36.6 ly away. It already knows Earth, and stays quiet and aims its instruments at the source.
+Hael: a contacter, awake since 1992. To Hael our knock was a late answer to its gifts. Its table rolled an answer, sent a quarter of a Year after the knock landed.
+The first words are from the voice bank. The parts are the mock’s.
+Its question is one Earth can’t answer safely without thought: who else we have heard names others to it.
+The finding proves itself: Earth’s telescopes can check the orbits it gives.
+Settled 2026-10-13: a first voice lifts Minds a word at every candidate. Here it is the world we read smog at, so the word goes to almost certain.
+Settled · How much of a knock can the Mind read? All three layers, at once. What it proves, from physics. What it holds, because a knock is built to be read. And what it means, as a word that can be wrong. A stranger neighbor’s message may yet need a study. Settled 2026-10-13.
++1:22:57 · Year 16.6
+“What did they do then?”
+Earth · Year 16.6
+Sol · 2056.6 · 1 Year = 00:05:00
+ENERGY · [90.1%] · MATTER · 761 kt · COMPUTE · [100%]
+MIND · WHAT THEY LIKELY DID
+AFTER OUR SILENCE · A SENDER LIKE HAEL
+Wrote again · roughly even · a second try would have reached us before we listened
+Called to everyone · unlikely · we would hear a broadcast still going
+Sent a probe or a watcher · very unlikely · one built after 2003 could arrive about now
+Kept watching · very unlikely · nothing to see
+WAYS TO KNOW
+X-ray sky watch · a braking flame, in its last weeks · in orbit · Year 20.9 · 00:21:30
+Ask them · lands Year 20.9 · their answer by Year 25 · Year 25 · 00:43:12
+THE MIND · After silence a sender like this most often writes again, and now and then sends a probe. A probe begun after 2003, built and flown as we would, arrives about now. Only an X-ray watch sees its last weeks, and the last ones in orbit end about 2031. · [Build the X-ray watch] · [Ask them]
+[Talk to the Mind]
+Godview
+Settled 2026-10-14: the Mind says what the sender has likely done, from its tables, in words. Hael’s table for silence: knock 53%, call 24%, probe 12%, watch 10%.
+Truth: in 2003 Hael rolled a probe. Its rocket launched in 2023 and reaches Sol at Year 26.2.
+Truth: Hael leans Open, so its probe burns all the way in. Settled 2026-10-14.
+Proposed, a sample: the X-ray watch is Einstein Probe’s class, 6 Years at standard pace. Einstein Probe took about 6 from approval to launch, Swift 5. Paced by idle thought, it takes 4.2.
+Settled · A neighbor sends a probe to Sol. What arrives, and does Earth see it? A rocket, as v1 had it: a 20-Year build, a tenth of light speed. Its braking flame is X-rays, seen only in its last weeks, within a few AU, by an X-ray sky watch Earth must build. An Open sender’s probe most often burns all the way in. A Hidden one’s most often stops far out and watches from the outskirts, unseen. Small dark sails were set aside to keep the game simple: the Sun can catch one only below 3.8% of light speed, so they almost never arrive in play. Settled 2026-10-14.
++1:23:27 · Year 16.7
+“Build the X-ray watch. We answer them later.”
+Earth · Year 16.7
+Sol · 2056.7 · 1 Year = 00:05:00
+ENERGY · [90.1%] · MATTER · 767 kt · COMPUTE · [100%]
+MIND · NEW ORDER
+WHAT YOU WANT
+Build the X-ray watch. We answer them later.
+THE MIND’S VERSION
+BUILD · X-ray sky watch · in orbit · a few tonnes · Year 20.9
+WAKES YOU · Anything braking toward us
+[Edit] · [Set the order]
+THE MIND · Started. It is done at Year 20.9. It sees a flame like that within about 2 AU: its last weeks. I send nothing to Hael until you say. · [Undo]
+[Talk to the Mind]
+Godview
+The Mind advised the watch only when asked what Hael did. It starts nothing on its own.
+The answer waits. The player chooses what wakes them: anything braking toward Sol.
++1:23:57 · Year 16.8
+Puts the phone down.
+Saturday · 17:48
+HOLOS · IN 00:20:00 · Earth: the X-ray sky watch is built · Year 20.9. It watches for a braking flame.
+Godview
+The next wake is 46 minutes off.
++2:10:25 · Year 26.1
+The phone lights. The Mind is already speaking.
+Seen · Something braking toward us, from Alpha Centauri A’s side of the sky.
+Earth · Year 26.1
+Sol · 2066.1 · 1 Year = 00:05:00
+ENERGY · [75.1%] · MATTER · 1,284 kt · COMPUTE · [100%]
+REPORT · SEEN
+[‹ All reports]
+
+### A flame, braking toward Sol
+X-ray sky watch · a day of looks · about 2 AU out · from Alpha Centauri A’s side of the sky
+Hard X-rays where nothing was. Brighter each day, and moving against the stars toward the inner planets. Hot gas near sixty thousand electronvolts: the light of fusion. It points at us, so it is slowing.
+WHAT IT COULD BE · NOW
+A craft, braking · almost certain
+A comet, or a flaring star · almost no chance
+WHO SENT IT
+Hael · very likely
+WHAT IT CAN’T TELL
+What it carries, or what it will do. Comets shine in soft X-rays only, and stars don’t move.
+THE MIND · UNASKED · Something is braking toward us · A fusion flame, about 2 AU out, pointed at us and slowing. It stops near our orbit in about 4 weeks: 23 seconds. It has said nothing. · [Watch it] · [Hail it]
+[Talk to the Mind]
+Godview
+Truth: Hael’s probe. It brakes at a hundredth of a gravity, as the samples have it.
+Samples: a probe of 1,000 t, half a terawatt of jet, a tenth of it as X-rays, as Zubrin assumed. The watch reaches 0.7 AU in one look, and 2.0 with a day of looks stacked.
+So it is seen 29 days before it stops: 23 seconds of play. Without the watch Earth would see nothing, unless a telescope chanced on it.
+Real: a fusion flame’s X-rays are mostly near 60 keV. About 6% fall in Einstein Probe’s band.
+Settled · A neighbor sends a probe to Sol. What arrives, and does Earth see it? A rocket, as v1 had it: a 20-Year build, a tenth of light speed. Its braking flame is X-rays, seen only in its last weeks, within a few AU, by an X-ray sky watch Earth must build. An Open sender’s probe most often burns all the way in. A Hidden one’s most often stops far out and watches from the outskirts, unseen. Small dark sails were set aside to keep the game simple: the Sun can catch one only below 3.8% of light speed, so they almost never arrive in play. Settled 2026-10-14.
++2:10:40 · Year 26.1
+“Watch it. Every telescope that can.”
+Earth · Year 26.1
+Sol · 2066.1 · 1 Year = 00:05:00
+ENERGY · [75.1%] · MATTER · 1,286 kt · COMPUTE · [100%]
+MIND · NEW ORDER
+WHAT YOU WANT
+Watch it. Every telescope that can.
+THE MIND’S VERSION
+OBSERVE · The craft · infrared telescope, X-ray watch · its heat, its size, where it stops
+WAKES YOU · If it moves, or speaks
+[Edit] · [Set the order]
+THE MIND · Set. Looking tells it nothing. I send nothing to it. · [Undo]
+[Talk to the Mind]
+Godview
+Watching is quiet: telescopes send nothing. Hailing it, or sending a craft, tells Hael we see it.
++2:10:48 · Year 26.2
+The phone lights. Opens it.
+Lands · It has stopped near our orbit. It is quiet.
+Earth · Year 26.2
+Sol · 2066.2 · 1 Year = 00:05:00
+ENERGY · [75.1%] · MATTER · 1,288 kt · COMPUTE · [100%]
+REPORT · READING
+[‹ All reports]
+
+### It stopped
+infrared telescope · about 7 million km out · Year 26.2
+Its flame is out. It keeps station near our orbit, about twenty times the Moon’s distance. A dot of heat at about a thousand degrees: radiators. Too small for our mirror to split, so under a kilometre or two.
+WHAT IT CAN’T TELL
+What it is for, and whether anything aboard thinks. It has sent nothing we can hear.
+THE MIND · It stopped where it can see us well, and it is quiet. It may be watching for its makers, or waiting for us to speak first. I can hail it, or send a craft to look closer. Either tells Hael we see it. · [Hail it] · [Leave it]
+[Talk to the Mind]
+Godview
+Where it stops, about twenty times the Moon’s distance, is the mock’s.
+Real: a 6 m mirror splits about 1.5 km at that distance in near-infrared light.
+Hael’s answer came at Year 16.5 and its probe at 26.2. Earth’s answer, had the player sent one at once, would have reached Hael at Year 21.0.
+Design question 1 · What does a neighbor’s probe do once it arrives? Watch and report home, wait to be hailed, or speak first. And how its sender’s dials and tables set that. Raised by Hael’s probe.
+
 ## The long roads · hours 1 to 5
 Not mocked for this game. The third mock is written for seed 10’s: its rows need a dead world next door, two voices and a missed knock.
 
@@ -1215,4 +1357,4 @@ Settled: Earth has proof of minds who don’t know they are heard. What may it d
 Settled: What does a late answer cost? · Nothing extra. A sender listens for good, so a late answer is always heard. Its own tables carry the cost: by the time the answer lands, it may have knocked again or turned to others, and it rolls its table for an answer like any other. The Mind tells the player what the sender has likely done. Settled 2026-10-14.
 Settled: Is the plateau too quiet, and too long? · No. Replayed with paced works, the solar lens and listening again with each fifth, the third mock wakes the player twelve times in about three hours: about as often as the first hour. The longest quiet is 35 minutes. Every wake comes from a settled rule or the player’s own orders, and the player chooses what wakes them. Settled 2026-10-14.
 Settled: A neighbor sends a probe to Sol. What arrives, and does Earth see it? · A rocket, as v1 had it: a 20-Year build, a tenth of light speed. Its braking flame is X-rays, seen only in its last weeks, within a few AU, by an X-ray sky watch Earth must build. An Open sender’s probe most often burns all the way in. A Hidden one’s most often stops far out and watches from the outskirts, unseen. Small dark sails were set aside to keep the game simple: the Sun can catch one only below 3.8% of light speed, so they almost never arrive in play. Settled 2026-10-14.
-None are open.
+1. What does a neighbor’s probe do once it arrives? · Watch and report home, wait to be hailed, or speak first. And how its sender’s dials and tables set that. Raised by Hael’s probe.

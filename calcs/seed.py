@@ -89,6 +89,24 @@ def probe_trip(seed, p, t, what):
     return dict(what=what, kind='rocket', bright=inward, ends='close' if inward else 'outskirts', launch=launch,
                 arrives=launch + p['d'] / ROCKET_V, year=launch + p['d'] / ROCKET_V - Y0)
 
+# ---------- What an X-ray sky watch sees of a probe burning in ----------
+# Proposed 2026-10-14, samples: a probe of 1,000 t braking at a hundredth of a gravity, exhaust 10,600 km/s as
+# Daedalus's, so about 0.5 TW of jet. A tenth of that leaks as X-rays, as Zubrin 1995 assumed. 6% of a fusion flame's
+# X-rays fall in Einstein Probe's band, whose limit is 2.6e-11 erg/s/cm2 in 1,000 s. A day's looks stacked reach about
+# three times as far, as the fourth root of the time. The watch: Einstein Probe's class, 6 Years at standard pace, as it
+# took from approval in 2018 to launch in 2024, and Swift 5.
+PROBE_T, BRAKE_G, PROBE_VE, XRAY_SHARE = 1000, 0.01, 1.06e7, 0.1
+WXT_BAND, WXT_LIMIT, XRAY_WATCH_YEARS = 0.06, 2.6e-11, 6
+AU_M = 1.496e11
+def xray_reach_au(stack_s=86400):
+    a = BRAKE_G * 9.81
+    xrays = XRAY_SHARE * 0.5 * PROBE_T * 1e3 * a * PROBE_VE                       # watts
+    r_cm = math.sqrt(xrays * 1e7 * WXT_BAND / (4 * math.pi * WXT_LIMIT)) * (stack_s / 1000) ** 0.25
+    return r_cm / 100 / AU_M
+def xray_warning_days():
+    """Days before a probe burning in stops that the X-ray watch first sees it: the time to brake from its reach."""
+    return math.sqrt(2 * xray_reach_au() * AU_M / (BRAKE_G * 9.81)) / 86400
+
 # ---------- Spreading ----------
 # Settled 2026-10-14: neighbors may spread by the same physics and prices as Earth. The seed rolls whether a Mind
 # sends colonies, weighted by its Expand or Deepen dial, and each colony, once it stands alone as a Mind, rolls again

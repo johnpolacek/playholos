@@ -610,6 +610,11 @@ Settled 2026-10-10. Costs in [calcs/ai_cost.py](calcs/ai_cost.py), prices in [HO
     - *Odds of burning in, samples:* strongly Open 90%, leans Open 70%, leans Hidden 30%, strongly Hidden 10%. On 1,000 games, 53% of rolled probes burn in.
     - *In seed 11,* Hael leans Open, and its probe burns in.
     - Set aside: every probe burning in, and every probe stopping far out.
+  - *The X-ray sky watch, proposed 2026-10-14.* Samples, in [calcs/seed.py](calcs/seed.py).
+    - Einstein Probe's class: a few tonnes in orbit, 6 Years at standard pace. Einstein Probe took about 6 from approval in 2018 to launch in 2024, and Swift 5. It wants a twentieth of a flagship.
+    - A probe of 1,000 t braking at a hundredth of a gravity runs half a terawatt of jet. A tenth leaks as X-rays, as Zubrin assumed.
+    - The watch sees it within 0.7 AU in one look, 2 AU with a day of looks stacked. So 29 days before it stops: 23 seconds of play.
+    - *In seed 11's mock,* the player builds it on the Mind's word after Hael answers, and it catches Hael's probe. See [the mock](explorations/v2-mocks/seed-11.html#next).
   - *How often.* On 1,000 games, a rolled probe reaches Sol by Year 60 in 3. None arrives before Year 0, so none breaks Earth's quiet opening. Probes rolled in answer to the player's acts come on top.
   - *In seed 11:* Hael's rocket, rolled on silence in 2003, reaches Sol at Year 26.2.
   - *v1 reasoned that ancient probes must be rare, since none has been found.* That holds only for big ones. Searches would miss a probe 1 to 10 m across (Haqq-Misra and Kopparapu 2012).
@@ -855,6 +860,7 @@ Answered one at a time, in this order. Every answer must be permitted by current
 12. **The mocks on other games, 2026-10-14:** [seed 11](explorations/v2-mocks/seed-11.html), with no voice, five felt worlds and a living neighbor next door, and [seed 62](explorations/v2-mocks/seed-62.html), where the first mirror can read no felt world. The first hour now runs on any seed. It raised one question:
     - **Settled 2026-10-14:** a neighbor's probe is a rocket, v1's. Small dark sails were set aside to keep the game simple. Its braking flame is X-rays and shows only close in, corrected the same day: only in its last weeks, within a few AU. See [How neighbors play](#how-neighbors-play).
     - **Settled 2026-10-14:** where a probe ends its burn is its sender's Open or Hidden dial, as odds. A Hidden sender's probe most often stops far out, unseen. See [How neighbors play](#how-neighbors-play).
+    - **Mocked 2026-10-14:** [seed 11, next door](explorations/v2-mocks/seed-11.html#next). Hael answers Earth's knock at Year 16.5, the Mind reads its tables for silence, the player builds an X-ray watch, and it catches Hael's probe 29 days out. It raised one question: what does a neighbor's probe do once it arrives?
 13. **Earth's outposts and colonies, begun 2026-10-14.** See [Outposts and colonies](#outposts-and-colonies).
     - **Settled 2026-10-14:** people may go anywhere physics allows, at real prices. Nothing artificial limits the Will, since Holos tests the Fermi paradox.
     - **Settled 2026-10-14:** neighbors may spread too, by the same physics and prices, when their scripts choose.

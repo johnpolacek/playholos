@@ -1061,6 +1061,91 @@ HOUR = [
           (f"{later[0]['name']}’s knock arrives at Year {later[1]['year']:.1f}, +{clock(later[1]['year'])}. The all-sky watch {'catches' if later[1].get('allsky') else 'misses'} it." if later else 'No other voice is on its way in the next two hours.'),
           f'From minute 15 to minute 60 the player was woken {NUMW[WOKEN()]} times and played about {NUMW[round(PLAYED_MIN())]} minutes.']),
 ]
+# ---------- Next door: the answer, and what came before it ----------
+# A living neighbor next door answered Earth's knock, and had sent a probe after decades of silence. Settled 2026-10-14:
+# the Mind reads the sender's tables in words, a probe's sender's Open or Hidden dial sets where it ends its burn, and
+# Earth must build its own X-ray watch. The watch's price, the probe's mass and its X-ray share are proposals, samples
+# in calcs/seed.py. The gift's parts, the Mind's words and where the probe stops are the mock's.
+def next_door_rows():
+    if not (LIVE_ON and HEARD_K and LMOVE in seedmod.SENDS): return []
+    GIFT = LMOVE == 'gift'
+    q = next((q for q in LIVE['probes'] if q['bright'] and BACK_Y < q['year'] < 60), None)
+    if not q: return []
+    sil = dict(reactions.table(LW)['silence'])
+    WARN = seedmod.xray_warning_days(); REACH = seedmod.xray_reach_au()
+    t1 = AT(BACK_Y); t2 = t1 + 30; t3 = t2 + 30; XW_Y = t3 / 300 + eg.paced(seedmod.XRAY_WATCH_YEARS, eg.PUSH)
+    t5 = AT(q['year'] - WARN / 365.25); t6 = t5 + 15; t7 = AT(q['year'])
+    gift_r = tab(t1, 'Report', 'REPORT', 'HEARD', f"""<button class="backlink inline">‹ All reports</button>
+<h3 class="lead">{'A gift' if GIFT else 'An answer'} from {LS}</h3>
+<p class="copy small">{LS} · {LD:.1f} ly · all-sky watch · sent Year {BACK_Y - LD:.1f}, {BACK_Y - LD - LANDS_Y:.1f} Years after our knock landed</p>
+<p class="copy">“{LBANK['hail'][0]}” It proves they heard our knock: it uses our name for ourselves.</p>
+{SEC('WHAT IT MEANS · A JUDGMENT')}{odds('Minds at ' + LS, 33, 99)}
+{SEC('WHAT IT HOLDS · TYPED PARTS')}{part('ARCHIVE', 'Our radars from 1954, as they heard them. Two letters they sent us, in 1996 and 1997.')}{part('FINDING', 'Every world’s orbit around their two suns. Ours to check.')}{'' if GIFT else part('REQUEST', 'Who else have you heard?')}""")
+    def w(m): return word(100 * sil.get(m, 0))
+    then_r = tab(t2, 'Mind', 'MIND', 'WHAT THEY LIKELY DID', ''.join([
+        SEC(f'AFTER OUR SILENCE · A SENDER LIKE {LW.upper()}'),
+        quick('Wrote again', f'{w("knock")} · a second try would have reached us before we listened', ''),
+        quick('Called to everyone', f'{w("call")} · we would hear a broadcast still going', ''),
+        quick('Sent a probe or a watcher', f'{w("probe")} · one built after 2003 could arrive about now', ''),
+        quick('Kept watching', f'{w("watch")} · nothing to see', ''),
+        SEC('WAYS TO KNOW'),
+        quick('X-ray sky watch', 'a braking flame, in its last weeks · in orbit', tstack(f'Year {XW_Y:.1f}', clock(XW_Y - t2 / 300))),
+        quick('Ask them', f'lands Year {t2 / 300 + LD:.1f} · their answer by Year {t2 / 300 + 2 * LD:.0f}', tstack(f'Year {t2 / 300 + 2 * LD:.0f}', clock(2 * LD)))]))
+    watch_o = order(t3, 'Build the X-ray watch. We answer them later.', [
+        ('BUILD', f'<b>X-ray sky watch</b> · in orbit · a few tonnes · Year {XW_Y:.1f}'), ('WAKES YOU', 'Anything braking toward us')])
+    sleep = lockscreen(WALLCLOCK(t3 + 30), [(f'IN 00:{round((XW_Y - (t3 + 30) / 300) * 300) // 60:02d}:00', 'Earth: the X-ray sky watch is built', f'Year {XW_Y:.1f}. It watches for a braking flame.')])
+    xr_r = tab(t5, 'Report', 'REPORT', 'SEEN', f"""<button class="backlink inline">‹ All reports</button>
+<h3 class="lead">A flame, braking toward Sol</h3>
+<p class="copy small">X-ray sky watch · a day of looks · about {REACH:.0f} AU out · from {LS}’s side of the sky</p>
+<p class="copy">Hard X-rays where nothing was. Brighter each day, and moving against the stars toward the inner planets. Hot gas near sixty thousand electronvolts: the light of fusion. It points at us, so it is slowing.</p>
+{SEC('WHAT IT COULD BE · NOW')}{odds_now('A craft, braking', 99)}{odds_now('A comet, or a flaring star', 1)}
+{SEC('WHO SENT IT')}{odds_now(LW, 90)}
+{SEC('WHAT IT CAN’T TELL')}<p class="copy small">What it carries, or what it will do. Comets shine in soft X-rays only, and stars don’t move.</p>""")
+    look_o = order(t6, 'Watch it. Every telescope that can.', [
+        ('OBSERVE', '<b>The craft</b> · infrared telescope, X-ray watch · its heat, its size, where it stops'), ('WAKES YOU', 'If it moves, or speaks')])
+    stop_r = tab(t7, 'Report', 'REPORT', 'READING', f"""<button class="backlink inline">‹ All reports</button>
+<h3 class="lead">It stopped</h3>
+<p class="copy small">infrared telescope · about 7 million km out · Year {q['year']:.1f}</p>
+<p class="copy">Its flame is out. It keeps station near our orbit, about twenty times the Moon’s distance. A dot of heat at about a thousand degrees: radiators. Too small for our mirror to split, so under a kilometre or two.</p>
+{SEC('WHAT IT CAN’T TELL')}<p class="copy small">What it is for, and whether anything aboard thinks. It has sent nothing we can hear.</p>""")
+    Q = ask('What does a neighbor’s probe do once it arrives?', f'Watch and report home, wait to be hailed, or speak first. And how its sender’s dials and tables set that. Raised by {LW}’s probe.')
+    rows = [
+        stop(t1, 3600, '· The phone lights. The Mind is already speaking.', ('Heard', f'A voice from {LS}, {LD:.1f} ly away, in answer to our knock.'),
+             talk(gift_r, f'<b>They answered</b>From where we saw smog. They wrote twice before, they say, in 1996 and 1997. No one heard.', ('What did they do then?', 'Read it'), 'open'),
+             [f'{LW}: a {LIVE["n"]["disposition"]}, awake since {LIVE["waking"]:.0f}. To {LW} our knock was a late answer to its gifts. Its table rolled {'a gift' if GIFT else 'an answer'}, sent {reactions.span(LIVE["thinks"])} after the knock landed.',
+              'The first words are from the voice bank. The parts are the mock’s.', *([] if GIFT else ['Its question is one Earth can’t answer safely without thought: who else we have heard names others to it.']),
+              'The finding proves itself: Earth’s telescopes can check the orbits it gives.',
+              f'Settled 2026-10-13: a first voice lifts Minds a word at every candidate. Here it is the world we read smog at, so the word goes to almost certain.'], settled=26, label=HMS(t1)),
+        stop(t2, t1, 'What did they do then?', None,
+             talk(then_r, f'After silence a sender like this most often writes again, and now and then sends a probe. A probe begun after 2003, built and flown as we would, arrives about now. Only an X-ray watch sees its last weeks, and the last ones in orbit end about 2031.', ('Build the X-ray watch', 'Ask them')),
+             [f'Settled 2026-10-14: the Mind says what the sender has likely done, from its tables, in words. {LW}’s table for silence: ' + ', '.join(f'{m} {p:.0%}' for m, p in sil.items()) + '.',
+              f'Truth: in 2003 {LW} rolled a probe. Its rocket launched in {q["launch"]:.0f} and reaches Sol at Year {q["year"]:.1f}.',
+              f'Truth: {LW} leans Open, so its probe burns all the way in. Settled 2026-10-14.',
+              f'Proposed, a sample: the X-ray watch is Einstein Probe’s class, {seedmod.XRAY_WATCH_YEARS} Years at standard pace. Einstein Probe took about 6 from approval to launch, Swift 5. Paced by idle thought, it takes {XW_Y - t3 / 300:.1f}.'], settled=39, label=HMS(t2)),
+        stop(t3, t2, 'Build the X-ray watch. We answer them later.', None,
+             talk(watch_o, f'Started. It is done at Year {XW_Y:.1f}. It sees a flame like that within about {REACH:.0f} AU: its last weeks. I send nothing to {LW} until you say.', ('Undo',)),
+             ['The Mind advised the watch only when asked what Hael did. It starts nothing on its own.',
+              'The answer waits. The player chooses what wakes them: anything braking toward Sol.'], label=HMS(t3)),
+        stop(t3 + 30, t3, '· Puts the phone down.', None, sleep,
+             [f'The next wake is {(t5 - t3 - 30) // 60} minutes off.'], label=HMS(t3 + 30)),
+        stop(t5, t3 + 30, '· The phone lights. The Mind is already speaking.', ('Seen', f'Something braking toward us, from {LS}’s side of the sky.'),
+             talk(xr_r, f'<b>Something is braking toward us</b>A fusion flame, about {REACH:.0f} AU out, pointed at us and slowing. It stops near our orbit in about {WARN / 7:.0f} weeks: {WARN / 365.25 * 300:.0f} seconds. It has said nothing.', ('Watch it', 'Hail it'), 'open'),
+             [f'Truth: {LW}’s probe. It brakes at a hundredth of a gravity, as the samples have it.',
+              f'Samples: a probe of {seedmod.PROBE_T:,} t, half a terawatt of jet, a tenth of it as X-rays, as Zubrin assumed. The watch reaches {seedmod.xray_reach_au(1000):.1f} AU in one look, and {REACH:.1f} with a day of looks stacked.',
+              f'So it is seen {WARN:.0f} days before it stops: {WARN / 365.25 * 300:.0f} seconds of play. Without the watch Earth would see nothing, unless a telescope chanced on it.',
+              'Real: a fusion flame’s X-rays are mostly near 60 keV. About 6% fall in Einstein Probe’s band.'], settled=39, label=HMS(t5)),
+        stop(t6, t5, 'Watch it. Every telescope that can.', None,
+             talk(look_o, 'Set. Looking tells it nothing. I send nothing to it.', ('Undo',)),
+             ['Watching is quiet: telescopes send nothing. Hailing it, or sending a craft, tells Hael we see it.'], label=HMS(t6)),
+        stop(t7, t6, '· The phone lights. Opens it.', 'It has stopped near our orbit. It is quiet.',
+             talk(stop_r, 'It stopped where it can see us well, and it is quiet. It may be watching for its makers, or waiting for us to speak first. I can hail it, or send a craft to look closer. Either tells Hael we see it.', ('Hail it', 'Leave it'), 'glow'),
+             ['Where it stops, about twenty times the Moon’s distance, is the mock’s.',
+              'Real: a 6 m mirror splits about 1.5 km at that distance in near-infrared light.',
+              f'{LW}’s {"gift" if GIFT else "answer"} came at Year {BACK_Y:.1f} and its probe at {q["year"]:.1f}. Earth’s answer, had the player sent one at once, would have reached Hael at Year {t3 / 300 + LD:.1f}.'],
+             question=Q, label=HMS(t7)),
+    ]
+    return rows
+
 # ---------- Hours 1 to 5: Years 12 to about 54, where the long roads pay ----------
 # The phone is down for most of four hours. Each row is a wake, or a moment the player looked. The roads' dates are
 # calcs/early_game.py's, priced 2026-10-13 and paced by thought from 2026-10-14. What each reading and dispatch shows, the Mind's words and its lines are
@@ -1331,6 +1416,7 @@ def long_rows():
 eg_years = lambda y: f'{y:.0f} Years'
 import early_game
 LONG = [r.replace('<section id="t', '<section id="L', 1) for r in long_rows()]          # their own ids: minute 60 is also the last row of the hour before
+NEXT = [r.replace('<section id="t', '<section id="N', 1) for r in next_door_rows()]           # after the long roads' clock helpers
 
 # ---------- The page ----------
 V2_CSS = '''
@@ -1378,7 +1464,7 @@ try{{const t=localStorage.getItem('holos-mock-theme');if(t==='light'||t==='dark'
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
 <pattern id="hatch" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="4" stroke="{INK}" stroke-width=".8"></line></pattern>
 </defs></svg>
-<nav class="top" aria-label="Mocks"><div class="nav1"><strong>Holos v2 · mocks</strong><div class="pages"><a href="#about">About</a><a href="#godview">Godview</a><a href="#before">Before Year 0</a><a href="#t0">The first 15 minutes</a><a href="#hour">Minutes 15 to 60</a><a href="#long">Hours 1 to 5</a><a href="#asks">Questions</a><span class="divider" aria-hidden="true"></span><a class="minor" href="../../legacy/v1/home-mocks/index.html">v1 mocks</a></div><button class="theme" id="theme" aria-pressed="false">Dark mode</button></div></nav>
+<nav class="top" aria-label="Mocks"><div class="nav1"><strong>Holos v2 · mocks</strong><div class="pages"><a href="#about">About</a><a href="#godview">Godview</a><a href="#before">Before Year 0</a><a href="#t0">The first 15 minutes</a><a href="#hour">Minutes 15 to 60</a>{'<a href="#next">Next door</a>' if NEXT else ''}<a href="#long">Hours 1 to 5</a><a href="#asks">Questions</a><span class="divider" aria-hidden="true"></span><a class="minor" href="../../legacy/v1/home-mocks/index.html">v1 mocks</a></div><button class="theme" id="theme" aria-pressed="false">Dark mode</button></div></nav>
 {body}
 <script>
 const button=document.getElementById('theme'),query=matchMedia('(prefers-color-scheme: dark)');
@@ -1418,6 +1504,9 @@ Earth’s past, its knocks and its leads are real. The Mind’s judgments, compu
 <p>The phone went down at 15:30. From here each row is a wake the player chose, or a moment they checked in. Between rows nothing woke them. Years 3 to 12.</p>
 <p>How long a reading takes, what each one shows, and the order of observations are samples. Prices are the audit’s. Amber boxes are the questions this hour raises.</p></section>
 {''.join(HOUR)}
+{'' if not NEXT else f'''<section id="next" class="intro"><h2>Next door · hours 1 to {math.ceil(LIVE['probes'][0]['year'] * 300 / 3600)}</h2>
+<p>Years {BACK_Y:.0f} to {LIVE['probes'][0]['year']:.0f}. {LW} answers Earth’s knock, and a probe it sent decades ago arrives. Each row is a wake, or a moment the player looked. The long roads run underneath, unshown.</p>
+<p>The X-ray watch’s price, the probe’s mass and its X-rays are samples, in calcs/seed.py. The message’s parts, the Mind’s words and where the probe stops are the mock’s. Amber boxes are the questions these rows raise.</p></section>'''}{''.join(NEXT)}
 <section id="long" class="intro"><h2>The long roads · hours 1 to 5</h2>
 {'' if LONG else '<p>Not mocked for this game. The third mock is written for seed 10’s: its rows need a dead world next door, two voices and a missed knock.</p></section>'}{'' if not LONG else f'''<p>Years 12 to {ROAD['array'] + SAIL_FLY + GO_D:.0f}. The phone is down for most of {(ROAD['array'] + SAIL_FLY + GO_D - 12) * 5 / 60:.0f} hours. Each row is a wake, or a moment the player looked. Thought has hit the grid limit, and what moves now are works that take decades.</p>
 <p>The roads are priced in calcs/early_game.py, as samples, and paced by thought down the line the player set: the order begun. What each reading and the dispatch show, the Mind’s words and its lines are samples too. Amber boxes are the questions these hours raise.</p></section>'''}

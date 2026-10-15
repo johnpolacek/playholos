@@ -1239,6 +1239,8 @@ Gathered 2026-10-14 by a research agent, for whether Earth sees a neighbor's pro
   - SVOM, June 2024, three years. MAXI ends with the ISS, about 2030. Swift's science mostly stopped in February 2026, and its reboost was called off. eROSITA has been in safe mode since 2022.
   - eXTP, China, about 2030, dropped its wide-field monitor. THESEUS lost ESA's M7 slot in June 2026. HiZ-GUNDAM is not approved.
   - Why it matters: no wide-field X-ray watch is confirmed for 2040.
+  - Build times, 2026-10-14: Einstein Probe entered its engineering phase with China's second space science program, approved in May 2018, and launched on 9 January 2024 ([Wikipedia](https://en.wikipedia.org/wiki/Einstein_Probe), and a search summary of CAS news). About 1,450 kg. Swift was selected in October 1999 and launched on 20 November 2004 ([Gehrels et al. 2004](https://arxiv.org/pdf/astro-ph/0405233)).
+  - Used: the X-ray sky watch's price, 6 Years at standard pace, a sample. `calcs/seed.py` XRAY_WATCH_YEARS.
   - Used: the probe rule, 2026-10-14. Earth must build its own.
 - **This project's arithmetic: how close a drive shows, 2026-10-14.** Script kept out of the repo.
   - Brightness falls as distance squared. With 6% of a drive's X-rays in Einstein Probe's band, its 1,000 s limit sees 1 TW within about 3 AU, and Zubrin's 60 TW within about 22. Long stacking roughly triples that.
