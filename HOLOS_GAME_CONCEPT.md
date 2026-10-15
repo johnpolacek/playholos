@@ -604,6 +604,12 @@ Settled 2026-10-10. Costs in [calcs/ai_cost.py](calcs/ai_cost.py), prices in [HO
     - Braking at a hundredth of a gravity, a probe covers its last 10 AU in about 64 days.
     - Zubrin's "within a light-year" came from a focusing step that adds no photons, by a reading of his scanned paper.
     - *No such watch is confirmed for 2040.* Einstein Probe, SVOM and MAXI end by about 2031. Swift is coming down. THESEUS lost its slot.
+  - *Where it ends its burn is its sender's Open or Hidden dial, as odds.* Settled 2026-10-14.
+    - One burns all the way in, to watch from close. An X-ray sky watch can catch its last weeks.
+    - The other ends its burn past 100 AU, beyond any watch's reach, and watches from the outskirts, as v1's lurker did. Earth never sees it arrive.
+    - *Odds of burning in, samples:* strongly Open 90%, leans Open 70%, leans Hidden 30%, strongly Hidden 10%. On 1,000 games, 53% of rolled probes burn in.
+    - *In seed 11,* Hael leans Open, and its probe burns in.
+    - Set aside: every probe burning in, and every probe stopping far out.
   - *How often.* On 1,000 games, a rolled probe reaches Sol by Year 60 in 3. None arrives before Year 0, so none breaks Earth's quiet opening. Probes rolled in answer to the player's acts come on top.
   - *In seed 11:* Hael's rocket, rolled on silence in 2003, reaches Sol at Year 26.2.
   - *v1 reasoned that ancient probes must be rare, since none has been found.* That holds only for big ones. Searches would miss a probe 1 to 10 m across (Haqq-Misra and Kopparapu 2012).
@@ -847,7 +853,8 @@ Answered one at a time, in this order. Every answer must be permitted by current
     - **Settled 2026-10-14:** a picture shows everything larger than a pixel. The lens and the dispatch now follow the rule. The swarm is a thousand sails, six days of laser. See [How Earth learns](#how-earth-learns).
     - **Settled 2026-10-13:** the plateau at the grid limit stands. Better chips don't dodge it, and the megatonne road pays there. See [Growing compute](#growing-compute).
 12. **The mocks on other games, 2026-10-14:** [seed 11](explorations/v2-mocks/seed-11.html), with no voice, five felt worlds and a living neighbor next door, and [seed 62](explorations/v2-mocks/seed-62.html), where the first mirror can read no felt world. The first hour now runs on any seed. It raised one question:
-    - **Settled 2026-10-14:** a neighbor's probe is a rocket, v1's. Small dark sails were set aside to keep the game simple. Its braking flame is X-rays and shows only close in, corrected the same day. See [How neighbors play](#how-neighbors-play).
+    - **Settled 2026-10-14:** a neighbor's probe is a rocket, v1's. Small dark sails were set aside to keep the game simple. Its braking flame is X-rays and shows only close in, corrected the same day: only in its last weeks, within a few AU. See [How neighbors play](#how-neighbors-play).
+    - **Settled 2026-10-14:** where a probe ends its burn is its sender's Open or Hidden dial, as odds. A Hidden sender's probe most often stops far out, unseen. See [How neighbors play](#how-neighbors-play).
 13. **Earth's outposts and colonies, begun 2026-10-14.** See [Outposts and colonies](#outposts-and-colonies).
     - **Settled 2026-10-14:** people may go anywhere physics allows, at real prices. Nothing artificial limits the Will, since Holos tests the Fermi paradox.
     - **Settled 2026-10-14:** neighbors may spread too, by the same physics and prices, when their scripts choose.

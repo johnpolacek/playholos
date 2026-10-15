@@ -78,10 +78,16 @@ def act(p, news, t, what, table, rng, depth=0):
 # Set aside the same day, to keep the game simple: small dark sails that brake on the Sun's light. Physics allows
 # them, but the Sun catches a sail only below 3.8% of light speed (Heller and Hippke 2017), so they take about 115
 # Years from Alpha Centauri and almost never arrive in play.
+# Settled 2026-10-14: where a probe ends its burn is set by its sender's Open or Hidden dial, as odds. One burns all
+# the way in to watch from close, so an X-ray sky watch can see its last weeks. The other ends its burn past 100 AU,
+# beyond any watch's reach, and watches from the outskirts, as v1's lurker did. The odds are samples.
 ROCKET_V, ROCKET_BUILD = 0.1, 20
-def probe_trip(p, t, what):
+BURN_IN = {'O2': 0.9, 'O1': 0.7, 'H1': 0.3, 'H2': 0.1}
+def probe_trip(seed, p, t, what):
     launch = t + p['thinks'] + ROCKET_BUILD
-    return dict(what=what, kind='rocket', bright=True, launch=launch, arrives=launch + p['d'] / ROCKET_V, year=launch + p['d'] / ROCKET_V - Y0)
+    inward = keyed(seed, 'burn', p['name'], what) < BURN_IN[p['dials'].split()[0]]     # keyed, so no other draw moves
+    return dict(what=what, kind='rocket', bright=inward, ends='close' if inward else 'outskirts', launch=launch,
+                arrives=launch + p['d'] / ROCKET_V, year=launch + p['d'] / ROCKET_V - Y0)
 
 # ---------- Spreading ----------
 # Settled 2026-10-14: neighbors may spread by the same physics and prices as Earth. The seed rolls whether a Mind
@@ -295,7 +301,7 @@ def draw(seed, rows=None):
             if end == n['dies']: p['inbound'].append(dict(what='its last broadcast', move='broadcast', sent=w - start, year=w - start + d - Y0, watts=watts))
         for i in p['inbound']: catches(p, i, seed)
         # Probes it rolled, and when each reaches Sol. Pure arithmetic on moves already rolled, so no draw moves.
-        p['probes'] = [probe_trip(p, t, what) for t, move, what in
+        p['probes'] = [probe_trip(seed, p, t, what) for t, move, what in
                        ([(p['knows'], p['on_hum'], 'its answer to Earth’s radars')] if p['heard'] else [])
                        + ([(p['after_silence']['at'], p['after_silence']['move'], 'after silence')] if p['after_silence'] else [])
                        + [(c['acts'], c['move'], f"its answer to {c['msg']}") for c in p['caught']] if move == 'probe']
