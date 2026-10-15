@@ -1413,7 +1413,7 @@ Results the design is waiting on. Check each when its date comes.
   - My check against [Mamajek's dwarf table](https://www.pas.rochester.edu/~emamajek/EEM_dwarf_UBVIJHK_colors_Teff.txt): at BP-RP 3.00 a settled dwarf has absolute G 11.44. YZ CMi has 10.80, from Gaia DR3. That is 0.64 magnitudes too bright.
   - Corrected: its size is not ordinary. Its radius, 0.37 Suns (Cifuentes et al. 2020), is about 1.5 times a settled dwarf's of its colour. Its mass, 0.36, is computed from that radius.
   - Kerr et al. name unseen twins as their main false alarm. A twin adds up to 0.76 magnitudes. Gaia's fit quality, RUWE 1.35, sits just under the usual 1.4 alarm.
-  - My reasoning, not a paper's: a twin is unlikely. Imaging surveys of young red dwarfs looked at it (Bowler et al. 2015, Meshkat et al. 2017), and CARMENES models its velocities as one spotted star ([Baroch et al. 2020](https://arxiv.org/abs/2006.16608)). A twin too close to image would show two sets of lines.
+  - My reasoning, not a paper's: a twin is unlikely. The Gemini Deep Planet Survey imaged it (Lafrenière et al. 2007, as compiled in Meshkat et al. 2017's table, checked on VizieR), and CARMENES models its velocities as one spotted star ([Baroch et al. 2020](https://arxiv.org/abs/2006.16608)). A twin too close to image would show two sets of lines.
   - My calculation: it moves at U -19, V -22, W -8 km/s, about 10 km/s from the beta Pictoris group. Not a member, despite Nakajima and Morino 2012.
   - Not ruled out: extra metals and dark spots also brighten a red dwarf for its colour, by part of this.
 - Closed 2026-10-15: DT Virginis stays out. JWST finds its companion light for its temperature, so young.
