@@ -962,7 +962,14 @@ What a neighbor's world can plausibly be, beyond an Earth twin. Each roster entr
   - **[Moody et al. 2024](https://doi.org/10.1038/s41559-024-02461-1)** · Published, Nature Ecology and Evolution. The last common ancestor of all life lived about 4.2 billion years ago, between 4.09 and 4.33.
   - **[Kipping 2020](https://arxiv.org/abs/2005.09008)** · Published, PNAS. Rerun Earth's clock and life should often start again. Intelligence is another matter: rare is slightly favored, at 3 to 2.
   - **[Snyder-Beattie et al. 2021](https://doi.org/10.1089/ast.2019.2149)** · Published, Astrobiology. The hard-steps case: the big transitions each take longer, on average, than Earth lasts, so intelligent life is exceptionally rare.
-  - **[Mills et al. 2024](https://arxiv.org/abs/2408.10293)** · Preprint. A search says Science Advances published it in 2025, which I did not confirm. The other case: no hard steps. Each step waited for the planet to allow it, such as enough oxygen, and humans arose on time.
+  - **[Mills et al. 2025](https://doi.org/10.1126/sciadv.ads5698)** · Published, Science Advances 11, eads5698, February 2025. Confirmed 2026-10-15 from arXiv's journal field ([2408.10293](https://arxiv.org/abs/2408.10293)). The other case: no hard steps. Each step waited for the planet to allow it, such as enough oxygen, and humans arose on time.
+    - Read 2026-10-15 through a summary of the full text at Europe PMC, PMC11827626, not line by line.
+    - Earth's land life has about 1.0 to 1.9 billion years left, not Carter's 5. So humans came at 70 to 80% of the window, not halfway.
+    - Each step waited for oxygen. Animals need 0.1 to 1% of today's oxygen. People need 53 to 59%, reached only 420 to 400 million years ago. Open fire needs 88%.
+    - A step that happened once is not proof it was hard. Rivals may have died out, the first may have shut out the rest, or it may have changed the world to suit itself.
+    - Planets differ: some may never gain oxygen, others faster than Earth.
+    - Its test: with no hard steps, early-Earth, oxygen and modern air should all be common, and a world's age should say which. Technosignatures should be common on old enough Earth-like worlds.
+  - **[Watson 2025](https://doi.org/10.1098/rstb.2024.0105)** · Published, Philosophical Transactions B 380. I read the abstract. A hard-steps defender's update: each step was a whole-Earth change lasting hundreds of millions of years, tied to the two great ice ages. That leaves two or three hard steps to humans. Searches may find early-Earth air, and rarely oxygen air like later Earth's.
   - **[Reinhard et al. 2017](https://arxiv.org/abs/1702.01137)** · Published, Astrobiology. Oxygen and ozone were a poor sign of Earth's life for all but the last 500 million years. Methane was hard to see for most of the last 2.5 billion. A world can be full of life and show nothing in its air.
   - **[Schwieterman et al. 2024](https://arxiv.org/abs/2405.11149)** · Published, ApJ. Read in the paper's text: sulfur hexafluoride lasts about 1,000 years in air, and the perfluorocarbons 2,000 to 50,000.
   - **[Stevens et al. 2016](https://arxiv.org/abs/1507.08530)** · Published. A civilization that destroys itself leaves signs. Some fade faster than its radio era lasted. Others persist far longer.
@@ -973,6 +980,7 @@ What a neighbor's world can plausibly be, beyond an Earth twin. Each roster entr
   - From memory, not checked: Earth's air gained oxygen about 2.4 billion years ago, animals appear about 0.6 billion years ago, and our species is about 300,000 years old.
   - Matters: on the one world we know, life is microbes for most of its history, shows in the air for between a ninth and a half of it, and has had radio for 130 years of 4.5 billion.
   - Matters: the game's premise puts a mind at about 1 warm world in 18. Minds can't be commoner than life, so in this game most warm worlds that can hold life do.
+  - Matters, measured 2026-10-15 on 200 games: if oxygen were a long shot, reached by 1 living world in 10 at Earth's age, a game would hold about 3 natural worlds with animals beside 11 minds. Every mind's world passed through animals, so the premise clashes with hard steps. Earth's pace as typical gives about 22.
   - Used since: v2 [How Earth learns](HOLOS_GAME_CONCEPT.md#how-earth-learns), the ladder and the rung draw in calcs/seed.py.
   - Used since 2026-10-13: the Mind's starting words. It judges from what Earth knows, so Kipping 2020 and Sandberg et al. stand behind Minds, almost no chance, and Kipping 2025 behind a higher word for Life. Price et al. 2020, logged under [Hearing technology by radio](#hearing-technology-by-radio), is the null result it starts from. The words themselves are this project's samples.
 
