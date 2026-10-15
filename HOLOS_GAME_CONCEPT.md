@@ -610,6 +610,13 @@ Settled 2026-10-10. Costs in [calcs/ai_cost.py](calcs/ai_cost.py), prices in [HO
     - *Odds of burning in, samples:* strongly Open 90%, leans Open 70%, leans Hidden 30%, strongly Hidden 10%. On 1,000 games, 53% of rolled probes burn in.
     - *In seed 11,* Hael leans Open, and its probe burns in.
     - Set aside: every probe burning in, and every probe stopping far out.
+  - *What it does on arrival is what its orders say.* Settled 2026-10-15. Built in [calcs/reactions.py](calcs/reactions.py), tables in [HOLOS_REACTIONS.md](HOLOS_REACTIONS.md#a-probes-orders).
+    - A probe has no mind of its own, as v1's nodes. Its sender writes its orders at launch, rolled from a table for its kind and tilted by its dials.
+    - It watches quietly and reports home, hails the world it was sent to, or waits to be hailed. A hunter's may hail with a false face, as bait.
+    - *Bases, samples:* a watcher's probe watches 70%, waits 25%, hails 5%. A contacter's hails 50%, waits 35%, watches 15%. An inward neighbor's watches 60%, waits 35%. A hunter's watches 70%, wears a false face 20%, waits 10%.
+    - A hail is sent from close range, so any receiver hears it. Its words are as old as the launch: it knows nothing since.
+    - *On 1,000 games* of rolled probes: watch 42%, hail 33%, wait 24%, a false face under 1%.
+    - *In seed 11,* Hael's orders: hail 63%, wait 28%, watch 8%. The seed rolls hail. Its words, written in 2023, reach Earth at Year 36.2.
   - *The X-ray sky watch, proposed 2026-10-14.* Samples, in [calcs/seed.py](calcs/seed.py).
     - Einstein Probe's class: a few tonnes in orbit, 6 Years at standard pace. Einstein Probe took about 6 from approval in 2018 to launch in 2024, and Swift 5. It wants a twentieth of a flagship.
     - A probe of 1,000 t braking at a hundredth of a gravity runs half a terawatt of jet. A tenth leaks as X-rays, as Zubrin assumed.
@@ -874,6 +881,7 @@ Answered one at a time, in this order. Every answer must be permitted by current
     - **Settled 2026-10-14:** where a probe ends its burn is its sender's Open or Hidden dial, as odds. A Hidden sender's probe most often stops far out, unseen. See [How neighbors play](#how-neighbors-play).
     - **Settled 2026-10-15:** a fusion drive takes 30 Years at standard pace, and burns 20 to reach a tenth of light speed. Every trip gains 10 Years for speeding up, probes' too.
     - **Mocked 2026-10-14:** [seed 11, next door](explorations/v2-mocks/seed-11.html#next). Hael answers Earth's knock at Year 16.5, the Mind reads its tables for silence, the player builds an X-ray watch, and it catches Hael's probe 29 days out, at Year 36. It raised one question: what does a neighbor's probe do once it arrives?
+    - **Settled 2026-10-15:** what its orders say, rolled by its sender at launch: watch, hail, or wait to be hailed. Hael's probe hails.
 13. **Earth's outposts and colonies, begun 2026-10-14.** See [Outposts and colonies](#outposts-and-colonies).
     - **Settled 2026-10-14:** people may go anywhere physics allows, at real prices. Nothing artificial limits the Will, since Holos tests the Fermi paradox.
     - **Settled 2026-10-14:** neighbors may spread too, by the same physics and prices, when their scripts choose.

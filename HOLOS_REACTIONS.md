@@ -82,6 +82,45 @@ Settled 2026-10-14. A world with arrays hears a knock and may answer as a people
 | strongly Hidden | broadcast | watch 90%, answer 7%, knock 2% |
 | strongly Hidden | reply | watch 74%, answer 26% |
 
+## A probe's orders
+
+Settled 2026-10-15. A probe follows orders its sender writes at launch, as v1's nodes do: it has no mind of its own. The sender rolls them from a table for its kind. Its dials tilt each order as the move it is most like: watch as watch, hail as knock, wait as answer, mask as mask. A hail is sent from close range, so any receiver hears it.
+
+- **watch:** watches quietly and reports home.
+- **hail:** hails the world it was sent to, in words its sender wrote at launch.
+- **wait:** waits to be hailed, and answers in words its sender wrote at launch.
+- **mask:** hails with a false face, as bait.
+
+| Neighbor | Orders |
+| --- | --- |
+| Veyra | watch 88%, wait 10%, hail 1% |
+| Hael | hail 63%, wait 28%, watch 8% |
+| Kesh | watch 79%, wait 18%, hail 4% |
+| Tavi | watch 90%, wait 9%, hail 1% |
+| Ombe | hail 64%, wait 29%, watch 7% |
+| Sere | watch 88%, wait 11%, hail 1% |
+| Ilm | watch 57%, wait 37%, hail 6% |
+| Varn | watch 67%, wait 30%, hail 3% |
+| Quessa | watch 95%, wait 5% |
+| Daal | watch 68%, mask 27%, wait 5% |
+| Ystra | watch 92%, wait 7%, hail 1% |
+| Nuvo | hail 66%, wait 29%, watch 5% |
+| Kirrin | watch 92%, wait 7%, hail 1% |
+| Ruun | hail 64%, wait 29%, watch 7% |
+| Faen | watch 67%, wait 30%, hail 3% |
+| Corra | watch 85%, wait 13%, hail 1% |
+| Lusk | watch 83%, wait 14%, hail 3% |
+| Iru | hail 47%, wait 39%, watch 14% |
+| Tolle | watch 85%, wait 13%, hail 1% |
+| Vesh | watch 82%, mask 15%, wait 3% |
+| Sabe | hail 71%, wait 24%, watch 5% |
+| Ulan | watch 85%, wait 13%, hail 1% |
+| Odun | watch 92%, wait 7%, hail 1% |
+| Ree | hail 66%, wait 29%, watch 5% |
+| Hesk | watch 85%, wait 13%, hail 1% |
+| Arro | watch 79%, wait 18%, hail 4% |
+| Wenn | watch 90%, wait 9%, hail 1% |
+
 ## Tables
 
 Moves under 5% are folded into "other".

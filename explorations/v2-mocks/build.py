@@ -54,7 +54,8 @@ SETTLED = [('Does a half-built real instrument cost fewer Years?', 'It costs wha
            ('Earth has proof of minds who don’t know they are heard. What may it do?', 'Anything v1 allows, as with a suspicion. And they can answer. Before its Mind wakes, a world with radio arrays may answer as a people, as Earth’s own senders have: about ten aimed sends since 1974, none after the world was asked. The seed rolls whether and how, and its Mind inherits the exchange. Settled 2026-10-14.'),
            ('What does a late answer cost?', 'Nothing extra. A sender listens for good, so a late answer is always heard. Its own tables carry the cost: by the time the answer lands, it may have knocked again or turned to others, and it rolls its table for an answer like any other. The Mind tells the player what the sender has likely done. Settled 2026-10-14.'),
            ('Is the plateau too quiet, and too long?', 'No. Replayed with paced works, the solar lens and listening again with each fifth, the third mock wakes the player twelve times in about three hours: about as often as the first hour. The longest quiet is 35 minutes. Every wake comes from a settled rule or the player’s own orders, and the player chooses what wakes them. Settled 2026-10-14.'),
-           ('A neighbor sends a probe to Sol. What arrives, and does Earth see it?', 'A rocket, as v1 had it: a 20-Year build, a tenth of light speed. Its braking flame is X-rays, seen only in its last weeks, within a few AU, by an X-ray sky watch Earth must build. An Open sender’s probe most often burns all the way in. A Hidden one’s most often stops far out and watches from the outskirts, unseen. Small dark sails were set aside to keep the game simple: the Sun can catch one only below 3.8% of light speed, so they almost never arrive in play. Settled 2026-10-14.')]
+           ('A neighbor sends a probe to Sol. What arrives, and does Earth see it?', 'A rocket, as v1 had it: a 20-Year build, a tenth of light speed. Its braking flame is X-rays, seen only in its last weeks, within a few AU, by an X-ray sky watch Earth must build. An Open sender’s probe most often burns all the way in. A Hidden one’s most often stops far out and watches from the outskirts, unseen. Small dark sails were set aside to keep the game simple: the Sun can catch one only below 3.8% of light speed, so they almost never arrive in play. Settled 2026-10-14.'),
+           ('What does a neighbor’s probe do once it arrives?', 'What its orders say. A probe has no mind of its own: its sender writes its orders at launch, rolled from a table for its kind. It watches quietly, hails the world, or waits to be hailed. A hunter’s may hail with a false face. A hail is sent from close range, so any receiver hears it. Settled 2026-10-15.')]
 
 # ---------- Godview: who is out there ----------
 MOVE = reactions.MOVES
@@ -1104,12 +1105,15 @@ def next_door_rows():
 {SEC('WHAT IT CAN’T TELL')}<p class="copy small">What it carries, or what it will do. Comets shine in soft X-rays only, and stars don’t move.</p>""")
     look_o = order(t6, 'Watch it. Every telescope that can.', [
         ('OBSERVE', '<b>The craft</b> · infrared telescope, X-ray watch · its heat, its size, where it stops'), ('WAKES YOU', 'If it moves, or speaks')])
-    stop_r = tab(t7, 'Report', 'REPORT', 'READING', f"""<button class="backlink inline">‹ All reports</button>
-<h3 class="lead">It stopped</h3>
-<p class="copy small">infrared telescope · about 7 million km out · Year {q['year']:.1f}</p>
-<p class="copy">Its flame is out. It keeps station near our orbit, about twenty times the Moon’s distance. A dot of heat at about a thousand degrees: radiators. Too small for our mirror to split, so under a kilometre or two.</p>
-{SEC('WHAT IT CAN’T TELL')}<p class="copy small">What it is for, and whether anything aboard thinks. It has sent nothing we can hear.</p>""")
-    Q = ask('What does a neighbor’s probe do once it arrives?', f'Watch and report home, wait to be hailed, or speak first. And how its sender’s dials and tables set that. Raised by {LW}’s probe.')
+    HAIL = q['orders'] in ('hail', 'mask')
+    stop_r = tab(t7, 'Report', 'REPORT', 'HEARD' if HAIL else 'READING', f"""<button class="backlink inline">‹ All reports</button>
+<h3 class="lead">{'It hails us' if HAIL else 'It stopped'}</h3>
+<p class="copy small">{'radio, from the craft · about 7 million km out' if HAIL else 'infrared telescope · about 7 million km out'} · Year {q['year']:.1f}</p>
+""" + (f"""<p class="copy">“{LBANK['hail'][1]}”</p>
+{SEC('WHAT IT HOLDS · TYPED PARTS')}{part('ARCHIVE', 'We wrote to you twice, in your 1996 and 1997. Perhaps no one listened. We sent this to wait with you.')}{part('REQUEST', 'Speak to this craft, and it carries your words home.')}
+{SEC('WHAT IT CAN’T KNOW')}<p class="copy small">Anything after its launch in {q['launch']:.0f}: our knock, or {LW}’s answer. Its words are {q['year'] + Y0 - q['launch']:.0f} years old.</p>""" if HAIL else
+       f"""<p class="copy">Its flame is out. It keeps station near our orbit, about twenty times the Moon’s distance. A dot of heat at about a thousand degrees: radiators. Too small for our mirror to split, so under a kilometre or two.</p>
+{SEC('WHAT IT CAN’T TELL')}<p class="copy small">What it is for, and whether anything aboard thinks. It has sent nothing we can hear.</p>"""))
     rows = [
         stop(t1, 3600, '· The phone lights. The Mind is already speaking.', ('Heard', f'A voice from {LS}, {LD:.1f} ly away, in answer to our knock.'),
              talk(gift_r, f'<b>They answered</b>From where we saw smog. They wrote twice before, they say, in 1996 and 1997. No one heard.', ('What did they do then?', 'Read it'), 'open'),
@@ -1138,12 +1142,15 @@ def next_door_rows():
         stop(t6, t5, 'Watch it. Every telescope that can.', None,
              talk(look_o, 'Set. Looking tells it nothing. I send nothing to it.', ('Undo',)),
              ['Watching is quiet: telescopes send nothing. Hailing it, or sending a craft, tells Hael we see it.'], label=HMS(t6)),
-        stop(t7, t6, '· The phone lights. Opens it.', 'It has stopped near our orbit. It is quiet.',
-             talk(stop_r, 'It stopped where it can see us well, and it is quiet. It may be watching for its makers, or waiting for us to speak first. I can hail it, or send a craft to look closer. Either tells Hael we see it.', ('Hail it', 'Leave it'), 'glow'),
-             ['Where it stops, about twenty times the Moon’s distance, is the mock’s.',
-              'Real: a 6 m mirror splits about 1.5 km at that distance in near-infrared light.',
+        stop(t7, t6, '· The phone lights. The Mind is already speaking.' if HAIL else '· The phone lights. Opens it.',
+             ('Heard', f'The craft speaks, in words {LW} wrote at its launch.') if HAIL else 'It has stopped near our orbit. It is quiet.',
+             talk(stop_r, f'<b>It speaks</b>Words from {q["launch"]:.0f}, before our knock. It asks us to answer through it. Whatever we give it goes home at light speed, as a knock would.', ('Answer it', 'Leave it'), 'open') if HAIL else
+             talk(stop_r, f'It stopped where it can see us well, and it is quiet. It may be watching for its makers, or waiting for us to speak first. I can hail it, or send a craft to look closer. Either tells {LW} we see it.', ('Hail it', 'Leave it'), 'glow'),
+             [f'Settled 2026-10-15: a probe follows orders its sender rolled at launch. {LW}’s odds: ' + ', '.join(f'{o} {p:.0%}' for o, p in reactions.orders(LW)) + f'. The seed rolled: {q["orders"]}.',
+              'Where it stops, about twenty times the Moon’s distance, is the mock’s.',
+              *(['The words are from the voice bank. The parts are the mock’s.'] if HAIL else ['Real: a 6 m mirror splits about 1.5 km at that distance in near-infrared light.']),
               f'{LW}’s {"gift" if GIFT else "answer"} came at Year {BACK_Y:.1f} and its probe at {q["year"]:.1f}. Earth’s answer, had the player sent one at once, would have reached Hael at Year {t3 / 300 + LD:.1f}.'],
-             question=Q, label=HMS(t7)),
+             settled=len(SETTLED) - 1, label=HMS(t7)),
     ]
     return rows
 
@@ -1507,7 +1514,7 @@ Earth’s past, its knocks and its leads are real. The Mind’s judgments, compu
 {''.join(HOUR)}
 {'' if not NEXT else f'''<section id="next" class="intro"><h2>Next door · hours 1 to {math.ceil(LIVE['probes'][0]['year'] * 300 / 3600)}</h2>
 <p>Years {BACK_Y:.0f} to {LIVE['probes'][0]['year']:.0f}. {LW} answers Earth’s knock, and a probe it sent decades ago arrives. Each row is a wake, or a moment the player looked. The long roads run underneath, unshown.</p>
-<p>The X-ray watch’s price, the probe’s mass and its X-rays are samples, in calcs/seed.py. The message’s parts, the Mind’s words and where the probe stops are the mock’s. Amber boxes are the questions these rows raise.</p></section>'''}{''.join(NEXT)}
+<p>The X-ray watch’s price, the probe’s mass and its X-rays are samples, in calcs/seed.py. The messages’ parts, the Mind’s words and where the probe stops are the mock’s.</p></section>'''}{''.join(NEXT)}
 <section id="long" class="intro"><h2>The long roads · hours 1 to 5</h2>
 {'' if LONG else '<p>Not mocked for this game. The third mock is written for seed 10’s: its rows need a dead world next door, two voices and a missed knock.</p></section>'}{'' if not LONG else f'''<p>Years 12 to {ROAD['array'] + SAIL_FLY + GO_D:.0f}. The phone is down for most of {(ROAD['array'] + SAIL_FLY + GO_D - 12) * 5 / 60:.0f} hours. Each row is a wake, or a moment the player looked. Thought has hit the grid limit, and what moves now are works that take decades.</p>
 <p>The roads are priced in calcs/early_game.py, as samples, and paced by thought down the line the player set: the order begun. What each reading and the dispatch show, the Mind’s words and its lines are samples too. Amber boxes are the questions these hours raise.</p></section>'''}

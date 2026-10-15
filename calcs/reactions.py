@@ -182,6 +182,38 @@ def people_table(dials):
         out[news] = sorted(((m, v / total) for m, v in w.items()), key=lambda kv: -kv[1])
     return out
 
+# Settled 2026-10-15: a probe follows orders its sender writes at launch, as v1's nodes do. The sender rolls them from a
+# table for its kind, tilted by its dials as the move each order is most like: a hail like a knock, waiting like an
+# answer, watching like watching, a false face like a mask. A hail is a message the sender wrote at launch, sent from
+# close range, so any receiver hears it. Odds are design choices, not physics.
+ORDERS = {
+    'watch': 'watches quietly and reports home',
+    'hail': 'hails the world it was sent to, in words its sender wrote at launch',
+    'wait': 'waits to be hailed, and answers in words its sender wrote at launch',
+    'mask': 'hails with a false face, as bait',
+}
+ORDERS_BASE = {
+    'watcher': B(watch=70, wait=25, hail=5),
+    'contacter': B(hail=50, wait=35, watch=15),
+    'inward': B(watch=60, wait=35, hail=5),
+    'hunter': B(watch=70, mask=20, wait=10),
+}
+ORDERS_LIKE = dict(watch='watch', hail='knock', wait='answer', mask='mask')
+ORDERS_OWN = {'Ilm': dict(hail=0.2), 'Sabe': dict(hail=1.3), 'Ystra': dict(wait=0.5)}
+def orders(name):
+    """A probe's orders, as (order, odds) from most to least likely."""
+    n = next(x for x in nb.ROSTER if x['name'] == name)
+    dials, style = CHARACTER[name]
+    w = dict(ORDERS_BASE[n['disposition']])
+    for order in w:
+        like = ORDERS_LIKE[order]
+        for code in dials.split():
+            w[order] *= DIAL[DIAL_NAMES[code[0]]].get(like, 1) ** int(code[1])
+        w[order] *= STYLE[style].get(like, 1) if style else 1
+        w[order] *= ORDERS_OWN.get(name, {}).get(order, 1)
+    total = sum(w.values())
+    return sorted(((o, v / total) for o, v in w.items()), key=lambda kv: -kv[1])
+
 GATES = [
     'Only a hunter strikes first, and only when its target is soft and it judges the launch unseen. Otherwise a rolled strike becomes watch.',
     'Anyone may strike back when struck, if it has the weapons. Until then a rolled strike queues the weapon projects.',
@@ -253,6 +285,15 @@ def write():
     for lean in ('O2', 'O1', 'H1', 'H2'):
         for news, odds in people_table(lean).items():
             L.append(f'| {dial_words(lean)} | {news} | ' + ', '.join(f'{m} {p:.0%}' for m, p in odds) + ' |')
+    L += ['', "## A probe's orders", '',
+          "Settled 2026-10-15. A probe follows orders its sender writes at launch, as v1's nodes do: it has no mind of its own. "
+          'The sender rolls them from a table for its kind. Its dials tilt each order as the move it is most like: '
+          + ', '.join(f'{o} as {m}' for o, m in ORDERS_LIKE.items()) + '. A hail is sent from close range, so any receiver hears it.', '']
+    L += [f'- **{k}:** {v}.' for k, v in ORDERS.items()]
+    L += ['', '| Neighbor | Orders |', '| --- | --- |']
+    for n in nb.ROSTER:
+        if n.get('dies') is None:
+            L.append(f"| {n['name']} | " + ', '.join(f'{o} {p:.0%}' for o, p in orders(n['name']) if p >= 0.005) + ' |')
     L += ['', '## Tables', '', 'Moves under 5% are folded into "other".', '']
     for n in nb.ROSTER:
         name = n['name']

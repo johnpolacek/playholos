@@ -89,7 +89,12 @@ BURN_IN = {'O2': 0.9, 'O1': 0.7, 'H1': 0.3, 'H2': 0.1}
 def probe_trip(seed, p, t, what):
     launch = t + p['thinks'] + ROCKET_BUILD
     inward = keyed(seed, 'burn', p['name'], what) < BURN_IN[p['dials'].split()[0]]     # keyed, so no other draw moves
-    return dict(what=what, kind='rocket', bright=inward, ends='close' if inward else 'outskirts', launch=launch,
+    # Settled 2026-10-15: its orders, rolled by its sender at launch (calcs/reactions.py orders). Keyed too.
+    u, acc, order = keyed(seed, 'orders', p['name'], what), 0, None
+    for order, odds in reactions.orders(p['name']):
+        acc += odds
+        if u < acc: break
+    return dict(what=what, kind='rocket', bright=inward, ends='close' if inward else 'outskirts', orders=order, launch=launch,
                 arrives=launch + p['d'] / ROCKET_V + ROCKET_BURNS, year=launch + p['d'] / ROCKET_V + ROCKET_BURNS - Y0)
 
 # ---------- What an X-ray sky watch sees of a probe burning in ----------

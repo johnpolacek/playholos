@@ -1173,7 +1173,7 @@ From minute 15 to minute 60 the player was woken four times and played about six
 
 ## Next door · hours 1 to 4
 Years 16 to 36. Hael answers Earth’s knock, and a probe it sent decades ago arrives. Each row is a wake, or a moment the player looked. The long roads run underneath, unshown.
-The X-ray watch’s price, the probe’s mass and its X-rays are samples, in calcs/seed.py. The message’s parts, the Mind’s words and where the probe stops are the mock’s. Amber boxes are the questions these rows raise.
+The X-ray watch’s price, the probe’s mass and its X-rays are samples, in calcs/seed.py. The messages’ parts, the Mind’s words and where the probe stops are the mock’s.
 +1:22:27 · Year 16.5
 The phone lights. The Mind is already speaking.
 Heard · A voice from Alpha Centauri A, 4.3 ly away, in answer to our knock.
@@ -1295,26 +1295,30 @@ THE MIND · Set. Looking tells it nothing. I send nothing to it. · [Undo]
 Godview
 Watching is quiet: telescopes send nothing. Hailing it, or sending a craft, tells Hael we see it.
 +3:00:48 · Year 36.2
-The phone lights. Opens it.
-Lands · It has stopped near our orbit. It is quiet.
+The phone lights. The Mind is already speaking.
+Heard · The craft speaks, in words Hael wrote at its launch.
 Earth · Year 36.2
 Sol · 2076.2 · 1 Year = 00:05:00
 ENERGY · [75.1%] · MATTER · 6.2 Mt · COMPUTE · [100%]
-REPORT · READING
+REPORT · HEARD
 [‹ All reports]
 
-### It stopped
-infrared telescope · about 7 million km out · Year 36.2
-Its flame is out. It keeps station near our orbit, about twenty times the Moon’s distance. A dot of heat at about a thousand degrees: radiators. Too small for our mirror to split, so under a kilometre or two.
-WHAT IT CAN’T TELL
-What it is for, and whether anything aboard thinks. It has sent nothing we can hear.
-THE MIND · It stopped where it can see us well, and it is quiet. It may be watching for its makers, or waiting for us to speak first. I can hail it, or send a craft to look closer. Either tells Hael we see it. · [Hail it] · [Leave it]
+### It hails us
+radio, from the craft · about 7 million km out · Year 36.2
+“Hello, Record 4,112. We have kept every light our sky ever sent us, every song and every name, and we would love to keep yours.”
+WHAT IT HOLDS · TYPED PARTS
+ARCHIVE · We wrote to you twice, in your 1996 and 1997. Perhaps no one listened. We sent this to wait with you.
+REQUEST · Speak to this craft, and it carries your words home.
+WHAT IT CAN’T KNOW
+Anything after its launch in 2023: our knock, or Hael’s answer. Its words are 53 years old.
+THE MIND · UNASKED · It speaks · Words from 2023, before our knock. It asks us to answer through it. Whatever we give it goes home at light speed, as a knock would. · [Answer it] · [Leave it]
 [Talk to the Mind]
 Godview
+Settled 2026-10-15: a probe follows orders its sender rolled at launch. Hael’s odds: hail 63%, wait 28%, watch 8%. The seed rolled: hail.
 Where it stops, about twenty times the Moon’s distance, is the mock’s.
-Real: a 6 m mirror splits about 1.5 km at that distance in near-infrared light.
+The words are from the voice bank. The parts are the mock’s.
 Hael’s answer came at Year 16.5 and its probe at 36.2. Earth’s answer, had the player sent one at once, would have reached Hael at Year 21.0.
-Design question 1 · What does a neighbor’s probe do once it arrives? Watch and report home, wait to be hailed, or speak first. And how its sender’s dials and tables set that. Raised by Hael’s probe.
+Settled · What does a neighbor’s probe do once it arrives? What its orders say. A probe has no mind of its own: its sender writes its orders at launch, rolled from a table for its kind. It watches quietly, hails the world, or waits to be hailed. A hunter’s may hail with a false face. A hail is sent from close range, so any receiver hears it. Settled 2026-10-15.
 
 ## The long roads · hours 1 to 5
 Not mocked for this game. The third mock is written for seed 10’s: its rows need a dead world next door, two voices and a missed knock.
@@ -1360,4 +1364,5 @@ Settled: Earth has proof of minds who don’t know they are heard. What may it d
 Settled: What does a late answer cost? · Nothing extra. A sender listens for good, so a late answer is always heard. Its own tables carry the cost: by the time the answer lands, it may have knocked again or turned to others, and it rolls its table for an answer like any other. The Mind tells the player what the sender has likely done. Settled 2026-10-14.
 Settled: Is the plateau too quiet, and too long? · No. Replayed with paced works, the solar lens and listening again with each fifth, the third mock wakes the player twelve times in about three hours: about as often as the first hour. The longest quiet is 35 minutes. Every wake comes from a settled rule or the player’s own orders, and the player chooses what wakes them. Settled 2026-10-14.
 Settled: A neighbor sends a probe to Sol. What arrives, and does Earth see it? · A rocket, as v1 had it: a 20-Year build, a tenth of light speed. Its braking flame is X-rays, seen only in its last weeks, within a few AU, by an X-ray sky watch Earth must build. An Open sender’s probe most often burns all the way in. A Hidden one’s most often stops far out and watches from the outskirts, unseen. Small dark sails were set aside to keep the game simple: the Sun can catch one only below 3.8% of light speed, so they almost never arrive in play. Settled 2026-10-14.
-1. What does a neighbor’s probe do once it arrives? · Watch and report home, wait to be hailed, or speak first. And how its sender’s dials and tables set that. Raised by Hael’s probe.
+Settled: What does a neighbor’s probe do once it arrives? · What its orders say. A probe has no mind of its own: its sender writes its orders at launch, rolled from a table for its kind. It watches quietly, hails the world, or waits to be hailed. A hunter’s may hail with a false face. A hail is sent from close range, so any receiver hears it. Settled 2026-10-15.
+None are open.
