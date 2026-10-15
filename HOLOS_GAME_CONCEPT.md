@@ -749,7 +749,13 @@ Begun 2026-10-14. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#outposts-and-
   - *It brakes on its sail,* in about 19 years with no fuel.
   - *How fast a seed grows is a separate number.* NASA's seed copies itself in about a year. Freitas's grows to a factory in 500. The neighbors' pace, a first ship 60 Years after landing, sits between: a sample.
   - Set aside: a light seed fed chips by supply ships until it builds its own chip works.
-  - Still open: build times, and which of these works Earth's tree offers first.
+- **What each push costs Earth, priced 2026-10-14.** Numbers from `python3 calcs/early_game.py`. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#pricing-a-seed-ship).
+  - *A laser waits on industry that copies itself.* 50 TW in space weighs about 150 Mt by NASA's 2024 ratio, or about 2 Gt with today's lasers and radiators. The long roads bring 720 kt of rock a Year.
+  - *Deuterium is cheap, and its plants are the pace.* A 20 to 30 Year burn needs 30,000 to 60,000 t, plus 1,400 to 4,000 t of engine and radiators. Bruce took 4 to 5 years to build, and works twelve times its peak make 40,000 t in 10 Years. Its energy is 1% of a Year of the grid.
+  - *The drive is the hard part.* Firefly needs a steady pinch of 1,175 GW. Zap Energy's best ran 39 kW. No one has dated a flight engine.
+  - *Helium-3 waits on Uranus,* about 20,000 t, and on an engine that burns it. Helion reached 13 keV in 2026, and the burn wants about 60.
+  - So deuterium is Earth's nearest road, once a drive exists.
+  - Still open: how long a fusion drive takes, and the seed ship's own build time.
 
 ## Death and new games
 

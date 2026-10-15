@@ -387,6 +387,38 @@ def thought_split():
         print(f'    The plateau ends at Year {d["Power from orbit"] + 1:.1f}: {d["Power from orbit"] + 1 - 11.1:.0f} Years, {(d["Power from orbit"] + 1 - 11.1) * 5 / 60:.1f} hours of play.')
     print('  The order moves the small works by Years, and matter\'s road by about one. Rock from the Moon sets that pace.')
 
+# ---------- A seed ship, and what pushes it ----------
+# Settled 2026-10-14: every seed stands alone, so a seed ship weighs about 1,500 t (Gros 2017's case, Freitas 1980's
+# seed). Priced 2026-10-14 from a research agent's sources, logged in HOLOS_RESEARCH.md, "Pricing a seed ship". The
+# arithmetic here is this project's. Three pushes to a tenth of light speed, all open to the Will.
+C = 2.998e8
+def seed_ship(ship_t=1500, v=0.1, grid_tw=24):
+    print(f'A seed ship of {ship_t:,} t to {v:g} of light speed. It brakes on its sail, so it carries no braking fuel.')
+    # 1. Light. A sail takes at best 2P/c of push, so the light it needs is at least m v c / 2.
+    e = ship_t * 1e3 * v * C * C / 2
+    print(f'  Laser: at least {e:.1e} J of light, {e / (grid_tw * 1e12 * YEAR):.1f} Years of Earth\'s whole Year 0 grid.')
+    print('    About 50 TW from an array 100 km across, by Lubin 2016\'s scaling. In space that is about 150 Mt by NASA\'s 2024')
+    print('    ratio for space power, or about 2 Gt with Lubin\'s masses for lasers, panels and radiators today.')
+    print(f'    The long roads bring {DRIVER_KT + MINING_KT} kt of rock a Year, so it waits on industry that copies itself.')
+    # 2. Deuterium. Firefly's exhaust, 12,000 km/s, and its engine and radiators, 2,050 t for 600 kN.
+    ve, kg_per_n = 1.2e7, 2050e3 / 6e5
+    ratio = math.exp(v * C / ve)
+    for burn in (20, 30):
+        n_per_t = (ratio - 1) * 1e3 * ve / (burn * YEAR)              # average thrust per tonne of dry ship
+        k = kg_per_n * n_per_t / 1e3                                  # tonnes of engine per tonne of dry ship
+        dry = ship_t / (1 - k); fuel = (ratio - 1) * dry
+        print(f'  Deuterium, a {burn}-Year burn: mass ratio {ratio:.1f}, engine and radiators {dry - ship_t:,.0f} t, {fuel:,.0f} t of deuterium.')
+    d2o = 40e3 * 20 / 4                                               # tonnes of heavy water holding 40,000 t of deuterium
+    print(f'    40,000 t of deuterium is {d2o:,.0f} t of heavy water: {d2o / 1600:.0f} Years of Canada\'s Bruce plant at its peak,')
+    print(f'    or 10 Years of works twelve times its size. Bruce took 4 to 5 years to build. At 36 GJ a kg of heavy water,')
+    print(f'    {d2o * 1e3 * 36e9:.1e} J: {d2o * 1e3 * 36e9 / (grid_tw * 1e12 * YEAR):.0%} of a Year of the grid.')
+    print('    The drive itself: Firefly needs a 1,175 GW pinch held steady. Zap Energy\'s best ran 39 kW. No one has dated a flight engine.')
+    # 3. Helium-3. Daedalus's exhaust, 10,600 km/s. 60% of D-He3 fuel by mass is helium-3.
+    ratio3 = math.exp(v * C / 1.06e7)
+    print(f'  Helium-3: mass ratio {ratio3:.0f}. About 20,000 t of helium-3, from Uranus: Palaszewski needs 20 to 110 kt of craft')
+    print('    for 5,000 t of fuel over 10 years. The Moon holds about 200,000 t in its richest soil, spread thin. No engine yet')
+    print('    burns it: Helion reached about 13 keV in 2026, and the burn wants about 60.')
+
 if __name__ == '__main__':
     long_roads(); print()
     thought_speed(); print()
@@ -401,4 +433,5 @@ if __name__ == '__main__':
     belt(); belt(flow_kt=60); print()
     far_side(); print()
     hum(); tone_reach(); print()
-    all_sky()
+    all_sky(); print()
+    seed_ship()

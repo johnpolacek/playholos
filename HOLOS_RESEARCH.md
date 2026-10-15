@@ -1294,6 +1294,28 @@ Gathered 2026-10-14 by a research agent, for Earth's first seed ship.
 - **Forward 1984, sizes** · Through a secondary page only.
   - Rendezvous: 71 t inside a 710 t ring, 100 km across, 7.2 TW out and 26 TW to brake, through a 1,000 km lens. These figures may be garbled: 7.2 TW would take about 40 years.
   - Used: the seed ship question, 2026-10-14.
+- **Heavy water at scale** · Gathered 2026-10-14 by a research agent.
+  - Canada's Bruce plant: contracted 1969, in service June 1973, at design rate April 1974. 800 t of heavy water a year a plant, 1,600 at peak. 340,000 t of feed water for each tonne. Closed 1997 ([Wikipedia](https://en.wikipedia.org/wiki/Heavy_water), read).
+  - About 1980 Canada's four plants made over 2,000 t a year, at about 300 dollars a kg ([Miller, AECL, 2001](https://www.nuclearfaq.ca/A-Miller-Heavy-Water.pdf), read). The Girdler sulfide process takes about 36 GJ a kg ([Ivanco et al.](https://proceedings.cns-snc.ca/index.php/pcns/article/download/2703/2702/2738), read).
+  - No current world total found. India, Argentina and Iran together run under a thousand tonnes a year, by the agent's reading of scattered figures.
+  - Why it matters: deuterium is plentiful and cheap in energy. Plants, not physics, set the pace.
+  - Used: the seed ship's deuterium, 2026-10-14. `calcs/early_game.py` seed_ship().
+- **Fusion drives, 2025 and 2026** · Gathered 2026-10-14 by a research agent.
+  - Firefly, by the [i4is review](https://i4is.org/reaching-the-stars-in-a-century-using-fusion-propulsion/) (read): a steady deuterium Z-pinch driven at 5 MA and 235 kV, 1,175 GW. 600 kN, exhaust 12,000 km/s.
+  - [Zap Energy's 2025 highlights](https://legacy.zapenergy.com/blog/2025-highlights) (read): 1,080 shots in 3 hours at 39 kW average. FuZE-3 reached over 10^10 neutrons. No net-gain figures.
+  - [Helion, February 2026](https://helionenergy.com/newsroom/helion-achieves-new-fusion-energy-milestones) (read): 150 million °C, about 13 keV, and the first private D-T fusion. D-He3 not yet at burn temperature. A 50 MW plant for Microsoft is aimed at 2028.
+  - Princeton's PFRC-2: 100 eV electrons, 300 ms pulses ([Wikipedia](https://en.wikipedia.org/wiki/Princeton_field-reversed_configuration), read). The Direct Fusion Drive is a NIAC concept.
+  - A 2025 preprint, not peer reviewed, rates fusion rockets at readiness level 2 to 3. No independent estimate of years to a flight engine was found.
+  - Why it matters: a fusion drive is about thirty million times past today's steady pinch. Its time is a sample, not a forecast.
+  - Used: the seed ship question, 2026-10-14.
+- **Space power and lasers by mass** · Gathered 2026-10-14 by a research agent.
+  - [NASA OTPS 2024, space-based solar power](https://www.nasa.gov/wp-content/uploads/2024/01/otps-sbsp-report-final-tagged-approved-1-8-24-tagged-v2.pdf) (read): design RD1 delivers 2 GW from about 5,900 t, about 3 kg a kW. One page gives 585 t instead; the report contradicts itself. Assembly in the 2040s, 7 to 13 years.
+  - [Caltech's design paper](https://arxiv.org/abs/2206.08373) (read): 160 g a square metre, 7 to 14% end to end. Space arrays today are about 70 W a kg.
+  - Lubin 2016 (read): fiber lasers 5 kg a kW, aiming at 1. Space panels under 7 kg a kW. Radiators 25 kg a kW of heat, the largest part. No total given.
+  - [Frazer-Nash for ESA, 2022](https://www.fnc.co.uk/media/myuhgjfg/space-based-solar-power-executive-summary.pdf) (read): 18 years to a full-scale prototype, in four phases.
+  - The ISS: first module November 1998, US segment finished 2011, about 13 years, 420 t.
+  - Why it matters: a 50 TW laser weighs about 150 Mt by NASA's ratio, or about 2 Gt by Lubin's parts today. The agent's arithmetic.
+  - Used: the seed ship question, 2026-10-14. `calcs/early_game.py` seed_ship().
 - **This project's arithmetic: pushing a seed ship, 2026-10-14.**
   - Light pushes at best twice its power over c. So 1,500 t at a tenth of light speed needs at least 6.7e21 J of light: about 9 Years of Earth's whole 24 TW grid.
   - A fusion ship starts at its mass ratio times its dry mass: about 12 on deuterium at Firefly's exhaust, about 17 on helium-3 at Daedalus's. Braking on a sail needs no more.
