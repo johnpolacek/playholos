@@ -157,7 +157,10 @@ YOUNG = {
     # about a quarter of 0.35 to 0.5 Sun stars are still fast at 0.7 billion years (Douglas et al. 2017, 2019). So
     # AD Leonis, GT Pegasi, GJ 4337 A with GJ 4338 B, and OT Serpentis are hosts again too. Those below stay out: each
     # is dated by a slow, settled spin, by a bound companion, or by its brightness above the main sequence.
-    '46580': 'HD 82106 (Gl 349), 0.2 to 0.9 Gyr from spin, activity and X-rays',
+    # Checked 2026-10-15 against the slow spin sequence K and early M dwarfs share from Praesepe (670 Myr) to NGC 6811
+    # (1 Gyr), where they stall (Curtis et al. 2020, Douglas et al. 2019). Gliese 208 spins 15% faster than Praesepe's
+    # stars of its colour, and DS Leonis 12% faster, so both are younger. HD 82106 (Gl 349) spins on that sequence or
+    # slower, so its spin, activity and X-ray ages, all under a billion, can't rule out an older star: it is a host again.
     '26335': 'Gliese 208, 0.15 to 0.8 Gyr, near 0.5 from its 12.3 day spin. Earth knocked here',
     '892348454394856064': 'YY Geminorum (Castor C), 0.29 to 0.37 Gyr, the age of Castor A and B',
     '63510': 'DT Virginis (Gl 494, Ross 458), 0.13 to 0.8 Gyr',

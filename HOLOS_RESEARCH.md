@@ -836,7 +836,7 @@ What Sol's own instruments have found nearby. For v2 open question 3.
   - GT Pegasi turns in 1.63 days and is about 0.45 Suns. GJ 4337 A has no secure period. Neither has a confirmed group, and neither counts as low gravity by Shkolnik's own rule.
   - Matters: for all three the supported statement is "probably under about 2 billion years", not "under one".
   - Used: AD Leonis, GT Pegasi, GJ 4337 A with GJ 4338 B, and OT Serpentis are hosts again. OT Serpentis was not in the agent's brief: it is an M1.5 star at 3.4 days dated the same two ways, so I applied the same reasoning. That one is my call.
-  - Still out, 8 stars. A slow, settled spin: HD 82106, Gliese 208 and its companion, DS Leonis. A bound companion: YY Geminorum, GJ 569 A, DT Virginis. Brightness above the main sequence: YZ Canis Minoris.
+  - Still out, 8 stars. A slow, settled spin: HD 82106, Gliese 208 and its companion, DS Leonis. Corrected 2026-10-15: HD 82106 is a host again, under To check, below. A bound companion: YY Geminorum, GJ 569 A, DT Virginis. Brightness above the main sequence: YZ Canis Minoris.
 - **[El-Badry, Rix and Heintz 2021](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/MNRAS/506/2269)** · Published, MNRAS 506, 2269. Catalog queried on VizieR, 2026-10-13.
   - 114 wide pairs touch the 50 ly census. [calcs/hosts.py](calcs/hosts.py) finds all but two, and neither of those holds a star that can host.
   - hosts.py pairs 33 more that the catalog lacks: close pairs and known triples such as 36 Ophiuchi, Gliese 2 and 4, and 55 Cancri. Each matches in distance and motion.
@@ -991,7 +991,7 @@ What a neighbor's world can plausibly be, beyond an Earth twin. Each roster entr
   - **[Ji et al. 2025](https://arxiv.org/abs/2504.19872)** · Published. No single clean line: how much water and carbon a world starts with blurs it. Heavier worlds at heavier stars keep air more easily.
   - **[Nguyen et al. 2026](https://arxiv.org/abs/2608.23912)** · Accepted, ApJL. JWST finds thick air on some lava worlds and bare rock on some cooler red dwarf planets. Two boundaries, not one, with fits by star kind, mass and age. Not used yet: its fits could replace the simple line.
   - **[Ware et al. 2026, the HAges Catalog](https://arxiv.org/abs/2605.12647)** · Accepted, ApJ. Data at [Zenodo](https://doi.org/10.5281/zenodo.19227788). Published ages from asteroseismology and spin for 127 of the 659 stars the Habitable Worlds Observatory is likeliest to observe. Past about 6 billion years, spin ages run about 47% low.
-    - 161 of the 880 hosts are in it, and 53 have an age: 2 F, 12 G, 23 K, 16 M. Of the 110 the mirror can split, 35.
+    - 161 of the 880 hosts are in it, as of 2026-10-14, and 53 have an age: 2 F, 12 G, 23 K, 16 M. Of the 110 the mirror can split, 35.
     - Alpha Centauri A has 20 ages, 4.2 to 6.7 billion years. Beta Virginis has two, 3.2 and 4.0.
     - Gaia's own ages do not agree with it. On the 9 hosts that have both, the median gap is 4.7 billion years.
   - **[Cukanovaite et al. 2023](https://doi.org/10.1093/mnras/stad1020)** · Published, MNRAS. White dwarfs within 40 pc fit an even rate of star birth over the last 10.5 billion years.
@@ -1393,7 +1393,12 @@ Results the design is waiting on. Check each when its date comes.
 - About 15 red dwarfs are unconfirmed young-group candidates with no age of their own. They stay. Gliese 393 is listed in AB Doradus but [Amado et al. 2021](https://arxiv.org/abs/2105.13785) put it older than 0.7 billion years.
 - 31 of the F, G and K hosts have no published age in any table opened, mostly K companions.
 - HD 221503 is a candidate member of a 210 million year group ([Thao et al. 2024](https://arxiv.org/abs/2406.05234)) and stays until someone dates it.
-- Stars dated by a slow spin: Gliese 208, DS Leonis and HD 82106. Confirmed 2026-10-14, abstract read: K and M dwarfs do stall. Stars in Praesepe (670 million years), NGC 6811 (1 billion) and NGC 752 (1.4 billion) sit on one slow sequence, and stars of 0.55 Suns stay stalled at least 1.3 billion years ([Curtis et al. 2020](https://arxiv.org/abs/2010.02272), ApJ 904, 140). Still to do: compare each star's period with Praesepe's sequence at its mass. Only a period on that sequence, or slower, leaves its age open past a billion.
+- Closed 2026-10-15: stars dated by a slow spin. Checked by a research agent against Praesepe's slow sequence, from table medians in Douglas et al. 2019 ([VizieR J/ApJ/879/100](https://cdsarc.cds.unistra.fr/viz-bin/cat/J/ApJ/879/100)) and Curtis et al. 2020 ([VizieR J/ApJ/904/140](https://cdsarc.cds.unistra.fr/viz-bin/cat/J/ApJ/904/140)), with Gaia DR3 colours.
+  - Gliese 208, BP-RP 1.82: spins in 11.5 to 12.3 days in five studies. Praesepe's stars of its colour: 14.3 to 14.6, never under 13.3. NGC 6811's match them. So it is younger than about 670 million years. Out. Its other ages: 0.4 to 0.5 billion.
+  - DS Leonis, BP-RP 2.01: a median of 14.3 days over about 15 values, one season 15.7. Praesepe: 16.0 to 16.4. Probably younger. Out, the weakest of the three. Its other ages: 0.4 to 0.7 billion.
+  - HD 82106, BP-RP 1.21: TESS gives 11.1 ± 1.2 days ([Schmitt et al. 2026](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/A+A/709/A180)). An older estimate gives 13.3. Praesepe: 10.7 to 11.3, and NGC 6811 the same. NGC 752, at 1.4 billion, spins slower. So it sits on the stalled sequence or past it, and its age is open past a billion. A host again. Its ten published ages, 0.2 to 0.9, all come from spin or what follows spin.
+  - Not corrected: Praesepe is metal-rich. The verdict for HD 82106 rests on one TESS period and one estimate.
+  - Used: calcs/hosts.py, 2026-10-15. 881 hosts.
 - YZ Canis Minoris stays out on one table's age from its brightness. Read Kerr et al. 2021 for the basis. Its mass and size are ordinary for its type.
 - DT Virginis stays out on its companion Ross 458 C. That signature can also come from heavy elements.
 - calcs/observing.py: the split of noise between leaked starlight and dust is an estimate. Find a published count-rate budget for an Earth twin at 10 pc.

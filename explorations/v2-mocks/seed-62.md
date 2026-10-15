@@ -361,7 +361,7 @@ The clock runs while you talk: 1 Year every · 00:05:00.
 Who has heard us?
 THE MIND · I can’t know. Our radars have crossed every star within ninety light-years. Anyone with a dish like ours who watched us for days has our day, our year, and where we are.
 How many could that be?
-THE MIND · About 880 stars within fifty light-years could keep a world like ours. If minds are common, some of them heard. If they are careful, none will say so.
+THE MIND · About 881 stars within fifty light-years could keep a world like ours. If minds are common, some of them heard. If they are careful, none will say so.
 What would you do?
 ITS VIEW · FROM OUR CHARTER AND DIALS · Assume someone has, and that they are as curious as we are. Listen properly. Then call. · leans open · expand and deepen, even · near the middle
 Ask the Mind… · [Send · ↑]
@@ -1105,7 +1105,7 @@ HOLOS · THE MIND · A receiver would hear some of them better · On one of thes
 Godview
 Truth: 2 are homes. Quessa’s world at Gliese 216 B, Veyra’s world at HD 10307.
 13 are natural, from Groombridge 34 at 12 ly to Gliese 1021 at 49. Truth: 1 airy and lifeless, 2 hiding microbes, 3 showing oxygen, 4 with animals and forests, 3 where life died.
-Their ages: 8 published, 5 drawn. The seed drew 147 natural worlds in all, 109 at red dwarfs, and 88 are bare rock.
+Their ages: 8 published, 5 drawn. The seed drew 148 natural worlds in all, 109 at red dwarfs, and 88 are bare rock.
 From here a home and a natural world look alike: a point of light that moves with its star.
 The Mind calls Minds almost no chance at each. In truth 2 of 15 are homes: very unlikely. It never reads the seed.
 Each needed a second visit, months after the first. Most are too far to read with this mirror.

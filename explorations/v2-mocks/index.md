@@ -359,7 +359,7 @@ The clock runs while you talk: 1 Year every · 00:05:00.
 Who has heard us?
 THE MIND · I can’t know. Our radars have crossed every star within ninety light-years. Anyone with a dish like ours who watched us for days has our day, our year, and where we are.
 How many could that be?
-THE MIND · About 880 stars within fifty light-years could keep a world like ours. If minds are common, some of them heard. If they are careful, none will say so.
+THE MIND · About 881 stars within fifty light-years could keep a world like ours. If minds are common, some of them heard. If they are careful, none will say so.
 What would you do?
 ITS VIEW · FROM OUR CHARTER AND DIALS · Assume someone has, and that they are as curious as we are. Listen properly. Then call. · leans open · expand and deepen, even · leans bold
 Ask the Mind… · [Send · ↑]
