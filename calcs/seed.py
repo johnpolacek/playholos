@@ -81,13 +81,16 @@ def act(p, news, t, what, table, rng, depth=0):
 # Settled 2026-10-14: where a probe ends its burn is set by its sender's Open or Hidden dial, as odds. One burns all
 # the way in to watch from close, so an X-ray sky watch can see its last weeks. The other ends its burn past 100 AU,
 # beyond any watch's reach, and watches from the outskirts, as v1's lurker did. The odds are samples.
-ROCKET_V, ROCKET_BUILD = 0.1, 20
+# Settled 2026-10-15 with the fusion drive's price: speeding up and slowing down take time. A rocket at a hundredth of a
+# gravity takes 9.7 Years to reach a tenth of light speed, over half a light-year, and as long to stop. Each costs
+# about 5 Years over cruising that stretch, so a probe's trip is ROCKET_BURNS Years longer.
+ROCKET_V, ROCKET_BUILD, ROCKET_BURNS = 0.1, 20, 10
 BURN_IN = {'O2': 0.9, 'O1': 0.7, 'H1': 0.3, 'H2': 0.1}
 def probe_trip(seed, p, t, what):
     launch = t + p['thinks'] + ROCKET_BUILD
     inward = keyed(seed, 'burn', p['name'], what) < BURN_IN[p['dials'].split()[0]]     # keyed, so no other draw moves
     return dict(what=what, kind='rocket', bright=inward, ends='close' if inward else 'outskirts', launch=launch,
-                arrives=launch + p['d'] / ROCKET_V, year=launch + p['d'] / ROCKET_V - Y0)
+                arrives=launch + p['d'] / ROCKET_V + ROCKET_BURNS, year=launch + p['d'] / ROCKET_V + ROCKET_BURNS - Y0)
 
 # ---------- What an X-ray sky watch sees of a probe burning in ----------
 # Proposed 2026-10-14, samples: a probe of 1,000 t braking at a hundredth of a gravity, exhaust 10,600 km/s as
@@ -126,7 +129,10 @@ def xray_warning_days():
 # and Falcon 2008, and this project's arithmetic). Zubrin 1995's range left that out. Earth never hears one brake.
 CENSUS_PC = 100 / 3.2616
 SPREAD = {'E2': 0.8, 'E1': 0.6, 'D1': 0.25, 'D2': 0.1}
-FIRST_SHIP, EVERY, SHIP_V, BRAKE, STANDS, HORIZON = 40, 20, 0.1, 15, 20, Y0 + 300
+# Settled 2026-10-15: a seed ship burns deuterium for 20 Years to reach a tenth of light speed, as Firefly's engine
+# allows (calcs/early_game.py seed_ship). At half speed on average, the burn costs BURN Years over cruising. Hops under
+# 1.4 ly never reach full speed, so they come out a little long. A sample.
+FIRST_SHIP, EVERY, SHIP_V, BRAKE, BURN, STANDS, HORIZON = 40, 20, 0.1, 15, 10, 20, Y0 + 300
 _CENSUS = []
 def census():
     if not _CENSUS:
@@ -168,7 +174,7 @@ def spread(seed, neighbors):
             # search's limit for centuries.
             n = m['p']['n']
             tone = n.get('awake', n['hum']) if m['p']['targeted'] or not n.get('awake_aimed') else n['hum']
-            lands = t + hop / SHIP_V + BRAKE
+            lands = t + hop / SHIP_V + BURN + BRAKE
             c = dict(root=m['root'], parent=m['name'], origin=m['star'], tone=tone, star=x, sent=t, lands=lands, stands=lands + STANDS, hop=hop, depth=m['depth'] + 1)
             colonies.append(c)
             if c['stands'] < HORIZON: queue.append(dict(name=f"{m['root']} {len(colonies)}", root=m['root'], star=x, stands=c['stands'], dials=m['dials'], depth=c['depth'], p=m['p']))

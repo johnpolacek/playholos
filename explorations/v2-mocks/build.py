@@ -1072,6 +1072,7 @@ def next_door_rows():
     q = next((q for q in LIVE['probes'] if q['bright'] and BACK_Y < q['year'] < 60), None)
     if not q: return []
     sil = dict(reactions.table(LW)['silence'])
+    ETA = 2003 + seedmod.ROCKET_BUILD + LD / seedmod.ROCKET_V + seedmod.ROCKET_BURNS - Y0      # what Earth's own physics says a probe sent after 2003 would take
     WARN = seedmod.xray_warning_days(); REACH = seedmod.xray_reach_au()
     t1 = AT(BACK_Y); t2 = t1 + 30; t3 = t2 + 30; XW_Y = t3 / 300 + eg.paced(seedmod.XRAY_WATCH_YEARS, eg.PUSH)
     t5 = AT(q['year'] - WARN / 365.25); t6 = t5 + 15; t7 = AT(q['year'])
@@ -1086,7 +1087,7 @@ def next_door_rows():
         SEC(f'AFTER OUR SILENCE · A SENDER LIKE {LW.upper()}'),
         quick('Wrote again', f'{w("knock")} · a second try would have reached us before we listened', ''),
         quick('Called to everyone', f'{w("call")} · we would hear a broadcast still going', ''),
-        quick('Sent a probe or a watcher', f'{w("probe")} · one built after 2003 could arrive about now', ''),
+        quick('Sent a probe or a watcher', f'{w("probe")} · one begun after 2003 could arrive near Year {ETA:.0f}', ''),
         quick('Kept watching', f'{w("watch")} · nothing to see', ''),
         SEC('WAYS TO KNOW'),
         quick('X-ray sky watch', 'a braking flame, in its last weeks · in orbit', tstack(f'Year {XW_Y:.1f}', clock(XW_Y - t2 / 300))),
@@ -1117,7 +1118,7 @@ def next_door_rows():
               'The finding proves itself: Earth’s telescopes can check the orbits it gives.',
               f'Settled 2026-10-13: a first voice lifts Minds a word at every candidate. Here it is the world we read smog at, so the word goes to almost certain.'], settled=26, label=HMS(t1)),
         stop(t2, t1, 'What did they do then?', None,
-             talk(then_r, f'After silence a sender like this most often writes again, and now and then sends a probe. A probe begun after 2003, built and flown as we would, arrives about now. Only an X-ray watch sees its last weeks, and the last ones in orbit end about 2031.', ('Build the X-ray watch', 'Ask them')),
+             talk(then_r, f'After silence a sender like this most often writes again, and now and then sends a probe. A probe begun after 2003, built and flown as we would, arrives near Year {ETA:.0f}. Only an X-ray watch sees its last weeks, and the last ones in orbit end about 2031.', ('Build the X-ray watch', 'Ask them')),
              [f'Settled 2026-10-14: the Mind says what the sender has likely done, from its tables, in words. {LW}’s table for silence: ' + ', '.join(f'{m} {p:.0%}' for m, p in sil.items()) + '.',
               f'Truth: in 2003 {LW} rolled a probe. Its rocket launched in {q["launch"]:.0f} and reaches Sol at Year {q["year"]:.1f}.',
               f'Truth: {LW} leans Open, so its probe burns all the way in. Settled 2026-10-14.',

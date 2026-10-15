@@ -615,8 +615,9 @@ Settled 2026-10-10. Costs in [calcs/ai_cost.py](calcs/ai_cost.py), prices in [HO
     - A probe of 1,000 t braking at a hundredth of a gravity runs half a terawatt of jet. A tenth leaks as X-rays, as Zubrin assumed.
     - The watch sees it within 0.7 AU in one look, 2 AU with a day of looks stacked. So 29 days before it stops: 23 seconds of play.
     - *In seed 11's mock,* the player builds it on the Mind's word after Hael answers, and it catches Hael's probe. See [the mock](explorations/v2-mocks/seed-11.html#next).
-  - *How often.* On 1,000 games, a rolled probe reaches Sol by Year 60 in 3. None arrives before Year 0, so none breaks Earth's quiet opening. Probes rolled in answer to the player's acts come on top.
-  - *In seed 11:* Hael's rocket, rolled on silence in 2003, reaches Sol at Year 26.2.
+  - *How often.* On 1,000 games, a rolled probe reaches Sol by Year 60 in 2. None arrives before Year 0, so none breaks Earth's quiet opening. Probes rolled in answer to the player's acts come on top.
+  - *Speeding up and slowing down take 10 Years more,* settled 2026-10-15. At a hundredth of a gravity, each takes 9.7 Years over half a light-year.
+  - *In seed 11:* Hael's rocket, rolled on silence in 2003, reaches Sol at Year 36.2.
   - *v1 reasoned that ancient probes must be rare, since none has been found.* That holds only for big ones. Searches would miss a probe 1 to 10 m across (Haqq-Misra and Kopparapu 2012).
   - Set aside for neighbors the same day, to keep the game simple: small dark sails, chosen by a Hidden sender's dials. Physics allows them. But the Sun can catch a sail only below 3.8% of light speed (Heller and Hippke 2017), so one takes about 115 Years from Alpha Centauri and almost never arrives in play.
   - Also set aside for neighbors: relays at the Sun's lens points, lurkers on Earth's co-orbital asteroids, and probes that build. Logged as research.
@@ -718,13 +719,14 @@ Begun 2026-10-14. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#outposts-and-
   - *Pace, samples from Earth's own:* the first seed ship 40 Years after waking, as Earth's launcher and a sentinel take. Then one every 20 Years, to the nearest free star, at a tenth of light speed, and 15 Years more to brake. A colony stands alone as a Mind 20 Years after landing (Metzger et al. 2013).
   - *Never to Sol, or to a star another neighbor holds.* Targets come from Gaia's census to 100 ly, so a neighbor near 50 ly isn't pushed inward.
   - *A companion within a light-year is home ground,* like Proxima to Alpha Centauri A. Gaia's distance errors between companions would also misdirect such hops.
-  - *What a game holds, on 400 games.* A colony has landed before Year 0 in 3%. By Year 60, in 52%, a median of 1. By Year 300, in 95%, a median of 34: the region fills, as Hart's argument expects. A hop is a median 3.4 ly.
-  - *In seed 11,* Kesh settles GJ 4352 at Year 54, and Hael reaches Barnard's Star, 6 ly from Sol, at Year 71.6. In seed 10, Ombe's first colony lands at Year 33.9.
+  - *A 20-Year burn to cruising speed costs 10 Years more,* settled 2026-10-15, as Firefly's engine allows. Hops under 1.4 ly come out a little long.
+  - *What a game holds, on 400 games.* A colony has landed before Year 0 in 1%. By Year 60, in 41%. By Year 300, in 95%, a median of 30: the region fills, as Hart's argument expects. A hop is a median 3.2 ly.
+  - *In seed 11,* Kesh settles GJ 4352 at Year 64, and Hael reaches Barnard's Star, 6 ly from Sol, at Year 81.6. In seed 10, Ombe's first colony lands at Year 43.9.
 - **Earth sees of a colony what physics gives.** Settled 2026-10-14. Built in [calcs/seed.py](calcs/seed.py). Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#outposts-and-colonies).
   - *Its ship, never.* It brakes on a magnetic sail, whose radio dies in the gas between stars, below. A fusion launch shows in X-rays only within tens of AU of its home.
     - An antimatter rocket would show for hundreds of light-years, but only along its exhaust. No neighbor flies one.
   - *Its radio, once it stands alone, is its parent Mind's toward Sol.* A sample. Earth hears it with the same instruments and limits as any home.
-    - By Year 60, in 400 games: 24 colonies' radio reaches Earth. The all-sky watch hears none. A far-side array, held a Year on the right star, would hear one in 2.5% of games.
+    - By Year 60, in 400 games: 10 colonies' radio reaches Earth. The all-sky watch hears none. A far-side array, held a Year on the right star, would hear one in 1% of games.
   - *Its heat stays far under any search's limit for centuries.* Searches rule out only near-complete Dyson spheres within 100 pc.
   - *So spreading is mostly unseen early,* and a quiet sky can hide a filling region. That is the Fermi test, played honestly.
 - **A colony ship brakes on a magnetic sail.** Settled 2026-10-14. Built in [calcs/seed.py](calcs/seed.py).
@@ -755,7 +757,11 @@ Begun 2026-10-14. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#outposts-and-
   - *The drive is the hard part.* Firefly needs a steady pinch of 1,175 GW. Zap Energy's best ran 39 kW. No one has dated a flight engine.
   - *Helium-3 waits on Uranus,* about 20,000 t, and on an engine that burns it. Helion reached 13 keV in 2026, and the burn wants about 60.
   - So deuterium is Earth's nearest road, once a drive exists.
-  - Still open: how long a fusion drive takes, and the seed ship's own build time.
+- **A fusion drive takes 30 Years at standard pace.** Settled 2026-10-15. A sample: no one has dated a flight engine. Thought shortens it to 21.
+  - It burns deuterium, as Firefly does, for 20 Years to reach a tenth of light speed.
+  - So a first launch near Year 35 if begun with the long roads at Year 12, with deuterium works and a ship built alongside.
+  - Set aside: fusion plants first, then the drive, and leaving it unpriced.
+  - Still open: the seed ship's own build time.
 
 ## Death and new games
 
@@ -866,7 +872,8 @@ Answered one at a time, in this order. Every answer must be permitted by current
 12. **The mocks on other games, 2026-10-14:** [seed 11](explorations/v2-mocks/seed-11.html), with no voice, five felt worlds and a living neighbor next door, and [seed 62](explorations/v2-mocks/seed-62.html), where the first mirror can read no felt world. The first hour now runs on any seed. It raised one question:
     - **Settled 2026-10-14:** a neighbor's probe is a rocket, v1's. Small dark sails were set aside to keep the game simple. Its braking flame is X-rays and shows only close in, corrected the same day: only in its last weeks, within a few AU. See [How neighbors play](#how-neighbors-play).
     - **Settled 2026-10-14:** where a probe ends its burn is its sender's Open or Hidden dial, as odds. A Hidden sender's probe most often stops far out, unseen. See [How neighbors play](#how-neighbors-play).
-    - **Mocked 2026-10-14:** [seed 11, next door](explorations/v2-mocks/seed-11.html#next). Hael answers Earth's knock at Year 16.5, the Mind reads its tables for silence, the player builds an X-ray watch, and it catches Hael's probe 29 days out. It raised one question: what does a neighbor's probe do once it arrives?
+    - **Settled 2026-10-15:** a fusion drive takes 30 Years at standard pace, and burns 20 to reach a tenth of light speed. Every trip gains 10 Years for speeding up, probes' too.
+    - **Mocked 2026-10-14:** [seed 11, next door](explorations/v2-mocks/seed-11.html#next). Hael answers Earth's knock at Year 16.5, the Mind reads its tables for silence, the player builds an X-ray watch, and it catches Hael's probe 29 days out, at Year 36. It raised one question: what does a neighbor's probe do once it arrives?
 13. **Earth's outposts and colonies, begun 2026-10-14.** See [Outposts and colonies](#outposts-and-colonies).
     - **Settled 2026-10-14:** people may go anywhere physics allows, at real prices. Nothing artificial limits the Will, since Holos tests the Fermi paradox.
     - **Settled 2026-10-14:** neighbors may spread too, by the same physics and prices, when their scripts choose.

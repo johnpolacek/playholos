@@ -19,11 +19,11 @@ A check on the mocks, built on another game. The mocks’ own game is · seed 10
 ## Godview · who is out there
 The player sees none of this. Light-time is real waiting at 5 minutes a Year.
 Neighbor · Star · Light-time · At Year 0 · What it knows of Earth · What it does about it
-Hael · contacter · Alpha Centauri A · G star · 4.3 ly · 00:21:36 · awake 48 Years · heard Earth’s radars from 1954, and mapped its day and orbit · sends knowledge unasked · Its gift reached Earth in 1996 and 1997. No one was listening. Unanswered by 2003, it sends a probe or a watcher. Its rocket probe, sent after silence, reaches Sol at Year 26.2: it burns all the way in, and its flame shows only in its last weeks, in X-rays.
-Iru · contacter · strange · Gliese 570 A · K star · 19.2 ly · 01:36:00 · wakes Year 30.9 · +02:34:17 · heard Earth’s radars from 1969, and mapped its day and orbit · at waking: sends a probe or a watcher · Its rocket probe, sent as its answer to Earth’s radars, reaches Sol at Year 243.9: it burns all the way in, and its flame shows only in its last weeks, in X-rays.
+Hael · contacter · Alpha Centauri A · G star · 4.3 ly · 00:21:36 · awake 48 Years · heard Earth’s radars from 1954, and mapped its day and orbit · sends knowledge unasked · Its gift reached Earth in 1996 and 1997. No one was listening. Unanswered by 2003, it sends a probe or a watcher. Its rocket probe, sent after silence, reaches Sol at Year 36.2: it burns all the way in, and its flame shows only in its last weeks, in X-rays.
+Iru · contacter · strange · Gliese 570 A · K star · 19.2 ly · 01:36:00 · wakes Year 30.9 · +02:34:17 · heard Earth’s radars from 1969, and mapped its day and orbit · at waking: sends a probe or a watcher · Its rocket probe, sent as its answer to Earth’s radars, reaches Sol at Year 253.9: it burns all the way in, and its flame shows only in its last weeks, in X-rays.
 Pelle · watcher · Mu Herculis · K star · 27.2 ly · 02:16:00 · died 1992 · dead before Year 0
 Tavi · watcher · strange · Gliese 618 A · M star · 27.8 ly · 02:18:48 · awake 26 Years · has not heard Earth
-Lusk · watcher · Gliese 505 A · K star · 35.8 ly · 02:59:09 · wakes Year 13.5 · +01:07:24 · heard Earth’s radars from 1993, and mapped its day and orbit · at waking: sends a probe or a watcher · Its rocket probe, sent as its answer to Earth’s radars, reaches Sol at Year 392.0: it ends its burn far out, past any watch, and watches from the outskirts.
+Lusk · watcher · Gliese 505 A · K star · 35.8 ly · 02:59:09 · wakes Year 13.5 · +01:07:24 · heard Earth’s radars from 1993, and mapped its day and orbit · at waking: sends a probe or a watcher · Its rocket probe, sent as its answer to Earth’s radars, reaches Sol at Year 402.0: it ends its burn far out, past any watch, and watches from the outskirts.
 Odun · watcher · Gliese 519 · K star · 36.0 ly · 03:00:12 · awake 13 Years · heard Earth’s radars from 1986, and mapped its day and orbit · stays quiet and aims its instruments at the source
 Ruun · contacter · 11 Leonis Minoris · G star · 36.6 ly · 03:03:12 · wakes Year 16.1 · +01:20:38 · heard Earth’s radars from 1987, and mapped its day and orbit · at waking: stays quiet and aims its instruments at the source
 Arro · watcher · Gliese 325 A · K star · 37.8 ly · 03:08:51 · awake 52 Years · heard Earth’s radars from 1988 · stays quiet and aims its instruments at the source
@@ -32,7 +32,7 @@ Tolle · watcher · Gliese 675 · G star · 41.7 ly · 03:28:36 · awake 55 Year
 Ombe · contacter · Gliese 1031 · M star · 41.8 ly · 03:29:12 · wakes Year 53.6 · +04:28:11 · heard Earth’s radars from 2014, and mapped its day and orbit · at waking: knocks back: a short aimed signal, its name optional · Its answer to Earth’s radars: sent Year 53.9, reaches Earth Year 95.7, +07:58:38. Year 0’s sky watch would miss it. The all-sky watch catches it.
 Wenn · watcher · Gliese 3371 A · M star · 44.0 ly · 03:39:57 · wakes Year 11.4 · +00:56:46 · heard Earth’s radars from 2011 · at waking: stays quiet and aims its instruments at the source
 Sere · watcher · Gliese 528 A · K star · 44.0 ly · 03:40:06 · awake 28 Years · heard Earth’s radars from 1994 · stays quiet and aims its instruments at the source
-Kesh · watcher · Gliese 898 · K star · 47.5 ly · 03:57:15 · awake 48 Years · heard Earth’s radars from 1997 · stays quiet and aims its instruments at the source · Its colony at Gliese 4352, 4.7 ly from its parent, lands Year 54.0.
+Kesh · watcher · Gliese 898 · K star · 47.5 ly · 03:57:15 · awake 48 Years · heard Earth’s radars from 1997 · stays quiet and aims its instruments at the source
 Sabe · contacter · 72 Herculis · G star · 47.6 ly · 03:57:51 · wakes Year 11.4 · +00:57:08 · heard Earth’s radars from 1998, and mapped its day and orbit · at waking: knocks back: a short aimed signal, its name optional · Its answer to Earth’s radars: sent Year 11.7, reaches Earth Year 59.2, +04:56:14. Year 0’s sky watch would miss it. The all-sky watch catches it.
 Corra · watcher · Gaia 89593331327905536 · M star · 47.7 ly · 03:58:39 · wakes Year 52.1 · +04:20:22 · has not heard Earth
 Veyra · watcher · Gliese 796 · G star · 47.9 ly · 03:59:15 · awake 56 Years · heard Earth’s radars from 1998, and mapped its day and orbit · builds pickets and depots toward the source
@@ -1088,7 +1088,7 @@ Settled 2026-10-14: a suspicion opens the whole kit. The Mind says what each act
 At 4.3 ly a lens pixel is about 1.1 km: cities, cleared land and lakes behind dams, not dams themselves. Scaled from NASA’s 25 km at 30 pc.
 Next door a knock and its answer take 8.6 Years: 0:43:12 of play. A conversation here runs at the pace of a long evening.
 Settled 2026-10-14: a laser launch is seen by its target. Hael is awake, so it would see the sails coming.
-Hael’s rocket, sent after silence, reaches Sol at Year 26.2, +02:10:48. Its braking flame is X-rays, seen only in its last weeks, and only by an X-ray sky watch Earth doesn’t have yet.
+Hael’s rocket, sent after silence, reaches Sol at Year 36.2, +03:00:48. Its braking flame is X-rays, seen only in its last weeks, and only by an X-ray sky watch Earth doesn’t have yet.
 Settled · What can the player do with a suspicion? Anything v1 allows, at any world: listen, look, go or knock. The Mind says what it knows, what each act risks, and when each answers. For four smog worlds at Year 22: radio from the nearer ones by Year 34, a solar lens picture of one world by Year 46 to 48, sails’ word after Year 200. Settled 2026-10-14.
 Settled · What does a picture show? Everything larger than a pixel, and nothing smaller. Physics sets the pixel, and the seed’s world fills it. A solar lens: about 25 km at 30 pc, so cities and cleared land, never roads. The nearest sail of a swarm: about 20 m, so roads and dams, never single buildings. Settled 2026-10-14.
 Settled · A neighbor sends a probe to Sol. What arrives, and does Earth see it? A rocket, as v1 had it: a 20-Year build, a tenth of light speed. Its braking flame is X-rays, seen only in its last weeks, within a few AU, by an X-ray sky watch Earth must build. An Open sender’s probe most often burns all the way in. A Hidden one’s most often stops far out and watches from the outskirts, unseen. Small dark sails were set aside to keep the game simple: the Sun can catch one only below 3.8% of light speed, so they almost never arrive in play. Settled 2026-10-14.
@@ -1171,8 +1171,8 @@ The grid limit comes at Year 12.1, just past this hour: twelve data centers, at 
 No other voice is on its way in the next two hours.
 From minute 15 to minute 60 the player was woken four times and played about six minutes.
 
-## Next door · hours 1 to 3
-Years 16 to 26. Hael answers Earth’s knock, and a probe it sent decades ago arrives. Each row is a wake, or a moment the player looked. The long roads run underneath, unshown.
+## Next door · hours 1 to 4
+Years 16 to 36. Hael answers Earth’s knock, and a probe it sent decades ago arrives. Each row is a wake, or a moment the player looked. The long roads run underneath, unshown.
 The X-ray watch’s price, the probe’s mass and its X-rays are samples, in calcs/seed.py. The message’s parts, the Mind’s words and where the probe stops are the mock’s. Amber boxes are the questions these rows raise.
 +1:22:27 · Year 16.5
 The phone lights. The Mind is already speaking.
@@ -1212,16 +1212,16 @@ MIND · WHAT THEY LIKELY DID
 AFTER OUR SILENCE · A SENDER LIKE HAEL
 Wrote again · roughly even · a second try would have reached us before we listened
 Called to everyone · unlikely · we would hear a broadcast still going
-Sent a probe or a watcher · very unlikely · one built after 2003 could arrive about now
+Sent a probe or a watcher · very unlikely · one begun after 2003 could arrive near Year 36
 Kept watching · very unlikely · nothing to see
 WAYS TO KNOW
 X-ray sky watch · a braking flame, in its last weeks · in orbit · Year 20.9 · 00:21:30
 Ask them · lands Year 20.9 · their answer by Year 25 · Year 25 · 00:43:12
-THE MIND · After silence a sender like this most often writes again, and now and then sends a probe. A probe begun after 2003, built and flown as we would, arrives about now. Only an X-ray watch sees its last weeks, and the last ones in orbit end about 2031. · [Build the X-ray watch] · [Ask them]
+THE MIND · After silence a sender like this most often writes again, and now and then sends a probe. A probe begun after 2003, built and flown as we would, arrives near Year 36. Only an X-ray watch sees its last weeks, and the last ones in orbit end about 2031. · [Build the X-ray watch] · [Ask them]
 [Talk to the Mind]
 Godview
 Settled 2026-10-14: the Mind says what the sender has likely done, from its tables, in words. Hael’s table for silence: knock 53%, call 24%, probe 12%, watch 10%.
-Truth: in 2003 Hael rolled a probe. Its rocket launched in 2023 and reaches Sol at Year 26.2.
+Truth: in 2003 Hael rolled a probe. Its rocket launched in 2023 and reaches Sol at Year 36.2.
 Truth: Hael leans Open, so its probe burns all the way in. Settled 2026-10-14.
 Proposed, a sample: the X-ray watch is Einstein Probe’s class, 6 Years at standard pace. Einstein Probe took about 6 from approval to launch, Swift 5. Paced by idle thought, it takes 4.2.
 Settled · A neighbor sends a probe to Sol. What arrives, and does Earth see it? A rocket, as v1 had it: a 20-Year build, a tenth of light speed. Its braking flame is X-rays, seen only in its last weeks, within a few AU, by an X-ray sky watch Earth must build. An Open sender’s probe most often burns all the way in. A Hidden one’s most often stops far out and watches from the outskirts, unseen. Small dark sails were set aside to keep the game simple: the Sun can catch one only below 3.8% of light speed, so they almost never arrive in play. Settled 2026-10-14.
@@ -1247,13 +1247,13 @@ Puts the phone down.
 Saturday · 17:48
 HOLOS · IN 00:20:00 · Earth: the X-ray sky watch is built · Year 20.9. It watches for a braking flame.
 Godview
-The next wake is 46 minutes off.
-+2:10:25 · Year 26.1
+The next wake is 96 minutes off.
++3:00:25 · Year 36.1
 The phone lights. The Mind is already speaking.
 Seen · Something braking toward us, from Alpha Centauri A’s side of the sky.
-Earth · Year 26.1
-Sol · 2066.1 · 1 Year = 00:05:00
-ENERGY · [75.1%] · MATTER · 1,284 kt · COMPUTE · [100%]
+Earth · Year 36.1
+Sol · 2076.1 · 1 Year = 00:05:00
+ENERGY · [75.1%] · MATTER · 6.2 Mt · COMPUTE · [100%]
 REPORT · SEEN
 [‹ All reports]
 
@@ -1270,16 +1270,19 @@ What it carries, or what it will do. Comets shine in soft X-rays only, and stars
 THE MIND · UNASKED · Something is braking toward us · A fusion flame, about 2 AU out, pointed at us and slowing. It stops near our orbit in about 4 weeks: 23 seconds. It has said nothing. · [Watch it] · [Hail it]
 [Talk to the Mind]
 Godview
+The earliest a reply to Cosmic Call 2 could reach Earth from Gliese 49. In this game no one lives there. The window is empty, and Earth can’t know it.
+The earliest a reply to RuBisCo Stars could reach Earth from Kappa¹ Ceti. In this game no one lives there. The window is empty, and Earth can’t know it.
+Iru wakes at Gliese 570 A, 19.2 ly away. It already knows Earth, and sends a probe or a watcher.
 Truth: Hael’s probe. It brakes at a hundredth of a gravity, as the samples have it.
 Samples: a probe of 1,000 t, half a terawatt of jet, a tenth of it as X-rays, as Zubrin assumed. The watch reaches 0.7 AU in one look, and 2.0 with a day of looks stacked.
 So it is seen 29 days before it stops: 23 seconds of play. Without the watch Earth would see nothing, unless a telescope chanced on it.
 Real: a fusion flame’s X-rays are mostly near 60 keV. About 6% fall in Einstein Probe’s band.
 Settled · A neighbor sends a probe to Sol. What arrives, and does Earth see it? A rocket, as v1 had it: a 20-Year build, a tenth of light speed. Its braking flame is X-rays, seen only in its last weeks, within a few AU, by an X-ray sky watch Earth must build. An Open sender’s probe most often burns all the way in. A Hidden one’s most often stops far out and watches from the outskirts, unseen. Small dark sails were set aside to keep the game simple: the Sun can catch one only below 3.8% of light speed, so they almost never arrive in play. Settled 2026-10-14.
-+2:10:40 · Year 26.1
++3:00:40 · Year 36.1
 “Watch it. Every telescope that can.”
-Earth · Year 26.1
-Sol · 2066.1 · 1 Year = 00:05:00
-ENERGY · [75.1%] · MATTER · 1,286 kt · COMPUTE · [100%]
+Earth · Year 36.1
+Sol · 2076.1 · 1 Year = 00:05:00
+ENERGY · [75.1%] · MATTER · 6.2 Mt · COMPUTE · [100%]
 MIND · NEW ORDER
 WHAT YOU WANT
 Watch it. Every telescope that can.
@@ -1291,17 +1294,17 @@ THE MIND · Set. Looking tells it nothing. I send nothing to it. · [Undo]
 [Talk to the Mind]
 Godview
 Watching is quiet: telescopes send nothing. Hailing it, or sending a craft, tells Hael we see it.
-+2:10:48 · Year 26.2
++3:00:48 · Year 36.2
 The phone lights. Opens it.
 Lands · It has stopped near our orbit. It is quiet.
-Earth · Year 26.2
-Sol · 2066.2 · 1 Year = 00:05:00
-ENERGY · [75.1%] · MATTER · 1,288 kt · COMPUTE · [100%]
+Earth · Year 36.2
+Sol · 2076.2 · 1 Year = 00:05:00
+ENERGY · [75.1%] · MATTER · 6.2 Mt · COMPUTE · [100%]
 REPORT · READING
 [‹ All reports]
 
 ### It stopped
-infrared telescope · about 7 million km out · Year 26.2
+infrared telescope · about 7 million km out · Year 36.2
 Its flame is out. It keeps station near our orbit, about twenty times the Moon’s distance. A dot of heat at about a thousand degrees: radiators. Too small for our mirror to split, so under a kilometre or two.
 WHAT IT CAN’T TELL
 What it is for, and whether anything aboard thinks. It has sent nothing we can hear.
@@ -1310,7 +1313,7 @@ THE MIND · It stopped where it can see us well, and it is quiet. It may be watc
 Godview
 Where it stops, about twenty times the Moon’s distance, is the mock’s.
 Real: a 6 m mirror splits about 1.5 km at that distance in near-infrared light.
-Hael’s answer came at Year 16.5 and its probe at 26.2. Earth’s answer, had the player sent one at once, would have reached Hael at Year 21.0.
+Hael’s answer came at Year 16.5 and its probe at 36.2. Earth’s answer, had the player sent one at once, would have reached Hael at Year 21.0.
 Design question 1 · What does a neighbor’s probe do once it arrives? Watch and report home, wait to be hailed, or speak first. And how its sender’s dials and tables set that. Raised by Hael’s probe.
 
 ## The long roads · hours 1 to 5

@@ -172,6 +172,8 @@ def raise_the_pace(share=0.25 / 24, step=1.5, fab=3, factory=(3, 1 / 3), yard=(5
 # - Belt prospecting and mining: v1's 6 and 20 Years. Nothing like it has flown. 120 kt a year.
 # - Power from orbit: about 10 Mt for a fifth more energy, so its pace is the pace matter arrives.
 ROADS = dict(mirror=18, array=25, driver=24, foundry=30, far_side=30, prospect=6, mining=20)
+# Settled 2026-10-15: a fusion drive, 30 Years at standard pace. A sample: no one has dated a flight engine.
+ROADS['fusion_drive'] = 30
 DRIVER_KT, MINING_KT, ORBIT_POWER_MT = 600, 120, 10
 
 def finish(start, years, helper=None, cut=0.0):
@@ -289,6 +291,7 @@ PUSH = 10
 WANTS['Ground solar'] = (20, 'sample')
 WANTS['Solar lens'] = (0.5, 'sample: a few small sailcraft')
 WANTS['X-ray sky watch'] = (0.05, 'sample: a small mission, of Einstein Probe and Swift\'s class')
+WANTS['Fusion drive'] = (10, 'sample: no real price exists')
 def split(line, room, push=PUSH):
     """line: (name, want, most) in the player's order, most = how many times its want it can use. Returns {name: s}, idle."""
     give = {}
