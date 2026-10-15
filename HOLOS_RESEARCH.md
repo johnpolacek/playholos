@@ -1309,7 +1309,7 @@ Gathered 2026-10-14 by a research agent, for Earth's first seed ship.
   - Why it matters: a fusion drive is about thirty million times past today's steady pinch. Its time is a sample, not a forecast.
   - Used: the seed ship question, 2026-10-14.
 - **Space power and lasers by mass** · Gathered 2026-10-14 by a research agent.
-  - [NASA OTPS 2024, space-based solar power](https://www.nasa.gov/wp-content/uploads/2024/01/otps-sbsp-report-final-tagged-approved-1-8-24-tagged-v2.pdf) (read): design RD1 delivers 2 GW from about 5,900 t, about 3 kg a kW. One page gives 585 t instead; the report contradicts itself. Assembly in the 2040s, 7 to 13 years.
+  - [NASA OTPS 2024, space-based solar power](https://www.nasa.gov/wp-content/uploads/2024/01/otps-sbsp-report-final-tagged-approved-1-8-24-tagged-v2.pdf) (read): design RD1 delivers 2 GW from about 5,900 t, about 3 kg a kW. One page gives 585 t instead, so the report contradicts itself. Assembly in the 2040s, 7 to 13 years.
   - [Caltech's design paper](https://arxiv.org/abs/2206.08373) (read): 160 g a square metre, 7 to 14% end to end. Space arrays today are about 70 W a kg.
   - Lubin 2016 (read): fiber lasers 5 kg a kW, aiming at 1. Space panels under 7 kg a kW. Radiators 25 kg a kW of heat, the largest part. No total given.
   - [Frazer-Nash for ESA, 2022](https://www.fnc.co.uk/media/myuhgjfg/space-based-solar-power-executive-summary.pdf) (read): 18 years to a full-scale prototype, in four phases.
