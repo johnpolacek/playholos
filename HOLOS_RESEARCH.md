@@ -1316,6 +1316,13 @@ Gathered 2026-10-14 by a research agent, for Earth's first seed ship.
   - The ISS: first module November 1998, US segment finished 2011, about 13 years, 420 t.
   - Why it matters: a 50 TW laser weighs about 150 Mt by NASA's ratio, or about 2 Gt by Lubin's parts today. The agent's arithmetic.
   - Used: the seed ship question, 2026-10-14. `calcs/early_game.py` seed_ship().
+- **Learning curves and production lines** · Gathered 2026-10-15, through search summaries.
+  - Wright 1936, "Factors Affecting the Costs of Airplanes": labor per airplane fell by a fixed share each time the count built doubled. Summaries give 10 to 20% ([experience curve](https://en.wikipedia.org/wiki/Experience_curve_effect), [NBER on the Flying Fortress](https://www.nber.org/chapters/c10232.pdf)). The original was not read.
+  - NASA's Cost Estimating Handbook, 2002, as quoted in a [PRICE H briefing](https://spdf.gsfc.nasa.gov/pub/data/stereo/documents/websites/solar-radio/solar-radio-imaging/IMDC/SIRA_PRICE_H.pdf): a typical aerospace learning rate is 85%, so each doubling of quantity takes 85% of the labor. It applies mainly to uninterrupted manufacturing. Electronics 90 to 95%.
+  - A [University of Maryland space systems course](https://spacecraft.ssl.umd.edu/academics/483F24/483F24L07.costing/483F24L07.costing.pdf) uses unit cost = first unit × n^(ln rate / ln 2).
+  - Liberty ships: about 230 days each in the first year, Patrick Henry 244. By 1943 a median of 39 days, three launched a day, from 18 new yards ([Liberty ship](https://en.wikipedia.org/wiki/Liberty_ship), [Smithsonian](https://www.si.edu/object/nmah_842604)). 2,710 were built.
+  - Why it matters: copies of one design come faster, and a line of yards builds many at once.
+  - Used: the production line question, 2026-10-15.
 - **This project's arithmetic: pushing a seed ship, 2026-10-14.**
   - Light pushes at best twice its power over c. So 1,500 t at a tenth of light speed needs at least 6.7e21 J of light: about 9 Years of Earth's whole 24 TW grid.
   - A fusion ship starts at its mass ratio times its dry mass: about 12 on deuterium at Firefly's exhaust, about 17 on helium-3 at Daedalus's. Braking on a sail needs no more.

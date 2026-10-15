@@ -768,7 +768,10 @@ Begun 2026-10-14. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#outposts-and-
   - It burns deuterium, as Firefly does, for 20 Years to reach a tenth of light speed.
   - So a first launch near Year 35 if begun with the long roads at Year 12, with deuterium works and a ship built alongside.
   - Set aside: fusion plants first, then the drive, and leaving it unpriced.
-  - Still open: the seed ship's own build time.
+- **A seed ship takes 18 Years at standard pace.** Settled 2026-10-15. The flagship standard, built in the orbital yard alongside the drive.
+  - The yard takes a quarter off, and thought shortens it to about 9.5 Years. The drive, at 21, sets the launch.
+  - For scale: the ISS took about 13 years to assemble 420 t.
+  - Set aside: the ISS's 13 Years, and v1's 50.
 
 ## Death and new games
 
@@ -880,6 +883,7 @@ Answered one at a time, in this order. Every answer must be permitted by current
     - **Settled 2026-10-14:** a neighbor's probe is a rocket, v1's. Small dark sails were set aside to keep the game simple. Its braking flame is X-rays and shows only close in, corrected the same day: only in its last weeks, within a few AU. See [How neighbors play](#how-neighbors-play).
     - **Settled 2026-10-14:** where a probe ends its burn is its sender's Open or Hidden dial, as odds. A Hidden sender's probe most often stops far out, unseen. See [How neighbors play](#how-neighbors-play).
     - **Settled 2026-10-15:** a fusion drive takes 30 Years at standard pace, and burns 20 to reach a tenth of light speed. Every trip gains 10 Years for speeding up, probes' too.
+    - **Settled 2026-10-15:** a seed ship takes 18 Years at standard pace, built in the orbital yard. The drive sets the launch.
     - **Mocked 2026-10-14:** [seed 11, next door](explorations/v2-mocks/seed-11.html#next). Hael answers Earth's knock at Year 16.5, the Mind reads its tables for silence, the player builds an X-ray watch, and it catches Hael's probe 29 days out, at Year 36. It raised one question: what does a neighbor's probe do once it arrives?
     - **Settled 2026-10-15:** what its orders say, rolled by its sender at launch: watch, hail, or wait to be hailed. Hael's probe hails.
 13. **Earth's outposts and colonies, begun 2026-10-14.** See [Outposts and colonies](#outposts-and-colonies).

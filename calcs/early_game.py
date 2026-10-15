@@ -174,6 +174,8 @@ def raise_the_pace(share=0.25 / 24, step=1.5, fab=3, factory=(3, 1 / 3), yard=(5
 ROADS = dict(mirror=18, array=25, driver=24, foundry=30, far_side=30, prospect=6, mining=20)
 # Settled 2026-10-15: a fusion drive, 30 Years at standard pace. A sample: no one has dated a flight engine.
 ROADS['fusion_drive'] = 30
+# Settled 2026-10-15: a seed ship takes 18 Years at standard pace, the flagship standard, built in the orbital yard.
+ROADS['seed_ship'] = 18
 DRIVER_KT, MINING_KT, ORBIT_POWER_MT = 600, 120, 10
 
 def finish(start, years, helper=None, cut=0.0):
