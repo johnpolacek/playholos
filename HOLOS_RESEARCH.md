@@ -1255,11 +1255,11 @@ Gathered 2026-10-14 by a research agent, for Earth's first seed ship.
   - A seed of 100 t, by subsystem estimates 63 to 146 t, drawing 0.5 to 12 MW. It unfolds in a year, then makes 100 t a year of itself.
   - 90 to 96% closure is called realistic. Chips and bearings, 4 to 10%, come from Earth.
   - Why it matters: the best-known seed can't stand alone light-years from home.
-  - Used: the seed ship question, 2026-10-14.
+  - Used: v2 [Outposts and colonies](HOLOS_GAME_CONCEPT.md#outposts-and-colonies), every seed stands alone, 2026-10-14. Its year-long copy time bounds the neighbors' pace.
 - **[Freitas 1980, REPRO](https://www.rfreitas.com/Astro/ReproJBISJuly1980.htm)** · Published, JBIS 33, 251. Read, the author's web copy.
   - A 443 t SEED lands on a jovian moon, with 412 MW of reactors. It grows to a 346,000 t factory in 500 years.
   - Why it matters: the only stand-alone interstellar seed found.
-  - Used: the seed ship question, 2026-10-14.
+  - Used: v2 [Outposts and colonies](HOLOS_GAME_CONCEPT.md#outposts-and-colonies), the seed's 443 t, 2026-10-14. `calcs/seed.py`.
 - **[Borgue and Hein 2021](https://arxiv.org/abs/2005.12303)** · Published, Acta Astronautica. Read.
   - A 70 kg asteroid probe that can make 47 kg of itself. Its electronics and solar rolls come from Earth.
   - Used: not yet. Too small for an industry seed.

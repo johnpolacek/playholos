@@ -727,6 +727,18 @@ Begun 2026-10-14. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#outposts-and-
     - Zubrin's ranges, 40 to 400 ly, left that absorption out, as far as the accounts read show.
     - The Will may still build such an antenna. It would hear nothing from other stars.
   - Set aside: braking on the rocket alone.
+- **Every seed stands alone, so a seed ship weighs about 1,500 tonnes.** Settled 2026-10-14. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#pricing-a-seed-ship).
+  - *Why.* Light-years from home, nothing can be fetched. NASA's 1980 seed weighs 100 t but needs 4 to 10% of its parts from Earth, such as chips and bearings.
+  - *The seed: about 443 t,* Freitas's 1980 design, the only stand-alone interstellar seed found. It brings its own reactors. No study yet shows a seed that makes its own chips, so that is speculation.
+  - *The ship: about 1,500 t,* Gros 2017's case. Half is the magnetic sail. The rest is the seed, its shield and its frame. Daedalus's dust shield was 50 t of beryllium.
+  - *Three ways to push it to a tenth of light speed,* all open to Earth and to neighbors:
+    - A laser: at least 6.7e21 J of light, about 9 Years of Earth's whole Year 0 grid. About 50 TW from an array 100 km across, by Lubin's scaling. The array serves ship after ship.
+    - Fusion on deuterium: a ship of about 12 times its dry mass at launch, as Firefly's exhaust gives. Deuterium comes from seawater: about a billion tonnes processed for 40,000 t. Its engine needs heavy radiators.
+    - Fusion on helium-3: about 17 times its dry mass, as Daedalus's exhaust gives. The Moon holds too little. Uranus's air holds enough, at 20,000 to 110,000 t of mining craft for 5,000 t of fuel (Palaszewski).
+  - *It brakes on its sail,* in about 19 years with no fuel.
+  - *How fast a seed grows is a separate number.* NASA's seed copies itself in about a year. Freitas's grows to a factory in 500. The neighbors' pace, a first ship 60 Years after landing, sits between: a sample.
+  - Set aside: a light seed fed chips by supply ships until it builds its own chip works.
+  - Still open: build times, and which of these works Earth's tree offers first.
 
 ## Death and new games
 
@@ -842,3 +854,4 @@ Answered one at a time, in this order. Every answer must be permitted by current
     - **Settled 2026-10-14:** the seed rolls whether each neighbor spreads, weighted by its dial, and each colony rolls again.
     - **Settled 2026-10-14:** Earth sees of a colony what physics gives: almost never its ship, its radio as its parent's, and no heat for centuries.
     - **Settled 2026-10-14:** a colony ship brakes on a magnetic sail, 15 Years more a trip, by Gros 2017's case. Corrected the same day: its sail's radio dies in the gas, so Earth can't hear it.
+    - **Settled 2026-10-14:** every seed stands alone, so a seed ship weighs about 1,500 t. A laser, deuterium or helium-3 pushes it, at real prices.

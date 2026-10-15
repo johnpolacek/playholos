@@ -96,6 +96,8 @@ def probe_trip(p, t, what):
 # 0.37 ly and about 19 years, at 0.1 protons per cubic cm. The star's wind finishes the last 100 km/s. So a trip is
 # BRAKE Years longer than its cruise. Corrected the same day: this said a Mind finishes on its rocket from 2% of light
 # speed, from a case far smaller than Gros's.
+# Settled 2026-10-14: every seed stands alone, so a seed ship weighs about 1,500 t: Freitas 1980's 443 t seed, Gros's
+# sail, a shield and a frame. The pace above assumes a seed that grows faster than Freitas's: a sample.
 # The sail's radio is born just above the gas's own cutoff, so the gas swallows it within a few thousand AU (Redfield
 # and Falcon 2008, and this project's arithmetic). Zubrin 1995's range left that out. Earth never hears one brake.
 CENSUS_PC = 100 / 3.2616
