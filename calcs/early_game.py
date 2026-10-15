@@ -306,7 +306,7 @@ def split(line, room, push=PUSH):
         more = min(want * (most - 1), room); give[name] += more; room -= more
     return {name: give[name] / want for name, want, _ in line}, room
 
-def replay(order, start=12.0, dt=0.01, studies=0.1, show=True, early=None, scale=1.0, extra=()):
+def replay(order, start=12.0, dt=0.01, studies=0.1, show=True, early=None, scale=1.0, extra=(), front=()):
     """The third mock's game from Year 12, every work paced by the thought the player's order gives it. The launcher
     and the laser array were begun earlier: `early` gives their standard Years left at Year 12, from first_hour()."""
     early = early or first_hour(show=False, scale=scale)[1]
@@ -320,7 +320,9 @@ def replay(order, start=12.0, dt=0.01, studies=0.1, show=True, early=None, scale
     added = {w for _, w, _ in extra}
     while y < 80 and (fifths < FIFTHS_TOTAL or extra or any(w in line for w in added)):
         while extra and extra[0][0] <= y + 1e-9:
-            _, w, years = extra.pop(0); line.append(w); left[w] = years
+            _, w, years = extra.pop(0); left[w] = years
+            if w in front: line.insert(0, w)                  # the player moved it to the front of the line
+            else: line.append(w)
         room = scale * 1.5 ** (min(n, sum(y >= d for d in dc_done(n))) + (y >= dc12)) / FLAGSHIP_THOUGHT - studies / FLAGSHIP_THOUGHT
         s, idle = split([(w, WANTS[w.split(' (')[0]][0], 1 if w == 'Power from orbit' else PUSH) for w in line], room)
         if first is None: first = dict(s, idle=idle)
@@ -334,7 +336,7 @@ def replay(order, start=12.0, dt=0.01, studies=0.1, show=True, early=None, scale
             if left[w] <= 0:
                 line.remove(w)
                 if w != 'Far-side array, one fifth': done[w] = y
-                k = next((i for i, x in enumerate(line) if x in added), len(line))                 # before the works added later
+                k = next((i for i, x in enumerate(line) if x in added and x not in front), len(line))    # before the works added later, unless moved first
                 if w == 'Mass driver': line[k:k] = ['Far-side array, one fifth', 'Power from orbit']; left['Far-side array, one fifth'] = ROADS['far_side'] / 5
                 if w == 'Far-side array, one fifth':
                     fifths += 1; done[f'Far-side array, fifth {fifths}'] = y

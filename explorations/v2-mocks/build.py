@@ -1213,6 +1213,9 @@ def long_rows():
     DRIVE_Y, SHIP_Y, WORKS_Y = PACED['Fusion drive'], PACED['Seed ship'], PACED['Deuterium works']
     FUEL_KT = 61; FUEL_Y = WORKS_Y + FUEL_KT / early_game.D_WORKS_KT; LAUNCH_Y = max(DRIVE_Y, SHIP_Y, FUEL_Y)
     PX = 4.24; LAND_Y = LAUNCH_Y + PX / seedmod.SHIP_V + seedmod.BURN + seedmod.BRAKE
+    FRONT = early_game.replay(early_game.BY_START, show=False, scale=SCALE, extra=[(SEED_SHIP_Y, 'Fusion drive', early_game.ROADS['fusion_drive']),
+        (SEED_SHIP_Y, 'Seed ship', early_game.ROADS['seed_ship'] * 0.75), (SEED_SHIP_Y, 'Deuterium works', early_game.D_WORKS_YEARS)], front=('Fusion drive',))
+    FRONT_Y = max(FRONT['Fusion drive'], SHIP_Y, FUEL_Y); SLIP = FRONT['Far-side array, fifth 5'] - PACED['Far-side array, fifth 5']
     settle = tab(ts0 - 30, 'Mind', 'MIND', 'WAYS TO SETTLE', ''.join([
         SEC('A SEED SHIP · MACHINES THAT BUILD'),
         quick('Fusion drive', 'burns deuterium for 20 Years to a tenth of light speed · nothing like it exists', tstack(f'Year {DRIVE_Y:.0f}', clock(DRIVE_Y - ts0 / 300))),
@@ -1365,8 +1368,9 @@ def long_rows():
               'Settled 2026-10-15: a fusion drive takes 30 Years at standard pace, the ship 18 in the yard. Deuterium is cheap: its plants set the pace.',
               'A laser that pushes ships waits on industry that copies itself. The long roads bring 720 kt of rock a Year.'], label=HMS(ts0 - 30)),
         at(ts0, ts0 - 30, 'Start it. Proxima Centauri. Last in the line.', None,
-             talk(seed_o, f'Set, last in the line: the long roads lose almost nothing. The drive sets the launch. Proxima shares a sky with Alpha Centauri A, whose air shows something burned. A seed’s works there could be seen, if anyone is left to look.', ('Undo',)),
-             [f'Last in the line, the drive takes {DRIVE_Y - SEED_SHIP_Y:.0f} Years, not the 21 it would take pushed. The ship is done at Year {SHIP_Y:.0f}, and the deuterium at {FUEL_Y:.0f}.',
+             talk(seed_o, f'Set, last in the line: the long roads lose almost nothing. Put the drive first and it leaves at Year {FRONT_Y:.0f}, and the far side slips under a Year. Proxima shares a sky with Alpha Centauri A, whose air shows something burned. A seed’s works there could be seen, if anyone is left to look.', ('Undo',)),
+             [f'Drive first in the line: launch at Year {FRONT_Y:.1f}, {LAUNCH_Y - FRONT_Y:.1f} Years sooner. The foundry slips {FRONT["Orbital foundry"] - PACED["Orbital foundry"]:.1f} Years and the far-side array {SLIP:.1f}. This player keeps it last.',
+              f'Last in the line, the drive takes {DRIVE_Y - SEED_SHIP_Y:.0f} Years, not the 21 it would take pushed. The ship is done at Year {SHIP_Y:.0f}, and the deuterium at {FUEL_Y:.0f}.',
               'The long roads shift by under a sixth of a Year: the works take their want, and little push.',
               'The Mind cautions, from what Earth knows. It does not choose the star.',
               'A production line for seed ships is not set up. One ship first.'], settled=(card('What does a seed ship cost'), card('Can copies of a work')), label=HMS(ts0)),

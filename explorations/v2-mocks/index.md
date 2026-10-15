@@ -1314,9 +1314,10 @@ BUILD · Deuterium works · Year 24.2, then 61 kt by Year 31.8
 BUILD · Seed ship · in the yard · Year 32.7
 THEN · Launch to Proxima Centauri · when all three are ready · Year 47.6
 [Edit] · [Set the order]
-THE MIND · Set, last in the line: the long roads lose almost nothing. The drive sets the launch. Proxima shares a sky with Alpha Centauri A, whose air shows something burned. A seed’s works there could be seen, if anyone is left to look. · [Undo]
+THE MIND · Set, last in the line: the long roads lose almost nothing. Put the drive first and it leaves at Year 40, and the far side slips under a Year. Proxima shares a sky with Alpha Centauri A, whose air shows something burned. A seed’s works there could be seen, if anyone is left to look. · [Undo]
 [Talk to the Mind]
 Godview
+Drive first in the line: launch at Year 40.2, 7.4 Years sooner. The foundry slips 0.5 Years and the far-side array 0.8. This player keeps it last.
 Last in the line, the drive takes 28 Years, not the 21 it would take pushed. The ship is done at Year 33, and the deuterium at 32.
 The long roads shift by under a sixth of a Year: the works take their want, and little push.
 The Mind cautions, from what Earth knows. It does not choose the star.
