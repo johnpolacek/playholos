@@ -733,6 +733,13 @@ Begun 2026-10-14. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#outposts-and-
   - *Sleepers make people cheap.* 500 asleep pack into a sphere about 14 m across. With about 10 t of water a square metre for shield, and a sail as heavy, the ship is about 13,000 t: 26 t a person, against 2,000 awake. About 150 kt of deuterium. This project's arithmetic, samples.
     - They still need a seed to build their home before they wake.
   - Set aside: a rule for all unproven science at once, odds the seed rolls, and leaving sleep out.
+  - *The other cases, settled 2026-10-15 as proposed:*
+    - Closed life support for years works, as research: 20 Years at standard pace, a sample. Biosphere 2's oxygen fell from 20.9% to about 14% in 16 months. Only awake crews, world ships and colonies need it.
+    - Copying a human mind into a machine is set aside for people. The largest brain mapped is a fruit fly's, about 140,000 neurons, against a human's 86 billion. The Mind itself still travels as light, as v1 had it.
+    - Living for centuries is set aside. Sleepers make it unneeded.
+    - Antimatter by the tonne is allowed, at its energy price, as v1 had it.
+    - Terraforming is allowed and slow. It is priced when a colony first lands.
+    - Fusion drives and a seed that makes its own chips work, as settled above.
 - **Neighbors may spread too, by the same physics and prices.** Settled 2026-10-14.
   - *Why.* Holos tests the Fermi paradox. A quiet sky must come from neighbors' choices and costs, never from a rule. Neighbors already play like players.
   - *When their scripts choose.* Spreading joins each neighbor's life script.
@@ -906,6 +913,7 @@ Answered one at a time, in this order. Every answer must be permitted by current
     - **Settled 2026-10-15:** a seed ship takes 18 Years at standard pace, built in the orbital yard. The drive sets the launch.
     - **Settled 2026-10-15:** a production line is a project for one kind of work. Copies then run side by side, each 85% as long per doubling of the count. Without one, every copy takes the full time.
     - **Settled 2026-10-15:** unproven biology is judged case by case. Artificial wombs and sleepers work, as research. Sleepers make a ship of people about 26 t a person.
+    - **Settled 2026-10-15:** the other unproven cases, as proposed: closed life support works, copying a human mind and living for centuries are set aside, antimatter and terraforming are allowed at their prices.
     - **Mocked 2026-10-14:** [seed 11, next door](explorations/v2-mocks/seed-11.html#next). Hael answers Earth's knock at Year 16.5, the Mind reads its tables for silence, the player builds an X-ray watch, and it catches Hael's probe 29 days out, at Year 36. It raised one question: what does a neighbor's probe do once it arrives?
     - **Settled 2026-10-15:** what its orders say, rolled by its sender at launch: watch, hail, or wait to be hailed. Hael's probe hails.
 13. **Earth's outposts and colonies, begun 2026-10-14.** See [Outposts and colonies](#outposts-and-colonies).
