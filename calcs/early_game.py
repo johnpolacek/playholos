@@ -424,6 +424,23 @@ def seed_ship(ship_t=1500, v=0.1, grid_tw=24):
     print('    for 5,000 t of fuel over 10 years. The Moon holds about 200,000 t in its richest soil, spread thin. No engine yet')
     print('    burns it: Helion reached about 13 keV in 2026, and the burn wants about 60.')
 
+# ---------- A production line ----------
+# Settled 2026-10-15: a production line is a project of its own, for one kind of work. Without one, every copy takes
+# the full standard time. With one, copies run side by side, as many as matter, energy and thought allow, and each
+# takes less: NASA's Cost Estimating Handbook gives a typical aerospace learning rate of 85%, each doubling of the
+# count built taking 85% of the labor. Liberty ships went from about 230 days to a median of 39 over 2,710 ships, close
+# to what 85% predicts. Setting up a line costs what the factory and yard projects do, samples: 3 Years on the ground,
+# 5 in orbit. It can't shorten supply, flight between stars, or light coming home.
+LEARN, LINE_GROUND, LINE_ORBIT = 0.85, 3, 5
+def copy_years(standard, n, rate=LEARN):
+    """Standard Years for the nth copy of a work built on a production line. The first is the full time."""
+    return standard * n ** (math.log(rate) / math.log(2))
+def production_line():
+    print(f'A production line: {LINE_GROUND} Years to set up on the ground, {LINE_ORBIT} in orbit. Each copy then takes the')
+    print(f'standard time times n to the {math.log(LEARN) / math.log(2):.3f}: {LEARN:.0%} each time the count doubles.')
+    print('  Seed ships, 18 Years standard: ' + ', '.join(f'copy {n} {copy_years(18, n):.1f}' for n in (1, 2, 4, 8, 16, 32)) + '.')
+    print(f'  Check: 2,710 Liberty ships at {LEARN:.0%} predict {1 / copy_years(1, 2710):.1f} times faster. They went from 230 days to 39: {230 / 39:.1f}.')
+
 if __name__ == '__main__':
     long_roads(); print()
     thought_speed(); print()
@@ -439,4 +456,5 @@ if __name__ == '__main__':
     far_side(); print()
     hum(); tone_reach(); print()
     all_sky(); print()
-    seed_ship()
+    seed_ship(); print()
+    production_line()

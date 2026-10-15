@@ -1322,7 +1322,7 @@ Gathered 2026-10-14 by a research agent, for Earth's first seed ship.
   - A [University of Maryland space systems course](https://spacecraft.ssl.umd.edu/academics/483F24/483F24L07.costing/483F24L07.costing.pdf) uses unit cost = first unit × n^(ln rate / ln 2).
   - Liberty ships: about 230 days each in the first year, Patrick Henry 244. By 1943 a median of 39 days, three launched a day, from 18 new yards ([Liberty ship](https://en.wikipedia.org/wiki/Liberty_ship), [Smithsonian](https://www.si.edu/object/nmah_842604)). 2,710 were built.
   - Why it matters: copies of one design come faster, and a line of yards builds many at once.
-  - Used: the production line question, 2026-10-15.
+  - Used: v2 [Build times](HOLOS_GAME_CONCEPT.md#build-times), a production line, 2026-10-15. `calcs/early_game.py` copy_years().
 - **This project's arithmetic: pushing a seed ship, 2026-10-14.**
   - Light pushes at best twice its power over c. So 1,500 t at a tenth of light speed needs at least 6.7e21 J of light: about 9 Years of Earth's whole 24 TW grid.
   - A fusion ship starts at its mass ratio times its dry mass: about 12 on deuterium at Firefly's exhaust, about 17 on helium-3 at Daedalus's. Braking on a sail needs no more.

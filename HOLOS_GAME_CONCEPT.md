@@ -317,6 +317,15 @@ Settled 2026-10-10. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#earth-to-ye
   - The all-sky watch takes 6 Years. Begin it and the factory together: the factory is done at Year 3, the watch's last 3 Years become 2, and it is done at Year 5.
   - The deep-field receiver, 12 Years, is done at Year 9. The Habitable Worlds Observatory, 8 Years left, is done at Year 7.25 if the yard is begun at Year 0.
   - So starting a work at once is never worse than waiting for the speed-up. A design choice: real works pay something to change method midway.
+- **A production line is a project, for one kind of work.** Settled 2026-10-15. Built in [calcs/early_game.py](calcs/early_game.py). Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#pricing-a-seed-ship).
+  - *Without one,* every copy takes the full standard time. A second telescope of its class takes the full 18.
+  - *With one,* copies run side by side, as many as matter, energy and thought allow. Each takes less: 85% of the time each time the count built doubles. That is NASA's typical aerospace learning rate.
+    - Real: Liberty ships went from about 230 days each to a median of 39, over 2,710 ships, from 18 new yards. 85% predicts 6.4 times faster. They got 5.9.
+    - Seed ships, 18 Years standard: the 2nd takes 15.3, the 4th 13, the 8th 11.1, the 16th 9.4.
+  - *Setting one up,* samples: 3 Years on the ground, 5 in orbit, as the factory and yard projects cost.
+  - *It can't shorten* the first copy, supply of matter, energy or fuel, flight between stars, or light coming home. For seed ships, deuterium becomes the pace.
+  - *Its name is a production line,* so it is never confused with the line that splits thought.
+  - Set aside: copies that speed up with no line, and both together.
 - **The same pattern everywhere.** A standard pace from the science, and a project that raises it: chip fabs for compute, launch complexes for lift, factories and yards for building.
 - **An inquiry's works, priced 2026-10-13.** Samples. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#travel-sails-and-lenses).
   - *A laser sail array:* 25 Years, on the ground, no matter. Starshot aimed at a first launch within a generation, and its own model puts the array at 8 billion dollars (Parkin 2018). v1 had 60 Years.
@@ -884,6 +893,7 @@ Answered one at a time, in this order. Every answer must be permitted by current
     - **Settled 2026-10-14:** where a probe ends its burn is its sender's Open or Hidden dial, as odds. A Hidden sender's probe most often stops far out, unseen. See [How neighbors play](#how-neighbors-play).
     - **Settled 2026-10-15:** a fusion drive takes 30 Years at standard pace, and burns 20 to reach a tenth of light speed. Every trip gains 10 Years for speeding up, probes' too.
     - **Settled 2026-10-15:** a seed ship takes 18 Years at standard pace, built in the orbital yard. The drive sets the launch.
+    - **Settled 2026-10-15:** a production line is a project for one kind of work. Copies then run side by side, each 85% as long per doubling of the count. Without one, every copy takes the full time.
     - **Mocked 2026-10-14:** [seed 11, next door](explorations/v2-mocks/seed-11.html#next). Hael answers Earth's knock at Year 16.5, the Mind reads its tables for silence, the player builds an X-ray watch, and it catches Hael's probe 29 days out, at Year 36. It raised one question: what does a neighbor's probe do once it arrives?
     - **Settled 2026-10-15:** what its orders say, rolled by its sender at launch: watch, hail, or wait to be hailed. Hael's probe hails.
 13. **Earth's outposts and colonies, begun 2026-10-14.** See [Outposts and colonies](#outposts-and-colonies).
