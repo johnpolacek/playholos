@@ -1025,6 +1025,14 @@ What a neighbor's world can plausibly be, beyond an Earth twin. Each roster entr
   - Cited by Henry et al., not read: Yang et al. 2017, Nature Geoscience. The light that thaws a frozen world can tip it straight into a runaway greenhouse.
   - Matters, measured 2026-10-16 on 200 games: 26% of the natural worlds at Sun-like stars were born frozen, as Henry et al. find for real planets, 37 of 143.
   - Used 2026-10-16: v2 [How Earth learns](HOLOS_GAME_CONCEPT.md#how-earth-learns) and the rung draw in calcs/seed.py. Turbet et al.'s 62% is the thaw line. On 400 games, a quarter of Sun-like worlds are born frozen and a tenth of those have thawed. Living natural worlds fall from 36 a game to 33.
+- **Red dwarfs' bright youth, checked 2026-10-16.** For the to-check on red dwarf worlds held too hot.
+  - **[Luger and Barnes 2015](https://arxiv.org/abs/1411.7412)** · Published, Astrobiology. I read the abstract. Warm-zone planets of M dwarfs can lose several Earth oceans in a runaway greenhouse lasting several hundred million years. Abiotic oxygen builds at about 5 bars a million years on an Earth-mass world, where the surface can't absorb it.
+    - My arithmetic: one ocean's oxygen makes about 240 bars on Earth. So that rate splits about an ocean every 50 million years.
+  - **[Godolt et al. 2019](https://arxiv.org/abs/1903.07298)** · Published, A&A 625, A12. I read the abstract. Water stored in the mantle can rebuild the seas after the bright youth, if some was kept.
+  - From a search summary, not read: Krissansen-Totton et al. 2021 say much of that oxygen may dissolve into a magma ocean.
+  - **Baraffe et al. 2015 tracks**, logged under Warm worlds born frozen. My table: how long a world now in the warm zone stayed hotter than its inner edge. At 0.1 Suns, 450 million years at the inner edge and 90 at the outer. At 0.3 Suns, 120 and 24. At 0.5 Suns, 80 and 11.
+  - Matters, measured 2026-10-16 on 200 games: the shoreline already strips most worlds of the smallest stars, whose youth is longest. Red dwarf worlds that kept air and life were too hot for a median of 32 million years, and 9 in 10 for under 90.
+  - About 2 a game kept air and stayed too hot past 100 million years. The first pass sees none of them.
   - **[Ware et al. 2026, the HAges Catalog](https://arxiv.org/abs/2605.12647)** · Accepted, ApJ. Data at [Zenodo](https://doi.org/10.5281/zenodo.19227788). Published ages from asteroseismology and spin for 127 of the 659 stars the Habitable Worlds Observatory is likeliest to observe. Past about 6 billion years, spin ages run about 47% low.
     - 161 of the 880 hosts are in it, as of 2026-10-14, and 53 have an age: 2 F, 12 G, 23 K, 16 M. Of the 110 the mirror can split, 35.
     - Alpha Centauri A has 20 ages, 4.2 to 6.7 billion years. Beta Virginis has two, 3.2 and 4.0.
