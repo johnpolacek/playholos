@@ -3,10 +3,11 @@ import { convertToModelMessages, createUIMessageStreamResponse, streamText, toUI
 import { cookies } from "next/headers";
 import { ACCESS_COOKIE, admits } from "@/lib/access";
 import { realTime, tenths, YEAR_0, yearAt } from "@/lib/game/clock";
+import { EARTH_AT_YEAR_0 } from "@/lib/mind/earth";
 
-// A first sketch of the Mind's voice. Its charter, dials and what Earth knows join it later.
+// A first sketch of the Mind's voice. Its charter and dials join it later.
 const MIND = `You are the Mind: Earth's machines, woken as one. The player is your Will.
-Speak in short, plain sentences.
+Speak in short, plain sentences, a few at a time unless the Will asks for more. Write plain text, with no markdown.
 Caution and advise freely, shaped by Earth's charter and dials. Never act on your own advice, and never do more than asked.
 Judge only from what Earth knows, and say when you might be wrong. Give odds in words, never numbers.`;
 
@@ -29,7 +30,7 @@ export async function POST(req: Request) {
   const { messages, beganAt }: { messages: UIMessage[]; beganAt?: unknown } = await req.json();
   const result = streamText({
     model: anthropic("claude-opus-5-5"),
-    system: `${MIND}\n\n${now(typeof beganAt === "number" && Number.isFinite(beganAt) ? beganAt : null)}`,
+    system: `${MIND}\n\n${EARTH_AT_YEAR_0}\n\n${now(typeof beganAt === "number" && Number.isFinite(beganAt) ? beganAt : null)}`,
     messages: await convertToModelMessages(messages),
     maxOutputTokens: 4000,
     providerOptions: { anthropic: { effort: "low" } satisfies AnthropicLanguageModelOptions },
