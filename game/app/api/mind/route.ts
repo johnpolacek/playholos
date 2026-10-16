@@ -16,6 +16,7 @@ export async function POST(req: Request) {
     model: anthropic("claude-opus-5-5"),
     system: MIND,
     messages: await convertToModelMessages(messages),
+    maxOutputTokens: 4000,
     providerOptions: { anthropic: { effort: "low" } satisfies AnthropicLanguageModelOptions },
   });
   return createUIMessageStreamResponse({ stream: toUIMessageStream({ stream: result.stream }) });
