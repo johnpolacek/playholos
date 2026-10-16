@@ -552,6 +552,8 @@ What Sol's own instruments have found nearby. For v2 open question 3.
   - Used: a re-read in the first mock, and a follow-up observation of its day side.
 - **[LHS 1140 b](https://arxiv.org/abs/2403.13265)** · 48.8 ly. Damiano et al. 2024. Abstract read 2026-10-12.
   - JWST's crossing spectrum rules out hydrogen-rich air, which leaves a water world. It favors heavier air, perhaps nitrogen, with modest confidence. No helium in four JWST transits (August 2026).
+  - **[Cherubim et al. 2026](https://arxiv.org/abs/2607.14326)** · Published, Science, July 16, 2026. I read the abstract. Helium escaping LHS 1140 b, seen from Magellan in 2024 and not in 2025, so the escape varies. None at LHS 1140 c. The upper air is helium, short of hydrogen, with heavier gases held below. The first sign of kept air on a rocky warm-zone world.
+  - Matters: by 2040 Earth knows LHS 1140 b keeps air. The mock's finding agrees.
   - Corrected 2026-10-12: this log had it as a water world or a small gas world. The 2024 paper already rules the gas world out.
   - Used: a follow-up re-read in the first mock.
 - **[Terra Hunting Experiment](https://www.iac.es/en/projects/harps3-high-accuracy-radial-velocity-planet-searcher)** · HARPS3 began work in summer 2026 on La Palma: every clear night for ten years, on at least 40 bright Sun-like northern stars. By 2040 its results are in. If a neighbor's world sits in its sample and is heavy enough, Earth found it.
@@ -998,7 +1000,20 @@ What a neighbor's world can plausibly be, beyond an Earth twin. Each roster entr
     - Fully convective red dwarfs stay active longer than that assumes: 2.1 to 3.1 times the dose. Only their largest rocky planets are likely to keep air.
     - Already airless by measurement: LHS 3844 b, TRAPPIST-1 b and c, LTT 1445 A b, GJ 1132 b and others.
   - **[Ji et al. 2025](https://arxiv.org/abs/2504.19872)** · Published. No single clean line: how much water and carbon a world starts with blurs it. Heavier worlds at heavier stars keep air more easily.
-  - **[Nguyen et al. 2026](https://arxiv.org/abs/2608.23912)** · Accepted, ApJL. JWST finds thick air on some lava worlds and bare rock on some cooler red dwarf planets. Two boundaries, not one, with fits by star kind, mass and age. Not used yet: its fits could replace the simple line.
+  - **[Nguyen et al. 2026](https://arxiv.org/abs/2608.23912)** · Published, ApJL 1008, L4. Read 2026-10-16 in the arXiv HTML: the method, Table 2 and the caveats myself, Table 1 through a summary. JWST finds thick air on some lava worlds and bare rock on some cooler red dwarf planets. Two boundaries, not one: a hot one where molten worlds keep feeding their air, and a cooler one set by escape. Between them, an airless valley.
+    - The fits are for four sample stars: a Sun-like G2, a K4, an M4 and TRAPPIST-1. Ages 0.01, 0.1, 1 and 5 billion years, none older.
+    - Table 2 gives each line as log10 of lifetime XUV dose against log10 of escape speed. At 5 billion years, nominal volatiles: G (-1.626, 4.850, -1.651), K (-3.268, 7.014, -2.597), M4 (-3.666, 5.727, -2.057), TRAPPIST-1 (-3.249, 4.230, -1.306).
+    - Volatiles matter most. Zahnle and Catling's line falls between their nominal and volatile-poor Sun-like cases. My arithmetic: at Earth's escape speed, Earth's dose times 44 nominal, 0.67 volatile-poor, 11 for Zahnle and Catling.
+    - Their doses come from their own star histories, Equation 1. Their red dwarfs use the older, lower XUV. They say Pass et al.'s 2 to 3 times more would push many planets bare.
+    - TRAPPIST-1 b, c and d likely bare. e may keep thin air like Mars's, f and g thicker. Only the largest, most temperate red dwarf planets keep air.
+    - Matters: the fits can't drop into the seed. They cover four stars, not each real one, stop at 5 billion years, and need their own star model for the dose.
+    - Used 2026-10-16: the single line stays, with Pass et al.'s factor. The paper backs it as a middle case, and backs each world's luck as its unknown volatiles.
+  - **[Meni-Gallardo and Pallé 2026](https://arxiv.org/abs/2508.12865)** · Accepted, MNRAS, June 2026. I read the abstract. An empirical shoreline, anchored to Mars and four planets with tentative air. Steeper than theory, so more red dwarf planets keep air. But revised XUV histories for small red dwarfs show "severe atmospheric vulnerability".
+  - **Checked 2026-10-16, the game's line at measured planets.** My arithmetic with calcs/seed.py's shoreline.
+    - LHS 1140 b: +0.47, the airy side. Helium escapes it (Cherubim et al. 2026), so it keeps air.
+    - TRAPPIST-1 e: -1.47, bare. JWST neither shows nor rules out air (Glidden et al. 2025). f: -0.99.
+    - GJ 3929 b: -1.45, bare. Rocky Worlds finds it likely bare ([arXiv 2508.12516](https://arxiv.org/abs/2508.12516)).
+    - Widening each world's luck from 0.5 to 0.8 moves red dwarf bare rock from 71% to 68%. Measured on 200 games. Not worth a change.
   - **[Ware et al. 2026, the HAges Catalog](https://arxiv.org/abs/2605.12647)** · Accepted, ApJ. Data at [Zenodo](https://doi.org/10.5281/zenodo.19227788). Published ages from asteroseismology and spin for 127 of the 659 stars the Habitable Worlds Observatory is likeliest to observe. Past about 6 billion years, spin ages run about 47% low.
     - 161 of the 880 hosts are in it, as of 2026-10-14, and 53 have an age: 2 F, 12 G, 23 K, 16 M. Of the 110 the mirror can split, 35.
     - Alpha Centauri A has 20 ages, 4.2 to 6.7 billion years. Beta Virginis has two, 3.2 and 4.0.
@@ -1432,6 +1447,6 @@ Results the design is waiting on. Check each when its date comes.
 - Gaia's FLAME ages differ from asteroseismic and spin ages by a median of 4.7 billion years on 9 hosts. Closed 2026-10-15: calcs/hosts.py's rule that drops an F or G star when FLAME's upper bound is under a billion years drops none. Within 50 ly no F or G star has an upper bound under 2 billion.
 - 58 Eridani has six spin ages from 0.43 to 1.1 billion years. It stays a host under the rule, since two reach a billion.
 - The rung draw ignores a warm zone's outward drift as its star brightens. It matters for F stars and old G stars.
-- Nguyen et al. 2026 give fitted shorelines by star kind, mass and age. Read the paper and see whether they should replace the single line.
+- Closed 2026-10-16: Nguyen et al. 2026's fitted shorelines don't replace the single line. See What sets a natural world's rung.
 - Earth's aimed messages: the power of the 1983, 2008, 2009 Canberra and 2013 sends is in no source found. Hirabayashi's books may hold the first.
 - Working links for Project Daedalus's 1978 report and Criswell 1985.

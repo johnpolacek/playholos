@@ -222,7 +222,8 @@ def warm_world(seed, host):
 #   4 log10(escape speed in km/s) - log10(lifetime dose of far ultraviolet and X-rays, Earth = 1) - 3.16 is above zero.
 #   Mars sits on the line. The dose is L^0.4 / a^2, and 3.1 times that at a fully convective red dwarf, one fainter
 #   than absolute G 10 (Pass et al. 2025). The line is broad (Ji et al. 2025), so each world has its own luck: 0.5 in
-#   the log, a sample.
+#   the log, a sample. Checked 2026-10-16: Nguyen et al. 2026 put this line between their nominal and volatile-poor
+#   Sun-like cases, so it stays a middle case, and the luck stands for each world's unknown volatiles.
 # - Life. Kipping 2025 gives 13 to 1 that life starts fast where conditions allow, and not how often they allow. Here
 #   it started on 3 airy worlds in 4, and later died out on 1 in 5 of those: both samples.
 # - Pace. Earth had lasting oxygen at 2.3 billion years old (Poulton et al. 2021), and air rich enough to read, with

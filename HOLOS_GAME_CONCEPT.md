@@ -378,7 +378,7 @@ Settled 2026-10-06. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#earths-lead
   - Why a study can find something: the Mind reads old records better than their first readers did. That is the game's premise, not a result.
 - **What follows in the first mock.** Two observations the Mind offers, which spend the telescope in turn, and one more study.
   - Gliese 12 b's day side, with the space telescope. A cool day side means air carries heat away. The space telescope read TRAPPIST-1's inner worlds this way in 2023.
-  - LHS 1140 b's crossings, studied. In 2024 they ruled out a hydrogen world and hinted at heavier air over water.
+  - LHS 1140 b's crossings, studied. In 2024 they ruled out a hydrogen world and hinted at heavier air over water. In 2026 helium was seen escaping it, the first sign of kept air on a warm rocky world.
   - Fomalhaut through a Year, monthly. It closes the lead as rubble.
 - **Settled leads stay settled.** Alpha Centauri A's candidate is resolved long before 2040. Adopt JWST's August 2026 result when it is published. As of 2026-10-13 it is not: the telescope observed on August 11 and 12, and no paper is out. A bright background star blocks the next try until about 2030.
 
@@ -438,6 +438,7 @@ Settled 2026-10-13.
   - Set aside: minds without industry drawn by the seed, and every rung drawn, ruins included.
 - **A natural world's rung comes from its star's age, and physics says whether it kept its air.** Settled 2026-10-13. Built in [calcs/seed.py](calcs/seed.py).
   - *Air.* A world keeps its air if it sits on the airy side of the cosmic shoreline: the line through Mars that divides the Solar System's airy worlds from its bare ones. Small worlds and harsh young stars lose (Zahnle and Catling 2017).
+    - *Checked 2026-10-16 against Nguyen et al. 2026.* Their model puts this line midway between volatile-rich and volatile-poor worlds, so it stays. Their fits cover only four sample stars.
   - *Red dwarfs are harsh.* Their warm zones sit close in, and the dimmest stay active about three times longer than the old estimate (Pass et al. 2025). Most of their warm worlds come out bare rock.
   - *Age.* Earth had lasting oxygen at 2.3 billion years old, and air rich enough to read, with animals and forests, at about 4. A world follows that schedule at its own pace.
   - *Published ages where they exist.* 53 hosts have one from asteroseismology or spin (Ware et al. 2026). The rest are drawn evenly from 1 to 10.5 billion years, as nearby stars formed.
