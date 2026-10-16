@@ -749,6 +749,12 @@ Begun 2026-10-14. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#outposts-and-
   - *People to another star cost billions of tonnes and centuries.* The 2025 winning design, Chrysalis: 2.4 billion tonnes, about 2,400 people, about 400 years to Alpha Centauri. Over 100,000 aboard keep knowledge alive (Hein et al. 2012).
   - *Frozen embryos weigh far less,* but artificial wombs don't exist yet (Crowl et al. 2012). Building them is research Earth could do first.
   - *A colony that can stand alone is a Mind,* as v1 had it: its own industry, power and thought.
+- **The Will can move into any Mind of Earth's, and crosses as light.** Settled 2026-10-16, as v1 had it ([v1: The Will, the Mind and Nodes](legacy/v1/HOLOS_GAME_CONCEPT.md)).
+  - *The crossing is lights out.* The screen shows only the transfer, for the light time on the game clock. Proxima is 4.2 Years, 21 minutes. 10 ly is 50 minutes.
+  - *The clock runs on.* The crossing goes on with the app closed, like everything else.
+  - *A stand-in takes the Mind left behind.* An AI Will runs it from the player's orders and charter, reading them by intent. It is not a rival.
+  - *The Will arrives knowing only what it knew when it left.* The new Mind says what happened there meanwhile. Coming back, the old one says what its stand-in did, and why.
+  - *Only Minds can hold the Will,* never nodes. Earth's seed at Proxima can from about Year 135, when it stands alone.
   - Set aside: Minds only beyond the home system, and Minds only everywhere.
 - **What a ship of people costs, priced 2026-10-15.** Numbers from `python3 calcs/early_game.py`. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#ships-that-carry-people).
   - *Frozen embryos on a seed ship:* under a tonne of bank, so the ship's price barely moves. Frozen cells may last 160 to 235 years of deep-space radiation, by mouse sperm on the ISS. But no womb yet carries a mammal from conception to birth: the human gap runs from about day 14 to week 22.
@@ -961,4 +967,5 @@ Answered one at a time, in this order. Every answer must be permitted by current
     - *Wakes, as played:* four in about six hours. The longest quiet is about 3 hours, Years 51 to 89.
     - *Rolled here, keyed to the seed:* each sender's move on silence and on Earth's reply, from its tables. Ombe knocks again, then sends a probe on hearing Earth. Hael knocks again. Ree sends knowledge unasked, reaching Earth about Year 130.
     - *The Mind advises, and does nothing more.* At Year 51 it says half its thought is idle. This player leaves it.
-    - Open: where in a system a seed lands, and who chooses. And whether the Will can move into the seed's Mind once it stands alone, as v1 allows.
+    - Open: where in a system a seed lands, and who chooses.
+    - **Settled 2026-10-16:** the Will can move into a new Mind, as light, with only the crossing on screen. A stand-in AI Will runs the Mind left behind. See [Outposts and colonies](#outposts-and-colonies).

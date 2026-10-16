@@ -58,7 +58,8 @@ SETTLED = [('Does a half-built real instrument cost fewer Years?', 'It costs wha
            ('A neighbor sends a probe to Sol. What arrives, and does Earth see it?', 'A rocket, as v1 had it: a 20-Year build, a tenth of light speed. Its braking flame is X-rays, seen only in its last weeks, within a few AU, by an X-ray sky watch Earth must build. An Open sender’s probe most often burns all the way in. A Hidden one’s most often stops far out and watches from the outskirts, unseen. Small dark sails were set aside to keep the game simple: the Sun can catch one only below 3.8% of light speed, so they almost never arrive in play. Settled 2026-10-14.'),
            ('What does a neighbor’s probe do once it arrives?', 'What its orders say. A probe has no mind of its own: its sender writes its orders at launch, rolled from a table for its kind. It watches quietly, hails the world, or waits to be hailed. A hunter’s may hail with a false face. A hail is sent from close range, so any receiver hears it. Settled 2026-10-15.'),
            ('What does a seed ship cost?', 'About 1,500 t: a 443 t seed that stands alone, and a magnetic sail as heavy as the rest. A fusion drive burning deuterium takes 30 Years at standard pace and the ship 18, built in the orbital yard. Deuterium is cheap, and its plants set the pace. A laser that pushes ships waits on industry that copies itself. Settled 2026-10-14 and 15.'),
-           ('Can copies of a work come faster?', 'With a production line, a project of its own: copies run side by side, each taking 85% as long each time the count built doubles. Without one, every copy takes the full time. Settled 2026-10-15.')]
+           ('Can copies of a work come faster?', 'With a production line, a project of its own: copies run side by side, each taking 85% as long each time the count built doubles. Without one, every copy takes the full time. Settled 2026-10-15.'),
+           ('Can the Will move into a new Mind?', 'Yes, as v1 had it: it crosses as light, and the screen shows only the crossing. Proxima is 21 minutes. A stand-in AI Will runs the Mind left behind, from the player’s orders and charter. Settled 2026-10-16.')]
 
 # ---------- Godview: who is out there ----------
 MOVE = reactions.MOVES
@@ -1581,16 +1582,16 @@ def late_rows():
     rows.append(at(tw, tl, '· The phone lights. Opens it.', ('Dispatch', 'The seed ship is down at Proxima Centauri.'),
                    talk(word_r, f'<b>Down at Proxima</b>The seed ship landed {PX:.0f} Years ago, as this light left. It is building. About Year {LAND_Y + seedmod.STANDS:.0f} it stands alone, a Mind of its own. Then a second home exists, {PX:.1f} light-years off.', ('What can it do?', 'Later'), 'glow'),
                    ['The first of Earth’s works to land at another star. Launched at Year ' + f'{LAUNCH_Y:.1f}, from an order given at Year {SEED_SHIP_Y:.1f}.',
-                    f'v1: a node becomes a Mind when it can stand alone, and the Will lives in one Mind at a time, travelling between them as light. Where v2 says nothing, v1 holds.',
+                    f'v1: a node becomes a Mind when it can stand alone. Settled 2026-10-16: the Will can move into it, as light.',
                     (f'{WHOF["name"]}’s second knock reached Earth at Year {HAGAIN_Y:.1f}, unheard, as its first was.' if HAGAIN in seedmod.SENDS and HAGAIN_Y < WORD_Y + .5 else '')],
                    question=ask('Where in a system does a seed land, and who chooses?', 'The order named Proxima Centauri and no world. The Mind never does more than asked, so the choice is the player’s, or a standing rule’s.'), label=HMS(tw)))
     rows.append(at(tw + 30, tw, 'What can it do?', None,
                    talk(tab(tw + 30, 'Mind', 'MIND', 'A SECOND HOME', ''.join([
                        SEC('NOW'), quick('Build', 'copies of itself, from Proxima’s rock', '<span class="mono">under way</span>'), quick('Report', f'by narrow beam · {PX:.1f} Years each way', ''),
-                       SEC(f'FROM YEAR {LAND_Y + seedmod.STANDS:.0f}'), quick('Think for itself', 'a Mind, on its own matter', ''), quick('Host the Will', f'v1: the Will moves as light · {PX:.1f} Years to cross', '')])),
-                        f'Now it builds, and reports when it can. Once it stands alone it thinks for itself, as I do. In v1 your Will could cross to it, as light: {PX:.1f} Years each way, with no one awake in transit.', ('Later',)),
+                       SEC(f'FROM YEAR {LAND_Y + seedmod.STANDS:.0f}'), quick('Think for itself', 'a Mind, on its own matter', ''), quick('Host the Will', f'it crosses as light · {PX:.1f} Years, {PX * 5:.0f} minutes, lights out', '')])),
+                        f'Now it builds, and reports when it can. Once it stands alone it thinks for itself, as I do. Then your Will can cross to it as light: {PX:.1f} Years, {PX * 5:.0f} minutes with only the crossing on your screen. A stand-in would run this Mind from your orders.', ('Later',)),
                    ['The reply to Earth’s answer from ' + ' and '.join(f"{p['name']} about Year {back:.0f}" for p, _, m, back in replies if m in seedmod.SENDS or m in ('answer', 'gift')) + '. The fifth mock’s, if there is one.'],
-                   question=ask('When the seed stands alone as a Mind, can the Will move there?', 'v1 says yes: one Mind at a time, travelling as light. A Will in transit is nowhere for 4.2 Years. v2 has not said.'), label=HMS(tw + 30)))
+                   settled=card('Can the Will move into a new Mind'), label=HMS(tw + 30)))
     rows.sort(key=lambda r: r[0])
     return [stop(t, prev, *a, **k) for (t, a, k), prev in zip(rows, [th] + [r[0] for r in rows])]
 LATE = [r.replace('<section id="t', '<section id="W', 1) for r in late_rows()]

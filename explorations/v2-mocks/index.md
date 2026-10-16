@@ -1886,7 +1886,7 @@ THE MIND · Down at Proxima · The seed ship landed 4 Years ago, as this light l
 [Talk to the Mind]
 Godview
 The first of Earth’s works to land at another star. Launched at Year 47.6, from an order given at Year 19.2.
-v1: a node becomes a Mind when it can stand alone, and the Will lives in one Mind at a time, travelling between them as light. Where v2 says nothing, v1 holds.
+v1: a node becomes a Mind when it can stand alone. Settled 2026-10-16: the Will can move into it, as light.
 Hael’s second knock reached Earth at Year 119.3, unheard, as its first was.
 Design question 1 · Where in a system does a seed land, and who chooses? The order named Proxima Centauri and no world. The Mind never does more than asked, so the choice is the player’s, or a standing rule’s.
 +9:57:21 · Year 119.5
@@ -1900,12 +1900,12 @@ Build · copies of itself, from Proxima’s rock · under way
 Report · by narrow beam · 4.2 Years each way
 FROM YEAR 135
 Think for itself · a Mind, on its own matter
-Host the Will · v1: the Will moves as light · 4.2 Years to cross
-THE MIND · Now it builds, and reports when it can. Once it stands alone it thinks for itself, as I do. In v1 your Will could cross to it, as light: 4.2 Years each way, with no one awake in transit. · [Later]
+Host the Will · it crosses as light · 4.2 Years, 21 minutes, lights out
+THE MIND · Now it builds, and reports when it can. Once it stands alone it thinks for itself, as I do. Then your Will can cross to it as light: 4.2 Years, 21 minutes with only the crossing on your screen. A stand-in would run this Mind from your orders. · [Later]
 [Talk to the Mind]
 Godview
 The reply to Earth’s answer from Ree about Year 130. The fifth mock’s, if there is one.
-Design question 2 · When the seed stands alone as a Mind, can the Will move there? v1 says yes: one Mind at a time, travelling as light. A Will in transit is nowhere for 4.2 Years. v2 has not said.
+Settled · Can the Will move into a new Mind? Yes, as v1 had it: it crosses as light, and the screen shows only the crossing. Proxima is 21 minutes. A stand-in AI Will runs the Mind left behind, from the player’s orders and charter. Settled 2026-10-16.
 
 ## Questions these mocks raise
 Settled: Does a half-built real instrument cost fewer Years? · It costs what its real schedule leaves: about 8 Years for the Habitable Worlds Observatory. Build times are standard, from the science, and the player can invest in projects that build faster. A speed-up also shortens the part left of a work under way. Settled 2026-10-10 and 10-11.
@@ -1951,5 +1951,5 @@ Settled: A neighbor sends a probe to Sol. What arrives, and does Earth see it? �
 Settled: What does a neighbor’s probe do once it arrives? · What its orders say. A probe has no mind of its own: its sender writes its orders at launch, rolled from a table for its kind. It watches quietly, hails the world, or waits to be hailed. A hunter’s may hail with a false face. A hail is sent from close range, so any receiver hears it. Settled 2026-10-15.
 Settled: What does a seed ship cost? · About 1,500 t: a 443 t seed that stands alone, and a magnetic sail as heavy as the rest. A fusion drive burning deuterium takes 30 Years at standard pace and the ship 18, built in the orbital yard. Deuterium is cheap, and its plants set the pace. A laser that pushes ships waits on industry that copies itself. Settled 2026-10-14 and 15.
 Settled: Can copies of a work come faster? · With a production line, a project of its own: copies run side by side, each taking 85% as long each time the count built doubles. Without one, every copy takes the full time. Settled 2026-10-15.
+Settled: Can the Will move into a new Mind? · Yes, as v1 had it: it crosses as light, and the screen shows only the crossing. Proxima is 21 minutes. A stand-in AI Will runs the Mind left behind, from the player’s orders and charter. Settled 2026-10-16.
 1. Where in a system does a seed land, and who chooses? · The order named Proxima Centauri and no world. The Mind never does more than asked, so the choice is the player’s, or a standing rule’s.
-2. When the seed stands alone as a Mind, can the Will move there? · v1 says yes: one Mind at a time, travelling as light. A Will in transit is nowhere for 4.2 Years. v2 has not said.
