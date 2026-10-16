@@ -5,4 +5,6 @@ export interface Save {
   seed: number;
   /** Epoch ms of the tap on Begin. Null while planning before Year 0. */
   beganAt: number | null;
+  /** Past the first screen. Missing on saves from before it. */
+  woke?: boolean;
 }
