@@ -3,3 +3,7 @@ node_modules/
 test-results/
 .DS_Store
 __pycache__/
+.vercel/
+.env*
+# Turbopack writes loader output here, at its root, when it builds game/.
+.next/

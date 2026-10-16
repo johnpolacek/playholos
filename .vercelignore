@@ -1,0 +1,15 @@
+# The game deploys from here with Root Directory game. It reads src, assets and data, and nothing else.
+node_modules
+.cache
+legacy
+explorations
+calcs
+tests
+scripts
+index.html
+color.html
+*.md
+__pycache__
+game/node_modules
+game/.next
+.next

@@ -1,9 +1,11 @@
+import path from "node:path";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // The map strip is the atlas's own scene, so the game reads ../src, ../assets and ../data.
+  compiler: { define: { __LINE_ART__: "true" } },
   turbopack: {
-    // The repo root holds the atlas's own lockfile. Widen this when the game imports ../data or ../src.
-    root: __dirname,
+    root: path.join(__dirname, ".."),
     rules: {
       "*.css": {
         loaders: ["@tailwindcss/turbopack"],
