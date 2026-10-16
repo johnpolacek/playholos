@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import golden from "./golden.json" with { type: "json" };
 import { describe, earthKnows } from "./knowledge.ts";
+import { observe } from "./observing.ts";
 import { PyRandom } from "./pyrandom.ts";
 import { roll } from "./reactions.ts";
 import { loadVoices, loadWorld } from "./world.ts";
@@ -42,4 +43,15 @@ test("a knock is heard only once it arrives, and only if the watch catches it", 
   const ombe = world.neighbors.find((p) => p.name === "Ombe")!;
   assert.equal(ombe.inbound[0].kit0, false);                      // Year 0's sky watch misses it, so Earth hears nothing yet
   assert.equal(earthKnows(world, 20).heard.length, 0);
+});
+
+test("reading times match calcs/observing.py, the dark patch's edges included", () => {
+  const close = (a: number | null, b: number | string | null) =>
+    b === null ? a === null : b === "inf" ? a === Infinity : a !== null && Math.abs(a - (b as number)) < 1e-9 * Math.max(1, Math.abs(b as number));
+  for (const { args, out } of golden.observe) {
+    const got = observe(...(args as [number, number, number, number]));
+    assert.ok(close(got.sep, out.sep), `sep ${args}`);
+    assert.ok(close(got.seenH, out.seen_h), `seen ${args}`);
+    for (const gas of ["water", "oxygen", "ozone"] as const) assert.ok(close(got[gas], out[gas]), `${gas} ${args}: ${got[gas]} vs ${out[gas]}`);
+  }
 });
