@@ -165,11 +165,13 @@ def raise_the_pace(share=0.25 / 24, step=1.5, fab=3, factory=(3, 1 / 3), yard=(5
 # - A new telescope with a 15 m mirror: 18 Years, the flagship standard. Its study aimed at a launch about 2039, from a
 #   2019 report. About 40 t.
 # - A laser sail array: 25 Years. Starshot aimed at a first launch within a generation.
-# - A mass driver on the Moon: v1's 24 Years. O'Neill's group gave a rate, 600 kt a year, and no build time.
+# - A mass driver on the Moon: v1's 24 Years. O'Neill's group gave a rate, 600 kt a year, and no build time. Checked
+#   2026-10-16: a Chinese rotating launcher plans full scale by 2045, and a 2026 quenchgun study gives 263 kt a year.
 # - An orbital foundry: v1's 30 Years. It turns thrown rock into works.
 # - A far-side array: v1's 30 Years, after the Moon's mine exists. FarView plans 4 to 8 years for a fifth of the area,
 #   in far lighter antennas. Settled 2026-10-13: it grows in fifths, 6 Years each, and each hears farther.
-# - Belt prospecting and mining: v1's 6 and 20 Years. Nothing like it has flown. 120 kt a year.
+# - Belt prospecting and mining: v1's 6 and 20 Years. Nothing like it has flown. 120 kt a year. Still true in 2026:
+#   AstroForge's Odin was lost in 2025, and nothing has been mined.
 # - Power from orbit: about 10 Mt for a fifth more energy, so its pace is the pace matter arrives.
 ROADS = dict(mirror=18, array=25, driver=24, foundry=30, far_side=30, prospect=6, mining=20)
 # Settled 2026-10-15: a fusion drive, 30 Years at standard pace. A sample: no one has dated a flight engine.

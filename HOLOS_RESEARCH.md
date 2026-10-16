@@ -415,6 +415,20 @@ Anchors for [the project audit](HOLOS_PROJECT_AUDIT.md).
   - Not found: any real schedule for a mass driver, for megatonnes of lunar metal a year, or for mining the belt. v1's 24, 30 and 20 Years stand unchecked.
   - Matters: only the telescope and the far-side array have a builder's own date behind them. The rest are v1's times, kept and flagged.
   - Used: v2 [Build times](HOLOS_GAME_CONCEPT.md#build-times), calcs/early_game.py and the project audit.
+- **The long roads, rechecked 2026-10-16.** By a research agent. Its reading is marked on each line, and I did not reread the sources.
+  - **[LUVOIR final report](https://arxiv.org/abs/1912.06219)**, chapters 1 and 12, read by the agent. NASA told the team to assume Phase A from January 1, 2025. Launch November 2039: 15.6 years to the end of commissioning, with 791 days of reserve. A technology plan of about 5 years comes first. 27.8 t as designed, 37.4 t with growth.
+    - Matters: about 20 years from start to work. The game's 18 Years and about 40 t hold.
+  - **Habitable Worlds Observatory, 2026.** Read by the agent: NASA hopes to launch in the late 2030s or early 2040s (Space.com, January 12, 2026). Its FY26 budget was $150M. The FY27 request in April 2026 was $5M, and a House committee in May 2026 required no less than FY26's (SpacePolicyOnline, May 13, 2026). Not yet law. No links kept.
+  - **[Sonntag 2026, lunar mass drivers](https://www.afpc.org/uploads/documents/Special_Report_-_Strategic_Implications_of_Lunar_Mass_Drivers-5.27.26.pdf)** · AFPC special report, May 2026, read in full by the agent. A 1 t quenchgun of about 372 t, landed in 4 loads, firing 1 t every 2 minutes at 20 MW: about 263 kt a year. No build time. Its author told Space.com a working system could come by the mid-2030s, if funded.
+  - **A Chinese rotating launcher, 2024.** Shanghai Institute of Satellite Engineering, via Universe Today, read by the agent. 80 t, two launches a day, key parts by 2030, full scale by 2045.
+  - Matters: about 20 years to a full-scale lunar launcher, from the one dated plan. The game's 24 Years and 600 kt a year hold. An advocate's 10 years is faster.
+  - **[Metzger et al. 2013, bootstrapping](https://arxiv.org/abs/1612.03238)** · Published, J. Aerospace Engineering. Abstract and growth section read by the agent. Industry grows in generations 2 years apart. 12 t landed grows to 156 t of plant in about 20 years, 41 t to up to 40,000 t.
+  - **[Sanders, Kleinhenz and Linne 2022](https://ntrs.nasa.gov/citations/20220008799)** · NASA, COSPAR. Read by the agent. NASA's notional plan: tens of tonnes a year at first, scaling to hundreds or thousands. No dates.
+  - Matters: megatonnes of lunar metal a year need self-copying growth, as Metzger describes. No real plan names a date.
+  - **Asteroid mining, 2023 to 2026.** From Wikipedia, read by the agent. AstroForge's Brokkr-1 failed in 2023, and Odin was lost in March 2025 before reaching its asteroid. Vestri waits for a flight not before 2027. Nothing has been mined.
+  - Matters: 6 Years of prospecting fits real cruise times. 20 Years to 120 kt a year has nothing behind it, and nothing against it.
+  - **FarView, full text** ([arXiv 2404.03840](https://arxiv.org/abs/2404.03840)), read by the agent in the PDF. The whole array needs about 50 to 70 t of aluminum. About 5 t of landed equipment refines 10 to 15 t of metal a year. Rovers lay one 400-dipole subarray a lunar day, about 250 in all, over 4 to 8 years.
+    - Matters: by area, the game's fifth in 6 Years matches FarView's pace. By mass it needs about 2,500 times FarView's metal a year, so it waits on the lunar mine. The game's array hears higher pitch than FarView's dipoles can, so it stays heavier.
 
 - **[Phipps et al., Review: Laser-Ablation Propulsion](https://www.researchgate.net/publication/225005755_Review_Laser-Ablation_Propulsion)** · Published, Journal of Propulsion and Power ([debris removal](https://arxiv.org/abs/1110.3835)).
   - Ablation thrust runs about 10⁻⁵ to 10⁻⁴ N per watt that lands, near 10⁻⁴ at its best.
@@ -1433,7 +1447,7 @@ Results the design is waiting on. Check each when its date comes.
 
 ## To check
 
-- The long roads: a real schedule for a lunar mass driver, for lunar metal at megatonnes a year, and for belt mining. FarView's mass. LUVOIR's schedule at source.
+- Closed 2026-10-16: the long roads' schedules. The telescope and the mass driver hold. The megatonne mine and belt mining have no real schedule, and stay v1's. See The long roads, rechecked.
 
 - Companion masses in calcs/binaries.py are rough: dynamical masses depend on distance cubed, and white dwarfs read as light from their brightness.
 - About 15 red dwarfs are unconfirmed young-group candidates with no age of their own. They stay. Gliese 393 is listed in AB Doradus but [Amado et al. 2021](https://arxiv.org/abs/2105.13785) put it older than 0.7 billion years.
