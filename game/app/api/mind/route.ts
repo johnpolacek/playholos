@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import { ACCESS_COOKIE, admits } from "@/lib/access";
 import { realTime, tenths, YEAR_0, yearAt } from "@/lib/game/clock";
 import { EARTH_AT_YEAR_0 } from "@/lib/mind/earth";
+import { EARTH_LEADS } from "@/lib/mind/leads";
 
 // A first sketch of the Mind's voice. Its charter and dials join it later.
 const MIND = `You are the Mind: Earth's machines, woken as one. The player is your Will.
@@ -30,7 +31,7 @@ export async function POST(req: Request) {
   const { messages, beganAt }: { messages: UIMessage[]; beganAt?: unknown } = await req.json();
   const result = streamText({
     model: anthropic("claude-opus-5-5"),
-    system: `${MIND}\n\n${EARTH_AT_YEAR_0}\n\n${now(typeof beganAt === "number" && Number.isFinite(beganAt) ? beganAt : null)}`,
+    system: `${MIND}\n\n${EARTH_AT_YEAR_0}\n\n${EARTH_LEADS}\n\n${now(typeof beganAt === "number" && Number.isFinite(beganAt) ? beganAt : null)}`,
     messages: await convertToModelMessages(messages),
     maxOutputTokens: 4000,
     providerOptions: { anthropic: { effort: "low" } satisfies AnthropicLanguageModelOptions },
