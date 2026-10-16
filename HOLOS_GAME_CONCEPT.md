@@ -958,7 +958,7 @@ Answered one at a time, in this order. Every answer must be permitted by current
     - *A knock comes again.* Ombe, unanswered by its own clock, knocks again at Year 59. It reaches Earth at Year 108, 29 Years after Earth's answer reached Ombe. The Mind dates it by when it was sent.
     - *Hael's second knock is missed too,* at Year 119.3, under the all-sky watch's floor as its first was.
     - *The seed ship lands* at Proxima Centauri at Year 115, and word reaches Earth at Year 119.4. It stands alone as a Mind about Year 135.
-    - *Wakes, as played:* four in about six hours. The longest quiet is 2.5 hours, Years 51 to 89.
+    - *Wakes, as played:* four in about six hours. The longest quiet is about 3 hours, Years 51 to 89.
     - *Rolled here, keyed to the seed:* each sender's move on silence and on Earth's reply, from its tables. Ombe knocks again, then sends a probe on hearing Earth. Hael knocks again. Ree sends knowledge unasked, reaching Earth about Year 130.
     - *The Mind advises, and does nothing more.* At Year 51 it says half its thought is idle. This player leaves it.
     - Open: where in a system a seed lands, and who chooses. And whether the Will can move into the seed's Mind once it stands alone, as v1 allows.
