@@ -1014,6 +1014,16 @@ What a neighbor's world can plausibly be, beyond an Earth twin. Each roster entr
     - TRAPPIST-1 e: -1.47, bare. JWST neither shows nor rules out air (Glidden et al. 2025). f: -0.99.
     - GJ 3929 b: -1.45, bare. Rocky Worlds finds it likely bare ([arXiv 2508.12516](https://arxiv.org/abs/2508.12516)).
     - Widening each world's luck from 0.5 to 0.8 moves red dwarf bare rock from 71% to 68%. Measured on 200 games. Not worth a change.
+- **Warm worlds born frozen, checked 2026-10-16.** For the warm zone's outward drift, under To check.
+  - **Gough 1981** · Published, Solar Physics 74, 21. From memory, a standard result: the Sun's light was 1 / (1 + 0.4 (1 - t / 4.57 billion years)) of today's. 71% at birth, 10% more in 1.1 billion years, 44% more in 3.5.
+  - **[Baraffe et al. 2015 tracks](http://perso.ens-lyon.fr/isabelle.baraffe/BHAC15dir/BHAC15_tracks+structure)** · Published, A&A 577, A42. Downloaded and read 2026-10-16. A Sun-mass star goes from 0.69 Suns at 0.1 billion years to 0.98 at 4.6 and 1.40 at 8. 1.2 Suns: 1.73 at 0.1, 2.46 at 3. 0.8 Suns: 0.24 at 0.1, 0.31 at 8.
+    - My check: Gough's curve, with time counted in each star's main-sequence life, matches these within about 10% for 0.8 to 1.2 Suns.
+  - **[Tuchow and Wright 2023](https://arxiv.org/abs/2301.02961)** · Published, ApJ. I read the abstract. 29 to 74% of planets in warm zones arrived there late, as their star changed. Whether they can be habitable is unclear.
+  - **[Henry, von Hippel and Childs 2026](https://arxiv.org/abs/2609.01790)** · Accepted, ApJ. Read 2026-10-16 in the arXiv HTML, the method and discussion. Ages for 146 known hosts of 4,475 to 7,200 K, with Kopparapu et al.'s warm zones. Of 143 planets now in a warm zone, 97 were always in it, 37 were born frozen and entered later, 9 were once too hot.
+    - Their words: born-frozen planets "should not be assumed habitable solely on the basis of present-day HZ membership".
+  - **[Turbet et al. 2017](https://arxiv.org/abs/1703.04624)** · Published, EPSL. I read the abstract. A frozen Earth-like world at a Sun-like star may never thaw beyond about 1.27 AU, below 62% of Earth's light. Its carbon dioxide freezes out at the poles.
+  - Cited by Henry et al., not read: Yang et al. 2017, Nature Geoscience. The light that thaws a frozen world can tip it straight into a runaway greenhouse.
+  - Matters, measured 2026-10-16 on 200 games: 26% of the natural worlds at Sun-like stars were born frozen, as Henry et al. find for real planets, 37 of 143.
   - **[Ware et al. 2026, the HAges Catalog](https://arxiv.org/abs/2605.12647)** · Accepted, ApJ. Data at [Zenodo](https://doi.org/10.5281/zenodo.19227788). Published ages from asteroseismology and spin for 127 of the 659 stars the Habitable Worlds Observatory is likeliest to observe. Past about 6 billion years, spin ages run about 47% low.
     - 161 of the 880 hosts are in it, as of 2026-10-14, and 53 have an age: 2 F, 12 G, 23 K, 16 M. Of the 110 the mirror can split, 35.
     - Alpha Centauri A has 20 ages, 4.2 to 6.7 billion years. Beta Virginis has two, 3.2 and 4.0.
@@ -1447,6 +1457,7 @@ Results the design is waiting on. Check each when its date comes.
 - Gaia's FLAME ages differ from asteroseismic and spin ages by a median of 4.7 billion years on 9 hosts. Closed 2026-10-15: calcs/hosts.py's rule that drops an F or G star when FLAME's upper bound is under a billion years drops none. Within 50 ly no F or G star has an upper bound under 2 billion.
 - 58 Eridani has six spin ages from 0.43 to 1.1 billion years. It stays a host under the rule, since two reach a billion.
 - The rung draw ignores a warm zone's outward drift as its star brightens. It matters for F stars and old G stars.
+- The rung draw starts a red dwarf world's clock at its star's birth. Its star's bright youth held it in a runaway greenhouse for hundreds of millions of years first (Luger and Barnes 2015). Not modelled.
 - Closed 2026-10-16: Nguyen et al. 2026's fitted shorelines don't replace the single line. See What sets a natural world's rung.
 - Earth's aimed messages: the power of the 1983, 2008, 2009 Canberra and 2013 sends is in no source found. Hirabayashi's books may hold the first.
 - Working links for Project Daedalus's 1978 report and Criswell 1985.
