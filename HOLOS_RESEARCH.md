@@ -1179,7 +1179,7 @@ What a neighbor's world can plausibly be, beyond an Earth twin. Each roster entr
 - **Classic space-industry studies** · Study. Links found by an agent, 2026-10-13.
   - Lunar mass driver: [O'Neill 1974](https://doi.org/10.1063/1.3128863), Physics Today 27, 32, and [O'Neill and Kolm 1980](https://doi.org/10.1016/0094-5765(80)90002-8), Acta Astronautica 7, 1229.
   - The Stanford torus: [NASA SP-413, Space Settlements: A Design Study](https://ntrs.nasa.gov/citations/19770014162), from a 1975 summer study, published 1977.
-  - Star lifting: Criswell 1985, in Interstellar Migration and the Human Experience, University of California Press. No working link found.
+  - Star lifting: Criswell 1985, in Interstellar Migration and the Human Experience, University of California Press ([Internet Archive lending copy](https://archive.org/details/interstellarmigr0000unse_h4h6), ISBN 0520053494, checked 2026-10-16). No free text found.
   - Used: v1 catalog (mass driver, habitat ring, star lifting).
 
 ## Outposts and colonies
@@ -1470,4 +1470,4 @@ Results the design is waiting on. Check each when its date comes.
 - Closed 2026-10-16: red dwarfs' bright youth stays out of the rung draw. See Red dwarfs' bright youth.
 - Closed 2026-10-16: Nguyen et al. 2026's fitted shorelines don't replace the single line. See What sets a natural world's rung.
 - Earth's aimed messages: the power of the 1983, 2008, 2009 Canberra and 2013 sends is in no source found. Hirabayashi's books may hold the first.
-- Working links for Project Daedalus's 1978 report and Criswell 1985.
+- Closed 2026-10-16: links for Project Daedalus's 1978 report and Criswell 1985. Daedalus has no free text: the BIS sells a reprint, and its shop link works. Criswell's book is in the Internet Archive's lending library.
