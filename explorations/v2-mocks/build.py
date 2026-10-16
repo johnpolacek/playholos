@@ -878,6 +878,8 @@ if LIVE_ON:
     LS, LD, LW = LIVE['star'], LIVE['d'], LIVE['name']
     LO = observing.observe(LD / 3.2616, LIVE['n']['world']['mass'] ** (1 / 3.7), LIVE['a'], LIVE['host']['luminosity'])
     LSIG = signs.read(LIVE, T(8) / 300); LSMOG = LSIG['industry'] and LSIG['smog 6.5 m']
+    LBEYOND = LSMOG == 'beyond'                                       # smog there, past the dark patch's edge: settled 2026-10-16
+    LSMOG = LSMOG if isinstance(LSMOG, float) and LSMOG < math.inf else None
     M0 = MINDS[1] if VOICE else MINDS[0]
     L_FLOOR = year_floor(LD)
     # Earth's knock, sent twice from Year 7.5. To a sender, any message from Earth is a late answer to its own, so it
@@ -902,12 +904,12 @@ if LIVE_ON:
 {SEC('WHAT IT COULD BE · NOW')}{odds_now('Rock, and no life we could see', NEW['rock'])}{odds_now('Life', NEW['life'])}{odds_now('Minds', NEW['minds'])}
 {SEC('WITH WHAT WE HAVE')}{quick('Read its air', f'Infrared telescope · water in {DAYS(LO["water"])}, oxygen in {DAYS(LO["oxygen"])} · the sweep waits', START(.1))}""")
     L_ORDER = order(T(7), 'Read its air.', [
-        ('OBSERVE', f'<b>{LS}’s world</b> · water, oxygen, then smog · about {DAYS(max(LO["oxygen"], LSMOG or 0))}'), ('THEN', 'Back to the sweep'), ('WAKES YOU', 'When the reading lands')])
+        ('OBSERVE', f'<b>{LS}’s world</b> · water, oxygen{", then smog" if LSMOG else ""} · about {DAYS(max(LO["oxygen"], LSMOG or 0))}'), ('THEN', 'Back to the sweep'), ('WAKES YOU', 'When the reading lands')])
     L_AIR_ODDS = [('Life', NEW['life'], 90), ('Minds', M0, 33), ('Rock, and no life we could see', NEW['rock'], 3)] if LSMOG else [('Life', NEW['life'], 88), ('Minds', M0, M0), ('Rock, and no life we could see', NEW['rock'], 5)]
     L_AIR = tab(T(8), 'Report', 'REPORT', 'FIRST READING', f"""<button class="backlink inline">‹ All reports</button>
 <h3 class="lead">{'Oxygen, and smog' if LSMOG else 'Water and oxygen'}</h3>
 <p class="copy small">{LS} · {LD:.1f} ly · infrared telescope · {DAYS(max(LO['oxygen'], LSMOG or 0))} · light that left 4 Years ago</p>
-<p class="copy">Water and oxygen: a living world. {'And nitrogen dioxide, at about the level our own air held in 1980. Burning makes it. So do lightning and soil, and a cloud deck can pass for it.' if LSMOG else 'No smog this mirror can see.'}</p>
+<p class="copy">Water and oxygen: a living world. {'And nitrogen dioxide, at about the level our own air held in 1980. Burning makes it. So do lightning and soil, and a cloud deck can pass for it.' if LSMOG else 'Its smog band is blue, and here that falls past the edge of this mirror’s dark patch.' if LBEYOND else 'No smog this mirror can see.'}</p>
 {SEC('WHAT IT COULD BE · BEFORE → NOW')}{''.join(odds(*r) for r in L_AIR_ODDS)}
 {SEC('WHAT IT CAN’T TELL')}<p class="copy small">Whether anyone burns it. Smog is a hint, not proof. And nothing since this light left, four Years ago.</p>""")
     L_WAYS = tab(T(9), 'Mind', 'MIND', 'WAYS TO KNOW MORE', ''.join([
@@ -937,9 +939,11 @@ if LIVE_ON:
              [f'Times are physics: calcs/observing.py for water and oxygen, calcs/signs.py for smog. At {LD:.1f} ly every one is quick.']),
         stop(T(8), T(7), '· The Mind glows. Taps it.', (f'{LS}’s world has oxygen, and smog. Minds: {moved(M0, 33)}.' if LSMOG else f'{LS}’s world has water and oxygen. Life: {moved(NEW["life"], 88)}.'),
              talk(L_AIR, ('Oxygen, and smog at about our own old level. Burning makes it, and so does weather. I would not call it minds yet. Our radio array can’t hear a world’s everyday radio this far, so silence says little.' if LSMOG else
+                          'Water and oxygen, next door. Alive, most likely. Smog would show in blue light, and this world sits past my dark patch there.' if LBEYOND else
                           'Water and oxygen, next door. Alive, most likely. Nothing in this light says more.'), ('What can we do now?', 'Later'), 'glow'),
-             [f'Truth: {LW}’s people burn, as Earth did. The calc gives every neighbor Earth’s smog from its first radio on, woken or not. A sample.' if LSMOG else f'Truth: {LW}’s people do not burn.',
-              f'Settled 2026-10-13: the first telescope reads smog only within about 12 ly. Here it takes {DAYS(LSMOG)}.' if LSMOG else 'Their smog is gone, or never was.',
+             [f'Truth: {LW}’s people burn, as Earth did. The calc gives every neighbor Earth’s smog from its first radio on, woken or not. A sample.' if LSMOG or LBEYOND else f'Truth: {LW}’s people do not burn.',
+              f'Settled 2026-10-13: the first telescope reads smog only within about 12 ly. Here it takes {DAYS(LSMOG)}.' if LSMOG else
+              f'Settled 2026-10-16: the dark patch ends at 0.76 arcseconds in blue-green light, and this world sits {LO["sep"] / 1000:.2f} out. The 15 m mirror’s ends nearer still, at 0.44.' if LBEYOND else 'Their smog is gone, or never was.',
               f'Their everyday radio is about {watts(LSIG["watts"])}. A Year of the radio array hears only tones above {watts(L_FLOOR)}. A far-side array would hear it in minutes.',
               'Smog at a world this close moves Minds two words. It is still a hint: lightning and soil make it too.'], settled=(19, 20)),
         stop(T(9), T(8), 'What can we do now?', None,

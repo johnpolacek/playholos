@@ -31,6 +31,9 @@ LISTEN_CAP = 365.25                      # days: the longest single listening ca
 FAR_FIFTHS, FIFTH_YEARS = 5, 6
 def far_sefd(fifths): return EARS[2][1] * FAR_FIFTHS / fifths
 SMOG = ((6.5, 300, 5.71 / 3.2616), (15, 400, 10))           # mirror in metres, its published hours, and at how many parsecs
+# Each mirror's dark patch ends at so many wavelengths over its width: 48 for the 6.5 m (calcs/observing.py), and 64
+# for a 15 m, as LUVOIR-A's coronagraph was drawn with 128-across mirrors. Settled 2026-10-16.
+SMOG_OWA = {6.5: 48, 15: 64}
 LOOK = 9.0                               # the Year the first pass ends
 
 # Settled 2026-10-14: when the sweep marks a world, the Mind advises a deep-field receiver, and the player decides.
@@ -113,6 +116,7 @@ def listen_days(watts, ly, sefd):
 def smog_days(mirror, hours, at_pc, d_pc, radius, a, lum):
     """Days to read Earth-level smog: 'glare' if the mirror can't split the world, inf if over two months."""
     if a / d_pc * 1000 < 3.5 * observing.BANDS['green'] * 1e-6 / mirror * 206265 * 1000: return 'glare'
+    if a / d_pc * 1000 > SMOG_OWA[mirror] * observing.BANDS['green'] * 1e-6 / mirror * 206265 * 1000: return 'beyond'
     days = hours / 24 * observing.ratio(d_pc, radius, a, lum) / observing.ratio(at_pc, 1, 1, 1)
     return days if days <= observing.CAP_D else math.inf
 
@@ -131,6 +135,7 @@ def read(p, year=LOOK):
 def tell(x):
     if x is None: return 'no'
     if x == 'glare': return 'in the glare'
+    if x == 'beyond': return 'past the dark patch'
     if x == math.inf: return 'over 2 months'
     return f'{x * 24:.0f} hours' if x < 2 else f'{x:.0f} days'
 

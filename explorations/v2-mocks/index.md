@@ -1348,13 +1348,13 @@ WHAT YOU WANT
 Read the worlds we felt first. Then every world it can.
 THE MIND’S VERSION
 OBSERVE · Gliese 432 A’s world · smog, water, oxygen · 5 days
-THEN · Twelve more worlds · quickest first · 297 days in all
+THEN · Eleven more worlds · quickest first · 297 days in all
 WAKES YOU · Any smog · then when all are read
 [Edit] · [Set the order]
 THE MIND · Set. Smog first, at Gliese 432 A: 5 days. Smog is burning, or weather. I will say which I think, and why. · [Undo]
 [Talk to the Mind]
 Godview
-The mirror can read thirteen of Earth’s nineteen worlds for smog within two months each. The first telescope could read smog only within about 12 ly.
+The mirror can read twelve of Earth’s nineteen worlds for smog within two months each. The first telescope could read smog only within about 12 ly.
 The launcher was done at Year 19.8, not 25.6. A flyby probe would take 12 more at its want, and 36 in flight. The player leaves it: the sails will be first.
 +1:47:45 · Year 21.6
 The Mind glows. Taps it.
@@ -1374,7 +1374,7 @@ Minds · very unlikely → · unlikely
 Rock, and no life we could see · unlikely → · almost no chance
 A small gas world · very unlikely → · almost no chance
 WHAT WOULD SAY MORE
-The other worlds · if smog is common, it is weather · twelve to read · under way
+The other worlds · if smog is common, it is weather · eleven to read · under way
 Far-side array · everyday radio, if there is any · needs the Moon’s mass driver · later
 THE MIND · Smog, at about our own old level. Burning makes it, and so does weather. One world proves nothing. I am reading the others, to learn how common it is.
 [Talk to the Mind]
@@ -1383,14 +1383,14 @@ Truth: Varn’s people, 67 years before their waking. They burn, as Earth did.
 The calc gives every neighbor Earth’s smog from its first radio on, woken or not. A sample.
 +1:51:19 · Year 22.3
 The phone lights. Opens it.
-Lands · Smog at four worlds of thirteen. Minds, at each: unlikely → roughly even.
+Lands · Smog at four worlds of twelve. Minds, at each: unlikely → roughly even.
 Earth · Year 22.3
 Sol · 2062.3 · 1 Year = 00:05:00
 ENERGY · [75.1%] · MATTER · 1,073 kt · COMPUTE · [100%]
 REPORT · FINDING
 [‹ All reports]
 
-### Smog at four worlds of thirteen
+### Smog at four worlds of twelve
 15 m mirror · 297 days · every world it can read for smog
 WITH SMOG
 Gliese 432 A’s world · felt before Year 0 · 31 ly · smog
@@ -1398,10 +1398,10 @@ Gliese 216 B’s world · a point of light from the sweep · 29 ly · smog
 12 Ophiuchi’s world · felt before Year 0 · 32 ly · smog
 Gliese 1021’s world · a point of light from the sweep · 49 ly · smog
 WITHOUT
-Nine worlds, some with oxygen and none with smog. So it is not ordinary weather.
+Eight worlds, some with oxygen and none with smog. So it is not ordinary weather.
 MINDS, AT EACH WORLD WITH SMOG · BEFORE → NOW
 Minds · unlikely → · roughly even
-THE MIND · UNASKED · Four worlds with smog · And nine without, some of them living. So it is not weather. It may still be something I don’t know. Proof is radio, and the ear for that is 11 Years off. · [What can we do now?] · [Later]
+THE MIND · UNASKED · Four worlds with smog · And eight without, some of them living. So it is not weather. It may still be something I don’t know. Proof is radio, and the ear for that is 11 Years off. · [What can we do now?] · [Later]
 [Talk to the Mind]
 Godview
 Truth: every one is a home. Varn at Gliese 432 A, Kesh at Gliese 216 B, Kirrin at 12 Ophiuchi, Hael at Gliese 1021.

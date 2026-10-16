@@ -409,7 +409,13 @@ Settled 2026-10-13.
   - *The rule.* A warm world's brightness goes as its area over its distance squared. Time grows as distance squared where starlight sets the noise, and as its fourth power where dust does (Stark et al. 2014).
   - *Calibrated on published figures.* An Earth twin at 10 pc is first seen in 3.2 hours. A search for water takes about 22 days for a 6 m mirror, and oxygen four times that. No target gets more than two months.
   - *Reach matters as much as time.* A mirror can't split a world too close to its star in our sky: 56 thousandths of an arcsecond in green light, 84 at oxygen's band, 104 at water's, for a 6.5 m mirror.
-  - *In this game:* Alpha Centauri A's world is seen in minutes, with water in 16 hours and oxygen in 3 days. 82 Eridani d gives water in 3 days. Gliese 432 A's world, 73 thousandths from its star, gives only its color and ozone, in 49 days. 12 Ophiuchi's can be seen and not read.
+  - *Its dark patch has an outer edge too.* Settled 2026-10-16. The edge sits at half the actuators across its shaping mirror, in wavelengths over its width.
+    - *The first mirror has 96 across,* as in HWO's first design case. Its edge: 0.76 arcseconds in green, 0.91 at ozone's band, 1.16 at oxygen's, 1.43 at water's.
+    - *The 15 m mirror has 128 across,* as LUVOIR-A was drawn. Its edge is nearer in our sky: 0.44 arcseconds in green, where smog shows.
+    - *Only Alpha Centauri A and B pass it.* A's warm zone spans 0.89 to 1.56 arcseconds, so its worlds are read in red light, and their smog can't be read by either mirror.
+    - *B's glare is taken as cancelled* by controlling for both stars at once. Labs have shown a millionth, not yet the ten-billionth needed. B sits 5.5 arcseconds from A at Year 0 and 13.6 by Year 5.
+    - Set aside: 64 across, as in HWO's 6.5 m design case, which puts most of A's warm zone out of reach.
+  - *In this game:* Alpha Centauri A's world is seen in minutes, with water in 16 hours and oxygen in 3 days. Its ozone band falls past the dark patch. 82 Eridani d gives water in 3 days. Gliese 432 A's world, 73 thousandths from its star, gives only its color and ozone, in 49 days. 12 Ophiuchi's can be seen and not read.
   - *On the game clock* a day is under a second. So a reading lands within the minute it is ordered, or not at all.
   - *The sweep.* The mirror can split the middle of the warm zone at 110 of the 881 hosts. A first pass gives each up to a day, a sample, and takes about eight weeks. A candidate needs a second visit, weeks to months later, to show it moves with its star.
   - NASA's own list has 164 stars because it reaches past 50 ly. The seed draws nothing out there.
@@ -493,7 +499,7 @@ Settled 2026-10-13.
     - *City lights:* out of reach. Earth's own would show to 0.04 ly.
     - *Going:* a flyby or a probe is the surest way (Haqq-Misra et al. 2025).
   - *Smog is not proof.* Lightning and soil make it too, and clouds can mimic it. It moves the Mind's word.
-  - *What a game holds.* A first pass sees about 4 living homes. The first telescope can read smog at 1 in 10 of them, a 15 m mirror at 8 in 10. A far-side array hears 9 in 10 within a Year.
+  - *What a game holds.* A first pass sees about 4 living homes. The first telescope can read smog at about 1 in 12 of them, a 15 m mirror at about 3 in 4. Recounted 2026-10-16. A far-side array hears 9 in 10 within a Year.
   - *Earth's ground arrays hear almost none.* Held on a star for a Year, an SKA-class deep-field receiver hears about 1 living neighbor in 460. Their loud years are mostly over, as seen from here.
   - *About 1 living neighbor in 8 is out of reach of all of these.* What is left is its own voice, or going.
   - *In the mock's game:* Varn's world, 31 ly off, 80 years before its waking. A far-side array would hear it in 5 hours and a 15 m mirror would read its smog in 5 days. Earth has neither at Year 9.
@@ -526,7 +532,8 @@ Settled 2026-10-13.
     - At 49 ly a pixel is about 13 km. The build, 8 Years, and its want, half a flagship, are samples.
   - *Earth has knocked on stars with no sign of life,* as Cosmic Call did. A suspicion is more than Earth had then.
   - *Next door, in a second game, seed 11.* Hael lives at Alpha Centauri A, awake since 1992.
-    - The sweep's first stop finds its world at Year 7.1. The first mirror reads oxygen and smog in 10 days.
+    - The sweep's first stop finds its world at Year 7.1. The first mirror reads water and oxygen in 34 hours.
+    - Its smog sits past the dark patch's edge, for both mirrors. Since 2026-10-16 the mock reads no smog there, and Minds stays at almost no chance.
     - Its everyday radio, about 10 kW, is under what a Year of Earth's array hears: 290 kW.
     - So the ways differ: radio by Year 34, a lens picture at about 1 km a pixel by Year 31, sails' word by 51.
     - A knock and its answer take 8.6 Years: 43 minutes of play. The mock's player knocks at Year 7.6.

@@ -15,6 +15,11 @@ star sits too near the Sun to point at, are left out on purpose. Sources are in 
 - Reach. A coronagraph can't split a world closer to its star than about 3.5 wavelengths over the mirror's width
   (Stark et al. 2024). For a 6.5 m mirror that is 56 thousandths of an arcsecond in green light, 84 at oxygen's band
   and 104 at water's. And no single target gets more than two months (Stark et al. 2019).
+- Outer edge. Its dark patch ends at about half its deformable mirror's actuators across, in wavelengths over the
+  mirror's width. Settled 2026-10-16: 96 across, as in HWO's first design case (Feinberg et al. 2026), so 48. For
+  6.5 m that is 0.76 arcseconds in green, 0.91 at ozone's band, 1.16 at oxygen's and 1.43 at water's. Only Alpha
+  Centauri A's and B's warm zones reach past it, so their worlds are read in red light. B's own light is taken to be
+  cancelled by controlling for both stars at once: shown in labs to a millionth, not yet to the ten-billionth needed.
 
 The split of the noise at the calibration point is this project's estimate: leaked starlight at a raw contrast of
 1e-10 is about 0.87 of an Earth twin's light, and dust about 0.75. Both are samples. The mirror is not fixed yet either.
@@ -26,9 +31,11 @@ SEEN_H, WATER_D = 3.2, 22.0              # hours to first see an Earth twin at 1
 OXYGEN, OZONE = 4.0, 7.8                 # times water's exposure: S/N 10 for oxygen, S/N 14 for ozone's weak green band, against 5
 CAP_D = 61                               # no target gets more than two months
 MIRROR = 6.5                             # metres, inscribed
+OWA_LD = 48                              # the dark patch's edge, in wavelengths over the mirror's width
 BANDS = {'green': 0.50, 'ozone': 0.60, 'oxygen': 0.76, 'water': 0.94}            # microns
 
 def iwa(microns): return 3.5 * microns * 1e-6 / MIRROR * 206265 * 1000           # thousandths of an arcsecond
+def owa(microns): return OWA_LD * microns * 1e-6 / MIRROR * 206265 * 1000
 
 def ratio(d_pc, radius, a_au, lum):
     """Exposure time over that of an Earth twin of a Sun twin at 10 pc."""
@@ -37,19 +44,20 @@ def ratio(d_pc, radius, a_au, lum):
 
 def observe(d_pc, radius, a_au, lum):
     r, sep = ratio(d_pc, radius, a_au, lum), a_au / d_pc * 1000
-    out = dict(sep=sep, seen_h=SEEN_H * r if sep > iwa(BANDS['green']) else None)
+    out = dict(sep=sep, seen_h=SEEN_H * r if iwa(BANDS['green']) < sep < owa(BANDS['water']) else None)   # seen in its reddest band if need be
     for gas, mult, band in (('water', 1, 'water'), ('oxygen', OXYGEN, 'oxygen'), ('ozone', OZONE, 'ozone')):
         days = WATER_D * r * mult
-        out[gas] = None if sep < iwa(BANDS[band]) else days if days <= CAP_D else float('inf')
+        out[gas] = None if not iwa(BANDS[band]) < sep < owa(BANDS[band]) else days if days <= CAP_D else float('inf')
     return out
 
 def tell(x, unit='d'):
-    if x is None: return 'inside the glare'
+    if x is None: return 'out of reach'
     if x == float('inf'): return 'over two months'
     return f'{x * 24:.0f} hours' if x < 2 else f'{x:.0f} days'
 
 if __name__ == '__main__':
     print('Inner working angle, thousandths of an arcsecond: ' + ', '.join(f'{k} {iwa(v):.0f}' for k, v in BANDS.items()))
+    print('Outer working angle, thousandths of an arcsecond: ' + ', '.join(f'{k} {owa(v):.0f}' for k, v in BANDS.items()))
     print(f"{'world':34} {'ly':>5} {'apart':>7} {'first seen':>12} {'water':>16} {'oxygen':>16} {'ozone':>16}")
     for name, ly, radius, a, lum in (('An Earth twin of a Sun twin, 10 pc', 32.6, 1.0, 1.0, 1.0),
                                      ('Alpha Centauri A, this game’s world', 4.32, 0.97, 1.447, 1.52),

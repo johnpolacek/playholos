@@ -1033,37 +1033,37 @@ MIND · NEW ORDER
 WHAT YOU WANT
 Read its air.
 THE MIND’S VERSION
-OBSERVE · Alpha Centauri A’s world · water, oxygen, then smog · about 10 days
+OBSERVE · Alpha Centauri A’s world · water, oxygen · about 34 hours
 THEN · Back to the sweep
 WAKES YOU · When the reading lands
 [Edit] · [Set the order]
-THE MIND · Set. Water in 9 hours, oxygen in 34 hours, smog in 10 days. The sweep waits. · [Undo]
+THE MIND · Set. Water in 9 hours, oxygen in 34 hours. The sweep waits. · [Undo]
 [Talk to the Mind]
 Godview
 Times are physics: calcs/observing.py for water and oxygen, calcs/signs.py for smog. At 4.3 ly every one is quick.
 +36:30 · Year 7.3
 The Mind glows. Taps it.
-Lands · Alpha Centauri A’s world has oxygen, and smog. Minds: almost no chance → unlikely.
+Lands · Alpha Centauri A’s world has water and oxygen. Life: unlikely → very likely.
 Earth · Year 7.3
 Sol · 2047.3 · 1 Year = 00:05:00
 ENERGY · [11.9%] · MATTER · 252 kt · COMPUTE · [100%]
 REPORT · FIRST READING
 [‹ All reports]
 
-### Oxygen, and smog
-Alpha Centauri A · 4.3 ly · infrared telescope · 10 days · light that left 4 Years ago
-Water and oxygen: a living world. And nitrogen dioxide, at about the level our own air held in 1980. Burning makes it. So do lightning and soil, and a cloud deck can pass for it.
+### Water and oxygen
+Alpha Centauri A · 4.3 ly · infrared telescope · 34 hours · light that left 4 Years ago
+Water and oxygen: a living world. Its smog band is blue, and here that falls past the edge of this mirror’s dark patch.
 WHAT IT COULD BE · BEFORE → NOW
 Life · unlikely → · very likely
-Minds · almost no chance → · unlikely
+Minds · almost no chance
 Rock, and no life we could see · likely → · almost no chance
 WHAT IT CAN’T TELL
 Whether anyone burns it. Smog is a hint, not proof. And nothing since this light left, four Years ago.
-THE MIND · Oxygen, and smog at about our own old level. Burning makes it, and so does weather. I would not call it minds yet. Our radio array can’t hear a world’s everyday radio this far, so silence says little. · [What can we do now?] · [Later]
+THE MIND · Water and oxygen, next door. Alive, most likely. Smog would show in blue light, and this world sits past my dark patch there. · [What can we do now?] · [Later]
 [Talk to the Mind]
 Godview
 Truth: Hael’s people burn, as Earth did. The calc gives every neighbor Earth’s smog from its first radio on, woken or not. A sample.
-Settled 2026-10-13: the first telescope reads smog only within about 12 ly. Here it takes 10 days.
+Settled 2026-10-16: the dark patch ends at 0.76 arcseconds in blue-green light, and this world sits 0.92 out. The 15 m mirror’s ends nearer still, at 0.44.
 Their everyday radio is about 10 kW. A Year of the radio array hears only tones above 291 kW. A far-side array would hear it in minutes.
 Smog at a world this close moves Minds two words. It is still a hint: lightning and soil make it too.
 Settled · How fast does a living neighbor become known? As fast as physics allows, and no faster. Each sign of minds needs its real instrument: everyday radio a far-side array, smog a mirror of about 15 m. The first telescope reads smog only within about 12 light-years, and smog is not proof. Going is the surest way. Settled 2026-10-13.
