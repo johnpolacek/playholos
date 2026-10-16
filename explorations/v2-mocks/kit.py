@@ -60,7 +60,7 @@ def pretty(name):
         n, g, sup, con, comp = m.groups()
         head = (GREEK[g] + (f'{"¹²³"[int(sup) - 1]}' if sup else '')) if g in GREEK else n
         return f'{head} {GEN[con]}{comp or ""}'
-    return name
+    return name.replace("'", '’')                               # the mocks' own apostrophe
 for p in NB: p['star'] = pretty(p['host']['name'])
 
 def clock(years):

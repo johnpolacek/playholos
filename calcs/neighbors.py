@@ -107,10 +107,13 @@ def glow_at(n, waking, year):
 # A world's tug on its star, K. In 2026 the star's own shimmer, about 1 m/s, hides an Earth. Stars watched hardest
 # do better: at Barnard's Star and Proxima, planets near 0.2 to 0.4 m/s are already found. So a star's 2026 floor is
 # the smallest tug among its planets found by radial velocity, if under 1 m/s.
+# A red dwarf's 2026 floor is what the surveys could feel there, from calcs/hosts.py, settled 2026-10-16. One no
+# survey watched hides any warm world. By 2040 a watched red dwarf's floor halves: a decade more, four times the nights.
 # By 2040 a decade of nightly watching reaches about 0.1 m/s for Terra Hunting's bright northern stars, and about
 # 0.3 m/s for other bright Sun-like stars. Above that, Earth found the world: it is a seeded find, not hidden.
 RV_2026 = 1.0
 def rv_2040(host):
+    if host['kind'] == 'M': return min(host.get('rv_floor', RV_2026), host.get('rv_survey', RV_2026) / 2)
     bright_sunlike = host['kind'] in 'GK' and host['luminosity'] > 0.3
     return min((0.1 if host.get('north') else 0.3) if bright_sunlike else 1.0, host.get('rv_floor', RV_2026))
 
@@ -150,9 +153,10 @@ def load_hosts():
                         if p['pl_bmasse'] and p['pl_orbsmax']}
         rv = [p for p in known.get(r['id'], []) + known.get(r['name'], []) + known.get(f"HIP {s.get('hip')}", [])
               if p['discoverymethod'] == 'Radial Velocity']
-        r['rv_floor'] = min([RV_2026] + [float(p['pl_rvamp']) if p['pl_rvamp'] else
-                                         tug(float(p['pl_bmasse']), float(p['pl_orbsmax']), star_mass(r['luminosity']), 1)
-                                         for p in rv if p['pl_rvamp'] or (p['pl_bmasse'] and p['pl_orbsmax'])])
+        r['rv_survey'] = (float(r['rv_floor_2026']) if r['rv_floor_2026'] else math.inf) if r['kind'] == 'M' else RV_2026
+        r['rv_floor'] = min([r['rv_survey']] + [float(p['pl_rvamp']) if p['pl_rvamp'] else
+                                                tug(float(p['pl_bmasse']), float(p['pl_orbsmax']), star_mass(r['luminosity']), 1)
+                                                for p in rv if p['pl_rvamp'] or (p['pl_bmasse'] and p['pl_orbsmax'])])
     return rows
 
 def orbit_fails(host, mass, a, e, pole):

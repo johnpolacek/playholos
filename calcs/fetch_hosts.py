@@ -4,6 +4,7 @@
 - Known planets within 50 ly (NASA Exoplanet Archive, pscomppars).
 - Wide binaries among those stars (El-Badry, Rix and Heintz 2021, via VizieR).
 - Published ages of the Habitable Worlds Observatory's target stars (the HAges Catalog, Ware et al. 2026, via Zenodo).
+- Radial velocity surveys of red dwarfs: CARMENES DR1, the HARPS RV bank, and Keck's HIRES (CDS and VizieR).
 Builds read the cached files and never fetch.
 """
 import csv, math, urllib.parse, urllib.request
@@ -68,7 +69,23 @@ def close_binaries():
             'REQUEST': 'doQuery', 'LANG': 'ADQL', 'FORMAT': 'csv', 'MAXREC': '100000',
             'QUERY': f'SELECT * FROM "B/sb9/{table}"'}, out)
 
+def rv_surveys():
+    """Who watched which star: CARMENES DR1's star list (Ribas et al. 2023), and every velocity in the HARPS RV bank
+    (Trifonov et al. 2020) and Keck's HIRES survey as corrected by Tal-Or et al. 2019."""
+    (CACHE / 'rv').mkdir(exist_ok=True)
+    asu = 'https://vizier.cds.unistra.fr/viz-bin/asu-tsv?-out.max=unlimited&-source='
+    for name, url in (('carmenes-dr1.dat', 'https://cdsarc.cds.unistra.fr/ftp/cats/J/A+A/670/A139/table1.dat'),
+                      ('harps-list.dat', 'https://cdsarc.cds.unistra.fr/ftp/cats/J/A+A/636/A74/list.dat'),
+                      ('harps-rv.tsv', asu + 'J/A+A/636/A74/rvbank&-out=Name,BJD,DRVmlcnzp'),
+                      ('hires-stars.dat', 'https://cdsarc.cds.unistra.fr/ftp/cats/J/MNRAS/484/L8/stars.dat'),
+                      ('hires-rv.tsv', asu + 'J/MNRAS/484/L8/table1&-out=Name,BJD,RVcor')):
+        if (CACHE / 'rv' / name).exists(): print(f'{name}: cached'); continue
+        with urllib.request.urlopen(url, timeout=600) as resp:
+            (CACHE / 'rv' / name).write_bytes(resp.read())
+        print(f'{name}: downloaded')
+
 if __name__ == '__main__':
     main()
     close_binaries()
     ages()
+    rv_surveys()

@@ -651,7 +651,7 @@ BEATS = [
          ['Truth: rubble, as the first reading suggested. A lead can close dull.']),
     (beat(780, 'And the other new world?' if len(FINDS) == 2 else 'And the other new worlds?', None,
           talk(find_clue(780, f=F2, key='find2', busy='free at Year 3, after the Luyten windows'),
-               f'{F2["star"]}, {FARTHER} and {"heavier" if F2["msini"] > F["msini"] else "lighter"}. It doesn’t cross either.' + (f' {NUMW[len(FINDS) - 2].capitalize()} more are on the list.' if len(FINDS) > 2 else '') + ' The array is on Luyten’s Star until Year 3. I can listen here next, if you say so.', ('Queue it', 'Later')),
+               f'{F2["star"]}, {FARTHER} and {"heavier" if F2["msini"] > F["msini"] else "lighter"}. It doesn’t cross either.' + (f' {NUMW[len(FINDS) - 2].capitalize()} more {"is" if len(FINDS) == 3 else "are"} on the list.' if len(FINDS) > 2 else '') + ' The array is on Luyten’s Star until Year 3. I can listen here next, if you say so.', ('Queue it', 'Later')),
           [(f"Truth: {F2['star']}’s world is {F2['who']}’s home." if F2['who'] else f"Truth: {F2['star']}’s world is natural."),
            f'The Mind led with the {"nearer" if len(FINDS) == 2 else "nearest"} world. This one was on the list from Year 0, and the player comes to it in a quiet half-minute.',
            'The Mind offers and waits. The array is the player’s to point.']) if F2 else beat(780)), beat(810),
@@ -1180,7 +1180,7 @@ for w in POINTS:
 SMOGGED = sorted([w for w in POINTS if isinstance(w['smog_d'], float) and w['smog_d'] < math.inf], key=lambda w: w['smog_d'])
 SMOG_HITS = [w for w in SMOGGED if w['smog']]
 SMOG_DAYS = sum(w['smog_d'] for w in SMOGGED)
-NUM = ('no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen')
+NUM = ('no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty', 'twenty-one', 'twenty-two', 'twenty-three', 'twenty-four')
 VOICE2 = next(((p, i) for p in NB for i in p['inbound'] if 12 < i['year'] <= 60 and i.get('allsky')), None)       # a second voice the all-sky watch catches
 FAINT = next(((p, i) for p in NB for i in p['inbound'] if 12 < i['year'] <= 60 and not i.get('allsky')), None)    # and a knock too faint for it
 PLATEAU = ROAD['dc12'] - 11.1

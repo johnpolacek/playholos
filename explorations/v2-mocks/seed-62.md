@@ -13,7 +13,7 @@ Fusion on the grid · Yes, 2038 · a bit under even
 Compute at Year 0 · 100% · 10²⁵ operations a second
 Dials · leans open, expand and deepen, even, near the middle · real history, moved by the branches
 Neighbors · 5 · 3 heard Earth · first arrival Year 47.6
-Seeded find · Gliese 75 · a natural world
+Seeded find · Gliese 1286 · a natural world
 A check on the mocks, built on another game. The mocks’ own game is · seed 10.
 
 ## Godview · who is out there
@@ -24,7 +24,7 @@ Quessa · watcher · strange · Gliese 216 B · K star · 29.4 ly · 02:26:45 ·
 Veyra · watcher · HD 10307 · G star · 41.5 ly · 03:27:45 · awake 16 Years · heard Earth’s radars from 1992, and mapped its day and orbit. Catches Cosmic Call 2, Year 5.1 · stays quiet and aims its instruments at the source · Its answer to Cosmic Call 2: sent Year 6.1, reaches Earth Year 47.6, +03:58:03. Year 0’s sky watch would catch it. The all-sky watch catches it.
 Tolle · watcher · Theta Ursae Majoris · G star · 44.2 ly · 03:40:54 · wakes Year 74.8 · +06:14:00 · has not heard Earth
 Hesk · inward · strange · HD 281621 · M star · 45.4 ly · 03:47:03 · awake 41 Years · heard Earth’s radars from 1995 · nothing new: keeps its plan
-[drawing: Every neighbor in this game, seen from above the galaxy’s plane; labels: 10 ly · 00:50:00, 20 ly · 01:40:00, 30 ly · 02:30:00, 40 ly · 03:20:00, 50 ly · 04:10:00, Earth, Sere, Alpha Centauri B · 4.3 ly, Quessa, Gliese 216 B · 29.4 ly, Veyra, HD 10307 · 41.5 ly, Tolle, Theta Ursae Majoris · 44.2 ly, Hesk, HD 281621 · 45.4 ly, 82 Eridani, Fomalhaut, Luyten’s Star, Gliese 75, HD 122064, Gliese 675, Gliese 611 A, 31 Aquilae]
+[drawing: Every neighbor in this game, seen from above the galaxy’s plane; labels: 10 ly · 00:50:00, 20 ly · 01:40:00, 30 ly · 02:30:00, 40 ly · 03:20:00, 50 ly · 04:10:00, Earth, Sere, Alpha Centauri B · 4.3 ly, Quessa, Gliese 216 B · 29.4 ly, Veyra, HD 10307 · 41.5 ly, Tolle, Theta Ursae Majoris · 44.2 ly, Hesk, HD 281621 · 45.4 ly, 82 Eridani, Fomalhaut, Luyten’s Star, Gliese 1286, Gliese 75, HD 122064, Gliese 675, Gliese 611 A, 31 Aquilae]
 Filled: awake at Year 0. Open: wakes later. Cross: dead. Blue ring: has heard Earth. Amber: a hunter. Diamonds: Earth’s leads.
 
 ## Before Year 0
@@ -137,10 +137,11 @@ Talk to the Mind… · [Send · ↑]
 Earth · Before Year 0
 Sol · The clock starts when you begin
 ENERGY · [1%] · MATTER · 20 kt · COMPUTE · [0%]
-[drawing: Stars near Sol; labels: Sol, 82 Eridani, 19.7 ly · 01:38:30, Fomalhaut, 25.1 ly · 02:05:30, Luyten’s Star, 12.3 ly · 01:01:18, Gliese 75 →, 32.8 ly · 02:43:45 · beyond this view, Gliese 675, 41.7 ly · 03:28:36 · beyond this view, Gliese 611 A, 46.8 ly · 03:54:12 · beyond this view, 31 Aquilae, 48.7 ly · 04:03:21 · beyond this view, 00:50:00, 01:40:00, Alpha Centauri, Procyon, Tau Ceti, Epsilon Eridani, Altair, Vega, 10 ly]
+[drawing: Stars near Sol; labels: Sol, 82 Eridani, 19.7 ly · 01:38:30, Fomalhaut, 25.1 ly · 02:05:30, Luyten’s Star, 12.3 ly · 01:01:18, Gliese 1286, 23.4 ly · 01:57:03, Gliese 75 →, 32.8 ly · 02:43:45 · beyond this view, Gliese 611 A, 46.8 ly · 03:54:12 · beyond this view, 31 Aquilae, 48.7 ly · 04:03:21 · beyond this view, 00:50:00, 01:40:00, Alpha Centauri, Procyon, Tau Ceti, Epsilon Eridani, Altair, Vega, 10 ly]
 [World] · [System] · [selected: Stars] · [Region] · [Galaxy]
-LEADS · 8 · LIGHT-TIME
+LEADS · 9 · LIGHT-TIME
 - A stretched orbit · 82 Eridani · a heavy world, sometimes warm · its air is unread · 01:38:30
+- A new world · Gliese 1286 · felt by ESPRESSO in 2034 · at least 1.8 Earths · 01:57:03
 - A new world · Gliese 75 · felt by Terra Hunting in 2036 · at least 1.1 Earths · 02:43:45
 - A new world · HD 122064 · felt by Terra Hunting in 2036 · at least 1.6 Earths · 02:44:09
 - A new world · Gliese 675 · felt by Terra Hunting in 2036 · at least 2.6 Earths · 03:28:36
@@ -150,12 +151,13 @@ LEADS · 8 · LIGHT-TIME
 - A reply could come · Luyten’s Star · to our 2017 message · Year 2.3 · 00:11:30
 Godview
 82 Eridani d is real and natural. No neighbor is there in this game.
-Gliese 75’s world is natural: the seed put no neighbor there. Earth can’t tell from here.
+Gliese 1286’s world is natural: the seed put no neighbor there. Earth can’t tell from here.
+Gliese 75’s world is natural.
 HD 122064’s world is natural.
 Gliese 675’s world is natural.
 Gliese 611 A’s world is natural.
 31 Aquilae’s world is natural.
-Earth holds five felt worlds at Year 0, and the list shows every one. The Mind leads with the nearest: a rule that uses nothing the seed knows.
+Earth holds six felt worlds at Year 0, and the list shows every one. The Mind leads with the nearest: a rule that uses nothing the seed knows.
 Fomalhaut is 440 million years old: too young for minds, so it is never a host. Its clouds are rubble.
 Luyten’s Star: no one lives there. About 3 games in 10 put someone at a star Earth knocked on.
 9 · Planning
@@ -255,28 +257,28 @@ Truth: rubble. Nothing at Fomalhaut is built.
 Kappa¹ Ceti is under a billion years old: too young for minds, so it is never a host.
 +1:00 · Year 0.2
 “Later. And the new worlds?”
-Lands · None of the five new worlds crosses its star.
+Lands · None of the six new worlds crosses its star.
 Earth · Year 0.2
 Sol · 2040.2 · 1 Year = 00:05:00
 ENERGY · [1.0%] · MATTER · 23 kt · COMPUTE · [60%]
-[drawing: STARS · GLIESE 75 · 32.8 LY · 02:43:45; labels: Sol, 82 Eridani, 19.7 ly · 01:38:30, Fomalhaut, 25.1 ly · 02:05:30, Luyten’s Star, 12.3 ly · 01:01:18, Gliese 75 →, 32.8 ly · 02:43:45 · beyond this view, Gliese 675, 41.7 ly · 03:28:36 · beyond this view, Gliese 611 A, 46.8 ly · 03:54:12 · beyond this view, 31 Aquilae, 48.7 ly · 04:03:21 · beyond this view, 00:50:00, 01:40:00, Alpha Centauri, Procyon, Tau Ceti, Epsilon Eridani, Altair, Vega] · STARS · GLIESE 75 · 32.8 LY · 02:43:45
+[drawing: STARS · GLIESE 1286 · 23.4 LY · 01:57:03; labels: Sol, 82 Eridani, 19.7 ly · 01:38:30, Fomalhaut, 25.1 ly · 02:05:30, Luyten’s Star, 12.3 ly · 01:01:18, Gliese 1286, 23.4 ly · 01:57:03, Gliese 75 →, 32.8 ly · 02:43:45 · beyond this view, Gliese 611 A, 46.8 ly · 03:54:12 · beyond this view, 31 Aquilae, 48.7 ly · 04:03:21 · beyond this view, 00:50:00, 01:40:00, Alpha Centauri, Procyon, Tau Ceti, Epsilon Eridani, Altair, Vega] · STARS · GLIESE 1286 · 23.4 LY · 01:57:03
 CLUE · YEAR 0.2
-[‹ Gliese 75]
+[‹ Gliese 1286]
 
-### A world at Gliese 75
-Gliese 75 · 32.8 ly · felt by Terra Hunting, 2036 · light that left 33 Years ago
-At least 1.1 Earth masses. A year of 305 days, 0.84 AU out, inside its star’s warm zone. It doesn’t cross its star, so we have its least mass and not its size.
+### A world at Gliese 1286
+Gliese 1286 · 23.4 ly · felt by ESPRESSO, 2034 · light that left 23 Years ago
+At least 1.8 Earth masses. A year of 9 days, 0.05 AU out, inside its star’s warm zone. It doesn’t cross its star, so we have its least mass and not its size.
 WHAT IT COULD BE · NOW
 Rock, and no life we could see · likely
 A small gas world · unlikely
 Life · very unlikely
 Minds · almost no chance
 WITH WHAT WE HAVE
-Listen to Gliese 75 for a Year · Radio array · rules out steady tones above 17 MW · 1 Year · 00:05:00 · [Start]
-THE MIND · The nearest first. It doesn’t cross, so its air stays hidden. I can listen for a Year, at a tenth of compute. That hears only the loud: tones above 17 MW. · [Listen for a Year] · [Later]
+Listen to Gliese 1286 for a Year · Radio array · rules out steady tones above 9 MW · 1 Year · 00:05:00 · [Start]
+THE MIND · The nearest first. It doesn’t cross, so its air stays hidden. I can listen for a Year, at a tenth of compute. That hears only the loud: tones above 9 MW. · [Listen for a Year] · [Later]
 [Talk to the Mind]
 Godview
-Gliese 75’s world is natural: the seed put no neighbor there. Earth can’t tell from here.
+Gliese 1286’s world is natural: the seed put no neighbor there. Earth can’t tell from here.
 +1:30 · Year 0.3
 “82 Eridani?”
 Lands · 82 Eridani d’s orbit holds. Shimmer: very unlikely → almost no chance.
@@ -310,7 +312,7 @@ ENERGY · [1.0%] · MATTER · 26 kt · COMPUTE · [100%]
 Read the air of nearby worlds.
 A mirror wide enough to split a world from its star and say what its air is made of. The Habitable Worlds Observatory, under way for years, finished.
 HELPS WITH
-82 Eridani d · Gliese 75’s world · Air, oceans, and the gases a living or built world leaves
+82 Eridani d · Gliese 1286’s world · Air, oceans, and the gases a living or built world leaves
 USES EACH YEAR
 Compute · [15%] · 15%
 Energy · [1%] · under 1%
@@ -429,7 +431,7 @@ NEW
 EARLIER
 - No thick air on Gliese 12 b · Gliese 12 · 39.7 ly · Year 0.5
 - The stretched orbit is real · 82 Eridani · 19.7 ly · Year 0.3
-- Gliese 75’s world doesn’t cross · Gliese 75 · 32.8 ly · Year 0.2
+- Gliese 1286’s world doesn’t cross · Gliese 1286 · 23.4 ly · Year 0.2
 - A third cloud at Fomalhaut · Fomalhaut · 25.1 ly · Year 0.1
 THE MIND · Two of Tau Ceti’s four keep time. The outer one sits at the cold edge of its warm zone, twelve light-years off. The telescope you started could see it. And Barnard’s Star has no fifth world.
 [Talk to the Mind]
@@ -457,14 +459,14 @@ THE MIND · The data center runs: half again as much thought, for half a percent
 [Talk to the Mind]
 Settled · What stops a data center every Year? Chips set the pace: the fabs fill one a Year, each +50% compute. Energy sets the ceiling, near a hundredfold. Settled 2026-10-10.
 +5:30 · Year 1.1
-“Keep them coming. And listen to Gliese 75 for a Year.”
+“Keep them coming. And listen to Gliese 1286 for a Year.”
 Earth · Year 1.1
 Sol · 2041.1 · 1 Year = 00:05:00
 ENERGY · [1.6%] · MATTER · 36 kt · COMPUTE · [100%]
 [drawing: ORBIT · EARTH · 4 BUILDING; labels: the Moon, Earth, low orbit, All-sky watch · 18%, Deep flash watch · 18%, Second data center · 0%, Infrared telescope · 9%] · ORBIT · EARTH · 4 BUILDING
 PROJECTS · 5 BUILDING · 1 OBSERVING
 OBSERVING · WITH WHAT WE HAVE
-Listen to Gliese 75 for a Year · Radio array · tones above 17 MW · under way · 00:05:00
+Listen to Gliese 1286 for a Year · Radio array · tones above 9 MW · under way · 00:05:00
 STUDYING · NEXT FINDING: EPSILON INDI
 BUILDING · 5
 - All-sky watch · two sites, one in each hemisphere · 3.1 Years · 00:15:30
@@ -660,24 +662,24 @@ No one lives at LHS 1140 in this game.
 Nothing new. · A dead 30 seconds.
 +10:30 · Year 2.1
 The Mind glows. Taps it.
-Lands · A Year of listening: nothing loud at Gliese 75.
+Lands · A Year of listening: nothing loud at Gliese 1286.
 Earth · Year 2.1
 Sol · 2042.1 · 1 Year = 00:05:00
 ENERGY · [2.3%] · MATTER · 41 kt · COMPUTE · [100%]
 REPORT · READING · 1 YEAR
 [‹ All reports]
 
-### Nothing loud at Gliese 75
-Gliese 75 · 32.8 ly · radio array · 1 Year · light that left 33 Years ago
-A Year of listening, part of every night. Nothing from Gliese 75 stands above the sky’s own noise.
+### Nothing loud at Gliese 1286
+Gliese 1286 · 23.4 ly · radio array · 1 Year · light that left 23 Years ago
+A Year of listening, part of every night. Nothing from Gliese 1286 stands above the sky’s own noise.
 WHAT IT RULES OUT
-Steady tones above about 17 MW, as of 33 Years ago: a beacon, a broadcast, or radars like ours pointed this way.
+Steady tones above about 9 MW, as of 23 Years ago: a beacon, a broadcast, or radars like ours pointed this way.
 WHAT IT CAN’T TELL
 Anyone quieter. A world’s everyday radio is thousands of times fainter than that. And anything they did since.
 WHAT WOULD HEAR MORE
 Deep-field receiver · hears fainter · 12 Years · ground · 12 Years · 01:00:00
 Far-side array · hears a world’s everyday radio · needs Moon industry · later
-THE MIND · Nothing above 17 MW at Gliese 75. Quiet, or empty. Our own radars are louder than that, so it rules out a world like ours was.
+THE MIND · Nothing above 9 MW at Gliese 1286. Quiet, or empty. Our own radars are louder than that, so it rules out a world like ours was.
 [Talk to the Mind]
 Godview
 Truth: nothing was there to hear.
@@ -747,24 +749,24 @@ Truth: rubble, as the first reading suggested. A lead can close dull.
 Earth · Year 2.6
 Sol · 2042.6 · 1 Year = 00:05:00
 ENERGY · [2.3%] · MATTER · 49 kt · COMPUTE · [100%]
-[drawing: STARS · HD 122064 · 32.8 LY · 02:44:09; labels: Sol, 82 Eridani, 19.7 ly · 01:38:30, Fomalhaut, 25.1 ly · 02:05:30, Luyten’s Star, 12.3 ly · 01:01:18, Gliese 75 →, 32.8 ly · 02:43:45 · beyond this view, Gliese 675, 41.7 ly · 03:28:36 · beyond this view, Gliese 611 A, 46.8 ly · 03:54:12 · beyond this view, 31 Aquilae, 48.7 ly · 04:03:21 · beyond this view, 00:50:00, 01:40:00, Alpha Centauri, Procyon, Tau Ceti, Epsilon Eridani, Altair, Vega] · STARS · HD 122064 · 32.8 LY · 02:44:09
+[drawing: STARS · GLIESE 75 · 32.8 LY · 02:43:45; labels: Sol, 82 Eridani, 19.7 ly · 01:38:30, Fomalhaut, 25.1 ly · 02:05:30, Luyten’s Star, 12.3 ly · 01:01:18, Gliese 1286, 23.4 ly · 01:57:03, Gliese 75 →, 32.8 ly · 02:43:45 · beyond this view, Gliese 611 A, 46.8 ly · 03:54:12 · beyond this view, 31 Aquilae, 48.7 ly · 04:03:21 · beyond this view, 00:50:00, 01:40:00, Alpha Centauri, Procyon, Tau Ceti, Epsilon Eridani, Altair, Vega] · STARS · GLIESE 75 · 32.8 LY · 02:43:45
 CLUE · YEAR 2.6
-[‹ HD 122064]
+[‹ Gliese 75]
 
-### A world at HD 122064
-HD 122064 · 32.8 ly · felt by Terra Hunting, 2036 · light that left 33 Years ago
-At least 1.6 Earth masses. A year of 243 days, 0.69 AU out, inside its star’s warm zone. It doesn’t cross its star, so we have its least mass and not its size.
+### A world at Gliese 75
+Gliese 75 · 32.8 ly · felt by Terra Hunting, 2036 · light that left 33 Years ago
+At least 1.1 Earth masses. A year of 305 days, 0.84 AU out, inside its star’s warm zone. It doesn’t cross its star, so we have its least mass and not its size.
 WHAT IT COULD BE · NOW
 Rock, and no life we could see · likely
 A small gas world · unlikely
 Life · very unlikely
 Minds · almost no chance
 WITH WHAT WE HAVE
-Listen to HD 122064 for a Year · Radio array · free at Year 3, after the Luyten windows · 1 Year · 00:05:00 · [Queue]
-THE MIND · HD 122064, a little farther and heavier. It doesn’t cross either. Three more are on the list. The array is on Luyten’s Star until Year 3. I can listen here next, if you say so. · [Queue it] · [Later]
+Listen to Gliese 75 for a Year · Radio array · free at Year 3, after the Luyten windows · 1 Year · 00:05:00 · [Queue]
+THE MIND · Gliese 75, twice as far and lighter. It doesn’t cross either. Four more are on the list. The array is on Luyten’s Star until Year 3. I can listen here next, if you say so. · [Queue it] · [Later]
 [Talk to the Mind]
 Godview
-Truth: HD 122064’s world is natural.
+Truth: Gliese 75’s world is natural.
 The Mind led with the nearest world. This one was on the list from Year 0, and the player comes to it in a quiet half-minute.
 The Mind offers and waits. The array is the player’s to point.
 +13:30 · Year 2.7
@@ -801,7 +803,7 @@ ENERGY · [2.3%] · MATTER · 55 kt · COMPUTE · [100%]
 MIND · WHAT WAKES YOU
 YOU CHOSE
 - The all-sky watch and flash watch are built · then little aimed at us is missed · Year 4.2 · 00:06:00
-- The infrared telescope is done · then it reads 82 Eridani d and Gliese 75 · Year 6.1 · 00:15:30
+- The infrared telescope is done · then it reads 82 Eridani d and Gliese 1286 · Year 6.1 · 00:15:30
 - Thinking draws a tenth of our energy · 6 data centers in · Year 6.1 · 00:15:30
 - A reply could come · Gliese 526 · to our 2013 message · Year 9 · 00:30:00
 - The Moon vault is done · the Mind’s second home · Year 9.1 · 00:30:30
@@ -909,7 +911,7 @@ ENERGY · [11.9%] · MATTER · 203 kt · COMPUTE · [100%]
 MIND · THE NEW TELESCOPE
 ONE WORLD AT A TIME · YOURS TO ORDER
 [selected: 82 Eridani d · wide and bright · water, then oxygen · 11 days · 00:00:09]
-Gliese 75 · HD 122064 · Gliese 675 · Gliese 611 A · 31 Aquilae · close in or faint · seen, not read · out of reach
+Gliese 1286 · Gliese 75 · HD 122064 · Gliese 675 · Gliese 611 A · 31 Aquilae · close in or faint · seen, not read · out of reach
 WHEN IDLE · ITS SEARCH
 The warm zones of 110 near stars · nearest first · a first pass takes about eight weeks · [Set]
 WHAT SETS THE TIME
@@ -917,7 +919,7 @@ How bright the world is from here, and how far it sits from its star’s glare.
 THE MIND · It can split a world from its star only when they sit far enough apart in our sky. 82 Eridani d is wide and bright: days. None of the new worlds can be read with this mirror: each sits too close to its star, or is too faint. · [Order them] · [Later]
 [Talk to the Mind]
 Godview
-Gliese 75’s world is natural. HD 122064’s world is natural. Gliese 675’s world is natural. Gliese 611 A’s world is natural. 31 Aquilae’s world is natural. Earth has held them as leads since Year 0.
+Gliese 1286’s world is natural. Gliese 75’s world is natural. HD 122064’s world is natural. Gliese 675’s world is natural. Gliese 611 A’s world is natural. 31 Aquilae’s world is natural. Earth has held them as leads since Year 0.
 Times are from calcs/observing.py. A day of telescope time is under a second of play.
 Settled · What sets how long an observation takes? Physics. A nearer or larger world is brighter, so its reading comes sooner: hours at Alpha Centauri, days at 82 Eridani. A world too close to its star in our sky can’t be read at all. Seasons are left out for now. Settled 2026-10-13.
 Settled · At Year 0, how many of its felt worlds does Earth show? All of them, and the Mind leads with one: the nearest, a rule that uses nothing the seed knows. Earth holds two to four felt worlds in 6 games of 10, and in about half of games none is a home. Settled 2026-10-13.
@@ -1105,7 +1107,7 @@ HOLOS · THE MIND · A receiver would hear some of them better · On one of thes
 Godview
 Truth: 2 are homes. Quessa’s world at Gliese 216 B, Veyra’s world at HD 10307.
 13 are natural, from Groombridge 34 at 12 ly to Gliese 1021 at 49. Truth: 1 airy and lifeless, 4 hiding microbes, 3 showing oxygen, 1 with animals and forests, 2 where life died, 2 frozen.
-Their ages: 8 published, 5 drawn. The seed drew 148 natural worlds in all, 109 at red dwarfs, and 88 are bare rock.
+Their ages: 8 published, 5 drawn. The seed drew 178 natural worlds in all, 139 at red dwarfs, and 113 are bare rock.
 From here a home and a natural world look alike: a point of light that moves with its star.
 The Mind calls Minds almost no chance at each. In truth 2 of 15 are homes: very unlikely. It never reads the seed.
 Each needed a second visit, months after the first. Most are too far to read with this mirror.
@@ -1158,7 +1160,7 @@ Saturday · 17:24
 HOLOS · SWEEPING · The infrared telescope: its second pass · Any candidate wakes you.
 HOLOS · SENT · Alpha Centauri B: our knock lands at Year 11.5 · An answer could come by Year 16. The all-sky watch is listening.
 Godview
-The telescope is back on its sweep. Gliese 75’s world, HD 122064’s world, Gliese 675’s world, Gliese 611 A’s world and 31 Aquilae’s world wait for a better mirror.
+The telescope is back on its sweep. Gliese 1286’s world, Gliese 75’s world, HD 122064’s world, Gliese 675’s world, Gliese 611 A’s world and 31 Aquilae’s world wait for a better mirror.
 No other voice is on its way in the next two hours.
 From minute 15 to minute 60 the player was woken five times and played about seven minutes.
 

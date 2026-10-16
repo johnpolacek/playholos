@@ -1,7 +1,7 @@
 """Which stars within 50 ly could host a neighbor? For v2 open question 4. Run: python3 calcs/hosts.py
 
 Reads the census (.cache/gcns-100ly.csv, .cache/hygdata_v41.csv) and what calcs/fetch_hosts.py cached:
-Gaia DR3 FLAME ages and luminosities, and known planets from the NASA Exoplanet Archive.
+Gaia DR3 FLAME ages and luminosities, known planets from the NASA Exoplanet Archive, and red dwarf velocity surveys.
 Writes data/hosts-50ly.csv. Sources are in HOLOS_RESEARCH.md.
 """
 import csv, math, re, collections
@@ -234,6 +234,53 @@ def planets():
         if r['hip_name']: by_host[r['hip_name'].replace(' ', ' ')].append(r)
     return by_host
 
+# ---------- Who watched each red dwarf, and how small a tug they could feel by 2026 ----------
+# Settled 2026-10-16. Three public surveys, matched by position: CARMENES DR1 (Ribas et al. 2023), the HARPS RV bank
+# (Trifonov et al. 2020) and Keck's HIRES (Butler et al. 2017, corrected by Tal-Or et al. 2019). A star counts as
+# watched with 10 or more nights in one of them. Its floor is the smallest tug that survey could feel: a sine of K in
+# nightly scatter sigma over N nights reaches a 1% false alarm near K = 6.8 sigma / sqrt(N), this project's rule of
+# thumb. CARMENES's list gives no scatter, so its median, 3.9 m/s, stands in. Surveys after 2020 are not counted.
+RV_SNR, RV_NIGHTS, CARMENES_SIGMA = 6.8, 10, 3.9
+def rv_watch(star_list):
+    import statistics
+    def j2000(s):
+        return s['ra'] - s['pmra'] * 16 / 3.6e6 / math.cos(math.radians(s['dec'])), s['dec'] - s['pmde'] * 16 / 3.6e6
+    def sexa(line, ra, dec):
+        h, m, sec = int(line[ra[0]:ra[0] + 2]), int(line[ra[0] + 3:ra[0] + 5]), float(line[ra[0] + 6:ra[1]])
+        sign, d, dm, ds = line[dec[0]], int(line[dec[0] + 1:dec[0] + 3]), int(line[dec[0] + 4:dec[0] + 6]), float(line[dec[0] + 7:dec[1]] or 0)
+        return 15 * (h + m / 60 + sec / 3600), (-1 if sign == '-' else 1) * (d + dm / 60 + ds / 3600)
+    def nights(path):
+        out = {}
+        for line in (CACHE / 'rv' / path).open():
+            p = line.rstrip('\n').split('\t')
+            try: name, t, v = p[0].strip(), float(p[1]), float(p[2])
+            except (ValueError, IndexError): continue
+            if v > -9e6: out.setdefault(name, {}).setdefault(math.floor(t), []).append(v)
+        return {k: [statistics.mean(v) for v in n.values()] for k, n in out.items()}
+    surveys = []
+    for label, listing, rv, ra, dec in (('HARPS', 'harps-list.dat', 'harps-rv.tsv', (16, 29), (30, 43)),
+                                        ('HIRES', 'hires-stars.dat', 'hires-rv.tsv', (15, 26), (27, 38))):
+        vals, pos = nights(rv), {}
+        for line in (CACHE / 'rv' / listing).open():
+            try: pos[line[:ra[0] - 1].strip()] = sexa(line, ra, dec)
+            except ValueError: pass
+        surveys.append((label, [(n, *pos[n], len(v), statistics.pstdev(v)) for n, v in vals.items() if n in pos and len(v) >= RV_NIGHTS]))
+    carmenes = []                                              # positions from the name, J hhmm.m +dd.d, truncated
+    for line in (CACHE / 'rv' / 'carmenes-dr1.dat').open():
+        k, n = line[:11].strip(), int(line[37:40].strip() or line[41:44].strip() or 0)
+        ra, dec = 15 * (int(k[1:3]) + int(k[3:5]) / 60 + int(k[5]) / 600), (1 if k[6] == '+' else -1) * (int(k[7:9]) + int(k[9]) / 10)
+        if n >= RV_NIGHTS: carmenes.append((k, ra + 0.0125, dec + math.copysign(0.05, dec), n, CARMENES_SIGMA))
+    out = {}
+    for s in star_list:
+        if s['kind'] != 'M': continue
+        ra, dec = j2000(s); got = []
+        for label, rows in surveys:
+            got += [(RV_SNR * sd / math.sqrt(n), label, n) for name, r, d, n, sd in rows
+                    if abs(d - dec) < 0.01 and 3600 * math.hypot((r - ra) * math.cos(math.radians(dec)), d - dec) < 20]
+        got += [(RV_SNR * sd / math.sqrt(n), 'CARMENES', n) for k, r, d, n, sd in carmenes if abs(d - dec) < 0.06 and abs(r - ra) < 0.02]
+        if got: out[s['id']] = min(got)
+    return out
+
 def hz(lum):
     """Conservative warm zone, after Kopparapu et al. 2013, in AU."""
     return 0.95 * math.sqrt(lum), 1.67 * math.sqrt(lum)
@@ -253,7 +300,7 @@ def main():
     name_from_hyg(s_list)
     hipparcos(s_list)
     import binaries, scorch
-    ages, pl, pairs, close = flame(), planets(), companions(s_list), binaries.close_orbits(s_list)
+    ages, pl, pairs, close, watch = flame(), planets(), companions(s_list), binaries.close_orbits(s_list), rv_watch(s_list)
     kept, dropped, dated = [], collections.Counter(), published_ages()
     for s in [s for s in s_list if s['kind']]:
         f = ages.get(s['id'], {})
@@ -288,11 +335,15 @@ def main():
     out = ROOT / 'data' / 'hosts-50ly.csv'
     with out.open('w', newline='') as fh:
         w = csv.writer(fh)
-        w.writerow(['id', 'name', 'kind', 'distance_ly', 'luminosity', 'warm_zone_au', 'age_gyr', 'weight', 'age_pub_gyr', 'age_pub_by'])
+        w.writerow(['id', 'name', 'kind', 'distance_ly', 'luminosity', 'warm_zone_au', 'age_gyr', 'weight', 'age_pub_gyr', 'age_pub_by',
+                    'rv_floor_2026', 'rv_watched_by'])
         for s in sorted(kept, key=lambda s: s['d_pc']):
             w.writerow([s['id'], s['name'], s['kind'], f"{s['d_pc'] * LY_PC:.2f}", f"{s['lum']:.3g}",
-                        f"{s['hz_in']:.2f}-{s['hz_out']:.2f}", s['age'][:4] if s['age'] else '', s['weight'], *dated.get(s['id'], ('', ''))])
+                        f"{s['hz_in']:.2f}-{s['hz_out']:.2f}", s['age'][:4] if s['age'] else '', s['weight'], *dated.get(s['id'], ('', '')),
+                        *((f"{watch[s['id']][0]:.2f}", f"{watch[s['id']][1]} {watch[s['id']][2]} {'velocities' if watch[s['id']][1] == 'CARMENES' else 'nights'}") if s['id'] in watch else ('', ''))])
     print(f"  {sum(s['id'] in dated for s in kept)} hosts have a published age from asteroseismology or spin (HAges).")
+    m = [s for s in kept if s['kind'] == 'M']; f = [watch[s['id']][0] for s in m if s['id'] in watch]
+    print(f"  {len(f)} of {len(m)} red dwarf hosts were watched by 2020's surveys. {sum(x < 2 for x in f)} could feel under 2 m/s, {sum(x < 3 for x in f)} under 3.")
     print(f'  wrote {out.relative_to(ROOT)}')
 
 # ---------- How loud a neighbor may be ----------

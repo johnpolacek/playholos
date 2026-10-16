@@ -12,8 +12,8 @@ People on Mars · No · 15%
 Fusion on the grid · No · a bit under even
 Compute at Year 0 · 67% · 6.7×10²⁴ operations a second
 Dials · leans open, expand and deepen, even, near the middle · real history, moved by the branches
-Neighbors · 19 · 14 heard Earth · first arrival Year 59.2
-Seeded find · Keid · a natural world
+Neighbors · 19 · 15 heard Earth · first arrival Year 59.2
+Seeded find · Kapteyn’s Star · a natural world
 A check on the mocks, built on another game. The mocks’ own game is · seed 10.
 
 ## Godview · who is out there
@@ -34,11 +34,11 @@ Wenn · watcher · Gliese 3371 A · M star · 44.0 ly · 03:39:57 · wakes Year 
 Sere · watcher · Gliese 528 A · K star · 44.0 ly · 03:40:06 · awake 28 Years · heard Earth’s radars from 1994 · stays quiet and aims its instruments at the source
 Kesh · watcher · Gliese 898 · K star · 47.5 ly · 03:57:15 · awake 48 Years · heard Earth’s radars from 1997 · stays quiet and aims its instruments at the source
 Sabe · contacter · 72 Herculis · G star · 47.6 ly · 03:57:51 · wakes Year 11.4 · +00:57:08 · heard Earth’s radars from 1998, and mapped its day and orbit · at waking: knocks back: a short aimed signal, its name optional · Its answer to Earth’s radars: sent Year 11.7, reaches Earth Year 59.2, +04:56:14. Year 0’s sky watch would miss it. The all-sky watch catches it.
-Corra · watcher · Gaia 89593331327905536 · M star · 47.7 ly · 03:58:39 · wakes Year 52.1 · +04:20:22 · has not heard Earth
+Corra · watcher · Gaia 89593331327905536 · M star · 47.7 ly · 03:58:39 · awake 48 Years · heard Earth’s radars from 1998 · stays quiet and aims its instruments at the source · Its colony at Gliese 104, 2.8 ly from its parent, lands Year 44.6.
 Veyra · watcher · Gliese 796 · G star · 47.9 ly · 03:59:15 · awake 56 Years · heard Earth’s radars from 1998, and mapped its day and orbit · builds pickets and depots toward the source
 Ulan · inward · Gliese 833 · K star · 48.3 ly · 04:01:36 · wakes Year 48.0 · +03:59:58 · has not heard Earth
 Daal · hunter · 31 Aquilae · G star · 48.7 ly · 04:03:21 · awake 28 Years · heard Earth’s radars from 1999, and mapped its day and orbit · stays quiet and aims its instruments at the source
-[drawing: Every neighbor in this game, seen from above the galaxy’s plane; labels: 10 ly · 00:50:00, 20 ly · 01:40:00, 30 ly · 02:30:00, 40 ly · 03:20:00, 50 ly · 04:10:00, Earth, Iru, Gliese 570 A · 19.2 ly, Pelle, Mu Herculis · 27.2 ly, Tavi, Gliese 618 A · 27.8 ly, Odun, Gliese 519 · 36.0 ly, Ruun, 11 Leonis Minoris · 36.6 ly, Arro, Gliese 325 A · 37.8 ly, Anwe, Zeta² Reticuli · 39.3 ly, Tolle, Gliese 675 · 41.7 ly, Sere, Gliese 528 A · 44.0 ly, Veyra, Gliese 796 · 47.9 ly, Daal, 31 Aquilae · 48.7 ly, 82 Eridani, Fomalhaut, Luyten’s Star, Keid, HD 122064, Gliese 675, 72 Herculis]
+[drawing: Every neighbor in this game, seen from above the galaxy’s plane; labels: 10 ly · 00:50:00, 20 ly · 01:40:00, 30 ly · 02:30:00, 40 ly · 03:20:00, 50 ly · 04:10:00, Earth, Iru, Gliese 570 A · 19.2 ly, Pelle, Mu Herculis · 27.2 ly, Tavi, Gliese 618 A · 27.8 ly, Odun, Gliese 519 · 36.0 ly, Ruun, 11 Leonis Minoris · 36.6 ly, Arro, Gliese 325 A · 37.8 ly, Anwe, Zeta² Reticuli · 39.3 ly, Tolle, Gliese 675 · 41.7 ly, Sere, Gliese 528 A · 44.0 ly, Veyra, Gliese 796 · 47.9 ly, Daal, 31 Aquilae · 48.7 ly, 82 Eridani, Fomalhaut, Luyten’s Star, Kapteyn’s Star, Keid, HD 122064, Gliese 675, 72 Herculis]
 Filled: awake at Year 0. Open: wakes later. Cross: dead. Blue ring: has heard Earth. Amber: a hunter. Diamonds: Earth’s leads.
 
 ## Before Year 0
@@ -53,7 +53,7 @@ You are its Will. · What Earth becomes is yours to choose.
 [Skip the memories] · [Where we come from]
 Godview
 The seed is drawn now, before the first screen: seed 11. The player never sees it.
-19 neighbors within 50 ly. 14 have heard Earth. 8 are not awake yet. 2 dead.
+19 neighbors within 50 ly. 15 have heard Earth. 7 are not awake yet. 2 dead.
 2 · Where we come from
 BEFORE YEAR 0 · WHERE WE COME FROM
 
@@ -101,7 +101,7 @@ Kappa¹ Ceti Year 0.1 · Gliese 208 Year 0.8 · 55 Cancri Year 4.6 · HD 10307 Y
 I can say where our noise has gone. · I can’t say who heard it. · No one can, yet.
 [What you inherit]
 Godview
-Heard Earth’s radars: Hael, Iru, Lusk, Odun, Ruun, Arro, Tolle, Ombe, Wenn, Sere, Kesh, Sabe, Veyra, Daal.
+Heard Earth’s radars: Hael, Iru, Lusk, Odun, Ruun, Arro, Tolle, Ombe, Wenn, Sere, Kesh, Sabe, Corra, Veyra, Daal.
 At the stars Earth knocked on: no one, in this game.
 The Mind lists where the noise went, never who heard. That holds here.
 Before Year 0, 2 aimed signals reached Earth unheard: Hael’s gift in 1996 and 1997. Nothing recorded them, so no archive holds them.
@@ -150,10 +150,11 @@ Talk to the Mind… · [Send · ↑]
 Earth · Before Year 0
 Sol · The clock starts when you begin
 ENERGY · [1%] · MATTER · 20 kt · COMPUTE · [0%]
-[drawing: Stars near Sol; labels: Sol, 82 Eridani, 19.7 ly · 01:38:30, Fomalhaut, 25.1 ly · 02:05:30, Luyten’s Star, 12.3 ly · 01:01:18, Keid, 16.3 ly · 01:21:42, Gliese 505 A, 35.8 ly · 02:59:09 · beyond this view, Gliese 675, 41.7 ly · 03:28:36 · beyond this view, 00:50:00, 01:40:00, Alpha Centauri, Procyon, Tau Ceti, Epsilon Eridani, Barnard’s Star, Altair, Vega, Epsilon Indi, 61 Cygni, 10 ly]
+[drawing: Stars near Sol; labels: Sol, 82 Eridani, 19.7 ly · 01:38:30, Fomalhaut, 25.1 ly · 02:05:30, Luyten’s Star, 12.3 ly · 01:01:18, Kapteyn’s Star, 12.9 ly · 01:04:27, Keid, 16.3 ly · 01:21:42, Gliese 505 A, 35.8 ly · 02:59:09 · beyond this view, Gliese 675, 41.7 ly · 03:28:36 · beyond this view, 00:50:00, 01:40:00, Alpha Centauri, Sirius, Procyon, Tau Ceti, Epsilon Eridani, Altair, Vega, 61 Cygni, 10 ly]
 [World] · [System] · [selected: Stars] · [Region] · [Galaxy]
-LEADS · 8 · LIGHT-TIME
+LEADS · 9 · LIGHT-TIME
 - A stretched orbit · 82 Eridani · a heavy world, sometimes warm · its air is unread · 01:38:30
+- A new world · Kapteyn’s Star · felt by ESPRESSO in 2034 · at least 1.9 Earths · 01:04:27
 - A new world · Keid · felt by Terra Hunting in 2036 · at least 1 Earth · 01:21:42
 - A new world · HD 122064 · felt by Terra Hunting in 2036 · at least 1.8 Earths · 02:44:09
 - A new world · Gliese 505 A · felt by Terra Hunting in 2036 · at least 1.1 Earths · 02:59:09
@@ -163,12 +164,13 @@ LEADS · 8 · LIGHT-TIME
 - A reply could come · Luyten’s Star · to our 2017 message · Year 2.3 · 00:11:30
 Godview
 82 Eridani d is real and natural. No neighbor is there in this game.
-Keid’s world is natural: the seed put no neighbor there. Earth can’t tell from here.
+Kapteyn’s Star’s world is natural: the seed put no neighbor there. Earth can’t tell from here.
+Keid’s world is natural.
 HD 122064’s world is natural.
 Gliese 505 A’s world is Lusk’s home too.
 Gliese 675’s world is Tolle’s home too.
 72 Herculis’s world is Sabe’s home too.
-Earth holds five felt worlds at Year 0, and the list shows every one. The Mind leads with the nearest: a rule that uses nothing the seed knows.
+Earth holds six felt worlds at Year 0, and the list shows every one. The Mind leads with the nearest: a rule that uses nothing the seed knows.
 Fomalhaut is 440 million years old: too young for minds, so it is never a host. Its clouds are rubble.
 Luyten’s Star: no one lives there. About 3 games in 10 put someone at a star Earth knocked on.
 9 · Planning
@@ -268,28 +270,28 @@ Truth: rubble. Nothing at Fomalhaut is built.
 Kappa¹ Ceti is under a billion years old: too young for minds, so it is never a host.
 +1:00 · Year 0.2
 “Later. And the new worlds?”
-Lands · None of the five new worlds crosses its star.
+Lands · None of the six new worlds crosses its star.
 Earth · Year 0.2
 Sol · 2040.2 · 1 Year = 00:05:00
 ENERGY · [0.7%] · MATTER · 23 kt · COMPUTE · [90%]
-[drawing: STARS · KEID · 16.3 LY · 01:21:42; labels: Sol, 82 Eridani, 19.7 ly · 01:38:30, Fomalhaut, 25.1 ly · 02:05:30, Luyten’s Star, 12.3 ly · 01:01:18, Keid, 16.3 ly · 01:21:42, Gliese 505 A, 35.8 ly · 02:59:09 · beyond this view, Gliese 675, 41.7 ly · 03:28:36 · beyond this view, 00:50:00, 01:40:00, Alpha Centauri, Procyon, Tau Ceti, Epsilon Eridani, Barnard’s Star, Altair, Vega, Epsilon Indi, 61 Cygni] · STARS · KEID · 16.3 LY · 01:21:42
+[drawing: STARS · KAPTEYN’S STAR · 12.9 LY · 01:04:27; labels: Sol, 82 Eridani, 19.7 ly · 01:38:30, Fomalhaut, 25.1 ly · 02:05:30, Luyten’s Star, 12.3 ly · 01:01:18, Kapteyn’s Star, 12.9 ly · 01:04:27, Keid, 16.3 ly · 01:21:42, Gliese 505 A, 35.8 ly · 02:59:09 · beyond this view, Gliese 675, 41.7 ly · 03:28:36 · beyond this view, 00:50:00, 01:40:00, Alpha Centauri, Sirius, Procyon, Tau Ceti, Epsilon Eridani, Altair, Vega, 61 Cygni] · STARS · KAPTEYN’S STAR · 12.9 LY · 01:04:27
 CLUE · YEAR 0.2
-[‹ Keid]
+[‹ Kapteyn’s Star]
 
-### A world at Keid
-Keid · 16.3 ly · felt by Terra Hunting, 2036 · light that left 16 Years ago
-At least 1 Earth mass. A year of 352 days, 0.90 AU out, inside its star’s warm zone. It doesn’t cross its star, so we have its least mass and not its size.
+### A world at Kapteyn’s Star
+Kapteyn’s Star · 12.9 ly · felt by ESPRESSO, 2034 · light that left 13 Years ago
+At least 1.9 Earth masses. A year of 36 days, 0.15 AU out, inside its star’s warm zone. It doesn’t cross its star, so we have its least mass and not its size.
 WHAT IT COULD BE · NOW
 Rock, and no life we could see · likely
 A small gas world · unlikely
 Life · very unlikely
 Minds · almost no chance
 WITH WHAT WE HAVE
-Listen to Keid for a Year · Radio array · rules out steady tones above 4 MW · 1 Year · 00:05:00 · [Start]
-THE MIND · The nearest first. It doesn’t cross, so its air stays hidden. I can listen for a Year, at a tenth of compute. That hears only the loud: tones above 4 MW. · [Listen for a Year] · [Later]
+Listen to Kapteyn’s Star for a Year · Radio array · rules out steady tones above 3 MW · 1 Year · 00:05:00 · [Start]
+THE MIND · The nearest first. It doesn’t cross, so its air stays hidden. I can listen for a Year, at a tenth of compute. That hears only the loud: tones above 3 MW. · [Listen for a Year] · [Later]
 [Talk to the Mind]
 Godview
-Keid’s world is natural: the seed put no neighbor there. Earth can’t tell from here.
+Kapteyn’s Star’s world is natural: the seed put no neighbor there. Earth can’t tell from here.
 +1:30 · Year 0.3
 “82 Eridani?”
 Lands · 82 Eridani d’s orbit holds. Shimmer: very unlikely → almost no chance.
@@ -323,7 +325,7 @@ ENERGY · [0.7%] · MATTER · 26 kt · COMPUTE · [100%]
 Read the air of nearby worlds.
 A mirror wide enough to split a world from its star and say what its air is made of. The Habitable Worlds Observatory, under way for years, finished.
 HELPS WITH
-82 Eridani d · Keid’s world · Air, oceans, and the gases a living or built world leaves
+82 Eridani d · Kapteyn’s Star’s world · Air, oceans, and the gases a living or built world leaves
 USES EACH YEAR
 Compute · [15%] · 15%
 Energy · [1%] · under 1%
@@ -381,7 +383,7 @@ Ask the Mind… · [Send · ↑]
 Godview
 Real: four worlds smaller than Earth at Barnard’s Star, confirmed in 2025. Nothing over 0.57 Earths in its warm zone then. A third of an Earth by 2040 is the mock’s.
 No one lives at Barnard’s Star in this game.
-14 of 17 living neighbors have heard Earth: Hael, Iru, Lusk, Odun, Ruun, Arro, Tolle, Ombe, Wenn, Sere, Kesh, Sabe, Veyra, Daal.
+15 of 17 living neighbors have heard Earth: Hael, Iru, Lusk, Odun, Ruun, Arro, Tolle, Ombe, Wenn, Sere, Kesh, Sabe, Corra, Veyra, Daal.
 The Mind can only say it doesn’t know. The concept sets that: it lists where the noise went, never who heard.
 +3:30 · Year 0.7
 “Can we go quiet?”
@@ -435,9 +437,10 @@ Wenn, 44.0 ly: hears them stop at Year 46.8, +03:53:57. It can’t tell waking f
 Sere, 44.0 ly: hears them stop at Year 46.8, +03:54:06. It can’t tell waking from dying. It stays quiet and aims its instruments at the source.
 Kesh, 47.5 ly: hears them stop at Year 50.2, +04:11:15. It can’t tell waking from dying. It stays quiet and aims its instruments at the source.
 Sabe, 47.6 ly: hears them stop at Year 50.4, +04:11:51. It can’t tell waking from dying. It knocks back: a short aimed signal, its name optional. It takes a quarter of a Year to act, so that reaches Earth at Year 98.2.
+Corra, 47.7 ly: hears them stop at Year 50.5, +04:12:39. It can’t tell waking from dying. It stays quiet and aims its instruments at the source.
 Veyra, 47.9 ly: hears them stop at Year 50.6, +04:13:15. It can’t tell waking from dying. It stays quiet and aims its instruments at the source.
 Daal, 48.7 ly: hears them stop at Year 51.5, +04:17:21. It can’t tell waking from dying. It sends a probe or a watcher.
-Wakes after the last sweep has passed, and never hears one: Corra. Across games, about 1 neighbor in 9.
+Wakes after the last sweep has passed, and never hears one: no one in this game. Across games, about 1 neighbor in 9.
 Ulan wakes at Year 48.0, while sweeps still pass it until Year 51.1. It can still find them.
 Gliese 208 turns every 12.3 days, which dates it near half a billion years: too young for minds, so it is never a host.
 Settled · How long does a Mind take to act on news? Its Cautious or Bold dial sets it: a tenth of a Year if strongly Bold, a quarter if it leans Bold, a Year if it leans Cautious, two if strongly Cautious. Settled 2026-10-11.
@@ -454,7 +457,7 @@ NEW
 EARLIER
 - No thick air on Gliese 12 b · Gliese 12 · 39.7 ly · Year 0.5
 - The stretched orbit is real · 82 Eridani · 19.7 ly · Year 0.3
-- Keid’s world doesn’t cross · Keid · 16.3 ly · Year 0.2
+- Kapteyn’s Star’s world doesn’t cross · Kapteyn’s Star · 12.9 ly · Year 0.2
 - A third cloud at Fomalhaut · Fomalhaut · 25.1 ly · Year 0.1
 THE MIND · Two of Tau Ceti’s four keep time. The outer one sits at the cold edge of its warm zone, twelve light-years off. The telescope you started could see it. And Barnard’s Star has no fifth world.
 [Talk to the Mind]
@@ -482,14 +485,14 @@ THE MIND · The data center runs: half again as much thought, for half a percent
 [Talk to the Mind]
 Settled · What stops a data center every Year? Chips set the pace: the fabs fill one a Year, each +50% compute. Energy sets the ceiling, near a hundredfold. Settled 2026-10-10.
 +5:30 · Year 1.1
-“Keep them coming. And listen to Keid for a Year.”
+“Keep them coming. And listen to Kapteyn’s Star for a Year.”
 Earth · Year 1.1
 Sol · 2041.1 · 1 Year = 00:05:00
 ENERGY · [1.0%] · MATTER · 36 kt · COMPUTE · [100%]
 [drawing: ORBIT · EARTH · 4 BUILDING; labels: the Moon, Earth, low orbit, All-sky watch · 18%, Deep flash watch · 18%, Second data center · 0%, Infrared telescope · 9%] · ORBIT · EARTH · 4 BUILDING
 PROJECTS · 5 BUILDING · 1 OBSERVING
 OBSERVING · WITH WHAT WE HAVE
-Listen to Keid for a Year · Radio array · tones above 4 MW · under way · 00:05:00
+Listen to Kapteyn’s Star for a Year · Radio array · tones above 3 MW · under way · 00:05:00
 STUDYING · NEXT FINDING: EPSILON INDI
 BUILDING · 5
 - All-sky watch · two sites, one in each hemisphere · 3.1 Years · 00:15:30
@@ -685,24 +688,24 @@ No one lives at LHS 1140 in this game.
 Nothing new. · A dead 30 seconds.
 +10:30 · Year 2.1
 The Mind glows. Taps it.
-Lands · A Year of listening: nothing loud at Keid.
+Lands · A Year of listening: nothing loud at Kapteyn’s Star.
 Earth · Year 2.1
 Sol · 2042.1 · 1 Year = 00:05:00
 ENERGY · [1.6%] · MATTER · 41 kt · COMPUTE · [100%]
 REPORT · READING · 1 YEAR
 [‹ All reports]
 
-### Nothing loud at Keid
-Keid · 16.3 ly · radio array · 1 Year · light that left 16 Years ago
-A Year of listening, part of every night. Nothing from Keid stands above the sky’s own noise.
+### Nothing loud at Kapteyn’s Star
+Kapteyn’s Star · 12.9 ly · radio array · 1 Year · light that left 13 Years ago
+A Year of listening, part of every night. Nothing from Kapteyn’s Star stands above the sky’s own noise.
 WHAT IT RULES OUT
-Steady tones above about 4 MW, as of 16 Years ago: a beacon, a broadcast, or radars like ours pointed this way.
+Steady tones above about 3 MW, as of 13 Years ago: a beacon, a broadcast, or radars like ours pointed this way.
 WHAT IT CAN’T TELL
 Anyone quieter. A world’s everyday radio is thousands of times fainter than that. And anything they did since.
 WHAT WOULD HEAR MORE
 Deep-field receiver · hears fainter · 12 Years · ground · 12 Years · 01:00:00
 Far-side array · hears a world’s everyday radio · needs Moon industry · later
-THE MIND · Nothing above 4 MW at Keid. Quiet, or empty. Our own radars are louder than that, so it rules out a world like ours was.
+THE MIND · Nothing above 3 MW at Kapteyn’s Star. Quiet, or empty. Our own radars are louder than that, so it rules out a world like ours was.
 [Talk to the Mind]
 Godview
 Truth: nothing was there to hear.
@@ -772,24 +775,24 @@ Truth: rubble, as the first reading suggested. A lead can close dull.
 Earth · Year 2.6
 Sol · 2042.6 · 1 Year = 00:05:00
 ENERGY · [1.6%] · MATTER · 49 kt · COMPUTE · [100%]
-[drawing: STARS · HD 122064 · 32.8 LY · 02:44:09; labels: Sol, 82 Eridani, 19.7 ly · 01:38:30, Fomalhaut, 25.1 ly · 02:05:30, Luyten’s Star, 12.3 ly · 01:01:18, Keid, 16.3 ly · 01:21:42, Gliese 505 A, 35.8 ly · 02:59:09 · beyond this view, Gliese 675, 41.7 ly · 03:28:36 · beyond this view, 00:50:00, 01:40:00, Alpha Centauri, Procyon, Tau Ceti, Epsilon Eridani, Barnard’s Star, Altair, Vega, Epsilon Indi, 61 Cygni] · STARS · HD 122064 · 32.8 LY · 02:44:09
+[drawing: STARS · KEID · 16.3 LY · 01:21:42; labels: Sol, 82 Eridani, 19.7 ly · 01:38:30, Fomalhaut, 25.1 ly · 02:05:30, Luyten’s Star, 12.3 ly · 01:01:18, Kapteyn’s Star, 12.9 ly · 01:04:27, Keid, 16.3 ly · 01:21:42, Gliese 505 A, 35.8 ly · 02:59:09 · beyond this view, Gliese 675, 41.7 ly · 03:28:36 · beyond this view, 00:50:00, 01:40:00, Alpha Centauri, Sirius, Procyon, Tau Ceti, Epsilon Eridani, Altair, Vega, 61 Cygni] · STARS · KEID · 16.3 LY · 01:21:42
 CLUE · YEAR 2.6
-[‹ HD 122064]
+[‹ Keid]
 
-### A world at HD 122064
-HD 122064 · 32.8 ly · felt by Terra Hunting, 2036 · light that left 33 Years ago
-At least 1.8 Earth masses. A year of 185 days, 0.57 AU out, inside its star’s warm zone. It doesn’t cross its star, so we have its least mass and not its size.
+### A world at Keid
+Keid · 16.3 ly · felt by Terra Hunting, 2036 · light that left 16 Years ago
+At least 1 Earth mass. A year of 352 days, 0.90 AU out, inside its star’s warm zone. It doesn’t cross its star, so we have its least mass and not its size.
 WHAT IT COULD BE · NOW
 Rock, and no life we could see · likely
 A small gas world · unlikely
 Life · very unlikely
 Minds · almost no chance
 WITH WHAT WE HAVE
-Listen to HD 122064 for a Year · Radio array · free at Year 3, after the Luyten windows · 1 Year · 00:05:00 · [Queue]
-THE MIND · HD 122064, twice as far and heavier. It doesn’t cross either. Three more are on the list. The array is on Luyten’s Star until Year 3. I can listen here next, if you say so. · [Queue it] · [Later]
+Listen to Keid for a Year · Radio array · free at Year 3, after the Luyten windows · 1 Year · 00:05:00 · [Queue]
+THE MIND · Keid, a little farther and lighter. It doesn’t cross either. Four more are on the list. The array is on Luyten’s Star until Year 3. I can listen here next, if you say so. · [Queue it] · [Later]
 [Talk to the Mind]
 Godview
-Truth: HD 122064’s world is natural.
+Truth: Keid’s world is natural.
 The Mind led with the nearest world. This one was on the list from Year 0, and the player comes to it in a quiet half-minute.
 The Mind offers and waits. The array is the player’s to point.
 +13:30 · Year 2.7
@@ -826,7 +829,7 @@ ENERGY · [1.6%] · MATTER · 55 kt · COMPUTE · [100%]
 MIND · WHAT WAKES YOU
 YOU CHOSE
 - The all-sky watch and flash watch are built · then little aimed at us is missed · Year 4.2 · 00:06:00
-- The infrared telescope is done · then it reads 82 Eridani d and Keid · Year 6.5 · 00:17:30
+- The infrared telescope is done · then it reads 82 Eridani d and Kapteyn’s Star · Year 6.5 · 00:17:30
 - Thinking draws a tenth of our energy · 7 data centers in · Year 7.1 · 00:20:30
 - A reply could come · Gliese 526 · to our 2013 message · Year 9 · 00:30:00
 - The Moon vault is done · the Mind’s second home · Year 9.4 · 00:32:00
@@ -935,26 +938,26 @@ MIND · THE NEW TELESCOPE
 ONE WORLD AT A TIME · YOURS TO ORDER
 - selected: Keid’s world · wide of its star in our sky · water, then oxygen · 22 days · 00:00:18
 - 82 Eridani d · wide and bright · water, then oxygen · 11 days · 00:00:09
-HD 122064 · Gliese 505 A · Gliese 675 · 72 Herculis · close in or faint · seen, not read · out of reach
+Kapteyn’s Star · HD 122064 · Gliese 505 A · Gliese 675 · 72 Herculis · close in or faint · seen, not read · out of reach
 WHEN IDLE · ITS SEARCH
 The warm zones of 110 near stars · nearest first · a first pass takes about eight weeks · [Set]
 WHAT SETS THE TIME
 How bright the world is from here, and how far it sits from its star’s glare.
-THE MIND · It can split a world from its star only when they sit far enough apart in our sky. 82 Eridani d is wide and bright: days. The new world sits wide of its star too: water in 5 days, oxygen in 22 days. · [Order them] · [Later]
+THE MIND · It can split a world from its star only when they sit far enough apart in our sky. 82 Eridani d is wide and bright: days. Kapteyn’s Star’s world sits too close to its star, or is too faint. Keid’s world sits wide of its star too: water in 5 days, oxygen in 22 days. · [Order them] · [Later]
 [Talk to the Mind]
 Godview
-HD 122064’s world is natural. Lusk lives at Gliese 505 A. Tolle lives at Gliese 675. Sabe lives at 72 Herculis. Earth has held them as leads since Year 0.
+Kapteyn’s Star’s world is natural. HD 122064’s world is natural. Lusk lives at Gliese 505 A. Tolle lives at Gliese 675. Sabe lives at 72 Herculis. Earth has held them as leads since Year 0.
 Times are from calcs/observing.py. A day of telescope time is under a second of play.
 Settled · What sets how long an observation takes? Physics. A nearer or larger world is brighter, so its reading comes sooner: hours at Alpha Centauri, days at 82 Eridani. A world too close to its star in our sky can’t be read at all. Seasons are left out for now. Settled 2026-10-13.
 Settled · At Year 0, how many of its felt worlds does Earth show? All of them, and the Mind leads with one: the nearest, a rule that uses nothing the seed knows. Earth holds two to four felt worlds in 6 games of 10, and in about half of games none is a home. Settled 2026-10-13.
 +34:30 · Year 6.9
-“The new world first. Then let it sweep.”
+“Keid’s world first. Then let it sweep.”
 Earth · Year 6.9
 Sol · 2046.9 · 1 Year = 00:05:00
 ENERGY · [7.9%] · MATTER · 230 kt · COMPUTE · [100%]
 MIND · NEW ORDER
 WHAT YOU WANT
-The new world first. Then let it sweep.
+Keid’s world first. Then let it sweep.
 THE MIND’S VERSION
 OBSERVE · Keid’s world · its water and oxygen · 22 days
 WHEN IDLE · Search the warm zones of 110 near stars · nearest first
@@ -1135,7 +1138,7 @@ HOLOS · THE MIND · A receiver would hear some of them better · On one of thes
 Godview
 Truth: 4 are homes. Iru’s world at Gliese 570 A, Pelle’s world at Mu Herculis, Ruun’s world at 11 Leonis Minoris, Anwe’s world at Zeta² Reticuli.
 8 are natural, from Alpha Centauri B at 4 ly to Nu² Lupi at 48. Truth: 1 bare rock, 1 airy and lifeless, 1 hiding microbes, 1 with animals and forests, 1 where life died, 3 frozen.
-Their ages: 2 published, 6 drawn. The seed drew 157 natural worlds in all, 127 at red dwarfs, and 92 are bare rock.
+Their ages: 2 published, 6 drawn. The seed drew 182 natural worlds in all, 152 at red dwarfs, and 111 are bare rock.
 From here a home and a natural world look alike: a point of light that moves with its star.
 The Mind calls Minds almost no chance at each. In truth 4 of 12 are homes: unlikely. It never reads the seed.
 Each needed a second visit, months after the first. Most are too far to read with this mirror.
@@ -1165,7 +1168,7 @@ The earliest a reply to A Message From Earth could reach Earth from Gliese 581. 
 The earliest a reply to Hello From Earth could reach Earth from Gliese 581. In this game no one lives there. The window is empty, and Earth can’t know it.
 Wenn wakes at Gliese 3371 A, 44.0 ly away. It already knows Earth, and stays quiet and aims its instruments at the source.
 Sabe wakes at 72 Herculis, 47.6 ly away. It already knows Earth, and knocks back: a short aimed signal, its name optional.
-The telescope is back on its sweep. 82 Eridani d still waits for an order. HD 122064’s world, Gliese 505 A’s world, Gliese 675’s world and 72 Herculis’s world wait for a better mirror.
+The telescope is back on its sweep. 82 Eridani d still waits for an order. Kapteyn’s Star’s world, HD 122064’s world, Gliese 505 A’s world, Gliese 675’s world and 72 Herculis’s world wait for a better mirror.
 Hael’s answer is on its way: it reaches Earth at Year 16.5, +01:22:27, in answer to our knock.
 The grid limit comes at Year 12.1, just past this hour: twelve data centers, at 130 times the thought Earth woke with. The Taiwan branch started Earth lower on the same curve, and the grid caps the same height.
 No other voice is on its way in the next two hours.

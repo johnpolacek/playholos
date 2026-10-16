@@ -420,10 +420,15 @@ Settled 2026-10-13.
 - **A sweep finds natural warm worlds too, at the real rate.** Settled 2026-10-13. The seed draws them, in [calcs/seed.py](calcs/seed.py).
   - *The rate.* NASA plans its telescope on 0.24 rocky worlds in each star's warm zone, 0.6 to 1.4 Earths wide, the same at every kind of star (Stark et al. 2019). Kepler's counts allow 0.08 to 0.70.
   - *The draw.* Each host with no neighbor gets a world at that chance. Small ones are commoner, and so are wider orbits, as Kepler found. Orbits are circular.
-  - *The same checks as a neighbor's world.* A stable orbit, no transit seen from Sol, no tug in 2026 data. About 60 draws a game fail and are dropped, most at red dwarfs, where a fifth of worlds would tug over 1 m/s.
-  - *What a game holds.* About 150 natural warm worlds, 120 of them at red dwarfs. The mirror can split about 18 from their stars. Its first pass sees about 10 it had not felt before, and about 4 neighbors' worlds.
+  - *The same checks as a neighbor's world.* A stable orbit, no transit seen from Sol, no tug in 2026 data. About 28 draws a game fail and are dropped, most beside a companion.
+  - *A red dwarf hides what no one watched.* Settled 2026-10-16. Its 2026 floor is what real surveys could feel there: CARMENES, HARPS and Keck, matched star by star.
+    - *How many were watched.* 294 of the 715 red dwarf hosts, for 10 nights or more. 27 could feel under 2 m/s. 421 were never watched in these surveys.
+    - *By 2040 a watched star's floor halves,* with four times the nights. An unwatched one still hides any warm world. A sample.
+    - *Example.* Kapteyn's Star: HARPS could feel about 1.3 m/s by 2026, and 0.7 by 2040. In seed 11 its world tugs 0.77, so it is one of Earth's finds.
+    - Set aside: every red dwarf watched to 1 m/s, which erased about 31 worlds a game no survey could catch. And watched stars reaching 1 m/s by 2040, which gave about 10 finds at Year 0.
+  - *What a game holds.* About 180 natural warm worlds, 150 of them at red dwarfs. Recounted 2026-10-16. The mirror can split about 18 from their stars. Its first pass sees about 10 it had not felt before, and about 4 neighbors' worlds.
   - *So about 1 point of light in 4 is a home.* From Earth the two look alike: a point that moves with its star.
-  - *Some are felt before Year 0.* A natural world that tugs hard enough for the planet hunters by 2040 is one of Earth's finds: about 2 a game, and none in 1 game in 10.
+  - *Some are felt before Year 0.* A natural world that tugs hard enough for the planet hunters by 2040 is one of Earth's finds: about 4 a game, and none in 1 game in 50. Recounted 2026-10-16.
   - *Samples:* at most one warm world a star, none beside a neighbor's world, and a day a star on the first pass.
   - Set aside: a sweep that finds only neighbors' worlds, and a sweep that finds cold giants and dust alone.
 - **Alive is a ladder, and a natural world climbs no higher than animals and forests.** Settled 2026-10-13. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#kinds-of-worlds).
@@ -433,7 +438,7 @@ Settled 2026-10-13.
   - *What the first mirror tells apart.* No air, water without oxygen, and oxygen. Hidden microbes read as a lifeless sea, and animals as an oxygen world.
   - *A world whose life died reads as a lifeless sea.* Its oxygen is gone in a few million years. A sample, from 2026-10-14.
   - *So does a frozen world.* Air, water as ice, and no oxygen. From 2026-10-16.
-  - *Which reading a game opens with.* Measured on 300 games, 2026-10-14. At the nearest felt world it can read, the first mirror reads water and oxygen in 6 games of 10. It reads only color and ozone in 1 in 17, as in the mocks' game. In 3 of 10 it can read no felt world, and the player reads 82 Eridani d.
+  - *Which reading a game opens with.* Measured on 300 games, 2026-10-14, and again 2026-10-16. At the nearest felt world it can read, the first mirror reads water and oxygen in 6 games of 10. It reads only color and ozone in 1 in 17, as in the mocks' game. In 1 in 3 it can read no felt world, and the player reads 82 Eridani d.
   - *The premise makes life common.* It puts a mind at about 1 warm world in 18. Minds can't be commoner than life, so most worlds that can hold life do.
   - *Later:* stone-age worlds and old ruins can join the roster as written entries.
   - Set aside: minds without industry drawn by the seed, and every rung drawn, ruins included.
@@ -443,7 +448,7 @@ Settled 2026-10-13.
   - *Red dwarfs are harsh.* Their warm zones sit close in, and the dimmest stay active about three times longer than the old estimate (Pass et al. 2025). Most of their warm worlds come out bare rock.
   - *Age.* Earth had lasting oxygen at 2.3 billion years old, and air rich enough to read, with animals and forests, at about 4. A world follows that schedule at its own pace.
   - *Published ages where they exist.* 53 hosts have one from asteroseismology or spin (Ware et al. 2026). The rest are drawn evenly from 1 to 10.5 billion years, as nearby stars formed.
-  - *What a game holds.* Of about 150 natural worlds: 89 bare rock, 14 airy and lifeless, 33 alive, 8 where life died, 6 frozen. Recounted 2026-10-16.
+  - *What a game holds.* Of about 180 natural worlds: 112 bare rock, 16 airy and lifeless, 36 alive, 9 where life died, 6 frozen. Recounted 2026-10-16.
   - *At Sun-like stars* about 4 in 10 are alive, 3 in 10 show oxygen, and 1 in 5 is frozen. At red dwarfs about 7 in 10 are bare rock.
   - *So oxygen does not unmask a neighbor.* Of the points of light a first pass shows, about 4 natural worlds show oxygen, beside about 4 or 5 homes.
   - *Samples:* life started on 3 airy worlds in 4, and died on 1 in 5 of those. Each world's pace varies by a factor of 1.6. Each world's luck at the shoreline is half a power of ten.

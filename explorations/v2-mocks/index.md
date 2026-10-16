@@ -28,7 +28,7 @@ Hael · contacter · Gliese 1021 · G star · 49.1 ly · 04:05:24 · awake 29 Ye
 Ombe · contacter · Gliese 4338 B · M star · 49.1 ly · 04:05:33 · awake 44 Years · heard Earth’s radars from 1999, and mapped its day and orbit · knocks back: a short aimed signal, its name optional · Its colony at Gaia 1925025168366253952, 2.3 ly from its parent, lands Year 43.9. Its answer to Earth’s radars: sent 1999, reaches Earth Year 8.5, +00:42:21. Year 0’s sky watch would miss it. The all-sky watch catches it.
 Ulan · inward · Gliese 52 · K star · 49.1 ly · 04:05:42 · wakes Year 29.4 · +02:27:01 · has not heard Earth
 Ree · contacter · 19 Draconis · F star · 49.9 ly · 04:09:42 · awake 21 Years · heard Earth’s radars from 2000, and mapped its day and orbit · knocks back: a short aimed signal, its name optional · Its answer to Earth’s radars: sent 2020, reaches Earth Year 29.6, +02:28:13. Year 0’s sky watch would miss it. The all-sky watch catches it.
-[drawing: Every neighbor in this game, seen from above the galaxy’s plane; labels: 10 ly · 00:50:00, 20 ly · 01:40:00, 30 ly · 02:30:00, 40 ly · 03:20:00, 50 ly · 04:10:00, Earth, Anwe, Alpha Centauri A · 4.3 ly, Kesh, Gliese 216 B · 29.4 ly, Varn, Gliese 432 A · 31.2 ly, Kirrin, 12 Ophiuchi · 32.3 ly, Nuvo, 20 Leonis Minoris · 48.7 ly, Hael, Gliese 1021 · 49.1 ly, Ombe, Gliese 4338 B · 49.1 ly, Ulan, Gliese 52 · 49.1 ly, Ree, 19 Draconis · 49.9 ly, 82 Eridani, Fomalhaut, Luyten’s Star, Gliese 432 A, 12 Ophiuchi]
+[drawing: Every neighbor in this game, seen from above the galaxy’s plane; labels: 10 ly · 00:50:00, 20 ly · 01:40:00, 30 ly · 02:30:00, 40 ly · 03:20:00, 50 ly · 04:10:00, Earth, Anwe, Alpha Centauri A · 4.3 ly, Kesh, Gliese 216 B · 29.4 ly, Varn, Gliese 432 A · 31.2 ly, Kirrin, 12 Ophiuchi · 32.3 ly, Nuvo, 20 Leonis Minoris · 48.7 ly, Hael, Gliese 1021 · 49.1 ly, Ombe, Gliese 4338 B · 49.1 ly, Ulan, Gliese 52 · 49.1 ly, Ree, 19 Draconis · 49.9 ly, 82 Eridani, Fomalhaut, Luyten’s Star, Gliese 432 A, 12 Ophiuchi, Gliese 1232]
 Filled: awake at Year 0. Open: wakes later. Cross: dead. Blue ring: has heard Earth. Amber: a hunter. Diamonds: Earth’s leads.
 
 ## Before Year 0
@@ -140,19 +140,21 @@ Talk to the Mind… · [Send · ↑]
 Earth · Before Year 0
 Sol · The clock starts when you begin
 ENERGY · [1%] · MATTER · 20 kt · COMPUTE · [0%]
-[drawing: Stars near Sol; labels: Sol, 82 Eridani, 19.7 ly · 01:38:30, Fomalhaut, 25.1 ly · 02:05:30, Luyten’s Star, 12.3 ly · 01:01:18, Gliese 432 A →, 31.2 ly · 02:35:54 · beyond this view, 12 Ophiuchi, 32.3 ly · 02:41:21 · beyond this view, 00:50:00, 01:40:00, Alpha Centauri, Procyon, Tau Ceti, Epsilon Eridani, Barnard’s Star, Altair, Vega, Epsilon Indi, 61 Cygni, 10 ly]
+[drawing: Stars near Sol; labels: Sol, 82 Eridani, 19.7 ly · 01:38:30, Fomalhaut, 25.1 ly · 02:05:30, Luyten’s Star, 12.3 ly · 01:01:18, Gliese 432 A →, 31.2 ly · 02:35:54 · beyond this view, 12 Ophiuchi, 32.3 ly · 02:41:21 · beyond this view, Gliese 1232, 33.5 ly · 02:47:42 · beyond this view, 00:50:00, 01:40:00, Alpha Centauri, Procyon, Tau Ceti, Epsilon Eridani, Barnard’s Star, Altair, Vega, Epsilon Indi, 10 ly]
 [World] · [System] · [selected: Stars] · [Region] · [Galaxy]
-LEADS · 5 · LIGHT-TIME
+LEADS · 6 · LIGHT-TIME
 - A stretched orbit · 82 Eridani · a heavy world, sometimes warm · its air is unread · 01:38:30
 - A new world · Gliese 432 A · felt by ESPRESSO in 2034 · at least 3.2 Earths · 02:35:54
 - A new world · 12 Ophiuchi · felt by Terra Hunting in 2036 · at least 1.1 Earths · 02:41:21
+- A new world · Gliese 1232 · felt by ESPRESSO in 2034 · at least 2.7 Earths · 02:47:42
 - Too many collisions · Fomalhaut · a second dust cloud since 2023 · 02:05:30
 - A reply could come · Luyten’s Star · to our 2017 message · Year 2.3 · 00:11:30
 Godview
 82 Eridani d is real and natural. No neighbor is there in this game.
 Gliese 432 A’s world is Varn’s home. Varn wakes Year 57.6 · +04:47:48, and has not heard Earth.
 12 Ophiuchi’s world is Kirrin’s home too.
-Earth holds two felt worlds at Year 0, and the list shows every one. The Mind leads with the nearest: a rule that uses nothing the seed knows.
+Gliese 1232’s world is natural.
+Earth holds three felt worlds at Year 0, and the list shows every one. The Mind leads with the nearest: a rule that uses nothing the seed knows.
 Fomalhaut is 440 million years old: too young for minds, so it is never a host. Its clouds are rubble.
 Luyten’s Star: no one lives there. About 3 games in 10 put someone at a star Earth knocked on.
 9 · Planning
@@ -252,11 +254,11 @@ Truth: rubble. Nothing at Fomalhaut is built.
 Kappa¹ Ceti is under a billion years old: too young for minds, so it is never a host.
 +1:00 · Year 0.2
 “Later. And the new worlds?”
-Lands · Neither new world crosses its star.
+Lands · None of the three new worlds crosses its star.
 Earth · Year 0.2
 Sol · 2040.2 · 1 Year = 00:05:00
 ENERGY · [1.0%] · MATTER · 23 kt · COMPUTE · [60%]
-[drawing: STARS · GLIESE 432 A · 31.2 LY · 02:35:54; labels: Sol, 82 Eridani, 19.7 ly · 01:38:30, Fomalhaut, 25.1 ly · 02:05:30, Luyten’s Star, 12.3 ly · 01:01:18, Gliese 432 A →, 31.2 ly · 02:35:54 · beyond this view, 12 Ophiuchi, 32.3 ly · 02:41:21 · beyond this view, 00:50:00, 01:40:00, Alpha Centauri, Procyon, Tau Ceti, Epsilon Eridani, Barnard’s Star, Altair, Vega, Epsilon Indi, 61 Cygni] · STARS · GLIESE 432 A · 31.2 LY · 02:35:54
+[drawing: STARS · GLIESE 432 A · 31.2 LY · 02:35:54; labels: Sol, 82 Eridani, 19.7 ly · 01:38:30, Fomalhaut, 25.1 ly · 02:05:30, Luyten’s Star, 12.3 ly · 01:01:18, Gliese 432 A →, 31.2 ly · 02:35:54 · beyond this view, 12 Ophiuchi, 32.3 ly · 02:41:21 · beyond this view, Gliese 1232, 33.5 ly · 02:47:42 · beyond this view, 00:50:00, 01:40:00, Alpha Centauri, Procyon, Tau Ceti, Epsilon Eridani, Barnard’s Star, Altair, Vega, Epsilon Indi] · STARS · GLIESE 432 A · 31.2 LY · 02:35:54
 CLUE · YEAR 0.2
 [‹ Gliese 432 A]
 
@@ -270,7 +272,7 @@ Life · very unlikely
 Minds · almost no chance
 WITH WHAT WE HAVE
 Listen to Gliese 432 A for a Year · Radio array · rules out steady tones above 15 MW · 1 Year · 00:05:00 · [Start]
-THE MIND · The nearer one first. It doesn’t cross, so its air stays hidden. I can listen for a Year, at a tenth of compute. That hears only the loud: tones above 15 MW. · [Listen for a Year] · [Later]
+THE MIND · The nearest first. It doesn’t cross, so its air stays hidden. I can listen for a Year, at a tenth of compute. That hears only the loud: tones above 15 MW. · [Listen for a Year] · [Later]
 [Talk to the Mind]
 Godview
 Gliese 432 A’s world is Varn’s home. Varn wakes Year 57.6 · +04:47:48, and has not heard Earth.
@@ -742,11 +744,11 @@ THE MIND · One orbit for all three. Rubble, almost surely. Fomalhaut is 440 mil
 Godview
 Truth: rubble, as the first reading suggested. A lead can close dull.
 +13:00 · Year 2.6
-“And the other new world?”
+“And the other new worlds?”
 Earth · Year 2.6
 Sol · 2042.6 · 1 Year = 00:05:00
 ENERGY · [2.3%] · MATTER · 49 kt · COMPUTE · [100%]
-[drawing: STARS · 12 OPHIUCHI · 32.3 LY · 02:41:21; labels: Sol, 82 Eridani, 19.7 ly · 01:38:30, Fomalhaut, 25.1 ly · 02:05:30, Luyten’s Star, 12.3 ly · 01:01:18, Gliese 432 A →, 31.2 ly · 02:35:54 · beyond this view, 12 Ophiuchi, 32.3 ly · 02:41:21 · beyond this view, 00:50:00, 01:40:00, Alpha Centauri, Procyon, Tau Ceti, Epsilon Eridani, Barnard’s Star, Altair, Vega, Epsilon Indi, 61 Cygni] · STARS · 12 OPHIUCHI · 32.3 LY · 02:41:21
+[drawing: STARS · 12 OPHIUCHI · 32.3 LY · 02:41:21; labels: Sol, 82 Eridani, 19.7 ly · 01:38:30, Fomalhaut, 25.1 ly · 02:05:30, Luyten’s Star, 12.3 ly · 01:01:18, Gliese 432 A →, 31.2 ly · 02:35:54 · beyond this view, 12 Ophiuchi, 32.3 ly · 02:41:21 · beyond this view, Gliese 1232, 33.5 ly · 02:47:42 · beyond this view, 00:50:00, 01:40:00, Alpha Centauri, Procyon, Tau Ceti, Epsilon Eridani, Barnard’s Star, Altair, Vega, Epsilon Indi] · STARS · 12 OPHIUCHI · 32.3 LY · 02:41:21
 CLUE · YEAR 2.6
 [‹ 12 Ophiuchi]
 
@@ -760,11 +762,11 @@ Life · very unlikely
 Minds · almost no chance
 WITH WHAT WE HAVE
 Listen to 12 Ophiuchi for a Year · Radio array · free at Year 3, after the Luyten windows · 1 Year · 00:05:00 · [Queue]
-THE MIND · 12 Ophiuchi, a little farther and lighter. It doesn’t cross either. The array is on Luyten’s Star until Year 3. I can listen here next, if you say so. · [Queue it] · [Later]
+THE MIND · 12 Ophiuchi, a little farther and lighter. It doesn’t cross either. One more is on the list. The array is on Luyten’s Star until Year 3. I can listen here next, if you say so. · [Queue it] · [Later]
 [Talk to the Mind]
 Godview
 Truth: 12 Ophiuchi’s world is Kirrin’s home.
-The Mind led with the nearer world. This one was on the list from Year 0, and the player comes to it in a quiet half-minute.
+The Mind led with the nearest world. This one was on the list from Year 0, and the player comes to it in a quiet half-minute.
 The Mind offers and waits. The array is the player’s to point.
 +13:30 · Year 2.7
 Nothing new. · A dead 30 seconds.
@@ -910,7 +912,7 @@ MIND · THE NEW TELESCOPE
 ONE WORLD AT A TIME · YOURS TO ORDER
 - selected: Gliese 432 A’s world · close to its star in our sky · color and ozone only · 49 days · 00:00:40
 - 82 Eridani d · wide and bright · water, then oxygen · 11 days · 00:00:09
-- 12 Ophiuchi’s world · close in and faint · seen, not read · out of reach
+12 Ophiuchi · Gliese 1232 · close in or faint · seen, not read · out of reach
 WHEN IDLE · ITS SEARCH
 The warm zones of 110 near stars · nearest first · a first pass takes about eight weeks · [Set]
 WHAT SETS THE TIME
@@ -918,7 +920,7 @@ How bright the world is from here, and how far it sits from its star’s glare.
 THE MIND · It can split a world from its star only when they sit far enough apart in our sky. 82 Eridani d is wide and bright: days. The new world is close in. I can read its color and its ozone, not its water. · [Order them] · [Later]
 [Talk to the Mind]
 Godview
-Kirrin lives at 12 Ophiuchi. Earth has held its world as a lead since Year 0.
+Kirrin lives at 12 Ophiuchi. Gliese 1232’s world is natural. Earth has held them as leads since Year 0.
 Times are from calcs/observing.py. A day of telescope time is under a second of play.
 Settled · What sets how long an observation takes? Physics. A nearer or larger world is brighter, so its reading comes sooner: hours at Alpha Centauri, days at 82 Eridani. A world too close to its star in our sky can’t be read at all. Seasons are left out for now. Settled 2026-10-13.
 Settled · At Year 0, how many of its felt worlds does Earth show? All of them, and the Mind leads with one: the nearest, a rule that uses nothing the seed knows. Earth holds two to four felt worlds in 6 games of 10, and in about half of games none is a home. Settled 2026-10-13.
@@ -1083,7 +1085,7 @@ HOLOS · THE MIND · A receiver would hear some of them better · On one of thes
 Godview
 Truth: 4 are homes. Kesh’s world at Gliese 216 B, Nuvo’s world at 20 Leonis Minoris, Hael’s world at Gliese 1021, Ree’s world at 19 Draconis.
 11 are natural, from Gliese 664 at 19 ly to Nu Phoenicis at 50. Truth: 2 bare rock, 2 airy and lifeless, 2 hiding microbes, 1 showing oxygen, 1 with animals and forests, 2 where life died, 1 frozen.
-Their ages: 5 published, 6 drawn. The seed drew 136 natural worlds in all, 113 at red dwarfs, and 85 are bare rock.
+Their ages: 5 published, 6 drawn. The seed drew 170 natural worlds in all, 147 at red dwarfs, and 113 are bare rock.
 From here a home and a natural world look alike: a point of light that moves with its star.
 The Mind calls Minds almost no chance at each. In truth 4 of 15 are homes: unlikely. It never reads the seed.
 Each needed a second visit, months after the first. Most are too far to read with this mirror.
@@ -1215,7 +1217,7 @@ Saturday · 17:24
 HOLOS · SWEEPING · The infrared telescope: Alpha Centauri B next · Any candidate wakes you.
 HOLOS · WAITING · Gliese 4338 B: unanswered · The array is held on it. Nothing sent.
 Godview
-The telescope is back on its sweep. 82 Eridani d still waits for an order. 12 Ophiuchi’s world waits for a better mirror.
+The telescope is back on its sweep. 82 Eridani d still waits for an order. 12 Ophiuchi’s world and Gliese 1232’s world wait for a better mirror.
 Hael’s knock arrives at Year 19.9, +01:39:35. The all-sky watch misses it.
 From minute 15 to minute 60 the player was woken seven times and played about eight minutes.
 
@@ -1276,7 +1278,7 @@ Thought · all in use, down the line you set
 THE MIND · Seven Years, and nothing heard. Energy is up a fifth. I have read every world this mirror can reach. The new mirror is 2.4 Years off. · [What did the worlds show?] · [Later]
 [Talk to the Mind]
 Godview
-The first telescope could read five of the eighteen points of light Earth holds: Alpha Centauri A, Gliese 664, Gliese 216 B, Rana, Gliese 432 A. The rest sit inside their stars’ glare, or are too faint.
+The first telescope could read five of the nineteen points of light Earth holds: Alpha Centauri A, Gliese 664, Gliese 216 B, Rana, Gliese 432 A. The rest sit inside their stars’ glare, or are too faint.
 Truth: Alpha Centauri A is Anwe’s home, Gliese 664 airy and lifeless, Gliese 216 B is Kesh’s home, Rana where life died, Gliese 432 A is Varn’s home.
 A second blue world with ozone, at Gliese 216 B, was read while the player was away. It went to the summary.
 +1:35:30 · Year 19.1
@@ -1331,7 +1333,7 @@ Godview
 Hael’s knock reaches Earth: its answer to Earth’s radars, sent 2011 from Gliese 1021.
 Ten gigawatts from 49 ly is under the all-sky watch’s floor: for a four-hour knock it hears that power to 35 ly. It comes again a Year later, and is missed again.
 A deep-field receiver, held on that star, hears it to 117 ly. The Mind advised one at Year 7.6, when the sweep marked a point of light at Gliese 1021. This player left it.
-Begun then, it was done by Year 16. Shared among all 18 points of light, it hears this knock only to 28 ly.
+Begun then, it was done by Year 16. Shared among all 19 points of light, it hears this knock only to 27 ly.
 The Mind can’t report what it didn’t hear. Settled 2026-10-10.
 Settled · A knock Earth can’t hear: should a candidate world earn a listen? The Mind advises it. When the sweep marks worlds, it says a deep-field receiver would hear their knocks about three times farther than the all-sky watch. The player decides. The Mind never builds it on its own. Settled 2026-10-14.
 Settled · One receiver, many marked worlds: how does it share its watch? It is split. The player names the stars it holds, and each part hears less far, as real dish arrays do. On one star it hears a ten gigawatt knock to 117 ly. On four, to 59. On more than eleven, no farther than the all-sky watch. A dish array can’t hold scattered stars at full reach. Settled 2026-10-14.
@@ -1352,7 +1354,7 @@ WAKES YOU · Any smog · then when all are read
 THE MIND · Set. Smog first, at Gliese 432 A: 5 days. Smog is burning, or weather. I will say which I think, and why. · [Undo]
 [Talk to the Mind]
 Godview
-The mirror can read thirteen of Earth’s eighteen worlds for smog within two months each. The first telescope could read smog only within about 12 ly.
+The mirror can read thirteen of Earth’s nineteen worlds for smog within two months each. The first telescope could read smog only within about 12 ly.
 The launcher was done at Year 19.8, not 25.6. A flyby probe would take 12 more at its want, and 36 in flight. The player leaves it: the sails will be first.
 +1:47:45 · Year 21.6
 The Mind glows. Taps it.
