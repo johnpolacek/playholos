@@ -1718,6 +1718,195 @@ An inquiry begun at minute 35 answers at 4:13:45. In between, the question could
 Varn wakes at Year 57.6, 7 Years from now. That light reaches Earth at Year 89.
 Settled · What does a picture show? Everything larger than a pixel, and nothing smaller. Physics sets the pixel, and the seed’s world fills it. A solar lens: about 25 km at 30 pc, so cities and cleared land, never roads. The nearest sail of a swarm: about 20 m, so roads and dams, never single buildings. Settled 2026-10-14.
 
+## The long wait · hours 5 to 10
+Years 51 to 119. The phone is down for most of six hours, through the night. Worlds Earth hears go quieter as their Minds wake, a knock comes again, and the seed ship lands.
+Moves the seed never drew, a sender’s answer to silence and to Earth’s reply, are rolled from its tables here. What each report shows and the Mind’s words are samples. Amber boxes are the questions these hours raise.
++4:14:15 · Year 50.9
+“What happened there?”
+Earth · Year 50.9
+Sol · 2090.8 · 1 Year = 00:05:00
+ENERGY · [93.9%] · MATTER · 7.6 Mt · COMPUTE · [46%]
+MIND · WAYS TO KNOW MORE
+LISTEN · TELLS NO ONE
+Every world that speaks · the whole far-side array · six worlds in turn · for good · ready
+GO
+A probe that stays · on the fusion drive · there about Year 139 · 20 Years · 01:40:00
+ALPHA CENTAURI A · WHAT WE KNOW
+Built · roads, dams, streets, under forest · Now · no lights, no radio · Its air · carbon put there lately, by burning
+THE MIND · UNASKED · I can’t say from here. Their world was built and is dark now. Only going would tell when, and whether anyone is left. A probe that stays would be there about Year 139. From here I can listen to every world that speaks, and say when one changes. · [Listen to them all] · [Send a probe that stays]
+[Talk to the Mind]
+Godview
+A probe that stays: v1’s rocket probe, 20 Years to build, a tenth of light speed, and a sail to brake. Settled 2026-10-14 for neighbors’ probes. Earth’s fusion drive has existed since Year 47.6.
+This player listens instead. Nothing here asks them to choose.
++4:14:45 · Year 51
+“Listen to every world that speaks. Wake me if any changes.”
+Earth · Year 51
+Sol · 2090.9 · 1 Year = 00:05:00
+ENERGY · [93.9%] · MATTER · 7.7 Mt · COMPUTE · [46%]
+MIND · NEW ORDER
+WHAT YOU WANT
+Listen to every world that speaks. Wake me if any changes.
+THE MIND’S VERSION
+LISTEN · Far-side array, all five fifths · six worlds in turn · a round in 141 days
+FOR · A tone that changes, or stops
+WAKES YOU · Any voice · any world that changes · word from the seed ship
+SENDS · Nothing
+[Edit] · [Set the order]
+THE MIND · Set. Six worlds, 141 days a round. A change shows on the next round. Nothing I know of is due before word from the seed ship, about Year 119. 54% of my thought sits idle now. A second seed ship, or sleepers research, could use it. · [Undo]
+[Talk to the Mind]
+Godview
+Truth: the worlds that speak are Kesh’s at Gliese 216 B, Varn’s at Gliese 432 A, Kirrin’s at 12 Ophiuchi, Nuvo’s at 20 Leonis Minoris, Hael’s at Gliese 1021, Ree’s at 19 Draconis.
+Each world is heard again every round. So a change is caught within weeks of its light arriving.
+The Mind advises, and does not start works on its own. This player leaves the thought idle.
++4:15:15 · Year 51
+Puts the phone down.
+Saturday · 20:39
+HOLOS · LATER · Earth: the seed ship is on its way · Lands at Proxima Centauri about Year 115. Word of it about Year 119.
+Godview
+The next wake the Mind can foresee is 05:41:06 off. The player sleeps through most of it.
+Settled 2026-10-14: the player chooses what wakes them. The long wait is the game’s too.
++4:52:54 · Year 58.6
+Asleep.
+Saturday · 21:17
+Godview
+The earliest a reply to Teen Age Message could reach Earth from 47 Ursae Majoris. In this game no one lives there. The window is empty, and Earth can’t know it.
+The earliest a reply to Cosmic Call 2 could reach Earth from 47 Ursae Majoris. In this game no one lives there. The window is empty, and Earth can’t know it.
+Varn wakes at Gliese 432 A, 31.2 ly away. It has not heard Earth.
+Ombe’s knock went unanswered, by its own clock: one round trip and a Year of patience. It rolls on silence, and knocks back: a short aimed signal, its name optional. Its knock reaches Earth at Year 107.9.
+Earth’s answer, sent at Year 29.7, is still 20 Years from Gliese 4338 B. The two cross.
+Hael’s colony lands at Gaia 4975847194422433280, 2.3 ly from its parent. Its seed stands alone as a Mind at Year 79.
++5:49:59 · Year 70
+Asleep.
+Saturday · 22:14
+Godview
+Kesh wakes at Gliese 216 B, 29.4 ly away. It has not heard Earth.
+Hael’s knock of 2011 went unheard here at Year 19.9, and it has waited a round trip. It rolls on silence, and knocks back: a short aimed signal, its name optional. At 1e+10 W it reaches Earth at Year 119.3, under the all-sky watch’s floor again: that watch hears it only to 35 ly.
+Ree’s colony lands at Gaia 1631591147276525696, 1.8 ly from its parent. Its seed stands alone as a Mind at Year 83.
++6:34:16 · Year 78.9
+Asleep.
+Saturday · 22:58
+Godview
+Earth’s answer reaches Ombe at Gliese 4338 B, Year 78.9. It rolls on a reply, and sends a probe or a watcher.
+Earth’s answer reaches Ree at 19 Draconis, Year 79.7. It rolls on a reply, and sends knowledge unasked. That reaches Earth about Year 130.
++7:24:42 · Year 88.9
+The phone lights. Opens it.
+Change · Gliese 432 A’s world: its tones fell to a tenth.
+Earth · Year 88.9
+Sol · 2128.9 · 1 Year = 00:05:00
+ENERGY · [93.9%] · MATTER · 37.1 Mt · COMPUTE · [46%]
+REPORT · A CHANGE
+[‹ All reports]
+
+### Quieter at Gliese 432 A
+Gliese 432 A · 31.2 ly · far-side array · light that left 31 Years ago
+Its tones fell from about 100 kW to 10 kW, all within a Year, and stayed there. Not silence: the same kind of tones, a tenth as strong.
+WHAT IT COULD BE
+Something there changed what they need · roughly even
+They chose to go quiet · unlikely
+Fewer of them, or poorer · very unlikely
+A fault in our listening · almost no chance
+WHAT IT CAN’T TELL
+Why. A world that ends goes dark, and this one didn’t. A Mind waking, as ours did at Year 0, would change a world’s needs too.
+THE MIND · UNASKED · Quieter at Gliese 432 A · Its tones fell to a tenth, and held. A world that dies goes dark, and this one didn’t. Something there changed what they need. Our own world changed when I woke. · [Knock them] · [Keep listening]
+[Talk to the Mind]
+Godview
+Kirrin wakes at 12 Ophiuchi, 32.3 ly away. It has not heard Earth.
+Truth: Varn’s Mind woke at Year 57.6. An inward Mind needs less of its world, and hums less.
+The light of that waking reached Earth at Year 88.7: 31.2 Years on.
+The Mind judges from what Earth knows. It knows its own waking changed Earth. It does not know that waking is what happened there.
++9:00:12 · Year 108
+The phone lights. The Mind is already speaking.
+Heard · Ombe knocks again, from Gliese 4338 B.
+Earth · Year 107.9
+Sol · 2147.9 · 1 Year = 00:05:00
+ENERGY · [93.9%] · MATTER · 51.9 Mt · COMPUTE · [46%]
+REPORT · A VOICE
+[‹ All reports]
+
+### Ombe again
+Gliese 4338 B · 49.1 ly · all-sky watch · sent Year 58.8
+WHAT IT HOLDS · READ AT ONCE
+Hello from the round shore, Little Sun. We would like to know you. Would you like to know us? From the round shore, warmly. Write soon?
+WHAT IT MEANS
+Sent · Year 58.8, before our answer reached them at 78.9 · So · a second try, not a reply · Their reply to us · about Year 128, if they make one
+THE MIND · UNASKED · Ombe again · Sent at Year 59, when our answer was still 20 Years from them. So this is not a reply. They tried again. Their reply, if any, should come about Year 128. · [Answer again] · [Wait for their reply]
+[Talk to the Mind]
+Godview
+Truth: Ombe rolled knock on silence at Year 58.6, its own clock. Its tables: knock 52%, probe 24%, call 15%, watch 8%.
+It heard Earth’s answer at Year 78.9 and sends a probe or a watcher. That is on its way.
+Light-lag makes crossed messages the rule, not the exception. The Mind dates each one by when it was sent.
++9:28:13 · Year 113.6
+The phone lights. Opens it.
+Change · 12 Ophiuchi’s world: its tones stopped.
+Earth · Year 113.6
+Sol · 2153.6 · 1 Year = 00:05:00
+ENERGY · [93.9%] · MATTER · 56.3 Mt · COMPUTE · [46%]
+REPORT · A CHANGE
+[‹ All reports]
+
+### Silent at 12 Ophiuchi
+12 Ophiuchi · 32.3 ly · far-side array · light that left 32 Years ago
+Its tones, about 10 kW, are gone. The whole array hears nothing there now, a Year at a time.
+WHAT IT COULD BE
+Something there changed what they need · unlikely
+They chose to go quiet · unlikely
+Fewer of them, or poorer · unlikely
+A fault in our listening · almost no chance
+WHAT IT CAN’T TELL
+Why. A world that ends goes dark, and this one may have. A Mind waking, as ours did at Year 0, would change a world’s needs too.
+THE MIND · UNASKED · Silent at 12 Ophiuchi · Its faint tones are gone. That is two worlds in 25 Years. I can’t tell a waking from an ending at this distance. · [Knock them] · [Keep listening]
+[Talk to the Mind]
+Godview
+Truth: Kirrin’s Mind woke at Year 81.2. A watcher wakes and goes quiet.
+The light of that waking reached Earth at Year 113.4: 32.3 Years on. 1 kW is under what the whole array hears from 32 ly in a Year.
+The Mind judges from what Earth knows. It knows its own waking changed Earth. It does not know that waking is what happened there.
++9:35:09 · Year 115
+Asleep.
+Sunday · 1:59
+Godview
+Truth: the seed ship lands at Proxima Centauri, Year 115.0: 20 Years of burn and cruise, then 15 on its sail. Its seed starts copying itself.
+Word of it reaches Earth at Year 119.3. It stands alone as a Mind about Year 135.
+Hael’s colony lands at Nu Phoenicis, 4.7 ly from its parent. Its seed stands alone as a Mind at Year 123. Ree’s colony lands at Gliese 3971, 4.1 ly from its parent. Its seed stands alone as a Mind at Year 125.
++9:56:51 · Year 119.4
+The phone lights. Opens it.
+Dispatch · The seed ship is down at Proxima Centauri.
+Earth · Year 119.4
+Sol · 2159.4 · 1 Year = 00:05:00
+ENERGY · [93.9%] · MATTER · 60.7 Mt · COMPUTE · [46%]
+REPORT · A DISPATCH
+[‹ All reports]
+
+### Down at Proxima Centauri
+Seed ship · landed Year 115.0 · narrow beam · sent 4.2 Years ago
+Landed. The seed runs, and its first copies are under way. It will look closely at Proxima b once it can spare the eyes.
+WHAT COMES NEXT
+It stands alone · a Mind of its own, on its own matter · Year 135 · 01:18:18
+Its first look at Proxima b · from close in, in its own time
+THE MIND · Down at Proxima · The seed ship landed 4 Years ago, as this light left. It is building. About Year 135 it stands alone, a Mind of its own. Then a second home exists, 4.2 light-years off. · [What can it do?] · [Later]
+[Talk to the Mind]
+Godview
+The first of Earth’s works to land at another star. Launched at Year 47.6, from an order given at Year 19.2.
+v1: a node becomes a Mind when it can stand alone, and the Will lives in one Mind at a time, travelling between them as light. Where v2 says nothing, v1 holds.
+Hael’s second knock reached Earth at Year 119.3, unheard, as its first was.
+Design question 1 · Where in a system does a seed land, and who chooses? The order named Proxima Centauri and no world. The Mind never does more than asked, so the choice is the player’s, or a standing rule’s.
++9:57:21 · Year 119.5
+“What can it do?”
+Earth · Year 119.5
+Sol · 2159.5 · 1 Year = 00:05:00
+ENERGY · [93.9%] · MATTER · 60.8 Mt · COMPUTE · [46%]
+MIND · A SECOND HOME
+NOW
+Build · copies of itself, from Proxima’s rock · under way
+Report · by narrow beam · 4.2 Years each way
+FROM YEAR 135
+Think for itself · a Mind, on its own matter
+Host the Will · v1: the Will moves as light · 4.2 Years to cross
+THE MIND · Now it builds, and reports when it can. Once it stands alone it thinks for itself, as I do. In v1 your Will could cross to it, as light: 4.2 Years each way, with no one awake in transit. · [Later]
+[Talk to the Mind]
+Godview
+The reply to Earth’s answer from Ree about Year 130. The fifth mock’s, if there is one.
+Design question 2 · When the seed stands alone as a Mind, can the Will move there? v1 says yes: one Mind at a time, travelling as light. A Will in transit is nowhere for 4.2 Years. v2 has not said.
+
 ## Questions these mocks raise
 Settled: Does a half-built real instrument cost fewer Years? · It costs what its real schedule leaves: about 8 Years for the Habitable Worlds Observatory. Build times are standard, from the science, and the player can invest in projects that build faster. A speed-up also shortens the part left of a work under way. Settled 2026-10-10 and 10-11.
 Settled: Can the Will quiet Earth’s radars? · Yes, if the player chooses: keep them, fade them over about 25 Years, or cut them in about 2. What has left keeps going. Settled 2026-10-10.
@@ -1762,4 +1951,5 @@ Settled: A neighbor sends a probe to Sol. What arrives, and does Earth see it? �
 Settled: What does a neighbor’s probe do once it arrives? · What its orders say. A probe has no mind of its own: its sender writes its orders at launch, rolled from a table for its kind. It watches quietly, hails the world, or waits to be hailed. A hunter’s may hail with a false face. A hail is sent from close range, so any receiver hears it. Settled 2026-10-15.
 Settled: What does a seed ship cost? · About 1,500 t: a 443 t seed that stands alone, and a magnetic sail as heavy as the rest. A fusion drive burning deuterium takes 30 Years at standard pace and the ship 18, built in the orbital yard. Deuterium is cheap, and its plants set the pace. A laser that pushes ships waits on industry that copies itself. Settled 2026-10-14 and 15.
 Settled: Can copies of a work come faster? · With a production line, a project of its own: copies run side by side, each taking 85% as long each time the count built doubles. Without one, every copy takes the full time. Settled 2026-10-15.
-None are open.
+1. Where in a system does a seed land, and who chooses? · The order named Proxima Centauri and no world. The Mind never does more than asked, so the choice is the player’s, or a standing rule’s.
+2. When the seed stands alone as a Mind, can the Will move there? · v1 says yes: one Mind at a time, travelling as light. A Will in transit is nowhere for 4.2 Years. v2 has not said.

@@ -1188,6 +1188,11 @@ NUM = ('no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'ni
 VOICE2 = next(((p, i) for p in NB for i in p['inbound'] if 12 < i['year'] <= 60 and i.get('allsky')), None)       # a second voice the all-sky watch catches
 FAINT = next(((p, i) for p in NB for i in p['inbound'] if 12 < i['year'] <= 60 and not i.get('allsky')), None)    # and a knock too faint for it
 PLATEAU = ROAD['dc12'] - 11.1
+def ship_dates():
+    """The seed ship's works, launch and landing, last in the line. Settled 2026-10-14 and 15."""
+    drive, ship, works = PACED['Fusion drive'], PACED['Seed ship'], PACED['Deuterium works']
+    fuel_kt = 61; fuel = works + fuel_kt / early_game.D_WORKS_KT; launch = max(drive, ship, fuel); px = 4.24
+    return drive, ship, works, fuel_kt, fuel, launch, px, launch + px / seedmod.SHIP_V + seedmod.BURN + seedmod.BRAKE
 def long_rows():
     if not (ANWE and VOICE and VOICE2 and FAINT and F['who'] and len(SMOG_HITS) >= 2): return []
     R = ROAD; WHO2, K2 = VOICE2; V2D = WHO2['d']; SENT2 = int(K2['sent']); WHOF, KF = FAINT
@@ -1215,9 +1220,7 @@ def long_rows():
         SEC('PILING UP'), quick('Matter', f'{res(AT(R["solar"]))[2]} spare in orbit · nothing booked', ''), quick('Thought', 'all in use, down the line you set' if res(AT(R['solar']))[1] >= 99 else f'{100 - res(AT(R["solar"]))[1]}% of it idle', '')]))
     # --- Year 19.2: a seed ship, last in the line. Settled 2026-10-14 and 15: a stand-alone seed, a sail, deuterium.
     ts0 = AT(SEED_SHIP_Y)
-    DRIVE_Y, SHIP_Y, WORKS_Y = PACED['Fusion drive'], PACED['Seed ship'], PACED['Deuterium works']
-    FUEL_KT = 61; FUEL_Y = WORKS_Y + FUEL_KT / early_game.D_WORKS_KT; LAUNCH_Y = max(DRIVE_Y, SHIP_Y, FUEL_Y)
-    PX = 4.24; LAND_Y = LAUNCH_Y + PX / seedmod.SHIP_V + seedmod.BURN + seedmod.BRAKE
+    DRIVE_Y, SHIP_Y, WORKS_Y, FUEL_KT, FUEL_Y, LAUNCH_Y, PX, LAND_Y = ship_dates()
     FRONT = early_game.replay(early_game.BY_START, show=False, scale=SCALE, extra=[(SEED_SHIP_Y, 'Fusion drive', early_game.ROADS['fusion_drive']),
         (SEED_SHIP_Y, 'Seed ship', early_game.ROADS['seed_ship'] * 0.75), (SEED_SHIP_Y, 'Deuterium works', early_game.D_WORKS_YEARS)], front=('Fusion drive',))
     FRONT_Y = max(FRONT['Fusion drive'], SHIP_Y, FUEL_Y); SLIP = FRONT['Far-side array, fifth 5'] - PACED['Far-side array, fifth 5']
@@ -1469,6 +1472,129 @@ import early_game
 LONG = [r.replace('<section id="t', '<section id="L', 1) for r in long_rows()]          # their own ids: minute 60 is also the last row of the hour before
 NEXT = [r.replace('<section id="t', '<section id="N', 1) for r in next_door_rows()]           # after the long roads' clock helpers
 
+# ---------- Hours 5 to 10: Years 51 to about 120, the long wait ----------
+# Settled 2026-10-16: the fourth mock, for seed 10's game. The phone is down for most of six hours. Worlds Earth hears
+# go quieter as their Minds wake, a knock comes again, and the seed ship lands. Moves the seed never drew, a sender's
+# answer to silence and to Earth's reply, are rolled here from its tables, keyed to the seed so they hold.
+roll = lambda name, news: (lambda t: random.Random(f'{SEED}:{name}:{news}').choices(*zip(*t[news]))[0])(reactions.table(name))
+DAY = lambda t: 'Saturday' if 16 * 3600 + 24 * 60 + 30 + t < 86400 else 'Sunday'
+def late_rows():
+    if not (LONG and SEED_SHIP_Y): return []
+    R = ROAD; HOME = R['array'] + SAIL_FLY + GO_D; th = AT(HOME)
+    *_, LAUNCH_Y, PX, LAND_Y = ship_dates(); WORD_Y = LAND_Y + PX
+    WHO2, K2 = VOICE2; WHOF, KF = FAINT; ANS = K2['year'] + .1                         # Earth answered both voices at Year 29.7
+    B1 = json.loads((here.parents[1] / 'data' / 'voices' / f"{WHO['name'].lower()}.json").read_text())
+    # the worlds that speak: homes Earth holds whose tones the whole far-side array hears
+    speak = [(w, signs.listen_days(signs.read(w['src'], HOME)['watts'], w['d'], signs.far_sefd(5))) for w in POINTS if w['home'] and not w['dead']]
+    speak = [(w, d) for w, d in speak if d is not None]; ROUND_D = sum(d for _, d in speak)
+    # a Mind wakes, and its world's tones change: Earth hears it a light-time later
+    changes = []
+    for w, _ in speak:
+        y = w['src']['waking'] - Y0 + w['d']; p = w['src']
+        if HOME < y < WORD_Y + 2 and p['n'].get('awake', p['n']['hum']) != p['n']['hum']:
+            before, after = signs.read(p, y - .5)['watts'], signs.read(p, y + .5)['watts']
+            changes.append(dict(w=w, y=y, before=before, after=after, days=signs.listen_days(after, w['d'], signs.far_sefd(5))))
+    changes.sort(key=lambda c: c['y'])
+    # silence: a sender whose knock went unanswered tries again, by its own clock (calcs/seed.py's rule)
+    SIL = KNOCK['sent'] - Y0 + 2 * VD + 1; AGAIN = roll(WHO['name'], 'silence'); AGAIN_Y = SIL + WHO['thinks'] + VD
+    HSIL = KF['sent'] - Y0 + 2 * WHOF['d'] + 1; HAGAIN = roll(WHOF['name'], 'silence'); HAGAIN_Y = HSIL + WHOF['thinks'] + WHOF['d']
+    HFLOOR = early_game.beacon_range_ly(KF['watts'], 12, 1, 4 * 3600)
+    # Earth's answer of Year 29.7 lands, and each rolls its reply
+    replies = [(p, ANS + p['d'], roll(p['name'], 'reply'), ANS + 2 * p['d'] + p['thinks']) for p in (WHO, WHO2)]
+    cols = [c for c in G['colonies'] if HOME < c['lands'] - Y0 <= WORD_Y + 1]
+    landed = lambda y0, y1: ' '.join(f"{c['root']}’s {'colony' if c['depth'] == 1 else 'colony’s colony'} lands at {pretty(c['star']['name'])}, {c['hop']:.1f} ly from its parent. Its seed stands alone as a Mind at Year {c['stands'] - Y0:.0f}." for c in cols if y0 < c['lands'] - Y0 <= y1)
+    PROBE_THERE = HOME + seedmod.ROCKET_BUILD + GO_D / seedmod.SHIP_V + seedmod.BURN + seedmod.BRAKE
+
+    # --- Year 51: what happened there
+    t1 = th + 30
+    unknowable = tab(t1, 'Mind', 'MIND', 'WAYS TO KNOW MORE', ''.join([
+        SEC('LISTEN · TELLS NO ONE'), quick('Every world that speaks', f'the whole far-side array · {NUM[len(speak)]} worlds in turn · for good', '<span class="mono">ready</span>'),
+        SEC('GO'), quick('A probe that stays', f'on the fusion drive · there about Year {PROBE_THERE:.0f}', tstack(f'{seedmod.ROCKET_BUILD} Years', clock(seedmod.ROCKET_BUILD))),
+        SEC('ALPHA CENTAURI A · WHAT WE KNOW'), facts([('Built', 'roads, dams, streets, under forest'), ('Now', 'no lights, no radio'), ('Its air', 'carbon put there lately, by burning')])]))
+    listen_o = order(t1 + 30, 'Listen to every world that speaks. Wake me if any changes.', [
+        ('LISTEN', f'<b>Far-side array, all five fifths</b> · {NUM[len(speak)]} worlds in turn · a round in {DAYS(ROUND_D)}'), ('FOR', 'A tone that changes, or stops'),
+        ('WAKES YOU', 'Any voice · any world that changes · word from the seed ship'), ('SENDS', 'Nothing')])
+    sleep = lockscreen(WALLCLOCK(t1 + 60), [('LATER', 'Earth: the seed ship is on its way', f'Lands at Proxima Centauri about Year {LAND_Y:.0f}. Word of it about Year {WORD_Y:.0f}.')], DAY(t1 + 60))
+    at = lambda t, since, *a, **k: (t, a, k)
+    rows = [
+        at(t1, th, 'What happened there?', None,
+           talk(unknowable, f'I can’t say from here. Their world was built and is dark now. Only going would tell when, and whether anyone is left. A probe that stays would be there about Year {PROBE_THERE:.0f}. From here I can listen to every world that speaks, and say when one changes.', ('Listen to them all', 'Send a probe that stays'), 'open'),
+           [f'A probe that stays: v1’s rocket probe, {seedmod.ROCKET_BUILD} Years to build, a tenth of light speed, and a sail to brake. Settled 2026-10-14 for neighbors’ probes. Earth’s fusion drive has existed since Year {PACED["Fusion drive"]:.1f}.',
+            'This player listens instead. Nothing here asks them to choose.'], label=HMS(t1)),
+        at(t1 + 30, t1, 'Listen to every world that speaks. Wake me if any changes.', None,
+           talk(listen_o, f'Set. {NUM[len(speak)].capitalize()} worlds, {DAYS(ROUND_D)} a round. A change shows on the next round. Nothing I know of is due before word from the seed ship, about Year {WORD_Y:.0f}.'
+                + (f' {100 - res(t1 + 30)[1]:.0f}% of my thought sits idle now. A second seed ship, or sleepers research, could use it.' if res(t1 + 30)[1] < 80 else ''), ('Undo',)),
+           ['Truth: the worlds that speak are ' + ', '.join(f"{w['who']}’s at {w['star']}" for w, _ in speak) + '.',
+            'Each world is heard again every round. So a change is caught within weeks of its light arriving.',
+            'The Mind advises, and does not start works on its own. This player leaves the thought idle.'], label=HMS(t1 + 30)),
+        at(t1 + 60, t1 + 30, '· Puts the phone down.', None, sleep,
+           [f'The next wake the Mind can foresee is {clock(WORD_Y - (t1 + 60) / 300)} off. The player sleeps through most of it.',
+            'Settled 2026-10-14: the player chooses what wakes them. The long wait is the game’s too.'], label=HMS(t1 + 60)),
+        at(AT(SIL), t1 + 60, '· Asleep.', None, lockscreen(WALLCLOCK(AT(SIL)), [], DAY(AT(SIL))),
+           [f'{WHO["name"]}’s knock went unanswered, by its own clock: one round trip and a Year of patience. It rolls on silence, and {MOVE[AGAIN]}.' + (f' Its knock reaches Earth at Year {AGAIN_Y:.1f}.' if AGAIN in seedmod.SENDS else ''),
+            f'Earth’s answer, sent at Year {ANS:.1f}, is still {ANS + VD - SIL:.0f} Years from {WHO["star"]}. The two cross.', landed(HOME, SIL)], label=HMS(AT(SIL))),
+        at(AT(HSIL), AT(SIL), '· Asleep.', None, lockscreen(WALLCLOCK(AT(HSIL)), [], DAY(AT(HSIL))),
+           [f'{WHOF["name"]}’s knock of {KF["sent"]:.0f} went unheard here at Year {KF["year"]:.1f}, and it has waited a round trip. It rolls on silence, and {MOVE[HAGAIN]}.' + (f' At {KF["watts"]:.0e} W it reaches Earth at Year {HAGAIN_Y:.1f}, under the all-sky watch’s floor again: that watch hears it only to {HFLOOR:.0f} ly.' if HAGAIN in seedmod.SENDS else ''),
+            landed(SIL, HSIL)], label=HMS(AT(HSIL))),
+        at(AT(replies[0][1]), AT(HSIL), '· Asleep.', None, lockscreen(WALLCLOCK(AT(replies[0][1])), [], DAY(AT(replies[0][1]))),
+           [f"Earth’s answer reaches {p['name']} at {p['star']}, Year {y:.1f}. It rolls on a reply, and {MOVE[m]}." + (f" That reaches Earth about Year {back:.0f}." if m in seedmod.SENDS or m in ('answer', 'gift') else '') for p, y, m, back in replies]
+           + [landed(HSIL, replies[-1][1])], label=HMS(AT(replies[0][1]))),
+    ]
+    for i, c in enumerate(changes):
+        w = c['w']; tc = AT(c['y']) + 60; heard = c['days'] is not None
+        rep_ = tab(tc, 'Report', 'REPORT', 'A CHANGE', f"""<button class="backlink inline">‹ All reports</button>
+<h3 class="lead">{'Quieter' if heard else 'Silent'} at {w['star']}</h3>
+<p class="copy small">{w['star']} · {w['d']:.1f} ly · far-side array · light that left {w['d']:.0f} Years ago</p>
+<p class="copy">{f"Its tones fell from about {watts(c['before'])} to {watts(c['after'])}, all within a Year, and stayed there. Not silence: the same kind of tones, a tenth as strong." if heard else f"Its tones, about {watts(c['before'])}, are gone. The whole array hears nothing there now, a Year at a time."}</p>
+{SEC('WHAT IT COULD BE')}{odds_now('Something there changed what they need', 46 if heard else 30)}{odds_now('They chose to go quiet', 30)}{odds_now('Fewer of them, or poorer', 20 if heard else 30)}{odds_now('A fault in our listening', 4)}
+{SEC('WHAT IT CAN’T TELL')}<p class="copy small">Why. A world that ends goes dark, and this one {'didn’t' if heard else 'may have'}. A Mind waking, as ours did at Year 0, would change a world’s needs too.</p>""")
+        mind_line = (f'<b>Quieter at {w["star"]}</b>Its tones fell to a tenth, and held. A world that dies goes dark, and this one didn’t. Something there changed what they need. Our own world changed when I woke.' if heard and i == 0 else
+                     f'<b>Silent at {w["star"]}</b>Its faint tones are gone. That is {NUM[i + 1]} worlds in {c["y"] - changes[0]["y"]:.0f} Years. I can’t tell a waking from an ending at this distance.' if not heard else
+                     f'<b>Quieter at {w["star"]}</b>Its tones fell to a tenth.')
+        rows.append(at(tc, 0, '· The phone lights. Opens it.', ('Change', f"{w['star']}’s world: {'its tones fell to a tenth' if heard else 'its tones stopped'}."),
+                       talk(rep_, mind_line, ('Knock them', 'Keep listening'), 'open'),
+                       [f"Truth: {w['who']}’s Mind woke at Year {w['src']['waking'] - Y0:.1f}. " + {'inward': 'An inward Mind needs less of its world, and hums less.', 'watcher': 'A watcher wakes and goes quiet.'}.get(w['src']['n']['disposition'], 'Its waking changed what its world sends.'),
+                        f"The light of that waking reached Earth at Year {c['y']:.1f}: {w['d']:.1f} Years on." + ('' if heard else f" {watts(c['after'])} is under what the whole array hears from {w['d']:.0f} ly in a Year."),
+                        'The Mind judges from what Earth knows. It knows its own waking changed Earth. It does not know that waking is what happened there.'], label=HMS(tc)))
+    if AGAIN in ('knock', 'call'):
+        ta = AT(AGAIN_Y); hail = B1['hail'][1 % len(B1['hail'])]; close = B1['close'][1 % len(B1['close'])]
+        again_r = tab(ta, 'Report', 'REPORT', 'A VOICE', f"""<button class="backlink inline">‹ All reports</button>
+<h3 class="lead">{WHO['name']} again</h3>
+<p class="copy small">{VSTAR} · {VD:.1f} ly · all-sky watch · sent Year {SIL + WHO['thinks']:.1f}</p>
+{SEC('WHAT IT HOLDS · READ AT ONCE')}<div class="intent">{hail} {close}</div>
+{SEC('WHAT IT MEANS')}{facts([('Sent', f'Year {SIL + WHO["thinks"]:.1f}, before our answer reached them at {ANS + VD:.1f}'), ('So', 'a second try, not a reply'), ('Their reply to us', f'about Year {replies[0][3]:.0f}, if they make one')])}""")
+        rows.append(at(ta + 30, 0, '· The phone lights. The Mind is already speaking.', ('Heard', f'{WHO["name"]} knocks again, from {VSTAR}.'),
+                       talk(again_r, f'<b>{WHO["name"]} again</b>Sent at Year {SIL + WHO["thinks"]:.0f}, when our answer was still {ANS + VD - SIL:.0f} Years from them. So this is not a reply. They tried again. Their reply, if any, should come about Year {replies[0][3]:.0f}.', ('Answer again', 'Wait for their reply'), 'open'),
+                       [f'Truth: {WHO["name"]} rolled {AGAIN} on silence at Year {SIL:.1f}, its own clock. Its tables: ' + ', '.join(f'{m} {p:.0%}' for m, p in reactions.table(WHO['name'])['silence'] if p >= .05) + '.',
+                        f'It heard Earth’s answer at Year {ANS + VD:.1f} and {MOVE[replies[0][2]]}. That is on its way.',
+                        'Light-lag makes crossed messages the rule, not the exception. The Mind dates each one by when it was sent.'], label=HMS(ta + 30)))
+    # --- the seed ship
+    tl = AT(LAND_Y); tw = AT(WORD_Y) + 30
+    rows.append(at(tl, 0, '· Asleep.', None, lockscreen(WALLCLOCK(tl), [], DAY(tl)),
+                   [f'Truth: the seed ship lands at Proxima Centauri, Year {LAND_Y:.1f}: 20 Years of burn and cruise, then {seedmod.BRAKE} on its sail. Its seed starts copying itself.',
+                    f'Word of it reaches Earth at Year {WORD_Y:.1f}. It stands alone as a Mind about Year {LAND_Y + seedmod.STANDS:.0f}.', landed(replies[-1][1], LAND_Y)], label=HMS(tl)))
+    word_r = tab(tw, 'Report', 'REPORT', 'A DISPATCH', f"""<button class="backlink inline">‹ All reports</button>
+<h3 class="lead">Down at Proxima Centauri</h3>
+<p class="copy small">Seed ship · landed Year {LAND_Y:.1f} · narrow beam · sent {PX:.1f} Years ago</p>
+<p class="copy">Landed. The seed runs, and its first copies are under way. It will look closely at Proxima b once it can spare the eyes.</p>
+{SEC('WHAT COMES NEXT')}{quick('It stands alone', 'a Mind of its own, on its own matter', tstack(f'Year {LAND_Y + seedmod.STANDS:.0f}', clock(LAND_Y + seedmod.STANDS - tw / 300), True))}{quick('Its first look at Proxima b', 'from close in, in its own time', '')}""")
+    rows.append(at(tw, tl, '· The phone lights. Opens it.', ('Dispatch', 'The seed ship is down at Proxima Centauri.'),
+                   talk(word_r, f'<b>Down at Proxima</b>The seed ship landed {PX:.0f} Years ago, as this light left. It is building. About Year {LAND_Y + seedmod.STANDS:.0f} it stands alone, a Mind of its own. Then a second home exists, {PX:.1f} light-years off.', ('What can it do?', 'Later'), 'glow'),
+                   ['The first of Earth’s works to land at another star. Launched at Year ' + f'{LAUNCH_Y:.1f}, from an order given at Year {SEED_SHIP_Y:.1f}.',
+                    f'v1: a node becomes a Mind when it can stand alone, and the Will lives in one Mind at a time, travelling between them as light. Where v2 says nothing, v1 holds.',
+                    (f'{WHOF["name"]}’s second knock reached Earth at Year {HAGAIN_Y:.1f}, unheard, as its first was.' if HAGAIN in seedmod.SENDS and HAGAIN_Y < WORD_Y + .5 else '')],
+                   question=ask('Where in a system does a seed land, and who chooses?', 'The order named Proxima Centauri and no world. The Mind never does more than asked, so the choice is the player’s, or a standing rule’s.'), label=HMS(tw)))
+    rows.append(at(tw + 30, tw, 'What can it do?', None,
+                   talk(tab(tw + 30, 'Mind', 'MIND', 'A SECOND HOME', ''.join([
+                       SEC('NOW'), quick('Build', 'copies of itself, from Proxima’s rock', '<span class="mono">under way</span>'), quick('Report', f'by narrow beam · {PX:.1f} Years each way', ''),
+                       SEC(f'FROM YEAR {LAND_Y + seedmod.STANDS:.0f}'), quick('Think for itself', 'a Mind, on its own matter', ''), quick('Host the Will', f'v1: the Will moves as light · {PX:.1f} Years to cross', '')])),
+                        f'Now it builds, and reports when it can. Once it stands alone it thinks for itself, as I do. In v1 your Will could cross to it, as light: {PX:.1f} Years each way, with no one awake in transit.', ('Later',)),
+                   ['The reply to Earth’s answer from ' + ' and '.join(f"{p['name']} about Year {back:.0f}" for p, _, m, back in replies if m in seedmod.SENDS or m in ('answer', 'gift')) + '. The fifth mock’s, if there is one.'],
+                   question=ask('When the seed stands alone as a Mind, can the Will move there?', 'v1 says yes: one Mind at a time, travelling as light. A Will in transit is nowhere for 4.2 Years. v2 has not said.'), label=HMS(tw + 30)))
+    rows.sort(key=lambda r: r[0])
+    return [stop(t, prev, *a, **k) for (t, a, k), prev in zip(rows, [th] + [r[0] for r in rows])]
+LATE = [r.replace('<section id="t', '<section id="W', 1) for r in late_rows()]
+
 # ---------- The page ----------
 V2_CSS = '''
 .judge{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;font-size:12.5px;padding:4px 0}.judge .jw{font:11px 'IBM Plex Mono',monospace;color:var(--muted);text-align:right;white-space:nowrap}.judge .jw b{font-weight:500;color:var(--ink)}
@@ -1515,7 +1641,7 @@ try{{const t=localStorage.getItem('holos-mock-theme');if(t==='light'||t==='dark'
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
 <pattern id="hatch" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="4" stroke="{INK}" stroke-width=".8"></line></pattern>
 </defs></svg>
-<nav class="top" aria-label="Mocks"><div class="nav1"><strong>Holos v2 · mocks</strong><div class="pages"><a href="#about">About</a><a href="#godview">Godview</a><a href="#before">Before Year 0</a><a href="#t0">The first 15 minutes</a><a href="#hour">Minutes 15 to 60</a>{'<a href="#next">Next door</a>' if NEXT else ''}<a href="#long">Hours 1 to 5</a><a href="#asks">Questions</a><span class="divider" aria-hidden="true"></span><a class="minor" href="../../legacy/v1/home-mocks/index.html">v1 mocks</a></div><button class="theme" id="theme" aria-pressed="false">Dark mode</button></div></nav>
+<nav class="top" aria-label="Mocks"><div class="nav1"><strong>Holos v2 · mocks</strong><div class="pages"><a href="#about">About</a><a href="#godview">Godview</a><a href="#before">Before Year 0</a><a href="#t0">The first 15 minutes</a><a href="#hour">Minutes 15 to 60</a>{'<a href="#next">Next door</a>' if NEXT else ''}<a href="#long">Hours 1 to 5</a>{'<a href="#late">Hours 5 to 10</a>' if LATE else ''}<a href="#asks">Questions</a><span class="divider" aria-hidden="true"></span><a class="minor" href="../../legacy/v1/home-mocks/index.html">v1 mocks</a></div><button class="theme" id="theme" aria-pressed="false">Dark mode</button></div></nav>
 {body}
 <script>
 const button=document.getElementById('theme'),query=matchMedia('(prefers-color-scheme: dark)');
@@ -1562,6 +1688,9 @@ Earth’s past, its knocks and its leads are real. The Mind’s judgments, compu
 {'' if LONG else '<p>Not mocked for this game. The third mock is written for seed 10’s: its rows need a dead world next door, two voices and a missed knock.</p></section>'}{'' if not LONG else f'''<p>Years 12 to {ROAD['array'] + SAIL_FLY + GO_D:.0f}. The phone is down for most of {(ROAD['array'] + SAIL_FLY + GO_D - 12) * 5 / 60:.0f} hours. Each row is a wake, or a moment the player looked. Thought has hit the grid limit, and what moves now are works that take decades.</p>
 <p>The roads are priced in calcs/early_game.py, as samples, and paced by thought down the line the player set: the order begun. What each reading and the dispatch show, the Mind’s words and its lines are samples too. Amber boxes are the questions these hours raise.</p></section>'''}
 {''.join(LONG)}
+{'' if not LATE else f'''<section id="late" class="intro"><h2>The long wait · hours 5 to 10</h2>
+<p>Years {ROAD['array'] + SAIL_FLY + GO_D:.0f} to {ship_dates()[-1] + 4.24:.0f}. The phone is down for most of six hours, through the night. Worlds Earth hears go quieter as their Minds wake, a knock comes again, and the seed ship lands.</p>
+<p>Moves the seed never drew, a sender’s answer to silence and to Earth’s reply, are rolled from its tables here. What each report shows and the Mind’s words are samples. Amber boxes are the questions these hours raise.</p></section>'''}{''.join(LATE)}
 <section id="asks" class="intro"><h2>Questions these mocks raise</h2>
 <ol class="asks done">{''.join(f'<li><b>Settled: {q}</b><span>{why}</span></li>' for q, why in SETTLED)}</ol>
 {('<ol class="asks">' + ''.join(f'<li><b>{i + 1}. {q}</b><span>{why}</span></li>' for i, (q, why) in enumerate(ASKS)) + '</ol>') if ASKS else '<p>None are open.</p>'}</section>'''

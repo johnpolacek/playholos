@@ -952,3 +952,13 @@ Answered one at a time, in this order. Every answer must be permitted by current
     - **Settled 2026-10-14:** Earth sees of a colony what physics gives: almost never its ship, its radio as its parent's, and no heat for centuries.
     - **Settled 2026-10-14:** a colony ship brakes on a magnetic sail, 15 Years more a trip, by Gros 2017's case. Corrected the same day: its sail's radio dies in the gas, so Earth can't hear it.
     - **Settled 2026-10-14:** every seed stands alone, so a seed ship weighs about 1,500 t. A laser, deuterium or helium-3 pushes it, at real prices.
+14. **Fourth mock built 2026-10-16:** [the long wait](explorations/v2-mocks/index.html#late), hours 5 to 10, on seed 10's game. Years 51 to 119, through the night.
+    - *What it shows.* The player asks what happened at Alpha Centauri A, and orders the far-side array to listen to the six worlds that speak, waking them for any change.
+    - *Two worlds change.* Varn's tones fall to a tenth at Year 88.9, 31 Years after its Mind woke. Kirrin's stop at Year 113.6. The Mind can't tell a waking from an ending, and says so.
+    - *A knock comes again.* Ombe, unanswered by its own clock, knocks again at Year 59. It reaches Earth at Year 108, 29 Years after Earth's answer reached Ombe. The Mind dates it by when it was sent.
+    - *Hael's second knock is missed too,* at Year 119.3, under the all-sky watch's floor as its first was.
+    - *The seed ship lands* at Proxima Centauri at Year 115, and word reaches Earth at Year 119.4. It stands alone as a Mind about Year 135.
+    - *Wakes, as played:* four in about six hours. The longest quiet is 2.5 hours, Years 51 to 89.
+    - *Rolled here, keyed to the seed:* each sender's move on silence and on Earth's reply, from its tables. Ombe knocks again, then sends a probe on hearing Earth. Hael knocks again. Ree sends knowledge unasked, reaching Earth about Year 130.
+    - *The Mind advises, and does nothing more.* At Year 51 it says half its thought is idle. This player leaves it.
+    - Open: where in a system a seed lands, and who chooses. And whether the Will can move into the seed's Mind once it stands alone, as v1 allows.

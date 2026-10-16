@@ -277,9 +277,9 @@ def confirm(t, kind, name, why, copy, sections, compute, matter_line, years, str
             + SEC('TIME') + '<div class="timeline"><div class="track"><i style="left:0"></i><i style="left:33.3%"></i><i style="left:66.6%"></i><i style="left:100%"></i>'
             f'<span>now</span><span>01:00:00</span><span>02:00:00</span><span>03:00:00</span></div><div class="span" style="width:{width:.1f}%"><span>{years} Years</span></div></div>'
             f'</div></div>')
-def lockscreen(clock_, notes):
+def lockscreen(clock_, notes, day='Saturday'):
     n = ''.join(f'<div class="note"><span class="mono">HOLOS · {t}</span><b>{h}</b><span>{b}</span></div>' for t, h, b in notes)
-    return f'<div class="phone lock"><div class="lockclock"><span>Saturday</span><b>{clock_}</b></div>{n}</div>'
+    return f'<div class="phone lock"><div class="lockclock"><span>{day}</span><b>{clock_}</b></div>{n}</div>'
 
 # ---------- The board: a strip of the map under the top bar ----------
 SH = 195
