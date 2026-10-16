@@ -22,7 +22,7 @@ export function Hud() {
   const { energy, matter, compute } = BEFORE_YEAR_0;
   const y = year === null ? null : tenths(year);
   return (
-    <header className="flex h-[104px] shrink-0 flex-col gap-1.5 border-b border-faint px-4 pt-4 pb-3">
+    <header className="flex shrink-0 flex-col gap-1.5 border-b border-faint px-4 pt-4 pb-3">
       <div className="flex items-baseline justify-between">
         <span className="flex items-center gap-2 text-xl font-semibold">
           <i className="size-2.5 rounded-full bg-you" />
@@ -44,7 +44,7 @@ export function Hud() {
         <Meter label="ENERGY" pct={energy} />
         <span className="flex flex-col gap-[3px] text-[10px] tracking-[.08em] text-muted">
           MATTER
-          <em className="font-mono text-xs leading-none font-semibold text-ink not-italic">{matter}</em>
+          <em className="font-mono text-xs leading-tight font-semibold text-ink not-italic">{matter}</em>
         </span>
         <Meter label="COMPUTE" pct={compute} />
       </div>
