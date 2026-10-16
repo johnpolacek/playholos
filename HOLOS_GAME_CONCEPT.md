@@ -438,7 +438,7 @@ Settled 2026-10-13.
   - Set aside: minds without industry drawn by the seed, and every rung drawn, ruins included.
 - **A natural world's rung comes from its star's age, and physics says whether it kept its air.** Settled 2026-10-13. Built in [calcs/seed.py](calcs/seed.py).
   - *Air.* A world keeps its air if it sits on the airy side of the cosmic shoreline: the line through Mars that divides the Solar System's airy worlds from its bare ones. Small worlds and harsh young stars lose (Zahnle and Catling 2017).
-    - *Checked 2026-10-16 against Nguyen et al. 2026.* Their model puts this line midway between volatile-rich and volatile-poor worlds, so it stays. Their fits cover only four sample stars.
+    - *Checked 2026-10-16 against Nguyen et al. 2026.* Their model puts this line between its usual worlds and its volatile-poor ones, so it stays. Their fits cover only four sample stars.
   - *Red dwarfs are harsh.* Their warm zones sit close in, and the dimmest stay active about three times longer than the old estimate (Pass et al. 2025). Most of their warm worlds come out bare rock.
   - *Age.* Earth had lasting oxygen at 2.3 billion years old, and air rich enough to read, with animals and forests, at about 4. A world follows that schedule at its own pace.
   - *Published ages where they exist.* 53 hosts have one from asteroseismology or spin (Ware et al. 2026). The rest are drawn evenly from 1 to 10.5 billion years, as nearby stars formed.
