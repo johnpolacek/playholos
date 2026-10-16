@@ -4,6 +4,7 @@ import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import { useEffect, useRef, useState } from "react";
 import { realTime } from "@/lib/game/clock";
+import { browserStore } from "@/lib/game/store";
 
 // A deployed Mind spends real money, so it asks for an access code once. The browser keeps it.
 const CODE_KEY = "holos:mind-code";
@@ -18,7 +19,12 @@ async function opens(code: string) {
   return (await fetch("/api/mind", { headers: { "x-mind-code": code } })).ok;
 }
 
-const transport = new DefaultChatTransport({ api: "/api/mind", headers: () => ({ "x-mind-code": storedCode() }) });
+// Each send carries the time of Begin, so the Mind knows the Year.
+const transport = new DefaultChatTransport({
+  api: "/api/mind",
+  headers: () => ({ "x-mind-code": storedCode() }),
+  body: async () => ({ beganAt: (await browserStore.load())?.beganAt ?? null }),
+});
 
 export function MindChat() {
   const [open, setOpen] = useState<boolean>();
