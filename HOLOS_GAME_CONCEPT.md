@@ -456,7 +456,11 @@ Settled 2026-10-13.
     - *Example.* An 8 billion year old Sun twin, and a world 1.5 times Earth's distance. At birth it got half of today's light, and froze. It is frozen still.
     - *The rule.* A world that got less than the warm zone's outer light at its star's birth froze. It thaws once its light reaches 62% of Earth's (Turbet et al. 2017). Life's clock starts then.
     - *How many.* A quarter of Sun-like worlds were born frozen, as Henry et al. 2026 find for real planets, 37 of 143. About 1 in 10 of them has thawed.
-    - *Red dwarfs are left out.* They barely brighten. Their bright youth, which held their worlds too hot, is still to check.
+    - *Red dwarfs are left out.* They barely brighten.
+  - *A red dwarf's bright youth is left out too.* Settled 2026-10-16. Its warm worlds were too hot at first, and may have boiled off seas.
+    - *Why it barely matters.* The shoreline already strips the worlds of the smallest stars, whose youth is longest. Worlds that kept air and life were too hot for a median of 32 million years.
+    - *The survivors keep their seas.* Water stored in the rock can refill them (Godolt et al. 2019). About 2 a game were too hot past 100 million years, and the first pass sees none.
+    - Set aside: drying those worlds, and leaving split-water oxygen in their air as a false lead.
     - Set aside: thawing as soon as a world enters the warm zone, and never thawing, which plays almost the same.
   - Set aside: fixed odds at every star, and fixed odds by star kind.
 - **The Mind gives its judgment in words, never in numbers.** Settled 2026-10-13.

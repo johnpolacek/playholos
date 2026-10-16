@@ -236,8 +236,10 @@ def warm_world(seed, host):
 #   star's main-sequence life, which matches Baraffe et al. 2015 within about 10% from 0.8 to 1.2 Suns). A world that
 #   got less than the warm zone's outer light at its star's birth, 1 / 1.67^2 of Earth's, froze. It thaws only once its
 #   light reaches 62% of Earth's (Turbet et al. 2017), and life's clock starts then. Henry et al. 2026 find 37 of 143
-#   real warm-zone planets born frozen, and here about a quarter at Sun-like stars are. Red dwarfs barely brighten, and
-#   their bright youth is another matter (To check), so they are left out.
+#   real warm-zone planets born frozen, and here about a quarter at Sun-like stars are. Red dwarfs barely brighten, so
+#   they are left out. Their bright youth held their warm worlds too hot first, settled 2026-10-16 as left out too: the
+#   shoreline strips the worst, the rest were too hot for a median of 32 million years, and water kept in the rock can
+#   refill the seas (Godolt et al. 2019).
 RUNGS = ('bare rock', 'airy and lifeless', 'hiding microbes', 'showing oxygen', 'with animals and forests', 'where life died', 'frozen')
 ALIVE = RUNGS[2:5]
 SHORE_LUCK, STARTED, DIED, PACE = 0.5, 0.75, 0.2, math.log(1.6)
