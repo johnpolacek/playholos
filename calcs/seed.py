@@ -232,10 +232,26 @@ def warm_world(seed, host):
 #   Oxygen as a long shot would leave about 3 natural worlds with animals a game, fewer than its minds.
 # - Age. A published age from asteroseismology or spin (Ware et al. 2026). Where none exists, drawn evenly from 1 to
 #   10.5 billion years (Cukanovaite et al. 2023), and no more than the star's main-sequence life.
-RUNGS = ('bare rock', 'airy and lifeless', 'hiding microbes', 'showing oxygen', 'with animals and forests', 'where life died')
+# - Born frozen. Settled 2026-10-16: a star brightens as it ages, as the Sun has (Gough 1981, with time counted in the
+#   star's main-sequence life, which matches Baraffe et al. 2015 within about 10% from 0.8 to 1.2 Suns). A world that
+#   got less than the warm zone's outer light at its star's birth, 1 / 1.67^2 of Earth's, froze. It thaws only once its
+#   light reaches 62% of Earth's (Turbet et al. 2017), and life's clock starts then. Henry et al. 2026 find 37 of 143
+#   real warm-zone planets born frozen, and here about a quarter at Sun-like stars are. Red dwarfs barely brighten, and
+#   their bright youth is another matter (To check), so they are left out.
+RUNGS = ('bare rock', 'airy and lifeless', 'hiding microbes', 'showing oxygen', 'with animals and forests', 'where life died', 'frozen')
 ALIVE = RUNGS[2:5]
 SHORE_LUCK, STARTED, DIED, PACE = 0.5, 0.75, 0.2, math.log(1.6)
 OXYGEN_AT, RICH_AT, OLDEST = 2.3, 4.0, 10.5
+OUTER_LIGHT, THAW_LIGHT = 1 / 1.67 ** 2, 0.62
+def brightness(x): return 1 / (1.4 - 0.875 * min(1.0, max(0.0, x)))    # Gough 1981, x in main-sequence lives
+def thawed(host, a, age):
+    """When life's clock could start, in billions of years after the star's birth: 0 for a world warm from the start,
+    None for one still frozen."""
+    if host['kind'] == 'M': return 0.0
+    life, now = 10 * host['luminosity'] ** -0.75, host['luminosity'] / a ** 2
+    if now * brightness(0) / brightness(age / life) >= OUTER_LIGHT: return 0.0
+    if now < THAW_LIGHT: return None
+    return (1.4 - now / (THAW_LIGHT * brightness(age / life))) / 0.875 * life
 def shoreline(host, radius, mass, a):
     """How far a world sits on the airy side of the cosmic shoreline, in the log. Negative: its air is probably gone."""
     dose = host['luminosity'] ** 0.4 / a ** 2 * (3.1 if host['kind'] == 'M' and host['gabs'] > 10 else 1)
@@ -245,12 +261,13 @@ def rung(seed, w):
     host = w['host']; rng = random.Random(f"{seed}:rung:{host['id']}")
     u_age, luck, u_start, u_died, pace = rng.random(), rng.gauss(0, SHORE_LUCK), rng.random(), rng.random(), math.exp(rng.gauss(0, PACE))
     age = host['age'] or 1 + u_age * (min(OLDEST, max(2.0, 10 * host['luminosity'] ** -0.75)) - 1)
-    shore = shoreline(host, w['radius'], w['mass'], w['a'])
+    shore, thaw = shoreline(host, w['radius'], w['mass'], w['a']), thawed(host, w['a'], age)
     if shore + luck <= 0: r = RUNGS[0]
+    elif thaw is None: r = RUNGS[6]
     elif u_start >= STARTED: r = RUNGS[1]
     elif u_died < DIED: r = RUNGS[5]
-    else: r = RUNGS[2] if age < OXYGEN_AT * pace else RUNGS[3] if age < RICH_AT * pace else RUNGS[4]
-    return dict(age=age, age_by=host['age_by'] or 'drawn', shore=shore, rung=r)
+    else: r = RUNGS[2] if age - thaw < OXYGEN_AT * pace else RUNGS[3] if age - thaw < RICH_AT * pace else RUNGS[4]
+    return dict(age=age, age_by=host['age_by'] or 'drawn', shore=shore, thaw=thaw, rung=r)
 
 # The infrared telescope's search. Its first pass gives a star up to a day, a sample: enough to see an Earth twin of a
 # Sun twin out to about 50 ly. A fainter world waits for a deeper pass.
@@ -386,6 +403,7 @@ def stats(rows, n=400):
     counts, knocked, caught, in15, in60, hunter, find = [], 0, 0, 0, 0, 0, 0
     warm, felt, finds, split, first, homes, points = [], [], [], [], [], [], []
     rungs, seen_rungs, sun_rungs = {r: 0 for r in RUNGS}, {r: 0 for r in RUNGS}, {r: 0 for r in RUNGS}
+    sun, born_frozen, late = 0, 0, 0
     for s in range(1, n + 1):
         g = draw(s, rows); ns = g['neighbors']
         arr = [i['year'] for p in ns for i in p['inbound'] if i['year'] > 0]
@@ -397,6 +415,7 @@ def stats(rows, n=400):
         points.append(sum(x['swept'] for x in w) + homes[-1])
         for x in w:
             rungs[x['rung']] += 1; seen_rungs[x['rung']] += x['swept']; sun_rungs[x['rung']] += x['host']['kind'] != 'M'
+            if x['host']['kind'] != 'M': sun += 1; born_frozen += x['thaw'] != 0; late += bool(x['thaw'])
     # Quieting Earth's radars: a neighbor that wakes after the last radar light has passed it never finds them.
     living = heard = 0; spared = {3: 0, 30: 0}
     for s in range(1, n + 1):
@@ -422,6 +441,7 @@ def stats(rows, n=400):
           f"Neighbors' worlds seen on that pass: {mid(homes)}. The pass shows {sum(points) / n:.0f} points of light on average, and about 1 in {sum(points) / sum(homes):.0f} is a home.")
     share = lambda d: ', '.join(f"{r} {d[r] / sum(d.values()):.0%}" for r in RUNGS)
     print(f"What natural worlds are: {share(rungs)}. At Sun-like stars: {share(sun_rungs)}. Among those the first pass sees: {share(seen_rungs)}.")
+    print(f"Born frozen at Sun-like stars: {born_frozen / sun:.0%} of {sun / n:.0f} a game. {late / born_frozen:.0%} of those have thawed since.")
     print(f"Living natural worlds a game: {sum(rungs[r] for r in ALIVE) / n:.0f} of {sum(rungs.values()) / n:.0f}. Among those the first pass sees: "
           f"{sum(seen_rungs[r] for r in ALIVE) / n:.1f} of {sum(seen_rungs.values()) / n:.1f}, and {seen_rungs[RUNGS[3]] / n + seen_rungs[RUNGS[4]] / n:.1f} show oxygen.")
     k = len(early)

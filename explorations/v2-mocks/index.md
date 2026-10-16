@@ -1082,7 +1082,7 @@ HOLOS · NOW · The sweep’s first pass is done: 15 more candidates · Nearest:
 HOLOS · THE MIND · A receiver would hear some of them better · On one of these worlds, a deep-field receiver hears knocks three times farther than the watch. Spread over eleven, no farther. Yours to say.
 Godview
 Truth: 4 are homes. Kesh’s world at Gliese 216 B, Nuvo’s world at 20 Leonis Minoris, Hael’s world at Gliese 1021, Ree’s world at 19 Draconis.
-11 are natural, from Gliese 664 at 19 ly to Nu Phoenicis at 50. Truth: 2 bare rock, 2 airy and lifeless, 2 hiding microbes, 2 showing oxygen, 1 with animals and forests, 2 where life died.
+11 are natural, from Gliese 664 at 19 ly to Nu Phoenicis at 50. Truth: 2 bare rock, 2 airy and lifeless, 2 hiding microbes, 1 showing oxygen, 1 with animals and forests, 2 where life died, 1 frozen.
 Their ages: 5 published, 6 drawn. The seed drew 136 natural worlds in all, 113 at red dwarfs, and 85 are bare rock.
 From here a home and a natural world look alike: a point of light that moves with its star.
 The Mind calls Minds almost no chance at each. In truth 4 of 15 are homes: unlikely. It never reads the seed.

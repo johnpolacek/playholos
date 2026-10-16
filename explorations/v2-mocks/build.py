@@ -820,6 +820,7 @@ READ_LANDS = {'oxygen': f'{FO["star"]}’s world is blue, with ozone. Life: {mov
               'gas': f'82 Eridani d has a thick air, and no oxygen. A small gas world: {moved(52, 81)}.'}[SHOWS]
 TRUTH = {'bare rock': 'bare rock', 'airy and lifeless': 'air and sea, and no life', 'hiding microbes': 'microbes, under an air that shows none',
          'showing oxygen': 'an oxygen world, and no one there', 'with animals and forests': 'animals and forests, and no one there', 'where life died': 'life lived there once, and died',
+         'frozen': 'frozen since its star was young, and no life',
          'gas': '82 Eridani d is real, and its air is unread. What this reading shows is the mock’s sample: a small gas world, as a mass of at least 5.8 Earths suggests'}
 AIR_ROWS = ([('A small gas world', 52, 81), ('Rock, with seasons that freeze and thaw', 45, 17), ('Not a world: the star’s own shimmer', 3, 2)] if SHOWS == 'gas' else
             [('Life', *AIR['life']), ('Rock, and no life we could see', *AIR['rock']), ('A small gas world', *AIR['gas']), ('Minds', *AIR['minds'])])

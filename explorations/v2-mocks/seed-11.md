@@ -1019,7 +1019,7 @@ Godview
 Truth: Hael’s world. A contacter, awake 48 Years. It heard Earth’s radars from 1954, and mapped its day and orbit.
 Before Year 0 Hael sent Earth two gifts, arriving in 1996 and 1997. No one was listening.
 The Mind’s word for Minds here is almost no chance. It judges from what Earth knows.
-Alpha Centauri B has a small world too, found the next day. Truth: natural, where life died.
+Alpha Centauri B has a small world too, found the next day. Truth: natural, frozen.
 Real, and not modelled: Alpha Centauri B’s stray light, and a warm zone a full arcsecond wide, both make this star hard for a coronagraph.
 +36:00 · Year 7.2
 “Read its air.”
@@ -1134,7 +1134,7 @@ HOLOS · NOW · The sweep’s first pass is done: 12 more candidates · Nearest:
 HOLOS · THE MIND · A receiver would hear some of them better · On one of these worlds, a deep-field receiver hears knocks three times farther than the watch. Spread over eleven, no farther. Yours to say.
 Godview
 Truth: 4 are homes. Iru’s world at Gliese 570 A, Pelle’s world at Mu Herculis, Ruun’s world at 11 Leonis Minoris, Anwe’s world at Zeta² Reticuli.
-8 are natural, from Alpha Centauri B at 4 ly to Nu² Lupi at 48. Truth: 1 bare rock, 1 airy and lifeless, 1 hiding microbes, 3 with animals and forests, 2 where life died.
+8 are natural, from Alpha Centauri B at 4 ly to Nu² Lupi at 48. Truth: 1 bare rock, 1 airy and lifeless, 1 hiding microbes, 1 with animals and forests, 1 where life died, 3 frozen.
 Their ages: 2 published, 6 drawn. The seed drew 157 natural worlds in all, 127 at red dwarfs, and 92 are bare rock.
 From here a home and a natural world look alike: a point of light that moves with its star.
 The Mind calls Minds almost no chance at each. In truth 4 of 12 are homes: unlikely. It never reads the seed.

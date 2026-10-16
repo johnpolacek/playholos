@@ -1104,7 +1104,7 @@ HOLOS · NOW · The sweep’s first pass is done: 15 more candidates · Nearest:
 HOLOS · THE MIND · A receiver would hear some of them better · On one of these worlds, a deep-field receiver hears knocks three times farther than the watch. Spread over eleven, no farther. Yours to say.
 Godview
 Truth: 2 are homes. Quessa’s world at Gliese 216 B, Veyra’s world at HD 10307.
-13 are natural, from Groombridge 34 at 12 ly to Gliese 1021 at 49. Truth: 1 airy and lifeless, 2 hiding microbes, 3 showing oxygen, 4 with animals and forests, 3 where life died.
+13 are natural, from Groombridge 34 at 12 ly to Gliese 1021 at 49. Truth: 1 airy and lifeless, 4 hiding microbes, 3 showing oxygen, 1 with animals and forests, 2 where life died, 2 frozen.
 Their ages: 8 published, 5 drawn. The seed drew 148 natural worlds in all, 109 at red dwarfs, and 88 are bare rock.
 From here a home and a natural world look alike: a point of light that moves with its star.
 The Mind calls Minds almost no chance at each. In truth 2 of 15 are homes: very unlikely. It never reads the seed.

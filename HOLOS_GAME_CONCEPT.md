@@ -427,11 +427,12 @@ Settled 2026-10-13.
   - *Samples:* at most one warm world a star, none beside a neighbor's world, and a day a star on the first pass.
   - Set aside: a sweep that finds only neighbors' worlds, and a sweep that finds cold giants and dust alone.
 - **Alive is a ladder, and a natural world climbs no higher than animals and forests.** Settled 2026-10-13. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#kinds-of-worlds).
-  - *The rungs.* Bare rock. Air and sea with no life. Hidden microbes. An oxygen world. Animals and forests. A world whose life died is one more.
+  - *The rungs.* Bare rock. Air and sea with no life. Hidden microbes. An oxygen world. Animals and forests. A world whose life died is one more, and since 2026-10-16 a world still frozen since its star was young.
   - *Every mind stays hand-written,* living or dead, with industry or without. The seed never draws one.
   - *Why.* Earth's life has been microbes for most of 4.2 billion years, and its radio is 130 years old. A natural draw would almost never land on minds.
   - *What the first mirror tells apart.* No air, water without oxygen, and oxygen. Hidden microbes read as a lifeless sea, and animals as an oxygen world.
   - *A world whose life died reads as a lifeless sea.* Its oxygen is gone in a few million years. A sample, from 2026-10-14.
+  - *So does a frozen world.* Air, water as ice, and no oxygen. From 2026-10-16.
   - *Which reading a game opens with.* Measured on 300 games, 2026-10-14. At the nearest felt world it can read, the first mirror reads water and oxygen in 6 games of 10. It reads only color and ozone in 1 in 17, as in the mocks' game. In 3 of 10 it can read no felt world, and the player reads 82 Eridani d.
   - *The premise makes life common.* It puts a mind at about 1 warm world in 18. Minds can't be commoner than life, so most worlds that can hold life do.
   - *Later:* stone-age worlds and old ruins can join the roster as written entries.
@@ -442,16 +443,21 @@ Settled 2026-10-13.
   - *Red dwarfs are harsh.* Their warm zones sit close in, and the dimmest stay active about three times longer than the old estimate (Pass et al. 2025). Most of their warm worlds come out bare rock.
   - *Age.* Earth had lasting oxygen at 2.3 billion years old, and air rich enough to read, with animals and forests, at about 4. A world follows that schedule at its own pace.
   - *Published ages where they exist.* 53 hosts have one from asteroseismology or spin (Ware et al. 2026). The rest are drawn evenly from 1 to 10.5 billion years, as nearby stars formed.
-  - *What a game holds.* Of about 150 natural worlds: 90 bare rock, 15 airy and lifeless, 36 alive, 9 where life died.
-  - *At Sun-like stars* about half are alive, and 4 in 10 show oxygen. At red dwarfs about 7 in 10 are bare rock.
-  - *So oxygen does not unmask a neighbor.* Of the points of light a first pass shows, about 5 natural worlds show oxygen, beside about 4 or 5 homes.
+  - *What a game holds.* Of about 150 natural worlds: 89 bare rock, 14 airy and lifeless, 33 alive, 8 where life died, 6 frozen. Recounted 2026-10-16.
+  - *At Sun-like stars* about 4 in 10 are alive, 3 in 10 show oxygen, and 1 in 5 is frozen. At red dwarfs about 7 in 10 are bare rock.
+  - *So oxygen does not unmask a neighbor.* Of the points of light a first pass shows, about 4 natural worlds show oxygen, beside about 4 or 5 homes.
   - *Samples:* life started on 3 airy worlds in 4, and died on 1 in 5 of those. Each world's pace varies by a factor of 1.6. Each world's luck at the shoreline is half a power of ten.
   - *Earth's pace is typical.* Settled 2026-10-15. Each step waits for its world to allow it, mostly for oxygen, so a world's age says how far its life has come. This is what Mills et al. 2025 predict if there are no hard steps.
     - *Why not hard steps.* If oxygen were a long shot, a game would hold about 3 natural worlds with animals beside 11 minds. Every mind's world had animals first, so the premise would break. Measured on 200 games.
     - *So oxygen stays a coin flip.* A first pass sees about 5 natural oxygen worlds beside about 5 homes.
     - *The Mind still reasons from Earth's split science.* Hard steps remain a live view in 2040, so its starting words are unchanged.
     - Set aside: oxygen as a long shot (Snyder-Beattie et al. 2021, Watson 2025), and a wider spread of ×2.5, which changes a first pass by less than one world.
-  - *Not modelled:* a warm zone drifts outward as its star brightens, so an old Sun-like star's world may have thawed late.
+  - *A world born frozen thaws late, or not yet.* Settled 2026-10-16. A star brightens as it ages, so its warm zone drifts outward.
+    - *Example.* An 8 billion year old Sun twin, and a world 1.5 times Earth's distance. At birth it got half of today's light, and froze. It is frozen still.
+    - *The rule.* A world that got less than the warm zone's outer light at its star's birth froze. It thaws once its light reaches 62% of Earth's (Turbet et al. 2017). Life's clock starts then.
+    - *How many.* A quarter of Sun-like worlds were born frozen, as Henry et al. 2026 find for real planets, 37 of 143. About 1 in 10 of them has thawed.
+    - *Red dwarfs are left out.* They barely brighten. Their bright youth, which held their worlds too hot, is still to check.
+    - Set aside: thawing as soon as a world enters the warm zone, and never thawing, which plays almost the same.
   - Set aside: fixed odds at every star, and fixed odds by star kind.
 - **The Mind gives its judgment in words, never in numbers.** Settled 2026-10-13.
   - *A report still lists what a thing could be.* Each explanation carries a word. If a reading moved it, the word before shows too: Life, very unlikely → likely.
@@ -890,7 +896,7 @@ Answered one at a time, in this order. Every answer must be permitted by current
     - **Settled 2026-10-13:** the first telescope reads a dead world's strange air, and not its cause. Proof needs an infrared interferometer, or going. See [How Earth learns](#how-earth-learns).
     - **Settled 2026-10-13:** a sweep finds natural warm worlds too, at the real rate. In this game its first pass shows 15 new points of light: 4 homes and 11 natural worlds. See [How Earth learns](#how-earth-learns).
     - **Settled 2026-10-13:** alive is a ladder, and a natural world climbs no higher than animals and forests. Every mind stays hand-written. See [How Earth learns](#how-earth-learns).
-    - **Settled 2026-10-13:** its star's age sets a natural world's rung, on Earth's schedule with scatter, and physics says whether it kept its air. In this game the sweep's 11 natural worlds are 5 alive, 2 where life died, 2 airy and lifeless, 2 bare rock. See [How Earth learns](#how-earth-learns).
+    - **Settled 2026-10-13:** its star's age sets a natural world's rung, on Earth's schedule with scatter, and physics says whether it kept its air. In this game the sweep's 11 natural worlds are 4 alive, 2 where life died, 2 airy and lifeless, 2 bare rock, 1 frozen. Recounted 2026-10-16. See [How Earth learns](#how-earth-learns).
     - **Settled 2026-10-13:** the Mind gives its judgment in words, never in numbers. Both mocks now show words. See [How Earth learns](#how-earth-learns).
     - **Settled 2026-10-13:** the Mind judges from what Earth knows, never from the seed, and it can be wrong. A first voice lifts Minds a word at every candidate. In this game it calls Minds very unlikely at the sweep's 15 points of light, and 4 are homes. See [How Earth learns](#how-earth-learns).
     - **Priced 2026-10-13:** what an inquiry costs in time. A laser array takes 25 Years, and word from 4.3 ly comes home near Year 60. See [Build times](#build-times). Every question this mock raised is now closed.

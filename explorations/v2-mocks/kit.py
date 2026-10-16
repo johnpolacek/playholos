@@ -135,7 +135,8 @@ def first_read(f):
     return dict(o, mode=None, days=None, what='seen, not read' if o['seen_h'] else 'inside its star’s glare')
 # What that reading shows, by the truth. The first mirror tells apart no air, water without oxygen, and oxygen. Hidden
 # microbes read as a lifeless sea, and animals as an oxygen world (settled 2026-10-13). A world whose life died reads as a
-# lifeless sea: its oxygen is gone in a few million years, a sample.
+# lifeless sea: its oxygen is gone in a few million years, a sample. So does a world still frozen since its star was
+# young: air, and water as ice, and no oxygen (settled 2026-10-16).
 def shows(f):
     r = f['rung']
     return 'oxygen' if r in ('home', 'showing oxygen', 'with animals and forests') else 'bare' if r == 'bare rock' else 'dead' if r == 'dead' else 'sea'

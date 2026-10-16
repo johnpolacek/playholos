@@ -1024,6 +1024,7 @@ What a neighbor's world can plausibly be, beyond an Earth twin. Each roster entr
   - **[Turbet et al. 2017](https://arxiv.org/abs/1703.04624)** · Published, EPSL. I read the abstract. A frozen Earth-like world at a Sun-like star may never thaw beyond about 1.27 AU, below 62% of Earth's light. Its carbon dioxide freezes out at the poles.
   - Cited by Henry et al., not read: Yang et al. 2017, Nature Geoscience. The light that thaws a frozen world can tip it straight into a runaway greenhouse.
   - Matters, measured 2026-10-16 on 200 games: 26% of the natural worlds at Sun-like stars were born frozen, as Henry et al. find for real planets, 37 of 143.
+  - Used 2026-10-16: v2 [How Earth learns](HOLOS_GAME_CONCEPT.md#how-earth-learns) and the rung draw in calcs/seed.py. Turbet et al.'s 62% is the thaw line. On 400 games, a quarter of Sun-like worlds are born frozen and a tenth of those have thawed. Living natural worlds fall from 36 a game to 33.
   - **[Ware et al. 2026, the HAges Catalog](https://arxiv.org/abs/2605.12647)** · Accepted, ApJ. Data at [Zenodo](https://doi.org/10.5281/zenodo.19227788). Published ages from asteroseismology and spin for 127 of the 659 stars the Habitable Worlds Observatory is likeliest to observe. Past about 6 billion years, spin ages run about 47% low.
     - 161 of the 880 hosts are in it, as of 2026-10-14, and 53 have an age: 2 F, 12 G, 23 K, 16 M. Of the 110 the mirror can split, 35.
     - Alpha Centauri A has 20 ages, 4.2 to 6.7 billion years. Beta Virginis has two, 3.2 and 4.0.
@@ -1456,7 +1457,7 @@ Results the design is waiting on. Check each when its date comes.
 - Natural warm worlds: NASA's 164 targets reach 23.3 pc, about 76 ly. The seed draws nothing past 50 ly, so the game's sweep covers 110 stars.
 - Gaia's FLAME ages differ from asteroseismic and spin ages by a median of 4.7 billion years on 9 hosts. Closed 2026-10-15: calcs/hosts.py's rule that drops an F or G star when FLAME's upper bound is under a billion years drops none. Within 50 ly no F or G star has an upper bound under 2 billion.
 - 58 Eridani has six spin ages from 0.43 to 1.1 billion years. It stays a host under the rule, since two reach a billion.
-- The rung draw ignores a warm zone's outward drift as its star brightens. It matters for F stars and old G stars.
+- Closed 2026-10-16: the warm zone's outward drift. A world born frozen thaws at 62% of Earth's light. See Warm worlds born frozen.
 - The rung draw starts a red dwarf world's clock at its star's birth. Its star's bright youth held it in a runaway greenhouse for hundreds of millions of years first (Luger and Barnes 2015). Not modelled.
 - Closed 2026-10-16: Nguyen et al. 2026's fitted shorelines don't replace the single line. See What sets a natural world's rung.
 - Earth's aimed messages: the power of the 1983, 2008, 2009 Canberra and 2013 sends is in no source found. Hirabayashi's books may hold the first.
