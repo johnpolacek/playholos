@@ -63,6 +63,8 @@ Every source the game rests on, grouped by the question it answers. Each entry s
   - *Message to Altair,* August 15, 1983, from the Stanford dish, one hour. Its power is not in any source found.
   - *Teen Age Message,* 2001, Evpatoria: six sessions, 366 minutes in all, about 100 kW on average, about an hour a star. Only 47 Ursae Majoris is within 50 ly.
   - *A Message From Earth,* October 9, 2008, Evpatoria, four and a half hours, to Gliese 581. *Hello From Earth,* August 28, 2009, Canberra's 70 m dish, two hours. Neither gave its power or frequency.
+    - Checked 2026-10-16: the [Wireless Institute of Australia, 2009](https://www.wia.org.au/newsevents/news/2009/20090817-1/index.php) says Hello From Earth's power and frequency were not disclosed. Press gave 302 GW along the beam ([Wilson da Silva](https://www.wilsondasilva.com/post/earth-sends-25-000-messages-to-aliens)). A blog gives 18 kW at 7.145 GHz. My arithmetic: a 70 m dish at that frequency turns 18 kW into about 3 × 10¹¹ W, so the two agree.
+    - Message to Altair: a 46 m dish at 70.8 cm, per [Wikipedia](https://en.wikipedia.org/wiki/Message_to_Altair). Still no power.
   - *RuBisCo Stars,* the night of November 7 to 8, 2009, Arecibo: TZ Arietis, then Teegarden's Star, then Kappa¹ Ceti, in about 70 minutes, a quarter of an hour each. Wikipedia's dates are two days late.
   - *The 2012 reply to the Wow! signal,* Arecibo. Its director then, Robert Kerr, told LEMMiNO the transmitter overheated and broke down soon after it began, and that perhaps one message got out. He could not recall which star it was pointed at. The targets were HD 54351, 37 Geminorum and 55 Cancri, in that order.
   - *Lone Signal,* from June 17, 2013, for about two months, to Gliese 526: a 3 kW transmitter on a 30 m dish. That is hundreds of times weaker along its beam than Evpatoria's sends. This project's arithmetic.
@@ -1469,5 +1471,5 @@ Results the design is waiting on. Check each when its date comes.
 - Closed 2026-10-16: the warm zone's outward drift. A world born frozen thaws at 62% of Earth's light. See Warm worlds born frozen.
 - Closed 2026-10-16: red dwarfs' bright youth stays out of the rung draw. See Red dwarfs' bright youth.
 - Closed 2026-10-16: Nguyen et al. 2026's fitted shorelines don't replace the single line. See What sets a natural world's rung.
-- Earth's aimed messages: the power of the 1983, 2008, 2009 Canberra and 2013 sends is in no source found. Hirabayashi's books may hold the first.
+- Closed 2026-10-16: the unknown powers of Earth's aimed messages change nothing. Altair is no host. Gliese 581's 2009 knock, about 3 × 10¹¹ W, clears the floor whatever 2008's was. Lone Signal's 3 kW is logged. See Earth's aimed messages.
 - Closed 2026-10-16: links for Project Daedalus's 1978 report and Criswell 1985. Daedalus has no free text: the BIS sells a reprint, and its shop link works. Criswell's book is in the Internet Archive's lending library.
