@@ -1322,6 +1322,10 @@ Gathered 2026-10-14 by a research agent, for Earth's first seed ship.
   - A 443 t SEED lands on a jovian moon, with 412 MW of reactors. It grows to a 346,000 t factory in 500 years.
   - Why it matters: the only stand-alone interstellar seed found.
   - Used: v2 [Outposts and colonies](HOLOS_GAME_CONCEPT.md#outposts-and-colonies), the seed's 443 t, 2026-10-14. `calcs/seed.py`.
+  - Reread 2026-10-16 through a summary of the same copy, for where a seed lands. A small moon, about 100 km across and asteroid-like, at 7 thousandths of a gee: cheap to land on and haul from. Fuel comes from the giant's air. It gives no rule for avoiding worlds with life, and leaves open whether a probe may enter a system that has some.
+- **Proxima Centauri's worlds, checked 2026-10-16.** From search summaries and Wikipedia, not the papers.
+  - b: at least 1.07 Earths, 11.2 days, in the warm zone. d: about a quarter of an Earth, 5.1 days, close in, confirmed by ESPRESSO in 2022. c: a candidate at 1.5 AU, disputed since Artigau et al. 2022 tied its signal to the instrument.
+  - Matters: a seed at Proxima chooses between a bare small world and one that might hold life. Real planetary protection keeps landers off worlds that might hold life.
 - **[Borgue and Hein 2021](https://arxiv.org/abs/2005.12303)** · Published, Acta Astronautica. Read.
   - A 70 kg asteroid probe that can make 47 kg of itself. Its electronics and solar rolls come from Earth.
   - Used: not yet. Too small for an industry seed.
