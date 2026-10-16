@@ -58,7 +58,7 @@ def pretty(name):
     m = re.match(r'^(\d+)? ?([A-Z][a-z]{1,2})? ?(\d)? ?([A-Z][A-Za-z]{2})( [ABC])?$', name)
     if m and m.group(4) in GEN and (m.group(1) or m.group(2) in GREEK):
         n, g, sup, con, comp = m.groups()
-        head = (GREEK[g] + (f'{"¹²³"[int(sup) - 1]}' if sup else '')) if g in GREEK else n
+        head = (GREEK[g] + (f'{"¹²³⁴⁵⁶⁷⁸⁹"[int(sup) - 1]}' if sup else '')) if g in GREEK else n
         return f'{head} {GEN[con]}{comp or ""}'
     return name.replace("'", '’')                               # the mocks' own apostrophe
 for p in NB: p['star'] = pretty(p['host']['name'])

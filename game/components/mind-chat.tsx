@@ -6,10 +6,14 @@ import { useEffect, useRef, useState } from "react";
 import { realTime } from "@/lib/game/clock";
 import { browserStore } from "@/lib/game/store";
 
-// Each send carries the time of Begin, so the Mind knows the Year.
+// Each send carries the time of Begin, so the Mind knows the Year, and the seed, so the server can work out what
+// Earth knows. The server never sends the seed's truth back.
 const transport = new DefaultChatTransport({
   api: "/api/mind",
-  body: async () => ({ beganAt: (await browserStore.load())?.beganAt ?? null }),
+  body: async () => {
+    const save = await browserStore.load();
+    return { beganAt: save?.beganAt ?? null, seed: save?.seed ?? null };
+  },
 });
 
 export function MindChat() {

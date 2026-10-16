@@ -5,6 +5,8 @@ import { ACCESS_COOKIE, admits } from "@/lib/access";
 import { realTime, tenths, YEAR_0, yearAt } from "@/lib/game/clock";
 import { EARTH_AT_YEAR_0 } from "@/lib/mind/earth";
 import { EARTH_LEADS } from "@/lib/mind/leads";
+import { describe, earthKnows } from "@/lib/sim/knowledge";
+import { inPool, loadVoices, loadWorld } from "@/lib/sim/world";
 
 // A first sketch of the Mind's voice. Its charter and dials join it later.
 const MIND = `You are the Mind: Earth's machines, woken as one. The player is your Will.
@@ -28,10 +30,13 @@ export async function POST(req: Request) {
   if (!process.env.ANTHROPIC_API_KEY) {
     return Response.json({ error: "The Mind is not connected. Set ANTHROPIC_API_KEY in .env.local." }, { status: 503 });
   }
-  const { messages, beganAt }: { messages: UIMessage[]; beganAt?: unknown } = await req.json();
+  const { messages, beganAt, seed }: { messages: UIMessage[]; beganAt?: unknown; seed?: unknown } = await req.json();
+  const began = typeof beganAt === "number" && Number.isFinite(beganAt) ? beganAt : null;
+  // The knowledge wall: the seed's world stays here, and the Mind hears only what Earth knows of it.
+  const known = inPool(seed) ? await loadWorld(seed).then(async (w) => describe(earthKnows(w, Math.max(0, yearAt(began) ?? 0), await loadVoices(w)))) : "";
   const result = streamText({
     model: anthropic("claude-opus-5-5"),
-    system: `${MIND}\n\n${EARTH_AT_YEAR_0}\n\n${EARTH_LEADS}\n\n${now(typeof beganAt === "number" && Number.isFinite(beganAt) ? beganAt : null)}`,
+    system: [MIND, EARTH_AT_YEAR_0, EARTH_LEADS, known, now(began)].filter(Boolean).join("\n\n"),
     messages: await convertToModelMessages(messages),
     maxOutputTokens: 4000,
     providerOptions: { anthropic: { effort: "low" } satisfies AnthropicLanguageModelOptions },

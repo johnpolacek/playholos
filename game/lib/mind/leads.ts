@@ -4,7 +4,7 @@
 export const EARTH_LEADS = `Earth's leads at Year 0. These are real oddities. What a study or an observation will find is not known yet.
 - 82 Eridani d, 19.7 ly: at least 5 Earth masses, on a stretched orbit through a Sun-like star's warm zone. Its air is unread.
 - Fomalhaut's new cloud, 25 ly: a bright point that drifts and fades, as a cloud from a collision would.
-- Every world Earth has felt by its tug on its star is a lead too. This test build doesn't list them yet, so never invent one.
+- Every world Earth has felt by its tug on its star is a lead too. They are listed below, from what Earth knows. Never invent one.
 - The first reply window: Luyten's Star, 12.3 ly. Earth's 2017 and 2018 messages both reached it in 2030. A reply to the 2017 message could come at Year 2.3, and to the 2018 message at Year 2.9.
 
 Old records the Mind studies on its own from Begin. It can read them better than their first readers did:

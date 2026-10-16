@@ -3,6 +3,7 @@
 import { createContext, use, useEffect, useState } from "react";
 import { yearAt } from "@/lib/game/clock";
 import { browserStore } from "@/lib/game/store";
+import { POOL } from "@/lib/sim/pool";
 import type { Save } from "@/lib/game/types";
 
 interface Game {
@@ -10,15 +11,17 @@ interface Game {
   save?: Save;
   /** Game Years since Begin. Null before Begin, or while loading. */
   year: number | null;
+  wake(): void;
   begin(): void;
   newGame(): void;
 }
 
 const GameContext = createContext<Game | null>(null);
 
-// The seed is drawn when a new game begins. A stand-in until calcs/seed.py is ported.
+// The seed is drawn when a new game begins, from the pool of worlds calcs/export_worlds.py drew.
+const drawSeed = () => POOL[Math.floor(Math.random() * POOL.length)];
 function freshSave(): Save {
-  return { seed: Math.floor(Math.random() * 2 ** 31), beganAt: null };
+  return { seed: drawSeed(), beganAt: null };
 }
 
 export function GameProvider({ children }: { children: React.ReactNode }) {
@@ -27,8 +30,9 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     browserStore.load().then((loaded) => {
-      const game = loaded ?? freshSave();
-      if (!loaded) browserStore.save(game);
+      // A save from before the pool keeps its clock and takes a seed the server has a world for.
+      const game = !loaded ? freshSave() : POOL.includes(loaded.seed) ? loaded : { ...loaded, seed: drawSeed() };
+      if (game !== loaded) browserStore.save(game);
       setSave(game);
       setNow(Date.now());
     });
@@ -51,6 +55,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   const game: Game = {
     save,
     year: yearAt(began, now),
+    wake: () => save && update({ ...save, woke: true }),
     begin: () => save && update({ ...save, beganAt: Date.now() }),
     newGame: () => update(freshSave()),
   };
