@@ -6,3 +6,15 @@ export const YEAR_0 = 2040;
 export function yearAt(beganAt: number | null, now = Date.now()): number | null {
   return beganAt === null ? null : (now - beganAt) / MS_PER_YEAR;
 }
+
+/** Years to the tenth below, as the top bar shows them: 0, 0.1, 3.2. */
+export function tenths(years: number): number {
+  return Math.floor(years * 10 + 1e-9) / 10;
+}
+
+/** Real time for a span of game time, as HH:MM:SS. */
+export function realTime(years: number): string {
+  const s = Math.round((years * MS_PER_YEAR) / 1000);
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${pad(Math.floor(s / 3600))}:${pad(Math.floor((s % 3600) / 60))}:${pad(s % 60)}`;
+}

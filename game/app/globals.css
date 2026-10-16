@@ -12,6 +12,7 @@
   --panel: #f1efe8;
   --track: #e0dcd1;
   --fill2: #4a4843;
+  --rowline: #dcd8ce;
   --you: #1f7a96;
   --other: #a8620f;
   --shadow: rgba(0, 0, 0, 0.12);
@@ -30,6 +31,7 @@
     --panel: #17181a;
     --track: #2a2b2e;
     --fill2: #bdb9af;
+    --rowline: #26282b;
     --you: #5bb8d6;
     --other: #e0a24a;
     --shadow: rgba(0, 0, 0, 0.5);
@@ -48,6 +50,7 @@
   --panel: #17181a;
   --track: #2a2b2e;
   --fill2: #bdb9af;
+  --rowline: #26282b;
   --you: #5bb8d6;
   --other: #e0a24a;
   --shadow: rgba(0, 0, 0, 0.5);
@@ -65,6 +68,7 @@
   --color-panel: var(--panel);
   --color-track: var(--track);
   --color-fill2: var(--fill2);
+  --color-rowline: var(--rowline);
   --color-you: var(--you);
   --color-other: var(--other);
   --color-shadow: var(--shadow);
