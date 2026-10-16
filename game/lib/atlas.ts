@@ -26,7 +26,8 @@ export async function mountAtlas(parent: HTMLElement, theme: Theme) {
     floats(new URL("../../data/neighborhood.bin", import.meta.url)),
   ]);
   const textures = Object.fromEntries(Object.entries(TEXTURES).map(([key, image]) => [key, image.src]));
-  // Earth is drawn at the moment the strip opens and holds still. It does not follow the game clock,
-  // where a Year passes in 5 minutes and Earth would spin about once a second. Settled 2026-10-16.
-  return mountStrip(parent, { textures, stars, neighborhoodStars, neighborhood, theme, date: new Date() });
+  // Earth turns once a minute, for the look. It does not follow the game clock, where a Year passes
+  // in 5 minutes and Earth would spin about once a second. Settled 2026-10-16. Still for reduced motion.
+  const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  return mountStrip(parent, { textures, stars, neighborhoodStars, neighborhood, theme, date: new Date(), turnSeconds: still ? 0 : 60 });
 }

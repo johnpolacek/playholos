@@ -8,7 +8,8 @@ import { INK_THEMES, setInkTheme } from './line-art.js';
 // A small view of the atlas for the game's map strip: the same Universe, one camera, opening on Earth.
 // The caller loads the data, so this file knows nothing about how it is bundled.
 // Line edition only: the bundler defines __LINE_ART__ as true.
-export async function mountStrip(parent,{textures:urls,stars,neighborhoodStars,neighborhood,date=new Date(),theme='light'}) {
+// turnSeconds: real seconds per Earth day, as the atlas plays time. 0 holds Earth still.
+export async function mountStrip(parent,{textures:urls,stars,neighborhoodStars,neighborhood,date=new Date(),theme='light',turnSeconds=0}) {
   setInkTheme(theme);
   const renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,logarithmicDepthBuffer:true});
   renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.NoToneMapping;
@@ -45,8 +46,11 @@ export async function mountStrip(parent,{textures:urls,stars,neighborhoodStars,n
   }
   const observer=new ResizeObserver(resize);observer.observe(parent);
   parent.append(renderer.domElement);resize();syncCamera();
-  renderer.setAnimationLoop(()=>{
+  let last=performance.now();
+  renderer.setAnimationLoop(time=>{
+    const dt=Math.max(0,Math.min((time-last)/1000,.05));last=time;
     if(document.hidden)return;
+    if(turnSeconds){state.date=new Date(state.date.getTime()+dt/turnSeconds*86400000);universe.updateEphemeris(state.date);}
     controls.update();readControls();
     if(pose.home)pose.target.copy(homeTarget(pose.distance,universe.earth.positionAU));
     syncCamera();universe.update(pose,state,camera);renderer.render(universe.scene,camera);
