@@ -1315,6 +1315,28 @@ BUILD · Fusion drive · Year 47.6
 BUILD · Deuterium works · Year 24.2, then 61 kt by Year 31.8
 BUILD · Seed ship · in the yard · Year 32.7
 THEN · Launch to Proxima Centauri · when all three are ready · Year 47.6
+LANDS · Which world? · the order names only the star
+[Edit] · [Set the order]
+THE MIND · Which world there? I would pick d: a quarter of an Earth, bare, cheap to build on. b might hold life, and a seed there would change it for good. · [d] · [b]
+[Talk to the Mind]
+Godview
+Real: Proxima b, at least 1.07 Earths, in the warm zone. Proxima d, about a quarter of an Earth, close in, confirmed in 2022. c is a disputed candidate.
+A seed is a node until it stands alone, so it follows its order as written. The order must say where it lands.
+Settled · Where does a seed land, and who chooses? Where its order says. If the order names only a star, the Mind asks which world and advises: the smallest bare one, never one that might hold life. The seed follows the order as written, with a fallback for surprises on arrival. Settled 2026-10-16.
++1:36:30 · Year 19.3
+“d.”
+Earth · Year 19.3
+Sol · 2059.3 · 1 Year = 00:05:00
+ENERGY · [75.1%] · MATTER · 910 kt · COMPUTE · [100%]
+MIND · NEW ORDER
+WHAT YOU WANT
+Start it. Proxima Centauri, on d. Last in the line.
+THE MIND’S VERSION
+BUILD · Fusion drive · Year 47.6
+BUILD · Deuterium works · Year 24.2, then 61 kt by Year 31.8
+BUILD · Seed ship · in the yard · Year 32.7
+THEN · Launch to Proxima Centauri · when all three are ready · Year 47.6
+LANDS · Proxima d · small and bare · if unsafe on arrival, the smallest bare rock there
 [Edit] · [Set the order]
 THE MIND · Set, last in the line: the long roads lose almost nothing. Put the drive first and it leaves at Year 40, and the far side slips under a Year. Proxima shares a sky with Alpha Centauri A, whose air shows something burned. A seed’s works there could be seen, if anyone is left to look. · [Undo]
 [Talk to the Mind]
@@ -1864,31 +1886,30 @@ The Mind judges from what Earth knows. It knows its own waking changed Earth. It
 Asleep.
 Sunday · 1:59
 Godview
-Truth: the seed ship lands at Proxima Centauri, Year 115.0: 20 Years of burn and cruise, then 15 on its sail. Its seed starts copying itself.
+Truth: the seed ship lands on Proxima d, Year 115.0: 20 Years of burn and cruise, then 15 on its sail. Its seed starts copying itself.
 Word of it reaches Earth at Year 119.3. It stands alone as a Mind about Year 135.
 Hael’s colony lands at Nu Phoenicis, 4.7 ly from its parent. Its seed stands alone as a Mind at Year 123. Ree’s colony lands at Gliese 3971, 4.1 ly from its parent. Its seed stands alone as a Mind at Year 125.
 +9:56:51 · Year 119.4
 The phone lights. Opens it.
-Dispatch · The seed ship is down at Proxima Centauri.
+Dispatch · The seed ship is down on Proxima d.
 Earth · Year 119.4
 Sol · 2159.4 · 1 Year = 00:05:00
 ENERGY · [93.9%] · MATTER · 60.7 Mt · COMPUTE · [46%]
 REPORT · A DISPATCH
 [‹ All reports]
 
-### Down at Proxima Centauri
+### Down on Proxima d
 Seed ship · landed Year 115.0 · narrow beam · sent 4.2 Years ago
-Landed. The seed runs, and its first copies are under way. It will look closely at Proxima b once it can spare the eyes.
+Landed on d, as ordered. The seed runs, and its first copies are under way. It will look closely at Proxima b once it can spare the eyes.
 WHAT COMES NEXT
 It stands alone · a Mind of its own, on its own matter · Year 135 · 01:18:18
 Its first look at Proxima b · from close in, in its own time
-THE MIND · Down at Proxima · The seed ship landed 4 Years ago, as this light left. It is building. About Year 135 it stands alone, a Mind of its own. Then a second home exists, 4.2 light-years off. · [What can it do?] · [Later]
+THE MIND · Down on Proxima d · The seed ship landed 4 Years ago, as this light left. It is building. About Year 135 it stands alone, a Mind of its own. Then a second home exists, 4.2 light-years off. · [What can it do?] · [Later]
 [Talk to the Mind]
 Godview
 The first of Earth’s works to land at another star. Launched at Year 47.6, from an order given at Year 19.2.
 v1: a node becomes a Mind when it can stand alone. Settled 2026-10-16: the Will can move into it, as light.
 Hael’s second knock reached Earth at Year 119.3, unheard, as its first was.
-Design question 1 · Where in a system does a seed land, and who chooses? The order named Proxima Centauri and no world. The Mind never does more than asked, so the choice is the player’s, or a standing rule’s.
 +9:57:21 · Year 119.5
 “What can it do?”
 Earth · Year 119.5
@@ -1896,7 +1917,7 @@ Sol · 2159.5 · 1 Year = 00:05:00
 ENERGY · [93.9%] · MATTER · 60.8 Mt · COMPUTE · [46%]
 MIND · A SECOND HOME
 NOW
-Build · copies of itself, from Proxima’s rock · under way
+Build · copies of itself, from d’s rock · under way
 Report · by narrow beam · 4.2 Years each way
 FROM YEAR 135
 Think for itself · a Mind, on its own matter
@@ -1951,5 +1972,6 @@ Settled: A neighbor sends a probe to Sol. What arrives, and does Earth see it? �
 Settled: What does a neighbor’s probe do once it arrives? · What its orders say. A probe has no mind of its own: its sender writes its orders at launch, rolled from a table for its kind. It watches quietly, hails the world, or waits to be hailed. A hunter’s may hail with a false face. A hail is sent from close range, so any receiver hears it. Settled 2026-10-15.
 Settled: What does a seed ship cost? · About 1,500 t: a 443 t seed that stands alone, and a magnetic sail as heavy as the rest. A fusion drive burning deuterium takes 30 Years at standard pace and the ship 18, built in the orbital yard. Deuterium is cheap, and its plants set the pace. A laser that pushes ships waits on industry that copies itself. Settled 2026-10-14 and 15.
 Settled: Can copies of a work come faster? · With a production line, a project of its own: copies run side by side, each taking 85% as long each time the count built doubles. Without one, every copy takes the full time. Settled 2026-10-15.
+Settled: Where does a seed land, and who chooses? · Where its order says. If the order names only a star, the Mind asks which world and advises: the smallest bare one, never one that might hold life. The seed follows the order as written, with a fallback for surprises on arrival. Settled 2026-10-16.
 Settled: Can the Will move into a new Mind? · Yes, as v1 had it: it crosses as light, and the screen shows only the crossing. Proxima is 21 minutes. A stand-in AI Will runs the Mind left behind, from the player’s orders and charter. Settled 2026-10-16.
-1. Where in a system does a seed land, and who chooses? · The order named Proxima Centauri and no world. The Mind never does more than asked, so the choice is the player’s, or a standing rule’s.
+None are open.

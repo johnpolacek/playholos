@@ -749,6 +749,12 @@ Begun 2026-10-14. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#outposts-and-
   - *People to another star cost billions of tonnes and centuries.* The 2025 winning design, Chrysalis: 2.4 billion tonnes, about 2,400 people, about 400 years to Alpha Centauri. Over 100,000 aboard keep knowledge alive (Hein et al. 2012).
   - *Frozen embryos weigh far less,* but artificial wombs don't exist yet (Crowl et al. 2012). Building them is research Earth could do first.
   - *A colony that can stand alone is a Mind,* as v1 had it: its own industry, power and thought.
+- **A seed lands where its order says.** Settled 2026-10-16.
+  - *If the order names only a star,* the Mind asks which world, and advises.
+  - *Its advice:* the smallest bare world, never one that might hold life. Low gravity makes landing and hauling cheap (Freitas 1980).
+  - *The seed follows the order as written.* It is a node until it stands alone, as v1 had it, so it has no judgment of its own.
+  - *Each order carries a fallback,* since it is written decades before arrival. Example: land on Proxima d, and if d proves unsafe, on the smallest bare rock there.
+  - Set aside: one standing rule for every seed, and a seed that picks for itself on arrival.
 - **The Will can move into any Mind of Earth's, and crosses as light.** Settled 2026-10-16, as v1 had it ([v1: The Will, the Mind and Nodes](legacy/v1/HOLOS_GAME_CONCEPT.md)).
   - *The crossing is lights out.* The screen shows only the transfer, for the light time on the game clock. Proxima is 4.2 Years, 21 minutes. 10 ly is 50 minutes.
   - *The clock runs on.* The crossing goes on with the app closed, like everything else.
@@ -967,5 +973,5 @@ Answered one at a time, in this order. Every answer must be permitted by current
     - *Wakes, as played:* four in about six hours. The longest quiet is about 3 hours, Years 51 to 89.
     - *Rolled here, keyed to the seed:* each sender's move on silence and on Earth's reply, from its tables. Ombe knocks again, then sends a probe on hearing Earth. Hael knocks again. Ree sends knowledge unasked, reaching Earth about Year 130.
     - *The Mind advises, and does nothing more.* At Year 51 it says half its thought is idle. This player leaves it.
-    - Open: where in a system a seed lands, and who chooses.
+    - **Settled 2026-10-16:** a seed lands where its order says. If the order names only a star, the Mind asks and advises. In the mock the player picks Proxima d. See [Outposts and colonies](#outposts-and-colonies).
     - **Settled 2026-10-16:** the Will can move into a new Mind, as light, with only the crossing on screen. A stand-in AI Will runs the Mind left behind. See [Outposts and colonies](#outposts-and-colonies).

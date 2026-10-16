@@ -59,6 +59,7 @@ SETTLED = [('Does a half-built real instrument cost fewer Years?', 'It costs wha
            ('What does a neighbor’s probe do once it arrives?', 'What its orders say. A probe has no mind of its own: its sender writes its orders at launch, rolled from a table for its kind. It watches quietly, hails the world, or waits to be hailed. A hunter’s may hail with a false face. A hail is sent from close range, so any receiver hears it. Settled 2026-10-15.'),
            ('What does a seed ship cost?', 'About 1,500 t: a 443 t seed that stands alone, and a magnetic sail as heavy as the rest. A fusion drive burning deuterium takes 30 Years at standard pace and the ship 18, built in the orbital yard. Deuterium is cheap, and its plants set the pace. A laser that pushes ships waits on industry that copies itself. Settled 2026-10-14 and 15.'),
            ('Can copies of a work come faster?', 'With a production line, a project of its own: copies run side by side, each taking 85% as long each time the count built doubles. Without one, every copy takes the full time. Settled 2026-10-15.'),
+           ('Where does a seed land, and who chooses?', 'Where its order says. If the order names only a star, the Mind asks which world and advises: the smallest bare one, never one that might hold life. The seed follows the order as written, with a fallback for surprises on arrival. Settled 2026-10-16.'),
            ('Can the Will move into a new Mind?', 'Yes, as v1 had it: it crosses as light, and the screen shows only the crossing. Proxima is 21 minutes. A stand-in AI Will runs the Mind left behind, from the player’s orders and charter. Settled 2026-10-16.')]
 
 # ---------- Godview: who is out there ----------
@@ -1232,9 +1233,10 @@ def long_rows():
         quick('The ship', '1,500 t: a seed of 443 t that stands alone, and a sail 1,600 km across', tstack(f'Year {SHIP_Y:.0f}', clock(SHIP_Y - ts0 / 300))),
         SEC('PEOPLE · LATER'), quick('Sleepers', 'research, 60 Years · then about 26 t a person', ''), quick('Embryos', 'artificial wombs, research, 20 Years', ''),
         SEC('BY LIGHT'), quick('A laser for ships', 'about 50 TW, 150 Mt to 2 Gt in space · after industry copies itself', '<span class="mono">later</span>')]))
-    seed_o = order(ts0, 'Start it. Proxima Centauri. Last in the line.', [
-        ('BUILD', f'<b>Fusion drive</b> · Year {DRIVE_Y:.1f}'), ('BUILD', f'<b>Deuterium works</b> · Year {WORKS_Y:.1f}, then {FUEL_KT} kt by Year {FUEL_Y:.1f}'),
-        ('BUILD', f'<b>Seed ship</b> · in the yard · Year {SHIP_Y:.1f}'), ('THEN', f'<b>Launch to Proxima Centauri</b> · when all three are ready · Year {LAUNCH_Y:.1f}')])
+    seed_parts = [('BUILD', f'<b>Fusion drive</b> · Year {DRIVE_Y:.1f}'), ('BUILD', f'<b>Deuterium works</b> · Year {WORKS_Y:.1f}, then {FUEL_KT} kt by Year {FUEL_Y:.1f}'),
+        ('BUILD', f'<b>Seed ship</b> · in the yard · Year {SHIP_Y:.1f}'), ('THEN', f'<b>Launch to Proxima Centauri</b> · when all three are ready · Year {LAUNCH_Y:.1f}')]
+    seed_ask = order(ts0, 'Start it. Proxima Centauri. Last in the line.', seed_parts + [('LANDS', '<b>Which world?</b> · the order names only the star')])
+    seed_o = order(ts0 + 30, 'Start it. Proxima Centauri, on d. Last in the line.', seed_parts + [('LANDS', '<b>Proxima d</b> · small and bare · if unsafe on arrival, the smallest bare rock there')])
     gone = lockscreen(WALLCLOCK(AT(LAUNCH_Y)), [('NOW', 'Earth: the seed ship has left for Proxima Centauri', f'Year {LAUNCH_Y:.1f}. It lands about Year {LAND_Y:.0f}.')])
     # --- Year 25.5: the 15 m mirror
     tm = AT(R['mirror'])
@@ -1377,12 +1379,16 @@ def long_rows():
               'Settled 2026-10-15: a fusion drive takes 30 Years at standard pace, the ship 18 in the yard. Deuterium is cheap: its plants set the pace.',
               'A laser that pushes ships waits on industry that copies itself. The long roads bring 720 kt of rock a Year.'], label=HMS(ts0 - 30)),
         at(ts0, ts0 - 30, 'Start it. Proxima Centauri. Last in the line.', None,
+             talk(seed_ask, 'Which world there? I would pick d: a quarter of an Earth, bare, cheap to build on. b might hold life, and a seed there would change it for good.', ('d', 'b')),
+             ['Real: Proxima b, at least 1.07 Earths, in the warm zone. Proxima d, about a quarter of an Earth, close in, confirmed in 2022. c is a disputed candidate.',
+              'A seed is a node until it stands alone, so it follows its order as written. The order must say where it lands.'], settled=card('Where does a seed land'), label=HMS(ts0)),
+        at(ts0 + 30, ts0, 'd.', None,
              talk(seed_o, f'Set, last in the line: the long roads lose almost nothing. Put the drive first and it leaves at Year {FRONT_Y:.0f}, and the far side slips under a Year. Proxima shares a sky with Alpha Centauri A, whose air shows something burned. A seed’s works there could be seen, if anyone is left to look.', ('Undo',)),
              [f'Drive first in the line: launch at Year {FRONT_Y:.1f}, {LAUNCH_Y - FRONT_Y:.1f} Years sooner. The foundry slips {FRONT["Orbital foundry"] - PACED["Orbital foundry"]:.1f} Years and the far-side array {SLIP:.1f}. This player keeps it last.',
               f'Last in the line, the drive takes {DRIVE_Y - SEED_SHIP_Y:.0f} Years, not the 21 it would take pushed. The ship is done at Year {SHIP_Y:.0f}, and the deuterium at {FUEL_Y:.0f}.',
               'The long roads shift by under a sixth of a Year: the works take their want, and little push.',
               'The Mind cautions, from what Earth knows. It does not choose the star.',
-              'A production line for seed ships is not set up. One ship first.'], settled=(card('What does a seed ship cost'), card('Can copies of a work')), label=HMS(ts0)),
+              'A production line for seed ships is not set up. One ship first.'], settled=(card('What does a seed ship cost'), card('Can copies of a work')), label=HMS(ts0 + 30)),
         *([at(AT(LAUNCH_Y), 0, '· The phone lights. Reads it. Leaves it.', f'The seed ship leaves for Proxima Centauri.', gone,
               [f'It burns for 20 Years to a tenth of light speed, cruises, and brakes on its sail for 19. It lands about Year {LAND_Y:.0f}, and word of it reaches Earth about Year {LAND_Y + PX:.0f}.',
                'Its flame is X-rays, seen only within tens of AU. No neighbor is that close.',
@@ -1572,22 +1578,22 @@ def late_rows():
     # --- the seed ship
     tl = AT(LAND_Y); tw = AT(WORD_Y) + 30
     rows.append(at(tl, 0, '· Asleep.', None, lockscreen(WALLCLOCK(tl), [], DAY(tl)),
-                   [f'Truth: the seed ship lands at Proxima Centauri, Year {LAND_Y:.1f}: 20 Years of burn and cruise, then {seedmod.BRAKE} on its sail. Its seed starts copying itself.',
+                   [f'Truth: the seed ship lands on Proxima d, Year {LAND_Y:.1f}: 20 Years of burn and cruise, then {seedmod.BRAKE} on its sail. Its seed starts copying itself.',
                     f'Word of it reaches Earth at Year {WORD_Y:.1f}. It stands alone as a Mind about Year {LAND_Y + seedmod.STANDS:.0f}.', landed(replies[-1][1], LAND_Y)], label=HMS(tl)))
     word_r = tab(tw, 'Report', 'REPORT', 'A DISPATCH', f"""<button class="backlink inline">‹ All reports</button>
-<h3 class="lead">Down at Proxima Centauri</h3>
+<h3 class="lead">Down on Proxima d</h3>
 <p class="copy small">Seed ship · landed Year {LAND_Y:.1f} · narrow beam · sent {PX:.1f} Years ago</p>
-<p class="copy">Landed. The seed runs, and its first copies are under way. It will look closely at Proxima b once it can spare the eyes.</p>
+<p class="copy">Landed on d, as ordered. The seed runs, and its first copies are under way. It will look closely at Proxima b once it can spare the eyes.</p>
 {SEC('WHAT COMES NEXT')}{quick('It stands alone', 'a Mind of its own, on its own matter', tstack(f'Year {LAND_Y + seedmod.STANDS:.0f}', clock(LAND_Y + seedmod.STANDS - tw / 300), True))}{quick('Its first look at Proxima b', 'from close in, in its own time', '')}""")
-    rows.append(at(tw, tl, '· The phone lights. Opens it.', ('Dispatch', 'The seed ship is down at Proxima Centauri.'),
-                   talk(word_r, f'<b>Down at Proxima</b>The seed ship landed {PX:.0f} Years ago, as this light left. It is building. About Year {LAND_Y + seedmod.STANDS:.0f} it stands alone, a Mind of its own. Then a second home exists, {PX:.1f} light-years off.', ('What can it do?', 'Later'), 'glow'),
+    rows.append(at(tw, tl, '· The phone lights. Opens it.', ('Dispatch', 'The seed ship is down on Proxima d.'),
+                   talk(word_r, f'<b>Down on Proxima d</b>The seed ship landed {PX:.0f} Years ago, as this light left. It is building. About Year {LAND_Y + seedmod.STANDS:.0f} it stands alone, a Mind of its own. Then a second home exists, {PX:.1f} light-years off.', ('What can it do?', 'Later'), 'glow'),
                    ['The first of Earth’s works to land at another star. Launched at Year ' + f'{LAUNCH_Y:.1f}, from an order given at Year {SEED_SHIP_Y:.1f}.',
                     f'v1: a node becomes a Mind when it can stand alone. Settled 2026-10-16: the Will can move into it, as light.',
                     (f'{WHOF["name"]}’s second knock reached Earth at Year {HAGAIN_Y:.1f}, unheard, as its first was.' if HAGAIN in seedmod.SENDS and HAGAIN_Y < WORD_Y + .5 else '')],
-                   question=ask('Where in a system does a seed land, and who chooses?', 'The order named Proxima Centauri and no world. The Mind never does more than asked, so the choice is the player’s, or a standing rule’s.'), label=HMS(tw)))
+                   label=HMS(tw)))
     rows.append(at(tw + 30, tw, 'What can it do?', None,
                    talk(tab(tw + 30, 'Mind', 'MIND', 'A SECOND HOME', ''.join([
-                       SEC('NOW'), quick('Build', 'copies of itself, from Proxima’s rock', '<span class="mono">under way</span>'), quick('Report', f'by narrow beam · {PX:.1f} Years each way', ''),
+                       SEC('NOW'), quick('Build', 'copies of itself, from d’s rock', '<span class="mono">under way</span>'), quick('Report', f'by narrow beam · {PX:.1f} Years each way', ''),
                        SEC(f'FROM YEAR {LAND_Y + seedmod.STANDS:.0f}'), quick('Think for itself', 'a Mind, on its own matter', ''), quick('Host the Will', f'it crosses as light · {PX:.1f} Years, {PX * 5:.0f} minutes, lights out', '')])),
                         f'Now it builds, and reports when it can. Once it stands alone it thinks for itself, as I do. Then your Will can cross to it as light: {PX:.1f} Years, {PX * 5:.0f} minutes with only the crossing on your screen. A stand-in would run this Mind from your orders.', ('Later',)),
                    ['The reply to Earth’s answer from ' + ' and '.join(f"{p['name']} about Year {back:.0f}" for p, _, m, back in replies if m in seedmod.SENDS or m in ('answer', 'gift')) + '. The fifth mock’s, if there is one.'],
