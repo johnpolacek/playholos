@@ -6,87 +6,13 @@ import { useEffect, useRef, useState } from "react";
 import { realTime } from "@/lib/game/clock";
 import { browserStore } from "@/lib/game/store";
 
-// A deployed Mind spends real money, so it asks for an access code once. The browser keeps it.
-const CODE_KEY = "holos:mind-code";
-function storedCode() {
-  try {
-    return localStorage.getItem(CODE_KEY) ?? "";
-  } catch {
-    return "";
-  }
-}
-async function opens(code: string) {
-  return (await fetch("/api/mind", { headers: { "x-mind-code": code } })).ok;
-}
-
 // Each send carries the time of Begin, so the Mind knows the Year.
 const transport = new DefaultChatTransport({
   api: "/api/mind",
-  headers: () => ({ "x-mind-code": storedCode() }),
   body: async () => ({ beganAt: (await browserStore.load())?.beganAt ?? null }),
 });
 
 export function MindChat() {
-  const [open, setOpen] = useState<boolean>();
-
-  useEffect(() => {
-    opens(storedCode()).then(setOpen);
-  }, []);
-
-  if (open === undefined) return null;
-  if (!open) return <CodeGate onOpen={() => setOpen(true)} />;
-  return (
-    <Conversation
-      onLocked={() => {
-        try {
-          localStorage.removeItem(CODE_KEY);
-        } catch {}
-        setOpen(false);
-      }}
-    />
-  );
-}
-
-function CodeGate({ onOpen }: { onOpen: () => void }) {
-  const [code, setCode] = useState("");
-  const [wrong, setWrong] = useState(false);
-  return (
-    <form
-      className="mt-2 flex flex-col gap-2"
-      onSubmit={async (e) => {
-        e.preventDefault();
-        if (!(await opens(code))) return setWrong(true);
-        try {
-          localStorage.setItem(CODE_KEY, code);
-        } catch {}
-        onOpen();
-      }}
-    >
-      <span className="font-mono text-[9.5px] tracking-[.1em] text-you">ACCESS CODE</span>
-      <p className="text-[13.5px] leading-[1.45]">This test build asks for a code before the Mind can answer.</p>
-      <div className="flex h-11 items-center gap-2 rounded-full border border-ink bg-paper pr-1.5 pl-3.5">
-        <input
-          value={code}
-          onChange={(e) => {
-            setCode(e.currentTarget.value);
-            setWrong(false);
-          }}
-          inputMode="numeric"
-          autoComplete="off"
-          placeholder="Code"
-          aria-label="Access code"
-          className="min-w-0 grow bg-transparent text-sm outline-none placeholder:text-muted"
-        />
-        <button type="submit" disabled={!code} aria-label="Open" className="size-8 shrink-0 rounded-full bg-ink text-paper disabled:opacity-35">
-          ↑
-        </button>
-      </div>
-      {wrong && <p className="text-xs text-other">That code doesn’t open the Mind.</p>}
-    </form>
-  );
-}
-
-function Conversation({ onLocked }: { onLocked: () => void }) {
   const { messages, sendMessage, status, error } = useChat({ transport });
   const [input, setInput] = useState("");
   const end = useRef<HTMLDivElement>(null);
@@ -117,14 +43,7 @@ function Conversation({ onLocked }: { onLocked: () => void }) {
           );
         })}
         {status === "submitted" && <span className="self-start font-mono text-[9.5px] tracking-[.1em] text-you">THE MIND IS THINKING</span>}
-        {error && (
-          <p className="text-xs text-other">
-            The Mind can’t answer right now.{" "}
-            <button type="button" onClick={onLocked} className="underline">
-              Enter the access code again
-            </button>
-          </p>
-        )}
+        {error && <p className="text-xs text-other">The Mind can’t answer right now.</p>}
         <div ref={end} />
       </div>
       <form

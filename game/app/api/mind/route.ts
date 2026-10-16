@@ -1,5 +1,7 @@
 import { anthropic, type AnthropicLanguageModelOptions } from "@ai-sdk/anthropic";
 import { convertToModelMessages, createUIMessageStreamResponse, streamText, toUIMessageStream, type UIMessage } from "ai";
+import { cookies } from "next/headers";
+import { ACCESS_COOKIE, admits } from "@/lib/access";
 import { realTime, tenths, YEAR_0, yearAt } from "@/lib/game/clock";
 
 // A first sketch of the Mind's voice. Its charter, dials and what Earth knows join it later.
@@ -18,20 +20,9 @@ function now(beganAt: number | null) {
   return `It is Year ${y}, ${(YEAR_0 + y).toFixed(1)}. Year 0 began ${realTime(year)} ago in the Will's time. One Year passes every five of the Will's minutes, and the clock runs while you talk.`;
 }
 
-// The Mind spends the key's money, so a production server needs the access code. `next dev` runs without one.
-function allowed(req: Request) {
-  const code = process.env.MIND_ACCESS_CODE;
-  if (!code) return process.env.NODE_ENV !== "production";
-  return req.headers.get("x-mind-code") === code;
-}
-
-/** Checks an access code before the chat saves it. */
-export async function GET(req: Request) {
-  return new Response(null, { status: allowed(req) ? 204 : 401 });
-}
-
 export async function POST(req: Request) {
-  if (!allowed(req)) return Response.json({ error: "Wrong access code." }, { status: 401 });
+  // The proxy already checks the access cookie. The Mind spends real money, so it checks again.
+  if (!admits((await cookies()).get(ACCESS_COOKIE)?.value)) return Response.json({ error: "Locked." }, { status: 401 });
   if (!process.env.ANTHROPIC_API_KEY) {
     return Response.json({ error: "The Mind is not connected. Set ANTHROPIC_API_KEY in .env.local." }, { status: 503 });
   }

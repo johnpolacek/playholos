@@ -8,6 +8,7 @@ npm run dev                                # http://localhost:3000
 ```
 
 - `app/(play)/`: the phone. Top bar, map strip, tab page, and the rail. One route per tab.
+- `proxy.ts` and `app/unlock/`: the test build is private. Any production server asks once for the code in `ACCESS_CODE`, and a cookie keeps it open. `next dev` is open.
 - `app/godview/`: what the player can't see. Dev only.
 - `app/api/mind/`: the Mind's chat, on the AI SDK. Needs `ANTHROPIC_API_KEY` in `.env.local`.
 - `lib/game/`: the clock, save types, and the browser store. The simulation is still Python in `../calcs/`.
