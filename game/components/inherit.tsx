@@ -2,9 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useGame } from "@/components/game-provider";
-import { NIGHT } from "@/components/people";
 import type { EarthPast } from "@/lib/game/past";
-import { Sources } from "@/components/sources";
+import { ScreenBar } from "@/components/screen-bar";
+import { type CANVAS, useCanvasInk } from "@/components/theme-toggle";
 import { INHERIT_SOURCES } from "@/lib/game/sources";
 import { gsap, prefersReducedMotion, rise, riseFrom, useStage } from "@/lib/motion";
 
@@ -14,10 +14,6 @@ import { gsap, prefersReducedMotion, rise, riseFrom, useStage } from "@/lib/moti
 
 type Light = [lat: number, lon: number, b: number];
 
-const AMBER = "232,180,92";
-const BLUE = "91,184,214";
-const INK = "230,227,219";
-const MUTED = "138,134,126";
 const KM_AU = 1.496e8;
 const LIGHT_S = 299792;
 
@@ -56,12 +52,13 @@ function glowSprite(rgb: string) {
 
 function Flight({ zoom, lights }: { zoom: React.RefObject<{ z: number; show: number }>; lights: Light[] }) {
   const canvas = useRef<HTMLCanvasElement>(null);
+  const ink = useCanvasInk();
 
   useEffect(() => {
     const el = canvas.current!;
     const g = el.getContext("2d")!;
-    const lamp = glowSprite(AMBER);
-    const sun = glowSprite("255,236,190");
+    const glows = new Map<string, HTMLCanvasElement>();
+    const glow = (rgb: string) => glows.get(rgb) ?? glows.set(rgb, glowSprite(rgb)).get(rgb)!;
     // Spare matter: depots, spent stages and dead craft, mostly low, some at geostationary height.
     const junk = Array.from({ length: 260 }, (_, i) => ({
       r: i % 9 === 0 ? 42164 : EARTH_R + 400 + Math.random() * 1600,
@@ -84,7 +81,8 @@ function Flight({ zoom, lights }: { zoom: React.RefObject<{ z: number; show: num
     const ro = new ResizeObserver(fit);
     ro.observe(el);
 
-    const label = (text: string, x: number, y: number, rgb = MUTED, alpha = 1) => {
+    let c: (typeof CANVAS)[keyof typeof CANVAS] = ink.current;
+    const label = (text: string, x: number, y: number, rgb: string = c.muted, alpha = 1) => {
       g.font = "9px var(--font-plex-mono), monospace";
       g.textAlign = x > w * 0.62 ? "right" : "left";
       g.fillStyle = `rgba(${rgb},${alpha})`;
@@ -97,6 +95,7 @@ function Flight({ zoom, lights }: { zoom: React.RefObject<{ z: number; show: num
     const draw = (now: number) => {
       const t = (now - t0) / 1000;
       const { z, show } = zoom.current;
+      c = ink.current;
       g.setTransform(dpr, 0, 0, dpr, 0, 0);
       g.clearRect(0, 0, w, h);
       g.globalAlpha = show;
@@ -111,16 +110,16 @@ function Flight({ zoom, lights }: { zoom: React.RefObject<{ z: number; show: num
       const s = pos(KM_AU, SUN_A);
       const sunA = visible(KM_AU * k, 6);
       if (sunA > 0) {
-        g.strokeStyle = `rgba(${INK},${0.12 * sunA})`;
+        g.strokeStyle = `rgba(${c.ink},${0.12 * sunA})`;
         g.lineWidth = 0.7;
         g.beginPath();
         g.arc(s.x, s.y, KM_AU * k, 0, Math.PI * 2);
         g.stroke();
         const size = 10 + 6 * sunA;
-        g.globalCompositeOperation = "lighter";
-        g.drawImage(sun, s.x - size, s.y - size, size * 2, size * 2);
+        g.globalCompositeOperation = c.glow;
+        g.drawImage(glow(c.sun), s.x - size, s.y - size, size * 2, size * 2);
         g.globalCompositeOperation = "source-over";
-        label("the Sun", s.x, s.y, MUTED, sunA);
+        label("the Sun", s.x, s.y, c.muted, sunA);
       }
 
       // The far probes, on their long roads out from the Sun.
@@ -132,17 +131,17 @@ function Flight({ zoom, lights }: { zoom: React.RefObject<{ z: number; show: num
         if (a <= 0) continue;
         const q = { x: s.x + p.d * k * Math.cos(p.a), y: s.y + p.d * k * Math.sin(p.a) };
         g.setLineDash([2, 4]);
-        g.strokeStyle = `rgba(${INK},${0.25 * a})`;
+        g.strokeStyle = `rgba(${c.ink},${0.25 * a})`;
         g.beginPath();
         g.moveTo(s.x, s.y);
         g.lineTo(q.x, q.y);
         g.stroke();
         g.setLineDash([]);
-        g.fillStyle = `rgba(${INK},${a})`;
+        g.fillStyle = `rgba(${c.ink},${a})`;
         g.beginPath();
         g.arc(q.x, q.y, 2.2, 0, Math.PI * 2);
         g.fill();
-        label(name, q.x, q.y, INK, a);
+        label(name, q.x, q.y, c.ink, a);
       }
 
       // L2, where Roman and an aging JWST watch.
@@ -150,19 +149,19 @@ function Flight({ zoom, lights }: { zoom: React.RefObject<{ z: number; show: num
       const l2A = visible(L2.d * k, 20, R * 6);
       if (l2A > 0) {
         g.setLineDash([1, 3]);
-        g.strokeStyle = `rgba(${BLUE},${0.5 * l2A})`;
+        g.strokeStyle = `rgba(${c.mind},${0.5 * l2A})`;
         g.beginPath();
         g.moveTo(cx, cy);
         g.lineTo(l2.x, l2.y);
         g.stroke();
         g.setLineDash([]);
-        g.fillStyle = `rgba(${INK},${l2A})`;
+        g.fillStyle = `rgba(${c.ink},${l2A})`;
         for (const dy of [-3, 3]) {
           g.beginPath();
           g.arc(l2.x, l2.y + dy, 1.6, 0, Math.PI * 2);
           g.fill();
         }
-        label("Roman · JWST · L2", l2.x, l2.y, INK, l2A);
+        label("Roman · JWST · L2", l2.x, l2.y, c.ink, l2A);
       }
 
       // The Moon, with stations at its south pole.
@@ -171,26 +170,26 @@ function Flight({ zoom, lights }: { zoom: React.RefObject<{ z: number; show: num
       if (mA > 0) {
         const mr = Math.max(2, MOON.r * k);
         g.setLineDash([1, 3]);
-        g.strokeStyle = `rgba(${BLUE},${0.5 * mA})`;
+        g.strokeStyle = `rgba(${c.mind},${0.5 * mA})`;
         g.beginPath();
         g.moveTo(cx, cy);
         g.lineTo(m.x, m.y);
         g.stroke();
         g.setLineDash([]);
-        g.fillStyle = "#07090b";
-        g.strokeStyle = `rgba(${INK},${mA})`;
+        g.fillStyle = c.paper;
+        g.strokeStyle = `rgba(${c.ink},${mA})`;
         g.lineWidth = 1;
         g.beginPath();
         g.arc(m.x, m.y, mr, 0, Math.PI * 2);
         g.fill();
         g.stroke();
         if (mr > 5) {
-          g.fillStyle = `rgba(${BLUE},${mA})`;
+          g.fillStyle = `rgba(${c.mind},${mA})`;
           g.beginPath();
           g.arc(m.x, m.y + mr * 0.92, 1.8, 0, Math.PI * 2);
           g.fill();
         }
-        label(mr > 5 ? "the Moon · south-pole stations" : "the Moon", m.x + mr, m.y, MUTED, mA);
+        label(mr > 5 ? "the Moon · south-pole stations" : "the Moon", m.x + mr, m.y, c.muted, mA);
       }
 
       // Spare matter in orbit, circling.
@@ -199,7 +198,7 @@ function Flight({ zoom, lights }: { zoom: React.RefObject<{ z: number; show: num
         const a = visible(r - er, 1.5, R * 3);
         if (a <= 0) continue;
         const ang = j.a + t * j.w * (EARTH_R / j.r) ** 1.5;
-        g.fillStyle = `rgba(${INK},${0.55 * a})`;
+        g.fillStyle = `rgba(${c.ink},${0.55 * a})`;
         g.fillRect(cx + r * Math.cos(ang), cy + r * Math.sin(ang), 1.2, 1.2);
       }
 
@@ -210,7 +209,7 @@ function Flight({ zoom, lights }: { zoom: React.RefObject<{ z: number; show: num
           const a = -2.3 + i * 0.5 + Math.sin(i * 7) * 0.2;
           const r0 = er;
           const r1 = er + EARTH_R * 0.18 * k * phase;
-          g.strokeStyle = `rgba(${AMBER},${0.7 * (1 - phase)})`;
+          g.strokeStyle = `rgba(${c.lamp},${0.7 * (1 - phase)})`;
           g.lineWidth = 1;
           g.beginPath();
           g.moveTo(cx + r0 * Math.cos(a), cy + r0 * Math.sin(a));
@@ -221,23 +220,23 @@ function Flight({ zoom, lights }: { zoom: React.RefObject<{ z: number; show: num
 
       // Earth: its lights while it is large, a blue point when it is not.
       if (er > 4) {
-        g.fillStyle = "#07090b";
+        g.fillStyle = c.paper;
         g.beginPath();
         g.arc(cx, cy, er, 0, Math.PI * 2);
         g.fill();
         const air = g.createRadialGradient(cx, cy, er * 0.96, cx, cy, er * 1.1);
-        air.addColorStop(0, `rgba(${BLUE},0.28)`);
-        air.addColorStop(1, `rgba(${BLUE},0)`);
+        air.addColorStop(0, `rgba(${c.mind},0.28)`);
+        air.addColorStop(1, `rgba(${c.mind},0)`);
         g.fillStyle = air;
         g.beginPath();
         g.arc(cx, cy, er * 1.1, 0, Math.PI * 2);
         g.fill();
-        g.strokeStyle = `rgba(${INK},0.5)`;
+        g.strokeStyle = `rgba(${c.ink},0.5)`;
         g.lineWidth = 1;
         g.beginPath();
         g.arc(cx, cy, er, 0, Math.PI * 2);
         g.stroke();
-        g.globalCompositeOperation = "lighter";
+        g.globalCompositeOperation = c.glow;
         for (const [lat, lon, b] of lights) {
           const p = (lat * Math.PI) / 180;
           const l = ((lon - lon0 - t * 2) * Math.PI) / 180;
@@ -247,20 +246,20 @@ function Flight({ zoom, lights }: { zoom: React.RefObject<{ z: number; show: num
           const y = cy - er * (Math.cos(tilt) * Math.sin(p) - Math.sin(tilt) * Math.cos(p) * Math.cos(l));
           const size = (1.4 + b) * (er / 160);
           g.globalAlpha = show * Math.min(1, cosc * 2.2) * (0.35 + b * 0.08);
-          g.drawImage(lamp, x - size, y - size, size * 2, size * 2);
+          g.drawImage(glow(c.lamp), x - size, y - size, size * 2, size * 2);
         }
         g.globalAlpha = show;
         g.globalCompositeOperation = "source-over";
       }
-      g.fillStyle = `rgba(${BLUE},1)`;
+      g.fillStyle = `rgba(${c.mind},1)`;
       g.beginPath();
       g.arc(cx, cy, er > 4 ? 0 : 2.6, 0, Math.PI * 2);
       g.fill();
-      if (er <= 4) label("Earth", cx, cy, BLUE);
+      if (er <= 4) label("Earth", cx, cy, c.mind);
 
       // The scale: the view's radius, in kilometers and then in light-time.
       g.globalAlpha = show;
-      g.strokeStyle = `rgba(${MUTED},0.8)`;
+      g.strokeStyle = `rgba(${c.muted},0.8)`;
       g.lineWidth = 1;
       g.beginPath();
       g.moveTo(cx, h - 10);
@@ -272,7 +271,7 @@ function Flight({ zoom, lights }: { zoom: React.RefObject<{ z: number; show: num
       g.stroke();
       g.font = "9px var(--font-plex-mono), monospace";
       g.textAlign = "center";
-      g.fillStyle = `rgba(${MUTED},1)`;
+      g.fillStyle = `rgba(${c.muted},1)`;
       g.fillText(reach(10 ** z), cx + R / 2, h - 15);
       g.globalAlpha = 1;
     };
@@ -283,7 +282,7 @@ function Flight({ zoom, lights }: { zoom: React.RefObject<{ z: number; show: num
       gsap.ticker.remove(draw);
       ro.disconnect();
     };
-  }, [lights, zoom]);
+  }, [ink, lights, zoom]);
 
   return <canvas ref={canvas} data-m="flight" aria-hidden className="block h-[min(48vh,400px)] w-full shrink-0" />;
 }
@@ -396,15 +395,13 @@ export function Inherit({ onSkip, onNext }: { onSkip(): void; onNext(): void }) 
     <div
       ref={root}
       onPointerDown={hurry}
-      style={{ ...NIGHT, visibility: ready ? undefined : "hidden" }}
-      className="flex grow flex-col overflow-y-auto bg-paper px-5 pt-6 text-ink"
+      style={ready ? undefined : { visibility: "hidden" }}
+      className="flex grow flex-col overflow-y-auto bg-paper px-5 text-ink"
     >
-      <div className="flex items-center justify-between">
-        <span data-m="kick" className="font-mono text-[10.5px] tracking-[.1em] text-muted">
-          YEAR 0 · WHAT YOU INHERIT
-        </span>
-        <Sources sources={INHERIT_SOURCES} />
-      </div>
+      <ScreenBar sources={INHERIT_SOURCES} />
+      <span data-m="kick" className="font-mono text-[10.5px] tracking-[.1em] text-muted">
+        YEAR 0 · WHAT YOU INHERIT
+      </span>
       {ready && <Flight zoom={zoom} lights={lights} />}
       <div className="mt-2 grid min-h-[104px]">{past && stops(past).map((s) => <Stop key={s.kick} {...s} />)}</div>
       <div className="mt-3 grid grid-cols-3 gap-2.5 border-t border-faint pt-3">

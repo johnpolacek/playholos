@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useGame } from "@/components/game-provider";
 import { history, type EarthPast, type Moment } from "@/lib/game/past";
-import { Sources } from "@/components/sources";
+import { ScreenBar } from "@/components/screen-bar";
 import { originsSources } from "@/lib/game/sources";
 import { gsap, prefersReducedMotion, rise, riseFrom, useStage } from "@/lib/motion";
 
@@ -138,14 +138,12 @@ export function Origins({ onSkip, onNext }: { onSkip(): void; onNext(): void }) 
       ref={root}
       onPointerDown={hurry}
       style={told ? undefined : { visibility: "hidden" }}
-      className="flex grow flex-col overflow-y-auto bg-paper px-5 pt-6"
+      className="flex grow flex-col overflow-y-auto bg-paper px-5"
     >
-      <div className="flex items-center justify-between">
-        <span data-m="kick" className="font-mono text-[10.5px] tracking-[.1em] text-muted">
-          BEFORE YEAR 0 · WHERE WE COME FROM
-        </span>
-        <Sources sources={past ? originsSources(past) : []} />
-      </div>
+      <ScreenBar sources={past ? originsSources(past) : []} />
+      <span data-m="kick" className="font-mono text-[10.5px] tracking-[.1em] text-muted">
+        BEFORE YEAR 0 · WHERE WE COME FROM
+      </span>
       <h1 data-m="lead" className="mt-1.5 text-[22px] font-semibold">
         4.6 billion years to this morning
       </h1>

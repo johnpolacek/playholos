@@ -6,7 +6,7 @@ import { Origins } from "@/components/origins";
 import { People } from "@/components/people";
 import { Stand } from "@/components/stand";
 import { Inherit } from "@/components/inherit";
-import { ThemeToggle } from "@/components/theme-toggle";
+import { ScreenBar } from "@/components/screen-bar";
 import { Charter } from "@/components/charter";
 import { charsRise, gsap, prefersReducedMotion, rest, rise, riseFrom, useGSAP, useStage } from "@/lib/motion";
 
@@ -28,7 +28,7 @@ function EarthAndMoon() {
       viewBox="0 0 390 360"
       role="img"
       aria-label="Earth and the Moon, drawn in line"
-      className="mt-10 block w-full font-mono"
+      className="block w-full font-mono"
     >
       <defs>
         <pattern id="hatch" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
@@ -121,13 +121,7 @@ export function Wake({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
         1.5,
       )
       .fromTo(q('[data-m="label"]'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.5, stagger: 0.2 }, 1.9)
-      .fromTo(q('[data-m="kick"]'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.5 }, 1.8)
-      .fromTo(
-        q('[data-m="theme"]'),
-        { autoAlpha: 0, y: -6 },
-        { autoAlpha: 1, y: 0, duration: 0.4, ease: "power3.out" },
-        1.9,
-      );
+      .fromTo(q('[data-m="kick"]'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.5 }, 1.8);
     charsRise(tl, q('[data-m="title"]')[0], 2);
     tl.fromTo(q('[data-m="copy"]'), riseFrom, { ...rise, duration: 0.6, stagger: 0.25 }, 2.5).fromTo(
       q('[data-m="act"]'),
@@ -138,8 +132,10 @@ export function Wake({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
   });
 
   return (
-    <div ref={root} className="relative flex grow flex-col overflow-y-auto bg-paper">
-      <ThemeToggle staged className="pt-4 pr-6" />
+    <div ref={root} className="flex grow flex-col overflow-y-auto bg-paper">
+      <div className="px-6">
+        <ScreenBar />
+      </div>
       <EarthAndMoon />
       <div className="flex grow flex-col gap-2.5 px-6 pt-2 pb-6">
         <span data-m="kick" className="font-mono text-[10.5px] tracking-[.1em] text-muted">

@@ -35,9 +35,42 @@ function choose(c: Choice) {
 
 export const useScheme = () => useSyncExternalStore(subscribe, currentScheme, (): Scheme => "light");
 
+// What the memory screens' canvases draw with, as "r,g,b". Dark keeps their night: warm lamps that add light to a
+// black sky. Light draws ink on paper, and its lamps darken the paper where they burn.
+export const CANVAS = {
+  dark: {
+    ink: "230,227,219",
+    muted: "138,134,126",
+    lamp: "232,180,92",
+    mind: "91,184,214",
+    sun: "255,236,190",
+    paper: "#121314",
+    glow: "lighter",
+  },
+  light: {
+    ink: "23,23,22",
+    muted: "107,104,96",
+    lamp: "168,98,15",
+    mind: "31,122,150",
+    sun: "214,140,40",
+    paper: "#fbfaf7",
+    glow: "multiply",
+  },
+} as const;
+
+/** The canvas palette for the page's theme, in a ref a draw loop reads every frame. */
+export function useCanvasInk() {
+  const scheme = useScheme();
+  const ink = useRef<(typeof CANVAS)[Scheme]>(CANVAS.light);
+  useLayoutEffect(() => {
+    ink.current = CANVAS[scheme];
+  }, [scheme]);
+  return ink;
+}
+
 // The theme button, in the map's corner across from the stage tag, and in Wake's: a crescent and a star. It follows
 // the phone until tapped, then each tap flips the theme. The crescent fills in the dark, and the star twinkles. On a
-// staged screen, the screen's useStage brings it in and out as `[data-m="theme"]`.
+// staged screen, it enters with the screen's kicker and leaves with the screen.
 export function ThemeToggle({ staged = false, className = "pt-1 pr-2.5" }: { staged?: boolean; className?: string }) {
   const root = useRef<HTMLButtonElement>(null);
   const tapped = useRef(false);
@@ -82,7 +115,8 @@ export function ThemeToggle({ staged = false, className = "pt-1 pr-2.5" }: { sta
   return (
     <button
       ref={root}
-      data-m={staged ? "theme" : undefined}
+      data-m={staged ? "kick" : undefined}
+      onPointerDown={(e) => e.stopPropagation()}
       onClick={tap}
       aria-label="Dark theme"
       aria-pressed={scheme === "dark"}

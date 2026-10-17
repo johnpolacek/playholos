@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Sources } from "@/components/sources";
+import { ScreenBar } from "@/components/screen-bar";
+import { useCanvasInk } from "@/components/theme-toggle";
 import { PEOPLE_SOURCES } from "@/lib/game/sources";
 import { gsap, prefersReducedMotion, rise, riseFrom, useStage } from "@/lib/motion";
 
@@ -11,20 +12,6 @@ import { gsap, prefersReducedMotion, rise, riseFrom, useStage } from "@/lib/moti
 
 type Light = [lat: number, lon: number, b: number];
 
-// The night, whatever the phone's theme: the dark tokens, on this screen only.
-export const NIGHT = {
-  "--paper": "#07090b",
-  "--panel": "#07090b",
-  "--ink": "#e6e3db",
-  "--muted": "#8a867e",
-  "--page-ink2": "#b3afa6",
-  "--faint": "#2a2c30",
-  "--you": "#5bb8d6",
-  "--other": "#e8b45c",
-} as React.CSSProperties;
-
-const LAMP = "232,180,92";
-const MIND = "91,184,214";
 const TILT = (22 * Math.PI) / 180;
 const PEOPLE = 9.2e9;
 
@@ -64,12 +51,13 @@ function hubs(lights: Light[], n: number, apart: number) {
 
 function Globe({ scene, lights }: { scene: React.RefObject<Scene>; lights: Light[] }) {
   const canvas = useRef<HTMLCanvasElement>(null);
+  const ink = useCanvasInk();
 
   useEffect(() => {
     const el = canvas.current!;
     const g = el.getContext("2d")!;
-    const lamp = glowSprite(LAMP);
-    const mindGlow = glowSprite(MIND);
+    const glows = new Map<string, HTMLCanvasElement>();
+    const glow = (rgb: string) => glows.get(rgb) ?? glows.set(rgb, glowSprite(rgb)).get(rgb)!;
     // Cities first, then towns, so the count climbs as the big lights come on.
     const order = lights.map((l, i) => ({ l, k: l[2] + Math.random() * 2.5, i })).sort((a, b) => b.k - a.k);
     const rank = new Float32Array(lights.length);
@@ -109,6 +97,7 @@ function Globe({ scene, lights }: { scene: React.RefObject<Scene>; lights: Light
       last = now;
       if (!still) lon0 -= dt * 4;
       const s = scene.current;
+      const c = ink.current;
       g.setTransform(dpr, 0, 0, dpr, 0, 0);
       g.clearRect(0, 0, w, h);
       const r = Math.min(w * 0.4, h * 0.34);
@@ -118,13 +107,13 @@ function Globe({ scene, lights }: { scene: React.RefObject<Scene>; lights: Light
       // The air: a thin blue glow on the limb.
       if (s.outline > 0) {
         const air = g.createRadialGradient(cx, cy, r * 0.96, cx, cy, r * 1.12);
-        air.addColorStop(0, `rgba(${MIND},${0.22 * s.outline})`);
-        air.addColorStop(1, `rgba(${MIND},0)`);
+        air.addColorStop(0, `rgba(${c.mind},${0.22 * s.outline})`);
+        air.addColorStop(1, `rgba(${c.mind},0)`);
         g.fillStyle = air;
         g.beginPath();
         g.arc(cx, cy, r * 1.12, 0, Math.PI * 2);
         g.fill();
-        g.strokeStyle = `rgba(230,227,219,${0.55 * s.outline})`;
+        g.strokeStyle = `rgba(${c.ink},${0.55 * s.outline})`;
         g.lineWidth = 1;
         g.beginPath();
         g.arc(cx, cy, r, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * s.outline);
@@ -132,7 +121,7 @@ function Globe({ scene, lights }: { scene: React.RefObject<Scene>; lights: Light
       }
 
       // The lights. Each comes on at its turn, and dims toward the limb.
-      g.globalCompositeOperation = "lighter";
+      g.globalCompositeOperation = c.glow;
       for (let i = 0; i < lights.length; i++) {
         const on = (s.lit - rank[i]) * 12;
         if (on <= 0) continue;
@@ -141,7 +130,7 @@ function Globe({ scene, lights }: { scene: React.RefObject<Scene>; lights: Light
         if (p.z <= 0.02) continue;
         const size = (1.6 + b * 1.1) * (r / 150);
         g.globalAlpha = Math.min(1, on) * Math.min(1, p.z * 2.2) * (0.35 + b * 0.08);
-        g.drawImage(lamp, p.x - size, p.y - size, size * 2, size * 2);
+        g.drawImage(glow(c.lamp), p.x - size, p.y - size, size * 2, size * 2);
       }
       g.globalAlpha = 1;
 
@@ -155,7 +144,7 @@ function Globe({ scene, lights }: { scene: React.RefObject<Scene>; lights: Light
           if (p.z <= 0.05) continue;
           const qx = (p.x + mx) / 2 + (p.x - cx) * 0.35;
           const qy = Math.min(p.y, my) - r * 0.25;
-          g.strokeStyle = `rgba(${MIND},${0.55 * Math.min(1, p.z * 3)})`;
+          g.strokeStyle = `rgba(${c.mind},${0.55 * Math.min(1, p.z * 3)})`;
           g.beginPath();
           g.moveTo(p.x, p.y);
           const steps = 24;
@@ -172,17 +161,17 @@ function Globe({ scene, lights }: { scene: React.RefObject<Scene>; lights: Light
       if (s.mind > 0) {
         const pulse = still ? 1 : 1 + 0.25 * Math.sin(now / 420);
         const size = 26 * s.mind * pulse;
-        g.drawImage(mindGlow, mx - size, my - size, size * 2, size * 2);
+        g.drawImage(glow(c.mind), mx - size, my - size, size * 2, size * 2);
       }
       g.globalCompositeOperation = "source-over";
       if (s.mind > 0) {
-        g.fillStyle = `rgba(${MIND},${s.mind})`;
+        g.fillStyle = `rgba(${c.mind},${s.mind})`;
         g.beginPath();
         g.arc(mx, my, 2.5, 0, Math.PI * 2);
         g.fill();
         g.font = "9px var(--font-plex-mono), monospace";
         g.textAlign = "center";
-        g.fillStyle = `rgba(138,134,126,${s.mind})`;
+        g.fillStyle = `rgba(${c.muted},${s.mind})`;
         g.fillText("the Mind", mx, my - 12);
       }
     };
@@ -192,7 +181,7 @@ function Globe({ scene, lights }: { scene: React.RefObject<Scene>; lights: Light
       gsap.ticker.remove(draw);
       ro.disconnect();
     };
-  }, [lights, scene]);
+  }, [ink, lights, scene]);
 
   return <canvas ref={canvas} data-m="globe" aria-hidden className="block h-[min(46vh,360px)] w-full shrink-0" />;
 }
@@ -243,15 +232,13 @@ export function People({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
     <div
       ref={root}
       onPointerDown={hurry}
-      style={{ ...NIGHT, visibility: lights ? undefined : "hidden" }}
-      className="flex grow flex-col overflow-y-auto bg-paper px-5 pt-6 text-ink"
+      style={lights ? undefined : { visibility: "hidden" }}
+      className="flex grow flex-col overflow-y-auto bg-paper px-5 text-ink"
     >
-      <div className="flex items-center justify-between">
-        <span data-m="kick" className="font-mono text-[10.5px] tracking-[.1em] text-muted">
-          YEAR 0 · EARTH’S PEOPLE
-        </span>
-        <Sources sources={PEOPLE_SOURCES} />
-      </div>
+      <ScreenBar sources={PEOPLE_SOURCES} />
+      <span data-m="kick" className="font-mono text-[10.5px] tracking-[.1em] text-muted">
+        YEAR 0 · EARTH’S PEOPLE
+      </span>
       {lights && <Globe scene={scene} lights={lights} />}
       <div data-m="count" className="-mt-2 flex items-baseline gap-2">
         <span ref={count} className="text-[34px] leading-none font-semibold tracking-[-.01em] tabular-nums">

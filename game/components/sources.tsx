@@ -47,14 +47,6 @@ function Sheet({ sources, onClose }: { sources: Source[]; onClose(): void }) {
       <div
         data-s="panel"
         className="relative flex max-h-[78%] flex-col rounded-t-[22px] border-t border-faint bg-paper text-ink"
-        style={
-          {
-            "--paper": "#fbfaf7",
-            "--ink": "#171716",
-            "--muted": "#6b6860",
-            "--faint": "#cfcbc0",
-          } as React.CSSProperties
-        }
       >
         <div className="flex items-center justify-between px-5 pt-4 pb-2">
           <span className="font-mono text-[10.5px] tracking-[.1em] text-muted">THE REAL RECORD</span>
@@ -74,7 +66,7 @@ function Sheet({ sources, onClose }: { sources: Source[]; onClose(): void }) {
                     href={url}
                     target="_blank"
                     rel="noreferrer"
-                    className="text-[13px] text-[#1f7a96] underline decoration-[#1f7a96]/40 underline-offset-2"
+                    className="text-[13px] text-you underline decoration-you/40 underline-offset-2"
                   >
                     {label} ↗
                   </a>
@@ -99,7 +91,7 @@ export function Sources({ sources }: { sources: Source[] }) {
         onPointerDown={(e) => e.stopPropagation()}
         onClick={() => setOpen(true)}
         aria-label="The real record"
-        className="-my-2 -mr-2 flex h-9 w-9 items-center justify-center text-muted"
+        className="-ml-2.5 flex h-9 w-9 items-center justify-center text-muted"
       >
         <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.2">
           <circle cx="8" cy="8" r="7" />

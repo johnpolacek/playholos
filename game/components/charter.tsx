@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useGame } from "@/components/game-provider";
+import { ScreenBar } from "@/components/screen-bar";
 import { ENDS, HISTORY, NOTCH, WHY, base, kicks, lean, offers, reply } from "@/lib/game/charter";
 import type { EarthPast } from "@/lib/game/past";
 import { gsap, prefersReducedMotion, rise, riseFrom, useStage } from "@/lib/motion";
@@ -203,8 +204,9 @@ export function Charter({ onNext }: { onSkip(): void; onNext(): void }) {
     <div
       ref={root}
       style={past ? undefined : { visibility: "hidden" }}
-      className="flex grow flex-col overflow-y-auto bg-paper px-5 pt-6"
+      className="flex grow flex-col overflow-y-auto bg-paper px-5"
     >
+      <ScreenBar />
       <span data-m="kick" className="font-mono text-[10.5px] tracking-[.1em] text-muted">
         BEFORE YEAR 0 · EARTH’S CHARTER
       </span>

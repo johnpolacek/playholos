@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { NIGHT } from "@/components/people";
 import { KNOCKS, RADARS_SINCE } from "@/lib/game/knocks";
 import { YEAR_0 } from "@/lib/game/clock";
-import { Sources } from "@/components/sources";
+import { ScreenBar } from "@/components/screen-bar";
+import { useCanvasInk } from "@/components/theme-toggle";
 import { STAND_SOURCES } from "@/lib/game/sources";
 import { gsap, prefersReducedMotion, rise, riseFrom, useStage } from "@/lib/motion";
 import SKY from "@/lib/game/sky.json";
@@ -15,8 +15,6 @@ import SKY from "@/lib/game/sky.json";
 // been answered by now, and none were. Six are still on their way.
 
 const SPAN = 52;
-const AMBER = "232,180,92";
-const BLUE = "91,184,214";
 const STARS = SKY.stars as unknown as [ra: number, d: number, mag: number][];
 const TARGETS = SKY.targets as unknown as Record<string, [ra: number, d: number]>;
 
@@ -31,6 +29,7 @@ const NEXT_YEAR = Math.floor((replyBy(NEXT) - YEAR_0) * 10) / 10;
 
 function Sky({ scene }: { scene: React.RefObject<{ year: number; grid: number; labels: number }> }) {
   const canvas = useRef<HTMLCanvasElement>(null);
+  const ink = useCanvasInk();
 
   useEffect(() => {
     const el = canvas.current!;
@@ -51,6 +50,7 @@ function Sky({ scene }: { scene: React.RefObject<{ year: number; grid: number; l
 
     const draw = (now: number) => {
       const { year, grid, labels } = scene.current;
+      const c = ink.current;
       g.setTransform(dpr, 0, 0, dpr, 0, 0);
       g.clearRect(0, 0, w, h);
       const cx = w / 2;
@@ -68,11 +68,11 @@ function Sky({ scene }: { scene: React.RefObject<{ year: number; grid: number; l
       g.font = "8.5px var(--font-plex-mono), monospace";
       g.textAlign = "center";
       for (let ly = 10; ly <= 50; ly += 10) {
-        g.strokeStyle = `rgba(230,227,219,${0.09 * grid})`;
+        g.strokeStyle = `rgba(${c.ink},${0.09 * grid})`;
         g.beginPath();
         g.arc(cx, cy, px(ly), 0, Math.PI * 2);
         g.stroke();
-        g.fillStyle = `rgba(138,134,126,${0.8 * grid})`;
+        g.fillStyle = `rgba(${c.muted},${0.8 * grid})`;
         g.fillText(`${ly} ly`, cx, cy - px(ly) - 3);
       }
 
@@ -81,13 +81,13 @@ function Sky({ scene }: { scene: React.RefObject<{ year: number; grid: number; l
         // Past the map's edge the noise still fills it, but the glow stays inside the map.
         const r = Math.min(px(shell), R + 4);
         const inside = g.createRadialGradient(cx, cy, 0, cx, cy, r);
-        inside.addColorStop(0, `rgba(${AMBER},0.02)`);
-        inside.addColorStop(1, `rgba(${AMBER},0.08)`);
+        inside.addColorStop(0, `rgba(${c.lamp},0.02)`);
+        inside.addColorStop(1, `rgba(${c.lamp},0.08)`);
         g.fillStyle = inside;
         g.beginPath();
         g.arc(cx, cy, r, 0, Math.PI * 2);
         g.fill();
-        g.strokeStyle = `rgba(${AMBER},${px(shell) > R ? 0 : 0.7})`;
+        g.strokeStyle = `rgba(${c.lamp},${px(shell) > R ? 0 : 0.7})`;
         g.lineWidth = 1.4;
         g.beginPath();
         g.arc(cx, cy, r, 0, Math.PI * 2);
@@ -101,12 +101,12 @@ function Sky({ scene }: { scene: React.RefObject<{ year: number; grid: number; l
         const since = shell - d;
         if (since > 0) {
           const flare = Math.max(0, 1 - since / 3);
-          g.fillStyle = `rgba(${AMBER},${0.45 + 0.55 * flare})`;
+          g.fillStyle = `rgba(${c.lamp},${0.45 + 0.55 * flare})`;
           g.beginPath();
           g.arc(p.x, p.y, size + flare * 2.5, 0, Math.PI * 2);
           g.fill();
         } else {
-          g.fillStyle = `rgba(230,227,219,${0.35 * grid})`;
+          g.fillStyle = `rgba(${c.ink},${0.35 * grid})`;
           g.beginPath();
           g.arc(p.x, p.y, size * 0.8, 0, Math.PI * 2);
           g.fill();
@@ -119,7 +119,7 @@ function Sky({ scene }: { scene: React.RefObject<{ year: number; grid: number; l
         const [ra] = TARGETS[target];
         const gone = Math.min(year - sent, ly);
         const head = at(ra, gone);
-        g.strokeStyle = `rgba(${AMBER},0.35)`;
+        g.strokeStyle = `rgba(${c.lamp},0.35)`;
         g.lineWidth = 0.8;
         g.beginPath();
         g.moveTo(cx, cy);
@@ -127,18 +127,18 @@ function Sky({ scene }: { scene: React.RefObject<{ year: number; grid: number; l
         g.stroke();
         if (year - sent < ly) {
           const pulse = 3.2 + Math.sin(now / 200 + sent) * 0.8;
-          g.fillStyle = `rgba(${AMBER},0.25)`;
+          g.fillStyle = `rgba(${c.lamp},0.25)`;
           g.beginPath();
           g.arc(head.x, head.y, pulse * 2, 0, Math.PI * 2);
           g.fill();
-          g.fillStyle = `rgba(255,236,190,1)`;
+          g.fillStyle = `rgba(${c.sun},1)`;
           g.beginPath();
           g.arc(head.x, head.y, 1.8, 0, Math.PI * 2);
           g.fill();
         } else {
           const ping = year - sent - ly;
           if (ping < 3) {
-            g.strokeStyle = `rgba(${AMBER},${0.8 * (1 - ping / 3)})`;
+            g.strokeStyle = `rgba(${c.lamp},${0.8 * (1 - ping / 3)})`;
             g.lineWidth = 1;
             g.beginPath();
             g.arc(head.x, head.y, 3 + ping * 6, 0, Math.PI * 2);
@@ -153,8 +153,8 @@ function Sky({ scene }: { scene: React.RefObject<{ year: number; grid: number; l
         const p = at(ra, d);
         const silent = replyBy(name) < year;
         const next = name === NEXT;
-        g.strokeStyle = next ? `rgba(${BLUE},${grid})` : `rgba(230,227,219,${0.8 * grid})`;
-        g.fillStyle = "#07090b";
+        g.strokeStyle = next ? `rgba(${c.mind},${grid})` : `rgba(${c.ink},${0.8 * grid})`;
+        g.fillStyle = c.paper;
         g.lineWidth = 1;
         g.beginPath();
         g.arc(p.x, p.y, 3, 0, Math.PI * 2);
@@ -164,19 +164,19 @@ function Sky({ scene }: { scene: React.RefObject<{ year: number; grid: number; l
           g.font = "9px var(--font-plex-mono), monospace";
           g.textAlign = p.x > cx ? "left" : "right";
           const dx = p.x > cx ? 7 : -7;
-          g.fillStyle = next ? `rgba(${BLUE},${labels})` : `rgba(138,134,126,${labels})`;
+          g.fillStyle = next ? `rgba(${c.mind},${labels})` : `rgba(${c.muted},${labels})`;
           g.fillText(next ? `${name} · reply Year ${NEXT_YEAR}` : `${name} · silent`, p.x + dx, p.y + 3);
         }
       }
 
       // Sol.
-      g.fillStyle = `rgba(${BLUE},1)`;
+      g.fillStyle = `rgba(${c.mind},1)`;
       g.beginPath();
       g.arc(cx, cy, 3, 0, Math.PI * 2);
       g.fill();
       g.font = "9px var(--font-plex-mono), monospace";
       g.textAlign = "center";
-      g.fillStyle = `rgba(138,134,126,${grid})`;
+      g.fillStyle = `rgba(${c.muted},${grid})`;
       g.fillText("Sol", cx, cy + 14);
     };
 
@@ -185,7 +185,7 @@ function Sky({ scene }: { scene: React.RefObject<{ year: number; grid: number; l
       gsap.ticker.remove(draw);
       ro.disconnect();
     };
-  }, [scene]);
+  }, [ink, scene]);
 
   return (
     <canvas
@@ -242,17 +242,16 @@ export function Stand({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
     <div
       ref={root}
       onPointerDown={hurry}
-      style={NIGHT}
-      className="flex grow flex-col overflow-y-auto bg-paper px-5 pt-6 text-ink"
+      className="flex grow flex-col overflow-y-auto bg-paper px-5 text-ink"
     >
-      <div className="flex items-center justify-between gap-3">
+      <ScreenBar sources={STAND_SOURCES} />
+      <div className="flex items-baseline justify-between gap-3">
         <span data-m="kick" className="font-mono text-[10.5px] tracking-[.1em] text-muted">
           YEAR 0 · WHERE THINGS STAND
         </span>
-        <span data-m="clock" ref={clock} className="ml-auto font-mono text-[13px] text-other tabular-nums">
+        <span data-m="clock" ref={clock} className="font-mono text-[13px] text-other tabular-nums">
           {RADARS_SINCE}
         </span>
-        <Sources sources={STAND_SOURCES} />
       </div>
       <Sky scene={scene} />
       <h1 data-m="lead" className="mt-2 text-[24px] leading-tight font-semibold">
