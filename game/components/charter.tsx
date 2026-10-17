@@ -68,7 +68,6 @@ export function Charter({ onNext }: { onSkip(): void; onNext(): void }) {
   const lines = useMemo(() => (past ? suggest(past) : []), [past]);
   const line = lines[pick]?.line ?? "";
   const pages = Math.ceil(lines.length / PER);
-  const shown = lines.slice(page * PER, page * PER + PER);
 
   // "More options": the four on screen blur away, the next four rise in, and the first of them is picked, so the
   // chosen line is always one in view. After the last four, back to the first.
@@ -144,22 +143,35 @@ export function Charter({ onNext }: { onSkip(): void; onNext(): void }) {
           </div>
         }
       >
-        <div ref={list} className="mt-5 flex flex-col gap-2 wide:mt-6">
-          {shown.map((c, n) => {
-            const i = page * PER + n;
-            return (
-              <button
-                key={c.line}
-                data-line
-                data-m="line"
-                onClick={() => setPick(i)}
-                aria-pressed={pick === i}
-                className={`rounded-xl border px-3.5 py-3 text-left text-[15px] leading-snug transition-colors ${pick === i ? "border-you bg-you/10 font-medium" : "border-faint"}`}
-              >
-                “{c.line}”
-              </button>
-            );
-          })}
+        {/* Every set of four is laid out in the same cell, and only one shows, so the list holds the tallest set's
+            height and nothing below it moves as the sets change. */}
+        <div className="mt-5 grid wide:mt-6">
+          {Array.from({ length: pages }, (_, p) => (
+            <div
+              key={p}
+              ref={p === page ? list : undefined}
+              inert={p !== page}
+              aria-hidden={p !== page}
+              className={`col-start-1 row-start-1 flex flex-col gap-2 ${p === page ? "" : "invisible"}`}
+            >
+              {lines.slice(p * PER, p * PER + PER).map((c, n) => {
+                const i = p * PER + n;
+                const on = p === page;
+                return (
+                  <button
+                    key={c.line}
+                    data-line={on || undefined}
+                    data-m={on ? "line" : undefined}
+                    onClick={() => setPick(i)}
+                    aria-pressed={pick === i}
+                    className={`rounded-xl border px-3.5 py-3 text-left text-[15px] leading-snug transition-colors ${pick === i ? "border-you bg-you/10" : "border-faint"}`}
+                  >
+                    “{c.line}”
+                  </button>
+                );
+              })}
+            </div>
+          ))}
         </div>
         {pages > 1 && (
           <button
