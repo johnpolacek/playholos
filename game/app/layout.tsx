@@ -1,5 +1,6 @@
-import type { Metadata, Viewport } from "next";
+import type { Metadata } from "next";
 import { IBM_Plex_Mono, SUSE } from "next/font/google";
+import { themeScript } from "@/lib/theme";
 import "./globals.css";
 
 const suse = SUSE({ subsets: ["latin"], variable: "--font-suse" });
@@ -10,16 +11,13 @@ export const metadata: Metadata = {
   description: "Earth wakes as one Mind. You are its Will.",
 };
 
-export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#fbfaf7" },
-    { media: "(prefers-color-scheme: dark)", color: "#121314" },
-  ],
-};
-
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${suse.variable} ${plexMono.variable}`}>
+    <html lang="en" className={`${suse.variable} ${plexMono.variable}`} suppressHydrationWarning>
+      <head>
+        {/* The theme, and the browser chrome's color to match, before the first paint. */}
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body className="font-sans antialiased">{children}</body>
     </html>
   );

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { currentScheme, ThemeToggle, useScheme } from "@/components/theme-toggle";
 
 // The atlas's five stages, and its outward button: each tap travels one stage out, and the last comes home.
 const STAGES = [
@@ -24,28 +25,30 @@ export function MapStrip() {
   const [ready, setReady] = useState(false);
   const [stage, setStage] = useState(0);
   const [tall, setTall] = useState(false);
+  const scheme = useScheme();
 
   useEffect(() => {
     const parent = view.current;
     if (!parent) return;
-    const dark = matchMedia("(prefers-color-scheme: dark)");
     let gone = false;
-    const follow = () => strip.current?.setTheme(dark.matches ? "dark" : "light");
     import("@/lib/atlas")
-      .then(({ mountAtlas }) => mountAtlas(parent, dark.matches ? "dark" : "light"))
+      .then(({ mountAtlas }) => mountAtlas(parent, currentScheme()))
       .then((mounted) => {
         if (gone) return mounted.dispose();
         strip.current = mounted;
         setReady(true);
       });
-    dark.addEventListener("change", follow);
     return () => {
       gone = true;
-      dark.removeEventListener("change", follow);
       strip.current?.dispose();
       strip.current = undefined;
     };
   }, []);
+
+  // The map draws in the theme the page is in, chosen or the phone's.
+  useEffect(() => {
+    if (ready) strip.current?.setTheme(scheme);
+  }, [ready, scheme]);
 
   function travel() {
     const next = (stage + 1) % STAGES.length;
@@ -59,6 +62,7 @@ export function MapStrip() {
       <span className="pointer-events-none absolute top-2 left-2.5 rounded-[9px] border border-faint bg-paper px-[7px] py-0.5 font-mono text-[9.5px] tracking-[.06em]">
         {STAGES[stage].name}
       </span>
+      <ThemeToggle />
       {ready && (
         <button onClick={travel} className="absolute right-2.5 bottom-3 h-8 rounded-full border border-faint bg-paper px-3 text-xs">
           {STAGES[stage].next}
