@@ -32,7 +32,7 @@ npm run dev                                # http://localhost:3000
 
 Everything else inside the shell is placeholder.
 
-Live at https://holos-game.vercel.app. A push to `main` deploys it. By hand, deploy from the repo root with `vercel deploy --prod`: the Vercel project's Root Directory is `game`, and `.vercelignore` keeps the upload to what the game reads.
+Live at https://playholos.vercel.app. A push to `main` deploys it. By hand, deploy from the repo root with `vercel deploy --prod`: the Vercel project's Root Directory is `game`, and `.vercelignore` keeps the upload to what the game reads.
 
 ## Orders in the save, proposed
 
