@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useRef } from "react";
 import { SkyArt, useSky } from "@/components/sky";
 import { gsap, rise, riseFrom, useGSAP, useStage } from "@/lib/motion";
@@ -8,7 +9,7 @@ const AU_KM = 149597870.7;
 const LIGHT_KMS = 299792.458;
 
 // Where the view is, by its distance from Earth in AU. The map's own stage names, with the Moon and the Oort cloud.
-const PLACES: [upTo: number, name: string][] = [
+export const PLACES: [upTo: number, name: string][] = [
   [0.0035, "EARTH"],
   [0.06, "EARTH AND MOON"],
   [400, "SOLAR SYSTEM"],
@@ -19,7 +20,7 @@ const PLACES: [upTo: number, name: string][] = [
 ];
 
 /** A distance as the time light takes to cross it: kilometers up close, then light-seconds out to light-years. */
-function lightTime(au: number) {
+export function lightTime(au: number) {
   const km = au * AU_KM;
   const s = km / LIGHT_KMS;
   const fixed = (n: number) => n.toLocaleString("en-US", { maximumFractionDigits: n < 10 ? 1 : 0 });
@@ -100,6 +101,13 @@ export function Drift({ onNext }: { onSkip(): void; onNext(): void }) {
         >
           Begin game
         </button>
+        <Link
+          data-m="act"
+          href="/about"
+          className="mt-5 font-mono text-[10.5px] tracking-[.1em] text-muted transition-colors hover:text-ink"
+        >
+          ABOUT HOLOS
+        </Link>
       </div>
     </div>
   );
