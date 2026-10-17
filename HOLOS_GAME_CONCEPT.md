@@ -205,7 +205,7 @@ Settled 2026-10-06. v1 used three dials without defining them here.
 - **Cautious or Bold: how much risk it takes.** Cautious looks before it acts, hedges and guards against loss. Bold acts first and accepts danger for gain. A cautious Earth studies a strange signal for years before answering. A bold one answers the same week. Veyra leans Cautious after a comet winter. Hael leans Bold after a century of calling out.
 - **The Will sets the dials by choosing Earth's charter.** Settled 2026-10-16, replacing a one-notch nudge settled the same day. The screen is "Our Charter": the Mind suggests four founding lines, with more on request, and the Will picks one. There are no dials on screen.
   - *The line is the setting.* Each suggested line sets the three dials. The Mind leads with the line Earth's history fits best, so a game with a war and a bomb leads with "Look first, then speak as one."
-  - *More lines.* About twenty wait behind the first four, ranked by fit. Writing your own was set aside 2026-10-17, since a free line has no setting.
+  - *More lines.* About twenty wait behind the first four, ranked by fit. "More lines" swaps in the next four, cycling back to the first. Writing your own was set aside 2026-10-17, since a free line has no setting.
   - Why: dials and nudge buttons on screen needed explaining, and the choice that matters is what Earth is for. Lines and their dial settings are in `game/lib/game/charter.ts`.
   - Set aside: dials fixed until play moves them, a one-notch nudge, and dials the Will sets freely.
 - **Earth's base, from real history:**

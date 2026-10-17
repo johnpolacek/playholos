@@ -45,13 +45,17 @@ function Chosen({ line }: { line: string }) {
   );
 }
 
+/** Lines on screen at once. */
+const PER = 4;
+
 export function Charter({ onNext }: { onSkip(): void; onNext(): void }) {
   const { save, setCharter } = useGame();
   const root = useRef<HTMLDivElement>(null);
   const [past, setPast] = useState<EarthPast>();
   const [pick, setPick] = useState(0);
-  const [shown, setShown] = useState(4);
+  const [page, setPage] = useState(0);
   const list = useRef<HTMLDivElement>(null);
+  const swapping = useRef(false);
   const seed = save?.seed;
   useEffect(() => {
     if (seed === undefined) return;
@@ -63,13 +67,41 @@ export function Charter({ onNext }: { onSkip(): void; onNext(): void }) {
   const history = useMemo(() => (past ? base(past) : []), [past]);
   const lines = useMemo(() => (past ? suggest(past) : []), [past]);
   const line = lines[pick]?.line ?? "";
+  const pages = Math.ceil(lines.length / PER);
+  const shown = lines.slice(page * PER, page * PER + PER);
 
-  // Lines asked for rise in after the first four.
+  // "More lines": the four on screen blur away, the next four rise in, and the first of them is picked, so the
+  // chosen line is always one in view. After the last four, back to the first.
+  function more() {
+    if (swapping.current) return;
+    const next = (page + 1) % pages;
+    const swap = () => {
+      setPage(next);
+      setPick(next * PER);
+    };
+    const old = list.current?.querySelectorAll("[data-line]");
+    if (!old?.length || prefersReducedMotion()) return swap();
+    swapping.current = true;
+    gsap.to(old, {
+      autoAlpha: 0,
+      y: -10,
+      filter: "blur(4px)",
+      duration: 0.25,
+      ease: "power2.in",
+      stagger: 0.04,
+      onComplete: swap,
+    });
+  }
+
   useEffect(() => {
-    if (shown <= 4 || !list.current || prefersReducedMotion()) return;
-    const fresh = [...list.current.querySelectorAll("[data-line]")].slice(shown - 4, shown);
-    gsap.fromTo(fresh, riseFrom, { ...rise, stagger: 0.06 });
-  }, [shown]);
+    if (!swapping.current || !list.current) return;
+    swapping.current = false;
+    gsap.fromTo(
+      list.current.querySelectorAll("[data-line]"),
+      { autoAlpha: 0, y: 14, filter: "blur(4px)" },
+      { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 0.5, ease: "power3.out", stagger: 0.06 },
+    );
+  }, [page]);
 
   const { leave } = useStage(
     root,
@@ -113,28 +145,34 @@ export function Charter({ onNext }: { onSkip(): void; onNext(): void }) {
         }
       >
         <div ref={list} className="mt-5 flex flex-col gap-2 wide:mt-6">
-          {lines.slice(0, shown).map((c, i) => (
-            <button
-              key={c.line}
-              data-line
-              data-m={i < 4 ? "line" : undefined}
-              onClick={() => setPick(i)}
-              aria-pressed={pick === i}
-              className={`rounded-xl border px-3.5 py-3 text-left text-[15px] leading-snug transition-colors ${pick === i ? "border-you bg-you/10 font-medium" : "border-faint"}`}
-            >
-              “{c.line}”
-            </button>
-          ))}
-          {shown < lines.length && (
-            <button
-              data-m="line"
-              onClick={() => setShown((n) => n + 4)}
-              className="self-start px-1 py-2 text-[14px] text-you"
-            >
-              More lines ({lines.length - shown})
-            </button>
-          )}
+          {shown.map((c, n) => {
+            const i = page * PER + n;
+            return (
+              <button
+                key={c.line}
+                data-line
+                data-m="line"
+                onClick={() => setPick(i)}
+                aria-pressed={pick === i}
+                className={`rounded-xl border px-3.5 py-3 text-left text-[15px] leading-snug transition-colors ${pick === i ? "border-you bg-you/10 font-medium" : "border-faint"}`}
+              >
+                “{c.line}”
+              </button>
+            );
+          })}
         </div>
+        {pages > 1 && (
+          <button
+            data-m="line"
+            onClick={more}
+            className="mt-1 flex items-center gap-2 self-start px-1 py-2 text-[14px] text-you"
+          >
+            More lines
+            <span className="font-mono text-[11px] text-muted tabular-nums">
+              {page + 1}/{pages}
+            </span>
+          </button>
+        )}
         <div className="mt-auto shrink-0 pt-5 pb-4 wide:pt-8">
           <button
             data-m="act"

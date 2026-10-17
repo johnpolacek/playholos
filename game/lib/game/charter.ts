@@ -83,7 +83,7 @@ export function dialsFor(pull: number[], history: number[]) {
   return pull.map((p, i) => (p === 0 ? history[i] : 50 + p * SWAY));
 }
 
-/** Every line, the ones Earth's history fits best first. The screen shows four, then more on request. */
+/** Every line, the ones Earth's history fits best first. The screen shows four at a time and cycles through the rest. */
 export function suggest(past: EarthPast) {
   const d = base(past).map((v) => (v - 50) / 50);
   const fit = (pull: number[]) => pull.reduce((s, p, i) => s + p * d[i], 0) / pull.filter((p) => p !== 0).length;
