@@ -228,3 +228,28 @@ export const INHERIT_SOURCES: Source[] = [
     ],
   },
 ];
+
+export const MIND_SOURCES: Source[] = [
+  {
+    title: "The dishes",
+    text: "Real radio dishes and arrays, among them NASA's three deep-space stations at Goldstone, Madrid and Canberra, China's 500-meter FAST, and the arrays in Chile, South Africa and Western Australia.",
+    links: [
+      ["NASA Deep Space Network", W("NASA_Deep_Space_Network")],
+      ["List of radio telescopes", W("List_of_radio_telescopes")],
+    ],
+  },
+  {
+    title: "The telescopes",
+    text: "The great observatories for light, on Mauna Kea, in Chile's Atacama, on La Palma and in South Africa. The ELT and the Giant Magellan Telescope are being built in Chile now.",
+    links: [["Largest optical telescopes", W("List_of_largest_optical_reflecting_telescopes")]],
+  },
+  {
+    title: "The data centers",
+    text: "The biggest clusters, Northern Virginia first, and the giants built for AI since 2024: xAI's Colossus in Memphis, Stargate in Abilene, Meta's Hyperion in Louisiana and Microsoft's Fairwater in Wisconsin. Each place is the nearest town.",
+    links: [
+      ["Colossus", W("Colossus_(supercomputer)")],
+      ["Stargate", W("Stargate_LLC")],
+      ["Data center", W("Data_center")],
+    ],
+  },
+];

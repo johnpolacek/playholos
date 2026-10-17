@@ -12,6 +12,7 @@ import { skyBasis } from "../../src/coordinates.js";
 import { AGE, WHOLE_ROAD, agoAt, place as placeOf, roadZoom } from "./game/road";
 import { KNOCKS, RADARS_SINCE, TARGET_DEC } from "./game/knocks";
 import SKY from "./game/sky.json";
+import { MACHINES, type MachineKind } from "./game/machines";
 import {
   DEG,
   LIFT,
@@ -49,10 +50,14 @@ export interface Dials {
   grid?: number;
   /** The stars Earth knocked on are named. */
   labels?: number;
+  /** Meeting the Mind: Earth's dishes, telescopes and data centers come on, one by one. */
+  dish?: number;
+  scope?: number;
+  compute?: number;
 }
 
 /** What the sky shows: the title, the map, or one of the screens before the shell. */
-export type Mode = "title" | "map" | "wake" | "origins" | "people" | "stand" | "inherit" | "charter";
+export type Mode = "title" | "map" | "wake" | "origins" | "people" | "stand" | "inherit" | "charter" | "mind";
 
 /** One screen's view of the sky. */
 export interface Show {
@@ -65,7 +70,7 @@ export interface Show {
   rect?: () => { x: number; y: number; w: number; h: number } | null;
   /** For "title": the camera's distance from Earth's surface in AU, each frame. */
   onFrame?(fromEarthAU: number): void;
-  /** For "people": where the Mind is on screen, in CSS pixels, each frame. */
+  /** For "people" and "mind": where the Mind is on screen, in CSS pixels, each frame. */
   onMind?(x: number, y: number): void;
   /** For "inherit" and "stand": where their labeled places are on screen, each frame. */
   onMarks?(marks: Mark[]): void;
@@ -364,6 +369,9 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       // What you inherit: out from Earth's night side, as far as its intro has flown.
       case "inherit":
         return (t) => [(d?.zoom ?? 4.15) - HALF_VIEW_KM, 0.9 + drift(t, 300), 0.18, 0];
+      // Meeting the Mind: Earth close, turning, its machines lit, toward the dawn.
+      case "mind":
+        return () => [-3.62, 0.7, 0.22, 0];
       // The charter: Earth and the Moon, small and far.
       case "charter":
         return (t) => [-1.95, 0.5 + drift(t, 400), 0.3, 0];
@@ -377,9 +385,9 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
   // The sky opens wherever the game opens: on the title for a new game, or on the map for one already begun.
   pilot.fly(poseFor(first), 0, true);
   /** Where each screen's subject sits in its art, as a share of the art's height: up for the title's button. */
-  const LIFTS: Partial<Record<Mode, number>> = { title: LIFT, people: -0.14, wake: -0.04 };
+  const LIFTS: Partial<Record<Mode, number>> = { title: LIFT, people: -0.14, wake: -0.04, mind: -0.14 };
   /** Real seconds per Earth turn: a minute, or two while a screen holds still on it. Added up, so a change never jumps. */
-  const turnOf = () => (spec.mode === "people" || spec.mode === "wake" ? 120 : 60);
+  const turnOf = () => (spec.mode === "people" || spec.mode === "wake" || spec.mode === "mind" ? 120 : 60);
   let turned = 0;
   const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
   renderer.autoClear = false;
@@ -922,6 +930,86 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     }
   }
 
+  // ── Meeting the Mind: Earth's real machines come on, kind by kind, and threads rise from each to the Mind ──
+  function meeting() {
+    const kinds: Record<MachineKind, Kind> = { dish: "mind", scope: "ink", compute: "lamp" };
+    const lamps = {} as Record<MachineKind, THREE.ShaderMaterial>;
+    for (const kind of ["dish", "scope", "compute"] as const) {
+      const c = new Cloud();
+      // Each comes on at its own moment in its kind's turn: a bright point in a soft halo, to stand out from the lights.
+      for (const m of MACHINES.filter((m) => m.kind === kind)) {
+        const at = onGlobe(m.lat, m.lon, 1.006);
+        const rank = 0.02 + rand() * 0.9;
+        c.add(...at, 18, 0.45, K[kinds[kind]], rank);
+        c.add(...at, 5.5, 1, K[kinds[kind]], rank);
+      }
+      lamps[kind] = glow({ fixed: true, depthTest: true });
+      lamps[kind].blending = THREE.AdditiveBlending;
+      spin.add(c.points(lamps[kind]));
+    }
+    const strands = MACHINES.map((m) => {
+      const mat = line(kinds[m.kind], 0, true);
+      const geo = new THREE.BufferGeometry().setAttribute(
+        "position",
+        new THREE.BufferAttribute(new Float32Array(25 * 3), 3),
+      );
+      const l = new THREE.Line(geo, mat);
+      l.frustumCulled = false;
+      earth.scene.add(l);
+      return { at: new THREE.Vector3(...onGlobe(m.lat, m.lon, 1.006)), line: l, mat };
+    });
+    const core = new Cloud();
+    core.add(0, 0, 0, 60, 0.55, K.mind);
+    core.add(0, 0, 0, 8, 1, K.mind);
+    const coreGlow = glow({ fixed: true });
+    const corePts = core.points(coreGlow);
+    corePts.renderOrder = 2;
+    earth.scene.add(corePts);
+    const top = new THREE.Vector3();
+    const site = new THREE.Vector3();
+    const arc = new THREE.Vector3();
+    const eye = new THREE.Vector3();
+    return (up: THREE.Vector3, p: number) => {
+      const d = dialsOf.mind;
+      for (const kind of ["dish", "scope", "compute"] as const) {
+        lamps[kind].uniforms.uOpacity.value = p;
+        lamps[kind].uniforms.uReveal.value = d?.[kind] ?? 0;
+      }
+      top.copy(up).multiplyScalar(MIND_UP);
+      corePts.position.copy(top);
+      coreGlow.uniforms.uOpacity.value = p * (d?.mind ?? 0) * (still ? 1 : 0.8 + 0.2 * Math.sin(clock * 2.4));
+      const steps = Math.round(24 * (d?.threads ?? 0));
+      for (const { at, line: l, mat } of strands) {
+        site.copy(at).applyQuaternion(spin.quaternion);
+        eye.copy(earth.camera.position).sub(site).normalize();
+        mat.uniforms.uOpacity.value = 0.55 * p * smooth(site.clone().normalize().dot(eye) * 4);
+        // Lift each thread off its site before it bends to the Mind, the farther from the Mind the higher, so none
+        // cuts through the globe.
+        const w = (1 - site.dot(top) / (site.length() * top.length())) / 2;
+        arc.copy(site).setLength(1.1 + 2.6 * w).add(top).multiplyScalar(0.5);
+        const pos = l.geometry.attributes.position as THREE.BufferAttribute;
+        for (let k = 0; k <= 24; k++) {
+          const t = k / 24;
+          const a = (1 - t) ** 2;
+          const b = 2 * (1 - t) * t;
+          const c = t * t;
+          pos.setXYZ(
+            k,
+            a * site.x + b * arc.x + c * top.x,
+            a * site.y + b * arc.y + c * top.y,
+            a * site.z + b * arc.z + c * top.z,
+          );
+        }
+        pos.needsUpdate = true;
+        l.geometry.setDrawRange(0, steps > 0 ? steps + 1 : 0);
+      }
+      if (spec.mode === "mind" && spec.onMind) {
+        const q = top.clone().project(earth.camera);
+        spec.onMind(((q.x + 1) / 2) * parent.clientWidth, ((1 - q.y) / 2) * parent.clientHeight);
+      }
+    };
+  }
+
   // ── What you inherit: Earth's kit at Year 0, each piece where it is ──
   function inheritance() {
     const north = new THREE.Vector3(0, 1, 0).applyQuaternion(bodyOrientation("Earth", date));
@@ -1391,7 +1479,10 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
   function framingOf(s: Show): Framing {
     const W = parent.clientWidth;
     const H = parent.clientHeight;
-    const r = s.rect?.() ?? null;
+    const r = s.rect?.();
+    // A screen's art box gone, as between one screen and the next: the framing holds where it was until the next
+    // screen places its own. A screen with no art, or a hidden one, frames the whole sky.
+    if (r === null && framing) return framing;
     const box = r && r.w > 8 && r.h > 8 ? r : { x: 0, y: 0, w: W, h: H };
     return { cx: box.x + box.w / 2, cy: box.y + box.h / 2 - (LIFTS[s.mode] ?? 0) * box.h, w: box.w, h: box.h };
   }
@@ -1431,6 +1522,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
   let kit: ReturnType<typeof inheritance> | null = null;
   let road: ReturnType<typeof sunsRoad> | null = null;
   let noise: ReturnType<typeof standing> | null = null;
+  let machines: ReturnType<typeof meeting> | null = null;
   const presence: Partial<Record<Mode, number>> = {};
   let lastClock = 0;
   function present(mode: Mode, dt: number) {
@@ -1439,7 +1531,8 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     presence[mode] = p < 0.002 && !target ? 0 : p;
     return presence[mode]!;
   }
-  if (first.mode === "origins") road = sunsRoad(first.moments ?? []);
+  /** Where we come from's moments, which can come after its screen does: the road is built once they are here. */
+  let momentsOf = first.moments ?? [];
 
   /** Data fades in when it arrives, or shows at once in a still. */
   const arrived = (at: number) => (still ? Number(at < Infinity) : smooth((clock - at) / 1.6));
@@ -1471,6 +1564,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     const pInherit = present("inherit", dt);
     const pOrigins = present("origins", dt);
     const pStand = present("stand", dt);
+    const pMind = present("mind", dt);
     surface.uniforms.uOpacity.value = arrived(surfaceAt);
     // Who they are lights the cities in turn. Elsewhere they are all lit.
     surface.uniforms.uLit.value = 1 + ((dialsOf.people?.lit ?? 1) - 1) * pPeople;
@@ -1502,8 +1596,12 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
 
     if (pPeople > 0) people(up, pPeople);
     if (pInherit > 0) (kit ??= inheritance())(x, pInherit);
-    if (pOrigins > 0) road?.(x, pOrigins);
+    if (pOrigins > 0) {
+      if (!road && momentsOf.length) road = sunsRoad(momentsOf);
+      road?.(x, pOrigins);
+    }
     if (pStand > 0) (noise ??= standing())(x, pStand);
+    if (pMind > 0) (machines ??= meeting())(up, pMind);
     if (spec.onScale && framing) spec.onScale((D * 149597870.7) / focal, framing.w, framing.h);
 
     renderer.clear();
@@ -1530,15 +1628,16 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
 
   return {
     show(next) {
-      // The same screen again, as on a remount: take its new callbacks, and keep flying.
+      // The same screen again, as on a remount or once its data comes: take its new callbacks, keep flying, and say
+      // how long is left.
+      if (next.moments?.length) momentsOf = next.moments;
       if (next.mode === spec.mode && next.dials === spec.dials) {
         spec = next;
-        return 0;
+        return pilot.remaining(clock);
       }
       if (framing) framingFrom = framing;
       spec = next;
       if (next.dials) dialsOf[next.mode] = next.dials;
-      if (next.mode === "origins" && !road) road = sunsRoad(next.moments ?? []);
       dirty = true;
       return pilot.fly(poseFor(next), clock);
     },

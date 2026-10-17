@@ -16,8 +16,22 @@ const transport = new DefaultChatTransport({
   },
 });
 
-export function MindChat() {
+export function MindChat({ ask }: { ask?: string }) {
   const { messages, sendMessage, status, error } = useChat({ transport });
+  const asked = useRef(false);
+
+  // A question brought from Meeting the Mind: asked once, then dropped from the address.
+  useEffect(() => {
+    if (!ask || asked.current) return;
+    // A tick late, so a dev double mount sends it once, from the chat that stays.
+    const id = setTimeout(() => {
+      asked.current = true;
+      sendMessage({ text: ask });
+      // Not a navigation, so the chat stays mounted.
+      window.history.replaceState(null, "", "/mind");
+    });
+    return () => clearTimeout(id);
+  }, [ask, sendMessage]);
   const [input, setInput] = useState("");
   const end = useRef<HTMLDivElement>(null);
   const busy = status === "submitted" || status === "streaming";

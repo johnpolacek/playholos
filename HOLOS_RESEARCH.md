@@ -1487,6 +1487,12 @@ The first screen, before Earth wakes, flies from Earth out to the Local Group an
   - Spare matter sits on the planes most used: the [ISS](https://en.wikipedia.org/wiki/International_Space_Station) at 51.6°, [Starlink](https://en.wikipedia.org/wiki/Starlink)'s 53° shells, [sun-synchronous orbits](https://en.wikipedia.org/wiki/Sun-synchronous_orbit) near 98°, and the [geostationary belt](https://en.wikipedia.org/wiki/Geostationary_orbit) at 42,164 km from Earth's center. Which piece sits where is ours.
   - Rockets lift from real pads: Cape Canaveral, Boca Chica, Kourou, Baikonur, Jiuquan and Wenchang.
   - Used: What you inherit's debris and lift.
+- **The Mind's machines** · Reference, checked 2026-10-17.
+  - Real radio dishes and arrays: NASA's [Deep Space Network](https://en.wikipedia.org/wiki/NASA_Deep_Space_Network) at Goldstone, Madrid and Canberra, FAST, Green Bank, the VLA, ALMA, MeerKAT, Murchison, Effelsberg, Jodrell Bank, Parkes, the Allen Array, GMRT, LOFAR, Tianma, ESA's Malargüe, JAXA's Usuda and Kashi ([List of radio telescopes](https://en.wikipedia.org/wiki/List_of_radio_telescopes)). Arecibo is left out: it fell in 2020.
+  - The big telescopes for light: Mauna Kea, Paranal, Rubin, the ELT and Las Campanas in Chile, La Palma, SALT, Kitt Peak, Palomar, Siding Spring, Xinglong and Devasthal ([Largest optical telescopes](https://en.wikipedia.org/wiki/List_of_largest_optical_reflecting_telescopes)).
+  - The biggest data center clusters, Northern Virginia first, and the AI giants since 2024: [Colossus](https://en.wikipedia.org/wiki/Colossus_(supercomputer)) in Memphis, [Stargate](https://en.wikipedia.org/wiki/Stargate_LLC) in Abilene, Meta's Hyperion in Richland Parish (32.48, −91.63, from its Wikipedia page) and Microsoft's Fairwater in Mount Pleasant, Wisconsin.
+  - Matters: "every dish, every telescope, every data center" names real things, and each lights where it stands.
+  - Used: Meeting the Mind, `game/lib/game/machines.ts`. Places are to the nearest town. Which ones are on the list is ours.
 
 ## Watch list
 

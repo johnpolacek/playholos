@@ -687,8 +687,8 @@ Settled 2026-10-10.
   - *Who they are:* Earth's 9.2 billion people, and how they feel about the Mind they built.
   - *Where things stand:* Earth's loud past, every knock it sent and when a reply could come, and that nothing has been heard.
   - *What you inherit:* Earth's kit at Year 0.
-- **The charter.** The Mind proposes Earth's founding line from its history and dials. The player keeps it or edits it.
-- **Meeting the Mind, then the tour,** as v1 had them.
+- **The charter.** The Mind proposes founding lines from Earth's history and dials, and the player picks one. See "The dials".
+- **Meeting the Mind.** Settled 2026-10-17. Earth's real dishes, telescopes and data centers light up as the Mind names them, and threads rise from each into one point. Its first words follow, then its first advice from the charter's strongest lean, which it never acts on. Three questions, "What doesn't fit?", "Who has heard us?" and "Plan our waking.", each open the Mind's chat with that question asked. The tour follows, as v1 had it.
 - **Planning.** The player queues builds, observations, standing orders and what wakes them, sets how much thought goes to studies, and sets what each instrument searches when idle. Nothing happens yet.
 - **Begin.** When the player taps Begin, Year 0 starts and everything queued starts at once. From then on the clock runs, offline too, at 5 real minutes a Year.
 - **The first session keeps v1's rhythm.** Settled 2026-10-12. About 15 minutes of play from Begin, the first result within 30 seconds, and something real landing about every minute. It ends on a timer the player sets, 45 to 60 minutes out.

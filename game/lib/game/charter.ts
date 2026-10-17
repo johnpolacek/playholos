@@ -89,3 +89,26 @@ export function suggest(past: EarthPast) {
   const fit = (pull: number[]) => pull.reduce((s, p, i) => s + p * d[i], 0) / pull.filter((p) => p !== 0).length;
   return [...CHARTERS].sort((a, b) => fit(b.pull) - fit(a.pull));
 }
+
+/**
+ * The Mind's first advice, from the dial the charter leans on hardest. Advice only: the Will decides.
+ * Settled 2026-10-17 for "Meeting the Mind".
+ */
+export function firstAdvice(dials: number[]) {
+  const ADVICE = [
+    [
+      "We have been loud for ninety years, and no one has answered. We would learn to listen properly, then call.",
+      "We have been loud for ninety years, by accident. We would listen hard, and send nothing new until we know who is near.",
+    ],
+    [
+      "We would start the builds that carry us outward, and listen while they run.",
+      "We would spend our first thought on the records we already hold. They know more than their first readers saw.",
+    ],
+    [
+      "We would look a long time before we touch anything. Nothing out there is in a hurry.",
+      "We would move while the window is open, and listen as we go.",
+    ],
+  ];
+  const i = dials.reduce((best, v, k) => (Math.abs(v - 50) > Math.abs(dials[best] - 50) ? k : best), 0);
+  return ADVICE[i][dials[i] < 50 ? 0 : 1];
+}

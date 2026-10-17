@@ -8,6 +8,7 @@ import { Stand } from "@/components/stand";
 import { Inherit } from "@/components/inherit";
 import { FILL, Spread } from "@/components/spread";
 import { Charter } from "@/components/charter";
+import { Meet } from "@/components/meet";
 import { Drift } from "@/components/drift";
 import { Sky, SkyArt } from "@/components/sky";
 import type { Dials } from "@/lib/drift";
@@ -103,7 +104,7 @@ export const useLeaveShell = () => use(LeaveShell);
 
 // The phone. A new game opens on the drift, then Wake and the memories, all under one sky. A game already begun goes straight to the
 // shell. Screens past the last one built lead to the shell. A reload starts over at the drift.
-const SCREENS = [Drift, Wake, Origins, People, Stand, Inherit, Charter];
+const SCREENS = [Drift, Wake, Origins, People, Stand, Inherit, Charter, Meet];
 
 export function Opening({ className, children }: { className: string; children: React.ReactNode }) {
   const { save, wake } = useGame();
