@@ -39,6 +39,11 @@ Every source the game rests on, grouped by the question it answers. Each entry s
   - About 15 minutes per star, 1.1 to 3.45 GHz, searching for narrow drifting tones. Rules out steady narrowband transmitters above about 2×10¹⁰ to 3×10¹¹ W at the neighbors' distances.
   - Matters: what Earth's null results exclude about the neighbors. They search for tones, so they barely limit pulsed radar.
   - Used: v1 "Why Earth hears none of it today". v2 open question 4.
+- **[Wright, Kanodia and Lubar 2018, how much SETI has been done](https://arxiv.org/abs/1809.07252)** · Published, AJ 156, 260. Abstract read 2026-10-17.
+  - Models everywhere a radio signal could hide as an eight-dimensional "cosmic haystack", then adds up what several large searches covered. The share is about a large hot tub, or small swimming pool, against Earth's oceans.
+  - Its point: bright beacons could be common and still unfound, so the Fermi paradox can't lean on radio silence.
+  - Matters: Earth's quiet sky says very little about its neighbors. It fits [What Earth hears](HOLOS_GAME_CONCEPT.md#what-earth-hears): before 2028, Earth caught about 1 knock in 100.
+  - Used: not yet in the design. Cited when explaining the quiet sky to players.
 - **[Garrett 2026, broadband radio searches](https://academic.oup.com/mnras/article/549/3/stag991/8697603)** · Published, MNRAS.
   - Broadband surveys followed by interferometric source discrimination. Its roughly 100 pc reach assumes emissions far stronger than Earth's today.
   - Matters: the model for surveying, then investigating. It does not validate v1's receiver ranges.
