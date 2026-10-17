@@ -22,3 +22,19 @@ export const KNOCKS: [string, number, string, number][] = [
 
 /** Earth's radars began sweeping the sky in the 1950s. */
 export const RADARS_SINCE = 1950;
+
+/** Each target's declination, J2000 degrees, for placing it in 3D. Its right ascension and distance are in sky.json. */
+export const TARGET_DEC: Record<string, number> = {
+  Altair: 8.87,
+  "47 Ursae Majoris": 40.43,
+  "Gliese 49": 62.35,
+  "Gliese 208": 11.33,
+  "55 Cancri": 28.33,
+  "Gliese 581": -7.72,
+  "TZ Arietis": 13.05,
+  "Kappa¹ Ceti": 3.37,
+  "Gliese 526": 14.89,
+  "Luyten's Star": 5.23,
+  "HD 10307": 42.61,
+  "Teegarden's Star": 16.88,
+};

@@ -1,21 +1,20 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { KNOCKS, RADARS_SINCE } from "@/lib/game/knocks";
 import { YEAR_0 } from "@/lib/game/clock";
+import { SkyArt } from "@/components/sky";
 import { FILL, Spread } from "@/components/spread";
-import { useCanvasInk } from "@/components/theme-toggle";
+import type { Dials, Mark } from "@/lib/drift";
 import { STAND_SOURCES } from "@/lib/game/sources";
-import { gsap, prefersReducedMotion, rise, riseFrom, useStage } from "@/lib/motion";
+import { prefersReducedMotion, rise, riseFrom, useStage } from "@/lib/motion";
 import SKY from "@/lib/game/sky.json";
 
-// "Where things stand": ninety years of Earth's noise, seen from above Sol. Each star within 50 ly sits at its real
-// distance and right ascension. From 1950 the radar shell spreads at the speed of light and crosses every one of
-// them. Then the aimed messages leave on their real dates, each a pulse along its beam. Some arrive. Three could have
-// been answered by now, and none were. Six are still on their way.
+// "Where things stand": ninety years of Earth's noise across the stars within 50 light-years, in the game's sky. Each
+// star sits at its real place. From 1950 the radar shell spreads at the speed of light and lights every one of them.
+// Then the aimed messages leave on their real dates, each a pulse along its beam. Some arrive. Three could have been
+// answered by now, and none were. Six are still on their way.
 
-const SPAN = 52;
-const STARS = SKY.stars as unknown as [ra: number, d: number, mag: number][];
 const TARGETS = SKY.targets as unknown as Record<string, [ra: number, d: number]>;
 
 /** The earliest a reply to any message to this star could reach Earth. */
@@ -27,173 +26,44 @@ const SILENT = TARGET_NAMES.filter((t) => replyBy(t) < YEAR_0);
 const NEXT = TARGET_NAMES.filter((t) => replyBy(t) >= YEAR_0).sort((a, b) => replyBy(a) - replyBy(b))[0];
 const NEXT_YEAR = Math.floor((replyBy(NEXT) - YEAR_0) * 10) / 10;
 
-function Sky({ scene }: { scene: React.RefObject<{ year: number; grid: number; labels: number }> }) {
-  const canvas = useRef<HTMLCanvasElement>(null);
-  const ink = useCanvasInk();
-
-  useEffect(() => {
-    const el = canvas.current!;
-    const g = el.getContext("2d")!;
-    let w = 0;
-    let h = 0;
-    let dpr = 1;
-    const fit = () => {
-      dpr = Math.min(2, window.devicePixelRatio || 1);
-      w = el.clientWidth;
-      h = el.clientHeight;
-      el.width = w * dpr;
-      el.height = h * dpr;
-    };
-    fit();
-    const ro = new ResizeObserver(fit);
-    ro.observe(el);
-
-    const draw = (now: number) => {
-      const { year, grid, labels } = scene.current;
-      const c = ink.current;
-      g.setTransform(dpr, 0, 0, dpr, 0, 0);
-      g.clearRect(0, 0, w, h);
-      const cx = w / 2;
-      const cy = h / 2;
-      const R = Math.min(w, h) / 2 - 6;
-      const px = (ly: number) => (ly / SPAN) * R;
-      const at = (ra: number, d: number) => {
-        const a = -Math.PI / 2 - (ra / 24) * Math.PI * 2;
-        return { x: cx + px(d) * Math.cos(a), y: cy + px(d) * Math.sin(a) };
-      };
-      const shell = year - RADARS_SINCE;
-
-      // Distance rings, 10 ly apart.
-      g.lineWidth = 0.6;
-      g.font = "8.5px var(--font-plex-mono), monospace";
-      g.textAlign = "center";
-      for (let ly = 10; ly <= 50; ly += 10) {
-        g.strokeStyle = `rgba(${c.ink},${0.09 * grid})`;
-        g.beginPath();
-        g.arc(cx, cy, px(ly), 0, Math.PI * 2);
-        g.stroke();
-        g.fillStyle = `rgba(${c.muted},${0.8 * grid})`;
-        g.fillText(`${ly} ly`, cx, cy - px(ly) - 3);
+/** The map, in the sky: the scene draws the shell, the stars and the beams, and names the knocked-on stars here. */
+function Map({ dials, onReady }: { dials: Dials; onReady(flight: number): void }) {
+  const names = useRef<Record<string, HTMLSpanElement | null>>({});
+  // The stars that could have answered by now are named silent, and the next to answer is named in blue.
+  const onMarks = useCallback(
+    (marks: Mark[]) => {
+      const year = dials.year ?? YEAR_0;
+      for (const { id, x, y, a } of marks) {
+        const n = names.current[id];
+        if (!n) continue;
+        const shown = id === "Sol" ? a : a * (dials.labels ?? 0) * (id === NEXT || replyBy(id) < year ? 1 : 0);
+        const right = x > (n.parentElement?.clientWidth ?? 0) / 2;
+        n.style.transform = `translate(${x + (right ? 8 : -8)}px, ${y}px) translate(${right ? "0" : "-100%"}, -50%)`;
+        n.style.opacity = String(shown);
       }
-
-      // The radar shell, and the noise inside it.
-      if (shell > 0) {
-        // Past the map's edge the noise still fills it, but the glow stays inside the map.
-        const r = Math.min(px(shell), R + 4);
-        const inside = g.createRadialGradient(cx, cy, 0, cx, cy, r);
-        inside.addColorStop(0, `rgba(${c.lamp},0.02)`);
-        inside.addColorStop(1, `rgba(${c.lamp},0.08)`);
-        g.fillStyle = inside;
-        g.beginPath();
-        g.arc(cx, cy, r, 0, Math.PI * 2);
-        g.fill();
-        g.strokeStyle = `rgba(${c.lamp},${px(shell) > R ? 0 : 0.7})`;
-        g.lineWidth = 1.4;
-        g.beginPath();
-        g.arc(cx, cy, r, 0, Math.PI * 2);
-        g.stroke();
-      }
-
-      // The stars. Each flares as the shell crosses it, then stays lit.
-      for (const [ra, d, mag] of STARS) {
-        const p = at(ra, d);
-        const size = Math.max(0.6, 2.2 - mag * 0.1);
-        const since = shell - d;
-        if (since > 0) {
-          const flare = Math.max(0, 1 - since / 3);
-          g.fillStyle = `rgba(${c.lamp},${0.45 + 0.55 * flare})`;
-          g.beginPath();
-          g.arc(p.x, p.y, size + flare * 2.5, 0, Math.PI * 2);
-          g.fill();
-        } else {
-          g.fillStyle = `rgba(${c.ink},${0.35 * grid})`;
-          g.beginPath();
-          g.arc(p.x, p.y, size * 0.8, 0, Math.PI * 2);
-          g.fill();
-        }
-      }
-
-      // The aimed messages: a beam to each star, and a pulse moving out along it at the speed of light.
-      for (const [, sent, target, ly] of KNOCKS) {
-        if (year <= sent) continue;
-        const [ra] = TARGETS[target];
-        const gone = Math.min(year - sent, ly);
-        const head = at(ra, gone);
-        g.strokeStyle = `rgba(${c.lamp},0.35)`;
-        g.lineWidth = 0.8;
-        g.beginPath();
-        g.moveTo(cx, cy);
-        g.lineTo(head.x, head.y);
-        g.stroke();
-        if (year - sent < ly) {
-          const pulse = 3.2 + Math.sin(now / 200 + sent) * 0.8;
-          g.fillStyle = `rgba(${c.lamp},0.25)`;
-          g.beginPath();
-          g.arc(head.x, head.y, pulse * 2, 0, Math.PI * 2);
-          g.fill();
-          g.fillStyle = `rgba(${c.sun},1)`;
-          g.beginPath();
-          g.arc(head.x, head.y, 1.8, 0, Math.PI * 2);
-          g.fill();
-        } else {
-          const ping = year - sent - ly;
-          if (ping < 3) {
-            g.strokeStyle = `rgba(${c.lamp},${0.8 * (1 - ping / 3)})`;
-            g.lineWidth = 1;
-            g.beginPath();
-            g.arc(head.x, head.y, 3 + ping * 6, 0, Math.PI * 2);
-            g.stroke();
-          }
-        }
-      }
-
-      // The twelve stars Earth knocked on.
-      for (const name of TARGET_NAMES) {
-        const [ra, d] = TARGETS[name];
-        const p = at(ra, d);
-        const silent = replyBy(name) < year;
-        const next = name === NEXT;
-        g.strokeStyle = next ? `rgba(${c.mind},${grid})` : `rgba(${c.ink},${0.8 * grid})`;
-        g.fillStyle = c.paper;
-        g.lineWidth = 1;
-        g.beginPath();
-        g.arc(p.x, p.y, 3, 0, Math.PI * 2);
-        g.fill();
-        g.stroke();
-        if (labels > 0 && (next || silent)) {
-          g.font = "9px var(--font-plex-mono), monospace";
-          g.textAlign = p.x > cx ? "left" : "right";
-          const dx = p.x > cx ? 7 : -7;
-          g.fillStyle = next ? `rgba(${c.mind},${labels})` : `rgba(${c.muted},${labels})`;
-          g.fillText(next ? `${name} · reply Year ${NEXT_YEAR}` : `${name} · silent`, p.x + dx, p.y + 3);
-        }
-      }
-
-      // Sol.
-      g.fillStyle = `rgba(${c.mind},1)`;
-      g.beginPath();
-      g.arc(cx, cy, 3, 0, Math.PI * 2);
-      g.fill();
-      g.font = "9px var(--font-plex-mono), monospace";
-      g.textAlign = "center";
-      g.fillStyle = `rgba(${c.muted},${grid})`;
-      g.fillText("Sol", cx, cy + 14);
-    };
-
-    gsap.ticker.add(draw);
-    return () => {
-      gsap.ticker.remove(draw);
-      ro.disconnect();
-    };
-  }, [ink, scene]);
-
+    },
+    [dials],
+  );
   return (
-    <canvas
-      ref={canvas}
-      data-m="sky"
-      aria-hidden
-      className={`mx-auto block aspect-square w-full max-w-[420px] shrink-0 sm:max-w-[520px] wide:aspect-auto ${FILL}`}
-    />
+    <SkyArt
+      mode="stand"
+      dials={dials}
+      onReady={onReady}
+      onMarks={onMarks}
+      className={`relative mx-auto block aspect-square w-full max-w-[420px] shrink-0 sm:max-w-[520px] wide:aspect-auto ${FILL}`}
+    >
+      {[...TARGET_NAMES, "Sol"].map((id) => (
+        <span
+          key={id}
+          ref={(n) => {
+            names.current[id] = n;
+          }}
+          className={`pointer-events-none absolute top-0 left-0 font-mono text-[9px] whitespace-nowrap opacity-0 ${id === NEXT ? "text-you" : "text-muted"}`}
+        >
+          {id === "Sol" ? "Sol" : id === NEXT ? `${id} · reply Year ${NEXT_YEAR}` : `${id} · silent`}
+        </span>
+      ))}
+    </SkyArt>
   );
 }
 
@@ -207,36 +77,48 @@ const LINES = [
 export function Stand({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
   const root = useRef<HTMLDivElement>(null);
   const clock = useRef<HTMLSpanElement>(null);
-  const scene = useRef({ year: RADARS_SINCE - 2, grid: 0, labels: 0 });
+  // One object for the whole screen: the intro runs the years, and the scene reads them every frame.
+  const [dials] = useState<Dials>(() => ({ year: RADARS_SINCE - 2, grid: 0, labels: 0 }));
+  const [ready, setReady] = useState(false);
+  // The camera's flight to this screen: the story starts as it arrives.
+  const lead = useRef(0);
+  const onReady = useCallback((flight: number) => {
+    lead.current = flight;
+    setReady(true);
+  }, []);
 
-  const { leave, hurry } = useStage(root, (q, tl) => {
-    const s = scene.current;
-    const show = () => {
-      const y = Math.floor(s.year);
-      clock.current!.textContent = y >= YEAR_0 ? `${YEAR_0} · Year 0` : String(Math.max(RADARS_SINCE, y));
-    };
-    tl.fromTo(q('[data-m="kick"]'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.5 }, 0)
-      .set(q('[data-m="sky"]'), { autoAlpha: 1 }, 0)
-      .to(s, { grid: 1, duration: 1 }, 0.2)
-      .fromTo(q('[data-m="clock"]'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.4 }, 0.6)
-      .to(s, { year: YEAR_0, duration: 8, ease: "power1.inOut", onUpdate: show }, 0.8)
-      .to(s, { labels: 1, duration: 0.6 }, 8.6)
-      .fromTo(q('[data-m="lead"]'), riseFrom, { ...rise, duration: 0.7 }, 8.9);
-    q('[data-m="line"]').forEach((line, i) => tl.fromTo(line, riseFrom, { ...rise, duration: 0.6 }, 9.5 + i * 0.7));
-    tl.fromTo(q('[data-m="last"]'), riseFrom, { ...rise, duration: 0.8 }, 12.4).fromTo(
-      q('[data-m="act"]'),
-      riseFrom,
-      { ...rise, stagger: 0.08 },
-      13,
-    );
-  });
+  const { leave, hurry } = useStage(
+    root,
+    (q, tl) => {
+      tl.delay(Math.max(0, lead.current - 0.6));
+      const s = dials;
+      const show = () => {
+        const y = Math.floor(s.year ?? YEAR_0);
+        clock.current!.textContent = y >= YEAR_0 ? `${YEAR_0} · Year 0` : String(Math.max(RADARS_SINCE, y));
+      };
+      tl.fromTo(q('[data-m="kick"]'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.5 }, 0)
+        .to(s, { grid: 1, duration: 1 }, 0.2)
+        .fromTo(q('[data-m="clock"]'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.4 }, 0.6)
+        .to(s, { year: YEAR_0, duration: 8, ease: "power1.inOut", onUpdate: show }, 0.8)
+        .to(s, { labels: 1, duration: 0.6 }, 8.6)
+        .fromTo(q('[data-m="lead"]'), riseFrom, { ...rise, duration: 0.7 }, 8.9);
+      q('[data-m="line"]').forEach((line, i) => tl.fromTo(line, riseFrom, { ...rise, duration: 0.6 }, 9.5 + i * 0.7));
+      tl.fromTo(q('[data-m="last"]'), riseFrom, { ...rise, duration: 0.8 }, 12.4).fromTo(
+        q('[data-m="act"]'),
+        riseFrom,
+        { ...rise, stagger: 0.08 },
+        13,
+      );
+    },
+    ready,
+  );
 
   // Reduced motion skips the ninety years: the sky as it stands at Year 0.
   useEffect(() => {
-    if (!prefersReducedMotion()) return;
-    scene.current = { year: YEAR_0, grid: 1, labels: 1 };
+    if (!ready || !prefersReducedMotion()) return;
+    Object.assign(dials, { year: YEAR_0, grid: 1, labels: 1 });
     clock.current!.textContent = `${YEAR_0} · Year 0`;
-  }, []);
+  }, [ready, dials]);
 
   return (
     <div
@@ -256,7 +138,7 @@ export function Stand({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
             </span>
           </div>
         }
-        art={<Sky scene={scene} />}
+        art={<Map dials={dials} onReady={onReady} />}
       >
         <h1 data-m="lead" className="mt-2 text-[24px] leading-tight font-semibold wide:mt-4 wide:text-[30px]">
           Ninety years loud. Nothing heard.
@@ -272,11 +154,7 @@ export function Stand({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
           </p>
         </div>
         <div className="mt-auto grid shrink-0 grid-cols-[1fr_1.4fr] gap-2 pt-5 pb-4 wide:pt-8">
-          <button
-            data-m="act"
-            onClick={() => leave(onSkip)}
-            className="h-[46px] rounded-full text-[15px] font-medium"
-          >
+          <button data-m="act" onClick={() => leave(onSkip)} className="h-[46px] rounded-full text-[15px] font-medium">
             Skip
           </button>
           <button

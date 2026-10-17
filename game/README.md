@@ -20,15 +20,14 @@ npm run dev                                # http://localhost:3000
   - `pyrandom.ts` is CPython's random generator, so a roll here matches the same roll in the calcs and the mocks.
   - `works.ts` paces Earth's works from the player's orders, in one loop from Year 0. `data/works.json` holds each work's Years and want.
 
-- `components/map-strip.tsx`: the map strip. It mounts the atlas's own scene, `../src/strip.js`, opening on Earth.
-  - `lib/atlas.ts` loads its maps and star data from `../assets` and `../data`.
+- `lib/drift.ts`: the game's one scene, in Three.js with the atlas's ephemeris, stars and galaxies from `../src`, `../assets` and `../data`. Today's Earth with its night lights, the planets, the HYG stars, and a Milky Way drawn to its measured arms. It draws four scales, each in its own units, far to near, so no float spans Earth to Andromeda. Sources in HOLOS_RESEARCH.md, The drift.
+  - `lib/flight.ts` places its camera: one director for the title's loop, every screen's view and the map, easing distance, turn and tilt between them, so the camera zooms, pans and orbits from one view to the next and never cuts. The map rests at five stops, flies between them, and turns with a drag.
   - Three.js and Astronomy Engine come from the atlas's packages at the repo root. The game keeps only Three.js's types.
-- `components/drift.tsx`: a new game's first screen, before Wake. No title: a slow flight from Earth out to the Local Group and home, and Begin game, which dives home to Earth.
-  - The scene is `lib/drift.ts`, in Three.js with the atlas's ephemeris, stars and galaxies. It draws four scales, each in its own units, far to near, so no float spans Earth to Andromeda. Its Milky Way's sources are in HOLOS_RESEARCH.md, The drift.
-  - The flight itself is `lib/flight.ts`. The map's line art can fly it too, through `mountAtlasDrift` in `lib/atlas.ts`: add `?look=atlas` to the address.
-  - `app/drift/`: both looks side by side, in step. Dev only.
+- `components/sky.tsx`: the game's one sky, behind every screen from the title to the charter and on into the shell, where the map strip is its window. Each screen's `SkyArt` is an empty box in its layout where the sky frames the screen's subject, with the screen's dials: the sunrise on Wake, the Sun's road on Where we come from (timed by `lib/game/road.ts`), the lights and threads on Who they are, the radar shell on Where things stand, the flight out to Voyager 1 on What you inherit, and Earth and the Moon behind the charter. Each screen's story waits for the camera to arrive.
+- `components/drift.tsx`: a new game's first screen, before Wake. No title: the slow loop from Earth out to the Local Group and home, and Begin game, which dives home to Earth.
+- `components/map-strip.tsx`: the map strip, the sky's window in the shell. The camera flies in from the charter, and back out to the title on New game.
 
-- `lib/theme.ts`: the theme follows the phone until the player picks Light or Dark, kept in this browser. The root layout's script paints it before the first frame. The button in the map's corner and atop every screen before the shell, `components/theme-toggle.tsx`, flips it. Every screen follows it, and the memory screens' canvases draw from `CANVAS`, a palette per theme. Screens before the shell open with `components/screen-bar.tsx`, by way of `Spread`: the real record on the left, the theme on the right.
+- The game is always dark: the colors in `app/globals.css`, and `lib/ink.ts` for the memory screens' canvases. Screens before the shell open with `components/screen-bar.tsx`, by way of `Spread`: the real record on the left.
 - `lib/motion.ts`: the full motion treatment, from the animaxxing skills in `../.claude/skills`. Every element enters from a blank screen, rests, and leaves. Mark an element `data-m` and give its screen a `useStage` intro. Reduced motion skips the travel.
 
 Everything else inside the shell is placeholder.

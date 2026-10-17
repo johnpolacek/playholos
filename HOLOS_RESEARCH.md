@@ -1472,6 +1472,21 @@ The first screen, before Earth wakes, flies from Earth out to the Local Group an
   - The [Kuiper belt](https://en.wikipedia.org/wiki/Kuiper_belt), thickest from 42 to 48 AU, with the plutinos at 39.4 AU.
   - The [Oort cloud](https://en.wikipedia.org/wiki/Oort_cloud), about 2,000 to 100,000 AU. No one has seen it. It is inferred from long-period comets.
   - Used: the drift's belts and shell. The bodies' places are random.
+- **The Sun's road around the Milky Way** · checked 2026-10-17.
+  - The Sun circles the center at about 236 km/s ([Reid et al. 2019](https://arxiv.org/abs/1910.03357)). At 8.28 kpc that is one lap in about 220 million years, so about 20 laps since it formed. It bobs through the disk about 2.7 times a lap ([Sun](https://en.wikipedia.org/wiki/Sun#Orbit_in_Milky_Way)), and is about 21 pc up now.
+  - Where it was born is argued. [Baba, Tsujimoto and Saitoh 2024](https://doaj.org/article/ceaf1bd37b4d471aa565f6847891d7d3) find about 5 kpc can explain its move out. A [2025 preprint](https://arxiv.org/abs/2502.20441) finds about 7.1 kpc most likely, near Minchev et al. 2013's 4.4 to 7.7. [Martínez-Barbosa et al. 2015](https://arxiv.org/abs/1410.2238) find it may not have migrated far at all.
+  - Used: Where we come from. The road starts at 7 kpc, the most likely value in the newest estimate, and drifts out evenly to today's 8.28 kpc. The even drift is ours.
+- **Where Earth's messages went** · Reference.
+  - The twelve stars Earth aimed messages at, placed in 3D from their right ascension and distance in `game/lib/game/sky.json` and their J2000 declinations, from their Wikipedia pages: Altair, 47 Ursae Majoris, Gliese 49, Gliese 208, 55 Cancri, Gliese 581, TZ Arietis, Kappa¹ Ceti, Gliese 526, Luyten's Star, HD 10307 and Teegarden's Star.
+  - Used: Where things stand, each message's beam in the scene. The radar shell spreads from 1950, as `calcs/knocks.py` has it.
+- **Where the far probes head** · Reference, checked 2026-10-17.
+  - Voyager 1 is in Ophiuchus, near RA 17h 15m, Dec +12.4° ([TheSkyLive](https://theskylive.com/voyager1-info)). New Horizons is in Sagittarius, near RA 19h 20m, Dec −20° ([Heavens-Above](https://www.heavens-above.com/SolarEscape.aspx)). Both move almost straight out, so the directions hold to Year 0.
+  - Their distances at Year 0, 220 and 100 AU, are HOLOS_GAME_CONCEPT.md's.
+  - Used: What you inherit, where the scene puts the two probes and their roads from the Sun.
+- **Earth's orbits and pads** · Reference.
+  - Spare matter sits on the planes most used: the [ISS](https://en.wikipedia.org/wiki/International_Space_Station) at 51.6°, [Starlink](https://en.wikipedia.org/wiki/Starlink)'s 53° shells, [sun-synchronous orbits](https://en.wikipedia.org/wiki/Sun-synchronous_orbit) near 98°, and the [geostationary belt](https://en.wikipedia.org/wiki/Geostationary_orbit) at 42,164 km from Earth's center. Which piece sits where is ours.
+  - Rockets lift from real pads: Cape Canaveral, Boca Chica, Kourou, Baikonur, Jiuquan and Wenchang.
+  - Used: What you inherit's debris and lift.
 
 ## Watch list
 

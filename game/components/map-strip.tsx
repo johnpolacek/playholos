@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { currentScheme, ThemeToggle, useScheme } from "@/components/theme-toggle";
+import { useRef, useState } from "react";
+import { SkyArt, useSky } from "@/components/sky";
+import type { Stop } from "@/lib/flight";
 
-// The atlas's five stages, and its outward button: each tap travels one stage out, and the last comes home.
-const STAGES = [
+// The map's five stops, and its outward button: each tap travels one stop out, and the last comes home.
+const STAGES: { id: Stop; name: string; next: string }[] = [
   { id: "earth", name: "EARTH", next: "Solar System ↗" },
   { id: "solar", name: "SOLAR SYSTEM", next: "Nearby stars ↗" },
   { id: "stars", name: "NEARBY STARS", next: "Milky Way ↗" },
@@ -12,66 +13,53 @@ const STAGES = [
   { id: "group", name: "LOCAL GROUP", next: "Back to Earth ↙" },
 ];
 
-interface Strip {
-  show(stage: string): void;
-  setTheme(name: string): void;
-  dispose(): void;
-}
-
-// The board: a strip of the map under the top bar, drawn by the atlas's own scene.
+// The board: a strip of the map under the top bar, a window onto the game's one sky, which flies here from the
+// charter. It rests at a stop, turning slowly, travels outward a stop a tap, and turns with a drag.
 export function MapStrip() {
-  const view = useRef<HTMLDivElement>(null);
-  const strip = useRef<Strip>(undefined);
-  const [ready, setReady] = useState(false);
+  const sky = useSky();
   const [stage, setStage] = useState(0);
   const [tall, setTall] = useState(false);
-  const scheme = useScheme();
-
-  useEffect(() => {
-    const parent = view.current;
-    if (!parent) return;
-    let gone = false;
-    import("@/lib/atlas")
-      .then(({ mountAtlas }) => mountAtlas(parent, currentScheme()))
-      .then((mounted) => {
-        if (gone) return mounted.dispose();
-        strip.current = mounted;
-        setReady(true);
-      });
-    return () => {
-      gone = true;
-      strip.current?.dispose();
-      strip.current = undefined;
-    };
-  }, []);
-
-  // The map draws in the theme the page is in, chosen or the phone's.
-  useEffect(() => {
-    if (ready) strip.current?.setTheme(scheme);
-  }, [ready, scheme]);
+  const held = useRef<{ x: number; y: number } | null>(null);
 
   function travel() {
     const next = (stage + 1) % STAGES.length;
-    strip.current?.show(STAGES[next].id);
+    sky?.go(STAGES[next].id);
     setStage(next);
   }
+
+  const press = (e: React.PointerEvent<HTMLDivElement>) => {
+    held.current = { x: e.clientX, y: e.clientY };
+    e.currentTarget.setPointerCapture(e.pointerId);
+  };
+  const drag = (e: React.PointerEvent<HTMLDivElement>) => {
+    const from = held.current;
+    if (!from) return;
+    const { width, height } = e.currentTarget.getBoundingClientRect();
+    sky?.turn((e.clientX - from.x) / width, (e.clientY - from.y) / height);
+    held.current = { x: e.clientX, y: e.clientY };
+  };
+  const release = () => (held.current = null);
 
   // Tall, the strip opens wider at its handle. Wide, the map fills the left of the screen, and needs no handle.
   return (
     <div
       data-shell="map"
-      className={`relative shrink-0 overflow-hidden border-b border-faint bg-paper transition-[height] duration-300 wide:col-start-1 wide:row-span-2 wide:row-start-2 wide:h-auto wide:border-b-0 ${tall ? "h-[72%]" : "h-[45%]"}`}
+      className={`relative shrink-0 overflow-hidden border-b border-faint transition-[height] duration-300 wide:col-start-1 wide:row-span-2 wide:row-start-2 wide:h-auto wide:border-b-0 ${tall ? "h-[72%]" : "h-[45%]"}`}
     >
-      <div ref={view} className="absolute inset-0" />
+      <SkyArt mode="map" className="absolute inset-0" />
+      <div
+        onPointerDown={press}
+        onPointerMove={drag}
+        onPointerUp={release}
+        onPointerCancel={release}
+        className="absolute inset-0 cursor-grab touch-none active:cursor-grabbing"
+      />
       <span className="pointer-events-none absolute top-2 left-2.5 rounded-[9px] border border-faint bg-paper px-[7px] py-0.5 font-mono text-[9.5px] tracking-[.06em]">
         {STAGES[stage].name}
       </span>
-      <ThemeToggle />
-      {ready && (
-        <button onClick={travel} className="absolute right-2.5 bottom-3 h-8 rounded-full border border-faint bg-paper px-3 text-xs">
-          {STAGES[stage].next}
-        </button>
-      )}
+      <button onClick={travel} className="absolute right-2.5 bottom-3 h-8 rounded-full border border-faint bg-paper px-3 text-xs">
+        {STAGES[stage].next}
+      </button>
       <button
         onClick={() => setTall(!tall)}
         aria-label={tall ? "Show less of the map" : "Show more of the map"}

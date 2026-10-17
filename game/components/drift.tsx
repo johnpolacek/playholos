@@ -1,10 +1,8 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { ScreenBar } from "@/components/screen-bar";
-import { currentScheme, useScheme } from "@/components/theme-toggle";
-import type { Drift as Scene } from "@/lib/drift";
-import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP, useStage } from "@/lib/motion";
+import { useCallback, useRef } from "react";
+import { SkyArt, useSky } from "@/components/sky";
+import { gsap, rise, riseFrom, useGSAP, useStage } from "@/lib/motion";
 
 const AU_KM = 149597870.7;
 const LIGHT_KMS = 299792.458;
@@ -36,77 +34,45 @@ function lightTime(au: number) {
   return `${fixed(years / 1e6)} million light-years`;
 }
 
-export type Look = "drift" | "atlas";
-
 // The first screen, before Earth wakes. No title, only the sky: the view drifts out from Earth past the Moon, the
 // planets and the nearby stars to the Milky Way and the Local Group, then home, and says where it is and how far light
-// takes to get there. Begin game dives home to Earth. For comparison, `look` "atlas", or ?look=atlas in the address,
-// draws the same flight with the map's own line-art scene instead. Screens given one `epoch` fly in step.
-export function Drift({ onNext, look, epoch }: { onSkip(): void; onNext(): void; look?: Look; epoch?: number }) {
+// takes to get there. Begin game dives home to Earth.
+export function Drift({ onNext }: { onSkip(): void; onNext(): void }) {
   const root = useRef<HTMLDivElement>(null);
-  const sky = useRef<HTMLDivElement>(null);
   const place = useRef<HTMLSpanElement>(null);
   const far = useRef<HTMLSpanElement>(null);
-  const scene = useRef<Scene>(undefined);
   const going = useRef(false);
-  const scheme = useScheme();
+  const sky = useSky();
 
   const { leave } = useStage(root, (q, tl) => {
-    tl.fromTo(q('[data-m="sky"]'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 2.8, ease: "power1.inOut" }, 0)
-      .fromTo(q('[data-m="kick"]'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.5 }, 1.4)
-      .fromTo(q('[data-m="where"]'), riseFrom, { ...rise, duration: 0.7, stagger: 0.15 }, 1.8)
-      .fromTo(q('[data-m="act"]'), riseFrom, { ...rise, duration: 0.7 }, 2.4);
+    tl.fromTo(q('[data-m="where"]'), riseFrom, { ...rise, duration: 0.7, stagger: 0.15 }, 1.8).fromTo(
+      q('[data-m="act"]'),
+      riseFrom,
+      { ...rise, duration: 0.7 },
+      2.4,
+    );
   });
   const { contextSafe } = useGSAP({ scope: root });
 
-  useEffect(() => {
-    const el = sky.current;
-    if (!el) return;
-    let gone = false;
-    let mounted: Scene | undefined;
-    // Written straight to the page each frame, not through React.
-    const show = (au: number) => {
-      const name = PLACES.find(([upTo]) => au < upTo)![1];
-      const away = au < 1e-9 ? "" : `${lightTime(au)} from Earth`;
-      if (place.current && place.current.textContent !== name) {
-        place.current.textContent = name;
-        gsap.fromTo(place.current, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.6, overwrite: true });
-      }
-      if (far.current && far.current.textContent !== away) far.current.textContent = away;
-    };
-    const atlas = (look ?? new URLSearchParams(location.search).get("look")) === "atlas";
-    const options = { theme: currentScheme(), still: prefersReducedMotion(), epoch, onFrame: show };
-    const mount = async (): Promise<Scene | undefined> => {
-      if (!atlas) return (await import("@/lib/drift")).mountDrift(el, options);
-      const { mountAtlasDrift } = await import("@/lib/atlas");
-      return gone ? undefined : mountAtlasDrift(el, options);
-    };
-    mount()
-      .then((made) => {
-        if (!made) return;
-        if (gone) return made.dispose();
-        mounted = made;
-        scene.current = made;
-      })
-      // No WebGL: the screen keeps its button on the plain page.
-      .catch(() => {});
-    return () => {
-      gone = true;
-      mounted?.dispose();
-      scene.current = undefined;
-    };
-  }, [look, epoch]);
+  // Where the view is, written straight to the page each frame, not through React.
+  const onFrame = useCallback((au: number) => {
+    const name = PLACES.find(([upTo]) => au < upTo)![1];
+    const away = au < 1e-9 ? "" : `${lightTime(au)} from Earth`;
+    if (place.current && place.current.textContent !== name) {
+      place.current.textContent = name;
+      gsap.fromTo(place.current, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.6, overwrite: true });
+    }
+    if (far.current && far.current.textContent !== away) far.current.textContent = away;
+  }, []);
 
-  useEffect(() => scene.current?.setTheme(scheme), [scheme]);
-
-  // The words leave, the view falls home to Earth, then the sky goes and Earth wakes.
+  // The words leave and the view falls home to Earth, where Earth wakes. The sky stays.
   const begin = () =>
     contextSafe(() => {
       if (going.current) return;
       going.current = true;
-      const secs = scene.current?.home() ?? 0;
+      const secs = sky?.home() ?? 0;
       if (!secs) return leave(onNext);
-      gsap.to(gsap.utils.toArray('[data-m="act"], [data-m="where"], [data-m="kick"]', root.current), {
+      gsap.to(gsap.utils.toArray('[data-m="act"], [data-m="where"]', root.current), {
         autoAlpha: 0,
         y: -8,
         duration: 0.3,
@@ -118,12 +84,8 @@ export function Drift({ onNext, look, epoch }: { onSkip(): void; onNext(): void;
     })();
 
   return (
-    <div ref={root} className="relative flex grow flex-col overflow-hidden bg-paper">
-      <div ref={sky} data-m="sky" aria-hidden className="absolute inset-0" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-64 bg-linear-to-t from-paper/85 to-transparent" />
-      <div className="relative px-6 wide:px-10">
-        <ScreenBar />
-      </div>
+    <div ref={root} className="relative flex grow flex-col overflow-hidden">
+      <SkyArt mode="title" onFrame={onFrame} className="hidden" />
       <div className="relative mt-auto flex flex-col items-center px-6 pb-12">
         <div data-m="where" className="font-mono text-[10.5px] tracking-[.1em] text-muted">
           <span ref={place}>EARTH</span>

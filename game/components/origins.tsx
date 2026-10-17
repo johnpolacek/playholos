@@ -1,42 +1,21 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useGame } from "@/components/game-provider";
 import { history, type EarthPast, type Moment } from "@/lib/game/past";
+import { SkyArt } from "@/components/sky";
 import { FILL, Spread } from "@/components/spread";
+import type { Dials } from "@/lib/drift";
+import { LAP, agoAt, place, roadZoom } from "@/lib/game/road";
 import { originsSources } from "@/lib/game/sources";
 import { gsap, prefersReducedMotion, rise, riseFrom, useStage } from "@/lib/motion";
 
-// "Where we come from": 4.6 billion years as a spiral, drawn from the outside in. Each turn holds less time, so the
-// deep past sweeps by and the last century crowds the middle. A light travels the line and stops at each moment.
-// The middle is this morning, and Earth wakes there.
+// "Where we come from": 4.6 billion years as the Sun's road around the Milky Way, in the game's scene. The Sun's light
+// laps the galaxy about twenty times while the deep past sweeps by, and each moment lights on the road where the Sun was
+// then. As time runs short the view closes in: the nearby stars for the first people, the Sun's neighborhood for
+// writing, and home. The road ends on Earth, this morning, as it wakes.
 
-const CX = 195;
-const CY = 168;
-const TURNS = 3.25;
-const DEEP = Math.log10(4.6e9 + 1);
-
-/** Where on the spiral a moment sits, from 0 at the Sun's birth to 1 at this morning. Log time. */
-const place = (ago: number) => 1 - Math.log10(ago + 1) / DEEP;
-const radius = (u: number) => 152 * (1 - u) ** 0.6;
-const angle = (u: number) => -Math.PI / 2 + TURNS * Math.PI * 2 * u;
-const at = (u: number) => ({ x: CX + radius(u) * Math.cos(angle(u)), y: CY + radius(u) * Math.sin(angle(u)) });
-
-/** The spiral as one path, and how far along it each u falls, so the line can be drawn to any moment. */
-function spiral() {
-  const n = 720;
-  const pts = Array.from({ length: n + 1 }, (_, i) => at(i / n));
-  const len = [0];
-  for (let i = 1; i <= n; i++) len.push(len[i - 1] + Math.hypot(pts[i].x - pts[i - 1].x, pts[i].y - pts[i - 1].y));
-  const total = len[n];
-  return {
-    d: "M" + pts.map((p) => `${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join("L"),
-    along: (u: number) => (len[Math.round(u * n)] / total) * 100,
-  };
-}
-const SPIRAL = spiral();
-
-/** The clock under the spiral: years ago in the deep past, then dates. */
+/** The clock under the road: years ago in the deep past, then dates. */
 function when(ago: number) {
   if (ago < 0.5) return "2040 · this morning";
   if (ago >= 1e9) return `${(ago / 1e9).toFixed(1)} billion years ago`;
@@ -74,70 +53,69 @@ export function Origins({ onSkip, onNext }: { onSkip(): void; onNext(): void }) 
   }, [seed]);
   const told = useMemo(() => past && history(past), [past]);
   const moments = useMemo(() => (told ? [...told.moments, NOW] : []), [told]);
+  const knots = useMemo(() => told?.moments.map((m) => ({ u: place(m.ago), dial: !!m.dial })), [told]);
+  // One object for the whole screen: the intro moves the light, and the scene reads it every frame.
+  const [dials] = useState<Dials>(() => ({ u: 0, earth: 0 }));
+  const [shown, setShown] = useState(false);
+  // The camera's flight to this screen: the story starts as it arrives.
+  const lead = useRef(0);
+  const onReady = useCallback((flight: number) => {
+    lead.current = flight;
+    setShown(true);
+  }, []);
+  const ready = !!told && shown;
 
   const { leave, hurry } = useStage(
     root,
     (q, tl) => {
-      const line = q('[data-m="line"]')[0];
-      const head = q('[data-m="head"]')[0];
-      const dots = q('[data-m="dot"]');
+      tl.delay(Math.max(0, lead.current - 0.6));
       const caps = q('[data-m="cap"]');
-      const pos = { u: 0 };
       const follow = () => {
-        gsap.set(line, { drawSVG: `0% ${SPIRAL.along(pos.u)}%` });
-        const p = at(pos.u);
-        gsap.set(head, { x: p.x, y: p.y });
-        clock.current!.textContent = when(10 ** ((1 - pos.u) * DEEP) - 1);
+        clock.current!.textContent = when(agoAt(dials.u ?? 0));
       };
       tl.fromTo(q('[data-m="kick"]'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.5 }, 0)
         .fromTo(q('[data-m="lead"]'), riseFrom, { ...rise, duration: 0.6 }, 0.1)
-        .set([line, head], { autoAlpha: 1 }, 0.4)
+        .fromTo(q('[data-m="road"]'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 1.2, ease: "power1.inOut" }, 0.2)
         .fromTo(q('[data-m="clock"]'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.4 }, 0.4)
         .call(follow, [], 0.4);
       let prev = 0;
       let t = 0.6;
       moments.forEach((m, i) => {
         const u = place(m.ago);
-        const move = 0.3 + 2.4 * (u - prev);
-        tl.to(pos, { u, duration: move, ease: "sine.inOut", onUpdate: follow }, t);
+        // Longer for the laps the Sun runs between moments, and for each power of ten the view closes in.
+        const laps = (agoAt(prev) - agoAt(u)) / LAP;
+        const move = 0.35 + 2.4 * (u - prev) + 0.12 * laps + 0.35 * Math.abs(roadZoom(prev) - roadZoom(u));
+        tl.to(dials, { u, duration: move, ease: "sine.inOut", onUpdate: follow }, t);
         t += move;
-        tl.fromTo(
-          dots[i],
-          { autoAlpha: 0, scale: 0 },
-          { autoAlpha: 1, scale: 1, duration: 0.35, ease: "back.out(3)" },
-          t - 0.05,
-        );
         if (i > 0) tl.to(caps[i - 1], { autoAlpha: 0, y: -6, duration: 0.18, ease: "power2.in" }, t - 0.15);
         tl.fromTo(caps[i], { autoAlpha: 0, y: 8 }, { autoAlpha: 1, y: 0, duration: 0.3, ease: "power3.out" }, t);
         t += m === NOW ? 0 : 0.5 + (m.detail ? 0.35 : 0) + (m.dial ? 0.3 : 0);
         prev = u;
       });
-      tl.fromTo(
-        q('[data-m="earth"]'),
-        { autoAlpha: 0, scale: 0 },
-        { autoAlpha: 1, scale: 1, duration: 0.8, ease: "back.out(2)", transformOrigin: "50% 50%" },
-        t - 0.2,
-      )
-        .to(head, { autoAlpha: 0, duration: 0.4 }, t)
-        .fromTo(q('[data-m="act"]'), riseFrom, { ...rise, stagger: 0.08 }, t + 0.6);
+      tl.to(dials, { earth: 1, duration: 0.8, ease: "power2.out" }, t - 0.2).fromTo(
+        q('[data-m="act"]'),
+        riseFrom,
+        { ...rise, stagger: 0.08 },
+        t + 0.6,
+      );
     },
-    !!told,
+    ready,
   );
 
-  // Reduced motion skips the journey: the whole spiral, every moment, and this morning's caption.
+  // Reduced motion skips the journey: the whole road around the galaxy, every moment, and this morning's caption.
   useEffect(() => {
-    if (!told || !prefersReducedMotion() || !root.current) return;
+    if (!ready || !prefersReducedMotion() || !root.current) return;
     const caps = root.current.querySelectorAll('[data-m="cap"]');
     caps.forEach((c, i) => gsap.set(c, { autoAlpha: i === caps.length - 1 ? 1 : 0 }));
-    gsap.set(root.current.querySelector('[data-m="head"]'), { autoAlpha: 0 });
+    Object.assign(dials, { u: 1, earth: 1 });
     clock.current!.textContent = when(0);
-  }, [told]);
+  }, [ready, dials]);
 
   return (
     <div
       ref={root}
       onPointerDown={hurry}
-      style={told ? undefined : { visibility: "hidden" }}
+      style={ready ? undefined : { visibility: "hidden" }}
       className="flex grow flex-col overflow-y-auto bg-paper px-5 wide:px-10"
     >
       <Spread
@@ -153,46 +131,15 @@ export function Origins({ onSkip, onNext }: { onSkip(): void; onNext(): void }) 
           </>
         }
         art={
-          <svg
-            viewBox="0 0 390 336"
-            aria-hidden
-            className={`-mx-5 mt-1 block h-[min(44vh,360px)] w-[calc(100%+40px)] shrink-0 font-mono sm:h-[min(44vh,480px)] ${FILL}`}
-          >
-            <path d={SPIRAL.d} fill="none" strokeWidth=".7" opacity=".18" className="stroke-ink" />
-            <path
-              data-m="line"
-              d={SPIRAL.d}
-              fill="none"
-              strokeWidth="1.2"
-              strokeLinecap="round"
-              className="stroke-ink"
+          knots && (
+            <SkyArt
+              mode="origins"
+              dials={dials}
+              moments={knots}
+              onReady={onReady}
+              className={`-mx-5 mt-1 block h-[min(44vh,360px)] w-[calc(100%+40px)] max-w-none shrink-0 sm:h-[min(44vh,480px)] ${FILL}`}
             />
-            {moments.map((m) => {
-              const p = at(place(m.ago));
-              return m === NOW ? (
-                <g key="now" data-m="dot" transform={`translate(${p.x} ${p.y})`} />
-              ) : (
-                <circle
-                  key={m.what}
-                  data-m="dot"
-                  cx={p.x}
-                  cy={p.y}
-                  r={m.dial ? 3.6 : 2.8}
-                  strokeWidth="1.2"
-                  className={m.dial ? "fill-you stroke-paper" : "fill-paper stroke-ink"}
-                  style={{ transformOrigin: `${p.x}px ${p.y}px` }}
-                />
-              );
-            })}
-            <g data-m="earth">
-              <circle cx={CX} cy={CY} r="16" opacity=".18" className="fill-you" />
-              <circle cx={CX} cy={CY} r="7" strokeWidth="1.3" className="fill-paper stroke-you" />
-            </g>
-            <g data-m="head">
-              <circle r="9" opacity=".22" className="fill-you" />
-              <circle r="3.2" className="fill-you" />
-            </g>
-          </svg>
+          )
         }
       >
         <span data-m="clock" ref={clock} className="mt-1 font-mono text-[12px] tracking-[.04em] text-muted wide:mt-5">

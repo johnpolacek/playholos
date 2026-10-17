@@ -10,8 +10,7 @@ import { INK_THEMES, setInkTheme } from './line-art.js';
 // The caller loads the data, so this file knows nothing about how it is bundled.
 // Line edition only: the bundler defines __LINE_ART__ as true.
 // turnSeconds: real seconds per Earth day, as the atlas plays time. 0 holds Earth still.
-// onFrame: called each frame with the camera's distance from Earth's surface in AU.
-export async function mountStrip(parent,{textures:urls,stars,neighborhoodStars,neighborhood,date=new Date(),theme='light',turnSeconds=0,onFrame}) {
+export async function mountStrip(parent,{textures:urls,stars,neighborhoodStars,neighborhood,date=new Date(),theme='light',turnSeconds=0}) {
   setInkTheme(theme);
   const renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,logarithmicDepthBuffer:true});
   renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.NoToneMapping;
@@ -64,17 +63,12 @@ export async function mountStrip(parent,{textures:urls,stars,neighborhoodStars,n
   }
   const observer=new ResizeObserver(resize);observer.observe(parent);
   parent.append(renderer.domElement);resize();syncCamera();
-  let last=performance.now(),driver=null;const eye=new THREE.Vector3(),size=new THREE.Vector2();
+  let last=performance.now();
   renderer.setAnimationLoop(time=>{
     const dt=Math.max(0,Math.min((time-last)/1000,.05));last=time;
     if(document.hidden)return;
     if(turnSeconds){state.date=new Date(state.date.getTime()+dt/turnSeconds*86400000);universe.updateEphemeris(state.date);}
-    if(driver){
-      // Driven: the caller sets the whole view each frame, lens included.
-      const view=driver(renderer.getSize(size),universe.earth.positionAU);
-      pose.target.copy(view.target);pose.direction.copy(view.direction);pose.distance=view.distance;pose.home=false;pose.follow=null;flight=null;
-      camera.up.copy(view.up);camera.fov=view.fov/Math.PI*180;camera.setViewOffset(size.x,size.y,0,size.y*view.lift,size.x,size.y);camera.updateProjectionMatrix();
-    } else if(flight){
+    if(flight){
       const t=Math.min(1,(time-flight.start)/flight.duration),sample=sampleFlight(flight,t,universe.earth.positionAU);
       pose.target.copy(sample.target);pose.direction.copy(sample.direction);pose.distance=sample.distance;
       if(t===1){pose.home=flight.to.home;pose.follow=flight.to.follow;flight=null;}
@@ -83,7 +77,6 @@ export async function mountStrip(parent,{textures:urls,stars,neighborhoodStars,n
       if(pose.home)pose.target.copy(homeTarget(pose.distance,universe.earth.positionAU));
     }
     syncCamera();universe.update(pose,state,camera);renderer.render(universe.scene,camera);
-    if(onFrame){eye.copy(pose.target).addScaledVector(pose.direction,pose.distance);onFrame(Math.max(0,eye.distanceTo(universe.earth.positionAU)-PLANETS[2].radius/AU_KM));}
   });
 
   return {
@@ -95,8 +88,6 @@ export async function mountStrip(parent,{textures:urls,stars,neighborhoodStars,n
       flight={...planFlight(pose,to,{home:pose.home&&to.home}),to,start:performance.now()};
       pose.follow=null;pose.home=flight.home;
     },
-    // For the first screen: fn(size, earthAU) returns {target, direction, distance, up, fov, lift} each frame.
-    drive(fn){driver=fn;controls.enabled=false;},
     setTheme(name){setInkTheme(name);universe.scene.background.set(INK_THEMES[name].paper);},
     dispose(){renderer.setAnimationLoop(null);observer.disconnect();controls.dispose();renderer.dispose();renderer.domElement.remove();},
   };

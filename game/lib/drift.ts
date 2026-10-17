@@ -8,14 +8,88 @@ import { PC_LY, PLANETS, julianDate, orbitPath, seededRandom } from "../../src/a
 import { bodyOrientation, bodyPosition, moonOffset } from "../../src/ephemeris.js";
 import { GALAXIES, galaxyExtent, galaxyPosition, galaxyViewRadius } from "../../src/galaxies.js";
 import { GALACTIC_CENTER, LY_AU, eclipticToGalactic } from "../../src/navigation.js";
-import { DEG, LIFT, R_E_AU, band, createFlight, ramp, smooth } from "./flight";
+import { skyBasis } from "../../src/coordinates.js";
+import { AGE, WHOLE_ROAD, agoAt, place as placeOf, roadZoom } from "./game/road";
+import { KNOCKS, RADARS_SINCE, TARGET_DEC } from "./game/knocks";
+import SKY from "./game/sky.json";
+import {
+  DEG,
+  LIFT,
+  R_E_AU,
+  type Stop,
+  band,
+  type Pose,
+  HALF_VIEW_KM,
+  createDirector,
+  easeInOut,
+  lens,
+  ramp,
+  smooth,
+} from "./flight";
 
-export type Scheme = "light" | "dark";
+/** The memory screens' dials, tweened by their intros and read every frame. 0 to 1. */
+export interface Dials {
+  /** The lights come on, cities first. */
+  lit?: number;
+  /** Threads rise from the cities to one point. */
+  threads?: number;
+  /** The point glows: the Mind. */
+  mind?: number;
+  /** The scale: log10 of the km across half the view's short side. */
+  zoom?: number;
+  /** The Sun rises over Earth's edge. */
+  rise?: number;
+  /** How far the Sun's light has come on its road, in log time: 0 at its birth to 1 at this morning. */
+  u?: number;
+  /** Earth wakes, and the Sun's light on the road fades. */
+  earth?: number;
+  /** The year, as Earth's radar shell spreads from 1950. */
+  year?: number;
+  /** The map's rings and stars come in. */
+  grid?: number;
+  /** The stars Earth knocked on are named. */
+  labels?: number;
+}
+
+/** What the sky shows: the title, the map, or one of the screens before the shell. */
+export type Mode = "title" | "map" | "wake" | "origins" | "people" | "stand" | "inherit" | "charter";
+
+/** One screen's view of the sky. */
+export interface Show {
+  mode: Mode;
+  /** The screen's intro dials. */
+  dials?: Dials;
+  /** For "origins": the moments on the Sun's road, by when they fall in its log time. */
+  moments?: { u: number; dial: boolean }[];
+  /** Where the screen's art sits in the sky's frame, in CSS pixels, each frame. The whole frame when not given. */
+  rect?: () => { x: number; y: number; w: number; h: number } | null;
+  /** For "title": the camera's distance from Earth's surface in AU, each frame. */
+  onFrame?(fromEarthAU: number): void;
+  /** For "people": where the Mind is on screen, in CSS pixels, each frame. */
+  onMind?(x: number, y: number): void;
+  /** For "inherit" and "stand": where their labeled places are on screen, each frame. */
+  onMarks?(marks: Mark[]): void;
+  /** For "inherit": km per CSS pixel at the art's center, and the art's size. */
+  onScale?(kmPerPx: number, w: number, h: number): void;
+}
+
+/** A labeled place on screen, in CSS pixels, and how much it shows. */
+export interface Mark {
+  id: string;
+  x: number;
+  y: number;
+  a: number;
+}
 
 export interface Drift {
-  setTheme(scheme: Scheme): void;
-  /** Dives home to Earth. Returns the dive's length in seconds. */
+  /** Turns to another screen's view. The camera flies there. Returns the flight's length in seconds. */
+  show(next: Show): number;
+  /** The title: dives home to Earth. Returns the dive's length in seconds. */
   home(): number;
+  /** The map: flies to a stop. */
+  go(stop: Stop): void;
+  /** The map: turns the view by a drag, as shares of the map's width and height. */
+  turn(dx: number, dy: number): void;
   dispose(): void;
 }
 
@@ -44,49 +118,32 @@ const KINDS = ["ink", "warm", "young", "rose", "lamp", "mind", "sun", "dust"] as
 type Kind = (typeof KINDS)[number];
 const K = Object.fromEntries(KINDS.map((k, i) => [k, i])) as Record<Kind, number>;
 
-// Dark keeps the night: chalk and warm light that add up on slate. Light draws in ink on paper, as the memory
-// screens' canvases do, and the dust lanes lift the ink.
-const PALETTES: Record<Scheme, { bg: string; gain: number; additive: boolean } & Record<Kind, string>> = {
-  dark: {
-    bg: "#121314",
-    gain: 1,
-    additive: true,
-    ink: "230,227,219",
-    warm: "255,206,150",
-    young: "168,198,255",
-    rose: "255,126,148",
-    lamp: "232,180,92",
-    mind: "91,184,214",
-    sun: "255,236,190",
-    dust: "18,19,20",
-  },
-  light: {
-    bg: "#fbfaf7",
-    gain: 0.55,
-    additive: false,
-    ink: "23,23,22",
-    warm: "168,98,15",
-    young: "38,70,112",
-    rose: "168,58,58",
-    lamp: "168,98,15",
-    mind: "31,122,150",
-    sun: "214,140,40",
-    dust: "251,250,247",
-  },
+// The night: chalk and warm light that add up on slate, and dust that dims them.
+const PALETTE: { bg: string } & Record<Kind, string> = {
+  bg: "#121314",
+  ink: "230,227,219",
+  warm: "255,206,150",
+  young: "168,198,255",
+  rose: "255,126,148",
+  lamp: "232,180,92",
+  mind: "91,184,214",
+  sun: "255,236,190",
+  dust: "18,19,20",
 };
 
 const GLOW_VERT = /* glsl */ `
 uniform vec3 uPal[8];
-uniform float uFocal, uDpr, uOpacity, uMinPx, uMaxPx, uFixed;
+uniform float uFocal, uDpr, uOpacity, uMinPx, uMaxPx, uFixed, uReveal;
 uniform vec2 uNear;
-attribute float aSize, aBright, aKind;
+attribute float aSize, aBright, aKind, aRank;
 varying vec3 vColor;
 varying float vAlpha;
 void main() {
   vec4 mv = modelViewMatrix * vec4(position, 1.0);
   gl_Position = projectionMatrix * mv;
   float depth = max(-mv.z, 1e-12);
-  float a = aBright * uOpacity;
+  // A point waits for its turn, where a screen reveals them in order.
+  float a = aBright * uOpacity * clamp((uReveal - aRank) * 400.0 + 1.0, 0.0, 1.0);
   float px;
   if (uFixed > 0.5) px = aSize * uDpr;
   else {
@@ -105,14 +162,13 @@ void main() {
 }`;
 
 const GLOW_FRAG = /* glsl */ `
-uniform float uGain;
 varying vec3 vColor;
 varying float vAlpha;
 void main() {
   vec2 p = gl_PointCoord * 2.0 - 1.0;
   float r2 = dot(p, p);
   if (r2 > 1.0) discard;
-  gl_FragColor = vec4(vColor, min(1.0, vAlpha * uGain * (exp(-r2 * 4.5) - 0.011)));
+  gl_FragColor = vec4(vColor, min(1.0, vAlpha * (exp(-r2 * 4.5) - 0.011)));
 }`;
 
 // The HYG stars, as bright as they look from wherever the camera is: each star's absolute magnitude, moved to the
@@ -137,7 +193,7 @@ void main() {
   if (a < 0.004 || mv.z > 0.0) gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
 }`;
 
-// A globe in two tones: the paper, inked a little on one side of the terminator, and a rim.
+// A globe in two tones: the night, a little lighter where the Sun is up, and a rim.
 const GLOBE_VERT = /* glsl */ `
 varying vec3 vN;
 varying vec3 vW;
@@ -150,7 +206,7 @@ void main() {
 
 const GLOBE_FRAG = /* glsl */ `
 uniform vec3 uBg, uInk, uRimColor, uSun;
-uniform float uDay, uNight, uRim;
+uniform float uDay, uRim;
 varying vec3 vN;
 varying vec3 vW;
 void main() {
@@ -158,7 +214,7 @@ void main() {
   vec3 v = normalize(cameraPosition - vW);
   float lit = smoothstep(-0.12, 0.3, dot(n, uSun));
   float rim = pow(1.0 - max(dot(n, v), 0.0), 2.5);
-  vec3 c = mix(uBg, uInk, uDay * lit + uNight * (1.0 - lit));
+  vec3 c = mix(uBg, uInk, uDay * lit);
   c = mix(c, uRimColor, clamp(rim * uRim * (0.35 + 0.65 * lit), 0.0, 1.0));
   gl_FragColor = vec4(c, 1.0);
 }`;
@@ -167,29 +223,34 @@ void main() {
 const AIR_VERT = /* glsl */ `
 varying vec3 vNv;
 varying vec3 vNw;
+varying vec3 vW;
 void main() {
   vNv = normalize(normalMatrix * normal);
   vNw = normalize(mat3(modelMatrix) * normal);
+  vW = (modelMatrix * vec4(position, 1.0)).xyz;
   gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
 }`;
 
+// Looking toward the Sun through the air, it scatters forward and burns gold: dawn from space.
 const AIR_FRAG = /* glsl */ `
-uniform vec3 uColor, uSun;
+uniform vec3 uColor, uSun, uDawn;
 uniform float uOpacity, uEdge;
 varying vec3 vNv;
 varying vec3 vNw;
+varying vec3 vW;
 void main() {
   float k = clamp(-normalize(vNv).z / uEdge, 0.0, 1.0);
   float lit = smoothstep(-0.35, 0.45, dot(normalize(vNw), uSun));
-  gl_FragColor = vec4(uColor, k * k * k * lit * uOpacity);
+  float dawn = pow(max(dot(normalize(vW - cameraPosition), uSun), 0.0), 40.0);
+  gl_FragColor = vec4(mix(uColor, uDawn, min(1.0, dawn * 2.0)), k * k * k * (lit + dawn * 3.0) * uOpacity);
 }`;
 
 // Earth's land in dots, lit by the Sun, and its night lights where the Sun is down.
 const SURFACE_VERT = /* glsl */ `
 uniform vec3 uPal[8];
 uniform vec3 uSun;
-uniform float uFocal, uDpr, uOpacity, uLights, uNightLand, uLamp;
-attribute float aSize, aBright, aKind;
+uniform float uFocal, uDpr, uOpacity, uLights, uLit;
+attribute float aSize, aBright, aKind, aRank;
 varying vec3 vColor;
 varying float vAlpha;
 void main() {
@@ -199,8 +260,8 @@ void main() {
   vec3 n = normalize(mat3(modelMatrix) * position);
   float sun = dot(n, uSun);
   float a = aKind < 0.5
-    ? aBright * mix(uNightLand, 0.85, smoothstep(-0.1, 0.25, sun))
-    : aBright * (1.0 - smoothstep(-0.18, 0.04, sun)) * uLights * uLamp;
+    ? aBright * mix(0.12, 0.85, smoothstep(-0.1, 0.25, sun))
+    : aBright * (1.0 - smoothstep(-0.18, 0.04, sun)) * uLights * clamp((uLit - aRank) * 12.0, 0.0, 1.0);
   float px = aSize * uFocal / max(-mv.z, 1e-6);
   float lo = 0.6 * uDpr;
   if (px < lo) { a *= px * px / (lo * lo); px = lo; }
@@ -209,6 +270,26 @@ void main() {
   vColor = uPal[int(aKind + 0.5)];
   vAlpha = a * uOpacity;
   if (vAlpha < 0.002) gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
+}`;
+
+// A sphere seen from outside, brightest where we look along its skin: Earth's radar shell.
+const SHELL_VERT = /* glsl */ `
+varying vec3 vN;
+varying vec3 vW;
+void main() {
+  vN = normalize(mat3(modelMatrix) * normal);
+  vec4 w = modelMatrix * vec4(position, 1.0);
+  vW = w.xyz;
+  gl_Position = projectionMatrix * viewMatrix * w;
+}`;
+const SHELL_FRAG = /* glsl */ `
+uniform vec3 uColor;
+uniform float uOpacity;
+varying vec3 vN;
+varying vec3 vW;
+void main() {
+  float edge = 1.0 - abs(dot(normalize(vN), normalize(cameraPosition - vW)));
+  gl_FragColor = vec4(uColor, (0.025 + 0.5 * pow(edge, 4.0)) * uOpacity);
 }`;
 
 const LINE_VERT = /* glsl */ `void main() { gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`;
@@ -223,11 +304,14 @@ class Cloud {
   size: number[] = [];
   bright: number[] = [];
   kind: number[] = [];
-  add(x: number, y: number, z: number, size: number, bright: number, kind: number) {
+  /** When each comes on, 0 to 1, where a screen lights them in turn. */
+  rank: number[] = [];
+  add(x: number, y: number, z: number, size: number, bright: number, kind: number, rank = 0) {
     this.p.push(x, y, z);
     this.size.push(size);
     this.bright.push(bright);
     this.kind.push(kind);
+    this.rank.push(rank);
   }
   points(material: THREE.Material) {
     const g = new THREE.BufferGeometry();
@@ -235,6 +319,7 @@ class Cloud {
     g.setAttribute("aSize", new THREE.Float32BufferAttribute(this.size, 1));
     g.setAttribute("aBright", new THREE.Float32BufferAttribute(this.bright, 1));
     g.setAttribute("aKind", new THREE.Float32BufferAttribute(this.kind, 1));
+    g.setAttribute("aRank", new THREE.Float32BufferAttribute(this.rank, 1));
     const pts = new THREE.Points(g, material);
     pts.frustumCulled = false;
     return pts;
@@ -253,16 +338,49 @@ interface Layer {
   on: boolean;
 }
 
-export function mountDrift(
-  parent: HTMLElement,
-  {
-    theme,
-    still,
-    epoch,
-    onFrame,
-  }: { theme: Scheme; still: boolean; epoch?: number; onFrame?(fromEarthAU: number): void },
-): Drift {
-  const flight = createFlight({ still, epoch });
+export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { still: boolean }): Drift {
+  // The game's one sky: the title's loop, each screen's view and the map, with the camera flying between them.
+  let spec: Show = first;
+  const pilot = createDirector({ still });
+  /** Each screen's last dials, so its extras can fade out on them after it has gone. */
+  const dialsOf: Partial<Record<Mode, Dials>> = { [first.mode]: first.dials };
+  const drift = (t: number, period: number) => (still ? 0 : (2 * Math.PI * t) / period);
+  /** Where each screen looks. */
+  function poseFor({ mode, dials: d }: Show): Pose | "title" | "map" {
+    switch (mode) {
+      // Wake: on the night side, in line with the Sun, which rises past Earth's edge.
+      case "wake":
+        return () => [-3.59, 1.222 + (1 - (d?.rise ?? 1)) * 0.105, -0.2, 0];
+      // Where we come from: the camera follows the Sun's light from the whole galaxy down to Earth. A still shows the
+      // whole road.
+      case "origins":
+        return (t) => [still ? WHOLE_ROAD : roadZoom(d?.u ?? 1), 0.6 + drift(t, 360), 0, 0];
+      // Who they are: 150° round from the Sun, a little above the equator.
+      case "people":
+        return () => [-3.6, 0.9, 0.18, 0];
+      // Where things stand: the stars within 50 light-years, seen from well above.
+      case "stand":
+        return (t) => [7.08, 0.4 + drift(t, 600), 0.55, 0];
+      // What you inherit: out from Earth's night side, as far as its intro has flown.
+      case "inherit":
+        return (t) => [(d?.zoom ?? 4.15) - HALF_VIEW_KM, 0.9 + drift(t, 300), 0.18, 0];
+      // The charter: Earth and the Moon, small and far.
+      case "charter":
+        return (t) => [-1.95, 0.5 + drift(t, 400), 0.3, 0];
+      // The map rests at its stops, and turns with a drag.
+      case "map":
+        return "map";
+      default:
+        return "title";
+    }
+  }
+  // The sky opens wherever the game opens: on the title for a new game, or on the map for one already begun.
+  pilot.fly(poseFor(first), 0, true);
+  /** Where each screen's subject sits in its art, as a share of the art's height: up for the title's button. */
+  const LIFTS: Partial<Record<Mode, number>> = { title: LIFT, people: -0.14, wake: -0.04 };
+  /** Real seconds per Earth turn: a minute, or two while a screen holds still on it. Added up, so a change never jumps. */
+  const turnOf = () => (spec.mode === "people" || spec.mode === "wake" ? 120 : 60);
+  let turned = 0;
   const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
   renderer.autoClear = false;
   renderer.domElement.style.cssText = "display:block;width:100%;height:100%";
@@ -271,11 +389,10 @@ export function mountDrift(
   const rand = seededRandom(2040);
   const gauss = () => Math.sqrt(-2 * Math.log(1 - rand())) * Math.cos(2 * Math.PI * rand());
 
-  // One palette, one gain and one lens, shared by every material.
+  // One palette and one lens, shared by every material.
   const pal = KINDS.map(() => new THREE.Color());
   const shared = {
     uPal: { value: pal },
-    uGain: { value: 1 },
     uFocal: { value: 1 },
     uDpr: { value: 1 },
   };
@@ -303,6 +420,7 @@ export function mountDrift(
         uMaxPx: { value: maxPx },
         uFixed: { value: fixed ? 1 : 0 },
         uNear: { value: new THREE.Vector2(...near) },
+        uReveal: { value: 1 },
       },
       vertexShader: GLOW_VERT,
       fragmentShader: GLOW_FRAG,
@@ -341,7 +459,7 @@ export function mountDrift(
   });
 
   // Today's sky. The positions hold still, and Earth turns once a minute, as on the map.
-  const { date, earthAU, sunDir, eX, eN, eZ } = flight;
+  const { date, earthAU, sunDir, eX, eN, eZ } = pilot.sky;
 
   // Four scales, each in its own units and drawn far to near, so a float never has to span Earth to Andromeda.
   const cosmos = layer(
@@ -377,7 +495,6 @@ export function mountDrift(
     uRimColor: { value: pal[K.ink] },
     uSun: { value: sunDir },
     uDay: { value: 0 },
-    uNight: { value: 0 },
     uRim: { value: 0 },
   });
   const earthGlobe = new THREE.ShaderMaterial({
@@ -398,6 +515,7 @@ export function mountDrift(
   const air = new THREE.ShaderMaterial({
     uniforms: {
       uColor: { value: pal[K.mind] },
+      uDawn: { value: pal[K.sun] },
       uSun: { value: sunDir },
       uOpacity: { value: 0.6 },
       uEdge: { value: Math.sqrt(1 - 1 / (AIR * AIR)) },
@@ -416,8 +534,7 @@ export function mountDrift(
       uSun: { value: sunDir },
       uOpacity: { value: 0 },
       uLights: { value: 1 },
-      uNightLand: { value: 0.12 },
-      uLamp: { value: 1 },
+      uLit: { value: 1 },
     },
     vertexShader: SURFACE_VERT,
     fragmentShader: GLOW_FRAG,
@@ -738,8 +855,435 @@ export function mountDrift(
       ),
     );
 
+  // ── Who they are: threads from the brightest cities rise to one point above Earth, the Mind ──
+  const MIND_UP = 1.6;
+  const threads: { at: THREE.Vector3; line: THREE.Line; mat: THREE.ShaderMaterial }[] = [];
+  const mindCloud = new Cloud();
+  mindCloud.add(0, 0, 0, 52, 0.5, K.mind);
+  mindCloud.add(0, 0, 0, 7, 1, K.mind);
+  const mindGlow = glow({ fixed: true });
+  const mindPts = mindCloud.points(mindGlow);
+  mindPts.renderOrder = 2;
+  function weave(lights: Light[]) {
+    for (const [lat, lon] of hubs(lights, 18, 14)) {
+      const mat = line("mind", 0, true);
+      const geo = new THREE.BufferGeometry().setAttribute(
+        "position",
+        new THREE.BufferAttribute(new Float32Array(25 * 3), 3),
+      );
+      const l = new THREE.Line(geo, mat);
+      l.frustumCulled = false;
+      earth.scene.add(l);
+      threads.push({ at: new THREE.Vector3(...onGlobe(lat, lon, 1.004)), line: l, mat });
+    }
+    earth.scene.add(mindPts);
+  }
+  const mind = new THREE.Vector3();
+  const city = new THREE.Vector3();
+  const bend = new THREE.Vector3();
+  const toCam = new THREE.Vector3();
+  let woven = false;
+  function people(up: THREE.Vector3, p: number) {
+    const dials = dialsOf.people;
+    if (!woven && lightsData) {
+      weave(lightsData);
+      woven = true;
+    }
+    mind.copy(up).multiplyScalar(MIND_UP);
+    mindPts.position.copy(mind);
+    mindGlow.uniforms.uOpacity.value = p * (dials?.mind ?? 0) * (still ? 1 : 0.85 + 0.15 * Math.sin(clock * 2.4));
+    const steps = Math.round(24 * (dials?.threads ?? 0));
+    for (const { at, line: l, mat } of threads) {
+      city.copy(at).applyQuaternion(spin.quaternion);
+      // Fade the threads of cities turning away, and bow each one out toward us so it clears the globe.
+      toCam.copy(earth.camera.position).sub(city).normalize();
+      mat.uniforms.uOpacity.value = 0.7 * p * smooth(city.clone().normalize().dot(toCam) * 4);
+      bend.copy(city).add(mind).multiplyScalar(0.5);
+      bend.setLength(Math.max(bend.length() * 1.25, 1.4));
+      const pos = l.geometry.attributes.position as THREE.BufferAttribute;
+      for (let k = 0; k <= 24; k++) {
+        const t = k / 24;
+        const a = (1 - t) ** 2;
+        const b = 2 * (1 - t) * t;
+        const c = t * t;
+        pos.setXYZ(
+          k,
+          a * city.x + b * bend.x + c * mind.x,
+          a * city.y + b * bend.y + c * mind.y,
+          a * city.z + b * bend.z + c * mind.z,
+        );
+      }
+      pos.needsUpdate = true;
+      l.geometry.setDrawRange(0, steps > 0 ? steps + 1 : 0);
+    }
+    if (spec.mode === "people" && spec.onMind) {
+      const q = mind.clone().project(earth.camera);
+      spec.onMind(((q.x + 1) / 2) * parent.clientWidth, ((1 - q.y) / 2) * parent.clientHeight);
+    }
+  }
+
+  // ── What you inherit: Earth's kit at Year 0, each piece where it is ──
+  function inheritance() {
+    const north = new THREE.Vector3(0, 1, 0).applyQuaternion(bodyOrientation("Earth", date));
+    // Spare matter in orbit: depots, spent stages and dead craft. Most low, on the planes launches favor, and some at
+    // geostationary height, which keeps pace with the turning Earth.
+    const debrisGlow = glow({ fixed: true });
+    const rings: { group: THREE.Group; rate: number }[] = [];
+    const ring = (incl: number, r: number, n: number, rate: number) => {
+      const node = new THREE.Vector3(1, 0, 0).applyAxisAngle(north, rand() * 2 * Math.PI);
+      node.addScaledVector(north, -node.dot(north)).normalize();
+      const normal = north.clone().applyAxisAngle(node, incl * DEG);
+      const c = new Cloud();
+      for (let i = 0; i < n; i++) {
+        const t = rand() * 2 * Math.PI;
+        const rr = r * (1 + gauss() * 0.02);
+        c.add(rr * Math.cos(t), gauss() * 0.01, rr * Math.sin(t), 1.6, 0.55 + rand() * 0.3, K.ink);
+      }
+      const group = new THREE.Group();
+      group.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), normal);
+      group.add(c.points(debrisGlow));
+      earth.scene.add(group);
+      rings.push({ group, rate });
+    };
+    // The station's plane, broadband shells, sun-synchronous orbits, and a few others, by inclination and height in km.
+    for (const [incl, alt] of [
+      [51.6, 420],
+      [53, 550],
+      [97.6, 700],
+      [98.2, 800],
+      [43, 1100],
+      [70, 600],
+      [28.5, 350],
+      [86.4, 780],
+    ])
+      ring(incl, 1 + alt / 6371, 28, 0.5 * (1 + 1000 / (6371 + alt)));
+    ring(0, 42164 / 6371, 140, -1);
+    // The geostationary belt itself, drawn faintly, where the far debris keeps station.
+    const belt = line("ink", 0, true);
+    const geo = loop(
+      Array.from(
+        { length: 180 },
+        (_, i) =>
+          new THREE.Vector3(
+            (42164 / 6371) * Math.cos((i / 180) * 2 * Math.PI),
+            0,
+            (42164 / 6371) * Math.sin((i / 180) * 2 * Math.PI),
+          ),
+      ),
+      belt,
+    );
+    geo.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), north);
+    earth.scene.add(geo);
+
+    // Lift: rockets climbing from real pads. Cape Canaveral, Boca Chica, Kourou, Baikonur, Jiuquan, Wenchang.
+    const lifts = (
+      [
+        [28.5, -80.6],
+        [26.0, -97.2],
+        [5.2, -52.8],
+        [45.9, 63.3],
+        [40.96, 100.3],
+        [19.6, 110.95],
+      ] as const
+    ).map(([lat, lon]) => {
+      const mat = line("lamp", 0, true);
+      const geo = new THREE.BufferGeometry().setAttribute(
+        "position",
+        new THREE.BufferAttribute(new Float32Array(6), 3),
+      );
+      const l = new THREE.Line(geo, mat);
+      l.frustumCulled = false;
+      spin.add(l);
+      return { at: new THREE.Vector3(...onGlobe(lat, lon, 1)), l, mat };
+    });
+
+    // The Moon's south-pole stations, and the telescopes at L2, 1.5 million km out on the night side.
+    const pole = moonAt.clone().addScaledVector(eN, -0.29);
+    const l2 = sunDir.clone().multiplyScalar(-1.5e6 / 6371);
+    const beside = sunDir.clone().cross(eN).normalize().multiplyScalar(2.5);
+    const stations = new Cloud();
+    stations.add(pole.x, pole.y, pole.z, 3.2, 1, K.mind);
+    const poleGlow = glow({ fixed: true });
+    earth.scene.add(stations.points(poleGlow));
+    const scopes = new Cloud();
+    for (const side of [1, -1])
+      scopes.add(l2.x + beside.x * side, l2.y + beside.y * side, l2.z + beside.z * side, 2.4, 1, K.ink);
+    const l2Glow = glow({ fixed: true });
+    earth.scene.add(scopes.points(l2Glow));
+    const moonLine = line("mind", 0, true);
+    const l2Line = line("mind", 0, true);
+    for (const [to, mat] of [
+      [moonAt, moonLine],
+      [l2, l2Line],
+    ] as const) {
+      const l = new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), to]), mat);
+      l.frustumCulled = false;
+      earth.scene.add(l);
+    }
+
+    // The far probes, where they head, at the distances they reach by Year 0: Voyager 1 toward Ophiuchus and New
+    // Horizons toward Sagittarius. Each on a dotted road from the Sun.
+    const probeAt = (ra: number, dec: number, au: number) =>
+      new THREE.Vector3().copy(skyBasis(ra, dec).radial).multiplyScalar(au);
+    const voyager = probeAt(258.75, 12.4, 220);
+    const horizons = probeAt(290, -20.1, 100);
+    const probes = new Cloud();
+    const roads = new Cloud();
+    for (const p of [voyager, horizons]) {
+      probes.add(p.x, p.y, p.z, 4, 1, K.ink);
+      for (let i = 1; i < 90; i++) {
+        const q = p.clone().multiplyScalar(i / 90);
+        roads.add(q.x, q.y, q.z, 1.4, 0.6, K.ink);
+      }
+    }
+    const probeGlow = glow({ fixed: true });
+    const roadGlow = glow({ fixed: true });
+    solar.scene.add(probes.points(probeGlow), roads.points(roadGlow));
+
+    const origin = new THREE.Vector3();
+    const moonBand = (x: number) => band(x, -2.6, -2.1, -0.9, -0.5);
+    const l2Band = (x: number) => band(x, -1.7, -1.3, -0.3, 0.2);
+    const farBand = (x: number) => band(x, 1.2, 2.0);
+    const marks: [id: string, layer: Layer, at: THREE.Vector3, show: (x: number) => number][] = [
+      ["earth", earth, origin, (x) => band(x, -2.5, -2.1, 1.4, 2.0)],
+      ["moon", earth, moonAt, moonBand],
+      ["l2", earth, l2, l2Band],
+      ["sun", solar, origin, (x) => ramp(x, -0.3, 0.3)],
+      ["horizons", solar, horizons, farBand],
+      ["voyager", solar, voyager, farBand],
+    ];
+    const v = new THREE.Vector3();
+    let last = clock;
+
+    return (x: number, p: number) => {
+      const dt = Math.min(0.1, Math.max(0, clock - last));
+      last = clock;
+      debrisGlow.uniforms.uOpacity.value = p * band(x, -3.8, -3.4, -2.2, -1.7);
+      belt.uniforms.uOpacity.value = 0.14 * p * band(x, -3.4, -3.0, -2.2, -1.7);
+      for (const { group, rate } of rings) group.rotateY((rate < 0 ? (2 * Math.PI) / turnOf() : rate) * dt);
+      const lift = p * band(x, -3.9, -3.6, -3.0, -2.7);
+      lifts.forEach(({ at, l, mat }, i) => {
+        const phase = (clock * 0.35 + i / lifts.length) % 1;
+        const pos = l.geometry.attributes.position as THREE.BufferAttribute;
+        pos.setXYZ(0, at.x, at.y, at.z);
+        pos.setXYZ(1, at.x * (1 + 0.3 * phase), at.y * (1 + 0.3 * phase), at.z * (1 + 0.3 * phase));
+        pos.needsUpdate = true;
+        mat.uniforms.uOpacity.value = 0.8 * lift * (1 - phase);
+      });
+      poleGlow.uniforms.uOpacity.value = p * moonBand(x);
+      moonLine.uniforms.uOpacity.value = 0.35 * p * moonBand(x);
+      l2Glow.uniforms.uOpacity.value = p * l2Band(x);
+      l2Line.uniforms.uOpacity.value = 0.4 * p * l2Band(x);
+      probeGlow.uniforms.uOpacity.value = roadGlow.uniforms.uOpacity.value = p * farBand(x);
+
+      if (spec.mode === "inherit" && spec.onMarks) {
+        const w = parent.clientWidth;
+        const h = parent.clientHeight;
+        spec.onMarks(
+          marks.map(([id, layer, at, show]) => {
+            v.copy(at).project(layer.camera);
+            return { id, x: ((v.x + 1) / 2) * w, y: ((1 - v.y) / 2) * h, a: v.z < 1 ? show(x) : 0 };
+          }),
+        );
+      }
+    };
+  }
+
+  // ── Where we come from: the Sun's road around the Milky Way, 4.6 billion years to this morning ──
+  function sunsRoad(moments: { u: number; dial: boolean }[]) {
+    // About 236 km/s round the center (Reid et al. 2019), in kpc a year. Born near 7 kpc, the Sun drifted out to today's
+    // 8.28. Estimates of where it was born run from about 5 to 7 kpc. It bobs through the disk too, about 85 pc up and
+    // down about 2.7 times a lap, and is 21 pc up and rising now.
+    const v = (236 / 3.0857e16) * 3.15576e7;
+    const k = (7 - R0) / AGE;
+    const radius = (ago: number) => R0 + k * ago;
+    const behind = (ago: number) => (v / k) * Math.log(radius(ago) / R0);
+    const bob = Math.asin(0.0208 / 0.085);
+    const height = (ago: number) => 0.085 * Math.sin(bob - (2 * Math.PI * ago) / 8e7);
+    const now = new THREE.Vector3(...inDisk(R0, 0, height(0)));
+    /** Where the Sun was, from where it is, in kly. */
+    const road = (ago: number, out = new THREE.Vector3()) =>
+      out.set(...inDisk(radius(ago), -behind(ago), height(ago))).sub(now);
+
+    // Its laps, drawn as its light passes, and the last million years, close to home.
+    const laps = new Cloud();
+    for (let ago = AGE; ago > 1e6; ago -= 4e5) {
+      const p = road(ago);
+      laps.add(p.x, p.y, p.z, 2.2, 0.85, K.warm, placeOf(ago));
+    }
+    const near = new Cloud();
+    for (let i = 0; i <= 700; i++) {
+      const ago = 10 ** (6 - (6 * i) / 700);
+      const p = road(ago);
+      near.add(p.x, p.y, p.z, 2.2, 0.85, K.warm, placeOf(ago));
+    }
+    // Each moment, a knot on the road where the Sun was then. The ones that set a dial glow blue.
+    const deep = new Cloud();
+    const recent = new Cloud();
+    for (const { u, dial } of moments) {
+      const p = road(agoAt(u));
+      const c = agoAt(u) > 1e6 ? deep : recent;
+      c.add(p.x, p.y, p.z, 7, 1, dial ? K.mind : K.sun, u);
+      c.add(p.x, p.y, p.z, 20, 0.4, dial ? K.mind : K.warm, u);
+    }
+    const lapsGlow = glow({ fixed: true });
+    const nearGlow = glow({ fixed: true });
+    const deepGlow = glow({ fixed: true });
+    const recentGlow = glow({ fixed: true });
+    // The Sun's light, traveling the road.
+    const sun = new Cloud();
+    sun.add(0, 0, 0, 34, 0.6, K.sun);
+    sun.add(0, 0, 0, 9, 1, K.sun);
+    const sunGlow2 = glow({ fixed: true });
+    const sunPts = sun.points(sunGlow2);
+    cosmos.scene.add(
+      laps.points(lapsGlow),
+      near.points(nearGlow),
+      deep.points(deepGlow),
+      recent.points(recentGlow),
+      sunPts,
+    );
+    const at = new THREE.Vector3();
+    return (x: number, p: number) => {
+      const dials = dialsOf.origins;
+      const u = dials?.u ?? 1;
+      for (const m of [lapsGlow, nearGlow, deepGlow, recentGlow]) m.uniforms.uReveal.value = u;
+      // The laps and the deep past while the galaxy is in view, the last million years once it is not.
+      lapsGlow.uniforms.uOpacity.value = deepGlow.uniforms.uOpacity.value = p * ramp(x, 8.2, 9.2);
+      nearGlow.uniforms.uOpacity.value = recentGlow.uniforms.uOpacity.value = p * (1 - ramp(x, 9.0, 9.8));
+      sunPts.position.copy(road(agoAt(u), at));
+      sunGlow2.uniforms.uOpacity.value = p * (1 - (dials?.earth ?? 0));
+    };
+  }
+
+  // ── Where things stand: ninety years of Earth's noise across the stars within 50 light-years ──
+  function standing() {
+    // The radar shell, spreading at the speed of light since 1950: bright at its edge, faint inside.
+    const shellMat = new THREE.ShaderMaterial({
+      uniforms: { uColor: { value: pal[K.lamp] }, uOpacity: { value: 0 } },
+      vertexShader: SHELL_VERT,
+      fragmentShader: SHELL_FRAG,
+      transparent: true,
+      depthWrite: false,
+      depthTest: false,
+      blending: THREE.AdditiveBlending,
+    });
+    const shell = new THREE.Mesh(new THREE.SphereGeometry(1, 72, 48), shellMat);
+    shell.frustumCulled = false;
+    stars.scene.add(shell);
+    // Rings every ten light-years in the Galaxy's plane.
+    const ringMat = line("ink", 0);
+    for (let r = 10; r <= 50; r += 10)
+      stars.scene.add(
+        loop(
+          Array.from(
+            { length: 128 },
+            (_, i) =>
+              new THREE.Vector3(r * Math.cos((i / 128) * 2 * Math.PI), 0, r * Math.sin((i / 128) * 2 * Math.PI)),
+          ),
+          ringMat,
+        ),
+      );
+    // The twelve stars Earth knocked on, at their real places.
+    const targets = Object.entries(SKY.targets as unknown as Record<string, [ra: number, ly: number]>).map(
+      ([name, [ra, ly]]) => ({
+        name,
+        ly,
+        at: new THREE.Vector3().copy(skyBasis(ra * 15, TARGET_DEC[name] ?? 0).radial).multiplyScalar(ly),
+      }),
+    );
+    const marks = new Cloud();
+    for (const t of targets) marks.add(t.at.x, t.at.y, t.at.z, 6, 0.9, K.ink);
+    const marksGlow = glow({ fixed: true });
+    stars.scene.add(marks.points(marksGlow));
+    // Each aimed message: a beam toward its star, and a pulse moving out along it at the speed of light.
+    const beams = KNOCKS.map(([, sent, target, ly]) => {
+      const to = targets
+        .find((t) => t.name === target)!
+        .at.clone()
+        .normalize();
+      const mat = line("lamp", 0);
+      const l = new THREE.Line(
+        new THREE.BufferGeometry().setAttribute("position", new THREE.BufferAttribute(new Float32Array(6), 3)),
+        mat,
+      );
+      l.frustumCulled = false;
+      stars.scene.add(l);
+      return { sent, ly, to, l, mat };
+    });
+    const pulses = new Cloud();
+    for (let i = 0; i < beams.length; i++) pulses.add(0, 0, 0, 7, 1, K.sun);
+    const pulsePts = pulses.points(glow({ fixed: true }));
+    stars.scene.add(pulsePts);
+    // The stars themselves come in with the stars' points once the HYG list has come.
+    let lit: THREE.ShaderMaterial | null = null;
+    let dim: THREE.ShaderMaterial | null = null;
+    const v = new THREE.Vector3();
+
+    return (x: number, p: number) => {
+      const d = dialsOf.stand;
+      const year = d?.year ?? 2040;
+      const grid = d?.grid ?? 1;
+      const shellLy = Math.max(0, year - RADARS_SINCE);
+      if (!lit && within50.length) {
+        // Unswept, faint in ink. Swept, warm, from the moment the shell passes.
+        const cold = new Cloud();
+        const warm = new Cloud();
+        for (let i = 0; i < within50.length; i += 4) {
+          const [sx, sy, sz, ly] = within50.slice(i, i + 4);
+          cold.add(sx, sy, sz, 2, 0.5, K.ink);
+          warm.add(sx, sy, sz, 2.8, 1, K.lamp, ly / 100);
+        }
+        dim = glow({ fixed: true });
+        lit = glow({ fixed: true });
+        stars.scene.add(cold.points(dim), warm.points(lit));
+      }
+      if (dim && lit) {
+        dim.uniforms.uOpacity.value = p * grid;
+        lit.uniforms.uOpacity.value = p;
+        lit.uniforms.uReveal.value = shellLy / 100;
+      }
+      shell.scale.setScalar(Math.max(0.01, shellLy));
+      // Past the map's edge the shell runs on unseen, as on the old map, so it never washes the view.
+      shellMat.uniforms.uOpacity.value = p * ramp(shellLy, 0, 2) * (1 - 0.9 * ramp(shellLy, 46, 64));
+      ringMat.uniforms.uOpacity.value = 0.12 * p * grid;
+      marksGlow.uniforms.uOpacity.value = p * grid;
+      const bright = pulsePts.geometry.attributes.aBright as THREE.BufferAttribute;
+      const pos = pulsePts.geometry.attributes.position as THREE.BufferAttribute;
+      beams.forEach(({ sent, ly, to, l, mat }, i) => {
+        const gone = Math.max(0, Math.min(year - sent, ly));
+        const head = v.copy(to).multiplyScalar(gone);
+        const line = l.geometry.attributes.position as THREE.BufferAttribute;
+        line.setXYZ(1, head.x, head.y, head.z);
+        line.needsUpdate = true;
+        mat.uniforms.uOpacity.value = year > sent ? 0.4 * p : 0;
+        pos.setXYZ(i, head.x, head.y, head.z);
+        bright.setX(i, year > sent && year - sent < ly ? 1 : 0);
+      });
+      pos.needsUpdate = true;
+      bright.needsUpdate = true;
+      (pulsePts.material as THREE.ShaderMaterial).uniforms.uOpacity.value = p * (0.8 + 0.2 * Math.sin(clock * 6));
+
+      if (spec.mode === "stand" && spec.onMarks) {
+        const w = parent.clientWidth;
+        const h = parent.clientHeight;
+        spec.onMarks(
+          [...targets.map((t) => ({ id: t.name, at: t.at })), { id: "Sol", at: new THREE.Vector3() }].map(
+            ({ id, at }) => {
+              v.copy(at).project(stars.camera);
+              return { id, x: ((v.x + 1) / 2) * w, y: ((1 - v.y) / 2) * h, a: v.z < 1 ? p * grid : 0 };
+            },
+          ),
+        );
+      }
+    };
+  }
+
   // ── Data that comes later: Earth's land and lights, and the stars ──
   let gone = false;
+  let lightsData: Light[] | null = null;
+  /** The stars within 50 light-years, for Where things stand: x, y, z and distance, in ly. */
+  const within50: number[] = [];
   Promise.all([landMask(), import("./game/lights.json")]).then(([isLand, { default: lights }]) => {
     if (gone) return;
     const ground = new Cloud();
@@ -753,11 +1297,17 @@ export function mountDrift(
       const [x, yy, z] = onGlobe(lat, lon, 1.002);
       ground.add(x, yy, z, 0.011, 0.9, K.ink);
     }
-    for (const [lat, lon, b] of lights as [number, number, number][]) {
+    // Cities first, then towns, for a screen that lights them in turn.
+    const all = lights as Light[];
+    const order = all.map((l, i) => ({ k: l[2] + rand() * 2.5, i })).sort((a, b) => b.k - a.k);
+    const rank = new Float32Array(all.length);
+    order.forEach((o, r) => (rank[o.i] = r / all.length));
+    all.forEach(([lat, lon, b], i) => {
       const [x, y, z] = onGlobe(lat, lon, 1.004);
-      ground.add(x, y, z, 0.007 + b * 0.0022, 0.3 + b * 0.08, K.lamp);
-    }
+      ground.add(x, y, z, 0.007 + b * 0.0022, 0.3 + b * 0.08, K.lamp, rank[i]);
+    });
     spin.add(ground.points(surface));
+    lightsData = all;
     surfaceAt = clock;
     dirty = true;
   });
@@ -779,6 +1329,7 @@ export function mountDrift(
           near.add(x, y, z, 2.6, 0.9, color < 0.3 ? K.young : color > 1.2 ? K.warm : K.ink);
           stalk.push(x, y, z, x, 0, z);
         }
+        if (ly > 1e-3 && ly < 50) within50.push(x, y, z, ly);
         pos[i * 3] = x;
         pos[i * 3 + 1] = y;
         pos[i * 3 + 2] = z;
@@ -805,49 +1356,70 @@ export function mountDrift(
       dirty = true;
     });
 
-  // ── Theme ──
-  function setTheme(scheme: Scheme) {
-    const p = PALETTES[scheme];
-    KINDS.forEach((k, i) => paint(p[k], pal[i]));
-    paint(p.dust, bg);
-    shared.uGain.value = p.gain;
-    renderer.setClearColor(p.bg);
-    for (const m of glows) m.blending = p.additive && !m.userData.dust ? THREE.AdditiveBlending : THREE.NormalBlending;
-    const dark = scheme === "dark";
-    const set = (m: THREE.ShaderMaterial, values: Record<string, unknown>) => {
-      for (const [k, v] of Object.entries(values)) m.uniforms[k].value = v;
-    };
-    set(earthGlobe, {
-      uDay: dark ? 0.07 : 0,
-      uNight: dark ? 0 : 0.08,
-      uRim: dark ? 0.8 : 0.9,
-      uRimColor: pal[dark ? K.mind : K.ink],
-    });
-    // On paper, the land stays drawn through the night, and the lamps take more ink to show.
-    set(surface, { uNightLand: dark ? 0.12 : 0.4, uLamp: dark ? 1 : 1.8 });
-    set(moonGlobe, { uDay: dark ? 0.42 : 0, uNight: dark ? 0 : 0.16, uRim: dark ? 0.15 : 0.85 });
-    air.blending = dark ? THREE.AdditiveBlending : THREE.NormalBlending;
-    air.uniforms.uOpacity.value = dark ? 0.6 : 0.3;
-    dirty = true;
-  }
+  // ── Colors ──
+  KINDS.forEach((k, i) => paint(PALETTE[k], pal[i]));
+  paint(PALETTE.dust, bg);
+  renderer.setClearColor(PALETTE.bg);
+  for (const m of glows) m.blending = m.userData.dust ? THREE.NormalBlending : THREE.AdditiveBlending;
+  earthGlobe.uniforms.uDay.value = 0.07;
+  earthGlobe.uniforms.uRim.value = 0.8;
+  earthGlobe.uniforms.uRimColor.value = pal[K.mind];
+  moonGlobe.uniforms.uDay.value = 0.42;
+  moonGlobe.uniforms.uRim.value = 0.15;
+  air.blending = THREE.AdditiveBlending;
 
   // ── Size ──
+  let dpr = 1;
   function fit() {
     const w = parent.clientWidth;
     const h = parent.clientHeight;
     if (!w || !h) return;
-    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    dpr = Math.min(2, window.devicePixelRatio || 1);
     renderer.setPixelRatio(dpr);
     renderer.setSize(w, h, false);
-    const fov = flight.lens(w, h);
-    for (const L of layers) {
-      L.camera.fov = fov / DEG;
-      L.camera.aspect = w / h;
-      L.camera.setViewOffset(w, h, 0, h * LIFT, w, h);
-    }
-    shared.uFocal.value = (h * dpr) / (2 * Math.tan(fov / 2));
     shared.uDpr.value = dpr;
     dirty = true;
+  }
+
+  // The lens frames the screen's art, wherever it sits in the sky's frame: the art's short side spans the same angle
+  // everywhere, the subject sits at its center, and the sky runs on past it to the frame's edges. Between screens the
+  // framing eases from one art to the next with the camera.
+  type Framing = { cx: number; cy: number; w: number; h: number };
+  let framing: Framing | null = null;
+  let framingFrom: Framing | null = null;
+  let focal = 1;
+  function framingOf(s: Show): Framing {
+    const W = parent.clientWidth;
+    const H = parent.clientHeight;
+    const r = s.rect?.() ?? null;
+    const box = r && r.w > 8 && r.h > 8 ? r : { x: 0, y: 0, w: W, h: H };
+    return { cx: box.x + box.w / 2, cy: box.y + box.h / 2 - (LIFTS[s.mode] ?? 0) * box.h, w: box.w, h: box.h };
+  }
+  function frameLens() {
+    const W = parent.clientWidth;
+    const H = parent.clientHeight;
+    if (!W || !H) return;
+    const to = framingOf(spec);
+    const k = framingFrom ? easeInOut(pilot.progress()) : 1;
+    const f: Framing = framingFrom
+      ? {
+          cx: framingFrom.cx + (to.cx - framingFrom.cx) * k,
+          cy: framingFrom.cy + (to.cy - framingFrom.cy) * k,
+          w: framingFrom.w + (to.w - framingFrom.w) * k,
+          h: framingFrom.h + (to.h - framingFrom.h) * k,
+        }
+      : to;
+    if (k >= 1) framingFrom = null;
+    framing = f;
+    focal = f.h / (2 * Math.tan(lens(f.w, f.h) / 2));
+    const VW = 2 * Math.max(f.cx, W - f.cx, 1);
+    const VH = 2 * Math.max(f.cy, H - f.cy, 1);
+    for (const L of layers) {
+      L.camera.fov = (2 * Math.atan(VH / (2 * focal))) / DEG;
+      L.camera.aspect = VW / VH;
+      L.camera.setViewOffset(VW, VH, VW / 2 - f.cx, VH / 2 - f.cy, W, H);
+    }
+    shared.uFocal.value = focal * dpr;
   }
   const ro = new ResizeObserver(fit);
   ro.observe(parent);
@@ -855,12 +1427,28 @@ export function mountDrift(
   let clock = 0;
   let dirty = true;
   const look = new THREE.Vector3();
+  // Each screen's extras: built when first shown, and faded in and out as their screen comes and goes.
+  let kit: ReturnType<typeof inheritance> | null = null;
+  let road: ReturnType<typeof sunsRoad> | null = null;
+  let noise: ReturnType<typeof standing> | null = null;
+  const presence: Partial<Record<Mode, number>> = {};
+  let lastClock = 0;
+  function present(mode: Mode, dt: number) {
+    const target = spec.mode === mode ? 1 : 0;
+    const p = still ? target : (presence[mode] ?? 0) + (target - (presence[mode] ?? 0)) * (1 - Math.exp(-dt * 2.5));
+    presence[mode] = p < 0.002 && !target ? 0 : p;
+    return presence[mode]!;
+  }
+  if (first.mode === "origins") road = sunsRoad(first.moments ?? []);
 
   /** Data fades in when it arrives, or shows at once in a still. */
   const arrived = (at: number) => (still ? Number(at < Infinity) : smooth((clock - at) / 1.6));
 
   function draw() {
-    const { logD, D, target, cam, up } = flight.at(clock);
+    const dt = Math.min(0.1, Math.max(0, clock - lastClock));
+    lastClock = clock;
+    const { logD, D, target, cam, up } = pilot.at(clock);
+    frameLens();
 
     for (const L of layers) {
       const d = D / L.unit;
@@ -877,11 +1465,18 @@ export function mountDrift(
     earth.on = x < -0.2;
     solar.on = x < 7;
     stars.on = x < 9.4;
-    spin.quaternion.copy(bodyOrientation("Earth", new Date(date.getTime() + clock * 1436e3)));
+    turned += (dt * 86164e3) / turnOf();
+    spin.quaternion.copy(bodyOrientation("Earth", new Date(date.getTime() + turned)));
+    const pPeople = present("people", dt);
+    const pInherit = present("inherit", dt);
+    const pOrigins = present("origins", dt);
+    const pStand = present("stand", dt);
     surface.uniforms.uOpacity.value = arrived(surfaceAt);
+    // Who they are lights the cities in turn. Elsewhere they are all lit.
+    surface.uniforms.uLit.value = 1 + ((dialsOf.people?.lit ?? 1) - 1) * pPeople;
     surface.uniforms.uLights.value = 1 - ramp(x, -2.7, -1.9);
     (moonRing.material as THREE.ShaderMaterial).uniforms.uOpacity.value = 0.3 * band(x, -3.4, -2.6, -1.2, -0.5);
-    planetGlow.uniforms.uOpacity.value = band(x, -2.1, -1.2, 3.6, 4.6);
+    planetGlow.uniforms.uOpacity.value = band(x, -2.1, -1.2, 2.6, 3.0);
     orbits.forEach((o: THREE.LineLoop, i: number) => {
       (o.material as THREE.ShaderMaterial).uniforms.uOpacity.value =
         (i === 2 ? 0.55 : 0.2) * band(x, -1.6, -0.5, 3.3, 4.4);
@@ -889,11 +1484,13 @@ export function mountDrift(
     beltGlow.uniforms.uOpacity.value = band(x, -0.8, 0.1, 2.6, 3.4);
     kuiperGlow.uniforms.uOpacity.value = band(x, 0.6, 1.5, 3.8, 4.6);
     oortGlow.uniforms.uOpacity.value = band(x, 2.6, 3.6, 5.2, 6.0);
-    pairGlow.uniforms.uOpacity.value = band(x, -3.1, -2.5, -0.9, -0.4);
+    pairGlow.uniforms.uOpacity.value = band(x, -2.7, -2.3, -0.9, -0.4);
     // From inside the Milky Way, the other galaxies are faint smudges.
     othersGlow.uniforms.uOpacity.value = 0.3 + 0.7 * ramp(x, 9.5, 10.6);
     halosGlow.uniforms.uOpacity.value = ramp(x, 10.4, 11.1);
-    const map = arrived(starsAt) * band(x, 5.6, 6.2, 7.0, 7.6);
+    // The star map's stalks and rings, on the title's flight and the map, not on the screens between.
+    const pTitle = present("title", dt);
+    const map = arrived(starsAt) * band(x, 5.6, 6.2, 7.0, 7.6) * (spec.mode === "map" ? 1 : pTitle);
     mapDots.uniforms.uOpacity.value = map;
     stalks.uniforms.uOpacity.value = 0.2 * map;
     rings.uniforms.uOpacity.value = 0.16 * map;
@@ -903,13 +1500,19 @@ export function mountDrift(
     mwGlow.uniforms.uMaxPx.value = 1.6 + 1.9 * ramp(x, 7.5, 9);
     homeGlow.uniforms.uOpacity.value = band(x, 5.4, 6.1) * (0.65 + 0.35 * Math.sin(clock * 2.2));
 
+    if (pPeople > 0) people(up, pPeople);
+    if (pInherit > 0) (kit ??= inheritance())(x, pInherit);
+    if (pOrigins > 0) road?.(x, pOrigins);
+    if (pStand > 0) (noise ??= standing())(x, pStand);
+    if (spec.onScale && framing) spec.onScale((D * 149597870.7) / focal, framing.w, framing.h);
+
     renderer.clear();
     for (const L of layers) {
       if (!L.on) continue;
       renderer.clearDepth();
       renderer.render(L.scene, L.camera);
     }
-    onFrame?.(Math.max(0, cam.distanceTo(earthAU) - R_E_AU));
+    if (spec.mode === "title") spec.onFrame?.(Math.max(0, cam.distanceTo(earthAU) - R_E_AU));
   }
 
   let raf = 0;
@@ -917,23 +1520,42 @@ export function mountDrift(
     raf = requestAnimationFrame(frame);
     // A still is one frame, redrawn only when something changes.
     if (still && !dirty) return;
-    clock = flight.clock(now);
+    clock = pilot.clock(now);
     dirty = false;
     draw();
   }
 
-  setTheme(theme);
   fit();
   raf = requestAnimationFrame(frame);
 
   return {
-    setTheme,
-    home: () => flight.home(clock),
+    show(next) {
+      // The same screen again, as on a remount: take its new callbacks, and keep flying.
+      if (next.mode === spec.mode && next.dials === spec.dials) {
+        spec = next;
+        return 0;
+      }
+      if (framing) framingFrom = framing;
+      spec = next;
+      if (next.dials) dialsOf[next.mode] = next.dials;
+      if (next.mode === "origins" && !road) road = sunsRoad(next.moments ?? []);
+      dirty = true;
+      return pilot.fly(poseFor(next), clock);
+    },
+    home: () => pilot.home(clock),
+    go(stop) {
+      pilot.go(stop, clock);
+      dirty = true;
+    },
+    turn(dx, dy) {
+      pilot.turnBy(dx, dy);
+      dirty = true;
+    },
     dispose() {
       gone = true;
       cancelAnimationFrame(raf);
       ro.disconnect();
-      flight.dispose();
+      pilot.dispose();
       for (const L of layers)
         L.scene.traverse((o) => {
           if (o instanceof THREE.Mesh || o instanceof THREE.Points || o instanceof THREE.Line) {
@@ -946,6 +1568,19 @@ export function mountDrift(
       renderer.domElement.remove();
     },
   };
+}
+
+/** A night light: latitude, longitude, and brightness from 1 to 9. NASA's Black Marble, via scripts/lights.mjs. */
+type Light = [lat: number, lon: number, b: number];
+
+/** The brightest cities, spread apart: where the threads start. */
+function hubs(lights: Light[], n: number, apart: number) {
+  const out: Light[] = [];
+  for (const l of [...lights].sort((a, b) => b[2] - a[2])) {
+    if (out.every((h) => Math.hypot(h[0] - l[0], (h[1] - l[1]) * Math.cos(l[0] * DEG)) > apart)) out.push(l);
+    if (out.length === n) break;
+  }
+  return out;
 }
 
 /** A point on Earth in the globe's frame: +Y north, +X the prime meridian, as the atlas orients it. */

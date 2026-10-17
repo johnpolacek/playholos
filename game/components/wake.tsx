@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, use, useRef, useState } from "react";
+import { createContext, use, useCallback, useEffect, useRef, useState } from "react";
 import { useGame } from "@/components/game-provider";
 import { Origins } from "@/components/origins";
 import { People } from "@/components/people";
@@ -9,132 +9,55 @@ import { Inherit } from "@/components/inherit";
 import { FILL, Spread } from "@/components/spread";
 import { Charter } from "@/components/charter";
 import { Drift } from "@/components/drift";
-import { charsRise, gsap, prefersReducedMotion, rest, rise, riseFrom, useGSAP, useStage } from "@/lib/motion";
+import { Sky, SkyArt } from "@/components/sky";
+import type { Dials } from "@/lib/drift";
+import { charsRise, gsap, prefersReducedMotion, rise, riseFrom, useGSAP, useStage } from "@/lib/motion";
 
-// The mock's stipple: a fixed scatter, the same on every phone.
-function stipple(seed: number, n: number, w: number, h: number) {
-  let s = seed;
-  const rand = () => ((s = (s * 16807) % 2147483647) - 1) / 2147483646;
-  return Array.from({ length: n }, () => ({
-    x: rand() * w,
-    y: rand() * h,
-    r: rand() < 1 / 3 ? 0.8 : 0.5,
-  }));
-}
-const STARS = stipple(21, 70, 390, 360);
+/** The art's size on a phone, and its soft edge into the words. Wide, it fills the left. */
+const ART = `-mx-6 block h-[min(46vh,380px)] w-[calc(100%+48px)] max-w-none shrink-0 sm:h-[min(46vh,480px)] ${FILL}`;
 
-function EarthAndMoon() {
-  return (
-    <svg
-      viewBox="0 0 390 360"
-      role="img"
-      aria-label="Earth and the Moon, drawn in line"
-      className={`-mx-6 block w-[calc(100%+48px)] max-w-none font-mono ${FILL}`}
-    >
-      <defs>
-        <pattern id="hatch" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-          <line x1="0" y1="0" x2="0" y2="4" strokeWidth=".8" className="stroke-ink" />
-        </pattern>
-      </defs>
-      {STARS.map((s, i) => (
-        <circle key={i} data-m="star" cx={s.x} cy={s.y} r={s.r} opacity=".35" className="fill-ink" />
-      ))}
-      <circle data-m="earth" cx="205" cy="225" r="118" strokeWidth="1.4" className="fill-paper stroke-ink" />
-      <path
-        data-m="night"
-        d="M205 107 A118 118 0 0 0 205 343 A70 118 0 0 1 205 107 Z"
-        fill="url(#hatch)"
-        opacity=".55"
-      />
-      <circle data-m="moon" cx="338" cy="92" r="17" strokeWidth="1.1" className="fill-paper stroke-ink" />
-      <text
-        data-m="label"
-        x="338"
-        y="124"
-        fontSize="9"
-        textAnchor="middle"
-        strokeWidth="3"
-        strokeLinejoin="round"
-        paintOrder="stroke"
-        className="fill-muted stroke-paper"
-      >
-        the Moon
-      </text>
-      <line
-        data-m="sun"
-        x1="36"
-        y1="56"
-        x2="112"
-        y2="132"
-        strokeWidth=".8"
-        strokeDasharray="3 4"
-        className="stroke-ink"
-      />
-      <text
-        data-m="label"
-        x="36"
-        y="48"
-        fontSize="9"
-        strokeWidth="3"
-        strokeLinejoin="round"
-        paintOrder="stroke"
-        className="fill-muted stroke-paper"
-      >
-        ↘ sunlight
-      </text>
-    </svg>
-  );
-}
-
-// The first screen of a new game, before the shell. A slow wake: the sky, then Earth drawn in line, then the words.
+// The first screen of a new game, after the drift. Earth's night side close up, its real cities lit, and as the words
+// come the real Sun rises past its edge: this morning.
 export function Wake({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
   const root = useRef<HTMLDivElement>(null);
-  const { leave } = useStage(root, (q, tl) => {
-    tl.fromTo(
-      q('[data-m="star"]'),
-      { autoAlpha: 0 },
-      {
-        autoAlpha: rest,
-        duration: 0.8,
-        stagger: { amount: 1.2, from: "random" },
-      },
-      0,
-    )
-      .set(q('[data-m="earth"]'), { autoAlpha: 1 }, 0.3)
-      .fromTo(
-        q('[data-m="earth"]'),
-        { drawSVG: "50% 50%" },
-        { drawSVG: "0% 100%", duration: 1.6, ease: "power2.inOut" },
-        0.3,
-      )
-      .fromTo(
-        q('[data-m="night"]'),
-        { autoAlpha: 0, x: 24 },
-        { autoAlpha: rest, x: 0, duration: 1.2, ease: "power2.out" },
-        1.4,
-      )
-      .set(q('[data-m="moon"]'), { autoAlpha: 1 }, 1.1)
-      .fromTo(q('[data-m="moon"]'), { drawSVG: 0 }, { drawSVG: "100%", duration: 0.9, ease: "power2.inOut" }, 1.1)
-      .fromTo(
-        q('[data-m="sun"]'),
-        { autoAlpha: 0, x: -20, y: -20 },
-        { autoAlpha: 1, x: 0, y: 0, duration: 1, ease: "power2.out" },
-        1.5,
-      )
-      .fromTo(q('[data-m="label"]'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.5, stagger: 0.2 }, 1.9)
-      .fromTo(q('[data-m="kick"]'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.5 }, 1.8);
-    charsRise(tl, q('[data-m="title"]')[0], 2);
-    tl.fromTo(q('[data-m="copy"]'), riseFrom, { ...rise, duration: 0.6, stagger: 0.25 }, 2.5).fromTo(
-      q('[data-m="act"]'),
-      riseFrom,
-      { ...rise, stagger: 0.08 },
-      3.1,
-    );
-  });
+  const [dials] = useState<Dials>(() => ({ rise: 0 }));
+  const [ready, setReady] = useState(false);
+  // The camera's flight to this screen: the story starts as it arrives.
+  const lead = useRef(0);
+  const onReady = useCallback((flight: number) => {
+    lead.current = flight;
+    setReady(true);
+  }, []);
+  const { leave } = useStage(
+    root,
+    (q, tl) => {
+      tl.delay(Math.max(0, lead.current - 0.6));
+      tl.fromTo(q('[data-m="sky"]'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 1.6, ease: "power1.inOut" }, 0)
+        .to(dials, { rise: 1, duration: 3.4, ease: "power1.inOut" }, 0.4)
+        .fromTo(q('[data-m="kick"]'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.5 }, 1.8);
+      charsRise(tl, q('[data-m="title"]')[0], 2);
+      tl.fromTo(q('[data-m="copy"]'), riseFrom, { ...rise, duration: 0.6, stagger: 0.25 }, 2.5).fromTo(
+        q('[data-m="act"]'),
+        riseFrom,
+        { ...rise, stagger: 0.08 },
+        3.1,
+      );
+    },
+    ready,
+  );
+
+  // Reduced motion skips the intro: the Sun is up.
+  useEffect(() => {
+    if (ready && prefersReducedMotion()) Object.assign(dials, { rise: 1 });
+  }, [ready, dials]);
 
   return (
-    <div ref={root} className="flex grow flex-col overflow-y-auto bg-paper px-6 wide:px-10">
-      <Spread art={<EarthAndMoon />}>
+    <div
+      ref={root}
+      style={ready ? undefined : { visibility: "hidden" }}
+      className="flex grow flex-col overflow-y-auto bg-paper px-6 wide:px-10"
+    >
+      <Spread art={<SkyArt mode="wake" dials={dials} onReady={onReady} className={ART} />}>
         <div className="flex grow flex-col gap-2.5 pt-2 pb-6">
           <span data-m="kick" className="font-mono text-[10.5px] tracking-[.1em] text-muted">
             YEAR 0 · SOL · 2040
@@ -178,7 +101,7 @@ export function Wake({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
 const LeaveShell = createContext<(then: () => void) => void>((then) => then());
 export const useLeaveShell = () => use(LeaveShell);
 
-// The phone. A new game opens on the drift, then Wake and the memories. A game already begun goes straight to the
+// The phone. A new game opens on the drift, then Wake and the memories, all under one sky. A game already begun goes straight to the
 // shell. Screens past the last one built lead to the shell. A reload starts over at the drift.
 const SCREENS = [Drift, Wake, Origins, People, Stand, Inherit, Charter];
 
@@ -236,11 +159,20 @@ export function Opening({ className, children }: { className: string; children: 
     // Skip leaves the memories for the charter on Wake, and skips one memory after that.
     const charter = SCREENS.indexOf(Charter);
     const skip = () => setAt(at === SCREENS.indexOf(Wake) ? charter : Math.min(at + 2, charter));
-    body = <Screen key={at} onSkip={skip} onNext={next} />;
+    body = (
+      <>
+        <Screen key={at} onSkip={skip} onNext={next} />
+        {/* The charter has no art of its own: the sky holds on Earth and the Moon behind it. */}
+        {Screen === Charter && <SkyArt mode="charter" className="hidden" />}
+      </>
+    );
   }
+  // One sky behind every screen from the title to the charter, and on into the map. The camera flies between them.
   return (
     <div ref={frame} id="phone" className={`relative ${className}`}>
-      <LeaveShell value={leaveShell}>{body}</LeaveShell>
+      <LeaveShell value={leaveShell}>
+        <Sky shade={!inShell}>{body}</Sky>
+      </LeaveShell>
     </div>
   );
 }

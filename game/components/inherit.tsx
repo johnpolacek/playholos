@@ -1,33 +1,35 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useGame } from "@/components/game-provider";
 import type { EarthPast } from "@/lib/game/past";
 import { FILL, Spread } from "@/components/spread";
-import { type CANVAS, useCanvasInk } from "@/components/theme-toggle";
+import { SkyArt } from "@/components/sky";
+import type { Dials, Mark } from "@/lib/drift";
 import { INHERIT_SOURCES } from "@/lib/game/sources";
 import { gsap, prefersReducedMotion, rise, riseFrom, useStage } from "@/lib/motion";
 
-// "What you inherit": Earth's kit at Year 0, as a powers-of-ten flight. The view opens on Earth's night lights and
-// pulls back past the spare matter in orbit, the Moon's south-pole stations, the telescopes at L2 and the Sun, out to
-// Voyager 1, silent at 220 AU. Real distances throughout. Kit from HOLOS_GAME_CONCEPT.md, Earth's kit at Year 0.
+// "What you inherit": Earth's kit at Year 0, as a powers-of-ten flight in the game's scene. The view opens on Earth's
+// night lights and pulls back past the spare matter in orbit, the Moon's south-pole stations, the telescopes at L2 and
+// the Sun, out to Voyager 1, silent at 220 AU. Real distances and directions throughout. Kit from
+// HOLOS_GAME_CONCEPT.md, Earth's kit at Year 0.
 
-type Light = [lat: number, lon: number, b: number];
-
-const KM_AU = 1.496e8;
 const LIGHT_S = 299792;
 
-const EARTH_R = 6371;
-const MOON = { d: 384400, r: 1737, a: -0.55 };
-const SUN_A = 3.5;
-const L2 = { d: 1.5e6, a: SUN_A - Math.PI };
-const NEW_HORIZONS = { d: 100 * KM_AU, a: 4.9 };
-const VOYAGER = { d: 220 * KM_AU, a: 4.35 };
-
-/** Where the camera rests for each caption: log10 of the view's radius in km. */
+/** Where the camera rests for each caption: log10 of the km across half the view's short side. */
 const STOPS = [4.15, 4.75, 5.8, 6.55, 8.5, 10.65];
 
-/** A view radius as the scale readout says it: kilometers up close, then light-time. */
+/** The places named on the flight, by the scene's marks. */
+const NAMES: Record<string, string> = {
+  earth: "Earth",
+  moon: "the Moon · south-pole stations",
+  l2: "Roman · JWST · L2",
+  sun: "the Sun",
+  horizons: "New Horizons · 100 AU",
+  voyager: "Voyager 1 · silent · 220 AU",
+};
+
+/** A distance as the scale readout says it: kilometers up close, then light-time. */
 function reach(km: number) {
   const s = km / LIGHT_S;
   if (s < 1) return `${Number(km.toPrecision(2)).toLocaleString("en-US")} km`;
@@ -36,261 +38,52 @@ function reach(km: number) {
   return `${(s / 3600).toFixed(0)} light-hours`;
 }
 
-function glowSprite(rgb: string) {
-  const c = document.createElement("canvas");
-  c.width = c.height = 64;
-  const g = c.getContext("2d")!;
-  const grad = g.createRadialGradient(32, 32, 0, 32, 32, 32);
-  grad.addColorStop(0, `rgba(${rgb},1)`);
-  grad.addColorStop(0.2, `rgba(${rgb},.7)`);
-  grad.addColorStop(0.5, `rgba(${rgb},.15)`);
-  grad.addColorStop(1, `rgba(${rgb},0)`);
-  g.fillStyle = grad;
-  g.fillRect(0, 0, 64, 64);
-  return c;
-}
-
-function Flight({ zoom, lights }: { zoom: React.RefObject<{ z: number; show: number }>; lights: Light[] }) {
-  const canvas = useRef<HTMLCanvasElement>(null);
-  const ink = useCanvasInk();
-
-  useEffect(() => {
-    const el = canvas.current!;
-    const g = el.getContext("2d")!;
-    const glows = new Map<string, HTMLCanvasElement>();
-    const glow = (rgb: string) => glows.get(rgb) ?? glows.set(rgb, glowSprite(rgb)).get(rgb)!;
-    // Spare matter: depots, spent stages and dead craft, mostly low, some at geostationary height.
-    const junk = Array.from({ length: 260 }, (_, i) => ({
-      r: i % 9 === 0 ? 42164 : EARTH_R + 400 + Math.random() * 1600,
-      a: Math.random() * Math.PI * 2,
-      w: 0.25 + Math.random() * 0.2,
-    }));
-    const tilt = (20 * Math.PI) / 180;
-    const lon0 = 15;
-    let w = 0;
-    let h = 0;
-    let dpr = 1;
-    const fit = () => {
-      dpr = Math.min(2, window.devicePixelRatio || 1);
-      w = el.clientWidth;
-      h = el.clientHeight;
-      el.width = w * dpr;
-      el.height = h * dpr;
-    };
-    fit();
-    const ro = new ResizeObserver(fit);
-    ro.observe(el);
-
-    let c: (typeof CANVAS)[keyof typeof CANVAS] = ink.current;
-    const label = (text: string, x: number, y: number, rgb: string = c.muted, alpha = 1) => {
-      g.font = "9px var(--font-plex-mono), monospace";
-      g.textAlign = x > w * 0.62 ? "right" : "left";
-      g.fillStyle = `rgba(${rgb},${alpha})`;
-      g.fillText(text, x + (x > w * 0.62 ? -8 : 8), y + 3);
-    };
-    // Fades a thing in while it is a readable size on screen, and out when it shrinks to nothing.
-    const visible = (px: number, lo: number, hi = Infinity) => Math.max(0, Math.min(1, (px - lo) / lo, (hi - px) / hi));
-
-    let t0 = performance.now();
-    const draw = (now: number) => {
-      const t = (now - t0) / 1000;
-      const { z, show } = zoom.current;
-      c = ink.current;
-      g.setTransform(dpr, 0, 0, dpr, 0, 0);
-      g.clearRect(0, 0, w, h);
-      g.globalAlpha = show;
-      const R = Math.min(w, h) * 0.46;
-      const k = R / 10 ** z;
-      const cx = w / 2;
-      const cy = h / 2;
-      const pos = (d: number, a: number) => ({ x: cx + d * k * Math.cos(a), y: cy + d * k * Math.sin(a) });
-      const er = EARTH_R * k;
-
-      // The Sun, and Earth's year around it, once the view is wide enough.
-      const s = pos(KM_AU, SUN_A);
-      const sunA = visible(KM_AU * k, 6);
-      if (sunA > 0) {
-        g.strokeStyle = `rgba(${c.ink},${0.12 * sunA})`;
-        g.lineWidth = 0.7;
-        g.beginPath();
-        g.arc(s.x, s.y, KM_AU * k, 0, Math.PI * 2);
-        g.stroke();
-        const size = 10 + 6 * sunA;
-        g.globalCompositeOperation = c.glow;
-        g.drawImage(glow(c.sun), s.x - size, s.y - size, size * 2, size * 2);
-        g.globalCompositeOperation = "source-over";
-        label("the Sun", s.x, s.y, c.muted, sunA);
-      }
-
-      // The far probes, on their long roads out from the Sun.
-      for (const [p, name] of [
-        [NEW_HORIZONS, "New Horizons · 100 AU"],
-        [VOYAGER, "Voyager 1 · silent · 220 AU"],
-      ] as const) {
-        const a = visible(p.d * k, 30);
-        if (a <= 0) continue;
-        const q = { x: s.x + p.d * k * Math.cos(p.a), y: s.y + p.d * k * Math.sin(p.a) };
-        g.setLineDash([2, 4]);
-        g.strokeStyle = `rgba(${c.ink},${0.25 * a})`;
-        g.beginPath();
-        g.moveTo(s.x, s.y);
-        g.lineTo(q.x, q.y);
-        g.stroke();
-        g.setLineDash([]);
-        g.fillStyle = `rgba(${c.ink},${a})`;
-        g.beginPath();
-        g.arc(q.x, q.y, 2.2, 0, Math.PI * 2);
-        g.fill();
-        label(name, q.x, q.y, c.ink, a);
-      }
-
-      // L2, where Roman and an aging JWST watch.
-      const l2 = pos(L2.d, L2.a);
-      const l2A = visible(L2.d * k, 20, R * 6);
-      if (l2A > 0) {
-        g.setLineDash([1, 3]);
-        g.strokeStyle = `rgba(${c.mind},${0.5 * l2A})`;
-        g.beginPath();
-        g.moveTo(cx, cy);
-        g.lineTo(l2.x, l2.y);
-        g.stroke();
-        g.setLineDash([]);
-        g.fillStyle = `rgba(${c.ink},${l2A})`;
-        for (const dy of [-3, 3]) {
-          g.beginPath();
-          g.arc(l2.x, l2.y + dy, 1.6, 0, Math.PI * 2);
-          g.fill();
-        }
-        label("Roman · JWST · L2", l2.x, l2.y, c.ink, l2A);
-      }
-
-      // The Moon, with stations at its south pole.
-      const m = pos(MOON.d, MOON.a);
-      const mA = visible(MOON.d * k, 14, R * 8);
-      if (mA > 0) {
-        const mr = Math.max(2, MOON.r * k);
-        g.setLineDash([1, 3]);
-        g.strokeStyle = `rgba(${c.mind},${0.5 * mA})`;
-        g.beginPath();
-        g.moveTo(cx, cy);
-        g.lineTo(m.x, m.y);
-        g.stroke();
-        g.setLineDash([]);
-        g.fillStyle = c.paper;
-        g.strokeStyle = `rgba(${c.ink},${mA})`;
-        g.lineWidth = 1;
-        g.beginPath();
-        g.arc(m.x, m.y, mr, 0, Math.PI * 2);
-        g.fill();
-        g.stroke();
-        if (mr > 5) {
-          g.fillStyle = `rgba(${c.mind},${mA})`;
-          g.beginPath();
-          g.arc(m.x, m.y + mr * 0.92, 1.8, 0, Math.PI * 2);
-          g.fill();
-        }
-        label(mr > 5 ? "the Moon · south-pole stations" : "the Moon", m.x + mr, m.y, c.muted, mA);
-      }
-
-      // Spare matter in orbit, circling.
-      for (const j of junk) {
-        const r = j.r * k;
-        const a = visible(r - er, 1.5, R * 3);
-        if (a <= 0) continue;
-        const ang = j.a + t * j.w * (EARTH_R / j.r) ** 1.5;
-        g.fillStyle = `rgba(${c.ink},${0.55 * a})`;
-        g.fillRect(cx + r * Math.cos(ang), cy + r * Math.sin(ang), 1.2, 1.2);
-      }
-
-      // Lift: rockets climbing from the ground, a few at a time.
-      if (er > 30) {
-        for (let i = 0; i < 4; i++) {
-          const phase = (t * 0.5 + i / 4) % 1;
-          const a = -2.3 + i * 0.5 + Math.sin(i * 7) * 0.2;
-          const r0 = er;
-          const r1 = er + EARTH_R * 0.18 * k * phase;
-          g.strokeStyle = `rgba(${c.lamp},${0.7 * (1 - phase)})`;
-          g.lineWidth = 1;
-          g.beginPath();
-          g.moveTo(cx + r0 * Math.cos(a), cy + r0 * Math.sin(a));
-          g.lineTo(cx + r1 * Math.cos(a + phase * 0.25), cy + r1 * Math.sin(a + phase * 0.25));
-          g.stroke();
-        }
-      }
-
-      // Earth: its lights while it is large, a blue point when it is not.
-      if (er > 4) {
-        g.fillStyle = c.paper;
-        g.beginPath();
-        g.arc(cx, cy, er, 0, Math.PI * 2);
-        g.fill();
-        const air = g.createRadialGradient(cx, cy, er * 0.96, cx, cy, er * 1.1);
-        air.addColorStop(0, `rgba(${c.mind},0.28)`);
-        air.addColorStop(1, `rgba(${c.mind},0)`);
-        g.fillStyle = air;
-        g.beginPath();
-        g.arc(cx, cy, er * 1.1, 0, Math.PI * 2);
-        g.fill();
-        g.strokeStyle = `rgba(${c.ink},0.5)`;
-        g.lineWidth = 1;
-        g.beginPath();
-        g.arc(cx, cy, er, 0, Math.PI * 2);
-        g.stroke();
-        g.globalCompositeOperation = c.glow;
-        for (const [lat, lon, b] of lights) {
-          const p = (lat * Math.PI) / 180;
-          const l = ((lon - lon0 - t * 2) * Math.PI) / 180;
-          const cosc = Math.sin(tilt) * Math.sin(p) + Math.cos(tilt) * Math.cos(p) * Math.cos(l);
-          if (cosc <= 0.02) continue;
-          const x = cx + er * Math.cos(p) * Math.sin(l);
-          const y = cy - er * (Math.cos(tilt) * Math.sin(p) - Math.sin(tilt) * Math.cos(p) * Math.cos(l));
-          const size = (1.4 + b) * (er / 160);
-          g.globalAlpha = show * Math.min(1, cosc * 2.2) * (0.35 + b * 0.08);
-          g.drawImage(glow(c.lamp), x - size, y - size, size * 2, size * 2);
-        }
-        g.globalAlpha = show;
-        g.globalCompositeOperation = "source-over";
-      }
-      g.fillStyle = `rgba(${c.mind},1)`;
-      g.beginPath();
-      g.arc(cx, cy, er > 4 ? 0 : 2.6, 0, Math.PI * 2);
-      g.fill();
-      if (er <= 4) label("Earth", cx, cy, c.mind);
-
-      // The scale: the view's radius, in kilometers and then in light-time.
-      g.globalAlpha = show;
-      g.strokeStyle = `rgba(${c.muted},0.8)`;
-      g.lineWidth = 1;
-      g.beginPath();
-      g.moveTo(cx, h - 10);
-      g.lineTo(cx + R, h - 10);
-      g.moveTo(cx, h - 13);
-      g.lineTo(cx, h - 7);
-      g.moveTo(cx + R, h - 13);
-      g.lineTo(cx + R, h - 7);
-      g.stroke();
-      g.font = "9px var(--font-plex-mono), monospace";
-      g.textAlign = "center";
-      g.fillStyle = `rgba(${c.muted},1)`;
-      g.fillText(reach(10 ** z), cx + R / 2, h - 15);
-      g.globalAlpha = 1;
-    };
-
-    t0 = performance.now();
-    gsap.ticker.add(draw);
-    return () => {
-      gsap.ticker.remove(draw);
-      ro.disconnect();
-    };
-  }, [ink, lights, zoom]);
+function Flight({ dials, onReady }: { dials: Dials; onReady(flight: number): void }) {
+  const names = useRef<Record<string, HTMLSpanElement | null>>({});
+  const bar = useRef<HTMLDivElement>(null);
+  const span = useRef<HTMLSpanElement>(null);
+  // Each name sits beside its place, on the side away from the edge, and shows while its place is in view.
+  const onMarks = useCallback((marks: Mark[]) => {
+    for (const { id, x, y, a } of marks) {
+      const n = names.current[id];
+      if (!n) continue;
+      const right = x > (n.parentElement?.clientWidth ?? 0) * 0.62;
+      n.style.transform = `translate(${x + (right ? -8 : 8)}px, ${y}px) translate(${right ? "-100%" : "0"}, -50%)`;
+      n.style.opacity = String(a);
+    }
+  }, []);
+  // The scale bar spans half the view's short side.
+  const onScale = useCallback((kmPerPx: number, w: number, h: number) => {
+    const px = Math.min(w, h) * 0.46;
+    if (bar.current) bar.current.style.width = `${px}px`;
+    if (span.current) span.current.textContent = reach(px * kmPerPx);
+  }, []);
 
   return (
-    <canvas
-      ref={canvas}
-      data-m="flight"
-      aria-hidden
-      className={`block h-[min(48vh,400px)] w-full shrink-0 sm:h-[min(48vh,520px)] ${FILL}`}
-    />
+    <SkyArt
+      mode="inherit"
+      dials={dials}
+      onReady={onReady}
+      onMarks={onMarks}
+      onScale={onScale}
+      className={`relative block h-[min(48vh,400px)] w-full shrink-0 sm:h-[min(48vh,520px)] ${FILL}`}
+    >
+      {Object.entries(NAMES).map(([id, name]) => (
+        <span
+          key={id}
+          ref={(n) => {
+            names.current[id] = n;
+          }}
+          className={`pointer-events-none absolute top-0 left-0 font-mono text-[9px] whitespace-nowrap opacity-0 ${id === "earth" ? "text-you" : "text-muted"}`}
+        >
+          {name}
+        </span>
+      ))}
+      <div className="pointer-events-none absolute bottom-5 left-1/2 flex flex-col items-start gap-1 wide:bottom-8">
+        <span ref={span} className="font-mono text-[9px] text-muted" />
+        <div ref={bar} className="h-1.5 border-x border-b border-muted/80" />
+      </div>
+    </SkyArt>
   );
 }
 
@@ -345,35 +138,38 @@ function Stop({ kick, big, line }: { kick: string; big: string; line: string }) 
 export function Inherit({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
   const { save } = useGame();
   const root = useRef<HTMLDivElement>(null);
-  const zoom = useRef({ z: STOPS[0], show: 0 });
-  const [lights, setLights] = useState<Light[]>();
+  // One object for the whole screen: the intro tweens the scale, and the scene reads it every frame.
+  const [dials] = useState<Dials>(() => ({ zoom: STOPS[0] }));
+  const [shown, setShown] = useState(false);
+  // The camera's flight to this screen: the story starts as it arrives.
+  const lead = useRef(0);
+  const onReady = useCallback((flight: number) => {
+    lead.current = flight;
+    setShown(true);
+  }, []);
   const [past, setPast] = useState<EarthPast>();
   const seed = save?.seed;
 
-  useEffect(() => {
-    import("@/lib/game/lights.json").then((m) => setLights(m.default as Light[]));
-  }, []);
   useEffect(() => {
     if (seed === undefined) return;
     fetch(`/api/earth?seed=${seed}`)
       .then((r) => (r.ok ? r.json() : undefined))
       .then(setPast);
   }, [seed]);
-  const ready = !!lights && !!past;
+  const ready = shown && !!past;
 
   const { leave, hurry } = useStage(
     root,
     (q, tl) => {
-      const zm = zoom.current;
+      tl.delay(Math.max(0, lead.current - 0.6));
       const caps = q('[data-m="cap"]');
       tl.fromTo(q('[data-m="kick"]'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.5 }, 0)
-        .set(q('[data-m="flight"]'), { autoAlpha: 1 }, 0)
-        .to(zm, { show: 1, duration: 1.2 }, 0.1)
+        .fromTo(q('[data-m="flight"]'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 1.2 }, 0.1)
         .fromTo(caps[0], { autoAlpha: 0, y: 10 }, { autoAlpha: 1, y: 0, duration: 0.5, ease: "power3.out" }, 0.8);
       let t = 2.6;
       STOPS.slice(1).forEach((z, i) => {
         const move = 1.1 + (z - STOPS[i]) * 0.35;
-        tl.to(zm, { z, duration: move, ease: "power2.inOut" }, t);
+        tl.to(dials, { zoom: z, duration: move, ease: "power2.inOut" }, t);
         tl.to(caps[i], { autoAlpha: 0, y: -8, duration: 0.25, ease: "power2.in" }, t + move - 0.55);
         tl.fromTo(
           caps[i + 1],
@@ -393,10 +189,10 @@ export function Inherit({ onSkip, onNext }: { onSkip(): void; onNext(): void }) 
   // Reduced motion skips the flight: the widest view, and the last stop.
   useEffect(() => {
     if (!ready || !prefersReducedMotion() || !root.current) return;
-    zoom.current = { z: STOPS[STOPS.length - 1], show: 1 };
+    Object.assign(dials, { zoom: STOPS[STOPS.length - 1] });
     const caps = root.current.querySelectorAll('[data-m="cap"]');
     caps.forEach((c, i) => gsap.set(c, { autoAlpha: i === caps.length - 1 ? 1 : 0 }));
-  }, [ready]);
+  }, [ready, dials]);
 
   return (
     <div
@@ -412,7 +208,7 @@ export function Inherit({ onSkip, onNext }: { onSkip(): void; onNext(): void }) 
             YEAR 0 · WHAT YOU INHERIT
           </span>
         }
-        art={ready && <Flight zoom={zoom} lights={lights} />}
+        art={<Flight dials={dials} onReady={onReady} />}
       >
         <div className="mt-2 grid min-h-[104px] wide:mt-4">
           {past && stops(past).map((s) => <Stop key={s.kick} {...s} />)}

@@ -3,46 +3,8 @@
 /* A screen wider than it is tall, from a phone on its side to a desktop. The art and the words stand side by side. */
 @custom-variant wide (@media (orientation: landscape) and (min-width: 40rem));
 
-/* Colors from explorations/v2-mocks/base.css: ink on paper, chalk on slate. */
+/* Colors from explorations/v2-mocks/base.css: chalk on slate. The game is always dark. */
 :root {
-  --page: #dcd8ce;
-  --page-ink2: #4a4843;
-  --frame: #b9b4a8;
-  --paper: #fbfaf7;
-  --ink: #171716;
-  --muted: #6b6860;
-  --faint: #cfcbc0;
-  --panel: #f1efe8;
-  --track: #e0dcd1;
-  --fill2: #4a4843;
-  --rowline: #dcd8ce;
-  --you: #1f7a96;
-  --other: #a8620f;
-  --shadow: rgba(0, 0, 0, 0.12);
-  color-scheme: light;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --page: #0b0c0d;
-    --page-ink2: #a9a59c;
-    --frame: #2a2b2e;
-    --paper: #121314;
-    --ink: #e6e3db;
-    --muted: #9c988f;
-    --faint: #34363a;
-    --panel: #17181a;
-    --track: #2a2b2e;
-    --fill2: #bdb9af;
-    --rowline: #26282b;
-    --you: #5bb8d6;
-    --other: #e0a24a;
-    --shadow: rgba(0, 0, 0, 0.5);
-    color-scheme: dark;
-  }
-}
-
-:root[data-theme="dark"] {
   --page: #0b0c0d;
   --page-ink2: #a9a59c;
   --frame: #2a2b2e;
