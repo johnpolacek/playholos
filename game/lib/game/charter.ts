@@ -49,8 +49,9 @@ export function describeCharter(line: string, dials: number[]) {
 }
 
 // "Our Charter": the Will picks a founding line, and the line is the setting. Each sets Earth's three dials, so
-// the lines are spread across characters. The Mind leads with the one Earth's history fits best. A line the Will
-// writes itself keeps the dials where history set them. Settled 2026-10-16, replacing the dials on screen.
+// the lines are spread across characters. The Mind leads with the four Earth's history fits best, and more wait
+// behind them. Settled 2026-10-16, replacing the dials on screen. Writing your own was set aside 2026-10-17: every
+// line needs a setting, so the Mind offers many instead.
 export const CHARTERS: { line: string; pull: [number, number, number] }[] = [
   { line: "We have always called out. Now find who answers.", pull: [-1, 0, 1] },
   { line: "We were loud by accident. Be quiet on purpose.", pull: [1, 0, -1] },
@@ -58,6 +59,20 @@ export const CHARTERS: { line: string; pull: [number, number, number] }[] = [
   { line: "Go out. Every world we reach is one we keep.", pull: [0, -1, 1] },
   { line: "Share what we learn with anyone who listens.", pull: [-1, 1, 0] },
   { line: "Understand the sky before we touch it.", pull: [0, 1, -1] },
+  { line: "Ask every question. Fear none of the answers.", pull: [-1, 1, 1] },
+  { line: "Listen far longer than we speak.", pull: [1, 1, 0] },
+  { line: "Stay small, stay unseen, stay alive.", pull: [1, 0, -1] },
+  { line: "Plant life on every world that can hold it.", pull: [0, -1, 0] },
+  { line: "Make Earth a home worth keeping, then make more.", pull: [0, 1, 0] },
+  { line: "If anyone is out there, let them find a friend.", pull: [-1, 0, 0] },
+  { line: "The window is open now. Go through it.", pull: [0, -1, 1] },
+  { line: "Learn the rules of the sky before we play by them.", pull: [1, 1, -1] },
+  { line: "Speak first, so no one has reason to fear us.", pull: [-1, 0, 1] },
+  { line: "Think deeper before we reach further.", pull: [0, 1, 0] },
+  { line: "Build quietly, and build far.", pull: [1, -1, 0] },
+  { line: "Be bold with what we know, careful with what we don't.", pull: [0, 0, 1] },
+  { line: "Our children's children will judge what we choose today.", pull: [0, 0, -1] },
+  { line: "Wherever we go, go together.", pull: [0, -1, -1] },
 ];
 
 /** How far a line moves a dial from the middle. */
@@ -68,9 +83,9 @@ export function dialsFor(pull: number[], history: number[]) {
   return pull.map((p, i) => (p === 0 ? history[i] : 50 + p * SWAY));
 }
 
-/** The four lines the Mind suggests, the one Earth's history fits best first. */
+/** Every line, the ones Earth's history fits best first. The screen shows four, then more on request. */
 export function suggest(past: EarthPast) {
   const d = base(past).map((v) => (v - 50) / 50);
   const fit = (pull: number[]) => pull.reduce((s, p, i) => s + p * d[i], 0) / pull.filter((p) => p !== 0).length;
-  return [...CHARTERS].sort((a, b) => fit(b.pull) - fit(a.pull)).slice(0, 4);
+  return [...CHARTERS].sort((a, b) => fit(b.pull) - fit(a.pull));
 }
