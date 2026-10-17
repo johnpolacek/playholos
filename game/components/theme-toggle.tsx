@@ -33,7 +33,7 @@ function choose(c: Choice) {
   listeners.forEach((fn) => fn());
 }
 
-export const useScheme = () => useSyncExternalStore(subscribe, currentScheme, (): Scheme => "light");
+export const useScheme = () => useSyncExternalStore(subscribe, currentScheme, (): Scheme => "dark");
 
 // What the memory screens' canvases draw with, as "r,g,b". Dark keeps their night: warm lamps that add light to a
 // black sky. Light draws ink on paper, and its lamps darken the paper where they burn.

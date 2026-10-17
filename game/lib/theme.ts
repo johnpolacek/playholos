@@ -1,4 +1,4 @@
-// The theme follows the phone until the player picks Light or Dark. The pick lives in this browser. The root
+// The game is dark until the player picks Light, or System to follow the phone. The pick lives in this browser. The root
 // layout's script paints it before the first frame, so a reload never flashes the other theme.
 export type Choice = "system" | "light" | "dark";
 export type Scheme = "light" | "dark";
@@ -6,11 +6,12 @@ export type Scheme = "light" | "dark";
 const KEY = "holos:theme";
 
 /**
- * Sets the page's theme, and the browser's chrome to match. Light or Dark set `data-theme`, anything else clears
- * it. Self-contained, since the root layout inlines it as a script.
+ * Sets the page's theme, and the browser's chrome to match. Light or Dark set `data-theme`, System clears it,
+ * and no pick yet is Dark. Self-contained, since the root layout inlines it as a script.
  */
-export function paint(choice: string | null) {
-  const chosen = choice === "light" || choice === "dark";
+export function paint(pick: string | null) {
+  const choice = pick === "light" || pick === "system" ? pick : "dark";
+  const chosen = choice !== "system";
   if (chosen) document.documentElement.setAttribute("data-theme", choice);
   else document.documentElement.removeAttribute("data-theme");
   // The chrome's color is --paper: the chosen theme's, or both by media for the phone's. Only this sets
@@ -30,15 +31,14 @@ export const themeScript = `(function(){var c;try{c=localStorage.getItem(${JSON.
 export function loadChoice(): Choice {
   try {
     const c = localStorage.getItem(KEY);
-    return c === "light" || c === "dark" ? c : "system";
+    return c === "light" || c === "system" ? c : "dark";
   } catch {
-    return "system";
+    return "dark";
   }
 }
 
 export function saveChoice(choice: Choice) {
   try {
-    if (choice === "system") localStorage.removeItem(KEY);
-    else localStorage.setItem(KEY, choice);
+    localStorage.setItem(KEY, choice);
   } catch {}
 }
