@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* A screen wider than it is tall, from a phone on its side to a desktop. The art and the words stand side by side. */
+@custom-variant wide (@media (orientation: landscape) and (min-width: 40rem));
+
 /* Colors from explorations/v2-mocks/base.css: ink on paper, chalk on slate. */
 :root {
   --page: #dcd8ce;

@@ -21,26 +21,30 @@ export function Hud() {
   const { save, year } = useGame();
   const { energy, matter, compute } = BEFORE_YEAR_0;
   const y = year === null ? null : tenths(year);
+  // Tall: Earth and the Year, then the meters below. Wide: one band, the meters between Earth and the Year.
   return (
-    <header data-shell="top" className="flex shrink-0 flex-col gap-1.5 border-b border-faint px-4 pt-4 pb-3">
-      <div className="flex items-baseline justify-between">
-        <span className="flex items-center gap-2 text-xl font-semibold">
-          <i className="size-2.5 rounded-full bg-you" />
-          Earth
-        </span>
-        <span className="text-[15px] font-medium">{!save ? "" : y === null ? "Before Year 0" : `Year ${y}`}</span>
-      </div>
-      <div className="flex justify-between text-xs text-muted">
-        <span>Sol</span>
+    <header
+      data-shell="top"
+      className="grid shrink-0 grid-cols-[1fr_auto] items-baseline gap-x-4 gap-y-1.5 border-b border-faint px-4 pt-4 pb-3 wide:col-span-2 wide:grid-cols-[auto_1fr_auto] wide:gap-x-10 wide:px-6 wide:py-3"
+    >
+      <span className="flex items-center gap-2 text-xl font-semibold">
+        <i className="size-2.5 rounded-full bg-you" />
+        Earth
+      </span>
+      <span className="text-right text-[15px] font-medium wide:col-start-3">
+        {!save ? "" : y === null ? "Before Year 0" : `Year ${y}`}
+      </span>
+      <span className="text-xs text-muted">Sol</span>
+      <span className="text-right text-xs text-muted wide:col-start-3">
         {!save ? null : y === null ? (
-          <span>The clock starts when you begin</span>
+          "The clock starts when you begin"
         ) : (
-          <span>
+          <>
             {(YEAR_0 + y).toFixed(1)} · 1 Year = <span className="font-mono tabular-nums">{realTime(1)}</span>
-          </span>
+          </>
         )}
-      </div>
-      <div className="mt-1 grid grid-cols-3 gap-2.5">
+      </span>
+      <div className="col-span-2 mt-1 grid grid-cols-3 gap-2.5 wide:col-span-1 wide:col-start-2 wide:row-span-2 wide:row-start-1 wide:mt-0 wide:w-full wide:max-w-[520px] wide:self-center wide:justify-self-center">
         <Meter label="ENERGY" pct={energy} />
         <span className="flex flex-col gap-[3px] text-[10px] tracking-[.08em] text-muted">
           MATTER

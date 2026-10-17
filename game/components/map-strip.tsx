@@ -56,8 +56,12 @@ export function MapStrip() {
     setStage(next);
   }
 
+  // Tall, the strip opens wider at its handle. Wide, the map fills the left of the screen, and needs no handle.
   return (
-    <div data-shell="map" className={`relative shrink-0 overflow-hidden border-b border-faint bg-paper transition-[height] duration-300 ${tall ? "h-[72%]" : "h-[45%]"}`}>
+    <div
+      data-shell="map"
+      className={`relative shrink-0 overflow-hidden border-b border-faint bg-paper transition-[height] duration-300 wide:col-start-1 wide:row-span-2 wide:row-start-2 wide:h-auto wide:border-b-0 ${tall ? "h-[72%]" : "h-[45%]"}`}
+    >
       <div ref={view} className="absolute inset-0" />
       <span className="pointer-events-none absolute top-2 left-2.5 rounded-[9px] border border-faint bg-paper px-[7px] py-0.5 font-mono text-[9.5px] tracking-[.06em]">
         {STAGES[stage].name}
@@ -72,7 +76,7 @@ export function MapStrip() {
         onClick={() => setTall(!tall)}
         aria-label={tall ? "Show less of the map" : "Show more of the map"}
         aria-expanded={tall}
-        className="absolute bottom-0 left-1/2 flex h-5 w-16 -translate-x-1/2 items-end justify-center pb-[5px]"
+        className="absolute bottom-0 left-1/2 flex h-5 w-16 -translate-x-1/2 items-end justify-center pb-[5px] wide:hidden"
       >
         <span className="h-1 w-9 rounded-sm bg-faint" />
       </button>

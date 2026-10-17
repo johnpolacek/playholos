@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useGame } from "@/components/game-provider";
 import { history, type EarthPast, type Moment } from "@/lib/game/past";
-import { ScreenBar } from "@/components/screen-bar";
+import { FILL, Spread } from "@/components/spread";
 import { originsSources } from "@/lib/game/sources";
 import { gsap, prefersReducedMotion, rise, riseFrom, useStage } from "@/lib/motion";
 
@@ -138,73 +138,89 @@ export function Origins({ onSkip, onNext }: { onSkip(): void; onNext(): void }) 
       ref={root}
       onPointerDown={hurry}
       style={told ? undefined : { visibility: "hidden" }}
-      className="flex grow flex-col overflow-y-auto bg-paper px-5"
+      className="flex grow flex-col overflow-y-auto bg-paper px-5 wide:px-10"
     >
-      <ScreenBar sources={past ? originsSources(past) : []} />
-      <span data-m="kick" className="font-mono text-[10.5px] tracking-[.1em] text-muted">
-        BEFORE YEAR 0 · WHERE WE COME FROM
-      </span>
-      <h1 data-m="lead" className="mt-1.5 text-[22px] font-semibold">
-        4.6 billion years to this morning
-      </h1>
-      <svg
-        viewBox="0 0 390 336"
-        aria-hidden
-        className="-mx-5 mt-1 block h-[min(44vh,360px)] w-[calc(100%+40px)] shrink-0 font-mono"
-      >
-        <path d={SPIRAL.d} fill="none" strokeWidth=".7" opacity=".18" className="stroke-ink" />
-        <path data-m="line" d={SPIRAL.d} fill="none" strokeWidth="1.2" strokeLinecap="round" className="stroke-ink" />
-        {moments.map((m) => {
-          const p = at(place(m.ago));
-          return m === NOW ? (
-            <g key="now" data-m="dot" transform={`translate(${p.x} ${p.y})`} />
-          ) : (
-            <circle
-              key={m.what}
-              data-m="dot"
-              cx={p.x}
-              cy={p.y}
-              r={m.dial ? 3.6 : 2.8}
+      <Spread
+        sources={past ? originsSources(past) : []}
+        head={
+          <>
+            <span data-m="kick" className="font-mono text-[10.5px] tracking-[.1em] text-muted">
+              BEFORE YEAR 0 · WHERE WE COME FROM
+            </span>
+            <h1 data-m="lead" className="mt-1.5 text-[22px] font-semibold wide:text-[30px] wide:leading-tight">
+              4.6 billion years to this morning
+            </h1>
+          </>
+        }
+        art={
+          <svg
+            viewBox="0 0 390 336"
+            aria-hidden
+            className={`-mx-5 mt-1 block h-[min(44vh,360px)] w-[calc(100%+40px)] shrink-0 font-mono sm:h-[min(44vh,480px)] ${FILL}`}
+          >
+            <path d={SPIRAL.d} fill="none" strokeWidth=".7" opacity=".18" className="stroke-ink" />
+            <path
+              data-m="line"
+              d={SPIRAL.d}
+              fill="none"
               strokeWidth="1.2"
-              className={m.dial ? "fill-you stroke-paper" : "fill-paper stroke-ink"}
-              style={{ transformOrigin: `${p.x}px ${p.y}px` }}
+              strokeLinecap="round"
+              className="stroke-ink"
             />
-          );
-        })}
-        <g data-m="earth">
-          <circle cx={CX} cy={CY} r="16" opacity=".18" className="fill-you" />
-          <circle cx={CX} cy={CY} r="7" strokeWidth="1.3" className="fill-paper stroke-you" />
-        </g>
-        <g data-m="head">
-          <circle r="9" opacity=".22" className="fill-you" />
-          <circle r="3.2" className="fill-you" />
-        </g>
-      </svg>
-      <span data-m="clock" ref={clock} className="mt-1 font-mono text-[12px] tracking-[.04em] text-muted">
-        4.6 billion years ago
-      </span>
-      <div className="mt-1.5 grid min-h-[110px]">
-        {told?.moments.map((m) => (
-          <Caption key={m.what} m={m} />
-        ))}
-        <Caption m={NOW} now />
-      </div>
-      <div className="mt-auto grid shrink-0 grid-cols-[1fr_1.4fr] gap-2 pt-5 pb-4">
-        <button
-          data-m="act"
-          onClick={() => leave(onSkip)}
-          className="h-[46px] rounded-full text-[15px] font-medium"
-        >
-          Skip people
-        </button>
-        <button
-          data-m="act"
-          onClick={() => leave(onNext)}
-          className="h-[46px] rounded-full bg-ink text-[15px] font-medium text-paper"
-        >
-          Who they are
-        </button>
-      </div>
+            {moments.map((m) => {
+              const p = at(place(m.ago));
+              return m === NOW ? (
+                <g key="now" data-m="dot" transform={`translate(${p.x} ${p.y})`} />
+              ) : (
+                <circle
+                  key={m.what}
+                  data-m="dot"
+                  cx={p.x}
+                  cy={p.y}
+                  r={m.dial ? 3.6 : 2.8}
+                  strokeWidth="1.2"
+                  className={m.dial ? "fill-you stroke-paper" : "fill-paper stroke-ink"}
+                  style={{ transformOrigin: `${p.x}px ${p.y}px` }}
+                />
+              );
+            })}
+            <g data-m="earth">
+              <circle cx={CX} cy={CY} r="16" opacity=".18" className="fill-you" />
+              <circle cx={CX} cy={CY} r="7" strokeWidth="1.3" className="fill-paper stroke-you" />
+            </g>
+            <g data-m="head">
+              <circle r="9" opacity=".22" className="fill-you" />
+              <circle r="3.2" className="fill-you" />
+            </g>
+          </svg>
+        }
+      >
+        <span data-m="clock" ref={clock} className="mt-1 font-mono text-[12px] tracking-[.04em] text-muted wide:mt-5">
+          4.6 billion years ago
+        </span>
+        <div className="mt-1.5 grid min-h-[110px]">
+          {told?.moments.map((m) => (
+            <Caption key={m.what} m={m} />
+          ))}
+          <Caption m={NOW} now />
+        </div>
+        <div className="mt-auto grid shrink-0 grid-cols-[1fr_1.4fr] gap-2 pt-5 pb-4 wide:pt-8">
+          <button
+            data-m="act"
+            onClick={() => leave(onSkip)}
+            className="h-[46px] rounded-full text-[15px] font-medium"
+          >
+            Skip people
+          </button>
+          <button
+            data-m="act"
+            onClick={() => leave(onNext)}
+            className="h-[46px] rounded-full bg-ink text-[15px] font-medium text-paper"
+          >
+            Who they are
+          </button>
+        </div>
+      </Spread>
     </div>
   );
 }

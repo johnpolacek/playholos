@@ -14,7 +14,7 @@ const TABS = [
 export function Rail() {
   const path = usePathname();
   return (
-    <nav data-shell="rail" aria-label="Main" className="grid h-16 shrink-0 grid-cols-5 border-t border-faint bg-paper">
+    <nav data-shell="rail" aria-label="Main" className="grid h-16 shrink-0 grid-cols-5 border-t border-faint bg-paper wide:col-start-2 wide:row-start-3 wide:border-l">
       {TABS.map(({ label, href }) => {
         const on = path === href;
         return (

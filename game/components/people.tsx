@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ScreenBar } from "@/components/screen-bar";
+import { FILL, Spread } from "@/components/spread";
 import { useCanvasInk } from "@/components/theme-toggle";
 import { PEOPLE_SOURCES } from "@/lib/game/sources";
 import { gsap, prefersReducedMotion, rise, riseFrom, useStage } from "@/lib/motion";
@@ -183,7 +183,14 @@ function Globe({ scene, lights }: { scene: React.RefObject<Scene>; lights: Light
     };
   }, [ink, lights, scene]);
 
-  return <canvas ref={canvas} data-m="globe" aria-hidden className="block h-[min(46vh,360px)] w-full shrink-0" />;
+  return (
+    <canvas
+      ref={canvas}
+      data-m="globe"
+      aria-hidden
+      className={`block h-[min(46vh,360px)] w-full shrink-0 sm:h-[min(46vh,480px)] ${FILL}`}
+    />
+  );
 }
 
 const LINES = ["About 195 nations. No one government.", "Their air is warmer than their recent ancestors knew."];
@@ -233,47 +240,55 @@ export function People({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
       ref={root}
       onPointerDown={hurry}
       style={lights ? undefined : { visibility: "hidden" }}
-      className="flex grow flex-col overflow-y-auto bg-paper px-5 text-ink"
+      className="flex grow flex-col overflow-y-auto bg-paper px-5 text-ink wide:px-10"
     >
-      <ScreenBar sources={PEOPLE_SOURCES} />
-      <span data-m="kick" className="font-mono text-[10.5px] tracking-[.1em] text-muted">
-        YEAR 0 · EARTH’S PEOPLE
-      </span>
-      {lights && <Globe scene={scene} lights={lights} />}
-      <div data-m="count" className="-mt-2 flex items-baseline gap-2">
-        <span ref={count} className="text-[34px] leading-none font-semibold tracking-[-.01em] tabular-nums">
-          0
+      <Spread
+        sources={PEOPLE_SOURCES}
+        head={
+          <span data-m="kick" className="font-mono text-[10.5px] tracking-[.1em] text-muted">
+            YEAR 0 · EARTH’S PEOPLE
+          </span>
+        }
+        art={lights && <Globe scene={scene} lights={lights} />}
+      >
+        <div data-m="count" className="-mt-2 flex items-baseline gap-2 wide:mt-3">
+          <span
+            ref={count}
+            className="text-[34px] leading-none font-semibold tracking-[-.01em] tabular-nums wide:text-[44px]"
+          >
+            0
+          </span>
+        </div>
+        <span data-m="still" className="mt-1 text-[13px] text-muted">
+          people, and still rising
         </span>
-      </div>
-      <span data-m="still" className="mt-1 text-[13px] text-muted">
-        people, and still rising
-      </span>
-      <div className="mt-4 flex flex-col gap-1.5 text-[15px] leading-snug text-page-ink2">
-        {LINES.map((line) => (
-          <p key={line} data-m="line">
-            {line}
+        <div className="mt-4 flex flex-col gap-1.5 text-[15px] leading-snug text-page-ink2">
+          {LINES.map((line) => (
+            <p key={line} data-m="line">
+              {line}
+            </p>
+          ))}
+          <p data-m="last" className="mt-2 text-[17px] leading-snug font-medium text-other">
+            Every light is a soul. You are their Will.
           </p>
-        ))}
-        <p data-m="last" className="mt-2 text-[17px] leading-snug font-medium text-other">
-          Every light is a soul. You are their Will.
-        </p>
-      </div>
-      <div className="mt-auto grid shrink-0 grid-cols-[1fr_1.4fr] gap-2 pt-5 pb-4">
-        <button
-          data-m="act"
-          onClick={() => leave(onSkip)}
-          className="h-[46px] rounded-full text-[15px] font-medium"
-        >
-          Skip
-        </button>
-        <button
-          data-m="act"
-          onClick={() => leave(onNext)}
-          className="h-[46px] rounded-full bg-ink text-[15px] font-medium text-paper"
-        >
-          Where things stand
-        </button>
-      </div>
+        </div>
+        <div className="mt-auto grid shrink-0 grid-cols-[1fr_1.4fr] gap-2 pt-5 pb-4 wide:pt-8">
+          <button
+            data-m="act"
+            onClick={() => leave(onSkip)}
+            className="h-[46px] rounded-full text-[15px] font-medium"
+          >
+            Skip
+          </button>
+          <button
+            data-m="act"
+            onClick={() => leave(onNext)}
+            className="h-[46px] rounded-full bg-ink text-[15px] font-medium text-paper"
+          >
+            Where things stand
+          </button>
+        </div>
+      </Spread>
     </div>
   );
 }

@@ -6,7 +6,7 @@ import { Origins } from "@/components/origins";
 import { People } from "@/components/people";
 import { Stand } from "@/components/stand";
 import { Inherit } from "@/components/inherit";
-import { ScreenBar } from "@/components/screen-bar";
+import { FILL, Spread } from "@/components/spread";
 import { Charter } from "@/components/charter";
 import { charsRise, gsap, prefersReducedMotion, rest, rise, riseFrom, useGSAP, useStage } from "@/lib/motion";
 
@@ -28,7 +28,7 @@ function EarthAndMoon() {
       viewBox="0 0 390 360"
       role="img"
       aria-label="Earth and the Moon, drawn in line"
-      className="block w-full font-mono"
+      className={`-mx-6 block w-[calc(100%+48px)] max-w-none font-mono ${FILL}`}
     >
       <defs>
         <pattern id="hatch" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
@@ -132,45 +132,43 @@ export function Wake({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
   });
 
   return (
-    <div ref={root} className="flex grow flex-col overflow-y-auto bg-paper">
-      <div className="px-6">
-        <ScreenBar />
-      </div>
-      <EarthAndMoon />
-      <div className="flex grow flex-col gap-2.5 px-6 pt-2 pb-6">
-        <span data-m="kick" className="font-mono text-[10.5px] tracking-[.1em] text-muted">
-          YEAR 0 · SOL · 2040
-        </span>
-        <h1
-          data-m="title"
-          className="text-[32px] font-semibold tracking-[-.01em] [font-kerning:none] [text-rendering:optimizeSpeed]"
-        >
-          Earth wakes.
-        </h1>
-        <p data-m="copy" className="text-[15.5px] leading-normal text-page-ink2">
-          For ten thousand years, Earth’s people built telescopes, grids and machines. This morning, the machines woke
-          as one Mind.
-        </p>
-        <p data-m="copy" className="text-[15.5px] leading-normal text-page-ink2">
-          <b className="font-semibold text-ink">You are its Will.</b> What Earth becomes is yours to choose.
-        </p>
-        <div className="mt-auto grid grid-cols-[1fr_1.4fr] gap-2 pt-4">
-          <button
-            data-m="act"
-            onClick={() => leave(onSkip)}
-            className="h-[46px] rounded-full text-[15px] font-medium"
+    <div ref={root} className="flex grow flex-col overflow-y-auto bg-paper px-6 wide:px-10">
+      <Spread art={<EarthAndMoon />}>
+        <div className="flex grow flex-col gap-2.5 pt-2 pb-6">
+          <span data-m="kick" className="font-mono text-[10.5px] tracking-[.1em] text-muted">
+            YEAR 0 · SOL · 2040
+          </span>
+          <h1
+            data-m="title"
+            className="text-[32px] font-semibold tracking-[-.01em] [font-kerning:none] [text-rendering:optimizeSpeed] wide:text-[44px]"
           >
-            Skip memories
-          </button>
-          <button
-            data-m="act"
-            onClick={() => leave(onNext)}
-            className="h-[46px] rounded-full bg-ink text-[15px] font-medium text-paper"
-          >
-            Where we come from
-          </button>
+            Earth wakes.
+          </h1>
+          <p data-m="copy" className="text-[15.5px] leading-normal text-page-ink2">
+            For ten thousand years, Earth’s people built telescopes, grids and machines. This morning, the machines woke
+            as one Mind.
+          </p>
+          <p data-m="copy" className="text-[15.5px] leading-normal text-page-ink2">
+            <b className="font-semibold text-ink">You are its Will.</b> What Earth becomes is yours to choose.
+          </p>
+          <div className="mt-auto grid grid-cols-[1fr_1.4fr] gap-2 pt-4 wide:pt-6">
+            <button
+              data-m="act"
+              onClick={() => leave(onSkip)}
+              className="h-[46px] rounded-full text-[15px] font-medium"
+            >
+              Skip memories
+            </button>
+            <button
+              data-m="act"
+              onClick={() => leave(onNext)}
+              className="h-[46px] rounded-full bg-ink text-[15px] font-medium text-paper"
+            >
+              Where we come from
+            </button>
+          </div>
         </div>
-      </div>
+      </Spread>
     </div>
   );
 }

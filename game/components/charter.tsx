@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useGame } from "@/components/game-provider";
-import { ScreenBar } from "@/components/screen-bar";
+import { Spread } from "@/components/spread";
 import { ENDS, HISTORY, NOTCH, WHY, base, kicks, lean, offers, reply } from "@/lib/game/charter";
 import type { EarthPast } from "@/lib/game/past";
 import { gsap, prefersReducedMotion, rise, riseFrom, useStage } from "@/lib/motion";
@@ -52,7 +52,11 @@ function Gauge({
 
   return (
     <div className="flex flex-col items-center">
-      <svg viewBox="0 0 110 62" className="w-full max-w-[120px]" aria-label={`${a} or ${b}: ${lean(dial, value)}`}>
+      <svg
+        viewBox="0 0 110 62"
+        className="w-full max-w-[120px] wide:lg:max-w-[200px]"
+        aria-label={`${a} or ${b}: ${lean(dial, value)}`}
+      >
         <path data-m="arc" d={`M13 52 A${R} ${R} 0 0 1 97 52`} fill="none" strokeWidth="1.2" className="stroke-ink" />
         {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((i) => {
           const p = tip(i * 12.5, R);
@@ -85,17 +89,26 @@ function Gauge({
           <circle cx="55" cy="52" r="3" className="fill-ink" />
         </g>
       </svg>
-      <div data-m="ends" className="-mt-1 flex w-full max-w-[120px] justify-between font-mono text-[9px] text-muted">
+      <div
+        data-m="ends"
+        className="-mt-1 flex w-full max-w-[120px] justify-between font-mono text-[9px] text-muted wide:lg:max-w-[200px] wide:lg:text-[10.5px]"
+      >
         <span>{a}</span>
         <span>{b}</span>
       </div>
-      <span data-m="why" className="mt-1 min-h-[22px] text-center font-mono text-[9px] leading-tight text-muted">
+      <span
+        data-m="why"
+        className="mt-1 min-h-[22px] text-center font-mono text-[9px] leading-tight text-muted wide:mt-2 wide:lg:text-[10.5px]"
+      >
         {WHY[dial]}
       </span>
-      <span data-m="kick-tag" className="mt-1 min-h-[14px] text-center font-mono text-[9px] text-you">
+      <span
+        data-m="kick-tag"
+        className="mt-1 min-h-[14px] text-center font-mono text-[9px] text-you wide:lg:text-[10.5px]"
+      >
         {kick}
       </span>
-      <div data-m="nudge" className="mt-1 flex items-center gap-1">
+      <div data-m="nudge" className="mt-1 flex items-center gap-1 wide:mt-2 wide:gap-2">
         <button
           onClick={() => onNudge(nudge - 1)}
           disabled={nudge <= -1}
@@ -200,81 +213,95 @@ export function Charter({ onNext }: { onSkip(): void; onNext(): void }) {
     leave(onNext);
   }
 
+  // Wide, the dials are the art: they fill the left, and the founding lines stand beside them.
   return (
     <div
       ref={root}
       style={past ? undefined : { visibility: "hidden" }}
-      className="flex grow flex-col overflow-y-auto bg-paper px-5"
+      className="flex grow flex-col overflow-y-auto bg-paper px-5 wide:px-10"
     >
-      <ScreenBar />
-      <span data-m="kick" className="font-mono text-[10.5px] tracking-[.1em] text-muted">
-        BEFORE YEAR 0 · EARTH’S CHARTER
-      </span>
-      <h1 data-m="lead" className="mt-1.5 text-[28px] leading-tight font-semibold">
-        What is Earth for?
-      </h1>
-      <div className="mt-4 grid grid-cols-3 gap-2">
-        {[0, 1, 2].map((i) => (
-          <Gauge
-            key={i}
-            dial={i}
-            value={dials[i]}
-            history={start[i]}
-            kick={tags
-              .filter((k) => k.dial === i)
-              .map((k) => k.what)
-              .join(" · ")}
-            nudge={nudge[i]}
-            onNudge={(n) => onNudge(i, n)}
-          />
-        ))}
-      </div>
-      <p data-m="note" className="mt-3 min-h-[38px] text-[13px] leading-snug text-page-ink2">
-        {said ||
-          "History set these. Nudge each one notch if you disagree. They shape our advice, never what Earth can build."}
-      </p>
-      <span data-m="lines-head" className="mt-3 font-mono text-[10.5px] tracking-[.1em] text-muted">
-        FOUNDING LINE · PROPOSED BY THE MIND
-      </span>
-      <div className="mt-2 flex flex-col gap-2">
-        {lines.map((l, i) => (
-          <button
-            key={l}
+      <Spread
+        head={
+          <>
+            <span data-m="kick" className="font-mono text-[10.5px] tracking-[.1em] text-muted">
+              BEFORE YEAR 0 · EARTH’S CHARTER
+            </span>
+            <h1 data-m="lead" className="mt-1.5 text-[28px] leading-tight font-semibold wide:text-[36px]">
+              What is Earth for?
+            </h1>
+          </>
+        }
+        art={
+          <div className="contents wide:flex wide:w-full wide:max-w-[720px] wide:flex-col">
+            <div className="mt-4 grid grid-cols-3 gap-2 wide:mt-0 wide:lg:gap-6">
+              {[0, 1, 2].map((i) => (
+                <Gauge
+                  key={i}
+                  dial={i}
+                  value={dials[i]}
+                  history={start[i]}
+                  kick={tags
+                    .filter((k) => k.dial === i)
+                    .map((k) => k.what)
+                    .join(" · ")}
+                  nudge={nudge[i]}
+                  onNudge={(n) => onNudge(i, n)}
+                />
+              ))}
+            </div>
+            <p
+              data-m="note"
+              className="mt-3 min-h-[38px] text-[13px] leading-snug text-page-ink2 wide:mx-auto wide:mt-8 wide:max-w-[480px] wide:text-center wide:text-[15px]"
+            >
+              {said ||
+                "History set these. Nudge each one notch if you disagree. They shape our advice, never what Earth can build."}
+            </p>
+          </div>
+        }
+      >
+        <span data-m="lines-head" className="mt-3 font-mono text-[10.5px] tracking-[.1em] text-muted wide:mt-6">
+          FOUNDING LINE · PROPOSED BY THE MIND
+        </span>
+        <div className="mt-2 flex flex-col gap-2">
+          {lines.map((l, i) => (
+            <button
+              key={l}
+              data-m="line"
+              onClick={() => setPick(i)}
+              aria-pressed={pick === i}
+              className={`rounded-xl border px-3.5 py-3 text-left text-[15px] leading-snug transition-colors ${pick === i ? "border-you bg-you/10 font-medium" : "border-faint"}`}
+            >
+              “{l}”
+            </button>
+          ))}
+          <div
             data-m="line"
-            onClick={() => setPick(i)}
-            aria-pressed={pick === i}
-            className={`rounded-xl border px-3.5 py-3 text-left text-[15px] leading-snug transition-colors ${pick === i ? "border-you bg-you/10 font-medium" : "border-faint"}`}
+            className={`rounded-xl border px-3.5 py-2 transition-colors ${pick === 3 ? "border-you bg-you/10" : "border-faint"}`}
           >
-            “{l}”
-          </button>
-        ))}
-        <div
-          data-m="line"
-          className={`rounded-xl border px-3.5 py-2 transition-colors ${pick === 3 ? "border-you bg-you/10" : "border-faint"}`}
-        >
-          <input
-            value={own}
-            onFocus={() => setPick(3)}
-            onChange={(e) => {
-              setOwn(e.target.value);
-              setPick(3);
-            }}
-            maxLength={140}
-            placeholder="Other: write your own"
-            className="w-full bg-transparent py-1 text-[15px] outline-none placeholder:text-muted"
-          />
+            <input
+              value={own}
+              onFocus={() => setPick(3)}
+              onChange={(e) => {
+                setOwn(e.target.value);
+                setPick(3);
+              }}
+              maxLength={140}
+              placeholder="Other: write your own"
+              className="w-full bg-transparent py-1 text-[15px] outline-none placeholder:text-muted"
+            />
+          </div>
         </div>
-      </div>
-      <div className="mt-auto shrink-0 pt-5 pb-4">
-        <button
-          data-m="act"
-          onClick={keep}
-          disabled={!line}
-          className="h-[46px] w-full rounded-full bg-ink text-[15px] font-medium text-paper disabled:opacity-35"
-        >
-          This is our charter
-        </button>
-      </div>
+        <div className="mt-auto shrink-0 pt-5 pb-4 wide:pt-8">
+          <button
+            data-m="act"
+            onClick={keep}
+            disabled={!line}
+            className="h-[46px] w-full rounded-full bg-ink text-[15px] font-medium text-paper disabled:opacity-35"
+          >
+            This is our charter
+          </button>
+        </div>
+      </Spread>
     </div>
   );
 }

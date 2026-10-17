@@ -4,20 +4,24 @@ import { MapStrip } from "@/components/map-strip";
 import { Rail } from "@/components/rail";
 import { Opening } from "@/components/wake";
 
-// One phone: full screen on a phone, a 390 × 844 frame on anything wider.
+// The whole screen at every size. Tall, as on a phone: the top bar, the map, the tab page and the rail, stacked.
+// Wide: the top bar across, the map fills the left, and the tab page and rail stand in a column on the right.
 export default function PlayLayout({ children }: { children: React.ReactNode }) {
   return (
     <GameProvider>
-      <div className="sm:flex sm:min-h-dvh sm:items-center sm:justify-center sm:p-6">
-        <Opening className="flex h-dvh w-full flex-col overflow-hidden bg-paper sm:h-[844px] sm:w-[390px] sm:rounded-[28px] sm:shadow-[0_0_0_1px_var(--frame),0_12px_32px_var(--shadow)]">
+      <Opening className="flex h-dvh w-full flex-col overflow-hidden bg-paper">
+        <div className="flex min-h-0 grow flex-col wide:grid wide:grid-cols-[minmax(0,1fr)_clamp(340px,32vw,440px)] wide:grid-rows-[auto_minmax(0,1fr)_auto]">
           <Hud />
           <MapStrip />
-          <main data-shell="page" className="flex grow flex-col overflow-y-auto bg-panel px-4 pt-3">
+          <main
+            data-shell="page"
+            className="flex grow flex-col overflow-y-auto bg-panel px-4 pt-3 wide:col-start-2 wide:row-start-2 wide:border-l wide:border-faint"
+          >
             {children}
           </main>
           <Rail />
-        </Opening>
-      </div>
+        </div>
+      </Opening>
     </GameProvider>
   );
 }

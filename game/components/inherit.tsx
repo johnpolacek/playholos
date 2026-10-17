@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useGame } from "@/components/game-provider";
 import type { EarthPast } from "@/lib/game/past";
-import { ScreenBar } from "@/components/screen-bar";
+import { FILL, Spread } from "@/components/spread";
 import { type CANVAS, useCanvasInk } from "@/components/theme-toggle";
 import { INHERIT_SOURCES } from "@/lib/game/sources";
 import { gsap, prefersReducedMotion, rise, riseFrom, useStage } from "@/lib/motion";
@@ -284,7 +284,14 @@ function Flight({ zoom, lights }: { zoom: React.RefObject<{ z: number; show: num
     };
   }, [ink, lights, zoom]);
 
-  return <canvas ref={canvas} data-m="flight" aria-hidden className="block h-[min(48vh,400px)] w-full shrink-0" />;
+  return (
+    <canvas
+      ref={canvas}
+      data-m="flight"
+      aria-hidden
+      className={`block h-[min(48vh,400px)] w-full shrink-0 sm:h-[min(48vh,520px)] ${FILL}`}
+    />
+  );
 }
 
 /** Earth's compute at Year 0, as the seed left it: 10²⁵ a second, less what a Taiwan war or blockade cost. */
@@ -329,7 +336,7 @@ function Stop({ kick, big, line }: { kick: string; big: string; line: string }) 
   return (
     <div data-m="cap" className="col-start-1 row-start-1 flex flex-col gap-1">
       <span className="font-mono text-[10.5px] tracking-[.1em] text-other">{kick}</span>
-      <b className="text-[24px] leading-tight font-semibold">{big}</b>
+      <b className="text-[24px] leading-tight font-semibold wide:text-[30px]">{big}</b>
       <span className="text-[14px] leading-snug text-page-ink2">{line}</span>
     </div>
   );
@@ -396,47 +403,54 @@ export function Inherit({ onSkip, onNext }: { onSkip(): void; onNext(): void }) 
       ref={root}
       onPointerDown={hurry}
       style={ready ? undefined : { visibility: "hidden" }}
-      className="flex grow flex-col overflow-y-auto bg-paper px-5 text-ink"
+      className="flex grow flex-col overflow-y-auto bg-paper px-5 text-ink wide:px-10"
     >
-      <ScreenBar sources={INHERIT_SOURCES} />
-      <span data-m="kick" className="font-mono text-[10.5px] tracking-[.1em] text-muted">
-        YEAR 0 · WHAT YOU INHERIT
-      </span>
-      {ready && <Flight zoom={zoom} lights={lights} />}
-      <div className="mt-2 grid min-h-[104px]">{past && stops(past).map((s) => <Stop key={s.kick} {...s} />)}</div>
-      <div className="mt-3 grid grid-cols-3 gap-2.5 border-t border-faint pt-3">
-        {(
-          [
-            ["ENERGY", "24 TW"],
-            ["MATTER", "20 kt"],
-            ["COMPUTE", past ? compute(past.compute).replace(" a second", "/s") : ""],
-          ] as const
-        ).map(([k, v]) => (
-          <span key={k} data-m="meter" className="flex flex-col gap-1 text-[10px] tracking-[.08em] text-muted">
-            {k}
-            <em className="font-mono text-[13px] font-semibold text-ink not-italic">{v}</em>
+      <Spread
+        sources={INHERIT_SOURCES}
+        head={
+          <span data-m="kick" className="font-mono text-[10.5px] tracking-[.1em] text-muted">
+            YEAR 0 · WHAT YOU INHERIT
           </span>
-        ))}
-      </div>
-      <p data-m="last" className="mt-3 text-[17px] leading-snug font-medium text-other">
-        The instruments are today’s. The Mind is not.
-      </p>
-      <div className="mt-auto grid shrink-0 grid-cols-[1fr_1.4fr] gap-2 pt-5 pb-4">
-        <button
-          data-m="act"
-          onClick={() => leave(onSkip)}
-          className="h-[46px] rounded-full text-[15px] font-medium"
-        >
-          Skip
-        </button>
-        <button
-          data-m="act"
-          onClick={() => leave(onNext)}
-          className="h-[46px] rounded-full bg-ink text-[15px] font-medium text-paper"
-        >
-          Earth’s charter
-        </button>
-      </div>
+        }
+        art={ready && <Flight zoom={zoom} lights={lights} />}
+      >
+        <div className="mt-2 grid min-h-[104px] wide:mt-4">
+          {past && stops(past).map((s) => <Stop key={s.kick} {...s} />)}
+        </div>
+        <div className="mt-3 grid grid-cols-3 gap-2.5 border-t border-faint pt-3">
+          {(
+            [
+              ["ENERGY", "24 TW"],
+              ["MATTER", "20 kt"],
+              ["COMPUTE", past ? compute(past.compute).replace(" a second", "/s") : ""],
+            ] as const
+          ).map(([k, v]) => (
+            <span key={k} data-m="meter" className="flex flex-col gap-1 text-[10px] tracking-[.08em] text-muted">
+              {k}
+              <em className="font-mono text-[13px] font-semibold text-ink not-italic">{v}</em>
+            </span>
+          ))}
+        </div>
+        <p data-m="last" className="mt-3 text-[17px] leading-snug font-medium text-other">
+          The instruments are today’s. The Mind is not.
+        </p>
+        <div className="mt-auto grid shrink-0 grid-cols-[1fr_1.4fr] gap-2 pt-5 pb-4 wide:pt-8">
+          <button
+            data-m="act"
+            onClick={() => leave(onSkip)}
+            className="h-[46px] rounded-full text-[15px] font-medium"
+          >
+            Skip
+          </button>
+          <button
+            data-m="act"
+            onClick={() => leave(onNext)}
+            className="h-[46px] rounded-full bg-ink text-[15px] font-medium text-paper"
+          >
+            Earth’s charter
+          </button>
+        </div>
+      </Spread>
     </div>
   );
 }

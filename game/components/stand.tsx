@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { KNOCKS, RADARS_SINCE } from "@/lib/game/knocks";
 import { YEAR_0 } from "@/lib/game/clock";
-import { ScreenBar } from "@/components/screen-bar";
+import { FILL, Spread } from "@/components/spread";
 import { useCanvasInk } from "@/components/theme-toggle";
 import { STAND_SOURCES } from "@/lib/game/sources";
 import { gsap, prefersReducedMotion, rise, riseFrom, useStage } from "@/lib/motion";
@@ -192,7 +192,7 @@ function Sky({ scene }: { scene: React.RefObject<{ year: number; grid: number; l
       ref={canvas}
       data-m="sky"
       aria-hidden
-      className="mx-auto block aspect-square w-full max-w-[420px] shrink-0"
+      className={`mx-auto block aspect-square w-full max-w-[420px] shrink-0 sm:max-w-[520px] wide:aspect-auto ${FILL}`}
     />
   );
 }
@@ -242,47 +242,52 @@ export function Stand({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
     <div
       ref={root}
       onPointerDown={hurry}
-      className="flex grow flex-col overflow-y-auto bg-paper px-5 text-ink"
+      className="flex grow flex-col overflow-y-auto bg-paper px-5 text-ink wide:px-10"
     >
-      <ScreenBar sources={STAND_SOURCES} />
-      <div className="flex items-baseline justify-between gap-3">
-        <span data-m="kick" className="font-mono text-[10.5px] tracking-[.1em] text-muted">
-          YEAR 0 · WHERE THINGS STAND
-        </span>
-        <span data-m="clock" ref={clock} className="font-mono text-[13px] text-other tabular-nums">
-          {RADARS_SINCE}
-        </span>
-      </div>
-      <Sky scene={scene} />
-      <h1 data-m="lead" className="mt-2 text-[24px] leading-tight font-semibold">
-        Ninety years loud. Nothing heard.
-      </h1>
-      <div className="mt-2.5 flex flex-col gap-1.5 text-[15px] leading-snug text-page-ink2">
-        {LINES.map((line) => (
-          <p key={line} data-m="line">
-            {line}
+      <Spread
+        sources={STAND_SOURCES}
+        head={
+          <div className="flex flex-wrap items-baseline justify-between gap-x-3">
+            <span data-m="kick" className="font-mono text-[10.5px] tracking-[.1em] text-muted">
+              YEAR 0 · WHERE THINGS STAND
+            </span>
+            <span data-m="clock" ref={clock} className="font-mono text-[13px] text-other tabular-nums">
+              {RADARS_SINCE}
+            </span>
+          </div>
+        }
+        art={<Sky scene={scene} />}
+      >
+        <h1 data-m="lead" className="mt-2 text-[24px] leading-tight font-semibold wide:mt-4 wide:text-[30px]">
+          Ninety years loud. Nothing heard.
+        </h1>
+        <div className="mt-2.5 flex flex-col gap-1.5 text-[15px] leading-snug text-page-ink2">
+          {LINES.map((line) => (
+            <p key={line} data-m="line">
+              {line}
+            </p>
+          ))}
+          <p data-m="last" className="mt-2 text-[17px] leading-snug font-medium text-other">
+            We know where our noise has gone. We can’t know who heard it.
           </p>
-        ))}
-        <p data-m="last" className="mt-2 text-[17px] leading-snug font-medium text-other">
-          We know where our noise has gone. We can’t know who heard it.
-        </p>
-      </div>
-      <div className="mt-auto grid shrink-0 grid-cols-[1fr_1.4fr] gap-2 pt-5 pb-4">
-        <button
-          data-m="act"
-          onClick={() => leave(onSkip)}
-          className="h-[46px] rounded-full text-[15px] font-medium"
-        >
-          Skip
-        </button>
-        <button
-          data-m="act"
-          onClick={() => leave(onNext)}
-          className="h-[46px] rounded-full bg-ink text-[15px] font-medium text-paper"
-        >
-          What you inherit
-        </button>
-      </div>
+        </div>
+        <div className="mt-auto grid shrink-0 grid-cols-[1fr_1.4fr] gap-2 pt-5 pb-4 wide:pt-8">
+          <button
+            data-m="act"
+            onClick={() => leave(onSkip)}
+            className="h-[46px] rounded-full text-[15px] font-medium"
+          >
+            Skip
+          </button>
+          <button
+            data-m="act"
+            onClick={() => leave(onNext)}
+            className="h-[46px] rounded-full bg-ink text-[15px] font-medium text-paper"
+          >
+            What you inherit
+          </button>
+        </div>
+      </Spread>
     </div>
   );
 }

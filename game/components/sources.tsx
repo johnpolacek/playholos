@@ -46,7 +46,7 @@ function Sheet({ sources, onClose }: { sources: Source[]; onClose(): void }) {
       <div data-s="back" onClick={close} className="absolute inset-0 bg-black/55" />
       <div
         data-s="panel"
-        className="relative flex max-h-[78%] flex-col rounded-t-[22px] border-t border-faint bg-paper text-ink"
+        className="relative mx-auto flex max-h-[78%] w-full max-w-[560px] flex-col rounded-t-[22px] border-t border-faint bg-paper text-ink sm:border-x"
       >
         <div className="flex items-center justify-between px-5 pt-4 pb-2">
           <span className="font-mono text-[10.5px] tracking-[.1em] text-muted">THE REAL RECORD</span>
