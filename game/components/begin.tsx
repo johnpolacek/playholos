@@ -19,7 +19,7 @@ export function Begin() {
         </div>
         <div className="mt-auto mb-3 rounded-xl border border-l-[3px] border-frame border-l-you bg-paper px-[11px] py-[9px] text-[12.5px] leading-[1.4]">
           <span className="mb-0.5 block font-mono text-[9.5px] tracking-[.08em] text-you">THE MIND</span>
-          Nothing here sends anything. When you begin, one Year passes every five of your minutes, and I keep going
+          Nothing here sends anything. When you begin, one Year passes every five of your minutes, and we keep going
           while you’re away.
         </div>
         <button onClick={begin} className="mb-2 h-[46px] shrink-0 rounded-full bg-ink text-[15px] font-medium text-paper">
