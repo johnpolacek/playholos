@@ -1448,6 +1448,31 @@ Gathered 2026-10-15 by a research agent. Tags as it reported: read means the sou
   - The same crew at a hundredth of light speed, braking by rocket: 0.5 Mt dry, 0.3 Mt of deuterium, about 440 Years.
   - 500 sleepers at about 3 cubic metres each, shielded by 10 t of water a square metre, with a sail as heavy: about 13,000 t dry and 150 kt of deuterium.
 
+## The drift: Earth to the Local Group
+
+The first screen, before Earth wakes, flies from Earth out to the Local Group and home (`game/lib/drift.ts`). Today's Earth, Moon and planets come from the atlas's ephemeris, the stars from HYG v4.1, the galaxies' places and outlines from the Local Volume Database, and the night lights from NASA's Black Marble, all as the atlas and the memory screens already use them. The Milky Way is drawn, so its sources are here.
+
+- **[Reid et al. 2019, our view of the Milky Way from maser parallaxes](https://arxiv.org/abs/1910.03357)** · Published, ApJ 885, 131.
+  - Table 2 fits each spiral arm as a log spiral with a kink: the Norma, Scutum–Centaurus, Sagittarius–Carina, Local, Perseus and Outer arms, each over the azimuths its masers cover. R0 = 8.15 kpc.
+  - Matters: the arms are measured only on our side of the Galaxy. The far side is extrapolation.
+  - Used: the drift's arms, rescaled to the GRAVITY distance. Past each measured range, the arm runs on at a 12° pitch and fades. That run-on is ours.
+- **[GRAVITY Collaboration 2022](https://arxiv.org/abs/2112.07478)** · Published, A&A 657, L12. The Sun is 8,277 pc from Sgr A*. Used: the atlas's galactic center, and the drift's.
+- **[Wegg, Gerhard and Portail 2015](https://arxiv.org/abs/1504.01401)** · Published, MNRAS 450, 4050.
+  - The long bar's half-length is 5.0 ± 0.2 kpc, at 28 to 33° from the Sun's line of sight, its near end at positive longitude.
+  - Used: the drift's bar, 5 kpc at 28°.
+- **[Bland-Hawthorn and Gerhard 2016, The Galaxy in Context](https://arxiv.org/abs/1602.07702)** · Published, ARA&A 54, 529. Review.
+  - Best estimates in the body: thin disk scale length 2.6 ± 0.5 kpc, scale height 300 ± 50 pc.
+  - Used: the drift's old disk.
+- **[Harris 2010, globular cluster catalog](https://arxiv.org/abs/1012.3224)** · Reference. 157 known globular clusters. Used: the drift's halo, 157 points thinning as r^-3.5. Their places are random.
+- **[Courteau et al. 2011](https://arxiv.org/abs/1106.3564)** · Published, ApJ 739, 20. Andromeda's disk scale length is 5.3 ± 0.5 kpc. Used: the drift's Andromeda.
+- **[Gordon et al. 2006](https://arxiv.org/abs/astro-ph/0601314)** · Published, ApJL 638, L87. Spitzer shows Andromeda's dust as weak spiral arms and a star-forming ring about 10 kpc out. Used: the drift's Andromeda ring.
+- **Triangulum, the Magellanic Clouds and the dwarfs** · their places and outlines are the Local Volume Database's. The shapes inside are ours: a loose two-armed disk for Triangulum, an off-center bar and the Tarantula for the Large Cloud, and a Small Cloud drawn long along our line of sight ([Small Magellanic Cloud](https://en.wikipedia.org/wiki/Small_Magellanic_Cloud)).
+- **The Sun's small bodies** · Reference.
+  - The asteroid belt from 2.1 to 3.3 AU, with the [Kirkwood gaps](https://en.wikipedia.org/wiki/Kirkwood_gap) at Jupiter's 3:1, 5:2 and 7:3, and the [Jupiter trojans](https://en.wikipedia.org/wiki/Jupiter_trojan) 60° ahead and behind.
+  - The [Kuiper belt](https://en.wikipedia.org/wiki/Kuiper_belt), thickest from 42 to 48 AU, with the plutinos at 39.4 AU.
+  - The [Oort cloud](https://en.wikipedia.org/wiki/Oort_cloud), about 2,000 to 100,000 AU. No one has seen it. It is inferred from long-period comets.
+  - Used: the drift's belts and shell. The bodies' places are random.
+
 ## Watch list
 
 Results the design is waiting on. Check each when its date comes.

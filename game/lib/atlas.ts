@@ -19,7 +19,11 @@ async function floats(url: URL) {
 
 export type Theme = "light" | "dark";
 
-export async function mountAtlas(parent: HTMLElement, theme: Theme) {
+export async function mountAtlas(
+  parent: HTMLElement,
+  theme: Theme,
+  { onFrame }: { onFrame?(fromEarthAU: number): void } = {},
+) {
   const [{ mountStrip }, stars, neighborhoodStars] = await Promise.all([
     import("../../src/strip.js"),
     floats(new URL("../../data/stars.bin", import.meta.url)),
@@ -29,5 +33,28 @@ export async function mountAtlas(parent: HTMLElement, theme: Theme) {
   // Earth turns once a minute, for the look. It does not follow the game clock, where a Year passes
   // in 5 minutes and Earth would spin about once a second. Settled 2026-10-16. Still for reduced motion.
   const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  return mountStrip(parent, { textures, stars, neighborhoodStars, neighborhood, theme, date: new Date(), turnSeconds: still ? 0 : 60 });
+  return mountStrip(parent, { textures, stars, neighborhoodStars, neighborhood, theme, date: new Date(), turnSeconds: still ? 0 : 60, onFrame });
+}
+
+// The first screen's drift drawn by the map's own scene instead of lib/drift.ts, to compare the two. Both follow the
+// same flight, lib/flight.ts, so with the same epoch they are at the same place at the same moment.
+export async function mountAtlasDrift(
+  parent: HTMLElement,
+  { theme, still, epoch, onFrame }: { theme: Theme; still: boolean; epoch?: number; onFrame?(fromEarthAU: number): void },
+) {
+  const { createFlight, LIFT } = await import("./flight");
+  const flight = createFlight({ still, epoch });
+  const strip = await mountAtlas(parent, theme, { onFrame });
+  strip.drive((size: { x: number; y: number }, earth: Parameters<typeof flight.at>[1]) => {
+    const { target, dir, D, up } = flight.at(flight.clock(), earth);
+    return { target, direction: dir, distance: D, up, fov: flight.lens(size.x, size.y), lift: LIFT };
+  });
+  return {
+    setTheme: (scheme: Theme) => strip.setTheme(scheme),
+    home: () => flight.home(flight.clock()),
+    dispose() {
+      flight.dispose();
+      strip.dispose();
+    },
+  };
 }

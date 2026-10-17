@@ -22,7 +22,11 @@ npm run dev                                # http://localhost:3000
 
 - `components/map-strip.tsx`: the map strip. It mounts the atlas's own scene, `../src/strip.js`, opening on Earth.
   - `lib/atlas.ts` loads its maps and star data from `../assets` and `../data`.
-  - Three.js and Astronomy Engine come from the atlas's packages at the repo root.
+  - Three.js and Astronomy Engine come from the atlas's packages at the repo root. The game keeps only Three.js's types.
+- `components/drift.tsx`: a new game's first screen, before Wake. No title: a slow flight from Earth out to the Local Group and home, and Begin game, which dives home to Earth.
+  - The scene is `lib/drift.ts`, in Three.js with the atlas's ephemeris, stars and galaxies. It draws four scales, each in its own units, far to near, so no float spans Earth to Andromeda. Its Milky Way's sources are in HOLOS_RESEARCH.md, The drift.
+  - The flight itself is `lib/flight.ts`. The map's line art can fly it too, through `mountAtlasDrift` in `lib/atlas.ts`: add `?look=atlas` to the address.
+  - `app/drift/`: both looks side by side, in step. Dev only.
 
 - `lib/theme.ts`: the theme follows the phone until the player picks Light or Dark, kept in this browser. The root layout's script paints it before the first frame. The button in the map's corner and atop every screen before the shell, `components/theme-toggle.tsx`, flips it. Every screen follows it, and the memory screens' canvases draw from `CANVAS`, a palette per theme. Screens before the shell open with `components/screen-bar.tsx`, by way of `Spread`: the real record on the left, the theme on the right.
 - `lib/motion.ts`: the full motion treatment, from the animaxxing skills in `../.claude/skills`. Every element enters from a blank screen, rests, and leaves. Mark an element `data-m` and give its screen a `useStage` intro. Reduced motion skips the travel.

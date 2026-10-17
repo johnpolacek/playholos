@@ -8,6 +8,7 @@ import { Stand } from "@/components/stand";
 import { Inherit } from "@/components/inherit";
 import { FILL, Spread } from "@/components/spread";
 import { Charter } from "@/components/charter";
+import { Drift } from "@/components/drift";
 import { charsRise, gsap, prefersReducedMotion, rest, rise, riseFrom, useGSAP, useStage } from "@/lib/motion";
 
 // The mock's stipple: a fixed scatter, the same on every phone.
@@ -177,9 +178,9 @@ export function Wake({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
 const LeaveShell = createContext<(then: () => void) => void>((then) => then());
 export const useLeaveShell = () => use(LeaveShell);
 
-// The phone. A new game opens on Wake, then the memories. A game already begun goes straight to the shell.
-// Screens past the last one built lead to the shell. A reload starts the memories over.
-const SCREENS = [Wake, Origins, People, Stand, Inherit, Charter];
+// The phone. A new game opens on the drift, then Wake and the memories. A game already begun goes straight to the
+// shell. Screens past the last one built lead to the shell. A reload starts over at the drift.
+const SCREENS = [Drift, Wake, Origins, People, Stand, Inherit, Charter];
 
 export function Opening({ className, children }: { className: string; children: React.ReactNode }) {
   const { save, wake } = useGame();
@@ -232,9 +233,9 @@ export function Opening({ className, children }: { className: string; children: 
   else if (save) {
     const Screen = SCREENS[at];
     const next = () => (at + 1 < SCREENS.length ? setAt(at + 1) : wake());
-    // Skip leaves the memories for the charter on the first screen, and skips one memory after that.
+    // Skip leaves the memories for the charter on Wake, and skips one memory after that.
     const charter = SCREENS.indexOf(Charter);
-    const skip = () => setAt(at === 0 ? charter : Math.min(at + 2, charter));
+    const skip = () => setAt(at === SCREENS.indexOf(Wake) ? charter : Math.min(at + 2, charter));
     body = <Screen key={at} onSkip={skip} onNext={next} />;
   }
   return (
