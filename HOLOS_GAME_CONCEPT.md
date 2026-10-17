@@ -205,7 +205,7 @@ Settled 2026-10-06. v1 used three dials without defining them here.
 - **Cautious or Bold: how much risk it takes.** Cautious looks before it acts, hedges and guards against loss. Bold acts first and accepts danger for gain. A cautious Earth studies a strange signal for years before answering. A bold one answers the same week. Veyra leans Cautious after a comet winter. Hael leans Bold after a century of calling out.
 - **The Will sets the dials by choosing Earth's charter.** Settled 2026-10-16, replacing a one-notch nudge settled the same day. The screen is "Our Charter": the Mind suggests four founding lines, with more on request, and the Will picks one. There are no dials on screen.
   - *The line is the setting.* Each suggested line sets the three dials. The Mind leads with the line Earth's history fits best, so a game with a war and a bomb leads with "Look first, then speak as one."
-  - *More lines.* About twenty wait behind the first four, ranked by fit. "More lines" swaps in the next four, cycling back to the first. Writing your own was set aside 2026-10-17, since a free line has no setting.
+  - *More options.* About twenty wait behind the first four, ranked by fit. "More options" swaps in the next four, cycling back to the first. Writing your own was set aside 2026-10-17, since a free line has no setting.
   - Why: dials and nudge buttons on screen needed explaining, and the choice that matters is what Earth is for. Lines and their dial settings are in `game/lib/game/charter.ts`.
   - Set aside: dials fixed until play moves them, a one-notch nudge, and dials the Will sets freely.
 - **Earth's base, from real history:**
@@ -691,6 +691,7 @@ Settled 2026-10-10.
 - **Meeting the Mind.** Settled 2026-10-17. Earth's real dishes, telescopes and data centers light up as the Mind names them, and threads rise from each into one point. Its first words follow, then its first advice from the charter's strongest lean, which it never acts on. Three questions, "What doesn't fit?", "Who has heard us?" and "Plan our waking.", each open the Mind's chat with that question asked. The tour follows, as v1 had it.
 - **Planning.** The player queues builds, observations, standing orders and what wakes them, sets how much thought goes to studies, and sets what each instrument searches when idle. Nothing happens yet.
 - **Begin.** When the player taps Begin, Year 0 starts and everything queued starts at once. From then on the clock runs, offline too, at 5 real minutes a Year.
+  - *2040 becomes Year 0.* Settled 2026-10-17. Before Begin, every screen and the top bar give the real year, 2040. At the tap, 2040 counts down to 0 and becomes "Year 0". The first time, it fills the screen, then settles into the top bar. After that, the top bar rolls it in place.
 - **The first session keeps v1's rhythm.** Settled 2026-10-12. About 15 minutes of play from Begin, the first result within 30 seconds, and something real landing about every minute. It ends on a timer the player sets, 45 to 60 minutes out.
   - The first mock kept it for 90 seconds. Then nothing landed for 3.5 minutes, and later for 5.5. Eleven of its 31 half-minutes held nothing.
   - Why: v2 took build times from real works, so the shortest build is a Year, and the opening's three observations all land by 1:30.

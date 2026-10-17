@@ -97,7 +97,7 @@ export function People({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
         sources={PEOPLE_SOURCES}
         head={
           <span data-m="kick" className="font-mono text-[10.5px] tracking-[.1em] text-muted">
-            YEAR 0 · EARTH’S PEOPLE
+            2040 · EARTH’S PEOPLE
           </span>
         }
         art={<Globe dials={dials} onReady={onReady} />}

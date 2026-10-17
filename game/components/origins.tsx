@@ -123,7 +123,7 @@ export function Origins({ onSkip, onNext }: { onSkip(): void; onNext(): void }) 
         head={
           <>
             <span data-m="kick" className="font-mono text-[10.5px] tracking-[.1em] text-muted">
-              BEFORE YEAR 0 · WHERE WE COME FROM
+              2040 · WHERE WE COME FROM
             </span>
             <h1 data-m="lead" className="mt-1.5 text-[22px] font-semibold wide:text-[30px] wide:leading-tight">
               4.6 billion years to this morning

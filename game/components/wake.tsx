@@ -61,7 +61,7 @@ export function Wake({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
       <Spread art={<SkyArt mode="wake" dials={dials} onReady={onReady} className={ART} />}>
         <div className="flex grow flex-col gap-2.5 pt-2 pb-6">
           <span data-m="kick" className="font-mono text-[10.5px] tracking-[.1em] text-muted">
-            YEAR 0 · SOL · 2040
+            2040 · SOL
           </span>
           <h1
             data-m="title"

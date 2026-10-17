@@ -205,7 +205,7 @@ export function Inherit({ onSkip, onNext }: { onSkip(): void; onNext(): void }) 
         sources={INHERIT_SOURCES}
         head={
           <span data-m="kick" className="font-mono text-[10.5px] tracking-[.1em] text-muted">
-            YEAR 0 · WHAT YOU INHERIT
+            2040 · WHAT YOU INHERIT
           </span>
         }
         art={<Flight dials={dials} onReady={onReady} />}

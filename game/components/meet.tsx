@@ -107,7 +107,7 @@ export function Meet({ onNext }: { onSkip(): void; onNext(): void }) {
         sources={MIND_SOURCES}
         head={
           <span data-m="kick" className="font-mono text-[10.5px] tracking-[.1em] text-muted">
-            BEFORE YEAR 0 · FIRST WORDS
+            2040 · FIRST WORDS
           </span>
         }
         art={<Globe dials={dials} onReady={onReady} />}

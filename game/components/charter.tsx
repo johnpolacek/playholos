@@ -70,7 +70,7 @@ export function Charter({ onNext }: { onSkip(): void; onNext(): void }) {
   const pages = Math.ceil(lines.length / PER);
   const shown = lines.slice(page * PER, page * PER + PER);
 
-  // "More lines": the four on screen blur away, the next four rise in, and the first of them is picked, so the
+  // "More options": the four on screen blur away, the next four rise in, and the first of them is picked, so the
   // chosen line is always one in view. After the last four, back to the first.
   function more() {
     if (swapping.current) return;
@@ -131,7 +131,7 @@ export function Charter({ onNext }: { onSkip(): void; onNext(): void }) {
         head={
           <>
             <span data-m="kick" className="font-mono text-[10.5px] tracking-[.1em] text-muted">
-              BEFORE YEAR 0 · WHAT IS EARTH FOR?
+              2040 · WHAT IS EARTH FOR?
             </span>
             <h1 data-m="lead" className="mt-1.5 text-[28px] leading-tight font-semibold wide:text-[36px]">
               Our Charter
@@ -167,7 +167,7 @@ export function Charter({ onNext }: { onSkip(): void; onNext(): void }) {
             onClick={more}
             className="mt-1 flex items-center gap-2 self-start px-1 py-2 text-[14px] text-you"
           >
-            More lines
+            More options
             <span className="font-mono text-[11px] text-muted tabular-nums">
               {page + 1}/{pages}
             </span>

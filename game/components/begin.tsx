@@ -1,14 +1,19 @@
 "use client";
 
+import { useState } from "react";
 import { useGame } from "@/components/game-provider";
 import { useLeaveShell } from "@/components/wake";
+import { seenYearZero, YearZero } from "@/components/year-zero";
 import { realTime } from "@/lib/game/clock";
 
-// Begin: Year 0 starts at the tap, and the clock runs from then, offline too. Settled 2026-10-10.
+// Begin: Year 0 starts at the tap, and the clock runs from then, offline too. Settled 2026-10-10. The tap plays 2040
+// becoming Year 0, over the screen the first time and in the top bar after.
 export function Begin() {
   const { save, year, begin, newGame } = useGame();
   const leaveShell = useLeaveShell();
+  const [moment, setMoment] = useState<"full" | "roll" | null>(null);
   if (!save) return null;
+  const zero = <YearZero on={!!moment} full={moment === "full"} onDone={() => setMoment(null)} />;
 
   if (year === null) {
     return (
@@ -22,10 +27,19 @@ export function Begin() {
           Nothing here sends anything. When you begin, one Year passes every five of your minutes, and we keep going
           while you’re away.
         </div>
-        <button onClick={begin} className="mb-2 h-[46px] shrink-0 rounded-full bg-ink text-[15px] font-medium text-paper">
+        <button
+          onClick={() => {
+            setMoment(seenYearZero() ? "roll" : "full");
+            begin();
+          }}
+          className="mb-2 h-[46px] shrink-0 rounded-full bg-ink text-[15px] font-medium text-paper"
+        >
           Begin · Year 0 starts now
         </button>
-        <button onClick={() => leaveShell(newGame)} className="mb-4 h-9 shrink-0 rounded-full border border-ink text-sm">
+        <button
+          onClick={() => leaveShell(newGame)}
+          className="mb-4 h-9 shrink-0 rounded-full border border-ink text-sm"
+        >
           New game
         </button>
       </>
@@ -40,9 +54,13 @@ export function Begin() {
           <span className="font-mono tabular-nums">{realTime(year)}</span> since you began
         </span>
       </div>
-      <button onClick={() => leaveShell(newGame)} className="mt-auto mb-4 h-9 shrink-0 rounded-full border border-ink text-sm">
+      <button
+        onClick={() => leaveShell(newGame)}
+        className="mt-auto mb-4 h-9 shrink-0 rounded-full border border-ink text-sm"
+      >
         New game
       </button>
+      {zero}
     </>
   );
 }

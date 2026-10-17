@@ -94,7 +94,7 @@ export function Stand({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
       const s = dials;
       const show = () => {
         const y = Math.floor(s.year ?? YEAR_0);
-        clock.current!.textContent = y >= YEAR_0 ? `${YEAR_0} · Year 0` : String(Math.max(RADARS_SINCE, y));
+        clock.current!.textContent = y >= YEAR_0 ? String(YEAR_0) : String(Math.max(RADARS_SINCE, y));
       };
       tl.fromTo(q('[data-m="kick"]'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.5 }, 0)
         .to(s, { grid: 1, duration: 1 }, 0.2)
@@ -117,7 +117,7 @@ export function Stand({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
   useEffect(() => {
     if (!ready || !prefersReducedMotion()) return;
     Object.assign(dials, { year: YEAR_0, grid: 1, labels: 1 });
-    clock.current!.textContent = `${YEAR_0} · Year 0`;
+    clock.current!.textContent = String(YEAR_0);
   }, [ready, dials]);
 
   return (
@@ -131,7 +131,7 @@ export function Stand({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
         head={
           <div className="flex flex-wrap items-baseline justify-between gap-x-3">
             <span data-m="kick" className="font-mono text-[10.5px] tracking-[.1em] text-muted">
-              YEAR 0 · WHERE THINGS STAND
+              2040 · WHERE THINGS STAND
             </span>
             <span data-m="clock" ref={clock} className="font-mono text-[13px] text-other tabular-nums">
               {RADARS_SINCE}

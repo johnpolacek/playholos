@@ -31,8 +31,8 @@ export function Hud() {
         <i className="size-2.5 rounded-full bg-you" />
         Earth
       </span>
-      <span className="text-right text-[15px] font-medium wide:col-start-3">
-        {!save ? "" : y === null ? "Before Year 0" : `Year ${y}`}
+      <span data-year className="text-right text-[15px] font-medium wide:col-start-3">
+        {!save ? "" : y === null ? YEAR_0 : `Year ${y}`}
       </span>
       <span className="text-xs text-muted">Sol</span>
       <span className="text-right text-xs text-muted wide:col-start-3">
