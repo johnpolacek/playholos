@@ -1,0 +1,29 @@
+name: test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            game/package-lock.json
+      # The atlas, checked against JPL Horizons.
+      - run: npm ci
+      - run: npm test
+      # The game, its simulation checked against the Python.
+      - run: npm ci
+        working-directory: game
+      - run: npm test
+        working-directory: game
+      - run: npm run lint
+        working-directory: game

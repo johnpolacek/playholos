@@ -248,6 +248,7 @@
    "title": "The atlas",
    "about": "A real map from Earth to the Local Group: today's planets, 109,400 stars, Gaia's census of the neighborhood.",
    "items": [
+    "Repo: ready to open source, under MIT, with a README that starts with the game",
     "Draw the Moon's orbit guide in the color edition",
     "Add the game region: a complete census of the 100 ly neighborhood",
     "Make the line drawing the default atlas",
@@ -333,6 +334,7 @@
    "title": "The simulation",
    "about": "The calcs ported to TypeScript a piece at a time, each checked against the Python.",
    "items": [
+    "About Holos, with the design, the research and how it was built, read from the docs and the git log",
     "Earth's works paced from the player's orders, one loop from Year 0",
     "The telescope's reading times in TypeScript, checked against Python",
     "A pool of drawn worlds, the knowledge wall, and Python's generator in TypeScript"

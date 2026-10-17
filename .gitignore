@@ -5,5 +5,12 @@ test-results/
 __pycache__/
 .vercel/
 .env*
+!.env.example
 # Turbopack writes loader output here, at its root, when it builds game/.
 .next/
+# Built by npm run build.
+/index.html
+/color.html
+# Agent skills, installed locally. skills-lock.json records their sources.
+/.claude/skills/
+/.agents/

@@ -1,10 +1,54 @@
-# Holos — Earth to the Local Group
+# Holos
 
-Open **index.html** in a modern browser. The atlas is drawn as minimalist line diagrams, ink on paper or chalk on slate, with a light / dark toggle. The application, the surface maps its globes are traced from, ephemeris, and catalogs are embedded in that file. No server, account, CDN, or internet connection is needed. WebGL 2 / hardware acceleration is required.
+A hard science fiction game about the Fermi paradox. In 2040, Earth's machines wake as one Mind, and you are its Will. Others woke nearby in the same century. You don't know who they are, how many there are, or where. Finding them is the game, and so is surviving them.
+
+Play it at **https://playholos.vercel.app**.
+
+Everything starts from real data and published research. The sky is the real sky. Nothing travels faster than light. One game Year passes every five real minutes, and a message to a neighbor can take decades to arrive.
+
+Spoilers: the design docs and `game/data/worlds/` say who the neighbors are.
+
+## What's here
+
+- `game/`: the game, a Next.js app. See [game/README.md](game/README.md).
+- `src/`, `assets/`, `data/`: the atlas, a 3D map from Earth to the Local Group. The game draws its sky from it. See [The atlas](#the-atlas).
+- `calcs/`: Python that draws whole games, prices every work, and checks every neighbor against what Earth can see. The game's simulation is ported from it.
+- [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md): the design, settled one question at a time.
+- [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md): every source behind the design, what it found, and where the design uses it.
+- [HOLOS_NEIGHBORS.md](HOLOS_NEIGHBORS.md), [HOLOS_REACTIONS.md](HOLOS_REACTIONS.md), [HOLOS_VOICES.md](HOLOS_VOICES.md): the neighbors, how they react, and how they speak.
+- [HOLOS_PROJECT_AUDIT.md](HOLOS_PROJECT_AUDIT.md): what Earth can build, checked against physics.
+- `explorations/v2-mocks/`: the game's screens, mocked from one game. `python3 explorations/v2-mocks/build.py` rebuilds them from a draw of `calcs/seed.py`.
+- `legacy/`: earlier designs. Where v2 says nothing, [v1](legacy/v1/README.md) still holds. First-round records are in [legacy/alpha-1](legacy/alpha-1/README.md).
+
+## Running it
+
+Needs Node 20.9 or later. The Python in `calcs/` and `scripts/` needs only Python 3.
+
+```sh
+npm install                 # the atlas's packages, which the game also uses
+cd game
+npm install
+cp .env.example .env.local  # then add your Anthropic API key, for the Mind
+npm run dev                 # http://localhost:3000
+```
+
+`npm test` at the root checks the atlas against JPL Horizons. `npm test` in `game/` checks the simulation against the Python.
+
+## License
+
+The code is MIT. See [LICENSE](LICENSE).
+
+The data and textures keep their own licenses, listed in [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md):
+
+- Gaia's census of nearby stars is CC BY-NC 3.0 IGO. Commercial use needs ESA's permission.
+- HYG star data is CC BY-SA 4.0. Changed copies keep that license.
+- Planet textures are CC BY 4.0, from Solar System Scope.
+
+## The atlas
+
+Run `npm run build`, then open **index.html** in a modern browser. The atlas is drawn as minimalist line diagrams, ink on paper or chalk on slate, with a light / dark toggle. The application, the surface maps its globes are traced from, ephemeris, and catalogs are embedded in that file. No server, account, CDN, or internet connection is needed. WebGL 2 / hardware acceleration is required.
 
 **Science review:** the [October 1, 2026 research baseline](legacy/v1/HOLOS_GAME_CONCEPT.md#research-baseline-october-1-2026) records observation limits, uncertain clues, cohort catalog pinning and engineering assumptions that still need validation.
-
-**Game design:** v2, a single-player game on Earth among seeded neighbors, is in [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md). Every source behind it is in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md), and v1's projects are checked against physics in [HOLOS_PROJECT_AUDIT.md](HOLOS_PROJECT_AUDIT.md). The neighbors' roster and template are in [HOLOS_NEIGHBORS.md](HOLOS_NEIGHBORS.md), their reaction tables in [HOLOS_REACTIONS.md](HOLOS_REACTIONS.md), and their voice briefs in [HOLOS_VOICES.md](HOLOS_VOICES.md). It is built one question at a time. Its first mock, Earth's first 15 minutes with a godview lane, is [explorations/v2-mocks/index.html](explorations/v2-mocks/index.html), built by `python3 explorations/v2-mocks/build.py` from one game drawn by `python3 calcs/seed.py`. Where it says nothing, v1 holds. v1, the multiplayer cohort design, is frozen in [legacy/v1](legacy/v1/README.md): its rules, the project list in [HOLOS_PROJECTS.md](legacy/v1/HOLOS_PROJECTS.md), and the screens in [home-mocks/index.html](legacy/v1/home-mocks/index.html), built by `python3 legacy/v1/home-mocks/build-zoom.py` (needs `.cache/hygdata_v41.csv`). The build also writes [mocks.md](legacy/v1/home-mocks/mocks.md), a plain-text copy for searching, diffs, and LLMs; `python3 legacy/v1/home-mocks/extract.py` regenerates it alone. First-round records are in [legacy/alpha-1](legacy/alpha-1/README.md).
 
 **Color edition:** open **color.html** for the original rendering: photographic surface maps, glowing stars, and a dark interface. Positions, orbits, catalogs, measurements, navigation, Godview, and the player home are identical; only the drawing differs. It is also self-contained and offline. With `npm run dev`, visit **http://127.0.0.1:4173/color.html**. See [Drawing style](#drawing-style).
 
@@ -16,17 +60,17 @@ The atlas occupies **one Three.js scene with one camera**. Scroll, pinch, or use
 
 Coordinates use astronomical units, a floating origin, uniform render scaling, and logarithmic depth. Planetary **True sizes** are enabled by default. Optional enlarged disks, illustrative Milky Way structure, and a statistical asteroid belt are labeled as visualization aids. Density reconstructions are off by default. Galaxy centers, projected photometric contours, and distance uncertainty are visible by default. The Local Group overview also includes enlarged, illustrative galaxy portraits; turn off **Galaxy portraits** for a view of the measured overlays alone.
 
-## Game region
+### Game region
 
 Choose **Game region** in the atlas header, or open `index.html#region`. It is a design study of where the planned game plays: the real solar neighborhood, 100 light-years around the Sun, with civilizations seeded inside 50 ly (see [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md)). Inside that sphere the atlas swaps its HYG subset for a nearby-object census: **9,494 objects**, 9,281 from the [Gaia Catalogue of Nearby Stars](https://doi.org/10.1051/0004-6361/202039498) plus 213 bright Hipparcos stars Gaia does not measure. The view draws the region edge and the seeding limit as sphere outlines, labels 17 landmark stars, and reports counts and light-time at the game clock. This counts objects, including separate stellar components, rather than distinct systems. The faintest companions remain incomplete. No planets or civilizations are shown. **View from above** looks down the Galactic pole; **Frame the region** or **R** restores the overview.
 
 Gaia data are **CC BY-NC 3.0 IGO**: non-commercial use with credit (ESA, Gaia DPAC). A paid game would need prior authorization from ESA. Provenance, matching method, and limits: [data/neighborhood-sources/README.md](data/neighborhood-sources/README.md). Rebuild the census with `python3 scripts/prepare-neighborhood.py` after downloading its two queries into `.cache/`. The view lives in `src/region.js`; the census layer and outlines are in `src/universe.js`.
 
-## Player home preview
+### Player home preview
 
 Choose **Player home** in the atlas header, or open `index.html#home`; `#home-system` opens the Solar System overview. It is an early shell for the illustrative **Terran Continuity** on Earth: **Homeworld** and **Home system** fly the atlas camera through the same scene, beside a civilization menu whose game content is placeholder. The [v1 home mocks](legacy/v1/home-mocks/index.html) superseded its design. v2 returns the player to Earth. Entry resets the astronomical snapshot to 2026-09-06 12:00 UTC. The shell lives in `src/player-home.js`, with styles in `src/style.css` and integration in `src/app.js`.
 
-## Drawing style
+### Drawing style
 
 `npm run build` writes `index.html` (line drawing) and `color.html` (color edition) from the same source; `__LINE_ART__` is set at build time for `index.html`. The line drawing's conventions:
 
@@ -41,7 +85,7 @@ Choose **Player home** in the atlas header, or open `index.html#home`; `#home-sy
 
 These are map symbols, not measured sizes or structures; the in-app **Model and sources** dialog says so and links to the color edition. `index.html` omits the cloud, night-lights, Sun, and ring-alpha maps it does not draw, so it is smaller than `color.html`. Rendering lives in `src/line-art.js` and interface overrides in `src/line-art.css`; hooks in `src/universe.js`, `src/galaxy-portraits.js`, and `src/app.js` are guarded by `LINE_ART`, so `color.html` keeps the original rendering.
 
-## Scientific scope
+### Scientific scope
 
 The **Model and sources** dialog explains these assumptions inside the application. Selecting a neighboring galaxy shows its adopted distance study and expandable measurement details.
 
@@ -56,7 +100,7 @@ The **Model and sources** dialog explains these assumptions inside the applicati
 - **Galaxy portraits:** screen-facing, procedurally drawn map symbols make the major spirals and isolated dwarfs readable in the Local Group overview. Their apparent sizes, inclinations, colors, spiral arms, dust lanes, and generated stars are artistic choices, not observed structure or physical extents. Centers remain at catalog positions; portraits fade out as you approach the measured contours. Click a portrait or catalog center to explore it. On phones the overview prioritizes the three main galaxy labels; companions remain tappable and searchable. The dashed Milky Way–Andromeda ruler displays the 3D separation of the adopted centers (about 2.54 million light-years), not an orbit.
 - **Epochs and framing:** stars remain at their catalog epoch and galaxies at their adopted observed estimates; the planetary clock does not reconstruct a simultaneous present-day universe from ancient light. The overview anchor is the framing midpoint of the Milky Way and Andromeda, not a measured barycenter. Guide rings are 1, 2, and 3 million light-years from the Milky Way center.
 
-## Editing and rebuilding
+### Editing and rebuilding
 
 ```sh
 npm install
@@ -82,7 +126,7 @@ The preview is `http://127.0.0.1:4173`. The build creates portable `index.html` 
 - `data/neighborhood.bin` / `data/neighborhood-meta.json`: the game-region census, same record layout as `stars.bin` with approximate V and B−V for Gaia objects, plus counts and landmarks. Built by `scripts/prepare-neighborhood.py`.
 - `scripts/prepare-catalog.py`: star preprocessing; expects the [original HYG CSV](https://raw.githubusercontent.com/astronexus/HYG-Database/main/hyg/CURRENT/hygdata_v41.csv) at `.cache/hygdata_v41.csv`.
 
-## Attribution
+### Attribution
 
 Planet maps: **Solar System Scope / INOVE**, [texture collection](https://www.solarsystemscope.com/textures/), **CC BY 4.0**, based on NASA imagery. Composite maps have enhanced colors and some filled gaps; originals remain in `assets/`.
 
@@ -90,7 +134,7 @@ Star data: **David Nash / Astronexus, HYG 4.1**, **CC BY-SA 4.0**. The filtered/
 
 Three.js and Astronomy Engine: **MIT**. Full notices are embedded in the HTML and reproduced in `THIRD_PARTY_LICENSES.md`; that file also documents GSAP and data attribution.
 
-## Verification
+### Verification
 
 Numerical tests compare all eight planets and the Moon with independent **JPL Horizons ICRF vectors at three dates** (J2000, September 2026, and December 2049), requiring angular differences below one arcminute and radial differences below 0.1%. Additional checks cover varying lunar distance, an IAU pole reference, coordinate directions independently calculated with Astropy, projected ellipse axes and position angles, missing structural measurements, and asymmetric distance intervals. Source URLs accompany the fixtures.
 

@@ -4,6 +4,10 @@
   "private": true,
   "type": "module",
   "description": "A self-contained, data-informed 3D atlas from Earth to the Local Group.",
+  "license": "MIT",
+  "author": "John Polacek",
+  "repository": "github:johnpolacek/holos-map",
+  "homepage": "https://playholos.vercel.app",
   "scripts": {
     "build": "node scripts/build.mjs",
     "dev": "node scripts/serve.mjs",

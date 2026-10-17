@@ -28,7 +28,7 @@ npm run dev                                # http://localhost:3000
 - `components/map-strip.tsx`: the map strip, the sky's window in the shell. The camera flies in from the charter, and back out to the title on New game.
 
 - The game is always dark: the colors in `app/globals.css`, and `lib/ink.ts` for the memory screens' canvases. Screens before the shell open with `components/screen-bar.tsx`, by way of `Spread`: the real record on the left.
-- `lib/motion.ts`: the full motion treatment, from the animaxxing skills in `../.claude/skills`. Every element enters from a blank screen, rests, and leaves. Mark an element `data-m` and give its screen a `useStage` intro. Reduced motion skips the travel.
+- `lib/motion.ts`: the full motion treatment, from the animaxxing skills, whose sources are in `../skills-lock.json`. Every element enters from a blank screen, rests, and leaves. Mark an element `data-m` and give its screen a `useStage` intro. Reduced motion skips the travel.
 
 Everything else inside the shell is placeholder.
 
