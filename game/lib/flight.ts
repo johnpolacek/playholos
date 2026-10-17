@@ -240,6 +240,8 @@ export function createDirector({ still }: { still: boolean }) {
     clock: (now?: number) => (still ? 10 : seconds(now) - start),
     /** How far the camera is between one screen's view and the next, 0 to 1. */
     progress: () => progress,
+    /** The seconds left in the camera's flight to the current view. */
+    remaining: (clock: number) => (leg ? Math.max(0, leg.at + leg.span - clock) : 0),
     /**
      * Flies to a screen's pose, the title's loop, or the map, which opens on Earth. `instant` starts there, as when the
      * game opens. Returns the flight's length in seconds.
