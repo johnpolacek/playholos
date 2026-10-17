@@ -33,7 +33,7 @@ function readCharter(c: unknown) {
 }
 
 export async function POST(req: Request) {
-  // The proxy already checks the access cookie. The Mind spends real money, so it checks again.
+  // The Mind spends real money, so only the access code opens it.
   if (!admits((await cookies()).get(ACCESS_COOKIE)?.value)) return Response.json({ error: "Locked." }, { status: 401 });
   if (!process.env.ANTHROPIC_API_KEY) {
     return Response.json({ error: "The Mind is not connected. Set ANTHROPIC_API_KEY in .env.local." }, { status: 503 });
