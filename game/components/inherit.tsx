@@ -141,10 +141,10 @@ export function Inherit({ onSkip, onNext }: { onSkip(): void; onNext(): void }) 
   // One object for the whole screen: the intro tweens the scale, and the scene reads it every frame.
   const [dials] = useState<Dials>(() => ({ zoom: STOPS[0] }));
   const [shown, setShown] = useState(false);
-  // The camera's flight to this screen: the story starts as it arrives.
+  // When the camera arrives at this screen, on the page's clock: the story starts then, however long its data took.
   const lead = useRef(0);
   const onReady = useCallback((flight: number) => {
-    lead.current = flight;
+    lead.current = performance.now() / 1000 + flight;
     setShown(true);
   }, []);
   const [past, setPast] = useState<EarthPast>();
@@ -161,7 +161,7 @@ export function Inherit({ onSkip, onNext }: { onSkip(): void; onNext(): void }) 
   const { leave, hurry } = useStage(
     root,
     (q, tl) => {
-      tl.delay(Math.max(0, lead.current - 0.6));
+      tl.delay(Math.max(0, lead.current - performance.now() / 1000 - 0.6));
       const caps = q('[data-m="cap"]');
       tl.fromTo(q('[data-m="kick"]'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.5 }, 0)
         .fromTo(q('[data-m="flight"]'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 1.2 }, 0.1)

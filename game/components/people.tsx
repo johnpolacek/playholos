@@ -49,17 +49,17 @@ export function People({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
   // One object for the whole screen: the intro tweens it, and the scene reads it every frame.
   const [dials] = useState<Dials>(() => ({ lit: 0, threads: 0, mind: 0 }));
   const [ready, setReady] = useState(false);
-  // The camera's flight to this screen: the story starts as it arrives.
+  // When the camera arrives at this screen, on the page's clock: the story starts then, however long its data took.
   const lead = useRef(0);
   const onReady = useCallback((flight: number) => {
-    lead.current = flight;
+    lead.current = performance.now() / 1000 + flight;
     setReady(true);
   }, []);
 
   const { leave, hurry } = useStage(
     root,
     (q, tl) => {
-      tl.delay(Math.max(0, lead.current - 0.6));
+      tl.delay(Math.max(0, lead.current - performance.now() / 1000 - 0.6));
       const s = dials;
       const n = { v: 0 };
       const show = () => (count.current!.textContent = Math.round(n.v).toLocaleString("en-US"));

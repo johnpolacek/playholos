@@ -80,17 +80,17 @@ export function Stand({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
   // One object for the whole screen: the intro runs the years, and the scene reads them every frame.
   const [dials] = useState<Dials>(() => ({ year: RADARS_SINCE - 2, grid: 0, labels: 0 }));
   const [ready, setReady] = useState(false);
-  // The camera's flight to this screen: the story starts as it arrives.
+  // When the camera arrives at this screen, on the page's clock: the story starts then, however long its data took.
   const lead = useRef(0);
   const onReady = useCallback((flight: number) => {
-    lead.current = flight;
+    lead.current = performance.now() / 1000 + flight;
     setReady(true);
   }, []);
 
   const { leave, hurry } = useStage(
     root,
     (q, tl) => {
-      tl.delay(Math.max(0, lead.current - 0.6));
+      tl.delay(Math.max(0, lead.current - performance.now() / 1000 - 0.6));
       const s = dials;
       const show = () => {
         const y = Math.floor(s.year ?? YEAR_0);

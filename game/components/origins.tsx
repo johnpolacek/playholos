@@ -57,10 +57,10 @@ export function Origins({ onSkip, onNext }: { onSkip(): void; onNext(): void }) 
   // One object for the whole screen: the intro moves the light, and the scene reads it every frame.
   const [dials] = useState<Dials>(() => ({ u: 0, earth: 0 }));
   const [shown, setShown] = useState(false);
-  // The camera's flight to this screen: the story starts as it arrives.
+  // When the camera arrives at this screen, on the page's clock: the story starts then, however long its data took.
   const lead = useRef(0);
   const onReady = useCallback((flight: number) => {
-    lead.current = flight;
+    lead.current = performance.now() / 1000 + flight;
     setShown(true);
   }, []);
   const ready = !!told && shown;
@@ -68,7 +68,7 @@ export function Origins({ onSkip, onNext }: { onSkip(): void; onNext(): void }) 
   const { leave, hurry } = useStage(
     root,
     (q, tl) => {
-      tl.delay(Math.max(0, lead.current - 0.6));
+      tl.delay(Math.max(0, lead.current - performance.now() / 1000 - 0.6));
       const caps = q('[data-m="cap"]');
       const follow = () => {
         clock.current!.textContent = when(agoAt(dials.u ?? 0));
@@ -131,15 +131,13 @@ export function Origins({ onSkip, onNext }: { onSkip(): void; onNext(): void }) 
           </>
         }
         art={
-          knots && (
-            <SkyArt
-              mode="origins"
-              dials={dials}
-              moments={knots}
-              onReady={onReady}
-              className={`-mx-5 mt-1 block h-[min(44vh,360px)] w-[calc(100%+40px)] max-w-none shrink-0 sm:h-[min(44vh,480px)] ${FILL}`}
-            />
-          )
+          <SkyArt
+            mode="origins"
+            dials={dials}
+            moments={knots}
+            onReady={onReady}
+            className={`-mx-5 mt-1 block h-[min(44vh,360px)] w-[calc(100%+40px)] max-w-none shrink-0 sm:h-[min(44vh,480px)] ${FILL}`}
+          />
         }
       >
         <span data-m="clock" ref={clock} className="mt-1 font-mono text-[12px] tracking-[.04em] text-muted wide:mt-5">

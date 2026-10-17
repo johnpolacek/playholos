@@ -23,16 +23,16 @@ export function Wake({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
   const root = useRef<HTMLDivElement>(null);
   const [dials] = useState<Dials>(() => ({ rise: 0 }));
   const [ready, setReady] = useState(false);
-  // The camera's flight to this screen: the story starts as it arrives.
+  // When the camera arrives at this screen, on the page's clock: the story starts then, however long its data took.
   const lead = useRef(0);
   const onReady = useCallback((flight: number) => {
-    lead.current = flight;
+    lead.current = performance.now() / 1000 + flight;
     setReady(true);
   }, []);
   const { leave } = useStage(
     root,
     (q, tl) => {
-      tl.delay(Math.max(0, lead.current - 0.6));
+      tl.delay(Math.max(0, lead.current - performance.now() / 1000 - 0.6));
       tl.fromTo(q('[data-m="sky"]'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 1.6, ease: "power1.inOut" }, 0)
         .to(dials, { rise: 1, duration: 3.4, ease: "power1.inOut" }, 0.4)
         .fromTo(q('[data-m="kick"]'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.5 }, 1.8);
