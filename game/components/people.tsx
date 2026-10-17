@@ -268,7 +268,7 @@ export function People({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
           </p>
         ))}
         <p data-m="last" className="mt-2 text-[17px] leading-snug font-medium text-other">
-          Every light is someone waiting to see what you do.
+          Every light is a soul. You are their Will.
         </p>
       </div>
       <div className="mt-auto grid shrink-0 grid-cols-[1fr_1.4fr] gap-2 pt-5 pb-4">

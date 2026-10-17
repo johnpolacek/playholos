@@ -2,7 +2,7 @@
 
 import { createContext, use, useRef, useState } from "react";
 import { useGame } from "@/components/game-provider";
-import { Origins } from "@/components/memories";
+import { Origins } from "@/components/origins";
 import { People } from "@/components/people";
 import { charsRise, gsap, prefersReducedMotion, rest, rise, riseFrom, useGSAP, useStage } from "@/lib/motion";
 
