@@ -10,6 +10,7 @@ import { FILL, Spread } from "@/components/spread";
 import { Charter } from "@/components/charter";
 import { Meet } from "@/components/meet";
 import { Leads } from "@/components/leads";
+import { Plan } from "@/components/plan";
 import { Drift } from "@/components/drift";
 import { Sky, SkyArt } from "@/components/sky";
 import type { Dials } from "@/lib/drift";
@@ -105,7 +106,7 @@ export const useLeaveShell = () => use(LeaveShell);
 
 // The phone. A new game opens on the drift, then Wake and the memories, all under one sky. A game already begun goes straight to the
 // shell. Screens past the last one built lead to the shell. A reload starts over at the drift.
-const SCREENS = [Drift, Wake, Origins, People, Stand, Inherit, Charter, Meet, Leads];
+const SCREENS = [Drift, Wake, Origins, People, Stand, Inherit, Charter, Meet, Leads, Plan];
 
 export function Opening({ className, children }: { className: string; children: React.ReactNode }) {
   const { save, wake } = useGame();
@@ -160,12 +161,14 @@ export function Opening({ className, children }: { className: string; children: 
     const next = () => (at + 1 < SCREENS.length ? setAt(at + 1) : wake());
     // Skip leaves the memories for the charter on Wake, and skips one memory after that.
     const charter = SCREENS.indexOf(Charter);
-    const skip = () => setAt(at === SCREENS.indexOf(Wake) ? charter : Math.min(at + 2, charter));
+    // Past the charter, Skip goes to Planning: as "Plan our waking." does on Meeting the Mind.
+    const skip = () =>
+      setAt(at === SCREENS.indexOf(Wake) ? charter : at > charter ? SCREENS.indexOf(Plan) : Math.min(at + 2, charter));
     body = (
       <>
         <Screen key={at} onSkip={skip} onNext={next} />
-        {/* The charter has no art of its own: the sky holds on Earth and the Moon behind it. */}
-        {Screen === Charter && <SkyArt mode="charter" className="hidden" />}
+        {/* The charter and Planning have no sky art of their own: the sky holds on Earth and the Moon behind them. */}
+        {(Screen === Charter || Screen === Plan) && <SkyArt mode="charter" className="hidden" />}
       </>
     );
   }

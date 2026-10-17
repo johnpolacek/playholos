@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, use, useEffect, useState } from "react";
+import { createContext, use, useEffect, useRef, useState } from "react";
 import { yearAt } from "@/lib/game/clock";
 import { browserStore } from "@/lib/game/store";
 import { POOL } from "@/lib/sim/pool";
@@ -13,6 +13,7 @@ interface Game {
   year: number | null;
   wake(): void;
   setCharter(charter: NonNullable<Save["charter"]>): void;
+  setPlan(plan: NonNullable<Save["plan"]>): void;
   begin(): void;
   newGame(): void;
 }
@@ -47,18 +48,26 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     return () => clearInterval(id);
   }, [began]);
 
+  // The latest save, so two changes in one tap both land: Planning's plan, then the wake that follows it.
+  const latest = useRef<Save>(undefined);
   function update(game: Save) {
+    latest.current = game;
     setSave(game);
     setNow(Date.now());
     browserStore.save(game);
   }
 
+  const change = (f: (s: Save) => Save) => {
+    const s = latest.current ?? save;
+    if (s) update(f(s));
+  };
   const game: Game = {
     save,
     year: yearAt(began, now),
-    wake: () => save && update({ ...save, woke: true }),
-    setCharter: (charter) => save && update({ ...save, charter }),
-    begin: () => save && update({ ...save, beganAt: Date.now() }),
+    wake: () => change((s) => ({ ...s, woke: true })),
+    setCharter: (charter) => change((s) => ({ ...s, charter })),
+    setPlan: (plan) => change((s) => ({ ...s, plan })),
+    begin: () => change((s) => ({ ...s, beganAt: Date.now() })),
     newGame: () => update(freshSave()),
   };
   return <GameContext value={game}>{children}</GameContext>;

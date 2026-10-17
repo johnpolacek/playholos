@@ -43,7 +43,7 @@ function Globe({ dials, onReady }: { dials: Dials; onReady(flight: number): void
   );
 }
 
-export function Meet({ onNext }: { onSkip(): void; onNext(): void }) {
+export function Meet({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
   const { save, wake } = useGame();
   const router = useRouter();
   const root = useRef<HTMLDivElement>(null);
@@ -92,6 +92,7 @@ export function Meet({ onNext }: { onSkip(): void; onNext(): void }) {
 
   function ask(text: string) {
     if (text === ASKS[0]) return leave(onNext);
+    if (text === ASKS[2]) return leave(onSkip);
     leave(() => {
       router.push(`/mind?ask=${encodeURIComponent(text)}`);
       wake();

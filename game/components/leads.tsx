@@ -108,7 +108,7 @@ function Map({ dials, ids, onReady }: { dials: Dials; ids: string[]; onReady(fli
 }
 
 export function Leads({ onNext }: { onSkip(): void; onNext(): void }) {
-  const { save } = useGame();
+  const { save, wake } = useGame();
   const router = useRouter();
   const root = useRef<HTMLDivElement>(null);
   const [felt, setFelt] = useState<FeltWorld[]>();
@@ -226,7 +226,7 @@ export function Leads({ onNext }: { onSkip(): void; onNext(): void }) {
             onClick={() =>
               leave(() => {
                 router.push(`/mind?ask=${encodeURIComponent("What doesn’t fit?")}`);
-                onNext();
+                wake();
               })
             }
             className="h-[46px] rounded-full border border-ink text-[15px] font-medium"

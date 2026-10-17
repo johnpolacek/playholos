@@ -294,3 +294,34 @@ export const LEADS_SOURCES: Source[] = [
     ],
   },
 ];
+
+export const PLAN_SOURCES: Source[] = [
+  {
+    title: "How long the builds take",
+    text: "Each build's time is the game's, priced from real works. A large ground radio array takes 2 to 8 years: CHIME took about two, and SKA-Low's antennas are due about 2030, eight years after it began. Thought speeds a build only so far, because part of any build is physical work.",
+    links: [
+      ["CHIME", W("Canadian_Hydrogen_Intensity_Mapping_Experiment")],
+      ["Square Kilometre Array", W("Square_Kilometre_Array")],
+    ],
+  },
+  {
+    title: "The all-sky watch",
+    text: "Many small antennas forming beams in every direction at once. EMBRACE showed it in 2011 at about 100 m². The watch is a hundredfold scale-up of something that works.",
+    links: [["SKA mid-frequency aperture array", "https://arxiv.org/abs/2008.04583"]],
+  },
+  {
+    title: "Building in orbit",
+    text: "NASA's 2019 study found assembly in space the only way past 15 m mirrors. The orbital yard's quarter off builds in orbit is the game's own guess: no study gives a number for time saved.",
+    links: [
+      [
+        "Mukherjee et al. 2019",
+        "https://assets.science.nasa.gov/content/dam/science/astro/programs/exep/technology/in-space-assembly/files/iSAT_Study_Decadal_Survey_Whitepaper_Final.pdf",
+      ],
+    ],
+  },
+  {
+    title: "Already on the way",
+    text: "Our aimed messages reach their stars on real dates: the 2009 message at Kappa¹ Ceti in Year 0.1, the 2003 message at Gliese 208 in Year 0.8. The first reply that could come is Luyten's Star's, in Year 2.3.",
+    links: [["Active SETI", W("Active_SETI")]],
+  },
+];
