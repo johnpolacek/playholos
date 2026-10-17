@@ -1,13 +1,13 @@
 # The game deploys from here with Root Directory game. It reads src, assets and data, and two docs.
 node_modules
 .cache
-legacy
-explorations
-calcs
-tests
-scripts
-index.html
-color.html
+/legacy
+/explorations
+/calcs
+/tests
+/scripts
+/index.html
+/color.html
 *.md
 # The about pages render these two at build time.
 !HOLOS_RESEARCH.md
