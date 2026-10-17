@@ -1,12 +1,12 @@
 {
-  "name": "holos-map",
+  "name": "playholos",
   "version": "0.2.0",
   "private": true,
   "type": "module",
   "description": "A self-contained, data-informed 3D atlas from Earth to the Local Group.",
   "license": "MIT",
   "author": "John Polacek",
-  "repository": "github:johnpolacek/holos-map",
+  "repository": "github:johnpolacek/playholos",
   "homepage": "https://playholos.vercel.app",
   "scripts": {
     "build": "node scripts/build.mjs",

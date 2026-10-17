@@ -112,7 +112,7 @@ export function Drift({ onNext }: { onSkip(): void; onNext(): void }) {
         </Link>
         <a
           data-m="foot"
-          href="https://github.com/johnpolacek/holos-map"
+          href="https://github.com/johnpolacek/playholos"
           target="_blank"
           rel="noopener noreferrer"
           className="transition-colors hover:text-ink"
