@@ -87,7 +87,10 @@ export function useStage(
         });
     })();
 
-  return { leave };
+  // A tap during a long intro plays the rest at four times the speed.
+  const hurry = () => active.current?.isActive() && active.current.timeScale(4);
+
+  return { leave, hurry };
 }
 
 /** Characters rise behind masks: for one display line that keeps kerning off. Returns the split's revert. */

@@ -148,33 +148,3 @@ export function Origins({ onSkip, onNext }: { onSkip(): void; onNext(): void }) 
     </Screen>
   );
 }
-
-const PEOPLE = [
-  ["People", "9.2 billion, still rising."],
-  ["Together", "About 195 nations. No one government."],
-  ["Their air", "Warmer than their grandparents’: past 1.5°C since about 2030."],
-  ["The machines", "Built by rival labs and states. This morning they woke as one."],
-  ["And you", "Some asked for you. Most did not. All of them are waiting to see what you do."],
-];
-
-export function People({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
-  return (
-    <Screen kick="YEAR 0 · EARTH’S PEOPLE" lead="9.2 billion of them, and you">
-      <p data-m="item" className="text-[13px] leading-[1.45] text-page-ink2">
-        No drawing here. You are one of them.
-      </p>
-      <dl className="my-0.5 grid grid-cols-[110px_1fr] gap-x-2.5 gap-y-[7px] pt-2 text-[13px]">
-        {PEOPLE.map(([k, v]) => (
-          <div key={k} data-m="item" className="col-span-2 grid grid-cols-subgrid">
-            <dt className="text-muted">{k}</dt>
-            <dd>{v}</dd>
-          </div>
-        ))}
-      </dl>
-      <div data-m="item" className="mt-3 border-l-[3px] border-l-other bg-paper px-3 py-2.5 text-[13px] leading-[1.4]">
-        Keeping them alive is the floor. <b className="text-other">What else they are for is yours to decide.</b>
-      </div>
-      <Buttons skip="Skip" next="Where things stand" onSkip={onSkip} onNext={onNext} />
-    </Screen>
-  );
-}
