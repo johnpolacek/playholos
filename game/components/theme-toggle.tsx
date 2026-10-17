@@ -35,86 +35,68 @@ function choose(c: Choice) {
 
 export const useScheme = () => useSyncExternalStore(subscribe, currentScheme, (): Scheme => "light");
 
-// The dial's rows, top to bottom, and where night sits on the world for each: half, none, all.
-const CHOICES: Choice[] = ["system", "light", "dark"];
-const SHADE = { system: 0, light: 4, dark: -4 };
-const ROW = 14;
+// How far night has crossed the world: none for light, all for dark.
+const NIGHT = { light: 13, dark: 0 };
 
-/** Every tap changes what shows: from System to the theme the phone isn't in, then the one it is, then back. */
-function next(c: Choice): Choice {
-  const os = phoneScheme();
-  const other = os === "dark" ? "light" : "dark";
-  return c === "system" ? other : c === other ? os : "system";
-}
-
-// The theme chip, in the map's corner across from the stage tag. A small world turns into night with the choice.
-export function ThemeToggle() {
+// The theme button, in the map's corner across from the stage tag, and in Wake's. It follows the phone until tapped,
+// then each tap turns the world into night or out of it. On a staged screen, the screen's useStage brings it in and
+// out as `[data-m="theme"]`.
+export function ThemeToggle({ staged = false, className = "pt-1 pr-2.5" }: { staged?: boolean; className?: string }) {
   const root = useRef<HTMLButtonElement>(null);
   const tapped = useRef(false);
-  const choice = useSyncExternalStore(subscribe, getChoice, (): Choice => "system");
+  const scheme = useScheme();
 
   // Strict Mode's dev remount clears the attribute the root layout's script set. A no-op in production.
   useLayoutEffect(() => paint(getChoice()), []);
 
-  // It enters once the map has opened, and leaves with the map.
+  // In the map, it enters once the map has opened, and leaves with the map.
   useGSAP(
     () => {
-      if (prefersReducedMotion()) return;
+      if (staged || prefersReducedMotion()) return;
       gsap.from(root.current, { autoAlpha: 0, y: -6, duration: 0.4, ease: "power3.out", delay: 0.75 });
     },
     { scope: root },
   );
 
-  // The dial rolls to the choice and night crosses the world. Set in place until the first tap.
+  // Night crosses the world. Set in place until the first tap.
   useGSAP(
     () => {
-      const q = gsap.utils.selector(root);
-      const dial = { y: -ROW * CHOICES.indexOf(choice) };
-      const shade = { x: SHADE[choice] };
-      if (!tapped.current || prefersReducedMotion()) {
-        gsap.set(q("[data-dial]"), dial);
-        gsap.set(q("[data-shade]"), shade);
-        return;
-      }
-      gsap.to(q("[data-dial]"), { ...dial, duration: 0.35, ease: "power3.out", overwrite: "auto" });
-      gsap.to(q("[data-shade]"), { ...shade, duration: 0.5, ease: "power2.inOut", overwrite: "auto" });
+      const shade = gsap.utils.selector(root)("[data-shade]");
+      const to = { x: NIGHT[scheme] };
+      if (!tapped.current || prefersReducedMotion()) gsap.set(shade, to);
+      else gsap.to(shade, { ...to, duration: 0.6, ease: "power2.inOut", overwrite: "auto" });
     },
-    { scope: root, dependencies: [choice] },
+    { scope: root, dependencies: [scheme] },
   );
 
   function tap() {
     tapped.current = true;
-    choose(next(choice));
+    choose(scheme === "dark" ? "light" : "dark");
   }
 
   return (
     <button
       ref={root}
+      data-m={staged ? "theme" : undefined}
       onClick={tap}
-      aria-label={`Theme: ${choice[0].toUpperCase()}${choice.slice(1)}`}
-      className="absolute top-0 right-0 pt-2 pr-2.5 pb-3 pl-4"
+      aria-label="Dark theme"
+      aria-pressed={scheme === "dark"}
+      className={`absolute top-0 right-0 pb-2 pl-3 ${className}`}
     >
-      <span className="flex items-center gap-[5px] rounded-[9px] border border-faint bg-paper px-[7px] py-0.5 font-mono text-[9.5px] tracking-[.06em]">
-        <svg viewBox="0 0 10 10" aria-hidden className="size-[10px]">
-          <clipPath id="theme-moon">
-            <circle cx="5" cy="5" r="4" />
+      <span className="flex size-7 items-center justify-center rounded-full border border-faint bg-paper">
+        <svg viewBox="0 0 16 16" aria-hidden className="size-3.5">
+          <clipPath id="theme-world">
+            <circle cx="8" cy="8" r="6.5" />
           </clipPath>
           {/* Night is hatched, as on Wake's Earth, so it reads as shade in either theme. */}
-          <pattern id="theme-hatch" width="2" height="2" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-            <line x1="0" y1="0" x2="0" y2="2" strokeWidth=".9" className="stroke-ink" />
+          <pattern id="theme-hatch" width="2.2" height="2.2" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <line x1="0" y1="0" x2="0" y2="2.2" strokeWidth=".9" className="stroke-ink" />
           </pattern>
-          <g clipPath="url(#theme-moon)">
-            <rect data-shade x="5" y="1" width="8" height="8" fill="url(#theme-hatch)" />
+          <g clipPath="url(#theme-world)">
+            <rect data-shade x="1.5" y="1.5" width="13" height="13" fill="url(#theme-hatch)" />
           </g>
-          <circle cx="5" cy="5" r="4" fill="none" strokeWidth="1" className="stroke-ink" />
+          <circle cx="8" cy="8" r="6.5" fill="none" strokeWidth="1.1" className="stroke-ink" />
         </svg>
-        <span aria-hidden className="h-[14px] overflow-hidden leading-[14px]">
-          <span data-dial className="flex flex-col">
-            {CHOICES.map((c) => (
-              <span key={c}>{c.toUpperCase()}</span>
-            ))}
-          </span>
-        </span>
       </span>
     </button>
   );

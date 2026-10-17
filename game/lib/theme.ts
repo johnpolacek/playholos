@@ -1,4 +1,4 @@
-// The theme: System follows the phone, and Light or Dark override it. The choice lives in this browser. The root
+// The theme follows the phone until the player picks Light or Dark. The pick lives in this browser. The root
 // layout's script paints it before the first frame, so a reload never flashes the other theme.
 export type Choice = "system" | "light" | "dark";
 export type Scheme = "light" | "dark";

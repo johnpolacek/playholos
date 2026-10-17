@@ -22,7 +22,7 @@ npm run dev                                # http://localhost:3000
   - `lib/atlas.ts` loads its maps and star data from `../assets` and `../data`.
   - Three.js and Astronomy Engine come from the atlas's packages at the repo root.
 
-- `lib/theme.ts`: System, Light or Dark, kept in this browser. The root layout's script paints it before the first frame, and the chip in the map's corner, `components/theme-toggle.tsx`, changes it. People, Stand and Inherit stay night in both.
+- `lib/theme.ts`: the theme follows the phone until the player picks Light or Dark, kept in this browser. The root layout's script paints it before the first frame. The button in the corner of Wake and the map, `components/theme-toggle.tsx`, flips it. People, Stand and Inherit stay night in both.
 - `lib/motion.ts`: the full motion treatment, from the animaxxing skills in `../.claude/skills`. Every element enters from a blank screen, rests, and leaves. Mark an element `data-m` and give its screen a `useStage` intro. Reduced motion skips the travel.
 
 Everything else inside the phone is placeholder.
