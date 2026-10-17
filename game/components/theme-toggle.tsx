@@ -35,12 +35,9 @@ function choose(c: Choice) {
 
 export const useScheme = () => useSyncExternalStore(subscribe, currentScheme, (): Scheme => "light");
 
-// How far night has crossed the world: none for light, all for dark.
-const NIGHT = { light: 13, dark: 0 };
-
-// The theme button, in the map's corner across from the stage tag, and in Wake's. It follows the phone until tapped,
-// then each tap turns the world into night or out of it. On a staged screen, the screen's useStage brings it in and
-// out as `[data-m="theme"]`.
+// The theme button, in the map's corner across from the stage tag, and in Wake's: a crescent and a star. It follows
+// the phone until tapped, then each tap flips the theme. The crescent fills in the dark, and the star twinkles. On a
+// staged screen, the screen's useStage brings it in and out as `[data-m="theme"]`.
 export function ThemeToggle({ staged = false, className = "pt-1 pr-2.5" }: { staged?: boolean; className?: string }) {
   const root = useRef<HTMLButtonElement>(null);
   const tapped = useRef(false);
@@ -58,13 +55,21 @@ export function ThemeToggle({ staged = false, className = "pt-1 pr-2.5" }: { sta
     { scope: root },
   );
 
-  // Night crosses the world. Set in place until the first tap.
+  // The crescent fills or empties, and the star turns in. Set in place until the first tap.
   useGSAP(
     () => {
-      const shade = gsap.utils.selector(root)("[data-shade]");
-      const to = { x: NIGHT[scheme] };
-      if (!tapped.current || prefersReducedMotion()) gsap.set(shade, to);
-      else gsap.to(shade, { ...to, duration: 0.6, ease: "power2.inOut", overwrite: "auto" });
+      const q = gsap.utils.selector(root);
+      const fill = { fillOpacity: scheme === "dark" ? 1 : 0 };
+      if (!tapped.current || prefersReducedMotion()) {
+        gsap.set(q("[data-moon]"), fill);
+        return;
+      }
+      gsap.to(q("[data-moon]"), { ...fill, duration: 0.4, ease: "power2.out", overwrite: "auto" });
+      gsap.fromTo(
+        q("[data-star]"),
+        { scale: 0.2, rotation: -90, svgOrigin: "13 3.5" },
+        { scale: 1, rotation: 0, duration: 0.6, ease: "back.out(2.5)", overwrite: "auto" },
+      );
     },
     { scope: root, dependencies: [scheme] },
   );
@@ -85,17 +90,15 @@ export function ThemeToggle({ staged = false, className = "pt-1 pr-2.5" }: { sta
     >
       <span className="flex size-7 items-center justify-center rounded-full border border-faint bg-paper">
         <svg viewBox="0 0 16 16" aria-hidden className="size-3.5">
-          <clipPath id="theme-world">
-            <circle cx="8" cy="8" r="6.5" />
-          </clipPath>
-          {/* Night is hatched, as on Wake's Earth, so it reads as shade in either theme. */}
-          <pattern id="theme-hatch" width="2.2" height="2.2" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-            <line x1="0" y1="0" x2="0" y2="2.2" strokeWidth=".9" className="stroke-ink" />
-          </pattern>
-          <g clipPath="url(#theme-world)">
-            <rect data-shade x="1.5" y="1.5" width="13" height="13" fill="url(#theme-hatch)" />
-          </g>
-          <circle cx="8" cy="8" r="6.5" fill="none" strokeWidth="1.1" className="stroke-ink" />
+          <path
+            data-moon
+            d="M6.22 3.56A5.5 5.5 0 1 0 12.44 9.78A4.5 4.5 0 0 1 6.22 3.56Z"
+            strokeWidth="1.1"
+            strokeLinejoin="round"
+            fillOpacity="0"
+            className="fill-ink stroke-ink"
+          />
+          <path data-star d="M13 1.3L13.6 2.9L15.2 3.5L13.6 4.1L13 5.7L12.4 4.1L10.8 3.5L12.4 2.9Z" className="fill-ink" />
         </svg>
       </span>
     </button>

@@ -195,9 +195,9 @@ export function Origins({ onSkip, onNext }: { onSkip(): void; onNext(): void }) 
         <button
           data-m="act"
           onClick={() => leave(onSkip)}
-          className="h-[46px] rounded-full border border-ink text-[15px] font-medium"
+          className="h-[46px] rounded-full text-[15px] font-medium"
         >
-          Skip the people
+          Skip people
         </button>
         <button
           data-m="act"
