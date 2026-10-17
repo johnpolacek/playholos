@@ -7,6 +7,7 @@ import { observe } from "./observing.ts";
 import { PyRandom } from "./pyrandom.ts";
 import { roll } from "./reactions.ts";
 import { loadVoices, loadWorld } from "./world.ts";
+import { pace, type Order } from "./works.ts";
 
 test("the generator is CPython's, seeded from ints and strings", () => {
   for (const [key, want] of Object.entries(golden.random)) {
@@ -54,4 +55,30 @@ test("reading times match calcs/observing.py, the dark patch's edges included", 
     assert.ok(close(got.seenH, out.seen_h), `seen ${args}`);
     for (const gas of ["water", "oxygen", "ozone"] as const) assert.ok(close(got[gas], out[gas]), `${gas} ${args}: ${got[gas]} vs ${out[gas]}`);
   }
+});
+
+// Python steps its loops a hundredth of a Year at a time and dates a work by the step it ends in. This loop is exact,
+// so it runs a little later, and the gap grows down the line: at most 0.03 Years by the fifth far-side array.
+const STEPPED = 0.05;
+const mock = (g: (typeof golden.works)[number]) => pace(g.orders as Order[], 80, { scale: g.scale, aside: g.aside as [number, number, number][] });
+
+test("works are done when calcs/early_game.py says, in all four mock games", () => {
+  for (const g of golden.works) {
+    const p = mock(g);
+    assert.deepEqual(Object.keys(p.done).sort(), Object.keys(g.done).sort(), g.name);
+    for (const [w, y] of Object.entries(g.done)) assert.ok(Math.abs(p.done[w] - (y as number)) < STEPPED, `${g.name}: ${w} at ${p.done[w]}, Python ${y}`);
+  }
+});
+
+test("Year 5 of the first mock: the watches are built, the telescope is not", () => {
+  const p = pace(golden.works[0].orders as Order[], 5, { aside: golden.works[0].aside as [number, number, number][] });
+  assert.ok(p.done["All-sky watch"] < 5 && p.done["Launch complex"] < 5);
+  assert.deepEqual(p.line.map((l) => l.work), ["Infrared telescope", "Moon vault"]);
+  assert.equal(p.dataCenters.length, 4);
+});
+
+test("a fifth of the compute stalls the first hour, and nothing breaks", () => {
+  const full = mock(golden.works[0]), deep = pace(golden.works[0].orders as Order[], 80, { scale: 0.1975, aside: golden.works[0].aside as [number, number, number][] });
+  assert.ok(deep.done["All-sky watch"] > full.done["All-sky watch"]);
+  assert.ok(deep.done["Far-side array, fifth 5"] !== undefined);
 });

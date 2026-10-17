@@ -16,6 +16,8 @@ npm run dev                                # http://localhost:3000
   - `data/worlds/`: the pool of drawn worlds, one per seed, written by `python3 ../calcs/export_worlds.py`. They hold the seed's truth, so only the server reads them.
   - `knowledge.ts` is the wall: the Mind is told what Earth knows at that moment, never the truth.
   - `pyrandom.ts` is CPython's random generator, so a roll here matches the same roll in the calcs and the mocks.
+  - `works.ts` paces Earth's works from the player's orders, in one loop from Year 0. `data/works.json` holds each work's Years and want.
+
 - `components/map-strip.tsx`: the map strip. It mounts the atlas's own scene, `../src/strip.js`, opening on Earth.
   - `lib/atlas.ts` loads its maps and star data from `../assets` and `../data`.
   - Three.js and Astronomy Engine come from the atlas's packages at the repo root.
@@ -25,3 +27,18 @@ npm run dev                                # http://localhost:3000
 Everything else inside the phone is placeholder.
 
 Live at https://holos-game.vercel.app. A push to `main` deploys it. By hand, deploy from the repo root with `vercel deploy --prod`: the Vercel project's Root Directory is `game`, and `.vercelignore` keeps the upload to what the game reads.
+
+## Orders in the save, proposed
+
+Not wired yet. Agree this with the UI before either side builds on it.
+
+- `Save` gains `orders?: Order[]`, with `Order` from `lib/sim/works.ts`.
+- An order is stamped with the game Year it was given: `yearAt(beganAt)` at the tap, 0 while planning before Begin.
+- The list only grows. A change of mind is a new order, never an edit.
+- Four kinds so far:
+  - `{ y, begin: "Moon vault" }`: a work joins the end of the line. `"Data center"` queues one for the fabs.
+  - `{ y, first: "Moon vault" }`: the player moves a work under way to the front.
+  - `{ y, standing: "Data center" }`: the fabs keep data centers coming.
+  - `{ y, studies: 0.1 }`: thought set aside for the Mind's studies.
+- Work names are the keys of `data/works.json`.
+- The chat request sends `orders` with `seed` and `beganAt`. The server replays them all with `pace(orders, now, { scale: world.earth.compute })`, so a date never drifts.

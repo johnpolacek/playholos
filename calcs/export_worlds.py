@@ -4,7 +4,7 @@ Settled 2026-10-16: the game ships a pool of drawn worlds, not a port of the dra
 second, and the game loads one when a game begins. The files hold the seed's truth, so only the game's server reads
 them, and the Mind is told only what Earth knows (game/lib/sim/knowledge.ts).
 
-Writes game/data/worlds/<seed>.json.gz, game/data/reactions.json, game/lib/sim/pool.ts, and the golden checks in
+Writes game/data/worlds/<seed>.json.gz, game/data/reactions.json, game/data/works.json, game/lib/sim/pool.ts, and the golden checks in
 game/lib/sim/golden.json that the TypeScript port is tested against. Times are game Years, Year 0 = 2040.
 """
 import gzip, json, math, random, sys
@@ -101,7 +101,55 @@ def golden():
     cases = [(10.0, 1.0, 1.0, 1.0), (4.32 / 3.2616, 0.97, 1.447, 1.52), (19.7 / 3.2616, 2.0, 1.354, 0.66), (31.18 / 3.2616, 1.5, 0.702, 0.362),
              (4.32 / 3.2616, 1.0, 0.60, 0.5), (12.9 / 3.2616, 1.2, 0.15, 0.0124)]
     seen = [dict(args=c, out={k: 'inf' if v == math.inf else v for k, v in observing.observe(*c).items()}) for c in cases]   # JSON has no infinity
-    return dict(random=seqs, rolls=choose, observe=seen)
+    return dict(random=seqs, rolls=choose, observe=seen, works=works_golden())
+
+# ---------- Works and their pacing ----------
+# calcs/early_game.py paces the mocks in two loops, each for one fixed order: first_hour() to Year 12, then replay().
+# The game runs one loop for any order (game/lib/sim/works.ts). Its numbers come from here, so they have one source.
+import early_game as eg
+FH = {w: years for w, _, years in eg.FIRST_HOUR}
+ORBIT = ('Infrared telescope', 'Launcher', 'A 15 m mirror', 'Orbital foundry', 'Seed ship')    # the yard's cut, as the mocks apply it
+
+def works_catalog():
+    R = eg.ROADS
+    years = dict(FH, **{'Ground solar': 10, 'A 15 m mirror': R['mirror'], 'Mass driver': R['driver'], 'Orbital foundry': R['foundry'],
+                        'Belt mining': R['prospect'] + R['mining'], 'Far-side array, one fifth': R['far_side'] / eg.FIFTHS_TOTAL,
+                        'Fusion drive': R['fusion_drive'], 'Seed ship': R['seed_ship'], 'Deuterium works': eg.D_WORKS_YEARS})
+    works = {w: dict(years=y, want=eg.WANTS[w][0]) for w, y in years.items()}
+    for w in ORBIT: works[w]['orbit'] = True
+    works['Belt mining']['milestone'] = ['Belt prospecting', R['mining']]          # prospecting is done when mining's Years are all that is left
+    works['Mass driver']['then'] = ['Far-side array, one fifth', 'Power from orbit']
+    works['Far-side array, one fifth']['copies'] = [eg.FIFTHS_TOTAL, 'Far-side array, fifth']
+    works['Power from orbit'] = dict(want=eg.WANTS['Power from orbit'][0], rock=eg.ORBIT_POWER_MT * 1000, most=1)
+    return dict(works=works, floor=eg.FLOOR, push=eg.PUSH, flagship=eg.FLAGSHIP_THOUGHT, gridRoom=eg.GRID_ROOM, step=1.5,
+                dataCenter=dict(years=1, aside=0.05), studies=0.1, yard=dict(work='Orbital yard', cut=0.25),
+                rock={'Mass driver': eg.DRIVER_KT, 'Belt mining': eg.MINING_KT})
+
+def mock_orders(order=eg.BY_START, extra=(), front=()):
+    """The mocks' game as the player's orders: the first hour's builds as begun, the long roads at Year 12 in `order`."""
+    o = [dict(y=0, begin='Data center'), dict(y=1.1, standing='Data center')] + [dict(y=t, begin=w) for w, t, _ in eg.FIRST_HOUR]
+    o += [dict(y=12.0, begin=w) for w in eg.BY_START if w not in FH]
+    if order != eg.BY_START: o += [dict(y=12.0, first=w) for w in reversed(order)]
+    for y, w, _ in sorted(extra):
+        o.append(dict(y=y, begin=w))
+        if w in front: o.append(dict(y=y, first=w))
+    return o
+
+def works_golden():
+    """Each mock game's dates, from early_game's two loops, for the one loop to match."""
+    aside = [list(a) for a in eg.SET_ASIDE_BASE[1:]]                                # the mock's observations. Studies and data centers are the loop's own
+    out = []
+    for name, scale, order, extra, front in (('in the order begun', 1.0, eg.BY_START, (), ()), ('matter first', 1.0, eg.MATTER_FIRST, (), ()),
+                                             ('two thirds the compute', 2 / 3, eg.BY_START, (), ())):
+        done = dict(eg.first_hour(show=False, scale=scale)[0], **eg.replay(order, show=False, scale=scale))
+        done.pop('spare')
+        out.append(dict(name=name, scale=scale, orders=mock_orders(order), aside=aside, done=done))
+    y = round(eg.replay(eg.BY_START, show=False)['Ground solar'] + 0.2, 1)
+    extra = [(y, 'Fusion drive', eg.ROADS['fusion_drive']), (y, 'Seed ship', eg.ROADS['seed_ship'] * 0.75), (y, 'Deuterium works', eg.D_WORKS_YEARS)]
+    done = dict(eg.first_hour(show=False)[0], **eg.replay(eg.BY_START, show=False, extra=extra, front=('Fusion drive',)))
+    done.pop('spare')
+    out.append(dict(name='a seed ship, its drive first', scale=1.0, orders=mock_orders(extra=extra, front=('Fusion drive',)), aside=aside, done=done))
+    return out
 
 if __name__ == '__main__':
     rows = nb.load_hosts()
@@ -111,6 +159,7 @@ if __name__ == '__main__':
         (GAME / 'data' / 'worlds' / f'{s}.json.gz').write_bytes(gzip.compress(data, mtime=0))
     tables = {n['name']: reactions.table(n['name']) for n in nb.ROSTER if reactions.table(n['name'])}
     (GAME / 'data' / 'reactions.json').write_text(json.dumps(dict(tables=tables, moves=reactions.MOVES), indent=1))
+    (GAME / 'data' / 'works.json').write_text(json.dumps(works_catalog(), indent=1))
     (GAME / 'lib' / 'sim' / 'pool.ts').write_text('// Written by calcs/export_worlds.py. The seeds a new game may draw.\n'
                                                   f'export const POOL: readonly number[] = {json.dumps(POOL)};\n')
     (GAME / 'lib' / 'sim' / 'golden.json').write_text(json.dumps(golden(), indent=1))
