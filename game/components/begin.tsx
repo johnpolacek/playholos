@@ -20,8 +20,11 @@ export function Begin() {
           Nothing here sends anything. When you begin, one Year passes every five of your minutes, and I keep going
           while you’re away.
         </div>
-        <button onClick={begin} className="mb-4 h-[46px] shrink-0 rounded-full bg-ink text-[15px] font-medium text-paper">
+        <button onClick={begin} className="mb-2 h-[46px] shrink-0 rounded-full bg-ink text-[15px] font-medium text-paper">
           Begin · Year 0 starts now
+        </button>
+        <button onClick={newGame} className="mb-4 h-9 shrink-0 rounded-full border border-ink text-sm">
+          New game
         </button>
       </>
     );
