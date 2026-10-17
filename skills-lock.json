@@ -7,6 +7,12 @@
       "skillPath": "skills/animaxxing/SKILL.md",
       "computedHash": "c9e865647a5d03f2184184c9126812ef63e195c32e5ce64c370f039b2350501f"
     },
+    "animaxxing-webgl": {
+      "source": "johnpolacek/animaxxing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/animaxxing-webgl/SKILL.md",
+      "computedHash": "c7f5f280bfb4f26b3629b07822f916f0aa30b80ab53cf4d6e50790ddc476efbe"
+    },
     "gsap-core": {
       "source": "greensock/gsap-skills",
       "sourceType": "github",
@@ -60,6 +66,12 @@
       "sourceType": "github",
       "skillPath": "skills/gsap-utils/SKILL.md",
       "computedHash": "1ab2387f6e694718a4f1b5acf2a4ab16e1b884c3428adf5f6b26d830f00826cf"
+    },
+    "gsap-vanilla": {
+      "source": "johnpolacek/animaxxing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/gsap-vanilla/SKILL.md",
+      "computedHash": "f22d1ebef412b8b596ea7a81c09ecae20146132c9da2792a6e13600f4888e460"
     }
   }
 }
