@@ -197,7 +197,11 @@ Every source the game rests on, grouped by the question it answers. Each entry s
 - **[UN World Population Prospects 2024](https://www.un.org/development/desa/pd/sites/www.un.org.development.desa.pd/files/undesa_pd_2024_wpp_2024_advance_unedited_0.pdf)** · Projection.
   - About 9.18 billion in 2040 in the medium variant, peaking near 10.3 billion in the mid-2080s.
   - Matters: Earth's people at Year 0, the lives a strike ends.
-  - Used: v2 Year 0 and Earth's road to it.
+  - Used: v2 Year 0 and Earth's road to it. The game's "Who they are" counts to 9.2 billion (`game/components/people.tsx`).
+- **[NASA Black Marble](https://earthobservatory.nasa.gov/features/NightLights)**, via [Solar System Scope's night map](https://www.solarsystemscope.com/textures/) (CC BY 4.0) · Imagery.
+  - Earth's lights at night, from the Suomi NPP satellite. Where people live and build, seen from space.
+  - Matters: the people at Year 0 shown where they really are, not as a number alone.
+  - Used: the game's "Who they are" lights about 6,800 points sampled from the atlas's night map (`game/scripts/lights.mjs`).
 - **[WMO Global Annual to Decadal Climate Update](https://wmo.int/resources/publication-series/wmo-global-annual-decadal-climate-update/wmo-global-annual-decadal-climate-update-2025-2029)** · Forecast.
   - 2024 was the first calendar year above 1.5°C. About a 70% chance the 2025 to 2029 average exceeds it. The Paris goal is a 20-year average, so the long-term crossing comes around 2030.
   - Matters: Earth's climate at Year 0.
