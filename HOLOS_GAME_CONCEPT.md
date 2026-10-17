@@ -203,10 +203,11 @@ Settled 2026-10-06. v1 used three dials without defining them here.
 - **Open or Hidden: how much it shows itself.** Open speaks, shares and lets itself be seen. Hidden stays quiet and conceals. Veyra leans Hidden after a war fought over signals. Hael leans Open after millennia of sharing every record.
 - **Expand or Deepen: where it grows.** Expand reaches outward, for more places, matter and room. Deepen turns inward, for more thought, knowledge and compute. Veyra leans Expand after its moon towns. Hael leans Deepen after its archives.
 - **Cautious or Bold: how much risk it takes.** Cautious looks before it acts, hedges and guards against loss. Bold acts first and accepts danger for gain. A cautious Earth studies a strange signal for years before answering. A bold one answers the same week. Veyra leans Cautious after a comet winter. Hael leans Bold after a century of calling out.
-- **The Will may nudge each dial one notch at the charter.** Settled 2026-10-16. History and this game's branches set the dials first. Then the Will may move each one notch, 12 points, either way, and no further. A faint mark keeps where history put it, and the Mind says in a line what the change means.
-  - Why: the charter asks what Earth is for, and dials the Will can't touch made it a slideshow. One notch keeps history in charge of where Earth starts.
-  - The founding line: the Mind offers three, fitted to the dials, and the Will picks one or writes its own. The three refresh when a dial moves.
-  - Set aside: dials fixed until play moves them, and dials the Will sets freely.
+- **The Will sets the dials by choosing Earth's charter.** Settled 2026-10-16, replacing a one-notch nudge settled the same day. The screen is "Our Charter": the Mind suggests four founding lines and the Will picks one or writes its own. There are no dials on screen.
+  - *The line is the setting.* Each suggested line sets the three dials. The Mind leads with the line Earth's history fits best, so a game with a war and a bomb leads with "Look first, then speak as one."
+  - *A line the Will writes* keeps the dials where history and the branches set them.
+  - Why: dials and nudge buttons on screen needed explaining, and the choice that matters is what Earth is for. Lines and their dial settings are in `game/lib/game/charter.ts`.
+  - Set aside: dials fixed until play moves them, a one-notch nudge, and dials the Will sets freely.
 - **Earth's base, from real history:**
   - *Open or Hidden: leans Open.* Radars since the 1950s, the Arecibo message (1974) and the Voyager records (1977). Against it: a 2015 statement urging worldwide debate before any more messages are sent.
   - *Expand or Deepen: near the middle.* Apollo, reusable heavy lift and Moon bases pull outward. The AI build-out put the decades before Year 0 into compute.

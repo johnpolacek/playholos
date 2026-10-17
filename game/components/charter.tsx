@@ -3,134 +3,33 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useGame } from "@/components/game-provider";
 import { Spread } from "@/components/spread";
-import { ENDS, HISTORY, NOTCH, WHY, base, kicks, lean, offers, reply } from "@/lib/game/charter";
+import { base, dialsFor, suggest } from "@/lib/game/charter";
 import type { EarthPast } from "@/lib/game/past";
-import { gsap, prefersReducedMotion, rise, riseFrom, useStage } from "@/lib/motion";
+import { gsap, prefersReducedMotion, rise, riseFrom, SplitText, useStage } from "@/lib/motion";
 
-// "What is Earth for?": morning, after the night. Three dials swing to where history set them, and this game's
-// branches kick them. The Will may nudge each one notch. Then the Mind offers three founding lines fitted to the
-// dials, or the Will writes its own.
+// "Our Charter": morning, after the night. The Mind suggests four founding lines, the one Earth's history fits best
+// first, or the Will writes its own. The line is the setting: each sets Earth's three dials behind it, and the Mind
+// advises from them. Wide, the chosen line stands large on the left and writes itself in as the pick changes.
 
-const R = 42;
-/** A needle's turn for a dial value: straight up at 50, flat left at 0, flat right at 100. */
-const turn = (v: number) => -90 + (180 * v) / 100;
-const tip = (v: number, r = R) => {
-  const a = Math.PI - (Math.PI * v) / 100;
-  return { x: 55 + r * Math.cos(a), y: 52 - r * Math.sin(a) };
-};
-
-function Gauge({
-  dial,
-  value,
-  history,
-  kick,
-  nudge,
-  onNudge,
-}: {
-  dial: number;
-  value: number;
-  history: number;
-  kick?: string;
-  nudge: number;
-  onNudge(n: number): void;
-}) {
-  const needle = useRef<SVGGElement>(null);
-  const first = useRef(true);
-  const [a, b] = ENDS[dial];
-  const ghost = tip(history, R + 4);
-  const ghostIn = tip(history, R - 6);
-
-  // After the intro, a nudge swings the needle to its new place.
+function Chosen({ line }: { line: string }) {
+  const el = useRef<HTMLParagraphElement>(null);
   useEffect(() => {
-    if (first.current) {
-      first.current = false;
-      return;
-    }
-    if (prefersReducedMotion()) gsap.set(needle.current, { rotation: turn(value), svgOrigin: "55 52" });
-    else gsap.to(needle.current, { rotation: turn(value), svgOrigin: "55 52", duration: 0.6, ease: "back.out(2.2)" });
-  }, [value]);
-
+    if (!el.current || prefersReducedMotion()) return;
+    const split = SplitText.create(el.current, { type: "words", aria: "auto" });
+    const tween = gsap.fromTo(
+      split.words,
+      { autoAlpha: 0, y: 14, filter: "blur(6px)" },
+      { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 0.6, ease: "power3.out", stagger: 0.06, onComplete: () => split.revert() },
+    );
+    return () => {
+      tween.kill();
+      split.revert();
+    };
+  }, [line]);
   return (
-    <div className="flex flex-col items-center">
-      <svg
-        viewBox="0 0 110 62"
-        className="w-full max-w-[120px] wide:lg:max-w-[200px]"
-        aria-label={`${a} or ${b}: ${lean(dial, value)}`}
-      >
-        <path data-m="arc" d={`M13 52 A${R} ${R} 0 0 1 97 52`} fill="none" strokeWidth="1.2" className="stroke-ink" />
-        {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((i) => {
-          const p = tip(i * 12.5, R);
-          const q = tip(i * 12.5, R - 4);
-          return (
-            <line key={i} data-m="tick" x1={p.x} y1={p.y} x2={q.x} y2={q.y} strokeWidth=".8" className="stroke-muted" />
-          );
-        })}
-        <line
-          data-m="ghost"
-          x1={ghost.x}
-          y1={ghost.y}
-          x2={ghostIn.x}
-          y2={ghostIn.y}
-          strokeWidth="2"
-          strokeLinecap="round"
-          className="stroke-you"
-          opacity={nudge ? 0.6 : 0}
-        />
-        {/* The stage shows the needle and clears its transforms when the intro ends. The turn is the dial's
-            value, so it lives on an inner group the stage never touches. */}
-        <g data-m="needle">
-          <g ref={needle} data-needle>
-            <line
-              x1="55"
-              y1="52"
-              x2="55"
-              y2={52 - R + 6}
-              strokeWidth="1.6"
-              strokeLinecap="round"
-              className="stroke-ink"
-            />
-            <circle cx="55" cy="52" r="3" className="fill-ink" />
-          </g>
-        </g>
-      </svg>
-      <div
-        data-m="ends"
-        className="-mt-1 flex w-full max-w-[120px] justify-between font-mono text-[9px] text-muted wide:lg:max-w-[200px] wide:lg:text-[10.5px]"
-      >
-        <span>{a}</span>
-        <span>{b}</span>
-      </div>
-      <span
-        data-m="why"
-        className="mt-1 min-h-[22px] text-center font-mono text-[9px] leading-tight text-muted wide:mt-2 wide:lg:text-[10.5px]"
-      >
-        {WHY[dial]}
-      </span>
-      <span
-        data-m="kick-tag"
-        className="mt-1 min-h-[14px] text-center font-mono text-[9px] text-you wide:lg:text-[10.5px]"
-      >
-        {kick}
-      </span>
-      <div data-m="nudge" className="mt-1 flex items-center gap-1 wide:mt-2 wide:gap-2">
-        <button
-          onClick={() => onNudge(nudge - 1)}
-          disabled={nudge <= -1}
-          aria-label={`Toward ${a}`}
-          className="h-8 w-8 rounded-full border border-faint text-sm disabled:opacity-25"
-        >
-          ‹
-        </button>
-        <button
-          onClick={() => onNudge(nudge + 1)}
-          disabled={nudge >= 1}
-          aria-label={`Toward ${b}`}
-          className="h-8 w-8 rounded-full border border-faint text-sm disabled:opacity-25"
-        >
-          ›
-        </button>
-      </div>
-    </div>
+    <p ref={el} key={line} className="max-w-[640px] text-[clamp(32px,4vw,56px)] leading-[1.15] font-semibold text-balance">
+      {line ? `“${line}”` : ""}
+    </p>
   );
 }
 
@@ -138,8 +37,6 @@ export function Charter({ onNext }: { onSkip(): void; onNext(): void }) {
   const { save, setCharter } = useGame();
   const root = useRef<HTMLDivElement>(null);
   const [past, setPast] = useState<EarthPast>();
-  const [nudge, setNudge] = useState([0, 0, 0]);
-  const [said, setSaid] = useState("");
   const [pick, setPick] = useState(0);
   const [own, setOwn] = useState("");
   const seed = save?.seed;
@@ -150,75 +47,29 @@ export function Charter({ onNext }: { onSkip(): void; onNext(): void }) {
       .then(setPast);
   }, [seed]);
 
-  const start = useMemo(() => (past ? base(past) : HISTORY), [past]);
-  const tags = useMemo(() => (past ? kicks(past) : []), [past]);
-  const dials = start.map((v, i) => v + nudge[i] * NOTCH);
-  const lines = offers(dials);
-  const line = pick === 3 ? own.trim() : lines[pick];
+  const history = useMemo(() => (past ? base(past) : []), [past]);
+  const lines = useMemo(() => (past ? suggest(past) : []), [past]);
+  const writing = pick === lines.length;
+  const line = writing ? own.trim() : (lines[pick]?.line ?? "");
 
   const { leave } = useStage(
     root,
     (q, tl) => {
-      const needles = q("[data-needle]");
       tl.fromTo(q('[data-m="kick"]'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.5 }, 0)
         .fromTo(q('[data-m="lead"]'), riseFrom, { ...rise, duration: 0.7 }, 0.1)
-        .set(q('[data-m="arc"]'), { autoAlpha: 1 }, 0.4)
-        .fromTo(
-          q('[data-m="arc"]'),
-          { drawSVG: "50% 50%" },
-          { drawSVG: "0% 100%", duration: 0.8, ease: "power2.inOut", stagger: 0.12 },
-          0.4,
-        )
-        .fromTo(q('[data-m="tick"]'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.3, stagger: 0.01 }, 0.8)
-        .fromTo(q('[data-m="ends"]'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.4, stagger: 0.1 }, 1)
-        .set(q('[data-m="needle"]'), { autoAlpha: 1 }, 1.1)
-        .set(needles, { rotation: 0, svgOrigin: "55 52" }, 1.1);
-      // History swings each needle, and the reason shows under it.
-      needles.forEach((n, i) => {
-        tl.to(n, { rotation: turn(HISTORY[i]), duration: 1.1, ease: "elastic.out(1, 0.6)" }, 1.3 + i * 0.25);
-      });
-      tl.fromTo(q('[data-m="why"]'), { autoAlpha: 0, y: 4 }, { autoAlpha: 1, y: 0, duration: 0.4, stagger: 0.25 }, 1.4);
-      // This game's branches kick the needles one notch.
-      let t = 2.9;
-      tags.forEach((k) => {
-        tl.to(needles[k.dial], { rotation: turn(start[k.dial]), duration: 0.5, ease: "back.out(3)" }, t);
-        t += 0.45;
-      });
-      tl.fromTo(
-        q('[data-m="kick-tag"]'),
-        { autoAlpha: 0, scale: 0.6 },
-        { autoAlpha: 1, scale: 1, duration: 0.35, ease: "back.out(2.4)", stagger: 0.2 },
-        2.9,
-      )
-        .fromTo(q('[data-m="nudge"]'), riseFrom, { ...rise, stagger: 0.08 }, t + 0.2)
-        .fromTo(q('[data-m="note"]'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.5 }, t + 0.3)
-        .fromTo(q('[data-m="lines-head"]'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.4 }, t + 0.7)
-        .fromTo(q('[data-m="line"]'), riseFrom, { ...rise, stagger: 0.12 }, t + 0.8)
-        .fromTo(q('[data-m="act"]'), riseFrom, rise, t + 1.4);
+        .fromTo(q('[data-m="art"]'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.6 }, 0.4)
+        .fromTo(q('[data-m="line"]'), riseFrom, { ...rise, stagger: 0.12 }, 0.5)
+        .fromTo(q('[data-m="act"]'), riseFrom, rise, 1.2);
     },
     !!past,
   );
 
-  // Reduced motion skips the swing: the needles start where history and the branches left them.
-  useEffect(() => {
-    if (!past || !prefersReducedMotion() || !root.current) return;
-    root.current.querySelectorAll<SVGGElement>("[data-needle]").forEach((n, i) => {
-      gsap.set(n, { rotation: turn(start[i]), svgOrigin: "55 52" });
-    });
-  }, [past, start]);
-
-  function onNudge(dial: number, n: number) {
-    setNudge((all) => all.map((v, i) => (i === dial ? n : v)));
-    setSaid(reply(dial, n));
-  }
-
   function keep() {
     if (!line) return;
-    setCharter({ line, dials });
+    setCharter({ line, dials: writing ? history : dialsFor(lines[pick].pull, history) });
     leave(onNext);
   }
 
-  // Wide, the dials are the art: they fill the left, and the founding lines stand beside them.
   return (
     <div
       ref={root}
@@ -229,66 +80,41 @@ export function Charter({ onNext }: { onSkip(): void; onNext(): void }) {
         head={
           <>
             <span data-m="kick" className="font-mono text-[10.5px] tracking-[.1em] text-muted">
-              BEFORE YEAR 0 · EARTH’S CHARTER
+              BEFORE YEAR 0 · WHAT IS EARTH FOR?
             </span>
             <h1 data-m="lead" className="mt-1.5 text-[28px] leading-tight font-semibold wide:text-[36px]">
-              What is Earth for?
+              Our Charter
             </h1>
           </>
         }
         art={
-          <div className="contents wide:flex wide:w-full wide:max-w-[720px] wide:flex-col">
-            <div className="mt-4 grid grid-cols-3 gap-2 wide:mt-0 wide:lg:gap-6">
-              {[0, 1, 2].map((i) => (
-                <Gauge
-                  key={i}
-                  dial={i}
-                  value={dials[i]}
-                  history={start[i]}
-                  kick={tags
-                    .filter((k) => k.dial === i)
-                    .map((k) => k.what)
-                    .join(" · ")}
-                  nudge={nudge[i]}
-                  onNudge={(n) => onNudge(i, n)}
-                />
-              ))}
-            </div>
-            <p
-              data-m="note"
-              className="mt-3 min-h-[38px] text-[13px] leading-snug text-page-ink2 wide:mx-auto wide:mt-8 wide:max-w-[480px] wide:text-center wide:text-[15px]"
-            >
-              {said ||
-                "History set these. Nudge each one notch if you disagree. They shape our advice, never what Earth can build."}
-            </p>
+          <div data-m="art" className="hidden wide:flex wide:w-full wide:items-center wide:justify-center wide:px-6">
+            <Chosen line={line} />
           </div>
         }
       >
-        <span data-m="lines-head" className="mt-3 font-mono text-[10.5px] tracking-[.1em] text-muted wide:mt-6">
-          FOUNDING LINE · PROPOSED BY THE MIND
-        </span>
-        <div className="mt-2 flex flex-col gap-2">
-          {lines.map((l, i) => (
+        <div className="mt-5 flex flex-col gap-2 wide:mt-6">
+          {lines.map((c, i) => (
             <button
-              key={l}
+              key={c.line}
               data-m="line"
               onClick={() => setPick(i)}
               aria-pressed={pick === i}
               className={`rounded-xl border px-3.5 py-3 text-left text-[15px] leading-snug transition-colors ${pick === i ? "border-you bg-you/10 font-medium" : "border-faint"}`}
             >
-              “{l}”
+              “{c.line}”
             </button>
           ))}
           <div
             data-m="line"
-            className={`rounded-xl border px-3.5 py-2 transition-colors ${pick === 3 ? "border-you bg-you/10" : "border-faint"}`}
+            className={`rounded-xl border px-3.5 py-2 transition-colors ${writing ? "border-you bg-you/10" : "border-faint"}`}
           >
             <input
               value={own}
-              onFocus={() => setPick(3)}
+              onFocus={() => setPick(lines.length)}
               onChange={(e) => {
                 setOwn(e.target.value);
-                setPick(3);
+                setPick(lines.length);
               }}
               maxLength={140}
               placeholder="Other: write your own"
