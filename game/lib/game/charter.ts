@@ -95,3 +95,30 @@ export function describeCharter(line: string, dials: number[]) {
   const words = dials.map((v, i) => lean(i, v)).join(", ");
   return `Earth's charter. Founding line, chosen by the Will: "${line}". Dials: ${words} (Open or Hidden, Expand or Deepen, Cautious or Bold). Reason from these when the Will asks your view. They shape advice, never what Earth can build.`;
 }
+
+// "Our Charter": the Will picks a founding line, and the line is the setting. Each sets Earth's three dials, so
+// the lines are spread across characters. The Mind leads with the one Earth's history fits best. A line the Will
+// writes itself keeps the dials where history set them. Settled 2026-10-16, replacing the dials on screen.
+export const CHARTERS: { line: string; pull: [number, number, number] }[] = [
+  { line: "We have always called out. Now find who answers.", pull: [-1, 0, 1] },
+  { line: "We were loud by accident. Be quiet on purpose.", pull: [1, 0, -1] },
+  { line: "We came close to ending ourselves. Look first, then speak as one.", pull: [0, 0, -1] },
+  { line: "Go out. Every world we reach is one we keep.", pull: [0, -1, 1] },
+  { line: "Share what we learn with anyone who listens.", pull: [-1, 1, 0] },
+  { line: "Understand the sky before we touch it.", pull: [0, 1, -1] },
+];
+
+/** How far a line moves a dial from the middle. */
+const SWAY = 22;
+
+/** The dials a line sets. Where it has no pull, the dial stays where history left it. */
+export function dialsFor(pull: number[], history: number[]) {
+  return pull.map((p, i) => (p === 0 ? history[i] : 50 + p * SWAY));
+}
+
+/** The four lines the Mind suggests, the one Earth's history fits best first. */
+export function suggest(past: EarthPast) {
+  const d = base(past).map((v) => (v - 50) / 50);
+  const fit = (pull: number[]) => pull.reduce((s, p, i) => s + p * d[i], 0) / pull.filter((p) => p !== 0).length;
+  return [...CHARTERS].sort((a, b) => fit(b.pull) - fit(a.pull)).slice(0, 4);
+}
