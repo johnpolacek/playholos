@@ -59,6 +59,10 @@ Every source the game rests on, grouped by the question it answers. Each entry s
   - Earth's aimed messages from 1974 on, with targets and arrival dates. Within 50 ly: Altair, Gliese 49, Gliese 208, 55 Cancri, HD 10307, 47 Ursae Majoris, Gliese 581, Teegarden's Star, TZ Arietis, Kappa¹ Ceti, Gliese 526, Luyten's Star.
   - Matters: Earth's real knocks. Each lasted hours, so being heard needs a listener watching Sol at that moment.
   - Used: v2 Earth's loud past.
+- **[SIMBAD](https://simbad.cds.unistra.fr/simbad/)** · Catalog.
+  - Positions for Teegarden's Star (RA 02h53m) and HD 10307 (RA 01h41m), the two message targets missing from the atlas's star list.
+  - Matters: every star Earth knocked on sits where it really is.
+  - Used: the game's "Where things stand" sky map (`game/scripts/sky.mjs`). The other ten targets, and the 536 stars within 50 ly, come from the atlas's HYG and Gaia list. Its message beams and reply windows are `calcs/knocks.py`'s sends, in `game/lib/game/knocks.ts`.
 - **Earth's aimed messages, checked 2026-10-13** · Mixed. Agent, from [Zaitsev 2006](https://arxiv.org/abs/physics/0610031), the senders' own pages and accounts, and [LEMMiNO's history of interstellar messages, 2025](https://www.lemmi.no/p/shouting-at-stars), which I read for the 2009, 2012 and 2013 sends.
   - *Message to Altair,* August 15, 1983, from the Stanford dish, one hour. Its power is not in any source found.
   - *Teen Age Message,* 2001, Evpatoria: six sessions, 366 minutes in all, about 100 kW on average, about an hour a star. Only 47 Ursae Majoris is within 50 ly.

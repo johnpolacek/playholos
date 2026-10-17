@@ -10,7 +10,7 @@ import { gsap, prefersReducedMotion, rise, riseFrom, useStage } from "@/lib/moti
 type Light = [lat: number, lon: number, b: number];
 
 // The night, whatever the phone's theme: the dark tokens, on this screen only.
-const NIGHT = {
+export const NIGHT = {
   "--paper": "#07090b",
   "--panel": "#07090b",
   "--ink": "#e6e3db",

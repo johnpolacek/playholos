@@ -4,6 +4,7 @@ import { createContext, use, useRef, useState } from "react";
 import { useGame } from "@/components/game-provider";
 import { Origins } from "@/components/origins";
 import { People } from "@/components/people";
+import { Stand } from "@/components/stand";
 import { charsRise, gsap, prefersReducedMotion, rest, rise, riseFrom, useGSAP, useStage } from "@/lib/motion";
 
 // The mock's stipple: a fixed scatter, the same on every phone.
@@ -174,7 +175,7 @@ export const useLeaveShell = () => use(LeaveShell);
 
 // The phone. A new game opens on Wake, then the memories. A game already begun goes straight to the shell.
 // Screens past the last one built lead to the shell. A reload starts the memories over.
-const SCREENS = [Wake, Origins, People];
+const SCREENS = [Wake, Origins, People, Stand];
 
 export function Opening({ className, children }: { className: string; children: React.ReactNode }) {
   const { save, wake } = useGame();
