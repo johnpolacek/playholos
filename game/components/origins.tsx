@@ -162,7 +162,7 @@ export function Origins({ onSkip, onNext }: { onSkip(): void; onNext(): void }) 
             onClick={() => leave(onNext)}
             className="h-[46px] rounded-full bg-ink text-[15px] font-medium text-paper"
           >
-            Who they are
+            Who we are
           </button>
         </div>
       </Spread>

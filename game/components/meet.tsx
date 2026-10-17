@@ -119,7 +119,7 @@ export function Meet({ onNext }: { onSkip(): void; onNext(): void }) {
         </span>
         <p className="mt-1.5 text-[19px] leading-snug font-medium wide:text-[22px]">
           <span data-m="open" className="inline-block">
-            This morning Earth’s people and machines woke as one:
+            This morning we and our machines woke as one:
           </span>{" "}
           <span data-m="dish" className="inline-block text-you">
             every dish,

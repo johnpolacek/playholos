@@ -1,4 +1,4 @@
-// Earth's night lights for "Who they are": where the people are, from the atlas's night map (Solar System Scope,
+// Earth's night lights for "Who we are": where the people are, from the atlas's night map (Solar System Scope,
 // CC BY 4.0, after NASA's Black Marble). Writes lib/game/lights.json as [lat, lon, brightness 1-9] triples.
 // Run from game/: node scripts/lights.mjs
 import { writeFileSync } from "node:fs";

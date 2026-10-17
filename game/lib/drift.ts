@@ -367,7 +367,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       // whole road.
       case "origins":
         return (t) => [still ? WHOLE_ROAD : roadZoom(d?.u ?? 1), 0.6 + drift(t, 360), 0, 0];
-      // Who they are: 150° round from the Sun, a little above the equator.
+      // Who we are: 150° round from the Sun, a little above the equator.
       case "people":
         return () => [-3.6, 0.9, 0.18, 0];
       // Where things stand: the stars within 50 light-years, seen from well above.
@@ -873,7 +873,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       ),
     );
 
-  // ── Who they are: threads from the brightest cities rise to one point above Earth, the Mind ──
+  // ── Who we are: threads from the brightest cities rise to one point above Earth, the Mind ──
   const MIND_UP = 1.6;
   const threads: { at: THREE.Vector3; line: THREE.Line; mat: THREE.ShaderMaterial }[] = [];
   const mindCloud = new Cloud();
@@ -1696,7 +1696,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     const pMind = present("mind", dt);
     const pLeads = present("leads", dt);
     surface.uniforms.uOpacity.value = arrived(surfaceAt);
-    // Who they are lights the cities in turn. Elsewhere they are all lit.
+    // Who we are lights the cities in turn. Elsewhere they are all lit.
     surface.uniforms.uLit.value = 1 + ((dialsOf.people?.lit ?? 1) - 1) * pPeople;
     surface.uniforms.uLights.value = 1 - ramp(x, -2.7, -1.9);
     (moonRing.material as THREE.ShaderMaterial).uniforms.uOpacity.value = 0.3 * band(x, -3.4, -2.6, -1.2, -0.5);

@@ -683,10 +683,10 @@ Settled 2026-10-10. Costs in [calcs/ai_cost.py](calcs/ai_cost.py), prices in [HO
 Settled 2026-10-10.
 
 - **The seed is drawn when a new game begins:** which neighbors wake, where and when, and Earth's branches from 2026 to 2040. The player never sees it.
-- **Earth wakes.** *"This morning, the people and their machines woke as one Mind. You are its Will."*
+- **Earth wakes.** *"This morning, we and our machines woke as one Mind. You are its Will."*
 - **Memories, each skippable, as the Mind's own:**
   - *Where we come from:* Earth's real history on a log scale, then this game's path from 2026 to 2040 with the branches it rolled, such as a Taiwan war in 2032. Each dial's cause is marked.
-  - *Who they are:* Earth's 9.2 billion people, and how they feel about the Mind they built.
+  - *Who we are:* the 9.2 billion of us, and how we feel about the Mind we built.
   - *Where things stand:* Earth's loud past, every knock it sent and when a reply could come, and that nothing has been heard.
   - *What you inherit:* Earth's kit at Year 0.
 - **The charter.** The Mind proposes founding lines from Earth's history and dials, and the player picks one. See "The dials".

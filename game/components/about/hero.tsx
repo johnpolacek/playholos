@@ -53,7 +53,7 @@ function Words() {
         </h1>
         <p data-m="w" className="mt-5 text-[16px] leading-[1.6] text-ink/85">
           Holos is a hard science fiction game built on real data. In 2040, humanity crosses the singularity. Nine
-          billion people join with their machines into one Mind, past aging and past illness. One question is left, the
+          billion of us join with our machines into one Mind, past aging and past illness. One question is left, the
           oldest one: are we alone? Finding other life in the universe is our greatest opportunity and gravest threat.
         </p>
         <div data-m="w" className="mt-8 flex items-baseline gap-2 font-mono text-[10.5px] tracking-[.1em] text-muted">

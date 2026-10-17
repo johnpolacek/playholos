@@ -7,9 +7,9 @@ import type { Dials } from "@/lib/drift";
 import { PEOPLE_SOURCES } from "@/lib/game/sources";
 import { prefersReducedMotion, rise, riseFrom, useStage } from "@/lib/motion";
 
-// "Who they are": Earth at night, in the game's scene. The globe turns in the dark while its real city lights come
+// "Who we are": Earth at night, in the game's scene. The globe turns in the dark while its real city lights come
 // on, cities first, and the count climbs to 9.2 billion, the UN's 2040 projection. Then threads rise from the cities
-// and meet in one point: the people and their machines, woken as one. The lights are NASA's Black Marble, by way of the atlas's night
+// and meet in one point: we and our machines, woken as one. The lights are NASA's Black Marble, by way of the atlas's night
 // map (scripts/lights.mjs).
 
 const PEOPLE = 9.2e9;
@@ -41,7 +41,7 @@ function Globe({ dials, onReady }: { dials: Dials; onReady(flight: number): void
   );
 }
 
-const LINES = ["About 195 nations. No one government.", "Their air is warmer than their recent ancestors knew."];
+const LINES = ["About 195 nations. No one government.", "Our air is warmer than our recent ancestors knew."];
 
 export function People({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
   const root = useRef<HTMLDivElement>(null);
@@ -120,7 +120,7 @@ export function People({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
             </p>
           ))}
           <p data-m="last" className="mt-2 text-[17px] leading-snug font-medium text-other">
-            Every light is a soul. You are their Will.
+            Every light is a soul. You are our Will.
           </p>
         </div>
         <div className="mt-auto grid shrink-0 grid-cols-[1fr_1.4fr] gap-2 pt-5 pb-4 wide:pt-8">

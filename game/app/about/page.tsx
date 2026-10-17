@@ -141,8 +141,8 @@ export default function About() {
               <h3 className="mt-3 text-[18px] font-semibold">Humanity crosses the singularity by 2040</h3>
               <p className="mt-2 text-[15px] leading-[1.6] text-page-ink2">
                 Forecasters put general AI near 2031, and the most probable 2040 has several rival AIs. The game goes
-                further: Earth&rsquo;s people and machines become one Mind, and life is solved. No one ages, and every
-                mind is linked.
+                further: we and our machines become one Mind, and life is solved. No one ages, and every mind is
+                linked.
               </p>
             </div>
           </div>
