@@ -117,7 +117,6 @@ export function Origins({ onSkip, onNext }: { onSkip(): void; onNext(): void }) 
         t - 0.2,
       )
         .to(head, { autoAlpha: 0, duration: 0.4 }, t)
-        .fromTo(q('[data-m="note"]'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.5 }, t + 0.4)
         .fromTo(q('[data-m="act"]'), riseFrom, { ...rise, stagger: 0.08 }, t + 0.6);
     },
     !!told,
@@ -187,14 +186,6 @@ export function Origins({ onSkip, onNext }: { onSkip(): void; onNext(): void }) 
         ))}
         <Caption m={NOW} now />
       </div>
-      {told && (
-        <p data-m="note" className="mt-2 text-xs leading-[1.45] text-muted">
-          Each blue mark set or moved a dial.{" "}
-          {told.rolled
-            ? `The last ${told.rolled} happened in this game, not every game.`
-            : "No branch was rolled in this game."}
-        </p>
-      )}
       <div className="mt-auto grid shrink-0 grid-cols-[1fr_1.4fr] gap-2 pt-5 pb-4">
         <button
           data-m="act"
