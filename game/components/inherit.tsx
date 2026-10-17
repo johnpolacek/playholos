@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { useGame } from "@/components/game-provider";
 import { NIGHT } from "@/components/people";
 import type { EarthPast } from "@/lib/game/past";
+import { Sources } from "@/components/sources";
+import { INHERIT_SOURCES } from "@/lib/game/sources";
 import { gsap, prefersReducedMotion, rise, riseFrom, useStage } from "@/lib/motion";
 
 // "What you inherit": Earth's kit at Year 0, as a powers-of-ten flight. The view opens on Earth's night lights and
@@ -397,9 +399,12 @@ export function Inherit({ onSkip, onNext }: { onSkip(): void; onNext(): void }) 
       style={{ ...NIGHT, visibility: ready ? undefined : "hidden" }}
       className="flex grow flex-col overflow-y-auto bg-paper px-5 pt-6 text-ink"
     >
-      <span data-m="kick" className="font-mono text-[10.5px] tracking-[.1em] text-muted">
-        YEAR 0 · WHAT YOU INHERIT
-      </span>
+      <div className="flex items-center justify-between">
+        <span data-m="kick" className="font-mono text-[10.5px] tracking-[.1em] text-muted">
+          YEAR 0 · WHAT YOU INHERIT
+        </span>
+        <Sources sources={INHERIT_SOURCES} />
+      </div>
       {ready && <Flight zoom={zoom} lights={lights} />}
       <div className="mt-2 grid min-h-[104px]">{past && stops(past).map((s) => <Stop key={s.kick} {...s} />)}</div>
       <div className="mt-3 grid grid-cols-3 gap-2.5 border-t border-faint pt-3">

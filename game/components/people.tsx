@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { Sources } from "@/components/sources";
+import { PEOPLE_SOURCES } from "@/lib/game/sources";
 import { gsap, prefersReducedMotion, rise, riseFrom, useStage } from "@/lib/motion";
 
 // "Who they are": Earth at night. The globe turns in the dark while its real city lights come on and the count
@@ -195,12 +197,7 @@ function Globe({ scene, lights }: { scene: React.RefObject<Scene>; lights: Light
   return <canvas ref={canvas} data-m="globe" aria-hidden className="block h-[min(46vh,360px)] w-full shrink-0" />;
 }
 
-const LINES = [
-  "About 195 nations. No one government.",
-  "Their air is warmer than their grandparents knew.",
-  "This morning, every machine they built woke as one.",
-  "Some asked for you. Most did not.",
-];
+const LINES = ["About 195 nations. No one government.", "Their air is warmer than their recent ancestors knew."];
 
 export function People({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
   const root = useRef<HTMLDivElement>(null);
@@ -226,10 +223,10 @@ export function People({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
         .to(n, { v: PEOPLE, duration: 3.6, ease: "power1.in", onUpdate: show }, 1)
         .fromTo(q('[data-m="still"]'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.6 }, 4.4);
       q('[data-m="line"]').forEach((line, i) => tl.fromTo(line, riseFrom, { ...rise, duration: 0.6 }, 4.8 + i * 1.1));
-      tl.to(s, { threads: 1, duration: 1.8, ease: "power2.inOut" }, 7)
-        .to(s, { mind: 1, duration: 0.6, ease: "back.out(2)" }, 8.5)
-        .fromTo(q('[data-m="last"]'), riseFrom, { ...rise, duration: 0.8 }, 9.4)
-        .fromTo(q('[data-m="act"]'), riseFrom, { ...rise, stagger: 0.08 }, 10);
+      tl.to(s, { threads: 1, duration: 1.8, ease: "power2.inOut" }, 6.2)
+        .to(s, { mind: 1, duration: 0.6, ease: "back.out(2)" }, 7.7)
+        .fromTo(q('[data-m="last"]'), riseFrom, { ...rise, duration: 0.8 }, 8.6)
+        .fromTo(q('[data-m="act"]'), riseFrom, { ...rise, stagger: 0.08 }, 9.2);
     },
     !!lights,
   );
@@ -249,9 +246,12 @@ export function People({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
       style={{ ...NIGHT, visibility: lights ? undefined : "hidden" }}
       className="flex grow flex-col overflow-y-auto bg-paper px-5 pt-6 text-ink"
     >
-      <span data-m="kick" className="font-mono text-[10.5px] tracking-[.1em] text-muted">
-        YEAR 0 · EARTH’S PEOPLE
-      </span>
+      <div className="flex items-center justify-between">
+        <span data-m="kick" className="font-mono text-[10.5px] tracking-[.1em] text-muted">
+          YEAR 0 · EARTH’S PEOPLE
+        </span>
+        <Sources sources={PEOPLE_SOURCES} />
+      </div>
       {lights && <Globe scene={scene} lights={lights} />}
       <div data-m="count" className="-mt-2 flex items-baseline gap-2">
         <span ref={count} className="text-[34px] leading-none font-semibold tracking-[-.01em] tabular-nums">

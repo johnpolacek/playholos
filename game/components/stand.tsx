@@ -4,6 +4,8 @@ import { useEffect, useRef } from "react";
 import { NIGHT } from "@/components/people";
 import { KNOCKS, RADARS_SINCE } from "@/lib/game/knocks";
 import { YEAR_0 } from "@/lib/game/clock";
+import { Sources } from "@/components/sources";
+import { STAND_SOURCES } from "@/lib/game/sources";
 import { gsap, prefersReducedMotion, rise, riseFrom, useStage } from "@/lib/motion";
 import SKY from "@/lib/game/sky.json";
 
@@ -243,13 +245,14 @@ export function Stand({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
       style={NIGHT}
       className="flex grow flex-col overflow-y-auto bg-paper px-5 pt-6 text-ink"
     >
-      <div className="flex items-baseline justify-between">
+      <div className="flex items-center justify-between gap-3">
         <span data-m="kick" className="font-mono text-[10.5px] tracking-[.1em] text-muted">
           YEAR 0 · WHERE THINGS STAND
         </span>
-        <span data-m="clock" ref={clock} className="font-mono text-[13px] text-other tabular-nums">
+        <span data-m="clock" ref={clock} className="ml-auto font-mono text-[13px] text-other tabular-nums">
           {RADARS_SINCE}
         </span>
+        <Sources sources={STAND_SOURCES} />
       </div>
       <Sky scene={scene} />
       <h1 data-m="lead" className="mt-2 text-[24px] leading-tight font-semibold">
@@ -262,7 +265,7 @@ export function Stand({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
           </p>
         ))}
         <p data-m="last" className="mt-2 text-[17px] leading-snug font-medium text-other">
-          I know where our noise has gone. I can’t know who heard it.
+          We know where our noise has gone. We can’t know who heard it.
         </p>
       </div>
       <div className="mt-auto grid shrink-0 grid-cols-[1fr_1.4fr] gap-2 pt-5 pb-4">

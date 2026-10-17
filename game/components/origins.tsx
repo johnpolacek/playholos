@@ -3,6 +3,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useGame } from "@/components/game-provider";
 import { history, type EarthPast, type Moment } from "@/lib/game/past";
+import { Sources } from "@/components/sources";
+import { originsSources } from "@/lib/game/sources";
 import { gsap, prefersReducedMotion, rise, riseFrom, useStage } from "@/lib/motion";
 
 // "Where we come from": 4.6 billion years as a spiral, drawn from the outside in. Each turn holds less time, so the
@@ -56,7 +58,7 @@ function Caption({ m, now }: { m: Moment; now?: boolean }) {
   );
 }
 
-const NOW: Moment = { when: "2040", ago: 0, what: "The machines wake as one" };
+const NOW: Moment = { when: "2040", ago: 0, what: "Earth wakes" };
 
 export function Origins({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
   const { save } = useGame();
@@ -138,9 +140,12 @@ export function Origins({ onSkip, onNext }: { onSkip(): void; onNext(): void }) 
       style={told ? undefined : { visibility: "hidden" }}
       className="flex grow flex-col overflow-y-auto bg-paper px-5 pt-6"
     >
-      <span data-m="kick" className="font-mono text-[10.5px] tracking-[.1em] text-muted">
-        BEFORE YEAR 0 · WHERE WE COME FROM
-      </span>
+      <div className="flex items-center justify-between">
+        <span data-m="kick" className="font-mono text-[10.5px] tracking-[.1em] text-muted">
+          BEFORE YEAR 0 · WHERE WE COME FROM
+        </span>
+        <Sources sources={past ? originsSources(past) : []} />
+      </div>
       <h1 data-m="lead" className="mt-1.5 text-[22px] font-semibold">
         4.6 billion years to this morning
       </h1>

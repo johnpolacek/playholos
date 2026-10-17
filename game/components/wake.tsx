@@ -234,7 +234,7 @@ export function Opening({ className, children }: { className: string; children: 
     body = <Screen key={at} onSkip={skip} onNext={next} />;
   }
   return (
-    <div ref={frame} className={className}>
+    <div ref={frame} id="phone" className={`relative ${className}`}>
       <LeaveShell value={leaveShell}>{body}</LeaveShell>
     </div>
   );
