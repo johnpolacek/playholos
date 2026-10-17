@@ -1,6 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import { useGame } from "@/components/game-provider";
+import { Origins, People } from "@/components/memories";
 
 // The mock's stipple: a fixed scatter, the same on every phone.
 function stipple(seed: number, n: number, w: number, h: number) {
@@ -35,9 +37,8 @@ function EarthAndMoon() {
   );
 }
 
-// The first screen of a new game, before the shell. Both ways on lead to the shell until the memories are built.
-export function Wake() {
-  const { wake } = useGame();
+// The first screen of a new game, before the shell.
+export function Wake({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
   return (
     <div className="flex grow flex-col overflow-y-auto bg-paper">
       <EarthAndMoon />
@@ -52,10 +53,10 @@ export function Wake() {
           <b className="font-semibold text-ink">You are its Will.</b> What Earth becomes is yours to choose.
         </p>
         <div className="mt-auto grid grid-cols-[1fr_1.4fr] gap-2 pt-4">
-          <button onClick={wake} className="h-[46px] rounded-full border border-ink text-[15px] font-medium">
+          <button onClick={onSkip} className="h-[46px] rounded-full border border-ink text-[15px] font-medium">
             Skip the memories
           </button>
-          <button onClick={wake} className="h-[46px] rounded-full bg-ink text-[15px] font-medium text-paper">
+          <button onClick={onNext} className="h-[46px] rounded-full bg-ink text-[15px] font-medium text-paper">
             Where we come from
           </button>
         </div>
@@ -64,10 +65,18 @@ export function Wake() {
   );
 }
 
-// A new game opens on Wake. A game already begun goes straight to the shell.
+// A new game opens on Wake, then the memories. A game already begun goes straight to the shell.
+// Screens past the last one built lead to the shell. A reload starts the memories over.
+const SCREENS = [Wake, Origins, People];
+
 export function Opening({ children }: { children: React.ReactNode }) {
-  const { save } = useGame();
+  const { save, wake } = useGame();
+  const [at, setAt] = useState(0);
   if (!save) return <div className="grow bg-paper" />;
-  if (!save.woke && save.beganAt === null) return <Wake />;
-  return children;
+  if (save.woke || save.beganAt !== null) return children;
+  const Screen = SCREENS[at];
+  const next = () => (at + 1 < SCREENS.length ? setAt(at + 1) : wake());
+  // Skip leaves the memories on the first screen, and skips one memory after that.
+  const skip = () => (at === 0 || at + 2 >= SCREENS.length ? wake() : setAt(at + 2));
+  return <Screen key={at} onSkip={skip} onNext={next} />;
 }
