@@ -6,6 +6,7 @@ import { Origins } from "@/components/origins";
 import { People } from "@/components/people";
 import { Stand } from "@/components/stand";
 import { Inherit } from "@/components/inherit";
+import { Charter } from "@/components/charter";
 import { charsRise, gsap, prefersReducedMotion, rest, rise, riseFrom, useGSAP, useStage } from "@/lib/motion";
 
 // The mock's stipple: a fixed scatter, the same on every phone.
@@ -176,7 +177,7 @@ export const useLeaveShell = () => use(LeaveShell);
 
 // The phone. A new game opens on Wake, then the memories. A game already begun goes straight to the shell.
 // Screens past the last one built lead to the shell. A reload starts the memories over.
-const SCREENS = [Wake, Origins, People, Stand, Inherit];
+const SCREENS = [Wake, Origins, People, Stand, Inherit, Charter];
 
 export function Opening({ className, children }: { className: string; children: React.ReactNode }) {
   const { save, wake } = useGame();
@@ -229,8 +230,9 @@ export function Opening({ className, children }: { className: string; children: 
   else if (save) {
     const Screen = SCREENS[at];
     const next = () => (at + 1 < SCREENS.length ? setAt(at + 1) : wake());
-    // Skip leaves the memories on the first screen, and skips one memory after that.
-    const skip = () => (at === 0 || at + 2 >= SCREENS.length ? wake() : setAt(at + 2));
+    // Skip leaves the memories for the charter on the first screen, and skips one memory after that.
+    const charter = SCREENS.indexOf(Charter);
+    const skip = () => setAt(at === 0 ? charter : Math.min(at + 2, charter));
     body = <Screen key={at} onSkip={skip} onNext={next} />;
   }
   return (

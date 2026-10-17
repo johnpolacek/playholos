@@ -12,7 +12,7 @@ const transport = new DefaultChatTransport({
   api: "/api/mind",
   body: async () => {
     const save = await browserStore.load();
-    return { beganAt: save?.beganAt ?? null, seed: save?.seed ?? null };
+    return { beganAt: save?.beganAt ?? null, seed: save?.seed ?? null, charter: save?.charter ?? null };
   },
 });
 

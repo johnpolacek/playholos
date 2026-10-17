@@ -12,6 +12,7 @@ interface Game {
   /** Game Years since Begin. Null before Begin, or while loading. */
   year: number | null;
   wake(): void;
+  setCharter(charter: NonNullable<Save["charter"]>): void;
   begin(): void;
   newGame(): void;
 }
@@ -56,6 +57,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     save,
     year: yearAt(began, now),
     wake: () => save && update({ ...save, woke: true }),
+    setCharter: (charter) => save && update({ ...save, charter }),
     begin: () => save && update({ ...save, beganAt: Date.now() }),
     newGame: () => update(freshSave()),
   };

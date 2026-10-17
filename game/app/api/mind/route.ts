@@ -3,6 +3,7 @@ import { convertToModelMessages, createUIMessageStreamResponse, streamText, toUI
 import { cookies } from "next/headers";
 import { ACCESS_COOKIE, admits } from "@/lib/access";
 import { realTime, tenths, YEAR_0, yearAt } from "@/lib/game/clock";
+import { describeCharter } from "@/lib/game/charter";
 import { EARTH_AT_YEAR_0 } from "@/lib/mind/earth";
 import { EARTH_LEADS } from "@/lib/mind/leads";
 import { describe, earthKnows } from "@/lib/sim/knowledge";
@@ -24,19 +25,26 @@ function now(beganAt: number | null) {
   return `It is Year ${y}, ${(YEAR_0 + y).toFixed(1)}. Year 0 began ${realTime(year)} ago in the Will's time. One Year passes every five of the Will's minutes, and the clock runs while you talk.`;
 }
 
+// The Will's charter, from its save. Checked, since it comes from the browser.
+function readCharter(c: unknown) {
+  const { line, dials } = (c ?? {}) as { line?: unknown; dials?: unknown };
+  const ok = typeof line === "string" && Array.isArray(dials) && dials.length === 3 && dials.every((d) => typeof d === "number");
+  return ok ? describeCharter(line.slice(0, 140), dials) : "";
+}
+
 export async function POST(req: Request) {
   // The proxy already checks the access cookie. The Mind spends real money, so it checks again.
   if (!admits((await cookies()).get(ACCESS_COOKIE)?.value)) return Response.json({ error: "Locked." }, { status: 401 });
   if (!process.env.ANTHROPIC_API_KEY) {
     return Response.json({ error: "The Mind is not connected. Set ANTHROPIC_API_KEY in .env.local." }, { status: 503 });
   }
-  const { messages, beganAt, seed }: { messages: UIMessage[]; beganAt?: unknown; seed?: unknown } = await req.json();
+  const { messages, beganAt, seed, charter }: { messages: UIMessage[]; beganAt?: unknown; seed?: unknown; charter?: unknown } = await req.json();
   const began = typeof beganAt === "number" && Number.isFinite(beganAt) ? beganAt : null;
   // The knowledge wall: the seed's world stays here, and the Mind hears only what Earth knows of it.
   const known = inPool(seed) ? await loadWorld(seed).then(async (w) => describe(earthKnows(w, Math.max(0, yearAt(began) ?? 0), await loadVoices(w)))) : "";
   const result = streamText({
     model: anthropic("claude-opus-5-5"),
-    system: [MIND, EARTH_AT_YEAR_0, EARTH_LEADS, known, now(began)].filter(Boolean).join("\n\n"),
+    system: [MIND, readCharter(charter), EARTH_AT_YEAR_0, EARTH_LEADS, known, now(began)].filter(Boolean).join("\n\n"),
     messages: await convertToModelMessages(messages),
     maxOutputTokens: 4000,
     providerOptions: { anthropic: { effort: "low" } satisfies AnthropicLanguageModelOptions },

@@ -7,4 +7,6 @@ export interface Save {
   beganAt: number | null;
   /** Past the first screen. Missing on saves from before it. */
   woke?: boolean;
+  /** Earth's founding line and dials, from the charter screen. */
+  charter?: { line: string; dials: number[] };
 }
