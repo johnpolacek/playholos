@@ -12,7 +12,8 @@ import { prefersReducedMotion, rise, riseFrom, useStage } from "@/lib/motion";
 
 // "Meeting the Mind": the last screen before the shell. Earth turns close, and its real machines come on as the Mind
 // names them: the dishes, the telescopes, the data centers. Threads rise from every one and meet in the Mind. Then
-// its first words, its first advice from the charter, and three things the Will can ask. Each opens the Mind's chat.
+// its first words, its first advice from the charter, and three things the Will can ask. "What doesn't fit?" shows
+// the leads on the map. The others open the Mind's chat with the question asked.
 
 const ASKS = ["What doesn’t fit?", "Who has heard us?", "Plan our waking."];
 
@@ -43,7 +44,7 @@ function Globe({ dials, onReady }: { dials: Dials; onReady(flight: number): void
 }
 
 export function Meet({ onNext }: { onSkip(): void; onNext(): void }) {
-  const { save } = useGame();
+  const { save, wake } = useGame();
   const router = useRouter();
   const root = useRef<HTMLDivElement>(null);
   const [dials] = useState<Dials>(() => ({ dish: 0, scope: 0, compute: 0, threads: 0, mind: 0 }));
@@ -90,9 +91,10 @@ export function Meet({ onNext }: { onSkip(): void; onNext(): void }) {
   }, [ready, dials]);
 
   function ask(text: string) {
+    if (text === ASKS[0]) return leave(onNext);
     leave(() => {
       router.push(`/mind?ask=${encodeURIComponent(text)}`);
-      onNext();
+      wake();
     });
   }
 
@@ -156,7 +158,7 @@ export function Meet({ onNext }: { onSkip(): void; onNext(): void }) {
               {text}
             </button>
           ))}
-          <button data-m="act" onClick={() => leave(onNext)} className="h-9 text-[13px] text-muted">
+          <button data-m="act" onClick={() => leave(wake)} className="h-9 text-[13px] text-muted">
             Later
           </button>
         </div>

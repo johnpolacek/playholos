@@ -610,6 +610,11 @@ What Sol's own instruments have found nearby. For v2 open question 3.
   - Used: v2 [How Earth learns](HOLOS_GAME_CONCEPT.md#how-earth-learns), and both mocks.
 - Earlier entries also apply: Epsilon Indi Ab, Delta Pavonis, Tau Ceti, Beta Hydri, Epsilon Eridani b, TRAPPIST-1 f and the Earth transit zone, where Teegarden's Star enters about 2050.
 
+- **Where the leads sit, for the leads screen.** Added 2026-10-17. Positions of 82 Eridani (Gl 139), Fomalhaut (Gl 881), Luyten's Star (Gl 273) and every star where a game in the pool can feel a world, 70 in all.
+  - Found: catalog stars match the HYG list in data/stars.json by Gliese or HIP name. The rest match the Gaia Catalogue of Nearby Stars (Gaia Collaboration, Smart et al. 2021) by Gaia EDR3 id, from .cache/gcns-100ly.csv. All 70 matched.
+  - Matters: each lead is drawn at its real direction and the game's distance, so the map is the real sky near Sol.
+  - Used: game/lib/game/leads.json, built by game/scripts/leads.mjs, and the leads screen.
+
 ## Reading air
 
 - **[Krissansen-Totton et al., published 2026](https://arxiv.org/abs/2507.14771)** · Published.

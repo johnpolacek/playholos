@@ -12,6 +12,7 @@ import { skyBasis } from "../../src/coordinates.js";
 import { AGE, WHOLE_ROAD, agoAt, place as placeOf, roadZoom } from "./game/road";
 import { KNOCKS, RADARS_SINCE, TARGET_DEC } from "./game/knocks";
 import SKY from "./game/sky.json";
+import LEADS from "./game/leads.json";
 import { MACHINES, type MachineKind } from "./game/machines";
 import {
   DEG,
@@ -54,10 +55,14 @@ export interface Dials {
   dish?: number;
   scope?: number;
   compute?: number;
+  /** What doesn't fit: how many of Earth's leads are lit, one by one, from 0 to all of them. */
+  found?: number;
+  /** The lead the Will is looking at, counted from 1. 0 for none. */
+  focus?: number;
 }
 
 /** What the sky shows: the title, the map, or one of the screens before the shell. */
-export type Mode = "title" | "map" | "wake" | "origins" | "people" | "stand" | "inherit" | "charter" | "mind";
+export type Mode = "title" | "map" | "wake" | "origins" | "people" | "stand" | "inherit" | "charter" | "mind" | "leads";
 
 /** One screen's view of the sky. */
 export interface Show {
@@ -70,9 +75,11 @@ export interface Show {
   rect?: () => { x: number; y: number; w: number; h: number } | null;
   /** For "title": the camera's distance from Earth's surface in AU, each frame. */
   onFrame?(fromEarthAU: number): void;
+  /** For "leads": the stars of Earth's leads, by the names players see, in the order they are lit. */
+  leads?: string[];
   /** For "people" and "mind": where the Mind is on screen, in CSS pixels, each frame. */
   onMind?(x: number, y: number): void;
-  /** For "inherit" and "stand": where their labeled places are on screen, each frame. */
+  /** For "inherit", "stand" and "leads": where their labeled places are on screen, each frame. */
   onMarks?(marks: Mark[]): void;
   /** For "inherit": km per CSS pixel at the art's center, and the art's size. */
   onScale?(kmPerPx: number, w: number, h: number): void;
@@ -372,6 +379,9 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       // Meeting the Mind: Earth close, turning, its machines lit, toward the dawn.
       case "mind":
         return () => [-3.62, 0.7, 0.22, 0];
+      // What doesn't fit: the same stars from higher, so each lead's height off the Galaxy's plane shows.
+      case "leads":
+        return (t) => [7.0, 1.1 + drift(t, 600), 0.75, 0];
       // The charter: Earth and the Moon, small and far.
       case "charter":
         return (t) => [-1.95, 0.5 + drift(t, 400), 0.3, 0];
@@ -1367,6 +1377,124 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     };
   }
 
+  // ── What doesn't fit: Earth's leads among the stars within 50 light-years ──
+  function leading(ids: string[]) {
+    const where = LEADS as unknown as Record<string, [ra: number, dec: number, ly: number]>;
+    const leads = ids
+      .filter((id) => where[id])
+      .map((id) => {
+        const [ra, dec, ly] = where[id];
+        return { id, at: new THREE.Vector3().copy(skyBasis(ra * 15, dec).radial).multiplyScalar(ly) };
+      });
+    // Rings every ten light-years in the Galaxy's plane, as on Where things stand.
+    const ringMat = line("ink", 0);
+    const RINGS = [10, 20, 30, 40, 50];
+    const ringAt = (r: number, i: number, n: number) =>
+      new THREE.Vector3(r * Math.cos((i / n) * 2 * Math.PI), 0, r * Math.sin((i / n) * 2 * Math.PI));
+    for (const r of RINGS) stars.scene.add(loop(Array.from({ length: 128 }, (_, i) => ringAt(r, i, 128)), ringMat));
+    // Each lead: a point, a halo that breathes, a stalk down to the plane, and a thread out from Sol.
+    const core = new Cloud();
+    const halo = new Cloud();
+    const feet = new Cloud();
+    const stalk: number[] = [];
+    const threads = leads.map(({ id, at }) => {
+      const kind = id === "Luyten's Star" ? K.lamp : K.mind;
+      core.add(at.x, at.y, at.z, 6.5, 1, kind);
+      halo.add(at.x, at.y, at.z, 26, 0, kind);
+      feet.add(at.x, 0, at.z, 2.5, 0.7, K.ink);
+      stalk.push(at.x, at.y, at.z, at.x, 0, at.z);
+      const mat = line(id === "Luyten's Star" ? "lamp" : "mind", 0);
+      const l = new THREE.Line(
+        new THREE.BufferGeometry().setAttribute("position", new THREE.BufferAttribute(new Float32Array(6), 3)),
+        mat,
+      );
+      l.frustumCulled = false;
+      stars.scene.add(l);
+      return { l, mat };
+    });
+    core.add(0, 0, 0, 8, 1, K.sun);
+    const coreGlow = glow({ fixed: true });
+    const haloGlow = glow({ fixed: true });
+    const feetGlow = glow({ fixed: true });
+    const corePts = core.points(coreGlow);
+    const haloPts = halo.points(haloGlow);
+    stars.scene.add(haloPts, corePts, feet.points(feetGlow));
+    const stalkMat = line("ink", 0);
+    const stalks = new THREE.LineSegments(
+      new THREE.BufferGeometry().setAttribute("position", new THREE.Float32BufferAttribute(stalk, 3)),
+      stalkMat,
+    );
+    stalks.frustumCulled = false;
+    stars.scene.add(stalks);
+    // The other stars, faint, once the catalog has come.
+    let dim: THREE.ShaderMaterial | null = null;
+    const v = new THREE.Vector3();
+
+    return (p: number) => {
+      const d = dialsOf.leads;
+      const found = d?.found ?? leads.length;
+      const grid = d?.grid ?? 1;
+      const focus = (d?.focus ?? 0) - 1;
+      if (!dim && within50.length) {
+        const cold = new Cloud();
+        for (let i = 0; i < within50.length; i += 4) cold.add(within50[i], within50[i + 1], within50[i + 2], 2, 0.45, K.ink);
+        dim = glow({ fixed: true });
+        stars.scene.add(cold.points(dim));
+      }
+      if (dim) dim.uniforms.uOpacity.value = p * grid;
+      ringMat.uniforms.uOpacity.value = 0.12 * p * grid;
+      coreGlow.uniforms.uOpacity.value = p;
+      haloGlow.uniforms.uOpacity.value = p;
+      feetGlow.uniforms.uOpacity.value = p;
+      stalkMat.uniforms.uOpacity.value = 0.22 * p;
+      // Lit in turn: the thread runs out from Sol, then the star comes on with a flare, then breathes.
+      const shown = leads.map((_, i) => Math.min(1, Math.max(0, found - i)));
+      const coreB = corePts.geometry.attributes.aBright as THREE.BufferAttribute;
+      const haloB = haloPts.geometry.attributes.aBright as THREE.BufferAttribute;
+      leads.forEach(({ at }, i) => {
+        const k = shown[i];
+        const reach = easeInOut(Math.min(1, k / 0.6));
+        const lit = ramp(k, 0.5, 1);
+        const pos = threads[i].l.geometry.attributes.position as THREE.BufferAttribute;
+        v.copy(at).multiplyScalar(reach);
+        pos.setXYZ(1, v.x, v.y, v.z);
+        pos.needsUpdate = true;
+        threads[i].mat.uniforms.uOpacity.value = (i === focus ? 0.7 : 0.3) * p * Math.min(1, k * 4);
+        coreB.setX(i, lit);
+        const flare = 4 * lit * (1 - lit);
+        const breathe = 0.35 + 0.15 * Math.sin(clock * 1.8 + i * 1.7);
+        haloB.setX(i, lit * (i === focus ? 0.9 : breathe) + flare);
+      });
+      coreB.needsUpdate = true;
+      haloB.needsUpdate = true;
+
+      if (spec.mode === "leads" && spec.onMarks) {
+        const w = parent.clientWidth;
+        const h = parent.clientHeight;
+        const onScreen = (at: THREE.Vector3) => {
+          v.copy(at).project(stars.camera);
+          return { x: ((v.x + 1) / 2) * w, y: ((1 - v.y) / 2) * h, z: v.z };
+        };
+        const marks: Mark[] = leads.map(({ id, at }, i) => {
+          const s = onScreen(at);
+          return { id, x: s.x, y: s.y, a: s.z < 1 ? p * ramp(shown[i], 0.6, 1) : 0 };
+        });
+        const sol = onScreen(new THREE.Vector3());
+        marks.push({ id: "Sol", x: sol.x, y: sol.y, a: p });
+        // Each ring is named where it is lowest on screen, nearest the viewer.
+        for (const r of RINGS) {
+          let best = { x: 0, y: -Infinity, z: 2 };
+          for (let i = 0; i < 24; i++) {
+            const s = onScreen(ringAt(r, i, 24));
+            if (s.y > best.y) best = s;
+          }
+          marks.push({ id: `ring:${r}`, x: best.x, y: best.y, a: best.z < 1 ? p * grid : 0 });
+        }
+        spec.onMarks(marks);
+      }
+    };
+  }
+
   // ── Data that comes later: Earth's land and lights, and the stars ──
   let gone = false;
   let lightsData: Light[] | null = null;
@@ -1523,6 +1651,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
   let road: ReturnType<typeof sunsRoad> | null = null;
   let noise: ReturnType<typeof standing> | null = null;
   let machines: ReturnType<typeof meeting> | null = null;
+  let clues: ReturnType<typeof leading> | null = null;
   const presence: Partial<Record<Mode, number>> = {};
   let lastClock = 0;
   function present(mode: Mode, dt: number) {
@@ -1565,6 +1694,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     const pOrigins = present("origins", dt);
     const pStand = present("stand", dt);
     const pMind = present("mind", dt);
+    const pLeads = present("leads", dt);
     surface.uniforms.uOpacity.value = arrived(surfaceAt);
     // Who they are lights the cities in turn. Elsewhere they are all lit.
     surface.uniforms.uLit.value = 1 + ((dialsOf.people?.lit ?? 1) - 1) * pPeople;
@@ -1602,6 +1732,10 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     }
     if (pStand > 0) (noise ??= standing())(x, pStand);
     if (pMind > 0) (machines ??= meeting())(up, pMind);
+    if (pLeads > 0) {
+      if (!clues && spec.mode === "leads" && spec.leads?.length) clues = leading(spec.leads);
+      clues?.(pLeads);
+    }
     if (spec.onScale && framing) spec.onScale((D * 149597870.7) / focal, framing.w, framing.h);
 
     renderer.clear();

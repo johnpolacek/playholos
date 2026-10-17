@@ -253,3 +253,44 @@ export const MIND_SOURCES: Source[] = [
     ],
   },
 ];
+
+export const LEADS_SOURCES: Source[] = [
+  {
+    title: "82 Eridani d",
+    text: "At least 5 Earth masses, 650 days around a Sun-like star 19.7 light-years away, on an orbit stretched enough to swing through its warm zone. Found by its star's sway, so its size and air are unread.",
+    links: [
+      ["Nari et al. 2025", "https://arxiv.org/abs/2501.17092"],
+      ["82 Eridani", W("82_Eridani")],
+    ],
+  },
+  {
+    title: "Fomalhaut's collisions",
+    text: 'Fomalhaut\'s "planet" was a dust cloud from a collision, and Hubble saw a second appear in 2023. Theory expected one such collision in 100,000 years. Two came in 20.',
+    links: [
+      [
+        "Hubble captures a rare collision, 2025",
+        "https://phys.org/news/2025-12-hubble-captures-rare-collision-nearby.html",
+      ],
+      [
+        "ESA: asteroids colliding around Fomalhaut",
+        "https://www.esa.int/Science_Exploration/Space_Science/Hubble_sees_asteroids_colliding_around_nearby_star",
+      ],
+    ],
+  },
+  {
+    title: "Luyten's Star",
+    text: "Sónar Calling GJ273b was sent there in 2017 and 2018, and both reached it in 2030. A reply to the first could reach Earth in Year 2.3.",
+    links: [["Luyten's Star", W("Luyten's_Star")]],
+  },
+  {
+    title: "The new worlds",
+    text: "Each is a world this game's planet hunters feel by 2040, by its tug on its star. ESPRESSO works now in Chile, and the Terra Hunting Experiment began its ten years on La Palma in 2026. The stars are real. Which worlds they find is rolled for this game.",
+    links: [
+      ["ESPRESSO", W("ESPRESSO")],
+      [
+        "Terra Hunting Experiment",
+        "https://www.iac.es/en/projects/harps3-high-accuracy-radial-velocity-planet-searcher",
+      ],
+    ],
+  },
+];
