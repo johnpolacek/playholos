@@ -76,17 +76,21 @@ function Gauge({
           className="stroke-you"
           opacity={nudge ? 0.6 : 0}
         />
-        <g ref={needle} data-m="needle" data-dial={dial}>
-          <line
-            x1="55"
-            y1="52"
-            x2="55"
-            y2={52 - R + 6}
-            strokeWidth="1.6"
-            strokeLinecap="round"
-            className="stroke-ink"
-          />
-          <circle cx="55" cy="52" r="3" className="fill-ink" />
+        {/* The stage shows the needle and clears its transforms when the intro ends. The turn is the dial's
+            value, so it lives on an inner group the stage never touches. */}
+        <g data-m="needle">
+          <g ref={needle} data-needle>
+            <line
+              x1="55"
+              y1="52"
+              x2="55"
+              y2={52 - R + 6}
+              strokeWidth="1.6"
+              strokeLinecap="round"
+              className="stroke-ink"
+            />
+            <circle cx="55" cy="52" r="3" className="fill-ink" />
+          </g>
         </g>
       </svg>
       <div
@@ -155,7 +159,7 @@ export function Charter({ onNext }: { onSkip(): void; onNext(): void }) {
   const { leave } = useStage(
     root,
     (q, tl) => {
-      const needles = q('[data-m="needle"]');
+      const needles = q("[data-needle]");
       tl.fromTo(q('[data-m="kick"]'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.5 }, 0)
         .fromTo(q('[data-m="lead"]'), riseFrom, { ...rise, duration: 0.7 }, 0.1)
         .set(q('[data-m="arc"]'), { autoAlpha: 1 }, 0.4)
@@ -167,7 +171,8 @@ export function Charter({ onNext }: { onSkip(): void; onNext(): void }) {
         )
         .fromTo(q('[data-m="tick"]'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.3, stagger: 0.01 }, 0.8)
         .fromTo(q('[data-m="ends"]'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.4, stagger: 0.1 }, 1)
-        .set(needles, { autoAlpha: 1, rotation: 0, svgOrigin: "55 52" }, 1.1);
+        .set(q('[data-m="needle"]'), { autoAlpha: 1 }, 1.1)
+        .set(needles, { rotation: 0, svgOrigin: "55 52" }, 1.1);
       // History swings each needle, and the reason shows under it.
       needles.forEach((n, i) => {
         tl.to(n, { rotation: turn(HISTORY[i]), duration: 1.1, ease: "elastic.out(1, 0.6)" }, 1.3 + i * 0.25);
@@ -197,7 +202,7 @@ export function Charter({ onNext }: { onSkip(): void; onNext(): void }) {
   // Reduced motion skips the swing: the needles start where history and the branches left them.
   useEffect(() => {
     if (!past || !prefersReducedMotion() || !root.current) return;
-    root.current.querySelectorAll<SVGGElement>('[data-m="needle"]').forEach((n, i) => {
+    root.current.querySelectorAll<SVGGElement>("[data-needle]").forEach((n, i) => {
       gsap.set(n, { rotation: turn(start[i]), svgOrigin: "55 52" });
     });
   }, [past, start]);
