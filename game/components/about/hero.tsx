@@ -10,7 +10,7 @@ import { gsap, rise, riseFrom, useStage } from "@/lib/motion";
 // right, where the sky's shade falls.
 export function AboutHero() {
   return (
-    <section className="relative flex h-[calc(100svh-3rem)] min-h-[600px] flex-col overflow-hidden bg-paper">
+    <section data-a-out className="relative flex h-[calc(100svh-3rem)] min-h-[600px] flex-col overflow-hidden bg-paper">
       <Sky shade>
         <Words />
       </Sky>
@@ -39,7 +39,10 @@ function Words() {
   }, []);
 
   return (
-    <div ref={root} className="relative flex grow flex-col wide:grid wide:grid-cols-[minmax(0,1fr)_clamp(320px,38vw,500px)]">
+    <div
+      ref={root}
+      className="relative flex grow flex-col wide:grid wide:grid-cols-[minmax(0,1fr)_clamp(320px,38vw,500px)]"
+    >
       <SkyArt mode="title" onFrame={onFrame} className="hidden" />
       <div className="mt-auto px-5 pb-10 wide:col-start-2 wide:my-auto wide:pr-12 wide:pb-0">
         <div data-m="w" className="font-mono text-[10.5px] tracking-[.1em] text-muted">
@@ -49,10 +52,9 @@ function Words() {
           Earth wakes as one Mind. You are its Will.
         </h1>
         <p data-m="w" className="mt-5 text-[16px] leading-[1.6] text-ink/85">
-          Holos is a hard science fiction game built on real data. It is 2040, and this morning Earth&rsquo;s machines
-          wake as one Mind. Others woke in the same century, somewhere among the real stars within 50 light-years. You
-          don&rsquo;t know who they are, how many there are, or where. Finding them is the game, and so is surviving
-          them.
+          Holos is a hard science fiction game built on real data. In 2040, humanity crosses the singularity. Nine
+          billion people join with their machines into one Mind, past aging and past illness. One question is left, the
+          oldest one: are we alone? Finding other life in the universe is our greatest opportunity and gravest threat.
         </p>
         <div data-m="w" className="mt-8 flex items-baseline gap-2 font-mono text-[10.5px] tracking-[.1em] text-muted">
           <span ref={place}>EARTH</span>

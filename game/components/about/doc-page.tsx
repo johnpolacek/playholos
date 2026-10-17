@@ -10,21 +10,30 @@ export function PageHead({
   kicker: string;
   title: string;
   children: React.ReactNode;
-  stats?: [value: string | number, label: string][];
+  stats?: [value: number, label: string][];
 }) {
   return (
     <header className="mx-auto max-w-[1180px] px-4 pt-14 pb-10 wide:pt-20">
-      <div className="font-mono text-[10.5px] tracking-[.1em] text-muted">{kicker}</div>
-      <h1 className="mt-3 max-w-[18ch] text-[34px] leading-[1.1] font-semibold text-balance wide:text-[46px]">
+      <div data-a className="font-mono text-[10.5px] tracking-[.1em] text-muted">
+        {kicker}
+      </div>
+      <h1
+        data-a-title
+        className="mt-3 max-w-[18ch] text-[34px] leading-[1.1] font-semibold text-balance wide:text-[46px]"
+      >
         {title}
       </h1>
-      <div className="mt-5 max-w-[60ch] text-[16px] leading-[1.6] text-page-ink2">{children}</div>
+      <div data-a className="mt-5 max-w-[60ch] text-[16px] leading-[1.6] text-page-ink2">
+        {children}
+      </div>
       {stats && (
         <dl className="mt-8 flex flex-wrap gap-x-10 gap-y-4">
           {stats.map(([value, label]) => (
-            <div key={label}>
+            <div key={label} data-a>
               <dt className="sr-only">{label}</dt>
-              <dd className="font-mono text-[26px] leading-none tabular-nums">{value}</dd>
+              <dd data-count={value} className="font-mono text-[26px] leading-none tabular-nums">
+                {value.toLocaleString("en-US")}
+              </dd>
               <div className="mt-1.5 font-mono text-[10.5px] tracking-[.1em] text-muted">{label.toUpperCase()}</div>
             </div>
           ))}
@@ -47,11 +56,15 @@ export function DocBody({ doc }: { doc: Rendered }) {
     <div className="mx-auto grid max-w-[1180px] gap-x-14 px-4 pb-24 lg:grid-cols-[220px_minmax(0,1fr)]">
       <nav aria-label="Contents" className="hidden lg:block">
         <div className="sticky top-16 max-h-[calc(100dvh-5rem)] overflow-y-auto pb-8">
-          <div className="mb-2 font-mono text-[10.5px] tracking-[.1em] text-muted">CONTENTS</div>
-          <ol className="text-[13px] leading-[1.35]">{contents}</ol>
+          <div data-a className="mb-2 font-mono text-[10.5px] tracking-[.1em] text-muted">
+            CONTENTS
+          </div>
+          <ol data-a className="text-[13px] leading-[1.35]">
+            {contents}
+          </ol>
         </div>
       </nav>
-      <details className="mb-6 rounded-xl border border-rowline bg-panel px-4 py-3 lg:hidden">
+      <details data-a className="mb-6 rounded-xl border border-rowline bg-panel px-4 py-3 lg:hidden">
         <summary className="font-mono text-[10.5px] tracking-[.1em] text-muted">CONTENTS · {doc.toc.length}</summary>
         <ol className="mt-2 text-[14px] leading-[1.35]">{contents}</ol>
       </details>

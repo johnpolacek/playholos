@@ -79,3 +79,9 @@
   border: 0;
   border-top: 1px solid var(--rowline);
 }
+
+/* Before the motion takes over on a full load, the items it brings in stay hidden. lib/about/boot.ts sets the marker
+   and clears it if the motion never arrives. */
+html[data-about-boot="pending"] .about :is([data-a], [data-a-nav], [data-a-title], [data-m], .doc > :not(ul), .doc > ul > li) {
+  opacity: 0;
+}

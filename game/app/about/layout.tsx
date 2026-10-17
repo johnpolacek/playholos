@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import { AboutMotion } from "@/components/about/motion";
 import { AboutNav } from "@/components/about/nav";
+import { BOOT } from "@/lib/about/boot";
 import "./about.css";
 
 export const metadata: Metadata = {
@@ -7,12 +9,13 @@ export const metadata: Metadata = {
   description: "A hard science fiction game on real data. Every source, every rule, and how it is built.",
 };
 
-// The about pages scroll like a page, not a game: the bar on top, then the page.
+// The about pages scroll like a page, not a game: the bar on top, then the page. The boot script comes first, so it
+// runs before anything below it paints.
 export default function AboutLayout({ children }: LayoutProps<"/about">) {
   return (
-    <div className="min-h-dvh bg-page">
-      <AboutNav />
-      {children}
-    </div>
+    <>
+      <script dangerouslySetInnerHTML={{ __html: BOOT }} />
+      <AboutMotion nav={<AboutNav />}>{children}</AboutMotion>
+    </>
   );
 }

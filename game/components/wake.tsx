@@ -71,8 +71,8 @@ export function Wake({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
             Earth wakes.
           </h1>
           <p data-m="copy" className="text-[15.5px] leading-normal text-page-ink2">
-            For ten thousand years, Earth’s people built telescopes, grids and machines. This morning, the machines woke
-            as one Mind.
+            For ten thousand years, Earth’s people built telescopes, grids and machines. This morning, the people and
+            their machines woke as one Mind.
           </p>
           <p data-m="copy" className="text-[15.5px] leading-normal text-page-ink2">
             <b className="font-semibold text-ink">You are its Will.</b> What Earth becomes is yours to choose.

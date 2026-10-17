@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { AboutHero } from "@/components/about/hero";
+import { AboutLink } from "@/components/about/motion";
 import { sectionCount, sourceCount } from "@/lib/about/docs";
 import log from "@/data/build-log.json";
 
@@ -12,7 +12,7 @@ const BODY = "mt-4 max-w-[60ch] text-[16px] leading-[1.6] text-page-ink2";
 
 function Fact({ value, children }: { value: string; children: React.ReactNode }) {
   return (
-    <div className="border-t border-rowline pt-4">
+    <div data-a className="border-t border-rowline pt-4">
       <div className="font-mono text-[26px] leading-none tabular-nums">{value}</div>
       <p className="mt-2.5 text-[14px] leading-[1.5] text-muted">{children}</p>
     </div>
@@ -57,20 +57,24 @@ export default function About() {
 
       <div className="mx-auto max-w-[1180px] px-4">
         <section className="py-20 wide:py-28">
-          <div className={KICK}>A TEST OF THE FERMI PARADOX</div>
-          <h2 className={H2}>If the galaxy can be crossed, why is the sky quiet?</h2>
-          <p className={BODY}>
-            Holos sets no rule to keep it quiet. Earth and every neighbor may do anything physics allows, at its real
-            price. So if the sky stays quiet, that comes from what neighbors choose, what things cost, and what can
-            actually be seen from here. Every game starts from the real sky: nothing heard from anyone by 2040.
+          <div data-a className={KICK}>
+            A TEST OF THE FERMI PARADOX
+          </div>
+          <h2 data-a className={H2}>
+            If the galaxy can be crossed, why is the sky quiet?
+          </h2>
+          <p data-a className={BODY}>
+            Holos sets no rule to keep it quiet. Earth, and anyone else out there, may do anything physics allows, at
+            its real price. So if the sky stays quiet, that comes from what others choose, what things cost, and what
+            can actually be seen from here. Every game starts from the real sky: nothing heard from anyone by 2040.
           </p>
-          <figure className="mt-12 max-w-[46ch] border-l border-you/60 pl-5">
+          <figure data-a className="mt-12 max-w-[52ch] border-l border-you/60 pl-5">
             <blockquote className="text-[22px] leading-[1.35] text-balance wide:text-[26px]">
-              &ldquo;a large hot tub or small swimming pool&rdquo;
+              &ldquo;&hellip;a large hot tub or small swimming pool to that of the Earth&rsquo;s oceans.&rdquo;
             </blockquote>
             <figcaption className="mt-3 text-[14px] leading-[1.5] text-muted">
-              How much our radio searches have covered so far, against Earth&rsquo;s oceans. Jason Wright, director of
-              the Penn State Extraterrestrial Intelligence Center, with Kanodia and Lubar, 2018.{" "}
+              All the radio searching done so far, against everywhere a signal could be. Jason Wright, director of the
+              Penn State Extraterrestrial Intelligence Center, with Kanodia and Lubar, 2018.{" "}
               {out("https://arxiv.org/abs/1809.07252", "Read it")}
             </figcaption>
           </figure>
@@ -81,27 +85,31 @@ export default function About() {
             </Fact>
             <Fact value="4 ly">
               How far our best radio telescopes could hear a copy of Earth&rsquo;s phone networks. The nearest star is
-              4.2.{" "}
-              {out("https://arxiv.org/abs/2502.02614", "Sheikh et al. 2025")}
+              4.2. {out("https://arxiv.org/abs/2502.02614", "Sheikh et al. 2025")}
             </Fact>
-            <Fact value="1 in 5">
-              Games where a neighbor&rsquo;s message has already reached Earth unheard before the game begins.
+            <Fact value="66 years">
+              Of listening since Project Ozma in 1960, without one confirmed signal.{" "}
+              {out("https://www.seti.org/research/seti-101/project-ozma/", "SETI Institute")}
             </Fact>
           </div>
         </section>
 
         <section className="border-t border-rowline py-20 wide:py-28">
-          <div className={KICK}>EVIDENCE FIRST</div>
-          <h2 className={H2}>Improbable is fine. Contradicted is not.</h2>
-          <p className={BODY}>
+          <div data-a className={KICK}>
+            EVIDENCE FIRST
+          </div>
+          <h2 data-a className={H2}>
+            Improbable is fine. Contradicted is not.
+          </h2>
+          <p data-a className={BODY}>
             Everything starts from real data and the newest published research. Only then comes speculation, from the
             best evidence there is. Earth&rsquo;s history is real to 2026, then follows the most probable path to 2040.
             Where forecasts split, each game rolls a branch, weighted by its odds.
           </p>
           <div className="mt-12 grid gap-8 wide:grid-cols-3">
             <Fact value="9,494">
-              Stars and companions within 100 light-years, from Gaia&rsquo;s census of the Sun&rsquo;s neighborhood
-              and Hipparcos. Neighbors are seeded within 50.
+              Stars and companions within 100 light-years, from Gaia&rsquo;s census of the Sun&rsquo;s neighborhood and
+              Hipparcos.
             </Fact>
             <Fact value="9.2 billion">People on Earth at Year 0, from the UN&rsquo;s 2024 projections.</Fact>
             <Fact value="5 minutes">
@@ -112,36 +120,46 @@ export default function About() {
         </section>
 
         <section className="border-t border-rowline py-20 wide:py-28">
-          <div className={KICK}>TWO WHAT-IFS</div>
-          <h2 className={H2}>What the game assumes and can&rsquo;t prove</h2>
+          <div data-a className={KICK}>
+            TWO WHAT-IFS
+          </div>
+          <h2 data-a className={H2}>
+            What the game assumes and can&rsquo;t prove
+          </h2>
           <div className="mt-10 grid gap-10 wide:grid-cols-2">
-            <div>
+            <div data-a>
               <div className="font-mono text-[26px] leading-none">1</div>
-              <h3 className="mt-3 text-[18px] font-semibold">Many neighbors woke in the same century as Earth</h3>
+              <h3 className="mt-3 text-[18px] font-semibold">If we aren&rsquo;t alone, the others woke when we did</h3>
               <p className="mt-2 text-[15px] leading-[1.6] text-page-ink2">
                 Two civilizations like ours, placed at random in the galaxy, would overhear each other about one time in
-                ten million ({out("https://arxiv.org/abs/1007.0850", "Forgan and Nichol 2010")}). Without this, there
-                would be no one to find.
+                ten million ({out("https://arxiv.org/abs/1007.0850", "Forgan and Nichol 2010")}). So the game supposes
+                that anyone near enough to find woke in the same century as us.
               </p>
             </div>
-            <div>
+            <div data-a>
               <div className="font-mono text-[26px] leading-none">2</div>
-              <h3 className="mt-3 text-[18px] font-semibold">Earth&rsquo;s machines wake as one Mind</h3>
+              <h3 className="mt-3 text-[18px] font-semibold">Humanity crosses the singularity by 2040</h3>
               <p className="mt-2 text-[15px] leading-[1.6] text-page-ink2">
-                The most probable 2040 has several rival AIs, not one. Forecasters put general AI near 2031. The game
-                joins Earth&rsquo;s machines into one, so you have one Mind to guide.
+                Forecasters put general AI near 2031, and the most probable 2040 has several rival AIs. The game goes
+                further: Earth&rsquo;s people and machines become one Mind, and life is solved. No one ages, and every
+                mind is linked.
               </p>
             </div>
           </div>
         </section>
 
         <section className="border-t border-rowline py-20 wide:py-28">
-          <div className={KICK}>READ ON</div>
-          <h2 className={H2}>Everything behind the game</h2>
+          <div data-a className={KICK}>
+            READ ON
+          </div>
+          <h2 data-a className={H2}>
+            Everything behind the game
+          </h2>
           <div className="mt-10 grid gap-4 wide:grid-cols-3">
             {pages.map(([href, kicker, title, text, stat]) => (
-              <Link
+              <AboutLink
                 key={href}
+                data-a
                 href={href}
                 className="group flex flex-col rounded-2xl border border-rowline bg-panel p-6 transition-colors hover:border-faint"
               >
@@ -152,18 +170,21 @@ export default function About() {
                   <span className="text-ink tabular-nums">{stat.toUpperCase()}</span>
                   <span className="text-you transition-transform group-hover:translate-x-1">→</span>
                 </div>
-              </Link>
+              </AboutLink>
             ))}
           </div>
         </section>
       </div>
 
       <footer className="border-t border-rowline">
-        <div className="mx-auto flex max-w-[1180px] items-center justify-between px-4 py-8 font-mono text-[10.5px] tracking-[.1em] text-muted">
+        <div
+          data-a
+          className="mx-auto flex max-w-[1180px] items-center justify-between px-4 py-8 font-mono text-[10.5px] tracking-[.1em] text-muted"
+        >
           <span>HOLOS</span>
-          <Link href="/" className="text-ink">
+          <AboutLink href="/" className="text-ink">
             PLAY →
-          </Link>
+          </AboutLink>
         </div>
       </footer>
     </main>

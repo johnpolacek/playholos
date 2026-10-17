@@ -9,7 +9,7 @@ import { prefersReducedMotion, rise, riseFrom, useStage } from "@/lib/motion";
 
 // "Who they are": Earth at night, in the game's scene. The globe turns in the dark while its real city lights come
 // on, cities first, and the count climbs to 9.2 billion, the UN's 2040 projection. Then threads rise from the cities
-// and meet in one point: their machines, woken as one. The lights are NASA's Black Marble, by way of the atlas's night
+// and meet in one point: the people and their machines, woken as one. The lights are NASA's Black Marble, by way of the atlas's night
 // map (scripts/lights.mjs).
 
 const PEOPLE = 9.2e9;

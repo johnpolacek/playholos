@@ -1,6 +1,6 @@
 # Holos
 
-A hard science fiction game about the Fermi paradox. In 2040, Earth's machines wake as one Mind, and you are its Will. Others woke nearby in the same century. You don't know who they are, how many there are, or where. Finding them is the game, and so is surviving them.
+A hard science fiction game about the Fermi paradox. In 2040, humanity crosses the singularity: Earth's people and machines wake as one Mind, life is solved, and you are its Will. One question is left: are we alone? Finding other life in the universe is our greatest opportunity and gravest threat.
 
 Play it at **https://playholos.vercel.app**.
 

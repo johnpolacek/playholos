@@ -1,6 +1,6 @@
 # Holos · Game Concept
 
-Last updated: October 6, 2026.
+Last updated: October 17, 2026.
 
 ## Status
 
@@ -14,7 +14,7 @@ v2 grows one question at a time, and each answer is dated. Later user clarificat
 
 ## Core premise
 
-Holos is a single-player, hard science fiction browser game. You are the Will of Earth's Mind, on the morning Earth's machines wake as one, and you guide what Earth becomes.
+Holos is a single-player, hard science fiction browser game. You are the Will of Earth's Mind, on the morning humanity crosses the singularity and Earth's people and machines wake as one, and you guide what Earth becomes.
 
 You study nearby stars, build, listen, and send probes and messages. Nothing travels faster than light. Distant observations show history, and messages can take years to arrive.
 
@@ -171,8 +171,10 @@ Settled 2026-10-10. Numbers from `python3 calcs/seed.py stats`.
 
 Settled 2026-10-06.
 
-- **Year 0 is 2040.** Forecasters put general AI near January 2031, within 2028 to 2037 (Metaculus). AI researchers give it even odds by 2042 (2024 expert survey). 2040 sits between: Earth's machines have been general for some years, and this morning they wake as one Mind.
-- **One Mind is the game's second premise.** In the most probable 2040, Earth has several rival AIs, not one. The game assumes they wake as one Mind, so the Will has one Mind to live in. Improbable, not contradicted. The first premise is many neighbors waking in the same century ([v1: Hard science](legacy/v1/HOLOS_GAME_CONCEPT.md#hard-science)).
+- **Year 0 is 2040.** Forecasters put general AI near January 2031, within 2028 to 2037 (Metaculus). AI researchers give it even odds by 2042 (2024 expert survey). 2040 sits between: Earth's machines have been general for some years, and this morning humanity crosses the singularity, its people and machines waking as one Mind.
+- **One Mind is the game's second premise.** In the most probable 2040, Earth has several rival AIs, not one. The game assumes they wake as one Mind with Earth's people, so the Will has one Mind to live in. Improbable, not contradicted. The first premise is many neighbors waking in the same century ([v1: Hard science](legacy/v1/HOLOS_GAME_CONCEPT.md#hard-science)).
+- **The singularity is humanity's, and life is solved.** Settled 2026-10-17. Year 0 is humanity crossing the singularity, not machines waking. Earth's people no longer age or fall ill, and every mind is linked through the Mind. Part of the second premise: improbable by 2040, not contradicted.
+  - *"Are we alone?" stays the open question.* It is the one that matters most, and Earth doesn't know. Text the player reads never says.
 - **Earth's history is real to 2026, then the most probable path to 2040.** Each strand follows its best current forecast. Where forecasts split, the seed picks a branch, weighted by its odds. Every branch must leave the opening silent: nothing heard from any neighbor.
 - **The backbone, the same in every game:**
   - *People:* about 9.2 billion (UN, 2024).
@@ -681,7 +683,7 @@ Settled 2026-10-10. Costs in [calcs/ai_cost.py](calcs/ai_cost.py), prices in [HO
 Settled 2026-10-10.
 
 - **The seed is drawn when a new game begins:** which neighbors wake, where and when, and Earth's branches from 2026 to 2040. The player never sees it.
-- **Earth wakes.** *"This morning the machines woke as one Mind. You are its Will."*
+- **Earth wakes.** *"This morning, the people and their machines woke as one Mind. You are its Will."*
 - **Memories, each skippable, as the Mind's own:**
   - *Where we come from:* Earth's real history on a log scale, then this game's path from 2026 to 2040 with the branches it rolled, such as a Taiwan war in 2032. Each dial's cause is marked.
   - *Who they are:* Earth's 9.2 billion people, and how they feel about the Mind they built.
@@ -784,6 +786,7 @@ Begun 2026-10-14. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#outposts-and-
     - Closed life support for years works, as research: 20 Years at standard pace, a sample. Biosphere 2's oxygen fell from 20.9% to about 14% in 16 months. Only awake crews, world ships and colonies need it.
     - Copying a human mind into a machine is set aside for people. The largest brain mapped is a fruit fly's, about 140,000 neurons, against a human's 86 billion. The Mind itself still travels as light, as v1 had it.
     - Living for centuries is set aside. Sleepers make it unneeded.
+      - *Superseded 2026-10-17:* life is solved at Year 0, so people no longer age ([Year 0](#year-0-and-earths-road-to-it)). What that changes for crews, sleepers and colonies is open.
     - Antimatter by the tonne is allowed, at its energy price, as v1 had it.
     - Terraforming is allowed and slow. It is priced when a colony first lands.
     - Fusion drives and a seed that makes its own chips work, as settled above.
@@ -960,7 +963,7 @@ Answered one at a time, in this order. Every answer must be permitted by current
     - **Settled 2026-10-15:** a seed ship takes 18 Years at standard pace, built in the orbital yard. The drive sets the launch.
     - **Settled 2026-10-15:** a production line is a project for one kind of work. Copies then run side by side, each 85% as long per doubling of the count. Without one, every copy takes the full time.
     - **Settled 2026-10-15:** unproven biology is judged case by case. Artificial wombs and sleepers work, as research. Sleepers make a ship of people about 26 t a person.
-    - **Settled 2026-10-15:** the other unproven cases, as proposed: closed life support works, copying a human mind and living for centuries are set aside, antimatter and terraforming are allowed at their prices.
+    - **Settled 2026-10-15:** the other unproven cases, as proposed: closed life support works, copying a human mind and living for centuries are set aside, antimatter and terraforming are allowed at their prices. Living for centuries was superseded on 2026-10-17: life is solved at Year 0.
     - **Mocked 2026-10-15:** [Earth's first seed ship](explorations/v2-mocks/index.html#L5730), in seed 10's long roads. The player asks what settling takes at Year 19, and starts a drive, deuterium works and a ship, last in the line. The long roads move under a sixth of a Year. The ship is done at Year 33 and the fuel at 32, but the drive, last in line, takes until 47.6. It leaves for Proxima Centauri then and lands about Year 115.
     - **Mocked 2026-10-14:** [seed 11, next door](explorations/v2-mocks/seed-11.html#next). Hael answers Earth's knock at Year 16.5, the Mind reads its tables for silence, the player builds an X-ray watch, and it catches Hael's probe 29 days out, at Year 36. It raised one question: what does a neighbor's probe do once it arrives?
     - **Settled 2026-10-15:** what its orders say, rolled by its sender at launch: watch, hail, or wait to be hailed. Hael's probe hails.

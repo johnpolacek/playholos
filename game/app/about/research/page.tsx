@@ -19,9 +19,9 @@ export default function Research() {
           [doc.toc.length, "questions"],
         ]}
       >
-        Holos starts from real data and the newest published research, and only then speculates, from the best
-        evidence there is. Each source below says what it found, why it matters to the game, and where the design uses
-        it. A newer result never deletes an older one: the older is marked superseded.
+        Holos starts from real data and the newest published research, and only then speculates, from the best evidence
+        there is. Each source below says what it found, why it matters to the game, and where the design uses it. A
+        newer result never deletes an older one: the older is marked superseded.
       </PageHead>
       <DocBody doc={doc} />
     </main>

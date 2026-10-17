@@ -47,13 +47,16 @@ const SHOWN = 5;
 
 function Changes({ part }: { part: Part }) {
   const item = (text: string) => (
-    <li key={text} className="relative pl-4 before:absolute before:top-[.6em] before:left-0 before:h-1 before:w-1 before:rounded-full before:bg-faint">
+    <li
+      key={text}
+      className="relative pl-4 before:absolute before:top-[.6em] before:left-0 before:h-1 before:w-1 before:rounded-full before:bg-faint"
+    >
       {text}
     </li>
   );
   const more = part.items.slice(SHOWN);
   return (
-    <section id={`part-${part.key}`} className="scroll-mt-16 border-t border-rowline py-7">
+    <section data-a id={`part-${part.key}`} className="scroll-mt-16 border-t border-rowline py-7">
       <div className="flex items-baseline justify-between gap-4">
         <h3 className="text-[18px] font-semibold">{part.title}</h3>
         <span className="font-mono text-[10.5px] tracking-[.1em] text-muted tabular-nums">
@@ -61,7 +64,9 @@ function Changes({ part }: { part: Part }) {
         </span>
       </div>
       <p className="mt-1.5 text-[14px] leading-[1.5] text-muted">{part.about}</p>
-      <ul className="mt-4 flex flex-col gap-1.5 text-[14.5px] leading-[1.45]">{part.items.slice(0, SHOWN).map(item)}</ul>
+      <ul className="mt-4 flex flex-col gap-1.5 text-[14.5px] leading-[1.45]">
+        {part.items.slice(0, SHOWN).map(item)}
+      </ul>
       {more.length > 0 && (
         <details className="group mt-3">
           <summary className="cursor-pointer list-none font-mono text-[10.5px] tracking-[.1em] text-you group-open:mb-1.5 [&::-webkit-details-marker]:hidden">
@@ -94,13 +99,17 @@ export default function Building() {
 
       <div className="mx-auto grid max-w-[1180px] gap-x-14 px-4 pb-24 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
         <section aria-label="The method">
-          <div className="mb-5 font-mono text-[10.5px] tracking-[.1em] text-muted">THE METHOD</div>
+          <div data-a className="mb-5 font-mono text-[10.5px] tracking-[.1em] text-muted">
+            THE METHOD
+          </div>
           <ol className="relative">
             {STEPS.map((step, i) => {
               const count = step.parts.reduce((n, k) => n + (parts.get(k)?.items.length ?? 0), 0);
               return (
-                <li key={step.title} className="relative pb-7 pl-9 last:pb-0">
-                  {i < STEPS.length - 1 && <span aria-hidden className="absolute top-6 bottom-0 left-[11px] w-px bg-faint" />}
+                <li key={step.title} data-a className="relative pb-7 pl-9 last:pb-0">
+                  {i < STEPS.length - 1 && (
+                    <span aria-hidden className="absolute top-6 bottom-0 left-[11px] w-px bg-faint" />
+                  )}
                   <span
                     aria-hidden
                     className="absolute top-0.5 left-0 flex h-[23px] w-[23px] items-center justify-center rounded-full border border-faint bg-page font-mono text-[10.5px] text-muted"
@@ -122,7 +131,9 @@ export default function Building() {
         </section>
 
         <section aria-label="Every change" className="mt-14 lg:mt-0">
-          <div className="mb-1 font-mono text-[10.5px] tracking-[.1em] text-muted">EVERY CHANGE, PART BY PART</div>
+          <div data-a className="mb-1 font-mono text-[10.5px] tracking-[.1em] text-muted">
+            EVERY CHANGE, PART BY PART
+          </div>
           {log.parts.map((part) => (
             <Changes key={part.key} part={part} />
           ))}

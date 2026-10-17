@@ -59,7 +59,7 @@ Every source the game rests on, grouped by the question it answers. Each entry s
 - **[Project Ozma, 1960](https://www.seti.org/research/seti-101/project-ozma/)** · History.
   - The first modern search: Tau Ceti and Epsilon Eridani, six hours a day, April to July 1960, at 21 cm.
   - Matters: a young listener stares longest at its nearest Sun-like stars. Basis for v2's character-weighted odds.
-  - Used: v2 Earth's loud past.
+  - Used: v2 Earth's loud past. The about page: 66 years of listening by 2026, without one confirmed signal.
 - **[List of interstellar radio messages](https://en.wikipedia.org/wiki/List_of_interstellar_radio_messages)** · Reference.
   - Earth's aimed messages from 1974 on, with targets and arrival dates. Within 50 ly: Altair, Gliese 49, Gliese 208, 55 Cancri, HD 10307, 47 Ursae Majoris, Gliese 581, Teegarden's Star, TZ Arietis, Kappa¹ Ceti, Gliese 526, Luyten's Star.
   - Matters: Earth's real knocks. Each lasted hours, so being heard needs a listener watching Sol at that moment.

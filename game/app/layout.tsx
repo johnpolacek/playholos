@@ -15,7 +15,8 @@ export const viewport: Viewport = { themeColor: "#121314", colorScheme: "dark" }
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${suse.variable} ${plexMono.variable}`}>
+    // The about pages' boot script marks <html> before React hydrates it.
+    <html lang="en" className={`${suse.variable} ${plexMono.variable}`} suppressHydrationWarning>
       <body className="font-sans antialiased">{children}</body>
     </html>
   );
