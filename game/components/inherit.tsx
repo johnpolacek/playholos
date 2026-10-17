@@ -42,13 +42,27 @@ function Flight({ dials, onReady }: { dials: Dials; onReady(flight: number): voi
   const names = useRef<Record<string, HTMLSpanElement | null>>({});
   const bar = useRef<HTMLDivElement>(null);
   const span = useRef<HTMLSpanElement>(null);
-  // Each name sits beside its place, on the side away from the edge, and shows while its place is in view.
+  // Each name sits beside its place, on the side away from the edge, and shows while its place is in view. On a narrow
+  // screen two places can be close: a name that would cross one already placed tries the other side, then below.
   const onMarks = useCallback((marks: Mark[]) => {
+    const placed: { l: number; r: number; t: number; b: number }[] = [];
     for (const { id, x, y, a } of marks) {
       const n = names.current[id];
       if (!n) continue;
+      const w = n.offsetWidth;
+      const h = n.offsetHeight;
       const right = x > (n.parentElement?.clientWidth ?? 0) * 0.62;
-      n.style.transform = `translate(${x + (right ? -8 : 8)}px, ${y}px) translate(${right ? "-100%" : "0"}, -50%)`;
+      const tries = [
+        { dx: right ? -8 - w : 8, dy: -h / 2 },
+        { dx: right ? 8 : -8 - w, dy: -h / 2 },
+        { dx: -w / 2, dy: 6 },
+      ];
+      const box = ({ dx, dy }: (typeof tries)[number]) => ({ l: x + dx, r: x + dx + w, t: y + dy, b: y + dy + h });
+      const clear = (b: ReturnType<typeof box>) =>
+        placed.every((p) => b.r < p.l || b.l > p.r || b.b < p.t || b.t > p.b);
+      const at = tries.find((t) => clear(box(t))) ?? tries[0];
+      if (a > 0.05) placed.push(box(at));
+      n.style.transform = `translate(${x + at.dx}px, ${y + at.dy}px)`;
       n.style.opacity = String(a);
     }
   }, []);
@@ -231,11 +245,7 @@ export function Inherit({ onSkip, onNext }: { onSkip(): void; onNext(): void }) 
           The instruments are today’s. The Mind is not.
         </p>
         <div className="mt-auto grid shrink-0 grid-cols-[1fr_1.4fr] gap-2 pt-5 pb-4 wide:pt-8">
-          <button
-            data-m="act"
-            onClick={() => leave(onSkip)}
-            className="h-[46px] rounded-full text-[15px] font-medium"
-          >
+          <button data-m="act" onClick={() => leave(onSkip)} className="h-[46px] rounded-full text-[15px] font-medium">
             Skip
           </button>
           <button
