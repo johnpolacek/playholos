@@ -20,6 +20,8 @@ npm run dev                                # http://localhost:3000
   - `lib/atlas.ts` loads its maps and star data from `../assets` and `../data`.
   - Three.js and Astronomy Engine come from the atlas's packages at the repo root.
 
+- `lib/motion.ts`: the full motion treatment, from the animaxxing skills in `../.claude/skills`. Every element enters from a blank screen, rests, and leaves. Mark an element `data-m` and give its screen a `useStage` intro. Reduced motion skips the travel.
+
 Everything else inside the phone is placeholder.
 
-Live at https://holos-game.vercel.app. Deploy from the repo root with `vercel deploy --prod`: the Vercel project's Root Directory is `game`, and `.vercelignore` keeps the upload to what the game reads.
+Live at https://holos-game.vercel.app. A push to `main` deploys it. By hand, deploy from the repo root with `vercel deploy --prod`: the Vercel project's Root Directory is `game`, and `.vercelignore` keeps the upload to what the game reads.

@@ -54,7 +54,7 @@ export function MapStrip() {
   }
 
   return (
-    <div className={`relative shrink-0 overflow-hidden border-b border-faint bg-paper transition-[height] duration-300 ${tall ? "h-[72%]" : "h-[45%]"}`}>
+    <div data-shell="map" className={`relative shrink-0 overflow-hidden border-b border-faint bg-paper transition-[height] duration-300 ${tall ? "h-[72%]" : "h-[45%]"}`}>
       <div ref={view} className="absolute inset-0" />
       <span className="pointer-events-none absolute top-2 left-2.5 rounded-[9px] border border-faint bg-paper px-[7px] py-0.5 font-mono text-[9.5px] tracking-[.06em]">
         {STAGES[stage].name}

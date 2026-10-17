@@ -1,11 +1,13 @@
 "use client";
 
 import { useGame } from "@/components/game-provider";
+import { useLeaveShell } from "@/components/wake";
 import { realTime } from "@/lib/game/clock";
 
 // Begin: Year 0 starts at the tap, and the clock runs from then, offline too. Settled 2026-10-10.
 export function Begin() {
   const { save, year, begin, newGame } = useGame();
+  const leaveShell = useLeaveShell();
   if (!save) return null;
 
   if (year === null) {
@@ -23,7 +25,7 @@ export function Begin() {
         <button onClick={begin} className="mb-2 h-[46px] shrink-0 rounded-full bg-ink text-[15px] font-medium text-paper">
           Begin · Year 0 starts now
         </button>
-        <button onClick={newGame} className="mb-4 h-9 shrink-0 rounded-full border border-ink text-sm">
+        <button onClick={() => leaveShell(newGame)} className="mb-4 h-9 shrink-0 rounded-full border border-ink text-sm">
           New game
         </button>
       </>
@@ -38,7 +40,7 @@ export function Begin() {
           <span className="font-mono tabular-nums">{realTime(year)}</span> since you began
         </span>
       </div>
-      <button onClick={newGame} className="mt-auto mb-4 h-9 shrink-0 rounded-full border border-ink text-sm">
+      <button onClick={() => leaveShell(newGame)} className="mt-auto mb-4 h-9 shrink-0 rounded-full border border-ink text-sm">
         New game
       </button>
     </>

@@ -1,11 +1,29 @@
 {
   "version": 1,
   "skills": {
+    "animaxxing": {
+      "source": "johnpolacek/animaxxing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/animaxxing/SKILL.md",
+      "computedHash": "c9e865647a5d03f2184184c9126812ef63e195c32e5ce64c370f039b2350501f"
+    },
     "gsap-core": {
       "source": "greensock/gsap-skills",
       "sourceType": "github",
       "skillPath": "skills/gsap-core/SKILL.md",
       "computedHash": "c4a01101d9e1aafbf4b49f75d74f9349790d8741981ba0237c990093863035a6"
+    },
+    "gsap-frameworks": {
+      "source": "greensock/gsap-skills",
+      "sourceType": "github",
+      "skillPath": "skills/gsap-frameworks/SKILL.md",
+      "computedHash": "4852e85a48088d9044b08ebd1db607915b628c0c3ec7e04300713f546728fbdf"
+    },
+    "gsap-nextjs": {
+      "source": "johnpolacek/animaxxing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/gsap-nextjs/SKILL.md",
+      "computedHash": "dcd3a3605a7608cc156eb3b3a88b650e40922ddad1e9550f860900f8578edf9a"
     },
     "gsap-performance": {
       "source": "greensock/gsap-skills",
@@ -24,6 +42,12 @@
       "sourceType": "github",
       "skillPath": "skills/gsap-react/SKILL.md",
       "computedHash": "7d3b52822681a4158e371f895c58fb7030ecaf33f585a534b7162f9e92c5d893"
+    },
+    "gsap-scrolltrigger": {
+      "source": "greensock/gsap-skills",
+      "sourceType": "github",
+      "skillPath": "skills/gsap-scrolltrigger/SKILL.md",
+      "computedHash": "1cdc5647693783cb7a662d84a5de434c88a051ed56b4d33597c9b5782b5973e6"
     },
     "gsap-timeline": {
       "source": "greensock/gsap-skills",
