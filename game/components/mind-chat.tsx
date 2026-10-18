@@ -1,6 +1,7 @@
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import { useEffect, useRef, useState } from "react";
+import { MindNote } from "@/components/mind-note";
 import { BAD_KEY } from "@/lib/access";
 import { realTime } from "@/lib/game/clock";
 import { browserStore } from "@/lib/game/store";
@@ -39,6 +40,7 @@ export function MindChat({ ask }: { ask?: string }) {
   const [input, setInput] = useState("");
   const end = useRef<HTMLDivElement>(null);
   const busy = status === "submitted" || status === "streaming";
+  const lastAnswer = messages.findLast((message) => message.role === "assistant")?.id;
 
   // A block body: newer browsers return a Promise from scrollIntoView, and React would call it as cleanup.
   useEffect(() => {
@@ -58,10 +60,14 @@ export function MindChat({ ask }: { ask?: string }) {
               {text}
             </div>
           ) : (
-            <div key={message.id} className="flex max-w-[86%] flex-col gap-[3px] self-start rounded-xl border border-faint bg-paper px-3 py-[9px] text-[13.5px] leading-[1.45] whitespace-pre-wrap">
-              <span className="font-mono text-[9.5px] tracking-[.1em] text-you">THE MIND</span>
+            // Only the newest answer's mark moves, so a long talk isn't a column of spinning marks.
+            <MindNote
+              key={message.id}
+              still={message.id !== lastAnswer}
+              className="max-w-[86%] self-start text-[13.5px] leading-[1.45] whitespace-pre-wrap"
+            >
               {text || "…"}
-            </div>
+            </MindNote>
           );
         })}
         {status === "submitted" && <span className="self-start font-mono text-[9.5px] tracking-[.1em] text-you">THE MIND IS THINKING</span>}

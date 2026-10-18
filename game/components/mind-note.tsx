@@ -2,18 +2,19 @@ import { useRef } from "react";
 import { gsap, prefersReducedMotion, useGSAP } from "@/lib/motion";
 
 // The Mind's mark beside its name: Sol, in ink, circling the Mind's blue core, which breathes. Plainer than the
-// corner's mark, so it reads at the size of the name. Drawn on a 16-unit grid around the center.
-function MindMark() {
+// corner's mark, so it reads at the size of the name. A still mark rests, Sol to the right. Drawn on a 16-unit grid
+// around the center.
+function MindMark({ still }: { still: boolean }) {
   const root = useRef<SVGSVGElement>(null);
   useGSAP(
     () => {
-      if (prefersReducedMotion()) return;
+      if (still || prefersReducedMotion()) return;
       gsap.to('[data-mark="sol"]', { rotation: 360, svgOrigin: "0 0", duration: 9, ease: "none", repeat: -1 });
       const breath = { svgOrigin: "0 0", duration: 2, ease: "sine.inOut", yoyo: true, repeat: -1 };
       gsap.fromTo('[data-mark="core"]', { scale: 0.85 }, { scale: 1.1, ...breath });
       gsap.fromTo('[data-mark="halo"]', { scale: 1.1 }, { scale: 0.85, ...breath });
     },
-    { scope: root },
+    { scope: root, dependencies: [still], revertOnUpdate: true },
   );
   return (
     <svg ref={root} width={15} height={15} viewBox="-8 -8 16 16" overflow="visible" aria-hidden className="shrink-0">
@@ -28,16 +29,16 @@ function MindMark() {
 }
 
 // The Mind's words, set off by one corner. Its mark and name sit in the top edge, the top fades out to the right, and
-// the side fades down. Settled 2026-10-18, from explorations/mind-voice-edge.html.
-export function MindNote({ children }: { children: React.ReactNode }) {
+// the side fades down. Settled 2026-10-18, from explorations/mind-voice-edge.html. The caller sets the words' size.
+export function MindNote({ className = "", still = false, children }: { className?: string; still?: boolean; children: React.ReactNode }) {
   return (
-    <div className="relative pr-1 pb-3 pl-3 text-[12.5px] leading-[1.4]">
+    <div className={`relative pr-1 pb-3 pl-3 ${className}`}>
       <span
         aria-hidden
         className="absolute top-2 bottom-0 left-0 w-[9px] rounded-tl-xl border-t border-l border-you/40 [mask-image:linear-gradient(black,transparent)]"
       />
       <div className="mb-1.5 flex h-4 items-center gap-[7px]">
-        <MindMark />
+        <MindMark still={still} />
         <span className="font-mono text-[9.5px] tracking-[.1em] whitespace-nowrap text-you">THE MIND</span>
         <span aria-hidden className="mt-2 h-px flex-1 self-start bg-linear-to-r from-you/40 to-transparent to-90%" />
       </div>

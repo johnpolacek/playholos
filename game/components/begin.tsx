@@ -24,7 +24,7 @@ export function Begin() {
         </div>
         <Queue />
         <div className="mt-auto mb-3 pt-4">
-          <MindNote>
+          <MindNote className="text-[12.5px] leading-[1.4]">
             Nothing here sends anything. When you begin, one Year passes every five of your minutes, and we keep going
             while you’re away.
           </MindNote>
