@@ -92,17 +92,18 @@ export function schedule(plan: Plan, scale: number): Record<string, number | nul
   );
 }
 
-/** What is already on its way, in Years from Year 0: our messages arriving, and the first replies that could come. */
+/** What is already on its way, in Years from Year 0: our messages arriving, and the first replies that could come.
+ *  Each keeps the message it rides on, the decimal year we sent it, and the star's distance in light-years. */
 export function events(until: number) {
-  const out: { at: number; star: string; reply: boolean }[] = [];
+  const out: { at: number; star: string; reply: boolean; msg: string; sent: number; ly: number }[] = [];
   const seen = new Set<string>();
-  for (const [, sent, star, ly] of KNOCKS) {
+  for (const [msg, sent, star, ly] of KNOCKS) {
     const arrive = sent + ly - YEAR_0;
-    if (arrive > 0 && arrive <= until) out.push({ at: arrive, star, reply: false });
+    if (arrive > 0 && arrive <= until) out.push({ at: arrive, star, reply: false, msg, sent, ly });
     const reply = sent + 2 * ly - YEAR_0;
     if (reply > 0 && reply <= until && !seen.has(star)) {
       seen.add(star);
-      out.push({ at: reply, star, reply: true });
+      out.push({ at: reply, star, reply: true, msg, sent, ly });
     }
   }
   return out.sort((a, b) => a.at - b.at);
