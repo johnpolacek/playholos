@@ -22,6 +22,10 @@ export const BUILDS: Build[] = [
   { name: "Launch complex", what: "Doubles what we lift to orbit." },
   { name: "Orbital yard", what: "Builds in orbit a quarter faster." },
   { name: "Moon vault", what: "A second home for our Mind, in the Moon’s rock.", kt: 10 },
+  // The two roads to the nearest star, open at Year 0 since 2026-10-18. Even last in line, the probe yard's large want
+  // takes the thought that would have pushed the builds before it, and slows them by Years.
+  { name: "Laser sail array", what: "Light from the ground, to push sails to a fifth of light speed." },
+  { name: "Probe yard", what: "Builds and fuels probes in orbit. The first flies 12 Years after.", kt: 10 },
 ];
 
 /** Thought for the Mind's own studies, as a share of Year 0's. */
@@ -42,10 +46,15 @@ export const FOMALHAUT = { name: "Image Fomalhaut again", what: "Has the new clo
 
 export const EMPTY: Plan = { builds: [], observe: [], studies: 0.1, search: "near" };
 
+/** The charter's strongest lean: which dial, and whether it leans low. */
+export function lean(dials: number[]) {
+  const i = dials.reduce((best, v, k) => (Math.abs(v - 50) > Math.abs(dials[best] - 50) ? k : best), 0);
+  return { i, low: dials[i] < 50 };
+}
+
 /** What the Mind would start with, from the charter's strongest lean: its words, and the builds it means. */
 export function advice(dials: number[]): { words: string; builds: string[]; studies?: number } {
-  const i = dials.reduce((best, v, k) => (Math.abs(v - 50) > Math.abs(dials[best] - 50) ? k : best), 0);
-  const low = dials[i] < 50;
+  const { i, low } = lean(dials);
   if (i === 0)
     return low
       ? {

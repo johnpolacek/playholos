@@ -1,7 +1,8 @@
 // Reach: spreading out into the Galaxy, probes first. At Year 0 there is nothing to send yet, so the tab shows how far
-// we have gone and the two roads to the nearest star, each dated as if begun now, last in the line, with this game's
-// thought and the plan as it stands. Distances at Year 0 are HOLOS_GAME_CONCEPT.md's. Built 2026-10-18.
-import { ordersOf } from "./plan";
+// we have gone and the two roads to the nearest star. Each can be queued before Begin, last in line. One queued is
+// dated where the plan has it, and one not yet as if queued now, with this game's thought. Queued, a road can slow
+// what is before it: see slows(). Distances at Year 0 are HOLOS_GAME_CONCEPT.md's. Built 2026-10-18.
+import { ordersOf, schedule } from "./plan";
 import type { Plan } from "./types";
 import { type Order, pace } from "@/lib/sim/works";
 
@@ -33,6 +34,8 @@ export const VOYAGER_AU_PER_YEAR = 3.6;
 
 export interface Road {
   name: string;
+  /** Its place in our order, from 1, or null while it is not queued. */
+  n: number | null;
   /** What we build first, and what flies. */
   build: string;
   craft: string;
@@ -43,36 +46,37 @@ export interface Road {
   home: number | null;
 }
 
-/** Each road begun at Year `from`, alone and last in line, so it never slows what the plan already holds. Sails fly at
- *  a fifth of light speed, as Starshot's design. A flyby probe is built 12 Years after the yard, and flies at an
- *  eighth, as Daedalus. Its word comes home at light speed. */
+/** Each road where the plan has it, or else begun at Year `from`, last in line.
+ *  Sails fly at a fifth of light speed, as Starshot's design. A flyby probe is built 12 Years after the yard, and flies
+ *  at an eighth, as Daedalus. Its word comes home at light speed. */
 export function roads(plan: Plan, scale: number, from = 0): Road[] {
   const { orders, aside } = ordersOf(plan);
-  const doneOf = (work: string) =>
-    pace([...orders, { y: from, begin: work } as Order], 200, { scale, aside })
-      .done[work] ?? null;
-  const road = (
-    name: string,
-    build: string,
-    craft: string,
-    wait: number,
-    speed: number,
-  ): Road => {
+  const doneOf = (work: string) => {
+    const more: Order[] = plan.builds.includes(work) ? [] : [{ y: from, begin: work }];
+    return pace([...orders, ...more], 200, { scale, aside }).done[work] ?? null;
+  };
+  const road = (name: string, build: string, craft: string, wait: number, speed: number): Road => {
     const done = doneOf(build);
     const leaves = done === null ? null : done + wait;
     const arrives = leaves === null ? null : leaves + NEAREST.ly / speed;
-    return {
-      name,
-      build,
-      craft,
-      done,
-      leaves,
-      arrives,
-      home: arrives === null ? null : arrives + NEAREST.ly,
-    };
+    const n = plan.builds.indexOf(build) + 1 || null;
+    return { name, n, build, craft, done, leaves, arrives, home: arrives === null ? null : arrives + NEAREST.ly };
   };
-  return [
-    road("By sail", "Laser sail array", "Sails", 0, 0.2),
-    road("By probe", "Probe yard", "A flyby probe", 12, 1 / 8),
-  ];
+  return [road("By sail", "Laser sail array", "Sails", 0, 0.2), road("By probe", "Probe yard", "A flyby probe", 12, 1 / 8)];
+}
+
+/** The queued build a work slows most, and by how many Years, against the plan without it. Each work in line gets its
+ *  want in turn before any is pushed past it, so a work with a large want, even last, takes the push from those before
+ *  it. Null when it slows nothing by a tenth of a Year. */
+export function slows(plan: Plan, scale: number, work: string): { name: string; by: number } | null {
+  const others = plan.builds.filter((b) => b !== work);
+  const without = schedule({ ...plan, builds: others }, scale);
+  const within = schedule(plan.builds.includes(work) ? plan : { ...plan, builds: [...others, work] }, scale);
+  let most: { name: string; by: number } | null = null;
+  for (const name of others) {
+    const a = without[name], b = within[name];
+    if (a === null || b === null) continue;
+    if (b - a >= 0.1 && (!most || b - a > most.by)) most = { name, by: b - a };
+  }
+  return most;
 }
