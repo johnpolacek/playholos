@@ -20,9 +20,9 @@ const ELSEWHERE = [
   ["https://johnpolacek.com", "Created by John Polacek"],
 ] as const;
 
-// The mark in the top bar's corner: the galactic year, bare. Sol, in cyan, circles the galaxy's glowing core, as it
-// does once every 230 million years. Here a lap takes 14 seconds. Drawn on a 24-unit grid around the center. Rounded,
-// so the server and the browser draw it alike.
+// The mark in the top bar's corner: the galactic year. Sol, in cyan, circles the galaxy's glowing core, as it does
+// once every 230 million years. Here a lap takes 14 seconds, and the core swells and settles once every six. Drawn on
+// a 24-unit grid around the center. Rounded, so the server and the browser draw it alike.
 const round = (v: number) => Math.round(v * 1000) / 1000;
 const ORBIT = 9.4;
 // Where Sol starts, up and to the right, and where it rests for anyone who asks for less motion.
@@ -37,10 +37,13 @@ const WAKE = Array.from({ length: 10 }, (_, i) => {
   };
 });
 const GLOW = [
-  [0, 0.95],
-  [0.35, 0.4],
+  [0, 1],
+  [0.3, 0.55],
   [1, 0],
 ] as const;
+// The core's two glows, wide and bright, each at rest and at the top of a breath. The wide one's faint edge reaches
+// Sol's orbit at the top of a breath.
+const CORE = { wide: [8.2, 9.4], bright: [3.8, 4.25] } as const;
 
 function GalacticYear({ size }: { size: number }) {
   const root = useRef<SVGSVGElement>(null);
@@ -50,6 +53,9 @@ function GalacticYear({ size }: { size: number }) {
     () => {
       if (prefersReducedMotion()) return;
       gsap.to('[data-g="sol"]', { rotation: -360, svgOrigin: "0 0", duration: 14, ease: "none", repeat: -1 });
+      const breath = { duration: 3, ease: "sine.inOut", yoyo: true, repeat: -1 };
+      gsap.to('[data-g="wide"]', { attr: { r: CORE.wide[1] }, opacity: 1, ...breath });
+      gsap.to('[data-g="bright"]', { attr: { r: CORE.bright[1] }, ...breath });
     },
     { scope: root },
   );
@@ -63,8 +69,8 @@ function GalacticYear({ size }: { size: number }) {
         </radialGradient>
       </defs>
       {/* The core: a wide soft glow, and a small bright one inside it. */}
-      <circle r={3.6} fill={`url(#${glow})`} />
-      <circle r={1.4} fill={`url(#${glow})`} />
+      <circle data-g="wide" r={CORE.wide[0]} opacity={0.85} fill={`url(#${glow})`} />
+      <circle data-g="bright" r={CORE.bright[0]} fill={`url(#${glow})`} />
       <circle
         r={ORBIT}
         fill="none"
@@ -163,7 +169,7 @@ function Drawer({ onClose }: { onClose(): void }) {
       <nav data-d="panel" className="relative flex h-full w-[min(320px,86%)] flex-col overflow-y-auto border-r border-faint bg-paper px-5 pt-3 pb-8">
         <div data-d="item" className="flex items-center justify-between">
           <span className="flex items-center gap-2.5">
-            <GalacticYear size={26} />
+            <GalacticYear size={34} />
             <span className="font-mono text-[10.5px] tracking-[.1em]">HOLOS</span>
           </span>
           <button onClick={() => close()} aria-label="Close" className="-mr-3 size-11 text-xl leading-none text-muted">
@@ -220,16 +226,6 @@ function Drawer({ onClose }: { onClose(): void }) {
             <span className="text-muted">↗</span>
           </a>
         ))}
-
-        {process.env.NODE_ENV === "development" && (
-          <>
-            <Label>DEV</Label>
-            <Link data-d="item" href="/godview" className={row}>
-              God view
-              <span className="text-muted">→</span>
-            </Link>
-          </>
-        )}
       </nav>
     </dialog>
   );
@@ -247,9 +243,9 @@ export function Menu() {
         aria-label="Menu"
         aria-haspopup="dialog"
         aria-expanded={open}
-        className="-my-2 -ml-2.5 flex size-11 items-center justify-center text-ink"
+        className="-my-2 -ml-2 flex size-12 items-center justify-center text-ink"
       >
-        <GalacticYear size={24} />
+        <GalacticYear size={40} />
       </button>
       {open && (
         <Drawer
