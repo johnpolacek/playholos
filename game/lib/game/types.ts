@@ -12,6 +12,8 @@ export interface Save {
   /** What starts at Year 0, from Planning: builds in the order queued, observations, thought for studies, and what
    *  idle instruments sweep. Nothing in it happens before Begin. */
   plan?: Plan;
+  /** Readings the Will has opened, by id. */
+  seen?: string[];
 }
 
 export interface Plan {

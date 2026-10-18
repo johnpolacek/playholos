@@ -7,13 +7,18 @@ import { BAD_KEY } from "@/lib/access";
 import { realTime } from "@/lib/game/clock";
 import { browserStore } from "@/lib/game/store";
 
-// Each send carries the time of Begin, so the Mind knows the Year, and the seed, so the server can work out what
-// Earth knows. The server never sends the seed's truth back.
+// Each send carries the time of Begin, so the Mind knows the Year, the seed, so the server can work out what Earth
+// knows, and what the plan observes, so it knows what has landed. The server never sends the seed's truth back.
 const transport = new DefaultChatTransport({
   api: "/api/mind",
   body: async () => {
     const save = await browserStore.load();
-    return { beganAt: save?.beganAt ?? null, seed: save?.seed ?? null, charter: save?.charter ?? null };
+    return {
+      beganAt: save?.beganAt ?? null,
+      seed: save?.seed ?? null,
+      charter: save?.charter ?? null,
+      observe: save?.plan?.observe ?? [],
+    };
   },
 });
 

@@ -4,25 +4,31 @@ import { createContext, use, useCallback, useEffect, useMemo, useState } from "r
 import { useGame } from "@/components/game-provider";
 import { LeadList, LeadsMap } from "@/components/leads";
 import type { Dials } from "@/lib/drift";
-import { type Lead, leadsOf, skyId } from "@/lib/game/leads";
+import { type Lead, landed, leadsOf, type Reading, skyId } from "@/lib/game/leads";
 import { gsap, prefersReducedMotion } from "@/lib/motion";
 import type { FeltWorld } from "@/lib/sim/types";
 
 // Scan: what we know of the sky. Earth's leads, drawn on the map and listed in the tab, with one lead in view
-// between them: pointing at a row turns the map to its star.
+// between them: pointing at a row turns the map to its star. Readings land on their leads as the clock runs, and stay
+// marked until opened.
 
 interface Leads {
   leads: Lead[];
   ids: string[];
   dials: Dials;
+  /** What has landed on each lead, by its slug. */
+  readings: Record<string, Reading[]>;
+  /** Readings landed and not yet opened, by id. */
+  fresh: Set<string>;
 }
 
-const ScanContext = createContext<Leads>({ leads: [], ids: [], dials: {} });
+const ScanContext = createContext<Leads>({ leads: [], ids: [], dials: {}, readings: {}, fresh: new Set() });
 /** Earth's leads, their stars as the sky names them, and the dials the map draws them by. */
 export const useLeads = () => use(ScanContext);
 
 export function ScanProvider({ children }: { children: React.ReactNode }) {
-  const seed = useGame().save?.seed;
+  const { save, year } = useGame();
+  const seed = save?.seed;
   const [felt, setFelt] = useState<FeltWorld[]>();
   useEffect(() => {
     if (seed === undefined) return;
@@ -31,10 +37,19 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
       .then(setFelt, () => setFelt([]));
   }, [seed]);
   const [dials] = useState<Dials>(() => ({ found: 0, grid: 0, focus: 0 }));
+  const leads = useMemo(() => (felt ? leadsOf(felt) : []), [felt]);
+  // Kept apart from the readings, so a landing never relights the map.
+  const ids = useMemo(() => leads.map((l) => skyId(l.star)), [leads]);
+  // Landing depends only on the tenth of a Year, so the readings change at most every thirty seconds.
+  const tenth = year === null ? null : Math.floor(year * 10) / 10;
+  const observe = save?.plan?.observe;
+  const seen = save?.seen;
   const value = useMemo(() => {
-    const leads = felt ? leadsOf(felt) : [];
-    return { leads, ids: leads.map((l) => skyId(l.star)), dials };
-  }, [felt, dials]);
+    const readings = Object.fromEntries(leads.map((l) => [l.slug, landed(l.slug, observe, tenth)]));
+    const opened = new Set(seen);
+    const fresh = new Set(Object.values(readings).flatMap((rs) => rs.map((r) => r.id).filter((id) => !opened.has(id))));
+    return { leads, ids, dials, readings, fresh };
+  }, [leads, ids, dials, observe, tenth, seen]);
   return <ScanContext value={value}>{children}</ScanContext>;
 }
 
@@ -60,7 +75,7 @@ export function ScanMap({ className }: { className: string }) {
 
 /** The Scan tab: Earth's leads, and how long light takes to reach each. Each opens its own page. */
 export function Scan() {
-  const { leads, dials } = useLeads();
+  const { leads, dials, readings, fresh } = useLeads();
   if (!leads.length) return null;
   return (
     <>
@@ -68,7 +83,7 @@ export function Scan() {
         <span>Leads · {leads.length}</span>
         <span>Light takes</span>
       </div>
-      <LeadList leads={leads} dials={dials} />
+      <LeadList leads={leads} dials={dials} readings={readings} fresh={fresh} />
     </>
   );
 }

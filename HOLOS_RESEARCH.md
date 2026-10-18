@@ -921,8 +921,8 @@ What a neighbor's world can plausibly be, beyond an Earth twin. Each roster entr
   - Slow rotators build thick clouds over their noon side and stay Earth-like at nearly twice the light of fast rotators.
   - Used: Sere.
 - **[Chen and Kipping 2017, forecasting masses and radii](https://arxiv.org/abs/1603.08614)** · Published, ApJ 834, 17.
-  - A mass-radius relation from 316 objects. Rocky worlds give way to worlds with thick gas at about 2 Earth masses.
-  - Caveat: the 2 Earth mass figure is from memory of the paper, not read at source this session. A 2023 study favors a sharper break than its smooth model ([arXiv 2310.16733](https://arxiv.org/pdf/2310.16733)).
+  - A mass-radius relation from 316 objects. Rocky worlds give way to worlds with thick gas at 2.0 Earth masses, +0.7 or −0.6. Abstract read 2026-10-18.
+  - Caveat: a 2023 study favors a sharper break than its smooth model ([arXiv 2310.16733](https://arxiv.org/pdf/2310.16733)).
   - Used: the words on a felt world's lead page. Under 1.5 Earths, rock is likely. From 1.5 to 3, rock and gas are roughly even. Above 3, gas is likely. A tug gives only the least mass.
 - **[Cowan and Abbot 2014, super-Earths need not be water worlds](https://iopscience.iop.org/article/10.1088/0004-637X/781/1/27)** · Published, ApJ.
   - A planet with plate tectonics keeps dry land if its water is under about 0.2% of its mass, at any size, since deeper seafloors push more water into the mantle.
@@ -1523,7 +1523,7 @@ Results the design is waiting on. Check each when its date comes.
 
 ## To check
 
-- Chen and Kipping 2017's break between rock and gas, about 2 Earth masses: read it at source. It sets the words on felt worlds' lead pages.
+- Closed 2026-10-18: Chen and Kipping 2017's break between rock and gas, read at source: 2.0 Earth masses, +0.7 or −0.6.
 
 - Closed 2026-10-16: the long roads' schedules. The telescope and the mass driver hold. The megatonne mine and belt mining have no real schedule, and stay v1's. See The long roads, rechecked.
 

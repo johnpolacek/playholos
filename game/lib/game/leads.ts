@@ -1,5 +1,6 @@
 import { YEAR_0 } from "@/lib/game/clock";
 import { KNOCKS } from "@/lib/game/knocks";
+import { FOMALHAUT } from "@/lib/game/plan";
 import type { FeltWorld } from "@/lib/sim/types";
 
 // Earth's real leads in 2040, each with its own page: a world on a stretched orbit, every world the planet hunters felt
@@ -24,6 +25,23 @@ export interface Could {
   what: string;
   why: string;
   odds: Odds;
+}
+
+/**
+ * What an observation found, landing on its lead's page in the Year it is done: what it saw, the Mind's word on it,
+ * each explanation's new word, in the lead's order, and what would tell us next.
+ */
+export interface Reading {
+  id: string;
+  /** The observation in the plan that brings it. */
+  needs: string;
+  at: number;
+  by: string;
+  title: string;
+  line: string;
+  mind: string;
+  now: Odds[];
+  tells: string[];
 }
 
 /** What a lead's page draws: a world's orbit against its star's warm zone, Fomalhaut's belt, or a message's trip. */
@@ -173,15 +191,24 @@ export function leadsOf(felt: FeltWorld[]): Lead[] {
         ["Second cloud", "Seen in 2023, close to the first"],
         ["Expected", "One such crash in 100,000 years or more"],
       ],
+      // The four explanations and their words are the first mock's, so its first reading can move them.
       could: [
         {
-          what: "An unseen world stirring the belt",
-          why: "Its pull could send rocks across each other’s paths.",
+          what: "Rubble from one old breakup",
+          why: "One large rock, broken long ago, could keep its pieces crashing for a while.",
           odds: "roughly even",
         },
-        { what: "A crowded belt", why: "More large rocks than we thought would mean more crashes.", odds: "roughly even" },
-        { what: "Chance", why: "Two rare crashes, close together, by luck alone.", odds: "very unlikely" },
-        { what: "Minds", why: "A new point of light could be something made. Nothing says so.", odds: "almost no chance" },
+        {
+          what: "A hidden world stirring the belt",
+          why: "Its pull could send rocks across each other’s paths.",
+          odds: "very unlikely",
+        },
+        { what: "Chance", why: "Two rare crashes, close together, by luck alone.", odds: "unlikely" },
+        {
+          what: "Something moving rocks",
+          why: "A new point of light could be something made. Nothing says so.",
+          odds: "almost no chance",
+        },
       ],
       tells: ["Imaging Fomalhaut again, in thirty seconds of the space telescope. A crash’s cloud drifts outward and fades."],
       art: { kind: "clouds" },
@@ -212,4 +239,48 @@ export function leadsOf(felt: FeltWorld[]): Lead[] {
       art: { kind: "reply", sent: LUYTEN.map(([, sent]) => sent), ly: LUYTEN[0][3] },
     },
   ];
+}
+
+/**
+ * Readings by lead. Only Fomalhaut's so far: the one observation open at Year 0. It makes the lead stranger, as the
+ * concept has it. The third cloud is the game's, not real: the first two were found in 2004 and 2023.
+ */
+export const READINGS: Record<string, Reading[]> = {
+  fomalhaut: [
+    {
+      id: "fomalhaut-third-cloud",
+      needs: FOMALHAUT.name,
+      at: FOMALHAUT.lands,
+      by: "Space telescope",
+      title: "A third cloud",
+      line: "The cloud seen in 2023 has spread and faded, as dust does. A new one sits beside it. Three crashes in 36 years, where we expected one in 100,000.",
+      mind: "Chance can’t carry three. The likeliest answer is dull: one old breakup, still grinding itself down. A Year of watching would tell us if the clouds share one orbit.",
+      now: ["likely", "unlikely", "almost no chance", "very unlikely"],
+      tells: [
+        "Watching Fomalhaut through a Year, monthly, with the space telescope. If the clouds share one orbit, one breakup made them all.",
+      ],
+    },
+  ],
+};
+
+/** The readings that have landed on a lead by this Year, from what the plan observes. */
+export function landed(slug: string, observe: string[] | undefined, year: number | null): Reading[] {
+  if (year === null || !observe) return [];
+  return (READINGS[slug] ?? []).filter((r) => observe.includes(r.needs) && year >= r.at);
+}
+
+/** The Mind's words on Earth's named leads now, with what any reading found, for the Mind to judge from. */
+export function describeLeads(observe: string[] | undefined, year: number | null): string {
+  const lines = leadsOf([]).map((lead) => {
+    const read = landed(lead.slug, observe, year).at(-1);
+    const words = lead.could
+      .map((c, i) => {
+        const now = read?.now[i] ?? c.odds;
+        return `${c.what}, ${now}${now === c.odds ? "" : ` (was ${c.odds})`}`;
+      })
+      .join("; ");
+    const found = read ? ` Landed at Year ${read.at}, by the ${read.by.toLowerCase()}: ${read.title}. ${read.line}` : "";
+    return `- ${lead.star}, ${lead.what.toLowerCase()}.${found} Our words: ${words}.`;
+  });
+  return `Our words on the named leads, as the Scan tab shows them. Keep to them, and say so if a reading moved one:\n${lines.join("\n")}`;
 }

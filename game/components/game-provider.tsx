@@ -14,6 +14,8 @@ interface Game {
   wake(): void;
   setCharter(charter: NonNullable<Save["charter"]>): void;
   setPlan(plan: NonNullable<Save["plan"]>): void;
+  /** Marks readings as opened. */
+  see(ids: string[]): void;
   begin(): void;
   newGame(): void;
 }
@@ -67,6 +69,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     wake: () => change((s) => ({ ...s, woke: true })),
     setCharter: (charter) => change((s) => ({ ...s, charter })),
     setPlan: (plan) => change((s) => ({ ...s, plan })),
+    see: (ids) => change((s) => ({ ...s, seen: [...new Set([...(s.seen ?? []), ...ids])] })),
     begin: () => change((s) => ({ ...s, beganAt: Date.now() })),
     newGame: () => update(freshSave()),
   };

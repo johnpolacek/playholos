@@ -8,7 +8,7 @@ import { SkyArt } from "@/components/sky";
 import { FILL, Spread } from "@/components/spread";
 import type { Dials, Mark } from "@/lib/drift";
 import { realTime } from "@/lib/game/clock";
-import { type Lead, leadsOf, skyId } from "@/lib/game/leads";
+import { type Lead, leadsOf, type Reading, skyId } from "@/lib/game/leads";
 import { LEADS_SOURCES } from "@/lib/game/sources";
 import type { FeltWorld } from "@/lib/sim/types";
 import { prefersReducedMotion, rise, riseFrom, useStage } from "@/lib/motion";
@@ -74,9 +74,22 @@ export function LeadsMap({
 
 /**
  * Earth's leads as rows. Pointing at one turns the map to it. In the opening, picking one holds the map there and each
- * asks the Mind its own question. On Scan, each opens its own page.
+ * asks the Mind its own question. On Scan, each opens its own page, and a row shows its latest reading, marked new
+ * until opened.
  */
-export function LeadList({ leads, dials, onAsk }: { leads: Lead[]; dials: Dials; onAsk?(question: string): void }) {
+export function LeadList({
+  leads,
+  dials,
+  onAsk,
+  readings = {},
+  fresh,
+}: {
+  leads: Lead[];
+  dials: Dials;
+  onAsk?(question: string): void;
+  readings?: Record<string, Reading[]>;
+  fresh?: Set<string>;
+}) {
   // The lead in view: the one the Will points at, or else the one they picked, which stays until picked again.
   const [picked, setPicked] = useState<number | null>(null);
   const peeked = useRef<number | null>(null);
@@ -89,19 +102,32 @@ export function LeadList({ leads, dials, onAsk }: { leads: Lead[]; dials: Dials;
     look(null, i);
   };
 
-  const row = (l: Lead) => (
+  const row = (l: Lead) => {
+    const read = readings[l.slug]?.at(-1);
+    const isNew = !!read && !!fresh?.has(read.id);
+    return (
     <>
       <span className={`size-2 shrink-0 translate-y-[-1px] rounded-full ${l.reply ? "bg-other" : "bg-you"}`} />
       <span className="flex min-w-0 grow flex-col">
         <span className="text-[15px] leading-snug">
           <b className="font-semibold">{l.what}</b> · {l.star}
         </span>
-        <span className="text-[13.5px] leading-snug text-page-ink2">{l.line}</span>
+        {read ? (
+          <span className="text-[13.5px] leading-snug text-ink">
+            {isNew && (
+              <span className="mr-1.5 rounded-full bg-you px-1.5 py-px font-mono text-[9px] tracking-[.08em] text-paper">NEW</span>
+            )}
+            {read.title}, Year {read.at}.
+          </span>
+        ) : (
+          <span className="text-[13.5px] leading-snug text-page-ink2">{l.line}</span>
+        )}
       </span>
       <span className="shrink-0 text-right font-mono text-[11px] text-muted tabular-nums">{realTime(l.ly)}</span>
       {!onAsk && <span className="shrink-0 self-center text-muted">›</span>}
     </>
-  );
+    );
+  };
   const peek = (i: number) => ({
     onPointerEnter: (e: React.PointerEvent) => e.pointerType === "mouse" && look(i),
     onPointerLeave: (e: React.PointerEvent) => e.pointerType === "mouse" && look(null),

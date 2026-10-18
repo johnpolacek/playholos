@@ -697,7 +697,12 @@ Settled 2026-10-10.
     - *Drawn.* A world's orbit from above, against its star's warm zone, with Earth's orbit for scale when it fits. Fomalhaut's belt with its two clouds. Our messages' trip to Luyten's Star, the earliest replies coming back, and now.
     - *Felt worlds' words follow a rule,* from the least mass: rock or a small gas world. A world too close to its star for the infrared telescope to split says so.
     - Set aside: the chat as the first step. It hid the map and the list.
-  - Not built yet: what lands joining its lead's page and moving its words, and a mark on the tab when it does.
+  - *The first landing, built 2026-10-18.* If the plan images Fomalhaut, its reading lands at Year 0.1, as the first mock has it. The row reads "A third cloud, Year 0.1" with a NEW mark, and the Scan tab gets a dot until the page is opened.
+    - *The page leads with the reading:* what it saw, and the Mind's word on it. Four words move, each shown as before → now. Chance: unlikely → almost no chance.
+    - *The drawing changes:* the 2023 cloud fades, and a new one sits beside it.
+    - *The Mind hears it too.* Each send carries what the plan observes, and the Mind is told the named leads' words, before and after.
+    - Fomalhaut's Year 0 explanations are now the mock's four, so its reading can move them.
+    - Not built yet: other readings, studies, our messages arriving, and ordering the Year of watching it offers.
 - **Planning.** The player queues builds, observations, standing orders and what wakes them, sets how much thought goes to studies, and sets what each instrument searches when idle. Nothing happens yet.
   - *Built 2026-10-17.* The Mind says what it would start with, from the charter's strongest lean, and marks those builds "we would". It queues nothing. One tap queues its picks, for the player to change.
   - The player picks builds in order, the one observation open at Year 0, a share of thought for studies, and what idle instruments sweep.

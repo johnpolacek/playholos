@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
+import { useGame } from "@/components/game-provider";
 import { LeadArt } from "@/components/lead-art";
 import { useLeads } from "@/components/scan";
 import { realTime } from "@/lib/game/clock";
@@ -10,19 +11,30 @@ import { ODDS, type Odds } from "@/lib/game/leads";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
 
 // One lead, as a report: drawn, then what we measured, what it could be with the Mind's word for each, and what would
-// tell us. The map flies to its star while it is open, and back out when we leave. Asking the Mind is the last step.
+// tell us. Its latest reading, once one lands, comes first, and the words it moved show what they were. The map flies
+// to its star while it is open, and back out when we leave. Asking the Mind is the last step.
 
-/** The Mind's word, on its seven-step scale. */
-function Scale({ odds }: { odds: Odds }) {
+/** The Mind's word, on its seven-step scale. A word a reading moved shows where it was, ringed, and what it was. */
+function Scale({ odds, was }: { odds: Odds; was?: Odds }) {
   const at = ODDS.indexOf(odds);
+  const from = was && was !== odds ? ODDS.indexOf(was) : -1;
   return (
     <span className="flex shrink-0 items-center gap-2">
       <span className="flex gap-[3px]" aria-hidden>
         {ODDS.map((o, i) => (
-          <span key={o} className={`h-[7px] w-[7px] rounded-full ${i <= at ? "bg-you" : "bg-track"}`} />
+          <span
+            key={o}
+            className={`h-[7px] w-[7px] rounded-full ${i <= at ? "bg-you" : "bg-track"} ${i === from ? "ring-1 ring-ink ring-offset-1 ring-offset-panel" : ""}`}
+          />
         ))}
       </span>
-      <span className="w-[104px] font-mono text-[10.5px] text-ink">{odds}</span>
+      {from >= 0 ? (
+        <span className="font-mono text-[10.5px] text-ink">
+          <span className="text-muted">{was} →</span> {odds}
+        </span>
+      ) : (
+        <span className="w-[104px] font-mono text-[10.5px] text-ink">{odds}</span>
+      )}
     </span>
   );
 }
@@ -30,11 +42,19 @@ function Scale({ odds }: { odds: Odds }) {
 const HEAD = "font-mono text-[10px] tracking-[.1em] text-muted uppercase";
 
 export function LeadPage({ slug }: { slug: string }) {
-  const { leads, dials } = useLeads();
+  const { leads, dials, readings, fresh } = useLeads();
+  const { see } = useGame();
   const router = useRouter();
   const root = useRef<HTMLDivElement>(null);
   const i = leads.findIndex((l) => l.slug === slug);
   const lead = leads[i];
+  const read = lead && readings[lead.slug]?.at(-1);
+
+  // Opening the page reads what landed on it.
+  const unread = read && fresh.has(read.id) ? read.id : null;
+  useEffect(() => {
+    if (unread) see([unread]);
+  }, [unread, see]);
 
   useEffect(() => {
     if (i < 0) return;
@@ -85,8 +105,22 @@ export function LeadPage({ slug }: { slug: string }) {
         {lead.star} · {lead.ly.toFixed(1)} ly · light takes <span className="font-mono tabular-nums">{realTime(lead.ly)}</span>
       </p>
 
+      {read && (
+        <section data-m className="mt-3 rounded-xl border border-you/60 bg-you/[.06] px-3 py-2.5">
+          <span className="font-mono text-[10px] tracking-[.1em] text-you">
+            READING · YEAR {read.at} · {read.by.toUpperCase()}
+          </span>
+          <h2 className="mt-1 text-[16px] leading-snug font-semibold">{read.title}</h2>
+          <p className="mt-0.5 text-[13.5px] leading-snug">{read.line}</p>
+          <p className="mt-2 text-[13.5px] leading-snug text-page-ink2">
+            <span className="mr-1.5 font-mono text-[10px] tracking-[.1em] text-you">THE MIND</span>
+            {read.mind}
+          </p>
+        </section>
+      )}
+
       <div data-m className="mt-3 rounded-xl border border-faint bg-paper px-2 py-1">
-        <LeadArt art={lead.art} />
+        <LeadArt art={lead.art} read={read?.id} />
       </div>
 
       <h2 data-m className={`mt-5 ${HEAD}`}>What we measured</h2>
@@ -101,11 +135,11 @@ export function LeadPage({ slug }: { slug: string }) {
 
       <h2 data-m className={`mt-5 ${HEAD}`}>What it could be</h2>
       <ul className="mt-1 flex flex-col">
-        {lead.could.map((c) => (
+        {lead.could.map((c, k) => (
           <li key={c.what} data-m className="border-t border-faint py-2.5 first:border-t-0">
-            <div className="flex items-center justify-between gap-3">
+            <div className={`flex gap-x-3 gap-y-1 ${read ? "flex-col items-start" : "items-center justify-between"}`}>
               <span className="text-[15px] leading-snug font-semibold">{c.what}</span>
-              <Scale odds={c.odds} />
+              <Scale odds={read?.now[k] ?? c.odds} was={read && c.odds} />
             </div>
             <p className="mt-0.5 text-[13.5px] leading-snug text-page-ink2">{c.why}</p>
           </li>
@@ -113,7 +147,7 @@ export function LeadPage({ slug }: { slug: string }) {
       </ul>
 
       <h2 data-m className={`mt-4 ${HEAD}`}>What would tell us</h2>
-      {lead.tells.map((t) => (
+      {(read?.tells ?? lead.tells).map((t) => (
         <p key={t} data-m className="mt-1.5 text-[13.5px] leading-snug">
           {t}
         </p>
