@@ -229,9 +229,13 @@ export function Plan({ onNext }: { onSkip(): void; onNext(): void }) {
     !!save,
   );
 
+  // The queue waits on the Projects tab, with Begin.
   function queue() {
     setPlan(plan);
-    leave(onNext);
+    leave(() => {
+      router.push("/projects");
+      onNext();
+    });
   }
 
   const chip = (on: boolean) =>

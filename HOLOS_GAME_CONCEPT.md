@@ -696,7 +696,9 @@ Settled 2026-10-10.
   - *Built 2026-10-17.* The Mind says what it would start with, from the charter's strongest lean, and marks those builds "we would". It queues nothing. One tap queues its picks, for the player to change.
   - The player picks builds in order, the one observation open at Year 0, a share of thought for studies, and what idle instruments sweep.
   - Beside it the first Years are drawn as they would run: each build a thread out to the Year it is done, paced by the game's own loop from the order picked. Our messages arriving and the first replies that could come sit above them on their real dates.
-  - Not built yet: standing orders and what wakes them. The plan is saved, and the queue screen will show it before Begin.
+  - Not built yet: standing orders and what wakes them.
+  - *The queue, built 2026-10-17.* "Queue that" opens the Projects tab. Each queued build and the observation is a thread from Year 0 to its done Year, on one axis, with Earth's messages already on their way below. A now line waits at Year 0. After Begin it moves at 5 minutes a Year, the threads fill behind it, and each row counts down in real time, then reads done.
+  - Not built yet: changing the plan from the queue. Planning is only in the opening.
 - **Begin.** When the player taps Begin, Year 0 starts and everything queued starts at once. From then on the clock runs, offline too, at 5 real minutes a Year.
   - *2040 becomes Year 0.* Settled 2026-10-17. Before Begin, every screen and the top bar give the real year, 2040. At the tap, 2040 counts down to 0 and becomes "Year 0". The first time, it fills the screen, then settles into the top bar. After that, the top bar rolls it in place.
 - **The first session keeps v1's rhythm.** Settled 2026-10-12. About 15 minutes of play from Begin, the first result within 30 seconds, and something real landing about every minute. It ends on a timer the player sets, 45 to 60 minutes out.

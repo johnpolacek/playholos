@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useGame } from "@/components/game-provider";
 import { useLeaveShell } from "@/components/wake";
 import { seenYearZero, YearZero } from "@/components/year-zero";
+import { Queue } from "@/components/queue";
 import { realTime } from "@/lib/game/clock";
 
 // Begin: Year 0 starts at the tap, and the clock runs from then, offline too. Settled 2026-10-10. The tap plays 2040
@@ -22,10 +23,13 @@ export function Begin() {
           <span>Nothing has started</span>
           <span className="text-xs text-muted">Everything queued starts at Year 0, the moment you begin.</span>
         </div>
-        <div className="mt-auto mb-3 rounded-xl border border-l-[3px] border-frame border-l-you bg-paper px-[11px] py-[9px] text-[12.5px] leading-[1.4]">
-          <span className="mb-0.5 block font-mono text-[9.5px] tracking-[.08em] text-you">THE MIND</span>
-          Nothing here sends anything. When you begin, one Year passes every five of your minutes, and we keep going
-          while you’re away.
+        <Queue />
+        <div className="mt-auto mb-3 pt-4">
+          <div className="rounded-xl border border-l-[3px] border-frame border-l-you bg-paper px-[11px] py-[9px] text-[12.5px] leading-[1.4]">
+            <span className="mb-0.5 block font-mono text-[9.5px] tracking-[.08em] text-you">THE MIND</span>
+            Nothing here sends anything. When you begin, one Year passes every five of your minutes, and we keep going
+            while you’re away.
+          </div>
         </div>
         <button
           onClick={() => {
@@ -54,6 +58,7 @@ export function Begin() {
           <span className="font-mono tabular-nums">{realTime(year)}</span> since you began
         </span>
       </div>
+      <Queue />
       <button
         onClick={() => leaveShell(newGame)}
         className="mt-auto mb-4 h-9 shrink-0 rounded-full border border-ink text-sm"
