@@ -5,9 +5,10 @@ import { base, dialsFor, suggest } from "@/lib/game/charter";
 import type { EarthPast } from "@/lib/game/past";
 import { gsap, prefersReducedMotion, rise, riseFrom, SplitText, useStage } from "@/lib/motion";
 
-// "Our Charter": morning, after the night. The Mind suggests four founding lines, the one Earth's history fits best
-// first, and offers more on request. The line is the setting: each sets Earth's three dials behind it, and the Mind
-// advises from them. Wide, the chosen line stands large on the left and writes itself in as the pick changes.
+// "Our Charter": morning, after the night. The Mind suggests four founding lines, "The window is open now" first, then
+// the ones Earth's history fits best, and offers more on request. The line is the setting: each sets Earth's three
+// dials behind it, and the Mind advises from them. Wide, the chosen line stands large on the left and writes itself in
+// as the pick changes.
 
 function Chosen({ line }: { line: string }) {
   const el = useRef<HTMLParagraphElement>(null);
