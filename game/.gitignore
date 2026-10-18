@@ -38,3 +38,6 @@ yarn-error.log*
 /dist
 /.wrangler
 .dev.vars*
+
+# Remade from git history before every dev server and build. See scripts/build-log.mjs.
+/data/build-log.json

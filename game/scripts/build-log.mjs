@@ -1,20 +1,10 @@
 // The log for /about/building: every commit, filed under the part of the work it touched most, newest first, without
-// dates. Writes data/build-log.json. Run from game/: node scripts/build-log.mjs. It runs before every build too, and a
-// shallow clone keeps the committed log.
+// dates. Writes data/build-log.json, which git ignores: it is remade from the history before every dev server and
+// build. Run from game/: node scripts/build-log.mjs.
 import { execFileSync } from "node:child_process";
 import { writeFileSync } from "node:fs";
 
 const git = (...args) => execFileSync("git", args, { cwd: "..", encoding: "utf8", maxBuffer: 64 << 20 }).trim();
-
-try {
-  if (git("rev-parse", "--is-shallow-repository") === "true") {
-    console.log("build-log: shallow clone, keeping data/build-log.json");
-    process.exit(0);
-  }
-} catch {
-  console.log("build-log: no git, keeping data/build-log.json");
-  process.exit(0);
-}
 
 // In the order the work runs: the evidence, the rules, the numbers, the mocks, the map, then the game.
 const PARTS = [
@@ -117,7 +107,12 @@ const GAME = new Set(["sky", "opening", "mind", "sim", "shell", "look"]);
 const PREFIX = /^(game|v2( research| mock| round( \d+)?)?|research( to-checks, \w+ batch)?|hosts|knocks|data|cost model|audit|leakage):\s+/i;
 const NOISE = /^(updates?|update (all|nav)|docs updates|improve style|add gsap skills|ignore python bytecode caches)$/i;
 
-const log = git("log", "--no-merges", "--name-only", "--format=%x1e%s");
+let log = "";
+try {
+  log = git("log", "--no-merges", "--name-only", "--format=%x1e%s");
+} catch {
+  console.log("build-log: no git history, so the log is empty");
+}
 const items = Object.fromEntries(PARTS.map((p) => [p.key, []]));
 
 for (const record of log.split("\x1e").slice(1)) {

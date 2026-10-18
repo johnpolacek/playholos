@@ -5,6 +5,7 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
+    "predev": "node scripts/build-log.mjs",
     "dev": "vite",
     "prebuild": "node scripts/build-log.mjs",
     "build": "vite build",
