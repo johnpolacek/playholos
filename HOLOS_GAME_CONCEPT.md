@@ -411,6 +411,13 @@ Settled 2026-10-13.
   - Set aside: a search as a one-off order like an observation, and no new kind at all.
 - **An inquiry goes there.** Settled 2026-10-13. A mission sent to find out: a sail swarm, a flyby probe, a sentinel. Probe stays the name of the craft. What comes home is a dispatch, by narrow beam, one light-time later.
   - *One screen compares the ways to go,* as v1's Send a probe screen did: when each arrives, what it can see, and who sees it leave.
+  - *The Reach tab, built 2026-10-18.* Reach is spreading out into the Galaxy, probes first. It was a stub that read "listen, look, go or knock". Nothing is sent from it at Year 0, but it shows why the long roads matter.
+    - *How far we've gone:* one line from Earth to Alpha Centauri, each step ten times farther, with light-hours to light-years beneath. Voyager 1, 30 light-hours out, is lit. The rest is dashed. At its speed the star is about 76,000 years away.
+    - *Two roads:* the laser sail array, then sails at a fifth of light speed, and the probe yard, then a flyby probe 12 Years later at an eighth. Each is dated as if begun now, last in line, with this game's thought and the plan as it stands, so it slows nothing queued.
+    - *In the first test game, with nothing queued:* sails arrive at Year 39.2 and their word is home at 43.6. The probe's word is home at 80.2.
+    - *The Mind says what in the plan would bring the probe sooner:* an orbital yard there brings its word home 6 Years sooner.
+    - *Lift isn't what holds probes back.* A flyby probe is about 100 t, against the 20 kt we hold. A launch complex moves no date.
+    - Not built yet: the map flying out past Voyager to the nearest stars, and beginning a road after Begin.
   - Set aside: an inquiry as a question pinned on a place, which the Mind then pursues by every means. Worth its own round later. And leaving the word unused.
 - **Four words for what comes back.** A search returns a candidate. An observation returns a reading. A study returns a finding. An inquiry returns a dispatch.
 - **Physics sets how long an observation or a sweep takes.** Settled 2026-10-13. A nearer or larger world is brighter, so its reading comes sooner. The numbers are in [calcs/observing.py](calcs/observing.py).

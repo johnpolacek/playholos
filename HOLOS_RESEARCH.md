@@ -1521,6 +1521,10 @@ The first screen, before Earth wakes, flies from Earth out to the Local Group an
   - Voyager 1 is in Ophiuchus, near RA 17h 15m, Dec +12.4° ([TheSkyLive](https://theskylive.com/voyager1-info)). New Horizons is in Sagittarius, near RA 19h 20m, Dec −20° ([Heavens-Above](https://www.heavens-above.com/SolarEscape.aspx)). Both move almost straight out, so the directions hold to Year 0.
   - Their distances at Year 0, 220 and 100 AU, are HOLOS_GAME_CONCEPT.md's.
   - Used: What you inherit, where the scene puts the two probes and their roads from the Sun.
+- **Voyager 1's speed, and Neptune's distance** · General knowledge, not a source read, 2026-10-18.
+  - Voyager 1 moves out at about 17 km/s, about 3.6 AU a year. Neptune orbits at about 30 AU.
+  - Matters: at Voyager's pace the nearest star is about 76,000 years away, against Year 43.6 by sail.
+  - Used: the Reach tab, how far we have gone, and the gap to Alpha Centauri.
 - **Earth's orbits and pads** · Reference.
   - Spare matter sits on the planes most used: the [ISS](https://en.wikipedia.org/wiki/International_Space_Station) at 51.6°, [Starlink](https://en.wikipedia.org/wiki/Starlink)'s 53° shells, [sun-synchronous orbits](https://en.wikipedia.org/wiki/Sun-synchronous_orbit) near 98°, and the [geostationary belt](https://en.wikipedia.org/wiki/Geostationary_orbit) at 42,164 km from Earth's center. Which piece sits where is ours.
   - Rockets lift from real pads: Cape Canaveral, Boca Chica, Kourou, Baikonur, Jiuquan and Wenchang.

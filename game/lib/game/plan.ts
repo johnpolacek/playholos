@@ -82,10 +82,16 @@ export function advice(dials: number[]): { words: string; builds: string[]; stud
       };
 }
 
-/** When each queued build is done, in Years from Year 0, with this game's thought. Null past 40 Years. */
-export function schedule(plan: Plan, scale: number): Record<string, number | null> {
+/** The plan as the player's orders at Year 0, and the thought its observation sets aside. */
+export function ordersOf(plan: Plan) {
   const orders: Order[] = [{ y: 0, studies: plan.studies }, ...plan.builds.map((begin) => ({ y: 0, begin }))];
   const aside = plan.observe.length ? ([[0, FOMALHAUT.lands, 0.05]] as const) : [];
+  return { orders, aside };
+}
+
+/** When each queued build is done, in Years from Year 0, with this game's thought. Null past 40 Years. */
+export function schedule(plan: Plan, scale: number): Record<string, number | null> {
+  const { orders, aside } = ordersOf(plan);
   const p = pace(orders, 40, { scale, aside });
   return Object.fromEntries(
     plan.builds.map((b) => [b, b === "Data center" ? (p.dataCenters[0] ?? null) : (p.done[b] ?? null)]),
