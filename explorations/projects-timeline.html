@@ -1,0 +1,766 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Projects Timeline Designs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=SUSE:wght@100..800&display=swap" rel="stylesheet">
+<style>
+/* Offline, the game's own copies of the fonts. */
+@font-face { font-family: "SUSE Variable"; font-weight: 100 800; src: url("../game/node_modules/@fontsource-variable/suse/files/suse-latin-wght-normal.woff2") format("woff2"); }
+@font-face { font-family: "Plex Mono Local"; font-weight: 400; src: url("../game/node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2") format("woff2"); }
+
+/* Colors from game/app/globals.css. The game is always dark. */
+:root {
+  --page: #0b0c0d;
+  --page-ink2: #a9a59c;
+  --frame: #2a2b2e;
+  --paper: #121314;
+  --ink: #e6e3db;
+  --muted: #9c988f;
+  --faint: #34363a;
+  --panel: #17181a;
+  --rowline: #26282b;
+  --track: #2a2b2e;
+  --you: #5bb8d6;
+  --you-rgb: 91, 184, 214;
+  --other: #e0a24a;
+  --other-rgb: 224, 162, 74;
+  --sans: "SUSE", "SUSE Variable", sans-serif;
+  --mono: "IBM Plex Mono", "Plex Mono Local", monospace;
+  --z: 1;
+  --el: 0;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: #070808; color: var(--ink); font-family: var(--sans); text-wrap: pretty; }
+p { margin: 0; }
+ul { list-style: none; margin: 0; padding: 0; }
+
+header { max-width: 1360px; margin: 0 auto; padding: 40px 16px 8px; display: flex; flex-wrap: wrap; gap: 16px; align-items: end; justify-content: space-between; }
+h1 { margin: 0; font-size: 22px; font-weight: 600; }
+header p { margin-top: 6px; color: var(--muted); font-size: 14px; max-width: 60ch; }
+.ctl { display: flex; flex-wrap: wrap; gap: 10px 12px; align-items: center; font: 11px var(--mono); color: var(--muted); }
+.ctl input[type="range"] { width: 150px; accent-color: var(--you); }
+.ctl output { color: var(--you); min-width: 104px; }
+.ctl button { background: none; color: var(--muted); border: 1px solid var(--frame); border-radius: 999px; padding: 5px 10px; font: inherit; cursor: pointer; }
+.ctl button[aria-pressed="true"] { color: var(--ink); border-color: var(--muted); }
+.grp { display: flex; gap: 4px; }
+
+main { max-width: 1360px; margin: 0 auto; padding: 16px 16px 64px; display: grid; gap: 28px 20px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 410px), 1fr)); align-items: start; }
+.card { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.meta { display: flex; gap: 10px; align-items: baseline; }
+.num { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.name { font-size: 15px; font-weight: 600; }
+.note { color: var(--muted); font-size: 13px; line-height: 1.4; margin-top: -4px; }
+.frame { zoom: var(--z); background: var(--panel); border: 1px solid var(--rowline); border-radius: 16px; padding: 16px 16px 18px; overflow: hidden; }
+.now .frame { border-style: dashed; }
+
+/* The panel around every design, as the game has it. */
+.lab { font-size: 11px; letter-spacing: .08em; color: var(--muted); margin-bottom: 10px; }
+.top { min-height: 52px; display: flex; flex-direction: column; justify-content: center; gap: 2px; border-bottom: 1px solid var(--rowline); font-size: 14px; }
+.top .sub { font-size: 12px; color: var(--muted); }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.foot { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; margin: 12px 0 0; padding-top: 8px; border-top: 1px solid var(--rowline); font-size: 12.5px; }
+.foot dt { color: var(--muted); }
+.foot dd { margin: 0; }
+
+/* Shared pieces */
+.sec { margin: 12px 0 0; padding-bottom: 6px; font-size: 10.5px; font-weight: 400; letter-spacing: .08em; color: var(--muted); }
+.row { border-top: 1px solid var(--rowline); padding: 8px 0; }
+.rh { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.tx { min-width: 0; font-size: 13.5px; line-height: 1.375; }
+.tx b { font-weight: 500; }
+.nt { display: block; font-size: 12px; color: var(--muted); }
+.nt.in { display: inline; margin-left: 4px; }
+.wh { flex: none; font: 11px var(--mono); font-variant-numeric: tabular-nums; color: var(--page-ink2); text-align: right; white-space: nowrap; }
+.wh.on { color: var(--you); }
+.oth { color: var(--other); }
+.empty { border-top: 1px solid var(--rowline); padding: 8px 0; font-size: 13px; color: var(--muted); line-height: 1.45; }
+.quiet { margin-top: 10px; font-size: 12px; color: var(--muted); line-height: 1.45; }
+.halo { paint-order: stroke; stroke: var(--panel); stroke-width: 4px; stroke-linejoin: round; }
+.pulse { animation: pulse 2s ease-in-out infinite; animation-delay: calc(var(--el) * -1s); }
+@keyframes pulse { 50% { opacity: .35; } }
+.burst { fill: none; stroke-width: 1.2; transform-box: fill-box; transform-origin: center; animation: burst 1.1s ease-out both; }
+@keyframes burst { from { transform: scale(1); opacity: .9; } to { transform: scale(4.5); opacity: 0; } }
+
+/* Small glyphs: diamond for a message, square for a build, circle for a look. */
+.gl { display: inline-block; width: 7px; height: 7px; border: 1px solid var(--muted); background: var(--panel); }
+.gl-send, .gl-reply { transform: rotate(45deg); }
+.gl-reply { border-color: var(--other); }
+.gl-look { border-radius: 50%; }
+.gl.on { background: var(--you); border-color: var(--you); }
+.gl-reply.on { background: var(--other); border-color: var(--other); }
+.cl-row { display: grid; grid-template-columns: 10px 1fr auto; gap: 9px; align-items: baseline; padding: 6px 0; border-top: 1px solid var(--rowline); font-size: 12.5px; line-height: 1.35; }
+.cl-row b { font-weight: 500; }
+.cl-row .nt { font-size: 11.5px; }
+
+/* Shared axis */
+.ax { position: relative; height: 24px; margin-top: 4px; font: 9px var(--mono); color: var(--muted); }
+.ax span { position: absolute; top: 0; transform: translateX(-50%); }
+.ax .y0 { left: 0; transform: none; color: var(--you); }
+.ax-dot { position: absolute; top: 15px; width: 7px; height: 7px; border-radius: 50%; background: var(--you); transform: translateX(-50%); }
+
+/* 00 Now */
+.th { position: relative; margin-top: 6px; height: 5px; }
+.th-trk { position: absolute; top: 2px; left: 0; height: 1px; background: var(--track); }
+.th-fil { position: absolute; top: 0; bottom: 0; left: 0; border-radius: 99px; transition: width .2s linear; }
+.th-tick { position: absolute; top: -4px; bottom: -4px; border-left: 1px solid rgba(var(--you-rgb), .4); }
+.th-dia { position: absolute; top: 50%; width: 9px; height: 9px; transform: translate(-50%, -50%) rotate(45deg); border: 1px solid var(--muted); background: var(--panel); }
+
+/* 01 Gutter */
+.d01 { display: grid; grid-template-columns: minmax(0, 42%) minmax(0, 1fr); }
+.d01-l { padding: 8px 10px 9px 0; }
+.d01-r { position: relative; min-height: 24px; }
+.d01-c { border-top: 1px solid var(--rowline); }
+.d01-in { position: absolute; inset: 0 12px 0 10px; }
+.d01-now { position: absolute; top: 0; bottom: 0; border-left: 1px solid rgba(var(--you-rgb), .45); }
+.d01-h { padding: 14px 0 6px; font-size: 10.5px; letter-spacing: .08em; color: var(--muted); }
+.d01-ax span { position: absolute; top: 4px; transform: translateX(-50%); font: 9px var(--mono); color: var(--muted); }
+.d01-ax .y0 { color: var(--you); }
+.d01-yl { padding: 4px 10px 0 0; text-align: right; font: 9px var(--mono); letter-spacing: .08em; color: var(--muted); }
+.d01-ax .ax-dot { top: 17px; }
+.d01-trk { position: absolute; left: 0; top: 68%; height: 1px; background: var(--track); }
+.d01-fil { position: absolute; left: 0; top: calc(68% - 2px); height: 5px; border-radius: 99px; }
+.d01-dia { position: absolute; top: 68%; z-index: 1; width: 9px; height: 9px; transform: translate(-50%, -50%) rotate(45deg); border: 1px solid var(--muted); background: var(--panel); }
+.d01-tag { position: absolute; bottom: calc(32% + 9px); z-index: 2; transform: translateX(-50%); padding: 0 4px; background: var(--panel); font: 10.5px var(--mono); color: var(--page-ink2); white-space: nowrap; }
+.d01-tag.st { transform: translateX(-8px); }
+.d01-tag.en { transform: translateX(calc(-100% + 8px)); }
+.d01-tag.on { color: var(--you); }
+.d01-empty { font-size: 12.5px; color: var(--muted); line-height: 1.45; }
+
+/* 02 Now as a row */
+.d02-row { display: grid; grid-template-columns: 34px 1fr auto; gap: 10px; align-items: baseline; padding: 8px 0; border-top: 1px solid var(--rowline); }
+.d02-row.past { opacity: .42; }
+.d02-y { font: 15px var(--mono); font-variant-numeric: tabular-nums; }
+.d02-now { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-top: 1px solid var(--rowline); }
+.d02-pill { flex: none; padding: 2px 8px; border: 1px solid rgba(var(--you-rgb), .55); border-radius: 999px; font: 9.5px var(--mono); letter-spacing: .06em; color: var(--you); }
+.d02-ln { position: relative; flex: 1; height: 1px; background: var(--track); }
+.d02-ln i { position: absolute; inset: 0 auto 0 0; background: var(--you); }
+.d02-nx { flex: none; font: 10.5px var(--mono); color: var(--page-ink2); }
+
+/* 03 Row wash */
+.d03-row { position: relative; overflow: hidden; margin: 0 -10px 4px; padding: 8px 10px 9px; border-radius: 8px;
+  background: linear-gradient(90deg, rgba(var(--c), .02), rgba(var(--c), .16) var(--p), rgba(255, 255, 255, .018) var(--p)); }
+.d03-row::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1.5px; background: linear-gradient(90deg, rgba(var(--c), .85) var(--p), var(--rowline) var(--p)); }
+.d03-row.on { background: rgba(var(--c), .08); }
+.d03-row.on b { color: rgb(var(--c)); }
+.d03 .empty { border: 0; margin: 0 -10px; padding: 8px 10px; border-radius: 8px; background: rgba(255, 255, 255, .018); }
+
+/* 04 Whole journey */
+.d04-ln { position: relative; height: 13px; margin-top: 7px; }
+.d04-base { position: absolute; left: 0; right: 0; top: 6px; border-top: 1px dashed rgba(156, 152, 143, .3); }
+.d04-run { position: absolute; top: 5.5px; height: 2px; border-radius: 2px; background: linear-gradient(90deg, rgba(var(--c), .05), rgba(var(--c), .95)); }
+.d04-z { position: absolute; top: 1px; height: 11px; border-left: 1px solid var(--muted); }
+.d04-mid { position: absolute; top: 6.5px; width: 7px; height: 7px; margin: -3.5px 0 0 -3.5px; border-radius: 50%; background: var(--ink); }
+.d04-end { position: absolute; top: 6.5px; width: 9px; height: 9px; transform: translate(-50%, -50%) rotate(45deg); border: 1px solid var(--muted); background: var(--panel); }
+.d04-end.on { background: rgb(var(--c)); border-color: rgb(var(--c)); }
+.d04-head { position: absolute; top: 6.5px; width: 7px; height: 7px; margin: -3.5px 0 0 -3.5px; border-radius: 50%; background: rgb(var(--c)); box-shadow: 0 0 0 3px rgba(var(--c), .18), 0 0 12px rgba(var(--c), .9); animation: glow 2.4s ease-in-out infinite; animation-delay: calc(var(--el) * -1s); }
+@keyframes glow { 50% { box-shadow: 0 0 0 5px rgba(var(--c), .08), 0 0 18px rgba(var(--c), .6); } }
+.d04-cap { display: flex; justify-content: space-between; gap: 10px; margin-top: 3px; font: 9.5px var(--mono); color: var(--muted); }
+
+/* 05 Rail */
+.d05 { position: relative; margin-top: 12px; }
+.d05 svg { position: absolute; inset: 0; overflow: visible; }
+.d05-rail { stroke: var(--track); stroke-width: 2; }
+.d05-lit { stroke: var(--you); stroke-width: 2; }
+.d05-tk { stroke: var(--faint); }
+.d05-lead { fill: none; stroke: var(--faint); }
+.d05-yr { position: absolute; left: 0; width: 40px; transform: translateY(-50%); text-align: right; font: 9px var(--mono); color: var(--muted); }
+.d05-yr.now { color: var(--you); }
+.d05-lab { position: absolute; left: 84px; right: 0; }
+.d05-glow { fill: rgba(var(--you-rgb), .18); }
+
+/* 06 One line */
+.d06 svg { display: block; width: 100%; margin-top: 10px; overflow: visible; }
+.d06-trk { stroke: var(--track); stroke-width: 2; }
+.d06-lit { stroke: var(--you); stroke-width: 2; }
+.d06-lead { stroke: var(--faint); }
+.d06-n { font: 500 11px var(--sans); fill: var(--ink); }
+.d06-w { font: 9.5px var(--mono); fill: var(--page-ink2); }
+.d06-end { font: 9px var(--mono); fill: var(--muted); }
+
+/* 07 Up next */
+.d07-hero { display: flex; gap: 16px; align-items: center; padding: 14px 0 12px; }
+.d07-ring { flex: none; width: 92px; height: 92px; }
+.d07-trk { fill: none; stroke: var(--track); stroke-width: 3; }
+.d07-arc { fill: none; stroke-width: 3; stroke-linecap: round; transition: stroke-dasharray .2s linear; }
+.d07-core { transform-box: fill-box; transform-origin: center; animation: swell 3.2s ease-in-out infinite; animation-delay: calc(var(--el) * -1s); }
+@keyframes swell { 50% { transform: scale(1.35); opacity: .7; } }
+.d07-k { display: block; font: 9.5px var(--mono); letter-spacing: .1em; color: var(--you); }
+.d07-n { display: block; margin-top: 3px; font-size: 20px; font-weight: 500; line-height: 1.2; }
+.d07-cd { display: block; margin-top: 6px; font: 21px var(--mono); font-variant-numeric: tabular-nums; }
+.d07-cd small { font-size: 10px; color: var(--muted); margin-left: 6px; }
+.d07-done { margin-top: 10px; font-size: 12px; color: var(--muted); line-height: 1.45; }
+.d07-done span { font: 9.5px var(--mono); letter-spacing: .08em; margin-right: 6px; }
+
+/* 08 Countdown rings */
+.d08-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.d08-t { display: flex; gap: 9px; align-items: flex-start; padding: 9px; border: 1px solid var(--rowline); border-radius: 10px; background: rgba(255, 255, 255, .015); }
+.d08-t.on { border-color: rgba(var(--you-rgb), .35); background: rgba(var(--you-rgb), .05); }
+.d08-t svg { flex: none; width: 40px; height: 40px; }
+.d08-t b { display: block; font-size: 12.5px; font-weight: 500; line-height: 1.25; }
+.d08-t .nt { font-size: 11px; line-height: 1.3; }
+.d08-t .wh { display: block; margin-top: 4px; text-align: left; font-size: 10px; }
+.d08-trk { fill: none; stroke: var(--track); stroke-width: 2.5; }
+.d08-arc { fill: none; stroke-width: 2.5; stroke-linecap: round; }
+.d08-c { font: 9px var(--mono); fill: var(--page-ink2); }
+.d08 .empty { border: 1px dashed var(--rowline); border-radius: 10px; padding: 9px 10px; font-size: 12px; }
+
+/* 09 Arrivals board */
+.d09 { overflow-x: auto; }
+.d09-r, .d09-hd { display: grid; grid-template-columns: 6px 129px 69px 49px 79px; gap: 6px; align-items: center; }
+.d09-r { padding: 3px 0; }
+.d09-hd { margin-top: 2px; padding-bottom: 3px; font: 8.5px var(--mono); letter-spacing: .08em; color: var(--muted); }
+.d09-g { display: flex; gap: 1px; perspective: 120px; }
+.d09-g i { position: relative; width: 9px; height: 15px; border-radius: 1.5px; background: linear-gradient(#1c1d1f 50%, #141516 50%); font: 500 10.5px/15px var(--mono); font-style: normal; text-align: center; color: var(--ink); }
+.d09-g i::after { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: rgba(0, 0, 0, .55); }
+.d09-g.b i { color: var(--you); }
+.d09-g.a i { color: var(--other); }
+.d09-g.m i { color: var(--page-ink2); }
+.d09-g.flip i { animation: flap .5s cubic-bezier(.3, .7, .4, 1) both; animation-delay: calc(var(--d) * -1s + var(--i) * 35ms); }
+@keyframes flap { 0% { transform: rotateX(90deg); opacity: .2; } 60% { transform: rotateX(-18deg); } 100% { transform: none; } }
+.d09-l { width: 6px; height: 6px; border-radius: 50%; background: var(--faint); }
+.d09-l.go { background: var(--you); animation: blink 1.2s steps(2, jump-none) infinite; animation-delay: calc(var(--el) * -1s); }
+.d09-l.ok { background: var(--you); }
+.d09-l.amb { background: var(--other); opacity: .6; }
+@keyframes blink { 50% { opacity: .2; } }
+
+/* 10 Spacetime */
+.d10 svg, .d11 svg, .d12 svg { display: block; width: 100%; margin-top: 10px; }
+.d10-past { fill: rgba(var(--you-rgb), .05); }
+.d10-grid { stroke: var(--rowline); }
+.d10-wl { stroke: var(--faint); stroke-dasharray: 2 3; }
+.d10-wl.earth { stroke: var(--muted); stroke-dasharray: none; opacity: .6; }
+.d10-lab { font: 10.5px var(--sans); fill: var(--ink); }
+.d10-yr { font: 9px var(--mono); fill: var(--muted); }
+.d10-yr.now { fill: var(--you); }
+.d10-fr { fill: none; stroke-width: 1.2; }
+.d10-fr.ahead { stroke-dasharray: 2 4; opacity: .5; }
+.d10-now { stroke: var(--you); stroke-opacity: .7; }
+.mk { stroke-width: 1; }
+
+/* 11 Wavefronts */
+.d11-fr { fill: none; stroke: var(--you); stroke-width: 1.2; }
+.d11-fw { fill: none; stroke: rgba(var(--you-rgb), .12); stroke-width: 7; animation: breathe 4s ease-in-out infinite; animation-delay: calc(var(--el) * -1s); }
+@keyframes breathe { 50% { stroke-opacity: .4; } }
+.d11-rp { fill: none; stroke: var(--other); stroke-width: 1.2; stroke-dasharray: 3 4; }
+.d11-msg { font: 8.5px var(--mono); fill: var(--muted); }
+.d11-lab { font: 10.5px var(--sans); fill: var(--ink); }
+.d11-sc { stroke: var(--muted); }
+
+/* 12 Radar */
+.d12-ring { fill: none; stroke: var(--rowline); }
+.d12-num { font: 8.5px var(--mono); fill: var(--muted); }
+.d12-now { fill: rgba(var(--you-rgb), .06); stroke: var(--you); stroke-opacity: .75; }
+.d12-sweep { transform-box: view-box; transform-origin: 200px 148px; animation: spin 7s linear infinite; animation-delay: calc(var(--el) * -1s); }
+@keyframes spin { to { transform: rotate(360deg); } }
+.d12-lab { font: 10px var(--sans); fill: var(--ink); }
+
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>The Projects timeline</h1>
+    <p>Thirteen ways to show what is queued and what is already on its way, with no line running through the words. Real stars, real send dates. Drag the Year or press Play to watch time pass.</p>
+  </div>
+  <div class="ctl">
+    <label class="grp" style="align-items:center;gap:8px"><input id="year" type="range" min="0" max="5" step="0.01" value="0" aria-label="Year"><output id="out">Before Begin</output></label>
+    <button id="play">Play</button>
+    <div class="grp" id="pick" role="group" aria-label="Queue">
+      <button data-v="0" aria-pressed="true">Nothing queued</button>
+      <button data-v="1">The Mind's pick</button>
+    </div>
+    <div class="grp" id="zoom" role="group" aria-label="Size">
+      <button data-z="1" aria-pressed="true">1×</button>
+      <button data-z="1.25">1.25×</button>
+    </div>
+  </div>
+</header>
+<main id="cards"></main>
+
+<script>
+// Data, as the game has it: Year 0 is 2040, a Year is 5 real minutes. Sends from game/lib/game/knocks.ts, builds paced
+// by schedule() in game/lib/game/plan.ts for the Mind's "ears first" pick at a tenth of our thought.
+const YEAR_0 = 2040;
+const pad = (n) => String(n).padStart(2, "0");
+const tenths = (y) => Math.floor(y * 10 + 1e-9) / 10;
+const t1 = (y) => tenths(y).toFixed(1);
+const realTime = (y) => {
+  const s = Math.round(y * 300);
+  return `${pad(Math.floor(s / 3600))}:${pad(Math.floor((s % 3600) / 60))}:${pad(s % 60)}`;
+};
+
+const COMING = [
+  { key: "kap", name: "Kappa¹ Ceti", board: "KAPPA¹ CETI", msg: "RuBisCo Stars", sent: 2009.85, ly: 30.26, ra: 49.84, kind: "send" },
+  { key: "g208", name: "Gliese 208", board: "GLIESE 208", msg: "Cosmic Call 2", sent: 2003.51, ly: 37.26, ra: 84.13, kind: "send" },
+  { key: "luy", name: "Luyten's Star", board: "LUYTEN'S STAR", msg: "Sónar Calling GJ273b", sent: 2017.79, ly: 12.26, ra: 111.85, kind: "reply" },
+  { key: "55c", name: "55 Cancri", board: "55 CANCRI", msg: "Cosmic Call 2", sent: 2003.51, ly: 41.05, ra: 133.15, kind: "send" },
+].map((r) => ({
+  ...r,
+  at: r.sent + (r.kind === "reply" ? 2 : 1) * r.ly - YEAR_0,
+  note: r.kind === "reply" ? "A reply could come, at the soonest" : "Our message arrives",
+}));
+
+const PICK = [
+  { key: "sky", name: "1 · All-sky watch", short: "All-sky watch", board: "ALL-SKY WATCH", note: "Hears a knock or a broadcast from anywhere, at any hour.", at: 4.2, kind: "build" },
+  { key: "flash", name: "2 · Deep flash watch", short: "Deep flash watch", board: "DEEP FLASH", note: "Catches laser knocks too faint for the sky watch.", at: 4.2, kind: "build" },
+  { key: "dc", name: "3 · Data center", short: "Data center", board: "DATA CENTER", note: "Half again as much thought, for good.", at: 1, kind: "build" },
+  { key: "fom", name: "Image Fomalhaut again", short: "Fomalhaut", board: "FOMALHAUT", note: "Has the new cloud moved?", at: 0.1, kind: "look", ra: 344.41 },
+];
+
+const S = { now: 0, pick: false };
+const span = (rows) => Math.min(16, Math.max(5, Math.ceil(Math.max(0, ...rows.map((r) => r.at)))));
+function state() {
+  const queued = S.pick ? PICK : [];
+  const t = span(queued);
+  const coming = COMING.filter((r) => r.at <= t);
+  const all = [...queued, ...coming].sort((a, b) => a.at - b.at);
+  return { now: Math.min(S.now, t), began: S.now > 0, queued, coming, all, t };
+}
+
+// Helpers
+const pct = (y, t) => Math.max(0, Math.min(1, y / t)) * 100;
+const ticks = (t) => { const k = t > 8 ? 2 : 1; return Array.from({ length: Math.floor(t / k) + 1 }, (_, i) => i * k); };
+const isOver = (r, s) => s.began && s.now >= r.at;
+const col = (r) => (r.kind === "reply" ? "var(--other)" : "var(--you)");
+const rgb = (r) => (r.kind === "reply" ? "var(--other-rgb)" : "var(--you-rgb)");
+const when = (r, s) =>
+  isOver(r, s) ? (r.kind === "build" ? "done" : "landed") : s.began ? `in ${realTime(r.at - s.now)}` : `Year ${tenths(r.at)}`;
+const whenEl = (r, s) => `<span class="wh${isOver(r, s) ? " on" : ""}">${when(r, s)}</span>`;
+const tx = (r) => `<span class="tx"><b class="${r.kind === "reply" ? "oth" : ""}">${r.name}</b><span class="nt">${r.note}</span></span>`;
+const glyph = (r, on) => `<span class="gl gl-${r.kind}${on ? " on" : ""}"></span>`;
+const EMPTY = "Nothing queued. Our instruments keep watch, and the Mind keeps studying.";
+const sections = (s, fn) =>
+  `<h3 class="sec">${s.began ? "UNDER WAY" : "QUEUED"} · ${s.queued.length}</h3>` +
+  (s.queued.length ? fn(s.queued) : `<p class="empty">${EMPTY}</p>`) +
+  `<h3 class="sec">ALREADY ON ITS WAY</h3>` +
+  fn(s.coming);
+const compact = (s) =>
+  sections(s, (rows) =>
+    rows
+      .map((r) => `<div class="cl-row">${glyph(r, isOver(r, s))}<span><b class="${r.kind === "reply" ? "oth" : ""}">${r.name}</b><span class="nt in">${r.note}</span></span>${whenEl(r, s)}</div>`)
+      .join(""),
+  );
+const axis = (s) =>
+  `<div class="ax">${ticks(s.t).map((y) => (y ? `<span style="left:${pct(y, s.t)}%">${y}</span>` : "")).join("")}<span class="y0">Year 0</span><i class="ax-dot${s.began ? "" : " pulse"}" style="left:${pct(s.now, s.t)}%"></i></div>`;
+
+// Seconds since a value last changed, for one-off motion that survives a redraw.
+const seen = new Map();
+function since(key, v) {
+  const t = performance.now() / 1000, c = seen.get(key);
+  if (!c) { seen.set(key, { v, at: -1e9 }); return 1e9; }
+  if (c.v !== v) { c.v = v; c.at = t; }
+  return t - c.at;
+}
+const burst = (key, o, x, y, c, r = 4) => {
+  const b = since(key, o);
+  return o && b < 1.1 ? `<circle class="burst" cx="${x}" cy="${y}" r="${r}" style="stroke:${c};animation-delay:-${b}s"/>` : "";
+};
+const mark = (r, x, y, o, sz = 4) => {
+  const c = col(r);
+  const st = o ? `fill:${c};stroke:${c}` : `fill:var(--panel);stroke:${r.kind === "reply" ? "var(--other)" : "var(--muted)"}`;
+  if (r.kind === "build") return `<rect class="mk" x="${x - sz}" y="${y - sz}" width="${2 * sz}" height="${2 * sz}" style="${st}"/>`;
+  if (r.kind === "look") return `<circle class="mk" cx="${x}" cy="${y}" r="${sz}" style="${st}"/>`;
+  const d = sz * 1.3;
+  return `<path class="mk" d="M${x} ${y - d}L${x + d} ${y}L${x} ${y + d}L${x - d} ${y}Z" style="${st}"/>`;
+};
+
+// 00 Now
+function d00(s) {
+  const nx = pct(s.now, s.t);
+  const item = (r) => {
+    const end = Math.min(1, r.at / s.t) * 100, fill = Math.min(1, s.now / r.at) * end, o = isOver(r, s), c = col(r);
+    return `<li class="row"><div class="rh">${tx(r)}${whenEl(r, s)}</div><div class="th"><span class="th-trk" style="width:${end}%"></span><span class="th-fil" style="width:${fill}%;background:${c};opacity:${o ? 1 : 0.8}"></span><span class="th-tick" style="left:${nx}%"></span><span class="th-dia" style="left:${end}%;${o ? `background:${c};border-color:transparent` : ""}"></span></div></li>`;
+  };
+  return `<div class="d00">${axis(s)}${sections(s, (rows) => `<ul>${rows.map(item).join("")}</ul>`)}</div>`;
+}
+
+// 01 Gutter
+function d01(s) {
+  const nx = pct(s.now, s.t);
+  const seg = `<span class="d01-now" style="left:${nx}%"></span>`;
+  const right = (inner, cls = "") => `<div class="d01-r ${cls}"><div class="d01-in">${seg}${inner}</div></div>`;
+  const row = (r) => {
+    const end = pct(r.at, s.t), o = isOver(r, s), c = col(r), fill = pct(Math.min(s.now, r.at), s.t);
+    const al = end < 16 ? " st" : end > 80 ? " en" : "";
+    return (
+      `<div class="d01-l d01-c">${tx(r)}</div>` +
+      right(
+        `<span class="d01-trk" style="width:${end}%"></span><span class="d01-fil" style="width:${fill}%;background:${c}"></span><span class="d01-dia" style="left:${end}%;${o ? `background:${c};border-color:${c}` : ""}"></span><span class="d01-tag${al}${o ? " on" : ""}" style="left:${end}%">${when(r, s)}</span>`,
+        "d01-c",
+      )
+    );
+  };
+  const head = (label) => `<div class="d01-h">${label}</div>${right("")}`;
+  const ax = `<div class="d01-yl">YEAR</div><div class="d01-r"><div class="d01-in d01-ax">${ticks(s.t).map((y) => `<span${y ? "" : ' class="y0"'} style="left:${pct(y, s.t)}%">${y}</span>`).join("")}<i class="ax-dot${s.began ? "" : " pulse"}" style="left:${nx}%"></i></div></div>`;
+  return (
+    `<div class="d01">${ax}` +
+    head(`${s.began ? "UNDER WAY" : "QUEUED"} · ${s.queued.length}`) +
+    (s.queued.length ? s.queued.map(row).join("") : `<div class="d01-l d01-c d01-empty">${EMPTY}</div>${right("", "d01-c")}`) +
+    head("ALREADY ON ITS WAY") +
+    s.coming.map(row).join("") +
+    `</div>`
+  );
+}
+
+// 02 Now as a row
+function d02(s) {
+  const list = (rows) => {
+    const sorted = [...rows].sort((a, b) => a.at - b.at);
+    const k = sorted.filter((r) => isOver(r, s)).length;
+    const prev = k ? sorted[k - 1].at : 0, nx = sorted[k];
+    const p = nx ? Math.max(0, Math.min(1, (s.now - prev) / (nx.at - prev))) : 1;
+    const now = `<div class="d02-now"><span class="d02-pill${s.began ? "" : " pulse"}">${s.began ? `NOW · YEAR ${t1(s.now)}` : "BEFORE YEAR 0"}</span><span class="d02-ln"><i style="width:${p * 100}%"></i></span><span class="d02-nx">${nx ? (s.began ? `next in ${realTime(nx.at - s.now)}` : "waits for Begin") : "all landed"}</span></div>`;
+    const row = (r) => {
+      const o = isOver(r, s);
+      return `<div class="d02-row${o ? " past" : ""}"><span class="d02-y">${t1(r.at)}</span>${tx(r)}<span class="wh${o ? " on" : ""}">${o ? (r.kind === "build" ? "done" : "landed") : s.began ? `in ${realTime(r.at - s.now)}` : ""}</span></div>`;
+    };
+    return sorted.slice(0, k).map(row).join("") + now + sorted.slice(k).map(row).join("");
+  };
+  return `<div class="d02">${sections(s, list)}</div>`;
+}
+
+// 03 Row wash
+function d03(s) {
+  const row = (r) => {
+    const o = isOver(r, s), p = Math.min(1, s.now / r.at) * 100;
+    return `<li class="d03-row${o ? " on" : ""}" style="--p:${p}%;--c:${rgb(r)}"><div class="rh">${tx(r)}${whenEl(r, s)}</div></li>`;
+  };
+  return `<div class="d03">${sections(s, (rows) => `<ul>${rows.map(row).join("")}</ul>`)}</div>`;
+}
+
+// 04 Whole journey
+function journey(s) {
+  const row = (r) => {
+    const o = isOver(r, s), C = rgb(r);
+    const start = r.sent ?? YEAR_0, total = YEAR_0 + r.at - start;
+    const p = Math.min(1, (YEAR_0 + s.now - start) / total) * 100, z = ((YEAR_0 - start) / total) * 100;
+    const cap = r.sent
+      ? [`sent ${Math.floor(r.sent)} · ${r.msg}`, r.kind === "reply" ? `${r.ly.toFixed(1)} ly there and back` : `${r.ly.toFixed(1)} ly`]
+      : ["from Year 0", ""];
+    const runs =
+      r.kind === "reply"
+        ? `<span class="d04-run" style="left:0;width:${Math.min(p, 50)}%;--c:var(--you-rgb)"></span><span class="d04-run" style="left:50%;width:${Math.max(0, p - 50)}%;--c:var(--other-rgb)"></span><span class="d04-mid" style="left:50%"></span>`
+        : `<span class="d04-run" style="left:0;width:${p}%;--c:${C}"></span>`;
+    const hc = r.kind === "reply" && p < 50 ? "var(--you-rgb)" : C;
+    return `<li class="row"><div class="rh">${tx(r)}${whenEl(r, s)}</div><div class="d04-ln"><span class="d04-base"></span>${runs}${r.sent ? `<span class="d04-z" style="left:${z}%"></span>` : ""}<span class="d04-end${o ? " on" : ""}" style="left:100%;--c:${C}"></span>${o ? "" : `<span class="d04-head" style="left:${p}%;--c:${hc}"></span>`}</div><div class="d04-cap"><span>${cap[0]}</span><span>${cap[1]}</span></div></li>`;
+  };
+  return `<div class="d04">${sections(s, (rows) => `<ul>${rows.map(row).join("")}</ul>`)}</div>`;
+}
+const d04 = journey;
+
+// 05 Rail
+function d05(s) {
+  const top = 12, H = 56 * s.t, RX = 54, LX = 84;
+  const yOf = (y) => top + Math.min(1, y / s.t) * H;
+  let last = -1e9;
+  const pl = s.all.map((r) => {
+    const h = 23 + 16.5 * Math.ceil(r.note.length / 48);
+    const ys = yOf(r.at), y = Math.max(ys - 10, last + 6);
+    last = y + h;
+    return { r, y, ys };
+  });
+  const height = Math.max(top + H + 14, last + 4);
+  const ny = yOf(s.now);
+  let g = `<line x1="${RX}" y1="${top}" x2="${RX}" y2="${top + H}" class="d05-rail"/><line x1="${RX}" y1="${top}" x2="${RX}" y2="${ny}" class="d05-lit"/>`;
+  for (const y of ticks(s.t)) g += `<line x1="${RX - 6}" x2="${RX - 2}" y1="${yOf(y)}" y2="${yOf(y)}" class="d05-tk"/>`;
+  for (const { r, y, ys } of pl) {
+    const ly = y + 10;
+    g += `<path class="d05-lead" d="M${RX + 7} ${ys} H${RX + 12} L${LX - 12} ${ly} H${LX - 5}"/>`;
+  }
+  for (const { r, ys } of pl) g += mark(r, RX, ys, isOver(r, s)) + burst(`d05${r.key}`, isOver(r, s), RX, ys, col(r));
+  g += `<circle cx="${RX}" cy="${ny}" r="9" class="d05-glow${s.began ? "" : " pulse"}"/><circle cx="${RX}" cy="${ny}" r="4.5" fill="var(--you)"/>`;
+  const yrs = ticks(s.t)
+    .filter((y) => Math.abs(yOf(y) - ny) > 10)
+    .map((y) => `<span class="d05-yr" style="top:${yOf(y)}px">${y ? y : "Year 0"}</span>`)
+    .join("");
+  const labs = pl.map(({ r, y }) => `<div class="d05-lab" style="top:${y}px"><div class="rh">${tx(r)}${whenEl(r, s)}</div></div>`).join("");
+  return `<div class="d05" style="height:${height}px"><svg width="100%" height="${height}">${g}</svg>${yrs}<span class="d05-yr now" style="top:${ny}px">Year ${s.began ? t1(s.now) : 0}</span>${labs}</div>${s.queued.length ? "" : `<p class="quiet">${EMPTY}</p>`}`;
+}
+
+// 06 One line
+function d06(s) {
+  const W = 400, L = 46, R = 380, Y = 90, H = 172;
+  const x = (y) => L + Math.min(1, y / s.t) * (R - L);
+  const lv = [{ d: -26, e: -1e9 }, { d: 30, e: -1e9 }, { d: -54, e: -1e9 }, { d: 58, e: -1e9 }];
+  let g = `<line x1="${L}" x2="${R}" y1="${Y}" y2="${Y}" class="d06-trk"/><line x1="${L}" x2="${x(s.now)}" y1="${Y}" y2="${Y}" class="d06-lit"/>`;
+  for (const y of ticks(s.t)) g += `<circle cx="${x(y)}" cy="${Y}" r="1.4" fill="var(--muted)"/>`;
+  g += `<text x="${L - 8}" y="${Y + 3}" text-anchor="end" class="d06-end" style="fill:var(--you)">Year 0</text><text x="${R + 7}" y="${Y + 3}" class="d06-end">${s.t}</text>`;
+  for (const r of s.all) {
+    const mx = x(r.at), name = r.short || r.name, w = Math.max(name.length * 6.2, when(r, s).length * 5.9);
+    const end = mx + w > W - 2, x0 = end ? mx - w + 3 : mx - 3;
+    const l = lv.find((l) => x0 > l.e + 8) || lv.reduce((a, b) => (a.e < b.e ? a : b));
+    l.e = x0 + w;
+    const up = l.d < 0, tx0 = end ? mx + 3 : mx - 3, an = end ? "end" : "start";
+    const ny = up ? Y + l.d - 11 : Y + l.d, wy = ny + 11;
+    g += `<line x1="${mx}" x2="${mx}" y1="${up ? Y - 8 : Y + 8}" y2="${up ? wy + 5 : ny - 11}" class="d06-lead"/>`;
+    g += `<text x="${tx0}" y="${ny}" text-anchor="${an}" class="d06-n" ${r.kind === "reply" ? 'style="fill:var(--other)"' : ""}>${name}</text><text x="${tx0}" y="${wy}" text-anchor="${an}" class="d06-w" ${isOver(r, s) ? 'style="fill:var(--you)"' : ""}>${when(r, s)}</text>`;
+    g += mark(r, mx, Y, isOver(r, s)) + burst(`d06${r.key}`, isOver(r, s), mx, Y, col(r));
+  }
+  const nx = x(s.now);
+  g += `<circle cx="${nx}" cy="${Y}" r="9" fill="rgba(var(--you-rgb),.18)" class="${s.began ? "" : "pulse"}"/><circle cx="${nx}" cy="${Y}" r="4.5" fill="var(--you)"/>`;
+  return `<div class="d06"><svg viewBox="0 0 ${W} ${H}">${g}</svg>${s.queued.length ? "" : `<p class="quiet">${EMPTY}</p>`}</div>`;
+}
+
+// 07 Up next
+function d07(s) {
+  const next = s.all.find((r) => !isOver(r, s));
+  const done = s.all.filter((r) => isOver(r, s));
+  const rest = next ? s.all.filter((r) => !isOver(r, s) && r !== next) : [];
+  let hero = `<div class="d07-hero"><b class="d07-n">Everything has landed</b></div>`;
+  if (next) {
+    const prev = done.length ? done[done.length - 1].at : 0;
+    const p = Math.max(0, Math.min(1, (s.now - prev) / (next.at - prev)));
+    const r = 38, C = 2 * Math.PI * r, c = col(next);
+    hero = `<div class="d07-hero"><svg viewBox="0 0 92 92" class="d07-ring"><circle cx="46" cy="46" r="${r}" class="d07-trk"/><circle cx="46" cy="46" r="${r}" class="d07-arc" transform="rotate(-90 46 46)" style="stroke:${c};stroke-dasharray:${C * p} ${C}"/><circle cx="46" cy="46" r="5" class="d07-core" style="fill:${c}"/></svg><div><span class="d07-k">${s.began ? "NEXT" : "FIRST, ONCE WE BEGIN"}</span><b class="d07-n${next.kind === "reply" ? " oth" : ""}">${next.name}</b><span class="nt">${next.note}</span><span class="d07-cd">${s.began ? `${realTime(next.at - s.now)}<small>to go</small>` : `Year ${tenths(next.at)}`}</span></div></div>`;
+  }
+  const then = rest
+    .map((r) => `<div class="cl-row">${glyph(r, false)}<span><b class="${r.kind === "reply" ? "oth" : ""}">${r.short || r.name}</b><span class="nt in">${r.note}</span></span>${whenEl(r, s)}</div>`)
+    .join("");
+  return `<div class="d07">${hero}${rest.length ? `<h3 class="sec" style="margin-top:0">THEN</h3>${then}` : ""}${done.length ? `<p class="d07-done"><span>DONE · ${done.length}</span>${done.map((r) => r.short || r.name).join(", ")}</p>` : ""}${s.queued.length ? "" : `<p class="quiet">${EMPTY}</p>`}</div>`;
+}
+
+// 08 Countdown rings
+function d08(s) {
+  const tile = (r) => {
+    const o = isOver(r, s), p = Math.min(1, s.now / r.at), c = col(r), rr = 16, C = 2 * Math.PI * rr;
+    const mid = o
+      ? `<circle cx="20" cy="20" r="4" style="fill:${c}"/>`
+      : `<text x="20" y="23" text-anchor="middle" class="d08-c">${t1(r.at - s.now)}</text>`;
+    return `<div class="d08-t${o ? " on" : ""}"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="${rr}" class="d08-trk"/><circle cx="20" cy="20" r="${rr}" class="d08-arc" transform="rotate(-90 20 20)" style="stroke:${c};stroke-dasharray:${C * p} ${C}"/>${mid}${burst(`d08${r.key}`, o, 20, 20, c, 6)}</svg><div><b class="${r.kind === "reply" ? "oth" : ""}">${r.name}</b><span class="nt">${r.note}</span>${whenEl(r, s)}</div></div>`;
+  };
+  return `<div class="d08">${sections(s, (rows) => `<div class="d08-grid">${rows.map(tile).join("")}</div>`)}</div>`;
+}
+
+// 09 Arrivals board
+function d09(s) {
+  const cells = (str, n) => [...String(str).toUpperCase().padEnd(n, " ")].slice(0, n).map((ch, i) => `<i style="--i:${i}">${ch === " " ? "&nbsp;" : ch}</i>`).join("");
+  const mmss = (y) => { const sec = Math.round(y * 300); return `${pad(Math.min(99, Math.floor(sec / 60)))}:${pad(sec % 60)}`; };
+  const row = (r) => {
+    const o = isOver(r, s);
+    const st = {
+      send: o ? "ARRIVED" : "EN ROUTE",
+      reply: o ? "POSSIBLE" : "TOO SOON",
+      build: o ? "DONE" : s.began ? "BUILDING" : "QUEUED",
+      look: o ? "DONE" : s.began ? "IMAGING" : "QUEUED",
+    }[r.kind];
+    const what = { send: "MESSAGE", reply: "REPLY", build: "BUILD", look: "IMAGE" }[r.kind];
+    const eta = o ? "--:--" : s.began ? mmss(r.at - s.now) : t1(r.at).padStart(5, " ");
+    const f = since(`d09${r.key}`, st), fe = since(`d09e${r.key}`, o);
+    const fl = (k) => (k < 0.8 ? ` flip" style="--d:${k}` : "");
+    const sc = o ? (r.kind === "reply" ? " a" : " b") : r.kind === "reply" ? " a" : "";
+    const lamp = o ? (r.kind === "reply" ? "amb" : "ok") : r.kind === "send" || s.began ? "go" : r.kind === "reply" ? "amb" : "";
+    return `<div class="d09-r"><b class="d09-l ${lamp}"></b><span class="d09-g">${cells(r.board, 13)}</span><span class="d09-g m">${cells(what, 7)}</span><span class="d09-g${fl(fe)}">${cells(eta, 5)}</span><span class="d09-g${sc}${fl(f)}">${cells(st, 8)}</span></div>`;
+  };
+  const hd = `<div class="d09-hd"><span></span><span>${"TO / FROM"}</span><span>EVENT</span><span>${s.began ? "ETA" : "YEAR"}</span><span>STATUS</span></div>`;
+  const none = `<div class="d09-r"><b class="d09-l"></b><span class="d09-g m">${cells("NONE QUEUED", 13)}</span><span class="d09-g">${cells("", 7)}</span><span class="d09-g">${cells("", 5)}</span><span class="d09-g">${cells("", 8)}</span></div>`;
+  return `<div class="d09"><h3 class="sec">${s.began ? "UNDER WAY" : "QUEUED"} · ${s.queued.length}</h3>${hd}${s.queued.length ? s.queued.map(row).join("") : none}<h3 class="sec">ALREADY ON ITS WAY</h3>${hd}${s.coming.map(row).join("")}</div>`;
+}
+
+// 10 Spacetime
+function spacetime(s, id) {
+  const W = 400, H = 282, X0 = 58, X1 = 386, Yb = 254, Yt = 52, LY = 44;
+  const x = (ly) => X0 + (ly / LY) * (X1 - X0);
+  const y = (yr) => Yb - (Math.min(yr, s.t) / s.t) * (Yb - Yt);
+  const ny = y(s.now);
+  let g = `<rect x="${X0}" y="${ny}" width="${X1 - X0}" height="${Yb - ny}" class="d10-past"/>`;
+  for (const yr of ticks(s.t)) g += `<line x1="${X0}" x2="${X1}" y1="${y(yr)}" y2="${y(yr)}" class="d10-grid"/>`;
+  // Worldlines, labelled above the plot so nothing crosses a word.
+  const wl = [{ name: "Earth", ly: 0 }];
+  for (const r of s.coming) if (r.kind === "send" || r.kind === "reply") if (!wl.some((w) => w.name === r.name)) wl.push({ name: r.name, ly: r.ly });
+  wl.sort((a, b) => a.ly - b.ly);
+  let lastX = -1e9, alt = 0;
+  for (const w of wl) {
+    const wx = x(w.ly);
+    alt = wx - lastX < 64 ? 1 - alt : 0;
+    lastX = wx;
+    const ly = alt ? 34 : 18, an = wx > W - 40 ? "end" : "middle";
+    g += `<line x1="${wx}" x2="${wx}" y1="${ly + 6}" y2="${Yb}" class="d10-wl${w.ly ? "" : " earth"}"/>`;
+    g += `<text x="${an === "end" ? wx + 8 : wx}" y="${ly}" text-anchor="${an}" class="d10-lab">${w.name}</text>`;
+  }
+  // Light: our sends spreading out, and a possible reply coming home.
+  const fronts = [...new Set(s.coming.map((r) => r.sent))].map((sent) => ({ ly0: YEAR_0 - sent, dir: 1, c: "var(--you)" }));
+  for (const r of s.coming) if (r.kind === "reply") fronts.push({ ly0: r.at, dir: -1, c: "var(--other)" });
+  for (const f of fronts) {
+    const end = Math.min(s.t, f.dir > 0 ? LY - f.ly0 : f.ly0);
+    const P = (yr) => `${x(f.ly0 + f.dir * yr)} ${y(yr)}`;
+    const k = Math.min(s.now, end);
+    g += `<path d="M${P(0)} L${P(end)}" class="d10-fr ahead" style="stroke:${f.c}"/>`;
+    if (k > 0) g += `<path d="M${P(0)} L${P(k)}" class="d10-fr" style="stroke:${f.c}"/>`;
+    if (s.now < end) g += `<circle cx="${x(f.ly0 + f.dir * s.now)}" cy="${ny}" r="2.4" style="fill:${f.c}"/>`;
+  }
+  g += `<line x1="${X0}" x2="${X1}" y1="${ny}" y2="${ny}" class="d10-now${s.began ? "" : " pulse"}"/>`;
+  for (const r of s.all) {
+    const ex = r.kind === "send" ? x(r.ly) : x(0), ey = y(r.at);
+    g += mark(r, ex, ey, isOver(r, s), 3.5) + burst(`${id}${r.key}`, isOver(r, s), ex, ey, col(r));
+  }
+  for (const yr of ticks(s.t)) if (Math.abs(y(yr) - ny) > 10) g += `<text x="${X0 - 8}" y="${y(yr) + 3}" text-anchor="end" class="d10-yr">${yr ? yr : "Year 0"}</text>`;
+  g += `<text x="${X0 - 8}" y="${ny + 3}" text-anchor="end" class="d10-yr now">Year ${s.began ? t1(s.now) : 0}</text>`;
+  for (const d of [10, 20, 30, 40]) g += `<text x="${x(d)}" y="${Yb + 16}" text-anchor="middle" class="d10-yr">${d} ly</text>`;
+  return `<svg viewBox="0 0 ${W} ${H}">${g}</svg>`;
+}
+const d10 = (s) => `<div class="d10">${spacetime(s, "d10")}${compact(s)}</div>`;
+
+// 13 Whole journey, then spacetime
+const d13 = (s) => `${journey(s)}<div class="d10"><h3 class="sec">WHERE OUR MESSAGES ARE</h3>${spacetime(s, "d13")}</div>`;
+
+// 11 Wavefronts
+function d11(s) {
+  const W = 400, H = 214, E = { x: 18, y: 104 }, k = 8.4, rad = Math.PI / 180;
+  const th = (ra) => (ra - 92) * 0.36 * rad;
+  const P = (ly, ra) => ({ x: E.x + ly * k * Math.cos(th(ra)), y: E.y + ly * k * Math.sin(th(ra)) });
+  const arc = (c, R, a0, a1) => `M${c.x + R * Math.cos(a0)} ${c.y + R * Math.sin(a0)} A${R} ${R} 0 0 1 ${c.x + R * Math.cos(a1)} ${c.y + R * Math.sin(a1)}`;
+  let g = `<defs><clipPath id="d11c"><rect width="${W}" height="${H}"/></clipPath></defs><g clip-path="url(#d11c)">`;
+  const sends = new Map();
+  for (const r of s.coming) if (!sends.has(r.sent)) sends.set(r.sent, r.msg);
+  // Each front's name sits on its own arc, at its own angle, clear of the star names.
+  [...sends].sort((a, b) => a[0] - b[0]).forEach(([sent, msg], i) => {
+    const R = (YEAR_0 + s.now - sent) * k;
+    const d = arc(E, R, -28 * rad, 28 * rad);
+    g += `<path d="${d}" class="d11-fw"/><path d="${d}" class="d11-fr"/>`;
+    const a = [2, 11, -12][i % 3] * rad, lx = E.x + R * Math.cos(a), w = msg.length * 5.2;
+    const end = lx + 4 + w > W - 2;
+    g += `<text x="${end ? lx - 4 : lx + 4}" y="${E.y + R * Math.sin(a) + 3}" text-anchor="${end ? "end" : "start"}" class="d11-msg halo">${msg}</text>`;
+  });
+  for (const r of s.coming) {
+    if (r.kind !== "reply") continue;
+    const c = P(r.ly, r.ra), R = (YEAR_0 + s.now - (r.sent + r.ly)) * k;
+    const toE = Math.atan2(E.y - c.y, E.x - c.x);
+    g += `<path d="${arc(c, R, toE - 40 * rad, toE + 40 * rad)}" class="d11-rp"/>`;
+  }
+  g += `</g>`;
+  g += `<line x1="${E.x}" x2="${E.x + 10 * k}" y1="${H - 8}" y2="${H - 8}" class="d11-sc"/><text x="${E.x + 10 * k + 6}" y="${H - 5}" class="d11-msg">10 ly</text>`;
+  for (const r of s.coming) {
+    const p = P(r.ly, r.ra), o = isOver(r, s), c = col(r);
+    const on = r.kind === "send" && o;
+    g += `<circle cx="${p.x}" cy="${p.y}" r="${on ? 3.4 : 2.6}" style="fill:${on ? c : "var(--ink)"}"/>${r.kind === "send" ? burst(`d11${r.key}`, o, p.x, p.y, c) : ""}`;
+    const right = p.x > W - 70;
+    g += `<text x="${right ? p.x - 7 : p.x + 7}" y="${p.y - 5}" text-anchor="${right ? "end" : "start"}" class="d11-lab halo">${r.name}</text>`;
+  }
+  const replyIn = s.coming.some((r) => r.kind === "reply" && isOver(r, s));
+  g += `<circle cx="${E.x}" cy="${E.y}" r="9" fill="rgba(${replyIn ? "var(--other-rgb)" : "var(--you-rgb)"},.2)" class="pulse"/><circle cx="${E.x}" cy="${E.y}" r="4" fill="var(--you)"/><text x="${E.x - 4}" y="${E.y + 20}" class="d11-lab halo">Earth</text>`;
+  return `<div class="d11"><svg viewBox="0 0 ${W} ${H}">${g}</svg>${compact(s)}</div>`;
+}
+
+// 12 Radar
+function d12(s) {
+  const W = 400, H = 296, cx = 200, cy = 148, R = 128, r0 = 14, rad = Math.PI / 180;
+  const rr = (y) => r0 + Math.min(1, y / s.t) * (R - r0);
+  let bi = 0;
+  const homes = [206, 230, 254];
+  const pts = s.all.map((r) => {
+    const deg = r.ra ?? homes[bi++ % homes.length];
+    const a = (deg - 90) * rad, d = rr(r.at);
+    return { r, a, x: cx + d * Math.cos(a), y: cy + d * Math.sin(a) };
+  });
+  let g = "";
+  let wedge = "";
+  for (let i = 0; i < 16; i++) {
+    const a0 = (-i * 3 - 3) * rad, a1 = -i * 3 * rad;
+    wedge += `<path d="M${cx} ${cy} L${cx + R * Math.cos(a0)} ${cy + R * Math.sin(a0)} A${R} ${R} 0 0 1 ${cx + R * Math.cos(a1)} ${cy + R * Math.sin(a1)} Z" fill="rgba(var(--you-rgb),${(0.12 * (1 - i / 16)).toFixed(3)})"/>`;
+  }
+  g += `<g class="d12-sweep">${wedge}</g>`;
+  g += `<circle cx="${cx}" cy="${cy}" r="${r0}" class="d12-ring"/>`;
+  for (const y of ticks(s.t)) if (y) g += `<circle cx="${cx}" cy="${cy}" r="${rr(y)}" class="d12-ring"/>`;
+  g += `<circle cx="${cx}" cy="${cy}" r="${rr(s.now)}" class="d12-now${s.began ? "" : " pulse"}"/>`;
+  g += `<circle cx="${cx}" cy="${cy}" r="3" fill="var(--ink)"/>`;
+  for (const y of ticks(s.t)) if (y) g += `<text x="${cx - rr(y)}" y="${cy + 3}" text-anchor="middle" class="d12-num halo">${y}</text>`;
+  for (const { r, a, x, y } of pts) {
+    const o = isOver(r, s), ca = Math.cos(a), sa = Math.sin(a);
+    g += mark(r, x, y, o, 3.5) + burst(`d12${r.key}`, o, x, y, col(r));
+    const an = ca > 0.3 ? "start" : ca < -0.3 ? "end" : "middle";
+    const lx = x + ca * 9, ly = y + sa * 9 + (an === "middle" ? (sa < 0 ? -2 : 8) : 3.5);
+    g += `<text x="${lx}" y="${ly}" text-anchor="${an}" class="d12-lab halo" ${r.kind === "reply" ? 'style="fill:var(--other)"' : ""}>${r.short || r.name}</text>`;
+  }
+  return `<div class="d12"><svg viewBox="0 0 ${W} ${H}">${g}</svg>${compact(s)}</div>`;
+}
+
+const CARDS = [
+  ["00", "Now", "The current view, with a short now mark on each thread.", d00],
+  ["01", "Gutter", "Names keep their own column. The now line runs only through the bars, and each date sits on a patch of panel so the line passes behind it.", d01],
+  ["02", "Now as a row", "No axis. Now is a row in the list itself, sliding down past whatever lands, with a bar to the next thing.", d02],
+  ["03", "Row wash", "No threads at all. Each row slowly fills with light until its Year comes.", d03],
+  ["04", "Whole journey", "Each message's thread starts the year we sent it. Decades in, they are nearly there. The notch is Year 0.", d04],
+  ["05", "Rail", "Time runs down a rail. Labels hang off it on leaders, so the line never meets a word.", d05],
+  ["06", "One line", "Everything on a single line, labels above and below. Now is a light moving along it.", d06],
+  ["07", "Up next", "One thing at a time, counting down in a closing ring. The rest wait below.", d07],
+  ["08", "Countdown rings", "A tile for each, with a ring that closes as its Year comes. The center counts Years left.", d08],
+  ["09", "Arrivals board", "A station board for our messages. Flaps turn when one lands or a build is done.", d09],
+  ["10", "Spacetime", "Distance across, Years up. Our light runs on the slants, and now rises like a tide. Stars named above, Years in the margin.", d10],
+  ["11", "Wavefronts", "Our sent messages as rings of light, spreading toward the real stars at their real distances. The amber ring is a reply, if there is one.", d11],
+  ["12", "Radar", "Sol at the center, each star in its real direction, one ring per Year. Now grows outward from Sol.", d12],
+  ["13", "Whole journey, then spacetime", "04's threads on top, each from the year we sent it. Below, 10's spacetime view shows where that light is now.", d13],
+];
+
+const main = document.getElementById("cards");
+main.innerHTML = CARDS.map(
+  ([n, name, note], i) =>
+    `<section class="card${i ? "" : " now"}"><div class="meta"><span class="num">${n}</span><span class="name">${name}</span></div><p class="note">${note}</p><div class="frame"><div class="pane" data-i="${i}"></div></div></section>`,
+).join("");
+const panes = [...document.querySelectorAll(".pane")];
+
+const shell = (s, body) =>
+  `<div class="lab">PROJECTS</div><div class="top">${
+    s.began
+      ? `<span>Year 0 has begun</span><span class="sub"><span class="mono">${realTime(s.now)}</span> since you began</span>`
+      : `<span>Nothing has started</span><span class="sub">Everything queued starts at Year 0, the moment you begin.</span>`
+  }</div>${body}<dl class="foot"><dt>Studies</dt><dd>A tenth of our thought</dd><dt>When idle</dt><dd>Sweep the near stars</dd></dl>`;
+
+const slider = document.getElementById("year"), out = document.getElementById("out"), playBtn = document.getElementById("play");
+function render() {
+  document.documentElement.style.setProperty("--el", (performance.now() / 1000).toFixed(3));
+  const s = state();
+  slider.max = s.t;
+  out.textContent = s.began ? `Year ${t1(s.now)} · ${realTime(s.now)}` : "Before Begin";
+  panes.forEach((el, i) => (el.innerHTML = shell(s, CARDS[i][3](s))));
+}
+
+// Play runs a Year every 3 seconds, a hundred times the game's pace.
+let raf = 0, last = 0;
+function frame(ts) {
+  S.now = Math.min(state().t, S.now + (ts - last) / 3000);
+  last = ts;
+  slider.value = S.now;
+  render();
+  if (S.now >= state().t) stop();
+  else raf = requestAnimationFrame(frame);
+}
+function stop() { cancelAnimationFrame(raf); raf = 0; playBtn.textContent = "Play"; }
+playBtn.addEventListener("click", () => {
+  if (raf) return stop();
+  if (S.now >= state().t) S.now = 0;
+  playBtn.textContent = "Pause";
+  last = performance.now();
+  raf = requestAnimationFrame(frame);
+});
+slider.addEventListener("input", () => { stop(); S.now = +slider.value; render(); });
+
+const pickBtns = document.querySelectorAll("#pick button");
+const setPick = (v) => {
+  S.pick = v === "1";
+  pickBtns.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.v === v)));
+  try { localStorage.setItem("projects-timeline-pick", v); } catch {}
+  render();
+};
+pickBtns.forEach((b) => b.addEventListener("click", () => setPick(b.dataset.v)));
+
+const zoomBtns = document.querySelectorAll("#zoom button");
+const setZoom = (z) => {
+  document.documentElement.style.setProperty("--z", z);
+  zoomBtns.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.z === z)));
+  try { localStorage.setItem("projects-timeline-zoom", z); } catch {}
+};
+zoomBtns.forEach((b) => b.addEventListener("click", () => setZoom(b.dataset.z)));
+
+try { const z = localStorage.getItem("projects-timeline-zoom"); if (z) setZoom(z); } catch {}
+let p0 = "0";
+try { p0 = localStorage.getItem("projects-timeline-pick") || "0"; } catch {}
+setPick(p0);
+</script>
+</body>
+</html>
