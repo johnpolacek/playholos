@@ -1,5 +1,6 @@
 import { createContext, use, useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
+import { preload } from "@/app/about/load";
 import { useGame } from "@/components/game-provider";
 import { Origins } from "@/components/origins";
 import { People } from "@/components/people";
@@ -12,6 +13,7 @@ import { Leads } from "@/components/leads";
 import { Drift } from "@/components/drift";
 import { Sky, SkyArt } from "@/components/sky";
 import type { Dials } from "@/lib/drift";
+import { LeaveFor } from "@/lib/leave";
 import { charsRise, gsap, prefersReducedMotion, rise, riseFrom, useGSAP, useStage } from "@/lib/motion";
 
 /** The art's size on a phone, and its soft edge into the words. Wide, it fills the left. */
@@ -153,6 +155,32 @@ export function Opening({ className, children }: { className: string; children: 
         });
     })();
 
+  // Out of the game, as to the about pages: the screen lifts away and its sky dims to bare paper, where the about
+  // page's own sky lights. The page's code loads meanwhile, then the router moves. The first way out wins.
+  const away = useRef(false);
+  const leaveFor = (href: string) =>
+    contextSafe(() => {
+      if (away.current) return;
+      away.current = true;
+      preload(href);
+      const go = () => navigate(href);
+      const root = frame.current;
+      if (!root || prefersReducedMotion()) return go();
+      const q = gsap.utils.selector(root);
+      gsap
+        .timeline({ onComplete: go })
+        .set(root, { pointerEvents: "none" })
+        .to(q(shell ? "[data-shell]" : "[data-m]").reverse(), {
+          autoAlpha: 0,
+          y: -8,
+          duration: 0.28,
+          ease: "power2.in",
+          stagger: { amount: 0.18 },
+          overwrite: true,
+        })
+        .to(root.children, { autoAlpha: 0, duration: 0.5, ease: "power1.in" }, 0.12);
+    })();
+
   let body: React.ReactNode = <div className="grow bg-paper" />;
   if (shell) body = children;
   else if (save) {
@@ -179,7 +207,9 @@ export function Opening({ className, children }: { className: string; children: 
   return (
     <div ref={frame} id="phone" className={`relative ${className}`}>
       <LeaveShell value={leaveShell}>
-        <Sky shade={!shell}>{body}</Sky>
+        <LeaveFor value={leaveFor}>
+          <Sky shade={!shell}>{body}</Sky>
+        </LeaveFor>
       </LeaveShell>
     </div>
   );

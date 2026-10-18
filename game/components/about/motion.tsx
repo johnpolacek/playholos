@@ -1,18 +1,20 @@
 import { createContext, use, useRef } from "react";
 import { Link, type LinkProps, useLocation, useNavigate } from "react-router";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { plainClick } from "@/lib/leave";
 import { charsRise, fontsReady, gsap, prefersReducedMotion, useGSAP } from "@/lib/motion";
 
 gsap.registerPlugin(ScrollTrigger);
 
 // The about pages' motion: light and quick. The bar drops in once. Each page's items rise as they come into view, its
 // title's letters rise behind masks, and its figures count up. A link out plays the items on screen away first, then
-// navigates. Back and forward only enter.
+// navigates. Out of the about pages, the bar leaves too, a beat behind. Back and forward only enter.
 
 /** A page's items: marked ones, and each block of a rendered doc. */
 const ITEMS = "[data-a], .doc > :not(ul), .doc > ul > li";
 
-const Go = createContext<(href: string) => void>(() => {});
+/** Plays the page out, then navigates. False when another link already won. */
+const Go = createContext<(href: string) => boolean>(() => false);
 
 
 function countUp(el: HTMLElement) {
@@ -31,7 +33,7 @@ export function AboutMotion({ nav, children }: { nav: React.ReactNode; children:
   const route = useRef<HTMLDivElement>(null);
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  const leaving = useRef<gsap.core.Tween | null>(null);
+  const leaving = useRef<gsap.core.Timeline | null>(null);
 
   // The bar, once.
   useGSAP(
@@ -56,7 +58,9 @@ export function AboutMotion({ nav, children }: { nav: React.ReactNode; children:
   // Each page, on every route.
   useGSAP(
     (_, safe) => {
-      // A new page releases the last link's lock, and stops its outro from navigating twice.
+      // A new page releases the last link's lock, and stops its outro from navigating twice. One cut short, as by back,
+      // puts back what it had played out.
+      if (leaving.current?.isActive()) leaving.current.progress(0);
       leaving.current?.kill();
       leaving.current = null;
       const page = route.current!;
@@ -111,26 +115,36 @@ export function AboutMotion({ nav, children }: { nav: React.ReactNode; children:
 
   const { contextSafe } = useGSAP({ scope: root });
 
-  // A link out: what is on screen lifts away, then the router moves. The first link wins until the next page enters.
+  // A link out: what is on screen lifts away, then the router moves. Out of the about pages, the bar follows, long
+  // enough for Play's burst to be seen. The first link wins until the next page enters.
   const go = (href: string) =>
     contextSafe(() => {
-      if (leaving.current) return;
+      if (leaving.current) return false;
       const page = route.current!;
       const on = gsap.utils.toArray<HTMLElement>(`${ITEMS}, [data-a-title], [data-a-out]`, page).filter((el) => {
         const r = el.getBoundingClientRect();
         return r.height > 0 && r.bottom > 0 && r.top < window.innerHeight;
       });
+      const bar = href.startsWith("/about")
+        ? []
+        : gsap.utils.toArray<HTMLElement>("[data-a-nav], [data-a-bar]", root.current);
       const push = () => navigate(href);
-      if (!on.length || prefersReducedMotion()) return push();
-      leaving.current = gsap.to(on, {
-        autoAlpha: 0,
-        y: -10,
-        duration: 0.22,
-        ease: "power2.in",
-        stagger: { amount: 0.12 },
-        overwrite: true,
-        onComplete: push,
-      });
+      if ((!on.length && !bar.length) || prefersReducedMotion()) {
+        push();
+        return true;
+      }
+      leaving.current = gsap
+        .timeline({ onComplete: push })
+        .to(on, {
+          autoAlpha: 0,
+          y: -10,
+          duration: 0.22,
+          ease: "power2.in",
+          stagger: { amount: 0.12 },
+          overwrite: true,
+        })
+        .to(bar, { autoAlpha: 0, y: -8, duration: 0.25, ease: "power2.in", stagger: 0.04, overwrite: true }, 0.12);
+      return true;
     })();
 
   // Plain anchors: the contents, the docs' links, and the method's jumps. A jump within the page goes through the
@@ -154,7 +168,7 @@ export function AboutMotion({ nav, children }: { nav: React.ReactNode; children:
   };
 
   return (
-    <div ref={root} className="about min-h-dvh bg-page">
+    <div ref={root} className="about min-h-dvh overflow-x-clip bg-page">
       <Go value={go}>
         {nav}
         <div ref={route} onClick={onClick}>
@@ -165,18 +179,21 @@ export function AboutMotion({ nav, children }: { nav: React.ReactNode; children:
   );
 }
 
-/** A link that plays the page out before it navigates. Same-page and new-tab clicks stay native. */
-export function AboutLink({ href, ...props }: Omit<LinkProps, "to"> & { href: string }) {
+/**
+ * A link that plays the page out before it navigates, and calls `onLeave` as it starts. Same-page and new-tab clicks
+ * stay native.
+ */
+export function AboutLink({ href, onLeave, ...props }: Omit<LinkProps, "to"> & { href: string; onLeave?(): void }) {
   const go = use(Go);
   return (
     <Link
       {...props}
       to={href}
       onClick={(e) => {
-        if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+        if (!plainClick(e)) return;
         if (href.split("#")[0] === location.pathname) return;
         e.preventDefault();
-        go(href);
+        if (go(href)) onLeave?.();
       }}
     />
   );

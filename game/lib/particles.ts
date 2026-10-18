@@ -1,17 +1,17 @@
 // A particle field: a canvas that reaches past a target element, its particles stepped on the GSAP ticker. Emitters run
 // each frame while attached, and a particle may carry its own update. Tweens on the plain particle objects work too,
 // since the ticker runs them before the field steps. It ticks only while it has something to draw. From animaxxing's
-// particle field, with only the shapes the reactor draws.
+// particle field, with only the shapes the reactor and the about pages' Play draw.
 import { gsap } from "@/lib/motion";
 
-export type Shape = "dot" | "spark" | "square" | "outline";
+export type Shape = "dot" | "spark" | "square" | "star" | "outline";
 
 export type Particle = {
   x: number;
   y: number;
   vx: number;
   vy: number;
-  /** Radius for dots, half-width for squares, stroke width for sparks, spread for outlines. */
+  /** Radius for dots, half-width for squares, stroke width for sparks, ray length for stars, spread for outlines. */
   size: number;
   alpha: number;
   shape: Shape;
@@ -27,6 +27,8 @@ export type Particle = {
   age: number;
   /** Alpha falls to zero over the particle's life. */
   fade: boolean;
+  /** Size falls to zero over the particle's life. */
+  shrink: boolean;
   /** Sideways sway: amplitude in px/s and frequency in Hz. */
   wobble: number;
   wobbleFreq: number;
@@ -49,6 +51,7 @@ const DEFAULTS: Omit<Particle, "x" | "y"> = {
   life: 1,
   age: 0,
   fade: true,
+  shrink: false,
   wobble: 0,
   wobbleFreq: 0,
   phase: 0,
@@ -171,18 +174,20 @@ export class ParticleField {
     ctx.strokeStyle = this.color;
     ctx.lineCap = "round";
     for (const p of this.particles) {
-      const alpha = p.alpha * (p.fade && p.life !== Infinity ? 1 - p.age / p.life : 1);
-      if (alpha <= 0.005 || p.size <= 0.05) continue;
+      const spent = p.life === Infinity ? 0 : p.age / p.life;
+      const alpha = p.alpha * (p.fade ? 1 - spent : 1);
+      const size = p.size * (p.shrink ? 1 - spent : 1);
+      if (alpha <= 0.005 || size <= 0.05) continue;
       ctx.globalAlpha = Math.min(alpha, 1);
       const speed = Math.hypot(p.vx, p.vy);
       if (p.shape === "dot" || (p.shape === "spark" && speed < 1)) {
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, size, 0, Math.PI * 2);
         ctx.fill();
       } else if (p.shape === "spark") {
         // A streak trailing the direction of travel.
         const tail = Math.min(speed * 0.04, 18);
-        ctx.lineWidth = p.size;
+        ctx.lineWidth = size;
         ctx.beginPath();
         ctx.moveTo(p.x, p.y);
         ctx.lineTo(p.x - (p.vx / speed) * tail, p.y - (p.vy / speed) * tail);
@@ -191,14 +196,27 @@ export class ParticleField {
         ctx.save();
         ctx.translate(p.x, p.y);
         ctx.rotate(p.rotation);
-        ctx.fillRect(-p.size, -p.size, p.size * 2, p.size * 2);
+        ctx.fillRect(-size, -size, size * 2, size * 2);
+        ctx.restore();
+      } else if (p.shape === "star") {
+        // Four thin rays crossing at the center, like a glint off a lens.
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rotation);
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(-size, 0);
+        ctx.lineTo(size, 0);
+        ctx.moveTo(0, -size);
+        ctx.lineTo(0, size);
+        ctx.stroke();
         ctx.restore();
       } else {
         // The target's outline, pushed out by the particle's size.
         const { x, y, w, h } = this.box;
         ctx.lineWidth = 1.5;
         ctx.beginPath();
-        ctx.roundRect(x - p.size, y - p.size, w + p.size * 2, h + p.size * 2, this.radius + p.size);
+        ctx.roundRect(x - size, y - size, w + size * 2, h + size * 2, this.radius + size);
         ctx.stroke();
       }
     }

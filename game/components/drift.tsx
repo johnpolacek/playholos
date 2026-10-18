@@ -2,6 +2,7 @@ import { Link } from "react-router";
 import { useCallback, useRef } from "react";
 import { Reactor, type ReactorHandle } from "@/components/reactor";
 import { SkyArt, useSky } from "@/components/sky";
+import { plainClick, useLeaveFor } from "@/lib/leave";
 import { gsap, rise, riseFrom, useGSAP, useStage } from "@/lib/motion";
 
 const AU_KM = 149597870.7;
@@ -45,6 +46,7 @@ export function Drift({ onNext }: { onSkip(): void; onNext(): void }) {
   const reactor = useRef<ReactorHandle>(null);
   const going = useRef(false);
   const sky = useSky();
+  const leaveFor = useLeaveFor();
 
   const { leave } = useStage(root, (q, tl) => {
     tl.fromTo(q('[data-m="where"]'), riseFrom, { ...rise, duration: 0.7, stagger: 0.15 }, 1.8);
@@ -105,7 +107,16 @@ export function Drift({ onNext }: { onSkip(): void; onNext(): void }) {
         </Reactor>
       </div>
       <footer className="relative flex flex-wrap items-center justify-center gap-x-4 gap-y-1 px-6 pb-5 font-mono text-[10px] tracking-[.1em] text-muted uppercase">
-        <Link data-m="foot" to="/about" className="transition-colors hover:text-ink">
+        <Link
+          data-m="foot"
+          to="/about"
+          onClick={(e) => {
+            if (!plainClick(e)) return;
+            e.preventDefault();
+            leaveFor("/about");
+          }}
+          className="transition-colors hover:text-ink"
+        >
           About
         </Link>
         <a
