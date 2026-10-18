@@ -141,14 +141,14 @@ export function Opening({ className, children }: { className: string; children: 
   const leaveShell = (then: () => void) =>
     contextSafe(() => {
       const parts = gsap.utils.selector(frame)("[data-shell]").reverse();
-      if (prefersReducedMotion()) return then();
+      // A new game opens on the drift, with or without the shell's leaving.
+      const gone = () => {
+        setAt(0);
+        then();
+      };
+      if (prefersReducedMotion()) return gone();
       gsap
-        .timeline({
-          onComplete: () => {
-            setAt(0);
-            then();
-          },
-        })
+        .timeline({ onComplete: gone })
         .to(parts, {
           autoAlpha: 0,
           y: (i) => (i === 0 ? 12 : i === parts.length - 1 ? -12 : -8),
