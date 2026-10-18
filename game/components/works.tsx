@@ -104,7 +104,8 @@ function toward(dx: number, dy: number) {
   return ["→", "↘", "↓", "↙", "←", "↖", "↑", "↗"][(Math.round(Math.atan2(dy, dx) / (Math.PI / 4)) + 8) % 8];
 }
 
-/** The map on our builds: the one in view where it would stand, how far along it is, and which way Earth is. */
+/** The map on our builds: the one in view where it would stand, how far along it is, and from the Moon, which way
+ *  Earth is. */
 export function WorksMap({ className }: { className: string }) {
   const { list, dials } = useWorks();
   const { year } = useGame();
@@ -115,55 +116,52 @@ export function WorksMap({ className }: { className: string }) {
     return (Math.hypot(m.x, m.y, m.z) * AU_KM) / 299792.458;
   });
   const names = useRef<Record<string, HTMLSpanElement | null>>({});
-  const onMarks = useCallback(
-    (marks: Mark[]) => {
-      // Only the build in view is named.
-      for (const w of list) {
-        const n = names.current[`site:${w.name}`];
-        if (n && !marks.some((m) => m.id === `site:${w.name}`)) n.style.opacity = "0";
-      }
-      for (const { id, x, y, a } of marks) {
-        const n = names.current[id];
-        const box = n?.parentElement;
-        if (!n || !box) continue;
-        if (id.startsWith("site:")) {
-          n.style.transform = `translate(${x + 26}px, ${y}px) translate(0, -50%)`;
-          n.style.opacity = String(a);
-          continue;
-        }
-        // Earth: where it is, or held at the map's edge with an arrow its way.
-        const [w, h] = [box.clientWidth, box.clientHeight];
-        const pad = 18;
-        const inside = x > pad && x < w - pad && y > pad && y < h - pad;
-        const [cx, cy] = [w / 2, h / 2];
-        const k = inside
-          ? 1
-          : Math.min((w / 2 - pad) / Math.abs(x - cx || 1e-6), (h / 2 - pad) / Math.abs(y - cy || 1e-6));
-        const [ex, ey] = [cx + (x - cx) * k, cy + (y - cy) * k];
-        const arrow = names.current.arrow;
-        if (arrow) arrow.textContent = inside ? "" : `${toward(x - cx, y - cy)} `;
-        n.style.transform = `translate(${ex}px, ${ey}px) translate(${ex > cx ? "-100%" : "0"}, ${ey > cy ? "-100%" : "0"})`;
+  const onMarks = useCallback((marks: Mark[]) => {
+    // Only the build in view is named, at its places, and Earth only from the Moon.
+    for (const [id, n] of Object.entries(names.current))
+      if (n && id !== "arrow" && !marks.some((m) => m.id === id)) n.style.opacity = "0";
+    for (const { id, x, y, a } of marks) {
+      const n = names.current[id];
+      const box = n?.parentElement;
+      if (!n || !box) continue;
+      if (id.startsWith("site:")) {
+        n.style.transform = `translate(${x + 26}px, ${y}px) translate(0, -50%)`;
         n.style.opacity = String(a);
+        continue;
       }
-    },
-    [list],
-  );
+      // Earth: where it is, or held at the map's edge with an arrow its way.
+      const [w, h] = [box.clientWidth, box.clientHeight];
+      const pad = 18;
+      const inside = x > pad && x < w - pad && y > pad && y < h - pad;
+      const [cx, cy] = [w / 2, h / 2];
+      const k = inside
+        ? 1
+        : Math.min((w / 2 - pad) / Math.abs(x - cx || 1e-6), (h / 2 - pad) / Math.abs(y - cy || 1e-6));
+      const [ex, ey] = [cx + (x - cx) * k, cy + (y - cy) * k];
+      const arrow = names.current.arrow;
+      if (arrow) arrow.textContent = inside ? "" : `${toward(x - cx, y - cy)} `;
+      n.style.transform = `translate(${ex}px, ${ey}px) translate(${ex > cx ? "-100%" : "0"}, ${ey > cy ? "-100%" : "0"})`;
+      n.style.opacity = String(a);
+    }
+  }, []);
   const label =
     "pointer-events-none absolute top-0 left-0 font-mono text-[9px] whitespace-nowrap opacity-0 [text-shadow:0_0_4px_#121314,0_0_8px_#121314]";
   return (
     <SkyArt mode="works" dials={dials} works={list} onMarks={onMarks} className={className}>
-      {list.map((w) => (
-        <span
-          key={w.name}
-          ref={(n) => {
-            names.current[`site:${w.name}`] = n;
-          }}
-          className={`${label} leading-snug`}
-        >
-          <span className="block text-you">{w.site.name}</span>
-          <span className="block text-ink">{state(w, year)}</span>
-        </span>
-      ))}
+      {list.flatMap((w) =>
+        w.site.places.map((pl, k) => (
+          <span
+            key={`${w.name}:${k}`}
+            ref={(n) => {
+              names.current[`site:${w.name}:${k}`] = n;
+            }}
+            className={`${label} leading-snug`}
+          >
+            <span className="block text-you">{pl.name}</span>
+            <span className="block text-ink">{state(w, year)}</span>
+          </span>
+        )),
+      )}
       <span
         ref={(n) => {
           names.current.earth = n;

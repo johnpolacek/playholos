@@ -96,9 +96,14 @@ export interface Show {
   /** For "beams": our messages on their way, each by its star, the decimal year we sent it, the light-years it goes,
    *  and whether it is the reply that could come back. */
   beams?: { star: string; sent: number; ly: number; reply: boolean }[];
-  /** For "works": our builds with places, each by its name, its place on the Moon, whether it is queued, and when it is
-   *  done, in Years from Year 0. */
-  works?: { name: string; site: { lat: number; lon: number }; queued: boolean; done: number | null }[];
+  /** For "works": our builds with places, each by its name, where it stands on Earth or the Moon, whether it is
+   *  queued, and when it is done, in Years from Year 0. */
+  works?: {
+    name: string;
+    site: { on: "earth" | "moon"; places: { lat: number; lon: number }[] };
+    queued: boolean;
+    done: number | null;
+  }[];
   /** For "people" and "mind": where the Mind is on screen, in CSS pixels, each frame. */
   onMind?(x: number, y: number): void;
   /** For "inherit", "stand", "leads", "beams" and "works": where their labeled places are on screen, each frame. */
@@ -130,8 +135,10 @@ export interface Drift {
 const KLY_AU = 1000 * LY_AU;
 /** The Moon's radius, in Earth radii. */
 const MOON_R = 1737.4 / 6371.0084;
-/** How near a build is seen: log10 of AU from the middle of its view, about 7,800 km. */
+/** How near a build on the Moon is seen: log10 of AU from the middle of its view, about 7,800 km. */
 const NEAR_WORK = -4.28;
+/** How near builds on Earth are seen, from its middle: about 53,000 km, so their domes clear its edge. */
+const EARTH_WORK = -3.45;
 
 // The Milky Way's measured arms, Reid et al. 2019, Table 2: a log spiral with a kink, over the azimuths where masers
 // pin it down. β is galactocentric azimuth, 0 toward the Sun, growing with the Galaxy's turn. Degrees and kpc, at their
@@ -432,9 +439,9 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       .addScaledVector(north, Math.sin(φ));
   }
   const sitesAt = new Map<string, THREE.Vector3>();
-  /** Where a build stands on the Moon, as a direction from its middle. */
+  /** Where a build on the Moon stands, as a direction from its middle. */
   const siteAt = (w: NonNullable<Show["works"]>[number]) => {
-    if (!sitesAt.has(w.name)) sitesAt.set(w.name, onMoon(w.site.lat, w.site.lon));
+    if (!sitesAt.has(w.name)) sitesAt.set(w.name, onMoon(w.site.places[0].lat, w.site.places[0].lon));
     return sitesAt.get(w.name)!;
   };
   /** Where it is, the lead or the message's star, in light-years from Sol. */
@@ -476,14 +483,21 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     };
   }
 
-  // Our builds' view: from off the site's side, away from the line to Earth, and a little above, so the Moon fills the
-  // view and the thread home runs out across it. It sways a little. Turning to another eases round, as the leads' does.
+  // Our builds' view. On the Moon: from off the site's side, away from the line to Earth, and a little above, so the
+  // Moon fills the view and the thread home runs out across it. It sways a little. On Earth: the whole globe, as it
+  // turns, each place coming round under its dome. Turning to another eases round, as the leads' view does.
   function worksPose(): Pose {
     let at: number | null = null;
     let [az, tilt] = [0, 0];
     return (t) => {
       const w = spec.works?.[aimedWork()];
       if (!w) return [STOPS.earth, az, tilt, 0];
+      if (w.site.on === "earth") {
+        const k = at === null || still ? 1 : 1 - Math.exp(-Math.min(0.1, Math.max(0, t - at)) * LOOK);
+        at = t;
+        tilt += (0.12 - tilt) * k;
+        return [EARTH_WORK, az, tilt, 0];
+      }
       const { eX, eN, eZ } = pilot.sky;
       const s = siteAt(w);
       const toEarth = moonAt.clone().negate().normalize();
@@ -1904,52 +1918,99 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       dirty = true;
     });
 
-    // Each site: a ring on the ground round it, dashed for the plan and turning slowly, drawn solid as it is built. A
-    // point in a glow, and a thread home to Earth. The glow beats each time light could cross from Earth.
+    // Each place: drawn lines on the ground, dashed for the plan and turning slowly, and drawn solid as it is built. On
+    // the Moon, a ring round the site, and a thread home to Earth. On Earth, a dome over each place, the sky it
+    // watches, turning with Earth. Each place is a point in a glow, which on the Moon beats each time light could
+    // cross from Earth.
     const RING = 64;
     const beat = (moonAt.length() * 6371.0084) / 299792.458;
-    function mark(w: NonNullable<Show["works"]>[number]) {
-      const s = siteAt(w);
-      const at = s.clone().multiplyScalar(MOON_R * 1.004);
-      const flat = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), s);
-      const ring = (dashed: boolean) => {
-        const pts: number[] = [];
-        const r = MOON_R * 0.15;
-        for (let i = 0; i < RING; i += dashed ? 2 : 1) {
-          const [a, b] = [(i / RING) * 2 * Math.PI, ((i + 1) / RING) * 2 * Math.PI];
-          pts.push(r * Math.sin(a), r * Math.cos(a), 0, r * Math.sin(b), r * Math.cos(b), 0);
-        }
-        const mat = line(dashed ? "ink" : "mind", 0, true);
-        const l = new THREE.LineSegments(
-          new THREE.BufferGeometry().setAttribute("position", new THREE.Float32BufferAttribute(pts, 3)),
-          mat,
-        );
-        l.frustumCulled = false;
-        const holder = new THREE.Group();
-        holder.position.copy(at);
-        holder.quaternion.copy(flat);
-        holder.add(l);
-        g.add(holder);
-        return { l, holder, mat };
-      };
-      const spot = new Cloud();
-      spot.add(at.x, at.y, at.z, 4.5, 1, K.mind);
-      spot.add(at.x, at.y, at.z, 22, 0.5, K.mind);
-      const spotGlow = glow({ fixed: true, depthTest: true });
-      spotGlow.blending = THREE.AdditiveBlending;
-      const pts = spot.points(spotGlow);
-      g.add(pts);
-      const threadMat = line("mind", 0, true);
-      const thread = new THREE.Line(
-        new THREE.BufferGeometry().setFromPoints([at.clone().add(moonAt), new THREE.Vector3()]),
-        threadMat,
+    const up = new THREE.Vector3(0, 0, 1);
+    /** A ring, as line segments round the place: in its own frame, z up. */
+    const ring = (r: number) => {
+      const pts: number[] = [];
+      for (let i = 0; i < RING; i++) {
+        const [a, b] = [(i / RING) * 2 * Math.PI, ((i + 1) / RING) * 2 * Math.PI];
+        pts.push(r * Math.sin(a), r * Math.cos(a), 0, r * Math.sin(b), r * Math.cos(b), 0);
+      }
+      return pts;
+    };
+    /** A dome: its ground ring, then three arcs over the top, from the ground up. */
+    const dome = (r: number) => {
+      const pts = ring(r);
+      const N = RING / 2;
+      for (const φ of [0, Math.PI / 3, (2 * Math.PI) / 3])
+        for (const side of [1, -1])
+          for (let i = 0; i < N / 2; i++) {
+            const [a, b] = [(i / N) * Math.PI, ((i + 1) / N) * Math.PI];
+            const at = (t: number) => [
+              r * Math.cos(t) * Math.cos(φ) * side,
+              r * Math.cos(t) * Math.sin(φ) * side,
+              r * Math.sin(t),
+            ];
+            pts.push(...at(a), ...at(b));
+          }
+      return pts;
+    };
+    /** Lines at a place, dashed or solid, in a frame set flat on the ground there. */
+    function lines(pts: number[], dashed: boolean, parent: THREE.Object3D, at: THREE.Vector3, flat: THREE.Quaternion) {
+      const kept = dashed ? pts.filter((_, i) => Math.floor(i / 6) % 2 === 0) : pts;
+      const mat = line(dashed ? "ink" : "mind", 0, true);
+      const l = new THREE.LineSegments(
+        new THREE.BufferGeometry().setAttribute("position", new THREE.Float32BufferAttribute(kept, 3)),
+        mat,
       );
-      thread.frustumCulled = false;
-      earth.scene.add(thread);
-      return { at, dashed: ring(true), solid: ring(false), pts, spotGlow, threadMat };
+      l.frustumCulled = false;
+      const holder = new THREE.Group();
+      holder.position.copy(at);
+      holder.quaternion.copy(flat);
+      holder.add(l);
+      parent.add(holder);
+      return { l, holder, mat, n: kept.length / 6 };
+    }
+    function mark(w: NonNullable<Show["works"]>[number]) {
+      const moon = w.site.on === "moon";
+      const places = w.site.places.map((pl, k) => {
+        const s =
+          moon && k === 0
+            ? siteAt(w)
+            : moon
+              ? onMoon(pl.lat, pl.lon)
+              : new THREE.Vector3(...onGlobe(pl.lat, pl.lon, 1));
+        const parent = moon ? g : spin;
+        const at = s.clone().multiplyScalar(moon ? MOON_R * 1.004 : 1.003);
+        const flat = new THREE.Quaternion().setFromUnitVectors(up, s);
+        const pts = moon ? ring(MOON_R * 0.15) : dome(0.3);
+        const spot = new Cloud();
+        spot.add(at.x, at.y, at.z, 4.5, 1, K.mind);
+        spot.add(at.x, at.y, at.z, 22, 0.5, K.mind);
+        const spotGlow = glow({ fixed: true, depthTest: true });
+        spotGlow.blending = THREE.AdditiveBlending;
+        const dots = spot.points(spotGlow);
+        parent.add(dots);
+        return {
+          at,
+          parent,
+          dashed: lines(pts, true, parent, at, flat),
+          solid: lines(pts, false, parent, at, flat),
+          dots,
+          spotGlow,
+        };
+      });
+      let threadMat: THREE.ShaderMaterial | null = null;
+      if (moon) {
+        threadMat = line("mind", 0, true);
+        const thread = new THREE.Line(
+          new THREE.BufferGeometry().setFromPoints([places[0].at.clone().add(moonAt), new THREE.Vector3()]),
+          threadMat,
+        );
+        thread.frustumCulled = false;
+        earth.scene.add(thread);
+      }
+      return { moon, places, threadMat };
     }
     const made = new Map<string, ReturnType<typeof mark>>();
     const v = new THREE.Vector3();
+    const n = new THREE.Vector3();
     // Fading out, the view keeps the builds it last had.
     let list: NonNullable<Show["works"]> = [];
 
@@ -1957,23 +2018,26 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       if (spec.mode === "works") list = spec.works ?? [];
       const years = (dialsOf.works?.year ?? YEAR_0) - YEAR_0;
       const focus = list[aimedWork()];
-      ground.uniforms.uOpacity.value = p * arrived(groundAt);
+      ground.uniforms.uOpacity.value = p * arrived(groundAt) * Number(focus?.site.on !== "earth");
       const flash = still ? 0 : Math.exp(-((clock % beat) / beat) * 5);
       for (const w of list) {
         if (!made.has(w.name)) made.set(w.name, mark(w));
         const m = made.get(w.name)!;
         const seen = w.name === focus?.name ? p : 0;
         const built = w.queued && w.done !== null ? Math.min(1, Math.max(0, years / w.done)) : 0;
-        m.dashed.mat.uniforms.uOpacity.value = seen * (built >= 1 ? 0 : w.queued ? 0.8 : 0.45);
-        if (!still) m.dashed.holder.rotateZ(dt * 0.12);
-        m.solid.l.geometry.setDrawRange(0, 2 * Math.round(RING * built));
-        m.solid.mat.uniforms.uOpacity.value = 0.9 * seen;
-        const b = m.pts.geometry.attributes.aBright as THREE.BufferAttribute;
-        b.setX(0, 0.45 + 0.55 * built);
-        b.setX(1, (0.25 + 0.35 * built) * (0.7 + (0.3 + 0.7 * built) * flash));
-        b.needsUpdate = true;
-        m.spotGlow.uniforms.uOpacity.value = seen;
-        m.threadMat.uniforms.uOpacity.value = seen * (0.14 + 0.3 * built);
+        const beats = m.moon ? flash : 0;
+        for (const pl of m.places) {
+          pl.dashed.mat.uniforms.uOpacity.value = seen * (built >= 1 ? 0 : w.queued ? 0.8 : 0.45);
+          if (!still) pl.dashed.holder.rotateZ(dt * 0.12);
+          pl.solid.l.geometry.setDrawRange(0, 2 * Math.round(pl.solid.n * built));
+          pl.solid.mat.uniforms.uOpacity.value = 0.9 * seen;
+          const b = pl.dots.geometry.attributes.aBright as THREE.BufferAttribute;
+          b.setX(0, 0.45 + 0.55 * built);
+          b.setX(1, (0.25 + 0.35 * built) * (0.7 + (0.3 + 0.7 * built) * beats));
+          b.needsUpdate = true;
+          pl.spotGlow.uniforms.uOpacity.value = seen;
+        }
+        if (m.threadMat) m.threadMat.uniforms.uOpacity.value = seen * (0.14 + 0.3 * built);
       }
 
       if (spec.mode === "works" && spec.onMarks) {
@@ -1981,15 +2045,23 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         const h = parent.clientHeight;
         const marks: Mark[] = [];
         const m = focus && made.get(focus.name);
-        if (m) {
-          v.copy(m.at).add(moonAt).project(earth.camera);
-          marks.push({ id: `site:${focus.name}`, x: ((v.x + 1) / 2) * w, y: ((1 - v.y) / 2) * h, a: v.z < 1 ? p : 0 });
+        m?.places.forEach((pl, k) => {
+          // A place on Earth's far side, turned away from us, is not named.
+          pl.parent.localToWorld(v.copy(pl.at));
+          const facing = m.moon || n.copy(v).normalize().dot(n.clone().subVectors(earth.camera.position, v)) > 0;
+          v.project(earth.camera);
+          const a = v.z < 1 && facing ? p : 0;
+          marks.push({ id: `site:${focus.name}:${k}`, x: ((v.x + 1) / 2) * w, y: ((1 - v.y) / 2) * h, a });
+        });
+        // Earth, from the Moon, often behind us: then its way across the screen is the other side of the middle, far
+        // off.
+        if (m?.moon) {
+          const behind = v.set(0, 0, 0).applyMatrix4(earth.camera.matrixWorldInverse).z > 0;
+          v.set(0, 0, 0).project(earth.camera);
+          const k = behind ? -1000 : 1;
+          const a = p * ramp(-x, 2.4, 3.2);
+          marks.push({ id: "earth", x: ((v.x * k + 1) / 2) * w, y: ((1 - v.y * k) / 2) * h, a });
         }
-        // Earth, often behind us: then its way across the screen is the other side of the middle, far off.
-        const behind = v.set(0, 0, 0).applyMatrix4(earth.camera.matrixWorldInverse).z > 0;
-        v.set(0, 0, 0).project(earth.camera);
-        const k = behind ? -1000 : 1;
-        marks.push({ id: "earth", x: ((v.x * k + 1) / 2) * w, y: ((1 - v.y * k) / 2) * h, a: p * ramp(-x, 2.4, 3.2) });
         spec.onMarks(marks);
       }
     };
@@ -2184,7 +2256,8 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     // Our builds: the view's middle hops to the one in view, near its site, and home after. On the way the view backs
     // off, so where it left and where it goes show together.
     const work = spec.mode === "works" ? spec.works?.[aimedWork()] : undefined;
-    if (work) goal.copy(siteAt(work)).multiplyScalar(MOON_R * 0.45).add(moonAt).multiplyScalar(R_E_AU);
+    if (work?.site.on === "moon")
+      goal.copy(siteAt(work)).multiplyScalar(MOON_R * 0.45).add(moonAt).multiplyScalar(R_E_AU);
     else goal.set(0, 0, 0);
     if (!goal.equals(hop.to)) {
       hop.from.copy(workShift);
