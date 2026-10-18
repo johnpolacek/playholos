@@ -40,7 +40,7 @@ const HEAD = "font-mono text-[10px] tracking-[.1em] text-muted uppercase";
 
 export function LeadPage({ slug }: { slug: string }) {
   const { leads, dials, readings, fresh } = useLeads();
-  const { see } = useGame();
+  const { see, did } = useGame();
   const navigate = useNavigate();
   const root = useRef<HTMLDivElement>(null);
   const i = leads.findIndex((l) => l.slug === slug);
@@ -52,6 +52,12 @@ export function LeadPage({ slug }: { slug: string }) {
   useEffect(() => {
     if (unread) see([unread]);
   }, [unread, see]);
+
+  // Opening any lead is one of the things we would do before Begin.
+  const found = !!lead;
+  useEffect(() => {
+    if (found) did("openedLead");
+  }, [found, did]);
 
   useEffect(() => {
     if (i < 0) return;

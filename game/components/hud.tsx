@@ -1,3 +1,4 @@
+import { Begin } from "@/components/begin";
 import { useGame } from "@/components/game-provider";
 import { Menu } from "@/components/menu";
 import { realTime, tenths, YEAR_0 } from "@/lib/game/clock";
@@ -33,13 +34,13 @@ export function Hud() {
         {!save ? "" : y === null ? YEAR_0 : `Year ${y}`}
       </span>
       <span className="text-right text-xs text-muted wide:col-start-3">
-        {!save ? null : y === null ? (
-          "The clock starts when you begin"
-        ) : (
+        {/* Before Begin, the count of what we would do first, which opens Begin. */}
+        {save && y !== null && (
           <>
             {(YEAR_0 + y).toFixed(1)} · 1 Year = <span className="font-mono tabular-nums">{realTime(1)}</span>
           </>
         )}
+        <Begin />
       </span>
       <div className="col-span-2 mt-1 grid grid-cols-3 gap-2.5 wide:col-span-1 wide:col-start-2 wide:row-span-2 wide:row-start-1 wide:mt-0 wide:w-full wide:max-w-[520px] wide:self-center wide:justify-self-center">
         <Meter label="ENERGY" pct={energy} />

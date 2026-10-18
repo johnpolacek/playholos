@@ -1,6 +1,7 @@
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import { useEffect, useRef, useState } from "react";
+import { useGame } from "@/components/game-provider";
 import { MindNote } from "@/components/mind-note";
 import { BAD_KEY } from "@/lib/access";
 import { realTime } from "@/lib/game/clock";
@@ -41,6 +42,12 @@ export function MindChat({ ask }: { ask?: string }) {
   const end = useRef<HTMLDivElement>(null);
   const busy = status === "submitted" || status === "streaming";
   const lastAnswer = messages.findLast((message) => message.role === "assistant")?.id;
+
+  // An answer from the Mind is one of the things we would have before Begin.
+  const { did } = useGame();
+  useEffect(() => {
+    if (lastAnswer) did("asked");
+  }, [lastAnswer, did]);
 
   // A block body: newer browsers return a Promise from scrollIntoView, and React would call it as cleanup.
   useEffect(() => {

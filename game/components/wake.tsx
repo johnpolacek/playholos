@@ -102,6 +102,10 @@ export function Wake({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
 const LeaveShell = createContext<(then: () => void) => void>((then) => then());
 export const useLeaveShell = () => use(LeaveShell);
 
+// Before Begin, the plan can be changed: the shell leaves for Planning, under the same sky, and comes back after.
+const Replan = createContext<() => void>(() => {});
+export const useReplan = () => use(Replan);
+
 // The phone. A new game opens on the drift, then Wake and the memories, all under one sky. A game already begun goes straight to the
 // shell. Screens past the last one built lead to the shell. A reload starts over at the drift.
 const SCREENS = [Drift, Wake, Origins, People, Stand, Inherit, Charter, Meet, Leads, Plan];
@@ -109,13 +113,15 @@ const SCREENS = [Drift, Wake, Origins, People, Stand, Inherit, Charter, Meet, Le
 export function Opening({ className, children }: { className: string; children: React.ReactNode }) {
   const { save, wake } = useGame();
   const [at, setAt] = useState(0);
+  const [replanning, setReplanning] = useState(false);
   const frame = useRef<HTMLDivElement>(null);
   const inShell = !!save && (save.woke || save.beganAt !== null);
+  const shell = inShell && !replanning;
 
   // The shell enters piece by piece: the top bar drops in, the map opens, the page rises, the rail comes up.
   const { contextSafe } = useGSAP(
     () => {
-      if (!inShell) return;
+      if (!shell) return;
       const q = gsap.utils.selector(frame);
       const parts = q("[data-shell]");
       if (prefersReducedMotion()) return;
@@ -129,7 +135,7 @@ export function Opening({ className, children }: { className: string; children: 
         .fromTo(q('[data-shell="page"]'), { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.5 }, 0.35)
         .fromTo(q('[data-shell="rail"]'), { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: 0.45 }, 0.45);
     },
-    { scope: frame, dependencies: [inShell] },
+    { scope: frame, dependencies: [shell] },
   );
 
   const leaveShell = (then: () => void) =>
@@ -153,7 +159,14 @@ export function Opening({ className, children }: { className: string; children: 
     })();
 
   let body: React.ReactNode = <div className="grow bg-paper" />;
-  if (inShell) body = children;
+  if (shell) body = children;
+  else if (replanning)
+    body = (
+      <>
+        <Plan onSkip={() => setReplanning(false)} onNext={() => setReplanning(false)} />
+        <SkyArt mode="charter" className="hidden" />
+      </>
+    );
   else if (save) {
     const Screen = SCREENS[at];
     const next = () => (at + 1 < SCREENS.length ? setAt(at + 1) : wake());
@@ -174,7 +187,9 @@ export function Opening({ className, children }: { className: string; children: 
   return (
     <div ref={frame} id="phone" className={`relative ${className}`}>
       <LeaveShell value={leaveShell}>
-        <Sky shade={!inShell}>{body}</Sky>
+        <Replan value={() => leaveShell(() => setReplanning(true))}>
+          <Sky shade={!shell}>{body}</Sky>
+        </Replan>
       </LeaveShell>
     </div>
   );

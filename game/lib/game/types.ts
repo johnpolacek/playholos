@@ -14,6 +14,10 @@ export interface Save {
   plan?: Plan;
   /** Readings the Will has opened, by id. */
   seen?: string[];
+  /** Opened a lead's page, one of the four things we would do before Begin. */
+  openedLead?: boolean;
+  /** Had an answer from the Mind, another of the four. */
+  asked?: boolean;
 }
 
 export interface Plan {

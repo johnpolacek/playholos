@@ -1,11 +1,11 @@
-import { Begin } from "@/components/begin";
+import { Projects } from "@/components/projects";
 import { TabHead } from "@/components/tab-head";
 
-export default function Projects() {
+export default function ProjectsTab() {
   return (
     <>
       <TabHead title="PROJECTS" />
-      <Begin />
+      <Projects />
     </>
   );
 }

@@ -227,7 +227,7 @@ export function Plan({ onNext }: { onSkip(): void; onNext(): void }) {
     !!save,
   );
 
-  // The queue waits on the Projects tab, with Begin.
+  // The queue waits on the Projects tab, and Begin in the top bar.
   function queue() {
     setPlan(plan);
     leave(() => {

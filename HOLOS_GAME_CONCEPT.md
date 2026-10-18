@@ -709,8 +709,11 @@ Settled 2026-10-10.
   - Beside it the first Years are drawn as they would run: each build a thread out to the Year it is done, paced by the game's own loop from the order picked. Our messages arriving and the first replies that could come sit above them on their real dates.
   - Not built yet: standing orders and what wakes them.
   - *The queue, built 2026-10-17.* "Queue that" opens the Projects tab. Each queued build and the observation is a thread from Year 0 to its done Year, on one axis, with Earth's messages already on their way below. A now line waits at Year 0. After Begin it moves at 5 minutes a Year, the threads fill behind it, and each row counts down in real time, then reads done.
-  - Not built yet: changing the plan from the queue. Planning is only in the opening.
+  - *Changing the plan, built 2026-10-18.* Before Begin, "Change plan" on the Projects tab opens Planning again, under the same sky, and "Queue that" comes back. After Begin, a change is an order, not built yet.
 - **Begin.** When the player taps Begin, Year 0 starts and everything queued starts at once. From then on the clock runs, offline too, at 5 real minutes a Year.
+  - *Before we begin, built 2026-10-18.* Begin lives in the top bar, on every tab, as a count: "2 of 4 ready · Begin". It opens the four things we would do first, drawn as a thread down to Year 0: queue our first builds, image Fomalhaut again, open a lead, and ask the Mind. The last needs an Anthropic API key or the access code, and says so.
+    - None is a lock. Begin works at any count. While one is open, the Mind says why it would wait, and the open marks pulse: "Begin anyway" or "Not yet".
+    - Each step opens where it is done: Planning, Scan, or the Mind.
   - *2040 becomes Year 0.* Settled 2026-10-17. Before Begin, every screen and the top bar give the real year, 2040. At the tap, 2040 counts down to 0 and becomes "Year 0". The first time, it fills the screen, then settles into the top bar. After that, the top bar rolls it in place.
 - **The first session keeps v1's rhythm.** Settled 2026-10-12. About 15 minutes of play from Begin, the first result within 30 seconds, and something real landing about every minute. It ends on a timer the player sets, 45 to 60 minutes out.
   - The first mock kept it for 90 seconds. Then nothing landed for 3.5 minutes, and later for 5.5. Eleven of its 31 half-minutes held nothing.
