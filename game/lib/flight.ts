@@ -93,6 +93,9 @@ function poseAt(x: number) {
   return POSE[POSE.length - 1];
 }
 
+/** How far above the plane the view leans at a scale, before any tilt. */
+export const leanAt = (logD: number) => poseAt(logD)[1];
+
 /** The vertical field of view, in radians, for a screen of this shape. */
 export const lens = (w: number, h: number) => 2 * Math.atan(Math.tan((FOV * DEG) / 2) * Math.max(1, h / w));
 
@@ -284,7 +287,8 @@ export function createDirector({ still }: { still: boolean }) {
       } else last = to;
       return frame(...last);
     },
-    /** The turn that puts the camera off toward x, z in the Milky Way's plane, from the stars outward. */
+    /** The turn that puts the camera off toward x, z in the plane the view turns in: the Milky Way's from the stars
+     *  outward, and nearer, the ecliptic's, given as x along eX and z along eZ. */
     facing: (x: number, z: number) => Math.atan2(z, x) - frame.az0,
     /** The map: flies to a stop. Returns the flight's length in seconds. */
     go(to: Stop, clock: number) {

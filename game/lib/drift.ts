@@ -4,6 +4,7 @@
 // the measured arms and bar. Sources in HOLOS_RESEARCH.md, The drift. Client only.
 import * as THREE from "three";
 import earthDaymap from "../../assets/earth_daymap.jpg";
+import moonMap from "../../assets/moon.jpg";
 import { PC_LY, PLANETS, julianDate, orbitPath, seededRandom } from "../../src/astronomy.js";
 import { bodyOrientation, bodyPosition, moonOffset } from "../../src/ephemeris.js";
 import { GALAXIES, galaxyExtent, galaxyPosition, galaxyViewRadius } from "../../src/galaxies.js";
@@ -18,6 +19,7 @@ import { MACHINES, type MachineKind } from "./game/machines";
 import {
   DEG,
   LIFT,
+  STOPS,
   R_E_AU,
   type Stop,
   band,
@@ -25,6 +27,7 @@ import {
   HALF_VIEW_KM,
   createDirector,
   easeInOut,
+  leanAt,
   lens,
   ramp,
   smooth,
@@ -46,7 +49,7 @@ export interface Dials {
   u?: number;
   /** Earth wakes, and the Sun's light on the road fades. */
   earth?: number;
-  /** The year, as Earth's radar shell spreads from 1950, or as our messages fly. */
+  /** The year, as Earth's radar shell spreads from 1950, as our messages fly, or as our builds go up. */
   year?: number;
   /** The map's rings and stars come in. */
   grid?: number;
@@ -58,13 +61,24 @@ export interface Dials {
   compute?: number;
   /** What doesn't fit: how many of Earth's leads are lit, one by one, from 0 to all of them. */
   found?: number;
-  /** The lead the Will is looking at, or the message, counted from 1. 0 for none. */
+  /** The lead the Will is looking at, the message, or the build, counted from 1. 0 for none. */
   focus?: number;
 }
 
 /** What the sky shows: the title, the map, or one of the screens before the shell. */
 export type Mode =
-  "title" | "map" | "wake" | "origins" | "people" | "stand" | "inherit" | "charter" | "mind" | "leads" | "beams";
+  | "title"
+  | "map"
+  | "wake"
+  | "origins"
+  | "people"
+  | "stand"
+  | "inherit"
+  | "charter"
+  | "mind"
+  | "leads"
+  | "beams"
+  | "works";
 
 /** One screen's view of the sky. */
 export interface Show {
@@ -82,9 +96,12 @@ export interface Show {
   /** For "beams": our messages on their way, each by its star, the decimal year we sent it, the light-years it goes,
    *  and whether it is the reply that could come back. */
   beams?: { star: string; sent: number; ly: number; reply: boolean }[];
+  /** For "works": our builds with places, each by its name, its place on the Moon, whether it is queued, and when it is
+   *  done, in Years from Year 0. */
+  works?: { name: string; site: { lat: number; lon: number }; queued: boolean; done: number | null }[];
   /** For "people" and "mind": where the Mind is on screen, in CSS pixels, each frame. */
   onMind?(x: number, y: number): void;
-  /** For "inherit", "stand", "leads" and "beams": where their labeled places are on screen, each frame. */
+  /** For "inherit", "stand", "leads", "beams" and "works": where their labeled places are on screen, each frame. */
   onMarks?(marks: Mark[]): void;
   /** For "inherit": km per CSS pixel at the art's center, and the art's size. */
   onScale?(kmPerPx: number, w: number, h: number): void;
@@ -111,6 +128,10 @@ export interface Drift {
 }
 
 const KLY_AU = 1000 * LY_AU;
+/** The Moon's radius, in Earth radii. */
+const MOON_R = 1737.4 / 6371.0084;
+/** How near a build is seen: log10 of AU from the middle of its view, about 7,800 km. */
+const NEAR_WORK = -4.28;
 
 // The Milky Way's measured arms, Reid et al. 2019, Table 2: a log spiral with a kink, over the azimuths where masers
 // pin it down. β is galactocentric azimuth, 0 toward the Sun, growing with the Galaxy's turn. Degrees and kpc, at their
@@ -382,6 +403,8 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
   // The game's one sky: the title's loop, each screen's view and the map, with the camera flying between them.
   let spec: Show = first;
   const pilot = createDirector({ still });
+  /** Where the Moon is today, from Earth, in Earth radii. */
+  const moonAt = new THREE.Vector3().copy(moonOffset(pilot.sky.date)).divideScalar(R_E_AU);
   /** Each screen's last dials, so its extras can fade out on them after it has gone. */
   const dialsOf: Partial<Record<Mode, Dials>> = { [first.mode]: first.dials };
   const drift = (t: number, period: number) => (still ? 0 : (2 * Math.PI * t) / period);
@@ -392,6 +415,28 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
   };
   /** Our message in view, counted from 0. -1 for none. */
   const aimed = () => (dialsOf.beams?.focus ?? 0) - 1;
+  /** Our build in view, counted from 0. -1 for none. */
+  const aimedWork = () => (dialsOf.works?.focus ?? 0) - 1;
+  /** A place on the Moon as a direction from its middle: latitude, and longitude east from the middle of the side that
+   *  faces Earth. Its north is the ecliptic's, within the Moon's 1.5° tilt, and its sway toward and away from us is left
+   *  out. */
+  function onMoon(lat: number, lon: number) {
+    const { eN } = pilot.sky;
+    const toEarth = moonAt.clone().negate().normalize();
+    const north = eN.clone().addScaledVector(toEarth, -eN.dot(toEarth)).normalize();
+    const east = north.clone().cross(toEarth);
+    const [φ, λ] = [lat * DEG, lon * DEG];
+    return toEarth
+      .multiplyScalar(Math.cos(φ) * Math.cos(λ))
+      .addScaledVector(east, Math.cos(φ) * Math.sin(λ))
+      .addScaledVector(north, Math.sin(φ));
+  }
+  const sitesAt = new Map<string, THREE.Vector3>();
+  /** Where a build stands on the Moon, as a direction from its middle. */
+  const siteAt = (w: NonNullable<Show["works"]>[number]) => {
+    if (!sitesAt.has(w.name)) sitesAt.set(w.name, onMoon(w.site.lat, w.site.lon));
+    return sitesAt.get(w.name)!;
+  };
   /** Where it is, the lead or the message's star, in light-years from Sol. */
   const lookedAt = () => {
     if (spec.mode === "beams") {
@@ -431,6 +476,32 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     };
   }
 
+  // Our builds' view: from off the site's side, away from the line to Earth, and a little above, so the Moon fills the
+  // view and the thread home runs out across it. It sways a little. Turning to another eases round, as the leads' does.
+  function worksPose(): Pose {
+    let at: number | null = null;
+    let [az, tilt] = [0, 0];
+    return (t) => {
+      const w = spec.works?.[aimedWork()];
+      if (!w) return [STOPS.earth, az, tilt, 0];
+      const { eX, eN, eZ } = pilot.sky;
+      const s = siteAt(w);
+      const toEarth = moonAt.clone().negate().normalize();
+      const side = s.clone().addScaledVector(toEarth, -s.dot(toEarth));
+      const v = s
+        .clone()
+        .addScaledVector(side.lengthSq() > 1e-6 ? side.normalize() : eX, 0.75)
+        .addScaledVector(eN, 0.25)
+        .normalize();
+      const [toAz, toTilt] = [pilot.facing(v.dot(eX), v.dot(eZ)), Math.asin(v.dot(eN)) - leanAt(NEAR_WORK)];
+      const k = at === null || still ? 1 : 1 - Math.exp(-Math.min(0.1, Math.max(0, t - at)) * LOOK);
+      at = t;
+      az += wrap(toAz - az) * k;
+      tilt += (toTilt - tilt) * k;
+      return [NEAR_WORK, az + 0.08 * Math.sin(drift(t, 70)), tilt, 0];
+    };
+  }
+
   /** Where each screen looks. */
   function poseFor({ mode, dials: d }: Show): Pose | "title" | "map" {
     switch (mode) {
@@ -459,6 +530,9 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       // Our messages: the same, from beside the one in view.
       case "beams":
         return leadsPose();
+      // Our builds: close by the one in view.
+      case "works":
+        return worksPose();
       // The charter: Earth and the Moon, small and far.
       case "charter":
         return (t) => [-1.95, 0.5 + drift(t, 400), 0.3, 0];
@@ -639,8 +713,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
   glows.push(surface);
   let surfaceAt = Infinity;
 
-  const moonAt = new THREE.Vector3().copy(moonOffset(date)).divideScalar(R_E_AU);
-  const moon = new THREE.Mesh(new THREE.SphereGeometry(1737.4 / 6371.0084, 48, 32), moonGlobe);
+  const moon = new THREE.Mesh(new THREE.SphereGeometry(MOON_R, 48, 32), moonGlobe);
   moon.position.copy(moonAt);
   earth.scene.add(moon);
   // The Moon's orbit, drawn through where it is today.
@@ -1796,6 +1869,132 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     };
   }
 
+  // ── Our builds: each where it would stand, dashed while it waits, drawn round as it goes up, lit once done ──
+  function building() {
+    const g = new THREE.Group();
+    g.position.copy(moonAt);
+    earth.scene.add(g);
+    // The Moon in dots, its seas dark: the atlas's Moon map, read as Earth's land is. They come once the map has.
+    const ground = new THREE.ShaderMaterial({
+      uniforms: { ...shared, uSun: { value: sunDir }, uOpacity: { value: 0 }, uLights: { value: 0 }, uLit: { value: 1 } },
+      vertexShader: SURFACE_VERT,
+      fragmentShader: GLOW_FRAG,
+      transparent: true,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+    });
+    let groundAt = Infinity;
+    moonFace().then((face) => {
+      if (gone) return;
+      const dots = new Cloud();
+      const scatter = seededRandom(1969);
+      const N = 9000;
+      for (let i = 0; i < N; i++) {
+        const y = 1 - (2 * (i + 0.5)) / N;
+        const t = i * Math.PI * (3 - Math.sqrt(5));
+        // A little scatter, so the spiral the points are laid on doesn't show.
+        const lat = Math.asin(y) / DEG + (scatter() - 0.5) * 0.9;
+        const lon = Math.atan2(Math.sin(t), Math.cos(t)) / DEG + (scatter() - 0.5) * 0.9;
+        const at = onMoon(lat, lon).multiplyScalar(MOON_R * 1.003);
+        const tone = Math.min(1, Math.max(0, (face(lat, lon) - 70) / 120));
+        dots.add(at.x, at.y, at.z, 0.0075, 0.05 + 0.85 * tone ** 3, K.ink);
+      }
+      g.add(dots.points(ground));
+      groundAt = clock;
+      dirty = true;
+    });
+
+    // Each site: a ring on the ground round it, dashed for the plan and turning slowly, drawn solid as it is built. A
+    // point in a glow, and a thread home to Earth. The glow beats each time light could cross from Earth.
+    const RING = 64;
+    const beat = (moonAt.length() * 6371.0084) / 299792.458;
+    function mark(w: NonNullable<Show["works"]>[number]) {
+      const s = siteAt(w);
+      const at = s.clone().multiplyScalar(MOON_R * 1.004);
+      const flat = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), s);
+      const ring = (dashed: boolean) => {
+        const pts: number[] = [];
+        const r = MOON_R * 0.15;
+        for (let i = 0; i < RING; i += dashed ? 2 : 1) {
+          const [a, b] = [(i / RING) * 2 * Math.PI, ((i + 1) / RING) * 2 * Math.PI];
+          pts.push(r * Math.sin(a), r * Math.cos(a), 0, r * Math.sin(b), r * Math.cos(b), 0);
+        }
+        const mat = line(dashed ? "ink" : "mind", 0, true);
+        const l = new THREE.LineSegments(
+          new THREE.BufferGeometry().setAttribute("position", new THREE.Float32BufferAttribute(pts, 3)),
+          mat,
+        );
+        l.frustumCulled = false;
+        const holder = new THREE.Group();
+        holder.position.copy(at);
+        holder.quaternion.copy(flat);
+        holder.add(l);
+        g.add(holder);
+        return { l, holder, mat };
+      };
+      const spot = new Cloud();
+      spot.add(at.x, at.y, at.z, 4.5, 1, K.mind);
+      spot.add(at.x, at.y, at.z, 22, 0.5, K.mind);
+      const spotGlow = glow({ fixed: true, depthTest: true });
+      spotGlow.blending = THREE.AdditiveBlending;
+      const pts = spot.points(spotGlow);
+      g.add(pts);
+      const threadMat = line("mind", 0, true);
+      const thread = new THREE.Line(
+        new THREE.BufferGeometry().setFromPoints([at.clone().add(moonAt), new THREE.Vector3()]),
+        threadMat,
+      );
+      thread.frustumCulled = false;
+      earth.scene.add(thread);
+      return { at, dashed: ring(true), solid: ring(false), pts, spotGlow, threadMat };
+    }
+    const made = new Map<string, ReturnType<typeof mark>>();
+    const v = new THREE.Vector3();
+    // Fading out, the view keeps the builds it last had.
+    let list: NonNullable<Show["works"]> = [];
+
+    return (x: number, p: number, dt: number) => {
+      if (spec.mode === "works") list = spec.works ?? [];
+      const years = (dialsOf.works?.year ?? YEAR_0) - YEAR_0;
+      const focus = list[aimedWork()];
+      ground.uniforms.uOpacity.value = p * arrived(groundAt);
+      const flash = still ? 0 : Math.exp(-((clock % beat) / beat) * 5);
+      for (const w of list) {
+        if (!made.has(w.name)) made.set(w.name, mark(w));
+        const m = made.get(w.name)!;
+        const seen = w.name === focus?.name ? p : 0;
+        const built = w.queued && w.done !== null ? Math.min(1, Math.max(0, years / w.done)) : 0;
+        m.dashed.mat.uniforms.uOpacity.value = seen * (built >= 1 ? 0 : w.queued ? 0.8 : 0.45);
+        if (!still) m.dashed.holder.rotateZ(dt * 0.12);
+        m.solid.l.geometry.setDrawRange(0, 2 * Math.round(RING * built));
+        m.solid.mat.uniforms.uOpacity.value = 0.9 * seen;
+        const b = m.pts.geometry.attributes.aBright as THREE.BufferAttribute;
+        b.setX(0, 0.45 + 0.55 * built);
+        b.setX(1, (0.25 + 0.35 * built) * (0.7 + (0.3 + 0.7 * built) * flash));
+        b.needsUpdate = true;
+        m.spotGlow.uniforms.uOpacity.value = seen;
+        m.threadMat.uniforms.uOpacity.value = seen * (0.14 + 0.3 * built);
+      }
+
+      if (spec.mode === "works" && spec.onMarks) {
+        const w = parent.clientWidth;
+        const h = parent.clientHeight;
+        const marks: Mark[] = [];
+        const m = focus && made.get(focus.name);
+        if (m) {
+          v.copy(m.at).add(moonAt).project(earth.camera);
+          marks.push({ id: `site:${focus.name}`, x: ((v.x + 1) / 2) * w, y: ((1 - v.y) / 2) * h, a: v.z < 1 ? p : 0 });
+        }
+        // Earth, often behind us: then its way across the screen is the other side of the middle, far off.
+        const behind = v.set(0, 0, 0).applyMatrix4(earth.camera.matrixWorldInverse).z > 0;
+        v.set(0, 0, 0).project(earth.camera);
+        const k = behind ? -1000 : 1;
+        marks.push({ id: "earth", x: ((v.x * k + 1) / 2) * w, y: ((1 - v.y * k) / 2) * h, a: p * ramp(-x, 2.4, 3.2) });
+        spec.onMarks(marks);
+      }
+    };
+  }
+
   // ── Data that comes later: Earth's land and lights, and the stars ──
   let gone = false;
   let lightsData: Light[] | null = null;
@@ -1958,6 +2157,11 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
   let machines: ReturnType<typeof meeting> | null = null;
   let clues: ReturnType<typeof leading> | null = null;
   let sent: ReturnType<typeof sending> | null = null;
+  let builds: ReturnType<typeof building> | null = null;
+  /** Our builds: where the view's middle has moved to, in AU from Earth, and its hop there from where it was. */
+  const workShift = new THREE.Vector3();
+  const hop = { from: new THREE.Vector3(), to: new THREE.Vector3(), at: 0, secs: 0 };
+  const goal = new THREE.Vector3();
   const presence: Partial<Record<Mode, number>> = {};
   let lastClock = 0;
   function present(mode: Mode, dt: number) {
@@ -1975,7 +2179,26 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
   function draw() {
     const dt = Math.min(0.1, Math.max(0, clock - lastClock));
     lastClock = clock;
-    const { logD, D, target, cam, up } = pilot.at(clock);
+    const view = pilot.at(clock);
+    const { target, cam, up } = view;
+    // Our builds: the view's middle hops to the one in view, near its site, and home after. On the way the view backs
+    // off, so where it left and where it goes show together.
+    const work = spec.mode === "works" ? spec.works?.[aimedWork()] : undefined;
+    if (work) goal.copy(siteAt(work)).multiplyScalar(MOON_R * 0.45).add(moonAt).multiplyScalar(R_E_AU);
+    else goal.set(0, 0, 0);
+    if (!goal.equals(hop.to)) {
+      hop.from.copy(workShift);
+      hop.to.copy(goal);
+      hop.at = clock;
+      hop.secs = still ? 0 : 2.8;
+    }
+    const h = hop.secs ? easeInOut(Math.min(1, (clock - hop.at) / hop.secs)) : 1;
+    workShift.lerpVectors(hop.from, hop.to, h);
+    const back = 2 * hop.from.distanceTo(hop.to) * 4 * h * (1 - h);
+    target.add(workShift);
+    cam.add(workShift).addScaledVector(view.dir, back);
+    const D = view.D + back;
+    const logD = back ? Math.log10(D) : view.logD;
     // What doesn't fit and our messages: the view moves over to the middle of the path in view. Nearer than the stars
     // it stays on Earth, so a flight out to a path starts from Earth, and a flight home ends there.
     const P = (spec.mode === "leads" || spec.mode === "beams") && !still ? lookedAt() : null;
@@ -2009,6 +2232,9 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     const pMind = present("mind", dt);
     const pLeads = present("leads", dt);
     const pBeams = present("beams", dt);
+    const pWorks = present("works", dt);
+    // Close by our builds, the Moon's dots carry its face, so its globe goes dark under them.
+    moonGlobe.uniforms.uDay.value = 0.42 * (1 - 0.75 * pWorks);
     surface.uniforms.uOpacity.value = arrived(surfaceAt);
     // Who we are lights the cities in turn. Elsewhere they are all lit.
     surface.uniforms.uLit.value = 1 + ((dialsOf.people?.lit ?? 1) - 1) * pPeople;
@@ -2051,6 +2277,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       clues?.(pLeads);
     }
     if (pBeams > 0) (sent ??= sending())(x, pBeams);
+    if (pWorks > 0) (builds ??= building())(x, pWorks, dt);
     if (spec.onScale && framing) spec.onScale((D * 149597870.7) / focal, framing.w, framing.h);
 
     renderer.clear();
@@ -2136,6 +2363,28 @@ function onGlobe(lat: number, lon: number, r: number): [number, number, number] 
   const φ = lat * DEG;
   const λ = lon * DEG;
   return [r * Math.cos(φ) * Math.cos(λ), r * Math.sin(φ), -r * Math.cos(φ) * Math.sin(λ)];
+}
+
+/** The Moon's face, read off the atlas's Moon map: how bright it is at a latitude and east longitude, 0 to 255. The
+ *  seas are dark. */
+async function moonFace() {
+  const img = new Image();
+  img.src = moonMap;
+  await img.decode();
+  const W = 512;
+  const H = 256;
+  const c = document.createElement("canvas");
+  c.width = W;
+  c.height = H;
+  const g = c.getContext("2d", { willReadFrequently: true })!;
+  g.drawImage(img, 0, 0, W, H);
+  const d = g.getImageData(0, 0, W, H).data;
+  return (lat: number, lon: number) => {
+    const x = Math.min(W - 1, Math.floor((((lon / 360 + 0.5) % 1) + 1) % 1 * W));
+    const y = Math.min(H - 1, Math.max(0, Math.floor((0.5 - lat / 180) * H)));
+    const i = (y * W + x) * 4;
+    return (d[i] + d[i + 1] + d[i + 2]) / 3;
+  };
 }
 
 /** Land or sea, read off the atlas's day map: the sea is the blue. */

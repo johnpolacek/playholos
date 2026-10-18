@@ -1315,6 +1315,15 @@ Gathered 2026-10-14 for the round on Earth's outposts and colonies.
   - Where the sail's field balances the gas's push, electrons circle at about 6 times the gas's own cutoff at 10% of light speed, whatever the density. Zubrin's 12 kHz at 1 per cubic cm is 1.3 times it. Both sit where absorption is strong.
   - Sol sits in such gas, so every path out crosses some. A tenth of a parsec of it cuts the signal 50 to 40,000 times.
   - Used: Earth can't hear a sail brake, 2026-10-14.
+- **Where the Moon vault stands, checked 2026-10-18** · Mixed. For the Projects tab, where picking the vault flies the map to its place and opens its story.
+  - *The Sea of Tranquility pit.* 8.3355° N, 33.222° E, about 400 km from Apollo 11. Found by SELENE's cameras in 2009. Inner pit 88 to 100 m across, about 105 m deep ([Wikipedia](https://en.wikipedia.org/wiki/Mare_Tranquillitatis_pit)).
+  - *The cave.* [Carrer, Bruzzone et al. 2024](https://doi.org/10.1038/s41550-024-02302-y), Nature Astronomy 8, 1119, read through Wikipedia and press. Mini-RF radar from LRO, taken in 2010, reanalysed with 3D simulations: part of the echo comes from a conduit under the pit's west side, at least 45 m wide and 30 to 80 m long, 130 to 170 m down. The authors call an empty lava tube the most likely reading. The first radar evidence of a cave under a Moon pit. ESA's account gives other depths, so they stay loose.
+  - *Its warmth.* [Horvath, Hayne and Paige 2022](https://doi.org/10.1029/2022GL099710), Geophysical Research Letters, abstract and [NASA's account](https://www.nasa.gov/missions/lro/nasas-lro-finds-lunar-pits-harbor-comfortable-temperatures/). Modeled on this very pit: in permanent shade it holds near 290 K, about 17 °C, through the lunar day and night. Sunlit floors pass 420 K.
+  - *The next cave.* NASA picked GIMLI on 2026-10-05, a PSI-led lander and rover with radar, seismometers and a gravimeter, to test whether the Marius Hills pit opens into a cave. No launch date ([ScienceDaily](https://www.sciencedaily.com/releases/2026/10/261003234013.htm)).
+  - *Who tried before us.* Lonestar's Freedom, a small data center of 8 TB, rode Intuitive Machines' Athena to the south pole in March 2025. Athena landed on its side. Lonestar says its tests ran in transit and the payload survived ([FOX 13](https://fox13news.com/news/lunar-data-center-intact-despite-lunar-landers-botched-landing-st-pete-company-says)).
+  - *The Moon's face.* The dots read the atlas's Moon map, Solar System Scope's CC BY 4.0 composite of NASA imagery, already in assets/. Its longitude 0 sits mid-map: sampled at the pit and at Crisium, Imbrium and Serenitatis it is dark, near 80 of 255, and Tycho and the far side bright, near 190.
+  - Matters: the vault stands where the best evidence of a Moon cave is, the best place yet known there to keep a Mind out of the heat, cold and radiation.
+  - Used: game/lib/game/sites.ts, the Moon vault's place and story, and the map's view of it in game/lib/drift.ts, 2026-10-18.
 
 ### Seeing a fusion drive
 

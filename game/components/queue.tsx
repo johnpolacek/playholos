@@ -2,17 +2,34 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { type Beam, useBeams } from "@/components/beams";
 import { useGame } from "@/components/game-provider";
 import { realTime, tenths, YEAR_0 } from "@/lib/game/clock";
-import { type Send, SENDS } from "@/lib/game/knocks";
+import { SENDS } from "@/lib/game/knocks";
 import type { EarthPast } from "@/lib/game/past";
-import { Mark, Settings, toggleBuild, toggleLook, Unqueued, usePlan } from "@/components/picks";
+import {
+  type Aim,
+  buildStory,
+  focusable,
+  Mark,
+  MarkButton,
+  pointer,
+  Settings,
+  Story,
+  toggleBuild,
+  toggleLook,
+  Unqueued,
+  usePlan,
+  WASH,
+} from "@/components/picks";
+import { useWorks, type Work } from "@/components/works";
 import { BUILDS, EMPTY, events, FOMALHAUT, schedule, SEARCHES, STUDIES } from "@/lib/game/plan";
+import { SITES } from "@/lib/game/sites";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
 
 // The queue: what we plan to start at Year 0, and what is already on its way, each on its whole journey. Before Begin,
 // a tap on a queued row takes it out, and what we could also start waits below it. A message's thread
 // starts the year we sent it, decades back, with a notch at Year 0, and a reply runs out and back. A build's starts at
 // Year 0. Before Begin now waits at Year 0. After, it moves at 5 real minutes a Year, and what it passes is done.
-// Picking a message takes the map out to its star, to show where its light is now, and opens its story. Chosen from
+// Picking a message takes the map out to its star, to show where its light is now, and opens its story. A build with a
+// place on the map is picked the same way, by its row, and its mark takes it out. Chosen from
 // explorations/projects-timeline.html, 04.
 
 interface Row {
@@ -115,17 +132,8 @@ function Journey({ row, now, shown }: { row: Row; now: number; shown: boolean })
   );
 }
 
-/** A lit row's wash reaches past its edges without moving them. */
-const WASH = "bg-ink/[.04] shadow-[-10px_0_0_rgb(230_227_219/.04),10px_0_0_rgb(230_227_219/.04)]";
-
-/** A message row's part in the map: whether it is the one shown or pointed at, and what picks it. */
-interface Aim {
-  shown: boolean;
-  lit: boolean;
-  on: React.HTMLAttributes<HTMLLIElement>;
-}
-
-/** Before Begin, a queued row's tap takes it out of the queue. */
+/** A row: before Begin, a queued row's tap takes it out. A row that shows on the map is picked by a tap instead, and a
+ *  queued build of these is taken out by its mark. */
 function Item({ row, now, began, aim, take }: { row: Row; now: number; began: boolean; aim?: Aim; take?(): void }) {
   const done = over(row, now);
   const when =
@@ -138,27 +146,39 @@ function Item({ row, now, began, aim, take }: { row: Row; now: number; began: bo
         : began
           ? `in ${realTime(row.at - now)}`
           : `Year ${tenths(row.at)}`;
+  const split = !!(aim && take);
+  const keys = (act: () => void) => (e: React.KeyboardEvent) => {
+    if (e.key !== "Enter" && e.key !== " ") return;
+    e.preventDefault();
+    act();
+  };
   return (
     <li
       data-q="row"
       data-key={row.key}
-      {...aim?.on}
-      {...(take && {
-        role: "button",
-        tabIndex: 0,
-        "aria-pressed": true,
-        onClick: take,
-        onKeyDown: (e: React.KeyboardEvent) => {
-          if (e.key !== "Enter" && e.key !== " ") return;
-          e.preventDefault();
-          take();
-        },
-      })}
+      {...(aim && pointer(aim))}
+      {...(aim && !split && focusable(aim))}
+      {...(take &&
+        !split && {
+          role: "button",
+          tabIndex: 0,
+          "aria-pressed": true,
+          onClick: take,
+          onKeyDown: keys(take),
+        })}
       className={`group border-t border-rowline py-2 outline-none transition-[background-color,box-shadow] duration-200 ${aim || take ? "cursor-pointer" : ""} ${aim?.lit ? WASH : ""}`}
     >
       <div className="flex items-start gap-2.5">
-        {take && <Mark n={row.n ?? 0} look={row.kind === "look"} />}
-        <div className="flex min-w-0 grow items-baseline justify-between gap-3">
+        {take &&
+          (split ? (
+            <MarkButton n={row.n ?? 0} label={`Take ${row.name} out of the queue`} onClick={take} />
+          ) : (
+            <Mark n={row.n ?? 0} look={row.kind === "look"} />
+          ))}
+        <div
+          {...(split && focusable(aim!))}
+          className="flex min-w-0 grow items-baseline justify-between gap-3 outline-none"
+        >
           <span className="min-w-0 text-[13.5px] leading-snug">
             <b className={`font-medium ${row.kind === "reply" ? "text-other" : ""}`}>
               {row.n && !take ? `${row.n} · ${row.name}` : row.name}
@@ -173,38 +193,20 @@ function Item({ row, now, began, aim, take }: { row: Row; now: number; began: bo
         </div>
       </div>
       <Journey row={row} now={now} shown={!!aim?.shown} />
-      {row.msg && SENDS[row.msg] && <Story send={SENDS[row.msg]} reply={row.kind === "reply"} open={!!aim?.shown} />}
+      {row.msg && SENDS[row.msg] && (
+        <Story
+          lines={[
+            ["HOLDS", SENDS[row.msg].holds],
+            ["WHY", SENDS[row.msg].why],
+            ["FROM", SENDS[row.msg].from],
+            ["SINCE", SENDS[row.msg].since],
+          ]}
+          tone={row.kind === "reply" ? "other" : "you"}
+          open={!!aim?.shown}
+        />
+      )}
+      {row.kind === "build" && SITES[row.name] && <Story lines={buildStory(row.name)} tone="you" open={!!aim?.shown} />}
     </li>
-  );
-}
-
-/** A message's own story, opened while the map shows it: what it holds, why we sent it, from where, and since. */
-function Story({ send, reply, open }: { send: Send; reply: boolean; open: boolean }) {
-  const term = "pt-[3px] font-mono text-[9.5px] tracking-[.08em] text-muted";
-  return (
-    <div
-      aria-hidden={!open}
-      className={`grid transition-[grid-template-rows,opacity] duration-300 ease-out motion-reduce:transition-none ${open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}
-    >
-      <div className="min-h-0 overflow-hidden">
-        <dl
-          className={`mt-2.5 mb-0.5 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1.5 border-l pl-3 text-[12.5px] leading-snug ${reply ? "border-other/50" : "border-you/50"}`}
-        >
-          <dt className={term}>HOLDS</dt>
-          <dd>{send.holds}</dd>
-          <dt className={term}>WHY</dt>
-          <dd>{send.why}</dd>
-          <dt className={term}>FROM</dt>
-          <dd className="text-page-ink2">{send.from}</dd>
-          {send.since && (
-            <>
-              <dt className={term}>SINCE</dt>
-              <dd className="text-page-ink2">{send.since}</dd>
-            </>
-          )}
-        </dl>
-      </div>
-    </div>
   );
 }
 
@@ -244,7 +246,8 @@ export function Queue() {
   const { change } = usePlan();
 
   // Our messages, for the map. Picking one takes the map out to it, and pointing at another while it is out turns to
-  // that one. Leaving Projects brings the map home.
+  // that one. Our builds with places are the same, and the map shows one thing at a time. Leaving Projects brings the
+  // map home.
   const beams = useBeams();
   const { pick, peek, picked } = beams;
   const list: Beam[] = useMemo(
@@ -252,29 +255,38 @@ export function Queue() {
     [coming],
   );
   useEffect(() => () => pick([], null), [pick]);
-  const [hover, setHover] = useState<number | null>(null);
-  const point = (i: number | null) => {
-    setHover(i);
-    peek(i);
-  };
-  const toggle = (i: number) => pick(list, picked === i ? null : i);
+  const works = useWorks();
+  const { set: place, pick: pickWork, peek: peekWork } = works;
+  const placed: Work[] = useMemo(
+    () =>
+      Object.entries(SITES).map(([name, { site }]) => {
+        const queued = plan.builds.includes(name);
+        return { name, site, queued, done: queued ? (done[name] ?? null) : null };
+      }),
+    [plan.builds, done],
+  );
+  useEffect(() => place(placed), [place, placed]);
+  useEffect(() => () => pickWork(null), [pickWork]);
+  const [hover, setHover] = useState<string | null>(null);
   const aim = (i: number): Aim => ({
     shown: picked === i,
-    lit: picked === i || hover === i,
-    on: {
-      role: "button",
-      tabIndex: 0,
-      "aria-pressed": picked === i,
-      onClick: () => toggle(i),
-      onKeyDown: (e) => {
-        if (e.key !== "Enter" && e.key !== " ") return;
-        e.preventDefault();
-        toggle(i);
-      },
-      onPointerEnter: (e) => void (e.pointerType === "mouse" && point(i)),
-      onPointerLeave: (e) => void (e.pointerType === "mouse" && point(null)),
-      onFocus: (e) => void (e.currentTarget.matches(":focus-visible") && point(i)),
-      onBlur: () => point(null),
+    lit: picked === i || hover === list[i].key,
+    toggle: () => {
+      pick(list, picked === i ? null : i);
+      pickWork(null);
+    },
+    point: (on) => {
+      setHover(on ? list[i].key : null);
+      peek(on ? i : null);
+    },
+  });
+  const aimWork = (name: string): Aim => ({
+    shown: works.picked === name,
+    lit: works.picked === name || hover === name,
+    toggle: () => pickWork(works.picked === name ? null : name),
+    point: (on) => {
+      setHover(on ? name : null);
+      peekWork(on ? name : null);
     },
   });
 
@@ -311,7 +323,15 @@ export function Queue() {
   const search = SEARCHES.find((s) => s.id === plan.search)!;
 
   return (
-    <div ref={root} className="relative" onKeyDown={(e) => e.key === "Escape" && pick(list, null)}>
+    <div
+      ref={root}
+      className="relative"
+      onKeyDown={(e) => {
+        if (e.key !== "Escape") return;
+        pick(list, null);
+        pickWork(null);
+      }}
+    >
       <h3 className="mt-2 text-[10.5px] tracking-[.08em] text-muted">
         {began ? "UNDER WAY" : "QUEUED"} · {queued.length}
       </h3>
@@ -323,6 +343,7 @@ export function Queue() {
               row={r}
               now={now}
               began={began}
+              aim={r.kind === "build" && SITES[r.name] ? aimWork(r.name) : undefined}
               take={began ? undefined : () => change(r.kind === "look" ? toggleLook : toggleBuild(r.key))}
             />
           ))}
@@ -332,7 +353,7 @@ export function Queue() {
           Nothing queued. Our instruments keep watch, and the Mind keeps studying.
         </p>
       )}
-      {!began && <Unqueued />}
+      {!began && <Unqueued aim={aimWork} />}
 
       <h3 className="mt-3 text-[10.5px] tracking-[.08em] text-muted">ALREADY ON ITS WAY</h3>
       <ul>

@@ -3,6 +3,7 @@ import { useRef, useState } from "react";
 import { BeamsMap, useBeams } from "@/components/beams";
 import { ScanMap } from "@/components/scan";
 import { SkyArt, useSky } from "@/components/sky";
+import { useWorks, WorksMap } from "@/components/works";
 import type { Stop } from "@/lib/flight";
 
 // The map's five stops, and its outward button: each tap travels one stop out, and the last comes home.
@@ -20,12 +21,15 @@ const BUTTON = "absolute right-2.5 bottom-3 h-8 rounded-full border border-faint
 
 // The board: a strip of the map under the top bar, a window onto the game's one sky, which flies here from the
 // charter. On Scan and a lead's page it shows Earth's leads. On Projects, a message picked there takes it out to its
-// star. Elsewhere it rests at a stop, turning slowly, travels outward a stop a tap, and turns with a drag.
+// star, and a build to where it would stand. Elsewhere it rests at a stop, turning slowly, travels outward a stop a
+// tap, and turns with a drag.
 export function MapStrip() {
   const path = useLocation().pathname;
   const scan = path === "/" || path.startsWith("/lead/");
   const beams = useBeams();
   const aimed = path === "/projects" && beams.picked !== null;
+  const works = useWorks();
+  const built = path === "/projects" && works.picked !== null;
   const [tall, setTall] = useState(false);
 
   // Tall, the strip opens wider at its handle. Wide, the map fills the left of the screen, and needs no handle.
@@ -38,6 +42,14 @@ export function MapStrip() {
         <>
           <ScanMap className="absolute inset-0" />
           <span className={LABEL}>LEADS</span>
+        </>
+      ) : built ? (
+        <>
+          <WorksMap className="absolute inset-0" />
+          <span className={LABEL}>{works.picked!.toUpperCase()}</span>
+          <button onClick={() => works.pick(null)} className={BUTTON}>
+            Back to Earth ↙
+          </button>
         </>
       ) : aimed ? (
         <>
