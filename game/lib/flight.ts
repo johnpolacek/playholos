@@ -152,7 +152,7 @@ function framer({ earthAU, sunDir, eX, eN, eZ }: Sky) {
       .addScaledVector(z, Math.cos(el) * Math.sin(az))
       .addScaledVector(n, Math.sin(el));
 
-  return (logD: number, az: number, tilt: number, swing: number) => {
+  const frame = (logD: number, az: number, tilt: number, swing: number) => {
     const { up, dir } = view;
     const D = 10 ** logD;
     view.logD = logD;
@@ -182,6 +182,7 @@ function framer({ earthAU, sunDir, eX, eN, eZ }: Sky) {
     view.cam.copy(view.target).addScaledVector(dir, D);
     return view;
   };
+  return Object.assign(frame, { az0 });
 }
 
 export const easeInOut = (s: number) => (s < 0.5 ? 4 * s * s * s : 1 - (-2 * s + 2) ** 3 / 2);
@@ -283,6 +284,8 @@ export function createDirector({ still }: { still: boolean }) {
       } else last = to;
       return frame(...last);
     },
+    /** The turn that puts the camera off toward x, z in the Milky Way's plane, from the stars outward. */
+    facing: (x: number, z: number) => Math.atan2(z, x) - frame.az0,
     /** The map: flies to a stop. Returns the flight's length in seconds. */
     go(to: Stop, clock: number) {
       const from = map(clock)[0];

@@ -572,7 +572,11 @@ What Sol's own instruments have found nearby. For v2 open question 3.
 - **[Alpha Centauri A's candidate, S1](https://arxiv.org/abs/2508.03814)** · 4.4 ly. Imaged once by JWST in August 2024, missed in February and April 2025, with a 52% chance its orbit hid it. JWST observed it again on August 11 and 12, 2026: [programme 12628](https://www.stsci.edu/jwst-program-info/program/?program=12628), 4.5 hours with its mid-infrared spectrometer, seeking ammonia in the planet's light. The data are archived and no result is published as of 2026-10-13. The proposal says a bright background star blocks any further try until about 2030. Agent, from STScI's pages. Adopt the result when it is out.
 - **[Barnard's Star](https://ui.adsabs.harvard.edu/abs/2025ApJ...982L...1B/abstract)** · 6 ly. Four sub-Earths confirmed in 2025 after decades of false claims. Basant et al., MAROON-X and ESPRESSO.
 - **[82 Eridani d](https://arxiv.org/abs/2501.17092)** · 19.7 ly. At least 5 Earth masses, 650 days, eccentricity 0.45, swinging through the warm zone of a Sun-like star. Nari et al. 2025. Its air waits for the Habitable Worlds Observatory.
+  - *Checked 2026-10-17, by search:* at least 5.82 Earth masses, 1.354 AU out, from Nari et al. as quoted by [Wikipedia](https://en.wikipedia.org/wiki/82_G._Eridani_d) and press. The star gives 0.687 Suns of light ([Wikipedia](https://en.wikipedia.org/wiki/82_G._Eridani)). Its conservative warm zone is 0.833 to 1.450 AU ([a 2026 preprint](https://arxiv.org/pdf/2605.26217)). So the world swings from 0.74 to 1.96 AU, inside the warm zone's inner edge and well past its outer one.
+  - Used: its lead page in the Scan tab, drawn and measured.
 - **[Fomalhaut's collisions](https://phys.org/news/2025-12-hubble-captures-rare-collision-nearby.html)** · 25 ly. Its "planet" was a dust cloud from a collision, and a second cloud, cs2, appeared in 2023 Hubble images. Kalas and colleagues, December 2025. Theory expected one such collision in 100,000 years or longer, and two were seen in 20, close together on the belt's inner side ([ESA release](https://www.esa.int/Science_Exploration/Space_Science/Hubble_sees_asteroids_colliding_around_nearby_star)). Used: the v2 mock's Fomalhaut screen. Its third cloud is the seed's, not real.
+  - *Checked 2026-10-17, by search:* the first cloud, cs1, was first seen in 2004, and its path curved away from the star by 2013, as starlight pushes fine dust. cs2 sits 1.26 arcseconds, 23.4 AU, from where cs1 was found. Kalas's team has Hubble time to watch cs2 for three years, to see if it fades ([Sky & Telescope](https://skyandtelescope.org/astronomy-news/did-asteroids-collide-near-fomalhaut-again/), [ESA/Hubble heic2512](https://esahubble.org/news/heic2512/)).
+  - Used: its lead page in the Scan tab. The explanations and their words are the Mind's, from Year 0's science.
 - **[The Wow! signal, revised](https://arxiv.org/abs/2508.10657)** · 1977. Archival Ohio SETI data put it above 250 Jy at 1420.726 MHz, from two fields near 19h26m, −27°. Méndez and colleagues propose a hydrogen cloud brightened by a flare ([part I](https://arxiv.org/abs/2408.08513)).
 - **[3I/ATLAS](https://aasnova.org/2026/01/28/monthly-roundup-interstellar-visitor-3i-atlas/)** · An interstellar comet, found July 2025. Its water is rich in deuterium and it may be older than the Sun ([ESO](https://www.eso.org/public/news/eso2608/)). Its push off course fits ordinary outgassing ([preprint](https://arxiv.org/abs/2511.07450)). A radio search found only human interference ([report](https://www.sciencedaily.com/releases/2026/06/260621060309.htm)).
 - **Gliese 12 b** · 39.7 ly. Published: [Kuzuhara et al. 2024](https://arxiv.org/abs/2405.14708), ApJL 967, L21, and [Turner et al. 2025](https://arxiv.org/abs/2506.20564). Abstracts read 2026-10-12.
@@ -916,6 +920,10 @@ What a neighbor's world can plausibly be, beyond an Earth twin. Each roster entr
 - **[Yang, Boué, Fabrycky and Abbot 2014, slow rotation](https://arxiv.org/abs/1404.4992)** · Published, ApJL.
   - Slow rotators build thick clouds over their noon side and stay Earth-like at nearly twice the light of fast rotators.
   - Used: Sere.
+- **[Chen and Kipping 2017, forecasting masses and radii](https://arxiv.org/abs/1603.08614)** · Published, ApJ 834, 17.
+  - A mass-radius relation from 316 objects. Rocky worlds give way to worlds with thick gas at about 2 Earth masses.
+  - Caveat: the 2 Earth mass figure is from memory of the paper, not read at source this session. A 2023 study favors a sharper break than its smooth model ([arXiv 2310.16733](https://arxiv.org/pdf/2310.16733)).
+  - Used: the words on a felt world's lead page. Under 1.5 Earths, rock is likely. From 1.5 to 3, rock and gas are roughly even. Above 3, gas is likely. A tug gives only the least mass.
 - **[Cowan and Abbot 2014, super-Earths need not be water worlds](https://iopscience.iop.org/article/10.1088/0004-637X/781/1/27)** · Published, ApJ.
   - A planet with plate tectonics keeps dry land if its water is under about 0.2% of its mass, at any size, since deeper seafloors push more water into the mantle.
   - Used: Varn, Sabe, Lusk and Kesh's continents.
@@ -1514,6 +1522,8 @@ Results the design is waiting on. Check each when its date comes.
 - **JWST's August 2026 observation of Alpha Centauri A** · observed August 11 and 12, programme 12628. Not published as of 2026-10-13. Adopt the result for candidate S1.
 
 ## To check
+
+- Chen and Kipping 2017's break between rock and gas, about 2 Earth masses: read it at source. It sets the words on felt worlds' lead pages.
 
 - Closed 2026-10-16: the long roads' schedules. The telescope and the mass driver hold. The megatonne mine and belt mining have no real schedule, and stay v1's. See The long roads, rechecked.
 

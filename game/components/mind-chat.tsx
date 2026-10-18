@@ -55,7 +55,7 @@ export function MindChat({ ask }: { ask?: string }) {
               {text}
             </div>
           ) : (
-            <div key={message.id} className="flex max-w-[86%] flex-col gap-[3px] self-start rounded-xl border border-l-[3px] border-faint border-l-you bg-paper px-3 py-[9px] text-[13.5px] leading-[1.45] whitespace-pre-wrap">
+            <div key={message.id} className="flex max-w-[86%] flex-col gap-[3px] self-start rounded-xl border border-faint bg-paper px-3 py-[9px] text-[13.5px] leading-[1.45] whitespace-pre-wrap">
               <span className="font-mono text-[9.5px] tracking-[.1em] text-you">THE MIND</span>
               {text || "…"}
             </div>

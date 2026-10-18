@@ -1,10 +1,12 @@
+import { Scan } from "@/components/scan";
 import { TabHead } from "@/components/tab-head";
 
-export default function Home() {
+// What we know of the sky: Earth's leads, drawn on the map and listed here.
+export default function ScanTab() {
   return (
     <>
-      <TabHead title="HOME" />
-      <p className="text-sm text-muted">Earth’s leads and the stars near Sol.</p>
+      <TabHead title="SCAN" />
+      <Scan />
     </>
   );
 }

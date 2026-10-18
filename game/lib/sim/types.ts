@@ -76,6 +76,9 @@ export interface FeltWorld {
   a: number;
   by: string;
   year: number;
+  /** Its star, from the catalogs: its kind, and its warm zone in AU. */
+  kind?: string;
+  hz?: [number, number];
 }
 
 /** A signal Earth's watch caught, as received. */

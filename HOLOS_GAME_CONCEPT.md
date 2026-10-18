@@ -692,6 +692,12 @@ Settled 2026-10-10.
 - **The charter.** The Mind proposes founding lines from Earth's history and dials, and the player picks one. See "The dials".
 - **Meeting the Mind.** Settled 2026-10-17. Earth's real dishes, telescopes and data centers light up as the Mind names them, and threads rise from each into one point. Its first words follow, then its first advice from the charter's strongest lean, which it never acts on. Three questions, "What doesn't fit?", "Who has heard us?" and "Plan our waking.", each open the Mind's chat with that question asked. The tour follows, as v1 had it.
 - **The leads.** Settled 2026-10-17. "What doesn't fit?" opens a star map, not the chat. The stars within 50 ly seen from above, and Earth's leads lit one by one, each with a thread out from Sol and a stalk down to the Galaxy's plane: 82 Eridani d, every felt world nearest first, Fomalhaut's clouds, then Luyten's Star's reply window. Each row gives how long light takes to reach it in play time, which is what a call costs. "Ask about them" opens the chat with the question asked. "Plan our waking" goes on.
+  - *The Scan tab, built 2026-10-17.* Home and Reports become one tab, Scan, the first. Leads and what lands are about the same stars, so they share a place. Its map shows the leads as the leads screen does, and the tab lists them. Pointing at a row turns the map to its star. Each row's Ask opens the chat with its own question.
+  - *Lead pages, built 2026-10-17.* A row opens its lead's page, not the chat. The map flies to the star and holds there. The page is a report: a drawing, what we measured, what it could be with the Mind's word for each, and what would tell us. "Ask the Mind about it" comes last.
+    - *Drawn.* A world's orbit from above, against its star's warm zone, with Earth's orbit for scale when it fits. Fomalhaut's belt with its two clouds. Our messages' trip to Luyten's Star, the earliest replies coming back, and now.
+    - *Felt worlds' words follow a rule,* from the least mass: rock or a small gas world. A world too close to its star for the infrared telescope to split says so.
+    - Set aside: the chat as the first step. It hid the map and the list.
+  - Not built yet: what lands joining its lead's page and moving its words, and a mark on the tab when it does.
 - **Planning.** The player queues builds, observations, standing orders and what wakes them, sets how much thought goes to studies, and sets what each instrument searches when idle. Nothing happens yet.
   - *Built 2026-10-17.* The Mind says what it would start with, from the charter's strongest lean, and marks those builds "we would". It queues nothing. One tap queues its picks, for the player to change.
   - The player picks builds in order, the one observation open at Year 0, a share of thought for studies, and what idle instruments sweep.
@@ -721,7 +727,7 @@ Settled 2026-10-10.
     - Studied from Begin, on a tenth of thought: Gliese 432 A's crossings, 82 Eridani, Gliese 12 b, Barnard's Star, Tau Ceti, Epsilon Indi, then LHS 1140 b.
     - Offered as observations: Gliese 12 b's day side, and Fomalhaut through a Year.
     - Arrivals: the 2009 message at Kappa¹ Ceti, 0:30. The 2003 message at Gliese 208, 4:00.
-    - Results pile up while the player talks, and wait in Reports.
+    - Results pile up while the player talks, and wait on their leads in Scan.
 
 ## The seed, drawn
 

@@ -1,6 +1,8 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useRef, useState } from "react";
+import { ScanMap } from "@/components/scan";
 import { SkyArt, useSky } from "@/components/sky";
 import type { Stop } from "@/lib/flight";
 
@@ -13,12 +15,47 @@ const STAGES: { id: Stop; name: string; next: string }[] = [
   { id: "group", name: "LOCAL GROUP", next: "Back to Earth ↙" },
 ];
 
+const LABEL =
+  "pointer-events-none absolute top-2 left-2.5 rounded-[9px] border border-faint bg-paper px-[7px] py-0.5 font-mono text-[9.5px] tracking-[.06em]";
+
 // The board: a strip of the map under the top bar, a window onto the game's one sky, which flies here from the
-// charter. It rests at a stop, turning slowly, travels outward a stop a tap, and turns with a drag.
+// charter. On Scan and a lead's page it shows Earth's leads. Elsewhere it rests at a stop, turning slowly, travels
+// outward a stop a tap, and turns with a drag.
 export function MapStrip() {
+  const path = usePathname();
+  const scan = path === "/" || path.startsWith("/lead/");
+  const [tall, setTall] = useState(false);
+
+  // Tall, the strip opens wider at its handle. Wide, the map fills the left of the screen, and needs no handle.
+  return (
+    <div
+      data-shell="map"
+      className={`relative shrink-0 overflow-hidden border-b border-faint transition-[height] duration-300 wide:col-start-1 wide:row-span-2 wide:row-start-2 wide:h-auto wide:border-b-0 ${tall ? "h-[72%]" : "h-[45%]"}`}
+    >
+      {scan ? (
+        <>
+          <ScanMap className="absolute inset-0" />
+          <span className={LABEL}>LEADS</span>
+        </>
+      ) : (
+        <Stops />
+      )}
+      <button
+        onClick={() => setTall(!tall)}
+        aria-label={tall ? "Show less of the map" : "Show more of the map"}
+        aria-expanded={tall}
+        className="absolute bottom-0 left-1/2 flex h-5 w-16 -translate-x-1/2 items-end justify-center pb-[5px] wide:hidden"
+      >
+        <span className="h-1 w-9 rounded-sm bg-faint" />
+      </button>
+    </div>
+  );
+}
+
+// The map at its stops. Back from Scan, it opens on Earth again.
+function Stops() {
   const sky = useSky();
   const [stage, setStage] = useState(0);
-  const [tall, setTall] = useState(false);
   const held = useRef<{ x: number; y: number } | null>(null);
 
   function travel() {
@@ -40,12 +77,8 @@ export function MapStrip() {
   };
   const release = () => (held.current = null);
 
-  // Tall, the strip opens wider at its handle. Wide, the map fills the left of the screen, and needs no handle.
   return (
-    <div
-      data-shell="map"
-      className={`relative shrink-0 overflow-hidden border-b border-faint transition-[height] duration-300 wide:col-start-1 wide:row-span-2 wide:row-start-2 wide:h-auto wide:border-b-0 ${tall ? "h-[72%]" : "h-[45%]"}`}
-    >
+    <>
       <SkyArt mode="map" className="absolute inset-0" />
       <div
         onPointerDown={press}
@@ -54,20 +87,10 @@ export function MapStrip() {
         onPointerCancel={release}
         className="absolute inset-0 cursor-grab touch-none active:cursor-grabbing"
       />
-      <span className="pointer-events-none absolute top-2 left-2.5 rounded-[9px] border border-faint bg-paper px-[7px] py-0.5 font-mono text-[9.5px] tracking-[.06em]">
-        {STAGES[stage].name}
-      </span>
+      <span className={LABEL}>{STAGES[stage].name}</span>
       <button onClick={travel} className="absolute right-2.5 bottom-3 h-8 rounded-full border border-faint bg-paper px-3 text-xs">
         {STAGES[stage].next}
       </button>
-      <button
-        onClick={() => setTall(!tall)}
-        aria-label={tall ? "Show less of the map" : "Show more of the map"}
-        aria-expanded={tall}
-        className="absolute bottom-0 left-1/2 flex h-5 w-16 -translate-x-1/2 items-end justify-center pb-[5px] wide:hidden"
-      >
-        <span className="h-1 w-9 rounded-sm bg-faint" />
-      </button>
-    </div>
+    </>
   );
 }

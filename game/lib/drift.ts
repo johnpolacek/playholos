@@ -338,6 +338,19 @@ class Cloud {
   }
 }
 
+const leadsAt = new Map<string, THREE.Vector3 | null>();
+/** Where a lead's star is, in light-years from Sol in the galactic frame. None for a star scripts/leads.mjs lacks. */
+function leadAt(id: string) {
+  if (!leadsAt.has(id)) {
+    const at = (LEADS as unknown as Record<string, [ra: number, dec: number, ly: number]>)[id];
+    leadsAt.set(id, at ? new THREE.Vector3().copy(skyBasis(at[0] * 15, at[1]).radial).multiplyScalar(at[2]) : null);
+  }
+  return leadsAt.get(id)!;
+}
+
+/** An angle brought round to between -π and π. */
+const wrap = (a: number) => ((((a + Math.PI) % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI)) - Math.PI;
+
 interface Layer {
   scene: THREE.Scene;
   camera: THREE.PerspectiveCamera;
@@ -357,6 +370,45 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
   /** Each screen's last dials, so its extras can fade out on them after it has gone. */
   const dialsOf: Partial<Record<Mode, Dials>> = { [first.mode]: first.dials };
   const drift = (t: number, period: number) => (still ? 0 : (2 * Math.PI * t) / period);
+  /** What doesn't fit: the lead the Will is looking at, counted from 0, once all are lit. -1 for none. */
+  const looking = () => {
+    const n = spec.leads?.length ?? 0;
+    return (dialsOf.leads?.found ?? n) < n ? -1 : (dialsOf.leads?.focus ?? 0) - 1;
+  };
+  /** Where it is, in light-years from Sol. */
+  const lookedAt = () => {
+    const id = spec.leads?.[looking()];
+    return id ? leadAt(id) : null;
+  };
+  /** How fast the view eases to a lead and back, per second. */
+  const LOOK = 1.6;
+  // What doesn't fit's view: from high above, turning slowly. Looking at one lead, the camera comes round to its side,
+  // down near the plane, and in close, so its path out from Sol shows in depth: how far, and how high or low.
+  function leadsPose(): Pose {
+    let at: number | null = null;
+    let [logD, az, tilt] = [7.0, 0, 0.75];
+    return (t) => {
+      if (still) return [7.0, 1.1, 0.75, 0];
+      if (at === null) az = 1.1 + drift(t, 600);
+      const dt = at === null ? 0 : Math.min(0.1, Math.max(0, t - at));
+      at = t;
+      const k = 1 - Math.exp(-dt * LOOK);
+      const P = lookedAt();
+      if (P) {
+        // Whichever side is nearer, about 9° above the plane, near enough that the path fills the view.
+        const turns = [pilot.facing(-P.z, P.x), pilot.facing(P.z, -P.x)].map((a) => wrap(a - az));
+        az += (Math.abs(turns[0]) < Math.abs(turns[1]) ? turns[0] : turns[1]) * k;
+        logD += (Math.min(7.0, Math.max(6.3, Math.log10(2.5 * P.length() * LY_AU))) - logD) * k;
+        tilt += (-0.3 - tilt) * k;
+      } else {
+        az += drift(dt, 600);
+        logD += (7.0 - logD) * k;
+        tilt += (0.75 - tilt) * k;
+      }
+      return [logD, az, tilt, 0];
+    };
+  }
+
   /** Where each screen looks. */
   function poseFor({ mode, dials: d }: Show): Pose | "title" | "map" {
     switch (mode) {
@@ -381,7 +433,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         return () => [-3.62, 0.7, 0.22, 0];
       // What doesn't fit: the same stars from higher, so each lead's height off the Galaxy's plane shows.
       case "leads":
-        return (t) => [7.0, 1.1 + drift(t, 600), 0.75, 0];
+        return leadsPose();
       // The charter: Earth and the Moon, small and far.
       case "charter":
         return (t) => [-1.95, 0.5 + drift(t, 400), 0.3, 0];
@@ -1379,13 +1431,8 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
 
   // ── What doesn't fit: Earth's leads among the stars within 50 light-years ──
   function leading(ids: string[]) {
-    const where = LEADS as unknown as Record<string, [ra: number, dec: number, ly: number]>;
-    const leads = ids
-      .filter((id) => where[id])
-      .map((id) => {
-        const [ra, dec, ly] = where[id];
-        return { id, at: new THREE.Vector3().copy(skyBasis(ra * 15, dec).radial).multiplyScalar(ly) };
-      });
+    const leads = ids.filter(leadAt).map((id) => ({ id, at: leadAt(id)! }));
+    const v = new THREE.Vector3();
     // Rings every ten light-years in the Galaxy's plane, as on Where things stand.
     const ringMat = line("ink", 0);
     const RINGS = [10, 20, 30, 40, 50];
@@ -1426,15 +1473,56 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     );
     stalks.frustumCulled = false;
     stars.scene.add(stalks);
+    // The lead the Will looks at, in depth: its shadow on the plane and its stalk, square to each other, and a bead at
+    // each light-year along its thread.
+    const beads = new Cloud();
+    const paths = leads.map(({ id, at }) => {
+      const from = beads.size.length;
+      const ly = at.length();
+      for (let y = 1; y < ly; y++) {
+        v.copy(at).multiplyScalar(y / ly);
+        beads.add(v.x, v.y, v.z, 4.5, 0, id === "Luyten's Star" ? K.lamp : K.mind);
+      }
+      const mat = line("ink", 0);
+      const legs = new THREE.LineSegments(
+        new THREE.BufferGeometry().setAttribute(
+          "position",
+          new THREE.Float32BufferAttribute([0, 0, 0, at.x, 0, at.z, at.x, 0, at.z, at.x, at.y, at.z], 3),
+        ),
+        mat,
+      );
+      legs.frustumCulled = false;
+      stars.scene.add(legs);
+      return { from, to: beads.size.length, mat };
+    });
+    const beadGlow = glow({ fixed: true });
+    const beadPts = beads.points(beadGlow);
+    // And a pulse of light along it, sped up: out to the star, a breath there, and back. A call, and an answer.
+    const LIGHT = 10;
+    const TRAIL = 8;
+    const pulse = new Cloud();
+    pulse.add(0, 0, 0, 34, 0, K.mind);
+    for (let j = 0; j <= TRAIL; j++) pulse.add(0, 0, 0, 10 - j * 0.8, 0, K.mind);
+    const pulseGlow = glow({ fixed: true });
+    const pulsePts = pulse.points(pulseGlow);
+    stars.scene.add(beadPts, pulsePts);
+    const looked = leads.map(() => 0);
+    let pulseOf = -1;
+    let pulseAt = 0;
+    let then = clock;
     // The other stars, faint, once the catalog has come.
     let dim: THREE.ShaderMaterial | null = null;
-    const v = new THREE.Vector3();
 
     return (p: number) => {
       const d = dialsOf.leads;
       const found = d?.found ?? leads.length;
       const grid = d?.grid ?? 1;
-      const focus = (d?.focus ?? 0) - 1;
+      const focus = looking();
+      const dt = Math.min(0.1, Math.max(0, clock - then));
+      then = clock;
+      const ease = still ? 1 : 1 - Math.exp(-dt * LOOK * 2);
+      looked.forEach((l, i) => (looked[i] = l + ((i === focus ? 1 : 0) - l) * ease));
+      const any = Math.max(0, ...looked);
       if (!dim && within50.length) {
         const cold = new Cloud();
         for (let i = 0; i < within50.length; i += 4) cold.add(within50[i], within50[i + 1], within50[i + 2], 2, 0.45, K.ink);
@@ -1446,11 +1534,41 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       coreGlow.uniforms.uOpacity.value = p;
       haloGlow.uniforms.uOpacity.value = p;
       feetGlow.uniforms.uOpacity.value = p;
+      beadGlow.uniforms.uOpacity.value = p;
+      pulseGlow.uniforms.uOpacity.value = p;
       stalkMat.uniforms.uOpacity.value = 0.22 * p;
       // Lit in turn: the thread runs out from Sol, then the star comes on with a flare, then breathes.
       const shown = leads.map((_, i) => Math.min(1, Math.max(0, found - i)));
       const coreB = corePts.geometry.attributes.aBright as THREE.BufferAttribute;
       const haloB = haloPts.geometry.attributes.aBright as THREE.BufferAttribute;
+      const beadB = beadPts.geometry.attributes.aBright as THREE.BufferAttribute;
+      // The pulse starts out from Sol each time the Will looks at another lead.
+      if (focus !== pulseOf) [pulseOf, pulseAt] = [focus, clock];
+      const run = leads[focus];
+      let u = -1;
+      let back = false;
+      let arrive = 0;
+      if (run && !still) {
+        const go = run.at.length() / LIGHT;
+        const t = (clock - pulseAt) % (2 * go + 1.6);
+        if (t < go) u = t / go;
+        else if (t < go + 0.5) arrive = Math.sin((Math.PI * (t - go)) / 0.5);
+        else if (t < 2 * go + 0.5) [u, back] = [1 - (t - go - 0.5) / go, true];
+      }
+      const pos = pulsePts.geometry.attributes.position as THREE.BufferAttribute;
+      const pulseB = pulsePts.geometry.attributes.aBright as THREE.BufferAttribute;
+      const pulseK = pulsePts.geometry.attributes.aKind as THREE.BufferAttribute;
+      for (let j = 0; j < pos.count; j++) {
+        const lag = (Math.max(0, j - 1) * 0.5) / (run?.at.length() ?? 1);
+        const uj = back ? u + lag : u - lag;
+        const on = u >= 0 && uj >= 0 && uj <= 1;
+        if (on) v.copy(run.at).multiplyScalar(uj);
+        pos.setXYZ(j, v.x, v.y, v.z);
+        const b = j === 0 ? 0.45 : (1 - (j - 1) / (TRAIL + 1)) ** 2;
+        pulseB.setX(j, on ? b * looked[focus] * (back ? 0.7 : 1) : 0);
+        pulseK.setX(j, back ? K.lamp : K.mind);
+      }
+      pos.needsUpdate = pulseB.needsUpdate = pulseK.needsUpdate = true;
       leads.forEach(({ at }, i) => {
         const k = shown[i];
         const reach = easeInOut(Math.min(1, k / 0.6));
@@ -1459,14 +1577,19 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         v.copy(at).multiplyScalar(reach);
         pos.setXYZ(1, v.x, v.y, v.z);
         pos.needsUpdate = true;
-        threads[i].mat.uniforms.uOpacity.value = (i === focus ? 0.7 : 0.3) * p * Math.min(1, k * 4);
+        const seen = looked[i];
+        threads[i].mat.uniforms.uOpacity.value =
+          (0.3 + 0.4 * seen - 0.15 * any * (1 - seen)) * p * Math.min(1, shown[i] * 4);
+        paths[i].mat.uniforms.uOpacity.value = 0.3 * seen * lit * p;
+        for (let b = paths[i].from; b < paths[i].to; b++) beadB.setX(b, 0.9 * seen * lit);
         coreB.setX(i, lit);
         const flare = 4 * lit * (1 - lit);
         const breathe = 0.35 + 0.15 * Math.sin(clock * 1.8 + i * 1.7);
-        haloB.setX(i, lit * (i === focus ? 0.9 : breathe) + flare);
+        haloB.setX(i, lit * (breathe + (0.9 - breathe) * seen) + flare + (i === focus ? 0.8 * arrive : 0));
       });
       coreB.needsUpdate = true;
       haloB.needsUpdate = true;
+      beadB.needsUpdate = true;
 
       if (spec.mode === "leads" && spec.onMarks) {
         const w = parent.clientWidth;
@@ -1481,14 +1604,15 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         });
         const sol = onScreen(new THREE.Vector3());
         marks.push({ id: "Sol", x: sol.x, y: sol.y, a: p });
-        // Each ring is named where it is lowest on screen, nearest the viewer.
+        // Each ring is named where it is lowest on screen, nearest the viewer, and not while a lead's path is shown,
+        // where the rings lie nearly edge on.
         for (const r of RINGS) {
           let best = { x: 0, y: -Infinity, z: 2 };
           for (let i = 0; i < 24; i++) {
             const s = onScreen(ringAt(r, i, 24));
             if (s.y > best.y) best = s;
           }
-          marks.push({ id: `ring:${r}`, x: best.x, y: best.y, a: best.z < 1 ? p * grid : 0 });
+          marks.push({ id: `ring:${r}`, x: best.x, y: best.y, a: best.z < 1 ? p * grid * (1 - any) : 0 });
         }
         spec.onMarks(marks);
       }
@@ -1646,6 +1770,8 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
   let clock = 0;
   let dirty = true;
   const look = new THREE.Vector3();
+  const shift = new THREE.Vector3();
+  const mid = new THREE.Vector3();
   // Each screen's extras: built when first shown, and faded in and out as their screen comes and goes.
   let kit: ReturnType<typeof inheritance> | null = null;
   let road: ReturnType<typeof sunsRoad> | null = null;
@@ -1670,6 +1796,11 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     const dt = Math.min(0.1, Math.max(0, clock - lastClock));
     lastClock = clock;
     const { logD, D, target, cam, up } = pilot.at(clock);
+    // What doesn't fit: the view moves over to the middle of the path the Will is looking at.
+    const P = spec.mode === "leads" && !still ? lookedAt() : null;
+    shift.lerp(P ? mid.copy(P).multiplyScalar(0.5 * LY_AU) : mid.set(0, 0, 0), 1 - Math.exp(-dt * LOOK));
+    target.add(shift);
+    cam.add(shift);
     frameLens();
 
     for (const L of layers) {

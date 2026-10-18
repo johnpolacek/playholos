@@ -8,9 +8,10 @@ export type Voices = Record<string, { hail: string[]; close: string[] }>;
 
 export function earthKnows(world: World, year: number, voices: Voices = {}): EarthView {
   const shown = (id: string) => world.stars[id]?.shown ?? id;
-  // Earth's finds at Year 0: every world whose tug shows by 2040. Measured, not understood.
+  // Earth's finds at Year 0: every world whose tug shows by 2040. Measured, not understood. Its star is in the catalogs.
   const felt: FeltWorld[] = world.finds.map((f) => ({
     star: shown(f.star), d: f.d, minMass: f.msini, periodDays: f.periodDays, a: f.a, by: f.by, year: f.year,
+    kind: world.stars[f.star]?.kind, hz: world.stars[f.star]?.hz,
   }));
   // Signals that have arrived and were caught. Until Earth's works are ported, only Year 0's sky watch listens.
   const heard: Heard[] = [];
