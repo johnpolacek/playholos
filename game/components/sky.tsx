@@ -91,6 +91,7 @@ export function SkyArt({
   dials,
   moments,
   leads,
+  beams,
   onFrame,
   onMind,
   onMarks,
@@ -119,6 +120,7 @@ export function SkyArt({
       dials,
       moments,
       leads,
+      beams,
       rect,
       onFrame,
       onMind: onMind && ((x, y) => onMind(x - at.current.x, y - at.current.y)),
@@ -128,7 +130,7 @@ export function SkyArt({
       onScale,
     });
     onReady?.(flight);
-  }, [sky, mode, dials, moments, leads, onFrame, onMind, onMarks, onScale, onReady]);
+  }, [sky, mode, dials, moments, leads, beams, onFrame, onMind, onMarks, onScale, onReady]);
 
   return (
     <div ref={box} aria-hidden className={className}>

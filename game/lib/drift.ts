@@ -10,6 +10,7 @@ import { GALAXIES, galaxyExtent, galaxyPosition, galaxyViewRadius } from "../../
 import { GALACTIC_CENTER, LY_AU, eclipticToGalactic } from "../../src/navigation.js";
 import { skyBasis } from "../../src/coordinates.js";
 import { AGE, WHOLE_ROAD, agoAt, place as placeOf, roadZoom } from "./game/road";
+import { YEAR_0 } from "./game/clock";
 import { KNOCKS, RADARS_SINCE, TARGET_DEC } from "./game/knocks";
 import SKY from "./game/sky.json";
 import LEADS from "./game/leads.json";
@@ -45,7 +46,7 @@ export interface Dials {
   u?: number;
   /** Earth wakes, and the Sun's light on the road fades. */
   earth?: number;
-  /** The year, as Earth's radar shell spreads from 1950. */
+  /** The year, as Earth's radar shell spreads from 1950, or as our messages fly. */
   year?: number;
   /** The map's rings and stars come in. */
   grid?: number;
@@ -57,12 +58,13 @@ export interface Dials {
   compute?: number;
   /** What doesn't fit: how many of Earth's leads are lit, one by one, from 0 to all of them. */
   found?: number;
-  /** The lead the Will is looking at, counted from 1. 0 for none. */
+  /** The lead the Will is looking at, or the message, counted from 1. 0 for none. */
   focus?: number;
 }
 
 /** What the sky shows: the title, the map, or one of the screens before the shell. */
-export type Mode = "title" | "map" | "wake" | "origins" | "people" | "stand" | "inherit" | "charter" | "mind" | "leads";
+export type Mode =
+  "title" | "map" | "wake" | "origins" | "people" | "stand" | "inherit" | "charter" | "mind" | "leads" | "beams";
 
 /** One screen's view of the sky. */
 export interface Show {
@@ -77,9 +79,12 @@ export interface Show {
   onFrame?(fromEarthAU: number): void;
   /** For "leads": the stars of Earth's leads, by the names players see, in the order they are lit. */
   leads?: string[];
+  /** For "beams": our messages on their way, each by its star, the decimal year we sent it, the light-years it goes,
+   *  and whether it is the reply that could come back. */
+  beams?: { star: string; sent: number; ly: number; reply: boolean }[];
   /** For "people" and "mind": where the Mind is on screen, in CSS pixels, each frame. */
   onMind?(x: number, y: number): void;
-  /** For "inherit", "stand" and "leads": where their labeled places are on screen, each frame. */
+  /** For "inherit", "stand", "leads" and "beams": where their labeled places are on screen, each frame. */
   onMarks?(marks: Mark[]): void;
   /** For "inherit": km per CSS pixel at the art's center, and the art's size. */
   onScale?(kmPerPx: number, w: number, h: number): void;
@@ -348,6 +353,16 @@ function leadAt(id: string) {
   return leadsAt.get(id)!;
 }
 
+const targetsAt = new Map<string, THREE.Vector3>();
+/** Where a star Earth knocked on is, in light-years from Sol in the galactic frame. */
+function targetAt(name: string) {
+  if (!targetsAt.has(name)) {
+    const [ra, ly] = (SKY.targets as unknown as Record<string, [ra: number, ly: number]>)[name];
+    targetsAt.set(name, new THREE.Vector3().copy(skyBasis(ra * 15, TARGET_DEC[name] ?? 0).radial).multiplyScalar(ly));
+  }
+  return targetsAt.get(name)!;
+}
+
 /** An angle brought round to between -π and π. */
 const wrap = (a: number) => ((((a + Math.PI) % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI)) - Math.PI;
 
@@ -375,15 +390,22 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     const n = spec.leads?.length ?? 0;
     return (dialsOf.leads?.found ?? n) < n ? -1 : (dialsOf.leads?.focus ?? 0) - 1;
   };
-  /** Where it is, in light-years from Sol. */
+  /** Our message in view, counted from 0. -1 for none. */
+  const aimed = () => (dialsOf.beams?.focus ?? 0) - 1;
+  /** Where it is, the lead or the message's star, in light-years from Sol. */
   const lookedAt = () => {
+    if (spec.mode === "beams") {
+      const b = spec.beams?.[aimed()];
+      return b ? targetAt(b.star) : null;
+    }
     const id = spec.leads?.[looking()];
     return id ? leadAt(id) : null;
   };
   /** How fast the view eases to a lead and back, per second. */
   const LOOK = 1.6;
   // What doesn't fit's view: from high above, turning slowly. Looking at one lead, the camera comes round to its side,
-  // down near the plane, and in close, so its path out from Sol shows in depth: how far, and how high or low.
+  // down near the plane, and in close, so its path out from Sol shows in depth: how far, and how high or low. Our
+  // messages are seen the same way, each on its path out to its star.
   function leadsPose(): Pose {
     let at: number | null = null;
     let [logD, az, tilt] = [7.0, 0, 0.75];
@@ -433,6 +455,9 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         return () => [-3.62, 0.7, 0.22, 0];
       // What doesn't fit: the same stars from higher, so each lead's height off the Galaxy's plane shows.
       case "leads":
+        return leadsPose();
+      // Our messages: the same, from beside the one in view.
+      case "beams":
         return leadsPose();
       // The charter: Earth and the Moon, small and far.
       case "charter":
@@ -1619,6 +1644,158 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     };
   }
 
+  // ── Our messages on their way: each a path from Earth to its star, lit as far as its light has come ──
+  function sending() {
+    const origin = new THREE.Vector3();
+    // Each path starts at Earth, so the view can start there too: from Earth a path is a point on the sky, and it
+    // opens out as the camera pulls back.
+    const home = earthAU.clone().divideScalar(LY_AU);
+    const head = new THREE.Vector3();
+    const v = new THREE.Vector3();
+    // Rings every ten light-years in the Galaxy's plane, as on What doesn't fit, once past the Oort cloud.
+    const ringMat = line("ink", 0);
+    for (let r = 10; r <= 50; r += 10)
+      stars.scene.add(
+        loop(
+          Array.from(
+            { length: 128 },
+            (_, i) =>
+              new THREE.Vector3(r * Math.cos((i / 128) * 2 * Math.PI), 0, r * Math.sin((i / 128) * 2 * Math.PI)),
+          ),
+          ringMat,
+        ),
+      );
+    const seg = (kind: Kind) => {
+      const mat = line(kind, 0);
+      const l = new THREE.Line(
+        new THREE.BufferGeometry().setAttribute("position", new THREE.BufferAttribute(new Float32Array(6), 3)),
+        mat,
+      );
+      l.frustumCulled = false;
+      stars.scene.add(l);
+      return { l, mat };
+    };
+    const set = ({ l }: { l: THREE.Line }, a: THREE.Vector3, b: THREE.Vector3) => {
+      const pos = l.geometry.attributes.position as THREE.BufferAttribute;
+      pos.setXYZ(0, a.x, a.y, a.z);
+      pos.setXYZ(1, b.x, b.y, b.z);
+      pos.needsUpdate = true;
+    };
+    // Each aimed message: its whole path, faint, the stretch its light has run, and the stretch home a reply has run.
+    const knocks = KNOCKS.map(([, sent, star, ly]) => ({
+      sent,
+      star,
+      ly,
+      at: targetAt(star),
+      path: seg("ink"),
+      out: seg("mind"),
+      back: seg("lamp"),
+    }));
+    for (const k of knocks) set(k.path, home, k.at);
+    // The stars, each a point and a halo, and Sol. Each message has two heads, its light going out and a reply's
+    // coming home, each a point in a glow.
+    const names = [...new Set(knocks.map((k) => k.star))];
+    const core = new Cloud();
+    const halo = new Cloud();
+    for (const n of names) {
+      const at = targetAt(n);
+      core.add(at.x, at.y, at.z, 6.5, 0, K.ink);
+      halo.add(at.x, at.y, at.z, 26, 0, K.mind);
+    }
+    core.add(0, 0, 0, 8, 1, K.sun);
+    const heads = new Cloud();
+    for (let i = 0; i < knocks.length; i++)
+      for (const kind of [K.mind, K.lamp]) {
+        heads.add(0, 0, 0, 8, 0, kind);
+        heads.add(0, 0, 0, 30, 0, kind);
+      }
+    const coreGlow = glow({ fixed: true });
+    const haloGlow = glow({ fixed: true });
+    const headGlow = glow({ fixed: true });
+    const corePts = core.points(coreGlow);
+    const haloPts = halo.points(haloGlow);
+    const headPts = heads.points(headGlow);
+    stars.scene.add(haloPts, corePts, headPts);
+    // The other stars, faint, once the catalog has come.
+    let dim: THREE.ShaderMaterial | null = null;
+    // Fading out, the view keeps the messages it last had.
+    let list: NonNullable<Show["beams"]> = [];
+    const lit = new Map<string, number>();
+
+    return (x: number, p: number) => {
+      if (spec.mode === "beams") list = spec.beams ?? [];
+      const year = dialsOf.beams?.year ?? YEAR_0;
+      const focus = list[aimed()];
+      if (!dim && within50.length) {
+        const cold = new Cloud();
+        for (let i = 0; i < within50.length; i += 4) cold.add(within50[i], within50[i + 1], within50[i + 2], 2, 0.45, K.ink);
+        dim = glow({ fixed: true });
+        stars.scene.add(cold.points(dim));
+      }
+      if (dim) dim.uniforms.uOpacity.value = p;
+      ringMat.uniforms.uOpacity.value = 0.12 * p * ramp(x, 5, 6);
+      coreGlow.uniforms.uOpacity.value = p;
+      haloGlow.uniforms.uOpacity.value = p;
+      headGlow.uniforms.uOpacity.value = p * (0.8 + 0.2 * Math.sin(clock * 3));
+      const coreB = corePts.geometry.attributes.aBright as THREE.BufferAttribute;
+      const haloB = haloPts.geometry.attributes.aBright as THREE.BufferAttribute;
+      const haloK = haloPts.geometry.attributes.aKind as THREE.BufferAttribute;
+      const headB = headPts.geometry.attributes.aBright as THREE.BufferAttribute;
+      const headP = headPts.geometry.attributes.position as THREE.BufferAttribute;
+      const put = (j: number, at: THREE.Vector3, b: number) => {
+        headP.setXYZ(j, at.x, at.y, at.z);
+        headP.setXYZ(j + 1, at.x, at.y, at.z);
+        headB.setX(j, b);
+        headB.setX(j + 1, 0.35 * b);
+      };
+      // The message in view bright, the others on their way faint, the rest of Earth's messages not at all.
+      lit.clear();
+      let aim: THREE.Vector3 | null = null;
+      knocks.forEach((k, i) => {
+        const mine = (reply: boolean) => list.find((b) => b.star === k.star && b.sent === k.sent && b.reply === reply);
+        const [out, rep] = [mine(false), mine(true)];
+        const seen = (b: typeof out) => (b ? (b === focus ? 1 : 0.35) : 0);
+        const s = Math.max(seen(out), seen(rep));
+        // How far out its light is, and how far home a reply sent the day it arrived would be, as shares of the way.
+        const gone = Math.min(1, Math.max(0, (year - k.sent) / k.ly));
+        const back = Math.min(1, Math.max(0, (year - k.sent - k.ly) / k.ly));
+        head.copy(k.at).sub(home).multiplyScalar(gone).add(home);
+        v.copy(home).sub(k.at).multiplyScalar(back).add(k.at);
+        set(k.out, home, head);
+        set(k.back, k.at, v);
+        k.path.mat.uniforms.uOpacity.value = 0.22 * s * p;
+        k.out.mat.uniforms.uOpacity.value = 0.75 * s * p;
+        k.back.mat.uniforms.uOpacity.value = back > 0 ? 0.85 * seen(rep) * p : 0;
+        put(i * 4, head, gone < 1 ? seen(out) : 0);
+        put(i * 4 + 2, v, back > 0 && back < 1 ? seen(rep) : 0);
+        lit.set(k.star, Math.max(lit.get(k.star) ?? 0, s));
+        if (focus && (focus === out || focus === rep)) aim = (focus.reply ? v : head).clone();
+      });
+      names.forEach((n, j) => {
+        const s = lit.get(n) ?? 0;
+        coreB.setX(j, s);
+        haloB.setX(j, s >= 1 ? 0.45 + 0.2 * Math.sin(clock * 1.8) : 0);
+        haloK.setX(j, focus?.reply && focus.star === n ? K.lamp : K.mind);
+      });
+      coreB.needsUpdate = haloB.needsUpdate = haloK.needsUpdate = true;
+      headP.needsUpdate = headB.needsUpdate = true;
+
+      if (spec.mode === "beams" && spec.onMarks) {
+        const w = parent.clientWidth;
+        const h = parent.clientHeight;
+        const onScreen = (at: THREE.Vector3, id: string, a: number): Mark => {
+          v.copy(at).project(stars.camera);
+          return { id, x: ((v.x + 1) / 2) * w, y: ((1 - v.y) / 2) * h, a: v.z < 1 ? a : 0 };
+        };
+        const marks = names.map((n) => onScreen(targetAt(n), n, p * Math.min(1, 2 * (lit.get(n) ?? 0))));
+        marks.push(onScreen(origin, "Sol", p * ramp(x, 4, 5)));
+        // Where the light in view is now, for its words.
+        if (aim) marks.push(onScreen(aim, "head", p));
+        spec.onMarks(marks);
+      }
+    };
+  }
+
   // ── Data that comes later: Earth's land and lights, and the stars ──
   let gone = false;
   let lightsData: Light[] | null = null;
@@ -1771,6 +1948,8 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
   let dirty = true;
   const look = new THREE.Vector3();
   const shift = new THREE.Vector3();
+  /** The view's move toward the path in view, eased in time. It shows in full only out among the stars. */
+  const aimShift = new THREE.Vector3();
   const mid = new THREE.Vector3();
   // Each screen's extras: built when first shown, and faded in and out as their screen comes and goes.
   let kit: ReturnType<typeof inheritance> | null = null;
@@ -1778,6 +1957,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
   let noise: ReturnType<typeof standing> | null = null;
   let machines: ReturnType<typeof meeting> | null = null;
   let clues: ReturnType<typeof leading> | null = null;
+  let sent: ReturnType<typeof sending> | null = null;
   const presence: Partial<Record<Mode, number>> = {};
   let lastClock = 0;
   function present(mode: Mode, dt: number) {
@@ -1796,9 +1976,11 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     const dt = Math.min(0.1, Math.max(0, clock - lastClock));
     lastClock = clock;
     const { logD, D, target, cam, up } = pilot.at(clock);
-    // What doesn't fit: the view moves over to the middle of the path the Will is looking at.
-    const P = spec.mode === "leads" && !still ? lookedAt() : null;
-    shift.lerp(P ? mid.copy(P).multiplyScalar(0.5 * LY_AU) : mid.set(0, 0, 0), 1 - Math.exp(-dt * LOOK));
+    // What doesn't fit and our messages: the view moves over to the middle of the path in view. Nearer than the stars
+    // it stays on Earth, so a flight out to a path starts from Earth, and a flight home ends there.
+    const P = (spec.mode === "leads" || spec.mode === "beams") && !still ? lookedAt() : null;
+    aimShift.lerp(P ? mid.copy(P).multiplyScalar(0.5 * LY_AU) : mid.set(0, 0, 0), 1 - Math.exp(-dt * LOOK));
+    shift.copy(aimShift).multiplyScalar(ramp(logD, 5.2, 6.3));
     target.add(shift);
     cam.add(shift);
     frameLens();
@@ -1826,6 +2008,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     const pStand = present("stand", dt);
     const pMind = present("mind", dt);
     const pLeads = present("leads", dt);
+    const pBeams = present("beams", dt);
     surface.uniforms.uOpacity.value = arrived(surfaceAt);
     // Who we are lights the cities in turn. Elsewhere they are all lit.
     surface.uniforms.uLit.value = 1 + ((dialsOf.people?.lit ?? 1) - 1) * pPeople;
@@ -1867,6 +2050,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       if (!clues && spec.mode === "leads" && spec.leads?.length) clues = leading(spec.leads);
       clues?.(pLeads);
     }
+    if (pBeams > 0) (sent ??= sending())(x, pBeams);
     if (spec.onScale && framing) spec.onScale((D * 149597870.7) / focal, framing.w, framing.h);
 
     renderer.clear();

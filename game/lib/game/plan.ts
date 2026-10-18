@@ -1,4 +1,4 @@
-// Planning: what Earth can start at Year 0, and what the Mind would start with. The builds are the first hour's works
+// Planning, on the Projects tab: what Earth can start at Year 0, and what the Mind would start with. The builds are the first hour's works
 // from data/works.json, paced by lib/sim/works.ts from the player's own order, so every date on the screen is the
 // game's. The Mind advises from the charter's strongest lean and never queues anything itself.
 import { KNOCKS } from "./knocks";

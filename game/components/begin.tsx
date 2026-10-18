@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router";
 import { useGame } from "@/components/game-provider";
 import { MindNote } from "@/components/mind-note";
-import { useReplan } from "@/components/wake";
 import { seenYearZero, YearZero } from "@/components/year-zero";
 import { MS_PER_YEAR } from "@/lib/game/clock";
 import { FOMALHAUT } from "@/lib/game/plan";
@@ -19,8 +18,8 @@ interface Step {
   name: string;
   line(save: Save, unlocked: boolean): string;
   done(save: Save): boolean;
-  /** Planning, or a tab. */
-  to: "plan" | string;
+  /** The tab where it is done. */
+  to: string;
 }
 
 const STEPS: Step[] = [
@@ -28,13 +27,13 @@ const STEPS: Step[] = [
     name: "Queue our first builds",
     line: (s) => (s.plan?.builds.length ? s.plan.builds.join(", ") : "They start at Year 0, the moment we begin."),
     done: (s) => !!s.plan?.builds.length,
-    to: "plan",
+    to: "/projects",
   },
   {
     name: FOMALHAUT.name,
     line: () => `${FOMALHAUT.what} It lands ${Math.round((FOMALHAUT.lands * MS_PER_YEAR) / 1000)} seconds after we begin.`,
     done: (s) => !!s.plan?.observe.length,
-    to: "plan",
+    to: "/projects",
   },
   {
     name: "Open a lead",
@@ -77,7 +76,6 @@ const row = "flex w-full items-start gap-3 py-2 text-left";
 
 function List({ onClose, onBegin }: { onClose(then?: () => void): void; onBegin(): void }) {
   const { save } = useGame();
-  const replan = useReplan();
   const unlocked = !!useAccess();
   const [sure, setSure] = useState(false);
   const root = useRef<HTMLDivElement>(null);
@@ -123,15 +121,9 @@ function List({ onClose, onBegin }: { onClose(then?: () => void): void; onBegin(
           return (
             <li key={step.name} data-b="item">
               <span className="sr-only">{done[i] ? "Done: " : "Not done: "}</span>
-              {step.to === "plan" ? (
-                <button onClick={() => onClose(replan)} className={row}>
-                  {body}
-                </button>
-              ) : (
-                <Link to={step.to} onClick={() => onClose()} className={row}>
-                  {body}
-                </Link>
-              )}
+              <Link to={step.to} onClick={() => onClose()} className={row}>
+                {body}
+              </Link>
             </li>
           );
         })}

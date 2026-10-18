@@ -1,4 +1,5 @@
 import { Outlet } from "react-router";
+import { BeamsProvider } from "@/components/beams";
 import { GameProvider } from "@/components/game-provider";
 import { Hud } from "@/components/hud";
 import { MapStrip } from "@/components/map-strip";
@@ -13,17 +14,19 @@ export default function PlayLayout() {
     <GameProvider>
       <Opening className="flex h-dvh w-full flex-col overflow-hidden bg-paper">
         <ScanProvider>
-          <div className="flex min-h-0 grow flex-col wide:grid wide:grid-cols-[minmax(0,1fr)_clamp(340px,32vw,440px)] wide:grid-rows-[auto_minmax(0,1fr)_auto]">
-            <Hud />
-            <MapStrip />
-            <main
-              data-shell="page"
-              className="flex grow flex-col overflow-y-auto bg-panel px-4 pt-3 wide:col-start-2 wide:row-start-2 wide:border-l wide:border-faint"
-            >
-              <Outlet />
-            </main>
-            <Rail />
-          </div>
+          <BeamsProvider>
+            <div className="flex min-h-0 grow flex-col wide:grid wide:grid-cols-[minmax(0,1fr)_clamp(340px,32vw,440px)] wide:grid-rows-[auto_minmax(0,1fr)_auto]">
+              <Hud />
+              <MapStrip />
+              <main
+                data-shell="page"
+                className="flex grow flex-col overflow-y-auto bg-panel px-4 pt-3 wide:col-start-2 wide:row-start-2 wide:border-l wide:border-faint"
+              >
+                <Outlet />
+              </main>
+              <Rail />
+            </div>
+          </BeamsProvider>
         </ScanProvider>
       </Opening>
     </GameProvider>

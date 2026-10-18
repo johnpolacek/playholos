@@ -50,7 +50,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     return () => clearInterval(id);
   }, [began]);
 
-  // The latest save, so two changes in one tap both land: Planning's plan, then the wake that follows it.
+  // The latest save, so two changes in one tap both land.
   const latest = useRef<Save>(undefined);
   function update(game: Save) {
     latest.current = game;

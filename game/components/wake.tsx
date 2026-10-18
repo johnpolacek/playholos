@@ -1,4 +1,5 @@
 import { createContext, use, useCallback, useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router";
 import { useGame } from "@/components/game-provider";
 import { Origins } from "@/components/origins";
 import { People } from "@/components/people";
@@ -8,7 +9,6 @@ import { FILL, Spread } from "@/components/spread";
 import { Charter } from "@/components/charter";
 import { Meet } from "@/components/meet";
 import { Leads } from "@/components/leads";
-import { Plan } from "@/components/plan";
 import { Drift } from "@/components/drift";
 import { Sky, SkyArt } from "@/components/sky";
 import type { Dials } from "@/lib/drift";
@@ -102,21 +102,16 @@ export function Wake({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
 const LeaveShell = createContext<(then: () => void) => void>((then) => then());
 export const useLeaveShell = () => use(LeaveShell);
 
-// Before Begin, the plan can be changed: the shell leaves for Planning, under the same sky, and comes back after.
-const Replan = createContext<() => void>(() => {});
-export const useReplan = () => use(Replan);
-
 // The phone. A new game opens on the drift, then Wake and the memories, all under one sky. A game already begun goes straight to the
-// shell. Screens past the last one built lead to the shell. A reload starts over at the drift.
-const SCREENS = [Drift, Wake, Origins, People, Stand, Inherit, Charter, Meet, Leads, Plan];
+// shell. Past the last screen, the shell opens on Projects, where we plan our waking. A reload starts over at the drift.
+const SCREENS = [Drift, Wake, Origins, People, Stand, Inherit, Charter, Meet, Leads];
 
 export function Opening({ className, children }: { className: string; children: React.ReactNode }) {
   const { save, wake } = useGame();
+  const navigate = useNavigate();
   const [at, setAt] = useState(0);
-  const [replanning, setReplanning] = useState(false);
   const frame = useRef<HTMLDivElement>(null);
-  const inShell = !!save && (save.woke || save.beganAt !== null);
-  const shell = inShell && !replanning;
+  const shell = !!save && (save.woke || save.beganAt !== null);
 
   // The shell enters piece by piece: the top bar drops in, the map opens, the page rises, the rail comes up.
   const { contextSafe } = useGSAP(
@@ -160,26 +155,23 @@ export function Opening({ className, children }: { className: string; children: 
 
   let body: React.ReactNode = <div className="grow bg-paper" />;
   if (shell) body = children;
-  else if (replanning)
-    body = (
-      <>
-        <Plan onSkip={() => setReplanning(false)} onNext={() => setReplanning(false)} />
-        <SkyArt mode="charter" className="hidden" />
-      </>
-    );
   else if (save) {
     const Screen = SCREENS[at];
-    const next = () => (at + 1 < SCREENS.length ? setAt(at + 1) : wake());
+    const plan = () => {
+      navigate("/projects");
+      wake();
+    };
+    const next = () => (at + 1 < SCREENS.length ? setAt(at + 1) : plan());
     // Skip leaves the memories for the charter on Wake, and skips one memory after that.
     const charter = SCREENS.indexOf(Charter);
-    // Past the charter, Skip goes to Planning: as "Plan our waking." does on Meeting the Mind.
+    // Past the charter, Skip goes to Projects to plan: as "Plan our waking." does on Meeting the Mind.
     const skip = () =>
-      setAt(at === SCREENS.indexOf(Wake) ? charter : at > charter ? SCREENS.indexOf(Plan) : Math.min(at + 2, charter));
+      at > charter ? plan() : setAt(at === SCREENS.indexOf(Wake) ? charter : Math.min(at + 2, charter));
     body = (
       <>
         <Screen key={at} onSkip={skip} onNext={next} />
-        {/* The charter and Planning have no sky art of their own: the sky holds on Earth and the Moon behind them. */}
-        {(Screen === Charter || Screen === Plan) && <SkyArt mode="charter" className="hidden" />}
+        {/* The charter has no sky art of its own: the sky holds on Earth and the Moon behind it. */}
+        {Screen === Charter && <SkyArt mode="charter" className="hidden" />}
       </>
     );
   }
@@ -187,9 +179,7 @@ export function Opening({ className, children }: { className: string; children: 
   return (
     <div ref={frame} id="phone" className={`relative ${className}`}>
       <LeaveShell value={leaveShell}>
-        <Replan value={() => leaveShell(() => setReplanning(true))}>
-          <Sky shade={!shell}>{body}</Sky>
-        </Replan>
+        <Sky shade={!shell}>{body}</Sky>
       </LeaveShell>
     </div>
   );
