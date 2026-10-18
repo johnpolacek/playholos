@@ -10,7 +10,7 @@ npm run dev                                # http://localhost:3000
 - `app/(play)/`: the shell. Top bar, map, tab page, and the rail. One route per tab.
   - It fills the screen at every size. Tall, as on a phone, the parts stack. Wide, from a phone on its side up, the map fills the left and the tab page and rail stand on the right. `wide:` in `app/globals.css` is that breakpoint: landscape, 640px and up.
   - Screens before the shell lay out with `components/spread.tsx`: one column when tall, capped to a readable width on a tablet, and the art beside the words when wide.
-- `components/unlock.tsx`: the Mind is private in the test build. The rest of the game is open. On any production server, the Mind tab asks once for the code in `ACCESS_CODE`, and a cookie keeps it open. `next dev` is open.
+- `components/unlock.tsx`: the Mind is private in the test build. The rest of the game is open. On any production server, the Mind tab asks once for the code in `ACCESS_CODE` or the player's own Anthropic API key, and a cookie keeps it open. A key bills the player, and the server uses it per call without storing it. Only Console keys work: Anthropic's terms bar claude.ai logins in other apps. `next dev` is open.
 - `app/godview/`: what the player can't see. Dev only.
 - `app/api/mind/`: the Mind's chat, on the AI SDK. Needs `ANTHROPIC_API_KEY` in `.env.local`.
 - `lib/game/`: the clock, save types, and the browser store.
@@ -26,6 +26,7 @@ npm run dev                                # http://localhost:3000
 - `components/sky.tsx`: the game's one sky, behind every screen from the title to the charter and on into the shell, where the map strip is its window. Each screen's `SkyArt` is an empty box in its layout where the sky frames the screen's subject, with the screen's dials: the sunrise on Wake, the Sun's road on Where we come from (timed by `lib/game/road.ts`), the lights and threads on Who they are, the radar shell on Where things stand, the flight out to Voyager 1 on What you inherit, and Earth and the Moon behind the charter. Each screen's story waits for the camera to arrive.
 - `components/drift.tsx`: a new game's first screen, before Wake. No title: the slow loop from Earth out to the Local Group and home, and Begin game, which dives home to Earth.
 - `components/map-strip.tsx`: the map strip, the sky's window in the shell. The camera flies in from the charter, and back out to the title on New game.
+- `components/menu.tsx`: the galactic year in the top bar's corner, Sol circling the galaxy's glowing core. It opens a drawer: the player's Anthropic key, New game, the about pages, and links out.
 
 - The game is always dark: the colors in `app/globals.css`, and `lib/ink.ts` for the memory screens' canvases. Screens before the shell open with `components/screen-bar.tsx`, by way of `Spread`: the real record on the left.
 - `lib/motion.ts`: the full motion treatment, from the animaxxing skills, whose sources are in `../skills-lock.json`. Every element enters from a blank screen, rests, and leaves. Mark an element `data-m` and give its screen a `useStage` intro. Reduced motion skips the travel.

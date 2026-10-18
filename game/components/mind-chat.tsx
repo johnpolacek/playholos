@@ -3,6 +3,7 @@
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import { useEffect, useRef, useState } from "react";
+import { BAD_KEY } from "@/lib/access";
 import { realTime } from "@/lib/game/clock";
 import { browserStore } from "@/lib/game/store";
 
@@ -61,7 +62,7 @@ export function MindChat({ ask }: { ask?: string }) {
           );
         })}
         {status === "submitted" && <span className="self-start font-mono text-[9.5px] tracking-[.1em] text-you">THE MIND IS THINKING</span>}
-        {error && <p className="text-xs text-other">The Mind can’t answer right now.</p>}
+        {error && <p className="text-xs text-other">{error.message === BAD_KEY ? BAD_KEY : "The Mind can’t answer right now."}</p>}
         <div ref={end} />
       </div>
       <form

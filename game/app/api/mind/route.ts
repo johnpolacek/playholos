@@ -1,7 +1,7 @@
-import { anthropic, type AnthropicLanguageModelOptions } from "@ai-sdk/anthropic";
-import { convertToModelMessages, createUIMessageStreamResponse, streamText, toUIMessageStream, type UIMessage } from "ai";
+import { type AnthropicLanguageModelOptions, createAnthropic } from "@ai-sdk/anthropic";
+import { APICallError, convertToModelMessages, createUIMessageStreamResponse, streamText, toUIMessageStream, type UIMessage } from "ai";
 import { cookies } from "next/headers";
-import { ACCESS_COOKIE, admits } from "@/lib/access";
+import { ACCESS_COOKIE, admits, BAD_KEY, isAnthropicKey, KEY_COOKIE } from "@/lib/access";
 import { realTime, tenths, YEAR_0, yearAt } from "@/lib/game/clock";
 import { describeCharter } from "@/lib/game/charter";
 import { EARTH_AT_YEAR_0 } from "@/lib/mind/earth";
@@ -34,9 +34,13 @@ function readCharter(c: unknown) {
 }
 
 export async function POST(req: Request) {
-  // The Mind spends real money, so only the access code opens it.
-  if (!admits((await cookies()).get(ACCESS_COOKIE)?.value)) return Response.json({ error: "Locked." }, { status: 401 });
-  if (!process.env.ANTHROPIC_API_KEY) {
+  // The Mind spends real money: the player's own key spends theirs, and the access code spends ours.
+  // Their key is used for this call only, never stored or logged here.
+  const jar = await cookies();
+  const theirs = jar.get(KEY_COOKIE)?.value;
+  const apiKey = isAnthropicKey(theirs) ? theirs : admits(jar.get(ACCESS_COOKIE)?.value) ? process.env.ANTHROPIC_API_KEY : null;
+  if (apiKey === null) return Response.json({ error: "Locked." }, { status: 401 });
+  if (!apiKey) {
     return Response.json({ error: "The Mind is not connected. Set ANTHROPIC_API_KEY in .env.local." }, { status: 503 });
   }
   const { messages, beganAt, seed, charter }: { messages: UIMessage[]; beganAt?: unknown; seed?: unknown; charter?: unknown } = await req.json();
@@ -44,11 +48,14 @@ export async function POST(req: Request) {
   // The knowledge wall: the seed's world stays here, and the Mind hears only what Earth knows of it.
   const known = inPool(seed) ? await loadWorld(seed).then(async (w) => describe(earthKnows(w, Math.max(0, yearAt(began) ?? 0), await loadVoices(w)))) : "";
   const result = streamText({
-    model: anthropic("claude-opus-5-5"),
+    model: createAnthropic({ apiKey })("claude-opus-5-5"),
     system: [MIND, readCharter(charter), EARTH_AT_YEAR_0, EARTH_LEADS, known, now(began)].filter(Boolean).join("\n\n"),
     messages: await convertToModelMessages(messages),
     maxOutputTokens: 4000,
     providerOptions: { anthropic: { effort: "low" } satisfies AnthropicLanguageModelOptions },
   });
-  return createUIMessageStreamResponse({ stream: toUIMessageStream({ stream: result.stream }) });
+  // Anthropic refusing the key is the one failure the player can fix, so it alone gets its own line.
+  const onError = (e: unknown) =>
+    APICallError.isInstance(e) && (e.statusCode === 401 || e.statusCode === 403) ? BAD_KEY : "The Mind can’t answer right now.";
+  return createUIMessageStreamResponse({ stream: toUIMessageStream({ stream: result.stream, onError }) });
 }

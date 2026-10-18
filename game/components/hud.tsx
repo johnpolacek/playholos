@@ -1,6 +1,7 @@
 "use client";
 
 import { useGame } from "@/components/game-provider";
+import { Menu } from "@/components/menu";
 import { realTime, tenths, YEAR_0 } from "@/lib/game/clock";
 
 // Placeholder values: the mock's screen before Year 0. Real resources replace them.
@@ -21,20 +22,18 @@ export function Hud() {
   const { save, year } = useGame();
   const { energy, matter, compute } = BEFORE_YEAR_0;
   const y = year === null ? null : tenths(year);
-  // Tall: Earth and the Year, then the meters below. Wide: one band, the meters between Earth and the Year.
+  // Tall: the menu's galaxy and the Year, then the meters below. Wide: one band, the meters between the galaxy and the Year.
   return (
     <header
       data-shell="top"
       className="grid shrink-0 grid-cols-[1fr_auto] items-baseline gap-x-4 gap-y-1.5 border-b border-faint bg-paper px-4 pt-4 pb-3 wide:col-span-2 wide:grid-cols-[auto_1fr_auto] wide:gap-x-10 wide:px-6 wide:py-3"
     >
-      <span className="flex items-center gap-2 text-xl font-semibold">
-        <i className="size-2.5 rounded-full bg-you" />
-        Earth
-      </span>
+      <div className="row-span-2 self-center">
+        <Menu />
+      </div>
       <span data-year className="text-right text-[15px] font-medium wide:col-start-3">
         {!save ? "" : y === null ? YEAR_0 : `Year ${y}`}
       </span>
-      <span className="text-xs text-muted">Sol</span>
       <span className="text-right text-xs text-muted wide:col-start-3">
         {!save ? null : y === null ? (
           "The clock starts when you begin"

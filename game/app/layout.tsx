@@ -5,9 +5,17 @@ import "./globals.css";
 const suse = SUSE({ subsets: ["latin"], variable: "--font-suse" });
 const plexMono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "600"], variable: "--font-plex-mono" });
 
+const description =
+  "In 2040, humanity wakes as one Mind, and you are its Will. Are we alone? Finding other life is our greatest opportunity and gravest threat.";
+
+// What a shared link shows: the title, the line and the card drawn in opengraph-image.tsx. The address makes the
+// card's link whole, on previews too.
 export const metadata: Metadata = {
+  metadataBase: new URL("https://playholos.vercel.app"),
   title: "Holos",
-  description: "Earth wakes as one Mind. You are its Will.",
+  description,
+  openGraph: { type: "website", siteName: "Holos", title: "Holos", description },
+  twitter: { card: "summary_large_image", title: "Holos", description },
 };
 
 // Always dark, and the browser's chrome with it.
