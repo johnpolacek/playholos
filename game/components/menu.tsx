@@ -144,7 +144,8 @@ function Drawer({ onClose }: { onClose(): void }) {
       const done = () => {
         dialog.current?.close();
         onClose();
-        then?.();
+        // After this drawer's own animations are gone: run inside them, the shell's leaving would be reverted with them.
+        if (then) setTimeout(then);
       };
       if (prefersReducedMotion()) return done();
       gsap
