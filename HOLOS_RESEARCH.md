@@ -125,6 +125,10 @@ Every source the game rests on, grouped by the question it answers. Each entry s
   - *Sónar Calling GJ 273b,* 2017 and 2018. Primes to 193, then a tutorial on counting, arithmetic, geometry, radio waves and time, sent three times so a reader can trust two of three ([Scientific American blog](https://www.scientificamerican.com/blog/observations/new-keys-to-help-extraterrestrials-unlock-our-messages)). Then 10-second pieces by Autechre, Holly Herndon, Jean-Michel Jarre and more ([Sónar Calling](https://www.sonarcalling.com/en/artists/)). For Sónar's 25th year. Vakoch: success comes "if, 25 years from now, there's someone who remembers to look" (Scientific American, above). The site lists 38 artists over both years, not the 33 pieces reported in 2017.
   - Matters: each message is a real people's choice of what to say, and why. Most were sent for an anniversary, a festival, a magazine or a sale, not by any world body.
   - Used: `game/lib/game/knocks.ts` SENDS, opened from a message row in the Projects tab.
+- **[PANOSETI](https://oirlab.ucsd.edu/PANOinstr.html), checked 2026-10-18** · Instrument. Project page and [Wright et al. 2022](https://arxiv.org/pdf/2210.01356.pdf), through a search summary.
+  - An all-sky optical SETI watch for laser pulses from nanoseconds to seconds, timed to 1 ns. Domes of 0.46 m Fresnel-lens telescopes, each patch of sky seen from two sites at once to rule out air-shower flashes. Prototypes at Lick, two sites 677 m apart.
+  - Matters: a laser knock can be a billionth of a second long, so catching one takes a watch built for it.
+  - Used: the Projects tour, the Mind's line on the deep flash watch, 2026-10-18.
 
 ## Earth to Year 0: forecasts
 

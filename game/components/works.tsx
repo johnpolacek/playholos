@@ -3,7 +3,8 @@ import { useBeams } from "@/components/beams";
 import { useGame } from "@/components/game-provider";
 import { SkyArt } from "@/components/sky";
 import { tenths, YEAR_0 } from "@/lib/game/clock";
-import type { Site } from "@/lib/game/sites";
+import { type Site, SITES } from "@/lib/game/sites";
+import type { Plan } from "@/lib/game/types";
 import type { Dials, Mark } from "@/lib/drift";
 import { AU_KM } from "../../src/astronomy.js";
 import { moonOffset } from "../../src/ephemeris.js";
@@ -22,6 +23,13 @@ export interface Work {
   /** When it is done, in Years from Year 0. Null when not queued, or past 40 Years. */
   done: number | null;
 }
+
+/** Our builds with places, as the plan has them: queued or not, and when each queued one is done. */
+export const placedOf = (plan: Plan, done: Record<string, number | null>): Work[] =>
+  Object.entries(SITES).map(([name, { site }]) => {
+    const queued = plan.builds.includes(name);
+    return { name, site, queued, done: queued ? (done[name] ?? null) : null };
+  });
 
 interface Works {
   list: Work[];

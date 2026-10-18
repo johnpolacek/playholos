@@ -16,13 +16,14 @@ import {
 // Reviewing our scans, the first of the three things we would do before Begin. The Mind takes us through Earth's
 // leads one at a time, and the map turns to each star as we reach it. Fomalhaut comes last, with the one observation
 // open at Year 0, so the image is offered once we know why it matters. Settled 2026-10-18. Reaching the last lead
-// counts as done.
+// counts as done, and says so: the head reads DONE, the top bar's count ticks, and the way on is back to Scan.
 
 const INTRO =
   "The sky near us is quiet. These are the few things in it we can’t explain yet. Beside each, how long its light takes, in your time. A call costs that, and an answer as long again.";
 
-/** The stops as a thread: Sol, then each lead in the order we take them. Passed and current stops are lit. */
-function Thread({
+/** The stops as a thread: Sol, then each lead in the order we take them. Passed and current stops are lit. The
+ *  Projects tour takes its builds on it too. */
+export function Thread({
   stops,
   at,
   go,
@@ -142,6 +143,7 @@ export function Review({ onClose }: { onClose(): void }) {
       <div className="flex items-center justify-between pt-1 pb-0.5 text-[11px] tracking-[.08em] text-muted">
         <span className="grow">
           {at ? `SCAN · REVIEW ${at} OF ${last}` : "SCAN · REVIEW"}
+          {at === last && <span className="text-you"> · DONE</span>}
         </span>
         <button
           onClick={() => go(at - 1)}
@@ -152,11 +154,12 @@ export function Review({ onClose }: { onClose(): void }) {
           ‹
         </button>
         <button
-          onClick={() => (at === last ? onClose() : go(at + 1))}
-          aria-label={at === last ? "Done" : "Next"}
-          className={`-my-3 h-11 text-you wide:hidden ${at === last ? "px-2 text-[13px] tracking-normal" : "w-11 text-xl leading-none"}`}
+          onClick={() => go(at + 1)}
+          disabled={at === last}
+          aria-label="Next"
+          className="-my-3 size-11 text-xl leading-none text-you disabled:text-faint wide:hidden"
         >
-          {at === last ? "Done" : "›"}
+          ›
         </button>
         <button
           onClick={onClose}
@@ -276,7 +279,7 @@ export function Review({ onClose }: { onClose(): void }) {
           className="h-11 rounded-full bg-ink text-[15px] font-medium text-paper"
         >
           {at === last
-            ? "Done"
+            ? "Back to Scan"
             : at
               ? `Next · ${leads[order[at]].star}`
               : `First · ${leads[order[0]].star}`}

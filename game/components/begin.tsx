@@ -38,7 +38,7 @@ const STEPS: Step[] = [
     name: "Queue our first builds",
     line: (s) => (s.plan?.builds.length ? s.plan.builds.join(", ") : "They start at Year 0, the moment we begin."),
     done: (s) => !!s.plan?.builds.length,
-    to: "/projects",
+    to: "/projects?tour",
   },
   {
     name: "Ask the Mind",
@@ -253,9 +253,25 @@ export function Begin() {
   const [open, setOpen] = useState(false);
   const [moment, setMoment] = useState<"full" | "roll" | null>(null);
   const button = useRef<HTMLButtonElement>(null);
+  const n = save ? STEPS.filter((s) => s.done(save)).length : 0;
+  // A step done, wherever it is done, lights its arc, and the count pulses once, so we see it tick without a Done.
+  const was = useRef<number | null>(null);
+  useGSAP(
+    () => {
+      if (!save) return;
+      const up = was.current !== null && n > was.current;
+      was.current = n;
+      if (up && button.current && !prefersReducedMotion())
+        gsap.fromTo(
+          button.current,
+          { scale: 1 },
+          { scale: 1.12, duration: 0.18, ease: "power2.out", yoyo: true, repeat: 1, clearProps: "transform" },
+        );
+    },
+    { dependencies: [n, !!save] },
+  );
   if (!save) return null;
   const done = STEPS.map((s) => s.done(save));
-  const n = done.filter(Boolean).length;
   const count = n === STEPS.length ? "ALL READY" : `${n} OF ${STEPS.length} READY`;
 
   return (

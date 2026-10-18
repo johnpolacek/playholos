@@ -1,8 +1,10 @@
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router";
 import { useGame } from "@/components/game-provider";
 import { MindNote } from "@/components/mind-note";
 import { HISTORY } from "@/lib/game/charter";
-import { advice, BUILDS, EMPTY, FOMALHAUT, SEARCHES, STUDIES } from "@/lib/game/plan";
+import type { EarthPast } from "@/lib/game/past";
+import { advice, BUILDS, EMPTY, FOMALHAUT, schedule, SEARCHES, STUDIES } from "@/lib/game/plan";
 import { SITES } from "@/lib/game/sites";
 import type { Plan } from "@/lib/game/types";
 
@@ -16,6 +18,24 @@ export function usePlan() {
   const { save, setPlan } = useGame();
   const plan = save?.plan ?? EMPTY;
   return { plan, change: (f: (p: Plan) => Plan) => setPlan(f(plan)) };
+}
+
+/** This game's Earth, from the server, and when each queued build is done with the thought it has. Until the Earth
+ *  comes, the dates are at today's thought. */
+export function useSchedule() {
+  const { save } = useGame();
+  const [past, setPast] = useState<EarthPast>();
+  const seed = save?.seed;
+  useEffect(() => {
+    if (seed === undefined) return;
+    fetch(`/api/earth?seed=${seed}`)
+      .then((r) => (r.ok ? r.json() : undefined))
+      .then(setPast, () => setPast(undefined));
+  }, [seed]);
+  const plan = save?.plan ?? EMPTY;
+  const scale = past?.compute ?? 1;
+  const done = useMemo(() => schedule(plan, scale), [plan, scale]);
+  return { past, scale, done };
 }
 
 /** A build in or out of the queue. In, it goes last. */

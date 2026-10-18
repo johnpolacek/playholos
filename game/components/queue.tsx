@@ -3,7 +3,6 @@ import { type Beam, useBeams } from "@/components/beams";
 import { useGame } from "@/components/game-provider";
 import { realTime, tenths, YEAR_0 } from "@/lib/game/clock";
 import { SENDS } from "@/lib/game/knocks";
-import type { EarthPast } from "@/lib/game/past";
 import {
   type Aim,
   buildStory,
@@ -17,10 +16,11 @@ import {
   toggleLook,
   Unqueued,
   usePlan,
+  useSchedule,
   WASH,
 } from "@/components/picks";
-import { useWorks, type Work } from "@/components/works";
-import { BUILDS, EMPTY, events, FOMALHAUT, schedule, SEARCHES, STUDIES } from "@/lib/game/plan";
+import { placedOf, useWorks } from "@/components/works";
+import { BUILDS, EMPTY, events, FOMALHAUT, SEARCHES, STUDIES } from "@/lib/game/plan";
 import { SITES } from "@/lib/game/sites";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
 
@@ -213,18 +213,8 @@ function Item({ row, now, began, aim, take }: { row: Row; now: number; began: bo
 export function Queue() {
   const { save, year } = useGame();
   const root = useRef<HTMLDivElement>(null);
-  const [past, setPast] = useState<EarthPast>();
-  const seed = save?.seed;
-  useEffect(() => {
-    if (seed === undefined) return;
-    fetch(`/api/earth?seed=${seed}`)
-      .then((r) => (r.ok ? r.json() : undefined))
-      .then(setPast, () => setPast(undefined));
-  }, [seed]);
-
+  const { past, done } = useSchedule();
   const plan = save?.plan ?? EMPTY;
-  const scale = past?.compute ?? 1;
-  const done = useMemo(() => schedule(plan, scale), [plan, scale]);
   const queued = useMemo(() => rowsOf(plan, done), [plan, done]);
   const t = span(queued);
   const coming: Row[] = useMemo(
@@ -257,14 +247,7 @@ export function Queue() {
   useEffect(() => () => pick([], null), [pick]);
   const works = useWorks();
   const { set: place, pick: pickWork, peek: peekWork } = works;
-  const placed: Work[] = useMemo(
-    () =>
-      Object.entries(SITES).map(([name, { site }]) => {
-        const queued = plan.builds.includes(name);
-        return { name, site, queued, done: queued ? (done[name] ?? null) : null };
-      }),
-    [plan.builds, done],
-  );
+  const placed = useMemo(() => placedOf(plan, done), [plan, done]);
   useEffect(() => place(placed), [place, placed]);
   useEffect(() => () => pickWork(null), [pickWork]);
   const [hover, setHover] = useState<string | null>(null);
