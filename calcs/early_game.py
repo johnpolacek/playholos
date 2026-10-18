@@ -118,7 +118,7 @@ def orbit_stock(now_kt=17.4, lift_2025=3.2, lift_2040=40, life=5, spare_kt=20):
     print(f"  Spent stages are {0.22 * now_kt:.1f} kt of today's mass. Sample for Year 0: {spare_kt} kt spare, as depots, spent stages and dead craft.")
     up = sum(launched[-life:]); upkeep = up / life; spare_lift = lift_2040 - upkeep
     print(f'  Keeping {up:.0f} kt flying takes {upkeep:.0f} kt of lift a year. Spare lift: about {spare_lift:.0f} kt a Year.')
-    for name, kt in (('Deep vault', 10), ('Launcher', 10), ('Cold compute annex', 100)):
+    for name, kt in (('Deep vault', 10), ('Probe yard', 10), ('Cold compute annex', 100)):
         print(f'  {name}, {kt} kt: {kt / spare_kt:.1f} times the spare stock, {kt / spare_lift:.1f} Years of spare lift')
     # What lift spends. A fully reusable heavy lifter burns about 4,600 t of methane and oxygen for 100 to 150 t to
     # orbit, about 1,000 t of it methane at 50 MJ/kg. Order of magnitude: lift is short of pads and ships, not energy.
@@ -142,7 +142,7 @@ def wall_year(fits, more_lines=()):
 # P + (1 - c) * (T - P), or at T if it is done first. Starting at once is never worse than waiting.
 GROUND = [('Launch complex', 2), ('Chip fabs', 3), ('All-sky watch', 6), ('Deep flash watch', 6), ('Spectrograph bank', 8),
           ('Ground solar build-out', 10), ('Deep-field receiver', 12), ('Fusion plants', 40)]
-ORBIT = [('Cold compute annex', 12), ('A new infrared telescope', 18), ('Starshade', 20), ('Launcher', 24), ('Orbital foundry', 30), ('Habitat ring', 60)]
+ORBIT = [('Cold compute annex', 12), ('A new infrared telescope', 18), ('Starshade', 20), ('Probe yard', 24), ('Orbital foundry', 30), ('Habitat ring', 60)]
 def raise_the_pace(share=0.25 / 24, step=1.5, fab=3, factory=(3, 1 / 3), yard=(5, 1 / 4)):
     fits = math.floor(math.log(1 / share) / math.log(step))
     one, two, three = wall_year(fits), wall_year(fits, [fab]), wall_year(fits, [fab, 2 * fab])
@@ -263,7 +263,7 @@ WANTS = {  # work: (flagships, where the number comes from)
     'Infrared telescope': (1.0, 'the Habitable Worlds Observatory: about 11 billion dollars'),
     'A 15 m mirror': (2.0, 'LUVOIR-A: 18 to 24 billion dollars over its life'),
     'Laser sail array': (0.7, 'Starshot: 8 billion dollars for the ground beam director'),
-    'Launcher': (10, 'sample'), 'Belt mining': (20, 'sample'), 'Mass driver': (30, 'sample'), 'Orbital foundry': (30, 'sample'),
+    'Probe yard': (10, 'sample'), 'Belt mining': (20, 'sample'), 'Mass driver': (30, 'sample'), 'Orbital foundry': (30, 'sample'),
     'Far-side array, one fifth': (40, 'sample'), 'Power from orbit': (200, 'sample')}
 LIMIT_THOUGHT = 1.5 ** 11                # eleven data centers fit under the grid
 # A game whose Taiwan branch cut Earth's compute starts lower on the same curve: scale is Year 0's compute over the
@@ -272,7 +272,7 @@ LIMIT_THOUGHT = 1.5 ** 11                # eleven data centers fit under the gri
 GRID_ROOM = 24 / 0.25
 def centers(scale=1.0): return int(math.log(GRID_ROOM / scale) / math.log(1.5))
 
-def at_the_limit(running=('A 15 m mirror', 'Laser sail array', 'Launcher', 'Belt mining', 'Mass driver', 'Orbital foundry')):
+def at_the_limit(running=('A 15 m mirror', 'Laser sail array', 'Probe yard', 'Belt mining', 'Mass driver', 'Orbital foundry')):
     room = LIMIT_THOUGHT / FLAGSHIP_THOUGHT
     print(f'How much thought a work wants, in flagships. At Year 0 Earth has thought for {1 / FLAGSHIP_THOUGHT:.1f} flagships at standard pace. At the grid limit, for {room:.0f}.')
     for name, (f, src) in WANTS.items():
@@ -309,11 +309,11 @@ def split(line, room, push=PUSH):
     return {name: give[name] / want for name, want, _ in line}, room
 
 def replay(order, start=12.0, dt=0.01, studies=0.1, show=True, early=None, scale=1.0, extra=(), front=()):
-    """The third mock's game from Year 12, every work paced by the thought the player's order gives it. The launcher
+    """The third mock's game from Year 12, every work paced by the thought the player's order gives it. The probe yard
     and the laser array were begun earlier: `early` gives their standard Years left at Year 12, from first_hour()."""
     early = early or first_hour(show=False, scale=scale)[1]
     n = centers(scale)
-    left = {'Launcher': early['Launcher'], 'Laser sail array': early['Laser sail array'], 'Ground solar': 10, 'A 15 m mirror': ROADS['mirror'] * 0.75,
+    left = {'Probe yard': early['Probe yard'], 'Laser sail array': early['Laser sail array'], 'Ground solar': 10, 'A 15 m mirror': ROADS['mirror'] * 0.75,
             'Mass driver': ROADS['driver'], 'Orbital foundry': ROADS['foundry'] * 0.75, 'Belt mining': ROADS['prospect'] + ROADS['mining']}
     line = [w for w in order if w in left]
     done, fifths, y, first, dc12, spare = {}, 0, start, None, math.inf, []
@@ -364,7 +364,7 @@ DC_DONE = dc_done()
 # (work, start Year, standard Years): the mocks' starts. The telescope has 8 Years left of its real schedule at Year 0.4.
 # Paced, the telescope is done at Year 6.1, so the player reads Alpha Centauri A and starts the laser array at Year 7.
 FIRST_HOUR = (('All-sky watch', 0, 6), ('Deep flash watch', 0, 6), ('Infrared telescope', 0.4, 8), ('Moon vault', 1.6, 10),
-              ('Launch complex', 1.7, 2), ('Orbital yard', 6.3, 5), ('Launcher', 6.3, 24), ('Laser sail array', 7.0, ROADS['array']))
+              ('Launch complex', 1.7, 2), ('Orbital yard', 6.3, 5), ('Probe yard', 6.3, 24), ('Laser sail array', 7.0, ROADS['array']))
 SET_ASIDE_BASE = ((0, 99, 0.10), (0, 0.1, 0.05), (0.8, 2.8, 0.05), (1.1, 2.1, 0.10), (1.8, 3.0, 0.10), (6.2, 10.2, 0.10))
 def set_aside(dcs=DC_DONE): return SET_ASIDE_BASE + tuple((d - 1, d, 0.05) for d in dcs)    # studies, observations, a Year's listening, the telescope's reads, the data centers
 SET_ASIDE = set_aside()
@@ -382,7 +382,7 @@ def first_hour(until=12.0, dt=0.005, show=True, scale=1.0):
         for w in line:
             if w not in shown: shown[w] = (y, s[w])
             left[w] -= dt / paced(1, s[w])
-            if w == 'Launcher' and 'Orbital yard' in done and not done.get('yard cut'): left[w] *= 0.75; done['yard cut'] = y
+            if w == 'Probe yard' and 'Orbital yard' in done and not done.get('yard cut'): left[w] *= 0.75; done['yard cut'] = y
             if left[w] <= 0: done[w] = y
         y += dt
     done.pop('yard cut', None)
@@ -395,8 +395,8 @@ def first_hour(until=12.0, dt=0.005, show=True, scale=1.0):
     return done, left, spare
 
 FIFTHS_TOTAL = 5
-BY_START = ('Launcher', 'Laser sail array', 'Ground solar', 'A 15 m mirror', 'Mass driver', 'Orbital foundry', 'Belt mining')
-MATTER_FIRST = ('Mass driver', 'Belt mining', 'Orbital foundry', 'Launcher', 'Laser sail array', 'Ground solar', 'A 15 m mirror')
+BY_START = ('Probe yard', 'Laser sail array', 'Ground solar', 'A 15 m mirror', 'Mass driver', 'Orbital foundry', 'Belt mining')
+MATTER_FIRST = ('Mass driver', 'Belt mining', 'Orbital foundry', 'Probe yard', 'Laser sail array', 'Ground solar', 'A 15 m mirror')
 def thought_split():
     print(f'How thought is split: by the player\'s order. Each work gets its want in that order, then each is pushed to {PUSH} times its want.')
     for name, order in (('In the order begun, the default', BY_START), ('Matter first: driver, belt, foundry', MATTER_FIRST)):

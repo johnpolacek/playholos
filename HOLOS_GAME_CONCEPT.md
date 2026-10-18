@@ -237,7 +237,7 @@ Settled 2026-10-06. Replaces v1's numbers ([v1: Economy and projects](legacy/v1/
   - *What needs matter needs megatonnes.* Power from orbit, for a fifth more energy: about 10 Mt. The far-side array: about 1 Mt of lunar metal. A habitat ring: 10 Mt.
   - *Megatonnes can't come from Earth.* 10 Mt is 180 Years of lift. A mass driver on the Moon throws 600 kt a Year, by O'Neill's estimate, and belt mining brings 120.
   - *So the choice in the first hour is when to start that road:* mines, then a driver. The Mind lays it out and waits.
-  - *The first 15 minutes do use matter.* Earth starts with 20 kt, and a vault or a launcher costs 10.
+  - *The first 15 minutes do use matter.* Earth starts with 20 kt, and a vault or the probe yard costs 10.
   - *Priced 2026-10-13:* belt mining and the mass driver keep v1's 20 and 24 Years, and the driver no longer waits for the belt. See [Build times](#build-times).
   - Set aside: hiding matter until a megatonne work is on offer, and shrinking Earth's lift so matter stays scarce.
 - **Instruments and probes:** as in the backbone above.
@@ -283,7 +283,7 @@ Settled 2026-10-10. Numbers in [calcs/early_game.py](calcs/early_game.py). Repla
   - *Four works have a real price.* A 15 m mirror: 2 flagships, as LUVOIR-A costs 18 to 24 billion. The laser sail array: 0.7, as Starshot's beam director costs 8 billion. An SKA-class array: 0.2, as the SKA costs about 1.9 billion euros.
   - *One number ties the scale to the game.* The first telescope takes 0.15 of Year 0's thought, the mocks' own share. So Earth has thought for about 7 flagships at Year 0, and for about 577 at the grid limit.
   - *So thought is tight early and for megatonne works.* At Year 0 a second flagship is a real cost. At the limit every real-priced work can run at its floor.
-  - *Megatonne works have no real price.* Samples: the launcher 10, belt mining 20, the mass driver 30, the foundry 30, a fifth of the far-side array 40, power from orbit 200.
+  - *Megatonne works have no real price.* Samples: the probe yard 10, belt mining 20, the mass driver 30, the foundry 30, a fifth of the far-side array 40, power from orbit 200.
   - *At the limit:* the works begun at Year 12 want 93 flagships and would each take 72% of their standard time. To push the mass driver alone to ten times its want takes half of all thought.
   - *Done 2026-10-14:* all three mocks are replayed at paced speed, from Year 0.
   - Set aside: thought in scale with a work's Years, and one amount for every work.
@@ -299,7 +299,7 @@ Settled 2026-10-10. Numbers in [calcs/early_game.py](calcs/early_game.py). Repla
     - This project's reading. So no work stops because another is first.
     - Ten times is where a work stops gaining: 70% of its time, against a floor of 67%.
   - *What is left over sits idle,* and the Mind says so. Power from orbit takes its want and no more, since rock arrives at its own pace.
-  - *What the order changes, in the third mock's game.* In the order begun, the mirror and launcher are done at about Year 21.5, the sails launched at 27.7, power from orbit at 43.9.
+  - *What the order changes, in the third mock's game.* In the order begun, the mirror and probe yard are done at about Year 21.5, the sails launched at 27.7, power from orbit at 43.9.
   - Driver, belt and foundry first: the mirror waits until 25.5, the sails until 33.1, and power from orbit comes at 42.9.
   - *So the order moves small works by Years, and matter's road by about one.* Rock from the Moon sets that pace, not thought.
   - Set aside: an even split, which leaves the player nothing to decide. And a share for each work, retuned at every new one.
@@ -337,7 +337,8 @@ Settled 2026-10-10. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#earth-to-ye
 - **An inquiry's works, priced 2026-10-13.** Samples. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#travel-sails-and-lenses).
   - *A laser sail array:* 25 Years, on the ground, no matter. Starshot aimed at a first launch within a generation, and its own model puts the array at 8 billion dollars (Parkin 2018). v1 had 60 Years.
   - *Not under way at Year 0.* Starshot paused in 2024, so Earth starts it from nothing, unlike the telescope.
-  - *A flyby probe:* 12 Years after the launcher, v1's time, in the range of flagship craft. *A sentinel probe:* 20, v1's.
+  - *A flyby probe:* 12 Years after the probe yard, v1's time, in the range of flagship craft. *A sentinel probe:* 20, v1's.
+  - *The probe yard, named 2026-10-18.* It was the launcher. Earth already has launch complexes and 40 kt a Year of lift, so the name says what this one is for: building and fueling probes in orbit.
   - *What an inquiry to the nearest star costs.* At standard pace, begun at Year 9.4: the array is done at Year 34, sails arrive at Year 56, and their word is home at Year 60.
     - *Paced by the line, 2026-10-14,* begun at Year 7: the array is done at Year 24.8, sails arrive at Year 46, and their word is home at Year 51. A probe's word is home at about Year 72.
   - *Flight and light set most of it.* 4.3 ly is 22 Years at a fifth of light speed, 36 at an eighth, and 4.3 more for word to come back.
@@ -823,7 +824,7 @@ Begun 2026-10-14. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#outposts-and-
 - **The seed rolls whether a neighbor spreads, weighted by its dial, and each colony rolls again.** Settled 2026-10-14. Built in [calcs/seed.py](calcs/seed.py).
   - *Why.* Dials tilt every neighbor choice as odds. A roll at each colony is Landis's percolation: some branches stop, and quiet pockets form.
   - *Odds, samples:* strongly Expand 80%, leans Expand 60%, leans Deepen 25%, strongly Deepen 10%. A colony keeps its parent's dials. About 4 living neighbors in 10 spread.
-  - *Pace, samples from Earth's own:* the first seed ship 40 Years after waking, as Earth's launcher and a sentinel take. Then one every 20 Years, to the nearest free star, at a tenth of light speed, and 15 Years more to brake. A colony stands alone as a Mind 20 Years after landing (Metzger et al. 2013).
+  - *Pace, samples from Earth's own:* the first seed ship 40 Years after waking, as Earth's probe yard and a sentinel take. Then one every 20 Years, to the nearest free star, at a tenth of light speed, and 15 Years more to brake. A colony stands alone as a Mind 20 Years after landing (Metzger et al. 2013).
   - *Never to Sol, or to a star another neighbor holds.* Targets come from Gaia's census to 100 ly, so a neighbor near 50 ly isn't pushed inward.
   - *A companion within a light-year is home ground,* like Proxima to Alpha Centauri A. Gaia's distance errors between companions would also misdirect such hops.
   - *A 20-Year burn to cruising speed costs 10 Years more,* settled 2026-10-15, as Firefly's engine allows. Hops under 1.4 ly come out a little long.
@@ -945,7 +946,7 @@ Answered one at a time, in this order. Every answer must be permitted by current
    - **Settled 2026-10-12:** 11 of the 31 half-minutes had nothing new for the player. That is a flaw: v1's first-session rule holds in v2. See [How a game starts](#how-a-game-starts). What may land is settled too: readings from observations, findings from studies, and Earth's old messages arriving. Studies run on their own from Begin, and observations are offered as follow-ups. The rebuilt mock has 4 quiet half-minutes.
 9. **Settled 2026-10-10:** v1's research baseline, rechecked against the 2025 radar result and Garrett's 2026 cold-computing paper. See [Why the sky is quiet, rechecked](#why-the-sky-is-quiet-rechecked).
 10. **Second mock built 2026-10-13:** [the first hour away](explorations/v2-mocks/index.html#hour), minutes 15 to 60, on the same game. What each reading shows is a sample.
-    - **Replayed 2026-10-14 at paced speed.** The watches are built at minute 21. The telescope is done at minute 30, with the Mind's warning about energy. The player orders the yard and launcher, then the telescope gives a partial reading of one living world and finds a dead one next door, and the player starts the laser array at minute 35. The sweep's first pass is done at minute 38. A contacter's knock reaches Earth at minute 42, and the all-sky watch the player built catches it. The player is woken seven times and plays about nine minutes.
+    - **Replayed 2026-10-14 at paced speed.** The watches are built at minute 21. The telescope is done at minute 30, with the Mind's warning about energy. The player orders the orbital yard and probe yard, then the telescope gives a partial reading of one living world and finds a dead one next door, and the player starts the laser array at minute 35. The sweep's first pass is done at minute 38. A contacter's knock reaches Earth at minute 42, and the all-sky watch the player built catches it. The player is woken seven times and plays about nine minutes.
     - **Settled 2026-10-13:** physics sets how long an observation or a sweep takes. See [How Earth learns](#how-earth-learns).
     - **Settled 2026-10-13:** matter piles up in the first hour, and the Mind says what it is for: megatonne works, which must come from the Moon or the belt. See [Earth's kit at Year 0](#earths-kit-at-year-0).
     - **Settled 2026-10-13:** the Mind reads a knock at once, in three layers: what it proves, what it holds, and what it means as a word. See [What Earth hears](#what-earth-hears).

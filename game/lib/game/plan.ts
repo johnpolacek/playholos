@@ -19,7 +19,7 @@ export const BUILDS: Build[] = [
   { name: "Deep flash watch", what: "Catches laser knocks too faint for the sky watch." },
   { name: "Data center", what: "Half again as much thought, for good." },
   { name: "Infrared telescope", what: "Reads the air of the nearest worlds." },
-  { name: "Launch complex", what: "Lifts 40 kt a Year to orbit." },
+  { name: "Launch complex", what: "Doubles what we lift to orbit." },
   { name: "Orbital yard", what: "Builds in orbit a quarter faster." },
   { name: "Moon vault", what: "A second home for our Mind, in the Moon’s rock.", kt: 10 },
 ];

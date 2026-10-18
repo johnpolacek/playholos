@@ -188,7 +188,7 @@
     },
     {
      "y": 6.3,
-     "begin": "Launcher"
+     "begin": "Probe yard"
     },
     {
      "y": 7.0,
@@ -251,7 +251,7 @@
     "Orbital yard": 9.805000000000133,
     "Belt prospecting": 17.990000000000226,
     "Ground solar": 19.000000000000384,
-    "Launcher": 19.80000000000051,
+    "Probe yard": 19.80000000000051,
     "A 15 m mirror": 21.450000000000767,
     "Laser sail array": 24.830000000001295,
     "Mass driver": 28.96000000000194,
@@ -303,7 +303,7 @@
     },
     {
      "y": 6.3,
-     "begin": "Launcher"
+     "begin": "Probe yard"
     },
     {
      "y": 7.0,
@@ -343,7 +343,7 @@
     },
     {
      "y": 12.0,
-     "first": "Launcher"
+     "first": "Probe yard"
     },
     {
      "y": 12.0,
@@ -394,7 +394,7 @@
     "Orbital yard": 9.805000000000133,
     "Belt prospecting": 16.189999999999944,
     "Ground solar": 22.000000000000853,
-    "Launcher": 23.14000000000103,
+    "Probe yard": 23.14000000000103,
     "A 15 m mirror": 25.5000000000014,
     "Mass driver": 28.790000000001914,
     "Belt mining": 30.190000000002133,
@@ -446,7 +446,7 @@
     },
     {
      "y": 6.3,
-     "begin": "Launcher"
+     "begin": "Probe yard"
     },
     {
      "y": 7.0,
@@ -509,7 +509,7 @@
     "Orbital yard": 9.805000000000133,
     "Belt prospecting": 17.990000000000226,
     "Ground solar": 19.000000000000384,
-    "Launcher": 19.87000000000052,
+    "Probe yard": 19.87000000000052,
     "A 15 m mirror": 21.48000000000077,
     "Laser sail array": 25.130000000001342,
     "Mass driver": 28.990000000001945,
@@ -561,7 +561,7 @@
     },
     {
      "y": 6.3,
-     "begin": "Launcher"
+     "begin": "Probe yard"
     },
     {
      "y": 7.0,
@@ -640,7 +640,7 @@
     "Orbital yard": 9.805000000000133,
     "Belt prospecting": 17.990000000000226,
     "Ground solar": 19.000000000000384,
-    "Launcher": 19.80000000000051,
+    "Probe yard": 19.80000000000051,
     "A 15 m mirror": 21.450000000000767,
     "Deuterium works": 24.200000000001197,
     "Laser sail array": 24.830000000001295,

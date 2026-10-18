@@ -119,7 +119,7 @@ def xray_warning_days():
 # Settled 2026-10-14: neighbors may spread by the same physics and prices as Earth. The seed rolls whether a Mind
 # sends colonies, weighted by its Expand or Deepen dial, and each colony, once it stands alone as a Mind, rolls again
 # with its parent's dials. That is Landis's percolation (1998): some branches stop, and quiet pockets form.
-# Samples, all of them: the odds; a first seed ship 40 Years after waking, as Earth's own launcher and a sentinel take;
+# Samples, all of them: the odds; a first seed ship 40 Years after waking, as Earth's own probe yard and a sentinel take;
 # one more every 20 Years, to the nearest free star in the census; a tenth of light speed, v1's; and a colony standing
 # alone 20 Years after it lands, as Metzger et al. 2013 bootstrap the Moon's industry. No colony goes to Sol, or to a
 # star another neighbor holds. Targets come from the census to 100 ly, so a neighbor near 50 ly isn't pushed inward.

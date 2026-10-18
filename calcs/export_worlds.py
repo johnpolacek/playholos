@@ -108,7 +108,7 @@ def golden():
 # The game runs one loop for any order (game/lib/sim/works.ts). Its numbers come from here, so they have one source.
 import early_game as eg
 FH = {w: years for w, _, years in eg.FIRST_HOUR}
-ORBIT = ('Infrared telescope', 'Launcher', 'A 15 m mirror', 'Orbital foundry', 'Seed ship')    # the yard's cut, as the mocks apply it
+ORBIT = ('Infrared telescope', 'Probe yard', 'A 15 m mirror', 'Orbital foundry', 'Seed ship')    # the yard's cut, as the mocks apply it
 
 def works_catalog():
     R = eg.ROADS

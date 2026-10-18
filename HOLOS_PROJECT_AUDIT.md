@@ -89,7 +89,7 @@ Worked in [calcs/early_game.py](calcs/early_game.py). Orders of magnitude from p
 
 - *Chip fabs, 3 Years.* Eleven data centers fit under the grid. One line of fabs fills them by Year 11, a second line by Year 7, a third by Year 6.7. So one extra line is worth building and a third is not, until energy grows.
 - *Factory-built works, 3 Years, a third off ground builds.* Settled 2026-10-11: a speed-up helps whatever is not yet built, so also the part left of works under way. A work of T Years begun with the factory at Year 0 is done at 3 + ⅔ × (T − 3). The all-sky watch, 6 Years, is done at Year 5. The deep-field receiver, 12, at Year 9. Fusion plants, 40, at Year 27.7. Starting at once is never worse than waiting.
-- *Orbital yard, 5 Years, a quarter off builds in orbit.* By the same rule the Habitable Worlds Observatory, 8 Years left, is done at Year 7.25. The launcher, 24, at Year 19.25. The foundry, 30, at Year 23.75. Its other worth is size: works too large to launch whole.
+- *Orbital yard, 5 Years, a quarter off builds in orbit.* By the same rule the Habitable Worlds Observatory, 8 Years left, is done at Year 7.25. The probe yard, 24, at Year 19.25. The foundry, 30, at Year 23.75. Its other worth is size: works too large to launch whole.
 - *All-sky watch, 6 Years.* 1.28 million elements at two sites: ten times SKA-Low's antenna count and 1,250 times CHIME's receivers, on 2.5 times CHIME's area. CHIME took 2 years to build and SKA-Low takes about 8. Six is a sample between them.
 
 **The helium-3 harvest is about 150 kt.** Palaszewski's 100 t craft gather 500 kg of helium-3 from Uranus in 38 to 95 days, where it is 1.5×10⁻⁵ of the air, and Uranus's gravity well is far shallower than Jupiter's. That is 13 to 48 kg a Year per tonne of craft, about 10 per tonne once bases and tankers are counted. Daedalus's 1.5 kt a Year needs about 150 kt of system. One fast bullet's 660 kt would take 440 Years at that rate, so fast bullets wait for self-copying industry.
@@ -162,7 +162,7 @@ From 2026-10-13, a mission sent to find out is an inquiry, and what it sends hom
 | --- | --- | --- | --- | --- |
 | Tight-beam transmitter | 0 | OK | 0, ground | Laser links like DSOC, scaled up. |
 | Broadcast beacon | 0 | OK, recalculated | 0, ground. Sending 0.1% of energy, not 10%: a sky watch hears it to 44 ly in a day, a big dish to 17 ly in 5 minutes. See Calculations. | Sending is 10% of energy, now 2.4 TW. Range needs a receiver calculation. |
-| Launcher | 5,000 kt | OK | 10 kt of yard and fuel depot. | Depends on what it launches. |
+| Probe yard | 5,000 kt | OK | 10 kt of yard and fuel depot. | Depends on what it launches. |
 | Relay station | 3,000 kt | Heavy ×1,000+ | 50 t | A repeater is tonnes, not megatonnes. |
 | Flyby probe | 4,000 kt | Heavy ×100+ | 100 t for a 1 t payload | Daedalus: 54 kt for 450 t to 0.12c. A one-tonne payload needs about 100 t. |
 | Sentinel probe | 50 Mt | Heavy ×1,000 | 500 t: 5 t payload, fusion out, magnetic sail in. | Daedalus-class out, magnetic-sail braking in. |
