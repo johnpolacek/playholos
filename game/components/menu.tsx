@@ -44,23 +44,44 @@ const GLOW = [
 // The core's two glows, wide and bright, each at rest and at the top of a breath. The wide one's faint edge reaches
 // Sol's orbit at the top of a breath.
 const CORE = { wide: [8.2, 9.4], bright: [3.8, 4.25] } as const;
+// On hover, the core swells past the mark's edge, Sol laps four times as fast, and the core breathes twice as fast.
+const HOVER = { core: 1.45, sol: 4, breath: 2 } as const;
 
 function GalacticYear({ size }: { size: number }) {
   const root = useRef<SVGSVGElement>(null);
   // Each copy of the mark needs its own gradient id. React's ids carry characters a url(#…) can't.
   const glow = `glow${useId().replace(/[^\w-]/g, "")}`;
   useGSAP(
-    () => {
+    (_, contextSafe) => {
       if (prefersReducedMotion()) return;
-      gsap.to('[data-g="sol"]', { rotation: -360, svgOrigin: "0 0", duration: 14, ease: "none", repeat: -1 });
+      const sol = gsap.to('[data-g="sol"]', { rotation: -360, svgOrigin: "0 0", duration: 14, ease: "none", repeat: -1 });
       const breath = { duration: 3, ease: "sine.inOut", yoyo: true, repeat: -1 };
-      gsap.to('[data-g="wide"]', { attr: { r: CORE.wide[1] }, opacity: 1, ...breath });
-      gsap.to('[data-g="bright"]', { attr: { r: CORE.bright[1] }, ...breath });
+      const breaths = [
+        gsap.to('[data-g="wide"]', { attr: { r: CORE.wide[1] }, opacity: 1, ...breath }),
+        gsap.to('[data-g="bright"]', { attr: { r: CORE.bright[1] }, ...breath }),
+      ];
+      // Only the top bar's copy sits in a button, so only it wakes on hover.
+      const button = root.current?.closest("button");
+      if (!button || !contextSafe) return;
+      const wake = contextSafe((on: boolean) => {
+        const ease = { duration: 0.6, ease: "power2.out", overwrite: true };
+        gsap.to('[data-g="core"]', { scale: on ? HOVER.core : 1, svgOrigin: "0 0", ...ease });
+        gsap.to(sol, { timeScale: on ? HOVER.sol : 1, ...ease });
+        breaths.forEach((b) => gsap.to(b, { timeScale: on ? HOVER.breath : 1, ...ease }));
+      });
+      const enter = () => wake(true);
+      const leave = () => wake(false);
+      button.addEventListener("pointerenter", enter);
+      button.addEventListener("pointerleave", leave);
+      return () => {
+        button.removeEventListener("pointerenter", enter);
+        button.removeEventListener("pointerleave", leave);
+      };
     },
     { scope: root },
   );
   return (
-    <svg ref={root} width={size} height={size} viewBox="-12 -12 24 24" aria-hidden>
+    <svg ref={root} width={size} height={size} viewBox="-12 -12 24 24" overflow="visible" aria-hidden>
       <defs>
         <radialGradient id={glow}>
           {GLOW.map(([offset, opacity]) => (
@@ -69,8 +90,10 @@ function GalacticYear({ size }: { size: number }) {
         </radialGradient>
       </defs>
       {/* The core: a wide soft glow, and a small bright one inside it. */}
-      <circle data-g="wide" r={CORE.wide[0]} opacity={0.85} fill={`url(#${glow})`} />
-      <circle data-g="bright" r={CORE.bright[0]} fill={`url(#${glow})`} />
+      <g data-g="core">
+        <circle data-g="wide" r={CORE.wide[0]} opacity={0.85} fill={`url(#${glow})`} />
+        <circle data-g="bright" r={CORE.bright[0]} fill={`url(#${glow})`} />
+      </g>
       <circle
         r={ORBIT}
         fill="none"
