@@ -14,9 +14,9 @@ export interface Save {
   plan?: Plan;
   /** Readings the Will has opened, by id. */
   seen?: string[];
-  /** Opened a lead's page, one of the four things we would do before Begin. */
-  openedLead?: boolean;
-  /** Had an answer from the Mind, another of the four. */
+  /** Reviewed our scans with the Mind, to the last lead: one of the three things we would do before Begin. */
+  reviewed?: boolean;
+  /** Had an answer from the Mind, another of the three. */
   asked?: boolean;
 }
 

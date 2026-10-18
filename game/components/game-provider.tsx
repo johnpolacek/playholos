@@ -15,7 +15,7 @@ interface Game {
   /** Marks readings as opened. */
   see(ids: string[]): void;
   /** Marks one of the things we would do before Begin as done. Once done, it stays done. */
-  did(step: "openedLead" | "asked"): void;
+  did(step: "reviewed" | "asked"): void;
   begin(): void;
   newGame(): void;
 }

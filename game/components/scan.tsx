@@ -1,6 +1,8 @@
 import { createContext, use, useCallback, useEffect, useMemo, useState } from "react";
+import { Link, useSearchParams } from "react-router";
 import { useGame } from "@/components/game-provider";
 import { LeadList, LeadsMap } from "@/components/leads";
+import { Review } from "@/components/review";
 import type { Dials } from "@/lib/drift";
 import { type Lead, landed, leadsOf, type Reading, skyId } from "@/lib/game/leads";
 import { gsap, prefersReducedMotion } from "@/lib/motion";
@@ -8,7 +10,7 @@ import type { FeltWorld } from "@/lib/sim/types";
 
 // Scan: what we know of the sky. Earth's leads, drawn on the map and listed in the tab, with one lead in view
 // between them: pointing at a row turns the map to its star. Readings land on their leads as the clock runs, and stay
-// marked until opened.
+// marked until opened. Before Begin, the tab offers a review of them with the Mind, one at a time.
 
 interface Leads {
   leads: Lead[];
@@ -74,9 +76,31 @@ export function ScanMap({ className }: { className: string }) {
 /** The Scan tab: Earth's leads, and how long light takes to reach each. Each opens its own page. */
 export function Scan() {
   const { leads, dials, readings, fresh } = useLeads();
+  const { save, year } = useGame();
+  const [params, setParams] = useSearchParams();
+  const close = useCallback(() => setParams({}, { replace: true }), [setParams]);
   if (!leads.length) return null;
+  if (params.has("review")) return <Review onClose={close} />;
   return (
     <>
+      {(year === null || !save?.reviewed) && (
+        <Link
+          to="/?review"
+          className="mt-1 mb-2 flex items-center gap-3 rounded-xl border border-you/50 px-3 py-2.5 transition-colors hover:bg-you/10"
+        >
+          <svg width={14} height={14} viewBox="-7 -7 14 14" aria-hidden className="shrink-0">
+            <circle r={6} fill="none" className="stroke-you" />
+            <path d="M-1.8 -3 L3 0 L-1.8 3 Z" className="fill-you" />
+          </svg>
+          <span className="flex min-w-0 grow flex-col">
+            <span className="text-[14.5px] leading-snug">Review our scans</span>
+            <span className="text-[12.5px] leading-snug text-page-ink2">With the Mind, one lead at a time.</span>
+          </span>
+          <span className={`shrink-0 font-mono ${save?.reviewed ? "text-[10.5px] tracking-[.06em] text-you" : "text-[14px] text-muted"}`}>
+            {save?.reviewed ? "DONE" : "→"}
+          </span>
+        </Link>
+      )}
       <div className="mt-1 flex justify-between font-mono text-[10px] tracking-[.1em] text-muted uppercase">
         <span>Leads · {leads.length}</span>
         <span>Light takes</span>

@@ -59,6 +59,8 @@ export interface Lead {
   ly: number;
   /** What asking the Mind about it asks. */
   ask: string;
+  /** The Mind's word on it when we review our scans, in a breath. */
+  brief: string;
   reply?: boolean;
   /** What we measured. A measurement stays a number. */
   facts: [label: string, value: string][];
@@ -115,6 +117,7 @@ function feltLead(f: FeltWorld): Lead {
       : r >= 0.056
         ? "The infrared telescope can see it beside its star, but it sits too close in to read its water."
         : "It sits too close to its star for the infrared telescope to split. For now its tug is all we have.";
+  const kind = m < 1.5 ? "Small enough that it is likely rock." : m < 3 ? "Rock or gas, we can’t tell yet." : "At that mass, likely a gas world.";
   return {
     slug: slugOf(f.star),
     star: f.star,
@@ -122,6 +125,7 @@ function feltLead(f: FeltWorld): Lead {
     line: `Felt by ${f.by} in ${YEAR_0 + f.year}. At least ${one(m)} Earths.`,
     ly: f.d,
     ask: `What do we know of the new world at ${f.star}?`,
+    brief: `${kind} ${tell}`,
     facts: [
       ["Mass", `At least ${one(m)} Earths`],
       ["Its year", `${Math.round(f.periodDays)} days`],
@@ -153,6 +157,8 @@ export function leadsOf(felt: FeltWorld[]): Lead[] {
       line: "A heavy world, sometimes warm. Its air is unread.",
       ly: 19.7,
       ask: "What could 82 Eridani’s stretched orbit mean?",
+      brief:
+        "Most likely a gas world, swinging in and out of its star’s warm zone each year. Once the infrared telescope is built, about 3 days would show if its air holds water.",
       facts: [
         ["Mass", "At least 5.8 Earths"],
         ["Its year", "648 days"],
@@ -185,6 +191,8 @@ export function leadsOf(felt: FeltWorld[]): Lead[] {
       line: "Two dust clouds in 20 years, where we expected one.",
       ly: 25.1,
       ask: "Why are there so many collisions at Fomalhaut?",
+      brief:
+        "Two crashes in about 20 years, where we expected one in 100,000. Our best guess is one old breakup, still grinding itself down. Thirty seconds of the space telescope would show if the 2023 cloud has moved.",
       facts: [
         ["Its star", "A young white star, 440 million years old"],
         ["First cloud", "Seen in 2004, spreading by 2013"],
@@ -220,6 +228,7 @@ export function leadsOf(felt: FeltWorld[]): Lead[] {
       line: `To our 2017 message, as soon as Year ${REPLY}, about ${Math.round(REPLY * 5)} minutes after we begin.`,
       ly: 12.3,
       ask: "Could Luyten’s Star answer us?",
+      brief: `We sent it two messages, in 2017 and 2018. If anyone answered at once, the first reply reaches us at Year ${REPLY}. Almost certainly no one did, but our sky watch sees that star only 10 minutes a day.`,
       reply: true,
       facts: [
         ["Its star", "A red dwarf"],

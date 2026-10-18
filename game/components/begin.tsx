@@ -10,9 +10,10 @@ import { useAccess } from "@/lib/key";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
 
 // Begin: Year 0 starts at the tap, and the clock runs from then, offline too. Settled 2026-10-10. Before it, the top
-// bar counts the four things we would do first and opens them as a thread down to Year 0. None is a lock: Begin works
-// at any count, and while one is open the Mind says why it would wait. Settled 2026-10-18. The tap plays 2040 becoming
-// Year 0, over the screen the first time and in the top bar after.
+// bar counts the three things we would do first and opens them as a thread down to Year 0: review our scans, queue
+// our first builds, and ask the Mind. None is a lock: Begin works at any count, and while one is open the Mind says
+// why it would wait. Settled 2026-10-18. The tap plays 2040 becoming Year 0, over the screen the first time and in the
+// top bar after.
 
 interface Step {
   name: string;
@@ -24,22 +25,20 @@ interface Step {
 
 const STEPS: Step[] = [
   {
+    name: "Review our scans",
+    // Fomalhaut's image is offered at the review's end. Once queued, its landing is the line.
+    line: (s) =>
+      s.plan?.observe.length
+        ? `Fomalhaut’s new image lands ${Math.round((FOMALHAUT.lands * MS_PER_YEAR) / 1000)} seconds after we begin.`
+        : "The few things in our sky we can’t explain yet, one at a time.",
+    done: (s) => !!s.reviewed,
+    to: "/?review",
+  },
+  {
     name: "Queue our first builds",
     line: (s) => (s.plan?.builds.length ? s.plan.builds.join(", ") : "They start at Year 0, the moment we begin."),
     done: (s) => !!s.plan?.builds.length,
     to: "/projects",
-  },
-  {
-    name: FOMALHAUT.name,
-    line: () => `${FOMALHAUT.what} It lands ${Math.round((FOMALHAUT.lands * MS_PER_YEAR) / 1000)} seconds after we begin.`,
-    done: (s) => !!s.plan?.observe.length,
-    to: "/projects",
-  },
-  {
-    name: "Open a lead",
-    line: () => "The few things in our sky we can’t explain yet.",
-    done: (s) => !!s.openedLead,
-    to: "/",
   },
   {
     name: "Ask the Mind",
@@ -52,8 +51,9 @@ const STEPS: Step[] = [
   },
 ];
 
-/** The count, drawn: four arcs around a point, one for each step, lit as each is done. */
+/** The count, drawn: an arc around a point for each step, lit as each is done. */
 function Count({ done }: { done: boolean[] }) {
+  const arc = 100 / done.length;
   return (
     <svg width={14} height={14} viewBox="-7 -7 14 14" aria-hidden className="-rotate-90">
       {done.map((on, i) => (
@@ -63,8 +63,8 @@ function Count({ done }: { done: boolean[] }) {
           fill="none"
           pathLength={100}
           strokeWidth={2}
-          strokeDasharray="19 81"
-          strokeDashoffset={-(i * 25 + 3)}
+          strokeDasharray={`${arc - 6} ${100 - arc + 6}`}
+          strokeDashoffset={-(i * arc + 3)}
           className={`transition-colors duration-500 ${on ? "stroke-you" : "stroke-faint"}`}
         />
       ))}
