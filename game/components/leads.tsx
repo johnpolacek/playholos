@@ -1,7 +1,4 @@
-"use client";
-
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { Link, useNavigate } from "react-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useGame } from "@/components/game-provider";
 import { SkyArt } from "@/components/sky";
@@ -140,7 +137,7 @@ export function LeadList({
       <ul className="mt-1 flex flex-col">
         {leads.map((l, i) => (
           <li key={l.star} className="border-t border-faint">
-            <Link href={`/lead/${l.slug}`} {...peek(i)} className="flex items-baseline gap-3 py-2.5 text-left">
+            <Link to={`/lead/${l.slug}`} {...peek(i)} className="flex items-baseline gap-3 py-2.5 text-left">
               {row(l)}
             </Link>
           </li>
@@ -180,7 +177,7 @@ export function LeadList({
 
 export function Leads({ onNext }: { onSkip(): void; onNext(): void }) {
   const { save, wake } = useGame();
-  const router = useRouter();
+  const navigate = useNavigate();
   const root = useRef<HTMLDivElement>(null);
   const [felt, setFelt] = useState<FeltWorld[]>();
   const [dials] = useState<Dials>(() => ({ found: 0, grid: 0, focus: 0 }));
@@ -234,7 +231,7 @@ export function Leads({ onNext }: { onSkip(): void; onNext(): void }) {
 
   const ask = (question: string) =>
     leave(() => {
-      router.push(`/mind?ask=${encodeURIComponent(question)}`);
+      navigate(`/mind?ask=${encodeURIComponent(question)}`);
       wake();
     });
 

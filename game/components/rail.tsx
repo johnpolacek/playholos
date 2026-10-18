@@ -1,7 +1,4 @@
-"use client";
-
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { Link, useLocation } from "react-router";
 import { useLeads } from "@/components/scan";
 
 const TABS = [
@@ -12,7 +9,7 @@ const TABS = [
 ] as const;
 
 export function Rail() {
-  const path = usePathname();
+  const path = useLocation().pathname;
   // A reading landed and not yet opened marks Scan.
   const news = useLeads().fresh.size > 0;
   return (
@@ -23,7 +20,7 @@ export function Rail() {
         return (
           <Link
             key={href}
-            href={href}
+            to={href}
             aria-current={on ? "page" : undefined}
             aria-label={href === "/" && news ? `${label}, a new reading` : undefined}
             className={`flex items-center justify-center gap-1.5 text-[11px] ${on ? "font-semibold text-ink shadow-[inset_0_2px_0_var(--ink)]" : "text-muted"}`}

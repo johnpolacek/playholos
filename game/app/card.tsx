@@ -1,17 +1,16 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
-import { ImageResponse } from "next/og";
-import { YEAR_0 } from "@/lib/game/clock";
-import { KNOCKS } from "@/lib/game/knocks";
-import SKY from "@/lib/game/sky.json";
+import { Resvg } from "@resvg/resvg-js";
+import satori, { type SatoriOptions } from "satori";
+import { YEAR_0 } from "../lib/game/clock.ts";
+import { KNOCKS } from "../lib/game/knocks.ts";
+import SKY from "../lib/game/sky.json" with { type: "json" };
 
-// The card a shared link shows. On the left, the stars within 50 light-years of Sol, the ones "Where things stand"
-// sweeps, each at its right ascension and its true distance. Out from Sol run our aimed messages, each as far as it
-// has gone by Year 0: some have arrived, the rest are still on their way. On the right, the question and the game.
-export const alt =
-  "The stars within 50 light-years of Sol, each at its true distance, and how far our messages to them have gone by 2040. Beside them: Are we alone?";
-export const size = { width: 1200, height: 630 };
-export const contentType = "image/png";
+// The card a shared link shows, drawn as the client is built by vite.config.ts and served at /og-image.png. On the
+// left, the stars within 50 light-years of Sol, the ones "Where things stand" sweeps, each at its right ascension and
+// its true distance. Out from Sol run our aimed messages, each as far as it has gone by Year 0: some have arrived, the
+// rest are still on their way. On the right, the question and the game. Its alt text is in index.html.
+const size = { width: 1200, height: 630 };
 
 const INK = "#e6e3db";
 const MUTED = "#9c988f";
@@ -58,24 +57,27 @@ function map() {
   return `data:image/svg+xml;base64,${Buffer.from(svg).toString("base64")}`;
 }
 
-/** A font the game loads through next/font, fetched from Google Fonts as TrueType for the card. */
-async function font(family: string, weight: number) {
-  const css = await fetch(`https://fonts.googleapis.com/css2?family=${family.replaceAll(" ", "+")}:wght@${weight}`);
-  const src = (await css.text()).match(/src: url\((.+?)\) format\('(opentype|truetype)'\)/)?.[1];
-  if (!src) throw new Error(`Google Fonts sent no TrueType for ${family} ${weight}`);
-  return (await fetch(src)).arrayBuffer();
+/** One of the game's faces, from its package, as WOFF: the drawing can't read the WOFF2 the page loads. */
+const font = (file: string) => readFile(join(process.cwd(), "node_modules/@fontsource", file));
+
+/** The tab's mark, from public/icon.svg, ready to place as an image. */
+export const mark = async () => `data:image/svg+xml;base64,${await readFile(join(process.cwd(), "public/icon.svg"), "base64")}`;
+
+/** A drawing as a PNG. */
+export async function png(node: React.ReactNode, options: SatoriOptions) {
+  return new Resvg(await satori(node, options)).render().asPng();
 }
 
 const mono = { fontFamily: "Plex Mono", fontSize: 13, letterSpacing: 1.4, color: MUTED } as const;
 
-export default async function Image() {
-  const [suse, suseBold, plex, mark] = await Promise.all([
-    font("SUSE", 400),
-    font("SUSE", 600),
-    font("IBM Plex Mono", 400),
-    readFile(join(process.cwd(), "app/icon.svg"), "base64"),
+export async function card() {
+  const [suse, suseBold, plex, icon] = await Promise.all([
+    font("suse/files/suse-latin-400-normal.woff"),
+    font("suse/files/suse-latin-600-normal.woff"),
+    font("ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff"),
+    mark(),
   ]);
-  return new ImageResponse(
+  return png(
     (
       <div style={{ display: "flex", width: "100%", height: "100%", background: PAPER, fontFamily: "SUSE", color: INK }}>
         <img src={map()} width={C * 2} height={C * 2} alt="" style={{ position: "absolute", left: 15, top: 0 }} />
@@ -99,7 +101,7 @@ export default async function Image() {
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-            <img src={`data:image/svg+xml;base64,${mark}`} width={34} height={34} alt="" />
+            <img src={icon} width={34} height={34} alt="" />
             <div style={{ ...mono, fontSize: 18, letterSpacing: 5.4, color: INK }}>HOLOS</div>
           </div>
           <div style={{ marginTop: 40, fontSize: 74, fontWeight: 600, lineHeight: 1.05 }}>Are we alone?</div>

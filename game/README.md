@@ -4,18 +4,19 @@ The v2 game shell, built from [the v2 mocks](../explorations/v2-mocks/index.html
 
 ```bash
 npm install --prefix .. && npm install    # the atlas's packages, then the game's
-npm run dev                                # http://localhost:3000
+npm run dev                                # http://localhost:5173
 ```
 
-- `app/(play)/`: the shell. Top bar, map, tab page, and the rail. One route per tab.
+- A React app built with Vite, routed by React Router in `routes.tsx`, and served by one Cloudflare Worker. `worker/` answers `/api/*`, and every other address is the built client.
+- `app/play/`: the shell. Top bar, map, tab page, and the rail. One route per tab.
   - It fills the screen at every size. Tall, as on a phone, the parts stack. Wide, from a phone on its side up, the map fills the left and the tab page and rail stand on the right. `wide:` in `app/globals.css` is that breakpoint: landscape, 640px and up.
   - Screens before the shell lay out with `components/spread.tsx`: one column when tall, capped to a readable width on a tablet, and the art beside the words when wide.
-- `components/unlock.tsx`: the Mind is private in the test build. The rest of the game is open. On any production server, the Mind tab asks once for the code in `ACCESS_CODE` or the player's own Anthropic API key, and a cookie keeps it open. A key bills the player, and the server uses it per call without storing it. Only Console keys work: Anthropic's terms bar claude.ai logins in other apps. `next dev` is open.
-- `app/godview/`: what the player can't see. Dev only.
-- `app/api/mind/`: the Mind's chat, on the AI SDK. Needs `ANTHROPIC_API_KEY` in `.env.local`.
+- `components/unlock.tsx`: the Mind is private in the test build. The rest of the game is open. On any production server, the Mind tab asks once for the code in `ACCESS_CODE` or the player's own Anthropic API key, and a cookie keeps it open. A key bills the player, and the Worker uses it per call without storing it. Only Console keys work: Anthropic's terms bar claude.ai logins in other apps. `worker/access.ts` holds the cookies. The dev server is open.
+- `app/godview.tsx`: what the player can't see. Dev only.
+- `worker/mind.ts`: the Mind's chat, on the AI SDK. Needs `ANTHROPIC_API_KEY` in `.dev.vars`.
 - `lib/game/`: the clock, save types, and the browser store.
 - `lib/sim/`: the simulation, ported a piece at a time from Python in `../calcs/`. `npm test` checks it against Python.
-  - `data/worlds/`: the pool of drawn worlds, one per seed, written by `python3 ../calcs/export_worlds.py`. They hold the seed's truth, so only the server reads them.
+  - `data/worlds/`: the pool of drawn worlds, one per seed, written by `python3 ../calcs/export_worlds.py`. They hold the seed's truth, so they ride inside the Worker, never among the public files. `worker/world.ts` reads them there, and `lib/sim/world.ts` from disk for the tests.
   - `knowledge.ts` is the wall: the Mind is told what Earth knows at that moment, never the truth.
   - `pyrandom.ts` is CPython's random generator, so a roll here matches the same roll in the calcs and the mocks.
   - `works.ts` paces Earth's works from the player's orders, in one loop from Year 0. `data/works.json` holds each work's Years and want.
@@ -33,7 +34,7 @@ npm run dev                                # http://localhost:3000
 
 Everything else inside the shell is placeholder.
 
-Live at https://playholos.vercel.app. A push to `main` deploys it. By hand, deploy from the repo root with `vercel deploy --prod`: the Vercel project's Root Directory is `game`, and `.vercelignore` keeps the upload to what the game reads.
+Live at https://playholos.com, on the Cloudflare Worker `holos`. `npm run deploy` builds the client and the Worker and deploys both. Nothing deploys on push. The Worker's secrets, `ANTHROPIC_API_KEY` and `ACCESS_CODE`, are set with `npx wrangler secret put` and never committed. Locally they go in `.dev.vars`. The card a shared link shows and the home screen icon are drawn as the client is built, from `app/card.tsx` and `app/apple-icon.tsx`.
 
 ## Orders in the save, proposed
 

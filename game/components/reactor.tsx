@@ -1,5 +1,3 @@
-"use client";
-
 import { useImperativeHandle, useRef } from "react";
 import { gsap, prefersReducedMotion, useGSAP } from "@/lib/motion";
 import { ParticleField, perimeterPoint } from "@/lib/particles";

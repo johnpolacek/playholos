@@ -1,6 +1,4 @@
-"use client";
-
-import { useRouter } from "next/navigation";
+import { useNavigate } from "react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useGame } from "@/components/game-provider";
 import { Spread } from "@/components/spread";
@@ -194,7 +192,7 @@ function Timeline({ plan, done }: { plan: PlanT; done: Record<string, number | n
 
 export function Plan({ onNext }: { onSkip(): void; onNext(): void }) {
   const { save, setPlan } = useGame();
-  const router = useRouter();
+  const navigate = useNavigate();
   const root = useRef<HTMLDivElement>(null);
   const [past, setPast] = useState<EarthPast>();
   const [plan, setPlanState] = useState<PlanT>(() => save?.plan ?? EMPTY);
@@ -233,7 +231,7 @@ export function Plan({ onNext }: { onSkip(): void; onNext(): void }) {
   function queue() {
     setPlan(plan);
     leave(() => {
-      router.push("/projects");
+      navigate("/projects");
       onNext();
     });
   }
@@ -368,7 +366,7 @@ export function Plan({ onNext }: { onSkip(): void; onNext(): void }) {
             onClick={() =>
               leave(() => {
                 setPlan(plan);
-                router.push(`/mind?ask=${encodeURIComponent("What should we start with?")}`);
+                navigate(`/mind?ask=${encodeURIComponent("What should we start with?")}`);
                 onNext();
               })
             }

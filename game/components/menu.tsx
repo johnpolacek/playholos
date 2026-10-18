@@ -1,11 +1,8 @@
-"use client";
-
-import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
+import { Link } from "react-router";
 import { useGame } from "@/components/game-provider";
 import { useLeaveShell } from "@/components/wake";
-import { forgetKey, keyInUse } from "@/lib/key";
+import { forgetKey, useAccess } from "@/lib/key";
 import { gsap, prefersReducedMotion, useGSAP } from "@/lib/motion";
 
 const ABOUT = [
@@ -129,15 +126,14 @@ const row = "flex min-h-11 items-center justify-between gap-3 border-b border-ro
 function Drawer({ onClose }: { onClose(): void }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const closing = useRef(false);
-  const router = useRouter();
   const { newGame } = useGame();
   const leaveShell = useLeaveShell();
-  const [keyed, setKeyed] = useState<boolean | null>(null);
+  const open = useAccess();
+  const keyed = open === undefined ? null : open === "key";
   const [sure, setSure] = useState(false);
 
   useEffect(() => {
     if (!dialog.current?.open) dialog.current?.showModal();
-    keyInUse().then(setKeyed);
   }, []);
 
   // New game asks twice, and the second ask lapses.
@@ -214,17 +210,13 @@ function Drawer({ onClose }: { onClose(): void }) {
           </span>
           {keyed ? (
             <button
-              onClick={async () => {
-                await forgetKey();
-                setKeyed(false);
-                router.refresh();
-              }}
+              onClick={forgetKey}
               className="-mr-2 h-11 shrink-0 px-2 text-[13px] underline underline-offset-2"
             >
               Forget
             </button>
           ) : keyed === false ? (
-            <Link href="/mind" onClick={() => close()} className="-mr-2 flex h-11 shrink-0 items-center px-2 text-[13px] underline underline-offset-2">
+            <Link to="/mind" onClick={() => close()} className="-mr-2 flex h-11 shrink-0 items-center px-2 text-[13px] underline underline-offset-2">
               Add
             </Link>
           ) : null}
@@ -237,7 +229,7 @@ function Drawer({ onClose }: { onClose(): void }) {
 
         <Label>ABOUT HOLOS</Label>
         {ABOUT.map(([href, label]) => (
-          <Link key={href} data-d="item" href={href} className={row}>
+          <Link key={href} data-d="item" to={href} className={row}>
             {label}
             <span className="text-muted">→</span>
           </Link>

@@ -1,5 +1,3 @@
-"use client";
-
 import { useCallback, useEffect, useRef, useState } from "react";
 import { FILL, Spread } from "@/components/spread";
 import { SkyArt } from "@/components/sky";

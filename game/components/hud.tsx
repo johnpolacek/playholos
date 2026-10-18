@@ -1,5 +1,3 @@
-"use client";
-
 import { useGame } from "@/components/game-provider";
 import { Menu } from "@/components/menu";
 import { realTime, tenths, YEAR_0 } from "@/lib/game/clock";

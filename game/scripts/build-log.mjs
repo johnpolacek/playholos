@@ -1,6 +1,6 @@
 // The log for /about/building: every commit, filed under the part of the work it touched most, newest first, without
 // dates. Writes data/build-log.json. Run from game/: node scripts/build-log.mjs. It runs before every build too, and a
-// shallow clone, as Vercel's is unless VERCEL_DEEP_CLONE is set, keeps the committed log.
+// shallow clone keeps the committed log.
 import { execFileSync } from "node:child_process";
 import { writeFileSync } from "node:fs";
 
@@ -68,25 +68,48 @@ const PARTS = [
     key: "mind",
     title: "The Mind",
     about: "Earth's Mind, a language model that is told only what Earth knows, never the seed's truth.",
-    files: [/^game\/components\/(mind-chat|unlock)\.tsx$/, /^game\/app\/api\/mind\//, /^game\/lib\/(mind\/|access\.ts)/],
+    files: [
+      /^game\/components\/(mind-chat|unlock)\.tsx$/,
+      /^game\/app\/api\/mind\//,
+      /^game\/worker\/(mind|access)\.ts$/,
+      /^game\/lib\/(mind\/|access\.ts|key\.ts)/,
+    ],
   },
   {
     key: "sim",
     title: "The simulation",
     about: "The calcs ported to TypeScript a piece at a time, each checked against the Python.",
-    files: [/^game\/lib\/sim\//, /^game\/data\//, /^game\/scripts\//, /^game\/app\/(api\/earth|godview)\//],
+    files: [
+      /^game\/lib\/sim\//,
+      /^game\/data\//,
+      /^game\/scripts\//,
+      /^game\/app\/(api\/earth|godview)\//,
+      /^game\/app\/godview\.tsx$/,
+      /^game\/worker\/(world|earth|leads)\.ts$/,
+    ],
   },
   {
     key: "shell",
     title: "The shell",
     about: "The frame the game is played in: the top bar, the map, the tabs and the rail.",
-    files: [/^game\/app\/\(play\)\//, /^game\/components\/(hud|rail|tab-head|game-provider)\.tsx$/, /^game\/lib\/game\//],
+    files: [
+      /^game\/app\/\(play\)\//,
+      /^game\/app\/play\//,
+      /^game\/(main|routes)\.tsx$/,
+      /^game\/components\/(hud|rail|tab-head|game-provider)\.tsx$/,
+      /^game\/lib\/game\//,
+    ],
   },
   {
     key: "look",
     title: "Look and motion",
     about: "Chalk on slate, and motion where every element enters, rests and leaves.",
-    files: [/^game\/app\/(globals\.css|layout\.tsx)$/, /^game\/lib\/(motion|ink|theme)\.ts$/, /^game\/components\/theme-toggle/],
+    files: [
+      /^game\/app\/(globals\.css|layout\.tsx)$/,
+      /^game\/(index\.html|fonts\.css)$/,
+      /^game\/lib\/(motion|ink|theme)\.ts$/,
+      /^game\/components\/theme-toggle/,
+    ],
   },
 ];
 const GAME = new Set(["sky", "opening", "mind", "sim", "shell", "look"]);

@@ -1,5 +1,3 @@
-"use client";
-
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useGame } from "@/components/game-provider";
 import type { EarthPast } from "@/lib/game/past";

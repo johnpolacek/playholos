@@ -1,5 +1,3 @@
-"use client";
-
 import { createContext, use, useEffect, useRef, useState } from "react";
 import { yearAt } from "@/lib/game/clock";
 import { browserStore } from "@/lib/game/store";

@@ -1,17 +1,11 @@
-import type { Metadata } from "next";
 import { DocBody, PageHead } from "@/components/about/doc-page";
-import { renderDoc } from "@/lib/about/docs";
-
-export const metadata: Metadata = {
-  title: "Design",
-  description: "The rules of Holos, settled one question at a time, each answer dated.",
-};
+import doc from "../../../HOLOS_GAME_CONCEPT.md?doc";
 
 export default function Design() {
-  const doc = renderDoc("HOLOS_GAME_CONCEPT.md");
   const settled = doc.html.match(/\b(Settled|settled) 20\d\d-\d\d-\d\d/g)?.length ?? 0;
   return (
     <main>
+      <title>Design · Holos</title>
       <PageHead
         kicker="THE DESIGN"
         title="The rules, one question at a time"

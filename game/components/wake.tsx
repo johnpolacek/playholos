@@ -1,5 +1,3 @@
-"use client";
-
 import { createContext, use, useCallback, useEffect, useRef, useState } from "react";
 import { useGame } from "@/components/game-provider";
 import { Origins } from "@/components/origins";

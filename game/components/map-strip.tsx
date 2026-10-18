@@ -1,6 +1,4 @@
-"use client";
-
-import { usePathname } from "next/navigation";
+import { useLocation } from "react-router";
 import { useRef, useState } from "react";
 import { ScanMap } from "@/components/scan";
 import { SkyArt, useSky } from "@/components/sky";
@@ -22,7 +20,7 @@ const LABEL =
 // charter. On Scan and a lead's page it shows Earth's leads. Elsewhere it rests at a stop, turning slowly, travels
 // outward a stop a tap, and turns with a drag.
 export function MapStrip() {
-  const path = usePathname();
+  const path = useLocation().pathname;
   const scan = path === "/" || path.startsWith("/lead/");
   const [tall, setTall] = useState(false);
 

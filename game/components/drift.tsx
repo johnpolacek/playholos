@@ -1,6 +1,4 @@
-"use client";
-
-import Link from "next/link";
+import { Link } from "react-router";
 import { useCallback, useRef } from "react";
 import { Reactor, type ReactorHandle } from "@/components/reactor";
 import { SkyArt, useSky } from "@/components/sky";
@@ -107,7 +105,7 @@ export function Drift({ onNext }: { onSkip(): void; onNext(): void }) {
         </Reactor>
       </div>
       <footer className="relative flex flex-wrap items-center justify-center gap-x-4 gap-y-1 px-6 pb-5 font-mono text-[10px] tracking-[.1em] text-muted uppercase">
-        <Link data-m="foot" href="/about" className="transition-colors hover:text-ink">
+        <Link data-m="foot" to="/about" className="transition-colors hover:text-ink">
           About
         </Link>
         <a

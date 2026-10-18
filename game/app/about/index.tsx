@@ -1,10 +1,8 @@
-import type { Metadata } from "next";
 import { AboutHero } from "@/components/about/hero";
 import { AboutLink } from "@/components/about/motion";
-import { sectionCount, sourceCount } from "@/lib/about/docs";
 import log from "@/data/build-log.json";
-
-export const metadata: Metadata = { title: { absolute: "About · Holos" } };
+import { sections } from "../../../HOLOS_GAME_CONCEPT.md?stats";
+import { sources } from "../../../HOLOS_RESEARCH.md?stats";
 
 const KICK = "font-mono text-[10.5px] tracking-[.1em] text-muted";
 const H2 = "mt-3 max-w-[22ch] text-[28px] leading-[1.15] font-semibold text-balance wide:text-[34px]";
@@ -33,14 +31,14 @@ export default function About() {
       "THE RESEARCH",
       "Every source the game rests on",
       "What each found, why it matters to the game, and where the design uses it.",
-      `${sourceCount()} sources`,
+      `${sources} sources`,
     ],
     [
       "/about/design",
       "THE DESIGN",
       "The rules, one question at a time",
       "The design document as it stands today, every answer dated.",
-      `${sectionCount("HOLOS_GAME_CONCEPT.md")} sections`,
+      `${sections} sections`,
     ],
     [
       "/about/building",
@@ -53,6 +51,7 @@ export default function About() {
 
   return (
     <main>
+      <title>About · Holos</title>
       <AboutHero />
 
       <div className="mx-auto max-w-[1180px] px-4">

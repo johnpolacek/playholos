@@ -1,3 +1,4 @@
+import { Outlet } from "react-router";
 import { GameProvider } from "@/components/game-provider";
 import { Hud } from "@/components/hud";
 import { MapStrip } from "@/components/map-strip";
@@ -7,7 +8,7 @@ import { Opening } from "@/components/wake";
 
 // The whole screen at every size. Tall, as on a phone: the top bar, the map, the tab page and the rail, stacked.
 // Wide: the top bar across, the map fills the left, and the tab page and rail stand in a column on the right.
-export default function PlayLayout({ children }: { children: React.ReactNode }) {
+export default function PlayLayout() {
   return (
     <GameProvider>
       <Opening className="flex h-dvh w-full flex-col overflow-hidden bg-paper">
@@ -19,7 +20,7 @@ export default function PlayLayout({ children }: { children: React.ReactNode }) 
               data-shell="page"
               className="flex grow flex-col overflow-y-auto bg-panel px-4 pt-3 wide:col-start-2 wide:row-start-2 wide:border-l wide:border-faint"
             >
-              {children}
+              <Outlet />
             </main>
             <Rail />
           </div>

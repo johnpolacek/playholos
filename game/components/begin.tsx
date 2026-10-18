@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import { useGame } from "@/components/game-provider";
 import { useLeaveShell } from "@/components/wake";

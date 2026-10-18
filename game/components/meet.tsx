@@ -1,6 +1,4 @@
-"use client";
-
-import { useRouter } from "next/navigation";
+import { useNavigate } from "react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useGame } from "@/components/game-provider";
 import { SkyArt } from "@/components/sky";
@@ -45,7 +43,7 @@ function Globe({ dials, onReady }: { dials: Dials; onReady(flight: number): void
 
 export function Meet({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
   const { save, wake } = useGame();
-  const router = useRouter();
+  const navigate = useNavigate();
   const root = useRef<HTMLDivElement>(null);
   const [dials] = useState<Dials>(() => ({ dish: 0, scope: 0, compute: 0, threads: 0, mind: 0 }));
   const [ready, setReady] = useState(false);
@@ -94,7 +92,7 @@ export function Meet({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
     if (text === ASKS[0]) return leave(onNext);
     if (text === ASKS[2]) return leave(onSkip);
     leave(() => {
-      router.push(`/mind?ask=${encodeURIComponent(text)}`);
+      navigate(`/mind?ask=${encodeURIComponent(text)}`);
       wake();
     });
   }

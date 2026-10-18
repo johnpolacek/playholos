@@ -1,7 +1,6 @@
-// The design docs at the repo root, rendered for the about pages at build time. They are read from disk, never
-// copied, so the pages say what the docs say. Server only.
-import { readFileSync } from "node:fs";
-import path from "node:path";
+// The design docs at the repo root, rendered for the about pages as the client is built. vite.config.ts reads them
+// from disk, never copied, so the pages say what the docs say. A page imports HOLOS_*.md?doc for the doc rendered, or
+// ?stats for its counts.
 import { Marked, type Token, type Tokens } from "marked";
 
 /** The docs published at /about, by file. A link to any other file in the repo is private, so it shows as text. */
@@ -19,14 +18,6 @@ export interface Rendered {
   toc: { id: string; text: string }[];
   html: string;
 }
-
-// Each read spelled out, so the build traces these two files and not the whole repo.
-const READ: Record<Doc, () => string> = {
-  "HOLOS_RESEARCH.md": () => readFileSync(path.join(process.cwd(), "../HOLOS_RESEARCH.md"), "utf8"),
-  "HOLOS_GAME_CONCEPT.md": () => readFileSync(path.join(process.cwd(), "../HOLOS_GAME_CONCEPT.md"), "utf8"),
-};
-
-export const readDoc = (name: Doc) => READ[name]();
 
 const plain = (tokens: Token[]): string =>
   tokens.map((t) => ("tokens" in t && t.tokens ? plain(t.tokens) : "text" in t ? t.text : "")).join("");
@@ -66,8 +57,8 @@ const marked = new Marked({
   },
 });
 
-export function renderDoc(name: Doc): Rendered {
-  const tokens = marked.lexer(readDoc(name));
+export function renderDoc(markdown: string): Rendered {
+  const tokens = marked.lexer(markdown);
   const slug = slugger();
   let title = "";
   const toc: Rendered["toc"] = [];
@@ -84,8 +75,8 @@ export function renderDoc(name: Doc): Rendered {
   return { title, toc, html: marked.parser(body) };
 }
 
-/** How many sources the research log holds: one top-level entry each. */
-export const sourceCount = () => readDoc("HOLOS_RESEARCH.md").match(/^- \*\*\[/gm)?.length ?? 0;
-
-/** How many h2 sections a doc has. */
-export const sectionCount = (name: Doc) => readDoc(name).match(/^## /gm)?.length ?? 0;
+/** A doc's counts: the research log's sources, one top-level entry each, and its h2 sections. */
+export const countDoc = (markdown: string) => ({
+  sources: markdown.match(/^- \*\*\[/gm)?.length ?? 0,
+  sections: markdown.match(/^## /gm)?.length ?? 0,
+});

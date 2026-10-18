@@ -1,5 +1,3 @@
-"use client";
-
 import { useRef } from "react";
 import { createPortal } from "react-dom";
 import { YEAR_0 } from "@/lib/game/clock";

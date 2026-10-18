@@ -1,7 +1,4 @@
-"use client";
-
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { Link, useNavigate } from "react-router";
 import { useEffect, useRef } from "react";
 import { useGame } from "@/components/game-provider";
 import { LeadArt } from "@/components/lead-art";
@@ -44,7 +41,7 @@ const HEAD = "font-mono text-[10px] tracking-[.1em] text-muted uppercase";
 export function LeadPage({ slug }: { slug: string }) {
   const { leads, dials, readings, fresh } = useLeads();
   const { see } = useGame();
-  const router = useRouter();
+  const navigate = useNavigate();
   const root = useRef<HTMLDivElement>(null);
   const i = leads.findIndex((l) => l.slug === slug);
   const lead = leads[i];
@@ -63,10 +60,10 @@ export function LeadPage({ slug }: { slug: string }) {
   }, [dials, i]);
 
   useEffect(() => {
-    const back = (e: KeyboardEvent) => e.key === "Escape" && router.push("/");
+    const back = (e: KeyboardEvent) => e.key === "Escape" && navigate("/");
     window.addEventListener("keydown", back);
     return () => window.removeEventListener("keydown", back);
-  }, [router]);
+  }, [navigate]);
 
   useGSAP(
     () => {
@@ -80,7 +77,7 @@ export function LeadPage({ slug }: { slug: string }) {
   if (!lead)
     return (
       <p className="mt-2 text-sm text-muted">
-        We have no lead by that name. <Link href="/" className="text-ink underline underline-offset-2">Back to Scan</Link>
+        We have no lead by that name. <Link to="/" className="text-ink underline underline-offset-2">Back to Scan</Link>
       </p>
     );
 
@@ -89,7 +86,7 @@ export function LeadPage({ slug }: { slug: string }) {
       {/* The way back stays in reach while the page scrolls. */}
       <div className="sticky -top-3 z-10 -mx-4 bg-panel px-4 pt-3 pb-2">
         <Link
-          href="/"
+          to="/"
           data-m
           className="inline-flex h-9 items-center gap-1.5 rounded-full border border-ink bg-paper pr-4 pl-3 text-[14px] font-medium text-ink transition-colors hover:bg-ink hover:text-paper"
         >
@@ -155,7 +152,7 @@ export function LeadPage({ slug }: { slug: string }) {
 
       <button
         data-m
-        onClick={() => router.push(`/mind?ask=${encodeURIComponent(lead.ask)}`)}
+        onClick={() => navigate(`/mind?ask=${encodeURIComponent(lead.ask)}`)}
         className="mt-6 h-[46px] shrink-0 rounded-full border border-ink text-[15px] font-medium"
       >
         Ask the Mind about it

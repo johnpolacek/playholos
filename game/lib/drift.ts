@@ -1957,7 +1957,7 @@ function onGlobe(lat: number, lon: number, r: number): [number, number, number] 
 /** Land or sea, read off the atlas's day map: the sea is the blue. */
 async function landMask() {
   const img = new Image();
-  img.src = earthDaymap.src;
+  img.src = earthDaymap;
   await img.decode();
   const W = 1024;
   const H = 512;

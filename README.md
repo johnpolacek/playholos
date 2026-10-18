@@ -2,7 +2,7 @@
 
 A hard science fiction game about the Fermi paradox. In 2040, humanity crosses the singularity: Earth's people and machines wake as one Mind, life is solved, and you are its Will. One question is left: are we alone? Finding other life in the universe is our greatest opportunity and gravest threat.
 
-Play it at **https://playholos.vercel.app**.
+Play it at **https://playholos.com**.
 
 Everything starts from real data and published research. The sky is the real sky. Nothing travels faster than light. One game Year passes every five real minutes, and a message to a neighbor can take decades to arrive.
 
@@ -10,7 +10,7 @@ Spoilers: the design docs and `game/data/worlds/` say who the neighbors are.
 
 ## What's here
 
-- `game/`: the game, a Next.js app. See [game/README.md](game/README.md).
+- `game/`: the game, a React app on a Cloudflare Worker. See [game/README.md](game/README.md).
 - `src/`, `assets/`, `data/`: the atlas, a 3D map from Earth to the Local Group. The game draws its sky from it. See [The atlas](#the-atlas).
 - `calcs/`: Python that draws whole games, prices every work, and checks every neighbor against what Earth can see. The game's simulation is ported from it.
 - [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md): the design, settled one question at a time.

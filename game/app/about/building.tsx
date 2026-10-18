@@ -1,11 +1,5 @@
-import type { Metadata } from "next";
 import { PageHead } from "@/components/about/doc-page";
 import log from "@/data/build-log.json";
-
-export const metadata: Metadata = {
-  title: "Building",
-  description: "How Holos is built: evidence first, then rules, numbers, mocks, a real map, and the game.",
-};
 
 type Part = (typeof log.parts)[number];
 
@@ -85,6 +79,7 @@ export default function Building() {
   const total = log.parts.reduce((n, p) => n + p.items.length, 0);
   return (
     <main>
+      <title>Building · Holos</title>
       <PageHead
         kicker="HOW IT IS BUILT"
         title="Evidence, then rules, then the game"

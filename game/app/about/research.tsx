@@ -1,21 +1,16 @@
-import type { Metadata } from "next";
 import { DocBody, PageHead } from "@/components/about/doc-page";
-import { renderDoc, sourceCount } from "@/lib/about/docs";
-
-export const metadata: Metadata = {
-  title: "Research",
-  description: "Every source Holos rests on: what it found, why it matters, and where the game uses it.",
-};
+import doc from "../../../HOLOS_RESEARCH.md?doc";
+import { sources } from "../../../HOLOS_RESEARCH.md?stats";
 
 export default function Research() {
-  const doc = renderDoc("HOLOS_RESEARCH.md");
   return (
     <main>
+      <title>Research · Holos</title>
       <PageHead
         kicker="THE RESEARCH"
         title="Every source the game rests on"
         stats={[
-          [sourceCount(), "sources"],
+          [sources, "sources"],
           [doc.toc.length, "questions"],
         ]}
       >

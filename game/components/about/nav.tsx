@@ -1,6 +1,4 @@
-"use client";
-
-import { usePathname } from "next/navigation";
+import { useLocation } from "react-router";
 import { useEffect, useRef } from "react";
 import { AboutLink } from "@/components/about/motion";
 import { gsap, prefersReducedMotion, useGSAP } from "@/lib/motion";
@@ -14,7 +12,7 @@ const PAGES = [
 // The about pages' top bar: Holos, the three pages, and the way back to the game. A line under the page you're on
 // slides to the next one as you go.
 export function AboutNav() {
-  const here = usePathname();
+  const here = useLocation().pathname;
   const bar = useRef<HTMLDivElement>(null);
   const line = useRef<HTMLSpanElement>(null);
   const placed = useRef(false);

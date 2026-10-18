@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useRef } from "react";
 import { useGame } from "@/components/game-provider";
 import { YEAR_0, yearAt } from "@/lib/game/clock";

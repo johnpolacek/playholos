@@ -275,6 +275,8 @@
    "title": "The sky",
    "about": "The game's one Three.js scene, behind every screen, and the camera that flies between them.",
    "items": [
+    "Repo: renamed to playholos, and the landing page's GitHub link follows",
+    "Begin game is a reactor, from animaxxing's Get Animaxxed",
     "The camera's remaining flight, which the sky's remount needs",
     "The drift behind Earth wakes, a flight from Earth to the Local Group and home",
     "A bigger map, and a top bar that fits its text",
@@ -287,6 +289,10 @@
    "title": "The opening",
    "about": "The screens before Year 0: Earth's past, its people, where things stand, and the charter.",
    "items": [
+    "The queue, on the Projects tab, each build a thread to its done Year that fills once we begin",
+    "Plan our waking, with the first Years drawn as they would run",
+    "Humans are we, never they, and Who they are becomes Who we are",
+    "The singularity is humanity's, are we alone stays open, and About Holos moves",
     "What doesn't fit? opens Earth's leads on a star map",
     "Names on What you inherit step aside when places are close on a phone",
     "The charter's options hold still as the sets change",
@@ -320,6 +326,7 @@
    "title": "The Mind",
    "about": "Earth's Mind, a language model that is told only what Earth knows, never the seed's truth.",
    "items": [
+    "Bring your own Anthropic key to the Mind, a galaxy menu in the corner, and a card for shared links",
     "Only the Mind asks for the access code",
     "The Mind knows Earth's leads and its knock record",
     "The Mind knows Earth's kit at Year 0",
@@ -345,6 +352,8 @@
    "title": "The shell",
    "about": "The frame the game is played in: the top bar, the map, the tabs and the rail.",
    "items": [
+    "The first reading lands, a third cloud at Fomalhaut in Year 0.1, moving its words and marking Scan until opened",
+    "Scan takes over from Home and Report, and each lead opens its own page, drawn, measured, and what it could be",
     "The full motion treatment, from Earth wakes to the shell",
     "Begin, and the live clock in the top bar",
     "A thin Next.js shell for the v2 phone"

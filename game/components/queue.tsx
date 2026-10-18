@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useGame } from "@/components/game-provider";
 import { realTime, tenths } from "@/lib/game/clock";
@@ -8,7 +6,7 @@ import { BUILDS, EMPTY, events, FOMALHAUT, schedule, SEARCHES, STUDIES } from "@
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
 
 // The queue: what Planning saved, on the Years it will take. Every row is a thread from Year 0 to the Year it is done
-// or lands, on one shared axis, with a now line across them all. Before Begin the line waits at Year 0. After, it moves
+// or lands, on one shared axis, with a now mark on each. Before Begin the mark waits at Year 0. After, it moves
 // at 5 real minutes a Year, the threads fill behind it, and what it passes is done. Dates are the game's own pacing,
 // as Planning drew them.
 
@@ -53,6 +51,11 @@ function Thread({ row, t, now }: { row: Row; t: number; now: number }) {
       <span
         className={`absolute inset-y-0 left-0 origin-left rounded-full ${color} transition-[width] duration-1000 ease-linear`}
         style={{ width: `${fill * 100}%`, opacity: over ? 1 : 0.8 }}
+      />
+      {/* Now, a short mark across this thread only, so it never runs through the words. */}
+      <span
+        className="absolute -inset-y-1 border-l border-you/40"
+        style={{ left: `${Math.min(1, now / t) * 100}%` }}
       />
       {row.at !== null && (
         <span
@@ -140,7 +143,7 @@ export function Queue() {
 
   return (
     <div ref={root} className="relative">
-      {/* The axis, with the now line over every thread. */}
+      {/* The axis, with now as a dot. */}
       <div className="relative mt-1 h-4 font-mono text-[9px] text-muted">
         {ticks.map((y) => (
           <span key={y} className="absolute -translate-x-1/2" style={{ left: `${(y / t) * 100}%` }}>
@@ -149,15 +152,10 @@ export function Queue() {
         ))}
         <span className="absolute left-0 text-you">Year 0</span>
       </div>
-      <div
-        className="pointer-events-none absolute top-4 bottom-0"
+      <span
+        className={`pointer-events-none absolute top-4 size-[7px] -translate-x-1/2 rounded-full bg-you ${began ? "" : "animate-pulse"}`}
         style={{ left: `${Math.min(1, now / t) * 100}%` }}
-      >
-        <span className="absolute inset-y-0 border-l border-you/40" />
-        <span
-          className={`absolute top-0 size-[7px] -translate-x-1/2 rounded-full bg-you ${began ? "" : "animate-pulse"}`}
-        />
-      </div>
+      />
 
       <h3 className="mt-2 text-[10.5px] tracking-[.08em] text-muted">
         {began ? "UNDER WAY" : "QUEUED"} · {queued.length}

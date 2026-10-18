@@ -1,5 +1,3 @@
-"use client";
-
 import { createContext, use, useCallback, useEffect, useRef, useState } from "react";
 import type { Drift, Mark, Show } from "@/lib/drift";
 import type { Stop } from "@/lib/flight";
