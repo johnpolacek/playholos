@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useGame } from "@/components/game-provider";
 import { useLeaveShell } from "@/components/wake";
 import { seenYearZero, YearZero } from "@/components/year-zero";
+import { MindNote } from "@/components/mind-note";
 import { Queue } from "@/components/queue";
 import { realTime } from "@/lib/game/clock";
 
@@ -23,11 +24,10 @@ export function Begin() {
         </div>
         <Queue />
         <div className="mt-auto mb-3 pt-4">
-          <div className="rounded-xl border border-l-[3px] border-frame border-l-you bg-paper px-[11px] py-[9px] text-[12.5px] leading-[1.4]">
-            <span className="mb-0.5 block font-mono text-[9.5px] tracking-[.08em] text-you">THE MIND</span>
+          <MindNote>
             Nothing here sends anything. When you begin, one Year passes every five of your minutes, and we keep going
             while you’re away.
-          </div>
+          </MindNote>
         </div>
         <button
           onClick={() => {

@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mind Voice Orbit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=SUSE:wght@100..800&display=swap" rel="stylesheet">
+<style>
+/* Offline, the game's own copies of the fonts. */
+@font-face { font-family: "SUSE Variable"; font-weight: 100 800; src: url("../game/node_modules/@fontsource-variable/suse/files/suse-latin-wght-normal.woff2") format("woff2"); }
+@font-face { font-family: "Plex Mono Local"; font-weight: 400; src: url("../game/node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2") format("woff2"); }
+
+/* Colors from game/app/globals.css. The game is always dark. */
+:root {
+  --page: #0b0c0d;
+  --frame: #2a2b2e;
+  --paper: #121314;
+  --ink: #e6e3db;
+  --muted: #9c988f;
+  --faint: #34363a;
+  --panel: #17181a;
+  --rowline: #26282b;
+  --you: #5bb8d6;
+  --you-rgb: 91, 184, 214;
+  --sans: "SUSE", "SUSE Variable", sans-serif;
+  --mono: "IBM Plex Mono", "Plex Mono Local", monospace;
+  --z: 1;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: #070808; color: var(--ink); font-family: var(--sans); text-wrap: pretty; }
+p { margin: 0; }
+
+header { max-width: 1240px; margin: 0 auto; padding: 40px 16px 8px; display: flex; flex-wrap: wrap; gap: 16px; align-items: end; justify-content: space-between; }
+h1 { margin: 0; font-size: 22px; font-weight: 600; }
+header p { margin-top: 6px; color: var(--muted); font-size: 14px; max-width: 56ch; }
+header a { color: var(--muted); }
+.zoom { display: flex; gap: 4px; font-family: var(--mono); font-size: 11px; }
+.zoom button { background: none; color: var(--muted); border: 1px solid var(--frame); border-radius: 999px; padding: 5px 10px; font: inherit; cursor: pointer; }
+.zoom button[aria-pressed="true"] { color: var(--ink); border-color: var(--muted); }
+
+main { max-width: 1240px; margin: 0 auto; padding: 16px 16px 64px; display: grid; gap: 28px 20px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr)); }
+.card { display: flex; flex-direction: column; gap: 10px; }
+.meta { display: flex; gap: 10px; align-items: baseline; }
+.num { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.name { font-size: 15px; font-weight: 600; }
+.note { color: var(--muted); font-size: 13px; line-height: 1.4; margin-top: -4px; }
+.frame { zoom: var(--z); overflow: hidden; background: var(--page); border: 1px solid var(--rowline); border-radius: 16px; padding: 28px 16px 16px; display: flex; flex-direction: column; gap: 12px; }
+.begin { height: 46px; border-radius: 999px; background: var(--ink); color: var(--paper); font: 500 15px var(--sans); display: grid; place-items: center; }
+
+/* Shared pieces: the head is mark, name, rule. */
+.who { font-family: var(--mono); font-size: 9.5px; letter-spacing: .1em; color: var(--you); white-space: nowrap; }
+.words { font-size: 12.5px; line-height: 1.4; }
+.head { display: flex; align-items: center; gap: 7px; margin-bottom: 6px; }
+.line { flex: 1; height: 1px; background: var(--frame); }
+.mark { flex: none; display: block; width: 15px; height: 15px; }
+.mark svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.mark .ring { fill: none; stroke: var(--faint); stroke-width: 1; }
+.mark .halo { fill: rgba(var(--you-rgb), .18); animation: swell 4s ease-in-out infinite reverse; }
+.mark .core { fill: var(--you); animation: swell 4s ease-in-out infinite; }
+.mark .sol { animation: spin 9s linear infinite; }
+.mark .sol circle { fill: var(--ink); }
+.mark .trail { fill: none; stroke-width: 1.6; stroke-linecap: round; }
+@keyframes swell { 0%, 100% { transform: scale(.85); } 50% { transform: scale(1.1); } }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* 01 On the rule */
+
+/* 02 Fading rule */
+.v02 .line { background: linear-gradient(90deg, rgba(var(--you-rgb), .55), transparent); }
+
+/* 03 Sol's trail */
+.v03 .line { background: linear-gradient(90deg, rgba(var(--you-rgb), .4), var(--frame) 40%, transparent); }
+
+/* 04 Pulse on the rule */
+.v04 .line { position: relative; overflow: hidden; background: var(--frame); }
+.v04 .line::after { content: ""; position: absolute; top: 0; height: 1px; width: 60px; left: -60px; background: linear-gradient(90deg, transparent, var(--you), transparent); animation: pulse 4.5s ease-in infinite; }
+@keyframes pulse { 0% { left: -60px; } 55%, 100% { left: 100%; } }
+
+/* 05 Glow from the mark */
+.v05 { position: relative; }
+.v05::before { content: ""; position: absolute; left: -80px; top: -70px; width: 200px; height: 160px; background: radial-gradient(closest-side, rgba(var(--you-rgb), .16), transparent); pointer-events: none; animation: glow 4s ease-in-out infinite; }
+.v05 > * { position: relative; }
+.v05 .line { background: linear-gradient(90deg, rgba(var(--you-rgb), .35), transparent 80%); }
+@keyframes glow { 0%, 100% { opacity: .6; } 50% { opacity: 1; } }
+
+/* 06 Gradient panel */
+.v06 { border-radius: 12px; padding: 10px 12px 12px; background: linear-gradient(180deg, rgba(var(--you-rgb), .1), rgba(var(--you-rgb), .015) 85%); }
+.v06 .line { background: linear-gradient(90deg, rgba(var(--you-rgb), .4), transparent); }
+
+/* 07 Gradient edge */
+.v07 { border: 1px solid transparent; border-radius: 12px; padding: 10px 12px; background: linear-gradient(var(--paper), var(--paper)) padding-box, linear-gradient(135deg, rgba(var(--you-rgb), .75), var(--frame) 40%, var(--frame)) border-box; }
+
+/* 08 Name in the edge */
+.v08 { position: relative; margin-top: 6px; padding: 14px 12px 12px; border-radius: 12px 12px 0 0; background: linear-gradient(180deg, rgba(var(--you-rgb), .06), transparent 90%); }
+.v08::before { content: ""; position: absolute; inset: 0; border: 1px solid rgba(var(--you-rgb), .4); border-bottom: 0; border-radius: 12px 12px 0 0; -webkit-mask-image: linear-gradient(#000, transparent); mask-image: linear-gradient(#000, transparent); pointer-events: none; }
+.v08 .head { position: absolute; top: -8px; left: 9px; margin: 0; padding: 0 6px 0 4px; background: var(--page); }
+
+/* 09 Centered crest */
+.v09 { text-align: center; }
+.v09 .head { justify-content: center; }
+.v09 .line:first-child { background: linear-gradient(90deg, transparent, rgba(var(--you-rgb), .45)); }
+.v09 .line:last-child { background: linear-gradient(90deg, rgba(var(--you-rgb), .45), transparent); }
+
+/* 10 Measured rule */
+.v10 .line { height: 5px; background:
+  repeating-linear-gradient(90deg, rgba(var(--you-rgb), .7) 0 1px, transparent 1px 30px) bottom / 100% 5px no-repeat,
+  repeating-linear-gradient(90deg, var(--muted) 0 1px, transparent 1px 6px) bottom / 100% 3px no-repeat,
+  linear-gradient(var(--frame), var(--frame)) bottom / 100% 1px no-repeat;
+  -webkit-mask-image: linear-gradient(90deg, #000, transparent); mask-image: linear-gradient(90deg, #000, transparent); transform: translateY(-2px); }
+
+/* 11 Rule and time */
+.v11 .line { background: linear-gradient(90deg, rgba(var(--you-rgb), .45), var(--frame) 50%); }
+.v11 .when { font-family: var(--mono); font-size: 9.5px; letter-spacing: .08em; color: var(--muted); white-space: nowrap; }
+.v11 .foot { height: 1px; margin-top: 10px; background: linear-gradient(90deg, var(--frame), transparent); }
+
+/* 12 Night panel */
+.v12 { position: relative; overflow: hidden; border-radius: 12px; padding: 10px 12px 12px; border: 1px solid rgba(var(--you-rgb), .14); background:
+  radial-gradient(120% 90% at 0 0, rgba(var(--you-rgb), .14), transparent 60%),
+  linear-gradient(180deg, #0f1519, var(--paper)); }
+.v12::before, .v12::after { content: ""; position: absolute; inset: 0; pointer-events: none; }
+.v12::before { background:
+  radial-gradient(1px 1px at 72% 22%, rgba(230, 227, 219, .8), transparent),
+  radial-gradient(1px 1px at 88% 58%, rgba(230, 227, 219, .5), transparent),
+  radial-gradient(1px 1px at 55% 84%, rgba(230, 227, 219, .4), transparent),
+  radial-gradient(1px 1px at 94% 12%, rgba(230, 227, 219, .6), transparent); }
+.v12::after { background:
+  radial-gradient(1.5px 1.5px at 81% 36%, rgba(var(--you-rgb), .9), transparent),
+  radial-gradient(1px 1px at 63% 64%, rgba(230, 227, 219, .7), transparent); animation: twinkle 5s ease-in-out infinite; }
+.v12 > * { position: relative; }
+.v12 .line { background: linear-gradient(90deg, rgba(var(--you-rgb), .4), transparent 75%); }
+@keyframes twinkle { 0%, 100% { opacity: .2; } 50% { opacity: 1; } }
+
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>The Mind's voice, orbit mark</h1>
+    <p>Twelve takes on 12 from the <a href="mind-voice.html">first round</a>. The mark is smaller and sits on the line with the name. Most keep the rule, and most try a gradient.</p>
+  </div>
+  <div class="zoom" role="group" aria-label="Size">
+    <button data-z="1" aria-pressed="true">1×</button>
+    <button data-z="1.25">1.25×</button>
+    <button data-z="1.5">1.5×</button>
+  </div>
+</header>
+
+<main>
+  <section class="card">
+    <div class="meta"><span class="num">01</span><span class="name">On the rule</span></div>
+    <p class="note">The plain join of the two: mark, name, and a flat hairline. No box.</p>
+    <div class="frame">
+      <div class="v01"><div class="head"><span class="mark"></span><span class="who">THE MIND</span><span class="line"></span></div><p class="words">Nothing here sends anything. When you begin, one Year passes every five of your minutes, and we keep going while you’re away.</p></div>
+      <div class="begin">Begin · Year 0 starts now</div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="meta"><span class="num">02</span><span class="name">Fading rule</span></div>
+    <p class="note">The rule starts blue at the name and fades out to the right.</p>
+    <div class="frame">
+      <div class="v02"><div class="head"><span class="mark"></span><span class="who">THE MIND</span><span class="line"></span></div><p class="words">Nothing here sends anything. When you begin, one Year passes every five of your minutes, and we keep going while you’re away.</p></div>
+      <div class="begin">Begin · Year 0 starts now</div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="meta"><span class="num">03</span><span class="name">Sol's trail</span></div>
+    <p class="note">Sol drags a short fading arc as it circles. The rule fades from blue.</p>
+    <div class="frame">
+      <div class="v03"><div class="head"><span class="mark" data-trail></span><span class="who">THE MIND</span><span class="line"></span></div><p class="words">Nothing here sends anything. When you begin, one Year passes every five of your minutes, and we keep going while you’re away.</p></div>
+      <div class="begin">Begin · Year 0 starts now</div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="meta"><span class="num">04</span><span class="name">Pulse on the rule</span></div>
+    <p class="note">Every few seconds a short light leaves the name and runs down the rule.</p>
+    <div class="frame">
+      <div class="v04"><div class="head"><span class="mark"></span><span class="who">THE MIND</span><span class="line"></span></div><p class="words">Nothing here sends anything. When you begin, one Year passes every five of your minutes, and we keep going while you’re away.</p></div>
+      <div class="begin">Begin · Year 0 starts now</div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="meta"><span class="num">05</span><span class="name">Glow from the mark</span></div>
+    <p class="note">A soft blue light spreads from the mark and breathes with the core.</p>
+    <div class="frame">
+      <div class="v05"><div class="head"><span class="mark" data-lit></span><span class="who">THE MIND</span><span class="line"></span></div><p class="words">Nothing here sends anything. When you begin, one Year passes every five of your minutes, and we keep going while you’re away.</p></div>
+      <div class="begin">Begin · Year 0 starts now</div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="meta"><span class="num">06</span><span class="name">Gradient panel</span></div>
+    <p class="note">A borderless panel, blue at the top, fading to almost nothing below.</p>
+    <div class="frame">
+      <div class="v06"><div class="head"><span class="mark"></span><span class="who">THE MIND</span><span class="line"></span></div><p class="words">Nothing here sends anything. When you begin, one Year passes every five of your minutes, and we keep going while you’re away.</p></div>
+      <div class="begin">Begin · Year 0 starts now</div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="meta"><span class="num">07</span><span class="name">Gradient edge</span></div>
+    <p class="note">A plain box whose edge is lit blue at the mark's corner and dims away.</p>
+    <div class="frame">
+      <div class="v07"><div class="head"><span class="mark"></span><span class="who">THE MIND</span><span class="line"></span></div><p class="words">Nothing here sends anything. When you begin, one Year passes every five of your minutes, and we keep going while you’re away.</p></div>
+      <div class="begin">Begin · Year 0 starts now</div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="meta"><span class="num">08</span><span class="name">Name in the edge</span></div>
+    <p class="note">The box's top edge is the rule. The mark and name sit in it, and the sides fade down.</p>
+    <div class="frame">
+      <div class="v08"><div class="head"><span class="mark"></span><span class="who">THE MIND</span></div><p class="words">Nothing here sends anything. When you begin, one Year passes every five of your minutes, and we keep going while you’re away.</p></div>
+      <div class="begin">Begin · Year 0 starts now</div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="meta"><span class="num">09</span><span class="name">Centered crest</span></div>
+    <p class="note">Mark and name in the middle, rules fading out to both sides.</p>
+    <div class="frame">
+      <div class="v09"><div class="head"><span class="line"></span><span class="mark"></span><span class="who">THE MIND</span><span class="line"></span></div><p class="words">Nothing here sends anything. When you begin, one Year passes every five of your minutes, and we keep going while you’re away.</p></div>
+      <div class="begin">Begin · Year 0 starts now</div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="meta"><span class="num">10</span><span class="name">Measured rule</span></div>
+    <p class="note">The rule is a fine scale, like an instrument's, fading to the right.</p>
+    <div class="frame">
+      <div class="v10"><div class="head"><span class="mark" data-dash></span><span class="who">THE MIND</span><span class="line"></span></div><p class="words">Nothing here sends anything. When you begin, one Year passes every five of your minutes, and we keep going while you’re away.</p></div>
+      <div class="begin">Begin · Year 0 starts now</div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="meta"><span class="num">11</span><span class="name">Rule and time</span></div>
+    <p class="note">The rule runs to when it was said. A fading rule closes it below.</p>
+    <div class="frame">
+      <div class="v11"><div class="head"><span class="mark"></span><span class="who">THE MIND</span><span class="line"></span><span class="when">BEFORE YEAR 0</span></div><p class="words">Nothing here sends anything. When you begin, one Year passes every five of your minutes, and we keep going while you’re away.</p><div class="foot"></div></div>
+      <div class="begin">Begin · Year 0 starts now</div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="meta"><span class="num">12</span><span class="name">Night panel</span></div>
+    <p class="note">A deep blue panel with a few stars, two of them slowly twinkling.</p>
+    <div class="frame">
+      <div class="v12"><div class="head"><span class="mark" data-trail data-lit></span><span class="who">THE MIND</span><span class="line"></span></div><p class="words">Nothing here sends anything. When you begin, one Year passes every five of your minutes, and we keep going while you’re away.</p></div>
+      <div class="begin">Begin · Year 0 starts now</div>
+    </div>
+  </section>
+</main>
+
+<script>
+  // The mark: Sol circling a breathing core. data-trail adds a fading arc behind Sol, data-lit a brighter center,
+  // data-dash a dotted orbit.
+  document.querySelectorAll(".mark").forEach((el, i) => {
+    const { trail, lit, dash } = el.dataset;
+    const t = trail !== undefined, l = lit !== undefined, d = dash !== undefined;
+    el.innerHTML = `<svg viewBox="-8 -8 16 16" aria-hidden="true">
+      <defs>
+        <linearGradient id="trail${i}" gradientUnits="userSpaceOnUse" x1="-4.6" y1="-4.6" x2="6.5" y2="0">
+          <stop offset="0" stop-color="#5bb8d6" stop-opacity="0" /><stop offset="1" stop-color="#5bb8d6" stop-opacity=".9" />
+        </linearGradient>
+        <radialGradient id="lit${i}"><stop offset="0" stop-color="#d8f1f8" /><stop offset="1" stop-color="#5bb8d6" /></radialGradient>
+      </defs>
+      <circle class="ring" r="6.5"${d ? ' stroke-dasharray="1 1.6"' : ""} />
+      <circle class="halo" r="${l ? 4.4 : 3.8}" />
+      <circle class="core" r="2.2"${l ? ` style="fill:url(#lit${i})"` : ""} />
+      <g class="sol">${t ? `<path class="trail" d="M-4.6 -4.6 A6.5 6.5 0 0 1 6.5 0" stroke="url(#trail${i})" />` : ""}<circle cx="6.5" cy="0" r="1.3" /></g>
+    </svg>`;
+  });
+
+  const buttons = document.querySelectorAll(".zoom button");
+  const set = (z) => {
+    document.documentElement.style.setProperty("--z", z);
+    buttons.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.z === z)));
+    try { localStorage.setItem("mind-voice-zoom", z); } catch {}
+  };
+  buttons.forEach((b) => b.addEventListener("click", () => set(b.dataset.z)));
+  try { const z = localStorage.getItem("mind-voice-zoom"); if (z) set(z); } catch {}
+</script>
+</body>
+</html>

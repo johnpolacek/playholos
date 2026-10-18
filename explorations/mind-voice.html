@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mind Voice Designs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=SUSE:wght@100..800&display=swap" rel="stylesheet">
+<style>
+/* Offline, the game's own copies of the fonts. */
+@font-face { font-family: "SUSE Variable"; font-weight: 100 800; src: url("../game/node_modules/@fontsource-variable/suse/files/suse-latin-wght-normal.woff2") format("woff2"); }
+@font-face { font-family: "Plex Mono Local"; font-weight: 400; src: url("../game/node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2") format("woff2"); }
+
+/* Colors from game/app/globals.css. The game is always dark. */
+:root {
+  --page: #0b0c0d;
+  --page-ink2: #a9a59c;
+  --frame: #2a2b2e;
+  --paper: #121314;
+  --ink: #e6e3db;
+  --muted: #9c988f;
+  --faint: #34363a;
+  --panel: #17181a;
+  --rowline: #26282b;
+  --you: #5bb8d6;
+  --you-rgb: 91, 184, 214;
+  --sans: "SUSE", "SUSE Variable", sans-serif;
+  --mono: "IBM Plex Mono", "Plex Mono Local", monospace;
+  --z: 1;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: #070808; color: var(--ink); font-family: var(--sans); text-wrap: pretty; }
+p { margin: 0; }
+
+header { max-width: 1240px; margin: 0 auto; padding: 40px 16px 8px; display: flex; flex-wrap: wrap; gap: 16px; align-items: end; justify-content: space-between; }
+h1 { margin: 0; font-size: 22px; font-weight: 600; }
+header p { margin-top: 6px; color: var(--muted); font-size: 14px; max-width: 52ch; }
+.zoom { display: flex; gap: 4px; font-family: var(--mono); font-size: 11px; }
+.zoom button { background: none; color: var(--muted); border: 1px solid var(--frame); border-radius: 999px; padding: 5px 10px; font: inherit; cursor: pointer; }
+.zoom button[aria-pressed="true"] { color: var(--ink); border-color: var(--muted); }
+
+main { max-width: 1240px; margin: 0 auto; padding: 16px 16px 64px; display: grid; gap: 28px 20px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr)); }
+.card { display: flex; flex-direction: column; gap: 10px; }
+.meta { display: flex; gap: 10px; align-items: baseline; }
+.num { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.name { font-size: 15px; font-weight: 600; }
+.note { color: var(--muted); font-size: 13px; line-height: 1.4; margin-top: -4px; }
+.frame { zoom: var(--z); background: var(--page); border: 1px solid var(--rowline); border-radius: 16px; padding: 28px 16px 16px; display: flex; flex-direction: column; gap: 12px; }
+.now .frame { border-style: dashed; }
+.begin { height: 46px; border-radius: 999px; background: var(--ink); color: var(--paper); font: 500 15px var(--sans); display: grid; place-items: center; }
+
+/* Shared pieces */
+.who { font-family: var(--mono); font-size: 9.5px; letter-spacing: .1em; color: var(--you); }
+.words { font-size: 12.5px; line-height: 1.4; }
+
+/* 00 Now */
+.d00 { border: 1px solid var(--frame); border-left: 3px solid var(--you); border-radius: 12px; background: var(--paper); padding: 9px 11px; }
+.d00 .who { display: block; margin-bottom: 2px; letter-spacing: .08em; }
+
+/* 01 Bare voice */
+.d01 .who { display: block; margin-bottom: 4px; }
+.d01 .words { font-size: 14px; line-height: 1.45; }
+
+/* 02 Name on a rule */
+.d02 .rule { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
+.d02 .rule::before { content: ""; width: 10px; height: 1px; background: var(--frame); }
+.d02 .rule::after { content: ""; flex: 1; height: 1px; background: var(--frame); }
+
+/* 03 Breathing core */
+.d03 { border: 1px solid var(--frame); border-radius: 12px; background: var(--paper); padding: 10px 12px; }
+.d03 .head { display: flex; align-items: center; gap: 7px; margin-bottom: 4px; }
+.d03 .core { width: 6px; height: 6px; border-radius: 50%; background: var(--you); animation: breathe 3.2s ease-in-out infinite; }
+@keyframes breathe {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(var(--you-rgb), .45); transform: scale(.85); }
+  50% { box-shadow: 0 0 0 4px rgba(var(--you-rgb), 0); transform: scale(1); }
+}
+
+/* 04 Hanging quote */
+.d04 { position: relative; padding: 4px 0 0 22px; }
+.d04::before { content: "\201C"; position: absolute; left: -1px; top: -10px; font: 600 42px/1 var(--sans); color: var(--you); opacity: .55; }
+.d04 .words { font-size: 14px; line-height: 1.45; }
+.d04 .by { display: flex; align-items: center; gap: 8px; margin-top: 7px; }
+.d04 .by::before { content: ""; width: 12px; height: 1px; background: var(--you); opacity: .6; }
+
+/* 05 Bubble from a core */
+.d05 { display: flex; align-items: flex-end; gap: 8px; }
+.d05 .face { flex: none; width: 22px; height: 22px; border-radius: 50%; background: radial-gradient(circle, var(--you) 0 3px, rgba(var(--you-rgb), .18) 3.5px 6px, transparent 6.5px), var(--panel); border: 1px solid var(--faint); }
+.d05 .bubble { background: var(--panel); border: 1px solid var(--faint); border-radius: 14px 14px 14px 4px; padding: 9px 12px; }
+.d05 .who { display: block; margin-bottom: 3px; }
+
+/* 06 Lit top edge */
+.d06 { position: relative; overflow: hidden; border: 1px solid var(--frame); border-radius: 12px; padding: 10px 12px; background: radial-gradient(130% 70% at 0 0, rgba(var(--you-rgb), .09), transparent 60%), var(--paper); }
+.d06::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--you) 20%, transparent 60%); background-size: 200% 100%; animation: sweep 7s ease-in-out infinite; }
+@keyframes sweep { 0%, 100% { background-position: 100% 0; } 50% { background-position: 0 0; } }
+.d06 .who { display: block; margin-bottom: 3px; }
+
+/* 07 Corner ticks */
+.d07 { --t: rgba(var(--you-rgb), .75); padding: 12px 14px; background:
+  linear-gradient(var(--t), var(--t)) top left / 9px 1px, linear-gradient(var(--t), var(--t)) top left / 1px 9px,
+  linear-gradient(var(--t), var(--t)) top right / 9px 1px, linear-gradient(var(--t), var(--t)) top right / 1px 9px,
+  linear-gradient(var(--t), var(--t)) bottom left / 9px 1px, linear-gradient(var(--t), var(--t)) bottom left / 1px 9px,
+  linear-gradient(var(--t), var(--t)) bottom right / 9px 1px, linear-gradient(var(--t), var(--t)) bottom right / 1px 9px;
+  background-repeat: no-repeat; }
+.d07 .who { display: block; margin-bottom: 4px; }
+
+/* 08 Signal bars */
+.d08 { background: var(--panel); border-radius: 12px; padding: 10px 12px; }
+.d08 .head { display: flex; align-items: center; gap: 7px; margin-bottom: 4px; }
+.d08 .bars { display: flex; align-items: center; gap: 1.5px; height: 9px; }
+.d08 .bars i { width: 2px; height: 100%; background: var(--you); border-radius: 1px; animation: level 1.4s ease-in-out infinite; }
+.d08 .bars i:nth-child(2) { animation-delay: -.3s; }
+.d08 .bars i:nth-child(3) { animation-delay: -.7s; }
+.d08 .bars i:nth-child(4) { animation-delay: -1s; }
+@keyframes level { 0%, 100% { transform: scaleY(.3); } 50% { transform: scaleY(1); } }
+
+/* 09 Tinted wash */
+.d09 { background: rgba(var(--you-rgb), .07); border: 1px solid rgba(var(--you-rgb), .16); border-radius: 12px; padding: 10px 12px; }
+.d09 .who { display: block; margin-bottom: 3px; }
+
+/* 10 Transcript */
+.d10 { display: grid; grid-template-columns: 60px 1fr; gap: 10px; padding: 10px 0; border-top: 1px solid var(--rowline); border-bottom: 1px solid var(--rowline); }
+.d10 .who { padding-top: 3px; line-height: 1.4; }
+.d10 .words { font-size: 13px; }
+
+/* 11 Ledger */
+.d11 { padding-bottom: 10px; border-bottom: 1px solid var(--rowline); }
+.d11 .head { display: flex; align-items: baseline; gap: 6px; margin-bottom: 5px; }
+.d11 .lead { flex: 1; border-bottom: 1px dotted var(--faint); transform: translateY(-3px); }
+.d11 .when { font-family: var(--mono); font-size: 9.5px; letter-spacing: .08em; color: var(--muted); }
+
+/* 12 Orbit mark */
+.d12 { display: flex; gap: 11px; align-items: flex-start; background: var(--panel); border-radius: 14px; padding: 11px 12px; }
+.d12 svg { flex: none; width: 28px; height: 28px; overflow: visible; }
+.d12 .orbit { fill: none; stroke: var(--faint); }
+.d12 .c { fill: var(--you); transform-origin: 14px 14px; animation: swell 4s ease-in-out infinite; }
+.d12 .halo { fill: rgba(var(--you-rgb), .16); transform-origin: 14px 14px; animation: swell 4s ease-in-out infinite reverse; }
+.d12 .sol { transform-origin: 14px 14px; animation: spin 9s linear infinite; }
+.d12 .sol circle { fill: var(--ink); }
+.d12 .who { display: block; margin-bottom: 3px; }
+@keyframes swell { 0%, 100% { transform: scale(.85); } 50% { transform: scale(1.1); } }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>The Mind's voice</h1>
+    <p>Twelve ways to set the Mind's words apart, without the blue left edge. Each sits on the Begin screen at real size.</p>
+  </div>
+  <div class="zoom" role="group" aria-label="Size">
+    <button data-z="1" aria-pressed="true">1×</button>
+    <button data-z="1.25">1.25×</button>
+    <button data-z="1.5">1.5×</button>
+  </div>
+</header>
+
+<main>
+  <section class="card now">
+    <div class="meta"><span class="num">00</span><span class="name">Now</span></div>
+    <p class="note">The current box, for reference.</p>
+    <div class="frame">
+      <div class="d00"><span class="who">THE MIND</span><span class="words">Nothing here sends anything. When you begin, one Year passes every five of your minutes, and we keep going while you’re away.</span></div>
+      <div class="begin">Begin · Year 0 starts now</div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="meta"><span class="num">01</span><span class="name">Bare voice</span></div>
+    <p class="note">No box at all. The name and a slightly larger line, like the lead pages.</p>
+    <div class="frame">
+      <div class="d01"><span class="who">THE MIND</span><p class="words">Nothing here sends anything. When you begin, one Year passes every five of your minutes, and we keep going while you’re away.</p></div>
+      <div class="begin">Begin · Year 0 starts now</div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="meta"><span class="num">02</span><span class="name">Name on a rule</span></div>
+    <p class="note">The name sits in a hairline, like a section break. Open below.</p>
+    <div class="frame">
+      <div class="d02"><div class="rule"><span class="who">THE MIND</span></div><p class="words">Nothing here sends anything. When you begin, one Year passes every five of your minutes, and we keep going while you’re away.</p></div>
+      <div class="begin">Begin · Year 0 starts now</div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="meta"><span class="num">03</span><span class="name">Breathing core</span></div>
+    <p class="note">Plain box. A small blue core beside the name breathes slowly.</p>
+    <div class="frame">
+      <div class="d03"><div class="head"><span class="core"></span><span class="who">THE MIND</span></div><p class="words">Nothing here sends anything. When you begin, one Year passes every five of your minutes, and we keep going while you’re away.</p></div>
+      <div class="begin">Begin · Year 0 starts now</div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="meta"><span class="num">04</span><span class="name">Hanging quote</span></div>
+    <p class="note">A quote mark in the margin. The name signs it at the end.</p>
+    <div class="frame">
+      <div class="d04"><p class="words">Nothing here sends anything. When you begin, one Year passes every five of your minutes, and we keep going while you’re away.</p><div class="by"><span class="who">THE MIND</span></div></div>
+      <div class="begin">Begin · Year 0 starts now</div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="meta"><span class="num">05</span><span class="name">Bubble from a core</span></div>
+    <p class="note">A chat bubble with one tight corner, spoken from a small core.</p>
+    <div class="frame">
+      <div class="d05"><span class="face"></span><div class="bubble"><span class="who">THE MIND</span><p class="words">Nothing here sends anything. When you begin, one Year passes every five of your minutes, and we keep going while you’re away.</p></div></div>
+      <div class="begin">Begin · Year 0 starts now</div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="meta"><span class="num">06</span><span class="name">Lit top edge</span></div>
+    <p class="note">A faint glow from the top corner. A thin light drifts along the top.</p>
+    <div class="frame">
+      <div class="d06"><span class="who">THE MIND</span><p class="words">Nothing here sends anything. When you begin, one Year passes every five of your minutes, and we keep going while you’re away.</p></div>
+      <div class="begin">Begin · Year 0 starts now</div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="meta"><span class="num">07</span><span class="name">Corner ticks</span></div>
+    <p class="note">Only the four corners, like an instrument's sight. No fill.</p>
+    <div class="frame">
+      <div class="d07"><span class="who">THE MIND</span><p class="words">Nothing here sends anything. When you begin, one Year passes every five of your minutes, and we keep going while you’re away.</p></div>
+      <div class="begin">Begin · Year 0 starts now</div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="meta"><span class="num">08</span><span class="name">Signal bars</span></div>
+    <p class="note">A soft panel. Four bars by the name move like a voice.</p>
+    <div class="frame">
+      <div class="d08"><div class="head"><span class="bars"><i></i><i></i><i></i><i></i></span><span class="who">THE MIND</span></div><p class="words">Nothing here sends anything. When you begin, one Year passes every five of your minutes, and we keep going while you’re away.</p></div>
+      <div class="begin">Begin · Year 0 starts now</div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="meta"><span class="num">09</span><span class="name">Tinted wash</span></div>
+    <p class="note">The whole box takes a little of the Mind's blue.</p>
+    <div class="frame">
+      <div class="d09"><span class="who">THE MIND</span><p class="words">Nothing here sends anything. When you begin, one Year passes every five of your minutes, and we keep going while you’re away.</p></div>
+      <div class="begin">Begin · Year 0 starts now</div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="meta"><span class="num">10</span><span class="name">Transcript</span></div>
+    <p class="note">The name in its own column, like a spoken record between two lines.</p>
+    <div class="frame">
+      <div class="d10"><span class="who">THE MIND</span><p class="words">Nothing here sends anything. When you begin, one Year passes every five of your minutes, and we keep going while you’re away.</p></div>
+      <div class="begin">Begin · Year 0 starts now</div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="meta"><span class="num">11</span><span class="name">Ledger</span></div>
+    <p class="note">Name, a dotted leader, and when it was said. Logged, not boxed.</p>
+    <div class="frame">
+      <div class="d11"><div class="head"><span class="who">THE MIND</span><span class="lead"></span><span class="when">BEFORE YEAR 0</span></div><p class="words">Nothing here sends anything. When you begin, one Year passes every five of your minutes, and we keep going while you’re away.</p></div>
+      <div class="begin">Begin · Year 0 starts now</div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="meta"><span class="num">12</span><span class="name">Orbit mark</span></div>
+    <p class="note">The corner's mark as the speaker: Sol circling a breathing core.</p>
+    <div class="frame">
+      <div class="d12">
+        <svg viewBox="0 0 28 28" aria-hidden="true">
+          <circle class="orbit" cx="14" cy="14" r="11" />
+          <circle class="halo" cx="14" cy="14" r="7" />
+          <circle class="c" cx="14" cy="14" r="4" />
+          <g class="sol"><circle cx="25" cy="14" r="1.6" /></g>
+        </svg>
+        <div><span class="who">THE MIND</span><p class="words">Nothing here sends anything. When you begin, one Year passes every five of your minutes, and we keep going while you’re away.</p></div>
+      </div>
+      <div class="begin">Begin · Year 0 starts now</div>
+    </div>
+  </section>
+</main>
+
+<script>
+  const buttons = document.querySelectorAll(".zoom button");
+  const set = (z) => {
+    document.documentElement.style.setProperty("--z", z);
+    buttons.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.z === z)));
+    try { localStorage.setItem("mind-voice-zoom", z); } catch {}
+  };
+  buttons.forEach((b) => b.addEventListener("click", () => set(b.dataset.z)));
+  try { const z = localStorage.getItem("mind-voice-zoom"); if (z) set(z); } catch {}
+</script>
+</body>
+</html>
