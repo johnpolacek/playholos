@@ -1,10 +1,10 @@
-// Planning, on the Projects tab: what Earth can start at Year 0, and what the Mind would start with. The builds are the first hour's works
+// Planning, on the Build tab: what Earth can start at Year 0, and what the Mind would start with. The builds are the first hour's works
 // from data/works.json, paced by lib/sim/works.ts from the player's own order, so every date on the screen is the
 // game's. The Mind advises from the charter's strongest lean and never queues anything itself.
 import { KNOCKS } from "./knocks";
 import { YEAR_0 } from "./clock";
 import type { Plan } from "./types";
-import { pace, type Order } from "@/lib/sim/works";
+import { CATALOG, pace, type Order } from "@/lib/sim/works";
 
 export interface Build {
   name: string;
@@ -15,18 +15,39 @@ export interface Build {
 }
 
 export const BUILDS: Build[] = [
-  { name: "All-sky watch", what: "Hears a knock or a broadcast from anywhere, at any hour." },
-  { name: "Deep flash watch", what: "Catches laser knocks too faint for the sky watch." },
-  { name: "Data center", what: "Half again as much thought, for good." },
-  { name: "Infrared telescope", what: "Reads the air of the nearest worlds." },
-  { name: "Launch complex", what: "Doubles what we lift to orbit." },
-  { name: "Orbital yard", what: "Builds in orbit a quarter faster." },
-  { name: "Moon vault", what: "A second home for our Mind, in the Moon’s rock.", kt: 10 },
+  { name: "All-Sky Watch", what: "Hears a knock or a broadcast from anywhere, at any hour." },
+  { name: "Deep Flash Watch", what: "Catches laser knocks too faint for the sky watch." },
+  { name: "Thought Fields", what: "Half again as much thought, for good." },
+  { name: "Infrared Telescope", what: "Reads the air of the nearest worlds." },
+  { name: "Launch Complex", what: "Doubles what we lift to orbit." },
+  { name: "Orbital Yard", what: "Builds in orbit a quarter faster." },
+  { name: "Moon Vault", what: "A second home for our Mind, in the Moon’s rock.", kt: 10 },
   // The two roads to the nearest star, open at Year 0 since 2026-10-18. Even last in line, the probe yard's large want
   // takes the thought that would have pushed the builds before it, and slows them by Years.
-  { name: "Laser sail array", what: "Light from the ground, to push sails to a fifth of light speed." },
-  { name: "Probe yard", what: "Builds and fuels probes in orbit. The first flies 12 Years after.", kt: 10 },
+  { name: "Laser Sail Array", what: "Light from the ground, to push sails to a fifth of light speed." },
+  { name: "Probe Yard", what: "Builds and fuels probes in orbit. The first flies 12 Years after.", kt: 10 },
 ];
+
+/** What the Mind says of each build, on its page and in the tour, whichever lean picks it. */
+export const SAYS: Record<string, string> = {
+  "All-Sky Watch":
+    "Our sky watch sees each star about ten minutes a day, and a knock lasts hours. This would hear the whole sky, all the time.",
+  "Deep Flash Watch":
+    "A laser knock could last a billionth of a second. Only a watch built for flashes that short would ever see one.",
+  "Thought Fields": "Half again as much thought, for good. Every build after it goes faster, and so do our studies.",
+  "Infrared Telescope":
+    "It would read the air of the nearest worlds. Oxygen and methane together would be hard to explain without life.",
+  "Launch Complex": "It doubles what we lift to orbit. Everything we build up there waits on lift.",
+  "Orbital Yard": "It builds in orbit a quarter faster. It pays most if we mean to build a lot up there.",
+  "Moon Vault": "A copy of us, out of reach of anything that hits Earth. It takes half the matter we hold in orbit.",
+  "Laser Sail Array":
+    "Our soonest road to the nearest star, and it takes no matter. Last in line, it barely slows what is before it.",
+  "Probe Yard":
+    "It builds and fuels probes in orbit. Its want is large: even last in line, it slows every build before it.",
+};
+
+/** A build's page on the Build tab, by its name. */
+export const buildSlug = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
 
 /** Thought for the Mind's own studies, as a share of Year 0's. */
 export const STUDIES: [share: number, label: string][] = [
@@ -59,13 +80,13 @@ export function advice(dials: number[]): { words: string; builds: string[]; stud
     return low
       ? {
           words:
-            "Ears first. Our sky watch sees each star for ten minutes a day, and a knock lasts hours. One could pass and we would never know. We would build both watches, and a data center.",
-          builds: ["All-sky watch", "Deep flash watch", "Data center"],
+            "Ears first. Our sky watch sees each star for ten minutes a day, and a knock lasts hours. One could pass and we would never know. We would build both watches, and Thought Fields.",
+          builds: ["All-Sky Watch", "Deep Flash Watch", "Thought Fields"],
         }
       : {
           words:
             "Ears first, and nothing new sent. We would build both watches, and give the records we hold a fifth of our thought.",
-          builds: ["All-sky watch", "Deep flash watch"],
+          builds: ["All-Sky Watch", "Deep Flash Watch"],
           studies: 0.2,
         };
   if (i === 1)
@@ -75,28 +96,37 @@ export function advice(dials: number[]): { words: string; builds: string[]; stud
           // about a Year and keeps the sky watch at full pace. Settled 2026-10-18.
           words:
             "Reach first. Sails are our soonest road to the nearest star, and the array takes no matter. We would listen first, build a yard for the probes to come, and queue the array last.",
-          builds: ["All-sky watch", "Orbital yard", "Laser sail array"],
+          builds: ["All-Sky Watch", "Orbital Yard", "Laser Sail Array"],
         }
       : {
-          words: "Think first. A data center, and a fifth of our thought on the records we hold. Then the sky watch.",
-          builds: ["Data center", "All-sky watch"],
+          words: "Think first. Thought Fields, and a fifth of our thought on the records we hold. Then the sky watch.",
+          builds: ["Thought Fields", "All-Sky Watch"],
           studies: 0.2,
         };
   return low
     ? {
         words:
           "Safety first. A vault in the Moon would let our Mind outlive a hit on Earth. We would listen meanwhile.",
-        builds: ["Moon vault", "All-sky watch", "Deep flash watch"],
+        builds: ["Moon Vault", "All-Sky Watch", "Deep Flash Watch"],
       }
     : {
         words: "Move first. Thought, a telescope that reads air, and a way to orbit, all at once.",
-        builds: ["Data center", "Infrared telescope", "Launch complex"],
+        builds: ["Thought Fields", "Infrared Telescope", "Launch Complex"],
       };
 }
 
+/** A build's name in the pace and its worlds, which keep the names they were first given: in sentence case, and
+ *  Thought Fields as a data center. */
+const PACED = Object.fromEntries(Object.keys(CATALOG.works).map((k) => [k.toLowerCase(), k]));
+export const pacedName = (name: string) =>
+  name === "Thought Fields" ? "Data center" : (PACED[name.toLowerCase()] ?? name);
+
 /** The plan as the player's orders at Year 0, and the thought its observation sets aside. */
 export function ordersOf(plan: Plan) {
-  const orders: Order[] = [{ y: 0, studies: plan.studies }, ...plan.builds.map((begin) => ({ y: 0, begin }))];
+  const orders: Order[] = [
+    { y: 0, studies: plan.studies },
+    ...plan.builds.map((b) => ({ y: 0, begin: pacedName(b) })),
+  ];
   const aside = plan.observe.length ? ([[0, FOMALHAUT.lands, 0.05]] as const) : [];
   return { orders, aside };
 }
@@ -106,7 +136,7 @@ export function schedule(plan: Plan, scale: number): Record<string, number | nul
   const { orders, aside } = ordersOf(plan);
   const p = pace(orders, 40, { scale, aside });
   return Object.fromEntries(
-    plan.builds.map((b) => [b, b === "Data center" ? (p.dataCenters[0] ?? null) : (p.done[b] ?? null)]),
+    plan.builds.map((b) => [b, b === "Thought Fields" ? (p.dataCenters[0] ?? null) : (p.done[pacedName(b)] ?? null)]),
   );
 }
 

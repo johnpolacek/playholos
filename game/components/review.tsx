@@ -1,10 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useGame } from "@/components/game-provider";
 import { MindNote } from "@/components/mind-note";
-import { Mark, toggleLook, usePlan } from "@/components/picks";
+import { Look } from "@/components/picks";
 import { useLeads } from "@/components/scan";
-import { MS_PER_YEAR, realTime } from "@/lib/game/clock";
-import { FOMALHAUT } from "@/lib/game/plan";
+import { realTime } from "@/lib/game/clock";
 import {
   gsap,
   prefersReducedMotion,
@@ -22,7 +21,7 @@ const INTRO =
   "The sky near us is quiet. These are the few things in it we can’t explain yet. Beside each, how long its light takes, in your time. A call costs that, and an answer as long again.";
 
 /** The stops as a thread: Sol, then each lead in the order we take them. Passed and current stops are lit. The
- *  Projects tour takes its builds on it too. */
+ *  Build tour takes its builds on it too. */
 export function Thread({
   stops,
   at,
@@ -75,7 +74,6 @@ export function Thread({
 export function Review({ onClose }: { onClose(): void }) {
   const { leads, dials, readings } = useLeads();
   const { year, did } = useGame();
-  const { plan, change } = usePlan();
   const root = useRef<HTMLDivElement>(null);
   const next = useRef<HTMLButtonElement>(null);
   // A swipe across the words moves a stop, as on a phone.
@@ -139,8 +137,6 @@ export function Review({ onClose }: { onClose(): void }) {
   if (!leads.length) return null;
   const near = Math.min(...leads.map((l) => l.ly));
   const far = Math.max(...leads.map((l) => l.ly));
-  const queued = plan.observe.includes(FOMALHAUT.name);
-  const secs = Math.round((FOMALHAUT.lands * MS_PER_YEAR) / 1000);
 
   return (
     <div ref={root} className="flex grow flex-col">
@@ -237,25 +233,9 @@ export function Review({ onClose }: { onClose(): void }) {
               </MindNote>
             </div>
             {lead.slug === "fomalhaut" && year === null && (
-              <button
-                data-r
-                onClick={() => change(toggleLook)}
-                aria-pressed={queued}
-                className={`group mt-1 flex w-full items-start gap-2.5 rounded-xl border px-3 py-2.5 text-left transition-colors ${queued ? "border-other bg-other/10" : "border-other/50 hover:bg-other/5"}`}
-              >
-                <Mark n={queued ? 0 : null} look />
-                <span className="min-w-0 grow text-[14px] leading-snug">
-                  {queued
-                    ? "Queued: image Fomalhaut again"
-                    : "Image Fomalhaut again"}
-                  <span className="block text-[12px] text-muted">
-                    It lands {secs} seconds after we begin.
-                  </span>
-                </span>
-                <span className="shrink-0 font-mono text-[11px] text-muted tabular-nums">
-                  Year {FOMALHAUT.lands}
-                </span>
-              </button>
+              <div data-r className="mt-1">
+                <Look />
+              </div>
             )}
           </>
         ) : (

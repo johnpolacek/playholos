@@ -1,6 +1,7 @@
 import { createContext, use, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useGame } from "@/components/game-provider";
 import { distance, placeNames } from "@/components/inherit";
+import { Messages } from "@/components/messages";
 import { MindNote } from "@/components/mind-note";
 import { Mark, toggleBuild, usePlan, useSchedule } from "@/components/picks";
 import { SkyArt } from "@/components/sky";
@@ -27,8 +28,8 @@ import { gsap, prefersReducedMotion, useGSAP } from "@/lib/motion";
 // Reach at Year 0: how far we have gone, drawn on one line out from Earth where each step is ten times farther, and
 // the two roads to the nearest star on the Years they would take. The line is also the map's: as the tab opens the map
 // flies out from Earth past Voyager 1 to Alpha Centauri, a mark on the line keeping pace, and a tap or a drag on the
-// line flies the map there. Before Begin, a tap on a road queues it last in our order, or takes it out, as on Projects.
-// The Mind advises from the charter, and queues nothing.
+// line flies the map there. Before Begin, a tap on a road queues it last in our order, or takes it out, as on Build.
+// The Mind advises from the charter, and queues nothing. Last, our messages still on their way, our farthest reach.
 
 const W = 360;
 const L = 14;
@@ -328,7 +329,7 @@ function Years({ to }: { to: number }) {
 function sooner(plan: Plan, scale: number, from: number, now: number | null) {
   if (now === null) return null;
   let best: { name: string; by: number } | null = null;
-  for (const name of ["Orbital yard", "Data center"]) {
+  for (const name of ["Orbital Yard", "Thought Fields"]) {
     if (plan.builds.includes(name)) continue;
     const home = roads({ ...plan, builds: [...plan.builds, name] }, scale, from)[1].home;
     if (home !== null && now - home >= 1 && (!best || now - home > best.by)) best = { name, by: now - home };
@@ -349,14 +350,14 @@ function says(
   const out = [`By sail, the soonest word from ${NEAREST.name} comes home at Year ${year(sail.home)}.`];
   if (before) {
     const { i, low } = lean(dials);
-    if (i === 1 && low && !sail.n) out.push("Our charter leans to reach. The sail array takes no matter, so we would queue it.");
+    if (i === 1 && low && !sail.n) out.push("Our charter leans to reach. The Laser Sail Array takes no matter, so we would queue it.");
     else if (!(i === 1 && low)) out.push("We would wait on both. Our first builds pay back sooner.");
     if (slow)
-      out.push(`The probe yard ${probe.n ? "slows" : "would slow"} our ${slow.name.toLowerCase()} by ${year(slow.by)} Years.`);
-    if (probe.n && plan.builds.includes("Moon vault")) out.push("With the vault, it takes all 20 kt we hold in orbit.");
+      out.push(`The Probe Yard ${probe.n ? "slows" : "would slow"} our ${slow.name} by ${year(slow.by)} Years.`);
+    if (probe.n && plan.builds.includes("Moon Vault")) out.push("With the vault, it takes all 20 kt we hold in orbit.");
   }
   if (probe.n && tip)
-    out.push(`Queuing ${tip.name === "Orbital yard" ? "an orbital yard" : "a data center"} would bring the probe’s word home ${Math.round(tip.by)} Years sooner.`);
+    out.push(`Queuing ${tip.name === "Orbital Yard" ? "an Orbital Yard" : "Thought Fields"} would bring the probe’s word home ${Math.round(tip.by)} Years sooner.`);
   return out.join(" ");
 }
 
@@ -371,7 +372,7 @@ export function Reach() {
   const from = before ? 0 : Math.floor(clock * 10) / 10;
   const list = useMemo(() => roads(plan, scale, from), [plan, scale, from]);
   const tip = useMemo(() => sooner(plan, scale, from, list[1].home), [plan, scale, from, list]);
-  const slow = useMemo(() => (before ? slows(plan, scale, "Probe yard") : null), [before, plan, scale]);
+  const slow = useMemo(() => (before ? slows(plan, scale, "Probe Yard") : null), [before, plan, scale]);
   // The Years run to the last word home, in steps of twenty.
   const to = Math.max(60, Math.ceil(Math.max(...list.map((r) => r.home ?? 0)) / 20) * 20);
 
@@ -412,7 +413,7 @@ export function Reach() {
                 <span className="text-[14.5px] leading-snug font-medium">{road.name}</span>
                 <span className="text-[12px] leading-snug text-muted">
                   {road.build}, then {road.craft.toLowerCase()}
-                  {road.build === "Probe yard" ? ". 10 kt of our 20." : ". No matter."}
+                  {road.build === "Probe Yard" ? ". 10 kt of our 20." : ". No matter."}
                 </span>
               </span>
               {before && (
@@ -461,6 +462,8 @@ export function Reach() {
           {says(plan, save.charter?.dials ?? HISTORY, list, tip, slow, before)}
         </MindNote>
       </div>
+
+      <Messages />
     </div>
   );
 }

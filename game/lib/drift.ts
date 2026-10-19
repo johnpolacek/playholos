@@ -16,6 +16,7 @@ import { KNOCKS, RADARS_SINCE, TARGET_DEC } from "./game/knocks";
 import SKY from "./game/sky.json";
 import LEADS from "./game/leads.json";
 import { MACHINES, type MachineKind } from "./game/machines";
+import { CLOSE } from "./game/close";
 import {
   DEG,
   LIFT,
@@ -63,6 +64,8 @@ export interface Dials {
   found?: number;
   /** The lead the Will is looking at, the message, or the build, counted from 1. 0 for none. */
   focus?: number;
+  /** Our builds: 1 to fly down to the ground at the one in view, its Close View, and 0 to come back up. */
+  close?: number;
 }
 
 /** What the sky shows: the title, the map, or one of the screens before the shell. */
@@ -105,7 +108,7 @@ export interface Show {
       on: "earth" | "moon" | "orbit" | "l2";
       draw: "dome" | "ring" | "launch";
       places: { lat: number; lon: number }[];
-      orbit?: { km: number; tilt: number; minutes: number };
+      orbit?: { km: number; tilt: number; minutes: number; behind?: number };
       km?: number;
     };
     queued: boolean;
@@ -140,6 +143,9 @@ export interface Drift {
 }
 
 const KLY_AU = 1000 * LY_AU;
+const KM_AU = R_E_AU / 6371.0084;
+/** How long the Close View's fall to the ground takes, and its climb back, in seconds. */
+const DOWN = 4.5;
 /** The Moon's radius, in Earth radii. */
 const MOON_R = 1737.4 / 6371.0084;
 /** How near a build on the Moon is seen: log10 of AU from the middle of its view, about 7,800 km. */
@@ -460,6 +466,25 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
   }
   /** L2, this far out on Earth's night side, in Earth radii from Earth. */
   const l2At = (km: number) => pilot.sky.sunDir.clone().multiplyScalar(-km / 6371.0084);
+  const Z = new THREE.Vector3(0, 0, 1);
+  /** A telescope at L2, where it flies on a halo orbit round L2 drawn across the line to the Sun, 800,000 by 400,000
+   *  km, in Earth radii from Earth. */
+  function haloAt(km: number) {
+    const flat = new THREE.Quaternion().setFromUnitVectors(Z, pilot.sky.sunDir);
+    const [a, b] = [800000 / 6371.0084, 400000 / 6371.0084];
+    return new THREE.Vector3(a * Math.sin(0.7), b * Math.cos(0.7), 0).applyQuaternion(flat).add(l2At(km));
+  }
+  type Orbit = NonNullable<NonNullable<Show["works"]>[number]["site"]["orbit"]>;
+  /** A build in low orbit: where it is now, in Earth radii from Earth, and which way it goes. It goes round at Earth's
+   *  pace, so on the map, where Earth turns once a minute, a 93-minute orbit takes about 4 seconds. One behind
+   *  another trails it by that many degrees. */
+  function inOrbit(o: Orbit, at: THREE.Vector3, along?: THREE.Vector3) {
+    const flat = new THREE.Quaternion().setFromUnitVectors(Z, orbitFrame(o.tilt).axis);
+    const R = 1 + o.km / 6371.0084;
+    const θ = (2 * Math.PI * (turned / 1000)) / (o.minutes * 60) - (o.behind ?? 0) * DEG;
+    at.set(R * Math.sin(θ), R * Math.cos(θ), 0).applyQuaternion(flat);
+    along?.set(Math.cos(θ), -Math.sin(θ), 0).applyQuaternion(flat);
+  }
   const sitesAt = new Map<string, THREE.Vector3>();
   /** Where a build on the Moon stands, as a direction from its middle. */
   const siteAt = (w: NonNullable<Show["works"]>[number]) => {
@@ -714,7 +739,15 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     (d) => d * 0.02,
     (d) => d + 150,
   );
-  const layers = [cosmos, stars, solar, earth];
+  // And a fifth, in km from a build's place, for its Close View: a few km of ground, drawn over Earth.
+  const local = layer(
+    KM_AU,
+    new THREE.Vector3(),
+    (d) => d * 0.004,
+    (d) => d * 40 + 400,
+  );
+  local.on = false;
+  const layers = [cosmos, stars, solar, earth, local];
 
   // ── Earth and the Moon, in Earth radii ──
   const globeUniforms = () => ({
@@ -2092,7 +2125,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         const center = l2At(w.site.km ?? 1.5e6);
         const flat = new THREE.Quaternion().setFromUnitVectors(up, sunDir);
         const [a, b] = [800000 / 6371.0084, 400000 / 6371.0084];
-        const at = new THREE.Vector3(a * Math.sin(0.7), b * Math.cos(0.7), 0).applyQuaternion(flat).add(center);
+        const at = haloAt(w.site.km ?? 1.5e6);
         const threadMat = line("mind", 0, true);
         const thread = new THREE.Line(new THREE.BufferGeometry().setFromPoints([at, new THREE.Vector3()]), threadMat);
         thread.frustumCulled = false;
@@ -2127,7 +2160,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
               ...spotAt(at, earth.scene),
             },
           ],
-          orbit: { R, flat, seconds: o.minutes * 60 },
+          orbit: o,
           threadMat: null,
           rockets: null,
         };
@@ -2192,19 +2225,22 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       if (spec.mode === "works") list = spec.works ?? [];
       const years = (dialsOf.works?.year ?? YEAR_0) - YEAR_0;
       const focus = list[aimedWork()];
-      ground.uniforms.uOpacity.value = p * arrived(groundAt) * Number(focus?.site.on === "moon");
+      // Down at the Moon's ground, its dots would hang overhead: they go as Close View's own ground comes.
+      const moonHigh = (earth.camera.position.distanceTo(moonAt) - MOON_R) * 6371.0084;
+      ground.uniforms.uOpacity.value =
+        p * arrived(groundAt) * Number(focus?.site.on === "moon") * ramp(moonHigh, 10, 40);
       const flash = still ? 0 : Math.exp(-((clock % beat) / beat) * 5);
-      // A data center's glow beats faster: thought.
+      // Thought fields' glow beats faster: thought.
       const thinks = still ? 0 : Math.exp(-((clock % 0.9) / 0.9) * 4);
       for (const w of list) {
         if (!made.has(w.name)) made.set(w.name, mark(w));
         const m = made.get(w.name)!;
-        const seen = w.name === focus?.name ? p : 0;
+        // Close View draws the build on its own ground, so its marks here go as the view goes down.
+        const seen = w.name === focus?.name ? p * (1 - ramp(down, 0.45, 0.75)) : 0;
         const built = w.queued && w.done !== null ? Math.min(1, Math.max(0, years / w.done)) : 0;
         const beats = m.moon ? flash : w.site.on === "earth" && w.site.draw === "ring" ? thinks : 0;
         if (m.orbit) {
-          const θ = (2 * Math.PI * (turned / 1000)) / m.orbit.seconds;
-          m.places[0].at.set(m.orbit.R * Math.sin(θ), m.orbit.R * Math.cos(θ), 0).applyQuaternion(m.orbit.flat);
+          inOrbit(m.orbit, m.places[0].at);
           const pos = m.places[0].dots.geometry.attributes.position as THREE.BufferAttribute;
           for (const i of [0, 1]) pos.setXYZ(i, m.places[0].at.x, m.places[0].at.y, m.places[0].at.z);
           pos.needsUpdate = true;
@@ -2243,8 +2279,10 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         const marks: Mark[] = [];
         const m = focus && made.get(focus.name);
         m?.places.forEach((pl, k) => {
-          // A place on Earth's far side, turned away from us, is not named.
-          pl.parent.localToWorld(v.copy(pl.at));
+          // A place on Earth's far side, turned away from us, is not named. Down at it, its name sits on the ground.
+          v.copy(pl.at);
+          if (down > 0.5 && focus.site.on === "earth") v.setLength(1);
+          pl.parent.localToWorld(v);
           const facing =
             m.moon ||
             focus.site.on === "l2" ||
@@ -2263,6 +2301,207 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
           marks.push({ id: `earth:${focus.site.on}`, x: ((v.x * k + 1) / 2) * w, y: ((1 - v.y * k) / 2) * h, a });
         }
         spec.onMarks(marks);
+      }
+    };
+  }
+
+  // ── Close View: a build up close, in lines and lights at its place ──
+  const heading = new THREE.Vector3();
+  /** Close View's place for a build: where it is, in AU, and its up, north and east, as the sky has them now. On Earth
+   *  they turn with it. On the Moon, north is the ecliptic's. In low orbit, up is away from Earth and east is the way
+   *  it goes. At L2, up is away from the Sun, so its shade lies under it. */
+  function closePlace(w: NonNullable<Show["works"]>[number]) {
+    const { lat, lon } = w.site.places[0];
+    const at = new THREE.Vector3();
+    if (w.site.on === "earth") {
+      at.set(...onGlobe(lat, lon, 1)).applyQuaternion(spin.quaternion);
+      cUp.copy(at);
+      cNorth.set(0, 1, 0).applyQuaternion(spin.quaternion);
+    } else if (w.site.on === "moon") {
+      cUp.copy(siteAt(w));
+      at.copy(cUp).multiplyScalar(MOON_R).add(moonAt);
+      cNorth.copy(eN);
+    } else if (w.site.on === "orbit") {
+      inOrbit(w.site.orbit ?? { km: 400, tilt: 51.6, minutes: 92.9 }, at, heading);
+      cUp.copy(at).normalize();
+      cNorth.crossVectors(cUp, heading);
+    } else {
+      at.copy(haloAt(w.site.km ?? 1.5e6));
+      cUp.copy(sunDir).negate();
+      cNorth.copy(eN);
+    }
+    cNorth.addScaledVector(cUp, -cNorth.dot(cUp)).normalize();
+    cEast.crossVectors(cNorth, cUp);
+    local.origin.copy(at).multiplyScalar(R_E_AU).add(earthAU);
+  }
+
+  // ── Close View: a build up close, in lines and lights on a few km of ground at its place ──
+  function closeUp() {
+    /** Ground: dots out to `far` km, nearer together near the middle, on a curve that falls away as the body's does,
+     *  so the horizon is where it would be. A soft patchwork of brighter and darker dots reads as fields, or as the
+     *  Moon's dust. Past a shore, the sea has none. */
+    function field(R: number, far: number, seed: number, wet?: (x: number, y: number) => boolean) {
+      const c = new Cloud();
+      const scatter = seededRandom(seed);
+      for (let i = 0; i < 26000; i++) {
+        const r = 0.06 * (far / 0.06) ** scatter();
+        const a = scatter() * 2 * Math.PI;
+        const [x, y] = [r * Math.cos(a), r * Math.sin(a)];
+        if (wet?.(x, y)) continue;
+        const patch = 0.5 + 0.5 * Math.sin(x * 2.3 + Math.sin(y * 1.1)) * Math.sin(y * 1.9 + Math.sin(x * 0.8));
+        c.add(x, y, -(r * r) / (2 * R), 0.012 * r, (0.35 + 0.65 * patch) * (1 - ramp(r, far / 2, far)), K.ink);
+      }
+      return c;
+    }
+    /** Line segments in the place's frame. */
+    const segments = (pts: number[], kind: Kind) => {
+      const mat = line(kind, 0, false);
+      const l = new THREE.LineSegments(
+        new THREE.BufferGeometry().setAttribute("position", new THREE.Float32BufferAttribute(pts, 3)),
+        mat,
+      );
+      l.frustumCulled = false;
+      return { l, mat, n: pts.length / 6 };
+    };
+    /** Lights in the place's frame: x, y, z and size in km, and each one's turn to come on. */
+    const lamps = (pts: number[], stride: number, kind: Kind, mat: THREE.ShaderMaterial) => {
+      const c = new Cloud();
+      for (let i = 0; i < pts.length; i += stride)
+        c.add(pts[i], pts[i + 1], pts[i + 2], pts[i + 3], 1, K[kind], stride > 4 ? pts[i + 4] : 0);
+      return c.points(mat);
+    };
+    const additive = (m: THREE.ShaderMaterial) => ((m.blending = THREE.AdditiveBlending), m);
+
+    // Each build's model, made when first shown: its ground, what stands there already, dim, the build dashed for
+    // the plan and drawn in solid as it goes up, its lights coming on with it, and once it is done, the sky it watches
+    // and the light that runs from it. On Earth, the towns around show at night.
+    function model(w: NonNullable<Show["works"]>[number]) {
+      const m = CLOSE[w.name];
+      const { on } = w.site;
+      const { lat, lon } = w.site.places[0];
+      /** A place by latitude and longitude, in km east and north of this one, flat near enough. */
+      const near = (la: number, lo: number) => [(lo - lon) * 111.32 * Math.cos(lat * DEG), (la - lat) * 110.57];
+      const g = new THREE.Group();
+      const fieldGlow = glow({ minPx: 0.6, maxPx: 2.2 });
+      const have = [...m.have];
+      let wet: ((x: number, y: number) => boolean) | undefined;
+      if (m.shore) {
+        // The sea lies to the shore's right, walking from its first point to its second. Its line runs on past both.
+        const [[ax, ay], [bx, by]] = m.shore.map(([la, lo]) => near(la, lo));
+        wet = (x, y) => (bx - ax) * (y - ay) - (by - ay) * (x - ax) < 0;
+        for (let k = 0; k < 60; k++) {
+          const at = (t: number) => {
+            const [x, y] = [ax + (bx - ax) * t, ay + (by - ay) * t];
+            return [x, y, -(x * x + y * y) / (2 * 6371.0084)];
+          };
+          have.push(...at(-1.5 + k * 0.07), ...at(-1.5 + (k + 1) * 0.07));
+        }
+      }
+      if (on === "earth" || on === "moon") {
+        const seed = Math.round(Math.abs(lat * 1000 + lon));
+        g.add(field(on === "moon" ? 1737.4 : 6371.0084, on === "moon" ? 25 : 60, seed, wet).points(fieldGlow));
+      }
+      const haveLines = segments(have, "ink");
+      const solid = segments(m.build, "mind");
+      // The plan: each line cut into dashes, about 18 m long on the ground and finer on the small builds in space.
+      const dash = Math.min(0.018, m.view.km / 300);
+      const dashes: number[] = [];
+      for (let i = 0; i < m.build.length; i += 6) {
+        const [a, b] = [m.build.slice(i, i + 3), m.build.slice(i + 3, i + 6)];
+        const n = Math.max(2, Math.round(Math.hypot(b[0] - a[0], b[1] - a[1], b[2] - a[2]) / dash));
+        for (let k = 0; k < n; k += 2)
+          for (const t of [k / n, (k + 1) / n]) dashes.push(...a.map((c, j) => c + (b[j] - c) * t));
+      }
+      const dashed = segments(dashes, "ink");
+      const sky = segments(m.sky ?? [], "mind");
+      const haveGlow = additive(glow({ minPx: 1, maxPx: 3 }));
+      const lightGlow = additive(glow({ minPx: 1, maxPx: 4 }));
+      const townGlow = additive(glow({ minPx: 0.8, maxPx: 3 }));
+      const runGlow = additive(glow({ fixed: true }));
+      // A town's lights: a cluster as wide as its people need, round where it is.
+      const towns = new Cloud();
+      const spread = seededRandom(Math.round(Math.abs(lat) * 1000));
+      for (const [, tLat, tLon, people] of m.towns ?? []) {
+        const [tx, ty] = near(tLat, tLon);
+        const r = 0.6 * Math.sqrt(people / 1000);
+        for (let k = 0; k < Math.min(600, people / 60); k++) {
+          const [a, d] = [spread() * 2 * Math.PI, r * Math.sqrt(-Math.log(1 - spread() * 0.95)) * 0.6];
+          const [x, y] = [tx + d * Math.cos(a), ty + d * Math.sin(a)];
+          towns.add(x, y, -(x * x + y * y) / (2 * 6371.0084) + 0.005, 0.02, 0.4 + 0.6 * spread(), K.lamp);
+        }
+      }
+      // What runs once it is done: each path's points, and how far along each point lies, 0 to 1.
+      const runs = (m.runs ?? []).map((r) => {
+        const pts: THREE.Vector3[] = [];
+        for (let i = 0; i < r.pts.length; i += 3) pts.push(new THREE.Vector3(r.pts[i], r.pts[i + 1], r.pts[i + 2]));
+        const lengths = pts.slice(1).map((q, i) => q.distanceTo(pts[i]));
+        const total = lengths.reduce((s, l) => s + l, 0);
+        let sum = 0;
+        const at = [0, ...lengths.map((l) => (sum += l) / total)];
+        return { ...r, pts, at };
+      });
+      const runCloud = new Cloud();
+      for (const r of runs) runCloud.add(0, 0, 0, r.lands ? 6 : 4, 0, K.mind);
+      const runPts = runCloud.points(runGlow);
+      g.add(
+        haveLines.l,
+        dashed.l,
+        solid.l,
+        sky.l,
+        lamps(m.haveLights, 4, "lamp", haveGlow),
+        lamps(m.lights, 5, "mind", lightGlow),
+        towns.points(townGlow),
+        runPts,
+      );
+      place.add(g);
+      return { g, on, fieldGlow, haveLines, dashed, solid, sky, haveGlow, lightGlow, townGlow, runGlow, runs, runPts };
+    }
+    const made = new Map<string, ReturnType<typeof model>>();
+    const p0 = new THREE.Vector3();
+
+    return (w: NonNullable<Show["works"]>[number]) => {
+      if (!made.has(w.name)) made.set(w.name, model(w));
+      for (const [name, m] of made) m.g.visible = name === w.name;
+      const m = made.get(w.name)!;
+      const c = CLOSE[w.name];
+      const years = (dialsOf.works?.year ?? YEAR_0) - YEAR_0;
+      const built = w.queued && w.done !== null ? Math.min(1, Math.max(0, years / w.done)) : 0;
+      // It comes in as the view nears it, lit as the Sun is there now: on the ground by how high the Sun stands, in
+      // orbit unless Earth is in the way, and at L2 always.
+      const p = ramp(down, 0.55, 0.9);
+      p0.copy(local.origin).sub(earthAU).divideScalar(R_E_AU);
+      const day =
+        m.on === "earth" || m.on === "moon"
+          ? smooth((sunDir.dot(cUp) + 0.1) / 0.35)
+          : m.on === "orbit"
+            ? Number(p0.dot(sunDir) > 0 || p0.clone().addScaledVector(sunDir, -p0.dot(sunDir)).length() > 1)
+            : 1;
+      const beat = still || !c.beat ? 0 : Math.exp(-((clock % c.beat) / c.beat) * 4);
+      m.fieldGlow.uniforms.uOpacity.value = p * (m.on === "moon" ? 0.18 + 0.6 * day : 0.22 + 0.45 * day);
+      m.haveLines.mat.uniforms.uOpacity.value = p * (0.28 + 0.14 * day);
+      m.haveGlow.uniforms.uOpacity.value = p * (0.9 - 0.6 * day);
+      m.townGlow.uniforms.uOpacity.value = p * (1 - day) * 0.85;
+      m.dashed.mat.uniforms.uOpacity.value = p * (built >= 1 ? 0 : w.queued ? 0.8 : 0.45);
+      m.solid.l.geometry.setDrawRange(0, 2 * Math.round(m.solid.n * built));
+      m.solid.mat.uniforms.uOpacity.value = 0.9 * p;
+      m.lightGlow.uniforms.uReveal.value = built;
+      m.lightGlow.uniforms.uOpacity.value = built > 0 ? p * (0.7 + 0.3 * beat) : 0;
+      m.sky.mat.uniforms.uOpacity.value = built >= 1 ? p * 0.2 : 0;
+      // Craft climb their paths and fade, and a flash falls and lands bright.
+      m.runGlow.uniforms.uOpacity.value = built >= 1 ? p : 0;
+      if (built >= 1 && m.runs.length) {
+        const pos = m.runPts.geometry.attributes.position as THREE.BufferAttribute;
+        const bright = m.runPts.geometry.attributes.aBright as THREE.BufferAttribute;
+        m.runs.forEach((r, i) => {
+          const t = still ? 0.6 : (clock / r.secs + (r.offset ?? 0)) % 1;
+          let k = 1;
+          while (k < r.at.length - 1 && r.at[k] < t) k++;
+          const s = (t - r.at[k - 1]) / (r.at[k] - r.at[k - 1] || 1);
+          p0.lerpVectors(r.pts[k - 1], r.pts[k], s);
+          pos.setXYZ(i, p0.x, p0.y, p0.z);
+          bright.setX(i, r.lands ? t ** 3 : Math.sin(Math.PI * t) * (1 - 0.5 * t));
+        });
+        pos.needsUpdate = bright.needsUpdate = true;
       }
     };
   }
@@ -2430,6 +2669,18 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
   let clues: ReturnType<typeof leading> | null = null;
   let sent: ReturnType<typeof sending> | null = null;
   let builds: ReturnType<typeof building> | null = null;
+  let nearby: ReturnType<typeof closeUp> | null = null;
+  /** Close View: the build it is down at, or was, how far down, 0 to 1, and eased, and how a drag has turned it. */
+  let closing: NonNullable<Show["works"]>[number] | null = null;
+  let downAt = 0;
+  let down = 0;
+  let closeSince = 0;
+  const closeTurn = { az: 0, el: 0 };
+  const [cUp, cNorth, cEast, cDir] = Array.from({ length: 4 }, () => new THREE.Vector3());
+  const basis = new THREE.Matrix4();
+  /** The ground at the build's place, turned to lie flat there: x east, y north, z up. */
+  const place = new THREE.Group();
+  local.scene.add(place);
   /** Our builds: where the view's middle has moved to, in AU from Earth, and its hop there from where it was. */
   const workShift = new THREE.Vector3();
   const hop = { from: new THREE.Vector3(), to: new THREE.Vector3(), at: 0, secs: 0 };
@@ -2451,11 +2702,24 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
   function draw() {
     const dt = Math.min(0.1, Math.max(0, clock - lastClock));
     lastClock = clock;
+    const work = spec.mode === "works" ? spec.works?.[aimedWork()] : undefined;
+    // Close View: down to the ground at the build in view, and back up. Earth stops turning on the way down, so its
+    // ground holds still under us.
+    const want = work && CLOSE[work.name] && dialsOf.works?.close ? work : null;
+    if (want && (!closing || downAt === 0 || want.name !== closing.name)) {
+      closeTurn.az = closeTurn.el = 0;
+      closeSince = clock;
+    }
+    if (want) closing = want;
+    downAt = still ? Number(!!want) : Math.min(1, Math.max(0, downAt + (want ? dt : -dt) / DOWN));
+    down = easeInOut(downAt);
+    const pace = 1 / turnOf();
+    turned += dt * 86164e3 * (pace + (1 / 86164 - pace) * ramp(down, 0, 0.3));
+    spin.quaternion.copy(bodyOrientation("Earth", new Date(date.getTime() + turned)));
     const view = pilot.at(clock);
     const { target, cam, up } = view;
     // Our builds: the view's middle hops to the one in view, near its site, and home after. On the way the view backs
     // off, so where it left and where it goes show together.
-    const work = spec.mode === "works" ? spec.works?.[aimedWork()] : undefined;
     if (work?.site.on === "moon")
       goal.copy(siteAt(work)).multiplyScalar(MOON_R * 0.45).add(moonAt).multiplyScalar(R_E_AU);
     else if (work?.site.on === "l2") goal.copy(l2At(work.site.km ?? 1.5e6)).multiplyScalar(0.55 * R_E_AU);
@@ -2471,8 +2735,8 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     const back = 2 * hop.from.distanceTo(hop.to) * 4 * h * (1 - h);
     target.add(workShift);
     cam.add(workShift).addScaledVector(view.dir, back);
-    const D = view.D + back;
-    const logD = back ? Math.log10(D) : view.logD;
+    let D = view.D + back;
+    let logD = back ? Math.log10(D) : view.logD;
     // What doesn't fit and our messages: the view moves over to the middle of the path in view. Nearer than the stars
     // it stays on Earth, so a flight out to a path starts from Earth, and a flight home ends there.
     const P = (spec.mode === "leads" || spec.mode === "beams") && !still ? lookedAt() : null;
@@ -2480,6 +2744,36 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     shift.copy(aimShift).multiplyScalar(ramp(logD, 5.2, 6.3));
     target.add(shift);
     cam.add(shift);
+    // Close View: the place, its up, north and east as the sky has them now. The view falls to it at an even pace in
+    // log distance, so each scale passes as quickly as the last. Its middle moves onto the place early, and it tips
+    // from looking straight down to looking across the ground late, with the horizon near the top.
+    if (down > 0 && closing) {
+      const m = CLOSE[closing.name];
+      closePlace(closing);
+      const az = m.view.az * DEG + closeTurn.az + drift(clock - closeSince, 360);
+      const el = Math.min(1.35, Math.max(0.03, m.view.el * DEG + closeTurn.el));
+      cDir
+        .copy(cNorth)
+        .multiplyScalar(Math.cos(az))
+        .addScaledVector(cEast, Math.sin(az))
+        .multiplyScalar(Math.cos(el))
+        .addScaledVector(cUp, Math.sin(el));
+      logD += (Math.log10(m.view.km * KM_AU) - logD) * down;
+      D = 10 ** logD;
+      const [ax, ay, az2 = 0] = m.view.at ?? [0, 0];
+      mid
+        .copy(local.origin)
+        .addScaledVector(cEast, ax * KM_AU)
+        .addScaledVector(cNorth, ay * KM_AU)
+        .addScaledVector(cUp, az2 * KM_AU);
+      target.lerp(mid, ramp(down, 0, 0.35));
+      view.dir.lerp(cDir, ramp(down, 0.4, 1)).normalize();
+      up.lerp(cUp, ramp(down, 0.4, 1));
+      up.addScaledVector(view.dir, -up.dot(view.dir)).normalize();
+      cam.copy(target).addScaledVector(view.dir, D);
+      place.quaternion.setFromRotationMatrix(basis.makeBasis(cEast, cNorth, cUp));
+    }
+    local.on = down > 0.001;
     frameLens();
 
     for (const L of layers) {
@@ -2489,6 +2783,14 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       L.camera.lookAt(look.copy(target).sub(L.origin).divideScalar(L.unit));
       L.camera.near = L.near(d);
       L.camera.far = L.far(d);
+      // Close View can stand far out at L2, or right down on the Moon. Earth's layer then starts at its nearest ground,
+      // Earth's or the Moon's, and reaches past Earth.
+      if (L === earth && down > 0) {
+        const span = L.camera.position.length();
+        const toMoon = L.camera.position.distanceTo(moonAt) - MOON_R;
+        L.camera.near = Math.max(L.camera.near, 0.5 * Math.min(span - 1, toMoon));
+        L.camera.far = Math.max(L.camera.far, span + 70);
+      }
       L.camera.updateProjectionMatrix();
     }
 
@@ -2497,8 +2799,6 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     earth.on = x < -0.2;
     solar.on = x < 7;
     stars.on = x < 9.4;
-    turned += (dt * 86164e3) / turnOf();
-    spin.quaternion.copy(bodyOrientation("Earth", new Date(date.getTime() + turned)));
     const pPeople = present("people", dt);
     const pInherit = present("inherit", dt);
     const pReach = present("reach", dt);
@@ -2508,9 +2808,15 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     const pLeads = present("leads", dt);
     const pBeams = present("beams", dt);
     const pWorks = present("works", dt);
+    /** How high the camera is over Earth's ground, in km. */
+    const high = cam.distanceTo(earthAU) / KM_AU - 6371.0084;
     // Close by our builds, the Moon's dots carry its face, so its globe goes dark under them.
     moonGlobe.uniforms.uDay.value = 0.42 * (1 - 0.75 * pWorks);
-    surface.uniforms.uOpacity.value = arrived(surfaceAt);
+    // Down at the ground we look along it, where Earth's rim would light all of it: only the horizon keeps a glow.
+    earthGlobe.uniforms.uRim.value = 0.8 * (1 - 0.85 * (1 - ramp(high, 30, 200)));
+    // Down at the ground, Earth's dots and lights would hang overhead: they go as its own ground comes. From orbit they
+    // stay.
+    surface.uniforms.uOpacity.value = arrived(surfaceAt) * ramp(high, 25, 60);
     // Who we are lights the cities in turn. Elsewhere they are all lit.
     surface.uniforms.uLit.value = 1 + ((dialsOf.people?.lit ?? 1) - 1) * pPeople;
     surface.uniforms.uLights.value = 1 - ramp(x, -2.7, -1.9);
@@ -2553,6 +2859,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     }
     if (pBeams > 0) (sent ??= sending())(x, pBeams);
     if (pWorks > 0) (builds ??= building())(x, pWorks, dt);
+    if (local.on && closing) (nearby ??= closeUp())(closing);
     if (spec.onScale && framing) spec.onScale((D * 149597870.7) / focal, framing.w, framing.h);
 
     renderer.clear();
@@ -2567,8 +2874,8 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
   let raf = 0;
   function frame(now: number) {
     raf = requestAnimationFrame(frame);
-    // A still is one frame, redrawn only when something changes.
-    if (still && !dirty) return;
+    // A still is one frame, redrawn only when something changes, as when Close View goes down or comes up.
+    if (still && !dirty && Number(!!dialsOf.works?.close) === downAt) return;
     clock = pilot.clock(now);
     dirty = false;
     draw();
@@ -2598,7 +2905,11 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       dirty = true;
     },
     turn(dx, dy) {
-      pilot.turnBy(dx, dy);
+      // Down at a build, a drag walks the view round it, and raises or lowers it.
+      if (downAt > 0) {
+        closeTurn.az -= dx * Math.PI;
+        closeTurn.el = Math.max(-0.15, Math.min(1.1, closeTurn.el + dy * 1.2));
+      } else pilot.turnBy(dx, dy);
       dirty = true;
     },
     dispose() {

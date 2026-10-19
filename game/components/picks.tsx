@@ -1,17 +1,18 @@
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useGame } from "@/components/game-provider";
+import { MindHere } from "@/components/mind-chat";
 import { MindNote } from "@/components/mind-note";
-import { HISTORY } from "@/lib/game/charter";
+import { MS_PER_YEAR } from "@/lib/game/clock";
 import type { EarthPast } from "@/lib/game/past";
-import { advice, BUILDS, EMPTY, FOMALHAUT, schedule, SEARCHES, STUDIES } from "@/lib/game/plan";
+import { BUILDS, buildSlug, EMPTY, FOMALHAUT, schedule, SEARCHES, STUDIES } from "@/lib/game/plan";
 import { SITES } from "@/lib/game/sites";
 import type { Plan } from "@/lib/game/types";
+import { useAccess } from "@/lib/key";
 
-// Planning our waking, on the Projects tab: what starts at Year 0. The Mind says what it would start with, from the
-// charter, and queues nothing. Before Begin, a tap queues a build at the end of the order, or takes it out, and the
-// queue above draws it. A build with a place on the map splits its row: its mark queues it, and the rest of the row
-// takes the map to where it would stand and opens its story. Every change is saved as it is made.
+// Planning our waking, on the Build tab: what starts at Year 0. The Mind's note sends us to it to decide, and it
+// queues nothing. A tap on a build opens its page, where we add it to the queue, and the queue above draws it. The one
+// observation is offered on Fomalhaut's lead instead, on Scan. Every change is saved as it is made.
 
 /** The plan, and a change to it, saved at once. */
 export function usePlan() {
@@ -47,40 +48,18 @@ export const toggleBuild = (name: string) => (p: Plan) => ({
 /** The one observation open at Year 0, in or out. */
 export const toggleLook = (p: Plan) => ({ ...p, observe: p.observe.length ? [] : [FOMALHAUT.name] });
 
-const mindOf = (dials?: number[]) => advice(dials ?? HISTORY);
-
-/** A row's mark: its place in the order, or an open circle. Pointed at, it shows what a tap does: pointing at the row,
- *  or, where the mark is its own button, at the mark. */
-export function Mark({ n, look = false, own = false }: { n: number | null; look?: boolean; own?: boolean }) {
+/** A row's mark: its place in the order, or an open circle. Pointed at, the row shows what a tap does. */
+export function Mark({ n, look = false }: { n: number | null; look?: boolean }) {
   const on = n !== null;
   const fill = look ? "bg-other" : "bg-you";
-  const hide = own ? "group-hover/mark:opacity-0 group-focus-visible/mark:opacity-0" : "group-hover:opacity-0";
-  const show = own ? "group-hover/mark:opacity-100 group-focus-visible/mark:opacity-100" : "group-hover:opacity-100";
   return (
     <span
       aria-hidden
       className={`relative flex size-[18px] shrink-0 translate-y-[2px] items-center justify-center rounded-full font-mono text-[10px] ${on ? `${fill} text-paper` : "border border-faint text-muted"}`}
     >
-      <span className={`transition-opacity ${hide}`}>{on ? (look ? "" : n) : ""}</span>
-      <span className={`absolute opacity-0 transition-opacity ${show}`}>{on ? "−" : "+"}</span>
+      <span className="transition-opacity group-hover:opacity-0">{on ? (look ? "" : n) : ""}</span>
+      <span className="absolute opacity-0 transition-opacity group-hover:opacity-100">{on ? "−" : "+"}</span>
     </span>
-  );
-}
-
-/** A mark as its own button, 44 px to the touch, where the rest of its row shows the build on the map. */
-export function MarkButton({ n, label, onClick }: { n: number | null; label: string; onClick(): void }) {
-  return (
-    <button
-      type="button"
-      aria-label={label}
-      onClick={(e) => {
-        e.stopPropagation();
-        onClick();
-      }}
-      className="group/mark -m-[13px] shrink-0 p-[13px] outline-none"
-    >
-      <Mark n={n} own />
-    </button>
   );
 }
 
@@ -155,6 +134,7 @@ export const buildStory = (name: string): [string, string | undefined][] => {
   const s = SITES[name]?.story;
   return s
     ? [
+        ["WE HAVE", s.have],
         ["WHERE", s.where],
         ["WHY", s.why],
         ["TAKES", s.takes],
@@ -163,111 +143,81 @@ export const buildStory = (name: string): [string, string | undefined][] => {
     : [];
 };
 
-/** The Mind's word on where to start, and one tap to queue it. */
+/** The Mind's note, at any Year: what's next is ours to decide together. Once the Mind is open to us, we ask it right
+ *  here, in our one talk with it. Until then, asking takes us to the Mind tab to open it. */
 export function Advice() {
-  const { save } = useGame();
-  const { plan, change } = usePlan();
   const navigate = useNavigate();
-  const mind = mindOf(save?.charter?.dials);
-  const same =
-    plan.builds.join() === mind.builds.join() && (mind.studies === undefined || plan.studies === mind.studies);
+  const open = useAccess();
 
   return (
-    <MindNote className="mt-3">
-      <p className="text-[14.5px] leading-snug">{mind.words}</p>
-      <div className="mt-1.5 flex flex-wrap gap-x-4 text-[13px]">
-        {!same && (
+    <div className="mt-3">
+      <MindNote>
+        <p className="text-[14.5px] leading-snug">Engage with billions of minds to decide what to do next.</p>
+        {open === null && (
           <button
-            onClick={() => change((p) => ({ ...p, builds: mind.builds, studies: mind.studies ?? p.studies }))}
-            className="py-1 text-you"
+            onClick={() => navigate(`/mind?ask=${encodeURIComponent("What should we do next?")}`)}
+            className="mt-1.5 py-1 text-[13px] text-you"
           >
-            Queue what we would start with
+            Ask the Mind
           </button>
         )}
-        <button
-          onClick={() => navigate(`/mind?ask=${encodeURIComponent("What should we start with?")}`)}
-          className="py-1 text-page-ink2"
-        >
-          Ask the Mind
-        </button>
-      </div>
-    </MindNote>
+      </MindNote>
+      {open && <MindHere />}
+    </div>
   );
 }
 
-const pick = "group flex w-full items-start gap-2.5 border-t border-rowline py-2 text-left";
-
-/** What we could start and haven't queued. A tap puts it last in the queue, or for a build with a place on the map,
- *  a tap on its mark does, and the rest of its row shows it there. */
-export function Unqueued({ aim }: { aim(name: string): Aim }) {
-  const { save } = useGame();
-  const { plan, change } = usePlan();
-  const mind = mindOf(save?.charter?.dials);
+/** What we could start and haven't queued. A tap on a build opens its page. */
+export function Unqueued() {
+  const { plan } = usePlan();
   const builds = BUILDS.filter((b) => !plan.builds.includes(b.name));
-  const look = !plan.observe.length;
-  if (!builds.length && !look) return null;
+  if (!builds.length) return null;
 
   return (
     <>
       <h3 data-q="row" className="mt-3 text-[10.5px] tracking-[.08em] text-muted">
-        {plan.builds.length || plan.observe.length ? "WE COULD ALSO START" : "WE COULD START"}
+        {plan.builds.length ? "WE COULD ALSO START" : "WE COULD START"}
       </h3>
       <ul data-q="row">
-        {builds.map((b) => {
-          const words = (
-            <>
-              <span className="text-page-ink2 transition-colors group-hover:text-ink">{b.name}</span>
-              {mind.builds.includes(b.name) && (
-                <span className="ml-2 font-mono text-[9.5px] tracking-[.06em] text-you">WE WOULD</span>
-              )}
-              <span className="block text-[12px] text-muted">
-                {b.what}
-                {b.kt ? ` ${b.kt} kt of our 20.` : ""}
-              </span>
-            </>
-          );
-          if (!SITES[b.name])
-            return (
-              <li key={b.name}>
-                <button onClick={() => change(toggleBuild(b.name))} aria-pressed={false} className={pick}>
-                  <Mark n={null} />
-                  <span className="min-w-0 text-[13.5px] leading-snug">{words}</span>
-                </button>
-              </li>
-            );
-          const a = aim(b.name);
-          return (
-            <li
-              key={b.name}
-              {...pointer(a)}
-              className={`group cursor-pointer border-t border-rowline py-2 transition-[background-color,box-shadow] duration-200 ${a.lit ? WASH : ""}`}
-            >
-              <div className="flex items-start gap-2.5">
-                <MarkButton n={null} label={`Queue ${b.name}`} onClick={() => change(toggleBuild(b.name))} />
-                <div {...focusable(a)} className="min-w-0 grow text-[13.5px] leading-snug outline-none">
-                  {words}
-                </div>
-              </div>
-              <Story lines={buildStory(b.name)} tone="you" open={a.shown} />
-            </li>
-          );
-        })}
-        {look && (
-          <li>
-            <button onClick={() => change(toggleLook)} aria-pressed={false} className={pick}>
-              <Mark n={null} look />
+        {builds.map((b) => (
+          <li key={b.name} className="border-t border-rowline">
+            <Link to={`/build/${buildSlug(b.name)}`} className="flex items-baseline gap-3 py-2">
               <span className="min-w-0 grow text-[13.5px] leading-snug">
-                <span className="text-page-ink2 transition-colors group-hover:text-ink">{FOMALHAUT.name}</span>
+                {b.name}
                 <span className="block text-[12px] text-muted">
-                  {FOMALHAUT.what} Thirty seconds of the space telescope.
+                  {b.what}
+                  {b.kt ? ` ${b.kt} kt of our 20.` : ""}
                 </span>
               </span>
-              <span className="shrink-0 font-mono text-[11px] text-muted tabular-nums">Year {FOMALHAUT.lands}</span>
-            </button>
+              <span aria-hidden className="shrink-0 self-center text-muted">
+                ›
+              </span>
+            </Link>
           </li>
-        )}
+        ))}
       </ul>
     </>
+  );
+}
+
+/** The one observation open at Year 0, offered on Fomalhaut's lead: a tap queues it, or takes it out. */
+export function Look() {
+  const { plan, change } = usePlan();
+  const queued = plan.observe.includes(FOMALHAUT.name);
+  const secs = Math.round((FOMALHAUT.lands * MS_PER_YEAR) / 1000);
+  return (
+    <button
+      onClick={() => change(toggleLook)}
+      aria-pressed={queued}
+      className={`group flex w-full items-start gap-2.5 rounded-xl border px-3 py-2.5 text-left transition-colors ${queued ? "border-other bg-other/10" : "border-other/50 hover:bg-other/5"}`}
+    >
+      <Mark n={queued ? 0 : null} look />
+      <span className="min-w-0 grow text-[14px] leading-snug">
+        {queued ? "Queued: image Fomalhaut again" : FOMALHAUT.name}
+        <span className="block text-[12px] text-muted">It lands {secs} seconds after we begin.</span>
+      </span>
+      <span className="shrink-0 font-mono text-[11px] text-muted tabular-nums">Year {FOMALHAUT.lands}</span>
+    </button>
   );
 }
 

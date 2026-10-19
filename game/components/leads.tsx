@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useGame } from "@/components/game-provider";
 import { SkyArt } from "@/components/sky";
 import { FILL, Spread } from "@/components/spread";
@@ -14,7 +14,7 @@ import { prefersReducedMotion, rise, riseFrom, useStage } from "@/lib/motion";
 // lit one by one, each with a thread out from Sol: a world on a stretched orbit, every world the planet hunters felt
 // by 2040, nearest first, Fomalhaut's collisions, and the first star that could answer our messages. Beside each, how
 // long light takes to get there, in play time: what a call would cost. Picking one shows its path out from Sol in
-// depth, and each has its own question for the Mind.
+// depth and opens what we measured of it.
 
 /** The stars within 50 light-years from above, with Earth's leads lit as the dials say, each named. */
 export function LeadsMap({
@@ -70,28 +70,29 @@ export function LeadsMap({
 }
 
 /**
- * Earth's leads as rows. Pointing at one turns the map to it. In the opening, picking one holds the map there and each
- * asks the Mind its own question. On Scan, each opens its own page, and a row shows its latest reading, marked new
- * until opened.
+ * Earth's leads as rows. Pointing at one turns the map to it. In the opening, each is a line, pointing at one opens
+ * what we measured, and picking one holds it open and the map there. On Scan, each opens its own page, and a row
+ * shows its latest reading, marked new until opened.
  */
 export function LeadList({
   leads,
   dials,
-  onAsk,
+  fold = false,
   readings = {},
   fresh,
 }: {
   leads: Lead[];
   dials: Dials;
-  onAsk?(question: string): void;
+  fold?: boolean;
   readings?: Record<string, Reading[]>;
   fresh?: Set<string>;
 }) {
   // The lead in view: the one the Will points at, or else the one they picked, which stays until picked again.
   const [picked, setPicked] = useState<number | null>(null);
-  const peeked = useRef<number | null>(null);
+  const [peeked, setPeeked] = useState<number | null>(null);
+  const shown = peeked ?? picked;
   const look = (peek: number | null, pick = picked) => {
-    peeked.current = peek;
+    setPeeked(peek);
     Object.assign(dials, { focus: (peek ?? pick ?? -1) + 1 });
   };
   const pick = (i: number | null) => {
@@ -121,18 +122,18 @@ export function LeadList({
         )}
       </span>
       <span className="shrink-0 text-right font-mono text-[11px] text-muted tabular-nums">{realTime(l.ly)}</span>
-      {!onAsk && <span className="shrink-0 self-center text-muted">›</span>}
+      <span className="shrink-0 self-center text-muted">›</span>
     </>
     );
   };
   const peek = (i: number) => ({
     onPointerEnter: (e: React.PointerEvent) => e.pointerType === "mouse" && look(i),
     onPointerLeave: (e: React.PointerEvent) => e.pointerType === "mouse" && look(null),
-    onFocus: (e: React.FocusEvent) => e.currentTarget.matches(":focus-visible") && look(i),
+    onFocus: (e: React.FocusEvent) => e.target.matches(":focus-visible") && look(i),
     onBlur: () => look(null),
   });
 
-  if (!onAsk)
+  if (!fold)
     return (
       <ul className="mt-1 flex flex-col">
         {leads.map((l, i) => (
@@ -147,33 +148,60 @@ export function LeadList({
 
   return (
     <ul className="mt-1 flex flex-col" onKeyDown={(e) => e.key === "Escape" && pick(null)}>
-      {leads.map((l, i) => (
-        <li key={l.star} data-m="lead" className="border-t border-faint">
-          <div
-            className={`flex items-center gap-3 transition-opacity duration-300 ${picked !== null && picked !== i ? "opacity-50" : ""}`}
-          >
-            <button
-              onClick={() => pick(picked === i ? null : i)}
+      {leads.map((l, i) => {
+        const open = shown === i;
+        return (
+          <li key={l.star} data-m="lead" className="border-t border-faint">
+            <div
               {...peek(i)}
-              aria-pressed={picked === i}
-              className="flex min-w-0 grow items-baseline gap-3 py-2.5 text-left"
+              className={`transition-opacity duration-300 ${picked !== null && !open ? "opacity-50" : ""}`}
             >
-              {row(l)}
-            </button>
-            <button
-              onClick={() => onAsk(l.ask)}
-              title={l.ask}
-              aria-label={l.ask}
-              className="h-8 shrink-0 rounded-full border border-faint px-3.5 text-[13px] font-medium transition-colors hover:border-ink"
-            >
-              Ask
-            </button>
-          </div>
-        </li>
-      ))}
+              <button
+                onClick={() => pick(picked === i ? null : i)}
+                aria-expanded={open}
+                className="flex w-full items-baseline gap-3 py-2.5 text-left"
+              >
+                <span
+                  className={`size-2 shrink-0 translate-y-[-1px] rounded-full ${l.reply ? "bg-other" : "bg-you"}`}
+                />
+                <span className="min-w-0 grow truncate text-[15px] leading-snug">
+                  <b className="font-semibold">{l.what}</b> · {l.star}
+                </span>
+                <span className="shrink-0 font-mono text-[11px] text-muted tabular-nums">{realTime(l.ly)}</span>
+                <span className={`shrink-0 text-muted transition-transform duration-300 ${open ? "rotate-90" : ""}`}>
+                  ›
+                </span>
+              </button>
+              <div
+                aria-hidden={!open}
+                className={`grid transition-[grid-template-rows] duration-300 ${open ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
+              >
+                <div className="min-h-0 overflow-hidden">
+                  <div className="pb-3 pl-5">
+                    <p className="text-[13.5px] leading-snug text-page-ink2">{l.line}</p>
+                    <dl className="mt-2 grid grid-cols-[auto_1fr] items-baseline gap-x-3 gap-y-1 text-[13px] leading-snug">
+                      {l.facts.map(([label, value]) => (
+                        <Fragment key={label}>
+                          <dt className="font-mono text-[9.5px] tracking-[.08em] text-muted uppercase">{label}</dt>
+                          <dd>{value}</dd>
+                        </Fragment>
+                      ))}
+                    </dl>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+        );
+      })}
     </ul>
   );
 }
+
+// A button answers the pointer: it brightens on hover and gives under a press, quick in and slower out. Only
+// scale and color move here, since the stage's own tweens own transform and opacity.
+const PRESS =
+  "transition-[scale,background-color,border-color,box-shadow] duration-150 ease-out active:scale-[.97] active:duration-75 [-webkit-tap-highlight-color:transparent]";
 
 export function Leads({ onNext }: { onSkip(): void; onNext(): void }) {
   const { save, wake } = useGame();
@@ -280,7 +308,7 @@ export function Leads({ onNext }: { onSkip(): void; onNext(): void }) {
           <span>Leads · {leads.length}</span>
           <span>Light takes</span>
         </div>
-        <LeadList leads={leads} dials={dials} onAsk={ask} />
+        <LeadList leads={leads} dials={dials} fold />
         <p data-m="last" className="mt-3 text-[15px] leading-snug text-page-ink2">
           A call to any of them takes as long as its light, and an answer as long again. Which we look at first is
           yours.
@@ -289,16 +317,16 @@ export function Leads({ onNext }: { onSkip(): void; onNext(): void }) {
           <button
             data-m="act"
             onClick={() => ask("What doesn’t fit?")}
-            className="h-[46px] rounded-full border border-ink text-[15px] font-medium"
+            className={`${PRESS} h-[46px] rounded-full border border-ink/70 text-[15px] font-medium hover:border-ink hover:bg-ink/10`}
           >
-            Ask about them
+            Ask the Mind
           </button>
           <button
             data-m="act"
             onClick={() => leave(onNext)}
-            className="h-[46px] rounded-full bg-ink text-[15px] font-medium text-paper"
+            className={`${PRESS} h-[46px] rounded-full bg-ink text-[15px] font-medium text-paper hover:bg-ink/90 hover:shadow-[0_0_28px_-6px_var(--color-you)]`}
           >
-            Plan our waking
+            Plan Our Waking
           </button>
         </div>
       </Spread>

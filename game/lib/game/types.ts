@@ -9,7 +9,7 @@ export interface Save {
   woke?: boolean;
   /** Earth's founding line and dials, from the charter screen. */
   charter?: { line: string; dials: number[] };
-  /** What starts at Year 0, planned on the Projects tab: builds in the order queued, observations, thought for
+  /** What starts at Year 0, planned on the Build tab: builds in the order queued, observations, thought for
    *  studies, and what idle instruments sweep. Nothing in it happens before Begin. */
   plan?: Plan;
   /** Readings the Will has opened, by id. */

@@ -4,7 +4,8 @@ import NotFound from "@/app/not-found";
 import PlayLayout from "@/app/play/layout";
 import Lead from "@/app/play/lead";
 import Mind from "@/app/play/mind";
-import Projects from "@/app/play/projects";
+import BuildTab from "@/app/play/build";
+import BuildItem from "@/app/play/build-item";
 import Reach from "@/app/play/reach";
 import ScanTab from "@/app/play/scan";
 
@@ -21,7 +22,8 @@ export const router = createBrowserRouter([
         children: [
           { index: true, Component: ScanTab },
           { path: "mind", Component: Mind },
-          { path: "projects", Component: Projects },
+          { path: "build", Component: BuildTab },
+          { path: "build/:slug", Component: BuildItem },
           { path: "reach", Component: Reach },
           { path: "lead/:slug", Component: Lead },
         ],

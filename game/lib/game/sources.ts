@@ -305,13 +305,13 @@ export const PLAN_SOURCES: Source[] = [
     ],
   },
   {
-    title: "The all-sky watch",
+    title: "The All-Sky Watch",
     text: "Many small antennas forming beams in every direction at once. EMBRACE showed it in 2011 at about 100 m². The watch is a hundredfold scale-up of something that works.",
     links: [["SKA mid-frequency aperture array", "https://arxiv.org/abs/2008.04583"]],
   },
   {
     title: "Building in orbit",
-    text: "NASA's 2019 study found assembly in space the only way past 15 m mirrors. The orbital yard's quarter off builds in orbit is the game's own guess: no study gives a number for time saved.",
+    text: "NASA's 2019 study found assembly in space the only way past 15 m mirrors. The Orbital Yard's quarter off builds in orbit is the game's own guess: no study gives a number for time saved.",
     links: [
       [
         "Mukherjee et al. 2019",
@@ -319,6 +319,10 @@ export const PLAN_SOURCES: Source[] = [
       ],
     ],
   },
+];
+
+/** Reach: our messages still on their way. */
+export const REACH_SOURCES: Source[] = [
   {
     title: "Already on the way",
     text: "Our aimed messages reach their stars on real dates: the 2009 message at Kappa¹ Ceti in Year 0.1, the 2003 message at Gliese 208 in Year 0.8. The first reply that could come is Luyten's Star's, in Year 2.3.",

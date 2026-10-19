@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router";
 import { useEffect, useRef } from "react";
 import { useGame } from "@/components/game-provider";
 import { LeadArt } from "@/components/lead-art";
+import { Look } from "@/components/picks";
 import { useLeads } from "@/components/scan";
 import { realTime } from "@/lib/game/clock";
 import { ODDS, type Odds } from "@/lib/game/leads";
@@ -9,7 +10,8 @@ import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motio
 
 // One lead, as a report: drawn, then what we measured, what it could be with the Mind's word for each, and what would
 // tell us. Its latest reading, once one lands, comes first, and the words it moved show what they were. The map flies
-// to its star while it is open, and back out when we leave. Asking the Mind is the last step.
+// to its star while it is open, and back out when we leave. Before Begin, Fomalhaut's page offers the one observation
+// open at Year 0. Asking the Mind is the last step.
 
 /** The Mind's word, on its seven-step scale. A word a reading moved shows where it was, ringed, and what it was. */
 function Scale({ odds, was }: { odds: Odds; was?: Odds }) {
@@ -40,7 +42,7 @@ const HEAD = "font-mono text-[10px] tracking-[.1em] text-muted uppercase";
 
 export function LeadPage({ slug }: { slug: string }) {
   const { leads, dials, readings, fresh } = useLeads();
-  const { see } = useGame();
+  const { see, year } = useGame();
   const navigate = useNavigate();
   const root = useRef<HTMLDivElement>(null);
   const i = leads.findIndex((l) => l.slug === slug);
@@ -149,6 +151,12 @@ export function LeadPage({ slug }: { slug: string }) {
           {t}
         </p>
       ))}
+      {/* Before Begin, the one observation open at Year 0 is ours to queue here. */}
+      {lead.slug === "fomalhaut" && year === null && (
+        <div data-m className="mt-3">
+          <Look />
+        </div>
+      )}
 
       <button
         data-m

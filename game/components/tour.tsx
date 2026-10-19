@@ -1,12 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { Queueing } from "@/components/build-page";
 import { useGame } from "@/components/game-provider";
 import { MindNote } from "@/components/mind-note";
-import { buildStory, Mark, Story, toggleBuild, usePlan, useSchedule } from "@/components/picks";
+import { buildStory, Mark, Story, usePlan, useSchedule } from "@/components/picks";
 import { Thread } from "@/components/review";
 import { placedOf, useWorks } from "@/components/works";
 import { HISTORY } from "@/lib/game/charter";
 import { tenths } from "@/lib/game/clock";
-import { advice, BUILDS, schedule } from "@/lib/game/plan";
+import { advice, BUILDS, SAYS } from "@/lib/game/plan";
 import { SITES } from "@/lib/game/sites";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
 
@@ -15,25 +16,6 @@ import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motio
 // one's place when it has one. Each stop offers its build: the Mind advises, and we queue. The last stop is our order,
 // and when each is done. Queuing a build counts as done, here or in the list. Settled 2026-10-18.
 
-/** What the Mind says of each build, whichever lean picks it. */
-const SAYS: Record<string, string> = {
-  "All-sky watch":
-    "Our sky watch sees each star about ten minutes a day, and a knock lasts hours. This would hear the whole sky, all the time.",
-  "Deep flash watch":
-    "A laser knock could last a billionth of a second. Only a watch built for flashes that short would ever see one.",
-  "Data center": "Half again as much thought, for good. Every build after it goes faster, and so do our studies.",
-  "Infrared telescope":
-    "It would read the air of the nearest worlds. Oxygen and methane together would be hard to explain without life.",
-  "Launch complex": "It doubles what we lift to orbit. Everything we build up there waits on lift.",
-  "Orbital yard": "It builds in orbit a quarter faster. It pays most if we mean to build a lot up there.",
-  "Moon vault": "A copy of us, out of reach of anything that hits Earth. It takes half the matter we hold in orbit.",
-  "Laser sail array":
-    "Our soonest road to the nearest star, and it takes no matter. Last in line, it barely slows what is before it.",
-  "Probe yard":
-    "It builds and fuels probes in orbit. Its want is large: even last in line, it slows every build before it.",
-};
-
-const ORDINAL = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh"];
 const when = (d: number | null | undefined) => (d == null ? "past Year 40" : `Year ${tenths(d)}`);
 const and = (xs: string[]) => (xs.length < 2 ? xs.join("") : `${xs.slice(0, -1).join(", ")} and ${xs.at(-1)}`);
 
@@ -92,9 +74,6 @@ export function Tour({ onClose }: { onClose(): void }) {
   );
 
   const open = year === null;
-  const queued = !!name && plan.builds.includes(name);
-  // A build's Year: where it stands in our order, or last in line if we queue it now.
-  const by = !name ? null : queued ? done[name] : schedule({ ...plan, builds: [...plan.builds, name] }, scale)[name];
   const missing = picks.filter((b) => !plan.builds.includes(b));
   const span = Math.min(16, Math.max(5, Math.ceil(Math.max(0, ...plan.builds.map((b) => done[b] ?? 16)))));
 
@@ -105,7 +84,7 @@ export function Tour({ onClose }: { onClose(): void }) {
       <div className="sticky top-0 z-10 -mx-4 -mt-3 bg-panel px-4 pt-3 pb-1">
         <div className="flex items-center justify-between pt-1 pb-0.5 text-[11px] tracking-[.08em] text-muted">
           <span className="grow">
-            {at === last ? "PROJECTS · OUR ORDER" : at ? `PROJECTS · PLAN ${at} OF ${picks.length}` : "PROJECTS · PLAN"}
+            {at === last ? "BUILD · OUR ORDER" : at ? `BUILD · PLAN ${at} OF ${picks.length}` : "BUILD · PLAN"}
             {at === last && plan.builds.length > 0 && <span className="text-you"> · DONE</span>}
           </span>
           <button
@@ -158,25 +137,9 @@ export function Tour({ onClose }: { onClose(): void }) {
               {build.what}
               {build.kt ? ` ${build.kt} kt of our 20.` : ""}
             </p>
-            {open && (
-              <button
-                data-r
-                onClick={() => change(toggleBuild(build.name))}
-                aria-pressed={queued}
-                className={`group mt-2.5 flex w-full items-start gap-2.5 rounded-xl border px-3 py-2.5 text-left transition-colors ${queued ? "border-you bg-you/10" : "border-you/50 hover:bg-you/5"}`}
-              >
-                <Mark n={queued ? plan.builds.indexOf(build.name) + 1 : null} />
-                <span className="min-w-0 grow text-[14px] leading-snug">
-                  {queued
-                    ? `Queued, ${ORDINAL[plan.builds.indexOf(build.name)]} in our order`
-                    : `Queue the ${build.name}`}
-                  <span className="block text-[12px] text-muted">
-                    {queued ? "Tap again to take it out." : "It starts at Year 0, the moment we begin."}
-                  </span>
-                </span>
-                <span className="shrink-0 font-mono text-[11px] text-muted tabular-nums">{when(by)}</span>
-              </button>
-            )}
+            <div data-r>
+              <Queueing name={build.name} scale={scale} done={done} />
+            </div>
             <div data-r className="mt-3">
               <MindNote className="text-[14.5px] leading-snug">{SAYS[build.name]}</MindNote>
             </div>
@@ -268,7 +231,7 @@ export function Tour({ onClose }: { onClose(): void }) {
           className="h-11 rounded-full bg-ink text-[15px] font-medium text-paper"
         >
           {at === last
-            ? "Back to Projects"
+            ? "Back to Build"
             : at === picks.length
               ? "Next · Our order"
               : `${at ? "Next" : "First"} · ${picks[at]}`}

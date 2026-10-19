@@ -2,7 +2,7 @@
 // we have gone and the two roads to the nearest star. Each can be queued before Begin, last in line. One queued is
 // dated where the plan has it, and one not yet as if queued now, with this game's thought. Queued, a road can slow
 // what is before it: see slows(). Distances at Year 0 are HOLOS_GAME_CONCEPT.md's. Built 2026-10-18.
-import { ordersOf, schedule } from "./plan";
+import { ordersOf, pacedName, schedule } from "./plan";
 import type { Plan } from "./types";
 import { type Order, pace } from "@/lib/sim/works";
 
@@ -64,8 +64,8 @@ export interface Road {
 export function roads(plan: Plan, scale: number, from = 0): Road[] {
   const { orders, aside } = ordersOf(plan);
   const doneOf = (work: string) => {
-    const more: Order[] = plan.builds.includes(work) ? [] : [{ y: from, begin: work }];
-    return pace([...orders, ...more], 200, { scale, aside }).done[work] ?? null;
+    const more: Order[] = plan.builds.includes(work) ? [] : [{ y: from, begin: pacedName(work) }];
+    return pace([...orders, ...more], 200, { scale, aside }).done[pacedName(work)] ?? null;
   };
   const road = (name: string, build: string, craft: string, wait: number, speed: number): Road => {
     const done = doneOf(build);
@@ -74,7 +74,7 @@ export function roads(plan: Plan, scale: number, from = 0): Road[] {
     const n = plan.builds.indexOf(build) + 1 || null;
     return { name, n, build, craft, done, leaves, arrives, home: arrives === null ? null : arrives + NEAREST.ly };
   };
-  return [road("By sail", "Laser sail array", "Sails", 0, 0.2), road("By probe", "Probe yard", "A flyby probe", 12, 1 / 8)];
+  return [road("By sail", "Laser Sail Array", "Sails", 0, 0.2), road("By probe", "Probe Yard", "A flyby probe", 12, 1 / 8)];
 }
 
 /** The queued build a work slows most, and by how many Years, against the plan without it. Each work in line gets its

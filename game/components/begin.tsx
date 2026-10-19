@@ -38,7 +38,7 @@ const STEPS: Step[] = [
     name: "Queue our first builds",
     line: (s) => (s.plan?.builds.length ? s.plan.builds.join(", ") : "They start at Year 0, the moment we begin."),
     done: (s) => !!s.plan?.builds.length,
-    to: "/projects?tour",
+    to: "/build?tour",
   },
   {
     name: "Ask the Mind",

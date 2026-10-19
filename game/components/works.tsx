@@ -3,16 +3,17 @@ import { useBeams } from "@/components/beams";
 import { useGame } from "@/components/game-provider";
 import { SkyArt } from "@/components/sky";
 import { tenths, YEAR_0 } from "@/lib/game/clock";
+import { CLOSE } from "@/lib/game/close";
 import { type Site, SITES } from "@/lib/game/sites";
 import type { Plan } from "@/lib/game/types";
 import type { Dials, Mark } from "@/lib/drift";
 import { AU_KM } from "../../src/astronomy.js";
 import { moonOffset } from "../../src/ephemeris.js";
 
-// Our builds on the map. Picking one in Projects flies the map to where it would stand and draws it there: dashed
-// while it waits, drawn round as it goes up, lit once done. Pointing at another while the map is out turns to it.
-// Picking it again, or Back to Earth, brings the map home. The map shows one thing at a time, so picking a build puts
-// a message back.
+// Our builds on the map. Opening one's page in Build flies the map to where it would stand and draws it there: dashed
+// while it waits, drawn round as it goes up, lit once done. Close View flies on down to the ground there, where the
+// build is drawn as it would look. Leaving the page, or Back to Earth, brings the map home. The map shows one thing at
+// a time, so picking a build puts a message back.
 
 /** One of our builds with a place on the map, as the plan has it now. */
 export interface Work {
@@ -40,8 +41,10 @@ interface Works {
   set(list: Work[]): void;
   /** Picks a build, or none, which brings the map home. */
   pick(name: string | null): void;
-  /** Points at a build while the map is out, or stops pointing. */
-  peek(name: string | null): void;
+  /** Down at the build picked, in its Close View. */
+  close: boolean;
+  /** Flies down to the build picked, or back up. */
+  setClose(on: boolean): void;
 }
 
 const WorksContext = createContext<Works>({
@@ -50,7 +53,8 @@ const WorksContext = createContext<Works>({
   dials: {},
   set() {},
   pick() {},
-  peek() {},
+  close: false,
+  setClose() {},
 });
 export const useWorks = () => use(WorksContext);
 
@@ -58,35 +62,44 @@ export function WorksProvider({ children }: { children: React.ReactNode }) {
   const { pick: aimBeam } = useBeams();
   const [list, setList] = useState<Work[]>([]);
   const [picked, setPicked] = useState<string | null>(null);
-  const [dials] = useState<Dials>(() => ({ focus: 0, year: YEAR_0 }));
+  const [close, setDown] = useState(false);
+  const [dials] = useState<Dials>(() => ({ focus: 0, year: YEAR_0, close: 0 }));
   const held = useRef<string | null>(null);
   const now = useRef<Work[]>([]);
-  // The build in view, counted from 1: the one pointed at, or else the one picked.
+  // The build in view, the one picked, counted from 1.
   const focus = useCallback(
-    (name: string | null) =>
-      void Object.assign(dials, { focus: now.current.findIndex((w) => w.name === (name ?? held.current)) + 1 }),
+    () => void Object.assign(dials, { focus: now.current.findIndex((w) => w.name === held.current) + 1 }),
     [dials],
   );
   const set = useCallback(
     (next: Work[]) => {
       now.current = next;
       setList(next);
-      focus(null);
+      focus();
     },
     [focus],
   );
+  const setClose = useCallback(
+    (on: boolean) => {
+      Object.assign(dials, { close: Number(on) });
+      setDown(on);
+    },
+    [dials],
+  );
+  // Another build, or none, starts from its own view again.
   const pick = useCallback(
     (name: string | null) => {
+      if (name !== held.current) setClose(false);
       held.current = name;
       setPicked(name);
-      focus(null);
+      focus();
       if (name !== null) aimBeam([], null);
     },
-    [aimBeam, focus],
+    [aimBeam, focus, setClose],
   );
   const value = useMemo(
-    () => ({ list, picked, dials, set, pick, peek: focus }),
-    [list, picked, dials, set, pick, focus],
+    () => ({ list, picked, dials, set, pick, close, setClose }),
+    [list, picked, dials, set, pick, close, setClose],
   );
   return <WorksContext value={value}>{children}</WorksContext>;
 }
@@ -107,7 +120,7 @@ function toward(dx: number, dy: number) {
 /** The map on our builds: the one in view where it would stand, how far along it is, and from the Moon or L2, which
  *  way Earth is, in light. */
 export function WorksMap({ className }: { className: string }) {
-  const { list, dials } = useWorks();
+  const { list, dials, close, setClose } = useWorks();
   const { year } = useGame();
   useEffect(() => void Object.assign(dials, { year: YEAR_0 + (year ?? 0) }), [dials, year]);
   // Light from Earth to the Moon today, and to L2, in seconds.
@@ -120,7 +133,10 @@ export function WorksMap({ className }: { className: string }) {
   const onMarks = useCallback((marks: Mark[]) => {
     // Only the build in view is named, at its places, and Earth only from the Moon or L2.
     for (const [id, n] of Object.entries(names.current))
-      if (n && !id.startsWith("arrow:") && !marks.some((m) => m.id === id)) n.style.opacity = "0";
+      if (n && !id.startsWith("arrow:") && !marks.some((m) => m.id === id)) {
+        n.style.opacity = "0";
+        n.style.visibility = "hidden";
+      }
     for (const { id, x, y, a } of marks) {
       const n = names.current[id];
       const box = n?.parentElement;
@@ -133,6 +149,8 @@ export function WorksMap({ className }: { className: string }) {
           : `translate(${x + 26}px, ${y}px) translate(0, -50%)`;
         n.style.textAlign = left ? "right" : "left";
         n.style.opacity = String(a);
+        // Hidden, its name can't be tapped.
+        n.style.visibility = a > 0.02 ? "visible" : "hidden";
         continue;
       }
       // Earth: where it is, or held at the map's edge with an arrow its way.
@@ -155,18 +173,37 @@ export function WorksMap({ className }: { className: string }) {
   return (
     <SkyArt mode="works" dials={dials} works={list} onMarks={onMarks} className={className}>
       {list.flatMap((w) =>
-        w.site.places.map((pl, k) => (
-          <span
-            key={`${w.name}:${k}`}
-            ref={(n) => {
-              names.current[`site:${w.name}:${k}`] = n;
-            }}
-            className={`${label} leading-snug`}
-          >
-            <span className="block text-you">{pl.name}</span>
-            <span className="block text-ink">{state(w, year)}</span>
-          </span>
-        )),
+        w.site.places.map((pl, k) => {
+          const words = (
+            <>
+              <span className="block tracking-[.08em] text-ink">{w.name.toUpperCase()}</span>
+              <span className="block text-you">{pl.name}</span>
+              <span className="block text-ink">{state(w, year)}</span>
+            </>
+          );
+          return (
+            <span
+              key={`${w.name}:${k}`}
+              ref={(n) => {
+                names.current[`site:${w.name}:${k}`] = n;
+              }}
+              className={`${label} leading-snug`}
+            >
+              {/* A tap on its name takes the map down to it, as Close View does. */}
+              {CLOSE[w.name] && !close ? (
+                <button
+                  tabIndex={-1}
+                  onClick={() => setClose(true)}
+                  className="pointer-events-auto cursor-pointer [text-align:inherit]"
+                >
+                  {words}
+                </button>
+              ) : (
+                words
+              )}
+            </span>
+          );
+        }),
       )}
       {(
         [

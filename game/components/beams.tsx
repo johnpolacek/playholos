@@ -4,7 +4,7 @@ import { SkyArt } from "@/components/sky";
 import { tenths, YEAR_0 } from "@/lib/game/clock";
 import type { Dials, Mark } from "@/lib/drift";
 
-// Our messages on the map. Picking one in Projects flies the map out to its star, where its path runs from Sol, lit as
+// Our messages on the map. Picking one in Reach flies the map out to its star, where its path runs from Sol, lit as
 // far as its light has come. Pointing at another while the map is out turns to it. Picking it again, or Back to Earth,
 // brings the map home.
 

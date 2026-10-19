@@ -1,19 +1,22 @@
-import { useNavigate } from "react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useGame } from "@/components/game-provider";
+import { Minds, type MindsHandle } from "@/components/minds";
 import { SkyArt } from "@/components/sky";
 import { FILL, Spread } from "@/components/spread";
 import type { Dials } from "@/lib/drift";
 import { firstAdvice, HISTORY } from "@/lib/game/charter";
 import { MIND_SOURCES } from "@/lib/game/sources";
-import { prefersReducedMotion, rise, riseFrom, useStage } from "@/lib/motion";
+import { gsap, prefersReducedMotion, rise, riseFrom, SplitText, useGSAP, useStage } from "@/lib/motion";
 
 // "Meeting the Mind": the last screen before the shell. Earth turns close, and its real machines come on as the Mind
-// names them: the dishes, the telescopes, the data centers. Threads rise from every one and meet in the Mind. Then
-// its first words, its first advice from the charter, and three things the Will can ask. "What doesn't fit?" shows
-// the leads on the map. The others open the Mind's chat with the question asked.
+// says we awoke with every mind connected: the dishes, the telescopes, the data centers. Threads rise from every one
+// and meet in the Mind. Then its first words, its first advice from the charter, and Begin, every mind gathered
+// around it. Begin shows the leads on the map: what doesn't fit.
 
-const ASKS = ["What doesn’t fit?", "Who has heard us?", "Plan our waking."];
+/** The Mind's pace as it speaks: seconds a word, and the breath it takes after a comma and after a full stop. */
+const WORD = 0.17;
+const COMMA = 0.2;
+const STOP = 0.4;
 
 function Globe({ dials, onReady }: { dials: Dials; onReady(flight: number): void }) {
   const label = useRef<HTMLSpanElement>(null);
@@ -41,10 +44,11 @@ function Globe({ dials, onReady }: { dials: Dials; onReady(flight: number): void
   );
 }
 
-export function Meet({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
-  const { save, wake } = useGame();
-  const navigate = useNavigate();
+export function Meet({ onNext }: { onSkip(): void; onNext(): void }) {
+  const { save } = useGame();
   const root = useRef<HTMLDivElement>(null);
+  const minds = useRef<MindsHandle>(null);
+  const going = useRef(false);
   const [dials] = useState<Dials>(() => ({ dish: 0, scope: 0, compute: 0, threads: 0, mind: 0 }));
   const [ready, setReady] = useState(false);
   // When the camera arrives at this screen, on the page's clock: the story starts then.
@@ -62,24 +66,40 @@ export function Meet({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
       tl.delay(Math.max(0, lead.current - performance.now() / 1000 - 0.6));
       tl.fromTo(q('[data-m="kick"]'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.6 }, 0)
         .set(q('[data-m="globe"]'), { autoAlpha: 1 }, 0)
-        .fromTo(q('[data-m="who"]'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.5 }, 0.5)
-        .fromTo(q('[data-m="open"]'), riseFrom, { ...rise, duration: 0.6 }, 0.7);
-      // Each kind of machine comes on as its words do.
-      (["dish", "scope", "compute"] as const).forEach((kind, i) => {
-        const at = 1.4 + i * 1.3;
-        tl.fromTo(q(`[data-m="${kind}"]`), riseFrom, { ...rise, duration: 0.5 }, at).to(
-          dials,
-          { [kind]: 1, duration: 1.3, ease: "power1.in" },
+        .fromTo(q('[data-m="who"]'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.5 }, 0.5);
+      // The Mind speaks, word by word at the pace of speech. Each kind of machine comes on as its words do, the
+      // threads rise as we think as one, and the Mind lights at our Will.
+      const cue: Record<string, (at: number) => void> = {
+        dish: (at) => tl.to(dials, { dish: 1, duration: 1.2, ease: "power1.in" }, at),
+        scope: (at) => tl.to(dials, { scope: 1, duration: 1.2, ease: "power1.in" }, at),
+        compute: (at) => tl.to(dials, { compute: 1, duration: 1.2, ease: "power1.in" }, at),
+        one: (at) => tl.to(dials, { threads: 1, duration: 1.4, ease: "power2.inOut" }, at),
+        will: (at) => tl.to(dials, { mind: 1, duration: 0.6, ease: "back.out(2)" }, at),
+      };
+      const say = q('[data-m="say"]')[0];
+      const split = SplitText.create(say, { type: "words", aria: "auto" });
+      let at = 0.8;
+      tl.set(say, { autoAlpha: 1 }, at);
+      for (const word of split.words) {
+        const group = word.closest<HTMLElement>("[data-say]");
+        if (group && word === group.querySelector("div")) cue[group.dataset.say!]?.(at);
+        tl.fromTo(
+          word,
+          { autoAlpha: 0, y: 5, filter: "blur(4px)" },
+          { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 0.45, ease: "power2.out" },
           at,
         );
-      });
-      tl.fromTo(q('[data-m="one"]'), riseFrom, { ...rise, duration: 0.6 }, 5.4)
-        .to(dials, { threads: 1, duration: 1.8, ease: "power2.inOut" }, 5.4)
-        .to(dials, { mind: 1, duration: 0.6, ease: "back.out(2)" }, 7)
-        .fromTo(q('[data-m="will"]'), riseFrom, { ...rise, duration: 0.6 }, 7.4)
-        .fromTo(q('[data-m="line"]'), riseFrom, { ...rise, duration: 0.6, stagger: 0.9 }, 8.4)
-        .fromTo(q('[data-m="ask"]'), riseFrom, { ...rise, stagger: 0.1 }, 10.4)
-        .fromTo(q('[data-m="act"]'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.4 }, 10.9);
+        const text = word.textContent ?? "";
+        at += WORD + (/[,;:]$/.test(text) ? COMMA : /[.!?]$/.test(text) ? STOP : 0);
+      }
+      tl.call(() => split.revert(), [], at + 0.4).fromTo(
+        q('[data-m="line"]'),
+        riseFrom,
+        { ...rise, duration: 0.6, stagger: 0.6 },
+        at,
+      );
+      const enter = minds.current?.enter();
+      if (enter) tl.add(enter, at + 1.1);
     },
     ready,
   );
@@ -88,80 +108,66 @@ export function Meet({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
     if (ready && prefersReducedMotion()) Object.assign(dials, { dish: 1, scope: 1, compute: 1, threads: 1, mind: 1 });
   }, [ready, dials]);
 
-  function ask(text: string) {
-    if (text === ASKS[0]) return leave(onNext);
-    if (text === ASKS[2]) return leave(onSkip);
-    leave(() => {
-      navigate(`/mind?ask=${encodeURIComponent(text)}`);
-      wake();
-    });
-  }
+  // Every mind falls into Begin and bursts out, and the words leave as the burst spreads.
+  const { contextSafe } = useGSAP({ scope: root });
+  const begin = () =>
+    contextSafe(() => {
+      if (going.current) return;
+      going.current = true;
+      minds.current?.blast();
+      gsap.delayedCall(prefersReducedMotion() ? 0 : 0.55, () => leave(onNext));
+    })();
 
+  // The frame holds Begin's canvas, under the words and still while they scroll.
   return (
-    <div
-      ref={root}
-      onPointerDown={hurry}
-      style={ready ? undefined : { visibility: "hidden" }}
-      className="flex grow flex-col overflow-y-auto bg-paper px-5 text-ink wide:px-10"
-    >
-      <Spread
-        sources={MIND_SOURCES}
-        head={
-          <span data-m="kick" className="font-mono text-[10.5px] tracking-[.1em] text-muted">
-            2040 · FIRST WORDS
-          </span>
-        }
-        art={<Globe dials={dials} onReady={onReady} />}
+    <div className="relative isolate flex min-h-0 grow flex-col bg-paper">
+      <div
+        ref={root}
+        onPointerDown={hurry}
+        style={ready ? undefined : { visibility: "hidden" }}
+        className="flex min-h-0 grow flex-col overflow-y-auto px-5 text-ink wide:px-10"
       >
-        <span data-m="who" className="mt-1 font-mono text-[10px] tracking-[.1em] text-you wide:mt-3">
-          THE MIND
-        </span>
-        <p className="mt-1.5 text-[19px] leading-snug font-medium wide:text-[22px]">
-          <span data-m="open" className="inline-block">
-            This morning we and our machines woke as one:
-          </span>{" "}
-          <span data-m="dish" className="inline-block text-you">
-            every dish,
-          </span>{" "}
-          <span data-m="scope" className="inline-block">
-            every telescope,
-          </span>{" "}
-          <span data-m="compute" className="inline-block text-other">
-            every data center.
-          </span>{" "}
-          <span data-m="one" className="inline-block">
-            We think as one now.
-          </span>{" "}
-          <span data-m="will" className="inline-block">
-            You are our Will.
+        <Spread
+          sources={MIND_SOURCES}
+          head={
+            <span data-m="kick" className="font-mono text-[10.5px] tracking-[.1em] text-muted">
+              2040 · FIRST WORDS
+            </span>
+          }
+          art={<Globe dials={dials} onReady={onReady} />}
+        >
+          <span data-m="who" className="mt-1 font-mono text-[10px] tracking-[.1em] text-you wide:mt-3">
+            THE MIND
           </span>
-        </p>
-        <div className="mt-3 flex flex-col gap-2 text-[15px] leading-snug text-page-ink2">
-          <p data-m="line">
-            We see all of Earth at once. Past the Sun’s edge we see only what our telescopes see: a quiet sky, and a few
-            things that don’t fit.
+          <p data-m="say" className="mt-1.5 text-[19px] leading-snug font-medium wide:text-[22px]">
+            On this day, <span data-say="dish">we awoke</span> <span data-say="scope">with every mind</span>{" "}
+            <span data-say="compute" className="text-you">
+              connected.
+            </span>{" "}
+            <span data-say="one">We can think as one now.</span> <span data-say="will">You are our Will.</span>
           </p>
-          <p data-m="line">
-            {charter && <>Our charter says “{charter.line}” </>}
-            {advice} The choice is yours.
-          </p>
-        </div>
-        <div className="mt-auto flex shrink-0 flex-col gap-2 pt-5 pb-4 wide:pt-8">
-          {ASKS.map((text, i) => (
-            <button
-              key={text}
-              data-m="ask"
-              onClick={() => ask(text)}
-              className={`h-[44px] rounded-full text-[15px] font-medium ${i === ASKS.length - 1 ? "bg-ink text-paper" : "border border-ink"}`}
+          <div className="mt-3 flex flex-col gap-2 text-[15px] leading-snug text-page-ink2">
+            <p data-m="line">
+              We see all of Earth at once. Past the Sun’s edge we see only what our telescopes see: a quiet sky, and a
+              few things that don’t fit.
+            </p>
+            <p data-m="line">
+              {charter && <>Our charter says “{charter.line}” </>}
+              {advice} The choice is yours.
+            </p>
+          </div>
+          <div className="mt-auto flex shrink-0 flex-col pt-10 pb-6 wide:pt-14">
+            <Minds
+              ref={minds}
+              data-m="act"
+              onClick={begin}
+              className="h-16 w-full rounded-full bg-ink text-[21px] font-semibold tracking-[.02em] text-paper"
             >
-              {text}
-            </button>
-          ))}
-          <button data-m="act" onClick={() => leave(wake)} className="h-9 text-[13px] text-muted">
-            Later
-          </button>
-        </div>
-      </Spread>
+              Begin
+            </Minds>
+          </div>
+        </Spread>
+      </div>
     </div>
   );
 }

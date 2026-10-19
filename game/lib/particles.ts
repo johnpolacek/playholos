@@ -1,7 +1,8 @@
 // A particle field: a canvas that reaches past a target element, its particles stepped on the GSAP ticker. Emitters run
 // each frame while attached, and a particle may carry its own update. Tweens on the plain particle objects work too,
-// since the ticker runs them before the field steps. It ticks only while it has something to draw. From animaxxing's
-// particle field, with only the shapes the reactor and the about pages' Play draw.
+// since the ticker runs them before the field steps. It ticks only while it has something to draw. Linked particles
+// draw threads to each other. From animaxxing's particle field, with only the shapes the reactor, the about pages'
+// Play and the Mind's Begin draw.
 import { gsap } from "@/lib/motion";
 
 export type Shape = "dot" | "spark" | "square" | "star" | "outline";
@@ -33,6 +34,8 @@ export type Particle = {
   wobble: number;
   wobbleFreq: number;
   phase: number;
+  /** How far a thread reaches from this particle to another linked one, in px. 0 for none. */
+  link: number;
   update?: (p: Particle) => void;
 };
 
@@ -55,10 +58,18 @@ const DEFAULTS: Omit<Particle, "x" | "y"> = {
   wobble: 0,
   wobbleFreq: 0,
   phase: 0,
+  link: 0,
 };
 
 /** Longest step the field takes, so a stalled tab does not fling everything off. */
 const MAX_STEP = 0.05;
+/** A thread's alpha between two touching particles. It fades to nothing at the longer reach. */
+const THREAD = 0.45;
+
+/** How much of a particle shows now: its alpha, faded over its life if it fades. */
+function shown(p: Particle) {
+  return p.alpha * (p.fade && p.life !== Infinity ? 1 - p.age / p.life : 1);
+}
 
 export class ParticleField {
   readonly particles: Particle[] = [];
@@ -71,6 +82,7 @@ export class ParticleField {
   private readonly ctx: CanvasRenderingContext2D;
   private readonly target: HTMLElement;
   private readonly bleed: number;
+  private readonly frame?: HTMLElement;
   private readonly emitters = new Set<(dt: number) => void>();
   private color = "#fff";
   private time = 0;
@@ -78,11 +90,13 @@ export class ParticleField {
   private height = 0;
   private running = false;
 
-  constructor(canvas: HTMLCanvasElement, target: HTMLElement, bleed: number) {
+  /** With `frame`, the canvas covers the frame instead of reaching `bleed` past the target. */
+  constructor(canvas: HTMLCanvasElement, target: HTMLElement, bleed: number, frame?: HTMLElement) {
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d")!;
     this.target = target;
     this.bleed = bleed;
+    this.frame = frame;
     this.sync();
   }
 
@@ -90,11 +104,23 @@ export class ParticleField {
   sync() {
     const { offsetWidth: w, offsetHeight: h } = this.target;
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    this.width = w + this.bleed * 2;
-    this.height = h + this.bleed * 2;
-    Object.assign(this.box, { x: this.bleed, y: this.bleed, w, h });
-    this.canvas.width = Math.round(this.width * dpr);
-    this.canvas.height = Math.round(this.height * dpr);
+    if (this.frame) {
+      // Where the target sits in the frame, by its center, so a scale tween on it doesn't move the box.
+      const f = this.frame.getBoundingClientRect();
+      const t = this.target.getBoundingClientRect();
+      this.width = f.width;
+      this.height = f.height;
+      Object.assign(this.box, { x: t.left - f.left + (t.width - w) / 2, y: t.top - f.top + (t.height - h) / 2, w, h });
+    } else {
+      this.width = w + this.bleed * 2;
+      this.height = h + this.bleed * 2;
+      Object.assign(this.box, { x: this.bleed, y: this.bleed, w, h });
+    }
+    // A new size clears the canvas, so a scroll that only moves the target keeps it.
+    const cw = Math.round(this.width * dpr);
+    const ch = Math.round(this.height * dpr);
+    if (this.canvas.width !== cw) this.canvas.width = cw;
+    if (this.canvas.height !== ch) this.canvas.height = ch;
     this.canvas.style.width = `${this.width}px`;
     this.canvas.style.height = `${this.height}px`;
     this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -173,9 +199,28 @@ export class ParticleField {
     ctx.fillStyle = this.color;
     ctx.strokeStyle = this.color;
     ctx.lineCap = "round";
+    // Threads first, under the particles: as strong as the fainter end, and gone at the longer reach.
+    const linked = this.particles.filter((p) => p.link > 0);
+    ctx.lineWidth = 1;
+    for (let i = 0; i < linked.length; i++) {
+      const a = linked[i];
+      for (let j = i + 1; j < linked.length; j++) {
+        const b = linked[j];
+        const reach = Math.max(a.link, b.link);
+        const d = Math.hypot(a.x - b.x, a.y - b.y);
+        if (d >= reach) continue;
+        const alpha = Math.min(shown(a), shown(b)) * (1 - d / reach) * THREAD;
+        if (alpha <= 0.005) continue;
+        ctx.globalAlpha = Math.min(alpha, 1);
+        ctx.beginPath();
+        ctx.moveTo(a.x, a.y);
+        ctx.lineTo(b.x, b.y);
+        ctx.stroke();
+      }
+    }
     for (const p of this.particles) {
       const spent = p.life === Infinity ? 0 : p.age / p.life;
-      const alpha = p.alpha * (p.fade ? 1 - spent : 1);
+      const alpha = shown(p);
       const size = p.size * (p.shrink ? 1 - spent : 1);
       if (alpha <= 0.005 || size <= 0.05) continue;
       ctx.globalAlpha = Math.min(alpha, 1);

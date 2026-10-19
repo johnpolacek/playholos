@@ -1,38 +1,42 @@
 import { useLocation } from "react-router";
 import { useRef, useState } from "react";
 import { BeamsMap, useBeams } from "@/components/beams";
+import { Globe, Lens } from "@/components/icons";
 import { ReachMap, useReach } from "@/components/reach";
 import { ScanMap } from "@/components/scan";
 import { SkyArt, useSky } from "@/components/sky";
 import { useWorks, WorksMap } from "@/components/works";
 import type { Stop } from "@/lib/flight";
+import { CLOSE } from "@/lib/game/close";
 
 // The map's five stops, and its outward button: each tap travels one stop out, and the last comes home.
 const STAGES: { id: Stop; name: string; next: string }[] = [
-  { id: "earth", name: "EARTH", next: "Solar System ↗" },
-  { id: "solar", name: "SOLAR SYSTEM", next: "Nearby stars ↗" },
-  { id: "stars", name: "NEARBY STARS", next: "Milky Way ↗" },
-  { id: "galaxy", name: "MILKY WAY", next: "Other galaxies ↗" },
-  { id: "group", name: "LOCAL GROUP", next: "Back to Earth ↙" },
+  { id: "earth", name: "EARTH", next: "Solar System" },
+  { id: "solar", name: "SOLAR SYSTEM", next: "Nearby Stars" },
+  { id: "stars", name: "NEARBY STARS", next: "Milky Way" },
+  { id: "galaxy", name: "MILKY WAY", next: "Other Galaxies" },
+  { id: "group", name: "LOCAL GROUP", next: "Back to Earth" },
 ];
 
 const LABEL =
   "pointer-events-none absolute top-2 left-2.5 rounded-[9px] border border-faint bg-paper px-[7px] py-0.5 font-mono text-[9.5px] tracking-[.06em]";
-const BUTTON = "absolute right-2.5 bottom-3 h-8 rounded-full border border-faint bg-paper px-3 text-xs";
+const PILL = "inline-flex h-8 items-center gap-1.5 rounded-full border border-faint bg-paper pr-3 pl-2.5 text-xs";
+const BUTTON = `absolute right-2.5 bottom-3 ${PILL}`;
 
 // The board: a strip of the map under the top bar, a window onto the game's one sky, which flies here from the
-// charter. On Scan and a lead's page it shows Earth's leads. On Projects, a message picked there takes it out to its
-// star, and a build to where it would stand. On Reach it flies out from Earth to the nearest star. Elsewhere it rests
-// at a stop, turning slowly, travels outward a stop a tap, and turns with a drag.
+// charter. On Scan and a lead's page it shows Earth's leads. On Build, a build's page takes it to where it would stand,
+// and Close View on down to the ground there, where a drag walks round it. On Reach it flies out from Earth to the
+// nearest star, and a message picked there takes it out to its star. Elsewhere it rests at a stop, turning slowly,
+// travels outward a stop a tap, and turns with a drag. A lens marks going closer or farther, and Earth coming home.
 export function MapStrip() {
   const { pathname: path, search } = useLocation();
-  // The walkthroughs, the Scan review and the Projects tour, need room under the map on a phone for the Mind's words.
+  // The walkthroughs, the Scan review and the Build tour, need room under the map on a phone for the Mind's words.
   const guided = /[?&](review|tour)\b/.test(search);
   const scan = path === "/" || path.startsWith("/lead/");
   const beams = useBeams();
-  const aimed = path === "/projects" && beams.picked !== null;
+  const aimed = path === "/reach" && beams.picked !== null;
   const works = useWorks();
-  const built = path === "/projects" && works.picked !== null;
+  const built = (path === "/build" || path.startsWith("/build/")) && works.picked !== null;
   const reach = useReach();
   const [tall, setTall] = useState(false);
 
@@ -51,17 +55,31 @@ export function MapStrip() {
       ) : built ? (
         <>
           <WorksMap className="absolute inset-0" />
-          <span className={LABEL}>{works.picked!.toUpperCase()}</span>
-          <button onClick={() => works.pick(null)} className={BUTTON}>
-            Back to Earth ↙
-          </button>
+          {works.close && <Turn />}
+          <span className={LABEL}>
+            {works.picked!.toUpperCase()}
+            {works.close && " · CLOSE VIEW"}
+          </span>
+          <div className="absolute right-2.5 bottom-3 flex gap-1.5">
+            {CLOSE[works.picked!] && (
+              <button onClick={() => works.setClose(!works.close)} className={PILL}>
+                <Lens closer={!works.close} />
+                {works.close ? "Pull Back" : "Close View"}
+              </button>
+            )}
+            <button onClick={() => works.pick(null)} className={PILL}>
+              <Globe />
+              Back to Earth
+            </button>
+          </div>
         </>
       ) : aimed ? (
         <>
           <BeamsMap className="absolute inset-0" />
           <span className={LABEL}>OUR MESSAGES</span>
           <button onClick={() => beams.pick(beams.list, null)} className={BUTTON}>
-            Back to Earth ↙
+            <Globe />
+            Back to Earth
           </button>
         </>
       ) : path === "/reach" ? (
@@ -69,7 +87,8 @@ export function MapStrip() {
           <ReachMap className="absolute inset-0" />
           <span className={LABEL}>FROM EARTH</span>
           <button onClick={() => reach.tour()} className={BUTTON}>
-            Fly out again ↗
+            <Lens closer={false} />
+            Fly Out Again
           </button>
         </>
       ) : (
@@ -91,7 +110,6 @@ export function MapStrip() {
 function Stops() {
   const sky = useSky();
   const [stage, setStage] = useState(0);
-  const held = useRef<{ x: number; y: number } | null>(null);
 
   function travel() {
     const next = (stage + 1) % STAGES.length;
@@ -99,6 +117,23 @@ function Stops() {
     setStage(next);
   }
 
+  return (
+    <>
+      <SkyArt mode="map" className="absolute inset-0" />
+      <Turn />
+      <span className={LABEL}>{STAGES[stage].name}</span>
+      <button onClick={travel} className={BUTTON}>
+        {stage === STAGES.length - 1 ? <Globe /> : <Lens closer={false} />}
+        {STAGES[stage].next}
+      </button>
+    </>
+  );
+}
+
+// A drag across the map turns the view: round Earth at the stops, or round a build in its Close View.
+function Turn() {
+  const sky = useSky();
+  const held = useRef<{ x: number; y: number } | null>(null);
   const press = (e: React.PointerEvent<HTMLDivElement>) => {
     held.current = { x: e.clientX, y: e.clientY };
     e.currentTarget.setPointerCapture(e.pointerId);
@@ -111,21 +146,13 @@ function Stops() {
     held.current = { x: e.clientX, y: e.clientY };
   };
   const release = () => (held.current = null);
-
   return (
-    <>
-      <SkyArt mode="map" className="absolute inset-0" />
-      <div
-        onPointerDown={press}
-        onPointerMove={drag}
-        onPointerUp={release}
-        onPointerCancel={release}
-        className="absolute inset-0 cursor-grab touch-none active:cursor-grabbing"
-      />
-      <span className={LABEL}>{STAGES[stage].name}</span>
-      <button onClick={travel} className={BUTTON}>
-        {STAGES[stage].next}
-      </button>
-    </>
+    <div
+      onPointerDown={press}
+      onPointerMove={drag}
+      onPointerUp={release}
+      onPointerCancel={release}
+      className="absolute inset-0 cursor-grab touch-none active:cursor-grabbing"
+    />
   );
 }

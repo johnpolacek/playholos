@@ -113,10 +113,10 @@ function feltLead(f: FeltWorld): Lead {
   const r = reach(f.a, f.d);
   const tell =
     r >= 0.104
-      ? "The infrared telescope can split it from its star and read its air: water first, then oxygen."
+      ? "The Infrared Telescope can split it from its star and read its air: water first, then oxygen."
       : r >= 0.056
-        ? "The infrared telescope can see it beside its star, but it sits too close in to read its water."
-        : "It sits too close to its star for the infrared telescope to split. For now its tug is all we have.";
+        ? "The Infrared Telescope can see it beside its star, but it sits too close in to read its water."
+        : "It sits too close to its star for the Infrared Telescope to split. For now its tug is all we have.";
   const kind = m < 1.5 ? "Small enough that it is likely rock." : m < 3 ? "Rock or gas, we can’t tell yet." : "At that mass, likely a gas world.";
   return {
     slug: slugOf(f.star),
@@ -158,7 +158,7 @@ export function leadsOf(felt: FeltWorld[]): Lead[] {
       ly: 19.7,
       ask: "What could 82 Eridani’s stretched orbit mean?",
       brief:
-        "Most likely a gas world, swinging in and out of its star’s warm zone each year. Once the infrared telescope is built, about 3 days would show if its air holds water.",
+        "Most likely a gas world, swinging in and out of its star’s warm zone each year. Once the Infrared Telescope is built, about 3 days would show if its air holds water.",
       facts: [
         ["Mass", "At least 5.8 Earths"],
         ["Its year", "648 days"],
@@ -180,7 +180,7 @@ export function leadsOf(felt: FeltWorld[]): Lead[] {
           odds: "very unlikely",
         },
       ],
-      tells: ["The infrared telescope can split it from its star and read its air. Water would show in about 3 days."],
+      tells: ["The Infrared Telescope can split it from its star and read its air. Water would show in about 3 days."],
       art: { kind: "orbit", a: 1.354, e: 0.45, hz: [0.83, 1.45] },
     },
     ...felt.map(feltLead),
@@ -243,7 +243,7 @@ export function leadsOf(felt: FeltWorld[]): Lead[] {
         { what: "A reply, as soon as one could come", why: `It would reach us at Year ${REPLY}.`, odds: "almost no chance" },
       ],
       tells: [
-        "Listening as each window opens. Our sky watch sees its star about 10 minutes a day, and a knock lasts hours. The all-sky watch hears at any hour.",
+        "Listening as each window opens. Our sky watch sees its star about 10 minutes a day, and a knock lasts hours. The All-Sky Watch hears at any hour.",
       ],
       art: { kind: "reply", sent: LUYTEN.map(([, sent]) => sent), ly: LUYTEN[0][3] },
     },
