@@ -146,15 +146,17 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
     },
   },
   "Laser Sail Array": {
-    // Starshot's own criteria, high, dry and southern, and the Atacama it weighed, beside ALMA.
+    // Starshot's own criteria, high, dry and southern, and the Atacama it weighed, beside ALMA, on the plateau with the
+    // strongest sunlight measured on Earth.
     site: { on: "earth", draw: "ring", places: [{ lat: -23.03, lon: -67.7, name: "Chajnantor plateau, Chile" }] },
     story: {
       have: "Our strongest lasers on the ground run at a few hundred kilowatts. The array needs 100 GW, a third of a million times that.",
       where:
         "A square kilometer of lasers on the Chajnantor plateau in Chile’s Atacama, about 5,000 m up, 5 km east of ALMA’s dishes.",
-      why: "High and dry, so the air blurs the beam least, and far south, where Alpha Centauri rides high in the sky.",
+      why: "High and dry, so the air blurs the beam least, and far south, where Alpha Centauri climbs 52° up. Its sunlight is the strongest measured on Earth, to charge the array between launches.",
       takes: `About ${years("Laser Sail Array")} Years. It takes none of the matter we hold in orbit.`,
-      before: "Breakthrough Starshot set out this plan in 2016. In September 2025 it was put on hold indefinitely.",
+      before:
+        "Breakthrough Starshot set out this plan in 2016, with 100 million dollars to begin. By 2025 it was on hold, about 4.5 million spent.",
     },
   },
   "Probe Yard": {
@@ -166,12 +168,12 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
       orbit: { km: 400, tilt: 51.6, minutes: 92.9, behind: 1.5 },
     },
     story: {
-      have: "Nothing we have built has flown faster than Parker Solar Probe: about 190 km/s, at its closest to the Sun.",
+      have: "Nothing we have built has flown faster than Parker Solar Probe: 192 km/s, at its closest to the Sun in 2024.",
       where: "In low orbit, 400 km up, on the Orbital Yard’s path, about 180 km behind it.",
       why: "A probe this big can’t be launched whole. Its parts come up to orbit, so we join and fuel it there.",
       takes: `About ${years("Probe Yard")} Years, and ${kt("Probe Yard")} kt of the 20 we hold in orbit. The first probe flies 12 Years after.`,
       before:
-        "Project Daedalus, from 1973 to 1978, planned a two-stage fusion probe of 54,000 t, to be built in Earth orbit, as this one is.",
+        "Project Daedalus, from 1973 to 1978, planned a two-stage fusion probe of 54,000 t, built in Earth orbit as this one is. It would pass Barnard’s Star about 50 years after launch.",
     },
   },
 };
