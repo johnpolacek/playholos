@@ -1,4 +1,4 @@
-// Where Earth's leads sit in the sky, for "What doesn't fit?": the three real leads, and every star where any game's
+// Where Earth's leads sit in the sky, for "What doesn't fit?": the four real leads, and every star where any game's
 // planet hunters can feel a world by 2040. Catalog stars by Gliese or HIP name from ../data/stars.json (HYG), the rest
 // by Gaia id from the census in ../.cache/gcns-100ly.csv (python3 calcs/fetch_hosts.py fetches it). Distances are the
 // game's. Writes lib/game/leads.json. Run from game/: node scripts/leads.mjs
@@ -21,6 +21,7 @@ for (const r of rows) {
 /** Right ascension in hours, declination in degrees, distance in ly. */
 const out = {};
 for (const [shown, gl] of [
+  ["Proxima Centauri", "Gl 551"],
   ["82 Eridani", "Gl 139"],
   ["Fomalhaut", "Gl 881"],
   ["Luyten's Star", "Gl 273"],

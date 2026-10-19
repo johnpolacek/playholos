@@ -151,7 +151,7 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
       have: "Our strongest lasers on the ground run at a few hundred kilowatts. The array needs 100 GW, a third of a million times that.",
       where:
         "A square kilometer of lasers on the Chajnantor plateau in Chile’s Atacama, about 5,000 m up, 5 km east of ALMA’s dishes.",
-      why: "High and dry, so the air blurs the beam least, and far south, where Alpha Centauri climbs 52° up. Its sunlight is the strongest measured on Earth, to charge the array between launches.",
+      why: "High and dry, so the air blurs the beam least, and far south, where Proxima Centauri climbs 50° up. Its sunlight is the strongest measured on Earth, to charge the array between launches.",
       takes: "None of the matter we hold in orbit.",
       before:
         "Breakthrough Starshot set out this plan in 2016, with 100 million dollars to begin. By 2025 it was on hold, about 4.5 million spent.",

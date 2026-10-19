@@ -2,6 +2,7 @@
 // "Earth's leads at Year 0" and "Stars Earth knocked on", with reply years from calcs/knocks.py as the first
 // mock shows them. Change it when they change. The seed's felt worlds aren't drawn yet, so none are listed.
 export const EARTH_LEADS = `Earth's leads at Year 0. These are real oddities. What a study or an observation will find is not known yet.
+- Proxima b, 4.24 ly, the nearest world: at least 1.06 Earth masses, in a flaring red dwarf's warm zone, 11.2-day year. Its air is unread: no telescope Earth has can split it from its star. The two roads on Reach, sails and a flyby probe, go there.
 - 82 Eridani d, 19.7 ly: at least 5 Earth masses, on a stretched orbit through a Sun-like star's warm zone. Its air is unread.
 - Fomalhaut's new cloud, 25 ly: a bright point that drifts and fades, as a cloud from a collision would.
 - Every world Earth has felt by its tug on its star is a lead too. They are listed below, from what Earth knows. Never invent one.
@@ -17,6 +18,7 @@ Old records the Mind studies on its own from Begin. It can read them better than
 Earth's noise, and who it reached:
 - Radars since the 1950s. Their first sweeps are 90 ly out, so every star within 50 ly has been crossed. They still sweep.
 - 15 aimed messages, 1983 to 2018, to 12 stars within 50 ly. Each lasted minutes to hours.
+- Voyager 1, launched 1977, about 220 AU out and silent since its power ran out in the 2030s. It carries the Golden Record, for whoever finds it, and passes 1.7 ly from Gliese 445 in about 40,000 years.
 - Replies that could have come by now, and didn't: Altair from 2017, Teegarden's Star from 2035, TZ Arietis from 2039. A passed window isn't closed. A reply can still come.
 - Reply windows ahead: Luyten's Star at Year 2.3 and 2.9, Gliese 526 at Year 9.0, Gliese 581 at Year 9.9. Later: Gliese 49 at Year 27, Kappa¹ Ceti at 30, Gliese 208 at 38, 55 Cancri at 46, HD 10307 at 47, 47 Ursae Majoris at 52.
 - Messages still on their way out, arriving at Kappa¹ Ceti at Year 0.1, Gliese 208 at 0.8, 55 Cancri at 4.6, HD 10307 at 5.1 and 47 Ursae Majoris at 7.0.

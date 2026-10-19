@@ -24,8 +24,9 @@ export const MARKS: { name: string; au: number; craft?: boolean }[] = [
   { name: "Voyager 1", au: 220, craft: true },
 ];
 
-/** The nearest star system, as calcs/early_game.py's long roads have it. */
-export const NEAREST = { name: "Alpha Centauri", ly: 4.32 };
+/** Where the two roads go: Proxima Centauri, the nearest star, for the world next door that no telescope we have can
+ *  read. At Gaia's distance. Until 2026-10-19 they went to Alpha Centauri at calcs/early_game.py's 4.32 light-years. */
+export const NEAREST = { name: "Proxima Centauri", ly: 4.24 };
 
 /** Light-time, for the line's ticks. */
 export const LIGHT: [label: string, au: number][] = [
@@ -41,9 +42,6 @@ export const LIGHT: [label: string, au: number][] = [
 export const zoomFor = (au: number) => Math.log10(1.4 * AU_KM * au);
 export const auFor = (zoom: number) => 10 ** zoom / (1.4 * AU_KM);
 
-/** Voyager 1 moves out at about 17 km/s, 3.6 AU a Year. */
-export const VOYAGER_AU_PER_YEAR = 3.6;
-
 export interface Road {
   name: string;
   /** Its place in our order, from 1, or null while it is not queued. */
@@ -51,6 +49,8 @@ export interface Road {
   /** What we build first, and what flies. */
   build: string;
   craft: string;
+  /** Its speed, as a share of light's. */
+  speed: number;
   /** The Year the build is done, the craft leaves, it arrives, and its word reaches us. Null past the horizon. */
   done: number | null;
   leaves: number | null;
@@ -72,10 +72,46 @@ export function roads(plan: Plan, scale: number, from = 0): Road[] {
     const leaves = done === null ? null : done + wait;
     const arrives = leaves === null ? null : leaves + NEAREST.ly / speed;
     const n = plan.builds.indexOf(build) + 1 || null;
-    return { name, n, build, craft, done, leaves, arrives, home: arrives === null ? null : arrives + NEAREST.ly };
+    return { name, n, build, craft, speed, done, leaves, arrives, home: arrives === null ? null : arrives + NEAREST.ly };
   };
   return [road("By sail", "Laser Sail Array", "Sails", 0, 0.2), road("By probe", "Probe Yard", "A flyby probe", 12, 1 / 8)];
 }
+
+/** A road toward a star `ly` away: the build and the wait are the same, the flight and the word home are its own. */
+export function toward(road: Road, ly: number): Road {
+  const arrives = road.leaves === null ? null : road.leaves + ly / road.speed;
+  return { ...road, arrives, home: arrives === null ? null : arrives + ly };
+}
+
+/** A way to go that no build offers yet: what it is, and what it waits on. Sources in HOLOS_RESEARCH.md, under
+ *  "Classic propulsion studies" and "Solar gravitational lens mission". */
+export interface Way {
+  key: string;
+  name: string;
+  line: string;
+  needs: string;
+}
+
+export const LOCKED: Way[] = [
+  {
+    key: "stay",
+    name: "A probe that stays",
+    line: "It brakes on the thin gas between the stars with a magnetic sail, shedding a tenth of light speed in about 19 years, and stays to watch.",
+    needs: "A way to brake. No build offers one yet.",
+  },
+  {
+    key: "lens",
+    name: "A lens at the Sun’s focus",
+    line: "A telescope 550 AU out, where the Sun’s gravity focuses a star’s light. It could map the world’s face, kilometers to a pixel, without going.",
+    needs: "A craft that flies 550 AU, 2.5 times as far as Voyager 1. No build offers one yet.",
+  },
+  {
+    key: "mind",
+    name: "A mind",
+    line: "A copy of our Mind, sent to stay, to think there, and to speak with whoever it finds.",
+    needs: "A ship that stops, and a Mind small enough to carry. Neither is ours yet.",
+  },
+];
 
 /** The queued build a work slows most, and by how many Years, against the plan without it. Each work in line gets its
  *  want in turn before any is pushed past it, so a work with a large want, even last, takes the push from those before

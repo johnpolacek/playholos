@@ -435,6 +435,37 @@ export const buildTone = (name: string, queued = true) => `${TONE[does(name)]}${
 export const buildBlue = (name: string): React.CSSProperties | undefined =>
   does(name) === "listen" ? undefined : ({ "--you": `var(--${does(name)})` } as React.CSSProperties);
 
+/** The Golden Record, turning: a groove's glint goes round, as if it played. */
+function Record({ size, still }: MarkProps) {
+  return (
+    <Moving
+      size={size}
+      still={still}
+      move={(_, part) =>
+        void gsap.to(part("glint"), { rotation: 360, svgOrigin: "8 8", duration: 6, ease: "none", repeat: -1 })
+      }
+    >
+      <circle cx="8" cy="8" r="6.25" />
+      <circle cx="8" cy="8" r="3.9" opacity={0.45} />
+      <circle cx="8" cy="8" r="1" fill="currentColor" stroke="none" />
+      <path data-k="glint" d="M8 2.9A5.1 5.1 0 0 1 12.4 5.45" />
+    </Moving>
+  );
+}
+
+/** Voyager 1's mark: the record it carries. */
+export const RecordMark = ({ size = 16, still }: { size?: number; still?: boolean }) => (
+  <Record size={size} still={still} />
+);
+
+/** A way to go that no build offers yet: Lucide's lock, held still, since nothing moves there yet. */
+export const LockMark = ({ size = 16 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden className="shrink-0" {...LINES[24]}>
+    <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+  </svg>
+);
+
 /** A build's mark, by its name. */
 export function BuildMark({ name, size = 16, still }: { name: string; size?: number; still?: boolean }) {
   switch (name) {

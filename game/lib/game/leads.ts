@@ -3,8 +3,9 @@ import { KNOCKS } from "@/lib/game/knocks";
 import { FOMALHAUT } from "@/lib/game/plan";
 import type { FeltWorld } from "@/lib/sim/types";
 
-// Earth's real leads in 2040, each with its own page: a world on a stretched orbit, every world the planet hunters felt
-// by 2040, nearest first, Fomalhaut's collisions, and the first star that could answer our messages. Each page is a
+// Earth's real leads in 2040, each with its own page: the world next door, whose air we can't read from here, a world
+// on a stretched orbit, every world the planet hunters felt by 2040, nearest first, Fomalhaut's collisions, and the
+// first star that could answer our messages. Each page is a
 // report as HOLOS_GAME_CONCEPT.md has it: what we measured, what it could be, each with the Mind's word, and what would
 // tell us. Real numbers from HOLOS_RESEARCH.md, "Earth's leads, as of October 2026".
 
@@ -150,6 +151,48 @@ function feltLead(f: FeltWorld): Lead {
 
 export function leadsOf(felt: FeltWorld[]): Lead[] {
   return [
+    // The nearest world, and the reason for the two roads on Reach: no telescope we have can split it from its star, so
+    // going is how we would read it. Added 2026-10-19. Its warm zone is ours, from Kopparapu et al. 2013 at the star's
+    // 0.0016 Suns.
+    {
+      slug: "proxima-centauri",
+      star: "Proxima Centauri",
+      what: "A world next door",
+      line: "About Earth’s mass, in its star’s warm zone. Its air is unread.",
+      ly: 4.24,
+      ask: "Could Proxima b keep its air?",
+      brief:
+        "The nearest world outside ours, about Earth’s mass and warm enough for water. Its star flares, which could have stripped its air. It sits too close to its star for any telescope we have to split, so going there is how we would read it.",
+      facts: [
+        ["Mass", "At least 1.06 Earths"],
+        ["Its year", "11.2 days"],
+        ["From its star", "0.049 AU"],
+        ["Warmth", "In the warm zone, with two thirds of Earth’s sunlight"],
+        ["Its star", "A red dwarf that flares, the Sun’s nearest neighbor"],
+        ["Felt by", "Pale Red Dot, 2016, and ESPRESSO since"],
+      ],
+      could: [
+        {
+          what: "Bare rock",
+          why: "Its star’s flares and wind could have stripped its air long ago, as they seem to have for hotter worlds near red dwarfs.",
+          odds: "roughly even",
+        },
+        {
+          what: "Rock under air, maybe water",
+          why: "Cooler worlds hold air better, and it gets only two thirds of Earth’s sunlight.",
+          odds: "roughly even",
+        },
+        {
+          what: "A small gas world",
+          why: "Its tug gives only a floor. Seen near face on, it could be several times heavier.",
+          odds: "unlikely",
+        },
+      ],
+      tells: [
+        "It sits too close to its star for the Infrared Telescope to split. A flyby would see it whole: the two roads on Reach go there.",
+      ],
+      art: { kind: "orbit", a: 0.0485, e: 0, hz: [0.042, 0.082] },
+    },
     {
       slug: "82-eridani",
       star: "82 Eridani",

@@ -585,6 +585,14 @@ Anchors for [the project audit](HOLOS_PROJECT_AUDIT.md).
 
 What Sol's own instruments have found nearby. For v2 open question 3.
 
+- **[Proxima Centauri b](https://en.wikipedia.org/wiki/Proxima_Centauri_b)** · 4.24 ly. Read through Wikipedia, 2026-10-19. Found in 2016 by the Pale Red Dot team ([Anglada-Escudé et al. 2016](https://doi.org/10.1038/nature19106), Nature 536, 437).
+  - At least 1.055 ± 0.055 Earths, an 11.185-day year, 0.0485 AU out, its orbit near circular (Suárez Mascareño et al. 2025). About 65% of Earth's sunlight, about 234 K at equilibrium. It does not cross its star as seen from here. Whether it has air is unknown.
+  - Its star flares, brightening up to a hundredfold in hours, with 10 to 60 times Earth's X-ray and ultraviolet, and winds that could strip air (Ribas et al. 2016, Garraffo et al. 2016). Proxima d was confirmed in 2022. Proxima c stays disputed.
+  - Its warm zone, 0.042 to 0.082 AU, is this project's: [Kopparapu et al. 2013](https://doi.org/10.1088/0004-637X/765/2/131)'s runaway greenhouse and maximum greenhouse limits, at the star's 0.0016 Suns.
+  - At 0.0485 AU and 4.24 ly it sits 37 thousandths of an arcsecond from its star, inside the Infrared Telescope's 56. "No telescope we have can read its air" rests on this project's 2040, where the Infrared Telescope's story says none can read a neighbor's air.
+  - Matters: the nearest world we know, and the reason the two roads go where they go.
+  - Used: game/lib/game/leads.ts, the lead "A world next door", and game/lib/game/reach.ts, the roads to Proxima at 4.24 ly, 2026-10-19. From the Laser Sail Array's plateau it climbs about 50° up: this project's reckoning at Dec −62.68°.
+
 - **[Alpha Centauri A's candidate, S1](https://arxiv.org/abs/2508.03814)** · 4.4 ly. Imaged once by JWST in August 2024, missed in February and April 2025, with a 52% chance its orbit hid it. JWST observed it again on August 11 and 12, 2026: [programme 12628](https://www.stsci.edu/jwst-program-info/program/?program=12628), 4.5 hours with its mid-infrared spectrometer, seeking ammonia in the planet's light. The data are archived and no result is published as of 2026-10-13. The proposal says a bright background star blocks any further try until about 2030. Agent, from STScI's pages. Adopt the result when it is out.
 - **[Barnard's Star](https://ui.adsabs.harvard.edu/abs/2025ApJ...982L...1B/abstract)** · 6 ly. Four sub-Earths confirmed in 2025 after decades of false claims. Basant et al., MAROON-X and ESPRESSO.
 - **[82 Eridani d](https://arxiv.org/abs/2501.17092)** · 19.7 ly. At least 5 Earth masses, 650 days, eccentricity 0.45, swinging through the warm zone of a Sun-like star. Nari et al. 2025. Its air waits for the Habitable Worlds Observatory.
@@ -1204,6 +1212,7 @@ What a neighbor's world can plausibly be, beyond an Earth twin. Each roster entr
     - Matters: a lens is the one way short of going to see a suspected world's surface, within a few decades. One craft serves one star.
     - This project's arithmetic: 548 AU at 150 km/s is 17 Years. A pixel scales with distance, so about 13 km at 49 ly. The dive toward the Sun before that is not timed.
     - Used: v2 [How Earth learns](HOLOS_GAME_CONCEPT.md#how-earth-learns), a suspicion opens the whole kit. `calcs/signs.py closer`, and the third mock's lens to Gliese 1021.
+    - Used: game/lib/game/reach.ts, the locked way "A lens at the Sun's focus" on each destination, 2026-10-19.
 - **[Eubanks et al. 2026, science from the in situ exploration of the Proxima system](https://arxiv.org/abs/2604.20182)** · Preprint, April 2026. Read in the arXiv HTML, 2026-10-14.
   - A swarm of 3.6 g laser-sail probes at 0.2c. About 1,000 launched over a 6-day boost, about 300 left to talk to Earth.
   - Each probe is a 4 m disk with 169 annular 200 mm apertures, phased to give "sub-arc-second resolutions at optical wavelengths". The search summary put it at about 0.4 arcseconds.
@@ -1578,6 +1587,13 @@ The first screen, before Earth wakes, flies from Earth out to the Local Group an
   - Voyager 1 is in Ophiuchus, near RA 17h 15m, Dec +12.4° ([TheSkyLive](https://theskylive.com/voyager1-info)). New Horizons is in Sagittarius, near RA 19h 20m, Dec −20° ([Heavens-Above](https://www.heavens-above.com/SolarEscape.aspx)). Both move almost straight out, so the directions hold to Year 0.
   - Their distances at Year 0, 220 and 100 AU, are HOLOS_GAME_CONCEPT.md's.
   - Used: What you inherit, where the scene puts the two probes and their roads from the Sun.
+- **Voyager 1 going silent, and where it goes** · Read 2026-10-19.
+  - [JPL, April 2026](https://www.jpl.nasa.gov/news/nasa-shuts-off-instrument-on-voyager-1-to-keep-spacecraft-operating/): its Low-energy Charged Particles experiment was switched off on April 17, 2026, to save power. Two science instruments remain. Each Voyager loses about 4 watts a year. It reaches one light-day from Earth on November 18, 2026.
+  - The last instrument is expected to go dark sometime in the 2030s: [a science blog](https://scienceblog.com/t-voyager-1-is-now-so-far-away-that-its-plutonium-power-source-is-quietly-fading-and-sometime-in-the-2030s-nasa-will-switch-off-its-final-instrument-ending-the-only-signal-ever-sent-to-us-from-interst/), secondary. Silent by Year 0 is this project's, on that.
+  - [NASA](https://www.nasa.gov/image-article/reaching-stars): in 40,000 years it comes within 1.7 ly of Gliese 445, also called AC +79 3888. Others say 1.6 ly.
+  - [The Golden Record](https://en.wikipedia.org/wiki/Voyager_Golden_Record): greetings in 55 languages and 116 pictures, on a gold-plated copper disc, chosen by a committee chaired by Carl Sagan, launched on both Voyagers in 1977.
+  - Matters: by Year 0 Voyager 1 is no longer a probe that reports. It is a message carried, the slowest we sent.
+  - Used: game/components/reach.tsx and game/lib/game/knocks.ts, Voyager 1 under "Sent" on Reach, with the Golden Record's story, 2026-10-19.
 - **Voyager 1's speed, and Neptune's distance** · General knowledge, not a source read, 2026-10-18.
   - Voyager 1 moves out at about 17 km/s, about 3.6 AU a year. Neptune orbits at about 30 AU.
   - Matters: at Voyager's pace the nearest star is about 76,000 years away, against Year 43.6 by sail.

@@ -1380,19 +1380,31 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     const roadGlow = glow({ fixed: true });
     solar.scene.add(probes.points(probeGlow), roads.points(roadGlow));
 
-    // Reach only: Alpha Centauri, the nearest star, ringed, on a dotted road from the Sun. A and B at RA 219.9°, Dec
-    // -60.8°, at the 4.32 light-years calcs/early_game.py's long roads take for the system.
-    const alpha = new THREE.Vector3().copy(skyBasis(219.9, -60.83).radial).multiplyScalar(4.32);
-    const nearest = new Cloud();
-    nearest.add(alpha.x, alpha.y, alpha.z, 9, 0.5, K.mind);
-    const toward = new Cloud();
-    for (let i = 1; i < 120; i++) {
-      const q = alpha.clone().multiplyScalar(i / 120);
-      toward.add(q.x, q.y, q.z, 1.6, 0.7, K.mind);
-    }
+    // Reach only: where we would go, ringed, on a dotted road from the Sun. Proxima Centauri, the nearest star, or the
+    // destination open on Reach, its star the one in spec.leads. Redrawn when the destination changes, 2026-10-19.
+    const alpha = new THREE.Vector3();
     const nearestGlow = glow({ fixed: true });
     const towardGlow = glow({ fixed: true });
-    stars.scene.add(nearest.points(nearestGlow), toward.points(towardGlow));
+    let target = "";
+    let drawn: THREE.Points[] = [];
+    const aim = (id: string) => {
+      target = id;
+      alpha.copy(leadAt(id) ?? leadAt("Proxima Centauri")!);
+      for (const pts of drawn) {
+        stars.scene.remove(pts);
+        pts.geometry.dispose();
+      }
+      const nearest = new Cloud();
+      nearest.add(alpha.x, alpha.y, alpha.z, 9, 0.5, K.mind);
+      const toward = new Cloud();
+      for (let i = 1; i < 120; i++) {
+        const q = alpha.clone().multiplyScalar(i / 120);
+        toward.add(q.x, q.y, q.z, 1.6, 0.7, K.mind);
+      }
+      drawn = [nearest.points(nearestGlow), toward.points(towardGlow)];
+      stars.scene.add(...drawn);
+    };
+    aim("Proxima Centauri");
 
     const origin = new THREE.Vector3();
     const moonBand = (x: number) => band(x, -2.6, -2.1, -0.9, -0.5);
@@ -1415,6 +1427,8 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     return (x: number, p: number, far: number) => {
       const dt = Math.min(0.1, Math.max(0, clock - last));
       last = clock;
+      const want = (spec.mode === "reach" && spec.leads?.[0]) || "Proxima Centauri";
+      if (want !== target) aim(want);
       nearestGlow.uniforms.uOpacity.value = towardGlow.uniforms.uOpacity.value = far * starBand(x);
       debrisGlow.uniforms.uOpacity.value = p * band(x, -3.8, -3.4, -2.2, -1.7);
       belt.uniforms.uOpacity.value = 0.14 * p * band(x, -3.4, -3.0, -2.2, -1.7);

@@ -321,11 +321,23 @@ export const PLAN_SOURCES: Source[] = [
   },
 ];
 
-/** Reach: our messages still on their way. */
-export const REACH_SOURCES: Source[] = [
+/** Scan: our messages still on their way, under the leads. */
+export const SCAN_SOURCES: Source[] = [
   {
     title: "Already on the way",
     text: "Our aimed messages reach their stars on real dates: the 2009 message at Kappa¹ Ceti in Year 0.1, the 2003 message at Gliese 208 in Year 0.8. The first reply that could come is Luyten's Star's, in Year 2.3.",
     links: [["Active SETI", W("Active_SETI")]],
+  },
+];
+
+/** Reach: what we have sent, Voyager 1, and where it goes. */
+export const REACH_SOURCES: Source[] = [
+  {
+    title: "Voyager 1",
+    text: "Our farthest craft, about 220 AU out at Year 0. In April 2026 NASA switched off another instrument to save power, and expects the last to go dark in the 2030s. In about 40,000 years it passes 1.7 light-years from Gliese 445. It carries the Golden Record.",
+    links: [
+      ["NASA: reaching the stars", "https://www.nasa.gov/image-article/reaching-stars"],
+      ["Voyager Golden Record", W("Voyager_Golden_Record")],
+    ],
   },
 ];

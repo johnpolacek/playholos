@@ -6,6 +6,7 @@ import Lead from "@/app/play/lead";
 import Mind from "@/app/play/mind";
 import BuildTab from "@/app/play/build";
 import BuildItem from "@/app/play/build-item";
+import Destination from "@/app/play/destination";
 import Reach from "@/app/play/reach";
 import ScanTab from "@/app/play/scan";
 
@@ -25,6 +26,7 @@ export const router = createBrowserRouter([
           { path: "build", Component: BuildTab },
           { path: "build/:slug", Component: BuildItem },
           { path: "reach", Component: Reach },
+          { path: "reach/:slug", Component: Destination },
           { path: "lead/:slug", Component: Lead },
         ],
       },

@@ -2,7 +2,7 @@ import { useLocation } from "react-router";
 import { useRef, useState } from "react";
 import { BeamsMap, useBeams } from "@/components/beams";
 import { Globe, Lens } from "@/components/icons";
-import { ReachMap, useReach } from "@/components/reach";
+import { ReachMap, Ruler, useReach } from "@/components/reach";
 import { ScanMap } from "@/components/scan";
 import { SkyArt, useSky } from "@/components/sky";
 import { useWorks, WorksMap } from "@/components/works";
@@ -26,15 +26,17 @@ const BUTTON = `absolute right-2.5 bottom-3 ${PILL}`;
 // The board: a strip of the map under the top bar, a window onto the game's one sky, which flies here from the
 // charter. On Scan and a lead's page it shows Earth's leads. On Build, a build's page takes it to where it would stand,
 // and Close View on down to the ground there, where a drag walks round it. On Reach it flies out from Earth to the
-// nearest star, and a message picked there takes it out to its star. Elsewhere it rests at a stop, turning slowly,
+// nearest star. A message picked on Scan takes it out to its star. Elsewhere it rests at a stop, turning slowly,
 // travels outward a stop a tap, and turns with a drag. A lens marks going closer or farther, and Earth coming home.
 export function MapStrip() {
   const { pathname: path, search } = useLocation();
   // The walkthroughs, the Scan review and the Build tour, need room under the map on a phone for the Mind's words.
   const guided = /[?&](review|tour)\b/.test(search);
   const scan = path === "/" || path.startsWith("/lead/");
+  // Reach's map stays on a destination's page, and flies out to its star.
+  const reaching = path === "/reach" || path.startsWith("/reach/");
   const beams = useBeams();
-  const aimed = path === "/reach" && beams.picked !== null;
+  const aimed = path === "/" && beams.picked !== null;
   const works = useWorks();
   const built = (path === "/build" || path.startsWith("/build/")) && works.picked !== null;
   const reach = useReach();
@@ -47,7 +49,16 @@ export function MapStrip() {
       data-shell="map"
       className={`relative shrink-0 overflow-hidden border-b border-faint transition-[height] duration-300 wide:col-start-1 wide:row-span-2 wide:row-start-2 wide:h-auto wide:border-b-0 ${tall ? "h-[72%]" : guided ? "h-[34%]" : "h-[45%]"}`}
     >
-      {scan ? (
+      {aimed ? (
+        <>
+          <BeamsMap className="absolute inset-0" />
+          <span className={LABEL}>MESSAGES</span>
+          <button onClick={() => beams.pick(beams.list, null)} className={BUTTON}>
+            <Globe />
+            Back to Earth
+          </button>
+        </>
+      ) : scan ? (
         <>
           <ScanMap className="absolute inset-0" />
           <span className={LABEL}>LEADS</span>
@@ -73,20 +84,15 @@ export function MapStrip() {
             </button>
           </div>
         </>
-      ) : aimed ? (
-        <>
-          <BeamsMap className="absolute inset-0" />
-          <span className={LABEL}>OUR MESSAGES</span>
-          <button onClick={() => beams.pick(beams.list, null)} className={BUTTON}>
-            <Globe />
-            Back to Earth
-          </button>
-        </>
-      ) : path === "/reach" ? (
+      ) : reaching ? (
         <>
           <ReachMap className="absolute inset-0" />
           <span className={LABEL}>FROM EARTH</span>
-          <button onClick={() => reach.tour()} className={BUTTON}>
+          {/* The ruler is the map's zoom, so it lies on the map, along its foot, clear of the handle on a phone. */}
+          <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-page/80 via-page/40 to-transparent px-4 pt-6 pb-5 wide:px-10 wide:pb-6">
+            <Ruler />
+          </div>
+          <button onClick={() => reach.tour()} className={`absolute top-2 right-2.5 ${PILL}`}>
             <Lens closer={false} />
             Fly Out Again
           </button>

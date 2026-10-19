@@ -2,6 +2,7 @@ import { createContext, use, useCallback, useEffect, useMemo, useState } from "r
 import { useSearchParams } from "react-router";
 import { useGame } from "@/components/game-provider";
 import { LeadList, LeadsMap } from "@/components/leads";
+import { Messages } from "@/components/messages";
 import { Review } from "@/components/review";
 import { ListHead, Walk } from "@/components/tab-head";
 import type { Dials } from "@/lib/drift";
@@ -11,7 +12,8 @@ import type { FeltWorld } from "@/lib/sim/types";
 
 // Scan: what we know of the sky. Earth's leads, drawn on the map and listed in the tab, with one lead in view
 // between them: pointing at a row turns the map to its star. Readings land on their leads as the clock runs, and stay
-// marked until opened. Before Begin, the tab offers a review of them with the Mind, one at a time.
+// marked until opened. Before Begin, the tab offers a review of them with the Mind, one at a time. Under the leads, our
+// messages still on their way: light crossing the same sky, whose replies would be leads.
 
 interface Leads {
   leads: Lead[];
@@ -89,6 +91,7 @@ export function Scan() {
       )}
       <ListHead left={`Leads · ${leads.length}`} right="Reached in" className="mt-1" />
       <LeadList leads={leads} dials={dials} readings={readings} fresh={fresh} />
+      <Messages />
     </>
   );
 }

@@ -30,6 +30,15 @@ export interface Send {
 
 /** Each message's story, by its name in KNOCKS. Sources in HOLOS_RESEARCH.md, What our messages hold. */
 export const SENDS: Record<string, Send> = {
+  // Not beamed but carried: our slowest message, on Reach with the rest since 2026-10-19. NASA's figures.
+  "The Golden Record": {
+    holds:
+      "Greetings in 55 languages, the sounds of Earth, music from many lands, and 116 pictures, on a gold-plated copper disc. Its cover shows how to play it.",
+    why: "For whoever finds it, far from here and far from now. A committee chaired by Carl Sagan chose what it holds.",
+    from: "Voyager 1, launched from Cape Canaveral · September 5, 1977",
+    since:
+      "It left the Sun’s wind in 2012. Its power ran low through the 2030s, and it fell silent. In about 40,000 years it passes 1.7 ly from Gliese 445.",
+  },
   "Message to Altair": {
     holds:
       "A spoken greeting in Japanese, drawn from 48,972 readers’ letters. Then 13 pictures: numbers, the elements, the Solar System, DNA, and life from first cells to mammals. The last is the formula for alcohol and the word “Cheers”.",

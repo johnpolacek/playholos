@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 import { type Aim, focusable, pointer, Story, WASH } from "@/components/picks";
-import { BeamMark, BuildMark, buildBlue } from "@/components/marks";
+import { BeamMark, BuildMark, buildBlue, RecordMark } from "@/components/marks";
 import { Face } from "@/components/tab-head";
 import { span, tenths, YEAR_0 } from "@/lib/game/clock";
 import { SENDS } from "@/lib/game/knocks";
@@ -17,7 +17,8 @@ export interface Row {
   note: string;
   /** Years from Year 0. Null past 40 Years. */
   at: number | null;
-  kind: "build" | "send" | "reply";
+  /** A craft is a message carried, not beamed: Voyager 1's Golden Record. */
+  kind: "build" | "send" | "reply" | "craft";
   /** A message's name, the decimal year we sent it, and its star's distance in light-years. */
   msg?: string;
   sent?: number;
@@ -58,7 +59,7 @@ function Journey({ row, now, shown }: { row: Row; now: number; shown: boolean })
             />
           </>
         ) : (
-          run(0, p, row.kind === "send" ? "from-you/5 to-you/95" : "from-you/20 to-you/95")
+          run(0, p, row.kind === "build" ? "from-you/20 to-you/95" : "from-you/5 to-you/95")
         )}
         {row.sent !== undefined && (
           <span className="absolute top-px h-[11px] border-l border-muted" style={{ left: `${zero * 100}%` }} />
@@ -98,22 +99,26 @@ export function Item({ row, now, began, aim }: { row: Row; now: number; began: b
   const done = over(row, now);
   const build = row.kind === "build";
   const when =
-    row.at === null
-      ? "past Year 40"
-      : done
-        ? build
-          ? "done"
-          : "landed"
-        : build
-          ? span(row.at - now)
-          : began
-            ? `in ${span(row.at - now)}`
-            : `Year ${tenths(row.at)}`;
+    row.kind === "craft" && row.at !== null
+      ? `${Math.round(row.at / 1000)},000 Years`
+      : row.at === null
+        ? "past Year 40"
+        : done
+          ? build
+            ? "done"
+            : "landed"
+          : build
+            ? span(row.at - now)
+            : began
+              ? `in ${span(row.at - now)}`
+              : `Year ${tenths(row.at)}`;
   const head = (
     <Face
       mark={
         build ? (
           <BuildMark name={row.name} />
+        ) : row.kind === "craft" ? (
+          <RecordMark still={!aim?.lit} />
         ) : (
           // A message moves only while it is pointed at or shown, so the list stays calm.
           <BeamMark back={row.kind === "reply"} still={!aim?.lit} />
