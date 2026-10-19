@@ -35,6 +35,12 @@ export const BUILDS: Build[] = [
     kt: 10,
     does: "reach",
   },
+  // The longest roads: what a craft needs to stay at a star, and a copy of our Mind to send. The catalog had them, and
+  // Reach's locked ways now name them, so they can be queued at Year 0 too, last in line, 2026-10-19. Paces settled
+  // 2026-10-15 in HOLOS_GAME_CONCEPT.md: a drive 30 Years at standard pace, a seed ship 18, about 1,500 t.
+  { name: "Deuterium Works", what: "Draws heavy hydrogen from seawater, to fuel fusion.", does: "reach" },
+  { name: "Fusion Drive", what: "An engine that lets a craft slow at a star, and stay.", does: "reach" },
+  { name: "Seed Ship", what: "Carries a copy of our Mind to a star, to stay.", kt: 1.5, does: "reach" },
 ];
 
 /** What the Mind says of each build, on its page and in the tour, whichever lean picks it. */
@@ -53,6 +59,12 @@ export const SAYS: Record<string, string> = {
     "Our soonest road to the nearest star, and it takes no matter. Last in line, it barely slows what is before it.",
   "Probe Yard":
     "It builds and fuels probes in orbit. Its want is large: even last in line, it slows every build before it.",
+  "Deuterium Works":
+    "Fusion burns heavy hydrogen, and the sea holds plenty: about one hydrogen atom in 6,400. It takes little, and pays only once a drive is coming.",
+  "Fusion Drive":
+    "No one has flown one yet. It is how a craft slows at a star and stays, where a flyby passes in minutes. Thirty Years at standard pace, for the longest roads.",
+  "Seed Ship":
+    "A copy of our Mind that goes and stays, about 1,500 tonnes with its seed. It flies only on a Fusion Drive, fed by the Deuterium Works.",
 };
 
 /** A build's page on the Build tab, by its name. */

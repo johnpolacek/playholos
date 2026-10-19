@@ -83,33 +83,34 @@ export function toward(road: Road, ly: number): Road {
   return { ...road, arrives, home: arrives === null ? null : arrives + ly };
 }
 
-/** A way to go that no build offers yet: what it is, and what it waits on. Sources in HOLOS_RESEARCH.md, under
- *  "Classic propulsion studies" and "Solar gravitational lens mission". */
+/** A way to go that waits on builds beyond the two roads: what it is, and the builds it needs, by name, each a link to
+ *  its page to start it. Sources in HOLOS_RESEARCH.md, "Classic propulsion studies" and "Solar gravitational lens
+ *  mission", and HOLOS_GAME_CONCEPT.md's drive and seed ship, settled 2026-10-15. */
 export interface Way {
   key: string;
   name: string;
   line: string;
-  needs: string;
+  needs: string[];
 }
 
 export const LOCKED: Way[] = [
   {
-    key: "stay",
-    name: "A probe that stays",
-    line: "It brakes on the thin gas between the stars with a magnetic sail, shedding a tenth of light speed in about 19 years, and stays to watch.",
-    needs: "A way to brake. No build offers one yet.",
-  },
-  {
     key: "lens",
     name: "A lens at the Sun’s focus",
-    line: "A telescope 550 AU out, where the Sun’s gravity focuses a star’s light. It could map the world’s face, kilometers to a pixel, without going.",
-    needs: "A craft that flies 550 AU, 2.5 times as far as Voyager 1. No build offers one yet.",
+    line: "Small solar sails, built in orbit, dive past the Sun and reach its focus, 550 AU out, in about 17 years. There the Sun’s gravity gathers the star’s light into a map of the world’s face, kilometers to a pixel.",
+    needs: ["Orbital Yard"],
+  },
+  {
+    key: "stay",
+    name: "A probe that stays",
+    line: "A probe with a fusion drive slows at the star and stays to watch, where a flyby passes in minutes.",
+    needs: ["Probe Yard", "Fusion Drive", "Deuterium Works"],
   },
   {
     key: "mind",
     name: "A mind",
     line: "A copy of our Mind, sent to stay, to think there, and to speak with whoever it finds.",
-    needs: "A ship that stops, and a Mind small enough to carry. Neither is ours yet.",
+    needs: ["Seed Ship", "Fusion Drive", "Deuterium Works"],
   },
 ];
 

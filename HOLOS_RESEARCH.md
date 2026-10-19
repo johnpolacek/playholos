@@ -1594,6 +1594,8 @@ The first screen, before Earth wakes, flies from Earth out to the Local Group an
   - [The Golden Record](https://en.wikipedia.org/wiki/Voyager_Golden_Record): greetings in 55 languages and 116 pictures, on a gold-plated copper disc, chosen by a committee chaired by Carl Sagan, launched on both Voyagers in 1977.
   - Matters: by Year 0 Voyager 1 is no longer a probe that reports. It is a message carried, the slowest we sent.
   - Used: game/components/reach.tsx and game/lib/game/knocks.ts, Voyager 1 under "Sent" on Reach, with the Golden Record's story, 2026-10-19.
+- **Deuterium in seawater** · General knowledge, not a source read, 2026-10-19. About one hydrogen atom in 6,400 in the oceans is deuterium, about 156 parts per million ([Wikipedia](https://en.wikipedia.org/wiki/Deuterium)).
+  - Used: game/lib/game/plan.ts, the Mind's word on the Deuterium Works.
 - **Voyager 1's speed, and Neptune's distance** · General knowledge, not a source read, 2026-10-18.
   - Voyager 1 moves out at about 17 km/s, about 3.6 AU a year. Neptune orbits at about 30 AU.
   - Matters: at Voyager's pace the nearest star is about 76,000 years away, against Year 43.6 by sail.

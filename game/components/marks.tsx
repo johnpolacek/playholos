@@ -212,6 +212,50 @@ const Zap = ({ size, still }: MarkProps) => (
   </Moving>
 );
 
+/** Deuterium Works: a drop of seawater, gathering and falling. */
+const Droplet = ({ size, still }: MarkProps) => (
+  <Moving
+    size={size}
+    grid={24}
+    still={still}
+    move={(_, part) => {
+      const o = { svgOrigin: "12 22" };
+      sway(part("drop"), { ...o, y: -1.2, scaleY: 0.94 }, { ...o, y: 0.6, scaleY: 1.04 }, 1.6);
+    }}
+  >
+    <path
+      data-k="drop"
+      d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"
+    />
+  </Moving>
+);
+
+/** The Fusion Drive: a flame that never quite holds still. */
+const Flame = ({ size, still }: MarkProps) => (
+  <Moving
+    size={size}
+    grid={24}
+    still={still}
+    move={(_, part) => {
+      const o = { svgOrigin: "12 21" };
+      sway(part("fire"), { ...o, scaleY: 0.9, scaleX: 1.04 }, { ...o, scaleY: 1.08, scaleX: 0.96 }, 0.35);
+    }}
+  >
+    <path data-k="fire" d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4" />
+  </Moving>
+);
+
+/** The Seed Ship: a sprout, swaying, for the copy of us it plants. */
+const Sprout = ({ size, still }: MarkProps) => (
+  <Moving size={size} grid={24} still={still} move={(_, part) => void rock(part("shoot"), -6, 6, 2.8, "12 21")}>
+    <g data-k="shoot">
+      <path d="M14 9.536V7a4 4 0 0 1 4-4h1.5a.5.5 0 0 1 .5.5V5a4 4 0 0 1-4 4 4 4 0 0 0-4 4c0 2 1 3 1 5a5 5 0 0 1-1 3" />
+      <path d="M4 9a5 5 0 0 1 8 4 5 5 0 0 1-8-4" />
+    </g>
+    <path d="M5 21h14" />
+  </Moving>
+);
+
 /** A new world, turning: two meridians wheel round as it spins. */
 function World({ size, still }: MarkProps) {
   const r = 6.25;
@@ -485,6 +529,12 @@ export function BuildMark({ name, size = 16, still }: { name: string; size?: num
       return <Moon size={size} still={still} />;
     case "Laser Sail Array":
       return <Sail size={size} still={still} />;
+    case "Deuterium Works":
+      return <Droplet size={size} still={still} />;
+    case "Fusion Drive":
+      return <Flame size={size} still={still} />;
+    case "Seed Ship":
+      return <Sprout size={size} still={still} />;
     default:
       return <Probe size={size} still={still} />;
   }

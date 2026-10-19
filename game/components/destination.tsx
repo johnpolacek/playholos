@@ -10,13 +10,34 @@ import { skyId } from "@/lib/game/leads";
 import { Face, ListHead } from "@/components/tab-head";
 import { HISTORY } from "@/lib/game/charter";
 import { span } from "@/lib/game/clock";
+import { buildSlug } from "@/lib/game/plan";
 import { LOCKED, roads, slows, toward } from "@/lib/game/reach";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
 
 // One destination, opened from Reach: a lead's star, and every way we could go there. The two roads open at Year 0,
 // by sail and by probe, are drawn on the Years they would take, each with the build it needs and, before Begin, the
-// button that queues it. The rest are listed locked, with what they wait on, so the way ahead shows. Reach's map stays,
-// and flies out to the star, its ruler stretched to it. Settled 2026-10-19.
+// button that queues it. The rest are listed locked, each with the builds it needs, every one a link to its page to
+// start it, so the way ahead shows. Reach's map stays, and flies out to the star, its ruler stretched to it. Settled
+// 2026-10-19.
+
+/** A build a way needs: its mark in its color, its name, and how it stands, opening its page to start it. */
+function Need({ name, queued, done }: { name: string; queued: boolean; done: boolean }) {
+  return (
+    <Link
+      to={`/build/${buildSlug(name)}`}
+      className="inline-flex h-7 items-center gap-1.5 rounded-full border border-faint pr-2.5 pl-2 text-[12.5px] text-ink transition-colors hover:border-muted"
+    >
+      <span className={buildTone(name, queued || done)}>
+        <BuildMark name={name} size={13} />
+      </span>
+      {name}
+      {(queued || done) && <span className="text-muted">· {done ? "done" : "queued"}</span>}
+      <span aria-hidden className="text-muted">
+        ›
+      </span>
+    </Link>
+  );
+}
 
 const WHAT: Record<string, string> = {
   "Laser Sail Array": "Sails a few grams heavy, pushed by light from the ground, pass at a fifth of light speed.",
@@ -28,7 +49,7 @@ export function DestinationPage({ slug }: { slug: string }) {
   const { aim } = useReach();
   const { save, year: clock } = useGame();
   const { plan, change } = usePlan();
-  const { scale } = useSchedule();
+  const { scale, done: doneBy } = useSchedule();
   const navigate = useNavigate();
   const root = useRef<HTMLDivElement>(null);
   const i = leads.findIndex((l) => l.slug === slug);
@@ -125,12 +146,8 @@ export function DestinationPage({ slug }: { slug: string }) {
               <div className="pl-7">
                 <Thread road={road} i={k} to={to} />
                 <div className="flex items-center justify-between gap-3">
-                  <span className={`text-[12.5px] leading-snug ${queued ? "text-you" : "text-muted"}`}>
-                    {done
-                      ? `The ${road.build} is done.`
-                      : queued
-                        ? `Needs the ${road.build}, ${before ? "queued" : "under way"}.`
-                        : `Needs the ${road.build}.`}
+                  <span className="flex flex-wrap items-center gap-1.5 text-[12.5px] text-muted">
+                    Needs <Need name={road.build} queued={queued} done={done} />
                   </span>
                   {before && (
                     <button
@@ -172,7 +189,17 @@ export function DestinationPage({ slug }: { slug: string }) {
               right="Not yet"
               more={false}
             />
-            <p className="mt-1 pl-7 text-[12.5px] leading-snug text-muted">{w.needs}</p>
+            <div className="mt-1.5 flex flex-wrap items-center gap-1.5 pl-7 text-[12.5px] text-muted">
+              Needs
+              {w.needs.map((n) => (
+                <Need
+                  key={n}
+                  name={n}
+                  queued={plan.builds.includes(n)}
+                  done={!before && (doneBy[n] ?? Infinity) <= clock}
+                />
+              ))}
+            </div>
           </li>
         ))}
       </ul>
