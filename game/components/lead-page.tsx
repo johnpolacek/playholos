@@ -12,7 +12,8 @@ import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motio
 // One lead, as a report: drawn, then what we measured, what it could be with the Mind's word for each, and what would
 // tell us. Its latest reading, once one lands, comes first, and the words it moved show what they were. The map flies
 // to its star while it is open, and back out when we leave. Before Begin, Fomalhaut's page offers the one observation
-// open at Year 0. Asking the Mind is the last step.
+// open at Year 0. Asking the Mind is the last step. Beside its distance, a link to its destination on Reach, and every
+// way we could go there, as that page links back here, 2026-10-19.
 
 /** The Mind's word, on its seven-step scale. A word a reading moved shows where it was, ringed, and what it was. */
 function Scale({ odds, was }: { odds: Odds; was?: Odds }) {
@@ -104,7 +105,11 @@ export function LeadPage({ slug }: { slug: string }) {
         <h1 className="text-[19px] leading-snug font-medium">{lead.what}</h1>
       </div>
       <p data-m className="mt-0.5 text-[13.5px] text-page-ink2">
-        {lead.star} · {lead.ly.toFixed(1)} ly · reached in <span className="font-mono tabular-nums">{span(lead.ly)}</span>
+        {lead.star} · {lead.ly.toFixed(1)} ly · reached in <span className="font-mono tabular-nums">{span(lead.ly)}</span>{" "}
+        ·{" "}
+        <Link to={`/reach/${lead.slug}`} className="whitespace-nowrap text-you">
+          Ways to go ›
+        </Link>
       </p>
 
       {read && (
