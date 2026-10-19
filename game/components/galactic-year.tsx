@@ -6,6 +6,9 @@ import { gsap, prefersReducedMotion, useGSAP } from "@/lib/motion";
 // every six. Drawn on a 24-unit grid around the center. Rounded, so the server and the browser draw it alike.
 const round = (v: number) => Math.round(v * 1000) / 1000;
 const ORBIT = 9.4;
+// Seconds for one lap of Sol, and for the core to swell or settle.
+const LAP = 14;
+const BREATH = 3;
 // Where Sol starts, up and to the right, and where it rests for anyone who asks for less motion.
 const SOL_AT = -0.8;
 // Sol's wake: ten short arcs behind it, each thinner and fainter.
@@ -35,8 +38,8 @@ export function GalacticYear({ size }: { size: number }) {
   useGSAP(
     (_, contextSafe) => {
       if (prefersReducedMotion()) return;
-      const sol = gsap.to('[data-g="sol"]', { rotation: -360, svgOrigin: "0 0", duration: 14, ease: "none", repeat: -1 });
-      const breath = { duration: 3, ease: "sine.inOut", yoyo: true, repeat: -1 };
+      const sol = gsap.to('[data-g="sol"]', { rotation: -360, svgOrigin: "0 0", duration: LAP, ease: "none", repeat: -1 });
+      const breath = { duration: BREATH, ease: "sine.inOut", yoyo: true, repeat: -1 };
       const breaths = [
         gsap.to('[data-g="wide"]', { attr: { r: CORE.wide[1] }, opacity: 1, ...breath }),
         gsap.to('[data-g="bright"]', { attr: { r: CORE.bright[1] }, ...breath }),
@@ -93,4 +96,77 @@ export function GalacticYear({ size }: { size: number }) {
       </g>
     </svg>
   );
+}
+
+// The tab's icon: the same mark, drawn on a canvas on the game's paper and handed to the tab 15 times a second. At 16
+// pixels the orbit keeps half its dots, and Sol and its wake are drawn twice as thick. Safari keeps the first icon it
+// loads, icon.svg, and anyone who asks for less motion gets one still frame.
+const TAB = { px: 64, fps: 15, dots: 18, dot: 0.5, sol: 1.6, wake: 2.2 } as const;
+
+const rgba = (hex: string, a: number) =>
+  `rgba(${[1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16)).join(",")},${a})`;
+
+export function animateTab() {
+  const link = document.querySelector<HTMLLinkElement>('link[rel="icon"]');
+  const canvas = document.createElement("canvas");
+  canvas.width = canvas.height = TAB.px;
+  const ctx = canvas.getContext("2d");
+  if (!link || !ctx) return;
+  const css = getComputedStyle(document.documentElement);
+  const [paper, ink, muted, you] = ["--paper", "--ink", "--muted", "--you"].map((v) => css.getPropertyValue(v).trim());
+  const glow = (r: number) => {
+    const g = ctx.createRadialGradient(0, 0, 0, 0, 0, r);
+    GLOW.forEach(([offset, opacity]) => g.addColorStop(offset, rgba(ink, opacity)));
+    return g;
+  };
+  const start = performance.now();
+  const draw = () => {
+    const t = (performance.now() - start) / 1000;
+    // How far into a breath the core is, 0 at rest and 1 at the top, eased as the mark's sine.inOut.
+    const b = (1 - Math.cos((Math.PI * t) / BREATH)) / 2;
+    const sol = SOL_AT - (2 * Math.PI * t) / LAP;
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, TAB.px, TAB.px);
+    ctx.fillStyle = paper;
+    ctx.beginPath();
+    ctx.roundRect(0, 0, TAB.px, TAB.px, TAB.px * 0.22);
+    ctx.fill();
+    // The 24-unit grid, with room past the orbit for Sol.
+    ctx.setTransform(TAB.px / 25, 0, 0, TAB.px / 25, TAB.px / 2, TAB.px / 2);
+    for (const [r0, r1, a0, a1] of [
+      [...CORE.wide, 0.85, 1],
+      [...CORE.bright, 1, 1],
+    ]) {
+      const r = r0 + (r1 - r0) * b;
+      ctx.globalAlpha = a0 + (a1 - a0) * b;
+      ctx.fillStyle = glow(r);
+      ctx.beginPath();
+      ctx.arc(0, 0, r, 0, 2 * Math.PI);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = rgba(muted, 0.55);
+    for (let i = 0; i < TAB.dots; i++) {
+      const a = (2 * Math.PI * i) / TAB.dots;
+      ctx.beginPath();
+      ctx.arc(ORBIT * Math.cos(a), ORBIT * Math.sin(a), TAB.dot, 0, 2 * Math.PI);
+      ctx.fill();
+    }
+    ctx.lineCap = "round";
+    WAKE.forEach(({ width, opacity }, i) => {
+      ctx.strokeStyle = rgba(you, opacity);
+      ctx.lineWidth = width * (TAB.wake / 1.1);
+      ctx.beginPath();
+      ctx.arc(0, 0, ORBIT, sol + i * 0.09, sol + (i + 1) * 0.09);
+      ctx.stroke();
+    });
+    ctx.fillStyle = you;
+    ctx.beginPath();
+    ctx.arc(ORBIT * Math.cos(sol), ORBIT * Math.sin(sol), TAB.sol, 0, 2 * Math.PI);
+    ctx.fill();
+    link.type = "image/png";
+    link.href = canvas.toDataURL();
+  };
+  draw();
+  if (!prefersReducedMotion()) setInterval(draw, 1000 / TAB.fps);
 }

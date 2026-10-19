@@ -16,7 +16,7 @@ export async function appleIcon() {
         background: "#121314",
       }}
     >
-      {/* Inset, so the phone's rounded corners don't clip the ring's ends. */}
+      {/* Inset, so the phone's rounded corners never reach Sol's orbit. */}
       <img src={await mark()} width={136} height={136} alt="" />
     </div>,
     { ...size, fonts: [] },
