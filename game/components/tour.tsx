@@ -29,7 +29,8 @@ const SAYS: Record<string, string> = {
   "Moon vault": "A copy of us, out of reach of anything that hits Earth. It takes half the matter we hold in orbit.",
   "Laser sail array":
     "Our soonest road to the nearest star, and it takes no matter. Last in line, it barely slows what is before it.",
-  "Probe yard": "It builds and fuels probes in orbit. Its want is large: even last in line, it slows every build before it.",
+  "Probe yard":
+    "It builds and fuels probes in orbit. Its want is large: even last in line, it slows every build before it.",
 };
 
 const ORDINAL = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh"];
@@ -60,6 +61,8 @@ export function Tour({ onClose }: { onClose(): void }) {
   useEffect(() => () => pick(null), [pick]);
 
   const go = (k: number) => setAt(Math.max(0, Math.min(last, k)));
+  // Each stop opens at its top: on a phone the page scrolls, and the last stop's place would hide this one's head.
+  useEffect(() => void root.current?.closest("main")?.scrollTo({ top: 0 }), [at]);
   useEffect(() => next.current?.focus({ preventScroll: true }), []);
   useEffect(() => {
     const keys = (e: KeyboardEvent) => {
@@ -97,37 +100,40 @@ export function Tour({ onClose }: { onClose(): void }) {
 
   return (
     <div ref={root} className="flex grow flex-col">
-      {/* In place of the tab's head. Tall, as on a phone, the way on is here too, so the Mind's words clear the fold. */}
-      <div className="flex items-center justify-between pt-1 pb-0.5 text-[11px] tracking-[.08em] text-muted">
-        <span className="grow">
-          {at === last ? "PROJECTS · OUR ORDER" : at ? `PROJECTS · PLAN ${at} OF ${picks.length}` : "PROJECTS · PLAN"}
-          {at === last && plan.builds.length > 0 && <span className="text-you"> · DONE</span>}
-        </span>
-        <button
-          onClick={() => go(at - 1)}
-          disabled={!at}
-          aria-label="Back"
-          className="-my-3 size-11 text-xl leading-none text-ink disabled:text-faint wide:hidden"
-        >
-          ‹
-        </button>
-        <button
-          onClick={() => go(at + 1)}
-          disabled={at === last}
-          aria-label="Next"
-          className="-my-3 size-11 text-xl leading-none text-you disabled:text-faint wide:hidden"
-        >
-          ›
-        </button>
-        <button onClick={onClose} aria-label="Close the plan" className="-my-3 -mr-3 size-11 text-xl leading-none">
-          ×
-        </button>
+      {/* In place of the tab's head, held at the top as the page scrolls. Tall, as on a phone, the way on is here too,
+          so the Mind's words clear the fold. */}
+      <div className="sticky top-0 z-10 -mx-4 -mt-3 bg-panel px-4 pt-3 pb-1">
+        <div className="flex items-center justify-between pt-1 pb-0.5 text-[11px] tracking-[.08em] text-muted">
+          <span className="grow">
+            {at === last ? "PROJECTS · OUR ORDER" : at ? `PROJECTS · PLAN ${at} OF ${picks.length}` : "PROJECTS · PLAN"}
+            {at === last && plan.builds.length > 0 && <span className="text-you"> · DONE</span>}
+          </span>
+          <button
+            onClick={() => go(at - 1)}
+            disabled={!at}
+            aria-label="Back"
+            className="-my-3 size-11 text-xl leading-none text-ink disabled:text-faint wide:hidden"
+          >
+            ‹
+          </button>
+          <button
+            onClick={() => go(at + 1)}
+            disabled={at === last}
+            aria-label="Next"
+            className="-my-3 size-11 text-xl leading-none text-you disabled:text-faint wide:hidden"
+          >
+            ›
+          </button>
+          <button onClick={onClose} aria-label="Close the plan" className="-my-3 -mr-3 size-11 text-xl leading-none">
+            ×
+          </button>
+        </div>
+        <Thread
+          stops={[{ name: "What we would start with" }, ...picks.map((b) => ({ name: b })), { name: "Our order" }]}
+          at={at}
+          go={go}
+        />
       </div>
-      <Thread
-        stops={[{ name: "What we would start with" }, ...picks.map((b) => ({ name: b })), { name: "Our order" }]}
-        at={at}
-        go={go}
-      />
 
       <div
         key={at}
@@ -152,15 +158,12 @@ export function Tour({ onClose }: { onClose(): void }) {
               {build.what}
               {build.kt ? ` ${build.kt} kt of our 20.` : ""}
             </p>
-            <div data-r className="mt-3">
-              <MindNote className="text-[14.5px] leading-snug">{SAYS[build.name]}</MindNote>
-            </div>
             {open && (
               <button
                 data-r
                 onClick={() => change(toggleBuild(build.name))}
                 aria-pressed={queued}
-                className={`group mt-1 flex w-full items-start gap-2.5 rounded-xl border px-3 py-2.5 text-left transition-colors ${queued ? "border-you bg-you/10" : "border-you/50 hover:bg-you/5"}`}
+                className={`group mt-2.5 flex w-full items-start gap-2.5 rounded-xl border px-3 py-2.5 text-left transition-colors ${queued ? "border-you bg-you/10" : "border-you/50 hover:bg-you/5"}`}
               >
                 <Mark n={queued ? plan.builds.indexOf(build.name) + 1 : null} />
                 <span className="min-w-0 grow text-[14px] leading-snug">
@@ -174,6 +177,9 @@ export function Tour({ onClose }: { onClose(): void }) {
                 <span className="shrink-0 font-mono text-[11px] text-muted tabular-nums">{when(by)}</span>
               </button>
             )}
+            <div data-r className="mt-3">
+              <MindNote className="text-[14.5px] leading-snug">{SAYS[build.name]}</MindNote>
+            </div>
             {SITES[build.name] && (
               <div data-r>
                 <Story lines={buildStory(build.name)} tone="you" open />
@@ -210,13 +216,6 @@ export function Tour({ onClose }: { onClose(): void }) {
                 ))}
               </ol>
             )}
-            <div data-r className="mt-3">
-              <MindNote className="text-[14.5px] leading-snug">
-                {missing.length
-                  ? `We would add the ${and(missing)}.`
-                  : "That’s what we would start with. The order can still change, until we begin."}
-              </MindNote>
-            </div>
             {open && missing.length > 0 && (
               <button
                 data-r
@@ -227,11 +226,18 @@ export function Tour({ onClose }: { onClose(): void }) {
                     studies: mind.studies ?? p.studies,
                   }))
                 }
-                className="mt-1 h-11 rounded-full border border-you/50 text-[14px] text-you transition-colors hover:bg-you/10"
+                className="mt-3 h-11 rounded-full border border-you/50 text-[14px] text-you transition-colors hover:bg-you/10"
               >
                 {missing.length === picks.length ? "Queue what we would start with" : `Queue the ${and(missing)}`}
               </button>
             )}
+            <div data-r className="mt-3">
+              <MindNote className="text-[14.5px] leading-snug">
+                {missing.length
+                  ? `We would add the ${and(missing)}.`
+                  : "That’s what we would start with. The order can still change, until we begin."}
+              </MindNote>
+            </div>
           </>
         ) : (
           <>

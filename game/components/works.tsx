@@ -126,7 +126,12 @@ export function WorksMap({ className }: { className: string }) {
       const box = n?.parentElement;
       if (!n || !box) continue;
       if (id.startsWith("site:")) {
-        n.style.transform = `translate(${x + 26}px, ${y}px) translate(0, -50%)`;
+        // Beside its place, or on its left where the right would run off the map, as on a phone.
+        const left = x + 26 + n.offsetWidth > box.clientWidth - 8;
+        n.style.transform = left
+          ? `translate(${x - 26}px, ${y}px) translate(-100%, -50%)`
+          : `translate(${x + 26}px, ${y}px) translate(0, -50%)`;
+        n.style.textAlign = left ? "right" : "left";
         n.style.opacity = String(a);
         continue;
       }
@@ -181,7 +186,8 @@ export function WorksMap({ className }: { className: string }) {
               names.current[`arrow:${from}`] = n;
             }}
           />
-          Earth · {secs.toFixed(2)} light-seconds
+          Earth
+          <span className="block">{secs.toFixed(2)} light-seconds</span>
         </span>
       ))}
     </SkyArt>

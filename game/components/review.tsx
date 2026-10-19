@@ -105,6 +105,11 @@ export function Review({ onClose }: { onClose(): void }) {
   }, [at, last, did]);
 
   const go = (k: number) => setAt(Math.max(0, Math.min(last, k)));
+  // Each stop opens at its top: on a phone the page scrolls, and the last stop's place would hide this one's head.
+  useEffect(
+    () => void root.current?.closest("main")?.scrollTo({ top: 0 }),
+    [at],
+  );
   useEffect(() => next.current?.focus({ preventScroll: true }), []);
   useEffect(() => {
     const keys = (e: KeyboardEvent) => {
@@ -139,44 +144,50 @@ export function Review({ onClose }: { onClose(): void }) {
 
   return (
     <div ref={root} className="flex grow flex-col">
-      {/* In place of the tab's head. Tall, as on a phone, the way on is here too, so the Mind's words clear the fold. */}
-      <div className="flex items-center justify-between pt-1 pb-0.5 text-[11px] tracking-[.08em] text-muted">
-        <span className="grow">
-          {at ? `SCAN · REVIEW ${at} OF ${last}` : "SCAN · REVIEW"}
-          {at === last && <span className="text-you"> · DONE</span>}
-        </span>
-        <button
-          onClick={() => go(at - 1)}
-          disabled={!at}
-          aria-label="Back"
-          className="-my-3 size-11 text-xl leading-none text-ink disabled:text-faint wide:hidden"
-        >
-          ‹
-        </button>
-        <button
-          onClick={() => go(at + 1)}
-          disabled={at === last}
-          aria-label="Next"
-          className="-my-3 size-11 text-xl leading-none text-you disabled:text-faint wide:hidden"
-        >
-          ›
-        </button>
-        <button
-          onClick={onClose}
-          aria-label="Close the review"
-          className="-my-3 -mr-3 size-11 text-xl leading-none"
-        >
-          ×
-        </button>
+      {/* In place of the tab's head, held at the top as the page scrolls. Tall, as on a phone, the way on is here too,
+          so the Mind's words clear the fold. */}
+      <div className="sticky top-0 z-10 -mx-4 -mt-3 bg-panel px-4 pt-3 pb-1">
+        <div className="flex items-center justify-between pt-1 pb-0.5 text-[11px] tracking-[.08em] text-muted">
+          <span className="grow">
+            {at ? `SCAN · REVIEW ${at} OF ${last}` : "SCAN · REVIEW"}
+            {at === last && <span className="text-you"> · DONE</span>}
+          </span>
+          <button
+            onClick={() => go(at - 1)}
+            disabled={!at}
+            aria-label="Back"
+            className="-my-3 size-11 text-xl leading-none text-ink disabled:text-faint wide:hidden"
+          >
+            ‹
+          </button>
+          <button
+            onClick={() => go(at + 1)}
+            disabled={at === last}
+            aria-label="Next"
+            className="-my-3 size-11 text-xl leading-none text-you disabled:text-faint wide:hidden"
+          >
+            ›
+          </button>
+          <button
+            onClick={onClose}
+            aria-label="Close the review"
+            className="-my-3 -mr-3 size-11 text-xl leading-none"
+          >
+            ×
+          </button>
+        </div>
+        <Thread
+          stops={[
+            { name: "All our leads" },
+            ...order.map((k) => ({
+              name: leads[k].star,
+              reply: leads[k].reply,
+            })),
+          ]}
+          at={at}
+          go={go}
+        />
       </div>
-      <Thread
-        stops={[
-          { name: "All our leads" },
-          ...order.map((k) => ({ name: leads[k].star, reply: leads[k].reply })),
-        ]}
-        at={at}
-        go={go}
-      />
 
       <div
         key={at}
