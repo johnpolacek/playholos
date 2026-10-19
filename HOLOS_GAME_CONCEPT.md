@@ -379,6 +379,7 @@ Settled 2026-10-06. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#earths-lead
   - *Fomalhaut's new cloud,* 25 ly. It drifts and fades, so the first observation makes it stranger, as v1 required of one lead.
   - *The Luyten's Star reply window,* Year 2.3, 11 real minutes in.
   - *Proxima b, the world next door,* 4.24 ly. Added 2026-10-19, first in the list. About Earth's mass in a flaring red dwarf's warm zone. Its air is unread, and it sits too close to its star for any telescope we have to split. It is why the two roads on Reach go where they go: the player meets it on Scan first.
+  - *Each lead's system, drawn, 2026-10-19.* A lead's page draws its star and every world known there on its orbit, as Kepler has it, on rings each ten times farther: real orbits for Proxima, 82 Eridani and Luyten's Star, Fomalhaut's belts, and for a newly felt world only itself, "only this world is known". Claims not confirmed are dashed. Tilts and sizes, which no one knows, are not drawn as known. Next: the same, in 3D, on the map.
 - **Four older puzzles are studied from Begin.** Added 2026-10-12, to keep the first session's rhythm. From 2026-10-13 they are studies, which the Mind runs on its own: see [How Earth learns](#how-earth-learns). Each is a real oddity as of 2026. What a study finds in 2040 is the mock's sample.
   - *Gliese 12 b,* 39.7 ly. A world Earth's size, 12.8 days around a quiet red star. Its air is unread.
   - *Barnard's Star,* 6 ly. Four worlds smaller than Earth, confirmed in 2025. Nothing over 0.57 Earths in its warm zone then.

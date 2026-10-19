@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router";
 import { useEffect, useRef } from "react";
 import { useGame } from "@/components/game-provider";
 import { LeadArt } from "@/components/lead-art";
+import { SystemArt } from "@/components/system-art";
 import { LeadMark } from "@/components/marks";
 import { Look } from "@/components/picks";
 import { useLeads } from "@/components/scan";
@@ -13,7 +14,9 @@ import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motio
 // tell us. Its latest reading, once one lands, comes first, and the words it moved show what they were. The map flies
 // to its star while it is open, and back out when we leave. Before Begin, Fomalhaut's page offers the one observation
 // open at Year 0. Asking the Mind is the last step. Beside its distance, a link to its destination on Reach, and every
-// way we could go there, as that page links back here, 2026-10-19.
+// way we could go there, as that page links back here, 2026-10-19. A lead about a world is drawn as its whole system,
+// every world known there on its orbit. Fomalhaut's clouds and Luyten's Star's messages keep their own drawings, and
+// their systems follow under what we measured, 2026-10-19.
 
 /** The Mind's word, on its seven-step scale. A word a reading moved shows where it was, ringed, and what it was. */
 function Scale({ odds, was }: { odds: Odds; was?: Odds }) {
@@ -127,7 +130,11 @@ export function LeadPage({ slug }: { slug: string }) {
       )}
 
       <div data-m className="mt-3 rounded-xl border border-faint bg-paper px-2 py-1">
-        <LeadArt art={lead.art} read={read?.id} />
+        {lead.system && lead.art.kind === "orbit" ? (
+          <SystemArt system={lead.system} />
+        ) : (
+          <LeadArt art={lead.art} read={read?.id} />
+        )}
       </div>
 
       <h2 data-m className={`mt-5 ${HEAD}`}>What we measured</h2>
@@ -139,6 +146,15 @@ export function LeadPage({ slug }: { slug: string }) {
           </div>
         ))}
       </dl>
+
+      {lead.system && lead.art.kind !== "orbit" && (
+        <>
+          <h2 data-m className={`mt-5 ${HEAD}`}>Its system</h2>
+          <div data-m className="mt-1.5 rounded-xl border border-faint bg-paper px-2 py-1">
+            <SystemArt system={lead.system} />
+          </div>
+        </>
+      )}
 
       <h2 data-m className={`mt-5 ${HEAD}`}>What it could be</h2>
       <ul className="mt-1 flex flex-col">

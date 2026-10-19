@@ -2,6 +2,7 @@ import { YEAR_0 } from "@/lib/game/clock";
 import { KNOCKS } from "@/lib/game/knocks";
 import { FOMALHAUT } from "@/lib/game/plan";
 import type { FeltWorld } from "@/lib/sim/types";
+import { type System, SYSTEMS } from "./systems";
 
 // Earth's real leads in 2040, each with its own page: the world next door, whose air we can't read from here, a world
 // on a stretched orbit, every world the planet hunters felt by 2040, nearest first, Fomalhaut's collisions, and the
@@ -69,6 +70,8 @@ export interface Lead {
   /** What would tell us. */
   tells: string[];
   art: Art;
+  /** Its star and what is known to go round it, drawn on its page. */
+  system?: System;
 }
 
 /** The scene names Luyten's Star as the catalog does. */
@@ -100,6 +103,9 @@ function warmth(a: number, hz?: [number, number]) {
   if (!hz) return "Unknown";
   return a < hz[0] ? "Too close in: hotter than the warm zone" : a > hz[1] ? "Beyond the warm zone: cold" : "In the warm zone";
 }
+
+/** Each hand-written lead with its system, where we have one. */
+const withSystems = (leads: Lead[]) => leads.map((l) => (l.system || !SYSTEMS[l.slug] ? l : { ...l, system: SYSTEMS[l.slug] }));
 
 /** A felt world's page, from what the planet hunters measured. Its words follow its least mass and its reach. */
 function feltLead(f: FeltWorld): Lead {
@@ -146,11 +152,18 @@ function feltLead(f: FeltWorld): Lead {
     ],
     tells: [tell],
     art: { kind: "orbit", a: f.a, e: 0, hz: f.hz },
+    // Its star by its kind, and the one world felt there. The rest of its system is unknown.
+    system: {
+      temp: { M: 3300, K: 4500, G: 5600, F: 6500 }[f.kind ?? "G"] ?? 5600,
+      hz: f.hz,
+      worlds: [{ name: "", a: f.a, e: 0, days: f.periodDays, mass: m, status: "confirmed", lead: true }],
+      unknown: true,
+    },
   };
 }
 
 export function leadsOf(felt: FeltWorld[]): Lead[] {
-  return [
+  return withSystems([
     // The nearest world, and the reason for the two roads on Reach: no telescope we have can split it from its star, so
     // going is how we would read it. Added 2026-10-19. Its warm zone is ours, from Kopparapu et al. 2013 at the star's
     // 0.0016 Suns.
@@ -290,7 +303,7 @@ export function leadsOf(felt: FeltWorld[]): Lead[] {
       ],
       art: { kind: "reply", sent: LUYTEN.map(([, sent]) => sent), ly: LUYTEN[0][3] },
     },
-  ];
+  ]);
 }
 
 /**
