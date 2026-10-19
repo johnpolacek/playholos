@@ -3,6 +3,7 @@ import { BeamsProvider } from "@/components/beams";
 import { GameProvider } from "@/components/game-provider";
 import { Hud } from "@/components/hud";
 import { MapStrip } from "@/components/map-strip";
+import { ReachProvider } from "@/components/reach";
 import { Rail } from "@/components/rail";
 import { ScanProvider } from "@/components/scan";
 import { WorksProvider } from "@/components/works";
@@ -17,7 +18,8 @@ export default function PlayLayout() {
         <ScanProvider>
           <BeamsProvider>
             <WorksProvider>
-              <div className="flex min-h-0 grow flex-col wide:grid wide:grid-cols-[minmax(0,1fr)_clamp(340px,32vw,440px)] wide:grid-rows-[auto_minmax(0,1fr)_auto]">
+              <ReachProvider>
+                <div className="flex min-h-0 grow flex-col wide:grid wide:grid-cols-[minmax(0,1fr)_clamp(340px,32vw,440px)] wide:grid-rows-[auto_minmax(0,1fr)_auto]">
                 <Hud />
                 <MapStrip />
                 <main
@@ -28,6 +30,7 @@ export default function PlayLayout() {
                 </main>
                 <Rail />
               </div>
+              </ReachProvider>
             </WorksProvider>
           </BeamsProvider>
         </ScanProvider>

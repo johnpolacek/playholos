@@ -74,6 +74,7 @@ export type Mode =
   | "people"
   | "stand"
   | "inherit"
+  | "reach"
   | "charter"
   | "mind"
   | "leads"
@@ -112,9 +113,9 @@ export interface Show {
   }[];
   /** For "people" and "mind": where the Mind is on screen, in CSS pixels, each frame. */
   onMind?(x: number, y: number): void;
-  /** For "inherit", "stand", "leads", "beams" and "works": where their labeled places are on screen, each frame. */
+  /** For "inherit", "reach", "stand", "leads", "beams" and "works": where their labeled places are on screen, each frame. */
   onMarks?(marks: Mark[]): void;
-  /** For "inherit": km per CSS pixel at the art's center, and the art's size. */
+  /** For "inherit" and "reach": km per CSS pixel at the art's center, and the art's size. */
   onScale?(kmPerPx: number, w: number, h: number): void;
 }
 
@@ -574,8 +575,10 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       // Where things stand: the stars within 50 light-years, seen from well above.
       case "stand":
         return (t) => [7.08, 0.4 + drift(t, 600), 0.55, 0];
-      // What you inherit: out from Earth's night side, as far as its intro has flown.
+      // What you inherit: out from Earth's night side, as far as its intro has flown. Reach flies the same way, on out
+      // to the nearest star.
       case "inherit":
+      case "reach":
         return (t) => [(d?.zoom ?? 4.15) - HALF_VIEW_KM, 0.9 + drift(t, 300), 0.18, 0];
       // Meeting the Mind: Earth close, turning, its machines lit, toward the dawn.
       case "mind":
@@ -1344,10 +1347,26 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     const roadGlow = glow({ fixed: true });
     solar.scene.add(probes.points(probeGlow), roads.points(roadGlow));
 
+    // Reach only: Alpha Centauri, the nearest star, ringed, on a dotted road from the Sun. A and B at RA 219.9°, Dec
+    // -60.8°, at the 4.32 light-years calcs/early_game.py's long roads take for the system.
+    const alpha = new THREE.Vector3().copy(skyBasis(219.9, -60.83).radial).multiplyScalar(4.32);
+    const nearest = new Cloud();
+    nearest.add(alpha.x, alpha.y, alpha.z, 9, 0.5, K.mind);
+    const toward = new Cloud();
+    for (let i = 1; i < 120; i++) {
+      const q = alpha.clone().multiplyScalar(i / 120);
+      toward.add(q.x, q.y, q.z, 1.6, 0.7, K.mind);
+    }
+    const nearestGlow = glow({ fixed: true });
+    const towardGlow = glow({ fixed: true });
+    stars.scene.add(nearest.points(nearestGlow), toward.points(towardGlow));
+
     const origin = new THREE.Vector3();
     const moonBand = (x: number) => band(x, -2.6, -2.1, -0.9, -0.5);
     const l2Band = (x: number) => band(x, -1.7, -1.3, -0.3, 0.2);
-    const farBand = (x: number) => band(x, 1.2, 2.0);
+    // The probes fade once they are too near the Sun to tell apart from it.
+    const farBand = (x: number) => band(x, 1.2, 2.0, 3.8, 4.6);
+    const starBand = (x: number) => ramp(x, 4.6, 5.4);
     const marks: [id: string, layer: Layer, at: THREE.Vector3, show: (x: number) => number][] = [
       ["earth", earth, origin, (x) => band(x, -2.5, -2.1, 1.4, 2.0)],
       ["moon", earth, moonAt, moonBand],
@@ -1355,13 +1374,15 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       ["sun", solar, origin, (x) => ramp(x, -0.3, 0.3)],
       ["horizons", solar, horizons, farBand],
       ["voyager", solar, voyager, farBand],
+      ["alpha", stars, alpha, (x) => (spec.mode === "reach" ? starBand(x) : 0)],
     ];
     const v = new THREE.Vector3();
     let last = clock;
 
-    return (x: number, p: number) => {
+    return (x: number, p: number, far: number) => {
       const dt = Math.min(0.1, Math.max(0, clock - last));
       last = clock;
+      nearestGlow.uniforms.uOpacity.value = towardGlow.uniforms.uOpacity.value = far * starBand(x);
       debrisGlow.uniforms.uOpacity.value = p * band(x, -3.8, -3.4, -2.2, -1.7);
       belt.uniforms.uOpacity.value = 0.14 * p * band(x, -3.4, -3.0, -2.2, -1.7);
       for (const { group, rate } of rings) group.rotateY((rate < 0 ? (2 * Math.PI) / turnOf() : rate) * dt);
@@ -1380,7 +1401,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       l2Line.uniforms.uOpacity.value = 0.4 * p * l2Band(x);
       probeGlow.uniforms.uOpacity.value = roadGlow.uniforms.uOpacity.value = p * farBand(x);
 
-      if (spec.mode === "inherit" && spec.onMarks) {
+      if ((spec.mode === "inherit" || spec.mode === "reach") && spec.onMarks) {
         const w = parent.clientWidth;
         const h = parent.clientHeight;
         spec.onMarks(
@@ -2480,6 +2501,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     spin.quaternion.copy(bodyOrientation("Earth", new Date(date.getTime() + turned)));
     const pPeople = present("people", dt);
     const pInherit = present("inherit", dt);
+    const pReach = present("reach", dt);
     const pOrigins = present("origins", dt);
     const pStand = present("stand", dt);
     const pMind = present("mind", dt);
@@ -2518,7 +2540,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     homeGlow.uniforms.uOpacity.value = band(x, 5.4, 6.1) * (0.65 + 0.35 * Math.sin(clock * 2.2));
 
     if (pPeople > 0) people(up, pPeople);
-    if (pInherit > 0) (kit ??= inheritance())(x, pInherit);
+    if (pInherit > 0 || pReach > 0) (kit ??= inheritance())(x, Math.max(pInherit, pReach), pReach);
     if (pOrigins > 0) {
       if (!road && momentsOf.length) road = sunsRoad(momentsOf);
       road?.(x, pOrigins);

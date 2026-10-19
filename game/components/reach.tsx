@@ -1,76 +1,262 @@
-import { useMemo, useRef } from "react";
+import { createContext, use, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useGame } from "@/components/game-provider";
+import { distance, placeNames } from "@/components/inherit";
 import { MindNote } from "@/components/mind-note";
 import { Mark, toggleBuild, usePlan, useSchedule } from "@/components/picks";
+import { SkyArt } from "@/components/sky";
+import type { Dials, Mark as Place } from "@/lib/drift";
 import { HISTORY } from "@/lib/game/charter";
 import { lean } from "@/lib/game/plan";
-import { LIGHT, LIGHT_HOUR_AU, LY_AU, MARKS, NEAREST, type Road, roads, slows, VOYAGER_AU_PER_YEAR } from "@/lib/game/reach";
+import {
+  auFor,
+  LIGHT,
+  LIGHT_HOUR_AU,
+  LY_AU,
+  MARKS,
+  NEAR_AU,
+  NEAREST,
+  type Road,
+  roads,
+  slows,
+  VOYAGER_AU_PER_YEAR,
+  zoomFor,
+} from "@/lib/game/reach";
 import type { Plan } from "@/lib/game/types";
 import { gsap, prefersReducedMotion, useGSAP } from "@/lib/motion";
 
 // Reach at Year 0: how far we have gone, drawn on one line out from Earth where each step is ten times farther, and
-// the two roads to the nearest star on the Years they would take. Before Begin, a tap queues a road last in our
-// order, or takes it out, as on Projects. The Mind advises from the charter, and queues nothing. Each line travels out
-// from its start as the tab opens.
+// the two roads to the nearest star on the Years they would take. The line is also the map's: as the tab opens the map
+// flies out from Earth past Voyager 1 to Alpha Centauri, a mark on the line keeping pace, and a tap or a drag on the
+// line flies the map there. Before Begin, a tap on a road queues it last in our order, or takes it out, as on Projects.
+// The Mind advises from the charter, and queues nothing.
 
 const W = 360;
 const L = 14;
 const R = W - 14;
 const FAR = NEAREST.ly * LY_AU;
-const at = (au: number) => L + (Math.log10(au) / Math.log10(FAR)) * (R - L);
+const SPAN = Math.log10(FAR / NEAR_AU);
+const at = (au: number) => L + (Math.log10(au / NEAR_AU) / SPAN) * (R - L);
+const auAt = (x: number) => NEAR_AU * 10 ** (((Math.min(R, Math.max(L, x)) - L) / (R - L)) * SPAN);
 const year = (y: number) => (Math.round(y * 10) / 10).toString();
+const [NEAR_ZOOM, FAR_ZOOM] = [zoomFor(NEAR_AU), zoomFor(FAR)];
+const VOYAGER = MARKS.at(-1)!;
 
-/** The gap: Earth to the nearest star, each step ten times farther. What we have sent is lit, the rest is dashed. */
-function Gap() {
-  const far = MARKS.at(-1)!;
-  // Labels climb as the marks crowd toward our farthest craft.
-  const lift = [0, 0, 16, 32];
+interface ReachView {
+  /** The map's zoom, which the scene reads each frame. A new object each change when motion is reduced, so the still
+   *  sky redraws. */
+  dials: Dials;
+  /** Flies the map to a zoom, or jumps there when motion is reduced. */
+  fly(zoom: number): void;
+  /** Holds the map at a zoom, as a drag does. */
+  hold(zoom: number): void;
+  /** Out from Earth, a pause at Voyager 1, then on to the nearest star, after `delay` seconds. */
+  tour(delay?: number): void;
+}
+
+const ReachContext = createContext<ReachView>({ dials: {}, fly() {}, hold() {}, tour() {} });
+export const useReach = () => use(ReachContext);
+
+export function ReachProvider({ children }: { children: React.ReactNode }) {
+  // With motion, one object for good: the tweens move it and the scene reads it each frame.
+  const [dials, setDials] = useState<Dials>(() => ({ zoom: FAR_ZOOM }));
+  const jump = useCallback((zoom: number) => setDials({ zoom }), []);
+  const fly = useCallback(
+    (zoom: number) => {
+      if (prefersReducedMotion()) return jump(zoom);
+      const far = Math.abs(zoom - (dials.zoom ?? zoom));
+      gsap.to(dials, { zoom, duration: Math.min(3, 0.5 + 0.35 * far), ease: "power2.inOut", overwrite: true });
+    },
+    [dials, jump],
+  );
+  const hold = useCallback(
+    (zoom: number) => {
+      if (prefersReducedMotion()) return jump(zoom);
+      gsap.killTweensOf(dials);
+      Object.assign(dials, { zoom });
+    },
+    [dials, jump],
+  );
+  const tour = useCallback(
+    (delay = 0) => {
+      if (prefersReducedMotion()) return jump(FAR_ZOOM);
+      gsap.killTweensOf(dials);
+      gsap
+        .timeline({ delay })
+        .fromTo(dials, { zoom: NEAR_ZOOM }, { zoom: zoomFor(VOYAGER.au), duration: 5, ease: "power2.inOut" })
+        .to(dials, { zoom: FAR_ZOOM, duration: 3.5, ease: "power2.inOut" }, "+=1.2");
+    },
+    [dials, jump],
+  );
+  const value = useMemo(() => ({ dials, fly, hold, tour }), [dials, fly, hold, tour]);
+  return <ReachContext value={value}>{children}</ReachContext>;
+}
+
+/** What the map names on the way out, by the scene's marks. */
+const NAMES: Record<string, string> = {
+  earth: "Earth",
+  moon: "the Moon · south-pole stations",
+  l2: "Roman · JWST · L2",
+  sun: "the Sun",
+  horizons: "New Horizons · 100 AU",
+  voyager: "Voyager 1 · silent · 220 AU",
+  alpha: `${NEAREST.name} · ${NEAREST.ly.toFixed(1)} ly`,
+};
+
+/** The map on Reach: the flight out from Earth, its places named, and a scale bar in light-time. It flies out once each
+ *  time the tab opens. */
+export function ReachMap({ className }: { className: string }) {
+  const { dials, tour } = useReach();
+  const names = useRef<Record<string, HTMLSpanElement | null>>({});
+  const bar = useRef<HTMLDivElement>(null);
+  const span = useRef<HTMLSpanElement>(null);
+  const toured = useRef(false);
+  const onMarks = useCallback((marks: Place[]) => placeNames(names.current, marks), []);
+  const onScale = useCallback((kmPerPx: number, w: number, h: number) => {
+    const px = Math.min(w, h) * 0.46;
+    if (bar.current) bar.current.style.width = `${px}px`;
+    if (span.current) span.current.textContent = distance(px * kmPerPx);
+  }, []);
+  // The tour starts as the camera arrives from wherever the map was.
+  const onReady = useCallback(
+    (flight: number) => {
+      if (toured.current) return;
+      toured.current = true;
+      tour(Math.max(0, flight - 0.5));
+    },
+    [tour],
+  );
   return (
-    <svg viewBox={`0 0 ${W} 112`} className="mt-2 w-full overflow-visible" role="img" aria-label={`From Earth to ${NEAREST.name}`}>
-      <defs>
-        <clipPath id="reach-gap">
-          <rect data-reach="reveal" x={0} y={0} width={W} height={112} />
-        </clipPath>
-      </defs>
-      <g clipPath="url(#reach-gap)">
-        {[1, 10, 100, 1e3, 1e4, 1e5].map((au) => (
-          <line key={au} x1={at(au)} x2={at(au)} y1={58} y2={66} className="stroke-faint" />
-        ))}
-        <line x1={at(far.au)} x2={R} y1={62} y2={62} strokeDasharray="2 4" className="stroke-muted" />
-        <line x1={L} x2={at(far.au)} y1={62} y2={62} strokeWidth={2} className="stroke-you" />
-        {LIGHT.map(([label, au]) => (
-          <g key={label}>
-            <line x1={at(au)} x2={at(au)} y1={66} y2={74} className="stroke-muted" />
-            <text x={at(au)} y={86} textAnchor="middle" className="fill-muted font-mono text-[8px]">
-              {label}
-            </text>
-          </g>
-        ))}
-        {MARKS.map((m, i) => (
-          <g key={m.name}>
-            {lift[i] > 0 && <line x1={at(m.au)} x2={at(m.au)} y1={58} y2={50 - lift[i]} className="stroke-faint" />}
-            <circle cx={at(m.au)} cy={62} r={m.craft ? 3 : 2.5} className={m.craft ? "fill-you" : "fill-ink"} />
-            <text
-              x={at(m.au) + (i === 0 ? -3 : 0)}
-              y={46 - lift[i]}
-              textAnchor={i === 0 ? "start" : "middle"}
-              className={`font-mono text-[8.5px] ${m.craft ? "fill-you" : "fill-page-ink2"}`}
-            >
-              {m.name}
-            </text>
-          </g>
-        ))}
-        <circle cx={R} cy={62} r={4} className="fill-ink" />
-        <circle cx={R} cy={62} r={8} className="fill-ink/15" />
-        <text x={R + 4} y={46} textAnchor="end" className="fill-ink font-mono text-[8.5px]">
-          {NEAREST.name}
-        </text>
-        <text x={L - 3} y={104} className="fill-muted font-mono text-[8px]">
-          each tick ten times farther
-        </text>
-        <text x={R} y={104} textAnchor="end" className="fill-muted font-mono text-[8px]">
-          {NEAREST.ly.toFixed(1)} ly
-        </text>
+    <SkyArt mode="reach" dials={dials} onReady={onReady} onMarks={onMarks} onScale={onScale} className={className}>
+      {Object.entries(NAMES).map(([id, name]) => (
+        <span
+          key={id}
+          ref={(n) => {
+            names.current[id] = n;
+          }}
+          className={`pointer-events-none absolute top-0 left-0 font-mono text-[9px] whitespace-nowrap opacity-0 ${id === "earth" || id === "alpha" ? "text-you" : "text-muted"}`}
+        >
+          {name}
+        </span>
+      ))}
+      <div className="pointer-events-none absolute bottom-5 left-1/2 flex flex-col items-start gap-1 wide:bottom-8">
+        <span ref={span} className="font-mono text-[9px] text-muted" />
+        <div ref={bar} className="h-1.5 border-x border-b border-muted/80" />
+      </div>
+    </SkyArt>
+  );
+}
+
+/** The line out: Earth to the nearest star, each step ten times farther. What we have sent is lit, the rest is dashed.
+ *  It is the map's zoom too: a mark keeps pace with the map, and a tap or a drag flies it there. */
+function Gap() {
+  const { dials, fly, hold } = useReach();
+  const svg = useRef<SVGSVGElement>(null);
+  const view = useRef<SVGGElement>(null);
+  const press = useRef<{ x: number; moved: boolean } | null>(null);
+  // Labels climb as the marks crowd toward our farthest craft.
+  const lift = [0, 0, 0, 0, 16, 32];
+
+  // The view's mark follows the map's zoom, however it moves.
+  useEffect(() => {
+    const follow = () => {
+      const x = at(auFor(dials.zoom ?? FAR_ZOOM));
+      view.current?.setAttribute("transform", `translate(${Math.min(R, Math.max(L, x))} 0)`);
+    };
+    follow();
+    gsap.ticker.add(follow);
+    return () => gsap.ticker.remove(follow);
+  }, [dials]);
+
+  const xOf = (e: React.PointerEvent) => {
+    const r = svg.current!.getBoundingClientRect();
+    return ((e.clientX - r.left) / r.width) * W;
+  };
+  // A tap near a mark flies to it, anywhere else to that distance. A drag holds the map under the pointer.
+  const snap = (x: number) => {
+    const near = [...MARKS.map((m) => m.au), FAR].find((au) => Math.abs(at(au) - x) < 10);
+    return zoomFor(near ?? auAt(x));
+  };
+  const step = (by: number) => fly(Math.min(FAR_ZOOM, Math.max(NEAR_ZOOM, (dials.zoom ?? FAR_ZOOM) + by)));
+
+  return (
+    <svg
+      ref={svg}
+      viewBox={`0 0 ${W} 112`}
+      className="mt-2 w-full cursor-pointer touch-none overflow-visible outline-none select-none focus-visible:ring-2 focus-visible:ring-you/50"
+      role="slider"
+      tabIndex={0}
+      aria-label={`The map's view, from Earth to ${NEAREST.name}`}
+      aria-valuemin={0}
+      aria-valuemax={100}
+      aria-valuenow={Math.round(((dials.zoom ?? FAR_ZOOM) - NEAR_ZOOM) / (FAR_ZOOM - NEAR_ZOOM) * 100)}
+      onPointerDown={(e) => {
+        e.currentTarget.setPointerCapture(e.pointerId);
+        press.current = { x: xOf(e), moved: false };
+      }}
+      onPointerMove={(e) => {
+        const p = press.current;
+        if (!p) return;
+        if (!p.moved && Math.abs(xOf(e) - p.x) < 4) return;
+        p.moved = true;
+        hold(zoomFor(auAt(xOf(e))));
+      }}
+      onPointerUp={(e) => {
+        const p = press.current;
+        press.current = null;
+        if (p && !p.moved) fly(snap(xOf(e)));
+      }}
+      onPointerCancel={() => (press.current = null)}
+      onKeyDown={(e) => {
+        const by = { ArrowRight: 0.5, ArrowUp: 0.5, ArrowLeft: -0.5, ArrowDown: -0.5 }[e.key];
+        if (by) step(by);
+        else if (e.key === "Home") fly(NEAR_ZOOM);
+        else if (e.key === "End") fly(FAR_ZOOM);
+        else return;
+        e.preventDefault();
+      }}
+    >
+      {Array.from({ length: Math.floor(SPAN) + 1 }, (_, k) => NEAR_AU * 10 ** k).map((au) => (
+        <line key={au} x1={at(au)} x2={at(au)} y1={58} y2={66} className="stroke-faint" />
+      ))}
+      <line x1={at(VOYAGER.au)} x2={R} y1={62} y2={62} strokeDasharray="2 4" className="stroke-muted" />
+      <line x1={L} x2={at(VOYAGER.au)} y1={62} y2={62} strokeWidth={2} className="stroke-you" />
+      {LIGHT.map(([label, au]) => (
+        <g key={label}>
+          <line x1={at(au)} x2={at(au)} y1={66} y2={74} className="stroke-muted" />
+          <text x={at(au)} y={86} textAnchor="middle" className="fill-muted font-mono text-[8px]">
+            {label}
+          </text>
+        </g>
+      ))}
+      {MARKS.map((m, i) => (
+        <g key={m.name}>
+          {lift[i] > 0 && <line x1={at(m.au)} x2={at(m.au)} y1={58} y2={50 - lift[i]} className="stroke-faint" />}
+          <circle cx={at(m.au)} cy={62} r={m.craft ? 3 : 2.5} className={m.craft ? "fill-you" : "fill-ink"} />
+          <text
+            x={at(m.au) + (i === 0 ? -3 : 0)}
+            y={46 - lift[i]}
+            textAnchor={i === 0 ? "start" : "middle"}
+            className={`font-mono text-[8.5px] ${m.craft ? "fill-you" : "fill-page-ink2"}`}
+          >
+            {m.name}
+          </text>
+        </g>
+      ))}
+      <circle cx={R} cy={62} r={4} className="fill-ink" />
+      <circle cx={R} cy={62} r={8} className="fill-ink/15" />
+      <text x={R + 4} y={46} textAnchor="end" className="fill-ink font-mono text-[8.5px]">
+        {NEAREST.name}
+      </text>
+      <text x={L - 3} y={104} className="fill-muted font-mono text-[8px]">
+        each tick ten times farther · tap or drag to fly the map
+      </text>
+      <text x={R} y={104} textAnchor="end" className="fill-muted font-mono text-[8px]">
+        {NEAREST.ly.toFixed(1)} ly
+      </text>
+      {/* The map's view: where it is looking out to, now. */}
+      <g ref={view} className="pointer-events-none">
+        <line x1={0} x2={0} y1={52} y2={72} strokeWidth={1.5} className="stroke-other" />
+        <path d="M-4 48 L4 48 L0 53 Z" className="fill-other" />
       </g>
     </svg>
   );
@@ -194,7 +380,6 @@ export function Reach() {
       if (prefersReducedMotion()) return;
       gsap
         .timeline({ defaults: { ease: "power2.inOut" } })
-        .fromTo('[data-reach="reveal"]', { attr: { width: 0 } }, { attr: { width: W }, duration: 1.6 }, 0.1)
         .fromTo('[data-reach="road"]', { attr: { width: 0 } }, { attr: { width: W }, duration: 1.4, stagger: 0.3 }, 0.6)
         .fromTo('[data-reach="say"]', { autoAlpha: 0, y: 12 }, { autoAlpha: 1, y: 0, duration: 0.5, ease: "power3.out" }, 1.2);
     },

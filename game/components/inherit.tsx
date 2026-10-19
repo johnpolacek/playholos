@@ -27,48 +27,52 @@ const NAMES: Record<string, string> = {
   voyager: "Voyager 1 · silent · 220 AU",
 };
 
-/** A distance as the scale readout says it: kilometers up close, then light-time. */
-function reach(km: number) {
+/** A distance as the scale readout says it: kilometers up close, then light-time. Reach's map goes on to days and
+ *  years. */
+export function distance(km: number) {
   const s = km / LIGHT_S;
   if (s < 1) return `${Number(km.toPrecision(2)).toLocaleString("en-US")} km`;
   if (s < 60) return `${s.toFixed(s < 10 ? 1 : 0)} light-seconds`;
   if (s < 3600) return `${(s / 60).toFixed(s < 600 ? 1 : 0)} light-minutes`;
-  return `${(s / 3600).toFixed(0)} light-hours`;
+  if (s < 2 * 86400) return `${(s / 3600).toFixed(0)} light-hours`;
+  if (s < 365.25 * 86400) return `${(s / 86400).toFixed(0)} light-days`;
+  return `${(s / 31557600).toFixed(1)} light-years`;
+}
+
+/** Each name sits beside its place, on the side away from the edge, and shows while its place is in view. On a narrow
+ *  screen two places can be close: a name that would cross one already placed tries the other side, then below. */
+export function placeNames(names: Record<string, HTMLSpanElement | null>, marks: Mark[]) {
+  const placed: { l: number; r: number; t: number; b: number }[] = [];
+  for (const { id, x, y, a } of marks) {
+    const n = names[id];
+    if (!n) continue;
+    const w = n.offsetWidth;
+    const h = n.offsetHeight;
+    const right = x > (n.parentElement?.clientWidth ?? 0) * 0.62;
+    const tries = [
+      { dx: right ? -8 - w : 8, dy: -h / 2 },
+      { dx: right ? 8 : -8 - w, dy: -h / 2 },
+      { dx: -w / 2, dy: 6 },
+    ];
+    const box = ({ dx, dy }: (typeof tries)[number]) => ({ l: x + dx, r: x + dx + w, t: y + dy, b: y + dy + h });
+    const clear = (b: ReturnType<typeof box>) => placed.every((p) => b.r < p.l || b.l > p.r || b.b < p.t || b.t > p.b);
+    const at = tries.find((t) => clear(box(t))) ?? tries[0];
+    if (a > 0.05) placed.push(box(at));
+    n.style.transform = `translate(${x + at.dx}px, ${y + at.dy}px)`;
+    n.style.opacity = String(a);
+  }
 }
 
 function Flight({ dials, onReady }: { dials: Dials; onReady(flight: number): void }) {
   const names = useRef<Record<string, HTMLSpanElement | null>>({});
   const bar = useRef<HTMLDivElement>(null);
   const span = useRef<HTMLSpanElement>(null);
-  // Each name sits beside its place, on the side away from the edge, and shows while its place is in view. On a narrow
-  // screen two places can be close: a name that would cross one already placed tries the other side, then below.
-  const onMarks = useCallback((marks: Mark[]) => {
-    const placed: { l: number; r: number; t: number; b: number }[] = [];
-    for (const { id, x, y, a } of marks) {
-      const n = names.current[id];
-      if (!n) continue;
-      const w = n.offsetWidth;
-      const h = n.offsetHeight;
-      const right = x > (n.parentElement?.clientWidth ?? 0) * 0.62;
-      const tries = [
-        { dx: right ? -8 - w : 8, dy: -h / 2 },
-        { dx: right ? 8 : -8 - w, dy: -h / 2 },
-        { dx: -w / 2, dy: 6 },
-      ];
-      const box = ({ dx, dy }: (typeof tries)[number]) => ({ l: x + dx, r: x + dx + w, t: y + dy, b: y + dy + h });
-      const clear = (b: ReturnType<typeof box>) =>
-        placed.every((p) => b.r < p.l || b.l > p.r || b.b < p.t || b.t > p.b);
-      const at = tries.find((t) => clear(box(t))) ?? tries[0];
-      if (a > 0.05) placed.push(box(at));
-      n.style.transform = `translate(${x + at.dx}px, ${y + at.dy}px)`;
-      n.style.opacity = String(a);
-    }
-  }, []);
+  const onMarks = useCallback((marks: Mark[]) => placeNames(names.current, marks), []);
   // The scale bar spans half the view's short side.
   const onScale = useCallback((kmPerPx: number, w: number, h: number) => {
     const px = Math.min(w, h) * 0.46;
     if (bar.current) bar.current.style.width = `${px}px`;
-    if (span.current) span.current.textContent = reach(px * kmPerPx);
+    if (span.current) span.current.textContent = distance(px * kmPerPx);
   }, []);
 
   return (

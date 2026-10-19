@@ -7,12 +7,18 @@ import type { Plan } from "./types";
 import { type Order, pace } from "@/lib/sim/works";
 
 export const LY_AU = 63241;
+const AU_KM = 149597870.7;
 /** One hour of light, in AU: 499 light-seconds to the AU. */
 export const LIGHT_HOUR_AU = 3600 / 499;
 
-/** Our farthest craft at Year 0, and Neptune for a sense of the Sun's own family. */
+/** The near end of the line out: about 15,000 km, Earth up close. */
+export const NEAR_AU = 1e-4;
+
+/** From Earth outward: the Moon, the Sun, Neptune, and our farthest craft at Year 0. */
 export const MARKS: { name: string; au: number; craft?: boolean }[] = [
-  { name: "Earth", au: 1 },
+  { name: "Earth", au: NEAR_AU },
+  { name: "Moon", au: 384400 / AU_KM },
+  { name: "Sun", au: 1 },
   { name: "Neptune", au: 30 },
   { name: "New Horizons", au: 100, craft: true },
   { name: "Voyager 1", au: 220, craft: true },
@@ -21,13 +27,19 @@ export const MARKS: { name: string; au: number; craft?: boolean }[] = [
 /** The nearest star system, as calcs/early_game.py's long roads have it. */
 export const NEAREST = { name: "Alpha Centauri", ly: 4.32 };
 
-/** Light-time from the Sun, for the drawing's ticks. */
+/** Light-time, for the line's ticks. */
 export const LIGHT: [label: string, au: number][] = [
+  ["light-second", 1 / 499],
+  ["light-minute", 60 / 499],
   ["light-hour", LIGHT_HOUR_AU],
   ["light-day", 24 * LIGHT_HOUR_AU],
-  ["light-month", 30.44 * 24 * LIGHT_HOUR_AU],
   ["light-year", LY_AU],
 ];
+
+/** The map's zoom, log10 of the km across half its short side, that frames a distance with room to spare. The line
+ *  on the page and the map share it, so a place on one is a view on the other. */
+export const zoomFor = (au: number) => Math.log10(1.4 * AU_KM * au);
+export const auFor = (zoom: number) => 10 ** zoom / (1.4 * AU_KM);
 
 /** Voyager 1 moves out at about 17 km/s, 3.6 AU a Year. */
 export const VOYAGER_AU_PER_YEAR = 3.6;

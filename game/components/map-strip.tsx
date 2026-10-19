@@ -1,6 +1,7 @@
 import { useLocation } from "react-router";
 import { useRef, useState } from "react";
 import { BeamsMap, useBeams } from "@/components/beams";
+import { ReachMap, useReach } from "@/components/reach";
 import { ScanMap } from "@/components/scan";
 import { SkyArt, useSky } from "@/components/sky";
 import { useWorks, WorksMap } from "@/components/works";
@@ -21,8 +22,8 @@ const BUTTON = "absolute right-2.5 bottom-3 h-8 rounded-full border border-faint
 
 // The board: a strip of the map under the top bar, a window onto the game's one sky, which flies here from the
 // charter. On Scan and a lead's page it shows Earth's leads. On Projects, a message picked there takes it out to its
-// star, and a build to where it would stand. Elsewhere it rests at a stop, turning slowly, travels outward a stop a
-// tap, and turns with a drag.
+// star, and a build to where it would stand. On Reach it flies out from Earth to the nearest star. Elsewhere it rests
+// at a stop, turning slowly, travels outward a stop a tap, and turns with a drag.
 export function MapStrip() {
   const path = useLocation().pathname;
   const scan = path === "/" || path.startsWith("/lead/");
@@ -30,6 +31,7 @@ export function MapStrip() {
   const aimed = path === "/projects" && beams.picked !== null;
   const works = useWorks();
   const built = path === "/projects" && works.picked !== null;
+  const reach = useReach();
   const [tall, setTall] = useState(false);
 
   // Tall, the strip opens wider at its handle. Wide, the map fills the left of the screen, and needs no handle.
@@ -57,6 +59,14 @@ export function MapStrip() {
           <span className={LABEL}>OUR MESSAGES</span>
           <button onClick={() => beams.pick(beams.list, null)} className={BUTTON}>
             Back to Earth ↙
+          </button>
+        </>
+      ) : path === "/reach" ? (
+        <>
+          <ReachMap className="absolute inset-0" />
+          <span className={LABEL}>FROM EARTH</span>
+          <button onClick={() => reach.tour()} className={BUTTON}>
+            Fly out again ↗
           </button>
         </>
       ) : (

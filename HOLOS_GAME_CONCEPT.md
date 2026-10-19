@@ -421,7 +421,9 @@ Settled 2026-10-13.
     - *Once the probe yard is queued, the Mind says what would bring it sooner:* in the first test game, an orbital yard, 6 Years.
     - *Reach first, on Projects, settled 2026-10-18:* the all-sky watch, the orbital yard, then the sail array last. It was a launch complex, a yard and the sky watch, but lift moves no probe date. Listening first costs the sails about a Year, and keeps the sky watch at Year 4.2 instead of 6.0. The yard cuts the probe yard by a quarter, for later.
     - *Lift isn't what holds probes back.* A flyby probe is about 100 t, against the 20 kt we hold. A launch complex moves no date.
-    - Not built yet: the map flying out past Voyager to the nearest stars, beginning a road after Begin, and what happens when a probe arrives.
+    - *The map flies out, built 2026-10-18.* As the tab opens, the map makes the opening's flight from Earth past the Moon and Voyager 1, pauses, and goes on to Alpha Centauri, ringed on a dotted road from the Sun. Its scale bar reads light-seconds to light-years.
+    - *The line is the map's zoom.* It runs from Earth up close to Alpha Centauri, each step ten times farther, with the Moon, the Sun and Neptune on it. A mark on it keeps pace with the map. A tap flies the map to that distance, or to a place near it, and a drag holds the map under the finger.
+    - Not built yet: beginning a road after Begin, and what happens when a probe arrives.
   - Set aside: an inquiry as a question pinned on a place, which the Mind then pursues by every means. Worth its own round later. And leaving the word unused.
 - **Four words for what comes back.** A search returns a candidate. An observation returns a reading. A study returns a finding. An inquiry returns a dispatch.
 - **Physics sets how long an observation or a sweep takes.** Settled 2026-10-13. A nearer or larger world is brighter, so its reading comes sooner. The numbers are in [calcs/observing.py](calcs/observing.py).
