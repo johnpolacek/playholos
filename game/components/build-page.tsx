@@ -14,13 +14,14 @@ import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motio
 // One build, opened from Build: what it gives us, when it would be done, the Mind's word on it, and its story. The map
 // flies to where it would stand while it is open, and home when we leave. Before Begin, its button adds it to the
 // queue, last in our order, or takes it out, as in the Mind's tour. Last, Close View takes the map down to the ground
-// there, as the map's own button and the place's name on it do. Settled 2026-10-18.
+// there, as the map's own button and the place's name on it do. Settled 2026-10-18. Asking the Mind is the last step,
+// as on a lead's page, 2026-10-19.
 
 const ORDINAL = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth"];
 
-/** Where the build stands: in our order or not, and when it is done. */
+/** Where the build stands: in our order or not, and when it is done, in Years and in play time, as the list counts. */
 function status(open: boolean, at: number, by: number | null | undefined, year: number) {
-  const when = by == null ? "after Year 40" : `by Year ${tenths(by)}`;
+  const when = by == null ? "after Year 40" : `by Year ${tenths(by)}, ${realTime(by)} after we begin`;
   if (open)
     return at < 0 ? `Last in our order, it would be done ${when}.` : `Queued, ${ORDINAL[at]} in our order. Done ${when}.`;
   if (at < 0) return "Not in our order.";
@@ -112,7 +113,7 @@ export function BuildPage({ slug }: { slug: string }) {
         <Link
           to="/build"
           data-m
-          className="inline-flex h-9 items-center gap-1.5 rounded-full border border-ink bg-paper pr-4 pl-3 text-[14px] font-medium text-ink"
+          className="inline-flex h-9 items-center gap-1.5 rounded-full border border-ink bg-paper pr-4 pl-3 text-[14px] font-medium text-ink transition-colors hover:bg-ink hover:text-paper"
         >
           <span aria-hidden className="text-[18px] leading-none">‹</span>
           All builds
@@ -147,6 +148,13 @@ export function BuildPage({ slug }: { slug: string }) {
           {close ? "Pull Back" : "Close View"}
         </button>
       )}
+      <button
+        data-m
+        onClick={() => navigate(`/mind?ask=${encodeURIComponent(`What would the ${build.name} give us, and what would it slow?`)}`)}
+        className={`${CLOSE[build.name] ? "mt-2.5" : "mt-6"} h-[46px] shrink-0 rounded-full border border-ink text-[15px] font-medium`}
+      >
+        Ask the Mind about it
+      </button>
     </div>
   );
 }

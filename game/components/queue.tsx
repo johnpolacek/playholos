@@ -2,20 +2,21 @@ import { useMemo, useRef } from "react";
 import { useGame } from "@/components/game-provider";
 import { Item, type Row } from "@/components/journey";
 import { Unqueued, useSchedule } from "@/components/picks";
+import { ListHead } from "@/components/tab-head";
 import { BUILDS, EMPTY } from "@/lib/game/plan";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
 
-// The queue: what we plan to start at Year 0, each on its whole journey from Year 0. A tap on a build opens its page,
+// The queue: what we plan to start at Year 0, each on its whole journey from Year 0, in Scan's face: a dot, its name
+// and line, and how long until it's done in play time, as Scan counts light's. A tap on a build opens its page,
 // where it comes in or out of the queue, and what we could also start waits below. Our messages already on their way
 // moved to Reach, and the one observation to Fomalhaut's lead on Scan, 2026-10-18. The Mind's studies keep a tenth of
 // our thought on their own, and what idle instruments sweep waits until sweeps are built, so neither is ours to set
 // here, 2026-10-19.
 
 function rowsOf(plan: typeof EMPTY, done: Record<string, number | null>): Row[] {
-  return plan.builds.map((name, i) => ({
+  return plan.builds.map((name) => ({
     key: name,
     name,
-    n: i + 1,
     note: BUILDS.find((b) => b.name === name)?.what ?? "",
     at: done[name] ?? null,
     kind: "build",
@@ -25,7 +26,7 @@ function rowsOf(plan: typeof EMPTY, done: Record<string, number | null>): Row[] 
 export function Queue() {
   const { save, year } = useGame();
   const root = useRef<HTMLDivElement>(null);
-  const { past, done } = useSchedule();
+  const { past, scale, done } = useSchedule();
   const plan = save?.plan ?? EMPTY;
   const queued = useMemo(() => rowsOf(plan, done), [plan, done]);
   const began = year !== null;
@@ -63,21 +64,24 @@ export function Queue() {
 
   return (
     <div ref={root} className="relative">
-      <h3 className="mt-2 text-[10.5px] tracking-[.08em] text-muted">
-        {began ? "UNDER WAY" : "QUEUED"} · {queued.length}
-      </h3>
-      {queued.length ? (
-        <ul data-q="queued">
-          {queued.map((r) => (
-            <Item key={r.key} row={r} now={now} began={began} />
-          ))}
-        </ul>
-      ) : (
-        <p data-q="row" className="border-t border-rowline py-2 text-[13px] text-muted">
-          Nothing queued. Our instruments keep watch, and the Mind keeps studying.
-        </p>
+      {/* Before Begin an empty queue shows nothing, and the Mind's walk above offers to fill it. */}
+      {(began || queued.length > 0) && (
+        <>
+          <ListHead left={`${began ? "Under way" : "Queued"} · ${queued.length}`} right="Done in" className="mt-1" />
+          {queued.length ? (
+            <ul data-q="queued" className="mt-1">
+              {queued.map((r) => (
+                <Item key={r.key} row={r} now={now} began={began} />
+              ))}
+            </ul>
+          ) : (
+            <p data-q="row" className="mt-1 border-t border-faint py-2.5 text-[13.5px] leading-snug text-page-ink2">
+              Nothing under way. Our instruments keep watch, and the Mind keeps studying.
+            </p>
+          )}
+        </>
       )}
-      {!began && <Unqueued />}
+      {!began && <Unqueued scale={scale} className={queued.length ? "mt-5" : "mt-1"} />}
     </div>
   );
 }

@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router";
 import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useGame } from "@/components/game-provider";
 import { SkyArt } from "@/components/sky";
+import { Face } from "@/components/tab-head";
 import { FILL, Spread } from "@/components/spread";
 import type { Dials, Mark } from "@/lib/drift";
 import { realTime } from "@/lib/game/clock";
@@ -104,26 +105,27 @@ export function LeadList({
     const read = readings[l.slug]?.at(-1);
     const isNew = !!read && !!fresh?.has(read.id);
     return (
-    <>
-      <span className={`size-2 shrink-0 translate-y-[-1px] rounded-full ${l.reply ? "bg-other" : "bg-you"}`} />
-      <span className="flex min-w-0 grow flex-col">
-        <span className="text-[15px] leading-snug">
-          <b className="font-semibold">{l.what}</b> · {l.star}
-        </span>
-        {read ? (
-          <span className="text-[13.5px] leading-snug text-ink">
-            {isNew && (
-              <span className="mr-1.5 rounded-full bg-you px-1.5 py-px font-mono text-[9px] tracking-[.08em] text-paper">NEW</span>
-            )}
-            {read.title}, Year {read.at}.
-          </span>
-        ) : (
-          <span className="text-[13.5px] leading-snug text-page-ink2">{l.line}</span>
-        )}
-      </span>
-      <span className="shrink-0 text-right font-mono text-[11px] text-muted tabular-nums">{realTime(l.ly)}</span>
-      <span className="shrink-0 self-center text-muted">›</span>
-    </>
+      <Face
+        dot={l.reply ? "bg-other" : "bg-you"}
+        name={
+          <>
+            <b className="font-semibold">{l.what}</b> · {l.star}
+          </>
+        }
+        line={
+          read ? (
+            <span className="text-ink">
+              {isNew && (
+                <span className="mr-1.5 rounded-full bg-you px-1.5 py-px font-mono text-[9px] tracking-[.08em] text-paper">NEW</span>
+              )}
+              {read.title}, Year {read.at}.
+            </span>
+          ) : (
+            l.line
+          )
+        }
+        right={realTime(l.ly)}
+      />
     );
   };
   const peek = (i: number) => ({
@@ -138,7 +140,7 @@ export function LeadList({
       <ul className="mt-1 flex flex-col">
         {leads.map((l, i) => (
           <li key={l.star} className="border-t border-faint">
-            <Link to={`/lead/${l.slug}`} {...peek(i)} className="flex items-baseline gap-3 py-2.5 text-left">
+            <Link to={`/lead/${l.slug}`} {...peek(i)} className="block py-2.5 text-left">
               {row(l)}
             </Link>
           </li>

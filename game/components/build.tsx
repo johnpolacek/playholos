@@ -1,16 +1,19 @@
 import { useCallback } from "react";
 import { useSearchParams } from "react-router";
 import { useGame } from "@/components/game-provider";
-import { Advice } from "@/components/picks";
+import { usePlan } from "@/components/picks";
 import { useLeaveShell } from "@/components/wake";
 import { Queue } from "@/components/queue";
+import { Walk } from "@/components/tab-head";
 import { Tour } from "@/components/tour";
 import { realTime } from "@/lib/game/clock";
 
-// The Build tab: the Mind's note to decide what's next with it, and the queue. The Mind's tour opens from Begin,
-// in the top bar.
+// The Build tab, laid out as Scan is: the Mind's walk through what it would start with, as Scan's review, then the
+// queue and what we could start, in Scan's rows. The walk opens from here and from Begin, in the top bar. Asking the
+// Mind is on each build's page, 2026-10-19.
 export function Build() {
   const { save, year, newGame } = useGame();
+  const { plan } = usePlan();
   const leaveShell = useLeaveShell();
   const [params, setParams] = useSearchParams();
   const close = useCallback(() => setParams({}, { replace: true }), [setParams]);
@@ -27,7 +30,14 @@ export function Build() {
           </span>
         </div>
       )}
-      <Advice />
+      {(year === null || !plan.builds.length) && (
+        <Walk
+          to="/build?tour"
+          title="Queue our first builds"
+          line="With the Mind, one build at a time."
+          done={plan.builds.length > 0}
+        />
+      )}
       <Queue />
       <div className="mt-auto flex shrink-0 flex-col gap-2 pt-4 pb-4">
         <button onClick={() => leaveShell(newGame)} className="h-9 rounded-full border border-ink text-sm">

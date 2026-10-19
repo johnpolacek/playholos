@@ -1,18 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link } from "react-router";
 import { useGame } from "@/components/game-provider";
-import { MindHere } from "@/components/mind-chat";
-import { MindNote } from "@/components/mind-note";
-import { MS_PER_YEAR } from "@/lib/game/clock";
+import { Face, ListHead } from "@/components/tab-head";
+import { MS_PER_YEAR, realTime } from "@/lib/game/clock";
 import type { EarthPast } from "@/lib/game/past";
 import { BUILDS, buildSlug, EMPTY, FOMALHAUT, schedule } from "@/lib/game/plan";
 import { SITES } from "@/lib/game/sites";
 import type { Plan } from "@/lib/game/types";
-import { useAccess } from "@/lib/key";
 
-// Planning our waking, on the Build tab: what starts at Year 0. The Mind's note sends us to it to decide, and it
-// queues nothing. A tap on a build opens its page, where we add it to the queue, and the queue above draws it. The one
-// observation is offered on Fomalhaut's lead instead, on Scan. Every change is saved as it is made.
+// Planning our waking, on the Build tab: what starts at Year 0. The Mind's walk through what it would start with
+// queues nothing unless we say. A tap on a build opens its page, where we add it to the queue, and the queue above
+// draws it. The one observation is offered on Fomalhaut's lead instead, on Scan. Every change is saved as it is made.
 
 /** The plan, and a change to it, saved at once. */
 export function usePlan() {
@@ -143,55 +141,41 @@ export const buildStory = (name: string): [string, string | undefined][] => {
     : [];
 };
 
-/** The Mind's note, at any Year: what's next is ours to decide together. Once the Mind is open to us, we ask it right
- *  here, in our one talk with it. Until then, asking takes us to the Mind tab to open it. */
-export function Advice() {
-  const navigate = useNavigate();
-  const open = useAccess();
-
-  return (
-    <div className="mt-3">
-      <MindNote>
-        <p className="text-[14.5px] leading-snug">Engage with billions of minds to decide what to do next.</p>
-        {open === null && (
-          <button
-            onClick={() => navigate(`/mind?ask=${encodeURIComponent("What should we do next?")}`)}
-            className="mt-1.5 py-1 text-[13px] text-you"
-          >
-            Ask the Mind
-          </button>
-        )}
-      </MindNote>
-      {open && <MindHere />}
-    </div>
-  );
-}
-
-/** What we could start and haven't queued. A tap on a build opens its page. */
-export function Unqueued() {
+/** What we could start and haven't queued, each with an open dot, and when it would be done if we queued it now,
+ *  last in line. A tap on a build opens its page. */
+export function Unqueued({ scale, className = "" }: { scale: number; className?: string }) {
   const { plan } = usePlan();
   const builds = BUILDS.filter((b) => !plan.builds.includes(b.name));
+  const by = useMemo(
+    () =>
+      Object.fromEntries(
+        BUILDS.filter((b) => !plan.builds.includes(b.name)).map((b) => [
+          b.name,
+          schedule({ ...plan, builds: [...plan.builds, b.name] }, scale)[b.name],
+        ]),
+      ),
+    [plan, scale],
+  );
   if (!builds.length) return null;
 
   return (
     <>
-      <h3 data-q="row" className="mt-3 text-[10.5px] tracking-[.08em] text-muted">
-        {plan.builds.length ? "WE COULD ALSO START" : "WE COULD START"}
-      </h3>
-      <ul data-q="row">
+      <ListHead
+        data-q="row"
+        left={`${plan.builds.length ? "We could also start" : "We could start"} · ${builds.length}`}
+        right="Done in"
+        className={className}
+      />
+      <ul data-q="row" className="mt-1">
         {builds.map((b) => (
-          <li key={b.name} className="border-t border-rowline">
-            <Link to={`/build/${buildSlug(b.name)}`} className="flex items-baseline gap-3 py-2">
-              <span className="min-w-0 grow text-[13.5px] leading-snug">
-                {b.name}
-                <span className="block text-[12px] text-muted">
-                  {b.what}
-                  {b.kt ? ` ${b.kt} kt of our 20.` : ""}
-                </span>
-              </span>
-              <span aria-hidden className="shrink-0 self-center text-muted">
-                ›
-              </span>
+          <li key={b.name} className="border-t border-faint">
+            <Link to={`/build/${buildSlug(b.name)}`} className="block py-2.5">
+              <Face
+                dot="border border-you"
+                name={<b className="font-semibold">{b.name}</b>}
+                line={`${b.what}${b.kt ? ` ${b.kt} kt of our 20.` : ""}`}
+                right={by[b.name] == null ? "past Year 40" : realTime(by[b.name]!)}
+              />
             </Link>
           </li>
         ))}

@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import { type Aim, focusable, pointer, Story, WASH } from "@/components/picks";
+import { Face } from "@/components/tab-head";
 import { realTime, tenths, YEAR_0 } from "@/lib/game/clock";
 import { SENDS } from "@/lib/game/knocks";
 import { buildSlug } from "@/lib/game/plan";
@@ -16,8 +17,6 @@ export interface Row {
   /** Years from Year 0. Null past 40 Years. */
   at: number | null;
   kind: "build" | "send" | "reply";
-  /** A build's place in the order, from 1. */
-  n?: number;
   /** A message's name, the decimal year we sent it, and its star's distance in light-years. */
   msg?: string;
   sent?: number;
@@ -92,7 +91,8 @@ function Journey({ row, now, shown }: { row: Row; now: number; shown: boolean })
   );
 }
 
-/** A row: a build's tap opens its page, and a message's shows it on the map and opens its story. */
+/** A row, with Scan's face: a build's tap opens its page, and a message's shows it on the map and opens its story. A
+ *  build counts down to done in play time, as Scan's leads count light's time. */
 export function Item({ row, now, began, aim }: { row: Row; now: number; began: boolean; aim?: Aim }) {
   const done = over(row, now);
   const build = row.kind === "build";
@@ -103,33 +103,29 @@ export function Item({ row, now, began, aim }: { row: Row; now: number; began: b
         ? build
           ? "done"
           : "landed"
-        : began
-          ? `in ${realTime(row.at - now)}`
-          : `Year ${tenths(row.at)}`;
+        : build
+          ? realTime(row.at - now)
+          : began
+            ? `in ${realTime(row.at - now)}`
+            : `Year ${tenths(row.at)}`;
   const head = (
-    <div className="flex min-w-0 items-baseline justify-between gap-3">
-      <span className="min-w-0 text-[13.5px] leading-snug">
-        <b className={`font-medium ${row.kind === "reply" ? "text-other" : ""}`}>
-          {row.n ? `${row.n} · ${row.name}` : row.name}
-        </b>
-        <span className="block text-[12px] text-muted">{row.note}</span>
-      </span>
-      <span className={`shrink-0 text-right font-mono text-[11px] tabular-nums ${done ? "text-you" : "text-page-ink2"}`}>
-        {when}
-      </span>
-      {build && (
-        <span aria-hidden className="shrink-0 self-center text-muted">
-          ›
-        </span>
-      )}
-    </div>
+    <Face
+      dot={row.kind === "reply" ? "bg-other" : "bg-you"}
+      name={<b className="font-semibold">{row.name}</b>}
+      line={row.note}
+      right={<span className={done ? "text-you" : ""}>{when}</span>}
+      more={build}
+    />
   );
+  // The thread runs under the words, clear of the dot.
   if (build)
     return (
-      <li data-q="row" data-key={row.key} className="border-t border-rowline">
-        <Link to={`/build/${buildSlug(row.name)}`} className="block py-2">
+      <li data-q="row" data-key={row.key} className="border-t border-faint">
+        <Link to={`/build/${buildSlug(row.name)}`} className="block py-2.5">
           {head}
-          <Journey row={row} now={now} shown={false} />
+          <div className="pl-5">
+            <Journey row={row} now={now} shown={false} />
+          </div>
         </Link>
       </li>
     );
@@ -139,21 +135,25 @@ export function Item({ row, now, began, aim }: { row: Row; now: number; began: b
       data-key={row.key}
       {...(aim && pointer(aim))}
       {...(aim && focusable(aim))}
-      className={`group border-t border-rowline py-2 outline-none transition-[background-color,box-shadow] duration-200 ${aim ? "cursor-pointer" : ""} ${aim?.lit ? WASH : ""}`}
+      className={`group border-t border-faint py-2.5 outline-none transition-[background-color,box-shadow] duration-200 ${aim ? "cursor-pointer" : ""} ${aim?.lit ? WASH : ""}`}
     >
       {head}
-      <Journey row={row} now={now} shown={!!aim?.shown} />
+      <div className="pl-5">
+        <Journey row={row} now={now} shown={!!aim?.shown} />
+      </div>
       {row.msg && SENDS[row.msg] && (
-        <Story
-          lines={[
-            ["HOLDS", SENDS[row.msg].holds],
-            ["WHY", SENDS[row.msg].why],
-            ["FROM", SENDS[row.msg].from],
-            ["SINCE", SENDS[row.msg].since],
-          ]}
-          tone={row.kind === "reply" ? "other" : "you"}
-          open={!!aim?.shown}
-        />
+        <div className="pl-5">
+          <Story
+            lines={[
+              ["HOLDS", SENDS[row.msg].holds],
+              ["WHY", SENDS[row.msg].why],
+              ["FROM", SENDS[row.msg].from],
+              ["SINCE", SENDS[row.msg].since],
+            ]}
+            tone={row.kind === "reply" ? "other" : "you"}
+            open={!!aim?.shown}
+          />
+        </div>
       )}
     </li>
   );
