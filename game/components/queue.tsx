@@ -1,13 +1,15 @@
 import { useMemo, useRef } from "react";
 import { useGame } from "@/components/game-provider";
 import { Item, type Row } from "@/components/journey";
-import { Settings, Unqueued, useSchedule } from "@/components/picks";
-import { BUILDS, EMPTY, SEARCHES, STUDIES } from "@/lib/game/plan";
+import { Unqueued, useSchedule } from "@/components/picks";
+import { BUILDS, EMPTY } from "@/lib/game/plan";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
 
 // The queue: what we plan to start at Year 0, each on its whole journey from Year 0. A tap on a build opens its page,
 // where it comes in or out of the queue, and what we could also start waits below. Our messages already on their way
-// moved to Reach, and the one observation to Fomalhaut's lead on Scan, 2026-10-18.
+// moved to Reach, and the one observation to Fomalhaut's lead on Scan, 2026-10-18. The Mind's studies keep a tenth of
+// our thought on their own, and what idle instruments sweep waits until sweeps are built, so neither is ours to set
+// here, 2026-10-19.
 
 function rowsOf(plan: typeof EMPTY, done: Record<string, number | null>): Row[] {
   return plan.builds.map((name, i) => ({
@@ -58,8 +60,6 @@ export function Queue() {
   );
 
   if (!past) return <div className="min-h-[120px]" />;
-  const studies = STUDIES.find(([s]) => s === plan.studies)?.[1] ?? `${plan.studies}`;
-  const search = SEARCHES.find((s) => s.id === plan.search)!;
 
   return (
     <div ref={root} className="relative">
@@ -78,20 +78,6 @@ export function Queue() {
         </p>
       )}
       {!began && <Unqueued />}
-
-      {began ? (
-        <dl
-          data-q="row"
-          className="mt-3 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 border-t border-rowline pt-2 text-[12.5px]"
-        >
-          <dt className="text-muted">Studies</dt>
-          <dd>{plan.studies ? `${studies} of our thought` : "None"}</dd>
-          <dt className="text-muted">When idle</dt>
-          <dd>{search.label}</dd>
-        </dl>
-      ) : (
-        <Settings />
-      )}
     </div>
   );
 }

@@ -397,12 +397,13 @@ Settled 2026-10-13.
 - **Four ways to learn, from widest to closest.** A search sweeps many targets for one kind of sign. An observation points one instrument at one target. A study works through data already in hand. An inquiry goes there.
 - **An observation is ordered.** One instrument, one target at a time. What comes back is a reading. The Mind offers observations and never starts one unasked.
 - **A study runs on its own.** The Mind works through the data Earth holds: old records at first, then each new reading as it lands. What comes back is a finding. Settled 2026-10-13.
-  - *Thought is its budget.* The player sets a share of compute for studies. More means faster findings, and less left for builds.
+  - *Thought is its budget.* A tenth of Earth's thought, fixed. More thought for the Mind comes from building Thought Fields.
+    - *Revised 2026-10-19:* the player set the share until then. Findings aren't built yet, so a bigger share only slowed builds.
   - *Why this is not acting unasked.* A study points no instrument, builds nothing and sends nothing. The Mind says what it is studying next.
   - *What limits it.* Data. Once the records are read, more thought finds little until new readings arrive. This is reasoning, not yet a rule.
   - *Sample:* a tenth of thought, and about one finding a minute in the first session.
   - Set aside: studies in the Mind's own order with no budget, and studies the player orders one by one.
-- **A search is a standing order for an idle instrument.** Settled 2026-10-13. Each instrument has a sweep it falls back to: many targets, one kind of sign. The player sets it once. Any observation interrupts it. What comes back is a candidate.
+- **A search is a standing order for an idle instrument.** Settled 2026-10-13. Each instrument has a sweep it falls back to: many targets, one kind of sign. The player sets it once, once sweeps are built. Any observation interrupts it. What comes back is a candidate.
   - *Why:* real observatories don't idle. Between pointed work they sweep, as Breakthrough Listen swept 1,327 near stars and Terra Hunting watches 40 for ten years.
   - *The trade is real.* The same instrument hours spread wide go shallow, and an observation takes the instrument away from its sweep.
   - *Candidates can be wrong.* Hephaistos's best waste-heat candidates turned out to be background galaxies.
@@ -717,9 +718,9 @@ Settled 2026-10-10.
     - *The Mind hears it too.* Each send carries what the plan observes, and the Mind is told the named leads' words, before and after.
     - Fomalhaut's Year 0 explanations are now the mock's four, so its reading can move them.
     - Not built yet: other readings, studies, our messages arriving, and ordering the Year of watching it offers.
-- **Planning.** The player queues builds, observations, standing orders and what wakes them, sets how much thought goes to studies, and sets what each instrument searches when idle. Nothing happens yet.
+- **Planning.** The player queues builds, observations, standing orders and what wakes them. Nothing happens yet.
   - *Built 2026-10-17.* The Mind says what it would start with, from the charter's strongest lean, and marks those builds "we would". It queues nothing. One tap queues its picks, for the player to change.
-  - The player picks builds in order, the one observation open at Year 0, a share of thought for studies, and what idle instruments sweep.
+  - The player picks builds in order, and the one observation open at Year 0.
   - *On the Build tab, settled 2026-10-18.* Planning was its own screen at the end of the opening. It drew the queue a second time, and picking and watching sat in two places. Now "Plan our waking" opens the shell on Build, and planning happens there.
     - The Mind's advice sits at the top until Begin, with "Queue what we would start with" and "Ask the Mind".
     - Below the queue, what we could also start. Every change saves at once.
@@ -728,7 +729,7 @@ Settled 2026-10-10.
     - *Places for the last two, 2026-10-18.* The Laser Sail Array stands on the Chajnantor plateau in the Atacama, beside ALMA, high, dry and southern, as Starshot wanted. The Probe Yard flies on the Orbital Yard's path, 1.5° behind it.
     - *Names in Title Case, 2026-10-18.* Builds are proper names: All-Sky Watch, Thought Fields, Moon Vault. The pace and its worlds keep their first names.
     - *Thought fields, named 2026-10-18.* The data center build is Thought fields: halls that think, spread row on row across farmland, as Close View shows them. The pace and its worlds still call each one a data center. Saves that queued one keep it.
-    - Studies and idle sweeps are chips under the messages already on their way.
+    - *Studies and idle sweeps, dropped 2026-10-19.* Both were chips under the queue, and neither changed anything but slower builds. Studies keep a tenth of our thought on their own. Sweeps come back as a choice once they are built. The two starting plans that gave studies a fifth now give them the same tenth.
   - Not built yet: standing orders and what wakes them.
   - *The queue, built 2026-10-17.* The Build tab draws it. Each queued build and the observation is a thread from Year 0 to its done Year, on one axis, with Earth's messages already on their way below. A now line waits at Year 0. After Begin it moves at 5 minutes a Year, the threads fill behind it, and each row counts down in real time, then reads done.
   - *Changing the plan.* Before Begin, the plan changes in place on Build. After Begin, a change is an order, not built yet.

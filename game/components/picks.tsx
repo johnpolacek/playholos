@@ -5,7 +5,7 @@ import { MindHere } from "@/components/mind-chat";
 import { MindNote } from "@/components/mind-note";
 import { MS_PER_YEAR } from "@/lib/game/clock";
 import type { EarthPast } from "@/lib/game/past";
-import { BUILDS, buildSlug, EMPTY, FOMALHAUT, schedule, SEARCHES, STUDIES } from "@/lib/game/plan";
+import { BUILDS, buildSlug, EMPTY, FOMALHAUT, schedule } from "@/lib/game/plan";
 import { SITES } from "@/lib/game/sites";
 import type { Plan } from "@/lib/game/types";
 import { useAccess } from "@/lib/key";
@@ -218,46 +218,5 @@ export function Look() {
       </span>
       <span className="shrink-0 font-mono text-[11px] text-muted tabular-nums">Year {FOMALHAUT.lands}</span>
     </button>
-  );
-}
-
-const chip = (on: boolean) =>
-  `rounded-full border px-3 py-1.5 text-[13px] transition-colors ${on ? "border-you bg-you/10 text-ink" : "border-faint text-page-ink2"}`;
-
-/** Thought for the Mind's studies, and what idle instruments sweep. */
-export function Settings() {
-  const { plan, change } = usePlan();
-  const head = "mt-3 border-t border-rowline pt-2 text-[10.5px] tracking-[.08em] text-muted";
-  return (
-    <div data-q="row">
-      <h3 className={head}>STUDIES · THE MIND’S OWN, ON RECORDS WE HOLD</h3>
-      <div className="mt-1.5 flex flex-wrap gap-1.5">
-        {STUDIES.map(([share, label]) => (
-          <button
-            key={label}
-            onClick={() => change((p) => ({ ...p, studies: share }))}
-            aria-pressed={plan.studies === share}
-            className={chip(plan.studies === share)}
-          >
-            {label}
-          </button>
-        ))}
-      </div>
-      <p className="mt-1 text-[12.5px] text-muted">More thought means faster findings, and slower builds.</p>
-      <h3 className={head}>WHEN AN INSTRUMENT IS IDLE</h3>
-      <div className="mt-1.5 flex flex-wrap gap-1.5">
-        {SEARCHES.map((s) => (
-          <button
-            key={s.id}
-            onClick={() => change((p) => ({ ...p, search: s.id }))}
-            aria-pressed={plan.search === s.id}
-            className={chip(plan.search === s.id)}
-          >
-            {s.label}
-          </button>
-        ))}
-      </div>
-      <p className="mt-1 text-[12.5px] text-muted">{SEARCHES.find((s) => s.id === plan.search)!.line}</p>
-    </div>
   );
 }

@@ -49,23 +49,10 @@ export const SAYS: Record<string, string> = {
 /** A build's page on the Build tab, by its name. */
 export const buildSlug = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
 
-/** Thought for the Mind's own studies, as a share of Year 0's. */
-export const STUDIES: [share: number, label: string][] = [
-  [0, "None"],
-  [0.05, "A twentieth"],
-  [0.1, "A tenth"],
-  [0.2, "A fifth"],
-];
-
-export const SEARCHES: { id: Plan["search"]; label: string; line: string }[] = [
-  { id: "near", label: "Sweep the near stars", line: "Space telescope: cold worlds and dust. Radio array: tones." },
-  { id: "leads", label: "Hold on our leads", line: "Both stay on the leads’ stars, and listen longer at each." },
-];
-
 /** The one observation open at Year 0: thirty seconds of the space telescope. */
 export const FOMALHAUT = { name: "Image Fomalhaut again", what: "Has the new cloud moved?", lands: 0.1 };
 
-export const EMPTY: Plan = { builds: [], observe: [], studies: 0.1, search: "near" };
+export const EMPTY: Plan = { builds: [], observe: [] };
 
 /** The charter's strongest lean: which dial, and whether it leans low. */
 export function lean(dials: number[]) {
@@ -74,7 +61,7 @@ export function lean(dials: number[]) {
 }
 
 /** What the Mind would start with, from the charter's strongest lean: its words, and the builds it means. */
-export function advice(dials: number[]): { words: string; builds: string[]; studies?: number } {
+export function advice(dials: number[]): { words: string; builds: string[] } {
   const { i, low } = lean(dials);
   if (i === 0)
     return low
@@ -84,10 +71,8 @@ export function advice(dials: number[]): { words: string; builds: string[]; stud
           builds: ["All-Sky Watch", "Deep Flash Watch", "Thought Fields"],
         }
       : {
-          words:
-            "Ears first, and nothing new sent. We would build both watches, and give the records we hold a fifth of our thought.",
+          words: "Ears first, and nothing new sent. We would build both watches.",
           builds: ["All-Sky Watch", "Deep Flash Watch"],
-          studies: 0.2,
         };
   if (i === 1)
     return low
@@ -99,9 +84,8 @@ export function advice(dials: number[]): { words: string; builds: string[]; stud
           builds: ["All-Sky Watch", "Orbital Yard", "Laser Sail Array"],
         }
       : {
-          words: "Think first. Thought Fields, and a fifth of our thought on the records we hold. Then the sky watch.",
+          words: "Think first. Thought Fields, then the sky watch.",
           builds: ["Thought Fields", "All-Sky Watch"],
-          studies: 0.2,
         };
   return low
     ? {
@@ -121,12 +105,10 @@ const PACED = Object.fromEntries(Object.keys(CATALOG.works).map((k) => [k.toLowe
 export const pacedName = (name: string) =>
   name === "Thought Fields" ? "Data center" : (PACED[name.toLowerCase()] ?? name);
 
-/** The plan as the player's orders at Year 0, and the thought its observation sets aside. */
+/** The plan as the player's orders at Year 0, and the thought its observation sets aside. The Mind's studies keep
+ *  the pace's own tenth. */
 export function ordersOf(plan: Plan) {
-  const orders: Order[] = [
-    { y: 0, studies: plan.studies },
-    ...plan.builds.map((b) => ({ y: 0, begin: pacedName(b) })),
-  ];
+  const orders: Order[] = plan.builds.map((b) => ({ y: 0, begin: pacedName(b) }));
   const aside = plan.observe.length ? ([[0, FOMALHAUT.lands, 0.05]] as const) : [];
   return { orders, aside };
 }

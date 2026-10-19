@@ -186,7 +186,6 @@ export function Tour({ onClose }: { onClose(): void }) {
                   change((p) => ({
                     ...p,
                     builds: [...p.builds, ...picks.filter((b) => !p.builds.includes(b))],
-                    studies: mind.studies ?? p.studies,
                   }))
                 }
                 className="mt-3 h-11 rounded-full border border-you/50 text-[14px] text-you transition-colors hover:bg-you/10"
