@@ -5,7 +5,7 @@ import { LeadArt } from "@/components/lead-art";
 import { LeadMark } from "@/components/marks";
 import { Look } from "@/components/picks";
 import { useLeads } from "@/components/scan";
-import { realTime } from "@/lib/game/clock";
+import { span } from "@/lib/game/clock";
 import { ODDS, type Odds } from "@/lib/game/leads";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
 
@@ -104,7 +104,7 @@ export function LeadPage({ slug }: { slug: string }) {
         <h1 className="text-[19px] leading-snug font-medium">{lead.what}</h1>
       </div>
       <p data-m className="mt-0.5 text-[13.5px] text-page-ink2">
-        {lead.star} · {lead.ly.toFixed(1)} ly · light takes <span className="font-mono tabular-nums">{realTime(lead.ly)}</span>
+        {lead.star} · {lead.ly.toFixed(1)} ly · reached in <span className="font-mono tabular-nums">{span(lead.ly)}</span>
       </p>
 
       {read && (

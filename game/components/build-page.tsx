@@ -6,7 +6,7 @@ import { BuildMark, buildTone } from "@/components/marks";
 import { MindNote } from "@/components/mind-note";
 import { buildStory, Story, toggleBuild, usePlan, useSchedule } from "@/components/picks";
 import { placedOf, useWorks } from "@/components/works";
-import { realTime, tenths } from "@/lib/game/clock";
+import { span, tenths } from "@/lib/game/clock";
 import { CLOSE } from "@/lib/game/close";
 import { BUILDS, buildSlug, SAYS, schedule } from "@/lib/game/plan";
 import { SITES } from "@/lib/game/sites";
@@ -22,12 +22,12 @@ const ORDINAL = ["first", "second", "third", "fourth", "fifth", "sixth", "sevent
 
 /** Where the build stands: in our order or not, and when it is done, in Years and in play time, as the list counts. */
 function status(open: boolean, at: number, by: number | null | undefined, year: number) {
-  const when = by == null ? "after Year 40" : `by Year ${tenths(by)}, ${realTime(by)} after we begin`;
+  const when = by == null ? "after Year 40" : `by Year ${tenths(by)}, ${span(by)} after we begin`;
   if (open)
     return at < 0 ? `Last in our order, it would be done ${when}.` : `Queued, ${ORDINAL[at]} in our order. Done ${when}.`;
   if (at < 0) return "Not in our order.";
   if (by == null) return "Under way. Done after Year 40.";
-  return year >= by ? "Done." : `Under way. Done in ${realTime(by - year)}.`;
+  return year >= by ? "Done." : `Under way. Done in ${span(by - year)}.`;
 }
 
 /** A build's place in our order, and before Begin, the button that adds it or takes it out. When it is added or taken

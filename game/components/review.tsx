@@ -4,7 +4,7 @@ import { MindNote } from "@/components/mind-note";
 import { LeadMark } from "@/components/marks";
 import { Look } from "@/components/picks";
 import { useLeads } from "@/components/scan";
-import { realTime } from "@/lib/game/clock";
+import { span } from "@/lib/game/clock";
 import {
   gsap,
   prefersReducedMotion,
@@ -214,10 +214,8 @@ export function Review({ onClose }: { onClose(): void }) {
               </h2>
             </div>
             <p data-r className="mt-0.5 text-[13.5px] text-page-ink2">
-              {lead.star} · {lead.ly.toFixed(1)} ly · light takes{" "}
-              <span className="font-mono tabular-nums">
-                {realTime(lead.ly)}
-              </span>
+              {lead.star} · {lead.ly.toFixed(1)} ly · reached in{" "}
+              <span className="font-mono tabular-nums">{span(lead.ly)}</span>
             </p>
             <div data-r className="mt-3">
               <MindNote className="text-[14.5px] leading-snug">

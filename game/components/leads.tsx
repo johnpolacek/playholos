@@ -6,7 +6,7 @@ import { LeadMark } from "@/components/marks";
 import { Face } from "@/components/tab-head";
 import { FILL, Spread } from "@/components/spread";
 import type { Dials, Mark } from "@/lib/drift";
-import { realTime } from "@/lib/game/clock";
+import { span } from "@/lib/game/clock";
 import { type Lead, leadsOf, type Reading, skyId } from "@/lib/game/leads";
 import { LEADS_SOURCES } from "@/lib/game/sources";
 import type { FeltWorld } from "@/lib/sim/types";
@@ -15,8 +15,17 @@ import { prefersReducedMotion, rise, riseFrom, useStage } from "@/lib/motion";
 // "What doesn't fit?": the Mind's answer, drawn. The stars within 50 light-years from above, and Earth's real leads
 // lit one by one, each with a thread out from Sol: a world on a stretched orbit, every world the planet hunters felt
 // by 2040, nearest first, Fomalhaut's collisions, and the first star that could answer our messages. Beside each, how
-// long light takes to get there, in play time: what a call would cost. Picking one shows its path out from Sol in
+// long a message takes to reach it, in play time, and its distance: what a call would cost. Picking one shows its path out from Sol in
 // depth and opens what we measured of it.
+
+/** How long a message takes to reach a star, one way, in play time, and under it how far it is: 1h 38m, 19.7 ly.
+ *  Stacked, so on a phone the names keep their one line. */
+const reach = (ly: number) => (
+  <span className="flex flex-col items-end">
+    <span>{span(ly)}</span>
+    <span className="mt-[3px] text-[10px] text-muted/80">{ly.toFixed(1)} ly</span>
+  </span>
+);
 
 /** The stars within 50 light-years from above, with Earth's leads lit as the dials say, each named. */
 export function LeadsMap({
@@ -126,7 +135,7 @@ export function LeadList({
             l.line
           )
         }
-        right={realTime(l.ly)}
+        right={reach(l.ly)}
       />
     );
   };
@@ -171,7 +180,7 @@ export function LeadList({
                 <span className="min-w-0 grow truncate text-[15px] leading-snug">
                   <b className="font-semibold">{l.what}</b> · {l.star}
                 </span>
-                <span className="shrink-0 font-mono text-[11px] text-muted tabular-nums">{realTime(l.ly)}</span>
+                <span className="shrink-0 font-mono text-[11px] text-muted tabular-nums">{reach(l.ly)}</span>
                 <span className={`shrink-0 text-muted transition-transform duration-300 ${open ? "rotate-90" : ""}`}>
                   ›
                 </span>
@@ -310,7 +319,7 @@ export function Leads({ onNext }: { onSkip(): void; onNext(): void }) {
           className="mt-4 flex justify-between font-mono text-[10px] tracking-[.1em] text-muted uppercase"
         >
           <span>Leads · {leads.length}</span>
-          <span>Light takes</span>
+          <span>Reached in</span>
         </div>
         <LeadList leads={leads} dials={dials} fold />
         <p data-m="last" className="mt-3 text-[15px] leading-snug text-page-ink2">

@@ -74,7 +74,7 @@ export function ScanMap({ className }: { className: string }) {
   return ids.length ? <LeadsMap dials={dials} ids={ids} onReady={onReady} className={className} /> : null;
 }
 
-/** The Scan tab: Earth's leads, and how long light takes to reach each. Each opens its own page. */
+/** The Scan tab: Earth's leads, and how long a message takes to reach each. Each opens its own page. */
 export function Scan() {
   const { leads, dials, readings, fresh } = useLeads();
   const { save, year } = useGame();
@@ -87,7 +87,7 @@ export function Scan() {
       {(year === null || !save?.reviewed) && (
         <Walk to="/?review" title="Review our scans" line="With the Mind, one lead at a time." done={!!save?.reviewed} />
       )}
-      <ListHead left={`Leads · ${leads.length}`} right="Light takes" className="mt-1" />
+      <ListHead left={`Leads · ${leads.length}`} right="Reached in" className="mt-1" />
       <LeadList leads={leads} dials={dials} readings={readings} fresh={fresh} />
     </>
   );

@@ -3,7 +3,7 @@ import { Link } from "react-router";
 import { useGame } from "@/components/game-provider";
 import { BuildMark, buildTone } from "@/components/marks";
 import { Face, ListHead } from "@/components/tab-head";
-import { MS_PER_YEAR, realTime } from "@/lib/game/clock";
+import { MS_PER_YEAR, span } from "@/lib/game/clock";
 import type { EarthPast } from "@/lib/game/past";
 import { BUILDS, buildSlug, EMPTY, FOMALHAUT, schedule } from "@/lib/game/plan";
 import { SITES } from "@/lib/game/sites";
@@ -176,7 +176,7 @@ export function Unqueued({ scale, className = "" }: { scale: number; className?:
                 tone={buildTone(b.name, false)}
                 name={<b className="font-semibold">{b.name}</b>}
                 line={`${b.what}${b.kt ? ` ${b.kt} kt of our 20.` : ""}`}
-                right={by[b.name] == null ? "past Year 40" : realTime(by[b.name]!)}
+                right={by[b.name] == null ? "past Year 40" : span(by[b.name]!)}
               />
             </Link>
           </li>

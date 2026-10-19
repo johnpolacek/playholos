@@ -2,7 +2,7 @@ import { Link } from "react-router";
 import { type Aim, focusable, pointer, Story, WASH } from "@/components/picks";
 import { BeamMark, BuildMark, buildBlue } from "@/components/marks";
 import { Face } from "@/components/tab-head";
-import { realTime, tenths, YEAR_0 } from "@/lib/game/clock";
+import { span, tenths, YEAR_0 } from "@/lib/game/clock";
 import { SENDS } from "@/lib/game/knocks";
 import { buildSlug } from "@/lib/game/plan";
 
@@ -105,9 +105,9 @@ export function Item({ row, now, began, aim }: { row: Row; now: number; began: b
           ? "done"
           : "landed"
         : build
-          ? realTime(row.at - now)
+          ? span(row.at - now)
           : began
-            ? `in ${realTime(row.at - now)}`
+            ? `in ${span(row.at - now)}`
             : `Year ${tenths(row.at)}`;
   const head = (
     <Face
