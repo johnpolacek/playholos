@@ -25,7 +25,9 @@ const BUTTON = "absolute right-2.5 bottom-3 h-8 rounded-full border border-faint
 // star, and a build to where it would stand. On Reach it flies out from Earth to the nearest star. Elsewhere it rests
 // at a stop, turning slowly, travels outward a stop a tap, and turns with a drag.
 export function MapStrip() {
-  const path = useLocation().pathname;
+  const { pathname: path, search } = useLocation();
+  // The walkthroughs, the Scan review and the Projects tour, need room under the map on a phone for the Mind's words.
+  const guided = /[?&](review|tour)\b/.test(search);
   const scan = path === "/" || path.startsWith("/lead/");
   const beams = useBeams();
   const aimed = path === "/projects" && beams.picked !== null;
@@ -34,11 +36,12 @@ export function MapStrip() {
   const reach = useReach();
   const [tall, setTall] = useState(false);
 
-  // Tall, the strip opens wider at its handle. Wide, the map fills the left of the screen, and needs no handle.
+  // Tall, the strip opens wider at its handle, and gives a walkthrough more room. Wide, the map fills the left of the
+  // screen, and needs no handle.
   return (
     <div
       data-shell="map"
-      className={`relative shrink-0 overflow-hidden border-b border-faint transition-[height] duration-300 wide:col-start-1 wide:row-span-2 wide:row-start-2 wide:h-auto wide:border-b-0 ${tall ? "h-[72%]" : "h-[45%]"}`}
+      className={`relative shrink-0 overflow-hidden border-b border-faint transition-[height] duration-300 wide:col-start-1 wide:row-span-2 wide:row-start-2 wide:h-auto wide:border-b-0 ${tall ? "h-[72%]" : guided ? "h-[34%]" : "h-[45%]"}`}
     >
       {scan ? (
         <>
