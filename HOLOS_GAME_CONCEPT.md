@@ -419,6 +419,7 @@ Settled 2026-10-13.
     - *The Mind advises from the charter, and says what it costs.* A charter leaning to reach: "we would queue" the sail array, which takes no matter. Otherwise: "we would wait on both". It names the build the probe yard slows most, and by how much, and warns when the vault and the yard take all 20 kt.
     - *In the first test game, with nothing queued:* sails arrive at Year 39.2 and their word is home at 43.6. The probe's word is home at 80.2.
     - *Once the probe yard is queued, the Mind says what would bring it sooner:* in the first test game, an orbital yard, 6 Years.
+    - *Reach first, on Projects, settled 2026-10-18:* the all-sky watch, the orbital yard, then the sail array last. It was a launch complex, a yard and the sky watch, but lift moves no probe date. Listening first costs the sails about a Year, and keeps the sky watch at Year 4.2 instead of 6.0. The yard cuts the probe yard by a quarter, for later.
     - *Lift isn't what holds probes back.* A flyby probe is about 100 t, against the 20 kt we hold. A launch complex moves no date.
     - Not built yet: the map flying out past Voyager to the nearest stars, beginning a road after Begin, and what happens when a probe arrives.
   - Set aside: an inquiry as a question pinned on a place, which the Mind then pursues by every means. Worth its own round later. And leaving the word unused.

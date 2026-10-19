@@ -71,8 +71,11 @@ export function advice(dials: number[]): { words: string; builds: string[]; stud
   if (i === 1)
     return low
       ? {
-          words: "Reach first. A launch complex and a yard carry everything after them. We would add the sky watch.",
-          builds: ["Launch complex", "Orbital yard", "All-sky watch"],
+          // Lift isn't what holds probes back, so no launch complex. Listening first, and the array last, costs the sails
+          // about a Year and keeps the sky watch at full pace. Settled 2026-10-18.
+          words:
+            "Reach first. Sails are our soonest road to the nearest star, and the array takes no matter. We would listen first, build a yard for the probes to come, and queue the array last.",
+          builds: ["All-sky watch", "Orbital yard", "Laser sail array"],
         }
       : {
           words: "Think first. A data center, and a fifth of our thought on the records we hold. Then the sky watch.",

@@ -27,6 +27,9 @@ const SAYS: Record<string, string> = {
   "Launch complex": "It doubles what we lift to orbit. Everything we build up there waits on lift.",
   "Orbital yard": "It builds in orbit a quarter faster. It pays most if we mean to build a lot up there.",
   "Moon vault": "A copy of us, out of reach of anything that hits Earth. It takes half the matter we hold in orbit.",
+  "Laser sail array":
+    "Our soonest road to the nearest star, and it takes no matter. Last in line, it barely slows what is before it.",
+  "Probe yard": "It builds and fuels probes in orbit. Its want is large: even last in line, it slows every build before it.",
 };
 
 const ORDINAL = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh"];
