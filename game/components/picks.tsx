@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router";
 import { useGame } from "@/components/game-provider";
+import { BuildMark, buildTone } from "@/components/marks";
 import { Face, ListHead } from "@/components/tab-head";
 import { MS_PER_YEAR, realTime } from "@/lib/game/clock";
 import type { EarthPast } from "@/lib/game/past";
@@ -141,8 +142,8 @@ export const buildStory = (name: string): [string, string | undefined][] => {
     : [];
 };
 
-/** What we could start and haven't queued, each with an open dot, and when it would be done if we queued it now,
- *  last in line. A tap on a build opens its page. */
+/** What we could start and haven't queued, each mark in its color, dimmer, and when it would be done if we queued it
+ *  now, last in line. A tap on a build opens its page. */
 export function Unqueued({ scale, className = "" }: { scale: number; className?: string }) {
   const { plan } = usePlan();
   const builds = BUILDS.filter((b) => !plan.builds.includes(b.name));
@@ -171,7 +172,8 @@ export function Unqueued({ scale, className = "" }: { scale: number; className?:
           <li key={b.name} className="border-t border-faint">
             <Link to={`/build/${buildSlug(b.name)}`} className="block py-2.5">
               <Face
-                dot="border border-you"
+                mark={<BuildMark name={b.name} />}
+                tone={buildTone(b.name, false)}
                 name={<b className="font-semibold">{b.name}</b>}
                 line={`${b.what}${b.kt ? ` ${b.kt} kt of our 20.` : ""}`}
                 right={by[b.name] == null ? "past Year 40" : realTime(by[b.name]!)}

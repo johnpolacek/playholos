@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import { type Aim, focusable, pointer, Story, WASH } from "@/components/picks";
+import { BeamMark, BuildMark, buildBlue } from "@/components/marks";
 import { Face } from "@/components/tab-head";
 import { realTime, tenths, YEAR_0 } from "@/lib/game/clock";
 import { SENDS } from "@/lib/game/knocks";
@@ -110,20 +111,29 @@ export function Item({ row, now, began, aim }: { row: Row; now: number; began: b
             : `Year ${tenths(row.at)}`;
   const head = (
     <Face
-      dot={row.kind === "reply" ? "bg-other" : "bg-you"}
+      mark={
+        build ? (
+          <BuildMark name={row.name} />
+        ) : (
+          // A message moves only while it is pointed at or shown, so the list stays calm.
+          <BeamMark back={row.kind === "reply"} still={!aim?.lit} />
+        )
+      }
+      tone={row.kind === "reply" ? "text-other" : "text-you"}
       name={<b className="font-semibold">{row.name}</b>}
       line={row.note}
       right={<span className={done ? "text-you" : ""}>{when}</span>}
       more={build}
     />
   );
-  // The thread runs under the words, clear of the dot.
+  // The thread runs under the words, clear of the mark. A build's color stands in for our blue, so its mark, thread
+  // and done take it.
   if (build)
     return (
-      <li data-q="row" data-key={row.key} className="border-t border-faint">
+      <li data-q="row" data-key={row.key} style={buildBlue(row.name)} className="border-t border-faint">
         <Link to={`/build/${buildSlug(row.name)}`} className="block py-2.5">
           {head}
-          <div className="pl-5">
+          <div className="pl-7">
             <Journey row={row} now={now} shown={false} />
           </div>
         </Link>
@@ -138,11 +148,11 @@ export function Item({ row, now, began, aim }: { row: Row; now: number; began: b
       className={`group border-t border-faint py-2.5 outline-none transition-[background-color,box-shadow] duration-200 ${aim ? "cursor-pointer" : ""} ${aim?.lit ? WASH : ""}`}
     >
       {head}
-      <div className="pl-5">
+      <div className="pl-7">
         <Journey row={row} now={now} shown={!!aim?.shown} />
       </div>
       {row.msg && SENDS[row.msg] && (
-        <div className="pl-5">
+        <div className="pl-7">
           <Story
             lines={[
               ["HOLDS", SENDS[row.msg].holds],

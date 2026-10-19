@@ -43,7 +43,8 @@ export function Walk({ to, title, line, done }: { to: string; title: string; lin
   );
 }
 
-/** A list's head: what it holds and how many, and what its right column counts. */
+/** A list's head: what it holds and how many, and what its right column counts, its edge on the counts' edge, clear
+ *  of the rows' ›. */
 export function ListHead({
   left,
   right,
@@ -53,24 +54,28 @@ export function ListHead({
   return (
     <div
       {...rest}
-      className={`flex justify-between font-mono text-[10px] tracking-[.1em] text-muted uppercase ${className}`}
+      className={`flex justify-between pr-5 font-mono text-[10px] tracking-[.1em] text-muted uppercase ${className}`}
     >
       <span>{left}</span>
-      <span>{right}</span>
+      {/* The tracking trails the last letter, so it hangs out by as much. */}
+      <span className="-mr-[.1em]">{right}</span>
     </div>
   );
 }
 
-/** A row's face: its dot, its name and line, its count on the right, and a › when it opens a page. */
+/** A row's face: its mark, its name and line, its count on the right, and a › when it opens a page. */
 export function Face({
-  dot,
+  mark,
+  tone,
   name,
   line,
   right,
   more = true,
 }: {
-  /** The dot's look: filled in our blue, or theirs, or an open ring. */
-  dot: string;
+  /** What it is, drawn, from marks.tsx. */
+  mark: React.ReactNode;
+  /** The mark's color: our blue, theirs, or muted until it's ours. */
+  tone: string;
   name: React.ReactNode;
   line: React.ReactNode;
   right: React.ReactNode;
@@ -78,13 +83,15 @@ export function Face({
 }) {
   return (
     <span className="flex items-baseline gap-3">
-      <span className={`size-2 shrink-0 translate-y-[-1px] rounded-full ${dot}`} />
+      {/* On the name's first line, centered on it. */}
+      <span className={`mt-[2px] shrink-0 self-start ${tone}`}>{mark}</span>
       <span className="flex min-w-0 grow flex-col">
         <span className="text-[15px] leading-snug">{name}</span>
         <span className="text-[13.5px] leading-snug text-page-ink2">{line}</span>
       </span>
       <span className="shrink-0 text-right font-mono text-[11px] text-muted tabular-nums">{right}</span>
-      {more && <span className="shrink-0 self-center text-muted">›</span>}
+      {/* As wide as the head leaves clear: 8px, and the 12px gap before it. */}
+      {more && <span className="w-2 shrink-0 self-center text-center text-muted">›</span>}
     </span>
   );
 }

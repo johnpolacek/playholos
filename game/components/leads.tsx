@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router";
 import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useGame } from "@/components/game-provider";
 import { SkyArt } from "@/components/sky";
+import { LeadMark } from "@/components/marks";
 import { Face } from "@/components/tab-head";
 import { FILL, Spread } from "@/components/spread";
 import type { Dials, Mark } from "@/lib/drift";
@@ -106,7 +107,8 @@ export function LeadList({
     const isNew = !!read && !!fresh?.has(read.id);
     return (
       <Face
-        dot={l.reply ? "bg-other" : "bg-you"}
+        mark={<LeadMark art={l.art} />}
+        tone={l.reply ? "text-other" : "text-you"}
         name={
           <>
             <b className="font-semibold">{l.what}</b> · {l.star}
@@ -163,9 +165,9 @@ export function LeadList({
                 aria-expanded={open}
                 className="flex w-full items-baseline gap-3 py-2.5 text-left"
               >
-                <span
-                  className={`size-2 shrink-0 translate-y-[-1px] rounded-full ${l.reply ? "bg-other" : "bg-you"}`}
-                />
+                <span className={`shrink-0 self-center ${l.reply ? "text-other" : "text-you"}`}>
+                  <LeadMark art={l.art} />
+                </span>
                 <span className="min-w-0 grow truncate text-[15px] leading-snug">
                   <b className="font-semibold">{l.what}</b> · {l.star}
                 </span>

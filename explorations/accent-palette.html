@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Accent Palette</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=SUSE:wght@100..800&display=swap" rel="stylesheet">
+<style>
+/* Offline, the game's own copies of the fonts. */
+@font-face { font-family: "SUSE Variable"; font-weight: 100 800; src: url("../game/node_modules/@fontsource-variable/suse/files/suse-latin-wght-normal.woff2") format("woff2"); }
+@font-face { font-family: "Plex Mono Local"; font-weight: 400; src: url("../game/node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2") format("woff2"); }
+
+/* Colors from game/app/globals.css. The game is always dark. */
+:root {
+  --page: #0b0c0d;
+  --page-ink2: #a9a59c;
+  --frame: #2a2b2e;
+  --paper: #121314;
+  --ink: #e6e3db;
+  --muted: #9c988f;
+  --faint: #34363a;
+  --panel: #17181a;
+  --rowline: #26282b;
+  --you: #5bb8d6;
+  --other: #e0a24a;
+  --sans: "SUSE", "SUSE Variable", sans-serif;
+  --mono: "IBM Plex Mono", "Plex Mono Local", monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: #070808; color: var(--ink); font-family: var(--sans); text-wrap: pretty; }
+p { margin: 0; }
+ul { list-style: none; margin: 0; padding: 0; }
+
+header { max-width: 1240px; margin: 0 auto; padding: 40px 16px 8px; }
+h1 { margin: 0; font-size: 22px; font-weight: 600; }
+header p { margin-top: 6px; color: var(--muted); font-size: 14px; line-height: 1.45; max-width: 70ch; }
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; }
+.tabs button { background: none; color: var(--muted); border: 1px solid var(--frame); border-radius: 999px; padding: 7px 13px; font: 13px var(--sans); cursor: pointer; }
+.tabs button[aria-pressed="true"] { color: var(--ink); border-color: var(--muted); background: #ffffff0a; }
+.tabs b { font-family: var(--mono); font-weight: 500; margin-right: 6px; color: var(--ink); }
+
+main { max-width: 1240px; margin: 0 auto; padding: 16px 16px 64px; display: grid; gap: 20px; grid-template-columns: minmax(0, 340px) repeat(2, minmax(0, 380px)); align-items: start; }
+@media (max-width: 1100px) { main { grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); } }
+.why { color: var(--page-ink2); font-size: 13.5px; line-height: 1.45; }
+.why strong { color: var(--ink); font-weight: 600; }
+.cap { font: 10px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 0 0 8px; }
+
+/* The palette */
+.sw { display: grid; grid-template-columns: 34px 1fr auto; gap: 2px 12px; align-items: center; padding: 10px 0; border-top: 1px solid var(--rowline); }
+.sw .chip { grid-row: span 2; width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; }
+.sw .chip svg { color: var(--panel); }
+.sw .nm { font-size: 14.5px; font-weight: 600; }
+.sw .hex { font: 11px var(--mono); color: var(--muted); text-align: right; }
+.sw .ds { font-size: 12.5px; color: var(--page-ink2); line-height: 1.35; }
+.sw .cr { font: 10.5px var(--mono); color: var(--muted); text-align: right; }
+
+/* The game's panel, as on a phone */
+.frame { background: var(--panel); border: 1px solid var(--rowline); border-radius: 16px; padding: 14px 16px 16px; }
+.tab { font-size: 11px; letter-spacing: .08em; color: var(--muted); padding: 2px 0 8px; }
+.walk { display: flex; align-items: center; gap: 12px; border: 1px solid rgb(91 184 214 / .5); border-radius: 12px; padding: 10px 12px; margin: 4px 0 8px; }
+.walk .t { font-size: 14.5px; }
+.walk .l { font-size: 12.5px; color: var(--page-ink2); }
+.walk .r { margin-left: auto; font: 10.5px var(--mono); letter-spacing: .06em; color: var(--you); }
+.lh { display: flex; justify-content: space-between; padding-right: 20px; font: 10px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-top: 4px; }
+.lh.gap { margin-top: 20px; }
+.rows { margin-top: 4px; }
+.row { display: flex; align-items: baseline; gap: 12px; padding: 10px 0; border-top: 1px solid var(--faint); }
+.row .mk { align-self: flex-start; margin-top: 2px; flex-shrink: 0; transition: color .3s, opacity .3s; }
+.row .tx { flex-grow: 1; min-width: 0; display: flex; flex-direction: column; }
+.row .nm { font-size: 15px; line-height: 1.375; }
+.row .nm b { font-weight: 600; }
+.row .ln { font-size: 13.5px; line-height: 1.375; color: var(--page-ink2); }
+.row .t { flex-shrink: 0; font: 11px var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+.row .ch { width: 8px; flex-shrink: 0; align-self: center; text-align: center; color: var(--muted); }
+.track { position: relative; height: 13px; margin: 7px 0 0 28px; }
+.track::before { content: ""; position: absolute; inset: 6px 0 auto; border-top: 1px dashed rgb(156 152 143 / .3); }
+.track .head { position: absolute; top: 3px; left: 0; width: 7px; height: 7px; border-radius: 50%; background: currentColor; box-shadow: 0 0 10px currentColor; }
+.track .end { position: absolute; top: 2px; right: 0; width: 9px; height: 9px; transform: rotate(45deg); border: 1px solid var(--muted); background: var(--panel); }
+
+.key { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 6px 14px; font: 11px var(--mono); color: var(--muted); }
+.key span { display: inline-flex; align-items: center; gap: 6px; }
+.key i { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Accent palette</h1>
+  <p>Today the game has two accent colors. Blue is us, amber is them. Build's marks show gray until queued. Here are four ways to color them. Every version keeps blue for us and amber for them on Scan and Reach. Marks not yet queued show dimmer, queued ones at full color.</p>
+  <div class="tabs" role="group" aria-label="Palette">
+    <button data-v="two"><b>A</b>Two colors</button>
+    <button data-v="verb"><b>B</b>By what it does</button>
+    <button data-v="five"><b>D</b>B, Lift in Reach</button>
+    <button data-v="place"><b>C</b>By where it stands</button>
+  </div>
+</header>
+<main>
+  <section>
+    <p class="cap">The palette</p>
+    <div id="swatches"></div>
+    <p class="cap" style="margin-top:18px">Where each sits on the color wheel</p>
+    <svg id="ring" width="300" height="196" viewBox="-150 -98 300 196" style="display:block;max-width:100%"></svg>
+    <p class="why" id="why" style="margin-top:14px"></p>
+  </section>
+  <section>
+    <p class="cap">Build</p>
+    <div class="frame">
+      <div class="tab">BUILD</div>
+      <div class="walk">
+        <svg width="14" height="14" viewBox="-7 -7 14 14" aria-hidden><circle r="6" fill="none" stroke="var(--you)"/><path d="M-1.8 -3 L3 0 L-1.8 3 Z" fill="var(--you)"/></svg>
+        <div><div class="t">Queue our first builds</div><div class="l">With the Mind, one build at a time.</div></div>
+        <span class="r">DONE</span>
+      </div>
+      <div class="lh"><span>Queued · 2</span><span>Done in</span></div>
+      <ul class="rows" id="queued"></ul>
+      <div class="lh gap"><span>We could also start · 7</span><span>Done in</span></div>
+      <ul class="rows" id="could"></ul>
+    </div>
+  </section>
+  <section>
+    <p class="cap">Scan, for comparison</p>
+    <div class="frame">
+      <div class="tab">SCAN</div>
+      <div class="lh"><span>Leads · 6</span><span>Light takes</span></div>
+      <ul class="rows" id="leads"></ul>
+    </div>
+    <div class="key" id="key"></div>
+  </section>
+</main>
+
+<script>
+// The marks, as drawn in game/components/marks.tsx, held still. Ours on a 16 grid, Lucide's on 24.
+const O = (s) => `<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" overflow="visible">${s}</svg>`;
+const L = (s) => `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${s}</svg>`;
+const SAT = '<path d="m13.5 6.5-3.148-3.148a1.205 1.205 0 0 0-1.704 0L6.352 5.648a1.205 1.205 0 0 0 0 1.704L9.5 10.5"/><path d="M16.5 7.5 19 5"/><path d="m17.5 10.5 3.148 3.148a1.205 1.205 0 0 1 0 1.704l-2.296 2.296a1.205 1.205 0 0 1-1.704 0L13.5 14.5"/><path d="M9 21a6 6 0 0 0-6-6"/><path d="M9.352 10.648a1.205 1.205 0 0 0 0 1.704l2.296 2.296a1.205 1.205 0 0 0 1.704 0l4.296-4.296a1.205 1.205 0 0 0 0-1.704l-2.296-2.296a1.205 1.205 0 0 0-1.704 0z"/>';
+const MARK = {
+  dish: O('<path d="M3 14.5h10M8 14.5v-4"/><g transform="rotate(-20 8 10.5)"><path d="M3.2 6.2Q8 12.6 12.8 6.2"/><path d="M8 9.4V4.4"/><circle cx="8" cy="3.6" r="0.8" fill="currentColor" stroke="none"/></g>'),
+  zap: L('<path d="M15.914 4a1.5 1.5 0 00-2.474-1.561l-9 9A1.5 1.5 0 005.5 14h4.002a.5.5 0 01.471.666L8.086 20a1.5 1.5 0 002.475 1.56l9-9A1.5 1.5 0 0018.5 10h-3.997a.5.5 0 01-.472-.667z"/>'),
+  brain: L('<path d="M12 18V5"/><path d="M15 13a4.17 4.17 0 01-3-4 4.17 4.17 0 01-3 4"/><path d="M17.707 6.294A3 3 0 1012 5a3 3 0 10-5.707 1.294"/><path d="M17.996 5.125a4 4 0 012.526 5.77"/><path d="M18 18a4 4 0 002-7.465"/><path d="M19.967 17.482a4 4 0 11-7.967.517 4 4 0 11-7.967-.517"/><path d="M6 18a4 4 0 01-2-7.465"/><path d="M6.004 5.125a4 4 0 00-2.526 5.77"/>'),
+  scope: L('<path d="m10.065 12.493-6.18 1.318a.934.934 0 0 1-1.108-.702l-.537-2.15a1.07 1.07 0 0 1 .691-1.265l13.504-4.44"/><path d="m13.56 11.747 4.332-.924"/><path d="m16 21-3.105-6.21"/><path d="M16.485 5.94a2 2 0 0 1 1.455-2.425l1.09-.272a1 1 0 0 1 1.212.727l1.515 6.06a1 1 0 0 1-.727 1.213l-1.09.272a2 2 0 0 1-2.425-1.455z"/><path d="m6.158 8.633 1.114 4.456"/><path d="m8 21 3.105-6.21"/><circle cx="12" cy="13" r="2"/>'),
+  rocket: L('<path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09"/><path d="M9 12a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.4 22.4 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 .05 5 .05"/>'),
+  sat: L(SAT),
+  moon: L('<path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"/>'),
+  sail: O('<path d="M3 14.8h10"/><path d="M4 14.2 8 5.6 12 14.2" stroke-width="0.8" opacity="0.6"/><path d="M6.2 5.6Q8 4.2 9.8 5.6"/>'),
+  orbit: O('<g transform="rotate(-24 8 8)"><ellipse cx="8" cy="8" rx="6.2" ry="5.53" opacity="0.55"/><circle cx="10.79" cy="8" r="1.5" fill="currentColor" stroke="none"/><circle cx="4.4" cy="12.2" r="1.25" fill="currentColor" stroke="none"/></g>'),
+  world: O('<circle cx="8" cy="8" r="6.25"/><ellipse cx="8" cy="8" rx="2.6" ry="6.25"/><ellipse cx="8" cy="8" rx="5.6" ry="6.25" opacity="0.5"/><path d="M1.75 8h12.5"/>'),
+  dust: O('<ellipse cx="8" cy="8" rx="6.4" ry="3" transform="rotate(-24 8 8)" opacity="0.55"/><circle cx="8" cy="8" r="1.5" fill="currentColor" stroke="none"/><g fill="currentColor" stroke="none"><circle cx="3.4" cy="9.6" r="0.85"/><circle cx="4.9" cy="8.9" r="0.85"/><circle cx="2.1" cy="8.7" r="0.85"/><circle cx="12.4" cy="5.6" r="0.85"/><circle cx="13.6" cy="4.8" r="0.85"/></g>'),
+  reply: O('<circle cx="2.6" cy="8" r="2"/><path d="M5.2 8h6.4" stroke-dasharray="0.1 2.1"/><circle cx="13.6" cy="8" r="1.6" fill="currentColor" stroke="none"/><circle cx="9" cy="8" r="1.2" fill="currentColor" stroke="none"/>'),
+};
+
+// Each build: its mark, what it does, where it stands, and a sample time, as Build showed with two queued.
+const BUILDS = [
+  { name: "All-Sky Watch", what: "Hears a knock or a broadcast from anywhere, at any hour.", mark: "dish", verb: "listen", place: "earth", t: "00:21:00", queued: true },
+  { name: "Laser Sail Array", what: "Light from the ground, to push sails to a fifth of light speed.", mark: "sail", verb: "reach", place: "earth", t: "01:28:45", queued: true },
+  { name: "Deep Flash Watch", what: "Catches laser knocks too faint for the sky watch.", mark: "zap", verb: "listen", place: "earth", t: "00:30:00" },
+  { name: "Thought Fields", what: "Half again as much thought, for good.", mark: "brain", verb: "think", place: "earth", t: "00:05:00" },
+  { name: "Infrared Telescope", what: "Reads the air of the nearest worlds.", mark: "scope", verb: "see", place: "l2", t: "00:40:00" },
+  { name: "Launch Complex", what: "Doubles what we lift to orbit.", mark: "rocket", verb: "lift", place: "earth", t: "00:10:00" },
+  { name: "Orbital Yard", what: "Builds in orbit a quarter faster.", mark: "sat", verb: "lift", place: "orbit", t: "00:25:00" },
+  { name: "Moon Vault", what: "A second home for our Mind, in the Moon’s rock. 10 kt of our 20.", mark: "moon", verb: "keep", place: "moon", t: "00:44:00" },
+  { name: "Probe Yard", what: "Builds and fuels probes in orbit. The first flies 12 Years after. 10 kt of our 20.", mark: "sat", verb: "reach", place: "orbit", t: "02:40:00" },
+];
+const LEADS = [
+  { what: "A stretched orbit", star: "82 Eridani", line: "A heavy world, sometimes warm. Its air is unread.", mark: "orbit", t: "01:38:30" },
+  { what: "A new world", star: "Gliese 1028", line: "Felt by ESPRESSO in 2034. At least 2.0 Earths.", mark: "world", t: "02:39:27" },
+  { what: "A new world", star: "20 Leonis Minoris", line: "Felt by Terra Hunting in 2036. At least 2.4 Earths.", mark: "world", t: "04:03:27" },
+  { what: "Too many collisions", star: "Fomalhaut", line: "Two dust clouds in 20 years, where we expected one.", mark: "dust", t: "02:05:30" },
+  { what: "A reply could come", star: "Luyten’s Star", line: "To our 2017 message, as soon as Year 2.3.", mark: "reply", t: "01:01:30", them: true },
+];
+
+// The two that every version keeps.
+const US = { key: "us", name: "Us", color: "#5bb8d6", ds: "Earth, our Mind, our leads and messages." };
+const THEM = { key: "them", name: "Them", color: "#e0a24a", ds: "Anything from another world: a reply, a signal." };
+
+// Each version: its colors, which key colors a build, and why. New colors sit near the two we have, in OKLCH: about
+// as light, about as strong, so they read as one family. Amber's hue stays clear of them all.
+const VERSIONS = {
+  two: {
+    swatches: [US, THEM],
+    of: () => "us",
+    why: "<strong>What it means.</strong> Every build is ours, so every build is blue. The two sections already say what's queued. Nothing new to learn, and Build lights up like Scan.",
+  },
+  verb: {
+    swatches: [
+      { ...US, ds: "Earth, our Mind, our leads and messages. And listening, the heart of the game: both watches." },
+      THEM,
+      { key: "think", name: "Think", color: "oklch(0.75 0.12 295)", ds: "Thought Fields: more thought for the Mind." },
+      { key: "see", name: "See", color: "oklch(0.79 0.11 165)", ds: "The Infrared Telescope: reading other worlds' air." },
+      { key: "lift", name: "Lift", color: "oklch(0.84 0.14 118)", ds: "Launch Complex and Orbital Yard: getting things up there." },
+      { key: "reach", name: "Reach", color: "oklch(0.75 0.12 345)", ds: "Laser Sail Array and Probe Yard: going to the stars." },
+      { key: "keep", name: "Keep", color: "oklch(0.84 0.02 250)", ds: "Moon Vault: a copy of us, kept safe." },
+    ],
+    of: (b) => (b.verb === "listen" ? "us" : b.verb),
+    why: "<strong>What it means.</strong> A build's color is what it does, so a glance groups them: what listens, what thinks, what reaches. Listening keeps blue, since it's how we'd ever learn we aren't alone. The Mind's advice already speaks this way: \"Ears first\", \"Think first\", \"Reach first\".",
+  },
+  five: {
+    swatches: [
+      { ...US, ds: "Earth, our Mind, our leads and messages. And listening, the heart of the game: both watches." },
+      THEM,
+      { key: "think", name: "Think", color: "oklch(0.75 0.12 295)", ds: "Thought Fields: more thought for the Mind." },
+      { key: "see", name: "See", color: "oklch(0.79 0.12 150)", ds: "The Infrared Telescope: reading other worlds' air." },
+      { key: "reach", name: "Reach", color: "oklch(0.75 0.12 350)", ds: "Everything that takes us out: the Launch Complex, both yards, the sail array." },
+      { key: "keep", name: "Keep", color: "oklch(0.84 0.02 250)", ds: "Moon Vault: a copy of us, kept safe." },
+    ],
+    of: (b) => (b.verb === "listen" ? "us" : b.verb === "lift" ? "reach" : b.verb),
+    why: "<strong>What it means.</strong> B with Lift folded into Reach: getting up there is the first step of going out. One color fewer, so every color sits at least 50° from the next.",
+  },
+  place: {
+    swatches: [
+      US,
+      THEM,
+      { key: "earth", name: "On Earth", color: "oklch(0.78 0.12 150)", ds: "The watches, Thought Fields, the Launch Complex, the sail array." },
+      { key: "orbit", name: "In orbit", color: "oklch(0.75 0.12 295)", ds: "The Orbital Yard and the Probe Yard, 400 km up." },
+      { key: "l2", name: "At L2", color: "oklch(0.75 0.12 345)", ds: "The Infrared Telescope, 1.5 million km out." },
+      { key: "moon", name: "On the Moon", color: "oklch(0.84 0.02 250)", ds: "The Moon Vault." },
+    ],
+    of: (b) => b.place,
+    why: "<strong>What it means.</strong> A build's color is where it stands, the same place the map flies to. Five of nine share Earth's green, so the list reads mostly one color.",
+  },
+};
+
+// Hex and contrast on the panel, measured from what the browser paints.
+const ctx = Object.assign(document.createElement("canvas"), { width: 1, height: 1 }).getContext("2d");
+function rgb(color) {
+  ctx.clearRect(0, 0, 1, 1);
+  ctx.fillStyle = color;
+  ctx.fillRect(0, 0, 1, 1);
+  return [...ctx.getImageData(0, 0, 1, 1).data.slice(0, 3)];
+}
+const lum = (c) => {
+  const [r, g, b] = c.map((v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; });
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+};
+const contrast = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((m, n) => n - m); return (x + 0.05) / (y + 0.05); };
+const hex = (c) => "#" + c.map((v) => v.toString(16).padStart(2, "0")).join("");
+const PANEL = rgb("#17181a");
+
+function render(v) {
+  const V = VERSIONS[v];
+  const color = Object.fromEntries(V.swatches.map((s) => [s.key, s.color]));
+  document.querySelectorAll(".tabs button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.v === v)));
+
+  document.getElementById("swatches").innerHTML = V.swatches.map((s) => {
+    const c = rgb(s.color);
+    return `<div class="sw"><span class="chip" style="background:${s.color}">${MARK[s.key === "them" ? "reply" : s.key === "us" ? "dish" : { think: "brain", see: "scope", lift: "rocket", reach: "sail", keep: "moon", earth: "world", orbit: "sat", l2: "scope", moon: "moon" }[s.key]]}</span>
+      <span class="nm">${s.name}</span><span class="hex">${hex(c)}</span>
+      <span class="ds">${s.ds}</span><span class="cr">${contrast(c, PANEL).toFixed(1)}:1</span></div>`;
+  }).join("");
+  document.getElementById("why").innerHTML = V.why;
+
+  // The hue ring: each color at its hue, OKLCH's, which runs as the eye sees. Gray ones have no hue, so sit in the middle.
+  const hues = V.swatches.map((s) => {
+    const probe = document.body.appendChild(document.createElement("i"));
+    probe.style.color = s.color;
+    probe.style.color = `oklch(from ${getComputedStyle(probe).color} l c h)`;
+    const m = getComputedStyle(probe).color.match(/oklch\(([\d.]+) ([\d.]+) ([\d.]+)/);
+    probe.remove();
+    return { s, c: m ? +m[2] : 0, h: m ? +m[3] : 0 };
+  });
+  const R = 74;
+  document.getElementById("ring").innerHTML =
+    `<circle r="${R}" fill="none" stroke="#34363a" stroke-dasharray="1 4"/>` +
+    hues.map(({ s, c, h }) => {
+      const gray = c < 0.04;
+      const a = ((h - 90) * Math.PI) / 180;
+      const [x, y] = gray ? [0, 0] : [R * Math.cos(a), R * Math.sin(a)];
+      // A label beside its dot, on the side away from the middle.
+      const side = gray ? 0 : Math.cos(a) > 0.35 ? 1 : Math.cos(a) < -0.35 ? -1 : 0;
+      const [lx, ly] = gray ? [0, 22] : [(R + 15) * Math.cos(a), (R + 15) * Math.sin(a) + (side ? 0 : Math.sign(Math.sin(a)) * 6)];
+      const anchor = side > 0 ? "start" : side < 0 ? "end" : "middle";
+      return `<circle cx="${x}" cy="${y}" r="9" fill="${s.color}"/><text x="${lx}" y="${ly + 4}" text-anchor="${anchor}" fill="#a9a59c" font-family="IBM Plex Mono, monospace" font-size="10">${s.name}${gray ? "" : " " + Math.round(h) + "°"}</text>`;
+    }).join("");
+
+  const row = (b) => {
+    const c = color[V.of(b)];
+    return `<li><div class="row"><span class="mk" style="color:${c};opacity:${b.queued ? 1 : 0.62}">${MARK[b.mark]}</span>
+      <span class="tx"><span class="nm"><b>${b.name}</b></span><span class="ln">${b.what}</span></span>
+      <span class="t">${b.t}</span><span class="ch">›</span></div>
+      ${b.queued ? `<div class="track" style="color:${c}"><span class="head"></span><span class="end"></span></div>` : ""}</li>`;
+  };
+  document.getElementById("queued").innerHTML = BUILDS.filter((b) => b.queued).map(row).join("");
+  document.getElementById("could").innerHTML = BUILDS.filter((b) => !b.queued).map(row).join("");
+  document.getElementById("leads").innerHTML = LEADS.map((l) => `<li><div class="row"><span class="mk" style="color:${l.them ? THEM.color : US.color}">${MARK[l.mark]}</span>
+    <span class="tx"><span class="nm"><b>${l.what}</b> · ${l.star}</span><span class="ln">${l.line}</span></span>
+    <span class="t">${l.t}</span><span class="ch">›</span></div></li>`).join("");
+  document.getElementById("key").innerHTML = '<span><i style="background:var(--you)"></i>queued, full color</span><span><i style="background:var(--you);opacity:.62"></i>not yet, dimmer</span><span>sample times</span>';
+  try { localStorage.setItem("holos:palette", v); } catch {}
+}
+
+document.querySelectorAll(".tabs button").forEach((b) => b.addEventListener("click", () => render(b.dataset.v)));
+let start = "verb";
+try { start = localStorage.getItem("holos:palette") || start; } catch {}
+render(VERSIONS[start] ? start : "verb");
+</script>
+</body>
+</html>

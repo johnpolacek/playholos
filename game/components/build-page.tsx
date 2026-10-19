@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router";
 import { useEffect, useMemo, useRef } from "react";
 import { useGame } from "@/components/game-provider";
 import { Lens } from "@/components/icons";
+import { BuildMark, buildTone } from "@/components/marks";
 import { MindNote } from "@/components/mind-note";
 import { buildStory, Story, toggleBuild, usePlan, useSchedule } from "@/components/picks";
 import { placedOf, useWorks } from "@/components/works";
@@ -119,8 +120,10 @@ export function BuildPage({ slug }: { slug: string }) {
           All builds
         </Link>
       </div>
-      <div data-m className="mt-1 flex items-baseline gap-2.5">
-        <span className="size-2.5 shrink-0 translate-y-[-1px] rounded-full bg-you" />
+      <div data-m className="mt-1 flex items-start gap-2.5">
+        <span className={`mt-[4px] shrink-0 ${buildTone(build.name, plan.builds.includes(build.name))}`}>
+          <BuildMark name={build.name} size={18} />
+        </span>
         <h1 className="text-[19px] leading-snug font-medium">{build.name}</h1>
       </div>
       <p data-m className="mt-0.5 text-[13.5px] text-page-ink2">

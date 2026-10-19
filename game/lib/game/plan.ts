@@ -6,26 +6,35 @@ import { YEAR_0 } from "./clock";
 import type { Plan } from "./types";
 import { CATALOG, pace, type Order } from "@/lib/sim/works";
 
+/** What a build does, which gives it its color: listening, thinking, seeing, lifting, reaching or keeping us. */
+export type Does = "listen" | "think" | "see" | "lift" | "reach" | "keep";
+
 export interface Build {
   name: string;
   /** What it gives us, in a line. */
   what: string;
+  does: Does;
   /** Matter it takes from the 20 kt we hold, if any worth naming. */
   kt?: number;
 }
 
 export const BUILDS: Build[] = [
-  { name: "All-Sky Watch", what: "Hears a knock or a broadcast from anywhere, at any hour." },
-  { name: "Deep Flash Watch", what: "Catches laser knocks too faint for the sky watch." },
-  { name: "Thought Fields", what: "Half again as much thought, for good." },
-  { name: "Infrared Telescope", what: "Reads the air of the nearest worlds." },
-  { name: "Launch Complex", what: "Doubles what we lift to orbit." },
-  { name: "Orbital Yard", what: "Builds in orbit a quarter faster." },
-  { name: "Moon Vault", what: "A second home for our Mind, in the Moon’s rock.", kt: 10 },
+  { name: "All-Sky Watch", what: "Hears a knock or a broadcast from anywhere, at any hour.", does: "listen" },
+  { name: "Deep Flash Watch", what: "Catches laser knocks too faint for the sky watch.", does: "listen" },
+  { name: "Thought Fields", what: "Half again as much thought, for good.", does: "think" },
+  { name: "Infrared Telescope", what: "Reads the air of the nearest worlds.", does: "see" },
+  { name: "Launch Complex", what: "Doubles what we lift to orbit.", does: "lift" },
+  { name: "Orbital Yard", what: "Builds in orbit a quarter faster.", does: "lift" },
+  { name: "Moon Vault", what: "A second home for our Mind, in the Moon’s rock.", kt: 10, does: "keep" },
   // The two roads to the nearest star, open at Year 0 since 2026-10-18. Even last in line, the probe yard's large want
   // takes the thought that would have pushed the builds before it, and slows them by Years.
-  { name: "Laser Sail Array", what: "Light from the ground, to push sails to a fifth of light speed." },
-  { name: "Probe Yard", what: "Builds and fuels probes in orbit. The first flies 12 Years after.", kt: 10 },
+  { name: "Laser Sail Array", what: "Light from the ground, to push sails to a fifth of light speed.", does: "reach" },
+  {
+    name: "Probe Yard",
+    what: "Builds and fuels probes in orbit. The first flies 12 Years after.",
+    kt: 10,
+    does: "reach",
+  },
 ];
 
 /** What the Mind says of each build, on its page and in the tour, whichever lean picks it. */

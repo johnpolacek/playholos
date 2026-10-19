@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Queueing } from "@/components/build-page";
 import { useGame } from "@/components/game-provider";
 import { MindNote } from "@/components/mind-note";
+import { BuildMark, buildTone } from "@/components/marks";
 import { buildStory, Mark, Story, usePlan, useSchedule } from "@/components/picks";
 import { Thread } from "@/components/review";
 import { placedOf, useWorks } from "@/components/works";
@@ -129,8 +130,10 @@ export function Tour({ onClose }: { onClose(): void }) {
       >
         {build ? (
           <>
-            <div data-r className="flex items-baseline gap-2.5">
-              <span className="size-2.5 shrink-0 translate-y-[-1px] rounded-full bg-you" />
+            <div data-r className="flex items-start gap-2.5">
+              <span className={`mt-[4px] shrink-0 ${buildTone(build.name, plan.builds.includes(build.name))}`}>
+                <BuildMark name={build.name} size={18} />
+              </span>
               <h2 className="text-[19px] leading-snug font-medium">{build.name}</h2>
             </div>
             <p data-r className="mt-0.5 text-[13.5px] text-page-ink2">

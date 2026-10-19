@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useGame } from "@/components/game-provider";
 import { MindNote } from "@/components/mind-note";
+import { LeadMark } from "@/components/marks";
 import { Look } from "@/components/picks";
 import { useLeads } from "@/components/scan";
 import { realTime } from "@/lib/game/clock";
@@ -204,10 +205,10 @@ export function Review({ onClose }: { onClose(): void }) {
       >
         {lead ? (
           <>
-            <div data-r className="flex items-baseline gap-2.5">
-              <span
-                className={`size-2.5 shrink-0 translate-y-[-1px] rounded-full ${lead.reply ? "bg-other" : "bg-you"}`}
-              />
+            <div data-r className="flex items-start gap-2.5">
+              <span className={`mt-[4px] shrink-0 ${lead.reply ? "text-other" : "text-you"}`}>
+                <LeadMark art={lead.art} size={18} />
+              </span>
               <h2 className="text-[19px] leading-snug font-medium">
                 {lead.what}
               </h2>

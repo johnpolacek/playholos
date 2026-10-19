@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router";
 import { useEffect, useRef } from "react";
 import { useGame } from "@/components/game-provider";
 import { LeadArt } from "@/components/lead-art";
+import { LeadMark } from "@/components/marks";
 import { Look } from "@/components/picks";
 import { useLeads } from "@/components/scan";
 import { realTime } from "@/lib/game/clock";
@@ -96,8 +97,10 @@ export function LeadPage({ slug }: { slug: string }) {
           All leads
         </Link>
       </div>
-      <div data-m className="mt-1 flex items-baseline gap-2.5">
-        <span className={`size-2.5 shrink-0 translate-y-[-1px] rounded-full ${lead.reply ? "bg-other" : "bg-you"}`} />
+      <div data-m className="mt-1 flex items-start gap-2.5">
+        <span className={`mt-[4px] shrink-0 ${lead.reply ? "text-other" : "text-you"}`}>
+          <LeadMark art={lead.art} size={18} />
+        </span>
         <h1 className="text-[19px] leading-snug font-medium">{lead.what}</h1>
       </div>
       <p data-m className="mt-0.5 text-[13.5px] text-page-ink2">

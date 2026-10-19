@@ -18,6 +18,13 @@
   --rowline: #26282b;
   --you: #5bb8d6;
   --other: #e0a24a;
+  /* What each build does, chosen 2026-10-19 in explorations/accent-palette.html, B. Listening keeps our blue. Each is
+     as light and as strong as the two above in OKLCH, at least 45° of hue from the next. */
+  --think: #b39ef2;
+  --see: #70d1a9;
+  --lift: #c2d766;
+  --reach: #e48ebf;
+  --keep: #c1ccd7;
   --shadow: rgba(0, 0, 0, 0.5);
   color-scheme: dark;
 }
@@ -36,6 +43,11 @@
   --color-rowline: var(--rowline);
   --color-you: var(--you);
   --color-other: var(--other);
+  --color-think: var(--think);
+  --color-see: var(--see);
+  --color-lift: var(--lift);
+  --color-reach: var(--reach);
+  --color-keep: var(--keep);
   --color-shadow: var(--shadow);
   --font-sans: var(--font-suse);
   --font-mono: var(--font-plex-mono);
