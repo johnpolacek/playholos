@@ -101,10 +101,11 @@ export interface Show {
   works?: {
     name: string;
     site: {
-      on: "earth" | "moon" | "orbit";
+      on: "earth" | "moon" | "orbit" | "l2";
       draw: "dome" | "ring" | "launch";
       places: { lat: number; lon: number }[];
       orbit?: { km: number; tilt: number; minutes: number };
+      km?: number;
     };
     queued: boolean;
     done: number | null;
@@ -146,6 +147,8 @@ const NEAR_WORK = -4.28;
 const EARTH_WORK = -3.45;
 /** How near one place on Earth, or low orbit, is seen: about 27,000 km, so 400 km up shows. */
 const NEAR_EARTH = -3.75;
+/** How far L2 is seen from: about 3.9 million km, so Earth, the Moon's orbit and L2 all show. */
+const L2_WORK = -1.58;
 
 // The Milky Way's measured arms, Reid et al. 2019, Table 2: a log spiral with a kink, over the azimuths where masers
 // pin it down. β is galactocentric azimuth, 0 toward the Sun, growing with the Galaxy's turn. Degrees and kpc, at their
@@ -454,6 +457,8 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     const node = pole.clone().cross(pilot.sky.eX).normalize();
     return { axis: pole.applyAxisAngle(node, tilt * DEG), node };
   }
+  /** L2, this far out on Earth's night side, in Earth radii from Earth. */
+  const l2At = (km: number) => pilot.sky.sunDir.clone().multiplyScalar(-km / 6371.0084);
   const sitesAt = new Map<string, THREE.Vector3>();
   /** Where a build on the Moon stands, as a direction from its middle. */
   const siteAt = (w: NonNullable<Show["works"]>[number]) => {
@@ -502,8 +507,9 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
   // Our builds' view. On the Moon: from off the site's side, away from the line to Earth, and a little above, so the
   // Moon fills the view and the thread home runs out across it. It sways a little. One place on Earth: from a little
   // north of it, turning with Earth to keep it in sight. Low orbit: from well above its plane, so it opens out round
-  // Earth. The watches' places on Earth: the whole globe as it turns, each place coming round under its dome. Turning
-  // to another eases round, as the leads' view does.
+  // Earth. L2: from the side and a little above, with Earth and the Moon's orbit across the view from it. The watches'
+  // places on Earth: the whole globe as it turns, each place coming round under its dome. Turning to another eases
+  // round, as the leads' view does.
   function worksPose(): Pose {
     let at: number | null = null;
     let [az, tilt] = [0, 0];
@@ -527,6 +533,10 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
           .addScaledVector(eN, 0.25)
           .normalize();
         logD = NEAR_WORK;
+      } else if (w.site.on === "l2") {
+        const { sunDir } = pilot.sky;
+        v = sunDir.clone().cross(eN).normalize().addScaledVector(eN, 0.5).normalize();
+        logD = L2_WORK;
       } else if (w.site.on === "orbit") {
         const { axis, node } = orbitFrame(w.site.orbit?.tilt ?? 0);
         v = axis.multiplyScalar(0.8).addScaledVector(node, 0.6).normalize();
@@ -1966,6 +1976,15 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       }
       return pts;
     };
+    /** An ellipse, as line segments: in its own frame, z across it. */
+    const ellipse = (a: number, b: number) => {
+      const pts: number[] = [];
+      for (let i = 0; i < RING; i++) {
+        const [s, t] = [(i / RING) * 2 * Math.PI, ((i + 1) / RING) * 2 * Math.PI];
+        pts.push(a * Math.sin(s), b * Math.cos(s), 0, a * Math.sin(t), b * Math.cos(t), 0);
+      }
+      return pts;
+    };
     /** A dome: its ground ring, then three arcs over the top, from the ground up. */
     const dome = (r: number) => {
       const pts = ring(r);
@@ -2046,6 +2065,32 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       const moon = on === "moon";
       // Low orbit: a ring round Earth at its height and tilt, and the yard going round it, at Earth's own pace: the
       // map turns Earth once a minute, so a 93-minute orbit takes about 4 seconds.
+      // L2: a halo orbit round it, drawn across the line to the Sun, 800,000 by 400,000 km, the telescope on it, and a
+      // thread home to Earth.
+      if (on === "l2") {
+        const center = l2At(w.site.km ?? 1.5e6);
+        const flat = new THREE.Quaternion().setFromUnitVectors(up, sunDir);
+        const [a, b] = [800000 / 6371.0084, 400000 / 6371.0084];
+        const at = new THREE.Vector3(a * Math.sin(0.7), b * Math.cos(0.7), 0).applyQuaternion(flat).add(center);
+        const threadMat = line("mind", 0, true);
+        const thread = new THREE.Line(new THREE.BufferGeometry().setFromPoints([at, new THREE.Vector3()]), threadMat);
+        thread.frustumCulled = false;
+        earth.scene.add(thread);
+        return {
+          moon,
+          places: [
+            {
+              at,
+              parent: earth.scene as THREE.Object3D,
+              shapes: [shape(ellipse(a, b), earth.scene, center, flat)],
+              ...spotAt(at, earth.scene),
+            },
+          ],
+          orbit: null,
+          threadMat,
+          rockets: null,
+        };
+      }
       if (on === "orbit") {
         const o = w.site.orbit ?? { km: 400, tilt: 51.6, minutes: 92.9 };
         const flat = new THREE.Quaternion().setFromUnitVectors(up, orbitFrame(o.tilt).axis);
@@ -2179,19 +2224,22 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         m?.places.forEach((pl, k) => {
           // A place on Earth's far side, turned away from us, is not named.
           pl.parent.localToWorld(v.copy(pl.at));
-          const facing = m.moon || n.copy(v).normalize().dot(n.clone().subVectors(earth.camera.position, v)) > 0;
+          const facing =
+            m.moon ||
+            focus.site.on === "l2" ||
+            n.copy(v).normalize().dot(n.clone().subVectors(earth.camera.position, v)) > 0;
           v.project(earth.camera);
           const a = v.z < 1 && facing ? p : 0;
           marks.push({ id: `site:${focus.name}:${k}`, x: ((v.x + 1) / 2) * w, y: ((1 - v.y) / 2) * h, a });
         });
-        // Earth, from the Moon, often behind us: then its way across the screen is the other side of the middle, far
-        // off.
-        if (m?.moon) {
+        // Earth, from the Moon or L2. From the Moon it is often behind us: then its way across the screen is the other
+        // side of the middle, far off.
+        if (m && (m.moon || focus.site.on === "l2")) {
           const behind = v.set(0, 0, 0).applyMatrix4(earth.camera.matrixWorldInverse).z > 0;
           v.set(0, 0, 0).project(earth.camera);
           const k = behind ? -1000 : 1;
-          const a = p * ramp(-x, 2.4, 3.2);
-          marks.push({ id: "earth", x: ((v.x * k + 1) / 2) * w, y: ((1 - v.y * k) / 2) * h, a });
+          const a = focus.site.on === "l2" ? p : p * ramp(-x, 2.4, 3.2);
+          marks.push({ id: `earth:${focus.site.on}`, x: ((v.x * k + 1) / 2) * w, y: ((1 - v.y * k) / 2) * h, a });
         }
         spec.onMarks(marks);
       }
@@ -2389,6 +2437,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     const work = spec.mode === "works" ? spec.works?.[aimedWork()] : undefined;
     if (work?.site.on === "moon")
       goal.copy(siteAt(work)).multiplyScalar(MOON_R * 0.45).add(moonAt).multiplyScalar(R_E_AU);
+    else if (work?.site.on === "l2") goal.copy(l2At(work.site.km ?? 1.5e6)).multiplyScalar(0.55 * R_E_AU);
     else goal.set(0, 0, 0);
     if (!goal.equals(hop.to)) {
       hop.from.copy(workShift);

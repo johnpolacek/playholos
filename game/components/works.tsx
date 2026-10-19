@@ -104,22 +104,23 @@ function toward(dx: number, dy: number) {
   return ["→", "↘", "↓", "↙", "←", "↖", "↑", "↗"][(Math.round(Math.atan2(dy, dx) / (Math.PI / 4)) + 8) % 8];
 }
 
-/** The map on our builds: the one in view where it would stand, how far along it is, and from the Moon, which way
- *  Earth is. */
+/** The map on our builds: the one in view where it would stand, how far along it is, and from the Moon or L2, which
+ *  way Earth is, in light. */
 export function WorksMap({ className }: { className: string }) {
   const { list, dials } = useWorks();
   const { year } = useGame();
   useEffect(() => void Object.assign(dials, { year: YEAR_0 + (year ?? 0) }), [dials, year]);
-  // Light from Earth to the Moon today, in seconds.
+  // Light from Earth to the Moon today, and to L2, in seconds.
   const [light] = useState(() => {
     const m = moonOffset(new Date());
     return (Math.hypot(m.x, m.y, m.z) * AU_KM) / 299792.458;
   });
+  const l2 = (list.find((w) => w.site.on === "l2")?.site.km ?? 1.5e6) / 299792.458;
   const names = useRef<Record<string, HTMLSpanElement | null>>({});
   const onMarks = useCallback((marks: Mark[]) => {
-    // Only the build in view is named, at its places, and Earth only from the Moon.
+    // Only the build in view is named, at its places, and Earth only from the Moon or L2.
     for (const [id, n] of Object.entries(names.current))
-      if (n && id !== "arrow" && !marks.some((m) => m.id === id)) n.style.opacity = "0";
+      if (n && !id.startsWith("arrow:") && !marks.some((m) => m.id === id)) n.style.opacity = "0";
     for (const { id, x, y, a } of marks) {
       const n = names.current[id];
       const box = n?.parentElement;
@@ -138,7 +139,7 @@ export function WorksMap({ className }: { className: string }) {
         ? 1
         : Math.min((w / 2 - pad) / Math.abs(x - cx || 1e-6), (h / 2 - pad) / Math.abs(y - cy || 1e-6));
       const [ex, ey] = [cx + (x - cx) * k, cy + (y - cy) * k];
-      const arrow = names.current.arrow;
+      const arrow = names.current[`arrow:${id.slice("earth:".length)}`];
       if (arrow) arrow.textContent = inside ? "" : `${toward(x - cx, y - cy)} `;
       n.style.transform = `translate(${ex}px, ${ey}px) translate(${ex > cx ? "-100%" : "0"}, ${ey > cy ? "-100%" : "0"})`;
       n.style.opacity = String(a);
@@ -162,19 +163,27 @@ export function WorksMap({ className }: { className: string }) {
           </span>
         )),
       )}
-      <span
-        ref={(n) => {
-          names.current.earth = n;
-        }}
-        className={`${label} text-muted`}
-      >
+      {(
+        [
+          ["moon", light],
+          ["l2", l2],
+        ] as const
+      ).map(([from, secs]) => (
         <span
+          key={from}
           ref={(n) => {
-            names.current.arrow = n;
+            names.current[`earth:${from}`] = n;
           }}
-        />
-        Earth · {light.toFixed(2)} light-seconds
-      </span>
+          className={`${label} text-muted`}
+        >
+          <span
+            ref={(n) => {
+              names.current[`arrow:${from}`] = n;
+            }}
+          />
+          Earth · {secs.toFixed(2)} light-seconds
+        </span>
+      ))}
     </SkyArt>
   );
 }

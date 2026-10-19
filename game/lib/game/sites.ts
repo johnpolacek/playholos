@@ -1,6 +1,6 @@
 // Where each build would stand, for the map, and what it holds, for the Projects tab. Picking a build there flies the
-// map to its place. All but the infrared telescope have theirs so far. Sources in HOLOS_RESEARCH.md, "Where the Moon
-// vault stands", "Where the watches stand" and "Where the data center, launch complex and yard stand".
+// map to its place. Sources in HOLOS_RESEARCH.md, "Where the Moon vault stands", "Where the watches stand", "Where
+// the data center, launch complex and yard stand" and "Where the infrared telescope stands".
 import { BUILDS } from "./plan";
 import { CATALOG } from "@/lib/sim/works";
 
@@ -13,15 +13,17 @@ export interface Place {
   name: string;
 }
 
-/** Where a build stands: on Earth, the Moon or in orbit, at one place or more. */
+/** Where a build stands: on Earth, the Moon, in low orbit or out at L2, at one place or more. */
 export interface Site {
-  on: "earth" | "moon" | "orbit";
+  on: "earth" | "moon" | "orbit" | "l2";
   /** How the map draws it: a dome of the sky each place watches, a ring round it, or paths up to orbit from it. */
   draw: "dome" | "ring" | "launch";
-  /** In orbit, one place, its name only. */
+  /** In orbit or at L2, one place, its name only. */
   places: Place[];
   /** In orbit: how high, in km, its tilt to the equator, in degrees, and minutes round. */
   orbit?: { km: number; tilt: number; minutes: number };
+  /** At L2: how far out from Earth, in km. */
+  km?: number;
 }
 
 /** A build's story: where it stands, why there, what it takes, and who tried before us. */
@@ -33,8 +35,7 @@ export interface Story {
 }
 
 const kt = (name: string) => BUILDS.find((b) => b.name === name)?.kt ?? 0;
-const years = (name: string) =>
-  name === "Data center" ? CATALOG.dataCenter.years : (CATALOG.works[name]?.years ?? 0);
+const years = (name: string) => (name === "Data center" ? CATALOG.dataCenter.years : (CATALOG.works[name]?.years ?? 0));
 
 export const SITES: Record<string, { site: Site; story: Story }> = {
   "All-sky watch": {
@@ -85,6 +86,18 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
       takes: `About ${years("Data center")} Year, as fast as the chip factories fill it. At first it draws about half a percent of Earth’s energy.`,
       before:
         "Stargate’s campus at Abilene, Texas, began in 2024, eight buildings for 1.2 GW. By April 2026, about 200 MW ran.",
+    },
+  },
+  "Infrared telescope": {
+    // Where Webb flies, and where NASA meant to send the Habitable Worlds Observatory.
+    site: { on: "l2", draw: "ring", places: [{ lat: 0, lon: 0, name: "L2, 1.5 million km out" }], km: 1_500_000 },
+    story: {
+      where:
+        "At L2, 1.5 million km out on Earth’s night side, where Webb flies. The Sun, Earth and Moon all stay behind it.",
+      why: "Infrared is heat, so the telescope must be colder than the worlds it reads. One shade blocks all three, and behind it Webb holds near 40 K while its sunny side reaches 110 °C.",
+      takes: `About ${years("Infrared telescope")} Years, built in orbit, a quarter faster once the yard is done.`,
+      before:
+        "NASA’s Habitable Worlds Observatory was to read the air of at least 25 such worlds from here in the 2040s. In April 2026 NASA asked only $5 million for it, down from $150 million.",
     },
   },
   "Launch complex": {
