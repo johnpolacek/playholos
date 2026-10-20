@@ -1,5 +1,5 @@
 import { useEffect, useSyncExternalStore } from "react";
-import type { Access } from "@/lib/access";
+import type { Access, Wrong } from "@/lib/access";
 
 // What opens the Mind in this browser, for the menu and the Mind tab. The cookie hides it from the page, so they ask
 // the Worker, and share one answer so a key forgotten in the menu locks the Mind tab too.
@@ -19,7 +19,7 @@ function set(next: Access) {
 
 async function ask(init?: RequestInit) {
   const res = await fetch("/api/access", init);
-  return (await res.json()) as { open: Access; wrong?: "key" | "code" };
+  return (await res.json()) as { open: Access; wrong?: Wrong };
 }
 
 /** The key, the code or nothing, and undefined until the Worker answers. */

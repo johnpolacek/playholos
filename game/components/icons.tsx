@@ -28,3 +28,13 @@ export function Globe({ size = 14 }: { size?: number }) {
     </svg>
   );
 }
+
+/** A key: its bow, its shaft and two teeth. */
+export function KeyMark({ size = 14 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 16 16" aria-hidden className="shrink-0" {...LINE}>
+      <circle cx="4.75" cy="8" r="3" />
+      <path d="M7.75 8h6.5M11.5 8v2.5M14.25 8v2" />
+    </svg>
+  );
+}

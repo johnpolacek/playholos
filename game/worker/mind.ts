@@ -1,6 +1,6 @@
 import { type AnthropicLanguageModelOptions, createAnthropic } from "@ai-sdk/anthropic";
 import { APICallError, convertToModelMessages, createUIMessageStreamResponse, streamText, toUIMessageStream, type UIMessage } from "ai";
-import { BAD_KEY } from "@/lib/access";
+import { BAD_KEY, KEY_NEEDS_WORKSPACE, MIND_MODEL } from "@/lib/access";
 import { realTime, tenths, YEAR_0, yearAt } from "@/lib/game/clock";
 import { describeCharter } from "@/lib/game/charter";
 import { describeLeads } from "@/lib/game/leads";
@@ -8,7 +8,7 @@ import { BUILDS } from "@/lib/game/plan";
 import { EARTH_AT_YEAR_0 } from "@/lib/mind/earth";
 import { EARTH_LEADS } from "@/lib/mind/leads";
 import { describe, earthKnows } from "@/lib/sim/knowledge";
-import { apiKeyFor } from "./access";
+import { apiKeyFor, workspaceFor } from "./access";
 import { inPool, loadVoices, loadWorld } from "./world";
 
 // A first sketch of the Mind's voice. Its charter and dials join it later.
@@ -73,8 +73,9 @@ export async function mind(req: Request) {
   const began = typeof beganAt === "number" && Number.isFinite(beganAt) ? beganAt : null;
   // The knowledge wall: the seed's world stays here, and the Mind hears only what Earth knows of it.
   const known = inPool(seed) ? await loadWorld(seed).then(async (w) => describe(earthKnows(w, Math.max(0, yearAt(began) ?? 0), await loadVoices(w)))) : "";
+  const workspace = workspaceFor(req);
   const result = streamText({
-    model: createAnthropic({ apiKey })("claude-opus-5-5"),
+    model: createAnthropic({ apiKey, headers: workspace ? { "anthropic-workspace-id": workspace } : undefined })(MIND_MODEL),
     system: [MIND, readCharter(charter), EARTH_AT_YEAR_0, EARTH_LEADS, describeLeads(readObserve(observe), yearAt(began)), readQueue(builds), known, now(began)]
       .filter(Boolean)
       .join("\n\n"),
@@ -82,8 +83,12 @@ export async function mind(req: Request) {
     maxOutputTokens: 4000,
     providerOptions: { anthropic: { effort: "low" } satisfies AnthropicLanguageModelOptions },
   });
-  // Anthropic refusing the key is the one failure the player can fix, so it alone gets its own line.
-  const onError = (e: unknown) =>
-    APICallError.isInstance(e) && (e.statusCode === 401 || e.statusCode === 403) ? BAD_KEY : "The Mind can’t answer right now.";
+  // Anthropic refusing the key is the failure the player can fix, so it gets its own lines.
+  const onError = (e: unknown) => {
+    if (!APICallError.isInstance(e)) return "The Mind can’t answer right now.";
+    if (e.statusCode === 401 || e.statusCode === 403) return BAD_KEY;
+    if (e.statusCode === 400 && e.responseBody?.includes("anthropic-workspace-id")) return KEY_NEEDS_WORKSPACE;
+    return "The Mind can’t answer right now.";
+  };
   return createUIMessageStreamResponse({ stream: toUIMessageStream({ stream: result.stream, onError }) });
 }
