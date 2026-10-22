@@ -128,7 +128,19 @@ Every source the game rests on, grouped by the question it answers. Each entry s
 - **[PANOSETI](https://oirlab.ucsd.edu/PANOinstr.html), checked 2026-10-18** · Instrument. Project page and [Wright et al. 2022](https://arxiv.org/pdf/2210.01356.pdf), through a search summary.
   - An all-sky optical SETI watch for laser pulses from nanoseconds to seconds, timed to 1 ns. Domes of 0.46 m Fresnel-lens telescopes, each patch of sky seen from two sites at once to rule out air-shower flashes. Prototypes at Lick, two sites 677 m apart.
   - Matters: a laser knock can be a billionth of a second long, so catching one takes a watch built for it.
-  - Used: the Build tour, the Mind's line on the deep flash watch, 2026-10-18.
+  - Used: the Build tour, the Mind's line on the deep flash watch, 2026-10-18. What the deep flash watch sees, 2026-10-20: below.
+- **[Howard et al. 2004, Search for Nanosecond Optical Pulses from Nearby Solar-Type Stars](https://collaborate.princeton.edu/en/publications/search-for-nanosecond-optical-pulses-from-nearby-solar-type-stars/), checked 2026-10-20** · Paper, ApJ 613:1270, abstract through a search summary.
+  - With Earth's technology of 2000, a directed laser pulse can outshine the Sun's broadband visible light by four orders of magnitude. Their search watched about 13,000 Sun-like stars.
+  - Matters: a flash aimed at Earth from a neighbor 50 ly away is bright enough to see, so what limits a flash watch is where and when it looks, not how far.
+  - Used: `calcs/seed.py` LASER and FLASH_SEEN, which senders knock by laser and how often the deep flash watch sees it, 2026-10-20.
+- **[Abeysekara et al. 2016, Optical SETI Observations of the Anomalous Star KIC 8462852](https://arxiv.org/pdf/1512.02388), checked 2026-10-20** · Paper, VERITAS, through a search summary.
+  - Notes that several papers describe megajoule pulsed lasers outshining their own star at up to about 1000 ly.
+  - Matters: the same reach, from an independent team, twenty times our neighbors' distance.
+  - Used: as above.
+- **[Wright et al. 2018, Panoramic optical and near-infrared SETI instrument: overall specifications and science program](https://arxiv.org/pdf/1808.05772), checked 2026-10-20** · Paper, through a search summary, with [PANOSETI's instrument page](https://oirlab.ucsd.edu/PANOinstr.html).
+  - One site sees about 8,445 square degrees at once, 20.47% of the sky, at night. It needs about 20 photons a pulse in visible light.
+  - Matters: a dome sees a fifth of the sky, at night, under clear sky, so it sees an hours-long laser knock only some of the time.
+  - Used: FLASH_SEEN in `calcs/seed.py`, a sample of 0.3 a send, 2026-10-20.
 
 ## Earth to Year 0: forecasts
 
@@ -603,6 +615,17 @@ What Sol's own instruments have found nearby. For v2 open question 3.
   - Matters: the nearest world we know, and the reason the two roads go where they go.
   - Used: game/lib/game/leads.ts, the lead "A world next door", and game/lib/game/reach.ts, the roads to Proxima at 4.24 ly, 2026-10-19. From the Laser Sail Array's plateau it climbs about 50° up: this project's reckoning at Dec −62.68°.
 
+- **Proxima b's nature, drawn, 2026-10-22.** For arrivals on Reach. Nothing new read: each piece is logged elsewhere here.
+  - Its least mass, 1.055 Earths, 0.0485 AU out from a star of 0.00157 Suns: the entry above.
+  - The cosmic shoreline with Pass et al. 2025's factor of 3.1 for a fully convective red dwarf, and each world's luck of 0.5 in the log: calcs/seed.py's, under "Kinds of worlds".
+  - Rock gives way to gas at 2.0 Earths: Chen and Kipping 2017, logged and read at source.
+  - Its age, 4.2 to 6.7 billion years, drawn evenly: Alpha Centauri A's 20 ages in Ware et al. 2026. That Proxima shares its system's age is general knowledge, not a source read.
+  - This project's arithmetic: at its least mass Proxima b sits about 0.85 below the shoreline in the log, so it keeps air in about 1 draw in 20. Over 20,000 draws: bare rock 81%, a small gas world 15%, air 4%, forests among it 1.9%.
+  - What a flyby sees: Eubanks et al. 2026, logged, about 20 m at best and 200 m at a miss of 100,000 km. So haze, bare ground, cloud and sea, and patches of forest show. Microbes and oxygen don't. That a probe also reads its air is this project's, from Daedalus's 450 t of payload.
+  - From general knowledge, not a source read: plants under a red star would look dark, as Kiang et al. 2007 argue.
+  - Matters: the lead said bare rock and air were roughly even. The physics the seed uses makes bare rock far likelier, so since 2026-10-22 the lead says bare rock is likely, air unlikely and a gas world very unlikely. Pass et al. 2025 list the rocky red dwarf worlds measured bare: LHS 3844 b, TRAPPIST-1 b and c, LTT 1445 A b, GJ 1132 b. Nguyen et al. 2026's models keep air only on the largest, most temperate.
+  - Used: game/lib/sim/proxima.ts, the visits in game/lib/sim/knowledge.ts, the readings on Proxima's lead, and its destination on Reach.
+
 - **[Alpha Centauri A's candidate, S1](https://arxiv.org/abs/2508.03814)** · 4.4 ly. Imaged once by JWST in August 2024, missed in February and April 2025, with a 52% chance its orbit hid it. JWST observed it again on August 11 and 12, 2026: [programme 12628](https://www.stsci.edu/jwst-program-info/program/?program=12628), 4.5 hours with its mid-infrared spectrometer, seeking ammonia in the planet's light. The data are archived and no result is published as of 2026-10-13. The proposal says a bright background star blocks any further try until about 2030. Agent, from STScI's pages. Adopt the result when it is out.
 - **[Barnard's Star](https://ui.adsabs.harvard.edu/abs/2025ApJ...982L...1B/abstract)** · 6 ly. Four sub-Earths confirmed in 2025 after decades of false claims. Basant et al., MAROON-X and ESPRESSO.
 - **[82 Eridani d](https://arxiv.org/abs/2501.17092)** · 19.7 ly. At least 5 Earth masses, 650 days, eccentricity 0.45, swinging through the warm zone of a Sun-like star. Nari et al. 2025. Its air waits for the Habitable Worlds Observatory.
@@ -745,6 +768,12 @@ What Sol's own instruments have found nearby. For v2 open question 3.
   - Matters: a dead world keeps its carbon for thousands of years and loses its smog at once. The first telescope reads the carbon and nothing that only industry makes. So it reads strange air, and not its cause.
   - Not used yet: watching a world's ozone and color for eruptions under way.
   - Used: v2 [How Earth learns](HOLOS_GAME_CONCEPT.md#how-earth-learns), and the second mock's Alpha Centauri A reading.
+
+- **The Mind's words on a read world, written 2026-10-22.** For readings on Scan.
+  - Already logged: Seavey et al. 2026, oxygen without life in thin dry air, and Krissansen-Totton et al. on reading oxygen only in context.
+  - From general knowledge, not a source read: Earth's earliest life made no oxygen, and oxygen built up in its air only later. The line says only that early microbes made none, and gives no date.
+  - The bands and their wavelengths, 0.6, 0.76 and 0.94 microns, are lib/sim/observing.ts's. Drawing each found gas as a dark line is how a spectrum shows absorption.
+  - Used: lib/game/leads.ts, airReading.
 
 ## Where neighbors can live
 
@@ -1259,6 +1288,15 @@ What a neighbor's world can plausibly be, beyond an Earth twin. Each roster entr
   - The Stanford torus: [NASA SP-413, Space Settlements: A Design Study](https://ntrs.nasa.gov/citations/19770014162), from a 1975 summer study, published 1977.
   - Star lifting: Criswell 1985, in Interstellar Migration and the Human Experience, University of California Press ([Internet Archive lending copy](https://archive.org/details/interstellarmigr0000unse_h4h6), ISBN 0520053494, checked 2026-10-16). No free text found.
   - Used: v1 catalog (mass driver, habitat ring, star lifting).
+- **Do matter and energy limit a growing civilization, checked 2026-10-22.** For whether builds should spend matter and energy as well as compute.
+  - **[Balbi and Lingam 2024](https://arxiv.org/abs/2409.06737)** · Preprint, published in Astrobiology 2025. Abstract read on arXiv, and parts of the text in its HTML through a fetch.
+    - Waste heat follows from any use of energy. At 1% more energy a year, a planet like Earth could lose its liquid water within about 1,000 years, from starlight or its own sources alike.
+    - The text puts the view that galaxy-wide growth fails on resources or energy with von Hoerner 1975, Newman and Sagan 1981, and Mullan and Haqq-Misra 2019, none read.
+  - **[Armstrong and Sandberg 2013](https://www.practicalethics.ox.ac.uk/node/174891)** · Published, Acta Astronautica 89, 1. From search summaries, not read: a civilization that can build a Dyson swarm can launch probes to millions of galaxies with modest energy and matter. The first step takes Mercury apart for the swarm.
+  - From general knowledge, the text not read: [Dyson 1960](https://doi.org/10.1126/science.131.3414.1667), Science 131, 1667. A growing civilization comes to use all its star's light, and takes planets apart for the matter, so its waste heat shows in the infrared. The exact sentence on matter and energy was not found in any source we could read.
+  - From general knowledge: Kardashev 1964 ranks civilizations by the energy they use. Stross's Accelerando, 2005, takes the inner planets apart for computers round the Sun.
+  - This project's arithmetic: a 1,500 t seed ship at a tenth of light speed moves with about 6.7 × 10²⁰ J, about a Year of Earth's energy at 24 TW. Starshot's 100 GW is 0.4% of that grid, for minutes a launch.
+  - Matters: real and hard science fiction agree that energy and matter set the ceilings, and compute itself runs on both. The game already caps compute at the grid, paces megatonne works by rock, and in calcs/early_game.py paces seed ships by their 40,000 t of deuterium. The 12 builds open at Year 0 are small enough that compute is the cost that bites.
 
 ## Outposts and colonies
 
@@ -1355,6 +1393,79 @@ Gathered 2026-10-14 for the round on Earth's outposts and colonies.
   - *On the map.* Earth turns once a minute there, so the yard goes round in about 4 seconds, at Earth's own pace.
   - Matters: each build stands where the real thing would, for the real reason: power, the equator, or an orbit everyone can reach.
   - Used: game/lib/game/sites.ts, their places and stories, and game/lib/drift.ts, the ring, the paths up from Kourou and the yard's orbit, 2026-10-18.
+- **Where ground solar stands, checked 2026-10-22** · Mixed. For the Build tab, Ground Solar's places and story. Researched by an agent.
+  - *Talatan.* Talatan Solar Park, Gonghe County, Qinghai, on the Tibetan plateau beside the Longyangxia Dam, 36.19° N, 100.54° E ([Wikipedia](https://en.wikipedia.org/wiki/Talatan_Solar_Park), read through a fetch). It covers 420 km², by the New York Times, 10 October 2025, as Wikipedia cites it. Wikipedia's pages disagree on its size: 21 GW in March 2026 from a prefecture source, 16 GW in 2023, and 8.43 GW in a 2025 timeline ([List of photovoltaic power stations](https://en.wikipedia.org/wiki/List_of_photovoltaic_power_stations), first half read through a fetch). So the story leaves its capacity out. The 3,000 m altitude is uncited there.
+  - *Khavda.* Khavda Renewable Energy Park, Gujarat, 24.117° N, 69.350° E, on salt desert by Pakistan. 30 GW of solar and wind are planned by 2029, and 9.4 GW ran as of April 2026 ([Wikipedia](https://en.wikipedia.org/wiki/Khavda_Renewable_Energy_Park), read through a fetch). Its area is 726 km² in the infobox and 538 km² in press, the latter through a search summary.
+  - *Cauchari.* Jujuy, Argentina, 24.095° S, 66.724° W, over 4,000 m up. 300 MW and about 660 GWh a year since 2020 ([Wikipedia](https://en.wikipedia.org/wiki/Cauchari_Solar_Plant), read through a fetch). This project's arithmetic: a 25% capacity factor.
+  - *Where panels make the most.* [World Bank and Solargis 2020, Global Photovoltaic Power Potential by Country](https://documents1.worldbank.org/curated/en/466331592817725242/text/Global-Photovoltaic-Power-Potential-by-Country.txt) · Report. Summary and regional sections read in full text.
+    - The highest potential is in the Andes: northwest Argentina, Bolivia, northern Chile and southern Peru. It is 15 to 20% above the Arabian Peninsula or north Africa, from clear skies, clean air, cold and altitude.
+    - Namibia has the highest country average and Ireland the lowest, slightly over a factor of two apart.
+  - *How much solar.* [Ember, Global Electricity Review 2026](https://ember-energy.org/latest-insights/global-electricity-review-2026/2025-in-review/) · Data, read through a fetch. Solar made 2,778 TWh in 2025, up a record 636 TWh, and 647 GW were added.
+  - This project's arithmetic: a fifth of 24 TW is 4.8 TW, about 42,000 TWh a Year, 15 times 2025's solar. Built over 10 Years, that is about 4,200 TWh a Year added, 6.6 times 2025's record rise.
+  - This project's choice: three places, the largest park at work, the largest being built, and the region with the best sunlight. No plan links them.
+  - Used: game/lib/game/sites.ts, 2026-10-22.
+- **Where the 15 m mirror stands, checked 2026-10-22** · Mixed. Researched by an agent.
+  - *LUVOIR-A.* 15.1 m across, folding to fit an 8 m fairing, to orbit Sun–Earth L2, launching about 2039 if funded, 18 to 24 billion dollars over its life ([Wikipedia](https://en.wikipedia.org/wiki/Large_Ultraviolet_Optical_Infrared_Surveyor), read through a fetch). The 2020 survey recommended a telescope of about 6 m instead, quoted on the same page.
+  - [LUVOIR final report](https://arxiv.org/abs/1912.06219): abstract reread 2026-10-22. It does not name the orbit. Its 27.8 t, or 37.4 t with growth, is already logged.
+  - This project's arithmetic: 15 over 6.5 is 2.3, so the closest a world can sit to its star and still be split shrinks from 56 to about 24 thousandths of an arcsecond in green light. The area is 5.3 times Webb's, taking both as full circles.
+  - This project's choice: beside the Infrared Telescope, as the real one would go.
+  - Used: game/lib/game/sites.ts, 2026-10-22.
+- **Where the Moon's mass driver stands, checked 2026-10-22** · Mixed. Researched by an agent.
+  - [O'Leary, Heppenheimer and Kaplan 1977, material transfer from the Moon](https://nss.org/?p=29416) · Published, AIAA Progress in Astronautics and Aeronautics 57, from the 1976 Ames summer study. Abstract read through a fetch.
+    - Launching from a critical longitude on the lunar equator, 33.1° E, gives the least scatter for one class of paths to L2.
+    - Errors of about 10 cm/s along the track, 1 mm/s up and 1 cm/s sideways give a 50 m miss.
+  - [Heppenheimer and Kaplan 1977](https://repository.exst.jaxa.jp/dspace/handle/a-is/438394) · AIAA. Abstract read through a fetch. Payloads fly to a passive catcher near L2.
+  - [Criswell, The Initial Lunar Supply Base](https://nss.org/settlement/nasa/spaceres/V-1.html) · Study, NASA SP-428, 1979. Read through a fetch. The base stands at the equator, near where Mare Tranquillitatis meets the eastward highlands. The driver points east, and catchers wait at L2.
+  - [Mass Drivers III: Engineering](https://nss.org/settlement/nasa/spaceres/III-3.html) · SP-428. Read through a fetch. Launch at 2,400 m/s, the lunar escape speed. 650,000 t a year at 49% operating time, as 10.5 kg loads at 4 Hz. It names no site.
+  - *Mass Driver 1.* Built by MIT students under O'Neill and Kolm in 1976 and 1977, largely from scrap ([Wikipedia](https://en.wikipedia.org/wiki/Mass_Driver_1), read through a fetch).
+  - Sonntag 2026, already logged: its siting sections read in full text 2026-10-22. Its quenchgun weighs 372 t and throws 1 t every 2 minutes on 20 MW, 262,800 t a year. Only a few polar sites send rock straight to low orbit.
+  - This project's choice: O'Neill's equator, not Sonntag's pole. The game's 600 kt a Year is O'Neill's group's rate. Its rock goes to a catcher and the foundry's orbit, as theirs did.
+  - This project's arithmetic: about 250 km from the Moon Vault's pit. The 1 kt of machines is HOLOS_GAME_CONCEPT.md's.
+  - Used: game/lib/game/sites.ts, 2026-10-22.
+- **Where the orbital foundry stands, checked 2026-10-22** · Mixed. Researched by an agent.
+  - O'Leary, Heppenheimer and Kaplan 1977, the same abstract: a stable orbit for the manufacturing facility with half the Moon's period, 10 to 30 m/s from L2, and cheaper to and from geosynchronous and low orbit than the other sites weighed.
+  - Heppenheimer and Kaplan 1977: a colony orbit of about two weeks, reached from L2 for as little as 9.02 m/s.
+  - This project's arithmetic and choice: half the sidereal month is 13.66 days, 19,672 minutes, about 241,000 km from Earth's center by Kepler's law. Drawn as a circle, tilted 25°, near the Moon's plane against Earth's equator around 2040. The abstracts give no shape.
+  - [Space Forge, ForgeStar-1](https://www.spaceforge.com/missions/forgestar-1) · Company page, read through a fetch. Launched June 2025. Its first plasma near 1,000 °C, the first on a free-flying commercial craft, is through a search summary.
+  - Used: game/lib/game/sites.ts, 2026-10-22.
+- **Where belt mining stands, checked 2026-10-22** · Mixed. Researched by an agent.
+  - The belt from 2.1 to 3.3 AU is already in drift.ts, logged under "The Sun's small bodies".
+  - *Psyche.* [JPL, May 2026](https://www.jpl.nasa.gov/news/nasas-psyche-mission-aces-mars-flyby-targets-metal-rich-asteroid/), read through a fetch: arrival in August 2029 at the metal-rich asteroid. Up to 60% metal by volume is Elkins-Tanton et al. 2022, through a search summary.
+  - *Samples.* Bennu's 121.6 g, with water in hydrated clay, through search summaries.
+  - [Keck Institute 2012](https://kiss.caltech.edu/final_reports/Asteroid_final_report.pdf): a 7 m, 500 t asteroid to high lunar orbit, through a search summary. Odin's loss in March 2025 is already logged.
+  - This project's choice: the belt as the source, and rock coming home to the foundry's orbit, where the map places it, since the map has no belt. Real plans aim at near-Earth asteroids.
+  - Used: game/lib/game/sites.ts, 2026-10-22.
+- **Where the far-side array stands, checked 2026-10-22** · Mixed. Researched by an agent.
+  - *Daedalus.* 5.9° S, 179.4° E, 93.6 km across, 3.0 km deep, near the middle of the far side, close to the point opposite Earth, proposed for a giant radio telescope ([Wikipedia](https://en.wikipedia.org/wiki/Daedalus_(crater)), read through a fetch).
+  - [Burns et al. 2019, FARSIDE](https://arxiv.org/abs/1911.08649) · NASA probe study. Site and instrument sections read in full text. The far side gives more than 100 dB against Earth's interference. The site must sit within 65° of the point opposite Earth.
+  - [van der Wateren and Burns, ITU, August 2026](https://www.itu.int/hub/2026/08/cosmology-from-the-moon-in-a-radio-quiet-environment/), read through a fetch. The shielded zone lies more than 23.2° beyond the limb. Radio Regulations Nos. 22.22 to 22.25 bar harmful emissions there.
+  - [Polidan et al. 2024, FarView](https://arxiv.org/abs/2404.03840) · ASR. Architecture and site sections read in full text. 100,000 dipoles over about 200 km², from 50 to 70 t of aluminum made from regolith.
+  - [Li et al. 2026](https://arxiv.org/abs/2604.07920) · Preprint. Abstract and instrument section read. The first radio SETI search from the far side, in Chang'e 4's recordings since 2019, found no credible periodic artificial signal.
+  - Maccone's protected circle and Bassett et al. 2020, through search summaries.
+  - This project's choice: Daedalus, best shielded beside the point opposite Earth. Von Kármán is the strongest alternative. Whether Daedalus's floor is flat enough was not checked.
+  - This project's arithmetic: 100 dB is ten billion times.
+  - Used: game/lib/game/sites.ts, 2026-10-22.
+- **Where power from orbit stands, checked 2026-10-22** · Mixed. Researched by an agent.
+  - NASA OTPS 2024, already logged, read in full 2026-10-22: both designs assembled in geostationary orbit in the 2040s. RD1 makes power 99% of the year, delivers 2 GW, needs 5.9 million kg sent up and one 6 km field of ground antennas.
+  - *Geostationary orbit.* 35,786 km above the equator, 1,436 minutes ([Wikipedia](https://en.wikipedia.org/wiki/Geostationary_orbit), read through a fetch).
+  - [Caltech, 1 June 2023](https://www.caltech.edu/about/news/in-a-first-caltechs-space-solar-power-demonstrator-wirelessly-transmits-power-in-space), read through a fetch. MAPLE's beam was detected on a Pasadena rooftop.
+  - Glaser 1968, through a search summary.
+  - This project's arithmetic: 4.8 TW is 2,400 of RD1, about 14 Mt at its ratio. The game's 10 Mt is its own.
+  - Used: game/lib/game/sites.ts, 2026-10-22.
+- **Where the deuterium works stands, checked 2026-10-22** · Mixed. Researched by an agent.
+  - [Heavy water](https://en.wikipedia.org/wiki/Heavy_water) · Reference, read through a fetch. Bruce, in service from 1973, 1,600 t a year at its peak, the largest in the world, 340,000 t of feed water a tonne, shut in 1997, on Lake Huron. India is the largest producer.
+  - [Bruce Nuclear Generating Station](https://en.wikipedia.org/wiki/Bruce_Nuclear_Generating_Station), read through a fetch. 44°19′31″ N, 81°35′58″ W. The heavy water plant made 16,000 t in all, on 750 MW of the station's process heat.
+  - [WNN, 14 May 2024](https://www.world-nuclear-news.org/Articles/Canadian-firms-team-up-for-heavy-water-production), read through a fetch. It gives 1998 for the close. Canadian firms are weighing new production.
+  - [Historic Nova Scotia, Glace Bay](https://historicnovascotia.ca/items/show/90), read through a fetch. It drew seawater, and corrosion from the sea water kept it from producing until 1976. It closed in 1985.
+  - This project's arithmetic: 24 times Bruce's peak is 38,400 t of heavy water and about 7,700 t of deuterium a Year, on 18 to 44 GW of heat, under 0.2% of 24 TW.
+  - This project's choice: Bruce, fresh water and nuclear steam, the pairing that worked. So since 2026-10-22 the build draws heavy hydrogen from water, not seawater.
+  - Used: game/lib/game/sites.ts, 2026-10-22.
+- **Where the fusion drive stands, checked 2026-10-22** · Mixed. Researched by an agent.
+  - [Mahon, i4is, 2018](https://i4is.org/reaching-the-stars-in-a-century-using-fusion-propulsion/) · Review of Freeland and Lamontagne 2015, JBIS 68, 68. Read through a fetch. Firefly could be built in Earth orbit or at an Earth–Moon Lagrange point, and is towed behind the Moon to be lit, away from Earth. 2,200 t dry, 4.7% of light speed after 10 years.
+  - Zap Energy's 39 kW is already logged.
+  - This project's choice: on the yard's orbit, about 355 km behind it. 1,400 to 4,000 t is HOLOS_GAME_CONCEPT.md's.
+  - Used: game/lib/game/sites.ts, 2026-10-22.
+- **Where the seed ship stands, checked 2026-10-22** · This project's choice, from logged sources: Freitas's REPRO, Gros 2017's 1,500 t, and Voyager 1's 40,000 years. On the yard's orbit, about 530 km behind it, beside its drive. Used: game/lib/game/sites.ts, 2026-10-22.
 - **Close views, checked 2026-10-18** · Mixed. For Close View on the map, where the camera falls from orbit to the ground at a build and draws it there in lines and lights.
   - *Hyperion's first plan.* 4 million sq ft over 2,250 acres, in nine buildings phased in through 2030. Its place is 32.4771° N, 91.6323° W, on Louisiana Highway 183 just outside Holly Ridge, with three combined-cycle gas plants from Entergy and the Smalling substation, which Meta paid for ([Wikipedia](https://en.wikipedia.org/wiki/Hyperion_Data_Center), [DCD](https://www.datacenterdynamics.com/en/news/meta-purchases-additional-1400-acres-for-hyperion-mega-data-center-expansion/)). Meta bought 1,400 more acres at the end of 2025, and its plans grew from 2 GW to 5 GW in July 2026 ([DCD](https://www.datacenterdynamics.com/en/news/meta-expands-data-center-campus-in-richland-parish-louisiana-to-5gw-will-invest-50bn/)).
   - *Our drawing.* 11 halls, as IEEE Spectrum counts the planned data centers, each 370 by 110 m, about the 41,000 m² each of the first plan's nine. The layout, the substation and gas plants' places, and the two power lines are ours: no site plan has been published.
@@ -1377,6 +1488,12 @@ Gathered 2026-10-14 for the round on Earth's outposts and colonies.
   - *Parker Solar Probe.* 192 km/s at its closest to the Sun, 24 December 2024, the fastest thing we have built ([Guinness World Records](https://www.guinnessworldrecords.com/world-records/66135-fastest-spacecraft-speed)). For the Probe Yard's "WE HAVE".
   - Matters: down at the ground, or out in space beside it, each build reads as a step from 2040, beside what stands there now.
   - Used: game/lib/game/close.ts, each build's model, game/lib/game/sites.ts, the Laser Sail Array's and Probe Yard's places and stories, and game/lib/drift.ts, the ground and the fall to each, 2026-10-18. The two stories rechecked against these, 2026-10-19.
+- **Close views for what opens and the long road, drawn 2026-10-22** · This project's drawings, from the places' sources above.
+  - Real sizes used: Talatan's rows of panels; LUVOIR-A's 15 m mirror; O'Neill's group's driver of nearly 5 km at 100 g, letting go at 2.4 km/s; the Keck Institute's bagged asteroid; Daedalus crater and FarView's dipoles made from aluminum; NASA's 2024 stations in geostationary orbit; Bruce's heavy water on Lake Huron; Firefly's radiators and magnetic nozzle; the seed ship's stowed loop.
+  - This project's arithmetic: a load leaving the Moon level falls behind its curve by the distance squared over twice its radius, about 120 m at 20 km and a kilometer at 60.
+  - From general knowledge, not a source read: Kincardine has about 12,000 people and Saugeen Shores about 16,000, by Canada's 2021 census. Lake Huron's shore by Bruce is our reading, not a survey.
+  - Everything else drawn is ours: the blocks, towers, tanks, fins, modules, coils and their places.
+  - Used: game/lib/game/close.ts.
 - **What we have at Year 0, on each build, written 2026-10-18** · This project's setting, not a source. For the Build tab, the "WE HAVE" line that opens each build's story, so it reads as a step from 2040, not 2026.
   - *Drawn from* [Earth's kit at Year 0](HOLOS_GAME_CONCEPT.md#earths-kit-at-year-0), [Growing compute](HOLOS_GAME_CONCEPT.md#growing-compute) and [What Earth hears](HOLOS_GAME_CONCEPT.md#what-earth-hears), as game/lib/mind/earth.ts holds them.
   - *The data center's scale.* This project's arithmetic: thought draws about 0.25 TW, fifty times Hyperion's planned 5 GW. One data center adds half again, about 0.12 TW, half a percent of 24 TW. So one is a Year of the fabs' chips, about 24 Hyperions, not one campus.

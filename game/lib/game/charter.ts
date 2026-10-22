@@ -107,7 +107,7 @@ export function firstAdvice(dials: number[]) {
     ],
     [
       "We would start the builds that carry us outward, and listen while they run.",
-      "We would spend our first thought on the records we already hold. They know more than their first readers saw.",
+      "We would spend our first compute on the records we already hold. They know more than their first readers saw.",
     ],
     [
       "We would look a long time before we touch anything. Nothing out there is in a hurry.",

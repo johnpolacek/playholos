@@ -111,9 +111,9 @@ function compute(share: number) {
 function stops(past: EarthPast) {
   return [
     {
-      kick: "GROW · ENERGY AND THOUGHT",
+      kick: "GROW · ENERGY AND COMPUTE",
       big: "24 TW",
-      line: `Earth’s grid. Thinking takes about 1% of it: ${compute(past.compute)}.`,
+      line: `Earth’s grid. Compute takes about 1% of it: ${compute(past.compute)}.`,
     },
     {
       kick: "GROW · MATTER",

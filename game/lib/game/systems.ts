@@ -18,6 +18,9 @@ export interface Body {
   lead?: boolean;
 }
 
+/** A world's name on the map: a claim not confirmed asks, and one with no name yet is "its world". */
+export const worldName = (w: Body) => (w.name ? `${w.name}${w.status === "confirmed" ? "" : "?"}` : "its world");
+
 export interface Belt {
   name: string;
   /** Inner and outer edge, in AU. */

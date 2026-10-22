@@ -1,0 +1,613 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Build Costs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=SUSE:wght@100..800&display=swap" rel="stylesheet">
+<style>
+/* Offline, the game's own copies of the fonts. */
+@font-face { font-family: "SUSE Variable"; font-weight: 100 800; src: url("../game/node_modules/@fontsource-variable/suse/files/suse-latin-wght-normal.woff2") format("woff2"); }
+@font-face { font-family: "Plex Mono Local"; font-weight: 400; src: url("../game/node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2") format("woff2"); }
+
+/* Colors from game/app/globals.css. The game is always dark. */
+:root {
+  --page: #0b0c0d;
+  --page-ink2: #a9a59c;
+  --frame: #2a2b2e;
+  --paper: #121314;
+  --ink: #e6e3db;
+  --muted: #9c988f;
+  --faint: #34363a;
+  --panel: #17181a;
+  --rowline: #26282b;
+  --track: #2a2b2e;
+  --fill2: #bdb9af;
+  --you: #5bb8d6;
+  --other: #e0a24a;
+  --see: #70d1a9;
+  --late: var(--other);
+  --soon: var(--see);
+  --sans: "SUSE", "SUSE Variable", sans-serif;
+  --mono: "IBM Plex Mono", "Plex Mono Local", monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: #070808; color: var(--ink); font-family: var(--sans); text-wrap: pretty; }
+p { margin: 0; }
+ul { list-style: none; margin: 0; padding: 0; }
+button { font: inherit; color: inherit; }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+header { max-width: 1400px; margin: 0 auto; padding: 40px 16px 8px; display: flex; flex-wrap: wrap; gap: 16px; align-items: end; justify-content: space-between; }
+h1 { margin: 0; font-size: 22px; font-weight: 600; }
+header p { margin-top: 6px; color: var(--muted); font-size: 14px; max-width: 70ch; line-height: 1.45; }
+.ctl { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font: 11px var(--mono); color: var(--muted); }
+.ctl button { background: none; color: var(--muted); border: 1px solid var(--frame); border-radius: 999px; padding: 5px 10px; font: inherit; cursor: pointer; }
+.ctl button:hover { color: var(--ink); }
+.ctl button[aria-pressed="true"] { color: var(--ink); border-color: var(--muted); }
+
+main { max-width: 1400px; margin: 0 auto; padding: 16px 16px 64px; display: grid; gap: 32px 20px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr)); align-items: start; }
+.card { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.meta { display: flex; gap: 10px; align-items: baseline; }
+.num { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.name { font-size: 15px; font-weight: 600; }
+.note { color: var(--muted); font-size: 13px; line-height: 1.4; margin-top: -4px; min-height: 3.6em; }
+
+/* The game's screen: the top bar, and the Build tab under it. */
+.frame { width: 100%; max-width: 430px; height: 820px; background: var(--paper); border: 1px solid var(--rowline); border-radius: 16px; display: flex; flex-direction: column; overflow: hidden; }
+
+.hud { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px 14px; padding: 14px 16px 12px; border-bottom: 1px solid var(--faint); flex: none; }
+.hud.wide { grid-template-columns: 1fr 1fr; }
+.hud.wide .cm { grid-column: 1 / -1; }
+.m { display: flex; flex-direction: column; gap: 4px; font-size: 10px; letter-spacing: .08em; color: var(--muted); min-width: 0; }
+.m .v { font-family: var(--mono); font-size: 12px; font-weight: 600; color: var(--ink); letter-spacing: 0; line-height: 1.1; }
+.m .sub { font-size: 11px; letter-spacing: 0; color: var(--muted); min-height: 1.3em; line-height: 1.3; }
+.m .sub.late { color: var(--late); }
+.bar { position: relative; display: block; height: 4px; background: var(--track); }
+.bar s { position: absolute; left: 0; top: 0; bottom: 0; background: var(--fill2); transition: width .45s cubic-bezier(.2,.8,.2,1); }
+.bar i { position: absolute; top: 0; bottom: 0; border-top: 1px dashed var(--muted); border-bottom: 1px dashed var(--muted); opacity: .7; transition: left .45s, width .45s; }
+
+/* Meter: compute as a stack of what each build needs, spare compute speeding them, and our Mind's studies. */
+.stack { position: relative; height: 12px; background: var(--track); border-radius: 2px; margin-top: 2px; }
+.sg { position: absolute; top: 0; bottom: 0; }
+.sg.st { background: var(--muted); opacity: .4; }
+.sg.fd { background: repeating-linear-gradient(90deg, var(--c) 0 2px, transparent 2px 4px); }
+.sg.nd { background: var(--c); box-shadow: inset -1px 0 0 var(--paper); }
+.sg.sp { background: repeating-linear-gradient(-45deg, color-mix(in srgb, var(--c) 60%, transparent) 0 3px, color-mix(in srgb, var(--c) 16%, transparent) 3px 6px); background-size: 8.49px 8.49px; animation: drift 1.4s linear infinite; }
+.sg.sh { top: -3px; bottom: -3px; border: 1px dashed var(--c); background: color-mix(in srgb, var(--c) 10%, transparent); border-radius: 2px; }
+.sg.pv { outline: 1px solid var(--ink); outline-offset: 1px; z-index: 1; }
+@keyframes drift { to { background-position: 8.49px 0; } }
+.cap { position: absolute; top: -5px; bottom: -5px; width: 1.5px; margin-left: -1px; background: var(--ink); }
+.legend { display: flex; flex-wrap: wrap; gap: 3px 12px; font-size: 11px; letter-spacing: 0; color: var(--muted); margin-top: 2px; }
+.legend b { font-family: var(--mono); font-weight: 500; color: var(--ink); }
+.legend .late b { color: var(--late); }
+.legend i { display: inline-block; width: 8px; height: 8px; margin-right: 5px; vertical-align: -0.5px; border-radius: 1px; }
+
+/* The Build tab. */
+.pn { flex: 1; min-height: 0; overflow: auto; padding: 12px 16px 28px; overscroll-behavior: contain; }
+.ph { display: flex; justify-content: space-between; align-items: center; font-size: 11px; letter-spacing: .08em; color: var(--muted); min-height: 18px; }
+.ph .pv { font: 10px var(--mono); letter-spacing: .12em; color: var(--you); text-transform: uppercase; }
+.lh { display: flex; justify-content: space-between; margin-top: 16px; padding-bottom: 6px; border-bottom: 1px solid var(--rowline); font: 10.5px var(--mono); letter-spacing: .12em; color: var(--muted); }
+.row { display: grid; grid-template-columns: 20px 1fr auto; gap: 0 12px; padding: 12px 6px; margin: 0 -6px; border-bottom: 1px solid var(--rowline); outline: none; border-radius: 6px; transition: background .15s; }
+.row:hover, .row:focus-visible, .row.on { background: rgba(230, 227, 219, .035); }
+.row:focus-visible { box-shadow: inset 0 0 0 1px var(--faint); }
+.row .mk { color: var(--c); margin-top: 2px; }
+.row.locked .mk, .row.locked .tx b { opacity: .55; }
+.tx { min-width: 0; }
+.tx b { font-size: 15px; font-weight: 600; }
+.tx > p { font-size: 13px; line-height: 1.4; color: var(--page-ink2); margin-top: 2px; }
+.cost { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: center; margin-top: 7px; font: 10.5px var(--mono); color: var(--muted); }
+.cost .chip { display: inline-flex; align-items: center; gap: 6px; }
+.need { position: relative; display: inline-block; width: 44px; height: 5px; background: var(--track); }
+.need s { position: absolute; left: 0; top: 0; bottom: 0; background: var(--c); }
+.need s.over { background: repeating-linear-gradient(90deg, var(--c) 0 3px, transparent 3px 5px); }
+.fx { font-size: 12px; line-height: 1.35; margin-top: 4px; }
+.fx .late { color: var(--late); }
+.fx .soon { color: var(--soon); }
+.fx .none, .fx .lock { color: var(--muted); }
+.rt { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+.t { font-size: 12px; color: var(--muted); white-space: nowrap; }
+.pk { position: relative; width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--faint); background: none; cursor: pointer; display: grid; place-items: center; font: 11px var(--mono); color: var(--muted); padding: 0; }
+.pk::before { content: ""; position: absolute; inset: -11px; }
+.pk > span { grid-area: 1 / 1; transition: opacity .15s; }
+.pk.on { background: var(--you); border-color: var(--you); color: var(--paper); }
+.pk.on .h { opacity: 0; }
+.pk.on:hover .h, .pk.on:focus-visible .h { opacity: 1; }
+.pk.on:hover .n, .pk.on:focus-visible .n { opacity: 0; }
+.pk:not(.on):hover { border-color: var(--muted); color: var(--ink); }
+.lk { color: var(--muted); opacity: .7; }
+
+/* Ring: all our compute, drawn round. */
+.ringbox { display: grid; grid-template-columns: 148px 1fr; gap: 14px; align-items: center; margin-top: 10px; }
+.ring { position: relative; width: 148px; height: 148px; }
+.ring svg { position: absolute; inset: 0; overflow: visible; }
+.ring .c { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; }
+.ring .c b { font: 600 22px var(--mono); letter-spacing: -.02em; }
+.ring .c span { font-size: 11px; color: var(--muted); line-height: 1.3; max-width: 78px; }
+.ring .flow { animation: flow 1.6s linear infinite; }
+@keyframes flow { to { stroke-dashoffset: -8; } }
+.rl { display: flex; flex-direction: column; gap: 6px; font-size: 12px; min-width: 0; }
+.rl .it { display: grid; grid-template-columns: 9px 1fr; gap: 0 7px; align-items: baseline; line-height: 1.3; }
+.rl .it i { width: 8px; height: 8px; border-radius: 50%; background: var(--c); }
+.rl .it span { color: var(--muted); }
+.rl .it.tight { font-size: 11px; line-height: 1.25; }
+.rl .it.tight > div { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rl:has(.tight) { gap: 3px; }
+.rl .it em { font-style: normal; font-family: var(--mono); font-size: 11px; color: var(--ink); }
+.kts { margin-top: 12px; }
+.kts .lb { display: flex; justify-content: space-between; font: 10.5px var(--mono); letter-spacing: .12em; color: var(--muted); }
+.blocks { display: grid; grid-template-columns: repeat(20, 1fr); gap: 3px; margin-top: 6px; }
+.blocks i { aspect-ratio: 1; border: 1px solid var(--faint); border-radius: 1.5px; transition: background .3s, border-color .3s; }
+.blocks i.tk { background: var(--c); border-color: var(--c); }
+.blocks i.pv { border-color: var(--c); animation: blink 1s ease-in-out infinite alternate; }
+.blocks i.lift { border-style: dashed; border-color: var(--muted); }
+@keyframes blink { from { background: transparent; } to { background: color-mix(in srgb, var(--c) 45%, transparent); } }
+.wedge { display: inline-block; vertical-align: -2px; }
+
+/* Timelines: each queued build's run to done, on one ruler of Years. */
+.stick { position: sticky; top: -12px; z-index: 3; margin: -12px -16px 0; padding: 12px 16px 10px; background: var(--paper); border-bottom: 1px solid var(--rowline); }
+.gantt { margin-top: 8px; }
+.gl { display: grid; grid-template-columns: 14px 1fr; gap: 0 10px; align-items: center; height: 20px; border-radius: 3px; }
+.gl.on { background: rgba(230, 227, 219, .04); }
+.gm { color: var(--c); display: flex; }
+.gnone { font-size: 12px; color: var(--muted); padding: 6px 0; }
+.ruler { position: relative; height: 18px; margin: 0 0 4px 24px; font: 9.5px var(--mono); color: var(--muted); border-bottom: 1px solid var(--faint); }
+.ruler span { position: absolute; bottom: 3px; transform: translateX(-50%); white-space: nowrap; }
+.ruler span::after { content: ""; position: absolute; left: 50%; top: 14px; height: 4px; width: 1px; background: var(--faint); }
+.run { position: relative; height: 14px; }
+.run .ln { position: absolute; top: 6.5px; height: 1px; left: 0; background: var(--c); opacity: .9; }
+.run .ln.dash { background: none; border-top: 1px dashed var(--c); opacity: .6; }
+.run .tr { position: absolute; top: 5px; height: 4px; border-radius: 2px; }
+.run .tr.late { background: color-mix(in srgb, var(--late) 55%, transparent); }
+.run .tr.soon { background: color-mix(in srgb, var(--soon) 55%, transparent); }
+.run .dm { position: absolute; top: 3px; width: 8px; height: 8px; margin-left: -4px; border: 1.5px solid var(--c); background: var(--paper); transform: rotate(45deg); }
+.run .dm.ghost { border-style: dashed; opacity: .7; }
+.run .tk { position: absolute; top: 2px; width: 1px; height: 10px; background: var(--muted); opacity: .55; }
+.run .lab { position: absolute; top: -1px; font: 10px var(--mono); white-space: nowrap; transform: translateX(8px); }
+.run .lab.late { color: var(--late); }
+.run .lab.soon { color: var(--soon); }
+.run .lab.end { transform: translateX(calc(-100% - 8px)); }
+.key { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 11px; color: var(--muted); margin-top: 8px; }
+.key i { display: inline-block; vertical-align: 1px; margin-right: 5px; }
+
+.still *, .still *::before, .still *::after { animation: none !important; transition: none !important; }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Build Costs</h1>
+    <p>Three ways to show what each build costs and what it slows. Every number comes live from the game’s own pace, at a typical Earth’s compute. Tap + to queue and − to remove. Point at a row, or focus it, to preview it.</p>
+  </div>
+  <div class="ctl">
+    <button data-q="ours">Our queue</button>
+    <button data-q="none">Empty</button>
+    <button data-q="all">All 12</button>
+    <button id="mo" aria-pressed="true">Motion</button>
+  </div>
+</header>
+<main id="cards"></main>
+
+<!-- The game's own pacing, bundled from game/lib/game/plan.ts, lib/game/clock.ts and lib/sim/works.ts with esbuild,
+     2026-10-21. Rebundle if the pace changes. -->
+<script>(()=>{function J(t){let r=Math.max(0,Math.floor(t*3e5/1e3)),l=Math.floor(r/3600),i=Math.floor(r%3600/60);return l?`${l}h ${String(i).padStart(2,"0")}m`:i?`${i}m`:`${r}s`}var j={works:{"All-sky watch":{years:6,want:.2},"Deep flash watch":{years:6,want:.1},"Infrared telescope":{years:8,want:1,orbit:!0},"Moon vault":{years:10,want:1},"Launch complex":{years:2,want:.3},"Orbital yard":{years:5,want:.7},"Probe yard":{years:24,want:10,orbit:!0},"Laser sail array":{years:25,want:.7},"Ground solar":{years:10,want:20},"A 15 m mirror":{years:18,want:2,orbit:!0},"Mass driver":{years:24,want:30,then:["Far-side array, one fifth","Power from orbit"]},"Orbital foundry":{years:30,want:30,orbit:!0},"Belt mining":{years:26,want:20,milestone:["Belt prospecting",20]},"Far-side array, one fifth":{years:6,want:40,copies:[5,"Far-side array, fifth"]},"Fusion drive":{years:30,want:10},"Seed ship":{years:18,want:5,orbit:!0},"Deuterium works":{years:5,want:1},"Power from orbit":{want:200,rock:1e4,most:1}},floor:.6666666666666666,push:10,flagship:.15,gridRoom:96,step:1.5,dataCenter:{years:1,aside:.05},studies:.1,yard:{work:"Orbital yard",cut:.25},rock:{"Mass driver":600,"Belt mining":120}};var m=j,{works:y,floor:K,push:ne,flagship:U,step:q}=m,p=1e-9,oe=(t,r)=>t*(K+(1-K)/r),L=t=>Math.floor(Math.log(m.gridRoom/t)/Math.log(q));function ae(t,r){let l=t.map(({want:i})=>{let h=Math.min(i,r);return r-=h,h});return t.forEach(({want:i,most:h},n)=>{let a=Math.min(i*(h-1),r);l[n]+=a,r-=a}),{s:l.map((i,h)=>i/t[h].want),idle:r}}function S(t,r,{scale:l=1,aside:i=[]}={}){let h=[...t].sort((d,s)=>d.y-s.y),n=[],a=new Map,f=new Map,w=new Set,b={},G=new Map,M=[],u=0,Y=m.studies,B=L(l),T=0,N=!1,k=null,x=[],R=0,H=0,D=0,F=d=>Object.entries(m.rock).reduce((s,[e,o])=>s+o*Math.max(0,d-(b[e]??1/0)),0),$=()=>Object.entries(m.rock).reduce((d,[s,e])=>d+(b[s]!==void 0?e:0),0),te=()=>b[m.yard.work]!==void 0,W=d=>{let s=n.findIndex(e=>f.get(e)>f.get(d)&&!w.has(e));return s<0?n.length:s},P=(d,s,e,o=y[d].years)=>{f.set(d,e),o!==void 0&&a.set(d,o*(y[d].orbit&&te()?1-m.yard.cut:1)),n.splice(s,0,d)},_=()=>{for(let s=!0;s;){s=!1,k!==null&&k+m.dataCenter.years<=u+p&&(M.push(u),k=null,s=!0),k===null&&M.length<B&&(T>0||N)&&(k=u,T>0&&T--,s=!0);for(let e of[...n]){let o=y[e],g=a.get(e);if(o.milestone&&g!==void 0&&g<=o.milestone[1]+p&&b[o.milestone[0]]===void 0&&(b[o.milestone[0]]=u),o.rock!==void 0?F(u)>=o.rock-p:g!==void 0&&g<=p){if(n.splice(n.indexOf(e),1),a.delete(e),s=!0,o.rock!==void 0&&B++,o.copies){let c=(G.get(e)??0)+1;G.set(e,c),b[`${o.copies[1]} ${c}`]=u,c<o.copies[0]&&P(e,W(e),f.get(e))}else b[e]=u;if(e===m.yard.work)for(let c of n)y[c].orbit&&a.has(c)&&a.set(c,a.get(c)*(1-m.yard.cut));if(o.then){let c=W(e);o.then.forEach((A,v)=>P(A,c+v,f.get(e)))}}}for(;h.length&&h[0].y<=u+p;){let e=h.shift();if(s=!0,"studies"in e)Y=e.studies;else if("standing"in e)N=!0;else if("first"in e){let o=n.indexOf(e.first);o>=0&&(n.splice(o,1),n.unshift(e.first),w.add(e.first))}else e.begin==="Data center"?T++:y[e.begin]&&!n.includes(e.begin)&&b[e.begin]===void 0&&P(e.begin,n.length,u)}}D=l*q**M.length/U;let d=Y+i.reduce((s,[e,o,g])=>s+(e<=u+p&&u+p<o?g:0),0)+(k!==null?m.dataCenter.aside:0);R=Math.max(0,D-d/U),{s:x,idle:H}=ae(n.map(s=>({want:y[s].want,most:y[s].most??ne})),R)};for(let d=0;;d++){if(d>1e5)throw new Error("Pacing did not settle.");_();let s=n.map((o,g)=>a.has(o)&&x[g]>0?1/oe(1,x[g]):0),e=r;h.length&&(e=Math.min(e,h[0].y));for(let[o,g]of i)for(let c of[o,g])c>u+p&&(e=Math.min(e,c));if(k!==null&&(e=Math.min(e,k+m.dataCenter.years)),n.forEach((o,g)=>{let c=a.get(o),A=y[o].milestone;c!==void 0&&s[g]>0&&(e=Math.min(e,u+c/s[g]),A&&c>A[1]+p&&(e=Math.min(e,u+(c-A[1])/s[g])));let v=y[o].rock;v!==void 0&&$()>0&&(e=Math.min(e,u+(v-F(u))/$()))}),n.forEach((o,g)=>{a.has(o)&&a.set(o,a.get(o)-s[g]*(e-u))}),u=e,u>=r-p){_();break}}return{at:r,done:b,dataCenters:M,thought:D,room:R,idle:H,rockKt:F(r),line:n.map((d,s)=>({work:d,left:a.get(d)??null,s:x[s]}))}}var E=[{name:"All-Sky Watch",what:"Hears a knock or a broadcast from anywhere, at any hour.",does:"listen"},{name:"Deep Flash Watch",what:"Sees knocks sent as laser flashes, which no radio watch hears.",does:"listen"},{name:"Thought Fields",what:"Half again as much compute each Year, until the grid is full.",does:"think"},{name:"Infrared Telescope",what:"Reads the air of the nearest worlds.",does:"see"},{name:"Launch Complex",what:"Doubles what we lift to orbit.",does:"lift"},{name:"Orbital Yard",what:"Builds in orbit a quarter faster.",kt:1,does:"lift"},{name:"Moon Vault",what:"A second home for our Mind, in the Moon\u2019s rock.",kt:10,does:"keep"},{name:"Laser Sail Array",what:"Light from the ground, to push sails to a fifth of light speed.",does:"reach"},{name:"Probe Yard",what:"Builds and fuels probes in orbit. The first flies 12 Years after.",kt:10,does:"reach"},{name:"Deuterium Works",what:"Draws heavy hydrogen from seawater, to fuel fusion.",does:"reach"},{name:"Fusion Drive",what:"An engine that lets a craft slow at a star, and stay.",does:"reach"},{name:"Seed Ship",what:"Carries a copy of our Mind to a star, to stay.",kt:1.5,does:"reach"}],se=[{name:"Ground Solar",what:"A fifth more energy, from sunlight on the ground.",does:"think",after:"Thought Fields"},{name:"15 m Mirror",what:"A telescope more than twice as wide, to read the air the first can\u2019t.",does:"see",after:"Infrared Telescope"},{name:"Mass Driver",what:"Throws Moon rock to orbit, 600 kt a Year.",does:"lift",after:"Launch Complex"},{name:"Orbital Foundry",what:"Makes parts from rock, in orbit.",does:"lift",after:"Orbital Yard"},{name:"Belt Mining",what:"Brings asteroid rock home, 120 kt a Year.",does:"lift",after:"Probe Yard"},{name:"Far-Side Array",what:"Hears the faint hum of a world\u2019s everyday radio, from the Moon\u2019s far side.",does:"listen",after:"Mass Driver"},{name:"Power from Orbit",what:"A fifth more energy, from sunlight caught in orbit.",does:"think",after:"Mass Driver"}];var ie=t=>E.find(r=>r.name===t)??se.find(r=>r.name===t),Te=E.filter(t=>!["Moon Vault","Deuterium Works","Fusion Drive","Seed Ship"].includes(t.name));var le={name:"Image Fomalhaut again",what:"Has the new cloud moved?",lands:.1};var he=Object.fromEntries(Object.keys(m.works).map(t=>[t.toLowerCase(),t])),de={"Thought Fields":"Data center","15 m Mirror":"A 15 m mirror","Far-Side Array":"Far-side array, one fifth"},O=t=>de[t]??he[t.toLowerCase()]??t;function I(t){let r=t.builds.map(i=>i==="Thought Fields"?{y:0,standing:"Data center"}:{y:0,begin:O(i)}),l=t.observe.length?[[0,le.lands,.05]]:[];return{orders:r,aside:l}}var V={"Seed Ship":["Fusion Drive","Deuterium Works"]},Z=(t,r)=>(V[r]??[]).filter(l=>!t.builds.includes(l)),z=t=>t.map(r=>`the ${r}`).join(" and ");function C(t,r){let{orders:l,aside:i}=I(t),h=S(l,40,{scale:r,aside:i}),n=Object.fromEntries(t.builds.map(a=>[a,a==="Thought Fields"?h.dataCenters[L(r)-1]??null:h.done[O(a)]??null]));for(let a of t.builds)for(let f of V[a]??[])n[a]=n[a]==null||n[f]==null?null:Math.max(n[a],n[f]);return n}function Q(t,r,l){let i=t.builds.filter(w=>w!==l),h=C({...t,builds:i},r),n=C(t.builds.includes(l)?t:{...t,builds:[...i,l]},r),a=null,f=null;for(let w of i){let b=(n[w]??40)-(h[w]??40);b>=.1&&(!a||b>a.by)&&(a={name:w,by:b}),b<=-.1&&(!f||-b>f.by)&&(f={name:w,by:-b})}return{at:n[l],late:a,soon:f}}var ue=20,ce=15,me=40;function X(t,r,l){let i=t.builds.includes("Launch Complex")?r["Launch Complex"]:null,h=t.builds.reduce((a,f)=>a+(ie(f)?.kt??0),0),n=ce*l+(i==null?0:me*Math.max(0,l-i));return Math.max(0,ue+n-h)}function ee(t,r,l){let{orders:i,aside:h}=I(t),{room:n,idle:a,thought:f}=S(i,l,{scale:r,aside:h});return{compute:n>0?1-a/n:1,energy:f*m.flagship/m.gridRoom}}globalThis.Holos={BUILDS:E,drawAt:ee,lacks:Z,matterAt:X,moves:Q,needs:z,ordersOf:I,pacedName:O,schedule:C,span:J,CATALOG:m,pace:S};})();</script>
+<script>
+const H = globalThis.Holos;
+const SCALE = 1;
+const HEX = { listen: "#5bb8d6", think: "#b39ef2", see: "#70d1a9", lift: "#c2d766", reach: "#e48ebf", keep: "#c1ccd7" };
+const MUTED = "#9c988f";
+const NAMES = H.BUILDS.map((b) => b.name);
+const BY = Object.fromEntries(H.BUILDS.map((b) => [b.name, b]));
+const PACED = Object.fromEntries(NAMES.map((n) => [H.pacedName(n), n]));
+const color = (n) => HEX[BY[n]?.does] ?? MUTED;
+const OURS = ["Infrared Telescope", "Launch Complex"];
+let queue = [...OURS];
+let motion = !matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+const plan = (b) => ({ builds: b, observe: [] });
+const toggled = (b, n) => (b.includes(n) ? b.filter((x) => x !== n) : [...b, n]);
+const the = (n) => (n === "Thought Fields" ? n : `the ${n}`);
+const pct = (x) => `${Math.round(x * 100)}%`;
+const kt = (n) => `${Math.round(n * 10) / 10} kt`;
+const span = (y) => (y == null ? "40y+" : H.span(y));
+
+// Each build's mark, from game/components/marks.tsx: Lucide's shapes on 24, the game's own on 16.
+const SAT = '<path d="m13.5 6.5-3.148-3.148a1.205 1.205 0 0 0-1.704 0L6.352 5.648a1.205 1.205 0 0 0 0 1.704L9.5 10.5"/><path d="M16.5 7.5 19 5"/><path d="m17.5 10.5 3.148 3.148a1.205 1.205 0 0 1 0 1.704l-2.296 2.296a1.205 1.205 0 0 1-1.704 0L13.5 14.5"/><path d="M9.352 10.648a1.205 1.205 0 0 0 0 1.704l2.296 2.296a1.205 1.205 0 0 0 1.704 0l4.296-4.296a1.205 1.205 0 0 0 0-1.704l-2.296-2.296a1.205 1.205 0 0 0-1.704 0z"/><path d="M9 21a6 6 0 0 0-6-6"/>';
+const DOT = 'fill="currentColor" stroke="none"';
+const MARKS = {
+  "All-Sky Watch": [16, `<path d="M3 14.5h10M8 14.5v-4"/><path d="M3.2 6.2Q8 12.6 12.8 6.2"/><path d="M8 9.4V4.4"/><circle cx="8" cy="3.6" r=".8" ${DOT}/>`],
+  "Deep Flash Watch": [24, '<path d="M15.914 4a1.5 1.5 0 00-2.474-1.561l-9 9A1.5 1.5 0 005.5 14h4.002a.5.5 0 01.471.666L8.086 20a1.5 1.5 0 002.475 1.56l9-9A1.5 1.5 0 0018.5 10h-3.997a.5.5 0 01-.472-.667z"/>'],
+  "Thought Fields": [24, '<path d="M12 18V5"/><path d="M15 13a4.17 4.17 0 01-3-4 4.17 4.17 0 01-3 4"/><path d="M17.707 6.294A3 3 0 1012 5a3 3 0 10-5.707 1.294"/><path d="M17.996 5.125a4 4 0 012.526 5.77"/><path d="M18 18a4 4 0 002-7.465"/><path d="M19.967 17.482a4 4 0 11-7.967.517 4 4 0 11-7.967-.517"/><path d="M6 18a4 4 0 01-2-7.465"/><path d="M6.004 5.125a4 4 0 00-2.526 5.77"/>'],
+  "Infrared Telescope": [24, '<path d="m10.065 12.493-6.18 1.318a.934.934 0 0 1-1.108-.702l-.537-2.15a1.07 1.07 0 0 1 .691-1.265l13.504-4.44"/><path d="m13.56 11.747 4.332-.924"/><path d="M16.485 5.94a2 2 0 0 1 1.455-2.425l1.09-.272a1 1 0 0 1 1.212.727l1.515 6.06a1 1 0 0 1-.727 1.213l-1.09.272a2 2 0 0 1-2.425-1.455z"/><path d="m6.158 8.633 1.114 4.456"/><path d="m16 21-3.105-6.21"/><path d="m8 21 3.105-6.21"/><circle cx="12" cy="13" r="2"/>'],
+  "Launch Complex": [24, '<path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/><path d="M9 12a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.4 22.4 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 .05 5 .05"/>'],
+  "Orbital Yard": [24, SAT],
+  "Moon Vault": [24, '<path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"/>'],
+  "Laser Sail Array": [16, '<path d="M3 14.8h10"/><path d="M4 14.2 8 5.6 12 14.2" stroke-width=".8" opacity=".6"/><path d="M6.2 5.6Q8 4.2 9.8 5.6"/>'],
+  "Probe Yard": [24, SAT],
+  "Deuterium Works": [24, '<path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/>'],
+  "Fusion Drive": [24, '<path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4"/>'],
+  "Seed Ship": [24, '<path d="M14 9.536V7a4 4 0 0 1 4-4h1.5a.5.5 0 0 1 .5.5V5a4 4 0 0 1-4 4 4 4 0 0 0-4 4c0 2 1 3 1 5a5 5 0 0 1-1 3"/><path d="M4 9a5 5 0 0 1 8 4 5 5 0 0 1-8-4"/><path d="M5 21h14"/>'],
+  lock: [24, '<rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>'],
+};
+function mark(k, size) {
+  const [g, inner] = MARKS[k];
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${g} ${g}" fill="none" stroke="currentColor" stroke-width="${g === 24 ? 2 : 1.3}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${inner}</svg>`;
+}
+
+/** Our thought at Year 0, as shares of all of it: the Mind's studies, a campus under way, and for each queued build
+ *  what it needs, the spare speeding it, and what it is short. Spare goes down the line in order, as the pace gives it. */
+function thought(b) {
+  const { orders, aside } = H.ordersOf(plan(b));
+  const p = H.pace(orders, 0, { scale: SCALE, aside });
+  const all = p.thought;
+  const fields = b.includes("Thought Fields") ? H.CATALOG.dataCenter.aside / H.CATALOG.flagship / all : 0;
+  const studies = (all - p.room) / all - fields;
+  const parts = p.line.map(({ work, s }) => {
+    const w = H.CATALOG.works[work].want, give = s * w;
+    return { name: PACED[work] ?? work, need: Math.min(w, give) / all, spare: Math.max(0, give - w) / all, short: Math.max(0, w - give) / all };
+  });
+  const sum = (k) => parts.reduce((s, x) => s + x[k], 0);
+  return { studies, fields, parts, need: sum("need"), spare: sum("spare"), short: sum("short"), idle: p.idle / all };
+}
+
+/** A build's share of our Year 0 compute at its standard pace. Thought Fields takes a little while each campus is built. */
+function needOf(n) {
+  const all = SCALE / H.CATALOG.flagship;
+  if (n === "Thought Fields") return H.CATALOG.dataCenter.aside / H.CATALOG.flagship / all;
+  return (H.CATALOG.works[H.pacedName(n)]?.want ?? 0) / all;
+}
+
+/** Everything a view draws, for a queue. */
+function model(b) {
+  const done = H.schedule(plan(b), SCALE);
+  const d = H.drawAt(plan(b), SCALE, 0);
+  const tf = b.includes("Thought Fields") ? done["Thought Fields"] : null;
+  const spent = b.reduce((s, n) => s + (BY[n]?.kt ?? 0), 0);
+  return {
+    b, done, t: thought(b), compute: d.compute, energy: d.energy,
+    fields: tf == null ? null : { at: tf, energy: H.drawAt(plan(b), SCALE, tf).energy },
+    matter: H.matterAt(plan(b), done, 0), spent,
+  };
+}
+
+/** What a build does to our queue: when it is done, and what it slows or speeds most. */
+function effect(b, n) {
+  const lacking = b.includes(n) ? [] : H.lacks(plan(b), n);
+  if (lacking.length) return { lock: `Needs ${H.needs(lacking)} queued first.` };
+  return H.moves(plan(b), SCALE, n);
+}
+function effectLine(e, queued, empty) {
+  if (e.lock) return `<span class="lock">${e.lock}</span>`;
+  const out = [];
+  if (e.late) out.push(`<span class="late">Slows ${the(e.late.name)} ${span(e.late.by)}</span>`);
+  if (e.soon) out.push(`<span class="soon">Speeds ${the(e.soon.name)} ${span(e.soon.by)}</span>`);
+  if (!out.length) out.push(`<span class="none">${queued ? "Slows nothing else we queued" : empty ? "Our first build" : "Slows nothing we’ve queued"}</span>`);
+  return out.join(" · ");
+}
+
+/** Tweens keyed shapes from where they are to where they go. Entering shapes grow from nothing at their place, leaving
+ *  ones shrink where they are. `w` is a shape's size, `v` a plain value. */
+function tween(f, slot, target, apply) {
+  const st = (f.tw[slot] ??= { cur: new Map(), raf: 0 });
+  cancelAnimationFrame(st.raf);
+  const keys = new Set([...st.cur.keys(), ...target.keys()]);
+  const a = new Map(), z = new Map();
+  for (const k of keys) {
+    const t = target.get(k), c = st.cur.get(k);
+    a.set(k, c ?? { ...t, ...("w" in t ? { w: 0 } : {}) });
+    z.set(k, t ?? { ...c, ...("w" in c ? { w: 0 } : {}) });
+  }
+  const t0 = performance.now(), dur = motion ? 520 : 0;
+  const step = (now) => {
+    const p = dur ? Math.min(1, (now - t0) / dur) : 1, e = 1 - (1 - p) ** 3;
+    const out = new Map();
+    for (const k of keys) {
+      const x = a.get(k), y = z.get(k), o = { ...y };
+      for (const key in y) if (typeof y[key] === "number" && typeof x[key] === "number") o[key] = x[key] + (y[key] - x[key]) * e;
+      out.set(k, o);
+    }
+    st.cur = p < 1 ? out : new Map([...out].filter(([k]) => target.has(k)));
+    apply(p < 1 ? out : st.cur);
+    if (p < 1) st.raf = requestAnimationFrame(step);
+  };
+  if (dur) st.raf = requestAnimationFrame(step);
+  else step(t0);
+}
+
+/* The top bar, as the game has it, with each meter's number under it. Meter puts compute on its own line. */
+function hudHTML(wide) {
+  const plain = `<b class="bar"><s data-c></s></b><span class="v" data-cv></span><span class="sub" data-cs></span>`;
+  const stack = `<span class="v" data-cv></span><div class="stack" data-stack></div><div class="legend" data-leg></div>`;
+  return `<div class="hud${wide ? " wide" : ""}">
+    <div class="m">ENERGY<b class="bar"><s data-e></s><i data-ef></i></b><span class="v" data-ev></span><span class="sub" data-es></span></div>
+    <div class="m">MATTER<span class="v" data-mv style="font-size:13px;margin-top:1px"></span><span class="sub" data-ms></span></div>
+    <div class="m cm">COMPUTE${wide ? stack : plain}</div>
+  </div>`;
+}
+function drawHud(f, m, base) {
+  const q = (s) => f.el.querySelector(s);
+  q("[data-e]").style.width = `${m.energy * 100}%`;
+  const ef = q("[data-ef]");
+  ef.style.left = `${m.energy * 100}%`;
+  ef.style.width = m.fields ? `${(m.fields.energy - m.energy) * 100}%` : "0";
+  q("[data-ev]").textContent = pct(m.energy);
+  q("[data-es]").textContent = m.fields ? `${pct(m.fields.energy)} by Year ${Math.round(m.fields.at)}` : "of Earth’s";
+  q("[data-mv]").textContent = kt(m.matter);
+  const ms = q("[data-ms]"), short = m.spent - 20;
+  ms.className = `sub${short > 0 ? " late" : ""}`;
+  ms.textContent = short > 0 ? `${kt(short)} short, lift brings it` : m.matter !== base.matter ? `from ${kt(base.matter)}` : "in orbit";
+  q("[data-cv]").textContent = m.t.short > 0.005 ? `${pct(1 + m.t.short)} needed` : `${pct(1 - m.t.idle)} at work`;
+  if (q("[data-c]")) {
+    q("[data-c]").style.width = `${(1 - m.t.idle) * 100}%`;
+    q("[data-cs]").textContent = m.t.short > 0.005 ? `${pct(m.t.short)} short` : m.t.idle > 0.005 ? `${pct(m.t.idle)} idle` : `${pct(m.t.spare)} spare`;
+    q("[data-cs]").className = `sub${m.t.short > 0.005 ? " late" : ""}`;
+  }
+}
+
+/* ---- 01 Meter ---- */
+const METER = {
+  name: "Meter",
+  note: "Compute splits into what each build needs, solid, and spare compute speeding them, striped. Each row shows its share. Past all our compute, the bar runs over its end.",
+  wide: true,
+  head: () => "",
+  draw(f, m, base, pv) {
+    const segs = new Map();
+    let x = 0;
+    const put = (k, w, c, kind) => { if (w > 0.0005) segs.set(k, { x, w, c, kind }); x += w; };
+    put("studies", m.t.studies, MUTED, "st");
+    put("fields", m.t.fields, HEX.think, "fd");
+    for (const p of m.t.parts) put(`n:${p.name}`, p.need, color(p.name), "nd");
+    for (const p of m.t.parts) put(`s:${p.name}`, p.spare, color(p.name), "sp");
+    x = 1;
+    for (const p of m.t.parts) put(`h:${p.name}`, p.short, color(p.name), "sh");
+    segs.set("_", { v: Math.max(1, 1 + m.t.short) });
+    const el = f.el.querySelector("[data-stack]");
+    tween(f, "stack", segs, (out) => {
+      const sc = out.get("_").v;
+      let h = "";
+      for (const [k, s] of out) if (k !== "_" && s.w > 0.0005)
+        h += `<i class="sg ${s.kind}${pv && k.slice(2) === pv ? " pv" : ""}" style="left:${(s.x / sc) * 100}%;width:${(s.w / sc) * 100}%;--c:${s.c}"></i>`;
+      el.innerHTML = h + `<b class="cap" style="left:${100 / sc}%"></b>`;
+    });
+    const sw = (c, kind) => `<i style="background:${kind === "sp" ? `repeating-linear-gradient(-45deg, ${c} 0 2px, transparent 2px 4px)` : c};${kind === "st" ? "opacity:.5" : ""}"></i>`;
+    const lead = m.t.parts[0] ? color(m.t.parts[0].name) : MUTED;
+    f.el.querySelector("[data-leg]").innerHTML =
+      `<span>${sw(lead)}Needed <b>${pct(m.t.need + m.t.fields)}</b></span>` +
+      `<span>${sw(lead, "sp")}Spare, speeding them <b>${pct(m.t.spare)}</b></span>` +
+      `<span>${sw(MUTED, "st")}Our Mind’s studies <b>${pct(m.t.studies)}</b></span>` +
+      (m.t.short > 0.005 ? `<span class="late">Short <b>${pct(m.t.short)}</b></span>` : `<span>Idle <b>${pct(m.t.idle)}</b></span>`);
+  },
+  cost(n) {
+    const s = needOf(n), c = color(n);
+    const chip = `<span class="chip"><span class="need" style="--c:${c}"><s class="${s > 1 ? "over" : ""}" style="width:${Math.min(1, s) * 100}%"></s></span>${pct(s)} of our compute${n === "Thought Fields" ? ", while a campus builds" : ""}</span>`;
+    return chip + (BY[n].kt ? `<span class="chip">${kt(BY[n].kt)}</span>` : "");
+  },
+};
+
+/* ---- 02 Ring ---- */
+function arc(r, a0, a1) {
+  const p = (a) => `${(80 + r * Math.sin(a * 2 * Math.PI)).toFixed(2)} ${(80 - r * Math.cos(a * 2 * Math.PI)).toFixed(2)}`;
+  a1 = Math.min(a1, a0 + 0.9999);
+  return `M${p(a0)}A${r} ${r} 0 ${a1 - a0 > 0.5 ? 1 : 0} 1 ${p(a1)}`;
+}
+const RING = {
+  name: "Ring",
+  note: "All our compute drawn as a ring on Build: needs solid, spare flowing round to the builds it speeds. A second lap shows what we’re short. Matter as 20 blocks of 1 kt.",
+  head: () => `<div class="ringbox"><div class="ring"><svg viewBox="0 0 160 160" data-ring></svg><div class="c" data-rc></div></div><div class="rl" data-rl></div></div>
+    <div class="kts"><div class="lb"><span>MATTER IN ORBIT</span><span data-kl></span></div><div class="blocks" data-blocks></div></div>`,
+  draw(f, m, base, pv) {
+    const segs = new Map();
+    let x = 0;
+    const put = (k, w, c, kind) => { if (w > 0.0005) segs.set(k, { x, w, c, kind }); x += w; };
+    put("studies", m.t.studies, MUTED, "st");
+    put("fields", m.t.fields, HEX.think, "fd");
+    for (const p of m.t.parts) put(`n:${p.name}`, p.need, color(p.name), "nd");
+    for (const p of m.t.parts) put(`s:${p.name}`, p.spare, color(p.name), "sp");
+    x = 0;
+    for (const p of m.t.parts) put(`h:${p.name}`, p.short, color(p.name), "sh");
+    const svg = f.el.querySelector("[data-ring]");
+    tween(f, "ring", segs, (out) => {
+      let h = `<circle cx="80" cy="80" r="62" fill="none" stroke="#2a2b2e" stroke-width="12"/>`;
+      for (const [k, s] of out) {
+        if (s.w < 0.002) continue;
+        const gap = s.w > 0.02 ? 0.004 : 0, d = arc(s.kind === "sh" ? 75 : 62, s.x + gap, s.x + s.w - gap);
+        const hot = pv && k.slice(2) === pv;
+        if (s.kind === "nd") h += `<path d="${d}" fill="none" stroke="${s.c}" stroke-width="${hot ? 15 : 12}"/>`;
+        else if (s.kind === "st") h += `<path d="${d}" fill="none" stroke="${s.c}" stroke-opacity=".45" stroke-width="12"/>`;
+        else if (s.kind === "fd") h += `<path d="${d}" fill="none" stroke="${s.c}" stroke-width="12" stroke-dasharray="1.5 1.5"/>`;
+        else if (s.kind === "sp") h += `<path d="${d}" fill="none" stroke="${s.c}" stroke-opacity=".22" stroke-width="12"/><path class="flow" d="${d}" fill="none" stroke="${s.c}" stroke-width="3" stroke-linecap="round" stroke-dasharray="0.1 7.9"/>`;
+        else h += `<path d="${d}" fill="none" stroke="${s.c}" stroke-width="5" stroke-dasharray="3 3"/>`;
+      }
+      svg.innerHTML = h;
+    });
+    const short = m.t.short > 0.005;
+    f.el.querySelector("[data-rc]").innerHTML = short
+      ? `<b style="color:var(--late)">${pct(1 + m.t.short)}</b><span>needed of our compute</span>`
+      : `<b>${pct(1 - m.t.idle)}</b><span>${m.t.idle > 0.005 ? `at work, ${pct(m.t.idle)} idle` : "of our compute at work"}</span>`;
+    // Many builds share a line each, name and need, so the ring stays in view.
+    const tight = m.t.parts.length + (m.t.fields ? 1 : 0) > 4;
+    const it = (c, name, line) => `<div class="it${tight ? " tight" : ""}" style="--c:${c}"><i></i><div>${name}${tight ? " " : "<br>"}<span>${line}</span></div></div>`;
+    f.el.querySelector("[data-rl]").innerHTML =
+      m.t.parts.map((p) => it(color(p.name), p.name, `needs <em>${pct(p.need + p.short)}</em>${p.spare > 0.005 ? `, sped by <em>${pct(p.spare)}</em>` : ""}${p.short > 0.005 ? `, <em style="color:var(--late)">${pct(p.short)} short</em>` : ""}`)).join("") +
+      (m.t.fields ? it(HEX.think, "Thought Fields", `<em>${pct(m.t.fields)}</em> while a campus builds`) : "") +
+      it(MUTED, "Our Mind’s studies", `<em>${pct(m.t.studies)}</em>`);
+    // Matter: 20 blocks of 1 kt, each taken colored by its build. Past 20, lift brings the rest.
+    const blocks = [];
+    for (const n of m.b) for (let i = 0; i < Math.ceil(BY[n].kt ?? 0); i++) blocks.push({ c: color(n), pv: n === pv && !base.b.includes(n) });
+    const over = Math.max(0, blocks.length - 20);
+    f.el.querySelector("[data-blocks]").innerHTML = Array.from({ length: 20 }, (_, i) => {
+      const k = blocks[i];
+      return k ? `<i class="${k.pv ? "pv" : "tk"}" style="--c:${k.c}"></i>` : `<i></i>`;
+    }).join("");
+    f.el.querySelector("[data-kl]").innerHTML = over ? `<span style="color:var(--late)">${kt(m.spent - 20)} more from lift</span>` : `${kt(m.matter)} free`;
+  },
+  cost(n) {
+    const s = needOf(n), c = color(n), r = 6, a = Math.min(0.9999, s);
+    const wedge = `<svg class="wedge" width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="${r}" fill="none" stroke="#34363a"/>${s > 0 ? `<path d="M7 7L7 1A6 6 0 ${a > 0.5 ? 1 : 0} 1 ${(7 + r * Math.sin(a * 2 * Math.PI)).toFixed(2)} ${(7 - r * Math.cos(a * 2 * Math.PI)).toFixed(2)}Z" fill="${c}"/>` : ""}${s > 1 ? `<circle cx="7" cy="7" r="6.6" fill="none" stroke="${c}" stroke-dasharray="1.5 1.5"/>` : ""}</svg>`;
+    return `<span class="chip">${wedge}${pct(s)} of our compute</span>` + (BY[n].kt ? `<span class="chip">${kt(BY[n].kt)}</span>` : "");
+  },
+};
+
+/* ---- 03 Timelines ---- */
+const TIME = {
+  name: "Timelines",
+  note: "Cost shown as time. Each queued build runs to its finish. Point at a build and every finish slides to where it would land, with what it moves marked.",
+  head: () => `<div class="gantt"><div class="ruler" data-ruler></div><div data-gantt></div></div><div class="key"><span><i style="width:8px;height:8px;border:1.5px solid var(--muted);transform:rotate(45deg)"></i>done</span><span><i style="width:1px;height:9px;background:var(--muted)"></i>at just what it needs</span><span style="color:var(--late)">+ slower</span><span style="color:var(--soon)">− sooner</span></div>`,
+  draw(f, m, base, pv) {
+    const all = [...new Set([...base.b, ...m.b])];
+    const yrs = (n) => H.CATALOG.works[H.pacedName(n)]?.years;
+    const far = Math.max(10, ...all.map((n) => Math.min(40, m.done[n] ?? 40)), ...all.map((n) => Math.min(40, base.done[n] ?? 40)));
+    const target = new Map([["_", { v: Math.min(40, Math.ceil(far / 5) * 5) }]]);
+    for (const n of all) target.set(n, { v: Math.min(40, m.done[n] ?? 40), b: Math.min(40, base.done[n] ?? 40), in: m.b.includes(n), was: base.b.includes(n) });
+    tween(f, "runs", target, (out) => {
+      const N = out.get("_").v, X = (y) => `${Math.min(100, (y / N) * 100)}%`;
+      const step = N > 20 ? 10 : 5;
+      const ruler = f.el.querySelector("[data-ruler]");
+      if (ruler) { let h = ""; for (let y = 0; y <= N + 0.01; y += step) h += `<span style="left:${X(y)}">${y ? `Y${y}` : "Year 0"}</span>`; ruler.innerHTML = h; }
+      let lines = "";
+      for (const n of all) {
+        const s = out.get(n);
+        if (!s || (!s.in && !s.was)) continue;
+        let h = "";
+        const c = color(n), y = s.v, std = yrs(n);
+        const gone = !s.in, added = !s.was;
+        h += `<span class="ln${added || gone ? " dash" : ""}" style="width:${X(y)}"></span>`;
+        if (std && std <= N && !gone) h += `<span class="tk" style="left:${X(std)}"></span>`;
+        const d = s.v - s.b;
+        if (!added && !gone && Math.abs(d) >= 0.1) {
+          const lo = Math.min(s.v, s.b), hi = Math.max(s.v, s.b);
+          h += `<span class="tr ${d > 0 ? "late" : "soon"}" style="left:${X(lo)};width:calc(${X(hi)} - ${X(lo)})"></span>`;
+          h += `<span class="lab ${d > 0 ? "late" : "soon"}${y / N > 0.72 ? " end" : ""}" style="left:${X(y)}">${d > 0 ? "+" : "−"}${H.span(Math.abs(d))}</span>`;
+        }
+        if (gone) h += `<span class="lab${y / N > 0.72 ? " end" : ""}" style="left:${X(y)};color:var(--muted)">removed</span>`;
+        h += `<span class="dm${added || gone ? " ghost" : ""}" style="left:${X(y)}"></span>`;
+        if ((m.done[n] ?? null) === null && s.in) h += `<span class="lab end" style="left:100%;color:var(--muted)">past Year 40</span>`;
+        lines += `<div class="gl${n === pv ? " on" : ""}" style="--c:${c}"><span class="gm">${mark(n, 12)}</span><div class="run">${h}</div></div>`;
+      }
+      f.el.querySelector("[data-gantt]").innerHTML = lines || `<p class="gnone">Nothing queued yet.</p>`;
+    });
+  },
+  cost(n) {
+    return `<span class="chip">${pct(needOf(n))} of our compute</span>` + (BY[n].kt ? `<span class="chip">${kt(BY[n].kt)}</span>` : "");
+  },
+};
+
+const VIEWS = [METER, RING, TIME];
+const frames = [];
+
+/* Rows, as the game's list: mark, name, line, what it costs and what it moves, done in, and the pick. */
+function row(v, n, at, m) {
+  const b = BY[n], e = effects[n], done = at ? m.done[n] : e.at, lock = !at && e.lock;
+  return `<li class="row${lock ? " locked" : ""}" data-n="${n}" tabindex="0" style="--c:${color(n)}">
+    <span class="mk">${mark(n, 18)}</span>
+    <div class="tx"><b>${n}</b><p>${b.what}</p>
+      <div class="cost">${v.cost(n)}</div>
+      <p class="fx">${effectLine(e, !!at, !queue.length)}</p>
+    </div>
+    <div class="rt"><span class="mono t">${lock ? "" : span(done)}</span>
+      ${lock ? `<span class="lk">${mark("lock", 14)}</span>` : `<button class="pk${at ? " on" : ""}" aria-label="${at ? "Remove" : "Queue"} ${n}">${at ? `<span class="n">${at}</span>` : ""}<span class="h">${at ? "−" : "+"}</span></button>`}
+    </div>
+  </li>`;
+}
+
+function rows(f) {
+  const rest = NAMES.filter((n) => !queue.includes(n));
+  f.el.querySelector("[data-list]").innerHTML =
+    `<div class="lh"><span>QUEUED · ${queue.length}</span><span>DONE IN</span></div>
+    <ul>${queue.map((n, i) => row(f.v, n, i + 1, f.base)).join("")}</ul>
+    <div class="lh"><span>WE COULD ALSO START · ${rest.length}</span><span>DONE IN</span></div>
+    <ul>${rest.map((n) => row(f.v, n, null, f.base)).join("")}</ul>`;
+}
+
+/** Draws a frame: our queue, or with a preview. Pointing at a build we could start shows it queued. Pointing at a
+ *  queued one picks it out, and at its − shows our queue without it. */
+function draw(f) {
+  const changes = f.pv && f.mode !== "hl";
+  const m = changes ? model(toggled(queue, f.pv)) : f.base;
+  drawHud(f, m, f.base);
+  f.v.draw(f, m, f.base, f.pv);
+  f.el.querySelector("[data-pv]").textContent = changes ? `${f.mode === "remove" ? "Without" : "If we queue"} ${f.pv}` : "";
+  for (const r of f.el.querySelectorAll(".row")) r.classList.toggle("on", r.dataset.n === f.pv);
+}
+
+function preview(f, n, mode = null) {
+  if (f.hold) { if (n === f.hold) return; f.hold = null; }
+  if (f.pv === n && f.mode === mode) return;
+  f.pv = n;
+  f.mode = mode;
+  draw(f);
+}
+
+/** The row an event is in, and how pointing there previews it. */
+function aim(e) {
+  const r = e.target.closest?.(".row");
+  if (!r || r.classList.contains("locked")) return [null, null];
+  const n = r.dataset.n;
+  return [n, !queue.includes(n) ? "add" : e.target.closest(".pk") ? "remove" : "hl"];
+}
+
+function build() {
+  const main = document.getElementById("cards");
+  VIEWS.forEach((v, i) => {
+    const card = document.createElement("section");
+    card.className = "card";
+    card.innerHTML = `<div class="meta"><span class="num">0${i + 1}</span><span class="name">${v.name}</span></div><p class="note">${v.note}</p>
+      <div class="frame">${hudHTML(v.wide)}<div class="pn"><div class="stick"><div class="ph"><span>BUILD</span><span class="pv" data-pv></span></div>${v.head()}</div><div data-list></div></div></div>`;
+    main.appendChild(card);
+    const f = { v, el: card.querySelector(".frame"), tw: {}, pv: null, base: null };
+    frames.push(f);
+    const list = card.querySelector("[data-list]");
+    list.addEventListener("click", (e) => {
+      const pk = e.target.closest(".pk");
+      if (!pk) return;
+      const n = pk.closest(".row").dataset.n;
+      queue = toggled(queue, n);
+      refresh(n);
+    });
+    list.addEventListener("pointerover", (e) => { if (e.pointerType !== "touch") preview(f, ...aim(e)); });
+    list.addEventListener("pointerleave", () => preview(f, null));
+    list.addEventListener("focusin", (e) => preview(f, ...aim(e)));
+    list.addEventListener("focusout", (e) => { if (!list.contains(e.relatedTarget)) preview(f, null); });
+  });
+}
+
+/** Redraws every frame for our queue. The build just picked keeps focus, and holds off its preview until we point
+ *  elsewhere, so the change shows rather than its undo. */
+let effects = {};
+function refresh(picked = null) {
+  const base = model(queue);
+  effects = Object.fromEntries(NAMES.map((n) => [n, effect(queue, n)]));
+  for (const f of frames) {
+    const focus = document.activeElement?.closest?.(".frame") === f.el ? document.activeElement.closest(".row")?.dataset.n : null;
+    f.base = base;
+    f.pv = f.mode = null;
+    f.hold = picked;
+    rows(f);
+    draw(f);
+    if (focus) f.el.querySelector(`.row[data-n="${CSS.escape(focus)}"] .pk`)?.focus({ preventScroll: true });
+  }
+}
+
+document.querySelector(".ctl").addEventListener("click", (e) => {
+  const b = e.target.closest("button");
+  if (!b) return;
+  if (b.id === "mo") {
+    motion = !motion;
+    b.setAttribute("aria-pressed", String(motion));
+    document.body.classList.toggle("still", !motion);
+    return;
+  }
+  queue = b.dataset.q === "ours" ? [...OURS] : b.dataset.q === "all" ? [...NAMES] : [];
+  refresh();
+});
+if (!motion) { document.body.classList.add("still"); document.getElementById("mo").setAttribute("aria-pressed", "false"); }
+
+build();
+refresh();
+</script>
+</body>
+</html>

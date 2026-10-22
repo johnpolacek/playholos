@@ -44,7 +44,7 @@ def neighbor(p, stars):
         radio=dict(since=n['radio_since'], arraysSince=n.get('arrays_since'), hum=n['hum'], awake=n.get('awake'), dies=n.get('dies'),
                    emissions=[[r4(x) for x in e] for e in n['emissions']]),
         inbound=[dict(what=i['what'], move=i['move'], sent=yr(i['sent']), year=r4(i['year']), sends=i.get('sends', 1), watts=i.get('watts'),
-                      kit0=i.get('kit0'), allsky=i.get('allsky')) for i in p['inbound']],
+                      kit0=i.get('kit0'), allsky=i.get('allsky'), laser=i.get('laser'), flash=i.get('flash')) for i in p['inbound']],
         unheard=[dict(what=u['what'], move=u['move'], sent=yr(u['sent']), arrived=yr(u['arrived'])) for u in p['unheard']],
         caught=[dict(msg=c['msg'], arrives=yr(c['arrives']), acts=yr(c['acts']), move=c['move']) for c in p['caught']],
         afterSilence=dict(at=yr(p['after_silence']['at']), move=p['after_silence']['move']) if p['after_silence'] else None,
@@ -108,7 +108,7 @@ def golden():
 # The game runs one loop for any order (game/lib/sim/works.ts). Its numbers come from here, so they have one source.
 import early_game as eg
 FH = {w: years for w, _, years in eg.FIRST_HOUR}
-ORBIT = ('Infrared telescope', 'Probe yard', 'A 15 m mirror', 'Orbital foundry', 'Seed ship')    # the yard's cut, as the mocks apply it
+ORBIT = ('Infrared telescope', 'Probe yard', 'A 15 m mirror', 'Orbital foundry', 'Seed ship', 'Fusion drive')    # the yard's cut, as the mocks apply it. The drive since 2026-10-22: it is joined in orbit, as Icarus's Firefly
 
 def works_catalog():
     R = eg.ROADS
@@ -145,7 +145,7 @@ def works_golden():
         done.pop('spare')
         out.append(dict(name=name, scale=scale, orders=mock_orders(order), aside=aside, done=done))
     y = round(eg.replay(eg.BY_START, show=False)['Ground solar'] + 0.2, 1)
-    extra = [(y, 'Fusion drive', eg.ROADS['fusion_drive']), (y, 'Seed ship', eg.ROADS['seed_ship'] * 0.75), (y, 'Deuterium works', eg.D_WORKS_YEARS)]
+    extra = [(y, 'Fusion drive', eg.ROADS['fusion_drive'] * 0.75), (y, 'Seed ship', eg.ROADS['seed_ship'] * 0.75), (y, 'Deuterium works', eg.D_WORKS_YEARS)]
     done = dict(eg.first_hour(show=False)[0], **eg.replay(eg.BY_START, show=False, extra=extra, front=('Fusion drive',)))
     done.pop('spare')
     out.append(dict(name='a seed ship, its drive first', scale=1.0, orders=mock_orders(extra=extra, front=('Fusion drive',)), aside=aside, done=done))

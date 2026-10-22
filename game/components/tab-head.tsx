@@ -2,44 +2,40 @@ import { Link } from "react-router";
 import { Sources } from "@/components/sources";
 import type { Source } from "@/lib/game/sources";
 
-// A tab's head, and the pieces Scan and Build share below it, so the two read alike: the card that walks us through
-// the tab with the Mind, a list's head, and a row's face.
+// A tab's head, with the link that walks us through the tab with the Mind, and the pieces Scan, Build and Reach share
+// below it, so they read alike: a list's head, and a row's face.
 
-/** A tab's name, and on the right its state, or the ⓘ that opens the real record behind it. */
-export function TabHead({ title, right, sources }: { title: string; right?: string; sources?: Source[] }) {
+/** A tab's name, and on the right its state, or the ⓘ that opens the real record behind it, with a walk through the
+ *  tab beside it, open at any time. */
+export function TabHead({
+  title,
+  right,
+  sources,
+  walk,
+}: {
+  title: string;
+  right?: string;
+  sources?: Source[];
+  walk?: { to: string; label: string };
+}) {
   return (
     <div className="flex items-center justify-between pt-1 pb-1.5 text-[11px] tracking-[.08em] text-muted">
       <span>{title}</span>
       {right && <span className="font-mono">{right}</span>}
-      {sources && (
-        <span className="-my-2.5 -mr-2.5 flex justify-end">
-          <Sources sources={sources} />
+      {(sources || walk) && (
+        <span className="-my-2.5 -mr-2.5 flex items-center justify-end">
+          {walk && (
+            <Link
+              to={walk.to}
+              className="px-2 py-2.5 font-mono text-[10.5px] tracking-[.06em] text-you uppercase hover:underline"
+            >
+              {walk.label}
+            </Link>
+          )}
+          {sources && <Sources sources={sources} />}
         </span>
       )}
     </div>
-  );
-}
-
-/** A walk through the tab with the Mind, one stop at a time: Scan's review of our leads, Build's first builds. Once
- *  done, it says so. */
-export function Walk({ to, title, line, done }: { to: string; title: string; line: string; done: boolean }) {
-  return (
-    <Link
-      to={to}
-      className="mt-1 mb-2 flex items-center gap-3 rounded-xl border border-you/50 px-3 py-2.5 transition-colors hover:bg-you/10"
-    >
-      <svg width={14} height={14} viewBox="-7 -7 14 14" aria-hidden className="shrink-0">
-        <circle r={6} fill="none" className="stroke-you" />
-        <path d="M-1.8 -3 L3 0 L-1.8 3 Z" className="fill-you" />
-      </svg>
-      <span className="flex min-w-0 grow flex-col">
-        <span className="text-[14.5px] leading-snug">{title}</span>
-        <span className="text-[12.5px] leading-snug text-page-ink2">{line}</span>
-      </span>
-      <span className={`shrink-0 font-mono ${done ? "text-[10.5px] tracking-[.06em] text-you" : "text-[14px] text-muted"}`}>
-        {done ? "DONE" : "→"}
-      </span>
-    </Link>
   );
 }
 

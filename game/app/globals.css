@@ -53,6 +53,52 @@
   --font-mono: var(--font-plex-mono);
 }
 
+/* Build's welcome at dawn: stars and city lights twinkle, and the marks over the limb bob. On Build, spare compute
+   flows round the ring, and matter a build we point at would take blinks. Cloud drifts over a world our craft saw. */
+@theme {
+  --animate-twinkle: twinkle 4s ease-in-out infinite;
+  --animate-bob: bob 3.6s ease-in-out infinite;
+  --animate-flow: flow 1.6s linear infinite;
+  --animate-blink: blink 1s ease-in-out infinite alternate;
+  --animate-drift: drift 60s linear infinite;
+  @keyframes drift {
+    to {
+      transform: translateX(-132px);
+    }
+  }
+  @keyframes flow {
+    to {
+      stroke-dashoffset: -8;
+    }
+  }
+  @keyframes blink {
+    from {
+      background-color: transparent;
+    }
+    to {
+      background-color: color-mix(in srgb, var(--c) 45%, transparent);
+    }
+  }
+  @keyframes twinkle {
+    0%,
+    100% {
+      opacity: 0.15;
+    }
+    50% {
+      opacity: 0.8;
+    }
+  }
+  @keyframes bob {
+    0%,
+    100% {
+      transform: translateY(-2px);
+    }
+    50% {
+      transform: translateY(2px);
+    }
+  }
+}
+
 body {
   background: var(--page);
   color: var(--ink);

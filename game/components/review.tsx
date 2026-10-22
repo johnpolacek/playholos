@@ -1,5 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate } from "react-router";
+import { useNext } from "@/components/begin";
 import { useGame } from "@/components/game-provider";
+import { Lens } from "@/components/icons";
 import { MindNote } from "@/components/mind-note";
 import { LeadMark } from "@/components/marks";
 import { Look } from "@/components/picks";
@@ -13,10 +16,11 @@ import {
   useGSAP,
 } from "@/lib/motion";
 
-// Reviewing our scans, the first of the three things we would do before Begin. The Mind takes us through Earth's
+// Reviewing our scans, the first of the four things we would do before Begin. The Mind takes us through Earth's
 // leads one at a time, and the map turns to each star as we reach it. Fomalhaut comes last, with the one observation
 // open at Year 0, so the image is offered once we know why it matters. Settled 2026-10-18. Reaching the last lead
-// counts as done, and says so: the head reads DONE, the top bar's count ticks, and the way on is back to Scan.
+// counts as done, and says so: the head reads DONE, the top bar's count ticks, and the way on is the next of
+// the four, or back to Scan once all are done.
 
 const INTRO =
   "The sky near us is quiet. These are the few things in it we can’t explain yet. Beside each, how long its light takes, in your time. A call costs that, and an answer as long again.";
@@ -73,10 +77,13 @@ export function Thread({
 }
 
 export function Review({ onClose }: { onClose(): void }) {
-  const { leads, dials, readings } = useLeads();
+  const { leads, dials, readings, setLook, close, setClose } = useLeads();
   const { year, did } = useGame();
   const root = useRef<HTMLDivElement>(null);
   const next = useRef<HTMLButtonElement>(null);
+  const navigate = useNavigate();
+  // At the end, the way on is the next of the four things we would do first, or back to the tab once all are done.
+  const then = useNext("/?review");
   // A swipe across the words moves a stop, as on a phone.
   const swipe = useRef<{ x: number; y: number } | null>(null);
   const [at, setAt] = useState(0);
@@ -95,9 +102,12 @@ export function Review({ onClose }: { onClose(): void }) {
   const lead = leads[i];
   const read = lead && readings[lead.slug]?.at(-1);
 
-  // The map turns to the lead in view, and back out to them all when we leave.
+  // The map turns to the lead in view, and back out to them all when we leave. Its system, if we know it, is open to
+  // Close View, from outside each time.
   useEffect(() => void Object.assign(dials, { focus: i + 1 }), [dials, i]);
   useEffect(() => () => void Object.assign(dials, { focus: 0 }), [dials]);
+  useEffect(() => setLook(lead ?? null), [setLook, lead]);
+  useEffect(() => () => setLook(null), [setLook]);
 
   useEffect(() => {
     if (last && at === last) did("reviewed");
@@ -143,7 +153,7 @@ export function Review({ onClose }: { onClose(): void }) {
     <div ref={root} className="flex grow flex-col">
       {/* In place of the tab's head, held at the top as the page scrolls. Tall, as on a phone, the way on is here too,
           so the Mind's words clear the fold. */}
-      <div className="sticky top-0 z-10 -mx-4 -mt-3 bg-panel px-4 pt-3 pb-1">
+      <div className="sticky -top-3 z-10 -mx-4 -mt-3 bg-panel px-4 pt-3 pb-1">
         <div className="flex items-center justify-between pt-1 pb-0.5 text-[11px] tracking-[.08em] text-muted">
           <span className="grow">
             {at ? `SCAN · REVIEW ${at} OF ${last}` : "SCAN · REVIEW"}
@@ -158,9 +168,9 @@ export function Review({ onClose }: { onClose(): void }) {
             ‹
           </button>
           <button
-            onClick={() => go(at + 1)}
-            disabled={at === last}
-            aria-label="Next"
+            onClick={() => (at === last ? then && navigate(then.to) : go(at + 1))}
+            disabled={at === last && !then}
+            aria-label={at === last && then ? then.name : "Next"}
             className="-my-3 size-11 text-xl leading-none text-you disabled:text-faint wide:hidden"
           >
             ›
@@ -236,6 +246,16 @@ export function Review({ onClose }: { onClose(): void }) {
                 <Look />
               </div>
             )}
+            {lead.system && (
+              <button
+                data-r
+                onClick={() => setClose(!close)}
+                className="mt-4 flex h-[46px] shrink-0 items-center justify-center gap-2 rounded-full border border-ink text-[15px] font-medium"
+              >
+                <Lens closer={!close} size={17} />
+                {close ? "Pull Back" : "Close View"}
+              </button>
+            )}
           </>
         ) : (
           <>
@@ -265,11 +285,11 @@ export function Review({ onClose }: { onClose(): void }) {
         </button>
         <button
           ref={next}
-          onClick={() => (at === last ? onClose() : go(at + 1))}
+          onClick={() => (at === last ? (then ? navigate(then.to) : onClose()) : go(at + 1))}
           className="h-11 rounded-full bg-ink text-[15px] font-medium text-paper"
         >
           {at === last
-            ? "Back to Scan"
+            ? (then?.name ?? "Back to Scan")
             : at
               ? `Next · ${leads[order[at]].star}`
               : `First · ${leads[order[0]].star}`}

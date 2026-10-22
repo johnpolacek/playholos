@@ -17,6 +17,7 @@ import SKY from "./game/sky.json";
 import LEADS from "./game/leads.json";
 import { MACHINES, type MachineKind } from "./game/machines";
 import { CLOSE } from "./game/close";
+import type { System } from "./game/systems";
 import {
   DEG,
   LIFT,
@@ -64,7 +65,8 @@ export interface Dials {
   found?: number;
   /** The lead the Will is looking at, the message, or the build, counted from 1. 0 for none. */
   focus?: number;
-  /** Our builds: 1 to fly down to the ground at the one in view, its Close View, and 0 to come back up. */
+  /** Our builds: 1 to fly down to the ground at the one in view, its Close View, and 0 to come back up. On Reach, 1 to
+   *  fly into the destination's system, and on Scan into the system of the lead in view. */
   close?: number;
 }
 
@@ -95,8 +97,12 @@ export interface Show {
   rect?: () => { x: number; y: number; w: number; h: number } | null;
   /** For "title": the camera's distance from Earth's surface in AU, each frame. */
   onFrame?(fromEarthAU: number): void;
-  /** For "leads": the stars of Earth's leads, by the names players see, in the order they are lit. */
+  /** For "leads": the stars of Earth's leads, by the names players see, in the order they are lit. For "reach": the
+   *  destination open, its star first. */
   leads?: string[];
+  /** For "reach": the destination's system, which its Close View flies into. For "leads": the system of the lead in
+   *  view, the same way. */
+  system?: System;
   /** For "beams": our messages on their way, each by its star, the decimal year we sent it, the light-years it goes,
    *  and whether it is the reply that could come back. */
   beams?: { star: string; sent: number; ly: number; reply: boolean }[];
@@ -437,6 +443,11 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     const n = spec.leads?.length ?? 0;
     return (dialsOf.leads?.found ?? n) < n ? -1 : (dialsOf.leads?.focus ?? 0) - 1;
   };
+  /** The system the view can fly into, its Close View: the destination open on Reach, or the lead in view on Scan. */
+  const systemOf = () => {
+    const star = spec.mode === "reach" ? spec.leads?.[0] : spec.mode === "leads" ? spec.leads?.[looking()] : undefined;
+    return star && spec.system ? { star, system: spec.system } : null;
+  };
   /** Our message in view, counted from 0. -1 for none. */
   const aimed = () => (dialsOf.beams?.focus ?? 0) - 1;
   /** Our build in view, counted from 0. -1 for none. */
@@ -566,7 +577,8 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       } else if (w.site.on === "orbit") {
         const { axis, node } = orbitFrame(w.site.orbit?.tilt ?? 0);
         v = axis.multiplyScalar(0.8).addScaledVector(node, 0.6).normalize();
-        logD = NEAR_EARTH;
+        // A high orbit is seen from farther, about four times its size, so its whole ring shows. 2026-10-22.
+        logD = Math.max(NEAR_EARTH, Math.log10(4 * (6371 + (w.site.orbit?.km ?? 400)) * KM_AU));
       }
       else if (w.site.draw !== "dome") {
         logD = NEAR_EARTH;
@@ -747,7 +759,16 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     (d) => d * 40 + 400,
   );
   local.on = false;
-  const layers = [cosmos, stars, solar, earth, local];
+  // And a sixth, in AU from the star of the destination open on Reach, for its Close View: its system, whose smallest
+  // orbits would shake if drawn in the Sun's layer so far from home.
+  const sys = layer(
+    1,
+    new THREE.Vector3(),
+    (d) => Math.max(d * 1e-3, 1e-7),
+    (d) => d * 10 + 1e4,
+  );
+  sys.on = false;
+  const layers = [cosmos, stars, solar, sys, earth, local];
 
   // ── Earth and the Moon, in Earth radii ──
   const globeUniforms = () => ({
@@ -1429,7 +1450,9 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       last = clock;
       const want = (spec.mode === "reach" && spec.leads?.[0]) || "Proxima Centauri";
       if (want !== target) aim(want);
-      nearestGlow.uniforms.uOpacity.value = towardGlow.uniforms.uOpacity.value = far * starBand(x);
+      // In its Close View, the ring and road give way to the system itself.
+      nearestGlow.uniforms.uOpacity.value = towardGlow.uniforms.uOpacity.value =
+        far * starBand(x) * (1 - ramp(sysDown, 0.2, 0.6));
       debrisGlow.uniforms.uOpacity.value = p * band(x, -3.8, -3.4, -2.2, -1.7);
       belt.uniforms.uOpacity.value = 0.14 * p * band(x, -3.4, -3.0, -2.2, -1.7);
       for (const { group, rate } of rings) group.rotateY((rate < 0 ? (2 * Math.PI) / turnOf() : rate) * dt);
@@ -1451,13 +1474,148 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       if ((spec.mode === "inherit" || spec.mode === "reach") && spec.onMarks) {
         const w = parent.clientWidth;
         const h = parent.clientHeight;
-        spec.onMarks(
-          marks.map(([id, layer, at, show]) => {
+        spec.onMarks([
+          ...marks.map(([id, layer, at, show]) => {
             v.copy(at).project(layer.camera);
-            return { id, x: ((v.x + 1) / 2) * w, y: ((1 - v.y) / 2) * h, a: v.z < 1 ? show(x) : 0 };
+            // Inside a system, the marks back home step aside: only the star and its worlds are named.
+            const home = id === "alpha" ? 1 : 1 - ramp(sysDown, 0, 0.5);
+            return { id, x: ((v.x + 1) / 2) * w, y: ((1 - v.y) / 2) * h, a: v.z < 1 ? show(x) * home : 0 };
           }),
-        );
+          ...(visitor?.marks(w, h) ?? []),
+        ]);
       }
+    };
+  }
+
+  // ── Close View into another system: its star and every world known round it, from the lead's own data ──
+  // How it tilts no one knows. A world found by its tug can't be face on to us, so we lay it 60° from face on, and look
+  // down on it at 35° from our side. Each orbit's turn in its plane is ours too. Reach's destinations fly into it, and
+  // from 2026-10-19 Scan's leads too.
+  function visiting() {
+    let built: { system: System; star: string } | null = null;
+    const sysParts: THREE.Object3D[] = [];
+    const sysLines: [THREE.ShaderMaterial, number][] = [];
+    const sysStarGlow = glow({ minPx: 2.5, maxPx: 120 });
+    const sysBeltGlow = glow({ minPx: 0.8, maxPx: 2.5 });
+    const sysWorldGlow = glow({ fixed: true });
+    let sysWorlds: THREE.Points | null = null;
+    const [pu, pv, pn] = [new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3()];
+    const flat = (r: number, ang: number, out: THREE.Vector3) =>
+      out.copy(pu).multiplyScalar(r * Math.cos(ang)).addScaledVector(pv, r * Math.sin(ang));
+    /** Where each world is now, in AU from its star, for its point and its name. */
+    const worldAt: THREE.Vector3[] = [];
+    const turnOfWorld = (i: number) => i * 1.9;
+    const v = new THREE.Vector3();
+    const buildSystem = (system: System, id: string, at: THREE.Vector3) => {
+      built = { system, star: id };
+      sysStar.copy(at).multiplyScalar(LY_AU);
+      for (const o of sysParts) {
+        sys.scene.remove(o);
+        (o as THREE.Points).geometry.dispose();
+      }
+      sysParts.length = 0;
+      sysLines.length = 0;
+      const toUs = at.clone().normalize().negate();
+      const side = new THREE.Vector3(0, 1, 0).cross(toUs).normalize();
+      pn.copy(toUs).multiplyScalar(Math.cos(60 * DEG)).addScaledVector(side, Math.sin(60 * DEG)).normalize();
+      pu.copy(toUs).addScaledVector(pn, -toUs.dot(pn)).normalize();
+      pv.copy(pn).cross(pu).normalize();
+      sysDir.copy(pu).multiplyScalar(Math.cos(35 * DEG)).addScaledVector(pn, Math.sin(35 * DEG)).normalize();
+      const { worlds, hz, belts = [] } = system;
+      worldAt.splice(0, worldAt.length, ...worlds.map(() => new THREE.Vector3()));
+      // The view frames what is sure: confirmed worlds and the warm zone, or with no world, the dust. A claim far out,
+      // like Proxima's disputed c, shows only as its orbit passes.
+      const sure = worlds.filter((w) => w.status === "confirmed").map((w) => w.a * (1 + w.e));
+      sysSpan = Math.max(...sure, hz?.[1] ?? 0, ...(sure.length ? [] : belts.map((b) => b.to)), 0.01);
+      const add = (o: THREE.Object3D) => {
+        sys.scene.add(o);
+        sysParts.push(o);
+      };
+      const lineOf = (kind: Kind, base: number) => {
+        const m = line(kind, 0);
+        sysLines.push([m, base]);
+        return m;
+      };
+      const star = new Cloud();
+      star.add(0, 0, 0, sysSpan * 0.06, 0.3, K.sun);
+      star.add(0, 0, 0, sysSpan * 0.012, 0.7, K.sun);
+      star.add(0, 0, 0, sysSpan * 0.002, 1, K.sun);
+      add(star.points(sysStarGlow));
+      const circle = (r: number) =>
+        Array.from({ length: 160 }, (_, k) => flat(r, (k / 160) * 2 * Math.PI, new THREE.Vector3()));
+      // The warm zone, a haze in the Mind's blue between its edges, and the edges drawn.
+      if (hz) {
+        for (const r of hz) add(loop(circle(r), lineOf("mind", 0.5)));
+        const warm = new Cloud();
+        for (let n = 0; n < 1800; n++) {
+          const r = hz[0] + rand() * (hz[1] - hz[0]);
+          const at = flat(r, rand() * 2 * Math.PI, new THREE.Vector3());
+          warm.add(at.x, at.y, at.z, r * 0.02, 0.35 + rand() * 0.25, K.mind);
+        }
+        add(warm.points(sysBeltGlow));
+      }
+      worlds.forEach((w, i) => {
+        const pts = Array.from({ length: 200 }, (_, k) => {
+          const nu = (k / 200) * 2 * Math.PI;
+          const r = (w.a * (1 - w.e * w.e)) / (1 + w.e * Math.cos(nu));
+          return flat(r, nu + turnOfWorld(i), new THREE.Vector3());
+        });
+        add(loop(pts, lineOf("ink", w.lead ? 0.7 : w.status === "confirmed" ? 0.35 : 0.16)));
+      });
+      if (belts.length) {
+        const dust = new Cloud();
+        for (const b of belts)
+          for (let n = 0; n < 2500; n++) {
+            const r = b.from + rand() * (b.to - b.from);
+            const at = flat(r, rand() * 2 * Math.PI, new THREE.Vector3()).addScaledVector(pn, gauss() * r * 0.02);
+            dust.add(at.x, at.y, at.z, r * 0.008, 0.45 + rand() * 0.3, rand() < 0.4 ? K.warm : K.ink);
+          }
+        add(dust.points(sysBeltGlow));
+      }
+      const pts = new Cloud();
+      // Each world a point by its least mass, the lead's in the Mind's blue.
+      for (const w of worlds) pts.add(0, 0, 0, 8 + 1.5 * Math.min(3, Math.log2(1 + (w.mass ?? 1))), 1, w.lead ? K.mind : K.ink);
+      sysWorlds = pts.points(sysWorldGlow);
+      add(sysWorlds);
+    };
+
+    return {
+      /** Builds the system wanted, but only once the view is out of the last one, so it never jumps between stars. */
+      want(star: string, system: System) {
+        const at = leadAt(star);
+        if (at && sysAt === 0 && (built?.system !== system || built.star !== star)) buildSystem(system, star, at);
+      },
+      /** Whether the system built is the one wanted. */
+      holds: (star: string, system: System) => built?.system === system && built.star === star,
+      /** Its worlds going round as Kepler has it, the innermost in four seconds and the rest as much slower as their
+       *  years are longer, and all of it coming in as the view goes inside. */
+      frame() {
+        const inside = ramp(sysDown, 0.45, 1);
+        sysStarGlow.uniforms.uOpacity.value = sysWorldGlow.uniforms.uOpacity.value = inside;
+        sysBeltGlow.uniforms.uOpacity.value = 0.8 * inside;
+        for (const [m, base] of sysLines) m.uniforms.uOpacity.value = base * inside;
+        if (!built || !sysWorlds || inside === 0) return;
+        const worlds = built.system.worlds;
+        const fastest = Math.min(...worlds.map((w) => w.days));
+        const pos = sysWorlds.geometry.attributes.position as THREE.BufferAttribute;
+        worlds.forEach((w, i) => {
+          const M = ((2 * Math.PI * clock) / (4 * (w.days / fastest)) + i * 2.3) % (2 * Math.PI);
+          let E = M;
+          for (let k = 0; k < 6; k++) E -= (E - w.e * Math.sin(E) - M) / (1 - w.e * Math.cos(E));
+          const px = w.a * (Math.cos(E) - w.e);
+          const py = w.a * Math.sqrt(1 - w.e * w.e) * Math.sin(E);
+          flat(Math.hypot(px, py), Math.atan2(py, px) + turnOfWorld(i), worldAt[i]);
+          pos.setXYZ(i, worldAt[i].x, worldAt[i].y, worldAt[i].z);
+        });
+        pos.needsUpdate = true;
+      },
+      /** Its worlds' names on screen, shown once the view is inside. */
+      marks(w: number, h: number): Mark[] {
+        return worldAt.map((at, i) => {
+          v.copy(at).project(sys.camera);
+          return { id: `w${i}`, x: ((v.x + 1) / 2) * w, y: ((1 - v.y) / 2) * h, a: v.z < 1 ? ramp(sysDown, 0.6, 1) : 0 };
+        });
+      },
     };
   }
 
@@ -1735,7 +1893,9 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     // The other stars, faint, once the catalog has come.
     let dim: THREE.ShaderMaterial | null = null;
 
-    return (p: number) => {
+    return (on: number) => {
+      // Inside a lead's system, the map of leads steps aside, and only its star keeps its name.
+      const p = on * (1 - ramp(sysDown, 0.2, 0.6));
       const d = dialsOf.leads;
       const found = d?.found ?? leads.length;
       const grid = d?.grid ?? 1;
@@ -1822,7 +1982,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         };
         const marks: Mark[] = leads.map(({ id, at }, i) => {
           const s = onScreen(at);
-          return { id, x: s.x, y: s.y, a: s.z < 1 ? p * ramp(shown[i], 0.6, 1) : 0 };
+          return { id, x: s.x, y: s.y, a: s.z < 1 ? (i === focus ? on : p) * ramp(shown[i], 0.6, 1) : 0 };
         });
         const sol = onScreen(new THREE.Vector3());
         marks.push({ id: "Sol", x: sol.x, y: sol.y, a: p });
@@ -1836,6 +1996,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
           }
           marks.push({ id: `ring:${r}`, x: best.x, y: best.y, a: best.z < 1 ? p * grid * (1 - any) : 0 });
         }
+        if (visitor) marks.push(...visitor.marks(w, h));
         spec.onMarks(marks);
       }
     };
@@ -2684,11 +2845,21 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
   let sent: ReturnType<typeof sending> | null = null;
   let builds: ReturnType<typeof building> | null = null;
   let nearby: ReturnType<typeof closeUp> | null = null;
+  /** Close View into another system, once one is wanted. */
+  let visitor: ReturnType<typeof visiting> | null = null;
+  const visit = () => (visitor ??= visiting());
   /** Close View: the build it is down at, or was, how far down, 0 to 1, and eased, and how a drag has turned it. */
   let closing: NonNullable<Show["works"]>[number] | null = null;
   let downAt = 0;
   let down = 0;
   let closeSince = 0;
+  /** Close View into another system: how far in, 0 to 1, and eased, where its star is, in AU, how far its system
+   *  spans, in AU, and the way the view looks down on it. */
+  let sysAt = 0;
+  let sysDown = 0;
+  const sysStar = new THREE.Vector3();
+  let sysSpan = 1;
+  const sysDir = new THREE.Vector3(0, 1, 0);
   const closeTurn = { az: 0, el: 0 };
   const [cUp, cNorth, cEast, cDir] = Array.from({ length: 4 }, () => new THREE.Vector3());
   const basis = new THREE.Matrix4();
@@ -2788,6 +2959,25 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       place.quaternion.setFromRotationMatrix(basis.makeBasis(cEast, cNorth, cUp));
     }
     local.on = down > 0.001;
+    // Close View into another system, Reach's destination or Scan's lead: from the far view of its star into it, at an
+    // even pace in log distance, the view's middle moving onto the star early and tipping to look down on its worlds
+    // late. Another system waits until the view is out of the last.
+    const there = systemOf();
+    if (there) visit().want(there.star, there.system);
+    const wantSys = !!there && !!dialsOf[spec.mode]?.close && visit().holds(there.star, there.system);
+    sysAt = still ? Number(wantSys) : Math.min(1, Math.max(0, sysAt + (wantSys ? dt : -dt) / DOWN));
+    sysDown = easeInOut(sysAt);
+    if (sysDown > 0) {
+      logD += (Math.log10(sysSpan * 2.4) - logD) * sysDown;
+      D = 10 ** logD;
+      target.lerp(sysStar, ramp(sysDown, 0, 0.35));
+      view.dir.lerp(sysDir, ramp(sysDown, 0.4, 1)).normalize();
+      up.addScaledVector(view.dir, -up.dot(view.dir)).normalize();
+      cam.copy(target).addScaledVector(view.dir, D);
+    }
+    sys.on = sysDown > 0.001;
+    sys.origin.copy(sysStar);
+    visitor?.frame();
     frameLens();
 
     for (const L of layers) {
@@ -2811,7 +3001,8 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     // What shows at this scale.
     const x = logD;
     earth.on = x < -0.2;
-    solar.on = x < 7;
+    // Inside another system, ours is a star behind: its own scene steps aside.
+    solar.on = x < 7 && sysDown < 0.6;
     stars.on = x < 9.4;
     const pPeople = present("people", dt);
     const pInherit = present("inherit", dt);
@@ -2889,7 +3080,8 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
   function frame(now: number) {
     raf = requestAnimationFrame(frame);
     // A still is one frame, redrawn only when something changes, as when Close View goes down or comes up.
-    if (still && !dirty && Number(!!dialsOf.works?.close) === downAt) return;
+    const inside = Number(!!systemOf() && !!dialsOf[spec.mode]?.close);
+    if (still && !dirty && Number(!!dialsOf.works?.close) === downAt && inside === sysAt) return;
     clock = pilot.clock(now);
     dirty = false;
     draw();

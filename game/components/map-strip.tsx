@@ -3,7 +3,7 @@ import { useRef, useState } from "react";
 import { BeamsMap, useBeams } from "@/components/beams";
 import { Globe, Lens } from "@/components/icons";
 import { ReachMap, Ruler, useReach } from "@/components/reach";
-import { ScanMap } from "@/components/scan";
+import { ScanMap, useLeads } from "@/components/scan";
 import { SkyArt, useSky } from "@/components/sky";
 import { useWorks, WorksMap } from "@/components/works";
 import type { Stop } from "@/lib/flight";
@@ -24,7 +24,8 @@ const PILL = "inline-flex h-8 items-center gap-1.5 rounded-full border border-fa
 const BUTTON = `absolute right-2.5 bottom-3 ${PILL}`;
 
 // The board: a strip of the map under the top bar, a window onto the game's one sky, which flies here from the
-// charter. On Scan and a lead's page it shows Earth's leads. On Build, a build's page takes it to where it would stand,
+// charter. On Scan and a lead's page it shows Earth's leads, and a lead open whose system we know has a Close View into
+// it. On Build, a build's page takes it to where it would stand,
 // and Close View on down to the ground there, where a drag walks round it. On Reach it flies out from Earth to the
 // nearest star. A message picked on Scan takes it out to its star. Elsewhere it rests at a stop, turning slowly,
 // travels outward a stop a tap, and turns with a drag. A lens marks going closer or farther, and Earth coming home.
@@ -40,6 +41,7 @@ export function MapStrip() {
   const works = useWorks();
   const built = (path === "/build" || path.startsWith("/build/")) && works.picked !== null;
   const reach = useReach();
+  const leads = useLeads();
   const [tall, setTall] = useState(false);
 
   // Tall, the strip opens wider at its handle, and gives a walkthrough more room. Wide, the map fills the left of the
@@ -61,7 +63,16 @@ export function MapStrip() {
       ) : scan ? (
         <>
           <ScanMap className="absolute inset-0" />
-          <span className={LABEL}>LEADS</span>
+          <span className={LABEL}>
+            {leads.close && leads.look ? `${leads.look.star.toUpperCase()} · CLOSE VIEW` : "LEADS"}
+          </span>
+          {/* A lead's Close View flies into its system, as a destination's does on Reach, and Pull Back out again. */}
+          {leads.look?.system && (
+            <button onClick={() => leads.setClose(!leads.close)} className={`absolute top-2 right-2.5 ${PILL}`}>
+              <Lens closer={!leads.close} />
+              {leads.close ? "Pull Back" : "Close View"}
+            </button>
+          )}
         </>
       ) : built ? (
         <>
@@ -87,15 +98,31 @@ export function MapStrip() {
       ) : reaching ? (
         <>
           <ReachMap className="absolute inset-0" />
-          <span className={LABEL}>FROM EARTH</span>
-          {/* The ruler is the map's zoom, so it lies on the map, along its foot, clear of the handle on a phone. */}
-          <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-page/80 via-page/40 to-transparent px-4 pt-6 pb-5 wide:px-10 wide:pb-6">
-            <Ruler />
+          <span className={LABEL}>
+            {reach.close ? `${reach.target.name.toUpperCase()} · CLOSE VIEW` : "FROM EARTH"}
+          </span>
+          {/* The ruler is the map's zoom, so it lies on the map, along its foot, clear of the handle on a phone. Inside a
+              system it has nothing to measure, so it steps aside. */}
+          {!reach.close && (
+            <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-page/80 via-page/40 to-transparent px-4 pt-6 pb-5 wide:px-10 wide:pb-6">
+              <Ruler />
+            </div>
+          )}
+          <div className="absolute top-2 right-2.5 flex gap-1.5">
+            {/* A destination's Close View flies into its system, and Pull Back out again. */}
+            {reach.target.system && (
+              <button onClick={() => reach.setClose(!reach.close)} className={PILL}>
+                <Lens closer={!reach.close} />
+                {reach.close ? "Pull Back" : "Close View"}
+              </button>
+            )}
+            {!reach.close && (
+              <button onClick={() => reach.tour()} className={PILL}>
+                <Lens closer={false} />
+                Fly Out Again
+              </button>
+            )}
           </div>
-          <button onClick={() => reach.tour()} className={`absolute top-2 right-2.5 ${PILL}`}>
-            <Lens closer={false} />
-            Fly Out Again
-          </button>
         </>
       ) : (
         <Stops />

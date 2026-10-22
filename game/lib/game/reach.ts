@@ -1,7 +1,7 @@
 // Reach: spreading out into the Galaxy, probes first. At Year 0 there is nothing to send yet, so the tab shows how far
 // we have gone and the two roads to the nearest star. Each can be queued before Begin, last in line. One queued is
-// dated where the plan has it, and one not yet as if queued now, with this game's thought. Queued, a road can slow
-// what is before it: see slows(). Distances at Year 0 are HOLOS_GAME_CONCEPT.md's. Built 2026-10-18.
+// dated where the plan has it, and one not yet as if queued now, with this game's compute. Queued, a road can slow
+// what is before it: see moves() in plan.ts. Distances at Year 0 are HOLOS_GAME_CONCEPT.md's. Built 2026-10-18.
 import { ordersOf, pacedName, schedule } from "./plan";
 import type { Plan } from "./types";
 import { type Order, pace } from "@/lib/sim/works";
@@ -62,10 +62,10 @@ export interface Road {
  *  Sails fly at a fifth of light speed, as Starshot's design. A flyby probe is built 12 Years after the yard, and flies
  *  at an eighth, as Daedalus. Its word comes home at light speed. */
 export function roads(plan: Plan, scale: number, from = 0): Road[] {
-  const { orders, aside } = ordersOf(plan);
+  const { orders, ...opts } = ordersOf(plan);
   const doneOf = (work: string) => {
     const more: Order[] = plan.builds.includes(work) ? [] : [{ y: from, begin: pacedName(work) }];
-    return pace([...orders, ...more], 200, { scale, aside }).done[pacedName(work)] ?? null;
+    return pace([...orders, ...more], 200, { scale, ...opts }).done[pacedName(work)] ?? null;
   };
   const road = (name: string, build: string, craft: string, wait: number, speed: number): Road => {
     const done = doneOf(build);
@@ -75,6 +75,21 @@ export function roads(plan: Plan, scale: number, from = 0): Road[] {
     return { name, n, build, craft, speed, done, leaves, arrives, home: arrives === null ? null : arrives + NEAREST.ly };
   };
   return [road("By sail", "Laser Sail Array", "Sails", 0, 0.2), road("By probe", "Probe Yard", "A flyby probe", 12, 1 / 8)];
+}
+
+/** What our order has built to learn with, as the knowledge wall takes it: the Year each watch and the telescope is
+ *  done, and for each road to Proxima b that we fly, the Year it passes and the Year its word reaches us. 2026-10-22. */
+export function kitOf(plan: Plan, scale: number) {
+  const done = schedule(plan, scale);
+  const fly = (r: Road) => (r.n !== null && r.arrives !== null && r.home !== null ? { passed: r.arrives, home: r.home } : null);
+  const [sails, probe] = roads(plan, scale);
+  return {
+    allSky: done["All-Sky Watch"],
+    flash: done["Deep Flash Watch"],
+    telescope: done["Infrared Telescope"],
+    sails: fly(sails),
+    probe: fly(probe),
+  };
 }
 
 /** A road toward a star `ly` away: the build and the wait are the same, the flight and the word home are its own. */
@@ -114,18 +129,3 @@ export const LOCKED: Way[] = [
   },
 ];
 
-/** The queued build a work slows most, and by how many Years, against the plan without it. Each work in line gets its
- *  want in turn before any is pushed past it, so a work with a large want, even last, takes the push from those before
- *  it. Null when it slows nothing by a tenth of a Year. */
-export function slows(plan: Plan, scale: number, work: string): { name: string; by: number } | null {
-  const others = plan.builds.filter((b) => b !== work);
-  const without = schedule({ ...plan, builds: others }, scale);
-  const within = schedule(plan.builds.includes(work) ? plan : { ...plan, builds: [...others, work] }, scale);
-  let most: { name: string; by: number } | null = null;
-  for (const name of others) {
-    const a = without[name], b = within[name];
-    if (a === null || b === null) continue;
-    if (b - a >= 0.1 && (!most || b - a > most.by)) most = { name, by: b - a };
-  }
-  return most;
-}

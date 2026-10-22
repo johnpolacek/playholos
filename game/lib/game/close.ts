@@ -594,6 +594,314 @@ function probeYard(): Close {
   };
 }
 
+// ── Ground Solar ──
+// Talatan, on the Tibetan plateau, covered 420 km² of panels in 2025, row on row. Drawn here as blocks of rows 0.9 by
+// 0.45 km: the park as it stands, dim to the west, and ours going up to the east, then its substation and the line
+// out north. The blocks, the substation and the line are ours.
+function rows(x: number, y: number) {
+  const out = panel(x, y, 0.9, 0.45, 0.001);
+  for (let k = 1; k < 6; k++) out.push(x, y + k * 0.075, 0.001, x + 0.9, y + k * 0.075, 0.001);
+  return out;
+}
+function groundSolar(): Close {
+  const have: number[] = [];
+  for (let i = 0; i < 3; i++) for (let j = 0; j < 4; j++) have.push(...rows(-3.2 + i, -1.1 + j * 0.55));
+  const b = new Rising();
+  for (let j = 0; j < 4; j++)
+    for (let i = 0; i < 4; i++) {
+      b.add(rows(0.2 + i, -1.1 + j * 0.55));
+      b.lit([0.2 + i, -1.1 + j * 0.55, 0.003]);
+    }
+  b.add(box(-0.25, 1.3, 0.12, 0.08, 0.015));
+  for (let y = 1.4; y <= 6; y += 0.4) b.add(stack(-0.25, y, 0.04));
+  b.add([-0.25, 1.3, 0.04, -0.25, 6, 0.04]);
+  b.lit([-0.25, 1.3, 0.02]);
+  return { view: { km: 5, el: 13, az: 200, at: [0.3, 0] }, have, ...b.done(0.006), haveLights: [] };
+}
+
+// ── 15 m Mirror ──
+// LUVOIR-A's mirror was 15 m across, folded to launch and opened at L2. Ours is built there whole, beside the Infrared
+// Telescope, drawn dim to one side: three rings of segments round an open middle, as Webb's two are, over a shade 70
+// by 46 m, our scale-up. The shade lies under it, toward the Sun, and the mirror looks out into the dark.
+function scope(dx: number, w: number, R: number, rings: number, mz: number): number[] {
+  const out: number[] = [];
+  for (let k = 0; k < 5; k++) {
+    const [ww, d, z] = [w * (1 - 0.04 * k), ((w * 2) / 3) * (1 - 0.04 * k), w * 0.04 * k];
+    out.push(
+      ...path([
+        [dx + ww, 0, z],
+        [dx + ww / 2, d, z],
+        [dx - ww / 2, d, z],
+        [dx - ww, 0, z],
+        [dx - ww / 2, -d, z],
+        [dx + ww / 2, -d, z],
+        [dx + ww, 0, z],
+      ]),
+    );
+  }
+  // The mast from the shade's middle up to the mirror.
+  out.push(dx, 0, w * 0.16, dx, w * 0.27, mz);
+  const step = Math.sqrt(3) * R;
+  for (let ring = 1; ring <= rings; ring++)
+    for (let k = 0; k < 6 * ring; k++) {
+      const a = (Math.floor(k / ring) * Math.PI) / 3 + Math.PI / 6;
+      const t = k % ring;
+      const x = ring * Math.cos(a) + t * Math.cos(a + (2 * Math.PI) / 3);
+      const y = ring * Math.sin(a) + t * Math.sin(a + (2 * Math.PI) / 3);
+      out.push(...hexagon(dx + step * x, w * 0.27 + step * y, mz, R * 0.97));
+    }
+  const top: V = [dx, w * 0.27, mz + step * (rings + 1.2)];
+  out.push(...hexagon(top[0], top[1], top[2], R * 0.45));
+  for (let k = 0; k < 3; k++) {
+    const a = (k * 2 * Math.PI) / 3;
+    const r = step * (rings + 0.6);
+    out.push(dx + r * Math.cos(a), w * 0.27 + r * Math.sin(a), mz, ...top);
+  }
+  return out;
+}
+function fifteenMeterMirror(): Close {
+  const [w, R, mz] = [0.035, 0.00124, 0.02];
+  const b = new Rising().add(scope(0, w, R, 3, mz));
+  const top: V = [0, w * 0.27, mz + Math.sqrt(3) * R * 4.2];
+  b.lit(top, [0, w * 0.27, mz - 0.001]);
+  return {
+    view: { km: 0.16, el: 18, az: 210, at: [-0.02, 0.01, 0.012] },
+    have: scope(-0.085, 0.015, 0.00092, 2, 0.009),
+    ...b.done(0.0006),
+    haveLights: [-0.085, 0.004, 0.0165, 0.0004],
+    runs: [{ pts: [-0.06, 0.12, 0.25, 0, w * 0.27, mz, ...top], secs: 3, lands: true }],
+  };
+}
+
+// ── Mass Driver ──
+// O'Neill's group's driver, at the critical longitude on the Moon's equator. Buckets ride a line of coils east and let
+// go of their loads at 2.4 km/s, the Moon's escape speed, then loop back empty. Their design at 100 g ran nearly 5 km,
+// so ours is drawn 5 km long, with its loading station, return line and solar field. A load leaves level, and the Moon
+// curves away beneath it: 120 m down at 20 km, a kilometer at 60. The craters round it are ours.
+function massDriver(): Close {
+  const have: number[] = [];
+  const rnd = seeded(1977);
+  for (let k = 0; k < 16; k++)
+    have.push(...circle([(rnd() - 0.5) * 9, (rnd() - 0.5) * 7, 0], 0.03 + rnd() * 0.35, [0, 0, 1], 32));
+  const b = new Rising().add(box(-2.62, 0.02, 0.12, 0.08, 0.02));
+  b.lit([-2.62, 0.02, 0.025]);
+  for (let i = 0; i <= 50; i++) {
+    const x = -2.5 + i * 0.1;
+    b.add(circle([x, 0, 0.012], 0.01, [1, 0, 0], 12));
+    if (i % 5 === 0) b.lit([x, 0, 0.024]);
+  }
+  b.add([-2.5, 0, 0.012, 2.5, 0, 0.012], [-2.5, 0.05, 0.004, 2.5, 0.05, 0.004]);
+  b.add(
+    path([
+      [2.5, 0.05, 0.004],
+      [2.58, 0.025, 0.008],
+      [2.5, 0, 0.012],
+    ]),
+  );
+  for (let i = 0; i < 12; i++) b.add(panel(-2.2 + (i % 6) * 0.2, -0.5 - Math.floor(i / 6) * 0.15, 0.16, 0.1, 0.002));
+  const flight: V[] = [
+    [-2.5, 0, 0.012],
+    [2.5, 0, 0.012],
+    [10, 0, 0.03],
+    [20, 0, 0.12],
+    [40, 0, 0.46],
+    [60, 0, 1.04],
+  ];
+  return {
+    view: { km: 6, el: 10, az: 200, at: [0.4, 0] },
+    have,
+    ...b.done(0.008),
+    haveLights: [],
+    sky: path(flight.slice(1)),
+    runs: [0, 0.25, 0.5, 0.75].map((offset) => ({ pts: flight.flat(), secs: 3, offset })),
+  };
+}
+
+// ── Orbital Foundry ──
+// No one has drawn a foundry for Moon rock since O'Neill's group placed one in this orbit in 1977. Ours: a mirror 120 m
+// across gathering sunlight to melt rock, four furnaces along a spine, and a net of rock caught from the Moon, with
+// loads still coming in. Its shape is ours.
+function orbitalFoundry(): Close {
+  const b = new Rising().add(tube(-0.15, 0.15, 0, 0, 0.008));
+  b.lit([-0.15, 0, 0.008], [0.15, 0, 0.008]);
+  for (const x of [-0.09, -0.03, 0.03, 0.09]) {
+    b.add(box(x, 0, 0.03, 0.03, 0.04, 0.008));
+    b.lit([x, 0, 0.05]);
+  }
+  const mirror: V = [0, 0.13, 0.06];
+  b.add(circle(mirror, 0.06, [0, 1, 0], 40), circle(mirror, 0.03, [0, 1, 0], 28));
+  for (let k = 0; k < 6; k++) b.add([...on(mirror, 0.06, (k * Math.PI) / 3, [0, 1, 0]), 0, 0.015, 0.05]);
+  const rock: V = [-0.26, 0, 0];
+  b.add(circle(rock, 0.04, [1, 0, 0], 24), circle(rock, 0.04, [0, 1, 0], 24), circle(rock, 0.04, [0, 0, 1], 24));
+  b.add([-0.22, 0, 0, -0.15, 0, 0]);
+  return {
+    view: { km: 0.75, el: 14, az: 205 },
+    have: [],
+    ...b.done(0.002),
+    haveLights: [],
+    runs: [{ pts: [-1.2, 0.3, 0.4, ...rock], secs: 6, lands: true }],
+  };
+}
+
+// ── Belt Mining ──
+// The Keck Institute's 2012 study would bag a whole 7 m asteroid, about 500 t, and bring it home to high lunar orbit.
+// Ours does the same at scale: a tug on solar wings, and its bag round a boulder of belt rock 40 m across, coming home
+// to the foundry's orbit. The boulder and the tug are ours.
+function beltMining(): Close {
+  const rnd = seeded(2012);
+  const radii = Array.from({ length: 14 }, () => 0.015 + rnd() * 0.008);
+  const outline = (n: V) =>
+    path(
+      [...radii, radii[0]].map((r, k) => on([0, 0, 0], r, (k / 14) * 2 * Math.PI, n)),
+    );
+  const b = new Rising().add(outline([0, 0, 1]), outline([0, 1, 0]), outline([1, 0, 0]));
+  b.add(circle([0, 0, 0], 0.03, [1, 0, 0], 24), circle([0, 0, 0], 0.03, [0, 1, 0], 24));
+  b.add([0.03, 0, 0, 0.07, 0, 0], box(0.085, 0, 0.03, 0.015, 0.015, -0.0075));
+  for (const side of [-1, 1]) b.add(panel(0.07, side > 0 ? 0.012 : -0.062, 0.03, 0.05));
+  b.lit([0.1, 0, 0.008], [0.07, 0, 0.008]);
+  return {
+    view: { km: 0.3, el: 15, az: 215 },
+    have: [],
+    ...b.done(0.0015),
+    haveLights: [],
+    runs: [{ pts: [0.1, 0, 0, 0.6, 0.05, 0.02], secs: 5 }],
+  };
+}
+
+// ── Far-Side Array ──
+// Daedalus crater, 94 km across, near the middle of the far side, where Earth never rises. FarView's plan: dipoles by
+// the hundred thousand, made from the far side's own aluminum. Ours grows in fifths, each a wedge of the crater's floor
+// round a factory at its middle. Drawn here is the middle few km, each cross standing for a patch of dipoles, a fifth
+// at a time, under the whole sky it hears. The craters on its floor are ours.
+function farSideArray(): Close {
+  const have: number[] = [];
+  const rnd = seeded(2002);
+  for (let k = 0; k < 18; k++)
+    have.push(...circle([(rnd() - 0.5) * 12, (rnd() - 0.5) * 10, 0], 0.04 + rnd() * 0.4, [0, 0, 1], 32));
+  const b = new Rising().add(box(0, 0, 0.16, 0.1, 0.03));
+  b.lit([0, 0, 0.035]);
+  for (let f = 0; f < 5; f++) {
+    for (let x = -3.6; x <= 3.6; x += 0.3)
+      for (let y = -3.6; y <= 3.6; y += 0.3) {
+        const r = Math.hypot(x, y);
+        const a = (Math.atan2(y, x) + 2 * Math.PI) % (2 * Math.PI);
+        if (r < 0.3 || r > 3.6 || Math.floor(a / ((2 * Math.PI) / 5)) !== f) continue;
+        b.add([x - 0.04, y, 0.001, x + 0.04, y, 0.001], [x, y - 0.04, 0.001, x, y + 0.04, 0.001]);
+      }
+    const a = ((f + 0.5) * 2 * Math.PI) / 5;
+    b.lit([2 * Math.cos(a), 2 * Math.sin(a), 0.003]);
+  }
+  return {
+    view: { km: 8, el: 14, az: 200 },
+    have,
+    ...b.done(0.01),
+    haveLights: [],
+    sky: hemisphere([0, 0, 0], 5),
+  };
+}
+
+// ── Power from Orbit ──
+// NASA's 2024 study assembled its stations in geostationary orbit, each beaming 2 GW down to a field of antennas about
+// 6 km across. Ours are built from Moon rock: drawn as one station, a sunward panel 4 by 2 km and a transmitter 1 km
+// across facing Earth, its beam going down, with others along the same ring. Their shapes are ours.
+function powerFromOrbit(): Close {
+  const station = (x: number) => [...panel(x - 2, -1, 4, 2, 0.6), ...circle([x, 0, 0], 0.5, [0, 0, 1], 32), x, 0, 0, x, 0, 0.6];
+  const b = new Rising().add(circle([0, 0, 0], 0.5, [0, 0, 1], 40), [0, 0, 0, 0, 0, 0.6]);
+  b.lit([0, 0, 0]);
+  for (let i = 0; i < 8; i++) {
+    b.add(panel(-2 + (i % 4), -1 + Math.floor(i / 4), 1, 1, 0.6));
+    b.lit([-1.5 + (i % 4), -0.5 + Math.floor(i / 4), 0.6]);
+  }
+  const beam: number[] = [];
+  for (let k = 0; k < 8; k++) beam.push(...on([0, 0, 0], 0.5, (k * Math.PI) / 4), 0, 0, -40);
+  return {
+    view: { km: 9, el: 16, az: 205, at: [0, 0, -0.5] },
+    have: [...station(-12), ...station(12)],
+    ...b.done(0.02),
+    haveLights: [-12, 0, 0, 0.02, 12, 0, 0, 0.02],
+    sky: beam,
+    runs: [0, 1 / 3, 2 / 3].map((offset) => ({ pts: [0, 0, 0, 0, 0, -60], secs: 2, offset })),
+  };
+}
+
+// ── Deuterium Works ──
+// Bruce, on Lake Huron, where Canada drew heavy water from lake water on the nuclear station's steam from 1973, 1,600
+// t a year at its peak. Ours is 24 times that: rows of tall towers inland of the station, which stands dim by the
+// shore. The towers, their rows and the shore line are ours: our reading of the site, not a survey.
+function deuteriumWorks(): Close {
+  const have = [...box(-0.3, 0.6, 0.35, 0.12, 0.05), ...box(-0.3, -0.6, 0.35, 0.12, 0.05)];
+  for (const y of [0.6, -0.6]) have.push(...circle([-0.3, y, 0.05], 0.04, [0, 0, 1], 16));
+  const b = new Rising();
+  for (let i = 0; i < 24; i++) {
+    const [x, y] = [0.5 + (i % 6) * 0.22, -0.66 + Math.floor(i / 6) * 0.44];
+    b.add(circle([x, y, 0], 0.02, [0, 0, 1], 14), circle([x, y, 0.09], 0.02, [0, 0, 1], 14), [x - 0.02, y, 0, x - 0.02, y, 0.09], [x + 0.02, y, 0, x + 0.02, y, 0.09]);
+    b.lit([x, y, 0.092]);
+  }
+  return {
+    view: { km: 2.6, el: 12, az: 215, at: [0.5, 0] },
+    have,
+    ...b.done(0.004),
+    haveLights: [-0.3, 0.6, 0.06, 0.006, -0.3, -0.6, 0.06, 0.006],
+    towns: [
+      ["Kincardine", 44.177, -81.637, 12000],
+      ["Saugeen Shores", 44.437, -81.387, 16000],
+    ],
+    shore: [
+      [44.42, -81.54],
+      [44.22, -81.7],
+    ],
+  };
+}
+
+// ── Fusion Drive ──
+// Project Icarus's Firefly: 2,200 t dry, 1,600 t of it radiators, joined in Earth orbit and towed behind the Moon to
+// be lit. Drawn here on the yard's orbit as a spine 300 m long, its deuterium tanks forward, radiator fins along it, and
+// the magnetic nozzle's ring at the back. It stays dark here, near Earth. The fins and tanks are ours.
+function fusionDrive(): Close {
+  const b = new Rising().add([-0.15, 0, 0, 0.15, 0, 0]);
+  for (const [y, z] of [
+    [0.012, 0.012],
+    [-0.012, 0.012],
+    [0.012, -0.012],
+    [-0.012, -0.012],
+  ])
+    b.add(circle([0.12, y, z], 0.012, [1, 0, 0], 18), circle([0.12, y, z], 0.012, [0, 1, 0], 18));
+  b.lit([0.12, 0, 0.026]);
+  for (let k = 0; k < 4; k++) {
+    const x = 0.06 - k * 0.045;
+    b.add(panel(x - 0.03, 0.004, 0.035, 0.05), panel(x - 0.03, -0.054, 0.035, 0.05));
+  }
+  b.add(circle([-0.15, 0, 0], 0.03, [1, 0, 0], 32), circle([-0.16, 0, 0], 0.022, [1, 0, 0], 28));
+  b.lit([-0.15, 0, 0.03], [-0.15, 0, -0.03]);
+  return {
+    view: { km: 0.5, el: 13, az: 210 },
+    have: [...tube(0.28, 0.32, -0.13, 0.02, 0.0045)],
+    ...b.done(0.0018),
+    haveLights: [0.3, -0.13, 0.025, 0.002],
+  };
+}
+
+// ── Seed Ship ──
+// About 1,500 t: a seed of about 443 t, as Freitas's REPRO, and a superconducting loop that unfurls 1,600 km across to
+// brake on the gas between the stars, drawn stowed as a coil. Built on the yard's orbit beside its drive, drawn dim
+// ahead of it. The modules and the coil are ours.
+function seedShip(): Close {
+  const b = new Rising();
+  for (let k = 0; k < 5; k++) {
+    b.add(tube(-0.05 + k * 0.022, -0.032 + k * 0.022, 0, 0, 0.009));
+    b.lit([-0.041 + k * 0.022, 0, 0.009]);
+  }
+  for (const r of [0.034, 0.038, 0.042]) b.add(circle([0.08, 0, 0], r, [1, 0, 0], 32));
+  b.add([0.06, 0, 0, 0.08, 0, 0]);
+  b.lit([0.08, 0, 0.042]);
+  return {
+    view: { km: 0.36, el: 13, az: 210 },
+    have: [-0.3, 0, 0.02, -0.15, 0, 0.02, ...circle([-0.3, 0, 0.02], 0.03, [1, 0, 0], 24)],
+    ...b.done(0.0016),
+    haveLights: [-0.22, 0, 0.03, 0.002],
+  };
+}
+
 /** Each build with a close view, by name. */
 export const CLOSE: Record<string, Close> = {
   "Thought Fields": thoughtFields(),
@@ -605,4 +913,14 @@ export const CLOSE: Record<string, Close> = {
   "Moon Vault": moonVault(),
   "Laser Sail Array": laserSailArray(),
   "Probe Yard": probeYard(),
+  "Ground Solar": groundSolar(),
+  "15 m Mirror": fifteenMeterMirror(),
+  "Mass Driver": massDriver(),
+  "Orbital Foundry": orbitalFoundry(),
+  "Belt Mining": beltMining(),
+  "Far-Side Array": farSideArray(),
+  "Power from Orbit": powerFromOrbit(),
+  "Deuterium Works": deuteriumWorks(),
+  "Fusion Drive": fusionDrive(),
+  "Seed Ship": seedShip(),
 };

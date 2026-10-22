@@ -74,7 +74,8 @@
   },
   "Fusion drive": {
    "years": 30,
-   "want": 10
+   "want": 10,
+   "orbit": true
   },
   "Seed ship": {
    "years": 18,

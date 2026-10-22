@@ -9,7 +9,9 @@ import { useLeads } from "@/components/scan";
 import { SkyArt } from "@/components/sky";
 import { Face, ListHead } from "@/components/tab-head";
 import type { Dials, Mark as Place } from "@/lib/drift";
-import { lean } from "@/lib/game/plan";
+import { YEAR_0 } from "@/lib/game/clock";
+import { visitReading } from "@/lib/game/leads";
+import { lean, type moves } from "@/lib/game/plan";
 import {
   auFor,
   LIGHT,
@@ -19,10 +21,10 @@ import {
   NEAREST,
   type Road,
   roads,
-  type slows,
   toward,
   zoomFor,
 } from "@/lib/game/reach";
+import { type System, worldName } from "@/lib/game/systems";
 import type { Plan } from "@/lib/game/types";
 import { gsap, prefersReducedMotion } from "@/lib/motion";
 
@@ -33,7 +35,9 @@ import { gsap, prefersReducedMotion } from "@/lib/motion";
 // read. Before Begin, a tap on a road queues it last in our order, or takes it out, as on Build. The Mind advises from
 // the charter, and queues nothing. Reach holds what we launch, and our messages, which are light, live on Scan with
 // the sky they cross. So under the line, what we have sent: Voyager 1, silent, carrying the Golden Record. Our sails
-// and probes join it once they fly. Settled 2026-10-19.
+// and probes join it once they fly. Settled 2026-10-19. They do since 2026-10-22, each until its word comes home from
+// Proxima b. The tab's head opens the nearest star at any time, the third
+// of the four things we would do first.
 
 // The roads' Years, drawn 360 wide.
 const W = 360;
@@ -51,6 +55,8 @@ export interface Target {
   id: string;
   name: string;
   ly: number;
+  /** Its system, which Close View flies into. */
+  system?: System;
 }
 const NEAREST_TARGET: Target = { id: NEAREST.name, name: NEAREST.name, ly: NEAREST.ly };
 
@@ -79,6 +85,9 @@ interface ReachView {
   target: Target;
   /** Turns the map to a destination and flies it out there, or with null, back to the nearest star. */
   aim(to: Target | null): void;
+  /** In the destination's system, or not, and the way in and out. */
+  close: boolean;
+  setClose(on: boolean): void;
 }
 
 const ReachContext = createContext<ReachView>({
@@ -88,6 +97,8 @@ const ReachContext = createContext<ReachView>({
   tour() {},
   target: NEAREST_TARGET,
   aim() {},
+  close: false,
+  setClose() {},
 });
 export const useReach = () => use(ReachContext);
 
@@ -112,8 +123,18 @@ export function ReachProvider({ children }: { children: React.ReactNode }) {
     [dials, jump],
   );
   const [target, setTarget] = useState<Target>(NEAREST_TARGET);
+  // Close View: the scene reads it from the dials each frame, and the screen from here.
+  const [close, setCloseState] = useState(false);
+  const setClose = useCallback(
+    (on: boolean) => {
+      Object.assign(dials, { close: on ? 1 : 0 });
+      setCloseState(on);
+    },
+    [dials],
+  );
   const tour = useCallback(
     (delay = 0) => {
+      setClose(false);
       if (prefersReducedMotion()) return jump(farZoom(target.ly));
       gsap.killTweensOf(dials);
       gsap
@@ -121,17 +142,21 @@ export function ReachProvider({ children }: { children: React.ReactNode }) {
         .fromTo(dials, { zoom: NEAR_ZOOM }, { zoom: zoomFor(VOYAGER.au), duration: 5, ease: "power2.inOut" })
         .to(dials, { zoom: farZoom(target.ly), duration: 3.5, ease: "power2.inOut" }, "+=1.2");
     },
-    [dials, jump, target],
+    [dials, jump, target, setClose],
   );
   const aim = useCallback(
     (to: Target | null) => {
       const next = to ?? NEAREST_TARGET;
-      setTarget((was) => (was.id === next.id ? was : next));
+      setClose(false);
+      setTarget((was) => (was.id === next.id && was.system === next.system ? was : next));
       fly(farZoom(next.ly));
     },
-    [fly],
+    [fly, setClose],
   );
-  const value = useMemo(() => ({ dials, fly, hold, tour, target, aim }), [dials, fly, hold, tour, target, aim]);
+  const value = useMemo(
+    () => ({ dials, fly, hold, tour, target, aim, close, setClose }),
+    [dials, fly, hold, tour, target, aim, close, setClose],
+  );
   return <ReachContext value={value}>{children}</ReachContext>;
 }
 
@@ -153,7 +178,10 @@ export function ReachMap({ className }: { className: string }) {
   const toured = useRef(false);
   // The scene rings the star it is given, and the name follows it.
   const star = useMemo(() => [target.id], [target.id]);
-  const named = { ...NAMES, alpha: `${target.name} · ${target.ly.toFixed(1)} ly` };
+  const named: Record<string, string> = { ...NAMES, alpha: `${target.name} · ${target.ly.toFixed(1)} ly` };
+  target.system?.worlds.forEach((w, i) => {
+    named[`w${i}`] = worldName(w);
+  });
   const onMarks = useCallback((marks: Place[]) => placeNames(names.current, marks), []);
   // The tour starts as the camera arrives from wherever the map was.
   const onReady = useCallback(
@@ -165,7 +193,15 @@ export function ReachMap({ className }: { className: string }) {
     [tour],
   );
   return (
-    <SkyArt mode="reach" dials={dials} leads={star} onReady={onReady} onMarks={onMarks} className={className}>
+    <SkyArt
+      mode="reach"
+      dials={dials}
+      leads={star}
+      system={target.system}
+      onReady={onReady}
+      onMarks={onMarks}
+      className={className}
+    >
       {Object.entries(named).map(([id, name]) => (
         <span
           key={id}
@@ -400,7 +436,7 @@ export function says(
   dials: number[],
   [sail, probe]: Road[],
   tip: ReturnType<typeof sooner>,
-  slow: ReturnType<typeof slows>,
+  slow: ReturnType<typeof moves>["late"],
   before: boolean,
 ) {
   if (sail.home === null) return `Neither road reaches ${name} within two centuries at our pace.`;
@@ -421,7 +457,7 @@ export function says(
 export function Reach() {
   const { save, year: clock } = useGame();
   const { fly } = useReach();
-  const { leads } = useLeads();
+  const { leads, visits } = useLeads();
   const { plan } = usePlan();
   const { scale } = useSchedule();
   // Voyager 1, picked, takes the map out to it, and again home to the nearest star.
@@ -452,12 +488,36 @@ export function Reach() {
     [leads, base],
   );
 
+  // Our sails and probe join Voyager 1 once they leave, each on its way from leaving to its word home from Proxima b.
+  const flying: Row[] = base
+    .filter((r) => r.n !== null && r.leaves !== null && r.home !== null && clock !== null && clock >= r.leaves)
+    .map((r) => {
+      const seen = visits.find((v) => v.by === (r.build === "Laser Sail Array" ? "sails" : "probe"));
+      return {
+        key: r.build,
+        name: r.craft,
+        note: seen
+          ? `Passed Proxima b at Year ${year(r.arrives!)}. Their word is home: ${visitReading(seen).title.toLowerCase()}.`
+          : clock! >= r.arrives!
+            ? `Passed Proxima b at Year ${year(r.arrives!)}. Their word is on its way home.`
+            : `To Proxima b, at ${r.speed === 0.2 ? "a fifth" : "an eighth"} of light speed. Passing at Year ${year(r.arrives!)}.`,
+        at: r.home,
+        kind: "flight",
+        msg: "to Proxima b",
+        sent: YEAR_0 + r.leaves!,
+        ly: NEAREST.ly,
+      };
+    });
+
   if (!save) return null;
 
   return (
     <div className="flex flex-col pb-4">
-      <ListHead left="Sent · 1" right="Near a star in" className="mt-1" />
+      <ListHead left={`Sent · ${1 + flying.length}`} right="Word home" className="mt-1" />
       <ul className="mt-1">
+        {flying.map((r) => (
+          <Item key={r.key} row={r} now={clock ?? 0} began={clock !== null} />
+        ))}
         <Item row={SENT} now={clock ?? 0} began={clock !== null} aim={voyager} />
       </ul>
 

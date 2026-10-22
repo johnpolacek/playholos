@@ -24,6 +24,9 @@ export interface Inbound {
   /** Would Year 0's sky watch catch it? Would the all-sky watch? */
   kit0: boolean | null;
   allsky: boolean | null;
+  /** Sent as laser flashes, which no radio watch hears, and whether the deep flash watch would catch them. */
+  laser?: boolean;
+  flash?: boolean;
 }
 
 export interface Neighbor {
@@ -79,6 +82,9 @@ export interface FeltWorld {
   /** Its star, from the catalogs: its kind, and its warm zone in AU. */
   kind?: string;
   hz?: [number, number];
+  /** What our Infrared Telescope has made of it so far, once built: whether it can split it from its star, each band
+   *  of its air read, true if it shows, and the Year of the latest, or of its first look. */
+  read?: { split: boolean; readable?: boolean; water?: boolean; oxygen?: boolean; ozone?: boolean; at?: number };
 }
 
 /** A signal Earth's watch caught, as received. */
@@ -90,10 +96,28 @@ export interface Heard {
   move: string;
   /** What it holds, read at once. Its sender may sign it. */
   text: string | null;
+  /** The build that caught it, when Year 0's sky watch would have missed it. */
+  by?: string;
+  /** It came as laser flashes. */
+  laser?: boolean;
+}
+
+/** What a flyby saw of a world, and sent home. Pictures show what is larger than a pixel: haze, bare ground, cloud
+ *  and sea, or forest. A probe reads its air too. */
+export interface Visit {
+  star: string;
+  world: string;
+  by: "sails" | "probe";
+  /** The Year it passed, and the Year its word reached us. */
+  passed: number;
+  home: number;
+  sight: "haze" | "bare" | "seas" | "green";
+  air?: { water: boolean; oxygen: boolean };
 }
 
 export interface EarthView {
   year: number;
   felt: FeltWorld[];
   heard: Heard[];
+  visits: Visit[];
 }

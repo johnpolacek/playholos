@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import type { Art } from "@/lib/game/leads";
-import { BUILDS, type Does } from "@/lib/game/plan";
+import { buildOf, type Does } from "@/lib/game/plan";
 import { gsap, prefersReducedMotion, useGSAP } from "@/lib/motion";
 
 // Each row's mark on Scan, Build and Reach, in place of a dot, and beside the name on its page. Plain things are
@@ -9,7 +9,8 @@ import { gsap, prefersReducedMotion, useGSAP } from "@/lib/motion";
 // orbit, faster near its star, a new world turning, two puffs of dust on Fomalhaut's ring, a message out and a reply
 // back, the sky watch's dish sweeping, a flash, thought breathing as the Mind's mark does, a telescope nodding, a
 // rocket's thrust, a yard rocking and a probe leaving it, the Moon rocking as it librates, and the array's light
-// pushing a sail up. Each starts at its own moment, so like marks don't move as one. Each takes its color from the
+// pushing a sail up. What our builds open moves too: a sun over a panel, a mirror gathering light, rock thrown off the
+// Moon, a foundry's wheel, a craft round a rock, a hum coming down to the far side, and power beamed down, 2026-10-20. Each starts at its own moment, so like marks don't move as one. Each takes its color from the
 // words beside it, and holds still for reduced motion. Settled 2026-10-19.
 
 const LINES = {
@@ -256,6 +257,129 @@ const Sprout = ({ size, still }: MarkProps) => (
   </Moving>
 );
 
+/** Ground Solar: a panel on the ground, and the sun above it brightening and dimming. */
+const Solar = ({ size, still }: MarkProps) => (
+  <Moving
+    size={size}
+    still={still}
+    move={(_, part) => void sway(part("sun"), { scale: 0.75, svgOrigin: "12.6 3.4" }, { scale: 1.2, svgOrigin: "12.6 3.4" }, 1.8)}
+  >
+    <path d="M1.8 14.6h12.4M7.6 12.2v2.4" />
+    <path d="M2.6 12.2 5.4 7.6h6.2L8.8 12.2z" />
+    <circle data-k="sun" cx="12.6" cy="3.4" r="1.4" fill="currentColor" stroke="none" />
+  </Moving>
+);
+
+/** The 15 m Mirror: a mirror of many segments, its light gathering to the middle and fading. */
+const Mirror = ({ size, still }: MarkProps) => (
+  <Moving
+    size={size}
+    still={still}
+    move={(_, part) => void sway(part("light"), { opacity: 0.2, scale: 0.6, svgOrigin: "8 8" }, { opacity: 1, scale: 1, svgOrigin: "8 8" }, 1.6)}
+  >
+    <path d="M8 1.8 13.4 4.9v6.2L8 14.2 2.6 11.1V4.9z" />
+    <path d="M8 1.8V5.6M13.4 4.9 10.1 6.8M13.4 11.1 10.1 9.2M8 14.2v-3.8M2.6 11.1l3.3-1.9M2.6 4.9l3.3 1.9" opacity={0.55} />
+    <path d="M8 5.6 10.1 6.8v2.4L8 10.4 5.9 9.2V6.8z" />
+    <circle data-k="light" cx="8" cy="8" r="1" fill="currentColor" stroke="none" />
+  </Moving>
+);
+
+/** The Mass Driver: rock riding its track up off the Moon, faster and faster, and away. */
+const Driver = ({ size, still }: MarkProps) => (
+  <Moving
+    size={size}
+    still={still}
+    move={(_, part) =>
+      void gsap
+        .timeline({ repeat: -1, repeatDelay: 0.5, delay: offset() })
+        .fromTo(part("rock"), { attr: { cx: 3, cy: 12.6 }, opacity: 1 }, { attr: { cx: 15, cy: 5.6 }, duration: 1.4, ease: "power2.in" })
+        .to(part("rock"), { opacity: 0, duration: 0.3 }, "-=0.3")
+    }
+  >
+    <path d="M1.4 14.6Q8 12.4 14.6 14.6" />
+    <path d="M2.6 12.8 11 7.9M8.4 9.4v4" />
+    <circle data-k="rock" cx={still ? 7 : 3} cy={still ? 10.3 : 12.6} r="1.1" fill="currentColor" stroke="none" />
+  </Moving>
+);
+
+/** The Orbital Foundry: a gear turning, slowly. */
+const Foundry = ({ size, still }: MarkProps) => (
+  <Moving
+    size={size}
+    still={still}
+    move={(_, part) =>
+      void gsap.to(part("wheel"), { rotation: 360, svgOrigin: "8 8", duration: 12, ease: "none", repeat: -1, delay: offset() })
+    }
+  >
+    <g data-k="wheel">
+      <path d="M12.31 7.13 13.95 7.22 13.95 8.78 12.31 8.87 11.67 10.43 12.76 11.66 11.66 12.76 10.43 11.67 8.87 12.31 8.78 13.95 7.22 13.95 7.13 12.31 5.57 11.67 4.34 12.76 3.24 11.66 4.33 10.43 3.69 8.87 2.05 8.78 2.05 7.22 3.69 7.13 4.33 5.57 3.24 4.34 4.34 3.24 5.57 4.33 7.13 3.69 7.22 2.05 8.78 2.05 8.87 3.69 10.43 4.33 11.66 3.24 12.76 4.34 11.67 5.57z" strokeLinejoin="round" />
+      <circle cx="8" cy="8" r="1.7" />
+    </g>
+  </Moving>
+);
+
+/** Belt Mining: a lumpy rock, and a craft going round it. */
+const Belt = ({ size, still }: MarkProps) => (
+  <Moving
+    size={size}
+    still={still}
+    move={(_, part) =>
+      void gsap.to(part("craft"), { rotation: 360, svgOrigin: "8 8.4", duration: 5, ease: "none", repeat: -1, delay: offset() })
+    }
+  >
+    <path d="M4.4 7.2 6.2 4.8l3.2-.2 2.2 1.6.6 3-1.6 2.6-3.2.6-2.4-1.4z" strokeLinejoin="round" />
+    <circle cx="7" cy="8.6" r="0.6" fill="currentColor" stroke="none" />
+    <circle data-k="craft" cx="8" cy="1.6" r="1" fill="currentColor" stroke="none" />
+  </Moving>
+);
+
+/** The Far-Side Array: small dishes across the Moon's far side, and a faint hum coming down to them. */
+const FarSide = ({ size, still }: MarkProps) => (
+  <Moving
+    size={size}
+    still={still}
+    move={(_, part) =>
+      void gsap.fromTo(
+        part("hum"),
+        { y: -2.5, opacity: 0 },
+        {
+          keyframes: [
+            { y: -0.5, opacity: 1, duration: 0.6, ease: "sine.out" },
+            { y: 2.5, opacity: 0, duration: 1.2, ease: "sine.in" },
+          ],
+          repeat: -1,
+          repeatDelay: 0.6,
+          delay: offset(),
+        },
+      )
+    }
+  >
+    <path d="M1.4 14.6Q8 11.6 14.6 14.6" />
+    <path d="M2.6 12.2q1 1.5 2 0M7 11.4q1 1.5 2 0M11.4 12.2q1 1.5 2 0" />
+    <path data-k="hum" d="M4.4 5.4Q8 3.2 11.6 5.4" strokeDasharray="0.1 1.9" />
+  </Moving>
+);
+
+/** Power from Orbit: a sunlit panel up high, its power coming down to the ground. */
+const Beamed = ({ size, still }: MarkProps) => (
+  <Moving
+    size={size}
+    still={still}
+    move={(_, part) =>
+      void gsap.fromTo(
+        part("down"),
+        { strokeDashoffset: 0 },
+        { strokeDashoffset: -2, duration: 0.6, ease: "none", repeat: -1, delay: offset() },
+      )
+    }
+  >
+    <rect x="2.4" y="1.4" width="11.2" height="2.8" rx="0.4" />
+    <path d="M6.1 1.4v2.8M9.9 1.4v2.8" opacity={0.55} />
+    <path data-k="down" d="M8 6v6.2" strokeDasharray="0.1 1.9" />
+    <path d="M1.4 14.6Q8 12.4 14.6 14.6" />
+  </Moving>
+);
+
 /** A new world, turning: two meridians wheel round as it spins. */
 function World({ size, still }: MarkProps) {
   const r = 6.25;
@@ -470,10 +594,13 @@ const TONE: Record<Does, string> = {
   keep: "text-keep",
 };
 
-const does = (name: string): Does => BUILDS.find((b) => b.name === name)?.does ?? "listen";
+const does = (name: string): Does => buildOf(name)?.does ?? "listen";
 
 /** A build's color, as a class: full once queued, dimmer until then. */
 export const buildTone = (name: string, queued = true) => `${TONE[does(name)]}${queued ? "" : " opacity-60"}`;
+
+/** A build's color, as a value, for what is drawn in it. */
+export const buildColor = (name: string) => `var(--${does(name) === "listen" ? "you" : does(name)})`;
 
 /** A build's color, standing in for our blue, so a row's thread and its marks take the build's color. */
 export const buildBlue = (name: string): React.CSSProperties | undefined =>
@@ -535,6 +662,20 @@ export function BuildMark({ name, size = 16, still }: { name: string; size?: num
       return <Flame size={size} still={still} />;
     case "Seed Ship":
       return <Sprout size={size} still={still} />;
+    case "Ground Solar":
+      return <Solar size={size} still={still} />;
+    case "15 m Mirror":
+      return <Mirror size={size} still={still} />;
+    case "Mass Driver":
+      return <Driver size={size} still={still} />;
+    case "Orbital Foundry":
+      return <Foundry size={size} still={still} />;
+    case "Belt Mining":
+      return <Belt size={size} still={still} />;
+    case "Far-Side Array":
+      return <FarSide size={size} still={still} />;
+    case "Power from Orbit":
+      return <Beamed size={size} still={still} />;
     default:
       return <Probe size={size} still={still} />;
   }

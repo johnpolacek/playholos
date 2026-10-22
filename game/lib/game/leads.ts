@@ -1,7 +1,7 @@
 import { YEAR_0 } from "@/lib/game/clock";
 import { KNOCKS } from "@/lib/game/knocks";
 import { FOMALHAUT } from "@/lib/game/plan";
-import type { FeltWorld } from "@/lib/sim/types";
+import type { FeltWorld, Visit } from "@/lib/sim/types";
 import { type System, SYSTEMS } from "./systems";
 
 // Earth's real leads in 2040, each with its own page: the world next door, whose air we can't read from here, a world
@@ -44,6 +44,10 @@ export interface Reading {
   mind: string;
   now: Odds[];
   tells: string[];
+  /** What our Infrared Telescope has read of its air, drawn as its light. */
+  air?: NonNullable<FeltWorld["read"]>;
+  /** What a flyby's pictures showed, drawn as the world. */
+  sight?: Visit["sight"];
 }
 
 /** What a lead's page draws: a world's orbit against its star's warm zone, Fomalhaut's belt, or a message's trip. */
@@ -107,14 +111,18 @@ function warmth(a: number, hz?: [number, number]) {
 /** Each hand-written lead with its system, where we have one. */
 const withSystems = (leads: Lead[]) => leads.map((l) => (l.system || !SYSTEMS[l.slug] ? l : { ...l, system: SYSTEMS[l.slug] }));
 
+/** Under about 2 Earths, most worlds are rock. Above it, most keep thick gas (Chen and Kipping 2017). */
+const rockOdds = (m: number): Odds => (m < 1.5 ? "likely" : m < 3 ? "roughly even" : "unlikely");
+const gasOdds = (m: number): Odds => (m < 1.5 ? "unlikely" : m < 3 ? "roughly even" : "likely");
+
 /** A felt world's page, from what the planet hunters measured. Its words follow its least mass and its reach. */
 function feltLead(f: FeltWorld): Lead {
   const one = (x: number) => x.toFixed(1);
   // Under about 2 Earths, most worlds are rock. Above it, most keep thick gas (Chen and Kipping 2017). A tug gives
   // only the least mass, so the true one is likely higher.
   const m = f.minMass;
-  const rock: Odds = m < 1.5 ? "likely" : m < 3 ? "roughly even" : "unlikely";
-  const gas: Odds = m < 1.5 ? "unlikely" : m < 3 ? "roughly even" : "likely";
+  const rock = rockOdds(m);
+  const gas = gasOdds(m);
   // The infrared telescope splits a world from its star 56 thousandths of an arcsecond out in green light, and 104
   // at water's band.
   const r = reach(f.a, f.d);
@@ -162,11 +170,132 @@ function feltLead(f: FeltWorld): Lead {
   };
 }
 
+/** What our Infrared Telescope has made of a felt world, as a reading on its lead, landing on the Year of its latest
+ *  band, or of its first look. Each new band is a new reading. Seen beside its star, it is a world. Oxygen never says
+ *  who lives there: a world whose makers died keeps theirs. 2026-10-22. */
+export function airReading(f: FeltWorld): Reading | null {
+  const read = f.read;
+  if (!read) return null;
+  const slug = slugOf(f.star);
+  const at = Math.floor((read.at ?? 0) * 10 + 1e-9) / 10;
+  const by = "Infrared Telescope";
+  const seen: Odds[] = [rockOdds(f.minMass), gasOdds(f.minMass), "almost no chance"];
+  if (!read.split)
+    return {
+      id: `${slug}-air-unsplit`,
+      needs: "",
+      at,
+      by,
+      air: read,
+      title: "Too close to its star to split",
+      line: "Our Infrared Telescope can’t split it from its star, so its air stays unread.",
+      mind: "Its tug is still all we have. A wider mirror could split some worlds this one can’t.",
+      now: [rockOdds(f.minMass), gasOdds(f.minMass), "unlikely"],
+      tells: ["The 15 m Mirror, which the Infrared Telescope opens, would split worlds closer to their stars."],
+    };
+  const bands = (["water", "oxygen", "ozone"] as const).filter((b) => read[b] !== undefined);
+  if (!read.readable)
+    return {
+      id: `${slug}-air-faint`,
+      needs: "",
+      at,
+      by,
+      air: read,
+      title: "Seen beside its star",
+      line: "Our Infrared Telescope sees it beside its star, but its air is too faint, or too close in, to read.",
+      mind: "We see it, so it is a world, not a trick of its star. Its air is beyond this mirror.",
+      now: seen,
+      tells: ["A wider mirror would gather enough of its light to read its air."],
+    };
+  if (!bands.length)
+    return {
+      id: `${slug}-air-seen`,
+      needs: "",
+      at,
+      by,
+      air: read,
+      title: "Seen, and reading its air",
+      line: "Our Infrared Telescope sees it beside its star, and is reading its air now.",
+      mind: "We see it, so it is a world, not a trick of its star. Its air comes next, a band at a time.",
+      now: seen,
+      tells: ["Water, oxygen and ozone each show as enough of its light adds up, the faintest last."],
+    };
+  const shows = bands.filter((b) => read[b]);
+  const and = (xs: readonly string[]) => (xs.length < 2 ? xs.join("") : `${xs.slice(0, -1).join(", ")} and ${xs.at(-1)}`);
+  const title = shows.length ? `${and(shows)} in its air` : `No ${and(bands)} in its air`;
+  const left = 3 - bands.length;
+  return {
+    id: `${slug}-air-${bands.map((b) => `${b[0]}${read[b] ? 1 : 0}`).join("")}`,
+    needs: "",
+    at,
+    by,
+    air: read,
+    title: title[0].toUpperCase() + title.slice(1),
+    line: `Our Infrared Telescope read ${bands.map((b) => (read[b] ? b : `no ${b}`)).join(", ")}.${left ? " It reads on." : ""}`,
+    mind: read.oxygen
+      ? "Oxygen with water is what life made of Earth’s air. Oxygen can also build up without life, in thin dry air, so we weigh it against everything else we read. It can’t tell us who, if anyone, lives there."
+      : read.water
+        ? "Water, and no oxygen so far. A sea without life reads like this, and so does one whose life makes no oxygen, as Earth’s early microbes didn’t."
+        : "No water in its air. Life as we know it needs water, so we would look elsewhere first.",
+    now: seen,
+    tells: left
+      ? ["Our telescope reads on, for the bands still to come."]
+      : ["The telescope has read all it can. Going there is how we would learn more: the roads on Reach."],
+  };
+}
+
+/** What our sails or probe saw of Proxima b, as a reading on its lead, landing the Year their word reached us. The
+ *  pictures settle what it is. A probe reads its air too. 2026-10-22. */
+export function visitReading(v: Visit): Reading {
+  const who = v.by === "sails" ? "Our sails’" : "Our probe’s";
+  const SAW = {
+    haze: ["A small gas world", "pictures show haze to the horizon, and no ground. It is heavier than its tug told us."],
+    bare: ["Bare rock", "pictures show bare rock under a black sky. No cloud, no sea. Its star’s flares took its air."],
+    seas: ["Cloud and seas", "pictures show cloud, and seas under it. Its air held, against its star’s flares."],
+    green: ["Cloud, seas and forests", "pictures show cloud and seas, and its land dark green, in patches the size of forests."],
+  } as const;
+  const [title, saw] = SAW[v.sight];
+  const air = v.air ? ` It read ${v.air.water ? "water" : "no water"} and ${v.air.oxygen ? "oxygen" : "no oxygen"} in its air.` : "";
+  const MIND = {
+    haze: "No ground to stand on. Seen near face on, a world weighs more than its tug says, and this one did.",
+    bare: "As we feared, its star stripped it. Nothing we know of could live on its face.",
+    seas: v.air?.oxygen
+      ? "Oxygen with water, at our door. It could be life’s, or rock and starlight’s. It can’t tell us who, if anyone, lives there."
+      : v.air
+        ? "Water and no oxygen: empty seas, or life that makes none, as Earth’s early microbes made none."
+        : "Air held, and seas. Pictures can’t tell an empty sea from one full of microbes. Its air would tell us more.",
+    green: v.air?.oxygen
+      ? "Forests, and oxygen in their air. Something there turns starlight into life, as our plants do."
+      : "Plants would look dark under a red star. Something may turn its light into life, but we would want its air read first.",
+  };
+  const now: Odds[] =
+    v.sight === "haze"
+      ? ["almost no chance", "almost no chance", "almost certain"]
+      : v.sight === "bare"
+        ? ["almost certain", "almost no chance", "almost no chance"]
+        : ["almost no chance", "almost certain", "almost no chance"];
+  return {
+    id: `proxima-${v.by}-${v.sight}`,
+    needs: "",
+    at: Math.floor(v.home * 10 + 1e-9) / 10,
+    by: v.by === "sails" ? "Our sails" : "Our probe",
+    title,
+    line: `${who} ${saw}${air}`,
+    mind: MIND[v.sight],
+    now,
+    tells:
+      v.by === "probe" || v.sight === "bare"
+        ? ["To learn more we would have to stay. A Seed Ship carries a copy of our Mind to a star, to stay."]
+        : ["A probe passing after them could read its air."],
+    sight: v.sight,
+  };
+}
+
 export function leadsOf(felt: FeltWorld[]): Lead[] {
   return withSystems([
     // The nearest world, and the reason for the two roads on Reach: no telescope we have can split it from its star, so
     // going is how we would read it. Added 2026-10-19. Its warm zone is ours, from Kopparapu et al. 2013 at the star's
-    // 0.0016 Suns.
+    // 0.0016 Suns. Its odds follow the shoreline the seed draws by, since 2026-10-22: likely bare rock.
     {
       slug: "proxima-centauri",
       star: "Proxima Centauri",
@@ -175,7 +304,7 @@ export function leadsOf(felt: FeltWorld[]): Lead[] {
       ly: 4.24,
       ask: "Could Proxima b keep its air?",
       brief:
-        "The nearest world outside ours, about Earth’s mass and warm enough for water. Its star flares, which could have stripped its air. It sits too close to its star for any telescope we have to split, so going there is how we would read it.",
+        "The nearest world outside ours, about Earth’s mass and warm enough for water. Its star flares, and has likely stripped its air. It sits too close to its star for any telescope we have to split, so going there is how we would read it.",
       facts: [
         ["Mass", "At least 1.06 Earths"],
         ["Its year", "11.2 days"],
@@ -187,18 +316,18 @@ export function leadsOf(felt: FeltWorld[]): Lead[] {
       could: [
         {
           what: "Bare rock",
-          why: "Its star’s flares and wind could have stripped its air long ago, as they seem to have for hotter worlds near red dwarfs.",
-          odds: "roughly even",
+          why: "Its star’s flares and wind strip small worlds this close. Rocky worlds measured near red dwarfs have proved bare, and models keep air only on the largest and coolest.",
+          odds: "likely",
         },
         {
           what: "Rock under air, maybe water",
-          why: "Cooler worlds hold air better, and it gets only two thirds of Earth’s sunlight.",
-          odds: "roughly even",
+          why: "Cooler worlds hold air better, and it gets only two thirds of Earth’s sunlight. At its mass, it would need luck.",
+          odds: "unlikely",
         },
         {
           what: "A small gas world",
           why: "Its tug gives only a floor. Seen near face on, it could be several times heavier.",
-          odds: "unlikely",
+          odds: "very unlikely",
         },
       ],
       tells: [

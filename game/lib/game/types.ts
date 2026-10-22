@@ -14,13 +14,23 @@ export interface Save {
   plan?: Plan;
   /** Readings the Will has opened, by id. */
   seen?: string[];
-  /** Reviewed our scans with the Mind, to the last lead: one of the three things we would do before Begin. */
+  /** Reviewed our scans with the Mind, to the last lead: one of the four things we would do before Begin. */
   reviewed?: boolean;
-  /** Had an answer from the Mind, another of the three. */
+  /** Opened a destination on Reach, another of the four. */
+  looked?: boolean;
+  /** Had an answer from the Mind, the last of the four. */
   asked?: boolean;
 }
 
 export interface Plan {
   builds: string[];
   observe: string[];
+  /** Builds ordered in play, once what each waits on was done, in the order we ordered them. Since 2026-10-22. */
+  later?: Ordered[];
+}
+
+/** A build ordered in play: its name, and the Year we ordered it. */
+export interface Ordered {
+  name: string;
+  y: number;
 }

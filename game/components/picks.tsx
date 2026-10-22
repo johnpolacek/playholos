@@ -1,11 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router";
 import { useGame } from "@/components/game-provider";
+import { CostLine, previews, usePreview } from "@/components/costs";
 import { BuildMark, buildTone } from "@/components/marks";
+import { OpensLine } from "@/components/opens";
 import { Face, ListHead } from "@/components/tab-head";
-import { MS_PER_YEAR, span } from "@/lib/game/clock";
+import { MS_PER_YEAR, span, tenths } from "@/lib/game/clock";
 import type { EarthPast } from "@/lib/game/past";
-import { BUILDS, buildSlug, EMPTY, FOMALHAUT, schedule } from "@/lib/game/plan";
+import { BUILDS, buildSlug, EMPTY, FOMALHAUT, inUse, lacks, moves, needs, openAt, schedule } from "@/lib/game/plan";
 import { SITES } from "@/lib/game/sites";
 import type { Plan } from "@/lib/game/types";
 
@@ -20,22 +22,50 @@ export function usePlan() {
   return { plan, change: (f: (p: Plan) => Plan) => setPlan(f(plan)) };
 }
 
-/** This game's Earth, from the server, and when each queued build is done with the thought it has. Until the Earth
- *  comes, the dates are at today's thought. */
-export function useSchedule() {
+// This game's Earth, fetched once a seed and shared: the top bar's count needs it too, on every tab. A failed fetch
+// is tried again on the next screen that asks.
+const earths = new Map<number, Promise<EarthPast | undefined>>();
+
+function useEarth() {
   const { save } = useGame();
   const [past, setPast] = useState<EarthPast>();
   const seed = save?.seed;
   useEffect(() => {
     if (seed === undefined) return;
-    fetch(`/api/earth?seed=${seed}`)
-      .then((r) => (r.ok ? r.json() : undefined))
-      .then(setPast, () => setPast(undefined));
+    let live = true;
+    if (!earths.has(seed))
+      earths.set(
+        seed,
+        fetch(`/api/earth?seed=${seed}`)
+          .then((r) => (r.ok ? r.json() : undefined))
+          .catch(() => undefined)
+          .then((p) => (p ? p : void earths.delete(seed))),
+      );
+    earths.get(seed)!.then((p) => live && setPast(p));
+    return () => void (live = false);
   }, [seed]);
+  return past;
+}
+
+/** This game's Earth, from the server, and when each queued build is done with the compute it has. Until the Earth
+ *  comes, the dates are at today's compute. */
+export function useSchedule() {
+  const { save } = useGame();
+  const past = useEarth();
   const plan = save?.plan ?? EMPTY;
   const scale = past?.compute ?? 1;
   const done = useMemo(() => schedule(plan, scale), [plan, scale]);
   return { past, scale, done };
+}
+
+/** How much of our compute the plan would use at Year 0, and whether it is all in use, which is enough. Unknown until
+ *  this game's Earth comes. */
+export function useCompute() {
+  const { save } = useGame();
+  const past = useEarth();
+  const plan = save?.plan ?? EMPTY;
+  const used = useMemo(() => (past ? inUse(plan, past.compute) : 0), [plan, past]);
+  return { known: !!past, used, full: used > 0.995 };
 }
 
 /** A build in or out of the queue. In, it goes last. */
@@ -143,17 +173,16 @@ export const buildStory = (name: string): [string, string | undefined][] => {
 };
 
 /** What we could start and haven't queued, each mark in its color, dimmer, and when it would be done if we queued it
- *  now, last in line. A tap on a build opens its page. */
+ *  now, last in line, with its share of our compute, its matter and what it would slow, and what it opens under it.
+ *  Pointed at, the ring above shows it queued. A tap on a build opens its page. */
 export function Unqueued({ scale, className = "" }: { scale: number; className?: string }) {
   const { plan } = usePlan();
+  const [, preview] = usePreview();
   const builds = BUILDS.filter((b) => !plan.builds.includes(b.name));
   const by = useMemo(
     () =>
       Object.fromEntries(
-        BUILDS.filter((b) => !plan.builds.includes(b.name)).map((b) => [
-          b.name,
-          schedule({ ...plan, builds: [...plan.builds, b.name] }, scale)[b.name],
-        ]),
+        BUILDS.filter((b) => !plan.builds.includes(b.name)).map((b) => [b.name, moves(plan, scale, b.name)]),
       ),
     [plan, scale],
   );
@@ -168,17 +197,65 @@ export function Unqueued({ scale, className = "" }: { scale: number; className?:
         className={className}
       />
       <ul data-q="row" className="mt-1">
-        {builds.map((b) => (
+        {builds.map((b) => {
+          // A Seed Ship waits for its drive and fuel in our order, and says which.
+          const lacking = lacks(plan, b.name);
+          return (
+            <li key={b.name} className="border-t border-faint">
+              <Link
+                to={`/build/${buildSlug(b.name)}`}
+                className="block py-2.5"
+                {...(!lacking.length && previews(b.name, preview))}
+              >
+                <Face
+                  mark={<BuildMark name={b.name} />}
+                  tone={buildTone(b.name, false)}
+                  name={<b className="font-semibold">{b.name}</b>}
+                  line={`${b.what}${lacking.length ? ` Needs ${needs(lacking)} in our order first.` : ""}`}
+                  right={lacking.length ? "" : by[b.name].at == null ? "past Year 40" : span(by[b.name].at!)}
+                />
+                {!lacking.length && <CostLine name={b.name} move={by[b.name]} />}
+              </Link>
+              <OpensLine name={b.name} />
+            </li>
+          );
+        })}
+      </ul>
+    </>
+  );
+}
+
+/** In play, what our builds have opened and we haven't ordered, as Unqueued has them: when each would be done if we
+ *  ordered it now, last in line, what it would take and slow, and what it opens. Pointed at, the ring shows it
+ *  ordered. A tap opens its page, where we order it. 2026-10-22. */
+export function Opened({ scale, now, className = "" }: { scale: number; now: number; className?: string }) {
+  const { plan } = usePlan();
+  const { done } = useSchedule();
+  const [, preview] = usePreview();
+  const at = tenths(now);
+  const open = useMemo(() => openAt(plan, done, at), [plan, done, at]);
+  const by = useMemo(
+    () => Object.fromEntries(open.map((b) => [b.name, moves(plan, scale, b.name, at)])),
+    [open, plan, scale, at],
+  );
+  if (!open.length) return null;
+  return (
+    <>
+      <ListHead left={`Open to start · ${open.length}`} right="Done in" className={className} />
+      <ul className="mt-1">
+        {open.map((b) => (
           <li key={b.name} className="border-t border-faint">
-            <Link to={`/build/${buildSlug(b.name)}`} className="block py-2.5">
+            <Link to={`/build/${buildSlug(b.name)}`} className="block py-2.5" {...previews(b.name, preview)}>
               <Face
                 mark={<BuildMark name={b.name} />}
                 tone={buildTone(b.name, false)}
                 name={<b className="font-semibold">{b.name}</b>}
-                line={`${b.what}${b.kt ? ` ${b.kt} kt of our 20.` : ""}`}
-                right={by[b.name] == null ? "past Year 40" : span(by[b.name]!)}
+                line={b.what}
+                right={by[b.name].at == null ? "past Year 40" : span(by[b.name].at! - at)}
               />
+              <CostLine name={b.name} move={by[b.name]} at={at} />
             </Link>
+            <OpensLine name={b.name} />
           </li>
         ))}
       </ul>

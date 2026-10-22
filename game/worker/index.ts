@@ -1,6 +1,6 @@
 import { access } from "./access";
 import { earth } from "./earth";
-import { leads } from "./leads";
+import { known, leads } from "./leads";
 import { mind } from "./mind";
 
 // The game's server. The built client is served as static files before this runs, so only /api/* lands here.
@@ -10,6 +10,7 @@ const ROUTES: Record<string, (req: Request) => Promise<Response>> = {
   "DELETE /api/access": access,
   "GET /api/earth": earth,
   "GET /api/leads": leads,
+  "GET /api/known": known,
   "POST /api/mind": mind,
 };
 

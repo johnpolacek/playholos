@@ -1,19 +1,23 @@
-import { createContext, use, useCallback, useEffect, useMemo, useState } from "react";
+import { createContext, use, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router";
 import { useGame } from "@/components/game-provider";
+import { Heard } from "@/components/heard";
 import { LeadList, LeadsMap } from "@/components/leads";
 import { Messages } from "@/components/messages";
 import { Review } from "@/components/review";
-import { ListHead, Walk } from "@/components/tab-head";
+import { ListHead } from "@/components/tab-head";
 import type { Dials } from "@/lib/drift";
-import { type Lead, landed, leadsOf, type Reading, skyId } from "@/lib/game/leads";
+import { airReading, type Lead, landed, leadsOf, type Reading, skyId, visitReading } from "@/lib/game/leads";
 import { gsap, prefersReducedMotion } from "@/lib/motion";
-import type { FeltWorld } from "@/lib/sim/types";
+import type { EarthView, Heard as Signal, Visit } from "@/lib/sim/types";
 
 // Scan: what we know of the sky. Earth's leads, drawn on the map and listed in the tab, with one lead in view
 // between them: pointing at a row turns the map to its star. Readings land on their leads as the clock runs, and stay
-// marked until opened. Before Begin, the tab offers a review of them with the Mind, one at a time. Under the leads, our
-// messages still on their way: light crossing the same sky, whose replies would be leads.
+// marked until opened. The tab's head offers a review of them with the Mind, one at a time, at any time. Under the leads, our
+// messages still on their way: light crossing the same sky, whose replies would be leads. A lead open, in the review or
+// on its page, whose system we know, has a Close View: the map flies into its system, as a destination's does on
+// Reach. Added 2026-10-19. What Earth knows comes from the server as the clock runs, through the knowledge wall: what our
+// Infrared Telescope reads lands on each world's lead, and what our watches catch is listed above the leads, 2026-10-22.
 
 interface Leads {
   leads: Lead[];
@@ -21,47 +25,130 @@ interface Leads {
   dials: Dials;
   /** What has landed on each lead, by its slug. */
   readings: Record<string, Reading[]>;
-  /** Readings landed and not yet opened, by id. */
+  /** Readings landed and not yet opened, by id, and signals caught and not yet opened. */
   fresh: Set<string>;
+  /** Signals our watches have caught, as they arrived. */
+  heard: Signal[];
+  /** What our sails and probe have seen up close, once their word is home. */
+  visits: Visit[];
+  /** The lead open, in the review or on its page, whose system Close View flies into. */
+  look: Lead | null;
+  setLook(lead: Lead | null): void;
+  /** In its system, or not. */
+  close: boolean;
+  setClose(on: boolean): void;
 }
 
-const ScanContext = createContext<Leads>({ leads: [], ids: [], dials: {}, readings: {}, fresh: new Set() });
+const ScanContext = createContext<Leads>({
+  leads: [],
+  ids: [],
+  dials: {},
+  readings: {},
+  fresh: new Set(),
+  heard: [],
+  visits: [],
+  look: null,
+  setLook() {},
+  close: false,
+  setClose() {},
+});
 /** Earth's leads, their stars as the sky names them, and the dials the map draws them by. */
 export const useLeads = () => use(ScanContext);
+
+const NOTHING: EarthView = { year: 0, felt: [], heard: [], visits: [] };
+
+/** A signal's id, to mark it new until opened. */
+export const heardId = (h: Signal) => `heard-${h.star}-${h.arrived}`;
 
 export function ScanProvider({ children }: { children: React.ReactNode }) {
   const { save, year } = useGame();
   const seed = save?.seed;
-  const [felt, setFelt] = useState<FeltWorld[]>();
+  // Landing depends only on the tenth of a Year, so what we know changes at most every thirty seconds.
+  const tenth = year === null ? null : Math.floor(year * 10) / 10;
+  const plan = save?.plan;
+  const query = useMemo(
+    () =>
+      new URLSearchParams({
+        year: String(tenth ?? 0),
+        builds: JSON.stringify(plan?.builds ?? []),
+        later: JSON.stringify(plan?.later ?? []),
+        observe: JSON.stringify(plan?.observe ?? []),
+      }).toString(),
+    [tenth, plan],
+  );
+  const [view, setView] = useState<EarthView>();
   useEffect(() => {
     if (seed === undefined) return;
-    fetch(`/api/leads?seed=${seed}`)
-      .then((r) => (r.ok ? r.json() : []))
-      .then(setFelt, () => setFelt([]));
-  }, [seed]);
-  const [dials] = useState<Dials>(() => ({ found: 0, grid: 0, focus: 0 }));
-  const leads = useMemo(() => (felt ? leadsOf(felt) : []), [felt]);
+    let live = true;
+    fetch(`/api/known?seed=${seed}&${query}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then(
+        (v: EarthView | null) => live && setView((was) => v ?? was ?? NOTHING),
+        () => live && setView((was) => was ?? NOTHING),
+      );
+    return () => void (live = false);
+  }, [seed, query]);
+  const felt = view?.felt;
+  const heard = useMemo(() => view?.heard ?? [], [view]);
+  const visits = useMemo(() => view?.visits ?? [], [view]);
+  const [dials] = useState<Dials>(() => ({ found: 0, grid: 0, focus: 0, close: 0 }));
+  // Keyed by the stars felt, so a reading landing never rebuilds the leads the map lights.
+  const stars = felt?.map((f) => f.star).join("|");
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const leads = useMemo(() => (felt ? leadsOf(felt) : []), [stars]);
+  // The scene reads Close View from the dials each frame, and the screen from here. Another lead starts outside.
+  const [look, setLookState] = useState<Lead | null>(null);
+  const [close, setCloseState] = useState(false);
+  const setClose = useCallback(
+    (on: boolean) => {
+      Object.assign(dials, { close: on ? 1 : 0 });
+      setCloseState(on);
+    },
+    [dials],
+  );
+  const setLook = useCallback(
+    (lead: Lead | null) => {
+      setClose(false);
+      setLookState(lead);
+    },
+    [setClose],
+  );
   // Kept apart from the readings, so a landing never relights the map.
   const ids = useMemo(() => leads.map((l) => skyId(l.star)), [leads]);
-  // Landing depends only on the tenth of a Year, so the readings change at most every thirty seconds.
-  const tenth = year === null ? null : Math.floor(year * 10) / 10;
   const observe = save?.plan?.observe;
   const seen = save?.seen;
   const value = useMemo(() => {
-    const readings = Object.fromEntries(leads.map((l) => [l.slug, landed(l.slug, observe, tenth)]));
+    // What our telescope has read, on each felt world's lead, after any observation's.
+    const air = Object.fromEntries((felt ?? []).map((f) => [f.star, airReading(f)]));
+    // And what our sails and probe saw of Proxima b, last.
+    const visited = Object.fromEntries(
+      leads.map((l) => [l.star, visits.filter((v) => v.star === l.star).map(visitReading)]),
+    );
+    const readings = Object.fromEntries(
+      leads.map((l) => [
+        l.slug,
+        [...landed(l.slug, observe, tenth), ...(air[l.star] ? [air[l.star]!] : []), ...(visited[l.star] ?? [])],
+      ]),
+    );
     const opened = new Set(seen);
-    const fresh = new Set(Object.values(readings).flatMap((rs) => rs.map((r) => r.id).filter((id) => !opened.has(id))));
-    return { leads, ids, dials, readings, fresh };
-  }, [leads, ids, dials, observe, tenth, seen]);
+    const fresh = new Set(
+      [...Object.values(readings).flatMap((rs) => rs.map((r) => r.id)), ...heard.map(heardId)].filter((id) => !opened.has(id)),
+    );
+    return { leads, ids, dials, readings, fresh, heard, visits, look, setLook, close, setClose };
+  }, [leads, felt, ids, dials, observe, tenth, seen, heard, visits, look, setLook, close, setClose]);
   return <ScanContext value={value}>{children}</ScanContext>;
 }
 
 /** The map on Scan: the stars within 50 light-years, and the leads lit in turn as the camera arrives. An open lead's
  * page holds the focus, so the camera goes on to its star once all are lit. */
 export function ScanMap({ className }: { className: string }) {
-  const { ids, dials } = useLeads();
+  const { ids, dials, look } = useLeads();
+  // The leads light once as the map opens, not again as a lead's system comes and goes.
+  const lit = useRef(false);
   const onReady = useCallback(
     (flight: number) => {
+      if (lit.current) return;
+      lit.current = true;
       gsap.killTweensOf(dials);
       if (prefersReducedMotion()) return void Object.assign(dials, { grid: 1, found: ids.length });
       Object.assign(dials, { grid: 0, found: 0 });
@@ -73,23 +160,22 @@ export function ScanMap({ className }: { className: string }) {
     [dials, ids],
   );
   useEffect(() => () => void gsap.killTweensOf(dials), [dials]);
-  return ids.length ? <LeadsMap dials={dials} ids={ids} onReady={onReady} className={className} /> : null;
+  return ids.length ? (
+    <LeadsMap dials={dials} ids={ids} system={look?.system} onReady={onReady} className={className} />
+  ) : null;
 }
 
 /** The Scan tab: Earth's leads, and how long a message takes to reach each. Each opens its own page. */
 export function Scan() {
-  const { leads, dials, readings, fresh } = useLeads();
-  const { save, year } = useGame();
+  const { leads, dials, readings, fresh, heard } = useLeads();
   const [params, setParams] = useSearchParams();
   const close = useCallback(() => setParams({}, { replace: true }), [setParams]);
   if (!leads.length) return null;
   if (params.has("review")) return <Review onClose={close} />;
   return (
     <>
-      {(year === null || !save?.reviewed) && (
-        <Walk to="/?review" title="Review our scans" line="With the Mind, one lead at a time." done={!!save?.reviewed} />
-      )}
-      <ListHead left={`Leads · ${leads.length}`} right="Reached in" className="mt-1" />
+      {heard.length > 0 && <Heard />}
+      <ListHead left={`Leads · ${leads.length}`} right="Reached in" className={heard.length ? "mt-5" : "mt-1"} />
       <LeadList leads={leads} dials={dials} readings={readings} fresh={fresh} />
       <Messages />
     </>

@@ -4,6 +4,7 @@ import { useGame } from "@/components/game-provider";
 import { SkyArt } from "@/components/sky";
 import { tenths, YEAR_0 } from "@/lib/game/clock";
 import { CLOSE } from "@/lib/game/close";
+import { ordered } from "@/lib/game/plan";
 import { type Site, SITES } from "@/lib/game/sites";
 import type { Plan } from "@/lib/game/types";
 import type { Dials, Mark } from "@/lib/drift";
@@ -28,7 +29,7 @@ export interface Work {
 /** Our builds with places, as the plan has them: queued or not, and when each queued one is done. */
 export const placedOf = (plan: Plan, done: Record<string, number | null>): Work[] =>
   Object.entries(SITES).map(([name, { site }]) => {
-    const queued = plan.builds.includes(name);
+    const queued = ordered(plan).includes(name);
     return { name, site, queued, done: queued ? (done[name] ?? null) : null };
   });
 

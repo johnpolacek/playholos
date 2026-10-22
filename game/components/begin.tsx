@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router";
 import { useGame } from "@/components/game-provider";
 import { MindNote } from "@/components/mind-note";
+import { useCompute } from "@/components/picks";
 import { seenYearZero, YearZero } from "@/components/year-zero";
 import { MS_PER_YEAR } from "@/lib/game/clock";
 import { FOMALHAUT } from "@/lib/game/plan";
@@ -10,15 +11,34 @@ import { useAccess } from "@/lib/key";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
 
 // Begin: Year 0 starts at the tap, and the clock runs from then, offline too. Settled 2026-10-10. Before it, the top
-// bar counts the three things we would do first and opens them as a thread down to Year 0: review our scans, queue
-// our first builds, and ask the Mind. None is a lock: Begin works at any count, and while one is open the Mind says
-// why it would wait. Settled 2026-10-18. The tap plays 2040 becoming Year 0, over the screen the first time and in the
-// top bar after.
+// bar counts the four things we would do first and opens them as a thread down to Year 0, in the tabs' order: review
+// our scans, queue our first builds, see where we could go, and ask the Mind. None is a lock: Begin works at any
+// count, and while one is open the Mind says why it would wait. Settled 2026-10-18, Reach's step added 2026-10-19.
+// The way on is the next step, not Begin: the count names it, the sheet leads with it, and each step's end opens the
+// one after. Begin leads once all four are done. Settled 2026-10-19. Our first builds are done once the queue puts
+// all our compute to work at Year 0, 2026-10-19. The tap plays 2040 becoming Year 0, over the screen the first time
+// and in the top bar after.
+
+/** What a step reads beyond the save: whether the Mind is open to us, and how much of our compute the queue would
+ *  use, once this game's Earth is known. */
+interface Now {
+  unlocked: boolean;
+  known: boolean;
+  used: number;
+  full: boolean;
+}
+
+function useNow(): Now {
+  const unlocked = !!useAccess();
+  return { unlocked, ...useCompute() };
+}
 
 interface Step {
   name: string;
-  line(save: Save, unlocked: boolean): string;
-  done(save: Save): boolean;
+  /** In the top bar's count. */
+  short: string;
+  line(save: Save, now: Now): string;
+  done(save: Save, now: Now): boolean;
   /** The tab where it is done. */
   to: string;
 }
@@ -26,6 +46,7 @@ interface Step {
 const STEPS: Step[] = [
   {
     name: "Review our scans",
+    short: "Review scans",
     // Fomalhaut's image is offered at the review's end. Once queued, its landing is the line.
     line: (s) =>
       s.plan?.observe.length
@@ -36,13 +57,27 @@ const STEPS: Step[] = [
   },
   {
     name: "Queue our first builds",
-    line: (s) => (s.plan?.builds.length ? s.plan.builds.join(", ") : "They start at Year 0, the moment we begin."),
-    done: (s) => !!s.plan?.builds.length,
+    short: "Queue builds",
+    // Enough is all our compute in use at Year 0. What the queue leaves sits idle.
+    line: (s, { used, full }) =>
+      s.plan?.builds.length
+        ? `${s.plan.builds.join(", ")}. ${full ? "All" : `${Math.floor(used * 100)}%`} of our compute in use.`
+        : "Enough to put all our compute to work at Year 0.",
+    done: (_, { full }) => full,
     to: "/build?tour",
   },
   {
+    name: "See where we could go",
+    short: "See where to go",
+    // The nearest star first: the world next door, and the reason for the two roads.
+    line: () => "Our leads’ stars, and every way to get there.",
+    done: (s) => !!s.looked,
+    to: "/reach/proxima-centauri",
+  },
+  {
     name: "Ask the Mind",
-    line: (_, unlocked) =>
+    short: "Ask the Mind",
+    line: (_, { unlocked }) =>
       unlocked
         ? "It advises, and never acts on its own advice."
         : "It advises. An Anthropic API key, or the access code, opens it.",
@@ -50,6 +85,13 @@ const STEPS: Step[] = [
     to: "/mind",
   },
 ];
+
+/** The first of the four not yet done, in order, or null once all are. `but` leaves out the one we are on. */
+export function useNext(but?: string) {
+  const { save } = useGame();
+  const now = useNow();
+  return (save && STEPS.find((s) => s.to !== but && !s.done(save, now))) || null;
+}
 
 /** The count, drawn: an arc around a point for each step, lit as each is done. */
 function Count({ done }: { done: boolean[] }) {
@@ -76,7 +118,7 @@ const row = "flex w-full items-start gap-3 py-2 text-left";
 
 function List({ onClose, onBegin }: { onClose(then?: () => void): void; onBegin(): void }) {
   const { save } = useGame();
-  const unlocked = !!useAccess();
+  const now = useNow();
   const [sure, setSure] = useState(false);
   const root = useRef<HTMLDivElement>(null);
   const first = useRef(true);
@@ -91,8 +133,8 @@ function List({ onClose, onBegin }: { onClose(then?: () => void): void; onBegin(
   );
 
   if (!save) return null;
-  const done = STEPS.map((s) => s.done(save));
-  const open = done.filter((d) => !d).length;
+  const done = STEPS.map((s) => s.done(save, now));
+  const next = STEPS.find((s) => !s.done(save, now));
 
   return (
     <div ref={root} className="flex flex-col">
@@ -105,22 +147,25 @@ function List({ onClose, onBegin }: { onClose(then?: () => void): void; onBegin(
               <span
                 data-b="node"
                 aria-hidden
-                className={`relative mt-[5px] size-[11px] shrink-0 rounded-full border transition-colors duration-500 ${done[i] ? "border-you bg-you" : sure ? "animate-pulse border-other bg-paper" : "border-muted bg-paper"}`}
-              />
+                className={`relative mt-[5px] size-[11px] shrink-0 rounded-full border transition-colors duration-500 ${done[i] ? "border-you bg-you" : sure ? "animate-pulse border-other bg-paper" : step === next ? "border-you bg-paper" : "border-muted bg-paper"}`}
+              >
+                {/* The next step calls, as Year 0 does once all are done. */}
+                {step === next && <span data-b="pulse" className="absolute -inset-px rounded-full border border-you" />}
+              </span>
               <span className="flex min-w-0 grow flex-col">
                 <span className="text-[14.5px] leading-snug">{step.name}</span>
-                <span className="text-[12.5px] leading-snug text-page-ink2">{step.line(save, unlocked)}</span>
+                <span className="text-[12.5px] leading-snug text-page-ink2">{step.line(save, now)}</span>
               </span>
               <span
-                className={`shrink-0 font-mono tracking-[.06em] ${done[i] ? "mt-[3px] text-[10.5px] text-you" : "text-[14px] text-muted"}`}
+                className={`shrink-0 font-mono tracking-[.06em] ${done[i] || step === next ? "mt-[3px] text-[10.5px] text-you" : "text-[14px] text-muted"}`}
               >
-                {done[i] ? "DONE" : "→"}
+                {done[i] ? "DONE" : step === next ? "NEXT" : "→"}
               </span>
             </>
           );
           return (
             <li key={step.name} data-b="item">
-              <span className="sr-only">{done[i] ? "Done: " : "Not done: "}</span>
+              <span className="sr-only">{done[i] ? "Done: " : step === next ? "Next: " : "Not done: "}</span>
               <Link to={step.to} onClick={() => onClose()} className={row}>
                 {body}
               </Link>
@@ -140,25 +185,42 @@ function List({ onClose, onBegin }: { onClose(then?: () => void): void; onBegin(
         <MindNote className="text-[13px] leading-[1.45]">
           <span data-b="say" className="block">
             {sure
-              ? "Once we begin, a Year passes every five of your minutes, even while you’re away. What’s queued starts at Year 0. We would finish these first, while the clock still waits."
-              : "Nothing here sends anything. When you begin, one Year passes every five of your minutes, and we keep going while you’re away."}
+              ? "Once we begin, the clock doesn’t stop, even while you’re away, and what’s queued starts at Year 0. We would finish these first, while it still waits."
+              : next
+                ? "We would take these one at a time, while the clock waits. Once we begin, a Year passes every five of your minutes, even while you’re away."
+                : "Nothing here sends anything. When you begin, one Year passes every five of your minutes, and we keep going while you’re away."}
           </span>
         </MindNote>
       </div>
 
+      {/* While a step is open, it leads and Begin waits beside it. Once all are done, Begin leads. */}
       <div data-b="item" className="mt-3 grid grid-cols-[1fr_1.4fr] gap-2">
-        <button
-          onClick={() => (sure ? setSure(false) : onClose())}
-          className="h-[46px] rounded-full border border-ink text-[15px] font-medium"
-        >
-          Not yet
-        </button>
-        <button
-          onClick={() => (open && !sure ? setSure(true) : onBegin())}
-          className="h-[46px] rounded-full bg-ink text-[15px] font-medium text-paper"
-        >
-          {sure ? "Begin anyway" : "Begin · Year 0"}
-        </button>
+        {next ? (
+          <>
+            <button
+              onClick={() => (sure ? onBegin() : setSure(true))}
+              className="h-[46px] rounded-full border border-ink text-[15px] font-medium"
+            >
+              {sure ? "Begin anyway" : "Begin now"}
+            </button>
+            <Link
+              to={next.to}
+              onClick={() => onClose()}
+              className="flex h-[46px] items-center justify-center rounded-full bg-ink px-3 text-center text-[15px] leading-tight font-medium text-paper"
+            >
+              {next.name}
+            </Link>
+          </>
+        ) : (
+          <>
+            <button onClick={() => onClose()} className="h-[46px] rounded-full border border-ink text-[15px] font-medium">
+              Not yet
+            </button>
+            <button onClick={onBegin} className="h-[46px] rounded-full bg-ink text-[15px] font-medium text-paper">
+              Begin · Year 0
+            </button>
+          </>
+        )}
       </div>
     </div>
   );
@@ -247,18 +309,21 @@ function Sheet({ count, onClose, onBegin }: { count: string; onClose(): void; on
   );
 }
 
-/** Before Begin, the top bar's count of what we would do first, and the sheet it opens. After, the Year 0 moment. */
+/** Before Begin, the top bar's count of what we would do first, naming the next, and the sheet it opens. After, the Year 0 moment. */
 export function Begin() {
   const { save, year, begin } = useGame();
   const [open, setOpen] = useState(false);
   const [moment, setMoment] = useState<"full" | "roll" | null>(null);
   const button = useRef<HTMLButtonElement>(null);
-  const n = save ? STEPS.filter((s) => s.done(save)).length : 0;
+  const now = useNow();
+  const next = useNext();
+  const n = save ? STEPS.filter((s) => s.done(save, now)).length : 0;
   // A step done, wherever it is done, lights its arc, and the count pulses once, so we see it tick without a Done.
+  // The count waits for this game's Earth, so its builds' step coming in on load isn't taken for a tick.
   const was = useRef<number | null>(null);
   useGSAP(
     () => {
-      if (!save) return;
+      if (!save || !now.known) return;
       const up = was.current !== null && n > was.current;
       was.current = n;
       if (up && button.current && !prefersReducedMotion())
@@ -268,10 +333,10 @@ export function Begin() {
           { scale: 1.12, duration: 0.18, ease: "power2.out", yoyo: true, repeat: 1, clearProps: "transform" },
         );
     },
-    { dependencies: [n, !!save] },
+    { dependencies: [n, !!save, now.known] },
   );
   if (!save) return null;
-  const done = STEPS.map((s) => s.done(save));
+  const done = STEPS.map((s) => s.done(save, now));
   const count = n === STEPS.length ? "ALL READY" : `${n} OF ${STEPS.length} READY`;
 
   return (
@@ -287,7 +352,7 @@ export function Begin() {
           <Count done={done} />
           {n === STEPS.length ? "All ready" : `${n} of ${STEPS.length} ready`}
           <span className="text-muted">·</span>
-          <b className="font-medium text-you">Begin</b>
+          <b className="font-medium text-you">{next ? next.short : "Begin"}</b>
         </button>
       )}
       {open && (

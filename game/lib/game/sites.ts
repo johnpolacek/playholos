@@ -1,6 +1,7 @@
 // Where each build would stand, for the map, and what it holds, for the Build tab. Picking a build there flies the
 // map to its place. Sources in HOLOS_RESEARCH.md, "Where the Moon vault stands", "Where the watches stand", "Where
-// the data center, launch complex and yard stand" and "Where the infrared telescope stands".
+// the data center, launch complex and yard stand", "Where the infrared telescope stands", and since 2026-10-22, each
+// opened build's and the long road's "Where ... stands".
 import { BUILDS } from "./plan";
 
 /** One place a build stands: latitude, and longitude east. On the Moon, longitude runs from the middle of the side
@@ -27,7 +28,7 @@ export interface Site {
 }
 
 /** A build's story: what we have at Year 0, where it stands, why there, what it takes, and who tried before us. How
- *  long it takes is left to the build's page and the list, which reckon it with this game's thought, 2026-10-19. */
+ *  long it takes is left to the build's page and the list, which reckon it with this game's compute, 2026-10-19. */
 export interface Story {
   /** What Earth already has of its kind in 2040, so the build reads as a step from there. */
   have?: string;
@@ -88,7 +89,7 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
       where:
         "Around Hyperion, in Richland Parish, Louisiana, and on campuses like it. Each campus we build is a Year of the fabs’ chips.",
       why: "The land and the power lines are already there, so chips are the only wait.",
-      takes: "Chips as fast as the fabs make them. It draws about 120 GW, half a percent of Earth’s energy.",
+      takes: "Chips as fast as the fabs make them, a campus a Year. The first draws about 120 GW, half a percent of Earth’s energy. After eleven, compute draws nine tenths of it.",
     },
   },
   "Infrared Telescope": {
@@ -172,6 +173,164 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
       takes: `${kt("Probe Yard")} kt of the 20 we hold in orbit. The first probe flies 12 Years after.`,
       before:
         "Project Daedalus, from 1973 to 1978, planned a two-stage fusion probe of 54,000 t, built in Earth orbit as this one is. It would pass Barnard’s Star about 50 years after launch.",
+    },
+  },
+  "Ground Solar": {
+    // The largest solar park at work, the largest being built, and the Andes, where panels make the most power on Earth.
+    site: {
+      on: "earth",
+      draw: "ring",
+      places: [
+        { lat: 36.19, lon: 100.54, name: "Talatan, Qinghai, China" },
+        { lat: 24.117, lon: 69.35, name: "Khavda, Gujarat, India" },
+        { lat: -24.095, lon: -66.724, name: "Cauchari, Jujuy, Argentina" },
+      ],
+    },
+    story: {
+      have: "Solar and wind grow our energy 1 to 2% a Year. The largest solar park, Talatan in China, already covered 420 km² in 2025.",
+      where:
+        "Fields of panels on dry, empty land: round Talatan on the Tibetan plateau, at Khavda in India’s salt desert, and at Cauchari, 4,000 m up in Argentina’s Andes.",
+      why: "Clear, clean, thin air lets the most sunlight through, and cold keeps panels working well. Panels in the Andes make 15 to 20% more power than in the Sahara or Arabia.",
+      takes: "None of the matter we hold in orbit. A fifth more energy is about 42,000 TWh a Year, 15 times what all our panels made in 2025.",
+      before: "Khavda is to hold 30 GW of sun and wind by 2029. By April 2026 about 9.4 GW ran there.",
+    },
+  },
+  "15 m Mirror": {
+    // Beside the Infrared Telescope at L2, where LUVOIR-A, the 15 m design, was to fly.
+    site: { on: "l2", draw: "ring", places: [{ lat: 0, lon: 0, name: "L2, 1.5 million km out" }], km: 1_500_000 },
+    story: {
+      have: "Webb’s mirror, 6.5 m across, is the widest we have in space. The Habitable Worlds Observatory’s, about 6 m, is still being built.",
+      where: "At L2, 1.5 million km out on Earth’s night side, beside the Infrared Telescope.",
+      why: "A wider mirror splits worlds that sit closer to their stars. At 15 m it reaches 2.3 times closer in than Webb’s, and gathers five times the light. At L2 the Sun, Earth and Moon all stay on one side.",
+      takes: "About 40 t, as LUVOIR-A weighed with margin. Building in orbit, a quarter faster once the yard is done.",
+      before:
+        "LUVOIR-A, a 15 m design, reported to NASA in 2019 and aimed at a launch about 2039. The 2020 survey chose a telescope of about 6 m instead.",
+    },
+  },
+  "Mass Driver": {
+    // O’Neill’s group’s launch point: on the equator at 33.1° east, where throws scatter least on the way to a catcher
+    // beyond the far side.
+    site: { on: "moon", draw: "ring", places: [{ lat: 0, lon: 33.1, name: "Lunar equator, 33° east" }] },
+    story: {
+      have: "Crews have landed on the Moon since 2028. Every tonne we hold in orbit came up from Earth.",
+      where:
+        "On the Moon’s equator at 33° east, where the Sea of Tranquility meets the highlands, about 250 km south of the Moon Vault.",
+      why: "Rock leaves at 2.4 km/s, the Moon’s escape speed, and coasts to a catcher beyond the far side. From this spot small errors in a throw scatter least, as O’Neill’s group showed in 1977.",
+      takes: "About 1 kt of machines, landed from Earth. O’Neill’s design threw about half the time, a 10 kg load four times a second.",
+      before:
+        "In 1977 MIT students built Mass Driver 1 for O’Neill and Kolm, largely from scrap. A 2026 study sized a 372 t driver for the Moon, throwing 263 kt a Year. None has been built there.",
+    },
+  },
+  "Orbital Foundry": {
+    // O’Neill’s group’s orbit for working Moon rock: half the Moon’s month, a nudge from where thrown rock is caught.
+    site: {
+      on: "orbit",
+      draw: "ring",
+      places: [{ lat: 0, lon: 0, name: "High orbit, 235,000 km up" }],
+      orbit: { km: 235_000, tilt: 25, minutes: 19_672 },
+    },
+    story: {
+      have: "Small furnaces in orbit grow crystals for chips. Nothing up there has been made from rock.",
+      where:
+        "In a high orbit 235,000 km up, nearly two thirds of the way to the Moon, once round every 13.7 days, half the Moon’s month.",
+      why: "Rock thrown from the Moon is caught beyond it, and reaches this orbit for 10 to 30 m/s. From here low orbit and geostationary orbit cost less fuel than from the other places O’Neill’s group weighed.",
+      takes: "About 1 kt of machines, then rock as it comes. Building in orbit, a quarter faster once the yard is done.",
+      before:
+        "O’Neill’s group placed a factory for Moon rock in this orbit in 1977. In 2025 Space Forge’s ForgeStar-1 lit a 1,000 °C furnace, the first on a free-flying commercial craft.",
+    },
+  },
+  "Belt Mining": {
+    // The map has no belt, so the mining stands where its rock comes home: the foundry's orbit, a little behind it.
+    site: {
+      on: "orbit",
+      draw: "ring",
+      places: [{ lat: 0, lon: 0, name: "High orbit, where belt rock comes home" }],
+      orbit: { km: 235_000, tilt: 25, minutes: 19_672, behind: 30 },
+    },
+    story: {
+      have: "Our probes have brought home grams of asteroid, 121.6 g of it from Bennu. NASA’s Psyche reached a metal one in 2029. None has been mined.",
+      where:
+        "In the asteroid belt between Mars and Jupiter, 2.1 to 3.3 times Earth’s distance from the Sun. Its rock comes home to the Orbital Foundry’s high orbit.",
+      why: "Some asteroids are largely metal, and some hold water. Psyche may be up to 60% metal, and Bennu’s grains hold water in their clay.",
+      takes: "Survey probes from the Probe Yard first, then a fleet that hauls 120 kt a Year home.",
+      before:
+        "In 2012 a Keck Institute study planned to bring a whole 7 m asteroid, about 500 t, to high lunar orbit. AstroForge’s Odin, sent in 2025 to fly past an asteroid, was lost on the way.",
+    },
+  },
+  "Far-Side Array": {
+    // Near the middle of the far side, where Earth never rises: a crater long proposed for a radio telescope, deep in
+    // the ITU’s shielded zone.
+    site: { on: "moon", draw: "ring", places: [{ lat: -5.9, lon: 179.4, name: "Daedalus crater, far side" }] },
+    story: {
+      have: "Small receivers have listened from the far side since Chang’e 4 landed in 2019. Every big ear we have is on Earth, under our own noise.",
+      where: "Inside Daedalus crater, 94 km across, near the middle of the Moon’s far side, where Earth never rises.",
+      why: "The Moon’s bulk dims our radio there more than ten billion times, and radio rules bar emissions there that would harm radio astronomy. Only there can we hear a world’s faint everyday hum.",
+      takes: "About 1 Mt of metal, made in place from the far side’s own rock, as NASA’s FarView study plans on a smaller scale. It grows in fifths, each hearing farther.",
+      before:
+        "In 2026 a team searched Chang’e 4’s far-side recordings for a repeating signal, the first such search from there. It found none.",
+    },
+  },
+  "Power from Orbit": {
+    // Geostationary orbit, where NASA’s 2024 designs fly: once round a day, so each station hangs over one spot on Earth.
+    site: {
+      on: "orbit",
+      draw: "ring",
+      places: [{ lat: 0, lon: 0, name: "Geostationary orbit, 35,786 km up" }],
+      orbit: { km: 35_786, tilt: 0, minutes: 1436.1 },
+    },
+    story: {
+      have: "Tests have beamed a little power from orbit to the ground. Nothing up there feeds our grid.",
+      where:
+        "In geostationary orbit, 35,786 km above the equator. Each station beams to a field of antennas on the ground about 6 km across.",
+      why: "Up there a station goes round once a day, so it hangs over one spot. Above the weather, NASA’s 2024 design makes power 99% of the Year, day and night.",
+      takes: "About 10 Mt of Moon rock, so it comes only as fast as rock does. NASA’s 2024 design sends down 2 GW from 5,900 t.",
+      before: "Peter Glaser proposed it in 1968. In 2023 Caltech’s MAPLE beamed a little power from orbit to a rooftop in Pasadena.",
+    },
+  },
+  "Deuterium Works": {
+    // Where the largest heavy water plant ever ran, on the nuclear station’s steam, by Lake Huron.
+    site: { on: "earth", draw: "ring", places: [{ lat: 44.325, lon: -81.599, name: "Bruce, Ontario, on Lake Huron" }] },
+    story: {
+      have: "We make heavy water only for reactors. India makes the most.",
+      where: "Beside the Bruce nuclear station on Lake Huron, in Ontario, where Canada made heavy water from 1973 to 1997.",
+      why: "Heavy water is drawn out with heat and a great deal of water, 340,000 t for each tonne. Bruce’s reactors gave the steam, by the lake. Glace Bay, in Nova Scotia, tried seawater, and the salt corroded it.",
+      takes: "Plants 24 times Bruce’s at its peak, about 7,700 t of deuterium a Year, on under a fifth of a percent of our energy.",
+      before:
+        "Bruce made 1,600 t of heavy water a Year at its peak, the most of any plant, and 16,000 t in all. It closed when Canada’s reactors had enough.",
+    },
+  },
+  "Fusion Drive": {
+    // On the yard’s orbit, as Project Icarus planned for its Firefly, and lit only once towed behind the Moon.
+    site: {
+      on: "orbit",
+      draw: "ring",
+      places: [{ lat: 0, lon: 0, name: "Low orbit, 400 km up" }],
+      orbit: { km: 400, tilt: 51.6, minutes: 92.9, behind: 3 },
+    },
+    story: {
+      have: "Fusion plants are being built, but none feeds the grid yet. No fusion engine has ever fired.",
+      where: "In low orbit, 400 km up, on the Orbital Yard’s path, about 350 km behind it.",
+      why: "Its parts come up to orbit and are joined there, as Project Icarus planned for its Firefly. It burns deuterium and throws off radiation, so it is first lit behind the Moon, far from Earth.",
+      takes: "An engine and radiators of 1,400 to 4,000 t, by Firefly’s figures scaled to our ship. Building in orbit, a quarter faster once the yard is done.",
+      before:
+        "Firefly, drawn in 2015, burns deuterium for 10 years to reach 4.7% of light speed. Its pinch draws 1,175 GW. Zap Energy’s best ran at 39 kW in 2025.",
+    },
+  },
+  "Seed Ship": {
+    // On the yard’s orbit just past its drive: built where its parts come up, and fitted to the drive there.
+    site: {
+      on: "orbit",
+      draw: "ring",
+      places: [{ lat: 0, lon: 0, name: "Low orbit, 400 km up" }],
+      orbit: { km: 400, tilt: 51.6, minutes: 92.9, behind: 4.5 },
+    },
+    story: {
+      have: "Nothing we have launched can stop at another star. Voyager 1, our farthest, passes 1.7 ly from one in 40,000 years.",
+      where: "In low orbit, 400 km up, on the Orbital Yard’s path, about 530 km behind it, 180 km past its Fusion Drive.",
+      why: "At about 1,500 t it can’t be launched whole. Its parts come up to orbit, so we join it there, beside the drive that will carry it.",
+      takes: `${kt("Seed Ship")} kt of the 20 we hold in orbit. About half is the magnetic sail it brakes on. The seed itself is about 443 t.`,
+      before:
+        "In 1980 Robert Freitas drew REPRO, a 443 t seed that lands on a giant planet’s moon and grows into a 346,000 t factory over 500 years.",
     },
   },
 };

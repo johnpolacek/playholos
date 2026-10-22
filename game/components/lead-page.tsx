@@ -7,7 +7,8 @@ import { LeadMark } from "@/components/marks";
 import { Look } from "@/components/picks";
 import { useLeads } from "@/components/scan";
 import { span } from "@/lib/game/clock";
-import { ODDS, type Odds } from "@/lib/game/leads";
+import { ODDS, type Odds, type Reading } from "@/lib/game/leads";
+import { VisitArt } from "@/components/visit-art";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
 
 // One lead, as a report: drawn, then what we measured, what it could be with the Mind's word for each, and what would
@@ -45,8 +46,58 @@ function Scale({ odds, was }: { odds: Odds; was?: Odds }) {
 
 const HEAD = "font-mono text-[10px] tracking-[.1em] text-muted uppercase";
 
+/** The bands our Infrared Telescope reads, in microns, as lib/sim/observing.ts has them. */
+const BANDS = [
+  { band: "ozone", um: 0.6 },
+  { band: "oxygen", um: 0.76 },
+  { band: "water", um: 0.94 },
+] as const;
+
+/** A world's light, as our Infrared Telescope spreads it, from green to past red. A gas in its air drinks its own band,
+ *  so each found shows as a dark line. One looked for and missing leaves its band whole, and one still being read
+ *  flickers. Unsplit or too faint, the light is its star's, dimmed. 2026-10-22. */
+function AirBands({ air }: { air: NonNullable<Reading["air"]> }) {
+  const x = (um: number) => `${((um - 0.5) / 0.5) * 100}%`;
+  const seen = air.split && air.readable;
+  return (
+    <div className="mt-2.5">
+      <div
+        className={`relative h-6 overflow-hidden rounded-[3px] ${seen ? "" : "opacity-35"}`}
+        style={{
+          background:
+            "linear-gradient(90deg, #4f9d5a 0%, #b9b54a 18%, #d98a3a 30%, #b8432f 44%, #6d2a2a 56%, #3a2224 78%, #261c1f 100%)",
+        }}
+      >
+        {seen &&
+          BANDS.map(({ band, um }) => {
+            const v = air[band];
+            return (
+              <span
+                key={band}
+                className={`absolute inset-y-0 w-[5px] -translate-x-1/2 ${v === true ? "bg-paper" : v === false ? "border-x border-dashed border-ink/50" : "animate-pulse bg-paper/40 motion-reduce:animate-none"}`}
+                style={{ left: x(um) }}
+              />
+            );
+          })}
+      </div>
+      <div className="relative mt-1 h-7 font-mono text-[9.5px] leading-tight text-muted">
+        {BANDS.map(({ band, um }) => {
+          const v = air[band];
+          return (
+            <span key={band} className="absolute -translate-x-1/2 text-center whitespace-nowrap" style={{ left: x(um) }}>
+              <span className={v === true ? "text-ink" : ""}>{!seen ? band : v === true ? band : v === false ? `no ${band}` : "reading"}</span>
+              <br />
+              {um} µm
+            </span>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 export function LeadPage({ slug }: { slug: string }) {
-  const { leads, dials, readings, fresh } = useLeads();
+  const { leads, dials, readings, fresh, setLook } = useLeads();
   const { see, year } = useGame();
   const navigate = useNavigate();
   const root = useRef<HTMLDivElement>(null);
@@ -60,11 +111,16 @@ export function LeadPage({ slug }: { slug: string }) {
     if (unread) see([unread]);
   }, [unread, see]);
 
+  // The map turns to the lead, and its system, if we know it, is open to the map's Close View.
   useEffect(() => {
     if (i < 0) return;
     Object.assign(dials, { focus: i + 1 });
-    return () => void Object.assign(dials, { focus: 0 });
-  }, [dials, i]);
+    setLook(leads[i]);
+    return () => {
+      Object.assign(dials, { focus: 0 });
+      setLook(null);
+    };
+  }, [dials, i, leads, setLook]);
 
   useEffect(() => {
     const back = (e: KeyboardEvent) => e.key === "Escape" && navigate("/");
@@ -122,6 +178,12 @@ export function LeadPage({ slug }: { slug: string }) {
           </span>
           <h2 className="mt-1 text-[16px] leading-snug font-semibold">{read.title}</h2>
           <p className="mt-0.5 text-[13.5px] leading-snug">{read.line}</p>
+          {read.air && <AirBands air={read.air} />}
+          {read.sight && (
+            <div className="mt-2.5 flex justify-center">
+              <VisitArt sight={read.sight} />
+            </div>
+          )}
           <p className="mt-2 text-[13.5px] leading-snug text-page-ink2">
             <span className="mr-1.5 font-mono text-[10px] tracking-[.1em] text-you">THE MIND</span>
             {read.mind}

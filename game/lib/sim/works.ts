@@ -69,10 +69,13 @@ export interface PaceOptions {
   scale?: number;
   /** Thought set aside for observations: [from Year, to Year, share of Year 0 thought]. */
   aside?: readonly (readonly [number, number, number])[];
+  /** Whether the works a done work opens join the line on their own, as the mocks have it. The game's player orders
+   *  them instead, since 2026-10-22. */
+  follow?: boolean;
 }
 
 /** Earth's works at Year `until`, from the player's orders. */
-export function pace(orders: readonly Order[], until: number, { scale = 1, aside = [] }: PaceOptions = {}): Pace {
+export function pace(orders: readonly Order[], until: number, { scale = 1, aside = [], follow = true }: PaceOptions = {}): Pace {
   const queue = [...orders].sort((a, b) => a.y - b.y);                     // a stable sort keeps one Year's orders as given
   const line: string[] = [], left = new Map<string, number>(), begun = new Map<string, number>(), moved = new Set<string>();
   const done: Record<string, number> = {}, built = new Map<string, number>(), dataCenters: number[] = [];
@@ -108,7 +111,7 @@ export function pace(orders: readonly Order[], until: number, { scale = 1, aside
           if (n < work.copies[0]) join(w, place(w), begun.get(w)!);
         } else done[w] = t;
         if (w === CATALOG.yard.work) for (const x of line) if (WORKS[x].orbit && left.has(x)) left.set(x, left.get(x)! * (1 - CATALOG.yard.cut));
-        if (work.then) { const at = place(w); work.then.forEach((x, i) => join(x, at + i, begun.get(w)!)); }
+        if (follow && work.then) { const at = place(w); work.then.forEach((x, i) => join(x, at + i, begun.get(w)!)); }
       }
       while (queue.length && queue[0].y <= t + EPS) {
         const o = queue.shift()!; changed = true;

@@ -298,7 +298,7 @@ export const LEADS_SOURCES: Source[] = [
 export const PLAN_SOURCES: Source[] = [
   {
     title: "How long the builds take",
-    text: "Each build's time is the game's, priced from real works. A large ground radio array takes 2 to 8 years: CHIME took about two, and SKA-Low's antennas are due about 2030, eight years after it began. Thought speeds a build only so far, because part of any build is physical work.",
+    text: "Each build's time is the game's, priced from real works. A large ground radio array takes 2 to 8 years: CHIME took about two, and SKA-Low's antennas are due about 2030, eight years after it began. Compute speeds a build only so far, because part of any build is physical work.",
     links: [
       ["CHIME", W("Canadian_Hydrogen_Intensity_Mapping_Experiment")],
       ["Square Kilometre Array", W("Square_Kilometre_Array")],

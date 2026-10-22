@@ -8,6 +8,7 @@ import { FILL, Spread } from "@/components/spread";
 import type { Dials, Mark } from "@/lib/drift";
 import { span } from "@/lib/game/clock";
 import { type Lead, leadsOf, type Reading, skyId } from "@/lib/game/leads";
+import { type System, worldName } from "@/lib/game/systems";
 import { LEADS_SOURCES } from "@/lib/game/sources";
 import type { FeltWorld } from "@/lib/sim/types";
 import { prefersReducedMotion, rise, riseFrom, useStage } from "@/lib/motion";
@@ -31,11 +32,14 @@ const reach = (ly: number) => (
 export function LeadsMap({
   dials,
   ids,
+  system,
   onReady,
   className,
 }: {
   dials: Dials;
   ids: string[];
+  /** The system of the lead in view, which its Close View flies into, its worlds named there. */
+  system?: System;
   onReady(flight: number): void;
   className: string;
 }) {
@@ -47,11 +51,12 @@ export function LeadsMap({
         const n = names.current[id];
         if (!n) continue;
         const ring = id.startsWith("ring:");
+        const lead = ids.includes(id);
         const right = ring || x > (n.parentElement?.clientWidth ?? 0) / 2;
         n.style.transform = ring
           ? `translate(${x}px, ${y + 4}px) translate(-50%, 0)`
           : `translate(${x + (right ? 9 : -9)}px, ${y}px) translate(${right ? "0" : "-100%"}, -50%)`;
-        n.style.opacity = String(a * (focus && id !== focus && id !== "Sol" && !ring ? 0.45 : 1));
+        n.style.opacity = String(a * (focus && lead && id !== focus ? 0.45 : 1));
       }
     },
     [dials, ids],
@@ -61,6 +66,7 @@ export function LeadsMap({
       mode="leads"
       dials={dials}
       leads={ids}
+      system={system}
       onReady={onReady}
       onMarks={onMarks}
       className={className}
@@ -74,6 +80,17 @@ export function LeadsMap({
           className={`pointer-events-none absolute top-0 left-0 font-mono text-[9px] whitespace-nowrap opacity-0 ${id === "Luyten's Star" ? "text-other" : id.startsWith("ring:") || id === "Sol" ? "text-muted" : "text-you"}`}
         >
           {id.startsWith("ring:") ? `${id.slice(5)} ly` : id}
+        </span>
+      ))}
+      {system?.worlds.map((w, i) => (
+        <span
+          key={`w${i}`}
+          ref={(n) => {
+            names.current[`w${i}`] = n;
+          }}
+          className="pointer-events-none absolute top-0 left-0 font-mono text-[9px] whitespace-nowrap text-muted opacity-0"
+        >
+          {worldName(w)}
         </span>
       ))}
     </SkyArt>

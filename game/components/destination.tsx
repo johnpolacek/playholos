@@ -4,21 +4,24 @@ import { useGame } from "@/components/game-provider";
 import { BuildMark, buildBlue, buildTone, LeadMark, LockMark } from "@/components/marks";
 import { MindNote } from "@/components/mind-note";
 import { toggleBuild, usePlan, useSchedule } from "@/components/picks";
+import { Lens } from "@/components/icons";
 import { axis, says, sooner, Thread, useReach, year, Years } from "@/components/reach";
 import { useLeads } from "@/components/scan";
-import { skyId } from "@/lib/game/leads";
+import { VisitArt } from "@/components/visit-art";
+import { skyId, visitReading } from "@/lib/game/leads";
 import { Face, ListHead } from "@/components/tab-head";
 import { HISTORY } from "@/lib/game/charter";
 import { span } from "@/lib/game/clock";
-import { buildSlug } from "@/lib/game/plan";
-import { LOCKED, roads, slows, toward } from "@/lib/game/reach";
+import { buildSlug, moves } from "@/lib/game/plan";
+import { LOCKED, roads, toward } from "@/lib/game/reach";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
 
 // One destination, opened from Reach: a lead's star, and every way we could go there. The two roads open at Year 0,
 // by sail and by probe, are drawn on the Years they would take, each with the build it needs and, before Begin, the
 // button that queues it. The rest are listed locked, each with the builds it needs, every one a link to its page to
-// start it, so the way ahead shows. Reach's map stays, and flies out to the star, its ruler stretched to it. Settled
-// 2026-10-19.
+// start it, so the way ahead shows. Reach's map stays, and flies out to the star, its ruler stretched to it. Last, Close
+// View flies the map into the star's system, every world known there going round. Settled 2026-10-19. Once our sails
+// or probe have passed and their word is home, what they saw is drawn above the ways, 2026-10-22.
 
 /** A build a way needs: its mark in its color, its name, and how it stands, opening its page to start it. */
 function Need({ name, queued, done }: { name: string; queued: boolean; done: boolean }) {
@@ -45,9 +48,9 @@ const WHAT: Record<string, string> = {
 };
 
 export function DestinationPage({ slug }: { slug: string }) {
-  const { leads } = useLeads();
-  const { aim } = useReach();
-  const { save, year: clock } = useGame();
+  const { leads, visits } = useLeads();
+  const { aim, close, setClose } = useReach();
+  const { save, year: clock, did } = useGame();
   const { plan, change } = usePlan();
   const { scale, done: doneBy } = useSchedule();
   const navigate = useNavigate();
@@ -61,16 +64,20 @@ export function DestinationPage({ slug }: { slug: string }) {
   const ly = lead?.ly ?? 0;
   const ways = useMemo(() => roads(plan, scale, from).map((r) => toward(r, ly)), [plan, scale, from, ly]);
   const tip = useMemo(() => sooner(plan, scale, from, ways[1].home, ly), [plan, scale, from, ways, ly]);
-  const slow = useMemo(() => (before ? slows(plan, scale, "Probe Yard") : null), [before, plan, scale]);
+  const slow = useMemo(() => (before ? moves(plan, scale, "Probe Yard").late : null), [before, plan, scale]);
   const { to, step } = axis(ways);
 
   // Reach's map flies out to the star while the page is open, and back to the nearest star when we leave.
   const star = lead?.star;
+  const system = lead?.system;
   useEffect(() => {
     if (!star) return;
-    aim({ id: skyId(star), name: star, ly });
+    aim({ id: skyId(star), name: star, ly, system });
     return () => aim(null);
-  }, [aim, star, ly]);
+  }, [aim, star, ly, system]);
+
+  // Opening any destination counts as seeing where we could go, one of the four things we would do before Begin.
+  useEffect(() => void (star && did("looked")), [star, did]);
 
   useEffect(() => {
     const back = (e: KeyboardEvent) => e.key === "Escape" && navigate("/reach");
@@ -126,6 +133,24 @@ export function DestinationPage({ slug }: { slug: string }) {
           Its lead ›
         </Link>
       </p>
+
+      {visits
+        .filter((v) => v.star === lead.star)
+        .map((v) => {
+          const r = visitReading(v);
+          return (
+            <section key={r.id} data-m className="mt-4 flex items-center gap-3 rounded-xl border border-other/50 bg-other/[.05] p-3">
+              <VisitArt sight={v.sight} size={96} />
+              <div className="min-w-0">
+                <span className="font-mono text-[10px] tracking-[.1em] text-other uppercase">
+                  {v.world} · {r.by} · Year {r.at}
+                </span>
+                <h2 className="mt-0.5 text-[16px] leading-snug font-semibold">{r.title}</h2>
+                <p className="mt-0.5 text-[13px] leading-snug text-page-ink2">{r.line}</p>
+              </div>
+            </section>
+          );
+        })}
 
       <ListHead data-m left={`Ways to go · ${ways.length + LOCKED.length}`} right="Arrives" className="mt-5" />
       <ul className="mt-1">
@@ -209,6 +234,16 @@ export function DestinationPage({ slug }: { slug: string }) {
           {says(lead.star, plan, save.charter?.dials ?? HISTORY, ways, tip, slow, before)}
         </MindNote>
       </div>
+      {lead.system && (
+        <button
+          data-m
+          onClick={() => setClose(!close)}
+          className="mt-6 flex h-[46px] shrink-0 items-center justify-center gap-2 rounded-full border border-ink text-[15px] font-medium"
+        >
+          <Lens closer={!close} size={17} />
+          {close ? "Pull Back" : "Close View"}
+        </button>
+      )}
     </div>
   );
 }
