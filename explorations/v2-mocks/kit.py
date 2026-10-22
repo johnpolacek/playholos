@@ -199,7 +199,7 @@ if SEED_SHIP_Y:
     PACED = {k: v if k == 'spare' else round(v, 2) for k, v in eg.replay(eg.BY_START, start=LONG_START, show=False, scale=SCALE, extra=[
         (SEED_SHIP_Y, 'Fusion drive', eg.ROADS['fusion_drive']), (SEED_SHIP_Y, 'Seed ship', eg.ROADS['seed_ship'] * 0.75),
         (SEED_SHIP_Y, 'Deuterium works', eg.D_WORKS_YEARS)]).items()}
-ROAD = dict(array=PACED['Laser sail array'], solar=PACED['Ground solar'], mirror=PACED['A 15 m mirror'], launcher=PACED['Launcher'],
+ROAD = dict(array=PACED['Laser sail array'], solar=PACED['Ground solar'], mirror=PACED['A 15 m mirror'], launcher=PACED['Probe yard'],
             driver=PACED['Mass driver'], foundry=PACED['Orbital foundry'], prospect=PACED['Belt prospecting'], mining=PACED['Belt mining'],
             fifth=PACED['Far-side array, fifth 1'], fifths=[PACED[f'Far-side array, fifth {k}'] for k in range(1, eg.FIFTHS_TOTAL + 1)],
             power=PACED['Power from orbit'])

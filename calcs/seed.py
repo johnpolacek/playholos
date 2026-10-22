@@ -24,6 +24,18 @@ SENDS = ('knock', 'answer', 'call', 'gift', 'mask')
 # Year 0's sky watch is a drift scan: each direction north of -20 degrees, ten minutes a day. The all-sky watch, once
 # built, sees every direction at every hour.
 KNOCK_W, KNOCK_HOURS, AGAIN, CALL_W = 1e12, 4, 1.0, 2.4e11
+# Settled 2026-10-20: some senders aim their short sends as laser flashes, not radio. With Earth's own technology of
+# 2000, a flash a billionth of a second long outshines the Sun ten thousand times (Howard et al. 2004), so any flash
+# aimed at Earth from our neighbors' 50 ly is bright enough. A narrow beam is seen only near its target, so a Hidden
+# Mind takes to it more: odds by its Open or Hidden dial, samples. Its calls stay radio, as does a dead world's last
+# broadcast. Earth's radio watches never hear a flash. Only the deep flash watch sees one, at night, under clear sky,
+# with the star in its domes' fields, each about a fifth of the sky at once (Wright et al. 2018): FLASH_SEEN a send, a
+# sample. The draws are keyed, so no other roll moves. The silent opening still checks a laser sender's early sends as
+# radio, which is stricter than it need be, and keeps every roll where it was.
+# The draw's key is the first that leaves the mocks' seeds 10, 11 and 62 as they were, as the mocks' seed itself was
+# chosen. Elsewhere a flash can take a knock a radio watch would have caught, so the two watches hear different things.
+LASER = {'O2': 0.1, 'O1': 0.2, 'H1': 0.4, 'H2': 0.6}
+LASER_KEY, FLASH_SEEN = 'laser 1', 0.3
 def catches(p, i, seed):
     d, steady = p['d'], i['move'] in ('call', 'broadcast')
     watts = i.get('watts') or (CALL_W if steady else p['n']['awake'] if p['n'].get('awake_aimed') else KNOCK_W)
@@ -31,9 +43,11 @@ def catches(p, i, seed):
     overlap = 1.0 if steady else (KNOCK_HOURS + 1 / 6) / 24
     sends = 1 if steady else i.get('sends', 2)
     loud = watts >= nb.floor_watts(12, 1, 600, d)
-    i.update(watts=watts, steady=steady, north=p['host']['north'], loud=loud,
-             kit0=p['host']['north'] and loud and any(rng.random() < overlap for _ in range(sends)),
-             allsky=watts >= nb.floor_watts(12, 1, 86400 if steady else KNOCK_HOURS * 3600, d))
+    laser = p['laser'] and not steady
+    i.update(watts=watts, steady=steady, north=p['host']['north'], loud=loud, laser=laser,
+             kit0=not laser and p['host']['north'] and loud and any(rng.random() < overlap for _ in range(sends)),
+             allsky=not laser and watts >= nb.floor_watts(12, 1, 86400 if steady else KNOCK_HOURS * 3600, d),
+             flash=laser and any(keyed(seed, 'flash', p['name'], i['what'], k) < FLASH_SEEN for k in range(sends)))
 
 # ---------- What Earth's listening caught before Year 0 ----------
 # A steady call lasts Years, so the searches that found nothing by 2040 would have found it. A knock lasts hours.
@@ -331,6 +345,7 @@ def draw(seed, rows=None):
         d, w, dead = p['host']['distance_ly'], p['waking'], n.get('dies') is not None
         p.update(name=n['name'], d=d, dead=dead, died=w - n['dies'] if dead else None,
                  dials=reactions.CHARACTER[n['name']][0], style=reactions.CHARACTER[n['name']][1], thinks=reactions.thinks(n['name']))
+        p['laser'] = keyed(seed, LASER_KEY, n['name']) < LASER[p['dials'].split()[0]]
         # What it does is rolled on its own stream, so a change to these rules never moves where anyone lives.
         acts = random.Random(f"{seed}:{n['name']}:acts")
         p['heard'] = (not dead) and acts.random() < p['heard']
@@ -388,7 +403,8 @@ def report(g):
         if p['after_silence']: print(f"          unanswered by {year(p['after_silence']['at'])}, it will: {p['after_silence']['move']}")
         for u in p['unheard']: print(f"          unheard: {u['what']} ({u['move']}), sent {u['sent']:.0f}, reached Earth in {u['arrived']:.0f}. No one was listening.")
         for i in p['inbound']: print(f"          on its way: {i['what']} ({i['move']}), sent {year(i['sent'])}, arrives Year {i['year']:.1f}. "
-                                     f"Year 0's sky watch {'catches' if i['kit0'] else 'misses'} it, the all-sky watch {'catches' if i['allsky'] else 'misses'} it.")
+                                     + (f"Laser flashes: no radio watch hears them, the deep flash watch {'catches' if i['flash'] else 'misses'} them." if i['laser'] else
+                                        f"Year 0's sky watch {'catches' if i['kit0'] else 'misses'} it, the all-sky watch {'catches' if i['allsky'] else 'misses'} it."))
     if g['natural']: print(f"  Seeded find: a natural world at {g['natural']['name']}, {g['natural']['distance_ly']:.1f} ly.")
     w = g['worlds']; first = [x for x in w if x['swept'] and not x['felt']]
     print(f"  Natural warm worlds: {len(w)}, {sum(x['host']['kind'] == 'M' for x in w)} of them at red dwarfs. {len(g['ruled_out'])} more drawn and ruled out by what Earth already knows.")
@@ -449,7 +465,8 @@ def stats(rows, n=400):
     k = len(early)
     print(f"Earth's ears: of {k} signals arriving in the first hour, Year 0's sky watch catches {sum(i['kit0'] for i in early) / k:.0%}. "
           f"{sum(not i['north'] for i in early) / k:.0%} come from its blind southern sky, and {sum(i['north'] and not i['loud'] for i in early) / k:.0%} are too faint for it. "
-          f"The all-sky watch would catch {sum(i['allsky'] for i in early) / k:.0%}.")
+          f"The all-sky watch would catch {sum(i['allsky'] for i in early) / k:.0%}. {sum(i['laser'] for i in early) / k:.0%} come as laser flashes, "
+          f"and the deep flash watch would catch {sum(i['flash'] for i in early) / k:.0%} of all.")
 
 if __name__ == '__main__':
     rows = nb.load_hosts()
