@@ -1,6 +1,6 @@
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { useSearchParams } from "react-router";
-import { Ceilings, Costs, PreviewProvider } from "@/components/costs";
+import { Ceilings, Costs, usePreview } from "@/components/costs";
 import { useGame } from "@/components/game-provider";
 import { Guide } from "@/components/guide";
 import { useLeaveShell } from "@/components/wake";
@@ -17,11 +17,14 @@ export function Build() {
   const leaveShell = useLeaveShell();
   const [params, setParams] = useSearchParams();
   const close = useCallback(() => setParams({}, { replace: true }), [setParams]);
+  // A build pointed at shows in the top bar too, so leaving Build lets it go.
+  const [, setPreview] = usePreview();
+  useEffect(() => () => setPreview(null), [setPreview]);
   if (!save) return null;
   if (params.has("tour")) return <Tour onClose={close} />;
 
   return (
-    <PreviewProvider>
+    <>
       {year !== null && (
         <div className="flex min-h-[52px] flex-col justify-center gap-0.5 border-b border-rowline text-sm">
           <span>Year 0 has begun</span>
@@ -44,6 +47,6 @@ export function Build() {
           New game
         </button>
       </div>
-    </PreviewProvider>
+    </>
   );
 }

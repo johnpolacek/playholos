@@ -325,10 +325,11 @@ function useEased(target: Map<string, Node>) {
 }
 
 /** Our Mind at the center, as its mark draws it, its compute flowing out to each build in our order, wider for a bigger
- *  share, and what has no work circling it. Thought Fields' stream is the campus under way. */
-function Streams({ plan, scale }: { plan: Plan; scale: number }) {
+ *  share, and what has no work circling it. Thought Fields' stream is the campus under way. A queued build pointed at
+ *  in the list is picked out, the others dimmed. */
+function Streams({ plan, scale, r, hot }: { plan: Plan; scale: number; r: Read; hot: string | null }) {
   const root = useRef<HTMLDivElement>(null);
-  const r = useMemo(() => readOf(plan, scale), [plan, scale]);
+  const dim = (name: string) => (hot && hot !== name ? 0.3 : 1);
   const done = useMemo(() => schedule(plan, scale), [plan, scale]);
   const k = plan.builds.length;
   const two = k > 7;
@@ -369,7 +370,7 @@ function Streams({ plan, scale }: { plan: Plan; scale: number }) {
           if (n.o < 0.01) return null;
           const d = `M${CX} ${CY + 12}C${CX} ${CY + 0.6 * (n.y - CY)} ${n.x} ${CY + 0.3 * (n.y - CY)} ${n.x} ${n.y - 13}`;
           return (
-            <g key={name} opacity={n.o}>
+            <g key={name} style={{ opacity: n.o * dim(name) }} className="transition-opacity duration-200">
               <path d={d} fill="none" stroke={buildColor(name)} strokeOpacity=".32" strokeWidth={1 + n.w * 9} />
               <path
                 d={d}
@@ -419,8 +420,15 @@ function Streams({ plan, scale }: { plan: Plan; scale: number }) {
         return (
           <span
             key={name}
-            className="absolute grid size-6 -translate-1/2 place-items-center rounded-full border bg-panel"
-            style={{ left: `${(n.x / W) * 100}%`, top: `${(n.y / H) * 100}%`, opacity: n.o, color: buildColor(name), borderColor: buildColor(name) }}
+            className="absolute grid size-6 -translate-1/2 place-items-center rounded-full border bg-panel transition-[opacity,box-shadow] duration-200"
+            style={{
+              left: `${(n.x / W) * 100}%`,
+              top: `${(n.y / H) * 100}%`,
+              opacity: n.o * dim(name),
+              color: buildColor(name),
+              borderColor: buildColor(name),
+              boxShadow: hot === name ? `0 0 12px ${buildColor(name)}` : undefined,
+            }}
           >
             <BuildMark name={name} size={13} still />
             {!two && target.has(name) && (
@@ -453,7 +461,9 @@ export function Guide() {
   const root = useRef<HTMLElement>(null);
   const { plan } = usePlan();
   const { scale } = useSchedule();
-  const { shown, adding } = useShown();
+  const { shown, adding, picked } = useShown();
+  const read = useMemo(() => readOf(shown, scale), [shown, scale]);
+  const pick = picked && read.parts.find((p) => p.name === picked);
   const { used, full, known } = useCompute();
   const { talk, reread } = useTalk();
   const next = useNext("/build?tour");
@@ -477,8 +487,15 @@ export function Guide() {
         <div className="flex min-h-[18px] items-center justify-between font-mono text-[10px] tracking-[.1em] text-muted">
           <span>OUR COMPUTE</span>
           {adding && <span className="tracking-[.12em] text-you uppercase">If we queue {adding}</span>}
+          {picked && (
+            <span className="tracking-[.12em] text-ink uppercase">
+              {picked}
+              {pick && ` · ${pct(pick.need + pick.more)}`}
+              {pick && pick.short > 0.005 && <span className="text-other"> · {pct(pick.short)} short</span>}
+            </span>
+          )}
         </div>
-        <Streams plan={shown} scale={scale} />
+        <Streams plan={shown} scale={scale} r={read} hot={picked} />
       </section>
 
       <section ref={root} className="border-b border-rowline pt-3 pb-3">

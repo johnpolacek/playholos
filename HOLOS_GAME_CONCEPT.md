@@ -764,7 +764,7 @@ Settled 2026-10-10.
       - Under it, the 20 kt we hold as blocks, each build's in its color, and the ceilings: lift brings matter, megatonnes must come from the Moon, and energy caps our compute, drawn as Thought Fields' climb to the grid.
       - Each build we could start shows its share of our Year 0 compute as a wedge, its matter, and the queued build it would slow or speed most.
       - The top bar's meters carry their numbers, and energy shows where Thought Fields takes it.
-      - Not yet: previews on queued rows, and the top bar following a preview.
+      - *Queued builds and the top bar, 2026-10-22.* Pointing at a queued build picks it out, on the ring or Build's streams, with its share and what it's short. Pointing at one we could start shows the top bar's meters as if it were queued, in our blue, and leaving Build lets the preview go.
     - *Opened builds ordered in play, 2026-10-22.* Once Year 0 has begun, what our builds have opened waits under the queue as "Open to start", each with when it would be done if ordered now, its share of our compute then, and what it would slow. Its page orders it, last in line from that Year, and its thread on the queue starts there.
       - Nothing joins the line on its own: the Mass Driver no longer starts the Far-Side Array and Power from Orbit. We order each.
       - Rock from the Moon and the belt now counts as matter in orbit, less what Power from Orbit takes as it waits on its 10 Mt.

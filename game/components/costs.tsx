@@ -12,6 +12,7 @@ import {
   computeAt,
   needOf,
   openAt,
+  ordered,
   orderLater,
   type moves,
   sharesAt,
@@ -279,7 +280,7 @@ function Ceiling({ queued, now, began }: { queued: boolean; now: number; began: 
 }
 
 /** What Build shows queued: our order, and the build pointed at in a list, added last before Begin, or ordered now
- *  in play once open. */
+ *  in play once open. A queued build pointed at is picked out instead. The top bar shows it too, 2026-10-22. */
 export function useShown() {
   const { year } = useGame();
   const { plan } = usePlan();
@@ -292,25 +293,34 @@ export function useShown() {
     () => (!adding ? plan : year === null ? toggleBuild(adding)(plan) : orderLater(adding, now)(plan)),
     [adding, plan, year, now],
   );
-  return { shown, adding, began: year !== null, now };
+  const picked = pv && ordered(plan).includes(pv) ? pv : null;
+  return { shown, adding, picked, began: year !== null, now };
 }
 
 /** Build's head: all our compute as a ring, and its key. On a wide screen it stays in view while the list scrolls
  *  under it, so pointing at a build shows what it would take. */
 export function Costs() {
   const { scale } = useSchedule();
-  const { shown, adding, now } = useShown();
+  const { shown, adding, picked, now } = useShown();
   const share = useMemo(() => sharesAt(shown, scale, now), [shown, scale, now]);
   const over = share.short > 0.005;
+  const pick = picked && share.parts.find((p) => p.name === picked);
   return (
     <section className="-mx-4 border-b border-rowline bg-panel px-4 pb-3 wide:sticky wide:-top-3 wide:z-10 wide:pt-3">
       <div className="flex min-h-[18px] items-center justify-between font-mono text-[10px] tracking-[.1em] text-muted">
         <span>OUR COMPUTE</span>
         {adding && <span className="tracking-[.12em] text-you uppercase">If we queue {adding}</span>}
+        {picked && (
+          <span className="tracking-[.12em] text-ink uppercase">
+            {picked}
+            {pick && ` · ${pct(pick.need + pick.spare)}`}
+            {pick && pick.short > 0.005 && <span className="text-other"> · {pct(pick.short)} short</span>}
+          </span>
+        )}
       </div>
       <div className="mt-2.5 grid grid-cols-[148px_1fr] items-center gap-3.5">
         <div className="relative size-[148px]">
-          <Ring share={share} hot={adding} />
+          <Ring share={share} hot={adding ?? picked} />
           <div className="absolute inset-0 grid place-content-center text-center">
             <b className={`font-mono text-[22px] font-semibold tracking-[-.02em] ${over ? "text-other" : ""}`}>
               {pct(over ? 1 + share.short : 1 - share.idle)}

@@ -1,4 +1,5 @@
 import { useLayoutEffect, useMemo, useRef, useState } from "react";
+import { previews, usePreview } from "@/components/costs";
 import { useGame } from "@/components/game-provider";
 import { Item, type Row } from "@/components/journey";
 import { Opened, Unqueued, usePlan, useSchedule } from "@/components/picks";
@@ -151,6 +152,7 @@ export function Queue() {
   const names = useMemo(() => queued.map((r) => r.key), [queued]);
   const reorder = useReorder(names, (builds) => change((p) => ({ ...p, builds })), list);
   const movable = !began && queued.length > 1;
+  const [, preview] = usePreview();
 
   useGSAP(
     () => {
@@ -201,6 +203,7 @@ export function Queue() {
                   row={r}
                   now={now}
                   began={began}
+                  point={previews(r.key, preview)}
                   style={movable ? reorder.style(r.key, i) : undefined}
                   grip={movable && <Grip name={r.key} i={i} n={queued.length} {...reorder.grip(r.key, i)} />}
                 />

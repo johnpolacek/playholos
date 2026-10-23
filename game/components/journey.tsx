@@ -110,12 +110,15 @@ export function Item({
   began,
   aim,
   grip,
+  point,
   style,
 }: {
   row: Row;
   now: number;
   began: boolean;
   aim?: Aim;
+  /** A build's pointer and focus, which preview it. */
+  point?: React.HTMLAttributes<HTMLElement>;
   /** A build's handle for reordering, under its mark, outside its link. */
   grip?: React.ReactNode;
   style?: React.CSSProperties;
@@ -176,7 +179,7 @@ export function Item({
   if (build)
     return (
       <li data-q="row" data-key={row.key} style={{ ...buildBlue(row.name), ...style }} className="relative border-t border-faint bg-panel">
-        <Link to={`/build/${buildSlug(row.name)}`} className="block py-2.5">
+        <Link to={`/build/${buildSlug(row.name)}`} className="block py-2.5" {...point}>
           {head}
           <div className="pl-7">
             <Journey row={row} now={now} shown={false} />
