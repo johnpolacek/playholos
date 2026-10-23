@@ -7,11 +7,12 @@ const SEEN_H = 3.2, WATER_D = 22.0;              // hours to first see an Earth 
 const OXYGEN = 4.0, OZONE = 7.8;                 // times water's exposure
 export const CAP_D = 61;                         // no target gets more than two months
 const MIRROR = 6.5, OWA_LD = 48;
-const BANDS = { green: 0.5, ozone: 0.6, oxygen: 0.76, water: 0.94 } as const;   // microns
+export const BANDS = { green: 0.5, ozone: 0.6, oxygen: 0.76, water: 0.94 } as const;   // microns
 
-const angle = (ld: number, microns: number) => ((ld * microns * 1e-6) / MIRROR) * 206265 * 1000;   // thousandths of an arcsecond
-export const iwa = (microns: number) => angle(3.5, microns);
-export const owa = (microns: number) => angle(OWA_LD, microns);
+// Thousandths of an arcsecond. A wider mirror, as the 15 m Mirror, narrows the dark patch in proportion.
+const angle = (ld: number, microns: number, mirror: number) => ((ld * microns * 1e-6) / mirror) * 206265 * 1000;
+export const iwa = (microns: number, mirror = MIRROR) => angle(3.5, microns, mirror);
+export const owa = (microns: number, mirror = MIRROR) => angle(OWA_LD, microns, mirror);
 
 /** Exposure time over that of an Earth twin of a Sun twin at 10 pc. */
 export function ratio(dPc: number, radius: number, aAu: number, lum: number): number {

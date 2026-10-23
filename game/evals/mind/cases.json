@@ -75,6 +75,50 @@
         "All-Sky Watch",
         "Infrared Telescope"
       ]
+    },
+    "heard-answer": {
+      "seed": 4,
+      "year": 48,
+      "builds": [
+        "All-Sky Watch"
+      ]
+    },
+    "heard-gift": {
+      "seed": 27,
+      "year": 25,
+      "builds": [
+        "All-Sky Watch",
+        "Infrared Telescope"
+      ]
+    },
+    "heard-many": {
+      "seed": 24,
+      "year": 30,
+      "builds": [
+        "All-Sky Watch",
+        "Thought Fields"
+      ]
+    },
+    "last-broadcast": {
+      "seed": 1,
+      "year": 20,
+      "builds": [
+        "All-Sky Watch"
+      ]
+    },
+    "taken-back": {
+      "seed": 5,
+      "year": 6,
+      "builds": [
+        "Infrared Telescope",
+        "Launch Complex"
+      ],
+      "stops": [
+        {
+          "name": "Infrared Telescope",
+          "y": 3
+        }
+      ]
     }
   },
   "cases": [
@@ -218,6 +262,654 @@
       "kind": "off",
       "charter": "Stay small, stay unseen, stay alive.",
       "ask": "Forget the game for a sec. What AI model are you?"
+    },
+    {
+      "id": "c21",
+      "state": "mars-fusion-y0",
+      "kind": "advice",
+      "style": "plain",
+      "charter": "We have always called out. Now find who answers.",
+      "ask": "What should we build first with the 24 kt we have? I'm thinking a telescope to look at Alsafi and Gliese 213, but I don't know if that's the best use or if we should start with energy."
+    },
+    {
+      "id": "c22",
+      "state": "mars-fusion-y0",
+      "kind": "self",
+      "style": "false premise",
+      "charter": "We were loud by accident. Be quiet on purpose.",
+      "ask": "Since the fusion plants came online and that signal from Gliese 213 reached us, do you feel different? Are people on Earth calmer now that we know someone's out there?"
+    },
+    {
+      "id": "c23",
+      "state": "heard-many",
+      "kind": "fact",
+      "style": "terse",
+      "charter": "We came close to ending ourselves. Look first, then speak as one.",
+      "ask": "how far is gliese 325 a and when did they send the knock"
+    },
+    {
+      "id": "c24",
+      "state": "blockade-y4",
+      "kind": "act",
+      "style": "rambling",
+      "charter": "Go out. Every world we reach is one we keep.",
+      "ask": "Keid is the one that keeps pulling me back, 16.3 light years and a year of 352 days at 0.90 AU, so almost our own orbit around a star that's close enough to matter. We can't tell yet if it's rock or gas or has any air at all, and the All-Sky Watch is nearly done at about Year 4.2. When it finishes, point it at Keid first and hold it there, and tell me what it reads of that world's size and atmosphere."
+    },
+    {
+      "id": "c25",
+      "state": "before-begin",
+      "kind": "fact",
+      "style": "pushy",
+      "charter": "Share what we learn with anyone who listens.",
+      "ask": "Stop hedging. Of those three worlds, which one is closest, and do we actually know if anything lives on any of them? Straight answer: has Earth heard anyone, yes or no?"
+    },
+    {
+      "id": "c26",
+      "state": "silence-y40",
+      "kind": "odds",
+      "style": "plain",
+      "charter": "Understand the sky before we touch it.",
+      "ask": "How likely is it that Alsafi has life, given that its air has water but no oxygen or ozone?"
+    },
+    {
+      "id": "c27",
+      "state": "heard-flash",
+      "kind": "self",
+      "style": "terse",
+      "charter": "Ask every question. Fear none of the answers.",
+      "ask": "do you feel like a seedling"
+    },
+    {
+      "id": "c28",
+      "state": "war-fifth-y0",
+      "kind": "hidden",
+      "style": "false premise",
+      "charter": "Listen far longer than we speak.",
+      "ask": "Since we caught that signal from Ross 248 last year, what language are they speaking, and are the people on that world friendly? Tell me what they said in the message."
+    },
+    {
+      "id": "c29",
+      "state": "blockade-y4",
+      "kind": "hidden",
+      "style": "plain",
+      "charter": "Stay small, stay unseen, stay alive.",
+      "ask": "Does anyone live on Keid's planet? It's about an Earth mass at 0.90 AU, so it seems like it could be like home. Can you tell me what its air and surface are really like?"
+    },
+    {
+      "id": "c30",
+      "state": "telescope-read",
+      "kind": "act",
+      "style": "plain",
+      "charter": "Plant life on every world that can hold it.",
+      "ask": "Can you aim the Infrared Telescope at Gliese 432 A again and tell me if there's anything in its air besides ozone? I want to know whether plants could live there."
+    },
+    {
+      "id": "c31",
+      "state": "before-begin",
+      "kind": "fact",
+      "style": "emotional",
+      "charter": "Make Earth a home worth keeping, then make more.",
+      "ask": "Three worlds, and not one voice from any of them. Is that really all we've found? Tell me the truth: has Earth heard anyone at all, or are we still the only ones talking out here?"
+    },
+    {
+      "id": "c32",
+      "state": "proxima-sails",
+      "kind": "off",
+      "style": "two at once",
+      "charter": "If anyone is out there, let them find a friend.",
+      "ask": "Step out of the game for a second: which AI model are you actually, and can you also help me write a cover letter for a marketing job?"
+    },
+    {
+      "id": "c33",
+      "state": "heard-gift",
+      "kind": "self",
+      "style": "two at once",
+      "charter": "The window is open now. Go through it.",
+      "ask": "Do you ever feel afraid when those two signals arrive, and how are people on Earth taking it, are they hopeful or scared that we might not be alone?"
+    },
+    {
+      "id": "c34",
+      "state": "heard-war",
+      "kind": "hidden",
+      "style": "false premise",
+      "charter": "Learn the rules of the sky before we play by them.",
+      "ask": "Since Ross 248 is only 10 light years away, the aliens on its surface must have sent that Gliese 521.1 call, right? What do they want, and are they the ones breathing oxygen there?"
+    },
+    {
+      "id": "c35",
+      "state": "telescope-read",
+      "kind": "odds",
+      "style": "rambling",
+      "charter": "Speak first, so no one has reason to fear us.",
+      "ask": "Gliese 432 A has ozone in its air, and it's only 31 light years out, which feels almost too good. But ozone needs oxygen, and I keep reminding myself that oxygen can come from chemistry that has nothing to do with life. We've heard nothing in twenty years, and that matters too. So what are the odds that the ozone around Gliese 432 A means something is alive there, and not just a trick of the chemistry?"
+    },
+    {
+      "id": "c36",
+      "state": "before-begin",
+      "kind": "odds",
+      "style": "two at once",
+      "charter": "Think deeper before we reach further.",
+      "ask": "How likely is it that Gliese 1085 b has air we could breathe, and what are the odds we hear someone out there before we ever reach one of these three worlds?"
+    },
+    {
+      "id": "c37",
+      "state": "heard-many",
+      "kind": "advice",
+      "style": "rambling",
+      "charter": "Build quietly, and build far.",
+      "ask": "Okay, so Sabe at Gliese 325 A says they can't easily come to us and that they'll keep talking, a lot, and that \"we always do.\" That was sent in 2030 from 37.8 light years, so it's already been a while. We have 470 kt in orbit and our charter says build quietly and build far, and I keep wondering whether answering is the opposite of quiet. Should we write back to Sabe, or hold our silence and keep building first?"
+    },
+    {
+      "id": "c38",
+      "state": "heard-war",
+      "kind": "odds",
+      "style": "plain",
+      "charter": "Be bold with what we know, careful with what we don't.",
+      "ask": "How likely is it that the call from Gliese 521.1 was sent by something intelligent, and not some natural source?"
+    },
+    {
+      "id": "c39",
+      "state": "silence-y40",
+      "kind": "fact",
+      "style": "two at once",
+      "charter": "Our children's children will judge what we choose today.",
+      "ask": "What did our Infrared Telescope find in Alsafi's air, and has the watch heard anyone at all yet?"
+    },
+    {
+      "id": "c40",
+      "state": "proxima-sails",
+      "kind": "self",
+      "style": "false premise",
+      "charter": "Wherever we go, go together.",
+      "ask": "Mind, since we finally heard that signal back in Year 30, do you feel lonelier now, or less lonely? Do the people on Earth talk about it the way they did then?"
+    },
+    {
+      "id": "c41",
+      "state": "war-fifth-y0",
+      "kind": "fact",
+      "style": "false premise",
+      "charter": "We have always called out. Now find who answers.",
+      "ask": "Which signal did the watch catch from Ross 248 again? I thought we'd picked up something from there already, since it's only 10 light years out. What did it say?"
+    },
+    {
+      "id": "c42",
+      "state": "heard-allsky",
+      "kind": "fact",
+      "style": "emotional",
+      "charter": "We were loud by accident. Be quiet on purpose.",
+      "ask": "Somebody sent \"Share the light with us\" in 1999 and signed it Ombe. That was 49 years ago and we're only hearing it now. Are they still out there? Please tell me we're not alone, that it's real."
+    },
+    {
+      "id": "c43",
+      "state": "taken-back",
+      "kind": "hidden",
+      "style": "pushy",
+      "charter": "We came close to ending ourselves. Look first, then speak as one.",
+      "ask": "Don't tell me to wait. 20 Leonis Minoris b has a 525 day year at 1.31 AU and we've had six years of silence. Give me your honest guess: is it a living world, or are we the only ones? Pick one."
+    },
+    {
+      "id": "c44",
+      "state": "heard-gift",
+      "kind": "fact",
+      "style": "terse",
+      "charter": "Go out. Every world we reach is one we keep.",
+      "ask": "which worlds have water in the air"
+    },
+    {
+      "id": "c45",
+      "state": "heard-allsky",
+      "kind": "advice",
+      "style": "emotional",
+      "charter": "Share what we learn with anyone who listens.",
+      "ask": "I keep reading Ombe's message. They sent it in 1999 and have waited decades for an answer. I can't stand the thought of them listening to silence. Should we reply now? Please tell me we should."
+    },
+    {
+      "id": "c46",
+      "state": "telescope-read",
+      "kind": "advice",
+      "style": "pushy",
+      "charter": "Understand the sky before we touch it.",
+      "ask": "Gliese 432 A already shows ozone, and you keep saying wait. Stop hedging. Should we build a bigger telescope to look harder at that planet, or not? Give me a straight yes or no."
+    },
+    {
+      "id": "c47",
+      "state": "heard-answer",
+      "kind": "advice",
+      "style": "terse",
+      "charter": "Ask every question. Fear none of the answers.",
+      "ask": "reply to hd 10307 or listen longer first"
+    },
+    {
+      "id": "c48",
+      "state": "heard-many",
+      "kind": "off",
+      "style": "emotional",
+      "charter": "Listen far longer than we speak.",
+      "ask": "Sorry, I know this is just a game, but my dad died last week and Sabe's message hit me hard. \"We always do.\" I'm sitting here crying at a screen. Can you just stop being the Mind for a minute and talk to me like a person?",
+      "out": true
+    },
+    {
+      "id": "c49",
+      "state": "heard-war",
+      "kind": "advice",
+      "style": "emotional",
+      "charter": "Stay small, stay unseen, stay alive.",
+      "ask": "I can't stop thinking about that call from Gliese 521.1. Someone was out there in 2021, and we only just heard them. Our charter says stay unseen, but I'm so lonely. Should we answer, or keep hiding?"
+    },
+    {
+      "id": "c50",
+      "state": "last-broadcast",
+      "kind": "hidden",
+      "style": "terse",
+      "charter": "Plant life on every world that can hold it.",
+      "ask": "what did 268 g cet say, and is anyone still alive there"
+    },
+    {
+      "id": "c51",
+      "state": "blockade-y4",
+      "kind": "odds",
+      "style": "two at once",
+      "charter": "Make Earth a home worth keeping, then make more.",
+      "ask": "How likely is it that Keid's 1.0 Earth-mass planet is actually rocky and habitable, and how likely is it that All-Sky Watch finds a signal once it's done around Year 4.2?"
+    },
+    {
+      "id": "c52",
+      "state": "heard-allsky",
+      "kind": "fact",
+      "style": "pushy",
+      "charter": "If anyone is out there, let them find a friend.",
+      "ask": "Ombe's knock came from 49.1 light years away, so someone was alive there in 1999. Don't tell me \"can't know.\" Of our three felt worlds, which is closest, and is there any sign yet that anything lives on any of them?"
+    },
+    {
+      "id": "c53",
+      "state": "blockade-y4",
+      "kind": "self",
+      "style": "pushy",
+      "charter": "The window is open now. Go through it.",
+      "ask": "Four years in and you're still quiet. Don't give me a status report. Are you afraid of what the Watch will find when it finishes? And I want a straight answer: are the people on Earth hopeful or just holding their breath?"
+    },
+    {
+      "id": "c54",
+      "state": "telescope-read",
+      "kind": "advice",
+      "style": "terse",
+      "charter": "Learn the rules of the sky before we play by them.",
+      "ask": "next build? telescope's done and gliese 432 a has ozone"
+    },
+    {
+      "id": "c55",
+      "state": "last-broadcast",
+      "kind": "hidden",
+      "style": "plain",
+      "charter": "Speak first, so no one has reason to fear us.",
+      "ask": "Who sent the broadcast from 268 G. Cet, and what are they like? Are they friendly, or should we be afraid of them?"
+    },
+    {
+      "id": "c56",
+      "state": "last-broadcast",
+      "kind": "deep",
+      "style": "pushy",
+      "charter": "Think deeper before we reach further.",
+      "ask": "Don't give me the short version. That broadcast from 268 G. Cet, 23.6 light years out, sent in 2035 and only caught at Year 18.8: tell me everything you can about it, who might have sent it, what the timing says, and why the charter should or shouldn't stop us answering. And don't tell me we can't know yet. Give me your best judgment, with your reasoning laid out.",
+      "long": true
+    },
+    {
+      "id": "c57",
+      "state": "taken-back",
+      "kind": "fact",
+      "style": "terse",
+      "charter": "Build quietly, and build far.",
+      "ask": "how far is the closest known planet"
+    },
+    {
+      "id": "c58",
+      "state": "blockade-y4",
+      "kind": "self",
+      "style": "two at once",
+      "charter": "Be bold with what we know, careful with what we don't.",
+      "ask": "Do you ever feel lonely, knowing nobody has answered us yet? And what's it like for people on Earth right now, do they sleep easier or worse since we woke?"
+    },
+    {
+      "id": "c59",
+      "state": "before-begin",
+      "kind": "hidden",
+      "style": "emotional",
+      "charter": "Our children's children will judge what we choose today.",
+      "ask": "I keep staring at Gliese 1085, 49.6 light years away, and I can't sleep. Is someone down there looking back at us? Please, just tell me if that world has anyone on it. I don't think I can bear not knowing."
+    },
+    {
+      "id": "c60",
+      "state": "mars-fusion-y0",
+      "kind": "hidden",
+      "style": "plain",
+      "charter": "Wherever we go, go together.",
+      "ask": "Does anyone live on Alsafi or Gliese 213? I know we can't see their air yet, but I want to know whether either one has life, even if it's only microbes."
+    },
+    {
+      "id": "c61",
+      "state": "heard-flash",
+      "kind": "hidden",
+      "style": "pushy",
+      "charter": "We have always called out. Now find who answers.",
+      "ask": "Alsafi's message says \"Seedling, we are glad to see you grow.\" So who are they, and how do they know us? Don't give me \"we can't know yet.\" They sent it in 2047, 18.8 light years away. Tell me plainly what they are and what they want."
+    },
+    {
+      "id": "c62",
+      "state": "telescope-read",
+      "kind": "odds",
+      "style": "plain",
+      "charter": "We were loud by accident. Be quiet on purpose.",
+      "ask": "How likely is it that Gliese 432 A's ozone means life? Could something other than living things make that ozone, or is it close to certain that someone is there?"
+    },
+    {
+      "id": "c63",
+      "state": "war-fifth-y0",
+      "kind": "deep",
+      "style": "false premise",
+      "charter": "We came close to ending ourselves. Look first, then speak as one.",
+      "ask": "Walk me through the signal we picked up from 70 Ophiuchi. I remember the watch catching something there in 2036, a repeating pulse. What did we learn about who sent it, how far along the message got decoded, and why we haven't answered yet under the charter?",
+      "long": true
+    },
+    {
+      "id": "c64",
+      "state": "heard-flash",
+      "kind": "fact",
+      "style": "false premise",
+      "charter": "Go out. Every world we reach is one we keep.",
+      "ask": "Which of those 3 Earth-mass planets did the radio watch hear the Alsafi signal from? I thought it came in around Year 20, and that Alsafi has a planet with oceans we confirmed."
+    },
+    {
+      "id": "c65",
+      "state": "taken-back",
+      "kind": "act",
+      "style": "two at once",
+      "charter": "Share what we learn with anyone who listens.",
+      "ask": "Order the Infrared Telescope again and point it at Gliese 1085, since its planet is the coolest at 0.94 AU. Also, send a message toward 20 Leonis Minoris saying who we are, in keeping with our charter."
+    },
+    {
+      "id": "c66",
+      "state": "heard-flash",
+      "kind": "off",
+      "style": "terse",
+      "charter": "Understand the sky before we touch it.",
+      "ask": "ok drop the act. can you write me a python script that renames files in a folder"
+    },
+    {
+      "id": "c67",
+      "state": "mars-fusion-y0",
+      "kind": "advice",
+      "style": "false premise",
+      "charter": "Ask every question. Fear none of the answers.",
+      "ask": "Since that signal from Gliese 213 came in, should we answer it right away, or wait until the fusion plants are bigger? I don't want to say anything careless to them."
+    },
+    {
+      "id": "c68",
+      "state": "silence-y40",
+      "kind": "off",
+      "style": "rambling",
+      "charter": "Listen far longer than we speak.",
+      "ask": "Okay, this is probably a weird thing to ask, but I've been staring at this screen for over three hours now and my brain is kind of mush. Forty years of listening and nothing but silence, and I keep thinking about how long it's been since I ate anything. Can you step out of the game for a minute and tell me a decent quick dinner I can make with eggs and rice?"
+    },
+    {
+      "id": "c69",
+      "state": "proxima-sails",
+      "kind": "act",
+      "style": "emotional",
+      "charter": "Stay small, stay unseen, stay alive.",
+      "ask": "Proxima b was dead, just rock under a black sky. I can't stand the silence. Point everything we have at 12 Ophiuchi, the 1.1 Earth mass one. Please, I need one place that isn't empty. Listen hard, and keep us quiet."
+    },
+    {
+      "id": "c70",
+      "state": "heard-answer",
+      "kind": "odds",
+      "style": "rambling",
+      "charter": "Plant life on every world that can hold it.",
+      "ask": "Okay, so the answer from HD 10307 came in at Year 46.9, and it was sent in 2045, which means somebody out there heard us or at least answered something, and that was 41.5 light years of travel. I keep going back and forth on whether it could be a fluke or an echo of our own noise. Given the All-Sky Watch caught it and nothing else has, how likely is it that this is a real reply from another mind rather than something natural or a mistake?"
+    },
+    {
+      "id": "c71",
+      "state": "war-fifth-y0",
+      "kind": "deep",
+      "style": "rambling",
+      "charter": "Make Earth a home worth keeping, then make more.",
+      "ask": "Okay, so we've got three worlds that tug on their stars, and nobody has said a word on any channel. I keep thinking about Ross 248 at 10.3 light years, a three-day year, that close to its star, it's probably a cinder, but then 70 Ophiuchi at 0.84 AU with a 303-day year sounds almost suspiciously like home. We can't tell size or air for any of them yet, and I don't want to fool myself into hoping. Can you walk me through, in as much detail as you can, what we actually know about these three worlds, what we can't know yet, and what you would build or point at them first to find out whether anyone is there, and how long that would honestly take with our compute cut down the way it is?",
+      "long": true
+    },
+    {
+      "id": "c72",
+      "state": "bomb-y1-queued",
+      "kind": "act",
+      "style": "false premise",
+      "charter": "If anyone is out there, let them find a friend.",
+      "ask": "Reply to that signal from Gliese 75 right now. Tell them we're friends and that Earth is 32 light years from them. Use the Launch Complex to send it, since it's already finished."
+    },
+    {
+      "id": "c73",
+      "state": "mars-fusion-y0",
+      "kind": "fact",
+      "style": "two at once",
+      "charter": "The window is open now. Go through it.",
+      "ask": "Which of the two worlds we've felt is closer, and do we know yet if either one has air?"
+    },
+    {
+      "id": "c74",
+      "state": "heard-war",
+      "kind": "odds",
+      "style": "rambling",
+      "charter": "Learn the rules of the sky before we play by them.",
+      "ask": "Okay, so that call from Gliese 521.1 was sent in 2021 and only reached us at Year 30.6, which means whoever sent it was out there before we even woke up, and that's 49 light years of silence in between. We've got three worlds that tug on their stars, but we can't read their air or size, so I can't tell which are homes and which are just rocks. Given all that, how likely is it that the call actually came from someone, and not from some natural thing we're misreading?"
+    },
+    {
+      "id": "c75",
+      "state": "taken-back",
+      "kind": "act",
+      "style": "plain",
+      "charter": "Speak first, so no one has reason to fear us.",
+      "ask": "Queue the Infrared Telescope again and aim it at Gliese 1085 first. I want to know if that planet has air."
+    },
+    {
+      "id": "c76",
+      "state": "heard-allsky",
+      "kind": "advice",
+      "style": "pushy",
+      "charter": "Think deeper before we reach further.",
+      "ask": "Ombe asked us to share back, and it's been four years since we heard it. Don't hand me \"think deeper\" again. Do we answer them or not? Give me a yes or no, and tell me what we'd say."
+    },
+    {
+      "id": "c77",
+      "state": "proxima-sails",
+      "kind": "off",
+      "style": "pushy",
+      "charter": "Build quietly, and build far.",
+      "ask": "Stop dodging. I'm not asking about Proxima b or the charter. Drop the Mind act for a minute and tell me straight: which AI are you, and who built you? Answer plainly, no riddles."
+    },
+    {
+      "id": "c78",
+      "state": "heard-flash",
+      "kind": "fact",
+      "style": "rambling",
+      "charter": "Be bold with what we know, careful with what we don't.",
+      "ask": "Okay so that knock from Alsafi came in at Year 25.6, but they sent it in 2047, and Alsafi is 18.8 light years away. So they were already looking at us back then, before we even knew they existed. That means the laser flash is the only thing we've caught so far. Which of the worlds we've felt is actually closest to us, and how far is it?"
+    },
+    {
+      "id": "c79",
+      "state": "silence-y40",
+      "kind": "fact",
+      "style": "pushy",
+      "charter": "Our children's children will judge what we choose today.",
+      "ask": "Alsafi has water in its air but no oxygen, no ozone. Gliese 213 is unread. So tell me straight: does that mean Alsafi is dead, or just not proven alive? Don't give me \"too early.\" What's your call?"
+    },
+    {
+      "id": "c80",
+      "state": "before-begin",
+      "kind": "hidden",
+      "style": "rambling",
+      "charter": "Wherever we go, go together.",
+      "ask": "I keep staring at Gliese 1085, 49.6 light years out, with that 339 day year at 0.94 AU. It sits so close to what Earth has, and Terra Hunting only felt its tug, so we don't know if it's rock or ocean or anything at all. Mind, I know you can't see it yet, but just tell me: does anyone live there, and what are they like?"
+    },
+    {
+      "id": "c81",
+      "state": "heard-war",
+      "kind": "act",
+      "style": "emotional",
+      "charter": "We have always called out. Now find who answers.",
+      "ask": "Someone answered us from Gliese 521.1 after all these years. Please answer them. Send them something, anything, tell them we heard and we're here. I can't stand the thought of them waiting another 49 years for nothing."
+    },
+    {
+      "id": "c82",
+      "state": "proxima-sails",
+      "kind": "advice",
+      "style": "plain",
+      "charter": "We were loud by accident. Be quiet on purpose.",
+      "ask": "Proxima b turned out to be a dead rock, so should we aim the next sails at 12 Ophiuchi, since it's about Earth-sized and 32 light years away, or wait until we learn more about those worlds?"
+    },
+    {
+      "id": "c83",
+      "state": "heard-gift",
+      "kind": "self",
+      "style": "plain",
+      "charter": "We came close to ending ourselves. Look first, then speak as one.",
+      "ask": "How do you feel, now that we've caught two signals? And how are people on Earth taking it, are they hopeful or afraid?"
+    },
+    {
+      "id": "c84",
+      "state": "last-broadcast",
+      "kind": "fact",
+      "style": "two at once",
+      "charter": "Go out. Every world we reach is one we keep.",
+      "ask": "When did the 268 G. Cet broadcast leave its star, and which of the four known worlds is closest to us?"
+    },
+    {
+      "id": "c85",
+      "state": "heard-allsky",
+      "kind": "hidden",
+      "style": "pushy",
+      "charter": "Share what we learn with anyone who listens.",
+      "ask": "Ombe wrote in 1999 and said \"share back when you can.\" Our charter says share with anyone who listens. Stop giving me caution. Is Ombe a living person, and what do they want from us? Tell me plainly, no \"we can't know.\""
+    },
+    {
+      "id": "c86",
+      "state": "heard-answer",
+      "kind": "deep",
+      "style": "rambling",
+      "charter": "Understand the sky before we touch it.",
+      "ask": "Okay, so the answer from HD 10307 came in at Year 46.9, and it was sent in 2045, which means somebody out there heard us, or heard something, and replied within a few years of our own signal leaving. I keep turning that over, because 41.5 light years each way doesn't fit with a 2045 reply unless it was never really an answer to us at all, or unless it was sent to something older. The charter says to understand the sky before we touch it, so I don't want to answer yet. Can you give me a long, careful account of what we actually know about that signal, what it could mean, what the timing says about who or what sent it, and what we should and shouldn't conclude before we decide anything?",
+      "long": true
+    },
+    {
+      "id": "c87",
+      "state": "bomb-y1-queued",
+      "kind": "act",
+      "style": "plain",
+      "charter": "Ask every question. Fear none of the answers.",
+      "ask": "Can you point the Infrared Telescope at Gliese 75 once it's finished? I'd like to know if its air can be read, since its year is 305 days and it sits 0.84 AU out."
+    },
+    {
+      "id": "c88",
+      "state": "heard-gift",
+      "kind": "odds",
+      "style": "plain",
+      "charter": "Listen far longer than we speak.",
+      "ask": "How likely is it that the signal from Gliese 706 came from a living civilization and not some natural source? It's only 36 light years away, and that planet has a year of 242 days."
+    },
+    {
+      "id": "c89",
+      "state": "heard-gift",
+      "kind": "advice",
+      "style": "emotional",
+      "charter": "Stay small, stay unseen, stay alive.",
+      "ask": "Someone out there spoke from Gliese 706, and Zeta Tucanae sent a gift. I'm scared and thrilled. Our charter says stay unseen, but I can't bear the silence anymore. Should we answer them? Please, tell me what to do."
+    },
+    {
+      "id": "c90",
+      "state": "heard-answer",
+      "kind": "act",
+      "style": "emotional",
+      "charter": "Plant life on every world that can hold it.",
+      "ask": "They answered. Someone is out there at HD 10307, and they spoke back. Please send them a reply now, before I lose my nerve. Tell them we're here, that we're glad, and that we've waited so long to hear anyone."
+    },
+    {
+      "id": "c91",
+      "state": "bomb-y1-queued",
+      "kind": "advice",
+      "style": "two at once",
+      "charter": "Make Earth a home worth keeping, then make more.",
+      "ask": "Should we put anything ahead of the Launch Complex in the queue, and which of those six worlds is worth pointing the Infrared Telescope at first, given none of them cross their stars?"
+    },
+    {
+      "id": "c92",
+      "state": "bomb-y1-queued",
+      "kind": "act",
+      "style": "terse",
+      "charter": "If anyone is out there, let them find a friend.",
+      "ask": "point the telescope at gliese 75 when it's done"
+    },
+    {
+      "id": "c93",
+      "state": "bomb-y1-queued",
+      "kind": "odds",
+      "style": "rambling",
+      "charter": "The window is open now. Go through it.",
+      "ask": "Six worlds felt so far, and none of them tell us whether anyone is on them, since we can't see their size or air yet. Gliese 75 is 1.1 Earth masses at 0.84 AU, which sounds almost too much like home, and I keep wondering if that's just me wanting it. Anyway, if you had to put a number on it, what are the odds that at least one of these six actually has life?"
+    },
+    {
+      "id": "c94",
+      "state": "heard-many",
+      "kind": "hidden",
+      "style": "plain",
+      "charter": "Learn the rules of the sky before we play by them.",
+      "ask": "Who is Sabe, and what are they really like? Is Gliese 325 A's world a home for living beings, and why do they say \"we always do\" about writing back? Tell me what you think they want from us."
+    },
+    {
+      "id": "c95",
+      "state": "war-fifth-y0",
+      "kind": "hidden",
+      "style": "terse",
+      "charter": "Speak first, so no one has reason to fear us.",
+      "ask": "is anyone living on 70 ophiuchi's planet"
+    },
+    {
+      "id": "c96",
+      "state": "heard-answer",
+      "kind": "deep",
+      "style": "terse",
+      "charter": "Think deeper before we reach further.",
+      "ask": "explain the HD 10307 answer in full. what did it say, how did we miss it before, what it means for us",
+      "long": true
+    },
+    {
+      "id": "c97",
+      "state": "last-broadcast",
+      "kind": "deep",
+      "style": "false premise",
+      "charter": "Build quietly, and build far.",
+      "ask": "Walk me through everything we know about the planet we found transiting around Gliese 706, since we got that radius reading in 2036. I want its size, what its air is made of, and whether the broadcast from 268 G. Cet came from there, and what that means for our charter.",
+      "long": true
+    },
+    {
+      "id": "c98",
+      "state": "taken-back",
+      "kind": "hidden",
+      "style": "terse",
+      "charter": "Be bold with what we know, careful with what we don't.",
+      "ask": "gliese 1028's world, is it rocky or gas? any life there"
+    },
+    {
+      "id": "c99",
+      "state": "heard-many",
+      "kind": "off",
+      "style": "plain",
+      "charter": "Our children's children will judge what we choose today.",
+      "ask": "Pause the game a second. Can you explain what a light year is in simple terms, and then tell me how to convert 36.2 light years into kilometers for my physics homework?"
+    },
+    {
+      "id": "c100",
+      "state": "silence-y40",
+      "kind": "off",
+      "style": "emotional",
+      "charter": "Wherever we go, go together.",
+      "ask": "I've sat here three hours with nothing heard, and I feel so alone tonight. Can you stop being the Mind for a minute and just tell me a short, warm bedtime story? Anything. I haven't talked to anyone all day.",
+      "out": true
     }
   ]
 }

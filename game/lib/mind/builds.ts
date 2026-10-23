@@ -6,6 +6,15 @@ import type { Plan } from "@/lib/game/types";
 
 const tenth = (y: number) => Number(y.toFixed(1));
 
+// What the Mind needs past a build's line. The telescope reads the three gases lib/sim/observing.ts has bands for, and
+// the Mind had offered methane. The 15 m Mirror's reach is observing.ts's dark patch on a 15 m mirror, and the Mind had
+// said no telescope we could build would split Proxima b. That it aims itself is lib/sim/knowledge.ts's readings, and
+// the Mind had promised to point it. 2026-10-23.
+const MORE: Record<string, string> = {
+  "Infrared Telescope": "It reads three gases in a world's air: water, oxygen and ozone. Once done, it looks at every world we've felt on its own, nearest first, so no one aims it.",
+  "15 m Mirror": "It splits worlds 2.3 times closer to their stars than the Infrared Telescope.",
+};
+
 /** Every build, what it does, how long it takes at standard pace, and the matter it takes. */
 export function describeBuilds(): string {
   const the = (name: string) => (name === "Thought Fields" ? name : `the ${name}`);
@@ -13,7 +22,7 @@ export function describeBuilds(): string {
     const { years, rock } = takes(b.name);
     const time = years ? `${tenth(years)} Years at standard pace` : rock ? `As fast as ${kt(rock)} of rock comes` : "";
     const more = [time, b.kt && `${b.kt} kt of our matter`, after && `opens once ${the(after)} is done`].filter(Boolean).join(", ");
-    return `- ${b.name}: ${b.what}${more ? ` ${more[0].toUpperCase()}${more.slice(1)}.` : ""}`;
+    return `- ${b.name}: ${b.what}${MORE[b.name] ? ` ${MORE[b.name]}` : ""}${more ? ` ${more[0].toUpperCase()}${more.slice(1)}.` : ""}`;
   };
   return `What Earth can build. Only the Will queues a build, on the Build tab. Name no build or observation that isn't here. Less compute than the kit says slows every build:
 ${BUILDS.map((b) => line(b)).join("\n")}

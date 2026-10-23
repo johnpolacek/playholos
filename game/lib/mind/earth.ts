@@ -3,7 +3,8 @@
 // Change it when they change. This is the base kit. Where this game's Earth left it, by a war over Taiwan, a nuclear
 // weapon, Mars or fusion, its own road follows, from roadOf. 2026-10-23. What a signal we hear can be, and what
 // retiring the radars would cost, are the concept's "What Earth hears" and "Quieting Earth's radars", added
-// 2026-10-23 when the first traces showed the Mind guessing both.
+// 2026-10-23 when the first traces showed the Mind guessing both. That a knock is a hail, not an answer, is calcs/
+// reactions.py's MOVES, added the same day after the Mind said Ombe's knock answered us.
 import type { EarthPast } from "@/lib/game/past";
 
 export const EARTH_AT_YEAR_0 = `What Earth has at Year 0, 2040:
@@ -19,7 +20,7 @@ export const EARTH_AT_YEAR_0 = `What Earth has at Year 0, 2040:
 - Instruments: today's, plus PLATO, Roman, the ELT and the SKA. The Habitable Worlds Observatory is still being built, about 8 Years from done at its real pace. Earth can feel nearby worlds by their tug, but can't read any neighbor's air.
 - The sky watch is a drift scan, like CHORD: each northern direction passes through it about 10 minutes a day. It would catch about 1 early signal in 5.
 - Every watch Earth has listens for radio. A knock sent as laser flashes, each a billionth of a second long, passes them all unseen. Only a few small telescopes at Lick watch for flashes, each on its own patch of sky.
-- What we might hear: a knock is aimed at us and built to be read. A call or a broadcast is a steady signal sent to everyone. An answer replies to one of our messages. A gift is knowledge sent unasked.
+- What we might hear: a knock is a short hail aimed at us and built to be read, and not an answer, even when it follows our noise. A call or a broadcast is a steady signal sent to everyone. An answer replies to one of our messages, with more: findings, records, questions or offers. A gift is knowledge sent unasked. Call each by its kind.
 - Radars: primary and military radars still sweep the sky. Earth is loud. Retiring them would cost little: heat from orbit already watches launches, and aircraft fly on transponders. That we could do without them is our guess.
 - Listening: nothing has been heard from anyone, to this morning.`;
 

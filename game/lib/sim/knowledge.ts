@@ -1,7 +1,7 @@
 // The knowledge wall: what Earth knows at a moment, from the seed's truth. Settled 2026-10-13: the Mind judges from
 // what Earth knows, never the seed. So nothing here passes on who lives where, a world's rung, or anything not yet
 // arrived and caught. Pure: no files, so it runs anywhere and tests fast.
-import { observe } from "./observing.ts";
+import { BANDS, iwa, observe, owa } from "./observing.ts";
 import { proximaB } from "./proxima.ts";
 import type { EarthView, Find, FeltWorld, Heard, Visit, World } from "./types.ts";
 
@@ -129,14 +129,51 @@ export function earthKnows(
   return { year, felt, heard, visits };
 }
 
+const GASES = ["water", "oxygen", "ozone"] as const;
+const WIDE = 15;   // the 15 m Mirror, which the Infrared Telescope opens
+
+/** Where a felt world sits from its star in our sky, from Earth's own measures of it, and what a mirror `m` metres
+ *  wide could split it in, and each gas whose band it could read there. Not whether it's bright enough: that needs its
+ *  size, which Earth doesn't know. observing.ts's dark patch, so what the Mind says is what the telescope does. */
+function reach(f: FeltWorld, m?: number) {
+  const sep = (f.a / (f.d / 3.2616)) * 1000;
+  const inside = (microns: number) => iwa(microns, m) < sep && sep < owa(microns, m);
+  return { sep, split: iwa(BANDS.green, m) < sep && sep < owa(BANDS.water, m), gases: GASES.filter((g) => inside(BANDS[g])) };
+}
+const gases = (g: readonly string[]) => (g.length > 1 ? `${g.slice(0, -1).join(", ")} and ${g.at(-1)}` : g[0]);
+
+/** What our two telescopes could make of a felt world, from where it sits: which could split it, and which gases each
+ *  could read. Added 2026-10-23, after the Mind took a world it could read for one beyond it, and back. */
+function scope(f: FeltWorld) {
+  const near = reach(f), wide = reach(f, WIDE);
+  const more = wide.gases.filter((g) => !near.gases.includes(g));
+  const at = `It sits ${Math.round(near.sep)} thousandths of an arcsecond from its star in our sky.`;
+  if (!wide.split) return `${at} That's too close for the Infrared Telescope or the 15 m Mirror to split.`;
+  if (!near.split)
+    return `${at} That's too close for the Infrared Telescope. The 15 m Mirror could split it${wide.gases.length ? `, and read its ${gases(wide.gases)} if it's bright enough` : ""}.`;
+  const first = near.gases.length
+    ? `The Infrared Telescope could split it, and read its ${gases(near.gases)} if it's bright enough.`
+    : "The Infrared Telescope could split it, but it sits too close to read any of its air.";
+  return `${at} ${first}${more.length ? ` The 15 m Mirror could read its ${gases(more)}${near.gases.length ? " too" : ""}.` : ""}`;
+}
+
 /** What we know of a felt world's air, in words. */
-function air(read: FeltWorld["read"]) {
-  if (!read) return "It doesn't cross its star, so its size and air are unread.";
-  if (!read.split) return "Our Infrared Telescope can't split it from its star, so its air stays unread.";
-  const bands = (["water", "oxygen", "ozone"] as const).filter((b) => read[b] !== undefined);
-  if (!read.readable) return "Our Infrared Telescope sees it beside its star, but its air is too faint or too close in to read.";
-  if (!bands.length) return "Our Infrared Telescope sees it beside its star, and is reading its air now.";
-  return `Our Infrared Telescope has read its air: ${bands.map((b) => (read[b] ? b : `no ${b}`)).join(", ")}.`;
+function air(f: FeltWorld) {
+  const read = f.read;
+  if (!read) return `It doesn't cross its star, so its size is unread, and no telescope has read its air. ${scope(f)}`;
+  if (!read.split) return `Its air stays unread. ${scope(f)}`;
+  // The gases this mirror can't read there at all, so "no water" is never taken from water it couldn't see.
+  const near = reach(f), wide = reach(f, WIDE);
+  const past = GASES.filter((g) => !near.gases.includes(g));
+  const later = past.filter((g) => wide.gases.includes(g));
+  const beyond =
+    (past.length && near.gases.length ? ` It sits too close to its star for this telescope to read its ${gases(past)}.` : "") +
+    (later.length ? ` The 15 m Mirror could read its ${gases(later)}.` : "");
+  if (!near.gases.length) return `Our Infrared Telescope sees it beside its star, but it sits too close to read any of its air.${beyond}`;
+  if (!read.readable) return `Our Infrared Telescope sees it beside its star, but its air is too faint to read.${beyond}`;
+  const bands = GASES.filter((b) => read[b] !== undefined);
+  if (!bands.length) return `Our Infrared Telescope sees it beside its star, and is reading its air now.${beyond}`;
+  return `Our Infrared Telescope has read its air: ${bands.map((b) => (read[b] ? b : `no ${b}`)).join(", ")}.${beyond}`;
 }
 
 /** The view in words, for the Mind's prompt. It takes the view and nothing else, so the truth can't reach it. */
@@ -145,14 +182,19 @@ export function describe(view: EarthView): string {
   const felt = view.felt.length
     ? view.felt.map((f) =>
         `- ${f.star}, ${one(f.d)} ly: at least ${one(f.minMass)} Earth masses, a year of ${Math.round(f.periodDays)} days, ` +
-        `${f.a.toFixed(2)} AU out. Felt by ${f.by} in ${2040 + f.year}. ${air(f.read)}`).join("\n")
+        `${f.a.toFixed(2)} AU out. Felt by ${f.by} in ${2040 + f.year}. ${air(f)}`).join("\n")
     : "- None. The planet hunters felt no new world by 2040.";
   const heard = view.heard.length
     ? view.heard.map((h) =>
         `- From ${h.star}, ${one(h.d)} ly: ${/^[aeiou]/.test(h.move) ? "an" : "a"} ${h.move}${h.laser ? " sent as laser flashes" : ""} ` +
         `that arrived at Year ${one(h.arrived)}, sent in ${Math.round(2040 + h.sent)}.` +
+        // Our radars' first sweeps left in 1950, so they reach a star d light years out in 1950 + d. Added 2026-10-23,
+        // after the Mind said a call was sent before we could be heard, twenty years after our noise had reached it.
+        ` Our radars first reached it about ${Math.round(1950 + h.d)}, ${2040 + h.sent >= 1950 + h.d ? "before" : "after"} it was sent.` +
         (h.laser ? ` Only our ${h.by} sees flashes. No radio watch hears them.` : h.by ? ` Our ${h.by} caught it. Year 0's sky watch would have missed it.` : "") +
-        (h.text ? ` It reads: "${h.text}"` : "")).join("\n")
+        // Only a knock's words are read at once, and nothing in the game reads the rest. Added 2026-10-23, after the
+        // Mind offered to go through an answer's words, and then, told they were unread, to read them.
+        (h.text ? ` It reads: "${h.text}"` : " Its words aren't in what Earth holds, and no build reads them.")).join("\n")
     : "- Nothing. Earth has heard no one.";
   const SIGHT = {
     haze: "haze to the horizon and no ground: a small gas world",

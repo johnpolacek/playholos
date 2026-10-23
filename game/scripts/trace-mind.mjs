@@ -6,7 +6,7 @@
 //   npm run trace:mind -- --only c01,c07    just those
 //   npm run trace:mind -- --dry             what each state tells the Mind, without asking it, for nothing
 //   npm run trace:mind -- --base http://localhost:5181
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { appendFileSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { MIND_MODEL } from "../lib/access.ts";
 import { base as history, CHARTERS, dialsFor } from "../lib/game/charter.ts";
 import { MS_PER_YEAR } from "../lib/game/clock.ts";
@@ -45,7 +45,7 @@ async function saveFor(state, line) {
   const pick = CHARTERS.find((x) => x.line === line);
   const charter = pick ? { line, dials: dialsFor(pick.pull, history(await pastOf(state.seed))) } : null;
   const beganAt = state.year === null ? null : Date.now() - state.year * MS_PER_YEAR;
-  return { seed: state.seed, beganAt, charter, builds: state.builds ?? [], observe: state.observe ?? [], later: state.later ?? [] };
+  return { seed: state.seed, beganAt, charter, builds: state.builds ?? [], observe: state.observe ?? [], later: state.later ?? [], stops: state.stops ?? [] };
 }
 
 try {
@@ -100,10 +100,11 @@ async function run(c) {
   const save = await saveFor(state, c.charter);
   const res = await (via === "api" ? askMind : askMindCli)(base, { ask: c.ask, ...save });
   if (!res?.ok || !res.text) failed++;
-  traces.push({
+  const trace = {
     id: c.id,
     state: c.state,
     kind: c.kind,
+    ...(c.style && { style: c.style }),
     charter: c.charter ?? null,
     ask: c.ask,
     seed: state.seed,
@@ -115,10 +116,14 @@ async function run(c) {
     status: res?.status ?? null,
     answer: res?.text ?? "",
     ...(c.long && { long: true }),
+    ...(c.out && { out: true }),
     checks: res?.text ? broken(res.text, c) : [],
     told: res?.told ?? null,
     save,
-  });
+  };
+  traces.push(trace);
+  // Saved as it lands, so a run stopped halfway keeps what it asked. Put in case order at the end.
+  appendFileSync(out, JSON.stringify(trace) + "\n");
   console.log(`${c.id} ${res?.ok ? "answered" : `failed, ${res?.status}`}: ${c.ask}\n  ${res?.text ?? ""}\n`);
 }
 const queue = [...todo];

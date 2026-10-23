@@ -230,6 +230,7 @@ function render() {
     h("div", { className: "badges" },
       h("span", { className: "badge id" }, t.id),
       h("span", { className: "badge kind" }, t.kind),
+      t.style ? h("span", { className: "badge kind" }, t.style) : false,
       h("span", { className: "badge" }, t.state),
       h("span", { className: "badge" }, `seed ${t.seed}`),
       h("span", { className: "badge" }, year),
