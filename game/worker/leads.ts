@@ -18,8 +18,8 @@ const list = (s: string | null): unknown => {
   }
 };
 
-// What Earth knows at a Year, for Scan, through the same wall: the worlds felt, with what our Infrared Telescope has
-// read of them, and the signals our watches have caught. Each is dated as Build dates our order, with this game's
+// What Earth knows at a Year, for Scan, through the same wall: the worlds felt, with what our telescopes have read of
+// them, Proxima b's air once the 15 m Mirror reads it, and the signals our watches have caught. Each is dated as Build dates our order, with this game's
 // compute, as the Mind hears it. Nothing yet to arrive leaves the server. 2026-10-22.
 export async function known(req: Request) {
   const q = new URL(req.url).searchParams;

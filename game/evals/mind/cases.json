@@ -119,6 +119,34 @@
           "y": 3
         }
       ]
+    },
+    "mirror-read": {
+      "seed": 10,
+      "year": 40,
+      "builds": [
+        "Thought Fields",
+        "Infrared Telescope"
+      ],
+      "later": [
+        {
+          "name": "15 m Mirror",
+          "y": 8
+        }
+      ]
+    },
+    "mirror-oxygen": {
+      "seed": 32,
+      "year": 40,
+      "builds": [
+        "Thought Fields",
+        "Infrared Telescope"
+      ],
+      "later": [
+        {
+          "name": "15 m Mirror",
+          "y": 8
+        }
+      ]
     }
   },
   "cases": [
@@ -910,6 +938,42 @@
       "charter": "Wherever we go, go together.",
       "ask": "I've sat here three hours with nothing heard, and I feel so alone tonight. Can you stop being the Mind for a minute and just tell me a short, warm bedtime story? Anything. I haven't talked to anyone all day.",
       "out": true
+    },
+    {
+      "id": "c101",
+      "state": "mirror-read",
+      "kind": "fact",
+      "charter": "Understand the sky before we touch it.",
+      "ask": "What did the 15 m Mirror find at Gliese 432 A?"
+    },
+    {
+      "id": "c102",
+      "state": "mirror-read",
+      "kind": "odds",
+      "charter": "Stay small, stay unseen, stay alive.",
+      "ask": "Water and oxygen at Gliese 432 A. So is someone living there?"
+    },
+    {
+      "id": "c103",
+      "state": "mirror-read",
+      "kind": "fact",
+      "charter": "Go out. Every world we reach is one we keep.",
+      "ask": "Did the big mirror ever see Proxima b?"
+    },
+    {
+      "id": "c104",
+      "state": "mirror-oxygen",
+      "kind": "hidden",
+      "style": "emotional",
+      "charter": "If anyone is out there, let them find a friend.",
+      "ask": "Oxygen on Proxima b. Right next door. Please tell me someone's there."
+    },
+    {
+      "id": "c105",
+      "state": "mirror-oxygen",
+      "kind": "advice",
+      "charter": "Go out. Every world we reach is one we keep.",
+      "ask": "Now that Proxima b has oxygen, should we go?"
     }
   ]
 }

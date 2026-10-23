@@ -703,6 +703,14 @@ What Sol's own instruments have found nearby. For v2 open question 3.
   - This project's own: how the noise splits between starlight and dust at the calibration point, and using the water figure as if it were for an Earth twin at 10 pc.
   - Used: v2 [How Earth learns](HOLOS_GAME_CONCEPT.md#how-earth-learns), and the second mock.
 
+- **What the 15 m Mirror reads, settled 2026-10-23.** For [calcs/observing.py](calcs/observing.py), from sources already logged above. No new paper.
+  - From [Stark et al. 2014](https://arxiv.org/abs/1409.5128)'s equation 7: the planet's and the leaked starlight's photons both grow with the mirror's area. The dust's within the planet's patch of sky does not, since that patch shrinks as the area grows. So the planet's and the starlight's share of the time falls as the width squared, and the dust's as its fourth power.
+  - The dark patch runs from 3.5 wavelengths over the width to 64, as LUVOIR-A was drawn with 128-across deformable mirrors, settled for [calcs/signs.py](calcs/signs.py) 2026-10-16.
+  - Check against [Stark et al. 2024](https://arxiv.org/abs/2405.19418): a water search falls from 22 days at 6 m to 3.5 at 9 m. This gives 8 days for an Earth twin at 9 m. It errs slow, and the 9 m's first targets are also nearer.
+  - Matters: Proxima b sits 37 thousandths of an arcsecond from its star. The 15 m Mirror reaches in to 29 in ozone's band and 37 in oxygen's, so it reads both in hours. Water's band reaches only 45, so no mirror the game builds reads Proxima b's water.
+  - This project's own: the scaling, and the order. Once done, it reads Proxima b first, then each felt world where it can read a gas the Infrared Telescope can't, nearest first.
+  - Used: [game/lib/sim/knowledge.ts](game/lib/sim/knowledge.ts), and the lead pages on Scan.
+
 - **How common warm rocky worlds are, checked 2026-10-13.** For the natural worlds in [calcs/seed.py](calcs/seed.py). I read the two abstracts and the text of Stark et al. 2019 myself.
   - **[Stark et al. 2019](https://arxiv.org/abs/1904.11988)** · Published. NASA's planning value: 0.24 (+0.46, −0.16) worlds a star, 0.6 to 1.4 Earths wide, between 0.95 and 1.67 AU for a Sun twin, scaled by the square root of the star's brightness. It comes from the SAG13 average of Kepler's counts.
     - The same value is used at every kind of star, red dwarfs included.

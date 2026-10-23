@@ -7,7 +7,7 @@ import { Messages } from "@/components/messages";
 import { Review } from "@/components/review";
 import { ListHead } from "@/components/tab-head";
 import type { Dials } from "@/lib/drift";
-import { airReading, type Lead, landed, leadsOf, type Reading, skyId, visitReading } from "@/lib/game/leads";
+import { airReading, type Lead, landed, leadsOf, nearestReading, type Reading, skyId, visitReading } from "@/lib/game/leads";
 import { gsap, prefersReducedMotion } from "@/lib/motion";
 import type { EarthView, Heard as Signal, Visit } from "@/lib/sim/types";
 
@@ -92,6 +92,7 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
   const felt = view?.felt;
   const heard = useMemo(() => view?.heard ?? [], [view]);
   const visits = useMemo(() => view?.visits ?? [], [view]);
+  const proxima = view?.proxima;
   const [dials] = useState<Dials>(() => ({ found: 0, grid: 0, focus: 0, close: 0 }));
   // Keyed by the stars felt, so a reading landing never rebuilds the leads the map lights.
   const stars = felt?.map((f) => f.star).join("|");
@@ -119,24 +120,28 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
   const observe = save?.plan?.observe;
   const seen = save?.seen;
   const value = useMemo(() => {
-    // What our telescope has read, on each felt world's lead, after any observation's.
-    const air = Object.fromEntries((felt ?? []).map((f) => [f.star, airReading(f)]));
+    // What our telescopes have read, on each felt world's lead, after any observation's: the Infrared Telescope's,
+    // then the 15 m Mirror's, which reads Proxima b too.
+    const air: Record<string, Reading[]> = Object.fromEntries(
+      (felt ?? []).map((f) => [
+        f.star,
+        [airReading(f), airReading(f, true)].filter((r): r is Reading => r !== null).sort((a, b) => a.at - b.at),
+      ]),
+    );
+    if (proxima) air["Proxima Centauri"] = [nearestReading(proxima)];
     // And what our sails and probe saw of Proxima b, last.
     const visited = Object.fromEntries(
       leads.map((l) => [l.star, visits.filter((v) => v.star === l.star).map(visitReading)]),
     );
     const readings = Object.fromEntries(
-      leads.map((l) => [
-        l.slug,
-        [...landed(l.slug, observe, tenth), ...(air[l.star] ? [air[l.star]!] : []), ...(visited[l.star] ?? [])],
-      ]),
+      leads.map((l) => [l.slug, [...landed(l.slug, observe, tenth), ...(air[l.star] ?? []), ...(visited[l.star] ?? [])]]),
     );
     const opened = new Set(seen);
     const fresh = new Set(
       [...Object.values(readings).flatMap((rs) => rs.map((r) => r.id)), ...heard.map(heardId)].filter((id) => !opened.has(id)),
     );
     return { leads, ids, dials, readings, fresh, heard, visits, look, setLook, close, setClose };
-  }, [leads, felt, ids, dials, observe, tenth, seen, heard, visits, look, setLook, close, setClose]);
+  }, [leads, felt, proxima, ids, dials, observe, tenth, seen, heard, visits, look, setLook, close, setClose]);
   return <ScanContext value={value}>{children}</ScanContext>;
 }
 

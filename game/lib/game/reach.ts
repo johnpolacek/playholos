@@ -77,8 +77,9 @@ export function roads(plan: Plan, scale: number, from = 0): Road[] {
   return [road("By sail", "Laser Sail Array", "Sails", 0, 0.2), road("By probe", "Probe Yard", "A flyby probe", 12, 1 / 8)];
 }
 
-/** What our order has built to learn with, as the knowledge wall takes it: the Year each watch and the telescope is
- *  done, and for each road to Proxima b that we fly, the Year it passes and the Year its word reaches us. 2026-10-22. */
+/** What our order has built to learn with, as the knowledge wall takes it: the Year each watch and telescope is done,
+ *  the 15 m Mirror since 2026-10-23, and for each road to Proxima b that we fly, the Year it passes and the Year its
+ *  word reaches us. 2026-10-22. */
 export function kitOf(plan: Plan, scale: number) {
   const done = schedule(plan, scale);
   const fly = (r: Road) => (r.n !== null && r.arrives !== null && r.home !== null ? { passed: r.arrives, home: r.home } : null);
@@ -87,6 +88,7 @@ export function kitOf(plan: Plan, scale: number) {
     allSky: done["All-Sky Watch"],
     flash: done["Deep Flash Watch"],
     telescope: done["Infrared Telescope"],
+    mirror: done["15 m Mirror"] ?? null,
     sails: fly(sails),
     probe: fly(probe),
   };

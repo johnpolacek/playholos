@@ -1,9 +1,9 @@
 // The knowledge wall: what Earth knows at a moment, from the seed's truth. Settled 2026-10-13: the Mind judges from
 // what Earth knows, never the seed. So nothing here passes on who lives where, a world's rung, or anything not yet
 // arrived and caught. Pure: no files, so it runs anywhere and tests fast.
-import { BANDS, iwa, observe, owa } from "./observing.ts";
+import { BANDS, iwa, observe, owa, WIDE } from "./observing.ts";
 import { proximaB } from "./proxima.ts";
-import type { EarthView, Find, FeltWorld, Heard, Visit, World } from "./types.ts";
+import type { EarthView, Find, FeltWorld, Gas, Heard, Read, Visit, World } from "./types.ts";
 
 /** A sender's voice bank: its knock reads as its hail and its close, and the close may carry its name. */
 export type Voices = Record<string, { hail: string[]; close: string[] }>;
@@ -13,6 +13,7 @@ export interface Kit {
   allSky?: number | null;
   flash?: number | null;
   telescope?: number | null;
+  mirror?: number | null;
   /** Each road to Proxima b, if our order flies it: the Year it passes, and the Year its word reaches us. */
   sails?: { passed: number; home: number } | null;
   probe?: { passed: number; home: number } | null;
@@ -34,27 +35,49 @@ function width(world: World, f: Find) {
   return world.worlds.find((w) => w.star === f.star)?.radius ?? (f.msini / 0.87) ** (1 / 3.7);
 }
 
-/** What the Infrared Telescope has read by Year `year`, once done at Year `from`. It takes the finds nearest first, each
- *  for as long as its longest readable band, and each band lands when its days are up. Days are calcs/observing.py's,
- *  through observing.ts. 2026-10-20. */
-function readings(world: World, from: number, year: number) {
-  const out = new Map<string, NonNullable<FeltWorld["read"]>>();
+const GASES: Gas[] = ["water", "oxygen", "ozone"];
+
+/** Proxima b as a telescope's target: where it sits, and how wide it truly is. Its air comes from its drawn nature. */
+const PROXIMA = { star: "Proxima Centauri", d: 4.24, a: 0.0485, lum: 0.00157 };
+
+/** What a telescope has read by Year `year`, once done at Year `from`. It takes its targets nearest first, each for as
+ *  long as its longest readable band, and each band lands when its days are up. Days are calcs/observing.py's, through
+ *  observing.ts. The Infrared Telescope's targets are the finds, 2026-10-20. The 15 m Mirror's are Proxima b and the
+ *  finds where it reads more than the Infrared Telescope can: one too close for it to split, or a gas past its reach
+ *  or too faint for it. It reads each for every gas it can. 2026-10-23. */
+function readings(world: World, from: number, year: number, mirror?: number) {
+  const out = new Map<string, Read>();
+  const wide = mirror === WIDE;
+  const { mass, nature } = proximaB(world.seed);
+  const targets = [
+    ...world.finds.map((f) => ({
+      star: f.star, d: f.d, a: f.a, lum: world.stars[f.star]?.lum ?? 1, radius: width(world, f),
+      air: f.truth.kind === "natural" ? AIR[f.truth.rung ?? ""] ?? "none" : "oxygen",
+    })),
+    ...(wide ? [{ ...PROXIMA, radius: mass ** (1 / 3.7), air: AIR[nature] ?? "none" }] : []),
+  ].sort((x, y) => x.d - y.d);
+  const gases = (r: ReturnType<typeof observe>) => GASES.filter((g) => r[g] !== null && r[g] !== Infinity);
   let t = from;
-  for (const f of [...world.finds].sort((a, b) => a.d - b.d)) {
+  for (const w of targets) {
     if (t > year) break;
-    const r = observe(f.d / 3.2616, width(world, f), f.a, world.stars[f.star]?.lum ?? 1);
-    const air = f.truth.kind === "natural" ? AIR[f.truth.rung ?? ""] ?? "none" : "oxygen";
-    const read: NonNullable<FeltWorld["read"]> = { split: r.seenH !== null, at: t };
-    out.set(f.star, read);
+    const r = observe(w.d / 3.2616, w.radius, w.a, w.lum, mirror);
+    if (wide && w.star !== PROXIMA.star) {
+      const near = observe(w.d / 3.2616, w.radius, w.a, w.lum);
+      if (!(r.seenH !== null && near.seenH === null) && !gases(r).some((g) => !gases(near).includes(g))) continue;
+    }
+    const read: Read = { split: r.seenH !== null, at: t };
+    out.set(w.star, read);
     if (r.seenH === null) continue;
-    const bands = { water: air !== "none", oxygen: air === "oxygen", ozone: air === "oxygen" };
+    const beyond = GASES.filter((g) => r[g] === null);
+    if (beyond.length) read.beyond = beyond;
+    const shows = { water: w.air !== "none", oxygen: w.air === "oxygen", ozone: w.air === "oxygen" };
     let longest = r.seenH / 24;
-    for (const band of ["water", "oxygen", "ozone"] as const) {
+    for (const band of GASES) {
       const days = r[band];
       if (days === null || days === Infinity) continue;
       read.readable = true;
       if (t + days / 365.25 <= year) {
-        read[band] = bands[band];
+        read[band] = shows[band];
         read.at = Math.max(read.at!, t + days / 365.25);
       }
       longest = Math.max(longest, days);
@@ -86,16 +109,18 @@ export function earthKnows(
   world: World,
   year: number,
   voices: Voices = {},
-  { allSky = null, flash = null, telescope = null, sails = null, probe = null }: Kit = {},
+  { allSky = null, flash = null, telescope = null, mirror = null, sails = null, probe = null }: Kit = {},
 ): EarthView {
   const shown = (id: string) => world.stars[id]?.shown ?? id;
   // Earth's finds at Year 0: every world whose tug shows by 2040. Measured, not understood. Its star is in the catalogs.
   // Once the Infrared Telescope is done, what it has read of each.
-  const read = telescope !== null && year >= telescope ? readings(world, telescope, year) : new Map();
+  const read = telescope !== null && year >= telescope ? readings(world, telescope, year) : new Map<string, Read>();
+  const wide = mirror !== null && year >= mirror ? readings(world, mirror, year, WIDE) : new Map<string, Read>();
   const felt: FeltWorld[] = world.finds.map((f) => ({
     star: shown(f.star), d: f.d, minMass: f.msini, periodDays: f.periodDays, a: f.a, by: f.by, year: f.year,
     kind: world.stars[f.star]?.kind, hz: world.stars[f.star]?.hz,
     ...(read.has(f.star) ? { read: read.get(f.star) } : {}),
+    ...(wide.has(f.star) ? { wide: wide.get(f.star) } : {}),
   }));
   // Signals that have arrived and were caught: by Year 0's sky watch, or, once each is done, by the All-Sky Watch, which
   // hears what reaches us from anywhere at any hour, or the Deep Flash Watch, which alone sees knocks sent as laser
@@ -126,11 +151,9 @@ export function earthKnows(
     .filter(([, road]) => road && road.home <= year)
     .map(([by, road]) => visit(world, by, road!))
     .sort((a, b) => a.home - b.home);
-  return { year, felt, heard, visits };
+  return { year, felt, heard, visits, ...(wide.has(PROXIMA.star) ? { proxima: wide.get(PROXIMA.star) } : {}) };
 }
 
-const GASES = ["water", "oxygen", "ozone"] as const;
-const WIDE = 15;   // the 15 m Mirror, which the Infrared Telescope opens
 
 /** Where a felt world sits from its star in our sky, from Earth's own measures of it, and what a mirror `m` metres
  *  wide could split it in, and each gas whose band it could read there. Not whether it's bright enough: that needs its
@@ -157,23 +180,29 @@ function scope(f: FeltWorld) {
   return `${at} ${first}${more.length ? ` The 15 m Mirror could read its ${gases(more)}${near.gases.length ? " too" : ""}.` : ""}`;
 }
 
-/** What we know of a felt world's air, in words. */
-function air(f: FeltWorld) {
-  const read = f.read;
-  if (!read) return `It doesn't cross its star, so its size is unread, and no telescope has read its air. ${scope(f)}`;
-  if (!read.split) return `Its air stays unread. ${scope(f)}`;
-  // The gases this mirror can't read there at all, so "no water" is never taken from water it couldn't see.
-  const near = reach(f), wide = reach(f, WIDE);
-  const past = GASES.filter((g) => !near.gases.includes(g));
-  const later = past.filter((g) => wide.gases.includes(g));
-  const beyond =
-    (past.length && near.gases.length ? ` It sits too close to its star for this telescope to read its ${gases(past)}.` : "") +
-    (later.length ? ` The 15 m Mirror could read its ${gases(later)}.` : "");
-  if (!near.gases.length) return `Our Infrared Telescope sees it beside its star, but it sits too close to read any of its air.${beyond}`;
-  if (!read.readable) return `Our Infrared Telescope sees it beside its star, but its air is too faint to read.${beyond}`;
+/** One telescope's read of a world, in words. A gas past its reach is said so, so "no water" is never taken from water
+ *  it couldn't see. */
+function told(read: Read, by: string) {
+  const beyond = read.beyond ?? [];
+  const reachable = GASES.filter((g) => !beyond.includes(g));
+  const past = beyond.length ? ` It sits too close to its star for this mirror to read its ${gases(beyond)}.` : "";
+  if (!reachable.length) return `Our ${by} sees it beside its star, but it sits too close to read any of its air.`;
+  if (!read.readable) return `Our ${by} sees it beside its star, but its air is too faint to read.${past}`;
   const bands = GASES.filter((b) => read[b] !== undefined);
-  if (!bands.length) return `Our Infrared Telescope sees it beside its star, and is reading its air now.${beyond}`;
-  return `Our Infrared Telescope has read its air: ${bands.map((b) => (read[b] ? b : `no ${b}`)).join(", ")}.${beyond}`;
+  if (!bands.length) return `Our ${by} sees it beside its star, and is reading its air now.${past}`;
+  return `Our ${by} has read its air: ${bands.map((b) => (read[b] ? b : `no ${b}`)).join(", ")}.${past}`;
+}
+
+/** What we know of a felt world's air, in words: each telescope's read, and what the 15 m Mirror could add. */
+function air(f: FeltWorld) {
+  const { read, wide } = f;
+  if (!read && !wide) return `It doesn't cross its star, so its size is unread, and no telescope has read its air. ${scope(f)}`;
+  if (read && !read.split && !wide) return `Its air stays unread. ${scope(f)}`;
+  const first = !read ? "" : read.split ? told(read, "Infrared Telescope") : "Our Infrared Telescope can't split it from its star.";
+  if (wide) return `${first} ${told(wide, "15 m Mirror")}`.trim();
+  const could = read?.readable ? GASES.filter((g) => !(read.beyond ?? []).includes(g)) : [];
+  const more = reach(f, WIDE).gases.filter((g) => !could.includes(g));
+  return `${first}${more.length ? ` The 15 m Mirror could read its ${gases(more)}.` : ""}`;
 }
 
 /** The view in words, for the Mind's prompt. It takes the view and nothing else, so the truth can't reach it. */
@@ -184,6 +213,7 @@ export function describe(view: EarthView): string {
         `- ${f.star}, ${one(f.d)} ly: at least ${one(f.minMass)} Earth masses, a year of ${Math.round(f.periodDays)} days, ` +
         `${f.a.toFixed(2)} AU out. Felt by ${f.by} in ${2040 + f.year}. ${air(f)}`).join("\n")
     : "- None. The planet hunters felt no new world by 2040.";
+  const nearest = view.proxima ? `\n- Proxima b, 4.2 ly, the nearest world: ${told(view.proxima, "15 m Mirror")}` : "";
   const heard = view.heard.length
     ? view.heard.map((h) =>
         `- From ${h.star}, ${one(h.d)} ly: ${/^[aeiou]/.test(h.move) ? "an" : "a"} ${h.move}${h.laser ? " sent as laser flashes" : ""} ` +
@@ -208,7 +238,7 @@ export function describe(view: EarthView): string {
       (v.air ? ` The probe read its air: ${v.air.water ? "water" : "no water"}, ${v.air.oxygen ? "oxygen" : "no oxygen"}.` : ""),
   );
   return `Worlds Earth has felt by their tug on their stars, as of Year ${one(view.year)}. From here a home and a natural world look the same:
-${felt}
+${felt}${nearest}
 
 Signals Earth's watch has caught:
 ${heard}${visits.length ? `\n\nWhat our craft have seen up close:\n${visits.join("\n")}` : ""}`;

@@ -458,6 +458,11 @@ Settled 2026-10-13.
     - *B's glare is taken as cancelled* by controlling for both stars at once. Labs have shown a millionth, not yet the ten-billionth needed. B sits 5.5 arcseconds from A at Year 0 and 13.6 by Year 5.
     - Set aside: 64 across, as in HWO's 6.5 m design case, which puts most of A's warm zone out of reach.
   - *In this game:* Alpha Centauri A's world is seen in minutes, with water in 16 hours and oxygen in 3 days. Its ozone band falls past the dark patch. 82 Eridani d gives water in 3 days. Gliese 432 A's world, 73 thousandths from its star, gives only its color and ozone, in 49 days. 12 Ophiuchi's can be seen and not read.
+  - *The 15 m Mirror reads air too.* Settled 2026-10-23. It reaches 15 / 6.5 times closer in and gathers about five times the light. By Stark et al. 2014, the planet's and starlight's share of the time falls as the width squared, and the dust's as its fourth power.
+    - *Once done, it reads on its own.* Proxima b first, then each felt world where it can read a gas the first telescope can't, nearest first. No one aims it.
+    - *Proxima b, at last.* Its oxygen and ozone show in hours. Its water's band sits past any mirror the game builds, so going is still how we would see it whole.
+    - *Gliese 432 A's world* gives water in under a day and oxygen in 3. 12 Ophiuchi's gives all three within a month.
+    - *A gas past a mirror's reach reads as out of reach,* never as missing.
   - *On the game clock* a day is under a second. So a reading lands within the minute it is ordered, or not at all.
   - *The sweep.* The mirror can split the middle of the warm zone at 110 of the 881 hosts. A first pass gives each up to a day, a sample, and takes about eight weeks. A candidate needs a second visit, weeks to months later, to show it moves with its star.
   - NASA's own list has 164 stars because it reaches past 50 ly. The seed draws nothing out there.

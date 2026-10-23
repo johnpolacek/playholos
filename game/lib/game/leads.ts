@@ -1,7 +1,8 @@
 import { YEAR_0 } from "@/lib/game/clock";
 import { KNOCKS } from "@/lib/game/knocks";
 import { FOMALHAUT } from "@/lib/game/plan";
-import type { FeltWorld, Visit } from "@/lib/sim/types";
+import { BANDS, iwa, owa, WIDE } from "@/lib/sim/observing";
+import type { FeltWorld, Gas, Read, Visit } from "@/lib/sim/types";
 import { type System, SYSTEMS } from "./systems";
 
 // Earth's real leads in 2040, each with its own page: the world next door, whose air we can't read from here, a world
@@ -44,8 +45,8 @@ export interface Reading {
   mind: string;
   now: Odds[];
   tells: string[];
-  /** What our Infrared Telescope has read of its air, drawn as its light. */
-  air?: NonNullable<FeltWorld["read"]>;
+  /** What one of our telescopes has read of its air, drawn as its light. */
+  air?: Read;
   /** What a flyby's pictures showed, drawn as the world. */
   sight?: Visit["sight"];
 }
@@ -99,8 +100,16 @@ const STARS: Record<string, string> = {
   F: "A star hotter than the Sun",
 };
 
-/** How far out from its star a world sits in our sky, in arcseconds, from its distance from its star and from us. */
-const reach = (aAU: number, ly: number) => aAU / (ly / 3.2616);
+const GASES: Gas[] = ["water", "oxygen", "ozone"];
+const and = (xs: readonly string[]) => (xs.length < 2 ? xs.join("") : `${xs.slice(0, -1).join(", ")} and ${xs.at(-1)}`);
+
+/** What a mirror could make of a world from where it sits in our sky, from its distance from its star and from us:
+ *  whether it splits it, and the gases whose bands it could read there. observing.ts's dark patch. */
+function sees(aAU: number, ly: number, mirror?: number) {
+  const sep = (aAU / (ly / 3.2616)) * 1000;
+  const inside = (um: number) => iwa(um, mirror) < sep && sep < owa(um, mirror);
+  return { split: iwa(BANDS.green, mirror) < sep && sep < owa(BANDS.water, mirror), gases: GASES.filter((g) => inside(BANDS[g])) };
+}
 
 /** Where a world sits against its star's warm zone. */
 function warmth(a: number, hz?: [number, number]) {
@@ -123,15 +132,17 @@ function feltLead(f: FeltWorld): Lead {
   const m = f.minMass;
   const rock = rockOdds(m);
   const gas = gasOdds(m);
-  // The infrared telescope splits a world from its star 56 thousandths of an arcsecond out in green light, and 104
-  // at water's band.
-  const r = reach(f.a, f.d);
+  // What each telescope could split and read, from where it sits. The 15 m Mirror's since 2026-10-23.
+  const near = sees(f.a, f.d), wide = sees(f.a, f.d, WIDE);
+  const more = wide.gases.filter((g) => !near.gases.includes(g));
   const tell =
-    r >= 0.104
+    near.gases.length === 3
       ? "The Infrared Telescope can split it from its star and read its air: water first, then oxygen."
-      : r >= 0.056
-        ? "The Infrared Telescope can see it beside its star, but it sits too close in to read its water."
-        : "It sits too close to its star for the Infrared Telescope to split. For now its tug is all we have.";
+      : near.split
+        ? `The Infrared Telescope can see it beside its star${near.gases.length ? ` and read its ${and(near.gases)}` : ""}, but it sits too close in for ${near.gases.length ? "the rest" : "its air"}.${more.length ? ` The 15 m Mirror could read its ${and(more)}.` : ""}`
+        : wide.split
+          ? `It sits too close to its star for the Infrared Telescope to split. The 15 m Mirror could${wide.gases.length ? `, and read its ${and(wide.gases)}` : ""}.`
+          : "It sits too close to its star for either telescope we can build to split. For now its tug is all we have.";
   const kind = m < 1.5 ? "Small enough that it is likely rock." : m < 3 ? "Rock or gas, we can’t tell yet." : "At that mass, likely a gas world.";
   return {
     slug: slugOf(f.star),
@@ -170,78 +181,126 @@ function feltLead(f: FeltWorld): Lead {
   };
 }
 
-/** What our Infrared Telescope has made of a felt world, as a reading on its lead, landing on the Year of its latest
- *  band, or of its first look. Each new band is a new reading. Seen beside its star, it is a world. Oxygen never says
- *  who lives there: a world whose makers died keeps theirs. 2026-10-22. */
-export function airReading(f: FeltWorld): Reading | null {
-  const read = f.read;
+/** What one of our telescopes has made of a felt world, as a reading on its lead, landing on the Year of its latest
+ *  band, or of its first look: the Infrared Telescope's, or `wide`, the 15 m Mirror's, since 2026-10-23. Each new band
+ *  is a new reading. Seen beside its star, it is a world. A gas past a mirror's reach is said so, never read as
+ *  missing. Oxygen never says who lives there: a world whose makers died keeps theirs. 2026-10-22. */
+export function airReading(f: FeltWorld, wide = false): Reading | null {
+  const read = wide ? f.wide : f.read;
   if (!read) return null;
   const slug = slugOf(f.star);
   const at = Math.floor((read.at ?? 0) * 10 + 1e-9) / 10;
-  const by = "Infrared Telescope";
+  const by = wide ? "15 m Mirror" : "Infrared Telescope";
+  const key = `${slug}-${wide ? "wide" : "air"}`;
   const seen: Odds[] = [rockOdds(f.minMass), gasOdds(f.minMass), "almost no chance"];
+  // The gases past this mirror's reach there, and what the 15 m Mirror could add to the first telescope's.
+  const beyond = read.beyond ?? [];
+  const reachable = GASES.filter((g) => !beyond.includes(g));
+  const more = wide ? [] : sees(f.a, f.d, WIDE).gases.filter((g) => !reachable.includes(g) || !read.readable);
+  const next = more.length ? `The 15 m Mirror, which the Infrared Telescope opens, could read its ${and(more)}.` : "To learn more we would have to go there.";
+  const past = beyond.length && reachable.length ? ` It sits too close to its star for this mirror to read its ${and(beyond)}.` : "";
   if (!read.split)
     return {
-      id: `${slug}-air-unsplit`,
+      id: `${key}-unsplit`,
       needs: "",
       at,
       by,
       air: read,
       title: "Too close to its star to split",
-      line: "Our Infrared Telescope can’t split it from its star, so its air stays unread.",
+      line: `Our ${by} can’t split it from its star, so its air stays unread.`,
       mind: "Its tug is still all we have. A wider mirror could split some worlds this one can’t.",
       now: [rockOdds(f.minMass), gasOdds(f.minMass), "unlikely"],
-      tells: ["The 15 m Mirror, which the Infrared Telescope opens, would split worlds closer to their stars."],
+      tells: [sees(f.a, f.d, WIDE).split ? "The 15 m Mirror, which the Infrared Telescope opens, would split it." : "It sits too close for any mirror we can build. Its tug is all we will have from here."],
     };
-  const bands = (["water", "oxygen", "ozone"] as const).filter((b) => read[b] !== undefined);
-  if (!read.readable)
+  const bands = GASES.filter((b) => read[b] !== undefined);
+  if (!reachable.length || !read.readable)
     return {
-      id: `${slug}-air-faint`,
+      id: `${key}-${reachable.length ? "faint" : "close"}`,
       needs: "",
       at,
       by,
       air: read,
       title: "Seen beside its star",
-      line: "Our Infrared Telescope sees it beside its star, but its air is too faint, or too close in, to read.",
+      line: `Our ${by} sees it beside its star, but ${reachable.length ? "its air is too faint" : "it sits too close in"} to read.`,
       mind: "We see it, so it is a world, not a trick of its star. Its air is beyond this mirror.",
       now: seen,
-      tells: ["A wider mirror would gather enough of its light to read its air."],
+      tells: [next],
     };
   if (!bands.length)
     return {
-      id: `${slug}-air-seen`,
+      id: `${key}-seen`,
       needs: "",
       at,
       by,
       air: read,
       title: "Seen, and reading its air",
-      line: "Our Infrared Telescope sees it beside its star, and is reading its air now.",
+      line: `Our ${by} sees it beside its star, and is reading its air now.${past}`,
       mind: "We see it, so it is a world, not a trick of its star. Its air comes next, a band at a time.",
       now: seen,
-      tells: ["Water, oxygen and ozone each show as enough of its light adds up, the faintest last."],
+      tells: [`${and(reachable)[0].toUpperCase()}${and(reachable).slice(1)} each show as enough of its light adds up, the faintest last.`],
     };
   const shows = bands.filter((b) => read[b]);
-  const and = (xs: readonly string[]) => (xs.length < 2 ? xs.join("") : `${xs.slice(0, -1).join(", ")} and ${xs.at(-1)}`);
-  const title = shows.length ? `${and(shows)} in its air` : `No ${and(bands)} in its air`;
-  const left = 3 - bands.length;
+  const title = shows.length ? `${and(shows)} in its air` : `No ${and(bands).replace(/ and (?=\w+$)/, " or ")} in its air`;
+  const left = reachable.length - bands.length;
   return {
-    id: `${slug}-air-${bands.map((b) => `${b[0]}${read[b] ? 1 : 0}`).join("")}`,
+    id: `${key}-${bands.map((b) => `${b[0]}${read[b] ? 1 : 0}`).join("")}`,
     needs: "",
     at,
     by,
     air: read,
     title: title[0].toUpperCase() + title.slice(1),
-    line: `Our Infrared Telescope read ${bands.map((b) => (read[b] ? b : `no ${b}`)).join(", ")}.${left ? " It reads on." : ""}`,
-    mind: read.oxygen
-      ? "Oxygen with water is what life made of Earth’s air. Oxygen can also build up without life, in thin dry air, so we weigh it against everything else we read. It can’t tell us who, if anyone, lives there."
-      : read.water
-        ? "Water, and no oxygen so far. A sea without life reads like this, and so does one whose life makes no oxygen, as Earth’s early microbes didn’t."
-        : "No water in its air. Life as we know it needs water, so we would look elsewhere first.",
+    line: `Our ${by} read ${bands.map((b) => (read[b] ? b : `no ${b}`)).join(", ")}.${left ? " It reads on." : past}`,
+    // Ozone is oxygen's, so either says oxygen. Water past reach is unread, not missing.
+    mind:
+      (read.oxygen || read.ozone) && read.water
+        ? "Oxygen with water is what life made of Earth’s air. Oxygen can also build up without life, in thin dry air, so we weigh it against everything else we read. It can’t tell us who, if anyone, lives there."
+        : read.oxygen || read.ozone
+          ? "Oxygen, and its water still unread. Oxygen can build up without life, where starlight splits water and its hydrogen escapes, so we weigh it against everything else we read. It can’t tell us who, if anyone, lives there."
+          : read.water
+            ? "Water, and no oxygen so far. A sea without life reads like this, and so does one whose life makes no oxygen, as Earth’s early microbes didn’t."
+            : read.water === false
+              ? "No water in its air. Life as we know it needs water, so we would look elsewhere first."
+              : "No oxygen in its air. Bare rock reads like this, and so does an empty sea, or one whose life makes none.",
     now: seen,
-    tells: left
-      ? ["Our telescope reads on, for the bands still to come."]
-      : ["The telescope has read all it can. Going there is how we would learn more: the roads on Reach."],
+    tells: left ? [`Our ${wide ? "mirror" : "telescope"} reads on, for the bands still to come.`] : [next],
   };
+}
+
+/** What our 15 m Mirror has read of Proxima b, as a reading on its lead. Its water's band sits too close to its star
+ *  for any mirror we can build, so it reads oxygen and ozone. Oxygen settles that its air held. 2026-10-23. */
+export function nearestReading(read: Read): Reading {
+  const at = Math.floor((read.at ?? 0) * 10 + 1e-9) / 10;
+  const base = { needs: "", at, by: "15 m Mirror", air: read };
+  const go = "A flyby would see it whole: the two roads on Reach go there.";
+  if (read.oxygen === undefined)
+    return {
+      ...base,
+      id: "proxima-wide-seen",
+      title: "Seen beside its star",
+      line: "Our 15 m Mirror sees Proxima b beside its star, just, and is reading its air now.",
+      mind: "Seen at last, the world next door. Oxygen and ozone come next. Its water sits too close to its star for any mirror we can build.",
+      now: ["likely", "unlikely", "very unlikely"],
+      tells: ["Oxygen shows first, then ozone, as enough of its light adds up."],
+    };
+  return read.oxygen
+    ? {
+        ...base,
+        id: `proxima-wide-o1${read.ozone === undefined ? "" : read.ozone ? "z1" : "z0"}`,
+        title: "Oxygen in its air",
+        line: `Our 15 m Mirror read oxygen${read.ozone ? " and ozone" : ""} in Proxima b’s air. Its water sits too close to its star for any mirror we can build.`,
+        mind: "Oxygen, at our door. Its air held against its star’s flares. It could be life’s, or rock and starlight’s, and it can’t tell us who, if anyone, lives there.",
+        now: ["almost no chance", "almost certain", "almost no chance"],
+        tells: [go],
+      }
+    : {
+        ...base,
+        id: `proxima-wide-o0${read.ozone === undefined ? "" : read.ozone ? "z1" : "z0"}`,
+        title: "No oxygen in its air",
+        line: `Our 15 m Mirror read no oxygen${read.ozone === false ? " and no ozone" : ""} in Proxima b’s air. Its water sits too close to its star for any mirror we can build.`,
+        mind: "No oxygen. Bare rock reads like this, and so does an empty sea, or one whose life makes none. Our words hold until we go.",
+        now: ["likely", "unlikely", "very unlikely"],
+        tells: [go],
+      };
 }
 
 /** What our sails or probe saw of Proxima b, as a reading on its lead, landing the Year their word reached us. The
@@ -304,7 +363,7 @@ export function leadsOf(felt: FeltWorld[]): Lead[] {
       ly: 4.24,
       ask: "Could Proxima b keep its air?",
       brief:
-        "The nearest world outside ours, about Earth’s mass and warm enough for water. Its star flares, and has likely stripped its air. It sits too close to its star for any telescope we have to split, so going there is how we would read it.",
+        "The nearest world outside ours, about Earth’s mass and warm enough for water. Its star flares, and has likely stripped its air. It sits too close to its star for any telescope we have to split. The 15 m Mirror would just reach it, and going there would show it whole.",
       facts: [
         ["Mass", "At least 1.06 Earths"],
         ["Its year", "11.2 days"],
@@ -331,7 +390,8 @@ export function leadsOf(felt: FeltWorld[]): Lead[] {
         },
       ],
       tells: [
-        "It sits too close to its star for the Infrared Telescope to split. A flyby would see it whole: the two roads on Reach go there.",
+        "It sits too close to its star for the Infrared Telescope to split. The 15 m Mirror would just reach it, for its oxygen and ozone, not its water.",
+        "A flyby would see it whole: the two roads on Reach go there.",
       ],
       art: { kind: "orbit", a: 0.0485, e: 0, hz: [0.042, 0.082] },
     },

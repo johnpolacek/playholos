@@ -100,6 +100,8 @@ def golden():
     import observing
     cases = [(10.0, 1.0, 1.0, 1.0), (4.32 / 3.2616, 0.97, 1.447, 1.52), (19.7 / 3.2616, 2.0, 1.354, 0.66), (31.18 / 3.2616, 1.5, 0.702, 0.362),
              (4.32 / 3.2616, 1.0, 0.60, 0.5), (12.9 / 3.2616, 1.2, 0.15, 0.0124)]
+    # And on the 15 m Mirror, Proxima b among them. Added 2026-10-23.
+    cases += [c + (observing.WIDE,) for c in cases[:4]] + [(4.24 / 3.2616, 1.07 ** (1 / 3.7), 0.0485, 0.00157, observing.WIDE)]
     seen = [dict(args=c, out={k: 'inf' if v == math.inf else v for k, v in observing.observe(*c).items()}) for c in cases]   # JSON has no infinity
     return dict(random=seqs, rolls=choose, observe=seen, works=works_golden())
 

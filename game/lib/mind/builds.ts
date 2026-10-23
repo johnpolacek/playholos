@@ -12,7 +12,7 @@ const tenth = (y: number) => Number(y.toFixed(1));
 // the Mind had promised to point it. 2026-10-23.
 const MORE: Record<string, string> = {
   "Infrared Telescope": "It reads three gases in a world's air: water, oxygen and ozone. Once done, it looks at every world we've felt on its own, nearest first, so no one aims it.",
-  "15 m Mirror": "It splits worlds 2.3 times closer to their stars than the Infrared Telescope.",
+  "15 m Mirror": "It splits worlds 2.3 times closer to their stars than the Infrared Telescope, and gathers five times the light. Once done, it reads Proxima b, then every world we've felt where it can read more than the Infrared Telescope, nearest first, on its own.",
 };
 
 /** Every build, what it does, how long it takes at standard pace, and the matter it takes. */

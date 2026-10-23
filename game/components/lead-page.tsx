@@ -46,16 +46,17 @@ function Scale({ odds, was }: { odds: Odds; was?: Odds }) {
 
 const HEAD = "font-mono text-[10px] tracking-[.1em] text-muted uppercase";
 
-/** The bands our Infrared Telescope reads, in microns, as lib/sim/observing.ts has them. */
+/** The bands our telescopes read, in microns, as lib/sim/observing.ts has them. */
 const BANDS = [
   { band: "ozone", um: 0.6 },
   { band: "oxygen", um: 0.76 },
   { band: "water", um: 0.94 },
 ] as const;
 
-/** A world's light, as our Infrared Telescope spreads it, from green to past red. A gas in its air drinks its own band,
- *  so each found shows as a dark line. One looked for and missing leaves its band whole, and one still being read
- *  flickers. Unsplit or too faint, the light is its star's, dimmed. 2026-10-22. */
+/** A world's light, as our telescope spreads it, from green to past red. A gas in its air drinks its own band, so each
+ *  found shows as a dark line. One looked for and missing leaves its band whole, one still being read flickers, and
+ *  one past this mirror's reach is marked out of reach, since 2026-10-23. Unsplit or too faint, the light is its
+ *  star's, dimmed. 2026-10-22. */
 function AirBands({ air }: { air: NonNullable<Reading["air"]> }) {
   const x = (um: number) => `${((um - 0.5) / 0.5) * 100}%`;
   const seen = air.split && air.readable;
@@ -69,7 +70,7 @@ function AirBands({ air }: { air: NonNullable<Reading["air"]> }) {
         }}
       >
         {seen &&
-          BANDS.map(({ band, um }) => {
+          BANDS.filter(({ band }) => !air.beyond?.includes(band)).map(({ band, um }) => {
             const v = air[band];
             return (
               <span
@@ -85,7 +86,9 @@ function AirBands({ air }: { air: NonNullable<Reading["air"]> }) {
           const v = air[band];
           return (
             <span key={band} className="absolute -translate-x-1/2 text-center whitespace-nowrap" style={{ left: x(um) }}>
-              <span className={v === true ? "text-ink" : ""}>{!seen ? band : v === true ? band : v === false ? `no ${band}` : "reading"}</span>
+              <span className={v === true ? "text-ink" : ""}>
+                {!seen ? band : air.beyond?.includes(band) ? "out of reach" : v === true ? band : v === false ? `no ${band}` : "reading"}
+              </span>
               <br />
               {um} µm
             </span>

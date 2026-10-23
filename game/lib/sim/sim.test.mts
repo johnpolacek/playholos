@@ -46,11 +46,11 @@ test("a knock is heard only once it arrives, and only if the watch catches it", 
   assert.equal(earthKnows(world, 20).heard.length, 0);
 });
 
-test("reading times match calcs/observing.py, the dark patch's edges included", () => {
+test("reading times match calcs/observing.py, the dark patch's edges included, on both mirrors", () => {
   const close = (a: number | null, b: number | string | null) =>
     b === null ? a === null : b === "inf" ? a === Infinity : a !== null && Math.abs(a - (b as number)) < 1e-9 * Math.max(1, Math.abs(b as number));
   for (const { args, out } of golden.observe) {
-    const got = observe(...(args as [number, number, number, number]));
+    const got = observe(...(args as [number, number, number, number, number?]));
     assert.ok(close(got.sep, out.sep), `sep ${args}`);
     assert.ok(close(got.seenH, out.seen_h), `seen ${args}`);
     for (const gas of ["water", "oxygen", "ozone"] as const) assert.ok(close(got[gas], out[gas]), `${gas} ${args}: ${got[gas]} vs ${out[gas]}`);

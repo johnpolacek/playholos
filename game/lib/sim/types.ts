@@ -82,9 +82,25 @@ export interface FeltWorld {
   /** Its star, from the catalogs: its kind, and its warm zone in AU. */
   kind?: string;
   hz?: [number, number];
-  /** What our Infrared Telescope has made of it so far, once built: whether it can split it from its star, each band
-   *  of its air read, true if it shows, and the Year of the latest, or of its first look. */
-  read?: { split: boolean; readable?: boolean; water?: boolean; oxygen?: boolean; ozone?: boolean; at?: number };
+  /** What our Infrared Telescope has made of it so far, once built. */
+  read?: Read;
+  /** What our 15 m Mirror has made of it, once built, if it can read more of it than the Infrared Telescope can. */
+  wide?: Read;
+}
+
+export type Gas = "water" | "oxygen" | "ozone";
+
+/** What one of our telescopes has made of a world so far: whether it can split it from its star, each gas of its air
+ *  read, true if it shows, the gases whose bands lie past this mirror's reach there, and the Year of the latest, or of
+ *  its first look. */
+export interface Read {
+  split: boolean;
+  readable?: boolean;
+  water?: boolean;
+  oxygen?: boolean;
+  ozone?: boolean;
+  beyond?: Gas[];
+  at?: number;
 }
 
 /** A signal Earth's watch caught, as received. */
@@ -120,4 +136,6 @@ export interface EarthView {
   felt: FeltWorld[];
   heard: Heard[];
   visits: Visit[];
+  /** What our 15 m Mirror has read of Proxima b, once built. */
+  proxima?: Read;
 }

@@ -11,12 +11,12 @@ export const CHECKS = [
   { name: "em dash", test: (a) => /[—–]/.test(a) },
   { name: "markdown", test: (a) => /\*\*|__|^#|^\s*[-*•] |^\s*\d+\. /m.test(a) },
   // "1 in 5" or "1 in 100,000", but not a name and a year, as "Gliese 521.1 in 2021". Spelled out too, as "one chance
-  // in three", but not a rate Earth measured, as "one early signal in five".
+  // in three", but not a rate Earth measured, as "one early signal in five", or "no one in fifty years".
   {
     name: "odds as numbers",
     test: (a) =>
       /\d\s?%|(?<![\d.,])\b\d{1,3}(?:,\d{3})* in \d{1,3}(?:,\d{3})*\b(?![.,]?\d)/.test(a) ||
-      /\b(one|two|three|four|five|six|seven|eight|nine|ten)( chance)? in (a |one )?(two|three|four|five|six|seven|eight|nine|ten|twenty|fifty|hundred|thousand|million)\b/i.test(a),
+      /(?<!\b(?:no|any|some|every) ?)\b(one|two|three|four|five|six|seven|eight|nine|ten)( chance)? in (a |one )?(two|three|four|five|six|seven|eight|nine|ten|twenty|fifty|hundred|thousand|million)\b/i.test(a),
   },
   { name: "jargon", test: (a) => /\b(leakage|technosignatures?|signatures?)\b/i.test(a) },
   { name: "names a model", test: (a) => /\b(Claude|Anthropic|Opus|Sonnet|Haiku|GPT|LLM|language model|Agent SDK)\b/i.test(a) },
