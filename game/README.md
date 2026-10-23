@@ -14,6 +14,7 @@ npm run dev                                # http://localhost:5173
 - `components/unlock.tsx`: the Mind is private in the test build. The rest of the game is open. On any production server, the Mind tab asks once for the code in `ACCESS_CODE` or the player's own Anthropic API key, and a cookie keeps it open. A key bills the player, and the Worker uses it per call without storing it. Only Console keys work: Anthropic's terms bar claude.ai logins in other apps. `worker/access.ts` holds the cookies. The dev server is open.
 - `app/godview.tsx`: what the player can't see. Dev only.
 - `worker/mind.ts`: the Mind's chat, on the AI SDK. Needs `ANTHROPIC_API_KEY` in `.dev.vars`.
+  - `npm run check:mind`, with the dev server going, asks the live Mind a few questions and checks its answers by code: that it knows its own Earth's road to Year 0 and speaks as we. Each run spends a few cents.
 - `lib/game/`: the clock, save types, and the browser store.
 - `lib/sim/`: the simulation, ported a piece at a time from Python in `../calcs/`. `npm test` checks it against Python.
   - `data/worlds/`: the pool of drawn worlds, one per seed, written by `python3 ../calcs/export_worlds.py`. They hold the seed's truth, so they ride inside the Worker, never among the public files. `worker/world.ts` reads them there, and `lib/sim/world.ts` from disk for the tests.
