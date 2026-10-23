@@ -72,6 +72,7 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
         year: String(tenth ?? 0),
         builds: JSON.stringify(plan?.builds ?? []),
         later: JSON.stringify(plan?.later ?? []),
+        stops: JSON.stringify(plan?.stops ?? []),
         observe: JSON.stringify(plan?.observe ?? []),
       }).toString(),
     [tenth, plan],

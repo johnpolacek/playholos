@@ -50,11 +50,15 @@ export interface Guide {
 export interface Plan {
   builds: string[];
   observe: string[];
-  /** Builds ordered in play, once what each waits on was done, in the order we ordered them. Since 2026-10-22. */
+  /** Builds ordered in play, once what each waits on was done, in the order we ordered them. Since 2026-10-22. A build
+   *  taken back and ordered again is here again, from 2026-10-23. */
   later?: Ordered[];
+  /** Builds taken back in play, at the Year each was. Each keeps its work, and ordering it again picks up there.
+   *  2026-10-23. */
+  stops?: Ordered[];
 }
 
-/** A build ordered in play: its name, and the Year we ordered it. */
+/** A build ordered in play, or taken back: its name, and the Year. */
 export interface Ordered {
   name: string;
   y: number;

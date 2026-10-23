@@ -174,25 +174,62 @@ export function ordersOf(plan: Plan) {
   const orders: Order[] = plan.builds.map((b) =>
     b === "Thought Fields" ? { y: 0, standing: "Data center" } : { y: 0, begin: pacedName(b) },
   );
-  for (const o of plan.later ?? []) orders.push({ y: o.y, begin: pacedName(o.name) });
+  for (const o of plan.later ?? [])
+    orders.push(o.name === "Thought Fields" ? { y: o.y, standing: "Data center" } : { y: o.y, begin: pacedName(o.name) });
+  for (const o of plan.stops ?? []) orders.push({ y: o.y, drop: o.name === "Thought Fields" ? "Data center" : pacedName(o.name) });
   const aside = plan.observe.length ? ([[0, FOMALHAUT.lands, 0.05]] as const) : [];
   return { orders, aside, follow: false };
 }
 
-/** Every build in our order: those from Year 0, then those ordered in play. */
-export const ordered = (plan: Plan) => [...plan.builds, ...(plan.later ?? []).map((o) => o.name)];
+/** A build's last word in our order: the Year it was last ordered, or taken back, whichever came later. Year 0's queue
+ *  comes before anything in play. Null if never ordered. */
+function lastOf(plan: Plan, name: string): { y: number; stop: boolean } | null {
+  let last = plan.builds.includes(name) ? { y: -1, stop: false } : null;
+  for (const o of plan.later ?? []) if (o.name === name && (!last || o.y >= last.y)) last = { y: o.y, stop: false };
+  for (const o of plan.stops ?? []) if (o.name === name && (!last || o.y >= last.y)) last = { y: o.y, stop: true };
+  return last;
+}
 
-/** A build ordered in play, at the Year we order it, last in line. */
-export const orderLater = (name: string, y: number) => (p: Plan): Plan => ({
-  ...p,
-  later: [...(p.later ?? []), { name, y }],
-});
+/** Every build in our order: those from Year 0, then those ordered in play, in the order ordered. Not those taken back,
+ *  and one ordered again stands where it was ordered again. */
+export const ordered = (plan: Plan) => [
+  ...plan.builds.filter((b) => lastOf(plan, b)?.y === -1),
+  ...(plan.later ?? []).filter((o) => { const l = lastOf(plan, o.name); return l && !l.stop && l.y === o.y; }).map((o) => o.name),
+];
+
+/** The Year a build was taken back, if it was and hasn't been ordered again. */
+export const takenAt = (plan: Plan, name: string) => {
+  const l = lastOf(plan, name);
+  return l?.stop ? l.y : null;
+};
+
+/** A build ordered in play, at the Year we order it, last in line. One taken back picks up its work. Taken back and
+ *  ordered again in the same tenth of a Year, it's as if it was never taken back. */
+export const orderLater = (name: string, y: number) => (p: Plan): Plan =>
+  takenAt(p, name) === y
+    ? { ...p, stops: p.stops?.filter((o) => !(o.name === name && o.y === y)) }
+    : { ...p, later: [...(p.later ?? []), { name, y }] };
+
+/** A build under way taken back at Year `y`. Its work is kept, and the rest of our order shares its compute from then.
+ *  Ordered and taken back in the same tenth of a Year, it's as if it was never ordered. 2026-10-23. */
+export const takeBack = (name: string, y: number) => (p: Plan): Plan =>
+  lastOf(p, name)?.y === y
+    ? { ...p, later: p.later?.filter((o) => !(o.name === name && o.y === y)) }
+    : { ...p, stops: [...(p.stops ?? []), { name, y }] };
+
+/** The standard Years of work left on a build we took back, as it stood then, by Year `year`. Null if none is kept, as
+ *  for Thought Fields, whose campus under way is finished. */
+export function keptOf(plan: Plan, scale: number, name: string, year: number) {
+  const { orders, ...opts } = ordersOf(plan);
+  return pace(orders, year, { scale, ...opts }).kept[pacedName(name)] ?? null;
+}
 
 /** Our order without a build. */
 const without = (plan: Plan, name: string): Plan => ({
   ...plan,
   builds: plan.builds.filter((b) => b !== name),
   later: plan.later?.filter((o) => o.name !== name),
+  stops: plan.stops?.filter((o) => o.name !== name),
 });
 
 /** When the pace has a work done: once, or for a work built in copies, its last. */
@@ -234,7 +271,8 @@ export function schedule(plan: Plan, scale: number): Record<string, number | nul
  *  in our order is added last at Year 0, or in play at Year `y`. */
 export function moves(plan: Plan, scale: number, work: string, y: number | null = null) {
   const others = ordered(plan).filter((b) => b !== work);
-  const less = schedule(without(plan, work), scale);
+  // One taken back is measured against our order as it stands, the compute it used until then spent.
+  const less = schedule(ordered(plan).includes(work) ? without(plan, work) : plan, scale);
   const more = ordered(plan).includes(work)
     ? plan
     : y === null
@@ -264,9 +302,11 @@ function held(plan: Plan, done: Record<string, number | null>, year: number) {
   const launch = plan.builds.includes("Launch Complex") ? done["Launch Complex"] : null;
   // Builds from Year 0 spend theirs then, and those ordered in play when ordered: the driver's and the foundry's
   // machines, landed from Earth, since 2026-10-22.
+  // Ordered again after it was taken back, a build has its matter already.
+  const first = (plan.later ?? []).filter((o, i, all) => !plan.builds.includes(o.name) && all.findIndex((x) => x.name === o.name) === i);
   const spent =
     plan.builds.reduce((s, b) => s + (buildOf(b)?.kt ?? 0), 0) +
-    (plan.later ?? []).reduce((s, o) => s + (o.y <= year ? (buildOf(o.name)?.kt ?? 0) : 0), 0);
+    first.reduce((s, o) => s + (o.y <= year ? (buildOf(o.name)?.kt ?? 0) : 0), 0);
   const lifted = SPARE_LIFT * year + (launch == null ? 0 : LAUNCH_LIFT * Math.max(0, year - launch));
   return HELD + lifted + rockAt(plan, done, year) - spent;
 }
@@ -326,7 +366,7 @@ export function sharesAt(plan: Plan, scale: number, year: number) {
   const { orders, ...opts } = ordersOf(plan);
   const p = pace(orders, year, { scale, ...opts });
   const all = p.thought;
-  const building = plan.builds.includes("Thought Fields") && p.dataCenters.length < centers(scale);
+  const building = ordered(plan).includes("Thought Fields") && p.dataCenters.length < centers(scale);
   const fields = building ? (scale * CATALOG.dataCenter.aside) / CATALOG.flagship / all : 0;
   const parts = p.line.map(({ work, s }) => {
     const want = CATALOG.works[work].want;
@@ -366,7 +406,12 @@ export function needOf(name: string, all: number, scale = 1) {
  *  done. */
 export function openAt(plan: Plan, done: Record<string, number | null>, year: number) {
   const ours = ordered(plan);
-  return LATER.filter((b) => !ours.includes(b.name) && ours.includes(b.after) && (done[b.after] ?? Infinity) <= year);
+  // Builds taken back wait here too, to order again. 2026-10-23.
+  const back = BUILDS.filter((b) => takenAt(plan, b.name) !== null);
+  return [
+    ...back,
+    ...LATER.filter((b) => !ours.includes(b.name) && (takenAt(plan, b.name) !== null || (ours.includes(b.after) && (done[b.after] ?? Infinity) <= year))),
+  ];
 }
 
 /** What energy lets our compute become, as Thought Fields grows it, queued now if it isn't: the Year each campus is

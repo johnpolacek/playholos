@@ -1,6 +1,6 @@
 import { kitOf } from "@/lib/game/reach";
 import { earthKnows } from "@/lib/sim/knowledge";
-import { readLater, readObserve, readQueue } from "./orders";
+import { readLater, readObserve, readQueue, readStops } from "./orders";
 import { inPool, loadVoices, loadWorld } from "./world";
 
 // The worlds Earth's planet hunters have felt by Year 0, through the knowledge wall: measured, never who lives there.
@@ -27,6 +27,11 @@ export async function known(req: Request) {
   if (!inPool(seed)) return Response.json({ error: "No such game." }, { status: 404 });
   const year = Math.min(200, Math.max(0, Number(q.get("year")) || 0));
   const world = await loadWorld(seed);
-  const plan = { builds: readQueue(list(q.get("builds"))), observe: readObserve(list(q.get("observe"))), later: readLater(list(q.get("later"))) };
+  const plan = {
+    builds: readQueue(list(q.get("builds"))),
+    observe: readObserve(list(q.get("observe"))),
+    later: readLater(list(q.get("later"))),
+    stops: readStops(list(q.get("stops"))),
+  };
   return Response.json(earthKnows(world, year, await loadVoices(world), kitOf(plan, Number(world.earth.compute) || 1)));
 }

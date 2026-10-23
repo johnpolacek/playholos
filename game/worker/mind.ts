@@ -6,7 +6,7 @@ import { describeCharter } from "@/lib/game/charter";
 import { describeLeads } from "@/lib/game/leads";
 import { kt, matterAt, schedule } from "@/lib/game/plan";
 import { kitOf } from "@/lib/game/reach";
-import { readLater, readObserve, readQueue } from "./orders";
+import { readLater, readObserve, readQueue, readStops } from "./orders";
 import { describeBuilds, describeQueue } from "@/lib/mind/builds";
 import { EARTH_AT_YEAR_0, roadOf } from "@/lib/mind/earth";
 import { EARTH_LEADS } from "@/lib/mind/leads";
@@ -55,6 +55,7 @@ export async function mind(req: Request) {
     observe,
     builds,
     later,
+    stops,
     dry,
   }: {
     messages: UIMessage[];
@@ -64,6 +65,7 @@ export async function mind(req: Request) {
     observe?: unknown;
     builds?: unknown;
     later?: unknown;
+    stops?: unknown;
     dry?: unknown;
   } = await req.json();
   const began = typeof beganAt === "number" && Number.isFinite(beganAt) ? beganAt : null;
@@ -76,7 +78,7 @@ export async function mind(req: Request) {
   // Where this Earth's road to Year 0 left the base kit, read beside the kit it changes.
   const road = world ? roadOf(pastOf(world)) : "";
   // Our order, dated as Build dates it with this game's compute.
-  const plan = { builds: queue, observe: readObserve(observe), later: orders };
+  const plan = { builds: queue, observe: readObserve(observe), later: orders, stops: readStops(stops) };
   const scale = Number(world?.earth.compute) || 1;
   const done = schedule(plan, scale);
   const at = yearAt(began);
@@ -84,7 +86,7 @@ export async function mind(req: Request) {
   let known = "";
   if (world) {
     const kit = kitOf(plan, scale);
-    const held = kt(matterAt({ builds: queue, observe: [], later: orders }, done, year ?? 0));
+    const held = kt(matterAt({ ...plan, observe: [] }, done, year ?? 0));
     known = `${describe(earthKnows(world, year ?? 0, await loadVoices(world), kit))}\n\nMatter we hold in orbit now, less what our builds take: ${held}.`;
   }
   const told = {
@@ -95,7 +97,7 @@ export async function mind(req: Request) {
     leads: EARTH_LEADS,
     scan: describeLeads(readObserve(observe), yearAt(began)),
     builds: describeBuilds(),
-    queue: describeQueue(queue, orders, done, year),
+    queue: describeQueue(plan, done, year),
     known,
     now: now(began),
   };

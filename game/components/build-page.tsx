@@ -12,6 +12,7 @@ import { CLOSE } from "@/lib/game/close";
 import {
   BUILDS,
   buildSlug,
+  keptOf,
   lacks,
   LATER,
   type Later,
@@ -20,6 +21,8 @@ import {
   ordered,
   SAYS,
   schedule,
+  takeBack,
+  takenAt,
   takes,
 } from "@/lib/game/plan";
 import { SITES } from "@/lib/game/sites";
@@ -31,7 +34,8 @@ import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motio
 // there, as the map's own button and the place's name on it do. Settled 2026-10-18. Asking the Mind is the last step,
 // as on a lead's page, 2026-10-19. After its story, what it opens once done. A build that waits has a page too,
 // saying what it waits on in place of the queue's button, 2026-10-20. Once it is open in play, its button orders it,
-// last in line from that Year, 2026-10-22.
+// last in line from that Year, 2026-10-22. In play, one under way can be taken back, keeping its work, and one taken
+// back ordered again, picking up there, last in line, 2026-10-23.
 
 const ORDINAL = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth"];
 
@@ -43,6 +47,54 @@ function status(open: boolean, at: number, by: number | null | undefined, year: 
   if (at < 0) return "Not in our order.";
   if (by == null) return "Under way. Done after Year 40.";
   return year >= by ? "Done." : `Under way. Done in ${span(by - year)}.`;
+}
+
+/** In play, a build under way and the button that takes it back, or one taken back, the work it kept, and the button
+ *  that orders it again, last in line. Its work is what it had left when taken back. Thought Fields keeps none: the
+ *  campus under way is finished, and no more begin. 2026-10-23. */
+function InPlay({ name, scale, done }: { name: string; scale: number; done: Record<string, number | null> }) {
+  const { year } = useGame();
+  const { plan, change } = usePlan();
+  const now = year === null ? null : tenths(year);
+  const back = takenAt(plan, name);
+  const again = useMemo(() => {
+    if (now === null || back === null) return null;
+    return { at: schedule(orderLater(name, now)(plan), scale)[name], left: keptOf(plan, scale, name, now) };
+  }, [now, back, name, plan, scale]);
+  if (now === null) return null;
+  if (back !== null && again) {
+    const { years } = takes(name);
+    const kept =
+      name === "Thought Fields"
+        ? ": the campus under way was finished, and no more begin."
+        : again.left !== null && years
+          ? `, its work kept, ${tenths(again.left)} of ${years} Years left at standard pace.`
+          : ", its work kept.";
+    return (
+      <div className="flex flex-col">
+        <p className="mt-2.5 text-[13px] leading-snug text-page-ink2">
+          Taken back at Year {tenths(back)}
+          {kept}{" "}
+          {again.at == null
+            ? "Ordered again now, it would be done after Year 40."
+            : `Ordered again now, it would be done by Year ${tenths(again.at)}, in ${span(again.at - now)}.`}
+        </p>
+        <button
+          onClick={() => change(orderLater(name, now))}
+          className="mt-2.5 h-11 rounded-full bg-ink text-[15px] font-medium text-paper"
+        >
+          Add to Queue
+        </button>
+      </div>
+    );
+  }
+  const at = done[name];
+  if (!ordered(plan).includes(name) || (at != null && at <= now)) return null;
+  return (
+    <button onClick={() => change(takeBack(name, now))} className="mt-2.5 h-11 rounded-full border border-ink text-[15px] font-medium">
+      Take back
+    </button>
+  );
 }
 
 /** A build's place in our order, and before Begin, the button that adds it or takes it out. When it is added or taken
@@ -63,6 +115,8 @@ export function Queueing({ name, scale, done }: { name: string; scale: number; d
   );
 
   const open = year === null;
+  // Taken back in play, it says so below, in place of where it stands.
+  const back = !open && takenAt(plan, name) !== null;
   const queued = at >= 0;
   // Its Year: where it stands in our order, or last in line if we add it now.
   const by = queued ? done[name] : schedule({ ...plan, builds: [...plan.builds, name] }, scale)[name];
@@ -70,22 +124,24 @@ export function Queueing({ name, scale, done }: { name: string; scale: number; d
   const lacking = open || queued ? lacks(plan, name) : [];
   return (
     <div ref={root} className="flex flex-col">
-      <p data-s className={`mt-2.5 text-[13px] leading-snug ${queued ? "text-you" : "text-page-ink2"}`}>
-        {lacking.length ? (
-          <span className="flex items-start gap-1.5">
-            <span className="mt-[2px] text-muted">
-              <LockMark size={13} />
+      {!back && (
+        <p data-s className={`mt-2.5 text-[13px] leading-snug ${queued ? "text-you" : "text-page-ink2"}`}>
+          {lacking.length ? (
+            <span className="flex items-start gap-1.5">
+              <span className="mt-[2px] text-muted">
+                <LockMark size={13} />
+              </span>
+              <span>
+                {queued ? "Queued, but it can’t leave without " : "Needs "}
+                <Lacking names={lacking} />
+                {queued ? " in our order." : " in our order first."}
+              </span>
             </span>
-            <span>
-              {queued ? "Queued, but it can’t leave without " : "Needs "}
-              <Lacking names={lacking} />
-              {queued ? " in our order." : " in our order first."}
-            </span>
-          </span>
-        ) : (
-          status(open, at, by, year ?? 0)
-        )}
-      </p>
+          ) : (
+            status(open, at, by, year ?? 0)
+          )}
+        </p>
+      )}
       {open && (queued || !lacking.length) && (
         <button
           onClick={() => change(toggleBuild(name))}
@@ -94,6 +150,7 @@ export function Queueing({ name, scale, done }: { name: string; scale: number; d
           {queued ? "Remove from Queue" : "Add to Queue"}
         </button>
       )}
+      {!open && <InPlay name={name} scale={scale} done={done} />}
     </div>
   );
 }
@@ -116,7 +173,8 @@ function Waits({ build, scale, done }: { build: Later; scale: number; done: Reco
   const { year } = useGame();
   const { plan, change } = usePlan();
   const now = year === null ? null : tenths(year);
-  const order = plan.later?.find((o) => o.name === build.name);
+  // Its last order, while it stands in our order.
+  const order = ordered(plan).includes(build.name) ? plan.later?.filter((o) => o.name === build.name).at(-1) : undefined;
   const by = ordered(plan).includes(build.after) ? done[build.after] : undefined;
   const open = now !== null && by != null && now >= by;
   // Its Year if we order it now, last in line.
@@ -127,12 +185,16 @@ function Waits({ build, scale, done }: { build: Later; scale: number; done: Reco
   if (order) {
     const at = done[build.name];
     return (
-      <p className="mt-2.5 text-[13px] leading-snug text-you">
-        Ordered at Year {tenths(order.y)}.{" "}
-        {at == null ? "Done after Year 40." : now! >= at ? "Done." : `Done in ${span(at - now!)}, by Year ${tenths(at)}.`}
-      </p>
+      <div className="flex flex-col">
+        <p className="mt-2.5 text-[13px] leading-snug text-you">
+          Ordered at Year {tenths(order.y)}.{" "}
+          {at == null ? "Done after Year 40." : now! >= at ? "Done." : `Done in ${span(at - now!)}, by Year ${tenths(at)}.`}
+        </p>
+        <InPlay name={build.name} scale={scale} done={done} />
+      </div>
     );
   }
+  if (now !== null && takenAt(plan, build.name) !== null) return <InPlay name={build.name} scale={scale} done={done} />;
   if (open)
     return (
       <div className="flex flex-col">

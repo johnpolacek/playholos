@@ -22,7 +22,8 @@ function rowsOf(plan: typeof EMPTY, done: Record<string, number | null>): Row[] 
     note: buildOf(name)?.what ?? "",
     at: done[name] ?? null,
     kind: "build",
-    from: plan.later?.find((o) => o.name === name)?.y,
+    // Ordered in play, or ordered again after it was taken back, its thread starts at its last order.
+    from: plan.later?.filter((o) => o.name === name).at(-1)?.y,
   }));
 }
 

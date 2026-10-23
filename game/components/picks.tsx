@@ -7,7 +7,7 @@ import { OpensLine } from "@/components/opens";
 import { Face, ListHead } from "@/components/tab-head";
 import { MS_PER_YEAR, span, tenths } from "@/lib/game/clock";
 import type { EarthPast } from "@/lib/game/past";
-import { BUILDS, buildSlug, EMPTY, FOMALHAUT, inUse, lacks, moves, needs, openAt, schedule, sharesAt } from "@/lib/game/plan";
+import { BUILDS, buildSlug, EMPTY, FOMALHAUT, inUse, lacks, moves, needs, openAt, schedule, sharesAt, takenAt } from "@/lib/game/plan";
 import { SITES } from "@/lib/game/sites";
 import type { Plan } from "@/lib/game/types";
 
@@ -255,7 +255,7 @@ export function Opened({ scale, now, className = "" }: { scale: number; now: num
                 mark={<BuildMark name={b.name} />}
                 tone={buildTone(b.name, false)}
                 name={<b className="font-semibold">{b.name}</b>}
-                line={b.what}
+                line={takenAt(plan, b.name) === null ? b.what : `${b.what} Taken back at Year ${takenAt(plan, b.name)}, its work kept.`}
                 right={by[b.name].at == null ? "past Year 40" : span(by[b.name].at! - at)}
               />
               <CostLine name={b.name} move={by[b.name]} at={at} />

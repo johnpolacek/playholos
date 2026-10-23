@@ -12,6 +12,9 @@ export type Order =
   | { y: number; begin: string }            // a work joins the end of the line. "Data center" queues one for the fabs
   | { y: number; first: string }            // the player moves a work under way to the front
   | { y: number; standing: "Data center" }  // the fabs keep data centers coming, as many as the grid allows
+  | { y: number; drop: string }             // the player takes a work back: it leaves the line and keeps its work, to
+                                            // pick up there if begun again. "Data center" ends the fabs' standing
+                                            // order, and a campus under way is finished. 2026-10-23
   | { y: number; studies: number };         // thought set aside for the Mind's studies
 
 interface Work {
@@ -62,6 +65,8 @@ export interface Pace {
   idle: number;
   /** Rock thrown from the Moon or hauled from the belt so far, kt. */
   rockKt: number;
+  /** Works taken back and not begun again: the standard Years each had left. */
+  kept: Record<string, number>;
 }
 
 export interface PaceOptions {
@@ -79,6 +84,8 @@ export function pace(orders: readonly Order[], until: number, { scale = 1, aside
   const queue = [...orders].sort((a, b) => a.y - b.y);                     // a stable sort keeps one Year's orders as given
   const line: string[] = [], left = new Map<string, number>(), begun = new Map<string, number>(), moved = new Set<string>();
   const done: Record<string, number> = {}, built = new Map<string, number>(), dataCenters: number[] = [];
+  // A work taken back: its standard Years left, and whether the yard was done then, so it gets the yard's cut once.
+  const kept = new Map<string, { left: number; yard: boolean }>();
   let t = 0, studies = CATALOG.studies, fits = centers(scale), queued = 0, standing = false, building: number | null = null;
   let s: number[] = [], room = 0, idle = 0, thought = 0;
 
@@ -118,8 +125,19 @@ export function pace(orders: readonly Order[], until: number, { scale = 1, aside
         if ("studies" in o) studies = o.studies;
         else if ("standing" in o) standing = true;
         else if ("first" in o) { const i = line.indexOf(o.first); if (i >= 0) { line.splice(i, 1); line.unshift(o.first); moved.add(o.first); } }
+        else if ("drop" in o) {
+          if (o.drop === "Data center") standing = false;
+          else if (line.includes(o.drop)) {
+            if (left.has(o.drop)) kept.set(o.drop, { left: left.get(o.drop)!, yard: yardDone() });
+            line.splice(line.indexOf(o.drop), 1); left.delete(o.drop);
+          }
+        }
         else if (o.begin === "Data center") queued++;
-        else if (WORKS[o.begin] && !line.includes(o.begin) && done[o.begin] === undefined) join(o.begin, line.length, t);
+        else if (WORKS[o.begin] && !line.includes(o.begin) && done[o.begin] === undefined) {
+          join(o.begin, line.length, t);
+          const k = kept.get(o.begin);
+          if (k) { left.set(o.begin, k.left * (WORKS[o.begin].orbit && !k.yard && yardDone() ? 1 - CATALOG.yard.cut : 1)); kept.delete(o.begin); }
+        }
       }
     }
     thought = (scale * STEP ** dataCenters.length) / FLAGSHIP;
@@ -153,6 +171,7 @@ export function pace(orders: readonly Order[], until: number, { scale = 1, aside
   }
   return {
     at: until, done, dataCenters, thought, room, idle, rockKt: rockAt(until),
+    kept: Object.fromEntries([...kept].map(([w, k]) => [w, k.left])),
     line: line.map((w, i) => ({ work: w, left: left.get(w) ?? null, s: s[i] })),
   };
 }

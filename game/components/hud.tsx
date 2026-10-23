@@ -5,7 +5,7 @@ import { Menu } from "@/components/menu";
 import { useShown } from "@/components/costs";
 import { useSchedule } from "@/components/picks";
 import { realTime, tenths, YEAR_0 } from "@/lib/game/clock";
-import { ceiling, drawAt, kt, matterAt, schedule, sharesAt, shortAt } from "@/lib/game/plan";
+import { ceiling, drawAt, kt, matterAt, ordered, schedule, sharesAt, shortAt } from "@/lib/game/plan";
 
 // What we have, from our order: matter we hold in orbit, growing with lift and less what our builds take, since
 // 2026-10-20. Energy, the share of Earth's that our compute draws, and compute, how much of ours is at work, since
@@ -72,7 +72,7 @@ export function Hud() {
   const share = useMemo(() => sharesAt(plan, scale, now), [plan, scale, now]);
   // Thought Fields grows our compute a campus at a time, until the grid is full.
   const top = useMemo(() => ceiling(plan, scale), [plan, scale]);
-  const full = plan.builds.includes("Thought Fields") ? top.campuses.at(-1) : undefined;
+  const full = ordered(plan).includes("Thought Fields") ? top.campuses.at(-1) : undefined;
   const most = top.step ** top.campuses.length / top.room;
   const over = share.short > 0.005;
   // Tall: the menu's galaxy and the Year, then the meters below. Wide: one band, the meters between the galaxy and the Year.

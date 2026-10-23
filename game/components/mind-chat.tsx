@@ -22,6 +22,7 @@ const transport = new DefaultChatTransport({
       observe: save?.plan?.observe ?? [],
       builds: save?.plan?.builds ?? [],
       later: save?.plan?.later ?? [],
+      stops: save?.plan?.stops ?? [],
     };
   },
 });

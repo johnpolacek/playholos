@@ -14,12 +14,14 @@ export function readQueue(b: unknown) {
   return Array.isArray(b) ? b.filter((x): x is string => typeof x === "string" && names.has(x)) : [];
 }
 
-// What we have ordered in play, once our builds opened it, from the save. Checked the same way.
+// What we have ordered in play, once our builds opened it or after we took one back, and what we have taken back, from
+// the save. Checked the same way.
 export function readLater(l: unknown): Ordered[] {
-  const names = new Set(LATER.map((build) => build.name));
+  const names = new Set([...BUILDS, ...LATER].map((build) => build.name));
   return Array.isArray(l)
     ? l
         .filter((o): o is Ordered => !!o && names.has(o.name) && typeof o.y === "number" && Number.isFinite(o.y) && o.y >= 0)
-        .slice(0, 16)
+        .slice(0, 32)
     : [];
 }
+export const readStops = readLater;
