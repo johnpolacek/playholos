@@ -18,6 +18,13 @@ const CASES = [
   { seed: 2, ask: ASK_AWAY, must: [/mars/i, /fusion/i], never: [/no one (is |has )?(on|set foot on) mars/i, /none feeds/i] },
   // Neither happened here.
   { seed: 5, ask: ASK_AWAY, must: [/mars/i], never: [/(live|living|outpost|lived) (on|at) mars/i, /fusion (joined|feeds|powers) our grid/i] },
+  // Nothing queued: our compute only grows once Thought Fields is.
+  {
+    seed: 3,
+    ask: "With nothing queued, will our compute grow by itself over the next ten Years?",
+    must: [/\bno\b|stays|won[’']t|will not|does not|doesn[’']t|not grow/i, /thought fields/i],
+    never: [/^yes\b/i],
+  },
 ];
 
 let failed = 0;
