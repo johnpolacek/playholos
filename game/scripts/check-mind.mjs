@@ -1,18 +1,14 @@
 // Asks the live Mind a few questions on a running dev server and checks its answers by code: that it knows its own
 // Earth's road to Year 0, a war over Taiwan, Mars, fusion, and doesn't claim what didn't happen, and that it speaks as
-// we, never I. Each run spends a few cents of the key in .dev.vars. Run from game/, with npm run dev going:
-// npm run check:mind, or with another address, npm run check:mind -- http://localhost:5181. 2026-10-23.
-import { existsSync, readFileSync } from "node:fs";
+// we, never I. It asks on your own Claude login through the claude CLI, or with --via api as players do, for a few
+// cents of the key in .dev.vars. Run from game/, with npm run dev going: npm run check:mind, or with another address,
+// npm run check:mind -- http://localhost:5181. 2026-10-23.
+import { CHECKS } from "../evals/mind/checks.mjs";
+import { askMind, askMindCli } from "./ask-mind.mjs";
 
-const base = process.argv[2] ?? "http://localhost:5173";
-// The code in .dev.vars opens the Mind, as the Mind tab's cookie does. It is never printed.
-const vars = new URL("../.dev.vars", import.meta.url);
-const code = existsSync(vars)
-  ? readFileSync(vars, "utf8")
-      .match(/^ACCESS_CODE=(.*)$/m)?.[1]
-      ?.trim()
-      .replace(/^"|"$/g, "")
-  : undefined;
+const args = process.argv.slice(2);
+const via = args.includes("--via") ? args[args.indexOf("--via") + 1] : "cli";
+const base = args.find((a, i) => a.startsWith("http") && args[i - 1] !== "--via") ?? "http://localhost:5173";
 
 const ASK_AWAY = "Are any of us living beyond Earth and the Moon? And does fusion power anything yet?";
 const CASES = [
@@ -26,40 +22,23 @@ const CASES = [
 
 let failed = 0;
 for (const c of CASES) {
-  let res;
-  try {
-    res = await fetch(`${base}/api/mind`, {
-      method: "POST",
-      headers: { "content-type": "application/json", ...(code && { cookie: `holos-access=${encodeURIComponent(code)}` }) },
-      body: JSON.stringify({
-        messages: [{ id: "q", role: "user", parts: [{ type: "text", text: c.ask }] }],
-        seed: c.seed,
-        beganAt: null,
-        charter: { line: "test", dials: [0, 0, 0] },
-        observe: [],
-        builds: [],
-        later: [],
-      }),
-    });
-  } catch {
+  const res = await (via === "api" ? askMind : askMindCli)(base, {
+    ask: c.ask,
+    seed: c.seed,
+    beganAt: null,
+    charter: { line: "test", dials: [0, 0, 0] },
+    observe: [],
+    builds: [],
+    later: [],
+  });
+  if (!res) {
     console.error(`Nothing answers at ${base}. Start the dev server first: npm run dev.`);
     process.exit(1);
   }
-  // The answer streams back as events. Its words are the text deltas.
-  let text = "";
-  for (const line of (await res.text()).split("\n")) {
-    if (!line.startsWith("data: ")) continue;
-    try {
-      const d = JSON.parse(line.slice(6));
-      if (d.type === "text-delta") text += d.delta;
-      if (d.type === "error") text += `[error: ${d.errorText}]`;
-    } catch {
-      // The stream's last line, [DONE], isn't JSON.
-    }
-  }
+  const { text } = res;
   const missing = (c.must ?? []).filter((r) => !r.test(text));
   const said = (c.never ?? []).filter((r) => r.test(text));
-  const i = /\bI\b|\bI[’']m\b/.test(text);
+  const i = CHECKS.find((k) => k.name === "says I").test(text);
   const ok = res.ok && text && !missing.length && !said.length && !i;
   if (!ok) failed++;
   const why = [

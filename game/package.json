@@ -14,6 +14,8 @@
     "lint": "eslint",
     "test": "node --test lib/sim/sim.test.mts",
     "check:mind": "node scripts/check-mind.mjs",
+    "trace:mind": "node scripts/trace-mind.mjs",
+    "review:mind": "node scripts/review-mind.mjs",
     "log": "node scripts/build-log.mjs",
     "types:worker": "wrangler types ./worker/worker-configuration.d.ts"
   },

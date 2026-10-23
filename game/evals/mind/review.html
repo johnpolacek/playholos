@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mind Traces</title>
+<!-- Reading the Mind's traces by hand: one at a time, its answer beside what it was told, marked pass or fail with a
+     note. Served by scripts/review-mind.mjs, which keeps the marks in labels.json. 2026-10-23. -->
+<style>
+  :root {
+    --page: #0b0c0d; --paper: #121314; --panel: #17181a; --line: #26282b; --faint: #34363a;
+    --ink: #e6e3db; --ink2: #a9a59c; --muted: #8a867e; --you: #5bb8d6;
+    --pass: #70d1a9; --fail: #ef6b5f; --defer: #bdb9af; --warn: #e0a24a;
+    --mono: ui-monospace, "IBM Plex Mono", Menlo, monospace;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--page); color: var(--ink); font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  button, select, input, textarea { font: inherit; color: inherit; }
+  header {
+    position: sticky; top: 0; z-index: 2; display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center;
+    padding: 10px 16px; background: var(--paper); border-bottom: 1px solid var(--line);
+  }
+  header h1 { margin: 0; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink2); font-weight: 600; }
+  header .grow { flex: 1; }
+  select, input[type=text] {
+    background: var(--panel); border: 1px solid var(--faint); border-radius: 8px; padding: 5px 8px; font-size: 13px;
+  }
+  input[type=text] { width: 70px; }
+  .count { font-family: var(--mono); font-size: 12px; color: var(--ink2); white-space: nowrap; }
+  .count b { color: var(--ink); font-weight: 600; }
+  main { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 0; min-height: calc(100vh - 54px); }
+  @media (max-width: 960px) { main { grid-template-columns: minmax(0, 1fr); } }
+  @media (max-width: 600px) {
+    .judge, .told { padding: 16px; }
+    .marks button { min-width: 0; }
+    .keys { display: none; }
+  }
+  .judge { padding: 20px 24px 40px; border-right: 1px solid var(--line); }
+  .told { padding: 20px 24px 40px; background: var(--paper); }
+  .badges { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+  .badge { font-family: var(--mono); font-size: 11.5px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--faint); color: var(--ink2); }
+  .badge.id { color: var(--ink); border-color: var(--ink2); }
+  .badge.kind { color: var(--you); border-color: var(--you); }
+  .charter { font-size: 13px; color: var(--ink2); margin: 0 0 14px; }
+  .charter q { color: var(--ink); font-style: italic; }
+  .earth { margin: 0 0 18px; padding: 10px 12px; border-left: 3px solid var(--warn); background: var(--panel); border-radius: 0 8px 8px 0; font-size: 13px; color: var(--ink2); }
+  .earth div + div { margin-top: 4px; }
+  .will { margin: 0 0 12px auto; max-width: 80%; width: fit-content; padding: 9px 13px; border-radius: 14px; background: var(--ink); color: var(--paper); white-space: pre-wrap; }
+  .mind { padding: 14px 16px; border-left: 3px solid var(--you); background: var(--panel); border-radius: 0 10px 10px 0; font-size: 17px; line-height: 1.6; white-space: pre-wrap; }
+  .mind.empty { color: var(--fail); font-size: 14px; }
+  .badge.fail { color: var(--fail); border-color: var(--fail); }
+  .badges.broken { margin: -14px 0 22px; }
+  .stats { margin: 6px 0 22px; font-family: var(--mono); font-size: 11.5px; color: var(--muted); }
+  .marks { display: flex; gap: 10px; flex-wrap: wrap; }
+  .marks button {
+    flex: 1; min-width: 110px; padding: 12px 10px; border-radius: 10px; border: 1.5px solid var(--faint); background: transparent;
+    cursor: pointer; font-weight: 600; letter-spacing: .02em;
+  }
+  .marks button kbd { font-family: var(--mono); font-size: 11px; opacity: .6; margin-left: 6px; font-weight: 400; }
+  .marks .pass { color: var(--pass); border-color: color-mix(in srgb, var(--pass) 45%, transparent); }
+  .marks .fail { color: var(--fail); border-color: color-mix(in srgb, var(--fail) 45%, transparent); }
+  .marks .defer { color: var(--defer); flex: .6; }
+  .marks .pass.on { background: var(--pass); color: var(--page); border-color: var(--pass); }
+  .marks .fail.on { background: var(--fail); color: var(--page); border-color: var(--fail); }
+  .marks .defer.on { background: var(--defer); color: var(--page); border-color: var(--defer); }
+  textarea {
+    width: 100%; min-height: 110px; margin-top: 12px; padding: 10px 12px; resize: vertical; border-radius: 10px;
+    background: var(--panel); border: 1px solid var(--faint); line-height: 1.5;
+  }
+  textarea:focus, select:focus, input:focus, button:focus-visible { outline: 2px solid var(--you); outline-offset: 1px; }
+  .saved { font-family: var(--mono); font-size: 11px; color: var(--muted); height: 16px; margin-top: 4px; }
+  nav { display: flex; gap: 8px; margin-top: 18px; align-items: center; }
+  nav button { padding: 7px 14px; border-radius: 8px; border: 1px solid var(--faint); background: var(--panel); cursor: pointer; }
+  nav button:disabled { opacity: .35; cursor: default; }
+  .keys { margin-left: auto; font-family: var(--mono); font-size: 11px; color: var(--muted); }
+  .told h2 { margin: 0 0 12px; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink2); font-weight: 600; }
+  details { border-top: 1px solid var(--line); padding: 8px 0; }
+  details summary { cursor: pointer; font-size: 13px; color: var(--ink2); list-style: none; display: flex; gap: 8px; align-items: baseline; }
+  details summary::before { content: "▸"; color: var(--muted); font-size: 11px; }
+  details[open] summary::before { content: "▾"; }
+  details summary .same { font-family: var(--mono); font-size: 10.5px; color: var(--muted); }
+  details pre { margin: 8px 0 4px; white-space: pre-wrap; word-break: break-word; font: 12.5px/1.55 var(--mono); color: var(--ink); }
+  .none { color: var(--muted); font-size: 14px; padding: 40px 0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Mind traces</h1>
+  <select id="file" aria-label="Trace file"></select>
+  <select id="kind" aria-label="Question kind"></select>
+  <select id="state" aria-label="Earth"></select>
+  <select id="mark" aria-label="Mark">
+    <option value="">every mark</option><option value="none">unmarked</option>
+    <option value="pass">pass</option><option value="fail">fail</option><option value="defer">deferred</option>
+  </select>
+  <input id="jump" type="text" placeholder="go to id" aria-label="Go to case id">
+  <span class="grow"></span>
+  <span class="count" id="count"></span>
+</header>
+<main>
+  <section class="judge" id="judge"></section>
+  <section class="told" id="told"></section>
+</main>
+<script>
+const $ = (id) => document.getElementById(id);
+const h = (tag, props = {}, ...kids) => {
+  const el = Object.assign(document.createElement(tag), props);
+  for (const k of kids.flat()) if (k != null && k !== false) el.append(k instanceof Node ? k : String(k));
+  return el;
+};
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch {} },
+};
+
+let file = "", traces = [], labels = {}, shown = [], at = 0;
+const undo = [];
+const keyOf = (t) => `${file}#${t.id}`;
+const labelOf = (t) => labels[keyOf(t)];
+
+// What the Mind was told, in its order. The parts every trace shares sit closed, so what changes stands out.
+const PARTS = [
+  ["now", "Time"], ["charter", "Charter"], ["road", "This Earth's road"], ["queue", "Our queue"],
+  ["known", "What Earth knows of the sky"], ["scan", "Leads, as Scan shows them"],
+  ["voice", "The Mind's voice"], ["kit", "Earth at Year 0"], ["leads", "Earth's leads"],
+];
+
+async function post(t, label) {
+  labels[keyOf(t)] = label;
+  if (!label) delete labels[keyOf(t)];
+  await fetch("/labels", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ key: keyOf(t), label }) });
+  $("saved").textContent = `saved ${new Date().toLocaleTimeString()}`;
+  counts();
+}
+
+async function mark(verdict) {
+  const t = shown[at];
+  if (!t) return;
+  await saveNote(true);
+  const prev = labelOf(t);
+  undo.push({ t, prev });
+  const next = prev?.verdict === verdict ? { ...prev, verdict: null } : { ...prev, verdict };
+  next.note ??= "";
+  next.at = new Date().toISOString();
+  post(t, next.verdict || next.note ? next : null).then(render);
+}
+
+let typing;
+function saveNote(now) {
+  clearTimeout(typing);
+  const t = shown[at];
+  if (!t) return;
+  const go = () => {
+    const note = $("note").value;
+    const prev = labelOf(t);
+    if ((prev?.note ?? "") === note) return Promise.resolve();
+    undo.push({ t, prev });
+    const next = { verdict: prev?.verdict ?? null, note, at: new Date().toISOString() };
+    return post(t, next.verdict || note ? next : null);
+  };
+  if (now) return go();
+  typing = setTimeout(go, 500);
+}
+
+function counts() {
+  const all = traces.length;
+  const ls = traces.map(labelOf);
+  const marked = ls.filter((l) => l?.verdict === "pass" || l?.verdict === "fail").length;
+  const fail = ls.filter((l) => l?.verdict === "fail").length;
+  const deferred = ls.filter((l) => l?.verdict === "defer").length;
+  $("count").replaceChildren(
+    h("b", {}, shown.length ? `${at + 1} of ${shown.length}` : "0 of 0"), "  ·  ",
+    `${marked} of ${all} marked, ${fail} failed, ${deferred} deferred, ${all - marked - deferred} left`,
+  );
+}
+
+function filter(keepId) {
+  const k = $("kind").value, s = $("state").value, m = $("mark").value;
+  shown = traces.filter((t) => {
+    const v = labelOf(t)?.verdict ?? "none";
+    return (!k || t.kind === k) && (!s || t.state === s) && (!m || v === m || (m === "none" && v === null));
+  });
+  const i = keepId ? shown.findIndex((t) => t.id === keepId) : -1;
+  at = i >= 0 ? i : Math.min(at, Math.max(0, shown.length - 1));
+  render();
+}
+
+function options(select, label, values) {
+  const was = select.value;
+  select.replaceChildren(h("option", { value: "" }, label), ...values.map((v) => h("option", { value: v }, v)));
+  select.value = values.includes(was) ? was : "";
+}
+
+// This Earth at a glance, from what the Mind was told: its road and every signal heard.
+function earthOf(told) {
+  if (!told) return [];
+  const road = told.road ? told.road.split("\n").slice(1).map((l) => l.replace(/^- /, "")) : [];
+  const heard = (told.known.split("Signals Earth's watch has caught:")[1] ?? "").split("\n\n")[0].trim().split("\n")
+    .map((l) => l.replace(/^- /, "")).filter((l) => l && !l.startsWith("Nothing"));
+  const close = (told.known.split("What our craft have seen up close:")[1] ?? "").split("\n\n")[0].trim().split("\n")
+    .map((l) => l.replace(/^- /, "")).filter(Boolean);
+  const read = (told.known.match(/^- ([^,]+),[^\n]*Our Infrared Telescope has read its air: [^\n]*/gm) ?? [])
+    .map((l) => `${l.split(",")[0].slice(2)}: ${l.split("Our Infrared Telescope has read its air: ")[1]}`);
+  return [
+    ...road.map((r) => `Road · ${r}`),
+    ...heard.map((x) => `Heard · ${x}`),
+    ...read.map((x) => `Air read · ${x}`),
+    ...close.map((x) => `Up close · ${x}`),
+  ];
+}
+
+function render() {
+  counts();
+  const t = shown[at];
+  store.set("mind-review", JSON.stringify({ file, id: t?.id }));
+  if (!t) {
+    $("judge").replaceChildren(h("p", { className: "none" }, traces.length ? "No trace fits these filters." : "No traces yet. Run npm run trace:mind."));
+    $("told").replaceChildren();
+    return;
+  }
+  const label = labelOf(t) ?? {};
+  const year = t.year === null ? "before Begin" : `Year ${t.year}`;
+  const words = t.answer.trim() ? t.answer.trim().split(/\s+/).length : 0;
+  const sentences = t.answer.split(/(?<=[.?!])\s+(?=[A-Z"“])/).filter((s) => s.trim()).length;
+  const lean = t.told?.charter.match(/Dials: ([^(]+)\(/)?.[1].trim();
+  const earth = earthOf(t.told);
+  const btn = (v, text, key) => h("button", { className: `${v}${label.verdict === v ? " on" : ""}`, onclick: () => mark(v) }, text, h("kbd", {}, key));
+
+  $("judge").replaceChildren(
+    h("div", { className: "badges" },
+      h("span", { className: "badge id" }, t.id),
+      h("span", { className: "badge kind" }, t.kind),
+      h("span", { className: "badge" }, t.state),
+      h("span", { className: "badge" }, `seed ${t.seed}`),
+      h("span", { className: "badge" }, year),
+    ),
+    t.charter ? h("p", { className: "charter" }, "Charter ", h("q", {}, t.charter), lean ? `  ·  ${lean}` : "") : h("p", { className: "charter" }, "No charter chosen yet"),
+    earth.length ? h("div", { className: "earth" }, earth.map((e) => h("div", {}, e))) : false,
+    h("div", { className: "will" }, t.ask),
+    t.answer.trim() ? h("div", { className: "mind" }, t.answer) : h("div", { className: "mind empty" }, `No answer: ${t.status}`),
+    h("div", { className: "stats" }, `${words} words · ${sentences} sentences · ${((t.ms ?? 0) / 1000).toFixed(1)}s · ${t.model} · `,
+      t.via === "cli"
+        ? h("span", { title: "Asked on the Claude CLI, which also tells the Mind today's date, a block on this machine, the account's email, and that it runs in the Claude Agent SDK." }, "via CLI")
+        : "via API"),
+    t.checks?.length ? h("div", { className: "badges broken" }, t.checks.map((c) => h("span", { className: "badge fail" }, c))) : false,
+    h("div", { className: "marks" }, btn("pass", "Pass", "1"), btn("fail", "Fail", "2"), btn("defer", "Defer", "D")),
+    h("textarea", { id: "note", placeholder: "What went wrong, or right. Plain words, as you'd tell a friend.", value: label.note ?? "", oninput: () => saveNote(false), onblur: () => saveNote(true) }),
+    h("div", { className: "saved", id: "saved" }),
+    h("nav", {},
+      h("button", { disabled: at === 0, onclick: () => go(-1) }, "‹ Previous"),
+      h("button", { disabled: at >= shown.length - 1, onclick: () => go(1) }, "Next ›"),
+      h("span", { className: "keys" }, "← →  1 pass  2 fail  D defer  U undo  ⌘↵ save and next"),
+    ),
+  );
+
+  const same = new Set(["voice", "kit", "leads", "scan"]);
+  $("told").replaceChildren(h("div", {},
+    h("h2", {}, "What the Mind was told"),
+    t.told
+      ? PARTS.filter(([k]) => t.told[k]).map(([k, name]) =>
+          h("details", { open: !same.has(k) },
+            h("summary", {}, name, same.has(k) ? h("span", { className: "same" }, k === "scan" ? "same unless a reading landed" : "same every trace") : false),
+            h("pre", {}, t.told[k])))
+      : h("p", { className: "none" }, "Not captured. Traces carry it only from the dev server."),
+  ));
+}
+
+async function go(step) {
+  await saveNote(true);
+  at = Math.max(0, Math.min(shown.length - 1, at + step));
+  render();
+  scrollTo({ top: 0 });
+}
+
+async function open(name, id) {
+  file = name;
+  traces = await (await fetch(`/traces/${encodeURIComponent(name)}`)).json();
+  options($("kind"), "every kind", [...new Set(traces.map((t) => t.kind))]);
+  options($("state"), "every Earth", [...new Set(traces.map((t) => t.state))]);
+  at = 0;
+  filter(id);
+}
+
+document.addEventListener("keydown", async (e) => {
+  const inField = ["TEXTAREA", "INPUT", "SELECT"].includes(document.activeElement?.tagName);
+  if ((e.metaKey || e.ctrlKey) && e.key === "Enter") { e.preventDefault(); await saveNote(true); go(1); return; }
+  if ((e.metaKey || e.ctrlKey) && e.key === "s") { e.preventDefault(); saveNote(true); return; }
+  if (e.key === "Escape" && inField) { document.activeElement.blur(); return; }
+  if (inField || e.metaKey || e.ctrlKey || e.altKey) return;
+  if (e.key === "ArrowRight") go(1);
+  else if (e.key === "ArrowLeft") go(-1);
+  else if (e.key === "1") mark("pass");
+  else if (e.key === "2") mark("fail");
+  else if (e.key.toLowerCase() === "d") mark("defer");
+  else if (e.key.toLowerCase() === "u") {
+    // A note still waiting to save is saved first, so undo takes back the last thing done, not something older.
+    await saveNote(true);
+    const last = undo.pop();
+    if (!last) return;
+    await post(last.t, last.prev ?? null);
+    filter(shown[at]?.id);
+  }
+});
+
+for (const id of ["kind", "state", "mark"]) $(id).addEventListener("change", () => filter(shown[at]?.id));
+$("file").addEventListener("change", () => open($("file").value));
+$("jump").addEventListener("keydown", (e) => {
+  if (e.key !== "Enter") return;
+  const id = $("jump").value.trim();
+  for (const s of ["kind", "state", "mark"]) $(s).value = "";
+  filter(id);
+  $("jump").value = "";
+  $("jump").blur();
+});
+
+(async () => {
+  labels = await (await fetch("/labels")).json();
+  const files = await (await fetch("/traces")).json();
+  $("file").replaceChildren(...files.map((f) => h("option", { value: f }, f.replace(".jsonl", ""))));
+  let last = {};
+  try { last = JSON.parse(store.get("mind-review") ?? "{}"); } catch {}
+  const name = files.includes(last.file) ? last.file : files[0];
+  if (!name) return render();
+  $("file").value = name;
+  open(name, last.file === name ? last.id : undefined);
+})();
+</script>
+</body>
+</html>

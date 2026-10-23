@@ -1,8 +1,10 @@
 // Earth's real leads and its knock record at Year 0. Drawn from HOLOS_GAME_CONCEPT.md as of 2026-10-16:
 // "Earth's leads at Year 0" and "Stars Earth knocked on", with reply years from calcs/knocks.py as the first
-// mock shows them. Change it when they change. The seed's felt worlds aren't drawn yet, so none are listed.
+// mock shows them. Change it when they change. The seed's felt worlds aren't drawn yet, so none are listed. That the
+// Infrared Telescope can't split Proxima b either, by lib/sim/observing.ts, was added 2026-10-23, after the Mind offered
+// it as a way to read its air.
 export const EARTH_LEADS = `Earth's leads at Year 0. These are real oddities. What a study or an observation will find is not known yet.
-- Proxima b, 4.24 ly, the nearest world: at least 1.06 Earth masses, in a flaring red dwarf's warm zone, 11.2-day year. Its air is unread: no telescope Earth has can split it from its star. Its star has likely stripped it bare: rocky worlds measured near red dwarfs have proved bare, and models keep air only on the largest and coolest. The two roads on Reach, sails and a flyby probe, go there.
+- Proxima b, 4.24 ly, the nearest world: at least 1.06 Earth masses, in a flaring red dwarf's warm zone, 11.2-day year. Its air is unread: no telescope Earth has can split it from its star, and nor could the Infrared Telescope, at 37 thousandths of an arcsecond. Its star has likely stripped it bare: rocky worlds measured near red dwarfs have proved bare, and models keep air only on the largest and coolest. The two roads on Reach, sails and a flyby probe, go there.
 - 82 Eridani d, 19.7 ly: at least 5 Earth masses, on a stretched orbit through a Sun-like star's warm zone. Its air is unread.
 - Fomalhaut's new cloud, 25 ly: a bright point that drifts and fades, as a cloud from a collision would.
 - Every world Earth has felt by its tug on its star is a lead too. They are listed below, from what Earth knows. Never invent one.

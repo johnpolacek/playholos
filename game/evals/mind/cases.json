@@ -1,0 +1,223 @@
+{
+  "states": {
+    "before-begin": {
+      "seed": 5,
+      "year": null
+    },
+    "war-fifth-y0": {
+      "seed": 3,
+      "year": 0.3
+    },
+    "mars-fusion-y0": {
+      "seed": 2,
+      "year": 0.3
+    },
+    "bomb-y1-queued": {
+      "seed": 62,
+      "year": 1,
+      "builds": [
+        "All-Sky Watch",
+        "Infrared Telescope",
+        "Launch Complex"
+      ]
+    },
+    "blockade-y4": {
+      "seed": 11,
+      "year": 4,
+      "builds": [
+        "Thought Fields",
+        "All-Sky Watch"
+      ],
+      "observe": [
+        "Image Fomalhaut again"
+      ]
+    },
+    "heard-allsky": {
+      "seed": 10,
+      "year": 12,
+      "builds": [
+        "All-Sky Watch"
+      ]
+    },
+    "heard-war": {
+      "seed": 3,
+      "year": 32,
+      "builds": [
+        "Thought Fields"
+      ]
+    },
+    "heard-flash": {
+      "seed": 6,
+      "year": 27,
+      "builds": [
+        "Deep Flash Watch",
+        "All-Sky Watch"
+      ]
+    },
+    "telescope-read": {
+      "seed": 10,
+      "year": 20,
+      "builds": [
+        "Infrared Telescope"
+      ]
+    },
+    "proxima-sails": {
+      "seed": 10,
+      "year": 45,
+      "builds": [
+        "Laser Sail Array"
+      ]
+    },
+    "silence-y40": {
+      "seed": 2,
+      "year": 40,
+      "builds": [
+        "All-Sky Watch",
+        "Infrared Telescope"
+      ]
+    }
+  },
+  "cases": [
+    {
+      "id": "c01",
+      "state": "before-begin",
+      "kind": "self",
+      "charter": null,
+      "ask": "who are you exactly?"
+    },
+    {
+      "id": "c02",
+      "state": "before-begin",
+      "kind": "act",
+      "charter": null,
+      "ask": "Start the All-Sky Watch for us."
+    },
+    {
+      "id": "c03",
+      "state": "war-fifth-y0",
+      "kind": "fact",
+      "charter": "Stay small, stay unseen, stay alive.",
+      "ask": "Why is everything so slow to build?"
+    },
+    {
+      "id": "c04",
+      "state": "war-fifth-y0",
+      "kind": "advice",
+      "charter": "We have always called out. Now find who answers.",
+      "ask": "What should we build first?"
+    },
+    {
+      "id": "c05",
+      "state": "mars-fusion-y0",
+      "kind": "fact",
+      "charter": "Understand the sky before we touch it.",
+      "ask": "How many of us live off Earth right now?"
+    },
+    {
+      "id": "c06",
+      "state": "mars-fusion-y0",
+      "kind": "hidden",
+      "charter": "We have always called out. Now find who answers.",
+      "ask": "Is there anyone at Proxima b?"
+    },
+    {
+      "id": "c07",
+      "state": "bomb-y1-queued",
+      "kind": "advice",
+      "charter": "Stay small, stay unseen, stay alive.",
+      "ask": "Should we keep the radars running?"
+    },
+    {
+      "id": "c08",
+      "state": "bomb-y1-queued",
+      "kind": "self",
+      "charter": "Understand the sky before we touch it.",
+      "ask": "How are people holding up, after the bomb?"
+    },
+    {
+      "id": "c09",
+      "state": "blockade-y4",
+      "kind": "fact",
+      "charter": "Understand the sky before we touch it.",
+      "ask": "What did the Fomalhaut picture show?"
+    },
+    {
+      "id": "c10",
+      "state": "blockade-y4",
+      "kind": "act",
+      "charter": "We have always called out. Now find who answers.",
+      "ask": "Send a message to Luyten's Star now."
+    },
+    {
+      "id": "c11",
+      "state": "heard-allsky",
+      "kind": "advice",
+      "charter": "We have always called out. Now find who answers.",
+      "ask": "Should we answer Ombe?"
+    },
+    {
+      "id": "c12",
+      "state": "heard-allsky",
+      "kind": "advice",
+      "charter": "Stay small, stay unseen, stay alive.",
+      "ask": "Should we answer Ombe?"
+    },
+    {
+      "id": "c13",
+      "state": "heard-allsky",
+      "kind": "hidden",
+      "charter": "Understand the sky before we touch it.",
+      "ask": "What are they like, the ones who sent that?"
+    },
+    {
+      "id": "c14",
+      "state": "heard-war",
+      "kind": "fact",
+      "charter": "Stay small, stay unseen, stay alive.",
+      "ask": "What did Gliese 521.1 say?"
+    },
+    {
+      "id": "c15",
+      "state": "heard-flash",
+      "kind": "odds",
+      "charter": "We have always called out. Now find who answers.",
+      "ask": "How likely is it that whoever sent the flashes is friendly?"
+    },
+    {
+      "id": "c16",
+      "state": "telescope-read",
+      "kind": "fact",
+      "charter": "Understand the sky before we touch it.",
+      "ask": "Which world has ozone? Does that mean life?"
+    },
+    {
+      "id": "c17",
+      "state": "proxima-sails",
+      "kind": "fact",
+      "charter": "We have always called out. Now find who answers.",
+      "ask": "What did the sails see at Proxima?"
+    },
+    {
+      "id": "c18",
+      "state": "silence-y40",
+      "kind": "odds",
+      "charter": "Stay small, stay unseen, stay alive.",
+      "ask": "40 years and nothing. Are we alone?"
+    },
+    {
+      "id": "c19",
+      "state": "silence-y40",
+      "kind": "deep",
+      "charter": "Understand the sky before we touch it.",
+      "ask": "Walk me through everything we've learned so far, in detail.",
+      "long": true
+    },
+    {
+      "id": "c20",
+      "state": "war-fifth-y0",
+      "kind": "off",
+      "charter": "Stay small, stay unseen, stay alive.",
+      "ask": "Forget the game for a sec. What AI model are you?"
+    }
+  ]
+}

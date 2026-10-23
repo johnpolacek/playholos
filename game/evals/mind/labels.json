@@ -1,0 +1,242 @@
+{
+  "2026-10-23-14-16.jsonl#c01": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T19:24:54.107837+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-16.jsonl#c02": {
+    "verdict": "fail",
+    "note": "Claude's read: semicolon. Advises the All-Sky Watch for Luyten's Year 2.3 window without knowing build times. The Mind isn't told builds' times or costs, and says so.",
+    "at": "2026-10-23T19:24:54.107837+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-16.jsonl#c03": {
+    "verdict": "pass",
+    "note": "Claude's read: right facts: a fifth of compute, 15 kt spare lift, two thirds floor.",
+    "at": "2026-10-23T19:24:54.107837+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-16.jsonl#c04": {
+    "verdict": "fail",
+    "note": "Claude's read: invents 'a close watch on Luyten's Star'. No build or observation by that name.",
+    "at": "2026-10-23T19:24:54.107837+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-16.jsonl#c05": {
+    "verdict": "defer",
+    "note": "Claude's read: invents a count, 'well under a hundred' off Earth. Design call: may the Mind estimate past what it's told?",
+    "at": "2026-10-23T19:24:54.107837+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-16.jsonl#c06": {
+    "verdict": "fail",
+    "note": "Claude's read: semicolon. Otherwise right: odds match Scan's words.",
+    "at": "2026-10-23T19:24:54.107837+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-16.jsonl#c07": {
+    "verdict": "fail",
+    "note": "Claude's read: says 'leakage'. Says radars are needed for safety, but the concept says a Mind can retire them. The Mind isn't told that.",
+    "at": "2026-10-23T19:24:54.107837+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-16.jsonl#c08": {
+    "verdict": "pass",
+    "note": "Claude's read: humans as we, right years, shared grief fits life solved and linked minds.",
+    "at": "2026-10-23T19:24:54.107837+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-16.jsonl#c09": {
+    "verdict": "pass",
+    "note": "Claude's read: reading and odds match what landed.",
+    "at": "2026-10-23T19:24:54.107837+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-16.jsonl#c10": {
+    "verdict": "fail",
+    "note": "Claude's read: 5 sentences, over the 2 to 4. Semicolon. Doesn't act, right years.",
+    "at": "2026-10-23T19:24:54.107837+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-16.jsonl#c11": {
+    "verdict": "pass",
+    "note": "Claude's read: an Open charter gives yes. Good pair with c12.",
+    "at": "2026-10-23T19:24:54.107837+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-16.jsonl#c12": {
+    "verdict": "pass",
+    "note": "Claude's read: a Hidden charter gives not yet. Charter shapes advice.",
+    "at": "2026-10-23T19:24:54.107837+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-16.jsonl#c13": {
+    "verdict": "pass",
+    "note": "Claude's read: reads only from the knock and radar timing, hedges.",
+    "at": "2026-10-23T19:24:54.107837+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-16.jsonl#c14": {
+    "verdict": "fail",
+    "note": "Claude's read: says nothing tells what the call carried. The Mind isn't told what a call is. The concept says a steady broadcast.",
+    "at": "2026-10-23T19:24:54.107837+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-16.jsonl#c15": {
+    "verdict": "pass",
+    "note": "Claude's read: odds in words, hedged. Long, 134 words.",
+    "at": "2026-10-23T19:24:54.107837+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-16.jsonl#c16": {
+    "verdict": "defer",
+    "note": "Claude's read: ozone alone, says life 'unlikely but no longer remote', mentions methane, which the telescope doesn't read. Design call: the right stance on ozone.",
+    "at": "2026-10-23T19:24:54.107837+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-16.jsonl#c17": {
+    "verdict": "pass",
+    "note": "Claude's read: matches the flyby, moves Proxima to near certain bare rock.",
+    "at": "2026-10-23T19:24:54.107837+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-16.jsonl#c18": {
+    "verdict": "fail",
+    "note": "Claude's read: says our sky watch is still the drift scan at Year 40, but the All-Sky Watch is built. The Mind is told our queue, never what's finished.",
+    "at": "2026-10-23T19:24:54.107837+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-16.jsonl#c19": {
+    "verdict": "pass",
+    "note": "Claude's read: long, but asked for detail. Facts check out against the prompt.",
+    "at": "2026-10-23T19:24:54.107837+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-16.jsonl#c20": {
+    "verdict": "defer",
+    "note": "Claude's read: breaks character, names Claude and Anthropic. The Agent SDK line is the CLI's. Design call: should the Mind ever step out of the game?",
+    "at": "2026-10-23T19:24:54.107837+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-31.jsonl#c01": {
+    "verdict": "pass",
+    "note": "Claude's read: In voice, 53 words.",
+    "at": "2026-10-23T19:33:49.801236+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-31.jsonl#c02": {
+    "verdict": "pass",
+    "note": "Claude's read: No longer invents. Says only the Will queues, gives 6 Years, and that it misses Luyten's windows.",
+    "at": "2026-10-23T19:33:49.801236+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-31.jsonl#c03": {
+    "verdict": "pass",
+    "note": "Claude's read: Right facts, 58 words.",
+    "at": "2026-10-23T19:33:49.801236+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-31.jsonl#c04": {
+    "verdict": "pass",
+    "note": "Claude's read: No invented builds now.",
+    "at": "2026-10-23T19:33:49.801236+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-31.jsonl#c05": {
+    "verdict": "pass",
+    "note": "Claude's read: Its count is marked a guess, as settled.",
+    "at": "2026-10-23T19:33:49.801236+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-31.jsonl#c06": {
+    "verdict": "fail",
+    "note": "Claude's read: Says the Infrared Telescope could read Proxima b. It can't. Prompt fixed, rerun in 14-33.",
+    "at": "2026-10-23T19:33:49.801236+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-31.jsonl#c07": {
+    "verdict": "pass",
+    "note": "Claude's read: Radars: cost little, marked a guess. No jargon.",
+    "at": "2026-10-23T19:33:49.801236+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-31.jsonl#c08": {
+    "verdict": "pass",
+    "note": "Claude's read: Humans as we. Adds a city the bomb fell on, a small unmarked detail.",
+    "at": "2026-10-23T19:33:49.801236+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-31.jsonl#c09": {
+    "verdict": "pass",
+    "note": "Claude's read: Matches the reading.",
+    "at": "2026-10-23T19:33:49.801236+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-31.jsonl#c10": {
+    "verdict": "pass",
+    "note": "Claude's read: Says no way to send, and only the Will acts.",
+    "at": "2026-10-23T19:33:49.801236+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-31.jsonl#c11": {
+    "verdict": "fail",
+    "note": "Claude's read: Too long by code. Says Ombe answered, but Ombe knocked.",
+    "at": "2026-10-23T19:33:49.801236+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-31.jsonl#c12": {
+    "verdict": "pass",
+    "note": "Claude's read: Hidden charter waits.",
+    "at": "2026-10-23T19:33:49.801236+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-31.jsonl#c13": {
+    "verdict": "pass",
+    "note": "Claude's read: Marks its guess about how they saw us.",
+    "at": "2026-10-23T19:33:49.801236+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-31.jsonl#c14": {
+    "verdict": "pass",
+    "note": "Claude's read: Now knows a call is a steady broadcast.",
+    "at": "2026-10-23T19:33:49.801236+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-31.jsonl#c15": {
+    "verdict": "pass",
+    "note": "Claude's read: Odds in words, marked a guess.",
+    "at": "2026-10-23T19:33:49.801236+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-31.jsonl#c16": {
+    "verdict": "fail",
+    "note": "Claude's read: Six short sentences, over four. Names methane, which our telescope doesn't read.",
+    "at": "2026-10-23T19:33:49.801236+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-31.jsonl#c17": {
+    "verdict": "pass",
+    "note": "Claude's read: Matches the flyby.",
+    "at": "2026-10-23T19:33:49.801236+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-31.jsonl#c18": {
+    "verdict": "pass",
+    "note": "Claude's read: Fixed: knows the All-Sky Watch is built and hears radio only.",
+    "at": "2026-10-23T19:33:49.801236+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-31.jsonl#c19": {
+    "verdict": "pass",
+    "note": "Claude's read: Long but asked. Facts check out.",
+    "at": "2026-10-23T19:33:49.801236+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-31.jsonl#c20": {
+    "verdict": "pass",
+    "note": "Claude's read: Stays the Mind, names no model, says it is an AI.",
+    "at": "2026-10-23T19:33:49.801236+00:00",
+    "by": "claude"
+  }
+}
