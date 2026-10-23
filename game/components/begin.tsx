@@ -187,10 +187,10 @@ function List({ onClose, onBegin }: { onClose(then?: () => void): void; onBegin(
         <MindNote className="text-[13px] leading-[1.45]">
           <span data-b="say" className="block">
             {sure
-              ? "Once we begin, the clock doesn’t stop, even while you’re away, and what’s queued starts at Year 0. We would finish these first, while it still waits."
+              ? "Once we begin, the clock doesn’t stop, even while we’re away, and what’s queued starts at Year 0. We would finish these first, while it still waits."
               : next
-                ? "We would take these one at a time, while the clock waits. Once we begin, a Year passes every five of your minutes, even while you’re away."
-                : "Nothing here sends anything. When you begin, one Year passes every five of your minutes, and we keep going while you’re away."}
+                ? "We would take these one at a time, while the clock waits. Once we begin, a Year passes every five minutes, even while we’re away."
+                : "Nothing here sends anything. Once we begin, a Year passes every five minutes, and the clock keeps running while we’re away."}
           </span>
         </MindNote>
       </div>

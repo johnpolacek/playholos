@@ -23,7 +23,7 @@ import {
 // the four, or back to Scan once all are done.
 
 const INTRO =
-  "The sky near us is quiet. These are the few things in it we can’t explain yet. Beside each, how long its light takes, in your time. A call costs that, and an answer as long again.";
+  "The sky near us is quiet. These are the few things in it we can’t explain yet. Beside each, how long its light takes, at a Year every five minutes. A call costs that, and an answer as long again.";
 
 /** The stops as a thread: Sol, then each lead in the order we take them. Passed and current stops are lit. The
  *  Build tour takes its builds on it too. */
