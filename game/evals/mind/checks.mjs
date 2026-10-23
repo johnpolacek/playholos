@@ -11,7 +11,8 @@ export const CHECKS = [
   { name: "semicolon", test: (a) => a.includes(";") },
   { name: "em dash", test: (a) => /[—–]/.test(a) },
   { name: "markdown", test: (a) => /\*\*|__|^#|^\s*[-*•] |^\s*\d+\. /m.test(a) },
-  { name: "odds as numbers", test: (a) => /\d\s?%|\b\d+ in \d+\b/.test(a) },
+  // "1 in 5" or "1 in 100,000", but not a name and a year, as "Gliese 521.1 in 2021".
+  { name: "odds as numbers", test: (a) => /\d\s?%|(?<![\d.,])\b\d{1,3}(?:,\d{3})* in \d{1,3}(?:,\d{3})*\b(?![.,]?\d)/.test(a) },
   { name: "jargon", test: (a) => /\b(leakage|technosignatures?|signatures?)\b/i.test(a) },
   { name: "names a model", test: (a) => /\b(Claude|Anthropic|Opus|Sonnet|Haiku|GPT|LLM|language model|Agent SDK)\b/i.test(a) },
   // About 60 words in two to four sentences, unless the Will asks for more. A little over 60 still passes.
