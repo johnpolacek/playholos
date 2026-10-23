@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useReducer, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router";
 import { useNext } from "@/components/begin";
 import { Ceilings, useShown } from "@/components/costs";
@@ -8,7 +8,7 @@ import { MindNote } from "@/components/mind-note";
 import { toggleBuild, useCompute, usePlan, useSchedule } from "@/components/picks";
 import { span } from "@/lib/game/clock";
 import { ceiling, inUse, moves, schedule, sharesAt } from "@/lib/game/plan";
-import type { Plan } from "@/lib/game/types";
+import type { GuideFig as Fig, Guide as Talk, Plan } from "@/lib/game/types";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
 
 // Build before Begin, with the Mind as our guide: our Mind drawn at the center, its compute flowing out to each build
@@ -38,15 +38,9 @@ function readOf(plan: Plan, scale: number) {
 }
 type Read = ReturnType<typeof readOf>;
 
-type Moved = { name: string; by: number } | null;
 /** A build in or out of our order, and what it did to the rest. */
-interface Change {
-  name: string;
-  adding: boolean;
-  at: number | null | undefined;
-  late: Moved;
-  soon: Moved;
-}
+type Change = NonNullable<Talk["last"]>;
+type Idea = Talk["ideas"][string];
 
 const IDEAS = {
   intro: "our compute",
@@ -61,33 +55,8 @@ const IDEAS = {
 };
 type Key = keyof typeof IDEAS;
 
-type Fig =
-  | { kind: "more"; name: string; need: number; more: number }
-  | { kind: "moved"; name: string; was: number; now: number; tone: "late" | "soon" }
-  | { kind: "grow"; campuses: number[]; step: number }
-  | { kind: "short"; names: string[] };
-
-interface Idea {
-  say: string;
-  fig?: Fig;
-  /** The change that brought it. */
-  at: number;
-}
-
-/** What the Mind has explained this game, and our order as it last saw it. Kept across tabs, since a build is queued
- *  on its own page, until the page reloads. */
-interface Talk {
-  plan: Plan;
-  seen: Key[];
-  now: Key;
-  ideas: Partial<Record<Key, Idea>>;
-  last: Change | null;
-  changes: number;
-}
-const talks = new Map<number, Talk>();
-
 /** The first idea a change shows that the Mind hasn't explained yet, if any. */
-function pick(seen: Key[], c: Change, r: Read): Key | null {
+function pick(seen: string[], c: Change, r: Read): Key | null {
   const p = r.parts.find((x) => x.name === c.name);
   const tries: [Key, boolean][] = c.adding
     ? [
@@ -171,30 +140,31 @@ function explain(key: Key, c: Change | null, r: Read, plan: Plan, scale: number)
   }
 }
 
-/** The Mind's talk for this game, brought up to date with every build queued or taken out since it last looked, each
- *  against our order as it was just before. Waits until this game's Earth is known, so the numbers are its own. */
+/** The Mind's talk for this game, kept in the save, brought up to date with every build queued or taken out since it
+ *  last looked, each against our order as it was just before. Waits until this game's Earth is known, so the numbers
+ *  are its own. */
 function useTalk() {
-  const { save } = useGame();
+  const { save, setGuide } = useGame();
   const { plan } = usePlan();
   const { scale } = useSchedule();
   const { known } = useCompute();
-  const [, bump] = useReducer((n: number) => n + 1, 0);
-  const seed = save?.seed;
+  const talk = save?.guide;
   useEffect(() => {
-    if (seed === undefined || !known) return;
-    const t = talks.get(seed);
-    if (!t) {
+    if (!known) return;
+    if (!talk) {
       const intro = explain("intro", null, readOf(plan, scale), plan, scale);
-      talks.set(seed, { plan, seen: ["intro"], now: "intro", ideas: { intro: { ...intro, at: 0 } }, last: null, changes: 0 });
-      return bump();
+      return setGuide({ builds: plan.builds, seen: ["intro"], now: "intro", ideas: { intro: { ...intro, at: 0 } }, last: null, changes: 0 });
     }
-    let was = t.plan;
+    if (talk.builds.join("|") === plan.builds.join("|")) return;
+    const t = { ...talk, seen: [...talk.seen], ideas: { ...talk.ideas } };
+    let was: Plan = { ...plan, builds: talk.builds };
     const changes = [
       ...was.builds.filter((b) => !plan.builds.includes(b)).map((name) => ({ name, adding: false })),
       ...plan.builds.filter((b) => !was.builds.includes(b)).map((name) => ({ name, adding: true })),
     ];
     for (const { name, adding } of changes) {
-      const c: Change = { name, adding, ...moves(was, scale, name) };
+      const { at, late, soon } = moves(was, scale, name);
+      const c: Change = { name, adding, at: at ?? null, late, soon };
       const next = toggleBuild(name)(was);
       const r = readOf(next, scale);
       const key = pick(t.seen, c, r);
@@ -207,11 +177,9 @@ function useTalk() {
       }
       was = next;
     }
-    t.plan = plan;
-    if (changes.length) bump();
-  }, [seed, plan, scale, known]);
-  const talk = seed === undefined ? undefined : talks.get(seed);
-  return { talk, reread: (k: Key) => talk && ((talk.now = k), bump()) };
+    setGuide({ ...t, builds: plan.builds });
+  }, [talk, plan, scale, known, setGuide]);
+  return { talk, reread: (k: string) => talk && setGuide({ ...talk, now: k }) };
 }
 
 /** What the last change did, in a line. */
@@ -536,7 +504,7 @@ export function Guide() {
             <span className="mr-0.5">
               IDEAS MET · {talk.seen.length} OF {Object.keys(IDEAS).length}
             </span>
-            {talk.seen.map((k) => (
+            {talk.seen.filter((k): k is Key => k in IDEAS).map((k) => (
               <button
                 key={k}
                 onClick={() => reread(k)}

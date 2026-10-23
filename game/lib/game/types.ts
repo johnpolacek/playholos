@@ -20,6 +20,30 @@ export interface Save {
   looked?: boolean;
   /** Had an answer from the Mind, the last of the four. */
   asked?: boolean;
+  /** What the Mind has explained on Build before Begin, kept so a reload doesn't explain it again. Since 2026-10-22. */
+  guide?: Guide;
+}
+
+/** What the Mind draws beside an idea on Build: a build's need and what more it takes, a build's time before and after
+ *  a change, Thought Fields' climb, or the builds short of their need. */
+export type GuideFig =
+  | { kind: "more"; name: string; need: number; more: number }
+  | { kind: "moved"; name: string; was: number; now: number; tone: "late" | "soon" }
+  | { kind: "grow"; campuses: number[]; step: number }
+  | { kind: "short"; names: string[] };
+
+type Moved = { name: string; by: number } | null;
+
+/** The Mind's talk on Build before Begin, in components/guide.tsx's words: our builds as it last saw them, each idea it
+ *  has explained in the order met, the one shown, the last build in or out and what it did, and how many there have
+ *  been. */
+export interface Guide {
+  builds: string[];
+  seen: string[];
+  now: string;
+  ideas: Record<string, { say: string; fig?: GuideFig; at: number }>;
+  last: { name: string; adding: boolean; at: number | null; late: Moved; soon: Moved } | null;
+  changes: number;
 }
 
 export interface Plan {
