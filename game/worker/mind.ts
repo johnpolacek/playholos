@@ -8,10 +8,11 @@ import { kt, matterAt, schedule } from "@/lib/game/plan";
 import { kitOf } from "@/lib/game/reach";
 import type { Ordered } from "@/lib/game/types";
 import { readLater, readObserve, readQueue } from "./orders";
-import { EARTH_AT_YEAR_0 } from "@/lib/mind/earth";
+import { EARTH_AT_YEAR_0, roadOf } from "@/lib/mind/earth";
 import { EARTH_LEADS } from "@/lib/mind/leads";
 import { describe, earthKnows } from "@/lib/sim/knowledge";
 import { apiKeyFor, workspaceFor } from "./access";
+import { pastOf } from "./earth";
 import { inPool, loadVoices, loadWorld } from "./world";
 
 // A first sketch of the Mind's voice. Its charter and dials join it later.
@@ -73,21 +74,23 @@ export async function mind(req: Request) {
   // The knowledge wall: the seed's world stays here, and the Mind hears only what Earth knows of it. Once our order
   // finishes a watch, it hears what reaches us, and the telescope reads what we have felt, dated as Build dates them,
   // with this game's compute.
-  const known = inPool(seed)
-    ? await loadWorld(seed).then(async (w) => {
-        const plan = { builds: queue, observe: readObserve(observe), later: orders };
-        const scale = Number(w.earth.compute) || 1;
-        const done = schedule(plan, scale);
-        const kit = kitOf(plan, scale);
-        const year = Math.max(0, yearAt(began) ?? 0);
-        const held = kt(matterAt({ builds: queue, observe: [], later: orders }, done, year));
-        return `${describe(earthKnows(w, year, await loadVoices(w), kit))}\n\nMatter we hold in orbit now, less what our builds take: ${held}.`;
-      })
-    : "";
+  const world = inPool(seed) ? await loadWorld(seed) : null;
+  // Where this Earth's road to Year 0 left the base kit, read beside the kit it changes.
+  const road = world ? roadOf(pastOf(world)) : "";
+  let known = "";
+  if (world) {
+    const plan = { builds: queue, observe: readObserve(observe), later: orders };
+    const scale = Number(world.earth.compute) || 1;
+    const done = schedule(plan, scale);
+    const kit = kitOf(plan, scale);
+    const year = Math.max(0, yearAt(began) ?? 0);
+    const held = kt(matterAt({ builds: queue, observe: [], later: orders }, done, year));
+    known = `${describe(earthKnows(world, year, await loadVoices(world), kit))}\n\nMatter we hold in orbit now, less what our builds take: ${held}.`;
+  }
   const workspace = workspaceFor(req);
   const result = streamText({
     model: createAnthropic({ apiKey, headers: workspace ? { "anthropic-workspace-id": workspace } : undefined })(MIND_MODEL),
-    system: [MIND, readCharter(charter), EARTH_AT_YEAR_0, EARTH_LEADS, describeLeads(readObserve(observe), yearAt(began)), describeQueue(queue, orders), known, now(began)]
+    system: [MIND, readCharter(charter), EARTH_AT_YEAR_0, road, EARTH_LEADS, describeLeads(readObserve(observe), yearAt(began)), describeQueue(queue, orders), known, now(began)]
       .filter(Boolean)
       .join("\n\n"),
     messages: await convertToModelMessages(messages),

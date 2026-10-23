@@ -1,6 +1,9 @@
 // What the Mind knows Earth has at Year 0. Drawn from HOLOS_GAME_CONCEPT.md as of 2026-10-16: "Year 0 and
 // Earth's road to it" (the backbone), "Earth's kit at Year 0", "Growing compute" and the mocks' settled cards.
-// Change it when they change. The seed's branches, such as a Taiwan war, aren't drawn yet, so this is the base kit.
+// Change it when they change. This is the base kit. Where this game's Earth left it, by a war over Taiwan, a nuclear
+// weapon, Mars or fusion, its own road follows, from roadOf. 2026-10-23.
+import type { EarthPast } from "@/lib/game/past";
+
 export const EARTH_AT_YEAR_0 = `What Earth has at Year 0, 2040:
 - People: about 9.2 billion. The long-term average warming passed 1.5°C around 2030.
 - Energy: about 24 TW, growing 1 to 2% a year on solar and wind. Fusion plants are being built, but the first 100 MW plant is likely near 2041, so none feeds the grid yet.
@@ -16,3 +19,31 @@ export const EARTH_AT_YEAR_0 = `What Earth has at Year 0, 2040:
 - Every watch Earth has listens for radio. A knock sent as laser flashes, each a billionth of a second long, passes them all unseen. Only a few small telescopes at Lick watch for flashes, each on its own patch of sky.
 - Radars: primary and military radars still sweep the sky. Earth is loud.
 - Listening: nothing has been heard from anyone, to this morning.`;
+
+
+/** This Earth's own road to Year 0 where it left the kit above, for the Mind, as the Will saw it told on waking: a war
+ *  or blockade over Taiwan and what it left of our compute, as Build says it, a nuclear weapon used, people on Mars,
+ *  fusion on the grid. In order, each with its year. Nothing if none happened. */
+export function roadOf(e: EarthPast): string {
+  const y = e.years;
+  const turns: [number | undefined, string][] = [];
+  if (e.taiwan) {
+    const what =
+      e.taiwan === "invasion"
+        ? "The war for Taiwan cost us the best chip fabs for years."
+        : "The blockade of Taiwan kept its chips from us for a year.";
+    const c = e.compute;
+    turns.push([
+      y.taiwan,
+      c >= 0.99
+        ? `${what} Output caught up, so our compute is as above.`
+        : `${what} Our compute at Year 0 is ${Math.round(c * 100)}% of what the kit above says, about ${Number((c * 10).toFixed(1))} × 10^24 operations a second, drawing about ${Number((c * 0.25).toFixed(2))} TW. Every build takes longer than it would have, and Thought Fields grows from less. Build says so.`,
+    ]);
+  }
+  if (e.nuclear) turns.push([y.nuclear, "A nuclear weapon was used in war. One, and none since."]);
+  if (e.mars) turns.push([y.mars, "We reached Mars. A few of us live in a small outpost there, a few ships' cargo."]);
+  if (e.fusion) turns.push([y.fusion, "Fusion joined the grid. The first plants are small, so most of our energy is still solar and wind."]);
+  if (!turns.length) return "";
+  turns.sort((a, b) => (a[0] ?? 0) - (b[0] ?? 0));
+  return `This Earth's own road, where it left the kit above. Where they differ, this holds. The Will saw it told on waking.\n${turns.map(([year, t]) => `- ${year ?? "Before 2040"}: ${t}`).join("\n")}`;
+}
