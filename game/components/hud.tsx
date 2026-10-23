@@ -9,7 +9,8 @@ import { ceiling, drawAt, kt, matterAt, sharesAt, shortAt } from "@/lib/game/pla
 // What we have, from our order: matter we hold in orbit, growing with lift and less what our builds take, since
 // 2026-10-20. Energy, the share of Earth's that our compute draws, and compute, how much of ours is at work, since
 // 2026-10-21. Each with its number and a word under it, and energy with where Thought Fields takes it
-// before the grid is full, from explorations/build-costs.html, 2026-10-22.
+// before the grid is full, from explorations/build-costs.html, 2026-10-22. Compute counts as Build's Mind does, what our
+// builds can use, at work or idle, and never says spare, 2026-10-22.
 
 const pct = (x: number) => `${Math.round(x * 100)}%`;
 
@@ -60,7 +61,7 @@ export function Hud() {
   const now = Math.max(0, y ?? 0);
   const matter = matterAt(plan, done, now);
   const short = shortAt(plan, done, now);
-  const { energy } = useMemo(() => drawAt(plan, scale, now), [plan, scale, now]);
+  const { energy, compute } = useMemo(() => drawAt(plan, scale, now), [plan, scale, now]);
   const share = useMemo(() => sharesAt(plan, scale, now), [plan, scale, now]);
   // Thought Fields grows our compute a campus at a time, until the grid is full.
   const top = useMemo(() => ceiling(plan, scale), [plan, scale]);
@@ -104,9 +105,9 @@ export function Hud() {
         />
         <Meter
           label="COMPUTE"
-          at={1 - share.idle}
-          value={over ? `${pct(1 + share.short)} needed` : `${pct(1 - share.idle)} at work`}
-          sub={over ? `${pct(share.short)} short` : share.idle > 0.005 ? `${pct(share.idle)} idle` : `${pct(share.spare)} spare`}
+          at={compute}
+          value={over ? `${pct(1 + share.short)} needed` : `${pct(compute)} at work`}
+          sub={over ? `${pct(share.short)} short` : compute < 0.995 ? `${pct(1 - compute)} idle` : "none idle"}
           late={over}
         />
       </div>

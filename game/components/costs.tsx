@@ -280,7 +280,7 @@ function Ceiling({ queued, now, began }: { queued: boolean; now: number; began: 
 
 /** What Build shows queued: our order, and the build pointed at in a list, added last before Begin, or ordered now
  *  in play once open. */
-function useShown() {
+export function useShown() {
   const { year } = useGame();
   const { plan } = usePlan();
   const { done } = useSchedule();
@@ -303,7 +303,7 @@ export function Costs() {
   const share = useMemo(() => sharesAt(shown, scale, now), [shown, scale, now]);
   const over = share.short > 0.005;
   return (
-    <section className="-mx-4 border-b border-rowline bg-panel px-4 pb-3 wide:sticky wide:-top-3 wide:z-10 wide:pt-3 wide:-mt-3">
+    <section className="-mx-4 border-b border-rowline bg-panel px-4 pb-3 wide:sticky wide:-top-3 wide:z-10 wide:pt-3">
       <div className="flex min-h-[18px] items-center justify-between font-mono text-[10px] tracking-[.1em] text-muted">
         <span>OUR COMPUTE</span>
         {adding && <span className="tracking-[.12em] text-you uppercase">If we queue {adding}</span>}
