@@ -63,12 +63,11 @@ function InPlay({ name, scale, done }: { name: string; scale: number; done: Reco
   }, [now, back, name, plan, scale]);
   if (now === null) return null;
   if (back !== null && again) {
-    const { years } = takes(name);
     const kept =
       name === "Thought Fields"
         ? ": the campus under way was finished, and no more begin."
-        : again.left !== null && years
-          ? `, its work kept, ${tenths(again.left)} of ${years} Years left at standard pace.`
+        : again.left !== null
+          ? `, its work kept: ${Math.floor(100 * again.left.built)}% built, ${tenths(again.left.left)} Years left at standard pace.`
           : ", its work kept.";
     return (
       <div className="flex flex-col">
@@ -258,7 +257,7 @@ export function BuildPage({ slug }: { slug: string }) {
   const name = build?.name ?? null;
 
   // The map: our builds with places, and this one where it would stand.
-  const placed = useMemo(() => placedOf(plan, done), [plan, done]);
+  const placed = useMemo(() => placedOf(plan, done, scale), [plan, done, scale]);
   useEffect(() => place(placed), [place, placed]);
   useEffect(() => pick(name && SITES[name] ? name : null), [pick, name]);
   useEffect(() => () => pick(null), [pick]);

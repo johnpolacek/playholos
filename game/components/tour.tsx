@@ -177,7 +177,7 @@ export function Tour({ onClose }: { onClose(): void }) {
   const name = build?.name ?? null;
 
   // The map: our builds with places, and the one in view where it would stand. Earth for the rest, and when we leave.
-  const placed = useMemo(() => placedOf(plan, done), [plan, done]);
+  const placed = useMemo(() => placedOf(plan, done, scale), [plan, done, scale]);
   useEffect(() => place(placed), [place, placed]);
   useEffect(() => pick(name && SITES[name] ? name : null), [pick, name]);
   useEffect(() => () => pick(null), [pick]);

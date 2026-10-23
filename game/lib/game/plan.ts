@@ -217,8 +217,8 @@ export const takeBack = (name: string, y: number) => (p: Plan): Plan =>
     ? { ...p, later: p.later?.filter((o) => !(o.name === name && o.y === y)) }
     : { ...p, stops: [...(p.stops ?? []), { name, y }] };
 
-/** The standard Years of work left on a build we took back, as it stood then, by Year `year`. Null if none is kept, as
- *  for Thought Fields, whose campus under way is finished. */
+/** The work left on a build we took back, as it stood then, by Year `year`: its standard Years left, and the share of
+ *  it built. Null if none is kept, as for Thought Fields, whose campus under way is finished. */
 export function keptOf(plan: Plan, scale: number, name: string, year: number) {
   const { orders, ...opts } = ordersOf(plan);
   return pace(orders, year, { scale, ...opts }).kept[pacedName(name)] ?? null;

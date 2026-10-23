@@ -65,8 +65,8 @@ export interface Pace {
   idle: number;
   /** Rock thrown from the Moon or hauled from the belt so far, kt. */
   rockKt: number;
-  /** Works taken back and not begun again: the standard Years each had left. */
-  kept: Record<string, number>;
+  /** Works taken back and not begun again: the standard Years each had left, and the share of it built. */
+  kept: Record<string, { left: number; built: number }>;
 }
 
 export interface PaceOptions {
@@ -84,8 +84,9 @@ export function pace(orders: readonly Order[], until: number, { scale = 1, aside
   const queue = [...orders].sort((a, b) => a.y - b.y);                     // a stable sort keeps one Year's orders as given
   const line: string[] = [], left = new Map<string, number>(), begun = new Map<string, number>(), moved = new Set<string>();
   const done: Record<string, number> = {}, built = new Map<string, number>(), dataCenters: number[] = [];
-  // A work taken back: its standard Years left, and whether the yard was done then, so it gets the yard's cut once.
-  const kept = new Map<string, { left: number; yard: boolean }>();
+  // A work taken back: its standard Years left of the whole, and whether the yard was done then, so it gets the yard's
+  // cut once. The whole is each work's standard Years when begun, cut with what is left, so the share built holds.
+  const kept = new Map<string, { left: number; whole: number; yard: boolean }>(), whole = new Map<string, number>();
   let t = 0, studies = CATALOG.studies, fits = centers(scale), queued = 0, standing = false, building: number | null = null;
   let s: number[] = [], room = 0, idle = 0, thought = 0;
 
@@ -97,7 +98,7 @@ export function pace(orders: readonly Order[], until: number, { scale = 1, aside
   const place = (w: string) => { const i = line.findIndex((x) => begun.get(x)! > begun.get(w)! && !moved.has(x)); return i < 0 ? line.length : i; };
   const join = (w: string, at: number, since: number, years = WORKS[w].years) => {
     begun.set(w, since);
-    if (years !== undefined) left.set(w, years * (WORKS[w].orbit && yardDone() ? 1 - CATALOG.yard.cut : 1));
+    if (years !== undefined) whole.set(w, left.set(w, years * (WORKS[w].orbit && yardDone() ? 1 - CATALOG.yard.cut : 1)).get(w)!);
     line.splice(at, 0, w);
   };
 
@@ -117,7 +118,8 @@ export function pace(orders: readonly Order[], until: number, { scale = 1, aside
           const n = (built.get(w) ?? 0) + 1; built.set(w, n); done[`${work.copies[1]} ${n}`] = t;
           if (n < work.copies[0]) join(w, place(w), begun.get(w)!);
         } else done[w] = t;
-        if (w === CATALOG.yard.work) for (const x of line) if (WORKS[x].orbit && left.has(x)) left.set(x, left.get(x)! * (1 - CATALOG.yard.cut));
+        if (w === CATALOG.yard.work)
+          for (const x of line) if (WORKS[x].orbit && left.has(x)) { left.set(x, left.get(x)! * (1 - CATALOG.yard.cut)); whole.set(x, whole.get(x)! * (1 - CATALOG.yard.cut)); }
         if (follow && work.then) { const at = place(w); work.then.forEach((x, i) => join(x, at + i, begun.get(w)!)); }
       }
       while (queue.length && queue[0].y <= t + EPS) {
@@ -128,7 +130,7 @@ export function pace(orders: readonly Order[], until: number, { scale = 1, aside
         else if ("drop" in o) {
           if (o.drop === "Data center") standing = false;
           else if (line.includes(o.drop)) {
-            if (left.has(o.drop)) kept.set(o.drop, { left: left.get(o.drop)!, yard: yardDone() });
+            if (left.has(o.drop)) kept.set(o.drop, { left: left.get(o.drop)!, whole: whole.get(o.drop)!, yard: yardDone() });
             line.splice(line.indexOf(o.drop), 1); left.delete(o.drop);
           }
         }
@@ -136,7 +138,10 @@ export function pace(orders: readonly Order[], until: number, { scale = 1, aside
         else if (WORKS[o.begin] && !line.includes(o.begin) && done[o.begin] === undefined) {
           join(o.begin, line.length, t);
           const k = kept.get(o.begin);
-          if (k) { left.set(o.begin, k.left * (WORKS[o.begin].orbit && !k.yard && yardDone() ? 1 - CATALOG.yard.cut : 1)); kept.delete(o.begin); }
+          if (k) {
+            const cut = WORKS[o.begin].orbit && !k.yard && yardDone() ? 1 - CATALOG.yard.cut : 1;
+            left.set(o.begin, k.left * cut); whole.set(o.begin, k.whole * cut); kept.delete(o.begin);
+          }
         }
       }
     }
@@ -171,7 +176,7 @@ export function pace(orders: readonly Order[], until: number, { scale = 1, aside
   }
   return {
     at: until, done, dataCenters, thought, room, idle, rockKt: rockAt(until),
-    kept: Object.fromEntries([...kept].map(([w, k]) => [w, k.left])),
+    kept: Object.fromEntries([...kept].map(([w, k]) => [w, { left: k.left, built: 1 - k.left / k.whole }])),
     line: line.map((w, i) => ({ work: w, left: left.get(w) ?? null, s: s[i] })),
   };
 }

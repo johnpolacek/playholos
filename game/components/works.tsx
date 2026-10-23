@@ -4,7 +4,7 @@ import { useGame } from "@/components/game-provider";
 import { SkyArt } from "@/components/sky";
 import { tenths, YEAR_0 } from "@/lib/game/clock";
 import { CLOSE } from "@/lib/game/close";
-import { ordered } from "@/lib/game/plan";
+import { keptOf, ordered, takenAt } from "@/lib/game/plan";
 import { type Site, SITES } from "@/lib/game/sites";
 import type { Plan } from "@/lib/game/types";
 import type { Dials, Mark } from "@/lib/drift";
@@ -24,13 +24,18 @@ export interface Work {
   queued: boolean;
   /** When it is done, in Years from Year 0. Null when not queued, or past 40 Years. */
   done: number | null;
+  /** Taken back in play: the share of it built then, or null for Thought Fields, which keeps no work. 2026-10-23. */
+  back?: number | null;
 }
 
-/** Our builds with places, as the plan has them: queued or not, and when each queued one is done. */
-export const placedOf = (plan: Plan, done: Record<string, number | null>): Work[] =>
+/** Our builds with places, as the plan has them: queued or not, when each queued one is done, and how much of one
+ *  taken back was built, with this game's compute. */
+export const placedOf = (plan: Plan, done: Record<string, number | null>, scale: number): Work[] =>
   Object.entries(SITES).map(([name, { site }]) => {
     const queued = ordered(plan).includes(name);
-    return { name, site, queued, done: queued ? (done[name] ?? null) : null };
+    const at = takenAt(plan, name);
+    const back = at === null ? {} : { back: keptOf(plan, scale, name, at)?.built ?? null };
+    return { name, site, queued, done: queued ? (done[name] ?? null) : null, ...back };
   });
 
 interface Works {
@@ -107,6 +112,7 @@ export function WorksProvider({ children }: { children: React.ReactNode }) {
 
 /** Where a build is, in words: waiting, how much is built, or done. Built evenly from Year 0, near enough. */
 function state(w: Work, year: number | null) {
+  if (w.back !== undefined) return w.back === null ? "Taken back" : `Taken back, ${Math.floor(100 * w.back)}% built`;
   if (!w.queued) return "Not queued";
   if (w.done === null) return "Past Year 40";
   if (year === null) return `Done Year ${tenths(w.done)}`;
