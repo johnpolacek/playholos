@@ -25,6 +25,8 @@ interface Now {
   unlocked: boolean;
   known: boolean;
   used: number;
+  short: number;
+  over: boolean;
   full: boolean;
 }
 
@@ -58,10 +60,10 @@ const STEPS: Step[] = [
   {
     name: "Queue our first builds",
     short: "Queue builds",
-    // Enough is all our compute in use at Year 0. What the queue leaves sits idle.
-    line: (s, { used, full }) =>
+    // Enough is all our compute in use at Year 0, and none short. What the queue leaves sits idle.
+    line: (s, { used, short, over, full }) =>
       s.plan?.builds.length
-        ? `${s.plan.builds.join(", ")}. ${full ? "All" : `${Math.floor(used * 100)}%`} of our compute in use.`
+        ? `${s.plan.builds.join(", ")}. ${over ? `${Math.round(short * 100)}% more than our compute carries.` : `${full ? "All" : `${Math.floor(used * 100)}%`} of our compute in use.`}`
         : "Enough to put all our compute to work at Year 0.",
     done: (_, { full }) => full,
     to: "/build?tour",

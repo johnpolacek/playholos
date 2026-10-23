@@ -30,10 +30,12 @@ function readOf(plan: Plan, scale: number) {
   const s = sharesAt(plan, scale, 0);
   const room = 1 - s.studies - s.fields;
   const used = inUse(plan, scale);
+  const over = s.short > 0.005;
   return {
     used,
-    full: used > 0.995,
-    over: s.short > 0.005,
+    idle: used < 0.995,
+    full: used > 0.995 && !over,
+    over,
     parts: s.parts.map((p) => ({ name: p.name, need: p.need / room, more: p.spare / room, short: p.short / room })),
   };
 }
@@ -88,12 +90,12 @@ function pick(seen: string[], c: Change, r: Read): Key | null {
         ["share", !!c.late],
         ["speed", !!c.soon],
         ["more", !!p && p.more > 0.01],
-        ["idle", !r.full],
+        ["idle", r.idle],
         ["full", r.full],
       ]
     : [
         ["out", true],
-        ["idle", !r.full && r.used > 0],
+        ["idle", r.idle && r.used > 0],
         ["full", r.full],
       ];
   return tries.find(([k, ok]) => ok && !seen.includes(k))?.[0] ?? null;
@@ -141,7 +143,7 @@ function explain(key: Key, c: Change | null, r: Read, plan: Plan, scale: number)
       return { say: "All our compute has work now, so this step is done. We can still change the order until Begin." };
     case "over":
       return {
-        say: "We’ve queued more than our compute carries. Builds take their share in the order queued, so the last get less than they need. Dragging one higher gives it its share first.",
+        say: "We’ve queued more than our compute carries. Builds take their share in the order queued, so the last get less than they need. Taking one out gives the rest more. In the queue on Build, one dragged higher gets its share first.",
         fig: { kind: "short", names: r.parts.filter((p) => p.short > 0.001).map((p) => p.name) },
       };
     case "out": {
@@ -548,7 +550,7 @@ export function Guide() {
   const { shown, adding, picked } = useShown();
   const read = useMemo(() => readOf(shown, scale), [shown, scale]);
   const pick = picked && read.parts.find((p) => p.name === picked);
-  const { used, full, known } = useCompute();
+  const { used, short, over, full, known } = useCompute();
   const { talk, reread } = useTalk();
   const next = useNext("/build?tour");
   const [more, setMore] = useState(false);
@@ -618,9 +620,17 @@ export function Guide() {
           </div>
         )}
         <div className="mt-3 flex min-h-[34px] items-center justify-between gap-2.5">
-          <span className={`inline-flex items-center gap-[7px] text-[13px] ${full ? "text-ink" : "text-muted"}`}>
+          <span className={`inline-flex items-center gap-[7px] text-[13px] ${full ? "text-ink" : over ? "text-other" : "text-muted"}`}>
             {full ? CHECK : OPEN}
-            {!known ? "Reading our compute" : full ? "Done. All our compute has work." : plan.builds.length ? `${pct(1 - used)} of our compute idle` : "Nothing queued yet"}
+            {!known
+              ? "Reading our compute"
+              : full
+                ? "Done. All our compute has work."
+                : over
+                  ? `${pct(short)} short. Our order needs more than we have.`
+                  : plan.builds.length
+                    ? `${pct(1 - used)} of our compute idle`
+                    : "Nothing queued yet"}
           </span>
           {full && next && (
             <Link to={next.to} className="flex h-[34px] shrink-0 items-center rounded-full bg-ink px-3.5 text-[13.5px] font-medium text-paper">

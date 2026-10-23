@@ -135,19 +135,22 @@ function Choose({ scale, done }: { scale: number; done: Record<string, number | 
   );
 }
 
-/** Our compute at Year 0, drawn: how much of it the queue would use. Full is enough, and says so. */
-function ComputeBar({ used, full }: { used: number; full: boolean }) {
+/** Our compute at Year 0, drawn: how much of it the queue would use. Full is enough, and says so. Over, it says how
+ *  much our order needs, as the top bar does, and what we have is drawn as part of it. */
+function ComputeBar({ used, short, full }: { used: number; short: number; full: boolean }) {
+  const over = short > 0.005;
   return (
     <div className="mt-2.5 flex items-center gap-2.5 font-mono text-[10px] tracking-[.1em] text-muted">
-      <span className="shrink-0">COMPUTE IN USE</span>
+      <span className="shrink-0">{over ? "COMPUTE NEEDED" : "COMPUTE IN USE"}</span>
       <span className="relative h-[3px] grow overflow-hidden rounded-full bg-track">
+        {over && <span className="absolute inset-0 rounded-full bg-other" />}
         <span
           className="absolute inset-y-0 left-0 rounded-full bg-you transition-[width] duration-700 ease-out"
-          style={{ width: `${used * 100}%` }}
+          style={{ width: `${(over ? 1 / (1 + short) : used) * 100}%` }}
         />
       </span>
-      <span className={`w-[3em] shrink-0 text-right tabular-nums ${full ? "text-you" : ""}`}>
-        {full ? "ALL" : `${Math.floor(used * 100)}%`}
+      <span className={`w-[3em] shrink-0 text-right tabular-nums ${full ? "text-you" : over ? "text-other" : ""}`}>
+        {full ? "ALL" : over ? `${Math.round((1 + short) * 100)}%` : `${Math.floor(used * 100)}%`}
       </span>
     </div>
   );
@@ -157,7 +160,7 @@ export function Tour({ onClose }: { onClose(): void }) {
   const { year } = useGame();
   const { plan } = usePlan();
   const { scale, done } = useSchedule();
-  const { used, full } = useCompute();
+  const { used, short, over, full } = useCompute();
   const { set: place, pick } = useWorks();
   const { talk } = useTalk();
   const root = useRef<HTMLDivElement>(null);
@@ -251,7 +254,7 @@ export function Tour({ onClose }: { onClose(): void }) {
           at={at}
           go={go}
         />
-        {open && <ComputeBar used={used} full={full} />}
+        {open && <ComputeBar used={used} short={short} full={full} />}
       </div>
 
       <div
@@ -314,7 +317,9 @@ export function Tour({ onClose }: { onClose(): void }) {
                     ? "That’s our order, under way since Year 0."
                     : full
                       ? "All our compute is in use from Year 0. The order can still change, until we begin."
-                      : plan.builds.length
+                      : over
+                        ? `Our order needs ${Math.round(short * 100)}% more compute than we have, so the last in line get less than they need. Taking one out would give the rest more.`
+                        : plan.builds.length
                         ? `${Math.floor(used * 100)}% of our compute would be in use. The rest would sit idle until we queue more.`
                         : "All our compute would sit idle. We would queue enough to use it all."}
                 </p>

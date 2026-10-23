@@ -7,7 +7,7 @@ import { OpensLine } from "@/components/opens";
 import { Face, ListHead } from "@/components/tab-head";
 import { MS_PER_YEAR, span, tenths } from "@/lib/game/clock";
 import type { EarthPast } from "@/lib/game/past";
-import { BUILDS, buildSlug, EMPTY, FOMALHAUT, inUse, lacks, moves, needs, openAt, schedule } from "@/lib/game/plan";
+import { BUILDS, buildSlug, EMPTY, FOMALHAUT, inUse, lacks, moves, needs, openAt, schedule, sharesAt } from "@/lib/game/plan";
 import { SITES } from "@/lib/game/sites";
 import type { Plan } from "@/lib/game/types";
 
@@ -58,14 +58,19 @@ export function useSchedule() {
   return { past, scale, done };
 }
 
-/** How much of our compute the plan would use at Year 0, and whether it is all in use, which is enough. Unknown until
- *  this game's Earth comes. */
+/** How much of our compute the plan would use at Year 0, how much more it would need than we have, and whether it is
+ *  all in use with none short, which is enough. Over isn't enough: the last in line get less than they need.
+ *  2026-10-23. Unknown until this game's Earth comes. */
 export function useCompute() {
   const { save } = useGame();
   const past = useEarth();
   const plan = save?.plan ?? EMPTY;
-  const used = useMemo(() => (past ? inUse(plan, past.compute) : 0), [plan, past]);
-  return { known: !!past, used, full: used > 0.995 };
+  const { used, short } = useMemo(
+    () => (past ? { used: inUse(plan, past.compute), short: sharesAt(plan, past.compute, 0).short } : { used: 0, short: 0 }),
+    [plan, past],
+  );
+  const over = short > 0.005;
+  return { known: !!past, used, short, over, full: used > 0.995 && !over };
 }
 
 /** A build in or out of the queue. In, it goes last. */
