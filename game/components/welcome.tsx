@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useGame } from "@/components/game-provider";
+import { War } from "@/components/guide";
 import { BuildMark, buildTone } from "@/components/marks";
 import { useSchedule } from "@/components/picks";
 import { ListHead } from "@/components/tab-head";
@@ -12,7 +13,8 @@ import { prefersReducedMotion } from "@/lib/motion";
 // The walk's first stop on Build: Earth's limb at dawn, the Sun cresting it, city lights on the night side, and what
 // we could start, each a tile below with how long it takes alone, and its mark floating over the limb. A pointer on
 // either lights both, and left alone they take turns. A tap opens that build's stop. Chosen 2026-10-20 in
-// explorations/build-welcome-dawn.html, 04, with its subhead A.
+// explorations/build-welcome-dawn.html, 04, with its subhead A. Under the builds, on an Earth a war over Taiwan left
+// with less compute, the Mind says why their times are long, as on Build. 2026-10-23.
 
 /** The same scatter every time, from a seed. */
 const scatter = (seed: number) => {
@@ -273,6 +275,7 @@ export function Welcome({ go }: { go(stop: number): void }) {
           );
         })}
       </div>
+      <War className="mt-4" />
     </div>
   );
 }

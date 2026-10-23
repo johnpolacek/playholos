@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import { Queueing } from "@/components/build-page";
 import { useNext } from "@/components/begin";
 import { useGame } from "@/components/game-provider";
+import { Told, useTalk } from "@/components/guide";
 import { MindNote } from "@/components/mind-note";
 import { Opens } from "@/components/opens";
 import { BuildMark, buildTone, LockMark } from "@/components/marks";
@@ -20,7 +21,8 @@ import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motio
 // start, in welcome.tsx, then takes us through each build open at Year 0 but the longest roads', one at a time, and the map flies to each
 // one's place when it has one. Each stop offers its build to queue. The last stop is our order, chosen from all of
 // them, each saying when it would be done and which of ours it would delay or speed up most, by name. The Mind
-// advises on each, and names what it would start with only when asked. Settled 2026-10-19.
+// advises on each, and names what it would start with only when asked. Settled 2026-10-19. What we queue or take out
+// at a stop brings up the Mind's ideas, as on Build, in guide.tsx, kept in the same talk. 2026-10-23.
 //
 // Enough is all our compute in use at Year 0: what the queue leaves sits idle. A bar in the head fills as we queue,
 // and once full the step is done and the next of the four leads, with the walk still open beside it.
@@ -157,6 +159,7 @@ export function Tour({ onClose }: { onClose(): void }) {
   const { scale, done } = useSchedule();
   const { used, full } = useCompute();
   const { set: place, pick } = useWorks();
+  const { talk } = useTalk();
   const root = useRef<HTMLDivElement>(null);
   const next = useRef<HTMLButtonElement>(null);
   const navigate = useNavigate();
@@ -280,7 +283,10 @@ export function Tour({ onClose }: { onClose(): void }) {
               <Queueing name={build.name} scale={scale} done={done} />
             </div>
             <div data-r className="mt-3">
-              <MindNote className="text-[14.5px] leading-snug">{SAYS[build.name]}</MindNote>
+              <MindNote className="text-[14.5px] leading-snug">
+                <p>{SAYS[build.name]}</p>
+                <Told talk={talk} />
+              </MindNote>
             </div>
             {SITES[build.name] && (
               <div data-r>
@@ -303,13 +309,16 @@ export function Tour({ onClose }: { onClose(): void }) {
             </p>
             <div data-r className="mt-3">
               <MindNote className="text-[14.5px] leading-snug">
-                {!open
-                  ? "That’s our order, under way since Year 0."
-                  : full
-                    ? "All our compute is in use from Year 0. The order can still change, until we begin."
-                    : plan.builds.length
-                      ? `${Math.floor(used * 100)}% of our compute would be in use. The rest would sit idle until we queue more.`
-                      : "All our compute would sit idle. We would queue enough to use it all."}
+                <p>
+                  {!open
+                    ? "That’s our order, under way since Year 0."
+                    : full
+                      ? "All our compute is in use from Year 0. The order can still change, until we begin."
+                      : plan.builds.length
+                        ? `${Math.floor(used * 100)}% of our compute would be in use. The rest would sit idle until we queue more.`
+                        : "All our compute would sit idle. We would queue enough to use it all."}
+                </p>
+                <Told talk={talk} />
               </MindNote>
             </div>
             <Choose scale={scale} done={done} />

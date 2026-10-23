@@ -56,21 +56,26 @@ const IDEAS = {
 };
 type Key = keyof typeof IDEAS;
 
-/** The Mind's first words, read fresh each time, since they hold what a war over Taiwan left of our compute, if one
- *  did, from this game's past. 2026-10-22. */
-function intro(past: EarthPast | undefined): Omit<Idea, "at"> {
-  const say =
-    "This is us, our Mind. Our compute flows to what we build, and a wider stream finishes sooner. What circles us is idle. We’ll explain each idea once, as it comes up.";
-  if (!past || past.compute >= 0.99 || !past.taiwan) return { say };
+/** What a war over Taiwan left of our compute, if one did, from this game's past, and its drawing. 2026-10-22. */
+function war(past: EarthPast | undefined): { say: string; fig: Fig } | null {
+  if (!past || past.compute >= 0.99 || !past.taiwan) return null;
   const year = past.years.taiwan;
   const cause =
     past.taiwan === "invasion"
       ? `The war for Taiwan${year ? ` in ${year}` : ""} cost us the best chip fabs for years`
       : `The blockade of Taiwan${year ? ` in ${year}` : ""} kept its chips from us for a year`;
   return {
-    say: `${say} ${cause}, so we have ${pct(past.compute)} of the compute we would have had. Every build takes longer.`,
+    say: `${cause}, so we have ${pct(past.compute)} of the compute we would have had. Every build takes longer.`,
     fig: { kind: "less", compute: past.compute },
   };
+}
+
+/** The Mind's first words, read fresh each time, since they hold the war, if there was one. */
+function intro(past: EarthPast | undefined): Omit<Idea, "at"> {
+  const say =
+    "This is us, our Mind. Our compute flows to what we build, and a wider stream finishes sooner. What circles us is idle. We’ll explain each idea once, as it comes up.";
+  const w = war(past);
+  return w ? { say: `${say} ${w.say}`, fig: w.fig } : { say };
 }
 
 /** The first idea a change shows that the Mind hasn't explained yet, if any. */
@@ -108,7 +113,7 @@ function explain(key: Key, c: Change | null, r: Read, plan: Plan, scale: number)
       };
     }
     case "idle":
-      return { say: `${pct(1 - r.used)} of our compute circles us idle, and idle compute builds nothing. Another build would put it to work.` };
+      return { say: `${pct(1 - r.used)} of our compute sits idle, and idle compute builds nothing. Another build would put it to work.` };
     case "share": {
       const { name, by } = c!.late!;
       const now = done[name] ?? 40;
@@ -128,12 +133,12 @@ function explain(key: Key, c: Change | null, r: Read, plan: Plan, scale: number)
     case "grow": {
       const { campuses, step } = ceiling(plan, scale);
       return {
-        say: `Thought Fields adds half again to our compute each Year, until it draws the whole grid. By Year ${Math.round(campuses.at(-1) ?? 0)} that’s about ${Math.round(step ** campuses.length)} times what we have, and all we build later comes sooner.`,
+        say: `Each campus of Thought Fields adds half again. By Year ${Math.round(campuses.at(-1) ?? 0)} that’s about ${Math.round(step ** campuses.length)} times the compute we have, and all we build later comes sooner.`,
         fig: { kind: "grow", campuses, step },
       };
     }
     case "full":
-      return { say: "Nothing circles us now. All our compute has work, so this step is done. We can still change the order until Begin." };
+      return { say: "All our compute has work now, so this step is done. We can still change the order until Begin." };
     case "over":
       return {
         say: "We’ve queued more than our compute carries. Builds take their share in the order queued, so the last get less than they need. Dragging one higher gives it its share first.",
@@ -158,8 +163,8 @@ function explain(key: Key, c: Change | null, r: Read, plan: Plan, scale: number)
 
 /** The Mind's talk for this game, kept in the save, brought up to date with every build queued or taken out since it
  *  last looked, each against our order as it was just before. Waits until this game's Earth is known, so the numbers
- *  are its own. */
-function useTalk() {
+ *  are its own. The walk keeps it too, in tour.tsx. */
+export function useTalk() {
   const { save, setGuide } = useGame();
   const { plan } = usePlan();
   const { scale } = useSchedule();
@@ -309,6 +314,57 @@ function Figure({ fig }: { fig: Fig }) {
       </div>
     );
   return fig.names.length ? <p className={mono}>Short of what {fig.names.length > 1 ? "they need" : "it needs"}: {fig.names.join(", ")}</p> : null;
+}
+
+/** For the walk's first stop: the Mind on what a war over Taiwan left of our compute, drawn, if one did. The times
+ *  on the builds under it are already that much longer. 2026-10-23. */
+export function War({ className = "" }: { className?: string }) {
+  const { past } = useSchedule();
+  const w = war(past);
+  if (!w) return null;
+  return (
+    <MindNote className={`text-[14.5px] leading-snug ${className}`}>
+      <p>{w.say}</p>
+      <div className="mt-2.5">
+        <Figure fig={w.fig} />
+      </div>
+    </MindNote>
+  );
+}
+
+/** For the walk, under the Mind's word on a stop: what a change made while the stop is in view brought up, the idea
+ *  drawn if it's new, or else what the change did, in a line. */
+export function Told({ talk }: { talk: Talk | undefined }) {
+  const root = useRef<HTMLDivElement>(null);
+  const [from] = useState(talk?.changes ?? 0);
+  const idea = talk && talk.changes > from ? talk.ideas[talk.now] : undefined;
+  useGSAP(
+    () => {
+      if (talk && talk.changes > from && !prefersReducedMotion()) gsap.fromTo(root.current, riseFrom, rise);
+    },
+    { dependencies: [talk?.changes] },
+  );
+  if (!talk || talk.changes <= from) return null;
+  return (
+    <div ref={root} className="mt-2.5">
+      {idea && idea.at === talk.changes ? (
+        <>
+          <p>{idea.say}</p>
+          {idea.fig && (
+            <div className="mt-2.5">
+              <Figure fig={idea.fig} />
+            </div>
+          )}
+        </>
+      ) : (
+        talk.last && (
+          <p className="text-[12.5px] text-page-ink2">
+            <LastLine c={talk.last} />
+          </p>
+        )
+      )}
+    </div>
+  );
 }
 
 const W = 400;
