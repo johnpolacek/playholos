@@ -7,6 +7,7 @@ import { BuildMark, buildColor } from "@/components/marks";
 import { MindNote } from "@/components/mind-note";
 import { toggleBuild, useCompute, usePlan, useSchedule } from "@/components/picks";
 import { span } from "@/lib/game/clock";
+import type { EarthPast } from "@/lib/game/past";
 import { ceiling, inUse, moves, schedule, sharesAt } from "@/lib/game/plan";
 import type { GuideFig as Fig, Guide as Talk, Plan } from "@/lib/game/types";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
@@ -55,6 +56,23 @@ const IDEAS = {
 };
 type Key = keyof typeof IDEAS;
 
+/** The Mind's first words, read fresh each time, since they hold what a war over Taiwan left of our compute, if one
+ *  did, from this game's past. 2026-10-22. */
+function intro(past: EarthPast | undefined): Omit<Idea, "at"> {
+  const say =
+    "This is us, our Mind. Our compute flows to what we build, and a wider stream finishes sooner. What circles us is idle. We’ll explain each idea once, as it comes up.";
+  if (!past || past.compute >= 0.99 || !past.taiwan) return { say };
+  const year = past.years.taiwan;
+  const cause =
+    past.taiwan === "invasion"
+      ? `The war for Taiwan${year ? ` in ${year}` : ""} cost us the best chip fabs for years`
+      : `The blockade of Taiwan${year ? ` in ${year}` : ""} kept its chips from us for a year`;
+  return {
+    say: `${say} ${cause}, so we have ${pct(past.compute)} of the compute we would have had. Every build takes longer.`,
+    fig: { kind: "less", compute: past.compute },
+  };
+}
+
 /** The first idea a change shows that the Mind hasn't explained yet, if any. */
 function pick(seen: string[], c: Change, r: Read): Key | null {
   const p = r.parts.find((x) => x.name === c.name);
@@ -81,9 +99,7 @@ function explain(key: Key, c: Change | null, r: Read, plan: Plan, scale: number)
   const done = schedule(plan, scale);
   switch (key) {
     case "intro":
-      return {
-        say: "This is us, our Mind. Our compute flows to what we build, and a wider stream finishes sooner. What circles us is idle. We’ll explain each idea once, as it comes up.",
-      };
+      return intro(undefined);
     case "more": {
       const p = r.parts.find((x) => x.name === c!.name)!;
       return {
@@ -280,6 +296,18 @@ function Figure({ fig }: { fig: Fig }) {
       </svg>
     );
   }
+  if (fig.kind === "less")
+    return (
+      <div>
+        <div className="relative h-2.5 rounded-full border border-dashed border-muted/70">
+          <i className="absolute inset-y-[-1px] left-[-1px] rounded-full bg-you" style={{ width: `calc(${fig.compute * 100}% + 2px)` }} />
+        </div>
+        <div className={`mt-1.5 flex justify-between ${mono}`}>
+          <span className="text-you">ours, {pct(fig.compute)}</span>
+          <span>what we would have had</span>
+        </div>
+      </div>
+    );
   return fig.names.length ? <p className={mono}>Short of what {fig.names.length > 1 ? "they need" : "it needs"}: {fig.names.join(", ")}</p> : null;
 }
 
@@ -460,7 +488,7 @@ const OPEN = (
 export function Guide() {
   const root = useRef<HTMLElement>(null);
   const { plan } = usePlan();
-  const { scale } = useSchedule();
+  const { scale, past } = useSchedule();
   const { shown, adding, picked } = useShown();
   const read = useMemo(() => readOf(shown, scale), [shown, scale]);
   const pick = picked && read.parts.find((p) => p.name === picked);
@@ -468,7 +496,7 @@ export function Guide() {
   const { talk, reread } = useTalk();
   const next = useNext("/build?tour");
   const [more, setMore] = useState(false);
-  const idea = talk?.ideas[talk.now];
+  const idea = !talk ? undefined : talk.now === "intro" ? { ...intro(past), at: 0 } : talk.ideas[talk.now];
 
   // A new idea, or one read again, rises in.
   const first = useRef(true);
@@ -499,7 +527,7 @@ export function Guide() {
       </section>
 
       <section ref={root} className="border-b border-rowline pt-3 pb-3">
-        {idea && (
+        {talk && idea && (
           <MindNote className="text-[14.5px] leading-snug">
             <div data-g="idea">
               <p>{idea.say}</p>

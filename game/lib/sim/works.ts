@@ -123,7 +123,9 @@ export function pace(orders: readonly Order[], until: number, { scale = 1, aside
       }
     }
     thought = (scale * STEP ** dataCenters.length) / FLAGSHIP;
-    const set = studies + aside.reduce((sum, [a, b, share]) => sum + (a <= t + EPS && t + EPS < b ? share : 0), 0) + (building !== null ? CATALOG.dataCenter.aside : 0);
+    // What is set aside is a share of this Earth's own Year 0 compute, so studies keep a tenth of it whatever a war
+    // left, as calcs/early_game.py has it since 2026-10-22.
+    const set = scale * (studies + aside.reduce((sum, [a, b, share]) => sum + (a <= t + EPS && t + EPS < b ? share : 0), 0) + (building !== null ? CATALOG.dataCenter.aside : 0));
     room = Math.max(0, thought - set / FLAGSHIP);
     ({ s, idle } = split(line.map((w) => ({ want: WORKS[w].want, most: WORKS[w].most ?? PUSH })), room));
   };

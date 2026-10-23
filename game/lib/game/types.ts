@@ -25,12 +25,13 @@ export interface Save {
 }
 
 /** What the Mind draws beside an idea on Build: a build's need and what more it takes, a build's time before and after
- *  a change, Thought Fields' climb, or the builds short of their need. */
+ *  a change, Thought Fields' climb, the builds short of their need, or our compute against what it would have been. */
 export type GuideFig =
   | { kind: "more"; name: string; need: number; more: number }
   | { kind: "moved"; name: string; was: number; now: number; tone: "late" | "soon" }
   | { kind: "grow"; campuses: number[]; step: number }
-  | { kind: "short"; names: string[] };
+  | { kind: "short"; names: string[] }
+  | { kind: "less"; compute: number };
 
 type Moved = { name: string; by: number } | null;
 

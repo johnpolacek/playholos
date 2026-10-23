@@ -357,7 +357,7 @@ export function CostLine({ name, move, at = 0 }: { name: string; move: ReturnTyp
   const { plan } = usePlan();
   const { scale } = useSchedule();
   const all = useMemo(() => computeAt(plan, scale, at), [plan, scale, at]);
-  const s = needOf(name, all);
+  const s = needOf(name, all, scale);
   const c = buildColor(name);
   const matter = buildOf(name)?.kt;
   const sweep = (x: number) => `${(7 + 6 * Math.sin(x * 2 * Math.PI)).toFixed(2)} ${(7 - 6 * Math.cos(x * 2 * Math.PI)).toFixed(2)}`;

@@ -327,7 +327,7 @@ export function sharesAt(plan: Plan, scale: number, year: number) {
   const p = pace(orders, year, { scale, ...opts });
   const all = p.thought;
   const building = plan.builds.includes("Thought Fields") && p.dataCenters.length < centers(scale);
-  const fields = building ? CATALOG.dataCenter.aside / CATALOG.flagship / all : 0;
+  const fields = building ? (scale * CATALOG.dataCenter.aside) / CATALOG.flagship / all : 0;
   const parts = p.line.map(({ work, s }) => {
     const want = CATALOG.works[work].want;
     const give = s * want;
@@ -356,9 +356,9 @@ export function computeAt(plan: Plan, scale: number, year: number) {
 }
 
 /** A build's share of `all` our compute, in flagships, at its standard pace. Thought Fields takes its share only
- *  while a campus is built. */
-export function needOf(name: string, all: number) {
-  const want = name === "Thought Fields" ? CATALOG.dataCenter.aside / CATALOG.flagship : (CATALOG.works[pacedName(name)]?.want ?? 0);
+ *  while a campus is built, a share of this Earth's Year 0 compute at `scale`. */
+export function needOf(name: string, all: number, scale = 1) {
+  const want = name === "Thought Fields" ? (scale * CATALOG.dataCenter.aside) / CATALOG.flagship : (CATALOG.works[pacedName(name)]?.want ?? 0);
   return want / all;
 }
 
