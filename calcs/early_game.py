@@ -269,6 +269,9 @@ LIMIT_THOUGHT = 1.5 ** 11                # eleven data centers fit under the gri
 # A game whose Taiwan branch cut Earth's compute starts lower on the same curve: scale is Year 0's compute over the
 # no-branch path's. Thinking's draw on energy scales with it, so the grid holds 96 times full Year 0 thought, and the
 # fabs keep filling a center a Year until the next would pass that. At 67%, twelve fit, a Year later, at the same height.
+# What is set aside, studies, observations and the data centers' build, is a share of that Earth's own Year 0 thought,
+# so studies keep a tenth of it whatever a war left. Before 2026-10-22 it was the no-branch path's share, and at 20%
+# compute the studies took half.
 GRID_ROOM = 24 / 0.25
 def centers(scale=1.0): return int(math.log(GRID_ROOM / scale) / math.log(1.5))
 
@@ -325,7 +328,7 @@ def replay(order, start=12.0, dt=0.01, studies=0.1, show=True, early=None, scale
             _, w, years = extra.pop(0); left[w] = years
             if w in front: line.insert(0, w)                  # the player moved it to the front of the line
             else: line.append(w)
-        room = scale * 1.5 ** (min(n, sum(y >= d for d in dc_done(n))) + (y >= dc12)) / FLAGSHIP_THOUGHT - studies / FLAGSHIP_THOUGHT
+        room = scale * 1.5 ** (min(n, sum(y >= d for d in dc_done(n))) + (y >= dc12)) / FLAGSHIP_THOUGHT - scale * studies / FLAGSHIP_THOUGHT
         s, idle = split([(w, WANTS[w.split(' (')[0]][0], 1 if w == 'Power from orbit' else PUSH) for w in line], room)
         if first is None: first = dict(s, idle=idle)
         spare.append((y, idle / room))
@@ -375,10 +378,10 @@ def first_hour(until=12.0, dt=0.005, show=True, scale=1.0):
     done, y, shown, spare = {}, 0.0, {}, []
     dcs = dc_done(centers(scale)); aside = set_aside(dcs)
     while y < until:
-        room = scale * 1.5 ** sum(y >= d for d in dcs) / FLAGSHIP_THOUGHT - sum(share for a, b, share in aside if a <= y < b) / FLAGSHIP_THOUGHT
+        room = scale * 1.5 ** sum(y >= d for d in dcs) / FLAGSHIP_THOUGHT - scale * sum(share for a, b, share in aside if a <= y < b) / FLAGSHIP_THOUGHT
         line = [w for w, t, _ in FIRST_HOUR if t <= y and w not in done]
         s, idle = split([(w, WANTS[w][0], PUSH) for w in line], room)
-        spare.append((y, idle / (room + sum(share for a, b, share in aside if a <= y < b) / FLAGSHIP_THOUGHT)))
+        spare.append((y, idle / (room + scale * sum(share for a, b, share in aside if a <= y < b) / FLAGSHIP_THOUGHT)))
         for w in line:
             if w not in shown: shown[w] = (y, s[w])
             left[w] -= dt / paced(1, s[w])
