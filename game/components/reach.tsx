@@ -36,8 +36,7 @@ import { gsap, prefersReducedMotion } from "@/lib/motion";
 // the charter, and queues nothing. Reach holds what we launch, and our messages, which are light, live on Scan with
 // the sky they cross. So under the line, what we have sent: Voyager 1, silent, carrying the Golden Record. Our sails
 // and probes join it once they fly. Settled 2026-10-19. They do since 2026-10-22, each until its word comes home from
-// Proxima b. The tab's head opens the nearest star at any time, the third
-// of the four things we would do first.
+// Proxima b. The tab's head opens the nearest star at any time.
 
 // The roads' Years, drawn 360 wide.
 const W = 360;

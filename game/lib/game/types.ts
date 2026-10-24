@@ -14,10 +14,8 @@ export interface Save {
   plan?: Plan;
   /** Readings the Will has opened, by id. */
   seen?: string[];
-  /** Reviewed our scans with the Mind, to the last lead: one of the four things we would do before Begin. */
+  /** Reviewed our scans with the Mind, to the last lead: one of the three things we would do before Begin. */
   reviewed?: boolean;
-  /** Opened a destination on Reach, another of the four. */
-  looked?: boolean;
   /** Had an answer from the Mind, the last of the four. */
   asked?: boolean;
   /** What the Mind has explained on Build before Begin, kept so a reload doesn't explain it again. Since 2026-10-22. */

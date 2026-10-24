@@ -50,7 +50,7 @@ const WHAT: Record<string, string> = {
 export function DestinationPage({ slug }: { slug: string }) {
   const { leads, visits } = useLeads();
   const { aim, close, setClose } = useReach();
-  const { save, year: clock, did } = useGame();
+  const { save, year: clock } = useGame();
   const { plan, change } = usePlan();
   const { scale, done: doneBy } = useSchedule();
   const navigate = useNavigate();
@@ -75,9 +75,6 @@ export function DestinationPage({ slug }: { slug: string }) {
     aim({ id: skyId(star), name: star, ly, system });
     return () => aim(null);
   }, [aim, star, ly, system]);
-
-  // Opening any destination counts as seeing where we could go, one of the four things we would do before Begin.
-  useEffect(() => void (star && did("looked")), [star, did]);
 
   useEffect(() => {
     const back = (e: KeyboardEvent) => e.key === "Escape" && navigate("/reach");

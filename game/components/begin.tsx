@@ -11,11 +11,12 @@ import { useAccess } from "@/lib/key";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
 
 // Begin: Year 0 starts at the tap, and the clock runs from then, offline too. Settled 2026-10-10. Before it, the top
-// bar counts the four things we would do first and opens them as a thread down to Year 0, in the tabs' order: review
-// our scans, queue our first builds, see where we could go, and ask the Mind. None is a lock: Begin works at any
-// count, and while one is open the Mind says why it would wait. Settled 2026-10-18, Reach's step added 2026-10-19.
+// bar counts the three things we would do first and opens them as a thread down to Year 0, in the tabs' order: review
+// our scans, queue our first builds, and ask the Mind. None is a lock: Begin works at any count, and while one is open
+// the Mind says why it would wait. Settled 2026-10-18. Reach's step, added 2026-10-19, went 2026-10-23: the review
+// already takes us through the same stars.
 // The way on is the next step, not Begin: the count names it, the sheet leads with it, and each step's end opens the
-// one after. Begin leads once all four are done. Settled 2026-10-19. Our first builds are done once the queue puts
+// one after. Begin leads once all three are done. Settled 2026-10-19. Our first builds are done once the queue puts
 // all our compute to work at Year 0, 2026-10-19. The tap plays 2040 becoming Year 0, over the screen the first time
 // and in the top bar after.
 
@@ -69,14 +70,6 @@ const STEPS: Step[] = [
     to: "/build?tour",
   },
   {
-    name: "See where we could go",
-    short: "See where to go",
-    // The nearest star first: the world next door, and the reason for the two roads.
-    line: () => "Our leads’ stars, and every way to get there.",
-    done: (s) => !!s.looked,
-    to: "/reach/proxima-centauri",
-  },
-  {
     name: "Ask the Mind",
     short: "Ask the Mind",
     line: (_, { unlocked }) =>
@@ -88,7 +81,7 @@ const STEPS: Step[] = [
   },
 ];
 
-/** The first of the four not yet done, in order, or null once all are. `but` leaves out the one we are on. */
+/** The first of the three not yet done, in order, or null once all are. `but` leaves out the one we are on. */
 export function useNext(but?: string) {
   const { save } = useGame();
   const now = useNow();
