@@ -12,5 +12,9 @@
   "routes": [
     { "pattern": "playholos.com", "custom_domain": true },
     { "pattern": "www.playholos.com", "custom_domain": true }
-  ]
+  ],
+  // Logs every request and what the Worker writes to the console, so a Mind that can't answer shows why.
+  "observability": { "enabled": true },
+  // Six questions a minute from one address. Each one spends money, ours behind the code.
+  "ratelimits": [{ "name": "MIND_LIMIT", "namespace_id": "1001", "simple": { "limit": 6, "period": 60 } }]
 }
