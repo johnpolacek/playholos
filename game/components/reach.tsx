@@ -44,9 +44,9 @@ const L = 14;
 const R = W - 14;
 export const year = (y: number) => (Math.round(y * 10) / 10).toString();
 /** The map's zoom that frames a star `ly` out. */
-const farZoom = (ly: number) => zoomFor(ly * LY_AU);
+export const farZoom = (ly: number) => zoomFor(ly * LY_AU);
 const [NEAR_ZOOM, FAR_ZOOM] = [zoomFor(NEAR_AU), farZoom(NEAREST.ly)];
-const VOYAGER = MARKS.at(-1)!;
+export const VOYAGER = MARKS.at(-1)!;
 
 /** Where the map and its ruler run out to: the nearest star, or the destination open on Reach. */
 export interface Target {

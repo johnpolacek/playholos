@@ -16,11 +16,11 @@ import {
   useGSAP,
 } from "@/lib/motion";
 
-// Reviewing our scans, the first of the three things we would do before Begin. The Mind takes us through Earth's
+// Reviewing our scans, the first of the four things we would do before Begin. The Mind takes us through Earth's
 // leads one at a time, and the map turns to each star as we reach it. Fomalhaut comes last, with the one observation
 // open at Year 0, so the image is offered once we know why it matters. Settled 2026-10-18. Reaching the last lead
 // counts as done, and says so: the head reads DONE, the top bar's count ticks, and the way on is the next of
-// the three, or back to Scan once all are done.
+// the four, or back to Scan once all are done.
 
 const INTRO =
   "The sky near us is quiet. These are the few things in it we can’t explain yet. Beside each, how long its light takes, at a Year every five minutes. A call costs that, and an answer as long again.";
@@ -82,7 +82,7 @@ export function Review({ onClose }: { onClose(): void }) {
   const root = useRef<HTMLDivElement>(null);
   const next = useRef<HTMLButtonElement>(null);
   const navigate = useNavigate();
-  // At the end, the way on is the next of the three things we would do first, or back to the tab once all are done.
+  // At the end, the way on is the next of the four things we would do first, or back to the tab once all are done.
   const then = useNext("/?review");
   const [at, setAt] = useState(0);
 
@@ -270,8 +270,10 @@ export function Review({ onClose }: { onClose(): void }) {
         )}
       </div>
 
-      {/* Wide, the way on stays in reach under the words. */}
-      <div className="sticky bottom-0 mt-auto hidden grid-cols-[1fr_1.4fr] gap-2 bg-panel pt-3 pb-3 wide:grid">
+      {/* Wide, the way on stays in reach under the words. At the last stop, on a phone too, so the next step is plain. */}
+      <div
+        className={`sticky bottom-0 mt-auto grid-cols-[1fr_1.4fr] gap-2 bg-panel pt-3 pb-3 ${at === last ? "grid" : "hidden wide:grid"}`}
+      >
         <button
           onClick={() => (at ? go(at - 1) : onClose())}
           className="h-11 rounded-full border border-ink text-[15px] font-medium"

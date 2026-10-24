@@ -1729,6 +1729,8 @@ The first screen, before Earth wakes, flies from Earth out to the Local Group an
   - [The Golden Record](https://en.wikipedia.org/wiki/Voyager_Golden_Record): greetings in 55 languages and 116 pictures, on a gold-plated copper disc, chosen by a committee chaired by Carl Sagan, launched on both Voyagers in 1977.
   - Matters: by Year 0 Voyager 1 is no longer a probe that reports. It is a message carried, the slowest we sent.
   - Used: game/components/reach.tsx and game/lib/game/knocks.ts, Voyager 1 under "Sent" on Reach, with the Golden Record's story, 2026-10-19.
+  - Its speed out of the Solar System is about 17 km/s, or 3.6 AU a year ([Wikipedia](https://en.wikipedia.org/wiki/Voyager_1)). At that pace the 268,000 AU to Proxima Centauri would take about 75,000 years. General knowledge, not a page read this session, 2026-10-23.
+  - Used: game/components/reach-tour.tsx, the walk's "The gap" stop, 2026-10-23.
 - **Deuterium in seawater** · General knowledge, not a source read, 2026-10-19. About one hydrogen atom in 6,400 in the oceans is deuterium, about 156 parts per million ([Wikipedia](https://en.wikipedia.org/wiki/Deuterium)).
   - Used: game/lib/game/plan.ts, the Mind's word on the Deuterium Works.
 - **Voyager 1's speed, and Neptune's distance** · General knowledge, not a source read, 2026-10-18.

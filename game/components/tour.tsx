@@ -17,7 +17,7 @@ import { BUILDS, lacks, matter, moves, needs, SAYS, STARTS } from "@/lib/game/pl
 import { SITES } from "@/lib/game/sites";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
 
-// Queuing our first builds, the second of the three things we would do before Begin. It opens at dawn on what we could
+// Queuing our first builds, the second of the four things we would do before Begin. It opens at dawn on what we could
 // start, in welcome.tsx, then takes us through each build open at Year 0 but the longest roads', one at a time, and the map flies to each
 // one's place when it has one. Each stop offers its build to queue. The last stop is our order, chosen from all of
 // them, each saying when it would be done and which of ours it would delay or speed up most, by name. The Mind
@@ -25,7 +25,7 @@ import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motio
 // at a stop brings up the Mind's ideas, as on Build, in guide.tsx, kept in the same talk. 2026-10-23.
 //
 // Enough is all our compute in use at Year 0: what the queue leaves sits idle. A bar in the head fills as we queue,
-// and once full the step is done and the next of the three leads, with the walk still open beside it.
+// and once full the step is done and the next of the four leads, with the walk still open beside it.
 
 const when = (d: number | null | undefined) => (d == null ? "past Year 40" : `Year ${tenths(d)}`);
 /** A change in Years, as a row says it: 0.3 Years, 1 Year. */
@@ -166,7 +166,7 @@ export function Tour({ onClose }: { onClose(): void }) {
   const root = useRef<HTMLDivElement>(null);
   const next = useRef<HTMLButtonElement>(null);
   const navigate = useNavigate();
-  // The next of the three things we would do first, or back to the tab once all are done.
+  // The next of the four things we would do first, or back to the tab once all are done.
   const then = useNext("/build?tour");
   // A swipe across the words moves a stop, as on a phone.
   const swipe = useRef<{ x: number; y: number } | null>(null);
@@ -214,7 +214,7 @@ export function Tour({ onClose }: { onClose(): void }) {
   );
 
   const open = year === null;
-  // Once all our compute is in use, the next of the three leads, on a phone too, and the walk goes on beside it.
+  // Once all our compute is in use, the next of the four leads, on a phone too, and the walk goes on beside it.
   const lead = open && full ? then : null;
   const onward = at === 0 ? "Explore Builds" :at + 1 >= last ? "Next · Our order" : `Next · ${STARTS[at].name}`;
   const outline = "h-11 rounded-full border border-ink text-[15px] font-medium";
