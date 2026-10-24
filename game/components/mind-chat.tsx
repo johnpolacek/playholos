@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router";
 import { useGame } from "@/components/game-provider";
 import { MindNote } from "@/components/mind-note";
-import { BAD_KEY, KEY_NEEDS_WORKSPACE } from "@/lib/access";
+import { BAD_KEY, KEY_NEEDS_CREDIT, KEY_NEEDS_WORKSPACE } from "@/lib/access";
 import { realTime } from "@/lib/game/clock";
 import { browserStore } from "@/lib/game/store";
 
@@ -73,7 +73,7 @@ function Talk({ messages, lastAnswer, status, error }: Pick<ReturnType<typeof us
         );
       })}
       {status === "submitted" && <span className="self-start font-mono text-[9.5px] tracking-[.1em] text-you">THE MIND IS THINKING</span>}
-      {error && <p className="text-xs text-other">{error.message === BAD_KEY || error.message === KEY_NEEDS_WORKSPACE ? error.message : "The Mind can’t answer right now."}</p>}
+      {error && <p className="text-xs text-other">{[BAD_KEY, KEY_NEEDS_WORKSPACE, KEY_NEEDS_CREDIT].includes(error.message) ? error.message : "The Mind can’t answer right now."}</p>}
     </>
   );
 }

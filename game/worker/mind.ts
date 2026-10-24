@@ -1,6 +1,6 @@
 import { type AnthropicLanguageModelOptions, createAnthropic } from "@ai-sdk/anthropic";
 import { APICallError, convertToModelMessages, createUIMessageStreamResponse, streamText, toUIMessageStream, type UIMessage } from "ai";
-import { BAD_KEY, KEY_NEEDS_WORKSPACE, MIND_MODEL } from "@/lib/access";
+import { BAD_KEY, KEY_NEEDS_CREDIT, KEY_NEEDS_WORKSPACE, MIND_MODEL } from "@/lib/access";
 import { realTime, tenths, YEAR_0, yearAt } from "@/lib/game/clock";
 import { describeCharter } from "@/lib/game/charter";
 import { describeLeads } from "@/lib/game/leads";
@@ -121,9 +121,12 @@ export async function mind(req: Request) {
   });
   // Anthropic refusing the key is the failure the player can fix, so it gets its own lines.
   const onError = (e: unknown) => {
+    // To the Worker's logs: Anthropic's status and words, never the key or what was asked.
+    console.error("Mind:", APICallError.isInstance(e) ? `${e.statusCode} ${e.message}` : String(e));
     if (!APICallError.isInstance(e)) return "The Mind can’t answer right now.";
     if (e.statusCode === 401 || e.statusCode === 403) return BAD_KEY;
     if (e.statusCode === 400 && e.responseBody?.includes("anthropic-workspace-id")) return KEY_NEEDS_WORKSPACE;
+    if (e.statusCode === 400 && e.responseBody?.includes("credit balance")) return KEY_NEEDS_CREDIT;
     return "The Mind can’t answer right now.";
   };
   const metadata = import.meta.env.DEV ? { messageMetadata: ({ part }: { part: { type: string } }) => (part.type === "start" ? { told } : undefined) } : {};
