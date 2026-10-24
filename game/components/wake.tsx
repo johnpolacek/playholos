@@ -204,8 +204,9 @@ export function Opening({ className, children }: { className: string; children: 
     );
   }
   // One sky behind every screen from the title to the charter, and on into the map. The camera flies between them.
+  // The game fits the screen, so a touch only scrolls up and down: a pinch never zooms it, nor leaves it to slide sideways.
   return (
-    <div ref={frame} id="phone" className={`relative ${className}`}>
+    <div ref={frame} id="phone" className={`relative touch-pan-y ${className}`}>
       <LeaveShell value={leaveShell}>
         <LeaveFor value={leaveFor}>
           <Sky shade={!shell}>{body}</Sky>
