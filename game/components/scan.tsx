@@ -37,6 +37,10 @@ interface Leads {
   /** In its system, or not. */
   close: boolean;
   setClose(on: boolean): void;
+  /** On or back a stop in the review, while it is open: a tap on the map takes it too. */
+  step(by: 1 | -1): void;
+  /** The review gives its step here as it opens, and null as it closes. */
+  setStep(step: ((by: 1 | -1) => void) | null): void;
 }
 
 const ScanContext = createContext<Leads>({
@@ -51,6 +55,8 @@ const ScanContext = createContext<Leads>({
   setLook() {},
   close: false,
   setClose() {},
+  step() {},
+  setStep() {},
 });
 /** Earth's leads, their stars as the sky names them, and the dials the map draws them by. */
 export const useLeads = () => use(ScanContext);
@@ -115,6 +121,9 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
     },
     [setClose],
   );
+  const stepping = useRef<((by: 1 | -1) => void) | null>(null);
+  const step = useCallback((by: 1 | -1) => stepping.current?.(by), []);
+  const setStep = useCallback((to: ((by: 1 | -1) => void) | null) => void (stepping.current = to), []);
   // Kept apart from the readings, so a landing never relights the map.
   const ids = useMemo(() => leads.map((l) => skyId(l.star)), [leads]);
   const observe = save?.plan?.observe;
@@ -140,9 +149,31 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
     const fresh = new Set(
       [...Object.values(readings).flatMap((rs) => rs.map((r) => r.id)), ...heard.map(heardId)].filter((id) => !opened.has(id)),
     );
-    return { leads, ids, dials, readings, fresh, heard, visits, look, setLook, close, setClose };
-  }, [leads, felt, proxima, ids, dials, observe, tenth, seen, heard, visits, look, setLook, close, setClose]);
+    return { leads, ids, dials, readings, fresh, heard, visits, look, setLook, close, setClose, step, setStep };
+  }, [leads, felt, proxima, ids, dials, observe, tenth, seen, heard, visits, look, setLook, close, setClose, step, setStep]);
   return <ScanContext value={value}>{children}</ScanContext>;
+}
+
+/** A tap that steps the review, as a story on a phone: on, or back on the left quarter. A drag, a scroll, a selection,
+ *  or a press on a button or link is left alone. A swipe across steps it too, on from the right. */
+export function useStepTap(step: (by: 1 | -1) => void) {
+  const from = useRef<{ x: number; y: number } | null>(null);
+  return {
+    onPointerDown: (e: React.PointerEvent) => void (from.current = { x: e.clientX, y: e.clientY }),
+    onPointerCancel: () => void (from.current = null),
+    onPointerUp: (e: React.PointerEvent<HTMLElement>) => {
+      const at = from.current;
+      from.current = null;
+      if (!at || (e.pointerType === "mouse" && e.button !== 0)) return;
+      if (e.target instanceof Element && e.target.closest("button, a, input, textarea, select, label, dialog")) return;
+      const dx = e.clientX - at.x;
+      const dy = e.clientY - at.y;
+      if (Math.abs(dx) > 48 && Math.abs(dx) > 2 * Math.abs(dy)) return step(dx < 0 ? 1 : -1);
+      if (Math.hypot(dx, dy) > 10 || !window.getSelection()?.isCollapsed) return;
+      const box = e.currentTarget.getBoundingClientRect();
+      step(e.clientX - box.left < box.width / 4 ? -1 : 1);
+    },
+  };
 }
 
 /** The map on Scan: the stars within 50 light-years, and the leads lit in turn as the camera arrives. An open lead's

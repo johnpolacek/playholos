@@ -3,7 +3,7 @@ import { useRef, useState } from "react";
 import { BeamsMap, useBeams } from "@/components/beams";
 import { Globe, Lens } from "@/components/icons";
 import { ReachMap, Ruler, useReach } from "@/components/reach";
-import { ScanMap, useLeads } from "@/components/scan";
+import { ScanMap, useLeads, useStepTap } from "@/components/scan";
 import { SkyArt, useSky } from "@/components/sky";
 import { useWorks, WorksMap } from "@/components/works";
 import type { Stop } from "@/lib/flight";
@@ -42,6 +42,9 @@ export function MapStrip() {
   const built = (path === "/build" || path.startsWith("/build/")) && works.picked !== null;
   const reach = useReach();
   const leads = useLeads();
+  // In the review, a tap on the map steps it as one on the words does, but not in a system's Close View, there to look.
+  const reviewing = path === "/" && /[?&]review\b/.test(search);
+  const tap = useStepTap(leads.step);
   const [tall, setTall] = useState(false);
 
   // Tall, the strip opens wider at its handle, and gives a walkthrough more room. Wide, the map fills the left of the
@@ -63,6 +66,7 @@ export function MapStrip() {
       ) : scan ? (
         <>
           <ScanMap className="absolute inset-0" />
+          {reviewing && !leads.close && <div {...tap} className="absolute inset-0" />}
           <span className={LABEL}>
             {leads.close && leads.look ? `${leads.look.star.toUpperCase()} · CLOSE VIEW` : "LEADS"}
           </span>

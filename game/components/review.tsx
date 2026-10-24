@@ -6,7 +6,7 @@ import { Lens } from "@/components/icons";
 import { MindNote } from "@/components/mind-note";
 import { LeadMark } from "@/components/marks";
 import { Look } from "@/components/picks";
-import { useLeads } from "@/components/scan";
+import { useLeads, useStepTap } from "@/components/scan";
 import { span } from "@/lib/game/clock";
 import {
   gsap,
@@ -77,15 +77,13 @@ export function Thread({
 }
 
 export function Review({ onClose }: { onClose(): void }) {
-  const { leads, dials, readings, setLook, close, setClose } = useLeads();
+  const { leads, dials, readings, setLook, close, setClose, setStep } = useLeads();
   const { year, did } = useGame();
   const root = useRef<HTMLDivElement>(null);
   const next = useRef<HTMLButtonElement>(null);
   const navigate = useNavigate();
   // At the end, the way on is the next of the four things we would do first, or back to the tab once all are done.
   const then = useNext("/?review");
-  // A swipe across the words moves a stop, as on a phone.
-  const swipe = useRef<{ x: number; y: number } | null>(null);
   const [at, setAt] = useState(0);
 
   // The leads in the order we take them: as Scan lists them, with Fomalhaut last.
@@ -114,6 +112,11 @@ export function Review({ onClose }: { onClose(): void }) {
   }, [at, last, did]);
 
   const go = (k: number) => setAt(Math.max(0, Math.min(last, k)));
+  // A tap anywhere on the review or the map steps it, as a story on a phone, and on from the last stop is the way on.
+  const step = (by: 1 | -1) => (by > 0 && at === last ? then && navigate(then.to) : go(at + by));
+  const tap = useStepTap(step);
+  useEffect(() => setStep(step));
+  useEffect(() => () => setStep(null), [setStep]);
   // Each stop opens at its top: on a phone the page scrolls, and the last stop's place would hide this one's head.
   useEffect(
     () => void root.current?.closest("main")?.scrollTo({ top: 0 }),
@@ -150,7 +153,7 @@ export function Review({ onClose }: { onClose(): void }) {
   const far = Math.max(...leads.map((l) => l.ly));
 
   return (
-    <div ref={root} className="flex grow flex-col">
+    <div ref={root} {...tap} className="flex grow flex-col">
       {/* In place of the tab's head, held at the top as the page scrolls. Tall, as on a phone, the way on is here too,
           so the Mind's words clear the fold. */}
       <div className="sticky -top-3 z-10 -mx-4 -mt-3 bg-panel px-4 pt-3 pb-1">
@@ -199,18 +202,6 @@ export function Review({ onClose }: { onClose(): void }) {
       <div
         key={at}
         aria-live="polite"
-        onPointerDown={(e) => (swipe.current = { x: e.clientX, y: e.clientY })}
-        onPointerUp={(e) => {
-          const from = swipe.current;
-          swipe.current = null;
-          if (!from) return;
-          const dx = e.clientX - from.x;
-          if (
-            Math.abs(dx) > 48 &&
-            Math.abs(dx) > 2 * Math.abs(e.clientY - from.y)
-          )
-            go(at + (dx < 0 ? 1 : -1));
-        }}
         className="mt-2 flex touch-pan-y flex-col"
       >
         {lead ? (
@@ -271,6 +262,10 @@ export function Review({ onClose }: { onClose(): void }) {
                 {INTRO}
               </MindNote>
             </div>
+            {/* On a phone the way on is a tap, which nothing else says. Wide has its buttons. */}
+            <p data-r className="mt-4 text-center font-mono text-[10px] tracking-[.1em] text-muted wide:hidden">
+              TAP ANYWHERE TO GO ON
+            </p>
           </>
         )}
       </div>
