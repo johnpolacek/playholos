@@ -254,7 +254,8 @@ export const MIND_SOURCES: Source[] = [
   },
 ];
 
-export const LEADS_SOURCES: Source[] = [
+/** Earth's leads, as Scan and its review list them. */
+const LEADS_SOURCES: Source[] = [
   {
     title: "82 Eridani d",
     text: "At least 5 Earth masses, 650 days around a Sun-like star 19.7 light-years away, on an orbit stretched enough to swing through its warm zone. Found by its star's sway, so its size and air are unread.",
@@ -321,8 +322,9 @@ export const PLAN_SOURCES: Source[] = [
   },
 ];
 
-/** Scan: our messages still on their way, under the leads. */
+/** Scan: Earth's leads, and our messages still on their way under them. */
 export const SCAN_SOURCES: Source[] = [
+  ...LEADS_SOURCES,
   {
     title: "Already on the way",
     text: "Our aimed messages reach their stars on real dates: the 2009 message at Kappa¹ Ceti in Year 0.1, the 2003 message at Gliese 208 in Year 0.8. The first reply that could come is Luyten's Star's, in Year 2.3.",

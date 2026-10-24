@@ -9,7 +9,6 @@ import { Inherit } from "@/components/inherit";
 import { FILL, Spread } from "@/components/spread";
 import { Charter } from "@/components/charter";
 import { Meet } from "@/components/meet";
-import { Leads } from "@/components/leads";
 import { Drift } from "@/components/drift";
 import { Sky, SkyArt } from "@/components/sky";
 import type { Dials } from "@/lib/drift";
@@ -104,9 +103,10 @@ export function Wake({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
 const LeaveShell = createContext<(then: () => void) => void>((then) => then());
 export const useLeaveShell = () => use(LeaveShell);
 
-// The phone. A new game opens on the drift, then Wake and the memories, all under one sky. A game already begun goes straight to the
-// shell. Past the last screen, the shell opens on Build, where we plan our waking. A reload starts over at the drift.
-const SCREENS = [Drift, Wake, Origins, People, Stand, Inherit, Charter, Meet, Leads];
+// The phone. A new game opens on the drift, then Wake and the memories, all under one sky. A game already begun goes
+// straight to the shell. Past the last screen, the shell opens on the review of our scans, the first of the things we
+// would do before Begin. A reload starts over at the drift.
+const SCREENS = [Drift, Wake, Origins, People, Stand, Inherit, Charter, Meet];
 
 export function Opening({ className, children }: { className: string; children: React.ReactNode }) {
   const { save, wake } = useGame();
@@ -186,13 +186,13 @@ export function Opening({ className, children }: { className: string; children: 
   else if (save) {
     const Screen = SCREENS[at];
     const plan = () => {
-      navigate("/build");
+      navigate("/?review");
       wake();
     };
     const next = () => (at + 1 < SCREENS.length ? setAt(at + 1) : plan());
     // Skip leaves the memories for the charter on Wake, and skips one memory after that.
     const charter = SCREENS.indexOf(Charter);
-    // Past the charter, Skip goes to Build to plan: as "Plan our waking." does on Meeting the Mind.
+    // Past the charter, Skip goes to the review, as Begin does on Meeting the Mind.
     const skip = () =>
       at > charter ? plan() : setAt(at === SCREENS.indexOf(Wake) ? charter : Math.min(at + 2, charter));
     body = (

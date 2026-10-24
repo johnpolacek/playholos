@@ -1,23 +1,18 @@
-import { Link, useNavigate } from "react-router";
-import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useGame } from "@/components/game-provider";
+import { Link } from "react-router";
+import { Fragment, useCallback, useRef, useState } from "react";
 import { SkyArt } from "@/components/sky";
 import { LeadMark } from "@/components/marks";
 import { Face } from "@/components/tab-head";
-import { FILL, Spread } from "@/components/spread";
 import type { Dials, Mark } from "@/lib/drift";
 import { span } from "@/lib/game/clock";
-import { type Lead, leadsOf, type Reading, skyId } from "@/lib/game/leads";
+import { type Lead, type Reading } from "@/lib/game/leads";
 import { type System, worldName } from "@/lib/game/systems";
-import { LEADS_SOURCES } from "@/lib/game/sources";
-import type { FeltWorld } from "@/lib/sim/types";
-import { prefersReducedMotion, rise, riseFrom, useStage } from "@/lib/motion";
 
-// "What doesn't fit?": the Mind's answer, drawn. The stars within 50 light-years from above, and Earth's real leads
-// lit one by one, each with a thread out from Sol: a world on a stretched orbit, every world the planet hunters felt
-// by 2040, nearest first, Fomalhaut's collisions, and the first star that could answer our messages. Beside each, how
-// long a message takes to reach it, in play time, and its distance: what a call would cost. Picking one shows its path out from Sol in
-// depth and opens what we measured of it.
+// Earth's leads, drawn for Scan. The stars within 50 light-years from above, and Earth's real leads lit, each with a
+// thread out from Sol: a world on a stretched orbit, every world the planet hunters felt by 2040, nearest first,
+// Fomalhaut's collisions, and the first star that could answer our messages. Beside each, how long a message takes to
+// reach it, in play time, and its distance: what a call would cost. Picking one shows its path out from Sol in depth
+// and opens what we measured of it.
 
 /** How long a message takes to reach a star, one way, in play time, and under it how far it is: 1h 38m, 19.7 ly.
  *  Stacked, so on a phone the names keep their one line. */
@@ -225,141 +220,5 @@ export function LeadList({
         );
       })}
     </ul>
-  );
-}
-
-// A button answers the pointer: it brightens on hover and gives under a press, quick in and slower out. Only
-// scale and color move here, since the stage's own tweens own transform and opacity.
-const PRESS =
-  "transition-[scale,background-color,border-color,box-shadow] duration-150 ease-out active:scale-[.97] active:duration-75 [-webkit-tap-highlight-color:transparent]";
-
-export function Leads({ onNext }: { onSkip(): void; onNext(): void }) {
-  const { save, wake } = useGame();
-  const navigate = useNavigate();
-  const root = useRef<HTMLDivElement>(null);
-  const [felt, setFelt] = useState<FeltWorld[]>();
-  const [dials] = useState<Dials>(() => ({ found: 0, grid: 0, focus: 0 }));
-  const [flown, setFlown] = useState(false);
-  const lead = useRef(0);
-  const onReady = useCallback((flight: number) => {
-    lead.current = performance.now() / 1000 + flight;
-    setFlown(true);
-  }, []);
-  const seed = save?.seed;
-  useEffect(() => {
-    if (seed === undefined) return;
-    fetch(`/api/leads?seed=${seed}`)
-      .then((r) => (r.ok ? r.json() : []))
-      .then(setFelt, () => setFelt([]));
-  }, [seed]);
-  const leads = useMemo(() => (felt ? leadsOf(felt) : []), [felt]);
-  const ids = useMemo(() => leads.map((l) => skyId(l.star)), [leads]);
-  const ready = flown && !!felt;
-
-  const { leave, hurry } = useStage(
-    root,
-    (q, tl) => {
-      tl.delay(Math.max(0, lead.current - performance.now() / 1000 - 0.6));
-      // However many there are, they all come on in about five seconds.
-      const step = Math.min(0.8, 5 / leads.length);
-      tl.fromTo(q('[data-m="kick"]'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.5 }, 0)
-        .to(dials, { grid: 1, duration: 1 }, 0.1)
-        .fromTo(q('[data-m="who"]'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.5 }, 0.3)
-        .fromTo(q('[data-m="open"]'), riseFrom, { ...rise, duration: 0.6 }, 0.5)
-        .fromTo(q('[data-m="head"]'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.4 }, 1.3);
-      q('[data-m="lead"]').forEach((row, i) => {
-        const at = 1.5 + i * step;
-        tl.to(dials, { found: i + 1, duration: step * 1.4, ease: "power1.inOut" }, at).fromTo(
-          row,
-          riseFrom,
-          { ...rise, duration: 0.5 },
-          at + step * 0.7,
-        );
-      });
-      const end = 1.5 + leads.length * step + 0.6;
-      tl.fromTo(q('[data-m="last"]'), riseFrom, { ...rise, duration: 0.7 }, end).fromTo(
-        q('[data-m="act"]'),
-        riseFrom,
-        { ...rise, stagger: 0.08 },
-        end + 0.6,
-      );
-    },
-    ready,
-  );
-
-  const ask = (question: string) =>
-    leave(() => {
-      navigate(`/mind?ask=${encodeURIComponent(question)}`);
-      wake();
-    });
-
-  useEffect(() => {
-    if (ready && prefersReducedMotion()) Object.assign(dials, { found: leads.length, grid: 1 });
-  }, [ready, dials, leads]);
-
-  return (
-    <div
-      ref={root}
-      onPointerDown={hurry}
-      style={ready ? undefined : { visibility: "hidden" }}
-      className="flex min-h-0 grow flex-col overflow-hidden bg-paper px-5 text-ink wide:overflow-y-auto wide:px-10"
-    >
-      <Spread
-        pinned
-        sources={LEADS_SOURCES}
-        head={
-          <span data-m="kick" className="font-mono text-[10.5px] tracking-[.1em] text-muted">
-            2040 · WHAT DOESN’T FIT?
-          </span>
-        }
-        art={
-          ids.length ? (
-            <LeadsMap
-              dials={dials}
-              ids={ids}
-              onReady={onReady}
-              className={`relative mx-auto block aspect-square max-h-[42dvh] w-full max-w-[420px] shrink-0 sm:max-w-[520px] wide:aspect-auto wide:max-h-none ${FILL}`}
-            />
-          ) : (
-            <div className="aspect-square w-full" />
-          )
-        }
-      >
-        <span data-m="who" className="mt-1 font-mono text-[10px] tracking-[.1em] text-you wide:mt-3">
-          THE MIND
-        </span>
-        <p data-m="open" className="mt-1.5 text-[19px] leading-snug font-medium wide:text-[22px]">
-          The sky near us is quiet. These are the few things in it we can’t explain yet.
-        </p>
-        <div
-          data-m="head"
-          className="mt-4 flex justify-between font-mono text-[10px] tracking-[.1em] text-muted uppercase"
-        >
-          <span>Leads · {leads.length}</span>
-          <span>Reached in</span>
-        </div>
-        <LeadList leads={leads} dials={dials} fold />
-        <p data-m="last" className="mt-3 text-[15px] leading-snug text-page-ink2">
-          A call to any of them takes as long as its light, and an answer as long again. Which we look at first is
-          yours.
-        </p>
-        <div className="mt-auto grid shrink-0 grid-cols-[1fr_1.4fr] gap-2 pt-5 pb-4 wide:pt-8">
-          <button
-            data-m="act"
-            onClick={() => ask("What doesn’t fit?")}
-            className={`${PRESS} h-[46px] rounded-full border border-ink/70 text-[15px] font-medium hover:border-ink hover:bg-ink/10`}
-          >
-            Ask the Mind
-          </button>
-          <button
-            data-m="act"
-            onClick={() => leave(onNext)}
-            className={`${PRESS} h-[46px] rounded-full bg-ink text-[15px] font-medium text-paper hover:bg-ink/90 hover:shadow-[0_0_28px_-6px_var(--color-you)]`}
-          >
-            Plan Our Waking
-          </button>
-        </div>
-      </Spread>
-    </div>
   );
 }
