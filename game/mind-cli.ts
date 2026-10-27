@@ -1,0 +1,160 @@
+import { spawn } from "node:child_process";
+import { createHash } from "node:crypto";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import type { IncomingMessage } from "node:http";
+import { tmpdir } from "node:os";
+import { createUIMessageStream, pipeUIMessageStreamToResponse, type UIMessage } from "ai";
+import type { Plugin } from "vite";
+import { readMindPick, type Usage } from "./lib/access.ts";
+import { CLI_BARE } from "./scripts/ask-mind.mjs";
+
+// With MIND_VIA=cli, the dev server's Mind answers on your own Claude login through the claude CLI, not the API key,
+// so play while we build spends the subscription. The Worker still builds what the Mind is told, asked dry, and still
+// says whether the Mind is open. The CLI takes one prompt, so earlier turns ride in the system prompt. 2026-10-25.
+
+const DRY = "x-holos-dry";
+
+// A tape of the neighbors' answers, for replaying a game in tests: real model trials, kept by what was asked. With
+// HOLOS_TAPE set to a file, each answer is recorded. With HOLOS_TAPE_MODE=replay too, answers come from it, and one
+// never asked comes back empty, so the neighbor takes its likeliest move. Hold the rolls with react's roll to match.
+// 2026-10-26.
+const TAPE = process.env.HOLOS_TAPE;
+const REPLAY = process.env.HOLOS_TAPE_MODE === "replay";
+const tapeKey = (...parts: string[]) => createHash("sha256").update(parts.join("\u0000")).digest("hex").slice(0, 24);
+const tape = (): Record<string, string> => (TAPE && existsSync(TAPE) ? JSON.parse(readFileSync(TAPE, "utf8")) : {});
+
+async function bodyOf(req: IncomingMessage) {
+  let raw = "";
+  for await (const chunk of req) raw += chunk;
+  return JSON.parse(raw || "{}");
+}
+
+const textOf = (m: UIMessage) => m.parts.map((p) => (p.type === "text" ? p.text : "")).join("");
+
+// The talk before this question, for the system prompt, so the question itself stays as the Will asked it.
+function talkOf(messages: UIMessage[]) {
+  const before = messages.slice(0, -1);
+  if (!before.length) return "";
+  const talk = before.map((m) => `${m.role === "user" ? "The Will" : "We"}: ${textOf(m)}`).join("\n\n");
+  return `\n\nOur talk so far, which you remember as your own and never recite:\n\n${talk}`;
+}
+
+export const mindCli: Plugin = {
+  name: "holos-mind-cli",
+  apply: () => process.env.MIND_VIA === "cli",
+  configureServer(server) {
+    server.middlewares.use(async (req, res, next) => {
+      // A neighbor's reaction, worker/react.ts: marked so the Worker asks back here, where the CLI can run.
+      if (req.method === "POST" && req.url === "/api/react") {
+        // The Worker reads the raw headers, so it is set in both. Before 2026-10-26 only the parsed one was, and the
+        // neighbors answered on the API key.
+        req.headers["x-holos-cli"] = "1";
+        req.rawHeaders.push("x-holos-cli", "1");
+        return next();
+      }
+      if (req.method === "POST" && req.url === "/__holos/cli") {
+        const { system, user, model, effort } = await bodyOf(req);
+        const key = tapeKey(model, effort, system, user);
+        if (TAPE && REPLAY) {
+          const text = tape()[key];
+          if (text === undefined) console.error("Tape: not recorded", key);
+          res.setHeader("content-type", "application/json");
+          return res.end(JSON.stringify({ text: text ?? "" }));
+        }
+        const child = spawn("claude", [...CLI_BARE, "--model", model, "--effort", effort, "--system-prompt", system, "--output-format", "json"], { cwd: tmpdir() });
+        let out = "";
+        child.stdout.on("data", (d) => (out += d));
+        child.stdin.end(user);
+        child.on("close", () => {
+          let text = "";
+          try {
+            text = JSON.parse(out).result ?? "";
+          } catch {}
+          if (TAPE && text) writeFileSync(TAPE, JSON.stringify({ ...tape(), [key]: text }, null, 1));
+          res.setHeader("content-type", "application/json");
+          res.end(JSON.stringify({ text }));
+        });
+        return;
+      }
+      if (req.method !== "POST" || req.url !== "/api/mind" || req.headers[DRY]) return next();
+      const body = await bodyOf(req);
+      // Asked dry, as trace:mind asks, the Worker answers. Its body was read here, so it goes on whole.
+      if (body.dry) {
+        const dry = await fetch(`http://${req.headers.host}/api/mind`, {
+          method: "POST",
+          headers: { "content-type": "application/json", cookie: req.headers.cookie ?? "", [DRY]: "1" },
+          body: JSON.stringify(body),
+        });
+        res.statusCode = dry.status;
+        res.setHeader("content-type", "application/json");
+        return res.end(await dry.text());
+      }
+      // The Worker builds the prompt and checks the cookie, as it does for every question.
+      const told = await fetch(`http://${req.headers.host}/api/mind`, {
+        method: "POST",
+        headers: { "content-type": "application/json", cookie: req.headers.cookie ?? "", [DRY]: "1" },
+        body: JSON.stringify({ ...body, dry: true }),
+      });
+      if (!told.ok) {
+        res.statusCode = told.status;
+        res.setHeader("content-type", "application/json");
+        return res.end(await told.text());
+      }
+      const { system } = (await told.json()) as { system: string };
+      const { model, effort } = readMindPick(body.pick);
+      const args = [...CLI_BARE, "--model", model, "--effort", effort, "--system-prompt", system + talkOf(body.messages)];
+      args.push("--output-format", "stream-json", "--verbose", "--include-partial-messages");
+      const stream = createUIMessageStream({
+        execute: ({ writer }) =>
+          new Promise<void>((resolve, reject) => {
+            const child = spawn("claude", args, { cwd: tmpdir() });
+            req.on("close", () => child.kill());
+            let buf = "";
+            let err = "";
+            let started = false;
+            child.stdout.on("data", (chunk) => {
+              buf += chunk;
+              const lines = buf.split("\n");
+              buf = lines.pop()!;
+              for (const line of lines) {
+                let d;
+                try {
+                  d = JSON.parse(line);
+                } catch {
+                  continue;
+                }
+                const delta = d.type === "stream_event" && d.event.type === "content_block_delta" ? d.event.delta : null;
+                if (delta?.type === "text_delta") {
+                  if (!started) writer.write({ type: "text-start", id: "a" });
+                  started = true;
+                  writer.write({ type: "text-delta", id: "a", delta: delta.text });
+                }
+                if (d.type === "result") {
+                  if (started) writer.write({ type: "text-end", id: "a" });
+                  if (d.is_error) return reject(new Error(String(d.result)));
+                  const u = d.usage ?? {};
+                  const usage: Usage = {
+                    model,
+                    input: u.input_tokens ?? 0,
+                    cacheRead: u.cache_read_input_tokens ?? 0,
+                    cacheWrite: u.cache_creation_input_tokens ?? 0,
+                    output: u.output_tokens ?? 0,
+                  };
+                  writer.write({ type: "message-metadata", messageMetadata: { usage } });
+                }
+              }
+            });
+            child.stderr.on("data", (d) => (err += d));
+            child.on("error", () => reject(new Error("No claude CLI on this machine.")));
+            child.on("close", (code) => (code ? reject(new Error(err.trim().slice(0, 200) || `claude exited ${code}`)) : resolve()));
+            child.stdin.end(textOf(body.messages.at(-1)));
+          }),
+        onError: (e) => {
+          console.error("Mind (CLI):", e instanceof Error ? e.message : String(e));
+          return "The Mind can’t answer on the Claude login right now.";
+        },
+      });
+      pipeUIMessageStreamToResponse({ response: res, stream });
+    });
+  },
+};

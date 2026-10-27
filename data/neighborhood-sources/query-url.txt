@@ -1,0 +1,1 @@
+https://tapvizier.cds.unistra.fr/TAPVizieR/tap/sync?REQUEST=doQuery&LANG=ADQL&FORMAT=csv&MAXREC=100000&QUERY=SELECT+GaiaEDR3%2C+RA_ICRS%2C+DE_ICRS%2C+Plx%2C+e_Plx%2C+pmRA%2C+pmDE%2C+%22Gmag%22%2C+BPmag%2C+RPmag%2C+RUWE%2C+GCNSprob%2C+WDprob%2C+Dist16%2C+Dist50%2C+Dist84%2C+xcoord50%2C+ycoord50%2C+zcoord50+FROM+%22J%2FA%2BA%2F649%2FA6%2Ftable1c%22+WHERE+Dist50+%3C%3D+0.031

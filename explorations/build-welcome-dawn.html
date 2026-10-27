@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Build Dawn Designs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=SUSE:wght@100..800&display=swap" rel="stylesheet">
+<style>
+/* Offline, the game's own copies of the fonts. */
+@font-face { font-family: "SUSE Variable"; font-weight: 100 800; src: url("../game/node_modules/@fontsource-variable/suse/files/suse-latin-wght-normal.woff2") format("woff2"); }
+@font-face { font-family: "Plex Mono Local"; font-weight: 400; src: url("../game/node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2") format("woff2"); }
+
+/* Colors from game/app/globals.css. The game is always dark. */
+:root {
+  --page: #0b0c0d;
+  --page-ink2: #a9a59c;
+  --frame: #2a2b2e;
+  --paper: #121314;
+  --ink: #e6e3db;
+  --muted: #9c988f;
+  --faint: #34363a;
+  --panel: #17181a;
+  --rowline: #26282b;
+  --track: #2a2b2e;
+  --you: #5bb8d6;
+  --other: #e0a24a;
+  --think: #b39ef2;
+  --see: #70d1a9;
+  --lift: #c2d766;
+  --reach: #e48ebf;
+  --keep: #c1ccd7;
+  --listen: var(--you);
+  --sans: "SUSE", "SUSE Variable", sans-serif;
+  --mono: "IBM Plex Mono", "Plex Mono Local", monospace;
+  --h: 720px;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: #070808; color: var(--ink); font-family: var(--sans); text-wrap: pretty; }
+p { margin: 0; }
+ul { list-style: none; margin: 0; padding: 0; }
+button { font: inherit; color: inherit; }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+header { max-width: 1400px; margin: 0 auto; padding: 40px 16px 8px; display: flex; flex-wrap: wrap; gap: 16px; align-items: end; justify-content: space-between; }
+h1 { margin: 0; font-size: 22px; font-weight: 600; }
+header p { margin-top: 6px; color: var(--muted); font-size: 14px; max-width: 64ch; line-height: 1.45; }
+.ctl { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center; font: 11px var(--mono); color: var(--muted); }
+.ctl button { background: none; color: var(--muted); border: 1px solid var(--frame); border-radius: 999px; padding: 5px 10px; font: inherit; cursor: pointer; }
+.ctl button[aria-pressed="true"] { color: var(--ink); border-color: var(--muted); }
+.grp { display: flex; gap: 4px; align-items: center; }
+
+main { max-width: 1400px; margin: 0 auto; padding: 16px 16px 64px; display: grid; gap: 32px 20px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr)); align-items: start; }
+.card { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.meta { display: flex; gap: 10px; align-items: baseline; }
+.num { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.name { font-size: 15px; font-weight: 600; }
+.note { color: var(--muted); font-size: 13px; line-height: 1.4; margin-top: -4px; min-height: 3.6em; }
+
+/* The panel, as the game has it: the walk's head, the page, and the way on. */
+.frame { position: relative; height: var(--h); width: 100%; max-width: 440px; background: var(--panel); border: 1px solid var(--rowline); border-radius: 16px; display: flex; flex-direction: column; overflow: hidden; }
+.hd { padding: 12px 16px 2px; flex: none; position: relative; z-index: 2; background: var(--panel); }
+.hl { display: flex; justify-content: space-between; align-items: center; font-size: 11px; letter-spacing: .08em; color: var(--muted); }
+.hl .x { color: var(--ink); font-size: 19px; line-height: 10px; }
+.thr { position: relative; display: flex; justify-content: space-between; align-items: center; height: 22px; margin-top: 6px; }
+.thr::before { content: ""; position: absolute; left: 4px; right: 4px; top: 50%; height: 1px; background: var(--faint); }
+.thr i { position: relative; width: 7px; height: 7px; border-radius: 50%; border: 1px solid var(--muted); background: var(--panel); }
+.thr i.on { background: var(--ink); border-color: var(--ink); box-shadow: 0 0 0 3px rgba(230,227,219,.14); }
+.tb { display: flex; align-items: center; gap: 10px; margin-top: 4px; padding-bottom: 6px; font: 10px var(--mono); letter-spacing: .1em; color: var(--muted); }
+.tb .bar { flex: 1; height: 3px; border-radius: 2px; background: var(--track); overflow: hidden; }
+.bd { position: relative; flex: 1; min-height: 0; display: flex; flex-direction: column; container-type: size; }
+.ft { flex: none; padding: 12px 16px 14px; position: relative; z-index: 2; background: var(--panel); }
+.go { width: 100%; height: 44px; border-radius: 999px; border: 0; background: var(--ink); color: var(--paper); font-weight: 500; font-size: 15px; cursor: pointer; }
+
+/* Shared: the scene, the words over it, and the rows. */
+.scene { position: relative; flex: 1 1 140px; min-height: 0; overflow: hidden; }
+.scene > svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.eyebrow { font: 10.5px var(--mono); letter-spacing: .14em; color: var(--you); }
+.title { font-size: 26px; font-weight: 500; line-height: 1.12; letter-spacing: -.01em; margin-top: 5px; }
+.title em { font-style: normal; color: var(--other); }
+.ov { position: absolute; left: 16px; right: 16px; top: 12px; pointer-events: none; }
+.ov .sub { font-size: 14px; line-height: 1.35; color: var(--page-ink2); margin-top: 6px; max-width: 32ch; }
+.lh { display: flex; justify-content: space-between; font: 10px var(--mono); letter-spacing: .1em; color: var(--muted); padding: 0 20px 6px 0; }
+.row { display: flex; align-items: center; gap: 11px; min-height: 40px; padding: 4px 0; border-top: 1px solid var(--rowline); cursor: pointer; position: relative; transition: background-color .3s, box-shadow .3s; }
+.row .t { flex: 1; min-width: 0; }
+.row .nm { display: block; font-size: 14.5px; font-weight: 600; line-height: 1.25; }
+.row .w { display: block; font-size: 12.5px; color: var(--page-ink2); line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.row .tm { flex: none; font: 11px var(--mono); color: var(--muted); text-align: right; }
+.row .more { flex: none; width: 8px; color: var(--muted); text-align: center; }
+.row.on { background: rgba(230,227,219,.045); box-shadow: -10px 0 0 rgba(230,227,219,.045), 10px 0 0 rgba(230,227,219,.045); }
+.row .mk { flex: none; }
+@container (max-height: 470px) { .row .w { display: none; } .row { min-height: 32px; } }
+
+/* Motion. */
+@keyframes tw { 0%, 100% { opacity: .15 } 50% { opacity: .8 } }
+@keyframes bob { 0%, 100% { transform: translateY(-2px) } 50% { transform: translateY(2px) } }
+@keyframes breathe { 0%, 100% { opacity: .55 } 50% { opacity: 1 } }
+@keyframes rise { from { opacity: 0; transform: translateY(8px) } to { opacity: 1; transform: none } }
+.tw { animation: tw 4s ease-in-out infinite; }
+.bob { animation: bob 3.6s ease-in-out infinite; }
+.breathe { animation: breathe 4s ease-in-out infinite; }
+.rows .row { animation: rise .7s cubic-bezier(.2,.7,.2,1) both; }
+body.still *, body.still *::before { animation-play-state: paused !important; }
+.sk .mg { transition: opacity .35s; }
+.sk.has .mg { opacity: .45; }
+.sk.has .mg.on { opacity: 1; }
+.sk .mg .halo { opacity: 0; transition: opacity .35s; }
+.sk .mg.on .halo { opacity: 1; }
+
+/* 01 */
+.v1 .list { flex: none; padding: 0 16px; }
+.v1 .lh { padding-top: 10px; }
+
+/* 02 */
+.v2 .top { flex: none; padding: 10px 16px 10px 62px; position: relative; z-index: 1; }
+.v2 .side { position: relative; flex: 1; min-height: 0; }
+.v2 .side > svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.v2 .rows { position: relative; height: 100%; display: flex; flex-direction: column; padding: 0 16px 6px 62px; }
+.v2 .row { flex: 1; border-top-color: rgba(38,40,43,.7); }
+.v2 .row .mk-slot { width: 24px; height: 24px; flex: none; }
+.v2 .sky { position: absolute; inset: 0; }
+
+/* 03 */
+.v3 .top { position: relative; z-index: 1; padding: 12px 16px 10px; }
+.v3 .glass { position: relative; z-index: 1; margin: 0 10px; padding: 2px 10px 4px; border-radius: 14px; background: rgba(18,19,20,.62); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); border: 1px solid rgba(52,54,58,.6); }
+.v3 .glass .row:first-child { border-top: 0; }
+.v3 .row.on { background: none; box-shadow: none; }
+.v3 .row.on .nm { color: var(--c); }
+
+/* 04 */
+.v4 .tiles { flex: none; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 0 16px; }
+.v4 .tile { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border: 1px solid var(--rowline); border-radius: 12px; cursor: pointer; transition: border-color .3s, background-color .3s; min-width: 0; }
+.v4 .tile .t { min-width: 0; }
+.v4 .tile .nm { display: block; font-size: 13px; font-weight: 600; line-height: 1.2; }
+.v4 .tile .tm { display: block; font: 10.5px var(--mono); color: var(--muted); margin-top: 3px; }
+.v4 .tile.on { border-color: var(--c); background: rgba(230,227,219,.03); }
+.v4 .lh { padding: 10px 4px 7px 2px; margin: 0 16px; }
+@container (max-height: 470px) { .v4 .tile { padding: 6px 9px; } .v4 .tile .tm { display: none; } }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Build, at dawn</h1>
+    <p>Four takes on 05 Dawn from build-welcome.html: a header about the eight projects, the eight listed, and Explore Builds. Times are each build alone at a typical Earth, in play time. A pointer on a row lights its mark in the scene. Left alone, they take turns.</p>
+  </div>
+  <div class="ctl">
+    <span class="grp">Space <button data-h="720" aria-pressed="true">Tall</button><button data-h="540" aria-pressed="false">Short</button></span>
+    <span class="grp">04's subhead <button data-s="0" aria-pressed="true">A</button><button data-s="1" aria-pressed="false">B</button><button data-s="2" aria-pressed="false">C</button></span>
+    <span class="grp">Motion <button data-m="1" aria-pressed="true">On</button><button data-m="0" aria-pressed="false">Off</button></span>
+  </div>
+</header>
+<main id="grid"></main>
+
+<script>
+// The game's data, from game/lib/game/plan.ts, sites.ts and the pace at a typical Earth (scale 1), 2026-10-20.
+// y: Years to build alone. use: share of our thought it puts to work alone.
+const STARTS = [
+  { n: "All-Sky Watch", d: "listen", m: "dish", y: 4.2, use: 1 / 3, w: "Hears a knock or a broadcast from anywhere, at any hour.", at: "Green Bank and Murchison", on: "earth" },
+  { n: "Deep Flash Watch", d: "listen", m: "zap", y: 4.2, use: 1 / 6, w: "Catches laser knocks too faint for the sky watch.", at: "Palomar and Sutherland", on: "earth" },
+  { n: "Thought Fields", d: "think", m: "brain", y: 1.0, use: 0, w: "Half again as much thought, for good.", at: "Richland Parish, Louisiana", on: "earth" },
+  { n: "Infrared Telescope", d: "see", m: "telescope", y: 5.78, use: 1, w: "Reads the air of the nearest worlds.", at: "L2, 1.5 million km out", on: "l2" },
+  { n: "Launch Complex", d: "lift", m: "rocket", y: 1.4, use: 0.5, w: "Doubles what we lift to orbit.", at: "Kourou, French Guiana", on: "earth" },
+  { n: "Orbital Yard", d: "lift", m: "yard", y: 3.53, use: 1, w: "Builds in orbit a quarter faster.", at: "Low orbit, 400 km up", on: "orbit" },
+  { n: "Laser Sail Array", d: "reach", m: "sail", y: 17.64, use: 1, w: "Light from the ground, to push sails to a fifth of light speed.", at: "Chajnantor plateau, Chile", on: "earth" },
+  { n: "Probe Yard", d: "reach", m: "probe", y: 29.33, use: 1, w: "Builds and fuels probes in orbit. The first flies 12 Years after.", at: "Low orbit, 400 km up", on: "orbit", more: true },
+];
+// What each opens once done, and how long it takes, in Years, or the rock it waits on.
+const LATER = [
+  { n: "Ground Solar", d: "think", m: "solar", after: "Thought Fields", y: 10 },
+  { n: "15 m Mirror", d: "see", m: "mirror", after: "Infrared Telescope", y: 18 },
+  { n: "Mass Driver", d: "lift", m: "driver", after: "Launch Complex", y: 24 },
+  { n: "Orbital Foundry", d: "lift", m: "foundry", after: "Orbital Yard", y: 30 },
+  { n: "Belt Mining", d: "lift", m: "belt", after: "Probe Yard", y: 26 },
+  { n: "Far-Side Array", d: "listen", m: "farside", after: "Mass Driver", y: 30 },
+  { n: "Power from Orbit", d: "think", m: "beamed", after: "Mass Driver", rock: "10 Mt" },
+];
+const opens = (n) => LATER.filter((b) => b.after === n);
+const col = (d) => `var(--${d})`;
+const HEX = { listen: "#5bb8d6", think: "#b39ef2", see: "#70d1a9", lift: "#c2d766", reach: "#e48ebf", keep: "#c1ccd7" };
+
+/** Play time for Years of game time, at 5 real minutes a Year, as the game counts it. */
+function play(y) {
+  const m = Math.floor(y * 5 + 1e-6);
+  if (m < 60) return `${m}m`;
+  const h = Math.floor(m / 60), r = m % 60;
+  return r ? `${h}h ${r}m` : `${h}h`;
+}
+
+// Each build's mark, from game/components/marks.tsx: Lucide's shapes on 24, the game's own on 16.
+const SAT = '<path d="m13.5 6.5-3.148-3.148a1.205 1.205 0 0 0-1.704 0L6.352 5.648a1.205 1.205 0 0 0 0 1.704L9.5 10.5"/><path d="M16.5 7.5 19 5"/><path d="m17.5 10.5 3.148 3.148a1.205 1.205 0 0 1 0 1.704l-2.296 2.296a1.205 1.205 0 0 1-1.704 0L13.5 14.5"/><path d="M9.352 10.648a1.205 1.205 0 0 0 0 1.704l2.296 2.296a1.205 1.205 0 0 0 1.704 0l4.296-4.296a1.205 1.205 0 0 0 0-1.704l-2.296-2.296a1.205 1.205 0 0 0-1.704 0z"/><path d="M9 21a6 6 0 0 0-6-6"/>';
+const gear = (() => {
+  const p = [];
+  for (let i = 0; i < 8; i++) {
+    const a = (2 * Math.PI * i) / 8;
+    for (const [da, r] of [[-0.2, 4.4], [-0.13, 6], [0.13, 6], [0.2, 4.4]]) p.push(`${(8 + r * Math.cos(a + da)).toFixed(2)} ${(8 + r * Math.sin(a + da)).toFixed(2)}`);
+  }
+  return `<path d="M${p.join(" ")}z"/><circle cx="8" cy="8" r="1.7"/>`;
+})();
+const DOT = 'fill="currentColor" stroke="none"';
+const MARKS = {
+  dish: [16, `<path d="M3 14.5h10M8 14.5v-4"/><path d="M3.2 6.2Q8 12.6 12.8 6.2"/><path d="M8 9.4V4.4"/><circle cx="8" cy="3.6" r=".8" ${DOT}/>`],
+  zap: [24, '<path d="M15.914 4a1.5 1.5 0 00-2.474-1.561l-9 9A1.5 1.5 0 005.5 14h4.002a.5.5 0 01.471.666L8.086 20a1.5 1.5 0 002.475 1.56l9-9A1.5 1.5 0 0018.5 10h-3.997a.5.5 0 01-.472-.667z"/>'],
+  brain: [24, '<path d="M12 18V5"/><path d="M15 13a4.17 4.17 0 01-3-4 4.17 4.17 0 01-3 4"/><path d="M17.707 6.294A3 3 0 1012 5a3 3 0 10-5.707 1.294"/><path d="M17.996 5.125a4 4 0 012.526 5.77"/><path d="M18 18a4 4 0 002-7.465"/><path d="M19.967 17.482a4 4 0 11-7.967.517 4 4 0 11-7.967-.517"/><path d="M6 18a4 4 0 01-2-7.465"/><path d="M6.004 5.125a4 4 0 00-2.526 5.77"/>'],
+  telescope: [24, '<path d="m10.065 12.493-6.18 1.318a.934.934 0 0 1-1.108-.702l-.537-2.15a1.07 1.07 0 0 1 .691-1.265l13.504-4.44"/><path d="m13.56 11.747 4.332-.924"/><path d="M16.485 5.94a2 2 0 0 1 1.455-2.425l1.09-.272a1 1 0 0 1 1.212.727l1.515 6.06a1 1 0 0 1-.727 1.213l-1.09.272a2 2 0 0 1-2.425-1.455z"/><path d="m6.158 8.633 1.114 4.456"/><path d="m16 21-3.105-6.21"/><path d="m8 21 3.105-6.21"/><circle cx="12" cy="13" r="2"/>'],
+  rocket: [24, '<path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/><path d="M9 12a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.4 22.4 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 .05 5 .05"/>'],
+  yard: [24, SAT],
+  sail: [16, '<path d="M3 14.8h10"/><path d="M4 14.2 8 5.6 12 14.2" stroke-width=".8" opacity=".6"/><path d="M6.2 5.6Q8 4.2 9.8 5.6"/>'],
+  probe: [24, SAT],
+  moon: [24, '<path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"/>'],
+  solar: [16, `<path d="M1.8 14.6h12.4M7.6 12.2v2.4"/><path d="M2.6 12.2 5.4 7.6h6.2L8.8 12.2z"/><circle cx="12.6" cy="3.4" r="1.4" ${DOT}/>`],
+  mirror: [16, `<path d="M8 1.8 13.4 4.9v6.2L8 14.2 2.6 11.1V4.9z"/><path d="M8 1.8V5.6M13.4 4.9 10.1 6.8M13.4 11.1 10.1 9.2M8 14.2v-3.8M2.6 11.1l3.3-1.9M2.6 4.9l3.3 1.9" opacity=".55"/><path d="M8 5.6 10.1 6.8v2.4L8 10.4 5.9 9.2V6.8z"/><circle cx="8" cy="8" r="1" ${DOT}/>`],
+  driver: [16, `<path d="M1.4 14.6Q8 12.4 14.6 14.6"/><path d="M2.6 12.8 11 7.9M8.4 9.4v4"/><circle cx="7" cy="10.3" r="1.1" ${DOT}/>`],
+  foundry: [16, gear],
+  belt: [16, `<path d="M4.4 7.2 6.2 4.8l3.2-.2 2.2 1.6.6 3-1.6 2.6-3.2.6-2.4-1.4z"/><circle cx="7" cy="8.6" r=".6" ${DOT}/><circle cx="8" cy="1.6" r="1" ${DOT}/>`],
+  farside: [16, '<path d="M1.4 14.6Q8 11.6 14.6 14.6"/><path d="M2.6 12.2q1 1.5 2 0M7 11.4q1 1.5 2 0M11.4 12.2q1 1.5 2 0"/><path d="M4.4 5.4Q8 3.2 11.6 5.4" stroke-dasharray=".1 1.9"/>'],
+  beamed: [16, '<rect x="2.4" y="1.4" width="11.2" height="2.8" rx=".4"/><path d="M6.1 1.4v2.8M9.9 1.4v2.8" opacity=".55"/><path d="M8 6v6.2" stroke-dasharray=".1 1.9"/><path d="M1.4 14.6Q8 12.4 14.6 14.6"/>'],
+};
+/** A mark as an svg, at a size; with x and y, placed inside another svg, centered there. */
+function mark(k, size, x, y, cls = "") {
+  const [g, inner] = MARKS[k];
+  const at = x === undefined ? "" : `x="${x - size / 2}" y="${y - size / 2}"`;
+  return `<svg ${at} class="mk ${cls}" width="${size}" height="${size}" viewBox="0 0 ${g} ${g}" overflow="visible" fill="none" stroke="currentColor" stroke-width="${g === 24 ? 2 : 1.3}" stroke-linecap="round" stroke-linejoin="round">${inner}</svg>`;
+}
+
+/** Stars, each twinkling at its own moment. */
+function stars(w, h, n, seed = 1) {
+  let s = seed, out = "";
+  const r = () => ((s = (s * 16807) % 2147483647) / 2147483647);
+  for (let i = 0; i < n; i++)
+    out += `<circle class="tw" cx="${(r() * w).toFixed(1)}" cy="${(r() * h).toFixed(1)}" r="${(r() * 0.7 + 0.3).toFixed(2)}" fill="#e6e3db" style="animation-delay:${(-r() * 4).toFixed(2)}s;animation-duration:${(3 + r() * 4).toFixed(1)}s"/>`;
+  return out;
+}
+
+let motion = !matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/** A row of the list: its mark, name and line, and when it's done alone. */
+const row = (b, i, slot = false) => `<li class="row" data-i="${i}" style="--c:${HEX[b.d]};animation-delay:${0.15 + i * 0.06}s">
+  ${slot ? `<span class="mk-slot"></span>` : `<span style="color:${HEX[b.d]}">${mark(b.m, 18)}</span>`}
+  <span class="t"><span class="nm">${b.n}</span><span class="w">${b.w}</span></span>
+  <span class="tm">${play(b.y)}</span><span class="more">›</span></li>`;
+const head = `<div class="lh"><span>WE COULD START · 8</span><span>DONE IN</span></div>`;
+
+/** Rows and the scene's marks lit together: by a pointer, or in turn when left alone. */
+function link(frame, items) {
+  const sk = frame.querySelector(".sk");
+  let i = -1, held = false;
+  const light = (k) => {
+    i = k;
+    items().forEach((el) => el.classList.toggle("on", +el.dataset.i === k));
+    sk?.classList.add("has");
+    sk?.querySelectorAll(".mg").forEach((g) => g.classList.toggle("on", +g.dataset.i === k));
+  };
+  setInterval(() => !held && motion && light((i + 1) % 8), 2800);
+  setTimeout(() => !held && light(0), 1400);
+  frame.addEventListener("pointerover", (e) => {
+    const el = e.target.closest("[data-i]");
+    if (el && frame.contains(el)) { held = true; light(+el.dataset.i); }
+  });
+  frame.addEventListener("pointerleave", () => (held = false));
+  return { relight: () => i >= 0 && light(i) };
+}
+
+/** Draw into an svg at its own size, again whenever that changes. */
+function sized(svg, draw) {
+  const go = () => {
+    const W = svg.clientWidth, H = svg.clientHeight;
+    if (!W || !H) return;
+    svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+    svg.innerHTML = draw(W, H);
+    svg.dispatchEvent(new Event("drawn"));
+  };
+  new ResizeObserver(go).observe(svg);
+  return go;
+}
+
+/** The dawn: night sky, the Sun cresting Earth's limb, city lights on the night side. The limb's top is at `top`. */
+function dawn(W, H, { top, sun = 0.82, curve = 1.6, glow = 120, lights = 140, seed = 5 }) {
+  const r = W * curve, cx = W / 2, cy = top + r;
+  const pt = (deg, rr) => { const a = (deg * Math.PI) / 180; return [cx + rr * Math.sin(a), cy - rr * Math.cos(a)]; };
+  const at = (x, rr = r) => (Math.asin(Math.max(-1, Math.min(1, (x - cx) / rr))) * 180) / Math.PI;
+  const id = `d${seed}`;
+  let h = `<defs>
+    <linearGradient id="${id}s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0b0c0d"/><stop offset=".72" stop-color="#0f1b22"/><stop offset="1" stop-color="#17323d"/></linearGradient>
+    <radialGradient id="${id}u"><stop offset="0" stop-color="#fff4dc"/><stop offset=".12" stop-color="#f3c77a" stop-opacity=".9"/><stop offset=".45" stop-color="#e0a24a" stop-opacity=".25"/><stop offset="1" stop-color="#e0a24a" stop-opacity="0"/></radialGradient>
+    <linearGradient id="${id}r" x1="0" x2="1"><stop offset="0" stop-color="#5bb8d6" stop-opacity=".15"/><stop offset="${Math.max(0.05, sun - 0.07)}" stop-color="#5bb8d6" stop-opacity=".8"/><stop offset="${sun + 0.04}" stop-color="#ffe3ad"/><stop offset="1" stop-color="#5bb8d6" stop-opacity=".3"/></linearGradient>
+    <radialGradient id="${id}e" cx="50%" cy="0%" r="60%"><stop offset="0" stop-color="#0e1a20"/><stop offset="1" stop-color="#070909"/></radialGradient>
+    <filter id="${id}b"><feGaussianBlur stdDeviation="4"/></filter></defs>`;
+  h += `<rect width="${W}" height="${H}" fill="url(#${id}s)"/>`;
+  h += stars(W, top, Math.round((W * top) / 1200), seed);
+  const [sx, sy] = pt(at(W * sun), r);
+  h += `<circle cx="${sx}" cy="${sy + 6}" r="${glow}" fill="url(#${id}u)"><animate attributeName="r" values="${glow * 0.92};${glow * 1.1};${glow * 0.92}" dur="9s" repeatCount="indefinite"/></circle>`;
+  h += `<circle cx="${cx}" cy="${cy}" r="${r + 5}" fill="none" stroke="url(#${id}r)" stroke-width="7" filter="url(#${id}b)"/>`;
+  h += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#${id}e)" stroke="url(#${id}r)" stroke-width="1.4"/>`;
+  let s = seed;
+  const rnd = () => ((s = (s * 16807) % 2147483647) / 2147483647);
+  for (let i = 0; i < lights; i++) {
+    const [x, y] = pt(at(W * (0.02 + rnd() * 0.96)), r - 6 - rnd() * Math.max(10, H - top));
+    h += `<circle class="tw" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(0.35 + rnd() * 0.6).toFixed(2)}" fill="#e0a24a" style="animation-delay:${(-rnd() * 4).toFixed(1)}s"/>`;
+  }
+  return { h, pt, at, r, cx, cy };
+}
+
+/** A mark floating on a thread above its place on the limb, lit with its row. With too little sky for it under the
+ *  words, only its place. */
+function floating(d, b, i, x, rr, low = false) {
+  const deg = d.at(x, rr), [mx, my] = d.pt(deg, rr), [gx, gy] = d.pt(deg, d.r);
+  if (low)
+    return `<g class="mg" data-i="${i}" style="color:${HEX[b.d]}"><circle cx="${gx}" cy="${gy}" r="2.2" fill="currentColor"/>
+      <circle class="halo" cx="${gx}" cy="${gy}" r="3" fill="none" stroke="currentColor"><animate attributeName="r" values="3;18" dur="1.8s" repeatCount="indefinite"/><animate attributeName="stroke-opacity" values=".9;0" dur="1.8s" repeatCount="indefinite"/></circle></g>`;
+  return `<g class="mg" data-i="${i}" style="color:${HEX[b.d]}">
+    <line x1="${gx}" y1="${gy}" x2="${mx}" y2="${my + 13}" stroke="currentColor" stroke-opacity=".35" stroke-dasharray="1 3"/>
+    <circle cx="${gx}" cy="${gy}" r="1.7" fill="currentColor"/>
+    <circle class="halo" cx="${gx}" cy="${gy}" r="3" fill="none" stroke="currentColor"><animate attributeName="r" values="3;16" dur="1.8s" repeatCount="indefinite"/><animate attributeName="stroke-opacity" values=".8;0" dur="1.8s" repeatCount="indefinite"/></circle>
+    <g class="bob" style="animation-delay:${-i * 0.45}s"><circle cx="${mx}" cy="${my}" r="13" fill="#0e1418" stroke="currentColor" stroke-opacity=".75"/>
+      <circle class="halo" cx="${mx}" cy="${my}" r="17" fill="currentColor" fill-opacity=".14"/>${mark(b.m, 15, mx, my)}</g></g>`;
+}
+
+// ---------------------------------------------------------------- 01, dawn over the list
+
+const V1 = {
+  name: "Dawn over the list",
+  note: "05's sunrise as a band at the top, with the header over the sky. The eight sit below it in the game's rows, and each row lights its mark.",
+  body: () => `<div class="scene"><svg class="sk"></svg>
+      <div class="ov"><div class="eyebrow">WELCOME TO BUILD · YEAR 0</div><div class="title">8 projects we could start</div></div></div>
+    <div class="list">${head}<ul class="rows">${STARTS.map((b, i) => row(b, i)).join("")}</ul></div>`,
+  init(f) {
+    const svg = f.querySelector(".sk");
+    const l = link(f, () => f.querySelectorAll(".row"));
+    sized(svg, (W, H) => {
+      const top = H * 0.8, d = dawn(W, H, { top, glow: Math.min(120, H * 0.6) });
+      const lift = Math.min(64, top - 96);
+      return d.h + STARTS.map((b, i) => floating(d, b, i, W * (0.09 + (i * 0.82) / 7), d.r + lift + (i % 2) * 16, lift < 30)).join("");
+    });
+    svg.addEventListener("drawn", l.relight);
+  },
+};
+
+// ---------------------------------------------------------------- 02, the limb down the side
+
+const V2 = {
+  name: "The limb down the side",
+  note: "Earth's edge runs down the left, the Sun cresting at its top. Each of the eight hangs off it on its own thread, so the list fills the panel and is the picture.",
+  body: () => `<div class="side"><svg class="sk"></svg>
+      <div class="rows-wrap" style="position:relative;height:100%;display:flex;flex-direction:column">
+        <div class="top"><div class="eyebrow">WELCOME TO BUILD · YEAR 0</div><div class="title">8 projects we could start</div></div>
+        <ul class="rows" style="flex:1;height:auto">${STARTS.map((b, i) => row(b, i, true)).join("")}</ul>
+      </div></div>`,
+  init(f) {
+    const svg = f.querySelector(".sk");
+    const l = link(f, () => f.querySelectorAll(".row"));
+    sized(svg, (W, H) => {
+      // Earth's center far to the left, so its limb is a long, gentle curve down the side.
+      const r = H * 1.3, cy = H * 0.42, cx = 44 - r;
+      const limb = (y) => cx + Math.sqrt(Math.max(0, r * r - (y - cy) ** 2));
+      let h = `<defs>
+        <linearGradient id="v2s" x1="0" x2="1"><stop offset="0" stop-color="#17323d"/><stop offset=".25" stop-color="#101b21"/><stop offset="1" stop-color="#17181a"/></linearGradient>
+        <radialGradient id="v2u"><stop offset="0" stop-color="#fff4dc"/><stop offset=".12" stop-color="#f3c77a" stop-opacity=".9"/><stop offset=".45" stop-color="#e0a24a" stop-opacity=".22"/><stop offset="1" stop-color="#e0a24a" stop-opacity="0"/></radialGradient>
+        <linearGradient id="v2r" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe3ad"/><stop offset=".12" stop-color="#5bb8d6" stop-opacity=".85"/><stop offset="1" stop-color="#5bb8d6" stop-opacity=".12"/></linearGradient>
+        <radialGradient id="v2e" cx="100%" cy="40%" r="60%"><stop offset="0" stop-color="#0e1a20"/><stop offset="1" stop-color="#070909"/></radialGradient>
+        <filter id="v2b"><feGaussianBlur stdDeviation="4"/></filter></defs>`;
+      h += `<rect width="${W}" height="${H}" fill="url(#v2s)"/>`;
+      h += stars(W, H, Math.round((W * H) / 1600), 9);
+      h += `<circle cx="${limb(0) + 6}" cy="2" r="110" fill="url(#v2u)"><animate attributeName="r" values="100;124;100" dur="9s" repeatCount="indefinite"/></circle>`;
+      h += `<circle cx="${cx}" cy="${cy}" r="${r + 5}" fill="none" stroke="url(#v2r)" stroke-width="7" filter="url(#v2b)"/>`;
+      h += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#v2e)" stroke="url(#v2r)" stroke-width="1.4"/>`;
+      let s = 21;
+      const rnd = () => ((s = (s * 16807) % 2147483647) / 2147483647);
+      for (let i = 0; i < 110; i++) {
+        const y = rnd() * H, x = limb(y) - 4 - rnd() * 40;
+        h += `<circle class="tw" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(0.35 + rnd() * 0.6).toFixed(2)}" fill="#e0a24a" style="animation-delay:${(-rnd() * 4).toFixed(1)}s"/>`;
+      }
+      // A thread from the limb to each row's mark, at the row's middle.
+      const ul = f.querySelector(".rows");
+      f.querySelectorAll(".row").forEach((el, i) => {
+        const b = STARTS[i], y = ul.offsetTop + el.offsetTop + el.offsetHeight / 2, mx = 74, gx = limb(y);
+        h += `<g class="mg" data-i="${i}" style="color:${HEX[b.d]}">
+          <line x1="${gx}" y1="${y}" x2="${mx - 13}" y2="${y}" stroke="currentColor" stroke-opacity=".4" stroke-dasharray="1 3"/>
+          <circle cx="${gx}" cy="${y}" r="1.8" fill="currentColor"/>
+          <circle class="halo" cx="${gx}" cy="${y}" r="3" fill="none" stroke="currentColor"><animate attributeName="r" values="3;14" dur="1.8s" repeatCount="indefinite"/><animate attributeName="stroke-opacity" values=".8;0" dur="1.8s" repeatCount="indefinite"/></circle>
+          <circle class="halo" cx="${mx}" cy="${y}" r="17" fill="currentColor" fill-opacity=".14"/>
+          <circle cx="${mx}" cy="${y}" r="13" fill="#0e1418" stroke="currentColor" stroke-opacity=".75"/>${mark(b.m, 15, mx, y)}</g>`;
+      });
+      return h;
+    });
+    svg.addEventListener("drawn", l.relight);
+  },
+};
+
+// ---------------------------------------------------------------- 03, the list in the sky
+
+const V3 = {
+  name: "The list in the sky",
+  note: "The whole panel is the dawn. The eight float over the sky on glass, and the lit one sends a beam up from its place on Earth.",
+  body: () => `<div class="scene" style="position:absolute;inset:0"><svg class="sk"></svg></div>
+    <div class="top"><div class="eyebrow">WELCOME TO BUILD · YEAR 0</div><div class="title">8 projects we could start</div></div>
+    <div class="glass"><ul class="rows">${STARTS.map((b, i) => row(b, i)).join("")}</ul></div>`,
+  init(f) {
+    const svg = f.querySelector(".sk");
+    const l = link(f, () => f.querySelectorAll(".row"));
+    sized(svg, (W, H) => {
+      const top = H - 46, d = dawn(W, H, { top, sun: 0.86, curve: 1.3, glow: 150, lights: 90, seed: 13 });
+      let h = d.h;
+      STARTS.forEach((b, i) => {
+        const deg = d.at(W * (0.1 + (i * 0.8) / 7)), [gx, gy] = d.pt(deg, d.r), [tx, ty] = d.pt(deg, d.r + top);
+        h += `<g class="mg" data-i="${i}" style="color:${HEX[b.d]}">
+          <circle cx="${gx}" cy="${gy}" r="2" fill="currentColor"/>
+          <g class="halo"><line x1="${gx}" y1="${gy}" x2="${tx}" y2="${ty}" stroke="currentColor" stroke-width="1.4"><animate attributeName="stroke-opacity" values=".15;.6;.15" dur="2s" repeatCount="indefinite"/></line>
+          <circle cx="${gx}" cy="${gy}" r="3" fill="none" stroke="currentColor"><animate attributeName="r" values="3;22" dur="1.8s" repeatCount="indefinite"/><animate attributeName="stroke-opacity" values=".9;0" dur="1.8s" repeatCount="indefinite"/></circle></g></g>`;
+      });
+      return h;
+    });
+    svg.addEventListener("drawn", l.relight);
+  },
+};
+
+// ---------------------------------------------------------------- 04, dawn over tiles
+
+// 04's subhead, in our voice. The bar above is the head's THOUGHT IN USE.
+const SUBS = [
+  "Queue enough to put all our thought to work when we begin.",
+  "Fill the bar above before we begin, so none of our thought sits idle.",
+  "What we queue starts at Year 0. Queue enough to use all our thought.",
+];
+
+const V4 = {
+  name: "Dawn over tiles",
+  note: "05's sunrise kept large, the eight below it as tiles in two columns, each with its moving mark and how long it takes alone. Now with a subhead: switch it above.",
+  body: () => `<div class="scene"><svg class="sk"></svg>
+      <div class="ov"><div class="eyebrow">WELCOME TO BUILD · YEAR 0</div><div class="title">8 projects we could start</div><p class="sub">${SUBS[0]}</p></div></div>
+    <div class="lh"><span>WE COULD START · 8</span><span></span></div>
+    <div class="tiles">${STARTS.map((b, i) => `<div class="tile" data-i="${i}" style="--c:${HEX[b.d]}"><span style="color:${HEX[b.d]}">${mark(b.m, 18)}</span><span class="t"><span class="nm">${b.n}</span><span class="tm">${play(b.y)}</span></span></div>`).join("")}</div>`,
+  init(f) {
+    const svg = f.querySelector(".sk"), ov = f.querySelector(".ov");
+    const l = link(f, () => f.querySelectorAll(".tile"));
+    V4.redraw = sized(svg, (W, H) => {
+      // The marks rise as high as the words above them allow.
+      const top = H * 0.78, d = dawn(W, H, { top, glow: Math.min(130, H * 0.55), seed: 7 });
+      const lift = Math.min(70, top - ov.offsetTop - ov.offsetHeight - 36);
+      return d.h + STARTS.map((b, i) => floating(d, b, i, W * (0.09 + (i * 0.82) / 7), d.r + lift + (i % 2) * 18, lift < 30)).join("");
+    });
+    svg.addEventListener("drawn", l.relight);
+  },
+};
+
+// ---------------------------------------------------------------- the page
+
+const DESIGNS = [V1, V2, V3, V4];
+const grid = document.getElementById("grid");
+DESIGNS.forEach((d, k) => {
+  const card = document.createElement("section");
+  card.className = "card";
+  card.innerHTML = `<div class="meta"><span class="num">${String(k + 1).padStart(2, "0")}</span><span class="name">${d.name}</span></div>
+    <p class="note">${d.note}</p>
+    <div class="frame v${k + 1}">
+      <div class="hd"><div class="hl"><span>BUILD</span><span class="x">×</span></div>
+        <div class="thr">${Array.from({ length: 10 }, (_, i) => `<i class="${i ? "" : "on"}"></i>`).join("")}</div>
+        <div class="tb"><span>THOUGHT IN USE</span><span class="bar"></span><span>0%</span></div></div>
+      <div class="bd">${d.body()}</div>
+      <div class="ft"><button class="go">Explore Builds</button></div>
+    </div>`;
+  grid.append(card);
+  d.init(card.querySelector(".frame"));
+});
+
+document.querySelectorAll("[data-h]").forEach((b) => b.addEventListener("click", () => {
+  document.documentElement.style.setProperty("--h", `${b.dataset.h}px`);
+  document.querySelectorAll("[data-h]").forEach((x) => x.setAttribute("aria-pressed", x === b));
+}));
+const setMotion = (on) => {
+  motion = on;
+  document.body.classList.toggle("still", !on);
+  document.querySelectorAll("svg").forEach((s) => (on ? s.unpauseAnimations?.() : s.pauseAnimations?.()));
+  document.querySelectorAll("[data-m]").forEach((x) => x.setAttribute("aria-pressed", (x.dataset.m === "1") === on));
+};
+document.querySelectorAll("[data-m]").forEach((b) => b.addEventListener("click", () => setMotion(b.dataset.m === "1")));
+if (!motion) setMotion(false);
+document.querySelectorAll("[data-s]").forEach((b) => b.addEventListener("click", () => {
+  document.querySelector(".v4 .ov .sub").textContent = SUBS[b.dataset.s];
+  document.querySelectorAll("[data-s]").forEach((x) => x.setAttribute("aria-pressed", x === b));
+  V4.redraw?.();
+}));
+</script>
+</body>
+</html>

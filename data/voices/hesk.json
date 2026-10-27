@@ -1,0 +1,62 @@
+{
+  "name": "Hesk",
+  "calls_sol": "gold-flash-gold",
+  "hail": [
+    "[a slow gold pulse] We see you. Speak in light.",
+    "[gold, flash, gold] Hesk greets you. Radio is rude. We forgive it once.",
+    "[blue rings, opening] Out of the long night, Hesk shows itself."
+  ],
+  "close": [
+    "[the light fades, slowly] Hesk.",
+    "[amber, then dark] Until the next light."
+  ],
+  "finding": [
+    "[steady white] Found: {part}",
+    "{part} [a bright ripple, settling]",
+    "[clear lines across the skin] We see it so: {part}",
+    "Plain in light: {part}",
+    "[a pattern holding still] {part}"
+  ],
+  "sighting": [
+    "[a sharp flicker] Seen: {part}",
+    "{part} [a long violet look]",
+    "In the long night, we watched: {part}",
+    "[pale rings, widening] Our eyes say: {part}",
+    "[the skin goes still, then bright] {part}"
+  ],
+  "archive": [
+    "[slow patterns, layered] From the Lit Halls: {part}",
+    "{part} [old colors, still bright]",
+    "Kept in light: {part}",
+    "[a long scroll of color] Our record: {part}",
+    "[soft green, unfolding] We show what we kept: {part}"
+  ],
+  "culture": [
+    "[the colors of home] Of Hesk: {part}",
+    "{part} [our skin says it better]",
+    "[a slow pattern, proud] We are this: {part}",
+    "Through the long nights, this: {part}",
+    "{part} [a warm glow, held]"
+  ],
+  "request": [
+    "[an open blue, waiting] {part}",
+    "{part} Answer in light, if you can.",
+    "[a flicker, reaching toward you] {part}",
+    "We ask, in color: {part}",
+    "{part} [the skin dims, waiting]"
+  ],
+  "verdict": [
+    "[a single steady color] {part}",
+    "Our light says: {part}",
+    "{part} [the pattern does not change]",
+    "[long, deliberate light] Judged: {part}",
+    "After a long night of looking: {part}"
+  ],
+  "accord": [
+    "[two patterns, facing] {part}",
+    "On the light between us: {part}",
+    "{part} [gold-flash-gold, slowly]",
+    "[an even light] Terms, shown plainly: {part}",
+    "{part} [the colors hold]"
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "name": "Veyra",
+  "calls_sol": "Twin",
+  "hail": [
+    "We have seen your light. We will say more when we have seen more.",
+    "Twin. We are here. That is enough, for now.",
+    "We looked a long time before answering, Twin. We are still looking."
+  ],
+  "close": [
+    "Veyra. We keep watching.",
+    "That is all we will say, for now."
+  ],
+  "finding": [
+    "We will say this much: {part}",
+    "{part} We checked it. We do not guess.",
+    "Looked at long enough to be sure: {part}",
+    "This is certain: {part} The rest, later.",
+    "From the grid, after long work: {part}"
+  ],
+  "sighting": [
+    "The sky watch saw this: {part}",
+    "{part} We are still looking.",
+    "We watch. We saw this: {part}",
+    "Seen, and not forgotten: {part}",
+    "{part} Look for yourselves."
+  ],
+  "archive": [
+    "From our records. Only this: {part}",
+    "{part} That is what we share, for now.",
+    "We kept this close. Now you have it: {part}",
+    "Use it quietly: {part}",
+    "Out of long years of watching: {part}"
+  ],
+  "culture": [
+    "About us, a little: {part}",
+    "{part} We do not say this often.",
+    "We are a people who watch the sky for rocks. {part}",
+    "One thing about Veyra: {part}",
+    "{part} That is who we are. The rest will wait."
+  ],
+  "request": [
+    "We watch our sky. Now we ask: {part}",
+    "{part} Reply when you are sure.",
+    "We ask once: {part}",
+    "{part} We will wait.",
+    "Before we say more: {part}"
+  ],
+  "verdict": [
+    "We have looked. {part}",
+    "{part} We will not explain it.",
+    "Our answer, after watching: {part}",
+    "{part} That is all.",
+    "We do not decide quickly. {part}"
+  ],
+  "accord": [
+    "On what is between us: {part}",
+    "{part} We will remember it.",
+    "Quietly, then: {part}",
+    "We have weighed it. {part}",
+    "Between the Twin and us: {part}"
+  ]
+}

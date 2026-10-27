@@ -1,0 +1,62 @@
+{
+  "name": "Quessa",
+  "calls_sol": "the Hum",
+  "hail": [
+    "We have heard the Hum for a long time. Now we answer, softly.",
+    "Hum, we listened before we spoke. This is Quessa, from below the ground.",
+    "Softly, from the deep galleries. We have listened long enough to answer."
+  ],
+  "close": [
+    "We go back to listening. Quessa.",
+    "The ground remembers. Speak softly, and we will hear."
+  ],
+  "finding": [
+    "We listened a long while. This is what it said: {part}",
+    "{part} We let it echo until it rang true.",
+    "From the deep arrays, quietly: {part}",
+    "Hear this as we heard it: {part}",
+    "{part} We listened twice before we spoke."
+  ],
+  "sighting": [
+    "We were listening when this came: {part}",
+    "A sound in the sky, as we heard it: {part}",
+    "{part} We hold still, and keep listening.",
+    "From above the ground, softly: {part}",
+    "{part} The arrays heard it, and so we tell you."
+  ],
+  "archive": [
+    "The ground remembers. Here is some of what it holds: {part}",
+    "{part} We kept it deep, where it stays cool.",
+    "From the galleries, carried up for you: {part}",
+    "Listen to what we have kept: {part}",
+    "{part} Hear it as many times as you need."
+  ],
+  "culture": [
+    "About us, softly: {part}",
+    "{part} That is how Quessa sounds, from inside.",
+    "We are a people of the ground. {part}",
+    "We hear through our feet, and we map by echo. {part}",
+    "{part} We say this rarely."
+  ],
+  "request": [
+    "We have listened. Now we ask: {part}",
+    "{part} We will be listening for your answer.",
+    "Quietly, one thing: {part}",
+    "{part} Answer softly, and we will hear.",
+    "Let your world speak to us: {part}"
+  ],
+  "verdict": [
+    "The ground says: {part}",
+    "We listened to all of it. {part}",
+    "{part} The ground remembers what we decide.",
+    "After the echoes settled: {part}",
+    "Softly, but plainly: {part}"
+  ],
+  "accord": [
+    "On what is between us, softly: {part}",
+    "{part} The ground will remember it.",
+    "We listened to every word before this: {part}",
+    "Hear this clearly, though we say it softly: {part}",
+    "Between our ground and yours: {part}"
+  ]
+}

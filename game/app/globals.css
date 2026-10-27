@@ -1,0 +1,131 @@
+@import "tailwindcss";
+
+/* A screen wider than it is tall, from a phone on its side to a desktop. The art and the words stand side by side. */
+@custom-variant wide (@media (orientation: landscape) and (min-width: 40rem));
+
+/* Colors from explorations/v2-mocks/base.css: chalk on slate. The game is always dark. */
+:root {
+  --page: #0b0c0d;
+  --page-ink2: #a9a59c;
+  --frame: #2a2b2e;
+  --paper: #121314;
+  --ink: #e6e3db;
+  --muted: #9c988f;
+  --faint: #34363a;
+  --panel: #17181a;
+  --track: #2a2b2e;
+  --fill2: #bdb9af;
+  --rowline: #26282b;
+  --you: #5bb8d6;
+  --other: #e0a24a;
+  /* What each build does, chosen 2026-10-19 in explorations/accent-palette.html, B. Listening keeps our blue. Each is
+     as light and as strong as the two above in OKLCH, at least 45° of hue from the next. */
+  --think: #b39ef2;
+  --see: #70d1a9;
+  --lift: #c2d766;
+  --reach: #e48ebf;
+  --keep: #c1ccd7;
+  /* A thing that is set and working, as a key that opens the Mind. The same green as see. */
+  --ok: #70d1a9;
+  --shadow: rgba(0, 0, 0, 0.5);
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-page: var(--page);
+  --color-page-ink2: var(--page-ink2);
+  --color-frame: var(--frame);
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-panel: var(--panel);
+  --color-track: var(--track);
+  --color-fill2: var(--fill2);
+  --color-rowline: var(--rowline);
+  --color-you: var(--you);
+  --color-other: var(--other);
+  --color-think: var(--think);
+  --color-see: var(--see);
+  --color-lift: var(--lift);
+  --color-reach: var(--reach);
+  --color-keep: var(--keep);
+  --color-ok: var(--ok);
+  --color-shadow: var(--shadow);
+  --font-sans: var(--font-suse);
+  --font-mono: var(--font-plex-mono);
+}
+
+/* Build's welcome at dawn: stars and city lights twinkle, and the marks over the limb bob. On Build, spare compute
+   flows round the ring, and matter a build we point at would take blinks. Cloud drifts over a world our craft saw. */
+@theme {
+  --animate-twinkle: twinkle 4s ease-in-out infinite;
+  --animate-bob: bob 3.6s ease-in-out infinite;
+  --animate-flow: flow 1.6s linear infinite;
+  --animate-blink: blink 1s ease-in-out infinite alternate;
+  --animate-drift: drift 60s linear infinite;
+  @keyframes drift {
+    to {
+      transform: translateX(-132px);
+    }
+  }
+  @keyframes flow {
+    to {
+      stroke-dashoffset: -8;
+    }
+  }
+  @keyframes blink {
+    from {
+      background-color: transparent;
+    }
+    to {
+      background-color: color-mix(in srgb, var(--c) 45%, transparent);
+    }
+  }
+  @keyframes twinkle {
+    0%,
+    100% {
+      opacity: 0.15;
+    }
+    50% {
+      opacity: 0.8;
+    }
+  }
+  @keyframes bob {
+    0%,
+    100% {
+      transform: translateY(-2px);
+    }
+    50% {
+      transform: translateY(2px);
+    }
+  }
+}
+
+body {
+  background: var(--page);
+  color: var(--ink);
+  text-wrap: pretty;
+}
+
+/* On a touch screen the game is tapped, not copied from. With no double-tap zoom, quick taps through a story would
+   select a word, and a long press would open the copy menu. A field we type in still selects. */
+@media (pointer: coarse) {
+  #phone {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
+  #phone :is(input, textarea) {
+    -webkit-user-select: text;
+    user-select: text;
+  }
+}
+
+/* Tailwind 4 leaves buttons with the default arrow. Every live button points, and a disabled one doesn't. */
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+}

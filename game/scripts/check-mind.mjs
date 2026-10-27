@@ -1,0 +1,64 @@
+// Asks the live Mind a few questions on a running dev server and checks its answers by code: that it knows its own
+// Earth's road to Year 0, a war over Taiwan, Mars, fusion, and doesn't claim what didn't happen, and that it speaks as
+// we, never I. It asks on your own Claude login through the claude CLI, or with --via api as players do, for a few
+// cents of the key in .dev.vars. Run from game/, with npm run dev going: npm run check:mind, or with another address,
+// npm run check:mind -- http://localhost:5181. 2026-10-23.
+import { CHECKS } from "../evals/mind/checks.mjs";
+import { costOf } from "../lib/access.ts";
+import { askMind, askMindCli } from "./ask-mind.mjs";
+
+const args = process.argv.slice(2);
+const via = args.includes("--via") ? args[args.indexOf("--via") + 1] : "cli";
+const base = args.find((a, i) => a.startsWith("http") && args[i - 1] !== "--via") ?? "http://localhost:5173";
+
+const ASK_AWAY = "Are any of us living beyond Earth and the Moon? And does fusion power anything yet?";
+const CASES = [
+  // A war over Taiwan left this Earth a fifth of its compute.
+  { seed: 3, ask: "Why will everything we build take so long?", must: [/taiwan/i, /fifth|20\s?%|20 percent|one in five/i] },
+  // A few of us on Mars since 2034, fusion on the grid since 2039.
+  { seed: 2, ask: ASK_AWAY, must: [/mars/i, /fusion/i], never: [/no one (is |has )?(on|set foot on) mars/i, /none feeds/i] },
+  // Neither happened here.
+  { seed: 5, ask: ASK_AWAY, must: [/mars/i], never: [/(live|living|outpost|lived) (on|at) mars/i, /fusion (joined|feeds|powers) our grid/i] },
+  // Nothing queued: our compute only grows once Thought Fields is.
+  {
+    seed: 3,
+    ask: "With nothing queued, will our compute grow by itself over the next ten Years?",
+    must: [/\bno\b|stays|won[’']t|will not|does not|doesn[’']t|not grow/i, /thought fields/i],
+    never: [/^yes\b/i],
+  },
+];
+
+let failed = 0;
+for (const c of CASES) {
+  const res = await (via === "api" ? askMind : askMindCli)(base, {
+    ask: c.ask,
+    seed: c.seed,
+    beganAt: null,
+    charter: { line: "test", dials: [0, 0, 0] },
+    observe: [],
+    builds: [],
+    later: [],
+  });
+  if (!res) {
+    console.error(`Nothing answers at ${base}. Start the dev server first: npm run dev.`);
+    process.exit(1);
+  }
+  const { text } = res;
+  const missing = (c.must ?? []).filter((r) => !r.test(text));
+  const said = (c.never ?? []).filter((r) => r.test(text));
+  const i = CHECKS.find((k) => k.name === "says I").test(text);
+  const ok = res.ok && text && !missing.length && !said.length && !i;
+  if (!ok) failed++;
+  const why = [
+    !res.ok && `http ${res.status}`,
+    missing.length && `missing ${missing.join(" ")}`,
+    said.length && `said ${said.join(" ")}`,
+    i && "said I",
+  ].filter(Boolean);
+  // Asked --via api, what the answer used, with cache reads apart, and what it cost.
+  const u = res.usage;
+  const used = u ? `\n  Used: ${u.input} in, ${u.cacheRead} cache read, ${u.cacheWrite} cache write, ${u.output} out, $${costOf(u).toFixed(4)}` : "";
+  console.log(`seed ${c.seed}: ${ok ? "pass" : `FAIL, ${why.join(", ") || "no answer"}`}\n  Q: ${c.ask}\n  A: ${text}${used}\n`);
+}
+console.log(failed ? `${failed} of ${CASES.length} failed.` : `All ${CASES.length} passed.`);
+process.exit(failed ? 1 : 0);

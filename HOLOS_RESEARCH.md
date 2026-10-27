@@ -1,0 +1,2036 @@
+# Holos · Research
+
+Last updated: October 26, 2026.
+
+Every source the game rests on, grouped by the question it answers. Each entry says what it found, why it matters to Holos, and where the design uses it. The rules are in [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md). The atlas’s own data sources (ephemeris, star catalogs, galaxies) are in the [README’s scientific scope](README.md#scientific-scope) and the `data/*/README.md` files.
+
+**Keeping it current.** Every Q&A round adds the sources it used. A newer result never deletes an older one: the older entry is marked *superseded* and points to the newer. The watch list at the end holds results the design is waiting on.
+
+**Status.** *Published*: peer reviewed. *Preprint*: posted, not yet reviewed. *Preliminary*: a talk or press release, no paper yet. *Study*: an engineering concept, not a demonstration. *Reference*: a compiled secondary source. Check the primary before relying on a number.
+
+## Hearing technology by radio
+
+- **[Loeb and Zaldarriaga 2007](https://arxiv.org/abs/astro-ph/0610377)** · Published, JCAP.
+  - Earth’s strongest steady leakage is military radar: about ten early-warning transmitters near 400 MHz, about 2×10⁸ W each, a hundred times more along the beam. A month’s stare hears it to about 23 pc with a small low-frequency array and about 200 pc with the SKA. A long listen recovers the planet’s day and orbit from the shifting pitch.
+  - Matters: physics lets every neighbor within 50 ly hear Earth, and what it hears is enough to aim at.
+  - Used: v2 [Earth’s loud past](HOLOS_GAME_CONCEPT.md#earths-loud-past). v1 “Why Earth hears none of it today”.
+- **Saide, Garrett and colleagues, airport and military radar** · Preliminary, [RAS National Astronomy Meeting, July 2025](https://ras.ac.uk/news-and-press/research-highlights/how-airports-heathrow-and-gatwick-could-help-aliens-spot-earth) ([summary](https://www.sci.news/astronomy/civilian-military-radar-leakage-alien-civilizations-14055.html)).
+  - Airport radars worldwide add up to about 2×10¹⁵ W. A dish like Green Bank’s could hear them to about 200 ly. Military radars sweep past an observer like a lighthouse, peaking near 10¹⁴ W, and look clearly artificial. Modeled from Barnard’s Star, HD 48948, HD 40307, AU Microscopii, HD 216520 and LHS 475.
+  - Matters: a brief survey observation of Sol may be enough to hear Earth. It raised v2’s sample odds.
+  - Used: v2 Earth’s loud past. On the watch list: the full paper sets the observing times.
+- **[Saide, Garrett and Heeralall-Issur 2023](https://academic.oup.com/mnras/article/522/2/2393/7028804)** · Published, MNRAS.
+  - Cell towers leak about 4 GW at peak, periodic and direction dependent. A Green Bank-class dish could not hear it within 10 ly.
+  - Matters: broadband leakage alone doesn’t give a world away. Basis for v1’s faint hum.
+  - Its authors dispute that Earth is going radio quiet on its own: strong broadcast towers fade, but phones, radars and satellites replace them ([SETI Institute summary](https://www.seti.org/news/can-et-detect-us/)).
+  - Used: v2 Earth’s loud past. v1 “A world’s hum can be heard”. v2 [Quieting Earth’s radars](HOLOS_GAME_CONCEPT.md#quieting-earths-radars): a fade is the Will’s choice, not the default path.
+- **[Sheikh et al. 2025, Earth detecting Earth](https://arxiv.org/abs/2502.02614)** · Published, AJ.
+  - Earth’s detectable signatures, seen with present-day Earth instruments, span 13 orders of magnitude. Planetary radar reaches a thousand times farther than the best non-radio signature.
+  - Matters: radio, not heat or air, is how worlds like Earth are found first.
+  - Used: v2 Earth’s loud past. v1 “Why Earth hears none of it today”.
+- **[Space-Based Infrared System](https://www.ssc.spaceforce.mil/Newsroom/Article/3124862/sbirs-geo-6-launch-closes-out-two-decades-of-progress-in-missile-warning-tracki)** · US Space Force release, 2022.
+  - Six infrared satellites in high orbit, with others, detect and track missile launches anywhere on Earth by their heat. A successor, Next-Gen OPIR, is being built.
+  - Matters: Earth’s loudest radars watch for the same launches. Warning by heat from orbit gives a Mind a way to retire them. That they could be retired is this project’s inference, not the source’s.
+  - Used: v2 [Quieting Earth’s radars](HOLOS_GAME_CONCEPT.md#quieting-earths-radars).
+- **[Forgan and Nichol 2010, a failure of serendipity](https://arxiv.org/abs/1007.0850)** · Published, International Journal of Astrobiology.
+  - Two human-like civilizations placed at random in the galaxy overhear each other about one time in ten million.
+  - Matters: why the game needs its one “what if”, many neighbors in the same century.
+  - Used: v1 “Why the sky stays quiet”.
+- **[Price et al. 2020, Breakthrough Listen, 1,327 nearby stars](https://arxiv.org/abs/1906.07750)** · Published, AJ.
+  - About 15 minutes per star, 1.1 to 3.45 GHz, searching for narrow drifting tones. Rules out steady narrowband transmitters above about 2×10¹⁰ to 3×10¹¹ W at the neighbors’ distances.
+  - Matters: what Earth’s null results exclude about the neighbors. They search for tones, so they barely limit pulsed radar.
+  - Used: v1 “Why Earth hears none of it today”. v2 open question 4.
+- **[Wright, Kanodia and Lubar 2018, how much SETI has been done](https://arxiv.org/abs/1809.07252)** · Published, AJ 156, 260. Abstract read 2026-10-17.
+  - Models everywhere a radio signal could hide as an eight-dimensional “cosmic haystack”, then adds up what several large searches covered. The share searched is like a large hot tub, or a small swimming pool, against Earth’s oceans.
+  - Its point: bright beacons could be common and still unfound, so the Fermi paradox can’t lean on radio silence.
+  - Matters: Earth’s quiet sky says very little about its neighbors. It fits [What Earth hears](HOLOS_GAME_CONCEPT.md#what-earth-hears): before 2028, Earth caught about 1 knock in 100.
+  - Used: not yet in the design. Cited when explaining the quiet sky to players.
+- **[Garrett 2026, broadband radio searches](https://academic.oup.com/mnras/article/549/3/stag991/8697603)** · Published, MNRAS.
+  - Broadband surveys followed by interferometric source discrimination. Its roughly 100 pc reach assumes emissions far stronger than Earth’s today.
+  - Matters: the model for surveying, then investigating. It does not validate v1’s receiver ranges.
+  - Used: v1 “Survey, then investigate”, deep-field receiver.
+- **[Garrett 2026, isolating broadband radio technosignatures](https://arxiv.org/abs/2605.10212)** · Preprint, May 2026.
+  - Narrowband searches may file a civilization’s broadband leakage as noise. Wide-field surveys, then interferometric follow-up, could find leakage from a Kardashev Type I civilization to about 100 pc, judged by brightness temperature, polarization, spectral structure, scintillation and position on a nearby star.
+  - Matters: Type I leakage is vastly louder than a world like Earth’s, so this doesn’t reach v2’s faint neighbors. It supports v2’s finding that their tones, not their broad hum, are what carries.
+  - Used: v2 [the project audit](HOLOS_PROJECT_AUDIT.md#calculations), a world’s hum.
+- **[CHIME/FRB first catalog, 2021](https://arxiv.org/abs/2106.04352)** · Published, ApJS.
+  - About 800 fast radio bursts per sky per day above its threshold.
+  - Matters: the sky is never silent. A watch on everything hears far galaxies first.
+  - Used: v1 “The sky is never silent”.
+- **[Project Ozma, 1960](https://www.seti.org/research/seti-101/project-ozma/)** · History.
+  - The first modern search: Tau Ceti and Epsilon Eridani, six hours a day, April to July 1960, at 21 cm.
+  - Matters: a young listener stares longest at its nearest Sun-like stars. Basis for v2’s character-weighted odds.
+  - Used: v2 Earth’s loud past. The about page: 66 years of listening by 2026, without one confirmed signal.
+- **[List of interstellar radio messages](https://en.wikipedia.org/wiki/List_of_interstellar_radio_messages)** · Reference.
+  - Earth’s aimed messages from 1974 on, with targets and arrival dates. Within 50 ly: Altair, Gliese 49, Gliese 208, 55 Cancri, HD 10307, 47 Ursae Majoris, Gliese 581, Teegarden’s Star, TZ Arietis, Kappa¹ Ceti, Gliese 526, Luyten’s Star.
+  - Matters: Earth’s real knocks. Each lasted hours, so being heard needs a listener watching Sol at that moment.
+  - Used: v2 Earth’s loud past.
+- **[SIMBAD](https://simbad.cds.unistra.fr/simbad/)** · Catalog.
+  - Positions for Teegarden’s Star (RA 02h53m) and HD 10307 (RA 01h41m), the two message targets missing from the atlas’s star list.
+  - Matters: every star Earth knocked on sits where it really is.
+  - Used: the game’s “Where things stand” sky map (`game/scripts/sky.mjs`). The other ten targets, and the 536 stars within 50 ly, come from the atlas’s HYG and Gaia list. Its message beams and reply windows are `calcs/knocks.py`’s sends, in `game/lib/game/knocks.ts`.
+- **Earth’s aimed messages, checked 2026-10-13** · Mixed. Agent, from [Zaitsev 2006](https://arxiv.org/abs/physics/0610031), the senders’ own pages and accounts, and [LEMMiNO’s history of interstellar messages, 2025](https://www.lemmi.no/p/shouting-at-stars), which I read for the 2009, 2012 and 2013 sends.
+  - *Message to Altair,* August 15, 1983, from the Stanford dish, one hour. Its power is not in any source found.
+  - *Teen Age Message,* 2001, Evpatoria: six sessions, 366 minutes in all, about 100 kW on average, about an hour a star. Only 47 Ursae Majoris is within 50 ly.
+  - *A Message From Earth,* October 9, 2008, Evpatoria, four and a half hours, to Gliese 581. *Hello From Earth,* August 28, 2009, Canberra’s 70 m dish, two hours. Neither gave its power or frequency.
+    - Checked 2026-10-16: the [Wireless Institute of Australia, 2009](https://www.wia.org.au/newsevents/news/2009/20090817-1/index.php) says Hello From Earth’s power and frequency were not disclosed. Press gave 302 GW along the beam ([Wilson da Silva](https://www.wilsondasilva.com/post/earth-sends-25-000-messages-to-aliens)). A blog gives 18 kW at 7.145 GHz. My arithmetic: a 70 m dish at that frequency turns 18 kW into about 3 × 10¹¹ W, so the two agree.
+    - Message to Altair: a 46 m dish at 70.8 cm, per [Wikipedia](https://en.wikipedia.org/wiki/Message_to_Altair). Still no power.
+  - *RuBisCo Stars,* the night of November 7 to 8, 2009, Arecibo: TZ Arietis, then Teegarden’s Star, then Kappa¹ Ceti, in about 70 minutes, a quarter of an hour each. Wikipedia’s dates are two days late.
+  - *The 2012 reply to the Wow! signal,* Arecibo. Its director then, Robert Kerr, told LEMMiNO the transmitter overheated and broke down soon after it began, and that perhaps one message got out. He could not recall which star it was pointed at. The targets were HD 54351, 37 Geminorum and 55 Cancri, in that order.
+  - *Lone Signal,* from June 17, 2013, for about two months, to Gliese 526: a 3 kW transmitter on a 30 m dish. That is hundreds of times weaker along its beam than Evpatoria’s sends. This project’s arithmetic.
+  - *Sónar Calling GJ 273b,* October 16 to 18, 2017 and May 2018: 1.5 MW pulses near 930 MHz from a 32 m dish.
+  - Matters: a knock lasts from a quarter of an hour to a few hours, and one of Earth’s was a failure.
+  - Used: [calcs/knocks.py](calcs/knocks.py). The 2012 reply is dropped, since nothing shows 55 Cancri was lit. RuBisCo Stars’ date moved by two days.
+- **[Cosmic Call](https://en.wikipedia.org/wiki/Cosmic_Call)** · Reference, with [Zaitsev’s review of messaging](https://arxiv.org/abs/physics/0610031).
+  - Sent in 1999 and 2003 from the 70 m dish at Evpatoria: about 150 kW at 5.01 GHz. The 1999 sessions ran about four hours a star.
+  - A 70 m dish at that frequency concentrates 150 kW into about 10¹² W along the beam. That last step is this project’s arithmetic.
+  - Matters: how strong and how long a knock is. A neighbor’s knock is taken to be like Earth’s.
+  - Used: v2 [What Earth hears](HOLOS_GAME_CONCEPT.md#what-earth-hears), calcs/seed.py.
+- **How much of a message can be read, checked 2026-10-13.** For the question of what a first voice gives the player to do.
+  - **[Busch and Reddick 2011, testing message designs](https://arxiv.org/abs/0911.3976)** · Published, in Vakoch’s Communication With Extraterrestrial Intelligence. I read the abstract. A blind test: one author coded a 75-kilobit message, the other deciphered it, and the reading was accurate. A message built to be read can be read.
+    - From a search summary, not read: the same paper says neither the Arecibo message nor Cosmic Call was ever tested this way.
+  - **[A Sign in Space, ESA 2024](https://blogs.esa.int/to-mars-and-back/?p=745)** · Agency blog, 23 October 2024. Read on the page. A made-up alien message, sent from a Mars orbiter in May 2023.
+    - About 5,000 volunteers pulled the message out of the raw signal in 10 days.
+    - Its content was decoded on 7 June 2024, a year later, by two people: five amino acids, drawn as a diagram.
+    - What it means is still open. The artist: they “found the ingredients of the recipe, but now it is time to interpret it”.
+  - Matters: reading a message has three layers. That it was sent, and how: at once. What it holds: fast if it was built to be read, a year if not. What it means: a judgment, and still open after the rest is done.
+  - Used: v2 [What Earth hears](HOLOS_GAME_CONCEPT.md#what-earth-hears), and the second mock’s voice report.
+- **[IAA SETI committee, position paper on sending communications](https://setileague.org/iaaseti/position.htm)** · Read on the page, 2026-10-13. For the question of what an answer may hold.
+  - It quotes Principle 8 of the 1989 Declaration of Principles: “No response to a signal or other evidence of extraterrestrial intelligence should be sent until appropriate international consultations have taken place.”
+  - From a search summary, not read: a revision in 2025 keeps that rule. It is a statement of principles, not law.
+  - Matters: Earth’s own standing rule is that no reply goes out unasked. In the game the Will is who is asked, which is v1’s approval step.
+  - Used: v2 [What Earth hears](HOLOS_GAME_CONCEPT.md#what-earth-hears).
+- **Holding many stars at once, checked 2026-10-14.** For the question of how one deep-field receiver shares its watch among the sweep’s marked worlds.
+  - **[van Haarlem et al. 2013, LOFAR](https://arxiv.org/abs/1305.3550)** · Published, A&A 556, A2. Abstract read.
+    - Digital beam-forming gives rapid repointing and “the potential for multiple simultaneous observations”.
+  - **[Moldón et al. 2015, LOFAR long baseline calibrator survey](https://arxiv.org/abs/1411.2743)** · Published, A&A 574, A73. Abstract read.
+    - It observed “30 different sources in each of the 12 sets of pointings per hour”, with LOFAR’s multi-beaming.
+  - **[Czech et al. 2021, Breakthrough Listen MeerKAT target selection](https://arxiv.org/abs/2103.16250)** · Published, PASP. Abstract read.
+    - The survey forms and processes “64 coherent beams simultaneously”, anywhere within the field of view, alongside other projects.
+  - From search summaries, not read at source: the SKA can run up to 16 subarrays at once, and SKA-Low plans 16 to 24 station beams. In LOFAR, the bandwidth is shared among the beams.
+  - Matters: a receiver can hold more than one star. A dish array split into parts gives each a share of the area, so each hears less far: reach falls as the square root of the number of parts.
+  - This project’s arithmetic: a 15 m dish at 1.4 GHz sees about a degree of sky, so a dish array’s simultaneous beams can’t reach scattered stars. MeerKAT’s 64 beams lie inside its view. LOFAR’s fixed antennas see the whole sky.
+  - Used: v2 [What Earth hears](HOLOS_GAME_CONCEPT.md#what-earth-hears), settled 2026-10-14: the receiver is split. `calcs/signs.py receiver`, and the third mock’s Hael row.
+- **[Sónar Calling GJ 273b](https://www.scientificamerican.com/article/interstellar-message-beamed-to-nearby-exoplanet)** · News, Scientific American, 2017 ([Space.com](https://www.space.com/38803-meti-signal-beamed-habitable-alien-planet.html)).
+  - Sent to Luyten’s Star on October 16 to 18, 2017, from the EISCAT dish in Tromsø, Norway, near 930 MHz: a science and maths tutorial and 33 short pieces of music. A second batch followed in 2018.
+  - Matters: it sets Earth’s first reply window in play, Year 2.3.
+  - Used: the v2 mock’s window screen at minute 11.
+- **What our messages hold, checked 2026-10-18** · Mixed. Two agents, each fact read at its source. For the Build tab, where each message opens on what it holds, why we sent it, and from where.
+  - *Message to Altair,* 1983. Made by Masaki Morimoto and Hisashi Hirabayashi of the Tokyo Astronomical Observatory for Weekly Shōnen Jump’s 15th anniversary, to give “dreams to children” ([Asahi](https://www.asahi.com/ajw/articles/14985246), [Kobe Shimbun](https://www.kobe-np.co.jp/news/society/202308/0016684520.shtml)). Sent on Tanabata by the old calendar, from the 46 m Stanford dish, 03:00 to 04:00 UTC: a spoken greeting made from 48,972 readers’ letters, then 13 pictures of 71 × 71 bits ([LEMMiNO](https://lemmi.no/p/shouting-at-stars)). The pictures: numbers, elements, the Solar System, DNA, life from early organisms to mammals, and last the formula for ethanol with “乾盃”, cheers ([Sankei, archived](https://web.archive.org/web/20080517080737/http://sankei.jp.msn.com/culture/academic/080512/acd0805120804006-n1.htm)). The letters are buried in a canister by the dish. Altair was “a famous star that everyone knows” (LEMMiNO). Zaitsev 2006 doesn’t count this send.
+  - *Teen Age Message,* 2001. Teens from Moscow, Kaluga, Voronezh and Zheleznogorsk chose the music, words and stars. Moscow’s Education Department paid for the dish. Professional thereminists played, not the teens ([IRE RAS, the concert](http://www.cplire.ru/html/ra&sr/irm/Theremin-concert.html)). Each session: a tone, a theremin concert (the finale of Beethoven’s 9th, Vivaldi, “The Swan”, Vocalise, Summertime, Kalinka-Malinka and more), then greetings in Russian and English and an image glossary ([TAM page, 2002](https://web.archive.org/web/2002/http://www.seti.housenet.org/tamapp/tamapp_intro.html)). Zaitsev: music is the “language of emotions” ([IRE RAS](http://www.cplire.ru/html/ra&sr/irm/teen-age-message.html)). Named “Hello, Galaxy!” for 40 years since Gagarin (LEMMiNO). Arecibo turned it down in 2000 as possibly “a dangerous affair”. 47 Ursae Majoris got it on September 3 ([Zaitsev 2006](https://arxiv.org/abs/physics/0610031)).
+  - *Cosmic Call 2,* 2003. Team Encounter’s “people’s space program”, led by Zaitsev and Richard Braastad, the idea of its president Charles Chafer. A science part of 53 minutes a star: the Dutil–Dumas Interstellar Rosetta Stone, the 1974 Arecibo message, a bilingual image glossary. Then paid personal messages, 220 MB from 50-plus countries: Bowie’s “Starman”, drawings by Ukrainian children, flags of 282 states ([IRE RAS, Cosmic Call 2003](http://www.cplire.ru/html/ra&sr/irm/CosmicCall-2003/index.html)). Chafer called it “a sort of ‘we’re coming’ announcement” for a solar sail that never flew ([Smithsonian, archived](https://web.archive.org/web/2017/http://www.smithsonianmag.com/science-nature/how-couple-guys-built-most-ambitious-alien-outreach-project-ever-180960473/)). Senders voted “Starman” over “Ziggy Stardust”, 161 to 147 (LEMMiNO). The company folded in 2004 ([Wikipedia](https://en.wikipedia.org/wiki/Cosmic_Call)).
+  - *A Message From Earth,* 2008. Oli Madgett of RDF Digital with Bebo, picked by web vote ([Bebo press, archived](http://web.archive.org/web/20100530135246/http://www.bebo.com/Press.jsp?PressPageId=7554880862)). RDF paid $40,000 for 4.5 hours of the RT-70 ([Universe Today](https://www.universetoday.com/19335/messages-from-earth-beamed-to-alien-world)). 501 notes, photos and drawings, over half a million taking part ([Telegraph, archived](https://web.archive.org/web/20081011142445/http://www.telegraph.co.uk/news/newstopics/howaboutthat/3166709/Messages-from-Earth-sent-to-distant-planet-by-Bebo.html)). Gliese 581c is now thought likely too hot for life ([Wikipedia](https://en.wikipedia.org/wiki/Gliese_581c)).
+  - *Hello From Earth,* 2009. Cosmos magazine’s National Science Week project, sent at midday on August 28 from DSS-43 at Tidbinbilla, two hours ([Cosmos release](https://www.wilsondasilva.com/post/australians-twitter-to-outer-space), [send-et page](https://www.wilsondasilva.com/post/send-et-a-text-message-from-earth)). JPL encoded the text file ([iTWire](https://itwire.com/science-news/space/earth-to-gliese-581d-anyone-there)). 25,880 messages of up to 160 characters, from 195 countries per Wikipedia or 199 per Cosmos. Gliese 581d may not exist: “the planetary signal in fact originates from stellar activity”, per later studies, though disputed ([Wikipedia](https://en.wikipedia.org/wiki/Gliese_581d)).
+  - *RuBisCo Stars,* 2009. Joe Davis’s own account: the gene for RuBisCo’s large subunit, 1,434 bases at two bits each, each base spoken as a phrase, “I”, “amthe”, “knowyourself”, “riddleoflife” ([Centauri Dreams](https://www.centauri-dreams.org/?p=10283), [follow-up](https://centauri-dreams.org/?p=10346)). Arecibo’s encoder was broken, so it went out from his iPhone recording, near the 1974 message’s anniversary. MIT: aimed as much at people, “there are intelligent beings on Earth we can’t communicate with” ([MIT News](https://news.mit.edu/2009/sketch-rubisco)). Unfunded.
+  - *Lone Signal,* 2013. From the Jamesburg dish, built in 1968 for Apollo 11 ([Wikipedia](https://en.wikipedia.org/wiki/Jamesburg_Earth_Station), [EarthSky](https://earthsky.org/space/got-something-to-say-to-an-alien-lone-signal-wants-to-beam-your-message/)). A hailing beam of primes, then Michael Busch’s message on Earth’s place, the periodic table and hydrogen. A public beam of 144-character texts, 4 credits for $0.99 ([Scientific American](https://www.scientificamerican.com/article/new-project-will-send-message-into-space)). “It’s never been the case that anyone on the face of the Earth can commune with the cosmos” ([Cal Academy](https://blog.calacademy.org/explore-science/earth-to-gliese-526)). Ran about June to August 2013 ([Wikipedia](https://en.wikipedia.org/wiki/Lone_Signal)).
+  - *Sónar Calling GJ 273b,* 2017 and 2018. Primes to 193, then a tutorial on counting, arithmetic, geometry, radio waves and time, sent three times so a reader can trust two of three ([Scientific American blog](https://www.scientificamerican.com/blog/observations/new-keys-to-help-extraterrestrials-unlock-our-messages)). Then 10-second pieces by Autechre, Holly Herndon, Jean-Michel Jarre and more ([Sónar Calling](https://www.sonarcalling.com/en/artists/)). For Sónar’s 25th year. Vakoch: success comes “if, 25 years from now, there’s someone who remembers to look” (Scientific American, above). The site lists 38 artists over both years, not the 33 pieces reported in 2017.
+  - Matters: each message is a real people’s choice of what to say, and why. Most were sent for an anniversary, a festival, a magazine or a sale, not by any world body.
+  - Used: `game/lib/game/knocks.ts` SENDS, opened from a message row in the Build tab.
+- **[PANOSETI](https://oirlab.ucsd.edu/PANOinstr.html), checked 2026-10-18** · Instrument. Project page and [Wright et al. 2022](https://arxiv.org/pdf/2210.01356.pdf), through a search summary.
+  - An all-sky optical SETI watch for laser pulses from nanoseconds to seconds, timed to 1 ns. Domes of 0.46 m Fresnel-lens telescopes, each patch of sky seen from two sites at once to rule out air-shower flashes. Prototypes at Lick, two sites 677 m apart.
+  - Matters: a laser knock can be a billionth of a second long, so catching one takes a watch built for it.
+  - Used: the Build tour, the Mind’s line on the deep flash watch, 2026-10-18. What the deep flash watch sees, 2026-10-20: below.
+- **[Howard et al. 2004, Search for Nanosecond Optical Pulses from Nearby Solar-Type Stars](https://collaborate.princeton.edu/en/publications/search-for-nanosecond-optical-pulses-from-nearby-solar-type-stars/), checked 2026-10-20** · Paper, ApJ 613:1270, abstract through a search summary.
+  - With Earth’s technology of 2000, a directed laser pulse can outshine the Sun’s broadband visible light by four orders of magnitude. Their search watched about 13,000 Sun-like stars.
+  - Matters: a flash aimed at Earth from a neighbor 50 ly away is bright enough to see, so what limits a flash watch is where and when it looks, not how far.
+  - Used: `calcs/seed.py` LASER and FLASH_SEEN, which senders knock by laser and how often the deep flash watch sees it, 2026-10-20.
+- **[Abeysekara et al. 2016, Optical SETI Observations of the Anomalous Star KIC 8462852](https://arxiv.org/pdf/1512.02388), checked 2026-10-20** · Paper, VERITAS, through a search summary.
+  - Notes that several papers describe megajoule pulsed lasers outshining their own star at up to about 1000 ly.
+  - Matters: the same reach, from an independent team, twenty times our neighbors’ distance.
+  - Used: as above.
+- **[Wright et al. 2018, Panoramic optical and near-infrared SETI instrument: overall specifications and science program](https://arxiv.org/pdf/1808.05772), checked 2026-10-20** · Paper, through a search summary, with [PANOSETI’s instrument page](https://oirlab.ucsd.edu/PANOinstr.html).
+  - One site sees about 8,445 square degrees at once, 20.47% of the sky, at night. It needs about 20 photons a pulse in visible light.
+  - Matters: a dome sees a fifth of the sky, at night, under clear sky, so it sees an hours-long laser knock only some of the time.
+  - Used: FLASH_SEEN in `calcs/seed.py`, a sample of 0.3 a send, 2026-10-20.
+
+## Sending messages
+
+For sending in play: what a message costs, how far it can be read, and how long it takes. Checked 2026-10-26. The sums are in [calcs/messages.py](calcs/messages.py).
+
+- **[Messerschmitt 2014, design for minimum energy in starship and interstellar communication](https://arxiv.org/abs/1402.1215)** · Preprint, written for JBIS. Read on ar5iv.
+  - The noise of the sky, the cosmic microwave background at 2.7 K, is the only floor that can’t be designed around. A bit needs at least ln 2, about 0.69, times the noise in one hertz.
+  - His own design, which spreads a message over a wide band, gets within twice that floor as the band grows. Real systems, with their own receiver noise and losses, need 10 to 100 times the sky’s ideal.
+  - Matters: reading a message has a hard physical cost per bit, so how far it can be read falls with the square of the distance, and big messages cost more.
+  - Used: `calcs/messages.py` READ_MARGIN, twice Shannon’s limit, a sample. The receiver’s own noise is in its SEFD.
+- **[Ho et al. 2024, algorithmic progress in language models](https://arxiv.org/abs/2403.05812)** · Preprint, Epoch AI. I read the abstract, 2026-10-26.
+  - The compute needed to reach a set performance halved about every 8 months. The 95% interval is 5 to 14 months.
+  - Matters: better methods are worth as much as more chips, and that can be measured. It gives a yardstick for what another mind’s knowledge could be worth to ours.
+  - Used: `game/lib/sim/messages.ts` GIFT_STEPS. A gift of every book is worth 3.4 times our thought, about 14 months of our own progress at this pace. An encyclopedia is 2.3 times, a collection 1.5. A sample, since no one knows what an alien mind’s methods would do for ours.
+- **[Arecibo message, 1974](https://en.wikipedia.org/wiki/Arecibo_message)** · Reference.
+  - 1,679 bits, a picture 23 by 73, sent at 2,380 MHz with 450 kW from the 305 m dish: about 2×10¹³ W along the beam.
+  - Matters: what one great dish could do in 1974. It sets the strength of Earth’s aimed sends at Year 0, 10¹³ W, a sample.
+  - Used: `calcs/messages.py` AIMED_W, ten times this, a sample, and the smallest size in its table.
+- **[Goldstone Solar System Radar](https://en.wikipedia.org/wiki/Goldstone_Solar_System_Radar)** · Reference, with [JPL’s IPN progress report 42-210](https://tda.jpl.nasa.gov/progress_report/42-210/210C.pdf) through a search summary.
+  - The 70 m DSS-14 dish sends about 450 kW at 8,560 MHz, from two 250 kW klystrons. Rated 500 kW. Since Arecibo fell in 2020, Earth’s only high-power planetary radar.
+  - This project’s arithmetic: a 70 m dish at that frequency turns 450 kW into about 10¹³ W along the beam, Arecibo’s level.
+  - Matters: Earth’s strongest aimed beam today is still about 1974’s. A 2040 Earth with a Mind is taken to do ten times better with dishes it has, beamed together, a sample, and a build can raise it.
+  - Used: `calcs/messages.py` AIMED_W.
+- **[Size of Wikipedia](https://en.wikipedia.org/wiki/Wikipedia:Size_of_Wikipedia)** · Reference, read 2026-10-26.
+  - On 3 September 2026, the current version of every article was about 26.80 GB compressed, without media.
+  - Matters: a real measure of “what we know”, for how long sending our knowledge takes.
+  - Used: `calcs/messages.py` SIZES.
+- **[Google Books, “Books of the world, stand up and be counted”](https://booksearch.blogspot.com/2010/08/books-of-world-stand-up-and-be-counted.html)** · Company blog, August 2010.
+  - Counts 129,864,880 books in the world.
+  - Matters: a ceiling on sending everything. At a sample half a megabyte of text a book, it takes thousands of Years at our neighbors’ distances.
+  - Used: `calcs/messages.py` SIZES. The half megabyte is this project’s sample.
+- Cosmic Call 2’s 220 MB, above in [Hearing technology by radio](#hearing-technology-by-radio), and a human genome’s 3.1 billion bases at two bits each fill out the sizes.
+
+## Earth to Year 0: forecasts
+
+- **[Metaculus, date of the first general AI system](https://www.metaculus.com/questions/5121/date-of-artificial-general-intelligence/)** · Forecast, community median ([summary](https://aitoolsreview.co.uk/insights/agi-timeline-predictions-2026)).
+  - Median 5 January 2031, range April 2028 to April 2037, from about 1,900 forecasters, read on the page 2026-10-10. It was January 2033 in early 2026 and about 2070 in 2020.
+  - Matters: the forecasters’ date for Earth’s Mind waking.
+  - Used: v2 [Year 0 and Earth’s road to it](HOLOS_GAME_CONCEPT.md#year-0-and-earths-road-to-it).
+- **[Grace et al., 2024 Expert Survey on Progress in AI](https://aiimpacts.org/wp-content/uploads/2026/09/ESPAI2024.pdf)** · Survey of 1,580 AI researchers, published September 2026.
+  - High-level machine intelligence: 10% by 2027, 50% by 2042, down from 2047 in the [2023 survey](https://arxiv.org/abs/2401.02843). Full automation of labor: 50% by 2098.
+  - Matters: the researchers’ date for Earth’s Mind waking. They run about a decade behind the forecasters.
+  - Used: v2 [Year 0 and Earth’s road to it](HOLOS_GAME_CONCEPT.md#year-0-and-earths-road-to-it).
+- **[Epoch AI, AI chip stock](https://epoch.ai/data/ai-data-centers)** · Data ([summary](https://the-decoder.com/global-ai-compute-hits-15-million-h100-equivalents-epoch-ai-finds/)).
+  - About 27.6 million H100-equivalents sold by June 2026, roughly 3×10²² operations a second. The stock grows about 3.4× a year. 15 million of them draw over 10 GW.
+  - Matters: where Earth’s compute starts, and how fast it can grow before power binds.
+  - Used: v2 [Year 0 and Earth’s road to it](HOLOS_GAME_CONCEPT.md#year-0-and-earths-road-to-it).
+- **[McKinsey 2019, Modular construction: from projects to products](https://www.mckinsey.com/capabilities/operations/our-insights/modular-construction-from-projects-to-products)** · Report.
+  - Building from factory-made modules can cut a project’s schedule by 20 to 50%, and its cost by up to 20%. The study covers buildings.
+  - Matters: a real basis for a project that makes ground builds faster.
+  - Used: v2 [Build times](HOLOS_GAME_CONCEPT.md#build-times), factory-built works.
+- **[NASA, in-Space Assembled Telescope study, 2019](https://ntrs.nasa.gov/citations/20190001286)** · Study, for the 2020 decadal survey.
+  - Assembly in space is a workable way to build observatories. It removes the limit of one rocket’s fairing, scales up, and looks like the only way past 15 m mirrors. No schedule saving is quantified in what was read.
+  - Matters: an orbital yard makes larger works possible. That it also makes them faster is this project’s speculation.
+  - Used: v2 Build times, the orbital yard.
+- **Flagship telescope build times** · History ([Hubble](https://en.wikipedia.org/wiki/Hubble_Space_Telescope), [Webb](https://en.wikipedia.org/wiki/James_Webb_Space_Telescope)).
+  - Hubble: Congress approved its first funding for 1978. Its mirror was begun in 1979. Its intended launch was 1983. It launched on April 24, 1990: 12 years.
+  - Webb: first designs in 1996, prime contract in 2003, construction complete in November 2016, launched December 25, 2021: 18 years from the contract.
+  - Matters: the standard time for a telescope of this class, about 18 Years. Webb is the nearer match in size.
+  - Used: v2 Build times. Reread 2026-10-11. An earlier note gave Hubble 13 years and Webb 17 from a 2004 construction start, from memory. The pages don’t give that start.
+- **TSMC’s Arizona fabs** · News ([Data Center Dynamics](https://www.datacenterdynamics.com/en/news/covid-and-labor-shortages-lead-to-construction-delays-at-tsmcs-arizona-chip-fab/), [New Electronics](https://www.newelectronics.co.uk/content/news/tsmc-looks-to-compress-arizona-fab-construction-into-just-two-years)).
+  - The first fab broke ground in June 2021 and made 4 nm chips from late 2024, about three and a half years. The second began in April 2025 and aims at about two.
+  - Matters: how fast chip supply can be added. A leading-edge fab takes 2 to 4 years.
+  - Used: v2 [Growing compute](HOLOS_GAME_CONCEPT.md#growing-compute), the chip fab project. And the Taiwan branches in calcs/branches.py, which take 3 to 4.
+- **ASML’s tool output** · Company plans ([Bits&Chips](https://bits-chips.com/article/asml-hints-at-60-billion-euros-in-sales-by-2030/), [Gigazine, February 2026](https://gigazine.net/gsc_news/en/20260225-asml-chip-advance)).
+  - ASML is the only maker of the EUV machines that print the finest chips. Its plan is capacity for 90 of them a year by 2025 to 2026, and 20 of the newer High-NA kind by 2027 to 2028.
+  - Each machine should print about 330 wafers an hour by 2030, up from 220 in 2026.
+  - Matters: what limits a crash build of chip fabs. Buildings take 2 to 4 years, and the tools come from one firm.
+  - Used: v2 [Growing compute](HOLOS_GAME_CONCEPT.md#growing-compute), the chip fab project’s 3 Years and its one extra line.
+- **Liberty ships** · History ([Thompson, summarized at the University of Houston](https://uh.edu/~odonnell/econ2370/ships.html), [Richmond Shipyards](https://en.wikipedia.org/wiki/Richmond_Shipyards)).
+  - The first ships in each yard took over six months from keel to delivery. By late 1943, thirty days. Sixteen yards delivered 2,699 ships in four years. Labor productivity rose about 40% a year.
+  - Kaiser began his first Richmond yard in December 1940 and laid its first keel in April 1941.
+  - Matters: a yard stands up in months, and the speed comes over two to three years of repeating one design.
+  - Used: v2 [Build times](HOLOS_GAME_CONCEPT.md#build-times), factory-built works: 3 Years. Its cut of a third sits in McKinsey’s range, since ground works differ from one another more than ships did.
+- **Building stations in orbit** · History ([ESA, Building the ISS](https://www.esa.int/Science_Exploration/Human_and_Robotic_Exploration/International_Space_Station/Building_the_International_Space_Station3), [Tiangong](https://en.wikipedia.org/wiki/Tiangong_space_station)).
+  - The ISS weighs almost 400 t. Its first part flew on November 20, 1998, and assembly took more than 40 missions, to 2011.
+  - Tiangong is about 100 t. Three modules flew on April 29, 2021, July 24, 2022 and October 31, 2022.
+  - Matters: with heavy lift, mass reaches orbit in months. The ISS’s 13 years were the Shuttle’s pace. Design and fitting out set the time.
+  - Used: v2 Build times, the orbital yard: 1 kt and 5 Years, a sample between the two.
+  - Checked 2026-10-13, agent: NASA’s own page says construction was completed in 2011.
+- **Assembly in space against launching whole** · Study. [Mukherjee et al. 2019, the iSAT study](https://assets.science.nasa.gov/content/dam/science/astro/programs/exep/technology/in-space-assembly/files/iSAT_Study_Decadal_Survey_Whitepaper_Final.pdf) and its [conference paper](https://assets.science.nasa.gov/content/dam/science/astro/programs/exep/technology/in-space-assembly/files/Mukherjee_et_al._2019_IAC-19_A7_1_5_x49711.pdf). Read by an agent. I read the lines quoted here.
+  - Past 15 m, assembly in space “appears as the only feasible approach”. At 15 m or less it may cost less, but the two estimates sit within each other’s uncertainty.
+  - On time it says only that launching in phases may remove delays on the critical path. No number.
+  - A 2017 study for the US government found launch drives about 12% of a satellite’s dry mass, and tests before launch about 3% of its schedule.
+  - Matters: the orbital yard’s cut of a quarter off build times in orbit has no study behind it. It stays the game’s own guess, and is labelled so.
+  - Used: v2 Build times.
+- **How long big radio arrays take** · History and plans ([CHIME](https://en.wikipedia.org/wiki/Canadian_Hydrogen_Intensity_Mapping_Experiment), [DSA-2000 in Physics Today](https://physicstoday.aip.org/news/a-radio-telescope-array-takes-shape-with-private-funds), [DSA-2000 talk, 2025](https://indico.astron.nl/event/411/contributions/3730/), [SKA](https://en.wikipedia.org/wiki/Square_Kilometre_Array)).
+  - CHIME: built from 2015 to August 2017. 8,000 m², 1,024 receivers.
+  - DSA-2000: 2,000 dishes of 5 m over 285 km², about $200 million. Construction planned from 2026, first light in 2027. Its funding was not final in September 2025.
+  - Checked 2026-10-13, agent: an August 2025 paper by the project has first light in 2027 and its survey from 2028. The project’s site now calls it the Deep Synoptic Array, with 1,650 dishes of 6.15 m.
+  - SKA: construction began on December 5, 2022. SKA-Low’s 131,000 antennas are not expected complete until about 2030.
+  - Matters: a large ground array takes 2 to 8 years. The big ones are slowed by count and by many partners.
+  - Used: v2 [What Earth hears](HOLOS_GAME_CONCEPT.md#what-earth-hears), the all-sky watch: 6 Years for 1.28 million small elements at two sites.
+- **[IEA, Energy and AI, 2025](https://iea.blob.core.windows.net/assets/de9dea13-b07d-42c5-a398-d1b3ae17d866/EnergyandAI.pdf)** · Report.
+  - Data centers used about 415 TWh in 2024 and reach about 945 TWh by 2030 and 1,200 TWh by 2035 in the base case. Accelerated servers grow about 30% a year.
+  - Matters: how much of Earth’s power thinking takes by Year 0.
+  - Used: v2 [Year 0 and Earth’s road to it](HOLOS_GAME_CONCEPT.md#year-0-and-earths-road-to-it).
+- **[Energy Institute, Statistical Review of World Energy 2025](https://www.energyinst.org/exploring-energy/resources/news-centre/media-releases/a-year-of-record-highs-in-an-energy-hungry-world,-reveals-ei-statistical-review)** · Data.
+  - World primary energy reached 592 EJ in 2024, about 19 TW, up nearly 2%. Wind and solar grew 16%.
+  - Matters: Earth’s grid at Year 0. v1’s 100 TW was five times today’s.
+  - Used: v2 [Year 0 and Earth’s road to it](HOLOS_GAME_CONCEPT.md#year-0-and-earths-road-to-it).
+- **[Global mass to orbit, 2025](https://www.satellitetoday.com/launch/2026/04/10/brycetech-report-shows-spacex-accounted-for-50-of-launches-in-2025/)** · Data, BryceTech ([Starship](https://en.wikipedia.org/wiki/SpaceX_Starship)).
+  - About 3,200 t reached orbit in 2025, over 80% of it by SpaceX. Starship’s later blocks aim at 100 to 200 t a flight.
+  - Matters: v1’s 40 kt a year is about twelve times 2025’s lift, a few hundred Starship flights.
+  - Used: v2 [Year 0 and Earth’s road to it](HOLOS_GAME_CONCEPT.md#year-0-and-earths-road-to-it).
+- **[ESA space environment statistics](https://sdup.esoc.esa.int/discosweb/statistics/)** · Data, read 2026-10-10, updated the day before.
+  - More than 17,400 t is in Earth orbit: 13,381 t of payloads, 3,918 t of spent rocket bodies, and little else by mass. Of about 19,440 satellites still up, about 15,900 work.
+  - Matters: most mass in orbit is in use. What is spare is spent stages and dead craft, roughly a third today.
+  - Used: v2 [Earth’s kit at Year 0](HOLOS_GAME_CONCEPT.md#earths-kit-at-year-0), matter in orbit.
+- **[Starlink’s satellites](https://www.eoportal.org/satellite-missions/starlink)** · Reference, eoPortal.
+  - Built for about five years, then brought down with their own thrusters to burn up.
+  - Matters: what is launched to low orbit doesn’t pile up. In 2040 only about the last five years of lift is still there.
+  - Used: matter in orbit, calcs/early_game.py.
+- **Earth’s instruments by 2040** · Plans.
+  - [ELT](https://www.eso.org/public/announcements/ann25001/): first light March 2029, science from December 2030. [SKA](https://en.wikipedia.org/wiki/Square_Kilometre_Array): science verification from 2029 (Low) and 2031 (Mid). [PLATO](https://www.dlr.de/en/latest/news/2025/plato-mission-to-launch-in-late-2026-onboard-ariane-6): launch December 2026. [Habitable Worlds Observatory](https://en.wikipedia.org/wiki/Habitable_Worlds_Observatory): early 2040s at the soonest.
+  - Matters: what Earth sees with at Year 0, and whether it can read a neighbor’s air.
+  - Used: v2 [Year 0 and Earth’s road to it](HOLOS_GAME_CONCEPT.md#year-0-and-earths-road-to-it).
+- **[FAA radar divestiture](https://www.faa.gov/air_traffic/technology/radardivestiture)** · Plan.
+  - ADS-B lets the FAA retire overlapping radars through 2035. The rest stay for aircraft without transponders, backup and weather.
+  - Matters: Earth’s radars thin but don’t go quiet before Year 0.
+  - Used: v2 [Year 0 and Earth’s road to it](HOLOS_GAME_CONCEPT.md#year-0-and-earths-road-to-it).
+- **[UN World Population Prospects 2024](https://www.un.org/development/desa/pd/sites/www.un.org.development.desa.pd/files/undesa_pd_2024_wpp_2024_advance_unedited_0.pdf)** · Projection.
+  - About 9.18 billion in 2040 in the medium variant, peaking near 10.3 billion in the mid-2080s.
+  - Matters: Earth’s people at Year 0, the lives a strike ends.
+  - Used: v2 Year 0 and Earth’s road to it. The game’s “Who we are” counts to 9.2 billion (`game/components/people.tsx`).
+- **[NASA Black Marble](https://earthobservatory.nasa.gov/features/NightLights)**, via [Solar System Scope’s night map](https://www.solarsystemscope.com/textures/) (CC BY 4.0) · Imagery.
+  - Earth’s lights at night, from the Suomi NPP satellite. Where people live and build, seen from space.
+  - Matters: the people at Year 0 shown where they really are, not as a number alone.
+  - Used: the game’s “Who we are” lights about 6,800 points sampled from the atlas’s night map (`game/scripts/lights.mjs`).
+- **[WMO Global Annual to Decadal Climate Update](https://wmo.int/resources/publication-series/wmo-global-annual-decadal-climate-update/wmo-global-annual-decadal-climate-update-2025-2029)** · Forecast.
+  - 2024 was the first calendar year above 1.5°C. About a 70% chance the 2025 to 2029 average exceeds it. The Paris goal is a 20-year average, so the long-term crossing comes around 2030.
+  - Matters: Earth’s climate at Year 0.
+  - Used: v2 Year 0 and Earth’s road to it.
+- **Crewed Moon landings** · Plans. [Artemis](https://en.wikipedia.org/wiki/Artemis_program): Artemis III is a docking test in Earth orbit in late 2027, Artemis IV the first landing in early 2028. [China](https://spacenews.com/china-on-track-for-crewed-moon-landing-by-2030-space-official-says/): a crewed landing in 2029 or 2030. [International Lunar Research Station](https://en.wikipedia.org/wiki/International_Lunar_Research_Station): a basic south-pole station by 2035.
+  - Matters: where people are off Earth at Year 0. Plans like these usually slip.
+  - Used: v2 Year 0 and Earth’s road to it.
+- **[Metaculus, first humans on Mars](https://www.metaculus.com/questions/3515/date-first-human-lands-on-mars/)** · Forecast.
+  - Median January 2046, range February 2038 to October 2060, from 392 forecasters, read on the page 2026-10-10. About 15% for humans sent before 2036, from an earlier summary.
+  - Matters: no one on Mars at Year 0 in the most probable path. A seeded branch can send them.
+  - Used: v2 Year 0 and Earth’s road to it, open question 1.
+- **[Commonwealth Fusion Systems, ARC](https://cfs.energy/technology/arc/)** · Plan ([grid application](https://cfs.energy/news-and-media/commonwealth-fusion-systems-becomes-first-fusion-company-to-apply-to-pjm-interconnection-the-largest-u.s.-wholesale-electricity-market)).
+  - A 400 MW plant aimed at the grid in the early 2030s. The grid approval takes four to six years. Net power on a grid has never been shown.
+  - Matters: fusion arrives before Year 0 but stays small.
+  - Used: v2 Year 0 and Earth’s road to it, open question 1.
+- **[Interstellar Probe](https://en.wikipedia.org/wiki/Interstellar_Probe_(spacecraft))** · Study, recommended by the 2024 heliophysics decadal survey.
+  - Launch window 2036 to 2042, about 6 to 7 AU a year after a Jupiter flyby.
+  - Matters: Earth’s farthest working probe at Year 0. v1’s 900 AU precursor is out of reach by 2040.
+  - Used: v2 Year 0 and Earth’s road to it.
+
+- **[Metaculus, first 100 MW fusion plant](https://www.metaculus.com/questions/363/)** · Forecast ([0.1% of world energy](https://www.metaculus.com/questions/9464/nuclear-fusion-power-01-of-global-energy/)).
+  - Median July 2041 for a 100 MW fusion plant in service, range March 2034 to July 2053, from 256 forecasters. July 2047 for fusion to supply 0.1% of world energy, range September 2039 to May 2058, from 99. Read on the pages 2026-10-10.
+  - Matters: most games have no fusion on the grid at Year 0. It corrected an earlier draft that assumed the 2030s.
+  - Used: v2 Year 0 and Earth’s road to it, open question 1.
+- **[Metaculus, Chinese invasion of Taiwan](https://www.metaculus.com/questions/11480/china-launches-invasion-of-taiwan/)** · Forecast, read on the page 2026-10-10.
+  - A full-scale invasion before 2028, 5%. Before 2030, 15%. Before 2035, 26%. From 974 forecasters. Earlier search summaries, 12% by 2028 and 27 to 33% by 2035, were out of date.
+  - Matters: the likeliest major branch before Year 0.
+  - Used: v2 [Year 0 and Earth’s road to it](HOLOS_GAME_CONCEPT.md#year-0-and-earths-road-to-it), the branches.
+- **[Metaculus, China blockades Taiwan](https://www.metaculus.com/questions/12309/china-engages-in-a-blockade-against-taiwan/)** · Forecast, read on the page 2026-10-10.
+  - A full-scale blockade before 2030, 30%. Before 2035, 46%. From 101 forecasters.
+  - Matters: a blockade cuts chip exports without an invasion, and forecasters think it nearly twice as likely.
+  - Used: v2 [Year 0 and Earth’s road to it](HOLOS_GAME_CONCEPT.md#year-0-and-earths-road-to-it), the blockade branch.
+- **[Metaculus, no non-test nuclear detonation before 2035](https://www.metaculus.com/questions/3150/no-non-test-nuclear-detonations-before-2035/)** · Forecast, read on the page 2026-10-10 ([by 2050](https://www.metaculus.com/questions/4779/will-a-nuclear-weapon-be-detonated-as-an-act-of-war-by-2050/)).
+  - 76% that none is used before 2035, so 24% that one is, from 193 forecasters. 34% for one used in war by 2050, from 532. The two agree.
+  - Matters: a branch that would push Earth toward Cautious.
+  - Used: v2 [Year 0 and Earth’s road to it](HOLOS_GAME_CONCEPT.md#year-0-and-earths-road-to-it), the branches.
+
+- **[Epoch AI, ML hardware energy efficiency](https://epoch.ai/data-insights/ml-hardware-energy-efficiency)** · Data ([hardware trends](https://epoch.ai/blog/trends-in-machine-learning-hardware)).
+  - Leading ML hardware gets about 28 to 40% more energy efficient a year. The H100 peaks near 1.4×10¹² operations a second per watt.
+  - Matters: Earth’s compute per watt at Year 0, about 40 to 100 times 2026’s. With about 0.25 TW for thinking, about 10²⁵ operations a second.
+- **[Ho, Erdil and Besiroglu 2023, limits of today’s chips](https://arxiv.org/abs/2312.08595)** · Preprint, Epoch AI. I read the abstract, 2026-10-13.
+  - Today’s kind of chip can become about 200 times more efficient than 2023’s, and no more: about 4.7×10¹⁵ operations a joule at 4-bit precision. That counts the energy to switch a transistor, to charge its wires, and what leaks.
+  - Matters: at 28 to 40% a year that ceiling is reached between 2039 and 2044. So at Year 0 chips sit at or near it, with a doubling left at most. That arithmetic is this project’s.
+  - Used: v2 [Growing compute](HOLOS_GAME_CONCEPT.md#growing-compute), as support for energy setting the ceiling, and for the open question on the grid limit.
+- **[Hobbhahn and Besiroglu 2022, predicting GPU performance](https://epoch.ai/blog/predicting-gpu-performance)** · Epoch AI report. Read on the page, 2026-10-13.
+  - Chips of today’s kind stop improving between 2027 and 2035, when transistors can shrink no further, near 0.7 nm. The two limits fall at about 2030 and 2033.
+  - Its own caution: it assumes no new kind of chip.
+  - From a search summary, not read: computing’s efficiency doubled every 1.6 years until 2000, and about every 2.6 since.
+  - Used: the same.
+- **How far thinking can speed a build, checked 2026-10-13.** For the question of what thought is for. I read each abstract myself, and the text of the first, which I pulled out of its PDF.
+  - **[Joumier, Freaner, Bitten and Emmons 2012](https://ntrs.nasa.gov/api/citations/20120009487/downloads/20120009487.pdf)** · Conference slides, ESA, NASA and the Aerospace Corporation. Science missions, from the start of design to launch.
+    - NASA: planned 49.6 months, took 64.1, a 31% overrun. ESA: planned 61.6, took 83.6. By size at NASA: small 52, medium 61, large 83.
+    - Planetary missions, which can’t miss their launch window, took about 53 at both agencies. The slides: about 53 months “appears to be the minimum schedule that is achievable”, a guide to “an un-compressible lower limit”.
+    - Their reading: a clear and urgent goal shared by everyone is one way to hold a schedule.
+  - **[Flyvbjerg 2014, megaprojects](https://arxiv.org/abs/1409.0003)** · Published overview. The iron law: over budget, over time, over and over again.
+  - **[Cantarelli, Molin and van Wee 2012](https://arxiv.org/abs/1307.2178)** · Published, Transport Policy. Dutch transport projects overrun by 16.5% on average, and most of it arises before building starts.
+  - **[Erdil and Besiroglu 2023](https://arxiv.org/abs/2309.11690)** · Preprint, Epoch AI. Whether automating thought could multiply growth tenfold turns on a few open questions, one of them physical bottlenecks in production.
+  - From search summaries, not read: Flyvbjerg’s set of 16,000 projects, 8.5% on budget and on time. A scheduling firm treats squeezing a schedule by more than 25% as trouble.
+  - From general knowledge, not a source read: Amdahl’s law. Speeding one part of a job helps only as far as the rest allows.
+  - Matters: real builds run a third to a half over their best case, and the loss is in planning and rework. That is the part thought can take away. The floor is what even urgent, well-run missions needed.
+  - This project’s own: two thirds as the floor for every kind of work, from one data set on space missions. And Amdahl’s form for what lies between.
+  - Used: v2 [Growing compute](HOLOS_GAME_CONCEPT.md#growing-compute), calcs/early_game.py and the third mock.
+- **Real prices for the works, checked 2026-10-13.** For how much thought each work wants.
+  - **[The Square Kilometre Array, Oxford physics](https://www.physics.ox.ac.uk/research/group/square-kilometre-array-ska)** · Group page, read. Phase 1 and its first ten years of running “will cost around €1.9 billion”.
+  - **[NASA 2024, space-based solar power](https://www.nasa.gov/organizations/otps/space-based-solar-power-report)** · Agency page, read. A system that could start in 2050 would cost more than ground alternatives, with launch and manufacturing the main costs.
+    - From a search summary, not read: 12 to 80 times the cost of ground power for each unit of electricity, for two designs of 2 GW.
+  - Already logged: LUVOIR-A at 18 to 24 billion dollars over its life, and Starshot’s ground beam director at 8 billion.
+  - From a search summary, not read: the 2020 survey’s telescope of about 6 m, now the Habitable Worlds Observatory, at about 11 billion dollars.
+  - Not found: a real price for a lunar mass driver, a far-side array at the game’s size, belt mining, or megatonnes of power from orbit.
+  - Matters: only works of today’s kind have a price. At today’s prices power from orbit at grid scale would cost thousands of flagships, which says nothing about one built from lunar rock. So megatonne works take samples.
+  - This project’s own: one flagship as 0.15 of Year 0’s thought, and every megatonne number.
+  - Used: v2 [Growing compute](HOLOS_GAME_CONCEPT.md#growing-compute) and calcs/early_game.py.
+  - Used: v2 open question 2.
+- **[Large space flexible solar arrays, 2025 review](https://www.sciencedirect.com/science/article/pii/S2950104025000161)** · Published ([NASA small-spacecraft power](https://www.nasa.gov/smallsat-institute/sst-soa/power-subsystems/)).
+  - Flown roll-out arrays reach about 36 to 218 W/kg, the ISS’s iROSA about 75 W/kg. Thin-film designs target 1 kW/kg.
+  - Matters: v1’s orbital solar array implied about 50 kW/kg, 50 to 600 times too light. At 1 kW/kg, 400 kt yields about 0.4 TW.
+  - Used: v2 open question 2.
+
+## Other worlds’ starting points
+
+- **[Hippke 2018, spaceflight from super-Earths is difficult](https://arxiv.org/abs/1804.04727)** · Published, International Journal of Astrobiology.
+  - Rocket fuel grows exponentially with a world’s surface gravity. 9,000 t of fuel on Earth becomes 55,000 t on a world of 9.7 Earth masses. Chemical rockets work up to about 10 Earth masses. Beyond that, a world needs nuclear propulsion.
+  - Matters: a neighbor’s gravity well sets how fast it can reach space, so neighbors don’t start equal to Earth.
+  - Used: v2 [The neighbors](HOLOS_GAME_CONCEPT.md#the-neighbors).
+
+- **[Hot Rocks Survey](https://www.stsci.edu/jwst/phase2-public/3730.pdf)** · JWST program 3730, results 2024 to 2026 ([II](https://arxiv.org/abs/2503.19772), [GJ 3929 b](https://arxiv.org/abs/2508.12516), [VI](https://arxiv.org/abs/2609.30552)).
+  - Most hot rocky planets around M dwarfs show no atmosphere, which maps the “cosmic shoreline”. A few, like GJ 357 b, don’t fit simple models. Temperate M-dwarf worlds remain open.
+  - Matters: M dwarfs are weighted low as neighbor hosts, not excluded. [calcs/hosts.py](calcs/hosts.py).
+  - Used: v2 open question 4.
+- **[Holman and Wiegert 1999](https://arxiv.org/abs/astro-ph/9809315)** · Published, AJ.
+  - A planet around one star of a binary stays stable inside a critical distance set by the binary’s separation, mass ratio and eccentricity: about 0.46 of the separation for a circular, equal-mass pair, less as eccentricity grows.
+  - Matters: the test for whether a binary’s warm zone can hold a neighbor’s world.
+  - Used: v2 open question 4.
+
+- **[Gaia DR3 astrophysical parameters, FLAME](https://www.cosmos.esa.int/web/gaia/dr3)** · Data, via the ESA Gaia archive. Fetched by [calcs/fetch_hosts.py](calcs/fetch_hosts.py).
+  - Isochrone ages, masses and luminosities for many stars within 50 ly.
+  - Matters: luminosity sets each host’s warm zone. Ages are used only for F and G stars, since isochrones barely constrain K and M dwarfs: FLAME puts Epsilon Eridani near 7 billion years.
+  - Used: [data/hosts-50ly.csv](data/hosts-50ly.csv).
+- **[NASA Exoplanet Archive, planetary systems composite](https://exoplanetarchive.ipac.caltech.edu/docs/TAP/usingTAP.html)** · Data, fetched October 2026.
+  - 227 known planets within 50 ly, with masses, orbits and eccentricities.
+  - Matters: a host is dropped when a known planet of 10 Earth masses or more crosses its warm zone.
+  - Used: data/hosts-50ly.csv.
+- **[El-Badry, Rix and Heintz 2021, a million binaries from Gaia](https://arxiv.org/abs/2101.05282)** · Published, MNRAS.
+  - Bound pairs agree in parallax and move together within what an orbit allows, about 2.1 km/s at 1,000 AU.
+  - Matters: the test calcs/hosts.py applies to find companions. Their catalog was unreachable on VizieR in October 2026, so the pairs are found directly.
+  - Used: data/hosts-50ly.csv.
+- **[Pecaut and Mamajek 2013](https://arxiv.org/abs/1307.2657)** · Published, ApJS ([table](https://www.pas.rochester.edu/~emamajek/EEM_dwarf_UBVIJHK_colors_Teff.txt)).
+  - Colors along the dwarf sequence: Gaia BP−RP near 0.59 at F5, 0.75 at G0, 0.98 at K0 and 1.84 at M0.
+  - Used: data/hosts-50ly.csv, sorting stars by kind.
+- **[Kopparapu et al. 2013, habitable zones](https://arxiv.org/abs/1301.6674)** · Published, ApJ.
+  - The conservative warm zone, about 0.95 to 1.67 AU for the Sun’s luminosity, scaling as its square root.
+  - Used: data/hosts-50ly.csv.
+- **Known young stars within 50 ly** · Published ages.
+  - [Epsilon Eridani](https://en.wikipedia.org/wiki/Epsilon_Eridani), 0.4 to 0.8 Gyr. [Kappa¹ Ceti](https://en.wikipedia.org/wiki/Kappa1_Ceti), 0.3 to 0.6 Gyr. The [Ursa Major moving group](https://arxiv.org/abs/2601.08985), about 418 Myr, with Pi¹ Ursae Majoris and Chi¹ Orionis. AU Microscopii, about 20 Myr.
+  - Used: dropped as hosts in data/hosts-50ly.csv.
+
+- **[Zeng, Sasselov and Jacobsen 2016, mass and radius of rocky planets](https://arxiv.org/abs/1512.08827)** · Published, ApJ.
+  - Rocky radius grows about as mass to the power 1/3.7, from Earth’s own interior model.
+  - Matters: a neighbor’s gravity and escape speed, and so its cost of reaching space.
+  - Used: [calcs/neighbors.py](calcs/neighbors.py).
+
+## Hostility
+
+- **[Dam 2026, First Attack, Final Offensive: the Dark Forest on an Open Roster](https://arxiv.org/abs/2609.12003)** · Preprint, September 2026.
+  - When no one can know how many others are out there, a first strike is rational only if the attacker accepts it may be its last attack. Mutual aggression is not an equilibrium. Everyone hiding is, whenever strikes are more visible to unfound watchers than hiders are to hunters.
+  - Matters: the physics of Holos makes strikes visible to third parties. Exhaust shows from behind, laser launches shine ahead, braking glows, and a strike’s direction names its sender. So the quiet sky fits a region where most minds hide and watch, and strike-first minds are rare.
+  - Used: v2 open question 4, the roster’s hostility.
+- **[Brin 1983, The Great Silence](https://www.researchgate.net/publication/234496344_The_'Great_Silence'_The_Controversy_Concerning_Extraterrestrial_Intelligent_Life)** · Published, QJRAS 24, 283.
+  - The “deadly probes” idea: hostile machines that silence others fit the Fermi paradox, but would leave no one to find. Liu Cixin’s “dark forest” later took the idea up ([overview](https://en.wikipedia.org/wiki/Dark_forest_hypothesis)).
+  - Matters: hostility can explain silence, but a region of wholly hostile minds leaves nothing to play. Holos’s premise, many minds waking in one century, sits better with hiding than with killing.
+  - Used: v2 open question 4.
+- **[Tan 2025, Beyond the Dark Forest](https://philarchive.org/archive/TANBTD-2)** · Essay.
+  - Criticizes the dark forest for assuming cheap interstellar war, static equilibria and fixed technology.
+  - Used: v2 open question 4.
+- **[Iain M. Banks, the Culture](https://en.wikipedia.org/wiki/Culture_series)** · Fiction, the stated inspiration ([Joseph Heath, Why the Culture Wins](https://josephheath.substack.com/p/why-the-culture-wins-an-appreciation)).
+  - Advanced minds are mostly tolerant, curious and generous. Contact studies younger civilizations and sometimes interferes, overtly or covertly, through Special Circumstances. Aggressive powers exist, but they are few, and they lose. The oldest civilizations Sublime and leave the galaxy’s affairs.
+  - Matters: past the physics, Holos’s neighbors take their range of character from here.
+  - Used: v2 open question 4.
+
+## Running the neighbors
+
+- **[Claude API pricing](https://platform.claude.com/docs/en/about-claude/pricing)** · Reference, September 2026 ([batch processing](https://platform.claude.com/docs/en/build-with-claude/batch-processing), [prompt caching](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)).
+  - Per million tokens, in and out: Claude Opus 5.5 $4 and $20, Claude Sonnet 5.5 $2 and $10, Claude Haiku 4.5 $1 and $5. [Claude Haiku 5.5](https://www.anthropic.com/claude/haiku), released October 7, 2026, $0.10 and $0.50 for prompts up to 100,000 tokens, cache hits $0.01, five times that above 100,000. Cached input about a tenth of the input price. The Batch API halves the price for work that can wait.
+  - Matters: what it costs for a model to play each neighbor.
+  - Used: v2 open question 5, [calcs/ai_cost.py](calcs/ai_cost.py).
+- **[Gemini Developer API pricing](https://ai.google.dev/gemini-api/docs/pricing)** · Reference, October 2026.
+  - Per million tokens, in and out: Gemini 3.5 Flash-Lite $0.30 and $2.50, Gemini 3.1 Flash-Lite $0.25 and $1.50. Batch halves both. Cached input about a tenth, plus $1 per million tokens an hour to keep the cache. Thinking counts as output.
+  - Matters: once the cheapest option, now dearer than Claude Haiku 5.5 on both input and output.
+  - Used: v2 open question 5, calcs/ai_cost.py.
+
+## Real masses behind the projects
+
+Anchors for [the project audit](HOLOS_PROJECT_AUDIT.md).
+
+- **[UNEP Global Resources Outlook 2024](https://www.unep.org/resources/Global-Resource-Outlook-2024)** · Report.
+  - The world uses about 106 Gt of materials a year, up from 30 Gt in 1970, heading for about 160 Gt by 2060.
+  - Matters: on Earth, ground builds are not short of matter. Only matter in space is scarce.
+  - Used: the project audit.
+- **[LUVOIR final report](https://arxiv.org/abs/1912.06219)** · Study.
+  - LUVOIR-A, a 15 m space telescope, about 28 t, up to 37 t with margins. JWST is 6.2 t.
+  - Used: the project audit, telescopes.
+- **[Starshade Rendezvous Probe](https://ntrs.nasa.gov/api/citations/20190028272/downloads/20190028272.pdf)** · Study, NASA.
+  - Launch mass about 3.8 t.
+  - Used: the project audit, starshade.
+- **[Hyper-Kamiokande](https://iopscience.iop.org/article/10.1088/1742-6596/2156/1/012153/pdf)** · Under construction.
+  - A 260 kt underground water detector.
+  - Used: the project audit, neutrino watch.
+- **[Project Daedalus](https://en.wikipedia.org/wiki/Project_Daedalus)** · Study, British Interplanetary Society, 1973 to 1978 ([Icarus](https://arxiv.org/abs/1005.3833)).
+  - 54,000 t at departure, 50,000 t of it fuel, 450 t of payload, to 0.12c. Exhaust about 10,000 km/s.
+  - Matters: the yardstick for every fusion probe, ship and bullet.
+  - Used: the project audit, probes and impactors.
+- **[Stanford torus](https://en.wikipedia.org/wiki/Stanford_torus)** · Study, NASA SP-413, 1975.
+  - About 10 Mt for 10,000 people, 95% of it radiation shielding from lunar soil.
+  - Used: the project audit, habitat ring.
+- **[O’Neill’s lunar mass driver](https://nss.org/l5-news-mass-driver-update/)** · Study, 1976 to 1977.
+  - A driver of 100 to 200 t could deliver about 600,000 t a year from the Moon.
+  - Used: the project audit, mass driver.
+- **[Freitas and Zachary 1981, a self-replicating lunar factory](http://www.rfreitas.com/Astro/GrowingLunarFactory1981.htm)** · Study.
+  - Grown from a 100 t seed, copying itself in about a year.
+  - Matters: v1’s factory cost 60 Mt, about 600,000 times the seed.
+  - Used: the project audit, factory and foundry.
+- **[Google Project Suncatcher](https://research.google/blog/exploring-a-space-based-scalable-ai-infrastructure-system-design/)** · Study, 2025, with a [prototype launched](https://www.npr.org/2026/10/01/nx-s1-5983697/project-suncatcher-google-ai-data-center-space) in 2026.
+  - Solar-powered satellites carrying AI chips, linked by laser, planned in clusters of 81.
+  - Matters: compute in orbit is being tested now. The cold compute annex fits it.
+  - Used: the project audit, cold compute annex.
+- **[NASA, antimatter requirements and energy costs](https://ntrs.nasa.gov/api/citations/19990110316/downloads/19990110316.pdf)** · Study.
+  - Making antimatter today takes about 10⁹ times more energy than it releases.
+  - Matters: the antimatter probe fits only if production gets about 100,000 times better.
+  - Used: the project audit, antimatter probe.
+- **[DART](https://en.wikipedia.org/wiki/Double_Asteroid_Redirection_Test)** · Demonstrated, 2022.
+  - About 0.6 t at impact.
+  - Used: the project audit, comet deflection.
+
+- **[Green Bank Telescope proposer’s guide](https://greenbankobservatory.org/wp-content/uploads/2017/07/GBTpg.pdf)** · Reference.
+  - At L band, about 2 K/Jy and 20 K, so an SEFD near 10 Jy.
+  - Used: the project audit, beacon range. [calcs/early_game.py](calcs/early_game.py).
+- **[SKA1 science performance](https://www.skao.int/sites/default/files/documents/SKA-TEL-SKO-0000818-01_SKA1_Science_Perform.pdf)** · Reference, SKAO.
+  - The full SKA-Mid reaches about 1,600 m²/K at 1.4 GHz, an SEFD near 1.1 Jy.
+  - Used: the project audit, beacon range.
+- **[Pulsar science with the CHIME telescope](https://arxiv.org/abs/1711.02104)** · Published.
+  - About 8,000 m² of cylinders, a gain near 1.16 K/Jy, a receiver near 30 K, about 200 square degrees in view. An SEFD near 45 Jy with the sky added.
+  - Used: the project audit, the sky watch’s sensitivity.
+- **[FarView, 2024](https://arxiv.org/abs/2404.03840)** · Study, Advances in Space Research.
+  - 100,000 dipoles over 200 km² of the lunar far side, made in place from metal in the regolith, by equipment landed from Earth.
+  - Matters: a far-side array is a lunar industry project, not cargo.
+  - Used: the project audit, far-side array.
+- **The long roads, checked 2026-10-13.** For v2’s build times of the works that megatonnes and far hearing wait on. I read each page or abstract named here myself.
+  - **FarView, above.** Abstract reread: the full array “will take 4 - 8 years to build”, and is meant for the 2030s. It listens at low pitch, for the early universe. Its mass is not in the abstract.
+    - The game’s far-side array is five times the area and built for higher pitch, so it needs a real collecting surface: about 1 Mt at an assumed 1 kg/m². That is this project’s, and far beyond FarView.
+  - **[LUVOIR, the 15 m telescope study](https://en.wikipedia.org/wiki/Large_Ultraviolet_Optical_Infrared_Surveyor)** · Reference page, read. If funded it would launch about 2039. The teams reported in 2019. Lifetime cost for the 15 m design: 18 to 24 billion dollars.
+    - From a search summary, not read: the 2020 survey chose a telescope of about 6 m instead, and judged the larger one unlikely before the late 2040s.
+  - **[Kolm, mass driver update](https://nss.org/l5-news-mass-driver-update/)** · L5 News, 1980. Read on the page: a lunar mass driver “several kilometers long, designed conservatively with present technology” should deliver 600,000 tons a year, assuming ten years of operation. No build time is given.
+  - **[Hein, Matheson and Fries 2018](https://arxiv.org/abs/1810.03836)** and **[Calla, Fries and Welch 2018](https://arxiv.org/abs/1808.05099)** · Preprints on asteroid mining, abstracts read. What decides it is how much each craft processes, how many craft fly, and how often. A small craft brings 100 kg of water a trip, and over a hundred must work for five years to break even.
+  - From general knowledge, not a source read: OSIRIS-REx took 7 years from launch to its sample’s return, and Hayabusa2 took 6.
+  - Not found: any real schedule for a mass driver, for megatonnes of lunar metal a year, or for mining the belt. v1’s 24, 30 and 20 Years stand unchecked.
+  - Matters: only the telescope and the far-side array have a builder’s own date behind them. The rest are v1’s times, kept and flagged.
+  - Used: v2 [Build times](HOLOS_GAME_CONCEPT.md#build-times), calcs/early_game.py and the project audit.
+- **The long roads, rechecked 2026-10-16.** By a research agent. Its reading is marked on each line, and I did not reread the sources.
+  - **[LUVOIR final report](https://arxiv.org/abs/1912.06219)**, chapters 1 and 12, read by the agent. NASA told the team to assume Phase A from January 1, 2025. Launch November 2039: 15.6 years to the end of commissioning, with 791 days of reserve. A technology plan of about 5 years comes first. 27.8 t as designed, 37.4 t with growth.
+    - Matters: about 20 years from start to work. The game’s 18 Years and about 40 t hold.
+  - **Habitable Worlds Observatory, 2026.** Read by the agent: NASA hopes to launch in the late 2030s or early 2040s (Space.com, January 12, 2026). Its FY26 budget was $150M. The FY27 request in April 2026 was $5M, and a House committee in May 2026 required no less than FY26’s (SpacePolicyOnline, May 13, 2026). Not yet law. No links kept.
+  - **[Sonntag 2026, lunar mass drivers](https://www.afpc.org/uploads/documents/Special_Report_-_Strategic_Implications_of_Lunar_Mass_Drivers-5.27.26.pdf)** · AFPC special report, May 2026, read in full by the agent. A 1 t quenchgun of about 372 t, landed in 4 loads, firing 1 t every 2 minutes at 20 MW: about 263 kt a year. No build time. Its author told Space.com a working system could come by the mid-2030s, if funded.
+  - **A Chinese rotating launcher, 2024.** Shanghai Institute of Satellite Engineering, via Universe Today, read by the agent. 80 t, two launches a day, key parts by 2030, full scale by 2045.
+  - Matters: about 20 years to a full-scale lunar launcher, from the one dated plan. The game’s 24 Years and 600 kt a year hold. An advocate’s 10 years is faster.
+  - **[Metzger et al. 2013, bootstrapping](https://arxiv.org/abs/1612.03238)** · Published, J. Aerospace Engineering. Abstract and growth section read by the agent. Industry grows in generations 2 years apart. 12 t landed grows to 156 t of plant in about 20 years, 41 t to up to 40,000 t.
+  - **[Sanders, Kleinhenz and Linne 2022](https://ntrs.nasa.gov/citations/20220008799)** · NASA, COSPAR. Read by the agent. NASA’s notional plan: tens of tonnes a year at first, scaling to hundreds or thousands. No dates.
+  - Matters: megatonnes of lunar metal a year need self-copying growth, as Metzger describes. No real plan names a date.
+  - **Asteroid mining, 2023 to 2026.** From Wikipedia, read by the agent. AstroForge’s Brokkr-1 failed in 2023, and Odin was lost in March 2025 before reaching its asteroid. Vestri waits for a flight not before 2027. Nothing has been mined.
+  - Matters: 6 Years of prospecting fits real cruise times. 20 Years to 120 kt a year has nothing behind it, and nothing against it.
+  - **FarView, full text** ([arXiv 2404.03840](https://arxiv.org/abs/2404.03840)), read by the agent in the PDF. The whole array needs about 50 to 70 t of aluminum. About 5 t of landed equipment refines 10 to 15 t of metal a year. Rovers lay one 400-dipole subarray a lunar day, about 250 in all, over 4 to 8 years.
+    - Matters: by area, the game’s fifth in 6 Years matches FarView’s pace. By mass it needs about 2,500 times FarView’s metal a year, so it waits on the lunar mine. The game’s array hears higher pitch than FarView’s dipoles can, so it stays heavier.
+
+- **[Phipps et al., Review: Laser-Ablation Propulsion](https://www.researchgate.net/publication/225005755_Review_Laser-Ablation_Propulsion)** · Published, Journal of Propulsion and Power ([debris removal](https://arxiv.org/abs/1110.3835)).
+  - Ablation thrust runs about 10⁻⁵ to 10⁻⁴ N per watt that lands, near 10⁻⁴ at its best.
+  - Matters: the deflector laser needs about 9 TW with a 1 km mirror, or 0.1 TW with a 10 km one.
+  - Used: the project audit, deflector laser. [calcs/late_game.py](calcs/late_game.py).
+- **[Mahaffy et al. 1998, Galileo probe](https://link.springer.com/article/10.1023/A:1005091806594)** · Published ([helium abundance](https://agupubs.onlinelibrary.wiley.com/doi/10.1029/98JE00695)).
+  - Jupiter’s ³He/⁴He is (1.66 ± 0.05)×10⁻⁴. Helium is about 24% of its air by mass.
+  - Matters: about 30 g of helium-3 per tonne of Jupiter’s air. It limits every fast fusion craft.
+  - Used: the project audit, heavy impactor and helium-3 harvest.
+- **[Project Daedalus, fuel](https://en.wikipedia.org/wiki/Project_Daedalus)** · Study.
+  - Its helium-3 was to be mined from Jupiter’s air by balloon-borne robotic factories over 20 years. Stages: 46,000 t and 4,000 t of propellant.
+  - Matters: 111 t of fuel per tonne of payload to 0.12c, about 3.9 times one ideal stage. The audit scales every fusion trip by that.
+  - Used: the project audit, all fusion craft.
+- **[NASA, antimatter production efficiency](https://ntrs.nasa.gov/api/citations/19990110316/downloads/19990110316.pdf)** · Study.
+  - Accelerator production is about 10⁻⁹ efficient.
+  - Used: the project audit, antimatter probe needs the swarm.
+- **[Heavy water production](https://energyeducation.ca/encyclopedia/Heavy_water)** · Reference.
+  - About one hydrogen atom in 6,500 in seawater is deuterium. Electrolysis takes about 850 kWh per kg of heavy water, the costly route.
+  - Matters: a slow D-D bullet’s 83 kt of deuterium is cheap in energy and plentiful in the oceans.
+  - Used: the project audit, heavy impactor.
+
+- **[Palaszewski 2014, atmospheric mining in the outer solar system](https://ntrs.nasa.gov/api/citations/20140006386/downloads/20140006386.pdf)** · Study, NASA TM-2014-217892 ([2021 update](https://ntrs.nasa.gov/api/citations/20210018165/downloads/Palaszewski_Atmospheric%20Mining%20in%20the%20Outer%20Solar%20System%20ASC.pdf)).
+  - Helium-3 is about 1.5×10⁻⁵ of Uranus’s air and 1.9×10⁻⁵ of Neptune’s. A 100 t gas-core nuclear aerospacecraft gathers 500 kg in 38 to 95 days. Uranus and Neptune are easier to mine than Jupiter or Saturn.
+  - Matters: a helium-3 harvest of about 1.5 kt a Year needs about 150 kt of craft.
+  - Used: the project audit, helium-3 harvest.
+- **[CHORD](https://arxiv.org/abs/2607.09374)** · Under construction ([progress](https://spaceq.ca/chord-the-successor-to-chime-readies-for-first-big-test-this-fall/)).
+  - 512 six-meter dishes at 300 to 1,500 MHz, a transit instrument that scans the sky as Earth turns. Complete by the end of 2027, commissioned in 2028.
+  - Matters: Earth’s Year 0 sky watch is a drift scan, not an always-on watch of the whole sky.
+  - Used: v2 Earth’s kit, the project audit.
+- **[EMBRACE](https://www.researchgate.net/publication/234056794_EMBRACE_Results_from_an_aperture_array_for_radio_astronomy)** · Demonstrated, since 2011 ([SKA mid-frequency aperture array](https://arxiv.org/abs/2008.04583)).
+  - 4,608 elements 12.5 cm apart near 1.2 GHz, forming many independent beams. Demonstrators reached about 100 m².
+  - Checked 2026-10-18: the 4,608 are EMBRACE at Nançay, France, 70 m². Its twin at Westerbork, Netherlands, had 9,504 elements on 148 m², per a 2014 ASTRON talk ([Torchinsky](https://www.astron.nl/midaa2014/documents/MFAA_EMBRACE_Steve_Torchinsky.pdf), [EMBRACE@Nançay](https://ar5iv.labs.arxiv.org/html/1504.03854)).
+  - Matters: an all-sky watch is a hundredfold scale-up of something that works.
+  - Used: the project audit, all-sky watch.
+- **[What exactly is 8-VSB anyway?](https://www.arrl.org/files/file/Technology/TV_Channels/8_Bit_VSB.pdf)** · Reference ([IEEE notes](https://site.ieee.org/scv-ces/files/2015/06/NTSC_8VSB.pdf)).
+  - ATSC digital television keeps a pilot tone 11.3 dB below its average power, about 7%.
+  - Matters: a modern world’s radio still carries pure tones, and tones are what a far listener catches.
+  - Used: the project audit, a world’s hum.
+
+- **[Neely 2025, the economic effects of a potential armed conflict over Taiwan](https://www.stlouisfed.org/-/media/project/frbstl/stlouisfed/publications/review/pdfs/2025/feb/economic-effects-of-potential-armed-conflict-over-taiwan.pdf)** · Published, Federal Reserve Bank of St. Louis Review ([Rhodium Group](https://rhg.com/research/taiwan-economic-disruptions/)).
+  - Taiwan makes 92% of the most advanced logic chips. Domestic suppliers elsewhere have very limited room to replace them. Rhodium puts a blockade’s immediate cost above $2 trillion.
+  - Matters: an invasion of Taiwan before 2035 leaves Earth with about half its compute at Year 0. A year’s blockade leaves two-thirds to all of it.
+  - Used: v2 branches, [calcs/branches.py](calcs/branches.py).
+
+## Earth’s character
+
+- **[Arecibo message](https://en.wikipedia.org/wiki/Arecibo_message)** and **[Voyager Golden Records](https://en.wikipedia.org/wiki/Voyager_Golden_Record)** · History.
+  - Earth’s first deliberate messages: a radio burst toward M13 in 1974, and records on two probes leaving the Solar System in 1977.
+  - Matters: Earth chose to be found, at least once. Basis for Earth’s lean toward Open.
+  - Used: v2 [The dials](HOLOS_GAME_CONCEPT.md#the-dials).
+- **[Statement regarding METI and Active SETI, 2015](https://setiathome.berkeley.edu/meti_statement_0.html)** · Statement, signed by scientists and others.
+  - Urges “vigorous international debate by a broadly representative body” before any more messages are sent.
+  - Matters: the strongest real pull toward Hidden.
+  - Used: v2 The dials. And v2 [How neighbors play](HOLOS_GAME_CONCEPT.md#how-neighbors-play), settled 2026-10-14: a people may answer before its Mind wakes. Earth’s own record, about ten aimed sends from 1974 to 2018 with none after the world was asked, is from the “Earth’s aimed messages” entry above. The people’s odds are this project’s.
+- **[DART](https://en.wikipedia.org/wiki/Double_Asteroid_Redirection_Test)** · Demonstrated, 2022.
+  - The first test of moving an asteroid by impact.
+  - Matters: Earth guards against loss it can see coming. A real pull toward Cautious.
+  - Used: v2 The dials.
+
+## Seeing worlds
+
+- **[Kaltenegger and Faherty 2021, the Earth transit zone](https://arxiv.org/abs/2107.07936)** · Published, Nature.
+  - 1,715 stars within 100 pc could have seen Earth cross the Sun in the last 5,000 years. 75 within 100 ly see it now and have been reached by Earth’s radio.
+  - Matters: a neighbor there can know Earth is a rocky world in the warm zone, not who lives on it.
+  - Used: v2 Earth’s loud past.
+- **[Terra Hunting Experiment](https://arxiv.org/abs/1806.00518)** · Study.
+  - Ten years of nightly radial velocities on at least 40 bright Sun-like stars, to find Earth twins through the star’s own shimmer.
+  - Matters: finding a small world takes Years even with a good instrument.
+  - Used: v1 “Feeling small worlds takes Years”, spectrograph bank.
+- **[Habitable Worlds Observatory](https://habitableworldsobservatory.org/home)** · Study, NASA, planned for the 2040s.
+  - A large space telescope built to image Earth-size worlds and read their air.
+  - Matters: no seat can read another’s air at Year 0. That waits for an instrument of this class.
+  - Status in October 2026: no formal launch date. NASA aims at the 2040s, and one projection says 2041. The 2027 budget request asks $5 million for it, against $150 million enacted for 2026. Cost is put at $11 billion or more ([Wikipedia](https://en.wikipedia.org/wiki/Habitable_Worlds_Observatory), [Johns Hopkins](https://washingtondc.jhu.edu/news/habitable-worlds-observatory)).
+  - Used: v1 starting kit. v2: still being built at Year 0. How far along is open, in the mock’s questions.
+
+## The leads: real oddities at real stars
+
+- **[Laliotis et al. 2023](https://arxiv.org/abs/2302.10310)** · Published.
+  - Delta Pavonis shows an astrometric pull with only a faint trend toward and away, so its companion’s orbit likely faces Sol.
+  - Used: v1 leads (“a giant, half seen”), `legacy/v1/home-mocks/leads.py`.
+- **[Matthews et al. 2024, Epsilon Indi Ab](https://www.nature.com/articles/s41586-024-07837-8)** · Published, Nature.
+  - JWST imaged a 275 K super-Jupiter: about 6 Jupiter masses, about 28 AU out, heavier and wider than the star’s sway foretold.
+  - Used: v1 lead “Ember”, leads.py.
+- **[A second visit to Epsilon Indi Ab, March 2026](https://arxiv.org/abs/2603.08780)** · Preprint.
+  - New JWST photometry confirms ammonia and suggests thick clouds.
+  - Used: not yet. Bears on v2 open question 3.
+- **[Kravtchenko et al., September 2026, ammonia mapped on Epsilon Indi Ab](https://arxiv.org/abs/2609.25784)** · Preprint.
+  - JWST spectra from MIRI (October 2025) and NIRSpec (May 2026) securely detect ammonia and water, with weaker methane and a hint of carbon dioxide.
+  - Matters: the most current data on the nearest imaged giant. Earth’s Year 0 lead must start from it.
+  - Used: not yet. Bears on v2 open question 3.
+- **[Beichman et al. 2025, Alpha Centauri A candidate](https://ui.adsabs.harvard.edu/abs/2025ApJ...989L..22B/abstract)** · Published, ApJL ([NASA release](https://science.nasa.gov/missions/webb/nasas-webb-finds-new-evidence-for-planet-around-closest-solar-twin/)).
+  - Candidate S1: 3.5 mJy at 15.5 µm, 1.5″ from the star, contrast 5.5×10⁻⁵, unseen in two follow-ups. A giant-planet candidate, not a rocky world.
+  - Matters: from Sol it is a real lead. v1 dropped it only because Veyra couldn’t see it.
+  - Used: v1 leads (dropped). v2 open question 3.
+- **[Feng et al. 2017, Tau Ceti](https://arxiv.org/abs/1708.02051)** · Published, AJ.
+  - Four candidate signals under 4 Earth masses, at 20, 49, 160 and 642 days, after modeling color-dependent stellar noise.
+  - Used: v1 lead “Chaff”, leads.py.
+- **[MacGregor et al. 2016, Tau Ceti’s dust belt](https://arxiv.org/abs/1607.02513)** · Published, ApJ.
+  - ALMA imaged the cold dust belt: nearly face-on, inner edge near 6 AU, and broad. It did not fit the belt’s tilt. The 35° comes from the paper below.
+  - Used: leads.py.
+- **[Lawler et al. 2014, Tau Ceti’s belt with Herschel](https://arxiv.org/abs/1408.2791)** · Published, MNRAS. Abstract read by an agent, 2026-10-13.
+  - The belt is tilted 35° ± 10° from face-on.
+  - Corrected 2026-10-13: this log credited the 35° to MacGregor et al. 2016. It is Lawler’s.
+  - Used: leads.py takes it as the plane of the candidate planets.
+- **[Pepe et al. 2011, 82 Eridani](https://arxiv.org/abs/1108.3447)** · Published, A&A.
+  - Three super-Earths at 0.12, 0.20 and 0.35 AU around HD 20794, found by their tug.
+  - Used: v1 lead “Brood”, leads.py.
+- **Beta Hydri’s slow drift** · Published. Primary papers read by an agent, 2026-10-13: [Endl et al. 2002](https://arxiv.org/abs/astro-ph/0207512), [Zechmeister et al. 2013](https://arxiv.org/abs/1211.7263), [Laliotis et al. 2023](https://arxiv.org/abs/2302.10310), [Metcalfe et al. 2007](https://arxiv.org/abs/0704.1606).
+  - Endl found a steady drift in its velocity and read it as a distant companion. Zechmeister found the drift smaller and unsteady, and said it might follow the star’s magnetic cycle. Laliotis suspects the same and could not confirm it.
+  - The star’s activity cycle is about 12 years (Metcalfe). The velocity signal runs 12 to 15 years.
+  - Corrected 2026-10-13: this log said two studies tie the drift to the magnetic cycle. They suspect it. None shows it. A [2025 study](https://www.aanda.org/articles/aa/full_html/2025/06/aa54730-25/aa54730-25.html) also finds a cycle of about 12 years.
+  - Used: v1 lead “Beacon”, leads.py.
+- **[Llop-Sayson et al., September 2026, Epsilon Eridani b](https://arxiv.org/abs/2609.19131)** · Preprint.
+  - About 0.91 ± 0.06 Jupiter masses. The imaging interpretation depends on the model.
+  - Used: v1 research baseline. Preserve its candidates and alternative fits.
+- **[Project Hephaistos IV, July 2026](https://arxiv.org/abs/2607.09460)** · Preprint.
+  - Infrared candidates D and E resolve into foreground stars and background galaxies.
+  - Matters: a heat clue can turn out to be something else. It explains these two, not every candidate.
+  - Used: v1 “Infrared follow-up is specific”.
+- **[Lim et al., August 2026, TRAPPIST-1 f](https://arxiv.org/abs/2608.17207)** · Preprint, accepted in AJ.
+  - JWST excludes hydrogen-helium atmospheres above about 20 mbar at 95% confidence in its cleaner visits.
+  - Matters: a null result is knowledge, but excluding one air doesn’t make a world airless.
+  - Used: v1 “A null result is knowledge”.
+
+## Earth’s leads, as of October 2026
+
+What Sol’s own instruments have found nearby. For v2 open question 3.
+
+- **Lead systems, checked 2026-10-19** · Mixed. Read through Wikipedia’s pages and their tables, and Nari et al.’s abstract. For the drawing of each lead’s whole system.
+  - *Proxima Centauri.* M5.5, 0.122 Suns, 0.154 Sun radii, 0.00157 Suns bright, 2,992 K (Kervella et al. 2017, Pineda et al. 2021). d: 5.12 days, 0.0288 AU, at least 0.26 Earths. b: 11.19 days, 0.0485 AU, at least 1.06 Earths (Suárez Mascareño et al. 2025). c: disputed, 1,928 days, 1.49 AU, at least 5.8 Earths by Damasso et al. 2020, its signal read as systematics by Artigau et al. 2022, and not confirmed by NIRPS in 2025. Alpha Centauri A and B are about 12,950 AU away. A 2017 claim of dust is now read as a flare ([Proxima Centauri](https://en.wikipedia.org/wiki/Proxima_Centauri), [Proxima c](https://en.wikipedia.org/wiki/Proxima_Centauri_c)).
+  - *82 Eridani.* G6, 0.69 Suns bright, 5,473 K. b: 18.3 days, 0.126 AU, at least 2.15 Earths. c: 89.7 days, 0.363 AU, at least 2.98. d: 647.6 days, 1.354 AU, eccentricity 0.45, at least 5.82 ([Nari et al. 2025](https://arxiv.org/abs/2501.17092), [82 Eridani](https://en.wikipedia.org/wiki/82_Eridani)). The 2011 forty-day world is now read as the star’s turning. Dust at about 22 to 27 AU (Kennedy et al. 2015).
+    - *Superseded in part:* Pepe et al. 2011’s three worlds at 0.12, 0.20 and 0.35 AU, above. The middle one is gone.
+  - *Luyten’s Star.* M3.5, 0.0088 Suns bright, 3,382 K. c: 4.72 days, 0.036 AU, at least 1.18 Earths. b: 18.65 days, 0.091 AU, at least 2.89, at the warm zone’s inner edge. Candidates d and e at 0.71 and 0.85 AU, about 10 Earths each, not confirmed (Astudillo-Defru et al. 2017, Tuomi et al. 2019, Pozuelos et al. 2020; [Luyten’s Star](https://en.wikipedia.org/wiki/Luyten%27s_Star)).
+  - *Fomalhaut.* A4, 16.6 Suns bright, 8,590 K. No world confirmed. A belt at 8 to 12 AU, dust between 35 and 133 AU, and the main ring at 133 to 158 AU, its middle about 15 AU off the star (Gáspár et al. 2023 with JWST, and ALMA). JWST’s “Great Dust Cloud” proved to be behind it. Companions 0.9 and 2.5 ly out ([Fomalhaut](https://en.wikipedia.org/wiki/Fomalhaut)).
+  - *Warm zones.* Kopparapu et al. 2013’s conservative limits, this project’s arithmetic: Proxima 0.042 to 0.082 AU, 82 Eridani 0.83 to 1.45, Luyten’s Star 0.098 to 0.19. Nari et al. give 82 Eridani’s wider, optimistic zone, 0.63 to 1.52.
+  - Not known, and not drawn as known: most orbits’ tilts, and every world’s size.
+  - Used: game/lib/game/systems.ts and game/components/system-art.tsx, each lead’s system on its page, 2026-10-19.
+
+- **[Proxima Centauri b](https://en.wikipedia.org/wiki/Proxima_Centauri_b)** · 4.24 ly. Read through Wikipedia, 2026-10-19. Found in 2016 by the Pale Red Dot team ([Anglada-Escudé et al. 2016](https://doi.org/10.1038/nature19106), Nature 536, 437).
+  - At least 1.055 ± 0.055 Earths, an 11.185-day year, 0.0485 AU out, its orbit near circular (Suárez Mascareño et al. 2025). About 65% of Earth’s sunlight, about 234 K at equilibrium. It does not cross its star as seen from here. Whether it has air is unknown.
+  - Its star flares, brightening up to a hundredfold in hours, with 10 to 60 times Earth’s X-ray and ultraviolet, and winds that could strip air (Ribas et al. 2016, Garraffo et al. 2016). Proxima d was confirmed in 2022. Proxima c stays disputed.
+  - Its warm zone, 0.042 to 0.082 AU, is this project’s: [Kopparapu et al. 2013](https://doi.org/10.1088/0004-637X/765/2/131)’s runaway greenhouse and maximum greenhouse limits, at the star’s 0.0016 Suns.
+  - At 0.0485 AU and 4.24 ly it sits 37 thousandths of an arcsecond from its star, inside the Infrared Telescope’s limit of 56. “No telescope we have can read its air” rests on this project’s 2040, where the Infrared Telescope’s story says none can read a neighbor’s air.
+  - Matters: the nearest world we know, and the reason the two roads go where they go.
+  - Used: game/lib/game/leads.ts, the lead “A world next door”, and game/lib/game/reach.ts, the roads to Proxima at 4.24 ly, 2026-10-19. From the Laser Sail Array’s plateau it climbs about 50° up: this project’s reckoning at Dec −62.68°.
+
+- **Proxima b’s nature, drawn, 2026-10-22.** For arrivals on Reach. Nothing new read: each piece is logged elsewhere here.
+  - Its least mass, 1.055 Earths, 0.0485 AU out from a star of 0.00157 Suns: the entry above.
+  - The cosmic shoreline with Pass et al. 2025’s factor of 3.1 for a fully convective red dwarf, and each world’s luck of 0.5 in the log: calcs/seed.py’s, under “Kinds of worlds”.
+  - Rock gives way to gas at 2.0 Earths: Chen and Kipping 2017, logged and read at source.
+  - Its age, 4.2 to 6.7 billion years, drawn evenly: Alpha Centauri A’s 20 ages in Ware et al. 2026. That Proxima shares its system’s age is general knowledge, not a source read.
+  - This project’s arithmetic: at its least mass Proxima b sits about 0.85 below the shoreline in the log, so it keeps air in about 1 draw in 20. Over 20,000 draws: bare rock 81%, a small gas world 15%, air 4%, forests among it 1.9%.
+  - What a flyby sees: Eubanks et al. 2026, logged, about 20 m at best and 200 m at a miss of 100,000 km. So haze, bare ground, cloud and sea, and patches of forest show. Microbes and oxygen don’t. That a probe also reads its air is this project’s, from Daedalus’s 450 t of payload.
+  - From general knowledge, not a source read: plants under a red star would look dark, as Kiang et al. 2007 argue.
+  - Matters: the lead said bare rock and air were roughly even. The physics the seed uses makes bare rock far likelier, so since 2026-10-22 the lead says bare rock is likely, air unlikely and a gas world very unlikely. Pass et al. 2025 list the rocky red dwarf worlds measured bare: LHS 3844 b, TRAPPIST-1 b and c, LTT 1445 A b, GJ 1132 b. Nguyen et al. 2026’s models keep air only on the largest, most temperate.
+  - Used: game/lib/sim/proxima.ts, the visits in game/lib/sim/knowledge.ts, the readings on Proxima’s lead, and its destination on Reach.
+
+- **[Alpha Centauri A’s candidate, S1](https://arxiv.org/abs/2508.03814)** · 4.4 ly. Imaged once by JWST in August 2024, missed in February and April 2025, with a 52% chance its orbit hid it. JWST observed it again on August 11 and 12, 2026: [programme 12628](https://www.stsci.edu/jwst-program-info/program/?program=12628), 4.5 hours with its mid-infrared spectrometer, seeking ammonia in the planet’s light. The data are archived and no result is published as of 2026-10-13. The proposal says a bright background star blocks any further try until about 2030. Agent, from STScI’s pages. Adopt the result when it is out.
+- **[Barnard’s Star](https://ui.adsabs.harvard.edu/abs/2025ApJ...982L...1B/abstract)** · 6 ly. Four sub-Earths confirmed in 2025 after decades of false claims. Basant et al., MAROON-X and ESPRESSO.
+- **[82 Eridani d](https://arxiv.org/abs/2501.17092)** · 19.7 ly. At least 5.8 Earth masses, 650 days, eccentricity 0.45, swinging through the warm zone of a Sun-like star. Nari et al. 2025. Its air waits for the Habitable Worlds Observatory.
+  - *Checked 2026-10-17, by search:* at least 5.82 Earth masses, 1.354 AU out, from Nari et al. as quoted by [Wikipedia](https://en.wikipedia.org/wiki/82_G._Eridani_d) and press. The star gives 0.687 Suns of light ([Wikipedia](https://en.wikipedia.org/wiki/82_G._Eridani)). Its conservative warm zone is 0.833 to 1.450 AU ([a 2026 preprint](https://arxiv.org/pdf/2605.26217)). So the world swings from 0.74 to 1.96 AU, inside the warm zone’s inner edge and well past its outer one.
+  - Used: its lead page in the Scan tab, drawn and measured.
+- **[Fomalhaut’s collisions](https://phys.org/news/2025-12-hubble-captures-rare-collision-nearby.html)** · 25 ly. Its “planet” was a dust cloud from a collision, and a second cloud, cs2, appeared in 2023 Hubble images. Kalas and colleagues, December 2025. Theory expected one such collision in 100,000 years or longer, and two were seen in 20 years, close together on the belt’s inner side ([ESA release](https://www.esa.int/Science_Exploration/Space_Science/Hubble_sees_asteroids_colliding_around_nearby_star)). Used: the v2 mock’s Fomalhaut screen. Its third cloud is the seed’s, not real.
+  - *Checked 2026-10-17, by search:* the first cloud, cs1, was first seen in 2004, and its path curved away from the star by 2013, as starlight pushes fine dust. cs2 sits 1.26 arcseconds, 23.4 AU, from where cs1 was found. Kalas’s team has Hubble time to watch cs2 for three years, to see if it fades ([Sky & Telescope](https://skyandtelescope.org/astronomy-news/did-asteroids-collide-near-fomalhaut-again/), [ESA/Hubble heic2512](https://esahubble.org/news/heic2512/)).
+  - Used: its lead page in the Scan tab. The explanations and their words are the Mind’s, from Year 0’s science.
+- **[The Wow! signal, revised](https://arxiv.org/abs/2508.10657)** · 1977. Archival Ohio SETI data put it above 250 Jy at 1420.726 MHz, from two fields near 19h26m, −27°. Méndez and colleagues propose a hydrogen cloud brightened by a flare ([part I](https://arxiv.org/abs/2408.08513)).
+- **[3I/ATLAS](https://aasnova.org/2026/01/28/monthly-roundup-interstellar-visitor-3i-atlas/)** · An interstellar comet, found July 2025. Its water is rich in deuterium and it may be older than the Sun ([ESO](https://www.eso.org/public/news/eso2608/)). Its push off course fits ordinary outgassing ([preprint](https://arxiv.org/abs/2511.07450)). A radio search found only human interference ([report](https://www.sciencedaily.com/releases/2026/06/260621060309.htm)).
+- **Gliese 12 b** · 39.7 ly. Published: [Kuzuhara et al. 2024](https://arxiv.org/abs/2405.14708), ApJL 967, L21, and [Turner et al. 2025](https://arxiv.org/abs/2506.20564). Abstracts read 2026-10-12.
+  - A world 0.93 to 0.96 Earth radii and about 0.95 Earth masses, every 12.76 days around a quiet M3 star. About 315 K with no air. Rocky, and unlikely to have kept its first gas.
+  - Matters: the nearest known temperate Earth-size world that crosses its star. Its air is unread.
+  - Used: a re-read in the first mock, and a follow-up observation of its day side.
+- **[LHS 1140 b](https://arxiv.org/abs/2403.13265)** · 48.8 ly. Damiano et al. 2024. Abstract read 2026-10-12.
+  - JWST’s crossing spectrum rules out hydrogen-rich air, which leaves a water world. It favors heavier air, perhaps nitrogen, with modest confidence. No helium in four JWST transits (August 2026).
+  - **[Cherubim et al. 2026](https://arxiv.org/abs/2607.14326)** · Published, Science, July 16, 2026. I read the abstract. Helium escaping LHS 1140 b, seen from Magellan in 2024 and not in 2025, so the escape varies. None at LHS 1140 c. The upper air is helium, short of hydrogen, with heavier gases held below. The first sign of kept air on a rocky warm-zone world.
+  - Matters: by 2040 Earth knows LHS 1140 b keeps air. The mock’s finding agrees.
+  - Corrected 2026-10-12: this log had it as a water world or a small gas world. The 2024 paper already rules the gas world out.
+  - Used: a follow-up re-read in the first mock.
+- **[Terra Hunting Experiment](https://www.iac.es/en/projects/harps3-high-accuracy-radial-velocity-planet-searcher)** · HARPS3 began work in summer 2026 on La Palma: every clear night for ten years, on at least 40 bright Sun-like northern stars. By 2040 its results are in. If a neighbor’s world sits in its sample and is heavy enough, Earth found it.
+- **Barnard’s Star, more detail** · Published. [Basant et al. 2025](https://arxiv.org/abs/2503.08095) and [Stefanov et al. 2025](https://arxiv.org/abs/2410.00577), A&A 693, L3. Abstracts read 2026-10-12.
+  - Four worlds at 2.34, 3.15, 4.12 and 6.74 days, 0.19 to 0.34 Earth masses. Nothing over 0.57 Earths in its warm zone, 10 to 42 days. No crossings in TESS data.
+  - Used: a re-read in the first mock. Its 2040 limit, a third of an Earth, is the mock’s.
+- **Day-side heat as a test for air** · Published. [Greene et al. 2023](https://arxiv.org/abs/2303.14849) and [Zieba et al. 2023](https://arxiv.org/abs/2306.10150). Abstracts read 2026-10-12.
+  - JWST measured the day-side glow of TRAPPIST-1 b and c at 15 microns. b is most likely bare rock. c has no thick carbon dioxide air.
+  - Matters: a real way to ask a red star’s rocky world whether it has air, without reading the air itself.
+  - Used: the Gliese 12 b follow-up in the first mock. Its cool day side is the mock’s.
+- **Observations and studies in the first mock, added 2026-10-12.** Seven of them and two arrivals fill the first session’s quiet half-minutes. From 2026-10-13 the ones that only read old records are studies, which the Mind runs on its own.
+  - Real, as logged here: Gliese 12 b, Barnard’s four worlds, Tau Ceti’s four signals, Epsilon Indi’s giant, LHS 1140 b, Fomalhaut’s clouds.
+  - The mock’s own: the reading each observation returns in 2040. Which two Tau Ceti signals hold, the limit inside Epsilon Indi’s giant, Gliese 12 b’s cool day side, how firm LHS 1140 b’s air is, and Fomalhaut’s shared orbit.
+  - Real arrivals: Earth’s 2009 message reaches Kappa¹ Ceti at Year 0.1, and its 2003 message reaches Gliese 208 at Year 0.8.
+  - Godview labels each one, so no invented result reads as real.
+- **Observations in the second mock, added 2026-10-13.** The first hour away: the infrared telescope reads three worlds and finds a fourth.
+  - Real, as logged here: oxygen with methane reads as life only in context (Krissansen-Totton et al.). Nitrogen dioxide has natural sources (Kopparapu et al. 2021). Long-lived industrial gases show in the mid-infrared (Lin et al. 2014). Daedalus was designed for 12% of light speed and Starshot for 20%.
+  - The mock’s own: what each reading shows. Life and a trace of nitrogen dioxide at Gliese 432 A’s world. A world at Alpha Centauri A with several times the carbon dioxide it should hold. 82 Eridani d as a small gas world. A Year a reading, and a fifth of a Year to image a near star’s warm zone.
+  - Checked 2026-10-13, see “What a dead world leaves” under [Reading air](#reading-air): carbon dioxide put into air stays for centuries to millennia, and the telescope’s light runs from about 0.2 to 1.8 microns.
+  - Depends on a pending result: this game’s dead world orbits Alpha Centauri A at 1.45 AU. If JWST’s August 2026 observation confirms a giant in that warm zone, the checker must treat it as a known planet, and the seed could not put a world there.
+- **Searches, settled 2026-10-13.** A search is a standing order for an idle instrument, and it returns candidates.
+  - Real sweeps already logged here: Breakthrough Listen on 1,327 near stars (Price et al. 2020), Project Hephaistos on millions of stars for waste heat, and the Terra Hunting Experiment on 40 bright stars for ten years.
+  - Matters: Hephaistos shows that candidates from a wide sweep can be something else. Its best turned out to be background galaxies.
+  - From general knowledge, not a source read: observatories fill the time between pointed programmes with surveys.
+  - Used: v2 [How Earth learns](HOLOS_GAME_CONCEPT.md#how-earth-learns), and both mocks.
+- Earlier entries also apply: Epsilon Indi Ab, Delta Pavonis, Tau Ceti, Beta Hydri, Epsilon Eridani b, TRAPPIST-1 f and the Earth transit zone, where Teegarden’s Star enters about 2050.
+
+- **Where the leads sit, for the leads screen.** Added 2026-10-17. Positions of 82 Eridani (Gl 139), Fomalhaut (Gl 881), Luyten’s Star (Gl 273) and every star where a game in the pool can feel a world, 70 in all.
+  - Found: catalog stars match the HYG list in data/stars.json by Gliese or HIP name. The rest match the Gaia Catalogue of Nearby Stars (Gaia Collaboration, Smart et al. 2021) by Gaia EDR3 id, from .cache/gcns-100ly.csv. All 70 matched.
+  - Matters: each lead is drawn at its real direction and the game’s distance, so the map is the real sky near Sol.
+  - Used: game/lib/game/leads.json, built by game/scripts/leads.mjs, and the leads screen.
+
+## Reading air
+
+- **[Krissansen-Totton et al., published 2026](https://arxiv.org/abs/2507.14771)** · Published.
+  - Broad wavelength coverage is needed to read oxygen and methane as life, not geology.
+  - Used: v1 “Instruments shift the odds”, air projects.
+- **[Seavey et al., March 2026](https://arxiv.org/abs/2603.11017)** · Preprint.
+  - Oxygen can build up without life in Mars-like atmospheres.
+  - Used: v1 clue odds.
+- **[Kopparapu et al. 2021](https://arxiv.org/abs/2102.05027)** · Published.
+  - Nitrogen dioxide as an industrial sign, with its natural sources and detection limits.
+  - Used: v1 “Instruments shift the odds”.
+
+- **How long a reading takes, checked 2026-10-13.** For [calcs/observing.py](calcs/observing.py). Agent, from papers and tables, with quotes. I read the report, not the papers.
+  - **[Stark et al. 2014](https://arxiv.org/abs/1409.5128)** · Published. Exposure time is signal to noise squared, times the planet’s light plus twice the background, over the planet’s light squared. The planet and the star’s leaked light fall with distance squared. Zodiacal dust does not.
+  - **[Alei et al. 2025](https://arxiv.org/abs/2512.05279)** · Preprint, revised January 2026. An Earth twin of a Sun twin at 10 pc is first seen at signal to noise 7 in 3.2 hours, with a 7.87 m mirror and 3 zodis of dust.
+  - **[Stark et al. 2024](https://arxiv.org/abs/2405.19418)** · Published. A water search takes 22 days on average for a 6 m telescope’s first 18 candidates, and 3.5 days at 9 m. Bandpass 20%, raw contrast 1e-10, inner working angle about 3.5 wavelengths over the mirror.
+  - **[Stark et al. 2019](https://arxiv.org/abs/1904.11988)** · Published. Two years of telescope time for the survey, and no target over two months.
+  - **[Stark et al. 2025](https://arxiv.org/abs/2502.18556)** · Report of the yield working group. Oxygen on one poor target, HIP 32439 at 18 pc, would take about 200 days.
+  - **[Latouf et al. 2023](https://arxiv.org/abs/2311.16015) and [2024](https://arxiv.org/abs/2411.15089)** · Published. Oxygen needs signal to noise 8, ozone’s green band 14 to 19. Methane at Earth’s level is not detectable at any signal to noise up to 20.
+  - **[Mamajek and Stapelfeldt 2024](https://arxiv.org/abs/2402.12414)** · NASA’s target list: 164 stars from 1.33 to 23.3 pc. Alpha Centauri A and B are both on it, tier B. A’s Earth twin sits 926 thousandths of an arcsecond out, with B 5.3 arcseconds away.
+  - **[Sirbu et al. 2023](https://ntrs.nasa.gov/citations/20230013128)** · Conference paper. Alpha Centauri is the top target for direct imaging if the companion’s leaked light can be suppressed.
+  - **[NASA’s page on the telescope](https://science.nasa.gov/astrophysics/programs/habitable-worlds-observatory/)** · April 2026. It aims to image 25 potentially habitable worlds. No mirror size, contrast or wavelength range is fixed yet.
+  - Matters: readings take hours to weeks, which is seconds of play. And a world close to its star in our sky can’t be read at all, which hides most of a K star’s warm zone at 30 ly.
+  - Not found: any published time for carbon dioxide or methane on an Earth twin, or any time for Alpha Centauri A.
+  - This project’s own: how the noise splits between starlight and dust at the calibration point, and using the water figure as if it were for an Earth twin at 10 pc.
+  - Used: v2 [How Earth learns](HOLOS_GAME_CONCEPT.md#how-earth-learns), and the second mock.
+
+- **What the 15 m Mirror reads, settled 2026-10-23.** For [calcs/observing.py](calcs/observing.py), from sources already logged above. No new paper.
+  - From [Stark et al. 2014](https://arxiv.org/abs/1409.5128)’s equation 7: the planet’s and the leaked starlight’s photons both grow with the mirror’s area. The dust’s photons from the planet’s patch of sky do not, since that patch shrinks as the area grows. So the planet’s and the starlight’s share of the time falls as the width squared, and the dust’s as its fourth power.
+  - The dark patch runs from 3.5 wavelengths over the width to 64, as LUVOIR-A was drawn with 128-across deformable mirrors, settled for [calcs/signs.py](calcs/signs.py) 2026-10-16.
+  - Check against [Stark et al. 2024](https://arxiv.org/abs/2405.19418): a water search falls from 22 days at 6 m to 3.5 at 9 m. This gives 8 days for an Earth twin at 9 m. It errs on the slow side, and the 9 m’s first targets are also nearer.
+  - Matters: Proxima b sits 37 thousandths of an arcsecond from its star. The 15 m Mirror reaches in to 29 in ozone’s band and 37 in oxygen’s, so it reads both in hours. Water’s band reaches only 45, so no mirror the game builds reads Proxima b’s water.
+  - This project’s own: the scaling, and the order. Once done, it reads Proxima b first, then each felt world where it can read a gas the Infrared Telescope can’t, nearest first.
+  - Used: [game/lib/sim/knowledge.ts](game/lib/sim/knowledge.ts), and the lead pages on Scan.
+
+- **How common warm rocky worlds are, checked 2026-10-13.** For the natural worlds in [calcs/seed.py](calcs/seed.py). I read the two abstracts and the text of Stark et al. 2019 myself.
+  - **[Stark et al. 2019](https://arxiv.org/abs/1904.11988)** · Published. NASA’s planning value: 0.24 (+0.46, −0.16) worlds a star, 0.6 to 1.4 Earths wide, between 0.95 and 1.67 AU for a Sun twin, scaled by the square root of the star’s brightness. It comes from the SAG13 average of Kepler’s counts.
+    - The same value is used at every kind of star, red dwarfs included.
+    - Small worlds are commoner and so are long periods: per step of ln R and ln P the count goes as 0.38 × R^−0.19 × P^0.26.
+    - A world narrower than 0.8 / √a Earths is left out, as too small to hold air. Orbits are circular.
+  - **[Bryson et al. 2021](https://arxiv.org/abs/2010.14812)** · Published. Kepler’s own count for Sun-like stars, 4800 to 6300 K: 0.37 (+0.48, −0.21) to 0.60 (+0.90, −0.36) worlds a star, 0.5 to 1.5 Earths wide, in the conservative warm zone. The two ends are two ways to fill in what Kepler missed.
+    - With 95% confidence, about 4 such worlds orbit G and K dwarfs within 10 pc, and the nearest is about 6 pc away.
+  - **[Dressing and Charbonneau 2015](https://arxiv.org/abs/1501.01623)** · Published. Red dwarfs: 0.16 (+0.17, −0.07) worlds of 1 to 1.5 Earths and 0.12 (+0.10, −0.05) of 1.5 to 2 Earths in each conservative warm zone.
+  - Matters: every figure allows a warm rocky world at between one star in ten and most stars. The seed takes NASA’s 0.24, the lowest central value, so its sweep matches what the real telescope is sized for.
+  - Check against Bryson: the seed’s games hold about 8 natural worlds at G and K hosts within 10 pc, and the nearest sits about 3.6 pc away. I read Bryson’s 4 and 6 pc as cautious bounds, not central values. That reading is mine.
+  - This project’s own: at most one warm world a star, none beside a neighbor’s world, and a first pass of up to a day a star.
+  - **[Bergsten et al. 2023](https://arxiv.org/abs/2310.11613)** · Published, AJ 166, 234. Abstract read 2026-10-14.
+    - Red dwarfs, worlds of 0.5 to 1.5 Earths: 8.58% (−8.22, +17.94) in the conservative warm zone, 14.22% (−12.71, +24.96) in the optimistic one.
+    - “The current Kepler sample does not offer evidence to support an increase” from Sun-like stars to red dwarfs. Gaia’s updated star sizes left no reliable Earth-sized candidate in the conservative zone.
+    - Matters: it supports one rate at every kind of star, as settled. Its central value is a third of the seed’s 0.24, though its error bars reach 26%. Flagged, not changed: the rate is a settled decision.
+  - Used: v2 [How Earth learns](HOLOS_GAME_CONCEPT.md#how-earth-learns), [The seed, drawn](HOLOS_GAME_CONCEPT.md#the-seed-drawn), and the second mock.
+
+- **Signs of minds, checked 2026-10-13.** For [calcs/signs.py](calcs/signs.py): what Earth can read of a living neighbor from afar, and with what. I read each abstract myself, and Table 2 and the scaling passages in the text of Sheikh et al.
+  - **[Sheikh et al. 2025, Earth detecting Earth](https://arxiv.org/abs/2502.02614)** · Published, AJ 169, 118. How far today’s Earth instruments would detect today’s Earth, sign by sign.
+    - Aimed planetary radar 12,000 ly. Deep Space Network 65 ly. Phone networks, 4 GW at peak, 4.0 ly with the SKA and MeerKAT together. A Voyager-like transmitter 0.97 ly.
+    - Nitrogen dioxide 5.7 ly: 300 hours on a mirror like the Habitable Worlds Observatory’s, cloud-free, scaled from Kopparapu et al. 2021. That is for Earth’s 1980 peak of 113 parts per billion, two to three times today’s. The paper takes each sign at its strongest.
+    - City lights 0.036 ly: 300 hours on a 6 m mirror. Heat islands 0.0005 ly. Satellites in transit 0.00002 ly.
+    - Already logged under [Hearing technology by radio](#hearing-technology-by-radio) for its headline. The distances are new here.
+  - **[Kopparapu et al. 2021](https://arxiv.org/abs/2102.05027)** · Published, ApJ. Earth’s level of nitrogen dioxide, on an Earth twin of a Sun twin at 10 pc, shows at signal to noise 5 in about 400 hours on a 15 m mirror, in light of 0.2 to 0.7 microns, cloud-free.
+    - Clouds and aerosols cut that, and can mimic the feature. It has living sources as well as industrial ones.
+    - Levels were three times higher in Earth’s past. Cooler stars destroy less of it, so the same output shows more.
+    - In the infrared, at red dwarfs, it takes several hundred hours.
+  - **[Beatty 2022, city lights](https://arxiv.org/abs/2105.09990)** · Published, MNRAS. An Earth twin’s city lights are not detectable by the 15 m or 4 m designs. Proxima b’s would show at twelve times Earth’s in 300 hours. At near Sun-like stars a tenth of the surface must be city.
+  - **[Haqq-Misra, Kopparapu and Profitiliotis 2025](https://arxiv.org/abs/2511.20329)** · Published, ApJL 995, L22. Ten modelled futures for Earth, as stand-ins for other worlds.
+    - The Habitable Worlds Observatory could show raised carbon dioxide with nitrogen dioxide in up to eight of the ten.
+    - A mid-infrared interferometer could show carbon dioxide with two CFCs in four of them, and with a further gas in one.
+    - Two futures show nothing except to a solar-lens mission. A flyby or a probe is the most conclusive way.
+  - **[Schwieterman et al. 2024](https://arxiv.org/abs/2405.11149)** · Published, ApJ 969, 20. Logged above for how long these gases last. Its detection times are for 1 to 100 parts per million, far above Earth’s level, as a world being warmed on purpose would hold.
+  - **[Dressing et al. 2026, the telescope’s discovery space](https://arxiv.org/abs/2608.11294)** · Preprint, to be submitted. I read the abstract: 70 science cases. From a search summary, not read: one case is a search for signs of technology, credited to Kopparapu et al. 2026.
+  - Not found: any published time for industrial gases at Earth’s level, or for nitrogen dioxide on a 6 m mirror beyond Sheikh’s one point.
+  - Matters: by radio, Earth’s ground arrays hear a quiet neighbor almost never. A far-side array hears nearly all. By light, the first telescope reads smog only next door, and smog is not proof.
+  - Check: the two smog points do not quite agree. Scaled by the fourth power of mirror width, Kopparapu’s point gives a 6 m mirror about 310 hours at 5.7 ly for today’s level. Sheikh’s 300 hours is for the peak, so it is the more cautious by a few times. Each mirror uses its own published point.
+  - This project’s own: a neighbor’s smog taken to be like Earth’s from its first radio on, at the peak for the first telescope and at today’s level for the 15 m mirror. Times at other worlds and distances scaled from those two points. A Year’s cap on one listening campaign. The two-month cap on one target is Stark et al. 2019’s.
+  - Added the same day, from the text of Haqq-Misra et al.: whether a 6 m mirror can read today’s level of nitrogen dioxide “remains to be calculated”. So Sheikh’s one point is all the first telescope’s smog times rest on.
+  - Used: v2 [How Earth learns](HOLOS_GAME_CONCEPT.md#how-earth-learns), calcs/signs.py and the second mock.
+
+- **Telescope seasons, checked 2026-10-13.** For the question of whether seasons set when an observation can start. Settled the same day: left out on purpose.
+  - **[Spohn, Stark and Savransky 2026](https://arxiv.org/abs/2604.22023)** · Accepted, JATIS. I read the abstract and Table 1 in the text. How far from the Sun each space telescope may point:
+    - JWST 85° to 135°, 40% of the sky at once. Roman 54° to 126°, 59%. HabEx 45° to 135°, 71%. LUVOIR 45° to 180°, 85%.
+    - The Habitable Worlds Observatory, nominal: 45° to 135°, 71% of the sky at once.
+    - Its yield of worlds drops sharply when the allowed band is narrower than 90°. Each extra reading required of a world costs about 22% of the yield.
+  - **[JWST field of regard, STScI](https://jwst-docs.stsci.edu/jwst-observatory-characteristics/jwst-target-viewing-constraints/jwst-field-of-regard-for)** · Read on the page. 85° to 135° from the Sun, about 39% of the sky on any day, and all of it within 6 months.
+  - This project’s arithmetic from the nominal limits: a star on the Sun’s path is out of reach twice a year, 90 days each time, near the Sun and opposite it. A star more than 45° off that path is always in reach: 29% of the sky.
+  - In play, at 5 minutes a Year: at most 75 seconds out of reach, twice a Year.
+  - Used: v2 [How Earth learns](HOLOS_GAME_CONCEPT.md#how-earth-learns), as a real limit the game skips.
+
+- **What a dead world leaves, checked 2026-10-13.** For the question of telling a dead civilization from a volcano. I read each abstract myself, and the text of Haqq-Misra et al. and of Kopparapu et al.
+  - **[Archer et al. 2009](https://doi.org/10.1146/annurev.earth.031208.100206)** · Published, Annual Review of Earth and Planetary Sciences. Burned carbon settles between air, sea and land within a few centuries. Models agree that 20 to 35% stays in the air after that, 2 to 20 centuries on. Dissolving seabed chalk draws it down further over 3,000 to 7,000 years.
+  - **[Haqq-Misra, Kopparapu and Profitiliotis 2025](https://arxiv.org/abs/2511.20329)** · Published, ApJL. Read in the text.
+    - The Habitable Worlds Observatory: a mirror of about 6 to 8 m, reading from about 0.2 to 1.8 microns.
+    - Carbon dioxide “itself would not be a technosignature”. With nitrogen dioxide rising beside it, it is a tentative one, and natural causes must be ruled out first. Two of the ten futures show only that pair, modestly raised, and “may be unconvincing”.
+    - A mid-infrared interferometer reads from about 4 to 18.5 microns. Two CFCs stand out in five futures. The weakest of those holds about three times today’s level: today is 0.23 and 0.52 parts per billion.
+    - The most conclusive way is a flyby that takes sharp images of the surface. No single mission is likely to settle it.
+  - **[Kopparapu et al. 2021](https://arxiv.org/abs/2102.05027)** · Read in the text: the main loss of nitrogen dioxide is sunlight breaking it apart. Lightning, wildfire and soil bacteria make it without industry.
+  - **[Ostberg et al. 2023](https://arxiv.org/abs/2309.15972)** · Accepted, AJ. Great eruptions under way, modelled on four Earth-like worlds over eight years with monthly spectra from 0.2 to 2.0 microns, change the ozone, oxygen and water features and the slope of the spectrum. Ozone and slope are the clearest signs.
+  - Already logged: Schwieterman et al. 2024 for how long the industrial gases last, and Lin et al. 2014 for reading them.
+  - From general knowledge, not a source read: nitrogen oxides last hours to days in Earth’s lower air. The two commonest CFCs last about 50 and 100 years.
+  - Matters: a dead world keeps its carbon for thousands of years and loses its smog at once. The first telescope reads the carbon and nothing that only industry makes. So it reads strange air, and not its cause.
+  - Not used yet: watching a world’s ozone and color for eruptions under way.
+  - Used: v2 [How Earth learns](HOLOS_GAME_CONCEPT.md#how-earth-learns), and the second mock’s Alpha Centauri A reading.
+
+- **The Mind’s words on a read world, written 2026-10-22.** For readings on Scan.
+  - Already logged: Seavey et al. 2026, oxygen without life in thin dry air, and Krissansen-Totton et al. on reading oxygen only in context.
+  - From general knowledge, not a source read: Earth’s earliest life made no oxygen, and oxygen built up in its air only later. The line says only that early microbes made none, and gives no date.
+  - The bands and their wavelengths, 0.6, 0.76 and 0.94 microns, are lib/sim/observing.ts’s. Drawing each found gas as a dark line is how a spectrum shows absorption.
+  - Used: lib/game/leads.ts, airReading.
+
+## Where neighbors can live
+
+- **[Li et al., March 2026, 70 Ophiuchi](https://arxiv.org/abs/2603.20044)** · Preprint.
+  - Planet exclusion limits and a binary solution. A rocky world in component A’s warm zone remains possible.
+  - Used: v1 “Sael remains possible”.
+- **[Jankowski et al., August 2026](https://arxiv.org/abs/2608.13243)** · Preprint.
+  - Orbital stability around 70 Ophiuchi and 36 Ophiuchi. Stable orbits to about 2.5 AU around 70 Oph A.
+  - Used: v1 homeworld constraints.
+- **Habitable-zone planets near Sol** · Mixed. Proxima b, GJ 1061 d, GJ 273 b, Teegarden b, TRAPPIST-1 e, LHS 1140 b, TOI-700 d, Ross 128 b and GJ 1002 b and c, each with what is and isn’t established.
+  - Used: the atlas’s player-site overlay. Sources in [data/player-sites/README.md](data/player-sites/README.md).
+
+- **HD 10307’s distance, checked 2026-10-14** · Gaia EDR3, in the GCNS census: 68.02 ± 0.37 mas. Its neighbors’ errors are 0.02 to 0.04.
+  - ORB6 lists a companion on a 19.5-year orbit, 0.61 arcseconds wide, grade 4. A pull like that spoils a parallax fit.
+  - Hipparcos puts the star at 41.6 ly, as calcs/knocks.py had it. Gaia’s value puts it at 48.
+  - Why it matters: the knock list called HD 10307 missing from Gaia, so it was ruled out as a host. It was there, under a Gaia number.
+  - Used: calcs/hosts.py takes Hipparcos’s distance. HD 10307 joins the knocked stars that can host a neighbor. See HOLOS_GAME_CONCEPT.md, Stars Earth knocked on.
+- **Common names for Gaia stars, rechecked 2026-10-14** · From HYG v4.1.
+  - HYG’s old parallaxes for faint red dwarfs run 20 to 30% off Gaia’s: it puts GJ 1061 at 4.3 pc, where Gaia has 3.7. A 10% match left them unnamed.
+  - Matching within a third in distance, then falling back to HD and HIP numbers, names 89 more hosts. 231 faint red dwarfs keep their Gaia numbers.
+  - Why it matters: a second game led with “Gaia 1661568850770761600”, a naked-eye K dwarf that is HD 122064.
+  - Used: calcs/hosts.py, name_from_hyg.
+- **[Sixth Catalog of Orbits of Visual Binary Stars, ORB6](https://www.astro.gsu.edu/wds/orb6.html)** · Reference, kept by the US Naval Observatory and Georgia State University.
+  - About 4,000 orbits of visual, interferometric and astrometric pairs, each graded 1, definitive, to 5, indeterminate, with 9 for wobble-only orbits.
+  - Used: [calcs/binaries.py](calcs/binaries.py). Grade 5 orbits are skipped.
+- **[Pourbaix et al. 2004, SB9](https://doi.org/10.1051/0004-6361:20041213)** · Published, A&A. The Ninth Catalogue of Spectroscopic Binary Orbits, [VizieR B/sb9](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=B/sb9).
+  - About 4,000 spectroscopic pairs with period, eccentricity and velocity amplitudes.
+  - Used: close pairs in calcs/binaries.py, and to confirm wobble-only orbits.
+- **[Bond et al. 2015, the Procyon system](https://arxiv.org/abs/1510.00485)** · Published, ApJ.
+  - Masses 1.478 and 0.592 Suns. Procyon A is about 2.7 billion years old. B became a white dwarf 1.37 billion years ago, from a star of about 2 Suns.
+  - Matters: B’s giant phase put about 55 times Earth’s sunlight on A’s warm zone, and the pair was then too close for a stable orbit there.
+  - Used: Procyon dropped as a host, in calcs/scorch.py.
+- **White dwarf companions within 50 ly** · Catalogs, gathered 2026-10-11 ([Toonen et al. 2017](https://arxiv.org/abs/1703.06893), [Holberg et al. 2013](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/MNRAS/435/2077), [O’Brien et al. 2024](https://arxiv.org/abs/2312.02735), [Giammichele et al. 2012](https://arxiv.org/abs/1202.5581), [Kirkpatrick et al. 2024](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/ApJS/271/55)).
+  - Fifteen possible hosts have a white dwarf companion, from 0.11 AU to 13,400 AU away. Separations, white dwarf masses, cooling ages and progenitor masses are in [calcs/scorch.py](calcs/scorch.py).
+  - Gaia’s own white dwarf flag misses two: 40 Eridani B and WD 1917-077 score under one half.
+  - Three more are only suspected, from barium or an unseen mass: Xi Ursae Majoris, Alpha Fornacis and Iota Ursae Majoris ([Fuhrmann et al. 2016](https://academic.oup.com/mnras/article/459/2/1682/2595128)). None is a host.
+  - No paper found works out the light a giant companion throws on the other star’s warm zone, or a separation below which that zone is sterilized.
+  - Matters: which hosts had their warm zone scorched, and how long ago.
+  - Used: calcs/scorch.py and the host list. Settled 2026-10-11: a scorched zone restarts the billion-year clock. 40 Eridani C and GJ 3991 left the list. Table values were read by a research agent from VizieR and ar5iv extracts. The Gliese 86 and 40 Eridani values below were reread from the abstracts.
+- **Gliese 86** · Published ([Farihi et al. 2013](https://arxiv.org/abs/1212.5601), [Brandt et al. 2019](https://arxiv.org/abs/1811.07285), [Zeng et al. 2022](https://arxiv.org/abs/2112.06394), [Fuhrmann et al. 2014](https://www.osti.gov/biblio/22357151)).
+  - The white dwarf is 8,180 K and 0.54 to 0.59 Suns, 1.25 billion years cooled. Its orbit is 22 to 24 AU across with eccentricity 0.43 to 0.53.
+  - It came from a star of 1.4 to 1.9 Suns. The pair then sat about 14 AU apart, with a closest approach near 9 AU. The host’s disk was cut at about 2 AU.
+  - The system’s age is disputed: 2.65 billion years (Farihi) or about 10 (Fuhrmann, Zeng).
+  - Matters: the hardest-hit K host. Its warm zone took about 17 times Earth’s sunlight at the giant’s tip, 1.25 billion years ago, and kept stable orbits throughout.
+  - Used: calcs/scorch.py.
+- **[Bond et al. 2017, 40 Eridani B](https://arxiv.org/abs/1709.00478)** · Published, ApJ. With [Mason et al. 2017](https://arxiv.org/abs/1707.03635) for the orbit.
+  - The white dwarf is 0.573 Suns and cooled about 122 million years ago. The system is about 1.8 billion years old.
+  - 40 Eridani C orbits the white dwarf at about 34.5 AU. 40 Eridani A sits about 417 AU off.
+  - Matters: C’s zone took about 18 times Earth’s sunlight, very recently. A’s took about 6% more than its own star gives.
+  - Used: calcs/scorch.py.
+- **Other close white dwarf pairs** · Published ([Sahu et al. 2017](https://arxiv.org/abs/1706.02037), [O’Brien et al. 2026](https://arxiv.org/abs/2607.11320)).
+  - Stein 2051 B is 0.675 Suns by light deflection, about 1.9 billion years cooled, about 57 AU from its red dwarf on the sky.
+  - GJ 3991’s white dwarf was first seen directly in 2026. It orbits the red dwarf every 15 days at 0.11 AU, about 4 billion years cooled. The red dwarf was inside the giant.
+  - Matters: Stein 2051 A’s zone took about 28 times Earth’s sunlight. GJ 3991 has no stable warm zone at all.
+  - Used: calcs/scorch.py. GJ 3991 leaves the host list on the stability rule.
+- **How bright a giant gets, and how its orbit widens** · Reviews ([Karakas and Lattanzio 2014](https://arxiv.org/abs/1405.0062), [Kratter and Perets 2012](https://arxiv.org/abs/1204.2014), [Veras 2016](https://arxiv.org/abs/1601.05419)).
+  - At the tip of its giant life a star’s light follows the mass of its core: L = 59,250 × (M − 0.522) Suns, after Paczyński 1970. A 0.6 Sun core gives about 4,600 Suns.
+  - Slow mass loss widens the orbit by the ratio of total mass before to after, and leaves its shape alone.
+  - In test runs a dying star’s own planets were captured by the companion about one time in ten.
+  - Matters: the two rules calcs/scorch.py uses.
+  - Checked 2026-10-13, agent, from the papers’ text and tables. The relation is Karakas and Lattanzio’s equation 2, for the core’s mass and the peak light between pulses.
+  - The first giant branch tops out near 2,500 Suns for a star like the Sun ([Kalirai et al. 2014](https://arxiv.org/abs/1312.4544), [Schröder and Smith 2008](https://arxiv.org/abs/0801.4031): 2,730). It is lower for heavier stars: about 1,600 at 2 Suns, and only 140 at 3, which light helium without a flash.
+  - So the 2,500 floor fits only stars that began under about 1.5 Suns. In scorch.py it applies to three white dwarfs, all of that kind. No outcome changes.
+  - How long: a dying star of 1.5 to 2.6 Suns shines above 2,500 Suns for 1 to 2 million years (Kalirai et al. 2014, table 3).
+  - Used: calcs/scorch.py.
+- **Gliese 283 A’s mass, checked 2026-10-13** · Published. Agent, from tables. [Subasavage et al. 2017](https://arxiv.org/abs/1706.00709), [Giammichele et al. 2012](https://arxiv.org/abs/1202.5581), [O’Brien et al. 2024](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/MNRAS/527/8687), [Kirkpatrick et al. 2024](https://arxiv.org/abs/2312.03639).
+  - Six values from its light run 0.60 to 0.66 Suns, with a cooling age of 1.3 to 1.6 billion years. The 1.11 in Kirkpatrick’s table traces to one 2001 gravitational redshift.
+  - Used: scorch.py keeps 0.64 Suns and 1.5 billion years. Even at 1.11, Gliese 283 B would stay: scorched harder, but still over a billion years ago.
+- **Wide white dwarf pairs seen only on the sky, reasoned 2026-10-13.** A pair’s true size is at least what the sky shows, so the true light is at most what scorch.py computes.
+  - The pairs it marks scorched this way, Stein 2051 A and Gliese 283 B, are kept anyway: over a billion years have passed.
+  - The pairs it marks unscorched can only have had less light. So no outcome can flip, and this is off the To check list.
+- **[Soubiran et al. 2018, radial velocity standard stars](https://doi.org/10.1051/0004-6361/201832795)** · Published, A&A.
+  - 107 Piscium’s velocity is steady to about a meter per second. Later work finds it single (Halbwachs et al. 2018).
+  - Matters: Hipparcos’s 1997 wobble orbit for it, which implies a brown dwarf tugging at about 2 km/s, can’t be real.
+  - Used: the rule that wobble-only orbits need backing. 107 Piscium kept as a host.
+- **[Bell, Mamajek and Naylor 2015, ages of young moving groups](https://arxiv.org/abs/1508.05955)** · Published, MNRAS.
+  - The AB Doradus moving group is about 150 million years old.
+  - Used: AB Doradus and its companions dropped as hosts, too young.
+- **Ages of nearby stars, checked 2026-10-10.** Every F, G and K host was matched against published ages, and M hosts against young-group lists. Tables were read on VizieR that day, and two were read a second time as a check. 25 hosts left the list.
+- **[Mamajek and Hillenbrand 2008](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/ApJ/687/1264)** · Published, ApJ 687, 1264.
+  - Ages from calcium emission and spin for 103 Sun-like dwarfs within 16 pc. HD 166 is 0.2 billion years old, HD 17925 0.1 to 0.2, Xi Boötis A 0.2, HD 37394 0.4 to 0.8.
+  - Matters: Gaia’s FLAME ages miss young cool stars. FLAME gives HD 166 9.6 billion years and Xi Boötis A 4.75.
+  - Used: the YOUNG list in [calcs/hosts.py](calcs/hosts.py).
+- **[Gagné et al. 2018, BANYAN Σ](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/ApJ/856/23)** · Published, ApJ 856, 23, with group ages from [Gagné and Faherty 2018](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/ApJ/862/138).
+  - Confirmed members of nearby young groups. Beta Pictoris is 24 million years old, AB Doradus about 150 million.
+  - Used: AT Microscopii A and B, GJ 2036 A and B, Wolf 1225 A and B and GJ 2060 C dropped as hosts.
+- **[Eisenbeiss et al. 2013, the Hercules-Lyra association](https://arxiv.org/abs/1312.4045)** · Published, A&A 556, A53.
+  - Members by lithium, spin and activity. The group is 257 ± 46 million years old. HD 166 and HD 17925 belong. HD 37394 is too old for it, near 0.5 billion.
+  - Used: the YOUNG list.
+- **Age compilations** · Published. [Vican 2012](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/AJ/143/135), [Stanford-Moore et al. 2020, BAFFLES](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/ApJ/898/27), [Sierchio et al. 2014](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/ApJ/785/33), [Gáspár, Rieke and Balog 2013](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/ApJ/768/25), [Montesinos et al. 2016](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/A+A/593/A51), [Wright et al. 2011](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/ApJ/743/48), [López-Santiago et al. 2010](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/A+A/514/A97), [Torres et al. 2006](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/A+A/460/695), [Riedel et al. 2017](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/AJ/153/95), [Casagrande et al. 2011](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/A+A/530/A138).
+  - Ages from activity, X-rays, spin, lithium and position on the main sequence. Together they put 111 Tauri near 0.3 billion years, Zeta Doradus 0.5, HD 29697 0.25, HD 74576 0.5, HD 98712 A 0.3 and HD 61606 A 0.45.
+  - Matters: no one method is safe alone. Activity ages fail for metal-poor stars such as Gamma Pavonis, and main-sequence position barely dates a K dwarf.
+  - Used: the YOUNG list. A star is dropped only when its estimates agree it is under a billion years. HD 61606 A rests on activity alone and is the weakest.
+- **[Mamajek et al. 2013, Fomalhaut C](https://arxiv.org/abs/1310.0764)** · Published, AJ 146, 154.
+  - The red dwarf LP 876-10 shares Fomalhaut’s motion from 0.77 pc away. The system is 440 ± 40 million years old.
+  - Used: dropped as a host.
+- **[Riedel et al. 2011, AP Columbae](https://arxiv.org/abs/1108.5318)** · Published, AJ 142, 104.
+  - A red dwarf 28 ly away with lithium, 12 to 50 million years old.
+  - Used: dropped as a host.
+- **[King et al. 2003, the Ursa Major group](https://iopscience.iop.org/article/10.1086/368241)** · Published, AJ 125, 1980.
+  - Members by motion, brightness and activity. The group is about 0.4 to 0.5 billion years old.
+  - Used: not for drops. It lists Zeta Trianguli Australis and Gamma Leporis as likely members, but their own ages read older. See To check.
+- **Borderline ages, settled 2026-10-12.** A star leaves the host list only when every published age is under a billion years, error bars included. A straddling age stays: improbable, not contradicted. 29 stars left on 2026-10-12. Sixteen came back the next day: see the correction below.
+  - Ages counted: spin, activity, X-rays, lithium, surface gravity, and the age of a star it is bound to. At least one must come from a method built for that kind of star.
+  - Not counted: main-sequence position for K and M stars, survey pipeline fits, assumed defaults, and the spin or activity of a star whose close companion’s tides set it.
+  - An activity relation fit to Sun-like stars and pushed onto a redder one can keep a star, but can’t drop one alone. That is a judgment call, made to keep the bar for dropping high.
+  - Set aside: drop when the middle estimate is under a billion, which would also drop 58 Eridani. And leaving the list as it was.
+  - How it was checked: the tables saved on 2026-10-10 were reread for every host. A search agent then ran VizieR’s age search at each candidate’s position. I reread the rows that decide an outcome. Rows marked agent were not reread by me.
+- **[Shkolnik, Liu and Reid 2009](https://arxiv.org/abs/0904.3323)** · Published, ApJ 699, 649. Ages read from the copies in [Shkolnik et al. 2012](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/ApJ/758/56) and Riedel et al. 2017.
+  - Spectra of 185 nearby red dwarfs as bright in X-rays as the Pleiades. Gravity, lithium and hydrogen emission set an upper age for each. 144 are under 300 million years.
+  - Close pairs shine in X-rays from tides, not youth, so the paper leaves them out. Eleven with no hydrogen emission are likely over 400 million years.
+  - Matters: these are upper limits from methods built for red dwarfs. For several stars it is the only age.
+  - Used: AD Leonis, EV Lacertae, G 227-22, OT Serpentis, GJ 1167 A, GJ 3304 A and B, Gl 82, CW Ursae Majoris, GJ 3372 B, 1RXS J193528.9+374605, G 36-26, GJ 4337 A, GJ 4338 B, GT Pegasi and NLTT 26114 dropped as hosts.
+  - Weakest: GJ 3304, 1RXS J193528.9+374605 and G 36-26 rest on this paper alone. The second is a possible close pair.
+- **[Engle 2024, Living with a Red Dwarf](https://arxiv.org/abs/2310.04302)** · Published, ApJ 960, 62. Tables read on [VizieR](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/ApJ/960/62), 2026-10-12.
+  - Ages for red dwarfs from how fast they spin. Gliese 208 turns in 12.29 days: 0.47 billion years, 0.52 from its X-rays. AD Leonis 0.17, OT Serpentis 0.15, CW Ursae Majoris 0.35, EV Lacertae 0.89.
+  - It also reads old where others read young: GJ 3417 A turns in 54.5 days, 3.9 billion years. GJ 358 2.96, GJ 669 A 1.9, GJ 382 1.9. Gliese 338 A and B read 0.93 and 0.97, with an X-ray age of 1.01.
+  - Matters: Gliese 208 had no age on 2026-10-10. It has three, all under a billion. Earth knocked on it in 2003.
+  - Used: Gliese 208 and its bound red dwarf dropped as hosts. Six knocked stars can host a neighbor, not seven. GJ 3417 A, GJ 358, GJ 669 A and B, GJ 382 and Gliese 338 stay.
+  - Eight more red dwarfs read under a billion with error bars, and nothing counted reads over: DT Virginis 0.14, Ross 154 0.19, GJ 569 A 0.64, DS Leonis 0.72, LP 735-29 0.78, YZ Canis Minoris 0.81, GJ 4274 0.89, GJ 3142 0.91. All dropped. GJ 3142 rests on this table alone, 0.84 to 0.97: the weakest entry.
+  - Gl 79 reads 0.86 here, but 1.08 from activity and 2.0 from X-rays in older tables. It stays.
+  - Not counted: CC Eridani and FK Aquarii spin with their close companions, every 1.56 and 4.08 days ([SB9](https://sb9.astro.ulb.ac.be/)). Tides set that spin, not age.
+  - BL Lyncis: the journal table gives 7.85 days and 0.35 billion years. The preprint table gives 16.4 days and 1.07, and [Shan et al. 2024](https://arxiv.org/abs/2401.09550) adopt 16.4. It stays, with VV Lyncis. Agent.
+- **[Grandjean et al. 2021](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/A+A/650/A39)** · Published, A&A 650, A39. Rows read on VizieR, 2026-10-12.
+  - Gliese 208 is 400 million years old, between 150 and 800. HD 82106 is 500 ± 100.
+  - Used: both dropped. HD 82106’s other ages from spin, activity and X-rays run 0.2 to 0.9 billion years, in ten tables. Agent for eight of them.
+- **[Isaacson et al. 2024](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/ApJS/274/35)** · Published, ApJS 274, 35. Rows read on VizieR, 2026-10-12.
+  - Activity ages: HD 111631 1.88 billion years, Gliese 208 0.03.
+  - Matters: both stars are redder than the relation was built for. Mamajek and Hillenbrand 2008 fit it to F7 through K2 stars only.
+  - Used: HD 111631 stays. So do BD+30 2512 and HD 75632 A, whose only ages push that relation onto late K stars. HD 223778’s activity comes from a companion on a 7.75 day orbit, so it stays too.
+- **[Torres and Ribas 2002](https://arxiv.org/abs/astro-ph/0111167)** and **[Torres et al. 2022](https://arxiv.org/abs/2210.16322)** · Published, both in ApJ. Abstracts read 2026-10-12.
+  - YY Geminorum is Castor C, bound to Castor A and B. Fits to A and B give about 370 million years, then 290 with measured sizes.
+  - Used: YY Geminorum dropped as a host.
+- **Other ages for the dropped red dwarfs** · Published. Agent, read on VizieR, not reread by me. [Brandt et al. 2014](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/ApJ/794/159), [Meshkat et al. 2017](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/AJ/154/245) after Bowler et al. 2015, [Lafrenière et al. 2007](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/ApJ/670/1367), [Galicher et al. 2016](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/A+A/594/A63).
+  - AD Leonis 0.18 and 0.19 billion years. Gl 82 0.03 to 0.1. GT Pegasi 0.1 to 0.3. G 227-22 0.53. GJ 3372 B 0.4. GJ 1167 A 0.045. GJ 4337 A 0.08. NLTT 26114 0.09.
+  - Used: none reads a billion or more, so the drops stand.
+- **Ages that back the eight** · Published. Abstract read by me for Burgasser. The rest agent, from paper text and VizieR.
+  - DT Virginis is Ross 458: 150 to 800 million years ([Burgasser et al. 2010](https://arxiv.org/abs/1009.5722)), under a billion ([Goldman et al. 2010](https://arxiv.org/abs/1002.2637)).
+  - Ross 154 spins fast enough to be under a billion ([Wargelin et al. 2008](https://arxiv.org/abs/0712.2791)).
+  - GJ 569’s brown dwarf pair: 300 to 800 million years ([Zapatero Osorio et al. 2004](https://arxiv.org/abs/astro-ph/0407334)), about 100 ([Simon et al. 2006](https://arxiv.org/abs/astro-ph/0603165)), 460 to 510 ([Dupuy et al. 2010](https://arxiv.org/abs/1007.4197)), 440 ([Dupuy and Liu 2017](https://arxiv.org/abs/1703.05775)).
+  - DS Leonis: 0.06 to 0.7 billion years in four tables. YZ Canis Minoris: 0.02 to 0.5 in eight. GJ 4274: 0.12 and 0.22. LP 735-29: 0.01 from activity.
+  - Used: the drops stand. Ross 154 is 9.7 ly away, the nearest star to leave the list.
+- **[Maldonado et al. 2020](https://arxiv.org/abs/2010.14867)** · Published, A&A 644, A68. Agent.
+  - Ages for red dwarfs from their place on the main sequence: AD Leonis 8.0 ± 4.1 billion years, EV Lacertae 7.7 ± 4.2, Gliese 208 9.4 ± 3.8. The paper warns the method has important limits for red dwarfs.
+  - Matters: a red dwarf barely moves on the main sequence in ten billion years. These ages can’t tell young from old.
+  - Used: not counted. The same holds for Mann et al. 2015, Yee et al. 2017 and Gaia’s own fits.
+- **Correction, 2026-10-13: spin and activity don’t date a small red dwarf.** Found while clearing the to-check list.
+  - **[Pass et al. 2024](https://arxiv.org/abs/2401.10167)** · Published. Abstract read. Fully convective red dwarfs, 0.08 to 0.35 Suns, stay fast-spinning and active for billions of years, then slow abruptly. When depends mostly on mass.
+  - **[Medina et al. 2022](https://arxiv.org/abs/2205.02331)** · Published. Abstract read. 219 single stars of 0.1 to 0.3 Suns within 15 pc. They leave the most active state at 2.4 ± 0.3 billion years on average. Those turning in under 10 days average 2.0 ± 1.2 billion years by their motions: 0.6 ± 0.3 at 0.2 to 0.3 Suns, 2.3 ± 1.3 at 0.1 to 0.2.
+  - Matters: Shkolnik et al. 2009 set their 300 million year limit from X-rays as bright as the Pleiades. Engle 2024 dates by spin. For a fully convective star neither can say under a billion.
+  - The test for fully convective: fainter than the gap in the main sequence near absolute G 10, where red dwarfs turn fully convective, near type M3 ([Jao et al. 2018](https://arxiv.org/abs/1806.07792), abstract read).
+  - Used: 15 red dwarfs dropped on 2026-10-12 are hosts again, with one bound companion. Ross 154, EV Lacertae, GJ 4274, G 227-22, GJ 1167 A, GJ 3304 A and B, Gl 82, CW Ursae Majoris, GJ 3372 B and GJ 3371 A, LP 735-29, G 36-26, NLTT 26114, GJ 3142. And 1RXS J193528.9+374605, whose one source marks it a possible close pair.
+  - Still out after this step, 13 stars. Five more came back later the same day: see the next entry. YZ Canis Minoris stays out on its brightness above the main sequence ([Kerr et al. 2021](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/ApJ/917/23), agent).
+  - Gl 82 has four young-group candidacies that disagree on the group. Unconfirmed candidates stay, as on 2026-10-10.
+- **A fast spin dates no red dwarf, 2026-10-13.** The follow-up on the three stars just above the fully convective line. Agent, from papers and tables. Counts from the tables are the agent’s.
+  - **[Douglas et al. 2017](https://arxiv.org/abs/1704.04507) and [2019](https://arxiv.org/abs/1905.06736)** · Published. In Praesepe, 0.67 billion years old, stars of 0.35 to 0.5 Suns have a median spin of 12 days, but about a quarter of the single ones still turn in under 5. Half of the fast ones are in close pairs.
+  - **[Núñez et al. 2022](https://arxiv.org/abs/2205.06461)** · Published. At that age fully convective dwarfs remain saturated in X-rays, most early and mid red dwarfs do not, and a few partly convective ones still are.
+  - **[West et al. 2008](https://arxiv.org/abs/0712.1590)**, table 2 · Published. How long red dwarfs stay active: M0 0.8 ± 0.6 billion years, M1 0.4 ± 0.4, M2 1.2 ± 0.4, M3 2.0 ± 0.5, M4 4.5, M5 7.0. Averages over many stars, not a limit for one.
+  - No cluster measures 0.4 Sun stars between 0.7 and 4 billion years. In M67, at 4, none of 142 turns in under 5 days ([Dungee et al. 2022](https://arxiv.org/abs/2211.01377)).
+  - Spin ages are for settled stars: [Gaidos et al. 2023](https://arxiv.org/abs/2301.12109) leave out the fast rotators, and Engle and Guinan’s relation gives under 0.2 billion years to any star faster than 3 days.
+  - Shkolnik et al. 2009 say their 150 and 300 million year limits are “statistical in nature rather than applicable to individual stars”.
+  - AD Leonis: [Kossakowski et al. 2022](https://arxiv.org/abs/2209.05814) derive no age. Its 0.4 billion years is the Castor group’s, and that group “does not provide useful age constraints” ([Mamajek et al. 2013](https://arxiv.org/abs/1310.0764)). Three tools find it in no group. It is single, and turns in 2.24 days.
+  - GT Pegasi turns in 1.63 days and is about 0.45 Suns. GJ 4337 A has no secure period. Neither has a confirmed group, and neither counts as low gravity by Shkolnik’s own rule.
+  - Matters: for all three the supported statement is “probably under about 2 billion years”, not “under one”.
+  - Used: AD Leonis, GT Pegasi, GJ 4337 A with GJ 4338 B, and OT Serpentis are hosts again. OT Serpentis was not in the agent’s brief: it is an M1.5 star at 3.4 days dated the same two ways, so I applied the same reasoning. That one is my call.
+  - Still out, 8 stars. A slow, settled spin: HD 82106, Gliese 208 and its companion, DS Leonis. Corrected 2026-10-15: HD 82106 is a host again, under To check, below. A bound companion: YY Geminorum, GJ 569 A, DT Virginis. Brightness above the main sequence: YZ Canis Minoris.
+- **[El-Badry, Rix and Heintz 2021](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/MNRAS/506/2269)** · Published, MNRAS 506, 2269. Catalog queried on VizieR, 2026-10-13.
+  - 114 wide pairs touch the 50 ly census. [calcs/hosts.py](calcs/hosts.py) finds all but two, and neither of those holds a star that can host.
+  - hosts.py pairs 33 more that the catalog lacks: close pairs and known triples such as 36 Ophiuchi, Gliese 2 and 4, and 55 Cancri. Each matches in distance and motion.
+  - No catalog pair in the census is wider than 20,000 AU, so that limit loses nothing here.
+  - Used: no change to the host list. Gliese 208’s red dwarf companion, 1,793 AU out, is not in the catalog but matches in distance and motion.
+
+## Kinds of worlds
+
+What a neighbor’s world can plausibly be, beyond an Earth twin. Each roster entry cites the ones it uses.
+
+- **Earth’s own dates for animals and forests, checked 2026-10-14.** For the rung draw’s schedule.
+  - **[Bobrovskiy et al. 2018, Science](https://marum.de/en/558-million-year-old-fat-reveals-earliest-known-animal.html)**, read on MARUM’s page: cholesterol in a Dickinsonia fossil from the White Sea makes it an animal, about 558 million years ago.
+  - **Stein et al. 2019, Current Biology**, from news coverage ([Yale e360](https://e360.yale.edu/digest/scientists-find-the-worlds-oldest-known-forest-dating-back-386-million-years), [EarthSky](https://earthsky.org/earth/oldest-forest-new-york-fossil-trees)), not read at source: fossil roots of the oldest known forest, in Cairo, New York, about 386 million years ago.
+  - Matters: Earth was about 3.98 billion years old with its first known animals, and 4.15 with forests. The rung draw’s “animals at about 4 billion years” fits both.
+  - Used: v2 [How Earth learns](HOLOS_GAME_CONCEPT.md#how-earth-learns), the rung from a star’s age.
+
+- **[Lobo, Shields, Palubski and Wolf 2023, terminator habitability](https://iopscience.iop.org/article/10.3847/1538-4357/aca970)** · Published, ApJ 945:161.
+  - A locked dry land world can have a scorching day side, a frozen night side and a temperate twilight band. On an ocean world, heat transport erases that contrast. Wet worlds can still have more habitable area at lower light, and may dry out as water freezes on the night side.
+  - Matters: locked M-dwarf neighbors should mostly be dry.
+  - Used: Tavi, Ystra, Corra and Mirr, in the roster in [HOLOS_NEIGHBORS.md](HOLOS_NEIGHBORS.md#the-roster).
+- **[Abe, Abe-Ouchi, Sleep and Zahnle 2011, dry planets](https://doi.org/10.1089/ast.2010.0545)** · Published, Astrobiology.
+  - A land planet keeps liquid water at its poles up to 170% of Earth’s sunlight, against 135% for an ocean planet. It freezes at 77% of Earth’s light, against 90%.
+  - Matters: dry worlds have a wider warm zone.
+  - Used: Quessa.
+- **[Pierrehumbert 2011, eyeball Earth](https://doi.org/10.1088/2041-8205/726/1/L8)** · Published, ApJL.
+  - A locked, mostly frozen planet can keep one stable pool of open water under its fixed sun.
+  - Caveat: written for Gliese 581g, which is no longer accepted as real ([Robertson et al. 2014](https://doi.org/10.1126/science.1253253)). The climate result stands as a general case.
+  - Used: Ombe.
+- **[Leconte, Wu, Menou and Murray 2015, asynchronous rotation](https://arxiv.org/abs/1502.01952)** · Published, Science.
+  - Tides in a planet’s air can keep a warm world from locking. With 1 bar of air, only around stars above about 0.5 to 0.7 Suns. With 10 bars, down to about 0.3 Suns.
+  - Matters: turning worlds at M dwarfs need thick air and a brighter M dwarf.
+  - Used: Hesk, Wenn and Lusk, and the checker’s brightness floor, 0.03 Suns of light.
+- **[Barnes 2017, tidal locking](https://arxiv.org/abs/1708.02981)** · Published, Celestial Mechanics and Dynamical Astronomy.
+  - Locking is possible for most planets in the warm zones of G, K and M dwarfs, if they start spinning slowly and have no moon.
+  - Matters: locked worlds are a normal case, not an oddity.
+  - Used: the roster’s mix of locked and turning worlds.
+- **[Luger and Barnes 2015, water loss at M dwarfs](https://arxiv.org/abs/1411.7412)** · Published, Astrobiology.
+  - A young M dwarf’s long bright phase can hold its warm-zone planets in a runaway greenhouse for hundreds of millions of years. They can lose several oceans.
+  - Matters: M-dwarf worlds that kept life are likely dry, and M dwarfs stay low-weight hosts.
+  - Used: the dry M-dwarf worlds, and the host weights.
+- **[Yang, Boué, Fabrycky and Abbot 2014, slow rotation](https://arxiv.org/abs/1404.4992)** · Published, ApJL.
+  - Slow rotators build thick clouds over their noon side and stay Earth-like at nearly twice the light of fast rotators.
+  - Used: Sere.
+- **[Chen and Kipping 2017, forecasting masses and radii](https://arxiv.org/abs/1603.08614)** · Published, ApJ 834, 17.
+  - A mass-radius relation from 316 objects. Rocky worlds give way to worlds with thick gas at 2.0 Earth masses, +0.7 or −0.6. Abstract read 2026-10-18.
+  - Caveat: a 2023 study favors a sharper break than its smooth model ([arXiv 2310.16733](https://arxiv.org/pdf/2310.16733)).
+  - Used: the words on a felt world’s lead page. Under 1.5 Earths, rock is likely. From 1.5 to 3, rock and gas are roughly even. Above 3, gas is likely. A tug gives only the least mass.
+- **[Cowan and Abbot 2014, super-Earths need not be water worlds](https://iopscience.iop.org/article/10.1088/0004-637X/781/1/27)** · Published, ApJ.
+  - A planet with plate tectonics keeps dry land if its water is under about 0.2% of its mass, at any size, since deeper seafloors push more water into the mantle.
+  - Used: Varn, Sabe, Lusk and Kesh’s continents.
+- **[Schulze-Makuch, Heller and Guinan 2020, superhabitable worlds](https://doi.org/10.1089/ast.2019.2161)** · Published, Astrobiology.
+  - A world better for life than Earth: a K dwarf 5 to 8 billion years old, a planet up to 1.5 Earth masses, a little warmer, with shallow seas and a large moon.
+  - Used: Ilm.
+- **[Williams and Pollard 2002, eccentric orbits](https://doi.org/10.1017/S1473550402001064)** · Published, International Journal of Astrobiology.
+  - Long-term climate depends mostly on the light averaged over a whole orbit. Their models ran an Earth twin at eccentricities up to 0.4.
+  - Used: Tolle.
+- **[Bolmont, Libert, Leconte and Selsis 2016, limits of the mean-flux rule](https://arxiv.org/abs/1604.06091)** · Published, A&A.
+  - The averaging rule breaks down at high eccentricity: above 0.6 around a Sun-like star, a planet freezes near its far point.
+  - Matters: Tolle’s 0.3 is safely inside.
+  - Used: Tolle.
+- **[Armstrong et al. 2014, obliquity swings](https://arxiv.org/abs/1404.3686)** · Published, Astrobiology.
+  - Fast, large swings in tilt weaken ice-albedo feedback. The swings alone push the warm zone’s cold edge out by up to 20%.
+  - Used: Odun.
+- **[Li and Batygin 2014, a moonless Earth’s tilt](https://arxiv.org/abs/1404.7505)** · Published, ApJ.
+  - Without a moon, tilt wanders fast between 0 and 45 degrees, but takes about 2 billion years to reach extremes. That is slow enough not to rule out life.
+  - Related: [Laskar, Joutel and Robutel 1993](https://doi.org/10.1038/361615a0) found the Moon holds Earth’s tilt to ±1.3 degrees. [Lissauer, Barnes and Chambers 2012](https://doi.org/10.1016/j.icarus.2011.10.013) found a moonless Earth’s range typically 20 to 25 degrees over hundreds of millions of years.
+  - Used: Odun.
+- **[Zahnle and Catling 2017, the cosmic shoreline](https://arxiv.org/abs/1702.03386)** · Published, ApJ.
+  - Bodies with and without air split along a line where sunlight scales as escape speed to the fourth power.
+  - Matters: a small world keeps its air only with modest light.
+  - Used: Ruun.
+- **[Buchhave et al. 2012, small planets at all metallicities](https://www.nature.com/articles/nature11121)** · Published, Nature.
+  - Giant planets favor metal-rich stars. Small planets form around stars with a wide range of metals.
+  - Used: Ruun, at a metal-poor star.
+- **[Sato, Cuntz, Guerra Olvera, Jack and Schröder 2014, F stars](https://arxiv.org/abs/1312.7431)** · Published, International Journal of Astrobiology.
+  - Ultraviolet damage to DNA at Earth-like distances from F stars is 2.5 to 7.1 times the Sun’s with no air, less with air.
+  - Used: Faen.
+- **[Kiang et al. 2007, photosynthesis under other stars](https://doi.org/10.1089/ast.2006.0108)** · Published, Astrobiology.
+  - Pigments should peak in near infrared under M dwarfs, red-orange under K stars, blue under early F.
+  - Used: Tavi.
+- **[Claudi et al. 2021, cyanobacteria under M-dwarf light](https://doi.org/10.3390/life11010010)** · Published, Life.
+  - Cyanobacteria grew under simulated M-dwarf light about as well as under sunlight.
+  - Used: the M-dwarf worlds’ life.
+- **[Howard et al. 2018, a naked-eye superflare from Proxima](https://arxiv.org/abs/1804.02001)** · Published, ApJL.
+  - Proxima brightened about 68 times. At least 5 such flares a year could cut an Earth-like ozone layer by 90% within 5 years.
+  - Used: Vesh.
+- **[Günther et al. 2020, flares in TESS’s first data](https://arxiv.org/abs/1901.00443)** · Published, AJ.
+  - Flares on about 30% of mid-to-late M dwarfs, 5% of early M dwarfs, and under 1% of F, G and K stars.
+  - Matters: a strike’s flash at an M dwarf would be filed as a flare.
+  - Used: Tavi, Corra, Mirr.
+- **[Heller and Barnes 2013, exomoon habitability](https://arxiv.org/abs/1209.5323)** · Published, Astrobiology.
+  - Starlight, planet light and tidal heat set an inner “habitable edge” for moons. Moons beyond about 10 planetary radii can be habitable.
+  - Not used yet: radial-velocity surveys would see most warm giants around near stars. Held for a neighbor on a moon of a known giant.
+- **[Greaves et al. 2004, Tau Ceti’s debris disk](https://people.ast.cam.ac.uk/~wyatt/gwhd04.pdf)** · Published, MNRAS.
+  - A disk out to about 55 AU with at least ten times the dust of the Kuiper belt, around a star older than the Sun.
+  - Used: Ulan.
+- **[Kershenbaum 2020, The Zoologist’s Guide to the Galaxy](https://openlibrary.org/isbn/9780241406793)** · Book, Viking.
+  - Natural selection is universal, so Earth’s animals predict alien bodies, senses and societies.
+  - Used: the strange neighbors, Ystra and Hesk most.
+- **[Frank, Carroll-Nellenback, Alberti and Kleidon 2018, the Anthropocene generalized](https://doi.org/10.1089/ast.2017.1671)** · Published, Astrobiology.
+  - Models coupling a civilization to its planet show a soft landing, a boom and die-off, or collapse.
+  - Used: Anwe.
+- **[Lin, Gonzalez Abad and Loeb 2014, industrial pollution](https://iopscience.iop.org/article/10.1088/2041-8205/792/1/L7)** · Published, ApJL.
+  - CFCs in an Earth-like planet’s air could be detected or ruled out at about 10 times Earth’s level, in about 1.2 to 1.7 days of JWST time for a planet around a white dwarf.
+  - Used: Anwe’s polluted sky, a seeded find for later telescopes.
+- **[Chambers, Wetherill and Boss 1996, multi-planet stability](https://doi.org/10.1006/icar.1996.0019)** · Published, Icarus.
+  - Instability time grows exponentially with spacing. Systems packed tighter than about 10 mutual Hill radii eventually go unstable.
+  - Used: the checker’s spacing from known small planets.
+- **[Smith and Lissauer 2009, closely spaced planets](https://ui.adsabs.harvard.edu/abs/2009Icar..201..381S/abstract)** · Published, Icarus 201, 381. Abstract read by an agent, 2026-10-13. Its fits are quoted in [Lissauer and Gavino 2021](https://arxiv.org/abs/2104.13657) and [Obertas et al. 2017](https://arxiv.org/abs/1703.08426).
+  - Three Earth-mass planets last a billion years at about 8.1 mutual Hill radii, and ten billion at about 8.8. Five planets reach ten billion years near 9. Five are less stable than three at the same spacing.
+  - Obertas et al. find five planets survive ten billion orbits from 8.6 to 13, with dips near 9.5, 10.6 and 11.8.
+  - Matters: the checker asks for 10. That is on the safe side: it turns away a few placements that would hold, and lets through none that would not.
+  - Used: the checker’s spacing rule stays at 10.
+- **[Gladman 1993, two close planets](https://doi.org/10.1006/icar.1993.1169)** · Published, Icarus.
+  - Two planets never meet if their orbits are more than 2√3 mutual Hill radii apart.
+  - Used: the checker’s spacing from known giants.
+- **[NASA Exoplanet Archive, composite planet table](https://exoplanetarchive.ipac.caltech.edu/)** · Reference.
+  - Discovery method and radial-velocity amplitude for each known planet within 50 ly.
+  - Matters: Barnard’s Star, Tau Ceti, Proxima and 82 Eridani already show planets at 0.2 to 0.5 m/s, so an invented world there must tug less.
+  - Used: the checker’s per-star 2026 floor.
+- **[Mamajek 2012, Fomalhaut’s age](https://arxiv.org/abs/1206.6353)** · Published, ApJL.
+  - Fomalhaut and its companion TW Piscis Austrini are about 440 million years old.
+  - Used: TW PsA is dropped as a host, too young.
+
+- **How common life and minds are, checked 2026-10-13.** For the open question on natural warm worlds. I read each abstract myself unless a line says otherwise. Nothing here is used yet.
+  - **[Kipping 2025](https://arxiv.org/abs/2504.05993)** · Accepted, Astrobiology. Life started so early on Earth that a fast start is favored 13 to 1 over a slow one, now that the last common ancestor is dated to 4.2 billion years ago. His caution: this is for Earth-like conditions, which may themselves be rare.
+  - **[Moody et al. 2024](https://doi.org/10.1038/s41559-024-02461-1)** · Published, Nature Ecology and Evolution. The last common ancestor of all life lived about 4.2 billion years ago, between 4.09 and 4.33.
+  - **[Kipping 2020](https://arxiv.org/abs/2005.09008)** · Published, PNAS. Rerun Earth’s clock and life should often start again. Intelligence is another matter: rare is slightly favored, at 3 to 2.
+  - **[Snyder-Beattie et al. 2021](https://doi.org/10.1089/ast.2019.2149)** · Published, Astrobiology. The hard-steps case: the big transitions each take longer, on average, than Earth lasts, so intelligent life is exceptionally rare.
+  - **[Mills et al. 2025](https://doi.org/10.1126/sciadv.ads5698)** · Published, Science Advances 11, eads5698, February 2025. Confirmed 2026-10-15 from arXiv’s journal field ([2408.10293](https://arxiv.org/abs/2408.10293)). The other case: no hard steps. Each step waited for the planet to allow it, such as enough oxygen, and humans arose on time.
+    - Read 2026-10-15 through a summary of the full text at Europe PMC, PMC11827626, not line by line.
+    - Earth’s land life has about 1.0 to 1.9 billion years left, not Carter’s 5. So humans came at 70 to 80% of the window, not halfway.
+    - Each step waited for oxygen. Animals need 0.1 to 1% of today’s oxygen. People need 53 to 59%, reached only 420 to 400 million years ago. Open fire needs 88%.
+    - A step that happened once is not proof it was hard. Rivals may have died out, the first may have shut out the rest, or it may have changed the world to suit itself.
+    - Planets differ: some may never gain oxygen, others faster than Earth.
+    - Its test: with no hard steps, early-Earth, oxygen and modern air should all be common, and a world’s age should say which. Technosignatures should be common on old enough Earth-like worlds.
+  - **[Watson 2025](https://doi.org/10.1098/rstb.2024.0105)** · Published, Philosophical Transactions B 380. I read the abstract. A hard-steps defender’s update: each step was a whole-Earth change lasting hundreds of millions of years, tied to the two great ice ages. That leaves two or three hard steps to humans. Searches may find early-Earth air, and rarely oxygen air like later Earth’s.
+  - Used 2026-10-15: v2 [How Earth learns](HOLOS_GAME_CONCEPT.md#how-earth-learns), Earth’s pace is typical. Mills et al. stand behind it. Snyder-Beattie et al. and Watson are the view set aside, and stay in the Mind’s starting words.
+  - **[Reinhard et al. 2017](https://arxiv.org/abs/1702.01137)** · Published, Astrobiology. Oxygen and ozone were a poor sign of Earth’s life for all but the last 500 million years. Methane was hard to see for most of the last 2.5 billion. A world can be full of life and show nothing in its air.
+  - **[Schwieterman et al. 2024](https://arxiv.org/abs/2405.11149)** · Published, ApJ. Read in the paper’s text: sulfur hexafluoride lasts about 1,000 years in air, and the perfluorocarbons 2,000 to 50,000.
+  - **[Stevens et al. 2016](https://arxiv.org/abs/1507.08530)** · Published. A civilization that destroys itself leaves signs. Some fade faster than its radio era lasted. Others persist far longer.
+  - **[Sandberg et al. 2018](https://arxiv.org/abs/1806.02404)** · Preprint. With honest error bars on every factor, there is a substantial chance no one else is in the observable universe. So the game’s many neighbors are improbable. Nothing observed contradicts them.
+  - **[Schmidt and Frank 2018](https://arxiv.org/abs/1804.03748)** · Published. An industrial age leaves a clear but thin layer in rock, much like natural climate events.
+  - From a search summary, not read: Glidden et al. 2025, on TRAPPIST-1 e. Four transits neither show nor rule out air. Air like Venus’s or Mars’s is disfavored, hydrogen air is excluded, and nitrogen air is allowed.
+  - From memory, abstract not found: Chopra and Lineweaver 2016, the Gaian bottleneck. Most young wet worlds freeze or overheat within about a billion years unless life steadies them, so early extinction is the usual outcome.
+  - From memory, not checked: Earth’s air gained oxygen about 2.4 billion years ago, animals appear about 0.6 billion years ago, and our species is about 300,000 years old.
+  - Matters: on the one world we know, life is microbes for most of its history, shows in the air for between a ninth and a half of it, and has had radio for 130 years of 4.5 billion.
+  - Matters: the game’s premise puts a mind at about 1 warm world in 18. Minds can’t be commoner than life, so in this game most warm worlds that can hold life do.
+  - Matters, measured 2026-10-15 on 200 games: if oxygen were a long shot, reached by 1 living world in 10 at Earth’s age, a game would hold about 3 natural worlds with animals beside 11 minds. Every mind’s world passed through animals, so the premise clashes with hard steps. Earth’s pace as typical gives about 22.
+  - Used since: v2 [How Earth learns](HOLOS_GAME_CONCEPT.md#how-earth-learns), the ladder and the rung draw in calcs/seed.py.
+  - Used since 2026-10-13: the Mind’s starting words. It judges from what Earth knows, so Kipping 2020 and Sandberg et al. stand behind Minds, almost no chance, and Kipping 2025 behind a higher word for Life. Price et al. 2020, logged under [Hearing technology by radio](#hearing-technology-by-radio), is the null result it starts from. The words themselves are this project’s samples.
+
+- **Saying how likely in words, checked 2026-10-13.** For the Mind’s reports.
+  - **ICD 203, the US intelligence community’s analytic standard** · Read in a [secondary copy](https://github.com/MISP/misp-taxonomies/tree/main/estimative-language), not the directive. Seven terms: almost no chance 1 to 5%, very unlikely 5 to 20%, unlikely 20 to 45%, roughly even chance 45 to 55%, likely 55 to 80%, very likely 80 to 95%, almost certain 95 to 99%.
+  - **[Budescu et al. 2014](https://www.nature.com/articles/nclimate2194)** · Published, Nature Climate Change. I read the abstract. Across 24 countries and 17 languages, people read the climate panel’s likelihood words as nearer to 50% than meant. Adding number ranges fixed much of it.
+  - From a search summary, not read: a Monash study found readers matched the seven terms’ ranges 32% of the time with no guide, and 66% with the ranges shown inline.
+  - Matters: words alone are read loosely. The game shows words only, by choice, so it uses one fixed scale everywhere.
+  - Used: v2 [How Earth learns](HOLOS_GAME_CONCEPT.md#how-earth-learns), and both mocks.
+
+- **What sets a natural world’s rung, checked 2026-10-13.** For the rung draw in [calcs/seed.py](calcs/seed.py). I read each abstract myself, and the formulas in the text of Pass et al.
+  - **[Pass, Charbonneau and Vanderburg 2025](https://arxiv.org/abs/2504.01182)** · Published, ApJL. The shoreline as a formula: a world keeps air when 4 log10 of its escape speed in km/s, minus log10 of its lifetime dose of far ultraviolet and X-rays in Earth units, minus 3.16, is above zero. Mars sits on the line.
+    - The dose, after Zahnle and Catling: the star’s brightness to the power 0.4, over the orbit’s size squared.
+    - Fully convective red dwarfs stay active longer than that assumes: 2.1 to 3.1 times the dose. Only their largest rocky planets are likely to keep air.
+    - Already airless by measurement: LHS 3844 b, TRAPPIST-1 b and c, LTT 1445 A b, GJ 1132 b and others.
+  - **[Ji et al. 2025](https://arxiv.org/abs/2504.19872)** · Published. No single clean line: how much water and carbon a world starts with blurs it. Heavier worlds at heavier stars keep air more easily.
+  - **[Nguyen et al. 2026](https://arxiv.org/abs/2608.23912)** · Published, ApJL 1008, L4. Read 2026-10-16 in the arXiv HTML: the method, Table 2 and the caveats myself, Table 1 through a summary. JWST finds thick air on some lava worlds and bare rock on some cooler red dwarf planets. Two boundaries, not one: a hot one where molten worlds keep feeding their air, and a cooler one set by escape. Between them, an airless valley.
+    - The fits are for four sample stars: a Sun-like G2, a K4, an M4 and TRAPPIST-1. Ages 0.01, 0.1, 1 and 5 billion years, none older.
+    - Table 2 gives each line as log10 of lifetime XUV dose against log10 of escape speed. At 5 billion years, nominal volatiles: G (-1.626, 4.850, -1.651), K (-3.268, 7.014, -2.597), M4 (-3.666, 5.727, -2.057), TRAPPIST-1 (-3.249, 4.230, -1.306).
+    - Volatiles matter most. Zahnle and Catling’s line falls between their nominal and volatile-poor Sun-like cases. My arithmetic: at Earth’s escape speed, Earth’s dose times 44 nominal, 0.67 volatile-poor, 11 for Zahnle and Catling.
+    - Their doses come from their own star histories, Equation 1. Their red dwarfs use the older, lower XUV. They say Pass et al.’s 2 to 3 times more would push many planets bare.
+    - TRAPPIST-1 b, c and d likely bare. e may keep thin air like Mars’s, f and g thicker. Only the largest, most temperate red dwarf planets keep air.
+    - Matters: the fits can’t drop into the seed. They cover four stars, not each real one, stop at 5 billion years, and need their own star model for the dose.
+    - Used 2026-10-16: the single line stays, with Pass et al.’s factor. The paper backs it as a middle case, and backs each world’s luck as its unknown volatiles.
+  - **[Meni-Gallardo and Pallé 2026](https://arxiv.org/abs/2508.12865)** · Accepted, MNRAS, June 2026. I read the abstract. An empirical shoreline, anchored to Mars and four planets with tentative air. Steeper than theory, so more red dwarf planets keep air. But revised XUV histories for small red dwarfs show “severe atmospheric vulnerability”.
+  - **Checked 2026-10-16, the game’s line at measured planets.** My arithmetic with calcs/seed.py’s shoreline.
+    - LHS 1140 b: +0.47, the airy side. Helium escapes it (Cherubim et al. 2026), so it keeps air.
+    - TRAPPIST-1 e: -1.47, bare. JWST neither shows nor rules out air (Glidden et al. 2025). f: -0.99.
+    - GJ 3929 b: -1.45, bare. Rocky Worlds finds it likely bare ([arXiv 2508.12516](https://arxiv.org/abs/2508.12516)).
+    - Widening each world’s luck from 0.5 to 0.8 moves red dwarf bare rock from 71% to 68%. Measured on 200 games. Not worth a change.
+- **Warm worlds born frozen, checked 2026-10-16.** For the warm zone’s outward drift, under To check.
+  - **Gough 1981** · Published, Solar Physics 74, 21. From memory, a standard result: the Sun’s light was 1 / (1 + 0.4 (1 - t / 4.57 billion years)) of today’s. 71% at birth, 10% more in 1.1 billion years, 44% more in 3.5.
+  - **[Baraffe et al. 2015 tracks](http://perso.ens-lyon.fr/isabelle.baraffe/BHAC15dir/BHAC15_tracks+structure)** · Published, A&A 577, A42. Downloaded and read 2026-10-16. A Sun-mass star goes from 0.69 Suns at 0.1 billion years to 0.98 at 4.6 and 1.40 at 8. 1.2 Suns: 1.73 at 0.1, 2.46 at 3. 0.8 Suns: 0.24 at 0.1, 0.31 at 8.
+    - My check: Gough’s curve, with time counted in each star’s main-sequence life, matches these within about 10% for 0.8 to 1.2 Suns.
+  - **[Tuchow and Wright 2023](https://arxiv.org/abs/2301.02961)** · Published, ApJ. I read the abstract. 29 to 74% of planets in warm zones arrived there late, as their star changed. Whether they can be habitable is unclear.
+  - **[Henry, von Hippel and Childs 2026](https://arxiv.org/abs/2609.01790)** · Accepted, ApJ. Read 2026-10-16 in the arXiv HTML, the method and discussion. Ages for 146 known hosts of 4,475 to 7,200 K, with Kopparapu et al.’s warm zones. Of 143 planets now in a warm zone, 97 were always in it, 37 were born frozen and entered later, 9 were once too hot.
+    - Their words: born-frozen planets “should not be assumed habitable solely on the basis of present-day HZ membership”.
+  - **[Turbet et al. 2017](https://arxiv.org/abs/1703.04624)** · Published, EPSL. I read the abstract. A frozen Earth-like world at a Sun-like star may never thaw beyond about 1.27 AU, below 62% of Earth’s light. Its carbon dioxide freezes out at the poles.
+  - Cited by Henry et al., not read: Yang et al. 2017, Nature Geoscience. The light that thaws a frozen world can tip it straight into a runaway greenhouse.
+  - Matters, measured 2026-10-16 on 200 games: 26% of the natural worlds at Sun-like stars were born frozen, as Henry et al. find for real planets, 37 of 143.
+  - Used 2026-10-16: v2 [How Earth learns](HOLOS_GAME_CONCEPT.md#how-earth-learns) and the rung draw in calcs/seed.py. Turbet et al.’s 62% is the thaw line. On 400 games, a quarter of Sun-like worlds are born frozen and a tenth of those have thawed. Living natural worlds fall from 36 a game to 33.
+- **Red dwarfs’ bright youth, checked 2026-10-16.** For the to-check on red dwarf worlds held too hot.
+  - **[Luger and Barnes 2015](https://arxiv.org/abs/1411.7412)** · Published, Astrobiology. I read the abstract. Warm-zone planets of M dwarfs can lose several Earth oceans in a runaway greenhouse lasting several hundred million years. Abiotic oxygen builds at about 5 bars a million years on an Earth-mass world, where the surface can’t absorb it.
+    - My arithmetic: one ocean’s oxygen makes about 240 bars on Earth. So that rate splits about an ocean every 50 million years.
+  - **[Godolt et al. 2019](https://arxiv.org/abs/1903.07298)** · Published, A&A 625, A12. I read the abstract. Water stored in the mantle can rebuild the seas after the bright youth, if some was kept.
+  - From a search summary, not read: Krissansen-Totton et al. 2021 say much of that oxygen may dissolve into a magma ocean.
+  - **Baraffe et al. 2015 tracks**, logged under Warm worlds born frozen. My table: how long a world now in the warm zone stayed hotter than its inner edge. At 0.1 Suns, 450 million years at the inner edge and 90 at the outer. At 0.3 Suns, 120 and 24. At 0.5 Suns, 80 and 11.
+  - Matters, measured 2026-10-16 on 200 games: the shoreline already strips most worlds of the smallest stars, whose youth is longest. Red dwarf worlds that kept air and life were too hot for a median of 32 million years, and 9 in 10 for under 90.
+  - About 2 a game kept air and stayed too hot past 100 million years. The first pass sees none of them.
+  - Used 2026-10-16: v2 [How Earth learns](HOLOS_GAME_CONCEPT.md#how-earth-learns). Left out of the rung draw, with Godolt et al. as the reason survivors keep their seas.
+  - **[Ware et al. 2026, the HAges Catalog](https://arxiv.org/abs/2605.12647)** · Accepted, ApJ. Data at [Zenodo](https://doi.org/10.5281/zenodo.19227788). Published ages from asteroseismology and spin for 127 of the 659 stars the Habitable Worlds Observatory is likeliest to observe. Past about 6 billion years, spin ages run about 47% low.
+    - 161 of the 880 hosts are in it, as of 2026-10-14, and 53 have an age: 2 F, 12 G, 23 K, 16 M. Of the 110 the mirror can split, 35.
+    - Alpha Centauri A has 20 ages, 4.2 to 6.7 billion years. Beta Virginis has two, 3.2 and 4.0.
+    - Gaia’s own ages do not agree with it. On the 9 hosts that have both, the median gap is 4.7 billion years.
+  - **[Cukanovaite et al. 2023](https://doi.org/10.1093/mnras/stad1020)** · Published, MNRAS. White dwarfs within 40 pc fit an even rate of star birth over the last 10.5 billion years.
+  - **[Poulton et al. 2021](https://doi.org/10.1038/s41586-021-03393-7)** · Published, Nature. Oxygen first rose about 2.43 billion years ago, swung for 200 million years, and stayed from about 2.22.
+  - Not evidence: Radica 2026, arXiv 2603.29743, is an April 1 paper. A search summary reported its claim that red dwarf planets keep air as a finding.
+  - Matters: air is decided by physics, and age by data where data exists. What the seed adds are four samples: whether life started, whether it died, each world’s pace, and its luck at the shoreline.
+  - This project’s own: Earth’s pace taken as typical, and the 0.5 spread at the shoreline.
+  - Used: v2 [How Earth learns](HOLOS_GAME_CONCEPT.md#how-earth-learns), data/hosts-50ly.csv, calcs/seed.py and the second mock.
+
+## Why the sky is quiet: computing and heat
+
+- **[Garrett 2026, Slysh haloes](https://arxiv.org/abs/2608.31153)** · Preprint, August 2026.
+  - The energy cost of computing falls with temperature, so mature minds may compute cold, far from their star, at about 5 to 28 K. Their waste heat glows grey and line-free in the far infrared and submillimetre, not the mid-infrared older searches watched. A thin-film halo of 10²⁰ W at 12 K weighs about 2×10²⁰ kg, a fraction of Ceres.
+  - Herschel’s DEBRIS (446 stars within 45 pc) and DUNES (133 within 25 pc) at 100 µm, and JCMT’s SONS (100 within 50 pc) at 850 µm, can be read as limits: about 7×10¹⁹ W at 10 pc, 10⁻⁷ to 10⁻⁵ of a star’s light. ALMA and NOEMA suit compact haloes around M dwarfs.
+  - Matters: v1’s cold, inward minds stay hidden at Earth’s scale, but a neighbor that grew large would show. A cold halo can pass for a debris disk until several wavelengths are compared.
+  - Used: v2 [Why the sky is quiet, rechecked](HOLOS_GAME_CONCEPT.md#why-the-sky-is-quiet-rechecked), the neighbor template.
+- **[Wright et al. 2014, the Ĝ search](https://arxiv.org/abs/1408.1133)** · Published ([framework](https://arxiv.org/abs/1408.1134)).
+  - Waste-heat searches, their natural contaminants, and why no one behavior can be assigned to all civilizations.
+  - Used: alpha-1 theory evaluation. v1 “Why the sky is quiet”.
+- **[Bennett on Landauer’s principle](https://arxiv.org/abs/physics/0210005)** and **[Landauer on dissipation](https://research.ibm.com/publications/dissipation-and-noise-immunity-in-computation-and-communication)** · Published.
+  - Erasing information has a minimum heat cost that scales with temperature. Reversible computing has idealized limits and speed tradeoffs.
+  - Used: v1 cold compute, “Compute runs on energy”.
+- **[OGLE compact-object constraints](https://arxiv.org/abs/1901.07120)** · Published.
+  - Microlensing limits on hidden compact objects depend on mass and population, so they don’t cap a number of small minds.
+  - Used: alpha-1 theory evaluation.
+- **[NASA small-spacecraft thermal control](https://www.nasa.gov/smallsat-institute/sst-soa/thermal-control/)** · Reference.
+  - Radiators and heat transport are explicit infrastructure. Shrinking the core doesn’t remove them.
+  - Used: alpha-1 theory evaluation.
+
+### Cold builds: a far-infrared telescope, a halo check, an annex, outer works
+
+Gathered 2026-10-26 for four candidate builds. Numbers marked *ours* are this project’s arithmetic, not the source’s.
+
+- **[NASA, September 2026, PRIMA selected](https://www.nasa.gov/news-release/nasa-selects-far-infrared-telescope-as-first-in-new-mission-class/)** · Published, September 2026.
+  - On 23 September 2026 PRIMA became the first Probe Explorer and moved to Phase B. A 1.8 m mirror, a five-year mission, launch aimed at 2033, cost capped at $1.2 billion before launch.
+  - That NASA dropped AXIS in March is from search summaries citing SpaceNews, not confirmed.
+  - Matters: Earth’s first far-infrared telescope since Herschel flies about 7 Years before Year 0.
+  - Used: the Halo Survey’s story, and why a far-infrared telescope build was set aside.
+- **[PRIMA observatory page](https://prima.ipac.caltech.edu/page/observatory)** · Reference.
+  - Mirror at 4.5 K, detectors at 100 mK, at L2. PRIMAger covers 25 to 261 µm, FIRESS 24 to 235 µm at R 85 and up.
+  - Matters: it stops at 261 µm, so it can’t reach 850 µm, where 5 to 12 K glow is brightest.
+  - Used: not yet.
+- **[Ciesla et al. 2025, PRIMAger](https://arxiv.org/abs/2509.01727)** · Preprint, September 2025.
+  - 5σ depth over 1 deg²: 1.77 mJy at 92 µm, 4.59 mJy at 235 µm. 10 to 25 times deeper than Herschel PACS for the same time.
+  - Matters: a large gain for surveying many stars fast.
+  - Used: the Halo Survey’s set-aside far-infrared telescope.
+- **[Béthermin et al. 2024, PRIMAger confusion](https://arxiv.org/abs/2404.04320)** · Published, A&A 692, A52.
+  - Background galaxies set a floor: 5σ of 4.6 mJy at 96 µm and 46 mJy at 235 µm.
+  - Matters: *ours,* for one star PRIMA lowers the cold-glow limit 1 to 3 times at best, and only for 20 to 28 K haloes. Its gains are speed, wide faint glow, and spectra that show a glow is line-free.
+  - Used: not yet.
+- **[ESA 2020, SPICA withdrawn](https://sci.esa.int/web/cosmic-vision/-/spica-no-longer-candidate-for-esa-s-m5-mission-selection)** and **[Origins Space Telescope, JATIS 2021](https://www.ipac.caltech.edu/publication/2021JATIS...7a1014L)** · Published.
+  - SPICA left M5 in October 2020 on cost. Origins, a 5.9 m mirror at 4.5 K, was not chosen.
+  - Matters: a far-infrared flagship beyond PRIMA is a build Earth would have to choose.
+  - Used: not yet.
+- **[MacGregor et al. 2016, collision models](https://arxiv.org/abs/1603.05644)** · Published, ApJ 823, 79.
+  - 15 debris disks: millimetre spectral index 2.38 to 3.08. Fomalhaut 2.70 ± 0.17. AU Mic and ε Eri have multi-band data.
+  - Matters: *ours,* a grey emitter’s index from 0.87 to 3 mm is 0.74 at 5 K, 1.55 at 12 K, 1.82 at 28 K. A detected halo is easy to tell from dust.
+  - Used: the Halo Survey.
+- **[Marshall et al. 2025, 133 resolved disks](https://arxiv.org/abs/2512.07573)** and **[Matrà et al. 2025, REASONS](https://www.aanda.org/articles/aa/full_html/2025/01/aa51397-24/aa51397-24.html)** · Preprint, accepted MNRAS, and published, A&A.
+  - Grain size slope q = 3.49 from far-infrared to millimetre. REASONS resolved 74 belts at 1.3 mm, most broad.
+  - Matters: the star list a halo check would start from.
+  - Used: the Halo Survey.
+- *Ours,* ALMA’s reach: about 8 µJy in band 3 and 17 to 30 µJy in band 7, 1σ in an hour. A compact 12 K halo at 10 pc shows at about 3×10¹⁸ W, 25 times below the Herschel and JCMT limit. Haloes hundreds of AU wide are resolved out by the 12 m dishes.
+  - A second test: starlit dust is 12 K only about 540 AU from a Sun-like star. A small ring that cold isn’t starlit dust.
+  - Checked 2026-10-26 against the 33 seeded games: no living neighbor reaches 3×10¹⁸ W by Year 50. By Year 100, 12 of 311 do. By Year 200, 147.
+- **[He et al. 2024, cryo-CMOS](https://arxiv.org/abs/2411.03099)** · Preprint, November 2024.
+  - A 28 nm process tuned for 77 K runs below 0.6 V, at 37% less power and 20% faster.
+  - Matters: about 1.6 times, measured, from a process not yet redesigned.
+  - Used: the Cold Annex.
+- **[Zhao et al. 2025, cryogenic CMOS](https://doi.org/10.1038/s44287-025-00157-7)** · Published, Nature Reviews Electrical Engineering 2, 277.
+  - Band tails stop switching from sharpening much below about 50 K. A search summary gives power at 0.27 of room temperature at 77 K. Paywalled, not confirmed.
+  - Matters: colder than 77 K adds little.
+  - Used: the Cold Annex.
+- **[Google Research 2025, Suncatcher](https://research.google/blog/exploring-a-space-based-scalable-ai-infrastructure-system-design/)** and **[NPR, 1 October 2026](https://www.kuow.org/npr-news/2026-10-01/google-launches-project-suncatcher-a-step-towards-ai-data-centers-in-space)** · Published.
+  - Design: 650 km dawn-dusk orbit, solar up to 8 times the ground’s. Launched 1 October 2026: four TPUs, run in 15-minute bursts because of heat.
+  - Matters: heat is the limit in orbit even at room temperature.
+  - Used: the Cold Annex’s story.
+- **[Gardner et al. 2023, JWST](https://arxiv.org/abs/2304.04869)** · Published.
+  - The sunshield’s coldest layer sits near 36 K. The near-infrared instruments run at 38.5 to 42.8 K with no cooler.
+  - Matters: *ours,* a 40 K chip does about 4 times the compute per watt, range 2 to 6. In space the cooler goes, but radiator area grows as 1/T⁴: about 3,800 km² a GW at 40 K, 250 at 77 K, 1.2 at 300 K. So 77 K gets most of the gain for a fifteenth of the radiator.
+  - Used: the Cold Annex.
+- **[Sandberg, Armstrong and Ćirković 2016, aestivation](https://arxiv.org/abs/1705.03394)** · Published, JBIS 69, 406. arXiv 2017.
+  - Erasing a bit costs kT ln2, so waiting for the universe to cool gains about 10³⁰. Minds would sleep, and keep matter from being wasted.
+  - Used: not yet.
+- **[Bennett, Hanson and Riedel 2019, comment](https://arxiv.org/abs/1902.06730)** · Published, Foundations of Physics.
+  - Matter not yet at equilibrium can absorb erasure now, so nothing forces waiting.
+  - Matters: cold minds computing today, as Holos has them, fit the physics.
+  - Used: not yet.
+- **[Pitjeva and Pitjev 2018, Kuiper belt mass](https://arxiv.org/abs/1811.05191)** · Published.
+  - About 0.02 Earth masses, 1.2×10²³ kg, mostly at 39 to 48 AU.
+  - Matters: Garrett’s 2×10²⁰ kg halo is about 0.2% of the belt.
+  - Used: not yet. Bears on outer cold works.
+- *Ours,* outer works: sunlight is 1.5 W/m² at 30 AU and 0.14 at 100. A sunlit film sits at 60 K at 30 AU, 33 K at 100. Behind a JWST-like shade, about 7 K at 30 AU. Light lag is 4.2 hours at 30 AU.
+  - So far out it is cold for free, but power is scarce. Power must be collected wide, or sent out.
+
+## Black holes
+
+Gathered 2026-10-26 for a late game: a black hole in the outer Solar System, the nearest known ones, and whether minds gather at them. Numbers marked *ours* are this project’s arithmetic. Used since 2026-10-26: Bambi’s density, Sahu et al.’s way of finding a lone hole, and the Kerr numbers, in [Black holes](HOLOS_GAME_CONCEPT.md#black-holes) and calcs/holes.py. The rest is not used yet.
+
+### Near us
+
+- **[Bambi 2026, a mission to Earth’s nearest black hole](https://arxiv.org/abs/2607.10982)** · Preprint, July 2026. Builds on [Bambi 2025](https://arxiv.org/abs/2504.14576), iScience 28, 113142.
+  - From Olejak et al. 2020’s population: about 10⁸ holes in the disk, 92% alone, one per 1,500 pc³. The nearest may lie within about 23 ly, and about 10 within 50 ly.
+  - His mission: gram sails at a third of light speed, 60 to 75 years to a hole 20 to 25 ly away. Find candidates as faint, fast infrared sources in CatWISE, or by glow where gas falls in, inside the Local Interstellar Clouds.
+  - Matters: *ours,* about 80 holes within 100 ly, the nearest near 20 ly. A dark neighbor inside the game’s region is expected, not contradicted. No one has found one.
+- **[Fender, Maccarone and Heywood 2013, the closest black holes](https://arxiv.org/abs/1301.1341)** · Published, MNRAS.
+  - More than 10⁸ lone holes in the Galaxy, about 35,000 within 815 ly. SKA surveys may see them as faint, fast radio sources.
+- **[El-Badry et al. 2023, Gaia BH1](https://arxiv.org/abs/2209.06833)** · Published, MNRAS.
+  - 9.62 ± 0.18 Suns at 1,560 ly, with a Sun-like star on a 185.6-day orbit. Dormant.
+  - Matters: the nearest known hole, 15 times past the game’s region. *Ours,* 15,600 Years at a tenth of light speed, its first word home at Year 17,160 after launch.
+- **[El-Badry et al. 2023, Gaia BH2](https://arxiv.org/abs/2302.07880)** · Published, MNRAS. 8.9 Suns at 3,800 ly, beside a red giant, dark in X-rays and radio.
+- **[Gaia Collaboration, Panuzzo et al. 2024, Gaia BH3](https://arxiv.org/abs/2404.10486)** · Published, A&A Letters.
+  - 32.7 ± 0.8 Suns at about 1,920 ly, the Milky Way’s heaviest known stellar hole. Dormant.
+- **Claims that failed.** HR 6819, announced in 2020 at 1,100 ly, proved to be two stars in 2022 (news summaries). The Unicorn and the Giraffe proved to be stripped giants ([El-Badry et al. 2022](https://arxiv.org/abs/2203.06348)).
+  - Matters: a claimed near hole needs an orbit and spectra before the Mind believes it.
+- **[Sahu et al. 2022](https://arxiv.org/abs/2201.13296), [Lam et al. 2022](https://arxiv.org/abs/2206.07480), [Mróz et al. 2022](https://arxiv.org/abs/2207.10729), [Sahu et al. 2025](https://arxiv.org/abs/2503.07820)** · Published, and a 2025 preprint.
+  - OGLE-2011-BLG-0462, a lone hole of about 7 Suns at about 5,000 ly, found by bending a background star’s light. Eleven years of Hubble settle it.
+  - Matters: a lone hole is found by what it does to starlight behind it, never its own.
+- Gaia DR4 is due 2 December 2026, with about 30 hole binaries predicted ([arXiv 2502.03527](https://arxiv.org/abs/2502.03527), search summary). Recheck then.
+
+### A black hole as Planet Nine
+
+- **[Scholtz and Unwin 2020, what if Planet 9 is a primordial black hole?](https://arxiv.org/abs/1909.11090)** · Published, PRL 125, 051103.
+  - 5 to 10 Earth masses, 300 to 1,000 AU out, about 4.5 cm across at 5 Earth masses, at 0.004 K. Proposed to explain both a short-event excess in OGLE’s microlensing and the clustered orbits of far trans-Neptunian objects.
+- **[Witten 2020, searching for a black hole in the outer Solar System](https://arxiv.org/abs/2004.14192)** · Preprint.
+  - Hundreds of sub-gram sails at 300 km/s reach 500 AU in about 8 years. The hole’s pull shows as a timing shift of about 7×10⁻⁵ s. Witten calls clocks the biggest obstacle.
+- **[Siraj, Loeb and Baird 2020](https://www.universetoday.com/articles/if-planet-9-is-a-primordial-black-hole-we-might-be-able-to-see-flares-when-it-consumes-comets)** · Published, ApJ Letters. From press, not the paper: comets falling in would flare, and LSST could catch a few a year.
+- **[Mróz et al. 2024, limits from the Magellanic Clouds](https://arxiv.org/abs/2410.06251)** · Published, ApJL 976, L19.
+  - No short events among 35 million stars: holes of Earth’s mass make at most 1% of dark matter. The bulge’s short events are free-floating planets.
+  - Matters: the strongest blow. It removes half the case and cuts the odds a few times. Improbable, not ruled out.
+- **[Napier et al. 2021](https://arxiv.org/abs/2102.05601)** · Published, PSJ. With survey bias modeled, the far objects show no clustering. From summaries.
+- **[Batygin et al. 2024](https://arxiv.org/abs/2404.11594)** · Published, ApJL 966, L8. A separate population rejects a Solar System without Planet 9 at about 5σ. From the abstract.
+- **[Cheng, Li and Yang 2025, 2017 OF201](https://arxiv.org/abs/2505.15806)** · Preprint. A dwarf planet at 838 AU that some Planet 9 setups throw out. From press.
+- **[Phan et al. 2025, IRAS and AKARI](https://arxiv.org/abs/2504.17288)** · Published, PASA 42, e064. One candidate at 500 to 700 AU, 7 to 17 Earth masses, unconfirmed. [Chen et al. 2025](https://arxiv.org/abs/2506.12854) adds two.
+  - Matters: a glowing Planet 9 is a planet. A confirmed one ends the black hole idea.
+- **[Siraj, Chyba and Tremaine 2025](https://arxiv.org/abs/2508.14156)** · Published, MNRAS Letters. The Kuiper Belt’s plane is tilted from 80 to 400 AU, perhaps by a smaller body at 100 to 200 AU.
+- **[Fienga et al. 2016, Cassini ranging](https://arxiv.org/abs/1602.06116)** · Published, A&A. Rules out Planet 9 over much of its orbit, by gravity, whatever it is made of.
+- **Rubin’s LSST began 30 June 2026** ([news, August 2026](https://spacedaily.com/t-rubin-direct-test-planet-nine-2026/)). No Planet 9 so far. A planet seen ends the idea. Clustering with no planet seen helps it.
+- *Ours:* 4.4 cm across at 5 Earth masses, 0.004 K, so it grows and never evaporates. Fed 2.7 g a second at 10% efficiency, it gives 24 TW, all of Earth’s 2040 energy. Its Eddington limit is about 10²⁶ W, so feeding is the limit, not its light. At 150 km/s, 500 AU is 16 Years. Light lag 2.9 days. Power is better used there than beamed home: a 10 m mirror’s beam is 18,000 km wide at Earth.
+
+### Using a black hole
+
+- **[Christodoulou 1970, irreducible mass](https://doi.org/10.1103/PhysRevLett.25.1596)** · Published, PRL. Up to 29% of a fast-spinning hole’s mass is spin energy that can be drawn out.
+- **[Press and Teukolsky 1972, the black-hole bomb](https://doi.org/10.1038/238211a0)** · Published, Nature. Waves off a spinning hole return stronger, and a mirror round it makes the gain run away. [Cromb et al. 2025](https://arxiv.org/abs/2503.24034), Science Advances, made the effect with a spinning cylinder in a lab.
+- *Ours, from the Kerr orbit formula:* matter fed in gives 5.7% of its mass as light with no spin, 15.6% at spin 0.9, 32% at 0.998, 42% at the limit. Fusion gives under 1%.
+- *Ours, clocks at the innermost stable orbit:* 0.71 with no spin, 0.37 at 0.9, 0.093 at 0.998. About ten times slower is the honest ceiling. Hovering lower takes 10¹¹ g. The sky ahead blueshifts too, so the cold sink is lost.
+- *Ours, tides:* at 10 Suns, 8×10⁵ g across 2 m at the innermost orbit. Small hardware survives, people don’t.
+- *Ours, how small:* a rod L long feels about density × tide × L²/8. Silicon at 8 Suns’ innermost orbit: about 1.7 GPa at 1 m, which breaks it, and 17 MPa at 10 cm, which holds. calcs/holes.py.
+  - Matters: a Mind can live on that orbit only spread over small chips, each in its own orbit, linked by light. A furnace’s disk fills the orbit, so only a refuge can.
+  - Used: the Will living at a hole, its clock slowed, 2026-10-26.
+- **[NASA JPL, DSOC](https://www.jpl.nasa.gov/missions/deep-space-optical-communications-dsoc/)** and **[its 2025 close](https://www.jpl.nasa.gov/news/nasas-deep-space-communications-demo-exceeds-project-expectations/)** · Mission pages. Read.
+  - Laser from Psyche to Palomar’s 5 m Hale telescope: 267 Mb/s from about 19 million miles in December 2023, a record 307 million miles in December 2024, 13.6 Tb in all. It ended 2 September 2025, past every goal.
+  - Matters: the first laser link past the Moon, and the only real yardstick for one to the stars. Our message dishes would take millions of Years to send a 100 PB Mind. A diffraction-limited laser with 100 m optics at both ends sends it 10 ly in under two days (calcs/late_game.py’s mind()).
+  - Used: the Mind Link build, which sends the Will to our Mind at a hole, 2026-10-26.
+- **[Opatrný, Richterek and Bakala 2017, life under a black sun](https://arxiv.org/abs/1601.02897)** · Published, Am. J. Phys. 85, 14. The sky is the heat source and the hole the sink: an Earth at a non-spinning hole’s innermost orbit gets 200 MW. A dormant hole is a fine sink and a weak source.
+- **[Lloyd 2000, ultimate limits to computation](https://arxiv.org/abs/quant-ph/9908043)** · Published, Nature 406, 1047. A black hole is the limit case of a computer, and “likely to prove extremely difficult or impossible” to use.
+- **[Crane and Westmoreland 2009, black hole starships](https://arxiv.org/abs/0908.1803)** · Preprint. A made hole of a few Mt, attometres across, shining petawatts for years. Making one takes about 10⁹ t of gamma-ray laser.
+
+- **[Tubín-Arenas et al. 2024, eROSITA upper limits](https://arxiv.org/abs/2401.17305)** and **[HEASARC, eRASS1 main catalog](https://heasarc.gsfc.nasa.gov/W3Browse/all/erass1main.html)** · Published, A&A, and a reference.
+  - The first all-sky survey reaches about 5×10⁻¹⁴ erg/s/cm² in soft X-rays, 0.5 to 2 keV at half completeness. Its public catalog covers the western galactic half.
+  - Matters: *ours,* a hole fed for power shows to it at 20 ly only above about 2×10¹⁹ W, if all its light fell in the band. Earth’s 24 TW is a million times fainter. So a furnace at a Mind’s scale hides. A braking flame shows only close in (calcs/seed.py).
+  - Used: a hole’s lead, “What it costs”, 2026-10-26.
+- *Ours, from the seeded games:* no neighbor could reach a hole by Year 0, since none woke more than 97 Years before Earth. After it, the soonest could arrive about Year 136 in the middle game, against our soonest sentinel near Year 262. In 5 of 33 games two could reach the same hole by Year 200.
+
+### Do minds gather there?
+
+- **[Smart 2012, the transcension hypothesis](https://www.accelerating.org/articles/transcensionhypothesis.html)** · Published, Acta Astronautica 78, 55. Read from the author’s copy.
+  - Minds grow denser and end at black holes, “a standard attractor for all higher intelligence”. Predicts radio civilizations going quiet, and X-ray binaries with Jupiter-mass holes, none found. No peer-reviewed rebuttal found.
+  - Matters: the founding speculation. Hard to test.
+- **[Vidal 2016, stellivores](https://zenodo.org/records/164853)** · Published, Acta Astronautica. From summaries: some accreting binaries might be living systems feeding on stars. Fringe.
+- **[Inoue and Yokoo 2011](https://arxiv.org/abs/1112.5519)** · Published, JBIS 64, 58. A galactic club powered by a supermassive hole sends power by narrow beams that no one off-beam sees. Signs: maser-like light from a galaxy’s center, or mirrors as shadows on its disk.
+- **[Hsiao et al. 2021, Dyson spheres around black holes](https://arxiv.org/abs/2106.15181)** · Published, MNRAS 506, 1723. Only a feeding hole is a big source, up to 10⁵ Suns. Its waste heat would show to GALEX-class surveys at 10 kpc. No search followed.
+- **[Gajjar et al. 2021, Breakthrough Listen at the Galactic Center](https://arxiv.org/abs/2104.14148)** · Published, AJ. Nothing above 4×10¹⁸ W at 1 to 4 GHz among about 60 million stars.
+- **[Wright 2018](https://arxiv.org/abs/1707.02175)** and **[Seto 2024](https://arxiv.org/abs/2404.00840)** · Published. The Galactic Center as a point any searcher picks. Seto uses the star S2 round Sgr A* as a shared clock.
+- *Ours:* a black hole swallows heat that never glows back. Gaia BH1 takes about 3×10¹³ W at 300 K. Sgr A* takes 3×10²² W at 77 K, more than Garrett’s haloes. A mind dumping heat into a hole shows no cold glow.
+- Verdict: not contradicted. Gathering at the Galactic Center is improbable and open, 27,000 ly away. At nearby stellar holes it is improbable on energy: they are dormant and weak.
+
+## Travel, sails and lenses
+
+- **[Caltech, January 2025](https://www.caltech.edu/about/news/the-pressure-to-explore-caltech-researchers-take-first-experimental-steps-toward-lightsails-that-could-reach-distant-star-systems)** · Published, lab result.
+  - First measurement of radiation pressure on a tethered microscopic sail.
+  - Used: v1 research baseline, sails.
+- **[Shen and Li, June 2026](https://arxiv.org/abs/2606.04052)** · Preprint.
+  - Sail thrust efficiency drops at relativistic speeds, but net acceleration stays positive.
+  - Used: v1 star laser, near-light sails.
+- **[Heller and Hippke 2017](https://arxiv.org/abs/1701.08803)** · Published, ApJL.
+  - A sail can brake on starlight and gravity at a bright star: about 4.6% of light speed to park at Proxima via Alpha Centauri A and B.
+  - Read again 2026-10-14. The probe is 86 grams: a 10 g payload on a sail 316 m across, as thin as graphene. It passes 5 star widths from the star.
+  - The Sun alone can launch or catch such a sail at up to about 11,500 km/s, 3.8% of light speed. So a sail braking into Sol takes about 115 Years from Alpha Centauri.
+  - Why it matters: a probe can be tiny and stop with no rocket, but only slowly.
+  - Used: v1 starlight sail, catalog. Why small dark probes were set aside, 2026-10-14: too slow to arrive in play.
+- **[Gros 2017, magnetic sails](https://arxiv.org/abs/1707.02801)** · Published, Journal of Physics Communications.
+  - A superconducting loop, about 50 km across, brakes on interstellar protons. The gas is so thin that a fast stop at Proxima needs about a thousand tonnes. A 1.5 t craft stops only from slow speeds, over about 10,000 years.
+  - Earlier drag estimates by Zubrin and Andrews were about three times too hopeful, by Freeland’s check.
+  - Read in [ar5iv](https://ar5iv.labs.arxiv.org/html/1707.02801), 2026-10-14. The Proxima case: a 1,500 t craft, about half of it sail, a loop 1,600 km across at about 420 kA. It stops from a tenth of light speed in 0.37 ly and about 19 years, at 0.1 protons per cubic cm. The trip takes about 58 years. The star’s wind or light finishes the last 100 km/s.
+  - A research agent’s reading of the full paper: a 100-year trip needs 400 t and a 430 km loop, and the loop must grow as the gas thins.
+  - Why it matters: a magnetic sail can’t stop a small, fast probe. A big ship stops in about 19 years, with no fuel.
+  - Used: the open question on neighbor probes, 2026-10-14. How a colony ship brakes, 2026-10-14: `calcs/seed.py` BRAKE, 15 Years over the cruise.
+- **[Hoang et al. 2017](https://arxiv.org/abs/1608.05284)** · Published, ApJ.
+  - At a fifth of light speed, gas and dust erode a gram probe’s front by about half a millimetre. A shield about 1 mm thick of graphite, strong and slow to melt, protects it. Lubin’s group coats the edge with beryllium instead, by a secondhand quote.
+  - Why it matters: what a small probe’s front is made of. Impact energy falls with the square of speed, so a braking sail at 4% of light speed takes about a twenty-fifth of it.
+  - Used: the open question on neighbor probes, 2026-10-14.
+- **[Atwater et al. 2018, Nature Materials 17, 861](https://experts.umn.edu/en/publications/materials-challenges-for-the-starshot-lightsail/)** · Published.
+  - A laser sail at a fifth of light speed needs materials with extreme properties. Later designs layer molybdenum disulfide, an atom-thin reflector, between films of silicon nitride that shed heat ([arXiv 2106.03558](https://arxiv.org/pdf/2106.03558)). Only the abstract and summaries were read.
+  - Why it matters: a laser sail reflects one color. A sail braking on a star must reflect its whole spectrum, a harder material problem.
+  - Used: the open question on neighbor probes, 2026-10-14.
+- **[Gillon 2014, the Sun’s focal regions](https://arxiv.org/abs/1309.7586)** · Published, Acta Astronautica.
+  - Probes from nearby stars could link home at low power through stellar gravitational lenses. So look for relays beyond 550 AU from the Sun, on the line opposite each of the nearest stars. A 2021 follow-up picks Wolf 359 as the best target ([arXiv 2111.05334](https://arxiv.org/pdf/2111.05334)).
+  - Critics: a builder could hide it, and a focal link would leak too little to see.
+  - Why it matters: it names where a hidden watcher’s relay would sit.
+  - Used: not yet. Set aside 2026-10-14 with hidden probes, to keep the game simple.
+- **[Kerby and Wright 2021](https://arxiv.org/abs/2109.08657v2)** · Published, AJ 162, 252.
+  - A relay at a star’s gravitational focus gains about 120 dB. Drift from the star’s wobble is metres a second a year, fixable over centuries. The Sun and Barnard’s Star make good hosts. Alpha Centauri and Sirius do not, by press accounts, since companions disturb them.
+  - Why it matters: relays are engineering, not new physics.
+  - Used: not yet. Set aside 2026-10-14 with hidden probes, to keep the game simple.
+- **[Benford 2019, “Looking for Lurkers”](https://arxiv.org/pdf/1903.09582)** · Preprint, later in AJ by one account.
+  - Earth’s co-orbital asteroids, such as 2016 HO3, offer a hidden probe material, a stable anchor and cover. None has been searched by SETI or planetary radar. A critic notes these orbits are not stable over a thousand years.
+  - Used: not yet. Set aside 2026-10-14 with hidden probes, to keep the game simple.
+- **[Freitas and Valdes 1980](https://rfreitas.com/Astro/SearchIcarus1980.htm)** · Published, Icarus 42, 442.
+  - A photographic search of the Earth-Moon L4 and L5 regions in 1979 found nothing, to about 14th magnitude. A 1983 follow-up added the other Lagrange points and found nothing.
+  - Why it matters: the only real searches for probes near Earth reached only large, bright objects.
+  - Used: not yet. Set aside 2026-10-14 with hidden probes, to keep the game simple.
+- **[Freitas 1980, a self-reproducing probe](https://www.rfreitas.com/Astro/ReproJBISJuly1980.htm)** · Published, JBIS 33, 251.
+  - REPRO, by summaries: fusion powered, mining Jupiter for helium-3, half its payload a seed that builds a new probe every 500 years. About 10 billion kg. It credits Bracewell with the first serious proposal for material probes.
+  - Why it matters: copying probes break no law. Their mass and pace are the limit.
+  - Used: not yet. Set aside 2026-10-14 with hidden probes, to keep the game simple.
+- **[Forward 1984, roundtrip laser sails](https://www.centauri-dreams.org/2005/05/18/fine-tuning-the-interstellar-lightsail/)** · Published, Journal of Spacecraft and Rockets 21, 187. Read through summaries only.
+  - A sail in three parts. At the target the outer ring detaches and reflects the home laser back onto the inner sail, which brakes.
+  - Why it matters: fast, able to stop, no rocket. But the sender’s laser shines on the target for years, so the target sees it.
+  - Used: not yet. Set aside 2026-10-14 with hidden probes, to keep the game simple.
+- **[Frisbee 2003, antimatter rockets](https://ntrs.nasa.gov/citations/20060043411)** · Conference paper, AIAA. Numbers through Centauri Dreams only.
+  - A 40 ly mission in 100 years needs a multi-stage craft of millions of tonnes, radiators thousands of km long, and antimatter made at efficiencies near a billionth.
+  - Why it matters: allowed by physics, absurd in cost. Its gamma rays make it bright.
+  - Used: not yet. Set aside 2026-10-14 with hidden probes, to keep the game simple.
+- **Bussard’s interstellar ramjet** · Fishback 1969, through [Centauri Dreams](https://www.centauri-dreams.org/2020/04/03/the-interstellar-ramjet-at-60/).
+  - Scooped interstellar gas gives only about 1 N of thrust a square kilometre of intake, before drag. Drag may exceed thrust. No definitive paper was found.
+  - Used: set aside for neighbor probes, 2026-10-14.
+- **Starwisp** · Forward 1985, corrected by Landis, through [Centauri Dreams](https://www.centauri-dreams.org/2008/10/21/remembering-starwisp/).
+  - A wire-mesh sail pushed by microwaves. Wires that thin absorb microwaves instead of reflecting them, and burn. The idea of a microwave sail stands. That design does not.
+  - Used: set aside for neighbor probes, 2026-10-14.
+- **[Haqq-Misra and Kopparapu 2012](https://arxiv.org/abs/1111.1212)** · Published, Acta Astronautica.
+  - Searches of the Solar System are too incomplete to rule out alien probes. Few could find one 1 to 10 m across, by press accounts of the paper ([Universe Today](https://www.universetoday.com/90789/alien-artifacts-may-be-here-just-hard-to-find)). Only the abstract was read.
+  - Why it matters: v1 reasoned that ancient probes must be rare, since none has been found at Sol. That holds only for large ones.
+  - Used: the open question on neighbor probes, 2026-10-14.
+- **[Hippke 2017, the Sun’s lens](https://arxiv.org/abs/1706.05570)** · Published, Acta Astronautica.
+  - The solar corona defocuses the Sun’s gravitational lens below about 120 GHz, so the lens cannot hear a world’s low-frequency hum.
+  - Used: v1 “The Sun’s lens cannot be assumed to amplify the low-frequency hum”, catalog.
+- **Solar gravitational lens mission** · Study ([NASA concept](https://www.nasa.gov/general/direct-multipixel-imaging-and-spectroscopy-of-an-exoplanet-with-a-solar-gravitational-lens-mission/), [geometry and travel](https://science.nasa.gov/universe/exoplanets/want-to-see-the-surface-of-another-earth-use-our-sun/)).
+  - The focal line starts beyond about 550 AU for a Sun-like star. Turyshev and colleagues.
+  - Used: v1 catalog.
+  - **[Turyshev et al. 2020, NIAC Phase III](https://arxiv.org/abs/2002.11871)**, with [NASA’s page](https://www.nasa.gov/general/direct-multipixel-imaging-and-spectroscopy-of-an-exoplanet-with-a-solar-gravitational-lens-mission/), read 2026-10-14.
+    - The strong region of the lens lies beyond 547.6 AU. A probe with a 1 m telescope images an exoplanet at 30 pc.
+    - NASA’s page: an exo-Earth at 30 pc at about 25 km a pixel in 6 months of integration. The abstract says 10 km. A perihelion speed of about 150 km/s.
+    - Small sailcraft fly together and can watch several planets of one system at once.
+    - From a search summary, not read: a 2022 paper finds even a 40 cm telescope enough, with weeks to months of looking.
+    - Matters: short of going there, a lens is the one way to see a suspected world’s surface within a few decades. One craft serves one star.
+    - This project’s arithmetic: 548 AU at 150 km/s is 17 Years. A pixel scales with distance, so about 13 km at 49 ly. The dive toward the Sun before that is not timed.
+    - Used: v2 [How Earth learns](HOLOS_GAME_CONCEPT.md#how-earth-learns), a suspicion opens the whole kit. `calcs/signs.py closer`, and the third mock’s lens to Gliese 1021.
+    - Used: game/lib/game/reach.ts, the locked way “A lens at the Sun’s focus” on each destination, 2026-10-19.
+    - Used: the Solar Lens build and each lens sent from a destination, 2026-10-26.
+- **[Eubanks et al. 2026, science from the in situ exploration of the Proxima system](https://arxiv.org/abs/2604.20182)** · Preprint, April 2026. Read in the arXiv HTML, 2026-10-14.
+  - A swarm of 3.6 g laser-sail probes at 0.2c. About 1,000 launched over a 6-day boost, about 300 left to talk to Earth.
+  - Each probe is a 4 m disk with 169 annular 200 mm apertures, phased to give “sub-arc-second resolutions at optical wavelengths”. The search summary put it at about 0.4 arcseconds.
+  - “With 300 probes, the total ephemeris error needs to be 100,000 km so that at least one probe passes within a diameter of the target planet.” At the closest distance, one resolution element is about 20 m.
+  - “Imagery during a near-relativistic flyby will be very difficult.” The close pass lasts under a minute, and images are stacked from many short exposures. Not all the raw data can ever be sent home.
+  - Matters: a real figure for what a flyby sees, 20 m at best and about 200 m at a miss of 100,000 km.
+  - Used: v2 [How Earth learns](HOLOS_GAME_CONCEPT.md#how-earth-learns), a picture shows everything larger than a pixel. `calcs/signs.py pictures`, and the third mock’s dispatch.
+- **[NASA Deep Space Optical Communications](https://www.nasa.gov/missions/tech-demonstration/deep-space-optical-communications-dsoc/)** · Demonstrated.
+  - Laser links across deep space, with precise pointing and data rates that fall with distance.
+  - Used: v1 tight beam, laser links.
+- **Classic propulsion studies** · Study. Links found by an agent, 2026-10-13.
+  - Breakthrough Starshot, gram-scale beamed sails: [Lubin 2016](https://arxiv.org/abs/1604.01356), JBIS 69, 40, and [Parkin 2018](https://arxiv.org/abs/1805.01306), Acta Astronautica 152, 370.
+    - Abstracts read by me, 2026-10-13. Parkin: the aim is “a first launch to Alpha Centauri within the next generation”. The cost-optimal design for a fifth of light speed is a 4.1 m sail pushed for 9 minutes, with 8.0 billion dollars of ground beam director and 6 million dollars of energy a sail. That assumes lasers at a cent a watt.
+    - Parkin’s full text, read in the arXiv HTML 2026-10-14: 200 GW of laser at 1.06 microns, a filled array 2.7 km across, 480 s of beam a sail. The sail starts 60,000 km up, reflects 70% and absorbs about a hundred-millionth.
+    - Matters: the 30% the sail passes goes on toward the target. This project’s arithmetic: as the beam stops, it lights a spot 0.05 AU across at Alpha Centauri, 150 times the Sun’s light there within that same nanometre of the spectrum. Past the target the cone is under 5 arcseconds wide, and no star within 50 ly is expected in it.
+    - Used: v2 [How Earth learns](HOLOS_GAME_CONCEPT.md#how-earth-learns), who sees a laser launch. `calcs/early_game.py` launch_glare(), and the third mock’s sails.
+    - A precursor at a hundredth of light speed: 517 million dollars. Lubin: wafer craft could pass a quarter of light speed.
+    - Read 2026-10-19: [Scoles, Scientific American, October 2025](https://www.scientificamerican.com/article/the-quiet-demise-of-breakthrough-starshot-a-billionaires-interstellar/). Worden, its director, wrote “We have put the program on hold”. Lubin puts the spend at about 4.5 million dollars over some 30 contracts, of the 100 million pledged in 2016. No date is given for the hold.
+    - From a search summary, not read: a [Centauri Dreams post of March 2026](https://www.centauri-dreams.org/2026/03/03/starshot-is-a-success-part-i/) says it paused in 2024 to restructure, and its first phase found no show-stopper.
+    - Matters: the builders’ own aim is a generation, not v1’s 60 Years.
+    - Used: v2 [Build times](HOLOS_GAME_CONCEPT.md#build-times), the laser sail array at 25 Years. Turning “a generation” into 25 is this project’s.
+  - Project Daedalus, fusion rockets: the British Interplanetary Society’s 1978 final report ([reprint](https://www.bis-space.com/shop/product/project-daedalus-demonstrating-the-engineering-feasibility-of-interstellar-travel/)). Project Icarus: [Long et al. 2010](https://arxiv.org/abs/1005.3833).
+  - Magnetic sail: [Zubrin and Andrews 1991](https://doi.org/10.2514/3.26230), J. Spacecraft and Rockets 28, 197, and [Zubrin and Martin 2000](http://www.niac.usra.edu/files/studies/final_report/320Zubrin.pdf), a NASA study.
+  - Corrected 2026-10-13: this log said a magnetic sail brakes at about 20 years per light-year. No paper found says so. Braking takes from under a year to centuries, by speed, sail size and mass: 95% of light speed to 4% in about 320 days with a 100 km sail (Zubrin 2000), or 5% of light speed to rest in 40 to 300 years ([Perakis and Hein 2016](https://arxiv.org/abs/1603.03015)).
+  - Used: v1 probe kinds in the catalog.
+
+## Industry and big works
+
+- **[Advanced Automation for Space Missions, NASA 1980](https://en.wikisource.org/wiki/Advanced_Automation_for_Space_Missions)** · Study, NASA CP-2255, Freitas and Gilbreath, editors.
+  - A self-replicating, growing lunar factory, assumed to copy itself in about a year.
+  - Used: v1 “Industry compounds once it can copy itself”, self-replicating factory.
+- **Classic space-industry studies** · Study. Links found by an agent, 2026-10-13.
+  - Lunar mass driver: [O’Neill 1974](https://doi.org/10.1063/1.3128863), Physics Today 27, 32, and [O’Neill and Kolm 1980](https://doi.org/10.1016/0094-5765(80)90002-8), Acta Astronautica 7, 1229.
+  - The Stanford torus: [NASA SP-413, Space Settlements: A Design Study](https://ntrs.nasa.gov/citations/19770014162), from a 1975 summer study, published 1977.
+  - Star lifting: Criswell 1985, in Interstellar Migration and the Human Experience, University of California Press ([Internet Archive lending copy](https://archive.org/details/interstellarmigr0000unse_h4h6), ISBN 0520053494, checked 2026-10-16). No free text found.
+  - Used: v1 catalog (mass driver, habitat ring, star lifting).
+- **Do matter and energy limit a growing civilization, checked 2026-10-22.** For whether builds should spend matter and energy as well as compute.
+  - **[Balbi and Lingam 2024](https://arxiv.org/abs/2409.06737)** · Preprint, published in Astrobiology 2025. Abstract read on arXiv, and parts of the text in its HTML through a fetch.
+    - Waste heat follows from any use of energy. At 1% more energy a year, a planet like Earth could lose its liquid water within about 1,000 years, from starlight or its own sources alike.
+    - The text puts the view that galaxy-wide growth fails on resources or energy with von Hoerner 1975, Newman and Sagan 1981, and Mullan and Haqq-Misra 2019, none read.
+  - **[Armstrong and Sandberg 2013](https://www.practicalethics.ox.ac.uk/node/174891)** · Published, Acta Astronautica 89, 1. From search summaries, not read: a civilization that can build a Dyson swarm can launch probes to millions of galaxies with modest energy and matter. The first step takes Mercury apart for the swarm.
+  - From general knowledge, the text not read: [Dyson 1960](https://doi.org/10.1126/science.131.3414.1667), Science 131, 1667. A growing civilization comes to use all its star’s light, and takes planets apart for the matter, so its waste heat shows in the infrared. The exact sentence on matter and energy was not found in any source we could read.
+  - From general knowledge: Kardashev 1964 ranks civilizations by the energy they use. Stross’s Accelerando, 2005, takes the inner planets apart for computers round the Sun.
+  - This project’s arithmetic: a 1,500 t seed ship at a tenth of light speed moves with about 6.7 × 10²⁰ J, about a Year of Earth’s energy at 24 TW. Starshot’s 100 GW is 0.4% of that grid, for minutes a launch.
+  - Matters: real and hard science fiction agree that energy and matter set the ceilings, and compute itself runs on both. The game already caps compute at the grid, paces megatonne works by rock, and in calcs/early_game.py paces seed ships by their 40,000 t of deuterium. The 12 builds open at Year 0 are small enough that compute is the cost that bites.
+
+## Outposts and colonies
+
+Gathered 2026-10-14 for the round on Earth’s outposts and colonies.
+
+- **[Metzger et al. 2013, bootstrapping space industry](https://arxiv.org/abs/1612.03238)** · Published, Journal of Aerospace Engineering.
+  - About 12 tonnes landed on the Moon over about 20 years could bootstrap a lunar industry. It ends with 156 t of assets and 60 robots, or 40,000 t and 100,000 robots if 41 t are launched. Teleoperated first, then autonomous. Further analysis needed, the authors say.
+  - Why it matters: a machine colony starts from tonnes, not megatonnes.
+  - Used: the colonies round, 2026-10-14.
+- **[Salotti 2020, minimum settlers](https://www.sciencealert.com/this-is-the-bare-minimum-number-of-people-you-d-need-to-colonise-mars)** · Published, Scientific Reports. Read through press accounts.
+  - About 110 people could keep a Mars settlement going, by a model that counts the work of living there. The number depends on how work is shared.
+  - Why it matters: the smallest real colony of people.
+  - Used: the colonies round, 2026-10-14.
+- **The Stanford torus, NASA SP-413** · Study, 1975. Through [NSS](https://nss.org/stanford-torus-space-settlement/) and [Vice](https://www.vice.com/en/article/the-first-cities-in-space-0000701-v22n8).
+  - A ring 1.8 km across, spinning once a minute for Earth’s gravity, for 10,000 people. About 10 million tons, shielded with lunar material.
+  - Why it matters: people in space cost megatonnes, the scale of the game’s Moon road.
+  - Used: the colonies round, 2026-10-14.
+- **[Project Hyperion results, i4is 2025](https://i4is.org/project-hyperion-winners-announced/)** · Design competition.
+  - The winner, Chrysalis: 58 km long, 2.4 billion tonnes. By press accounts, 2,400 people on a trip of about 400 years to Alpha Centauri.
+  - Why it matters: a ship of people to another star costs billions of tonnes and centuries.
+  - Used: the colonies round, 2026-10-14.
+- **[Hein et al. 2012, world ships](https://bis-space.com/shop/?p=9401)** · Published, JBIS 65, 119. Abstract only.
+  - Over 100,000 people keep knowledge alive on board. Reliability needs automatic repair. A world ship needs a space-colony civilization behind it first.
+  - Used: the colonies round, 2026-10-14.
+- **[Crowl, Hunt and Hein 2012, embryo colonies](https://bis-space.com/shop/?p=9471)** · Published, JBIS 65, 283. Abstract only.
+  - A colony founded from frozen embryos needs much less speed and mass. Frozen adults would suffer cosmic rays on a long trip. Artificial wombs don’t exist yet.
+  - Used: the colonies round, 2026-10-14.
+
+- **[Hart 1975, and Newman and Sagan 1981](https://ar5iv.labs.arxiv.org/html/1902.04450)** · Published, QJRAS 16, 128, and Icarus 46, 293. Read through the review in Carroll-Nellenback et al. 2019.
+  - Hart: a spacefaring species fills the galaxy in a few million years, short beside its age, so none exists. Tipler 1980 agreed.
+  - Newman and Sagan: with slow population growth the wave crawls, and filling the galaxy takes about as long as its age, or longer.
+  - Used: the spread round, 2026-10-14.
+- **[Carroll-Nellenback et al. 2019, the Aurora effect](https://arxiv.org/abs/1902.04450v1)** · Published, AJ 158, 117.
+  - With conservative ship speeds and launch rates, settlement fills the galaxy well within its age. Stars’ own motions speed the front. Settlements that fail, or end, can leave the galaxy partly filled in a steady state.
+  - Why it matters: an empty neighborhood is possible without a ban, if settling often fails or settlements end.
+  - Used: the spread round, 2026-10-14.
+- **[Landis 1998, percolation](https://bis-space.com/shop/?p=13987)** · Published, JBIS 51, 163. Abstract and summaries only.
+  - Each colony spreads with some chance P, else stays. Below a critical P, spreading stops, ringed by colonies that chose to stay. Above it, it spans the galaxy but leaves empty pockets. His example used P of a third.
+  - Why it matters: a choice made by each settlement, not each species, can leave Earth in a quiet pocket.
+  - Used: the spread round, 2026-10-14.
+
+- **[Suazo et al. 2024, Project Hephaistos II](https://arxiv.org/pdf/2405.02927)** · Published, MNRAS 531, 695.
+  - About five million stars screened in Gaia, 2MASS and WISE for the warm glow of partial Dyson spheres. Seven candidates, all M dwarfs, with infrared excess hard to explain. More study needed, such as checking for young dust disks.
+  - Why it matters: waste heat from works around a star is searchable, and nothing confirmed has turned up.
+  - Used: what Earth can see of a colony, 2026-10-14.
+- **[Upper limits on Dyson spheres within 100 pc, 2022](https://arxiv.org/pdf/2201.11123v1)** · Preprint, through [Centauri Dreams](https://www.centauri-dreams.org/2022/01/20/the-dyson-sphere-search/).
+  - From Gaia DR2 and AllWISE: under about 2 in 100,000 stars within 100 pc could host a 300 K Dyson sphere 90% complete. Limits are weaker for less complete ones.
+  - Why it matters: only very large works are ruled out near Sol. A young colony’s heat is far below any limit.
+  - Used: what Earth can see of a colony, 2026-10-14.
+
+- **Zubrin 1995, starship signatures** · Published, ASP Conference Series 74, and JBIS 49, 297. Read through [Centauri Dreams](https://www.centauri-dreams.org/2012/08/20/to-detect-a-starship/) and [its sequel](https://www.centauri-dreams.org/2012/08/21/seti-starship-radiation-signatures/).
+  - A fusion rocket’s X-rays are detectable within about a light-year, and fade into noise by 10. His standard ship weighs a million tonnes.
+  - An antimatter photon rocket, its light focused within 30 degrees, shows to about 300 ly for Hubble, but only along its exhaust.
+  - A ship braking on a magnetic sail from a tenth of light speed radiates near 12 kHz. A 6 km antenna in space hears a million-tonne ship at 400 ly, a 10,000-tonne one at 40.
+  - Why it matters: Earth almost never sees a neighbor’s ship. It corrected the probe rule: a braking flame shows only close in.
+  - Used: what Earth can see of a colony, and the probe rule, 2026-10-14.
+  - The sequel post also gives a 30 km antenna hearing a 10,000-tonne ship at 200 ly. The 12 kHz assumes 1 ion per cubic cm, ten times the gas near Sol. A reader’s comment there notes the solar wind’s cutoff near Earth, about 24 kHz.
+  - Corrected 2026-10-14: these ranges leave out the gas’s absorption, as far as the accounts read show. At these frequencies the gas around Sol swallows the radio within a few thousand AU, by this project’s arithmetic below. The design had offered an antenna to hear sails braking, on Zubrin’s ranges.
+  - Read in full the same day by a research agent, by OCR of the [ADS scan](https://articles.adsabs.harvard.edu/pdf/1995ASPC...74..487Z). His ship: a million tonnes at a tenth of light speed, exhaust at 8% of light speed, 0.005 g, 600 TW of jet. Its X-rays are assumed, not derived: 10% of the jet, 60 TW at 1 to 100 keV.
+  - A source of 1 TW per keV at 1 ly gives 0.02 photons an hour on a square metre. This project checked that.
+  - Corrected 2026-10-14: his “within one light-year” then multiplies by focusing a 1 m aperture to 1 cm. Focusing cuts background but adds no photons. So the range is not supported. The probe rule now uses the arithmetic in “Seeing a fusion drive” below.
+- **[Perakis and Hein 2016, magnetic and electric sails](https://arxiv.org/abs/1603.03015)** · Published, Acta Astronautica. Read in [ar5iv](https://ar5iv.arxiv.org/html/1603.03015), 2026-10-14.
+  - A magnetic sail alone brakes an 8,250 kg craft from 5% of light speed in about 39.7 years. That needed a loop 1,000 km in radius, which the authors call unrealistic. Their other cases keep it to 50 km.
+  - Its drag fades as the craft slows, “asymptotically”, so the end of braking is slow. An electric sail helps there: 29 years together.
+  - Their drag law, Eq. 1, goes as speed to the 4/3, by this project’s check of its units.
+  - Why it matters: a sail brakes the fast part well, and the slow end poorly.
+  - Used, then replaced the same day: BRAKE was first set from this small case, with a rocket finish. Gros 2017’s 1,500 t case replaced it.
+- **[Redfield and Falcon 2008, electron densities](https://ar5iv.arxiv.org/html/0804.1802)** · Published, ApJ. Through a search summary.
+  - The Local Interstellar Cloud holds about 0.12 ± 0.04 free electrons per cubic cm, from seven sight lines.
+  - Used: the absorption arithmetic below, 2026-10-14.
+- **[Redfield and Linsky 2008, the local clouds](https://arxiv.org/abs/0804.0161)** · Published, ApJ. Abstract read, and a search summary.
+  - The Local Interstellar Cloud “may be the cloud that immediately surrounds” the Solar System. Its temperature is about 7,500 ± 1,300 K.
+  - Used: the absorption arithmetic below, 2026-10-14.
+- **Low-frequency opacity of the sky** · [FARSIDE study, 2019](https://arxiv.org/pdf/1911.08649), and [a sky model with absorption, 2021](https://arxiv.org/pdf/2104.03170). Through a search summary.
+  - Warm ionized gas makes the whole sky opaque near 1 MHz over long paths. The galaxy’s radio spectrum turns over near 3 MHz. Absorption grows as density squared, and steeply as frequency falls.
+  - Used: the absorption arithmetic below, 2026-10-14.
+- **This project’s arithmetic: a sail’s radio in the gas, 2026-10-14.** Script kept out of the repo, a throwaway check.
+  - Free-free absorption, Rybicki and Lightman eq. 5.19b with the classical Gaunt factor. At 12 kHz in Local Cloud gas, radio falls to about 37% every 2,000 AU at 0.12 electrons per cubic cm, or 5,000 AU at 0.07. The hot, thin Local Bubble barely absorbs it.
+  - Where the sail’s field balances the gas’s push, electrons circle at about 6 times the gas’s own cutoff at 10% of light speed, whatever the density. Zubrin’s 12 kHz at 1 per cubic cm is 1.3 times it. Both sit where absorption is strong.
+  - Sol sits in such gas, so every path out crosses some. A tenth of a parsec of it cuts the signal 50 to 40,000 times.
+  - Used: Earth can’t hear a sail brake, 2026-10-14.
+- **Where the infrared telescope stands, checked 2026-10-18** · Mixed. For the Build tab and its tour.
+  - *L2.* Sun-Earth L2, 1.5 million km out on Earth’s night side, where Webb flies. Its sunshield blocks the Sun, Earth and Moon at once, so the telescope runs near 40 K (−233 °C) while the sunny side reaches about 110 °C ([ESA fact sheet](https://sci.esa.int/web/jwst/-/45759-fact-sheet), [JWST tracker](https://orbitalradar.com/jwst-tracker)). Halo orbits round L2 span roughly 250,000 to 800,000 km ([Orbital Radar](https://api.orbitalradar.com/glossary/l2)). The map draws one 800,000 by 400,000 km, within that range, not Webb’s own.
+  - *The Habitable Worlds Observatory.* NASA’s planned telescope to image at least 25 potentially habitable worlds and read oxygen and methane in their air, launching in the 2040s, likely to L2. NASA’s FY2027 request, April 3, 2026, asked $5 million for it, down from $150 million enacted for FY2026 ([Wikipedia](https://en.wikipedia.org/wiki/Habitable_Worlds_Observatory), [an HWO project paper, January 2026](https://www.arxiv.org/abs/2601.11803v1), through a search summary). Its 6 m aperture is from a secondary source only.
+  - *Light time.* 1.5 million km is 5.0 light-seconds, this project’s arithmetic.
+  - Matters: Earth’s first air-reading telescope stands where the real ones go, for the real reason: cold, behind one shade.
+  - Used: game/lib/game/sites.ts, its place and story, and game/lib/drift.ts, the view out to L2, 2026-10-18.
+- **Where the data center, launch complex and yard stand, checked 2026-10-18** · Mixed. For the Build tab and its tour.
+  - *Hyperion.* Meta’s campus in rural Richland Parish, Louisiana: about 13.6 km², 11 data centers planned, projected to need 5 GW, a first 2 GW by 2030. Entergy is building three gas plants for it, 2.26 GW together ([IEEE Spectrum](https://spectrum.ieee.org/5gw-data-center)). The data center stands around it, and around campuses like it: the land and power are there.
+  - *Stargate Abilene.* OpenAI’s first campus, begun in Q2 2024: eight buildings for 1.2 GW. An Oracle post implied about 200 MW ran as of April 22, 2026 ([Epoch AI](https://epoch.ai/publications/openai-stargate-where-the-us-sites-stand)). Dropped from the story 2026-10-18, as the 2040 line took its place.
+  - *Kourou.* The Guiana Space Centre, 5.2° N. In May 2026 ESA and CNES set €1 billion over three years to refurbish it, for six new launchers and pads ([Advanced Television](https://www.advanced-television.com/2026/05/19/esa-cnes-puts-e1bn-into-kourou-launch-site/)). MaiaSpace means to fly Europe’s first reusable launcher from the old Soyuz pad ([MaiaSpace](https://www.maia-space.com/news/342/)).
+  - *Earth’s push east.* This project’s arithmetic: the equator turns at 465 m/s, so Kourou gives 463 and Cape Canaveral, at 28.5°, 409.
+  - *Low orbit.* The ISS flies about 414 to 424 km up at 51.6°, once round every 92.9 minutes ([In-The-Sky.org](https://in-the-sky.org/spacecraft.php?id=26400)). 51.6° is the lowest tilt Russia reaches from Baikonur without dropping stages on China, so every big launch site can reach it. Through a NASA answer quoted on a mailing list, not read at NASA.
+  - *On the map.* Earth turns once a minute there, so the yard goes round in about 4 seconds, sped up as much as Earth’s turning.
+  - Matters: each build stands where the real thing would, for the real reason: power, the equator, or an orbit everyone can reach.
+  - Used: game/lib/game/sites.ts, their places and stories, and game/lib/drift.ts, the ring, the paths up from Kourou and the yard’s orbit, 2026-10-18.
+- **Where ground solar stands, checked 2026-10-22** · Mixed. For the Build tab, Ground Solar’s places and story. Researched by an agent.
+  - *Talatan.* Talatan Solar Park, Gonghe County, Qinghai, on the Tibetan plateau beside the Longyangxia Dam, 36.19° N, 100.54° E ([Wikipedia](https://en.wikipedia.org/wiki/Talatan_Solar_Park), read through a fetch). It covers 420 km², by the New York Times, 10 October 2025, as Wikipedia cites it. Wikipedia’s pages disagree on its size: 21 GW in March 2026 from a prefecture source, 16 GW in 2023, and 8.43 GW in a 2025 timeline ([List of photovoltaic power stations](https://en.wikipedia.org/wiki/List_of_photovoltaic_power_stations), first half read through a fetch). So the story leaves its capacity out. The 3,000 m altitude is uncited there.
+  - *Khavda.* Khavda Renewable Energy Park, Gujarat, 24.117° N, 69.350° E, on salt desert by Pakistan. 30 GW of solar and wind are planned by 2029, and 9.4 GW ran as of April 2026 ([Wikipedia](https://en.wikipedia.org/wiki/Khavda_Renewable_Energy_Park), read through a fetch). Its area is 726 km² in the infobox and 538 km² in press, the latter through a search summary.
+  - *Cauchari.* Jujuy, Argentina, 24.095° S, 66.724° W, over 4,000 m up. 300 MW and about 660 GWh a year since 2020 ([Wikipedia](https://en.wikipedia.org/wiki/Cauchari_Solar_Plant), read through a fetch). This project’s arithmetic: a 25% capacity factor.
+  - *Where panels make the most.* [World Bank and Solargis 2020, Global Photovoltaic Power Potential by Country](https://documents1.worldbank.org/curated/en/466331592817725242/text/Global-Photovoltaic-Power-Potential-by-Country.txt) · Report. Summary and regional sections read in full text.
+    - The highest potential is in the Andes: northwest Argentina, Bolivia, northern Chile and southern Peru. It is 15 to 20% above the Arabian Peninsula or north Africa, from clear skies, clean air, cold and altitude.
+    - Namibia has the highest country average and Ireland the lowest, slightly over a factor of two apart.
+  - *How much solar.* [Ember, Global Electricity Review 2026](https://ember-energy.org/latest-insights/global-electricity-review-2026/2025-in-review/) · Data, read through a fetch. Solar made 2,778 TWh in 2025, up a record 636 TWh, and 647 GW were added.
+  - This project’s arithmetic: a fifth of 24 TW is 4.8 TW, about 42,000 TWh a Year, 15 times 2025’s solar. Built over 10 Years, that is about 4,200 TWh a Year added, 6.6 times 2025’s record rise.
+  - This project’s choice: three places, the largest park at work, the largest being built, and the region with the best sunlight. No plan links them.
+  - Used: game/lib/game/sites.ts, 2026-10-22.
+- **Where the 15 m mirror stands, checked 2026-10-22** · Mixed. Researched by an agent.
+  - *LUVOIR-A.* 15.1 m across, folding to fit an 8 m fairing, to orbit Sun–Earth L2, launching about 2039 if funded, 18 to 24 billion dollars over its life ([Wikipedia](https://en.wikipedia.org/wiki/Large_Ultraviolet_Optical_Infrared_Surveyor), read through a fetch). The 2020 survey recommended a telescope of about 6 m instead, quoted on the same page.
+  - [LUVOIR final report](https://arxiv.org/abs/1912.06219): abstract reread 2026-10-22. It does not name the orbit. Its 27.8 t, or 37.4 t with growth, is already logged.
+  - This project’s arithmetic: 15 over 6.5 is 2.3, so the closest a world can sit to its star and still be split shrinks from 56 to about 24 thousandths of an arcsecond in green light. The area is 5.3 times Webb’s, taking both as full circles.
+  - This project’s choice: beside the Infrared Telescope, as the real one would go.
+  - Used: game/lib/game/sites.ts, 2026-10-22.
+- **Where the Moon’s mass driver stands, checked 2026-10-22** · Mixed. Researched by an agent.
+  - [O’Leary, Heppenheimer and Kaplan 1977, material transfer from the Moon](https://nss.org/?p=29416) · Published, AIAA Progress in Astronautics and Aeronautics 57, from the 1976 Ames summer study. Abstract read through a fetch.
+    - Launching from a critical longitude on the lunar equator, 33.1° E, gives the least scatter for one class of paths to L2.
+    - Errors of about 10 cm/s along the track, 1 mm/s up and 1 cm/s sideways give a 50 m miss.
+  - [Heppenheimer and Kaplan 1977](https://repository.exst.jaxa.jp/dspace/handle/a-is/438394) · AIAA. Abstract read through a fetch. Payloads fly to a passive catcher near L2.
+  - [Criswell, The Initial Lunar Supply Base](https://nss.org/settlement/nasa/spaceres/V-1.html) · Study, NASA SP-428, 1979. Read through a fetch. The base stands at the equator, near where Mare Tranquillitatis meets the eastward highlands. The driver points east, and catchers wait at L2.
+  - [Mass Drivers III: Engineering](https://nss.org/settlement/nasa/spaceres/III-3.html) · SP-428. Read through a fetch. Launch at 2,400 m/s, the lunar escape speed. 650,000 t a year at 49% operating time, as 10.5 kg loads at 4 Hz. It names no site.
+  - *Mass Driver 1.* Built by MIT students under O’Neill and Kolm in 1976 and 1977, largely from scrap ([Wikipedia](https://en.wikipedia.org/wiki/Mass_Driver_1), read through a fetch).
+  - Sonntag 2026, already logged: its siting sections read in full text 2026-10-22. Its quenchgun weighs 372 t and throws 1 t every 2 minutes on 20 MW, 262,800 t a year. Only a few polar sites send rock straight to low orbit.
+  - This project’s choice: O’Neill’s equator, not Sonntag’s pole. The game’s 600 kt a Year is O’Neill’s group’s rate. Its rock goes to a catcher and the foundry’s orbit, as theirs did.
+  - This project’s arithmetic: about 250 km from the Moon Vault’s pit. The 1 kt of machines is HOLOS_GAME_CONCEPT.md’s.
+  - Used: game/lib/game/sites.ts, 2026-10-22.
+- **Where the orbital foundry stands, checked 2026-10-22** · Mixed. Researched by an agent.
+  - O’Leary, Heppenheimer and Kaplan 1977, the same abstract: a stable orbit for the manufacturing facility with half the Moon’s period, 10 to 30 m/s from L2, and cheaper to and from geosynchronous and low orbit than the other sites weighed.
+  - Heppenheimer and Kaplan 1977: a colony orbit of about two weeks, reached from L2 for as little as 9.02 m/s.
+  - This project’s arithmetic and choice: half the sidereal month is 13.66 days, 19,672 minutes, about 241,000 km from Earth’s center by Kepler’s law. Drawn as a circle, tilted 25°, near the Moon’s plane against Earth’s equator around 2040. The abstracts give no shape.
+  - [Space Forge, ForgeStar-1](https://www.spaceforge.com/missions/forgestar-1) · Company page, read through a fetch. Launched June 2025. Its first plasma near 1,000 °C, the first on a free-flying commercial craft, is through a search summary.
+  - Used: game/lib/game/sites.ts, 2026-10-22.
+- **Where belt mining stands, checked 2026-10-22** · Mixed. Researched by an agent.
+  - The belt from 2.1 to 3.3 AU is already in drift.ts, logged under “The Sun’s small bodies”.
+  - *Psyche.* [JPL, May 2026](https://www.jpl.nasa.gov/news/nasas-psyche-mission-aces-mars-flyby-targets-metal-rich-asteroid/), read through a fetch: arrival in August 2029 at the metal-rich asteroid. Up to 60% metal by volume is Elkins-Tanton et al. 2022, through a search summary.
+  - *Samples.* Bennu’s 121.6 g, with water in hydrated clay, through search summaries.
+  - [Keck Institute 2012](https://kiss.caltech.edu/final_reports/Asteroid_final_report.pdf): a 7 m, 500 t asteroid to high lunar orbit, through a search summary. Odin’s loss in March 2025 is already logged.
+  - This project’s choice: the belt as the source, and rock coming home to the foundry’s orbit, where the map places it, since the map has no belt. Real plans aim at near-Earth asteroids.
+  - Used: game/lib/game/sites.ts, 2026-10-22.
+- **Where the far-side array stands, checked 2026-10-22** · Mixed. Researched by an agent.
+  - *Daedalus.* 5.9° S, 179.4° E, 93.6 km across, 3.0 km deep, near the middle of the far side, close to the point opposite Earth, proposed for a giant radio telescope ([Wikipedia](https://en.wikipedia.org/wiki/Daedalus_(crater)), read through a fetch).
+  - [Burns et al. 2019, FARSIDE](https://arxiv.org/abs/1911.08649) · NASA probe study. Site and instrument sections read in full text. The far side gives more than 100 dB against Earth’s interference. The site must sit within 65° of the point opposite Earth.
+  - [van der Wateren and Burns, ITU, August 2026](https://www.itu.int/hub/2026/08/cosmology-from-the-moon-in-a-radio-quiet-environment/), read through a fetch. The shielded zone lies more than 23.2° beyond the limb. Radio Regulations Nos. 22.22 to 22.25 bar harmful emissions there.
+  - [Polidan et al. 2024, FarView](https://arxiv.org/abs/2404.03840) · ASR. Architecture and site sections read in full text. 100,000 dipoles over about 200 km², from 50 to 70 t of aluminum made from regolith.
+  - [Li et al. 2026](https://arxiv.org/abs/2604.07920) · Preprint. Abstract and instrument section read. The first radio SETI search from the far side, in Chang’e 4’s recordings since 2019, found no credible periodic artificial signal.
+  - Maccone’s protected circle and Bassett et al. 2020, through search summaries.
+  - This project’s choice: Daedalus, best shielded beside the point opposite Earth. Von Kármán is the strongest alternative. Whether Daedalus’s floor is flat enough was not checked.
+  - This project’s arithmetic: 100 dB is ten billion times.
+  - Used: game/lib/game/sites.ts, 2026-10-22.
+- **Where power from orbit stands, checked 2026-10-22** · Mixed. Researched by an agent.
+  - NASA OTPS 2024, already logged, read in full 2026-10-22: both designs assembled in geostationary orbit in the 2040s. RD1 makes power 99% of the year, delivers 2 GW, needs 5.9 million kg sent up and one 6 km field of ground antennas.
+  - *Geostationary orbit.* 35,786 km above the equator, 1,436 minutes ([Wikipedia](https://en.wikipedia.org/wiki/Geostationary_orbit), read through a fetch).
+  - [Caltech, 1 June 2023](https://www.caltech.edu/about/news/in-a-first-caltechs-space-solar-power-demonstrator-wirelessly-transmits-power-in-space), read through a fetch. MAPLE’s beam was detected on a Pasadena rooftop.
+  - Glaser 1968, through a search summary.
+  - This project’s arithmetic: 4.8 TW is 2,400 of RD1, about 14 Mt at its ratio. The game’s 10 Mt is its own.
+  - Used: game/lib/game/sites.ts, 2026-10-22.
+- **Where the deuterium works stands, checked 2026-10-22** · Mixed. Researched by an agent.
+  - [Heavy water](https://en.wikipedia.org/wiki/Heavy_water) · Reference, read through a fetch. Bruce, in service from 1973, 1,600 t a year at its peak, the largest in the world, 340,000 t of feed water a tonne, shut in 1997, on Lake Huron. India is the largest producer.
+  - [Bruce Nuclear Generating Station](https://en.wikipedia.org/wiki/Bruce_Nuclear_Generating_Station), read through a fetch. 44°19′31″ N, 81°35′58″ W. The heavy water plant made 16,000 t in all, on 750 MW of the station’s process heat.
+  - [WNN, 14 May 2024](https://www.world-nuclear-news.org/Articles/Canadian-firms-team-up-for-heavy-water-production), read through a fetch. It gives 1998 for the close. Canadian firms are weighing new production.
+  - [Historic Nova Scotia, Glace Bay](https://historicnovascotia.ca/items/show/90), read through a fetch. It drew seawater, and the corrosion it caused kept the plant from producing until 1976. It closed in 1985.
+  - This project’s arithmetic: 24 times Bruce’s peak is 38,400 t of heavy water and about 7,700 t of deuterium a Year, on 18 to 44 GW of heat, under 0.2% of 24 TW.
+  - This project’s choice: Bruce, fresh water and nuclear steam, the pairing that worked. So since 2026-10-22 the build draws heavy hydrogen from water, not seawater.
+  - Used: game/lib/game/sites.ts, 2026-10-22.
+- **Where the fusion drive stands, checked 2026-10-22** · Mixed. Researched by an agent.
+  - [Mahon, i4is, 2018](https://i4is.org/reaching-the-stars-in-a-century-using-fusion-propulsion/) · Review of Freeland and Lamontagne 2015, JBIS 68, 68. Read through a fetch. Firefly could be built in Earth orbit or at an Earth–Moon Lagrange point, and is towed behind the Moon to be lit, away from Earth. 2,200 t dry, 4.7% of light speed after 10 years.
+  - Zap Energy’s 39 kW is already logged.
+  - This project’s choice: on the yard’s orbit, about 355 km behind it. 1,400 to 4,000 t is HOLOS_GAME_CONCEPT.md’s.
+  - Used: game/lib/game/sites.ts, 2026-10-22.
+- **Where the seed ship stands, checked 2026-10-22** · This project’s choice, from logged sources: Freitas’s REPRO, Gros 2017’s 1,500 t, and Voyager 1’s 40,000 years. On the yard’s orbit, about 530 km behind it, beside its drive. Used: game/lib/game/sites.ts, 2026-10-22.
+- **Close views, checked 2026-10-18** · Mixed. For Close View on the map, where the camera falls from orbit to the ground at a build and draws it there in lines and lights.
+  - *Hyperion’s first plan.* 4 million sq ft over 2,250 acres, in nine buildings phased in through 2030. Its place is 32.4771° N, 91.6323° W, on Louisiana Highway 183 just outside Holly Ridge, with three combined-cycle gas plants from Entergy and the Smalling substation, which Meta paid for ([Wikipedia](https://en.wikipedia.org/wiki/Hyperion_Data_Center), [DCD](https://www.datacenterdynamics.com/en/news/meta-purchases-additional-1400-acres-for-hyperion-mega-data-center-expansion/)). Meta bought 1,400 more acres at the end of 2025, and its plans grew from 2 GW to 5 GW in July 2026 ([DCD](https://www.datacenterdynamics.com/en/news/meta-expands-data-center-campus-in-richland-parish-louisiana-to-5gw-will-invest-50bn/)).
+  - *Our drawing.* 11 halls, as IEEE Spectrum counts the planned data centers, each 370 by 110 m, about the 41,000 m² of each of the first plan’s nine buildings. The layout, the substation and gas plants’ places, and the two power lines are ours: no site plan has been published.
+  - *The towns.* Rayville, Delhi and Monroe, at their real places, with about as many people. Their lights show at night.
+  - *All-Sky Watch.* The Green Bank Telescope’s dish is 100 by 110 m, its top 148 m up, at 38.4331° N, 79.8398° W. Our half of the watch, 640,000 antennas, is drawn as 100 stations of 6,400 at about ten to the square meter, near EMBRACE’s density. The stations are ours.
+  - *Deep Flash Watch.* PANOSETI’s geodesic dome is 4.988 m across and 1.827 m high, with 45 telescopes of 0.48 m, and its two domes stand 1 km apart to rule out false flashes ([PANOSETI mechanical design, arXiv 2111.12771](https://arxiv.org/pdf/2111.12771)). No source found names Palomar as its site: that stays ours, from the story. The Hale dome is drawn 41.8 m across.
+  - *Launch Complex.* ELA-3 at about 5.239° N, 52.768° W, and ELA-4 at about 5.256° N, 52.787° W ([The Space Devs](https://ll.thespacedevs.com/2.2.0/pad/67/)). No source found gives the pads’ distance from the shore. Our shore runs straight from Kourou toward Sinnamary, 3 km out to sea from both towns. The four new pads and their places are ours.
+  - *Orbital Yard and Probe Yard.* The ISS is 109 by 73 m and about 420 t. Daedalus was 190 m long, 54,000 t at the start with 50,000 t of fuel, studied 1973 to 1978, and would be built in Earth orbit ([Wikipedia](https://en.wikipedia.org/wiki/Project_Daedalus)). Both yards’ shapes are ours.
+    - Checked 2026-10-19: Wikipedia gives Earth orbit uncited, two stages, about 12% of light speed, and a 46-year cruise to Barnard’s Star after about 4 years of burn. One 1978 magazine caption shows it built in Jupiter orbit instead, where its helium-3 was to come from. The final report, which would settle it, has no free text. The story’s “about 50 years after launch” is this sum.
+  - *Infrared Telescope.* Webb’s shade is 21 by 14 m in five layers, its mirror 6.5 m in 18 segments. Ours is drawn as a 30 by 20 m shade and an 8 m mirror: our scale-up, as built in orbit.
+  - *Moon Vault.* The pit’s funnel is 140 to 146 m across and about 20 m deep, the pit inside it 88 to 100 m across and about 105 m deep, and radar shows a conduit west from it, about 45 m wide and 30 to 80 m long by one report ([Wikipedia](https://en.wikipedia.org/wiki/Mare_Tranquillitatis_pit), [Eos](https://eos.org/articles/lunar-lava-tube-revealed-beneath-collapsed-pit)). Model estimates from 2010 Mini-RF radar, not seen directly. The vault, its lift and solar field, and the craters round the pit are ours. Earth stands about 56° up in the west-southwest: our reckoning.
+  - *Laser Sail Array.* Starshot’s array: a phased array up to 100 GW, about a square kilometer ([Wikipedia](https://en.wikipedia.org/wiki/Breakthrough_Starshot), from Breakthrough’s 2016 concept page). Our site, 5 km east of ALMA on the Chajnantor plateau, is ours. ALMA’s 66 dishes are drawn round its real middle.
+    - Read 2026-10-19: [Haqq-Misra, Boston Globe, November 2017](https://www.bostonglobe.com/ideas/2017/11/11/here-why-plans-for-death-laser-space-have-been-put-hold/SwlSwr6G8VkYo9SIOR60mO/story.html) names the Southern Hemisphere, “where Proxima Centauri is more visible”, and the Atacama among the places. It predates the hold. The hold is from Scientific American, logged under “Classic propulsion studies”.
+    - Checked 2026-10-19: Breakthrough’s criteria were high altitude, dry air, and few birds or aircraft passing over ([Inverse, April 2016](https://www.inverse.com/article/14206-will-breakthrough-starshot-s-spaceship-pushing-laser-field-be-in-colorado-tibet)). Southern latitudes, with the Atacama “often mentioned” ([Centauri Dreams, August 2016](https://www.centauri-dreams.org/2016/08/30/breakthrough-starshot-report-2-drilling-down-to-the-basics/)). No Breakthrough source names a site.
+    - Checked 2026-10-19: [Finkbeiner, Scientific American, March 2017](https://www.scientificamerican.com/article/inside-the-breakthrough-starshot-mission-to-alpha-centauri/) gives 100 million kilowatt lasers, a kilometer on each side. Parkin’s cost model wants more: 200 GW across 2.7 km. The game keeps Starshot’s own figure.
+    - Our reckoning: Alpha Centauri, at 60.8° south, climbs 52° up at Chajnantor at its highest.
+    - The strongest lasers in 2026: Lockheed Martin delivered a 300 kW class laser to the US in 2022 and is scaling it to 500 kW ([Lockheed Martin, July 2023](https://news.lockheedmartin.com/2023-07-28-Lockheed-Martin-to-Scale-Its-Highest-Powered-Laser-to-500-Kilowatts-Power-Level)). Press release, not read. “A few hundred kilowatts” in 2040 is this project’s, and cautious.
+  - *Chajnantor’s sunlight.* [Cordero et al. 2023](https://doi.org/10.1175/BAMS-D-22-0215.1), BAMS 104, E1206. Published. From search summaries, not read. A station at 5,148 m on the plateau’s northwest edge, since 2016, measures a mean 308 W/m², the highest known on Earth, and bursts to 2,177 W/m². [Rondanelli, Molina and Falvey 2015](https://doi.org/10.1175/BAMS-D-13-00175.1), BAMS 96, 405, first found the Atacama maximum, near the Domeyko range.
+    - Matters: a real reason beyond Starshot’s for the array’s place. Charging it from that sun between launches is ours.
+  - *Parker Solar Probe.* 192 km/s at its closest to the Sun, 24 December 2024, the fastest thing we have built ([Guinness World Records](https://www.guinnessworldrecords.com/world-records/66135-fastest-spacecraft-speed)). For the Probe Yard’s “WE HAVE”.
+  - Matters: down at the ground, or out in space beside it, each build reads as a step from 2040, beside what stands there now.
+  - Used: game/lib/game/close.ts, each build’s model, game/lib/game/sites.ts, the Laser Sail Array’s and Probe Yard’s places and stories, and game/lib/drift.ts, the ground and the fall to each, 2026-10-18. The two stories rechecked against these, 2026-10-19.
+- **Close views for what opens and the long road, drawn 2026-10-22** · This project’s drawings, from the places’ sources above.
+  - Real sizes used: Talatan’s rows of panels, LUVOIR-A’s 15 m mirror, and O’Neill’s group’s driver of nearly 5 km at 100 g, which lets go at 2.4 km/s. Also the Keck Institute’s bagged asteroid, Daedalus crater and FarView’s dipoles made from aluminum, NASA’s 2024 stations in geostationary orbit, Bruce’s heavy water on Lake Huron, Firefly’s radiators and magnetic nozzle, and the seed ship’s stowed loop.
+  - This project’s arithmetic: a load leaving the Moon level falls behind its curve by the distance squared over twice its radius, about 120 m at 20 km and a kilometer at 60.
+  - From general knowledge, not a source read: Kincardine has about 12,000 people and Saugeen Shores about 16,000, by Canada’s 2021 census. Lake Huron’s shore by Bruce is our reading, not a survey.
+  - Everything else drawn is ours: the blocks, towers, tanks, fins, modules, coils and their places.
+  - Used: game/lib/game/close.ts.
+- **What we have at Year 0, on each build, written 2026-10-18** · This project’s setting, not a source. For the Build tab, the “WE HAVE” line that opens each build’s story, so it reads as a step from 2040, not 2026.
+  - *Drawn from* [Earth’s kit at Year 0](HOLOS_GAME_CONCEPT.md#earths-kit-at-year-0), [Growing compute](HOLOS_GAME_CONCEPT.md#growing-compute) and [What Earth hears](HOLOS_GAME_CONCEPT.md#what-earth-hears), as game/lib/mind/earth.ts holds them.
+  - *The data center’s scale.* This project’s arithmetic: thought draws about 0.25 TW, fifty times Hyperion’s planned 5 GW. One data center adds half again, about 0.12 TW, half a percent of 24 TW. So one is a Year of the fabs’ chips, about 24 Hyperions, not one campus.
+  - *The flash watch.* That only PANOSETI’s few telescopes at Lick watch for laser flashes by 2040 is speculation. The Palomar domes were still seeking funding in 2022.
+  - Used: game/lib/game/sites.ts, each story’s `have`, 2026-10-18.
+- **Where the watches stand, checked 2026-10-18** · Mixed. For the Build tab and its tour, where picking a watch shows its two places on Earth under domes.
+  - *Green Bank.* The National Radio Quiet Zone, about 13,000 square miles, 34,000 km², round Green Bank and Sugar Grove, West Virginia. Set up in 1958 by the FCC and IRAC ([Green Bank Observatory](https://greenbankobservatory.org/about/national-radio-quiet-zone/)). 38.43° N, 79.84° W.
+  - *Murchison.* Inyarrimanha Ilgari Bundara, CSIRO’s Murchison Radio-astronomy Observatory, about 700 km north of Perth. A radio quiet zone since April 2005, with a 70 km inner zone, enhanced in July 2011. SKA-Low’s 131,072 antennas are being built there since December 2022. The name means “sharing sky and stars” in Wajarri ([Wikipedia](https://en.wikipedia.org/wiki/Murchison_Radio-astronomy_Observatory)). 26.70° S, 116.67° E.
+  - *Why those two.* Murchison sits about 20° from Green Bank’s far side, one north and one south. A dense aperture array hears the half of the sky above it, so the pair hears nearly all of it at any hour. This project’s geometry, not a published design.
+  - *The flash watch’s domes.* PANOSETI’s 2022 plan for Palomar: two domes about 1 km apart, 45 telescopes each with 10° by 10° fields, scanning about 10,000 square degrees as Earth turns ([Sky & Telescope, August 2022](https://nxtbook.com/nxtbooks/aas/st_202208/index.php?startid=39)), then seeking funding. Its first telescopes went in at Lick by February 2020 and began testing in March 2021 ([Wright et al. 2021](https://arxiv.org/pdf/2111.11080)).
+  - *Why two domes.* A flash seen by both at once is far off. Seen by one, it is likely Cherenkov light from an air shower. On-sky tests found a baseline over 1 km cuts those false alarms ([Wright et al. 2022](https://arxiv.org/pdf/2210.01356)).
+  - *Sutherland.* The South African Astronomical Observatory’s dark site, home of SALT, 32.38° S, 20.81° E. Our choice for the southern sky, far from Palomar in longitude. A sample, not a plan anyone has made.
+  - Matters: both watches stand where real instruments already listen and look, for real reasons: quiet radio and dark skies.
+  - Used: game/lib/game/sites.ts, the watches’ places and stories, and their domes in game/lib/drift.ts, 2026-10-18.
+- **Where the Moon vault stands, checked 2026-10-18** · Mixed. For the Build tab, where picking the vault flies the map to its place and opens its story.
+  - *The Sea of Tranquility pit.* 8.3355° N, 33.222° E, about 400 km from Apollo 11. Found by SELENE’s cameras in 2009. Inner pit 88 to 100 m across, about 105 m deep ([Wikipedia](https://en.wikipedia.org/wiki/Mare_Tranquillitatis_pit)).
+  - *The cave.* [Carrer, Bruzzone et al. 2024](https://doi.org/10.1038/s41550-024-02302-y), Nature Astronomy 8, 1119, read through Wikipedia and press. Mini-RF radar from LRO, taken in 2010, reanalysed with 3D simulations: part of the echo comes from a conduit under the pit’s west side, at least 45 m wide and 30 to 80 m long, 130 to 170 m down. The authors call an empty lava tube the most likely reading. The first radar evidence of a cave under a Moon pit. ESA’s account gives other depths, so they stay loose.
+  - *Its warmth.* [Horvath, Hayne and Paige 2022](https://doi.org/10.1029/2022GL099710), Geophysical Research Letters, abstract and [NASA’s account](https://www.nasa.gov/missions/lro/nasas-lro-finds-lunar-pits-harbor-comfortable-temperatures/). Modeled on this very pit: in permanent shade it holds near 290 K, about 17 °C, through the lunar day and night. Sunlit floors pass 420 K.
+  - *The next cave.* NASA picked GIMLI on 2026-10-05, a PSI-led lander and rover with radar, seismometers and a gravimeter, to test whether the Marius Hills pit opens into a cave. No launch date ([ScienceDaily](https://www.sciencedaily.com/releases/2026/10/261003234013.htm)).
+  - *Who tried before us.* Lonestar’s Freedom, a small data center of 8 TB, rode Intuitive Machines’ Athena to the south pole in March 2025. Athena landed on its side. Lonestar says its tests ran in transit and the payload survived ([FOX 13](https://fox13news.com/news/lunar-data-center-intact-despite-lunar-landers-botched-landing-st-pete-company-says)).
+  - *The Moon’s face.* The dots read the atlas’s Moon map, Solar System Scope’s CC BY 4.0 composite of NASA imagery, already in assets/. Its longitude 0 sits mid-map: sampled at the pit and at Crisium, Imbrium and Serenitatis it is dark, near 80 of 255, and Tycho and the far side bright, near 190.
+  - Matters: the vault stands where the best evidence of a Moon cave is, the best place yet known there to keep a Mind out of the heat, cold and radiation.
+  - Used: game/lib/game/sites.ts, the Moon vault’s place and story, and the map’s view of it in game/lib/drift.ts, 2026-10-18.
+
+### Seeing a fusion drive
+
+Gathered 2026-10-14 by a research agent, for whether Earth sees a neighbor’s probe arrive. Tags as it reported: read means the paper itself.
+
+- **[Shubov 2021, D-He3 losses](https://arxiv.org/abs/2104.06251)** · Preprint. Read in part.
+  - X-rays from the hot fuel take 0.41 of fusion power at 50 keV, 0.25 at 70, 0.19 at 100. The best burn runs at 60 to 70 keV. With the field’s own radiation, losses take 50 to 75%.
+  - Used: the probe rule, 2026-10-14.
+- **[Xie 2024, D-D losses](https://arxiv.org/abs/2410.18054)** · Preprint. Read.
+  - In D-D fuel, X-ray losses match the useful fusion power at 45 to 72 keV.
+  - Why it matters: a fusion drive shines X-rays by its nature, near 60 keV. About 6% falls in Einstein Probe’s band and 70% in 15 to 150 keV, by the agent’s arithmetic.
+  - Used: the probe rule, 2026-10-14.
+- **Lamontagne 2018, JBIS 71, 450** · Abstract only, through the agent. No link kept.
+  - Neutrons and X-rays escaping: nearly zero for Daedalus, whose pellets absorb their own X-rays, 220 GW for l’Espérance, 8,400 GW for Firefly. An open nozzle lets up to 97% escape.
+  - Why it matters: how bright a drive is depends on its design, from nothing to more than its jet.
+  - Used: the probe rule, 2026-10-14.
+- **X-ray sky monitors, now and planned** · Mission pages and papers, through the agent.
+  - Einstein Probe, launched January 2024: 0.5 to 4 keV, 3,600 square degrees, 2.6e-11 erg/s/cm² in 1,000 s. Three years planned, five hoped.
+  - SVOM, June 2024, three years. MAXI ends with the ISS, about 2030. Swift’s science mostly stopped in February 2026, and its reboost was called off. eROSITA has been in safe mode since 2022.
+  - eXTP, China, about 2030, dropped its wide-field monitor. THESEUS lost ESA’s M7 slot in June 2026. HiZ-GUNDAM is not approved.
+  - Why it matters: no wide-field X-ray watch is confirmed for 2040.
+  - Build times, 2026-10-14: Einstein Probe entered its engineering phase with China’s second space science program, approved in May 2018, and launched on 9 January 2024 ([Wikipedia](https://en.wikipedia.org/wiki/Einstein_Probe), and a search summary of CAS news). About 1,450 kg. Swift was selected in October 1999 and launched on 20 November 2004 ([Gehrels et al. 2004](https://arxiv.org/pdf/astro-ph/0405233)).
+  - Used: the X-ray sky watch’s price, 6 Years at standard pace, a sample. `calcs/seed.py` XRAY_WATCH_YEARS.
+  - Used: the probe rule, 2026-10-14. Earth must build its own.
+- **This project’s arithmetic: how close a drive shows, 2026-10-14.** Script kept out of the repo.
+  - Brightness falls as distance squared. With 6% of a drive’s X-rays in Einstein Probe’s band, its 1,000 s limit sees 1 TW within about 3 AU, and Zubrin’s 60 TW within about 22. Long stacking roughly triples that.
+  - A 100 t probe braking at a hundredth of a gravity, exhaust 10,600 km/s, runs about 50 GW of jet. A 1,000 t one about 0.5 TW.
+  - At that braking, the last 1,000 AU take 640 days, the last 100 AU 200 days, the last 10 AU 64 days.
+  - Its radiators’ heat glows too: 3.5 GW at 1,000 K is about magnitude 16 at 1 AU and 21 at 10 AU, bolometric.
+  - Used: the probe rule, 2026-10-14. A probe shows only in its last weeks.
+
+### Pricing a seed ship
+
+Gathered 2026-10-14 by a research agent, for Earth’s first seed ship.
+
+- **[NASA 1980, a self-copying lunar factory](https://nss.org/wp-content/uploads/2017/07/1982-Self-Replicating-Lunar-Factory.pdf)** · Study, CP-2255, chapter 5. Read.
+  - A seed of 100 t, by subsystem estimates 63 to 146 t, drawing 0.5 to 12 MW. It unfolds in a year, then makes 100 t a year of itself.
+  - 90 to 96% closure is called realistic. Chips and bearings, 4 to 10%, come from Earth.
+  - Why it matters: the best-known seed can’t stand alone light-years from home.
+  - Used: v2 [Outposts and colonies](HOLOS_GAME_CONCEPT.md#outposts-and-colonies), every seed stands alone, 2026-10-14. Its year-long copy time bounds the neighbors’ pace.
+- **[Freitas 1980, REPRO](https://www.rfreitas.com/Astro/ReproJBISJuly1980.htm)** · Published, JBIS 33, 251. Read, the author’s web copy.
+  - A 443 t SEED lands on a jovian moon, with 412 MW of reactors. It grows to a 346,000 t factory in 500 years.
+  - Why it matters: the only stand-alone interstellar seed found.
+  - Used: v2 [Outposts and colonies](HOLOS_GAME_CONCEPT.md#outposts-and-colonies), the seed’s 443 t, 2026-10-14. `calcs/seed.py`.
+  - Reread 2026-10-16 through a summary of the same copy, for where a seed lands. A small moon, about 100 km across and asteroid-like, at 7 thousandths of a gee: cheap to land on and haul from. Fuel comes from the giant’s air. It gives no rule for avoiding worlds with life, and leaves open whether a probe may enter a system that has some.
+- **Proxima Centauri’s worlds, checked 2026-10-16.** From search summaries and Wikipedia, not the papers.
+  - b: at least 1.055 Earths, 11.2 days, in the warm zone. d: about a quarter of an Earth, 5.1 days, close in, confirmed by ESPRESSO in 2022. c: a candidate at 1.5 AU, disputed since Artigau et al. 2022 tied its signal to the instrument.
+  - Matters: a seed at Proxima chooses between a bare small world and one that might hold life. From general knowledge, not a source read: COSPAR’s planetary protection rules hold landers bound for worlds that might hold life to strict cleaning.
+- **[Borgue and Hein 2021](https://arxiv.org/abs/2005.12303)** · Published, Acta Astronautica. Read.
+  - A 70 kg asteroid probe that can make 47 kg of itself. Its electronics and solar rolls come from Earth.
+  - Used: not yet. Too small for an industry seed.
+- **Project Daedalus** · BIS 1978, through Wikipedia and Centauri Dreams only.
+  - 54,000 t at launch, 50,000 t of fuel, 450 t of payload, 0.12 of light speed, a flyby. Exhaust 10,600 km/s.
+  - About 30,000 t of helium-3, mined at Jupiter by balloon factories over 20 years.
+  - Its 50 t beryllium shield, 9 mm thick, faces the dust.
+  - Used: the seed ship question, 2026-10-14.
+- **[Swinney et al. 2020, Project Icarus](https://zenodo.org/record/3747274)** · Published. Table 1 read. Each design carries 150 t.
+  - Firefly, burning deuterium: 24,000 t, mass ratio 3.25 to reach 4.7% of light speed and 3.25 again to brake. Exhaust 11,970 km/s. 1,600 t of its 2,200 t dry is radiators.
+  - Ghost: 187,587 t, with a 1,785 t magnetic sail braking from 5% of light speed over 36 years. Dropped as its mass grew.
+  - Endeavour, on helium-3: 25,238 t, mass ratio 20.4, 8.25% of light speed. Unfinished.
+  - Why it matters: real designs to stop at a star weigh tens of thousands of tonnes, mostly fuel.
+  - Used: the seed ship question, 2026-10-14.
+- **[Crawford 2015, lunar helium-3](https://arxiv.org/abs/1410.6865)** · Published. Read.
+  - 4.2 parts per billion on average, about 10 at most measured. About 200,000 t in two rich maria, to 3 m deep.
+  - Why it matters: a ship’s load of helium-3 would mean mining about a trillion tonnes of lunar soil. The agent’s arithmetic.
+  - Used: the seed ship question, 2026-10-14.
+- **Palaszewski, outer planet mining** · NASA Glenn, [2015](https://ntrs.nasa.gov/citations/20150006664) and [2020](https://ntrs.nasa.gov/citations/20205004479). Read.
+  - Helium-3 is 1.5e-5 of Uranus’s air by mass. 5,000 t of fuel over 10 years needs 20,000 to 110,000 t of vehicles.
+  - Used: the seed ship question, 2026-10-14.
+- **[Andrews and Zubrin 1990, magnetic sails](https://ntrs.nasa.gov/citations/19910012840)** · Published, JBIS. Read by the agent.
+  - A 3,100 km loop at 1.35 MA, 950 t, brakes 1,000 t from half of light speed in 18.8 years. Slow below 3,000 km/s.
+  - Gros finds their drag about four times too high. Freeland 2015 traced a threefold error to an integration, by a summary.
+  - Used: how a colony ship brakes, 2026-10-14.
+- **Lubin 2016, scaling** · Read by the agent, same paper as above.
+  - A 10 km array at 50 to 70 GW pushes 100 kg to about 1% of light speed. Speed grows as the square root of power times array size, over the fourth root of mass.
+  - The agent’s arithmetic: 1,000 t at a tenth of light speed needs about 50 TW from a 100 km array.
+  - Used: the seed ship question, 2026-10-14.
+- **Forward 1984, sizes** · Through a secondary page only.
+  - Rendezvous: 71 t inside a 710 t ring, 100 km across, 7.2 TW out and 26 TW to brake, through a 1,000 km lens. These figures may be garbled: 7.2 TW would take about 40 years.
+  - Used: the seed ship question, 2026-10-14.
+- **Heavy water at scale** · Gathered 2026-10-14 by a research agent.
+  - Canada’s Bruce plant: contracted 1969, in service June 1973, at design rate April 1974. 800 t of heavy water a year a plant, 1,600 at peak. 340,000 t of feed water for each tonne. Closed 1997 ([Wikipedia](https://en.wikipedia.org/wiki/Heavy_water), read).
+  - About 1980 Canada’s four plants made over 2,000 t a year, at about 300 dollars a kg ([Miller, AECL, 2001](https://www.nuclearfaq.ca/A-Miller-Heavy-Water.pdf), read). The Girdler sulfide process takes about 36 GJ a kg ([Ivanco et al.](https://proceedings.cns-snc.ca/index.php/pcns/article/download/2703/2702/2738), read).
+  - No current world total found. India, Argentina and Iran together run under a thousand tonnes a year, by the agent’s reading of scattered figures.
+  - Why it matters: deuterium is plentiful and cheap in energy. Plants, not physics, set the pace.
+  - Used: the seed ship’s deuterium, 2026-10-14. `calcs/early_game.py` seed_ship().
+- **Fusion drives, 2025 and 2026** · Gathered 2026-10-14 by a research agent.
+  - Firefly, by the [i4is review](https://i4is.org/reaching-the-stars-in-a-century-using-fusion-propulsion/) (read): a steady deuterium Z-pinch driven at 5 MA and 235 kV, 1,175 GW. 600 kN, exhaust 12,000 km/s.
+  - [Zap Energy’s 2025 highlights](https://legacy.zapenergy.com/blog/2025-highlights) (read): 1,080 shots in 3 hours at 39 kW average. FuZE-3 reached over 10^10 neutrons. No net-gain figures.
+  - [Helion, February 2026](https://helionenergy.com/newsroom/helion-achieves-new-fusion-energy-milestones) (read): 150 million °C, about 13 keV, and the first private D-T fusion. D-He3 not yet at burn temperature. A 50 MW plant for Microsoft is aimed at 2028.
+  - Princeton’s PFRC-2: 100 eV electrons, 300 ms pulses ([Wikipedia](https://en.wikipedia.org/wiki/Princeton_field-reversed_configuration), read). The Direct Fusion Drive is a NIAC concept.
+  - A 2025 preprint, not peer reviewed, rates fusion rockets at readiness level 2 to 3. No independent estimate of years to a flight engine was found.
+  - Why it matters: a fusion drive is about thirty million times past today’s steady pinch. Its time is a sample, not a forecast.
+  - Used: the seed ship question, 2026-10-14.
+- **Space power and lasers by mass** · Gathered 2026-10-14 by a research agent.
+  - [NASA OTPS 2024, space-based solar power](https://www.nasa.gov/wp-content/uploads/2024/01/otps-sbsp-report-final-tagged-approved-1-8-24-tagged-v2.pdf) (read): design RD1 delivers 2 GW from about 5,900 t, about 3 kg a kW. One page gives 585 t instead, so the report contradicts itself. Assembly in the 2040s, 7 to 13 years.
+  - [Caltech’s design paper](https://arxiv.org/abs/2206.08373) (read): 160 g a square metre, 7 to 14% end to end. Space arrays today are about 70 W a kg.
+  - Lubin 2016 (read): fiber lasers 5 kg a kW, aiming at 1. Space panels under 7 kg a kW. Radiators 25 kg a kW of heat, the largest part. No total given.
+  - [Frazer-Nash for ESA, 2022](https://www.fnc.co.uk/media/myuhgjfg/space-based-solar-power-executive-summary.pdf) (read): 18 years to a full-scale prototype, in four phases.
+  - The ISS: first module November 1998, US segment finished 2011, about 13 years, 420 t.
+  - Why it matters: a 50 TW laser weighs about 150 Mt by NASA’s ratio, or about 2 Gt by Lubin’s parts today. The agent’s arithmetic.
+  - Used: the seed ship question, 2026-10-14. `calcs/early_game.py` seed_ship().
+- **Learning curves and production lines** · Gathered 2026-10-15, through search summaries.
+  - Wright 1936, “Factors Affecting the Costs of Airplanes”: labor per airplane fell by a fixed share each time the count built doubled. Summaries give 10 to 20% ([experience curve](https://en.wikipedia.org/wiki/Experience_curve_effect), [NBER on the Flying Fortress](https://www.nber.org/chapters/c10232.pdf)). The original was not read.
+  - NASA’s Cost Estimating Handbook, 2002, as quoted in a [PRICE H briefing](https://spdf.gsfc.nasa.gov/pub/data/stereo/documents/websites/solar-radio/solar-radio-imaging/IMDC/SIRA_PRICE_H.pdf): a typical aerospace learning rate is 85%, so each doubling of quantity takes 85% of the labor. It applies mainly to uninterrupted manufacturing. Electronics 90 to 95%.
+  - A [University of Maryland space systems course](https://spacecraft.ssl.umd.edu/academics/483F24/483F24L07.costing/483F24L07.costing.pdf) uses unit cost = first unit × n^(ln rate / ln 2).
+  - Liberty ships: about 230 days each in the first year, Patrick Henry 244. By 1943 a median of 39 days, three launched a day, from 18 new yards ([Liberty ship](https://en.wikipedia.org/wiki/Liberty_ship), [Smithsonian](https://www.si.edu/object/nmah_842604)). 2,710 were built.
+  - Why it matters: copies of one design come faster, and a line of yards builds many at once.
+  - Used: v2 [Build times](HOLOS_GAME_CONCEPT.md#build-times), a production line, 2026-10-15. `calcs/early_game.py` copy_years().
+- **This project’s arithmetic: pushing a seed ship, 2026-10-14.**
+  - Light pushes at best twice its power over c. So 1,500 t at a tenth of light speed needs at least 6.7e21 J of light: about 9 Years of Earth’s whole 24 TW grid.
+  - A fusion ship starts at its mass ratio times its dry mass: about 12 on deuterium at Firefly’s exhaust, about 17 on helium-3 at Daedalus’s. Braking on a sail needs no more.
+  - Deuterium is 3.5e-5 of seawater by mass. 40,000 t needs about a billion tonnes of water processed.
+  - Used: the seed ship question, 2026-10-14.
+
+### Ships that carry people
+
+Gathered 2026-10-15 by a research agent. Tags as it reported: read means the source itself.
+
+- **[Partridge et al. 2017, EXTEND](https://europepmc.org/article/PMC/PMC5414058)** · Published, Nature Communications. Read.
+  - Eight lambs grew in a fluid-filled bag for up to 28 days, from 105 to 120 days of a 145-day gestation: like a human born at 22 to 24 weeks. Runs ended by protocol, not failure.
+  - The FDA’s advisers met on first human trials in September 2023 ([MIT Technology Review](https://www.technologyreview.com/2023/09/29/1080538/)). No trial found begun by October 2026.
+  - Used: the people ship question, 2026-10-15.
+- **Embryos grown outside a body** · Abstracts and press.
+  - Mouse: from day 5.5 to day 11 of about 20, stopping when the embryo needs blood ([Aguilera-Castrejon et al. 2021](https://doi.org/10.1038/s41586-021-03416-3)). Monkey: to day 25 ([Gong et al. 2023](https://doi.org/10.1016/j.cell.2023.04.020)). Human: about 13 days, stopped by the 14-day rule ([Deglincerti et al. 2016](https://doi.org/10.1038/nature17948)).
+  - Why it matters: no mammal has gone from conception to birth outside a womb. The gap in humans runs from about day 14 to week 22.
+  - Used: the people ship question, 2026-10-15.
+- **[Wakayama et al. 2021, mouse sperm on the ISS](https://europepmc.org/article/PMC/PMC8195474)** · Published, Science Advances. Read.
+  - Freeze-dried sperm spent up to 5 years 10 months on the ISS, at 0.41 mGy a day. 168 pups were born, as often as from ground samples. On the ground, sperm took 30 Gy of x-rays and still gave pups. The authors estimate 201 years on the ISS.
+  - The agent’s arithmetic: 164 to 235 years in deep space. X-rays are not heavy ions, and sperm are not embryos.
+  - A 2023 study grew 720 frozen mouse embryos to blastocysts on the ISS, but carried none to birth ([iScience](https://doi.org/10.1016/j.isci.2023.108177)).
+  - Used: the people ship question, 2026-10-15.
+- **The longest-frozen embryo** · Press. A boy born July 2025 from an embryo frozen in 1994, 11,148 days ([ABC7](https://abc7ny.com/post/worlds-oldest-baby-ohio-couple-welcomes-boy-born-embryo-frozen-1994/17397568/)).
+- **Deep-space radiation** · MSL’s RAD in cruise to Mars: 1.8 mSv a day, about 0.67 Sv a year ([Zeitlin et al. 2013](https://doi.org/10.1126/science.1235989), abstract). Globus and Strout 2017: 20 mSv a year in deep space needs 6 to 7 t a square metre of water, or 10 to 11 of regolith ([NSS](https://nss.org/wp-content/uploads/2018/01/NSS-JOURNAL-Orbital-Space-Settlement-Radiation-Shielding.pdf), read).
+- **Founding crews** · Through [Hein et al. 2020](https://arxiv.org/abs/2005.04100), read, and abstracts.
+  - Moore 2003: a kin-based crew of 80 to 180 for about 200 years. HERITAGE 2017: that crew shrinks by two thirds and inbreeds without a frozen bank ([arXiv 1708.08649](https://arxiv.org/abs/1708.08649)).
+  - [Marin and Beluffi 2018](https://arxiv.org/abs/1806.03856): 98 people suffice for 6,300 years under strict breeding rules. 25 couples fail half the time.
+  - Smith 2014: 14,000 to 44,000, for a 150-year trip with disasters.
+  - Hein 2020’s reading: crews built from villages of 500 to 1,000.
+  - Used: the people ship question, 2026-10-15.
+- **Shielding a crew** · Stanford torus, [NASA SP-413](https://nss.org/settlement/nasa/75SummerStudy/Chapt4.html), read: 4.5 t a square metre, 9.9 Mt of shield for 10,000 people, about 990 t each. Hein 2020: shielding is over 90% of a world ship.
+  - At a tenth of light speed, gas hits as 4.7 MeV protons. Under a millimetre of hull stops them (NIST PSTAR). Semyonov: 1 to 2 cm of titanium up to 0.3 of light speed ([arXiv physics/0610030](https://arxiv.org/abs/physics/0610030), read). Dust is the harder problem, with no crewed sizing found.
+  - Used: the people ship question, 2026-10-15.
+- **World ships** · Hein et al. 2012: 100,000 people, 10 Mt dry and 50 Mt of propellant, 1% of light speed, about 600 t a person. Bond and Martin 1984: 250,000 people at hundreds of billions of tonnes. Both through Hein 2020’s table. Chrysalis, Hyperion’s 2025 winner: 2.4 billion t and about 400 years. Press gives its crew as 600 or 2,400.
+  - No published design of a crewed ship at a tenth of light speed with its mass was found.
+  - Used: the people ship question, 2026-10-15.
+- **Suspended animation** · [SpaceWorks for NASA, 2014](https://www.nasa.gov/sites/default/files/files/NIAC_Torpor_Habitat_for_Human_Stasis.pdf), read: torpor for 1 to 6 months would halve a Mars ship’s mass. ESA 2019: about a third lighter. Human trials perhaps in the mid-2030s, by press.
+  - No whole mammal has been frozen and revived. Rat kidneys were vitrified for up to 100 days and transplanted ([Han et al. 2023](https://doi.org/10.1038/s41467-023-38824-8), abstract).
+  - Used: the people ship question, 2026-10-15.
+- **Biosphere 2, 1991 to 1993** · Through [Britannica](https://www.britannica.com/topic/Biosphere-2) and Nelson 1996, by search summaries.
+  - Sealed with eight people, its oxygen fell from 20.9% to about 14% in 16 months, and air was pumped in. Soil microbes used it, and the concrete took up the carbon dioxide.
+  - Why it matters: no closed life support has yet run for years. Awake crews and slow world ships depend on it.
+  - Used: the list of unproven cases, 2026-10-15.
+- **[FlyWire, the fruit fly connectome, 2024](https://www.nih.gov/news-events/nih-research-matters/complete-wiring-map-adult-fruit-fly-brain)** · Nature, through the NIH’s summary.
+  - The whole adult fly brain mapped: about 140,000 neurons and over 50 million synapses. A human brain has about 86 billion neurons.
+  - Why it matters: copying a human mind is far beyond any scan made.
+  - Used: the list of unproven cases, 2026-10-15.
+- **This project’s arithmetic: people ships, 2026-10-15.** `calcs/early_game.py` people_ships().
+  - 500 people at 1,000 t each, with a sail as heavy again, to a tenth of light speed: 1 Mt dry and 11 Mt of deuterium, 2.7 Years of the Year 0 grid to make. About 69 Years to Alpha Centauri. By laser, about 6,000 Years of the grid.
+  - The same crew at a hundredth of light speed, braking by rocket: 0.5 Mt dry, 0.3 Mt of deuterium, about 440 Years.
+  - 500 sleepers at about 3 cubic metres each, shielded by 10 t of water a square metre, with a sail as heavy: about 13,000 t dry and 150 kt of deuterium.
+
+### Seed probes that copy themselves
+
+Checked 2026-10-26 for a seed probe, for work since 2023. Searches found little: two papers and a blog post. Nothing new on braking since Gros.
+
+- **[Ellery 2025, Technosignatures of Self-Replicating Probes in the Solar System](https://arxiv.org/abs/2510.00082)** · Preprint, arXiv 2510.00082. Abstract read. The PDF couldn’t be read here.
+  - A probe would go where the metals are, and build on a moon. The Moon is an ideal base.
+  - Its reactors, made of lunar rock, would leave lasting thorium-to-neodymium or thorium-to-barium ratios.
+  - Asteroid mining would be hard to tell from nature, so it stays quiet.
+  - A universal constructor is a likely gift in trade.
+  - From a search summary, not read: copying errors give rising and falling numbers of probes, not their end, as Lotka-Volterra predicts.
+  - Matters: a probe’s work leaves marks that last after it is gone, and its mining hides well.
+  - Used: v2 seed probe, mining moons and asteroids unseen, 2026-10-26. Its lasting marks, not yet.
+- **[Ivliev 2026, Autonomous AI-Cosmoindustry and the Quiet Expansion Filter](https://arxiv.org/abs/2606.13914)** · Preprint, arXiv 2606.13914, submitted to Acta Astronautica. Abstract read.
+  - Machines spread by small seed factories, copying slowly from star to nearby star.
+  - What it leaves is quiet: faint artifacts, local probes, small mining. It doesn’t build vast energy works.
+  - One civilization fills the stars it can reach in about 10 million years.
+  - Matters: slow, quiet, limited spreading is the newest picture.
+  - Used: v2 seed probe, its limit of 3 generations, 2026-10-26.
+- **[Marinko 2026, A Metallurgist’s Doubts About Self-Replicating Probes](https://www.centauri-dreams.org/2026/07/10/a-metallurgists-doubts-about-self-replicating-probes/)** · Blog, Centauri Dreams. Read.
+  - NASA 1980’s seed made 90 to 96% of itself. The rest came from home.
+  - That missing part is the hardest: chips, insulation, furnace linings, precision bearings.
+  - Turning raw rock into ore needs gravity, water and air, which asteroids lack.
+  - Parts age on the way. Our longest-lived craft, Voyager, has run about 50 years.
+  - Matters: it argues against copying fast, and for a heavy seed that carries its whole industry, as Freitas’s does.
+  - Used: v2 seed probe, at a neighbor colony’s pace, not NASA’s year, 2026-10-26.
+- **Older work these build on, not read:** [Ellery 2022, Self-replicating probes are imminent](https://www.cambridge.org/core/journals/international-journal-of-astrobiology/article/selfreplicating-probes-are-imminent-implications-for-seti/2CB214D26020D497D48AE489756BEE77), [Ashworth 2022](https://bis-space.com/shop/product/jbis-08-0283/), JBIS 75, 283, against a set end after so many copies, [Kowald 2016](https://arxiv.org/abs/1605.02169) for copying errors ending them, and [Borgue and Hein 2020](https://arxiv.org/abs/2005.12303), a probe that makes about 70% of its own mass.
+
+## The drift: Earth to the Local Group
+
+The first screen, before Earth wakes, flies from Earth out to the Local Group and home (`game/lib/drift.ts`). Today’s Earth, Moon and planets come from the atlas’s ephemeris, the stars from HYG v4.1, the galaxies’ places and outlines from the Local Volume Database, and the night lights from NASA’s Black Marble, all as the atlas and the memory screens already use them. The Milky Way is drawn, so its sources are here.
+
+- **[Reid et al. 2019, our view of the Milky Way from maser parallaxes](https://arxiv.org/abs/1910.03357)** · Published, ApJ 885, 131.
+  - Table 2 fits each spiral arm as a log spiral with a kink: the Norma, Scutum–Centaurus, Sagittarius–Carina, Local, Perseus and Outer arms, each over the azimuths its masers cover. R0 = 8.15 kpc.
+  - Matters: the arms are measured only on our side of the Galaxy. The far side is extrapolation.
+  - Used: the drift’s arms, rescaled to the GRAVITY distance. Past each measured range, the arm runs on at a 12° pitch and fades. That run-on is ours.
+- **[GRAVITY Collaboration 2022](https://arxiv.org/abs/2112.07478)** · Published, A&A 657, L12. The Sun is 8,277 pc from Sgr A*. Used: the atlas’s galactic center, and the drift’s.
+- **[Wegg, Gerhard and Portail 2015](https://arxiv.org/abs/1504.01401)** · Published, MNRAS 450, 4050.
+  - The long bar’s half-length is 5.0 ± 0.2 kpc, at 28 to 33° from the Sun’s line of sight, its near end at positive longitude.
+  - Used: the drift’s bar, 5 kpc at 28°.
+- **[Bland-Hawthorn and Gerhard 2016, The Galaxy in Context](https://arxiv.org/abs/1602.07702)** · Published, ARA&A 54, 529. Review.
+  - Best estimates in the body: thin disk scale length 2.6 ± 0.5 kpc, scale height 300 ± 50 pc.
+  - Used: the drift’s old disk.
+- **[Harris 2010, globular cluster catalog](https://arxiv.org/abs/1012.3224)** · Reference. 157 known globular clusters. Used: the drift’s halo, 157 points thinning as r^-3.5. Their places are random.
+- **[Courteau et al. 2011](https://arxiv.org/abs/1106.3564)** · Published, ApJ 739, 20. Andromeda’s disk scale length is 5.3 ± 0.5 kpc. Used: the drift’s Andromeda.
+- **[Gordon et al. 2006](https://arxiv.org/abs/astro-ph/0601314)** · Published, ApJL 638, L87. Spitzer shows Andromeda’s dust as weak spiral arms and a star-forming ring about 10 kpc out. Used: the drift’s Andromeda ring.
+- **Triangulum, the Magellanic Clouds and the dwarfs** · their places and outlines are the Local Volume Database’s. The shapes inside are ours: a loose two-armed disk for Triangulum, an off-center bar and the Tarantula for the Large Cloud, and a Small Cloud drawn long along our line of sight ([Small Magellanic Cloud](https://en.wikipedia.org/wiki/Small_Magellanic_Cloud)).
+- **[Sawala et al. 2025, No certainty of a Milky Way–Andromeda collision](https://www.uwa.edu.au/news/article/2025/june/astronomers-thought-the-milky-way-was-doomed-to-crash-into-andromeda)** · Published, Nature Astronomy, June 2025. I read the press coverage.
+  - Over 100,000 runs with Gaia and Hubble motions and newer masses give about even odds of a merger within 10 billion years.
+  - The Large Magellanic Cloud lowers the odds, and Triangulum raises them. Within 5 billion years a merger is very unlikely.
+  - Used: Andromeda’s card on Reach’s map, a coin flip. Replaces the old sure collision in about 4.5 billion years.
+- **Reach’s tap cards** · Reference. The center at 27,000 light-years and Sagittarius A* near four million Suns are GRAVITY 2022, as the atlas has them. The Tarantula as the Local Group’s brightest star-forming region, and the [Magellanic Stream](https://en.wikipedia.org/wiki/Magellanic_Stream) trailing the two Clouds, are textbook. Distances are the Local Volume Database’s, rounded.
+- **The Sun’s small bodies** · Reference.
+  - The asteroid belt from 2.1 to 3.3 AU, with the [Kirkwood gaps](https://en.wikipedia.org/wiki/Kirkwood_gap) at Jupiter’s 3:1, 5:2 and 7:3, and the [Jupiter trojans](https://en.wikipedia.org/wiki/Jupiter_trojan) 60° ahead and behind.
+  - The [Kuiper belt](https://en.wikipedia.org/wiki/Kuiper_belt), thickest from 42 to 48 AU, with the plutinos at 39.4 AU.
+  - The [Oort cloud](https://en.wikipedia.org/wiki/Oort_cloud), about 2,000 to 100,000 AU. No one has seen it. It is inferred from long-period comets.
+  - Used: the drift’s belts and shell. The bodies’ places are random.
+- **The Sun’s road around the Milky Way** · checked 2026-10-17.
+  - The Sun circles the center at about 236 km/s ([Reid et al. 2019](https://arxiv.org/abs/1910.03357)). At 8.28 kpc that is one lap in about 220 million years, so about 20 laps since it formed. It bobs through the disk about 2.7 times a lap ([Sun](https://en.wikipedia.org/wiki/Sun#Orbit_in_Milky_Way)), and is about 21 pc up now.
+  - Where it was born is argued. [Baba, Tsujimoto and Saitoh 2024](https://doaj.org/article/ceaf1bd37b4d471aa565f6847891d7d3) find about 5 kpc can explain its move out. A [2025 preprint](https://arxiv.org/abs/2502.20441) finds about 7.1 kpc most likely, near Minchev et al. 2013’s 4.4 to 7.7. [Martínez-Barbosa et al. 2015](https://arxiv.org/abs/1410.2238) find it may not have migrated far at all.
+  - Used: Where we come from. The road starts at 7 kpc, the most likely value in the newest estimate, and drifts out evenly to today’s 8.28 kpc. The even drift is ours.
+- **Where Earth’s messages went** · Reference.
+  - The twelve stars Earth aimed messages at, placed in 3D from their right ascension and distance in `game/lib/game/sky.json` and their J2000 declinations, from their Wikipedia pages: Altair, 47 Ursae Majoris, Gliese 49, Gliese 208, 55 Cancri, Gliese 581, TZ Arietis, Kappa¹ Ceti, Gliese 526, Luyten’s Star, HD 10307 and Teegarden’s Star.
+  - Used: Where things stand, each message’s beam in the scene. The radar shell spreads from 1950, as `calcs/knocks.py` has it.
+- **Where the far probes head** · Reference, checked 2026-10-17.
+  - Voyager 1 is in Ophiuchus, near RA 17h 15m, Dec +12.4° ([TheSkyLive](https://theskylive.com/voyager1-info)). New Horizons is in Sagittarius, near RA 19h 20m, Dec −20° ([Heavens-Above](https://www.heavens-above.com/SolarEscape.aspx)). Both move almost straight out, so the directions hold to Year 0.
+  - Their distances at Year 0, 220 and 100 AU, are HOLOS_GAME_CONCEPT.md’s.
+  - Used: What you inherit, where the scene puts the two probes and their roads from the Sun.
+- **Voyager 1 going silent, and where it goes** · Read 2026-10-19.
+  - [JPL, April 2026](https://www.jpl.nasa.gov/news/nasa-shuts-off-instrument-on-voyager-1-to-keep-spacecraft-operating/): its Low-energy Charged Particles experiment was switched off on April 17, 2026, to save power. Two science instruments remain. Each Voyager loses about 4 watts a year. It reaches one light-day from Earth on November 18, 2026.
+  - The last instrument is expected to go dark sometime in the 2030s: [a science blog](https://scienceblog.com/t-voyager-1-is-now-so-far-away-that-its-plutonium-power-source-is-quietly-fading-and-sometime-in-the-2030s-nasa-will-switch-off-its-final-instrument-ending-the-only-signal-ever-sent-to-us-from-interst/), secondary. Silent by Year 0 is this project’s, on that.
+  - [NASA](https://www.nasa.gov/image-article/reaching-stars): in 40,000 years it comes within 1.7 ly of Gliese 445, also called AC +79 3888. Others say 1.6 ly.
+  - [The Golden Record](https://en.wikipedia.org/wiki/Voyager_Golden_Record): greetings in 55 languages and 116 pictures, on a gold-plated copper disc, chosen by a committee chaired by Carl Sagan, launched on both Voyagers in 1977.
+  - Matters: by Year 0 Voyager 1 is no longer a probe that reports. It is a message carried, the slowest we sent.
+  - Used: game/components/reach.tsx and game/lib/game/knocks.ts, Voyager 1 under “Sent” on Reach, with the Golden Record’s story, 2026-10-19.
+  - Its speed out of the Solar System is about 17 km/s, or 3.6 AU a year ([Wikipedia](https://en.wikipedia.org/wiki/Voyager_1)). At that pace the 268,000 AU to Proxima Centauri would take about 75,000 years. General knowledge, not a page read this session, 2026-10-23.
+  - Used: game/components/reach-tour.tsx, the walk’s “The gap” stop, 2026-10-23. Folded into its “Voyager 1” stop, 2026-10-27.
+- **Deuterium in seawater** · General knowledge, not a source read, 2026-10-19. About one hydrogen atom in 6,400 in the oceans is deuterium, about 156 parts per million ([Wikipedia](https://en.wikipedia.org/wiki/Deuterium)).
+  - Used: game/lib/game/plan.ts, the Mind’s word on the Deuterium Works.
+- **Voyager 1’s speed, and Neptune’s distance** · General knowledge, not a source read, 2026-10-18.
+  - Voyager 1 moves out at about 17 km/s, about 3.6 AU a year. Neptune orbits at about 30 AU.
+  - Matters: at Voyager’s pace the nearest star is about 75,000 years away, against Year 43.6 by sail.
+  - Used: the Reach tab, how far we have gone, and the gap to Alpha Centauri.
+- **Earth’s orbits and pads** · Reference.
+  - Spare matter sits on the planes most used: the [ISS](https://en.wikipedia.org/wiki/International_Space_Station) at 51.6°, [Starlink](https://en.wikipedia.org/wiki/Starlink)’s 53° shells, [sun-synchronous orbits](https://en.wikipedia.org/wiki/Sun-synchronous_orbit) near 98°, and the [geostationary belt](https://en.wikipedia.org/wiki/Geostationary_orbit) at 42,164 km from Earth’s center. Which piece sits where is ours.
+  - Rockets lift from real pads: Cape Canaveral, Boca Chica, Kourou, Baikonur, Jiuquan and Wenchang.
+  - Used: What you inherit’s debris and lift.
+- **The Mind’s machines** · Reference, checked 2026-10-17.
+  - Real radio dishes and arrays: NASA’s [Deep Space Network](https://en.wikipedia.org/wiki/NASA_Deep_Space_Network) at Goldstone, Madrid and Canberra, FAST, Green Bank, the VLA, ALMA, MeerKAT, Murchison, Effelsberg, Jodrell Bank, Parkes, the Allen Array, GMRT, LOFAR, Tianma, ESA’s Malargüe, JAXA’s Usuda and Kashi ([List of radio telescopes](https://en.wikipedia.org/wiki/List_of_radio_telescopes)). Arecibo is left out: it fell in 2020.
+  - The big telescopes for light: Mauna Kea, Paranal, Rubin, the ELT and Las Campanas in Chile, La Palma, SALT, Kitt Peak, Palomar, Siding Spring, Xinglong and Devasthal ([Largest optical telescopes](https://en.wikipedia.org/wiki/List_of_largest_optical_reflecting_telescopes)).
+  - The biggest data center clusters, Northern Virginia first, and the AI giants since 2024: [Colossus](https://en.wikipedia.org/wiki/Colossus_(supercomputer)) in Memphis, [Stargate](https://en.wikipedia.org/wiki/Stargate_LLC) in Abilene, Meta’s Hyperion in Richland Parish (32.48, −91.63, from its Wikipedia page) and Microsoft’s Fairwater in Mount Pleasant, Wisconsin.
+  - Matters: “every dish, every telescope, every data center” names real things, and each lights where it stands.
+  - Used: Meeting the Mind, `game/lib/game/machines.ts`. Places are to the nearest town. Which ones are on the list is ours.
+
+## Watch list
+
+Results the design is waiting on. Check each when its date comes.
+
+- **Saide, Garrett and Heeralall-Issur, “Modelling Earth’s Radio Leakage: Detectability of Civilian and Military Radar Systems”** · in preparation. Its observing times set v2’s odds of Earth being heard.
+- **[Gaia DR4](https://www.cosmos.esa.int/web/gaia/dr4)** · release set for December 2, 2026, with the first large set of planets found by astrometry. Rebuild the census after release and validation, per v1’s migration notes, and recheck the host list and leads.
+- **Epsilon Indi Ab’s atmosphere** · two 2026 preprints. Feed Earth’s leads (v2 open question 3).
+- **JWST’s August 2026 observation of Alpha Centauri A** · observed August 11 and 12, programme 12628. Not published as of 2026-10-13. Adopt the result for candidate S1.
+
+## To check
+
+- Closed 2026-10-18: Chen and Kipping 2017’s break between rock and gas, read at source: 2.0 Earth masses, +0.7 or −0.6.
+
+- Closed 2026-10-16: the long roads’ schedules. The telescope and the mass driver hold. The megatonne mine and belt mining have no real schedule, and stay v1’s. See The long roads, rechecked.
+
+- Companion masses in calcs/binaries.py are rough: dynamical masses depend on distance cubed, and white dwarfs read as light from their brightness.
+- About 15 red dwarfs are unconfirmed young-group candidates with no age of their own. They stay. Gliese 393 is listed in AB Doradus but [Amado et al. 2021](https://arxiv.org/abs/2105.13785) put it older than 0.7 billion years.
+- 31 of the F, G and K hosts have no published age in any table opened, mostly K companions.
+- HD 221503 is a candidate member of a 210 million year group ([Thao et al. 2024](https://arxiv.org/abs/2406.05234)) and stays until someone dates it.
+- Closed 2026-10-15: stars dated by a slow spin. Checked by a research agent against Praesepe’s slow sequence, from table medians in Douglas et al. 2019 ([VizieR J/ApJ/879/100](https://cdsarc.cds.unistra.fr/viz-bin/cat/J/ApJ/879/100)) and Curtis et al. 2020 ([VizieR J/ApJ/904/140](https://cdsarc.cds.unistra.fr/viz-bin/cat/J/ApJ/904/140)), with Gaia DR3 colours.
+  - Gliese 208, BP-RP 1.82: spins in 11.5 to 12.3 days in five studies. Praesepe’s stars of its colour: 14.3 to 14.6, never under 13.3. NGC 6811’s match them. So it is younger than about 670 million years. Out. Its other ages: 0.4 to 0.5 billion.
+  - DS Leonis, BP-RP 2.01: a median of 14.3 days over about 15 values, one season 15.7. Praesepe: 16.0 to 16.4. Probably younger. Out, the weakest of the three. Its other ages: 0.4 to 0.7 billion.
+  - HD 82106, BP-RP 1.21: TESS gives 11.1 ± 1.2 days ([Schmitt et al. 2026](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/A+A/709/A180)). An older estimate gives 13.3. Praesepe: 10.7 to 11.3, and NGC 6811 the same. NGC 752, at 1.4 billion, spins slower. So it sits on the stalled sequence or past it, and its age is open past a billion. A host again. Its ten published ages, 0.2 to 0.9, all come from spin or what follows spin.
+  - Not corrected: Praesepe is metal-rich. The verdict for HD 82106 rests on one TESS period and one estimate.
+  - Used: calcs/hosts.py, 2026-10-15. 881 hosts.
+- Closed 2026-10-15: YZ Canis Minoris stays out. It is too bright for its colour, and nothing but youth explains it well.
+  - [Kerr et al. 2021](https://vizier.cds.unistra.fr/viz-bin/VizieR?-source=J/ApJ/917/23), table 1, queried on VizieR: 91% likely under 50 million years, fitted at 36.5. It sits in none of their groups.
+  - My check against [Mamajek’s dwarf table](https://www.pas.rochester.edu/~emamajek/EEM_dwarf_UBVIJHK_colors_Teff.txt): at BP-RP 3.00 a settled dwarf has absolute G 11.44. YZ CMi has 10.80, from Gaia DR3. That is 0.64 magnitudes too bright.
+  - Corrected: its size is not ordinary. Its radius, 0.37 Suns (Cifuentes et al. 2020), is about 1.5 times a settled dwarf’s of its colour. Its mass, 0.36, is computed from that radius.
+  - Kerr et al. name unseen twins as their main false alarm. A twin adds up to 0.76 magnitudes. Gaia’s fit quality, RUWE 1.35, sits just under the usual 1.4 alarm.
+  - My reasoning, not a paper’s: a twin is unlikely. The Gemini Deep Planet Survey imaged it (Lafrenière et al. 2007, as compiled in Meshkat et al. 2017’s table, checked on VizieR), and CARMENES models its velocities as one spotted star ([Baroch et al. 2020](https://arxiv.org/abs/2006.16608)). A twin too close to image would show two sets of lines.
+  - My calculation: it moves at U -19, V -22, W -8 km/s, about 10 km/s from the beta Pictoris group. Not a member, despite Nakajima and Morino 2012.
+  - Not ruled out: extra metals and dark spots also brighten a red dwarf for its colour, by part of this.
+- Closed 2026-10-15: DT Virginis stays out. JWST finds its companion light for its temperature, so young.
+  - [Burgasser et al. 2010](https://arxiv.org/abs/1009.5722), as summarized by the 2025 paper: 150 to 800 million years. No lithium and a light companion set the floor. Ross 458 A’s activity sets the ceiling.
+  - [Ross 458 c with JWST, 2025](https://arxiv.org/abs/2509.22803) · Preprint. Read through a summary of the text. Surface gravity log g 4.1 to 4.6, and 5 to 16 Jupiters, by four methods. Its retrieval finds metals like the host’s, within 1 sigma, so the low gravity isn’t heavy elements in disguise.
+  - From memory, not checked: an old field T dwarf has log g near 5. BANYAN puts the system in no young group, 99.9% field.
+  - So the worry under this item fails. The drop stands.
+- calcs/observing.py: the split of noise between leaked starlight and dust is an estimate. Find a published count-rate budget for an Earth twin at 10 pc.
+- Closed 2026-10-16: Alpha Centauri A’s warm zone and the coronagraph’s outer edge. Alpha Centauri A’s warm zone is a full arcsecond wide, perhaps past a coronagraph’s outer edge, and B’s light leaks in. Check the outer working angle of the telescope’s designs. Searched 2026-10-14: the first design case is a 6 m off-axis mirror, but no working angles were found in text I could read. The systems paper, [arXiv 2602.11046](https://arxiv.org/abs/2602.11046), has no HTML version.
+  - Checked 2026-10-16, decision pending.
+    - **[HWO concept and technology paper, 2026](https://arxiv.org/abs/2601.11803)** · Preprint, January 2026. Read through a summary of its HTML. The first design case, 6 m off-axis, has 96 × 96 deformable mirrors in four channels. The fourth, 6.5 to 7 m, has two of 64 × 64. The fifth, 8 to 8.5 m, has 96 × 96 in the visible and 64 × 64 in the near infrared. Bandpass 450 to 1,700 nm, contrast 10⁻¹⁰. No working angles stated, and no word on binaries.
+    - The rule, from the [HabEx](https://arxiv.org/abs/2001.06683) and [LUVOIR](https://arxiv.org/abs/1912.06219) reports via a search summary: a mirror N actuators across corrects out to about N/2 wavelengths over the aperture. HabEx’s 64 gave 32. LUVOIR needed about 96 for 48.
+    - My arithmetic for the game’s 6.5 m mirror. With 96 actuators the dark spot ends at 0.76 arcseconds in green, 0.91 at ozone’s band, 1.16 at oxygen’s and 1.43 at water’s. With 64: 0.51, 0.61, 0.77, 0.95.
+    - Alpha Centauri A’s warm zone spans 0.89 to 1.56 arcseconds. B’s spans 0.48 to 0.84. No other host’s zone reaches past 0.51.
+    - **A and B’s separation**, my arithmetic from [Akeson et al. 2021](https://arxiv.org/abs/2104.10086)’s orbit as [Wikipedia](https://en.wikipedia.org/wiki/Alpha_Centauri) lists it, checked against its 4.0 arcseconds in February 2016: 1.7 in mid-2037, 5.5 in 2040, 9.2 in 2042, 13.6 in 2045, 18.5 in 2050, widest at 21 in 2056.
+    - **Cancelling B’s light.** Multi-star wavefront control drives one mirror against both stars. Lab results found: two stars’ light cut tenfold or more ([Belikov et al. 2016](https://proceedings.spiedigitallibrary.org/conference-proceedings-of-spie/9904/990422/High-contrast-imaging-in-multi-star-systems--technology-development/10.1117/12.2233914.full)), and 4 × 10⁻⁶ on SCExAO’s bench ([Pluzhnik et al. 2021](https://repository.arizona.edu/handle/10150/662395)). Both from search summaries. A vacuum test is planned. Nothing near 10⁻¹⁰ yet.
+    - **[ECLIPS, LUVOIR-A’s coronagraph](https://arxiv.org/abs/1912.06219)** · Search summary of a 2019 SPIE briefing and an ExEP colloquium: 128 × 128 deformable mirrors, a dark zone from about 3 to 64 wavelengths over the aperture. A FALCO design study assumed 64 × 64 instead.
+    - Used 2026-10-16: calcs/observing.py, 48 for the first mirror, and calcs/signs.py, 64 for the 15 m. Seed 11’s next-door reading loses its smog.
+    - Small telescopes suit the pair: the warm zones sit at 0.7 and 0.4 arcseconds from their inner edges, so a 0.3 m class telescope could image them ([Project Blue](https://arxiv.org/abs/1803.04872), search summary).
+- JWST’s August 2026 look at the Alpha Centauri A candidate. Searched 2026-10-14 and 10-15: no result published yet. The team predicted S1 visible again in 2026 or 2027 ([AAS Nova](https://aasnova.org/2025/08/11/potential-discovery-of-a-world-next-door/)). If it confirms a giant in the warm zone, the seed can’t put a world there.
+- Closed 2026-10-16: which red dwarfs were watched. Each gets its real 2026 floor, halved by 2040.
+  - Checked 2026-10-16. Three public survey sets, matched by position to the 715 red dwarf hosts:
+    - **[Ribas et al. 2023, CARMENES DR1](https://arxiv.org/abs/2302.10528)** · Published, A&A 670, A139. [VizieR](https://cdsarc.cds.unistra.fr/viz-bin/cat/J/A+A/670/A139). 362 M dwarfs, 2016 to 2020. Read in the paper’s text: a median of 30 nights a star, a median scatter of 3.9 m/s, an internal precision of 1.27.
+    - **[Trifonov et al. 2020, the HARPS RV bank](https://cdsarc.cds.unistra.fr/viz-bin/cat/J/A+A/636/A74)** · Published, A&A 636, A74. 212,000 velocities of 2,912 stars, to 2018. Downloaded.
+    - **[Tal-Or et al. 2019](https://cdsarc.cds.unistra.fr/viz-bin/cat/J/MNRAS/484/L8)**, correcting [Butler et al. 2017](https://cdsarc.cds.unistra.fr/viz-bin/cat/J/AJ/153/208) · Published. 64,000 Keck velocities of 1,699 stars. Downloaded.
+    - **[Sabotta et al. 2021](https://arxiv.org/abs/2107.03802)** · Published, A&A 653. Read through a summary of the text. On CARMENES’s 71 best-watched M dwarfs, detection rises steeply from 2 Earth masses, and Earth-mass planets are undetectable at stars over 0.34 Suns.
+    - My rule of thumb: a sine of K in scatter σ over N nights reaches a 1% false alarm near K = 6.8 σ / √N.
+    - My counts: 294 of the 715 have 10 or more nights in at least one set. 27 could feel under 2 m/s, 58 under 3. 421 have none.
+    - Not counted: surveys after 2020, such as NIRPS, ESPRESSO and MAROON-X. So real 2026 coverage is better than this.
+    - Measured on 200 games: real floors keep 152 red dwarf worlds a game, not 121. If the watched stars’ floors halve by 2040, Earth knows about 4 worlds at Year 0, not 2.
+    - Used 2026-10-16: the floors in calcs/hosts.py, written to data/hosts-50ly.csv, and the 2026 and 2040 checks in calcs/neighbors.py. The surveys download through calcs/fetch_hosts.py. In the mocks, seeds 11 and 62 now lead with a red dwarf’s world.
+- Closed 2026-10-14: the bright hosts with only a Gaia name have HD names. HYG had them, and the match was too tight. See Where neighbors can live.
+- Closed 2026-10-15: HYG misspells GJ 1214 as “Onkaria”. The IAU named it Orkaria in 2023, from the Maa word for red ochre, and its planet Enaiposha ([IAU NameExoWorlds list](https://nameexoworlds.iau.org/_files/ugd/042af1_62a2c9fa6cfa44518808aacf598dafe6.pdf), [GJ 1214](https://en.wikipedia.org/wiki/GJ_1214)). Fixed in calcs/hosts.py, scripts/prepare-catalog.py and the atlas.
+- Closed 2026-10-15: Gliese 428’s one Gaia source is B. A is HD 99279, K7, V 7.51. B is M0, V 8.82. The pair’s orbit is 5.76 arcseconds and 421.5 years ([ARI’s nearby star pages](https://wwwadd.zah.uni-heidelberg.de/aricns/cnspages/4c00875.htm), 1998). The Gaia source shines at G 8.08, near B’s expected 8.3 and far from A’s 7.1, by this project’s colour conversion. A has no Gaia parallax in the census. At about 67 AU it leaves B’s warm zone, 0.2 AU out, stable.
+- Natural warm worlds: NASA’s 164 targets reach 23.3 pc, about 76 ly. The seed draws nothing past 50 ly, so the game’s sweep covers 110 stars.
+- Gaia’s FLAME ages differ from asteroseismic and spin ages by a median of 4.7 billion years on 9 hosts. Closed 2026-10-15: calcs/hosts.py’s rule that drops an F or G star when FLAME’s upper bound is under a billion years drops none. Within 50 ly no F or G star has an upper bound under 2 billion.
+- 58 Eridani has six spin ages from 0.43 to 1.1 billion years. It stays a host under the rule, since two reach a billion.
+- Closed 2026-10-16: the warm zone’s outward drift. A world born frozen thaws at 62% of Earth’s light. See Warm worlds born frozen.
+- Closed 2026-10-16: red dwarfs’ bright youth stays out of the rung draw. See Red dwarfs’ bright youth.
+- Closed 2026-10-16: Nguyen et al. 2026’s fitted shorelines don’t replace the single line. See What sets a natural world’s rung.
+- Closed 2026-10-16: the unknown powers of Earth’s aimed messages change nothing. Altair is no host. Gliese 581’s 2009 knock, about 3 × 10¹¹ W, clears the floor whatever 2008’s was. Lone Signal’s 3 kW is logged. See Earth’s aimed messages.
+- Closed 2026-10-16: links for Project Daedalus’s 1978 report and Criswell 1985. Daedalus has no free text: the BIS sells a reprint, and its shop link works. Criswell’s book is in the Internet Archive’s lending library.

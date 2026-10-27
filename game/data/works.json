@@ -1,0 +1,171 @@
+{
+ "works": {
+  "All-sky watch": {
+   "years": 6,
+   "want": 0.2
+  },
+  "Deep flash watch": {
+   "years": 6,
+   "want": 0.1
+  },
+  "Infrared telescope": {
+   "years": 8,
+   "want": 1.0,
+   "orbit": true
+  },
+  "Moon vault": {
+   "years": 10,
+   "want": 1.0
+  },
+  "Launch complex": {
+   "years": 2,
+   "want": 0.3
+  },
+  "Orbital yard": {
+   "years": 5,
+   "want": 0.7
+  },
+  "Probe yard": {
+   "years": 24,
+   "want": 10,
+   "orbit": true
+  },
+  "Laser sail array": {
+   "years": 25,
+   "want": 0.7
+  },
+  "Ground solar": {
+   "years": 10,
+   "want": 20
+  },
+  "A 15 m mirror": {
+   "years": 18,
+   "want": 2.0,
+   "orbit": true
+  },
+  "Mass driver": {
+   "years": 24,
+   "want": 30,
+   "then": [
+    "Far-side array, one fifth",
+    "Power from orbit"
+   ]
+  },
+  "Orbital foundry": {
+   "years": 30,
+   "want": 30,
+   "orbit": true
+  },
+  "Belt mining": {
+   "years": 26,
+   "want": 20,
+   "milestone": [
+    "Belt prospecting",
+    20
+   ]
+  },
+  "Far-side array, one fifth": {
+   "years": 6.0,
+   "want": 40,
+   "copies": [
+    5,
+    "Far-side array, fifth"
+   ]
+  },
+  "Fusion drive": {
+   "years": 30,
+   "want": 10,
+   "orbit": true
+  },
+  "Seed ship": {
+   "years": 18,
+   "want": 5,
+   "orbit": true
+  },
+  "Deuterium works": {
+   "years": 5,
+   "want": 1
+  },
+  "Power from orbit": {
+   "want": 200,
+   "rock": 10000,
+   "most": 1
+  },
+  "Cold annex": {
+   "want": 80,
+   "rock": 4000,
+   "most": 1
+  },
+  "Halo survey": {
+   "years": 1,
+   "want": 0.05
+  },
+  "Solar lens": {
+   "years": 8,
+   "want": 0.5,
+   "orbit": true
+  },
+  "Star mapper": {
+   "years": 8,
+   "want": 0.1
+  },
+  "Mind link": {
+   "years": 18,
+   "want": 0.5,
+   "orbit": true
+  }
+ },
+ "floor": 0.6666666666666666,
+ "push": 10,
+ "flagship": 0.15,
+ "gridRoom": 96.0,
+ "step": 1.5,
+ "dataCenter": {
+  "years": 1,
+  "aside": 0.05
+ },
+ "halo": {
+  "floor": 3e+18,
+  "every": 1
+ },
+ "lens": {
+  "au": 548,
+  "flight": 17.317,
+  "look": 0.5,
+  "km30pc": 25
+ },
+ "sentinel": {
+  "build": 20,
+  "speed": 0.1,
+  "burns": 10
+ },
+ "seedShip": {
+  "speed": 0.1,
+  "burn": 10,
+  "brake": 15,
+  "stands": 20
+ },
+ "seedProbe": {
+  "build": 18,
+  "first": 60,
+  "every": 20,
+  "copies": 2,
+  "generations": 3
+ },
+ "mindLink": {
+  "bits": 8e+17,
+  "aperture": 100,
+  "watts": 1000000000.0,
+  "wave": 1e-06,
+  "photons": 10
+ },
+ "studies": 0.1,
+ "yard": {
+  "work": "Orbital yard",
+  "cut": 0.25
+ },
+ "rock": {
+  "Mass driver": 600,
+  "Belt mining": 120
+ }
+}

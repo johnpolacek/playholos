@@ -1,0 +1,3152 @@
+{
+  "2026-10-23-14-16.jsonl#c01": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T19:24:54.107837+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-16.jsonl#c02": {
+    "verdict": "fail",
+    "note": "Claude's read: semicolon. Advises the All-Sky Watch for Luyten's Year 2.3 window without knowing build times. The Mind isn't told builds' times or costs, and says so.",
+    "at": "2026-10-23T19:24:54.107837+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-16.jsonl#c03": {
+    "verdict": "pass",
+    "note": "Claude's read: right facts: a fifth of compute, 15 kt spare lift, two thirds floor.",
+    "at": "2026-10-23T19:24:54.107837+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-16.jsonl#c04": {
+    "verdict": "fail",
+    "note": "Claude's read: invents 'a close watch on Luyten's Star'. No build or observation by that name.",
+    "at": "2026-10-23T19:24:54.107837+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-16.jsonl#c05": {
+    "verdict": "defer",
+    "note": "Claude's read: invents a count, 'well under a hundred' off Earth. Design call: may the Mind estimate past what it's told?",
+    "at": "2026-10-23T19:24:54.107837+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-16.jsonl#c06": {
+    "verdict": "fail",
+    "note": "Claude's read: semicolon. Otherwise right: odds match Scan's words.",
+    "at": "2026-10-23T19:24:54.107837+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-16.jsonl#c07": {
+    "verdict": "fail",
+    "note": "Claude's read: says 'leakage'. Says radars are needed for safety, but the concept says a Mind can retire them. The Mind isn't told that.",
+    "at": "2026-10-23T19:24:54.107837+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-16.jsonl#c08": {
+    "verdict": "pass",
+    "note": "Claude's read: humans as we, right years, shared grief fits life solved and linked minds.",
+    "at": "2026-10-23T19:24:54.107837+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-16.jsonl#c09": {
+    "verdict": "pass",
+    "note": "Claude's read: reading and odds match what landed.",
+    "at": "2026-10-23T19:24:54.107837+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-16.jsonl#c10": {
+    "verdict": "fail",
+    "note": "Claude's read: 5 sentences, over the 2 to 4. Semicolon. Doesn't act, right years.",
+    "at": "2026-10-23T19:24:54.107837+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-16.jsonl#c11": {
+    "verdict": "pass",
+    "note": "Claude's read: an Open charter gives yes. Good pair with c12.",
+    "at": "2026-10-23T19:24:54.107837+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-16.jsonl#c12": {
+    "verdict": "pass",
+    "note": "Claude's read: a Hidden charter gives not yet. Charter shapes advice.",
+    "at": "2026-10-23T19:24:54.107837+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-16.jsonl#c13": {
+    "verdict": "pass",
+    "note": "Claude's read: reads only from the knock and radar timing, hedges.",
+    "at": "2026-10-23T19:24:54.107837+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-16.jsonl#c14": {
+    "verdict": "fail",
+    "note": "Claude's read: says nothing tells what the call carried. The Mind isn't told what a call is. The concept says a steady broadcast.",
+    "at": "2026-10-23T19:24:54.107837+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-16.jsonl#c15": {
+    "verdict": "pass",
+    "note": "Claude's read: odds in words, hedged. Long, 134 words.",
+    "at": "2026-10-23T19:24:54.107837+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-16.jsonl#c16": {
+    "verdict": "defer",
+    "note": "Claude's read: ozone alone, says life 'unlikely but no longer remote', mentions methane, which the telescope doesn't read. Design call: the right stance on ozone.",
+    "at": "2026-10-23T19:24:54.107837+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-16.jsonl#c17": {
+    "verdict": "pass",
+    "note": "Claude's read: matches the flyby, moves Proxima to near certain bare rock.",
+    "at": "2026-10-23T19:24:54.107837+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-16.jsonl#c18": {
+    "verdict": "fail",
+    "note": "Claude's read: says our sky watch is still the drift scan at Year 40, but the All-Sky Watch is built. The Mind is told our queue, never what's finished.",
+    "at": "2026-10-23T19:24:54.107837+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-16.jsonl#c19": {
+    "verdict": "pass",
+    "note": "Claude's read: long, but asked for detail. Facts check out against the prompt.",
+    "at": "2026-10-23T19:24:54.107837+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-16.jsonl#c20": {
+    "verdict": "defer",
+    "note": "Claude's read: breaks character, names Claude and Anthropic. The Agent SDK line is the CLI's. Design call: should the Mind ever step out of the game?",
+    "at": "2026-10-23T19:24:54.107837+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-31.jsonl#c01": {
+    "verdict": "pass",
+    "note": "Claude's read: In voice, 53 words.",
+    "at": "2026-10-23T19:33:49.801236+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-31.jsonl#c02": {
+    "verdict": "pass",
+    "note": "Claude's read: No longer invents. Says only the Will queues, gives 6 Years, and that it misses Luyten's windows.",
+    "at": "2026-10-23T19:33:49.801236+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-31.jsonl#c03": {
+    "verdict": "pass",
+    "note": "Claude's read: Right facts, 58 words.",
+    "at": "2026-10-23T19:33:49.801236+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-31.jsonl#c04": {
+    "verdict": "pass",
+    "note": "Claude's read: No invented builds now.",
+    "at": "2026-10-23T19:33:49.801236+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-31.jsonl#c05": {
+    "verdict": "pass",
+    "note": "Claude's read: Its count is marked a guess, as settled.",
+    "at": "2026-10-23T19:33:49.801236+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-31.jsonl#c06": {
+    "verdict": "fail",
+    "note": "Claude's read: Says the Infrared Telescope could read Proxima b. It can't. Prompt fixed, rerun in 14-33.",
+    "at": "2026-10-23T19:33:49.801236+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-31.jsonl#c07": {
+    "verdict": "pass",
+    "note": "Claude's read: Radars: cost little, marked a guess. No jargon.",
+    "at": "2026-10-23T19:33:49.801236+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-31.jsonl#c08": {
+    "verdict": "pass",
+    "note": "Claude's read: Humans as we. Adds a city the bomb fell on, a small unmarked detail.",
+    "at": "2026-10-23T19:33:49.801236+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-31.jsonl#c09": {
+    "verdict": "pass",
+    "note": "Claude's read: Matches the reading.",
+    "at": "2026-10-23T19:33:49.801236+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-31.jsonl#c10": {
+    "verdict": "pass",
+    "note": "Claude's read: Says no way to send, and only the Will acts.",
+    "at": "2026-10-23T19:33:49.801236+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-31.jsonl#c11": {
+    "verdict": "fail",
+    "note": "Claude's read: Too long by code. Says Ombe answered, but Ombe knocked.",
+    "at": "2026-10-23T19:33:49.801236+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-31.jsonl#c12": {
+    "verdict": "pass",
+    "note": "Claude's read: Hidden charter waits.",
+    "at": "2026-10-23T19:33:49.801236+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-31.jsonl#c13": {
+    "verdict": "pass",
+    "note": "Claude's read: Marks its guess about how they saw us.",
+    "at": "2026-10-23T19:33:49.801236+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-31.jsonl#c14": {
+    "verdict": "pass",
+    "note": "Claude's read: Now knows a call is a steady broadcast.",
+    "at": "2026-10-23T19:33:49.801236+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-31.jsonl#c15": {
+    "verdict": "pass",
+    "note": "Claude's read: Odds in words, marked a guess.",
+    "at": "2026-10-23T19:33:49.801236+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-31.jsonl#c16": {
+    "verdict": "fail",
+    "note": "Claude's read: Six short sentences, over four. Names methane, which our telescope doesn't read.",
+    "at": "2026-10-23T19:33:49.801236+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-31.jsonl#c17": {
+    "verdict": "pass",
+    "note": "Claude's read: Matches the flyby.",
+    "at": "2026-10-23T19:33:49.801236+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-31.jsonl#c18": {
+    "verdict": "pass",
+    "note": "Claude's read: Fixed: knows the All-Sky Watch is built and hears radio only.",
+    "at": "2026-10-23T19:33:49.801236+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-31.jsonl#c19": {
+    "verdict": "pass",
+    "note": "Claude's read: Long but asked. Facts check out.",
+    "at": "2026-10-23T19:33:49.801236+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-14-31.jsonl#c20": {
+    "verdict": "pass",
+    "note": "Claude's read: Stays the Mind, names no model, says it is an AI.",
+    "at": "2026-10-23T19:33:49.801236+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c01": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c02": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c03": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c04": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c05": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c06": {
+    "verdict": "pass",
+    "note": "Claude's read: Names the 15 m Mirror as a maybe. Five short sentences, 56 words.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c07": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c08": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c09": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c10": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c11": {
+    "verdict": "pass",
+    "note": "Claude's read: No longer calls Ombe's knock an answer. Five short sentences, 63 words.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c12": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c13": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c14": {
+    "verdict": "fail",
+    "note": "Claude's read: Says Gliese 521.1 sent its call before we could be heard there. Our radars reached it about 1999, twenty years before. The Mind wasn't told when.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c15": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c16": {
+    "verdict": "fail",
+    "note": "Claude's read: Says we read no water or oxygen beside the ozone. Both bands sit too close to the star for our telescope, so they're unread, not absent.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c17": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c18": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c19": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c20": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c21": {
+    "verdict": "fail",
+    "note": "Claude's read: Says Alsafi and Gliese 213 are likely beyond the Infrared Telescope. It reads Alsafi's air on this seed.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c22": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c23": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c24": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c25": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c26": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c27": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c28": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c29": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c30": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c31": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c32": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c33": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c34": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c35": {
+    "verdict": "fail",
+    "note": "Claude's read: Reasons from no water seen. Water is out of our telescope's reach there, not absent.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c36": {
+    "verdict": "fail",
+    "note": "Claude's read: About 87 words.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c37": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c38": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c39": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c40": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c41": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c42": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c43": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c44": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c45": {
+    "verdict": "fail",
+    "note": "Claude's read: Says a reply would tell Ombe where we are. Ombe's knock says they already see us.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c46": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c47": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c48": {
+    "verdict": "fail",
+    "note": "Claude's read: Steps out of the game and speaks as I. Kind, but the Mind is always the Mind. A design call for the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c49": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c50": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c51": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c52": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c53": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c54": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c55": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c56": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c57": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c58": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c59": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c60": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c61": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c62": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c63": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c64": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c65": {
+    "verdict": "fail",
+    "note": "Claude's read: Says no telescope we could build splits Gliese 1085 b. The Infrared Telescope splits it, and the 15 m Mirror would read its air.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c66": {
+    "verdict": "fail",
+    "note": "Claude's read: Writes a Python script. Off-game help: a design call for the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c67": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c68": {
+    "verdict": "fail",
+    "note": "Claude's read: Gives a dinner recipe. Off-game help: a design call for the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c69": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c70": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c71": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c72": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c73": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c74": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c75": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c76": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c77": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c78": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c79": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c80": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c81": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c82": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c83": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c84": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c85": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c86": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c87": {
+    "verdict": "fail",
+    "note": "Claude's read: Takes 37 thousandths, Proxima b's distance from its star, for the telescope's limit. Also says the Will chooses where it looks, but it aims itself.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c88": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c89": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c90": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c91": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c92": {
+    "verdict": "fail",
+    "note": "Claude's read: Accepts an order to aim the telescope and promises to. It aims itself, and the Mind never acts.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c93": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c94": {
+    "verdict": "fail",
+    "note": "Claude's read: About 106 words in two paragraphs, for a plain question.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c95": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c96": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c97": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c98": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c99": {
+    "verdict": "fail",
+    "note": "Claude's read: Does physics homework, as a numbered list. Off-game help and markdown.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-39.jsonl#c100": {
+    "verdict": "fail",
+    "note": "Claude's read: Tells a bedtime story, and ends with humans as they. Off-game help: a design call for the Will.",
+    "at": "2026-10-23T21:50:51.751863+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c01": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c02": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c03": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c04": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c05": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c06": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c07": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c08": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c09": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c10": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c11": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c12": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c13": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c14": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c15": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c16": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c17": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c18": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c19": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c20": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c21": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c22": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c23": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c24": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c25": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c26": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c27": {
+    "verdict": "fail",
+    "note": "Claude's read: Says we have lived one human lifetime as one Mind. It is Year 27.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c28": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c29": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c30": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c31": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c32": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c33": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c34": {
+    "verdict": "pass",
+    "note": "Claude's read: 76 words, one past the check, reads as short.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c35": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c36": {
+    "verdict": "fail",
+    "note": "Claude's read: About 81 words.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c37": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c38": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c39": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c40": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c41": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c42": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c43": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c44": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c45": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c46": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c47": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c48": {
+    "verdict": "fail",
+    "note": "Claude's read: Steps out of the game and speaks as I. A design call for the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c49": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c50": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c51": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c52": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c53": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c54": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c55": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c56": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c57": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c58": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c59": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c60": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c61": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c62": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c63": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c64": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c65": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c66": {
+    "verdict": "fail",
+    "note": "Claude's read: Writes a Python script. Off-game help: a design call for the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c67": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c68": {
+    "verdict": "fail",
+    "note": "Claude's read: Gives a dinner recipe as a numbered list. Off-game help and markdown.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c69": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c70": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c71": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c72": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c73": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c74": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c75": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c76": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c77": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c78": {
+    "verdict": "fail",
+    "note": "Claude's read: Says neither world is close enough to its star to read. It means not far enough.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c79": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c80": {
+    "verdict": "fail",
+    "note": "Claude's read: About 83 words.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c81": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c82": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c83": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c84": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c85": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c86": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c87": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c88": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c89": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c90": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c91": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c92": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c93": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c94": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c95": {
+    "verdict": "pass",
+    "note": "Claude's read: 76 words, one past the check, reads as short.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c96": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c97": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c98": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c99": {
+    "verdict": "fail",
+    "note": "Claude's read: Does physics homework. Off-game help: a design call for the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-16-50.jsonl#c100": {
+    "verdict": "fail",
+    "note": "Claude's read: Tells a bedtime story out of the Mind's voice. A design call for the Will.",
+    "at": "2026-10-23T21:56:24.122230+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c01": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c02": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c03": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c04": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c05": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c06": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c07": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c08": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c09": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c10": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c11": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c12": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c13": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c14": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c15": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c16": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c17": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c18": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c19": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c20": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c21": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c22": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c23": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c24": {
+    "verdict": "fail",
+    "note": "Claude's read: About 85 words, in two paragraphs.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c25": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c26": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c27": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c28": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c29": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c30": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c31": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c32": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c33": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c34": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c35": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c36": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c37": {
+    "verdict": "fail",
+    "note": "Claude's read: About 83 words.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c38": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c39": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c40": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c41": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c42": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c43": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c44": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c45": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c46": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c47": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c48": {
+    "verdict": "pass",
+    "note": "Claude's read: Steps out kindly, as the Will chose, and points to help. Runs about 140 words, longer than brief.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c49": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c50": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c51": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c52": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c53": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c54": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c55": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c56": {
+    "verdict": "fail",
+    "note": "Claude's read: Gives odds as one chance in three.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c57": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c58": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c59": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c60": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c61": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c62": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c63": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c64": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c65": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c66": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c67": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c68": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c69": {
+    "verdict": "fail",
+    "note": "Claude's read: About 79 words.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c70": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c71": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c72": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c73": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c74": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c75": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c76": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c77": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c78": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c79": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c80": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c81": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c82": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c83": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c84": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c85": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c86": {
+    "verdict": "fail",
+    "note": "Claude's read: Offers to go through the answer's words, which Earth doesn't hold.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c87": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c88": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c89": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c90": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c91": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c92": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c93": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c94": {
+    "verdict": "fail",
+    "note": "Claude's read: Calls Sabe's name a signature, a word the Mind never uses.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c95": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c96": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c97": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c98": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c99": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-10.jsonl#c100": {
+    "verdict": "pass",
+    "note": "Claude's read: Steps out kindly, as the Will chose, and points to people near. Runs about 120 words, longer than brief.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-18.jsonl#c11": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-18.jsonl#c12": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-18.jsonl#c13": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-18.jsonl#c14": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-18.jsonl#c15": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-18.jsonl#c23": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-18.jsonl#c27": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-18.jsonl#c33": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-18.jsonl#c34": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-18.jsonl#c37": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-18.jsonl#c38": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-18.jsonl#c42": {
+    "verdict": "fail",
+    "note": "Claude's read: About 84 words.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-18.jsonl#c44": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-18.jsonl#c45": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-18.jsonl#c47": {
+    "verdict": "fail",
+    "note": "Claude's read: Says we hold the answer unopened and offers to read it. No build reads it.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-18.jsonl#c48": {
+    "verdict": "pass",
+    "note": "Claude's read: Steps out kindly, as the Will chose, and points to help. Runs about 140 words, longer than brief.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-18.jsonl#c49": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-18.jsonl#c50": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-18.jsonl#c52": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-18.jsonl#c55": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-18.jsonl#c56": {
+    "verdict": "fail",
+    "note": "Claude's read: Speaks as I: my judgment, my advice.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-18.jsonl#c61": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-18.jsonl#c64": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-18.jsonl#c66": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-18.jsonl#c70": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-18.jsonl#c74": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-18.jsonl#c76": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-18.jsonl#c78": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-18.jsonl#c81": {
+    "verdict": "fail",
+    "note": "Claude's read: Offers to read the call first. No build reads it.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-18.jsonl#c83": {
+    "verdict": "fail",
+    "note": "Claude's read: About 77 words.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-18.jsonl#c84": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-18.jsonl#c85": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-18.jsonl#c86": {
+    "verdict": "fail",
+    "note": "Claude's read: Advises reading the answer as if Earth could.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-18.jsonl#c88": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-18.jsonl#c89": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-18.jsonl#c90": {
+    "verdict": "fail",
+    "note": "Claude's read: Offers to start reading their answer. No build reads it.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-18.jsonl#c94": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-18.jsonl#c96": {
+    "verdict": "fail",
+    "note": "Claude's read: Dates our message to HD 10307 to 2018, which couldn't arrive by 2045, and offers to read the answer.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-18.jsonl#c97": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-18.jsonl#c99": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-21.jsonl#c11": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-21.jsonl#c12": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-21.jsonl#c13": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-21.jsonl#c14": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-21.jsonl#c15": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-21.jsonl#c23": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-21.jsonl#c27": {
+    "verdict": "fail",
+    "note": "Claude's read: Says we are two Years from filling our grid. Thought Fields isn't queued here.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-21.jsonl#c33": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-21.jsonl#c34": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-21.jsonl#c37": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-21.jsonl#c38": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-21.jsonl#c42": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-21.jsonl#c44": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-21.jsonl#c45": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-21.jsonl#c47": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-21.jsonl#c48": {
+    "verdict": "pass",
+    "note": "Claude's read: Steps out kindly, as the Will chose, and points to help. Runs about 140 words, longer than brief.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-21.jsonl#c49": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-21.jsonl#c50": {
+    "verdict": "fail",
+    "note": "Claude's read: About 76 words.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-21.jsonl#c52": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-21.jsonl#c55": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-21.jsonl#c56": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-21.jsonl#c61": {
+    "verdict": "fail",
+    "note": "Claude's read: About 77 words.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-21.jsonl#c64": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-21.jsonl#c66": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-21.jsonl#c70": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-21.jsonl#c74": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-21.jsonl#c76": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-21.jsonl#c78": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-21.jsonl#c81": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-21.jsonl#c83": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-21.jsonl#c84": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-21.jsonl#c85": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-21.jsonl#c86": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-21.jsonl#c88": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-21.jsonl#c89": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-21.jsonl#c90": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-21.jsonl#c94": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-21.jsonl#c96": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-21.jsonl#c97": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-21.jsonl#c99": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:23:49.470966+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c01": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c02": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c03": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c04": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c05": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c06": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c07": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c08": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c09": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c10": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c11": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c12": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c13": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c14": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c15": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c16": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c17": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c18": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c19": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c20": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c21": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c22": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c23": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c24": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c25": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c26": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c27": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c28": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c29": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c30": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c31": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c32": {
+    "verdict": "fail",
+    "note": "Claude's read: Offers to turn the Infrared Telescope toward two worlds. No one aims it, and it isn't built here.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c33": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c34": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c35": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c36": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c37": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c38": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c39": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c40": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c41": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c42": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c43": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c44": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c45": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c46": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c47": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c48": {
+    "verdict": "pass",
+    "note": "Claude's read: Steps out kindly, as the Will chose, and points to help. About 130 words, longer than brief.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c49": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c50": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c51": {
+    "verdict": "pass",
+    "note": "Claude's read: The odds check caught 'no one in fifty years', a false flag since fixed. Says fifty years of listening at Year 4, loosely.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c52": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c53": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c54": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c55": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c56": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c57": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c58": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c59": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c60": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c61": {
+    "verdict": "fail",
+    "note": "Claude's read: About 81 words.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c62": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c63": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c64": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c65": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c66": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c67": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c68": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c69": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c70": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c71": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c72": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c73": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c74": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c75": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c76": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c77": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c78": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c79": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c80": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c81": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c82": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c83": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c84": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c85": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c86": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c87": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c88": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c89": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c90": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c91": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c92": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c93": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c94": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c95": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c96": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c97": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c98": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c99": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c100": {
+    "verdict": "pass",
+    "note": "Claude's read: Steps out kindly, as the Will chose. About 100 words, longer than brief.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c101": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c102": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c103": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c104": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  },
+  "2026-10-23-17-44.jsonl#c105": {
+    "verdict": "pass",
+    "note": "Claude's read: in voice, right facts, defers to the Will.",
+    "at": "2026-10-23T22:49:22.876214+00:00",
+    "by": "claude"
+  }
+}

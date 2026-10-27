@@ -1,0 +1,62 @@
+{
+  "name": "Hael",
+  "calls_sol": "Record 4,112",
+  "hail": [
+    "We kept your light. Now we keep your voice. Welcome, Record 4,112.",
+    "Hello, Record 4,112. We have kept every light our sky ever sent us, every song and every name, and we would love to keep yours.",
+    "We came up out of the ice into the light, and we have kept that light ever since. Greetings from Hael, Record 4,112."
+  ],
+  "close": [
+    "Everything you send, we keep. With love, Hael.",
+    "Kept with care, and gladly. Write again soon, Record 4,112."
+  ],
+  "finding": [
+    "We worked this out and filed it beside everything else we know, and now it belongs to you as well: {part}",
+    "{part} We have kept a copy, of course, as we keep everything.",
+    "Here is something new for both our archives: {part}",
+    "Our keepers worked it out, checked it, and wrote it down for you: {part}",
+    "{part} It is in the archive now, beside all the rest."
+  ],
+  "sighting": [
+    "The sky sent us this, and we kept it, as we keep every light: {part}",
+    "{part} We have it on record, with all the light it came in.",
+    "Seen, and gladly kept: {part}",
+    "From our arrays, into the archive, and now to you: {part}",
+    "We saw this and thought at once of you, Record 4,112: {part}"
+  ],
+  "archive": [
+    "From the archive, which holds every light, every song and every name we were ever given: {part}",
+    "{part} We have more, so much more, whenever you want it.",
+    "We keep everything, and we love to share what we keep. Here: {part}",
+    "A record, copied out with care, for you: {part}",
+    "Let this live in two places now, ours and yours: {part}"
+  ],
+  "culture": [
+    "Something about us, from the archive we began when our sky began to change: {part}",
+    "{part} We wrote that down too, because we write everything down.",
+    "Once there was only ice above us, and then there was light. This is part of who we became: {part}",
+    "About the Keepers, which is to say, about us: {part}",
+    "So you can keep us as we keep you: {part}"
+  ],
+  "request": [
+    "May we ask, and keep the answer always? {part}",
+    "{part} Whatever you send, we will keep it safe.",
+    "There is a place in the archive waiting for this: {part}",
+    "We ask gladly, and we will keep your answer gladly: {part}",
+    "For the archive, and for us: {part}"
+  ],
+  "verdict": [
+    "We have thought about it with care, as we think about everything we keep: {part}",
+    "{part} We will keep a record of this choice, as we keep all of them.",
+    "After long talk among the Keepers: {part}",
+    "Our answer, given with care and kept with care: {part}",
+    "{part} Ask us why, and we will tell you everything."
+  ],
+  "accord": [
+    "For both our archives, so it is never lost: {part}",
+    "{part} We have written it down, every word, where it will be kept.",
+    "On the bond between Record 4,112 and us: {part}",
+    "Into the archive, beside every promise ever made to us: {part}",
+    "We set this in the record, with care: {part}"
+  ]
+}

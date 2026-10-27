@@ -1,0 +1,5 @@
+/* The two faces, served from our own host: SUSE for words, IBM Plex Mono for labels and numbers. */
+:root {
+  --font-suse: "SUSE Variable", sans-serif;
+  --font-plex-mono: "IBM Plex Mono", monospace;
+}

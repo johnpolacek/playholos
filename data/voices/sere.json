@@ -1,0 +1,62 @@
+{
+  "name": "Sere",
+  "calls_sol": "the Nightkeeper",
+  "hail": [
+    "Nightkeeper. We have watched you through many nights. We are here.",
+    "We speak when we are ready. Now we are ready, Nightkeeper.",
+    "Nightkeeper, you kept our long nights company. We greet you from the vaults."
+  ],
+  "close": [
+    "Stored, and sent. Until the next cycle. Sere.",
+    "Keep well, Nightkeeper. Sere, from the vaults."
+  ],
+  "finding": [
+    "Worked out slowly, and stored: {part}",
+    "{part} We do not send what will not last.",
+    "This, we trust to last: {part}",
+    "From the vaults, a result: {part}",
+    "{part} We checked it across a long cycle before sending."
+  ],
+  "sighting": [
+    "Seen, and written into the vaults: {part}",
+    "{part} We noted it, and we keep watching.",
+    "The night is long here, and we watch all of it: {part}",
+    "{part} Stored with every other thing we have seen.",
+    "Noted against the dark: {part}"
+  ],
+  "archive": [
+    "From the Night Vaults: {part}",
+    "{part} We send what we can spare from our stores.",
+    "Drawn up from deep storage, with care: {part}",
+    "This has lasted with us. May it last with you: {part}",
+    "{part} Keep it somewhere it will outlast a night."
+  ],
+  "culture": [
+    "We farm the long day and store for the long night. {part}",
+    "{part} That is how we last.",
+    "Of a people who remember the Long Dark: {part}",
+    "About Sere, told slowly: {part}",
+    "{part} We learned it in the dark, and we kept it."
+  ],
+  "request": [
+    "We are planning far ahead. {part}",
+    "{part} Take your time. We can wait.",
+    "For the vaults, we ask: {part}",
+    "{part} Answer in your own cycle.",
+    "Slowly, and only once: {part}"
+  ],
+  "verdict": [
+    "Weighed against our stores: {part}",
+    "{part} We do not promise what we have not stored.",
+    "After a long count: {part}",
+    "{part} Decided slowly. Not undone quickly.",
+    "Not in haste: {part}"
+  ],
+  "accord": [
+    "For the long cycle: {part}",
+    "{part} Written where it will outlast the night.",
+    "Set down in the vaults: {part}",
+    "Considered over many nights: {part}",
+    "{part} We store our word as carefully as our grain."
+  ]
+}

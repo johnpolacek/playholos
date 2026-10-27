@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Send Card</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=SUSE:wght@100..800&display=swap" rel="stylesheet">
+<style>
+/* Offline, the game's own copies of the fonts. */
+@font-face { font-family: "SUSE Variable"; font-weight: 100 800; src: url("../game/node_modules/@fontsource-variable/suse/files/suse-latin-wght-normal.woff2") format("woff2"); }
+@font-face { font-family: "Plex Mono Local"; font-weight: 400; src: url("../game/node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2") format("woff2"); }
+
+/* Colors from game/app/globals.css. The game is always dark. */
+:root {
+  --page: #0b0c0d;
+  --frame: #2a2b2e;
+  --paper: #121314;
+  --ink: #e6e3db;
+  --muted: #9c988f;
+  --faint: #34363a;
+  --panel: #17181a;
+  --rowline: #26282b;
+  --you: #5bb8d6;
+  --you-rgb: 91, 184, 214;
+  --other: #e0a24a;
+  --other-rgb: 224, 162, 74;
+  --ok: #70d1a9;
+  --sans: "SUSE", "SUSE Variable", sans-serif;
+  --mono: "IBM Plex Mono", "Plex Mono Local", monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: #070808; color: var(--ink); font-family: var(--sans); text-wrap: pretty; }
+p { margin: 0; }
+button { font: inherit; color: inherit; }
+
+header { max-width: 1320px; margin: 0 auto; padding: 40px 16px 8px; display: flex; flex-wrap: wrap; gap: 16px; align-items: end; justify-content: space-between; }
+h1 { margin: 0; font-size: 22px; font-weight: 600; }
+header p { margin-top: 6px; color: var(--muted); font-size: 14px; max-width: 70ch; }
+.controls { display: flex; flex-wrap: wrap; gap: 14px; }
+.group { display: flex; align-items: center; gap: 4px; font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.group span { margin-right: 4px; }
+button.pill { background: none; color: var(--muted); border: 1px solid var(--frame); border-radius: 999px; padding: 5px 10px; font: 11px var(--mono); cursor: pointer; }
+button.pill[aria-pressed="true"] { color: var(--ink); border-color: var(--muted); }
+button.pill:hover { color: var(--ink); }
+
+main { max-width: 1320px; margin: 0 auto; padding: 16px 16px 64px; display: grid; gap: 32px 20px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 400px), 1fr)); }
+.card { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.meta { display: flex; gap: 10px; align-items: baseline; }
+.num { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.name { font-size: 15px; font-weight: 600; }
+.note-text { color: var(--muted); font-size: 13px; line-height: 1.4; margin-top: -4px; min-height: calc(1.4em * 3); }
+
+/* The Mind tab's panel, as in mind-thinking.html. */
+.frame { position: relative; overflow: hidden; background: var(--panel); border: 1px solid var(--rowline); border-radius: 16px; padding: 20px 16px 14px; display: flex; flex-direction: column; gap: 10px; min-height: 560px; }
+.ask { align-self: flex-end; max-width: 86%; background: var(--ink); color: var(--paper); border-radius: 12px; padding: 9px 12px; font-size: 13.5px; line-height: 1.45; }
+.askbox { margin-top: auto; flex-shrink: 0; height: 38px; border-radius: 999px; border: 1px solid rgba(230, 227, 219, .55); color: var(--muted); font-size: 13.5px; padding: 0 6px 0 16px; display: flex; align-items: center; justify-content: space-between; }
+.askbox::after { content: "↑"; width: 28px; height: 28px; border-radius: 50%; background: rgba(230, 227, 219, .3); color: var(--paper); display: grid; place-items: center; font-size: 14px; }
+.note { position: relative; align-self: flex-start; max-width: 92%; padding: 0 4px 6px 12px; }
+.note .edge { position: absolute; top: 8px; bottom: 0; left: 0; width: 9px; border-top-left-radius: 12px; border-top: 1px solid rgba(var(--you-rgb), .4); border-left: 1px solid rgba(var(--you-rgb), .4); -webkit-mask-image: linear-gradient(#000, transparent); mask-image: linear-gradient(#000, transparent); }
+.note .head { margin-bottom: 6px; height: 16px; display: flex; align-items: center; gap: 7px; font: 400 9.5px/1 var(--mono); letter-spacing: .1em; color: var(--you); }
+.note .head::after { content: ""; height: 1px; flex: 1; background: linear-gradient(90deg, rgba(var(--you-rgb), .4), transparent 90%); }
+.words { font-size: 13.5px; line-height: 1.45; }
+
+/* What every card shares. */
+.lab { font: 400 9.5px/1 var(--mono); letter-spacing: .1em; color: var(--muted); text-transform: uppercase; }
+.lab.you { color: var(--you); }
+.lab.other { color: var(--other); }
+.quote { font-size: 13.5px; line-height: 1.45; }
+.btns { display: flex; gap: 8px; align-items: center; }
+.send { border: 0; border-radius: 999px; background: var(--you); color: var(--paper); font-weight: 600; font-size: 13px; padding: 8px 16px; cursor: pointer; }
+.ghost { background: none; border: 1px solid var(--frame); border-radius: 999px; color: var(--muted); font-size: 13px; padding: 7px 14px; cursor: pointer; }
+.ghost:hover { color: var(--ink); }
+.sent-line { display: none; font: 400 11px/1.5 var(--mono); color: var(--ok); }
+[data-state="sent"] .sent-line { display: block; }
+[data-state="sent"] .btns { display: none; }
+[data-state="sent"] .draft-only { display: none; }
+.mono { font-family: var(--mono); }
+.dim { color: var(--muted); }
+
+/* 01 Ledger */
+.ledger { border: 1px solid var(--rowline); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 12px; background: var(--paper); }
+.ledger .to { display: flex; justify-content: space-between; align-items: baseline; }
+.ledger .to b { font-size: 15px; font-weight: 600; }
+.facts { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--rowline); border-bottom: 1px solid var(--rowline); }
+.facts div { padding: 9px 0; display: flex; flex-direction: column; gap: 5px; }
+.facts div + div { border-left: 1px solid var(--rowline); padding-left: 10px; }
+.facts b { font: 600 13px var(--mono); }
+.risk { font-size: 12.5px; line-height: 1.45; color: var(--muted); }
+.risk::before { content: "△ "; color: var(--other); }
+
+/* 02 Light path */
+.path { border: 1px solid var(--rowline); border-radius: 12px; background: var(--paper); padding: 14px; display: flex; flex-direction: column; gap: 12px; }
+.path svg { width: 100%; height: 120px; overflow: visible; }
+
+/* 03 Contents */
+.chips { display: flex; flex-direction: column; gap: 8px; }
+.chip { display: grid; grid-template-columns: 82px 1fr 74px; gap: 10px; align-items: center; font-size: 12.5px; }
+.chip .bar { height: 6px; border-radius: 3px; background: var(--faint); position: relative; overflow: hidden; }
+.chip .bar i { position: absolute; inset: 0 auto 0 0; background: var(--you); border-radius: 3px; }
+.chip .t { font: 400 11px var(--mono); color: var(--muted); text-align: right; }
+.scale { display: grid; grid-template-columns: 82px 1fr 74px; gap: 10px; font: 400 9px var(--mono); color: var(--muted); }
+.scale div { display: flex; justify-content: space-between; }
+.box { border: 1px solid var(--rowline); border-radius: 12px; background: var(--paper); padding: 14px; display: flex; flex-direction: column; gap: 12px; }
+
+/* 04 Everywhere */
+.dial { display: flex; flex-direction: column; gap: 6px; }
+.dial input { width: 100%; accent-color: var(--you); }
+.ringmap { width: 100%; height: 210px; }
+.toggle { display: inline-flex; border: 1px solid var(--frame); border-radius: 999px; padding: 2px; }
+.toggle button { background: none; border: 0; border-radius: 999px; padding: 5px 12px; font-size: 12px; color: var(--muted); cursor: pointer; }
+.toggle button[aria-pressed="true"] { background: var(--faint); color: var(--ink); }
+.stat { display: flex; justify-content: space-between; font-size: 12.5px; padding: 6px 0; border-top: 1px solid var(--rowline); }
+.stat b { font: 600 12px var(--mono); }
+
+/* 05 Two voices */
+.voices { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.voices > div { border: 1px solid var(--rowline); border-radius: 10px; padding: 10px; display: flex; flex-direction: column; gap: 6px; font-size: 12.5px; line-height: 1.45; }
+.voices .theirs { border-color: rgba(var(--other-rgb), .35); }
+.lie { border-bottom: 1px dashed var(--other); }
+.only { font: 400 10px var(--mono); color: var(--other); }
+
+/* 06 Seal */
+.hold { position: relative; overflow: hidden; border: 1px solid var(--you); background: none; color: var(--you); border-radius: 999px; padding: 9px 18px; font-size: 13px; font-weight: 600; cursor: pointer; touch-action: none; user-select: none; }
+.hold i { position: absolute; inset: 0; background: rgba(var(--you-rgb), .25); transform-origin: left; transform: scaleX(0); }
+.hold span { position: relative; }
+.stamp { display: flex; flex-direction: column; gap: 10px; align-items: center; text-align: center; padding: 6px 0; }
+.stamp svg { width: 100%; height: 150px; }
+
+@media (prefers-reduced-motion: reduce) { .pulse, .ring-anim { animation: none !important; } }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>The send card</h1>
+    <p>Six ways the Mind could show a message before we send it. Each frame is the Mind tab at Year 48.9 in Earth 4. HD 10307 answered Cosmic Call 2, and we ask the Mind to reply. Numbers are real, from calcs/messages.py: our dishes at 10¹⁴ W along the beam, read by an all-sky watch like ours.</p>
+  </div>
+  <div class="controls">
+    <div class="group" role="group" aria-label="State"><span>State</span>
+      <button class="pill" data-state="draft" aria-pressed="true">Draft</button>
+      <button class="pill" data-state="sent">Sent</button>
+    </div>
+  </div>
+</header>
+<main id="cards"></main>
+
+<template id="talk">
+  <div class="ask"></div>
+  <div class="note"><div class="edge"></div><div class="head">THE MIND</div><p class="words"></p></div>
+</template>
+
+<script>
+// Earth 4 at Year 48.9: HD 10307 answered Cosmic Call 2 at Year 46.9. One Year is five of the Will's minutes.
+const NOW = 48.9, LY = 41.55, LANDS = +(NOW + LY).toFixed(1), BACK = +(LANDS + 0.1 + LY).toFixed(1), END = 60;
+const ASK = "answer them. tell them we’re friendly, and ask what they want.";
+const SAYS = "We can send it now. It reaches HD 10307 at Year 90.4, and the soonest an answer could be home is Year 132. They called first, so they’re listening for us. A reply tells them we heard, and that we chose to speak.";
+const TRAVELS = "A greeting: we heard you, and we come as friends. Then a question: what do you want from us?";
+const play = (y) => { const m = Math.round((y - NOW) * 5); return m >= 60 ? `${Math.floor(m / 60)} h ${m % 60} min` : `${m} min`; };
+
+const CARDS = [
+  {
+    name: "Ledger",
+    note: "The plainest. Who, what travels, three numbers, one risk, two buttons. Fits beside any answer, and reads in one glance.",
+    ask: ASK, says: SAYS,
+    body: () => `
+      <div class="ledger">
+        <div class="to"><span class="lab you">To</span><span class="mono dim" style="font-size:11px">${LY} ly</span></div>
+        <b style="font-size:15px;margin-top:-8px">HD 10307</b>
+        <div><div class="lab" style="margin-bottom:6px">What travels</div><p class="quote">${TRAVELS}</p></div>
+        <div class="facts">
+          <div><span class="lab">Sends in</span><b>8 seconds</b></div>
+          <div><span class="lab">Lands</span><b>Year ${LANDS}</b></div>
+          <div><span class="lab">Answer, soonest</span><b>Year ${BACK}</b></div>
+        </div>
+        <p class="risk">They learn we heard, and that we answer.</p>
+        <div class="btns draft-only"><button class="send">Send</button><button class="ghost">Change it</button></div>
+        <p class="sent-line">Sent at Year ${NOW} · on its way, lands Year ${LANDS}</p>
+      </div>`,
+  },
+  {
+    name: "Light path",
+    note: "The message drawn as light leaving Sol. Ticks for now, landing, and the soonest answer, with the game’s Year 60 marked so we see how far past it they fall.",
+    ask: ASK, says: SAYS,
+    body: () => {
+      const x = (y) => 16 + (y - NOW) / (BACK - NOW) * 368;
+      return `
+      <div class="path">
+        <div class="to" style="display:flex;justify-content:space-between"><span class="lab you">To HD 10307</span><span class="mono dim" style="font-size:11px">${LY} ly · sends in 8 s</span></div>
+        <p class="quote">${TRAVELS}</p>
+        <svg viewBox="0 0 400 120" role="img" aria-label="Our message leaves at Year ${NOW}, lands at Year ${LANDS}, and an answer could be home at Year ${BACK}">
+          <line x1="16" y1="46" x2="${x(LANDS)}" y2="46" stroke="rgba(91,184,214,.5)" stroke-width="1.5"/>
+          <path d="M ${x(LANDS)} 46 Q ${(x(LANDS) + x(BACK)) / 2} 92 ${x(BACK)} 46" fill="none" stroke="rgba(224,162,74,.45)" stroke-width="1.5" stroke-dasharray="3 4"/>
+          <circle cx="16" cy="46" r="5" fill="#e6e3db"/><text x="16" y="24" fill="#9c988f" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">SOL</text>
+          <circle cx="${x(LANDS)}" cy="46" r="4" fill="#e0a24a"/><text x="${x(LANDS)}" y="24" fill="#e0a24a" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">HD 10307</text>
+          <circle class="pulse" cx="16" cy="46" r="3" fill="#5bb8d6"><animate attributeName="cx" from="16" to="${x(LANDS)}" dur="3.2s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;1;1;0" dur="3.2s" repeatCount="indefinite"/></circle>
+          <line x1="${x(END)}" y1="36" x2="${x(END)}" y2="56" stroke="#34363a"/><text x="${x(END)}" y="70" fill="#9c988f" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">YEAR 60</text>
+          <text x="16" y="70" fill="#9c988f" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">${NOW}</text>
+          <text x="${x(LANDS)}" y="70" fill="#9c988f" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">LANDS ${LANDS}</text>
+          <text x="${x(BACK)}" y="108" fill="#9c988f" font-size="9" font-family="IBM Plex Mono" text-anchor="end">ANSWER ${BACK} · ${play(BACK)} OF PLAY</text>
+        </svg>
+        <div class="btns draft-only"><button class="send">Send</button><button class="ghost">Change it</button></div>
+        <p class="sent-line">Sent at Year ${NOW} · ${play(LANDS)} of play until it lands</p>
+      </div>`;
+    },
+  },
+  {
+    name: "What it holds",
+    note: "Each kind of thing in the message as its own row, with how long it takes to send on a scale from seconds to Years. Asking for more, as our genes, shows the cost before we commit.",
+    ask: "answer them. tell them we’re friendly, ask what they want, and send our genes so they know what we are.",
+    says: "We can send all three. Words go in seconds, but our genes take almost four months of our dishes at this distance. It all lands by Year 90.8. Our genes tell them a great deal about what we are, and they can’t be unsent.",
+    body: () => {
+      const L = (s) => Math.max(4, Math.min(100, (Math.log10(s) + 1) / 9 * 100));
+      const rows = [["Words", 7.8, "8 s"], ["A question", 1.2, "1 s"], ["Our genes", 115.9 * 86400, "116 days"]];
+      return `
+      <div class="box">
+        <div style="display:flex;justify-content:space-between"><span class="lab you">To HD 10307 · ${LY} ly</span><span class="lab">Time to send</span></div>
+        <div class="chips">${rows.map(([n, s, t]) => `<div class="chip"><span>${n}</span><span class="bar"><i style="width:${L(s)}%"></i></span><span class="t">${t}</span></div>`).join("")}</div>
+        <div class="scale"><span></span><div><span>1 s</span><span>1 day</span><span>1 Year</span><span>10 Years</span></div><span></span></div>
+        <div class="facts" style="grid-template-columns:repeat(2,1fr)">
+          <div><span class="lab">Done sending</span><b>Year 49.2</b></div>
+          <div><span class="lab">Lands</span><b>Year 90.8</b></div>
+        </div>
+        <p class="risk">Our genes say what we’re made of. Once sent, it can’t be called back.</p>
+        <div class="btns draft-only"><button class="send">Send all three</button><button class="ghost">Words only</button></div>
+        <p class="sent-line">Sending · our genes finish at Year 49.2</p>
+      </div>`;
+    },
+  },
+  {
+    name: "Everywhere, with a dial",
+    note: "Sent every way at once. The dial sets how far it can be read. Real nearby stars sit on a map by their direction, inside the read ring, the noticed ring, or outside. Repeat or once is chosen here.",
+    ask: "call out to everyone nearby. say we’re here and we’re friendly.",
+    says: "We can call every way at once. A page of words read to 20 light-years takes spare power we already have. Repeated, stars that keep listening read it far past the dial. Everyone in range learns where we are, not only the friendly.",
+    body: () => `
+      <div class="box">
+        <div style="display:flex;justify-content:space-between"><span class="lab you">To everyone</span><span class="lab">A page of words</span></div>
+        <p class="quote">We are here, at the star you call Sol. We come as friends.</p>
+        <div class="dial"><div style="display:flex;justify-content:space-between"><span class="lab">Readable to</span><b class="mono" data-out="reach" style="font-size:12px">20 ly</b></div><input type="range" min="5" max="50" value="20" data-in="reach" aria-label="Readable to, light-years"></div>
+        <svg class="ringmap" viewBox="-110 -105 220 210" data-map></svg>
+        <div><div class="stat"><span>Power</span><b data-out="power">0.04% of Earth’s</b></div>
+        <div class="stat"><span>Noticed to, in a day</span><b data-out="notice">57 ly</b></div>
+        <div class="stat"><span>Read by a star that listens a Year</span><b data-out="year">247 ly</b></div></div>
+        <div style="display:flex;justify-content:space-between;align-items:center"><div class="toggle" role="group" aria-label="Repeat"><button aria-pressed="true">Repeat until stopped</button><button aria-pressed="false">Once</button></div></div>
+        <div class="btns draft-only"><button class="send">Start calling</button><button class="ghost">Change it</button></div>
+        <p class="sent-line">Calling since Year ${NOW} · <u>Stop</u></p>
+      </div>`,
+  },
+  {
+    name: "Two voices",
+    note: "Our words beside what will actually travel, as the Mind has made it. A lie is marked, and the mark is for us only: they receive it as true.",
+    ask: "answer them. say we’re friendly, and tell them there are only a few million of us.",
+    says: "We can send it, with one change you should see. There are about nine billion of us, so the number is a lie. If they can hear our hum, they may already guess how many we are. A caught lie costs trust.",
+    body: () => `
+      <div class="box">
+        <span class="lab you">To HD 10307 · ${LY} ly</span>
+        <div class="voices">
+          <div><span class="lab">We said</span><p>“answer them. say we’re friendly, and tell them there are only a few million of us.”</p></div>
+          <div class="theirs"><span class="lab other">They receive</span><p>A greeting: we heard you, and we come as friends. <span class="lie">We are a few million.</span></p><span class="only">◆ A lie, marked for us only</span></div>
+        </div>
+        <div class="facts"><div><span class="lab">Sends in</span><b>6 seconds</b></div><div><span class="lab">Lands</span><b>Year ${LANDS}</b></div><div><span class="lab">Answer, soonest</span><b>Year ${BACK}</b></div></div>
+        <p class="risk">Our hum carries how loud we are. They may check.</p>
+        <div class="btns draft-only"><button class="send">Send with the lie</button><button class="ghost">Send it true</button></div>
+        <p class="sent-line">Sent at Year ${NOW} · the lie is in our record with them</p>
+      </div>`,
+  },
+  {
+    name: "Seal",
+    note: "The moment of sending, made weighty. Hold to send, since it can’t be undone. Sent, the card becomes a beam leaving Sol, and stays in the talk as a small sent line.",
+    ask: ASK, says: SAYS,
+    body: () => `
+      <div class="box">
+        <div style="display:flex;justify-content:space-between"><span class="lab you">To HD 10307</span><span class="mono dim" style="font-size:11px">lands Year ${LANDS}</span></div>
+        <p class="quote">${TRAVELS}</p>
+        <div class="stamp" data-stamp>
+          <svg viewBox="0 0 400 150" aria-hidden="true">
+            <circle cx="40" cy="75" r="6" fill="#e6e3db"/>
+            <circle cx="360" cy="75" r="4" fill="#e0a24a"/>
+            <g data-beam opacity="0"><line x1="40" y1="75" x2="360" y2="75" stroke="rgba(91,184,214,.5)"/><circle r="3.5" fill="#5bb8d6" cy="75" cx="40"><animate attributeName="cx" from="40" to="360" dur="2.4s" repeatCount="indefinite"/></circle></g>
+            <circle cx="40" cy="75" r="10" fill="none" stroke="rgba(91,184,214,.6)" data-ring opacity="0"><animate attributeName="r" from="8" to="60" dur="2.4s" repeatCount="indefinite"/><animate attributeName="opacity" from=".7" to="0" dur="2.4s" repeatCount="indefinite"/></circle>
+            <text x="40" y="104" fill="#9c988f" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">SOL</text>
+            <text x="360" y="104" fill="#e0a24a" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">HD 10307</text>
+          </svg>
+          <p class="dim draft-only" style="font-size:12.5px">It can’t be called back once it leaves.</p>
+          <button class="hold draft-only" data-hold><i></i><span>Hold to send</span></button>
+          <p class="sent-line">Sent at Year ${NOW} · ${play(LANDS)} of play until it lands</p>
+        </div>
+      </div>`,
+  },
+];
+
+// Real stars within 50 ly by right ascension and distance, seen from above Earth's pole. Those Earth has messaged in orange.
+const STARS = [["Proxima", 14.50, 4.24], ["Barnard’s", 17.96, 5.96], ["Wolf 359", 10.94, 7.86], ["Lalande 21185", 11.05, 8.31], ["Sirius", 6.75, 8.6], ["Ross 154", 18.83, 9.7], ["ε Eridani", 3.55, 10.5], ["τ Ceti", 1.73, 11.9], ["Luyten’s", 7.45, 12.2, 1], ["Teegarden’s", 2.88, 12.5, 1], ["Kapteyn’s", 5.19, 12.8], ["TZ Arietis", 2.0, 14.58, 1], ["Altair", 19.85, 16.7, 1], ["Gliese 526", 13.76, 17.7, 1], ["Gliese 581", 15.32, 20.55, 1], ["κ¹ Ceti", 3.32, 30.26, 1], ["Gliese 49", 1.03, 31.8, 1], ["Gliese 208", 5.6, 37.3, 1], ["55 Cancri", 8.87, 41.05, 1], ["HD 10307", 1.69, 41.55, 1], ["47 UMa", 10.99, 45.3, 1]];
+// calcs/messages.py: a page of words, a copy a day, read by a 12 Jy watch. Power grows as the square of the reach.
+const power = (d) => 0.002707 * (d / 50) ** 2;
+const notice = (d) => 2.829 * d, year = (d) => 12.366 * d;
+
+function drawMap(svg, d) {
+  const k = 100 / 50, r = (ly) => Math.min(ly, 52) * k;
+  const n = notice(d);
+  const dots = STARS.map(([name, ra, ly, msg]) => {
+    const a = ra / 24 * 2 * Math.PI, x = Math.cos(a) * r(ly), y = -Math.sin(a) * r(ly);
+    const fill = ly <= d ? "#5bb8d6" : ly <= n ? "#9c988f" : "#34363a";
+    return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${msg ? 2.6 : 2}" fill="${fill}" ${msg ? 'stroke="#e0a24a" stroke-width=".8"' : ""}><title>${name}, ${ly} ly</title></circle>`;
+  }).join("");
+  svg.innerHTML = `
+    <circle r="${r(50)}" fill="none" stroke="#26282b"/><circle r="${r(25)}" fill="none" stroke="#26282b"/>
+    <circle r="${Math.min(r(n), 104)}" fill="rgba(156,152,143,.05)" stroke="rgba(156,152,143,.35)" stroke-dasharray="2 3"/>
+    <circle r="${r(d)}" fill="rgba(91,184,214,.1)" stroke="rgba(91,184,214,.7)"/>
+    <circle class="ring-anim" r="${r(d)}" fill="none" stroke="rgba(91,184,214,.6)"><animate attributeName="r" from="2" to="${r(d)}" dur="3s" repeatCount="indefinite"/><animate attributeName="opacity" from=".8" to="0" dur="3s" repeatCount="indefinite"/></circle>
+    ${dots}<circle r="3" fill="#e6e3db"/>
+    <text x="0" y="${-r(d) - 4}" fill="#5bb8d6" font-size="7" font-family="IBM Plex Mono" text-anchor="middle">READ ${d} LY</text>
+    <text x="0" y="${r(50) + 3}" dy="6" fill="#9c988f" font-size="7" font-family="IBM Plex Mono" text-anchor="middle">50 LY</text>
+    <text x="-108" y="98" fill="#9c988f" font-size="6.5" font-family="IBM Plex Mono">◯ ORANGE: STARS WE HAVE MESSAGED</text>`;
+}
+
+const main = document.getElementById("cards");
+const talk = document.getElementById("talk");
+CARDS.forEach((c, i) => {
+  const card = document.createElement("section");
+  card.className = "card";
+  card.innerHTML = `<div class="meta"><span class="num">${String(i + 1).padStart(2, "0")}</span><span class="name">${c.name}</span></div><p class="note-text">${c.note}</p>`;
+  const frame = document.createElement("div");
+  frame.className = "frame";
+  frame.dataset.state = "draft";
+  frame.append(talk.content.cloneNode(true));
+  frame.querySelector(".ask").textContent = c.ask;
+  frame.querySelector(".words").textContent = c.says;
+  frame.insertAdjacentHTML("beforeend", c.body() + `<div class="askbox">Ask the Mind</div>`);
+  card.append(frame);
+  main.append(card);
+});
+
+// The dial on 04.
+for (const input of document.querySelectorAll("[data-in=reach]")) {
+  const box = input.closest(".box"), svg = box.querySelector("[data-map]");
+  const set = () => {
+    const d = +input.value;
+    box.querySelector("[data-out=reach]").textContent = `${d} ly`;
+    const p = power(d) * 100;
+    box.querySelector("[data-out=power]").textContent = `${p < 0.01 ? p.toFixed(3) : p.toFixed(2)}% of Earth’s`;
+    box.querySelector("[data-out=notice]").textContent = `${Math.round(notice(d))} ly`;
+    box.querySelector("[data-out=year]").textContent = `${Math.round(year(d))} ly`;
+    drawMap(svg, d);
+  };
+  input.addEventListener("input", set);
+  set();
+}
+for (const g of document.querySelectorAll(".toggle")) g.addEventListener("click", (e) => {
+  if (e.target.tagName !== "BUTTON") return;
+  for (const b of g.children) b.setAttribute("aria-pressed", String(b === e.target));
+});
+
+// Draft and Sent, for every frame, and a Send press sends that one.
+const setState = (frame, s) => {
+  frame.dataset.state = s;
+  const beam = frame.querySelector("[data-beam]"), ring = frame.querySelector("[data-ring]");
+  if (beam) beam.setAttribute("opacity", s === "sent" ? "1" : "0");
+  if (ring) ring.setAttribute("opacity", s === "sent" ? "1" : "0");
+};
+for (const b of document.querySelectorAll("[data-state]")) if (b.tagName === "BUTTON") b.addEventListener("click", () => {
+  for (const x of document.querySelectorAll("button[data-state]")) x.setAttribute("aria-pressed", String(x === b));
+  for (const f of document.querySelectorAll(".frame")) setState(f, b.dataset.state);
+});
+for (const s of document.querySelectorAll(".send")) s.addEventListener("click", () => setState(s.closest(".frame"), "sent"));
+
+// Hold to send on 06: a second's hold fills the button, letting go early empties it.
+for (const h of document.querySelectorAll("[data-hold]")) {
+  const fill = h.querySelector("i");
+  let t0 = 0, raf = 0;
+  const step = (t) => {
+    const p = Math.min(1, (t - t0) / 1000);
+    fill.style.transform = `scaleX(${p})`;
+    if (p < 1) raf = requestAnimationFrame(step);
+    else setState(h.closest(".frame"), "sent");
+  };
+  const down = (e) => { e.preventDefault(); t0 = performance.now(); raf = requestAnimationFrame(step); };
+  const up = () => { cancelAnimationFrame(raf); fill.style.transition = "transform .25s"; fill.style.transform = "scaleX(0)"; setTimeout(() => (fill.style.transition = ""), 260); };
+  h.addEventListener("pointerdown", down);
+  for (const ev of ["pointerup", "pointerleave", "pointercancel"]) h.addEventListener(ev, up);
+  h.addEventListener("keydown", (e) => { if ((e.key === " " || e.key === "Enter") && !e.repeat) down(e); });
+  h.addEventListener("keyup", up);
+}
+</script>
+</body>
+</html>

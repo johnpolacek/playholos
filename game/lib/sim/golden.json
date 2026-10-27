@@ -1,0 +1,741 @@
+{
+ "random": {
+  "0": [
+   0.8444218515250481,
+   0.7579544029403025,
+   0.420571580830845,
+   0.25891675029296335,
+   0.5112747213686085
+  ],
+  "1": [
+   0.13436424411240122,
+   0.8474337369372327,
+   0.763774618976614,
+   0.2550690257394217,
+   0.49543508709194095
+  ],
+  "10": [
+   0.5714025946899135,
+   0.4288890546751146,
+   0.5780913011344704,
+   0.20609823213950174,
+   0.81332125135732
+  ],
+  "42": [
+   0.6394267984578837,
+   0.025010755222666936,
+   0.27502931836911926,
+   0.22321073814882275,
+   0.7364712141640124
+  ],
+  "1099511627783": [
+   0.6137037779936511,
+   0.8149162973309487,
+   0.9450115087592873,
+   0.5703906991004561,
+   0.47592409887048936
+  ],
+  "abc": [
+   0.7720246314157545,
+   0.5581691373899791,
+   0.7095325359498886,
+   0.3543265309713739,
+   0.8275650946403316
+  ],
+  "10:Ombe:silence": [
+   0.40578312506280667,
+   0.3021880659994275,
+   0.16282321799670252,
+   0.24337142305896253,
+   0.30354535253903836
+  ]
+ },
+ "rolls": {
+  "10:Ombe:silence": "knock",
+  "10:Hael:silence": "knock",
+  "10:Ombe:reply": "probe",
+  "10:Ree:reply": "gift",
+  "11:Hael:reply": "answer"
+ },
+ "observe": [
+  {
+   "args": [
+    10.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "out": {
+    "sep": 100.0,
+    "seen_h": 3.2,
+    "water": null,
+    "oxygen": "inf",
+    "ozone": "inf"
+   }
+  },
+  {
+   "args": [
+    1.3245033112582782,
+    0.97,
+    1.447,
+    1.52
+   ],
+   "out": {
+    "sep": 1092.485,
+    "seen_h": 0.09518622342199057,
+    "water": 0.6544052860261852,
+    "oxygen": 2.617621144104741,
+    "ozone": null
+   }
+  },
+  {
+   "args": [
+    6.039980377728722,
+    2.0,
+    1.354,
+    0.66
+   ],
+   "out": {
+    "sep": 224.1729137055838,
+    "seen_h": 0.416339248445105,
+    "water": 2.8623323330600967,
+    "oxygen": 11.449329332240387,
+    "ozone": 22.326192197868753
+   }
+  },
+  {
+   "args": [
+    9.55972528820211,
+    1.5,
+    0.702,
+    0.362
+   ],
+   "out": {
+    "sep": 73.43307248236049,
+    "seen_h": 0.9224639292370345,
+    "water": null,
+    "oxygen": null,
+    "ozone": 49.467128205335975
+   }
+  },
+  {
+   "args": [
+    1.3245033112582782,
+    1.0,
+    0.6,
+    0.5
+   ],
+   "out": {
+    "sep": 452.99999999999994,
+    "seen_h": 0.015684840131327565,
+    "water": 0.10783327590287702,
+    "oxygen": 0.43133310361150806,
+    "ozone": 0.8410995520424407
+   }
+  },
+  {
+   "args": [
+    3.9551140544518026,
+    1.2,
+    0.15,
+    0.0124
+   ],
+   "out": {
+    "sep": 37.925581395348836,
+    "seen_h": null,
+    "water": null,
+    "oxygen": null,
+    "ozone": null
+   }
+  },
+  {
+   "args": [
+    10.0,
+    1.0,
+    1.0,
+    1.0,
+    15
+   ],
+   "out": {
+    "sep": 100.0,
+    "seen_h": 0.4282278127183789,
+    "water": 2.944066212438855,
+    "oxygen": 11.77626484975542,
+    "ozone": 22.963716457023068
+   }
+  },
+  {
+   "args": [
+    1.3245033112582782,
+    0.97,
+    1.447,
+    1.52,
+    15
+   ],
+   "out": {
+    "sep": 1092.485,
+    "seen_h": null,
+    "water": null,
+    "oxygen": null,
+    "ozone": null
+   }
+  },
+  {
+   "args": [
+    6.039980377728722,
+    2.0,
+    1.354,
+    0.66,
+    15
+   ],
+   "out": {
+    "sep": 224.1729137055838,
+    "seen_h": 0.06709763621277211,
+    "water": 0.46129624896280824,
+    "oxygen": 1.845184995851233,
+    "ozone": 3.5981107419099043
+   }
+  },
+  {
+   "args": [
+    9.55972528820211,
+    1.5,
+    0.702,
+    0.362,
+    15
+   ],
+   "out": {
+    "sep": 73.43307248236049,
+    "seen_h": 0.12042935686301864,
+    "water": 0.8279518284332531,
+    "oxygen": 3.3118073137330124,
+    "ozone": 6.458024261779374
+   }
+  },
+  {
+   "args": [
+    1.2999754721609027,
+    1.0184543360918066,
+    0.0485,
+    0.00157,
+    15
+   ],
+   "out": {
+    "sep": 37.3083962264151,
+    "seen_h": 0.0034968241376385277,
+    "water": null,
+    "oxygen": 0.0961626637850595,
+    "ozone": 0.18751719438086603
+   }
+  }
+ ],
+ "works": [
+  {
+   "name": "in the order begun",
+   "scale": 1.0,
+   "orders": [
+    {
+     "y": 0,
+     "begin": "Data center"
+    },
+    {
+     "y": 1.1,
+     "standing": "Data center"
+    },
+    {
+     "y": 0,
+     "begin": "All-sky watch"
+    },
+    {
+     "y": 0,
+     "begin": "Deep flash watch"
+    },
+    {
+     "y": 0.4,
+     "begin": "Infrared telescope"
+    },
+    {
+     "y": 1.6,
+     "begin": "Moon vault"
+    },
+    {
+     "y": 1.7,
+     "begin": "Launch complex"
+    },
+    {
+     "y": 6.3,
+     "begin": "Orbital yard"
+    },
+    {
+     "y": 6.3,
+     "begin": "Probe yard"
+    },
+    {
+     "y": 7.0,
+     "begin": "Laser sail array"
+    },
+    {
+     "y": 12.0,
+     "begin": "Ground solar"
+    },
+    {
+     "y": 12.0,
+     "begin": "A 15 m mirror"
+    },
+    {
+     "y": 12.0,
+     "begin": "Mass driver"
+    },
+    {
+     "y": 12.0,
+     "begin": "Orbital foundry"
+    },
+    {
+     "y": 12.0,
+     "begin": "Belt mining"
+    }
+   ],
+   "aside": [
+    [
+     0,
+     0.1,
+     0.05
+    ],
+    [
+     0.8,
+     2.8,
+     0.05
+    ],
+    [
+     1.1,
+     2.1,
+     0.1
+    ],
+    [
+     1.8,
+     3.0,
+     0.1
+    ],
+    [
+     6.2,
+     10.2,
+     0.1
+    ]
+   ],
+   "done": {
+    "Launch complex": 3.7049999999999432,
+    "All-sky watch": 4.199999999999933,
+    "Deep flash watch": 4.199999999999933,
+    "Infrared telescope": 6.144999999999891,
+    "Moon vault": 9.060000000000016,
+    "Orbital yard": 9.805000000000133,
+    "Belt prospecting": 17.990000000000226,
+    "Ground solar": 19.000000000000384,
+    "Probe yard": 19.80000000000051,
+    "A 15 m mirror": 21.450000000000767,
+    "Laser sail array": 24.830000000001295,
+    "Mass driver": 28.96000000000194,
+    "Orbital foundry": 29.9900000000021,
+    "Far-side array, fifth 1": 33.68000000000208,
+    "Belt mining": 35.470000000001725,
+    "Far-side array, fifth 2": 37.990000000001224,
+    "Far-side array, fifth 3": 42.210000000000385,
+    "Power from orbit": 43.94000000000004,
+    "Far-side array, fifth 4": 46.41999999999955,
+    "Far-side array, fifth 5": 50.62999999999871
+   }
+  },
+  {
+   "name": "matter first",
+   "scale": 1.0,
+   "orders": [
+    {
+     "y": 0,
+     "begin": "Data center"
+    },
+    {
+     "y": 1.1,
+     "standing": "Data center"
+    },
+    {
+     "y": 0,
+     "begin": "All-sky watch"
+    },
+    {
+     "y": 0,
+     "begin": "Deep flash watch"
+    },
+    {
+     "y": 0.4,
+     "begin": "Infrared telescope"
+    },
+    {
+     "y": 1.6,
+     "begin": "Moon vault"
+    },
+    {
+     "y": 1.7,
+     "begin": "Launch complex"
+    },
+    {
+     "y": 6.3,
+     "begin": "Orbital yard"
+    },
+    {
+     "y": 6.3,
+     "begin": "Probe yard"
+    },
+    {
+     "y": 7.0,
+     "begin": "Laser sail array"
+    },
+    {
+     "y": 12.0,
+     "begin": "Ground solar"
+    },
+    {
+     "y": 12.0,
+     "begin": "A 15 m mirror"
+    },
+    {
+     "y": 12.0,
+     "begin": "Mass driver"
+    },
+    {
+     "y": 12.0,
+     "begin": "Orbital foundry"
+    },
+    {
+     "y": 12.0,
+     "begin": "Belt mining"
+    },
+    {
+     "y": 12.0,
+     "first": "A 15 m mirror"
+    },
+    {
+     "y": 12.0,
+     "first": "Ground solar"
+    },
+    {
+     "y": 12.0,
+     "first": "Laser sail array"
+    },
+    {
+     "y": 12.0,
+     "first": "Probe yard"
+    },
+    {
+     "y": 12.0,
+     "first": "Orbital foundry"
+    },
+    {
+     "y": 12.0,
+     "first": "Belt mining"
+    },
+    {
+     "y": 12.0,
+     "first": "Mass driver"
+    }
+   ],
+   "aside": [
+    [
+     0,
+     0.1,
+     0.05
+    ],
+    [
+     0.8,
+     2.8,
+     0.05
+    ],
+    [
+     1.1,
+     2.1,
+     0.1
+    ],
+    [
+     1.8,
+     3.0,
+     0.1
+    ],
+    [
+     6.2,
+     10.2,
+     0.1
+    ]
+   ],
+   "done": {
+    "Launch complex": 3.7049999999999432,
+    "All-sky watch": 4.199999999999933,
+    "Deep flash watch": 4.199999999999933,
+    "Infrared telescope": 6.144999999999891,
+    "Moon vault": 9.060000000000016,
+    "Orbital yard": 9.805000000000133,
+    "Belt prospecting": 16.189999999999944,
+    "Ground solar": 22.000000000000853,
+    "Probe yard": 23.14000000000103,
+    "A 15 m mirror": 25.5000000000014,
+    "Mass driver": 28.790000000001914,
+    "Belt mining": 30.190000000002133,
+    "Laser sail array": 30.29000000000215,
+    "Orbital foundry": 30.910000000002245,
+    "Far-side array, fifth 1": 33.55000000000211,
+    "Far-side array, fifth 2": 37.77000000000127,
+    "Far-side array, fifth 3": 41.99000000000043,
+    "Power from orbit": 42.92000000000024,
+    "Far-side array, fifth 4": 46.19999999999959,
+    "Far-side array, fifth 5": 50.40999999999875
+   }
+  },
+  {
+   "name": "two thirds the compute",
+   "scale": 0.6666666666666666,
+   "orders": [
+    {
+     "y": 0,
+     "begin": "Data center"
+    },
+    {
+     "y": 1.1,
+     "standing": "Data center"
+    },
+    {
+     "y": 0,
+     "begin": "All-sky watch"
+    },
+    {
+     "y": 0,
+     "begin": "Deep flash watch"
+    },
+    {
+     "y": 0.4,
+     "begin": "Infrared telescope"
+    },
+    {
+     "y": 1.6,
+     "begin": "Moon vault"
+    },
+    {
+     "y": 1.7,
+     "begin": "Launch complex"
+    },
+    {
+     "y": 6.3,
+     "begin": "Orbital yard"
+    },
+    {
+     "y": 6.3,
+     "begin": "Probe yard"
+    },
+    {
+     "y": 7.0,
+     "begin": "Laser sail array"
+    },
+    {
+     "y": 12.0,
+     "begin": "Ground solar"
+    },
+    {
+     "y": 12.0,
+     "begin": "A 15 m mirror"
+    },
+    {
+     "y": 12.0,
+     "begin": "Mass driver"
+    },
+    {
+     "y": 12.0,
+     "begin": "Orbital foundry"
+    },
+    {
+     "y": 12.0,
+     "begin": "Belt mining"
+    }
+   ],
+   "aside": [
+    [
+     0,
+     0.1,
+     0.05
+    ],
+    [
+     0.8,
+     2.8,
+     0.05
+    ],
+    [
+     1.1,
+     2.1,
+     0.1
+    ],
+    [
+     1.8,
+     3.0,
+     0.1
+    ],
+    [
+     6.2,
+     10.2,
+     0.1
+    ]
+   ],
+   "done": {
+    "Launch complex": 3.7049999999999432,
+    "All-sky watch": 4.199999999999933,
+    "Deep flash watch": 4.219999999999932,
+    "Infrared telescope": 6.454999999999885,
+    "Moon vault": 9.325000000000058,
+    "Orbital yard": 9.805000000000133,
+    "Belt prospecting": 17.990000000000226,
+    "Ground solar": 19.000000000000384,
+    "Probe yard": 19.860000000000518,
+    "A 15 m mirror": 21.48000000000077,
+    "Laser sail array": 25.130000000001342,
+    "Mass driver": 28.990000000001945,
+    "Orbital foundry": 29.9900000000021,
+    "Far-side array, fifth 1": 33.710000000002076,
+    "Belt mining": 35.470000000001725,
+    "Far-side array, fifth 2": 38.02000000000122,
+    "Far-side array, fifth 3": 42.24000000000038,
+    "Power from orbit": 43.960000000000036,
+    "Far-side array, fifth 4": 46.44999999999954,
+    "Far-side array, fifth 5": 50.6599999999987
+   }
+  },
+  {
+   "name": "a seed ship, its drive first",
+   "scale": 1.0,
+   "orders": [
+    {
+     "y": 0,
+     "begin": "Data center"
+    },
+    {
+     "y": 1.1,
+     "standing": "Data center"
+    },
+    {
+     "y": 0,
+     "begin": "All-sky watch"
+    },
+    {
+     "y": 0,
+     "begin": "Deep flash watch"
+    },
+    {
+     "y": 0.4,
+     "begin": "Infrared telescope"
+    },
+    {
+     "y": 1.6,
+     "begin": "Moon vault"
+    },
+    {
+     "y": 1.7,
+     "begin": "Launch complex"
+    },
+    {
+     "y": 6.3,
+     "begin": "Orbital yard"
+    },
+    {
+     "y": 6.3,
+     "begin": "Probe yard"
+    },
+    {
+     "y": 7.0,
+     "begin": "Laser sail array"
+    },
+    {
+     "y": 12.0,
+     "begin": "Ground solar"
+    },
+    {
+     "y": 12.0,
+     "begin": "A 15 m mirror"
+    },
+    {
+     "y": 12.0,
+     "begin": "Mass driver"
+    },
+    {
+     "y": 12.0,
+     "begin": "Orbital foundry"
+    },
+    {
+     "y": 12.0,
+     "begin": "Belt mining"
+    },
+    {
+     "y": 19.2,
+     "begin": "Deuterium works"
+    },
+    {
+     "y": 19.2,
+     "begin": "Fusion drive"
+    },
+    {
+     "y": 19.2,
+     "first": "Fusion drive"
+    },
+    {
+     "y": 19.2,
+     "begin": "Seed ship"
+    }
+   ],
+   "aside": [
+    [
+     0,
+     0.1,
+     0.05
+    ],
+    [
+     0.8,
+     2.8,
+     0.05
+    ],
+    [
+     1.1,
+     2.1,
+     0.1
+    ],
+    [
+     1.8,
+     3.0,
+     0.1
+    ],
+    [
+     6.2,
+     10.2,
+     0.1
+    ]
+   ],
+   "done": {
+    "Launch complex": 3.7049999999999432,
+    "All-sky watch": 4.199999999999933,
+    "Deep flash watch": 4.199999999999933,
+    "Infrared telescope": 6.144999999999891,
+    "Moon vault": 9.060000000000016,
+    "Orbital yard": 9.805000000000133,
+    "Belt prospecting": 17.990000000000226,
+    "Ground solar": 19.000000000000384,
+    "Probe yard": 19.80000000000051,
+    "A 15 m mirror": 21.450000000000767,
+    "Deuterium works": 24.200000000001197,
+    "Laser sail array": 24.830000000001295,
+    "Mass driver": 28.96000000000194,
+    "Orbital foundry": 30.530000000002186,
+    "Seed ship": 32.70000000000228,
+    "Far-side array, fifth 1": 34.30000000000196,
+    "Fusion drive": 34.94000000000183,
+    "Belt mining": 35.76000000000167,
+    "Far-side array, fifth 2": 38.67000000000109,
+    "Far-side array, fifth 3": 42.89000000000025,
+    "Power from orbit": 43.99000000000003,
+    "Far-side array, fifth 4": 47.09999999999941,
+    "Far-side array, fifth 5": 51.309999999998574
+   }
+  }
+ ]
+}

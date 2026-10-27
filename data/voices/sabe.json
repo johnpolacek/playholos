@@ -1,0 +1,62 @@
+{
+  "name": "Sabe",
+  "calls_sol": "Friend",
+  "hail": [
+    "Friend, we can't easily come to you, so we'll speak. A lot.",
+    "Hello, hello, Friend. We are Sabe, and we have a tremendous amount to say.",
+    "Friend, at last, someone to answer. Sabe speaks, and gladly, and at length."
+  ],
+  "close": [
+    "Write back soon, Friend. We always do. Sabe.",
+    "More soon, Friend. Much more. Sabe."
+  ],
+  "finding": [
+    "Friend, a marvelous result: {part}",
+    "{part} Isn't that something? We think it's something.",
+    "We worked this out, and we couldn't wait to tell you: {part}",
+    "Here's a finding worth shouting about: {part}",
+    "{part} Tell us what you make of it, Friend."
+  ],
+  "sighting": [
+    "Friend, look what we saw: {part}",
+    "{part} We told everyone here at once. Now we're telling you.",
+    "Our great arrays caught this, and we must share it: {part}",
+    "You'll want to hear this, Friend: {part}",
+    "We saw it, and now you'll know it too: {part}"
+  ],
+  "archive": [
+    "From our libraries, with love: {part}",
+    "{part} There's plenty more where that came from.",
+    "Friend, take this, and take more if you like: {part}",
+    "Our records, in the common tongue: {part}",
+    "A gift from our archives: {part} Every word of it is yours."
+  ],
+  "culture": [
+    "About us, Friend, and gladly: {part}",
+    "{part} We are a people who talk. You may have noticed.",
+    "Ever since the Common Tongue, we've loved explaining ourselves. {part}",
+    "Our sky is heavy, so our voices carry. {part}",
+    "Let us tell you about Sabe: {part}"
+  ],
+  "request": [
+    "Friend, here's one for you: {part}",
+    "{part} And then tell us everything else.",
+    "{part} Answer soon, and answer at length.",
+    "We're asking, Friend, and we're listening hard: {part}",
+    "Now, Friend, our turn to ask: {part}"
+  ],
+  "verdict": [
+    "{part} And please, keep talking.",
+    "Our answer, Friend, and quickly: {part}",
+    "We've talked it over, at great length: {part}",
+    "{part} We say it warmly, Friend.",
+    "Straight from all of us: {part}"
+  ],
+  "accord": [
+    "Friend, on our agreement: {part}",
+    "{part} Whatever happens, we keep talking.",
+    "A matter between friends: {part}",
+    "Here's our word on it, Friend, and our word is good: {part}",
+    "Said out loud, so everyone hears: {part}"
+  ]
+}

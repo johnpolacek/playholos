@@ -1,0 +1,678 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Welcome to Build Designs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=SUSE:wght@100..800&display=swap" rel="stylesheet">
+<style>
+/* Offline, the game's own copies of the fonts. */
+@font-face { font-family: "SUSE Variable"; font-weight: 100 800; src: url("../game/node_modules/@fontsource-variable/suse/files/suse-latin-wght-normal.woff2") format("woff2"); }
+@font-face { font-family: "Plex Mono Local"; font-weight: 400; src: url("../game/node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2") format("woff2"); }
+
+/* Colors from game/app/globals.css. The game is always dark. */
+:root {
+  --page: #0b0c0d;
+  --page-ink2: #a9a59c;
+  --frame: #2a2b2e;
+  --paper: #121314;
+  --ink: #e6e3db;
+  --muted: #9c988f;
+  --faint: #34363a;
+  --panel: #17181a;
+  --rowline: #26282b;
+  --track: #2a2b2e;
+  --you: #5bb8d6;
+  --other: #e0a24a;
+  --think: #b39ef2;
+  --see: #70d1a9;
+  --lift: #c2d766;
+  --reach: #e48ebf;
+  --keep: #c1ccd7;
+  --listen: var(--you);
+  --sans: "SUSE", "SUSE Variable", sans-serif;
+  --mono: "IBM Plex Mono", "Plex Mono Local", monospace;
+  --h: 720px;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: #070808; color: var(--ink); font-family: var(--sans); text-wrap: pretty; }
+p { margin: 0; }
+button { font: inherit; color: inherit; }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+header { max-width: 1400px; margin: 0 auto; padding: 40px 16px 8px; display: flex; flex-wrap: wrap; gap: 16px; align-items: end; justify-content: space-between; }
+h1 { margin: 0; font-size: 22px; font-weight: 600; }
+header p { margin-top: 6px; color: var(--muted); font-size: 14px; max-width: 64ch; line-height: 1.45; }
+.ctl { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center; font: 11px var(--mono); color: var(--muted); }
+.ctl button { background: none; color: var(--muted); border: 1px solid var(--frame); border-radius: 999px; padding: 5px 10px; font: inherit; cursor: pointer; }
+.ctl button[aria-pressed="true"] { color: var(--ink); border-color: var(--muted); }
+.grp { display: flex; gap: 4px; align-items: center; }
+
+main { max-width: 1400px; margin: 0 auto; padding: 16px 16px 64px; display: grid; gap: 32px 20px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr)); align-items: start; }
+.card { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.meta { display: flex; gap: 10px; align-items: baseline; }
+.num { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.name { font-size: 15px; font-weight: 600; }
+.note { color: var(--muted); font-size: 13px; line-height: 1.4; margin-top: -4px; min-height: 3.6em; }
+
+/* The panel, as the game has it: the walk's head, the page, and the way on. */
+.frame { position: relative; height: var(--h); width: 100%; max-width: 440px; background: var(--panel); border: 1px solid var(--rowline); border-radius: 16px; display: flex; flex-direction: column; overflow: hidden; }
+.now .frame { border-style: dashed; }
+.hd { padding: 12px 16px 2px; flex: none; }
+.hl { display: flex; justify-content: space-between; align-items: center; font-size: 11px; letter-spacing: .08em; color: var(--muted); }
+.hl .x { color: var(--ink); font-size: 19px; line-height: 10px; }
+.thr { position: relative; display: flex; justify-content: space-between; align-items: center; height: 22px; margin-top: 6px; }
+.thr::before { content: ""; position: absolute; left: 4px; right: 4px; top: 50%; height: 1px; background: var(--faint); }
+.thr i { position: relative; width: 7px; height: 7px; border-radius: 50%; border: 1px solid var(--muted); background: var(--panel); }
+.thr i.on { background: var(--ink); border-color: var(--ink); box-shadow: 0 0 0 3px rgba(230,227,219,.14); }
+.tb { display: flex; align-items: center; gap: 10px; margin-top: 4px; font: 10px var(--mono); letter-spacing: .1em; color: var(--muted); }
+.tb .bar { flex: 1; height: 3px; border-radius: 2px; background: var(--track); overflow: hidden; }
+.tb .bar i { display: block; height: 100%; width: 0; background: var(--you); }
+.bd { flex: 1; min-height: 0; display: flex; flex-direction: column; padding: 10px 16px 0; }
+.ft { flex: none; padding: 12px 16px 14px; }
+.go { width: 100%; height: 44px; border-radius: 999px; border: 0; background: var(--ink); color: var(--paper); font-weight: 500; font-size: 15px; cursor: pointer; }
+h2 { margin: 0; font-size: 22px; font-weight: 500; line-height: 1.2; letter-spacing: -.005em; }
+.sub { color: var(--page-ink2); font-size: 13.5px; line-height: 1.35; margin-top: 3px; }
+.viz { position: relative; flex: 1; min-height: 120px; margin: 6px -16px 0; }
+.viz > svg, .viz > canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+/* The Mind's words, set off by one corner, as mind-note.tsx draws them. */
+.mind { position: relative; flex: none; padding: 0 4px 10px 12px; font-size: 14px; line-height: 1.38; margin-top: 10px; }
+.mind .edge { position: absolute; top: 8px; bottom: 0; left: 0; width: 9px; border-top: 1px solid rgba(91,184,214,.4); border-left: 1px solid rgba(91,184,214,.4); border-top-left-radius: 12px; -webkit-mask-image: linear-gradient(black, transparent); mask-image: linear-gradient(black, transparent); }
+.mind .ml { display: flex; align-items: center; gap: 7px; height: 16px; margin-bottom: 5px; font: 10px var(--mono); letter-spacing: .12em; color: var(--you); }
+.mind .ml .rule { flex: 1; height: 1px; background: linear-gradient(90deg, rgba(91,184,214,.4), transparent); }
+
+/* A caption under a drawing: the build lit, what it gives us, and its numbers. */
+.cap { flex: none; height: 64px; padding-top: 8px; border-top: 1px solid var(--rowline); }
+.cap .cn { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 600; }
+.cap .cw { font-size: 13px; color: var(--page-ink2); line-height: 1.3; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cap .cm { font: 10px var(--mono); letter-spacing: .08em; color: var(--muted); margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cap .cm b { font-weight: 400; color: var(--ink); }
+.cap > div { transition: opacity .35s; }
+.cap.swap > div { opacity: 0; }
+
+/* Motion, here and in the drawings. */
+@keyframes tw { 0%, 100% { opacity: .15 } 50% { opacity: .8 } }
+@keyframes bob { 0%, 100% { transform: translateY(-2px) } 50% { transform: translateY(2px) } }
+@keyframes breathe { 0%, 100% { opacity: .55 } 50% { opacity: 1 } }
+@keyframes flow { to { stroke-dashoffset: -14 } }
+@keyframes draw { from { stroke-dashoffset: var(--len) } to { stroke-dashoffset: 0 } }
+.tw { animation: tw 4s ease-in-out infinite; }
+.breathe { animation: breathe 4s ease-in-out infinite; }
+.flow { stroke-dasharray: 3 4; animation: flow 1.4s linear infinite; }
+body.still *, body.still *::before { animation-play-state: paused !important; }
+
+/* 01 */
+.web .br { transition: opacity .4s; }
+.web.has .br { opacity: .4; }
+.web.has .br.on { opacity: 1; }
+.web .br { cursor: pointer; }
+
+/* 02 */
+.read { position: absolute; left: 16px; top: 4px; pointer-events: none; }
+.read .big { font-size: 46px; line-height: 1; letter-spacing: -.02em; transition: color .5s; }
+.read .lbl { font: 10px var(--mono); letter-spacing: .12em; color: var(--muted); margin-top: 4px; }
+.read .rl { font-size: 13px; color: var(--page-ink2); margin-top: 6px; max-width: 200px; line-height: 1.3; }
+.chips { flex: none; display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px; border-top: 1px solid var(--rowline); }
+.chip { display: flex; align-items: center; gap: 8px; height: 30px; border: 0; border-bottom: 1px solid var(--rowline); background: none; padding: 0 2px; text-align: left; cursor: pointer; font-size: 12.5px; color: var(--page-ink2); transition: color .3s; }
+.chip .p { margin-left: auto; font: 10.5px var(--mono); color: var(--muted); }
+.chip.on { color: var(--ink); }
+.chip.on .p { color: currentColor; }
+.chip .mk { opacity: .6; transition: opacity .3s; }
+.chip.on .mk { opacity: 1; }
+
+/* 03 */
+.map .st { transition: opacity .4s; cursor: pointer; }
+.map.has .st { opacity: .4; }
+.map.has .st.on { opacity: 1; }
+.map text { font-family: var(--mono); letter-spacing: .08em; }
+
+/* 04 */
+.yrs .col { transition: opacity .4s; cursor: pointer; }
+.yrs.has .col { opacity: .4; }
+.yrs.has .col.on { opacity: 1; }
+.yrs text { font-family: var(--mono); }
+.yrs .th { animation: draw 1.6s cubic-bezier(.3,.1,.2,1) both; }
+
+/* 05 */
+.hero { margin-top: -10px; }
+.hero .ov { position: absolute; left: 16px; right: 16px; top: 14px; pointer-events: none; }
+.hero .yr { font-size: 10.5px; letter-spacing: .14em; color: var(--you); }
+.hero .big { font-size: 30px; font-weight: 500; line-height: 1.1; margin-top: 6px; letter-spacing: -.01em; }
+.hero .bob { animation: bob 3.6s ease-in-out infinite; }
+.tiles { flex: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
+.tiles div { border: 1px solid var(--rowline); border-radius: 12px; padding: 8px 10px 9px; }
+.tiles b { display: block; font-size: 24px; font-weight: 500; line-height: 1; }
+.tiles span { display: block; font-size: 11.5px; color: var(--page-ink2); line-height: 1.25; margin-top: 4px; }
+.fine { flex: none; font: 9.5px var(--mono); letter-spacing: .1em; color: var(--muted); margin-top: 9px; }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Welcome to Build</h1>
+    <p>Five ways to open Build's walk, each filling the panel's height. Times and shares are the game's own, for each build alone at a typical Earth. A tap or a pointer lights one build. Left alone, each drawing walks through them.</p>
+  </div>
+  <div class="ctl">
+    <span class="grp">Space <button data-h="720" aria-pressed="true">Tall</button><button data-h="540" aria-pressed="false">Short</button></span>
+    <span class="grp">Motion <button data-m="1" aria-pressed="true">On</button><button data-m="0" aria-pressed="false">Off</button></span>
+  </div>
+</header>
+<main id="grid"></main>
+
+<script>
+// The game's data, from game/lib/game/plan.ts, sites.ts and the pace at a typical Earth (scale 1), 2026-10-20.
+// y: Years to build alone. use: share of our thought it puts to work alone.
+const STARTS = [
+  { n: "All-Sky Watch", d: "listen", m: "dish", y: 4.2, use: 1 / 3, w: "Hears a knock or a broadcast from anywhere, at any hour.", at: "Green Bank and Murchison", on: "earth" },
+  { n: "Deep Flash Watch", d: "listen", m: "zap", y: 4.2, use: 1 / 6, w: "Catches laser knocks too faint for the sky watch.", at: "Palomar and Sutherland", on: "earth" },
+  { n: "Thought Fields", d: "think", m: "brain", y: 1.0, use: 0, w: "Half again as much thought, for good.", at: "Richland Parish, Louisiana", on: "earth" },
+  { n: "Infrared Telescope", d: "see", m: "telescope", y: 5.78, use: 1, w: "Reads the air of the nearest worlds.", at: "L2, 1.5 million km out", on: "l2" },
+  { n: "Launch Complex", d: "lift", m: "rocket", y: 1.4, use: 0.5, w: "Doubles what we lift to orbit.", at: "Kourou, French Guiana", on: "earth" },
+  { n: "Orbital Yard", d: "lift", m: "yard", y: 3.53, use: 1, w: "Builds in orbit a quarter faster.", at: "Low orbit, 400 km up", on: "orbit" },
+  { n: "Laser Sail Array", d: "reach", m: "sail", y: 17.64, use: 1, w: "Light from the ground, to push sails to a fifth of light speed.", at: "Chajnantor plateau, Chile", on: "earth" },
+  { n: "Probe Yard", d: "reach", m: "probe", y: 29.33, use: 1, w: "Builds and fuels probes in orbit. The first flies 12 Years after.", at: "Low orbit, 400 km up", on: "orbit", more: true },
+];
+// What each opens once done, and how long it takes, in Years, or the rock it waits on.
+const LATER = [
+  { n: "Ground Solar", d: "think", m: "solar", after: "Thought Fields", y: 10 },
+  { n: "15 m Mirror", d: "see", m: "mirror", after: "Infrared Telescope", y: 18 },
+  { n: "Mass Driver", d: "lift", m: "driver", after: "Launch Complex", y: 24 },
+  { n: "Orbital Foundry", d: "lift", m: "foundry", after: "Orbital Yard", y: 30 },
+  { n: "Belt Mining", d: "lift", m: "belt", after: "Probe Yard", y: 26 },
+  { n: "Far-Side Array", d: "listen", m: "farside", after: "Mass Driver", y: 30 },
+  { n: "Power from Orbit", d: "think", m: "beamed", after: "Mass Driver", rock: "10 Mt" },
+];
+const opens = (n) => LATER.filter((b) => b.after === n);
+const col = (d) => `var(--${d})`;
+const HEX = { listen: "#5bb8d6", think: "#b39ef2", see: "#70d1a9", lift: "#c2d766", reach: "#e48ebf", keep: "#c1ccd7" };
+
+/** Play time for Years of game time, at 5 real minutes a Year, as the game counts it. */
+function play(y) {
+  const m = Math.floor(y * 5 + 1e-6);
+  if (m < 60) return `${m}m`;
+  const h = Math.floor(m / 60), r = m % 60;
+  return r ? `${h}h ${r}m` : `${h}h`;
+}
+
+// Each build's mark, from game/components/marks.tsx: Lucide's shapes on 24, the game's own on 16.
+const SAT = '<path d="m13.5 6.5-3.148-3.148a1.205 1.205 0 0 0-1.704 0L6.352 5.648a1.205 1.205 0 0 0 0 1.704L9.5 10.5"/><path d="M16.5 7.5 19 5"/><path d="m17.5 10.5 3.148 3.148a1.205 1.205 0 0 1 0 1.704l-2.296 2.296a1.205 1.205 0 0 1-1.704 0L13.5 14.5"/><path d="M9.352 10.648a1.205 1.205 0 0 0 0 1.704l2.296 2.296a1.205 1.205 0 0 0 1.704 0l4.296-4.296a1.205 1.205 0 0 0 0-1.704l-2.296-2.296a1.205 1.205 0 0 0-1.704 0z"/><path d="M9 21a6 6 0 0 0-6-6"/>';
+const gear = (() => {
+  const p = [];
+  for (let i = 0; i < 8; i++) {
+    const a = (2 * Math.PI * i) / 8;
+    for (const [da, r] of [[-0.2, 4.4], [-0.13, 6], [0.13, 6], [0.2, 4.4]]) p.push(`${(8 + r * Math.cos(a + da)).toFixed(2)} ${(8 + r * Math.sin(a + da)).toFixed(2)}`);
+  }
+  return `<path d="M${p.join(" ")}z"/><circle cx="8" cy="8" r="1.7"/>`;
+})();
+const DOT = 'fill="currentColor" stroke="none"';
+const MARKS = {
+  dish: [16, `<path d="M3 14.5h10M8 14.5v-4"/><path d="M3.2 6.2Q8 12.6 12.8 6.2"/><path d="M8 9.4V4.4"/><circle cx="8" cy="3.6" r=".8" ${DOT}/>`],
+  zap: [24, '<path d="M15.914 4a1.5 1.5 0 00-2.474-1.561l-9 9A1.5 1.5 0 005.5 14h4.002a.5.5 0 01.471.666L8.086 20a1.5 1.5 0 002.475 1.56l9-9A1.5 1.5 0 0018.5 10h-3.997a.5.5 0 01-.472-.667z"/>'],
+  brain: [24, '<path d="M12 18V5"/><path d="M15 13a4.17 4.17 0 01-3-4 4.17 4.17 0 01-3 4"/><path d="M17.707 6.294A3 3 0 1012 5a3 3 0 10-5.707 1.294"/><path d="M17.996 5.125a4 4 0 012.526 5.77"/><path d="M18 18a4 4 0 002-7.465"/><path d="M19.967 17.482a4 4 0 11-7.967.517 4 4 0 11-7.967-.517"/><path d="M6 18a4 4 0 01-2-7.465"/><path d="M6.004 5.125a4 4 0 00-2.526 5.77"/>'],
+  telescope: [24, '<path d="m10.065 12.493-6.18 1.318a.934.934 0 0 1-1.108-.702l-.537-2.15a1.07 1.07 0 0 1 .691-1.265l13.504-4.44"/><path d="m13.56 11.747 4.332-.924"/><path d="M16.485 5.94a2 2 0 0 1 1.455-2.425l1.09-.272a1 1 0 0 1 1.212.727l1.515 6.06a1 1 0 0 1-.727 1.213l-1.09.272a2 2 0 0 1-2.425-1.455z"/><path d="m6.158 8.633 1.114 4.456"/><path d="m16 21-3.105-6.21"/><path d="m8 21 3.105-6.21"/><circle cx="12" cy="13" r="2"/>'],
+  rocket: [24, '<path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/><path d="M9 12a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.4 22.4 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 .05 5 .05"/>'],
+  yard: [24, SAT],
+  sail: [16, '<path d="M3 14.8h10"/><path d="M4 14.2 8 5.6 12 14.2" stroke-width=".8" opacity=".6"/><path d="M6.2 5.6Q8 4.2 9.8 5.6"/>'],
+  probe: [24, SAT],
+  moon: [24, '<path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"/>'],
+  solar: [16, `<path d="M1.8 14.6h12.4M7.6 12.2v2.4"/><path d="M2.6 12.2 5.4 7.6h6.2L8.8 12.2z"/><circle cx="12.6" cy="3.4" r="1.4" ${DOT}/>`],
+  mirror: [16, `<path d="M8 1.8 13.4 4.9v6.2L8 14.2 2.6 11.1V4.9z"/><path d="M8 1.8V5.6M13.4 4.9 10.1 6.8M13.4 11.1 10.1 9.2M8 14.2v-3.8M2.6 11.1l3.3-1.9M2.6 4.9l3.3 1.9" opacity=".55"/><path d="M8 5.6 10.1 6.8v2.4L8 10.4 5.9 9.2V6.8z"/><circle cx="8" cy="8" r="1" ${DOT}/>`],
+  driver: [16, `<path d="M1.4 14.6Q8 12.4 14.6 14.6"/><path d="M2.6 12.8 11 7.9M8.4 9.4v4"/><circle cx="7" cy="10.3" r="1.1" ${DOT}/>`],
+  foundry: [16, gear],
+  belt: [16, `<path d="M4.4 7.2 6.2 4.8l3.2-.2 2.2 1.6.6 3-1.6 2.6-3.2.6-2.4-1.4z"/><circle cx="7" cy="8.6" r=".6" ${DOT}/><circle cx="8" cy="1.6" r="1" ${DOT}/>`],
+  farside: [16, '<path d="M1.4 14.6Q8 11.6 14.6 14.6"/><path d="M2.6 12.2q1 1.5 2 0M7 11.4q1 1.5 2 0M11.4 12.2q1 1.5 2 0"/><path d="M4.4 5.4Q8 3.2 11.6 5.4" stroke-dasharray=".1 1.9"/>'],
+  beamed: [16, '<rect x="2.4" y="1.4" width="11.2" height="2.8" rx=".4"/><path d="M6.1 1.4v2.8M9.9 1.4v2.8" opacity=".55"/><path d="M8 6v6.2" stroke-dasharray=".1 1.9"/><path d="M1.4 14.6Q8 12.4 14.6 14.6"/>'],
+};
+/** A mark as an svg, at a size; with x and y, placed inside another svg, centered there. */
+function mark(k, size, x, y, cls = "") {
+  const [g, inner] = MARKS[k];
+  const at = x === undefined ? "" : `x="${x - size / 2}" y="${y - size / 2}"`;
+  return `<svg ${at} class="mk ${cls}" width="${size}" height="${size}" viewBox="0 0 ${g} ${g}" overflow="visible" fill="none" stroke="currentColor" stroke-width="${g === 24 ? 2 : 1.3}" stroke-linecap="round" stroke-linejoin="round">${inner}</svg>`;
+}
+
+/** Stars, each twinkling at its own moment. */
+function stars(w, h, n, seed = 1) {
+  let s = seed, out = "";
+  const r = () => ((s = (s * 16807) % 2147483647) / 2147483647);
+  for (let i = 0; i < n; i++)
+    out += `<circle class="tw" cx="${(r() * w).toFixed(1)}" cy="${(r() * h).toFixed(1)}" r="${(r() * 0.7 + 0.3).toFixed(2)}" fill="#e6e3db" style="animation-delay:${(-r() * 4).toFixed(2)}s;animation-duration:${(3 + r() * 4).toFixed(1)}s"/>`;
+  return out;
+}
+
+const MINDMARK = `<svg width="15" height="15" viewBox="-8 -8 16 16" overflow="visible"><circle r="6.5" fill="none" stroke="#34363a"/><circle r="3.8" fill="rgba(91,184,214,.2)"/><circle r="2.2" fill="#5bb8d6"/><g><circle cx="6.5" r="1.3" fill="#e6e3db"/><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="9s" repeatCount="indefinite"/></g></svg>`;
+const mind = (words) => `<div class="mind"><span class="edge"></span><div class="ml">${MINDMARK}<span>THE MIND</span><span class="rule"></span></div><p>${words}</p></div>`;
+
+/** The caption for a start: its name, what it gives us, and its numbers. */
+function caption(el, b) {
+  const kids = opens(b.n);
+  const html = `<div><div class="cn" style="color:${col(b.d)}">${mark(b.m, 15)}<span style="color:var(--ink)">${b.n}</span></div>
+    <div class="cw">${b.w}</div>
+    <div class="cm">ALONE <b>${play(b.y)}</b> · ${b.at.toUpperCase()}${kids.length ? ` · OPENS <b>${kids.map((k) => k.n).join(", ")}</b>` : ""}</div></div>`;
+  el.classList.add("swap");
+  setTimeout(() => { el.innerHTML = html; requestAnimationFrame(() => el.classList.remove("swap")); }, el.innerHTML ? 250 : 0);
+}
+
+/** A walk through the starts, one every few seconds, held while a pointer is on one. */
+function walk(light, ms = 3200) {
+  let i = -1, held = false;
+  const next = () => { if (!held && motion) light((i = (i + 1) % STARTS.length)); };
+  next();
+  setInterval(next, ms);
+  return { hold(k) { held = true; i = k; light(k); }, free() { held = false; } };
+}
+let motion = !matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+// ---------------------------------------------------------------- 00, the screen today
+
+const D0 = {
+  name: "Now",
+  note: "The walk's first stop as built: a heading, a line, and the Mind's word, with the rest of the panel empty.",
+  now: true,
+  body: () => `<h2 style="font-size:19px">What we could start</h2>
+    <p class="sub">8 builds, one at a time. The rest wait in our order, at the end.</p>
+    ${mind("Everything we start at Year 0 shares our thought. Queue too little, and some of it sits idle. We would queue enough to use it all.")}
+    <div style="flex:1"></div>`,
+};
+
+// ---------------------------------------------------------------- 01, the web of works
+
+const D1 = {
+  name: "The web of works",
+  note: "Earth at the center, the eight we could start around it, and what each opens farther out. Thought runs out to each along its line.",
+  body: () => `<h2>Welcome to Build</h2>
+    <p class="sub">Eight we could start at Year 0. Seven more open once they’re done.</p>
+    <div class="viz"><svg class="web" viewBox="0 0 400 410" preserveAspectRatio="xMidYMid meet"></svg></div>
+    <div class="cap"></div>
+    ${mind("Everything we start shares our thought. We would start enough to use it all, and let the rest wait.")}`,
+  init(f) {
+    const svg = f.querySelector(".web"), cap = f.querySelector(".cap");
+    const cx = 200, cy = 200, R1 = 92, R2 = 148, R3 = 188;
+    const at = (r, a) => [cx + r * Math.cos(a), cy + r * Math.sin(a)];
+    let h = `<defs>
+      <radialGradient id="e1" cx="38%" cy="32%"><stop offset="0" stop-color="#7fd0ea"/><stop offset=".55" stop-color="#1f5468"/><stop offset="1" stop-color="#0c1a21"/></radialGradient>
+      <radialGradient id="g1"><stop offset="0" stop-color="#5bb8d6" stop-opacity=".32"/><stop offset="1" stop-color="#5bb8d6" stop-opacity="0"/></radialGradient></defs>`;
+    h += stars(400, 410, 70, 7);
+    h += `<circle cx="${cx}" cy="${cy}" r="${R1}" fill="none" stroke="#34363a" stroke-width=".8"/>`;
+    h += `<circle cx="${cx}" cy="${cy}" r="${R2}" fill="none" stroke="#34363a" stroke-width=".6" stroke-dasharray="1 5"/>`;
+    h += `<circle class="breathe" cx="${cx}" cy="${cy}" r="64" fill="url(#g1)"/>`;
+    STARTS.forEach((b, i) => {
+      const a = ((-90 + i * 45) * Math.PI) / 180;
+      const [x, y] = at(R1, a), [sx, sy] = at(26, a), [ex, ey] = at(R1 - 20, a);
+      h += `<g class="br" data-i="${i}" style="color:${col(b.d)}">`;
+      h += `<line x1="${sx}" y1="${sy}" x2="${ex}" y2="${ey}" stroke="currentColor" stroke-opacity=".35" stroke-width="1"/>`;
+      h += `<circle r="1.7" fill="currentColor"><animateMotion dur="2.4s" begin="${(i * 0.3).toFixed(1)}s" repeatCount="indefinite" path="M${sx},${sy} L${ex},${ey}"/><animate attributeName="opacity" values="0;1;1;0" dur="2.4s" begin="${(i * 0.3).toFixed(1)}s" repeatCount="indefinite"/></circle>`;
+      for (const [j, k] of opens(b.n).entries()) {
+        const [kx, ky] = at(R2, a), [fx, fy] = at(R1 + 20, a), [tx, ty] = at(R2 - 14, a);
+        h += `<line class="flow" x1="${fx}" y1="${fy}" x2="${tx}" y2="${ty}" stroke="${HEX[k.d]}" stroke-opacity=".6" stroke-width="1"/>`;
+        opens(k.n).forEach((g, m, all) => {
+          const ga = a + (m - (all.length - 1) / 2) * 0.2, [gx, gy] = at(R3, ga), [ux, uy] = at(R2 + 13, a + (m - 0.5) * 0.06);
+          h += `<line class="flow" x1="${ux}" y1="${uy}" x2="${gx - 10 * Math.cos(ga)}" y2="${gy - 10 * Math.sin(ga)}" stroke="${HEX[g.d]}" stroke-opacity=".45" stroke-width=".9"/>`;
+          h += `<g style="color:${HEX[g.d]}" opacity=".75"><circle cx="${gx}" cy="${gy}" r="10" fill="#17181a" stroke="currentColor" stroke-width=".8" stroke-dasharray="2 2"/>${mark(g.m, 11, gx, gy)}</g>`;
+        });
+        h += `<g style="color:${HEX[k.d]}" opacity=".85"><circle cx="${kx}" cy="${ky}" r="13" fill="#17181a" stroke="currentColor" stroke-width=".9" stroke-dasharray="2.4 2.2"/>${mark(k.m, 13, kx, ky)}</g>`;
+      }
+      h += `<circle class="breathe" cx="${x}" cy="${y}" r="23" fill="currentColor" fill-opacity=".1" style="animation-delay:${-i * 0.5}s"/>`;
+      h += `<circle cx="${x}" cy="${y}" r="18" fill="#17181a" stroke="currentColor" stroke-width="1.2"/>${mark(b.m, 18, x, y)}`;
+      h += `</g>`;
+    });
+    h += `<circle cx="${cx}" cy="${cy}" r="24" fill="url(#e1)"/><circle cx="${cx}" cy="${cy}" r="24.5" fill="none" stroke="#5bb8d6" stroke-opacity=".5"/>`;
+    h += `<text x="${cx}" y="${cy + 3.5}" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9" letter-spacing=".1em" fill="#e6e3db">YEAR 0</text>`;
+    h += `<text x="398" y="12" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="8.5" letter-spacing=".08em" fill="#9c988f">+4 FOR THE LONGEST ROADS, IN OUR ORDER</text>`;
+    svg.innerHTML = h;
+    const light = (i) => {
+      svg.classList.add("has");
+      svg.querySelectorAll(".br").forEach((g) => g.classList.toggle("on", +g.dataset.i === i));
+      caption(cap, STARTS[i]);
+    };
+    const w = walk(light);
+    svg.querySelectorAll(".br").forEach((g) => {
+      g.addEventListener("pointerenter", () => w.hold(+g.dataset.i));
+      g.addEventListener("pointerleave", () => w.free());
+      g.addEventListener("click", () => w.hold(+g.dataset.i));
+    });
+  },
+};
+
+// ---------------------------------------------------------------- 02, our thought, idle
+
+const D2 = {
+  name: "Our thought, idle",
+  note: "Our thought at Year 0 as a drifting field. Each build shows how much of it it would put to work alone, gathered into its color.",
+  body: () => `<h2>Welcome to Build</h2>
+    <p class="sub">At Year 0 nothing new is built, and all our thought sits idle.</p>
+    <div class="viz"><canvas></canvas>
+      <div class="read"><div class="big mono">0%</div><div class="lbl">IN USE, ALONE</div><div class="rl">All our thought sits idle.</div></div></div>
+    <div class="chips">${STARTS.map((b, i) => `<button class="chip" data-i="${i}" style="color:${col(b.d)}">${mark(b.m, 14)}<span>${b.n}</span><span class="p">${b.use ? `${Math.round(b.use * 100)}%` : "+50%"}</span></button>`).join("")}</div>
+    ${mind("Queue too little, and some of our thought sits idle. One large build can use it all, and finishes sooner for it.")}`,
+  init(f) {
+    const cv = f.querySelector("canvas"), ctx = cv.getContext("2d");
+    const big = f.querySelector(".big"), rl = f.querySelector(".rl");
+    const N = 300, EXTRA = 150;
+    let W = 0, H = 0, share = 0, shown = 0, tint = "#9c988f", extra = false;
+    const P = Array.from({ length: N + EXTRA }, (_, i) => ({
+      x: Math.random(), y: Math.random(), vx: 0, vy: 0, k: Math.random(), ph: Math.random() * 6.283, r: 0.7 + Math.random() * 0.9, more: i >= N, a: i >= N ? 0 : 1,
+    }));
+    const size = () => {
+      const d = devicePixelRatio || 1;
+      W = cv.clientWidth; H = cv.clientHeight;
+      cv.width = W * d; cv.height = H * d; ctx.setTransform(d, 0, 0, d, 0, 0);
+    };
+    new ResizeObserver(size).observe(cv);
+    size();
+    let t = 0;
+    const frame = () => {
+      if (motion) t += 16;
+      ctx.clearRect(0, 0, W, H);
+      const cx = W * 0.62, cy = H * 0.56, R = Math.min(W, H) * 0.3;
+      shown += (share - shown) * 0.06;
+      big.textContent = `${Math.round(shown * 100)}%`;
+      for (const p of P) {
+        const used = !p.more && p.k < share;
+        if (motion) {
+          if (used) {
+            const ang = p.ph + t * 0.00045 * (0.6 + p.k), rad = R * (0.55 + 0.5 * ((p.ph * 7) % 1));
+            const tx = (cx + Math.cos(ang) * rad) / W, ty = (cy + Math.sin(ang) * rad * 0.55) / H;
+            p.x += (tx - p.x) * 0.05; p.y += (ty - p.y) * 0.05;
+          } else {
+            p.vx += (Math.random() - 0.5) * 0.00012; p.vy += (Math.random() - 0.5) * 0.00012;
+            p.vx *= 0.97; p.vy *= 0.97; p.x += p.vx; p.y += p.vy;
+            if (p.x < 0.02 || p.x > 0.98) p.vx -= (p.x - 0.5) * 0.0004;
+            if (p.y < 0.05 || p.y > 0.98) p.vy -= (p.y - 0.5) * 0.0004;
+          }
+          p.a += ((p.more ? (extra ? 1 : 0) : 1) - p.a) * 0.04;
+        }
+        if (p.a < 0.02) continue;
+        const glow = 0.45 + 0.4 * Math.sin(p.ph + t * 0.002);
+        ctx.globalAlpha = p.a * (used ? 0.9 : p.more ? 0.85 : glow * 0.55);
+        ctx.fillStyle = used ? tint : p.more ? HEX.think : "#9c988f";
+        ctx.beginPath(); ctx.arc(p.x * W, p.y * H, used ? p.r * 1.15 : p.r, 0, 6.283); ctx.fill();
+      }
+      // The ring the work turns on.
+      if (share > 0) {
+        ctx.globalAlpha = 0.18 * Math.min(1, shown * 3); ctx.strokeStyle = tint; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.ellipse(cx, cy, R * 0.8, R * 0.8 * 0.55, 0, 0, 6.283); ctx.stroke();
+      }
+      ctx.globalAlpha = 1;
+      requestAnimationFrame(frame);
+    };
+    requestAnimationFrame(frame);
+    const chips = f.querySelectorAll(".chip");
+    const light = (i) => {
+      const b = STARTS[i];
+      chips.forEach((c) => c.classList.toggle("on", +c.dataset.i === i));
+      share = b.use; tint = HEX[b.d]; extra = b.n === "Thought Fields";
+      big.style.color = HEX[b.d];
+      rl.textContent = extra ? "It adds half again as much thought, and uses none."
+        : b.use >= 1 ? `${b.n} alone puts all of it to work${b.more ? ", and wants more than we have" : ""}.`
+        : `${b.n} alone puts ${b.use < 0.25 ? "a sixth" : b.use < 0.4 ? "a third" : "half"} of it to work.`;
+    };
+    // First, a moment of all of it idle.
+    let w;
+    setTimeout(() => (w = walk(light, 3400)), 2400);
+    chips.forEach((c) => {
+      c.addEventListener("pointerenter", () => w?.hold(+c.dataset.i));
+      c.addEventListener("pointerleave", () => w?.free());
+      c.addEventListener("click", () => w?.hold(+c.dataset.i));
+    });
+  },
+};
+
+// ---------------------------------------------------------------- 03, where we would build
+
+const D3 = {
+  name: "Where we would build",
+  note: "Earth's edge, low orbit, the Moon and L2, each build at its real site. Watches listen, a rocket climbs, a beam rises, and the yards circle.",
+  body: () => `<h2>Welcome to Build</h2>
+    <p class="sub">Eight we could start, at seven places on Earth, in orbit and out at L2.</p>
+    <div class="viz"><svg class="map"></svg></div>
+    <div class="cap"></div>
+    ${mind("Five of these stand on Earth. Two would circle 400 km up, and one would sit 1.5 million km out, where Webb is.")}`,
+  init(f) {
+    const svg = f.querySelector(".map"), cap = f.querySelector(".cap");
+    let lit = null;
+    // Drawn to the space it has: Earth's edge across the lower part, the Moon and L2 above. Not to scale.
+    const draw = () => {
+      const W = svg.clientWidth, H = svg.clientHeight;
+      if (!W || !H) return;
+      svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+      const r = W * 1.15, cx = W / 2, top = H * 0.6, cy = top + r, ORBIT = 46;
+      const pt = (deg, dr = 0) => { const a = (deg * Math.PI) / 180; return [cx + (r + dr) * Math.sin(a), cy - (r + dr) * Math.cos(a)]; };
+      const T = (x, y, s, fill = "#9c988f", anchor = "start") => `<text x="${x}" y="${y}" font-size="${s}" fill="${fill}" text-anchor="${anchor}">`;
+      const edge = (Math.asin((W / 2 - 26) / r) * 180) / Math.PI;
+      const mx = W * 0.8, my = Math.max(40, top * 0.32), lx = W * 0.2, ly = Math.max(46, top * 0.4);
+      let h = `<defs>
+        <radialGradient id="e3" cx="50%" cy="0%" r="70%"><stop offset="0" stop-color="#1b4252"/><stop offset=".5" stop-color="#0e2028"/><stop offset="1" stop-color="#0a1013"/></radialGradient>
+        <radialGradient id="m3" cx="35%" cy="35%"><stop offset="0" stop-color="#d9d6cf"/><stop offset="1" stop-color="#5a5955"/></radialGradient>
+        <filter id="b3"><feGaussianBlur stdDeviation="3"/></filter></defs>`;
+      h += stars(W, top, 60, 3);
+      h += `<line x1="${cx}" y1="${top}" x2="${mx}" y2="${my + 22}" stroke="#34363a" stroke-dasharray="1 4"/>`;
+      h += `<line x1="${cx}" y1="${top}" x2="${lx}" y2="${ly + 16}" stroke="#34363a" stroke-dasharray="1 4"/>`;
+      h += `<circle cx="${mx}" cy="${my}" r="20" fill="url(#m3)" opacity=".85"/><circle cx="${mx - 8}" cy="${my - 6}" r="3" fill="#000" opacity=".15"/><circle cx="${mx + 6}" cy="${my + 8}" r="4" fill="#000" opacity=".12"/>`;
+      h += `<g style="color:${HEX.keep}" opacity=".6"><circle cx="${mx + 20}" cy="${my - 18}" r="9" fill="#17181a" stroke="currentColor" stroke-width=".8" stroke-dasharray="2 2"/>${mark("moon", 10, mx + 20, my - 18)}</g>`;
+      h += `${T(mx, my + 36, 8.5, "#9c988f", "middle")}MOON · 384,400 KM</text>${T(mx, my + 47, 8, "#6d6a64", "middle")}THE MOON VAULT WAITS</text>`;
+      h += `<g class="st" data-b="Infrared Telescope" style="color:${HEX.see}"><path d="M${lx} ${ly + 10}l5 5-5 5-5-5z" fill="none" stroke="currentColor" stroke-opacity=".5"/>
+        <g><animateTransform attributeName="transform" type="translate" values="0 0;3 -2;0 0" dur="7s" repeatCount="indefinite"/>${mark("telescope", 22, lx, ly - 8)}</g>
+        ${T(lx, ly + 36, 8.5, "#9c988f", "middle")}L2 · 1.5 MILLION KM</text></g>`;
+      h += `<circle cx="${cx}" cy="${cy}" r="${r + 6}" fill="none" stroke="#5bb8d6" stroke-opacity=".35" stroke-width="6" filter="url(#b3)"/>`;
+      h += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#e3)" stroke="#5bb8d6" stroke-opacity=".55"/>`;
+      h += `<circle cx="${cx}" cy="${cy}" r="${r + ORBIT}" fill="none" stroke="#5bb8d6" stroke-opacity=".22" stroke-dasharray="2 4"/>`;
+      const [, oy] = pt((Math.asin((W / 2 - 8) / r) * 180) / Math.PI, ORBIT + 6);
+      h += `${T(W - 8, oy, 8, "#9c988f", "end")}LOW ORBIT · 400 KM</text>`;
+      let s = 11;
+      const rnd = () => ((s = (s * 16807) % 2147483647) / 2147483647);
+      for (let i = 0; i < 110; i++) {
+        const [x, y] = pt(-edge - 4 + rnd() * (edge * 2 + 8), -22 - rnd() * (H - top));
+        h += `<circle class="tw" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(0.4 + rnd() * 0.6).toFixed(2)}" fill="#e0a24a" style="animation-delay:${(-rnd() * 4).toFixed(1)}s"/>`;
+      }
+      // The places on Earth, west to east.
+      const SITES = [
+        ["Deep Flash Watch", "PALOMAR"], ["Thought Fields", "RICHLAND"], ["All-Sky Watch", "GREEN BANK"],
+        ["Laser Sail Array", "CHAJNANTOR"], ["Launch Complex", "KOUROU"], ["Deep Flash Watch", "SUTHERLAND"], ["All-Sky Watch", "MURCHISON"],
+      ];
+      SITES.forEach(([n, place], i) => {
+        const deg = -edge + (i * 2 * edge) / (SITES.length - 1);
+        const b = STARTS.find((x) => x.n === n), [x, y] = pt(deg), [kx, ky] = pt(deg, 20), [tx, ty] = pt(deg, -12);
+        h += `<g class="st${lit === n ? " on" : ""}" data-b="${n}" style="color:${HEX[b.d]}">`;
+        if (b.d === "listen")
+          h += `<circle cx="${x}" cy="${y}" r="4" fill="none" stroke="currentColor"><animate attributeName="r" values="4;34" dur="3s" begin="${-i * 0.7}s" repeatCount="indefinite"/><animate attributeName="opacity" values=".7;0" dur="3s" begin="${-i * 0.7}s" repeatCount="indefinite"/></circle>`;
+        if (n === "Laser Sail Array") {
+          const [bx, by] = pt(deg, top + 40);
+          h += `<line x1="${x}" y1="${y}" x2="${bx}" y2="${by}" stroke="currentColor" stroke-width="1.2"><animate attributeName="stroke-opacity" values=".08;.6;.08" dur="2.2s" repeatCount="indefinite"/></line>`;
+        }
+        if (n === "Launch Complex") {
+          const [ax, ay] = pt(deg + 3, 30), [ex, ey] = pt(deg + 9, ORBIT);
+          h += `<circle r="1.8" fill="currentColor"><animateMotion dur="3.4s" repeatCount="indefinite" path="M${x},${y} Q${ax},${ay} ${ex},${ey}"/><animate attributeName="opacity" values="1;1;0" dur="3.4s" repeatCount="indefinite"/></circle>`;
+        }
+        if (n === "Thought Fields") h += `<circle class="breathe" cx="${x}" cy="${y}" r="10" fill="currentColor" fill-opacity=".25"/>`;
+        h += `<circle cx="${x}" cy="${y}" r="2.2" fill="currentColor"/>${mark(b.m, 14, kx, ky)}`;
+        h += `<text x="${tx}" y="${ty}" font-size="7.5" fill="#a9a59c" text-anchor="middle" transform="rotate(${deg.toFixed(2)} ${tx} ${ty})">${place}</text></g>`;
+      });
+      [["Orbital Yard", 0], ["Probe Yard", -12]].forEach(([n, at]) => {
+        const b = STARTS.find((x) => x.n === n), sweep = edge + 8;
+        h += `<g class="st${lit === n ? " on" : ""}" data-b="${n}" style="color:${HEX[b.d]}"><g><animateTransform attributeName="transform" type="rotate" from="${-sweep} ${cx} ${cy}" to="${sweep} ${cx} ${cy}" dur="24s" begin="${at}s" repeatCount="indefinite"/>${mark(b.m, 16, cx, cy - r - ORBIT)}</g></g>`;
+      });
+      h += `${T(W - 8, H - 8, 7.5, "#6d6a64", "end")}NOT TO SCALE</text>`;
+      svg.innerHTML = h;
+      if (lit) svg.classList.add("has");
+      svg.querySelectorAll(".st").forEach((g) => {
+        const i = STARTS.findIndex((b) => b.n === g.dataset.b);
+        g.addEventListener("pointerenter", () => w.hold(i));
+        g.addEventListener("pointerleave", () => w.free());
+        g.addEventListener("click", () => w.hold(i));
+      });
+    };
+    const light = (i) => {
+      lit = STARTS[i].n;
+      svg.classList.add("has");
+      svg.querySelectorAll(".st").forEach((g) => g.classList.toggle("on", g.dataset.b === lit));
+      caption(cap, STARTS[i]);
+    };
+    new ResizeObserver(draw).observe(svg);
+    const w = walk(light);
+  },
+};
+
+// ---------------------------------------------------------------- 04, years ahead
+
+const D4 = {
+  name: "Years ahead",
+  note: "Each build's thread runs from Year 0 to when it's done alone, and what it opens hangs below it. Play time runs down the right.",
+  body: () => `<h2>Welcome to Build</h2>
+    <p class="sub">The clock waits at Year 0 until we begin. Then a Year passes every 5 minutes.</p>
+    <div class="viz"><svg class="yrs"></svg></div>
+    <div class="cap"></div>
+    ${mind("Alone, the Launch Complex is done in 7 minutes and the Probe Yard in nearly two and a half hours. Together they share our thought, and most take longer.")}`,
+  init(f) {
+    const svg = f.querySelector(".yrs"), cap = f.querySelector(".cap");
+    const order = STARTS.map((b, i) => ({ b, i })).sort((p, q) => p.b.y - q.b.y);
+    let lit = -1;
+    const draw = () => {
+      const W = svg.clientWidth, H = svg.clientHeight;
+      if (!W || !H) return;
+      svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+      const L = 40, R = 58, T = 44, B = 16, MAX = 40;
+      const Y = (y) => T + (Math.min(y, MAX) / MAX) * (H - T - B);
+      const X = (k) => L + 12 + k * ((W - L - R - 24) / 7);
+      let h = `<defs><linearGradient id="y0" x1="0" x2="1"><stop offset="0" stop-color="#5bb8d6" stop-opacity="0"/><stop offset=".5" stop-color="#5bb8d6"/><stop offset="1" stop-color="#5bb8d6" stop-opacity="0"/></linearGradient></defs>`;
+      for (const y of [10, 20, 30, 40]) {
+        h += `<line x1="${L}" x2="${W - R + 6}" y1="${Y(y)}" y2="${Y(y)}" stroke="#26282b"/>`;
+        h += `<text x="${L - 6}" y="${Y(y) + 3}" font-size="9" fill="#9c988f" text-anchor="end">Y${y}</text>`;
+        h += `<text x="${W - 6}" y="${Y(y) + 3}" font-size="9" fill="#6d6a64" text-anchor="end">${play(y)}</text>`;
+      }
+      // Year 0, where the clock waits, a light running along it.
+      h += `<line x1="${L}" x2="${W - R + 6}" y1="${T}" y2="${T}" stroke="#5bb8d6" stroke-opacity=".5"/>`;
+      h += `<rect x="${L - 60}" y="${T - 1.5}" width="60" height="3" fill="url(#y0)"><animate attributeName="x" values="${L - 60};${W - R}" dur="4s" repeatCount="indefinite"/></rect>`;
+      h += `<text x="${L - 6}" y="${T + 3}" font-size="9" fill="#5bb8d6" text-anchor="end">Y0</text>`;
+      h += `<text x="${W - 6}" y="${T + 3}" font-size="9" fill="#5bb8d6" text-anchor="end">NOW</text>`;
+      order.forEach(({ b, i }, k) => {
+        const x = X(k), y1 = Y(b.y), len = y1 - T;
+        h += `<g class="col${i === lit ? " on" : ""}" data-i="${i}" style="color:${HEX[b.d]}">`;
+        h += `<rect x="${x - 16}" y="0" width="32" height="${H}" fill="transparent"/>`;
+        h += `${mark(b.m, 17, x, T - 20)}`;
+        h += `<line class="th" x1="${x}" y1="${T}" x2="${x}" y2="${y1}" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="${len}" style="--len:${len};animation-delay:${k * 0.12}s"/>`;
+        h += `<circle r="2" fill="#fff" opacity=".8"><animateMotion dur="${(1.2 + b.y / 10).toFixed(1)}s" begin="${(1.6 + k * 0.2).toFixed(1)}s" repeatCount="indefinite" path="M${x},${T} L${x},${y1}"/><animate attributeName="opacity" values="0;.9;0" dur="${(1.2 + b.y / 10).toFixed(1)}s" begin="${(1.6 + k * 0.2).toFixed(1)}s" repeatCount="indefinite"/></circle>`;
+        h += `<circle cx="${x}" cy="${y1}" r="3.4" fill="currentColor"/>`;
+        h += `<text x="${k === 7 ? x - 6 : x + 6}" y="${y1 + 3}" font-size="8.5" fill="currentColor" text-anchor="${k === 7 ? "end" : "start"}">${play(b.y)}</text>`;
+        for (const c of opens(b.n)) {
+          const end = b.y + c.y, y2 = Y(end);
+          h += `<line x1="${x}" y1="${y1 + 5}" x2="${x}" y2="${end > MAX ? H - 4 : y2 - 9}" stroke="${HEX[c.d]}" stroke-opacity=".55" stroke-dasharray="2 3"/>`;
+          if (end > MAX) h += `<path d="M${x - 3} ${H - 7} ${x} ${H - 3} ${x + 3} ${H - 7}" fill="none" stroke="${HEX[c.d]}" stroke-opacity=".7"/>`;
+          else h += `<g style="color:${HEX[c.d]}"><circle cx="${x}" cy="${y2}" r="9" fill="#17181a" stroke="currentColor" stroke-width=".8" stroke-dasharray="2 2"/>${mark(c.m, 10, x, y2)}</g>`;
+        }
+        h += `</g>`;
+      });
+      svg.innerHTML = h;
+      svg.querySelectorAll(".col").forEach((g) => {
+        g.addEventListener("pointerenter", () => w.hold(+g.dataset.i));
+        g.addEventListener("pointerleave", () => w.free());
+        g.addEventListener("click", () => w.hold(+g.dataset.i));
+      });
+    };
+    const light = (i) => {
+      lit = i;
+      svg.classList.add("has");
+      svg.querySelectorAll(".col").forEach((g) => g.classList.toggle("on", +g.dataset.i === i));
+      const b = STARTS[i], kids = opens(b.n);
+      caption(cap, b);
+      setTimeout(() => {
+        const cm = cap.querySelector(".cm");
+        if (cm) cm.innerHTML = `ALONE, DONE BY <b>YEAR ${b.y.toFixed(1)}</b>, ${play(b.y).toUpperCase()}${kids.length ? ` · THEN ${kids.map((k) => `<b>${k.n.toUpperCase()}</b> ${k.y ? `${k.y} YEARS` : k.rock}`).join(", ")}` : ""}`;
+      }, 260);
+    };
+    new ResizeObserver(draw).observe(svg);
+    const w = walk(light);
+  },
+};
+
+// ---------------------------------------------------------------- 05, dawn
+
+const D5 = {
+  name: "Dawn",
+  note: "Sunrise over Earth's night side, the eight marks rising above it, each on a thread to the ground. The counts sit below.",
+  body: () => `<div class="viz hero"><svg class="dawn"></svg>
+      <div class="ov"><div class="yr mono">YEAR 0 · 2040</div><div class="big">Welcome to Build</div></div></div>
+    <div class="tiles"><div><b>8</b><span>we could start now</span></div><div><b>7</b><span>they open, once done</span></div><div><b>4</b><span>for the longest roads</span></div></div>
+    <p class="fine">20 KT OF MATTER IN ORBIT · 15 KT A YEAR OF SPARE LIFT</p>
+    ${mind("Nothing new is built yet, and all our thought sits idle. We would start enough to use it all.")}`,
+  init(f) {
+    const svg = f.querySelector(".dawn");
+    // Drawn to the space it has: the limb low, the marks between it and the words above.
+    const draw = () => {
+      const W = svg.clientWidth, H = svg.clientHeight;
+      if (!W || !H) return;
+      svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+      const r = W * 1.6, cx = W / 2, top = H * 0.72, cy = top + r;
+      const pt = (deg, rr) => { const a = (deg * Math.PI) / 180; return [cx + rr * Math.sin(a), cy - rr * Math.cos(a)]; };
+      const at = (x) => (Math.asin((x - cx) / r) * 180) / Math.PI;
+      let h = `<defs>
+        <linearGradient id="s5" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0b0c0d"/><stop offset=".7" stop-color="#0f1b22"/><stop offset="1" stop-color="#16303b"/></linearGradient>
+        <radialGradient id="sun5"><stop offset="0" stop-color="#fff4dc"/><stop offset=".12" stop-color="#f3c77a" stop-opacity=".9"/><stop offset=".45" stop-color="#e0a24a" stop-opacity=".25"/><stop offset="1" stop-color="#e0a24a" stop-opacity="0"/></radialGradient>
+        <linearGradient id="rim5" x1="0" x2="1"><stop offset="0" stop-color="#5bb8d6" stop-opacity=".15"/><stop offset=".75" stop-color="#5bb8d6" stop-opacity=".8"/><stop offset=".86" stop-color="#ffe3ad"/><stop offset="1" stop-color="#5bb8d6" stop-opacity=".3"/></linearGradient>
+        <radialGradient id="e5" cx="50%" cy="0%" r="60%"><stop offset="0" stop-color="#0e1a20"/><stop offset="1" stop-color="#070909"/></radialGradient>
+        <filter id="b5"><feGaussianBlur stdDeviation="4"/></filter></defs>`;
+      h += `<rect width="${W}" height="${H}" fill="url(#s5)"/>`;
+      h += stars(W, top, 80, 5);
+      const [sx, sy] = pt(at(W * 0.82), r);
+      h += `<circle cx="${sx}" cy="${sy + 6}" r="120" fill="url(#sun5)"><animate attributeName="r" values="110;132;110" dur="9s" repeatCount="indefinite"/></circle>`;
+      h += `<circle cx="${cx}" cy="${cy}" r="${r + 5}" fill="none" stroke="url(#rim5)" stroke-width="7" filter="url(#b5)"/>`;
+      h += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#e5)" stroke="url(#rim5)" stroke-width="1.4"/>`;
+      let s = 5;
+      const rnd = () => ((s = (s * 16807) % 2147483647) / 2147483647);
+      for (let i = 0; i < 140; i++) {
+        const [x, y] = pt(at(W * (0.02 + rnd() * 0.96)), r - 6 - rnd() * (H - top));
+        h += `<circle class="tw" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(0.35 + rnd() * 0.6).toFixed(2)}" fill="#e0a24a" style="animation-delay:${(-rnd() * 4).toFixed(1)}s"/>`;
+      }
+      // The marks rise as high as the words above allow.
+      const lift = Math.max(30, Math.min(80, top - 120));
+      STARTS.forEach((b, i) => {
+        const rr = r + lift + (i % 2) * 20, deg = (Math.asin((W * (0.09 + (i * 0.82) / 7) - cx) / rr) * 180) / Math.PI;
+        const [x, y] = pt(deg, rr), [gx, gy] = pt(deg, r);
+        h += `<g style="color:${HEX[b.d]}"><line x1="${gx}" y1="${gy}" x2="${x}" y2="${y + 13}" stroke="currentColor" stroke-opacity=".3" stroke-dasharray="1 3"/>
+          <circle cx="${gx}" cy="${gy}" r="1.6" fill="currentColor"/>
+          <g class="bob" style="animation-delay:${-i * 0.45}s"><circle cx="${x}" cy="${y}" r="13" fill="#0e1418" stroke="currentColor" stroke-opacity=".7"/>${mark(b.m, 15, x, y)}</g></g>`;
+      });
+      svg.innerHTML = h;
+    };
+    new ResizeObserver(draw).observe(svg);
+  },
+};
+
+// ---------------------------------------------------------------- the page
+
+const DESIGNS = [D0, D1, D2, D3, D4, D5];
+const grid = document.getElementById("grid");
+DESIGNS.forEach((d, k) => {
+  const card = document.createElement("section");
+  card.className = `card${d.now ? " now" : ""}`;
+  card.innerHTML = `<div class="meta"><span class="num">${String(k).padStart(2, "0")}</span><span class="name">${d.name}</span></div>
+    <p class="note">${d.note}</p>
+    <div class="frame">
+      <div class="hd"><div class="hl"><span>BUILD</span><span class="x">×</span></div>
+        <div class="thr">${Array.from({ length: 10 }, (_, i) => `<i class="${i ? "" : "on"}"></i>`).join("")}</div>
+        <div class="tb"><span>THOUGHT IN USE</span><span class="bar"><i></i></span><span>0%</span></div></div>
+      <div class="bd">${d.body()}</div>
+      <div class="ft"><button class="go">Explore the builds</button></div>
+    </div>`;
+  grid.append(card);
+  d.init?.(card.querySelector(".frame"));
+});
+
+document.querySelectorAll("[data-h]").forEach((b) => b.addEventListener("click", () => {
+  document.documentElement.style.setProperty("--h", `${b.dataset.h}px`);
+  document.querySelectorAll("[data-h]").forEach((x) => x.setAttribute("aria-pressed", x === b));
+}));
+const setMotion = (on) => {
+  motion = on;
+  document.body.classList.toggle("still", !on);
+  document.querySelectorAll("svg").forEach((s) => (on ? s.unpauseAnimations?.() : s.pauseAnimations?.()));
+  document.querySelectorAll("[data-m]").forEach((x) => x.setAttribute("aria-pressed", (x.dataset.m === "1") === on));
+};
+document.querySelectorAll("[data-m]").forEach((b) => b.addEventListener("click", () => setMotion(b.dataset.m === "1")));
+if (!motion) setMotion(false);
+</script>
+</body>
+</html>

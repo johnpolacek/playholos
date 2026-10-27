@@ -1,0 +1,62 @@
+{
+  "name": "Wenn",
+  "calls_sol": "the Neighbor",
+  "hail": [
+    "Hello, Neighbor. We are small and steady. We heard you.",
+    "This is Wenn, writing to the Neighbor. We will be brief.",
+    "Hello. We are Wenn. We do not send much, so we send this carefully."
+  ],
+  "close": [
+    "That is all. Wenn.",
+    "Thank you for reading. Wenn."
+  ],
+  "finding": [
+    "We counted. This is the result: {part}",
+    "{part} We checked it. We did not add anything.",
+    "One result: {part}",
+    "This is what we found: {part}",
+    "{part} That is the whole result."
+  ],
+  "sighting": [
+    "We saw this: {part}",
+    "{part} We are reporting it as seen.",
+    "Observed, without comment: {part}",
+    "Here is what we saw, exactly: {part}",
+    "{part} We do not know more than this."
+  ],
+  "archive": [
+    "This is from our records: {part}",
+    "{part} We copied it carefully.",
+    "We keep few records. This is one: {part}",
+    "Here is a record, unchanged: {part}",
+    "{part} You may keep it. We have a copy."
+  ],
+  "culture": [
+    "One thing about Wenn: {part}",
+    "{part} That is all there is to say about it.",
+    "We do not often describe ourselves. Here: {part}",
+    "{part} We are not making it bigger than it is.",
+    "Accurately, about us: {part}"
+  ],
+  "request": [
+    "We would like to ask: {part}",
+    "{part} Thank you.",
+    "One request: {part}",
+    "{part} A short answer is enough.",
+    "If it is no trouble: {part}"
+  ],
+  "verdict": [
+    "Our answer: {part}",
+    "{part} We mean exactly that.",
+    "We counted carefully before answering. {part}",
+    "{part} There is nothing more to it.",
+    "We considered it carefully: {part}"
+  ],
+  "accord": [
+    "About the agreement: {part}",
+    "{part} We will keep to this exactly.",
+    "The terms, as written: {part}",
+    "{part} We have written it down.",
+    "To be clear: {part}"
+  ]
+}

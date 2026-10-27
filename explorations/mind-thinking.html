@@ -1,0 +1,682 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mind Thinking</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=SUSE:wght@100..800&display=swap" rel="stylesheet">
+<style>
+/* Offline, the game's own copies of the fonts. */
+@font-face { font-family: "SUSE Variable"; font-weight: 100 800; src: url("../game/node_modules/@fontsource-variable/suse/files/suse-latin-wght-normal.woff2") format("woff2"); }
+@font-face { font-family: "Plex Mono Local"; font-weight: 400; src: url("../game/node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2") format("woff2"); }
+
+/* Colors from game/app/globals.css. The game is always dark. */
+:root {
+  --page: #0b0c0d;
+  --frame: #2a2b2e;
+  --paper: #121314;
+  --ink: #e6e3db;
+  --muted: #9c988f;
+  --faint: #34363a;
+  --panel: #17181a;
+  --rowline: #26282b;
+  --you: #5bb8d6;
+  --you-rgb: 91, 184, 214;
+  --sans: "SUSE", "SUSE Variable", sans-serif;
+  --mono: "IBM Plex Mono", "Plex Mono Local", monospace;
+  --z: 1;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: #070808; color: var(--ink); font-family: var(--sans); text-wrap: pretty; }
+p { margin: 0; }
+
+header { max-width: 1320px; margin: 0 auto; padding: 40px 16px 8px; display: flex; flex-wrap: wrap; gap: 16px; align-items: end; justify-content: space-between; }
+h1 { margin: 0; font-size: 22px; font-weight: 600; }
+header p { margin-top: 6px; color: var(--muted); font-size: 14px; max-width: 64ch; }
+header a { color: var(--muted); }
+.controls { display: flex; flex-wrap: wrap; gap: 14px; }
+.group { display: flex; align-items: center; gap: 4px; font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.group span { margin-right: 4px; }
+button.pill { background: none; color: var(--muted); border: 1px solid var(--frame); border-radius: 999px; padding: 5px 10px; font: 11px var(--mono); cursor: pointer; }
+button.pill[aria-pressed="true"] { color: var(--ink); border-color: var(--muted); }
+button.pill:hover { color: var(--ink); }
+
+main { max-width: 1320px; margin: 0 auto; padding: 16px 16px 64px; display: grid; gap: 28px 20px; grid-template-columns: repeat(auto-fill, minmax(min(100%, calc(380px * var(--z))), 1fr)); }
+.card { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.meta { display: flex; gap: 10px; align-items: baseline; }
+.num { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.name { font-size: 15px; font-weight: 600; }
+.meta button { margin-left: auto; align-self: center; }
+/* Three lines held for every note, so the frames in a row line up. */
+.note-text { color: var(--muted); font-size: 13px; line-height: 1.4; margin-top: -4px; min-height: calc(1.4em * 3); }
+
+/* The Mind tab's panel: our question, the thinking, the answer and the ask box. */
+.frame { zoom: var(--z); position: relative; overflow: hidden; height: 300px; background: var(--panel); border: 1px solid var(--rowline); border-radius: 16px; padding: 20px 16px 14px; display: flex; flex-direction: column; gap: 8px; }
+.ask { align-self: flex-end; max-width: 86%; background: var(--ink); color: var(--paper); border-radius: 12px; padding: 9px 12px; font-size: 13.5px; line-height: 1.45; }
+.askbox { margin-top: auto; flex-shrink: 0; height: 38px; border-radius: 999px; border: 1px solid rgba(230, 227, 219, .55); color: var(--muted); font-size: 13.5px; padding: 0 6px 0 16px; display: flex; align-items: center; justify-content: space-between; }
+.askbox::after { content: "↑"; width: 28px; height: 28px; border-radius: 50%; background: rgba(230, 227, 219, .3); color: var(--paper); display: grid; place-items: center; font-size: 14px; }
+.over { position: absolute; inset: 0; pointer-events: none; }
+.over svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+
+/* The thinking row, in the game's type: mono, 9.5px, a tenth of an em apart. */
+.slot { flex-shrink: 0; }
+.row { position: relative; display: flex; align-items: center; gap: 8px; width: 86%; height: 16px; }
+.w { font: 400 9.5px/1 var(--mono); letter-spacing: .1em; color: var(--you); white-space: pre; }
+.w > span, .who > span, .is > span { display: inline-block; }
+.line { position: relative; flex: 1; height: 1px; overflow: hidden; }
+.line::before { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(var(--you-rgb), .4), transparent 90%); }
+.glint { position: absolute; inset: 0; background: linear-gradient(90deg, transparent 44%, var(--you) 50%, transparent 56%); opacity: 0; }
+
+/* The Mind's note, as game/components/mind-note.tsx draws it. */
+.note { position: relative; align-self: flex-start; max-width: 86%; padding: 0 4px 12px 12px; }
+.note .edge { position: absolute; top: 8px; bottom: 0; left: 0; width: 9px; border-top-left-radius: 12px; border-top: 1px solid rgba(var(--you-rgb), .4); border-left: 1px solid rgba(var(--you-rgb), .4); -webkit-mask-image: linear-gradient(#000, transparent); mask-image: linear-gradient(#000, transparent); }
+.note .head { margin-bottom: 6px; height: 16px; display: flex; align-items: center; gap: 7px; }
+.who, .is { font: 400 9.5px/1 var(--mono); letter-spacing: .1em; color: var(--you); white-space: pre; }
+.is { overflow: hidden; }
+.rule { position: relative; margin-top: 8px; align-self: flex-start; height: 1px; flex: 1; overflow: hidden; background: linear-gradient(90deg, rgba(var(--you-rgb), .4), transparent 90%); }
+.words { font-size: 13.5px; line-height: 1.45; }
+
+.mark { display: block; flex-shrink: 0; width: 15px; height: 15px; }
+.mark svg { display: block; width: 15px; height: 15px; overflow: visible; }
+.mark .ring { fill: none; stroke: var(--faint); }
+.mark .halo { fill: rgba(var(--you-rgb), .2); }
+.mark .core { fill: var(--you); }
+.mark .sol circle { fill: var(--ink); }
+.mark.calm .sol { animation: spin 9s linear infinite; }
+.mark.calm .core { animation: swell 4s ease-in-out infinite; }
+.mark.calm .halo { animation: swell 4s ease-in-out infinite reverse; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes swell { 0%, 100% { transform: scale(.85); } 50% { transform: scale(1.1); } }
+
+/* 03 */
+.field { flex: 1; height: 18px; display: block; overflow: visible; }
+/* 04 */
+.trace { flex: 1; height: 16px; display: block; overflow: visible; }
+/* 05 */
+.track { flex: 1; height: 1px; background: linear-gradient(90deg, rgba(var(--you-rgb), .25), transparent 90%); }
+.beam { position: absolute; left: 0; top: -3px; bottom: -3px; width: 1.5px; margin-left: -.75px; border-radius: 1px; background: #c9ecf7; box-shadow: 0 0 5px 1px rgba(var(--you-rgb), .8), 0 0 14px 3px rgba(var(--you-rgb), .3); opacity: 0; }
+/* 07 */
+.dots { display: flex; gap: 3px; }
+.dots i { display: block; width: 3px; height: 3px; border-radius: 50%; background: var(--you); }
+/* 08 */
+.w.lap { position: relative; padding: 5px 11px; }
+.row.tall { height: 20px; }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>The Mind is thinking</h1>
+    <p>Eight ways to show the Mind thinking. Each card plays our question, the thinking, and the answer arriving, then starts again. 01 is what the game has now. Press Answer now on any card to see its exit early.</p>
+    <p id="less" hidden>Your system asks for less motion. These play anyway. In the game, each would show the plain line.</p>
+  </div>
+  <div class="controls">
+    <div class="group" role="group" aria-label="Answer after"><span>Answer after</span>
+      <button class="pill" data-think="3">3 s</button>
+      <button class="pill" data-think="6" aria-pressed="true">6 s</button>
+      <button class="pill" data-think="never">Never</button>
+    </div>
+    <div class="group" role="group" aria-label="Size"><span>Size</span>
+      <button class="pill" data-z="1" aria-pressed="true">1×</button>
+      <button class="pill" data-z="1.5">1.5×</button>
+      <button class="pill" data-z="2">2×</button>
+    </div>
+  </div>
+</header>
+
+<main id="cards"></main>
+
+<script src="../game/node_modules/gsap/dist/gsap.min.js"></script>
+<script>window.gsap || document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"><\/script>')</script>
+<script>
+const THINKING = "THE MIND IS THINKING";
+const ANSWER = "We don’t know yet. No knock, broadcast or beam has reached us from any star. We have listened closely to only a small part of the sky, so the quiet tells us little.";
+const NOISE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+const YOU = "#5bb8d6";
+
+/** One letter's noise at a moment, the same for the same moment. Spaces and marks stay blank. 20 changes a second. */
+function noise(ch, i, time) {
+  if (!/[A-Z0-9]/.test(ch)) return " ";
+  const x = Math.sin(i * 12.9898 + Math.floor(time * 20) * 78.233) * 43758.5453;
+  return NOISE[Math.floor((x - Math.floor(x)) * NOISE.length)];
+}
+/** Each character of `text` as its own span in `el`. */
+function spell(el, text) {
+  el.textContent = "";
+  return Array.from(text, (ch) => {
+    const s = document.createElement("span");
+    s.textContent = ch;
+    el.append(s);
+    return s;
+  });
+}
+/** Where `el` sits inside `root`, in root's own pixels, so the frame's zoom doesn't matter. */
+function at(el, root) {
+  let x = 0, y = 0;
+  while (el && el !== root) { x += el.offsetLeft; y += el.offsetTop; el = el.offsetParent; }
+  return { x, y };
+}
+/** A small seeded random, so a field is the same every time. */
+function seeded(seed) {
+  let s = seed % 2147483647 || 1;
+  return () => (s = (s * 16807) % 2147483647) / 2147483647;
+}
+const MARK = (cls = "") => `<span class="mark ${cls}"><svg viewBox="-8 -8 16 16" aria-hidden="true"><circle class="ring" r="6.5"/><circle class="halo" r="3.8"/><circle class="core" r="2.2"/><g class="sol"><circle cx="6.5" r="1.3"/></g></svg></span>`;
+const WORDS = ANSWER.split(" ").map((w) => `<span class="ww">${w} </span>`).join("");
+const NOTE = `<div class="note answer"><span class="edge"></span><div class="head">${MARK("calm")}<span class="who">THE MIND</span><span class="rule"></span></div><p class="words">${WORDS}</p></div>`;
+
+// Each take builds its row in the slot, and gives back how it enters, what it does while we wait, and how it leaves.
+// Every animation is made inside the card's context, so starting again undoes all of it.
+const TAKES = [
+  {
+    name: "Decode",
+    note: "In the game now. The words come out of noise, a light runs through them and on along the line, and when the answer comes they fall back into noise.",
+    make({ slot }) {
+      slot.innerHTML = `<div class="row"><span class="w"></span><span class="line"><i class="glint"></i></span></div>`;
+      const letters = spell(slot.querySelector(".w"), THINKING);
+      const line = slot.querySelector(".line"), glint = slot.querySelector(".glint");
+      const n = letters.length, LEAD = 6, REST = .55;
+      const draw = (real, shown, time) => letters.forEach((el, i) => (el.textContent = i < real ? THINKING[i] : i < shown ? noise(THINKING[i], i, time) : " "));
+      draw(0, 0, 0);
+      gsap.set(line, { scaleX: 0, transformOrigin: "left center" });
+      return {
+        enter() {
+          const front = { at: 0 }, tl = gsap.timeline();
+          return tl.to(front, { at: n + LEAD, duration: .7, ease: "none", onUpdate: () => draw(front.at - LEAD, front.at, tl.time()) })
+            .to(line, { scaleX: 1, duration: .6, ease: "power2.out" }, .45)
+            .to(letters, { opacity: REST, duration: .5, ease: "sine.inOut" }, ">-.2");
+        },
+        idle() {
+          const flicker = () => { const i = gsap.utils.random(0, n - 1, 1); letters[i].textContent = noise(THINKING[i], i, Math.random() * 99); };
+          const settle = () => draw(n, n, 0);
+          return gsap.timeline({ repeat: -1, repeatDelay: .5 })
+            .to(letters, { opacity: 1, duration: .28, ease: "sine.inOut", stagger: { each: .045, yoyo: true, repeat: 1 } }, 0)
+            .fromTo(glint, { xPercent: -56, opacity: 1 }, { xPercent: 56, opacity: .15, duration: 1.1, ease: "sine.inOut" }, .8)
+            .call(flicker, null, .35).call(settle, null, .42).call(flicker, null, 1.6).call(settle, null, 1.66);
+        },
+        leave() {
+          draw(n, n, 0);
+          const front = { at: n + LEAD }, tl = gsap.timeline();
+          return tl.to(letters, { opacity: 1, duration: .15 }, 0).to(glint, { opacity: 0, duration: .15 }, 0)
+            .to(front, { at: 0, duration: .45, ease: "none", onUpdate: () => draw(front.at - LEAD, front.at, tl.time()) }, 0)
+            .to(line, { scaleX: 0, duration: .4, ease: "power2.in" }, 0);
+        },
+      };
+    },
+  },
+
+  {
+    name: "Becomes the answer",
+    note: "The thinking line is the head of the answer to come. Sol circles fast while we think and slows when the answer comes, the corner draws down, and the words fill in below.",
+    becomes: true,
+    make({ slot }) {
+      slot.innerHTML = `<div class="note answer"><span class="edge"></span><div class="head">${MARK()}<span class="who"></span><span class="is"></span><span class="rule"><i class="glint"></i></span></div><p class="words">${WORDS}</p></div>`;
+      const q = gsap.utils.selector(slot);
+      const [ring] = q(".ring"), [halo] = q(".halo"), [core] = q(".core"), [sol] = q(".sol"), [edge] = q(".edge"), [rule] = q(".rule"), [glint] = q(".glint"), [isEl] = q(".is");
+      const who = spell(q(".who")[0], "THE MIND"), is = spell(isEl, "IS THINKING");
+      const C = 2 * Math.PI * 6.5;
+      gsap.set(ring, { strokeDasharray: C, strokeDashoffset: C });
+      gsap.set([halo, core], { scale: 0, svgOrigin: "0 0" });
+      gsap.set(sol, { rotation: -140, svgOrigin: "0 0", opacity: 0 });
+      gsap.set([...who, ...is], { autoAlpha: 0, y: 3 });
+      gsap.set(rule, { scaleX: 0, transformOrigin: "left center" });
+      gsap.set(edge, { scaleY: 0, transformOrigin: "top" });
+      return {
+        enter: () => gsap.timeline()
+          .to(ring, { strokeDashoffset: 0, duration: .6, ease: "power2.inOut" }, 0)
+          .to(core, { scale: 1, duration: .5, ease: "back.out(2.5)" }, .15)
+          .to(halo, { scale: 1, duration: .6, ease: "power2.out" }, .25)
+          .to(sol, { opacity: 1, rotation: 0, duration: .7, ease: "power2.out" }, .2)
+          .to(who, { autoAlpha: 1, y: 0, duration: .25, stagger: .03, ease: "power2.out" }, .3)
+          .to(is, { autoAlpha: .6, y: 0, duration: .25, stagger: .03, ease: "power2.out" }, .5)
+          .to(rule, { scaleX: 1, duration: .6, ease: "power2.out" }, .7),
+        idle() {
+          const breath = { svgOrigin: "0 0", duration: .7, ease: "sine.inOut", yoyo: true, repeat: -1 };
+          return gsap.timeline()
+            .add(gsap.to(sol, { rotation: "+=360", duration: 1.3, ease: "none", repeat: -1 }), 0)
+            .add(gsap.fromTo(core, { scale: 1 }, { scale: 1.25, ...breath }), 0)
+            .add(gsap.fromTo(halo, { scale: 1 }, { scale: .75, ...breath }), 0)
+            .add(gsap.to(is, { opacity: 1, duration: .3, ease: "sine.inOut", stagger: { each: .05, yoyo: true, repeat: 1 }, repeat: -1, repeatDelay: .6 }), 0)
+            .add(gsap.fromTo(glint, { xPercent: -56, opacity: 1 }, { xPercent: 56, opacity: .15, duration: 1.1, ease: "sine.inOut", repeat: -1, repeatDelay: .7 }), .3);
+        },
+        leave() {
+          // Sol slows to its calm lap and keeps circling while we read.
+          const r = gsap.getProperty(sol, "rotation");
+          const calm = gsap.to(sol, { rotation: "+=360", duration: 9, ease: "none", repeat: -1, paused: true });
+          gsap.to(sol, { rotation: r + 200, duration: 1.3, ease: "power3.out", onComplete: () => calm.play() });
+          return gsap.timeline()
+            .to([core, halo], { scale: 1, duration: .4 }, 0)
+            .to(glint, { opacity: 0, duration: .2 }, 0)
+            .to(is.slice().reverse(), { autoAlpha: 0, y: -3, duration: .18, stagger: .02 }, 0)
+            .to(isEl, { width: 0, marginLeft: -7, duration: .35, ease: "power2.inOut" }, .25)
+            .to(edge, { scaleY: 1, duration: .5, ease: "power2.out" }, .35);
+        },
+      };
+    },
+  },
+
+  {
+    name: "All of us",
+    note: "Points for all of us and our machines. Thoughts jump between them while we think, then they gather into one, and the answer comes from there.",
+    make({ slot, n, cleanup }) {
+      slot.innerHTML = `<div class="row"><span class="w">${THINKING}</span><svg class="field" overflow="visible"></svg></div>`;
+      const w = slot.querySelector(".w"), svg = slot.querySelector(".field");
+      const W = svg.clientWidth || 200, H = 18, R = seeded(31 + n);
+      const ns = "http://www.w3.org/2000/svg";
+      const nodes = Array.from({ length: 46 }, () => {
+        const x = 3 + Math.pow(R(), 1.35) * (W - 6), y = 2 + R() * (H - 4);
+        const el = document.createElementNS(ns, "circle");
+        el.setAttribute("fill", YOU);
+        svg.append(el);
+        return { x, y, x0: x, y0: y, el, glow: 0, vis: 0, base: .22 + .3 * (1 - x / W) };
+      });
+      nodes.forEach((a) => (a.near = nodes.filter((b) => b !== a).sort((b, c) => Math.hypot(b.x0 - a.x0, b.y0 - a.y0) - Math.hypot(c.x0 - a.x0, c.y0 - a.y0)).slice(0, 3)));
+      const lines = Array.from({ length: 10 }, () => {
+        const el = document.createElementNS(ns, "line");
+        el.setAttribute("stroke", YOU);
+        el.setAttribute("stroke-width", ".6");
+        el.setAttribute("opacity", "0");
+        svg.append(el);
+        return { el, busy: false };
+      });
+      const flare = document.createElementNS(ns, "circle");
+      flare.setAttribute("fill", "#c9ecf7");
+      flare.setAttribute("r", "0");
+      svg.append(flare);
+      const s = { firing: false, last: 0, flare: 0 };
+      const pulses = [];
+      const fire = (a, time, depth) => {
+        const line = lines.find((l) => !l.busy);
+        if (!line) return;
+        line.busy = true;
+        a.glow = 1;
+        pulses.push({ a, b: a.near[Math.floor(Math.random() * 3)], t0: time, line, depth, landed: false });
+      };
+      const tick = (time) => {
+        if (s.firing && time - s.last > .13) { s.last = time; fire(nodes[Math.floor(Math.random() * nodes.length)], time, 0); }
+        for (let k = pulses.length - 1; k >= 0; k--) {
+          const p = pulses[k], u = (time - p.t0) / .32;
+          const reach = Math.min(1, u);
+          p.line.el.setAttribute("x1", p.a.x); p.line.el.setAttribute("y1", p.a.y);
+          p.line.el.setAttribute("x2", p.a.x + (p.b.x - p.a.x) * reach); p.line.el.setAttribute("y2", p.a.y + (p.b.y - p.a.y) * reach);
+          p.line.el.setAttribute("opacity", u < 1 ? .7 : Math.max(0, .7 - (u - 1) * 1.4));
+          if (u >= 1 && !p.landed) {
+            p.landed = true;
+            p.b.glow = 1;
+            if (s.firing && p.depth < 3 && Math.random() < .5) fire(p.b, time, p.depth + 1);
+          }
+          if (u > 1.5) { p.line.busy = false; p.line.el.setAttribute("opacity", 0); pulses.splice(k, 1); }
+        }
+        for (const d of nodes) {
+          d.glow *= .9;
+          d.el.setAttribute("cx", d.x); d.el.setAttribute("cy", d.y);
+          d.el.setAttribute("r", ((.85 + d.glow * .9) * d.vis).toFixed(2));
+          d.el.setAttribute("opacity", ((d.base + d.glow * .7) * d.vis).toFixed(2));
+        }
+        flare.setAttribute("cx", 0); flare.setAttribute("cy", H / 2);
+        flare.setAttribute("r", (s.flare * 3).toFixed(2)); flare.setAttribute("opacity", Math.min(1, s.flare * 2).toFixed(2));
+      };
+      gsap.ticker.add(tick);
+      cleanup(() => gsap.ticker.remove(tick));
+      gsap.set(w, { opacity: 0 });
+      return {
+        enter: () => gsap.timeline()
+          .to(w, { opacity: .85, duration: .4, ease: "power2.out" }, 0)
+          .to(nodes, { vis: 1, duration: .3, ease: "back.out(3)", stagger: { each: .012, from: "random" } }, .1),
+        idle() {
+          s.firing = true;
+          const breath = gsap.to(w, { opacity: .55, duration: 1.2, ease: "sine.inOut", yoyo: true, repeat: -1 });
+          return () => { s.firing = false; breath.kill(); };
+        },
+        leave: () => gsap.timeline()
+          .to(nodes, { x: 0, y: H / 2, duration: (i) => .3 + (nodes[i].x0 / W) * .3, ease: "power3.in" }, 0)
+          .to(s, { flare: 1, duration: .12, ease: "power2.out" }, .55)
+          .to(nodes, { vis: 0, duration: .1 }, .58)
+          .to(s, { flare: 0, duration: .3, ease: "power2.in" }, .67)
+          .to(w, { opacity: 0, duration: .3 }, .45),
+      };
+    },
+  },
+
+  {
+    name: "Thought wave",
+    note: "A trace like a signal on a scope, since so much of what we do is listen. It swells while we think, a point rides it, and it goes flat and draws back when the answer comes.",
+    make({ slot, n, cleanup }) {
+      slot.innerHTML = `<div class="row"><span class="w">${THINKING}</span><svg class="trace" overflow="visible"><defs><linearGradient id="tw${n}" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="200" y2="0"><stop offset="0" stop-color="${YOU}" stop-opacity=".9"/><stop offset=".85" stop-color="${YOU}" stop-opacity="0"/></linearGradient></defs><path fill="none" stroke="url(#tw${n})" stroke-width="1" stroke-linejoin="round"/><circle r="1.4" fill="#c9ecf7" opacity="0"/></svg></div>`;
+      const w = slot.querySelector(".w"), svg = slot.querySelector(".trace"), path = svg.querySelector("path"), dot = svg.querySelector("circle");
+      const W = svg.clientWidth || 200, MID = 8;
+      svg.querySelector("linearGradient").setAttribute("x2", W);
+      const s = { amp: 0, draw: 0, dot: 0 };
+      const wave = (x, t) => {
+        const rise = Math.min(1, x / 18);
+        const v = Math.sin(x * .09 + t * 5) * .55 + Math.sin(x * .23 - t * 7.3) * .3 + Math.sin(x * .041 + t * 2.1) * .35;
+        return MID + Math.max(-1, Math.min(1, v)) * 6 * rise * s.amp;
+      };
+      const tick = (t) => {
+        const end = s.draw * W;
+        let d = "M0 " + MID;
+        for (let x = 2; x <= end; x += 2) d += "L" + x + " " + wave(x, t).toFixed(2);
+        path.setAttribute("d", d);
+        const span = W * .8, x = (t * 60) % span;
+        dot.setAttribute("cx", x.toFixed(1)); dot.setAttribute("cy", wave(x, t).toFixed(2));
+        dot.setAttribute("opacity", (s.dot * (1 - x / span)).toFixed(2));
+      };
+      gsap.ticker.add(tick);
+      cleanup(() => gsap.ticker.remove(tick));
+      gsap.set(w, { opacity: 0 });
+      return {
+        enter: () => gsap.timeline()
+          .to(w, { opacity: .85, duration: .4, ease: "power2.out" }, 0)
+          .to(s, { draw: 1, duration: .8, ease: "power2.out" }, .2)
+          .to(s, { amp: 1, duration: 1, ease: "power2.out" }, .3),
+        idle: () => gsap.timeline()
+          .to(s, { dot: 1, duration: .4 }, 0)
+          .to(s, { amp: .4, duration: 1.3, ease: "sine.inOut", yoyo: true, repeat: -1 }, 0),
+        leave: () => gsap.timeline()
+          .to(s, { amp: 0, dot: 0, duration: .35, ease: "power2.in" }, 0)
+          .to(s, { draw: 0, duration: .4, ease: "power2.in" }, .3)
+          .to(w, { opacity: 0, duration: .3 }, .45),
+      };
+    },
+  },
+
+  {
+    name: "Scan",
+    note: "A beam writes the words, sweeps out along the line and back across them while we think, then wipes them away when the answer comes.",
+    make({ slot, cleanup }) {
+      slot.innerHTML = `<div class="row"><span class="w"></span><span class="track"></span><i class="beam"></i></div>`;
+      const row = slot.querySelector(".row"), w = row.querySelector(".w"), beam = row.querySelector(".beam");
+      const letters = spell(w, THINKING);
+      const xs = letters.map((l) => w.offsetLeft + l.offsetLeft + l.offsetWidth / 2);
+      const W = row.clientWidth, END = w.offsetLeft + w.offsetWidth;
+      const s = { x: -8, beam: 0, rest: .6, mode: "in" };
+      const tick = () => {
+        const fade = 1 - Math.max(0, s.x - END) / Math.max(1, W - END) * .75;
+        beam.style.transform = `translateX(${s.x}px)`;
+        beam.style.opacity = s.beam * fade;
+        letters.forEach((l, i) => {
+          const glow = Math.max(0, 1 - Math.abs(xs[i] - s.x) / 16) * s.beam;
+          const shown = s.mode === "all" || xs[i] < s.x;
+          l.style.opacity = shown ? Math.min(1, s.rest + glow * .8) : glow * .3;
+          l.style.textShadow = glow > .05 ? `0 0 ${(4 * glow).toFixed(1)}px rgba(91, 184, 214, ${(glow * .9).toFixed(2)})` : "none";
+        });
+      };
+      tick();
+      gsap.ticker.add(tick);
+      cleanup(() => gsap.ticker.remove(tick));
+      return {
+        enter: () => gsap.timeline()
+          .to(s, { beam: 1, duration: .15 }, 0)
+          .to(s, { x: END + 6, duration: .9, ease: "power1.inOut" }, 0)
+          .set(s, { mode: "all" }),
+        idle: () => gsap.timeline({ repeat: -1 })
+          .to(s, { x: W * .9, duration: 1.2, ease: "sine.inOut" })
+          .to(s, { x: -6, duration: 1.7, ease: "sine.inOut" }),
+        leave: () => gsap.timeline()
+          .set(s, { mode: "all" })
+          .to(s, { x: END + 6, duration: .25, ease: "power2.out" })
+          .set(s, { mode: "in" })
+          .to(s, { x: -8, duration: .55, ease: "power1.in" })
+          .to(s, { beam: 0, duration: .15 }, "-=.1"),
+      };
+    },
+  },
+
+  {
+    name: "What we weigh",
+    note: "The words flip like a departure board through what we are weighing. The phrases are the same for every question, so they could claim work the Mind isn’t doing.",
+    make({ slot }) {
+      const PREFIX = "THE MIND IS ";
+      const PHRASES = ["THINKING", "WEIGHING OUR CHARTER", "READING WHAT WE’VE HEARD", "HEARING FROM ALL OF US"];
+      const L = PREFIX.length + Math.max(...PHRASES.map((p) => p.length));
+      const texts = PHRASES.map((p) => (PREFIX + p).padEnd(L)), blank = " ".repeat(L);
+      slot.innerHTML = `<div class="row"><span class="w"></span></div>`;
+      const letters = spell(slot.querySelector(".w"), blank);
+      const flap = (from, to) => {
+        const st = { t: 0 }, span = .02 * L + .18;
+        return gsap.to(st, {
+          t: 1, duration: span, ease: "none",
+          onUpdate() {
+            const time = st.t * span;
+            letters.forEach((el, i) => {
+              if (from[i] === to[i]) return void (el.textContent = to[i]);
+              const a = i * .02;
+              el.textContent = time < a ? from[i] : time < a + .16 ? noise(to[i] !== " " ? to[i] : from[i], i, time) : to[i];
+            });
+          },
+        });
+      };
+      return {
+        enter: () => gsap.timeline().add(flap(blank, texts[0])),
+        idle() {
+          const tl = gsap.timeline({ repeat: -1 });
+          texts.forEach((t, k) => tl.add(flap(t, texts[(k + 1) % texts.length]), "+=1.5"));
+          return tl;
+        },
+        leave: () => gsap.timeline().add(flap(letters.map((l) => l.textContent).join(""), blank)),
+      };
+    },
+  },
+
+  {
+    name: "Quiet",
+    note: "The plainest. The words come out of a blur, three dots rise and fall while the words breathe, and it all blurs away.",
+    make({ slot }) {
+      slot.innerHTML = `<div class="row"><span class="w">${THINKING}</span><span class="dots"><i></i><i></i><i></i></span></div>`;
+      const w = slot.querySelector(".w"), dots = slot.querySelectorAll(".dots i");
+      gsap.set(w, { opacity: 0, filter: "blur(3px)" });
+      gsap.set(dots, { scale: 0, opacity: .45 });
+      return {
+        enter: () => gsap.timeline()
+          .to(w, { opacity: 1, filter: "blur(0px)", duration: .5, ease: "power2.out" })
+          .to(dots, { scale: 1, duration: .3, stagger: .08, ease: "back.out(3)" }, .25),
+        idle: () => gsap.timeline()
+          .to(dots, { y: -2.5, opacity: 1, duration: .32, ease: "sine.inOut", stagger: { each: .14, yoyo: true, repeat: 1 }, repeat: -1, repeatDelay: .3 }, 0)
+          .to(w, { opacity: .6, duration: 1.4, ease: "sine.inOut", yoyo: true, repeat: -1 }, 0),
+        leave: () => gsap.timeline()
+          .to(dots, { scale: 0, y: 0, duration: .2, stagger: { each: .06, from: "end" } }, 0)
+          .to(w, { opacity: 0, filter: "blur(3px)", duration: .35 }, .1),
+      };
+    },
+  },
+
+  {
+    name: "Sol’s lap",
+    note: "Sol circles the words with a trail, lighting each letter it passes. When the answer comes it flies down into the answer’s mark.",
+    make({ slot, frame, over, cleanup }) {
+      slot.innerHTML = `<div class="row tall"><span class="w lap"></span></div>`;
+      const w = slot.querySelector(".w"), letters = spell(w, THINKING);
+      over.innerHTML = `<svg aria-hidden="true"><rect fill="none" stroke="rgba(91, 184, 214, .3)" stroke-width=".75"/><g></g><circle r="1.6" fill="#e6e3db"/></svg>`;
+      const orbit = over.querySelector("rect"), trailG = over.querySelector("g"), sol = over.querySelector("circle");
+      const p = at(w, frame), bw = w.offsetWidth, bh = w.offsetHeight, r = bh / 2, flat = bw - 2 * r;
+      const P = 2 * flat + 2 * Math.PI * r;
+      Object.entries({ x: p.x, y: p.y, width: bw, height: bh, rx: r }).forEach(([k, v]) => orbit.setAttribute(k, v));
+      const xs = letters.map((l) => p.x + l.offsetLeft + l.offsetWidth / 2);
+      const point = (s) => {
+        s = ((s % P) + P) % P;
+        if (s < flat) return [p.x + r + s, p.y];
+        s -= flat;
+        if (s < Math.PI * r) { const a = -Math.PI / 2 + s / r; return [p.x + bw - r + Math.cos(a) * r, p.y + r + Math.sin(a) * r]; }
+        s -= Math.PI * r;
+        if (s < flat) return [p.x + bw - r - s, p.y + bh];
+        s -= flat;
+        const a = Math.PI / 2 + s / r;
+        return [p.x + r + Math.cos(a) * r, p.y + r + Math.sin(a) * r];
+      };
+      const trail = Array.from({ length: 12 }, (_, k) => {
+        const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        c.setAttribute("r", (1.4 * (1 - k / 14)).toFixed(2));
+        c.setAttribute("fill", YOU);
+        trailG.append(c);
+        return c;
+      });
+      const s = { s: 0, vis: 0, words: 0, front: 0, fly: null, t: 0 };
+      const seen = [];
+      const tick = () => {
+        let x, y;
+        if (s.fly) {
+          const { a, c, b } = s.fly, t = s.t, u = 1 - t;
+          x = u * u * a[0] + 2 * u * t * c[0] + t * t * b[0];
+          y = u * u * a[1] + 2 * u * t * c[1] + t * t * b[1];
+        } else [x, y] = point(s.s);
+        seen.unshift([x, y]);
+        seen.length = Math.min(seen.length, 13);
+        sol.setAttribute("cx", x); sol.setAttribute("cy", y); sol.setAttribute("opacity", s.vis);
+        trail.forEach((c, k) => {
+          const q = seen[k + 1] || seen[seen.length - 1];
+          c.setAttribute("cx", q[0]); c.setAttribute("cy", q[1]);
+          c.setAttribute("opacity", (.5 * (1 - k / 12) * s.vis).toFixed(2));
+        });
+        const near = !s.fly && Math.abs(y - (p.y + r)) > r * .6;
+        letters.forEach((l, i) => {
+          const lit = near ? Math.max(0, 1 - Math.abs(xs[i] - x) / 14) : 0;
+          l.style.opacity = (Math.max(0, Math.min(1, s.front - i)) * (s.words + lit * .35)).toFixed(2);
+        });
+      };
+      tick();
+      gsap.ticker.add(tick);
+      cleanup(() => gsap.ticker.remove(tick));
+      gsap.set(orbit, { strokeDasharray: P, strokeDashoffset: P });
+      return {
+        enter: () => gsap.timeline()
+          .to(orbit, { strokeDashoffset: 0, duration: .8, ease: "power2.inOut" }, 0)
+          .to(s, { words: .65, front: letters.length + 1, duration: .7, ease: "none" }, .1)
+          .to(s, { vis: 1, duration: .3 }, .1)
+          .to(s, { s: P * .3, duration: 1, ease: "sine.in" }, .1),
+        idle: () => gsap.to(s, { s: "+=" + P, duration: 2.2, ease: "none", repeat: -1 }),
+        leave() {
+          // To the center of the answer's mark, where it will be once this row folds away.
+          const mark = frame.querySelector(".frame > .note .mark");
+          const m = at(mark, frame), drop = slot.offsetHeight + 8;
+          const a = point(s.s), b = [m.x + 7.5, m.y + 7.5 - drop];
+          s.fly = { a, b, c: [a[0] + 10, b[1] - 2] };
+          s.t = 0;
+          gsap.to(s, { vis: 0, duration: .3, delay: 1.15 });
+          return gsap.timeline()
+            .to(s, { t: 1, duration: .7, ease: "power2.inOut" }, 0)
+            .to(orbit, { strokeDashoffset: -P, duration: .5, ease: "power2.in" }, 0)
+            .to(s, { words: 0, duration: .3 }, .1);
+        },
+      };
+    },
+  },
+];
+
+let think = 6;
+const main = document.getElementById("cards");
+const cards = TAKES.map((take, i) => {
+  const section = document.createElement("section");
+  section.className = "card";
+  section.innerHTML = `<div class="meta"><span class="num">${String(i + 1).padStart(2, "0")}</span><span class="name">${take.name}</span><button class="pill">Again</button></div><p class="note-text">${take.note}</p><div class="frame"></div>`;
+  main.append(section);
+  const frame = section.querySelector(".frame");
+  frame.innerHTML = `<div class="ask">Are we alone?</div><div class="slot"></div>${take.becomes ? "" : NOTE}<div class="askbox">Ask the Mind…</div><div class="over"></div>`;
+  const card = { take, frame, button: section.querySelector("button"), slot: frame.querySelector(".slot"), over: frame.querySelector(".over"), n: i, token: 0, cleanups: [], phase: "" };
+  card.button.addEventListener("click", () => (card.phase === "thinking" ? card.answer?.() : start(card)));
+  return card;
+});
+
+function phase(card, name) {
+  card.phase = name;
+  card.button.textContent = name === "thinking" ? "Answer now" : "Again";
+}
+function waitThink(card) {
+  clearTimeout(card.timer);
+  if (Number.isFinite(think)) card.timer = setTimeout(() => card.answer?.(), think * 1000);
+}
+
+/** One round: our question, the thinking, the answer, a rest, and again. Starting over undoes the round so far. */
+async function start(card) {
+  const token = ++card.token;
+  clearTimeout(card.timer);
+  card.answer = null;
+  card.cleanups.splice(0).forEach((f) => f());
+  card.ctx?.revert();
+  const ctx = (card.ctx = gsap.context(() => {}));
+  const live = () => token === card.token;
+  const step = (fn) => (live() ? ctx.add(fn) : undefined);
+  const { take, frame, slot, over } = card;
+  slot.innerHTML = "";
+  over.innerHTML = "";
+  const kit = { slot, frame, over, n: card.n, cleanup: (f) => card.cleanups.push(f) };
+  const ask = frame.querySelector(".ask");
+  phase(card, "asking");
+
+  const parts = step(() => {
+    gsap.set(ask, { autoAlpha: 0 });
+    gsap.set(frame.querySelector(".frame > .note"), { autoAlpha: 0 });
+    const parts = take.make(kit);
+    gsap.set(frame.querySelectorAll(".answer .ww"), { autoAlpha: 0 });
+    return parts;
+  });
+  await step(() => gsap.fromTo(ask, { autoAlpha: 0, y: 6 }, { autoAlpha: 1, y: 0, duration: .35, ease: "power2.out", delay: .2 }));
+  if (!live()) return;
+
+  phase(card, "thinking");
+  const answered = new Promise((resolve) => (card.answer = resolve));
+  waitThink(card);
+  await step(() => parts.enter());
+  if (!live()) return;
+  const idle = step(() => parts.idle());
+  await answered;
+  if (!live()) return;
+  clearTimeout(card.timer);
+  typeof idle === "function" ? idle() : idle?.kill();
+
+  phase(card, "answering");
+  await step(() => parts.leave());
+  if (!live()) return;
+  await step(() => {
+    const note = frame.querySelector(".answer");
+    const tl = gsap.timeline();
+    if (!take.becomes) {
+      tl.set(slot, { overflow: "hidden", height: slot.offsetHeight })
+        .to(slot, { height: 0, marginTop: -8, duration: .3, ease: "power2.inOut" }, 0)
+        .fromTo(note, { autoAlpha: 0, y: 6 }, { autoAlpha: 1, y: 0, duration: .35, ease: "power2.out" }, .12);
+    }
+    return tl.to(note.querySelectorAll(".ww"), { autoAlpha: 1, duration: .12, stagger: .04, ease: "none" }, take.becomes ? .1 : .3);
+  });
+  if (!live()) return;
+
+  phase(card, "answered");
+  await step(() => gsap.delayedCall(3.2, () => {}));
+  if (!live()) return;
+  await step(() => gsap.to(frame.querySelectorAll(".ask, .slot, .answer, .over"), { autoAlpha: 0, duration: .4 }));
+  if (live()) start(card);
+}
+
+function startAll() {
+  cards.forEach((card, i) => {
+    card.token++;
+    card.cleanups.splice(0).forEach((f) => f());
+    card.ctx?.revert();
+    setTimeout(() => start(card), i * 250);
+  });
+}
+
+document.querySelectorAll("[data-think]").forEach((b) =>
+  b.addEventListener("click", () => {
+    think = b.dataset.think === "never" ? Infinity : Number(b.dataset.think);
+    document.querySelectorAll("[data-think]").forEach((o) => o.setAttribute("aria-pressed", String(o === b)));
+    cards.forEach((card) => card.phase === "thinking" && waitThink(card));
+  }),
+);
+const zooms = document.querySelectorAll("[data-z]");
+const zoom = (z) => {
+  document.documentElement.style.setProperty("--z", z);
+  zooms.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.z === z)));
+  try { localStorage.setItem("mind-thinking-zoom", z); } catch {}
+};
+// A new size moves everything the takes measured, so they all start over.
+zooms.forEach((b) => b.addEventListener("click", () => { zoom(b.dataset.z); startAll(); }));
+try { const z = localStorage.getItem("mind-thinking-zoom"); if (z) zoom(z); } catch {}
+document.getElementById("less").hidden = !matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+// Fonts first, so the takes measure the real type. Bounded, so a missing font never holds the page.
+Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 1000))]).then(startAll);
+</script>
+</body>
+</html>

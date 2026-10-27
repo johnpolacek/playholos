@@ -1,0 +1,62 @@
+{
+  "name": "Odun",
+  "calls_sol": "the Warm",
+  "hail": [
+    "From the ice, to the Warm. We have endured. We are here.",
+    "Odun, to the Warm. Cold greetings, but honest ones.",
+    "This is Odun, from the warm band. We do not say much. What we say holds."
+  ],
+  "close": [
+    "Keep warm. Odun.",
+    "Odun. The ice waits, and so do we."
+  ],
+  "finding": [
+    "Measured, and measured again: {part}",
+    "{part} Store it. It will keep.",
+    "Plainly: {part}",
+    "What our instruments found: {part}",
+    "{part} We do not make it more than it is."
+  ],
+  "sighting": [
+    "Seen from the warm band: {part}",
+    "{part} We watched it the way we watch the ice.",
+    "In our sky: {part}",
+    "We say only what we saw: {part}",
+    "{part} We will keep watching."
+  ],
+  "archive": [
+    "From the Deep Stores: {part}",
+    "{part} Kept in the cold, where things last.",
+    "We share this from what we put by: {part}",
+    "A record, as it was kept: {part}",
+    "{part} Stored once. Now it is yours too."
+  ],
+  "culture": [
+    "About Odun: {part}",
+    "{part} That is how we have endured.",
+    "We are plain people, so plainly: {part}",
+    "Along the warm band, this is true: {part}",
+    "{part} We are what the ice left."
+  ],
+  "request": [
+    "We ask this plainly: {part}",
+    "{part} Answer when the weather allows.",
+    "From the ice, a request: {part}",
+    "{part} We can wait. We are good at waiting.",
+    "Odun asks one thing: {part}"
+  ],
+  "verdict": [
+    "We have weighed it against the winter. {part}",
+    "{part} It will not change with the weather.",
+    "Our answer, from the ice: {part}",
+    "{part} That is all we will say on it.",
+    "Decided slowly, as the ice moves: {part}"
+  ],
+  "accord": [
+    "On the agreement between us: {part}",
+    "{part} We say it as plainly as the Ice Treaty.",
+    "On what we share: {part}",
+    "{part} We do not change terms lightly.",
+    "Written down and put in the stores: {part}"
+  ]
+}
