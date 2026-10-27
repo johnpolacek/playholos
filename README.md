@@ -20,7 +20,22 @@ Spoilers: the design docs and `game/data/worlds/` say who the neighbors are.
 - `explorations/v2-mocks/`: the game's screens, mocked from one game. `python3 explorations/v2-mocks/build.py` rebuilds them from a draw of `calcs/seed.py`.
 - `legacy/`: earlier designs. Where v2 says nothing, [v1](legacy/v1/README.md) still holds. First-round records are in [legacy/alpha-1](legacy/alpha-1/README.md).
 
-## Running it
+## Play on your own Claude subscription
+
+Anyone with Claude Pro or Max can run the game on their own machine, with the Mind answering on their own Claude login. No API key, no cost beyond the subscription.
+
+1. Install [Node](https://nodejs.org) 20.9 or later, and [Claude Code](https://claude.com/claude-code). Run `claude` once to log in.
+2. Then:
+
+```sh
+git clone https://github.com/johnpolacek/playholos.git
+cd playholos
+npm run play
+```
+
+It installs what it needs, starts the game, and opens it at http://localhost:5173. Each question to the Mind runs through the `claude` CLI and counts against your plan's usage.
+
+## Running it for development
 
 Needs Node 20.9 or later. The Python in `calcs/` and `scripts/` needs only Python 3.
 
@@ -28,9 +43,11 @@ Needs Node 20.9 or later. The Python in `calcs/` and `scripts/` needs only Pytho
 npm install                 # the atlas's packages, which the game also uses
 cd game
 npm install
-cp .env.example .env.local  # then add your Anthropic API key, for the Mind
-npm run dev                 # http://localhost:3000
+cp .env.example .dev.vars   # then add your Anthropic API key, for the Mind
+npm run dev                 # http://localhost:5173
 ```
+
+`npm run dev:cli` in `game/` skips the key and asks on your Claude login, as `npm run play` does.
 
 `npm test` at the root checks the atlas against JPL Horizons. `npm test` in `game/` checks the simulation against the Python.
 
