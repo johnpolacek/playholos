@@ -67,3 +67,13 @@ export function KeyMark({ size = 14 }: { size?: number }) {
     </svg>
   );
 }
+
+/** A terminal: its window and a prompt. */
+export function Prompt({ size = 14 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 16 16" aria-hidden className="shrink-0" {...LINE}>
+      <rect x="1.75" y="2.75" width="12.5" height="10.5" rx="1.5" />
+      <path d="M4.5 6.5 6.75 8.5 4.5 10.5M8.5 10.5h3" />
+    </svg>
+  );
+}
