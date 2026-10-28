@@ -6,11 +6,11 @@ import type { Will } from "@/lib/game/types";
 import { describeCharter } from "@/lib/game/charter";
 import { describeLeads } from "@/lib/game/leads";
 import { kt, matterAt, schedule } from "@/lib/game/plan";
-import { colonyRoad, kitOf } from "@/lib/game/reach";
+import { kitOf } from "@/lib/game/reach";
 import { readGifts, readLater, readColony, readLenses, readObserve, readSentinels, readSeeds, readQueue, readStops, readWill, readPickets, readStrikes } from "./orders";
 import { describeBuilds, describeQueue, describeRock } from "@/lib/mind/builds";
 import { FOUND, rockOf } from "@/lib/game/rocks";
-import { harmOrders, hitsAt } from "@/lib/game/hits";
+import { colonyOf, harmOrders, hitsAt, restoreOf, survivorAt } from "@/lib/game/hits";
 import { describeConflict } from "@/lib/mind/conflict";
 import { answersHeard, describeSent, readSent } from "@/lib/game/sends";
 import { readReactions } from "./react";
@@ -138,7 +138,11 @@ export async function mind(req: Request) {
   const year = at === null || at < 0 ? null : at;
   const base = schedule(plan, scale);
   const hits = inPool(seed) ? hitsAt(plan, scale, seed, readReactions(reactions), { ...base, [FOUND]: rockOf(seed)?.found ?? null }, year ?? 0) : [];
-  const done = hits.length ? schedule(plan, scale, harmOrders(hits)) : base;
+  // Earth lost: our backup wakes where something can run it, and regrows. 2026-10-28.
+  const end = hits.find((h) => !h.screened && h.harm.ends);
+  const lives = end && world ? survivorAt(base, end.lands, colonyOf(plan, scale, (n) => starD(world, n))) : null;
+  const restore = end && lives ? restoreOf(lives.name, base, end.lands) : null;
+  const done = hits.length ? schedule(plan, scale, harmOrders(hits, restore)) : base;
   let known = "";
   if (world) {
     const kit = kitOf(plan, scale);
@@ -159,7 +163,7 @@ export async function mind(req: Request) {
     queue: describeQueue(plan, done, year),
     sent: describeSent(readSent(sent), year),
     known,
-    conflict: world ? describeConflict(world, readReactions(reactions), kitOf(plan, scale), hits, done, colonyOf(world, plan, scale), year) : "",
+    conflict: world ? describeConflict(world, readReactions(reactions), kitOf(plan, scale), hits, done, colonyOf(plan, scale, (n) => starD(world, n)), year) : "",
     rock: inPool(seed) ? describeRock(rockOf(seed), plan, { ...done, [FOUND]: rockOf(seed)?.found ?? null }, year) : "",
     now: now(began, away),
   };
@@ -214,9 +218,6 @@ export async function mind(req: Request) {
   return createUIMessageStreamResponse({ stream: toUIMessageStream({ stream: result.stream, onError, messageMetadata }) });
 }
 
-/** Our Mind at a star or a hole, where it stands and how far: one of the places the Will can live on if Earth falls. */
-function colonyOf(world: Awaited<ReturnType<typeof loadWorld>>, plan: Parameters<typeof colonyRoad>[0], scale: number) {
-  const c = plan.colony;
-  const d = c ? Object.values(world.stars).find((x) => x.shown === c.name || x.name === c.name)?.d : undefined;
-  return c && d !== undefined ? { star: c.name, d, stands: colonyRoad(plan, scale, 0, c.name, d).stands } : null;
-}
+/** A star's distance in light-years, by the name players see. */
+const starD = (world: Awaited<ReturnType<typeof loadWorld>>, name: string) =>
+  Object.values(world.stars).find((x) => x.shown === name || x.name === name)?.d;

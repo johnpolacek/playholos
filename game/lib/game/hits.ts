@@ -5,7 +5,7 @@
 import { harmOf, rockMt } from "@/lib/sim/conflict";
 import type { Order } from "@/lib/sim/works";
 import { YEAR_0 } from "./clock";
-import { screensOf } from "./reach";
+import { colonyRoad, screensOf } from "./reach";
 import { rockAt, rockOf } from "./rocks";
 import type { Plan, Reaction } from "./types";
 
@@ -38,9 +38,48 @@ export function hitsAt(
   return out.sort((a, b) => a.lands - b.lands);
 }
 
-/** The hits as harm in the pace. A strike that ends Earth leaves it no thought, for good. */
-export const harmOrders = (hits: readonly Hit[]): Order[] =>
-  hits.filter((h) => h.harm.share > 0).map((h) => ({ y: h.lands, harm: h.harm.share, recover: h.harm.ends ? 1e9 : h.harm.recover }));
+/** The hits as harm in the pace. A strike that ends Earth leaves it no thought, unless a backup of our Mind wakes
+ *  where something can run it, and regrows from there. */
+export function harmOrders(hits: readonly Hit[], restore: Restore | null = null): Order[] {
+  return hits
+    .filter((h) => h.harm.share > 0)
+    .map((h): Order =>
+      h.harm.ends && restore
+        ? { y: h.lands, restore: restore.from, doubling: restore.doubling }
+        : { y: h.lands, harm: h.harm.share, recover: h.harm.ends ? 1e9 : h.harm.recover },
+    );
+}
+
+/** How a backup of our Mind comes back: the share of Earth's thought it wakes with, and the Years its industry takes to
+ *  double, back to all of it. A vault alone is 10 kt of machines and a copy of us: a seed factory, which Metzger et al.
+ *  2013 grow in generations 2 years apart. The Moon Vault wakes on whatever else we built off Earth, as samples. The
+ *  Trojan Vault has only a small dark rock to work, so it doubles slower, a sample. Our colony is a Mind with its own
+ *  industry already. 2026-10-28. */
+export interface Restore {
+  from: number;
+  doubling: number;
+}
+const OFF_EARTH: [string, number][] = [
+  ["Cold Annex", 0.2],
+  ["Power from Orbit", 0.15],
+  ["Orbital Foundry", 0.03],
+  ["Mass Driver", 0.02],
+  ["Belt Mining", 0.02],
+  ["Orbital Yard", 0.01],
+];
+export function restoreOf(lives: string, done: Record<string, number | null>, lost: number): Restore {
+  if (lives === "the Moon Vault")
+    return { from: OFF_EARTH.reduce((s, [n, share]) => s + ((done[n] ?? Infinity) <= lost ? share : 0), 0.001), doubling: 2 };
+  if (lives === "the Trojan Vault") return { from: 0.001, doubling: 3 };
+  return { from: 0.01, doubling: 2 };
+}
+
+/** Our colony as a place the Will can live on: where it stands and how far its light is, from a star's distance. */
+export function colonyOf(plan: Plan, scale: number, dOf: (star: string) => number | undefined) {
+  const c = plan.colony;
+  const d = c ? dOf(c.name) : undefined;
+  return c && d !== undefined ? { star: c.name, d, stands: colonyRoad(plan, scale, 0, c.name, d).stands } : null;
+}
 
 /** Light-years from Earth to the Moon, 1.3 light-seconds, and to the Trojan Vault at L4, 499. */
 const YEAR_S = 31_557_600;

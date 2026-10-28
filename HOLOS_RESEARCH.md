@@ -497,6 +497,7 @@ Anchors for [the project audit](HOLOS_PROJECT_AUDIT.md).
   - **[Metzger et al. 2013, bootstrapping](https://arxiv.org/abs/1612.03238)** · Published, J. Aerospace Engineering. Abstract and growth section read by the agent. Industry grows in generations 2 years apart. 12 t landed grows to 156 t of plant in about 20 years, 41 t to up to 40,000 t.
   - **[Sanders, Kleinhenz and Linne 2022](https://ntrs.nasa.gov/citations/20220008799)** · NASA, COSPAR. Read by the agent. NASA’s notional plan: tens of tonnes a year at first, scaling to hundreds or thousands. No dates.
   - Matters: megatonnes of lunar metal a year need self-copying growth, as Metzger describes. No real plan names a date.
+  - Used, 2026-10-28: a vault’s backup regrows our thought by doubling every 2 Years, Metzger’s generation, in lib/game/hits.ts.
   - **Asteroid mining, 2023 to 2026.** From Wikipedia, read by the agent. AstroForge’s Brokkr-1 failed in 2023, and Odin was lost in March 2025 before reaching its asteroid. Vestri waits for a flight not before 2027. Nothing has been mined.
   - Matters: 6 Years of prospecting fits real cruise times. 20 Years to 120 kt a year has nothing behind it, and nothing against it.
   - **FarView, full text** ([arXiv 2404.03840](https://arxiv.org/abs/2404.03840)), read by the agent in the PDF. The whole array needs about 50 to 70 t of aluminum. About 5 t of landed equipment refines 10 to 15 t of metal a year. Rovers lay one 400-dipole subarray a lunar day, about 250 in all, over 4 to 8 years.

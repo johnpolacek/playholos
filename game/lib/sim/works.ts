@@ -19,8 +19,11 @@ export type Order =
   | { y: number; gift: string; steps: number } // a neighbor's knowledge, all of it come: our thought goes `steps`
                                             // steps further from then, as many data centers would. Once a star.
                                             // 2026-10-26
-  | { y: number; harm: number; recover: number }; // a strike on Earth: this share of our thought lost, won back
+  | { y: number; harm: number; recover: number } // a strike on Earth: this share of our thought lost, won back
                                             // evenly over `recover` Years. lib/sim/conflict.ts. 2026-10-28
+  | { y: number; restore: number; doubling: number }; // Earth's Mind lost, and its backup woken where something
+                                            // can run it: this share of our thought, doubling every so many Years
+                                            // as its industry copies itself, back to all of it. lib/game/hits.ts
 
 interface Work {
   years?: number;                   // standard Years, at the thought its want buys
@@ -105,8 +108,15 @@ export function pace(orders: readonly Order[], until: number, { scale = 1, aside
   let s: number[] = [], room = 0, idle = 0, thought = 0;
   const gifts = new Map<string, number>();
   const harms: { y: number; harm: number; recover: number }[] = [];
+  const backup: { o: { y: number; restore: number; doubling: number } | null } = { o: null };
+  /** What a woken backup thinks with at Year `at`, as a share of what Earth had: none before it wakes. */
+  const regrown = (at: number) => {
+    const r = backup.o;
+    return r && at >= r.y ? Math.min(1, r.restore * 2 ** ((at - r.y) / r.doubling)) : 1;
+  };
   /** What strikes leave of our thought at Year t: each loss shrinking as we rebuild. */
-  const spared = (at: number) => harms.reduce((m, h) => m * (1 - h.harm * Math.max(0, 1 - (at - h.y) / h.recover)), 1);
+  const spared = (at: number) =>
+    harms.reduce((m, h) => m * (1 - h.harm * Math.max(0, 1 - (at - h.y) / h.recover)), 1) * regrown(at);
 
   const rockAt = (y: number) => Object.entries(CATALOG.rock).reduce((kt, [w, rate]) => kt + rate * Math.max(0, y - (done[w] ?? Infinity)), 0);
   const rockRate = () => Object.entries(CATALOG.rock).reduce((r, [w, rate]) => r + (done[w] !== undefined ? rate : 0), 0);
@@ -151,6 +161,7 @@ export function pace(orders: readonly Order[], until: number, { scale = 1, aside
         if ("studies" in o) studies = o.studies;
         else if ("gift" in o) { if (!gifts.has(o.gift)) gifts.set(o.gift, o.steps); }
         else if ("harm" in o) harms.push(o);
+        else if ("restore" in o) backup.o = o;
         else if ("standing" in o) standing = true;
         else if ("first" in o) { const i = line.indexOf(o.first); if (i >= 0) { line.splice(i, 1); line.unshift(o.first); moved.add(o.first); } }
         else if ("drop" in o) {
@@ -188,6 +199,7 @@ export function pace(orders: readonly Order[], until: number, { scale = 1, aside
     for (const [a, b] of aside) for (const edge of [a, b]) if (edge > t + EPS) next = Math.min(next, edge);
     // While we rebuild, thought comes back a little each tenth of a Year.
     if (harms.some((h) => t + EPS < h.y + h.recover)) next = Math.min(next, t + 0.1);
+    if (backup.o && t + EPS >= backup.o.y && regrown(t) < 1) next = Math.min(next, t + 0.25);
     if (building !== null) next = Math.min(next, building + CATALOG.dataCenter.years);
     line.forEach((w, i) => {
       const l = left.get(w), m = WORKS[w].milestone;

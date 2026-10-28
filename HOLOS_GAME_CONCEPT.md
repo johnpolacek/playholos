@@ -783,7 +783,13 @@ Settled 2026-10-28, from the designer: anything available to another civilizatio
 - **Endings, built 2026-10-28.** From 10⁸ Mt no Mind of ours lives on Earth. The Will crosses to the Moon Vault, the Trojan Vault or our colony, whichever stood first, a Year for each light-year, through the Will’s own crossing screen. Otherwise the game ends half a minute after the flash.
 - **On the map, 2026-10-28.** Bullets fly their tracks on Scan’s messages map. A strike’s flash spreads as a ring of light from where it lands. On the globe, each strike flashes, then leaves a rose ring as wide as its blast.
 - **Neighbors, by the same rules, 2026-10-28.** A neighbor that guards against a source screens the line to it, 4 Years later, and our bullet can burst on it. Neighbors strike each other on each other’s news: the target is struck, or its screen is hit, and answers by its table. No one else sees it: no neighbor’s craft watches another’s system. We see launches and strikes only where a sentinel of ours stands, a light-time late. One fired at us is warning ten times as long as its word takes to come.
-- **Not yet:** what our Mind in a vault can build, warnings between neighbors, and dimming our glow.
+- **A vault is a backup, 2026-10-28, from the designer.** A copy can act only once it wakes on something that runs it.
+  - *The Moon Vault* wakes on what we built off Earth: its own seed of machines, 0.1% of Earth’s thought, plus the Cold Annex 20%, Power from Orbit 15%, the Orbital Foundry 3%, the Mass Driver and Belt Mining 2% each, the Orbital Yard 1%. Samples.
+  - *The Trojan Vault* has only its seed and a small dark rock: 0.1%, and slower to grow.
+  - *Our colony* is a Mind with its own industry: 1%.
+  - *Then its industry copies itself,* doubling every 2 Years as Metzger et al. 2013’s lunar seed grows, 3 at the Trojan Vault, back to all Earth had. So space builds are Earth’s real insurance.
+  - Not yet: which builds a backup can still make, and where.
+- **Not yet:** warnings between neighbors, and dimming our glow.
 
 ## Hostility
 

@@ -206,6 +206,15 @@ test("parity both ways: a neighbor's guard screens our bullet, and neighbors str
   assert.ok(!due.some((l) => l.news === "strike_seen"));
 });
 
+test("Earth lost: a backup wakes small where something can run it, and doubles back to all of it", () => {
+  const g = golden.works[0];
+  const at = (y: number, extra: Order[] = []) => pace([...(g.orders as Order[]), ...extra], y, { scale: g.scale, aside: g.aside as [number, number, number][] }).thought;
+  const lost: Order = { y: 30, restore: 0.01, doubling: 2 };
+  assert.ok(Math.abs(at(30.01, [lost]) / at(30.01) - 0.01) < 0.001);
+  assert.ok(Math.abs(at(34, [lost]) / at(34) - 0.04) < 0.002);
+  assert.ok(Math.abs(at(50, [lost]) / at(50) - 1) < 1e-9);
+});
+
 test("the Halo Survey sees what calcs/neighbors.py's glow_at gives, over ALMA's floor: none by Year 50, 12 by Year 100", async () => {
   let fifty = 0, hundred = 0;
   for (const seed of POOL) {

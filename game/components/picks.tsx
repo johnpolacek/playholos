@@ -7,7 +7,8 @@ import { OpensLine } from "@/components/opens";
 import { Face, ListHead } from "@/components/tab-head";
 import { MS_PER_YEAR, span, tenths } from "@/lib/game/clock";
 import { FOUND, rockOf } from "@/lib/game/rocks";
-import { harmOrders, hitsAt } from "@/lib/game/hits";
+import { colonyOf, harmOrders, hitsAt, restoreOf, survivorAt } from "@/lib/game/hits";
+import { target } from "@/lib/game/sends";
 import type { EarthPast } from "@/lib/game/past";
 import { BUILDS, buildSlug, EMPTY, FOMALHAUT, inUse, lacks, moves, needs, openAt, PAST, schedule, sharesAt, takenAt } from "@/lib/game/plan";
 import { SITES } from "@/lib/game/sites";
@@ -67,7 +68,13 @@ export function useSchedule() {
     () => (tenth === null ? [] : hitsAt(plan, scale, seed, save?.reactions ?? [], base, tenth)),
     [plan, scale, seed, save?.reactions, base, tenth],
   );
-  const harm = useMemo(() => harmOrders(hits), [hits]);
+  // Earth lost: our backup wakes where something can run it, and regrows. 2026-10-28.
+  const restore = useMemo(() => {
+    const end = hits.find((h) => !h.screened && h.harm.ends);
+    const lives = end ? survivorAt(base, end.lands, colonyOf(plan, scale, (n) => target(n)?.d)) : null;
+    return end && lives ? restoreOf(lives.name, base, end.lands) : null;
+  }, [hits, base, plan, scale]);
+  const harm = useMemo(() => harmOrders(hits, restore), [hits, restore]);
   const done = useMemo(
     (): Record<string, number | null> => (harm.length ? { ...schedule(plan, scale, harm), [FOUND]: found } : base),
     [harm, plan, scale, found, base],

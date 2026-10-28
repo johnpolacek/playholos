@@ -2,9 +2,8 @@ import { useEffect, useMemo } from "react";
 import { useGame } from "@/components/game-provider";
 import { useSchedule } from "@/components/picks";
 import { tenths, YEAR_0 } from "@/lib/game/clock";
-import { scarOf, survivorAt } from "@/lib/game/hits";
+import { colonyOf, scarOf, survivorAt } from "@/lib/game/hits";
 import { setScars } from "@/lib/scars";
-import { colonyRoad } from "@/lib/game/reach";
 import { target } from "@/lib/game/sends";
 
 // When a strike ends Earth's Mind: from 10⁸ Mt no Mind of ours lives on Earth. If a vault or our colony stands by then,
@@ -15,11 +14,7 @@ export function Fate() {
   const { hits, done, scale } = useSchedule();
   const end = hits.find((h) => !h.screened && h.harm.ends);
   const plan = save?.plan;
-  const colony = useMemo(() => {
-    const c = plan?.colony;
-    const d = c ? target(c.name)?.d : undefined;
-    return plan && c && d !== undefined ? { star: c.name, d, stands: colonyRoad(plan, scale, 0, c.name, d).stands } : null;
-  }, [plan, scale]);
+  const colony = useMemo(() => (plan ? colonyOf(plan, scale, (n) => target(n)?.d) : null), [plan, scale]);
   const lives = end ? survivorAt(done, end.lands, colony) : null;
   const will = save?.will;
   // Every strike that landed, a flash and a scar on the globe, on every screen that shows it.

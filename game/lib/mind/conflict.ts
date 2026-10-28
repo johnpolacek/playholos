@@ -1,7 +1,10 @@
 // What the Mind knows of strikes, screens and watched probes: only what has reached us. A bullet coming is dark until
 // it lands, and a probe braking in shows only to our X-ray watch in its last weeks. Settled 2026-10-28.
 import { tenths } from "@/lib/game/clock";
-import { survivorAt, type Hit } from "@/lib/game/hits";
+import { restoreOf, survivorAt, type Hit } from "@/lib/game/hits";
+
+/** A share, as a percent: tenths below one. */
+const pct = (x: number) => (x < 0.01 ? `${(x * 100).toFixed(1)}%` : `${Math.round(x * 100)}%`);
 import { HARM_WORDS, probeFate, probesToUs, strikesBetween, strikesOnUs, type ProbeToUs } from "@/lib/sim/conflict";
 import catalog from "@/data/works.json";
 
@@ -31,7 +34,12 @@ export function describeConflict(
   const end = hits.find((h) => !h.screened && h.harm.ends);
   if (end) {
     const lives = survivorAt(done, end.lands, colony)?.name;
-    lines.push(lives ? `Earth's Mind was lost at Year ${tenths(end.lands)}. We live on in ${lives}.` : `Earth's Mind was lost at Year ${tenths(end.lands)}, and no Mind of ours stood anywhere else. The game is over.`);
+    const r = lives ? restoreOf(lives, done, end.lands) : null;
+    lines.push(
+      lives && r
+        ? `Earth's Mind was lost at Year ${tenths(end.lands)}. Our backup woke in ${lives} with ${pct(r.from)} of the thought Earth had, on what stood off Earth, and its industry copies itself to double that every ${r.doubling} Years, back to all of it.`
+        : `Earth's Mind was lost at Year ${tenths(end.lands)}, and no Mind of ours stood anywhere else. The game is over.`,
+    );
   }
   const seen = probesToUs(world, reactions).flatMap((p: ProbeToUs) => {
     const f = probeFate(p, kit.xray ?? null, kit.interceptor ?? null);
