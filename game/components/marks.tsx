@@ -303,6 +303,24 @@ const Driver = ({ size, still }: MarkProps) => (
   </Moving>
 );
 
+/** The Launch Tunnel: a mountain, a tunnel up through it, and a craft thrown out of its mouth. Ours. 2026-10-27. */
+const Tunnel = ({ size, still }: MarkProps) => (
+  <Moving
+    size={size}
+    still={still}
+    move={(_, part) =>
+      void gsap
+        .timeline({ repeat: -1, repeatDelay: 0.6, delay: offset() })
+        .fromTo(part("craft"), { attr: { cx: 2.2, cy: 13.2 }, opacity: 1 }, { attr: { cx: 15, cy: 3.4 }, duration: 1.1, ease: "power2.in" })
+        .to(part("craft"), { opacity: 0, duration: 0.25 }, "-=0.25")
+    }
+  >
+    <path d="M1 14.6 7 5.2l2.4 3.4 1.6-1.8 4 7.8" />
+    <path d="M2.2 13.2 9.6 9.4" strokeDasharray="1 1.2" />
+    <circle data-k="craft" cx={still ? 11.6 : 2.2} cy={still ? 7.8 : 13.2} r="1" fill="currentColor" stroke="none" />
+  </Moving>
+);
+
 /** The Orbital Foundry: a gear turning, slowly. */
 const Foundry = ({ size, still }: MarkProps) => (
   <Moving
@@ -725,6 +743,8 @@ export function BuildMark({ name, size = 16, still }: { name: string; size?: num
       return <Telescope size={size} still={still} />;
     case "Launch Complex":
       return <Rocket size={size} still={still} />;
+    case "Launch Tunnel":
+      return <Tunnel size={size} still={still} />;
     case "Orbital Yard":
       return <Yard size={size} still={still} />;
     case "Moon Vault":

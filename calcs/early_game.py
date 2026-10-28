@@ -335,6 +335,11 @@ WANTS['Halo survey'] = (0.05, 'sample: an observing program on a telescope we ha
 WANTS.update({'Fusion drive': (10, 'sample: no real price exists'), 'Seed ship': (5, 'sample'),
               'Deuterium works': (1, 'sample: twenty-four Bruce plants'), 'Seed ship line': (2, 'sample')})
 D_WORKS_YEARS, D_WORKS_KT = 5, 8          # Bruce took 4 to 5 years. Twenty-four of its peak make about 8 kt of deuterium a Year
+# Settled 2026-10-27: the Launch Tunnel, StarTram's Gen-1 (Powell, Maise and Rather 2010). A 110 km vacuum tunnel in a
+# mountain throws 40 t craft out at 8.78 km/s, 10 a day: 128 kt of cargo a Year at 30 g, never people. $20B to build,
+# about two flagships. They gave 10 to 20 years to first launch from 2010, so 12 is a sample. A ground build: no matter.
+WANTS['Launch tunnel'] = (2.0, 'StarTram Gen-1: about 20 billion dollars')
+TUNNEL_YEARS, TUNNEL_KT = 12, 128
 def split(line, room, push=PUSH):
     """line: (name, want, most) in the player's order, most = how many times its want it can use. Returns {name: s}, idle."""
     give = {}

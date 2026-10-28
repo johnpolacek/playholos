@@ -4,7 +4,8 @@
 // weapon, Mars or fusion, its own road follows, from roadOf. 2026-10-23. What a signal we hear can be, and what
 // retiring the radars would cost, are the concept's "What Earth hears" and "Quieting Earth's radars", added
 // 2026-10-23 when the first traces showed the Mind guessing both. That a knock is a hail, not an answer, is calcs/
-// reactions.py's MOVES, added the same day after the Mind said Ombe's knock answered us.
+// reactions.py's MOVES, added the same day after the Mind said Ombe's knock answered us. Lift beyond rockets,
+// asteroids and the far side, 2026-10-27, from HOLOS_RESEARCH.md's "Builds we lack".
 import type { EarthPast } from "@/lib/game/past";
 
 export const EARTH_AT_YEAR_0 = `What Earth has at Year 0, 2040:
@@ -16,6 +17,9 @@ export const EARTH_AT_YEAR_0 = `What Earth has at Year 0, 2040:
 - What matter is for: instruments and probes weigh tonnes, so matter piles up early. The great works need megatonnes, and those must come from the Moon or the belt. Even at 55 kt a Year, with one Launch Complex, 10 Mt from Earth would take 180 Years of lift. A mass driver on the Moon takes about 24 Years to build at standard pace, then throws about 600 kt a Year. Belt mining takes about 20 Years, then brings about 120 kt a Year. More compute can shorten a build to about two thirds of its standard time, and no further. Rock from the Moon and flight between stars are physical, and compute shortens neither.
 - Four kinds of matter: metal from the belt or lifted from Earth, rock from the Moon, ice from the belt or Earth's oceans, and helium-3 from Uranus's air.
 - Space: crewed Moon landings since 2028. South-pole stations are planned, likely late. No one is on Mars.
+- Lift beyond rockets: none flies. No space elevator: the strongest long fiber made holds about an eighth of what one needs. A maglev launch tunnel, the Launch Tunnel, is priced but unbuilt. Power has been beamed from orbit only in small tests, never at grid scale.
+- Asteroids: NEO Surveyor and Rubin have found about 9 in 10 asteroids over 140 m that could hit Earth, and none is coming. DART showed in 2022 that a craft can push one aside, given years of warning.
+- The Moon's far side: small radio receivers there have heard the sky below 30 MHz, which Earth's air blocks. No large dish or array stands there.
 - Probes: the Voyagers fell silent in the 2030s, Voyager 1 near 30 light-hours out. New Horizons is near 14 light-hours. Interstellar Probe may be on its way.
 - Instruments: today's, plus PLATO, Roman, the ELT and the SKA. The Habitable Worlds Observatory is still being built, about 8 Years from done at its real pace. Earth can feel nearby worlds by their tug, but can't read any neighbor's air.
 - The sky watch is a drift scan, like CHORD: each northern direction passes through it about 10 minutes a day. It would catch about 1 early signal in 5.

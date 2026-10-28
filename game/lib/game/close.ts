@@ -365,6 +365,50 @@ function launchComplex(): Close {
   };
 }
 
+// ── Launch Tunnel ──
+// StarTram's Gen-1 through Cayambe, drawn as the mountain's contours round its summit, about 3 km over the land round
+// it. Their tunnel runs 110 km, so only its last 60 show, rising from the 300 MW plant to a mouth high on the east
+// flank. Its coils light every 5 km. Craft leave at 8.8 km/s and climb east, thinning their way out of the air. The
+// contours, the tunnel's rise and the mouth's place are ours.
+function launchTunnel(): Close {
+  const have: number[] = [];
+  for (const [z, r] of [
+    [0, 13],
+    [1, 9],
+    [2, 5],
+    [2.6, 2.2],
+    [2.9, 0.6],
+  ])
+    have.push(...circle([0, 0, z], r, [0, 0, 1], 48));
+  const [start, mouth]: [V, V] = [
+    [-60, 0, -0.6],
+    [4.4, 0, 2.1],
+  ];
+  const along = unit([mouth[0] - start[0], 0, mouth[2] - start[2]]);
+  const at = (t: number): V => [0, 1, 2].map((j) => start[j] + t * (mouth[j] - start[j])) as V;
+  const b = new Rising().add(box(start[0] - 1.5, -2.5, 1.6, 1, 0.12, start[2] + 0.6));
+  b.lit([start[0] - 1.5, -2.5, start[2] + 0.75]);
+  for (let i = 0; i <= 13; i++) {
+    const t = i / 13;
+    b.add(i ? path([at((i - 1) / 13), at(t)]) : [], circle(at(t), 0.12, along, 12));
+    b.lit(at(t));
+  }
+  b.add(circle(mouth, 0.3, along, 16));
+  const climb: V[] = [mouth, [12, 0, 4.5], [30, 0, 11], [60, 0, 24], [100, 0, 45]];
+  return {
+    view: { km: 70, el: 14, az: 200, at: [-14, 0, 1] },
+    have,
+    ...b.done(0.12),
+    haveLights: [],
+    sky: path(climb),
+    runs: [0, 0.5].map((offset) => ({ pts: [...start, ...climb.flat()], secs: 4, offset })),
+    towns: [
+      ["Cayambe", 0.041, -78.145, 39000],
+      ["Quito", -0.18, -78.467, 2000000],
+    ],
+  };
+}
+
 // ── Orbital Yard ──
 // A kiloton in orbit, a little over twice the ISS, which is 109 m by 73 m: drawn as a truss 200 m long with arms,
 // solar wings and a hull being joined below it. Spent stages drift near, the spare metal it works from. The shape is
@@ -1056,6 +1100,7 @@ export const CLOSE: Record<string, Close> = {
   "All-Sky Watch": allSkyWatch(),
   "Deep Flash Watch": deepFlashWatch(),
   "Launch Complex": launchComplex(),
+  "Launch Tunnel": launchTunnel(),
   "Orbital Yard": orbitalYard(),
   "Infrared Telescope": infraredTelescope(),
   "Moon Vault": moonVault(),

@@ -113,6 +113,10 @@
    "years": 18,
    "want": 0.5,
    "orbit": true
+  },
+  "Launch tunnel": {
+   "years": 12,
+   "want": 2.0
   }
  },
  "floor": 0.6666666666666666,

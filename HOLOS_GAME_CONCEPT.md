@@ -312,6 +312,10 @@ Settled 2026-10-06. Replaces v1’s numbers ([v1: Economy and projects](legacy/v
   - *Matter is real in the top bar, 2026-10-20.* It shows what we hold in orbit: 20 kt at Year 0, 15 kt a Year from spare lift, and 40 more once the Launch Complex is done, less what our builds take as each begins. The Orbital Yard’s 1 kt counts too. With the complex alone, about 514 kt by Year 10, against 170 without. The Mind is told it too. Energy and compute are still placeholders.
   - *Priced 2026-10-13:* belt mining and the mass driver keep v1’s 20 and 24 Years, and the driver no longer waits for the belt. See [Build times](#build-times).
   - Set aside: hiding matter until a megatonne work is on offer, and shrinking Earth’s lift so matter stays scarce.
+- **What else stands at Year 0, settled 2026-10-27.** From the newest results, logged in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#builds-we-lack). The Mind is told all three.
+  - *No lift beyond rockets.* No space elevator: the best long fiber, 12.5 GPa in 2026, is about an eighth of what one needs. SpinLaunch hasn’t flown to orbit. Power beamed from orbit stays at test scale: China aims at 10 MW by 2035, and none feeds a grid.
+  - *Asteroids are known.* NEO Surveyor, launched about 2027, and Rubin find about 9 in 10 over 140 m by the late 2030s, and none is coming. DART showed in 2022 that a craft can push one aside, given years of warning. No build guards against them, since nothing is coming.
+  - *The far side has been heard.* LuSEE-Night, landing in 2027, and small craft like it have listened below 30 MHz, which Earth’s air blocks. No large dish stands there.
 - **Instruments and probes:** as in the backbone above.
 - **The sky watch is a drift scan.** Like CHORD, finished in 2028: each northern direction passes through it for about 10 minutes a day. v1’s always-on watch of the whole sky becomes a project: dense aperture arrays on two continents ([the audit](HOLOS_PROJECT_AUDIT.md#calculations)).
 - **What moves with the smaller grid.** Compute takes about 1% of energy, not v1’s 10%, so even more energy sits idle early. A ground data center’s +50% compute draws about 0.5% of energy at first: see [Growing compute](#growing-compute). The industry cap at 100 GJ a tonne falls to about 7.5 Gt a year (v1: 30). Star lifting needs about 200,000 times the grid (v1: 50,000). A Sun-like star’s whole output is about 16 trillion times it (v1: four trillion).
@@ -428,6 +432,23 @@ Settled 2026-10-10. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#earth-to-ye
   - *Belt prospecting, then mining:* 6 and 20 Years, v1’s. Then 120 kt a Year. Nothing like it has flown.
   - *A far-side array:* 30 Years, v1’s, begun once the driver’s mine exists. About 1 Mt of metal made in place. FarView plans 4 to 8 years for a fifth of the area, in far lighter antennas.
   - *Power from orbit:* about 10 Mt for a fifth more energy, so its pace is the pace rock arrives.
+    - *Checked 2026-10-27:* NASA’s 2024 study gives about 2.9 kt a GW, so a fifth of 24 TW is about 14 Mt. The 10 Mt stands.
+- **The Launch Tunnel, built 2026-10-27.** StarTram’s Gen-1 (Powell, Maise and Rather 2010), the firmest lift past rockets any study offers. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#builds-we-lack).
+  - *What it is.* A 110 km vacuum tunnel through Cayambe, on the equator, throws 40 t craft out at 8.8 km/s, ten a day. Cargo only, at 30 g. The mountain is ours: they named the Andes or Africa.
+  - *Its price:* 12 Years, a sample from their 10 to 20. About two flagships, from its $20 billion. A ground build, so no matter.
+  - *What it gives:* 128 kt a Year of lift, three times the Launch Complex. Open at Year 0, but not in the walk on Build, since nothing we could start then waits on lift.
+  - *Untested:* the door of charged air that keeps the sky out of the tunnel.
+- **Weighed 2026-10-27 and set aside.** Each has sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#builds-we-lack).
+  - *A lunar elevator:* works in today’s fibers, but lifts 0.6 kt a Year, a thousandth of the Mass Driver.
+  - *An Earth elevator:* waits on a fiber no one has made.
+  - *A spinning tether in orbit:* needs a Mach 10 plane to meet it.
+  - *A launch loop:* its own inventor says its stability is unsolved.
+  - *An orbital ring:* 180 kt to start, from figures we could only read in a poor scan. A candidate after the Mass Driver.
+  - *A crater dish on the far side:* tonnes, not megatonnes, but at 350 m it hears no neighbor’s hum. It reads the early universe, not minds.
+  - *A space solar pilot:* 2 GW, under a hundredth of a percent of the grid. Power from Orbit already covers the road.
+  - *Asteroid defense:* nothing is coming. A build can wait for a rock that is.
+  - *A focus probe:* the Solar Lens already reaches the Sun’s focus.
+  - *New drives:* none beats the Fusion Drive to the stars. Fission fragment, PuFF and direct fusion are fast inside the solar system only. Mini-Mag Orion claims a tenth of light speed, untested.
   - *The mock’s game at standard pace, each begun when the Mind first offers it.* Replaced 2026-10-14 by the paced replay in [Growing compute](#growing-compute). The mirror: Year 23. Driver and foundry: Year 30. Belt mining: Year 32. Laser array: Year 34. Ten megatonnes in orbit: Year 45. Far-side array: Year 60.
   - *So the plateau lasts about 34 Years:* 2.8 hours of play, from the grid limit at Year 11 to power from orbit at about Year 45, whose fifth more energy makes room for a twelfth data center. Ground solar adds a fifth at Year 21.
   - *The whole far-side array arrives about when Varn wakes,* Year 57.6. Its first fifth arrives 24 Years sooner.

@@ -155,6 +155,9 @@ def works_catalog():
     # The Mind Link, settled 2026-10-26: 100 m optics in orbit and a 1 GW laser, to send the Will to our Mind at a hole.
     # calcs/holes.py.
     works['Mind link'] = dict(years=H.LINK_YEARS, want=H.LINK_WANT, orbit=True)
+    # The Launch Tunnel, settled 2026-10-27: StarTram's Gen-1, a ground build. Its lift is plan.ts's, as the Launch
+    # Complex's is.
+    works['Launch tunnel'] = dict(years=eg.TUNNEL_YEARS, want=eg.WANTS['Launch tunnel'][0])
     return dict(works=works, floor=eg.FLOOR, push=eg.PUSH, flagship=eg.FLAGSHIP_THOUGHT, gridRoom=eg.GRID_ROOM, step=1.5,
                 dataCenter=dict(years=1, aside=0.05), halo=dict(floor=eg.HALO['floor'], every=eg.HALO['every']), lens=dict(au=signs.LENS_AU, flight=round(signs.LENS_FLIGHT, 3), look=signs.LENS_LOOK, km30pc=25),
                 sentinel=dict(build=S.ROCKET_BUILD, speed=S.ROCKET_V, burns=S.ROCKET_BURNS),

@@ -29,6 +29,8 @@ export const BUILDS: Build[] = [
   // A near-infrared Gaia, of the GaiaNIR class, 2026-10-26: it finds black holes by the stars they shift.
   { name: "Star Mapper", what: "Maps a billion stars’ places, and finds black holes by the stars they shift.", does: "see" },
   { name: "Launch Complex", what: "Doubles what we lift to orbit.", does: "lift" },
+  // StarTram's Gen-1, 2026-10-27: a ground build, so it spends no matter, and lifts three times what the complex does.
+  { name: "Launch Tunnel", what: "Throws cargo to orbit from a tunnel in the Andes, 128 kt a Year.", does: "lift" },
   { name: "Orbital Yard", what: "Cuts build time in orbit by a quarter.", kt: 1, does: "lift" },
   { name: "Moon Vault", what: "A second home for our Mind, in the Moon’s rock.", kt: 10, does: "keep" },
   // The two roads to the nearest star, open at Year 0 since 2026-10-18. Even last in line, the probe yard's large want
@@ -105,9 +107,10 @@ export const buildOf = (name: string): Build | Later | undefined =>
 
 /** What we could start with, walked one at a time on Build: all but the longest roads' builds, which pay only once
  *  a drive is coming, and the Moon Vault, which can come later. They wait in the list. Chosen 2026-10-19,
- *  the vault left out 2026-10-20, and the Halo Survey and Star Mapper 2026-10-26, which pay off late. */
+ *  the vault left out 2026-10-20, the Halo Survey and Star Mapper 2026-10-26, which pay off late, and the Launch
+ *  Tunnel 2026-10-27, since nothing we could start waits on lift. */
 export const STARTS = BUILDS.filter(
-  (b) => !["Moon Vault", "Halo Survey", "Star Mapper", "Deuterium Works", "Fusion Drive", "Seed Ship"].includes(b.name),
+  (b) => !["Moon Vault", "Halo Survey", "Star Mapper", "Launch Tunnel", "Deuterium Works", "Fusion Drive", "Seed Ship"].includes(b.name),
 );
 
 /** What the Mind says of each build, on its page and in the walk. */
@@ -126,6 +129,8 @@ export const SAYS: Record<string, string> = {
     "A mind that computes cold, far from its star, glows grey, a color no dust has. Herschel saw no such glow. ALMA could see one 25 times fainter, if it is compact. Early on it will likely find only dust. A neighbor whose thinking keeps growing would show in time.",
   "Launch Complex":
     "It doubles what we lift to orbit. Nothing we could start now waits on lift, but the Mass Driver can’t reach the Moon without it.",
+  "Launch Tunnel":
+    "Superconducting magnets throw 40 t craft down a 110 km vacuum tunnel and out of a mountain at 8.8 km/s, ten a day. That is 128 kt a Year, three times the Launch Complex, at about $50 a kilogram. Cargo only: it pulls 30 g. No one has built one, and the door of charged air that keeps the sky out of the tunnel is untested. Nothing we could start now waits on lift.",
   "Orbital Yard": "It builds in orbit in a quarter less time. It pays most if we mean to build a lot up there.",
   "Moon Vault":
     "Nothing we know of threatens Earth yet. This keeps a copy of us out of reach of anything that hits Earth, in case something does. It takes half the matter we hold in orbit.",
@@ -328,12 +333,15 @@ export function moves(plan: Plan, scale: number, work: string, y: number | null 
 export const HELD = 20;
 export const SPARE_LIFT = 15;
 export const LAUNCH_LIFT = 40;
+/** The Launch Tunnel's lift, kt a Year: StarTram Gen-1's, at 10 launches a day. 2026-10-27. */
+export const TUNNEL_LIFT = 128;
 
 /** The matter we hold in orbit at a Year, in kt: the 20 at Year 0 and what spare lift has brought since, 40 kt a Year
  *  more once the Launch Complex is done, less what our builds take, spent as each begins at Year 0. Lift moves no
  *  date, so matter piles up. Rock from the Moon and the belt comes later. 2026-10-20. */
 function held(plan: Plan, done: Record<string, number | null>, year: number) {
   const launch = plan.builds.includes("Launch Complex") ? done["Launch Complex"] : null;
+  const tunnel = ordered(plan).includes("Launch Tunnel") ? done["Launch Tunnel"] : null;
   // Builds from Year 0 spend theirs then, and those ordered in play when ordered: the driver's and the foundry's
   // machines, landed from Earth, since 2026-10-22.
   // Ordered again after it was taken back, a build has its matter already.
@@ -341,7 +349,10 @@ function held(plan: Plan, done: Record<string, number | null>, year: number) {
   const spent =
     plan.builds.reduce((s, b) => s + (buildOf(b)?.kt ?? 0), 0) +
     first.reduce((s, o) => s + (o.y <= year ? (buildOf(o.name)?.kt ?? 0) : 0), 0);
-  const lifted = SPARE_LIFT * year + (launch == null ? 0 : LAUNCH_LIFT * Math.max(0, year - launch));
+  const lifted =
+    SPARE_LIFT * year +
+    (launch == null ? 0 : LAUNCH_LIFT * Math.max(0, year - launch)) +
+    (tunnel == null ? 0 : TUNNEL_LIFT * Math.max(0, year - tunnel));
   return HELD + lifted + rockAt(plan, done, year) - spent;
 }
 

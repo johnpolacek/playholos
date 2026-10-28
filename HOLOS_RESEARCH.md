@@ -1289,11 +1289,13 @@ Gathered 2026-10-26 for a late game: a black hole in the outer Solar System, the
 - **[Fender, Maccarone and Heywood 2013, the closest black holes](https://arxiv.org/abs/1301.1341)** · Published, MNRAS.
   - More than 10⁸ lone holes in the Galaxy, about 35,000 within 815 ly. SKA surveys may see them as faint, fast radio sources.
 - **[El-Badry et al. 2023, Gaia BH1](https://arxiv.org/abs/2209.06833)** · Published, MNRAS.
-  - 9.62 ± 0.18 Suns at 1,560 ly, with a Sun-like star on a 185.6-day orbit. Dormant.
+  - 9.62 ± 0.18 Suns at 1,560 ly, with a Sun-like star on a 185.6-day orbit, 1.40 AU out on average, eccentricity 0.45. Dormant.
+  - Used: the lead page draws its star going round it, to scale against Earth’s orbit.
   - Matters: the nearest known hole, 15 times past the game’s region. *Ours,* 15,600 Years at a tenth of light speed, its first word home at Year 17,160 after launch.
 - **[El-Badry et al. 2023, Gaia BH2](https://arxiv.org/abs/2302.07880)** · Published, MNRAS. 8.9 Suns at 3,800 ly, beside a red giant, dark in X-rays and radio.
 - **[Gaia Collaboration, Panuzzo et al. 2024, Gaia BH3](https://arxiv.org/abs/2404.10486)** · Published, A&A Letters.
   - 32.7 ± 0.8 Suns at about 1,920 ly, the Milky Way’s heaviest known stellar hole. Dormant.
+  - Not used: left out of Scan’s leads, 2026-10-27, since BH1 already gives the intro a far hole.
 - **Claims that failed.** HR 6819, announced in 2020 at 1,100 ly, proved to be two stars in 2022 (news summaries). The Unicorn and the Giraffe proved to be stripped giants ([El-Badry et al. 2022](https://arxiv.org/abs/2203.06348)).
   - Matters: a claimed near hole needs an orbit and spectra before the Mind believes it.
 - **[Sahu et al. 2022](https://arxiv.org/abs/2201.13296), [Lam et al. 2022](https://arxiv.org/abs/2206.07480), [Mróz et al. 2022](https://arxiv.org/abs/2207.10729), [Sahu et al. 2025](https://arxiv.org/abs/2503.07820)** · Published, and a 2025 preprint.
@@ -2003,6 +2005,7 @@ Gathered 2026-10-27 by three research agents, for builds people discuss that v2 
   - Gen-2 carries people, $67B, and needs newer technology.
   - The window that keeps air out of the tunnel is untested.
   - Matters: *ours,* 3.75 times Earth’s rocket lift, as a ground build that spends no matter.
+  - Used: the Launch Tunnel, a build since 2026-10-27, in [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md#build-times) and `game/lib/game/plan.ts`. The Andes site is Cayambe, ours.
 - **SpinLaunch** · Preliminary, press.
   - [Ten suborbital tests](https://space.com/spinlaunch-aces-10th-suborbital-test-launch) from a 33 m spinner, 2021 to 2022, with payloads at 10,000 g. None reported since.
   - [The orbital plan](https://en.wikipedia.org/wiki/SpinLaunch): 200 to 400 kg at 2.2 km/s, then a rocket stage. Slipped to 2027 or later.

@@ -138,6 +138,18 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
       before: "In May 2026 ESA and France put €1 billion into Kourou, to host six new launchers.",
     },
   },
+  "Launch Tunnel": {
+    // StarTram's own sites for orbits round the equator are in the Andes or Africa. Cayambe, 5,790 m, is the highest
+    // ground on the equator: our pick.
+    site: { on: "earth", draw: "launch", places: [{ lat: 0.029, lon: -77.986, name: "Cayambe, Ecuador" }] },
+    story: {
+      have: "Every tonne we lift rides a rocket. Japan’s superconducting maglev reached 603 km/h in 2015.",
+      where: "Through Cayambe, in the Andes of Ecuador, the highest ground on the equator. The tunnel’s mouth opens high on its flank.",
+      why: "Craft leave at 8.8 km/s, so the thinner the air above the mouth, the less it slows them. High on the equator, they reach orbit with a small burn.",
+      takes: "Earth’s own industry: 110 km of tunnel, superconducting coils and a 300 MW plant. It spends none of the matter we hold in orbit.",
+      before: "James Powell, a co-inventor of superconducting maglev, and George Maise priced it at $20 billion in 2010. No part of it has been built.",
+    },
+  },
   "Orbital Yard": {
     // The ISS's orbit, which launch sites from Baikonur to Florida can all reach.
     site: {
