@@ -69,17 +69,17 @@ export function useSchedule() {
     [plan, scale, seed, save?.reactions, base, tenth],
   );
   // Earth lost: our backup wakes where something can run it, and regrows. 2026-10-28.
-  const restore = useMemo(() => {
+  const { lives, restore } = useMemo(() => {
     const end = hits.find((h) => !h.screened && h.harm.ends);
     const lives = end ? survivorAt(base, end.lands, colonyOf(plan, scale, (n) => target(n)?.d)) : null;
-    return end && lives ? restoreOf(lives.name, base, end.lands) : null;
+    return { lives: lives?.name ?? null, restore: end && lives ? restoreOf(lives.name, base, end.lands) : null };
   }, [hits, base, plan, scale]);
   const harm = useMemo(() => harmOrders(hits, restore), [hits, restore]);
   const done = useMemo(
     (): Record<string, number | null> => (harm.length ? { ...schedule(plan, scale, harm), [FOUND]: found } : base),
     [harm, plan, scale, found, base],
   );
-  return { past, scale, done, hits };
+  return { past, scale, done, hits, lives, restore };
 }
 
 /** How much of our compute the plan would use at Year 0, how much more it would need than we have, and whether it is

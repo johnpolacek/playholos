@@ -8,7 +8,6 @@ import { Queue } from "@/components/queue";
 import { Tour } from "@/components/tour";
 import { realTime, tenths } from "@/lib/game/clock";
 import { HARM_WORDS } from "@/lib/sim/conflict";
-import { restoreOf, survivorAt } from "@/lib/game/hits";
 import { useSchedule } from "@/components/picks";
 
 // The Build tab, laid out as Scan is: the queue and what we could start, in Scan's rows. The walk through what we
@@ -57,17 +56,15 @@ export function Build() {
 
 /** Strikes landed on us, newest first: what each cost, and, once one ends Earth, where our Mind lives on. 2026-10-28. */
 function Struck() {
-  const { hits, done } = useSchedule();
+  const { hits, lives, restore: r } = useSchedule();
   if (!hits.length) return null;
   const end = hits.find((h) => !h.screened && h.harm.ends);
-  const lives = end ? survivorAt(done, end.lands, null)?.name : null;
-  const r = end && lives ? restoreOf(lives, done, end.lands) : null;
   return (
     <div className="flex flex-col gap-1 border-b border-rowline py-2.5 text-[13px] leading-snug">
       {end && (
         <p className="font-semibold text-ink">
           {lives && r
-            ? `Earth’s Mind was lost at Year ${tenths(end.lands)}. Our backup woke in ${lives} with ${r.from < 0.01 ? (r.from * 100).toFixed(1) : Math.round(r.from * 100)}% of Earth’s thought, doubling every ${r.doubling} Years. It builds only off Earth: in orbit, on the Moon and among the rocks.`
+            ? `Earth’s Mind was lost at Year ${tenths(end.lands)}. ${lives.startsWith("our Mind") ? `Our Will crossed to ${lives}, which goes on` : `Our backup woke in ${lives}`} with ${r.from < 0.01 ? (r.from * 100).toFixed(1) : Math.round(r.from * 100)}% of Earth’s thought, doubling every ${r.doubling} Years. It builds only off Earth: in orbit, on the Moon and among the rocks.`
             : `Earth’s Mind was lost at Year ${tenths(end.lands)}, and no Mind of ours stood anywhere else.`}
         </p>
       )}
