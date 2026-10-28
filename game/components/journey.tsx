@@ -3,7 +3,7 @@ import { type Aim, focusable, pointer, Story, WASH } from "@/components/picks";
 import { BeamMark, BuildMark, buildBlue, RecordMark } from "@/components/marks";
 import { OpensLine } from "@/components/opens";
 import { Face } from "@/components/tab-head";
-import { span, tenths, YEAR_0 } from "@/lib/game/clock";
+import { span, tenths, YEAR_0, lyOf } from "@/lib/game/clock";
 import { SENDS } from "@/lib/game/knocks";
 import { buildSlug, PAST } from "@/lib/game/plan";
 
@@ -93,7 +93,7 @@ function Journey({ row, now, shown }: { row: Row; now: number; shown: boolean })
         <span>{row.sent !== undefined ? `sent ${Math.floor(row.sent)} · ${row.msg}` : `from Year ${tenths(row.from ?? 0)}`}</span>
         {row.ly !== undefined && (
           <span>
-            {`${row.ly.toFixed(1)} ly${reply ? " there and back" : ""}`}
+            {`${lyOf(row.ly)} ly${reply ? " there and back" : ""}`}
             {!theirs && <span className={shown ? "text-you" : ""}> ↗</span>}
           </span>
         )}

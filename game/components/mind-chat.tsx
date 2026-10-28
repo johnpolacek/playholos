@@ -3,11 +3,14 @@ import { DefaultChatTransport, type UIMessage } from "ai";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router";
 import { useGame } from "@/components/game-provider";
+import { BuildCard } from "@/components/build-card";
 import { Check, Cross } from "@/components/icons";
 import { MindNote } from "@/components/mind-note";
 import { MindThinking, useThinking } from "@/components/mind-thinking";
 import { SendCard } from "@/components/send-card";
 import { BAD_KEY, costOf, type Effort, EFFORTS, KEY_NEEDS_CREDIT, KEY_NEEDS_WORKSPACE, MIND_MODELS, type MindModel, readMindPick, type Usage } from "@/lib/access";
+import { readBuildOffer } from "@/lib/game/build-offer";
+import { buildNamed } from "@/lib/game/plan";
 import { readOffer } from "@/lib/game/sends";
 import { browserStore } from "@/lib/game/store";
 import { forgetKey } from "@/lib/key";
@@ -89,9 +92,11 @@ function useMind() {
   return { ...helpers, busy, lastAnswer };
 }
 
-/** One of the Mind's answers: its words, and the card if it offers to send. */
+/** One of the Mind's answers: its words, and the card if it offers to send, or a build. */
 function Answer({ id, text, still, asked }: { id: string; text: string; still: boolean; asked?: UIMessage }) {
-  const { words, draft } = readOffer(text);
+  const { words: said, name } = readBuildOffer(text);
+  const build = name ? buildNamed(name) : undefined;
+  const { words, draft } = readOffer(said);
   const ask = asked?.parts.map((part) => (part.type === "text" ? part.text : "")).join("") ?? "";
   return (
     <>
@@ -101,6 +106,11 @@ function Answer({ id, text, still, asked }: { id: string; text: string; still: b
       {draft && (
         <div className="max-w-[92%] self-start pl-3">
           <SendCard id={id} draft={draft} asked={ask} />
+        </div>
+      )}
+      {build && (
+        <div className="max-w-[92%] self-start pl-3">
+          <BuildCard build={build} />
         </div>
       )}
     </>
@@ -304,7 +314,8 @@ export function MindChat({ ask }: { ask?: string }) {
       <div className="flex flex-col gap-2 pb-3">
         {messages.length === 0 && !ask && <Hello onAsk={(text) => sendMessage({ text })} />}
         <Talk messages={messages} lastAnswer={lastAnswer} status={status} error={error} />
-        <div ref={end} />
+        {/* Clear of the ask box, which sticks over the talk's foot, so a card under the last answer shows whole. */}
+        <div ref={end} className="scroll-mb-20" />
       </div>
       <AskBox busy={busy} onAsk={(text) => sendMessage({ text })} className="sticky bottom-0 mt-auto bg-panel pb-3" />
     </>

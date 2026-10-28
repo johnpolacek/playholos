@@ -5,7 +5,7 @@ import { SkyArt } from "@/components/sky";
 import { LeadMark } from "@/components/marks";
 import { Face } from "@/components/tab-head";
 import type { Dials, Mark, Show } from "@/lib/drift";
-import { span, YEAR_0 } from "@/lib/game/clock";
+import { span, YEAR_0, lyOf } from "@/lib/game/clock";
 import { target } from "@/lib/game/sends";
 import { type Lead, type Reading } from "@/lib/game/leads";
 import { type System, worldName } from "@/lib/game/systems";
@@ -21,7 +21,7 @@ import { type System, worldName } from "@/lib/game/systems";
 const reach = (ly: number) => (
   <span className="flex flex-col items-end">
     <span>{span(ly)}</span>
-    <span className="mt-[3px] text-[10px] text-muted/80">{ly.toFixed(1)} ly</span>
+    <span className="mt-[3px] text-[10px] text-muted/80">{lyOf(ly)} ly</span>
   </span>
 );
 
@@ -199,7 +199,7 @@ export function LeadList({
         tone={l.reply ? "text-other" : "text-you"}
         name={
           <>
-            <b className="font-semibold">{l.what}</b> · {l.star}
+            <b className="font-semibold">{l.star}</b> · {l.what}
           </>
         }
         line={
@@ -257,7 +257,7 @@ export function LeadList({
                   <LeadMark art={l.art} />
                 </span>
                 <span className="min-w-0 grow truncate text-[15px] leading-snug">
-                  <b className="font-semibold">{l.what}</b> · {l.star}
+                  <b className="font-semibold">{l.star}</b> · {l.what}
                 </span>
                 <span className="shrink-0 font-mono text-[11px] text-muted tabular-nums">{reach(l.ly)}</span>
                 <span className={`shrink-0 text-muted transition-transform duration-300 ${open ? "rotate-90" : ""}`}>

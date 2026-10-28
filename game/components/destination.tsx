@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router";
 import { useEffect, useMemo, useRef } from "react";
+import { BackBar } from "@/components/back-bar";
 import { useGame } from "@/components/game-provider";
 import { BuildMark, buildBlue, buildTone, LeadMark, LockMark } from "@/components/marks";
 import { MindNote } from "@/components/mind-note";
@@ -11,7 +12,7 @@ import { VisitArt } from "@/components/visit-art";
 import { skyId, visitReading } from "@/lib/game/leads";
 import { Face, ListHead } from "@/components/tab-head";
 import { HISTORY } from "@/lib/game/charter";
-import { span } from "@/lib/game/clock";
+import { span, lyOf } from "@/lib/game/clock";
 import { buildSlug, moves } from "@/lib/game/plan";
 import {
   colonyRoad,
@@ -64,11 +65,14 @@ const WHAT: Record<string, string> = {
   "Probe Yard": "A probe built and fueled in orbit. It leaves 12 Years after its yard is done and flies past at an eighth of light speed.",
   mind:
     "A copy of our Mind on the Seed Ship, to stand alone beside the hole. Feed it, and its furnace grows us fast, and shows once it passes a millionth of the Sun. Hide in it, and its heat falls in unseen, so it stays small, and safe.",
+  settle:
+    "A copy of our Mind on the Seed Ship, to stand alone at this star. It mines the moons and asteroids there and builds on the star’s light. Anyone living here sees its flame as it brakes in. One Seed Ship, one Mind: once sent, no other place.",
   seed:
     "A seed ship with no Mind on board, built beside the Seed Ship. It brakes on its sail, unseen, and stays. It mines the moons and asteroids there to build two copies of itself, which go on to the nearest stars no probe of ours is bound for. Copies make copies, for three generations: at most seven craft. Once sent, it can’t be called back.",
   sentinel:
     "A probe built at the Probe Yard flies at a tenth of light speed and brakes on its fusion flame to stay. It watches for as long as it lasts, and sees what a pass can’t.",
-  will: "The Will, sent by laser to our Mind here, to live. Orders and news cross the light-years between us and Earth. In a refuge, our Mind spreads over small chips on the hole’s innermost orbit, so its clock runs slow and the sky goes by faster.",
+  will: "The Will, sent by laser to our Mind here, to live. The crossing is dark: a Year for each light-year, with no orders and no news, while Earth goes on by our orders and charter. Then orders and news cross the light-years between us and Earth.",
+  refuge: "In a refuge, our Mind spreads over small chips on the hole’s innermost orbit, so its clock runs slow and the sky goes by faster.",
   "Solar Lens": "Small sails dive past the Sun to its focus, 3 light-days out, and stay. The Sun’s gravity gathers this world’s light into a picture of its face.",
 };
 
@@ -171,10 +175,13 @@ export function DestinationPage({ slug }: { slug: string }) {
     () => (lead && (felt || lead.slug === "proxima-centauri") ? seedRoad(plan, scale, from, lead.star, lead.ly) : null),
     [felt, lead, plan, scale, from],
   );
-  // Our Mind can go only to a black hole: a furnace to feed, or a shadow to hide in. 2026-10-26.
-  const mind = useMemo(() => (lead?.art.kind === "dark" ? colonyRoad(plan, scale, from, lead.star, lead.ly) : null), [lead, plan, scale, from]);
+  // Our Mind can go to a black hole, a furnace to feed or a shadow to hide in, 2026-10-26, or settle where a seed probe
+  // could, on a star's light and rock, 2026-10-27.
+  const hole = lead?.art.kind === "dark";
+  const settles = !!lead && !hole && (felt || lead.slug === "proxima-centauri");
+  const mind = useMemo(() => (lead && (hole || settles) ? colonyRoad(plan, scale, from, lead.star, lead.ly) : null), [lead, hole, settles, plan, scale, from]);
   // The Will can move to our Mind here once the Mind Link is done and word has come that it stands. 2026-10-26.
-  const ours = lead?.art.kind === "dark" && plan.colony?.name === lead.star && colony?.star === lead.star && !colony.lost ? colony : null;
+  const ours = mind && plan.colony?.name === lead!.star && colony?.star === lead!.star && !colony.lost ? colony : null;
   const heard = ours?.stands !== undefined && ours.d !== undefined ? ours.stands + ours.d : null;
   const gone = save?.will && save.will.hole === lead?.star ? save.will : undefined;
   const here = !!ours;
@@ -224,14 +231,7 @@ export function DestinationPage({ slug }: { slug: string }) {
     <div ref={root} className="flex flex-col pb-4">
       {/* The way back stays in reach while the page scrolls. */}
       <div className="sticky -top-3 z-10 -mx-4 bg-panel px-4 pt-3 pb-2">
-        <Link
-          to="/reach"
-          data-m
-          className="inline-flex h-9 items-center gap-1.5 rounded-full border border-ink bg-paper pr-4 pl-3 text-[14px] font-medium text-ink transition-colors hover:bg-ink hover:text-paper"
-        >
-          <span aria-hidden className="text-[18px] leading-none">‹</span>
-          All destinations
-        </Link>
+        <BackBar to="/reach" label="All destinations" />
       </div>
       <div data-m className="mt-1 flex items-start gap-2.5">
         <span className={`mt-[4px] shrink-0 ${lead.reply ? "text-other" : "text-you"}`}>
@@ -240,7 +240,7 @@ export function DestinationPage({ slug }: { slug: string }) {
         <h1 className="text-[19px] leading-snug font-medium">{lead.star}</h1>
       </div>
       <p data-m className="mt-0.5 text-[13.5px] text-page-ink2">
-        {lead.what} · {lead.ly.toFixed(1)} ly · a message takes{" "}
+        {lead.what} · {lyOf(lead.ly)} ly · a message takes{" "}
         <span className="font-mono tabular-nums">{span(lead.ly)}</span> ·{" "}
         <Link to={`/lead/${lead.slug}`} className="whitespace-nowrap text-you">
           Its lead ›
@@ -324,16 +324,16 @@ export function DestinationPage({ slug }: { slug: string }) {
             i={ways.length + 2}
             to={to}
             name="Our Mind, to stay"
-            line={WHAT.mind}
+            line={hole ? WHAT.mind : WHAT.settle}
             needs={SHIP_NEEDS}
             have={(n) => ({ queued: inOrder(n), done: !before && (doneBy[n] ?? Infinity) <= clock })}
             // One Seed Ship, one Mind: once sent to one hole, no other. Sent once all three are in our order.
             can={shipReady(plan) && (!plan.colony || plan.colony.name === lead.star)}
             send={() => {}}
             what="Mind"
-            sentAs={plan.colony?.mode === "furnace" ? "Sent, to feed it" : "Sent, to hide"}
-            choices={(["furnace", "refuge"] as const).map((mode) => ({
-              label: mode === "furnace" ? "Feed It" : "Hide in It",
+            sentAs={plan.colony?.mode === "furnace" ? "Sent, to feed it" : plan.colony?.mode === "refuge" ? "Sent, to hide" : "Sent, to settle"}
+            choices={(hole ? (["furnace", "refuge"] as const) : (["settle"] as const)).map((mode) => ({
+              label: mode === "furnace" ? "Feed It" : mode === "refuge" ? "Hide in It" : "Settle Here",
               send: () => change((p) => ({ ...p, colony: { name: lead.star, y: from, mode } })),
             }))}
           />
@@ -344,10 +344,10 @@ export function DestinationPage({ slug }: { slug: string }) {
             i={ways.length + 3}
             to={to}
             name="The Will, to live here"
-            line={`${WHAT.will} ${rate > 1 ? `Here ${rate.toFixed(1)} of the sky’s Years would pass in each of ours.` : "A furnace’s disk fills that orbit, so here our clock runs as Earth’s."}`}
+            line={`${WHAT.will} ${!hole ? "" : rate > 1 ? `${WHAT.refuge} Here ${rate.toFixed(1)} of the sky’s Years would pass in each of ours.` : "A furnace’s disk fills that orbit, so here our clock runs as Earth’s."}`.trim()}
             needs={["Mind Link"]}
             have={(n) => ({ queued: inOrder(n), done: !before && (doneBy[n] ?? Infinity) <= clock })}
-            // Once, for good: the Will leaves Earth now, and lives here once all of it has arrived.
+            // Once, for good: the Will leaves Earth now, dark until all of it has arrived, and lives here then.
             can={!before && !save?.will && will.leaves !== null && will.leaves <= from + 0.05}
             send={() => {}}
             what="Will"

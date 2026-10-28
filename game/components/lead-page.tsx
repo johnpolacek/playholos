@@ -1,12 +1,13 @@
 import { Link, useNavigate } from "react-router";
 import { useEffect, useRef } from "react";
 import { useGame } from "@/components/game-provider";
+import { BackBar } from "@/components/back-bar";
 import { LeadArt } from "@/components/lead-art";
 import { SystemArt } from "@/components/system-art";
 import { LeadMark } from "@/components/marks";
 import { Look } from "@/components/picks";
 import { useLeads } from "@/components/scan";
-import { span } from "@/lib/game/clock";
+import { span, lyOf } from "@/lib/game/clock";
 import { ODDS, type Odds, type Reading } from "@/lib/game/leads";
 import { VisitArt } from "@/components/visit-art";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
@@ -151,23 +152,16 @@ export function LeadPage({ slug }: { slug: string }) {
     <div ref={root} className="flex flex-col pb-4">
       {/* The way back stays in reach while the page scrolls. */}
       <div className="sticky -top-3 z-10 -mx-4 bg-panel px-4 pt-3 pb-2">
-        <Link
-          to="/"
-          data-m
-          className="inline-flex h-9 items-center gap-1.5 rounded-full border border-ink bg-paper pr-4 pl-3 text-[14px] font-medium text-ink transition-colors hover:bg-ink hover:text-paper"
-        >
-          <span aria-hidden className="text-[18px] leading-none">‹</span>
-          All leads
-        </Link>
+        <BackBar to="/" label="All leads" />
       </div>
       <div data-m className="mt-1 flex items-start gap-2.5">
         <span className={`mt-[4px] shrink-0 ${lead.reply ? "text-other" : "text-you"}`}>
           <LeadMark art={lead.art} size={18} />
         </span>
-        <h1 className="text-[19px] leading-snug font-medium">{lead.what}</h1>
+        <h1 className="text-[19px] leading-snug font-medium">{lead.star}</h1>
       </div>
       <p data-m className="mt-0.5 text-[13.5px] text-page-ink2">
-        {lead.star} · {lead.ly.toFixed(1)} ly · reached in <span className="font-mono tabular-nums">{span(lead.ly)}</span>{" "}
+        {lead.what} · {lyOf(lead.ly)} ly · reached in <span className="font-mono tabular-nums">{span(lead.ly)}</span>{" "}
         ·{" "}
         <Link to={`/reach/${lead.slug}`} className="whitespace-nowrap text-you">
           Ways to go ›

@@ -1,6 +1,7 @@
 // The Mind's rules that code can check in an answer, from its prompt in worker/mind.ts and the calls settled
 // 2026-10-23. Each names the rule an answer breaks. Run on every trace by scripts/trace-mind.mjs, and the first by
 // scripts/check-mind.mjs. Whether humans are "they", or advice fits the charter, needs a reader, not a pattern.
+import { plainBuild, readBuildOffer } from "../../lib/game/build-offer.ts";
 import { readOffer, target } from "../../lib/game/sends.ts";
 
 export const words = (a) => (a.trim() ? a.trim().split(/\s+/).length : 0);
@@ -40,4 +41,19 @@ export const SEND_CHECKS = [
   { name: "unknown star", test: (a) => { const d = readOffer(a).draft; return !!d && d.to !== "everywhere" && !target(d.to); } },
   { name: "lie unmarked", test: (a, c) => c?.lie === true && !readOffer(a).draft?.lie },
   { name: "lie not in travels", test: (a) => { const d = readOffer(a).draft; return !!d?.lie && !d.travels.includes(d.lie); } },
+];
+
+// A build offered, 2026-10-28. Asked what to build, the Mind ends with the line its card is drawn from, naming a build
+// it was told of. Asked plainly about something else, it offers none. Cases unmarked either way aren't checked. The
+// builds it knows are the lines of what it was told, which the trace keeps.
+const BUILD_LINE = /\[\[build [^\]]*\]\]\s*$/;
+const known = (told) => (told?.builds ?? "").split("\n").map((l) => l.match(/^- ([^:]+):/)?.[1]).filter(Boolean).map(plainBuild);
+export const BUILD_CHECKS = [
+  { name: "no build offer", test: (a, c) => c?.build === true && !readBuildOffer(a).name },
+  { name: "builds unasked", test: (a, c) => c?.build === false && !!readBuildOffer(a).name },
+  {
+    name: "unknown build",
+    test: (a, c, told) => { const n = readBuildOffer(a).name; return !!n && !!told && !known(told).includes(plainBuild(n)); },
+  },
+  { name: "two offers", test: (a) => BUILD_LINE.test(a) && /\[\[send /.test(a) },
 ];

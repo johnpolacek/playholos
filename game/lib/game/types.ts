@@ -1,4 +1,5 @@
 import type { UIMessage } from "ai";
+import type { ColonyMode } from "@/lib/sim/types";
 // Stubs. The simulation lives in calcs/ (Python) until it is ported.
 
 /** One game. The seed is drawn when a new game begins, and the player never sees it. */
@@ -30,12 +31,13 @@ export interface Save {
   /** How each neighbor took a message of ours once it landed, decided then and kept. Plain in the save: reading ahead
    *  spoils only this game. Since 2026-10-26. */
   reactions?: Reaction[];
-  /** The Will, sent by the Mind Link to live at our Mind on a black hole. Since 2026-10-26. */
+  /** The Will, sent by the Mind Link to live at our Mind at a hole or a star. Since 2026-10-26. */
   will?: Will;
 }
 
-/** The Will living at our Mind on a black hole: the hole, how far it is from Earth, the Year it was sent, the Year it
- *  arrived, and how many of the sky's Years go by in one of ours there, 1 unless a refuge's slow clock. */
+/** The Will living at our Mind at a black hole or a star: where, kept as `hole` since saves began so, how far it is
+ *  from Earth, the Year it was sent, the Year it arrived, dark between, and how many of the sky's Years go by in one of
+ *  ours there, 1 unless a refuge's slow clock. */
 export interface Will {
   hole: string;
   d: number;
@@ -149,9 +151,10 @@ export interface Plan {
    *  copies itself on to the nearest stars, for so many generations. Built once the Seed Ship, a Fusion Drive and the
    *  Deuterium Works are done. One a star. 2026-10-26. */
   seeds?: Ordered[];
-  /** A copy of our Mind sent on the Seed Ship to a black hole, to stay: the hole, the Year we sent it, and whether it
-   *  feeds the hole for power or hides in its shadow. One a game, since the Seed Ship carries one. 2026-10-26. */
-  colony?: Ordered & { mode: "furnace" | "refuge" };
+  /** A copy of our Mind sent on the Seed Ship to stay: the hole or star, the Year we sent it, and whether it feeds a
+   *  hole for power, hides in its shadow, or settles at a star. One a game, since the Seed Ship carries one.
+   *  2026-10-26, a star since 2026-10-27. */
+  colony?: Ordered & { mode: ColonyMode };
 }
 
 /** A build ordered in play, or taken back: its name, and the Year. */

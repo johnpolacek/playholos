@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Back Step Bar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=SUSE:wght@100..800&display=swap" rel="stylesheet">
+<style>
+/* Offline, the game's own copies of the fonts. */
+@font-face { font-family: "SUSE Variable"; font-weight: 100 800; src: url("../game/node_modules/@fontsource-variable/suse/files/suse-latin-wght-normal.woff2") format("woff2"); }
+@font-face { font-family: "Plex Mono Local"; font-weight: 400; src: url("../game/node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2") format("woff2"); }
+
+/* Colors from game/app/globals.css. The game is always dark. */
+:root {
+  --page: #0b0c0d;
+  --page-ink2: #a9a59c;
+  --frame: #2a2b2e;
+  --paper: #121314;
+  --ink: #e6e3db;
+  --muted: #9c988f;
+  --faint: #34363a;
+  --panel: #17181a;
+  --rowline: #26282b;
+  --track: #1d1e21;
+  --you: #5bb8d6;
+  --you-rgb: 91, 184, 214;
+  --reach: #e48ebf;
+  --reach-rgb: 228, 142, 191;
+  --sans: "SUSE", "SUSE Variable", sans-serif;
+  --mono: "IBM Plex Mono", "Plex Mono Local", monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: #070808; color: var(--ink); font-family: var(--sans); text-wrap: pretty; }
+p { margin: 0; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+
+header { max-width: 1320px; margin: 0 auto; padding: 40px 16px 8px; }
+h1 { margin: 0; font-size: 22px; font-weight: 600; }
+header p { margin-top: 6px; color: var(--muted); font-size: 14px; max-width: 72ch; line-height: 1.45; }
+main { max-width: 1320px; margin: 0 auto; padding: 22px 16px 64px; display: grid; gap: 32px 20px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr)); }
+.card { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.meta { display: flex; gap: 10px; align-items: baseline; }
+.num { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.name { font-size: 15px; font-weight: 600; }
+.note-text { color: var(--muted); font-size: 13px; line-height: 1.4; margin-top: -4px; min-height: calc(1.4em * 3); }
+
+/* The tab page, as a build opened from the walk on Reach shows it. */
+.frame { position: relative; overflow: hidden; background: var(--panel); border: 1px solid var(--rowline); border-radius: 16px; padding: 14px 16px 18px; }
+.frame .page { transition: transform .32s cubic-bezier(.3,.7,.3,1), opacity .32s; }
+.frame.leaving .page { transform: translateX(40%); opacity: 0; }
+.frame .toast { position: absolute; inset: auto 16px 16px; text-align: center; font: 400 10px var(--mono); letter-spacing: .1em; color: var(--you); opacity: 0; transition: opacity .2s; }
+.frame.leaving .toast { opacity: 1; }
+.walkhead { display: flex; justify-content: space-between; align-items: center; font-size: 11px; letter-spacing: .08em; color: var(--muted); }
+.walkhead b { font-weight: 400; color: var(--you); }
+.walkhead .x { font-size: 18px; color: var(--ink); line-height: 1; }
+.stops { position: relative; height: 24px; margin: 10px 4px 0; }
+.stops::before { content: ""; position: absolute; left: 4px; right: 8px; top: 50%; height: 1px; background: var(--you); opacity: .8; }
+.stops i { position: absolute; top: 50%; width: 9px; height: 9px; margin: -4.5px 0 0 -4.5px; border-radius: 50%; background: var(--you); }
+.stops i:first-child { background: var(--ink); }
+.stops i:last-child { width: 15px; height: 15px; margin: -7.5px 0 0 -7.5px; box-shadow: 0 0 0 3px #2a3d45; }
+.title { display: flex; gap: 10px; align-items: center; margin-top: 14px; }
+.title h3 { margin: 0; font-size: 19px; font-weight: 500; }
+.sub { margin-top: 4px; color: var(--page-ink2); font-size: 13px; line-height: 1.4; }
+.mind { position: relative; margin-top: 14px; padding: 0 0 4px 12px; }
+.mind::before { content: ""; position: absolute; top: 8px; bottom: 0; left: 0; width: 9px; border-top-left-radius: 12px; border-top: 1px solid rgba(var(--you-rgb), .4); border-left: 1px solid rgba(var(--you-rgb), .4); -webkit-mask-image: linear-gradient(#000, transparent); mask-image: linear-gradient(#000, transparent); }
+.mind .head { height: 16px; display: flex; align-items: center; gap: 7px; font: 400 9.5px/1 var(--mono); letter-spacing: .1em; color: var(--you); margin-bottom: 6px; }
+.mind .head::after { content: ""; height: 1px; flex: 1; background: linear-gradient(90deg, rgba(var(--you-rgb), .4), transparent 90%); }
+.mind p { font-size: 13.5px; line-height: 1.45; }
+.mark { width: 20px; height: 20px; flex-shrink: 0; color: var(--reach); }
+.mark svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; display: block; }
+.slot { margin-top: 12px; }
+
+/* What every bar shares: 10's step bar, on 12's track. */
+.bar { position: relative; overflow: hidden; width: 100%; height: 48px; border-radius: 999px; background: var(--track); border: 1px solid var(--faint); display: flex; align-items: center; gap: 10px; padding: 0 18px 0 5px; font-size: 14.5px; font-weight: 500; text-align: left; transition: border-color .2s, background .2s; }
+.bar:hover { border-color: #4a4c51; }
+/* No bright knob, 2026-10-28: a faint ring, or none at all. */
+.knob { width: 36px; height: 36px; border-radius: 50%; background: none; border: 1px solid rgba(230, 227, 219, .2); color: var(--ink); display: grid; place-items: center; font-size: 18px; line-height: 1; flex-shrink: 0; position: relative; z-index: 1; transition: transform .2s, border-color .2s; }
+.bar:hover .knob { transform: translateX(-2px); border-color: rgba(230, 227, 219, .45); }
+.bar.bare { padding-left: 14px; gap: 8px; }
+.bar.bare .knob { width: auto; height: auto; border: 0; font-size: 20px; }
+.lbl { position: relative; z-index: 1; }
+.lbl small { display: block; font: 400 9px/1.2 var(--mono); letter-spacing: .1em; color: var(--muted); font-weight: 400; }
+.mini { margin-left: auto; display: flex; gap: 5px; align-items: center; position: relative; z-index: 1; }
+.mini i { width: 5px; height: 5px; border-radius: 50%; background: var(--you); opacity: .55; }
+.mini i:first-child { background: var(--ink); }
+.mini i:last-child { width: 8px; height: 8px; opacity: 1; box-shadow: 0 0 0 2px #2a3d45; }
+
+/* 2 · The fill sweeps in from the knob on hover, as 12's follows its drag. */
+.v2 .fill { position: absolute; inset: 0 auto 0 0; width: 48px; background: rgba(var(--you-rgb), .16); border-radius: 999px; transition: width .45s cubic-bezier(.3,.7,.3,1); }
+.v2:hover .fill { width: 100%; }
+
+/* 3 · The stops become the bar's own thread, across its width. */
+.v3 { padding-right: 16px; }
+.v3 .thread { position: absolute; left: 52px; right: 16px; bottom: 9px; height: 7px; }
+.v3 .thread::before { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: rgba(var(--you-rgb), .5); }
+.v3 .thread i { position: absolute; top: 50%; width: 5px; height: 5px; margin: -2.5px 0 0 -2.5px; border-radius: 50%; background: var(--you); opacity: .7; }
+.v3 .thread i:first-child { background: var(--ink); }
+.v3 .thread i:last-child { width: 7px; height: 7px; margin: -3.5px 0 0 -3.5px; opacity: 1; box-shadow: 0 0 0 2px #2a3d45; }
+.v3 .lbl { margin-top: -10px; }
+
+/* 4 · 12's chevrons, turned to point home. */
+.chev { display: inline-flex; gap: 1px; color: var(--you); font-size: 13px; margin-right: -4px; }
+.chev span { animation: chev 1.6s infinite; opacity: .2; }
+.chev span:nth-child(2) { animation-delay: .2s; }
+.chev span:nth-child(1) { animation-delay: .4s; }
+@keyframes chev { 30% { opacity: 1; } 60%, 100% { opacity: .2; } }
+
+/* 5 · Where it sits on the walk, in mono. */
+.pos { margin-left: auto; font: 400 10px var(--mono); letter-spacing: .1em; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+
+/* 6 · The knob is the stop itself: our blue, ringed, as the walk draws it. */
+.v6 .knob { border-color: rgba(var(--you-rgb), .55); color: var(--you); box-shadow: 0 0 0 3px #22333a; }
+.v6:hover .knob { border-color: var(--you); box-shadow: 0 0 0 3px #22333a, 0 0 14px rgba(var(--you-rgb), .45); }
+
+/* 7 · Two lines: where it is, and its name. */
+.v7 .lbl { line-height: 1.15; }
+
+/* 8 · The walk's progress, drawn as a fill behind the words: all the way, it is done. */
+.v8 .fill { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(var(--you-rgb), .05), rgba(var(--you-rgb), .18)); }
+.v8 .fill::after { content: ""; position: absolute; right: 0; top: 0; bottom: 0; width: 2px; background: var(--you); opacity: .6; }
+
+/* 9 · Drag the knob home, or tap. */
+.v9 { touch-action: none; user-select: none; }
+.v9 .knob { position: absolute; left: 5px; top: 5px; cursor: grab; background: var(--track); }
+.v9 .fill { position: absolute; inset: 0 auto 0 0; width: 46px; background: rgba(var(--you-rgb), .18); border-radius: 999px; }
+.v9 .lbl { margin-left: 46px; }
+
+/* 10 · A glow on the side we go back to. */
+.v10::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 200px; background: radial-gradient(ellipse at 0% 50%, rgba(var(--you-rgb), .45), transparent 70%); opacity: .8; transition: opacity .3s; }
+.v10:hover::before { opacity: 1; }
+
+/* 11 · Slimmer, the stops spread through the middle. */
+.v11 { height: 40px; padding-left: 4px; }
+.v11 .knob { width: 30px; height: 30px; font-size: 16px; }
+.v11 .spread { flex: 1; display: flex; justify-content: space-between; align-items: center; margin: 0 4px 0 10px; position: relative; }
+.v11 .spread::before { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: rgba(var(--you-rgb), .35); }
+.v11 .spread i { position: relative; width: 5px; height: 5px; border-radius: 50%; background: var(--you); opacity: .6; }
+.v11 .spread i:first-child { background: var(--ink); }
+.v11 .spread i:last-child { width: 8px; height: 8px; opacity: 1; box-shadow: 0 0 0 2px #2a3d45; }
+
+/* 12 · Stars drift behind the words, as the sky does behind the map. */
+.v12 .sky { position: absolute; inset: 0; background-image: radial-gradient(1.3px 1.3px at 12% 30%, #e6e3dbcc, transparent), radial-gradient(1.3px 1.3px at 28% 72%, #e6e3db99, transparent), radial-gradient(1.3px 1.3px at 46% 22%, #e6e3dbaa, transparent), radial-gradient(1.3px 1.3px at 63% 64%, #e6e3db88, transparent), radial-gradient(1.4px 1.4px at 78% 38%, #5bb8d6, transparent), radial-gradient(1.3px 1.3px at 90% 76%, #e6e3db99, transparent); background-size: 200px 100%; animation: drift 24s linear infinite; }
+@keyframes drift { to { background-position: -200px 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>Step bar, on the swipe track, no bright knob</h1>
+  <p>Twelve takes on 10’s full-width Back with the stops drawn small, on 12’s dark track. No bright knob: half have a faint ring round the chevron, half no ring at all. Each sits in the page as a build opened from the walk on Reach shows it. Tap one to see the page leave for Roads to come. Number 9 drags too.</p>
+</header>
+<main id="grid"></main>
+
+<script>
+const FUSION = '<svg viewBox="0 0 24 24"><path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4"/></svg>';
+const mini = '<span class="mini"><i></i><i></i><i></i><i></i><i></i></span>';
+const knob = '<span class="knob">‹</span>';
+const lbl = (t = "Roads to come", s = "") => `<span class="lbl">${s ? `<small>${s}</small>` : ""}${t}</span>`;
+
+const OPTIONS = [
+  { name: "Plain", note: "10 as it was, on 12’s track, the chevron bare with no ring, the stops small at the end.",
+    html: `<button class="bar bare go">${knob}${lbl()}${mini}</button>` },
+  { name: "Sweep", note: "A faint ring round the chevron. On hover our blue sweeps from it across the bar, as 12’s fill follows a drag.",
+    html: `<button class="bar v2 go"><span class="fill"></span>${knob}${lbl()}${mini}</button>` },
+  { name: "Thread under", note: "No ring. The stops leave the end and run along the bar’s foot, a thread the width of the page, the last one ringed.",
+    html: `<button class="bar bare v3 go">${knob}${lbl()}<span class="thread"><i style="left:0"></i><i style="left:25%"></i><i style="left:50%"></i><i style="left:75%"></i><i style="left:100%"></i></span></button>` },
+  { name: "Chevrons home", note: "A faint ring, and 12’s three chevrons turned to point back, pulsing toward it.",
+    html: `<button class="bar go">${knob}<span class="chev"><span>‹</span><span>‹</span><span>‹</span></span>${lbl()}${mini}</button>` },
+  { name: "Place in mono", note: "No ring. Where it sits on the walk, 4 OF 4, in the walk head’s mono beside the stops.",
+    html: `<button class="bar bare go">${knob}${lbl()}<span class="pos">4 OF 4 ${mini.replace('class="mini"', 'class="mini" style="margin:0"')}</span></button>` },
+  { name: "Stop as knob", note: "The ring is the stop we go back to, in our blue, an outline only, as the walk rings its last stop.",
+    html: `<button class="bar v6 go">${knob}${lbl()}${mini}</button>` },
+  { name: "Two lines", note: "No ring. The walk’s name small in mono over the stop’s name, so it says where in the game we go.",
+    html: `<button class="bar bare v7 go">${knob}${lbl("Roads to come", "HOW WE REACH · 4 OF 4")}${mini}</button>` },
+  { name: "Done fill", note: "A faint ring, and a soft blue fill the bar’s whole width, edged at the end: the walk we came from is done.",
+    html: `<button class="bar v8 go"><span class="fill"></span>${knob}${lbl()}${mini}</button>` },
+  { name: "Drag home", note: "12’s drag, kept, its knob now a faint ring: pull it along to go back, or just tap it. The fill follows.",
+    html: `<div class="bar v9"><span class="fill"></span><button class="knob go-tap" aria-label="Back to Roads to come">‹</button>${lbl()}${mini}</div>` },
+  { name: "Glow", note: "No ring: a faint blue glow behind the chevron does its work, brighter on hover.",
+    html: `<button class="bar bare v10 go">${knob}${lbl()}${mini}</button>` },
+  { name: "Slim spread", note: "Shorter, a faint ring, the stops spread through the middle on their thread, the name left out. The stops say where.",
+    html: `<button class="bar v11 go" aria-label="Back to Roads to come">${knob.replace("knob", "knob")}<span class="spread"><i></i><i></i><i></i><i></i><i></i></span></button>` },
+  { name: "Starfield", note: "No ring. Faint stars drift behind the words, one of them ours in blue, as the sky does behind the map.",
+    html: `<button class="bar bare v12 go"><span class="sky"></span>${knob}${lbl()}${mini}</button>` },
+];
+
+const page = (o) => `
+  <div class="page">
+    <div class="walkhead"><span>REACH · 4 OF 4 · <b>DONE</b></span><span class="x">×</span></div>
+    <div class="stops"><i style="left:4px"></i><i style="left:25%"></i><i style="left:50%"></i><i style="left:75%"></i><i style="left:calc(100% - 8px)"></i></div>
+    <div class="slot">${o.html}</div>
+    <div class="title"><span class="mark">${FUSION}</span><h3>Fusion Drive</h3></div>
+    <p class="sub">An engine that lets a craft slow at a star, and stay.</p>
+    <div class="mind"><div class="head">THE MIND</div><p>No one has flown one yet. It lets a craft slow at a star and stay, where a flyby is past within minutes.</p></div>
+  </div>
+  <div class="toast">‹ BACK TO ROADS TO COME</div>`;
+
+OPTIONS.forEach((o, i) => {
+  const card = document.createElement("section");
+  card.className = "card";
+  card.innerHTML = `<div class="meta"><span class="num">${String(i + 1).padStart(2, "0")}</span><span class="name">${o.name}</span></div><p class="note-text">${o.note}</p><div class="frame">${page(o)}</div>`;
+  document.getElementById("grid").append(card);
+});
+
+// A tap on a way back: the page leaves for Roads to come, then comes back to try again.
+function leave(frame) {
+  frame.classList.add("leaving");
+  setTimeout(() => frame.classList.remove("leaving"), 1100);
+}
+document.addEventListener("click", (e) => {
+  const go = e.target.closest(".go, .go-tap");
+  if (go && !go.dataset.dragged) leave(go.closest(".frame"));
+  if (go) delete go.dataset.dragged;
+});
+
+// 9: the knob drags, the fill follows, and past most of the way it goes back.
+document.querySelectorAll(".v9").forEach((track) => {
+  const k = track.querySelector(".knob"), fill = track.querySelector(".fill");
+  let start = null, x = 0;
+  const max = () => track.clientWidth - k.offsetWidth - 8;
+  const set = (v, ease) => {
+    x = Math.max(0, Math.min(max(), v));
+    k.style.transition = fill.style.transition = ease ? "transform .25s, width .25s" : "none";
+    k.style.transform = `translateX(${x}px)`;
+    fill.style.width = `${x + 46}px`;
+  };
+  k.addEventListener("pointerdown", (e) => { start = e.clientX - x; k.setPointerCapture(e.pointerId); });
+  k.addEventListener("pointermove", (e) => { if (start !== null) set(e.clientX - start); });
+  k.addEventListener("pointerup", () => {
+    if (start === null) return;
+    start = null;
+    if (x > 4) k.dataset.dragged = "1";
+    if (x > max() * 0.7) leave(track.closest(".frame"));
+    set(0, true);
+  });
+});
+</script>
+</body>
+</html>

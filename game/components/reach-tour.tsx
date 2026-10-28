@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { useNext } from "@/components/begin";
 import { useGame } from "@/components/game-provider";
 import { BuildMark, buildTone } from "@/components/marks";
@@ -8,6 +8,7 @@ import { usePlan, useSchedule } from "@/components/picks";
 import { axis, Brings, farZoom, Key, Thread, useReach, VOYAGER, year, Years } from "@/components/reach";
 import { Thread as Stops } from "@/components/review";
 import { useStepTap } from "@/components/scan";
+import { buildSlug } from "@/lib/game/plan";
 import { LIGHT_HOUR_AU, LY_AU, NEAREST, roads } from "@/lib/game/reach";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
 
@@ -29,23 +30,74 @@ const LATER_ROADS = [
   { build: "Fusion Drive", line: "Slows a craft at a star, so it can stay", after: "Deuterium Works" },
   { build: "Solar Lens", line: "Uses the Sun as a lens, to picture one world’s face", after: "Orbital Yard" },
   { build: "Seed Ship", line: "Carries a copy of our Mind, at a tenth of light’s speed", after: "Fusion Drive" },
-  { build: "Mind Link", line: "A laser that sends the Will to our Mind at a black hole", after: "Seed Ship" },
+  { build: "Mind Link", line: "A laser that sends the Will to our Mind, wherever it stands", after: "Seed Ship" },
 ];
 
-/** The roads to come, each with its mark and the build it waits on. */
+/** The walk's head, held at the top as the page scrolls, as the review's: where we are, back and on, close, and the
+ *  stops. A build opened from Roads to come keeps it, its stops leading back into the walk. 2026-10-28. */
+export function WalkHead(props: {
+  at: number;
+  go(k: number): void;
+  back(): void;
+  next(): void;
+  nextOff?: boolean;
+  nextLabel?: string;
+  onClose(): void;
+}) {
+  const { at, go, back, next, nextOff, nextLabel = "Next", onClose } = props;
+  const last = STOPS.length - 1;
+  return (
+    <div className="sticky -top-3 z-10 -mx-4 -mt-3 bg-panel px-4 pt-3 pb-1">
+      <div className="flex items-center justify-between pt-1 pb-0.5 text-[11px] tracking-[.08em] text-muted">
+        <span className="grow">
+          {at ? `REACH · ${at} OF ${last}` : "REACH · HOW WE REACH"}
+          {at === last && <span className="text-you"> · DONE</span>}
+        </span>
+        <button onClick={back} disabled={!at} aria-label="Back" className="-my-3 size-11 text-xl leading-none text-ink disabled:text-faint wide:hidden">
+          ‹
+        </button>
+        <button onClick={next} disabled={nextOff} aria-label={nextLabel} className="-my-3 size-11 text-xl leading-none text-you disabled:text-faint wide:hidden">
+          ›
+        </button>
+        <button onClick={onClose} aria-label="Close the walk" className="-my-3 -mr-3 size-11 text-xl leading-none">
+          ×
+        </button>
+      </div>
+      <Stops stops={STOPS.map((name) => ({ name }))} at={at} go={go} />
+    </div>
+  );
+}
+
+/** A build page opened from Roads to come: the walk's head over it, at its last stop. Back, or a stop, goes into the
+ *  walk there. Close leaves the walk for Reach. */
+export function WalkBack() {
+  const navigate = useNavigate();
+  const last = STOPS.length - 1;
+  const to = (k: number) => navigate("/reach?tour", { state: { at: k } });
+  return <WalkHead at={last} go={to} back={() => to(last)} next={() => to(last)} nextOff onClose={() => navigate("/reach")} />;
+}
+
+/** The roads to come, each with its mark and the build it waits on. Each opens its build's page, 2026-10-27. */
 function Later() {
   return (
     <ol className="mt-3 flex flex-col">
       {LATER_ROADS.map((r) => (
-        <li key={r.build} data-r className="flex gap-3 pb-3">
-          <span className={`mt-[2px] shrink-0 ${buildTone(r.build, false)}`}>
-            <BuildMark name={r.build} size={21} />
-          </span>
-          <span className="flex flex-col">
-            <span className="text-[14.5px] font-medium">{r.build}</span>
-            <span className="text-[13px] text-page-ink2">{r.line}</span>
-            <span className="font-mono text-[10px] tracking-[.06em] text-muted">AFTER THE {r.after.toUpperCase()}</span>
-          </span>
+        <li key={r.build} data-r>
+          <Link
+            to={`/build/${buildSlug(r.build)}`}
+            state={{ back: { to: "/reach?tour", label: "Roads to come", state: { at: STOPS.length - 1 }, walk: true, stops: { n: STOPS.length, at: STOPS.length - 1 } } }}
+            className="flex gap-3 pb-3"
+          >
+            <span className={`mt-[2px] shrink-0 ${buildTone(r.build, false)}`}>
+              <BuildMark name={r.build} size={21} />
+            </span>
+            <span className="flex grow flex-col">
+              <span className="text-[14.5px] font-medium">{r.build}</span>
+              <span className="text-[13px] text-page-ink2">{r.line}</span>
+              <span className="font-mono text-[10px] tracking-[.06em] text-muted">AFTER THE {r.after.toUpperCase()}</span>
+            </span>
+            <span className="self-center text-muted">›</span>
+          </Link>
         </li>
       ))}
     </ol>
@@ -82,8 +134,10 @@ export function ReachTour({ onClose }: { onClose(): void }) {
   const navigate = useNavigate();
   // At the end, the way on is the next of the four things we would do first, or back to the tab once all are done.
   const then = useNext("/reach?tour");
-  const [at, setAt] = useState(0);
   const last = STOPS.length - 1;
+  // Back from a build opened on Roads to come, the walk opens where it was. 2026-10-28.
+  const back = (useLocation().state as { at?: number } | null)?.at;
+  const [at, setAt] = useState(() => Math.max(0, Math.min(last, back ?? 0)));
 
   const from = clock === null ? 0 : Math.floor(clock * 10) / 10;
   const ways = useMemo(() => roads(plan, scale, from), [plan, scale, from]);
@@ -160,34 +214,15 @@ export function ReachTour({ onClose }: { onClose(): void }) {
   return (
     <div ref={root} {...tap} className="flex grow flex-col">
       {/* In place of the tab's head, held at the top as the page scrolls, as the review's. */}
-      <div className="sticky -top-3 z-10 -mx-4 -mt-3 bg-panel px-4 pt-3 pb-1">
-        <div className="flex items-center justify-between pt-1 pb-0.5 text-[11px] tracking-[.08em] text-muted">
-          <span className="grow">
-            {at ? `REACH · ${at} OF ${last}` : "REACH · HOW WE REACH"}
-            {at === last && <span className="text-you"> · DONE</span>}
-          </span>
-          <button
-            onClick={() => go(at - 1)}
-            disabled={!at}
-            aria-label="Back"
-            className="-my-3 size-11 text-xl leading-none text-ink disabled:text-faint wide:hidden"
-          >
-            ‹
-          </button>
-          <button
-            onClick={() => (at === last ? then && navigate(then.to) : go(at + 1))}
-            disabled={at === last && !then}
-            aria-label={at === last && then ? then.name : "Next"}
-            className="-my-3 size-11 text-xl leading-none text-you disabled:text-faint wide:hidden"
-          >
-            ›
-          </button>
-          <button onClick={onClose} aria-label="Close the walk" className="-my-3 -mr-3 size-11 text-xl leading-none">
-            ×
-          </button>
-        </div>
-        <Stops stops={STOPS.map((name) => ({ name }))} at={at} go={go} />
-      </div>
+      <WalkHead
+        at={at}
+        go={go}
+        back={() => go(at - 1)}
+        next={() => (at === last ? then && navigate(then.to) : go(at + 1))}
+        nextOff={at === last && !then}
+        nextLabel={at === last && then ? then.name : "Next"}
+        onClose={onClose}
+      />
 
       <div key={at} aria-live="polite" className="mt-2 flex touch-pan-y flex-col">
         {road ? (

@@ -33,7 +33,7 @@ export async function known(req: Request) {
   const q = new URL(req.url).searchParams;
   const seed = Number(q.get("seed"));
   if (!inPool(seed)) return Response.json({ error: "No such game." }, { status: 404 });
-  // A game has no last Year, and word from far holes comes late: Gaia BH3's sentinel reports about Year 21,200.
+  // A game has no last Year, and word from far holes comes late: Gaia BH1's sentinel reports about Year 17,200.
   // Capped at 200 until 2026-10-26, which hid every report after it.
   const year = Math.min(25_000, Math.max(0, Number(q.get("year")) || 0));
   const world = await loadWorld(seed);

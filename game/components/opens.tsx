@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 import { BuildMark, buildTone } from "@/components/marks";
 import { Face, ListHead } from "@/components/tab-head";
 import { buildSlug, opens, takes } from "@/lib/game/plan";
@@ -40,6 +40,8 @@ export function OpensLine({ name }: { name: string }) {
 
 /** On a build's page: what it opens once done, in the list's rows, each to its page. */
 export function Opens({ name, className = "mt-6" }: { name: string; className?: string }) {
+  // The way back a build page came with goes along to the next.
+  const state = useLocation().state;
   const later = opens(name);
   if (!later.length) return null;
   return (
@@ -48,7 +50,7 @@ export function Opens({ name, className = "mt-6" }: { name: string; className?: 
       <ul className="mt-1">
         {later.map((b) => (
           <li key={b.name} className="border-t border-faint">
-            <Link to={`/build/${buildSlug(b.name)}`} className="block py-2.5">
+            <Link to={`/build/${buildSlug(b.name)}`} state={state} className="block py-2.5">
               <Face
                 mark={<BuildMark name={b.name} />}
                 tone={buildTone(b.name, false)}

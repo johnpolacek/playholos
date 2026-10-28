@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Back Navigation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=SUSE:wght@100..800&display=swap" rel="stylesheet">
+<style>
+/* Offline, the game's own copies of the fonts. */
+@font-face { font-family: "SUSE Variable"; font-weight: 100 800; src: url("../game/node_modules/@fontsource-variable/suse/files/suse-latin-wght-normal.woff2") format("woff2"); }
+@font-face { font-family: "Plex Mono Local"; font-weight: 400; src: url("../game/node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2") format("woff2"); }
+
+/* Colors from game/app/globals.css. The game is always dark. */
+:root {
+  --page: #0b0c0d;
+  --page-ink2: #a9a59c;
+  --frame: #2a2b2e;
+  --paper: #121314;
+  --ink: #e6e3db;
+  --muted: #9c988f;
+  --faint: #34363a;
+  --panel: #17181a;
+  --rowline: #26282b;
+  --you: #5bb8d6;
+  --you-rgb: 91, 184, 214;
+  --reach: #e48ebf;
+  --reach-rgb: 228, 142, 191;
+  --see: #70d1a9;
+  --sans: "SUSE", "SUSE Variable", sans-serif;
+  --mono: "IBM Plex Mono", "Plex Mono Local", monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: #070808; color: var(--ink); font-family: var(--sans); text-wrap: pretty; }
+p { margin: 0; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+
+header { max-width: 1320px; margin: 0 auto; padding: 40px 16px 8px; display: flex; flex-wrap: wrap; gap: 16px; align-items: end; justify-content: space-between; }
+h1 { margin: 0; font-size: 22px; font-weight: 600; }
+header p { margin-top: 6px; color: var(--muted); font-size: 14px; max-width: 72ch; line-height: 1.45; }
+.controls { display: flex; gap: 4px; font-family: var(--mono); font-size: 11px; color: var(--muted); align-items: center; }
+.controls span { margin-right: 4px; }
+.pill { color: var(--muted); border: 1px solid var(--frame); border-radius: 999px; padding: 5px 10px; font: 11px var(--mono); }
+.pill[aria-pressed="true"] { color: var(--ink); border-color: var(--muted); }
+.pill:hover { color: var(--ink); }
+
+h2.kind { max-width: 1320px; margin: 24px auto 0; padding: 0 16px; font: 400 11px var(--mono); letter-spacing: .12em; color: var(--muted); }
+main { max-width: 1320px; margin: 0 auto; padding: 14px 16px 24px; display: grid; gap: 32px 20px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr)); }
+[data-show="compact"] .full, [data-show="full"] .compact { display: none; }
+.card { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.meta { display: flex; gap: 10px; align-items: baseline; }
+.num { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.name { font-size: 15px; font-weight: 600; }
+.note-text { color: var(--muted); font-size: 13px; line-height: 1.4; margin-top: -4px; min-height: calc(1.4em * 3); }
+
+/* The tab page, as a build opened from the walk on Reach shows it. */
+.frame { position: relative; overflow: hidden; background: var(--panel); border: 1px solid var(--rowline); border-radius: 16px; padding: 14px 16px 18px; min-height: 330px; }
+.frame .page { transition: transform .32s cubic-bezier(.3,.7,.3,1), opacity .32s; }
+.frame.leaving .page { transform: translateX(40%); opacity: 0; }
+.frame .toast { position: absolute; inset: auto 16px 16px; text-align: center; font: 400 10px var(--mono); letter-spacing: .1em; color: var(--you); opacity: 0; transition: opacity .2s; }
+.frame.leaving .toast { opacity: 1; }
+.walkhead { display: flex; justify-content: space-between; align-items: center; font-size: 11px; letter-spacing: .08em; color: var(--muted); }
+.walkhead b { font-weight: 400; color: var(--you); }
+.walkhead .x { font-size: 18px; color: var(--ink); line-height: 1; }
+.stops { position: relative; height: 24px; margin: 10px 4px 0; }
+.stops::before { content: ""; position: absolute; left: 4px; right: 8px; top: 50%; height: 1px; background: var(--you); opacity: .8; }
+.stops i { position: absolute; top: 50%; width: 9px; height: 9px; margin: -4.5px 0 0 -4.5px; border-radius: 50%; background: var(--you); }
+.stops i:first-child { background: var(--ink); }
+.stops i:last-child { width: 15px; height: 15px; margin: -7.5px 0 0 -7.5px; box-shadow: 0 0 0 3px #2a3d45; }
+.title { display: flex; gap: 10px; align-items: center; margin-top: 14px; }
+.title h3 { margin: 0; font-size: 19px; font-weight: 500; }
+.sub { margin-top: 4px; color: var(--page-ink2); font-size: 13px; line-height: 1.4; }
+.lock { margin-top: 10px; color: var(--page-ink2); font-size: 13px; line-height: 1.4; }
+.lock u { color: var(--ink); text-underline-offset: 2px; }
+.mind { position: relative; margin-top: 14px; padding: 0 0 4px 12px; }
+.mind::before { content: ""; position: absolute; top: 8px; bottom: 0; left: 0; width: 9px; border-top-left-radius: 12px; border-top: 1px solid rgba(var(--you-rgb), .4); border-left: 1px solid rgba(var(--you-rgb), .4); -webkit-mask-image: linear-gradient(#000, transparent); mask-image: linear-gradient(#000, transparent); }
+.mind .head { height: 16px; display: flex; align-items: center; gap: 7px; font: 400 9.5px/1 var(--mono); letter-spacing: .1em; color: var(--you); margin-bottom: 6px; }
+.mind .head::after { content: ""; height: 1px; flex: 1; background: linear-gradient(90deg, rgba(var(--you-rgb), .4), transparent 90%); }
+.mind p { font-size: 13.5px; line-height: 1.45; }
+.mark { width: 20px; height: 20px; flex-shrink: 0; color: var(--reach); }
+.mark svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; display: block; }
+.slot { margin-top: 12px; }
+.mono { font-family: var(--mono); }
+
+/* ── 1 · Mark pill: the parent's own marks ride in the pill. ── */
+.o1 { display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px 0 10px; border: 1px solid var(--ink); border-radius: 999px; font-size: 14px; font-weight: 500; transition: background .2s, color .2s; }
+.o1 .ch { font-size: 18px; line-height: 1; transition: transform .2s; }
+.o1 .marks { display: flex; }
+.o1 .marks span { width: 15px; height: 15px; margin-right: -3px; border-radius: 50%; background: var(--panel); display: grid; place-items: center; color: var(--reach); }
+.o1 .marks span svg { width: 11px; height: 11px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
+.o1:hover { background: var(--ink); color: var(--paper); }
+.o1:hover .ch { transform: translateX(-3px); }
+.o1:hover .marks span { background: var(--ink); color: #8b3f6a; }
+
+/* ── 2 · Breadcrumb: each crumb a step back. ── */
+.o2 { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font: 400 10.5px var(--mono); letter-spacing: .08em; color: var(--muted); }
+.o2 button { color: var(--muted); padding: 4px 0; border-bottom: 1px dashed transparent; transition: color .15s, border-color .15s; }
+.o2 button:hover { color: var(--ink); border-color: var(--muted); }
+.o2 .sep { opacity: .5; }
+.o2 .here { color: var(--reach); }
+
+/* ── 3 · Orbit return: a dot circles the way home. ── */
+.o3 { display: inline-flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 500; }
+.o3 .ring { position: relative; width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--faint); display: grid; place-items: center; transition: border-color .2s; }
+.o3 .ring::before { content: "‹"; font-size: 18px; line-height: 1; margin-top: -2px; }
+.o3 .ring i { position: absolute; inset: -1px; border-radius: 50%; animation: spin 3.6s linear infinite reverse; }
+.o3 .ring i::after { content: ""; position: absolute; top: -2.5px; left: 50%; width: 5px; height: 5px; margin-left: -2.5px; border-radius: 50%; background: var(--you); box-shadow: 0 0 6px var(--you); }
+.o3 small { display: block; font: 400 9.5px var(--mono); letter-spacing: .1em; color: var(--muted); }
+.o3:hover .ring { border-color: var(--you); }
+.o3:hover .ring i { animation-duration: 1.2s; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── 4 · Comet: a light streaks back the way we came. ── */
+.o4 { position: relative; overflow: hidden; display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 16px 0 12px; border-radius: 999px; border: 1px solid rgba(var(--you-rgb), .5); color: var(--ink); font-size: 14px; font-weight: 500; }
+.o4::before { content: ""; position: absolute; top: 50%; left: 100%; width: 60px; height: 1.5px; margin-top: -.75px; background: linear-gradient(90deg, var(--you), transparent); box-shadow: 0 0 8px var(--you); animation: comet 3.2s ease-in infinite; }
+.o4:hover::before { animation-duration: .9s; }
+.o4 .ch { color: var(--you); font-size: 18px; line-height: 1; }
+@keyframes comet { 0%, 55% { left: 100%; } 100% { left: -70px; } }
+
+/* ── 5 · Tab ear: the page we came from, a tab behind this one. ── */
+.o5 { position: relative; display: inline-flex; align-items: center; gap: 8px; height: 30px; padding: 0 14px 0 10px; border: 1px solid var(--faint); border-bottom: 0; border-radius: 10px 10px 0 0; background: #1d1e21; font-size: 13px; color: var(--page-ink2); transform: translateY(1px); transition: color .2s, transform .2s, background .2s; }
+.o5 .ch { font-size: 16px; line-height: 1; }
+.o5-wrap { border-bottom: 1px solid var(--faint); margin: 0 -16px; padding: 0 16px; }
+.o5:hover { color: var(--ink); background: #222327; transform: translateY(-2px); }
+
+/* ── 6 · Mind's word: the way back, spoken by the Mind. ── */
+.o6 { display: flex; align-items: center; gap: 8px; text-align: left; font-size: 13.5px; color: var(--page-ink2); }
+.o6 .dot { width: 14px; height: 14px; border-radius: 50%; border: 1px solid rgba(var(--you-rgb), .6); display: grid; place-items: center; flex-shrink: 0; }
+.o6 .dot::after { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--you); }
+.o6 em { font-style: normal; color: var(--you); border-bottom: 1px solid rgba(var(--you-rgb), .4); transition: border-color .2s; }
+.o6:hover em { border-color: var(--you); }
+
+/* ── 7 · Card peek: the page we came from, stacked behind. ── */
+.o7 { display: block; width: 100%; position: relative; height: 54px; }
+.o7 .back { position: absolute; inset: 0 10px auto; height: 44px; border-radius: 12px 12px 0 0; border: 1px solid var(--faint); border-bottom: 0; background: #1c1d20; display: flex; align-items: center; justify-content: space-between; padding: 0 12px; transition: transform .25s; }
+.o7 .back::before { content: ""; position: absolute; inset: -7px 14px auto; height: 7px; border-radius: 8px 8px 0 0; border: 1px solid var(--faint); border-bottom: 0; background: #19191c; }
+.o7 .lab { font: 400 9.5px var(--mono); letter-spacing: .1em; color: var(--muted); }
+.o7 .t { font-size: 13.5px; color: var(--ink); }
+.o7 .marks { display: flex; gap: 6px; color: var(--reach); }
+.o7 .marks svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; }
+.o7 .marks .on { color: var(--ink); }
+.o7 .edge { position: absolute; left: -16px; right: -16px; bottom: 0; height: 12px; border-top: 1px solid var(--rowline); background: var(--panel); border-radius: 12px 12px 0 0; }
+.o7:hover .back { transform: translateY(-5px); }
+
+/* ── 8 · Siblings: back, and on along the four roads. ── */
+.o8 { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: center; }
+.o8 .up { height: 40px; padding: 0 14px 0 10px; border: 1px solid var(--ink); border-radius: 999px; display: inline-flex; align-items: center; gap: 6px; font-size: 13.5px; font-weight: 500; white-space: nowrap; }
+.o8 .up:hover { background: var(--ink); color: var(--paper); }
+.o8 .roads { display: grid; grid-template-columns: repeat(4, 1fr); height: 40px; border: 1px solid var(--faint); border-radius: 999px; overflow: hidden; }
+.o8 .roads button { display: grid; place-items: center; color: var(--reach); border-left: 1px solid var(--faint); transition: background .15s; }
+.o8 .roads button:first-child { border-left: 0; }
+.o8 .roads button svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; }
+.o8 .roads button:hover { background: rgba(var(--reach-rgb), .1); }
+.o8 .roads .on { background: rgba(var(--reach-rgb), .16); color: var(--ink); }
+
+/* ── 9 · Thread home: a dotted path back to the stop, a pulse running home. ── */
+.o9 { display: block; width: 100%; text-align: left; }
+.o9 svg { width: 100%; height: 44px; display: block; overflow: visible; }
+.o9 .row { display: flex; justify-content: space-between; font: 400 9.5px var(--mono); letter-spacing: .1em; color: var(--muted); margin-top: 2px; }
+.o9 .row b { font-weight: 400; color: var(--ink); }
+.o9 .pulse { animation: home 2.8s ease-in-out infinite; }
+.o9:hover .pulse { animation-duration: 1s; }
+@keyframes home { 0% { transform: translateX(var(--from)); opacity: 0; } 15% { opacity: 1; } 85% { opacity: 1; } 100% { transform: translateX(0); opacity: 0; } }
+
+/* ── 10 · Step bar: back to the stop, its place on the walk drawn in. ── */
+.o10 { width: 100%; height: 48px; border-radius: 999px; border: 1px solid var(--ink); display: flex; align-items: center; justify-content: space-between; padding: 0 18px 0 14px; font-size: 14.5px; font-weight: 500; transition: background .2s, color .2s; }
+.o10 .l { display: flex; align-items: center; gap: 8px; }
+.o10 .ch { font-size: 18px; line-height: 1; }
+.o10 .mini { display: flex; gap: 5px; align-items: center; }
+.o10 .mini i { width: 5px; height: 5px; border-radius: 50%; background: var(--you); opacity: .55; }
+.o10 .mini i:last-child { width: 8px; height: 8px; opacity: 1; box-shadow: 0 0 0 2px #2a3d45; }
+.o10:hover { background: var(--ink); color: var(--paper); }
+
+/* ── 11 · Return row: the parent as a list row, as on Build. ── */
+.o11 { width: 100%; display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 12px; background: rgba(var(--reach-rgb), .06); border: 1px solid rgba(var(--reach-rgb), .22); text-align: left; transition: background .2s, border-color .2s; }
+.o11 .ch { font-size: 20px; color: var(--reach); line-height: 1; transition: transform .2s; }
+.o11 .lab { display: block; font: 400 9.5px var(--mono); letter-spacing: .1em; color: var(--reach); }
+.o11 .t { display: block; font-size: 14.5px; font-weight: 500; margin-top: 2px; }
+.o11 .r { margin-left: auto; font: 400 10.5px var(--mono); color: var(--muted); }
+.o11:hover { background: rgba(var(--reach-rgb), .12); border-color: rgba(var(--reach-rgb), .45); }
+.o11:hover .ch { transform: translateX(-3px); }
+
+/* ── 12 · Swipe edge: drag right, or tap, to go back. ── */
+.o12 { position: relative; width: 100%; height: 46px; border-radius: 999px; background: #1d1e21; border: 1px solid var(--faint); overflow: hidden; user-select: none; touch-action: none; }
+.o12 .knob { position: absolute; top: 3px; left: 3px; width: 38px; height: 38px; border-radius: 50%; background: var(--ink); color: var(--paper); display: grid; place-items: center; font-size: 18px; z-index: 1; cursor: grab; }
+.o12 .knob:active { cursor: grabbing; }
+.o12 .fill { position: absolute; inset: 0 auto 0 0; width: 44px; background: rgba(var(--you-rgb), .18); border-radius: 999px; }
+.o12 .t { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 13.5px; color: var(--page-ink2); }
+.o12 .chev { display: inline-flex; gap: 1px; color: var(--you); font-size: 13px; }
+.o12 .chev span { animation: chev 1.6s infinite; opacity: .2; }
+.o12 .chev span:nth-child(2) { animation-delay: .2s; }
+.o12 .chev span:nth-child(3) { animation-delay: .4s; }
+@keyframes chev { 30% { opacity: 1; } 60%, 100% { opacity: .2; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+<body data-show="all">
+<header>
+  <div>
+    <h1>Back from a build to Roads to come</h1>
+    <p>Twelve ways back, each in the tab page as a build opened from the walk on Reach shows it. The first six are small, the last six run the page’s width. Tap one to see the page leave for Roads to come. Number 12 drags too.</p>
+  </div>
+  <div class="controls">
+    <span>SHOW</span>
+    <button class="pill" data-set="all" aria-pressed="true">All</button>
+    <button class="pill" data-set="compact" aria-pressed="false">Small</button>
+    <button class="pill" data-set="full" aria-pressed="false">Full width</button>
+  </div>
+</header>
+
+<h2 class="kind compact">SMALL</h2>
+<main id="compact" class="compact"></main>
+<h2 class="kind full">FULL WIDTH</h2>
+<main id="full" class="full"></main>
+
+<script>
+// The four roads' marks, from game/components/marks.tsx, held still.
+const MARK = {
+  fusion: '<svg viewBox="0 0 24 24"><path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4"/></svg>',
+  lens: '<svg viewBox="0 0 16 16"><circle cx="5.4" cy="8" r="2.4"/><path d="M1.4 3.2Q5.4 4.6 14.2 8M1.4 12.8Q5.4 11.4 14.2 8" opacity=".55"/><circle cx="14.2" cy="8" r="1.1" fill="currentColor" stroke="none"/></svg>',
+  seed: '<svg viewBox="0 0 24 24"><path d="M14 9.536V7a4 4 0 0 1 4-4h1.5a.5.5 0 0 1 .5.5V5a4 4 0 0 1-4 4 4 4 0 0 0-4 4c0 2 1 3 1 5a5 5 0 0 1-1 3"/><path d="M4 9a5 5 0 0 1 8 4 5 5 0 0 1-8-4"/><path d="M5 21h14"/></svg>',
+  link: '<svg viewBox="0 0 16 16"><path d="M2.4 2.6Q6.6 8 2.4 13.4"/><circle cx="5.6" cy="8" r=".9" fill="currentColor" stroke="none"/><path d="M6.8 8h7.6" stroke-dasharray="1.2 1.8"/></svg>',
+};
+const ROADS = ["fusion", "lens", "seed", "link"];
+const marks = (on) => ROADS.map((k) => `<span class="${k === on ? "on" : ""}">${MARK[k]}</span>`).join("");
+
+const OPTIONS = [
+  {
+    kind: "compact", name: "Mark pill",
+    note: "Today’s pill, carrying the four roads’ marks, so it reads as the list we came from and not just a word.",
+    html: `<button class="o1 go"><span class="ch">‹</span><span class="marks">${ROADS.map((k) => `<span>${MARK[k]}</span>`).join("")}</span>Roads to come</button>`,
+  },
+  {
+    kind: "compact", name: "Breadcrumb",
+    note: "The whole way down in mono, as the walk head writes. Each crumb steps back that far: Reach, the walk, or its stop.",
+    html: `<nav class="o2"><button class="go">REACH</button><span class="sep">›</span><button class="go">HOW WE REACH</button><span class="sep">›</span><button class="go">ROADS TO COME</button><span class="sep">›</span><span class="here">FUSION DRIVE</span></nav>`,
+  },
+  {
+    kind: "compact", name: "Orbit return",
+    note: "A ring with our blue dot circling home, quicker on hover. The stop’s name, with its place on the walk under it.",
+    html: `<button class="o3 go"><span class="ring"><i></i></span><span>Roads to come<small>STOP 4 OF 4</small></span></button>`,
+  },
+  {
+    kind: "compact", name: "Comet",
+    note: "A thin light streaks back along the pill now and then, the way we came. Faster on hover.",
+    html: `<button class="o4 go"><span class="ch">‹</span>Roads to come</button>`,
+  },
+  {
+    kind: "compact", name: "Tab ear",
+    note: "The page we came from as a tab behind this one, rising on hover. Reads as a stack without taking a row of its own.",
+    html: `<div class="o5-wrap"><button class="o5 go"><span class="ch">‹</span>Roads to come</button></div>`,
+  },
+  {
+    kind: "compact", name: "Mind’s word",
+    note: "The way back said in our voice, with the Mind’s dot. Quiet, and it fits the pages’ words.",
+    html: `<button class="o6 go"><span class="dot"></span><span>We came here from <em>Roads to come</em></span></button>`,
+  },
+  {
+    kind: "full", name: "Card peek",
+    note: "Roads to come as a card stacked behind this page, its four marks on it, this road lit. Tap the card to bring it forward.",
+    html: `<button class="o7 go"><span class="back"><span><span class="lab">BACK TO</span> <span class="t">Roads to come</span></span><span class="marks">${marks("fusion")}</span></span><span class="edge"></span></button>`,
+  },
+  {
+    kind: "full", name: "Siblings",
+    note: "Back, and beside it the four roads as a strip, this one lit. Step to the next road without going back first.",
+    html: `<div class="o8"><button class="up go"><span>‹</span>Roads</button><div class="roads">${ROADS.map((k) => `<button class="${k === "fusion" ? "on" : "go"}" aria-label="${k}">${MARK[k]}</button>`).join("")}</div></div>`,
+  },
+  {
+    kind: "full", name: "Thread home",
+    note: "A dotted path from this build back to the walk’s last stop, a pulse of our blue running home along it.",
+    html: `<button class="o9 go" style="--from: 290px"><svg viewBox="0 0 340 44"><line x1="10" x2="322" y1="22" y2="22" stroke="#9c988f" stroke-dasharray="1.5 4" opacity=".7"/><circle cx="10" cy="22" r="6.5" fill="#5bb8d6"/><circle cx="10" cy="22" r="10" fill="none" stroke="#2a3d45" stroke-width="3"/><g class="pulse"><circle cx="10" cy="22" r="7" fill="#5bb8d6" opacity=".2"/><circle cx="10" cy="22" r="2.4" fill="#5bb8d6"/></g><circle cx="322" cy="22" r="4" fill="#e48ebf"/></svg><span class="row"><b>‹ ROADS TO COME</b><span>FUSION DRIVE</span></span></button>`,
+  },
+  {
+    kind: "full", name: "Step bar",
+    note: "A full button as the walk’s own Back is, with the stops drawn small at its end, the last one ringed.",
+    html: `<button class="o10 go"><span class="l"><span class="ch">‹</span>Roads to come</span><span class="mini"><i></i><i></i><i></i><i></i><i></i></span></button>`,
+  },
+  {
+    kind: "full", name: "Return row",
+    note: "The parent drawn as a row from a list, in the roads’ pink, with where it sits on the walk at the right.",
+    html: `<button class="o11 go"><span class="ch">‹</span><span><span class="lab">HOW WE REACH</span><span class="t">Roads to come</span></span><span class="r">4 OF 4</span></button>`,
+  },
+  {
+    kind: "full", name: "Swipe edge",
+    note: "Drag the knob right, as a phone’s edge swipe goes back, or just tap it. The fill follows the drag.",
+    html: `<div class="o12"><div class="fill"></div><span class="t"><span class="chev"><span>›</span><span>›</span><span>›</span></span>Slide back to Roads to come</span><button class="knob go-tap" aria-label="Back to Roads to come">‹</button></div>`,
+  },
+];
+
+const page = (o) => `
+  <div class="page">
+    <div class="walkhead"><span>REACH · 4 OF 4 · <b>DONE</b></span><span class="x">×</span></div>
+    <div class="stops"><i style="left:4px"></i><i style="left:25%"></i><i style="left:50%"></i><i style="left:75%"></i><i style="left:calc(100% - 8px)"></i></div>
+    <div class="slot">${o.html}</div>
+    <div class="title"><span class="mark">${MARK.fusion}</span><h3>Fusion Drive</h3></div>
+    <p class="sub">An engine that lets a craft slow at a star, and stay.</p>
+    <p class="lock">Opens after the <u>Deuterium Works</u>, which isn’t in our order yet.</p>
+    <div class="mind"><div class="head">THE MIND</div><p>No one has flown one yet. It lets a craft slow at a star and stay, where a flyby is past within minutes. The longest roads need it.</p></div>
+  </div>
+  <div class="toast">‹ BACK TO ROADS TO COME</div>`;
+
+OPTIONS.forEach((o, i) => {
+  const card = document.createElement("section");
+  card.className = "card";
+  card.innerHTML = `<div class="meta"><span class="num">${String(i + 1).padStart(2, "0")}</span><span class="name">${o.name}</span></div><p class="note-text">${o.note}</p><div class="frame">${page(o)}</div>`;
+  document.getElementById(o.kind).append(card);
+});
+
+// A tap on a way back: the page leaves for Roads to come, then comes back to try again.
+function leave(frame) {
+  frame.classList.add("leaving");
+  setTimeout(() => frame.classList.remove("leaving"), 1100);
+}
+document.addEventListener("click", (e) => {
+  const go = e.target.closest(".go, .go-tap");
+  if (go && !go.dataset.dragged) leave(go.closest(".frame"));
+  if (go) delete go.dataset.dragged;
+  const set = e.target.closest("[data-set]");
+  if (set) {
+    document.body.dataset.show = set.dataset.set;
+    document.querySelectorAll("[data-set]").forEach((b) => b.setAttribute("aria-pressed", String(b === set)));
+  }
+});
+
+// 12: the knob drags, the fill follows, and past most of the way it goes back.
+document.querySelectorAll(".o12").forEach((track) => {
+  const knob = track.querySelector(".knob"), fill = track.querySelector(".fill");
+  let start = null, x = 0;
+  const max = () => track.clientWidth - knob.offsetWidth - 6;
+  const set = (v, ease) => {
+    x = Math.max(0, Math.min(max(), v));
+    knob.style.transition = fill.style.transition = ease ? "transform .25s, width .25s" : "none";
+    knob.style.transform = `translateX(${x}px)`;
+    fill.style.width = `${x + 44}px`;
+  };
+  knob.addEventListener("pointerdown", (e) => { start = e.clientX - x; knob.setPointerCapture(e.pointerId); });
+  knob.addEventListener("pointermove", (e) => { if (start !== null) set(e.clientX - start); });
+  knob.addEventListener("pointerup", () => {
+    if (start === null) return;
+    start = null;
+    if (x > 4) knob.dataset.dragged = "1";
+    if (x > max() * 0.7) leave(track.closest(".frame"));
+    set(0, true);
+  });
+});
+</script>
+</body>
+</html>

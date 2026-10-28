@@ -102,6 +102,29 @@
   }
 }
 
+/* A way back: faint stars drift behind its words, one of them ours in blue, as the sky does behind the map.
+   Settled 2026-10-28 in explorations/back-nav-step.html, 12. */
+.starfield {
+  background-image:
+    radial-gradient(1.3px 1.3px at 12% 30%, #e6e3dbcc, transparent),
+    radial-gradient(1.3px 1.3px at 28% 72%, #e6e3db99, transparent),
+    radial-gradient(1.3px 1.3px at 46% 22%, #e6e3dbaa, transparent),
+    radial-gradient(1.3px 1.3px at 63% 64%, #e6e3db88, transparent),
+    radial-gradient(1.4px 1.4px at 78% 38%, var(--you), transparent),
+    radial-gradient(1.3px 1.3px at 90% 76%, #e6e3db99, transparent);
+  background-size: 200px 100%;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .starfield {
+    animation: starfield 24s linear infinite;
+  }
+}
+@keyframes starfield {
+  to {
+    background-position: -200px 0;
+  }
+}
+
 body {
   background: var(--page);
   color: var(--ink);

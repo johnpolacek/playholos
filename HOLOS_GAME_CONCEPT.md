@@ -1142,13 +1142,18 @@ Settled 2026-10-26. Numbers from `python3 calcs/holes.py`. Sources in [HOLOS_RES
   - *What it is worth now:* a Mind of ours that lives if Earth does not, which is what keeps a game going.
   - *It may not be first.* It sees who was there when it landed, as a sentinel would.
   - *Not yet:* its thought or power reaching home.
-- **The Will can move to our Mind at a hole,** settled 2026-10-26, by a new build, the Mind Link.
+  - *Or to a star, 2026-10-27.* The Seed Ship can set our Mind down where a seed probe could, the world next door or a world we have felt, to settle on the star’s light and rock. Still one Seed Ship, one Mind, one place.
+    - *Who sees it:* a people at home there see it brake in, under their own sky, and decide at once. A neighbor’s colony there sees it too, first or later. A settled Mind is never hidden.
+    - *Its works* grow as a furnace’s do, doubling every 10 Years once it stands. No slow clock: a star has no innermost orbit to live on.
+    - *Not yet:* its glow seen by a neighbor’s survey.
+- **The Will can move to our Mind at a hole,** settled 2026-10-26, by a new build, the Mind Link. *2026-10-27:* or at a star, wherever our Mind stands.
   - *How it goes:* as a transmission, as Death and new games has it. Our message dishes would take millions of Years to send a 100 PB Mind. The Mind Link’s 100 m mirror and 1 GW laser send it 10 ly in under two days, about a month at 45 ly. Our Mind there builds its own 100 m mirror to catch it.
   - *When:* once the Mind Link is done, a sample of 18 Years like the 15 m Mirror’s road, and word has come home that our Mind there stands. Once, for good.
   - *Living there:* every order from the Will reaches Earth a light-time late, and Earth’s news reaches the Will as late. What happens at the hole, the Will sees at once.
   - *A slow clock, in a refuge only:* our Mind spreads over chips 10 cm wide on the hole’s innermost stable orbit, small enough that its tides can’t break them. Its clock runs at the Kerr orbit’s rate, so 1.4 to about 2 of the sky’s Years pass in each of ours. A furnace’s disk fills that orbit, so there the clock runs as Earth’s.
   - *What it is worth:* safety in the dark, and the sky going by faster, against a light-time between the Will and everything it orders.
-  - *Not yet:* Earth dying and the Will escaping there on its own, as Death and new games has it.
+  - *The crossing is dark, built 2026-10-27,* as the Will moving into any Mind has it: from leaving until all of it has arrived, a Year for each light-year, the screen shows only the transfer. The Will orders nothing and hears nothing. Earth goes on by our orders and charter.
+  - *Not yet:* Earth dying and the Will escaping there on its own, as Death and new games has it. Moving on again, or home.
 - **Not yet:** Planet Nine as a black hole.
 
 ## Why the sky is quiet, rechecked

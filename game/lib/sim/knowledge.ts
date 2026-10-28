@@ -5,7 +5,7 @@ import { giftWords } from "../game/sends.ts";
 import { lightTime } from "../light.ts";
 import { BANDS, iwa, observe, owa, WIDE } from "./observing.ts";
 import { proximaB } from "./proxima.ts";
-import type { DarkMass, EarthView, Find, FeltWorld, Gas, Glow, Heard, Hole, Read, Visit, World } from "./types.ts";
+import type { ColonyMode, DarkMass, EarthView, Find, FeltWorld, Gas, Glow, Heard, Hole, Read, Visit, World } from "./types.ts";
 import catalog from "../../data/works.json" with { type: "json" };
 import type { Loss } from "./meetings.ts";
 import { seedProbes } from "./spread.ts";
@@ -23,8 +23,8 @@ export interface Kit {
   mapper?: number | null;
   /** Each lens we sent, by the star it looks at as we name it: the Year it begins to look, and its picture is home. */
   lenses?: { star: string; looks: number; home: number }[];
-  /** Our Mind sent to a black hole: the hole, how it lives there, and the Year it leaves. */
-  colony?: { star: string; mode: "furnace" | "refuge"; leaves: number } | null;
+  /** Our Mind sent to a black hole or a star: where, how it lives there, and the Year it leaves. */
+  colony?: { star: string; mode: ColonyMode; leaves: number } | null;
   /** Each sentinel we sent, by its star as we name it, and the Year it leaves. */
   sentinels?: { star: string; leaves: number }[];
   /** Each seed probe we sent, by its star as we name it, and the Year it leaves. Its copies follow from spread.ts. */
@@ -357,10 +357,10 @@ function air(f: FeltWorld) {
 /** Our Mind at a black hole, as far as its word has reached us by `year`: on its way, landed, or standing alone as a
  *  Mind, and, once it stands, who was there before it, and how its furnace has grown, a Mind's computing doubling every
  *  10 Years from our 2040 scale, as a neighbor's does. A refuge stays as small and dark as it began. 2026-10-26. */
-function colonyAt(world: World, holes: (DarkMass & { id: string })[], c: { star: string; mode: "furnace" | "refuge"; leaves: number }, year: number, losses: Loss[] = []) {
+function colonyAt(world: World, holes: (DarkMass & { id: string })[], c: { star: string; mode: ColonyMode; leaves: number }, year: number, losses: Loss[] = []) {
   const { speed, burn, brake, stands } = catalog.seedShip;
   const h = holes.find((x) => x.name === c.star);
-  if (!h) return { star: c.star, mode: c.mode, leaves: c.leaves };
+  if (!h) return colonyAtStar(world, c, year, losses);
   const lands = c.leaves + h.d / speed + burn + brake, alone = lands + stands;
   const heard = year - h.d;                                       // what its word home shows of it now
   const truth = world.holes!.find((x) => x.id === h.id)!;
@@ -377,14 +377,38 @@ function colonyAt(world: World, holes: (DarkMass & { id: string })[], c: { star:
   return { star: c.star, mode: c.mode, leaves: c.leaves, lands, stands: alone, d: h.d, ...spin, ...(others.length ? { others } : {}), ...(came.length ? { came } : {}), ...(lost ? { lost } : {}), ...(watts ? { watts } : {}) };
 }
 
+/** Our Mind settled at a star, on its light and its rock, as far as its word has reached us by `year`: on its way,
+ *  landed, or standing alone as a Mind. Who was there first: a people at home, or their ruins, or a neighbor's colony
+ *  landed before it. Who came after, its end, and its works growing as a furnace's do. No slow clock: a star has no
+ *  innermost orbit to live on. 2026-10-27. */
+function colonyAtStar(world: World, c: { star: string; mode: ColonyMode; leaves: number }, year: number, losses: Loss[] = []) {
+  const { speed, burn, brake, stands } = catalog.seedShip;
+  const id = Object.keys(world.stars).find((k) => world.stars[k].shown === c.star);
+  if (!id) return { star: c.star, mode: c.mode, leaves: c.leaves };
+  const d = world.stars[id].d;
+  const lands = c.leaves + d / speed + burn + brake, alone = lands + stands;
+  const heard = year - d;
+  const n = world.neighbors.find((x) => x.star === id);
+  const theirs = world.colonies.filter((x) => x.star === id);
+  const others = heard >= lands
+    ? [...(n ? [{ kind: n.dead ? ("ruins" as const) : ("home" as const) }] : []), ...theirs.filter((x) => x.lands <= lands).map(() => ({ kind: "colony" as const }))]
+    : [];
+  const loss = losses.find((l) => l.craft === `colony:${id}`);
+  const lost = loss && heard >= loss.at ? { at: loss.at, how: loss.how } : null;
+  const until = Math.min(heard, loss?.at ?? Infinity);
+  const came = theirs.filter((x) => x.lands > lands && x.lands <= until).map((x) => ({ kind: "colony" as const, at: x.lands, from: comer(world, x.root) }));
+  const watts = until >= alone ? 1e13 * 2 ** ((until - alone) / 10) : null;
+  return { star: c.star, mode: c.mode, leaves: c.leaves, lands, stands: alone, d, atStar: true, ...(others.length ? { others } : {}), ...(came.length ? { came } : {}), ...(lost ? { lost } : {}), ...(watts ? { watts } : {}) };
+}
+
 /** The star a craft braking in at a hole came from: its flame points back along its track. Its star, never who. */
 function comer(world: World, who: string) {
   const p = world.neighbors.find((n) => n.name === who);
   return p ? (world.stars[p.star]?.shown ?? p.star) : "a star we can't name";
 }
 
-/** What the Will knows at Year `year`: Earth's news a light-time old once it lives at a hole, and, at first hand, our
- *  Mind there and any sentinel of ours at the same hole. 2026-10-26. */
+/** What the Will knows at Year `year`: Earth's news a light-time old once it lives at our Mind at a hole or a star,
+ *  and, at first hand, our Mind there and any craft of ours at the same place. 2026-10-26, a star since 2026-10-27. */
 export function willKnows(world: World, year: number, voices: Voices, kit: Kit, will?: { hole: string; d: number; at: number } | null): EarthView {
   if (!will || year < will.at) return earthKnows(world, year, voices, kit);
   const view = earthKnows(world, year - will.d, voices, kit);
@@ -417,8 +441,10 @@ function seedFinds(world: World, star: string, at: number): Pick<Visit, "world" 
   return { world: `${star}’s world`, sight, ...(sight !== "haze" ? { air: { water: air !== "none", oxygen: air === "oxygen" } } : {}), ...others };
 }
 
+type Others = NonNullable<NonNullable<EarthView["colony"]>["others"]>;
+
 /** What a sentinel at a black hole sees of whoever got there first. */
-function others(o: NonNullable<Visit["others"]>) {
+function others(o: Others) {
   return o
     .map((x) =>
       x.kind === "sentinel"
@@ -426,6 +452,19 @@ function others(o: NonNullable<Visit["others"]>) {
         : x.mode === "furnace"
           ? "Someone feeds the hole: a disk of matter glows round it, hot enough to shine in X-rays, and works round that take its light."
           : "Someone lives in its shadow: cold radiators and collectors, dark against the sky, dumping their heat into the hole.",
+    )
+    .join(" ");
+}
+
+/** Who our Mind found at a star when it landed. */
+function settledBy(o: Others) {
+  return o
+    .map((x) =>
+      x.kind === "home"
+        ? "A people live there: cities on its world, and it braked in under their sky, its flame plain to them."
+        : x.kind === "ruins"
+          ? "A people lived there once: their world is green, and their cities are ruins."
+          : "A ship not ours had landed there before it, and stayed.",
     )
     .join(" ");
 }
@@ -508,17 +547,18 @@ export function describe(view: EarthView): string {
   const c = view.colony;
   const colonyText = !c
     ? ""
-    : `\n\nOur Mind sent to ${c.star} on the Seed Ship, to ${c.mode === "furnace" ? "feed the hole for power" : "live hidden in its shadow"}: ` +
+    : `\n\nOur Mind sent to ${c.star} on the Seed Ship, to ${c.mode === "furnace" ? "feed the hole for power" : c.mode === "refuge" ? "live hidden in its shadow" : "settle there on the star's light and rock"}: ` +
       (c.lands === undefined
         ? `it leaves at Year ${one(c.leaves)}.`
         : view.year < c.lands + c.d!
           ? `it left at Year ${one(c.leaves)}, lands about Year ${one(c.lands)}, and its word of landing reaches us about Year ${one(c.lands + c.d!)}.`
           : `it landed at Year ${one(c.lands)} and stands alone as a Mind from Year ${one(c.stands!)}, ${one(c.d!)} light-years and Years away from us.` +
-            (c.others?.length ? ` It was not the first there. ${others(c.others)}` : " No one else was there.") +
+            (c.others?.length ? ` It was not the first there. ${c.atStar ? settledBy(c.others) : others(c.others)}` : " No one else was there.") +
             (c.clock ? ` The hole spins at ${c.spin!.toFixed(2)} of the most a hole can, so a clock on its innermost stable orbit runs ${(1 / c.clock).toFixed(1)} times slower than ours. ${c.mode === "refuge" ? "Our Mind there could spread over chips 10 cm wide on that orbit, small enough that its tides can't break them, and run that slow, once the Will lives there." : "Its furnace's disk fills that orbit, so our Mind can't live there."}` : "") +
             (c.came?.length ? ` Since then: ${c.came.map((x) => `at Year ${one(x.at)}, ${x.kind === "colony" ? "a ship not ours braked in and stayed" : "a craft not ours braked in and stays, watching"}, its track back to ${x.from}`).join("; ")}. Whoever came has seen ours.` : "") +
             (c.lost ? ` Its word stopped at Year ${one(c.lost.at)}. It is gone. ${c.lost.how === "strike" ? "Its last word showed nothing coming: whatever hit it came cold and fast." : "Its last word showed a craft not ours closing on it."}` : "") +
-            (c.watts && !c.lost ? ` Its furnace runs at about ${c.watts.toExponential(0).replace("e+", "×10^")} W, as its word shows it, under what any sky survey sees until about 10^19 W.` : c.mode === "refuge" ? " It keeps small and dark, and no one looking from outside would know it is there." : ""));
+            (c.watts && !c.lost && c.mode === "settle" ? ` Its works on the star's light run at about ${c.watts.toExponential(0).replace("e+", "×10^")} W, as its word shows it.` : "") +
+            (c.watts && !c.lost && c.mode === "furnace" ? ` Its furnace runs at about ${c.watts.toExponential(0).replace("e+", "×10^")} W, as its word shows it, under what any sky survey sees until about 10^19 W.` : c.mode === "refuge" ? " It keeps small and dark, and no one looking from outside would know it is there." : ""));
   const holesText = dark.length ? `\n\nBlack holes we have found. A star mapper finds more as they pass in front of stars:\n${dark.join("\n")}` : "";
   return `Worlds Earth has felt by their tug on their stars, as of Year ${one(view.year)}. From here a home and a natural world look the same:
 ${felt}${nearest}

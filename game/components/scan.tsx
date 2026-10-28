@@ -214,20 +214,28 @@ export function ScanMap({ className }: { className: string }) {
   const { ids, dials, look } = useLeads();
   // The leads light once as the map opens, not again as a lead's system comes and goes.
   const lit = useRef(false);
+  // A lead found after they lit lights too. Until all are lit the map holds no focus, so no Close View.
+  const count = useRef(ids.length);
   const onReady = useCallback(
     (flight: number) => {
       if (lit.current) return;
       lit.current = true;
       gsap.killTweensOf(dials);
-      if (prefersReducedMotion()) return void Object.assign(dials, { grid: 1, found: ids.length });
+      if (prefersReducedMotion()) return void Object.assign(dials, { grid: 1, found: count.current });
       Object.assign(dials, { grid: 0, found: 0 });
       gsap
         .timeline({ delay: Math.max(0, flight - 0.6) })
         .to(dials, { grid: 1, duration: 1 }, 0)
-        .to(dials, { found: ids.length, duration: Math.min(3, 0.4 * ids.length), ease: "power1.inOut" }, 0.4);
+        .to(dials, { found: () => count.current, duration: Math.min(3, 0.4 * count.current), ease: "power1.inOut" }, 0.4);
     },
-    [dials, ids],
+    [dials],
   );
+  useEffect(() => {
+    count.current = ids.length;
+    if (!lit.current || gsap.isTweening(dials) || dials.found === ids.length) return;
+    if (prefersReducedMotion()) return void Object.assign(dials, { found: ids.length });
+    gsap.to(dials, { found: ids.length, duration: 0.6, ease: "power1.inOut", overwrite: "auto" });
+  }, [dials, ids]);
   useEffect(() => () => void gsap.killTweensOf(dials), [dials]);
   return ids.length ? (
     <LeadsMap dials={dials} ids={ids} system={look?.system} onReady={onReady} className={className} />

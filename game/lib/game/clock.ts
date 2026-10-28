@@ -27,9 +27,12 @@ export function span(years: number): string {
   const s = Math.max(0, Math.floor((years * MS_PER_YEAR) / 1000));
   const h = Math.floor(s / 3600);
   const m = Math.floor((s % 3600) / 60);
-  if (h) return `${h}h ${String(m).padStart(2, "0")}m`;
+  if (h) return m ? `${h}h ${String(m).padStart(2, "0")}m` : `${h}h`;
   return m ? `${m}m` : `${s}s`;
 }
+
+/** Light-years as a screen writes them: 4.2, or 1,560 where the tenth is 0. */
+export const lyOf = (ly: number) => ly.toLocaleString("en-US", { maximumFractionDigits: 1 });
 
 /** Real time for a span of game time, as HH:MM:SS. */
 export function realTime(years: number): string {

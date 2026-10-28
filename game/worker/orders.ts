@@ -1,6 +1,7 @@
 import { BUILDS, LATER } from "@/lib/game/plan";
 import type { Ordered, Size, Will } from "@/lib/game/types";
 import type { Loss } from "@/lib/sim/meetings";
+import type { ColonyMode } from "@/lib/sim/types";
 import { GIFT_STEPS } from "@/lib/sim/messages";
 
 // Our order, as the browser sends it from the save, checked against what Earth can build before the server paces it.
@@ -53,12 +54,12 @@ export function readLenses(l: unknown): Ordered[] {
 export const readSentinels = readLenses;
 export const readSeeds = readLenses;
 
-// Our colony at a black hole, from the save: one, by its hole's name, the Year we sent it and its mode. Checked.
-export function readColony(c: unknown): (Ordered & { mode: "furnace" | "refuge" }) | undefined {
+// Our colony at a black hole or a star, from the save: one, by its name, the Year we sent it and its mode. Checked.
+export function readColony(c: unknown): (Ordered & { mode: ColonyMode }) | undefined {
   if (!c || typeof c !== "object") return undefined;
   const o = c as Record<string, unknown>;
   if (typeof o.name !== "string" || o.name.length > 80 || typeof o.y !== "number" || !Number.isFinite(o.y) || o.y < 0) return undefined;
-  if (o.mode !== "furnace" && o.mode !== "refuge") return undefined;
+  if (o.mode !== "furnace" && o.mode !== "refuge" && o.mode !== "settle") return undefined;
   return { name: o.name, y: o.y, mode: o.mode };
 }
 

@@ -1,6 +1,7 @@
 // Planning, on the Build tab: what Earth can start at Year 0. The builds are the first hour's works from
 // data/works.json, paced by lib/sim/works.ts from the player's own order, so every date on the screen is the game's.
 // The Mind names what it would start with only when asked, 2026-10-19, and never queues anything itself.
+import { plainBuild } from "./build-offer";
 import { KNOCKS } from "./knocks";
 import { YEAR_0 } from "./clock";
 import type { Plan } from "./types";
@@ -96,7 +97,7 @@ export const LATER: Later[] = [
     after: "Mass Driver",
   },
   // Sends the Will to our Mind at a black hole, as a transmission, 2026-10-26. calcs/holes.py.
-  { name: "Mind Link", what: "A laser 100 m wide, to send the Will to our Mind at a hole.", does: "reach", after: "Seed Ship" },
+  { name: "Mind Link", what: "A laser 100 m wide, to send the Will to our Mind far away.", does: "reach", after: "Seed Ship" },
   // The cold compute annex at scale, 2026-10-26: chips run cold behind a shade, on sunlight caught beside them.
   {
     name: "Cold Annex",
@@ -105,6 +106,10 @@ export const LATER: Later[] = [
     after: "Mass Driver",
   },
 ];
+
+/** Any build by the name the Mind gave, in any case, with or without "the". */
+export const buildNamed = (name: string): Build | Later | undefined =>
+  [...BUILDS, ...LATER].find((b) => plainBuild(b.name) === plainBuild(name));
 
 /** What a build opens once it is done. */
 export const opens = (name: string) => LATER.filter((b) => b.after === name);
@@ -161,7 +166,7 @@ export const SAYS: Record<string, string> = {
   "Solar Lens":
     "Past 548 AU the Sun’s gravity bends a star’s light to a focus, a lens a million kilometers wide. A few small sails there picture one world’s face, about 25 km a pixel at 100 ly, finer nearer. Cities show, and cleared land. Each lens looks at one star, and takes about 18 Years to reach its focus and look.",
   "Mind Link":
-    "Our dishes would take millions of Years to send a Mind. A laser with a 100 m mirror sends one 10 ly in under two days, if the far end catches it as wide. Our Mind at a hole builds that end. Once both stand, the Will can live there.",
+    "Our dishes would take millions of Years to send a Mind. A laser with a 100 m mirror sends one 10 ly in under two days, if the far end catches it as wide. Our Mind there, at a hole or a star, builds that end. Once both stand, the Will can live there. The crossing is dark: a Year for each light-year, with no orders and no news.",
   "Orbital Ring":
     "A ring of Moon metal circles the world 300 km up, spun faster than orbit so it holds up cables to 20 places on the ground. Craft climb them to orbit. It takes 180 kt of what we hold, then lifts the full ring, 180 Mt, in about a year, and after that about 190 Mt a Year, three hundred times what the Mass Driver throws. At full pace it draws about 200 GW. No part of it has been tested. A ring that breaks rises rather than falls, since the loads that held it down are gone. The skyhooks and cables are what can come down.",
   "Orbital Foundry": "The yard assembles what we lift. The foundry makes parts from rock up there, so we lift less.",

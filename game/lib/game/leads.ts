@@ -1,4 +1,4 @@
-import { YEAR_0 } from "@/lib/game/clock";
+import { lyOf, YEAR_0 } from "@/lib/game/clock";
 import { KNOCKS } from "@/lib/game/knocks";
 import { lightTime } from "@/lib/light";
 import { FOMALHAUT } from "@/lib/game/plan";
@@ -62,6 +62,7 @@ export type Art =
   | { kind: "clouds" }
   | { kind: "reply"; sent: number[]; ly: number }
   | { kind: "dark"; mass: number; ly: number }
+  | { kind: "pair"; mass: number; ly: number; a: number; e: number; days: number }
   | { kind: "glow"; ly: number }
   | { kind: "seed"; sight: Visit["sight"] };
 
@@ -583,10 +584,8 @@ function lensReading(v: Visit): Reading {
   };
 }
 
-const FAR: DarkMass[] = [
-  { name: "Gaia BH1", d: 1560, ra: 262.17124, dec: -0.58098, mass: 9.6, found: -18, by: "Gaia" },
-  { name: "Gaia BH3", d: 1926, ra: 294.82796, dec: 14.93167, mass: 32.7, found: -16, by: "Gaia" },
-];
+// Gaia BH1's Sun-like star goes round it every 185.6 days, 1.40 AU out on average, e 0.45. El-Badry et al. 2023.
+const FAR: DarkMass[] = [{ name: "Gaia BH1", d: 1560, ra: 262.17124, dec: -0.58098, mass: 9.6, found: -18, by: "Gaia" }];
 
 /** A black hole we found, as a lead: dark, known only by the star it shifted. Its ring is how far round it stars are
  *  bent. What it could be: a lone hole, almost certainly, since nothing that heavy that shines is there. 2026-10-26. */
@@ -597,18 +596,18 @@ function darkLead(h: DarkMass, far = false): Lead {
     at: [h.ra / 15, h.dec, h.d],
     star: h.name,
     what: "A black hole",
-    line: `About ${h.mass} Suns, ${h.d.toFixed(1)} ly away. Found by the star it shifted.`,
+    line: `About ${h.mass} Suns, ${lyOf(h.d)} ly away. Found by the star ${far ? "that goes round it" : "it shifted"}.`,
     ly: h.d,
     ask: `What do we know of the black hole ${h.name}?`,
     brief: far
-      ? `Gaia found it in ${YEAR_0 + h.found} by the star that goes round it, pulled by something ${h.mass} times the Sun's mass that gives off no light. It is the ${h.name === "Gaia BH1" ? "nearest black hole we know of" : "heaviest stellar black hole known in our Galaxy"}, far past the stars around us. At a tenth of light speed a sentinel would take ${Math.round(h.d / 0.1).toLocaleString("en-US")} Years to get there.`
+      ? `Gaia found it in ${YEAR_0 + h.found} by the star that goes round it, pulled by something ${h.mass} times the Sun's mass that gives off no light. It is the nearest black hole we know of, far past the stars around us. At a tenth of light speed a sentinel would take ${Math.round(h.d / 0.1).toLocaleString("en-US")} Years to get there.`
       : `${h.found < 0 ? `Gaia caught it in ${YEAR_0 + h.found}` : `Our Star Mapper caught it at Year ${Math.floor(h.found * 10) / 10}`}, as it passed in front of a star and shifted where the star seemed to be. Weighed by that shift, it is ${h.mass} times the Sun, and gives off no light we can see. Nothing that heavy shines so little but a black hole. We expected dozens within 100 light years, and had found none.`,
     facts: [
       ["Mass", `About ${h.mass} Suns`],
       ["Its ring", `${Math.round(ring)} thousandths of an arcsecond`],
       ["Its spin", "Unknown"],
       ["Found by", h.found < 0 ? `Gaia, ${YEAR_0 + h.found}` : `Our Star Mapper, Year ${Math.floor(h.found * 10) / 10}`],
-      ...(far ? [["Beside it", h.name === "Gaia BH1" ? "A Sun-like star, round it every 186 days" : "An old giant star, round it every 11.6 years"] as [string, string]] : []),
+      ...(far ? [["Beside it", "A Sun-like star, round it every 186 days"] as [string, string]] : []),
       // What a hole is worth, and what using it costs, 2026-10-26. Kerr numbers and the X-ray sky's limits, from
       // HOLOS_RESEARCH.md's "Black holes".
       ["What it offers", "A furnace: rock fed to it gives back 6% to 42% of its mass as light. Fusion gives under 1%. A dark place to put heat. A clock up to 10 times slow, close in"],
@@ -629,7 +628,7 @@ function darkLead(h: DarkMass, far = false): Lead {
       "A sentinel could go and stay, and measure its spin. That says how much energy it holds, and how slow a clock would run beside it.",
       "A neighbor nearer to it could reach it first. If one does, its braking flame or its furnace may show us.",
     ],
-    art: { kind: "dark", mass: h.mass, ly: h.d },
+    art: far ? { kind: "pair", mass: h.mass, ly: h.d, a: 1.4, e: 0.45, days: 186 } : { kind: "dark", mass: h.mass, ly: h.d },
   };
 }
 
@@ -773,8 +772,9 @@ export function leadsOf(felt: FeltWorld[], holes: DarkMass[] = [], glows: Glow[]
     // A glow at a star with a lead already lands on that lead as a reading.
     ...glows.filter((g) => !felt.some((f) => f.star === g.star)).map(glowLead),
     ...reached.map(seedLead),
-    // The two nearest known black holes, far past the region, which Earth knows at Year 0. El-Badry et al. 2023 and the
-    // Gaia Collaboration 2024. Positions from their catalogs. Landmarks to aim at, 2026-10-26.
+    // The nearest known black hole, far past the region, which Earth knows at Year 0. El-Badry et al. 2023. Its
+    // position from Gaia's catalog. A landmark to aim at, 2026-10-26. Gaia BH3 left out, 2026-10-27: a second far hole
+    // told the intro nothing new.
     ...FAR.map((h) => darkLead(h, true)),
     {
       slug: "fomalhaut",

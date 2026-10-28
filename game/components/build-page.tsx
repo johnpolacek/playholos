@@ -1,9 +1,10 @@
-import { Link, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { Fragment, useEffect, useMemo, useRef } from "react";
 import { useGame } from "@/components/game-provider";
 import { Lens } from "@/components/icons";
 import { BuildMark, buildTone, LockMark } from "@/components/marks";
 import { MindNote } from "@/components/mind-note";
+import { BackBar } from "@/components/back-bar";
 import { Opens } from "@/components/opens";
 import { buildStory, Story, toggleBuild, usePlan, useSchedule } from "@/components/picks";
 import { placedOf, useWorks } from "@/components/works";
@@ -158,10 +159,12 @@ export function Queueing({ name, scale, done }: { name: string; scale: number; d
 
 /** Builds our order lacks, each a link to its page. */
 function Lacking({ names }: { names: string[] }) {
+  // The way back goes along from build to build.
+  const state = useLocation().state;
   return names.map((n, i) => (
     <Fragment key={n}>
       {i ? " and " : ""}the{" "}
-      <Link to={`/build/${buildSlug(n)}`} className="text-ink underline underline-offset-2">
+      <Link to={`/build/${buildSlug(n)}`} state={state} className="text-ink underline underline-offset-2">
         {n}
       </Link>
     </Fragment>
@@ -170,9 +173,10 @@ function Lacking({ names }: { names: string[] }) {
 
 /** Where a build that waits stands: what it waits on, when that is done in our order, and how long it takes. Once it
  *  is open in play, the button that orders it now, and once ordered, when it is done. */
-function Waits({ build, scale, done }: { build: Later; scale: number; done: Record<string, number | null> }) {
+export function Waits({ build, scale, done }: { build: Later; scale: number; done: Record<string, number | null> }) {
   const { year, orderAt } = useGame();
   const { plan, change } = usePlan();
+  const state = useLocation().state;
   // An order lands on Earth a light-time late while the Will lives at a hole.
   const now = orderAt === null ? null : tenths(orderAt);
   // Its last order, while it stands in our order.
@@ -213,7 +217,7 @@ function Waits({ build, scale, done }: { build: Later; scale: number; done: Reco
       </div>
     );
   const after = (
-    <Link to={`/build/${buildSlug(build.after)}`} className="text-ink underline underline-offset-2">
+    <Link to={`/build/${buildSlug(build.after)}`} state={state} className="text-ink underline underline-offset-2">
       {build.after}
     </Link>
   );
@@ -249,11 +253,27 @@ function Waits({ build, scale, done }: { build: Later; scale: number; done: Reco
   );
 }
 
+/** Where a build page goes back to, when not to all builds. */
+export interface Back {
+  to: string;
+  label: string;
+  state?: unknown;
+  /** From the walk on Reach, whose own head stands over the page. */
+  walk?: boolean;
+  /** The walk's stops, drawn small on the way back, and the one it goes back to. */
+  stops?: { n: number; at: number };
+}
+
+/** Where the build page open now came from, if somewhere with its own way back. */
+export const useBack = () => (useLocation().state as { back?: Back } | null)?.back;
+
 export function BuildPage({ slug }: { slug: string }) {
   const { plan } = usePlan();
   const { scale, done } = useSchedule();
   const { set: place, pick, close, setClose } = useWorks();
   const navigate = useNavigate();
+  // Opened from somewhere with its own way back, as the walk on Reach, the button goes back there. 2026-10-28.
+  const from = useBack();
   const root = useRef<HTMLDivElement>(null);
   const build = [...BUILDS, ...LATER].find((b) => buildSlug(b.name) === slug);
   const later = LATER.find((b) => b.name === build?.name);
@@ -266,10 +286,10 @@ export function BuildPage({ slug }: { slug: string }) {
   useEffect(() => () => pick(null), [pick]);
 
   useEffect(() => {
-    const back = (e: KeyboardEvent) => e.key === "Escape" && navigate("/build");
+    const back = (e: KeyboardEvent) => e.key === "Escape" && navigate(from?.to ?? "/build", { state: from?.state });
     window.addEventListener("keydown", back);
     return () => window.removeEventListener("keydown", back);
-  }, [navigate]);
+  }, [navigate, from]);
 
   useGSAP(
     () => {
@@ -291,16 +311,10 @@ export function BuildPage({ slug }: { slug: string }) {
 
   return (
     <div ref={root} className="flex flex-col pb-4">
-      {/* The way back stays in reach while the page scrolls. */}
-      <div className="sticky -top-3 z-10 -mx-4 bg-panel px-4 pt-3 pb-2">
-        <Link
-          to="/build"
-          data-m
-          className="inline-flex h-9 items-center gap-1.5 rounded-full border border-ink bg-paper pr-4 pl-3 text-[14px] font-medium text-ink transition-colors hover:bg-ink hover:text-paper"
-        >
-          <span aria-hidden className="text-[18px] leading-none">‹</span>
-          All builds
-        </Link>
+      {/* The way back stays in reach while the page scrolls. From the walk on Reach, its head stays instead, and the
+          way back sits under it, above the title. 2026-10-28. */}
+      <div className={from?.walk ? "pt-2 pb-2" : "sticky -top-3 z-10 -mx-4 bg-panel px-4 pt-3 pb-2"}>
+        <BackBar to={from?.to ?? "/build"} state={from?.state} label={from?.label ?? "All builds"} stops={from?.stops} />
       </div>
       <div data-m className="mt-1 flex items-start gap-2.5">
         <span className={`mt-[4px] shrink-0 ${buildTone(build.name, ordered(plan).includes(build.name))}`}>

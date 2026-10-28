@@ -242,3 +242,25 @@ test("a seed probe's word comes home from each star a light-time after it lands,
   }
   assert.fail("no seed has a living neighbor in the census");
 });
+
+test("our Mind settled at a star: word of its landing comes one light-time later, and the people living there see it brake in", async () => {
+  const { crafts, notices } = await import("./meetings.ts");
+  for (const seed of POOL) {
+    const world = await loadWorld(seed);
+    const n = world.neighbors.find((x) => !x.dead);
+    if (!n) continue;
+    const star = world.stars[n.star].shown, d = world.stars[n.star].d;
+    const lands = 10 + hop(d);
+    const kit = { colony: { star, mode: "settle" as const, leaves: 10 } };
+    const at = (year: number) => earthKnows(world, year, {}, kit).colony!;
+    assert.equal(at(lands + d - 0.01).others, undefined);
+    const c = at(lands + d);
+    assert.ok(c.atStar && Math.abs(c.lands! - lands) < 1e-9);
+    assert.ok(c.others?.some((o) => o.kind === "home"));
+    assert.match(describe(earthKnows(world, lands + d, {}, kit)), /settle there/);
+    const [seen] = notices(world, crafts(world, kit), () => true).filter((x) => x.neighbor === n);
+    assert.ok(seen && seen.local && seen.first === "them" && Math.abs(seen.at - lands) < 1e-9);
+    return;
+  }
+  assert.fail("no seed has a living neighbor in the census");
+});

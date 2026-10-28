@@ -9,7 +9,7 @@ import { useLeads } from "@/components/scan";
 import { SkyArt } from "@/components/sky";
 import { Face, ListHead } from "@/components/tab-head";
 import type { Dials, Mark as Place } from "@/lib/drift";
-import { YEAR_0 } from "@/lib/game/clock";
+import { YEAR_0, lyOf } from "@/lib/game/clock";
 import { visitReading } from "@/lib/game/leads";
 import { lean, type moves } from "@/lib/game/plan";
 import {
@@ -219,7 +219,7 @@ export function ReachMap({ className }: { className: string }) {
   const toured = useRef(false);
   // The scene rings the star it is given, and the name follows it.
   const star = useMemo(() => [target.id], [target.id]);
-  const named: Record<string, string> = { ...NAMES, alpha: `${target.name} · ${target.ly.toFixed(1)} ly` };
+  const named: Record<string, string> = { ...NAMES, alpha: `${target.name} · ${lyOf(target.ly)} ly` };
   target.system?.worlds.forEach((w, i) => {
     named[`w${i}`] = worldName(w);
   });
@@ -411,7 +411,7 @@ export function Ruler() {
         each tick ten times farther · tap or drag to fly the map
       </text>
       <text x={r} y={80} textAnchor="end" className="fill-muted/80 font-mono text-[7.5px]">
-        {target.ly.toFixed(1)} ly
+        {lyOf(target.ly)} ly
       </text>
       {/* The map's view: where it is looking out to, now. */}
       <g ref={view} className="pointer-events-none">
@@ -702,7 +702,7 @@ export function Reach() {
                 mark={<LeadMark art={lead.art} />}
                 tone={lead.reply ? "text-other" : "text-you"}
                 name={<b className="font-semibold">{lead.star}</b>}
-                line={`${lead.what} · ${lead.ly.toFixed(1)} ly`}
+                line={`${lead.what} · ${lyOf(lead.ly)} ly`}
                 right={soonest === null ? "Not yet" : `Year ${year(soonest)}`}
               />
             </Link>

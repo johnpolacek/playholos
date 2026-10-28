@@ -32,6 +32,10 @@ export interface Inbound {
   flash?: boolean;
 }
 
+/** How our Mind lives where the Seed Ship sets it down: feeding a hole, hiding in its shadow, or settled at a star on
+ *  its light and its rock. A star since 2026-10-27. */
+export type ColonyMode = "furnace" | "refuge" | "settle";
+
 export interface Neighbor {
   name: string;
   star: string;
@@ -215,19 +219,22 @@ export interface EarthView {
   felt: FeltWorld[];
   heard: Heard[];
   visits: Visit[];
-  /** Our Mind sent to a black hole, as its word has reached us. */
+  /** Our Mind sent to a black hole or a star, as its word has reached us. */
   colony?: {
     star: string;
-    mode: "furnace" | "refuge";
+    mode: ColonyMode;
     leaves: number;
     lands?: number;
     stands?: number;
     d?: number;
-    others?: { kind: "sentinel" | "colony"; mode?: "furnace" | "refuge" }[];
+    /** Who was there first. At a star, a people at home, or the ruins of one. */
+    others?: { kind: "sentinel" | "colony" | "home" | "ruins"; mode?: "furnace" | "refuge" }[];
     /** Who braked in after it, each as it saw them and when, and its end, as far as its word has reached us. */
     came?: { kind: "sentinel" | "colony"; at: number; from: string }[];
     lost?: { at: number; how: "catch" | "strike" };
     watts?: number;
+    /** At a star, not a hole. */
+    atStar?: boolean;
     /** Its hole's spin, measured once it landed, and the clock on its innermost stable orbit. */
     spin?: number;
     clock?: number;

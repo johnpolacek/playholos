@@ -7,7 +7,7 @@ import { MindNote } from "@/components/mind-note";
 import { LeadMark } from "@/components/marks";
 import { Look } from "@/components/picks";
 import { useLeads, useStepTap } from "@/components/scan";
-import { span } from "@/lib/game/clock";
+import { span, lyOf } from "@/lib/game/clock";
 import {
   gsap,
   prefersReducedMotion,
@@ -211,11 +211,11 @@ export function Review({ onClose }: { onClose(): void }) {
                 <LeadMark art={lead.art} size={18} />
               </span>
               <h2 className="text-[19px] leading-snug font-medium">
-                {lead.what}
+                {lead.star}
               </h2>
             </div>
             <p data-r className="mt-0.5 text-[13.5px] text-page-ink2">
-              {lead.star} · {lead.ly.toFixed(1)} ly · reached in{" "}
+              {lead.what} · {lyOf(lead.ly)} ly · reached in{" "}
               <span className="font-mono tabular-nums">{span(lead.ly)}</span>
             </p>
             <div data-r className="mt-3">

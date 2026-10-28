@@ -50,7 +50,8 @@ async function prompt(world: World, l: Landing, record: Reaction[]) {
       // News of a craft at a dark mass, not a message. 2026-10-26.
       if (r.about) {
         const what = r.sent.startsWith("colony:") ? "a ship not yours that came to stay" : "a craft not yours";
-        return `- News reached you in ${one(r.at)} of ${what} at a dark mass your craft watch. You chose: ${r.move}.${r.text ? ` You sent to it: "${r.text}"` : ""}`;
+        const hole = world.holes?.some((h) => `colony:${h.id}` === r.sent || `sentinel:${h.id}` === r.sent);
+        return `- News reached you in ${one(r.at)} of ${what} ${hole ? "at a dark mass your craft watch" : "at a star where you live"}. You chose: ${r.move}.${r.text ? ` You sent to it: "${r.text}"` : ""}`;
       }
       const from = r.from ?? SOL;
       if (r.sent.startsWith("glow:"))
@@ -70,7 +71,7 @@ Your character: ${dials(p.dials)}. Toward others you are a ${p.disposition}${(p 
 You don't know Earth's names for stars, or yours. Judge only from what has reached you. Earth's radar has reached you since ${Math.round(1950 + p.d)}${p.heard ? ", and you heard it" : ""}.
 What you can see of Earth for yourself, to weigh any claim against: ${p.heard ? "its radio is the noise of a whole world, radars and broadcasts from many places, loud enough to mean billions of voices and an industry to match. Its radars sweep as a planet turns, and a long listen gives its day and its year. " : "nothing but its star, until it sends. "}No craft of Earth's has come near your world, and nothing it sends travels faster than light, so it could not reach you in less than ${p.d} years. Of any other world you see only its star, and what it sends. A claim that fits none of this may be a lie, a hope, or a threat. Take it as you would.
 A message is built to be read, but it takes time to send: a page goes in seconds, an archive takes Years. What you send is read once all of it has arrived, so write it as whole, never as still on its way.`;
-  const news = l.notice ? `${sighting(world, l.notice)}\nWhat you send goes to that ${l.notice.craft.kind === "sentinel" ? "craft" : "ship"}, at the dark mass.` : l.signal.move === "glow"
+  const news = l.notice ? `${sighting(world, l.notice)}\nWhat you send goes to that ${l.notice.craft.kind === "sentinel" ? "craft" : "ship"}, ${l.notice.craft.atStar ? "at that star" : "at the dark mass"}.` : l.signal.move === "glow"
       ? `Your watch has found a grey glow at ${named(from)}, ${l.d.toFixed(1)} light-years away: heat near 12 K with no line in it, a color no dust gives. Cold computing far from a star would glow so: someone's Mind, most likely, and growing. It carries no words, and says nothing of who they are.`
       : `A message from ${named(from)}, ${l.d.toFixed(1)} light-years away, has just reached you. ${msg}`;
   const user = `It is ${one(l.at)} on Earth's calendar. What has passed between you and others:
@@ -90,6 +91,7 @@ Answer with JSON only: {"move": "<one of the moves>", "text": "<if the move send
  *  already there shows nothing of where it came from. 2026-10-26. */
 function sighting(world: World, n: Notice) {
   const c = n.craft;
+  if (c.atStar) return settling(n);
   const mass = world.holes?.find((h) => h.id === c.holeId)?.mass;
   const where = n.local
     ? `Your Mind that stays at the dark mass, a black hole of ${mass?.toFixed(0)} Suns, has seen something there.`
@@ -105,6 +107,24 @@ function sighting(world: World, n: Notice) {
         : c.mode === "furnace"
           ? "Your craft, braking in, found someone already living there: a disk of matter glowing round the hole, hot enough to shine in X-rays, and works round it taking its light. They are not yours. You never saw them come, nor where from."
           : "Your craft, braking in, found works not yours hidden in the hole's shadow: cold radiators and collectors, dark against the sky, dumping their heat into the hole. You never saw them come, nor where from.";
+  return `${where} ${saw}`;
+}
+
+/** What a neighbor at a star saw of our Mind settling there: braking in on a flame far bigger than a probe's, its track
+ *  back to Earth's Sun, then mining and building on the star's light. At their home, under their own sky. 2026-10-27. */
+function settling(n: Notice) {
+  const c = n.craft;
+  const home = n.neighbor.star === c.holeId;
+  const where = home
+    ? "Over your own world, under your own sky, something has come."
+    : n.local
+      ? "Your Mind that stays at a star you settled has seen something there."
+      : `News has just reached you from your colony at a star ${n.hop.toFixed(1)} light-years from you.`;
+  const track = `Its track runs back to Earth's Sun, ${c.d.toFixed(1)} light-years away.`;
+  const saw =
+    n.first === "them"
+      ? `A ship not yours braked to a stop ${home ? "in your system" : "there"}, its fusion flame far bigger than a probe's, a ship of tens of thousands of tonnes. ${track} It has stayed, and is mining the asteroids and building on the star's light. A ship that size carries a factory, or a Mind.`
+      : "Your ship, braking in, found someone already living there: works not yours mining the asteroids and taking the star's light, and growing. You never saw them come, nor where from.";
   return `${where} ${saw}`;
 }
 

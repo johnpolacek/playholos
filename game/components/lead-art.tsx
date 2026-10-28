@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useGame } from "@/components/game-provider";
-import { YEAR_0 } from "@/lib/game/clock";
+import { YEAR_0, lyOf } from "@/lib/game/clock";
 import type { Art } from "@/lib/game/leads";
 import { VisitArt } from "@/components/visit-art";
 import { prefersReducedMotion } from "@/lib/motion";
@@ -161,7 +161,7 @@ function Reply({ sent, ly }: { sent: number[]; ly: number }) {
         SOL
       </text>
       <text x={X(y0)} y={star - 6} className="fill-other font-mono text-[8px]">
-        LUYTEN’S STAR · {ly.toFixed(1)} LY
+        LUYTEN’S STAR · {lyOf(ly)} LY
       </text>
       {sent.map((s) => (
         <g key={s}>
@@ -210,7 +210,7 @@ function Dark({ mass, ly }: { mass: number; ly: number }) {
     });
   }, 14);
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img" aria-label={`A black hole of ${mass} Suns, ${ly.toFixed(1)} light years away, shifting the stars behind it`}>
+    <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img" aria-label={`A black hole of ${mass} Suns, ${lyOf(ly)} light years away, shifting the stars behind it`}>
       {FIELD.map((s, i) => (
         <circle key={`t${i}`} cx={s.x} cy={s.y} r={0.5} fill="var(--muted)" opacity={0.35} />
       ))}
@@ -222,7 +222,45 @@ function Dark({ mass, ly }: { mass: number; ly: number }) {
         <circle r={4.5} fill="var(--paper)" stroke="var(--ink)" strokeWidth={0.8} />
       </g>
       <text x={10} y={H - 10} className="fill-muted font-mono text-[8px]">
-        {mass} SUNS · {ly.toFixed(1)} LY · DOTS: WHERE STARS TRULY ARE
+        {mass} SUNS · {lyOf(ly)} LY · DOTS: WHERE STARS TRULY ARE
+      </text>
+    </svg>
+  );
+}
+
+// A black hole with a star round it, from above, as Gaia BH1 is: the hole dark at one focus, its ring faint, and the
+// star going round as Kepler has it, quick near the hole and slow far out. Earth's orbit for scale. Gaia found it by
+// the star's swing on the sky. Ours, 2026-10-27.
+function Pair({ mass, ly, a, e, days }: { mass: number; ly: number; a: number; e: number; days: number }) {
+  const s = (H / 2 - 24) / (a * (1 + e));
+  const [cx, cy] = [W / 2 + a * e * s * 0.5, H / 2 - 6];
+  const b = a * Math.sqrt(1 - e * e);
+  const dot = useRef<SVGCircleElement>(null);
+  const halo = useRef<SVGCircleElement>(null);
+  useTicks((t) => {
+    // Eight seconds a turn: the shape and the speeding up are what show.
+    const M = ((2 * Math.PI * t) / 8) % (2 * Math.PI);
+    let E = M;
+    for (let k = 0; k < 6; k++) E -= (E - e * Math.sin(E) - M) / (1 - e * Math.cos(E));
+    const x = String(cx + a * (Math.cos(E) - e) * s), y = String(cy - b * Math.sin(E) * s);
+    for (const n of [dot.current, halo.current]) {
+      n?.setAttribute("cx", x);
+      n?.setAttribute("cy", y);
+    }
+  }, 2.5);
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img" aria-label={`A black hole of ${mass} Suns, ${lyOf(ly)} light years away, with a Sun-like star going round it every ${days} days`}>
+      <circle cx={cx} cy={cy} r={s} fill="none" stroke="var(--muted)" strokeWidth={0.7} strokeDasharray="2 3" opacity={0.6} />
+      <text x={cx + s * 0.72 + 3} y={cy + s * 0.72 + 9} className="fill-muted font-mono text-[7.5px]">
+        Earth’s orbit
+      </text>
+      <ellipse cx={cx - a * e * s} cy={cy} rx={a * s} ry={b * s} fill="none" stroke="var(--ink)" strokeWidth={1} opacity={0.75} />
+      <circle cx={cx} cy={cy} r={14} fill="none" stroke="var(--other)" strokeWidth={0.6} strokeDasharray="1 3" opacity={0.7} />
+      <circle cx={cx} cy={cy} r={4.5} fill="var(--paper)" stroke="var(--ink)" strokeWidth={0.8} />
+      <circle ref={halo} cx={cx + a * (1 - e) * s} cy={cy} r={9} fill="#f4e7c5" opacity={0.15} />
+      <circle ref={dot} cx={cx + a * (1 - e) * s} cy={cy} r={3.5} fill="#f4e7c5" />
+      <text x={10} y={H - 10} className="fill-muted font-mono text-[8px]">
+        {mass} SUNS · {lyOf(ly)} LY · ITS STAR ROUND IT EVERY {days} DAYS
       </text>
     </svg>
   );
@@ -246,12 +284,12 @@ function GlowArt({ ly }: { ly: number }) {
   }, 12);
   const band = `M${X(0.8)},${Y(0.8, 2.4)} L${X(3.3)},${Y(3.3, 2.4)} L${X(3.3)},${Y(3.3, 3.1)} L${X(0.8)},${Y(0.8, 3.1)} Z`;
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img" aria-label={`A grey glow round a star ${ly.toFixed(1)} light years away, its color unlike dust's`}>
+    <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img" aria-label={`A grey glow round a star ${lyOf(ly)} light years away, its color unlike dust's`}>
       <circle ref={halo} cx={70} cy={105} r={30} fill="none" stroke="var(--muted)" strokeWidth={10} opacity={0.3} />
       <circle cx={70} cy={105} r={30} fill="none" stroke="var(--muted)" strokeWidth={0.6} strokeDasharray="1 3" />
       <circle cx={70} cy={105} r={4} fill="#f4f6ff" />
       <text x={70} y={160} textAnchor="middle" className="fill-muted font-mono text-[7.5px]">
-        {ly.toFixed(1)} LY
+        {lyOf(ly)} LY
       </text>
       <path d={band} fill="var(--fill2)" opacity={0.25} />
       <text x={x1} y={Y(3.3, 3.1) + 12} textAnchor="end" className="fill-muted font-mono text-[7.5px]">
@@ -285,6 +323,7 @@ export function LeadArt({ art, read }: { art: Art; read?: string }) {
   if (art.kind === "orbit") return <Orbit a={art.a} e={art.e} hz={art.hz} />;
   if (art.kind === "clouds") return <Clouds third={read === "fomalhaut-third-cloud"} />;
   if (art.kind === "dark") return <Dark mass={art.mass} ly={art.ly} />;
+  if (art.kind === "pair") return <Pair mass={art.mass} ly={art.ly} a={art.a} e={art.e} days={art.days} />;
   if (art.kind === "glow") return <GlowArt ly={art.ly} />;
   if (art.kind === "seed") return <VisitArt sight={art.sight} size={220} />;
   return <Reply sent={art.sent} ly={art.ly} />;

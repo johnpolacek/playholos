@@ -2,18 +2,21 @@
 // Neighbors at black holes: whoever is at a hole second is seen by whoever is there first, and the one who sees it
 // tells its Mind, a light-time away unless that Mind stands at the hole. What the Mind does is a move on its table:
 // our sentinel is "probe" news, our Mind come to stay is "settle". A catch or a strike ends our craft there. Server
-// only: it reads the seed's truth. Pure, so it tests fast.
+// only: it reads the seed's truth. Pure, so it tests fast. Our Mind settled at a star, 2026-10-27: the people at home
+// there see it brake in under their sky, and so does a neighbor's colony there, first or later.
 import catalog from "../../data/works.json" with { type: "json" };
 import { darkMasses } from "./knowledge.ts";
-import type { Neighbor, World } from "./types.ts";
+import type { ColonyMode, Neighbor, World } from "./types.ts";
 
-/** One craft of ours at a black hole: a sentinel, or our Mind sent on the Seed Ship. */
+/** One craft of ours at a black hole: a sentinel, or our Mind sent on the Seed Ship, which can settle at a star too. */
 export interface Craft {
-  /** Its kind and the hole's id, as a reaction's key keeps it. */
+  /** Its kind and the hole's or star's id, as a reaction's key keeps it. */
   id: string;
   kind: "sentinel" | "colony";
-  mode?: "furnace" | "refuge";
-  /** The hole's name as we gave it, its id, and how far it is from Earth. */
+  mode?: ColonyMode;
+  /** At a star, not a hole. */
+  atStar?: boolean;
+  /** The hole's or star's name as we gave it, its id, and how far it is from Earth. */
   hole: string;
   holeId: string;
   d: number;
@@ -54,7 +57,7 @@ export const STRIKE_READY = 20, STRIKE_V = 0.1;
 /** Our craft at holes, from what the kit sends where: the sentinels sent to a hole we found, and our Mind. */
 export function crafts(
   world: World,
-  kit: { sentinels?: { star: string; leaves: number }[]; colony?: { star: string; mode: "furnace" | "refuge"; leaves: number } | null; mapper?: number | null },
+  kit: { sentinels?: { star: string; leaves: number }[]; colony?: { star: string; mode: ColonyMode; leaves: number } | null; mapper?: number | null },
 ): Craft[] {
   const holes = darkMasses(world, Infinity, kit.mapper ?? null);
   const out: Craft[] = [];
@@ -65,10 +68,15 @@ export function crafts(
     out.push({ id: `sentinel:${h.id}`, kind: "sentinel", hole: h.name, holeId: h.id, d: h.d, arrives: x.leaves + h.d / speed + burns });
   }
   const c = kit.colony, h = c && holes.find((y) => y.name === c.star);
+  const { speed, burn, brake, stands } = catalog.seedShip;
   if (c && h) {
-    const { speed, burn, brake, stands } = catalog.seedShip;
     const lands = c.leaves + h.d / speed + burn + brake;
     out.push({ id: `colony:${h.id}`, kind: "colony", mode: c.mode, hole: h.name, holeId: h.id, d: h.d, arrives: lands, stands: lands + stands });
+  }
+  const at = c && !h ? Object.keys(world.stars).find((k) => world.stars[k].shown === c.star) : undefined;
+  if (c && at) {
+    const d = world.stars[at].d, lands = c.leaves + d / speed + burn + brake;
+    out.push({ id: `colony:${at}`, kind: "colony", mode: c.mode, atStar: true, hole: c.star, holeId: at, d, arrives: lands, stands: lands + stands });
   }
   return out;
 }
@@ -77,6 +85,10 @@ export function crafts(
 export function notices(world: World, ours: Craft[], found: (key: string) => boolean): Notice[] {
   const out: Notice[] = [];
   for (const craft of ours) {
+    if (craft.atStar) {
+      out.push(...atStar(world, craft));
+      continue;
+    }
     const truth = world.holes?.find((h) => h.id === craft.holeId);
     const by = new Map<string, NonNullable<typeof truth>["claims"]>();
     for (const c of truth?.claims ?? []) by.set(c.who, [...(by.get(c.who) ?? []), c]);
@@ -94,6 +106,25 @@ export function notices(world: World, ours: Craft[], found: (key: string) => boo
     }
   }
   return out.sort((a, b) => a.at - b.at);
+}
+
+/** Who sees our Mind at a star: the people living there, at home, as it brakes in, their Mind deciding there once
+ *  woken; and each neighbor's colony there, whichever came first, deciding there once it stands, or else at the star it
+ *  came from. A settled Mind is never hidden. Ruins see nothing. */
+function atStar(world: World, craft: Craft): Notice[] {
+  const out: Notice[] = [];
+  const home = world.neighbors.find((p) => p.star === craft.holeId && !p.dead);
+  if (home) out.push({ craft, neighbor: home, first: "them", seen: craft.arrives, local: true, hop: 0, at: craft.arrives });
+  for (const c of world.colonies.filter((x) => x.star === craft.holeId)) {
+    const neighbor = world.neighbors.find((p) => p.name === c.root);
+    if (!neighbor || neighbor === home || out.some((n) => n.neighbor === neighbor)) continue;
+    const first = c.lands <= craft.arrives ? "them" : "us";
+    const seen = Math.max(c.lands, craft.arrives);
+    const local = c.stands <= seen;
+    const hop = local ? 0 : ((c as { hop?: number }).hop ?? 0);
+    out.push({ craft, neighbor, first, seen, local, hop, at: seen + hop });
+  }
+  return out;
 }
 
 /** When a move on a notice ends our craft: a catch by their craft there, ordered from where their Mind decides, or a

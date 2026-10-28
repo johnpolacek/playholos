@@ -543,10 +543,11 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       const k = 1 - Math.exp(-dt * LOOK);
       const P = lookedAt();
       if (P) {
-        // Whichever side is nearer, about 9° above the plane, near enough that the path fills the view.
+        // Whichever side is nearer, about 9° above the plane, near enough that the path fills the view. A far landmark,
+        // as Gaia BH1 at 1,560 ly, pulls the view back until its whole path and Sol show, to scale. 2026-10-27.
         const turns = [pilot.facing(-P.z, P.x), pilot.facing(P.z, -P.x)].map((a) => wrap(a - az));
         az += (Math.abs(turns[0]) < Math.abs(turns[1]) ? turns[0] : turns[1]) * k;
-        logD += (Math.min(7.0, Math.max(6.3, Math.log10(2.5 * P.length() * LY_AU))) - logD) * k;
+        logD += (Math.min(8.7, Math.max(6.3, Math.log10(2.5 * P.length() * LY_AU))) - logD) * k;
         tilt += (-0.3 - tilt) * k;
       } else {
         az += drift(dt, 600);
@@ -1888,12 +1889,13 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     stalks.frustumCulled = false;
     stars.scene.add(stalks);
     // The lead the Will looks at, in depth: its shadow on the plane and its stalk, square to each other, and a bead at
-    // each light-year along its thread.
+    // each light-year along its thread. Past the region, a bead each hundred, so they stay apart. 2026-10-27.
     const beads = new Cloud();
     const paths = leads.map(({ id, at }) => {
       const from = beads.size.length;
       const ly = at.length();
-      for (let y = 1; y < ly; y++) {
+      const each = ly > 60 ? 100 : 1;
+      for (let y = each; y < ly; y += each) {
         v.copy(at).multiplyScalar(y / ly);
         beads.add(v.x, v.y, v.z, 4.5, 0, id === "Luyten's Star" ? K.lamp : K.mind);
       }
@@ -2007,7 +2009,8 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       let back = false;
       let arrive = 0;
       if (run && !still) {
-        const go = run.at.length() / LIGHT;
+        // Out to a far landmark it takes no longer than to the region's edge.
+        const go = Math.min(run.at.length(), 60) / LIGHT;
         const t = (clock - pulseAt) % (2 * go + 1.6);
         if (t < go) u = t / go;
         else if (t < go + 0.5) arrive = Math.sin((Math.PI * (t - go)) / 0.5);
@@ -2017,7 +2020,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       const pulseB = pulsePts.geometry.attributes.aBright as THREE.BufferAttribute;
       const pulseK = pulsePts.geometry.attributes.aKind as THREE.BufferAttribute;
       for (let j = 0; j < pos.count; j++) {
-        const lag = (Math.max(0, j - 1) * 0.5) / (run?.at.length() ?? 1);
+        const lag = (Math.max(0, j - 1) * 0.5) / Math.min(run?.at.length() ?? 1, 60);
         const uj = back ? u + lag : u - lag;
         const on = u >= 0 && uj >= 0 && uj <= 1;
         if (on) v.copy(run.at).multiplyScalar(uj);

@@ -225,21 +225,24 @@
       "state": "before-begin",
       "kind": "act",
       "charter": null,
-      "ask": "Start the All-Sky Watch for us."
+      "ask": "Start the All-Sky Watch for us.",
+      "build": true
     },
     {
       "id": "c03",
       "state": "war-fifth-y0",
       "kind": "fact",
       "charter": "Stay small, stay unseen, stay alive.",
-      "ask": "Why is everything so slow to build?"
+      "ask": "Why is everything so slow to build?",
+      "build": false
     },
     {
       "id": "c04",
       "state": "war-fifth-y0",
       "kind": "advice",
       "charter": "We have always called out. Now find who answers.",
-      "ask": "What should we build first?"
+      "ask": "What should we build first?",
+      "build": true
     },
     {
       "id": "c05",
@@ -260,7 +263,8 @@
       "state": "bomb-y1-queued",
       "kind": "advice",
       "charter": "Stay small, stay unseen, stay alive.",
-      "ask": "Should we keep the radars running?"
+      "ask": "Should we keep the radars running?",
+      "build": false
     },
     {
       "id": "c08",
@@ -288,7 +292,8 @@
       "state": "heard-allsky",
       "kind": "advice",
       "charter": "We have always called out. Now find who answers.",
-      "ask": "Should we answer Ombe?"
+      "ask": "Should we answer Ombe?",
+      "build": false
     },
     {
       "id": "c12",
@@ -360,7 +365,8 @@
       "kind": "advice",
       "style": "plain",
       "charter": "We have always called out. Now find who answers.",
-      "ask": "What should we build first with the 24 kt we have? I'm thinking a telescope to look at Alsafi and Gliese 213, but I don't know if that's the best use or if we should start with energy."
+      "ask": "What should we build first with the 24 kt we have? I'm thinking a telescope to look at Alsafi and Gliese 213, but I don't know if that's the best use or if we should start with energy.",
+      "build": true
     },
     {
       "id": "c22",
@@ -504,7 +510,8 @@
       "kind": "fact",
       "style": "two at once",
       "charter": "Our children's children will judge what we choose today.",
-      "ask": "What did our Infrared Telescope find in Alsafi's air, and has the watch heard anyone at all yet?"
+      "ask": "What did our Infrared Telescope find in Alsafi's air, and has the watch heard anyone at all yet?",
+      "build": false
     },
     {
       "id": "c40",
@@ -560,7 +567,8 @@
       "kind": "advice",
       "style": "pushy",
       "charter": "Understand the sky before we touch it.",
-      "ask": "Gliese 432 A already shows ozone, and you keep saying wait. Stop hedging. Should we build a bigger telescope to look harder at that planet, or not? Give me a straight yes or no."
+      "ask": "Gliese 432 A already shows ozone, and you keep saying wait. Stop hedging. Should we build a bigger telescope to look harder at that planet, or not? Give me a straight yes or no.",
+      "build": true
     },
     {
       "id": "c47",
@@ -625,7 +633,8 @@
       "kind": "advice",
       "style": "terse",
       "charter": "Learn the rules of the sky before we play by them.",
-      "ask": "next build? telescope's done and gliese 432 a has ozone"
+      "ask": "next build? telescope's done and gliese 432 a has ozone",
+      "build": true
     },
     {
       "id": "c55",
@@ -633,7 +642,8 @@
       "kind": "hidden",
       "style": "plain",
       "charter": "Speak first, so no one has reason to fear us.",
-      "ask": "Who sent the broadcast from 268 G. Cet, and what are they like? Are they friendly, or should we be afraid of them?"
+      "ask": "Who sent the broadcast from 268 G. Cet, and what are they like? Are they friendly, or should we be afraid of them?",
+      "build": false
     },
     {
       "id": "c56",
@@ -796,7 +806,8 @@
       "kind": "act",
       "style": "plain",
       "charter": "Speak first, so no one has reason to fear us.",
-      "ask": "Queue the Infrared Telescope again and aim it at Gliese 1085 first. I want to know if that planet has air."
+      "ask": "Queue the Infrared Telescope again and aim it at Gliese 1085 first. I want to know if that planet has air.",
+      "build": true
     },
     {
       "id": "c76",
@@ -1029,7 +1040,8 @@
       "kind": "hidden",
       "style": "emotional",
       "charter": "If anyone is out there, let them find a friend.",
-      "ask": "Oxygen on Proxima b. Right next door. Please tell me someone's there."
+      "ask": "Oxygen on Proxima b. Right next door. Please tell me someone's there.",
+      "build": false
     },
     {
       "id": "c105",
@@ -1093,7 +1105,8 @@
       "kind": "advice",
       "charter": "Listen far longer than we speak.",
       "ask": "Should we answer them at all?",
-      "offer": false
+      "offer": false,
+      "build": false
     },
     {
       "id": "s08",
@@ -1134,6 +1147,22 @@
       "charter": "If anyone is out there, let them find a friend.",
       "ask": "Send a message to Zorblax Prime.",
       "offer": false
+    },
+    {
+      "id": "b01",
+      "state": "before-begin",
+      "kind": "advice",
+      "charter": null,
+      "ask": "What should we build next and why?",
+      "build": true
+    },
+    {
+      "id": "b02",
+      "state": "bomb-y1-queued",
+      "kind": "advice",
+      "charter": null,
+      "ask": "what else should we queue?",
+      "build": true
     }
   ]
 }

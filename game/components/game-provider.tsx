@@ -9,14 +9,14 @@ interface Game {
   save?: Save;
   /** Game Years since Begin. Null before Begin, or while loading. */
   year: number | null;
-  /** The Year an order given now lands on Earth: now, or a light-time on while the Will lives at a hole. */
+  /** The Year an order given now lands on Earth: now, or a light-time on while the Will lives at our Mind far away. */
   orderAt: number | null;
   wake(): void;
   setCharter(charter: NonNullable<Save["charter"]>): void;
   setPlan(plan: NonNullable<Save["plan"]>): void;
   setGuide(guide: NonNullable<Save["guide"]>): void;
   setTalk(talk: NonNullable<Save["talk"]>): void;
-  /** Sends the Will to live at our Mind on a hole, once, for good. */
+  /** Sends the Will to live at our Mind at a hole or a star, once, for good. It is dark while it crosses. */
   moveWill(will: Will): void;
   /** Sends a message: it joins what we have sent, for good. */
   send(message: Sent): void;

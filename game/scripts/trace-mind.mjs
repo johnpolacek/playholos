@@ -10,7 +10,8 @@ import { appendFileSync, mkdirSync, readFileSync, writeFileSync } from "node:fs"
 import { MIND_MODEL } from "../lib/access.ts";
 import { base as history, CHARTERS, dialsFor } from "../lib/game/charter.ts";
 import { MS_PER_YEAR } from "../lib/game/clock.ts";
-import { broken, CHECKS, SEND_CHECKS } from "../evals/mind/checks.mjs";
+import { broken, BUILD_CHECKS, CHECKS, SEND_CHECKS } from "../evals/mind/checks.mjs";
+import { readBuildOffer } from "../lib/game/build-offer.ts";
 import { readOffer } from "../lib/game/sends.ts";
 import { askMind, askMindCli } from "./ask-mind.mjs";
 
@@ -122,8 +123,14 @@ async function run(c) {
     ...(c.long && { long: true }),
     ...(c.out && { out: true }),
     ...(c.offer !== undefined && { offer: c.offer }),
-    // The Mind's words only: an offer to send ends with a line the card is drawn from, 2026-10-26.
-    checks: res?.text ? [...broken(readOffer(res.text).words, c), ...SEND_CHECKS.filter((k) => k.test(res.text, c)).map((k) => k.name)] : [],
+    ...(c.build !== undefined && { build: c.build }),
+    // The Mind's words only: an offer to send, or of a build, ends with a line its card is drawn from, 2026-10-26.
+    checks: res?.text
+      ? [
+          ...broken(readOffer(readBuildOffer(res.text).words).words, c),
+          ...[...SEND_CHECKS, ...BUILD_CHECKS].filter((k) => k.test(res.text, c, res.told)).map((k) => k.name),
+        ]
+      : [],
     told: res?.told ?? null,
     save,
   };
@@ -140,7 +147,7 @@ await Promise.all(Array.from({ length: 3 }, async () => {
 traces.sort((a, b) => todo.findIndex((c) => c.id === a.id) - todo.findIndex((c) => c.id === b.id));
 writeFileSync(out, traces.map((t) => JSON.stringify(t)).join("\n") + "\n");
 // What code can check, across the run: each rule, and the cases that break it.
-for (const { name } of [...CHECKS, ...SEND_CHECKS]) {
+for (const { name } of [...CHECKS, ...SEND_CHECKS, ...BUILD_CHECKS]) {
   const ids = traces.filter((t) => t.checks.includes(name)).map((t) => t.id);
   console.log(`${ids.length ? "breaks" : "keeps "} ${name}${ids.length ? `: ${ids.join(", ")}` : ""}`);
 }
