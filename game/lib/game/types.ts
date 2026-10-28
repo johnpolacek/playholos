@@ -79,6 +79,8 @@ export interface Reaction {
   /** A bullet fired at Earth: the Year it lands and its megatons. Dark until then. 2026-10-28. */
   lands?: number;
   mt?: number;
+  /** Our colony's own move, by its stand-in Will: where it stands. Reported home, heard at `arrives`. 2026-10-28. */
+  ours?: string;
 }
 
 /** One message we sent: aimed at a star, or every way at once. Our words as the Will said them, and the Mind's label,

@@ -58,6 +58,9 @@ export interface Neighbor {
   /** An elder, awake for millennia before us and done growing: asleep, or computing cold at a steady ceiling, in watts.
    *  One a game, 2026-10-28. */
   elder?: { asleep: boolean; ceiling: number };
+  /** Our colony, played by its stand-in Will from our charter: its own table, and where it stands. lib/sim/colony.ts,
+   *  2026-10-28. */
+  ours?: { where: string; table: Record<string, [string, number][]> };
 }
 
 export interface Find {
@@ -168,6 +171,8 @@ export interface Heard {
   overheard?: boolean;
   /** Sent on news of a craft of ours at a black hole, which it names. 2026-10-26. */
   about?: string;
+  /** Word from our colony of a move it made by its own choice, and whose news it was on. 2026-10-28. */
+  ours?: { chose: string; on?: string };
 }
 
 /** What a flyby saw of a world, and sent home. Pictures show what is larger than a pixel: haze, bare ground, cloud

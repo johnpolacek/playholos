@@ -6,6 +6,8 @@ import { heardId, useLeads } from "@/components/scan";
 import { ListHead } from "@/components/tab-head";
 import { YEAR_0 } from "@/lib/game/clock";
 import { giftWords } from "@/lib/game/sends";
+import reactions from "@/data/reactions.json";
+import type { Heard as HeardSignal } from "@/lib/sim/types";
 
 // What our watches have caught, on Scan, above the leads: each signal on its whole journey, from the year its sender
 // sent it to the Year it reached us, in their color. Opening one shows what it holds, read at once, who sent it, and
@@ -13,12 +15,36 @@ import { giftWords } from "@/lib/game/sends";
 
 const A = (move: string) => `${/^[aeiou]/.test(move) ? "An" : "A"} ${move}`;
 
+/** Word from our colony: a move its stand-in Will made by our charter, a light-time ago. 2026-10-28. */
+const MOVES = reactions.moves as Record<string, string>;
+function ours(h: HeardSignal, fresh: boolean): Row {
+  const { chose, on } = h.ours!;
+  return {
+    key: heardId(h),
+    name: `Our Mind at ${h.star}`,
+    note: `Word from our Mind there, sent in ${Math.floor(YEAR_0 + h.sent)}.`,
+    at: h.arrived,
+    kind: "heard",
+    msg: chose,
+    sent: YEAR_0 + h.sent,
+    ly: h.d,
+    fresh,
+    story: [
+      ["IT CHOSE", `It ${MOVES[chose] ?? chose}.`],
+      ...(on ? ([["ON NEWS FROM", on]] as [string, string][]) : []),
+      ...(h.text ? ([["IT SENT", `“${h.text}”`]] as [string, string][]) : []),
+      ["FROM", `Our Mind at ${h.star}, ${h.d.toFixed(1)} light-years away. It decides for itself by our charter, since our word takes ${h.d.toFixed(1)} Years to reach it.`],
+    ],
+  };
+}
+
 export function Heard() {
   const { year, see } = useGame();
   const { heard, fresh } = useLeads();
   const [open, setOpen] = useState<string | null>(null);
   const [lit, setLit] = useState<string | null>(null);
-  const rows: Row[] = heard.map((h) => ({
+  const rows: Row[] = heard.map((h) =>
+    h.ours ? ours(h, fresh.has(heardId(h))) : {
     key: heardId(h),
     name: h.star,
     note: `${A(h.move)}${h.laser ? ", in laser flashes" : ""}, sent in ${Math.floor(YEAR_0 + h.sent)}.`,
@@ -46,7 +72,7 @@ export function Heard() {
               : "Year 0’s sky watch",
           ]] as [string, string | undefined][])),
     ],
-  }));
+  });
   const aim = (key: string): Aim => ({
     shown: open === key,
     lit: open === key || lit === key,

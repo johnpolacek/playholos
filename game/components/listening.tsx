@@ -34,7 +34,7 @@ export function Listening() {
         seed: save.seed, beganAt: save.beganAt, sent: save.sent, reactions: save.reactions ?? [], pick: pick(),
         builds: plan?.builds ?? [], observe: plan?.observe ?? [], later: plan?.later ?? [], stops: plan?.stops ?? [],
         gifts: plan?.gifts ?? [], sentinels: plan?.sentinels ?? [], colony: plan?.colony ?? null, will: save.will ?? null,
-        pickets: plan?.pickets ?? [], strikes: plan?.strikes ?? [],
+        pickets: plan?.pickets ?? [], strikes: plan?.strikes ?? [], charter: save.charter ?? null,
       }),
     })
       .then((r) => (r.ok ? r.json() : null))

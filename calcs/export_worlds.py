@@ -219,7 +219,7 @@ if __name__ == '__main__':
         data = json.dumps(export(s, rows), separators=(',', ':')).encode()
         (GAME / 'data' / 'worlds' / f'{s}.json.gz').write_bytes(gzip.compress(data, mtime=0))
     tables = {n["name"]: reactions.table(n["name"]) for n in nb.EVERYONE if reactions.table(n['name'])}
-    (GAME / 'data' / 'reactions.json').write_text(json.dumps(dict(tables=tables, moves=reactions.MOVES), indent=1))
+    (GAME / 'data' / 'reactions.json').write_text(json.dumps(dict(tables=tables, moves=reactions.MOVES, kinds=reactions.BASE, dial=reactions.DIAL), indent=1))
     (GAME / 'data' / 'works.json').write_text(json.dumps(works_catalog(), indent=1))
     (GAME / 'lib' / 'sim' / 'pool.ts').write_text('// Written by calcs/export_worlds.py. The seeds a new game may draw.\n'
                                                   f'export const POOL: readonly number[] = {json.dumps(POOL)};\n')

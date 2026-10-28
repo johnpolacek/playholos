@@ -52,9 +52,9 @@ export function glowsSeen(world: World) {
   const shown = (p: Neighbor) => world.stars[p.star]?.shown ?? p.star;
   const out: { from: string; to: string; at: number; d: number }[] = [];
   for (const b of world.neighbors) {
-    if (b.dead || b.elder?.asleep) continue;                 // an elder asleep watches nothing
-    for (const a of world.neighbors) {
-      if (a === b || a.dead) continue;
+    if (b.dead || b.elder?.asleep || b.ours) continue;       // an elder asleep watches nothing. Our colony's glow and
+    for (const a of world.neighbors) {                       // watch aren't modeled yet, 2026-10-28
+      if (a === b || a.dead || a.ours) continue;
       const d = between(world, shown(a), shown(b));
       const need = catalog.halo.floor * (d / (10 * PC_LY)) ** 2;
       if (a.elder && a.elder.ceiling < need) continue;       // nor sheds enough to be seen
@@ -99,7 +99,8 @@ export const dieFor = (roll: string | null, key: string): Die => {
 /** Where a star sits, in light-years from Sol. */
 function place(world: World, star: string) {
   if (star === SOL) return [0, 0, 0];
-  const s = Object.values(world.stars).find((x) => x.shown === star || x.name === star);
+  // A hole by its id, where our colony may stand. 2026-10-28.
+  const s = Object.values(world.stars).find((x) => x.shown === star || x.name === star) ?? world.holes?.find((h) => h.id === star);
   if (!s || s.ra === undefined || s.dec === undefined) return null;
   const ra = (s.ra * 15 * Math.PI) / 180, dec = (s.dec * Math.PI) / 180;
   return [s.d * Math.cos(dec) * Math.cos(ra), s.d * Math.cos(dec) * Math.sin(ra), s.d * Math.sin(dec)];
@@ -123,8 +124,8 @@ function catches(p: Neighbor, at: number, die: Die) {
 }
 
 /** Two or three moves drawn by the table's odds, without repeats. */
-export function offers(name: string, news: News, die: Die, n = 3) {
-  const table = TABLES[name]?.[news];
+export function offers(name: string, news: News, die: Die, n = 3, own?: Record<string, [string, number][]>) {
+  const table = (own ?? TABLES[name])?.[news];
   if (!table?.some(([m]) => !HELD.has(m))) return ["ignore"];
   const left = table.filter(([m]) => !HELD.has(m));
   const out: string[] = [];
@@ -177,13 +178,13 @@ export function landings(world: World, sent: Sent[], done: Reaction[], now: numb
       ? p.inbound.some((i) => i.sent < (sentOf?.y ?? at))
       : done.some((r) => r.star === star && sendsTo(r) === signal.from && r.text);
     const news: News = signal.to === "everywhere" ? "broadcast" : spoke ? "reply" : "knock";
-    out.push({ key, signal, sent: sentOf, neighbor: p, star, at, d, news, read, missed, offers: missed ? [] : offers(p.name, news, die) });
+    out.push({ key, signal, sent: sentOf, neighbor: p, star, at, d, news, read, missed, offers: missed ? [] : offers(p.name, news, die, 3, p.ours?.table) });
   };
   for (const s of sent) {
     const signal: Signal = { id: s.id, from: SOL, to: s.to, text: s.travels, size: s.size };
     for (const p of world.neighbors) {
       const star = shown(p);
-      if (had.has(`${s.id}:${star}`)) continue;
+      if (p.ours || had.has(`${s.id}:${star}`)) continue;
       let at: number, read = true;
       if (s.to === "everywhere") {
         // Read once out to the dial. Repeated, a neighbor who keeps listening reads it farther: a Year of copies.
@@ -217,7 +218,7 @@ export function landings(world: World, sent: Sent[], done: Reaction[], now: numb
   for (const n of notices(world, ours, (key) => dieFor(roll, `${key}:found`)() < REFUGE_FOUND)) {
     const star = shown(n.neighbor);
     const key = `${n.craft.id}:${star}`;
-    if (n.at > now || had.has(key) || (lost.get(n.craft.id) ?? Infinity) <= n.seen) continue;
+    if (n.neighbor.ours || n.at > now || had.has(key) || (lost.get(n.craft.id) ?? Infinity) <= n.seen) continue;
     const news: News = n.craft.kind === "sentinel" ? "probe" : "settle";
     const signal: Signal = { id: n.craft.id, from: SOL, to: star, text: "", size: "page" };
     out.push({ key, signal, neighbor: n.neighbor, star, at: n.at, d: n.hop, news, read: true, missed: false, offers: offers(n.neighbor.name, news, dieFor(roll, key)), notice: n });
@@ -228,7 +229,7 @@ export function landings(world: World, sent: Sent[], done: Reaction[], now: numb
   const act = (id: string, move: string, to: string, p: Neighbor, at: number, d: number, news: News, sure: boolean) => {
     const star = shown(p);
     const key = `${id}:${star}`;
-    if (at > now || had.has(key)) return;
+    if (p.ours || at > now || had.has(key)) return;
     const die = dieFor(roll, key);
     const missed = !sure && !catches(p, at, die);
     const signal: Signal = { id, from: SOL, to, text: "", size: "page", move };
@@ -259,7 +260,7 @@ export function landings(world: World, sent: Sent[], done: Reaction[], now: numb
       if (b.lands <= now && !had.has(`${key}:${b.to}`)) {
         const die = dieFor(roll, `${key}:${b.to}`);
         const signal: Signal = { id: key, from: b.from, to: b.to, text: "", size: "page", move: b.screened ? "screened" : "struck" };
-        out.push({ key: `${key}:${b.to}`, signal, neighbor: target, star: b.to, at: b.lands, d: b.d, news: "struck", read: true, missed: false, offers: offers(target.name, "struck", die) });
+        out.push({ key: `${key}:${b.to}`, signal, neighbor: target, star: b.to, at: b.lands, d: b.d, news: "struck", read: true, missed: false, offers: offers(target.name, "struck", die, 3, target.ours?.table) });
       }
     }
   }

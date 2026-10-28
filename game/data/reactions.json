@@ -7215,5 +7215,379 @@
   "catch": "catches or disables a probe in its system",
   "strike": "plans a strike, fired when its weapons are ready",
   "ignore": "nothing new: keeps its plan"
+ },
+ "kinds": {
+  "watcher": {
+   "hum": {
+    "watch": 70,
+    "probe": 10,
+    "hide": 10,
+    "guard": 5,
+    "knock": 5
+   },
+   "knock": {
+    "watch": 45,
+    "guard": 20,
+    "knock": 10,
+    "answer": 10,
+    "hide": 10,
+    "probe": 5
+   },
+   "broadcast": {
+    "watch": 70,
+    "hide": 10,
+    "probe": 10,
+    "knock": 5,
+    "answer": 5
+   },
+   "reply": {
+    "answer": 50,
+    "watch": 30,
+    "guard": 10,
+    "probe": 10
+   },
+   "launch": {
+    "watch": 60,
+    "guard": 20,
+    "hide": 15,
+    "warn": 5
+   },
+   "incoming": {
+    "guard": 50,
+    "watch": 20,
+    "hide": 20,
+    "knock": 10
+   },
+   "probe": {
+    "watch": 40,
+    "catch": 20,
+    "hide": 15,
+    "answer": 15,
+    "guard": 10
+   },
+   "settle": {
+    "watch": 50,
+    "guard": 25,
+    "hide": 15,
+    "knock": 10
+   },
+   "strike_seen": {
+    "watch": 40,
+    "hide": 30,
+    "guard": 25,
+    "warn": 5
+   },
+   "struck": {
+    "guard": 40,
+    "strike": 30,
+    "hide": 20,
+    "answer": 10
+   },
+   "tipoff": {
+    "watch": 60,
+    "guard": 15,
+    "hide": 10,
+    "probe": 10,
+    "knock": 5
+   },
+   "quiet": {
+    "watch": 65,
+    "probe": 15,
+    "guard": 10,
+    "hide": 5,
+    "knock": 5
+   },
+   "silence": {
+    "watch": 60,
+    "knock": 15,
+    "probe": 15,
+    "hide": 10
+   }
+  },
+  "contacter": {
+   "hum": {
+    "knock": 35,
+    "watch": 30,
+    "probe": 15,
+    "call": 10,
+    "gift": 10
+   },
+   "knock": {
+    "answer": 50,
+    "gift": 20,
+    "knock": 10,
+    "watch": 10,
+    "probe": 10
+   },
+   "broadcast": {
+    "answer": 40,
+    "watch": 20,
+    "gift": 15,
+    "knock": 15,
+    "probe": 10,
+    "call": 10
+   },
+   "reply": {
+    "answer": 60,
+    "gift": 20,
+    "probe": 10,
+    "watch": 10
+   },
+   "launch": {
+    "watch": 50,
+    "warn": 25,
+    "guard": 15,
+    "knock": 10
+   },
+   "incoming": {
+    "knock": 30,
+    "guard": 30,
+    "watch": 20,
+    "answer": 20
+   },
+   "probe": {
+    "answer": 50,
+    "watch": 25,
+    "gift": 15,
+    "catch": 10
+   },
+   "settle": {
+    "knock": 40,
+    "answer": 25,
+    "watch": 20,
+    "gift": 10,
+    "guard": 5
+   },
+   "strike_seen": {
+    "warn": 40,
+    "watch": 25,
+    "guard": 20,
+    "probe": 10,
+    "hide": 5
+   },
+   "struck": {
+    "guard": 40,
+    "strike": 25,
+    "answer": 20,
+    "warn": 15
+   },
+   "tipoff": {
+    "watch": 30,
+    "warn": 25,
+    "knock": 20,
+    "probe": 15,
+    "gift": 10
+   },
+   "quiet": {
+    "knock": 35,
+    "probe": 30,
+    "watch": 25,
+    "gift": 10
+   },
+   "silence": {
+    "knock": 45,
+    "probe": 25,
+    "watch": 20,
+    "call": 10
+   }
+  },
+  "inward": {
+   "hum": {
+    "ignore": 60,
+    "watch": 35,
+    "knock": 5
+   },
+   "knock": {
+    "ignore": 55,
+    "watch": 25,
+    "answer": 15,
+    "hide": 5
+   },
+   "broadcast": {
+    "ignore": 70,
+    "watch": 25,
+    "answer": 5
+   },
+   "reply": {
+    "answer": 50,
+    "ignore": 30,
+    "watch": 20
+   },
+   "launch": {
+    "ignore": 50,
+    "watch": 40,
+    "guard": 10
+   },
+   "incoming": {
+    "guard": 45,
+    "watch": 30,
+    "hide": 20,
+    "knock": 5
+   },
+   "probe": {
+    "watch": 40,
+    "ignore": 30,
+    "catch": 20,
+    "answer": 10
+   },
+   "settle": {
+    "ignore": 40,
+    "watch": 30,
+    "guard": 20,
+    "hide": 10
+   },
+   "strike_seen": {
+    "watch": 40,
+    "guard": 30,
+    "ignore": 20,
+    "hide": 10
+   },
+   "struck": {
+    "guard": 50,
+    "strike": 25,
+    "hide": 20,
+    "answer": 5
+   },
+   "tipoff": {
+    "ignore": 60,
+    "watch": 35,
+    "guard": 5
+   },
+   "quiet": {
+    "ignore": 65,
+    "watch": 30,
+    "hide": 5
+   },
+   "silence": {
+    "ignore": 75,
+    "watch": 25
+   }
+  },
+  "hunter": {
+   "hum": {
+    "watch": 50,
+    "strike": 35,
+    "hide": 10,
+    "probe": 5
+   },
+   "knock": {
+    "watch": 40,
+    "strike": 35,
+    "mask": 20,
+    "hide": 5
+   },
+   "broadcast": {
+    "watch": 45,
+    "strike": 35,
+    "mask": 15,
+    "hide": 5
+   },
+   "reply": {
+    "mask": 50,
+    "watch": 30,
+    "strike": 20
+   },
+   "launch": {
+    "watch": 50,
+    "hide": 30,
+    "guard": 20
+   },
+   "incoming": {
+    "guard": 50,
+    "hide": 30,
+    "strike": 20
+   },
+   "probe": {
+    "catch": 60,
+    "watch": 20,
+    "hide": 10,
+    "mask": 10
+   },
+   "settle": {
+    "strike": 45,
+    "watch": 30,
+    "mask": 15,
+    "hide": 10
+   },
+   "strike_seen": {
+    "watch": 50,
+    "hide": 30,
+    "guard": 20
+   },
+   "struck": {
+    "strike": 50,
+    "guard": 30,
+    "hide": 20
+   },
+   "tipoff": {
+    "watch": 45,
+    "strike": 30,
+    "probe": 15,
+    "hide": 10
+   },
+   "quiet": {
+    "watch": 45,
+    "strike": 25,
+    "probe": 20,
+    "hide": 10
+   },
+   "silence": {
+    "watch": 50,
+    "mask": 25,
+    "strike": 15,
+    "hide": 10
+   }
+  }
+ },
+ "dial": {
+  "Open": {
+   "knock": 1.5,
+   "answer": 1.5,
+   "call": 1.6,
+   "gift": 1.5,
+   "warn": 1.2,
+   "hide": 0.6,
+   "mask": 0.6
+  },
+  "Hidden": {
+   "watch": 1.4,
+   "hide": 1.5,
+   "mask": 1.3,
+   "catch": 1.2,
+   "knock": 0.6,
+   "call": 0.4,
+   "answer": 0.75,
+   "gift": 0.75
+  },
+  "Expand": {
+   "probe": 1.5,
+   "guard": 1.15,
+   "ignore": 0.8
+  },
+  "Deepen": {
+   "watch": 1.2,
+   "ignore": 1.3,
+   "probe": 0.75,
+   "gift": 1.1
+  },
+  "Bold": {
+   "knock": 1.3,
+   "probe": 1.3,
+   "strike": 1.4,
+   "call": 1.3,
+   "catch": 1.2,
+   "watch": 0.85,
+   "guard": 0.85,
+   "hide": 0.8
+  },
+  "Cautious": {
+   "watch": 1.25,
+   "guard": 1.4,
+   "hide": 1.2,
+   "strike": 0.6,
+   "knock": 0.7,
+   "call": 0.7,
+   "probe": 0.85
+  }
  }
 }

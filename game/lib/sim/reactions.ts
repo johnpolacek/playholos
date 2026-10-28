@@ -6,6 +6,10 @@ import { PyRandom } from "./pyrandom.ts";
 export type News = "hum" | "knock" | "broadcast" | "reply" | "silence" | "quiet" | "probe" | "settle" | "struck" | "strike_seen";
 export const TABLES = tables.tables as unknown as Record<string, Record<string, [string, number][]>>;
 export const MOVES = tables.moves as Record<string, string>;
+/** The base odds for each kind of Mind, and how far each dial tilts a move, per unit of lean. For our colony, whose
+ *  table is built from our charter in play. 2026-10-28. */
+export const KINDS = tables.kinds as unknown as Record<string, Record<string, Record<string, number>>>;
+export const DIAL = tables.dial as unknown as Record<string, Record<string, number>>;
 
 /** The move a neighbor makes on this news, in this game. Null for the dead, who have no table. */
 export function roll(seed: number, name: string, news: News): string | null {

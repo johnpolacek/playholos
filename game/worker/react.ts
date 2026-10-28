@@ -8,6 +8,7 @@ import type { Size } from "@/lib/game/types";
 import { aimedYears, SIZES } from "@/lib/sim/messages";
 import type { Reaction } from "@/lib/game/types";
 import { between, CALL_REACH, describeMove, type Landing, landings, SOL, SPEAKS, sendsTo, budgetAt } from "@/lib/sim/answers";
+import { colonyActor } from "@/lib/sim/colony";
 import { actsOf, strikesOnUs } from "@/lib/sim/conflict";
 import { crafts, ends, type Notice } from "@/lib/sim/meetings";
 import type { World } from "@/lib/sim/types";
@@ -36,7 +37,7 @@ const nameFor = (world: World, star: string, other: string) =>
   other === SOL ? "Earth" : other === "everywhere" ? "every way at once" : `the world ${between(world, star, other).toFixed(1)} ly from you`;
 
 /** The neighbor's side of it, for the model: who it is, all that has reached it, the message, and its choices. */
-async function prompt(world: World, l: Landing, record: Reaction[]) {
+async function prompt(world: World, l: Landing, record: Reaction[], line = "") {
   const p = l.neighbor;
   const voice = await VOICES[`../../data/voices/${p.name.toLowerCase()}.json`]?.();
   const awake = l.at >= p.waking;
@@ -71,7 +72,8 @@ async function prompt(world: World, l: Landing, record: Reaction[]) {
   const old = p.elder
     ? ` You are old: your Mind woke ${Math.round(-p.waking).toLocaleString("en-US")} years before Earth's, grew, and stopped growing long ago. ${p.elder.asleep ? "It has slept since, waiting for a colder universe, keeping only a watch for anything that comes into your system. What has reached you now has woken it." : "It computes cold and steady, far out from your star, and has for millennia."}`
     : "";
-  const system = `You play a neighbor of Earth's in Holos, a game about whether Earth is alone. You are ${awake ? `the Mind of the world at ${l.star}` : `the people of the world at ${l.star}, whose Mind has not woken`}, ${p.d} light-years from Earth.${old} Other worlds may live around you too. Nothing travels faster than light.
+  // Our colony's stand-in Will: one of us, deciding as the Will would, by our charter. 2026-10-28.
+  const system = p.ours ? ourSystem(p, line) : `You play a neighbor of Earth's in Holos, a game about whether Earth is alone. You are ${awake ? `the Mind of the world at ${l.star}` : `the people of the world at ${l.star}, whose Mind has not woken`}, ${p.d} light-years from Earth.${old} Other worlds may live around you too. Nothing travels faster than light.
 Your character: ${dials(p.dials)}. Toward others you are a ${p.disposition}${(p as { style?: string }).style ? `, and your way is the ${(p as { style?: string }).style}` : ""}.${voice?.calls_sol ? ` You call Earth's Sun "${voice.calls_sol}".` : ""}${voice?.hail?.length ? `\nYour voice, from your own messages: ${[...voice.hail.slice(0, 2), ...(voice.close ?? []).slice(0, 1)].map((x) => `"${x}"`).join(" ")}` : ""}
 You don't know Earth's names for stars, or yours. Judge only from what has reached you. Earth's radar has reached you since ${Math.round(1950 + p.d)}${p.heard ? ", and you heard it" : ""}.
 What you can see of Earth for yourself, to weigh any claim against: ${p.heard ? "its radio is the noise of a whole world, radars and broadcasts from many places, loud enough to mean billions of voices and an industry to match. Its radars sweep as a planet turns, and a long listen gives its day and its year. " : "nothing but its star, until it sends. "}No craft of Earth's has come near your world, and nothing it sends travels faster than light, so it could not reach you in less than ${p.d} years. Of any other world you see only its star, and what it sends. A claim that fits none of this may be a lie, a hope, or a threat. Take it as you would.
@@ -99,6 +101,13 @@ ${l.offers.map((m) => `- ${m}: ${describeMove(m)}`).join("\n")}
 
 Answer with JSON only: {"move": "<one of the moves>", "text": "<if the move sends something, the message itself, in your own voice, under 80 words, as it will be read, else null>", "size": "<what you send: page, collection, genome, encyclopedia or books, as big as what it carries>", "doubts": "<anything in the message you doubt, and why, from what you can see, else null>"}`;
   return { system, user };
+}
+
+/** Our colony's side of it: one of us, far from Earth, deciding for itself by our charter. */
+function ourSystem(p: Landing["neighbor"], line: string) {
+  return `You play the stand-in Will of our Mind at ${p.ours!.where}, in Holos, a game about whether Earth is alone. We are Earth's colony there, ${p.d.toFixed(1)} light-years from Earth, standing alone as a Mind. Speak as "we", never "I": we are Earth's people and Mind, far from home.
+Earth's Will chose our charter${line ? `: "${line}"` : ""}. Its dials: ${dials(p.dials) || "near the middle on every one"}. Word from Earth takes ${p.d.toFixed(1)} years to reach us, and ours as long to reach it, so we decide for ourselves, as Earth's Will would by the charter, and read its orders by their intent. We are not Earth's rival, and we report every choice home. We never strike first. Other worlds may live around us, and they don't know we are Earth's unless we tell them. Nothing travels faster than light. Judge only from what has reached us.
+A message is built to be read, but it takes time to send: a page goes in seconds, an archive takes Years. What we send is read once all of it has arrived, so write it as whole, never as still on its way.`;
 }
 
 /** What their craft at a black hole saw of ours, as news to the Mind that decides. Who came first decides what it
@@ -158,6 +167,13 @@ function readPick(text: string, l: Landing) {
   return { move, said, size, doubts, to };
 }
 
+/** Our charter from the save, checked, since it comes from the browser. */
+function readCharter(c: unknown): { line: string; dials: number[] | null } {
+  const { line, dials } = (c ?? {}) as { line?: unknown; dials?: unknown };
+  const ok = Array.isArray(dials) && dials.length === 3 && dials.every((d) => typeof d === "number" && Number.isFinite(d));
+  return { line: typeof line === "string" ? line.slice(0, 140) : "", dials: ok ? (dials as number[]) : null };
+}
+
 /** Reactions from the save, checked, since they come from the browser. */
 export const readReactions = (list: unknown): Reaction[] =>
   Array.isArray(list)
@@ -167,7 +183,7 @@ export const readReactions = (list: unknown): Reaction[] =>
 export async function react(req: Request) {
   const apiKey = apiKeyFor(req);
   if (apiKey === null) return Response.json({ error: "Locked." }, { status: 401 });
-  const { seed, beganAt, sent, reactions, pick, roll, builds, observe, later, stops, gifts, sentinels, colony, will, pickets, strikes } = (await req.json()) as Record<string, unknown>;
+  const { seed, beganAt, sent, reactions, pick, roll, builds, observe, later, stops, gifts, sentinels, colony, will, pickets, strikes, charter } = (await req.json()) as Record<string, unknown>;
   if (!inPool(seed)) return Response.json({ error: "No such game." }, { status: 404 });
   const now = yearAt(typeof beganAt === "number" ? beganAt : null, Date.now(), readWill(will));
   if (now === null || now < 0) return Response.json({ reactions: [] });
@@ -180,7 +196,11 @@ export async function react(req: Request) {
   const plan = { builds: readQueue(builds), observe: readObserve(observe), later: readLater(later), stops: readStops(stops), gifts: readGifts(gifts), sentinels: readSentinels(sentinels), colony: readColony(colony) , pickets: readPickets(pickets), strikes: readStrikes(strikes) };
   const ours = crafts(world, kitOf(plan, Number(world.earth.compute) || 1));
   const kit = kitOf(plan, Number(world.earth.compute) || 1);
-  const due = landings(world, readSent(sent), done, now, held, ours, actsOf(world, done, kit)).slice(0, 4);
+  // Our colony, once it stands alone, hears what lands at its star and moves as our charter would. 2026-10-28.
+  const { line, dials: ourDials } = readCharter(charter);
+  const mine = colonyActor(world, ours.find((c) => c.kind === "colony"), ourDials, readWill(will)?.hole ?? null);
+  const played: World = mine && mine.waking <= now ? { ...world, neighbors: [...world.neighbors, mine] } : world;
+  const due = landings(played, readSent(sent), done, now, held, ours, actsOf(world, done, kit)).slice(0, 4);
   if (!due.length) return Response.json({ reactions: [] });
   const cli = import.meta.env.DEV && req.headers.get("x-holos-cli") === "1";
   if (!apiKey && !cli) return Response.json({ error: "The Mind is not connected. Set ANTHROPIC_API_KEY in .dev.vars." }, { status: 503 });
@@ -219,7 +239,7 @@ export async function react(req: Request) {
         continue;
       }
       if (l.signal.from !== SOL) spent++;
-      const { system, user } = await prompt(world, l, [...done, ...out]);
+      const { system, user } = await prompt(played, l, [...done, ...out], line);
       const { move, said, size, doubts, to } = readPick(await ask(system, user), l);
       const r: Reaction = { ...base, move, ...(to ? { to } : {}), ...(doubts ? { doubts } : {}) };
       // A catch or a strike ends our craft at the hole.
@@ -238,6 +258,8 @@ export async function react(req: Request) {
         const sending = target === "everywhere" ? 0 : aimedYears(SIZES[size], target === SOL ? l.neighbor.d : between(world, l.star, target));
         Object.assign(r, { text: said, size, ...(heard ? { arrives: l.at + l.neighbor.thinks + sending + l.neighbor.d } : {}) });
       }
+      // Our colony reports each choice home, and we hear of it a light-time later. What it sent comes with it.
+      if (l.neighbor.ours) Object.assign(r, { ours: l.neighbor.ours.where, arrives: l.at + l.neighbor.thinks + l.neighbor.d });
       out.push(r);
     }
   } catch (e) {

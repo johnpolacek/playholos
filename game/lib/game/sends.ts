@@ -126,16 +126,23 @@ export function describeSent(sent: Sent[], year: number | null): string {
  *  another world's news. */
 export function answersHeard(sent: Sent[], reactions: Reaction[], year: number | null): Heard[] {
   if (year === null) return [];
+  // Our colony reports every choice home, with or without words. 2026-10-28.
+  const home = reactions.flatMap((r): Heard[] =>
+    r.ours && r.move !== "unheard" && r.arrives !== undefined && r.arrives <= year
+      ? [{ star: r.ours, d: r.d, sent: r.arrives - r.d, arrived: r.arrives, move: "report", text: r.text ?? null, ours: { chose: r.move, on: r.from } }]
+      : [],
+  );
   return reactions
-    .filter((r) => r.text && r.arrives !== undefined && r.arrives <= year)
-    .map((r) => ({
+    .filter((r) => !r.ours && r.text && r.arrives !== undefined && r.arrives <= year)
+    .map((r): Heard => ({
       star: r.star, d: r.d, sent: r.arrives! - r.d, arrived: r.arrives!, move: r.move, text: r.text!,
       // A call every way at once, on another world's news, is overheard: it answers no message of ours.
       // Sent on news of our craft at a hole: from the hole, if their Mind stands there.
       ...(r.via ? { star: r.via.star, d: r.via.d, sent: r.arrives! - r.via.d } : {}),
       ...(r.from ? { overheard: true } : r.about ? { about: r.about } : { answers: sent.find((s) => s.id === r.sent)?.travels ?? "" }),
       ...(r.move === "gift" ? { gift: giftTimes(GIFT_STEPS[r.size ?? "collection"]) } : {}),
-    }));
+    }))
+    .concat(home);
 }
 
 /** What a gift does for our thinking, in words. */

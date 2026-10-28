@@ -10,6 +10,8 @@ import { hop, seedProbes } from "./spread.ts";
 import { POOL } from "./pool.ts";
 import { loadVoices, loadWorld } from "./world.ts";
 import { offEarth, pace, type Order } from "./works.ts";
+import { between, landings } from "./answers.ts";
+import { colonyActor, ourCodes, ourKind, ourTable } from "./colony.ts";
 
 test("the generator is CPython's, seeded from ints and strings", () => {
   for (const [key, want] of Object.entries(golden.random)) {
@@ -405,4 +407,35 @@ test("our Mind settled at a star: word of its landing comes one light-time later
     return;
   }
   assert.fail("no seed has a living neighbor in the census");
+});
+
+test("our colony's table comes from our charter: a lean is 1, far past the middle 2, and it never strikes first", () => {
+  assert.equal(ourCodes([35, 50, 62]), "O1 B1");
+  assert.equal(ourCodes([20, 80, 50]), "O2 D2");
+  assert.equal(ourKind("O1 B1"), "contacter");
+  assert.equal(ourKind("H1 D1"), "inward");
+  assert.equal(ourKind("H1 E1"), "watcher");
+  for (const codes of ["O1 B1", "H2 D2 C2", ""]) {
+    for (const [news, row] of Object.entries(ourTable(codes))) {
+      assert.ok(Math.abs(row.reduce((t, [, w]) => t + w, 0) - 1) < 1e-9);
+      if (news !== "struck") assert.ok(!row.some(([m]) => m === "strike"), `${codes} ${news}`);
+    }
+  }
+});
+
+test("our colony hears a neighbor's call near it once it stands, never our own sends, and not while the Will lives there", async () => {
+  const world = await loadWorld(10);
+  const shown = (k: string) => world.stars[k]?.shown ?? k;
+  const p = world.neighbors.find((n) => !n.dead && !n.elder)!;
+  const key = Object.keys(world.stars).find((k) => k !== p.star && !world.neighbors.some((n) => n.star === k) && between(world, shown(k), shown(p.star)) < 20)!;
+  const craft = { id: `colony:${key}`, kind: "colony" as const, atStar: true, hole: shown(key), holeId: key, d: world.stars[key].d, arrives: 0, stands: 0 };
+  const mine = colonyActor(world, craft, [35, 50, 62], null)!;
+  assert.equal(colonyActor(world, craft, [35, 50, 62], shown(key)), null);
+  const played = { ...world, neighbors: [...world.neighbors, mine] };
+  const call = { key: "c:x", sent: "c", star: shown(p.star), d: p.d, at: 1, move: "call", text: "We are here.", to: "everywhere" };
+  const ours = { id: "s1", y: 1, to: "everywhere", travels: "Hello.", size: "page" as const, reach: 60 };
+  const got = landings(played, [ours as never], [call], 500, "t").filter((l) => l.neighbor.ours);
+  assert.equal(got.length, 1);
+  assert.equal(got[0].signal.from, shown(p.star));
+  assert.ok(got[0].offers.every((m) => m in ourTable("O1 B1").broadcast.reduce((o, [k]) => ({ ...o, [k]: 1 }), {})));
 });

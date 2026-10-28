@@ -810,7 +810,13 @@ Settled 2026-10-28, from the designer: anything available to another civilizatio
   - *Then its industry copies itself,* doubling every 2 Years as Metzger et al. 2013’s lunar seed grows, 3 at the Trojan Vault, back to all Earth had. So space builds are Earth’s real insurance.
   - *A backup builds only off Earth.* What is joined in orbit, on the Moon or among the rocks goes on. Works on Earth, and its data centers, are lost with it. Settled 2026-10-28.
   - *A backup sleeps unseen.* Until it wakes it sends nothing and builds nothing. No neighbor learns of our builds anyway, only our launches, catches and radar.
-  - *A colony is a second Mind, with its own Will.* Word from Earth takes a Year a light-year, so it must decide alone. Our Will can cross to it by the Mind Link. Not built yet.
+  - *A colony is a second Mind, with its own Will.* Word from Earth takes a Year a light-year, so it must decide alone. Our Will can cross to it by the Mind Link. Built 2026-10-28:
+    - *Its stand-in Will acts on our charter,* making the moves a neighbor makes: watch, hide, guard, knock, answer, call, probe, gift, and strike only when struck. Not a rival. Parity: neighbors' colonies keep their parent's dials.
+    - *Its table is our charter's.* A contacter if it leans Open, inward if it leans Deepen, else a watcher, tilted by our dials as a neighbor's are. Never a hunter: a first strike is the Will's to order.
+    - *It hears what lands at its star* once it stands alone: neighbors' messages and calls. Not our own sends. Neighbors don't know it is Earth's unless it says so.
+    - *It reports every choice home,* heard a light-time later on Scan, and told to the Mind.
+    - *While the Will lives there,* it decides nothing on its own.
+    - *Not yet:* its glow and watch, harm from a strike on it, a strike from a colony at a hole, and Earth's own stand-in once the Will has left.
   - Not yet: which builds a backup can still make, and where.
 - **Not yet:** warnings between neighbors, and dimming our glow.
 
