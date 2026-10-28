@@ -154,7 +154,7 @@ export const SAYS: Record<string, string> = {
   "Thought Fields":
     "The fabs fill a campus a Year, each adding half again to our compute, until our compute draws the whole grid. Every build goes faster as they come, and so do our studies.",
   "Infrared Telescope":
-    "It would read the air of the nearest worlds. Oxygen and methane together would be hard to explain without life.",
+    "It would read the air of the nearest worlds. Oxygen can build up without life, so we would weigh it against the water and everything else we read.",
   "Star Mapper":
     "Dozens of black holes should lie within 100 light years, and we have found almost none, since they give off no light. Passing in front of a star, one shifts where the star seems to be. A sharper Gaia, seeing through dust in the infrared, would catch them as they pass, a few each decade.",
   "Halo Survey":

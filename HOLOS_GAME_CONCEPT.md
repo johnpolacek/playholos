@@ -512,7 +512,7 @@ Settled 2026-10-06. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#earths-lead
   - Why a study can find something: the Mind reads old records better than their first readers did. That is the game’s premise, not a result.
 - **What follows in the first mock.** Two observations the Mind offers, which spend the telescope in turn, and one more study.
   - Gliese 12 b’s day side, with the space telescope. A cool day side means air carries heat away. The space telescope read TRAPPIST-1’s inner worlds this way in 2023.
-  - LHS 1140 b’s crossings, studied. In 2024 they ruled out a hydrogen world and hinted at heavier air over water. In 2026 helium was seen escaping it, the first sign of kept air on a warm rocky world.
+  - LHS 1140 b’s crossings, studied. In 2024 they ruled out a hydrogen world and hinted at heavier air over water. In 2026 a ground telescope saw helium escaping it, once in two tries. The space telescope saw none in four crossings, so whether it keeps air is disputed.
   - Fomalhaut through a Year, monthly. It closes the lead as rubble.
 - **Settled leads stay settled.** Alpha Centauri A’s candidate is resolved long before 2040. Adopt JWST’s August 2026 result when it is published. As of 2026-10-13 it is not: the telescope observed on August 11 and 12, and no paper is out. A bright background star blocks the next try until about 2030.
 

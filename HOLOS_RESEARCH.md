@@ -673,9 +673,12 @@ What Sol’s own instruments have found nearby. For v2 open question 3.
   - Matters: the nearest known temperate Earth-size world that crosses its star. Its air is unread.
   - Used: a re-read in the first mock, and a follow-up observation of its day side.
 - **[LHS 1140 b](https://arxiv.org/abs/2403.13265)** · 48.8 ly. Damiano et al. 2024. Abstract read 2026-10-12.
-  - JWST’s crossing spectrum rules out hydrogen-rich air, which leaves a water world. It favors heavier air, perhaps nitrogen, with modest confidence. No helium in four JWST transits (August 2026).
-  - **[Cherubim et al. 2026](https://arxiv.org/abs/2607.14326)** · Published, Science, July 16, 2026. I read the abstract. Helium escaping LHS 1140 b, seen from Magellan in 2024 and not in 2025, so the escape varies. None at LHS 1140 c. The upper air is helium, short of hydrogen, with heavier gases held below. The first sign of kept air on a rocky warm-zone world.
-  - Matters: by 2040 Earth knows LHS 1140 b keeps air. The mock’s finding agrees.
+  - JWST’s crossing spectrum rules out hydrogen-rich air, which leaves a water world. It favors heavier air, perhaps nitrogen, with modest confidence.
+  - **[Cherubim et al. 2026](https://arxiv.org/abs/2607.14326)** · Published, Science, July 16, 2026. I read the abstract. Helium escaping LHS 1140 b, seen from Magellan in 2024 and not in 2025, so the escape varies. None at LHS 1140 c. The upper air is helium, short of hydrogen, with heavier gases held below. Claimed as the first sign of kept air on a rocky warm-zone world.
+  - **[Bennett et al. 2026](https://arxiv.org/abs/2608.13473)** · Preprint, August 2026. Read through a search summary. No helium in four JWST NIRISS transits, 2023 to 2026. The best ground model is rejected at over 3 sigma in each. The ground detection may be spurious, though helium seen in under half of crossings can’t be ruled out.
+  - **[No persistent helium absorption, 2026](https://arxiv.org/pdf/2608.19120)** · Preprint, August 2026. Title only. A second analysis of the same four transits, with the star’s own helium varying between epochs.
+  - Matters: as of October 2026 whether LHS 1140 b keeps air is disputed. The heavier air of 2024 is still a modest hint.
+  - Corrected 2026-10-28: this log said by 2040 Earth knows it keeps air. Game text now calls it disputed. The first mock’s finding, that it keeps a heavy air, is the mock’s own.
   - Corrected 2026-10-12: this log had it as a water world or a small gas world. The 2024 paper already rules the gas world out.
   - Used: a follow-up re-read in the first mock.
 - **[Terra Hunting Experiment](https://www.iac.es/en/projects/harps3-high-accuracy-radial-velocity-planet-searcher)** · HARPS3 began work in summer 2026 on La Palma: every clear night for ten years, on at least 40 bright Sun-like northern stars. By 2040 its results are in. If a neighbor’s world sits in its sample and is heavy enough, Earth found it.
@@ -710,9 +713,19 @@ What Sol’s own instruments have found nearby. For v2 open question 3.
 
 ## Reading air
 
-- **[Krissansen-Totton et al., published 2026](https://arxiv.org/abs/2507.14771)** · Published.
+- **[Krissansen-Totton et al., published 2026](https://arxiv.org/abs/2507.14771)** · Published, [Astrobiology](https://doi.org/10.1177/15311074261477497). Read through a search summary 2026-10-28.
   - Broad wavelength coverage is needed to read oxygen and methane as life, not geology.
+  - From 0.26 microns, for ozone in a Proterozoic-like world, to 1.7, for methane and carbon dioxide. Signal to noise 20 to 40.
   - Used: v1 “Instruments shift the odds”, air projects.
+  - Checked 2026-10-28: the game’s telescope reads water, oxygen and ozone, not methane, as Latouf et al. 2024 find methane at Earth’s level unreadable. The Infrared Telescope’s line no longer promises methane.
+- **[Theiling 2026](https://www.pnas.org/doi/10.1073/pnas.2520594123)** · Published, PNAS 123 (33), August 14, 2026. Read through a summary. Uses Earth’s chemical history as a template. A world crossing from chemistry to life would be the richest find, but spreading life recycles and erases its early chemistry.
+  - Matters: backs Reinhard et al. 2017. A young living world may lack the signs we expect, so hidden microbes read as a lifeless sea.
+- **[Juice’s look back at Earth, 2024](https://www.esa.int/Science_Exploration/Space_Science/Juice/Juice_confirms_that_Earth_is_habitable)** · ESA press release. Flying past Earth on August 20, 2024, Juice found oxygen, ozone, carbon dioxide and water. A repeat of Sagan’s 1990 Galileo test, mostly to calibrate instruments.
+  - Matters: it shows habitability, not life. Earth seen from afar reads only as a place life could be.
+- **K2-18 b and dimethyl sulfide** · 124 ly, outside the game’s 50. A warning, not a lead.
+  - Madhusudhan et al. 2025 reported DMS or DMDS at about 3 sigma from JWST. Reanalyses found the evidence insufficient ([arXiv 2505.13407](https://arxiv.org/abs/2505.13407)) and searched trace gases more broadly ([arXiv 2505.10539](https://arxiv.org/abs/2505.10539)). DMS also forms without life.
+  - Unverified: a September 2026 survey of ten worlds said to favor absorption at K2-18 b. Not found.
+  - Matters: a single molecule at 3 sigma is where the Mind starts asking, never where it concludes.
 - **[Seavey et al., March 2026](https://arxiv.org/abs/2603.11017)** · Preprint.
   - Oxygen can build up without life in Mars-like atmospheres.
   - Used: v1 clue odds.
@@ -1155,7 +1168,7 @@ What a neighbor’s world can plausibly be, beyond an Earth twin. Each roster en
     - Used 2026-10-16: the single line stays, with Pass et al.’s factor. The paper backs it as a middle case, and backs each world’s luck as its unknown volatiles.
   - **[Meni-Gallardo and Pallé 2026](https://arxiv.org/abs/2508.12865)** · Accepted, MNRAS, June 2026. I read the abstract. An empirical shoreline, anchored to Mars and four planets with tentative air. Steeper than theory, so more red dwarf planets keep air. But revised XUV histories for small red dwarfs show “severe atmospheric vulnerability”.
   - **Checked 2026-10-16, the game’s line at measured planets.** My arithmetic with calcs/seed.py’s shoreline.
-    - LHS 1140 b: +0.47, the airy side. Helium escapes it (Cherubim et al. 2026), so it keeps air.
+    - LHS 1140 b: +0.47, the airy side. Helium was seen escaping it (Cherubim et al. 2026), but JWST saw none (Bennett et al. 2026), so its air is disputed.
     - TRAPPIST-1 e: -1.47, bare. JWST neither shows nor rules out air (Glidden et al. 2025). f: -0.99.
     - GJ 3929 b: -1.45, bare. Rocky Worlds finds it likely bare ([arXiv 2508.12516](https://arxiv.org/abs/2508.12516)).
     - Widening each world’s luck from 0.5 to 0.8 moves red dwarf bare rock from 71% to 68%. Measured on 200 games. Not worth a change.
