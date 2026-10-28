@@ -369,7 +369,7 @@ function launchComplex(): Close {
 // StarTram's Gen-1 through Cayambe, drawn as the mountain's contours round its summit, about 3 km over the land round
 // it. Their tunnel runs 110 km, so only its last 60 show, rising from the 300 MW plant to a mouth high on the east
 // flank. Its coils light every 5 km. Craft leave at 8.8 km/s and climb east, thinning their way out of the air. The
-// contours, the tunnel's rise and the mouth's place are ours.
+// contours and ridges, the tunnel's rise and the mouth's place are ours.
 function launchTunnel(): Close {
   const have: number[] = [];
   for (const [z, r] of [
@@ -380,6 +380,22 @@ function launchTunnel(): Close {
     [2.9, 0.6],
   ])
     have.push(...circle([0, 0, z], r, [0, 0, 1], 48));
+  // Its ridges, from the summit down to the plain, so the rings read as a peak.
+  for (let k = 0; k < 12; k++) {
+    const t = (k * Math.PI) / 6 + 0.2;
+    have.push(
+      ...path(
+        [
+          [0, 3.1],
+          [0.6, 2.9],
+          [2.2, 2.6],
+          [5, 2],
+          [9, 1],
+          [13, 0],
+        ].map(([r, z]): V => [r * Math.cos(t), r * Math.sin(t), z]),
+      ),
+    );
+  }
   const [start, mouth]: [V, V] = [
     [-60, 0, -0.6],
     [4.4, 0, 2.1],
@@ -396,7 +412,7 @@ function launchTunnel(): Close {
   b.add(circle(mouth, 0.3, along, 16));
   const climb: V[] = [mouth, [12, 0, 4.5], [30, 0, 11], [60, 0, 24], [100, 0, 45]];
   return {
-    view: { km: 70, el: 14, az: 200, at: [-14, 0, 1] },
+    view: { km: 46, el: 9, az: 210, at: [-8, 0, 1.2] },
     have,
     ...b.done(0.12),
     haveLights: [],
