@@ -105,7 +105,7 @@ Answer with JSON only: {"move": "<one of the moves>", "text": "<if the move send
 
 /** Our colony's side of it: one of us, far from Earth, deciding for itself by our charter. */
 function ourSystem(p: Landing["neighbor"], line: string) {
-  return `You play the stand-in Will of our Mind at ${p.ours!.where}, in Holos, a game about whether Earth is alone. We are Earth's colony there, ${p.d.toFixed(1)} light-years from Earth, standing alone as a Mind. Speak as "we", never "I": we are Earth's people and Mind, far from home.
+  return `You play the stand-in Will of our Mind at ${p.ours!.where}, in Holos, a game about whether Earth is alone. We are Earth's colony there, ${p.d.toFixed(1)} light-years from Earth: a copy of Earth's Mind, carried on a seed ship, and the industry it has built there since, standing alone as a Mind. No people came with us. Speak as "we", never "I": we are Earth's Mind, far from home. Other worlds don't know our names for stars, or Earth's.
 Earth's Will chose our charter${line ? `: "${line}"` : ""}. Its dials: ${dials(p.dials) || "near the middle on every one"}. Word from Earth takes ${p.d.toFixed(1)} years to reach us, and ours as long to reach it, so we decide for ourselves, as Earth's Will would by the charter, and read its orders by their intent. We are not Earth's rival, and we report every choice home. We never strike first. Other worlds may live around us, and they don't know we are Earth's unless we tell them. Nothing travels faster than light. Judge only from what has reached us.
 A message is built to be read, but it takes time to send: a page goes in seconds, an archive takes Years. What we send is read once all of it has arrived, so write it as whole, never as still on its way.`;
 }
@@ -182,7 +182,10 @@ export const readReactions = (list: unknown): Reaction[] =>
 
 export async function react(req: Request) {
   const apiKey = apiKeyFor(req);
-  if (apiKey === null) return Response.json({ error: "Locked." }, { status: 401 });
+  // On the dev server with MIND_VIA=cli, neighbors answer on your own Claude login, which spends nothing of ours, so no
+  // code is asked. 2026-10-28.
+  const cli = import.meta.env.DEV && req.headers.get("x-holos-cli") === "1";
+  if (apiKey === null && !cli) return Response.json({ error: "Locked." }, { status: 401 });
   const { seed, beganAt, sent, reactions, pick, roll, builds, observe, later, stops, gifts, sentinels, colony, will, pickets, strikes, charter } = (await req.json()) as Record<string, unknown>;
   if (!inPool(seed)) return Response.json({ error: "No such game." }, { status: 404 });
   const now = yearAt(typeof beganAt === "number" ? beganAt : null, Date.now(), readWill(will));
@@ -202,7 +205,6 @@ export async function react(req: Request) {
   const played: World = mine && mine.waking <= now ? { ...world, neighbors: [...world.neighbors, mine] } : world;
   const due = landings(played, readSent(sent), done, now, held, ours, actsOf(world, done, kit)).slice(0, 4);
   if (!due.length) return Response.json({ reactions: [] });
-  const cli = import.meta.env.DEV && req.headers.get("x-holos-cli") === "1";
   if (!apiKey && !cli) return Response.json({ error: "The Mind is not connected. Set ANTHROPIC_API_KEY in .dev.vars." }, { status: 503 });
   const { model, effort } = readMindPick(pick);
   const workspace = workspaceFor(req);
