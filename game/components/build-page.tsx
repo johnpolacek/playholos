@@ -47,7 +47,7 @@ function status(open: boolean, at: number, by: number | null | undefined, year: 
   const when = by == null ? "after Year 1,000" : `by Year ${tenths(by)}, ${span(by)} after we begin`;
   if (open)
     return at < 0 ? `Last in our order, it would be done ${when}.` : `Queued, ${ORDINAL[at]} in our order. Done ${when}.`;
-  if (at < 0) return "Not in our order.";
+  if (at < 0) return "Not in our order yet.";
   if (by == null) return "Under way. Done after Year 1,000.";
   return year >= by ? "Done." : `Under way. Done in ${span(by - year)}.`;
 }
@@ -61,11 +61,30 @@ function InPlay({ name, scale, done }: { name: string; scale: number; done: Reco
   // An order lands on Earth a light-time late while the Will lives at a hole.
   const now = orderAt === null ? null : tenths(orderAt);
   const back = takenAt(plan, name);
+  // Left out at Begin, it can be ordered in play, last in line, 2026-10-28.
+  const fresh = back === null && !ordered(plan).includes(name);
+  const lacking = lacks(plan, name);
   const again = useMemo(() => {
-    if (now === null || back === null) return null;
-    return { at: schedule(orderLater(name, now)(plan), scale)[name], left: keptOf(plan, scale, name, now) };
-  }, [now, back, name, plan, scale]);
+    if (now === null || (back === null && !fresh)) return null;
+    return { at: schedule(orderLater(name, now)(plan), scale)[name], left: back === null ? null : keptOf(plan, scale, name, now) };
+  }, [now, back, fresh, name, plan, scale]);
   if (now === null) return null;
+  if (fresh && again && !lacking.length)
+    return (
+      <div className="flex flex-col">
+        <p className="mt-2.5 text-[13px] leading-snug text-page-ink2">
+          {again.at == null
+            ? "Ordered now, it would be done after Year 1,000."
+            : `Ordered now, it would be done by Year ${tenths(again.at)}, in ${span(again.at - now)}.`}
+        </p>
+        <button
+          onClick={() => change(orderLater(name, now))}
+          className="mt-2.5 h-11 rounded-full bg-ink text-[15px] font-medium text-paper"
+        >
+          Add to Queue
+        </button>
+      </div>
+    );
   if (back !== null && again) {
     const kept =
       name === "Thought Fields"
@@ -124,7 +143,7 @@ export function Queueing({ name, scale, done }: { name: string; scale: number; d
   // Its Year: where it stands in our order, or last in line if we add it now.
   const by = queued ? done[name] : schedule({ ...plan, builds: [...plan.builds, name] }, scale)[name];
   // A Seed Ship is queued only once its drive and fuel are, and says which it waits on.
-  const lacking = open || queued ? lacks(plan, name) : [];
+  const lacking = !back ? lacks(plan, name) : [];
   return (
     <div ref={root} className="flex flex-col">
       {!back && (

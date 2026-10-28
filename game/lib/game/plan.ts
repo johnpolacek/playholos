@@ -342,7 +342,7 @@ function doneOf(p: ReturnType<typeof pace>, name: string) {
 export const NEEDS: Record<string, string[]> = { "Seed Ship": ["Fusion Drive", "Deuterium Works"] };
 
 /** What a build needs that our order lacks. */
-export const lacks = (plan: Plan, name: string) => (NEEDS[name] ?? []).filter((n) => !plan.builds.includes(n));
+export const lacks = (plan: Plan, name: string) => (NEEDS[name] ?? []).filter((n) => !ordered(plan).includes(n));
 
 /** Builds as a line says them: the Fusion Drive and the Deuterium Works. */
 export const needs = (names: string[]) => names.map((n) => `the ${n}`).join(" and ");
@@ -523,14 +523,14 @@ export function needOf(name: string, all: number, scale = 1) {
   return want / all;
 }
 
-/** What our builds have opened by a Year, and we haven't ordered: each build that waits, once what it waits on is
+/** What we can order in play, and haven't: Year 0's builds, and each build that waits, once what it waits on is
  *  done. */
 export function openAt(plan: Plan, done: Record<string, number | null>, year: number) {
   const ours = ordered(plan);
-  // Builds taken back wait here too, to order again. 2026-10-23.
-  const back = BUILDS.filter((b) => takenAt(plan, b.name) !== null);
+  // Year 0's builds we left out, or took back, wait here too, to order in play. Before 2026-10-28 only those taken
+  // back did, and one left out at Begin could never be built.
   return [
-    ...back,
+    ...BUILDS.filter((b) => !ours.includes(b.name)),
     ...LATER.filter((b) => !ours.includes(b.name) && (takenAt(plan, b.name) !== null || ((ours.includes(b.after) || b.after === FOUND) && (done[b.after] ?? Infinity) <= year))),
   ];
 }
