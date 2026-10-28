@@ -262,7 +262,7 @@ export function DestinationPage({ slug }: { slug: string }) {
           const r = visitReading(v);
           return (
             <section key={r.id} data-m className="mt-4 flex items-center gap-3 rounded-xl border border-other/50 bg-other/[.05] p-3">
-              <VisitArt sight={v.sight} size={96} />
+              <VisitArt sight={v.sight} elder={v.elder} size={96} />
               <div className="min-w-0">
                 <span className="font-mono text-[10px] tracking-[.1em] text-other uppercase">
                   {v.world} · {r.by} · Year {r.at}

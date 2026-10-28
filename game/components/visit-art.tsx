@@ -5,9 +5,47 @@ import type { Visit } from "@/lib/sim/types";
 // cloud drifting over dark seas, with forests dark green on the land, as plants under a red star would look. Air
 // shows as a thin glow on its lit edge. 2026-10-22. A lens at the Sun's focus pictures felt worlds too, 2026-10-26:
 // ice from pole to pole, or a lived-in world, its fields cleared in squares and its cities' lights on the night side,
-// blinking on as we look.
+// blinking on as we look. An elder's home, 2026-10-28: round its green world, far out, its works hang in a thin ring
+// of sheets. Awake, they glow faint and cold, never brightening, and turn slowly. Asleep, they are dark and still.
 
-export function VisitArt({ sight, size = 132 }: { sight: Visit["sight"]; size?: number }) {
+/** Sheets in a ring, each turned along it. Fixed, so the picture is the same each time. */
+const SHEETS = Array.from({ length: 44 }, (_, k) => {
+  const a = (k / 44) * 2 * Math.PI + ((k * 5) % 7) * 0.02;
+  return { x: 66 + (57 + ((k * 11) % 9)) * Math.cos(a), y: 66 + (57 + ((k * 11) % 9)) * Math.sin(a), deg: (a * 180) / Math.PI + 90, w: k % 5 ? 2.6 : 4.2 };
+});
+
+function Works({ asleep }: { asleep: boolean }) {
+  return (
+    <g aria-hidden>
+      {!asleep && (
+        <>
+          <filter id="works-heat" x="-30%" y="-30%" width="160%" height="160%">
+            <feGaussianBlur stdDeviation="3" />
+          </filter>
+          <circle cx="66" cy="66" r="61" fill="none" stroke="#aab4c8" strokeWidth="6" opacity=".1" filter="url(#works-heat)" />
+        </>
+      )}
+      <g className={asleep ? undefined : "origin-center animate-[spin_240s_linear_infinite] motion-reduce:animate-none"}>
+        {SHEETS.map(({ x, y, deg, w }, k) => (
+          <rect
+            key={k}
+            x={x - w / 2}
+            y={y - 0.45}
+            width={w}
+            height=".9"
+            transform={`rotate(${deg} ${x} ${y})`}
+            fill={asleep ? "#2b3038" : "#c4cddd"}
+            stroke={asleep ? "#565d68" : "none"}
+            strokeWidth=".3"
+            opacity={asleep ? 0.9 : 0.55}
+          />
+        ))}
+      </g>
+    </g>
+  );
+}
+
+export function VisitArt({ sight, elder, size = 132 }: { sight: Visit["sight"]; elder?: Visit["elder"]; size?: number }) {
   // At a black hole: its dark disk, and the sky behind it bent into a ring of light. 2026-10-26.
   if (sight === "dark")
     return (
@@ -41,6 +79,7 @@ export function VisitArt({ sight, size = 132 }: { sight: Visit["sight"]; size?: 
   const haze = sight === "haze";
   return (
     <svg width={size} height={size} viewBox="0 0 132 132" aria-hidden className="shrink-0 overflow-visible">
+      {elder && <Works asleep={elder === "asleep"} />}
       <defs>
         <clipPath id={`${id}-disc`}>
           <circle cx="66" cy="66" r="48" />

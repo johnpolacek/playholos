@@ -268,8 +268,10 @@ function Pair({ mass, ly, a, e, days }: { mass: number; ly: number; a: number; e
 
 // A grey glow, drawn as the case for it: the star with its faint halo breathing, and beside it the glow's color from
 // 0.87 to 3 mm. Dust falls steeply with wavelength, a band from index 2.4 to 3.1 (MacGregor et al. 2016). This falls
-// at about 1.6, as a body near 12 K does, its measures landing one by one. Ours, 2026-10-26.
-function GlowArt({ ly }: { ly: number }) {
+// at about 1.6, as a body near 12 K does, its measures landing one by one. Ours, 2026-10-26. An elder's glow holds
+// level: its halo stops breathing, and under it our yearly looks land on a flat line beside a young Mind's doubling,
+// once a decade or so. 2026-10-28.
+function GlowArt({ ly, steady }: { ly: number; steady?: boolean }) {
   const halo = useRef<SVGCircleElement>(null);
   const dots = useRef<(SVGGElement | null)[]>([]);
   const [x0, x1, y0, y1] = [150, 300, 40, 170];
@@ -277,11 +279,18 @@ function GlowArt({ ly }: { ly: number }) {
   const X = (mm: number) => x0 + ((Math.log(mm) - Math.log(0.8)) / (Math.log(3.3) - Math.log(0.8))) * (x1 - x0);
   // Flux falls as wavelength to the minus index, pinned at 0.87 mm; drawn on a log scale, so each is a straight line.
   const Y = (mm: number, index: number) => y0 + 12 + index * 26 * Math.log(mm / 0.87);
+  const looks = useRef<(SVGCircleElement | null)[]>([]);
   useTicks((t) => {
-    halo.current?.setAttribute("r", String(30 + 4 * Math.sin(t * 0.9)));
-    halo.current?.setAttribute("opacity", String(0.25 + 0.1 * Math.sin(t * 0.9)));
+    const b = steady ? 0 : Math.sin(t * 0.9);
+    halo.current?.setAttribute("r", String(30 + 4 * b));
+    halo.current?.setAttribute("opacity", String(0.25 + 0.1 * b));
     dots.current.forEach((d, i) => d?.setAttribute("opacity", String(Math.min(1, Math.max(0, (t % 12) - 1 - i * 1.2)))));
+    looks.current.forEach((d, i) => d?.setAttribute("opacity", String(Math.min(1, Math.max(0, (t % 12) - 2 - i * 1.4)))));
   }, 12);
+  // Six Years of looks, from first seen. A young Mind doubling each decade would climb this much in that time.
+  const [lx0, lx1, ly0] = [16, 122, 202];
+  const LX = (yr: number) => lx0 + (yr / 6) * (lx1 - lx0);
+  const young = Array.from({ length: 13 }, (_, k) => `${k ? "L" : "M"}${LX(k / 2)},${ly0 - 40 * (2 ** (k / 2 / 10) - 1)}`).join(" ");
   const band = `M${X(0.8)},${Y(0.8, 2.4)} L${X(3.3)},${Y(3.3, 2.4)} L${X(3.3)},${Y(3.3, 3.1)} L${X(0.8)},${Y(0.8, 3.1)} Z`;
   return (
     <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img" aria-label={`A grey glow round a star ${lyOf(ly)} light years away, its color unlike dust's`}>
@@ -291,6 +300,21 @@ function GlowArt({ ly }: { ly: number }) {
       <text x={70} y={160} textAnchor="middle" className="fill-muted font-mono text-[7.5px]">
         {lyOf(ly)} LY
       </text>
+      {steady && (
+        <g>
+          <path d={young} fill="none" stroke="var(--muted)" strokeWidth={0.8} strokeDasharray="2 2" />
+          <text x={lx1} y={ly0 - 26} textAnchor="end" className="fill-muted font-mono text-[7px]">
+            YOUNG, DOUBLING
+          </text>
+          <line x1={lx0} x2={lx1} y1={ly0} y2={ly0} stroke="var(--other)" strokeWidth={1} />
+          {[0, 1, 2, 3, 4, 5, 6].map((yr) => (
+            <circle key={yr} ref={(el) => void (looks.current[yr] = el)} cx={LX(yr)} cy={ly0} r={2} fill="var(--other)" />
+          ))}
+          <text x={lx0} y={ly0 + 11} className="fill-other font-mono text-[7px]">
+            THIS GLOW, YEAR BY YEAR: LEVEL
+          </text>
+        </g>
+      )}
       <path d={band} fill="var(--fill2)" opacity={0.25} />
       <text x={x1} y={Y(3.3, 3.1) + 12} textAnchor="end" className="fill-muted font-mono text-[7.5px]">
         DUST 2.4 TO 3.1
@@ -324,7 +348,7 @@ export function LeadArt({ art, read }: { art: Art; read?: string }) {
   if (art.kind === "clouds") return <Clouds third={read === "fomalhaut-third-cloud"} />;
   if (art.kind === "dark") return <Dark mass={art.mass} ly={art.ly} />;
   if (art.kind === "pair") return <Pair mass={art.mass} ly={art.ly} a={art.a} e={art.e} days={art.days} />;
-  if (art.kind === "glow") return <GlowArt ly={art.ly} />;
-  if (art.kind === "seed") return <VisitArt sight={art.sight} size={220} />;
+  if (art.kind === "glow") return <GlowArt ly={art.ly} steady={art.steady} />;
+  if (art.kind === "seed") return <VisitArt sight={art.sight} elder={art.elder} size={220} />;
   return <Reply sent={art.sent} ly={art.ly} />;
 }

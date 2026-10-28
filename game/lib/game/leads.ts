@@ -54,6 +54,8 @@ export interface Reading {
   air?: Read;
   /** What a flyby's pictures showed, drawn as the world. */
   sight?: Visit["sight"];
+  /** An elder's home: its cold works drawn round it, lit or dark. 2026-10-28. */
+  elder?: Visit["elder"];
 }
 
 /** What a lead's page draws: a world's orbit against its star's warm zone, Fomalhaut's belt, or a message's trip. */
@@ -63,8 +65,8 @@ export type Art =
   | { kind: "reply"; sent: number[]; ly: number }
   | { kind: "dark"; mass: number; ly: number }
   | { kind: "pair"; mass: number; ly: number; a: number; e: number; days: number }
-  | { kind: "glow"; ly: number }
-  | { kind: "seed"; sight: Visit["sight"] };
+  | { kind: "glow"; ly: number; steady?: boolean }
+  | { kind: "seed"; sight: Visit["sight"]; elder?: Visit["elder"] };
 
 /** A black hole's lead: one drawn alone, or with a star going round it, as Gaia BH1. 2026-10-28. */
 export const isHole = (art: Art) => art.kind === "dark" || art.kind === "pair";
@@ -401,6 +403,7 @@ function sentinelReading(v: Visit): Reading {
     now: v.sight === "haze" ? ["almost no chance", "almost certain", "almost no chance"] : ["almost certain", "almost no chance", "almost no chance"],
     tells: ["It keeps watching, and sends word of anything that changes."],
     sight: v.sight,
+    ...(v.elder ? { elder: v.elder } : {}),
   };
 }
 
@@ -457,6 +460,7 @@ function seedReading(v: Visit): Reading {
     now: v.sight === "haze" ? ["almost no chance", "almost certain", "almost no chance"] : ["almost certain", "almost no chance", "almost no chance"],
     tells: ["It keeps watching, and sends word of anything that changes."],
     sight: v.sight,
+    ...(v.elder ? { elder: v.elder } : {}),
   };
 }
 
@@ -484,7 +488,7 @@ function seedLead(v: Visit): Lead {
       { what: "Nothing at all", why: "Its word has come home.", odds: "almost no chance" },
     ],
     tells: ["It keeps watching, and sends word of anything that changes."],
-    art: { kind: "seed", sight: v.sight },
+    art: { kind: "seed", sight: v.sight, ...(v.elder ? { elder: v.elder } : {}) },
   };
 }
 
@@ -673,7 +677,7 @@ function glowLead(g: Glow): Lead {
         : "It brightens if its computing grows. Watching it a decade would show the doubling.",
       "A sentinel could go and stay. A knock would tell them we are here.",
     ],
-    art: { kind: "glow", ly: g.d },
+    art: { kind: "glow", ly: g.d, ...(g.steady ? { steady: true } : {}) },
   };
 }
 
