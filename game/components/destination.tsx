@@ -9,7 +9,7 @@ import { Lens } from "@/components/icons";
 import { axis, Brings, Key, says, sooner, Thread, useReach, year, Years } from "@/components/reach";
 import { useLeads } from "@/components/scan";
 import { VisitArt } from "@/components/visit-art";
-import { skyId, visitReading } from "@/lib/game/leads";
+import { isHole, skyId, visitReading } from "@/lib/game/leads";
 import { Face, ListHead } from "@/components/tab-head";
 import { HISTORY } from "@/lib/game/charter";
 import { span, lyOf } from "@/lib/game/clock";
@@ -167,7 +167,7 @@ export function DestinationPage({ slug }: { slug: string }) {
   // A sentinel can go wherever a world is known, the world next door or one we've felt, or to a black hole we found.
   const stay = useMemo(
     () =>
-      lead && (felt || lead.slug === "proxima-centauri" || lead.art.kind === "dark") ? sentinelRoad(plan, scale, from, lead.star, lead.ly) : null,
+      lead && (felt || lead.slug === "proxima-centauri" || isHole(lead.art)) ? sentinelRoad(plan, scale, from, lead.star, lead.ly) : null,
     [felt, lead, plan, scale, from],
   );
   // A seed probe goes where there is rock to copy itself from: the world next door, or a world we've felt. 2026-10-26.
@@ -177,7 +177,7 @@ export function DestinationPage({ slug }: { slug: string }) {
   );
   // Our Mind can go to a black hole, a furnace to feed or a shadow to hide in, 2026-10-26, or settle where a seed probe
   // could, on a star's light and rock, 2026-10-27.
-  const hole = lead?.art.kind === "dark";
+  const hole = !!lead && isHole(lead.art);
   const settles = !!lead && !hole && (felt || lead.slug === "proxima-centauri");
   const mind = useMemo(() => (lead && (hole || settles) ? colonyRoad(plan, scale, from, lead.star, lead.ly) : null), [lead, hole, settles, plan, scale, from]);
   // The Will can move to our Mind here once the Mind Link is done and word has come that it stands. 2026-10-26.

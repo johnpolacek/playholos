@@ -66,6 +66,9 @@ export type Art =
   | { kind: "glow"; ly: number }
   | { kind: "seed"; sight: Visit["sight"] };
 
+/** A black hole's lead: one drawn alone, or with a star going round it, as Gaia BH1. 2026-10-28. */
+export const isHole = (art: Art) => art.kind === "dark" || art.kind === "pair";
+
 export interface Lead {
   /** Its page's address. */
   slug: string;

@@ -38,6 +38,21 @@ npm run dev                                # http://localhost:5173
 
 Everything else inside the shell is placeholder.
 
+## Shared UI
+
+Every piece two screens or more share. Use these before writing a new one, and add a part here and to `/design` when a second screen needs it. `/design` draws them all live, with the colors and type, from `app/design.tsx`.
+
+- `BackBar` (`components/back-bar.tsx`): every way back from a page to where it was opened. Never a pill. From a walk, its stops sit at the end.
+- `TabHead`, `ListHead`, `Face` (`components/tab-head.tsx`): a tab's top line, a list's head, and a list row.
+- `Thread` (`components/review.tsx`): a walk's stops. `WalkHead` (`components/reach-tour.tsx`) is How we reach's head with it.
+- `MindNote` (`components/mind-note.tsx`): the Mind's words on any page.
+- `BuildMark`, `buildTone`, `buildBlue`, `LeadMark`, `LockMark` (`components/marks.tsx`): what each build and lead is, drawn, and in its color.
+- `Lens`, `Globe`, `Dials`, `Check`, `Cross`, `KeyMark`, `Prompt` (`components/icons.tsx`): small control icons.
+- `VisitArt` (`components/visit-art.tsx`): what our craft saw of a world up close.
+- `Spread` (`components/spread.tsx`) and `SkyArt` (`components/sky.tsx`): a screen's layout before the shell, and its subject in the sky.
+- Reach's `Thread`, `Years`, `Key`, `Brings` (`components/reach.tsx`): a way to go drawn on its Years.
+- Buttons are class patterns, not a component yet: primary `rounded-full bg-ink text-paper`, outline `rounded-full border border-ink`, 46px in a page's column, 32px in a row. On the map, a small pill on `bg-paper` with an icon.
+
 Live at https://playholos.com, on the Cloudflare Worker `holos`. `npm run deploy` builds the client and the Worker and deploys both. Nothing deploys on push. The Worker's secrets, `ANTHROPIC_API_KEY` and `ACCESS_CODE`, are set with `npx wrangler secret put` and never committed. Locally they go in `.dev.vars`. The card a shared link shows and the home screen icon are drawn as the client is built, from `app/card.tsx` and `app/apple-icon.tsx`.
 
 ## Orders in the save, proposed

@@ -40,6 +40,8 @@ export const router = createBrowserRouter([
           { path: "building", lazy: later(PAGES["/about/building"]) },
         ],
       },
+      // The game's colors, type and shared parts, drawn live. 2026-10-28.
+      { path: "design", lazy: later(() => import("@/app/design")) },
       // Godview shows what the player can't see, so only the dev server has it.
       ...(import.meta.env.DEV ? [{ path: "godview", lazy: later(() => import("@/app/godview")) }] : []),
       { path: "*", Component: NotFound },
