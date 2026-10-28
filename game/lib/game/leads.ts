@@ -696,7 +696,11 @@ export function glowReading(g: Glow): Reading {
   };
 }
 
-export function leadsOf(felt: FeltWorld[], holes: DarkMass[] = [], glows: Glow[] = [], seeds: Visit[] = []): Lead[] {
+export function leadsOf(felt: FeltWorld[], holes: DarkMass[] = [], glows: Glow[] = [], seeds: Visit[] = [], kept: string[] = []): Lead[] {
+  // Scan shows one black hole, the nearest, and any we have sent craft to. 2026-10-28.
+  const dark = [...holes.map((h) => [h, false] as const), ...FAR.map((h) => [h, true] as const)];
+  const nearest = dark.reduce<(typeof dark)[number] | undefined>((n, x) => (!n || x[0].d < n[0].d ? x : n), undefined);
+  const shown = dark.filter((x) => x === nearest || kept.includes(x[0].name));
   // A star our seed probes reached with no lead of its own: Proxima, a felt world, or a glow already has one.
   const own = new Set(["Proxima Centauri", ...felt.map((f) => f.star), ...glows.map((g) => g.star)]);
   const landed = seeds.filter((v) => v.by === "seed" && !v.sent && !own.has(v.star));
@@ -779,14 +783,14 @@ export function leadsOf(felt: FeltWorld[], holes: DarkMass[] = [], glows: Glow[]
       art: { kind: "orbit", a: 1.354, e: 0.45, hz: [0.83, 1.45] },
     },
     ...felt.map(feltLead),
-    ...holes.map((h) => darkLead(h)),
+    ...shown.filter(([, far]) => !far).map(([h]) => darkLead(h)),
     // A glow at a star with a lead already lands on that lead as a reading.
     ...glows.filter((g) => !felt.some((f) => f.star === g.star)).map(glowLead),
     ...reached.map(seedLead),
     // The nearest known black hole, far past the region, which Earth knows at Year 0. El-Badry et al. 2023. Its
     // position from Gaia's catalog. A landmark to aim at, 2026-10-26. Gaia BH3 left out, 2026-10-27: a second far hole
     // told the intro nothing new.
-    ...FAR.map((h) => darkLead(h, true)),
+    ...shown.filter(([, far]) => far).map(([h]) => darkLead(h, true)),
     {
       slug: "fomalhaut",
       star: "Fomalhaut",

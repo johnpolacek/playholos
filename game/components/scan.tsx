@@ -129,11 +129,13 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
   const glows = view?.glows;
   // And stars our seed probes reached with no lead of their own, 2026-10-26.
   const seeds = useMemo(() => visits.filter((v) => v.by === "seed" && !v.sent), [visits]);
+  // Holes our craft went to keep their leads, beside the nearest.
+  const kept = [...(plan?.sentinels ?? []), ...(plan?.colony ? [plan.colony] : [])].map((o) => o.name);
   const stars = [
-    ...(felt ?? []).map((f) => f.star), ...(holes ?? []).map((h) => h.name), ...(glows ?? []).map((g) => `glow ${g.star}`), ...seeds.map((v) => `seed ${v.star}`),
+    ...kept.map((k) => `kept ${k}`), ...(felt ?? []).map((f) => f.star), ...(holes ?? []).map((h) => h.name), ...(glows ?? []).map((g) => `glow ${g.star}`), ...seeds.map((v) => `seed ${v.star}`),
   ].join("|");
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const leads = useMemo(() => (felt ? leadsOf(felt, holes ?? [], glows ?? [], seeds) : []), [stars]);
+  const leads = useMemo(() => (felt ? leadsOf(felt, holes ?? [], glows ?? [], seeds, kept) : []), [stars]);
   // The map places leads the sky file lacks: black holes found, and far landmarks.
   useEffect(() => placeLeads(Object.fromEntries(leads.flatMap((l) => (l.at ? [[skyId(l.star), l.at]] : [])))), [leads]);
   // The scene reads Close View from the dials each frame, and the screen from here. Another lead starts outside.
