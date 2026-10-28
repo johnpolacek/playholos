@@ -1993,8 +1993,21 @@ Gathered 2026-10-27 by three research agents, for builds people discuss that v2 
   - Matters: it pairs with the mass driver’s rock. It needs a hypersonic plane.
 - **[Birch 1982, Orbital Ring Systems and Jacob’s Ladders I](https://nss.org/wp-content/uploads/Orbital-Rings.pdf)** · Published, JBIS 35. A scan read, poor OCR.
   - Lift to escape speed costs 62 MJ a kg. One table reads 7.9 t a metre for a full ring, about 316 Mt *ours*, but the OCR is uncertain.
-  - [Wikipedia](https://en.wikipedia.org/wiki/Orbital_ring), uncited: 180 kt to start, then 1,000 times that within a year.
+  - [Wikipedia](https://en.wikipedia.org/wiki/Orbital_ring), uncited: 180 kt to start, then 1,000 times that within a year. Part II below confirms both.
   - Matters: *ours,* the seed is 9 times our whole orbital stock. It needs the Moon’s rock first. No part has been tested.
+- **[Birch 1983, Orbital Ring Systems and Jacob’s Ladders II](https://www.orionsarm.com/fm_store/OrbitalRings-II.pdf)** · Published, JBIS 36, 115 to 128. A clean retyped copy, read page by page 2026-10-27. All prices in 1975 dollars.
+  - The full ring: 1.8 × 10¹¹ kg, 180 Mt, mostly slag from the Moon, with steel and aluminium cables.
+  - The seed ring: 1.8 × 10⁸ kg, 180 kt, 4 kg a metre, holding 20 ladders.
+    - Each ladder lifts 300 kg a second, so the seed lifts the full ring’s mass in about a year.
+    - Energy to orbit by ladder: 9 kWh a kg.
+    - The seed, its ladders and the full ring’s materials: $15B, his eq. 25.
+  - From the Moon: a lunar ring and a 0.4 kg a metre light ring, then the full ring in Years 7 and 8.
+  - The partial ring: an arc 1,653 km long between Abemama and Canton Island in the Pacific, 385 km high at its peak.
+    - An aluminium cable of 0.25 kg a metre, 1.4 kt in all, laid on the sea from a drum and raised by hydrogen balloons.
+    - 120 MW lifts 1 kg a second, about 32 kt a Year. A mature arc lifts 100 kg a second on 3 GW.
+    - Birch prices it at $90M and four years. He calls the power price the most uncertain part.
+  - Matters: *ours,* the full ring lifts about 190 Mt a Year, 300 times the Mass Driver. The partial ring needs no Moon.
+  - Part III, 8 pages of uses and safety, is fetched but not yet read.
 - **[Lofstrom, Launch Loop](http://launchloop.com/ShortIntro)** · Preliminary, the author’s page, edited 2022. Full text read. The [1985 AIAA paper](http://launchloop.com/slides/launchloop.pdf) gave no text.
   - A rotor at 14 km/s holds a track 80 km up over 2,000 km of ocean. 5 t craft reach 11.1 km/s. 400 t an hour, up to 3.5 Mt a Year.
   - [Wikipedia’s summary](https://en.wikipedia.org/wiki/Launch_loop): a first loop of about $10B lifts 40 kt a Year at about $300 a kg.
