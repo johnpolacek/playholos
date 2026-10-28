@@ -340,6 +340,13 @@ D_WORKS_YEARS, D_WORKS_KT = 5, 8          # Bruce took 4 to 5 years. Twenty-four
 # about two flagships. They gave 10 to 20 years to first launch from 2010, so 12 is a sample. A ground build: no matter.
 WANTS['Launch tunnel'] = (2.0, 'StarTram Gen-1: about 20 billion dollars')
 TUNNEL_YEARS, TUNNEL_KT = 12, 128
+# Settled 2026-10-28: the Orbital Ring, Birch's bootstrapped ring (JBIS 36, 115, 1983). A seed ring of Moon metal,
+# 180 kt at 4 kg a metre, holds 20 ladders down to the ground, each lifting 300 kg a second: about 190 Mt a Year. The
+# seed first lifts the full ring, 180 Mt of slag and cable, in about a year. Birch priced it all at $15B in 1975
+# dollars, about $90B now, nine flagships. He gave about three years from lunar mining, which nothing has tested, so 10
+# is a sample.
+WANTS['Orbital ring'] = (9.0, "Birch's bootstrapped ring: $15B in 1975 dollars")
+RING_YEARS, RING_SEED_KT, RING_KT = 10, 180, 189_000
 def split(line, room, push=PUSH):
     """line: (name, want, most) in the player's order, most = how many times its want it can use. Returns {name: s}, idle."""
     give = {}

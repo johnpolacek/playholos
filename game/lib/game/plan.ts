@@ -71,6 +71,14 @@ export const LATER: Later[] = [
   },
   { name: "Mass Driver", what: "Throws Moon rock to orbit, 600 kt a Year.", kt: 1, does: "lift", after: "Launch Complex" },
   { name: "Orbital Foundry", what: "Makes parts from rock, in orbit.", kt: 1, does: "lift", after: "Orbital Yard" },
+  // Birch's bootstrapped ring, 2026-10-28: a seed of Moon metal, and ladders that lift from the ground at its pace.
+  {
+    name: "Orbital Ring",
+    what: "A ring round the world in low orbit, with cables down to the ground. 190 Mt a Year.",
+    kt: 180,
+    does: "lift",
+    after: "Mass Driver",
+  },
   // Reach's locked lens, made a build 2026-10-26: the yard's line of small sailcraft. Each lens is sent from a
   // destination's page, to one star.
   { name: "Solar Lens", what: "Small sails that fly to the Sun’s focus and picture one world’s face.", does: "see", after: "Orbital Yard" },
@@ -149,11 +157,13 @@ export const SAYS: Record<string, string> = {
   "15 m Mirror":
     "Our first telescope could read smog at about 1 living world in 12. A 15 m mirror would read it at about 3 in 4.",
   "Mass Driver":
-    "Megatonnes can’t come from Earth: 10 Mt is 180 Years of lift. This throws 600 kt of Moon rock a Year, by O’Neill’s estimate. No one has priced one.",
+    "Megatonnes can’t come from Earth by rocket: 10 Mt is 180 Years of lift. This throws 600 kt of Moon rock a Year, by O’Neill’s estimate. No one has priced one.",
   "Solar Lens":
     "Past 548 AU the Sun’s gravity bends a star’s light to a focus, a lens a million kilometers wide. A few small sails there picture one world’s face, about 25 km a pixel at 100 ly, finer nearer. Cities show, and cleared land. Each lens looks at one star, and takes about 18 Years to reach its focus and look.",
   "Mind Link":
     "Our dishes would take millions of Years to send a Mind. A laser with a 100 m mirror sends one 10 ly in under two days, if the far end catches it as wide. Our Mind at a hole builds that end. Once both stand, the Will can live there.",
+  "Orbital Ring":
+    "A ring of Moon metal circles the world 300 km up, spun faster than orbit so it holds up cables to 20 places on the ground. Craft climb them to orbit. It takes 180 kt of what we hold, then lifts the full ring, 180 Mt, in about a year, and after that about 190 Mt a Year, three hundred times what the Mass Driver throws. At full pace it draws about 200 GW. No part of it has been tested. A ring that breaks rises rather than falls, since the loads that held it down are gone. The skyhooks and cables are what can come down.",
   "Orbital Foundry": "The yard assembles what we lift. The foundry makes parts from rock up there, so we lift less.",
   "Belt Mining":
     "Survey probes first, then a mining fleet. Nothing like it has flown. It brings 120 kt of rock a Year, and needs no Mass Driver.",
@@ -356,8 +366,8 @@ function held(plan: Plan, done: Record<string, number | null>, year: number) {
   return HELD + lifted + rockAt(plan, done, year) - spent;
 }
 
-/** Rock come in by a Year, in kt, from the Moon's driver and the belt once each is done, less what Power from Orbit
- *  takes as it comes, until it holds the megatonnes it waits on. 2026-10-22. */
+/** Rock come in by a Year, in kt, from the Moon's driver, the belt and the ring's ladders once each is done, less
+ *  what Power from Orbit takes as it comes, until it holds the megatonnes it waits on. 2026-10-22. */
 function rockAt(plan: Plan, done: Record<string, number | null>, year: number) {
   const come = Object.entries(CATALOG.rock).reduce((kt, [work, rate]) => {
     const at = done[NAMED[work] ?? work];
@@ -374,7 +384,12 @@ export const shortAt = (plan: Plan, done: Record<string, number | null>, year: n
   Math.max(0, -held(plan, done, year));
 
 /** Matter as the top bar shows it: 20 kt, 514 kt, 1.2 Mt. */
-export const kt = (n: number) => (n < 1000 ? `${Math.floor(n)} kt` : `${(Math.floor(n / 100) / 10).toFixed(1)} Mt`);
+export const kt = (n: number) =>
+  n < 1000
+    ? `${Math.floor(n)} kt`
+    : n < 1e6
+      ? `${(Math.floor(n / 100) / 10).toFixed(1)} Mt`
+      : `${(Math.floor(n / 1e5) / 10).toFixed(1)} Gt`;
 
 /** A build's matter, as its line says it: its share of the 20 kt we hold, or, once the rest of our order holds all 20,
  *  how soon spare lift brings what is short. Matter piles up from lift, so it moves no date. */

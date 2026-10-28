@@ -1972,6 +1972,7 @@ Gathered 2026-10-27 by three research agents, for builds people discuss that v2 
 - **[Edwards 2003, Space Elevator, NIAC Phase II](https://NSS.org/wp-content/uploads/2017/07/2003-Space-Elevator-NIAC-phase2.pdf)** · Study. Full text read.
   - 13 t payloads, about 1 kt a Year, $6.5B technical cost, “operational in 15 years for $10B”. Laser power beaming from 200 kW to 1 MW.
   - The ribbon needs about 100 GPa in usable form.
+  - The first ribbon: 8 inches wide, thinner than paper, raised on four rockets and thickened by climbers. Reread 2026-10-28: the report gives no mass for it. The 18 t on [Wikipedia](https://en.wikipedia.org/wiki/Space_elevator) is uncited.
   - Matters: *ours,* 1 kt a Year is 2.5% of Earth’s rocket lift. Its worth is cost and reach, not volume.
 - **Tether materials, 2018 to 2026** · Published, abstracts and summaries only.
   - [Bai et al. 2018](https://www.nature.com/articles/s41565-018-0141-z), Nature Nanotechnology: centimetre bundles of perfect nanotubes pass 80 GPa. None scaled past centimetres.
@@ -1991,6 +1992,7 @@ Gathered 2026-10-27 by three research agents, for builds people discuss that v2 
   - [Phase I slides](https://www.slideshare.net/slideshow/bogar-nov99/38510101) give other masses, up to about 3,000 t. The sources conflict.
   - [Hoyt, NTRS 19980202363](https://ntrs.nasa.gov/citations/19980202363), abstract: rock coming back from the Moon balances the tether’s momentum, so traffic needs almost no fuel. NASA’s [MXER](https://webarchive.library.unt.edu/eot2008/20080921131450/http://www.nasa.gov/centers/marshall/pdf/115871main_MXER_TS.pdf) program, which reboosts by current in the tether, ended in the mid-2000s.
   - Matters: it pairs with the mass driver’s rock. It needs a hypersonic plane.
+  - Cost, searched 2026-10-28: no price per kg in either Boeing report we can read. Secondary sites give $300 to $1,000 a kg to transfer orbit, uncited. Unverified, so unused.
 - **[Birch 1982, Orbital Ring Systems and Jacob’s Ladders I](https://nss.org/wp-content/uploads/Orbital-Rings.pdf)** · Published, JBIS 35. A scan read, poor OCR.
   - Lift to escape speed costs 62 MJ a kg. One table reads 7.9 t a metre for a full ring, about 316 Mt *ours*, but the OCR is uncertain.
   - [Wikipedia](https://en.wikipedia.org/wiki/Orbital_ring), uncited: 180 kt to start, then 1,000 times that within a year. Part II below confirms both.
@@ -2007,12 +2009,35 @@ Gathered 2026-10-27 by three research agents, for builds people discuss that v2 
     - 120 MW lifts 1 kg a second, about 32 kt a Year. A mature arc lifts 100 kg a second on 3 GW.
     - Birch prices it at $90M and four years. He calls the power price the most uncertain part.
   - Matters: *ours,* the full ring lifts about 190 Mt a Year, 300 times the Mass Driver. The partial ring needs no Moon.
-  - Part III, 8 pages of uses and safety, is fetched but not yet read.
-- **[Lofstrom, Launch Loop](http://launchloop.com/ShortIntro)** · Preliminary, the author’s page, edited 2022. Full text read. The [1985 AIAA paper](http://launchloop.com/slides/launchloop.pdf) gave no text.
+  - Safety, his section 5: a broken ring has lost the loads that held it down, so it rises to a higher orbit and takes thousands of years to decay. Only skyhooks and ladders can fall, into guard zones. A load dropped from a skyhook can tear the rings unless riders hold them to one path.
+  - A meteoroid cuts a 300 km Kevlar ladder about once in 14,000 years, 150,000 if hollow, 600,000 with spare strands.
+  - Matters: *ours,* the danger is below the hooks, not the whole ring falling. The Mind says so.
+- **[Birch 1983, Orbital Ring Systems and Jacob’s Ladders III](https://www.orionsarm.com/fm_store/OrbitalRings-III.pdf)** · Published, JBIS 36, 231 to 238. A clean retyped copy, read page by page 2026-10-28.
+  - Uses, not safety. A ring is no radio source: it covers about a millionth of the sky, so Earth’s noise comes back about 60 dB down.
+  - Power transport rings could bring 10¹³ W down from orbit at about 80%, against about 50% by microwave beam.
+  - Moon rock sent down ladders gives back about 15 kWh a kg as it falls. Skyhooks can hold platforms fixed over one place, 300 km up.
+  - Blue skies: rings stacked to geostationary height, rings round the Sun, and shells of rings round planets or stars.
+  - Matters: *ours,* a ring adds almost nothing to the hum a neighbor hears. Its future uses fit late Power from Orbit and megastructures.
+  - Used: the Orbital Ring, a build since 2026-10-28, after the Mass Driver, in [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md#build-times) and `game/lib/game/plan.ts`. The partial ring is set aside.
+- **[Lofstrom, Launch Loop](http://launchloop.com/ShortIntro)** · Preliminary, the author’s page, edited 2022. Full text read.
   - A rotor at 14 km/s holds a track 80 km up over 2,000 km of ocean. 5 t craft reach 11.1 km/s. 400 t an hour, up to 3.5 Mt a Year.
   - [Wikipedia’s summary](https://en.wikipedia.org/wiki/Launch_loop): a first loop of about $10B lifts 40 kt a Year at about $300 a kg.
   - Lofstrom says its sideways stability “can be unstable”, and he is “still working on” it.
   - Matters: *ours,* about 18 kt of rotor and 7 GW, a small share of the grid. Control, not power, is the limit. A failure frees about 2 PJ.
+- **[Lofstrom 2009, The Launch Loop, a low cost Earth-to-high-orbit launch system](http://launchloop.com/slides/launchloop.pdf)** · Preliminary, his 2009 Space Elevator Conference revision of AIAA 85-1368. Full text read 2026-10-28. The 1985 original is not online.
+  - Its own crude parts list: $572M, “really old numbers”. He assumes $2B in all.
+  - Early: 26 kt a Year on 500 MW at 30% use, about $85 a kg. Later: 750 kt a Year on 4 GW, $9B, about $3 a kg. The basic loop tops out at 3.5 Mt a Year.
+  - A 5 t craft to near escape speed takes 735 GJ from the rotor. 80 an hour needs 17 GW.
+  - A failure dumps 1.5 PJ, most of the rotor into the sea, so loops “must not be constructed near populated areas”. Fragments that escape orbit the Sun for ages.
+  - He writes it “may prove impractical because of instabilities, expense, or political obstruction”.
+  - Matters: *ours,* it would rival the Launch Tunnel and Orbital Ring. Still set aside for its open stability question.
+- **[Philip Swan 2023, The Techno-Economic Viability of Actively Supported Structures](https://www.project-atlantis.com/wp-content/uploads/2023/07/TetheredRingPaper.pdf)** · Published, an IEEE conference, 2023. Abstract, costs and conclusions read 2026-10-28.
+  - A Tethered Ring: a ring tube 32 km up and 33,800 km round, held by tethers to the ground and by a magnetically confined mass stream inside it.
+  - Tube 67 kg a metre and terminus 30 kg, about 3 Mt in all, *ours* from his figures. Made only from materials mass-produced today.
+  - It carries a stratospheric transit line, and a launcher whose craft leave at up to 15 km/s.
+  - His levelized price: $12.45 a kg to nearby worlds, over 1.5 Mt of payload. Nothing built.
+  - Not the Peter Swan of the space elevator consortium: our earlier gap named the wrong Swan.
+  - Matters: *ours,* a ground-tethered cousin of the orbital ring, Earth-built. Weighed and set aside: the Orbital Ring and Launch Tunnel already cover lift.
 - **[Powell, Maise and Rather 2010, StarTram](https://startram.com/wp-content/uploads/2020/12/StarTram2010.pdf)** · Preliminary, a conference paper. Full text read.
   - Gen-1, cargo only: a 110 km vacuum tunnel up a mountain, craft out at 8.78 km/s, 35 t payloads, 30 g. 128 to 150 kt a Year, $20B to build, about $50 a kg, a 300 MW plant.
   - Gen-2 carries people, $67B, and needs newer technology.

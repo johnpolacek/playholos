@@ -117,6 +117,10 @@
   "Launch tunnel": {
    "years": 12,
    "want": 2.0
+  },
+  "Orbital ring": {
+   "years": 10,
+   "want": 9.0
   }
  },
  "floor": 0.6666666666666666,
@@ -170,6 +174,7 @@
  },
  "rock": {
   "Mass driver": 600,
-  "Belt mining": 120
+  "Belt mining": 120,
+  "Orbital ring": 189000
  }
 }

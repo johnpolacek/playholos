@@ -303,6 +303,25 @@ const Driver = ({ size, still }: MarkProps) => (
   </Moving>
 );
 
+/** The Orbital Ring: a ring round the world, a ladder hanging from it, and a craft climbing. 2026-10-28. */
+const Ring = ({ size, still }: MarkProps) => (
+  <Moving
+    size={size}
+    still={still}
+    move={(_, part) =>
+      void gsap
+        .timeline({ repeat: -1, repeatDelay: 0.5, delay: offset() })
+        .fromTo(part("craft"), { attr: { cy: 6 }, opacity: 1 }, { attr: { cy: 2.6 }, duration: 1.4, ease: "sine.inOut" })
+        .to(part("craft"), { opacity: 0, duration: 0.3 }, "-=0.3")
+    }
+  >
+    <circle cx="8" cy="10.4" r="4.4" />
+    <ellipse cx="8" cy="7.6" rx="7" ry="5" opacity={0.55} />
+    <path d="M8 2.6v3.4" />
+    <circle data-k="craft" cx="8" cy={still ? 4.3 : 6} r="1" fill="currentColor" stroke="none" />
+  </Moving>
+);
+
 /** The Launch Tunnel: a mountain, a tunnel up through it, and a craft thrown out of its mouth. Ours. 2026-10-27. */
 const Tunnel = ({ size, still }: MarkProps) => (
   <Moving
@@ -763,6 +782,8 @@ export function BuildMark({ name, size = 16, still }: { name: string; size?: num
       return <Mirror size={size} still={still} />;
     case "Mass Driver":
       return <Driver size={size} still={still} />;
+    case "Orbital Ring":
+      return <Ring size={size} still={still} />;
     case "Orbital Foundry":
       return <Foundry size={size} still={still} />;
     case "Belt Mining":

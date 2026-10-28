@@ -158,13 +158,16 @@ def works_catalog():
     # The Launch Tunnel, settled 2026-10-27: StarTram's Gen-1, a ground build. Its lift is plan.ts's, as the Launch
     # Complex's is.
     works['Launch tunnel'] = dict(years=eg.TUNNEL_YEARS, want=eg.WANTS['Launch tunnel'][0])
+    # The Orbital Ring, settled 2026-10-28: Birch's seed ring of Moon metal, then its ladders. What they lift comes as
+    # rock does, so the works that wait on megatonnes take it too.
+    works['Orbital ring'] = dict(years=eg.RING_YEARS, want=eg.WANTS['Orbital ring'][0])
     return dict(works=works, floor=eg.FLOOR, push=eg.PUSH, flagship=eg.FLAGSHIP_THOUGHT, gridRoom=eg.GRID_ROOM, step=1.5,
                 dataCenter=dict(years=1, aside=0.05), halo=dict(floor=eg.HALO['floor'], every=eg.HALO['every']), lens=dict(au=signs.LENS_AU, flight=round(signs.LENS_FLIGHT, 3), look=signs.LENS_LOOK, km30pc=25),
                 sentinel=dict(build=S.ROCKET_BUILD, speed=S.ROCKET_V, burns=S.ROCKET_BURNS),
                 seedShip=dict(speed=S.SHIP_V, burn=S.BURN, brake=S.BRAKE, stands=S.STANDS),
                 seedProbe=dict(build=S.PROBE_BUILD, first=S.STANDS + S.FIRST_SHIP, every=S.EVERY, copies=S.PROBE_COPIES, generations=S.PROBE_GENERATIONS),
                 mindLink=dict(bits=H.MIND_BITS, aperture=H.LINK_APERTURE, watts=H.LINK_W, wave=H.LINK_WAVE, photons=H.LINK_PHOTONS), studies=0.1, yard=dict(work='Orbital yard', cut=0.25),
-                rock={'Mass driver': eg.DRIVER_KT, 'Belt mining': eg.MINING_KT})
+                rock={'Mass driver': eg.DRIVER_KT, 'Belt mining': eg.MINING_KT, 'Orbital ring': eg.RING_KT})
 
 def mock_orders(order=eg.BY_START, extra=(), front=()):
     """The mocks' game as the player's orders: the first hour's builds as begun, the long roads at Year 12 in `order`."""

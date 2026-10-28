@@ -438,12 +438,19 @@ Settled 2026-10-10. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#earth-to-ye
   - *Its price:* 12 Years, a sample from their 10 to 20. About two flagships, from its $20 billion. A ground build, so no matter.
   - *What it gives:* 128 kt a Year of lift, three times the Launch Complex. Open at Year 0, but not in the walk on Build, since nothing we could start then waits on lift.
   - *Untested:* the door of charged air that keeps the sky out of the tunnel.
+- **The Orbital Ring, built 2026-10-28.** Birch’s bootstrapped ring (JBIS 1983), read clean. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#builds-we-lack).
+  - *What it is.* A seed ring of Moon metal, 300 km up round the equator, spun faster than orbit. Skyhooks ride it standing still, and 20 cables hang to the ground.
+  - *Its price:* 10 Years after the Mass Driver, a sample: Birch gave about 3 from lunar mining. 180 kt of what we hold. Nine flagships, from his $15 billion in 1975 dollars.
+  - *What it gives:* the seed lifts the full ring, 180 Mt, in about a year, so its building Years include that. Then about 190 Mt a Year, 300 times the Mass Driver, at about 200 GW.
+  - *It ends lift as a limit.* What it lifts comes in as rock does, so Power from Orbit and the Cold Annex take it too.
+  - *Untested:* no part has been built. A broken ring rises, not falls, by Birch’s Part II. The skyhooks and cables can fall, into cleared ground.
+  - *Set aside:* Birch’s partial ring, an arc between two Pacific islands. It would compete with the Launch Tunnel.
 - **Weighed 2026-10-27 and set aside.** Each has sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#builds-we-lack).
   - *A lunar elevator:* works in today’s fibers, but lifts 0.6 kt a Year, a thousandth of the Mass Driver.
   - *An Earth elevator:* waits on a fiber no one has made.
   - *A spinning tether in orbit:* needs a Mach 10 plane to meet it.
   - *A launch loop:* its own inventor says its stability is unsolved.
-  - *An orbital ring:* 180 kt to start, from figures we could only read in a poor scan. A candidate after the Mass Driver.
+  - *A tethered ring:* Earth-built, 32 km up, with a 15 km/s launcher. Weighed 2026-10-28. The Orbital Ring and Launch Tunnel already cover lift.
   - *A crater dish on the far side:* tonnes, not megatonnes, but at 350 m it hears no neighbor’s hum. It reads the early universe, not minds.
   - *A space solar pilot:* 2 GW, under a hundredth of a percent of the grid. Power from Orbit already covers the road.
   - *Asteroid defense:* nothing is coming. A build can wait for a rock that is.

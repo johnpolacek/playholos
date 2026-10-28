@@ -796,6 +796,49 @@ function massDriver(): Close {
   };
 }
 
+// ── Orbital Ring ──
+// Birch's seed ring, 300 km up round the equator: drawn as a cable bundle 1,200 km of its arc, bending with its orbit,
+// with Earth's limb below. A skyhook rides it standing still over the ground, and a ladder hangs from it to the sea.
+// Craft climb the ladder, then ride the ring away. The hook's shape is ours.
+function orbitalRing(): Close {
+  const R = 6371;
+  const H = 300;
+  const bend = (x: number, r: number) => -(x * x) / (2 * r);
+  const have: number[] = [];
+  for (const y of [-150, 0, 150]) have.push(...path([...Array(41)].map((_, i): V => [-900 + i * 45, y, bend(-900 + i * 45, R) - H])));
+  const b = new Rising();
+  // The ring goes up first, as the seed: three strands, then the full ring's bulk round them.
+  for (const [y, z] of [
+    [0, 0],
+    [3, 2],
+    [-3, 2],
+  ])
+    b.add(path([...Array(49)].map((_, i): V => [-600 + i * 25, y, bend(-600 + i * 25, R + H) + z])));
+  for (let i = 0; i <= 12; i++) {
+    const x = -600 + i * 100;
+    b.add(circle([x, 0, bend(x, R + H) + 1], 4, [1, 0, 0], 16));
+    b.lit([x, 0, bend(x, R + H) + 1]);
+  }
+  // The skyhook, and the ladder down to the ground.
+  b.add(box(-8, -6, 16, 12, 4, -4));
+  b.lit([0, 0, -4]);
+  const foot: V = [0, 0, -H];
+  b.add(path([[0, 0, -4], foot]));
+  b.add(box(-6, -6, 12, 12, 1, -H));
+  b.lit(foot);
+  // A craft is brightest midway along its run, so each run is mostly the climb: up the ladder, then a short ride.
+  const climb: V[] = [foot, [0, 0, -4]];
+  const ride: V[] = [...Array(4)].map((_, i): V => [i * 50, 0, bend(i * 50, R + H) + 6]);
+  return {
+    view: { km: 1100, el: 8, az: 200, at: [0, 0, -140] },
+    have,
+    ...b.done(2.5),
+    haveLights: [],
+    sky: path([...Array(13)].map((_, i): V => [i * 50, 0, bend(i * 50, R + H) + 6])),
+    runs: [0, 0.2, 0.4, 0.6, 0.8].map((offset) => ({ pts: [...climb, ...ride].flat(), secs: 5, offset })),
+  };
+}
+
 // ── Orbital Foundry ──
 // No one has drawn a foundry for Moon rock since O'Neill's group placed one in this orbit in 1977. Ours: a mirror 120 m
 // across gathering sunlight to melt rock, four furnaces along a spine, and a net of rock caught from the Moon, with
@@ -1125,6 +1168,7 @@ export const CLOSE: Record<string, Close> = {
   "Ground Solar": groundSolar(),
   "15 m Mirror": fifteenMeterMirror(),
   "Mass Driver": massDriver(),
+  "Orbital Ring": orbitalRing(),
   "Orbital Foundry": orbitalFoundry(),
   "Belt Mining": beltMining(),
   "Far-Side Array": farSideArray(),

@@ -266,6 +266,24 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
         "In 1977 MIT students built Mass Driver 1 for O’Neill and Kolm, largely from scrap. A 2026 study sized a 372 t driver for the Moon, throwing 263 kt a Year. None has been built there.",
     },
   },
+  "Orbital Ring": {
+    // Birch's ring circles the equator 300 km up, so its skyhooks can stand still over the ground. His first ladders
+    // came down in the Pacific, between Abemama and Canton Island.
+    site: {
+      on: "orbit",
+      draw: "ring",
+      places: [{ lat: 0, lon: 0, name: "Round the equator, 300 km up" }],
+      orbit: { km: 300, tilt: 0, minutes: 90.5 },
+    },
+    story: {
+      have: "Every tonne we lift rides a rocket. No cable reaches orbit: no fibre we make is strong enough to hang from geostationary orbit.",
+      where: "Round the equator, 300 km up. Twenty cables hang from it to the ground, evenly spaced, the first in the Pacific.",
+      why: "The ring moves faster than orbit, so it pushes up on whatever rides it. Skyhooks ride it standing still over the ground, and cables hang from them. Craft climb at the cost of power alone, about 9 kWh a kilogram.",
+      takes: "180 kt of Moon metal, cast as a cable 4 kg a metre. That seed lifts the full ring, 180 Mt of slag and cable, in about a year.",
+      before:
+        "Paul Birch worked out orbital rings in 1982 and priced one at $15 billion in 1975 dollars. No part of one has been built or tested.",
+    },
+  },
   "Orbital Foundry": {
     // O’Neill’s group’s orbit for working Moon rock: half the Moon’s month, a nudge from where thrown rock is caught.
     site: {
