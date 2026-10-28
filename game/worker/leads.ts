@@ -1,5 +1,5 @@
 import { kitOf } from "@/lib/game/reach";
-import { willKnows } from "@/lib/sim/knowledge";
+import { earthKnows, willKnows } from "@/lib/sim/knowledge";
 import { readGifts, readLater, readColony, readLenses, readObserve, readSentinels, readSeeds, readQueue, readStops } from "./orders";
 import { readLosses, readWill } from "./orders";
 import { inPool, loadVoices, loadWorld } from "./world";
