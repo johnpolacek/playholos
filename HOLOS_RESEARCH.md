@@ -1,6 +1,6 @@
 # Holos · Research
 
-Last updated: October 26, 2026.
+Last updated: October 27, 2026.
 
 Every source the game rests on, grouped by the question it answers. Each entry says what it found, why it matters to Holos, and where the design uses it. The rules are in [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md). The atlas’s own data sources (ephemeris, star catalogs, galaxies) are in the [README’s scientific scope](README.md#scientific-scope) and the `data/*/README.md` files.
 
@@ -1961,9 +1961,149 @@ The first screen, before Earth wakes, flies from Earth out to the Local Group an
   - Matters: “every dish, every telescope, every data center” names real things, and each lights where it stands.
   - Used: Meeting the Mind, `game/lib/game/machines.ts`. Places are to the nearest town. Which ones are on the list is ours.
 
+## Builds we lack
+
+Gathered 2026-10-27 by three research agents, for builds people discuss that v2 doesn’t offer. Reddit was out of reach of our tools, so each build is checked against papers and studies. Numbers marked *ours* are this project’s arithmetic. Prices are samples, not yet in [calcs/early_game.py](calcs/early_game.py). Used: not yet, unless stated.
+
+### Lift without rockets
+
+- **[Edwards 2003, Space Elevator, NIAC Phase II](https://NSS.org/wp-content/uploads/2017/07/2003-Space-Elevator-NIAC-phase2.pdf)** · Study. Full text read.
+  - 13 t payloads, about 1 kt a Year, $6.5B technical cost, “operational in 15 years for $10B”. Laser power beaming from 200 kW to 1 MW.
+  - The ribbon needs about 100 GPa in usable form.
+  - Matters: *ours,* 1 kt a Year is 2.5% of Earth’s rocket lift. Its worth is cost and reach, not volume.
+- **Tether materials, 2018 to 2026** · Published, abstracts and summaries only.
+  - [Bai et al. 2018](https://www.nature.com/articles/s41565-018-0141-z), Nature Nanotechnology: centimetre bundles of perfect nanotubes pass 80 GPa. None scaled past centimetres.
+  - [Nature Communications, July 2026](https://www.nature.com/articles/s41467-026-75150-1): the best long fibre found holds 12.5 GPa under slow load. A [2024 result](https://www.researchgate.net/publication/381581169_Carbon_nanotube_fibers_with_dynamic_strength_up_to_14_GPa) of 14 GPa is fast load, 8.2 GPa slow.
+  - [ISEC 2025 newsletters](https://www.isec.org/2025-newsletters), Preliminary: ISEC now backs graphene laminate. Its own study finds the bond between layers about 35 times too weak to grip a climber.
+  - Matters: *ours,* real fibre is about 8 times short. An Earth elevator needs a material breakthrough first.
+- **[Pearson, Levin, Oldson and Wykes 2005, Lunar Space Elevators, NIAC Phase I](http://www.niac.usra.edu/files/studies/final_report/1032Pearson.pdf)** · Study. Full text read, a poor extraction.
+  - Fibres that exist today work: M5 with a safety factor of 2 reaches 285 km of breaking height, against 275 km needed.
+  - Through Earth-Moon L1, with solar climbers at 100 km/h: 584 t of lunar rock a Year to high Earth orbit.
+  - [Wikipedia’s lunar elevator figures](https://en.wikipedia.org/wiki/Lunar_space_elevator) disagree, and Pearson stands by the NIAC numbers. Don’t use Wikipedia’s.
+  - Matters: *ours,* about a thousandth of the mass driver’s 600 kt a Year. Cheap and early, not bulk.
+- **[Penoyre and Sandford 2019, The Spaceline](https://arxiv.org/abs/1908.09339)** · Preprint. Abstract and press read.
+  - A line from the Moon to near geostationary height, in today’s fibres. Press gives about 40 t.
+  - Matters: a few launches could seed it from our 20 kt.
+- **[Boeing HASTOL Phase II, 2001](https://www.slideshare.net/cliffordstone/hastol-jun01)** · Study. Slide text read.
+  - A spinning tether 636 km long, 379 t in all, catches 5.5 t from a plane at Mach 10 and 100 km up.
+  - [Phase I slides](https://www.slideshare.net/slideshow/bogar-nov99/38510101) give other masses, up to about 3,000 t. The sources conflict.
+  - [Hoyt, NTRS 19980202363](https://ntrs.nasa.gov/citations/19980202363), abstract: rock coming back from the Moon balances the tether’s momentum, so traffic needs almost no fuel. NASA’s [MXER](https://webarchive.library.unt.edu/eot2008/20080921131450/http://www.nasa.gov/centers/marshall/pdf/115871main_MXER_TS.pdf) program, which reboosts by current in the tether, ended in the mid-2000s.
+  - Matters: it pairs with the mass driver’s rock. It needs a hypersonic plane.
+- **[Birch 1982, Orbital Ring Systems and Jacob’s Ladders I](https://nss.org/wp-content/uploads/Orbital-Rings.pdf)** · Published, JBIS 35. A scan read, poor OCR.
+  - Lift to escape speed costs 62 MJ a kg. One table reads 7.9 t a metre for a full ring, about 316 Mt *ours*, but the OCR is uncertain.
+  - [Wikipedia](https://en.wikipedia.org/wiki/Orbital_ring), uncited: 180 kt to start, then 1,000 times that within a year.
+  - Matters: *ours,* the seed is 9 times our whole orbital stock. It needs the Moon’s rock first. No part has been tested.
+- **[Lofstrom, Launch Loop](http://launchloop.com/ShortIntro)** · Preliminary, the author’s page, edited 2022. Full text read. The [1985 AIAA paper](http://launchloop.com/slides/launchloop.pdf) gave no text.
+  - A rotor at 14 km/s holds a track 80 km up over 2,000 km of ocean. 5 t craft reach 11.1 km/s. 400 t an hour, up to 3.5 Mt a Year.
+  - [Wikipedia’s summary](https://en.wikipedia.org/wiki/Launch_loop): a first loop of about $10B lifts 40 kt a Year at about $300 a kg.
+  - Lofstrom says its sideways stability “can be unstable”, and he is “still working on” it.
+  - Matters: *ours,* about 18 kt of rotor and 7 GW, a small share of the grid. Control, not power, is the limit. A failure frees about 2 PJ.
+- **[Powell, Maise and Rather 2010, StarTram](https://startram.com/wp-content/uploads/2020/12/StarTram2010.pdf)** · Preliminary, a conference paper. Full text read.
+  - Gen-1, cargo only: a 110 km vacuum tunnel up a mountain, craft out at 8.78 km/s, 35 t payloads, 30 g. 128 to 150 kt a Year, $20B to build, about $50 a kg, a 300 MW plant.
+  - Gen-2 carries people, $67B, and needs newer technology.
+  - The window that keeps air out of the tunnel is untested.
+  - Matters: *ours,* 3.75 times Earth’s rocket lift, as a ground build that spends no matter.
+- **SpinLaunch** · Preliminary, press.
+  - [Ten suborbital tests](https://space.com/spinlaunch-aces-10th-suborbital-test-launch) from a 33 m spinner, 2021 to 2022, with payloads at 10,000 g. None reported since.
+  - [The orbital plan](https://en.wikipedia.org/wiki/SpinLaunch): 200 to 400 kg at 2.2 km/s, then a rocket stage. Slipped to 2027 or later.
+  - [Via Satellite, 30 September 2026](https://www.satellitetoday.com/finance/2026/09/30/meridian-space-to-separate-spinlaunch-business-ahead-of-first-satellite-launch/): its satellite arm spun out and flies on SpaceX. No orbital spinner plan is mentioned.
+  - Matters: little lift from Earth. On the airless Moon it is a rival to the mass driver.
+
+Sample prices.
+- *StarTram Gen-1:* a ground build, 12 Years, no matter, +140 kt a Year of hard cargo. The best lift any study offers before 2060.
+- *Lunar elevator:* 10 Years, 40 t, +0.6 kt a Year. Needs a Moon base. It works in today’s fibres.
+- *Tether in orbit:* 8 Years, about 400 t, a few kt a Year. Needs a hypersonic plane.
+- *Launch loop:* a ground build, 12 Years, +40 kt a Year, growing to Mt. A thought share for its control is a natural hook.
+- *Orbital ring:* 20 Years after the mass driver, 180 kt to start, Mt a Year once grown.
+- *Earth elevator:* waits on a 100 GPa material that no one has made.
+- *Spin launcher:* best as a Moon build, against the mass driver.
+
+### Beamed power, planetary defense, a crater dish
+
+- **[Rodgers et al. 2024, NASA OTPS, Space-Based Solar Power](https://www.nasa.gov/wp-content/uploads/2024/01/otps-sbsp-report-final-tagged-approved-1-8-24-tagged-v2.pdf)** · Study. Full text and [slides](https://ntrs.nasa.gov/api/citations/20240008752/downloads/SBSP%20presentation%20slides%20for%20public%20shortened.pdf) read.
+  - Two designs near 2 GW. RD1: 5,900 t, assembled in 7.4 years. RD2: 10,000 t, in 12.6 years.
+  - *Ours,* about 13% of sunlight reaches the grid. A ground antenna 6 km across.
+  - $0.61 a kWh, against $0.02 to $0.05 for ground renewables. Launch is over 70% of the cost.
+  - Matters: *ours,* about 2.9 kt a GW, so a fifth more of 24 TW takes about 14 Mt. That checks our Power from Orbit at about 10 Mt. It has to be built from the Moon’s rock.
+- **[Frazer-Nash 2022, for ESA](https://www.fnc.co.uk/media/myuhgjfg/space-based-solar-power-executive-summary.pdf)** · Study. Executive summary read.
+  - 18 years in four steps: ground test, 40 MW, 500 MW, full scale. Assembly and upkeep in orbit rated TRL 3.
+  - Matters: a real ladder of steps the build could follow.
+- **Space solar status, 2023 to 2026** · Preliminary, press.
+  - [Caltech’s MAPLE, 2023](https://lindecenter.caltech.edu/news/in-a-first-caltechs-space-solar-power-demonstrator-wirelessly-transmits-power-in-space): beamed power in orbit and was detected on a Pasadena roof. Milliwatts.
+  - [ESA ended SOLARIS in 2024](https://www.euronews.com/2025/10/29/solar-energy-in-space-reality-or-science-fiction-euronews-tech-talks), the technology “too immature”.
+  - [Space Solar’s CASSIOPeiA](https://curationcorp.com/blog/space-solar-set-to-deliver-space-based-solar-power-to-iceland-by-2030): 2,000 t for 2 GW, a third of NASA’s mass a GW. A 30 MW plant aimed at 2030. Summary only.
+  - [China’s plan](https://interestingengineering.com/chinas-orbital-solar-power-station): 10 MW by 2035, 2 GW by 2050. JAXA’s OHISAMA, about 1 kW, slipped to fiscal 2026. Summaries only.
+  - Matters: no agency has committed to a full plant as of 2026.
+- **[Cheng et al. 2023, DART’s push](https://arxiv.org/abs/2303.03464)** · Published, Nature 616, 457. Abstract read.
+  - A 580 kg craft at 6.14 km/s cut Dimorphos’s orbit by 33 minutes. Debris thrown off gave 2.2 to 4.9 times the craft’s own push.
+  - Matters: kinetic impact works. A push of mm/s needs years of warning.
+- **Planetary defense, other sources** · Summaries only.
+  - [NEO Surveyor](https://arxiv.org/pdf/2310.12918): a 50 cm infrared telescope at L1, launch about 2027. Two thirds of asteroids over 140 m in 5 years, about 90% in 10 to 12.
+  - [Rubin’s warning, arXiv 2601.16255](https://arxiv.org/pdf/2601.16255): median about 1,218 days for impactors over 140 m, about 106 days for 50 to 140 m.
+  - [A Bennu-class asteroid](https://ntrs.nasa.gov/api/citations/20200007713/downloads/20200007713.pdf) with 10 years’ warning takes 34 to 53 impactors.
+  - [Lu and Love 2005](https://arxiv.org/abs/astro-ph/0509595), Nature: a 20 t craft hovering near an asteroid tows it by gravity, over years.
+  - [Moore et al. 2024](https://www.sci.news/physics/x-ray-asteroid-deflection-13281.html), Nature Physics: X-rays from Sandia’s Z machine pushed silica targets to 70 m/s. A stand-in for a nuclear push.
+  - [Hera](https://www.esa.int/Space_Safety/Hera/ESA_s_Hera_targets_early_arrival_at_Didymos_asteroids) reaches Didymos in November 2026. [RAMSES](https://en.wikipedia.org/wiki/Ramses_(spacecraft)) and [OSIRIS-APEX](https://svs.gsfc.nasa.gov/20414) meet Apophis in 2029.
+  - Matters: by Year 0 Earth knows nearly every large asteroid. Defense is a cheap build that matters only if a rock comes.
+- **[Bandyopadhyay et al., Lunar Crater Radio Telescope, NIAC Phase II](https://ntrs.nasa.gov/citations/20250001334)** · Study. Full text read, mass tables not.
+  - A wire dish 350 m across in a 1.3 km crater, 4.7 to 47 MHz. Reflector 415 kg, receiver 90 kg. About $2.6B with its lander.
+  - [Not a flight mission as of 2026](https://newspaceeconomy.ca/2026/09/30/what-is-nasas-lunar-crater-radio-telescope-and-will-it-ever-be-built/).
+  - Matters: a tonne-class dish that opens the sky below 30 MHz, which Earth’s air blocks.
+- **Other far-side radio works** · Abstracts and summaries.
+  - [FARSIDE, Burns et al. 2019](https://arxiv.org/abs/1911.08649): 128 antennas over 10 km, 0.15 to 40 MHz, one landing.
+  - [LuSEE-Night](https://arxiv.org/pdf/2407.07173): 128 kg, 0.1 to 50 MHz, on [Blue Ghost Mission 2](https://fireflyspace.com/blue-ghost-mission-2), landing spring 2027.
+  - [China’s Hongmeng](https://tianlai.bao.ac.cn/meeting/2023/files/7170_xuelei_chen.pdf): 9 craft in lunar orbit. No launch confirmed.
+  - Matters: a small first step before our Far-Side Array’s 1 Mt.
+
+Sample prices.
+- *A space solar pilot:* 8 Years, about 6 kt, 2 GW. A step toward Power from Orbit, which keeps its price.
+- *Asteroid watch and impactor:* the watch is real by Year 0. An impactor is under 1 t and a Year’s flight.
+- *A crater dish:* 3 Years, 1 to 2 t landed *ours*. Opens the low radio sky, a step before the Far-Side Array.
+
+### Other drives
+
+- **[Ewig 2003, Mini-Mag Orion, in the IAA nuclear propulsion study](https://iaaspace.org/wp-content/uploads/iaa/Studies/nuclearpropulsion.pdf)** · Reference. Section read.
+  - Small fission pellets crushed by a magnetic pinch, about 10,000 s. A 730 t ship carries 100 t at 100 km/s.
+  - [Two shots on Sandia’s Z machine](https://flightglobal.com/nuclear-power-concept-revisited/47904.article) gave no measurement.
+- **[Lenard and Andrews 2007, interstellar Mini-Mag Orion](https://iafastro.directory/iac/archive/browse/IAC-06/D2/8/4277/)** · Published, Acta Astronautica 61, 450. Abstract read.
+  - A fission-fusion hybrid at 0.1 to 0.15 c. It brakes with a magnetic sail in the target star’s wind.
+  - Matters: a rival to our fusion drive that pairs with the braking we already have. Never tested.
+- **[Adams et al. 2020, PuFF](https://ntrs.nasa.gov/api/citations/20205009102/downloads/AIAA_ASCEND_2020_PuFF.pdf)** · Study. Full text read.
+  - Pulsed fission-fusion, 5,000 to 30,000 s. About a month to Mars. No masses or cost given. No ignition found through 2026.
+  - Matters: *ours,* about 0.2% of c. A solar system drive.
+- **Fission fragment rockets** · Studies and papers.
+  - [Werka et al. 2012, NIAC](https://ntrs.nasa.gov/api/citations/20160010095/downloads/20160010095.pdf), full text: 527,000 s and 43 N, from a 113 t engine at 1 GW. A crewed ship to Callisto, 303 t.
+  - [Weed et al. 2023](https://www.frontiersin.org/articles/10.3389/frspt.2023.1197347/full), Published: an aerogel core, about 100 N a GW, a crewed Mars ship under 70 t, 75 days out.
+  - [Gahl et al. 2023](https://www.frontiersin.org/journals/space-technologies/articles/10.3389/frspt.2023.1191300/full), Published: no one has built such a reactor.
+  - Matters: *ours,* exhaust at 2 to 5% of c, but 0.01 c takes about 60 years of thrust. Too weak for a starship.
+- **[Bickford, TFINER, NIAC Phase II 2025](https://www.nasa.gov/directorates/stmd/niac/niac-studies/tfiner-thin-film-isotope-nuclear-engine-rocket)** · Study. Abstract read.
+  - Thin films of a decaying isotope, about 100 km/s from a few kg. The fuel’s half-life is 1.9 years.
+  - Matters: a probe to the Sun’s focus in about 30 years, said at the [2026 NIAC Symposium](https://www.planetary.org/planetary-radio/2026-niac-symposium-part-2).
+- **[Cohen et al. 2019, Direct Fusion Drive](https://w3.pppl.gov/ppst/docs/cohen2019jbis.pdf)** · Published, JBIS. Full text read.
+  - A 5.3 t craft reaches 550 AU in 13 years at 479 km/s, on 3.2 t of deuterium and helium-3.
+  - Alpha Centauri would take 350 to 500 years. The lab machine had made no fusion as of 2023.
+  - Matters: a ride to the Sun’s focus, gated on a helium-3 source.
+- **[Project Daedalus, 1978](https://en.wikipedia.org/wiki/Project_Daedalus)** and **[Swinney et al. 2025, Project Icarus review](https://bis-space.com/shop/product/jbis-078-05-0143/)** · Reference and Published, abstract.
+  - Daedalus: 54,000 t, 50,000 t of fuel, 450 t of payload, 0.12 c, a flyby.
+  - Icarus, ended 2023: mainly fusion could brake a large payload at a near star in under 100 years.
+  - Matters: Daedalus checks our fusion drive’s 0.1 c. Icarus checks that braking is possible.
+- **[Davoyan 2023, Pellet-Beam Propulsion, NIAC](https://www.nasa.gov/general/pellet-beam-propulsion-for-breakthrough-space-exploration/)** · Study. Abstract read.
+  - A stream of laser-pushed grains above 120 km/s pushes a 1 t craft to 500 AU in about 15 years.
+  - Matters: a use for the laser sail array that carries tonnes, not grams.
+
+Sample prices.
+- *Mini-Mag Orion to the stars:* 35 Years, 0.1 c with magnetic braking. A rival road to the fusion drive, untested.
+- *A focus probe:* 15 to 20 Years, by direct fusion, a thin-film isotope drive, or a pellet beam. It reaches the Sun’s focus in 13 to 30 Years.
+- *Fission fragment, PuFF and pulsed plasma:* fast in the solar system only. They speed outposts, not leads.
+- *The fusion drive keeps its price.* Daedalus and Icarus support it.
+
 ## Watch list
 
 Results the design is waiting on. Check each when its date comes.
+
+- **Hera at Didymos** · arrives November 2026. Its mass of Dimorphos pins down DART’s push.
+- **LuSEE-Night** · lands spring 2027. The first radio telescope on the far side.
+- **JAXA’s OHISAMA** · fiscal 2026. The first beam of power from orbit to the ground at about 1 kW.
 
 - **Saide, Garrett and Heeralall-Issur, “Modelling Earth’s Radio Leakage: Detectability of Civilian and Military Radar Systems”** · in preparation. Its observing times set v2’s odds of Earth being heard.
 - **[Gaia DR4](https://www.cosmos.esa.int/web/gaia/dr4)** · release set for December 2, 2026, with the first large set of planets found by astrometry. Rebuild the census after release and validation, per v1’s migration notes, and recheck the host list and leads.
