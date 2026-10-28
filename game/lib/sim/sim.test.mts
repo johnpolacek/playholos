@@ -9,7 +9,7 @@ import { roll } from "./reactions.ts";
 import { hop, seedProbes } from "./spread.ts";
 import { POOL } from "./pool.ts";
 import { loadVoices, loadWorld } from "./world.ts";
-import { pace, type Order } from "./works.ts";
+import { offEarth, pace, type Order } from "./works.ts";
 
 test("the generator is CPython's, seeded from ints and strings", () => {
   for (const [key, want] of Object.entries(golden.random)) {
@@ -211,8 +211,23 @@ test("Earth lost: a backup wakes small where something can run it, and doubles b
   const at = (y: number, extra: Order[] = []) => pace([...(g.orders as Order[]), ...extra], y, { scale: g.scale, aside: g.aside as [number, number, number][] }).thought;
   const lost: Order = { y: 30, restore: 0.01, doubling: 2 };
   assert.ok(Math.abs(at(30.01, [lost]) / at(30.01) - 0.01) < 0.001);
-  assert.ok(Math.abs(at(34, [lost]) / at(34) - 0.04) < 0.002);
-  assert.ok(Math.abs(at(50, [lost]) / at(50) - 1) < 1e-9);
+  // No data center is built once Earth is lost, so it regrows to what Earth had then.
+  const woke = at(30, [lost]);
+  assert.ok(Math.abs(at(34, [lost]) / woke - 4) < 1e-6);
+  assert.ok(Math.abs(at(50, [lost]) / woke - 100) < 1e-6);
+});
+
+test("Earth lost: its works leave the line, and a backup builds only off Earth", () => {
+  const orders: Order[] = [
+    { y: 0, begin: "Laser sail array" },
+    { y: 0, begin: "Probe yard" },
+    { y: 5, restore: 0.01, doubling: 2 },
+    { y: 6, begin: "Ground solar" },
+    { y: 6, begin: "Orbital yard" },
+  ];
+  const p = pace(orders, 6.01);
+  assert.deepEqual(p.line.map((l) => l.work), ["Probe yard", "Orbital yard"]);
+  assert.ok(offEarth("Moon vault") && offEarth("Seed ship") && !offEarth("Launch complex"));
 });
 
 test("the Halo Survey sees what calcs/neighbors.py's glow_at gives, over ALMA's floor: none by Year 50, 12 by Year 100", async () => {

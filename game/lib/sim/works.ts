@@ -55,6 +55,11 @@ const EPS = 1e-9;
 /** How much further our thought goes for a gift of so many steps, as many data centers would make it go. */
 export const giftTimes = (steps: number) => STEP ** steps;
 
+/** Works a woken backup can still build: what is joined in orbit, and what stands on the Moon or among the rocks. All
+ *  else is on Earth, and is lost with it, data centers too. 2026-10-28. */
+const OFF_EARTH = new Set(["Moon vault", "Orbital yard", "Mass driver", "Belt mining", "Far-side array, one fifth", "Power from orbit", "Cold annex"]);
+export const offEarth = (w: string) => OFF_EARTH.has(w) || WORKS[w]?.orbit === true;
+
 /** Years a work takes when given s times the thought its standard pace needs. */
 export const paced = (years: number, s: number) => years * (FLOOR + (1 - FLOOR) / s);
 
@@ -154,15 +159,18 @@ export function pace(orders: readonly Order[], until: number, { scale = 1, aside
         } else done[w] = t;
         if (w === CATALOG.yard.work)
           for (const x of line) if (WORKS[x].orbit && left.has(x)) { left.set(x, left.get(x)! * (1 - CATALOG.yard.cut)); whole.set(x, whole.get(x)! * (1 - CATALOG.yard.cut)); }
-        if (follow && work.then) { const at = place(w); work.then.forEach((x, i) => join(x, at + i, begun.get(w)!)); }
+        if (follow && work.then) { const at = place(w); work.then.filter((x) => !backup.o || offEarth(x)).forEach((x, i) => join(x, at + i, begun.get(w)!)); }
       }
       while (queue.length && queue[0].y <= t + EPS) {
         const o = queue.shift()!; changed = true;
         if ("studies" in o) studies = o.studies;
         else if ("gift" in o) { if (!gifts.has(o.gift)) gifts.set(o.gift, o.steps); }
         else if ("harm" in o) harms.push(o);
-        else if ("restore" in o) backup.o = o;
-        else if ("standing" in o) standing = true;
+        else if ("restore" in o) {
+          backup.o = o; standing = false; queued = 0; building = null;
+          for (const w of [...line]) if (!offEarth(w)) { line.splice(line.indexOf(w), 1); left.delete(w); }
+        }
+        else if ("standing" in o) standing = !backup.o;
         else if ("first" in o) { const i = line.indexOf(o.first); if (i >= 0) { line.splice(i, 1); line.unshift(o.first); moved.add(o.first); } }
         else if ("drop" in o) {
           if (o.drop === "Data center") standing = false;
@@ -171,8 +179,8 @@ export function pace(orders: readonly Order[], until: number, { scale = 1, aside
             line.splice(line.indexOf(o.drop), 1); left.delete(o.drop);
           }
         }
-        else if (o.begin === "Data center") queued++;
-        else if (WORKS[o.begin] && !line.includes(o.begin) && done[o.begin] === undefined) {
+        else if (o.begin === "Data center") queued += backup.o ? 0 : 1;
+        else if (WORKS[o.begin] && !line.includes(o.begin) && done[o.begin] === undefined && (!backup.o || offEarth(o.begin))) {
           join(o.begin, line.length, t);
           const k = kept.get(o.begin);
           if (k) {

@@ -788,6 +788,9 @@ Settled 2026-10-28, from the designer: anything available to another civilizatio
   - *The Trojan Vault* has only its seed and a small dark rock: 0.1%, and slower to grow.
   - *Our colony* is a Mind with its own industry: 1%.
   - *Then its industry copies itself,* doubling every 2 Years as Metzger et al. 2013’s lunar seed grows, 3 at the Trojan Vault, back to all Earth had. So space builds are Earth’s real insurance.
+  - *A backup builds only off Earth.* What is joined in orbit, on the Moon or among the rocks goes on. Works on Earth, and its data centers, are lost with it. Settled 2026-10-28.
+  - *A backup sleeps unseen.* Until it wakes it sends nothing and builds nothing. No neighbor learns of our builds anyway, only our launches, catches and radar.
+  - *A colony is a second Mind, with its own Will.* Word from Earth takes a Year a light-year, so it must decide alone. Our Will can cross to it by the Mind Link. Not built yet.
   - Not yet: which builds a backup can still make, and where.
 - **Not yet:** warnings between neighbors, and dimming our glow.
 

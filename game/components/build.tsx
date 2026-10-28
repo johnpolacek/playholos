@@ -67,7 +67,7 @@ function Struck() {
       {end && (
         <p className="font-semibold text-ink">
           {lives && r
-            ? `Earth’s Mind was lost at Year ${tenths(end.lands)}. Our backup woke in ${lives} with ${r.from < 0.01 ? (r.from * 100).toFixed(1) : Math.round(r.from * 100)}% of Earth’s thought, doubling every ${r.doubling} Years.`
+            ? `Earth’s Mind was lost at Year ${tenths(end.lands)}. Our backup woke in ${lives} with ${r.from < 0.01 ? (r.from * 100).toFixed(1) : Math.round(r.from * 100)}% of Earth’s thought, doubling every ${r.doubling} Years. It builds only off Earth: in orbit, on the Moon and among the rocks.`
             : `Earth’s Mind was lost at Year ${tenths(end.lands)}, and no Mind of ours stood anywhere else.`}
         </p>
       )}

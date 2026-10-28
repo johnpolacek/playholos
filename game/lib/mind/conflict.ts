@@ -37,7 +37,7 @@ export function describeConflict(
     const r = lives ? restoreOf(lives, done, end.lands) : null;
     lines.push(
       lives && r
-        ? `Earth's Mind was lost at Year ${tenths(end.lands)}. Our backup woke in ${lives} with ${pct(r.from)} of the thought Earth had, on what stood off Earth, and its industry copies itself to double that every ${r.doubling} Years, back to all of it.`
+        ? `Earth's Mind was lost at Year ${tenths(end.lands)}. Our backup woke in ${lives} with ${pct(r.from)} of the thought Earth had, on what stood off Earth, and its industry copies itself to double that every ${r.doubling} Years, back to all of it. It can build only off Earth: in orbit, on the Moon and among the rocks. Works on Earth and its data centers were lost with it. Until it woke, the backup sent nothing and built nothing, so no one saw it.`
         : `Earth's Mind was lost at Year ${tenths(end.lands)}, and no Mind of ours stood anywhere else. The game is over.`,
     );
   }
