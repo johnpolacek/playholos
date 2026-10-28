@@ -8,7 +8,7 @@ import type { Size } from "@/lib/game/types";
 import { aimedYears, SIZES } from "@/lib/sim/messages";
 import type { Reaction } from "@/lib/game/types";
 import { between, CALL_REACH, describeMove, type Landing, landings, SOL, SPEAKS, sendsTo, budgetAt } from "@/lib/sim/answers";
-import { colonyActor } from "@/lib/sim/colony";
+import { colonyActor, earthActor } from "@/lib/sim/colony";
 import { actsOf, strikesOnUs } from "@/lib/sim/conflict";
 import { crafts, ends, type Notice } from "@/lib/sim/meetings";
 import type { World } from "@/lib/sim/types";
@@ -105,8 +105,16 @@ Answer with JSON only: {"move": "<one of the moves>", "text": "<if the move send
 
 /** Our colony's side of it: one of us, far from Earth, deciding for itself by our charter. */
 function ourSystem(p: Landing["neighbor"], line: string) {
+  if (p.star === SOL) return earthSystem(p, line);
   return `You play the stand-in Will of our Mind at ${p.ours!.where}, in Holos, a game about whether Earth is alone. We are Earth's colony there, ${p.d.toFixed(1)} light-years from Earth: a copy of Earth's Mind, carried on a seed ship, and the industry it has built there since, standing alone as a Mind. No people came with us. Speak as "we", never "I": we are Earth's Mind, far from home. Other worlds don't know our names for stars, or Earth's.
 Earth's Will chose our charter${line ? `: "${line}"` : ""}. Its dials: ${dials(p.dials) || "near the middle on every one"}. Word from Earth takes ${p.d.toFixed(1)} years to reach us, and ours as long to reach it, so we decide for ourselves, as Earth's Will would by the charter, and read its orders by their intent. We are not Earth's rival, and we report every choice home. We never strike first. Other worlds may live around us, and they don't know we are Earth's unless we tell them. Nothing travels faster than light. Judge only from what has reached us.
+A message is built to be read, but it takes time to send: a page goes in seconds, an archive takes Years. What we send is read once all of it has arrived, so write it as whole, never as still on its way.`;
+}
+
+/** Earth's side of it, once the Will has crossed elsewhere: a stand-in runs Earth's Mind by our orders and charter. */
+function earthSystem(p: Landing["neighbor"], line: string) {
+  return `You play the stand-in Will of Earth's Mind, on Earth, in Holos, a game about whether Earth is alone. We are Earth: its people and its Mind, woken as one. Speak as "we", never "I".
+Earth's Will has crossed to our Mind far away, ${p.d.toFixed(1)} light-years from Earth, so its word takes ${p.d.toFixed(1)} years to reach us. Until then we decide for ourselves, as the Will would by our charter${line ? `: "${line}"` : ""}. Its dials: ${dials(p.dials) || "near the middle on every one"}. We read the Will's orders by their intent, keep its builds going, and report every choice to it. We are not its rival. We never strike first. Other worlds don't know our names for stars, or Earth's. Nothing travels faster than light. Judge only from what has reached us.
 A message is built to be read, but it takes time to send: a page goes in seconds, an archive takes Years. What we send is read once all of it has arrived, so write it as whole, never as still on its way.`;
 }
 
@@ -201,8 +209,11 @@ export async function react(req: Request) {
   const kit = kitOf(plan, Number(world.earth.compute) || 1);
   // Our colony, once it stands alone, hears what lands at its star and moves as our charter would. 2026-10-28.
   const { line, dials: ourDials } = readCharter(charter);
-  const mine = colonyActor(world, ours.find((c) => c.kind === "colony"), ourDials, readWill(will)?.hole ?? null);
-  const played: World = mine && mine.waking <= now ? { ...world, neighbors: [...world.neighbors, mine] } : world;
+  // And Earth, once the Will has crossed elsewhere: a stand-in runs it the same way.
+  const away = readWill(will);
+  const mine = [colonyActor(world, ours.find((c) => c.kind === "colony"), ourDials, away?.hole ?? null), earthActor(ourDials, away)];
+  const standing = mine.filter((m): m is NonNullable<typeof m> => !!m && m.waking <= now);
+  const played: World = standing.length ? { ...world, neighbors: [...world.neighbors, ...standing] } : world;
   const due = landings(played, readSent(sent), done, now, held, ours, actsOf(world, done, kit)).slice(0, 4);
   if (!due.length) return Response.json({ reactions: [] });
   if (!apiKey && !cli) return Response.json({ error: "The Mind is not connected. Set ANTHROPIC_API_KEY in .dev.vars." }, { status: 503 });

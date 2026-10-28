@@ -52,9 +52,11 @@ export function glowsSeen(world: World) {
   const shown = (p: Neighbor) => world.stars[p.star]?.shown ?? p.star;
   const out: { from: string; to: string; at: number; d: number }[] = [];
   for (const b of world.neighbors) {
-    if (b.dead || b.elder?.asleep || b.ours) continue;       // an elder asleep watches nothing. Our colony's glow and
-    for (const a of world.neighbors) {                       // watch aren't modeled yet, 2026-10-28
-      if (a === b || a.dead || a.ours) continue;
+    // An elder asleep watches nothing. Our colony glows and watches as a neighbor does, from the Year it stands,
+    // 2026-10-28. Earth's own glow isn't drawn here.
+    if (b.dead || b.elder?.asleep || b.star === SOL) continue;
+    for (const a of world.neighbors) {
+      if (a === b || a.dead || a.star === SOL) continue;
       const d = between(world, shown(a), shown(b));
       const need = catalog.halo.floor * (d / (10 * PC_LY)) ** 2;
       if (a.elder && a.elder.ceiling < need) continue;       // nor sheds enough to be seen
@@ -169,6 +171,7 @@ export function landings(world: World, sent: Sent[], done: Reaction[], now: numb
   const had = new Set(done.map((r) => r.key));
   const out: Landing[] = [];
   const land = (signal: Signal, p: Neighbor, at: number, d: number, read: boolean, sentOf?: Sent) => {
+    if (p.ours && at < p.waking) return;                     // ours hears nothing before it stands, or the Will leaves
     const star = shown(p);
     const key = `${signal.id}:${star}`;
     const die = dieFor(roll, key);
@@ -278,7 +281,7 @@ export function landings(world: World, sent: Sent[], done: Reaction[], now: numb
     const signal: Signal = { id: `glow:${g.from}`, from: g.from, to: g.to, text: "", size: "page", move: "glow" };
     if (g.at > now || had.has(`${signal.id}:${g.to}`)) continue;
     const key = `${signal.id}:${g.to}`;
-    out.push({ key, signal, neighbor: p, star: g.to, at: g.at, d: g.d, news: "hum", read: false, missed: false, offers: offers(p.name, "hum", dieFor(roll, key)) });
+    out.push({ key, signal, neighbor: p, star: g.to, at: g.at, d: g.d, news: "hum", read: false, missed: false, offers: offers(p.name, "hum", dieFor(roll, key), 3, p.ours?.table) });
   }
   return out.sort((a, b) => a.at - b.at);
 }

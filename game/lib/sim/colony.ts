@@ -51,13 +51,25 @@ export function ourThinks(codes: string) {
  *  we can't put in the sky, or while the Will lives there and decides for it. */
 export function colonyActor(world: World, craft: Craft | undefined, dials: readonly number[] | null, will: string | null): Neighbor | null {
   if (!craft || craft.kind !== "colony" || craft.stands === undefined || will === craft.hole) return null;
+  return actor(craft.holeId, craft.hole, craft.d, craft.stands, dials);
+}
+
+/** Earth's Mind once the Will has crossed elsewhere: a stand-in runs it by our orders and charter, as the colony's
+ *  does, from the Year the Will left. It hears what lands at Sol, and reports to the Will a light-time away. Null while
+ *  the Will lives on Earth, or once Earth's Mind is lost. 2026-10-28. */
+export function earthActor(dials: readonly number[] | null, will: { d: number; y: number; lost?: boolean } | null): Neighbor | null {
+  if (!will || will.lost) return null;
+  return actor("Sol", "Earth", will.d, will.y, dials);
+}
+
+function actor(star: string, where: string, d: number, waking: number, dials: readonly number[] | null): Neighbor {
   const codes = ourCodes(dials ?? [50, 50, 50]);
   return {
     name: "us",
-    star: craft.holeId,
-    d: craft.d,
+    star,
+    d,
     dead: false,
-    waking: craft.stands,
+    waking,
     disposition: ourKind(codes),
     doubling: 10,
     dials: codes,
@@ -70,6 +82,6 @@ export function colonyActor(world: World, craft: Craft | undefined, dials: reado
     inbound: [],
     afterSilence: null,
     probes: [],
-    ours: { where: craft.hole, table: ourTable(codes) },
+    ours: { where, table: ourTable(codes) },
   };
 }

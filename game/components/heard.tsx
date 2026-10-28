@@ -19,10 +19,12 @@ const A = (move: string) => `${/^[aeiou]/.test(move) ? "An" : "A"} ${move}`;
 const MOVES = reactions.moves as Record<string, string>;
 function ours(h: HeardSignal, fresh: boolean): Row {
   const { chose, on } = h.ours!;
+  // Earth's stand-in reports to the Will far away, as our colony reports home.
+  const who = h.star === "Earth" ? "Our Mind on Earth" : `Our Mind at ${h.star}`;
   return {
     key: heardId(h),
-    name: `Our Mind at ${h.star}`,
-    note: `Word from our Mind there, sent in ${Math.floor(YEAR_0 + h.sent)}.`,
+    name: who,
+    note: `Word from ${h.star === "Earth" ? "our Mind on Earth" : "our Mind there"}, sent in ${Math.floor(YEAR_0 + h.sent)}.`,
     at: h.arrived,
     kind: "heard",
     msg: chose,
@@ -33,7 +35,7 @@ function ours(h: HeardSignal, fresh: boolean): Row {
       ["IT CHOSE", `It ${MOVES[chose] ?? chose}.`],
       ...(on ? ([["ON NEWS FROM", on]] as [string, string][]) : []),
       ...(h.text ? ([["IT SENT", `“${h.text}”`]] as [string, string][]) : []),
-      ["FROM", `Our Mind at ${h.star}, ${h.d.toFixed(1)} light-years away. It decides for itself by our charter, since our word takes ${h.d.toFixed(1)} Years to reach it.`],
+      ["FROM", `${who}, ${h.d.toFixed(1)} light-years away. It decides for itself by our charter, since our word takes ${h.d.toFixed(1)} Years to reach it.`],
     ],
   };
 }

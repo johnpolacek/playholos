@@ -503,7 +503,7 @@ export function describe(view: EarthView): string {
     ? view.heard.map((h) =>
         // Word from our colony, on its own choice. 2026-10-28.
         h.ours
-          ? `- From our Mind at ${h.star}, ${one(h.d)} ly, arrived at Year ${one(h.arrived)}: it chose to ${h.ours.chose}${h.ours.on ? `, on news from ${h.ours.on}` : ""}. It decides for itself by our charter, since our word takes ${one(h.d)} Years to reach it.${h.text ? ` It sent: "${h.text}"` : ""}` :
+          ? `- From our Mind ${h.star === "Earth" ? "on Earth" : `at ${h.star}`}, ${one(h.d)} ly, arrived at Year ${one(h.arrived)}: it chose to ${h.ours.chose}${h.ours.on ? `, on news from ${h.ours.on}` : ""}. It decides for itself by our charter, since our word takes ${one(h.d)} Years to reach it.${h.text ? ` It sent: "${h.text}"` : ""}` :
         `- From ${h.star}, ${one(h.d)} ly: ${/^[aeiou]/.test(h.move) ? "an" : "a"} ${h.move}${h.laser ? " sent as laser flashes" : ""} ` +
         `that arrived at Year ${one(h.arrived)}, sent in ${Math.round(2040 + h.sent)}.` +
         // Our radars' first sweeps left in 1950, so they reach a star d light years out in 1950 + d. Added 2026-10-23,

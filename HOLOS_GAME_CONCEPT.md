@@ -816,7 +816,9 @@ Settled 2026-10-28, from the designer: anything available to another civilizatio
     - *It hears what lands at its star* once it stands alone: neighbors' messages and calls. Not our own sends. Neighbors don't know it is Earth's unless it says so.
     - *It reports every choice home,* heard a light-time later on Scan, and told to the Mind.
     - *While the Will lives there,* it decides nothing on its own.
-    - *Not yet:* its glow and watch, harm from a strike on it, a strike from a colony at a hole, and Earth's own stand-in once the Will has left.
+    - *It glows and watches as a neighbor does,* from the Year it stands: neighbors may find its heat, and it theirs. Its glow starts at Earth's 2040 scale, a sample.
+    - *Earth's stand-in runs the same way* once the Will crosses elsewhere: from the Year the Will left, it takes what lands at Sol, moves by our charter, and reports to the Will a light-time away. Not once Earth's Mind is lost.
+    - *Not yet:* harm from a strike on our colony, a strike from a colony at a hole, and a stand-in's guard or strike building real pickets and bullets.
   - Not yet: which builds a backup can still make, and where.
 - **Not yet:** warnings between neighbors, and dimming our glow.
 

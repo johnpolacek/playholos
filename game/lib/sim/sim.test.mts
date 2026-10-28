@@ -10,8 +10,8 @@ import { hop, seedProbes } from "./spread.ts";
 import { POOL } from "./pool.ts";
 import { loadVoices, loadWorld } from "./world.ts";
 import { offEarth, pace, type Order } from "./works.ts";
-import { between, landings } from "./answers.ts";
-import { colonyActor, ourCodes, ourKind, ourTable } from "./colony.ts";
+import { between, glowsSeen, landings, SOL } from "./answers.ts";
+import { colonyActor, earthActor, ourCodes, ourKind, ourTable } from "./colony.ts";
 
 test("the generator is CPython's, seeded from ints and strings", () => {
   for (const [key, want] of Object.entries(golden.random)) {
@@ -434,8 +434,32 @@ test("our colony hears a neighbor's call near it once it stands, never our own s
   const played = { ...world, neighbors: [...world.neighbors, mine] };
   const call = { key: "c:x", sent: "c", star: shown(p.star), d: p.d, at: 1, move: "call", text: "We are here.", to: "everywhere" };
   const ours = { id: "s1", y: 1, to: "everywhere", travels: "Hello.", size: "page" as const, reach: 60 };
-  const got = landings(played, [ours as never], [call], 500, "t").filter((l) => l.neighbor.ours);
+  const got = landings(played, [ours as never], [call], 500, "t").filter((l) => l.neighbor.ours && l.signal.move !== "glow");
   assert.equal(got.length, 1);
   assert.equal(got[0].signal.from, shown(p.star));
   assert.ok(got[0].offers.every((m) => m in ourTable("O1 B1").broadcast.reduce((o, [k]) => ({ ...o, [k]: 1 }), {})));
+});
+
+test("our colony glows and watches as a neighbor does, from the Year it stands", async () => {
+  const world = await loadWorld(10);
+  const shown = (k: string) => world.stars[k]?.shown ?? k;
+  const p = world.neighbors.find((n) => !n.dead && !n.elder)!;
+  const key = Object.keys(world.stars).find((k) => k !== p.star && !world.neighbors.some((n) => n.star === k) && between(world, shown(k), shown(p.star)) < 20)!;
+  const craft = { id: `colony:${key}`, kind: "colony" as const, atStar: true, hole: shown(key), holeId: key, d: world.stars[key].d, arrives: 100, stands: 120 };
+  const g = glowsSeen({ ...world, neighbors: [...world.neighbors, colonyActor(world, craft, [35, 50, 62], null)!] });
+  const seen = g.find((x) => x.from === shown(key) && x.to === shown(p.star));
+  const sees = g.find((x) => x.to === shown(key) && x.from === shown(p.star));
+  assert.ok(seen && seen.at > 120, "a neighbor sees our colony's glow after it stands");
+  assert.ok(sees && sees.at >= 120, "our colony sees a neighbor's glow once it stands");
+});
+
+test("Earth's stand-in takes what lands at Sol once the Will has left, and nothing before", async () => {
+  const world = await loadWorld(10);
+  assert.equal(earthActor([35, 50, 62], null), null);
+  assert.equal(earthActor([35, 50, 62], { d: 12, y: 200, lost: true }), null);
+  const earth = earthActor([35, 50, 62], { d: 12, y: 200 })!;
+  const p = world.neighbors.find((n) => !n.dead && !n.elder)!;
+  const knock = (at: number) => ({ key: `k${at}:x`, sent: `k${at}`, star: world.stars[p.star]?.shown ?? p.star, d: p.d, at, move: "knock", text: "Hello?" });
+  const got = landings({ ...world, neighbors: [...world.neighbors, earth] }, [], [knock(50), knock(250)], 600, "t").filter((l) => l.neighbor.star === SOL);
+  assert.deepEqual(got.map((l) => l.signal.id), ["k250:x"]);
 });
