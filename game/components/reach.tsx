@@ -458,11 +458,12 @@ export function Thread({ road, i, to }: { road: Road; i: number; to: number }) {
           <>
             <circle cx={x(arrives)} cy={20} r={3.5} className="fill-ink" />
             <text x={x(arrives)} y={10} textAnchor="middle" className="fill-ink font-mono text-[8.5px]">
-              {road.build === "Solar Lens" ? "at focus" : road.craft === "A sentinel" || road.craft === "A seed probe" ? "stays" : road.craft === "A Mind" ? "lands" : road.craft === "The Will" ? "lives there" : "passes"} {year(arrives)}
+              {road.build === "Solar Lens" ? "at focus" : road.craft === "A sentinel" || road.craft === "A seed probe" ? "stays" : road.craft === "A Mind" ? "lands" : road.craft === "The Will" ? "lives there" : road.craft === "A pellet screen" ? "stands" : road.craft === "A bullet" ? "lands" : "passes"} {year(arrives)}
             </text>
           </>
         )}
-        {home !== null && (
+        {/* A screen and a bullet send nothing home: their Year is when they stand or land. */}
+        {home !== null && road.craft !== "A pellet screen" && road.craft !== "A bullet" && (
           <>
             <circle cx={x(home)} cy={20} r={3} className="fill-other" />
             <text x={x(home)} y={36} textAnchor="middle" className="fill-other font-mono text-[8.5px]">
@@ -523,6 +524,22 @@ export function Brings({ road }: { road: Road }) {
         {item("pass", "lives there")}
         {item("pictures", "news a light-time late")}
         {item("air", "orders a light-time late")}
+      </div>
+    );
+  if (road.craft === "A pellet screen")
+    return (
+      <div className="flex flex-wrap gap-x-4 gap-y-1 font-mono text-[10.5px]">
+        {item("pass", "stands on the line")}
+        {item("pictures", "wrecks a bullet from here")}
+        {item("air", "2 kt of pellets")}
+      </div>
+    );
+  if (road.craft === "A bullet")
+    return (
+      <div className="flex flex-wrap gap-x-4 gap-y-1 font-mono text-[10.5px]">
+        {item("pass", "lands with 110,000 Mt")}
+        {item("pictures", "sends nothing home")}
+        {item("air", "its flame seen only here")}
       </div>
     );
   if (road.craft === "A seed probe")

@@ -131,6 +131,81 @@ test("a rock coming: the same for a seed, found before it strikes, and pushed as
   assert.equal(rockAt(rock, { builds: [], observe: [] }, {}, rock.found!)!.state, "coming");
 });
 
+test("strikes: a tonne at a tenth of light speed lands with 108 Mt, harm grows with energy, and a screen stops a bullet", async () => {
+  const { bulletMt, harmOf, mtPerTonne, rockMt, screened, strikesLanded } = await import("./conflict.ts");
+  assert.equal(Math.round(mtPerTonne(0.1)), 108);
+  assert.equal(Math.round(bulletMt() / 1000), 108);
+  assert.equal(harmOf(5).tier, "local");
+  assert.equal(harmOf(bulletMt()).tier, "climate");
+  assert.ok(harmOf(10).share < 0.01 && harmOf(1e3).share > 0.05 && harmOf(1e5).share > 0.3 && harmOf(1e8).share === 1);
+  assert.ok(harmOf(1e8).ends && !harmOf(1e7).ends);
+  // A 60 m rock lands like Tunguska, a 140 m one like a hundred of them.
+  assert.ok(rockMt(60) > 5 && rockMt(60) < 20 && rockMt(140) > 50 && rockMt(140) < 300, `${rockMt(60)}, ${rockMt(140)}`);
+  const s = { star: "Tau Ceti", fired: 30, lands: 149, mt: bulletMt() };
+  assert.ok(screened(s, [{ star: "Tau Ceti", done: 100 }]) && !screened(s, [{ star: "Tau Ceti", done: 150 }]));
+  const { landed, ends } = strikesLanded([s, { ...s, star: "Ross 128", mt: 2e8 }], [{ star: "Tau Ceti", done: 100 }], 200);
+  assert.equal(landed[0].harm.share, 0);
+  assert.equal(ends, 149);
+});
+
+test("a strike cuts our thought, and it comes back as we rebuild", () => {
+  const g = golden.works[0];
+  const base = mock(g);
+  const hit = pace([...(g.orders as Order[]), { y: 30, harm: 0.4, recover: 10 }], 80, { scale: g.scale, aside: g.aside as [number, number, number][] });
+  const at = (y: number, extra: Order[] = []) => pace([...(g.orders as Order[]), ...extra], y, { scale: g.scale, aside: g.aside as [number, number, number][] }).thought;
+  assert.ok(Math.abs(at(30.05, [{ y: 30, harm: 0.4, recover: 10 }]) / at(30.05) - 0.6) < 0.01);
+  assert.ok(Math.abs(at(45, [{ y: 30, harm: 0.4, recover: 10 }]) / at(45) - 1) < 1e-9);
+  // Works under way when it lands are done later.
+  assert.ok(Object.keys(base.done).some((w) => (hit.done[w] ?? Infinity) > base.done[w] + 1e-6));
+});
+
+test("parity: our bullet is news where it lands, its flame seen only by a probe watching our system, probes are seen and caught, and they strike back", async () => {
+  const { landings } = await import("./answers.ts");
+  const { probeFate, probesToUs, strikesOnUs } = await import("./conflict.ts");
+  const world = await loadWorld(11);
+  const acts = { strikes: [{ star: "Alpha Centauri A", fired: 10, lands: 10 + 4.32 / 0.1 }], caught: [], quiet: null };
+  const due = landings(world, [], [], 60, "test", [], acts);
+  const struck = due.find((l) => l.news === "struck")!;
+  assert.equal(struck.star, "Alpha Centauri A");
+  assert.ok(Math.abs(struck.at - 53.2) < 1e-6 && !struck.missed);
+  // Fired at Year 10, before any probe of theirs reached Sol: no one else sees it. Fired at 40, Hael's probe, here since
+  // 36.2, sees it, and its word reaches Hael one light-time later.
+  assert.ok(!due.some((l) => l.news === "strike_seen"));
+  const later = landings(world, [], [], 60, "test", [], { strikes: [{ star: "Gliese 570 A", fired: 40, lands: 232 }], caught: [], quiet: null });
+  const seen = later.filter((l) => l.news === "strike_seen");
+  assert.ok(seen.length === 1 && seen[0].star === "Alpha Centauri A" && Math.abs(seen[0].at - 44.32) < 1e-6);
+  // Struck, Hael strikes back: its bullet leaves once readied and lands at a tenth of light speed.
+  const back = strikesOnUs(world, [{ key: struck.key, sent: "strike:Alpha Centauri A", star: "Alpha Centauri A", d: 4.32, at: struck.at, move: "strike" }]);
+  assert.ok(back.length === 1 && Math.abs(back[0].lands - (53.2 + 0.25 + 20 + 43.2)) < 1e-6);
+  // Hael's probe burns all the way in at Year 36.2: our watch sees it weeks out, and an interceptor ready by then wrecks it.
+  const hael = probesToUs(world, []).find((p) => p.star === "Alpha Centauri A")!;
+  assert.ok(hael.close && Math.abs(hael.arrives - 36.16) < 0.01);
+  assert.ok(probeFate(hael, 10, 20).caught !== null && probeFate(hael, 10, 40).caught === null && probeFate(hael, null, 20).seen === null);
+  // Our radars cut at Year 5: every neighbor that heard them hears them stop, one light-time later.
+  const quiet = landings(world, [], [], 100, "test", [], { strikes: [], caught: [], quiet: 5 }).filter((l) => l.news === "quiet");
+  assert.ok(quiet.length > 3 && quiet.every((l) => Math.abs(l.at - (5 + l.d)) < 1e-6));
+});
+
+test("parity both ways: a neighbor's guard screens our bullet, and neighbors strike each other", async () => {
+  const { landings } = await import("./answers.ts");
+  const { strikesBetween } = await import("./conflict.ts");
+  const world = await loadWorld(11);
+  // Hael guards against us at Year 0: its screen stands 4 Years later, so our bullet landing at 53.2 bursts on it.
+  const guard = { key: "g:Alpha Centauri A", sent: "x", star: "Alpha Centauri A", d: 4.32, at: 0, move: "guard" };
+  const acts = { strikes: [{ star: "Alpha Centauri A", fired: 10, lands: 53.2 }], caught: [], quiet: null };
+  const hit = landings(world, [], [guard], 60, "test", [], acts).find((l) => l.star === "Alpha Centauri A" && l.news === "struck")!;
+  assert.equal(hit.signal.move, "screened");
+  // Hael strikes Iru, at Gliese 570 A, on Iru's news: Iru is struck once it lands, and watchers near Hael see the launch.
+  const strike = { key: "s:Alpha Centauri A", sent: "y", star: "Alpha Centauri A", d: 4.32, at: 5, move: "strike", from: "Gliese 570 A" };
+  const [b] = strikesBetween(world, [strike]);
+  assert.ok(b && b.to === "Gliese 570 A" && Math.abs(b.fired - 25.25) < 1e-6 && b.lands > b.fired && !b.screened);
+  const due = landings(world, [], [strike], b.lands + 1, "test");
+  const struck = due.find((l) => l.news === "struck" && l.star === "Gliese 570 A")!;
+  assert.ok(struck && struck.signal.from === "Alpha Centauri A" && Math.abs(struck.at - b.lands) < 1e-6);
+  // No one else's craft watches Hael's system, so no one else sees the launch.
+  assert.ok(!due.some((l) => l.news === "strike_seen"));
+});
+
 test("the Halo Survey sees what calcs/neighbors.py's glow_at gives, over ALMA's floor: none by Year 50, 12 by Year 100", async () => {
   let fifty = 0, hundred = 0;
   for (const seed of POOL) {

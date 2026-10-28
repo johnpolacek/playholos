@@ -167,6 +167,12 @@ def works_catalog():
     works['Trojan vault'] = dict(years=eg.TROJAN_YEARS, want=eg.WANTS['Trojan vault'][0], orbit=True)
     # The Rock Deflector, settled 2026-10-28: opened only when a rock is found coming, by game/lib/game/rocks.ts.
     works['Rock deflector'] = dict(years=eg.DEFLECTOR_YEARS, want=eg.WANTS['Rock deflector'][0])
+    # Parity builds, settled 2026-10-28: what a neighbor can do to us, we can build. lib/sim/conflict.ts.
+    works['X-ray sky watch'] = dict(years=eg.XRAY_YEARS, want=eg.WANTS['X-ray sky watch'][0], orbit=True)
+    works['Interceptor'] = dict(years=eg.INTERCEPTOR_YEARS, want=eg.WANTS['Interceptor'][0])
+    works['Quiet radars'] = dict(years=eg.QUIET_YEARS, want=eg.WANTS['Quiet radars'][0])
+    works['Picket yard'] = dict(years=eg.PICKET_YEARS, want=eg.WANTS['Picket yard'][0], orbit=True)
+    works['Strike yard'] = dict(years=eg.STRIKE_YARD_YEARS, want=eg.WANTS['Strike yard'][0], orbit=True)
     # Ground solar's fifth counts too, 2026-10-28: a whole data center more only where the grid's room was near one.
     works['Ground solar']['energy'] = 0.2
     works['Fusion plants'] = dict(years=eg.FUSION_YEARS, want=eg.WANTS['Fusion plants'][0], energy=eg.FUSION_ENERGY)

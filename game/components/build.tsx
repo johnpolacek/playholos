@@ -6,7 +6,10 @@ import { Guide } from "@/components/guide";
 import { useLeaveShell } from "@/components/wake";
 import { Queue } from "@/components/queue";
 import { Tour } from "@/components/tour";
-import { realTime } from "@/lib/game/clock";
+import { realTime, tenths } from "@/lib/game/clock";
+import { HARM_WORDS } from "@/lib/sim/conflict";
+import { survivorAt } from "@/lib/game/hits";
+import { useSchedule } from "@/components/picks";
 
 // The Build tab, laid out as Scan is: the queue and what we could start, in Scan's rows. The walk through what we
 // could start, as Scan's review, opens from the tab's head at any time and from Begin, in the top bar. Asking
@@ -33,6 +36,7 @@ export function Build() {
           </span>
         </div>
       )}
+      <Struck />
       {year === null ? (
         <Guide />
       ) : (
@@ -48,5 +52,29 @@ export function Build() {
         </button>
       </div>
     </>
+  );
+}
+
+/** Strikes landed on us, newest first: what each cost, and, once one ends Earth, where our Mind lives on. 2026-10-28. */
+function Struck() {
+  const { hits, done } = useSchedule();
+  if (!hits.length) return null;
+  const end = hits.find((h) => !h.screened && h.harm.ends);
+  const lives = end ? survivorAt(done, end.lands, null)?.name : null;
+  return (
+    <div className="flex flex-col gap-1 border-b border-rowline py-2.5 text-[13px] leading-snug">
+      {end && (
+        <p className="font-semibold text-ink">
+          {lives ? `Earth’s Mind was lost at Year ${tenths(end.lands)}. We live on in ${lives}.` : `Earth’s Mind was lost at Year ${tenths(end.lands)}, and no Mind of ours stood anywhere else.`}
+        </p>
+      )}
+      {[...hits].reverse().map((h) => (
+        <p key={`${h.from}:${h.lands}`} className="text-page-ink2">
+          {h.screened
+            ? `Year ${tenths(h.lands)}: a bullet from ${h.from} broke on our screen, a flash high in the air.`
+            : `Year ${tenths(h.lands)}: ${h.from === "a rock" ? "a rock" : `a bullet from ${h.from}`} struck Earth, ${HARM_WORDS[h.harm.tier]}.${h.harm.ends ? "" : ` We lost ${Math.round(h.harm.share * 100)}% of our thought, won back over about ${Math.round(h.harm.recover)} Years.`}`}
+        </p>
+      ))}
+    </div>
   );
 }

@@ -44,6 +44,8 @@ export interface Will {
   y: number;
   at: number;
   rate: number;
+  /** Earth's Mind was lost, and the Will crossed to a vault or colony that still stood. 2026-10-28. */
+  lost?: boolean;
 }
 
 /** A neighbor's move on a message, ours or another neighbor's, by the star it lives at: what it did, and what it sent,
@@ -74,6 +76,9 @@ export interface Reaction {
   via?: { star: string; d: number };
   /** A catch or a strike: the Year it ends our craft there. */
   ends?: number;
+  /** A bullet fired at Earth: the Year it lands and its megatons. Dark until then. 2026-10-28. */
+  lands?: number;
+  mt?: number;
 }
 
 /** One message we sent: aimed at a star, or every way at once. Our words as the Will said them, and the Mind's label,
@@ -155,6 +160,12 @@ export interface Plan {
    *  hole for power, hides in its shadow, or settles at a star. One a game, since the Seed Ship carries one.
    *  2026-10-26, a star since 2026-10-27. */
   colony?: Ordered & { mode: ColonyMode };
+  /** Pellet screens on the line to a star, each by the star and the Year we ordered it, built by the Picket Yard. A
+   *  bullet from that star that crosses one is wrecked. One a star. 2026-10-28. */
+  pickets?: Ordered[];
+  /** Our bullets, each by the star it is fired at and the Year we ordered it, readied by the Strike Yard. One a star.
+   *  2026-10-28. */
+  strikes?: (Ordered & { d?: number })[];
 }
 
 /** A build ordered in play, or taken back: its name, and the Year. */

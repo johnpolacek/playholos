@@ -329,7 +329,9 @@ def at_the_limit(running=('A 15 m mirror', 'Laser sail array', 'Probe yard', 'Be
 PUSH = 10
 WANTS['Ground solar'] = (20, 'sample')
 WANTS['Solar lens'] = (0.5, 'sample: a few small sailcraft')
-WANTS['X-ray sky watch'] = (0.05, 'sample: a small mission, of Einstein Probe and Swift\'s class')
+# Settled 2026-10-28: six Einstein Probe-class wide-field units cover the sky, about 9 t and $1.5B, 4 Years.
+WANTS['X-ray sky watch'] = (0.15, 'six Einstein Probe-class units, about 1.5 billion dollars')
+XRAY_YEARS = 4
 WANTS['Halo survey'] = (0.05, 'sample: an observing program on a telescope we have')
 # Wants for the seed ship's works, samples: no real price exists for any of them.
 WANTS.update({'Fusion drive': (10, 'sample: no real price exists'), 'Seed ship': (5, 'sample'),
@@ -365,6 +367,14 @@ TROJAN_YEARS, TROJAN_KT = 12, 10
 # see a rock is game/lib/game/rocks.ts.
 WANTS['Rock deflector'] = (0.3, 'sample: ten DARTs, a few billion dollars')
 DEFLECTOR_YEARS = 4
+# Settled 2026-10-28, parity with what neighbors can do. Interceptors: stored kill vehicles of a tonne, readied as
+# planetary defense's rapid-response studies ask, about 5 Years and $2B (Barbee et al.). Quiet radars: the concept's
+# cut, 2 Years of ground work. A picket yard builds pellet screens in orbit, each 2,000 t and 4 Years, our estimate. A
+# strike yard readies bullets of 1,000 t, as a neighbor's: 20 Years each once the yard stands. Its want and Years are
+# samples between the probe yard's and the fusion drive's.
+WANTS.update({'Interceptor': (0.2, 'about 2 billion dollars'), 'Quiet radars': (0.01, 'sample: ground work'),
+              'Picket yard': (0.5, 'sample'), 'Strike yard': (3, 'sample')})
+INTERCEPTOR_YEARS, QUIET_YEARS, PICKET_YEARS, STRIKE_YARD_YEARS = 5, 2, 6, 10
 def split(line, room, push=PUSH):
     """line: (name, want, most) in the player's order, most = how many times its want it can use. Returns {name: s}, idle."""
     give = {}

@@ -5,6 +5,7 @@
 // it reads the seed's truth. Pure, so it tests fast.
 import { dates } from "../game/sends.ts";
 import type { Reaction, Sent, Size } from "../game/types.ts";
+import { probesToUs, strikesBetween, theirScreens } from "./conflict.ts";
 import { type Craft, lossesOf, type Notice, notices, REFUGE_FOUND } from "./meetings.ts";
 import { aimedYears, GRID_2040, noticeReach, powerFor, readReach, SIZES } from "./messages.ts";
 import { PyRandom } from "./pyrandom.ts";
@@ -150,8 +151,17 @@ export function starSignals(world: World, done: Reaction[]) {
   });
 }
 
+/** What we did that others feel, by the same physics as theirs: bullets we fired, with the Year each left and lands,
+ *  probes we caught, and the Year our radars went quiet. 2026-10-28. */
+export interface Acts {
+  strikes: { star: string; fired: number; lands: number }[];
+  caught: { star: string; at: number }[];
+  quiet: number | null;
+}
+const NO_ACTS: Acts = { strikes: [], caught: [], quiet: null };
+
 /** Every landing by Year `now` that has no reaction yet: ours, and every neighbor's on every other. */
-export function landings(world: World, sent: Sent[], done: Reaction[], now: number, roll: string | null = null, ours: Craft[] = []): Landing[] {
+export function landings(world: World, sent: Sent[], done: Reaction[], now: number, roll: string | null = null, ours: Craft[] = [], acts: Acts = NO_ACTS): Landing[] {
   const shown = (p: Neighbor) => world.stars[p.star]?.shown ?? p.star;
   const had = new Set(done.map((r) => r.key));
   const out: Landing[] = [];
@@ -210,6 +220,54 @@ export function landings(world: World, sent: Sent[], done: Reaction[], now: numb
     const signal: Signal = { id: n.craft.id, from: SOL, to: star, text: "", size: "page" };
     out.push({ key, signal, neighbor: n.neighbor, star, at: n.at, d: n.hop, news, read: true, missed: false, offers: offers(n.neighbor.name, news, dieFor(roll, key)), notice: n });
   }
+  // What we did, as news. A bullet strikes its star, and every watcher sees its launch flame one light-time from Sol.
+  // A probe we caught goes dark, and its sender learns it one light-time later. Our radars falling quiet reach each
+  // listener who heard them. Nothing physical is missed: a strike lands whether anyone listens. 2026-10-28.
+  const act = (id: string, move: string, to: string, p: Neighbor, at: number, d: number, news: News, sure: boolean) => {
+    const star = shown(p);
+    const key = `${id}:${star}`;
+    if (at > now || had.has(key)) return;
+    const die = dieFor(roll, key);
+    const missed = !sure && !catches(p, at, die);
+    const signal: Signal = { id, from: SOL, to, text: "", size: "page", move };
+    out.push({ key, signal, neighbor: p, star, at, d, news, read: true, missed, offers: missed ? [] : offers(p.name, news, die) });
+  };
+  // A target that screened the line to Sol in time sees our bullet burst on its screen: still an attack, but no harm.
+  const guards = theirScreens(world, done);
+  // A launch shows only in its own system: a drive of tens of terawatts is about magnitude 40 at 10 light-years, past
+  // any telescope, and plain within a few hundred AU. So a neighbor sees ours only through a probe of its own watching
+  // Sol by then, and not caught, which sends word home at light speed. 2026-10-28.
+  const watching = probesToUs(world, done);
+  for (const s of acts.strikes)
+    for (const p of world.neighbors) {
+      const blocked = guards.some((g) => g.star === s.star && g.toward === SOL && g.done <= s.lands);
+      if (shown(p) === s.star) act(`strike:${s.star}`, blocked ? "screened" : "struck", s.star, p, s.lands, p.d, "struck", true);
+      const eyes = watching.some(
+        (w) => w.star === shown(p) && w.arrives <= s.fired && !acts.caught.some((c) => c.star === w.star && c.at <= s.fired),
+      );
+      if (eyes) act(`launch:${s.star}`, "strike_seen", s.star, p, s.fired + p.d, p.d, "strike_seen", true);
+    }
+  // And theirs at each other, by the same physics: the target struck, or its screen hit. No one else sees it: no
+  // neighbor's craft watches another's system. Parity, 2026-10-28.
+  const byName = new Map(world.neighbors.map((p) => [shown(p), p]));
+  for (const b of strikesBetween(world, done)) {
+    const target = byName.get(b.to);
+    if (target) {
+      const key = `nstrike:${b.from}:${b.fired.toFixed(2)}`;
+      if (b.lands <= now && !had.has(`${key}:${b.to}`)) {
+        const die = dieFor(roll, `${key}:${b.to}`);
+        const signal: Signal = { id: key, from: b.from, to: b.to, text: "", size: "page", move: b.screened ? "screened" : "struck" };
+        out.push({ key: `${key}:${b.to}`, signal, neighbor: target, star: b.to, at: b.lands, d: b.d, news: "struck", read: true, missed: false, offers: offers(target.name, "struck", die) });
+      }
+    }
+  }
+  for (const c of acts.caught) {
+    const p = world.neighbors.find((x) => shown(x) === c.star);
+    if (p) act(`caught:${c.star}:${c.at}`, "caught", c.star, p, c.at + p.d, p.d, "struck", true);
+  }
+  if (acts.quiet !== null)
+    for (const p of world.neighbors)
+      if (!p.dead && p.heard && (p.heardSince ?? Infinity) <= acts.quiet + p.d) act("quiet", "quiet", shown(p), p, acts.quiet + p.d, p.d, "quiet", false);
   // A glow is news of someone, with no words: a hum, by its tables.
   const who = new Map(world.neighbors.map((p) => [shown(p), p]));
   for (const g of glowsSeen(world)) {

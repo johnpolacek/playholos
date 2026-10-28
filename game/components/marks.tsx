@@ -258,6 +258,56 @@ const Sprout = ({ size, still }: MarkProps) => (
   </Moving>
 );
 
+/** The X-Ray Watch: a lobster-eye's cells, and a flame flaring in its sight. 2026-10-28. */
+const XRay = ({ size, still }: MarkProps) => (
+  <Moving size={size} still={still} move={(_, part) => void sway(part("flare"), { opacity: 0.2 }, { opacity: 1 }, 1.2)}>
+    <path d="M3 4h10v8H3zM6.3 4v8M9.7 4v8M3 8h10" opacity={0.6} />
+    <circle data-k="flare" cx="11.4" cy="5.8" r="1.2" fill="currentColor" stroke="none" opacity={still ? 1 : 0.2} />
+  </Moving>
+);
+
+/** Quiet Radars: a dish whose sweep fades out. 2026-10-28. */
+const Quiet = ({ size, still }: MarkProps) => (
+  <Moving size={size} still={still} move={(_, part) => void sway(part("sweep"), { opacity: 0.8 }, { opacity: 0.05 }, 2.2)}>
+    <path d="M3 13.6h6M6 13.6V10M2.6 6.4a4.6 4.6 0 0 0 6.8 3.6z" />
+    <path data-k="sweep" d="M9.6 6.8a3 3 0 0 1 2.2 2.2M10.6 4.4a5.6 5.6 0 0 1 3.6 3.6" opacity={still ? 0.4 : 0.8} />
+  </Moving>
+);
+
+/** The Interceptor: a kill vehicle meeting a craft head on. 2026-10-28. */
+const Intercept = ({ size, still }: MarkProps) => (
+  <Moving
+    size={size}
+    still={still}
+    move={(_, part) =>
+      void gsap
+        .timeline({ repeat: -1, repeatDelay: 0.6, delay: offset() })
+        .fromTo(part("kv"), { attr: { cx: 2 }, opacity: 1 }, { attr: { cx: 9.2 }, duration: 0.8, ease: "power1.in" })
+        .to(part("kv"), { opacity: 0, duration: 0.1 })
+    }
+  >
+    <path d="M10.4 6.8h3.8l-1.2 1.2 1.2 1.2h-3.8z" />
+    <circle data-k="kv" cx={still ? 7 : 2} cy="8" r="0.9" fill="currentColor" stroke="none" />
+  </Moving>
+);
+
+/** The Picket Yard: a grid of pellets on a line, and a bullet breaking on it. 2026-10-28. */
+const Picket = ({ size, still }: MarkProps) => (
+  <Moving size={size} still={still} move={(_, part) => void sway(part("spray"), { opacity: 0 }, { opacity: 0.9 }, 1.1)}>
+    <path d="M9 2.6v10.8" strokeDasharray="0.6 1.6" />
+    <path d="M2 8h6" />
+    <path data-k="spray" d="M10.4 8l3.4-2.4M10.4 8h3.8M10.4 8l3.4 2.4" opacity={still ? 0.9 : 0} />
+  </Moving>
+);
+
+/** The Strike Yard: a bullet on its long flame, outbound. 2026-10-28. */
+const Strike = ({ size, still }: MarkProps) => (
+  <Moving size={size} still={still} move={(_, part) => void sway(part("flame"), { opacity: 0.3 }, { opacity: 1 }, 0.7)}>
+    <path d="M8.6 6.6h4.2l1.4 1.4-1.4 1.4H8.6z" />
+    <path data-k="flame" d="M8.4 8H1.8M7.6 7l-4 -1.4M7.6 9l-4 1.4" opacity={still ? 1 : 0.3} />
+  </Moving>
+);
+
 /** The Rock Deflector: an impactor streaking in, and the rock it meets nudged aside. 2026-10-28. */
 const Deflector = ({ size, still }: MarkProps) => (
   <Moving
@@ -821,6 +871,16 @@ export function BuildMark({ name, size = 16, still }: { name: string; size?: num
       return <Flame size={size} still={still} />;
     case "Seed Ship":
       return <Sprout size={size} still={still} />;
+    case "X-Ray Watch":
+      return <XRay size={size} still={still} />;
+    case "Quiet Radars":
+      return <Quiet size={size} still={still} />;
+    case "Interceptor":
+      return <Intercept size={size} still={still} />;
+    case "Picket Yard":
+      return <Picket size={size} still={still} />;
+    case "Strike Yard":
+      return <Strike size={size} still={still} />;
     case "Rock Deflector":
       return <Deflector size={size} still={still} />;
     case "Trojan Vault":

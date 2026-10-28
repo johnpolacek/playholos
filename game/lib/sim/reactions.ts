@@ -3,7 +3,7 @@
 import tables from "../../data/reactions.json" with { type: "json" };
 import { PyRandom } from "./pyrandom.ts";
 
-export type News = "hum" | "knock" | "broadcast" | "reply" | "silence" | "quiet" | "probe" | "settle";
+export type News = "hum" | "knock" | "broadcast" | "reply" | "silence" | "quiet" | "probe" | "settle" | "struck" | "strike_seen";
 export const TABLES = tables.tables as unknown as Record<string, Record<string, [string, number][]>>;
 export const MOVES = tables.moves as Record<string, string>;
 

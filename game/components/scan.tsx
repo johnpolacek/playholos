@@ -89,6 +89,8 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
         gifts: JSON.stringify(plan?.gifts ?? []),
         lenses: JSON.stringify(plan?.lenses ?? []),
         sentinels: JSON.stringify(plan?.sentinels ?? []),
+        pickets: JSON.stringify(plan?.pickets ?? []),
+        strikes: JSON.stringify(plan?.strikes ?? []),
         seeds: JSON.stringify(plan?.seeds ?? []),
         colony: JSON.stringify(plan?.colony ?? null),
         losses,

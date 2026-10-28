@@ -1,5 +1,6 @@
 import { Outlet } from "react-router";
 import { BeamsProvider } from "@/components/beams";
+import { Fate } from "@/components/fate";
 import { Crossing } from "@/components/crossing";
 import { PreviewProvider } from "@/components/costs";
 import { GameProvider } from "@/components/game-provider";
@@ -19,6 +20,7 @@ export default function PlayLayout() {
     <GameProvider>
       <Listening />
       <Crossing />
+      <Fate />
       <Opening className="flex h-dvh w-full flex-col overflow-hidden bg-paper">
         <ScanProvider>
           <BeamsProvider>

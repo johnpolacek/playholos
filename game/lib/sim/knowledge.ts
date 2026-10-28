@@ -34,6 +34,9 @@ export interface Kit {
   probe?: { passed: number; home: number } | null;
   /** Our craft at black holes a neighbor caught or struck, from its moves kept in the save. 2026-10-26. */
   losses?: Loss[];
+  /** The Year our radars went quiet: a neighbor whose ears open only after our last sweep has passed never hears them,
+   *  so never answers them. 2026-10-28. */
+  quiet?: number | null;
 }
 
 /** What the first mirror tells apart: no air, water without oxygen, or oxygen. Hidden microbes read as a lifeless sea,
@@ -198,7 +201,7 @@ export function earthKnows(
   world: World,
   year: number,
   voices: Voices = {},
-  { allSky = null, flash = null, telescope = null, mirror = null, halo = null, mapper = null, lenses = [], sentinels = [], seeds = [], colony = null, sails = null, probe = null, losses = [] }: Kit = {},
+  { allSky = null, flash = null, telescope = null, mirror = null, halo = null, mapper = null, lenses = [], sentinels = [], seeds = [], colony = null, sails = null, probe = null, losses = [], quiet = null }: Kit = {},
 ): EarthView {
   const shown = (id: string) => world.stars[id]?.shown ?? id;
   // Earth's finds at Year 0: every world whose tug shows by 2040. Measured, not understood. Its star is in the catalogs.
@@ -216,7 +219,10 @@ export function earthKnows(
   // flashes. The world records which would catch each. 2026-10-20.
   const heard: Heard[] = [];
   for (const p of world.neighbors) {
+    // Our radars cut before they reached it: what it would have sent on hearing them is never sent.
+    const deaf = quiet !== null && (p.heardSince ?? Infinity) > quiet + p.d;
     for (const i of p.inbound) {
+      if (deaf && i.what.includes("radars")) continue;
       const wide = allSky !== null && i.year >= allSky && !!i.allsky;
       const seen = flash !== null && i.year >= flash && !!i.flash;
       if (i.year > year || !(i.kit0 || wide || seen)) continue;

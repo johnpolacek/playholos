@@ -2,6 +2,7 @@
 // data/works.json, paced by lib/sim/works.ts from the player's own order, so every date on the screen is the game's.
 // The Mind names what it would start with only when asked, 2026-10-19, and never queues anything itself.
 import { FOUND } from "./rocks";
+import { BULLET, SCREEN } from "@/lib/sim/conflict";
 import { plainBuild } from "./build-offer";
 import { KNOCKS } from "./knocks";
 import { YEAR_0 } from "./clock";
@@ -33,6 +34,9 @@ export const BUILDS: Build[] = [
   // A near-infrared Gaia, of the GaiaNIR class, 2026-10-26: it finds black holes by the stars they shift.
   { name: "Star Mapper", what: "Maps a billion stars’ places, and finds black holes by the stars they shift.", does: "see" },
   { name: "Launch Complex", what: "Doubles what we lift to orbit.", does: "lift" },
+  // What a neighbor can do to us, we can build, 2026-10-28: see a probe braking in, and fall quiet.
+  { name: "X-Ray Watch", what: "Sees a probe’s fusion flame as it brakes into our system, weeks out.", does: "see" },
+  { name: "Quiet Radars", what: "Cuts the radars that tell every listener we are here.", does: "keep" },
   // StarTram's Gen-1, 2026-10-27: a ground build, so it spends no matter, and lifts three times what the complex does.
   { name: "Launch Tunnel", what: "Throws cargo to orbit from a tunnel in the Andes, 128 kt a Year.", does: "lift" },
   { name: "Orbital Yard", what: "Cuts build time in orbit by a quarter.", kt: 1, does: "lift" },
@@ -108,6 +112,15 @@ export const LATER: Later[] = [
     does: "think",
     after: "Mass Driver",
   },
+  // Parity, 2026-10-28: catch what the watch sees, screen a line to a star, and strike one.
+  { name: "Interceptor", what: "Kill vehicles that catch a probe in our system once the watch sees it.", does: "keep", after: "X-Ray Watch" },
+  {
+    name: "Picket Yard",
+    what: "Builds pellet screens on the line to a star, to wreck a bullet from there.",
+    does: "keep",
+    after: "Orbital Yard",
+  },
+  { name: "Strike Yard", what: "Readies bullets of 1,000 t to fire at a star, at a tenth of light speed.", does: "reach", after: "Fusion Drive" },
   // A rock coming, 2026-10-28: the deflector opens only once a survey finds one, in games whose seed sends one.
   {
     name: "Rock Deflector",
@@ -142,7 +155,7 @@ export const buildOf = (name: string): Build | Later | undefined =>
  *  the vault left out 2026-10-20, the Halo Survey and Star Mapper 2026-10-26, which pay off late, and the Launch
  *  Tunnel 2026-10-27, since nothing we could start waits on lift. */
 export const STARTS = BUILDS.filter(
-  (b) => !["Moon Vault", "Halo Survey", "Star Mapper", "Launch Tunnel", "Deuterium Works", "Fusion Drive", "Seed Ship"].includes(b.name),
+  (b) => !["Moon Vault", "Halo Survey", "Star Mapper", "Launch Tunnel", "X-Ray Watch", "Quiet Radars", "Deuterium Works", "Fusion Drive", "Seed Ship"].includes(b.name),
 );
 
 /** What the Mind says of each build, on its page and in the walk. */
@@ -190,6 +203,16 @@ export const SAYS: Record<string, string> = {
     "Our dishes would take millions of Years to send a Mind. A laser with a 100 m mirror sends one 10 ly in under two days, if the far end catches it as wide. Our Mind there, at a hole or a star, builds that end. Once both stand, the Will can live there. The crossing is dark: a Year for each light-year, with no orders and no news.",
   "Orbital Ring":
     "A ring of Moon metal circles the world 300 km up, spun faster than orbit so it holds up cables to 20 places on the ground. Craft climb them to orbit. It takes 180 kt of what we hold, then lifts the full ring, 180 Mt, in about a year, and after that about 190 Mt a Year, three hundred times what the Mass Driver throws. At full pace it draws about 200 GW. No part of it has been tested. A ring that breaks rises rather than falls, since the loads that held it down are gone. The skyhooks and cables are what can come down.",
+  "X-Ray Watch":
+    "Six wide-field X-ray telescopes of Einstein Probe’s class, about 4 Years. A probe braking into our system on a fusion flame shows to them in its last weeks, about 2 AU out. A craft coasting dark shows to nothing we can build.",
+  "Quiet Radars":
+    "Ninety years of our radar sweeps are already out there, and nothing recalls them. Cutting the radars now means a listener whose ears open after our last sweep passes never hears us. Every listener who has heard us hears us stop, and can’t tell waking from dying.",
+  "Interceptor":
+    "Stored kill vehicles of a tonne each, about 5 Years. Once the X-Ray Watch sees a probe braking in, one meets it as it stops and wrecks it. Its sender loses its eyes here, and may take that as the act of war it is.",
+  "Picket Yard":
+    "It builds pellet screens in orbit: 10 g pellets 0.7 m apart, 10 km wide, about 2,000 t, held 4 million km out on the line to one star. A bullet from there that crosses one is wrecked into spray, and lands as a flash high in the air. A bullet coasts dark, so a screen must stand before one comes. Only a sentinel of ours at its star could see it fired. Each takes 4 Years.",
+  "Strike Yard":
+    "It readies bullets of 1,000 t, as a neighbor’s are, each 20 Years and 61 kt of fusion fuel. One lands at a tenth of light speed with about 110,000 Mt: a region gone, the ozone thinned, the climate cooled. It ends no Mind spread across its system. Its launch flame shows only in our own system: a probe of theirs watching here would see it, and no one farther off.",
   "Rock Deflector":
     "A rock is coming at Earth. Ten impactors of a tonne each hit it at 6 km/s, and the rock thrown off pushes it 3.6 times harder, as DART’s did. The earlier the push lands, the less it must move the rock: a 140 m rock needs about 2 Years’ warning, a 60 m one a few weeks. Too late, and it strikes.",
   "Trojan Vault":
@@ -225,6 +248,7 @@ const PACED = Object.fromEntries(Object.keys(CATALOG.works).map((k) => [k.toLowe
 const FIRST: Record<string, string> = {
   "Thought Fields": "Data center",
   "15 m Mirror": "A 15 m mirror",
+  "X-Ray Watch": "X-ray sky watch",
   "Far-Side Array": "Far-side array, one fifth",
 };
 export const pacedName = (name: string) => FIRST[name] ?? PACED[name.toLowerCase()] ?? name;
@@ -332,9 +356,10 @@ export const PAST = "past Year 1,000";
 /** When each queued build is done, in Years from Year 0, with this game's compute. Null past the horizon. Thought Fields
  *  is done once its campuses fill the grid. A build that needs others is done once they all are, and never if our
  *  order lacks one. */
-export function schedule(plan: Plan, scale: number): Record<string, number | null> {
+export function schedule(plan: Plan, scale: number, harm: readonly Order[] = []): Record<string, number | null> {
   const { orders, ...opts } = ordersOf(plan);
-  const p = pace(orders, HORIZON, { scale, ...opts });
+  // Strikes landed on Earth, as lib/game/hits.ts has them: our thought cut, and won back as we rebuild. 2026-10-28.
+  const p = pace([...orders, ...harm], HORIZON, { scale, ...opts });
   const done: Record<string, number | null> = Object.fromEntries(
     ordered(plan).map((b) => [b, b === "Thought Fields" ? (p.dataCenters[centers(scale) - 1] ?? null) : doneOf(p, b)]),
   );
@@ -386,9 +411,13 @@ function held(plan: Plan, done: Record<string, number | null>, year: number) {
   // machines, landed from Earth, since 2026-10-22.
   // Ordered again after it was taken back, a build has its matter already.
   const first = (plan.later ?? []).filter((o, i, all) => !plan.builds.includes(o.name) && all.findIndex((x) => x.name === o.name) === i);
+  // A screen is 2 kt of pellets, and a bullet 1 kt with 61 kt of fusion fuel, spent as each is ordered. 2026-10-28.
+  const each = (list: { y: number }[] | undefined, kt: number) => (list ?? []).filter((o) => o.y <= year).length * kt;
   const spent =
     plan.builds.reduce((s, b) => s + (buildOf(b)?.kt ?? 0), 0) +
-    first.reduce((s, o) => s + (o.y <= year ? (buildOf(o.name)?.kt ?? 0) : 0), 0);
+    first.reduce((s, o) => s + (o.y <= year ? (buildOf(o.name)?.kt ?? 0) : 0), 0) +
+    each(plan.pickets, SCREEN.tonnes / 1000) +
+    each(plan.strikes, (BULLET.tonnes * (1 + BULLET.fuelPerTonne)) / 1000);
   const lifted =
     SPARE_LIFT * year +
     (launch == null ? 0 : LAUNCH_LIFT * Math.max(0, year - launch)) +

@@ -2201,6 +2201,47 @@ Sample prices.
   - Matters: *ours,* about 3 in 10 rocks come unseen, too late to push. A sample.
 - Used: `game/lib/game/rocks.ts` and the Rock Deflector, a build since 2026-10-28, in [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md#build-times). 12 of our 33 seeds send a rock in their first 1,000 Years.
 
+### Strikes, screens and harm, 2026-10-28
+
+Three research passes by agents, from abstracts and summaries, not full papers. Arithmetic marked ours is ours.
+
+- **Relativistic bullets** · our arithmetic.
+  - Kinetic energy (γ − 1)mc²: a tonne at 0.1c is 4.53 × 10¹⁷ J, 108 Mt. At 0.2c, 443 Mt.
+  - Chicxulub was about 4.2 × 10²³ J: over 200,000 t at 0.1c. Boiling the oceans, about 10²⁸ J ([Sleep et al. 1989](https://ntrs.nasa.gov/citations/19900027793)): about 2 × 10¹⁰ t.
+  - [Siraj and Loeb 2020](https://arxiv.org/abs/2002.01476), preprint, abstract: a sub-relativistic body dumps its energy high, into a hot plasma column. *Ours:* a 1 t slug 1 m wide stops above about 15 km, a 108 Mt high airburst.
+  - [Hoang et al. 2017](https://arxiv.org/abs/1608.05284), ApJ 837:5, abstract: dust grains explode on a craft at 0.2c and erode it.
+  - Used: lib/sim/conflict.ts, bullets of 1,000 t at 0.1c, about 110,000 Mt.
+- **Seeing them coming** · [Yurtsever and Wilkinson 2015](https://arxiv.org/abs/1503.05845), preprint, full text.
+  - A relativistic craft scatters the microwave background into THz to infrared light, visible red only near γ ≈ 700. No range given.
+  - Matters: a bullet at 0.1c coasts dark to anything we can build. Screens must stand before a strike is known.
+- **Seeing a launch** · our arithmetic, and [Zubrin 1995, via a 2022 technosignature review](https://arxiv.org/pdf/2206.00030), secondary.
+  - A 1,000 t bullet with 61 kt of fuel at 1% g runs a jet of about 36 TW. If 1% shows as visible light, that is about magnitude 40 at 10 ly. Hubble reaches about 31, the largest planned telescopes about 36.
+  - Its X-rays at 10 ly are about 10¹⁰ times below Einstein Probe’s floor. Within its own system, about magnitude 11 at 1 AU and 21 at 100 AU: plain to any watcher there.
+  - Zubrin’s visible-light ranges of hundreds of light-years are for drives a million times stronger. The review notes no survey has seen fusion exhaust.
+  - Used: a launch is news only to a watcher in its own system, and an impact only to its target or a craft standing there. 2026-10-28. Before, every watcher within 60 ly saw a launch.
+- **Who strikes** · [Dam 2026, First Attack, Final Offensive](https://arxiv.org/abs/2609.12003), preprint, abstract.
+  - An attacker never knows it has found everyone. Where a strike is easier to see than a hider is to find, every hunter striking is unstable and hiding is stable.
+  - Used, then corrected 2026-10-28: strikes are not easy to see from afar, so Dam’s condition for hiding being stable fails here.
+- **Pellet screens** · ours, from Whipple shield physics ([a hypervelocity impact review](https://pure.bit.edu.cn/en/publications/research-and-development-on-hypervelocity-impact-protection-using)).
+  - A gram at 0.1c carries 4.5 × 10¹¹ J, far past what any solid survives. A grid 0.7 m apart always hits a 1 m bullet: 2 pellets a m².
+  - 10 g pellets over 10 km: about 2,000 t. Spray spreads at about 50 km/s, so 4 million km out it is wider than Earth, and lands as about 3.5 kJ/m² high in the air.
+  - Used: the Picket Yard and its screens, one a star.
+- **Damage by energy** · [Toon et al. 1997](https://ntrs.nasa.gov/citations/19970030230), Rev. Geophys., summary; [Bardeen et al. 2017](https://pmc.ncbi.nlm.nih.gov/articles/PMC5594694), PNAS.
+  - Under 10⁴ Mt, local. 10⁴ to 10⁵, global water vapor and ozone harm. 10⁵ to 10⁶, regional turns global. 10⁶ to 10⁷, too dark for photosynthesis.
+  - Chelyabinsk about 500 kt, Tunguska 3 to 50 Mt by estimate.
+- **What a disaster costs industry** · press and working papers.
+  - Tohoku 2011 took about 40 GW from TEPCO, and Renesas’s fab 6 months to restore. Maria 2017’s grid took 11 months. A big cyclone cuts income per person 7.4% after 20 years, with no recovery to trend ([Hsiang and Jina](https://www.nber.org/system/files/working_papers/w20352/w20352.pdf)).
+  - [Xia et al. 2022](https://publications.pik-potsdam.de/pubman/item/item_27336), Nature Food: 150 Tg of soot cuts crop calories about 90% in years 3 to 4.
+  - TSMC held about 72% of foundry revenue in 2025, so a regional strike can take compute out of proportion.
+  - Used, *ours:* lost share ((log₁₀ Mt − 1)/7)², won back over 2 × 10^(0.25(log₁₀ Mt − 1)) Years. From 10⁸ Mt no Mind lives on Earth.
+- **Watching and catching probes** · [Einstein Probe](https://heasarc.gsfc.nasa.gov/docs/heasarc/missions/einstein_probe.html), [Cheng et al. 2023](https://www.nature.com/articles/s41586-023-05878-z), [Barbee et al.](https://ntrs.nasa.gov/api/citations/20205000654/downloads/Options%20and%20uncertainties%20in%20planetary%20defense%20Mission%20planning%20and%20vehicle%20design%20for%20flexible%20response.docx.pdf), [Lubin 2014](https://dspace.mit.edu/handle/1721.1/88427).
+  - Einstein Probe’s wide-field telescope sees 3,600 deg² to about 2.6 × 10⁻¹¹ erg/s/cm² in 1 ks. *Ours:* with 3.5% of a terawatt flame in its band, about 0.7 AU in one look and 2 AU in a day. Six cover the sky, about 9 t and $1.5 billion.
+  - *Ours:* braking at 1% g, a probe 2 AU out moves about 240 km/s, and about 54 km/s in its last 0.1 AU. A tonne meeting it wrecks it.
+  - Interceptors take about 5 years to build. DE-STAR lasers of tens of GW reach only about 0.01 AU at 100 m.
+  - THESEUS, the one wide X-ray mission proposed for the 2030s, was passed over for ESA’s M7 in 2026.
+  - Used: the X-Ray Watch and the Interceptor.
+- Used: [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md#parity-what-a-neighbor-can-do-we-can-build), lib/sim/conflict.ts, lib/game/hits.ts.
+
 ## Watch list
 
 Results the design is waiting on. Check each when its date comes.

@@ -18,6 +18,9 @@ export interface Beam {
   ly: number;
   /** The reply that could come back, at the soonest. */
   reply: boolean;
+  /** A bullet, ours going out or theirs come in, at a tenth of light speed: its `ly` is the Years it flies, so the map
+   *  draws it a tenth as fast as light. 2026-10-28. */
+  bullet?: "out" | "in";
 }
 
 interface Beams {
@@ -60,6 +63,14 @@ export function BeamsProvider({ children }: { children: React.ReactNode }) {
 /** Where the light in view is now, in words: how far it has left to go, or how far out a reply could be. A light-year
  *  is a Year, so these read to the tenth below, as the queue's dates do. */
 function whereNow(b: Beam, year: number) {
+  if (b.bullet) {
+    if (b.bullet === "in") {
+      const lands = b.sent + 2 * b.ly - year;
+      return lands <= 0 ? "it struck Earth" : `lands in ${tenths(lands).toFixed(1)} Years`;
+    }
+    const left = b.sent + b.ly - year;
+    return year < b.sent ? "readying" : left <= 0 ? "it struck" : `lands in ${tenths(left).toFixed(1)} Years`;
+  }
   if (!b.reply) {
     const left = b.sent + b.ly - year;
     return left <= 0 ? "arrived" : `${left < 0.1 ? "under 0.1" : tenths(left).toFixed(1)} ly to go`;

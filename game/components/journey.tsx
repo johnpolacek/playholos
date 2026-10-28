@@ -31,6 +31,9 @@ export interface Row {
   msg?: string;
   sent?: number;
   ly?: number;
+  /** A bullet at a tenth of light speed, ours or theirs: its star's real distance, since `ly` is its Years of flight.
+   *  2026-10-28. */
+  bullet?: { d: number; theirs?: boolean };
 }
 
 const over = (row: Row, now: number) => row.at !== null && now >= row.at;
@@ -45,7 +48,7 @@ function Journey({ row, now, shown }: { row: Row; now: number; shown: boolean })
   const reply = row.kind === "reply";
   const theirs = row.kind === "heard";
   // A reply's first leg is ours going out, the second theirs coming home.
-  const head = reply && p < 0.5 ? "you" : reply ? "other" : "you";
+  const head = reply && p < 0.5 ? "you" : reply || theirs ? "other" : "you";
   const run = (from: number, to: number, c: string) => (
     <span
       className={`absolute top-[5.5px] h-[2px] rounded-full bg-linear-to-r ${c}`}
@@ -90,8 +93,15 @@ function Journey({ row, now, shown }: { row: Row; now: number; shown: boolean })
         )}
       </div>
       <div className="mt-[3px] flex justify-between gap-2.5 font-mono text-[9.5px] text-muted">
-        <span>{row.sent !== undefined ? `sent ${Math.floor(row.sent)} · ${row.msg}` : `from Year ${tenths(row.from ?? 0)}`}</span>
-        {row.ly !== undefined && (
+        <span>
+          {row.bullet ? row.msg : row.sent !== undefined ? `sent ${Math.floor(row.sent)} · ${row.msg}` : `from Year ${tenths(row.from ?? 0)}`}
+        </span>
+        {row.bullet ? (
+          <span>
+            {`${lyOf(row.bullet.d)} ly at a tenth of light speed`}
+            {!row.bullet.theirs && <span className={shown ? "text-you" : ""}> ↗</span>}
+          </span>
+        ) : row.ly !== undefined && (
           <span>
             {`${lyOf(row.ly)} ly${reply ? " there and back" : ""}`}
             {!theirs && <span className={shown ? "text-you" : ""}> ↗</span>}

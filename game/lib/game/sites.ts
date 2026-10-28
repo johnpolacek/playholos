@@ -209,6 +209,66 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
         "Project Daedalus, from 1973 to 1978, planned a two-stage fusion probe of 54,000 t, built in Earth orbit as this one is. It would pass Barnard’s Star about 50 years after launch.",
     },
   },
+  "X-Ray Watch": {
+    // Einstein Probe's orbit: 600 km up, 29° to the equator. Ours are six of its class spread round it.
+    site: { on: "orbit", draw: "ring", places: [{ lat: 0, lon: 0, name: "Low orbit, 600 km up" }], orbit: { km: 600, tilt: 29, minutes: 96.7 } },
+    story: {
+      have: "Einstein Probe and SVOM watched the X-ray sky into the 2030s. Both end about 2031, and nothing wide took their place.",
+      where: "In low orbit, 600 km up, as Einstein Probe flies. Six of its class cover the whole sky.",
+      why: "A fusion flame braking toward us shines in X-rays. Seen weeks out, a probe that burns all the way in can’t arrive unseen.",
+      takes: "About 9 t, six telescopes of 1.5 t each, and about $1.5 billion. None of the matter we hold in orbit beyond that.",
+      before: "Einstein Probe launched in January 2024 with lobster-eye optics that see 3,600 square degrees at once.",
+    },
+  },
+  "Quiet Radars": {
+    // The great early-warning radars, the loudest sweeps Earth sends: Pituffik, Fylingdales and Clear.
+    site: {
+      on: "earth",
+      draw: "dome",
+      places: [
+        { lat: 76.53, lon: -68.7, name: "Pituffik, Greenland" },
+        { lat: 54.36, lon: -0.67, name: "Fylingdales, England" },
+        { lat: 64.29, lon: -149.19, name: "Clear, Alaska, USA" },
+      ],
+    },
+    story: {
+      have: "Our radars have swept the sky since the 1950s. Ninety years of sweeps are already on their way out.",
+      where: "The great warning radars, Pituffik, Fylingdales and Clear among them, and the planetary radars that ping asteroids.",
+      why: "A listener whose ears open after our last sweep passes never hears us. The sooner they stop, the more such listeners there are.",
+      takes: "Ground work only. Heat watch from orbit already tracks missiles, and aircraft fly on transponders.",
+      before: "Arecibo’s radar fell in 2020. No one has silenced a planet’s radars on purpose.",
+    },
+  },
+  "Interceptor": {
+    site: { on: "orbit", draw: "ring", places: [{ lat: 0, lon: 0, name: "High orbit, 36,000 km up" }], orbit: { km: 35786, tilt: 0, minutes: 1436 } },
+    story: {
+      have: "DART struck Dimorphos in 2022, steering itself in at 6 km/s. Nothing has been built to catch a craft that brakes.",
+      where: "Stored in high orbit, fuelled and ready, as rapid-response planetary defense studies ask.",
+      why: "A probe braking in slows to tens of km/s in its last weeks. A tonne meeting it at 50 km/s carries about 300 t of TNT.",
+      takes: "About 40 t: kill vehicles of a tonne with kick stages, about $2 billion.",
+      before: "In NASA’s 2021 exercise, six months’ warning delivered about 8.65 t to a rock. Five Years is the usual lead to build one.",
+    },
+  },
+  "Picket Yard": {
+    site: { on: "orbit", draw: "ring", places: [{ lat: 0, lon: 0, name: "Low orbit, 400 km up" }], orbit: { km: 400, tilt: 51.6, minutes: 92.9, behind: 20 } },
+    story: {
+      have: "Whipple shields guard the ISS: a thin bumper breaks a grain into a spreading cloud before it reaches the hull.",
+      where: "Beside the Orbital Yard, which builds each screen and sends it 4 million km out on the line to its star.",
+      why: "At a tenth of light speed a gram carries 450 MJ, far past what any solid survives. A bullet that crosses a pellet is spray.",
+      takes: "About 2,000 t a screen, 10 g pellets 0.7 m apart over 10 km, and 4 Years to build and place.",
+      before: "No one has screened a line in space. The estimate is ours, from Whipple shield physics.",
+    },
+  },
+  "Strike Yard": {
+    site: { on: "orbit", draw: "ring", places: [{ lat: 0, lon: 0, name: "High orbit, by the foundry" }], orbit: { km: 235_000, tilt: 25, minutes: 19_672, behind: 60 } },
+    story: {
+      have: "A nuclear weapon’s yield tops out near 50 Mt. Nothing we have flies faster than Parker Solar Probe’s 0.06% of light speed.",
+      where: "In the Orbital Foundry’s high orbit, where Moon rock and fusion fuel come in.",
+      why: "A neighbor can fire one at us. Whatever they can build, we can. Fired, it coasts dark: only a watcher in our own system sees it leave.",
+      takes: "Per bullet, 1,000 t and 61 kt of fusion fuel, 20 Years to ready. The yard itself, 10 Years.",
+      before: "No one has built a weapon that crosses between stars. Its physics is a rocket’s, pointed.",
+    },
+  },
   "Rock Deflector": {
     // DART left from Vandenberg's SLC-4E in November 2021, so ours leave from there.
     site: { on: "earth", draw: "launch", places: [{ lat: 34.632, lon: -120.611, name: "Vandenberg, California, USA" }] },

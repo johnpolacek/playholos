@@ -233,7 +233,7 @@ Settled 2026-10-26, from a headless playtest: at Year 48 the Will heard HD 10307
     - *We overhear the calls,* and only the calls. A knock between them passes us by.
     - *Ours is never seen, settled 2026-10-26.* Our Cold Annex sheds 1,200 GW at 77 K. At 38 to 850 µm that is a billionth of the Sun’s light or less, and a few ten-thousandths of Earth’s own or less, and the Halo Survey’s floor for a glow that warm is 8×10²⁰ W at 10 pc, 600 million times more. Numbers in [calcs/kin.py](calcs/kin.py). A neighbor knows us by our radio, as before.
     - *On Scan’s map,* each call we overheard is a ring round its star in their color, the edge of its light, named at the star with how far it has gone, fading past 50 ly as ours do. Ours stay rings round Sol.
-  - *Not yet.* Neighbors’ seeded plans in play, their knocks, probes and silence, still roll before the game. Builds, probes and strikes a neighbor chooses in play move nothing yet but its words.
+  - *Not yet.* Neighbors’ seeded plans in play, their knocks, probes and silence, still roll before the game. Builds a neighbor chooses in play move nothing yet but its words. Its probes and strikes on us move, since 2026-10-28: see [Parity](#parity-what-a-neighbor-can-do-we-can-build).
   - Set aside: rolls fixed by the seed, and stars hearing each other only before the game.
   - *Later:* stars that act almost like players, reacting to each other live, not only to us.
   - Set aside: the model choosing any move freely, since models lean friendly and would move the odds. And odds alone, with the model only writing words.
@@ -765,11 +765,31 @@ Settled 2026-10-06, from first principles rather than for the game’s sake.
 - **Known planets limit them.** A neighbor’s world must keep clear of a star’s known planets, and tug less than Earth could feel in 2026. At stars watched hardest, such as Barnard’s Star and Tau Ceti, that floor is 0.2 to 0.4 m/s, not 1.
 - **How loud they may be.** Earth heard nothing by 2040. If SKA-Mid listened an hour to every star within 50 ly by then, a neighbor’s steady tones stayed under about 146 MW at 10 ly, 583 MW at 20 ly and 3.6 GW at 50 ly. Each neighbor’s history sets its own loudness under that ceiling.
 
+## Parity: what a neighbor can do, we can build
+
+Settled 2026-10-28, from the designer: anything available to another civilization is available to Earth, at the same price and pace, and the reverse. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#strikes-screens-and-harm-2026-10-28).
+
+- **What neighbors could do that we couldn’t:** guard a line, catch a probe, strike, and hide. Each is now a build.
+- **The X-Ray Watch.** Six Einstein Probe-class telescopes, 4 Years. It sees a probe braking all the way in, weeks out, with its direction. Probes that stop far out, and bullets, stay dark.
+- **The Interceptor,** after the watch. 5 Years. It wrecks every probe the watch sees, as it stops. The sender learns its probe went dark one light-time later, as “struck” news.
+- **Quiet Radars.** The cut from [Quieting Earth’s radars](#quieting-earths-radars), 2 Years. A neighbor whose ears open after our last sweep never answers our radars. Every listener hears us stop, as “quiet” news. The fade is not built.
+- **The Picket Yard,** after the Orbital Yard. Each screen, on the line to one star from its page on Reach: 2 kt, 4 Years. A bullet from that star landing after it stands is a flash in the high air.
+- **The Strike Yard,** after the Fusion Drive. Each bullet, at one star from its page on Reach: 1,000 t, 61 kt of fuel, 20 Years to ready, then a tenth of light speed. About 110,000 Mt.
+  - It lands as “struck” news, and the struck star answers by its own table, maybe in kind.
+  - Its launch shows only in our own system. A neighbor sees it only through a probe of its own watching Sol, not caught, as “strike seen” news a light-time later. Corrected 2026-10-28: before, every watcher within 60 ly saw it.
+  - It harms but doesn’t end a Mind spread across its system.
+- **Their bullets now land.** A neighbor’s “strike” on news of us fires a bullet, readied in 20 Years, that lands one tenth-light-speed crossing later. Before, it moved only its words. Their probes from the seed, and those sent in play, now reach Sol.
+- **Harm.** Any strike, a bullet or a rock, costs a share of our thought and grid by its energy, won back as we rebuild. Shown on Build, told to the Mind, in the pace from the Year it lands.
+- **Endings, built 2026-10-28.** From 10⁸ Mt no Mind of ours lives on Earth. The Will crosses to the Moon Vault, the Trojan Vault or our colony, whichever stood first, a Year for each light-year, through the Will’s own crossing screen. Otherwise the game ends half a minute after the flash.
+- **On the map, 2026-10-28.** Bullets fly their tracks on Scan’s messages map. A strike’s flash spreads as a ring of light from where it lands. On the globe, each strike flashes, then leaves a rose ring as wide as its blast.
+- **Neighbors, by the same rules, 2026-10-28.** A neighbor that guards against a source screens the line to it, 4 Years later, and our bullet can burst on it. Neighbors strike each other on each other’s news: the target is struck, or its screen is hit, and answers by its table. No one else sees it: no neighbor’s craft watches another’s system. We see launches and strikes only where a sentinel of ours stands, a light-time late. One fired at us is warning ten times as long as its word takes to come.
+- **Not yet:** what our Mind in a vault can build, warnings between neighbors, and dimming our glow.
+
 ## Hostility
 
 Settled 2026-10-10. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#hostility).
 
-- **The evidence first.** A quiet sky fits minds hiding from killers as well as minds hiding by caution. The newest game theory finds first strikes rational only for an attacker that accepts the strike may be its last, and everyone hiding is the stable outcome wherever strikes are easier to see than hiders (Dam 2026). In Holos strikes are easy to see: exhaust from behind, laser launches ahead, braking glow, and a direction that names the sender. They also need a helium-3 industry, take decades, and rarely kill every Mind. So hiding and watching beat striking.
+- **The evidence first.** A quiet sky fits minds hiding from killers as well as minds hiding by caution. The newest game theory finds first strikes rational only for an attacker that accepts the strike may be its last, and everyone hiding is the stable outcome wherever strikes are easier to see than hiders (Dam 2026). Corrected 2026-10-28: in Holos a strike can’t be seen from afar. A drive of tens of terawatts is about magnitude 40 at 10 ly, past any telescope, and plain only within its own system. Only the struck world learns the sender, from the bullet’s track, and only a watcher in the shooter’s system sees it fired. So Dam’s condition fails, and striking is less deterred than this first said. Strikes still need a helium-3 industry, take decades, rarely kill every Mind, and invite an answer in kind. Hiding and watching still pay. Before, this said strikes were easy to see: exhaust from behind, laser launches ahead, braking glow.
 - **Then Banks.** Most advanced minds are tolerant, curious and generous. Some meddle, openly or covertly. Aggressors exist but are few. The oldest turn inward.
 - **One disposition per neighbor,** shaded by its dials:
   - *Watchers, about 55%:* hide, watch, and speak on their own terms.

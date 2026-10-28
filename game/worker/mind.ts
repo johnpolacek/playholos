@@ -6,10 +6,12 @@ import type { Will } from "@/lib/game/types";
 import { describeCharter } from "@/lib/game/charter";
 import { describeLeads } from "@/lib/game/leads";
 import { kt, matterAt, schedule } from "@/lib/game/plan";
-import { kitOf } from "@/lib/game/reach";
-import { readGifts, readLater, readColony, readLenses, readObserve, readSentinels, readSeeds, readQueue, readStops, readWill } from "./orders";
+import { colonyRoad, kitOf } from "@/lib/game/reach";
+import { readGifts, readLater, readColony, readLenses, readObserve, readSentinels, readSeeds, readQueue, readStops, readWill, readPickets, readStrikes } from "./orders";
 import { describeBuilds, describeQueue, describeRock } from "@/lib/mind/builds";
 import { FOUND, rockOf } from "@/lib/game/rocks";
+import { harmOrders, hitsAt } from "@/lib/game/hits";
+import { describeConflict } from "@/lib/mind/conflict";
 import { answersHeard, describeSent, readSent } from "@/lib/game/sends";
 import { readReactions } from "./react";
 import { EARTH_AT_YEAR_0, roadOf } from "@/lib/mind/earth";
@@ -89,6 +91,8 @@ export async function mind(req: Request) {
     sentinels,
     seeds,
     colony,
+    pickets,
+    strikes,
     sent,
     reactions,
     pick,
@@ -108,6 +112,8 @@ export async function mind(req: Request) {
     sentinels?: unknown;
     seeds?: unknown;
     colony?: unknown;
+    pickets?: unknown;
+    strikes?: unknown;
     sent?: unknown;
     reactions?: unknown;
     pick?: unknown;
@@ -125,11 +131,14 @@ export async function mind(req: Request) {
   // Where this Earth's road to Year 0 left the base kit, read beside the kit it changes.
   const road = world ? roadOf(pastOf(world)) : "";
   // Our order, dated as Build dates it with this game's compute.
-  const plan = { builds: queue, observe: readObserve(observe), later: orders, stops: readStops(stops), gifts: readGifts(gifts), lenses: readLenses(lenses), sentinels: readSentinels(sentinels), seeds: readSeeds(seeds), colony: readColony(colony) };
+  const plan = { builds: queue, observe: readObserve(observe), later: orders, stops: readStops(stops), gifts: readGifts(gifts), lenses: readLenses(lenses), sentinels: readSentinels(sentinels), seeds: readSeeds(seeds), colony: readColony(colony), pickets: readPickets(pickets), strikes: readStrikes(strikes) };
   const scale = Number(world?.earth.compute) || 1;
-  const done = schedule(plan, scale);
+  // Strikes landed by now cut our thought from when each landed. 2026-10-28.
   const at = yearAt(began, Date.now(), away);
   const year = at === null || at < 0 ? null : at;
+  const base = schedule(plan, scale);
+  const hits = inPool(seed) ? hitsAt(plan, scale, seed, readReactions(reactions), { ...base, [FOUND]: rockOf(seed)?.found ?? null }, year ?? 0) : [];
+  const done = hits.length ? schedule(plan, scale, harmOrders(hits)) : base;
   let known = "";
   if (world) {
     const kit = kitOf(plan, scale);
@@ -150,6 +159,7 @@ export async function mind(req: Request) {
     queue: describeQueue(plan, done, year),
     sent: describeSent(readSent(sent), year),
     known,
+    conflict: world ? describeConflict(world, readReactions(reactions), kitOf(plan, scale), hits, done, colonyOf(world, plan, scale), year) : "",
     rock: inPool(seed) ? describeRock(rockOf(seed), plan, { ...done, [FOUND]: rockOf(seed)?.found ?? null }, year) : "",
     now: now(began, away),
   };
@@ -202,4 +212,11 @@ export async function mind(req: Request) {
     return { usage };
   };
   return createUIMessageStreamResponse({ stream: toUIMessageStream({ stream: result.stream, onError, messageMetadata }) });
+}
+
+/** Our Mind at a star or a hole, where it stands and how far: one of the places the Will can live on if Earth falls. */
+function colonyOf(world: Awaited<ReturnType<typeof loadWorld>>, plan: Parameters<typeof colonyRoad>[0], scale: number) {
+  const c = plan.colony;
+  const d = c ? Object.values(world.stars).find((x) => x.shown === c.name || x.name === c.name)?.d : undefined;
+  return c && d !== undefined ? { star: c.name, d, stands: colonyRoad(plan, scale, 0, c.name, d).stands } : null;
 }

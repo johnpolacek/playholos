@@ -1,4 +1,7 @@
 import { Link } from "react-router";
+import { useSchedule } from "@/components/picks";
+import { strikesOf } from "@/lib/game/reach";
+import { BULLET } from "@/lib/sim/conflict";
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import { useGame } from "@/components/game-provider";
 import { SkyArt } from "@/components/sky";
@@ -63,12 +66,23 @@ export function LeadsMap({
   }, [save?.sent, sent, calls]);
   // Neighbors' calls every way at once, once we have overheard them: we learn of one as its light passes us. 2026-10-26.
   const tenth = year === null ? null : Math.floor(year * 10) / 10;
+  // A strike's flash, as a ring of its light spreading: one on Earth from Sol as it lands, and ours from its star once
+  // that light has reached us. 2026-10-28.
+  const { hits, scale } = useSchedule();
+  const plan = save?.plan;
   useEffect(() => {
-    theirs.splice(0, theirs.length, ...(save?.reactions ?? []).flatMap((r) => {
+    const calls = (save?.reactions ?? []).flatMap((r) => {
       const t = (r.to === "everywhere" || r.move === "call") && r.arrives !== undefined && tenth !== null && r.arrives <= tenth ? target(r.star) : null;
       return t ? [{ name: t.name, ra: t.ra, dec: t.dec, ly: t.d, sent: YEAR_0 + r.arrives! - r.d }] : [];
-    }));
-  }, [save?.reactions, tenth, theirs]);
+    });
+    const onUs = hits.filter((h) => !h.screened).map((h) => ({ name: "Earth", ra: 0, dec: 0, ly: 0, sent: YEAR_0 + h.lands, flash: true }));
+    const ours = (plan ? strikesOf(plan, scale) : []).flatMap((s) => {
+      const t = target(s.star);
+      const lands = s.fired === null || !t ? null : s.fired + t.d / BULLET.v;
+      return lands !== null && tenth !== null && lands + t!.d <= tenth ? [{ name: t!.name, ra: t!.ra, dec: t!.dec, ly: t!.d, sent: YEAR_0 + lands, flash: true }] : [];
+    });
+    theirs.splice(0, theirs.length, ...calls, ...onUs, ...ours);
+  }, [save?.reactions, tenth, theirs, hits, plan, scale]);
   const named = [...new Set(sent.map((m) => m.name))].filter((n) => !ids.includes(n));
   const onMarks = useCallback(
     (marks: Mark[]) => {
@@ -76,7 +90,7 @@ export function LeadsMap({
       for (const { id, x, y, a } of marks) {
         const n = names.current[id];
         if (!n) continue;
-        const ring = id.startsWith("ring:") || id.startsWith("call:");
+        const ring = id.startsWith("ring:") || id.startsWith("call:") || (id.startsWith("theirs:") && theirs[Number(id.slice(7))]?.ly === 0);
         const lead = ids.includes(id);
         const right = ring || x > (n.parentElement?.clientWidth ?? 0) / 2;
         n.style.transform = ring
@@ -85,7 +99,7 @@ export function LeadsMap({
         n.style.opacity = String(a * (focus && lead && id !== focus ? 0.45 : 1));
       }
     },
-    [dials, ids],
+    [dials, ids, theirs],
   );
   return (
     <SkyArt
@@ -119,7 +133,9 @@ export function LeadsMap({
           }}
           className="pointer-events-none absolute top-0 left-0 font-mono text-[9px] whitespace-nowrap text-other opacity-0"
         >
-          {`${c.name}’s call · ${Math.max(0, YEAR_0 + (year ?? 0) - c.sent).toFixed(1)} ly`}
+          {c.flash
+            ? `${c.name === "Earth" ? "the strike on Earth" : `our strike on ${c.name}`}, its flash · ${Math.max(0, YEAR_0 + (year ?? 0) - c.sent).toFixed(1)} ly out`
+            : `${c.name}’s call · ${Math.max(0, YEAR_0 + (year ?? 0) - c.sent).toFixed(1)} ly`}
         </span>
       ))}
       {named.map((n) => (

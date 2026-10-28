@@ -47,7 +47,9 @@ export function Crossing() {
         </text>
       </svg>
       <p className="mt-6 max-w-[34ch] text-center text-[14px] leading-snug text-page-ink2">
-        We are light now, between the stars. Earth goes on by our orders and our charter. We wake knowing only what we knew when we left.
+        {will.lost
+          ? "Earth’s Mind is gone. We are light now, crossing to the copy of us kept there. We wake knowing only what we knew when Earth fell."
+          : "We are light now, between the stars. Earth goes on by our orders and our charter. We wake knowing only what we knew when we left."}
       </p>
     </div>
   );

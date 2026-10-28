@@ -132,6 +132,29 @@
    "years": 4,
    "want": 0.3
   },
+  "X-ray sky watch": {
+   "years": 4,
+   "want": 0.15,
+   "orbit": true
+  },
+  "Interceptor": {
+   "years": 5,
+   "want": 0.2
+  },
+  "Quiet radars": {
+   "years": 2,
+   "want": 0.01
+  },
+  "Picket yard": {
+   "years": 6,
+   "want": 0.5,
+   "orbit": true
+  },
+  "Strike yard": {
+   "years": 10,
+   "want": 3,
+   "orbit": true
+  },
   "Fusion plants": {
    "years": 30,
    "want": 100,

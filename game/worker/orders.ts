@@ -53,6 +53,8 @@ export function readLenses(l: unknown): Ordered[] {
 }
 export const readSentinels = readLenses;
 export const readSeeds = readLenses;
+export const readPickets = readLenses;
+export const readStrikes = readLenses;
 
 // Our colony at a black hole or a star, from the save: one, by its name, the Year we sent it and its mode. Checked.
 export function readColony(c: unknown): (Ordered & { mode: ColonyMode }) | undefined {

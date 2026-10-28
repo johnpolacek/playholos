@@ -7,6 +7,7 @@ import { OpensLine } from "@/components/opens";
 import { Face, ListHead } from "@/components/tab-head";
 import { MS_PER_YEAR, span, tenths } from "@/lib/game/clock";
 import { FOUND, rockOf } from "@/lib/game/rocks";
+import { harmOrders, hitsAt } from "@/lib/game/hits";
 import type { EarthPast } from "@/lib/game/past";
 import { BUILDS, buildSlug, EMPTY, FOMALHAUT, inUse, lacks, moves, needs, openAt, PAST, schedule, sharesAt, takenAt } from "@/lib/game/plan";
 import { SITES } from "@/lib/game/sites";
@@ -57,11 +58,21 @@ export function useSchedule() {
   const scale = past?.compute ?? 1;
   // A rock coming opens the Rock Deflector the Year a survey finds it, as a build opens once another is done.
   const seed = save?.seed;
-  const done = useMemo(
-    (): Record<string, number | null> => ({ ...schedule(plan, scale), [FOUND]: seed === undefined ? null : (rockOf(seed)?.found ?? null) }),
-    [plan, scale, seed],
+  const found = seed === undefined ? null : (rockOf(seed)?.found ?? null);
+  const base = useMemo((): Record<string, number | null> => ({ ...schedule(plan, scale), [FOUND]: found }), [plan, scale, found]);
+  // Strikes landed on us by now cut our thought from the Year each landed, and only from then. 2026-10-28.
+  const { year } = useGame();
+  const tenth = year === null ? null : Math.floor(year * 10) / 10;
+  const hits = useMemo(
+    () => (tenth === null ? [] : hitsAt(plan, scale, seed, save?.reactions ?? [], base, tenth)),
+    [plan, scale, seed, save?.reactions, base, tenth],
   );
-  return { past, scale, done };
+  const harm = useMemo(() => harmOrders(hits), [hits]);
+  const done = useMemo(
+    (): Record<string, number | null> => (harm.length ? { ...schedule(plan, scale, harm), [FOUND]: found } : base),
+    [harm, plan, scale, found, base],
+  );
+  return { past, scale, done, hits };
 }
 
 /** How much of our compute the plan would use at Year 0, how much more it would need than we have, and whether it is

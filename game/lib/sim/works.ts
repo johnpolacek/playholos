@@ -16,9 +16,11 @@ export type Order =
                                             // pick up there if begun again. "Data center" ends the fabs' standing
                                             // order, and a campus under way is finished. 2026-10-23
   | { y: number; studies: number }          // thought set aside for the Mind's studies
-  | { y: number; gift: string; steps: number }; // a neighbor's knowledge, all of it come: our thought goes `steps`
+  | { y: number; gift: string; steps: number } // a neighbor's knowledge, all of it come: our thought goes `steps`
                                             // steps further from then, as many data centers would. Once a star.
                                             // 2026-10-26
+  | { y: number; harm: number; recover: number }; // a strike on Earth: this share of our thought lost, won back
+                                            // evenly over `recover` Years. lib/sim/conflict.ts. 2026-10-28
 
 interface Work {
   years?: number;                   // standard Years, at the thought its want buys
@@ -102,6 +104,9 @@ export function pace(orders: readonly Order[], until: number, { scale = 1, aside
   let t = 0, studies = CATALOG.studies, fits = centers(scale), more = 0, queued = 0, standing = false, building: number | null = null;
   let s: number[] = [], room = 0, idle = 0, thought = 0;
   const gifts = new Map<string, number>();
+  const harms: { y: number; harm: number; recover: number }[] = [];
+  /** What strikes leave of our thought at Year t: each loss shrinking as we rebuild. */
+  const spared = (at: number) => harms.reduce((m, h) => m * (1 - h.harm * Math.max(0, 1 - (at - h.y) / h.recover)), 1);
 
   const rockAt = (y: number) => Object.entries(CATALOG.rock).reduce((kt, [w, rate]) => kt + rate * Math.max(0, y - (done[w] ?? Infinity)), 0);
   const rockRate = () => Object.entries(CATALOG.rock).reduce((r, [w, rate]) => r + (done[w] !== undefined ? rate : 0), 0);
@@ -145,6 +150,7 @@ export function pace(orders: readonly Order[], until: number, { scale = 1, aside
         const o = queue.shift()!; changed = true;
         if ("studies" in o) studies = o.studies;
         else if ("gift" in o) { if (!gifts.has(o.gift)) gifts.set(o.gift, o.steps); }
+        else if ("harm" in o) harms.push(o);
         else if ("standing" in o) standing = true;
         else if ("first" in o) { const i = line.indexOf(o.first); if (i >= 0) { line.splice(i, 1); line.unshift(o.first); moved.add(o.first); } }
         else if ("drop" in o) {
@@ -165,7 +171,7 @@ export function pace(orders: readonly Order[], until: number, { scale = 1, aside
         }
       }
     }
-    thought = (scale * STEP ** dataCenters.length * STEP ** [...gifts.values()].reduce((a, b) => a + b, 0)) / FLAGSHIP;
+    thought = (spared(t) * scale * STEP ** dataCenters.length * STEP ** [...gifts.values()].reduce((a, b) => a + b, 0)) / FLAGSHIP;
     // What is set aside is a share of this Earth's own Year 0 compute, so studies keep a tenth of it whatever a war
     // left, as calcs/early_game.py has it since 2026-10-22.
     const set = scale * (studies + aside.reduce((sum, [a, b, share]) => sum + (a <= t + EPS && t + EPS < b ? share : 0), 0) + (building !== null ? CATALOG.dataCenter.aside : 0));
@@ -180,6 +186,8 @@ export function pace(orders: readonly Order[], until: number, { scale = 1, aside
     let next = until;
     if (queue.length) next = Math.min(next, queue[0].y);
     for (const [a, b] of aside) for (const edge of [a, b]) if (edge > t + EPS) next = Math.min(next, edge);
+    // While we rebuild, thought comes back a little each tenth of a Year.
+    if (harms.some((h) => t + EPS < h.y + h.recover)) next = Math.min(next, t + 0.1);
     if (building !== null) next = Math.min(next, building + CATALOG.dataCenter.years);
     line.forEach((w, i) => {
       const l = left.get(w), m = WORKS[w].milestone;

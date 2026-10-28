@@ -19,6 +19,7 @@ import { onPlace, placeOf as placedLead } from "./game/places";
 import TARGETS from "../data/targets.json";
 import { MACHINES, type MachineKind } from "./game/machines";
 import { CLOSE } from "./game/close";
+import { scarsNow } from "./scars";
 import type { System } from "./game/systems";
 import {
   DEG,
@@ -112,7 +113,8 @@ export interface Show {
   calls?: { sent: number; until: number | null; reach: number; once?: boolean }[];
   /** For "leads": neighbors' calls every way at once that we have overheard, each by its star's place and the decimal
    *  year it left: a ring round their star, the edge of its light. 2026-10-26. */
-  theirCalls?: { name: string; ra: number; dec: number; ly: number; sent: number }[];
+  theirCalls?: { name: string; ra: number; dec: number; ly: number; sent: number; flash?: boolean }[];
+
   /** For "beams": our messages on their way, each by its star, the decimal year we sent it, the light-years it goes,
    *  and whether it is the reply that could come back. */
   beams?: { star: string; sent: number; ly: number; reply: boolean }[];
@@ -824,6 +826,52 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
   const spin = new THREE.Group();
   spin.add(new THREE.Mesh(new THREE.SphereGeometry(1, 96, 64), earthGlobe));
   earth.scene.add(spin);
+
+  // ── Strikes on Earth: a flash where each lands, gone within months, then a rose ring as wide as its blast. 2026-10-28.
+  const MAX_SCARS = 6;
+  const scarCloud = new Cloud();
+  for (let i = 0; i < MAX_SCARS; i++) {
+    scarCloud.add(0, 0, 0, 60, 0, K.lamp);
+    scarCloud.add(0, 0, 0, 9, 0, K.sun);
+  }
+  const scarGlow = glow({ fixed: true, depthTest: true });
+  scarGlow.blending = THREE.AdditiveBlending;
+  const scarPts = scarCloud.points(scarGlow);
+  spin.add(scarPts);
+  const scarRings = Array.from({ length: MAX_SCARS }, () => {
+    const mat = line("rose", 0, true);
+    const holder = new THREE.Group();
+    holder.add(loop(Array.from({ length: 96 }, (_, i) => new THREE.Vector3(Math.sin((i / 96) * 2 * Math.PI), Math.cos((i / 96) * 2 * Math.PI), 0)), mat));
+    spin.add(holder);
+    return { holder, mat };
+  });
+  const scarAt = new THREE.Vector3();
+  const scarUp = new THREE.Vector3(0, 0, 1);
+  function scarsFrame() {
+    const list = scarsNow.list.slice(0, MAX_SCARS);
+    const year = scarsNow.year;
+    const pos = scarPts.geometry.attributes.position as THREE.BufferAttribute;
+    const bright = scarPts.geometry.attributes.aBright as THREE.BufferAttribute;
+    scarRings.forEach(({ holder, mat }, i) => {
+      const s = list[i];
+      const age = s ? year - s.at : -1;
+      if (s) {
+        scarAt.set(...onGlobe(s.lat, s.lon, 1.002));
+        holder.position.copy(scarAt);
+        holder.quaternion.setFromUnitVectors(scarUp, scarAt.clone().normalize());
+        // Its blast's reach, but never smaller than the globe can show.
+        holder.scale.setScalar(Math.max(s.km, 120) / 6371.0084);
+      }
+      for (const j of [2 * i, 2 * i + 1]) pos.setXYZ(j, scarAt.x, scarAt.y, scarAt.z);
+      // Blinding as it lands, gone within months: a tenth of a Year is half a minute of play.
+      const flash = age >= 0 ? Math.exp(-age / 0.15) : 0;
+      bright.setX(2 * i, flash);
+      bright.setX(2 * i + 1, age >= 0 ? Math.min(1, flash * 2 + 0.25 * (1 - ramp(age, 5, 40))) : 0);
+      mat.uniforms.uOpacity.value = age >= 0 ? 0.75 * (1 - 0.6 * ramp(age, 5, 60)) : 0;
+    });
+    pos.needsUpdate = bright.needsUpdate = true;
+    scarGlow.uniforms.uOpacity.value = 1;
+  }
 
   const AIR = 1.06;
   const air = new THREE.ShaderMaterial({
@@ -2152,9 +2200,20 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
           }
           marks.push({ id: `call:${i}`, x: best.x, y: best.y, a: best.z < 1 ? p * (1 - any) * (1 - ramp(r, 50, 56)) : 0 });
         });
-        // Theirs named at their star, where the call began.
+        // Theirs named at their star, where the call began. A strike's flash on Earth spreads from Sol, so it is named at
+        // its lowest point, as our calls are. 2026-10-28.
         theirs.forEach((c, i) => {
-          const s = onScreen(theirAt(c));
+          let s = onScreen(theirAt(c));
+          if (c.ly === 0) {
+            const r = year - c.sent;
+            const box = spec.rect?.() ?? { x: 0, y: 0, w, h };
+            let best = { x: 0, y: -Infinity, z: 2 };
+            for (let k = 0; k < 48; k++) {
+              const q = onScreen(ringAt(r, k, 48));
+              if (q.y > best.y && q.y < box.y + box.h - 40 && q.x > box.x + 60 && q.x < box.x + box.w - 60) best = q;
+            }
+            s = best;
+          }
           marks.push({ id: `theirs:${i}`, x: s.x, y: s.y, a: s.z < 1 ? p * (1 - any) * (1 - ramp(year - c.sent, 50, 64)) : 0 });
         });
         if (visitor) marks.push(...visitor.marks(w, h));
@@ -3242,6 +3301,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     mwGlow.uniforms.uMaxPx.value = 1.6 + 1.9 * ramp(x, 7.5, 9);
     homeGlow.uniforms.uOpacity.value = band(x, 5.4, 6.1) * (0.65 + 0.35 * Math.sin(clock * 2.2));
 
+    scarsFrame();
     if (pPeople > 0) people(up, pPeople);
     if (pInherit > 0 || pReach > 0) (kit ??= inheritance())(x, Math.max(pInherit, pReach), pReach);
     if (pOrigins > 0) {

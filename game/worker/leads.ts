@@ -1,7 +1,7 @@
 import { kitOf } from "@/lib/game/reach";
 import { earthKnows, willKnows } from "@/lib/sim/knowledge";
 import { readGifts, readLater, readColony, readLenses, readObserve, readSentinels, readSeeds, readQueue, readStops } from "./orders";
-import { readLosses, readWill } from "./orders";
+import { readLosses, readPickets, readStrikes, readWill } from "./orders";
 import { inPool, loadVoices, loadWorld } from "./world";
 
 // The worlds Earth's planet hunters have felt by Year 0, through the knowledge wall: measured, never who lives there.
@@ -47,6 +47,8 @@ export async function known(req: Request) {
     sentinels: readSentinels(list(q.get("sentinels"))),
     seeds: readSeeds(list(q.get("seeds"))),
     colony: readColony(one(q.get("colony"))),
+    pickets: readPickets(list(q.get("pickets"))),
+    strikes: readStrikes(list(q.get("strikes"))),
   };
   // Our craft at holes a neighbor caught or struck, from the save's reactions. 2026-10-26.
   const losses = readLosses(list(q.get("losses")));

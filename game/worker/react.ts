@@ -8,10 +8,11 @@ import type { Size } from "@/lib/game/types";
 import { aimedYears, SIZES } from "@/lib/sim/messages";
 import type { Reaction } from "@/lib/game/types";
 import { between, CALL_REACH, describeMove, type Landing, landings, SOL, SPEAKS, sendsTo, budgetAt } from "@/lib/sim/answers";
+import { actsOf, strikesOnUs } from "@/lib/sim/conflict";
 import { crafts, ends, type Notice } from "@/lib/sim/meetings";
 import type { World } from "@/lib/sim/types";
 import { apiKeyFor, workspaceFor } from "./access";
-import { readColony, readWill, readGifts, readLater, readObserve, readQueue, readSentinels, readStops } from "./orders";
+import { readColony, readWill, readGifts, readLater, readObserve, readQueue, readSentinels, readStops, readPickets, readStrikes } from "./orders";
 import { inPool, loadWorld } from "./world";
 
 // How a neighbor takes a message, ours or another neighbor's, decided on the fly once the game reaches the Year it
@@ -71,9 +72,19 @@ Your character: ${dials(p.dials)}. Toward others you are a ${p.disposition}${(p 
 You don't know Earth's names for stars, or yours. Judge only from what has reached you. Earth's radar has reached you since ${Math.round(1950 + p.d)}${p.heard ? ", and you heard it" : ""}.
 What you can see of Earth for yourself, to weigh any claim against: ${p.heard ? "its radio is the noise of a whole world, radars and broadcasts from many places, loud enough to mean billions of voices and an industry to match. Its radars sweep as a planet turns, and a long listen gives its day and its year. " : "nothing but its star, until it sends. "}No craft of Earth's has come near your world, and nothing it sends travels faster than light, so it could not reach you in less than ${p.d} years. Of any other world you see only its star, and what it sends. A claim that fits none of this may be a lie, a hope, or a threat. Take it as you would.
 A message is built to be read, but it takes time to send: a page goes in seconds, an archive takes Years. What you send is read once all of it has arrived, so write it as whole, never as still on its way.`;
-  const news = l.notice ? `${sighting(world, l.notice)}\nWhat you send goes to that ${l.notice.craft.kind === "sentinel" ? "craft" : "ship"}, ${l.notice.craft.atStar ? "at that star" : "at the dark mass"}.` : l.signal.move === "glow"
+  // Our acts, as they feel them. 2026-10-28.
+  // Whose bullet, theirs or Earth's: neighbors strike each other too, by the same physics. 2026-10-28.
+  const shooter = l.signal.from === SOL ? "Earth's Sun" : named(l.signal.from);
+  const act: Record<string, string> = {
+    struck: `A bullet from ${shooter}, ${l.d.toFixed(1)} light-years away, has struck your world at a tenth of light speed with about 110,000 Mt. A region of yours is gone, and the high air is torn worldwide. Its track points back to ${shooter}.`,
+    screened: `A bullet from ${shooter}, ${l.d.toFixed(1)} light-years away, has burst on the pellet screen you set on that line, a flash high in your air and no harm. It came at a tenth of light speed with about 110,000 Mt.`,
+    strike_seen: `Your probe watching ${shooter}, ${l.d.toFixed(1)} light-years away, has seen a launch flame there: a mass of about 1,000 t driven to a tenth of light speed, toward ${named(l.signal.to)}. That is a bullet, and it will land with about 110,000 Mt. No one farther off could have seen it.`,
+    caught: "The probe you sent to Earth's Sun has gone dark as it braked in. Earth's craft met it there.",
+    quiet: "Earth's radars, which you have heard sweep for decades, have stopped. A world that wakes may silence them, and so may one that dies. From here you can't tell which.",
+  };
+  const news = act[l.signal.move ?? ""] ?? (l.notice ? `${sighting(world, l.notice)}\nWhat you send goes to that ${l.notice.craft.kind === "sentinel" ? "craft" : "ship"}, ${l.notice.craft.atStar ? "at that star" : "at the dark mass"}.` : l.signal.move === "glow"
       ? `Your watch has found a grey glow at ${named(from)}, ${l.d.toFixed(1)} light-years away: heat near 12 K with no line in it, a color no dust gives. Cold computing far from a star would glow so: someone's Mind, most likely, and growing. It carries no words, and says nothing of who they are.`
-      : `A message from ${named(from)}, ${l.d.toFixed(1)} light-years away, has just reached you. ${msg}`;
+      : `A message from ${named(from)}, ${l.d.toFixed(1)} light-years away, has just reached you. ${msg}`);
   const user = `It is ${one(l.at)} on Earth's calendar. What has passed between you and others:
 ${[...theirs, ...before].join("\n") || "- Nothing yet."}
 
@@ -152,7 +163,7 @@ export const readReactions = (list: unknown): Reaction[] =>
 export async function react(req: Request) {
   const apiKey = apiKeyFor(req);
   if (apiKey === null) return Response.json({ error: "Locked." }, { status: 401 });
-  const { seed, beganAt, sent, reactions, pick, roll, builds, observe, later, stops, gifts, sentinels, colony, will } = (await req.json()) as Record<string, unknown>;
+  const { seed, beganAt, sent, reactions, pick, roll, builds, observe, later, stops, gifts, sentinels, colony, will, pickets, strikes } = (await req.json()) as Record<string, unknown>;
   if (!inPool(seed)) return Response.json({ error: "No such game." }, { status: 404 });
   const now = yearAt(typeof beganAt === "number" ? beganAt : null, Date.now(), readWill(will));
   if (now === null || now < 0) return Response.json({ reactions: [] });
@@ -162,9 +173,10 @@ export async function react(req: Request) {
   const held = import.meta.env.DEV && typeof roll === "string" ? roll : null;
   // A few at a time, oldest first, so one long night away doesn't ask a hundred at once.
   // Our craft at black holes, from our order as Build dates it, which their craft there may see. 2026-10-26.
-  const plan = { builds: readQueue(builds), observe: readObserve(observe), later: readLater(later), stops: readStops(stops), gifts: readGifts(gifts), sentinels: readSentinels(sentinels), colony: readColony(colony) };
+  const plan = { builds: readQueue(builds), observe: readObserve(observe), later: readLater(later), stops: readStops(stops), gifts: readGifts(gifts), sentinels: readSentinels(sentinels), colony: readColony(colony) , pickets: readPickets(pickets), strikes: readStrikes(strikes) };
   const ours = crafts(world, kitOf(plan, Number(world.earth.compute) || 1));
-  const due = landings(world, readSent(sent), done, now, held, ours).slice(0, 4);
+  const kit = kitOf(plan, Number(world.earth.compute) || 1);
+  const due = landings(world, readSent(sent), done, now, held, ours, actsOf(world, done, kit)).slice(0, 4);
   if (!due.length) return Response.json({ reactions: [] });
   const cli = import.meta.env.DEV && req.headers.get("x-holos-cli") === "1";
   if (!apiKey && !cli) return Response.json({ error: "The Mind is not connected. Set ANTHROPIC_API_KEY in .dev.vars." }, { status: 503 });
@@ -227,6 +239,12 @@ export async function react(req: Request) {
   } catch (e) {
     console.error("React:", String(e));
     if (!out.length) return Response.json({ error: "The neighbors can’t be asked right now." }, { status: 502 });
+  }
+  // A bullet a neighbor fires at us: when it lands, and how hard. The Year stays in the save, but nothing shows it
+  // until it lands: a coasting bullet is dark. 2026-10-28.
+  for (const s of strikesOnUs(world, out)) {
+    const r = out.find((x) => x.star === s.star && x.move === "strike" && x.lands === undefined && !x.about);
+    if (r) Object.assign(r, { lands: s.lands, mt: s.mt });
   }
   return Response.json({ reactions: out });
 }

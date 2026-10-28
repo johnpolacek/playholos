@@ -2,6 +2,7 @@
 // we have gone and the two roads to the nearest star. Each can be queued before Begin, last in line. One queued is
 // dated where the plan has it, and one not yet as if queued now, with this game's compute. Queued, a road can slow
 // what is before it: see moves() in plan.ts. Distances at Year 0 are HOLOS_GAME_CONCEPT.md's. Built 2026-10-18.
+import { BULLET, SCREEN } from "@/lib/sim/conflict";
 import { ordersOf, pacedName, schedule } from "./plan";
 import type { Plan, Will } from "./types";
 import { CATALOG, type Order, pace } from "@/lib/sim/works";
@@ -122,6 +123,20 @@ export function sentinels(plan: Plan, scale: number) {
   return (plan.sentinels ?? []).map((o) => ({ star: o.name, leaves: ready === null ? null : Math.max(o.y, ready) + SENTINEL.build }));
 }
 
+/** Our pellet screens, each by its star and the Year it stands: once the Picket Yard is done, 4 Years after its order.
+ *  Null while the yard isn't. 2026-10-28. */
+export function screensOf(plan: Plan, scale: number) {
+  const yard = schedule(plan, scale)["Picket Yard"] ?? null;
+  return (plan.pickets ?? []).map((o) => ({ star: o.name, done: yard === null ? null : Math.max(o.y, yard) + SCREEN.years }));
+}
+
+/** Our bullets, each by its star and the Year it is fired: readied 20 Years after its order, once the Strike Yard
+ *  is done. Null while the yard isn't. 2026-10-28. */
+export function strikesOf(plan: Plan, scale: number) {
+  const yard = schedule(plan, scale)["Strike Yard"] ?? null;
+  return (plan.strikes ?? []).map((o) => ({ star: o.name, fired: yard === null ? null : Math.max(o.y, yard) + BULLET.ready }));
+}
+
 /** A sentinel to a star `ly` away as a road: what it needs built, the sentinel built and flying, arriving to stay, and
  *  its first word home. Sent or not, dated as if sent at Year `from`, and what it needs, if not in our order, as if
  *  begun then. */
@@ -136,6 +151,33 @@ export function sentinelRoad(plan: Plan, scale: number, from: number, star: stri
   return { name: "Send a sentinel", n: sent ? 1 : null, build: "Probe Yard", craft: "A sentinel", speed: SENTINEL.speed, done: ready, leaves, arrives, home: arrives === null ? null : arrives + ly };
 }
 export const sentinelReady = (plan: Plan) => SENTINEL_NEEDS.every((n) => inOrder(plan, n));
+
+/** A yard's Year done, as if begun at Year `from` when it isn't in our order. */
+function yardDone(plan: Plan, scale: number, from: number, yard: string) {
+  const { orders, ...opts } = ordersOf(plan);
+  const more: Order[] = inOrder(plan, yard) ? [] : [{ y: from, begin: pacedName(yard) }];
+  return pace([...orders, ...more], 300, { scale, ...opts }).done[pacedName(yard)] ?? null;
+}
+
+/** A pellet screen on the line to a star, as a road: the Picket Yard, then 4 Years to build and place it, 4 million
+ *  km out. It stands then, and we know it at once. 2026-10-28. */
+export function screenRoad(plan: Plan, scale: number, from: number, star: string): Road {
+  const yard = yardDone(plan, scale, from, "Picket Yard");
+  const sent = (plan.pickets ?? []).find((o) => o.name === star);
+  const leaves = yard === null ? null : Math.max(sent?.y ?? from, yard);
+  const stands = leaves === null ? null : leaves + SCREEN.years;
+  return { name: "A pellet screen", n: sent ? 1 : null, build: "Picket Yard", craft: "A pellet screen", speed: 0, done: yard, leaves, arrives: stands, home: stands };
+}
+
+/** Our bullet at a star `ly` away, as a road: the Strike Yard, 20 Years to ready it, and its flight at a tenth of light
+ *  speed. Nothing comes home from it: its Year is the Year it lands. 2026-10-28. */
+export function strikeRoad(plan: Plan, scale: number, from: number, star: string, ly: number): Road {
+  const yard = yardDone(plan, scale, from, "Strike Yard");
+  const sent = (plan.strikes ?? []).find((o) => o.name === star);
+  const leaves = yard === null ? null : Math.max(sent?.y ?? from, yard) + BULLET.ready;
+  const lands = leaves === null ? null : leaves + ly / BULLET.v;
+  return { name: "A bullet", n: sent ? 1 : null, build: "Strike Yard", craft: "A bullet", speed: BULLET.v, done: yard, leaves, arrives: lands, home: lands };
+}
 
 /** Our Mind on the Seed Ship to a black hole `ly` away, to stay: it leaves once the Seed Ship, its Fusion Drive and the
  *  Deuterium Works are done, flies at a tenth of light speed with calcs/seed.py's burn and braking, and stands alone
@@ -232,6 +274,11 @@ export function kitOf(plan: Plan, scale: number) {
     lenses: lenses(plan, scale).flatMap((l) => (l.looks !== null && l.home !== null ? [{ star: l.star, looks: l.looks, home: l.home }] : [])),
     sails: fly(sails),
     probe: fly(probe),
+    xray: done["X-Ray Watch"] ?? null,
+    interceptor: done["Interceptor"] ?? null,
+    quiet: done["Quiet Radars"] ?? null,
+    screens: screensOf(plan, scale).flatMap((x) => (x.done !== null ? [{ star: x.star, done: x.done }] : [])),
+    strikes: strikesOf(plan, scale).flatMap((x) => (x.fired !== null ? [{ star: x.star, fired: x.fired }] : [])),
   };
 }
 
