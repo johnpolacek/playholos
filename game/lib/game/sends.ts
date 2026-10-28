@@ -139,7 +139,7 @@ export function answersHeard(sent: Sent[], reactions: Reaction[], year: number |
       // A call every way at once, on another world's news, is overheard: it answers no message of ours.
       // Sent on news of our craft at a hole: from the hole, if their Mind stands there.
       ...(r.via ? { star: r.via.star, d: r.via.d, sent: r.arrives! - r.via.d } : {}),
-      ...(r.from ? { overheard: true } : r.about ? { about: r.about } : { answers: sent.find((s) => s.id === r.sent)?.travels ?? "" }),
+      ...(r.move === "warn" ? { warning: true as const } : r.from ? { overheard: true } : r.about ? { about: r.about } : { answers: sent.find((s) => s.id === r.sent)?.travels ?? "" }),
       ...(r.move === "gift" ? { gift: giftTimes(GIFT_STEPS[r.size ?? "collection"]) } : {}),
     }))
     .concat(home);

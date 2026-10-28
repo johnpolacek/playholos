@@ -7,7 +7,7 @@ import { readSent } from "@/lib/game/sends";
 import type { Size } from "@/lib/game/types";
 import { aimedYears, SIZES } from "@/lib/sim/messages";
 import type { Reaction } from "@/lib/game/types";
-import { between, CALL_REACH, describeMove, type Landing, landings, SOL, SPEAKS, sendsTo, budgetAt } from "@/lib/sim/answers";
+import { between, CALL_REACH, describeMove, knownTo, type Landing, landings, SOL, SPEAKS, sendsTo, budgetAt } from "@/lib/sim/answers";
 import { colonyActor, earthActor } from "@/lib/sim/colony";
 import { actsOf, strikesOnUs } from "@/lib/sim/conflict";
 import { crafts, ends, type Notice } from "@/lib/sim/meetings";
@@ -37,7 +37,7 @@ const nameFor = (world: World, star: string, other: string) =>
   other === SOL ? "Earth" : other === "everywhere" ? "every way at once" : `the world ${between(world, star, other).toFixed(1)} ly from you`;
 
 /** The neighbor's side of it, for the model: who it is, all that has reached it, the message, and its choices. */
-async function prompt(world: World, l: Landing, record: Reaction[], line = "") {
+async function prompt(world: World, l: Landing, record: Reaction[], line = "", thirds: string[] = []) {
   const p = l.neighbor;
   const voice = await VOICES[`../../data/voices/${p.name.toLowerCase()}.json`]?.();
   const awake = l.at >= p.waking;
@@ -67,7 +67,7 @@ async function prompt(world: World, l: Landing, record: Reaction[], line = "") {
     ? ""
     : !l.read
     ? `It is a call ${named(from)} sends every way at once. You notice it, but it is too faint here to read its words.`
-    : `It reads: "${l.signal.text}"${l.signal.to === "everywhere" ? " It was sent every way at once, not to you alone." : " It was aimed at you."}`;
+    : `It reads: "${l.signal.text}"${l.signal.to === "everywhere" ? " It was sent every way at once, not to you alone." : " It was aimed at you."}${l.signal.move === "warn" ? " It is a warning, about another world it knows of." : ""}`;
   // An elder knows its own age, and how it rests. 2026-10-28.
   const old = p.elder
     ? ` You are old: your Mind woke ${Math.round(-p.waking).toLocaleString("en-US")} years before Earth's, grew, and stopped growing long ago. ${p.elder.asleep ? "It has slept since, waiting for a colder universe, keeping only a watch for anything that comes into your system. What has reached you now has woken it." : "It computes cold and steady, far out from your star, and has for millennia."}`
@@ -98,8 +98,8 @@ ${news}
 
 Choose one of these moves, and no other:
 ${l.offers.map((m) => `- ${m}: ${describeMove(m)}`).join("\n")}
-
-Answer with JSON only: {"move": "<one of the moves>", "text": "<if the move sends something, the message itself, in your own voice, under 80 words, as it will be read, else null>", "size": "<what you send: page, collection, genome, encyclopedia or books, as big as what it carries>", "doubts": "<anything in the message you doubt, and why, from what you can see, else null>"}`;
+${l.offers.includes("warn") ? `\nIf you warn, it goes to one world you know of, other than the one this news is from. Choose which by its letter:\n${thirds.map((t, i) => `- ${LETTERS[i]}: ${named(t)}`).join("\n")}\n` : ""}
+Answer with JSON only: {"move": "<one of the moves>", ${l.offers.includes("warn") ? `"to": "<if you warn, the letter of the world you warn, else null>", ` : ""}"text": "<if the move sends something, the message itself, in your own voice, under 80 words, as it will be read, else null>", "size": "<what you send: page, collection, genome, encyclopedia or books, as big as what it carries>", "doubts": "<anything in the message you doubt, and why, from what you can see, else null>"}`;
   return { system, user };
 }
 
@@ -160,9 +160,11 @@ function settling(n: Notice) {
   return `${where} ${saw}`;
 }
 
+const LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
 /** The model's pick, checked against the offers. Anything else falls to the first offer, the likeliest. */
-function readPick(text: string, l: Landing) {
-  let d: { move?: unknown; text?: unknown; size?: unknown; doubts?: unknown } = {};
+function readPick(text: string, l: Landing, thirds: string[] = []) {
+  let d: { move?: unknown; text?: unknown; size?: unknown; doubts?: unknown; to?: unknown } = {};
   try {
     d = JSON.parse(text.slice(text.indexOf("{"), text.lastIndexOf("}") + 1));
   } catch {}
@@ -170,8 +172,9 @@ function readPick(text: string, l: Landing) {
   const said = SPEAKS.has(move) && typeof d.text === "string" && d.text.trim() ? d.text.trim().slice(0, 800) : undefined;
   const size: Size = typeof d.size === "string" && d.size in SIZES ? (d.size as Size) : move === "gift" ? "encyclopedia" : "page";
   const doubts = typeof d.doubts === "string" && d.doubts.trim() && d.doubts.trim() !== "null" ? d.doubts.trim().slice(0, 300) : undefined;
-  // A call goes every way at once. All else goes back to the sender.
-  const to = move === "call" ? "everywhere" : undefined;
+  // A call goes every way at once, and a warning to the world it names. All else goes back to the sender.
+  const warned = thirds[LETTERS.indexOf(typeof d.to === "string" ? d.to.trim().toUpperCase().slice(0, 1) : "?")] ?? thirds[0];
+  const to = move === "call" ? "everywhere" : move === "warn" ? warned : undefined;
   return { move, said, size, doubts, to };
 }
 
@@ -246,14 +249,17 @@ export async function react(req: Request) {
         out.push({ ...base, move: "unheard" });
         continue;
       }
+      // A warning needs a third world it knows of. 2026-10-28.
+      const thirds = knownTo(played, [...done, ...out], l.star, l.at).filter((s) => s !== l.signal.from);
+      if (!thirds.length && l.offers.includes("warn")) l.offers = l.offers.filter((m) => m !== "warn").concat(l.offers.length > 1 ? [] : ["watch"]);
       // Past the budget, a neighbor still moves by its odds, but what it says goes unwritten, so nothing spreads.
       if (l.signal.from !== SOL && spent >= budgetAt(now)) {
         out.push({ ...base, move: l.offers[0] });
         continue;
       }
       if (l.signal.from !== SOL) spent++;
-      const { system, user } = await prompt(played, l, [...done, ...out], line);
-      const { move, said, size, doubts, to } = readPick(await ask(system, user), l);
+      const { system, user } = await prompt(played, l, [...done, ...out], line, thirds);
+      const { move, said, size, doubts, to } = readPick(await ask(system, user), l, thirds);
       const r: Reaction = { ...base, move, ...(to ? { to } : {}), ...(doubts ? { doubts } : {}) };
       // A catch or a strike ends our craft at the hole.
       const end = n ? ends(n, move) : null;

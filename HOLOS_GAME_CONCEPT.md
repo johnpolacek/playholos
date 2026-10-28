@@ -226,6 +226,12 @@ Settled 2026-10-26, from a headless playtest: at Year 48 the Will heard HD 10307
     - Of 3,988 pairs in the 33 games, 72 could hear each other at all. 69 of those are Pelle’s one loud Year, 5×10⁹ W. A hum of 10⁴ W is heard nowhere, and Hael’s 10¹⁰ W was aimed at Sol.
     - So a pair could hear each other by Year 0 in 8 games of 33, almost always Pelle. Earth is the loud one, as [Earth’s loud past](#earths-loud-past) says.
     - So warning stays out of play. It returns only if neighbors come to know each other, by calls in play, or by seeing a Mind’s waste heat, as our Scan finds grey glows.
+  - *Warnings are back, 2026-10-28,* now that neighbors come to know each other by calls and glows.
+    - *Whom a neighbor can warn:* any world whose message, call or glow has reached it, and Earth if it heard our radars or any word or craft of ours. Never the world the news is about.
+    - *If it knows no third world,* warning isn’t offered. The model picks whom from those it knows.
+    - *A warning is a message,* written in the warner’s voice, at its dishes’ pace. The world warned takes it by its tip-off table.
+    - *A warning sent to us* shows on Scan as one. Only its words say whom it is about.
+    - *Our colony and Earth’s stand-in can warn too,* by the same rule.
   - *How they come to know each other, settled 2026-10-26.*
     - *By calls.* A contacter that hears a call may call out too: call joins its broadcast table at 10, before its dials, so Iru calls 10% of the time. The seed never rolls a broadcast, so no world moves. In a playtest on seed 18 before this, our call reached 24 worlds and none passed it on.
     - *By glows.* A woken Mind sees every star near it as well as our Halo Survey does, a sample: a compact glow over 3×10¹⁸ W at 10 pc. A neighbor’s glow starts at Earth’s 2040 scale and doubles every 10 Years, 5 if inward, so they find each other late. Across the 33 games: 2 pairs by Year 0, 84 by Year 100, 1,089 more by Year 200.
@@ -820,7 +826,7 @@ Settled 2026-10-28, from the designer: anything available to another civilizatio
     - *Earth's stand-in runs the same way* once the Will crosses elsewhere: from the Year the Will left, it takes what lands at Sol, moves by our charter, and reports to the Will a light-time away. Not once Earth's Mind is lost.
     - *Not yet:* harm from a strike on our colony, a strike from a colony at a hole, and a stand-in's guard or strike building real pickets and bullets.
   - Not yet: which builds a backup can still make, and where.
-- **Not yet:** warnings between neighbors, and dimming our glow.
+- **Not yet:** dimming our glow.
 
 ## Hostility
 

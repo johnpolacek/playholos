@@ -173,6 +173,8 @@ export interface Heard {
   about?: string;
   /** Word from our colony of a move it made by its own choice, and whose news it was on. 2026-10-28. */
   ours?: { chose: string; on?: string };
+  /** A warning sent to us about another world, which it names as it knows it. 2026-10-28. */
+  warning?: true;
 }
 
 /** What a flyby saw of a world, and sent home. Pictures show what is larger than a pixel: haze, bare ground, cloud

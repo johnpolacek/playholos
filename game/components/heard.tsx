@@ -60,6 +60,7 @@ export function Heard() {
       ["HOLDS", h.text ? `“${h.text}”` : "A pattern no star makes. We can’t read it yet."],
       ["FROM", `${h.star}, ${h.d.toFixed(1)} light-years away`],
       ...(h.overheard ? ([["SENT TO", "Every way at once, on news from another world. We overheard it."]] as [string, string][]) : []),
+      ...(h.warning ? ([["SENT TO", "Us, a warning about another world they know of"]] as [string, string][]) : []),
       ...(h.about ? ([["ON NEWS OF", h.about], ["CAUGHT BY", "Our dishes, which keep listening to every craft we send"]] as [string, string][]) : []),
       ...(h.answers !== undefined
         ? ([

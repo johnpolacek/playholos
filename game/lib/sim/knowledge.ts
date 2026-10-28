@@ -515,6 +515,7 @@ export function describe(view: EarthView): string {
         // Only a knock's words are read at once, and nothing in the game reads the rest. Added 2026-10-23, after the
         // Mind offered to go through an answer's words, and then, told they were unread, to read them.
         (h.overheard ? " It was sent every way at once, on news from another world, not to us. We overheard it." : "") +
+        (h.warning ? " It was sent to us as a warning about another world they know of. Which one, only its words can say." : "") +
         (h.answers !== undefined ? ` It answers our message, which said: "${h.answers}" We caught it listening at every star we send to.` : "") +
         (h.gift ? ` It is a gift of their knowledge, all of it here. From Year ${one(h.arrived)}: ${giftWords(h.gift)}` : "") +
         (h.text ? ` It reads: "${h.text}"` : " Its words aren't in what Earth holds, and no build reads them.")).join("\n")

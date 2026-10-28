@@ -10,7 +10,7 @@ import { hop, seedProbes } from "./spread.ts";
 import { POOL } from "./pool.ts";
 import { loadVoices, loadWorld } from "./world.ts";
 import { offEarth, pace, type Order } from "./works.ts";
-import { between, glowsSeen, landings, SOL } from "./answers.ts";
+import { between, glowsSeen, knownTo, landings, SOL } from "./answers.ts";
 import { colonyActor, earthActor, ourCodes, ourKind, ourTable } from "./colony.ts";
 
 test("the generator is CPython's, seeded from ints and strings", () => {
@@ -462,4 +462,21 @@ test("Earth's stand-in takes what lands at Sol once the Will has left, and nothi
   const knock = (at: number) => ({ key: `k${at}:x`, sent: `k${at}`, star: world.stars[p.star]?.shown ?? p.star, d: p.d, at, move: "knock", text: "Hello?" });
   const got = landings({ ...world, neighbors: [...world.neighbors, earth] }, [], [knock(50), knock(250)], 600, "t").filter((l) => l.neighbor.star === SOL);
   assert.deepEqual(got.map((l) => l.signal.id), ["k250:x"]);
+});
+
+test("a warning goes only to a world its sender knows of, and lands as a tip-off", async () => {
+  const world = await loadWorld(10);
+  const shown = (n: { star: string }) => world.stars[n.star]?.shown ?? n.star;
+  const [a, b, c] = world.neighbors.filter((n) => !n.dead && !n.elder && n.waking < 0);
+  // a knows b by b's call, and Earth only if it heard our radars.
+  const call = { key: `call:${shown(a)}`, sent: "call", star: shown(a), d: a.d, at: 20, move: "watch", from: shown(b) };
+  assert.deepEqual(knownTo(world, [call], shown(a), 10).filter((s) => s !== SOL), []);
+  assert.deepEqual(knownTo(world, [call], shown(a), 30).filter((s) => s !== SOL), [shown(b)]);
+  assert.equal(knownTo(world, [], shown(a), 300).includes(SOL), a.heard);
+  // a warns b about c: b takes it by its tip-off table.
+  const warn = { key: "w:x", sent: "w", star: shown(a), d: a.d, at: 30, move: "warn", from: shown(c), to: shown(b), text: "Beware the world near you." };
+  const got = landings(world, [], [call, warn], 2000, "t").filter((l) => l.signal.id === "w:x");
+  assert.equal(got.length, 1);
+  assert.equal(got[0].star, shown(b));
+  assert.equal(got[0].news, "tipoff");
 });

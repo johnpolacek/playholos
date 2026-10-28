@@ -14,11 +14,22 @@ import type { Neighbor, World } from "./types.ts";
 import catalog from "../../data/works.json" with { type: "json" };
 
 /** Moves that send something, which the model writes in the neighbor's voice. */
-export const SPEAKS = new Set(["knock", "answer", "gift", "mask", "call"]);
+export const SPEAKS = new Set(["knock", "answer", "gift", "mask", "call", "warn"]);
 
-/** Moves held out of play. A warning needs a third world the neighbor knows of, and who has heard whom is not worked
- *  out yet, 2026-10-26. */
-const HELD = new Set(["warn"]);
+/** Moves held out of play. Warnings came back 2026-10-28, once neighbors know each other by calls and glows: a
+ *  warning goes only to a world its sender knows of, by knownTo(). */
+const HELD = new Set<string>();
+
+/** The worlds a star knows of by Year `at`, by shown name or Sol: whoever's message, call or glow reached it, and Earth
+ *  if it heard our radars, or any word or craft of ours reached it. Who can be warned. 2026-10-28. */
+export function knownTo(world: World, done: readonly Reaction[], star: string, at: number) {
+  const out = new Set<string>();
+  const p = world.neighbors.find((n) => (world.stars[n.star]?.shown ?? n.star) === star);
+  if (p?.heard && (p.heardSince ?? Infinity) <= at) out.add(SOL);
+  for (const r of done) if (r.star === star && r.at <= at && r.move !== "unheard") out.add(r.from ?? SOL);
+  out.delete(star);
+  return [...out];
+}
 
 /** Earth, as a sender or a target. */
 export const SOL = "Sol";
@@ -180,7 +191,8 @@ export function landings(world: World, sent: Sent[], done: Reaction[], now: numb
     const spoke = signal.from === SOL
       ? p.inbound.some((i) => i.sent < (sentOf?.y ?? at))
       : done.some((r) => r.star === star && sendsTo(r) === signal.from && r.text);
-    const news: News = signal.to === "everywhere" ? "broadcast" : spoke ? "reply" : "knock";
+    // A warning about someone else is a tip-off, by its own table.
+    const news: News = signal.move === "warn" ? "tipoff" : signal.to === "everywhere" ? "broadcast" : spoke ? "reply" : "knock";
     out.push({ key, signal, sent: sentOf, neighbor: p, star, at, d, news, read, missed, offers: missed ? [] : offers(p.name, news, die, 3, p.ours?.table) });
   };
   for (const s of sent) {
