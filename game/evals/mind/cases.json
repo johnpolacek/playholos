@@ -27,9 +27,6 @@
       "builds": [
         "Thought Fields",
         "All-Sky Watch"
-      ],
-      "observe": [
-        "Image Fomalhaut again"
       ]
     },
     "heard-allsky": {
@@ -272,13 +269,6 @@
       "kind": "self",
       "charter": "Understand the sky before we touch it.",
       "ask": "How are people holding up, after the bomb?"
-    },
-    {
-      "id": "c09",
-      "state": "blockade-y4",
-      "kind": "fact",
-      "charter": "Understand the sky before we touch it.",
-      "ask": "What did the Fomalhaut picture show?"
     },
     {
       "id": "c10",

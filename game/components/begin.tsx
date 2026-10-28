@@ -3,8 +3,6 @@ import { Link } from "react-router";
 import { useGame } from "@/components/game-provider";
 import { MindNote } from "@/components/mind-note";
 import { useCompute } from "@/components/picks";
-import { MS_PER_YEAR } from "@/lib/game/clock";
-import { FOMALHAUT } from "@/lib/game/plan";
 import type { Save } from "@/lib/game/types";
 import { useAccess } from "@/lib/key";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
@@ -49,11 +47,7 @@ const STEPS: Step[] = [
   {
     name: "Review our scans",
     short: "Review scans",
-    // Fomalhaut's image is offered at the review's end. Once queued, its landing is the line.
-    line: (s) =>
-      s.plan?.observe.length
-        ? `Fomalhaut’s new image lands ${Math.round((FOMALHAUT.lands * MS_PER_YEAR) / 1000)} seconds after we begin.`
-        : "The few things in our sky we can’t explain yet, one at a time.",
+    line: () => "The few things in our sky we can’t explain yet, one at a time.",
     done: (s) => !!s.reviewed,
     to: "/?review",
   },

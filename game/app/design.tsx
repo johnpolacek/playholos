@@ -54,7 +54,6 @@ const TYPE: { cls: string; spec: string; use: string; text: string }[] = [
 const LEADS: { name: string; art: Art }[] = [
   { name: "A world felt", art: { kind: "orbit", a: 1, e: 0 } },
   { name: "A stretched orbit", art: { kind: "orbit", a: 1.35, e: 0.45 } },
-  { name: "Dust clouds", art: { kind: "clouds" } },
   { name: "A reply", art: { kind: "reply", sent: [], ly: 12 } },
   { name: "A black hole", art: { kind: "dark", mass: 9.6, ly: 1560 } },
   { name: "A grey glow", art: { kind: "glow", ly: 30 } },

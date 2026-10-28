@@ -1,7 +1,6 @@
 import { lyOf, YEAR_0 } from "@/lib/game/clock";
 import { KNOCKS } from "@/lib/game/knocks";
 import { lightTime } from "@/lib/light";
-import { FOMALHAUT } from "@/lib/game/plan";
 import { BANDS, iwa, owa, WIDE } from "@/lib/sim/observing";
 import type { DarkMass, FeltWorld, Gas, Glow, Read, Visit } from "@/lib/sim/types";
 import { CATALOG } from "@/lib/sim/works";
@@ -11,8 +10,7 @@ import { type System, SYSTEMS } from "./systems";
 const GENERATIONS = CATALOG.seedProbe.generations;
 
 // Earth's real leads in 2040, each with its own page: the world next door, whose air we can't read from here, a world
-// on a stretched orbit, every world the planet hunters felt by 2040, nearest first, Fomalhaut's collisions, and the
-// first star that could answer our messages. Each page is a
+// on a stretched orbit, every world the planet hunters felt by 2040, nearest first, and the first star that could answer our messages. Each page is a
 // report as HOLOS_GAME_CONCEPT.md has it: what we measured, what it could be, each with the Mind's word, and what would
 // tell us. Real numbers from HOLOS_RESEARCH.md, "Earth's leads, as of October 2026".
 
@@ -58,10 +56,9 @@ export interface Reading {
   elder?: Visit["elder"];
 }
 
-/** What a lead's page draws: a world's orbit against its star's warm zone, Fomalhaut's belt, or a message's trip. */
+/** What a lead's page draws: a world's orbit against its star's warm zone, or a message's trip. */
 export type Art =
   | { kind: "orbit"; a: number; e: number; hz?: [number, number] }
-  | { kind: "clouds" }
   | { kind: "reply"; sent: number[]; ly: number }
   | { kind: "dark"; mass: number; ly: number }
   | { kind: "pair"; mass: number; ly: number; a: number; e: number; days: number }
@@ -792,43 +789,6 @@ export function leadsOf(felt: FeltWorld[], holes: DarkMass[] = [], glows: Glow[]
     // told the intro nothing new.
     ...shown.filter(([, far]) => far).map(([h]) => darkLead(h, true)),
     {
-      slug: "fomalhaut",
-      star: "Fomalhaut",
-      what: "Too many collisions",
-      line: "Two dust clouds in 20 years. We expected one in 100,000 years.",
-      ly: 25.1,
-      ask: "Why are there so many collisions at Fomalhaut?",
-      brief:
-        "Two crashes in about 20 years, where we expected one in 100,000 years. Our best guess is one old breakup, still grinding itself down. Thirty seconds on the space telescope would show if the 2023 cloud has moved.",
-      facts: [
-        ["Its star", "A young white star, 440 million years old"],
-        ["First cloud", "Seen in 2004, spreading by 2013"],
-        ["Second cloud", "Seen in 2023, close to the first"],
-        ["Expected", "One such crash in 100,000 years or more"],
-      ],
-      // The four explanations and their words are the first mock's, so its first reading can move them.
-      could: [
-        {
-          what: "Rubble from one old breakup",
-          why: "One large rock, broken long ago, could keep its pieces crashing for a while.",
-          odds: "roughly even",
-        },
-        {
-          what: "A hidden world stirring the belt",
-          why: "Its pull could send rocks across each other’s paths.",
-          odds: "very unlikely",
-        },
-        { what: "Chance", why: "Two rare crashes, close together, by luck alone.", odds: "unlikely" },
-        {
-          what: "Something moving rocks",
-          why: "A new point of light could be something made. Nothing says so.",
-          odds: "almost no chance",
-        },
-      ],
-      tells: ["Imaging Fomalhaut again, with thirty seconds on the space telescope. A crash’s cloud drifts outward and fades."],
-      art: { kind: "clouds" },
-    },
-    {
       slug: "luytens-star",
       star: "Luyten’s Star",
       what: "A reply could come",
@@ -857,27 +817,9 @@ export function leadsOf(felt: FeltWorld[], holes: DarkMass[] = [], glows: Glow[]
   ]);
 }
 
-/**
- * Readings by lead. Only Fomalhaut's so far: the one observation open at Year 0. It makes the lead stranger, as the
- * concept has it. The third cloud is the game's, not real: the first two were found in 2004 and 2023.
- */
-export const READINGS: Record<string, Reading[]> = {
-  fomalhaut: [
-    {
-      id: "fomalhaut-third-cloud",
-      needs: FOMALHAUT.name,
-      at: FOMALHAUT.lands,
-      by: "Space telescope",
-      title: "A third cloud",
-      line: "The cloud seen in 2023 has spread and faded, as dust does. A new one sits beside it. Three crashes in 36 years, where we expected one in 100,000.",
-      mind: "Chance can’t explain three. The likeliest answer is dull: one old breakup, still grinding itself down. A Year of watching would tell us if the clouds share one orbit.",
-      now: ["likely", "unlikely", "almost no chance", "very unlikely"],
-      tells: [
-        "Watching Fomalhaut through a Year, monthly, with the space telescope. If the clouds share one orbit, one breakup made them all.",
-      ],
-    },
-  ],
-};
+/** Readings by lead, from what the plan observes. None is open at Year 0 since Fomalhaut’s lead was dropped,
+ *  2026-10-28. */
+export const READINGS: Record<string, Reading[]> = {};
 
 /** The readings that have landed on a lead by this Year, from what the plan observes. */
 export function landed(slug: string, observe: string[] | undefined, year: number | null): Reading[] {

@@ -10,7 +10,7 @@ import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motio
 // The queue: what we plan to start at Year 0, each on its whole journey from Year 0, in Scan's face: a dot, its name
 // and line, and how long until it's done in play time, as Scan counts light's. A tap on a build opens its page,
 // where it comes in or out of the queue, and what we could also start waits below. Our messages already on their way
-// moved to Reach, and the one observation to Fomalhaut's lead on Scan, 2026-10-18. The Mind's studies keep a tenth of
+// moved to Reach, 2026-10-18. The Mind's studies keep a tenth of
 // our compute on their own, and what idle instruments sweep waits until sweeps are built, so neither is ours to set
 // here, 2026-10-19. Before Begin, each queued build can be dragged by its dots to a new place in line, or moved with
 // the arrow keys, since the first in line gets our compute first, 2026-10-22. Once Year 0 has begun, what our builds have opened waits below, to order in play, 2026-10-22.

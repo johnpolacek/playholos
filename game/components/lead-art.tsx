@@ -5,7 +5,7 @@ import type { Art } from "@/lib/game/leads";
 import { VisitArt } from "@/components/visit-art";
 import { prefersReducedMotion } from "@/lib/motion";
 
-// A lead's page, drawn: a world's orbit against its star's warm zone, Fomalhaut's belt and its two clouds, or our
+// A lead's page, drawn: a world's orbit against its star's warm zone, or our
 // message's trip to Luyten's Star and the earliest a reply could come back, or a black hole shifting the stars behind
 // it. Each moves, unless motion is reduced.
 
@@ -81,55 +81,6 @@ function Orbit({ a, e, hz }: { a: number; e: number; hz?: [number, number] }) {
       <circle cx={cx} cy={cy} r={5} fill="#f4e7c5" />
       <circle cx={cx} cy={cy} r={11} fill="#f4e7c5" opacity={0.12} />
       <circle ref={dot} cx={cx + a * (1 - e) * s} cy={cy} r={3.5} fill="var(--ink)" />
-    </svg>
-  );
-}
-
-// Fomalhaut's belt, tilted as we see it, and its clouds on the inner side: the first, from 2004, drifting outward and
-// fading as it did, and the second, from 2023, still bright. Once our first image lands, the second has faded and a
-// third, new, sits beside it.
-function Clouds({ third }: { third: boolean }) {
-  const [cx, cy] = [W / 2, H / 2];
-  const first = useRef<SVGGElement>(null);
-  const second = useRef<SVGCircleElement>(null);
-  const fresh = useRef<SVGCircleElement>(null);
-  useTicks((t) => {
-    const k = (t % 8) / 8;
-    first.current?.setAttribute("transform", `translate(${-14 * k} ${4 * k})`);
-    first.current?.setAttribute("opacity", String(1 - 0.8 * k));
-    (third ? fresh : second).current?.setAttribute("r", String(9 + 3 * Math.sin(t * 1.6)));
-  }, 4);
-  return (
-    <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img" aria-label="Fomalhaut’s belt and its two clouds">
-      <g transform={`rotate(-22 ${cx} ${cy})`}>
-        <ellipse cx={cx} cy={cy} rx={138} ry={56} fill="none" stroke="var(--fill2)" strokeWidth={12} opacity={0.1} />
-        <ellipse cx={cx} cy={cy} rx={138} ry={56} fill="none" stroke="var(--fill2)" strokeWidth={0.8} opacity={0.45} />
-      </g>
-      <circle cx={cx} cy={cy} r={6} fill="#f4f6ff" />
-      <circle cx={cx} cy={cy} r={14} fill="#f4f6ff" opacity={0.12} />
-      <g ref={first}>
-        <circle cx={cx - 72} cy={cy + 6} r={7} fill="var(--you)" opacity={0.35} />
-        <circle cx={cx - 72} cy={cy + 6} r={2.5} fill="var(--you)" />
-      </g>
-      <text x={cx - 58} y={cy + 9} className="fill-muted font-mono text-[8px]">
-        2004
-      </text>
-      <g opacity={third ? 0.45 : 1}>
-        <circle ref={second} cx={cx - 62} cy={cy + 26} r={third ? 12 : 9} fill="var(--you)" opacity={third ? 0.2 : 0.3} />
-        <circle cx={cx - 62} cy={cy + 26} r={third ? 2 : 3} fill="var(--you)" />
-        <text x={cx - 46} y={cy + 29} className="fill-ink font-mono text-[8px]">
-          {third ? "2023 · FADING" : "2023"}
-        </text>
-      </g>
-      {third && (
-        <>
-          <circle ref={fresh} cx={cx - 40} cy={cy + 40} r={9} fill="var(--you)" opacity={0.35} />
-          <circle cx={cx - 40} cy={cy + 40} r={3} fill="var(--you)" />
-          <text x={cx - 24} y={cy + 43} className="fill-you font-mono text-[8px]">
-            NEW · YEAR 0.1
-          </text>
-        </>
-      )}
     </svg>
   );
 }
@@ -342,10 +293,8 @@ function GlowArt({ ly, steady }: { ly: number; steady?: boolean }) {
   );
 }
 
-/** `read` is the latest reading's id, for art that changes once one lands. */
-export function LeadArt({ art, read }: { art: Art; read?: string }) {
+export function LeadArt({ art }: { art: Art }) {
   if (art.kind === "orbit") return <Orbit a={art.a} e={art.e} hz={art.hz} />;
-  if (art.kind === "clouds") return <Clouds third={read === "fomalhaut-third-cloud"} />;
   if (art.kind === "dark") return <Dark mass={art.mass} ly={art.ly} />;
   if (art.kind === "pair") return <Pair mass={art.mass} ly={art.ly} a={art.a} e={art.e} days={art.days} />;
   if (art.kind === "glow") return <GlowArt ly={art.ly} steady={art.steady} />;

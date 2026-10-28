@@ -5,7 +5,6 @@ import { BackBar } from "@/components/back-bar";
 import { LeadArt } from "@/components/lead-art";
 import { SystemArt } from "@/components/system-art";
 import { LeadMark } from "@/components/marks";
-import { Look } from "@/components/picks";
 import { useLeads } from "@/components/scan";
 import { span, lyOf } from "@/lib/game/clock";
 import { ODDS, type Odds, type Reading } from "@/lib/game/leads";
@@ -14,10 +13,9 @@ import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motio
 
 // One lead, as a report: drawn, then what we measured, what it could be with the Mind's word for each, and what would
 // tell us. Its latest reading, once one lands, comes first, and the words it moved show what they were. The map flies
-// to its star while it is open, and back out when we leave. Before Begin, Fomalhaut's page offers the one observation
-// open at Year 0. Asking the Mind is the last step. Beside its distance, a link to its destination on Reach, and every
+// to its star while it is open, and back out when we leave. Asking the Mind is the last step. Beside its distance, a link to its destination on Reach, and every
 // way we could go there, as that page links back here, 2026-10-19. A lead about a world is drawn as its whole system,
-// every world known there on its orbit. Fomalhaut's clouds and Luyten's Star's messages keep their own drawings, and
+// every world known there on its orbit. Luyten's Star's messages keep their own drawing, and
 // their systems follow under what we measured, 2026-10-19.
 
 /** The Mind's word, on its seven-step scale. A word a reading moved shows where it was, ringed, and what it was. */
@@ -102,7 +100,7 @@ function AirBands({ air }: { air: NonNullable<Reading["air"]> }) {
 
 export function LeadPage({ slug }: { slug: string }) {
   const { leads, dials, readings, fresh, setLook } = useLeads();
-  const { see, year } = useGame();
+  const { see } = useGame();
   const navigate = useNavigate();
   const root = useRef<HTMLDivElement>(null);
   const i = leads.findIndex((l) => l.slug === slug);
@@ -192,7 +190,7 @@ export function LeadPage({ slug }: { slug: string }) {
         {lead.system && lead.art.kind === "orbit" ? (
           <SystemArt system={lead.system} />
         ) : (
-          <LeadArt art={lead.art} read={read?.id} />
+          <LeadArt art={lead.art} />
         )}
       </div>
 
@@ -234,12 +232,6 @@ export function LeadPage({ slug }: { slug: string }) {
           {t}
         </p>
       ))}
-      {/* Before Begin, the one observation open at Year 0 is ours to queue here. */}
-      {lead.slug === "fomalhaut" && year === null && (
-        <div data-m className="mt-3">
-          <Look />
-        </div>
-      )}
 
       <button
         data-m

@@ -5,18 +5,18 @@ import { CostLine, previews, usePreview } from "@/components/costs";
 import { BuildMark, buildTone } from "@/components/marks";
 import { OpensLine } from "@/components/opens";
 import { Face, ListHead } from "@/components/tab-head";
-import { MS_PER_YEAR, span, tenths } from "@/lib/game/clock";
+import { span, tenths } from "@/lib/game/clock";
 import { FOUND, rockOf } from "@/lib/game/rocks";
 import { colonyOf, harmOrders, hitsAt, restoreOf, survivorAt } from "@/lib/game/hits";
 import { target } from "@/lib/game/sends";
 import type { EarthPast } from "@/lib/game/past";
-import { BUILDS, buildSlug, EMPTY, FOMALHAUT, inUse, lacks, moves, needs, openAt, PAST, schedule, sharesAt, takenAt } from "@/lib/game/plan";
+import { BUILDS, buildSlug, EMPTY, inUse, lacks, moves, needs, openAt, PAST, schedule, sharesAt, takenAt } from "@/lib/game/plan";
 import { SITES } from "@/lib/game/sites";
 import type { Plan } from "@/lib/game/types";
 
 // Planning our waking, on the Build tab: what starts at Year 0. The Mind's walk through what it would start with
 // queues nothing unless we say. A tap on a build opens its page, where we add it to the queue, and the queue above
-// draws it. The one observation is offered on Fomalhaut's lead instead, on Scan. Every change is saved as it is made.
+// draws it. Every change is saved as it is made.
 
 /** The plan, and a change to it, saved at once. */
 export function usePlan() {
@@ -102,9 +102,6 @@ export const toggleBuild = (name: string) => (p: Plan) => ({
   ...p,
   builds: p.builds.includes(name) ? p.builds.filter((b) => b !== name) : [...p.builds, name],
 });
-
-/** The one observation open at Year 0, in or out. */
-export const toggleLook = (p: Plan) => ({ ...p, observe: p.observe.length ? [] : [FOMALHAUT.name] });
 
 /** A row's mark: its place in the order, or an open circle. Pointed at, the row shows what a tap does. */
 export function Mark({ n, look = false }: { n: number | null; look?: boolean }) {
@@ -289,26 +286,5 @@ export function Opened({ scale, now, className = "" }: { scale: number; now: num
         ))}
       </ul>
     </>
-  );
-}
-
-/** The one observation open at Year 0, offered on Fomalhaut's lead: a tap queues it, or takes it out. */
-export function Look() {
-  const { plan, change } = usePlan();
-  const queued = plan.observe.includes(FOMALHAUT.name);
-  const secs = Math.round((FOMALHAUT.lands * MS_PER_YEAR) / 1000);
-  return (
-    <button
-      onClick={() => change(toggleLook)}
-      aria-pressed={queued}
-      className={`group flex w-full items-start gap-2.5 rounded-xl border px-3 py-2.5 text-left transition-colors ${queued ? "border-other bg-other/10" : "border-other/50 hover:bg-other/5"}`}
-    >
-      <Mark n={queued ? 0 : null} look />
-      <span className="min-w-0 grow text-[14px] leading-snug">
-        {queued ? "Queued: image Fomalhaut again" : FOMALHAUT.name}
-        <span className="block text-[12px] text-muted">It lands {secs} seconds after we begin.</span>
-      </span>
-      <span className="shrink-0 font-mono text-[11px] text-muted tabular-nums">Year {FOMALHAUT.lands}</span>
-    </button>
   );
 }

@@ -15,7 +15,7 @@ import { type System, worldName } from "@/lib/game/systems";
 
 // Earth's leads, drawn for Scan. The stars within 50 light-years from above, and Earth's real leads lit, each with a
 // thread out from Sol: a world on a stretched orbit, every world the planet hunters felt by 2040, nearest first,
-// Fomalhaut's collisions, and the first star that could answer our messages. Beside each, how long a message takes to
+// and the first star that could answer our messages. Beside each, how long a message takes to
 // reach it, in play time, and its distance: what a call would cost. Picking one shows its path out from Sol in depth
 // and opens what we measured of it.
 

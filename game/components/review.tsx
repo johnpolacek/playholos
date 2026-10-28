@@ -5,7 +5,6 @@ import { useGame } from "@/components/game-provider";
 import { Lens } from "@/components/icons";
 import { MindNote } from "@/components/mind-note";
 import { LeadMark } from "@/components/marks";
-import { Look } from "@/components/picks";
 import { useLeads, useStepTap } from "@/components/scan";
 import { span, lyOf } from "@/lib/game/clock";
 import {
@@ -17,8 +16,7 @@ import {
 } from "@/lib/motion";
 
 // Reviewing our scans, the first of the four things we would do before Begin. The Mind takes us through Earth's
-// leads one at a time, and the map turns to each star as we reach it. Fomalhaut comes last, with the one observation
-// open at Year 0, so the image is offered once we know why it matters. Settled 2026-10-18. Reaching the last lead
+// leads one at a time, and the map turns to each star as we reach it. Settled 2026-10-18. Reaching the last lead
 // counts as done, and says so: the head reads DONE, the top bar's count ticks, and the way on is the next of
 // the four, or back to Scan once all are done.
 
@@ -78,7 +76,7 @@ export function Thread({
 
 export function Review({ onClose }: { onClose(): void }) {
   const { leads, dials, readings, setLook, close, setClose, setStep } = useLeads();
-  const { year, did } = useGame();
+  const { did } = useGame();
   const root = useRef<HTMLDivElement>(null);
   const next = useRef<HTMLButtonElement>(null);
   const navigate = useNavigate();
@@ -86,15 +84,8 @@ export function Review({ onClose }: { onClose(): void }) {
   const then = useNext("/?review");
   const [at, setAt] = useState(0);
 
-  // The leads in the order we take them: as Scan lists them, with Fomalhaut last.
-  const order = useMemo(
-    () =>
-      [...leads.keys()].sort(
-        (a, b) =>
-          +(leads[a].slug === "fomalhaut") - +(leads[b].slug === "fomalhaut"),
-      ),
-    [leads],
-  );
+  // The leads in the order we take them: as Scan lists them.
+  const order = useMemo(() => [...leads.keys()], [leads]);
   const last = order.length;
   const i = at > 0 ? order[at - 1] : -1;
   const lead = leads[i];
@@ -232,11 +223,6 @@ export function Review({ onClose }: { onClose(): void }) {
                 )}
               </MindNote>
             </div>
-            {lead.slug === "fomalhaut" && year === null && (
-              <div data-r className="mt-1">
-                <Look />
-              </div>
-            )}
             {lead.system && (
               <button
                 data-r

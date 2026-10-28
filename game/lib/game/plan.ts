@@ -231,9 +231,6 @@ export const SAYS: Record<string, string> = {
 /** A build's page on the Build tab, by its name. */
 export const buildSlug = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
 
-/** The one observation open at Year 0: thirty seconds of the space telescope. */
-export const FOMALHAUT = { name: "Image Fomalhaut again", what: "Has the new cloud moved?", lands: 0.1 };
-
 export const EMPTY: Plan = { builds: [], observe: [] };
 
 /** The charter's strongest lean: which dial, and whether it leans low. */
@@ -274,8 +271,7 @@ export function ordersOf(plan: Plan) {
     orders.push(o.name === "Thought Fields" ? { y: o.y, standing: "Data center" } : { y: o.y, begin: pacedName(o.name) });
   for (const o of plan.stops ?? []) orders.push({ y: o.y, drop: o.name === "Thought Fields" ? "Data center" : pacedName(o.name) });
   for (const o of plan.gifts ?? []) orders.push({ y: o.y, gift: o.name, steps: GIFT_STEPS[o.size ?? "collection"] });
-  const aside = plan.observe.length ? ([[0, FOMALHAUT.lands, 0.05]] as const) : [];
-  return { orders, aside, follow: false };
+  return { orders, aside: [], follow: false };
 }
 
 /** A build's last word in our order: the Year it was last ordered, or taken back, whichever came later. Year 0's queue

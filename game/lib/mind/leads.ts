@@ -9,7 +9,6 @@
 export const EARTH_LEADS = `Earth's leads at Year 0. These are real oddities. What a study or an observation will find is not known yet.
 - Proxima b, 4.24 ly, the nearest world: at least 1.06 Earth masses, in a flaring red dwarf's warm zone, 11.2-day year. Its air is unread: it sits 37 thousandths of an arcsecond from its star in our sky, too close for any telescope Earth has, and for the Infrared Telescope, which splits a world from 56. The 15 m Mirror splits from 24, so it would just reach Proxima b, and read its oxygen and ozone but not its water. Its star has likely stripped it bare: rocky worlds measured near red dwarfs have proved bare, and models keep air only on the largest and coolest. The two roads on Reach, sails and a flyby probe, go there.
 - 82 Eridani d, 19.7 ly: at least 5 Earth masses, on a stretched orbit through a Sun-like star's warm zone. Its air is unread.
-- Fomalhaut's new cloud, 25 ly: a bright point that drifts and fades, as a cloud from a collision would.
 - Every world Earth has felt by its tug on its star is a lead too. They are listed below, from what Earth knows. Never invent one.
 - The first reply window: Luyten's Star, 12.3 ly. Earth's 2017 and 2018 messages both reached it in 2030. A reply to the 2017 message could come at Year 2.3, and to the 2018 message at Year 2.9.
 

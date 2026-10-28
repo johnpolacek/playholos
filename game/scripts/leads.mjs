@@ -23,7 +23,6 @@ const out = {};
 for (const [shown, gl] of [
   ["Proxima Centauri", "Gl 551"],
   ["82 Eridani", "Gl 139"],
-  ["Fomalhaut", "Gl 881"],
   ["Luyten's Star", "Gl 273"],
 ]) {
   const s = catalog.get(key(gl));

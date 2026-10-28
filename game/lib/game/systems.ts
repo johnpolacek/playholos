@@ -82,18 +82,4 @@ export const SYSTEMS: Record<string, System> = {
       { name: "e", a: 0.849, e: 0.03, days: 542, mass: 9.3, status: "candidate" },
     ],
   },
-  // No world confirmed. Its dust, from Gáspár et al. 2023 with JWST and ALMA: a belt near 10 AU, dust between the
-  // belts, and the main ring at 133 to 158 AU, its middle about 15 AU off the star. The "Great Dust Cloud" proved to
-  // be a galaxy behind it, so it is left out.
-  fomalhaut: {
-    temp: 8590,
-    lum: 16.6,
-    worlds: [],
-    belts: [
-      { name: "inner belt", from: 8, to: 12 },
-      { name: "dust between", from: 35, to: 133 },
-      { name: "main ring", from: 133, to: 158 },
-    ],
-    beyond: "Its companions, 0.9 and 2.5 light-years out",
-  },
 };

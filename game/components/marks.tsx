@@ -6,7 +6,7 @@ import { gsap, prefersReducedMotion, useGSAP } from "@/lib/motion";
 // Each row's mark on Scan, Build and Reach, in place of a dot, and beside the name on its page. Plain things are
 // Lucide's shapes (ISC license, lucide.dev), drawn on its 24-unit grid with its 2-unit line, which at our size is the
 // 1.3 line of our own marks on 16. The game's own ideas are ours. Every mark moves, a little: a world on its stretched
-// orbit, faster near its star, a new world turning, two puffs of dust on Fomalhaut's ring, a message out and a reply
+// orbit, faster near its star, a new world turning, a message out and a reply
 // back, the sky watch's dish sweeping, a flash, thought breathing as the Mind's mark does, a telescope nodding, a
 // rocket's thrust, a yard rocking and a probe leaving it, the Moon rocking as it librates, and the array's light
 // pushing a sail up. What our builds open moves too: a sun over a panel, a mirror gathering light, rock thrown off the
@@ -582,50 +582,6 @@ function Orbit({ e, size, still }: { e: number; size: number; still?: boolean })
   );
 }
 
-/** Fomalhaut and its ring, where two puffs of dust swell and fade in turn. */
-function Dust({ size, still }: { size: number; still?: boolean }) {
-  const puff = (x: number, y: number, k: string) => (
-    <g data-k={k} fill="currentColor" stroke="none">
-      {[
-        [0, 0],
-        [1.5, -0.7],
-        [-1.3, -0.9],
-        [0.9, 1.3],
-        [-1.2, 1.1],
-      ].map(([dx, dy]) => (
-        <circle key={`${dx}${dy}`} cx={x + dx} cy={y + dy} r="0.85" />
-      ))}
-    </g>
-  );
-  return (
-    <Moving
-      size={size}
-      still={still}
-      move={(svg) => {
-        const tl = gsap.timeline({ repeat: -1 });
-        for (const [k, origin] of [
-          ["one", "3.4 9.6"],
-          ["two", "12.4 5.6"],
-        ] as const) {
-          // Each swells from the hit, and holds a moment before it thins away.
-          const puff = svg.querySelector(`[data-k="${k}"]`);
-          const at = k === "one" ? 0 : 1.8;
-          const grow = { scale: 1.5, svgOrigin: origin, duration: 2.6, ease: "power2.out" };
-          tl.fromTo(puff, { scale: 0.4, svgOrigin: origin }, grow, at)
-            .fromTo(puff, { opacity: 0 }, { opacity: 1, duration: 0.25 }, at)
-            .to(puff, { opacity: 0, duration: 1.2, ease: "power1.in" }, at + 1.4);
-        }
-        tl.to({}, { duration: 0.4 });
-      }}
-    >
-      <ellipse cx="8" cy="8" rx="6.4" ry="3" transform="rotate(-24 8 8)" opacity={0.55} />
-      <circle cx="8" cy="8" r="1.5" fill="currentColor" stroke="none" />
-      {puff(3.4, 9.6, "one")}
-      {puff(12.4, 5.6, "two")}
-    </Moving>
-  );
-}
-
 /** Earth, a star, and a message between them: out to the star, and for a reply, back. */
 function Beam({ back, size, still }: { back: boolean; size: number; still?: boolean }) {
   return (
@@ -918,12 +874,11 @@ export function BuildMark({ name, size = 16, still }: { name: string; size?: num
   }
 }
 
-/** A lead's mark, by what its page draws: a stretched orbit, a world felt by its tug, dust, or a reply. */
+/** A lead's mark, by what its page draws: a stretched orbit, a world felt by its tug, or a reply. */
 export function LeadMark({ art, size = 16, still }: { art: Art; size?: number; still?: boolean }) {
   if (art.kind === "reply") return <Beam back size={size} still={still} />;
   if (art.kind === "dark" || art.kind === "pair") return <Hole size={size} still={still} />;
   if (art.kind === "glow") return <Halo size={size} still={still} />;
-  if (art.kind === "clouds") return <Dust size={size} still={still} />;
   // A star our seed probe reached: the Seed Ship's sprout, for the copy of it there. 2026-10-26.
   if (art.kind === "seed") return <Sprout size={size} still={still} />;
   if (art.e > 0) return <Orbit e={art.e} size={size} still={still} />;

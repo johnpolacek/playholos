@@ -265,20 +265,6 @@ const LEADS_SOURCES: Source[] = [
     ],
   },
   {
-    title: "Fomalhaut’s collisions",
-    text: "Fomalhaut’s “planet” was a dust cloud from a collision, and Hubble saw a second appear in 2023. Theory expected one such collision in 100,000 years. Two came in 20 years.",
-    links: [
-      [
-        "Hubble captures a rare collision, 2025",
-        "https://phys.org/news/2025-12-hubble-captures-rare-collision-nearby.html",
-      ],
-      [
-        "ESA: asteroids colliding around Fomalhaut",
-        "https://www.esa.int/Science_Exploration/Space_Science/Hubble_sees_asteroids_colliding_around_nearby_star",
-      ],
-    ],
-  },
-  {
     title: "Luyten’s Star",
     text: "Sónar Calling GJ273b was sent there in 2017 and 2018, and both reached it in 2030. A reply to the first could reach Earth in Year 2.3.",
     links: [["Luyten’s Star", W("Luyten's_Star")]],
