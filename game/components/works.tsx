@@ -136,6 +136,7 @@ export function WorksMap({ className }: { className: string }) {
     return (Math.hypot(m.x, m.y, m.z) * AU_KM) / 299792.458;
   });
   const l2 = (list.find((w) => w.site.on === "l2")?.site.km ?? 1.5e6) / 299792.458;
+  const l4 = (list.find((w) => w.site.on === "l4")?.site.km ?? 149_597_871) / 299792.458;
   const names = useRef<Record<string, HTMLSpanElement | null>>({});
   const onMarks = useCallback((marks: Mark[]) => {
     // Only the build in view is named, at its places, and Earth only from the Moon or L2.
@@ -216,6 +217,7 @@ export function WorksMap({ className }: { className: string }) {
         [
           ["moon", light],
           ["l2", l2],
+          ["l4", l4],
         ] as const
       ).map(([from, secs]) => (
         <span

@@ -258,6 +258,51 @@ const Sprout = ({ size, still }: MarkProps) => (
   </Moving>
 );
 
+/** The Rock Deflector: an impactor streaking in, and the rock it meets nudged aside. 2026-10-28. */
+const Deflector = ({ size, still }: MarkProps) => (
+  <Moving
+    size={size}
+    still={still}
+    move={(_, part) =>
+      void gsap
+        .timeline({ repeat: -1, repeatDelay: 0.8, delay: offset() })
+        .fromTo(part("craft"), { attr: { cx: 1.6, cy: 14.2 }, opacity: 1 }, { attr: { cx: 8.4, cy: 7.6 }, duration: 0.9, ease: "power1.in" })
+        .to(part("craft"), { opacity: 0, duration: 0.15 })
+        .fromTo(part("rock"), { x: 0, y: 0 }, { x: 1.2, y: -0.8, duration: 0.6, ease: "power2.out" }, "<")
+        .to(part("rock"), { x: 0, y: 0, duration: 0.01 }, "+=0.6")
+    }
+  >
+    <path data-k="rock" d="M8.6 5.4c1.4-1.8 4.6-1.6 5.4.6.8 2-.2 4.4-2.6 4.8-2.2.4-4.2-1.2-3.8-3.2z" />
+    <path d="M1.6 14.2 6.4 9.6" strokeDasharray="1 1.4" opacity={0.55} />
+    <circle data-k="craft" cx={still ? 6.8 : 1.6} cy={still ? 9.2 : 14.2} r="0.9" fill="currentColor" stroke="none" />
+  </Moving>
+);
+
+/** The Trojan Vault: a dark rock, and a light inside it, steady and slow. 2026-10-28. */
+const Trojan = ({ size, still }: MarkProps) => (
+  <Moving
+    size={size}
+    still={still}
+    move={(_, part) => void sway(part("light"), { opacity: 0.3 }, { opacity: 1 }, 2.4)}
+  >
+    <path d="M3 8.4C2.4 5.4 4.6 3 7.6 3.2c2.4-.6 5 .6 5.6 3.2.8 2.8-.4 5.6-3.2 6.4-2.6 1-6 .6-7-4.4z" />
+    <circle data-k="light" cx="8.2" cy="8" r="1.3" fill="currentColor" stroke="none" opacity={still ? 1 : 0.3} />
+  </Moving>
+);
+
+/** Fusion Plants: a tokamak's ring, and the plasma in it glowing brighter and dimmer. 2026-10-28. */
+const Fusion = ({ size, still }: MarkProps) => (
+  <Moving
+    size={size}
+    still={still}
+    move={(_, part) => void sway(part("plasma"), { opacity: 0.35 }, { opacity: 1 }, 1.4)}
+  >
+    <ellipse cx="8" cy="8.6" rx="6.4" ry="3.6" />
+    <ellipse cx="8" cy="8.6" rx="2.6" ry="1.2" />
+    <ellipse data-k="plasma" cx="8" cy="8.6" rx="4.5" ry="2.4" strokeWidth={1.6} opacity={still ? 1 : 0.35} />
+  </Moving>
+);
+
 /** Ground Solar: a panel on the ground, and the sun above it brightening and dimming. */
 const Solar = ({ size, still }: MarkProps) => (
   <Moving
@@ -776,6 +821,12 @@ export function BuildMark({ name, size = 16, still }: { name: string; size?: num
       return <Flame size={size} still={still} />;
     case "Seed Ship":
       return <Sprout size={size} still={still} />;
+    case "Rock Deflector":
+      return <Deflector size={size} still={still} />;
+    case "Trojan Vault":
+      return <Trojan size={size} still={still} />;
+    case "Fusion Plants":
+      return <Fusion size={size} still={still} />;
     case "Ground Solar":
       return <Solar size={size} still={still} />;
     case "15 m Mirror":
@@ -810,7 +861,7 @@ export function BuildMark({ name, size = 16, still }: { name: string; size?: num
 /** A lead's mark, by what its page draws: a stretched orbit, a world felt by its tug, dust, or a reply. */
 export function LeadMark({ art, size = 16, still }: { art: Art; size?: number; still?: boolean }) {
   if (art.kind === "reply") return <Beam back size={size} still={still} />;
-  if (art.kind === "dark") return <Hole size={size} still={still} />;
+  if (art.kind === "dark" || art.kind === "pair") return <Hole size={size} still={still} />;
   if (art.kind === "glow") return <Halo size={size} still={still} />;
   if (art.kind === "clouds") return <Dust size={size} still={still} />;
   // A star our seed probe reached: the Seed Ship's sprout, for the copy of it there. 2026-10-26.

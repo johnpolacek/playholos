@@ -106,6 +106,31 @@ test("power from orbit and the cold annex never share rock: the second waits for
   assert.equal(both.dataCenters.length, alone.dataCenters.length + 1);
 });
 
+test("fusion plants add half again to the grid, so one more data center fits once they are done", () => {
+  const g = golden.works[0];
+  const alone = mock(g);
+  const fused = pace([...(g.orders as Order[]), { y: 0, begin: "Fusion plants" }], 80, { scale: g.scale, aside: g.aside as [number, number, number][] });
+  // 30 standard Years, and no faster than two thirds of that however much thought pushes it.
+  assert.ok(fused.done["Fusion plants"] >= 20 && fused.done["Fusion plants"] <= 30, `done at Year ${fused.done["Fusion plants"]}`);
+  assert.equal(fused.dataCenters.length, alone.dataCenters.length + 1);
+  assert.ok(fused.dataCenters.at(-1)! >= fused.done["Fusion plants"] - 1e-9);
+});
+
+test("a rock coming: the same for a seed, found before it strikes, and pushed aside only if the push lands in time", async () => {
+  const { rockOf, rockAt, leadNeeded } = await import("../game/rocks.ts");
+  const rocks = POOL.map((s) => rockOf(s)).filter((r) => r !== null);
+  assert.deepEqual(rockOf(15), rockOf(15));
+  // About 0.6 strikes a millennium of rocks no survey mapped: roughly 45% of games see one in 1,000 Years.
+  assert.ok(rocks.length >= 8 && rocks.length <= 22, `${rocks.length} of ${POOL.length}`);
+  for (const r of rocks) assert.ok(r.m >= 50 && r.strikes <= 1000 && (r.found === null || r.found < r.strikes));
+  const rock = rockOf(15)!;
+  const late = rock.strikes - leadNeeded(rock.m) + 0.5, early = rock.strikes - leadNeeded(rock.m) - 2;
+  const plan = { builds: [], observe: [], later: [{ name: "Rock Deflector", y: rock.found! }] };
+  assert.equal(rockAt(rock, plan, { "Rock Deflector": early - 1 }, rock.strikes)!.state, "pushed");
+  assert.equal(rockAt(rock, plan, { "Rock Deflector": late - 1 }, rock.strikes)!.state, "struck");
+  assert.equal(rockAt(rock, { builds: [], observe: [] }, {}, rock.found!)!.state, "coming");
+});
+
 test("the Halo Survey sees what calcs/neighbors.py's glow_at gives, over ALMA's floor: none by Year 50, 12 by Year 100", async () => {
   let fifty = 0, hundred = 0;
   for (const seed of POOL) {

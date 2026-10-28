@@ -347,6 +347,24 @@ TUNNEL_YEARS, TUNNEL_KT = 12, 128
 # is a sample.
 WANTS['Orbital ring'] = (9.0, "Birch's bootstrapped ring: $15B in 1975 dollars")
 RING_YEARS, RING_SEED_KT, RING_KT = 10, 180, 189_000
+# Settled 2026-10-28: Fusion Plants, a fleet of ARC-class plants. CFS's SPARC aims at first plasma in 2027 and ARC,
+# 400 MW, in the early 2030s, so the first plants stand near Year 0. Half again Year 0's 24 TW is 12 TW, about 30,000
+# such plants. A new plant must start on tritium the fleet breeds, about 1 kg per 100 MW of fusion (Abdou et al.
+# 2021), so the fleet grows by doubling, as France's reactors went from 15 to 55 in the 1980s. From one plant, 15
+# doublings at about 2 Years each: 30 Years, a sample. Its want is a sample between ground solar's and power from
+# orbit's. Overnight costs run from $3,000 to $22,000 a kW in studies, so no real price fits a flagship count.
+WANTS['Fusion plants'] = (100, 'sample: tens of trillions of dollars at any studied price')
+FUSION_YEARS, FUSION_ENERGY = 30, 0.5
+# Settled 2026-10-28: the Trojan Vault, a third home for our Mind inside 2020 XL5, the 1.2 km asteroid at Earth's L4
+# (Santana-Ros et al. 2022). The Moon Vault's 10 kt of machines, flown a year or two out, and hollowing as long as the
+# vault took: 12 Years, a sample. Its want a little over the Moon Vault's, a sample.
+WANTS['Trojan vault'] = (1.5, 'sample: the Moon Vault\'s, and a longer reach')
+TROJAN_YEARS, TROJAN_KT = 12, 10
+# Settled 2026-10-28: the Rock Deflector, ten DART-class impactors of a tonne. DART took about five years from its
+# start to launch on a few hundred million dollars, so 4 Years and a few hundredths of a flagship, samples. Which games
+# see a rock is game/lib/game/rocks.ts.
+WANTS['Rock deflector'] = (0.3, 'sample: ten DARTs, a few billion dollars')
+DEFLECTOR_YEARS = 4
 def split(line, room, push=PUSH):
     """line: (name, want, most) in the player's order, most = how many times its want it can use. Returns {name: s}, idle."""
     give = {}

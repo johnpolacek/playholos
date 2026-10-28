@@ -161,6 +161,15 @@ def works_catalog():
     # The Orbital Ring, settled 2026-10-28: Birch's seed ring of Moon metal, then its ladders. What they lift comes as
     # rock does, so the works that wait on megatonnes take it too.
     works['Orbital ring'] = dict(years=eg.RING_YEARS, want=eg.WANTS['Orbital ring'][0])
+    # Fusion Plants, settled 2026-10-28: a fleet grown by the tritium it breeds. Once done, the grid holds half again
+    # as much, and the data centers that room holds fit.
+    # The Trojan Vault, settled 2026-10-28: built in orbit's way, out at L4, so the yard cuts it as it does the rest.
+    works['Trojan vault'] = dict(years=eg.TROJAN_YEARS, want=eg.WANTS['Trojan vault'][0], orbit=True)
+    # The Rock Deflector, settled 2026-10-28: opened only when a rock is found coming, by game/lib/game/rocks.ts.
+    works['Rock deflector'] = dict(years=eg.DEFLECTOR_YEARS, want=eg.WANTS['Rock deflector'][0])
+    # Ground solar's fifth counts too, 2026-10-28: a whole data center more only where the grid's room was near one.
+    works['Ground solar']['energy'] = 0.2
+    works['Fusion plants'] = dict(years=eg.FUSION_YEARS, want=eg.WANTS['Fusion plants'][0], energy=eg.FUSION_ENERGY)
     return dict(works=works, floor=eg.FLOOR, push=eg.PUSH, flagship=eg.FLAGSHIP_THOUGHT, gridRoom=eg.GRID_ROOM, step=1.5,
                 dataCenter=dict(years=1, aside=0.05), halo=dict(floor=eg.HALO['floor'], every=eg.HALO['every']), lens=dict(au=signs.LENS_AU, flight=round(signs.LENS_FLIGHT, 3), look=signs.LENS_LOOK, km30pc=25),
                 sentinel=dict(build=S.ROCKET_BUILD, speed=S.ROCKET_V, burns=S.ROCKET_BURNS),

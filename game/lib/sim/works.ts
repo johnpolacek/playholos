@@ -29,6 +29,7 @@ interface Work {
   copies?: [number, string];        // built this many times, each named this and its number
   rock?: number;                    // done when this many kt of rock have come in, not paced by thought
   most?: number;                    // the most times its want it can use. PUSH if missing
+  energy?: number;                  // the share of Year 0's grid it adds once done, so more data centers fit
 }
 interface Catalog {
   works: Record<string, Work>;
@@ -53,7 +54,7 @@ export const giftTimes = (steps: number) => STEP ** steps;
 export const paced = (years: number, s: number) => years * (FLOOR + (1 - FLOOR) / s);
 
 /** How many data centers fit under the grid, for a game whose Year 0 compute is `scale` of the no-branch path's. */
-export const centers = (scale: number) => Math.floor(Math.log(CATALOG.gridRoom / scale) / Math.log(STEP));
+export const centers = (scale: number, more = 0) => Math.floor(Math.log((CATALOG.gridRoom * (1 + more)) / scale) / Math.log(STEP));
 
 /** Thought down the line: each work its want in order, then each pushed to its most. Returns times-want, and idle. */
 export function split(line: readonly { want: number; most: number }[], room: number): { s: number[]; idle: number } {
@@ -98,7 +99,7 @@ export function pace(orders: readonly Order[], until: number, { scale = 1, aside
   // A work taken back: its standard Years left of the whole, and whether the yard was done then, so it gets the yard's
   // cut once. The whole is each work's standard Years when begun, cut with what is left, so the share built holds.
   const kept = new Map<string, { left: number; whole: number; yard: boolean }>(), whole = new Map<string, number>();
-  let t = 0, studies = CATALOG.studies, fits = centers(scale), queued = 0, standing = false, building: number | null = null;
+  let t = 0, studies = CATALOG.studies, fits = centers(scale), more = 0, queued = 0, standing = false, building: number | null = null;
   let s: number[] = [], room = 0, idle = 0, thought = 0;
   const gifts = new Map<string, number>();
 
@@ -130,6 +131,8 @@ export function pace(orders: readonly Order[], until: number, { scale = 1, aside
         if (!(work.rock !== undefined ? w === rockFirst() && rockAt(t) - rockSpent() >= work.rock - EPS : l !== undefined && l <= EPS)) continue;
         line.splice(line.indexOf(w), 1); left.delete(w); changed = true;
         if (work.rock !== undefined) fits++;                               // power from orbit or the cold annex: one more data center fits
+        // Fusion plants add to the grid itself, so as many more fit as its new room holds. 2026-10-28.
+        if (work.energy) { fits += centers(scale, more + work.energy) - centers(scale, more); more += work.energy; }
         if (work.copies) {
           const n = (built.get(w) ?? 0) + 1; built.set(w, n); done[`${work.copies[1]} ${n}`] = t;
           if (n < work.copies[0]) join(w, place(w), begun.get(w)!);

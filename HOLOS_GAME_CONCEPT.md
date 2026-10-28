@@ -438,6 +438,23 @@ Settled 2026-10-10. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#earth-to-ye
   - *Its price:* 12 Years, a sample from their 10 to 20. About two flagships, from its $20 billion. A ground build, so no matter.
   - *What it gives:* 128 kt a Year of lift, three times the Launch Complex. Open at Year 0, but not in the walk on Build, since nothing we could start then waits on lift.
   - *Untested:* the door of charged air that keeps the sky out of the tunnel.
+- **A rock coming, and the Rock Deflector, built 2026-10-28.** Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#a-rock-coming-2026-10-28).
+  - *Which games:* each seed rolls the rocks no survey had mapped by Year 0, at real rates, over its first 1,000 Years. 12 of 33 seeds send one, mostly 50 to 70 m, one 140 m at Year 67.
+  - *Found:* 7 in 10 years to decades before they strike, the rest unseen. Until found, neither we nor the Mind know.
+  - *The build:* the Rock Deflector opens the Year the rock is found. Ten DART-class impactors, 4 Years and a Year’s flight. It must land early enough to move the rock two Earth radii: weeks for 60 m, about 2 Years for 140 m.
+  - *Then:* pushed aside, or it strikes. Its page and the Mind say which.
+  - *Not yet:* what a strike does to us beyond the news, and a close view. Asked of the designer.
+- **The Trojan Vault, built 2026-10-28.** A third home for our Mind, inside 2020 XL5 at Earth’s L4. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#a-third-home-for-our-mind-2026-10-28).
+  - *What it is.* The Moon Vault’s 10 kt of machines and chips, flown a year or two out and set in the rock.
+  - *Its price:* 12 Years, a sample, and a little over the Moon Vault’s want. It opens once the Moon Vault is done. Built in space, so the yard cuts it.
+  - *What it gives:* a copy of us 8 light-minutes away, out of reach of a strike on Earth and the Moon together. It keeps; it doesn’t think with us.
+  - *Not yet:* the rule that a surviving copy carries the game on, in [Death and new games](#death-and-new-games). Until then both vaults are kept, not played.
+  - *On the map,* L4 is a new kind of place, drawn in its true direction but 6 million km out, since Earth’s layer can’t reach the Sun’s distance.
+- **Fusion Plants, built 2026-10-28.** A fleet of ARC-class plants, 400 MW each. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#fusion-plants-2026-10-28).
+  - *What it is.* The first plants stand near Year 0. The fleet grows to about 30,000, half again Year 0’s 24 TW.
+  - *Its price:* 30 Years at standard pace, a sample: 15 doublings of about 2 Years, each new plant started on tritium the fleet bred. Want 100 flagships, a sample.
+  - *What it gives:* once done, the grid holds half again as much, and one more data center fits at every Year 0 compute. It cuts into the plateau, from Year 11 to Power from Orbit.
+  - *The pace now models energy.* A build can add a share of the grid, and the data centers that room holds fit. Ground Solar uses it too, from 2026-10-28: its fifth adds a whole data center only where the grid had nearly room for one, as on an Earth that starts at half our compute.
 - **The Orbital Ring, built 2026-10-28.** Birch’s bootstrapped ring (JBIS 1983), read clean. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#builds-we-lack).
   - *What it is.* A seed ring of Moon metal, 300 km up round the equator, spun faster than orbit. Skyhooks ride it standing still, and 20 cables hang to the ground.
   - *Its price:* 10 Years after the Mass Driver, a sample: Birch gave about 3 from lunar mining. 180 kt of what we hold. Nine flagships, from his $15 billion in 1975 dollars.
@@ -882,7 +899,7 @@ Settled 2026-10-10.
       - Nothing joins the line on its own: the Mass Driver no longer starts the Far-Side Array and Power from Orbit. We order each.
       - Rock from the Moon and the belt now counts as matter in orbit, less what Power from Orbit takes as it waits on its 10 Mt.
       - The Mind hears what we ordered in play, and when.
-      - Not yet: Ground Solar’s fifth more energy, which the pace doesn’t model.
+      - Ground Solar’s fifth more energy, which the pace didn’t model until 2026-10-28. See Fusion Plants in [Build times](#build-times).
       - *Taking an order back, 2026-10-23.* In play, a build under way, from Year 0’s queue or ordered since, has Take back on its page. From then it takes no compute, and the rest of our order shares it. It keeps its work: it waits under the queue in Open to start, saying when it was taken back, how much of it was built and how many standard Years are left, and ordering it again picks up there, last in line. On the map it reads Taken back, with how much was built. Its matter stays spent, so ordering it again costs none. Thought Fields taken back finishes the campus under way and begins no more. Taken back and ordered again in the same tenth of a Year, it’s as if nothing happened. Chosen over losing the work, so changing course wastes no compute. The Mind hears what we took back, and when.
     - *Places for what opens, and the long road, 2026-10-22.* Each of the ten builds without a place now has one on the map, with its story, from an agent’s research logged in HOLOS_RESEARCH.md: Ground Solar at Talatan, Khavda and Cauchari, the 15 m Mirror beside the Infrared Telescope at L2, the Mass Driver on the Moon’s equator at 33° east as O’Neill’s group placed it, the Orbital Foundry in a high orbit of half the Moon’s month, Belt Mining where its rock comes home there, the Far-Side Array in Daedalus crater, Power from Orbit in geostationary orbit, the Deuterium Works at Bruce on Lake Huron, and the Fusion Drive and Seed Ship on the yard’s orbit behind it.
       - A high orbit is framed far enough out to show its whole ring.

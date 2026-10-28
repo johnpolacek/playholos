@@ -6,6 +6,7 @@ import { BuildMark, buildTone } from "@/components/marks";
 import { OpensLine } from "@/components/opens";
 import { Face, ListHead } from "@/components/tab-head";
 import { MS_PER_YEAR, span, tenths } from "@/lib/game/clock";
+import { FOUND, rockOf } from "@/lib/game/rocks";
 import type { EarthPast } from "@/lib/game/past";
 import { BUILDS, buildSlug, EMPTY, FOMALHAUT, inUse, lacks, moves, needs, openAt, PAST, schedule, sharesAt, takenAt } from "@/lib/game/plan";
 import { SITES } from "@/lib/game/sites";
@@ -54,7 +55,12 @@ export function useSchedule() {
   const past = useEarth();
   const plan = save?.plan ?? EMPTY;
   const scale = past?.compute ?? 1;
-  const done = useMemo(() => schedule(plan, scale), [plan, scale]);
+  // A rock coming opens the Rock Deflector the Year a survey finds it, as a build opens once another is done.
+  const seed = save?.seed;
+  const done = useMemo(
+    (): Record<string, number | null> => ({ ...schedule(plan, scale), [FOUND]: seed === undefined ? null : (rockOf(seed)?.found ?? null) }),
+    [plan, scale, seed],
+  );
   return { past, scale, done };
 }
 

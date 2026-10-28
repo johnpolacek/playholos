@@ -8,7 +8,8 @@ import { describeLeads } from "@/lib/game/leads";
 import { kt, matterAt, schedule } from "@/lib/game/plan";
 import { kitOf } from "@/lib/game/reach";
 import { readGifts, readLater, readColony, readLenses, readObserve, readSentinels, readSeeds, readQueue, readStops, readWill } from "./orders";
-import { describeBuilds, describeQueue } from "@/lib/mind/builds";
+import { describeBuilds, describeQueue, describeRock } from "@/lib/mind/builds";
+import { FOUND, rockOf } from "@/lib/game/rocks";
 import { answersHeard, describeSent, readSent } from "@/lib/game/sends";
 import { readReactions } from "./react";
 import { EARTH_AT_YEAR_0, roadOf } from "@/lib/mind/earth";
@@ -149,6 +150,7 @@ export async function mind(req: Request) {
     queue: describeQueue(plan, done, year),
     sent: describeSent(readSent(sent), year),
     known,
+    rock: inPool(seed) ? describeRock(rockOf(seed), plan, { ...done, [FOUND]: rockOf(seed)?.found ?? null }, year) : "",
     now: now(began, away),
   };
   const system = Object.values(told).filter(Boolean).join("\n\n");

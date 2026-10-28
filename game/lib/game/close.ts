@@ -654,6 +654,62 @@ function probeYard(): Close {
   };
 }
 
+// ── Trojan Vault ──
+// 2020 XL5, about 1.2 km across, drawn as a lumpy body of rings. The vault goes in from a shaft on its sunward side:
+// a hall in the rock, solar wings on masts, radiators in its shadow and a dish turned home. The shape is ours: no one
+// has imaged it. At L4, z is away from the Sun.
+function trojanVault(): Close {
+  const have: number[] = [];
+  const lump = (t: number) => 0.6 * (1 + 0.12 * Math.sin(3 * t + 1) + 0.08 * Math.sin(5 * t + 2));
+  // A point on its lumpy face, at longitude t and latitude u.
+  const face = (t: number, u: number): V => [
+    lump(t) * Math.cos(u) * Math.cos(t),
+    0.8 * lump(t) * Math.cos(u) * Math.sin(t),
+    0.6 * Math.sin(u),
+  ];
+  for (const u of [-0.85, -0.43, 0, 0.43, 0.85]) have.push(...path([...Array(37)].map((_, i) => face((i / 36) * 2 * Math.PI, u))));
+  for (let k = 0; k < 6; k++) have.push(...path([...Array(13)].map((_, i) => face((k * Math.PI) / 3, (i / 12) * Math.PI - Math.PI / 2))));
+  const b = new Rising();
+  // The shaft down into the rock from its sunward face, then the hall at its foot.
+  b.add([0, 0, 0.62, 0, 0, 0.1]);
+  b.add(box(-0.08, -0.05, 0.16, 0.1, 0.06, 0.04));
+  b.lit([0, 0, 0.07]);
+  b.add(box(-0.04, -0.04, 0.08, 0.08, 0.04, 0.6));
+  for (const side of [-1, 1]) {
+    b.add([side * 0.04, 0, 0.64, side * 0.2, 0, 0.64]);
+    b.add(panel(side > 0 ? 0.2 : -0.36, -0.06, 0.16, 0.12, 0.64));
+  }
+  for (let i = 0; i < 4; i++) b.add(panel(-0.5 + i * 0.07, 0.62, 0.05, 0.12, -0.2));
+  b.add(circle([0.06, 0.06, 0.72], 0.05, [0.6, 0.3, 0.74], 24), [0.03, 0.03, 0.64, 0.06, 0.06, 0.72]);
+  b.lit([0, 0, 0.66], [0.06, 0.06, 0.72]);
+  return { view: { km: 3.2, el: 22, az: 200 }, have, ...b.done(0.012), haveLights: [], beat: 4 };
+}
+
+// ── Fusion Plants ──
+// ARC, Commonwealth Fusion's 400 MW plant, beside the Chesterfield power station on the James River. Drawn as its
+// tokamak, a ring of coils about 9 m across, in a hall 60 m square, with a turbine hall, a switchyard and the line
+// out. The old station's stacks stand dim behind it. The layout is ours: no plan has been published.
+function fusionPlants(): Close {
+  const have: number[] = [...box(-0.12, 0.1, 0.12, 0.08, 0.03)];
+  for (const x of [-0.1, -0.04]) have.push(...stack(x, 0.2, 0.12), ...circle([x, 0.2, 0.12], 0.004, [0, 0, 1], 12));
+  const b = new Rising();
+  // The coils first, around the torus, then the hall closed over them.
+  for (let k = 0; k < 18; k++) {
+    const t = (k * Math.PI) / 9;
+    b.add(circle([0.0045 * Math.cos(t), 0.0045 * Math.sin(t), 0.008], 0.003, [-Math.sin(t), Math.cos(t), 0], 16));
+  }
+  b.add(circle([0, 0, 0.008], 0.0045, [0, 0, 1], 36));
+  b.lit([0, 0, 0.008]);
+  b.add(box(-0.03, -0.03, 0.06, 0.06, 0.035));
+  b.add(box(0.05, -0.02, 0.09, 0.04, 0.025));
+  b.lit([0.095, 0, 0.026]);
+  for (let i = 0; i < 4; i++) b.add(square(0.18 + i * 0.02, 0, 0.012));
+  for (let x = 0.26; x <= 1.2; x += 0.16) b.add(stack(x, 0.02 * (x - 0.26), 0.04));
+  b.add(path([...Array(7)].map((_, i): V => [0.26 + i * 0.16, 0.02 * i * 0.16, 0.04])));
+  b.lit([0.21, 0, 0.004]);
+  return { view: { km: 0.38, el: 18, az: 215, at: [0.02, 0] }, have, ...b.done(0.004), haveLights: [-0.04, 0.2, 0.12, 0.003], beat: 2.4 };
+}
+
 // ── Ground Solar ──
 // Talatan, on the Tibetan plateau, covered 420 km² of panels in 2025, row on row. Drawn here as blocks of rows 0.9 by
 // 0.45 km: the park as it stands, dim to the west, and ours going up to the east, then its substation and the line
@@ -1165,6 +1221,8 @@ export const CLOSE: Record<string, Close> = {
   "Moon Vault": moonVault(),
   "Laser Sail Array": laserSailArray(),
   "Probe Yard": probeYard(),
+  "Trojan Vault": trojanVault(),
+  "Fusion Plants": fusionPlants(),
   "Ground Solar": groundSolar(),
   "15 m Mirror": fifteenMeterMirror(),
   "Mass Driver": massDriver(),

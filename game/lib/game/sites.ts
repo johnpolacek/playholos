@@ -15,7 +15,7 @@ export interface Place {
 
 /** Where a build stands: on Earth, the Moon, in low orbit or out at L2, at one place or more. */
 export interface Site {
-  on: "earth" | "moon" | "orbit" | "l2";
+  on: "earth" | "moon" | "orbit" | "l2" | "l4";
   /** How the map draws it: a dome of the sky each place watches, a ring round it, or paths up to orbit from it. */
   draw: "dome" | "ring" | "launch";
   /** In orbit or at L2, one place, its name only. */
@@ -207,6 +207,52 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
       takes: `${kt("Probe Yard")} kt of the 20 we hold in orbit. The first probe flies 12 Years after the yard is done.`,
       before:
         "Project Daedalus, from 1973 to 1978, planned a two-stage fusion probe of 54,000 t, built in Earth orbit as this one is. It would pass Barnard’s Star about 50 years after launch.",
+    },
+  },
+  "Rock Deflector": {
+    // DART left from Vandenberg's SLC-4E in November 2021, so ours leave from there.
+    site: { on: "earth", draw: "launch", places: [{ lat: 34.632, lon: -120.611, name: "Vandenberg, California, USA" }] },
+    story: {
+      have: "NEO Surveyor and Rubin have mapped about 9 in 10 rocks over 140 m, and none is coming. Smaller ones still slip by.",
+      where: "Launched from Vandenberg in California, where DART left in 2021, to meet the rock a Year out.",
+      why: "A small push early moves a rock far by the time it reaches us. The later it lands, the harder it must push.",
+      takes: "Ten impactors of a tonne each, flying at 6 km/s. None of the matter we hold in orbit.",
+      before:
+        "In 2022 DART struck Dimorphos, 150 m wide, and shortened its orbit by 33 minutes. The rock thrown off pushed it 3.6 times harder than the craft alone.",
+    },
+  },
+  "Trojan Vault": {
+    // 2020 XL5, Earth's second known trojan, librates round L4: 60° ahead of Earth on its orbit, an astronomical unit
+    // out. The map draws its loop round L4 as ours.
+    site: { on: "l4", draw: "ring", places: [{ lat: 0, lon: 0, name: "2020 XL5, at Earth’s L4" }], km: 149_597_871 },
+    story: {
+      have: "Our Mind lives on Earth, and the Moon Vault can keep a copy. Our craft have brought home grams of asteroid. None has stayed.",
+      where: "Inside 2020 XL5, a dark asteroid about 1.2 km wide. It shares Earth’s orbit, 60° ahead of us, 150 million km away.",
+      why: "Something that struck Earth and the Moon together would leave it untouched. Its rock shields the vault, and it stays near L4 for at least 4,000 Years.",
+      takes: "About 10 kt of machines and chips, as the Moon Vault does, flown a year or two out. Word takes 8 minutes each way.",
+      before: "Pan-STARRS found it in 2020. In 2022 Santana-Ros and colleagues confirmed it as Earth’s second known trojan. No craft has visited.",
+    },
+  },
+  "Fusion Plants": {
+    // The first plants planned to make power: CFS's ARC in Virginia, the UK's STEP at West Burton, and China's BEST at
+    // Hefei, the step before its own. The fleet grows out from places like these.
+    site: {
+      on: "earth",
+      draw: "ring",
+      places: [
+        { lat: 37.381, lon: -77.384, name: "Chesterfield, Virginia, USA" },
+        { lat: 53.361, lon: -0.808, name: "West Burton, England" },
+        { lat: 31.82, lon: 117.13, name: "Hefei, China" },
+      ],
+    },
+    story: {
+      have: "The first fusion plants are coming online. Commonwealth Fusion’s ARC, 400 MW, was planned for the early 2030s.",
+      where:
+        "Beside old power stations, where the grid already runs: ARC beside Chesterfield’s coal plant in Virginia, STEP at West Burton’s, and China’s tokamaks at Hefei.",
+      why: "Fusion runs day and night on the heavy hydrogen in seawater. Old plant sites already have the lines, the cooling water and the people.",
+      takes: "None of the matter we hold in orbit. Each new plant needs about 1 kg of tritium per 100 MW to start, bred by the plants before it.",
+      before:
+        "SPARC, the magnet test for ARC, aimed for first plasma in 2027. Studies put a plant at $3,000 to $22,000 a kW. None had sold power by 2026.",
     },
   },
   "Ground Solar": {

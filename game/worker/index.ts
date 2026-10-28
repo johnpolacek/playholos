@@ -28,6 +28,11 @@ const ROUTES: Record<string, (req: Request) => Promise<Response>> = {
 export default {
   async fetch(req) {
     const route = ROUTES[`${req.method} ${new URL(req.url).pathname}`];
-    return route ? route(req) : Response.json({ error: "Not found." }, { status: 404 });
+    const res = await (route ? route(req) : Response.json({ error: "Not found." }, { status: 404 }));
+    // A route that answers before reading the body, as a locked Mind does, leaves it unread. On the dev server that
+    // breaks the link to the Worker, and a request beside it fails with "fetch failed". So we read what is left.
+    // 2026-10-28.
+    if (req.body && !req.bodyUsed) await req.arrayBuffer().catch(() => undefined);
+    return res;
   },
 } satisfies ExportedHandler<Env>;

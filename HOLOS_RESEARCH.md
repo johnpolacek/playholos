@@ -2138,6 +2138,56 @@ Sample prices.
 - *Fission fragment, PuFF and pulsed plasma:* fast in the solar system only. They speed outposts, not leads.
 - *The fusion drive keeps its price.* Daedalus and Icarus support it.
 
+### Fusion plants, 2026-10-28
+
+- **[Commonwealth Fusion Systems, SPARC](https://en.wikipedia.org/wiki/SPARC_(tokamak)) and [ARC](https://www.ans.org/news/tag-cfs)** · Preliminary, press and the company.
+  - SPARC’s first of 18 magnets went in January 2026. First plasma slipped from 2025 to 2027.
+  - ARC, 400 MW, is sited beside Dominion’s Chesterfield station in Virginia, for the early 2030s.
+  - Matters: the first plants stand near our Year 0, so a fleet can start then.
+- **[Helion, Polaris and Orion](https://techcrunch.com/2026/02/13/fusion-startup-helion-hits-blistering-temps-as-it-races-toward-2028-deadline/)** · Preliminary, press, February 2026.
+  - Polaris reached 150 million °C on deuterium-tritium in early 2026, with no net electricity shown.
+  - Orion, 50 MW for Microsoft by 2028, is widely doubted.
+  - Matters: no plant had sold power by late 2026. Our Year 0 line, the first 100 MW plant near 2041, stands.
+- **Plant costs** · Studies, summaries read.
+  - An [MIT thesis](https://dspace.mit.edu/handle/1721.1/157003) on a 350 MW ARC-class plant: $8,800 to $22,200 a kW overnight, $140 to $550 a MWh.
+  - [MITEI 2024](https://energy.mit.edu/wp-content/uploads/2024/08/2024.09.12-MITEI-The-Role-of-Fusion-in-a-Decarbonized-Electricity-System-Summary-of-Findings-webinar.pdf) assumes $5,600 to $8,000 a kW in 2050. A [2026 Nature Energy paper](https://www.rinnovabili.it/wp-content/uploads/2026/04/s41560-026-02023-8.pdf) argues fusion’s learning rates are overestimated.
+  - Matters: *ours,* 12 TW at any of these prices is tens of trillions of dollars, so its want is a sample.
+- **[Abdou et al. 2021, Nuclear Fusion 61, 013001](https://ui.adsabs.harvard.edu/abs/2021NucFu..61a3001A)** · Published, abstract read.
+  - A plant must start on tritium: about 11 kg for 3 GW of fusion at 2% burn, under 5 kg at 5%, about 1 kg per 100 MW.
+  - Tritium from fission reactors is enough for ITER but maybe not beyond, [Pearson et al. 2018](https://oro.open.ac.uk/55293).
+  - Matters: *ours,* new plants start on what the fleet breeds, so it grows by doubling, not all at once.
+- **[France’s Messmer plan](https://worksinprogress.co/issue/liberte-egalite-radioactivite/)** · Secondary.
+  - Reactors at work in France rose from 15 to 55 during the 1980s, the fastest nuclear build-out ever.
+  - Matters: *ours,* a doubling about every five years, by one nation. Our whole Earth doubles every two.
+- Used: Fusion Plants, a build since 2026-10-28, in [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md#build-times), `calcs/early_game.py` and `game/lib/game/plan.ts`.
+
+### A third home for our Mind, 2026-10-28
+
+- **[Santana-Ros et al. 2022, Nature Communications 13, 447](https://ideas.repec.org/a/nat/natcom/v13y2022i1d10.1038_s41467-022-27988-4.html)** · Published, abstract and [press](https://noirlab.edu/public/news/noirlab2205) read.
+  - 2020 XL5 is Earth’s second known trojan, after 2010 TK7. About 1.18 km wide at an assumed dark albedo of 0.06.
+  - It stays at Earth’s L4, 60° ahead of us on our orbit, for at least 4,000 years, then escapes.
+  - They weighed reaching it by rocket; we found no delta-v in what we read.
+  - Matters: *ours,* the nearest rock that shares our orbit and stays. A vault there survives a strike on Earth and the Moon together.
+- **[The Lunar Ark, Thanga et al. 2021](https://newatlas.com/space/lunar-ark-backup-plants-animals/)** · Preliminary, a conference concept, press read.
+  - Frozen samples of 6.7 million species in lunar lava tubes, kept by robots, as a backup for Earth.
+  - Critics note it shares the Moon’s fate in a large enough strike.
+  - Matters: the idea behind our Moon Vault, and its weakness, which the Trojan Vault answers.
+- Used: the Trojan Vault, a build since 2026-10-28, after the Moon Vault, in [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md#build-times) and `game/lib/game/plan.ts`. The map draws L4 in its true direction, 6 million km out.
+
+### A rock coming, 2026-10-28
+
+- **[Harris and Chodas 2021, Icarus 365, 114452](https://ui.adsabs.harvard.edu/abs/2021Icar..36514452H)** and **[NEOMOD, Nesvorný et al. 2023](https://arxiv.org/pdf/2306.09521)** · Published, abstracts and citing papers read.
+  - Rocks of about 10 m and up strike every few decades. NEOMOD 2 counts three times fewer small ones than Harris and Chodas.
+  - Rocks over 140 m: about a 4.5% chance of a strike this millennium, by a [2025 NEOMOD-based study](https://arxiv.org/html/2508.02418v2).
+  - Matters: *ours,* with 9 in 10 over 140 m mapped by Year 0, that leaves about 0.45% a millennium. We use about 0.6 strikes a millennium for unmapped rocks of 50 to 140 m, a sample between Tunguska’s and Chelyabinsk’s rates.
+- **DART, 2022** · Published, [Cheng et al. 2023](https://pmc.ncbi.nlm.nih.gov/articles/10115652) and [Thomas et al. 2023](https://arxiv.org/pdf/2303.02077).
+  - It shortened Dimorphos’s orbit by 33 minutes. The rock thrown off pushed it 3.6 times harder than the craft alone.
+  - Matters: our deflector is ten of these at a tonne each. The push a rock needs grows with its mass and shrinks with warning.
+- **Tunguska, 1908, and Chelyabinsk, 2013** · Settled history.
+  - Tunguska’s airburst flattened about 2,150 km² of forest. Chelyabinsk’s 20 m rock came from the Sun’s side, unseen.
+  - Matters: *ours,* about 3 in 10 rocks come unseen, too late to push. A sample.
+- Used: `game/lib/game/rocks.ts` and the Rock Deflector, a build since 2026-10-28, in [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md#build-times). 12 of our 33 seeds send a rock in their first 1,000 Years.
+
 ## Watch list
 
 Results the design is waiting on. Check each when its date comes.

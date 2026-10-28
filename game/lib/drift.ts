@@ -121,7 +121,7 @@ export interface Show {
   works?: {
     name: string;
     site: {
-      on: "earth" | "moon" | "orbit" | "l2";
+      on: "earth" | "moon" | "orbit" | "l2" | "l4";
       draw: "dome" | "ring" | "launch";
       places: { lat: number; lon: number }[];
       orbit?: { km: number; tilt: number; minutes: number; behind?: number };
@@ -174,6 +174,8 @@ const EARTH_WORK = -3.45;
 const NEAR_EARTH = -3.75;
 /** How far L2 is seen from: about 3.9 million km, so Earth, the Moon's orbit and L2 all show. */
 const L2_WORK = -1.58;
+/** How far L4 is seen from: about 16 million km, so Earth and L4 as drawn both show. 2026-10-28. */
+const L4_WORK = -0.98;
 
 // The Milky Way's measured arms, Reid et al. 2019, Table 2: a log spiral with a kink, over the azimuths where masers
 // pin it down. β is galactocentric azimuth, 0 toward the Sun, growing with the Galaxy's turn. Degrees and kpc, at their
@@ -493,13 +495,26 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
   }
   /** L2, this far out on Earth's night side, in Earth radii from Earth. */
   const l2At = (km: number) => pilot.sky.sunDir.clone().multiplyScalar(-km / 6371.0084);
+  // Earth's L4: 60° ahead of Earth on its way round the Sun, as far from Earth as the Sun is. Earth's heading is where
+  // it will be tomorrow. Its way is true, but it is drawn 6 million km out: Earth's layer can't reach the Sun's
+  // distance, as the map has no belt for Belt Mining either. 2026-10-28.
+  const ahead = new THREE.Vector3()
+    .copy(bodyPosition("Earth", new Date(pilot.sky.date.getTime() + 864e5)))
+    .sub(pilot.sky.earthAU)
+    .normalize();
+  const l4At = (km: number) =>
+    pilot.sky.sunDir.clone().multiplyScalar(0.5).addScaledVector(ahead, Math.sqrt(3) / 2).multiplyScalar(km / 6371.0084);
+  /** A far site's middle, in Earth radii from Earth: L2's or L4's. */
+  const farAt = (site: { on: string; km?: number }) => (site.on === "l4" ? l4At(6e6) : l2At(site.km ?? 1.5e6));
   const Z = new THREE.Vector3(0, 0, 1);
   /** A telescope at L2, where it flies on a halo orbit round L2 drawn across the line to the Sun, 800,000 by 400,000
-   *  km, in Earth radii from Earth. */
-  function haloAt(km: number) {
+   *  km, in Earth radii from Earth. At L4, a trojan's loop round it, drawn 1.6 million by 400,000 km to suit L4 as
+   *  drawn: ours. */
+  const loopOf = (site: { on: string }) => (site.on === "l4" ? [1.6e6, 4e5] : [800000, 400000]).map((km) => km / 6371.0084);
+  function haloAt(site: { on: string; km?: number }) {
     const flat = new THREE.Quaternion().setFromUnitVectors(Z, pilot.sky.sunDir);
-    const [a, b] = [800000 / 6371.0084, 400000 / 6371.0084];
-    return new THREE.Vector3(a * Math.sin(0.7), b * Math.cos(0.7), 0).applyQuaternion(flat).add(l2At(km));
+    const [a, b] = loopOf(site);
+    return new THREE.Vector3(a * Math.sin(0.7), b * Math.cos(0.7), 0).applyQuaternion(flat).add(farAt(site));
   }
   type Orbit = NonNullable<NonNullable<Show["works"]>[number]["site"]["orbit"]>;
   /** A build in low orbit: where it is now, in Earth radii from Earth, and which way it goes. It goes round at Earth's
@@ -587,10 +602,10 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
           .addScaledVector(eN, 0.25)
           .normalize();
         logD = NEAR_WORK;
-      } else if (w.site.on === "l2") {
+      } else if (w.site.on === "l2" || w.site.on === "l4") {
         const { sunDir } = pilot.sky;
         v = sunDir.clone().cross(eN).normalize().addScaledVector(eN, 0.5).normalize();
-        logD = L2_WORK;
+        logD = w.site.on === "l4" ? L4_WORK : L2_WORK;
       } else if (w.site.on === "orbit") {
         const { axis, node } = orbitFrame(w.site.orbit?.tilt ?? 0);
         v = axis.multiplyScalar(0.8).addScaledVector(node, 0.6).normalize();
@@ -2472,11 +2487,11 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       // map turns Earth once a minute, so a 93-minute orbit takes about 4 seconds.
       // L2: a halo orbit round it, drawn across the line to the Sun, 800,000 by 400,000 km, the telescope on it, and a
       // thread home to Earth.
-      if (on === "l2") {
-        const center = l2At(w.site.km ?? 1.5e6);
+      if (on === "l2" || on === "l4") {
+        const center = farAt(w.site);
         const flat = new THREE.Quaternion().setFromUnitVectors(up, sunDir);
-        const [a, b] = [800000 / 6371.0084, 400000 / 6371.0084];
-        const at = haloAt(w.site.km ?? 1.5e6);
+        const [a, b] = loopOf(w.site);
+        const at = haloAt(w.site);
         const threadMat = line("mind", 0, true);
         const thread = new THREE.Line(new THREE.BufferGeometry().setFromPoints([at, new THREE.Vector3()]), threadMat);
         thread.frustumCulled = false;
@@ -2637,6 +2652,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
           const facing =
             m.moon ||
             focus.site.on === "l2" ||
+            focus.site.on === "l4" ||
             n.copy(v).normalize().dot(n.clone().subVectors(earth.camera.position, v)) > 0;
           v.project(earth.camera);
           const a = v.z < 1 && facing ? p : 0;
@@ -2644,11 +2660,11 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         });
         // Earth, from the Moon or L2. From the Moon it is often behind us: then its way across the screen is the other
         // side of the middle, far off.
-        if (m && (m.moon || focus.site.on === "l2")) {
+        if (m && (m.moon || focus.site.on === "l2" || focus.site.on === "l4")) {
           const behind = v.set(0, 0, 0).applyMatrix4(earth.camera.matrixWorldInverse).z > 0;
           v.set(0, 0, 0).project(earth.camera);
           const k = behind ? -1000 : 1;
-          const a = focus.site.on === "l2" ? p : p * ramp(-x, 2.4, 3.2);
+          const a = focus.site.on === "l2" || focus.site.on === "l4" ? p : p * ramp(-x, 2.4, 3.2);
           marks.push({ id: `earth:${focus.site.on}`, x: ((v.x * k + 1) / 2) * w, y: ((1 - v.y * k) / 2) * h, a });
         }
         spec.onMarks(marks);
@@ -2677,7 +2693,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       cUp.copy(at).normalize();
       cNorth.crossVectors(cUp, heading);
     } else {
-      at.copy(haloAt(w.site.km ?? 1.5e6));
+      at.copy(haloAt(w.site));
       cUp.copy(sunDir).negate();
       cNorth.copy(eN);
     }
@@ -3083,7 +3099,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     // off, so where it left and where it goes show together.
     if (work?.site.on === "moon")
       goal.copy(siteAt(work)).multiplyScalar(MOON_R * 0.45).add(moonAt).multiplyScalar(R_E_AU);
-    else if (work?.site.on === "l2") goal.copy(l2At(work.site.km ?? 1.5e6)).multiplyScalar(0.55 * R_E_AU);
+    else if (work?.site.on === "l2" || work?.site.on === "l4") goal.copy(farAt(work.site)).multiplyScalar(0.55 * R_E_AU);
     else goal.set(0, 0, 0);
     if (!goal.equals(hop.to)) {
       hop.from.copy(workShift);

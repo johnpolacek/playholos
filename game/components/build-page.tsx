@@ -28,6 +28,7 @@ import {
   PAST,
 } from "@/lib/game/plan";
 import { SITES } from "@/lib/game/sites";
+import { FOUND, harm, rockAt, rockOf } from "@/lib/game/rocks";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
 
 // One build, opened from Build: what it gives us, when it would be done, the Mind's word on it, and its story. The map
@@ -171,6 +172,21 @@ function Lacking({ names }: { names: string[] }) {
   ));
 }
 
+/** The rock the deflector is for: how wide, when it strikes, by when the push must land, and how it ended. */
+function RockLine({ done }: { done: Record<string, number | null> }) {
+  const { save, year } = useGame();
+  const { plan } = usePlan();
+  const rock = save ? rockAt(rockOf(save.seed), plan, done, year ?? 0) : null;
+  if (!rock || rock.found === null) return null;
+  const line =
+    rock.state === "pushed"
+      ? `Our impactors pushed it aside at Year ${tenths(rock.lands!)}. It passes Earth at Year ${tenths(rock.strikes)}.`
+      : rock.state === "struck"
+        ? `It struck Earth at Year ${tenths(rock.strikes)}: ${harm(rock.m)}.`
+        : `A rock ${rock.m} m wide strikes Earth at Year ${tenths(rock.strikes)}. To move it, our push must land by Year ${tenths(rock.strikes - rock.lead)}.`;
+  return <p className="mt-2.5 text-[13px] leading-snug text-ink">{line}</p>;
+}
+
 /** Where a build that waits stands: what it waits on, when that is done in our order, and how long it takes. Once it
  *  is open in play, the button that orders it now, and once ordered, when it is done. */
 export function Waits({ build, scale, done }: { build: Later; scale: number; done: Record<string, number | null> }) {
@@ -181,7 +197,7 @@ export function Waits({ build, scale, done }: { build: Later; scale: number; don
   const now = orderAt === null ? null : tenths(orderAt);
   // Its last order, while it stands in our order.
   const order = ordered(plan).includes(build.name) ? plan.later?.filter((o) => o.name === build.name).at(-1) : undefined;
-  const by = ordered(plan).includes(build.after) ? done[build.after] : undefined;
+  const by = ordered(plan).includes(build.after) || build.after === FOUND ? done[build.after] : undefined;
   const open = now !== null && by != null && now >= by;
   // Its Year if we order it now, last in line.
   const when = useMemo(
@@ -192,6 +208,7 @@ export function Waits({ build, scale, done }: { build: Later; scale: number; don
     const at = done[build.name];
     return (
       <div className="flex flex-col">
+        {build.after === FOUND && <RockLine done={done} />}
         <p className="mt-2.5 text-[13px] leading-snug text-you">
           Ordered at Year {tenths(order.y)}.{" "}
           {at == null ? "Done after Year 1,000." : now! >= at ? "Done." : `Done in ${span(at - now!)}, by Year ${tenths(at)}.`}
@@ -204,8 +221,9 @@ export function Waits({ build, scale, done }: { build: Later; scale: number; don
   if (open)
     return (
       <div className="flex flex-col">
+        {build.after === FOUND && <RockLine done={done} />}
         <p className="mt-2.5 text-[13px] leading-snug text-page-ink2">
-          Open since Year {tenths(by)}, after the {build.after}.{" "}
+          Open since Year {tenths(by)}, {build.after === FOUND ? "when we found a rock coming" : `after the ${build.after}`}.{" "}
           {when == null ? "Ordered now, it would be done after Year 1,000." : `Ordered now, it would be done by Year ${tenths(when)}, in ${span(when - now)}.`}
         </p>
         <button
@@ -215,6 +233,16 @@ export function Waits({ build, scale, done }: { build: Later; scale: number; don
           Add to Queue
         </button>
       </div>
+    );
+  // Only a rock found opens the deflector, and most games never see one.
+  if (build.after === FOUND)
+    return (
+      <p className="mt-2.5 flex items-start gap-1.5 text-[13px] leading-snug text-page-ink2">
+        <span className="mt-[2px] text-muted">
+          <LockMark size={13} />
+        </span>
+        <span>Opens only if our surveys find a rock coming at Earth.</span>
+      </p>
     );
   const after = (
     <Link to={`/build/${buildSlug(build.after)}`} state={state} className="text-ink underline underline-offset-2">

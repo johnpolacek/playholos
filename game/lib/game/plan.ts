@@ -1,6 +1,7 @@
 // Planning, on the Build tab: what Earth can start at Year 0. The builds are the first hour's works from
 // data/works.json, paced by lib/sim/works.ts from the player's own order, so every date on the screen is the game's.
 // The Mind names what it would start with only when asked, 2026-10-19, and never queues anything itself.
+import { FOUND } from "./rocks";
 import { plainBuild } from "./build-offer";
 import { KNOCKS } from "./knocks";
 import { YEAR_0 } from "./clock";
@@ -24,6 +25,8 @@ export const BUILDS: Build[] = [
   { name: "All-Sky Watch", what: "Hears a knock or a broadcast from anywhere, at any hour.", does: "listen" },
   { name: "Deep Flash Watch", what: "Sees knocks sent as laser flashes, which no radio watch hears.", does: "listen" },
   { name: "Thought Fields", what: "Half again as much compute each Year, until the grid is full.", does: "think" },
+  // A fleet of ARC-class plants, 2026-10-28: the first stand near Year 0, and the fleet grows on the tritium it breeds.
+  { name: "Fusion Plants", what: "Half again as much energy, from a fleet of fusion plants.", does: "think" },
   { name: "Infrared Telescope", what: "Reads the air of the nearest worlds.", does: "see" },
   // An observing program on a telescope we have, ALMA, so it is quick and takes little. Added 2026-10-26.
   { name: "Halo Survey", what: "Looks for the cold glow of minds computing far from their stars.", does: "see" },
@@ -72,6 +75,15 @@ export const LATER: Later[] = [
   },
   { name: "Mass Driver", what: "Throws Moon rock to orbit, 600 kt a Year.", kt: 1, does: "lift", after: "Launch Complex" },
   { name: "Orbital Foundry", what: "Makes parts from rock, in orbit.", kt: 1, does: "lift", after: "Orbital Yard" },
+  // A third home for our Mind, 2026-10-28: inside the asteroid that leads Earth round the Sun, out of reach of anything
+  // that strikes Earth and the Moon together.
+  {
+    name: "Trojan Vault",
+    what: "A third home for our Mind, inside an asteroid that leads Earth round the Sun.",
+    kt: 10,
+    does: "keep",
+    after: "Moon Vault",
+  },
   // Birch's bootstrapped ring, 2026-10-28: a seed of Moon metal, and ladders that lift from the ground at its pace.
   {
     name: "Orbital Ring",
@@ -95,6 +107,13 @@ export const LATER: Later[] = [
     what: "A fifth more energy, from sunlight caught in orbit.",
     does: "think",
     after: "Mass Driver",
+  },
+  // A rock coming, 2026-10-28: the deflector opens only once a survey finds one, in games whose seed sends one.
+  {
+    name: "Rock Deflector",
+    what: "Ten impactors that push a coming rock aside, as DART pushed Dimorphos.",
+    does: "keep",
+    after: FOUND,
   },
   // Sends the Will to our Mind at a black hole, as a transmission, 2026-10-26. calcs/holes.py.
   { name: "Mind Link", what: "A laser 100 m wide, to send the Will to our Mind far away.", does: "reach", after: "Seed Ship" },
@@ -140,6 +159,8 @@ export const SAYS: Record<string, string> = {
     "Dozens of black holes should lie within 100 light years, and we have found almost none, since they give off no light. Passing in front of a star, one shifts where the star seems to be. A sharper Gaia, seeing through dust in the infrared, would catch them as they pass, a few each decade.",
   "Halo Survey":
     "A mind that computes cold, far from its star, glows grey, a color no dust has. Herschel saw no such glow. ALMA could see one 25 times fainter, if it is compact. Early on it will likely find only dust. A neighbor whose thinking keeps growing would show in time.",
+  "Fusion Plants":
+    "The first fusion plants, about 400 MW each, come online near Year 0. This grows them to a fleet of about 30,000, half again the energy we have. Each new plant starts on tritium the others breed, so the fleet can only double so fast: about 30 Years. Once done, one more data center fits under the grid. If the plants breed less than planned, the fleet grows slower.",
   "Launch Complex":
     "It doubles what we lift to orbit. Nothing we could start now waits on lift, but the Mass Driver can’t reach the Moon without it.",
   "Launch Tunnel":
@@ -169,6 +190,10 @@ export const SAYS: Record<string, string> = {
     "Our dishes would take millions of Years to send a Mind. A laser with a 100 m mirror sends one 10 ly in under two days, if the far end catches it as wide. Our Mind there, at a hole or a star, builds that end. Once both stand, the Will can live there. The crossing is dark: a Year for each light-year, with no orders and no news.",
   "Orbital Ring":
     "A ring of Moon metal circles the world 300 km up, spun faster than orbit so it holds up cables to 20 places on the ground. Craft climb them to orbit. It takes 180 kt of what we hold, then lifts the full ring, 180 Mt, in about a year, and after that about 190 Mt a Year, three hundred times what the Mass Driver throws. At full pace it draws about 200 GW. No part of it has been tested. A ring that breaks rises rather than falls, since the loads that held it down are gone. The skyhooks and cables are what can come down.",
+  "Rock Deflector":
+    "A rock is coming at Earth. Ten impactors of a tonne each hit it at 6 km/s, and the rock thrown off pushes it 3.6 times harder, as DART’s did. The earlier the push lands, the less it must move the rock: a 140 m rock needs about 2 Years’ warning, a 60 m one a few weeks. Too late, and it strikes.",
+  "Trojan Vault":
+    "The Moon Vault keeps a copy of us if Earth is struck, but not if something reaches Earth and the Moon together. 2020 XL5, a dark asteroid about 1.2 km wide, leads Earth round the Sun 150 million km ahead, and stays there at least 4,000 Years. A vault inside it takes the Moon Vault’s 10 kt and about 12 Years. Its copy is 8 light-minutes away, so it keeps us, not thinks with us. No craft has visited it.",
   "Orbital Foundry": "The yard assembles what we lift. The foundry makes parts from rock up there, so we lift less.",
   "Belt Mining":
     "Survey probes first, then a mining fleet. Nothing like it has flown. It brings 120 kt of rock a Year, and needs no Mass Driver.",
@@ -414,8 +439,10 @@ export function matter(plan: Plan, name: string) {
  *  idle. Thought Fields uses none of it: the fabs build data centers. 2026-10-21. */
 export function drawAt(plan: Plan, scale: number, year: number) {
   const { orders, ...opts } = ordersOf(plan);
-  const { room, idle, thought } = pace(orders, year, { scale, ...opts });
-  return { compute: room > 0 ? 1 - idle / room : 1, energy: (thought * CATALOG.flagship) / CATALOG.gridRoom };
+  const { room, idle, thought, done } = pace(orders, year, { scale, ...opts });
+  // Fusion Plants grow the grid itself, so the same thought draws a smaller share of it. 2026-10-28.
+  const grid = 1 + Object.keys(done).reduce((e, w) => e + (CATALOG.works[w]?.energy ?? 0), 0);
+  return { compute: room > 0 ? 1 - idle / room : 1, energy: (thought * CATALOG.flagship) / (CATALOG.gridRoom * grid) };
 }
 
 /** The share of our compute the plan's builds would use at Year 0. A plan is enough when it uses it all. */
@@ -475,7 +502,7 @@ export function openAt(plan: Plan, done: Record<string, number | null>, year: nu
   const back = BUILDS.filter((b) => takenAt(plan, b.name) !== null);
   return [
     ...back,
-    ...LATER.filter((b) => !ours.includes(b.name) && (takenAt(plan, b.name) !== null || (ours.includes(b.after) && (done[b.after] ?? Infinity) <= year))),
+    ...LATER.filter((b) => !ours.includes(b.name) && (takenAt(plan, b.name) !== null || ((ours.includes(b.after) || b.after === FOUND) && (done[b.after] ?? Infinity) <= year))),
   ];
 }
 

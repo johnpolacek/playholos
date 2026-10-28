@@ -3,6 +3,7 @@
 // built. Times are Build's: a build's standard pace, and each one in our order as schedule dates it. 2026-10-23.
 import { BUILDS, kt, LATER, ordered, takenAt, takes } from "@/lib/game/plan";
 import { LENS_HOME } from "@/lib/game/reach";
+import { FOUND, harm, rockAt, type Rock } from "@/lib/game/rocks";
 import type { Plan } from "@/lib/game/types";
 
 const tenth = (y: number) => Number(y.toFixed(1));
@@ -20,6 +21,9 @@ const MORE: Record<string, string> = {
   "Halo Survey": "Once done, it looks at every star within 50 ly once a Year, on its own. It sees a compact cold glow, not a wide one, and tells a grey glow from dust's.",
   "Mind Link": "Once done, and once word has come that our Mind there stands, the Will can move to it, wherever it is, from that place's page on Reach. It goes as a transmission, 100 PB, which takes days at that distance, then the light-time. The crossing costs that time: the Will is dark for it, a Year for each light-year, ordering nothing and hearing nothing, while Earth goes on by our orders and charter. Living there, every order from the Will reaches Earth that many Years late, and Earth's news reaches the Will as late. In a refuge, our Mind there can spread over chips 10 cm wide on the innermost stable orbit, which tides can't break, so its clock runs slow and the sky outside goes by faster. A furnace's disk fills that orbit, so it can't.",
   "Orbital Ring": "A broken ring rises to a higher orbit rather than falling, since the loads that held it down are gone, and takes thousands of Years to come down. What can fall are the skyhooks and cables, into cleared ground beneath them. A meteoroid cuts a cable about once in 14,000 Years, far less with spare strands. The ring is no radio source: it reflects Earth's own noise about a million times fainter.",
+  "Trojan Vault": "It keeps a copy of our Mind 8 light-minutes from Earth, out of reach of a strike on Earth and the Moon together. It doesn't think with us: it keeps a copy that could carry on if Earth and the Moon were lost.",
+  "Ground Solar": "Its fifth more energy counts once it is done, but it fits a whole data center more only on some Earths, where the grid had nearly room for one. On most it adds energy we don't yet think with.",
+  "Fusion Plants": "Once done, the grid holds half again as much energy, so one more data center of Thought Fields fits. Until then it adds nothing to our thought: the fleet grows by breeding its own tritium, and the energy counts once it stands.",
   "Cold Annex": "Its heat glows in the far infrared, grey, as a neighbor's cold computing would.",
   "15 m Mirror": "It splits worlds 2.3 times closer to their stars than the Infrared Telescope, and gathers five times the light. Once done, it reads Proxima b, then every world we've felt where it can read more than the Infrared Telescope, nearest first, on its own.",
 };
@@ -35,7 +39,7 @@ export function describeBuilds(): string {
   };
   return `What Earth can build. Only the Will queues a build, on the Build tab. Name no build or observation that isn't here. Less compute than the kit says slows every build:
 ${BUILDS.map((b) => line(b)).join("\n")}
-${LATER.map((b) => line(b, b.after)).join("\n")}`;
+${LATER.filter((b) => b.after !== FOUND).map((b) => line(b, b.after)).join("\n")}`;
 }
 
 /** Our order, in line, with where each build stands at Year `year`: done, under way and when it will be, or past Year
@@ -87,4 +91,16 @@ export function describeQueue(plan: Plan, done: Record<string, number | null>, y
         "Copies make copies, for 3 generations at most, so 7 craft. Once sent, it can't be called back. Each one's word comes home one light-time after it lands.";
     }),
   ].join("\n");
+}
+
+/** The rock coming, once our surveys find it, and how it ended. Nothing while it is unknown: the Mind knows only what
+ *  Earth does. The Rock Deflector is offered only then. 2026-10-28. */
+export function describeRock(rock: Rock | null, plan: Plan, done: Record<string, number | null>, year: number | null) {
+  const r = rockAt(rock, plan, done, year ?? 0);
+  if (!r || r.state === "unknown") return "";
+  const at = (y: number) => `Year ${tenth(y)}`;
+  if (r.state === "struck")
+    return `A rock ${r.m} m wide struck Earth at ${at(r.strikes)}: ${harm(r.m)}.${r.found === null ? " No survey saw it coming." : ""}`;
+  if (r.state === "pushed") return `Our Rock Deflector pushed aside the ${r.m} m rock that would have struck Earth at ${at(r.strikes)}. It passes us by.`;
+  return `A rock ${r.m} m wide, found at ${at(r.found!)}, will strike Earth at ${at(r.strikes)}: ${harm(r.m)}. A new build is open: the Rock Deflector, ten impactors of a tonne, as DART was, ${tenth(takes("Rock Deflector").years ?? 4)} Years at standard pace and a Year's flight. Its push must land by ${at(r.strikes - r.lead)}, or the rock strikes.${r.lands !== null ? ` Ours lands at ${at(r.lands)}${r.pushed ? ", in time" : ", too late"}.` : ""}`;
 }

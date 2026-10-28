@@ -36,7 +36,8 @@
   },
   "Ground solar": {
    "years": 10,
-   "want": 20
+   "want": 20,
+   "energy": 0.2
   },
   "A 15 m mirror": {
    "years": 18,
@@ -121,6 +122,20 @@
   "Orbital ring": {
    "years": 10,
    "want": 9.0
+  },
+  "Trojan vault": {
+   "years": 12,
+   "want": 1.5,
+   "orbit": true
+  },
+  "Rock deflector": {
+   "years": 4,
+   "want": 0.3
+  },
+  "Fusion plants": {
+   "years": 30,
+   "want": 100,
+   "energy": 0.5
   }
  },
  "floor": 0.6666666666666666,
