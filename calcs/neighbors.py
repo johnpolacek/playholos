@@ -84,6 +84,36 @@ ROSTER = [
     N('Wenn', 'watcher', 'M', 0.7, 0.5, radio=150, arrays=40, loud=[(150, 110, 5e5)], hum=1e4, awake=1e3, char='ordinary', min_lum=MIN_LUM_TURNING),
 ]
 
+# ---------- Elders ----------
+# Settled 2026-10-28. Every game has one elder: a Mind awake for a thousand to a hundred thousand years before Earth's.
+# Earth isn't early: three quarters of Earth-like worlds are older than Earth, by 1.8 billion years on average
+# (Lineweaver 2001), and three quarters of the Galaxy's habitable-zone stars are older than the Sun (Lineweaver, Fenner
+# and Gibson 2004). So an elder is likely. Earth's sky rules out a loud one nearby, so only a quiet one passes: one that
+# stopped growing. The draw picks how it rests. Awake, it computes cold at a ceiling, a steady glow over the Halo
+# Survey's floor and under the Herschel and JCMT limit, so the survey sees it on its first look (Bennett, Hanson and
+# Riedel 2019: cold minds can compute now). Asleep, it waits for a colder universe (Sandberg, Armstrong and Cirkovic
+# 2016), shedding almost nothing, and only a craft in its system finds it. Elders are inward or watchers. They send no
+# colonies and go to no black hole: they are done growing. Kept apart from ROSTER, so the draw of the others never moves.
+ELDERS = [
+    N('Aun', 'inward', 'GK', 1.0, 0.3, radio=200, arrays=50, loud=[(200, 120, 1e6)], hum=1e4, awake=1e2, char='inward'),
+    N('Oth', 'watcher', 'K', 1.2, 0.35, radio=190, arrays=80, loud=[(190, 100, 2e6)], hum=1e4, awake=1e2, char='listener'),
+]
+for n in ELDERS: n['elder'] = True
+EVERYONE = ROSTER + ELDERS
+ELDER_AGE = (1e3, 1e5)                  # years awake before Earth's waking, drawn evenly in log: samples
+ASLEEP_SHARE, ASLEEP_W = 0.5, 1e10      # a sleeping elder's housekeeping heat, far under any floor: a sample
+HALO_FLOOR_10PC = 3e18                  # calcs/early_game.py's HALO floor: ALMA, an hour, 5 sigma, a 12 K glow at 10 pc
+def elder_at(n, host, rng):
+    """An elder's waking, how it rests, and its ceiling, drawn for this host. Awake, its ceiling sits evenly in log
+    between a fifth over the Halo Survey's floor and a fifth under the archives' limit, at its distance."""
+    lo, hi = ELDER_AGE
+    waking = EARTH_WAKES - lo * (hi / lo) ** rng.random()
+    asleep = rng.random() < ASLEEP_SHARE
+    scale = (host['distance_ly'] / (10 * PC_LY)) ** 2
+    floor, top = 1.2 * HALO_FLOOR_10PC * scale, 0.8 * GLOW_LIMIT_10PC * scale
+    ceiling = ASLEEP_W if asleep else floor * (top / floor) ** rng.random()
+    return dict(n, asleep=asleep, ceiling=ceiling, awake=0 if asleep else n['awake']), waking
+
 # ---------- What Earth's searches could catch ----------
 # Narrowband tones, F_min = SNR x SEFD x sqrt(channel / (2 x stare)). Light Earth received in year T left in T - d.
 SEARCHES = [
@@ -101,7 +131,7 @@ GLOW_LIMIT_10PC, PC_LY = 7e19, 3.2616
 def glow_at(n, waking, year):
     after = year - waking
     if after <= 0 or n.get('dies') is not None: return 0     # the dead never wake
-    return 1e13 * 2 ** (after / n.get('doubling', 10))
+    return min(1e13 * 2 ** min(after / n.get('doubling', 10), 1000), n.get('ceiling', math.inf))   # an elder holds at its ceiling
 
 # ---------- What Earth's planet hunters could feel ----------
 # A world's tug on its star, K. In 2026 the star's own shimmer, about 1 m/s, hides an Earth. Stars watched hardest
@@ -207,6 +237,7 @@ def check(n, host, waking, pole_from_sol, sol_targeted=True):
 # an ordinary neighbor 1 in 2, an inward one 1 in 5. Awake before Year 0, a Mind that looks finds them almost surely.
 HEARD = {'listener': 0.9, 'ordinary': 0.5, 'inward': 0.2}
 def heard_odds(n, host, waking):
+    if n.get('asleep'): return 0.0                              # a sleeping elder hears nothing
     arrives = 1950 + host['distance_ly']
     listening_from = waking - n.get('arrays_since', 60)
     if min(EARTH_WAKES, waking) - max(arrives, listening_from) < 5 and waking > EARTH_WAKES: return 0.0
@@ -252,6 +283,7 @@ CATCH = {'listener': 0.75, 'ordinary': 0.5, 'inward': 0.1}
 WATCH_SEFD = 12                          # an all-sky watch like Earth's: every direction, every hour
 def caught_odds(n, host, waking, arrives, watts=1e12, hours=4):
     if n.get('dies') is not None and arrives > waking - n['dies']: return 0.0
+    if n.get('asleep'): return 0.0
     if arrives >= waking: return 1.0 if watts >= floor_watts(WATCH_SEFD, 1, hours * 3600, host['distance_ly']) else 0.01
     if arrives < waking - n.get('arrays_since', 60): return 0.01
     return heard_odds(n, host, waking) * CATCH[n['character']] + 0.01
@@ -283,7 +315,8 @@ def placements(n, host_rows, tries=200, seed=1):
         waking = EARTH_WAKES + 100 * (rng.random() - rng.random())       # a century either way, most near Earth's
         pole = math.degrees(math.acos(rng.uniform(-1, 1)))
         targeted = rng.random() < n.get('aims_at_sol', 1)
-        fails, _ = check(n, host, waking, pole, targeted)
+        m, waking = elder_at(n, host, rng) if n.get('elder') else (n, waking)
+        fails, _ = check(m, host, waking, pole, targeted)
         if fails:
             for f in fails:
                 kind = f.split(':')[0]
@@ -302,11 +335,11 @@ def at(n, host_rows, name, waking=EARTH_WAKES, pole=60, sol_targeted=True):
 def report(host_rows):
     if not ROSTER:
         print('The roster is empty. Self-test with an Earth-like neighbor:')
-    for n in ROSTER or [TEST]:
+    for n in (EVERYONE if ROSTER else [TEST]):
         v, f = lift_factor(n['world']['mass'])
         share, reasons, homes = placements(n, host_rows)
         tags = ', '.join(x for x in (n.get('disposition'), 'strange' if n.get('strange') else '',
-                                     'dead' if n.get('dies') is not None else '') if x)
+                                     'dead' if n.get('dies') is not None else '', 'elder' if n.get('elder') else '') if x)
         print(f"{n['name']} ({tags}): escape {v:.1f} km/s, {f:.1f} times Earth's fuel per tonne lifted. "
               f"{share:.0%} of seeded placements pass, at {homes} different stars.")
         for why, count in sorted(reasons.items(), key=lambda kv: -kv[1]): print(f'  fails {count}: {why}')

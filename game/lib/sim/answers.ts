@@ -52,11 +52,12 @@ export function glowsSeen(world: World) {
   const shown = (p: Neighbor) => world.stars[p.star]?.shown ?? p.star;
   const out: { from: string; to: string; at: number; d: number }[] = [];
   for (const b of world.neighbors) {
-    if (b.dead) continue;
+    if (b.dead || b.elder?.asleep) continue;                 // an elder asleep watches nothing
     for (const a of world.neighbors) {
       if (a === b || a.dead) continue;
       const d = between(world, shown(a), shown(b));
       const need = catalog.halo.floor * (d / (10 * PC_LY)) ** 2;
+      if (a.elder && a.elder.ceiling < need) continue;       // nor sheds enough to be seen
       const crosses = d + a.waking + a.doubling * Math.log2(need / START_W);
       out.push({ from: shown(a), to: shown(b), at: Math.max(0, crosses, b.waking), d });
     }
@@ -116,6 +117,7 @@ export function between(world: World, a: string, b: string) {
 function catches(p: Neighbor, at: number, die: Die) {
   const dies = (p as Neighbor & { radio?: { dies?: number | null } }).radio?.dies;
   if (p.dead && (dies == null || at > p.waking - dies)) return false;
+  if (p.elder?.asleep) return false;                         // asleep, it hears no message. Only a craft in its system wakes it
   if (at >= p.waking) return true;
   return p.heard && die() < 0.5;
 }

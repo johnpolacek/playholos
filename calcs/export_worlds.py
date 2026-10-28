@@ -58,7 +58,8 @@ def neighbor(p, stars):
         unheard=[dict(what=u['what'], move=u['move'], sent=yr(u['sent']), arrived=yr(u['arrived'])) for u in p['unheard']],
         caught=[dict(msg=c['msg'], arrives=yr(c['arrives']), acts=yr(c['acts']), move=c['move']) for c in p['caught']],
         afterSilence=dict(at=yr(p['after_silence']['at']), move=p['after_silence']['move']) if p['after_silence'] else None,
-        probes=[{k: r4(v) for k, v in q.items()} for q in p['probes']])
+        probes=[{k: r4(v) for k, v in q.items()} for q in p['probes']],
+        **(dict(elder=dict(asleep=n['asleep'], ceiling=float(f"{n['ceiling']:.3g}"))) if n.get('elder') else {}))   # 2026-10-28
 
 def world(w, stars):
     return dict(star=star(w['host'], stars), d=r4(w['d']), a=r4(w['a']), radius=r4(w['radius']), mass=r4(w['mass']), pole=r4(w['pole']),
@@ -71,6 +72,7 @@ def find(src, stars):
     if src is None: return None
     if 'n' in src:
         h, mass, a, pole, truth = src['host'], src['n']['world']['mass'], src['a'], src['pole'], dict(kind='dead' if src['dead'] else 'home', who=src['name'])
+        if src['n'].get('elder'): truth['elder'] = 'asleep' if src['n']['asleep'] else 'awake'
         msini = mass * math.sin(math.radians(pole))
     elif 'rung' in src:
         h, mass, a, pole, truth = src['host'], src['mass'], src['a'], src['pole'], dict(kind='natural', rung=src['rung'])
@@ -216,7 +218,7 @@ if __name__ == '__main__':
     for s in POOL:
         data = json.dumps(export(s, rows), separators=(',', ':')).encode()
         (GAME / 'data' / 'worlds' / f'{s}.json.gz').write_bytes(gzip.compress(data, mtime=0))
-    tables = {n['name']: reactions.table(n['name']) for n in nb.ROSTER if reactions.table(n['name'])}
+    tables = {n["name"]: reactions.table(n["name"]) for n in nb.EVERYONE if reactions.table(n['name'])}
     (GAME / 'data' / 'reactions.json').write_text(json.dumps(dict(tables=tables, moves=reactions.MOVES), indent=1))
     (GAME / 'data' / 'works.json').write_text(json.dumps(works_catalog(), indent=1))
     (GAME / 'lib' / 'sim' / 'pool.ts').write_text('// Written by calcs/export_worlds.py. The seeds a new game may draw.\n'

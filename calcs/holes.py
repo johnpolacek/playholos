@@ -130,7 +130,7 @@ def claim(seed, holes, neighbors, place):
     at = {h['id']: xyz(h['ra'], h['dec'], h['d']) for h in holes}
     out = []
     for p in neighbors:
-        if p['dead']: continue
+        if p['dead'] or p['n'].get('elder'): continue              # an elder is done growing, 2026-10-28
         rng = random.Random(f"{seed}:holes:{p['name']}")
         lean = p['n']['disposition'] if p['n']['disposition'] in ('inward', 'hunter') else p['dials'].split()[1]
         if rng.random() >= GO.get(lean, 0): continue

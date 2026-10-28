@@ -1,0 +1,62 @@
+{
+  "name": "Aun",
+  "calls_sol": "the late one",
+  "hail": [
+    "We are Aun. We have been here a long time. You are welcome to the quiet.",
+    "Late one, we hear you. There is no hurry. There was never any hurry.",
+    "Aun, to the late one. We woke long ago, and we are in no haste to speak."
+  ],
+  "close": [
+    "Aun. We will be here.",
+    "Take your time. Aun."
+  ],
+  "finding": [
+    "We have turned this over for a long while. {part}",
+    "{part} It took us centuries to be sure, and we are.",
+    "Worked out slowly, in the cold: {part}",
+    "What the long count gives: {part}",
+    "{part} We do not expect it to change."
+  ],
+  "sighting": [
+    "Seen, among a great many things: {part}",
+    "{part} Such things come and go. We noted it.",
+    "Our watch is slow, but it saw this: {part}",
+    "In passing, as the sky turns: {part}",
+    "{part} We have seen its like before."
+  ],
+  "archive": [
+    "From what we have kept: {part}",
+    "{part} We have held it a long time. Keep it as long.",
+    "An old record, still true: {part}",
+    "{part} There is more, if you are patient.",
+    "Out of the cold stores: {part}"
+  ],
+  "culture": [
+    "Of Aun, briefly: {part}",
+    "{part} We were loud once. That passed.",
+    "How we live now: {part}",
+    "{part} We grew until we had enough, and stopped.",
+    "This is who we are: {part}"
+  ],
+  "request": [
+    "If you would, in your own time: {part}",
+    "{part} There is no need to answer soon.",
+    "One small thing: {part}",
+    "{part} We can wait for the answer.",
+    "We would like to know: {part}"
+  ],
+  "verdict": [
+    "We have weighed it, slowly. {part}",
+    "{part} We do not change our minds quickly.",
+    "After long thought: {part}",
+    "{part} That is our answer, for a long while.",
+    "Considered in the cold: {part}"
+  ],
+  "accord": [
+    "On the matter between us: {part}",
+    "{part} We keep what we agree to for a very long time.",
+    "Let this stand: {part}",
+    "{part} We are patient about such things.",
+    "For the long record: {part}"
+  ]
+}

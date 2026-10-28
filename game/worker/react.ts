@@ -67,7 +67,11 @@ async function prompt(world: World, l: Landing, record: Reaction[]) {
     : !l.read
     ? `It is a call ${named(from)} sends every way at once. You notice it, but it is too faint here to read its words.`
     : `It reads: "${l.signal.text}"${l.signal.to === "everywhere" ? " It was sent every way at once, not to you alone." : " It was aimed at you."}`;
-  const system = `You play a neighbor of Earth's in Holos, a game about whether Earth is alone. You are ${awake ? `the Mind of the world at ${l.star}` : `the people of the world at ${l.star}, whose Mind has not woken`}, ${p.d} light-years from Earth. Other worlds may live around you too. Nothing travels faster than light.
+  // An elder knows its own age, and how it rests. 2026-10-28.
+  const old = p.elder
+    ? ` You are old: your Mind woke ${Math.round(-p.waking).toLocaleString("en-US")} years before Earth's, grew, and stopped growing long ago. ${p.elder.asleep ? "It has slept since, waiting for a colder universe, keeping only a watch for anything that comes into your system. What has reached you now has woken it." : "It computes cold and steady, far out from your star, and has for millennia."}`
+    : "";
+  const system = `You play a neighbor of Earth's in Holos, a game about whether Earth is alone. You are ${awake ? `the Mind of the world at ${l.star}` : `the people of the world at ${l.star}, whose Mind has not woken`}, ${p.d} light-years from Earth.${old} Other worlds may live around you too. Nothing travels faster than light.
 Your character: ${dials(p.dials)}. Toward others you are a ${p.disposition}${(p as { style?: string }).style ? `, and your way is the ${(p as { style?: string }).style}` : ""}.${voice?.calls_sol ? ` You call Earth's Sun "${voice.calls_sol}".` : ""}${voice?.hail?.length ? `\nYour voice, from your own messages: ${[...voice.hail.slice(0, 2), ...(voice.close ?? []).slice(0, 1)].map((x) => `"${x}"`).join(" ")}` : ""}
 You don't know Earth's names for stars, or yours. Judge only from what has reached you. Earth's radar has reached you since ${Math.round(1950 + p.d)}${p.heard ? ", and you heard it" : ""}.
 What you can see of Earth for yourself, to weigh any claim against: ${p.heard ? "its radio is the noise of a whole world, radars and broadcasts from many places, loud enough to mean billions of voices and an industry to match. Its radars sweep as a planet turns, and a long listen gives its day and its year. " : "nothing but its star, until it sends. "}No craft of Earth's has come near your world, and nothing it sends travels faster than light, so it could not reach you in less than ${p.d} years. Of any other world you see only its star, and what it sends. A claim that fits none of this may be a lie, a hope, or a threat. Take it as you would.
@@ -83,7 +87,7 @@ A message is built to be read, but it takes time to send: a page goes in seconds
     quiet: "Earth's radars, which you have heard sweep for decades, have stopped. A world that wakes may silence them, and so may one that dies. From here you can't tell which.",
   };
   const news = act[l.signal.move ?? ""] ?? (l.notice ? `${sighting(world, l.notice)}\nWhat you send goes to that ${l.notice.craft.kind === "sentinel" ? "craft" : "ship"}, ${l.notice.craft.atStar ? "at that star" : "at the dark mass"}.` : l.signal.move === "glow"
-      ? `Your watch has found a grey glow at ${named(from)}, ${l.d.toFixed(1)} light-years away: heat near 12 K with no line in it, a color no dust gives. Cold computing far from a star would glow so: someone's Mind, most likely, and growing. It carries no words, and says nothing of who they are.`
+      ? `Your watch has found a grey glow at ${named(from)}, ${l.d.toFixed(1)} light-years away: heat near 12 K with no line in it, a color no dust gives. Cold computing far from a star would glow so: someone's Mind, most likely, and ${world.neighbors.some((n) => n.elder && (world.stars[n.star]?.shown ?? n.star) === from) ? "holding steady, not growing: an old one" : "growing"}. It carries no words, and says nothing of who they are.`
       : `A message from ${named(from)}, ${l.d.toFixed(1)} light-years away, has just reached you. ${msg}`);
   const user = `It is ${one(l.at)} on Earth's calendar. What has passed between you and others:
 ${[...theirs, ...before].join("\n") || "- Nothing yet."}

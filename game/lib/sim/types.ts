@@ -55,6 +55,9 @@ export interface Neighbor {
   inbound: Inbound[];
   afterSilence: { at: number; move: string } | null;
   probes: Record<string, number | string | boolean>[];
+  /** An elder, awake for millennia before us and done growing: asleep, or computing cold at a steady ceiling, in watts.
+   *  One a game, 2026-10-28. */
+  elder?: { asleep: boolean; ceiling: number };
 }
 
 export interface Find {
@@ -65,7 +68,7 @@ export interface Find {
   periodDays: number;
   by: string;
   year: number;
-  truth: { kind: "home" | "dead" | "natural"; who?: string; rung?: string };
+  truth: { kind: "home" | "dead" | "natural"; who?: string; rung?: string; elder?: "awake" | "asleep" };
 }
 
 export interface World {
@@ -184,6 +187,8 @@ export interface Visit {
   /** What a sentinel, staying, saw that a pass can't: someone living there, or the ruins of those who did. */
   lives?: boolean;
   ruins?: boolean;
+  /** An elder's home, as a craft there sees it: cold works far out, humming, or dark and still. 2026-10-28. */
+  elder?: "awake" | "asleep";
   /** At a black hole: its spin, measured, and how slow a clock runs on its innermost stable orbit. */
   spin?: number;
   clock?: number;
@@ -209,6 +214,8 @@ export interface Glow {
   /** The Year the survey first saw it, and how bright it is now, in watts, as its light shows it. */
   seen: number;
   watts: number;
+  /** It has held steady over five Years of looks or more: not growing, as nothing young is. An elder's. 2026-10-28. */
+  steady?: boolean;
   /** Where its star sits: right ascension in hours, declination. */
   ra?: number;
   dec?: number;
@@ -228,7 +235,7 @@ export interface EarthView {
     stands?: number;
     d?: number;
     /** Who was there first. At a star, a people at home, or the ruins of one. */
-    others?: { kind: "sentinel" | "colony" | "home" | "ruins"; mode?: "furnace" | "refuge" }[];
+    others?: { kind: "sentinel" | "colony" | "home" | "ruins" | "elder"; mode?: "furnace" | "refuge" }[];
     /** Who braked in after it, each as it saw them and when, and its end, as far as its word has reached us. */
     came?: { kind: "sentinel" | "colony"; at: number; from: string }[];
     lost?: { at: number; how: "catch" | "strike" };

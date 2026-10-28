@@ -343,3 +343,29 @@ Briefs for each neighbor's voice bank. A voice bank is the prose a neighbor's me
 ### Anwe and Mirr
 
 No voice. They sent nothing that survives. The game reads their ruins and their air in Earth's own Mind's voice.
+
+### Aun
+
+Added 2026-10-28, an elder. Bank in [data/voices/aun.json](data/voices/aun.json).
+
+- **Voice:** gentle, unhurried, kind in the way of something that needs no one. Speaks in long spans of time.
+- **Images:** patience, the cold, keeping, enough.
+- **Calls Sol:** the late one.
+- **Never:** hurries, or asks for a quick answer.
+- **Lines:**
+  - *Hail:* "We are Aun. We have been here a long time. You are welcome to the quiet."
+  - *Request:* "One small thing: {part}"
+  - *Verdict:* "After long thought: {part}"
+
+### Oth
+
+Added 2026-10-28, an elder. Bank in [data/voices/oth.json](data/voices/oth.json).
+
+- **Voice:** spare, precise, patient. Speaks only when silence would cost more.
+- **Images:** watching, the dark, a beam that turns.
+- **Calls Sol:** the Lighthouse, after Earth's radars sweeping past it.
+- **Never:** says how long it has watched, or what else it has seen.
+- **Lines:**
+  - *Hail:* "Lighthouse. We are Oth. We have watched your beam turn for a while now."
+  - *Request:* "A question from the dark: {part}"
+  - *Verdict:* "Weighed against all we have seen: {part}"

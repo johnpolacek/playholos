@@ -230,15 +230,33 @@ test("Earth lost: its works leave the line, and a backup builds only off Earth",
   assert.ok(offEarth("Moon vault") && offEarth("Seed ship") && !offEarth("Launch complex"));
 });
 
-test("the Halo Survey sees what calcs/neighbors.py's glow_at gives, over ALMA's floor: none by Year 50, 12 by Year 100", async () => {
+test("the Halo Survey sees what calcs/neighbors.py's glow_at gives, over ALMA's floor: no young Mind by Year 50, 12 by Year 100", async () => {
   let fifty = 0, hundred = 0;
   for (const seed of POOL) {
     const world = await loadWorld(seed);
-    fifty += glows(world, 0, 50).length;
-    hundred += glows(world, 0, 100).length;
+    const young = (g: { star: string }) => !world.neighbors.some((n) => n.elder && (world.stars[n.star]?.shown ?? n.star) === g.star);
+    fifty += glows(world, 0, 50).filter(young).length;
+    hundred += glows(world, 0, 100).filter(young).length;
   }
   assert.equal(fifty, 0);
   assert.equal(hundred, 12);
+});
+
+test("an elder awake shows on the Halo Survey's first look and holds steady; one asleep never shows", async () => {
+  let awake = 0;
+  for (const seed of POOL) {
+    const world = await loadWorld(seed);
+    const elders = world.neighbors.filter((n) => n.elder);
+    assert.equal(elders.length, 1);
+    const e = elders[0], star = world.stars[e.star]?.shown ?? e.star;
+    const seen = glows(world, 3, 200).find((g) => g.star === star);
+    if (e.elder!.asleep) { assert.equal(seen, undefined); continue; }
+    awake++;
+    assert.equal(seen?.seen, 3);
+    assert.equal(seen?.watts, e.elder!.ceiling);
+    assert.ok(seen?.steady);
+  }
+  assert.ok(awake > 5 && awake < POOL.length - 5);
 });
 
 test("a lens pictures a felt world's face once its picture is home: a home's cities, a natural world's ground", async () => {

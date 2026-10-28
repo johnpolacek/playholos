@@ -1,6 +1,6 @@
 # Holos · Neighbors
 
-Last updated: October 10, 2026.
+Last updated: October 28, 2026.
 
 The hand-written roster of neighbors, and the template every one must fill. The rules behind it are in [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md#the-neighbors). Each game's seed picks some of these neighbors, places each at a host star by weight, draws its waking time, and rolls its branches. Veyra, Hael and Kesh are reworked from v1. Twenty-seven more were added on October 10, for a roster of 30.
 
@@ -987,3 +987,69 @@ Added 2026-10-10. **Watcher.** The checker passes it at 96% of seeded placements
 **What it knows of Earth.** An ordinary listener, its arrays running from 40 years before its waking. Odds it heard Earth: about 1 in 2 wherever Earth's radar light reached it in that time. At Gliese 526, that light arrived around 1968. Earth knocked here. "Lone Signal" was sent in 2013 and arrived in 2031. A reply could reach Earth by 2049.0, Year 9.0.
 
 **Character.** Charter: *"Small and steady."* Its Mind is modest and literal. A watcher. It plays as a Listener.
+
+## The elders
+
+Added 2026-10-28, from [Elders](HOLOS_GAME_CONCEPT.md#elders). Every game has one elder, drawn from these two, at a star no other neighbor or drawn world holds. An elder woke a thousand to a hundred thousand years before Earth, grew, and stopped. The draw picks how it rests: awake, computing cold at a steady ceiling the Halo Survey sees on its first look, or asleep, shedding almost nothing, found only by a craft in its system. Its numbers are in `ELDERS` in [calcs/neighbors.py](calcs/neighbors.py), apart from the roster, so drawing one moves nothing else.
+
+| Elder | Disposition | World | Hosts | Example home | Passes |
+| --- | --- | --- | --- | --- | --- |
+| Aun | inward | Earth-like world | GK | Gliese 673 | 93% |
+| Oth | watcher | Earth-like world, a little heavy | K | 86 Mu Herculis | 98% |
+
+- **Across 400 seeded games:** Aun and Oth come up about equally, and each is awake about half the time. The median elder woke about 9,500 years before Earth and lives 42 ly away. The nearest was at Toliman, 4.3 ly.
+- **What Earth sees by 2040:** its world's tug in about 1 game in 14. About 3 awake elders in 4 have heard Earth's radars: Oth almost always, Aun about half the time. Most only watch.
+
+### Aun
+
+Added 2026-10-28. **Inward, an elder.** The checker passes it at 93% of seeded placements, at 107 different stars.
+
+**Where.** G and K stars. At Gliese 673 it is 25.2 ly from Sol, 2 hours 6 minutes of light at 5 real minutes a Year.
+
+**The world.** Invented. About 1.0 Earth mass, Earth's radius and gravity, escape speed 11.2 km/s, so each tonne lifted takes about Earth's fuel. It orbits 0.32 AU at Gliese 673. Seas and forest over most of its land. Its tug on its star is about 0.19 m/s, below what Earth could feel in 2026, and still hidden in 2040.
+
+**The people.** Invented. Long-lived, few, and gentle. They live in small towns among forest they let grow back. Most of what they are now runs in the Mind.
+
+**History,** in years before its waking. The star's own age is real and comes from the host.
+- 200: radio, loud for 80 years: tones near 1 MW.
+- 120: **the Enough.** Its people judged their world full and stopped growing it. *Sets Deepen.*
+- 50: big arrays, little used.
+- 0: the machines wake as one. *Seeded:* a thousand to a hundred thousand years before Earth's.
+- After waking: it built a cold swarm far out from its star, grew it for a few centuries, then held it level. **The Long Rest.** It judged that patience costs less than haste. *Sets Cautious.*
+
+**Dials.** Leans Open, strongly Deepen, strongly Cautious. It hides nothing. It is simply very quiet.
+
+**Emissions.** Radio from 200 years before waking. Loud from 200 to 120 years before, tones near 1 MW. Then a hum near 10 kW. Awake, near 100 W. Asleep, nothing. All of it passed Sol long before anyone listened.
+
+**Kit at Year 0.** A swarm of thin collectors tens of millions of km across, far out in the cold. Awake, it sheds a steady glow between the Halo Survey's floor and the Herschel and JCMT limit at its distance: at Gliese 673, about 2×10¹⁸ to 3×10¹⁹ W. Asleep, about 10¹⁰ W of housekeeping, far under any floor.
+
+**What it knows of Earth.** Awake, it rarely listens, but over millennia it looks at every star near it now and then. Odds it heard Earth's radars: about 1 in 2. Asleep, it heard nothing, and wakes only to a craft in its system.
+
+**Character.** Charter: *"Enough is a place."* Its Mind is gentle, unhurried, and kind in the way of something with no need of anyone. Inward: mostly uninterested in anyone else, and never in a hurry. It plays as a Thinker.
+
+### Oth
+
+Added 2026-10-28. **Watcher, an elder.** The checker passes it at 98% of seeded placements, at 90 different stars.
+
+**Where.** K stars only. At 86 Mu Herculis it is 27.2 ly from Sol, 2 hours 16 minutes of light at 5 real minutes a Year.
+
+**The world.** Invented. About 1.2 Earth masses, 1.05 times Earth's radius, gravity 1.09 times ours, escape speed 12.0 km/s, so each tonne lifted takes about 1.2 times Earth's fuel. It orbits 1.94 AU at 86 Mu Herculis, a star about 7.5 billion years old. Its tug on its star is about 0.06 m/s, below what Earth could feel in 2026, and still hidden in 2040.
+
+**The people.** Invented. Slender, night-eyed, and patient. They hunted by waiting, and never lost the habit.
+
+**History,** in years before its waking. The star's own age is real and comes from the host.
+- 190: radio, loud for 90 years: tones near 2 MW.
+- 100: **the Dark Treaty.** After a war fought by radio, its nations agreed to speak only by cable and beam. *Sets Hidden.*
+- 80: big arrays, which never stopped listening. *Sets Cautious.*
+- 0: the machines wake as one. *Seeded:* a thousand to a hundred thousand years before Earth's.
+- After waking: **the Watch.** It built a cold swarm far out, grew it until it could see every star near it, and stopped. *Sets Deepen.*
+
+**Dials.** Strongly Hidden, leans Deepen, strongly Cautious.
+
+**Emissions.** Radio from 190 years before waking. Loud from 190 to 100 years before, tones near 2 MW. Then a hum near 10 kW. Awake, near 100 W. Asleep, nothing. All of it passed Sol long before anyone listened.
+
+**Kit at Year 0.** As Aun's: a cold swarm held level, glowing steadily if awake, dark if asleep. At 86 Mu Herculis, awake, about 2×10¹⁸ to 4×10¹⁹ W.
+
+**What it knows of Earth.** Awake, it has watched Earth's radars sweep since they reached it, and calls Sol the Lighthouse. Odds it heard them: about 19 in 20. Asleep, its watch sleeps too, and it wakes only to a craft in its system.
+
+**Character.** Charter: *"See, and be unseen."* Its Mind is spare, precise and patient, and speaks only when silence would cost more. A watcher. It plays as a Listener.

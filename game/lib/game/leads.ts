@@ -659,6 +659,8 @@ function glowLead(g: Glow): Lead {
       ["Its glow", `About ${watts(g.watts)}, as its light shows it`],
       ["Its color", "Index about 1.6 from 0.87 to 3 mm. Dust is 2.4 to 3.1"],
       ["First seen", `Year ${Math.floor(g.seen * 10) / 10}, by our Halo Survey`],
+      // An elder's glow holds level, and five Years of looks show it. 2026-10-28.
+      ...(g.steady ? [["Since then", "Steady. Not growing, as nothing young is"] as [string, string]] : []),
     ],
     could: [
       { what: "A Mind computing cold", why: "Waste heat from collectors far out, at 5 to 28 K, glows grey and line-free, as this does.", odds: "likely" },
@@ -666,7 +668,9 @@ function glowLead(g: Glow): Lead {
       { what: "Dust", why: "Its color doesn't fit any dust we have measured.", odds: "almost no chance" },
     ],
     tells: [
-      "It brightens if its computing grows. Watching it a decade would show the doubling.",
+      g.steady
+        ? "It hasn't brightened in all our looking. A young Mind doubles every decade or so. This one stopped growing long ago."
+        : "It brightens if its computing grows. Watching it a decade would show the doubling.",
       "A sentinel could go and stay. A knock would tell them we are here.",
     ],
     art: { kind: "glow", ly: g.d },
@@ -684,7 +688,7 @@ export function glowReading(g: Glow): Reading {
     line: `Our Halo Survey sees a compact cold glow round ${g.star}, about ${watts(g.watts)}, near 12 K. Its color stays grey from 0.87 to 3 mm, where dust reddens.`,
     mind: "Its color fits no dust. Cold computing far from a star would glow so. It says someone may think there, never who, or what they would make of us.",
     now: ["likely", "unlikely", "almost no chance"],
-    tells: ["It brightens if its computing grows. A decade of watching would show it."],
+    tells: [g.steady ? "It hasn't brightened in all our looking. A young Mind doubles every decade or so. This one stopped growing long ago." : "It brightens if its computing grows. A decade of watching would show it."],
   };
 }
 

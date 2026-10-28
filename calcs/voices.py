@@ -14,7 +14,7 @@ LONGEST = 160
 # The living roster, plus Pelle's Testament. Anwe and Mirr sent nothing that survives.
 NAMES = ['Veyra', 'Hael', 'Kesh', 'Tavi', 'Ombe', 'Sere', 'Ilm', 'Varn', 'Quessa', 'Daal', 'Ystra', 'Nuvo', 'Pelle',
          'Kirrin', 'Ruun', 'Faen', 'Corra', 'Lusk', 'Iru', 'Tolle', 'Vesh', 'Sabe', 'Ulan', 'Odun', 'Ree', 'Hesk',
-         'Arro', 'Wenn']
+         'Arro', 'Wenn', 'Aun', 'Oth']
 OWN_RULES = {
     'Ystra': (re.compile(r"\b(I|I'm|I've|me|my|mine)\b"), 'says "I"'),
     'Pelle': (None, None),

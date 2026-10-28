@@ -303,6 +303,20 @@ def sight(host, radius, a):
     o = observing.observe(host['distance_ly'] / 3.2616, radius, a, host['luminosity'])
     return dict(sep=o['sep'], seen_h=o['seen_h'], split=o['seen_h'] is not None, swept=o['seen_h'] is not None and o['seen_h'] <= PASS_H)
 
+def place_elder(seed, pool):
+    """One elder for the game, from nb.ELDERS, at a star in the pool, on keys of its own: when it woke, whether it
+    sleeps, and its ceiling, from nb.elder_at. Heavier stars sooner, as for the others."""
+    n = nb.ELDERS[int(keyed(seed, 'elder') * len(nb.ELDERS))]
+    pool = [h for h in pool if h['kind'] in n['kinds'] and h['luminosity'] >= n.get('min_lum', 0)]
+    order = sorted(pool, key=lambda h: math.log(keyed(seed, 'elder', h['id'])) / float(h['weight']), reverse=True)
+    for host in order[:100]:
+        rng = random.Random(f"{seed}:elder:{host['id']}")
+        for _ in range(3):
+            m, waking = nb.elder_at(n, host, rng)
+            pole = math.degrees(math.acos(rng.uniform(-1, 1)))
+            fails, info = nb.check(m, host, waking, pole)
+            if not fails: return dict(n=m, host=host, waking=waking, pole=pole, targeted=True, **info)
+
 def draw(seed, rows=None):
     rows = rows or nb.load_hosts()
     rng = random.Random(seed)
@@ -340,15 +354,7 @@ def draw(seed, rows=None):
                 fails, info = nb.check(n, host, waking, pole, targeted)
                 if not fails: return dict(n=n, host=host, waking=waking, pole=pole, targeted=targeted, **info)
 
-    for n in picks:
-        fits = [h for h in rows if h['kind'] in n.get('kinds', 'FGKM') and h['luminosity'] >= n.get('min_lum', 0)]
-        p = None
-        if nudge:                                                        # one neighbor goes where Earth knocked
-            p = place(n, [h for h in fits if h['id'] in knocked]) if any(h['id'] in knocked for h in fits) else None
-            nudge = p is None
-        p = p or place(n, fits)
-        if not p: continue
-        used.add(p['host']['id'])
+    def fill(p, n):
         d, w, dead = p['host']['distance_ly'], p['waking'], n.get('dies') is not None
         p.update(name=n['name'], d=d, dead=dead, died=w - n['dies'] if dead else None,
                  dials=reactions.CHARACTER[n['name']][0], style=reactions.CHARACTER[n['name']][1], thinks=reactions.thinks(n['name']))
@@ -377,7 +383,18 @@ def draw(seed, rows=None):
                        ([(p['knows'], p['on_hum'], 'its answer to Earth’s radars')] if p['heard'] else [])
                        + ([(p['after_silence']['at'], p['after_silence']['move'], 'after silence')] if p['after_silence'] else [])
                        + [(c['acts'], c['move'], f"its answer to {c['msg']}") for c in p['caught']] if move == 'probe']
-        out.append(p)
+        return p
+
+    for n in picks:
+        fits = [h for h in rows if h['kind'] in n.get('kinds', 'FGKM') and h['luminosity'] >= n.get('min_lum', 0)]
+        p = None
+        if nudge:                                                        # one neighbor goes where Earth knocked
+            p = place(n, [h for h in fits if h['id'] in knocked]) if any(h['id'] in knocked for h in fits) else None
+            nudge = p is None
+        p = p or place(n, fits)
+        if not p: continue
+        used.add(p['host']['id'])
+        out.append(fill(p, n))
     for p in out: p.update(sight(p['host'], p['n']['world']['mass'] ** (1 / 3.7), p['a']))
     drawn = [w for w in (warm_world(seed, h) for h in rows if h['id'] not in used) if w]
     worlds = sorted((w for w in drawn if not w['fails']), key=lambda w: w['d'])
@@ -391,6 +408,14 @@ def draw(seed, rows=None):
                 and not h['name'].startswith('Gaia ')]                      # the planet hunters' stars are bright, so they have names
         natural = max(pool, key=lambda h: keyed(seed, 'find', h['id']))
     colonies = spread(seed, out)                                        # keyed draws only, so nothing above moves
+    # The elder, settled 2026-10-28: drawn last, on its own keys, at a star nothing else holds, so no other draw moves.
+    taken = used | {w['host']['id'] for w in drawn} | {c['star']['id'] for c in colonies} | ({natural['id']} if natural else set())
+    elder = place_elder(seed, [h for h in rows if h['id'] not in taken])
+    if elder:
+        elder = fill(elder, elder['n'])
+        elder.update(sight(elder['host'], elder['n']['world']['mass'] ** (1 / 3.7), elder['a']))
+        out.append(elder)
+        if elder['found_by_2040']: found.append(elder)
     return dict(seed=seed, earth=earth, count=count, neighbors=sorted(out, key=lambda p: p['d']), found=found, natural=natural, colonies=colonies,
                 worlds=worlds, felt=felt, ruled_out=[w for w in drawn if w['fails']])
 
@@ -402,7 +427,8 @@ def report(g):
           f"Mars {'yes' if e['mars'] else 'no'}, fusion on the grid {'yes' if e['fusion'] else 'no'}, compute {e['compute']:.0%}. {len(g['neighbors'])} neighbors.")
     for p in g['neighbors']:
         n = p['n']
-        state = (f"died {p['died']:.0f}" if p['dead'] else f"awake since {p['waking']:.0f}" if p['waking'] < Y0 else f"wakes Year {p['waking'] - Y0:.1f}")
+        state = (f"died {p['died']:.0f}" if p['dead'] else f"elder, {'asleep' if p['n']['asleep'] else 'awake'} since {p['waking']:.0f} at {p['n']['ceiling']:.0e} W"
+                 if p['n'].get('elder') else f"awake since {p['waking']:.0f}" if p['waking'] < Y0 else f"wakes Year {p['waking'] - Y0:.1f}")
         knows = (f"heard Earth from {p['heard_since']:.0f}, then: {p['on_hum']}" if p['heard'] else 'has not heard Earth')
         print(f"  {p['name']:7} {n['disposition']:9} {p['host']['name']:22} {p['host']['kind']} {p['d']:5.1f} ly  {state:18} {p['dials']}  {knows}"
               + ''.join(f". Caught {c['msg']} in {c['arrives']:.0f}, then: {c['move']}" for c in p['caught'])

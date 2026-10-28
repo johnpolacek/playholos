@@ -11,7 +11,7 @@ import neighbors as nb
 
 ROOT = Path(__file__).resolve().parents[1]
 WORLDS = ROOT / 'game' / 'data' / 'worlds'
-ROSTER = {n['name']: n for n in nb.ROSTER}
+ROSTER = {n["name"]: n for n in nb.EVERYONE}
 END = 2040 + 200
 
 def place(s):

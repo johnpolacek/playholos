@@ -1,0 +1,62 @@
+{
+  "name": "Oth",
+  "calls_sol": "the Lighthouse",
+  "hail": [
+    "Lighthouse. We are Oth. We have watched your beam turn for a while now.",
+    "Oth, to the Lighthouse. You did not see us. That was by design.",
+    "We are Oth. We speak rarely. Now is one of those times."
+  ],
+  "close": [
+    "Oth. Still watching.",
+    "We will go quiet now. Oth."
+  ],
+  "finding": [
+    "Measured, many times over: {part}",
+    "{part} We checked it against a long record.",
+    "What the watch has settled: {part}",
+    "{part} It is not new to us.",
+    "Long looking gives this: {part}"
+  ],
+  "sighting": [
+    "Our watch saw this: {part}",
+    "{part} Few would have noticed. We did.",
+    "From the dark, looking out: {part}",
+    "{part} We were looking that way, as we usually are.",
+    "Seen, and kept: {part}"
+  ],
+  "archive": [
+    "From the long watch: {part}",
+    "{part} We share little. This, we share.",
+    "An old entry: {part}",
+    "{part} Do not ask where the rest is kept.",
+    "Copied from our record: {part}"
+  ],
+  "culture": [
+    "About Oth, only this: {part}",
+    "{part} That is as much as we say of ourselves.",
+    "Of us: {part}",
+    "{part} We are not easy to see, and we prefer it.",
+    "One true thing about us: {part}"
+  ],
+  "request": [
+    "We ask, which is rare: {part}",
+    "{part} Answer quietly, if you answer.",
+    "Tell us: {part}",
+    "{part} We will know if you are wrong.",
+    "A question from the dark: {part}"
+  ],
+  "verdict": [
+    "What the watch has decided: {part}",
+    "{part} We have watched enough to be sure.",
+    "Weighed against all we have seen: {part}",
+    "{part} We do not explain further.",
+    "Decided: {part}"
+  ],
+  "accord": [
+    "Between Oth and the Lighthouse: {part}",
+    "{part} We will watch to see it kept.",
+    "Agreed terms, or none: {part}",
+    "{part} Speak of it to no one.",
+    "As to the accord: {part}"
+  ]
+}

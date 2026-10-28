@@ -1,6 +1,6 @@
 # Holos · Research
 
-Last updated: October 27, 2026.
+Last updated: October 28, 2026.
 
 Every source the game rests on, grouped by the question it answers. Each entry says what it found, why it matters to Holos, and where the design uses it. The rules are in [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md). The atlas’s own data sources (ephemeris, star catalogs, galaxies) are in the [README’s scientific scope](README.md#scientific-scope) and the `data/*/README.md` files.
 
@@ -1278,17 +1278,31 @@ Gathered 2026-10-26 for four candidate builds. Numbers marked *ours* are this pr
   - Used: the Cold Annex.
 - **[Sandberg, Armstrong and Ćirković 2016, aestivation](https://arxiv.org/abs/1705.03394)** · Published, JBIS 69, 406. arXiv 2017.
   - Erasing a bit costs kT ln2, so waiting for the universe to cool gains about 10³⁰. Minds would sleep, and keep matter from being wasted.
-  - Used: not yet.
+  - Used since 2026-10-28: an elder asleep, in [Elders](HOLOS_GAME_CONCEPT.md#elders).
 - **[Bennett, Hanson and Riedel 2019, comment](https://arxiv.org/abs/1902.06730)** · Published, Foundations of Physics.
   - Matter not yet at equilibrium can absorb erasure now, so nothing forces waiting.
   - Matters: cold minds computing today, as Holos has them, fit the physics.
-  - Used: not yet.
+  - Used since 2026-10-28: an elder awake, computing cold at a steady ceiling, in [Elders](HOLOS_GAME_CONCEPT.md#elders).
 - **[Pitjeva and Pitjev 2018, Kuiper belt mass](https://arxiv.org/abs/1811.05191)** · Published.
   - About 0.02 Earth masses, 1.2×10²³ kg, mostly at 39 to 48 AU.
   - Matters: Garrett’s 2×10²⁰ kg halo is about 0.2% of the belt.
   - Used: not yet. Bears on outer cold works.
 - *Ours,* outer works: sunlight is 1.5 W/m² at 30 AU and 0.14 at 100. A sunlit film sits at 60 K at 30 AU, 33 K at 100. Behind a JWST-like shade, about 7 K at 30 AU. Light lag is 4.2 hours at 30 AU.
   - So far out it is cold for free, but power is scarce. Power must be collected wide, or sent out.
+
+## Elders
+
+Added 2026-10-28, when every game gained one Mind far older than ours. Prompted by r/FermiParadox, read through the [Arctic Shift](https://arctic-shift.photon-reddit.com) archive: its commonest objection to a crowded century is that Earth isn’t early. Reddit is a prompt for questions here, never a source.
+
+- **[Lineweaver 2001, the age of terrestrial planets](https://arxiv.org/abs/astro-ph/0012399)** · Published, Icarus 151, 307. Abstract read.
+  - Three quarters of Earth-like planets in the universe are older than Earth, by 1.8 ± 0.9 billion years on average. From star formation over cosmic time and a window of metallicity for Earths.
+  - Matters: a Mind far older than ours is the likely case, not the odd one. It is about planets, not life: life follows only if it starts readily.
+  - Used: [Elders](HOLOS_GAME_CONCEPT.md#elders), why every game has one.
+- **[Lineweaver, Fenner and Gibson 2004, the Galactic habitable zone](https://arxiv.org/abs/astro-ph/0401024)** · Published, Science 303, 59. Abstract read.
+  - A ring 7 to 9 kpc from the Galaxy’s center, of stars formed 8 to 4 billion years ago. Three quarters of its stars are older than the Sun. Others doubted the data could support such a map (Livio, in press coverage).
+  - Matters: the same answer for our own Galaxy.
+  - Used: [Elders](HOLOS_GAME_CONCEPT.md#elders).
+- Also used there: Sandberg, Armstrong and Ćirković 2016, and Bennett, Hanson and Riedel 2019, under [Why the sky is quiet](#why-the-sky-is-quiet-computing-and-heat). Garrett 2026 sets the ceiling an awake elder must stay under.
 
 ## Black holes
 

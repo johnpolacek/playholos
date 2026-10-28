@@ -121,6 +121,8 @@ Settled 2026-10-15. A probe follows orders its sender writes at launch, as v1's 
 | Hesk | watch 85%, wait 13%, hail 1% |
 | Arro | watch 79%, wait 18%, hail 4% |
 | Wenn | watch 90%, wait 9%, hail 1% |
+| Aun | watch 73%, wait 26%, hail 2% |
+| Oth | watch 96%, wait 4% |
 
 ## Tables
 
@@ -677,3 +679,43 @@ Watcher, leans Hidden, leans Deepen, leans Cautious. Plays as a Listener. Acts 1
 | tipoff | watch 78%, guard 10%, hide 9%, other 4% |
 | quiet | watch 84%, guard 7%, other 10% |
 | silence | watch 83%, hide 9%, other 8% |
+
+### Aun
+
+Inward, leans Open, strongly Deepen, strongly Cautious. Plays as a Thinker. Acts 2 Years after news. An elder, done growing. It answers rarely, and never in haste.
+
+| News | Odds |
+| --- | --- |
+| hum | ignore 57%, watch 41%, other 2% |
+| knock | ignore 59%, watch 33%, answer 6%, other 2% |
+| broadcast | ignore 68%, watch 30%, other 2% |
+| reply | ignore 41%, watch 33%, answer 25% |
+| launch | ignore 46%, watch 45%, guard 9% |
+| incoming | guard 48%, watch 40%, hide 9%, other 2% |
+| probe | watch 53%, ignore 32%, catch 11%, other 4% |
+| settle | ignore 40%, watch 37%, guard 19%, other 4% |
+| strike_seen | watch 48%, guard 28%, ignore 20%, other 4% |
+| struck | guard 77%, hide 13%, strike 7%, other 3% |
+| tipoff | ignore 56%, watch 40%, other 4% |
+| quiet | ignore 63%, watch 35%, other 2% |
+| silence | ignore 71%, watch 29% |
+
+### Oth
+
+Watcher, strongly Hidden, leans Deepen, strongly Cautious. Plays as a Listener. Acts 2 Years after news. An elder, done growing. It has watched for millennia and is in no hurry to be seen.
+
+| News | Odds |
+| --- | --- |
+| hum | watch 90%, hide 7%, other 3% |
+| knock | watch 78%, guard 11%, hide 9%, other 2% |
+| broadcast | watch 92%, hide 7%, other 1% |
+| reply | watch 79%, answer 12%, guard 8%, other 1% |
+| launch | watch 80%, hide 10%, guard 8%, other 1% |
+| incoming | watch 43%, guard 34%, hide 22%, other 1% |
+| probe | watch 70%, hide 14%, catch 8%, guard 6%, other 2% |
+| settle | watch 76%, guard 12%, hide 12% |
+| strike_seen | watch 62%, hide 24%, guard 12%, other 1% |
+| struck | guard 49%, hide 41%, strike 7%, other 4% |
+| tipoff | watch 85%, hide 7%, guard 7%, other 1% |
+| quiet | watch 91%, other 9% |
+| silence | watch 91%, hide 8%, other 2% |

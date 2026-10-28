@@ -740,6 +740,7 @@ Settled 2026-10-06, from first principles rather than for the game’s sake.
 - **When they wake.** The premise puts every neighbor’s waking in the same century as Earth’s. Nothing favors one moment within that century, and nothing makes Earth first or last. So each neighbor’s waking is drawn evenly across a century that holds Earth’s. About half woke before Earth and half wake after, up to a century either way, most often within a few decades.
   - *Woke before Earth:* it has grown since, and may already know Earth is here. What it has done since waking must stay below what Earth could see by 2040, after its light delay.
   - *Wakes after Earth:* at Year 0 it is a world not yet there. It wakes during the game.
+  - *And one elder,* from 2026-10-28: a Mind awake for millennia. See [Elders](#elders).
 - **How many.** Physics doesn’t say. The premise says many. Civilizations arise independently, so they don’t cluster: every eligible host star is equally likely. Each game draws the count evenly in tenfold steps from a few to a few dozen within 50 ly, so 3 is as likely as 30.
 - **What they start with.** Nothing makes a waking world equal to Earth. Its kit follows its world’s physics, its history, and its years since waking.
   - *Physics:* a heavier world sits in a deeper gravity well, and rocket fuel grows exponentially with it. A rocket needing 9,000 t of fuel on Earth needs 55,000 t on a world of 10 Earth masses, and past that chemical rockets fail (Hippke 2018). A world without a large moon has no easy rock. A dimmer star gives weaker sunlight.
@@ -764,6 +765,25 @@ Settled 2026-10-06, from first principles rather than for the game’s sake.
   - *Wobble-only orbits need backing.* An orbit seen only in a star’s wobble, implying a tug over 1 km/s, counts only if a spectroscopic orbit confirms it. Velocity surveys of bright near stars would have seen it. That clears 107 Piscium, whose velocity is steady to about 1 m/s (Soubiran et al. 2018), and 61 Cygni A.
 - **Known planets limit them.** A neighbor’s world must keep clear of a star’s known planets, and tug less than Earth could feel in 2026. At stars watched hardest, such as Barnard’s Star and Tau Ceti, that floor is 0.2 to 0.4 m/s, not 1.
 - **How loud they may be.** Earth heard nothing by 2040. If SKA-Mid listened an hour to every star within 50 ly by then, a neighbor’s steady tones stayed under about 146 MW at 10 ly, 583 MW at 20 ly and 3.6 GW at 50 ly. Each neighbor’s history sets its own loudness under that ceiling.
+
+## Elders
+
+Settled 2026-10-28. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#elders). Asked after reading r/FermiParadox, whose commonest objection to games like this is “why did everyone wake at once?”
+
+- **Earth isn’t early.** Three quarters of Earth-like worlds in the universe are older than Earth, by 1.8 ± 0.9 billion years on average (Lineweaver 2001). Three quarters of the stars in the Galaxy’s habitable zone are older than the Sun (Lineweaver, Fenner and Gibson 2004). The premise keeps most neighbors in Earth’s century. But a Mind far older than ours is likely, so every game has one.
+- **Earth’s sky rules out a loud elder nearby.** A Mind that kept doubling for millennia would blaze in Herschel’s and JCMT’s archives. So an elder that passes the checker is one that stopped growing. That is the quiet sky’s answer here, from real data: the old ones went quiet, and the young ones aren’t loud yet.
+- **One a game, drawn last.** From a roster of its own, so drawing it moves nothing else, at a star no other neighbor, colony or drawn world holds. Aun and Oth for now, in [HOLOS_NEIGHBORS.md](HOLOS_NEIGHBORS.md#the-elders).
+  - *When it woke:* evenly in log between a thousand and a hundred thousand years before Earth. The median is about 9,500.
+  - *Who:* inward or a watcher. Aun is inward, Oth a watcher.
+- **The draw picks how it rests,** an even chance each:
+  - *Awake.* It computes cold at a steady ceiling, as Bennett, Hanson and Riedel 2019 allow. Its ceiling is drawn evenly in log between a fifth over the Halo Survey’s floor and a fifth under the archives’ limit, at its distance. So the Halo Survey sees it on its first look, and after five Years of looks it reads as steady: not growing, as nothing young is.
+  - *Asleep.* It waits for a colder universe, when computing costs less (Sandberg, Armstrong and Ćirković 2016). It sheds about 10¹⁰ W, far under any floor. It hears no message and sees no glow. Only a craft in its system finds it, and wakes it.
+- **What a craft sees there.** Its world is green, its towns few and small. Far out in the cold hangs a thin swarm tens of millions of km across: a 12 K glow of 10¹⁹ W needs about 10²² m². Awake, it sheds heat. Asleep, it hangs dark.
+- **It hears Earth as the others do.** Awake, it has looked for millennia: Oth heard Earth’s radars about 19 times in 20, Aun about 1 in 2. Asleep, it heard nothing.
+- **It is done growing.** It sends no colonies and goes to no black hole. Its reaction tables lean to watching and waiting.
+- **Across 400 games:** each kind comes up about a quarter of the time. The median elder lives 42 ly away. Earth feels its world’s tug by 2040 in about 1 game in 14.
+- **Parity.** Earth could rest the same way: hold its computing level, or sleep. Not built yet.
+- Set aside: an elder only some games, an elder that is inward only, and a wider window for every neighbor, which would make ordinary old neighbors blaze.
 
 ## Parity: what a neighbor can do, we can build
 
@@ -1215,10 +1235,11 @@ Settled 2026-10-10, against [Garrett 2026](HOLOS_RESEARCH.md#why-the-sky-is-quie
 - **The Halo Survey, settled 2026-10-26.** An observing program on ALMA, which Earth has: an hour in two bands at each star within 50 ly, about a Year of its time, then a look each Year.
   - *Deeper than the archives.* 5σ in an hour at 850 µm sees a compact 12 K glow of about 3×10¹⁸ W at 10 pc, 25 times under the Herschel and JCMT limit. Band 3 gives its color: grey, an index near 1.6, where dust is 2.4 to 3.1.
   - *It misses wide haloes.* ALMA’s 12 m dishes resolve out glow hundreds of AU across, so it sees compact ones.
-  - *Early on it finds nothing.* A neighbor starts at Earth’s 2040 scale and doubles every 10 Years, 5 if inward. Across the 33 seeded games no living neighbor crosses the floor by Year 50. By Year 100, 12 of 311 do. By Year 200, 147.
+  - *Early on it finds no young Mind.* A neighbor starts at Earth’s 2040 scale and doubles every 10 Years, 5 if inward. Across the 33 seeded games no living neighbor crosses the floor by Year 50. By Year 100, 12 of 311 do. By Year 200, 147.
+  - *But an elder awake shows on its first look,* from 2026-10-28 ([Elders](#elders)). In the 33 shipped games, 23 elders are awake and 10 asleep. After five Years of looks, an awake elder’s glow reads as steady, and the Mind is told so.
   - *What Earth learns is a glow, not a Mind.* The Mind hears where, when first seen and how bright, and that its color fits no dust. A glow carries no words.
   - *On Scan, 2026-10-26.* A glow at a star with no lead becomes a lead, “A grey glow”, placed on the map from the census. Its art is the case: the star’s halo breathing, and its color from 0.87 to 3 mm, a line at index 1.6 beside dust’s band of 2.4 to 3.1, its measures landing one by one. At a star with a lead already, it lands as a reading there. Odds: a Mind computing cold likely, something natural unknown unlikely, dust almost no chance.
-  - *Not in the first builds walked.* It waits in the list, since it finds nothing for a long while.
+  - *Not in the first builds walked.* It waits in the list, since it finds nothing for a long while. Revisit: with elders, it finds an old Mind at once in most games.
   - Set aside: a seeded halo hiding at a star Earth filed as dusty, which would need the checker changed. And a far-infrared telescope, since PRIMA flies from 2033 and a larger one would mostly be faster, not deeper.
 
 ## Retired with the cohort
