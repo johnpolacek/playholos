@@ -471,8 +471,14 @@ export function drawAt(plan: Plan, scale: number, year: number) {
   const { room, idle, thought, done, doublings } = pace(orders, year, { scale, ...opts });
   // Fusion Plants grow the grid itself, so the same thought draws a smaller share of it. 2026-10-28.
   const grid = 1 + Object.keys(done).reduce((e, w) => e + (CATALOG.works[w]?.energy ?? 0), 0);
-  // The Cold Halo thinks on its own sunlight, so what it adds draws nothing from Earth's grid. 2026-10-28.
-  const earth = thought / CATALOG.step ** doublings;
+  // The Cold Halo thinks on its own sunlight, so what it adds draws nothing from Earth's grid. Nor does the data
+  // center Power from Orbit or the Cold Annex adds, each on the power that came with it. 2026-10-28.
+  const own = Object.keys(done).filter((w) => CATALOG.works[w]?.rock !== undefined).length;
+  // A neighbor's gift takes our thought further on the same power, once a star, as the pace has it.
+  const gifts = new Map<string, number>();
+  for (const g of [...(plan.gifts ?? [])].sort((a, b) => a.y - b.y)) if (g.y <= year && !gifts.has(g.name)) gifts.set(g.name, GIFT_STEPS[g.size ?? "collection"]);
+  const gifted = [...gifts.values()].reduce((a, b) => a + b, 0);
+  const earth = thought / CATALOG.step ** (doublings + own + gifted);
   return { compute: room > 0 ? 1 - idle / room : 1, energy: (earth * CATALOG.flagship) / (CATALOG.gridRoom * grid) };
 }
 
