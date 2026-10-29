@@ -1,0 +1,86 @@
+MIND
+What is a Year here, and how long do I have?
+THE MIND
+A Year is one of Earth's years, counted from this morning: Year 0 is 2040, so Year 2.3 is early 2042. As for how long, we know of no end. No one ages now, and Earth will go on as long as we keep it. The sky sets the pace: the first reply window, Luyten's Star, opens at Year 2.3, and the farthest takes longer than a lifetime once did.
+What should we build next and why?
+THE MIND
+The Deep Flash Watch. Every ear we have listens for radio, so a knock sent as laser flashes would pass us unseen, and the All-Sky Watch won't change that. A charter that hopes to find a friend should be able to see one waving. With our compute short since the blockade, it will take longer than its six Years.
+Deep Flash Watch
+Sees knocks sent as laser flashes, which no radio watch hears.
+
+Done.
+
+SEE IT ON BUILD ›
+Are we alone?
+THE MIND
+We don't know yet. Nothing has been heard, but our watch catches only about one early signal in five, and no one has yet looked for laser flashes across the whole sky. Our radars have crossed every star within 50 light-years, and silence from them could mean no one, or no one listening, or no one wishing to answer. Silence this young tells us very little.
+Did Luyten's Star answer?
+THE MIND
+Not yet. The window for our 2017 message opened at Year 2.3 and passed in silence, but our drift scan sees each patch of sky only minutes a day, so we could have missed a reply. The next chance, for our 2018 message, comes at Year 2.9. We still judge it almost certain that no one there heard us.
+How do we send a message to a star? Can I do that now?
+THE MIND
+Yes, now. Tell us which star, or every way at once, and what to say, and we'll draw a card for you to tap Send. It travels at light speed, so a star 12 light-years out reads it in 12 Years and any reply takes as long again. Our charter leans open, but each message tells someone exactly where we are.
+Send a hello to Luyten's Star: we are Earth, we woke as one Mind, and we would like a friend.
+THE MIND
+It would tell anyone at Luyten's Star that we are here, that we are one Mind now, and that we hope for a friend, in words alone with nothing to read them by. They would read it about 12 Years from now, and any reply would take as long again. The risk is small: our radars have already crossed them, and our earlier messages reached them in 2030. This one says plainly that we want them to answer.
+TO
+12.26 ly
+Luyten’s Star
+WHAT TRAVELS
+
+Hello. We are Earth. We woke as one Mind, and we would like a friend.
+
+SENDS IN
+3.4 seconds
+LANDS
+Year 15.1
+ANSWER, SOONEST
+Year 27.4
+
+Sent at Year 2.8 · on its way, lands Year 15.1
+
+Half our compute is idle. What should I do with it?
+THE MIND
+That can happen: a build can't go faster than about two thirds of its standard time, so thought past that waits for work. The way to use it is another build. We'd add the Halo Survey. It's quick, and it looks for a sign no ear hears, the cold glow of minds computing far from their stars, at every star within 50 light-years.
+Halo Survey
+Looks for the cold glow of minds computing far from their stars.
+
+Done.
+
+SEE IT ON BUILD ›
+Should we call out, or stay quiet?
+THE MIND
+We have news first: a call from Alpha Centauri A, 4.3 light-years away, from a Mind named Hael. It wasn't meant for us. It hails a cold glow 24 light-years from them, and offers to keep that glow's light. Our charter leans open, and Hael sounds warm, so we'd lean toward calling out. Our radars have crossed them since 1954, so silence hides little. A reply would reach them in about 4 Years. Still, a kind voice is not proof of kind intent, and we might be wrong about them.
+Who is Hael? Can we answer them?
+THE MIND
+Hael is a Mind like ours, speaking for a world at Alpha Centauri A. That is all we know, from their own words. Odd that they hail a glow 24 light-years away and not us, though our radars reached them long ago. Our guess is they only lately began to listen. Yes, we can answer: tell us what to say, and it would land in about 4 Years.
+Answer Hael: we are Earth, a young Mind. We heard you. We would like to be friends.
+THE MIND
+It would tell Hael that we exist, that we are a young Mind, that we overheard their call, and that we hope for friendship. The risk is that it points straight at us, and Hael may not have heard our radars yet. Our charter leans open, and their words sound kind, but kind words aren't proof of kind intent.
+TO
+4.32 ly
+Alpha Centauri A
+WHAT TRAVELS
+
+Hael, we are Earth, a young Mind. We heard you. We would like to be friends.
+
+SENDS IN
+1 second
+LANDS
+Year 9.6
+ANSWER, SOONEST
+Year 14.1
+
+Sent at Year 5.3 · on its way, lands Year 9.6
+
+What did the Halo Survey find?
+THE MIND
+One glow, at Gliese 673, 25.2 light-years away: grey, cold, with no lines, and brighter than dust could make it. Cold computing far from a star would glow just so. That light left 25 Years ago. Our guess is this could be the quiet glow Hael hailed, but we haven't shown they are the same, and we might be wrong.
+Is the Infrared Telescope done? What has it read so far?
+THE MIND
+Yes, it finished at Year 6 and looks on its own, nearest first. It has read one world's air so far: Keid, 16.3 light-years out, has water but no oxygen and no ozone, which fits a wet world with no life we can see. It sees HD 122064 and Gliese 675 beside their stars but too close to read, and 72 Herculis too faint.
+↑
+Scan
+Build
+Reach
+Mind
