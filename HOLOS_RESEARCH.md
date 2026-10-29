@@ -1321,6 +1321,9 @@ Added 2026-10-28, for [The realistic premise](HOLOS_GAME_CONCEPT.md#the-realisti
   - **Suazo et al. 2024, Project Hephaistos**, logged above. No warm footprints near us, which fits small reaches.
   - **The 200 ly cap, this project’s estimate.** One mind per million stars, so footprints under 100,000 stars keep Earth outside all of them at 90% odds. At 0.0028 stars per cubic light-year that is a radius of about 200 ly.
   - **WISE at 12 µm, this project’s estimate.** About 1 mJy at 5σ, from memory. A 3.8×10²⁶ W swarm at 30,000 ly gives about 1.5 mJy, before dust.
+- **Smart et al. 2021, the Gaia Catalogue of Nearby Stars** · Published, A&A 649, A6. Count checked 2026-10-29: 331,312 objects within 100 pc from Gaia EDR3, downloaded from ESA’s Gaia archive. 300,098 have median positions inside 326 ly. Within 100 ly it holds 9,281, below the disk model’s 12,000, since it misses the faintest brown dwarfs.
+  - Matters: a real, complete census to 326 ly, small enough to ship in a browser.
+  - Used: [Real stars to 326 ly](HOLOS_GAME_CONCEPT.md#the-realistic-premise), the game’s star catalog. Check its counts against the disk model below.
 - **Star counts, this project’s model.** An exponential thin disk: 0.1 stars per cubic parsec here, 300 pc scale height, 2.6 kpc scale length. It gives about 1,500 stars within 50 ly, matching the census, and 8.5 million within 1,000 ly. Check against Gaia before building the wider catalog.
 
 ## Elders

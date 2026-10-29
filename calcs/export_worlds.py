@@ -12,7 +12,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'calcs'))
-import holes as H, neighbors as nb, reactions, seed as S
+import holes as H, minds as M, neighbors as nb, reactions, seed as S
 
 GAME = ROOT / 'game'
 POOL = list(range(1, 33)) + [62]          # the mocks' seeds 10, 11 and 62 among them
@@ -103,7 +103,8 @@ def export(seed, rows):
                          for c in g['colonies']],
                natural=star(g['natural'], stars) if g['natural'] else None,
                finds=sorted((find(x, stars) for x in g['found'] + g['felt'] + ([g['natural']] if g['natural'] else [])), key=lambda f: f['d']),
-               holes=holes_of(seed, g))      # lone black holes, from calcs/holes.py, 2026-10-26
+               holes=holes_of(seed, g),      # lone black holes, from calcs/holes.py, 2026-10-26
+               minds=M.draw(seed))           # the realistic premise's minds, from calcs/minds.py, 2026-10-29
     for c, src in zip(out['colonies'], g['colonies']):                     # a colony's star may not be a host
         if c['star'] not in stars: stars[c['star']] = dict(name=src['star']['name'], shown=pretty(src['star']['name']), kind=src['star']['kind'], d=r4(src['star']['d']))
     out['stars'] = stars

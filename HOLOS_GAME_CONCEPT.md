@@ -91,6 +91,47 @@ Settled 2026-10-28, one step at a time. The premise itself, how many minds exist
 - **At contact a peer is almost always inward.** Settled 2026-10-29. In 200,000 draws of wake time, distance and outward time, our light finds 63% already inward and 35% not yet awake. Only 2% are still outward.
   - *So peers and old minds share one reaction model.* At contact they are the same kind of mind.
   - *A peer that wakes after us* finds our old light in its sky, the mirror of us finding an older mind.
+- **An inward mind stays silent unless we spread.** Settled 2026-10-29. If it sees us spread, it may act, drawn per mind.
+  - *Why spreading.* Its one danger is a young mind that spreads, our Fermi answer. So our choice to spread is the game’s real risk.
+  - *Slow by physics.* It sees us as late as its distance in light-years. What it sends takes ten times that at a tenth of light’s speed.
+  - *No evidence on what minds want.* The trigger follows our premise. How likely any mind is to act is a guess.
+  - Set aside: a fixed stance drawn at the start whatever we do, and minds that always stay silent.
+- **What a mind does is a ladder: warn, contain, strike.** Settled 2026-10-29. It tries the cheapest act first, and climbs only if we keep spreading.
+  - *Warn:* a message at light speed.
+  - *Contain:* stop our seeds and young colonies. A gram at a tenth of light’s speed carries 450 GJ, enough to wreck a seed ship.
+  - *Strike Earth:* the costliest act. A bullet’s path points back to its sender, and by parity we could strike back.
+  - *Everything on the ladder Earth can build too,* at the same price and pace.
+  - *Kept open:* the ladder may become variable later, drawn per mind. Build it as data, not fixed code.
+  - Set aside for now: containment only, never touching Earth, and any act drawn freely.
+- **The watcher gives the warning, at once.** Settled 2026-10-29. Its maker gave it standing orders long ago. It sees our first seed launch and speaks by laser.
+  - *Why.* A 1 kg watcher can send a short message easily, so equipping it to speak costs almost nothing.
+  - *Contain and strike come from the maker,* after our news reaches it and its answer crosses back. The watcher has no weapons and doesn’t copy itself.
+  - Set aside: every rung from the maker, which puts the first warning a full round trip away, 800 years from 400 ly.
+- **The watcher’s maker cares, in every game.** Settled 2026-10-29. Watching is insurance against spreaders in our premise, so most watchers were sent for that reason. About 3 in 4, a guess with no evidence either way.
+  - *All or none, by likelihood,* as with the watcher itself. The likelier case holds in every game, and the odds are our confidence in it.
+  - So when we spread, the warning always comes.
+  - Set aside: a curious maker that never warns or acts, in some games only.
+- **Only seeds that build count as spreading.** Settled 2026-10-29. A probe that only looks can’t grow, and growth is the danger. So an old mind our probe reaches stays silent.
+  - Set aside: any craft sent to another star counting as spreading.
+- **Each rung has its trigger.** Settled 2026-10-29. Each matches a real step toward growth without limit.
+  - *Warn* when our first seed launches. One seed is a backup.
+  - *Contain* when we launch another seed after the warning.
+  - *Strike Earth* when our colonies launch seeds of their own. Growth is then out of our hands.
+  - Set aside: seed counts, such as contain after 3 and strike after 10, which would be arbitrary.
+- **Real stars to 326 ly, a seeded Galaxy beyond.** Settled 2026-10-29. Gaia’s census of nearby stars lists about 331,000 within 100 pc (Smart et al. 2021), a few MB to ship.
+  - *Beyond,* stars are drawn from the Galaxy’s measured shape, its disk, bar, arms and bulge. They are made from the seed as we look, the same every time.
+  - *Why so far.* The typical nearest old mind sits about 400 ly away, so most of the early game stays inside real data.
+  - Replaces the 536 stars within about 50 ly in game/lib/game/sky.json.
+  - Set aside: a real catalog to 100 ly only, about 12,000 stars, and a seeded Galaxy everywhere.
+- **Known landmarks sit at their real places.** Settled 2026-10-29. The seed fills in around them.
+  - *Examples:* the Pleiades at 444 ly, the Orion Nebula at 1,344 ly, Gaia BH1 at 1,560 ly, the nearest known black hole, and the Galaxy’s central black hole at about 26,700 ly.
+  - *To gather:* open clusters, nebulae, known black holes, globular clusters, each from a published catalog, logged in the research log.
+  - Set aside: seeding everything beyond 326 ly, landmarks included.
+- **The draw, in calcs/minds.py.** Added 2026-10-29, beside the old neighbors, as each world’s `minds`. Over 400 seeds: 8.6 old minds within 1,000 ly, the nearest typically 397 ly away, and 5.1 peers, 63% inward at contact.
+  - *Old minds* sit on real stars inside 326 ly and at seeded places out to 1,000 ly, weighted by the disk. Each is about a billion years older, at most 5 billion. Half sleep, as before. Awake, a glow stays under what the shallow all-sky maps would catch.
+  - *Peers* are placed by the Galaxy’s shape, 1 in 5 in the bulge and bar. Each carries its flash, the Years its warm phase shines at Earth.
+  - *The watcher’s maker is the nearest old mind.* Settled 2026-10-29: if several watch, the nearest answers first. Set aside: a maker drawn at random within 1,000 ly.
+  - *What a mind sends travels at a tenth of light’s speed,* as our bullets, by parity.
 - **The clock skips to the next event.** It keeps 5 real minutes a Year and runs while we’re away. We can jump ahead to the next arrival, build or signal, and it always stops when something new happens.
   - *Why:* a probe to 400 ly at a tenth of light’s speed takes 4,000 Years, 14 real days at the old clock. Light from a peer 20,000 ly away takes 20,000 Years.
   - *Multiplayer, later:* each player keeps their own clock, never more than light-time ahead of another. Hundreds of light-years apart, that limit almost never binds, so no turns are needed.

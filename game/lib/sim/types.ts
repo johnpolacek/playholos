@@ -87,6 +87,59 @@ export interface World {
    *  sky, whether Gaia's fifth catalog found it by Year 0, and the Years a star mapper would catch a star it shifts.
    *  The truth: Earth knows one only once found. 2026-10-26. */
   holes?: Hole[];
+  /** The realistic premise's minds, from calcs/minds.py: old minds out to 1,000 ly, young peers across the Galaxy,
+   *  and the watcher. Drawn beside the old neighbors until the rework retires them. The truth. 2026-10-29. */
+  minds?: Minds;
+}
+
+/** Positions are atlas light-years, (Galactic X, Galactic Z, -Galactic Y), as data/gcns-326ly.bin. Times are game Years. */
+export interface Minds {
+  old: OldMind[];
+  peers: Peer[];
+  watcher: Watcher;
+}
+
+export interface OldMind {
+  id: string;
+  pos: [number, number, number];
+  d: number;
+  /** Its star's index in data/gcns-326ly.bin, or null at a seeded place beyond the catalog. */
+  star: number | null;
+  /** Years older than us. */
+  age: number;
+  asleep: boolean;
+  /** Its cold far-infrared glow, awake. Null asleep. */
+  glowW: number | null;
+}
+
+export interface Peer {
+  id: string;
+  pos: [number, number, number];
+  d: number;
+  /** When it woke, before (negative) or after our Year 0. */
+  wake: number;
+  buildYears: number;
+  spread: "home" | "near" | "far";
+  reachLy: number;
+  seedC: number | null;
+  outwardYears: number;
+  asleep: boolean;
+  /** The Years its warm phase shines at Earth. */
+  flash: [number, number];
+  /** The Year our waking's light reaches it. */
+  ourLight: number;
+  atContact: "inward" | "outward" | "unborn";
+}
+
+export interface Watcher {
+  place: string;
+  kg: number;
+  arrivedYearsAgo: number;
+  /** The id of the old mind that sent it. */
+  maker: string;
+  /** Warn, contain, strike: what triggers each, who acts, and the Years after we act that it arrives. Data, so it
+   *  can vary per mind later. */
+  ladder: { rung: "warn" | "contain" | "strike"; on: string; by: "watcher" | "maker"; delay: number }[];
 }
 
 export interface Hole {

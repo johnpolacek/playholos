@@ -540,3 +540,34 @@ test("idle thought combs old recordings, and digs out a broadcast our watches mi
   assert.ok(h.found !== undefined && Math.abs(h.found - (h.arrived - ARCHIVE.from) * ARCHIVE.cost / 24) < 1e-6, String(h.found));
   assert.equal(found({ searched: log }, h.found! - 0.1), undefined);
 });
+
+test("the realistic premise's minds: rare and old near us, a few peers far off, a watcher every game", async () => {
+  let olds = 0, peers = 0;
+  for (const s of POOL) {
+    const { minds } = await loadWorld(s);
+    assert.ok(minds, `seed ${s} has no minds`);
+    olds += minds.old.length; peers += minds.peers.length;
+    // Old minds lie out to 1,000 ly, nearest first, on real stars only inside the 326 ly catalog.
+    minds.old.forEach((o, i) => {
+      assert.ok(o.d <= 2000 && (i === 0 || o.d >= minds.old[i - 1].d));
+      assert.ok(o.star === null ? o.d >= 326 : o.d <= 326.5, `${o.id} at ${o.d} ly`);
+      assert.ok(o.age > 0 && o.age <= 5e9 && (o.asleep ? o.glowW === null : o.glowW! > 0));
+    });
+    // A peer's warm phase reaches us d Years after it shines, and our light finds it inward, outward or not yet awake.
+    for (const p of minds.peers) {
+      assert.ok(Math.abs(p.flash[0] - (p.wake + p.d)) <= 0.15, p.id);
+      assert.ok(p.outwardYears >= 50 && p.outwardYears <= 21000 && p.reachLy <= 200);
+      const at = p.wake > p.d ? "unborn" : p.wake + p.outwardYears < p.d ? "inward" : "outward";
+      assert.equal(p.atContact, at, p.id);
+    }
+    // The watcher answers for the nearest old mind. It warns at once, and the maker's acts cross the gap and back.
+    const w = minds.watcher, maker = minds.old[0];
+    assert.equal(w.maker, maker.id);
+    assert.deepEqual(w.ladder.map((r) => r.rung), ["warn", "contain", "strike"]);
+    assert.equal(w.ladder[0].delay, 0);
+    assert.ok(w.ladder[1].delay >= maker.d * 10);
+  }
+  // About 8.5 old minds within 1,000 ly and 5 peers a game, loosely, over the pool.
+  assert.ok(olds / POOL.length > 5 && olds / POOL.length < 12, `${olds / POOL.length} old minds a game`);
+  assert.ok(peers / POOL.length > 3 && peers / POOL.length < 7, `${peers / POOL.length} peers a game`);
+});
