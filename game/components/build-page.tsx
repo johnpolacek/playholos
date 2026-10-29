@@ -125,7 +125,10 @@ export function Queueing({ name, scale, done }: { name: string; scale: number; d
   const { year } = useGame();
   const { plan, change } = usePlan();
   const root = useRef<HTMLDivElement>(null);
-  const at = plan.builds.indexOf(name);
+  const open = year === null;
+  // In play, its place counts what was ordered since Begin too. Before 2026-10-28, one ordered in play read "Not in
+  // our order yet."
+  const at = open ? plan.builds.indexOf(name) : ordered(plan).indexOf(name);
   const was = useRef(at);
   useGSAP(
     () => {
@@ -136,7 +139,6 @@ export function Queueing({ name, scale, done }: { name: string; scale: number; d
     { scope: root, dependencies: [at] },
   );
 
-  const open = year === null;
   // Taken back in play, it says so below, in place of where it stands.
   const back = !open && takenAt(plan, name) !== null;
   const queued = at >= 0;
