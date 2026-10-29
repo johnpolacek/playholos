@@ -254,7 +254,7 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
     story: {
       have: "Whipple shields guard the ISS: a thin bumper breaks a grain into a spreading cloud before it reaches the hull.",
       where: "Beside the Orbital Yard, which builds each screen and sends it 4 million km out on the line to its star.",
-      why: "At a tenth of light speed a gram carries 450 MJ, far past what any solid survives. A bullet that crosses a pellet is spray.",
+      why: "At a tenth of light speed a gram carries 450 GJ, far past what any solid survives. A bullet that crosses a pellet is spray.",
       takes: "About 2,000 t a screen, 10 g pellets 0.7 m apart over 10 km, and 4 Years to build and place.",
       before: "No one has screened a line in space. The estimate is ours, from Whipple shield physics.",
     },
@@ -465,7 +465,7 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
       orbit: { km: 400, tilt: 51.6, minutes: 92.9, behind: 30 },
     },
     story: {
-      have: "No craft has gone past 170 AU. Voyager 1, the farthest, took 48 years to reach it.",
+      have: "No craft has gone past about 215 AU. Voyager 1, the farthest, took 63 years to reach it.",
       where: "Built at the Orbital Yard, 400 km up. Each lens falls toward the Sun, swings close past it, and flies out the far side to 548 AU and beyond.",
       why: "The Sun’s gravity bends light passing it, and past 548 AU that light comes to a focus. A small telescope there sees one world through the Sun’s whole lens, its face kilometers to a pixel.",
       takes: "A few small sails, each with a telescope about 1 m wide. The dive past the Sun leaves at about 150 km/s, so it reaches the focus in about 17 Years.",

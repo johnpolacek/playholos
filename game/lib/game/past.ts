@@ -24,7 +24,7 @@ export interface Moment {
 
 const DEEP: Moment[] = [
   { when: "4.6 billion", ago: 4.6e9, what: "The Sun forms", detail: "Earth forms with it." },
-  { when: "3.5 billion", ago: 3.5e9, what: "First life" },
+  { when: "3.7 billion", ago: 3.7e9, what: "First life, or earlier" },
   { when: "2.4 billion", ago: 2.4e9, what: "Oxygen fills the air" },
   { when: "300,000", ago: 3e5, what: "The first people" },
   { when: "5,000", ago: 5000, what: "Writing" },

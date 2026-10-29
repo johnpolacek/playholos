@@ -614,7 +614,7 @@ function darkLead(h: DarkMass, far = false): Lead {
       ...(far ? [["Beside it", "A Sun-like star, round it every 186 days"] as [string, string]] : []),
       // What a hole is worth, and what using it costs, 2026-10-26. Kerr numbers and the X-ray sky's limits, from
       // HOLOS_RESEARCH.md's "Black holes".
-      ["What it offers", "A furnace: rock fed to it gives back 6% to 42% of its mass as light. Fusion gives under 1%. A dark place to put heat. A clock up to 10 times slow, close in"],
+      ["What it offers", "A furnace: rock fed to it gives back 6% to about 30% of its mass as light. Fusion gives under 1%. A dark place to put heat. A clock up to 10 times slow, close in"],
       ["What it costs", "A braking flame shows to anyone close. A furnace stays hidden until it grows past about a millionth of the Sun. A neighbor may get there first"],
     ],
     could: far
@@ -799,14 +799,14 @@ export function leadsOf(felt: FeltWorld[], holes: DarkMass[] = [], glows: Glow[]
       reply: true,
       facts: [
         ["Its star", "A red dwarf"],
-        ["Its worlds", "Two felt, one in the warm zone"],
+        ["Its worlds", "Two felt, one at the warm zone’s hot edge"],
         ["Our messages", "Sent October 2017 and May 2018"],
         ["They arrived", "2030"],
         ["Earliest replies", REPLIES.map((y) => `Year ${y}`).join(" and ")],
       ],
       could: [
-        { what: "No one heard", why: "No search has found anyone, anywhere.", odds: "almost certain" },
-        { what: "Someone heard, and stays quiet", why: "Hearing is not answering.", odds: "almost no chance" },
+        { what: "No one heard", why: "Minds are rare, about one per million stars.", odds: "almost certain" },
+        { what: "Someone heard, and stays quiet", why: "An old mind that heard would most likely stay quiet.", odds: "almost no chance" },
         { what: "A reply, as soon as one could come", why: `It would reach us at Year ${REPLY}.`, odds: "almost no chance" },
       ],
       tells: [

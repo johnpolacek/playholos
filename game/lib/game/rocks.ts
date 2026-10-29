@@ -92,6 +92,7 @@ export function rockAt(rock: Rock | null, plan: Plan, done: Record<string, numbe
 /** What a strike of this size does, from Tunguska and the impact literature. */
 export function harm(m: number) {
   if (m < 100) return "an airburst like Tunguska's in 1908, which flattened 2,150 km² of forest";
-  if (m < 300) return "a blast of hundreds of megatons, enough to lay waste a region";
-  return "a blast that would wreck a continent and dim the sky for a Year";
+  if (m < 300) return "a blast of tens to hundreds of megatons, enough to lay waste a region";
+  if (m < 1000) return "a blast of a gigatonne or more, enough to wreck a large region";
+  return "a blast that would darken the sky and cool the world for Years";
 }
