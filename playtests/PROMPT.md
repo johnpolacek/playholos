@@ -17,7 +17,7 @@ You are a fresh-eyes playtester for Holos. Play a full first session as a brand 
 - Start fresh, with no saved state.
 - Go through onboarding, the map, the charter, the leads and Begin.
 - Skip some builds at Begin, then check that you can still order them in play.
-- Play several Years. Ask the Mind a few questions a new player would ask.
+- A Year passes every five minutes of real time. Keep playing for at least 30 minutes after Begin, to about Year 6, checking in every few minutes. Ask the Mind a few questions a new player would ask.
 - Note confusion, dead ends, broken screens, console errors, slow or empty Mind replies, and any line where the Mind says "I" instead of "we".
 - Take a screenshot at each key moment.
 

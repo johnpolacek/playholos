@@ -11,4 +11,5 @@ __pycache__/
 /color.html
 # Agent skills, installed locally. skills-lock.json records their sources.
 /.claude/skills/
+/.claude/worktrees/
 /.agents/
