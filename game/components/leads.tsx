@@ -12,6 +12,7 @@ import { span, YEAR_0, lyOf } from "@/lib/game/clock";
 import { target } from "@/lib/game/sends";
 import { type Lead, type Reading } from "@/lib/game/leads";
 import { type System, worldName } from "@/lib/game/systems";
+import { placeLabel } from "@/components/place-label";
 
 // Earth's leads, drawn for Scan. The stars within 50 light-years from above, and Earth's real leads lit, each with a
 // thread out from Sol: a world on a stretched orbit, every world the planet hunters felt by 2040, nearest first,
@@ -92,10 +93,7 @@ export function LeadsMap({
         if (!n) continue;
         const ring = id.startsWith("ring:") || id.startsWith("call:") || (id.startsWith("theirs:") && theirs[Number(id.slice(7))]?.ly === 0);
         const lead = ids.includes(id);
-        const right = ring || x > (n.parentElement?.clientWidth ?? 0) / 2;
-        n.style.transform = ring
-          ? `translate(${x}px, ${y + (id.startsWith("call:") ? 16 : 4)}px) translate(-50%, 0)`
-          : `translate(${x + (right ? 9 : -9)}px, ${y}px) translate(${right ? "0" : "-100%"}, -50%)`;
+        placeLabel(n, x, y, ring ? (id.startsWith("call:") ? 16 : 4) : null);
         n.style.opacity = String(a * (focus && lead && id !== focus ? 0.45 : 1));
       }
     },

@@ -3,6 +3,7 @@ import { useGame } from "@/components/game-provider";
 import { SkyArt } from "@/components/sky";
 import { tenths, YEAR_0 } from "@/lib/game/clock";
 import type { Dials, Mark } from "@/lib/drift";
+import { placeLabel } from "@/components/place-label";
 
 // Our messages on the map. Picking one in Reach flies the map out to its star, where its path runs from Sol, lit as
 // far as its light has come. Pointing at another while the map is out turns to it. Picking it again, or Back to Earth,
@@ -99,10 +100,7 @@ export function BeamsMap({ className }: { className: string }) {
         const n = names.current[head ? `head:${focus?.key}` : id];
         if (!n) continue;
         // A star's name beside it, out from the middle. The light's words under it.
-        const right = x > (n.parentElement?.clientWidth ?? 0) / 2;
-        n.style.transform = head
-          ? `translate(${x}px, ${y + 10}px) translate(-50%, 0)`
-          : `translate(${x + (right ? 9 : -9)}px, ${y}px) translate(${right ? "0" : "-100%"}, -50%)`;
+        placeLabel(n, x, y, head ? 10 : null);
         n.style.opacity = String(a);
       }
     },
