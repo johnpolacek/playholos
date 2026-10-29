@@ -12,6 +12,8 @@ import type { Loss } from "./meetings.ts";
 import { seedProbes } from "./spread.ts";
 
 /** A sender's voice bank: its knock reads as its hail and its close, and the close may carry its name. */
+import { ARCHIVE, combedAt, combedBy } from "./works.ts";
+
 export type Voices = Record<string, { hail: string[]; close: string[] }>;
 
 /** What Earth has built to listen and look with: the Year each is done, if our order finishes it. */
@@ -40,7 +42,23 @@ export interface Kit {
   quiet?: number | null;
   /** Neighbors that chose to hide, by star and the Year of the move, from the save. Their glow stops growing. */
   hides?: { star: string; at: number }[];
+  /** Our idle thought combing old recordings: each Year the line changed, and the flagship-Years spent by then. */
+  searched?: [number, number][];
 }
+
+/** Our search of old recordings, for the Mind: how far it has combed by Year `year`, and how fast. */
+export function describeSearch(searched: readonly [number, number][], year: number) {
+  const at = combedAt(searched, year), soon = combedAt(searched, year + 1);
+  const through = Math.floor(2040 + at);
+  const pace =
+    at >= year - 0.05
+      ? "It has caught up with the present, and combs each new recording as it comes in."
+      : soon - at < 0.05
+        ? "We have no idle thought to spare now, so it waits."
+        : `It combs about ${Math.max(1, Math.round(soon - at))} Year${Math.round(soon - at) > 1 ? "s" : ""} of recordings in each of ours.`;
+  return `Our idle thought combs old radio recordings, oldest first, for any signal our watches missed when it came. It has combed from 2016 through ${through}. ${pace} What it finds shows in what Earth has heard.`;
+}
+
 
 /** What the first mirror tells apart: no air, water without oxygen, or oxygen. Hidden microbes read as a lifeless sea,
  *  as do a world whose life died and a frozen one, its water as ice. Every Mind's world had animals first, so a home
@@ -211,7 +229,7 @@ export function earthKnows(
   world: World,
   year: number,
   voices: Voices = {},
-  { allSky = null, flash = null, telescope = null, mirror = null, halo = null, mapper = null, lenses = [], sentinels = [], seeds = [], colony = null, sails = null, probe = null, losses = [], quiet = null, hides = [] }: Kit = {},
+  { allSky = null, flash = null, telescope = null, mirror = null, halo = null, mapper = null, lenses = [], sentinels = [], seeds = [], colony = null, sails = null, probe = null, losses = [], quiet = null, hides = [], searched = [] }: Kit = {},
 ): EarthView {
   const shown = (id: string) => world.stars[id]?.shown ?? id;
   // Earth's finds at Year 0: every world whose tug shows by 2040. Measured, not understood. Its star is in the catalogs.
@@ -235,12 +253,15 @@ export function earthKnows(
       if (deaf && i.what.includes("radars")) continue;
       const wide = allSky !== null && i.year >= allSky && !!i.allsky;
       const seen = flash !== null && i.year >= flash && !!i.flash;
-      if (i.year > year || !(i.kit0 || wide || seen)) continue;
+      // Missed when it came, a radio signal in recordings since 2016 is found once our search combs that far.
+      const dug = !(i.kit0 || wide || seen) && i.allsky && !i.laser && i.year >= ARCHIVE.from ? combedBy(searched, i.year) : null;
+      const found = dug !== null && dug <= year ? dug : null;
+      if (i.year > year || !(i.kit0 || wide || seen || found !== null)) continue;
       const bank = voices[p.name];
       heard.push({
         star: shown(p.star), d: p.d, sent: i.sent, arrived: i.year, move: i.move,
         text: bank && i.move === "knock" ? `${bank.hail[0]} ${bank.close[0]}` : null,
-        ...(i.kit0 ? {} : { by: seen ? "Deep Flash Watch" : "All-Sky Watch" }),
+        ...(i.kit0 ? {} : found !== null ? { found } : { by: seen ? "Deep Flash Watch" : "All-Sky Watch" }),
         ...(i.laser ? { laser: true } : {}),
       });
     }
@@ -519,6 +540,7 @@ export function describe(view: EarthView): string {
           ? ` Whoever watches there sent it to ${h.about.replace(/^Our/, "our")}, which passed it home.`
           : ` Our radars first reached it about ${Math.round(1950 + h.d)}, ${2040 + h.sent >= 1950 + h.d ? "before" : "after"} it was sent.`) +
         (h.laser ? ` Only our ${h.by} sees flashes. No radio watch hears them.` : h.by ? ` Our ${h.by} caught it. Year 0's sky watch would have missed it.` : "") +
+        (h.found !== undefined ? ` No one saw it when it came. Our search of old recordings dug it out at Year ${one(h.found)}.` : "") +
         // Only a knock's words are read at once, and nothing in the game reads the rest. Added 2026-10-23, after the
         // Mind offered to go through an answer's words, and then, told they were unread, to read them.
         (h.overheard ? " It was sent every way at once, on news from another world, not to us. We overheard it." : "") +

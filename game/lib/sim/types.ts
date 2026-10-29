@@ -160,6 +160,8 @@ export interface Heard {
   text: string | null;
   /** The build that caught it, when Year 0's sky watch would have missed it. */
   by?: string;
+  /** Missed when it came, and dug out of old recordings by our idle thought at this Year. 2026-10-28. */
+  found?: number;
   /** It came as laser flashes. */
   laser?: boolean;
   /** An answer to one of our messages, sent in play: what ours said. Our record with that star. 2026-10-26. */

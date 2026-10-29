@@ -4,7 +4,7 @@ import { Item, type Row } from "@/components/journey";
 import type { Aim } from "@/components/picks";
 import { heardId, useLeads } from "@/components/scan";
 import { ListHead } from "@/components/tab-head";
-import { YEAR_0 } from "@/lib/game/clock";
+import { tenths, YEAR_0 } from "@/lib/game/clock";
 import { giftWords } from "@/lib/game/sends";
 import reactions from "@/data/reactions.json";
 import type { Heard as HeardSignal } from "@/lib/sim/types";
@@ -68,7 +68,10 @@ export function Heard() {
             ...(h.gift ? ([["GAVE US", `Their knowledge. ${giftWords(h.gift)}`]] as [string, string][]) : []),
             ["CAUGHT BY", "Our dishes, which keep listening to every star we send to"],
           ] as [string, string | undefined][])
-        : h.about ? [] : ([[
+        : h.about ? [] : h.found !== undefined
+          // Missed when it came, and dug out of old recordings by our idle thought. 2026-10-28.
+          ? ([["FOUND BY", `Our search of old recordings, at Year ${tenths(h.found)}. No one saw it when it came.`]] as [string, string][])
+          : ([[
             "CAUGHT BY",
             h.by
               ? `Our ${h.by}. Year 0’s sky watch would have missed it.${h.laser ? " It alone sees flashes. No radio watch hears them." : ""}`

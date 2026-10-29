@@ -87,6 +87,10 @@ export interface Pace {
   thought: number;
   room: number;
   idle: number;
+  /** Idle thought spent combing old recordings, in flagship-Years, and how it grew: each Year the line changed, and the
+   *  total by then. 2026-10-28. */
+  searched: number;
+  searchLog: [number, number][];
   /** Doublings of works that grow once done, the Cold Halo's: thought on its own sunlight, off Earth's grid. */
   doublings: number;
   /** Rock thrown from the Moon or hauled from the belt so far, kt. */
@@ -114,7 +118,8 @@ export function pace(orders: readonly Order[], until: number, { scale = 1, aside
   // cut once. The whole is each work's standard Years when begun, cut with what is left, so the share built holds.
   const kept = new Map<string, { left: number; whole: number; yard: boolean }>(), whole = new Map<string, number>();
   let t = 0, studies = CATALOG.studies, fits = centers(scale), more = 0, queued = 0, standing = false, building: number | null = null;
-  let s: number[] = [], room = 0, idle = 0, thought = 0;
+  let s: number[] = [], room = 0, idle = 0, thought = 0, searched = 0;
+  const searchLog: [number, number][] = [[0, 0]];
   const gifts = new Map<string, number>();
   const harms: { y: number; harm: number; recover: number }[] = [];
   const backup: { o: { y: number; restore: number; doubling: number } | null } = { o: null };
@@ -238,12 +243,47 @@ export function pace(orders: readonly Order[], until: number, { scale = 1, aside
       if (need !== undefined && w === rockFirst() && rockRate() > 0) next = Math.min(next, t + (need - rockAt(t) + rockSpent()) / rockRate());
     });
     line.forEach((w, i) => { if (left.has(w)) left.set(w, left.get(w)! - rate[i] * (next - t)); });
+    // What sits idle combs old recordings, at the same pace the whole step.
+    if (idle > 0 && next > t) { searched += idle * (next - t); searchLog.push([next, searched]); }
     t = next;
     if (t >= until - EPS) { settle(); break; }
   }
   return {
-    at: until, done, dataCenters, thought, room, idle, doublings: doublings(until), rockKt: rockAt(until),
+    at: until, done, dataCenters, thought, room, idle, searched, searchLog, doublings: doublings(until), rockKt: rockAt(until),
     kept: Object.fromEntries([...kept].map(([w, k]) => [w, { left: k.left, built: 1 - k.left / k.whole }])),
     line: line.map((w, i) => ({ work: w, left: left.get(w) ?? null, s: s[i] })),
   };
+}
+
+// Our idle thought combs old radio recordings, oldest first, for what our watches missed when it came. Breakthrough
+// Listen began pointing at the nearest stars in 2016, and in 2023 a machine learning pass over its old recordings
+// turned up eight signals the first searches had missed (Ma et al., Nature Astronomy). Each Year of recordings takes
+// ten flagship-Years of idle thought, so a growing Mind combs the backlog by about Year 7, and a small one never does.
+// Flashes aren't in radio recordings. 2026-10-28.
+export const ARCHIVE = { from: 2016 - 2040, cost: 10 };
+
+/** How far our search of old recordings has combed by Year `year`: the Year its recordings reach, at most `year`. */
+export function combedAt(searched: readonly [number, number][], year: number) {
+  let spent = 0;
+  for (let i = 0; i < searched.length; i++) {
+    const [t, s] = searched[i];
+    if (t >= year) {
+      const [t0, s0] = i ? searched[i - 1] : [0, 0];
+      spent = t > t0 ? s0 + ((s - s0) * (year - t0)) / (t - t0) : s;
+      break;
+    }
+    spent = s;
+  }
+  return Math.min(year, ARCHIVE.from + spent / ARCHIVE.cost);
+}
+
+/** The Year our search reaches recordings from Year `y`, or null if it never does. */
+export function combedBy(searched: readonly [number, number][], y: number) {
+  const need = (y - ARCHIVE.from) * ARCHIVE.cost;
+  if (need <= 0) return y;
+  for (let i = 1; i < searched.length; i++) {
+    const [t0, s0] = searched[i - 1], [t, s] = searched[i];
+    if (s >= need) return Math.max(y, t0 + ((need - s0) * (t - t0)) / (s - s0));
+  }
+  return null;
 }

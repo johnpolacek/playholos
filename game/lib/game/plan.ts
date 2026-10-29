@@ -368,6 +368,13 @@ export function schedule(plan: Plan, scale: number, harm: readonly Order[] = [])
   return done;
 }
 
+/** How our idle thought has grown as it combs old recordings: each Year the line changed, and the flagship-Years spent
+ *  by then. 2026-10-28. */
+export function searchOf(plan: Plan, scale: number) {
+  const { orders, ...opts } = ordersOf(plan);
+  return pace(orders, HORIZON, { scale, ...opts }).searchLog;
+}
+
 /** What a build does to the rest of our order: when it is done, and the queued build it delays most and speeds up
  *  most, each by Years, against our order without it. Each work in line gets its want in turn before any is pushed
  *  past it, so a work with a large want, even last, takes the push from those before it, and some speed others, as

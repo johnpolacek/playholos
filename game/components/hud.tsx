@@ -5,7 +5,8 @@ import { Menu } from "@/components/menu";
 import { useShown } from "@/components/costs";
 import { useSchedule } from "@/components/picks";
 import { realTime, tenths, YEAR_0 } from "@/lib/game/clock";
-import { ceiling, drawAt, kt, matterAt, ordered, schedule, sharesAt, shortAt } from "@/lib/game/plan";
+import { ceiling, drawAt, kt, matterAt, ordered, schedule, searchOf, sharesAt, shortAt } from "@/lib/game/plan";
+import { combedAt } from "@/lib/sim/works";
 
 // What we have, from our order: matter we hold in orbit, growing with lift and less what our builds take, since
 // 2026-10-20. Energy, the share of Earth's that our compute draws, and compute, how much of ours is at work, since
@@ -77,6 +78,9 @@ export function Hud() {
   const full = ordered(plan).includes("Thought Fields") ? top.campuses.at(-1) : undefined;
   const most = top.step ** top.campuses.length / top.room;
   const over = share.short > 0.005;
+  // In play, idle compute combs old recordings until it catches up with the present. 2026-10-28.
+  const searched = useMemo(() => searchOf(plan, scale), [plan, scale]);
+  const searching = y !== null && combedAt(searched, now) < now - 0.05;
   // Tall: the menu's galaxy and the Year, then the meters below. Wide: one band, the meters between the galaxy and the Year.
   return (
     <header
@@ -119,7 +123,7 @@ export function Hud() {
           hint={hint}
           at={compute}
           value={over ? `${pct(1 + share.short)} needed` : `${pct(compute)} at work`}
-          sub={over ? `${pct(share.short)} short` : compute < 0.995 ? `${pct(1 - compute)} idle` : "none idle"}
+          sub={over ? `${pct(share.short)} short` : compute < 0.995 ? `${pct(1 - compute)} ${searching ? "searching" : "idle"}` : "none idle"}
           late={over}
         />
       </div>

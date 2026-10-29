@@ -9,7 +9,7 @@ import { roll } from "./reactions.ts";
 import { hop, seedProbes } from "./spread.ts";
 import { POOL } from "./pool.ts";
 import { loadVoices, loadWorld } from "./world.ts";
-import { offEarth, pace, type Order } from "./works.ts";
+import { ARCHIVE, combedAt, offEarth, pace, type Order } from "./works.ts";
 import { between, glowsSeen, knownTo, landings, SOL } from "./answers.ts";
 import { haloReaches, HALO } from "./conflict.ts";
 import { colonyActor, earthActor, ourCodes, ourKind, ourTable } from "./colony.ts";
@@ -525,4 +525,18 @@ test("neighbors see our Cold Halo once its 77 K glow crosses their floor, and ne
   const mine = seen.find((g) => g.to === (world.stars[p.star]?.shown ?? p.star))!;
   assert.ok(mine && mine.at >= p.d);
   assert.ok(!glowsSeen(world, [], [[0, 100]]).some((g) => g.from === SOL));
+});
+
+test("idle thought combs old recordings, and digs out a broadcast our watches missed", async () => {
+  // Ten flagship-Years a Year of recordings: 24 Years of backlog takes 240.
+  const log: [number, number][] = [[0, 0], [10, 240], [20, 480]];
+  assert.equal(combedAt(log, 5), ARCHIVE.from + 12);
+  assert.equal(combedAt(log, 20), 20);
+  // Mu Herculis's last broadcast reached us in 2018, missed by Year 0's watch.
+  const world = await loadWorld(11);
+  const found = (kit: Parameters<typeof earthKnows>[3], year: number) => earthKnows(world, year, {}, kit).heard.find((h) => h.star === "Mu Herculis");
+  assert.equal(found({}, 20), undefined);
+  const h = found({ searched: log }, 20)!;
+  assert.ok(h.found !== undefined && Math.abs(h.found - (h.arrived - ARCHIVE.from) * ARCHIVE.cost / 24) < 1e-6, String(h.found));
+  assert.equal(found({ searched: log }, h.found! - 0.1), undefined);
 });

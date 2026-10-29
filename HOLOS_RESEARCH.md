@@ -2259,6 +2259,14 @@ Three research passes by agents, from abstracts and summaries, not full papers. 
   - Used: the X-Ray Watch and the Interceptor.
 - Used: [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md#parity-what-a-neighbor-can-do-we-can-build), lib/sim/conflict.ts, lib/game/hits.ts.
 
+### Combing old recordings, 2026-10-28
+
+- **[Ma et al. 2023, a deep-learning search of 820 nearby stars](https://arxiv.org/abs/2301.12670)** · Published, Nature Astronomy. Abstract read.
+  - A machine learning pass over 480 hours of old Green Bank recordings from Breakthrough Listen found 8 signals the first searches had missed.
+  - None was seen again when the stars were looked at a second time.
+  - Matters: old recordings hold signals no one flagged, and more thought finds them. *Ours,* a signal that reached Earth after 2016 and was missed is buried in Breakthrough Listen’s recordings, since it pointed at every nearby star (Price et al. 2020, above).
+- Used: idle compute in play combs old recordings, oldest first, from 2016. Each Year of recordings takes ten flagship-Years of idle thought, a sample tuned so a Mind growing with Thought Fields catches up by about Year 7. Flashes aren’t in radio recordings. In 10 of our 33 seeds, a missed signal could wait there, fewer once the All-Sky Watch is done. In `game/lib/sim/works.ts` and `game/lib/sim/knowledge.ts`.
+
 ## Watch list
 
 Results the design is waiting on. Check each when its date comes.

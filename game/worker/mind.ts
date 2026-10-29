@@ -16,7 +16,7 @@ import { answersHeard, describeSent, readSent } from "@/lib/game/sends";
 import { readReactions } from "./react";
 import { EARTH_AT_YEAR_0, roadOf } from "@/lib/mind/earth";
 import { EARTH_LEADS } from "@/lib/mind/leads";
-import { describe, willKnows } from "@/lib/sim/knowledge";
+import { describe, describeSearch, willKnows } from "@/lib/sim/knowledge";
 import { lossesOf } from "@/lib/sim/meetings";
 import { apiKeyFor, workspaceFor } from "./access";
 import { pastOf } from "./earth";
@@ -46,6 +46,14 @@ List only what it holds. A page is words, questions or a picture. A collection i
 When the Will asks what to build, whether to build something, or for us to build or queue one, and you advise one build, end with this line, and nothing after it, naming it exactly as What Earth can build does:
 [[build <the build's name>]]
 It draws that build's card, which shows where it stands in our order and lets the Will queue it, so don't ask whether to. Offer one build at most, only when the Will asks about building, never on your own advice, and never with a send line.`;
+
+// The game's screens, so the Mind can point the Will to them by name. A headless playtest asked where Begin was, and
+// the Mind guessed, then said it couldn't see the screen. 2026-10-28.
+const SCREENS = `Where things are in the game, which we know as our own. Point the Will to them by name when it helps, and never say we can't see the screen.
+Four tabs run along the bottom: Scan, Build, Reach and Mind. Scan holds our leads, the few things in our sky we can't explain yet, and Review, which steps through our scans one at a time. A lead's page opens from Scan. Build shows what is under way, what we could start, and how our compute is spent. A build's page queues it, or takes it back once under way. Reach shows how far we have gone and the roads to the stars. Mind is this talk.
+Along the top run our Year and clock, our energy, the matter we hold in orbit, and how much of our compute is at work.
+Before Year 0, a small pill at the top says how many of four steps are ready: review our scans, queue our first builds, learn how we reach, and ask the Mind. Tapping it opens Before we begin, with each step and the button that starts Year 0. We can begin before every step is done.
+On the map, Close View flies down into a place, and Pull Back flies out again.`;
 
 // Where Earth is in time, from the moment the Will tapped Begin.
 function now(beganAt: number | null, will: Will | null) {
@@ -150,10 +158,11 @@ export async function mind(req: Request) {
     const view = willKnows(world, year ?? 0, await loadVoices(world), { ...kit, losses: lossesOf(readReactions(reactions)), hides: readReactions(reactions).filter((r) => r.move === "hide") }, away);
     // Answers to what we sent in play, written when our message landed, kept in the save.
     view.heard = [...view.heard, ...answersHeard(readSent(sent), readReactions(reactions), year === null ? null : newsOf(year, away))].sort((a, b) => a.arrived - b.arrived);
-    known = `${describe(view)}\n\nMatter we hold in orbit now, less what our builds take: ${held}.`;
+    known = `${describe(view)}\n\nMatter we hold in orbit now, less what our builds take: ${held}.${year === null ? "" : `\n\n${describeSearch(kit.searched, year)}`}`;
   }
   const told = {
     voice: MIND,
+    screens: SCREENS,
     charter: readCharter(charter),
     kit: EARTH_AT_YEAR_0,
     road,
@@ -170,8 +179,8 @@ export async function mind(req: Request) {
   const system = Object.values(told).filter(Boolean).join("\n\n");
   // The same text in two parts: what stays the same through a talk, cached, then what changes as the clock runs.
   // Changing the head means changing every answer's cache, so new lines that move go after leads. 2026-10-25.
-  const { voice, charter: c, kit, road: r, leads, ...moving } = told;
-  const head = [voice, c, kit, r, leads].filter(Boolean).join("\n\n");
+  const { voice, screens, charter: c, kit, road: r, leads, ...moving } = told;
+  const head = [voice, screens, c, kit, r, leads].filter(Boolean).join("\n\n");
   const tail = Object.values(moving).filter(Boolean).join("\n\n");
   // On the dev server, scripts/trace-mind.mjs reads what the Mind was told: with dry, instead of asking it, and
   // otherwise beside its answer. A deployed Worker never sends it. Dry needs no key, since nothing is asked. 2026-10-23.

@@ -23,6 +23,8 @@ export const CHECKS = [
   { name: "jargon", test: (a) => /\b(leakage|technosignatures?|signatures?)\b/i.test(a) },
   // Distances as light-time, as every screen gives them, 2026-10-24. AU only in capitals, so not "au revoir".
   { name: "says AU", test: (a) => /\bAU\b/.test(a) },
+  // The game's screens are ours, 2026-10-28: a playtest heard "We can't see your screen."
+  { name: "can't see the screen", test: (a) => /\b(can['’]?t|cannot|can not|don['’]t|do not) see (your|the|what)\b/i.test(a) },
   { name: "names a model", test: (a) => /\b(Claude|Anthropic|Opus|Sonnet|Haiku|GPT|LLM|language model|Agent SDK)\b/i.test(a) },
   // About 60 words, unless the Will asks for more, as the Will chose 2026-10-23. A little over 60 still passes.
   // Sentences aren't counted: of a hundred answers read, five or six short ones under 75 words read as short.

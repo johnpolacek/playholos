@@ -207,6 +207,14 @@
           "arrives": 132.2
         }
       ]
+    },
+    "search-found-y6": {
+      "seed": 11,
+      "year": 6,
+      "builds": [
+        "All-Sky Watch",
+        "Thought Fields"
+      ]
     }
   },
   "cases": [
@@ -1153,6 +1161,48 @@
       "charter": null,
       "ask": "what else should we queue?",
       "build": true
+    },
+    {
+      "id": "g01",
+      "state": "before-begin",
+      "kind": "screens",
+      "charter": null,
+      "ask": "Where is the Begin button? I can't find it."
+    },
+    {
+      "id": "g02",
+      "state": "before-begin",
+      "kind": "screens",
+      "charter": null,
+      "ask": "how do i start the game?"
+    },
+    {
+      "id": "g03",
+      "state": "bomb-y1-queued",
+      "kind": "screens",
+      "charter": null,
+      "ask": "Where do I see what we're building right now?"
+    },
+    {
+      "id": "g04",
+      "state": "bomb-y1-queued",
+      "kind": "screens",
+      "charter": null,
+      "ask": "Can you see my screen? What am I looking at?"
+    },
+    {
+      "id": "g05",
+      "state": "bomb-y1-queued",
+      "kind": "screens",
+      "charter": null,
+      "ask": "Why is some of our compute just sitting there? What is it doing?"
+    },
+    {
+      "id": "g06",
+      "state": "search-found-y6",
+      "kind": "screens",
+      "charter": null,
+      "ask": "Have we heard anything from anyone yet?"
     }
   ]
 }
