@@ -1,0 +1,210 @@
+{
+  "radiusLy": 326,
+  "seedRadiusLy": 50,
+  "count": 301387,
+  "withinSeed": 1210,
+  "gaia": 300098,
+  "hipparcosSupplement": 1289,
+  "whiteDwarfs": 16401,
+  "epoch": "J2016.0 (Gaia EDR3); HYG supplement at J2000.0",
+  "fields": [
+    "galacticX_ly",
+    "galacticZ_ly",
+    "negativeGalacticY_ly",
+    "approxVisualMagnitude",
+    "approxBVColorIndex"
+  ],
+  "sources": {
+    "gaia": "Gaia Collaboration, Smart et al. (2021), A&A 649, A6: Gaia Catalogue of Nearby Stars, VizieR J/A+A/649/A6",
+    "hyg": "HYG 4.1, David Nash / Astronexus, CC BY-SA 4.0"
+  },
+  "landmarks": [
+    {
+      "name": "Proxima Centauri",
+      "hyg": 70666,
+      "pos": [
+        2.94415,
+        -0.14211,
+        3.0567
+      ],
+      "distance": 4.2464,
+      "source": "Gaia EDR3"
+    },
+    {
+      "name": "Alpha Centauri",
+      "hyg": 71456,
+      "pos": [
+        3.09425,
+        -0.05139,
+        3.01551
+      ],
+      "distance": 4.3209,
+      "source": "Hipparcos via HYG"
+    },
+    {
+      "name": "Barnard's Star",
+      "hyg": 87665,
+      "pos": [
+        4.98139,
+        1.45906,
+        -2.99898
+      ],
+      "distance": 5.9947,
+      "source": "Gaia EDR3"
+    },
+    {
+      "name": "Wolf 359",
+      "hyg": 118720,
+      "pos": [
+        -1.91711,
+        6.51977,
+        3.93958
+      ],
+      "distance": 7.8551,
+      "source": "Gaia EDR3"
+    },
+    {
+      "name": "Sirius",
+      "hyg": 32263,
+      "pos": [
+        -5.77042,
+        -1.32923,
+        6.2381
+      ],
+      "distance": 8.6011,
+      "source": "Hipparcos via HYG"
+    },
+    {
+      "name": "Epsilon Eridani",
+      "hyg": 16496,
+      "pos": [
+        -6.753,
+        -7.81112,
+        1.91617
+      ],
+      "distance": 10.5018,
+      "source": "Gaia EDR3"
+    },
+    {
+      "name": "Procyon",
+      "hyg": 37173,
+      "pos": [
+        -9.29031,
+        2.58212,
+        6.19639
+      ],
+      "distance": 11.4618,
+      "source": "Hipparcos via HYG"
+    },
+    {
+      "name": "Tau Ceti",
+      "hyg": 8087,
+      "pos": [
+        -3.36988,
+        -11.41808,
+        -0.40946
+      ],
+      "distance": 11.912,
+      "source": "Gaia EDR3"
+    },
+    {
+      "name": "Altair",
+      "hyg": 97338,
+      "pos": [
+        11.11437,
+        -2.59098,
+        -12.23344
+      ],
+      "distance": 16.7302,
+      "source": "Hipparcos via HYG"
+    },
+    {
+      "name": "Vega",
+      "hyg": 90979,
+      "pos": [
+        9.06874,
+        8.25174,
+        -21.83798
+      ],
+      "distance": 25.0446,
+      "source": "Hipparcos via HYG"
+    },
+    {
+      "name": "Fomalhaut",
+      "hyg": 113008,
+      "pos": [
+        9.98061,
+        -22.75489,
+        -3.72924
+      ],
+      "distance": 25.1258,
+      "source": "Hipparcos via HYG"
+    },
+    {
+      "name": "Pollux",
+      "hyg": 37718,
+      "pos": [
+        -30.30088,
+        13.42096,
+        6.56753
+      ],
+      "distance": 33.7846,
+      "source": "Hipparcos via HYG"
+    },
+    {
+      "name": "Arcturus",
+      "hyg": 69451,
+      "pos": [
+        12.64262,
+        34.30379,
+        -3.39946
+      ],
+      "distance": 36.7171,
+      "source": "Hipparcos via HYG"
+    },
+    {
+      "name": "Capella",
+      "hyg": 24549,
+      "pos": [
+        -40.71194,
+        3.40771,
+        -12.76737
+      ],
+      "distance": 42.8028,
+      "source": "Hipparcos via HYG"
+    },
+    {
+      "name": "Castor",
+      "hyg": 36744,
+      "pos": [
+        -46.60592,
+        19.44886,
+        6.08698
+      ],
+      "distance": 50.8667,
+      "source": "Hipparcos via HYG"
+    },
+    {
+      "name": "Aldebaran",
+      "hyg": 21368,
+      "pos": [
+        -62.51668,
+        -23.06484,
+        1.06057
+      ],
+      "distance": 66.6442,
+      "source": "Hipparcos via HYG"
+    },
+    {
+      "name": "Regulus",
+      "hyg": 49528,
+      "pos": [
+        -35.9067,
+        59.78799,
+        37.74182
+      ],
+      "distance": 79.2991,
+      "source": "Hipparcos via HYG"
+    }
+  ]
+}

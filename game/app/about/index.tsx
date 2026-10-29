@@ -106,7 +106,7 @@ export default function About() {
             Where forecasts split, each game rolls a branch, weighted by its odds.
           </p>
           <div className="mt-12 grid gap-8 wide:grid-cols-3">
-            <Fact value="9,494">
+            <Fact value="9,484">
               Stars and companions within 100 light-years, from Gaia&rsquo;s census of the Sun&rsquo;s neighborhood and
               Hipparcos.
             </Fact>

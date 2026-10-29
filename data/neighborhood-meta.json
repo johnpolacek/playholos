@@ -1,10 +1,10 @@
 {
   "radiusLy": 100,
   "seedRadiusLy": 50,
-  "count": 9494,
-  "withinSeed": 1212,
+  "count": 9484,
+  "withinSeed": 1210,
   "gaia": 9281,
-  "hipparcosSupplement": 213,
+  "hipparcosSupplement": 203,
   "whiteDwarfs": 455,
   "epoch": "J2016.0 (Gaia EDR3); HYG supplement at J2000.0",
   "fields": [

@@ -1,17 +1,24 @@
-"""Build the v1 game region's star census: every object within 100 ly of the Sun.
+"""Build a star census: every object within a radius of the Sun, 100 ly by default.
 
 Sources (download into .cache first; the exact queries are in
 data/neighborhood-sources/):
   .cache/gcns-100ly.csv          Gaia Catalogue of Nearby Stars, Dist50 <= 31 pc
   .cache/gcns-all-positions.csv  the full GCNS positions, used only for matching
+  .cache/gcns-all.csv            the full GCNS with colors, for wider radii
   .cache/hygdata_v41.csv         HYG 4.1, for bright stars Gaia does not measure
+  .cache/hip-gaia-parallax.csv   Gaia EDR3 parallaxes of Hipparcos stars, for the region's edge
+
+The game's census, every object within 326 ly (100 pc):
+  python3 scripts/prepare-neighborhood.py 326 .cache/gcns-all.csv data/gcns-326ly
 """
-import collections, csv, json, math, struct
+import collections, csv, json, math, struct, sys
 from pathlib import Path
 
 root = Path(__file__).resolve().parents[1]
 PC_LY = 3.261563777
-RADIUS_LY, SEED_LY = 100, 50
+RADIUS_LY, SEED_LY = (float(sys.argv[1]) if len(sys.argv) > 1 else 100), 50
+CENSUS = sys.argv[2] if len(sys.argv) > 2 else '.cache/gcns-100ly.csv'
+OUT = sys.argv[3] if len(sys.argv) > 3 else 'data/neighborhood'
 EPOCH_SHIFT_YEARS = 16  # HYG J2000.0 positions moved to Gaia's J2016.0 epoch
 LANDMARKS = {'Sirius': 'Sirius', 'Rigil Kentaurus': 'Alpha Centauri', 'Proxima Centauri': 'Proxima Centauri',
     "Barnard's Star": "Barnard's Star", 'Wolf 359': 'Wolf 359', 'Procyon': 'Procyon', 'Ran': 'Epsilon Eridani',
@@ -43,9 +50,9 @@ def b_minus_v(bp_rp):
         if bp_rp <= x1: return y0 + (y1 - y0) * (bp_rp - x0) / (x1 - x0)
     return points[-1][1]
 
-# The census itself: every GCNS object whose median position lies inside 100 ly.
+# The census itself: every GCNS object whose median position lies inside the radius.
 census, points = [], []
-for row in csv.DictReader((root / '.cache/gcns-100ly.csv').open()):
+for row in csv.DictReader((root / CENSUS).open()):
     xyz = [float(row[k]) for k in ('xcoord50', 'ycoord50', 'zcoord50')]
     distance_ly = math.hypot(*xyz) * PC_LY
     if distance_ly > RADIUS_LY: continue
@@ -81,6 +88,14 @@ def gaia_counterpart(star):
                     if best is None or s < best[0]: best = (s, xyz)
     return best
 
+# Gaia's own parallax for each Hipparcos star it measured. Near the edge of a
+# wide region, a star Hipparcos puts inside may lie outside by Gaia, beyond the
+# GCNS too, so no census object matches it. Gaia's distance decides.
+hip_gaia_ly = {}
+if (root / '.cache/hip-gaia-parallax.csv').exists():
+    for row in csv.DictReader((root / '.cache/hip-gaia-parallax.csv').open()):
+        hip_gaia_ly[row['hip']] = 1000 / float(row['parallax']) * PC_LY
+
 # Supplement: Hipparcos stars (via HYG) that Gaia did not measure, mostly the
 # brightest stars. Gliese-only HYG entries are not added: without Hipparcos
 # astrometry, an unmatched faint entry is more likely a duplicate component or
@@ -91,7 +106,7 @@ for star in csv.DictReader((root / '.cache/hygdata_v41.csv').open()):
     if not 0 < d <= RADIUS_LY + 5: continue
     key = star['proper'] or star['gl']
     match = gaia_counterpart(star) if star['hip'] or key in LANDMARKS else None
-    added = bool(star['hip']) and match is None and d <= RADIUS_LY
+    added = bool(star['hip']) and match is None and d <= RADIUS_LY and hip_gaia_ly.get(star['hip'], 0) <= RADIUS_LY
     if added:
         ra, dec = math.radians(float(star['ra']) * 15), math.radians(float(star['dec']))
         eq = [d * math.cos(dec) * math.cos(ra), d * math.cos(dec) * math.sin(ra), d * math.sin(dec)]
@@ -106,15 +121,15 @@ for star in csv.DictReader((root / '.cache/hygdata_v41.csv').open()):
         landmarks.append(dict(name=LANDMARKS[key], hyg=int(star['id']), pos=[round(v, 5) for v in pos],
             distance=round(math.hypot(*pos), 4), source='Gaia EDR3' if match else 'Hipparcos via HYG'))
 
-(root / 'data/neighborhood.bin').write_bytes(struct.pack('<' + 'f' * len(points), *points))
+(root / f'{OUT}.bin').write_bytes(struct.pack('<' + 'f' * len(points), *points))
 within_seed = sum(s['distance'] <= SEED_LY for s in census)
-meta = dict(radiusLy=RADIUS_LY, seedRadiusLy=SEED_LY, count=len(census), withinSeed=within_seed,
+meta = dict(radiusLy=int(RADIUS_LY) if RADIUS_LY == int(RADIUS_LY) else RADIUS_LY, seedRadiusLy=SEED_LY, count=len(census), withinSeed=within_seed,
     gaia=gaia_count, hipparcosSupplement=len(census) - gaia_count, whiteDwarfs=sum(s['white_dwarf'] for s in census),
     epoch='J2016.0 (Gaia EDR3); HYG supplement at J2000.0',
     fields=['galacticX_ly', 'galacticZ_ly', 'negativeGalacticY_ly', 'approxVisualMagnitude', 'approxBVColorIndex'],
     sources=dict(gaia='Gaia Collaboration, Smart et al. (2021), A&A 649, A6: Gaia Catalogue of Nearby Stars, VizieR J/A+A/649/A6',
         hyg='HYG 4.1, David Nash / Astronexus, CC BY-SA 4.0'),
     landmarks=sorted(landmarks, key=lambda l: l['distance']))
-(root / 'data/neighborhood-meta.json').write_text(json.dumps(meta, indent=2) + '\n')
-print(f"{len(census):,} objects within {RADIUS_LY} ly ({gaia_count:,} Gaia, {len(census) - gaia_count:,} Hipparcos supplement); "
+(root / f'{OUT}-meta.json').write_text(json.dumps(meta, indent=2) + '\n')
+print(f"{len(census):,} objects within {RADIUS_LY:g} ly ({gaia_count:,} Gaia, {len(census) - gaia_count:,} Hipparcos supplement); "
       f"{within_seed:,} within {SEED_LY} ly; {len(landmarks)} landmarks")

@@ -27,7 +27,7 @@ const STEPS: { title: string; text: string; parts: string[] }[] = [
   },
   {
     title: "A real map",
-    text: "The planets where an ephemeris puts them today, 109,400 stars, Gaia's census of the 9,494 objects within 100 light-years, and the nearby galaxies, in one continuous scene.",
+    text: "The planets where an ephemeris puts them today, 109,400 stars, Gaia's census of the 9,484 objects within 100 light-years, and the nearby galaxies, in one continuous scene.",
     parts: ["atlas"],
   },
   {
