@@ -74,7 +74,23 @@ Settled 2026-10-28, one step at a time. The premise itself, how many minds exist
   - *Near stars stay a real catalog.* Beyond Gaia’s detail the Galaxy is drawn from its measured structure.
   - *Assumed:* 200 billion stars, minds arising evenly over 8 billion years. Star birth peaked long ago, so peers may be 2 to 3 times rarer.
   - Set aside: a 1,000 ly map, chosen first on 2026-10-28. It held about 8 old minds and no peers.
-  - *Open:* how long a young mind stays outward before it turns inward. Whether we meet a peer rests on it.
+  - *How long each peer stays outward* is drawn per peer, below.
+- **A young mind is outward for 50 to 20,000 years.** Settled 2026-10-29. Drawn per peer, then it turns inward and goes cold.
+  - *Building out its home system: 50 to 1,000 years.* From about Earth’s industry today to a swarm of Mercury’s mass is about 38 doublings. At 1 to 5 years a doubling (Metzger et al. 2013) that is 40 to 200 years. A cautious mind takes up to 1,000.
+  - *Spreading, if it does.* About 1 in 4 stays home. About 2 in 3 seed a few stars under 50 ly away, as backups. About 1 in 10 spreads far, up to 200 ly. Seeds travel at 1% to 20% of light’s speed.
+  - *Why most stay close.* A colony years away by light can’t share our thinking or send home its star’s power. It becomes a separate mind, a rival that drifts. Spreading also draws the watchers. Backups and cheap resources are the reasons to go (Omohundro 2008).
+  - *The quiet sky caps reach at about 200 ly.* With one mind per million stars, Earth sits outside every footprint only if each holds under about 100,000 stars. For 90% odds, the cap holds whatever the Galaxy’s star count. The split above averages about 2,000 stars.
+  - *What we see.* A peer’s warm phase reaches us as an infrared flash lasting centuries to millennia, somewhere in a long game. A Sun’s full output at 30,000 ly is about 1.5 mJy at 12 µm, right at WISE’s limit, so a survey we build must catch it.
+  - *So we rarely meet a peer outward.* Our probes take 100,000 Years or more to reach one. Missing its flash may mean missing it.
+  - Set aside: one fixed outward time for all, and peers turning inward only when they learn they’re watched. An even split of home and spread, which had no grounds.
+- **A peer’s history is drawn, until our light reaches it.** Settled 2026-10-29. Until then nothing it does can depend on us, so drawing it at the start loses nothing.
+  - *After our light arrives,* it may react, but only to what it can see of us with its own instruments.
+  - *Its reply takes as long again* to reach us, tens of thousands of Years.
+  - *Later, human players* can take a peer’s place on the same terms.
+  - Set aside: every peer played live from the start, which costs much and changes nothing we could see. Fully scripted peers that never react.
+- **At contact a peer is almost always inward.** Settled 2026-10-29. In 200,000 draws of wake time, distance and outward time, our light finds 63% already inward and 35% not yet awake. Only 2% are still outward.
+  - *So peers and old minds share one reaction model.* At contact they are the same kind of mind.
+  - *A peer that wakes after us* finds our old light in its sky, the mirror of us finding an older mind.
 - **The clock skips to the next event.** It keeps 5 real minutes a Year and runs while we’re away. We can jump ahead to the next arrival, build or signal, and it always stops when something new happens.
   - *Why:* a probe to 400 ly at a tenth of light’s speed takes 4,000 Years, 14 real days at the old clock. Light from a peer 20,000 ly away takes 20,000 Years.
   - *Multiplayer, later:* each player keeps their own clock, never more than light-time ahead of another. Hundreds of light-years apart, that limit almost never binds, so no turns are needed.

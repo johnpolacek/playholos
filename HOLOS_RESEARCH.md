@@ -1313,6 +1313,14 @@ Added 2026-10-28, for [The realistic premise](HOLOS_GAME_CONCEPT.md#the-realisti
     - Matters: why a watcher is sent whole, not grown. Not why none is sent.
   - **Benford 2019, looking for lurkers** · Published, AJ. From memory, not checked. Earth’s co-orbiting asteroids, such as Kamoʻoalewa, are where a watcher could sit unseen, and could be searched.
     - Used: where Earth searches for the watcher.
+- **How long a young mind stays outward, 2026-10-29.** For [A young mind is outward for 50 to 20,000 years](HOLOS_GAME_CONCEPT.md#the-realistic-premise).
+  - **Metzger et al. 2013**, logged under build times. Generations 2 years apart, about 5 years a doubling with Earth’s help. Used: home build-out of about 38 doublings at 1 to 5 years.
+  - **Armstrong and Sandberg 2013**, logged above. Taking Mercury apart is the first step to a swarm. Used: the swarm’s mass, 3.3×10²³ kg.
+  - **Omohundro 2008, the basic AI drives** · Published, AGI 2008 proceedings. From memory, not checked. Most goal-seeking agents gain resources and protect themselves, whatever their goals.
+    - Matters: the case for spreading. Light delay makes a colony a separate mind, which weakens it.
+  - **Suazo et al. 2024, Project Hephaistos**, logged above. No warm footprints near us, which fits small reaches.
+  - **The 200 ly cap, this project’s estimate.** One mind per million stars, so footprints under 100,000 stars keep Earth outside all of them at 90% odds. At 0.0028 stars per cubic light-year that is a radius of about 200 ly.
+  - **WISE at 12 µm, this project’s estimate.** About 1 mJy at 5σ, from memory. A 3.8×10²⁶ W swarm at 30,000 ly gives about 1.5 mJy, before dust.
 - **Star counts, this project’s model.** An exponential thin disk: 0.1 stars per cubic parsec here, 300 pc scale height, 2.6 kpc scale length. It gives about 1,500 stars within 50 ly, matching the census, and 8.5 million within 1,000 ly. Check against Gaia before building the wider catalog.
 
 ## Elders
