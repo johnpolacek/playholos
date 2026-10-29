@@ -88,13 +88,18 @@ export function LeadsMap({
   const onMarks = useCallback(
     (marks: Mark[]) => {
       const focus = ids[(dials.focus ?? 0) - 1];
-      for (const { id, x, y, a } of marks) {
+      // Leads and Sol first, then what we sent, then calls and flashes, and the rings' distances last, so the
+      // later give way.
+      const rank = (id: string) => (ids.includes(id) || id === "Sol" ? 0 : id.startsWith("sent:") ? 1 : id.startsWith("ring:") ? 3 : 2);
+      const taken: Parameters<typeof placeLabel>[4] = [];
+      for (const { id, x, y, a } of [...marks].sort((p, q) => rank(p.id) - rank(q.id))) {
         const n = names.current[id];
         if (!n) continue;
+        if (a <= 0) { n.style.opacity = "0"; continue; }
         const ring = id.startsWith("ring:") || id.startsWith("call:") || (id.startsWith("theirs:") && theirs[Number(id.slice(7))]?.ly === 0);
         const lead = ids.includes(id);
-        placeLabel(n, x, y, ring ? (id.startsWith("call:") ? 16 : 4) : null);
-        n.style.opacity = String(a * (focus && lead && id !== focus ? 0.45 : 1));
+        const clear = placeLabel(n, x, y, ring ? (id.startsWith("call:") ? 16 : 4) : null, taken);
+        n.style.opacity = String(a * clear * (focus && lead && id !== focus ? 0.45 : 1));
       }
     },
     [dials, ids, theirs],

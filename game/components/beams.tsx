@@ -95,13 +95,15 @@ export function BeamsMap({ className }: { className: string }) {
         const n = names.current[`head:${b.key}`];
         if (n && b !== focus) n.style.opacity = "0";
       }
-      for (const { id, x, y, a } of marks) {
+      // The light's words first, then the stars' names, which give way.
+      const taken: Parameters<typeof placeLabel>[4] = [];
+      for (const { id, x, y, a } of [...marks].sort((p, q) => Number(q.id === "head") - Number(p.id === "head"))) {
         const head = id === "head";
         const n = names.current[head ? `head:${focus?.key}` : id];
         if (!n) continue;
+        if (a <= 0) { n.style.opacity = "0"; continue; }
         // A star's name beside it, out from the middle. The light's words under it.
-        placeLabel(n, x, y, head ? 10 : null);
-        n.style.opacity = String(a);
+        n.style.opacity = String(a * placeLabel(n, x, y, head ? 10 : null, taken));
       }
     },
     [dials, list],
