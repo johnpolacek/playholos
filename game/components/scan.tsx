@@ -80,6 +80,8 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
   const plan = save?.plan;
   // Our craft at holes a neighbor caught or struck, by its moves kept in the save. 2026-10-26.
   const losses = JSON.stringify(lossesOf(save?.reactions ?? []));
+  // Neighbors that chose to hide, whose glow stops growing. 2026-10-28.
+  const hides = JSON.stringify((save?.reactions ?? []).filter((r) => r.move === "hide").map((r) => ({ star: r.star, at: r.at })));
   const query = useMemo(
     () =>
       new URLSearchParams({
@@ -94,11 +96,12 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
         seeds: JSON.stringify(plan?.seeds ?? []),
         colony: JSON.stringify(plan?.colony ?? null),
         losses,
+        hides,
         will: JSON.stringify(save?.will ?? null),
         stops: JSON.stringify(plan?.stops ?? []),
         observe: JSON.stringify(plan?.observe ?? []),
       }).toString(),
-    [tenth, plan, losses, save?.will],
+    [tenth, plan, losses, hides, save?.will],
   );
   const [view, setView] = useState<EarthView>();
   useEffect(() => {

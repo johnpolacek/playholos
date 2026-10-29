@@ -71,6 +71,12 @@ export const readLosses = (l: unknown): Loss[] =>
     ? l.filter((x): x is Loss => !!x && typeof x.craft === "string" && typeof x.at === "number" && Number.isFinite(x.at) && (x.how === "catch" || x.how === "strike")).slice(0, 16)
     : [];
 
+/** Neighbors' hides, from the browser: each by its star and the Year of the move. 2026-10-28. */
+export const readHides = (l: unknown): { star: string; at: number }[] =>
+  Array.isArray(l)
+    ? l.filter((x): x is { star: string; at: number } => !!x && typeof x.star === "string" && x.star.length <= 80 && typeof x.at === "number" && Number.isFinite(x.at)).slice(0, 64)
+    : [];
+
 /** Where the Will lives, from the browser, if it moved to a hole. 2026-10-26. */
 export function readWill(w: unknown): Will | null {
   const x = (w ?? {}) as Record<string, unknown>;

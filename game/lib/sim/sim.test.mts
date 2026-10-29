@@ -480,3 +480,21 @@ test("a warning goes only to a world its sender knows of, and lands as a tip-off
   assert.equal(got[0].star, shown(b));
   assert.equal(got[0].news, "tipoff");
 });
+
+test("a Mind that hides stops its glow growing: seen if it had crossed a watcher's floor, never if not", async () => {
+  const world = await loadWorld(10);
+  const all = glowsSeen(world);
+  const pair = all.find((g) => g.at > 50)!;
+  const p = world.neighbors.find((n) => (world.stars[n.star]?.shown ?? n.star) === pair.from)!;
+  const hide = (at: number) => [{ key: `h${at}`, sent: "h", star: pair.from, d: p.d, at, move: "hide" }];
+  // Hid long before its light could cross: no one sees it. Hid after: as before.
+  assert.ok(!glowsSeen(world, hide(p.waking - p.thinks)).some((g) => g.from === pair.from));
+  assert.ok(glowsSeen(world, hide(pair.at)).some((g) => g.from === pair.from && g.to === pair.to));
+  // Our Halo Survey the same: a hider found only if it crossed first, and its watts stop growing from the hide.
+  const ours = glows(world, 0, 400);
+  const g = ours.find((x) => x.seen > 20 && !world.neighbors.find((n) => (world.stars[n.star]?.shown ?? n.star) === x.star)?.elder)!;
+  const q = world.neighbors.find((n) => (world.stars[n.star]?.shown ?? n.star) === g.star)!;
+  assert.ok(!glows(world, 0, 400, new Map([[g.star, q.waking]])).some((x) => x.star === g.star));
+  const late = glows(world, 0, 400, new Map([[g.star, g.seen - q.d]])).find((x) => x.star === g.star)!;
+  assert.ok(late && late.watts < g.watts);
+});

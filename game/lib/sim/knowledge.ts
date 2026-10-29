@@ -3,6 +3,7 @@
 // arrived and caught. Pure: no files, so it runs anywhere and tests fast.
 import { giftWords } from "../game/sends.ts";
 import { lightTime } from "../light.ts";
+import { hidesOf } from "./conflict.ts";
 import { BANDS, iwa, observe, owa, WIDE } from "./observing.ts";
 import { proximaB } from "./proxima.ts";
 import type { ColonyMode, DarkMass, EarthView, Find, FeltWorld, Gas, Glow, Heard, Hole, Read, Visit, World } from "./types.ts";
@@ -37,6 +38,8 @@ export interface Kit {
   /** The Year our radars went quiet: a neighbor whose ears open only after our last sweep has passed never hears them,
    *  so never answers them. 2026-10-28. */
   quiet?: number | null;
+  /** Neighbors that chose to hide, by star and the Year of the move, from the save. Their glow stops growing. */
+  hides?: { star: string; at: number }[];
 }
 
 /** What the first mirror tells apart: no air, water without oxygen, or oxygen. Hidden microbes read as a lifeless sea,
@@ -130,19 +133,23 @@ function visit(world: World, by: Visit["by"], { passed, home }: { passed: number
  *  compact 12 K glow over the floor at 10 pc, growing with distance squared, in light that left d Years ago. The
  *  survey looks at each star once a Year. The dead never wake, as glow_at has it. Settled 2026-10-26. */
 const START_W = 1e13, PC_LY = 3.2616;
-export function glows(world: World, from: number, year: number): Glow[] {
+export function glows(world: World, from: number, year: number, hides: Map<string, number> = new Map()): Glow[] {
   const { floor, every } = catalog.halo;
   const out: Glow[] = [];
   for (const p of world.neighbors) {
     if (p.dead) continue;
     const need = floor * (p.d / (10 * PC_LY)) ** 2;
     if (p.elder && p.elder.ceiling < need) continue;                           // an elder asleep sheds almost nothing
-    const crosses = p.d + p.waking + p.doubling * Math.log2(need / START_W);   // the Year its light here crosses the floor
+    // A Mind that hid stops growing its glow: if it hid before its glow crossed the floor, we never see it. 2026-10-28.
+    const hid = hides.get(world.stars[p.star]?.shown ?? p.star) ?? Infinity;
+    const emits = p.waking + p.doubling * Math.log2(need / START_W);
+    if (hid < emits) continue;
+    const crosses = p.d + emits;                                                // the Year its light here crosses the floor
     const seen = from + every * Math.ceil(Math.max(0, crosses - from) / every - 1e-9);
     if (seen > year) continue;
     const at = world.stars[p.star];
     out.push({
-      star: at?.shown ?? p.star, d: p.d, seen, watts: Math.min(START_W * 2 ** Math.min((year - p.d - p.waking) / p.doubling, 1000), p.elder?.ceiling ?? Infinity),
+      star: at?.shown ?? p.star, d: p.d, seen, watts: Math.min(START_W * 2 ** Math.min((Math.min(year - p.d, hid) - p.waking) / p.doubling, 1000), p.elder?.ceiling ?? Infinity),
       ...(p.elder && year - seen >= 5 ? { steady: true } : {}),
       ...(at?.ra !== undefined ? { ra: at.ra, dec: at.dec } : {}),
     });
@@ -204,7 +211,7 @@ export function earthKnows(
   world: World,
   year: number,
   voices: Voices = {},
-  { allSky = null, flash = null, telescope = null, mirror = null, halo = null, mapper = null, lenses = [], sentinels = [], seeds = [], colony = null, sails = null, probe = null, losses = [], quiet = null }: Kit = {},
+  { allSky = null, flash = null, telescope = null, mirror = null, halo = null, mapper = null, lenses = [], sentinels = [], seeds = [], colony = null, sails = null, probe = null, losses = [], quiet = null, hides = [] }: Kit = {},
 ): EarthView {
   const shown = (id: string) => world.stars[id]?.shown ?? id;
   // Earth's finds at Year 0: every world whose tug shows by 2040. Measured, not understood. Its star is in the catalogs.
@@ -306,7 +313,7 @@ export function earthKnows(
   return {
     year, felt, heard, visits,
     ...(wide.has(PROXIMA.star) ? { proxima: wide.get(PROXIMA.star) } : {}),
-    ...(halo !== null && year >= halo ? { glows: glows(world, halo, year) } : {}),
+    ...(halo !== null && year >= halo ? { glows: glows(world, halo, year, hidesOf(world, hides)) } : {}),
     ...(colony ? { colony: colonyAt(world, holes, colony, year, losses) } : {}),
     ...(holes.length ? { holes: holes.map((h) => ({ name: h.name, d: h.d, ra: h.ra, dec: h.dec, mass: h.mass, found: h.found, by: h.by })) } : {}),
   };

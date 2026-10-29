@@ -147,7 +147,7 @@ export async function mind(req: Request) {
   if (world) {
     const kit = kitOf(plan, scale);
     const held = kt(matterAt({ ...plan, observe: [] }, done, year ?? 0));
-    const view = willKnows(world, year ?? 0, await loadVoices(world), { ...kit, losses: lossesOf(readReactions(reactions)) }, away);
+    const view = willKnows(world, year ?? 0, await loadVoices(world), { ...kit, losses: lossesOf(readReactions(reactions)), hides: readReactions(reactions).filter((r) => r.move === "hide") }, away);
     // Answers to what we sent in play, written when our message landed, kept in the save.
     view.heard = [...view.heard, ...answersHeard(readSent(sent), readReactions(reactions), year === null ? null : newsOf(year, away))].sort((a, b) => a.arrived - b.arrived);
     known = `${describe(view)}\n\nMatter we hold in orbit now, less what our builds take: ${held}.`;

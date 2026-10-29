@@ -159,6 +159,21 @@ export function theirScreens(world: World, reactions: readonly Reaction[]) {
   });
 }
 
+/** A Mind that chose to hide: by its star, the Year it starts to dim, once it has thought. From then the glow it sheds
+ *  stops growing, as it computes no larger in the open. The earliest hide counts. Ours as theirs: our colony hides by
+ *  the same move. Parity, 2026-10-28. */
+export function hidesOf(world: World, done: readonly { star: string; at: number; move?: string }[]) {
+  const out = new Map<string, number>();
+  for (const r of done) {
+    if (r.move !== undefined && r.move !== "hide") continue;
+    const p = world.neighbors.find((n) => shown(world, n) === r.star);
+    if (!p) continue;
+    const at = r.at + p.thinks;
+    if (at < (out.get(r.star) ?? Infinity)) out.set(r.star, at);
+  }
+  return out;
+}
+
 /** Light-years between two neighbors' stars, by where they sit in the sky. */
 function apart(world: World, a: Neighbor, b: Neighbor) {
   const at = (p: Neighbor) => {

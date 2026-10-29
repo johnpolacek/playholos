@@ -5,7 +5,7 @@
 // it reads the seed's truth. Pure, so it tests fast.
 import { dates } from "../game/sends.ts";
 import type { Reaction, Sent, Size } from "../game/types.ts";
-import { probesToUs, strikesBetween, theirScreens } from "./conflict.ts";
+import { hidesOf, probesToUs, strikesBetween, theirScreens } from "./conflict.ts";
 import { type Craft, lossesOf, type Notice, notices, REFUGE_FOUND } from "./meetings.ts";
 import { aimedYears, GRID_2040, noticeReach, powerFor, readReach, SIZES } from "./messages.ts";
 import { PyRandom } from "./pyrandom.ts";
@@ -59,8 +59,10 @@ export interface Signal {
  *  every star near it, as well as ALMA does, a sample. Its glow starts at Earth's 2040 scale and doubles every so many
  *  Years after waking, as knowledge.ts's glows() has it. Seen before Year 0, it is news at Year 0. Settled 2026-10-26. */
 const START_W = 1e13, PC_LY = 3.2616;
-export function glowsSeen(world: World) {
+export function glowsSeen(world: World, done: readonly Reaction[] = []) {
   const shown = (p: Neighbor) => world.stars[p.star]?.shown ?? p.star;
+  // A Mind that hid stops growing its glow, so one that hid before crossing a watcher's floor is never seen. 2026-10-28.
+  const hides = hidesOf(world, done);
   const out: { from: string; to: string; at: number; d: number }[] = [];
   for (const b of world.neighbors) {
     // An elder asleep watches nothing. Our colony glows and watches as a neighbor does, from the Year it stands,
@@ -71,7 +73,9 @@ export function glowsSeen(world: World) {
       const d = between(world, shown(a), shown(b));
       const need = catalog.halo.floor * (d / (10 * PC_LY)) ** 2;
       if (a.elder && a.elder.ceiling < need) continue;       // nor sheds enough to be seen
-      const crosses = d + a.waking + a.doubling * Math.log2(need / START_W);
+      const emits = a.waking + a.doubling * Math.log2(need / START_W);
+      if ((hides.get(shown(a)) ?? Infinity) < emits) continue;
+      const crosses = d + emits;
       out.push({ from: shown(a), to: shown(b), at: Math.max(0, crosses, b.waking), d });
     }
   }
@@ -288,7 +292,7 @@ export function landings(world: World, sent: Sent[], done: Reaction[], now: numb
       if (!p.dead && p.heard && (p.heardSince ?? Infinity) <= acts.quiet + p.d) act("quiet", "quiet", shown(p), p, acts.quiet + p.d, p.d, "quiet", false);
   // A glow is news of someone, with no words: a hum, by its tables.
   const who = new Map(world.neighbors.map((p) => [shown(p), p]));
-  for (const g of glowsSeen(world)) {
+  for (const g of glowsSeen(world, done)) {
     const p = who.get(g.to)!;
     const signal: Signal = { id: `glow:${g.from}`, from: g.from, to: g.to, text: "", size: "page", move: "glow" };
     if (g.at > now || had.has(`${signal.id}:${g.to}`)) continue;

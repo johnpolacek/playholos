@@ -239,6 +239,7 @@ Settled 2026-10-26, from a headless playtest: at Year 48 the Will heard HD 10307
     - *We overhear the calls,* and only the calls. A knock between them passes us by.
     - *Ours is never seen, settled 2026-10-26.* Our Cold Annex sheds 1,200 GW at 77 K. At 38 to 850 µm that is a billionth of the Sun’s light or less, and a few ten-thousandths of Earth’s own or less, and the Halo Survey’s floor for a glow that warm is 8×10²⁰ W at 10 pc, 600 million times more. Numbers in [calcs/kin.py](calcs/kin.py). A neighbor knows us by our radio, as before.
     - *On Scan’s map,* each call we overheard is a ring round its star in their color, the edge of its light, named at the star with how far it has gone, fading past 50 ly as ours do. Ours stay rings round Sol.
+  - *Hiding dims a glow, 2026-10-28.* A Mind that chooses to hide stops its glow growing once it has thought, as it computes no larger in the open. If it hid before its glow crossed a watcher’s floor, that watcher never sees it, our Halo Survey included. One seen already stays seen, no brighter. Our colony hides by the same move.
   - *Not yet.* Neighbors’ seeded plans in play, their knocks, probes and silence, still roll before the game. Builds a neighbor chooses in play move nothing yet but its words. Its probes and strikes on us move, since 2026-10-28: see [Parity](#parity-what-a-neighbor-can-do-we-can-build).
   - Set aside: rolls fixed by the seed, and stars hearing each other only before the game.
   - *Later:* stars that act almost like players, reacting to each other live, not only to us.
@@ -825,8 +826,7 @@ Settled 2026-10-28, from the designer: anything available to another civilizatio
     - *It glows and watches as a neighbor does,* from the Year it stands: neighbors may find its heat, and it theirs. Its glow starts at Earth's 2040 scale, a sample.
     - *Earth's stand-in runs the same way* once the Will crosses elsewhere: from the Year the Will left, it takes what lands at Sol, moves by our charter, and reports to the Will a light-time away. Not once Earth's Mind is lost.
     - *Not yet:* harm from a strike on our colony, a strike from a colony at a hole, and a stand-in's guard or strike building real pickets and bullets.
-  - Not yet: which builds a backup can still make, and where.
-- **Not yet:** dimming our glow.
+- **Not yet:** a cold halo for Earth, to think more at the cost of being seen.
 
 ## Hostility
 

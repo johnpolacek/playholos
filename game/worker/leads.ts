@@ -1,7 +1,7 @@
 import { kitOf } from "@/lib/game/reach";
 import { earthKnows, willKnows } from "@/lib/sim/knowledge";
 import { readGifts, readLater, readColony, readLenses, readObserve, readSentinels, readSeeds, readQueue, readStops } from "./orders";
-import { readLosses, readPickets, readStrikes, readWill } from "./orders";
+import { readHides, readLosses, readPickets, readStrikes, readWill } from "./orders";
 import { inPool, loadVoices, loadWorld } from "./world";
 
 // The worlds Earth's planet hunters have felt by Year 0, through the knowledge wall: measured, never who lives there.
@@ -52,6 +52,8 @@ export async function known(req: Request) {
   };
   // Our craft at holes a neighbor caught or struck, from the save's reactions. 2026-10-26.
   const losses = readLosses(list(q.get("losses")));
+  // Neighbors that chose to hide, whose glow stops growing. 2026-10-28.
+  const hides = readHides(list(q.get("hides")));
   // Once the Will lives at a hole, Earth's news reaches it a light-time late. 2026-10-26.
-  return Response.json(willKnows(world, year, await loadVoices(world), { ...kitOf(plan, Number(world.earth.compute) || 1), losses }, readWill(one(q.get("will")))));
+  return Response.json(willKnows(world, year, await loadVoices(world), { ...kitOf(plan, Number(world.earth.compute) || 1), losses, hides }, readWill(one(q.get("will")))));
 }
