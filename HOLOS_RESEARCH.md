@@ -1292,6 +1292,29 @@ Gathered 2026-10-26 for four candidate builds. Numbers marked *ours* are this pr
 - *Ours,* outer works: sunlight is 1.5 W/m² at 30 AU and 0.14 at 100. A sunlit film sits at 60 K at 30 AU, 33 K at 100. Behind a JWST-like shade, about 7 K at 30 AU. Light lag is 4.2 hours at 30 AU.
   - So far out it is cold for free, but power is scarce. Power must be collected wide, or sent out.
 
+## How common minds are
+
+Added 2026-10-28, for [The realistic premise](HOLOS_GAME_CONCEPT.md#the-realistic-premise): one mind per million stars, all older than us and inward, life common and the one rare step from animals to minds. The odds themselves are this project’s best guess. The sources bound them.
+
+- **Already logged, used here:** Sandberg et al. 2018, Kipping 2020 and 2025, Mills et al. 2025 and Snyder-Beattie et al. 2021, under [Kinds of worlds](#kinds-of-worlds), “How common life and minds are”. Lineweaver 2001 and Lineweaver, Fenner and Gibson 2004, under [Elders](#elders). Price et al. 2020, under [Hearing technology by radio](#hearing-technology-by-radio). Garrett 2026 and Sandberg, Armstrong and Ćirković 2016, under [Why the sky is quiet](#why-the-sky-is-quiet-computing-and-heat).
+  - Sandberg et al. 2018 now backs the density: with honest error bars, being alone in the Galaxy is quite possible, so a sparse best guess is the honest one.
+  - Kipping 2025 backs a fast start where conditions are Earth-like. The project’s sample of 3 airy worlds in 4 follows it. Kipping 2020 and Snyder-Beattie et al. 2021 back a rare step. Mills et al. 2025 backs the rungs below it. Watson 2025 puts hard steps earlier, at oxygen and the ice ages, and is the view set aside.
+  - Lineweaver 2001 backs “any mind we find is older”.
+- **Behroozi and Peeples 2015, Earth-like planets over cosmic time** · Published, MNRAS. From memory, not checked. Earth formed before about 92% of the Earth-like planets the universe will ever make.
+  - Matters: Earth is early in cosmic time, though young among worlds that exist now.
+  - Used: [The realistic premise](HOLOS_GAME_CONCEPT.md#the-realistic-premise), as the comparison that doesn’t bear on who we meet.
+- **Lineweaver and Davis 2002, life’s rapid start** · Published, Astrobiology. From memory, not checked. Reads Earth’s fast start as at least a 13% chance of life on suitable worlds older than a billion years.
+- **Spiegel and Turner 2012, Bayesian analysis of life’s early start** · Published, PNAS. From memory, not checked. A fast start is weak evidence, since we had to exist to ask.
+  - Matters, both: the bounds on life starting. Kipping 2020 answers Spiegel and Turner with an objective prior.
+- **Watchers and self-copying probes, 2026-10-28.** For [A silent watcher is here](HOLOS_GAME_CONCEPT.md#the-realistic-premise).
+  - **Nicholson and Forgan 2013, slingshot dynamics for self-replicating probes** · Published, International Journal of Astrobiology. From memory, not checked. Self-copying probes explore the Galaxy in about 10 million years.
+    - Matters: any old mind had a hundred times that long, so “no one sent them” or “they are here and quiet”.
+  - **Sagan and Newman 1983, the solipsist approach to extraterrestrial intelligence** · Published, QJRAS. From memory, not checked. Wise minds would refuse self-copying probes, since copies can drift and run wild.
+    - Matters: why a watcher is sent whole, not grown. Not why none is sent.
+  - **Benford 2019, looking for lurkers** · Published, AJ. From memory, not checked. Earth’s co-orbiting asteroids, such as Kamoʻoalewa, are where a watcher could sit unseen, and could be searched.
+    - Used: where Earth searches for the watcher.
+- **Star counts, this project’s model.** An exponential thin disk: 0.1 stars per cubic parsec here, 300 pc scale height, 2.6 kpc scale length. It gives about 1,500 stars within 50 ly, matching the census, and 8.5 million within 1,000 ly. Check against Gaia before building the wider catalog.
+
 ## Elders
 
 Added 2026-10-28, when every game gained one Mind far older than ours. Prompted by r/FermiParadox, read through the [Arctic Shift](https://arctic-shift.photon-reddit.com) archive: its commonest objection to a crowded century is that Earth isn’t early. Reddit is a prompt for questions here, never a source.

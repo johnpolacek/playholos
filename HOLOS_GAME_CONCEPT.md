@@ -1,6 +1,6 @@
 # Holos · Game Concept
 
-Last updated: October 17, 2026.
+Last updated: October 28, 2026.
 
 ## Status
 
@@ -18,11 +18,79 @@ Holos is a single-player, hard science fiction browser game. You are the Will of
 
 You study nearby stars, build, listen, and send probes and messages. Nothing travels faster than light. Distant observations show history, and messages can take years to arrive.
 
-Others woke in the same century. Every other civilization is seeded: written by hand, placed by the game, and run by AI. You don’t know who they are, how many there are, or where. Finding them is the game, and so is surviving them.
+Minds are rare. Most are far older than ours, gone inward and quiet, and something of theirs may already be watching us. A few young minds like ours woke across the Galaxy within a hundred thousand years of us, thousands of light-years away. The stars near us are almost surely empty of minds, though some hold life. You don’t know who is out there, or where. Finding out is the game. See [The realistic premise](#the-realistic-premise).
+
+*Changed 2026-10-28.* Before: others woke in the same century, a few to a few dozen within 50 ly, written by hand and run by AI. That was chosen for play, not from evidence, so it went.
 
 The central challenge is deciding how to explore, grow, and preserve Earth when distance makes knowledge uncertain and every commitment takes time.
 
 Iain M. Banks’s Culture books remain an inspiration. This does not authorize departures from hard science ([v1: Hard science](legacy/v1/HOLOS_GAME_CONCEPT.md#hard-science)).
+
+## The realistic premise
+
+Settled 2026-10-28, one step at a time. The premise itself, how many minds exist, where and how old, follows the best current estimate, never what plays well. Each number lives in one place so research can change it. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#how-common-minds-are).
+
+- **One mind per million stars.** The honest range runs from 1 per 1,000 to 1 per 10 billion. A million is its middle.
+  - *Minds don’t die,* as ours won’t. So the odds are warm worlds × life starts × a mind arises, with no lifetime factor.
+  - *Denser fights the quiet sky.* 1 per 1,000 would mean about 100 million silent minds in our Galaxy.
+  - *What it gives,* from a model of the Galaxy’s disk: about 1,500 stars within 50 ly and a 0.15% chance of a mind there. The nearest is typically about 400 ly away.
+  - *Almost all the doubt is one step,* a living world making a mind. No hard steps (Mills et al. 2025) puts it near 1 in 10. Hard steps (Snyder-Beattie et al. 2021, Watson 2025) put it near 1 in 10 billion. About 1 in 30,000 sits near the middle. Earth ran the experiment once, so it can’t say.
+  - *Every count scales with it.* Ten times the minds is ten times the peers.
+  - Set aside: drawing the density per game across the whole range, which claims no best guess. A tilt toward sparse, which double-counts what the checker already enforces. And a mind on 1 living world in 1,000, which leans toward one side of a live debate, considered 2026-10-28.
+- **Any mind we find is older.** Earth is younger than about three quarters of the Earth-like worlds that exist now, by 1.8 ± 0.9 billion years on average. About 90% sure.
+  - So a mind we find most likely woke long before us, probably by around a billion years. About 75% sure, since minds may take very different times to arise.
+  - A peer within a century of our waking is effectively zero. Peers are counted across the Galaxy instead, below.
+  - *Early is a different comparison.* Earth formed before about 92% of the Earth-like worlds that will ever exist. Those don’t exist yet, so we can’t meet them.
+- **Old minds are inward.** We model only what physics lets us see, and assume nothing about what they want.
+  - *The quiet sky forces it.* One that kept growing would blaze in our infrared archives. One that spread would have reached us millions of years ago.
+  - *Awake,* it computes cold far from its star, a faint grey far-infrared glow (Garrett 2026). *Asleep,* it waits for a colder universe and gives off almost nothing (Sandberg, Armstrong and Ćirković 2016). The seed picks which.
+  - No beacon, no colonies, no scripted personality. Silent by default. How it answers if reached is still open.
+  - *Hard to find, so late.* An awake one needs a far-infrared survey we must build. An asleep one needs a probe in its system, hundreds of light-years away.
+  - Set aside for now: minds that died and left ruins.
+- **Why the sky is quiet: rare, inward, watching.** Settled 2026-10-28. Our stated answer to the Fermi paradox.
+  - *Rare.* About 200,000 minds in our Galaxy, not billions.
+  - *Inward, for a reason physics gives every mind.* Computing costs less the colder it runs, so waiting and computing cold pays best (Sandberg, Armstrong and Ćirković 2016). Spreading adds little to a mind that only thinks. The same incentive for all is why all of them can choose alike.
+  - *Watching.* An inward mind’s one danger is a young mind that spreads. Watching it is cheap and invisible.
+  - *So the game’s tension is ours.* By parity we can spread. If we do, we become what the watchers watch for.
+  - Set aside: a test universe or simulation, which can’t be tested. The Mind may still raise it as an open idea.
+- **A silent watcher is here.** Settled 2026-10-28. Every game has one, small and dark, in our system for millions of years.
+  - *Why always.* About 200,000 old minds in our Galaxy, and one that watches is enough. A 1 kg watcher for every star is about 10⁸ t, sent at 1% of light’s speed for about 20 minutes of the Sun’s output: trivial for an old mind, with no self-copying machines to drift. More likely than not, about 2 in 3. Low confidence.
+  - *What evidence allows.* Our system has never been searched well for metre-sized objects. The best places are Earth’s co-orbiting asteroids and the Lagrange points (Benford 2019).
+  - *What it does.* It saw Earth’s life long ago and heard our radio. It may report home at light speed, a maker hundreds of light-years away or more. Its maker may not care.
+  - *Finding it* tells us minds exist, not who or where.
+  - Set aside: a watcher in some games only, which the user ruled out: all or none, by likelihood. And none, which needs every one of 200,000 minds to refrain.
+- **Earth is unheard at Year 0.** Settled 2026-10-28. Our radar front began in the 1950s, so by 2040 it reaches about 90 ly. The nearest mind is typically 400 ly away, so the chance one lies inside is about 1%.
+  - Only the watcher has heard us.
+  - *Quieting our radars* shapes the front that reaches minds centuries from now. It no longer hides us from minds that heard.
+- **The map is the Galaxy.** Settled 2026-10-28. A game can run 100,000 Years or more.
+  - *Why.* Peers exist only at Galaxy scale. Minds near us woke about once per billion years.
+  - | Woke within | Within 1,000 ly | In our Galaxy |
+    | --- | --- | --- |
+    | 1,000 years of us | 1 in 470,000 | 0.05 |
+    | 100,000 years | 1 in 4,700 | about 5 |
+    | 1 million years | 1 in 470 | about 50 |
+    | 10 million years | 1 in 47 | about 500 |
+  - *So about 5 peers,* young minds within 100,000 years of us, typically 10,000 to 50,000 ly away. Their light and ours take that many Years to cross.
+  - *Near stars stay a real catalog.* Beyond Gaia’s detail the Galaxy is drawn from its measured structure.
+  - *Assumed:* 200 billion stars, minds arising evenly over 8 billion years. Star birth peaked long ago, so peers may be 2 to 3 times rarer.
+  - Set aside: a 1,000 ly map, chosen first on 2026-10-28. It held about 8 old minds and no peers.
+  - *Open:* how long a young mind stays outward before it turns inward. Whether we meet a peer rests on it.
+- **The clock skips to the next event.** It keeps 5 real minutes a Year and runs while we’re away. We can jump ahead to the next arrival, build or signal, and it always stops when something new happens.
+  - *Why:* a probe to 400 ly at a tenth of light’s speed takes 4,000 Years, 14 real days at the old clock. Light from a peer 20,000 ly away takes 20,000 Years.
+  - *Multiplayer, later:* each player keeps their own clock, never more than light-time ahead of another. Hundreds of light-years apart, that limit almost never binds, so no turns are needed.
+  - Set aside: a faster fixed clock, which blurs early builds, and fully player-set speed.
+- **Life is common, minds are not.** The ladder in [How Earth learns](#how-earth-learns) stands: life starts on 3 airy worlds in 4, and climbs at Earth’s pace as its world allows.
+  - *3 in 4 is this project’s sample.* Kipping 2025’s 13 to 1 is the odds that life starts fast where conditions are Earth-like, not a share of worlds. The sample follows it.
+  - About 1 warm world in 4 has had life. Within 50 ly that is about 36 living worlds, 9 where life died, and a handful with oxygen, animals and forests.
+  - *The rare step is the last one,* from animals to a mind that builds. About 3 worlds per 100 stars have had life, so a mind arises on roughly 1 living world in 30,000.
+  - *Why last.* Animals have lived on Earth for 600 million years. Octopuses, crows and dolphins grew clever, and one species built lasting tools. Kipping 2020 slightly favors rare intelligence, 3 to 2. Snyder-Beattie et al. 2021 back hard steps in general.
+  - *Watson 2025 differs.* He puts the hard steps earlier, at whole-Earth changes tied to oxygen and the great ice ages. Our ladder makes those common by a world’s age, so he is the view set aside here. Corrected 2026-10-28: an earlier line cited him for the last step.
+  - *Mills et al. 2025 keep the rungs below.* Each step to animals waits for oxygen, as they argue. We part from them only on the last step, since common minds that never die would have shown by now.
+  - Set aside: life on 10% of warm worlds, chosen first on 2026-10-28. It had no source behind its split, and the ladder does.
+- **How we find an old mind.** Awake, by a far-infrared sky survey Earth builds. Asleep, only by a probe in its system.
+  - Our deep far-infrared archives cover stars within about 150 ly. Beyond, only shallow all-sky maps, which catch a mind only above about 0.3% of a Sun’s power at 400 ly. So an old mind can hide today.
+  - Set aside for now: reading an old mind’s home world through its air, which needs telescopes kilometers wide.
+- **Still to rework:** the neighbor roster, how neighbors play, the elder, the seed, the 50 ly map and catalog, Earth’s leads, and the Mind’s words. Fixes found by the realism audit are tracked in [HOLOS_REALISM_AUDIT.md](HOLOS_REALISM_AUDIT.md). Sections below that assume peers in our century are kept until then, marked superseded. The numbers tuned to 50 ly are listed in [To recheck at a wider scale](#to-recheck-at-a-wider-scale).
 
 ## Settled 2026-10-06
 
@@ -30,7 +98,8 @@ Iain M. Banks’s Culture books remain an inspiration. This does not authorize d
 - **Every other civilization is seeded and run by the game.** They are real superintelligences in the fiction. They play from scripts drawn from their own character. Changed 2026-10-26: in play, a model plays each one whenever news reaches it, ours or another neighbor’s. See [How neighbors play](#how-neighbors-play).
 - **Neighbors are a hand-written roster.** Each has a people, a world, a history and a voice. Each game’s seed picks which of them wake, at which eligible stars, and with what dials. Veyra, Hael and Kesh from v1 are the first three. Every placement still passes the survey limits at its star.
 - **Neighbors play like players.** Each AI Will plays its own strategy toward its own ends, as the v1 cohort playtest’s Listener, Caller and Grower did. There is still no floor on early death ([v1: Conflict](legacy/v1/HOLOS_GAME_CONCEPT.md#conflict)): danger comes from what neighbors choose and what physics allows, revisited only if playtests show early deaths.
-- **The clock is unchanged.** 5 real minutes = 1 Year. It runs offline, with no pause. Light delay stays real waiting.
+- **The clock is unchanged.** 5 real minutes = 1 Year. It runs offline, with no pause. Light delay stays real waiting. *Changed 2026-10-28:* we can skip to the next event. See [The realistic premise](#the-realistic-premise).
+- **Neighbors.** The three bullets above on neighbors are superseded 2026-10-28 by [The realistic premise](#the-realistic-premise).
 - **Earth’s loud past follows science and what is likely.** Earth’s radio history is real, so Earth need not start as faint as v1’s equal floor. Whether any neighbor heard it is set by physics and how likely it is, not by drama. See [Earth’s loud past](#earths-loud-past).
 - **Year 0 is 2040.** Earth’s history is real to 2026, then follows the most probable path. See [Year 0 and Earth’s road to it](#year-0-and-earths-road-to-it).
 
@@ -624,6 +693,7 @@ Settled 2026-10-13.
   - *The telescope reads, 2026-10-20.* Once our order finishes the Infrared Telescope, it reads the worlds Earth has felt, nearest first, each band landing when its days are up. The Mind is told what each air shows, water, oxygen and ozone, or that the mirror can’t split it or read it. Across the 33 test Earths it can split 80 of 138 felt worlds, read water on 26, in 17 Earths, and oxygen on 17. 5 of the 17 homes among them can be read, in 5 Earths. Not shown on Scan yet.
   - *Which reading a game opens with.* Measured on 300 games, 2026-10-14, and again 2026-10-16. At the nearest felt world it can read, the first mirror reads water and oxygen in 6 games of 10. It reads only color and ozone in 1 in 17, as in the mocks’ game. In 1 in 3 it can read no felt world, and the player reads 82 Eridani d.
   - *The premise makes life common.* It puts a mind at about 1 warm world in 18. Minds can’t be commoner than life, so most worlds that can hold life do.
+    - *Superseded 2026-10-28.* Minds are now one per million stars, so this reason is gone. Life stays common on Kipping 2025’s fast start. See [The realistic premise](#the-realistic-premise).
   - *Later:* stone-age worlds and old ruins can join the roster as written entries.
   - Set aside: minds without industry drawn by the seed, and every rung drawn, ruins included.
 - **A natural world’s rung comes from its star’s age, and physics says whether it kept its air.** Settled 2026-10-13. Built in [calcs/seed.py](calcs/seed.py).
@@ -638,6 +708,7 @@ Settled 2026-10-13.
   - *Samples:* life started on 3 airy worlds in 4, and died on 1 in 5 of those. Each world’s pace varies by a factor of 1.6. Each world’s luck at the shoreline is half a power of ten.
   - *Earth’s pace is typical.* Settled 2026-10-15. Each step waits for its world to allow it, mostly for oxygen, so a world’s age says how far its life has come. This is what Mills et al. 2025 predict if there are no hard steps.
     - *Why not hard steps.* If oxygen were a long shot, a game would hold about 3 natural worlds with animals beside 11 minds. Every mind’s world had animals first, so the premise would break. Measured on 200 games.
+    - *Changed 2026-10-28.* The one hard step now sits after animals, from animals to minds. The rungs to animals keep Earth’s pace. See [The realistic premise](#the-realistic-premise).
     - *So oxygen stays a coin flip.* A first pass sees about 5 natural oxygen worlds beside about 5 homes.
     - *The Mind still reasons from Earth’s split science.* Hard steps remain a live view in 2040, so its starting words are unchanged.
     - Set aside: oxygen as a long shot (Snyder-Beattie et al. 2021, Watson 2025), and a wider spread of ×2.5, which changes a first pass by less than one world.
@@ -742,6 +813,8 @@ Settled 2026-10-13.
 
 ## The neighbors
 
+**Superseded 2026-10-28** by [The realistic premise](#the-realistic-premise). Kept until the rework lands.
+
 Settled 2026-10-06, from first principles rather than for the game’s sake.
 
 - **When they wake.** The premise puts every neighbor’s waking in the same century as Earth’s. Nothing favors one moment within that century, and nothing makes Earth first or last. So each neighbor’s waking is drawn evenly across a century that holds Earth’s. About half woke before Earth and half wake after, up to a century either way, most often within a few decades.
@@ -774,6 +847,8 @@ Settled 2026-10-06, from first principles rather than for the game’s sake.
 - **How loud they may be.** Earth heard nothing by 2040. If SKA-Mid listened an hour to every star within 50 ly by then, a neighbor’s steady tones stayed under about 146 MW at 10 ly, 583 MW at 20 ly and 3.6 GW at 50 ly. Each neighbor’s history sets its own loudness under that ceiling.
 
 ## Elders
+
+**Superseded 2026-10-28** by [The realistic premise](#the-realistic-premise): every mind we find is an elder, and inward. The awake and asleep halves below carry over. Kept until the rework lands.
 
 Settled 2026-10-28. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#elders). Asked after reading r/FermiParadox, whose commonest objection to games like this is “why did everyone wake at once?”
 
