@@ -1212,7 +1212,7 @@ What a neighbor’s world can plausibly be, beyond an Earth twin. Each roster en
   - The energy cost of computing falls with temperature, so mature minds may compute cold, far from their star, at about 5 to 28 K. Their waste heat glows grey and line-free in the far infrared and submillimetre, not the mid-infrared older searches watched. A thin-film halo of 10²⁰ W at 12 K weighs about 2×10²⁰ kg, a fraction of Ceres.
   - Herschel’s DEBRIS (446 stars within 45 pc) and DUNES (133 within 25 pc) at 100 µm, and JCMT’s SONS (100 within 50 pc) at 850 µm, can be read as limits: about 7×10¹⁹ W at 10 pc, 10⁻⁷ to 10⁻⁵ of a star’s light. ALMA and NOEMA suit compact haloes around M dwarfs.
   - Matters: v1’s cold, inward minds stay hidden at Earth’s scale, but a neighbor that grew large would show. A cold halo can pass for a debris disk until several wavelengths are compared.
-  - Used: v2 [Why the sky is quiet, rechecked](HOLOS_GAME_CONCEPT.md#why-the-sky-is-quiet-rechecked), the neighbor template.
+  - Used: v2 [Why the sky is quiet, rechecked](HOLOS_GAME_CONCEPT.md#why-the-sky-is-quiet-rechecked), the neighbor template. Since 2026-10-28, the Cold Halo: Earth may grow a halo too, and be seen past a size.
 - **[Wright et al. 2014, the Ĝ search](https://arxiv.org/abs/1408.1133)** · Published ([framework](https://arxiv.org/abs/1408.1134)).
   - Waste-heat searches, their natural contaminants, and why no one behavior can be assigned to all civilizations.
   - Used: alpha-1 theory evaluation. v1 “Why the sky is quiet”.
@@ -1269,7 +1269,7 @@ Gathered 2026-10-26 for four candidate builds. Numbers marked *ours* are this pr
 - **[Zhao et al. 2025, cryogenic CMOS](https://doi.org/10.1038/s44287-025-00157-7)** · Published, Nature Reviews Electrical Engineering 2, 277.
   - Band tails stop switching from sharpening much below about 50 K. A search summary gives power at 0.27 of room temperature at 77 K. Paywalled, not confirmed.
   - Matters: colder than 77 K adds little.
-  - Used: the Cold Annex.
+  - Used: the Cold Annex, and the Cold Halo’s 77 K, 2026-10-28.
 - **[Google Research 2025, Suncatcher](https://research.google/blog/exploring-a-space-based-scalable-ai-infrastructure-system-design/)** and **[NPR, 1 October 2026](https://www.kuow.org/npr-news/2026-10-01/google-launches-project-suncatcher-a-step-towards-ai-data-centers-in-space)** · Published.
   - Design: 650 km dawn-dusk orbit, solar up to 8 times the ground’s. Launched 1 October 2026: four TPUs, run in 15-minute bursts because of heat.
   - Matters: heat is the limit in orbit even at room temperature.

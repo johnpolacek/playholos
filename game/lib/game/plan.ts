@@ -131,6 +131,8 @@ export const LATER: Later[] = [
   // Sends the Will to our Mind at a black hole, as a transmission, 2026-10-26. calcs/holes.py.
   { name: "Mind Link", what: "A laser 100 m wide, to send the Will to our Mind far away.", does: "reach", after: "Seed Ship" },
   // The cold compute annex at scale, 2026-10-26: chips run cold behind a shade, on sunlight caught beside them.
+  // The annex grown into a swarm, 2026-10-28: more thought each decade, until it grows bright enough to be seen.
+  { name: "Cold Halo", what: "The annex copied from asteroid rock, doubling every 10 Years.", does: "think", after: "Cold Annex" },
   {
     name: "Cold Annex",
     what: "Chips run cold in space, four times the thought a watt.",
@@ -224,6 +226,8 @@ export const SAYS: Record<string, string> = {
     "The Moon’s far side is the quietest place we can reach. An array there hears the hum of everyday radio that no telescope on Earth can. It grows in fifths, and the first already hears the nearest worlds.",
   "Power from Orbit":
     "A fifth more energy, from sunlight caught above the weather and beamed down. It takes 10 Mt of rock, so it comes only as fast as rock does.",
+  "Cold Halo":
+    "Factories copy the Cold Annex’s panels, chips and radiators out of asteroid rock. Once done it doubles every 10 Years, and each doubling thinks as much more as a data center. It sheds its heat at 77 K, where a glow is hard to see. Small, no neighbor sees it. Grown past about 8×10²⁰ W at 10 pc, it shows to their watches as a neighbor’s would to ours. Taken back, it stops growing and keeps its size.",
   "Cold Annex":
     "Chips at 77 K do about four times the work a watt, and in space nothing has to cool them but a shade and wide radiators. It thinks as much as Power from Orbit for about 4 Mt of rock, not 10. Both wait on the same rock, so whichever comes first in line takes it first. Its heat glows, as a neighbor’s would.",
 };
@@ -464,10 +468,12 @@ export function matter(plan: Plan, name: string) {
  *  idle. Thought Fields uses none of it: the fabs build data centers. 2026-10-21. */
 export function drawAt(plan: Plan, scale: number, year: number) {
   const { orders, ...opts } = ordersOf(plan);
-  const { room, idle, thought, done } = pace(orders, year, { scale, ...opts });
+  const { room, idle, thought, done, doublings } = pace(orders, year, { scale, ...opts });
   // Fusion Plants grow the grid itself, so the same thought draws a smaller share of it. 2026-10-28.
   const grid = 1 + Object.keys(done).reduce((e, w) => e + (CATALOG.works[w]?.energy ?? 0), 0);
-  return { compute: room > 0 ? 1 - idle / room : 1, energy: (thought * CATALOG.flagship) / (CATALOG.gridRoom * grid) };
+  // The Cold Halo thinks on its own sunlight, so what it adds draws nothing from Earth's grid. 2026-10-28.
+  const earth = thought / CATALOG.step ** doublings;
+  return { compute: room > 0 ? 1 - idle / room : 1, energy: (earth * CATALOG.flagship) / (CATALOG.gridRoom * grid) };
 }
 
 /** The share of our compute the plan's builds would use at Year 0. A plan is enough when it uses it all. */

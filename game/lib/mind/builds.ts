@@ -29,6 +29,7 @@ const MORE: Record<string, string> = {
   "Trojan Vault": "It keeps a copy of our Mind 8 light-minutes from Earth, out of reach of a strike on Earth and the Moon together. It doesn't think with us: it keeps a copy that could carry on if Earth and the Moon were lost.",
   "Ground Solar": "Its fifth more energy counts once it is done, but it fits a whole data center more only on some Earths, where the grid had nearly room for one. On most it adds energy we don't yet think with.",
   "Fusion Plants": "Once done, the grid holds half again as much energy, so one more data center of Thought Fields fits. Until then it adds nothing to our thought: the fleet grows by breeding its own tritium, and the energy counts once it stands.",
+  "Cold Halo": "It doubles every 10 Years once done, each doubling a data center's step of thought, until the Will takes it back, which stops it growing. Its glow at 77 K starts at the Cold Annex's 1,200 GW. A neighbor sees it once it passes about 8×10²⁰ W at 10 pc, less nearer, as the square of distance: at 10 ly, about 26 doublings, some 260 Years. Once seen, it is news to them that someone is there.",
   "Cold Annex": "Its heat glows in the far infrared, grey, as a neighbor's cold computing would.",
   "15 m Mirror": "It splits worlds 2.3 times closer to their stars than the Infrared Telescope, and gathers five times the light. Once done, it reads Proxima b, then every world we've felt where it can read more than the Infrared Telescope, nearest first, on its own.",
 };

@@ -112,6 +112,8 @@ export function WorksProvider({ children }: { children: React.ReactNode }) {
 
 /** Where a build is, in words: waiting, how much is built, or done. Built evenly from Year 0, near enough. */
 function state(w: Work, year: number | null) {
+  // The Cold Halo taken back once built is held at its size, not undone. 2026-10-28.
+  if (w.name === "Cold Halo" && w.back === null) return "Built, held at its size";
   if (w.back !== undefined) return w.back === null ? "Taken back" : `Taken back, ${Math.floor(100 * w.back)}% built`;
   if (!w.queued) return "Not queued";
   if (w.done === null) return "Past Year 1,000";

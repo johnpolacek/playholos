@@ -826,7 +826,13 @@ Settled 2026-10-28, from the designer: anything available to another civilizatio
     - *It glows and watches as a neighbor does,* from the Year it stands: neighbors may find its heat, and it theirs. Its glow starts at Earth's 2040 scale, a sample.
     - *Earth's stand-in runs the same way* once the Will crosses elsewhere: from the Year the Will left, it takes what lands at Sol, moves by our charter, and reports to the Will a light-time away. Not once Earth's Mind is lost.
     - *Not yet:* harm from a strike on our colony, a strike from a colony at a hole, and a stand-in's guard or strike building real pickets and bullets.
-- **Not yet:** a cold halo for Earth, to think more at the cost of being seen.
+- **The Cold Halo, 2026-10-28.** Earth can grow as a neighbor’s Mind grows, at the cost of being seen.
+  - *What it is:* the Cold Annex copied out of asteroid rock, each part behind its own shade, from L2 out along Earth’s orbit. It opens once the Cold Annex is done. Its factories take 10 Years and the annex’s want, samples.
+  - *How it grows:* done, it doubles every 10 Years, as a neighbor’s Mind does. Each doubling thinks as much more as a data center.
+  - *At 77 K,* where our chips’ gain stops (Zhao et al. 2025). Colder needs chips no research shows yet, so it isn’t offered.
+  - *Who sees it:* a neighbor’s watch, as well as our Halo Survey, needs (77/12)³ times the power for a 77 K glow as for 12 K: about 8×10²⁰ W at 10 pc, less nearer, as the square of distance. From the annex’s 1,200 GW that is about 26 doublings for a watcher 10 ly out, some 260 Years. Once seen, it is news to them as a neighbor’s glow is: a hum, by their tables.
+  - *Holding it is our hide.* Taken back, it keeps its size and stops growing, so its glow freezes, as a neighbor’s does when it hides. Ordered again, it grows on.
+  - *Not yet:* our Halo Survey seeing our own, and a close view of it grown past its first rings.
 
 ## Hostility
 

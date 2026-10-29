@@ -777,6 +777,25 @@ const Annex = ({ size, still }: MarkProps) => (
   </Moving>
 );
 
+/** The Cold Halo: sheets in a ring round the annex, turning slowly, their heat going out. Ours. 2026-10-28. */
+const Swarm = ({ size, still }: MarkProps) => (
+  <Moving
+    size={size}
+    still={still}
+    move={(_, part) =>
+      void gsap.to(part("ring"), { rotation: 360, svgOrigin: "8 8", duration: 40, ease: "none", repeat: -1, delay: offset() })
+    }
+  >
+    <path d="M6.6 6.6h2.8v2.8H6.6z" />
+    <g data-k="ring">
+      {Array.from({ length: 8 }, (_, k) => {
+        const a = (k * Math.PI) / 4, [x, y] = [8 + 5.4 * Math.cos(a), 8 + 5.4 * Math.sin(a)];
+        return <path key={k} d={`M${(x - 0.8).toFixed(2)} ${(y - 0.8).toFixed(2)}h1.6v1.6h-1.6z`} opacity={k % 2 ? 0.55 : 1} />;
+      })}
+    </g>
+  </Moving>
+);
+
 /** The Mind Link: a wide mirror, its beam going out in pulses. Ours. 2026-10-26. */
 const Link = ({ size, still }: MarkProps) => (
   <Moving
@@ -863,6 +882,8 @@ export function BuildMark({ name, size = 16, still }: { name: string; size?: num
       return <Halo size={size} still={still} />;
     case "Cold Annex":
       return <Annex size={size} still={still} />;
+    case "Cold Halo":
+      return <Swarm size={size} still={still} />;
     case "Solar Lens":
       return <SunLens size={size} still={still} />;
     case "Star Mapper":

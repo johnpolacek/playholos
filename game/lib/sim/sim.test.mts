@@ -11,6 +11,7 @@ import { POOL } from "./pool.ts";
 import { loadVoices, loadWorld } from "./world.ts";
 import { offEarth, pace, type Order } from "./works.ts";
 import { between, glowsSeen, knownTo, landings, SOL } from "./answers.ts";
+import { haloReaches, HALO } from "./conflict.ts";
 import { colonyActor, earthActor, ourCodes, ourKind, ourTable } from "./colony.ts";
 
 test("the generator is CPython's, seeded from ints and strings", () => {
@@ -497,4 +498,31 @@ test("a Mind that hides stops its glow growing: seen if it had crossed a watcher
   assert.ok(!glows(world, 0, 400, new Map([[g.star, q.waking]])).some((x) => x.star === g.star));
   const late = glows(world, 0, 400, new Map([[g.star, g.seen - q.d]])).find((x) => x.star === g.star)!;
   assert.ok(late && late.watts < g.watts);
+});
+
+test("the Cold Halo doubles every 10 Years once done, a data center's step each, and holds while taken back", () => {
+  const at = (y: number, extra: Order[] = []) => pace([{ y: 0, begin: "Cold halo" }, ...extra], y);
+  const done = at(200).done["Cold halo"];
+  assert.ok(done > 0);
+  const t0 = at(done + 0.01).thought;
+  assert.ok(Math.abs(at(done + 10.01).thought / t0 - 1.5) < 1e-6);
+  assert.ok(Math.abs(at(done + 30.01).thought / t0 - 1.5 ** 3) < 1e-6);
+  // Held from 15 Years in to 35: one doubling before, none while held, then on again.
+  const held = [{ y: done + 15, drop: "Cold halo" }, { y: done + 35, begin: "Cold halo" }] as Order[];
+  assert.ok(Math.abs(at(done + 34, held).thought / t0 - 1.5) < 1e-6);
+  assert.ok(Math.abs(at(done + 40.01, held).thought / t0 - 1.5 ** 2) < 1e-6);
+});
+
+test("neighbors see our Cold Halo once its 77 K glow crosses their floor, and never while it is small", async () => {
+  const world = await loadWorld(10);
+  // 26 doublings or so for a watcher 10 ly out.
+  const need = 3e18 * HALO.warmer * (10 / (10 * 3.2616)) ** 2;
+  const y = haloReaches([[100, null]], need)!;
+  assert.ok(y > 100 + 250 && y < 100 + 270, String(y));
+  assert.equal(haloReaches([[100, 150]], need), null);
+  const seen = glowsSeen(world, [], [[0, null]]).filter((g) => g.from === SOL);
+  const p = world.neighbors.find((n) => !n.dead && !n.elder?.asleep)!;
+  const mine = seen.find((g) => g.to === (world.stars[p.star]?.shown ?? p.star))!;
+  assert.ok(mine && mine.at >= p.d);
+  assert.ok(!glowsSeen(world, [], [[0, 100]]).some((g) => g.from === SOL));
 });

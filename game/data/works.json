@@ -159,6 +159,11 @@
    "years": 30,
    "want": 100,
    "energy": 0.5
+  },
+  "Cold halo": {
+   "years": 10,
+   "want": 80,
+   "grows": 10
   }
  },
  "floor": 0.6666666666666666,

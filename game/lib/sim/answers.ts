@@ -5,7 +5,7 @@
 // it reads the seed's truth. Pure, so it tests fast.
 import { dates } from "../game/sends.ts";
 import type { Reaction, Sent, Size } from "../game/types.ts";
-import { hidesOf, probesToUs, strikesBetween, theirScreens } from "./conflict.ts";
+import { haloReaches, HALO, hidesOf, probesToUs, strikesBetween, theirScreens } from "./conflict.ts";
 import { type Craft, lossesOf, type Notice, notices, REFUGE_FOUND } from "./meetings.ts";
 import { aimedYears, GRID_2040, noticeReach, powerFor, readReach, SIZES } from "./messages.ts";
 import { PyRandom } from "./pyrandom.ts";
@@ -59,7 +59,7 @@ export interface Signal {
  *  every star near it, as well as ALMA does, a sample. Its glow starts at Earth's 2040 scale and doubles every so many
  *  Years after waking, as knowledge.ts's glows() has it. Seen before Year 0, it is news at Year 0. Settled 2026-10-26. */
 const START_W = 1e13, PC_LY = 3.2616;
-export function glowsSeen(world: World, done: readonly Reaction[] = []) {
+export function glowsSeen(world: World, done: readonly Reaction[] = [], halo: readonly [number, number | null][] = []) {
   const shown = (p: Neighbor) => world.stars[p.star]?.shown ?? p.star;
   // A Mind that hid stops growing its glow, so one that hid before crossing a watcher's floor is never seen. 2026-10-28.
   const hides = hidesOf(world, done);
@@ -79,6 +79,13 @@ export function glowsSeen(world: World, done: readonly Reaction[] = []) {
       out.push({ from: shown(a), to: shown(b), at: Math.max(0, crosses, b.waking), d });
     }
   }
+  // Our Cold Halo, seen as theirs are, once its glow crosses each watcher's floor for a glow at 77 K. 2026-10-28.
+  if (halo.length)
+    for (const b of world.neighbors) {
+      if (b.dead || b.elder?.asleep || b.star === SOL) continue;
+      const emits = haloReaches(halo, catalog.halo.floor * HALO.warmer * (b.d / (10 * PC_LY)) ** 2);
+      if (emits !== null) out.push({ from: SOL, to: shown(b), at: Math.max(0, emits + b.d, b.waking), d: b.d });
+    }
   return out;
 }
 
@@ -177,6 +184,8 @@ export interface Acts {
   strikes: { star: string; fired: number; lands: number }[];
   caught: { star: string; at: number }[];
   quiet: number | null;
+  /** The Years our Cold Halo grew, which neighbors may see as a glow. 2026-10-28. */
+  halo?: [number, number | null][];
 }
 const NO_ACTS: Acts = { strikes: [], caught: [], quiet: null };
 
@@ -292,7 +301,7 @@ export function landings(world: World, sent: Sent[], done: Reaction[], now: numb
       if (!p.dead && p.heard && (p.heardSince ?? Infinity) <= acts.quiet + p.d) act("quiet", "quiet", shown(p), p, acts.quiet + p.d, p.d, "quiet", false);
   // A glow is news of someone, with no words: a hum, by its tables.
   const who = new Map(world.neighbors.map((p) => [shown(p), p]));
-  for (const g of glowsSeen(world, done)) {
+  for (const g of glowsSeen(world, done, acts.halo)) {
     const p = who.get(g.to)!;
     const signal: Signal = { id: `glow:${g.from}`, from: g.from, to: g.to, text: "", size: "page", move: "glow" };
     if (g.at > now || had.has(`${signal.id}:${g.to}`)) continue;

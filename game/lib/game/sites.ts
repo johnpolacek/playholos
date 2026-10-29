@@ -484,6 +484,17 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
       before: "In 2024 a 28 nm process tuned for 77 K ran on 37% less power. Below about 50 K chips gain little more.",
     },
   },
+  "Cold Halo": {
+    // Out from L2 along Earth's orbit, each element with its own shade, so every radiator sees only the cold sky.
+    site: { on: "l2", draw: "ring", places: [{ lat: 0, lon: 0, name: "From L2, out along Earth’s orbit" }], km: 1_500_000 },
+    story: {
+      have: "The Cold Annex at L2, 1,200 GW of chips at 77 K behind one shade.",
+      where: "From L2 outward, along Earth’s orbit round the Sun, each part behind its own small shade.",
+      why: "More chips at 77 K think more, and asteroid rock is plenty. Doubling, it grows as a neighbor’s Mind grows. Its heat glows grey in the far infrared, so past a size, neighbors’ watches find it, as ours find theirs.",
+      takes: "The annex’s want, then rock: it doubles every 10 Years until we take it back.",
+      before: "In 2026 Garrett read the sky’s far-infrared limits as limits on minds computing cold. Below about 50 K our chips gain little more, so 77 K is where ours run.",
+    },
+  },
   "Deuterium Works": {
     // Where the largest heavy water plant ever ran, on the nuclear station’s steam, by Lake Huron.
     site: { on: "earth", draw: "ring", places: [{ lat: 44.325, lon: -81.599, name: "Bruce, Ontario, on Lake Huron" }] },

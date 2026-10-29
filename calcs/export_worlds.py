@@ -167,6 +167,8 @@ def works_catalog():
     # as much, and the data centers that room holds fit.
     # The Trojan Vault, settled 2026-10-28: built in orbit's way, out at L4, so the yard cuts it as it does the rest.
     works['Trojan vault'] = dict(years=eg.TROJAN_YEARS, want=eg.WANTS['Trojan vault'][0], orbit=True)
+    # The Cold Halo, settled 2026-10-28: once done it grows, doubling every so many Years until taken back.
+    works['Cold halo'] = dict(years=eg.COLD_HALO_YEARS, want=eg.WANTS['Cold halo'][0], grows=eg.COLD_HALO_DOUBLING)
     # The Rock Deflector, settled 2026-10-28: opened only when a rock is found coming, by game/lib/game/rocks.ts.
     works['Rock deflector'] = dict(years=eg.DEFLECTOR_YEARS, want=eg.WANTS['Rock deflector'][0])
     # Parity builds, settled 2026-10-28: what a neighbor can do to us, we can build. lib/sim/conflict.ts.

@@ -35,6 +35,8 @@ interface Work {
   rock?: number;                    // done when this many kt of rock have come in, not paced by thought
   most?: number;                    // the most times its want it can use. PUSH if missing
   energy?: number;                  // the share of Year 0's grid it adds once done, so more data centers fit
+  grows?: number;                   // once done, it doubles every so many Years until taken back, each doubling a
+                                    // data center's step of thought: the Cold Halo, 2026-10-28
 }
 interface Catalog {
   works: Record<string, Work>;
@@ -57,7 +59,7 @@ export const giftTimes = (steps: number) => STEP ** steps;
 
 /** Works a woken backup can still build: what is joined in orbit, and what stands on the Moon or among the rocks. All
  *  else is on Earth, and is lost with it, data centers too. 2026-10-28. */
-const OFF_EARTH = new Set(["Moon vault", "Orbital yard", "Mass driver", "Belt mining", "Far-side array, one fifth", "Power from orbit", "Cold annex"]);
+const OFF_EARTH = new Set(["Moon vault", "Orbital yard", "Mass driver", "Belt mining", "Far-side array, one fifth", "Power from orbit", "Cold annex", "Cold halo"]);
 export const offEarth = (w: string) => OFF_EARTH.has(w) || WORKS[w]?.orbit === true;
 
 /** Years a work takes when given s times the thought its standard pace needs. */
@@ -85,6 +87,8 @@ export interface Pace {
   thought: number;
   room: number;
   idle: number;
+  /** Doublings of works that grow once done, the Cold Halo's: thought on its own sunlight, off Earth's grid. */
+  doublings: number;
   /** Rock thrown from the Moon or hauled from the belt so far, kt. */
   rockKt: number;
   /** Works taken back and not begun again: the standard Years each had left, and the share of it built. */
@@ -119,6 +123,11 @@ export function pace(orders: readonly Order[], until: number, { scale = 1, aside
     const r = backup.o;
     return r && at >= r.y ? Math.min(1, r.restore * 2 ** ((at - r.y) / r.doubling)) : 1;
   };
+  // A work that grows once done: the Years it has grown, and since when it grows now, if it does. Taken back, it stops
+  // growing and keeps its size. Ordered again, it grows on. 2026-10-28.
+  const grown = new Map<string, { years: number; since: number | null }>();
+  const doublings = (at: number) =>
+    [...grown].reduce((n, [w, g]) => n + Math.floor((g.years + (g.since === null ? 0 : at - g.since)) / WORKS[w].grows! + EPS), 0);
   /** What strikes leave of our thought at Year t: each loss shrinking as we rebuild. */
   const spared = (at: number) =>
     harms.reduce((m, h) => m * (1 - h.harm * Math.max(0, 1 - (at - h.y) / h.recover)), 1) * regrown(at);
@@ -157,6 +166,7 @@ export function pace(orders: readonly Order[], until: number, { scale = 1, aside
           const n = (built.get(w) ?? 0) + 1; built.set(w, n); done[`${work.copies[1]} ${n}`] = t;
           if (n < work.copies[0]) join(w, place(w), begun.get(w)!);
         } else done[w] = t;
+        if (work.grows) grown.set(w, { years: 0, since: t });
         if (w === CATALOG.yard.work)
           for (const x of line) if (WORKS[x].orbit && left.has(x)) { left.set(x, left.get(x)! * (1 - CATALOG.yard.cut)); whole.set(x, whole.get(x)! * (1 - CATALOG.yard.cut)); }
         if (follow && work.then) { const at = place(w); work.then.filter((x) => !backup.o || offEarth(x)).forEach((x, i) => join(x, at + i, begun.get(w)!)); }
@@ -173,6 +183,8 @@ export function pace(orders: readonly Order[], until: number, { scale = 1, aside
         else if ("standing" in o) standing = !backup.o;
         else if ("first" in o) { const i = line.indexOf(o.first); if (i >= 0) { line.splice(i, 1); line.unshift(o.first); moved.add(o.first); } }
         else if ("drop" in o) {
+          const g = grown.get(o.drop);
+          if (g && g.since !== null) { g.years += t - g.since; g.since = null; }
           if (o.drop === "Data center") standing = false;
           else if (line.includes(o.drop)) {
             if (left.has(o.drop)) kept.set(o.drop, { left: left.get(o.drop)!, whole: whole.get(o.drop)!, yard: yardDone() });
@@ -180,6 +192,7 @@ export function pace(orders: readonly Order[], until: number, { scale = 1, aside
           }
         }
         else if (o.begin === "Data center") queued += backup.o ? 0 : 1;
+        else if (grown.has(o.begin)) { const g = grown.get(o.begin)!; if (g.since === null) g.since = t; }
         else if (WORKS[o.begin] && !line.includes(o.begin) && done[o.begin] === undefined && (!backup.o || offEarth(o.begin))) {
           join(o.begin, line.length, t);
           const k = kept.get(o.begin);
@@ -190,7 +203,7 @@ export function pace(orders: readonly Order[], until: number, { scale = 1, aside
         }
       }
     }
-    thought = (spared(t) * scale * STEP ** dataCenters.length * STEP ** [...gifts.values()].reduce((a, b) => a + b, 0)) / FLAGSHIP;
+    thought = (spared(t) * scale * STEP ** (dataCenters.length + doublings(t)) * STEP ** [...gifts.values()].reduce((a, b) => a + b, 0)) / FLAGSHIP;
     // What is set aside is a share of this Earth's own Year 0 compute, so studies keep a tenth of it whatever a war
     // left, as calcs/early_game.py has it since 2026-10-22.
     const set = scale * (studies + aside.reduce((sum, [a, b, share]) => sum + (a <= t + EPS && t + EPS < b ? share : 0), 0) + (building !== null ? CATALOG.dataCenter.aside : 0));
@@ -209,6 +222,12 @@ export function pace(orders: readonly Order[], until: number, { scale = 1, aside
     if (harms.some((h) => t + EPS < h.y + h.recover)) next = Math.min(next, t + 0.1);
     if (backup.o && t + EPS >= backup.o.y && regrown(t) < 1) next = Math.min(next, t + 0.25);
     if (building !== null) next = Math.min(next, building + CATALOG.dataCenter.years);
+    for (const [w, g] of grown)
+      if (g.since !== null) {
+        // The next doubling: a whole period on from the last.
+        const k = WORKS[w].grows!, r = (g.years + t - g.since) % k;
+        next = Math.min(next, t + (k - r > EPS ? k - r : k));
+      }
     line.forEach((w, i) => {
       const l = left.get(w), m = WORKS[w].milestone;
       if (l !== undefined && rate[i] > 0) {
@@ -223,7 +242,7 @@ export function pace(orders: readonly Order[], until: number, { scale = 1, aside
     if (t >= until - EPS) { settle(); break; }
   }
   return {
-    at: until, done, dataCenters, thought, room, idle, rockKt: rockAt(until),
+    at: until, done, dataCenters, thought, room, idle, doublings: doublings(until), rockKt: rockAt(until),
     kept: Object.fromEntries([...kept].map(([w, k]) => [w, { left: k.left, built: 1 - k.left / k.whole }])),
     line: line.map((w, i) => ({ work: w, left: left.get(w) ?? null, s: s[i] })),
   };

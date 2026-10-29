@@ -27,6 +27,7 @@ import {
   takes,
   PAST,
 } from "@/lib/game/plan";
+import { haloDone, haloSpans } from "@/lib/game/halo";
 import { SITES } from "@/lib/game/sites";
 import { FOUND, harm, rockAt, rockOf } from "@/lib/game/rocks";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
@@ -52,6 +53,14 @@ function status(open: boolean, at: number, by: number | null | undefined, year: 
   return year >= by ? "Done." : `Under way. Done in ${span(by - year)}.`;
 }
 
+/** Watts in words: 1.2 TW, or past a thousand of those, as a power of ten, 3.4×10²⁰ W. */
+const SUP = "⁰¹²³⁴⁵⁶⁷⁸⁹";
+function watts(w: number) {
+  if (w < 1e15) return `${(w / 1e12).toFixed(1)} TW`;
+  const e = Math.floor(Math.log10(w));
+  return `${(w / 10 ** e).toFixed(1)}×10${[...String(e)].map((d) => SUP[Number(d)]).join("")} W`;
+}
+
 /** In play, a build under way and the button that takes it back, or one taken back, the work it kept, and the button
  *  that orders it again, last in line. Its work is what it had left when taken back. Thought Fields keeps none: the
  *  campus under way is finished, and no more begin. 2026-10-23. */
@@ -69,6 +78,29 @@ function InPlay({ name, scale, done }: { name: string; scale: number; done: Reco
     return { at: schedule(orderLater(name, now)(plan), scale)[name], left: back === null ? null : keptOf(plan, scale, name, now) };
   }, [now, back, fresh, name, plan, scale]);
   if (now === null) return null;
+  // The Cold Halo, once done, grows until taken back. Holding it keeps its size, and growing again picks up there.
+  // 2026-10-28.
+  if (name === "Cold Halo") {
+    const at = haloDone(plan, scale);
+    if (at !== null && at <= now) {
+      const grew = haloSpans(plan, scale, at).reduce((y, [a, b]) => y + Math.max(0, Math.min(b ?? now, now) - a), 0);
+      const growing = back === null;
+      return (
+        <div className="flex flex-col">
+          <p className="mt-2.5 text-[13px] leading-snug text-page-ink2">
+            {`Done at Year ${tenths(at)}. It has doubled ${Math.floor(grew / 10)} times, and sheds about ${watts(1.2e12 * 2 ** (grew / 10))} at 77 K. `}
+            {growing ? "It doubles every 10 Years while it grows." : `We hold it at its size, since Year ${tenths(back!)}.`}
+          </p>
+          <button
+            onClick={() => change(growing ? takeBack(name, now) : orderLater(name, now))}
+            className={`mt-2.5 h-11 rounded-full text-[15px] font-medium ${growing ? "border border-ink" : "bg-ink text-paper"}`}
+          >
+            {growing ? "Hold Its Size" : "Let It Grow"}
+          </button>
+        </div>
+      );
+    }
+  }
   if (fresh && again && !lacking.length)
     return (
       <div className="flex flex-col">

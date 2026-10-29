@@ -1131,6 +1131,37 @@ function coldAnnex(): Close {
   };
 }
 
+// ── Cold Halo ──
+// The Cold Annex, dim at the middle, and its copies going up round it in widening rings, each a small sheet behind its
+// own shade, lit as it starts. Its heat runs out to the cold sky. Drawn a few thousand km across, far smaller than it
+// grows: its shape is ours.
+function coldHalo(): Close {
+  const b = new Rising();
+  for (const [ring, n, r] of [[0, 8, 900], [1, 14, 1700], [2, 20, 2500]] as const)
+    for (let k = 0; k < n; k++) {
+      const a = (2 * Math.PI * (k + ring * 0.5)) / n;
+      const [x, y, z] = [r * Math.cos(a), r * Math.sin(a), (ring - 1) * 120 + 60 * Math.sin(3 * a)];
+      b.add(panel(x - 70, y - 70, 140, 140, z));
+      b.lit([x, y, z + 4]);
+    }
+  const sky: number[] = [];
+  const runs: Close["runs"] = [];
+  for (let k = 0; k < 12; k++) {
+    const a = (2 * Math.PI * k) / 12, r = 1700;
+    const [x, y] = [r * Math.cos(a), r * Math.sin(a)];
+    sky.push(x, y, 0, x * 1.6, y * 1.6, 900);
+    runs.push({ pts: [x, y, 0, x * 1.6, y * 1.6, 900], secs: 5, offset: k / 12 });
+  }
+  return {
+    view: { km: 9000, el: 28, az: 210 },
+    have: [...hexagon(0, 0, 0, 280), ...panel(-195, -195, 390, 390, 40)],
+    ...b.done(30),
+    haveLights: [0, 0, 44, 30],
+    sky,
+    runs,
+  };
+}
+
 // ── Deuterium Works ──
 // Bruce, on Lake Huron, where Canada drew heavy water from lake water on the nuclear station's steam from 1973, 1,600
 // t a year at its peak. Ours is 24 times that: rows of tall towers inland of the station, which stands dim by the
@@ -1233,6 +1264,7 @@ export const CLOSE: Record<string, Close> = {
   "Power from Orbit": powerFromOrbit(),
   "Halo Survey": haloSurvey(),
   "Cold Annex": coldAnnex(),
+  "Cold Halo": coldHalo(),
   "Solar Lens": solarLens(),
   "Star Mapper": starMapper(),
   "Deuterium Works": deuteriumWorks(),

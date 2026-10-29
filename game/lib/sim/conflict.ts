@@ -174,6 +174,23 @@ export function hidesOf(world: World, done: readonly { star: string; at: number;
   return out;
 }
 
+/** Our Cold Halo's glow: it starts at the Cold Annex's 1,200 GW, doubles every 10 Years while it grows, and sheds its
+ *  heat at 77 K, where the same watch needs (77/12)^3 times the power it needs at 12 K: calcs/kin.py. 2026-10-28. */
+export const HALO = { watts: 1.2e12, doubling: 10, warmer: (77 / 12) ** 3 };
+
+/** The Year our halo's glow first reaches `need` watts, from the spans it grew, or null if it never does. */
+export function haloReaches(spans: readonly [number, number | null][], need: number) {
+  let years = 0;
+  const want = HALO.doubling * Math.log2(need / HALO.watts);
+  if (want <= 0) return spans[0]?.[0] ?? null;
+  for (const [a, b] of spans) {
+    const len = b === null ? Infinity : b - a;
+    if (years + len >= want) return a + (want - years);
+    years += len;
+  }
+  return null;
+}
+
 /** Light-years between two neighbors' stars, by where they sit in the sky. */
 function apart(world: World, a: Neighbor, b: Neighbor) {
   const at = (p: Neighbor) => {

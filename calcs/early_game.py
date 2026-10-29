@@ -362,6 +362,12 @@ FUSION_YEARS, FUSION_ENERGY = 30, 0.5
 # vault took: 12 Years, a sample. Its want a little over the Moon Vault's, a sample.
 WANTS['Trojan vault'] = (1.5, 'sample: the Moon Vault\'s, and a longer reach')
 TROJAN_YEARS, TROJAN_KT = 12, 10
+# Settled 2026-10-28: the Cold Halo, the Cold Annex grown into a swarm that copies itself from asteroid rock, at 77 K,
+# where our chips' gain stops (Zhao et al. 2025). Its factories take 10 Years and the annex's want, samples. Done, it
+# doubles every 10 Years, as a neighbor's Mind grows, until taken back. Neighbors see it once its glow crosses their
+# floor, 3e18 W at 10 pc for 12 K, times (77/12)^3 for 77 K: calcs/kin.py.
+WANTS['Cold halo'] = (80, 'sample: the Cold Annex\'s')
+COLD_HALO_YEARS, COLD_HALO_DOUBLING = 10, 10
 # Settled 2026-10-28: the Rock Deflector, ten DART-class impactors of a tonne. DART took about five years from its
 # start to launch on a few hundred million dollars, so 4 Years and a few hundredths of a flagship, samples. Which games
 # see a rock is game/lib/game/rocks.ts.
