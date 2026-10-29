@@ -13,7 +13,7 @@ import { useSchedule } from "@/components/picks";
 // The Build tab, laid out as Scan is: the queue and what we could start, in Scan's rows. The walk through what we
 // could start, as Scan's review, opens from the tab's head at any time and from Begin, in the top bar. Asking
 // the Mind is on each build's page, 2026-10-19. Above the queue, what it costs, drawn, 2026-10-22. Before Begin, the Mind
-// guides us instead, in guide.tsx, 2026-10-22.
+// guides us instead, in guide.tsx, 2026-10-22. In play the head shows the live Year, 2026-10-29.
 export function Build() {
   const { save, year, newGame } = useGame();
   const leaveShell = useLeaveShell();
@@ -28,8 +28,8 @@ export function Build() {
   return (
     <>
       {year !== null && (
-        <div className="flex min-h-[52px] flex-col justify-center gap-0.5 border-b border-rowline text-sm">
-          <span>Year 0 has begun</span>
+        <div className="flex min-h-[52px] flex-col justify-center gap-0.5 border-b border-rowline">
+          <span className="text-[17px]">Year {tenths(year)}</span>
           <span className="text-xs text-muted">
             <span className="font-mono tabular-nums">{realTime(year)}</span> since we began
           </span>

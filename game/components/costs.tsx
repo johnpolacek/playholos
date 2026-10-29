@@ -15,9 +15,11 @@ import {
   ordered,
   orderLater,
   type moves,
+  searchOf,
   sharesAt,
   SPARE_LIFT,
 } from "@/lib/game/plan";
+import { combedAt } from "@/lib/sim/works";
 import { prefersReducedMotion } from "@/lib/motion";
 
 // What our order costs, drawn on Build: all our compute as a ring, the matter we hold in orbit as blocks, and the
@@ -47,7 +49,7 @@ export function previews(name: string, set: (name: string | null) => void): Reac
   };
 }
 
-type Kind = "studies" | "fields" | "need" | "spare" | "short";
+type Kind = "studies" | "fields" | "need" | "spare" | "idle" | "short";
 interface Seg {
   x: number;
   w: number;
@@ -95,7 +97,7 @@ function arc(r: number, a0: number, a1: number) {
 
 /** All our compute, round: our Mind's studies, a campus under way, what each build needs, solid, and the spare
  *  pushing it, flowing. What we're short runs a second lap outside, dashed. */
-function Ring({ share, hot }: { share: ReturnType<typeof sharesAt>; hot: string | null }) {
+function Ring({ share, hot, searching }: { share: ReturnType<typeof sharesAt>; hot: string | null; searching: boolean }) {
   const target = useMemo(() => {
     const segs = new Map<string, Seg>();
     let x = 0;
@@ -107,10 +109,12 @@ function Ring({ share, hot }: { share: ReturnType<typeof sharesAt>; hot: string 
     put("fields", share.fields, "var(--think)", "fields");
     for (const p of share.parts) put(`n:${p.name}`, p.need, buildColor(p.name), "need");
     for (const p of share.parts) put(`s:${p.name}`, p.spare, buildColor(p.name), "spare");
+    // What builds can't use closes the ring: combing old recordings while the search runs, else idle. 2026-10-29.
+    put("idle", share.idle, searching ? "var(--you)" : "var(--faint)", "idle");
     x = 0;
     for (const p of share.parts) put(`h:${p.name}`, p.short, buildColor(p.name), "short");
     return segs;
-  }, [share]);
+  }, [share, searching]);
   const segs = useTweened(target);
   return (
     <svg viewBox="0 0 160 160" className="absolute inset-0 overflow-visible" aria-hidden>
@@ -121,6 +125,8 @@ function Ring({ share, hot }: { share: ReturnType<typeof sharesAt>; hot: string 
         const d = arc(s.kind === "short" ? 75 : 62, s.x + gap, s.x + s.w - gap);
         if (s.kind === "need")
           return <path key={k} d={d} fill="none" stroke={s.c} strokeWidth={hot === k.slice(2) ? 15 : 12} />;
+        if (s.kind === "idle")
+          return <path key={k} d={d} fill="none" stroke={s.c} strokeOpacity={searching ? ".3" : "1"} strokeWidth="12" />;
         if (s.kind === "studies") return <path key={k} d={d} fill="none" stroke={s.c} strokeOpacity=".45" strokeWidth="12" />;
         if (s.kind === "fields")
           return <path key={k} d={d} fill="none" stroke={s.c} strokeWidth="12" strokeDasharray="1.5 1.5" />;
@@ -145,10 +151,12 @@ function Ring({ share, hot }: { share: ReturnType<typeof sharesAt>; hot: string 
   );
 }
 
-/** The ring's key: each build with what it needs, the spare pushing it and what it's short, a campus under way, and
- *  our Mind's studies. Many share a line each, so the ring stays in view. */
-function Key({ share }: { share: ReturnType<typeof sharesAt> }) {
-  const tight = share.parts.length + (share.fields ? 1 : 0) > 4;
+/** The ring's key: each build with what it needs, the spare pushing it and what it's short, a campus under way, our
+ *  Mind's studies, and what is left, searching or idle, so the key adds up to the whole ring. Many share a line each,
+ *  so the ring stays in view. */
+function Key({ share, searching }: { share: ReturnType<typeof sharesAt>; searching: boolean }) {
+  const idle = share.idle > 0.005;
+  const tight = share.parts.length + (share.fields ? 1 : 0) + (idle ? 1 : 0) > 4;
   const item = (c: string, name: string, line: React.ReactNode) => (
     <div
       key={name}
@@ -180,6 +188,10 @@ function Key({ share }: { share: ReturnType<typeof sharesAt> }) {
       )}
       {share.fields > 0 && item("var(--think)", "Thought Fields", <>{em(share.fields)} while a campus builds</>)}
       {item("var(--muted)", "Our Mind’s studies", em(share.studies))}
+      {idle &&
+        (searching
+          ? item("color-mix(in srgb, var(--you) 45%, transparent)", "Combing old recordings", <>{em(share.idle)}, for signals no one caught</>)
+          : item("var(--faint)", "Idle", <>{em(share.idle)}, more than our builds can use</>))}
     </div>
   );
 }
@@ -271,9 +283,13 @@ function Ceiling({ queued, now, began }: { queued: boolean; now: number; began: 
         <span>Year {end}</span>
       </div>
       <p className="mt-1.5 text-xs leading-snug text-muted">
-        {queued
-          ? `Each campus adds half again. By Year ${Math.round(last)} our compute draws ${pct(at(campuses.length))} of Earth’s grid, and no more fit.`
-          : `Our compute stays at its Year 0 level, ${pct(at(0))} of Earth’s grid. Thought Fields would grow it ${times}× by Year ${Math.round(last)}, until the grid is full.`}
+        {queued && began && grown === campuses.length
+          ? `Thought Fields filled Earth’s grid at Year ${Math.round(last)}. Our compute draws ${pct(at(campuses.length))} of it, ${times}× what it was at Year 0.`
+          : queued && began
+            ? `${grown ? `Thought Fields is growing our compute, ${Math.round(step ** grown * 10) / 10}× Year 0’s now.` : "Thought Fields is building its first campus."} Each campus adds half again, to ${times}× by Year ${Math.round(last)}, when the grid is full.`
+            : queued
+              ? `Each campus adds half again. By Year ${Math.round(last)} our compute draws ${pct(at(campuses.length))} of Earth’s grid, and no more fit.`
+              : `Our compute stays at its Year 0 level, ${pct(at(0))} of Earth’s grid. Thought Fields would grow it ${times}× by Year ${Math.round(last)}, until the grid is full.`}
       </p>
     </div>
   );
@@ -301,8 +317,11 @@ export function useShown() {
  *  under it, so pointing at a build shows what it would take. */
 export function Costs() {
   const { scale } = useSchedule();
-  const { shown, adding, picked, now } = useShown();
+  const { shown, adding, picked, began, now } = useShown();
   const share = useMemo(() => sharesAt(shown, scale, now), [shown, scale, now]);
+  // In play, what builds can't use combs old recordings until it catches up with the present, as the top bar says.
+  const searched = useMemo(() => searchOf(shown, scale), [shown, scale]);
+  const searching = began && combedAt(searched, now) < now - 0.05;
   const over = share.short > 0.005;
   const pick = picked && share.parts.find((p) => p.name === picked);
   return (
@@ -320,7 +339,7 @@ export function Costs() {
       </div>
       <div className="mt-2.5 grid grid-cols-[148px_1fr] items-center gap-3.5">
         <div className="relative size-[148px]">
-          <Ring share={share} hot={adding ?? picked} />
+          <Ring share={share} hot={adding ?? picked} searching={searching} />
           <div className="absolute inset-0 grid place-content-center text-center">
             <b className={`font-mono text-[22px] font-semibold tracking-[-.02em] ${over ? "text-other" : ""}`}>
               {pct(over ? 1 + share.short : 1 - share.idle)}
@@ -329,12 +348,12 @@ export function Costs() {
               {over
                 ? "of our compute needed"
                 : share.idle > 0.005
-                  ? `at work, ${pct(share.idle)} idle`
+                  ? `at work, ${pct(share.idle)} ${searching ? "searching" : "idle"}`
                   : "of our compute at work"}
             </span>
           </div>
         </div>
-        <Key share={share} />
+        <Key share={share} searching={searching} />
       </div>
     </section>
   );
@@ -346,7 +365,7 @@ export function Ceilings() {
   return (
     <section className="mb-3 border-b border-rowline pb-3">
       {!began && <Blocks builds={shown.builds} adding={adding} />}
-      <Ceiling queued={shown.builds.includes("Thought Fields")} now={now} began={began} />
+      <Ceiling queued={ordered(shown).includes("Thought Fields")} now={now} began={began} />
     </section>
   );
 }

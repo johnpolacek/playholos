@@ -2,7 +2,9 @@ import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import { previews, usePreview } from "@/components/costs";
 import { useGame } from "@/components/game-provider";
 import { Item, type Row } from "@/components/journey";
-import { Opened, Unqueued, usePlan, useSchedule } from "@/components/picks";
+import { Catalog } from "@/components/catalog";
+import { Instruments } from "@/components/instruments";
+import { Unqueued, usePlan, useSchedule } from "@/components/picks";
 import { ListHead } from "@/components/tab-head";
 import { buildOf, EMPTY, ordered } from "@/lib/game/plan";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
@@ -14,6 +16,8 @@ import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motio
 // our compute on their own, and what idle instruments sweep waits until sweeps are built, so neither is ours to set
 // here, 2026-10-19. Before Begin, each queued build can be dragged by its dots to a new place in line, or moved with
 // the arrow keys, since the first in line gets our compute first, 2026-10-22. Once Year 0 has begun, what our builds have opened waits below, to order in play, 2026-10-22.
+// In play, builds done become instruments, what is still building rises under them, and the Catalog holds the rest,
+// 2026-10-29.
 
 function rowsOf(plan: typeof EMPTY, done: Record<string, number | null>): Row[] {
   return ordered(plan).map((name) => ({
@@ -184,41 +188,41 @@ export function Queue() {
   );
 
   if (!past) return <div className="min-h-[120px]" />;
+  if (began)
+    return (
+      <div ref={root} className="relative">
+        <Instruments />
+        <Catalog className="mt-5" />
+      </div>
+    );
 
   return (
     <div ref={root} className="relative">
       {/* Before Begin an empty queue shows nothing, and the walk above offers to fill it. */}
-      {(began || queued.length > 0) && (
+      {queued.length > 0 && (
         <>
-          <ListHead left={`${began ? "Under way" : "Queued"} · ${queued.length}`} right="Done in" className="mt-1" />
+          <ListHead left={`Queued · ${queued.length}`} right="Done in" className="mt-1" />
           {movable && (
             <p data-q="row" className="mt-1 text-xs leading-snug text-muted">
               Drag a build by its dots to change its place. The first in line gets our compute first.
             </p>
           )}
-          {queued.length ? (
-            <ul ref={list} data-q="queued" className="mt-1">
-              {queued.map((r, i) => (
-                <Item
-                  key={r.key}
-                  row={r}
-                  now={now}
-                  began={began}
-                  point={previews(r.key, preview)}
-                  style={movable ? reorder.style(r.key, i) : undefined}
-                  grip={movable && <Grip name={r.key} i={i} n={queued.length} {...reorder.grip(r.key, i)} />}
-                />
-              ))}
-            </ul>
-          ) : (
-            <p data-q="row" className="mt-1 border-t border-faint py-2.5 text-[13.5px] leading-snug text-page-ink2">
-              Nothing under way. Our instruments keep watch, and the Mind keeps studying.
-            </p>
-          )}
+          <ul ref={list} data-q="queued" className="mt-1">
+            {queued.map((r, i) => (
+              <Item
+                key={r.key}
+                row={r}
+                now={now}
+                began={false}
+                point={previews(r.key, preview)}
+                style={movable ? reorder.style(r.key, i) : undefined}
+                grip={movable && <Grip name={r.key} i={i} n={queued.length} {...reorder.grip(r.key, i)} />}
+              />
+            ))}
+          </ul>
         </>
       )}
-      {!began && <Unqueued scale={scale} className={queued.length ? "mt-5" : "mt-1"} />}
-      {began && <Opened scale={scale} now={now} className="mt-5" />}
+      <Unqueued scale={scale} className={queued.length ? "mt-5" : "mt-1"} />
     </div>
   );
 }
