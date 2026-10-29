@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useSearchParams } from "react-router";
 import { useGame } from "@/components/game-provider";
 import { Item, type Row } from "@/components/journey";
 import type { Aim } from "@/components/picks";
@@ -11,7 +12,8 @@ import type { Heard as HeardSignal } from "@/lib/sim/types";
 
 // What our watches have caught, on Scan, above the leads: each signal on its whole journey, from the year its sender
 // sent it to the Year it reached us, in their color. Opening one shows what it holds, read at once, who sent it, and
-// which watch caught it. Each is marked new until opened. 2026-10-22.
+// which watch caught it. Each is marked new until opened. 2026-10-22. The banner over the map opens one here, at the
+// top of the tab whatever its scroll, 2026-10-29.
 
 const A = (move: string) => `${/^[aeiou]/.test(move) ? "An" : "A"} ${move}`;
 
@@ -43,8 +45,23 @@ function ours(h: HeardSignal, fresh: boolean): Row {
 export function Heard() {
   const { year, see } = useGame();
   const { heard, fresh } = useLeads();
-  const [open, setOpen] = useState<string | null>(null);
+  const [params, setParams] = useSearchParams();
+  const asked = params.get("heard");
+  const [open, setOpen] = useState<string | null>(asked);
   const [lit, setLit] = useState<string | null>(null);
+  const top = useRef<HTMLElement>(null);
+  // Brought here for one signal: open it, mark it seen, bring the tab's top into view, and drop it from the address.
+  const [was, setWas] = useState(asked);
+  if (asked && asked !== was) {
+    setWas(asked);
+    setOpen(asked);
+  }
+  useEffect(() => {
+    if (!asked) return;
+    if (fresh.has(asked)) see([asked]);
+    top.current?.closest("main")?.scrollTo({ top: 0 });
+    setParams((p) => (p.delete("heard"), p), { replace: true });
+  }, [asked, fresh, see, setParams]);
   const rows: Row[] = heard.map((h) =>
     h.ours ? ours(h, fresh.has(heardId(h))) : {
     key: heardId(h),
@@ -89,7 +106,7 @@ export function Heard() {
     point: (on) => setLit(on ? key : null),
   });
   return (
-    <section>
+    <section ref={top}>
       <ListHead left={`Heard · ${rows.length}`} right="Arrived" className="mt-1" />
       <ul className="mt-1">
         {rows.map((r) => (

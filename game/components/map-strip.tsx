@@ -1,4 +1,5 @@
 import { useLocation } from "react-router";
+import { Arrival } from "@/components/arrival";
 import { useRef, useState } from "react";
 import { BeamsMap, useBeams } from "@/components/beams";
 import { Globe, Lens } from "@/components/icons";
@@ -139,6 +140,7 @@ export function MapStrip() {
       >
         <span className="h-1 w-9 rounded-sm bg-faint" />
       </button>
+      <Arrival />
     </div>
   );
 }
