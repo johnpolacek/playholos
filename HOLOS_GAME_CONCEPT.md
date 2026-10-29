@@ -1279,6 +1279,21 @@ These v1 rules no longer apply.
 - **Odds are words.** Settled 2026-10-13. v1 showed percentages across named explanations. v2 shows one of seven words for each. See [How Earth learns](#how-earth-learns).
 - **Looks are observations, and what comes back is a reading.** Settled 2026-10-13. An observation is one pointed use of an instrument: an image, a listen, a watch. v1’s quick look and long look are a quick and a long observation. A study returns a finding. Ordinary uses of the word look stay.
 
+## To recheck at a wider scale
+
+Set 2026-10-28, before the refactor to a larger, sparser universe and a longer timeline. Each number below was tuned to neighbors within about 50 ly and games of a few centuries. Recheck each against the new scale, keep it or change it, and log why.
+
+- **The Cold Halo.** Doubles every 10 Years, from 1,200 GW. A watcher 10 ly out sees it after about 26 doublings, some 260 Years. Farther out, thousands. [game/lib/sim/conflict.ts](game/lib/sim/conflict.ts) `HALO`, [calcs/early_game.py](calcs/early_game.py) `COLD_HALO_*`.
+- **Glow floors.** Every watch sees a glow over 3×10¹⁸ W at 10 pc, times (77/12)³ for ours at 77 K, growing as the square of distance. A neighbor’s glow starts at 10¹³ W and doubles every 10 Years, 5 if inward. Who finds whom, and when, rests on these. [game/lib/sim/answers.ts](game/lib/sim/answers.ts) `glowsSeen`, [game/lib/sim/knowledge.ts](game/lib/sim/knowledge.ts) `glows`.
+- **Calls.** A call every way at once reads to 60 ly, `CALL_REACH`. In a sparser universe few would hear one, and neighbors would rarely come to know each other.
+- **Warnings.** Only to worlds a neighbor knows of, by message, call or glow. Fewer known worlds, fewer warnings. `knownTo`.
+- **Bullets and screens.** 20 Years to ready, a tenth of light speed, about 110,000 Mt. A screen takes 4 Years. At hundreds of light-years a strike takes millennia to land. `BULLET`, `SCREEN` in conflict.ts.
+- **Probes to us.** A probe on news of us takes 20 Years to build, a tenth of light speed, and 10 Years of burns. `probesToUs`.
+- **The model’s budget.** 60 neighbor moves on each other’s news per century, `STAR_BUDGET`. Longer games mean more calls to the model in all.
+- **Our colony and Earth’s stand-in.** Each reports a light-time late. A farther colony is silent far longer. A colony stands 20 Years after landing. [game/lib/sim/colony.ts](game/lib/sim/colony.ts).
+- **Backups.** A woken vault doubles every 2 Years, 3 at the Trojan Vault, back to all Earth had. Fine at any scale, but a longer game makes losing Earth likelier to matter. [game/lib/game/hits.ts](game/lib/game/hits.ts).
+- **Rocks.** 12 of 33 seeds send a rock, timed to a game of a few centuries. [game/lib/game/rocks.ts](game/lib/game/rocks.ts).
+
 ## Open questions
 
 Answered one at a time, in this order. Every answer must be permitted by current observations: improbable is acceptable, contradicted is not.
