@@ -1,6 +1,7 @@
 // The knowledge wall: what Earth knows at a moment, from the seed's truth. Settled 2026-10-13: the Mind judges from
 // what Earth knows, never the seed. So nothing here passes on who lives where, a world's rung, or anything not yet
 // arrived and caught. Pure: no files, so it runs anywhere and tests fast.
+import { mindsSeen, type MindKit } from "./minds.ts";
 import { giftWords } from "../game/sends.ts";
 import { lightTime } from "../light.ts";
 import { hidesOf } from "./conflict.ts";
@@ -44,6 +45,11 @@ export interface Kit {
   hides?: { star: string; at: number }[];
   /** Our idle thought combing old recordings: each Year the line changed, and the flagship-Years spent by then. */
   searched?: [number, number][];
+  /** What finds the realistic premise's minds, beyond the Halo Survey: lib/sim/minds.ts. 2026-10-29. */
+  warmWatch?: number | null;
+  moonSearch?: number | null;
+  watcherProbes?: MindKit["watcherProbes"];
+  craft?: MindKit["craft"];
 }
 
 /** Our search of old recordings, for the Mind: how far it has combed by Year `year`, and how fast. */
@@ -229,7 +235,7 @@ export function earthKnows(
   world: World,
   year: number,
   voices: Voices = {},
-  { allSky = null, flash = null, telescope = null, mirror = null, halo = null, mapper = null, lenses = [], sentinels = [], seeds = [], colony = null, sails = null, probe = null, losses = [], quiet = null, hides = [], searched = [] }: Kit = {},
+  { allSky = null, flash = null, telescope = null, mirror = null, halo = null, mapper = null, lenses = [], sentinels = [], seeds = [], colony = null, sails = null, probe = null, losses = [], quiet = null, hides = [], searched = [], warmWatch = null, moonSearch = null, watcherProbes = [], craft = [] }: Kit = {},
 ): EarthView {
   const shown = (id: string) => world.stars[id]?.shown ?? id;
   // Earth's finds at Year 0: every world whose tug shows by 2040. Measured, not understood. Its star is in the catalogs.
@@ -331,8 +337,13 @@ export function earthKnows(
     for (const c of p.copies) if (c.leaves + p.d <= year) visits.push({ ...base, ...found, passed: c.leaves, home: c.leaves + p.d, sent: c.star });
   }
   visits.sort((a, b) => a.home - b.home);
+  // The realistic premise's minds, as far as we have found them. 2026-10-29.
+  const firstSeed = seeds.length ? Math.min(...seeds.map((s) => s.leaves)) : null;
+  const minds = mindsSeen(world, { warmWatch, halo, moonSearch, watcherProbes, firstSeed, craft }, year);
+  const anyMind = minds.flashes.length || minds.glows.length || minds.watcher || minds.sleepers.length;
   return {
     year, felt, heard, visits,
+    ...(anyMind ? { minds } : {}),
     ...(wide.has(PROXIMA.star) ? { proxima: wide.get(PROXIMA.star) } : {}),
     ...(halo !== null && year >= halo ? { glows: glows(world, halo, year, hidesOf(world, hides)) } : {}),
     ...(colony ? { colony: colonyAt(world, holes, colony, year, losses) } : {}),

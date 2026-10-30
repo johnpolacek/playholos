@@ -22,6 +22,7 @@ PEERS = 5                               # mean young minds that woke within PEER
 PEER_WINDOW = 1e5                       # years either side of our waking
 ASLEEP_SHARE = 0.5                      # as calcs/neighbors.py, a sample
 MAX_AGE = 5e9                           # years older than us: Earth is 4.5 billion, the thin disk at most about 10
+REST_AU = (30, 2000)                    # where a sleeping mind rests from its star, evenly in log (concept, way 4)
 REPLY_C = 0.1                           # what a mind sends travels at a tenth of light's speed, as our own bullets
 
 # The Galaxy's shape: an exponential thin disk through the Sun's neighborhood, and a bulge. This project's model,
@@ -110,9 +111,12 @@ def old_mind(seed, i, pos, star=None):
     d = math.hypot(*pos)
     asleep = r.random() < ASLEEP_SHARE
     limit = 0.003 * 3.828e26 * (d / 400) ** 2
-    return dict(id=f'old-{i}', pos=[round(c, 3) for c in pos], d=round(d, 2), star=star,
-                age=round(min(MAX_AGE, 10 ** r.gauss(9, 0.5))), asleep=asleep,
-                glowW=None if asleep else float(f'{log_between(r, 1e18, limit):.3g}'))
+    age = round(min(MAX_AGE, 10 ** r.gauss(9, 0.5)))
+    glow = None if asleep else float(f'{log_between(r, 1e18, limit):.3g}')
+    # Asleep, it folds up small and rests in the cold: 12 K lies about 540 AU from a Sun, 54 AU from a dim red dwarf.
+    rest = round(log_between(r, *REST_AU)) if asleep else None
+    return dict(id=f'old-{i}', pos=[round(c, 3) for c in pos], d=round(d, 2), star=star, age=age, asleep=asleep,
+                glowW=glow, restAU=rest)
 
 def old_minds(seed):
     """Every old mind out to OLD_MINDS_LY: on real stars inside the catalog, at seeded places beyond."""

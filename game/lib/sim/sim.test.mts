@@ -571,3 +571,44 @@ test("the realistic premise's minds: rare and old near us, a few peers far off, 
   assert.ok(olds / POOL.length > 5 && olds / POOL.length < 12, `${olds / POOL.length} old minds a game`);
   assert.ok(peers / POOL.length > 3 && peers / POOL.length < 7, `${peers / POOL.length} peers a game`);
 });
+
+test("finding minds: a flash while the warm watch runs, half the cold glows, the watcher by where it sits, a sleeper up close", async () => {
+  const { skyOf, flashOf, coldGlowOf, watcherOf, sleeperOf, WARM_EVERY, MOON_SEARCH_YEARS, STAY_SEARCH_YEARS, FLYBY_SEES_AU } = await import("./minds.ts");
+  const { skyBasis } = await import("../../../src/coordinates.js");
+  // Sky positions agree with the atlas's own frame.
+  for (const [ra, dec] of [[56.6, 24.1], [262.17, -0.58], [6.02, -72.08]]) {
+    const r = skyBasis(ra, dec).radial;
+    const s = skyOf([r.x * 500, r.y * 500, r.z * 500]);
+    assert.ok(Math.abs(s.ra * 15 - ra) < 0.01 && Math.abs(s.dec - dec) < 0.01, `${ra} ${dec}`);
+  }
+  let awake = 0, glowing = 0;
+  for (const s of POOL) {
+    const world = await loadWorld(s);
+    const m = world.minds!;
+    // Earth knows no mind with nothing built: the wall holds.
+    assert.equal(earthKnows(world, 100000).minds, undefined);
+    for (const p of m.peers) {
+      const f = flashOf(p, 0, 200000);
+      if (p.flash[1] < 0) assert.equal(f, null);
+      else assert.ok(f && f.seen >= Math.max(0, p.flash[0]) && f.seen < Math.max(0, p.flash[0]) + WARM_EVERY + 1e-9, p.id);
+      assert.equal(flashOf(p, p.flash[1] + 1, 200000), null);   // built after it faded: missed for good
+    }
+    for (const o of m.old) if (!o.asleep) { awake++; if (coldGlowOf(o, 0, 10)) glowing++; }
+    // The watcher shows itself when it warns us, and a moon search finds it only at the Moon's L4 or L5.
+    const w = m.watcher;
+    assert.deepEqual(watcherOf(world, { firstSeed: 40 }, 39), null);
+    assert.equal(watcherOf(world, { firstSeed: 40 }, 40)?.by, "its warning");
+    const moon = watcherOf(world, { moonSearch: 10 }, 1000);
+    assert.equal(moon?.seen ?? null, w.place.startsWith("Earth–Moon") ? 10 + MOON_SEARCH_YEARS : null);
+    // A craft that stays finds a sleeper. A flyby only if it rests within a 1 m telescope's reach.
+    for (const o of m.old.filter((o) => o.asleep)) {
+      const stay = sleeperOf(o, [{ pos: o.pos, arrives: 5000, stays: true }], 1e6);
+      assert.equal(stay?.seen, 5000 + STAY_SEARCH_YEARS + o.d);
+      const pass = sleeperOf(o, [{ pos: o.pos, arrives: 5000, stays: false }], 1e6);
+      assert.equal(pass !== null, o.restAU! <= FLYBY_SEES_AU);
+      assert.equal(sleeperOf(o, [{ pos: [o.pos[0] + 1, o.pos[1], o.pos[2]], arrives: 5000, stays: true }], 1e6), null);
+    }
+  }
+  // The Halo Survey sees about half the awake old minds.
+  assert.ok(glowing / awake > 0.3 && glowing / awake < 0.7, `${glowing} of ${awake}`);
+});

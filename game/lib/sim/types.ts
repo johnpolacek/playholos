@@ -110,6 +110,8 @@ export interface OldMind {
   asleep: boolean;
   /** Its cold far-infrared glow, awake. Null asleep. */
   glowW: number | null;
+  /** Asleep, how far from its star it rests, folded up small, in AU. Null awake. */
+  restAU: number | null;
 }
 
 export interface Peer {
@@ -314,6 +316,8 @@ export interface EarthView {
   holes?: DarkMass[];
   /** Once the Halo Survey is done, every grey glow it has seen. */
   glows?: Glow[];
+  /** The realistic premise's minds Earth has found: warm flashes, cold glows, the watcher, sleepers. lib/sim/minds.ts. */
+  minds?: import("./minds.ts").MindsSeen;
   /** What our 15 m Mirror has read of Proxima b, once built. */
   proxima?: Read;
 }
