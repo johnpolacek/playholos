@@ -317,6 +317,10 @@ def place_elder(seed, pool):
             fails, info = nb.check(m, host, waking, pole)
             if not fails: return dict(n=m, host=host, waking=waking, pole=pole, targeted=True, **info)
 
+# Retired 2026-10-29 by the realistic premise: one mind per million stars, so no neighbors within 50 ly and no elder.
+# The minds a game holds come from calcs/minds.py. The roster's draws still run, so Earth's own draw keeps its stream.
+NEIGHBORS = False
+
 def draw(seed, rows=None):
     rows = rows or nb.load_hosts()
     rng = random.Random(seed)
@@ -334,6 +338,7 @@ def draw(seed, rows=None):
     if not any(n['disposition'] == 'hunter' for n in picks):            # a struck world needs a hunter in the game
         spare = [n for n in nb.ROSTER if n not in picks and not n.get('struck') and n['disposition'] != 'hunter']
         picks = [rng.choice(spare) if n.get('struck') else n for n in picks]
+    if not NEIGHBORS: picks = []
     by_name = {h['name']: h for h in rows}
     knocked = {by_name[v]['id']: k for k, v in nb.KNOCKED.items()}
     nudge = rng.random() < nb.KNOCKED_SHARE
@@ -410,7 +415,7 @@ def draw(seed, rows=None):
     colonies = spread(seed, out)                                        # keyed draws only, so nothing above moves
     # The elder, settled 2026-10-28: drawn last, on its own keys, at a star nothing else holds, so no other draw moves.
     taken = used | {w['host']['id'] for w in drawn} | {c['star']['id'] for c in colonies} | ({natural['id']} if natural else set())
-    elder = place_elder(seed, [h for h in rows if h['id'] not in taken])
+    elder = place_elder(seed, [h for h in rows if h['id'] not in taken]) if NEIGHBORS else None
     if elder:
         elder = fill(elder, elder['n'])
         elder.update(sight(elder['host'], elder['n']['world']['mass'] ** (1 / 3.7), elder['a']))

@@ -29,9 +29,9 @@ test("rolls match the mocks: Ombe and Hael knock again, Ombe answers ours with a
   }
 });
 
-test("seed 10 at Year 0: three felt worlds, nearest first, as the first mock leads", async () => {
+test("seed 10 at Year 0: one felt world, natural, and no signals: the neighbors are retired", async () => {
   const view = earthKnows(await loadWorld(10), 0);
-  assert.deepEqual(view.felt.map((f) => f.star), ["Gliese 432 A", "12 Ophiuchi", "Gliese 1232"]);
+  assert.deepEqual(view.felt.map((f) => f.star), ["Gliese 1232"]);
   assert.equal(view.heard.length, 0);
 });
 
@@ -43,13 +43,6 @@ test("the wall: the Mind's words never name who lives where", async () => {
     for (const rung of ["bare rock", "hiding microbes", "showing oxygen", "animals", "where life died", "frozen"])
       assert.ok(!words.includes(rung), `seed ${seed} leaks a rung: ${rung}`);
   }
-});
-
-test("a knock is heard only once it arrives, and only if the watch catches it", async () => {
-  const world = await loadWorld(10);
-  const ombe = world.neighbors.find((p) => p.name === "Ombe")!;
-  assert.equal(ombe.inbound[0].kit0, false);                      // Year 0's sky watch misses it, so Earth hears nothing yet
-  assert.equal(earthKnows(world, 20).heard.length, 0);
 });
 
 test("reading times match calcs/observing.py, the dark patch's edges included, on both mirrors", () => {
@@ -163,54 +156,6 @@ test("a strike cuts our thought, and it comes back as we rebuild", () => {
   assert.ok(Object.keys(base.done).some((w) => (hit.done[w] ?? Infinity) > base.done[w] + 1e-6));
 });
 
-test("parity: our bullet is news where it lands, its flame seen only by a probe watching our system, probes are seen and caught, and they strike back", async () => {
-  const { landings } = await import("./answers.ts");
-  const { probeFate, probesToUs, strikesOnUs } = await import("./conflict.ts");
-  const world = await loadWorld(11);
-  const acts = { strikes: [{ star: "Alpha Centauri A", fired: 10, lands: 10 + 4.32 / 0.1 }], caught: [], quiet: null };
-  const due = landings(world, [], [], 60, "test", [], acts);
-  const struck = due.find((l) => l.news === "struck")!;
-  assert.equal(struck.star, "Alpha Centauri A");
-  assert.ok(Math.abs(struck.at - 53.2) < 1e-6 && !struck.missed);
-  // Fired at Year 10, before any probe of theirs reached Sol: no one else sees it. Fired at 40, Hael's probe, here since
-  // 36.2, sees it, and its word reaches Hael one light-time later.
-  assert.ok(!due.some((l) => l.news === "strike_seen"));
-  const later = landings(world, [], [], 60, "test", [], { strikes: [{ star: "Gliese 570 A", fired: 40, lands: 232 }], caught: [], quiet: null });
-  const seen = later.filter((l) => l.news === "strike_seen");
-  assert.ok(seen.length === 1 && seen[0].star === "Alpha Centauri A" && Math.abs(seen[0].at - 44.32) < 1e-6);
-  // Struck, Hael strikes back: its bullet leaves once its harvest is built and filled, about 32.4 Years on, and lands at
-  // a tenth of light speed.
-  const back = strikesOnUs(world, [{ key: struck.key, sent: "strike:Alpha Centauri A", star: "Alpha Centauri A", d: 4.32, at: struck.at, move: "strike" }]);
-  assert.ok(back.length === 1 && Math.abs(back[0].lands - (53.2 + 0.25 + BULLET.ready + 43.2)) < 1e-6);
-  // Hael's probe burns all the way in at Year 36.2: our watch sees it weeks out, and an interceptor ready by then wrecks it.
-  const hael = probesToUs(world, []).find((p) => p.star === "Alpha Centauri A")!;
-  assert.ok(hael.close && Math.abs(hael.arrives - 36.16) < 0.01);
-  assert.ok(probeFate(hael, 10, 20).caught !== null && probeFate(hael, 10, 40).caught === null && probeFate(hael, null, 20).seen === null);
-  // Our radars cut at Year 5: every neighbor that heard them hears them stop, one light-time later.
-  const quiet = landings(world, [], [], 100, "test", [], { strikes: [], caught: [], quiet: 5 }).filter((l) => l.news === "quiet");
-  assert.ok(quiet.length > 3 && quiet.every((l) => Math.abs(l.at - (5 + l.d)) < 1e-6));
-});
-
-test("parity both ways: a neighbor's guard screens our bullet, and neighbors strike each other", async () => {
-  const { landings } = await import("./answers.ts");
-  const { strikesBetween } = await import("./conflict.ts");
-  const world = await loadWorld(11);
-  // Hael guards against us at Year 0: its screen stands 4 Years later, so our bullet landing at 53.2 bursts on it.
-  const guard = { key: "g:Alpha Centauri A", sent: "x", star: "Alpha Centauri A", d: 4.32, at: 0, move: "guard" };
-  const acts = { strikes: [{ star: "Alpha Centauri A", fired: 10, lands: 53.2 }], caught: [], quiet: null };
-  const hit = landings(world, [], [guard], 60, "test", [], acts).find((l) => l.star === "Alpha Centauri A" && l.news === "struck")!;
-  assert.equal(hit.signal.move, "screened");
-  // Hael strikes Iru, at Gliese 570 A, on Iru's news: Iru is struck once it lands, and watchers near Hael see the launch.
-  const strike = { key: "s:Alpha Centauri A", sent: "y", star: "Alpha Centauri A", d: 4.32, at: 5, move: "strike", from: "Gliese 570 A" };
-  const [b] = strikesBetween(world, [strike]);
-  assert.ok(b && b.to === "Gliese 570 A" && Math.abs(b.fired - (5.25 + BULLET.ready)) < 1e-6 && b.lands > b.fired && !b.screened);
-  const due = landings(world, [], [strike], b.lands + 1, "test");
-  const struck = due.find((l) => l.news === "struck" && l.star === "Gliese 570 A")!;
-  assert.ok(struck && struck.signal.from === "Alpha Centauri A" && Math.abs(struck.at - b.lands) < 1e-6);
-  // No one else's craft watches Hael's system, so no one else sees the launch.
-  assert.ok(!due.some((l) => l.news === "strike_seen"));
-});
-
 test("Earth lost: a backup wakes small where something can run it, and doubles back to all of it", () => {
   const g = golden.works[0];
   const at = (y: number, extra: Order[] = []) => pace([...(g.orders as Order[]), ...extra], y, { scale: g.scale, aside: g.aside as [number, number, number][] }).thought;
@@ -235,65 +180,26 @@ test("Earth lost: its works leave the line, and a backup builds only off Earth",
   assert.ok(offEarth("Moon vault") && offEarth("Seed ship") && !offEarth("Launch complex"));
 });
 
-test("the Halo Survey sees what calcs/neighbors.py's glow_at gives, over ALMA's floor: no young Mind by Year 50, 12 by Year 100", async () => {
-  let fifty = 0, hundred = 0;
-  for (const seed of POOL) {
-    const world = await loadWorld(seed);
-    const young = (g: { star: string }) => !world.neighbors.some((n) => n.elder && (world.stars[n.star]?.shown ?? n.star) === g.star);
-    fifty += glows(world, 0, 50).filter(young).length;
-    hundred += glows(world, 0, 100).filter(young).length;
-  }
-  assert.equal(fifty, 0);
-  assert.equal(hundred, 12);
+test("a lens pictures a felt world's face once its picture is home: its ground, never cities, now no one lives near", async () => {
+  const world = await loadWorld(10);
+  const f = world.finds[0];
+  const star = world.stars[f.star]?.shown ?? f.star;
+  const kit = { lenses: [{ star, looks: 30, home: 30.5 }] };
+  assert.equal(earthKnows(world, 30.4, {}, kit).visits.filter((v) => v.by === "lens").length, 0);
+  const v = earthKnows(world, 30.5, {}, kit).visits.find((x) => x.by === "lens")!;
+  assert.notEqual(v.sight, "cities");
+  assert.ok(Math.abs(v.km! - (25 * f.d) / (30 * 3.2616)) < 1e-9);
 });
 
-test("an elder awake shows on the Halo Survey's first look and holds steady; one asleep never shows", async () => {
-  let awake = 0;
-  for (const seed of POOL) {
-    const world = await loadWorld(seed);
-    const elders = world.neighbors.filter((n) => n.elder);
-    assert.equal(elders.length, 1);
-    const e = elders[0], star = world.stars[e.star]?.shown ?? e.star;
-    const seen = glows(world, 3, 200).find((g) => g.star === star);
-    if (e.elder!.asleep) { assert.equal(seen, undefined); continue; }
-    awake++;
-    assert.equal(seen?.seen, 3);
-    assert.equal(seen?.watts, e.elder!.ceiling);
-    assert.ok(seen?.steady);
-  }
-  assert.ok(awake > 5 && awake < POOL.length - 5);
-});
-
-test("a lens pictures a felt world's face once its picture is home: a home's cities, a natural world's ground", async () => {
-  for (const seed of POOL) {
-    const world = await loadWorld(seed);
-    const home = world.finds.find((f) => f.truth.kind === "home");
-    if (!home) continue;
-    const star = world.stars[home.star]?.shown ?? home.star;
-    const kit = { lenses: [{ star, looks: 30, home: 30.5 }] };
-    assert.equal(earthKnows(world, 30.4, {}, kit).visits.filter((v) => v.by === "lens").length, 0);
-    const v = earthKnows(world, 30.5, {}, kit).visits.find((x) => x.by === "lens")!;
-    assert.equal(v.sight, "cities");
-    assert.ok(Math.abs(v.km! - (25 * home.d) / (30 * 3.2616)) < 1e-9);
-    return;
-  }
-  assert.fail("no seed has a felt home");
-});
-
-test("a sentinel stays and sees who lives there: its first word comes home one light-time after it arrives", async () => {
-  for (const seed of POOL) {
-    const world = await loadWorld(seed);
-    const home = world.finds.find((f) => f.truth.kind === "home");
-    if (!home) continue;
-    const star = world.stars[home.star]?.shown ?? home.star;
-    const word = 10 + home.d / 0.1 + 10 + home.d;
-    const kit = { sentinels: [{ star, leaves: 10 }] };
-    assert.equal(earthKnows(world, word - 0.01, {}, kit).visits.length, 0);
-    const v = earthKnows(world, word, {}, kit).visits.find((x) => x.by === "sentinel")!;
-    assert.ok(v.lives && v.sight === "cities" && v.air?.oxygen);
-    return;
-  }
-  assert.fail("no seed has a felt home");
+test("a sentinel stays and reads a felt world up close: its first word comes home one light-time after it arrives", async () => {
+  const world = await loadWorld(10);
+  const f = world.finds[0];
+  const star = world.stars[f.star]?.shown ?? f.star;
+  const word = 10 + f.d / 0.1 + 10 + f.d;
+  const kit = { sentinels: [{ star, leaves: 10 }] };
+  assert.equal(earthKnows(world, word - 0.01, {}, kit).visits.length, 0);
+  const v = earthKnows(world, word, {}, kit).visits.find((x) => x.by === "sentinel")!;
+  assert.ok(v && !v.lives && !v.ruins && v.sight !== "cities");
 });
 
 test("black holes: Gaia's finds are known at Year 0, the Star Mapper finds more, and a sentinel measures one's spin", async () => {
@@ -317,27 +223,6 @@ test("black holes: Gaia's finds are known at Year 0, the Star Mapper finds more,
 test("every game has a black hole to find: the Star Mapper finds one within 20 Years of being done, in every seed", async () => {
   const { darkMasses } = await import("./knowledge.ts");
   for (const seed of POOL) assert.ok(darkMasses(await loadWorld(seed), 20, 0).length > 0, `seed ${seed} has none to find`);
-});
-
-test("a neighbor may reach a black hole before us, never before Year 0, and our sentinel sees it there unnamed", async () => {
-  const { darkMasses } = await import("./knowledge.ts");
-  let checked = false;
-  for (const seed of POOL) {
-    const world = await loadWorld(seed);
-    for (const h of world.holes!) for (const c of h.claims ?? []) assert.ok(c.arrives > 0, `seed ${seed}: ${c.who} at ${h.id} before Year 0`);
-    const hole = world.holes!.find((h) => h.claims?.some((c) => c.kind === "colony"));
-    if (!hole || checked) continue;
-    const named = darkMasses(world, 2000, 0).find((d) => d.id === hole.id);
-    if (!named) continue;
-    const settled = hole.claims!.find((c) => c.kind === "colony")!.stands!;
-    const leaves = settled;                                       // ours leaves once theirs stands, so it arrives after
-    const home = leaves + hole.d / 0.1 + 10 + hole.d;
-    const v = earthKnows(world, home, {}, { mapper: 0, sentinels: [{ star: named.name, leaves }] }).visits.find((x) => x.sight === "dark")!;
-    assert.ok(v.others?.some((o) => o.kind === "colony"));
-    assert.ok(!describe(earthKnows(world, home, {}, { mapper: 0, sentinels: [{ star: named.name, leaves }] })).includes(hole.claims![0].who));
-    checked = true;
-  }
-  assert.ok(checked, "no seed has a colony at a hole the mapper finds");
 });
 
 test("our Mind at a black hole: word of its landing comes one light-time later, and a furnace grows where a refuge stays dark", async () => {
@@ -369,47 +254,31 @@ test("seed probes copy themselves to the nearest free stars, two each, for three
   assert.equal(new Set(two.map((p) => p.star)).size, two.length);
 });
 
-test("a seed probe's word comes home from each star a light-time after it lands, and it sees who lives there", async () => {
-  for (const seed of POOL) {
-    const world = await loadWorld(seed);
-    const n = world.neighbors.find((x) => !x.dead);
-    if (!n) continue;
-    const star = world.stars[n.star].shown;
-    const [p] = seedProbes([{ star, leaves: 10 }]);
-    if (!p) continue;
-    const kit = { seeds: [{ star, leaves: 10 }] };
-    assert.equal(earthKnows(world, p.lands + p.d - 0.01, {}, kit).visits.filter((v) => v.by === "seed").length, 0);
-    const v = earthKnows(world, p.lands + p.d, {}, kit).visits.find((x) => x.by === "seed")!;
-    assert.ok(v.lives && v.sight === "cities" && v.gen === 1);
-    const later = earthKnows(world, 1000, {}, kit);
-    assert.equal(later.visits.filter((x) => x.by === "seed" && !x.sent).length, 7);
-    assert.equal(later.visits.filter((x) => x.sent).length, 6);
-    assert.match(describe(later), /seed probe/);
-    return;
-  }
-  assert.fail("no seed has a living neighbor in the census");
+test("a seed probe's word comes home from each star a light-time after it lands, and its copies go on", async () => {
+  const world = await loadWorld(10);
+  const star = world.stars[world.finds[0].star].shown;
+  const [p] = seedProbes([{ star, leaves: 10 }]);
+  const kit = { seeds: [{ star, leaves: 10 }] };
+  assert.equal(earthKnows(world, p.lands + p.d - 0.01, {}, kit).visits.filter((v) => v.by === "seed").length, 0);
+  const v = earthKnows(world, p.lands + p.d, {}, kit).visits.find((x) => x.by === "seed")!;
+  assert.ok(v.gen === 1 && !v.lives);
+  const later = earthKnows(world, 1000, {}, kit);
+  assert.equal(later.visits.filter((x) => x.by === "seed" && !x.sent).length, 7);
+  assert.equal(later.visits.filter((x) => x.sent).length, 6);
+  assert.match(describe(later), /seed probe/);
 });
 
-test("our Mind settled at a star: word of its landing comes one light-time later, and the people living there see it brake in", async () => {
-  const { crafts, notices } = await import("./meetings.ts");
-  for (const seed of POOL) {
-    const world = await loadWorld(seed);
-    const n = world.neighbors.find((x) => !x.dead);
-    if (!n) continue;
-    const star = world.stars[n.star].shown, d = world.stars[n.star].d;
-    const lands = 10 + hop(d);
-    const kit = { colony: { star, mode: "settle" as const, leaves: 10 } };
-    const at = (year: number) => earthKnows(world, year, {}, kit).colony!;
-    assert.equal(at(lands + d - 0.01).others, undefined);
-    const c = at(lands + d);
-    assert.ok(c.atStar && Math.abs(c.lands! - lands) < 1e-9);
-    assert.ok(c.others?.some((o) => o.kind === "home"));
-    assert.match(describe(earthKnows(world, lands + d, {}, kit)), /settle there/);
-    const [seen] = notices(world, crafts(world, kit), () => true).filter((x) => x.neighbor === n);
-    assert.ok(seen && seen.local && seen.first === "them" && Math.abs(seen.at - lands) < 1e-9);
-    return;
-  }
-  assert.fail("no seed has a living neighbor in the census");
+test("our Mind settled at a star: word of its landing comes one light-time later, and no one was there first", async () => {
+  const world = await loadWorld(10);
+  const f = world.finds[0];
+  const star = world.stars[f.star].shown, d = world.stars[f.star].d;
+  const lands = 10 + hop(d);
+  const kit = { colony: { star, mode: "settle" as const, leaves: 10 } };
+  const at = (year: number) => earthKnows(world, year, {}, kit).colony!;
+  const c = at(lands + d);
+  assert.ok(c.atStar && Math.abs(c.lands! - lands) < 1e-9);
+  assert.equal(c.others, undefined);
+  assert.match(describe(earthKnows(world, lands + d, {}, kit)), /settle there/);
 });
 
 test("our colony's table comes from our charter: a lean is 1, far past the middle 2, and it never strikes first", () => {
@@ -426,82 +295,6 @@ test("our colony's table comes from our charter: a lean is 1, far past the middl
   }
 });
 
-test("our colony hears a neighbor's call near it once it stands, never our own sends, and not while the Will lives there", async () => {
-  const world = await loadWorld(10);
-  const shown = (k: string) => world.stars[k]?.shown ?? k;
-  const p = world.neighbors.find((n) => !n.dead && !n.elder)!;
-  const key = Object.keys(world.stars).find((k) => k !== p.star && !world.neighbors.some((n) => n.star === k) && between(world, shown(k), shown(p.star)) < 20)!;
-  const craft = { id: `colony:${key}`, kind: "colony" as const, atStar: true, hole: shown(key), holeId: key, d: world.stars[key].d, arrives: 0, stands: 0 };
-  const mine = colonyActor(world, craft, [35, 50, 62], null)!;
-  assert.equal(colonyActor(world, craft, [35, 50, 62], shown(key)), null);
-  const played = { ...world, neighbors: [...world.neighbors, mine] };
-  const call = { key: "c:x", sent: "c", star: shown(p.star), d: p.d, at: 1, move: "call", text: "We are here.", to: "everywhere" };
-  const ours = { id: "s1", y: 1, to: "everywhere", travels: "Hello.", size: "page" as const, reach: 60 };
-  const got = landings(played, [ours as never], [call], 500, "t").filter((l) => l.neighbor.ours && l.signal.move !== "glow");
-  assert.equal(got.length, 1);
-  assert.equal(got[0].signal.from, shown(p.star));
-  assert.ok(got[0].offers.every((m) => m in ourTable("O1 B1").broadcast.reduce((o, [k]) => ({ ...o, [k]: 1 }), {})));
-});
-
-test("our colony glows and watches as a neighbor does, from the Year it stands", async () => {
-  const world = await loadWorld(10);
-  const shown = (k: string) => world.stars[k]?.shown ?? k;
-  const p = world.neighbors.find((n) => !n.dead && !n.elder)!;
-  const key = Object.keys(world.stars).find((k) => k !== p.star && !world.neighbors.some((n) => n.star === k) && between(world, shown(k), shown(p.star)) < 20)!;
-  const craft = { id: `colony:${key}`, kind: "colony" as const, atStar: true, hole: shown(key), holeId: key, d: world.stars[key].d, arrives: 100, stands: 120 };
-  const g = glowsSeen({ ...world, neighbors: [...world.neighbors, colonyActor(world, craft, [35, 50, 62], null)!] });
-  const seen = g.find((x) => x.from === shown(key) && x.to === shown(p.star));
-  const sees = g.find((x) => x.to === shown(key) && x.from === shown(p.star));
-  assert.ok(seen && seen.at > 120, "a neighbor sees our colony's glow after it stands");
-  assert.ok(sees && sees.at >= 120, "our colony sees a neighbor's glow once it stands");
-});
-
-test("Earth's stand-in takes what lands at Sol once the Will has left, and nothing before", async () => {
-  const world = await loadWorld(10);
-  assert.equal(earthActor([35, 50, 62], null), null);
-  assert.equal(earthActor([35, 50, 62], { d: 12, y: 200, lost: true }), null);
-  const earth = earthActor([35, 50, 62], { d: 12, y: 200 })!;
-  const p = world.neighbors.find((n) => !n.dead && !n.elder)!;
-  const knock = (at: number) => ({ key: `k${at}:x`, sent: `k${at}`, star: world.stars[p.star]?.shown ?? p.star, d: p.d, at, move: "knock", text: "Hello?" });
-  const got = landings({ ...world, neighbors: [...world.neighbors, earth] }, [], [knock(50), knock(250)], 600, "t").filter((l) => l.neighbor.star === SOL);
-  assert.deepEqual(got.map((l) => l.signal.id), ["k250:x"]);
-});
-
-test("a warning goes only to a world its sender knows of, and lands as a tip-off", async () => {
-  const world = await loadWorld(10);
-  const shown = (n: { star: string }) => world.stars[n.star]?.shown ?? n.star;
-  const [a, b, c] = world.neighbors.filter((n) => !n.dead && !n.elder && n.waking < 0);
-  // a knows b by b's call, and Earth only if it heard our radars.
-  const call = { key: `call:${shown(a)}`, sent: "call", star: shown(a), d: a.d, at: 20, move: "watch", from: shown(b) };
-  assert.deepEqual(knownTo(world, [call], shown(a), 10).filter((s) => s !== SOL), []);
-  assert.deepEqual(knownTo(world, [call], shown(a), 30).filter((s) => s !== SOL), [shown(b)]);
-  assert.equal(knownTo(world, [], shown(a), 300).includes(SOL), a.heard);
-  // a warns b about c: b takes it by its tip-off table.
-  const warn = { key: "w:x", sent: "w", star: shown(a), d: a.d, at: 30, move: "warn", from: shown(c), to: shown(b), text: "Beware the world near you." };
-  const got = landings(world, [], [call, warn], 2000, "t").filter((l) => l.signal.id === "w:x");
-  assert.equal(got.length, 1);
-  assert.equal(got[0].star, shown(b));
-  assert.equal(got[0].news, "tipoff");
-});
-
-test("a Mind that hides stops its glow growing: seen if it had crossed a watcher's floor, never if not", async () => {
-  const world = await loadWorld(10);
-  const all = glowsSeen(world);
-  const pair = all.find((g) => g.at > 50)!;
-  const p = world.neighbors.find((n) => (world.stars[n.star]?.shown ?? n.star) === pair.from)!;
-  const hide = (at: number) => [{ key: `h${at}`, sent: "h", star: pair.from, d: p.d, at, move: "hide" }];
-  // Hid long before its light could cross: no one sees it. Hid after: as before.
-  assert.ok(!glowsSeen(world, hide(p.waking - p.thinks)).some((g) => g.from === pair.from));
-  assert.ok(glowsSeen(world, hide(pair.at)).some((g) => g.from === pair.from && g.to === pair.to));
-  // Our Halo Survey the same: a hider found only if it crossed first, and its watts stop growing from the hide.
-  const ours = glows(world, 0, 400);
-  const g = ours.find((x) => x.seen > 20 && !world.neighbors.find((n) => (world.stars[n.star]?.shown ?? n.star) === x.star)?.elder)!;
-  const q = world.neighbors.find((n) => (world.stars[n.star]?.shown ?? n.star) === g.star)!;
-  assert.ok(!glows(world, 0, 400, new Map([[g.star, q.waking]])).some((x) => x.star === g.star));
-  const late = glows(world, 0, 400, new Map([[g.star, g.seen - q.d]])).find((x) => x.star === g.star)!;
-  assert.ok(late && late.watts < g.watts);
-});
-
 test("the Cold Halo doubles every 10 Years once done, a data center's step each, and holds while taken back", () => {
   const at = (y: number, extra: Order[] = []) => pace([{ y: 0, begin: "Cold halo" }, ...extra], y);
   const done = at(200).done["Cold halo"];
@@ -513,34 +306,6 @@ test("the Cold Halo doubles every 10 Years once done, a data center's step each,
   const held = [{ y: done + 15, drop: "Cold halo" }, { y: done + 35, begin: "Cold halo" }] as Order[];
   assert.ok(Math.abs(at(done + 34, held).thought / t0 - 1.5) < 1e-6);
   assert.ok(Math.abs(at(done + 40.01, held).thought / t0 - 1.5 ** 2) < 1e-6);
-});
-
-test("neighbors see our Cold Halo once its 77 K glow crosses their floor, and never while it is small", async () => {
-  const world = await loadWorld(10);
-  // 26 doublings or so for a watcher 10 ly out.
-  const need = 3e18 * HALO.warmer * (10 / (10 * 3.2616)) ** 2;
-  const y = haloReaches([[100, null]], need)!;
-  assert.ok(y > 100 + 250 && y < 100 + 270, String(y));
-  assert.equal(haloReaches([[100, 150]], need), null);
-  const seen = glowsSeen(world, [], [[0, null]]).filter((g) => g.from === SOL);
-  const p = world.neighbors.find((n) => !n.dead && !n.elder?.asleep)!;
-  const mine = seen.find((g) => g.to === (world.stars[p.star]?.shown ?? p.star))!;
-  assert.ok(mine && mine.at >= p.d);
-  assert.ok(!glowsSeen(world, [], [[0, 100]]).some((g) => g.from === SOL));
-});
-
-test("idle thought combs old recordings, and digs out a broadcast our watches missed", async () => {
-  // Ten flagship-Years a Year of recordings: 24 Years of backlog takes 240.
-  const log: [number, number][] = [[0, 0], [10, 240], [20, 480]];
-  assert.equal(combedAt(log, 5), ARCHIVE.from + 12);
-  assert.equal(combedAt(log, 20), 20);
-  // Mu Herculis's last broadcast reached us in 2018, missed by Year 0's watch.
-  const world = await loadWorld(11);
-  const found = (kit: Parameters<typeof earthKnows>[3], year: number) => earthKnows(world, year, {}, kit).heard.find((h) => h.star === "Mu Herculis");
-  assert.equal(found({}, 20), undefined);
-  const h = found({ searched: log }, 20)!;
-  assert.ok(h.found !== undefined && Math.abs(h.found - (h.arrived - ARCHIVE.from) * ARCHIVE.cost / 24) < 1e-6, String(h.found));
-  assert.equal(found({ searched: log }, h.found! - 0.1), undefined);
 });
 
 test("the realistic premise's minds: rare and old near us, a few peers far off, a watcher every game", async () => {
@@ -644,37 +409,23 @@ test("the Solar Swarm thinks with the light it catches, doubling every 2 Years, 
   assert.equal(at(done + 9.5, held).thought, at(done + 60, held).thought);
 });
 
-test("neighbors see our Solar Swarm as a warm excess over the Sun once it catches enough, and not while held small", async () => {
-  // Near: an excess of about a quarter of a thousandth of the Sun, some 86 Years after it starts.
-  const near = haloReaches([[0, null]], swarmSeenAt(10), SWARM)!;
-  assert.ok(near > 80 && near < 90, String(near));
-  // Across the Galaxy, only once it catches nearly all the Sun, and never past it.
-  assert.ok(haloReaches([[0, null]], swarmSeenAt(30000), SWARM)! > 105);
-  assert.equal(haloReaches([[0, null]], swarmSeenAt(60000), SWARM), null);
-  const world = await loadWorld(10);
-  const warm = glowsSeen(world, [], [], [[0, null]]).filter((g) => g.from === SOL && g.warm);
-  assert.ok(warm.length && warm.every((g) => g.at >= near + g.d - 1e-9 || g.at === 0));
-  assert.ok(!glowsSeen(world, [], [], [[0, 60]]).some((g) => g.from === SOL));
-});
-
 test("the Hypertelescope pictures each felt world in its reach, nearest first, a week each, and never cities", async () => {
   for (const seed of POOL) {
     const world = await loadWorld(seed);
-    const home = world.finds.find((f) => f.truth.kind === "home" && !f.truth.elder && f.d <= catalog.hyper.reach);
-    if (!home) continue;
+    const f = world.finds.find((x) => x.d <= catalog.hyper.reach);
+    if (!f) continue;
     const seen = earthKnows(world, 500, {}, { hyper: 40 }).visits.filter((v) => v.by === "hyper");
-    const reach = new Set(world.finds.filter((f) => f.d <= catalog.hyper.reach).map((f) => world.stars[f.star]?.shown ?? f.star));
+    const reach = new Set(world.finds.filter((x) => x.d <= catalog.hyper.reach).map((x) => world.stars[x.star]?.shown ?? x.star));
     assert.equal(seen.length, reach.size + 1);
     assert.equal(seen[0].world, "Proxima b");
     assert.ok(seen.every((v, i) => i === 0 || v.passed > seen[i - 1].passed));
     assert.ok(!seen.some((v) => v.sight === "cities"));
-    const v = seen.find((x) => x.star === (world.stars[home.star]?.shown ?? home.star))!;
-    assert.equal(v.sight, "green");
-    assert.ok(v.coarse && Math.abs(v.km! - catalog.hyper.kmPerLy * home.d) < 1e-9);
+    const v = seen.find((x) => x.star === (world.stars[f.star]?.shown ?? f.star))!;
+    assert.ok(Math.abs(v.km! - catalog.hyper.kmPerLy * f.d) < 1e-9);
     assert.equal(earthKnows(world, 39.9, {}, { hyper: 40 }).visits.filter((x) => x.by === "hyper").length, 0);
     return;
   }
-  assert.fail("no seed has a felt home in reach");
+  assert.fail("no seed has a felt world in reach");
 });
 
 test("bullets wait on helium-3 from a harvest that doubles every 5 Years, in the order ordered, and none without one", async () => {
