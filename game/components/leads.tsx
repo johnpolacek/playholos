@@ -21,11 +21,14 @@ import { placeLabel } from "@/components/place-label";
 // and opens what we measured of it.
 
 /** How long a message takes to reach a star, one way, in play time, and under it how far it is: 1h 38m, 19.7 ly.
- *  Stacked, so on a phone the names keep their one line. */
-const reach = (ly: number) => (
+ *  Stacked, so on a phone the names keep their one line. A range where Earth has one, and what is here at home said
+ *  so. 2026-10-30. */
+const reach = (l: Lead) => (
   <span className="flex flex-col items-end">
-    <span>{span(ly)}</span>
-    <span className="mt-[3px] text-[10px] text-muted/80">{lyOf(ly)} ly</span>
+    <span>{l.art.kind === "near" ? "here" : l.range ? `${span(l.range[0])} to ${span(l.range[1])}` : span(l.ly)}</span>
+    <span className="mt-[3px] text-[10px] text-muted/80">
+      {l.art.kind === "near" ? "by Earth" : l.range ? `${lyOf(l.range[0])} to ${lyOf(l.range[1])}` : lyOf(l.ly)}{l.art.kind === "near" ? "" : " ly"}
+    </span>
   </span>
 );
 
@@ -235,7 +238,7 @@ export function LeadList({
             l.line
           )
         }
-        right={reach(l.ly)}
+        right={reach(l)}
       />
     );
   };
@@ -280,7 +283,7 @@ export function LeadList({
                 <span className="min-w-0 grow truncate text-[15px] leading-snug">
                   <b className="font-semibold">{l.star}</b> · {l.what}
                 </span>
-                <span className="shrink-0 font-mono text-[11px] text-muted tabular-nums">{reach(l.ly)}</span>
+                <span className="shrink-0 font-mono text-[11px] text-muted tabular-nums">{reach(l)}</span>
                 <span className={`shrink-0 text-muted transition-transform duration-300 ${open ? "rotate-90" : ""}`}>
                   ›
                 </span>

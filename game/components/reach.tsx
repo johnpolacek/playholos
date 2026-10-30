@@ -669,7 +669,8 @@ export function Reach() {
   // Our leads' stars, nearest first, each with the soonest either road could arrive.
   const places = useMemo(
     () =>
-      [...leads]
+      // What is here at home has no road to it. 2026-10-30.
+      leads.filter((l) => l.art.kind !== "near")
         .sort((a, b) => a.ly - b.ly)
         .map((l) => {
           const at = base.map((r) => toward(r, l.ly).arrives).filter((y): y is number => y !== null);

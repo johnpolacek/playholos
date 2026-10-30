@@ -117,7 +117,8 @@ export function describeRock(rock: Rock | null, plan: Plan, done: Record<string,
   if (!r || r.state === "unknown") return "";
   const at = (y: number) => `Year ${tenth(y)}`;
   if (r.state === "struck")
-    return `A rock ${r.m} m wide struck Earth at ${at(r.strikes)}: ${harm(r.m)}.${r.found === null ? " No survey saw it coming." : ""}`;
+    // Its warning, plainly, so the Mind never says it came unwarned when we had Years. Playtest 2026-10-30.
+    return `A rock ${r.m} m wide struck Earth at ${at(r.strikes)}: ${harm(r.m)}.${r.found === null ? " No survey saw it coming." : ` We found it at ${at(r.found)}, ${tenth(r.strikes - r.found)} Years ahead, time enough for a push landing by ${at(r.strikes - r.lead)}. ${r.lands === null ? "We never ordered the Rock Deflector." : `Our Rock Deflector's push landed at ${at(r.lands)}, too late.`}`}`;
   if (r.state === "pushed") return `Our Rock Deflector pushed aside the ${r.m} m rock that would have struck Earth at ${at(r.strikes)}. It passes us by.`;
   return `A rock ${r.m} m wide, found at ${at(r.found!)}, will strike Earth at ${at(r.strikes)}: ${harm(r.m)}. A new build is open: the Rock Deflector, ten impactors of a tonne, as DART was, ${tenth(takes("Rock Deflector").years ?? 4)} Years at standard pace and a Year's flight. Its push must land by ${at(r.strikes - r.lead)}, or the rock strikes.${r.lands !== null ? ` Ours lands at ${at(r.lands)}${r.pushed ? ", in time" : ", too late"}.` : ""}`;
 }

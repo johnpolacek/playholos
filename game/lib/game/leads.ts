@@ -2,7 +2,8 @@ import { lyOf, YEAR_0 } from "@/lib/game/clock";
 import { KNOCKS } from "@/lib/game/knocks";
 import { lightTime } from "@/lib/light";
 import { BANDS, iwa, owa, WIDE } from "@/lib/sim/observing";
-import type { MindsSeen } from "@/lib/sim/minds";
+import type { MindsSeen, WatcherSeen } from "@/lib/sim/minds";
+import { harm, type rockAt } from "./rocks";
 import type { DarkMass, FeltWorld, Gas, Glow, Read, Visit } from "@/lib/sim/types";
 import { CATALOG } from "@/lib/sim/works";
 import { type System, SYSTEMS } from "./systems";
@@ -68,7 +69,10 @@ export type Art =
   | { kind: "glow"; ly: number; steady?: boolean }
   /** A warm glow ranged, not measured: its nearest and farthest, light-years. 2026-10-29. */
   | { kind: "warm"; near: number; far: number }
-  | { kind: "seed"; sight: Visit["sight"]; elder?: Visit["elder"] };
+  | { kind: "seed"; sight: Visit["sight"]; elder?: Visit["elder"] }
+  /** Something here at home, drawn where it sits: at the Moon's L5, on a rock sharing our orbit, or a rock coming in.
+   *  2026-10-30. */
+  | { kind: "near"; where: "moon" | "co-orbital" | "warning" | "rock"; struck?: boolean };
 
 /** A black hole's lead: one drawn alone, or with a star going round it, as Gaia BH1. 2026-10-28. */
 export const isHole = (art: Art) => art.kind === "dark" || art.kind === "pair";
@@ -831,6 +835,7 @@ export function mindLeads(m: MindsSeen | undefined): Lead[] {
       art: { kind: "glow", ly: g.d, steady: true },
       life: "unlikely",
     })),
+    ...(m.watcher ? [watcherLead(m.watcher)] : []),
     ...m.sleepers.map((x, i): Lead => ({
       slug: `warm-body-${i + 1}`,
       at: [x.ra, x.dec, x.d],
@@ -854,6 +859,91 @@ export function mindLeads(m: MindsSeen | undefined): Lead[] {
       life: "likely",
     })),
   ];
+}
+
+/** Light-years in a light-second, for what sits here at home. */
+const LY_SEC = 1 / 3.156e7;
+
+/** The watcher, once found, as a lead: where it sits, said as measured. Nothing tells us who made it. 2026-10-30. */
+function watcherLead(w: WatcherSeen): Lead {
+  const year = `Year ${Math.floor(w.seen * 10) / 10}`;
+  const moon = w.by === "moon search";
+  const rock = w.by === "asteroid tour";
+  return {
+    slug: "small-dark-body",
+    at: [0, 0, 0],
+    star: moon ? "A dark body at L5" : rock ? `A made thing on ${w.place}` : "A signal from close by",
+    what: moon ? "Something holding where nothing should" : rock ? "Something made, on a rock beside us" : "An answer to our ship",
+    line: moon
+      ? "About 10 cm across, at the Moon’s L5 point, where the Sun’s pull clears all rock."
+      : rock
+        ? "Smooth, dark and about 10 cm across, not of the rock it rides."
+        : "A narrow laser aimed at Earth, timed to our first seed ship.",
+    ly: moon ? 1.3 * LY_SEC : rock ? 500 * LY_SEC : 1000 * LY_SEC,
+    ask: moon ? "What is the dark body at the Moon’s L5 point?" : rock ? `What did our Asteroid Tour find on ${w.place}?` : "What sent the laser signal at our first seed ship?",
+    brief: moon
+      ? `Our Moon Search found a dark body about 10 cm across at the Moon’s L5 point, first seen at ${year}. The Sun’s pull unsettles anything there within years, yet it holds. No rock should. Something small, and steered, has been watching us from beside the Moon.`
+      : rock
+        ? `Our Asteroid Tour found something about 10 cm across on ${w.place}, at ${year}: smooth, dark, and not of the rock. It has been there a long time, and sends nothing we can hear.`
+        : `A narrow laser aimed at Earth from ${w.place}, from ${year}, the Year our first seed ship left. Its timing reads as an answer to that ship. Whatever sent it is small, and we never found it.`,
+    facts: [
+      ["First seen", `${year}, by ${moon ? "our Moon Search" : rock ? "our Asteroid Tour" : "our watches"}`],
+      ["Its size", moon || rock ? "About 10 cm across" : "Too small to see"],
+      ["Where", moon ? "The Moon’s L5 point, 1.3 light-seconds from Earth" : w.place],
+    ],
+    could: moon
+      ? [
+          { what: "Something made, steering to stay", why: "Only a body that steers holds at the Moon’s L5 for long. The Sun’s pull clears rock out within years.", odds: "likely" },
+          { what: "A rock just caught", why: "A passing rock can linger a few years before the Sun pulls it away. It would drift, and this one holds.", odds: "unlikely" },
+          { what: "Our own junk", why: "A lost piece of an old mission could sit near there for a while. None is listed, and it wouldn’t hold.", odds: "very unlikely" },
+        ]
+      : [
+          { what: "Something made, left to watch", why: "Smooth, dark and unlike the rock it rides, as something placed there would be.", odds: "likely" },
+          { what: "Something natural we don't know", why: "Rock and ice can take odd shapes. None we know is this smooth.", odds: "unlikely" },
+        ],
+    tells: [
+      "A craft sent to look closely would see what it is. It may see us coming.",
+      "A knock aimed at it would tell it we know it is there.",
+    ],
+    art: { kind: "near", where: moon ? "moon" : rock ? "co-orbital" : "warning" },
+    life: "very unlikely",
+  };
+}
+
+/** A rock coming, once found, as a lead: how wide, when it strikes, and whether our push turned it aside. Before
+ *  2026-10-30 it showed only on Build, so a player skipping on Scan never saw it come or strike. */
+export function rockLead(r: NonNullable<ReturnType<typeof rockAt>>): Lead {
+  const year = (y: number) => `Year ${Math.floor(y * 10) / 10}`;
+  const struck = r.state === "struck";
+  const pushed = r.state === "pushed";
+  return {
+    slug: "a-rock-coming",
+    at: [0, 0, 0],
+    star: struck ? "The rock that struck" : pushed ? "The rock pushed aside" : "A rock coming",
+    what: struck ? `A strike on Earth, ${year(r.strikes)}` : pushed ? "Turned aside in time" : `${r.m} m wide, striking ${year(r.strikes)}`,
+    line: struck
+      ? `A ${r.m} m rock struck Earth: ${harm(r.m)}.`
+      : pushed
+        ? `Our Rock Deflector pushed the ${r.m} m rock aside. It passes us by.`
+        : `Found at ${year(r.found!)}. Our push must land by ${year(r.strikes - r.lead)}.`,
+    ly: 0.5 * LY_SEC,
+    ask: struck ? "What did the rock strike do to us?" : pushed ? "How did our push turn the rock aside?" : "Can we push the rock aside in time?",
+    brief: struck
+      ? `A rock ${r.m} m wide struck Earth at ${year(r.strikes)}: ${harm(r.m)}.${r.found === null ? " No survey saw it coming." : ` We found it at ${year(r.found)}, ${Math.round(r.strikes - r.found)} Years ahead.${r.lands === null ? " We built no Rock Deflector." : ` Our push landed at ${year(r.lands)}, too late.`}`}`
+      : pushed
+        ? `Our Rock Deflector pushed aside the ${r.m} m rock that would have struck at ${year(r.strikes)}, as DART pushed Dimorphos.`
+        : `A rock ${r.m} m wide will strike Earth at ${year(r.strikes)}: ${harm(r.m)}. The Rock Deflector is open on Build. Its push must land by ${year(r.strikes - r.lead)}.`,
+    facts: [
+      ["Its width", `About ${r.m} m`],
+      ...(r.found !== null ? [["Found", `${year(r.found)}, ${Math.round(r.strikes - r.found)} Years before it strikes`] as [string, string]] : []),
+      [struck ? "Struck" : pushed ? "Would have struck" : "Strikes", year(r.strikes)],
+      ...(!struck && !pushed ? [["Push lands by", year(r.strikes - r.lead)] as [string, string]] : []),
+      ...(r.lands !== null ? [["Our push landed", `${year(r.lands)}${r.pushed ? ", in time" : ", too late"}`] as [string, string]] : []),
+    ],
+    could: [],
+    tells: struck || pushed ? [] : ["Ten impactors of a tonne, as DART was, push it two Earth widths aside if they land in time."],
+    art: { kind: "near", where: "rock", ...(struck ? { struck: true } : {}) },
+  };
 }
 
 export function leadsOf(felt: FeltWorld[], holes: DarkMass[] = [], glows: Glow[] = [], seeds: Visit[] = [], kept: string[] = [], minds?: MindsSeen): Lead[] {

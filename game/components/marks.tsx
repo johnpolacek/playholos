@@ -993,6 +993,8 @@ export function LeadMark({ art, size = 16, still }: { art: Art; size?: number; s
   if (art.kind === "glow" || art.kind === "warm") return <Halo size={size} still={still} />;
   // A star our seed probe reached: the Seed Ship's sprout, for the copy of it there. 2026-10-26.
   if (art.kind === "seed") return <Sprout size={size} still={still} />;
+  // Here at home: a rock coming, or something left by the Moon or on a rock beside us. 2026-10-30.
+  if (art.kind === "near") return art.where === "rock" ? <Deflector size={size} still={still} /> : art.where === "co-orbital" ? <Trojan size={size} still={still} /> : <Moon size={size} still={still} />;
   if (art.e > 0) return <Orbit e={art.e} size={size} still={still} />;
   return <World size={size} still={still} />;
 }

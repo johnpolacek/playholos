@@ -9,7 +9,10 @@ import { ListHead } from "@/components/tab-head";
 import type { Dials } from "@/lib/drift";
 import { placeLeads } from "@/lib/game/places";
 import { knownQuery } from "@/lib/game/known-query";
-import { airReading, glowReading, type Lead, landed, leadsOf, lifeOf, nearestReading, ODDS, type Reading, skyId, visitReading } from "@/lib/game/leads";
+import { airReading, glowReading, type Lead, landed, leadsOf, lifeOf, nearestReading, ODDS, type Reading, rockLead, skyId, visitReading } from "@/lib/game/leads";
+import { useSchedule } from "@/components/picks";
+import { EMPTY } from "@/lib/game/plan";
+import { rockAt, rockOf } from "@/lib/game/rocks";
 import { gsap, prefersReducedMotion } from "@/lib/motion";
 import type { EarthView, Heard as Signal, Visit } from "@/lib/sim/types";
 
@@ -35,6 +38,8 @@ interface Leads {
   visits: Visit[];
   /** Our Mind at a black hole, as its word has reached us. */
   colony?: EarthView["colony"];
+  /** The minds Earth has found, as measured, for the watches' lines on Build. 2026-10-30. */
+  minds?: EarthView["minds"];
   /** The lead open, in the review or on its page, whose system Close View flies into. */
   look: Lead | null;
   setLook(lead: Lead | null): void;
@@ -108,12 +113,23 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
   const seeds = useMemo(() => visits.filter((v) => v.by === "seed" && !v.sent), [visits]);
   // Holes our craft went to keep their leads, beside the nearest.
   const kept = [...(plan?.sentinels ?? []), ...(plan?.colony ? [plan.colony] : [])].map((o) => o.name);
+  // A rock found, and what befell it, leads Scan from the Year we find it. 2026-10-30.
+  const { done } = useSchedule();
+  const rock = useMemo(
+    () => (seed === undefined || tenth === null ? null : rockAt(rockOf(seed), plan ?? EMPTY, done, tenth)),
+    [seed, plan, done, tenth],
+  );
+  const rockKey = rock && rock.state !== "unknown" ? `${rock.state} ${rock.lands}` : "";
   const stars = [
+    rockKey,
     ...kept.map((k) => `kept ${k}`), ...(felt ?? []).map((f) => f.star), ...(holes ?? []).map((h) => h.name), ...(glows ?? []).map((g) => `glow ${g.star}`), ...seeds.map((v) => `seed ${v.star}`),
-    ...(minds ? [JSON.stringify([minds.flashes.map((f) => f.range ?? f.seen), minds.glows.length, minds.sleepers.length])] : []),
+    ...(minds ? [JSON.stringify([minds.flashes.map((f) => f.range ?? f.seen), minds.glows.length, minds.sleepers.length, minds.watcher?.seen])] : []),
   ].join("|");
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const leads = useMemo(() => (felt ? leadsOf(felt, holes ?? [], glows ?? [], seeds, kept, minds) : []), [stars]);
+  const leads = useMemo(
+    () => (felt ? [...(rockKey ? [rockLead(rock!)] : []), ...leadsOf(felt, holes ?? [], glows ?? [], seeds, kept, minds)] : []),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [stars],
+  );
   // The map places leads the sky file lacks: black holes found, and far landmarks.
   useEffect(() => placeLeads(Object.fromEntries(leads.flatMap((l) => (l.at ? [[skyId(l.star), l.at]] : [])))), [leads]);
   // The scene reads Close View from the dials each frame, and the screen from here. Another lead starts outside.
@@ -163,8 +179,8 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
     const fresh = new Set(
       [...Object.values(readings).flatMap((rs) => rs.map((r) => r.id)), ...heard.map(heardId)].filter((id) => !opened.has(id)),
     );
-    return { leads, ids, dials, readings, fresh, heard, visits, colony, look, setLook, close, setClose, step, setStep };
-  }, [leads, felt, proxima, ids, dials, observe, tenth, seen, heard, visits, colony, look, setLook, close, setClose, step, setStep]);
+    return { leads, ids, dials, readings, fresh, heard, visits, colony, minds, look, setLook, close, setClose, step, setStep };
+  }, [leads, felt, proxima, ids, dials, observe, tenth, seen, heard, visits, colony, minds, look, setLook, close, setClose, step, setStep]);
   return <ScanContext value={value}>{children}</ScanContext>;
 }
 

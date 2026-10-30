@@ -333,7 +333,63 @@ function WarmArt({ near, far }: { near: number; far: number }) {
   );
 }
 
+// Here at home, from above. The Moon's L5: Earth, the Moon going round, and the point 60° behind it, where a dark body
+// holds as the Sun's pull would clear rock away. A rock beside us: the Sun, Earth's orbit, and a rock sharing it on its
+// horseshoe. A rock coming: Earth, and the rock's path in, ending in a flash if it struck. 2026-10-30.
+function NearArt({ where, struck }: { where: "moon" | "co-orbital" | "warning" | "rock"; struck?: boolean }) {
+  const moving = useRef<SVGCircleElement>(null);
+  const point = useRef<SVGCircleElement>(null);
+  const rock = useRef<SVGCircleElement>(null);
+  const [cx, cy] = [W / 2, H / 2 - 6];
+  const R = 74;
+  useTicks((t) => {
+    const a = -t * 0.35;
+    const at = (r: number, ang: number) => [cx + r * Math.cos(ang), cy + r * Math.sin(ang)];
+    if (where === "rock") {
+      // In from the dark along a gentle curve, again each 8 seconds.
+      const k = Math.min(1, (t % 8) / 6);
+      const [x, y] = [W - 20 - k * (W - 20 - cx - 8), 26 + k * k * (cy - 26)];
+      rock.current?.setAttribute("cx", String(x));
+      rock.current?.setAttribute("cy", String(y));
+      return;
+    }
+    const [mx, my] = at(R, a);
+    moving.current?.setAttribute("cx", String(mx));
+    moving.current?.setAttribute("cy", String(my));
+    // The point 60° behind, the Moon's L5, or the rock's slow horseshoe beside Earth.
+    const [px, py] = where === "co-orbital" ? at(R, a + 0.35 + 0.25 * Math.sin(t * 0.3)) : at(R, a + Math.PI / 3);
+    point.current?.setAttribute("cx", String(px));
+    point.current?.setAttribute("cy", String(py));
+    point.current?.setAttribute("opacity", String(0.55 + 0.45 * Math.sin(t * 2)));
+  }, 3);
+  if (where === "rock")
+    return (
+      <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img" aria-label={struck ? "A rock's path in to Earth, ending in a strike" : "A rock's path in toward Earth"}>
+        <path d={`M${W - 20},26 Q${cx + 60},${cy - 70} ${cx + 8},${cy}`} fill="none" stroke="var(--muted)" strokeWidth={0.8} strokeDasharray="2 3" />
+        <circle cx={cx} cy={cy} r={9} fill="var(--you)" opacity={0.85} />
+        {struck && <circle cx={cx + 7} cy={cy - 3} r={16} fill="none" stroke="var(--other)" strokeWidth={2} opacity={0.7} />}
+        <circle ref={rock} cx={W - 20} cy={26} r={2.5} fill="#c9b8a0" />
+        <text x={cx} y={cy + 28} textAnchor="middle" className="fill-muted font-mono text-[7.5px]">EARTH</text>
+        <text x={W - 20} y={18} textAnchor="end" className="fill-muted font-mono text-[7px]">{struck ? "ITS PATH IN" : "ITS PATH, AS WE MEASURE IT"}</text>
+      </svg>
+    );
+  const co = where === "co-orbital";
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img" aria-label={co ? "A rock sharing Earth's orbit, with something on it" : "Earth and the Moon, with a dark body holding at the Moon's L5 point"}>
+      <circle cx={cx} cy={cy} r={R} fill="none" stroke="var(--muted)" strokeWidth={0.6} strokeDasharray="1 3" />
+      <circle cx={cx} cy={cy} r={co ? 7 : 6} fill={co ? "#f4e9c8" : "var(--you)"} opacity={0.9} />
+      <circle ref={moving} cx={cx + R} cy={cy} r={co ? 4.5 : 3.5} fill={co ? "var(--you)" : "#d8d8d8"} />
+      <circle ref={point} cx={cx} cy={cy - R} r={2.4} fill="var(--other)" />
+      <text x={cx} y={cy + 18} textAnchor="middle" className="fill-muted font-mono text-[7px]">{co ? "SUN" : "EARTH"}</text>
+      <text x={16} y={H - 12} className="fill-muted font-mono text-[7px]">
+        {co ? "A ROCK SHARING OUR ORBIT, AND WHAT RIDES IT" : where === "warning" ? "SOMEWHERE NEAR US, UNSEEN" : "THE MOON’S L5: 60° BEHIND IT, HOLDING"}
+      </text>
+    </svg>
+  );
+}
+
 export function LeadArt({ art }: { art: Art }) {
+  if (art.kind === "near") return <NearArt where={art.where} struck={art.struck} />;
   if (art.kind === "warm") return <WarmArt near={art.near} far={art.far} />;
   if (art.kind === "orbit") return <Orbit a={art.a} e={art.e} hz={art.hz} />;
   if (art.kind === "dark") return <Dark mass={art.mass} ly={art.ly} />;
