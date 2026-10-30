@@ -318,7 +318,7 @@ export function DestinationPage({ slug }: { slug: string }) {
             i={ways.length}
             to={to}
             name="A lens at the Sun’s focus"
-            line={`${WHAT["Solar Lens"]} About ${Math.round(lensKm(lead.ly))} km a pixel here.`}
+            line={`${WHAT["Solar Lens"]} About ${Math.round(lensKm(lead.ly))} km a pixel here.${lens.push === "Star Beam" ? " The Star Beam pushes it there instead, in about two months." : lens.push ? ` The ${lens.push} pushes it there instead, in about 5 Years.` : ""}`}
             needs={["Solar Lens"]}
             have={(n) => ({ queued: inOrder(n), done: !before && (doneBy[n] ?? Infinity) <= clock })}
             // Sent once the Solar Lens is ordered: it leaves when it is done. One a star, and never taken back.

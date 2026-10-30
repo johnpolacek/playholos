@@ -332,7 +332,7 @@ export function nearestReading(read: Read): Reading {
 /** What our sails or probe saw of Proxima b, as a reading on its lead, landing the Year their word reached us. The
  *  pictures settle what it is. A probe reads its air too. 2026-10-22. */
 export function visitReading(v: Visit): Reading {
-  if (v.by === "lens") return lensReading(v);
+  if (v.by === "lens" || v.by === "hyper") return lensReading(v);
   if (v.by === "sentinel") return sentinelReading(v);
   if (v.by === "seed") return seedReading(v);
   const who = v.by === "sails" ? "Our sails’" : "Our probe’s";
@@ -619,7 +619,8 @@ function isco(spin: number) {
   return 3 + z2 - Math.sqrt((3 - z1) * (3 + z1 + 2 * z2));
 }
 
-/** What a lens at the Sun's focus pictured of a felt world, as a reading on its lead: everything wider than its pixel.
+/** What a lens at the Sun's focus, or since 2026-10-29 the Hypertelescope, pictured of a felt world, as a reading on its
+ *  lead: everything wider than its pixel.
  *  Cities and cleared fields say someone lives there. A world whose makers are gone looks merely alive. 2026-10-26. */
 function lensReading(v: Visit): Reading {
   const px = `about ${Math.round(v.km ?? 0)} km a pixel`;
@@ -634,14 +635,19 @@ function lensReading(v: Visit): Reading {
     rocks: ["Only rock", "no world.", "A lens pictures only a world we have felt."],
   };
   const [title, saw, mind] = SAW[v.sight];
+  // Too wide a pixel for fields or towns: forests say life, and nothing says who. 2026-10-29.
+  const blur = v.coarse && v.sight === "green"
+    ? "Something there turns starlight into life, as our plants do. Its pixels are far wider than any field or town, so whether anyone lives there, it can’t tell. A lens could."
+    : null;
+  const hyper = v.by === "hyper";
   return {
-    id: `lens-${slugOf(v.star)}-${v.sight}`,
+    id: `${hyper ? "hyper" : "lens"}-${slugOf(v.star)}-${v.sight}`,
     needs: "",
     at: Math.floor(v.home * 10 + 1e-9) / 10,
-    by: "Our lens",
+    by: hyper ? "Our Hypertelescope" : "Our lens",
     title,
-    line: `Our lens at the Sun’s focus pictured its face, ${px}: ${saw}`,
-    mind,
+    line: `${hyper ? "Our Hypertelescope" : "Our lens at the Sun’s focus"} pictured its face, ${px}: ${saw}`,
+    mind: blur ?? mind,
     now: v.sight === "haze" ? ["almost no chance", "almost certain", "almost no chance"] : ["almost certain", "almost no chance", "almost no chance"],
     tells: v.sight === "cities" ? ["Listening there, or a knock, would tell us more. A knock tells them we are here."] : ["To learn more we would have to go there."],
     sight: v.sight,

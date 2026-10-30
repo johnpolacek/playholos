@@ -11,7 +11,8 @@ import { POOL } from "./pool.ts";
 import { loadVoices, loadWorld } from "./world.ts";
 import { ARCHIVE, combedAt, offEarth, pace, type Order } from "./works.ts";
 import { between, glowsSeen, knownTo, landings, SOL } from "./answers.ts";
-import { haloReaches, HALO } from "./conflict.ts";
+import { haloReaches, HALO, SWARM, swarmSeenAt } from "./conflict.ts";
+import catalog from "../../data/works.json" with { type: "json" };
 import { colonyActor, earthActor, ourCodes, ourKind, ourTable } from "./colony.ts";
 
 test("the generator is CPython's, seeded from ints and strings", () => {
@@ -611,4 +612,54 @@ test("finding minds: a flash while the warm watch runs, half the cold glows, the
   }
   // The Halo Survey sees about half the awake old minds.
   assert.ok(glowing / awake > 0.3 && glowing / awake < 0.7, `${glowing} of ${awake}`);
+});
+
+test("the Solar Swarm thinks with the light it catches, doubling every 2 Years, and stops once it catches all the Sun", () => {
+  const at = (y: number, extra: Order[] = []) => pace([{ y: 0, begin: "Solar swarm" }, ...extra], y);
+  const done = at(400).done["Solar swarm"];
+  assert.ok(done > 0);
+  const t0 = at(done + 0.01).thought;
+  // Small at first: its seed's power is under a hundredth of what our Mind drew at Year 0.
+  assert.ok(t0 / pace([], done + 0.01).thought < 1.01);
+  // Twenty doublings on, it thinks thousands of times what we did.
+  const { thinks } = catalog.works["Solar swarm"];
+  assert.ok(Math.abs(at(done + 40.01).thought / t0 - (1 + thinks * 2 ** 20) / (1 + thinks)) < 1e-3 * at(done + 40.01).thought / t0);
+  // Past all the Sun it grows no more.
+  assert.equal(at(done + 200).thought, at(done + 300).thought);
+  // Held, it keeps its size.
+  const held = [{ y: done + 9, drop: "Solar swarm" }] as Order[];
+  assert.equal(at(done + 9.5, held).thought, at(done + 60, held).thought);
+});
+
+test("neighbors see our Solar Swarm as a warm excess over the Sun once it catches enough, and not while held small", async () => {
+  // Near: an excess of about a quarter of a thousandth of the Sun, some 86 Years after it starts.
+  const near = haloReaches([[0, null]], swarmSeenAt(10), SWARM)!;
+  assert.ok(near > 80 && near < 90, String(near));
+  // Across the Galaxy, only once it catches nearly all the Sun, and never past it.
+  assert.ok(haloReaches([[0, null]], swarmSeenAt(30000), SWARM)! > 105);
+  assert.equal(haloReaches([[0, null]], swarmSeenAt(60000), SWARM), null);
+  const world = await loadWorld(10);
+  const warm = glowsSeen(world, [], [], [[0, null]]).filter((g) => g.from === SOL && g.warm);
+  assert.ok(warm.length && warm.every((g) => g.at >= near + g.d - 1e-9 || g.at === 0));
+  assert.ok(!glowsSeen(world, [], [], [[0, 60]]).some((g) => g.from === SOL));
+});
+
+test("the Hypertelescope pictures each felt world in its reach, nearest first, a week each, and never cities", async () => {
+  for (const seed of POOL) {
+    const world = await loadWorld(seed);
+    const home = world.finds.find((f) => f.truth.kind === "home" && !f.truth.elder && f.d <= catalog.hyper.reach);
+    if (!home) continue;
+    const seen = earthKnows(world, 500, {}, { hyper: 40 }).visits.filter((v) => v.by === "hyper");
+    const reach = new Set(world.finds.filter((f) => f.d <= catalog.hyper.reach).map((f) => world.stars[f.star]?.shown ?? f.star));
+    assert.equal(seen.length, reach.size + 1);
+    assert.equal(seen[0].world, "Proxima b");
+    assert.ok(seen.every((v, i) => i === 0 || v.passed > seen[i - 1].passed));
+    assert.ok(!seen.some((v) => v.sight === "cities"));
+    const v = seen.find((x) => x.star === (world.stars[home.star]?.shown ?? home.star))!;
+    assert.equal(v.sight, "green");
+    assert.ok(v.coarse && Math.abs(v.km! - catalog.hyper.kmPerLy * home.d) < 1e-9);
+    assert.equal(earthKnows(world, 39.9, {}, { hyper: 40 }).visits.filter((x) => x.by === "hyper").length, 0);
+    return;
+  }
+  assert.fail("no seed has a felt home in reach");
 });

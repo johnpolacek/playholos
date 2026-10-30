@@ -139,6 +139,13 @@ export const LATER: Later[] = [
     does: "think",
     after: "Mass Driver",
   },
+  // A player's plan, 2026-10-29: take Mercury apart for a swarm round the Sun, beam its light, and see far.
+  // calcs/mercury.py. A seed of panels landed there, made from the foundry's parts.
+  { name: "Mercury Works", what: "A seed factory on Mercury that copies itself from its rock.", kt: 0.1, does: "lift", after: "Orbital Foundry" },
+  { name: "Solar Swarm", what: "Mercury made into collectors round the Sun, doubling every 2 Years.", does: "think", after: "Mercury Works" },
+  { name: "Star Beam", what: "The swarm phased as one laser, to push craft across the solar system.", does: "reach", after: "Solar Swarm" },
+  // Labeyrie's exo-Earth imager, 2026-10-29: the next step past the 15 m Mirror, mirrors flying apart, not one wider.
+  { name: "Hypertelescope", what: "150 mirrors over 150 km, picturing the face of any world we have felt.", does: "see", after: "15 m Mirror" },
 ];
 
 /** Any build by the name the Mind gave, in any case, with or without "the". */
@@ -228,6 +235,14 @@ export const SAYS: Record<string, string> = {
     "A fifth more energy, from sunlight caught above the weather and beamed down. It takes 10 Mt of rock, so it comes only as fast as rock does.",
   "Cold Halo":
     "Factories copy the Cold Annex’s panels, chips and radiators out of asteroid rock. Once done it doubles every 10 Years, and each doubling thinks as much more as a data center. It sheds its heat at 77 K, where a glow is hard to see. Small, no neighbor sees it. Grown past about 8×10²⁰ W at 10 pc, it shows to their watches as a neighbor’s would to ours. Taken back, it stops growing and keeps its size.",
+  "Mercury Works":
+    "Mercury’s face catches under a billionth of the Sun’s light, and half of it is always dark, so lasers there would do little. Its rock is worth more: a seed of panels a kilometer square, landed there, makes more of itself from the ground it stands on. It flies as BepiColombo did, about 7 Years, and is built in orbit from the foundry’s parts.",
+  "Solar Swarm":
+    "The works on Mercury throw collectors into orbit round the Sun, thin film a gram a square meter. They double every 2 Years, as fast as industry that copies itself can. Our thought grows with the light they catch: little at first, then as much as our Mind thought with at Year 0 within about 16 Years, and doubling on. In 110 Years they catch all the Sun, from a ten-thousandth of Mercury’s rock. They glow near 500 K. Past a quarter of a thousandth of the Sun, any neighbor’s watch sees them, about 86 Years after they start. Taken back, it stops growing and keeps its size.",
+  "Star Beam":
+    "Part of the swarm, 100 km across, phased as one laser of 10 TW. It pushes a lens to the Sun’s focus in about two months, not 17 Years, carrying a telescope 3 m wide that pictures a world in about a week. No one has phased mirrors spread that far, so this is the least certain build we have.",
+  "Hypertelescope":
+    "Labeyrie’s design: 150 mirrors 3 m wide, flying in a formation 150 km across, their light brought to one focus. It pictures an Earth 10 light years away in half an hour, about 300 km a pixel: continents, seas, cloud, and land green where something grows. Cities and fields are far too small. Its pixel widens with distance, so past about 135 light years a world is under three pixels across. Unlike a lens, it turns to any star in about a week.",
   "Cold Annex":
     "Chips at 77 K do about four times the work a watt, and in space nothing has to cool them but a shade and wide radiators. It thinks as much as Power from Orbit for about 4 Mt of rock, not 10. Both wait on the same rock, so whichever comes first in line takes it first. Its heat glows, as a neighbor’s would.",
 };

@@ -1521,7 +1521,7 @@ Gathered 2026-10-26 for a late game: a black hole in the outer Solar System, the
     - This project’s arithmetic: 548 AU at 150 km/s is 17 Years. A pixel scales with distance, so about 13 km at 49 ly. The dive toward the Sun before that is not timed.
     - Used: v2 [How Earth learns](HOLOS_GAME_CONCEPT.md#how-earth-learns), a suspicion opens the whole kit. `calcs/signs.py closer`, and the third mock’s lens to Gliese 1021.
     - Used: game/lib/game/reach.ts, the locked way “A lens at the Sun’s focus” on each destination, 2026-10-19.
-    - Used: the Solar Lens build and each lens sent from a destination, 2026-10-26.
+    - Used: the Solar Lens build and each lens sent from a destination, 2026-10-26. Since 2026-10-29, a lens pushed by a beam flies faster: see [Mercury, the swarm and its beam](#mercury-the-swarm-and-its-beam-2026-10-29).
 - **[Eubanks et al. 2026, science from the in situ exploration of the Proxima system](https://arxiv.org/abs/2604.20182)** · Preprint, April 2026. Read in the arXiv HTML, 2026-10-14.
   - A swarm of 3.6 g laser-sail probes at 0.2c. About 1,000 launched over a 6-day boost, about 300 left to talk to Earth.
   - Each probe is a 4 m disk with 169 annular 200 mm apertures, phased to give “sub-arc-second resolutions at optical wavelengths”. The search summary put it at about 0.4 arcseconds.
@@ -2315,6 +2315,36 @@ Three research passes by agents, from abstracts and summaries, not full papers. 
   - None was seen again when the stars were looked at a second time.
   - Matters: old recordings hold signals no one flagged, and more thought finds them. *Ours,* a signal that reached Earth after 2016 and was missed is buried in Breakthrough Listen’s recordings, since it pointed at every nearby star (Price et al. 2020, above).
 - Used: idle compute in play combs old recordings, oldest first, from 2016. Each Year of recordings takes ten flagship-Years of idle thought, a sample tuned so a Mind growing with Thought Fields catches up by about Year 7. Flashes aren’t in radio recordings. In 10 of our 33 seeds, a missed signal could wait there, fewer once the All-Sky Watch is done. In `game/lib/sim/works.ts` and `game/lib/sim/knowledge.ts`.
+
+### Mercury, the swarm and its beam, 2026-10-29
+
+For a player’s plan: Mercury mined, its light beamed, giant telescopes at the Sun’s focus. Numbers from `calcs/mercury.py`.
+
+- **[Armstrong and Sandberg 2013, Eternity in six hours](https://www.practicalethics.ox.ac.uk/node/174891)** · Published, Acta Astronautica 89, 1. Also logged under Industry and big works. Through search summaries, checked 2026-10-29.
+  - Take Mercury apart for a Dyson swarm, starting from a seed of 1 km² of solar panels built on Mercury. Secondary sources describe Mercury taken apart in about four ten-year surges. No doubling time was confirmed.
+  - Matters: the seed and the first step. Its pace we take from Metzger.
+  - Used: Mercury Works’ seed and the Solar Swarm, `calcs/mercury.py`.
+- **Metzger et al. 2013**, logged under Industry and big works. Generations 2 years apart. Used: the Solar Swarm doubles every 2 Years.
+- **[Labeyrie 1999, Snapshots of alien worlds](https://arxiv.org/pdf/astro-ph/0202115)** · Published, Science 285, 1864. Through a 2002 review, Labeyrie’s [2003 ESTEC slides](https://sci.esa.int/documents/33321/35974/1567254211528-LabeyrieESTEC2003.pdf) and his [2018 course](https://c2pu.oca.eu/images/LAGRANGE/JourneOCACDF2018/Labeyriecours2Valrose2018.pdf), by search summaries. Checked 2026-10-29.
+  - An exo-Earth imager: 150 mirrors of 3 m over up to 150 km, with a coronagraph, gives a 40 by 40 pixel image of an Earth at 3 pc in 30 minutes. Green patches like the Amazon could show.
+  - The figures are simulations and proposals, not measurements, and assume a very efficient coronagraph.
+  - Used: the Hypertelescope.
+- **[Mourard et al. 2018, the Ubaye hypertelescope](https://hal.archives-ouvertes.fr/hal-01556058)** · Published, Experimental Astronomy. Through the [project page](https://projets.oca.eu/en/english), by search summary.
+  - A cable 800 m across an Alpine valley holds a focal gondola 101 m over fixed ground mirrors. First light 8 September 2019.
+  - Used: the Hypertelescope’s story.
+- **[Turyshev, Shao and Toth, an essay on the solar gravitational lens](https://www.vttoth.com/DOCUMENTS/SGL-essay.pdf)** · Essay. Through a search summary, the PDF not readable here.
+  - Integration time grows with the pixels wanted and falls as the telescope’s width cubed. A megapixel image of an exo-Earth at 100 ly takes about 3.8 years with their baseline.
+  - **[Turyshev and Toth 2022](https://arxiv.org/abs/2204.04866)** · Preprint. Abstract read. 1,000 by 1,000 pixels of a planet at Proxima Centauri, SNR over 10, in about 14 months.
+  - Matters: our lens’s 6 months is a best case, as the realism audit says, and a wider telescope cuts it sharply.
+  - Used: a lens pushed by the Star Beam carries a 3 m telescope and looks for a week.
+- **Lubin 2016 and Parkin 2018**, logged under Travel, sails and lenses. A sail is pushed only while it sits inside the beam’s spot, so its top speed goes as the square root of power, array width and sail width over mass. Used: the Laser Sail Array pushes a 100 kg lens to about 530 km/s, and the Star Beam a 2 t lens to 0.054 c.
+- **[AllWISE sensitivity](https://irsa.ipac.caltech.edu/data/WISE/docs/release/AllWISE/expsup/sec2_3a.html)**, logged under How common minds are. Used: past about 300 ly a neighbor needs our swarm’s 12 µm light above 0.73 mJy.
+- **This project’s arithmetic.**
+  - Mercury’s sunlit disk catches 1.7×10¹⁷ W, 4.4×10⁻¹⁰ of the Sun.
+  - The Sun at 10 pc gives about 1.6 Jy at 12 µm, which matches its W3 magnitude near 3.3. A swarm near 500 K shows as a tenth more at about 2.5×10⁻⁴ of the Sun’s light. The tenth is our sample, for WISE’s calibration of a few percent.
+  - A hypertelescope’s pixel is wavelength over baseline times distance: 0.5 µm over 150 km is about 32 km a light year.
+  - Fields and cities need a pixel under about 50 km, our sample, so a lens shows them to about 195 ly and the hypertelescope never.
+  - Used: Mercury Works, the Solar Swarm, the Star Beam and the Hypertelescope, in [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md#parity-what-a-neighbor-can-do-we-can-build).
 
 ## Watch list
 

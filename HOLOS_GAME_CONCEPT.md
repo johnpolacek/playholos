@@ -994,6 +994,26 @@ Settled 2026-10-28, from the designer: anything available to another civilizatio
   - *Who sees it:* a neighbor’s watch, as well as our Halo Survey, needs (77/12)³ times the power for a 77 K glow as for 12 K: about 8×10²⁰ W at 10 pc, less nearer, as the square of distance. From the annex’s 1,200 GW that is about 26 doublings for a watcher 10 ly out, some 260 Years. Once seen, it is news to them as a neighbor’s glow is: a hum, by their tables.
   - *Holding it is our hide.* Taken back, it keeps its size and stops growing, so its glow freezes, as a neighbor’s does when it hides. Ordered again, it grows on.
   - *Not yet:* our Halo Survey seeing our own, and a close view of it grown past its first rings.
+- **Mercury, its swarm, its beam, and a wider eye, 2026-10-29.** From a player’s plan: mine Mercury, cover it in solar cells and lasers, beam power across the system, send giant telescopes to the Sun’s focus, and see every warm world near us. Each step checked against the physics, and changed where it failed. Numbers from `python3 calcs/mercury.py`.
+  - *Mercury’s face is the wrong place for lasers.* Its sunlit disk catches about 1.7×10¹⁷ W, under a billionth of the Sun. Its day lasts 176 of ours, so half its face is dark, and a laser on the ground sees only the sky above it.
+  - *Taking it apart works.* Armstrong and Sandberg 2013: a seed of 1 km² of panels on Mercury, its rock thrown up as collectors round the Sun. A full shell at Mercury’s distance, at 1 g/m², is about 4×10¹⁹ kg, a ten-thousandth of Mercury.
+  - *Mercury Works:* the seed, about 100 t, built from the foundry’s parts and flown as BepiColombo was. It opens after the Orbital Foundry. 12 Years and 3 flagships, samples.
+  - *Solar Swarm:* opens after Mercury Works. 4 Years, then it doubles every 2, Metzger’s generation, inside the 1 to 5 Years a neighbor’s build-out takes. All the Sun after about 55 doublings, 110 Years.
+    - *It thinks with what it catches.* Our thought grows by its power over the 240 GW our Mind drew at Year 0, as steps of 1.5. Small for 16 Years, then about a doubling of thought each doubling.
+    - *Its glow is warm,* collectors near 500 K. A neighbor’s watch, WISE-like, sees an excess once it is a tenth of the Sun’s own 12 µm light: about 2.5×10⁻⁴ of the Sun, 9×10²² W, some 86 Years in, at any distance within about 300 ly. Farther, their 0.73 mJy floor needs more, and from 30,000 ly nearly all the Sun.
+    - *Holding it is our hide,* as the Cold Halo’s is.
+  - *Star Beam:* opens after the Solar Swarm. A 100 km patch of it phased as one 10 TW laser, Lubin’s DE-STAR grown. 10 Years and 2 flagships, samples. Phasing mirrors spread that far is untested: the least certain build we have.
+    - *It pushes lenses.* A 2 t lens with a 3 m telescope and a 100 m sail reaches 0.054 c, the Sun’s focus in about two months. Looking time falls as the telescope’s width cubed (Turyshev, Shao and Toth), so a week, not half a Year.
+    - *The Laser Sail Array pushes lenses too.* Starshot’s 200 GW from 2.7 km pushes a 100 kg lens with a 10 m sail to about 530 km/s, 5 Years out, not 17. A finding of this check: it was always so, and the game now has it.
+    - *Unseen by the star a lens looks at.* The lens flies away from its star, and so does the beam.
+  - *Hypertelescope:* Labeyrie’s exo-Earth imager, opening after the 15 m Mirror. 150 mirrors 3 m wide over 150 km, near L2. 20 Years and 2 flagships, samples.
+    - *About 32 km a pixel for each light year:* 134 km at Proxima b, 315 at 10 ly. An Earth at 10 ly is 40 pixels across in 30 minutes, Labeyrie’s figure.
+    - *Every felt world within 135 ly,* nearest first, a week each to move its focus craft, a sample. Past 135 ly an Earth is under 3 pixels.
+    - *As far off as a world is, fewer pixels hold its light,* so each pixel gets as much, and the same 30 minutes serves.
+    - *Never cities.* Fields and towns need a pixel under about 50 km, which it has only within 1.6 ly. A home reads as forests, and the Mind says it can’t tell who lives there.
+  - *The same rule for lenses.* A lens’s pixel passes 50 km past about 195 ly, and there it shows forests, not cities.
+  - *Not yet:* Mercury on the map, so these three have no place there; close views; the Star Beam pushing seed ships; a hypertelescope grown wider from the swarm’s mirrors; peers across the Galaxy seeing our swarm.
+  - *Why not every world in our quadrant.* A lens sees one star a craft. A hypertelescope can turn to any, but resolving cities at 10,000 ly needs a baseline near 2 million km. The physics allows it, built from the swarm, but nothing like it is designed.
 
 ## Hostility
 

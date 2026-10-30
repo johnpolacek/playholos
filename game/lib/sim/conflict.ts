@@ -5,6 +5,7 @@
 import type { Reaction } from "../game/types.ts";
 import { STRIKE_READY, STRIKE_V } from "./meetings.ts";
 import type { Neighbor, World } from "./types.ts";
+import catalog from "../../data/works.json" with { type: "json" };
 
 /** A bullet, ours or theirs: 1,000 t at a tenth of light speed, readied in 20 Years. Each tonne lands with 108 Mt, so
  *  it lands with about 110,000 Mt, enough to scar the air worldwide and cool the climate. Chicxulub would take over
@@ -178,10 +179,19 @@ export function hidesOf(world: World, done: readonly { star: string; at: number;
  *  heat at 77 K, where the same watch needs (77/12)^3 times the power it needs at 12 K: calcs/kin.py. 2026-10-28. */
 export const HALO = { watts: 1.2e12, doubling: 10, warmer: (77 / 12) ** 3 };
 
-/** The Year our halo's glow first reaches `need` watts, from the spans it grew, or null if it never does. */
-export function haloReaches(spans: readonly [number, number | null][], need: number) {
+/** Our Solar Swarm's glow: it starts at the sunlight Mercury Works' seed catches, doubles every 2 Years while it grows,
+ *  up to all the Sun, and sheds its heat near 500 K. A neighbor's watch sees it as an infrared excess over the Sun once
+ *  it sheds a quarter of a thousandth of the Sun's light, or, far off, once it passes their floor, as the square of
+ *  distance. calcs/mercury.py. 2026-10-29. */
+export const SWARM = { watts: catalog.swarm.watts, doubling: catalog.swarm.doubling, most: 3.828e26 };
+export const swarmSeenAt = (ly: number) => Math.max(catalog.swarm.excess, catalog.swarm.perLy2 * ly * ly);
+
+/** The Year our halo's glow first reaches `need` watts, from the spans it grew, or null if it never does. The swarm's
+ *  too, from its own start and pace. */
+export function haloReaches(spans: readonly [number, number | null][], need: number, { watts, doubling, most = Infinity }: { watts: number; doubling: number; most?: number } = HALO) {
   let years = 0;
-  const want = HALO.doubling * Math.log2(need / HALO.watts);
+  if (need > most) return null;
+  const want = doubling * Math.log2(need / watts);
   if (want <= 0) return spans[0]?.[0] ?? null;
   for (const [a, b] of spans) {
     const len = b === null ? Infinity : b - a;

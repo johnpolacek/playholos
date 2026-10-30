@@ -27,7 +27,8 @@ import {
   takes,
   PAST,
 } from "@/lib/game/plan";
-import { haloDone, haloSpans } from "@/lib/game/halo";
+import { GROWS, grownDone, grownSpans } from "@/lib/game/halo";
+import { SWARM } from "@/lib/sim/conflict";
 import { SITES } from "@/lib/game/sites";
 import { FOUND, harm, rockAt, rockOf } from "@/lib/game/rocks";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
@@ -78,25 +79,32 @@ function InPlay({ name, scale, done }: { name: string; scale: number; done: Reco
     return { at: schedule(orderLater(name, now)(plan), scale)[name], left: back === null ? null : keptOf(plan, scale, name, now) };
   }, [now, back, fresh, name, plan, scale]);
   if (now === null) return null;
-  // The Cold Halo, once done, grows until taken back. Holding it keeps its size, and growing again picks up there.
-  // 2026-10-28.
-  if (name === "Cold Halo") {
-    const at = haloDone(plan, scale);
+  // The Cold Halo, and since 2026-10-29 the Solar Swarm, once done, grow until taken back. Holding one keeps its size,
+  // and growing again picks up there. 2026-10-28.
+  if (GROWS.includes(name)) {
+    const at = grownDone(plan, scale, name);
     if (at !== null && at <= now) {
-      const grew = haloSpans(plan, scale, at).reduce((y, [a, b]) => y + Math.max(0, Math.min(b ?? now, now) - a), 0);
+      const grew = grownSpans(plan, scale, name, at).reduce((y, [a, b]) => y + Math.max(0, Math.min(b ?? now, now) - a), 0);
       const growing = back === null;
+      const swarm = name === "Solar Swarm";
+      const every = swarm ? SWARM.doubling : 10;
+      const n = Math.floor(grew / every);
+      const full = swarm && SWARM.watts * 2 ** n >= SWARM.most;
+      const sheds = swarm ? `catches about ${watts(Math.min(SWARM.most, SWARM.watts * 2 ** n))} of sunlight, near 500 K` : `sheds about ${watts(1.2e12 * 2 ** (grew / 10))} at 77 K`;
       return (
         <div className="flex flex-col">
           <p className="mt-2.5 text-[13px] leading-snug text-page-ink2">
-            {`Done at Year ${tenths(at)}. It has doubled ${Math.floor(grew / 10)} times, and sheds about ${watts(1.2e12 * 2 ** (grew / 10))} at 77 K. `}
-            {growing ? "It doubles every 10 Years while it grows." : `We hold it at its size, since Year ${tenths(back!)}.`}
+            {`Done at Year ${tenths(at)}. It has doubled ${n} times, and ${sheds}. `}
+            {full ? "It catches all the Sun, and can grow no more." : growing ? `It doubles every ${every} Years while it grows.` : `We hold it at its size, since Year ${tenths(back!)}.`}
           </p>
-          <button
-            onClick={() => change(growing ? takeBack(name, now) : orderLater(name, now))}
-            className={`mt-2.5 h-11 rounded-full text-[15px] font-medium ${growing ? "border border-ink" : "bg-ink text-paper"}`}
-          >
-            {growing ? "Hold Its Size" : "Let It Grow"}
-          </button>
+          {!full && (
+            <button
+              onClick={() => change(growing ? takeBack(name, now) : orderLater(name, now))}
+              className={`mt-2.5 h-11 rounded-full text-[15px] font-medium ${growing ? "border border-ink" : "bg-ink text-paper"}`}
+            >
+              {growing ? "Hold Its Size" : "Let It Grow"}
+            </button>
+          )}
         </div>
       );
     }

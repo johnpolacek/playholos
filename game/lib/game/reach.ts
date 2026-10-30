@@ -85,28 +85,44 @@ export const LENS_HOME = LENS.flight + LENS.look + LENS.au / LY_AU;
 /** A lens's pixel, in km across a world `ly` away. */
 export const lensKm = (ly: number) => (LENS.km30pc * ly) / (30 * 3.2616);
 
+/** How a lens flies, by the strongest beam done when it leaves. The Star Beam pushes it out in about two months, with a
+ *  telescope 3 m wide that looks for a week. The Laser Sail Array, Starshot's 200 GW, pushes a 100 kg lens to about
+ *  530 km/s, 5 Years out. Without either, a dive past the Sun, 17 Years. calcs/mercury.py. 2026-10-29. */
+export function lensTrip(done: Record<string, number | null>, leaves: number) {
+  const by = (n: string) => done[n] != null && done[n]! <= leaves;
+  const push = by("Star Beam") ? "Star Beam" : by("Laser Sail Array") ? "Laser Sail Array" : null;
+  const flight = push === "Star Beam" ? CATALOG.beams.beam : push ? CATALOG.beams.array : LENS.flight;
+  const look = push === "Star Beam" ? CATALOG.beams.look : LENS.look;
+  return { push, flight, look, home: flight + look + LENS.au / LY_AU };
+}
+
 /** Each lens we sent: its star, and the Year it leaves, once the Solar Lens is done, begins to look, and its picture
  *  reaches us. Null while the Solar Lens isn't done or ordered. 2026-10-26. */
 export function lenses(plan: Plan, scale: number) {
-  const done = schedule(plan, scale)["Solar Lens"] ?? null;
+  const done = schedule(plan, scale);
   return (plan.lenses ?? []).map((o) => {
-    const leaves = done === null ? null : Math.max(o.y, done);
-    return { star: o.name, leaves, looks: leaves === null ? null : leaves + LENS.flight, home: leaves === null ? null : leaves + LENS_HOME };
+    const leaves = done["Solar Lens"] == null ? null : Math.max(o.y, done["Solar Lens"]!);
+    const trip = leaves === null ? null : lensTrip(done, leaves);
+    return { star: o.name, leaves, looks: leaves === null ? null : leaves + trip!.flight, home: leaves === null ? null : leaves + trip!.home };
   });
 }
 
 /** A lens to a star as a road: the Solar Lens built, the lens leaving once it is done and sent, reaching the focus,
  *  and its picture home. Sent or not, dated as if sent at Year `from`, and the Solar Lens, if not in our order, as if
  *  begun then. */
-export function lensRoad(plan: Plan, scale: number, from: number, star: string): Road {
+export function lensRoad(plan: Plan, scale: number, from: number, star: string): Road & { push: string | null } {
   const { orders, ...opts } = ordersOf(plan);
   const ordered = plan.builds.includes("Solar Lens") || (plan.later ?? []).some((o) => o.name === "Solar Lens");
   const more: Order[] = ordered ? [] : [{ y: from, begin: pacedName("Solar Lens") }];
   const done = pace([...orders, ...more], 200, { scale, ...opts }).done[pacedName("Solar Lens")] ?? null;
   const sent = (plan.lenses ?? []).find((o) => o.name === star);
   const leaves = done === null ? null : Math.max(sent?.y ?? from, done);
-  const arrives = leaves === null ? null : leaves + LENS.flight;
-  return { name: "Send a lens", n: sent ? 1 : null, build: "Solar Lens", craft: "A lens", speed: 0, done, leaves, arrives, home: leaves === null ? null : leaves + LENS_HOME };
+  const trip = leaves === null ? null : lensTrip(schedule(plan, scale), leaves);
+  const arrives = leaves === null ? null : leaves + trip!.flight;
+  return {
+    name: "Send a lens", n: sent ? 1 : null, build: "Solar Lens", craft: "A lens", speed: 0, done, leaves, arrives,
+    home: leaves === null ? null : leaves + trip!.home, push: trip?.push ?? null,
+  };
 }
 
 /** A sentinel, v1's and the neighbors' own probe: the Probe Yard builds it in 20 Years once the yard, a Fusion Drive
@@ -264,6 +280,7 @@ export function kitOf(plan: Plan, scale: number) {
     mirror: done["15 m Mirror"] ?? null,
     halo: done["Halo Survey"] ?? null,
     mapper: done["Star Mapper"] ?? null,
+    hyper: done["Hypertelescope"] ?? null,
     colony: (() => {
       const c = plan.colony;
       if (!c) return null;

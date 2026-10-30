@@ -2,7 +2,7 @@
 // exist, guessed whether a watch was done, and called the drift scan our only ear at Year 40 with the All-Sky Watch long
 // built. Times are Build's: a build's standard pace, and each one in our order as schedule dates it. 2026-10-23.
 import { BUILDS, kt, LATER, ordered, takenAt, takes } from "@/lib/game/plan";
-import { LENS_HOME } from "@/lib/game/reach";
+import { lensTrip } from "@/lib/game/reach";
 import { FOUND, harm, rockAt, type Rock } from "@/lib/game/rocks";
 import type { Plan } from "@/lib/game/types";
 
@@ -14,7 +14,7 @@ const tenth = (y: number) => Number(y.toFixed(1));
 // the Mind had promised to point it. 2026-10-23.
 const MORE: Record<string, string> = {
   "Infrared Telescope": "It reads three gases in a world's air: water, oxygen and ozone. Once done, it looks at every world we've felt on its own, nearest first, so no one aims it.",
-  "Solar Lens": "Once done, the Will sends each lens from a destination's page on Reach, one a star, only to a world we've felt. A lens reaches the Sun's focus about 17 Years after it leaves, looks for half a Year, and its picture is home about 3 days later. It shows what is wider than its pixel, about 25 km at 100 ly: cities, cleared land, forests, ice. Never roads or dams.",
+  "Solar Lens": "Once done, the Will sends each lens from a destination's page on Reach, one a star, only to a world we've felt. A lens reaches the Sun's focus about 17 Years after it leaves, looks for half a Year, and its picture is home about 3 days later. Once the Laser Sail Array is done, it pushes each lens out in about 5 Years instead, and once the Star Beam is done, in about two months, carrying a telescope 3 m wide that looks for a week. It shows what is wider than its pixel, about 25 km at 100 ly: cities, cleared land, forests, ice. Never roads or dams.",
   "Probe Yard": "It builds flyby probes, and sentinels: once a Fusion Drive and the Deuterium Works are done too, the Will can send a sentinel from a destination's page on Reach, one a star. The yard builds it in 20 Years. It flies at a tenth of light speed, brakes on its flame and stays, and sees what a flyby can't: who lives there, or their ruins. Its braking flame points at the star, so whoever lives there may see it come.",
   "Star Mapper": "Once done, it watches on its own and finds each black hole the first time it passes close in front of a star it sees, a few each decade. A black hole found becomes a destination on Reach, where a sentinel can go. A hole is worth having: rock fed to it gives back 6% to about 30% of its mass as light, where fusion gives under 1%, it swallows heat unseen, and close in a clock runs up to 10 times slow. Using it costs little in being seen: a braking flame shows only close in, and a furnace stays below what X-ray surveys see until it grows past about a millionth of the Sun's output. A neighbor nearer to a hole may reach it first.",
   "Seed Ship": "It carries one copy of our Mind, so it goes to one place, from that place's page on Reach. To a black hole we have found, to feed the hole for power or to hide in its shadow: a furnace grows fast and shows to X-ray surveys once it passes about a millionth of the Sun, and a refuge stays small and unseen. Or to a star with a world we know, the world next door or one we have felt, to settle on its light and rock. Anyone living there sees it brake in. Any of these is a Mind of ours that lives if Earth does not.",
@@ -30,6 +30,10 @@ const MORE: Record<string, string> = {
   "Ground Solar": "Its fifth more energy counts once it is done, but it fits a whole data center more only on some Earths, where the grid had nearly room for one. On most it adds energy we don't yet think with.",
   "Fusion Plants": "Once done, the grid holds half again as much energy, so one more data center of Thought Fields fits. Until then it adds nothing to our thought: the fleet grows by breeding its own tritium, and the energy counts once it stands.",
   "Cold Halo": "It doubles every 10 Years once done, each doubling a data center's step of thought, until the Will takes it back, which stops it growing. Its glow at 77 K starts at the Cold Annex's 1,200 GW. A neighbor sees it once it passes about 8×10²⁰ W at 10 pc, less nearer, as the square of distance: at 10 ly, about 26 doublings, some 260 Years. Once seen, it is news to them that someone is there.",
+  "Mercury Works": "Once done, it opens the Solar Swarm. On its own it adds nothing yet: it is the seed the swarm grows from.",
+  "Solar Swarm": "It doubles every 2 Years once done, until the Will takes it back, which stops it growing. Our thought grows with the light it catches over what our Mind drew at Year 0, about 240 GW: little for 16 Years, then about a doubling of our thought with each of its own. It stops growing once it catches all the Sun, about 110 Years in. Its heat near 500 K shows to any neighbor's watch as an excess over the Sun once it sheds about 9×10²² W, some 86 Years in, as a neighbor building out its home would show to ours. Neighbors far past 300 ly need more. Holding it before then keeps us unseen.",
+  "Star Beam": "Once done, each lens the Will sends after that is pushed to the Sun's focus in about two months, with a 3 m telescope that looks a week, so its picture is home about 3 months after it leaves. It pushes only lenses for now, not seed ships. Its beam points away from the star a lens looks at, so the star never sees it.",
+  "Hypertelescope": "Once done, it pictures every world we've felt within about 135 ly on its own, nearest first, a week each. Its pixel is about 32 km for each light year away: 134 km at Proxima b, 3,150 km at 100 ly. It shows seas, cloud, ice, bare rock and land green where something grows, but no fields or cities at any distance. A lens shows those.",
   "Cold Annex": "Its heat glows in the far infrared, grey, as a neighbor's cold computing would.",
   "15 m Mirror": "It splits worlds 2.3 times closer to their stars than the Infrared Telescope, and gathers five times the light. Once done, it reads Proxima b, then every world we've felt where it can read more than the Infrared Telescope, nearest first, on its own.",
 };
@@ -69,12 +73,14 @@ export function describeQueue(plan: Plan, done: Record<string, number | null>, y
     "The Will's order, in line, and where each build stands:",
     ...names.map((b) => (since(b) === undefined ? `- ${at(b)}` : `- ${at(b)} Ordered at Year ${since(b)}.`)),
     ...back.map((b) => `- ${b}: taken back at Year ${takenAt(plan, b)}, its work kept. Ordered again, it picks up there.`),
-    // Each lens sent, as reach.ts's lenses() dates it: it leaves once the Solar Lens is done.
+    // Each lens sent, as reach.ts's lenses() dates it: it leaves once the Solar Lens is done, pushed by the strongest
+    // beam done by then.
     ...(plan.lenses ?? []).map((o) => {
       const d = done["Solar Lens"];
       if (d == null) return `- A lens to ${o.name}, sent at Year ${o.y}: waits on the Solar Lens.`;
       const leaves = Math.max(o.y, d);
-      return `- A lens to ${o.name}, sent at Year ${o.y}: leaves at Year ${tenth(leaves)}, its picture home about Year ${tenth(leaves + LENS_HOME)}.`;
+      const trip = lensTrip(done, leaves);
+      return `- A lens to ${o.name}, sent at Year ${o.y}: leaves at Year ${tenth(leaves)}${trip.push ? `, pushed by the ${trip.push}` : ""}, its picture home about Year ${tenth(leaves + trip.home)}.`;
     }),
     // Our Mind sent to a black hole or a star on the Seed Ship.
     ...(plan.colony

@@ -181,13 +181,17 @@ def works_catalog():
     # Ground solar's fifth counts too, 2026-10-28: a whole data center more only where the grid's room was near one.
     works['Ground solar']['energy'] = 0.2
     works['Fusion plants'] = dict(years=eg.FUSION_YEARS, want=eg.WANTS['Fusion plants'][0], energy=eg.FUSION_ENERGY)
+    # Mercury Works, the Solar Swarm, the Star Beam and the Hypertelescope, settled 2026-10-29: calcs/mercury.py.
+    import mercury
+    more, kit = mercury.catalog()
+    works.update(more)
     return dict(works=works, floor=eg.FLOOR, push=eg.PUSH, flagship=eg.FLAGSHIP_THOUGHT, gridRoom=eg.GRID_ROOM, step=1.5,
                 dataCenter=dict(years=1, aside=0.05), halo=dict(floor=eg.HALO['floor'], every=eg.HALO['every']), lens=dict(au=signs.LENS_AU, flight=round(signs.LENS_FLIGHT, 3), look=signs.LENS_LOOK, km30pc=25),
                 sentinel=dict(build=S.ROCKET_BUILD, speed=S.ROCKET_V, burns=S.ROCKET_BURNS),
                 seedShip=dict(speed=S.SHIP_V, burn=S.BURN, brake=S.BRAKE, stands=S.STANDS),
                 seedProbe=dict(build=S.PROBE_BUILD, first=S.STANDS + S.FIRST_SHIP, every=S.EVERY, copies=S.PROBE_COPIES, generations=S.PROBE_GENERATIONS),
                 mindLink=dict(bits=H.MIND_BITS, aperture=H.LINK_APERTURE, watts=H.LINK_W, wave=H.LINK_WAVE, photons=H.LINK_PHOTONS), studies=0.1, yard=dict(work='Orbital yard', cut=0.25),
-                rock={'Mass driver': eg.DRIVER_KT, 'Belt mining': eg.MINING_KT, 'Orbital ring': eg.RING_KT})
+                rock={'Mass driver': eg.DRIVER_KT, 'Belt mining': eg.MINING_KT, 'Orbital ring': eg.RING_KT}, **kit)
 
 def mock_orders(order=eg.BY_START, extra=(), front=()):
     """The mocks' game as the player's orders: the first hour's builds as begun, the long roads at Year 12 in `order`."""

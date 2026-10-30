@@ -6,6 +6,8 @@ import { usePlan, useSchedule } from "@/components/picks";
 import { useLeads } from "@/components/scan";
 import { ListHead } from "@/components/tab-head";
 import { span, tenths } from "@/lib/game/clock";
+import { grownSpans } from "@/lib/game/halo";
+import { SWARM } from "@/lib/sim/conflict";
 import type { Reading } from "@/lib/game/leads";
 import { buildOf, buildSlug, computeAt, LAUNCH_LIFT, ordered, PAST } from "@/lib/game/plan";
 import type { Heard, Visit } from "@/lib/sim/types";
@@ -17,7 +19,7 @@ import type { Heard, Visit } from "@/lib/sim/types";
 const A = (move: string) => `${/^[aeiou]/.test(move) ? "an" : "a"} ${move}`;
 
 /** Our craft whose word a build's sights come home as. */
-const CRAFT: Record<string, Visit["by"]> = { "Laser Sail Array": "sails", "Probe Yard": "probe", "Solar Lens": "lens" };
+const CRAFT: Record<string, Visit["by"]> = { "Laser Sail Array": "sails", "Probe Yard": "probe", "Solar Lens": "lens", Hypertelescope: "hyper" };
 
 interface Known {
   now: number;
@@ -27,6 +29,8 @@ interface Known {
   visits: Visit[];
   /** Our compute now, as a multiple of Year 0's. */
   grown: number;
+  /** Our Solar Swarm's share of the Sun's light now, and whether it still grows. 2026-10-29. */
+  swarm: { share: number; growing: boolean } | null;
 }
 
 /** What a build does now, from what it has brought us, and whether that is news: landed in the last half Year. */
@@ -59,10 +63,23 @@ function doing(name: string, k: Known): { line: string; news: boolean } {
     const home = k.visits.filter((v) => v.by === craft && v.home <= k.now).sort((a, b) => a.home - b.home);
     if (home.length) {
       const v = home.at(-1)!;
+      // The Hypertelescope pictures many on its own: how many, and the latest. 2026-10-29.
+      if (craft === "hyper")
+        return { line: `Has pictured ${home.length === 1 ? "a world" : `${home.length} worlds`}. The latest, ${v.world}, at Year ${tenths(v.home)}.`, news: recent(v.home) };
       return { line: `Word home from ${v.world}, at Year ${tenths(v.home)}.`, news: recent(v.home) };
     }
+    if (craft === "hyper") return { line: "Turning to the nearest worlds we’ve felt. No picture in yet.", news: false };
     return { line: "Ready. We send from Reach.", news: false };
   }
+  if (name === "Solar Swarm" && k.swarm) {
+    const { share, growing } = k.swarm;
+    // In watts, as its page says it, and as a share of the Sun once that reads plainly.
+    const w = share * SWARM.most, e = Math.floor(Math.log10(w));
+    const of = share >= 0.999 ? "all the Sun’s light" : share >= 1e-3 ? `${Math.round(share * 1000) / 10}% of the Sun’s light` : w < 1e15 ? `about ${(w / 1e12).toFixed(1)} TW of sunlight` : `about ${(w / 10 ** e).toFixed(1)}×10${[...String(e)].map((d) => "⁰¹²³⁴⁵⁶⁷⁸⁹"[Number(d)]).join("")} W of sunlight`;
+    return { line: `Catching ${of}. ${share >= 0.999 ? "It can grow no more." : growing ? "It doubles every 2 Years." : "We hold it at its size."}`, news: false };
+  }
+  if (name === "Mercury Works") return { line: "Its seed copies itself from Mercury’s rock.", news: false };
+  if (name === "Star Beam") return { line: "Ready. Each lens we send rides it to the Sun’s focus in about two months.", news: false };
   if (name === "Thought Fields")
     return { line: `Our compute is ${Math.round(k.grown * 10) / 10}× what it was at Year 0. No more campuses fit the grid.`, news: false };
   if (name === "Launch Complex") return { line: `Ready. It lifts ${LAUNCH_LIFT} kt more to orbit each Year.`, news: false };
@@ -108,7 +125,13 @@ export function Instruments() {
   );
   const tenth = tenths(now);
   const grown = useMemo(() => computeAt(plan, scale, tenth) / computeAt(plan, scale, 0), [plan, scale, tenth]);
-  const known: Known = { now, heard, read, visits, grown };
+  const swarm = useMemo(() => {
+    const spans = grownSpans(plan, scale, "Solar Swarm");
+    if (!spans.length || spans[0][0] > tenth) return null;
+    const years = spans.reduce((y, [a, b]) => y + Math.max(0, Math.min(b ?? tenth, tenth) - a), 0);
+    return { share: Math.min(1, (SWARM.watts * 2 ** Math.floor(years / SWARM.doubling)) / SWARM.most), growing: spans.at(-1)![1] === null };
+  }, [plan, scale, tenth]);
+  const known: Known = { now, heard, read, visits, grown, swarm };
   return (
     <>
       {working.length > 0 && (

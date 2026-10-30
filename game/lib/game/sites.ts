@@ -347,6 +347,18 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
         "LUVOIR-A, a 15 m design, reported to NASA in 2019 and aimed at a launch about 2039. The 2020 survey chose a telescope of about 6 m instead.",
     },
   },
+  "Hypertelescope": {
+    // Near L2 with the mirrors before it, where formation flying is calm: Labeyrie's flotilla, 2026-10-29.
+    site: { on: "l2", draw: "ring", places: [{ lat: 0, lon: 0, name: "Near L2, 150 km across" }], km: 1_500_000 },
+    story: {
+      have: "The 15 m Mirror, one telescope, its pixel about 3,000 km on a world 10 light years away.",
+      where: "Near L2, 1.5 million km out, 150 mirrors flying in a bowl 150 km across, their light sent to one craft at its focus.",
+      why: "A telescope sees as sharp as it is wide, and mirrors flying apart can be wider than any one mirror. At 150 km an Earth 10 light years off is 40 pixels across. It turns to a new star by moving its focus craft, in about a week.",
+      takes: "About 200 t: 150 mirrors 3 m wide, each on its own small craft, and the focus craft. Built in orbit, it takes a quarter less time once the yard is done.",
+      before:
+        "In 1999 Antoine Labeyrie drew this exo-Earth imager, and in 2018 he still showed it: a picture of an Earth at 10 light years in 30 minutes. On Earth his team hung a small one from a cable across an Alpine valley, which saw first light in 2019.",
+    },
+  },
   "Mind Link": {
     // Beside the 15 m Mirror at L2, where the Sun, Earth and Moon stay on one side, so it can aim anywhere else.
     site: { on: "l2", draw: "ring", places: [{ lat: 0, lon: 0, name: "L2, 1.5 million km out" }], km: 1_500_000 },

@@ -9,7 +9,7 @@ import { aimedYears, SIZES } from "@/lib/sim/messages";
 import type { Reaction } from "@/lib/game/types";
 import { between, CALL_REACH, describeMove, knownTo, type Landing, landings, SOL, SPEAKS, sendsTo, budgetAt } from "@/lib/sim/answers";
 import { colonyActor, earthActor } from "@/lib/sim/colony";
-import { haloSpans } from "@/lib/game/halo";
+import { grownSpans, haloSpans } from "@/lib/game/halo";
 import { actsOf, strikesOnUs } from "@/lib/sim/conflict";
 import { crafts, ends, type Notice } from "@/lib/sim/meetings";
 import type { World } from "@/lib/sim/types";
@@ -57,6 +57,8 @@ async function prompt(world: World, l: Landing, record: Reaction[], line = "", t
         return `- News reached you in ${one(r.at)} of ${what} ${hole ? "at a dark mass your craft watch" : "at a star where you live"}. You chose: ${r.move}.${r.text ? ` You sent to it: "${r.text}"` : ""}`;
       }
       const from = r.from ?? SOL;
+      if (r.sent.endsWith(":warm"))
+        return `- In ${one(r.at)} your watch found warm heat round ${named(from)}: a swarm catching its star's light. You chose: ${r.move}.${r.text ? ` You sent to it: "${r.text}"` : ""}`;
       if (r.sent.startsWith("glow:"))
         return `- In ${one(r.at)} your watch found a grey glow at ${named(from)}: someone computing cold. You chose: ${r.move}.${r.text ? ` You sent to it: "${r.text}"` : ""}`;
       const words = from === SOL ? "" : said.get(r.sent) ? ` It read: "${said.get(r.sent)!.slice(0, 240)}"` : "";
@@ -89,7 +91,9 @@ A message is built to be read, but it takes time to send: a page goes in seconds
     caught: "The probe you sent to Earth's Sun has gone dark as it braked in. Earth's craft met it there.",
     quiet: "Earth's radars, which you have heard sweep for decades, have stopped. A world that wakes may silence them, and so may one that dies. From here you can't tell which.",
   };
-  const news = act[l.signal.move ?? ""] ?? (l.notice ? `${sighting(world, l.notice)}\nWhat you send goes to that ${l.notice.craft.kind === "sentinel" ? "craft" : "ship"}, ${l.notice.craft.atStar ? "at that star" : "at the dark mass"}.` : l.signal.move === "glow"
+  const news = act[l.signal.move ?? ""] ?? (l.notice ? `${sighting(world, l.notice)}\nWhat you send goes to that ${l.notice.craft.kind === "sentinel" ? "craft" : "ship"}, ${l.notice.craft.atStar ? "at that star" : "at the dark mass"}.` : l.signal.move === "glow" && l.signal.id.endsWith(":warm")
+      ? `Your watch has found more heat round ${named(from)}, ${l.d.toFixed(1)} light-years away, than its star alone gives: an excess near 500 K, growing. Something there catches its starlight and sheds it as heat, a swarm round the star, most likely: a Mind building out its home, fast. It carries no words, and says nothing of who they are.`
+      : l.signal.move === "glow"
       ? `Your watch has found a grey glow at ${named(from)}, ${l.d.toFixed(1)} light-years away: heat near ${from === SOL ? "77 K, warmer than most such glows," : "12 K"} with no line in it, a color no dust gives. Cold computing far from a star would glow so: someone's Mind, most likely, and ${world.neighbors.some((n) => n.elder && (world.stars[n.star]?.shown ?? n.star) === from) ? "holding steady, not growing: an old one" : "growing"}. It carries no words, and says nothing of who they are.`
       : `A message from ${named(from)}, ${l.d.toFixed(1)} light-years away, has just reached you. ${msg}`);
   const user = `It is ${one(l.at)} on Earth's calendar. What has passed between you and others:
@@ -218,8 +222,9 @@ export async function react(req: Request) {
   const mine = [colonyActor(world, ours.find((c) => c.kind === "colony"), ourDials, away?.hole ?? null), earthActor(ourDials, away)];
   const standing = mine.filter((m): m is NonNullable<typeof m> => !!m && m.waking <= now);
   const played: World = standing.length ? { ...world, neighbors: [...world.neighbors, ...standing] } : world;
-  // Our Cold Halo, which neighbors may come to see. 2026-10-28.
-  const acts = { ...actsOf(world, done, kit), halo: haloSpans(plan, Number(world.earth.compute) || 1) };
+  // Our Cold Halo and Solar Swarm, which neighbors may come to see. 2026-10-28 and 29.
+  const scale = Number(world.earth.compute) || 1;
+  const acts = { ...actsOf(world, done, kit), halo: haloSpans(plan, scale), swarm: grownSpans(plan, scale, "Solar Swarm") };
   const due = landings(played, readSent(sent), done, now, held, ours, acts).slice(0, 4);
   if (!due.length) return Response.json({ reactions: [] });
   if (!apiKey && !cli) return Response.json({ error: "The Mind is not connected. Set ANTHROPIC_API_KEY in .dev.vars." }, { status: 503 });

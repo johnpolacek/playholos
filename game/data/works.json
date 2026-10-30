@@ -128,6 +128,11 @@
    "want": 1.5,
    "orbit": true
   },
+  "Cold halo": {
+   "years": 10,
+   "want": 80,
+   "grows": 10
+  },
   "Rock deflector": {
    "years": 4,
    "want": 0.3
@@ -160,10 +165,26 @@
    "want": 100,
    "energy": 0.5
   },
-  "Cold halo": {
+  "Mercury works": {
+   "years": 12,
+   "want": 3.0,
+   "orbit": true
+  },
+  "Solar swarm": {
+   "years": 4,
+   "want": 1.0,
+   "grows": 2,
+   "thinks": 0.00757,
+   "full": 55.2
+  },
+  "Star beam": {
    "years": 10,
-   "want": 80,
-   "grows": 10
+   "want": 2.0
+  },
+  "Hypertelescope": {
+   "years": 20,
+   "want": 2.0,
+   "orbit": true
   }
  },
  "floor": 0.6666666666666666,
@@ -219,5 +240,23 @@
   "Mass driver": 600,
   "Belt mining": 120,
   "Orbital ring": 189000
+ },
+ "beams": {
+  "array": 4.92,
+  "beam": 0.16,
+  "look": 0.0185
+ },
+ "swarm": {
+  "watts": 9090000000.0,
+  "doubling": 2,
+  "excess": 9.42e+22,
+  "perLy2": 4.06e+17,
+  "kelvin": 500.0
+ },
+ "hyper": {
+  "kmPerLy": 31.54,
+  "reach": 135,
+  "slew": 0.0192,
+  "cities": 50
  }
 }

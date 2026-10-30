@@ -11,7 +11,8 @@ import { gsap, prefersReducedMotion, useGSAP } from "@/lib/motion";
 // rocket's thrust, a yard rocking and a probe leaving it, the Moon rocking as it librates, and the array's light
 // pushing a sail up. What our builds open moves too: a sun over a panel, a mirror gathering light, rock thrown off the
 // Moon, a foundry's wheel, a craft round a rock, a hum coming down to the far side, and power beamed down, 2026-10-20. A star's cold glow, an annex's heat going out to
-// the sky, and light bent round the Sun to a focus, 2026-10-26. Each starts at its own moment, so like marks don't move as one. Each takes its color from the
+// the sky, and light bent round the Sun to a focus, 2026-10-26. Rock thrown off Mercury, a ring filling round the Sun, a
+// beam gathered from an arc, and mirrors spread wide to one focus, 2026-10-29. Each starts at its own moment, so like marks don't move as one. Each takes its color from the
 // words beside it, and holds still for reduced motion. Settled 2026-10-19.
 
 const LINES = {
@@ -796,6 +797,73 @@ const Swarm = ({ size, still }: MarkProps) => (
   </Moving>
 );
 
+/** Mercury Works: a small world, and a seed on it throwing rock up off its face. Ours. 2026-10-29. */
+const MercuryWorks = ({ size, still }: MarkProps) => (
+  <Moving
+    size={size}
+    still={still}
+    move={(_, part) =>
+      void gsap.fromTo(part("rock"), { x: 0, y: 0, opacity: 1 }, { x: 3.6, y: -5.4, opacity: 0, duration: 1.6, ease: "power1.out", repeat: -1, delay: offset() })
+    }
+  >
+    <circle cx="6.4" cy="10" r="4.2" />
+    <path d="M8.6 6.4l2-1.6" />
+    <circle data-k="rock" cx="10.6" cy="4.8" r="0.8" fill="currentColor" stroke="none" />
+  </Moving>
+);
+
+/** The Solar Swarm: the Sun, and a ring of collectors round it filling in, one more each beat. Ours. 2026-10-29. */
+const SolarSwarm = ({ size, still }: MarkProps) => (
+  <Moving
+    size={size}
+    still={still}
+    move={(_, part) =>
+      void gsap.fromTo(
+        part("ring")?.children ? [...part("ring")!.children] : [],
+        { opacity: 0.2 },
+        { opacity: 1, duration: 0.5, stagger: { each: 0.35, repeat: -1, yoyo: true }, ease: "sine.inOut", delay: offset() },
+      )
+    }
+  >
+    <circle cx="8" cy="8" r="2.2" />
+    <g data-k="ring">
+      {Array.from({ length: 12 }, (_, k) => {
+        const a = (k * Math.PI) / 6, [x, y] = [8 + 5.6 * Math.cos(a), 8 + 5.6 * Math.sin(a)];
+        return <circle key={k} cx={x.toFixed(2)} cy={y.toFixed(2)} r="0.7" fill="currentColor" stroke="none" />;
+      })}
+    </g>
+  </Moving>
+);
+
+/** The Star Beam: collectors in an arc phased as one, their light gathered to a narrow beam going out. Ours. 2026-10-29. */
+const StarBeam = ({ size, still }: MarkProps) => (
+  <Moving
+    size={size}
+    still={still}
+    move={(_, part) =>
+      void gsap.fromTo(part("beam"), { strokeDashoffset: 0 }, { strokeDashoffset: -4, duration: 0.8, ease: "none", repeat: -1, delay: offset() })
+    }
+  >
+    <path d="M3 2.6Q6.4 8 3 13.4" />
+    <path d="M3.6 4.6L8 8M3.6 11.4L8 8M4.4 8H8" opacity={0.55} />
+    <path data-k="beam" d="M8 8h6.6" strokeDasharray="2 2" />
+  </Moving>
+);
+
+/** The Hypertelescope: mirrors spread wide in a curve, their light brought to one focus, which drifts as the fleet
+ *  turns to a new star. Ours. 2026-10-29. */
+const Hyper = ({ size, still }: MarkProps) => (
+  <Moving size={size} still={still} move={(_, part) => void rock(part("fleet"), -6, 6, 3.2, "8 4")}>
+    <g data-k="fleet">
+      {[[1.8, 12.6], [4.6, 13.8], [8, 14.2], [11.4, 13.8], [14.2, 12.6]].map(([x, y]) => (
+        <path key={x} d={`M${x - 0.9} ${y}h1.8`} />
+      ))}
+      <path d="M1.8 12.6L8 4M8 14.2V4M14.2 12.6L8 4" opacity={0.4} />
+    </g>
+    <circle cx="8" cy="3.4" r="1.1" fill="currentColor" stroke="none" />
+  </Moving>
+);
+
 /** The Mind Link: a wide mirror, its beam going out in pulses. Ours. 2026-10-26. */
 const Link = ({ size, still }: MarkProps) => (
   <Moving
@@ -886,6 +954,14 @@ export function BuildMark({ name, size = 16, still }: { name: string; size?: num
       return <Swarm size={size} still={still} />;
     case "Solar Lens":
       return <SunLens size={size} still={still} />;
+    case "Mercury Works":
+      return <MercuryWorks size={size} still={still} />;
+    case "Solar Swarm":
+      return <SolarSwarm size={size} still={still} />;
+    case "Star Beam":
+      return <StarBeam size={size} still={still} />;
+    case "Hypertelescope":
+      return <Hyper size={size} still={still} />;
     case "Star Mapper":
       return <Hole size={size} still={still} />;
     case "Mind Link":

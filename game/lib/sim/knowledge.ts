@@ -25,6 +25,8 @@ export interface Kit {
   mirror?: number | null;
   halo?: number | null;
   mapper?: number | null;
+  /** The Year the Hypertelescope is done: it pictures every felt world in its reach, nearest first. 2026-10-29. */
+  hyper?: number | null;
   /** Each lens we sent, by the star it looks at as we name it: the Year it begins to look, and its picture is home. */
   lenses?: { star: string; looks: number; home: number }[];
   /** Our Mind sent to a black hole or a star: where, how it lives there, and the Year it leaves. */
@@ -148,7 +150,7 @@ function visit(world: World, by: Visit["by"], { passed, home }: { passed: number
     passed,
     home,
     sight,
-    ...(by !== "sails" && sight !== "haze" ? { air: { water: air !== "none", oxygen: air === "oxygen" } } : {}),
+    ...(by !== "sails" && by !== "hyper" && sight !== "haze" ? { air: { water: air !== "none", oxygen: air === "oxygen" } } : {}),
   };
 }
 
@@ -188,13 +190,15 @@ const PICTURED: Record<string, Visit["sight"]> = {
   "bare rock": "bare", "airy and lifeless": "seas", "hiding microbes": "seas", "showing oxygen": "seas",
   "with animals and forests": "green", "where life died": "seas", frozen: "ice",
 };
-function pictured(f: Find): Visit["sight"] {
+function pictured(f: Find, km = 0): Visit["sight"] {
   if (f.truth.elder) return "green";                // an elder's people live lightly, its works far out in the cold
-  if (f.truth.kind === "home") return "cities";
+  // Fields and cities show only to a pixel narrower than about 50 km: calcs/mercury.py. 2026-10-29.
+  if (f.truth.kind === "home") return km > HYPER.cities ? "green" : "cities";
   if (f.truth.kind === "dead") return "green";
   return PICTURED[f.truth.rung ?? ""] ?? "seas";
 }
 const LENS_KM_30PC = catalog.lens.km30pc;
+const HYPER = catalog.hyper;
 const GENERATIONS = catalog.seedProbe.generations;
 
 /** A black hole's name as astronomers give a source: J, its right ascension in hours and minutes, its declination in
@@ -235,7 +239,7 @@ export function earthKnows(
   world: World,
   year: number,
   voices: Voices = {},
-  { allSky = null, flash = null, telescope = null, mirror = null, halo = null, mapper = null, lenses = [], sentinels = [], seeds = [], colony = null, sails = null, probe = null, losses = [], quiet = null, hides = [], searched = [], warmWatch = null, moonSearch = null, watcherProbes = [], craft = [] }: Kit = {},
+  { allSky = null, flash = null, telescope = null, mirror = null, halo = null, mapper = null, hyper = null, lenses = [], sentinels = [], seeds = [], colony = null, sails = null, probe = null, losses = [], quiet = null, hides = [], searched = [], warmWatch = null, moonSearch = null, watcherProbes = [], craft = [] }: Kit = {},
 ): EarthView {
   const shown = (id: string) => world.stars[id]?.shown ?? id;
   // Earth's finds at Year 0: every world whose tug shows by 2040. Measured, not understood. Its star is in the catalogs.
@@ -286,8 +290,27 @@ export function earthKnows(
   for (const l of lenses) {
     const f = world.finds.find((x) => shown(x.star) === l.star);
     if (!f || l.home > year) continue;
-    visits.push({ star: l.star, world: `${l.star}’s world`, by: "lens", passed: l.looks, home: l.home, sight: pictured(f), km: (LENS_KM_30PC * f.d) / (30 * 3.2616) });
+    const km = (LENS_KM_30PC * f.d) / (30 * 3.2616);
+    visits.push({ star: l.star, world: `${l.star}’s world`, by: "lens", passed: l.looks, home: l.home, sight: pictured(f, km), km, ...(km > HYPER.cities ? { coarse: true } : {}) });
   }
+  // What the Hypertelescope has pictured: each felt world within its reach, nearest first, a week a star. Its pixel
+  // widens with distance, too wide anywhere for fields or cities. It sits at L2, so its picture is home at once.
+  // calcs/mercury.py. 2026-10-29.
+  if (hyper !== null) {
+    // Proxima b too, whose truth proxima.ts keeps apart from the seed's finds: the nearest, so the first it turns to.
+    const near = [
+      { star: "Proxima Centauri", d: 4.24, f: null as Find | null },
+      ...world.finds.filter((f, i, all) => f.d <= HYPER.reach && all.findIndex((x) => x.star === f.star) === i).map((f) => ({ star: shown(f.star), d: f.d, f })),
+    ].sort((a, b) => a.d - b.d);
+    near.forEach(({ star, d, f }, i) => {
+      const passed = hyper + i * HYPER.slew, home = passed + HYPER.slew, km = HYPER.kmPerLy * d;
+      if (home > year) return;
+      const coarse = km > HYPER.cities ? { coarse: true as const } : {};
+      if (!f) visits.push({ ...visit(world, "hyper", { passed, home }), km, ...coarse });
+      else visits.push({ star, world: `${star}’s world`, by: "hyper", passed, home, sight: pictured(f, km), km, ...coarse });
+    });
+  }
+
   // What each sentinel has seen, once its first word is home: it arrives at a tenth of light speed and stays, so it
   // sees what a pass can't: who lives there, or their ruins. Its air read from the world's truth, as a probe's.
   const { speed, burns } = catalog.sentinel;
@@ -572,8 +595,8 @@ export function describe(view: EarthView): string {
   };
   const visits = (view.visits ?? []).map(
     (v) =>
-      (v.by === "lens"
-        ? `- ${v.world}, ${one(view.felt.find((f) => f.star === v.star)?.d ?? 0)} ly, pictured by our lens at the Sun’s focus from Year ${one(v.passed)}, about ${Math.round(v.km ?? 0)} km a pixel, picture home at Year ${one(v.home)}: ${SIGHT[v.sight]}. Nothing narrower than a pixel shows.`
+      (v.by === "lens" || v.by === "hyper"
+        ? `- ${v.world}, ${one(view.felt.find((f) => f.star === v.star)?.d ?? 0)} ly, pictured by ${v.by === "lens" ? "our lens at the Sun’s focus" : "our Hypertelescope"} from Year ${one(v.passed)}, about ${Math.round(v.km ?? 0)} km a pixel, picture home at Year ${one(v.home)}: ${SIGHT[v.sight]}. Nothing narrower than a pixel shows.${v.coarse ? " Its pixels are too wide for fields or cities, so it can't tell whether anyone lives there." : ""}`
         : v.by === "seed" && v.sent
           ? `- ${v.world}: our seed probe there sent a copy of itself toward ${v.sent} at Year ${one(v.passed)}, word home at Year ${one(v.home)}.`
         : v.by === "seed"

@@ -240,14 +240,16 @@ export interface Heard {
 export interface Visit {
   star: string;
   world: string;
-  by: "sails" | "probe" | "lens" | "sentinel" | "seed";
+  by: "sails" | "probe" | "lens" | "sentinel" | "seed" | "hyper";
   /** The Year it passed, or for a lens the Year it began to look, and the Year its word reached us. */
   passed: number;
   home: number;
   sight: "haze" | "bare" | "seas" | "green" | "ice" | "cities" | "dark" | "rocks";
   air?: { water: boolean; oxygen: boolean };
-  /** A lens's pixel, in km across the world. */
+  /** A lens's or the Hypertelescope's pixel, in km across the world. */
   km?: number;
+  /** Its pixel too wide to show fields or cities, so a home reads as forests. 2026-10-29. */
+  coarse?: boolean;
   /** What a sentinel, staying, saw that a pass can't: someone living there, or the ruins of those who did. */
   lives?: boolean;
   ruins?: boolean;

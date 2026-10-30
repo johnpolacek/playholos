@@ -37,6 +37,10 @@ interface Work {
   energy?: number;                  // the share of Year 0's grid it adds once done, so more data centers fit
   grows?: number;                   // once done, it doubles every so many Years until taken back, each doubling a
                                     // data center's step of thought: the Cold Halo, 2026-10-28
+  thinks?: number;                  // for one that grows, what it thinks with when done as a share of our Year 0
+                                    // Mind's power: then each doubling adds its share, not a step. The Solar Swarm,
+                                    // 2026-10-29
+  full?: number;                    // the most doublings it can grow: the Solar Swarm, once it catches all the Sun
 }
 interface Catalog {
   works: Record<string, Work>;
@@ -45,6 +49,10 @@ interface Catalog {
   yard: { work: string; cut: number };
   halo: { floor: number; every: number };
   lens: { au: number; flight: number; look: number; km30pc: number };
+  /** Calcs/mercury.py: what pushes a lens, the Solar Swarm's glow, and what the Hypertelescope pictures. 2026-10-29. */
+  beams: { array: number; beam: number; look: number };
+  swarm: { watts: number; doubling: number; excess: number; perLy2: number; kelvin: number };
+  hyper: { kmPerLy: number; reach: number; slew: number; cities: number };
   sentinel: { build: number; speed: number; burns: number };
   seedShip: { speed: number; burn: number; brake: number; stands: number };
   seedProbe: { build: number; first: number; every: number; copies: number; generations: number };
@@ -59,7 +67,8 @@ export const giftTimes = (steps: number) => STEP ** steps;
 
 /** Works a woken backup can still build: what is joined in orbit, and what stands on the Moon or among the rocks. All
  *  else is on Earth, and is lost with it, data centers too. 2026-10-28. */
-const OFF_EARTH = new Set(["Moon vault", "Orbital yard", "Mass driver", "Belt mining", "Far-side array, one fifth", "Power from orbit", "Cold annex", "Cold halo"]);
+const OFF_EARTH = new Set(["Moon vault", "Orbital yard", "Mass driver", "Belt mining", "Far-side array, one fifth", "Power from orbit", "Cold annex", "Cold halo",
+  "Mercury works", "Solar swarm", "Star beam"]);
 export const offEarth = (w: string) => OFF_EARTH.has(w) || WORKS[w]?.orbit === true;
 
 /** Years a work takes when given s times the thought its standard pace needs. */
@@ -91,7 +100,8 @@ export interface Pace {
    *  total by then. 2026-10-28. */
   searched: number;
   searchLog: [number, number][];
-  /** Doublings of works that grow once done, the Cold Halo's: thought on its own sunlight, off Earth's grid. */
+  /** Steps of thought from works that grow once done, the Cold Halo's and the Solar Swarm's: thought on their own
+   *  sunlight, off Earth's grid. */
   doublings: number;
   /** Rock thrown from the Moon or hauled from the belt so far, kt. */
   rockKt: number;
@@ -131,8 +141,14 @@ export function pace(orders: readonly Order[], until: number, { scale = 1, aside
   // A work that grows once done: the Years it has grown, and since when it grows now, if it does. Taken back, it stops
   // growing and keeps its size. Ordered again, it grows on. 2026-10-28.
   const grown = new Map<string, { years: number; since: number | null }>();
+  // Each counts as steps of thought: a step a doubling, or for one that thinks with its own power, as many steps as its
+  // power over our Year 0 Mind's makes. 2026-10-29.
   const doublings = (at: number) =>
-    [...grown].reduce((n, [w, g]) => n + Math.floor((g.years + (g.since === null ? 0 : at - g.since)) / WORKS[w].grows! + EPS), 0);
+    [...grown].reduce((n, [w, g]) => {
+      const { grows, thinks, full = Infinity } = WORKS[w];
+      const k = Math.min(full, Math.floor((g.years + (g.since === null ? 0 : at - g.since)) / grows! + EPS));
+      return n + (thinks === undefined ? k : Math.log(1 + thinks * 2 ** k) / Math.log(STEP));
+    }, 0);
   /** What strikes leave of our thought at Year t: each loss shrinking as we rebuild. */
   const spared = (at: number) =>
     harms.reduce((m, h) => m * (1 - h.harm * Math.max(0, 1 - (at - h.y) / h.recover)), 1) * regrown(at);
@@ -228,7 +244,7 @@ export function pace(orders: readonly Order[], until: number, { scale = 1, aside
     if (backup.o && t + EPS >= backup.o.y && regrown(t) < 1) next = Math.min(next, t + 0.25);
     if (building !== null) next = Math.min(next, building + CATALOG.dataCenter.years);
     for (const [w, g] of grown)
-      if (g.since !== null) {
+      if (g.since !== null && (g.years + t - g.since) / WORKS[w].grows! < (WORKS[w].full ?? Infinity) - EPS) {
         // The next doubling: a whole period on from the last.
         const k = WORKS[w].grows!, r = (g.years + t - g.since) % k;
         next = Math.min(next, t + (k - r > EPS ? k - r : k));
