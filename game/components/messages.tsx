@@ -4,7 +4,7 @@ import { useGame } from "@/components/game-provider";
 import { Item, type Row } from "@/components/journey";
 import type { Aim } from "@/components/picks";
 import { ListHead } from "@/components/tab-head";
-import { YEAR_0 } from "@/lib/game/clock";
+import { tenths, YEAR_0 } from "@/lib/game/clock";
 import { events } from "@/lib/game/plan";
 import { dates } from "@/lib/game/sends";
 import type { Sent } from "@/lib/game/types";
@@ -39,7 +39,8 @@ const EVERYWHERE = "Every way at once";
  *  flies the map out to its star, as an old send does. 2026-10-26. */
 function sentRows(sent: Sent[]): Row[] {
   return sent.flatMap((s, i): Row[] => {
-    const msg = `Year ${s.y.toFixed(1)}`;
+    // In tenths, as the Year and the send card say it: a send at Year 0.95 read "Year 1.0" here, and 0.9 on the card.
+    const msg = `Year ${tenths(s.y).toFixed(1)}`;
     if (s.to === "everywhere")
       return [{
         key: `sent${i}`, name: EVERYWHERE, at: s.y + s.reach!, kind: "send", msg, sent: YEAR_0 + s.y, ly: s.reach,

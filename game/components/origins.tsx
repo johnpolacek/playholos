@@ -83,9 +83,11 @@ export function Origins({ onSkip, onNext }: { onSkip(): void; onNext(): void }) 
         // Longer for the laps the Sun runs between moments, and for each power of ten the view closes in.
         const laps = (agoAt(prev) - agoAt(u)) / LAP;
         const move = 0.35 + 2.4 * (u - prev) + 0.12 * laps + 0.35 * Math.abs(roadZoom(prev) - roadZoom(u));
+        // The last caption leaves as the clock starts to run, so no frame pairs it with another moment's Year. It
+        // left as the next arrived until 2026-10-30, and one frame read "450,000 years ago · Oxygen fills the air".
+        if (i > 0) tl.to(caps[i - 1], { autoAlpha: 0, y: -6, duration: 0.18, ease: "power2.in" }, t);
         tl.to(dials, { u, duration: move, ease: "sine.inOut", onUpdate: follow }, t);
         t += move;
-        if (i > 0) tl.to(caps[i - 1], { autoAlpha: 0, y: -6, duration: 0.18, ease: "power2.in" }, t - 0.15);
         tl.fromTo(caps[i], { autoAlpha: 0, y: 8 }, { autoAlpha: 1, y: 0, duration: 0.3, ease: "power3.out" }, t);
         t += m === NOW ? 0 : 0.5 + (m.detail ? 0.35 : 0) + (m.dial ? 0.3 : 0);
         prev = u;

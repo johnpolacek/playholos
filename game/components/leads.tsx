@@ -10,7 +10,7 @@ import { Face } from "@/components/tab-head";
 import type { Dials, Mark, Show } from "@/lib/drift";
 import { span, YEAR_0, lyOf } from "@/lib/game/clock";
 import { target } from "@/lib/game/sends";
-import { type Lead, lineAt, type Reading } from "@/lib/game/leads";
+import { type Lead, lineAt, type Reading, starName } from "@/lib/game/leads";
 import { type System, worldName } from "@/lib/game/systems";
 import { placeLabel } from "@/components/place-label";
 
@@ -95,7 +95,8 @@ export function LeadsMap({
       // Leads and Sol first, then what we sent, then calls and flashes, and the rings' distances last, so the
       // later give way.
       const rank = (id: string) => (ids.includes(id) || id === "Sol" ? 0 : id.startsWith("sent:") ? 1 : id.startsWith("ring:") ? 3 : 2);
-      const taken: Parameters<typeof placeLabel>[4] = [];
+      // The LEADS chip sits at the top left, and covered Gaia BH1's name there until 2026-10-30.
+      const taken: Parameters<typeof placeLabel>[4] = [{ l: 0, t: 0, r: 76, b: 36 }];
       for (const { id, x, y, a } of [...marks].sort((p, q) => rank(p.id) - rank(q.id))) {
         const n = names.current[id];
         if (!n) continue;
@@ -103,7 +104,9 @@ export function LeadsMap({
         const ring = id.startsWith("ring:") || id.startsWith("call:") || (id.startsWith("theirs:") && theirs[Number(id.slice(7))]?.ly === 0);
         const lead = ids.includes(id);
         const clear = placeLabel(n, x, y, ring ? (id.startsWith("call:") ? 16 : 4) : null, taken);
-        n.style.opacity = String(a * clear * (focus && lead && id !== focus ? 0.45 : 1));
+        // A lead's name stays, faint, where it can't be clear. Any other gives way whole: a star we sent to sat over
+        // Proxima Centauri's name until 2026-10-30.
+        n.style.opacity = String(a * (lead || id === "Sol" ? clear : clear === 1 ? 1 : 0) * (focus && lead && id !== focus ? 0.45 : 1));
       }
     },
     [dials, ids, theirs],
@@ -165,7 +168,7 @@ export function LeadsMap({
           }}
           className={`pointer-events-none absolute top-0 left-0 font-mono text-[9px] whitespace-nowrap opacity-0 ${id === "Luyten's Star" ? "text-other" : id.startsWith("ring:") || id === "Sol" ? "text-muted" : "text-you"}`}
         >
-          {id.startsWith("ring:") ? `${id.slice(5)} ly` : id}
+          {id.startsWith("ring:") ? `${id.slice(5)} ly` : starName(id)}
         </span>
       ))}
       {system?.worlds.map((w, i) => (
@@ -224,7 +227,7 @@ export function LeadList({
         tone={l.reply ? "text-other" : "text-you"}
         name={
           <>
-            <b className="font-semibold">{l.star}</b> · {l.what}
+            <b className="font-semibold">{starName(l.star)}</b> · {l.what}
           </>
         }
         line={
@@ -282,7 +285,7 @@ export function LeadList({
                   <LeadMark art={l.art} />
                 </span>
                 <span className="min-w-0 grow truncate text-[15px] leading-snug">
-                  <b className="font-semibold">{l.star}</b> · {l.what}
+                  <b className="font-semibold">{starName(l.star)}</b> · {l.what}
                 </span>
                 <span className="shrink-0 font-mono text-[11px] text-muted tabular-nums">{reach(l)}</span>
                 <span className={`shrink-0 text-muted transition-transform duration-300 ${open ? "rotate-90" : ""}`}>

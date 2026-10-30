@@ -24,6 +24,6 @@ Earth's noise, and who it reached:
 - 15 aimed messages, 1983 to 2018, to 12 stars within 50 ly. Each lasted minutes to hours.
 - Voyager 1, launched 1977, about 30 light-hours out and silent since its power ran out in the 2030s. It carries the Golden Record, for whoever finds it, and passes 1.7 ly from Gliese 445 in about 40,000 years.
 - Replies that could have come by now, and didn't: Altair from 2017, Teegarden's Star from 2035, TZ Arietis from 2039. A passed window isn't closed. A reply can still come.
-- Reply windows ahead: Luyten's Star at Year 2.3 and 2.9, Gliese 526 at Year 9.0, Gliese 581 at Year 9.9. Later: Gliese 49 at Year 27, Kappa¹ Ceti at 30, Gliese 208 at 38, 55 Cancri at 46, HD 10307 at 47, 47 Ursae Majoris at 52.
+- Reply windows ahead: Luyten's Star at Year 2.3 and 2.9, Gliese 526 at Year 8.9, Gliese 581 at Year 9.8. Later: Gliese 49 at Year 27, Kappa¹ Ceti at 30, Gliese 208 at 38, 55 Cancri at 46, HD 10307 at 47, 47 Ursae Majoris at 52.
 - Messages still on their way out: RuBisCo Stars, sent in 2009, reaches Kappa¹ Ceti at Year 0.1. Cosmic Call 2, sent in 2003, reaches Gliese 208 at Year 0.8, 55 Cancri at 4.6, HD 10307 at 5.1 and 47 Ursae Majoris at 8.8. The Teen Age Message, sent in 2001, reaches 47 Ursae Majoris at 7.0.
 - The Mind can say where Earth's noise has gone. It can't say who heard it. No one can, yet.`;

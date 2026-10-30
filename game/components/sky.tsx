@@ -28,6 +28,8 @@ export function Sky({ shade, children }: { shade: boolean; children: React.React
   const wanted = useRef<Show>({ mode: "title" });
   // The one fade the sky has: in, when the game first opens.
   const [lit, setLit] = useState(false);
+  // No WebGL: the maps and the globe stay blank, so we say why. They went blank with no word until 2026-10-30.
+  const [dark, setDark] = useState(false);
 
   useEffect(() => {
     const el = frame.current!;
@@ -39,7 +41,7 @@ export function Sky({ shade, children }: { shade: boolean; children: React.React
         setLit(true);
       })
       // No WebGL: the screens carry on over the plain page.
-      .catch(() => {});
+      .catch(() => !gone && setDark(true));
     return () => {
       gone = true;
       scene.current?.dispose();
@@ -72,6 +74,11 @@ export function Sky({ shade, children }: { shade: boolean; children: React.React
         aria-hidden
         className={`${shading} inset-x-0 top-0 h-32 bg-linear-to-b from-paper/70 to-transparent wide:hidden`}
       />
+      {dark && (
+        <p className="pointer-events-none absolute bottom-3 left-4 z-10 max-w-[280px] font-mono text-[10px] leading-snug text-muted">
+          Our maps and globe need WebGL, which this browser has turned off. Everything else works.
+        </p>
+      )}
       <div className="relative flex min-h-0 grow flex-col [&>*]:!bg-transparent">{children}</div>
     </SkyContext>
   );

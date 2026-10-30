@@ -7,7 +7,7 @@ import { SystemArt } from "@/components/system-art";
 import { LeadMark } from "@/components/marks";
 import { useLeads } from "@/components/scan";
 import { span, lyOf } from "@/lib/game/clock";
-import { ODDS, type Odds, type Reading } from "@/lib/game/leads";
+import { ODDS, type Odds, type Reading, starName } from "@/lib/game/leads";
 import { VisitArt } from "@/components/visit-art";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
 
@@ -156,7 +156,7 @@ export function LeadPage({ slug }: { slug: string }) {
         <span className={`mt-[4px] shrink-0 ${lead.reply ? "text-other" : "text-you"}`}>
           <LeadMark art={lead.art} size={18} />
         </span>
-        <h1 className="text-[19px] leading-snug font-medium">{lead.star}</h1>
+        <h1 className="text-[19px] leading-snug font-medium">{starName(lead.star)}</h1>
       </div>
       <p data-m className="mt-0.5 text-[13.5px] text-page-ink2">
         {lead.art.kind === "near" ? (

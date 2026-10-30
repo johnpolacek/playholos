@@ -11,7 +11,7 @@ import { Face, ListHead } from "@/components/tab-head";
 import type { Dials, Mark as Place } from "@/lib/drift";
 import { YEAR_0, lyOf } from "@/lib/game/clock";
 import { LANDMARKS } from "@/lib/game/landmarks";
-import { visitReading } from "@/lib/game/leads";
+import { starName, visitReading } from "@/lib/game/leads";
 import { lean, type moves } from "@/lib/game/plan";
 import {
   auFor,
@@ -721,7 +721,7 @@ export function Reach() {
               <Face
                 mark={<LeadMark art={lead.art} />}
                 tone={lead.reply ? "text-other" : "text-you"}
-                name={<b className="font-semibold">{lead.star}</b>}
+                name={<b className="font-semibold">{starName(lead.star)}</b>}
                 line={`${lead.what} · ${lyOf(lead.ly)} ly`}
                 right={soonest === null ? "Not yet" : `Year ${year(soonest)}`}
               />

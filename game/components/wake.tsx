@@ -105,13 +105,31 @@ export const useLeaveShell = () => use(LeaveShell);
 
 // The phone. A new game opens on the drift, then Wake and the memories, all under one sky. A game already begun goes
 // straight to the shell. Past the last screen, the shell opens on the review of our scans, the first of the things we
-// would do before Begin. A reload starts over at the drift.
+// would do before Begin. A reload comes back to the screen we were on, in this tab: it started over at the drift, and
+// a charter picked was lost, until 2026-10-30.
 const SCREENS = [Drift, Wake, Origins, People, Stand, Inherit, Charter, Meet];
+const AT = "holos:opening";
+const savedAt = () => {
+  try {
+    const n = Number(sessionStorage.getItem(AT));
+    return Number.isInteger(n) && n > 0 && n < SCREENS.length ? n : 0;
+  } catch {
+    return 0;
+  }
+};
 
 export function Opening({ className, children }: { className: string; children: React.ReactNode }) {
   const { save, wake } = useGame();
   const navigate = useNavigate();
-  const [at, setAt] = useState(0);
+  const [at, setAtState] = useState(savedAt);
+  const setAt = (n: number) => {
+    setAtState(n);
+    try {
+      sessionStorage.setItem(AT, String(n));
+    } catch {
+      // Private windows may refuse. The opening still runs, from the drift on a reload.
+    }
+  };
   const frame = useRef<HTMLDivElement>(null);
   const shell = !!save && (save.woke || save.beganAt !== null);
 

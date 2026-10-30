@@ -110,6 +110,10 @@ export interface Lead {
 /** A lead's line at a Year: Luyten's Star promised a reply "from Year 2.3" at Year 9,104 until 2026-10-30. */
 export const lineAt = (l: Lead, year: number | null) => (l.later && year !== null && year >= l.later.year ? l.later.line : l.line);
 
+/** A star's name as a screen shows it. A star known only by its Gaia number showed all 19 digits, "Gaia
+ *  1172618435080418176", and ran long on the map. Shown by its last seven, as papers do. Its id keeps them all. 2026-10-30. */
+export const starName = (star: string) => star.replace(/^Gaia (\d{10,})$/, (_, n: string) => `Gaia …${n.slice(-7)}`);
+
 /** The scene names Luyten's Star as the catalog does. */
 export const skyId = (star: string) => star.replace("’", "'");
 
