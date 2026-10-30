@@ -333,6 +333,51 @@ function WarmArt({ near, far }: { near: number; far: number }) {
   );
 }
 
+/** A supernova as we saw it: its brightness day by day, a type II's curve at its distance, against the half Moon, Venus
+ *  and what eyes can see. Bright for a season, seen by day while above Venus, and gone from our eyes in a few Years. A
+ *  dot runs along it. Betelgeuse's, 2026-10-30. Its peak is a type II's, absolute magnitude -17, a sample. */
+function NovaArt({ ly }: { ly: number }) {
+  const dot = useRef<SVGCircleElement>(null);
+  const [x0, x1, y0, y1] = [36, 300, 40, 150];
+  const DAYS = 1800;
+  const peak = -17 + 5 * Math.log10(ly / 3.2616 / 10);
+  // A plateau of about 100 days, a drop of 2 magnitudes, then the tail fading a hundredth of a magnitude a day.
+  const mag = (d: number) => (d < 110 ? peak + 0.004 * d : d < 140 ? peak + 0.44 + ((d - 110) / 30) * 2 : peak + 2.44 + 0.0098 * (d - 140));
+  const X = (d: number) => x0 + (d / DAYS) * (x1 - x0);
+  const Y = (m: number) => y0 + ((m + 12) / 19) * (y1 - y0);
+  const path = Array.from({ length: 121 }, (_, i) => (i / 120) * DAYS).map((d, i) => `${i ? "L" : "M"}${X(d).toFixed(1)},${Y(Math.min(7, mag(d))).toFixed(1)}`).join(" ");
+  useTicks((t) => {
+    const d = ((t * 140) % DAYS);
+    dot.current?.setAttribute("cx", String(X(d)));
+    dot.current?.setAttribute("cy", String(Y(Math.min(7, mag(d)))));
+  }, 24);
+  const ref = (m: number, label: string) => (
+    <g key={label}>
+      <line x1={x0} x2={x1} y1={Y(m)} y2={Y(m)} stroke="var(--faint)" strokeDasharray="2 3" />
+      <text x={x1} y={Y(m) - 3} textAnchor="end" className="fill-muted font-mono text-[7px]">
+        {label}
+      </text>
+    </g>
+  );
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img" aria-label="Its brightness over five Years: as bright as a half Moon for a season, then fading from sight">
+      <text x={x0} y={28} className="fill-muted font-mono text-[7.5px]">
+        HOW BRIGHT IT SHONE, DAY BY DAY
+      </text>
+      {ref(-10, "HALF MOON")}
+      {ref(-4.4, "VENUS, SEEN BY DAY ABOVE THIS")}
+      {ref(6, "WHAT EYES CAN SEE")}
+      <path d={path} fill="none" stroke="var(--other)" strokeWidth="1.6" />
+      <circle ref={dot} cx={X(0)} cy={Y(peak)} r={3.5} fill="var(--other)" />
+      {[0, 1, 2, 3, 4].map((yr) => (
+        <text key={yr} x={X(yr * 365.25)} y={y1 + 16} textAnchor="middle" className="fill-muted font-mono text-[7px]">
+          {yr ? `${yr} YR` : "SEEN"}
+        </text>
+      ))}
+    </svg>
+  );
+}
+
 // Here at home, from above. The Moon's L5: Earth, the Moon going round, and the point 60° behind it, where a dark body
 // holds as the Sun's pull would clear rock away. A rock beside us: the Sun, Earth's orbit, and a rock sharing it on its
 // horseshoe. A rock coming: Earth, and the rock's path in, ending in a flash if it struck. 2026-10-30.
@@ -395,6 +440,7 @@ export function LeadArt({ art }: { art: Art }) {
   if (art.kind === "dark") return <Dark mass={art.mass} ly={art.ly} />;
   if (art.kind === "pair") return <Pair mass={art.mass} ly={art.ly} a={art.a} e={art.e} days={art.days} />;
   if (art.kind === "glow") return <GlowArt ly={art.ly} steady={art.steady} />;
+  if (art.kind === "nova") return <NovaArt ly={art.ly} />;
   if (art.kind === "seed") return <VisitArt sight={art.sight} elder={art.elder} size={220} />;
   return <Reply sent={art.sent} ly={art.ly} />;
 }

@@ -10,6 +10,7 @@ import { kitOf } from "@/lib/game/reach";
 import { readGifts, readLater, readColony, readLenses, readObserve, readSentinels, readSeeds, readQueue, readStops, readWill, readPickets, readStrikes } from "./orders";
 import { describeBuilds, describeOffers, describeQueue, describeRock } from "@/lib/mind/builds";
 import { FOUND, rockOf } from "@/lib/game/rocks";
+import { describeSky } from "@/lib/game/natural";
 import { WATCHED, watchedAt } from "@/lib/sim/minds";
 import { colonyOf, harmOrders, hitsAt, restoreOf, survivorAt } from "@/lib/game/hits";
 import { describeSent, readSent } from "@/lib/game/sends";
@@ -170,6 +171,8 @@ export async function mind(req: Request) {
     offers: describeOffers(plan, scale, { ...done, [FOUND]: rockOf(seed)?.found ?? null, [WATCHED]: watched }, year),
     sent: describeSent(readSent(sent), year),
     known,
+    // The natural sky so far: stars exploding and merging, and Betelgeuse once gone. 2026-10-30.
+    sky: inPool(seed) ? describeSky(seed, year, done["Warm Sky Watch"] ?? null) : "",
     rock: inPool(seed) ? describeRock(rockOf(seed), plan, { ...done, [FOUND]: rockOf(seed)?.found ?? null }, year) : "",
     now: now(began, away),
   };

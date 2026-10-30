@@ -1,5 +1,6 @@
 import { schedule } from "@/lib/game/plan";
 import { rockAt, rockOf } from "@/lib/game/rocks";
+import { skyOf } from "@/lib/game/natural";
 import { kitOf } from "@/lib/game/reach";
 import { nextStop } from "@/lib/sim/next";
 import { earthKnows, willKnows } from "@/lib/sim/knowledge";
@@ -92,6 +93,7 @@ export async function next(req: Request) {
     done["Moon Search"] == null ? null : moonSearchEnds(done["Moon Search"]),
     done["Asteroid Tour"] == null ? null : tourEnds(done["Asteroid Tour"]),
   ];
-  const stop = nextStop(ahead, year, done, [...(rock ? [rock.found, rock.pushed ? rock.lands : null, rock.strikes] : []), ...ends]);
+  // Betelgeuse's end, once, the one natural event that stops a skip. 2026-10-30.
+  const stop = nextStop(ahead, year, done, [...(rock ? [rock.found, rock.pushed ? rock.lands : null, rock.strikes] : []), ...ends, skyOf(seed).betelgeuse]);
   return Response.json({ next: stop, ahead: AHEAD });
 }

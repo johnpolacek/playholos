@@ -72,7 +72,9 @@ export type Art =
   | { kind: "seed"; sight: Visit["sight"]; elder?: Visit["elder"] }
   /** Something here at home, drawn where it sits: at the Moon's L5, on a rock sharing our orbit, or a rock coming in.
    *  2026-10-30. */
-  | { kind: "near"; where: "moon" | "co-orbital" | "warning" | "rock"; struck?: boolean };
+  | { kind: "near"; where: "moon" | "co-orbital" | "warning" | "rock"; struck?: boolean }
+  /** A star exploded: its brightness as we saw it. 2026-10-30. */
+  | { kind: "nova"; ly: number };
 
 /** A black hole's lead: one drawn alone, or with a star going round it, as Gaia BH1. 2026-10-28. */
 export const isHole = (art: Art) => art.kind === "dark" || art.kind === "pair";
@@ -995,6 +997,32 @@ export function rockLead(r: NonNullable<ReturnType<typeof rockAt>>): Lead {
     could: [],
     tells: struck || pushed ? [] : ["Ten impactors of a tonne, as DART was, push it two Earth widths aside if they land in time."],
     art: { kind: "near", where: "rock", ...(struck ? { struck: true } : {}) },
+  };
+}
+
+/** Betelgeuse's end, once its light reaches us: the one natural event that leads Scan. Real place, its distance as
+ *  Joyce et al. 2020 have it, its brightness a type II supernova's at that distance, a sample. lib/game/natural.ts.
+ *  2026-10-30. */
+export function betelgeuseLead(at: number): Lead {
+  const year = `Year ${yearText(at)}`;
+  return {
+    slug: "betelgeuse",
+    at: [5.9195, 7.407, 548],
+    star: "Betelgeuse",
+    what: "A star exploded",
+    line: `Orion’s shoulder blew apart at ${year}, as bright as a half Moon, seen by day.`,
+    ly: 548,
+    ask: "Betelgeuse exploded. What does it mean for us?",
+    brief: `Betelgeuse, the red supergiant at Orion’s shoulder about 550 ly away, exploded. Its light reached us at ${year}, hours after its neutrinos. For a season it shone about as bright as a half Moon. It could be seen by day for more than a Year, and fades from our eyes after about 4 and leaves a neutron star, or a black hole. At 550 ly it harms nothing here: that takes a supernova within about 50.`,
+    facts: [
+      ["Its light reached us", year],
+      ["How far", "About 550 ly, so it blew 550 Years before we saw it"],
+      ["How bright", "About a half Moon’s, for a season. Seen by day for more than a Year"],
+      ["Its neutrinos", "Caught by our detectors hours before its light"],
+    ],
+    could: [],
+    tells: ["Orion has lost its shoulder. The shell it threw off will glow for thousands of Years."],
+    art: { kind: "nova", ly: 548 },
   };
 }
 

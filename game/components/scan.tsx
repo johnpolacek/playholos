@@ -9,9 +9,10 @@ import { ListHead } from "@/components/tab-head";
 import type { Dials } from "@/lib/drift";
 import { placeLeads } from "@/lib/game/places";
 import { knownQuery } from "@/lib/game/known-query";
-import { airReading, glowReading, type Lead, landed, leadsOf, lifeOf, nearestReading, ODDS, type Reading, rockLead, skyId, visitReading, watcherReadings } from "@/lib/game/leads";
+import { airReading, glowReading, type Lead, landed, leadsOf, lifeOf, nearestReading, ODDS, type Reading, rockLead, skyId, visitReading, watcherReadings, betelgeuseLead } from "@/lib/game/leads";
 import { setWatched, useSchedule } from "@/components/picks";
 import { watchedAt } from "@/lib/sim/minds";
+import { skyOf } from "@/lib/game/natural";
 import { target, WATCHER } from "@/lib/game/sends";
 import { EMPTY } from "@/lib/game/plan";
 import { rockAt, rockOf } from "@/lib/game/rocks";
@@ -125,13 +126,19 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
     [seed, plan, done, tenth],
   );
   const rockKey = rock && rock.state !== "unknown" ? `${rock.state} ${rock.lands}` : "";
+  // Betelgeuse's end leads Scan once its light reaches us. 2026-10-30.
+  const blown = seed !== undefined && tenth !== null && skyOf(seed).betelgeuse <= tenth ? skyOf(seed).betelgeuse : null;
   const stars = [
     rockKey,
+    `betelgeuse ${blown}`,
     ...kept.map((k) => `kept ${k}`), ...(felt ?? []).map((f) => f.star), ...(holes ?? []).map((h) => h.name), ...(glows ?? []).map((g) => `glow ${g.star}`), ...seeds.map((v) => `seed ${v.star}`),
     ...(minds ? [JSON.stringify([minds.flashes.map((f) => f.range ?? f.seen), minds.glows.length, minds.sleepers.length, minds.watcher?.seen])] : []),
   ].join("|");
   const leads = useMemo(
-    () => (felt ? [...(rockKey ? [rockLead(rock!)] : []), ...leadsOf(felt, holes ?? [], glows ?? [], seeds, kept, minds)] : []),
+    () =>
+      felt
+        ? [...(rockKey ? [rockLead(rock!)] : []), ...(blown !== null ? [betelgeuseLead(blown)] : []), ...leadsOf(felt, holes ?? [], glows ?? [], seeds, kept, minds)]
+        : [],
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [stars],
   );

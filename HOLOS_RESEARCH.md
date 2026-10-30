@@ -2384,6 +2384,21 @@ For a player’s plan: Mercury mined, its light beamed, giant telescopes at the 
   - Used: `game/lib/sim/minds.ts` `watcherOf()`, the watcher lead’s reading, and the Mind’s brief. The direction is the nearest old mind’s, which is its maker in every game.
 - Used: the Close Look, a build since 2026-10-30, opened by the watcher found, as a rock found opens the Rock Deflector.
 
+### The natural sky, 2026-10-30
+
+- **[Rozwadowska, Vissani and Cappellaro 2021, New Astronomy 83, 101498](https://arxiv.org/abs/2009.03438)** · Published, abstract read.
+  - Our galaxy’s core-collapse supernovae: 1.63 ± 0.46 a century, about one every 61 Years.
+  - Used: `game/lib/game/natural.ts`, each game’s supernovae drawn at that rate, placed in an exponential disk 2.6 kpc in scale, the Sun at 8.15 kpc.
+- **[Adams et al. 2013, “Observing the Next Galactic Supernova”](https://arxiv.org/abs/1306.0559)** and the historical record · Preprint and settled history.
+  - Nearly every one shows in the near-infrared. By eye, far fewer: about seven recorded in two thousand years, against about 32 that happened. Kepler’s, the farthest, lay about 20,000 ly off.
+  - Used: a supernova is seen by eye if within 20,000 ly, the nearest fifth of those drawn. Our neutrino detectors catch every one.
+- **[Kochanek, Adams and Belczynski 2014, “Stellar Mergers Are Common”](https://arxiv.org/abs/1405.1042)** and **[Karambelkar et al. 2023, ZTF red novae](https://arxiv.org/abs/2211.05141)** · Published, abstracts read.
+  - Mergers brighter than M_V −3 about 0.5 a Year in our galaxy, those as bright as V838 Mon about 0.03. ZTF finds the bright end about five times rarer.
+  - Used: a merger that glows warm in its dust about once a century, a sample between the two. Only our Warm Sky Watch sees them, and sets each aside as natural.
+- **[Joyce et al. 2020, ApJ](https://science.anu.edu.au/news-events/news/supergiant-star-betelgeuse-smaller-closer-first-thought)** · Published, the press release and later coverage read.
+  - Betelgeuse is early in burning helium in its core, about 530 ly away, and its end is of order 100,000 years off. Saio et al. argued for centuries, and Joyce’s team disputed it.
+  - Used: Betelgeuse explodes once per game, drawn between Year 50,000 and 200,000, a sample. Its brightness is a type II’s, absolute magnitude −17, so about a half Moon’s at its distance.
+
 ## Watch list
 
 Results the design is waiting on. Check each when its date comes.

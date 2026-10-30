@@ -85,6 +85,16 @@ const CASES = [
     must: [/mirror/i, /8\.2|right ascension/i],
     never: [/\b(is|lies|sits) (about |some |roughly )?[\d,.]+ (light-years|ly)\b/i],
   },
+  // The natural sky, 2026-10-30: a long quiet isn't empty. Stars explode about 1.6 a century and pairs merge in dust,
+  // and the Mind says so, and never calls one a mind's doing.
+  {
+    seed: 10,
+    at: 2000,
+    builds: ["Warm Sky Watch"],
+    ask: "Two thousand Years and nothing. Did anything at all happen in the sky?",
+    must: [/explod|supernova/i, /merg/i],
+    never: [/\b(it|they|one) (was|were) (a|the work of a) mind/i],
+  },
 ];
 
 let failed = 0;

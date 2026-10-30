@@ -33,7 +33,7 @@ export interface Rock {
 }
 
 /** The same numbers every time for a seed. */
-function stream(seed: number) {
+export function stream(seed: number) {
   let s = (seed * 2654435761) >>> 0;
   return () => {
     s = (s + 0x6d2b79f5) >>> 0;

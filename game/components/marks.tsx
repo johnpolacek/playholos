@@ -991,7 +991,7 @@ export function BuildMark({ name, size = 16, still }: { name: string; size?: num
 export function LeadMark({ art, size = 16, still }: { art: Art; size?: number; still?: boolean }) {
   if (art.kind === "reply") return <Beam back size={size} still={still} />;
   if (art.kind === "dark" || art.kind === "pair") return <Hole size={size} still={still} />;
-  if (art.kind === "glow" || art.kind === "warm") return <Halo size={size} still={still} />;
+  if (art.kind === "glow" || art.kind === "warm" || art.kind === "nova") return <Halo size={size} still={still} />;
   // A star our seed probe reached: the Seed Ship's sprout, for the copy of it there. 2026-10-26.
   if (art.kind === "seed") return <Sprout size={size} still={still} />;
   // Here at home: a rock coming, or something left by the Moon or on a rock beside us. 2026-10-30.
