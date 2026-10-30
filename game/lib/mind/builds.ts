@@ -1,7 +1,7 @@
 // What Earth can build, and how far our order has come, for the Mind. Without it the Mind named builds that don't
 // exist, guessed whether a watch was done, and called the drift scan our only ear at Year 40 with the All-Sky Watch long
 // built. Times are Build's: a build's standard pace, and each one in our order as schedule dates it. 2026-10-23.
-import { BUILDS, kt, LATER, ordered, takenAt, takes } from "@/lib/game/plan";
+import { BUILDS, kt, LATER, ordered, PAST, takenAt, takes } from "@/lib/game/plan";
 import { lensTrip } from "@/lib/game/reach";
 import { FOUND, harm, rockAt, type Rock } from "@/lib/game/rocks";
 import type { Plan } from "@/lib/game/types";
@@ -57,8 +57,8 @@ ${BUILDS.map((b) => line(b)).join("\n")}
 ${LATER.filter((b) => b.after !== FOUND).map((b) => line(b, b.after)).join("\n")}`;
 }
 
-/** Our order, in line, with where each build stands at Year `year`: done, under way and when it will be, or past Year
- *  40. Before Begin, `year` is null and each says when it would be done. Then what the Will took back, and when, its
+/** Our order, in line, with where each build stands at Year `year`: done, under way and when it will be, or past the
+ *  horizon. Before Begin, `year` is null and each says when it would be done. Then what the Will took back, and when, its
  *  work kept, since 2026-10-23. */
 export function describeQueue(plan: Plan, done: Record<string, number | null>, year: number | null): string {
   const names = ordered(plan);
@@ -67,7 +67,7 @@ export function describeQueue(plan: Plan, done: Record<string, number | null>, y
   const at = (name: string) => {
     const d = done[name];
     const fields = name === "Thought Fields";
-    if (d == null) return `${name}: not done by Year 1,000.`;
+    if (d == null) return `${name}: done ${PAST}.`;
     if (year === null) return fields ? `${name}: would fill the grid about Year ${tenth(d)}.` : `${name}: would be done about Year ${tenth(d)}.`;
     if (d <= year) return fields ? `${name}: its campuses filled the grid at Year ${tenth(d)}.` : `${name}: done at Year ${tenth(d)}.`;
     return fields ? `${name}: a campus a Year, filling the grid about Year ${tenth(d)}.` : `${name}: under way, done about Year ${tenth(d)}.`;

@@ -326,6 +326,9 @@ function lastOf(plan: Plan, name: string): { y: number; stop: boolean } | null {
   return last;
 }
 
+/** The Year a build was last ordered: Year 0 for one queued at Begin. 2026-10-30. */
+export const orderedAt = (plan: Plan, name: string) => Math.max(0, lastOf(plan, name)?.y ?? 0);
+
 /** Every build in our order: those from Year 0, then those ordered in play, in the order ordered. Not those taken back,
  *  and one ordered again stands where it was ordered again. */
 export const ordered = (plan: Plan) => [
@@ -390,7 +393,11 @@ export const needs = (names: string[]) => names.map((n) => `the ${n}`).join(" an
  *  Years until 2026-10-26, so a build ordered at Year 400 read "after Year 40". */
 export const HORIZON = 1000;
 /** Past the horizon, in words. */
-export const PAST = "past Year 1,000";
+export const PAST = "more than 1,000 Years out";
+
+/** The Year we pace to: so many Years past our last order, the horizon unless said. It was Year 1,000 itself until
+ *  2026-10-30, so a build ordered past it, as skip-ahead makes easy, was never done. */
+export const horizonOf = (orders: readonly Order[], ahead = HORIZON) => orders.reduce((y, o) => Math.max(y, o.y), 0) + ahead;
 
 /** When each queued build is done, in Years from Year 0, with this game's compute. Null past the horizon. Thought Fields
  *  is done once its campuses fill the grid. A build that needs others is done once they all are, and never if our
@@ -398,7 +405,7 @@ export const PAST = "past Year 1,000";
 export function schedule(plan: Plan, scale: number, harm: readonly Order[] = []): Record<string, number | null> {
   const { orders, ...opts } = ordersOf(plan);
   // Strikes landed on Earth, as lib/game/hits.ts has them: our thought cut, and won back as we rebuild. 2026-10-28.
-  const p = pace([...orders, ...harm], HORIZON, { scale, ...opts });
+  const p = pace([...orders, ...harm], horizonOf([...orders, ...harm]), { scale, ...opts });
   const done: Record<string, number | null> = Object.fromEntries(
     ordered(plan).map((b) => [b, b === "Thought Fields" ? (p.dataCenters[centers(scale) - 1] ?? null) : doneOf(p, b)]),
   );
@@ -411,13 +418,13 @@ export function schedule(plan: Plan, scale: number, harm: readonly Order[] = [])
  *  by then. 2026-10-28. */
 export function searchOf(plan: Plan, scale: number) {
   const { orders, ...opts } = ordersOf(plan);
-  return pace(orders, HORIZON, { scale, ...opts }).searchLog;
+  return pace(orders, horizonOf(orders), { scale, ...opts }).searchLog;
 }
 
 /** What a build does to the rest of our order: when it is done, and the queued build it delays most and speeds up
  *  most, each by Years, against our order without it. Each work in line gets its want in turn before any is pushed
  *  past it, so a work with a large want, even last, takes the push from those before it, and some speed others, as
- *  the Orbital Yard does what is built in orbit. Past the horizon counts as the horizon. Null under a tenth of a Year. One not
+ *  the Orbital Yard does what is built in orbit. Past the horizon counts as the horizon of our order with it. Null under a tenth of a Year. One not
  *  in our order is added last at Year 0, or in play at Year `y`. */
 export function moves(plan: Plan, scale: number, work: string, y: number | null = null) {
   const others = ordered(plan).filter((b) => b !== work);
@@ -429,10 +436,11 @@ export function moves(plan: Plan, scale: number, work: string, y: number | null 
       ? { ...plan, builds: [...plan.builds, work] }
       : orderLater(work, y)(plan);
   const within = schedule(more, scale);
+  const far = horizonOf(ordersOf(more).orders);
   let late: { name: string; by: number } | null = null;
   let soon: { name: string; by: number } | null = null;
   for (const name of others) {
-    const d = (within[name] ?? HORIZON) - (less[name] ?? HORIZON);
+    const d = (within[name] ?? far) - (less[name] ?? far);
     if (d >= 0.1 && (!late || d > late.by)) late = { name, by: d };
     if (d <= -0.1 && (!soon || -d > soon.by)) soon = { name, by: -d };
   }

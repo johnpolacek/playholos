@@ -48,11 +48,11 @@ const ORDINAL = ["first", "second", "third", "fourth", "fifth", "sixth", "sevent
 
 /** Where the build stands: in our order or not, and when it is done, in Years and in play time, as the list counts. */
 function status(open: boolean, at: number, by: number | null | undefined, year: number) {
-  const when = by == null ? "after Year 1,000" : `by Year ${tenths(by)}, ${span(by)} after we begin`;
+  const when = by == null ? PAST : `by Year ${tenths(by)}, ${span(by)} after we begin`;
   if (open)
     return at < 0 ? `Last in our order, it would be done ${when}.` : `Queued, ${ORDINAL[at]} in our order. Done ${when}.`;
   if (at < 0) return "Not in our order yet.";
-  if (by == null) return "Under way. Done after Year 1,000.";
+  if (by == null) return `Under way. Done ${PAST}.`;
   return year >= by ? "Done." : `Under way. Done in ${span(by - year)}.`;
 }
 
@@ -120,7 +120,7 @@ function InPlay({ name, scale, done }: { name: string; scale: number; done: Reco
       <div className="flex flex-col">
         <p className="mt-2.5 text-[13px] leading-snug text-page-ink2">
           {again.at == null
-            ? "Ordered now, it would be done after Year 1,000."
+            ? `Ordered now, it would be done ${PAST}.`
             : `Ordered now, it would be done by Year ${tenths(again.at)}, in ${span(again.at - now)}.`}
         </p>
         <button
