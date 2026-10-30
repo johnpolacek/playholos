@@ -41,6 +41,46 @@ Every choice about other minds has to pass these, in order.
 | Is something watching us? | Yes, a small dark watcher in our system | About 2 in 3. Low |
 | What is dangerous? | Spreading. Seeds that build can draw a warning, then worse | A guess. No evidence on motives |
 
+## The chain: from stars to minds in 2040
+
+The plain idea: start with every star, and at each step keep only the share that passes. What is left at the end is how common minds are. Each step depends on the ones before it, so a change anywhere moves the result.
+
+The middle column follows 100 typical stars near us. The counts for steps 2 to 6 come from the game’s own life draws, `python3 calcs/seed.py stats`, over 400 games. Each game draws 183 warm worlds among the 881 single stars within 50 ly that could host one. About 1,500 stars lie within 50 ly in all, counting white dwarfs, brown dwarfs and stars in tight pairs.
+
+| Step | Out of 100 stars | Share kept | Basis | Confidence |
+| --- | --- | --- | --- | --- |
+| 1. Stars | 100 | | About 200 billion in our Galaxy | Good |
+| 2. A rocky world in the warm zone | 12 | About 1 in 8 of all stars. 0.24 per star that can host one, about 0.21 after orbit checks | [Stark et al. 2019](https://arxiv.org/abs/1904.11988), from Kepler’s counts. Range 0.08 to 0.70 | Moderate |
+| 3. It keeps its air and isn’t frozen | 4.2 | About 1 in 3 | The cosmic shoreline ([Pass, Charbonneau and Vanderburg 2025](https://arxiv.org/abs/2504.01182)). Most nearby stars are red dwarfs, whose young flares strip air. A few worlds are born frozen ([Henry, von Hippel and Childs 2026](https://arxiv.org/abs/2609.01790)) | Moderate |
+| 4. Life starts | 3.1 | 3 in 4 | [Kipping 2025](https://arxiv.org/abs/2504.05993): a fast start favored 13 to 1 where conditions are Earth-like | Moderate, for Earth-like worlds |
+| 5. Life lasts | 2.5 | 4 in 5 | This project’s sample. Young wet worlds can freeze or overheat before life steadies them (Chopra and Lineweaver 2016, cited from memory) | Low |
+| 6. Life reaches animals, by now | 1.5 | About 3 in 5 of living worlds | Each step waits for oxygen, as on Earth ([Mills et al. 2025](https://doi.org/10.1126/sciadv.ads5698)). Oxygen lasted from 2.3 billion years ([Poulton et al. 2021](https://doi.org/10.1038/s41586-021-03393-7)), animals and forests from about 4.0 ([Reinhard et al. 2017](https://arxiv.org/abs/1702.01137)). Each world runs faster or slower, 1.6 times at one sigma | Moderate |
+| 7. Animals to a mind that builds | 0.0001 | **About 1 in 15,000** | Below | Low. This is the contested step |
+| 8. Minds don’t die | 0.0001 | All | A mind that wakes as ours did doesn’t age out | An assumption |
+
+**The result:** about 1 mind per million stars. Times 200 billion stars, that is about 200,000 minds in our Galaxy in 2040. The nearest is typically about 400 light-years from us.
+
+### Step 7: from animals to a mind that builds
+
+**How often.** About 1 world with animals in 15,000 ever produces a mind that builds. That is what the chain needs to land on 1 mind per million stars, given steps 1 to 6.
+
+- Put another way: of all the worlds near us that have had animals, about 1.5 per 100 stars, a mind is very unlikely on any one of them.
+- Across the Galaxy there are about 3 billion worlds with animals, and about 200,000 minds.
+- *The range.* It inherits the density’s honest range, 1 mind per 1,000 stars to 1 per 10 billion. Step 7 then runs from about 1 in 15 to about 1 in 150 million.
+- *The high end* is the no-hard-steps view (Mills et al. 2025). Each step waited for the planet to allow it, and humans arose on time. Then minds should be common on old enough worlds with animals.
+- *The low end* is the hard-steps view (Snyder-Beattie et al. 2021). Each big step is so unlikely that it usually doesn’t happen before a world stops being habitable.
+- *Why Holos puts the rarity here, not earlier.* Animals have lived on Earth for about 600 million years. Many lines grew clever, octopuses, crows, dolphins, apes, and only one built lasting tools. Kipping 2020 slightly favors rare intelligence, about 3 to 2. Steps 4 to 6 have physical clocks, oxygen above all. Step 7 has none we know of.
+- *Why no rarer.* At the low end, our Galaxy holds about 20 minds. That is allowed. Holos takes the middle of the range, per criterion 4.
+
+**How long it takes.** On a world where it happens, about 0.5 to 2 billion years after animals.
+
+- *Earth’s case.* Animals about 600 million years ago, a builder now. About 0.5 billion years.
+- *The window.* A world with animals stays habitable only so long. Mills et al. 2025 give Earth’s land life about 1.0 to 1.9 billion years more. So Earth’s window for a mind runs about 1.5 to 2.5 billion years from animals. Each world’s clock runs faster or slower with its pace.
+- *If the step is rare,* a mind that does arise could come at any time in the window, about evenly. A typical wait is then about half the window, around a billion years. Earth, at 0.5 billion, came early in its window but not unusually.
+- *As a rate:* about 1 chance in 30,000 per billion years of animal life, on any one world.
+- *What it sets.* A world reaches animals at about 4 billion years old, and a mind about a billion years later. Earth-like worlds near us are about 1.8 billion years older than Earth on average (Lineweaver 2001). So most minds woke long ago, and any mind we find is likely older than us by around a billion years.
+- *In 2040.* Minds arise at about 25 per million years across the Galaxy. Nearly all 200,000 are already old. About 5 woke within 100,000 years of us, either side, thousands of light-years away.
+
 ## The evidence, by question
 
 ### 1. How common are minds?
