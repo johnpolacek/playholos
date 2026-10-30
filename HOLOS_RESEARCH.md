@@ -1486,7 +1486,7 @@ Gathered 2026-10-26 for a late game: a black hole in the outer Solar System, the
   - Read in [ar5iv](https://ar5iv.labs.arxiv.org/html/1707.02801), 2026-10-14. The Proxima case: a 1,500 t craft, about half of it sail, a loop 1,600 km across at about 420 kA. It stops from a tenth of light speed in 0.37 ly and about 19 years, at 0.1 protons per cubic cm. The trip takes about 58 years. The star’s wind or light finishes the last 100 km/s.
   - A research agent’s reading of the full paper: a 100-year trip needs 400 t and a 430 km loop, and the loop must grow as the gas thins.
   - Why it matters: a magnetic sail can’t stop a small, fast probe. A big ship stops in about 19 years, with no fuel.
-  - Used: the open question on neighbor probes, 2026-10-14. How a colony ship brakes, 2026-10-14: `calcs/seed.py` BRAKE, 15 Years over the cruise.
+  - Used: the open question on neighbor probes, 2026-10-14. Since 2026-10-30, why a watcher is allowed, in [HOLOS_MODELING_ALIENS.md](HOLOS_MODELING_ALIENS.md). How a colony ship brakes, 2026-10-14: `calcs/seed.py` BRAKE, 15 Years over the cruise.
 - **[Hoang et al. 2017](https://arxiv.org/abs/1608.05284)** · Published, ApJ.
   - At a fifth of light speed, gas and dust erode a gram probe’s front by about half a millimetre. A shield about 1 mm thick of graphite, strong and slow to melt, protects it. Lubin’s group coats the edge with beryllium instead, by a secondhand quote.
   - Why it matters: what a small probe’s front is made of. Impact energy falls with the square of speed, so a braking sail at 4% of light speed takes about a twenty-fifth of it.
@@ -1629,7 +1629,7 @@ Gathered 2026-10-14 for the round on Earth’s outposts and colonies.
 - **[Carroll-Nellenback et al. 2019, the Aurora effect](https://arxiv.org/abs/1902.04450v1)** · Published, AJ 158, 117.
   - With conservative ship speeds and launch rates, settlement fills the galaxy well within its age. Stars’ own motions speed the front. Settlements that fail, or end, can leave the galaxy partly filled in a steady state.
   - Why it matters: an empty neighborhood is possible without a ban, if settling often fails or settlements end.
-  - Used: the spread round, 2026-10-14.
+  - Used: the spread round, 2026-10-14. Since 2026-10-30, the quiet-sky argument in [HOLOS_MODELING_ALIENS.md](HOLOS_MODELING_ALIENS.md): Earth unvisited limits unbroken settlement, not spreading, and doesn’t limit how many quiet minds exist.
 - **[Landis 1998, percolation](https://bis-space.com/shop/?p=13987)** · Published, JBIS 51, 163. Abstract and summaries only.
   - Each colony spreads with some chance P, else stays. Below a critical P, spreading stops, ringed by colonies that chose to stay. Above it, it spans the galaxy but leaves empty pockets. His example used P of a third.
   - Why it matters: a choice made by each settlement, not each species, can leave Earth in a quiet pocket.

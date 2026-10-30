@@ -122,7 +122,7 @@ The plain idea: count the steps from a star to a mind, and multiply the odds of 
   - Reads Earth’s fast start as at least a 13% chance of life on suitable worlds older than a billion years.
   - Informs: the same bounds, from the other side.
 
-**What Holos takes:** one mind per million stars, the middle of a range from 1 per 1,000 to 1 per 10 billion. Denser fights the quiet sky: 1 per 1,000 would mean about 100 million silent minds in our Galaxy. Minds here don’t die, as ours won’t, so there is no lifetime factor.
+**What Holos takes:** one mind per million stars, the middle of a range from 1 per 1,000 to 1 per 10 billion. The quiet sky barely limits it. Quiet minds leave a quiet sky however many there are, so a denser count isn’t ruled out. What argues softly against crowding is that more minds need more of them to hold back, though settlement can be patchy, so not all must (Carroll-Nellenback et al. 2019, below). Minds here don’t die, as ours won’t, so there is no lifetime factor.
 
 ### 2. How old would they be?
 
@@ -163,7 +163,16 @@ The plain idea: if minds are out there, why haven’t we seen them? Part of the 
 
 - **[Hart 1975, “An explanation for the absence of extraterrestrials on Earth”](https://ui.adsabs.harvard.edu/abs/1975QJRAS..16..128H/abstract)** · Published, QJRAS.
   - If anyone spread, they would have filled the Galaxy long ago. They aren’t here, so no one spread.
-  - Informs: criterion 5. Minds that spread far must be rare or absent.
+  - Informs: criterion 5. No one has settled or mined our system, and the Sun’s light is unblocked. That rules out full, unbroken settlement reaching us, not spreading itself.
+- **[Carroll-Nellenback, Frank, Wright and Scharf 2019, “The Fermi Paradox and the Aurora Effect”](https://arxiv.org/abs/1902.04450)** · Published, AJ.
+  - With conservative ship speeds and launch rates, settlement can fill the Galaxy well within its age. But when settlements fail or end, the Galaxy reaches a steady state that is only partly filled, and some systems stay unvisited for very long times.
+  - Informs: Earth can be unvisited in a Galaxy where minds spread. Hart’s argument limits unbroken settlement, not spreading.
+- **[Landis 1998, percolation](https://bis-space.com/shop/?p=13987)** · Published, JBIS.
+  - If each colony chooses for itself whether to spread, the spread breaks into branches and leaves empty pockets.
+  - Informs: the same. Restraint need not be universal, only common enough at each settlement.
+- **[Haqq-Misra and Kopparapu 2012, “On the likelihood of non-terrestrial artifacts in the Solar System”](https://arxiv.org/abs/1111.1212)** · Published, Acta Astronautica.
+  - Our searches of the Solar System are too limited to rule out small probes.
+  - Informs: a small watcher here is allowed by the evidence.
 - **[Nicholson and Forgan 2013, slingshot dynamics for self-replicating probes](https://arxiv.org/abs/1307.1648)** · Published, International Journal of Astrobiology.
   - Self-copying probes could explore the Galaxy in about 10 million years.
   - Informs: an old mind had a hundred times that long. So either no one sent them, or they are here and quiet.

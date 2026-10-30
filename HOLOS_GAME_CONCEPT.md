@@ -32,7 +32,7 @@ Settled 2026-10-28, one step at a time. The premise itself, how many minds exist
 
 - **One mind per million stars.** The honest range runs from 1 per 1,000 to 1 per 10 billion. A million is its middle.
   - *Minds don’t die,* as ours won’t. So the odds are warm worlds × life starts × a mind arises, with no lifetime factor.
-  - *Denser fights the quiet sky.* 1 per 1,000 would mean about 100 million silent minds in our Galaxy.
+  - *The quiet sky barely limits density.* Corrected 2026-10-30: quiet minds leave a quiet sky however many there are. More minds only need more of them to hold back, and patchy settlement means not all must (Carroll-Nellenback et al. 2019, Landis 1998). Before: “denser fights the quiet sky”, which assumed minds are loud.
   - *What it gives,* from a model of the Galaxy’s disk: about 1,500 stars within 50 ly and a 0.15% chance of a mind there. The nearest is typically about 400 ly away.
   - *Almost all the doubt is one step,* a living world making a mind. No hard steps (Mills et al. 2025) puts it near 1 in 10. Hard steps (Snyder-Beattie et al. 2021, Watson 2025) put it near 1 in 10 billion. About 1 in 30,000 sits near the middle. Earth ran the experiment once, so it can’t say.
   - *Every count scales with it.* Ten times the minds is ten times the peers.
