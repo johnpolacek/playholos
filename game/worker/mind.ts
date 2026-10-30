@@ -8,7 +8,7 @@ import { describeLeads } from "@/lib/game/leads";
 import { kt, matterAt, schedule } from "@/lib/game/plan";
 import { kitOf } from "@/lib/game/reach";
 import { readGifts, readLater, readColony, readLenses, readObserve, readSentinels, readSeeds, readQueue, readStops, readWill, readPickets, readStrikes } from "./orders";
-import { describeBuilds, describeQueue, describeRock } from "@/lib/mind/builds";
+import { describeBuilds, describeOffers, describeQueue, describeRock } from "@/lib/mind/builds";
 import { FOUND, rockOf } from "@/lib/game/rocks";
 import { colonyOf, harmOrders, hitsAt, restoreOf, survivorAt } from "@/lib/game/hits";
 import { describeSent, readSent } from "@/lib/game/sends";
@@ -163,6 +163,7 @@ export async function mind(req: Request) {
     scan: describeLeads(readObserve(observe), at),
     builds: describeBuilds(),
     queue: describeQueue(plan, done, year),
+    offers: describeOffers(plan, scale, { ...done, [FOUND]: rockOf(seed)?.found ?? null }, year),
     sent: describeSent(readSent(sent), year),
     known,
     rock: inPool(seed) ? describeRock(rockOf(seed), plan, { ...done, [FOUND]: rockOf(seed)?.found ?? null }, year) : "",

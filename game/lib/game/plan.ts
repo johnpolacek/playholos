@@ -534,7 +534,9 @@ export function drawAt(plan: Plan, scale: number, year: number) {
   for (const g of [...(plan.gifts ?? [])].sort((a, b) => a.y - b.y)) if (g.y <= year && !gifts.has(g.name)) gifts.set(g.name, GIFT_STEPS[g.size ?? "collection"]);
   const gifted = [...gifts.values()].reduce((a, b) => a + b, 0);
   const earth = thought / CATALOG.step ** (doublings + own + gifted);
-  return { compute: room > 0 ? 1 - idle / room : 1, energy: (earth * CATALOG.flagship) / (CATALOG.gridRoom * grid) };
+  // Of all our compute, studies counted at work, as Build's ring counts it: the top bar said 3% where Build said 6%
+  // until 2026-10-30.
+  return { compute: thought > 0 ? 1 - idle / thought : 1, energy: (earth * CATALOG.flagship) / (CATALOG.gridRoom * grid) };
 }
 
 /** The share of our compute the plan's builds would use at Year 0. A plan is enough when it uses it all. */
@@ -560,6 +562,8 @@ export function sharesAt(plan: Plan, scale: number, year: number) {
       need: Math.min(want, give) / all,
       spare: Math.max(0, give - want) / all,
       short: Math.max(0, want - give) / all,
+      // Pushed as far as compute can push it: two thirds of its standard time, and no further. 2026-10-30.
+      fastest: s >= (CATALOG.works[work].most ?? CATALOG.push) - 1e-6,
     };
   });
   const sum = (k: "need" | "spare" | "short") => parts.reduce((t, x) => t + x[k], 0);

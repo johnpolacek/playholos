@@ -1,7 +1,7 @@
 // What Earth can build, and how far our order has come, for the Mind. Without it the Mind named builds that don't
 // exist, guessed whether a watch was done, and called the drift scan our only ear at Year 40 with the All-Sky Watch long
 // built. Times are Build's: a build's standard pace, and each one in our order as schedule dates it. 2026-10-23.
-import { BUILDS, kt, LATER, ordered, PAST, takenAt, takes } from "@/lib/game/plan";
+import { BUILDS, kt, LATER, moves, openAt, ordered, PAST, takenAt, takes } from "@/lib/game/plan";
 import { lensTrip } from "@/lib/game/reach";
 import { FOUND, harm, rockAt, type Rock } from "@/lib/game/rocks";
 import type { Plan } from "@/lib/game/types";
@@ -108,6 +108,23 @@ export function describeQueue(plan: Plan, done: Record<string, number | null>, y
         "Copies make copies, for 3 generations at most, so 7 craft. Once sent, it can't be called back. Each one's word comes home one light-time after it lands.";
     }),
   ].join("\n");
+}
+
+/** Each build open to order now, as Build's catalog dates it with this game's compute: when it would be done, and the
+ *  build in our order it slows or speeds most. The Mind gave standard-pace Years and guessed at slowing, where Build
+ *  said "in 20m" and "slows nothing". Playtest 2026-10-30. */
+export function describeOffers(plan: Plan, scale: number, done: Record<string, number | null>, year: number | null) {
+  const at = tenth(year ?? 0);
+  const open = openAt(plan, done, at);
+  if (!open.length) return "";
+  const lines = open.map((b) => {
+    const m = moves(plan, scale, b.name, year === null ? null : at);
+    const when = m.at == null ? `done ${PAST}` : `done about Year ${tenth(m.at)}`;
+    const slows = m.late ? `slowing the ${m.late.name} by about ${tenth(m.late.by)} Years` : "slowing nothing we've queued";
+    const speeds = m.soon ? `, and speeding the ${m.soon.name} by about ${tenth(m.soon.by)} Years` : "";
+    return `- ${b.name}: ordered now, ${when}, ${slows}${speeds}.`;
+  });
+  return `Builds the Will could order now, as Build shows them. When asked how long one takes or what it slows, say these, never the standard pace:\n${lines.join("\n")}`;
 }
 
 /** The rock coming, once our surveys find it, and how it ended. Nothing while it is unknown: the Mind knows only what

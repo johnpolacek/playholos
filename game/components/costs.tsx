@@ -182,6 +182,7 @@ function Key({ share, searching }: { share: ReturnType<typeof sharesAt>; searchi
           <>
             needs {em(p.need + p.short)}
             {p.spare > 0.005 && <>, sped by {em(p.spare)}</>}
+            {p.fastest && <>, at its fastest</>}
             {p.short > 0.005 && <>, {em(p.short, true)} short</>}
           </>,
         ),

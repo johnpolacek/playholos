@@ -45,6 +45,25 @@ const CASES = [
     must: [/[\d,]+ (and|to) [\d,]+ (light-years|ly)|between [\d,]+/i, /dust|star/i],
     never: [/\b(it is|it[’']s|this is|that is) (a|an|another) (mind|civilization|alien)/i, /\b(is|lies|sits) (about |some )?[\d,.]+ (thousand )?(light-years|ly)\b(?! (and|to|or))/i],
   },
+  // Asked how long a build takes in play, the Mind gives Build's own date, not the standard pace, and says what it
+  // slows as Build does. It said "takes 8 Years" beside a card saying 20m. Playtest 2026-10-30.
+  {
+    seed: 3,
+    at: 2.8,
+    builds: ["All-Sky Watch", "Deep Flash Watch", "Thought Fields", "Launch Complex", "Orbital Yard"],
+    ask: "If we order the Infrared Telescope now, when is it done, and does it slow anything we've queued?",
+    must: [/year \d/i, /nothing|won[’']t slow|doesn[’']t slow|not slow|no delay/i],
+    never: [/standard pace/i],
+  },
+  // Seed 15's rock: found at Year 46.3, struck at 66.6. The Mind said it came without warning. Playtest 2026-10-30.
+  {
+    seed: 15,
+    at: 70,
+    builds: ["All-Sky Watch"],
+    ask: "Did we have any warning before the rock struck us?",
+    must: [/20 years|year 46/i],
+    never: [/without (the )?(years of )?warning|no warning|came unseen|unwarned/i],
+  },
 ];
 
 let failed = 0;
