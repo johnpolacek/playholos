@@ -1,7 +1,7 @@
 import { env } from "cloudflare:workers";
 import { access } from "./access";
 import { earth } from "./earth";
-import { known, leads } from "./leads";
+import { known, leads, next } from "./leads";
 import { mind } from "./mind";
 import { react } from "./react";
 
@@ -21,6 +21,7 @@ const ROUTES: Record<string, (req: Request) => Promise<Response>> = {
   "GET /api/earth": earth,
   "GET /api/leads": leads,
   "GET /api/known": known,
+  "GET /api/next": next,
   "POST /api/mind": limited,
   "POST /api/react": react,
 };

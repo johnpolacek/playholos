@@ -164,6 +164,7 @@ Settled 2026-10-28, one step at a time. The premise itself, how many minds exist
   - *Why:* a probe to 400 ly at a tenth of light’s speed takes 4,000 Years, 14 real days at the old clock. Light from a peer 20,000 ly away takes 20,000 Years.
   - *Multiplayer, later:* each player keeps their own clock, never more than light-time ahead of another. Hundreds of light-years apart, that limit almost never binds, so no turns are needed.
   - Set aside: a faster fixed clock, which blurs early builds, and fully player-set speed.
+  - *Built 2026-10-29:* a “Next: Year …” link by the Year jumps there. The server finds the soonest thing Earth will learn within 100,000 Years, or a build we finish, and says when, never what. A skip moves Begin back, so the clock runs on from the new Year.
 - **Life is common, minds are not.** The ladder in [How Earth learns](#how-earth-learns) stands: life starts on 3 airy worlds in 4, and climbs at Earth’s pace as its world allows.
   - *3 in 4 is this project’s sample.* Kipping 2025’s 13 to 1 is the odds that life starts fast where conditions are Earth-like, not a share of worlds. The sample follows it.
   - About 1 warm world in 4 has had life. Within 50 ly that is about 36 living worlds, 9 where life died, and a handful with oxygen, animals and forests.

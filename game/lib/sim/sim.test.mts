@@ -689,3 +689,16 @@ test("bullets wait on helium-3: 37 kt each from a harvest of 1.5 kt a Year, in t
   // A neighbor starts its harvest when it chooses to strike: 20 Years to build, 24.4 to fill.
   assert.ok(Math.abs(BULLET.ready - 44.4) < 1e-9);
 });
+
+test("skipping ahead stops at the next thing we learn or build, and says when, never what", async () => {
+  const { nextKnown, nextStop } = await import("./next.ts");
+  const world = await loadWorld(10);
+  // Seed 10 with the Warm Sky Watch at Year 0 and our Infrared Telescope: a warm glow is seen at Year 2,386, ranged two Years on.
+  const ahead = earthKnows(world, 102500, {}, { warmWatch: 0, telescope: 0 });
+  const first = ahead.minds!.flashes[0];
+  assert.equal(nextKnown(ahead, 2000), first.seen);
+  assert.equal(nextKnown(ahead, first.seen), first.ranged);
+  // A place in [ra, dec, d] is never taken for a time, and a build done sooner stops the skip first.
+  assert.equal(nextStop(ahead, 2000, { "Moon Search": 2100, "Halo Survey": null }), 2100);
+  assert.equal(nextStop({ year: 0, felt: [], heard: [], visits: [] }, 5, {}), null);
+});

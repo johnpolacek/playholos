@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Begin } from "@/components/begin";
 import { useGame } from "@/components/game-provider";
 import { Menu } from "@/components/menu";
@@ -7,6 +7,7 @@ import { useSchedule } from "@/components/picks";
 import { realTime, tenths, YEAR_0 } from "@/lib/game/clock";
 import { ceiling, drawAt, kt, matterAt, ordered, schedule, searchOf, sharesAt, shortAt } from "@/lib/game/plan";
 import { combedAt } from "@/lib/sim/works";
+import { knownQuery } from "@/lib/game/known-query";
 
 // What we have, from our order: matter we hold in orbit, growing with lift and less what our builds take, since
 // 2026-10-20. Energy, the share of Earth's that our compute draws, and compute, how much of ours is at work, since
@@ -59,6 +60,31 @@ function Meter({
   );
 }
 
+/** The skip: the next Year something new happens, from the server, which says when, never what. A tap jumps there.
+ *  The clock still runs at 5 minutes a Year without it. 2026-10-29. */
+function Skip() {
+  const { save, year, skipTo } = useGame();
+  const tenth = year === null ? null : Math.floor(year * 10) / 10;
+  const [next, setNext] = useState<number | null>(null);
+  const seed = save?.seed;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const query = useMemo(() => knownQuery(save, tenth), [tenth, save?.plan, save?.reactions, save?.will]);
+  useEffect(() => {
+    if (seed === undefined || tenth === null) return;
+    let live = true;
+    fetch(`/api/next?seed=${seed}&${query}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((v: { next: number | null } | null) => live && setNext(v?.next ?? null), () => live && setNext(null));
+    return () => void (live = false);
+  }, [seed, query, tenth]);
+  if (tenth === null || next === null || next <= tenth) return null;
+  return (
+    <button onClick={() => skipTo(next)} className="ml-2 text-you" title="Jump ahead to when something new happens">
+      Next: Year {tenths(next)} ›
+    </button>
+  );
+}
+
 export function Hud() {
   const { save, year } = useGame();
   const { scale } = useSchedule();
@@ -98,6 +124,7 @@ export function Hud() {
         {save && y !== null && (
           <>
             {(YEAR_0 + y).toFixed(1)} · 1 Year = <span className="font-mono tabular-nums">{realTime(1 / slow)}</span>
+            <Skip />
           </>
         )}
         <Begin />

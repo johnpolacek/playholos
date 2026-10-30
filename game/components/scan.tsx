@@ -10,7 +10,7 @@ import { ListHead } from "@/components/tab-head";
 import type { Dials } from "@/lib/drift";
 import { newsOf } from "@/lib/game/clock";
 import { placeLeads } from "@/lib/game/places";
-import { lossesOf } from "@/lib/sim/meetings";
+import { knownQuery } from "@/lib/game/known-query";
 import { airReading, glowReading, type Lead, landed, leadsOf, lifeOf, nearestReading, ODDS, type Reading, skyId, visitReading } from "@/lib/game/leads";
 import { gsap, prefersReducedMotion } from "@/lib/motion";
 import type { EarthView, Heard as Signal, Visit } from "@/lib/sim/types";
@@ -78,31 +78,9 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
   // Landing depends only on the tenth of a Year, so what we know changes at most every thirty seconds.
   const tenth = year === null ? null : Math.floor(year * 10) / 10;
   const plan = save?.plan;
-  // Our craft at holes a neighbor caught or struck, by its moves kept in the save. 2026-10-26.
-  const losses = JSON.stringify(lossesOf(save?.reactions ?? []));
-  // Neighbors that chose to hide, whose glow stops growing. 2026-10-28.
-  const hides = JSON.stringify((save?.reactions ?? []).filter((r) => r.move === "hide").map((r) => ({ star: r.star, at: r.at })));
-  const query = useMemo(
-    () =>
-      new URLSearchParams({
-        year: String(tenth ?? 0),
-        builds: JSON.stringify(plan?.builds ?? []),
-        later: JSON.stringify(plan?.later ?? []),
-        gifts: JSON.stringify(plan?.gifts ?? []),
-        lenses: JSON.stringify(plan?.lenses ?? []),
-        sentinels: JSON.stringify(plan?.sentinels ?? []),
-        pickets: JSON.stringify(plan?.pickets ?? []),
-        strikes: JSON.stringify(plan?.strikes ?? []),
-        seeds: JSON.stringify(plan?.seeds ?? []),
-        colony: JSON.stringify(plan?.colony ?? null),
-        losses,
-        hides,
-        will: JSON.stringify(save?.will ?? null),
-        stops: JSON.stringify(plan?.stops ?? []),
-        observe: JSON.stringify(plan?.observe ?? []),
-      }).toString(),
-    [tenth, plan, losses, hides, save?.will],
-  );
+  // What the server needs from the save, shared with the skip. 2026-10-29.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const query = useMemo(() => knownQuery(save, tenth), [tenth, plan, save?.reactions, save?.will]);
   const [view, setView] = useState<EarthView>();
   useEffect(() => {
     if (seed === undefined) return;

@@ -1,5 +1,5 @@
 import { createContext, use, useEffect, useRef, useState } from "react";
-import { ordersLand, yearAt } from "@/lib/game/clock";
+import { MS_PER_YEAR, ordersLand, yearAt } from "@/lib/game/clock";
 import { browserStore } from "@/lib/game/store";
 import { POOL } from "@/lib/sim/pool";
 import type { Reaction, Save, Sent, Will } from "@/lib/game/types";
@@ -29,6 +29,8 @@ interface Game {
   /** Marks one of the things we would do before Begin as done. Once done, it stays done. */
   did(step: "reviewed" | "reached" | "asked"): void;
   begin(): void;
+  /** Jump the clock ahead to Year `to`, never back. */
+  skipTo(to: number): void;
   newGame(): void;
 }
 
@@ -107,6 +109,16 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     see: (ids) => change((s) => ({ ...s, seen: [...new Set([...(s.seen ?? []), ...ids])] })),
     did: (step) => void ((latest.current ?? save)?.[step] || change((s) => ({ ...s, [step]: true }))),
     begin: () => change((s) => ({ ...s, beganAt: Date.now() })),
+    // A skip moves Begin back, so the clock reads the later Year and runs on from there. On a refuge's slow clock the
+    // sky's Years pass faster, so fewer of the Will's minutes go. 2026-10-29.
+    skipTo: (to) =>
+      change((s) => {
+        if (s.beganAt === null) return s;
+        const from = yearAt(s.beganAt, Date.now(), s.will) ?? 0;
+        if (to <= from) return s;
+        const rate = s.will && from >= s.will.at ? s.will.rate : 1;
+        return { ...s, beganAt: s.beganAt - ((to - from) / rate) * MS_PER_YEAR };
+      }),
     newGame: () => update(freshSave()),
   };
   return <GameContext value={game}>{children}</GameContext>;
