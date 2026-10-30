@@ -279,6 +279,9 @@ export function kitOf(plan: Plan, scale: number) {
     telescope: done["Infrared Telescope"],
     mirror: done["15 m Mirror"] ?? null,
     halo: done["Halo Survey"] ?? null,
+    warmWatch: done["Warm Sky Watch"] ?? null,
+    moonSearch: done["Moon Search"] ?? null,
+    asteroidTour: done["Asteroid Tour"] != null ? done["Asteroid Tour"]! + 1 : null,
     mapper: done["Star Mapper"] ?? null,
     hyper: done["Hypertelescope"] ?? null,
     colony: (() => {

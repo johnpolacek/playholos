@@ -33,6 +33,9 @@ BULGE_SHARE, BULGE_PC = 0.2, 1000.0             # share of peers in the bulge an
 
 # Where a watcher could sit unseen, after Benford 2019.
 WATCHER_PLACES = ('an Earth co-orbital asteroid', 'Sun–Earth L4', 'Sun–Earth L5', 'Earth–Moon L4', 'Earth–Moon L5')
+# The Earth co-orbital asteroids known by 2026, in the order an asteroid tour visits them. Kamoʻoalewa first, as
+# Tianwen-2. Cruithne's horseshoe path ranges farther, so last.
+CO_ORBITALS = ('Kamoʻoalewa', '2023 FW13', '2002 AA29', '2004 GU9', '2006 FV35', 'Cruithne')
 
 # A young mind's outward time: building out its home, then spreading if it does (concept, 2026-10-29).
 BUILD_YEARS = (50, 1000)                        # evenly in log
@@ -169,7 +172,9 @@ def watcher(seed, olds):
     r = rng(seed, 'watcher')
     maker = olds[0]
     d = maker['d']
-    return dict(place=WATCHER_PLACES[int(r.random() * len(WATCHER_PLACES))], kg=1,
+    place = WATCHER_PLACES[int(r.random() * len(WATCHER_PLACES))]
+    rock = int(rng(seed, 'watcher', 'rock').random() * len(CO_ORBITALS)) if place == WATCHER_PLACES[0] else None
+    return dict(place=place, rock=None if rock is None else CO_ORBITALS[rock], kg=1,
                 arrivedYearsAgo=round(log_between(r, 1e6, min(1e9, maker['age']))), maker=maker['id'],
                 ladder=[dict(rung='warn', on='our first seed launches', by='watcher', delay=0),
                         dict(rung='contain', on='we launch another seed after the warning', by='maker', delay=round(d + d / REPLY_C)),

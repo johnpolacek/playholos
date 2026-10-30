@@ -135,6 +135,8 @@ export interface Peer {
 
 export interface Watcher {
   place: string;
+  /** On an Earth co-orbital asteroid, which one. */
+  rock: string | null;
   kg: number;
   arrivedYearsAgo: number;
   /** The id of the old mind that sent it. */

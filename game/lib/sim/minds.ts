@@ -14,8 +14,8 @@ export interface MindKit {
   halo?: number | null;
   /** A deep, stacked search of the Earth–Moon L4 and L5 points from Earth. */
   moonSearch?: number | null;
-  /** Probes searching one of the watcher's other hiding places up close: the Year each arrives. */
-  watcherProbes?: { place: string; arrives: number }[];
+  /** The asteroid tour: the Year its probe reaches the first Earth co-orbital asteroid. It maps each in turn. */
+  asteroidTour?: number | null;
   /** The Year our first seed ship leaves: the watcher warns us, and so shows itself. */
   firstSeed?: number | null;
   /** Our craft at other stars: where, in atlas light-years, the Year it arrives, and whether it brakes and stays. */
@@ -43,7 +43,7 @@ export interface ColdGlowSeen {
 export interface WatcherSeen {
   place: string;
   seen: number;
-  by: "moon search" | "probe" | "its warning";
+  by: "moon search" | "asteroid tour" | "its warning";
 }
 
 /** A compact warm body resting in the cold outer reaches of another star's system. */
@@ -66,8 +66,12 @@ export interface MindsSeen {
 export const WARM_EVERY = 2;
 /** Years a deep stacked search of Earth–Moon L4 and L5 takes to reach magnitude 28. */
 export const MOON_SEARCH_YEARS = 3;
-/** Years a probe takes to search a Lagrange region or an asteroid up close. */
-export const PROBE_SEARCH_YEARS = 1;
+/** The Earth co-orbital asteroids known by 2026, in the order the tour visits them, as calcs/minds.py. */
+export const CO_ORBITALS = ["Kamoʻoalewa", "2023 FW13", "2002 AA29", "2004 GU9", "2006 FV35", "Cruithne"];
+/** Years the tour spends at each: a Year mapping its whole surface to centimeters, as Tianwen-2, and a Year to the next. */
+export const TOUR_EACH = 2;
+/** Years mapping one asteroid. */
+export const TOUR_MAP = 1;
 /** How near a flyby's path must pass a sleeping mind for its 1 m telescope to see it, in AU. */
 export const FLYBY_SEES_AU = 50;
 /** Years a probe that stays takes to map a whole system. */
@@ -109,14 +113,16 @@ export function coldGlowOf(m: OldMind, halo: number | null | undefined, year: nu
   return { ...skyOf(m.pos), d: m.d, seen, watts: m.glowW };
 }
 
-/** The watcher, found by where it sits: from Earth at the Moon's L4 or L5, by a probe elsewhere, or anywhere once it
- *  warns us at our first seed ship. Whichever comes first. */
+/** The watcher, found by where it sits: from Earth at the Moon's L4 or L5, by the asteroid tour on a co-orbital rock,
+ *  or anywhere once it warns us at our first seed ship. At the Sun–Earth L4 or L5 points nothing finds it but its
+ *  warning: the zone is tens of millions of km wide, and a probe sees a dark 10 cm body only within about 200,000 km. */
 export function watcherOf(world: World, kit: MindKit, year: number): WatcherSeen | null {
   const w = world.minds?.watcher;
   if (!w) return null;
   const ways: WatcherSeen[] = [];
   if (w.place.startsWith("Earth–Moon") && kit.moonSearch != null) ways.push({ place: w.place, seen: kit.moonSearch + MOON_SEARCH_YEARS, by: "moon search" });
-  for (const p of kit.watcherProbes ?? []) if (p.place === w.place) ways.push({ place: w.place, seen: p.arrives + PROBE_SEARCH_YEARS, by: "probe" });
+  const at = w.rock ? CO_ORBITALS.indexOf(w.rock) : -1;
+  if (at >= 0 && kit.asteroidTour != null) ways.push({ place: w.rock!, seen: kit.asteroidTour + at * TOUR_EACH + TOUR_MAP, by: "asteroid tour" });
   if (kit.firstSeed != null) ways.push({ place: w.place, seen: kit.firstSeed, by: "its warning" });
   const first = ways.filter((x) => x.seen <= year).sort((a, b) => a.seen - b.seen)[0];
   return first ?? null;

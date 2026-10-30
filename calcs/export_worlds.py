@@ -155,6 +155,12 @@ def works_catalog():
     # The Star Mapper, settled 2026-10-26: a near-infrared Gaia, of the GaiaNIR class proposed to ESA. Gaia took about 7
     # years from approval to launch and cost about a billion euros, a tenth of a flagship. calcs/holes.py.
     works['Star mapper'] = dict(years=8, want=0.1)
+    # The Warm Sky Watch, settled 2026-10-29: all-sky mid-infrared maps every 2 Years, for a peer's warm flash.
+    works['Warm sky watch'] = dict(years=eg.WARM_YEARS, want=eg.WANTS['Warm sky watch'][0], orbit=True)
+    # The Moon Search, settled 2026-10-29: a Year to ready, then 3 Years of stacking (lib/sim/minds.ts).
+    works['Moon search'] = dict(years=1, want=eg.WANTS['Moon search'][0])
+    # The Asteroid Tour, settled 2026-10-29: built in 5 Years, a Year to the first rock, then 2 Years each.
+    works['Asteroid tour'] = dict(years=5, want=eg.WANTS['Asteroid tour'][0])
     # The Mind Link, settled 2026-10-26: 100 m optics in orbit and a 1 GW laser, to send the Will to our Mind at a hole.
     # calcs/holes.py.
     works['Mind link'] = dict(years=H.LINK_YEARS, want=H.LINK_WANT, orbit=True)

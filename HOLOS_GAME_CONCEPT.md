@@ -131,14 +131,17 @@ Settled 2026-10-28, one step at a time. The premise itself, how many minds exist
   - *The flash.* A peer building out its home glows warm for its outward time, and its light takes its distance in Years to reach us. Over 400 seeds, about 1.7 flashes a game passed before Year 0, gone. About 2.5 arrive in 100,000 Years, the first typically near Year 29,000, and 1 game in 5 sees one inside 10,000 Years.
   - *Its depth.* A Sun’s full output from 30,000 ly is about 1.5 mJy at 12 µm. Dust dims it 2 to 4 times, the most toward the Galaxy’s center (Xue et al. 2016, Schödel et al. 2010). AllWISE reached 0.73 mJy in clear sky, far worse in the crowded plane. A watch about 10 times deeper sees a flash anywhere in the Galaxy, a fifth-built swarm included. Spotting a new source against a crowded plane is what a repeating watch is for. Checked 2026-10-29.
   - *A flash we aren’t watching for passes unseen.* The watch must already run when it arrives.
+  - *The Warm Sky Watch, built 2026-10-29:* a cooled telescope about 1.3 m wide at L2, 0.25 flagships, about $2.5 billion, 8 Years, a quarter quicker with the yard. NEO Surveyor’s 0.5 m took a $1.2 billion development baseline (NASA, 2022), scaled by aperture, a sample. Not on the starting list.
   - Set aside: the Halo Survey catching warm flashes too. A warm flash and a cold glow need different instruments.
 - **Way 2: an awake old mind’s cold glow.** Settled 2026-10-29. The Halo Survey finds about half of them. Its depth, 3×10¹⁸ W at 10 pc, is 4.5×10²⁰ W at 400 ly, where 56% of awake minds glow brighter, and 2.8×10²¹ W at 1,000 ly, where 50% do. A deeper survey later could find more.
   - *It becomes an all-sky far-infrared mapper.* Pointing at each star in turn worked for 50 ly. Within 1,000 ly there are 8.5 million stars.
   - Set aside: every awake old mind glowing above the floor. Physics doesn’t promise a bright glow.
 - **Way 3: the watcher, found by where it sits.** Settled 2026-10-29. A 1 kg watcher is about a dark 10 cm object, absolute magnitude about 39 at albedo 0.05, this project’s arithmetic.
   - *Earth–Moon L4 or L5:* about magnitude 26 to 27 from Earth, or 28 if coated near black. A deep, stacked search from Earth finds it in some Years.
-  - *Sun–Earth L4 or L5:* about magnitude 39, beyond any telescope. Only a probe searching the region up close finds it.
-  - *An Earth co-orbital asteroid,* such as Kamoʻoalewa: only a probe at each one finds it.
+  - *The Moon Search, built 2026-10-29:* a shift-and-stack program on Rubin and Subaru, 0.01 flagships, about $100 million, a sample. A Year to ready, then 3 Years of stacking to magnitude 28.
+  - *Sun–Earth L4 or L5:* about magnitude 39, beyond any telescope. Corrected 2026-10-29: no probe finds it either. The zone is tens of millions of km wide, and a probe sees a dark 10 cm body only within about 200,000 km, so years of sweeping cover about 1%. Only its warning reveals it.
+  - *An Earth co-orbital asteroid:* the Asteroid Tour, one probe of Tianwen-2’s class, maps each of the six known in turn: Kamoʻoalewa, 2023 FW13, 2002 AA29, 2004 GU9, 2006 FV35, Cruithne. 0.05 flagships, about $500 million, a sample. 5 Years to build, a Year to the first rock, then 2 Years each. The seed draws which rock.
+  - Set aside: a fleet of about 100 small probes sweeping the Sun–Earth zones for decades, about $2 billion and still unlikely to find it.
   - *Anywhere,* its warning at our first seed launch reveals it.
   - Set aside: one generic search that finds it anywhere after set Years.
 - **Way 4: an asleep old mind, found only up close.** Settled 2026-10-29.
@@ -1012,7 +1015,8 @@ Settled 2026-10-28, from the designer: anything available to another civilizatio
     - *As far off as a world is, fewer pixels hold its light,* so each pixel gets as much, and the same 30 minutes serves.
     - *Never cities.* Fields and towns need a pixel under about 50 km, which it has only within 1.6 ly. A home reads as forests, and the Mind says it can’t tell who lives there.
   - *The same rule for lenses.* A lens’s pixel passes 50 km past about 195 ly, and there it shows forests, not cities.
-  - *Not yet:* Mercury on the map, so these three have no place there; close views; the Star Beam pushing seed ships; a hypertelescope grown wider from the swarm’s mirrors; peers across the Galaxy seeing our swarm.
+  - *On the map, 2026-10-29:* each of Mercury’s three stands at Mercury, a globe in dots read off its map as the Moon’s is, with its works in a ring round it and a thread home. Every planet can hold a build so, and the map names all eight at the Sun’s family.
+  - *Not yet:* the swarm drawn as a ring round the Sun; close views; the Star Beam pushing seed ships; a hypertelescope grown wider from the swarm’s mirrors; peers across the Galaxy seeing our swarm.
   - *Why not every world in our quadrant.* A lens sees one star a craft. A hypertelescope can turn to any, but resolving cities at 10,000 ly needs a baseline near 2 million km. The physics allows it, built from the swarm, but nothing like it is designed.
 
 ## Hostility

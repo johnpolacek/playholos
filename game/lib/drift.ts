@@ -5,6 +5,14 @@
 import * as THREE from "three";
 import earthDaymap from "../../assets/earth_daymap.jpg";
 import moonMap from "../../assets/moon.jpg";
+import mercuryMap from "../../assets/mercury.jpg";
+import venusMap from "../../assets/venus_atmosphere.jpg";
+import marsMap from "../../assets/mars.jpg";
+import jupiterMap from "../../assets/jupiter.jpg";
+import saturnMap from "../../assets/saturn.jpg";
+import ringMap from "../../assets/saturn_ring_alpha.png";
+import uranusMap from "../../assets/uranus.jpg";
+import neptuneMap from "../../assets/neptune.jpg";
 import { PC_LY, PLANETS, julianDate, orbitPath, seededRandom } from "../../src/astronomy.js";
 import { bodyOrientation, bodyPosition, moonOffset } from "../../src/ephemeris.js";
 import { GALAXIES, galaxyExtent, galaxyPosition, galaxyViewRadius } from "../../src/galaxies.js";
@@ -127,7 +135,9 @@ export interface Show {
   works?: {
     name: string;
     site: {
-      on: "earth" | "moon" | "orbit" | "l2" | "l4";
+      on: "earth" | "moon" | "orbit" | "l2" | "l4" | "planet";
+      /** At a planet: which. 2026-10-29. */
+      body?: string;
       draw: "dome" | "ring" | "launch";
       places: { lat: number; lon: number }[];
       orbit?: { km: number; tilt: number; minutes: number; behind?: number };
@@ -362,6 +372,11 @@ void main() {
   if (vAlpha < 0.002) gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
 }`;
 
+// A planet's ground in dots, as the Moon's, lit from the Sun, all of it in the planet's own color. 2026-10-29.
+const PLANET_VERT = SURFACE_VERT.replace("uniform float uFocal,", "uniform float uTint;\nuniform float uFocal,")
+  .replace(/float a = aKind < 0\.5[\s\S]*?;\n  float px/, "float a = aBright * mix(0.12, 0.85, smoothstep(-0.1, 0.25, sun));\n  float px")
+  .replace("vColor = uPal[int(aKind + 0.5)];", "vColor = uPal[int(uTint + 0.5)];");
+
 // A sphere seen from outside, brightest where we look along its skin: Earth's radar shell.
 const SHELL_VERT = /* glsl */ `
 varying vec3 vN;
@@ -512,8 +527,13 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     .normalize();
   const l4At = (km: number) =>
     pilot.sky.sunDir.clone().multiplyScalar(0.5).addScaledVector(ahead, Math.sqrt(3) / 2).multiplyScalar(km / 6371.0084);
-  /** A far site's middle, in Earth radii from Earth: L2's or L4's. */
-  const farAt = (site: { on: string; km?: number }) => (site.on === "l4" ? l4At(6e6) : l2At(site.km ?? 1.5e6));
+  /** A planet's middle today, in Earth radii from Earth, and its radius in Earth radii. 2026-10-29. */
+  const planetAt = (body: string) =>
+    new THREE.Vector3().copy(bodyPosition(body, pilot.sky.date)).sub(pilot.sky.earthAU).divideScalar(R_E_AU);
+  const planetR = (body: string) => PLANETS.find((x: { name: string }) => x.name === body)!.radius / 6371.0084;
+  /** A far site's middle, in Earth radii from Earth: L2's, L4's or a planet's. */
+  const farAt = (site: { on: string; km?: number; body?: string }) =>
+    site.on === "planet" ? planetAt(site.body!) : site.on === "l4" ? l4At(6e6) : l2At(site.km ?? 1.5e6);
   const Z = new THREE.Vector3(0, 0, 1);
   /** A telescope at L2, where it flies on a halo orbit round L2 drawn across the line to the Sun, 800,000 by 400,000
    *  km, in Earth radii from Earth. At L4, a trojan's loop round it, drawn 1.6 million by 400,000 km to suit L4 as
@@ -614,6 +634,12 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         const { sunDir } = pilot.sky;
         v = sunDir.clone().cross(eN).normalize().addScaledVector(eN, 0.5).normalize();
         logD = w.site.on === "l4" ? L4_WORK : L2_WORK;
+      } else if (w.site.on === "planet") {
+        // A planet: from its day side and a little off the line to the Sun, so it shows lit with its night edge, and
+        // the works round it, from about seven of its widths across. 2026-10-29.
+        const toSun = new THREE.Vector3().copy(bodyPosition(w.site.body!, date)).negate().normalize();
+        v = toSun.clone().addScaledVector(toSun.clone().cross(eN).normalize(), 0.8).addScaledVector(eN, 0.35).normalize();
+        logD = Math.log10(7 * planetR(w.site.body!) * R_E_AU);
       } else if (w.site.on === "orbit") {
         const { axis, node } = orbitFrame(w.site.orbit?.tilt ?? 0);
         v = axis.multiplyScalar(0.8).addScaledVector(node, 0.6).normalize();
@@ -945,6 +971,9 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
   solar.scene.add(sun.points(sunGlow));
 
   const jd = julianDate(date);
+  /** Each planet where it is today, in AU from the Sun, for its name on the map. */
+  const bodies = new Map<string, THREE.Vector3>();
+  const bodyAt = (name: string) => bodies.get(name) ?? bodies.set(name, new THREE.Vector3().copy(bodyPosition(name, date))).get(name)!;
   const planets = new Cloud();
   const PLANET_KIND: Kind[] = ["ink", "ink", "mind", "rose", "warm", "warm", "young", "young"];
   const PLANET_PX = [2.2, 2.8, 3.2, 2.5, 4.2, 3.8, 3.1, 3.1];
@@ -2596,6 +2625,25 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
           rockets: null,
         };
       }
+      // At a planet: its works in a ring round it, in the plane the planets go round in, and a thread home. 2026-10-29.
+      if (on === "planet") {
+        const center = farAt(w.site);
+        const R = planetR(w.site.body!);
+        const flat = new THREE.Quaternion().setFromUnitVectors(up, eN);
+        const toSun = center.clone().add(earthAU.clone().divideScalar(R_E_AU)).negate().normalize();
+        const at = center.clone().addScaledVector(toSun.clone().cross(eN).normalize(), 1.6 * R);
+        const threadMat = line("mind", 0, true);
+        const thread = new THREE.Line(new THREE.BufferGeometry().setFromPoints([at, new THREE.Vector3()]), threadMat);
+        thread.frustumCulled = false;
+        earth.scene.add(thread);
+        return {
+          moon,
+          places: [{ at, parent: earth.scene as THREE.Object3D, shapes: [shape(ring(1.6 * R), earth.scene, center, flat)], ...spotAt(at, earth.scene) }],
+          orbit: null,
+          threadMat,
+          rockets: null,
+        };
+      }
       if (on === "orbit") {
         const o = w.site.orbit ?? { km: 400, tilt: 51.6, minutes: 92.9 };
         const flat = new THREE.Quaternion().setFromUnitVectors(up, orbitFrame(o.tilt).axis);
@@ -2666,6 +2714,74 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       }
       return { moon, places, orbit: null, threadMat, rockets };
     }
+    // The planets, each in dots read off its map as the Moon is, lit from the Sun, made when a build there is first in
+    // view. Saturn wears its rings. 2026-10-29.
+    const globes = new Map<string, { mat: THREE.ShaderMaterial; rings: THREE.ShaderMaterial | null; at: number }>();
+    function globeOf(body: string) {
+      if (globes.has(body)) return globes.get(body)!;
+      const group = new THREE.Group();
+      group.position.copy(planetAt(body));
+      group.quaternion.copy(bodyOrientation(body, date));
+      earth.scene.add(group);
+      const toSun = new THREE.Vector3().copy(bodyPosition(body, date)).negate().normalize();
+      const mat = new THREE.ShaderMaterial({
+        uniforms: { ...shared, uSun: { value: toSun }, uOpacity: { value: 0 }, uTint: { value: K[PLANET_KIND[PLANETS.findIndex((x: { name: string }) => x.name === body)]] } },
+        vertexShader: PLANET_VERT,
+        fragmentShader: GLOW_FRAG,
+        transparent: true,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+      });
+      const rings = body === "Saturn" ? glow({ maxPx: 4, depthTest: false }) : null;
+      if (rings) rings.blending = THREE.AdditiveBlending;
+      const made = { mat, rings, at: Infinity };
+      globes.set(body, made);
+      const i = PLANETS.findIndex((x: { name: string }) => x.name === body);
+      const R = planetR(body);
+      faceOf(PLANET_MAP[body]).then((face) => {
+        if (gone) return;
+        // Each map's own range of light, so a pale gas giant shows its bands as a dark cratered world shows its craters.
+        const N = 9000;
+        const tones: number[] = [];
+        const pts: [number, number][] = [];
+        for (let k = 0; k < N; k++) {
+          const y = 1 - (2 * (k + 0.5)) / N;
+          const t = k * Math.PI * (3 - Math.sqrt(5));
+          const [lat, lon] = [Math.asin(y) / DEG, Math.atan2(Math.sin(t), Math.cos(t)) / DEG];
+          pts.push([lat, lon]);
+          tones.push(face(lat, lon));
+        }
+        const sorted = [...tones].sort((a, b) => a - b);
+        const [lo, hi] = [sorted[Math.floor(N * 0.03)], sorted[Math.floor(N * 0.97)]];
+        const dots = new Cloud();
+        pts.forEach(([lat, lon], k) => {
+          const tone = Math.min(1, Math.max(0, (tones[k] - lo) / Math.max(1, hi - lo)));
+          dots.add(...onGlobe(lat, lon, R * 1.003), 0.0275 * R, 0.12 + 0.88 * tone ** 1.6, K[PLANET_KIND[i]]);
+        });
+        group.add(dots.points(mat));
+        made.at = clock;
+        dirty = true;
+      });
+      if (rings)
+        faceOf(ringMap).then((alpha) => {
+          if (gone) return;
+          // From the C ring's inner edge, 74,500 km, to the A ring's outer, 136,780 km, as the map runs.
+          const [r0, r1] = [74500 / 58232, 136780 / 58232];
+          const dots = new Cloud();
+          const scatter = seededRandom(1610);
+          for (let k = 0; k < 14000; k++) {
+            const u = scatter();
+            const a = scatter() * 2 * Math.PI;
+            const r = (r0 + (r1 - r0) * u) * R;
+            const b = alpha(0, -180 + 360 * u) / 255;
+            if (b < 0.05) continue;
+            dots.add(r * Math.cos(a), 0, r * Math.sin(a), 0.02 * R, 0.9 * b, K.warm);
+          }
+          group.add(dots.points(rings));
+          dirty = true;
+        });
+      return made;
+    }
     const made = new Map<string, ReturnType<typeof mark>>();
     const v = new THREE.Vector3();
     const n = new THREE.Vector3();
@@ -2680,6 +2796,12 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       const moonHigh = (earth.camera.position.distanceTo(moonAt) - MOON_R) * 6371.0084;
       ground.uniforms.uOpacity.value =
         p * arrived(groundAt) * Number(focus?.site.on === "moon") * ramp(moonHigh, 10, 40);
+      if (focus?.site.on === "planet") globeOf(focus.site.body!);
+      for (const [body, g] of globes) {
+        const o = p * arrived(g.at) * Number(focus?.site.on === "planet" && focus.site.body === body);
+        g.mat.uniforms.uOpacity.value = o;
+        if (g.rings) g.rings.uniforms.uOpacity.value = o;
+      }
       const flash = still ? 0 : Math.exp(-((clock % beat) / beat) * 5);
       // Thought fields' glow beats faster: thought.
       const thinks = still ? 0 : Math.exp(-((clock % 0.9) / 0.9) * 4);
@@ -2738,6 +2860,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
             m.moon ||
             focus.site.on === "l2" ||
             focus.site.on === "l4" ||
+            focus.site.on === "planet" ||
             n.copy(v).normalize().dot(n.clone().subVectors(earth.camera.position, v)) > 0;
           v.project(earth.camera);
           const a = v.z < 1 && facing ? p : 0;
@@ -2745,12 +2868,12 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         });
         // Earth, from the Moon or L2. From the Moon it is often behind us: then its way across the screen is the other
         // side of the middle, far off.
-        if (m && (m.moon || focus.site.on === "l2" || focus.site.on === "l4")) {
+        if (m && (m.moon || focus.site.on === "l2" || focus.site.on === "l4" || focus.site.on === "planet")) {
           const behind = v.set(0, 0, 0).applyMatrix4(earth.camera.matrixWorldInverse).z > 0;
           v.set(0, 0, 0).project(earth.camera);
           const k = behind ? -1000 : 1;
-          const a = focus.site.on === "l2" || focus.site.on === "l4" ? p : p * ramp(-x, 2.4, 3.2);
-          marks.push({ id: `earth:${focus.site.on}`, x: ((v.x * k + 1) / 2) * w, y: ((1 - v.y * k) / 2) * h, a });
+          const a = focus.site.on === "l2" || focus.site.on === "l4" || focus.site.on === "planet" ? p : p * ramp(-x, 2.4, 3.2);
+          marks.push({ id: `earth:${focus.site.on === "planet" ? `planet:${focus.site.body}` : focus.site.on}`, x: ((v.x * k + 1) / 2) * w, y: ((1 - v.y * k) / 2) * h, a });
         }
         spec.onMarks(marks);
       }
@@ -3199,6 +3322,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     if (work?.site.on === "moon")
       goal.copy(siteAt(work)).multiplyScalar(MOON_R * 0.45).add(moonAt).multiplyScalar(R_E_AU);
     else if (work?.site.on === "l2" || work?.site.on === "l4") goal.copy(farAt(work.site)).multiplyScalar(0.55 * R_E_AU);
+    else if (work?.site.on === "planet") goal.copy(farAt(work.site)).multiplyScalar(R_E_AU);
     else goal.set(0, 0, 0);
     if (!goal.equals(hop.to)) {
       hop.from.copy(workShift);
@@ -3287,6 +3411,23 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         L.camera.far = Math.max(L.camera.far, span + 70);
       }
       L.camera.updateProjectionMatrix();
+    }
+
+    // The map at its stops: each planet's name, once the view is out far enough to hold the Sun's family, and gone again
+    // past the Kuiper belt. 2026-10-29.
+    if (spec.mode === "map" && spec.onMarks) {
+      const w = parent.clientWidth, h = parent.clientHeight;
+      const a = ramp(logD, -1.6, -0.9) * (1 - ramp(logD, 2.9, 3.6));
+      solar.camera.updateMatrixWorld();
+      spec.onMarks(
+        PLANETS.map((b: { name: string }) => {
+          const at = b.name === "Earth" ? earthAU : bodyAt(b.name);
+          const v = new THREE.Vector3().copy(at).applyMatrix4(solar.camera.matrixWorldInverse);
+          const ahead = v.z < 0;
+          v.copy(at).project(solar.camera);
+          return { id: `body:${b.name}`, x: ((v.x + 1) / 2) * w, y: ((1 - v.y) / 2) * h, a: ahead ? a : 0 };
+        }),
+      );
     }
 
     // What shows at this scale.
@@ -3451,9 +3592,15 @@ function onGlobe(lat: number, lon: number, r: number): [number, number, number] 
 
 /** The Moon's face, read off the atlas's Moon map: how bright it is at a latitude and east longitude, 0 to 255. The
  *  seas are dark. */
-async function moonFace() {
+const moonFace = () => faceOf(moonMap);
+/** Each planet's map, from the atlas. 2026-10-29. */
+const PLANET_MAP: Record<string, string> = {
+  Mercury: mercuryMap, Venus: venusMap, Mars: marsMap, Jupiter: jupiterMap, Saturn: saturnMap, Uranus: uranusMap, Neptune: neptuneMap,
+};
+/** A map's brightness at a latitude and longitude, 0 to 255. */
+async function faceOf(src: string) {
   const img = new Image();
-  img.src = moonMap;
+  img.src = src;
   await img.decode();
   const W = 512;
   const H = 256;
@@ -3467,7 +3614,8 @@ async function moonFace() {
     const x = Math.min(W - 1, Math.floor((((lon / 360 + 0.5) % 1) + 1) % 1 * W));
     const y = Math.min(H - 1, Math.max(0, Math.floor((0.5 - lat / 180) * H)));
     const i = (y * W + x) * 4;
-    return (d[i] + d[i + 1] + d[i + 2]) / 3;
+    // Weighed by its alpha, which is all Saturn's ring map holds.
+    return ((d[i] + d[i + 1] + d[i + 2]) / 3) * (d[i + 3] / 255);
   };
 }
 

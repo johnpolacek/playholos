@@ -1,6 +1,6 @@
 import { useLocation } from "react-router";
 import { Arrival } from "@/components/arrival";
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { BeamsMap, useBeams } from "@/components/beams";
 import { Globe, Lens } from "@/components/icons";
 import { ReachMap, Ruler, useReach } from "@/components/reach";
@@ -8,6 +8,8 @@ import { ScanMap, useLeads, useStepTap } from "@/components/scan";
 import { SkyArt, useSky } from "@/components/sky";
 import { useWorks, WorksMap } from "@/components/works";
 import type { Stop } from "@/lib/flight";
+import type { Mark } from "@/lib/drift";
+import { PLANETS } from "../../src/astronomy.js";
 import { CLOSE } from "@/lib/game/close";
 
 // The map's five stops, and its outward button: each tap travels one stop out, and the last comes home.
@@ -145,10 +147,24 @@ export function MapStrip() {
   );
 }
 
-// The map at its stops. Back from Scan or our messages, it opens on Earth again.
+// The map at its stops. Back from Scan or our messages, it opens on Earth again. Out at the Sun's family, each planet
+// is named beside its point, 2026-10-29.
 function Stops() {
   const sky = useSky();
   const [stage, setStage] = useState(0);
+  const names = useRef<Record<string, HTMLSpanElement | null>>({});
+  const onMarks = useCallback((marks: Mark[]) => {
+    // Earth's name first, then the rest outward: one too close to a name already placed gives way.
+    const kept: { x: number; y: number }[] = [];
+    for (const { id, x, y, a } of [...marks].sort((m, k) => Number(k.id === "body:Earth") - Number(m.id === "body:Earth"))) {
+      const n = names.current[id];
+      if (!n) continue;
+      const clear = a > 0 && !kept.some((k) => Math.abs(k.x - x) < 46 && Math.abs(k.y - y) < 12);
+      if (clear) kept.push({ x, y });
+      n.style.transform = `translate(${x + 7}px, ${y}px) translate(0, -50%)`;
+      n.style.opacity = String(clear ? a : 0);
+    }
+  }, []);
 
   function travel() {
     const next = (stage + 1) % STAGES.length;
@@ -158,7 +174,19 @@ function Stops() {
 
   return (
     <>
-      <SkyArt mode="map" className="absolute inset-0" />
+      <SkyArt mode="map" onMarks={onMarks} className="absolute inset-0">
+        {PLANETS.map((b: { name: string }) => (
+          <span
+            key={b.name}
+            ref={(n) => {
+              names.current[`body:${b.name}`] = n;
+            }}
+            className={`pointer-events-none absolute top-0 left-0 font-mono text-[9px] whitespace-nowrap opacity-0 [text-shadow:0_0_4px_#121314,0_0_8px_#121314] ${b.name === "Earth" ? "text-you" : "text-muted"}`}
+          >
+            {b.name}
+          </span>
+        ))}
+      </SkyArt>
       <Turn />
       <span className={LABEL}>{STAGES[stage].name}</span>
       <button onClick={travel} className={BUTTON}>

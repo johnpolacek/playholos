@@ -50,7 +50,7 @@ export interface Kit {
   /** What finds the realistic premise's minds, beyond the Halo Survey: lib/sim/minds.ts. 2026-10-29. */
   warmWatch?: number | null;
   moonSearch?: number | null;
-  watcherProbes?: MindKit["watcherProbes"];
+  asteroidTour?: number | null;
   craft?: MindKit["craft"];
 }
 
@@ -239,7 +239,7 @@ export function earthKnows(
   world: World,
   year: number,
   voices: Voices = {},
-  { allSky = null, flash = null, telescope = null, mirror = null, halo = null, mapper = null, hyper = null, lenses = [], sentinels = [], seeds = [], colony = null, sails = null, probe = null, losses = [], quiet = null, hides = [], searched = [], warmWatch = null, moonSearch = null, watcherProbes = [], craft = [] }: Kit = {},
+  { allSky = null, flash = null, telescope = null, mirror = null, halo = null, mapper = null, hyper = null, lenses = [], sentinels = [], seeds = [], colony = null, sails = null, probe = null, losses = [], quiet = null, hides = [], searched = [], warmWatch = null, moonSearch = null, asteroidTour = null, craft = [] }: Kit = {},
 ): EarthView {
   const shown = (id: string) => world.stars[id]?.shown ?? id;
   // Earth's finds at Year 0: every world whose tug shows by 2040. Measured, not understood. Its star is in the catalogs.
@@ -362,7 +362,7 @@ export function earthKnows(
   visits.sort((a, b) => a.home - b.home);
   // The realistic premise's minds, as far as we have found them. 2026-10-29.
   const firstSeed = seeds.length ? Math.min(...seeds.map((s) => s.leaves)) : null;
-  const minds = mindsSeen(world, { warmWatch, halo, moonSearch, watcherProbes, firstSeed, craft }, year);
+  const minds = mindsSeen(world, { warmWatch, halo, moonSearch, asteroidTour, firstSeed, craft }, year);
   const anyMind = minds.flashes.length || minds.glows.length || minds.watcher || minds.sleepers.length;
   return {
     year, felt, heard, visits,

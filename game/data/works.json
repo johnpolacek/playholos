@@ -110,6 +110,19 @@
    "years": 8,
    "want": 0.1
   },
+  "Warm sky watch": {
+   "years": 8,
+   "want": 0.25,
+   "orbit": true
+  },
+  "Moon search": {
+   "years": 1,
+   "want": 0.01
+  },
+  "Asteroid tour": {
+   "years": 5,
+   "want": 0.05
+  },
   "Mind link": {
    "years": 18,
    "want": 0.5,

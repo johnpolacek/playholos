@@ -333,6 +333,16 @@ WANTS['Solar lens'] = (0.5, 'sample: a few small sailcraft')
 WANTS['X-ray sky watch'] = (0.15, 'six Einstein Probe-class units, about 1.5 billion dollars')
 XRAY_YEARS = 4
 WANTS['Halo survey'] = (0.05, 'sample: an observing program on a telescope we have')
+# Settled 2026-10-29: the warm sky watch, a cooled all-sky mid-infrared telescope about 1.3 m wide, ten times deeper
+# than WISE at 12 um. NEO Surveyor's 0.5 m took a development baseline of $1.2B, so about $2.5B: a sample, by aperture.
+WANTS['Warm sky watch'] = (0.25, 'about 2.5 billion dollars: NEO Surveyor, 0.5 m, $1.2B, scaled by aperture')
+WARM_YEARS = 8
+# Settled 2026-10-29: the Moon search, a shift-and-stack program on telescopes we have, Rubin's class, to magnitude 28
+# at the Earth-Moon L4 and L5 points. Observing time and software: a sample.
+WANTS['Moon search'] = (0.01, 'sample: about 100 million dollars of observing time and software')
+# Settled 2026-10-29: the asteroid tour, one probe of Tianwen-2's class mapping each Earth co-orbital asteroid in turn.
+# Discovery-class, about half a billion dollars: a sample, since Tianwen-2's price isn't public.
+WANTS['Asteroid tour'] = (0.05, 'sample: a Discovery-class probe, about 500 million dollars')
 # Wants for the seed ship's works, samples: no real price exists for any of them.
 WANTS.update({'Fusion drive': (10, 'sample: no real price exists'), 'Seed ship': (5, 'sample'),
               'Deuterium works': (1, 'sample: twenty-four Bruce plants'), 'Seed ship line': (2, 'sample')})

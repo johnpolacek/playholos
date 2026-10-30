@@ -33,6 +33,12 @@ export const BUILDS: Build[] = [
   { name: "Halo Survey", what: "Looks for the cold glow of minds computing far from their stars.", does: "see" },
   // A near-infrared Gaia, of the GaiaNIR class, 2026-10-26: it finds black holes by the stars they shift.
   { name: "Star Mapper", what: "Maps a billion stars’ places, and finds black holes by the stars they shift.", does: "see" },
+  // A cooled all-sky mid-infrared telescope, ten times deeper than WISE, 2026-10-29: it catches a young mind’s warm flash.
+  { name: "Warm Sky Watch", what: "Maps the whole sky in warm infrared every 2 Years, for new warm glows.", does: "see" },
+  // A shift-and-stack search of the Earth–Moon L4 and L5 points, on telescopes we have, 2026-10-29.
+  // One probe mapping each Earth co-orbital asteroid in turn, as Tianwen-2 maps Kamoʻoalewa, 2026-10-29.
+  { name: "Asteroid Tour", what: "A probe that maps each asteroid sharing Earth’s orbit, one by one, down to centimeters.", does: "see" },
+  { name: "Moon Search", what: "Stacks years of deep images of the Moon’s L4 and L5 points, for anything small and dark.", does: "see" },
   { name: "Launch Complex", what: "Doubles what we lift to orbit.", does: "lift" },
   // What a neighbor can do to us, we can build, 2026-10-28: see a probe braking in, and fall quiet.
   { name: "X-Ray Watch", what: "Sees a probe’s fusion flame as it brakes into our system, weeks out.", does: "see" },
@@ -164,7 +170,7 @@ export const buildOf = (name: string): Build | Later | undefined =>
  *  the vault left out 2026-10-20, the Halo Survey and Star Mapper 2026-10-26, which pay off late, and the Launch
  *  Tunnel 2026-10-27, since nothing we could start waits on lift. */
 export const STARTS = BUILDS.filter(
-  (b) => !["Moon Vault", "Halo Survey", "Star Mapper", "Launch Tunnel", "X-Ray Watch", "Quiet Radars", "Deuterium Works", "Fusion Drive", "Seed Ship"].includes(b.name),
+  (b) => !["Moon Vault", "Halo Survey", "Star Mapper", "Warm Sky Watch", "Moon Search", "Asteroid Tour", "Launch Tunnel", "X-Ray Watch", "Quiet Radars", "Deuterium Works", "Fusion Drive", "Seed Ship"].includes(b.name),
 );
 
 /** What the Mind says of each build, on its page and in the walk. */
@@ -177,6 +183,12 @@ export const SAYS: Record<string, string> = {
     "The fabs fill a campus a Year, each adding half again to our compute, until our compute draws the whole grid. Every build goes faster as they come, and so do our studies.",
   "Infrared Telescope":
     "It would read the air of the nearest worlds. Oxygen can build up without life, so we would weigh it against the water and everything else we read.",
+  "Asteroid Tour":
+    "Six known asteroids share Earth’s orbit, circling the Sun beside us for centuries. Something left to watch us could ride one. A probe maps each whole surface to centimeters in a Year, then flies on: Kamoʻoalewa first, Cruithne last, about 12 Years in all. A watcher floating free at the Sun–Earth L4 or L5 points it can’t find: those zones are tens of millions of km wide.",
+  "Moon Search":
+    "Sixty degrees ahead of the Moon and behind it, its pull and Earth’s balance, and a small thing can sit there for ages. Something left to watch us could. Stacked over 3 Years, Rubin-class images reach magnitude 28, enough to see a dark object about 10 cm wide there. Anything farther out it can’t see.",
+  "Warm Sky Watch":
+    "A young mind building out its home glows warm for centuries, and its light takes tens of thousands of Years to reach us. This maps the whole sky every 2 Years, ten times deeper than WISE, so a new warm glow anywhere in our galaxy shows. One that rises and fades before it runs, we never see.",
   "Star Mapper":
     "Dozens of black holes should lie within 100 light years, and we have found almost none, since they give off no light. Passing in front of a star, one shifts where the star seems to be. A sharper Gaia, seeing through dust in the infrared, would catch them as they pass, a few each decade.",
   "Halo Survey":
@@ -266,6 +278,9 @@ const FIRST: Record<string, string> = {
   "15 m Mirror": "A 15 m mirror",
   "X-Ray Watch": "X-ray sky watch",
   "Far-Side Array": "Far-side array, one fifth",
+  "Warm Sky Watch": "Warm sky watch",
+  "Moon Search": "Moon search",
+  "Asteroid Tour": "Asteroid tour",
 };
 export const pacedName = (name: string) => FIRST[name] ?? PACED[name.toLowerCase()] ?? name;
 

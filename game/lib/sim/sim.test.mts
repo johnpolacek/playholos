@@ -574,7 +574,7 @@ test("the realistic premise's minds: rare and old near us, a few peers far off, 
 });
 
 test("finding minds: a flash while the warm watch runs, half the cold glows, the watcher by where it sits, a sleeper up close", async () => {
-  const { skyOf, flashOf, coldGlowOf, watcherOf, sleeperOf, WARM_EVERY, MOON_SEARCH_YEARS, STAY_SEARCH_YEARS, FLYBY_SEES_AU } = await import("./minds.ts");
+  const { skyOf, flashOf, coldGlowOf, watcherOf, sleeperOf, WARM_EVERY, MOON_SEARCH_YEARS, STAY_SEARCH_YEARS, FLYBY_SEES_AU, CO_ORBITALS, TOUR_EACH, TOUR_MAP } = await import("./minds.ts");
   const { skyBasis } = await import("../../../src/coordinates.js");
   // Sky positions agree with the atlas's own frame.
   for (const [ra, dec] of [[56.6, 24.1], [262.17, -0.58], [6.02, -72.08]]) {
@@ -601,6 +601,10 @@ test("finding minds: a flash while the warm watch runs, half the cold glows, the
     assert.equal(watcherOf(world, { firstSeed: 40 }, 40)?.by, "its warning");
     const moon = watcherOf(world, { moonSearch: 10 }, 1000);
     assert.equal(moon?.seen ?? null, w.place.startsWith("Earth–Moon") ? 10 + MOON_SEARCH_YEARS : null);
+    // The asteroid tour finds it only on its own rock, in the tour's order. At the Sun–Earth points, only its warning.
+    const tour = watcherOf(world, { asteroidTour: 20 }, 1000);
+    assert.equal(tour?.seen ?? null, w.rock ? 20 + CO_ORBITALS.indexOf(w.rock) * TOUR_EACH + TOUR_MAP : null);
+    if (w.place.startsWith("Sun–Earth")) assert.equal(watcherOf(world, { moonSearch: 10, asteroidTour: 20 }, 1e5), null);
     // A craft that stays finds a sleeper. A flyby only if it rests within a 1 m telescope's reach.
     for (const o of m.old.filter((o) => o.asleep)) {
       const stay = sleeperOf(o, [{ pos: o.pos, arrives: 5000, stays: true }], 1e6);

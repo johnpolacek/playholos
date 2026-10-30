@@ -13,9 +13,11 @@ export interface Place {
   name: string;
 }
 
-/** Where a build stands: on Earth, the Moon, in low orbit or out at L2, at one place or more. */
+/** Where a build stands: on Earth, the Moon, in low orbit, out at L2 or L4, or at another planet, at one place or more. */
 export interface Site {
-  on: "earth" | "moon" | "orbit" | "l2" | "l4";
+  on: "earth" | "moon" | "orbit" | "l2" | "l4" | "planet";
+  /** At a planet: which, by the atlas's name. 2026-10-29. */
+  body?: string;
   /** How the map draws it: a dome of the sky each place watches, a ring round it, or paths up to orbit from it. */
   draw: "dome" | "ring" | "launch";
   /** In orbit or at L2, one place, its name only. */
@@ -103,6 +105,46 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
       takes: "Built in orbit, it takes a quarter less time once the yard is done.",
       before:
         "NASA’s Habitable Worlds Observatory was to read the air of at least 25 such worlds from here in the 2040s. In April 2026 NASA asked only $5 million for it, down from $150 million.",
+    },
+  },
+  "Asteroid Tour": {
+    // Kamoʻoalewa's path round the Sun, beside Earth's: the tour's first stop, where Tianwen-2 goes.
+    site: { on: "l2", draw: "ring", places: [{ lat: 0, lon: 0, name: "Beside Earth’s orbit, with Kamoʻoalewa" }], km: 15_000_000 },
+    story: {
+      have: "China’s Tianwen-2 reached Kamoʻoalewa in 2026 to map it and bring a sample home. No one has looked at the others up close.",
+      where: "Circling the Sun beside Earth, from one co-orbital asteroid to the next.",
+      why: "Six known asteroids share our orbit and stay near us for centuries. Anything left to watch us could ride one, and only a probe in orbit round each sees something a few centimeters across.",
+      takes: "One probe of Tianwen-2’s class, about $500 million, 5 Years to build. A Year to the first rock, then 2 Years each.",
+      before: "Kamoʻoalewa, 40 to 100 m wide, may be a piece of our Moon thrown off long ago. Benford 2019 named such rocks as where a watcher could sit.",
+    },
+  },
+  "Moon Search": {
+    // Rubin on Cerro Pachón and Subaru on Maunakea: the wide, deep cameras a stacked search runs on.
+    site: {
+      on: "earth",
+      draw: "dome",
+      places: [
+        { lat: -30.24, lon: -70.74, name: "Rubin Observatory, Cerro Pachón, Chile" },
+        { lat: 19.83, lon: -155.48, name: "Subaru, Maunakea, Hawaiʻi" },
+      ],
+    },
+    story: {
+      have: "Rubin maps the whole southern sky every few nights to about magnitude 24.5. No one has stacked years of it on the Moon’s L4 and L5 points.",
+      where: "On telescopes we have, Rubin in Chile and Subaru in Hawaiʻi, an observing program and its software.",
+      why: "The Moon’s L4 and L5 points, 384,000 km out, hold small things for ages. Stacking images that follow a slow drift brings out what one image never shows.",
+      takes: "About $100 million of observing time and software, a Year to ready, then 3 Years of stacking.",
+      before: "Searches of the Earth–Moon L4 and L5 points have turned up dust clouds, Kordylewski’s, debated since 1961, and nothing solid.",
+    },
+  },
+  "Warm Sky Watch": {
+    // At L2, behind one shade with Webb, as a cooled survey must be.
+    site: { on: "l2", draw: "ring", places: [{ lat: 0, lon: 0, name: "L2, 1.5 million km out" }], km: 1_500_000 },
+    story: {
+      have: "WISE mapped the warm sky in 2010 and NEO Surveyor from 2027. Neither reaches a new warm glow across our galaxy through its dust.",
+      where: "At L2, 1.5 million km out, cooled behind a shade, as Webb flies.",
+      why: "A young mind building out its home glows like a new warm star for centuries. Seen from tens of thousands of light-years, it is faint and buried in the crowded plane, so only repeated deep maps catch one appearing.",
+      takes: "A telescope about 1.3 m wide, cooled to its detectors' limit, and about $2.5 billion. Built in orbit, a quarter quicker once the yard is done.",
+      before: "WISE, 0.4 m, mapped the whole sky at 12 µm to about 0.7 mJy. NEO Surveyor, 0.5 m, cost $1.2 billion to build.",
     },
   },
   "Star Mapper": {
@@ -357,6 +399,37 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
       takes: "About 200 t: 150 mirrors 3 m wide, each on its own small craft, and the focus craft. Built in orbit, it takes a quarter less time once the yard is done.",
       before:
         "In 1999 Antoine Labeyrie drew this exo-Earth imager, and in 2018 he still showed it: a picture of an Earth at 10 light years in 30 minutes. On Earth his team hung a small one from a cable across an Alpine valley, which saw first light in 2019.",
+    },
+  },
+  // Mercury's builds, 2026-10-29: the map flies out to Mercury for each. calcs/mercury.py.
+  "Mercury Works": {
+    site: { on: "planet", body: "Mercury", draw: "ring", places: [{ lat: 0, lon: 0, name: "Mercury, 0.39 AU from the Sun" }] },
+    story: {
+      have: "Two craft have flown to Mercury, MESSENGER and BepiColombo. None has landed.",
+      where: "On Mercury, where sunlight is about 6.7 times as strong as at Earth, and the ground has no air to cross.",
+      why: "Its rock is close to the Sun and easy to throw off: a mass driver on the ground needs only 4.3 km/s. A seed of panels there makes more of itself from the ground it stands on.",
+      takes: "A seed of about 100 t, a square kilometer of panels and the machines to copy them, built in orbit from the foundry’s parts.",
+      before: "In 2013 Armstrong and Sandberg began their plan to fill the sky with probes by taking Mercury apart for a swarm round the Sun.",
+    },
+  },
+  "Solar Swarm": {
+    site: { on: "planet", body: "Mercury", draw: "ring", places: [{ lat: 0, lon: 0, name: "Round the Sun, near Mercury’s orbit" }] },
+    story: {
+      have: "Mercury Works, a seed copying itself from Mercury’s rock.",
+      where: "In orbit round the Sun near Mercury’s distance, thrown off Mercury and spreading round its orbit.",
+      why: "Thin film catches sunlight best close in. A whole shell at Mercury’s distance, a gram a square meter, takes a ten-thousandth of Mercury.",
+      takes: "Only time: it doubles every 2 Years from what it catches, until it catches all the Sun.",
+      before: "In 1960 Freeman Dyson argued that a growing people would come to use all its star’s light, and that its heat would show us where it lives.",
+    },
+  },
+  "Star Beam": {
+    site: { on: "planet", body: "Mercury", draw: "ring", places: [{ lat: 0, lon: 0, name: "Part of the swarm, near Mercury" }] },
+    story: {
+      have: "The Laser Sail Array, 200 GW from 2.7 km in the Atacama.",
+      where: "A patch of the swarm 100 km across, near Mercury, its collectors phased as one laser.",
+      why: "A beam pushes a sail only while the sail sits in its spot, and a wider beam keeps its spot small for longer. 100 km at 10 TW pushes a 2 t lens to a twentieth of light speed.",
+      takes: "Part of the swarm, given lasers and kept in step to a fraction of a wavelength.",
+      before: "From 2015 Philip Lubin drew DE-STAR, arrays of lasers in space up to 10 km wide, to push sails and turn aside asteroids.",
     },
   },
   "Mind Link": {

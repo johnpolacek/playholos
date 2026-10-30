@@ -58,6 +58,9 @@ function doing(name: string, k: Known): { line: string; news: boolean } {
   }
   if (name === "Infrared Telescope") return { line: "Reading the air of the nearest worlds. Nothing in yet.", news: false };
   if (name === "Halo Survey") return { line: "Sweeping the sky for cold glows. None yet.", news: false };
+  if (name === "Asteroid Tour") return { line: "Mapping the asteroids that share our orbit, one by one. Nothing that isn’t rock yet.", news: false };
+  if (name === "Moon Search") return { line: "Stacking deep images of the Moon’s L4 and L5 points. Nothing small and dark yet.", news: false };
+  if (name === "Warm Sky Watch") return { line: "Mapping the warm sky every 2 Years. No new warm glow yet.", news: false };
   const craft = CRAFT[name];
   if (craft) {
     const home = k.visits.filter((v) => v.by === craft && v.home <= k.now).sort((a, b) => a.home - b.home);

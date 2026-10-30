@@ -10,7 +10,7 @@ import { type Site, SITES } from "@/lib/game/sites";
 import type { Plan } from "@/lib/game/types";
 import type { Dials, Mark } from "@/lib/drift";
 import { AU_KM } from "../../src/astronomy.js";
-import { moonOffset } from "../../src/ephemeris.js";
+import { bodyPosition, moonOffset } from "../../src/ephemeris.js";
 
 // Our builds on the map. Opening one's page in Build flies the map to where it would stand and draws it there: dashed
 // while it waits, drawn round as it goes up, lit once done. Close View flies on down to the ground there, where the
@@ -140,6 +140,15 @@ export function WorksMap({ className }: { className: string }) {
   });
   const l2 = (list.find((w) => w.site.on === "l2")?.site.km ?? 1.5e6) / 299792.458;
   const l4 = (list.find((w) => w.site.on === "l4")?.site.km ?? 149_597_871) / 299792.458;
+  // From a planet, Earth is light-minutes away, as far as it is today. 2026-10-29.
+  const [planet] = useState(() => {
+    const at = (name: string) => bodyPosition(name, new Date());
+    return (body: string) => {
+      const [p, e] = [at(body), at("Earth")];
+      return (Math.hypot(p.x - e.x, p.y - e.y, p.z - e.z) * AU_KM) / 299792.458 / 60;
+    };
+  });
+  const bodies = [...new Set(list.flatMap((w) => (w.site.on === "planet" ? [w.site.body!] : [])))];
   const names = useRef<Record<string, HTMLSpanElement | null>>({});
   const onMarks = useCallback((marks: Mark[]) => {
     // Only the build in view is named, at its places, and Earth only from the Moon or L2.
@@ -221,6 +230,7 @@ export function WorksMap({ className }: { className: string }) {
           ["moon", light],
           ["l2", l2],
           ["l4", l4],
+          ...bodies.map((b) => [`planet:${b}`, planet(b) * 60] as const),
         ] as const
       ).map(([from, secs]) => (
         <span
@@ -236,7 +246,7 @@ export function WorksMap({ className }: { className: string }) {
             }}
           />
           Earth
-          <span className="block">{secs.toFixed(2)} light-seconds</span>
+          <span className="block">{from.startsWith("planet:") ? `${(secs / 60).toFixed(1)} light-minutes` : `${secs.toFixed(2)} light-seconds`}</span>
         </span>
       ))}
     </SkyArt>

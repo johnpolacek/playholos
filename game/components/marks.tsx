@@ -897,6 +897,9 @@ export function BuildMark({ name, size = 16, still }: { name: string; size?: num
     case "Thought Fields":
       return <Brain size={size} still={still} />;
     case "Infrared Telescope":
+    case "Warm Sky Watch":
+    case "Moon Search":
+    case "Asteroid Tour":
       return <Telescope size={size} still={still} />;
     case "Launch Complex":
       return <Rocket size={size} still={still} />;
