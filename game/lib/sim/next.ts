@@ -22,9 +22,11 @@ export function nextKnown(ahead: EarthView, year: number): number | null {
   return best;
 }
 
-/** The next Year to stop at: the soonest of what Earth will learn and the builds we finish. */
-export function nextStop(ahead: EarthView, year: number, done: Record<string, number | null>): number | null {
-  const times = [nextKnown(ahead, year), ...Object.values(done).filter((t): t is number => t !== null && t > year + 1e-6)];
+/** The next Year to stop at: the soonest of what Earth will learn, the builds we finish, and any other Year something
+ *  happens, such as a rock found, pushed aside or striking. */
+export function nextStop(ahead: EarthView, year: number, done: Record<string, number | null>, also: readonly (number | null)[] = []): number | null {
+  const later = (t: number | null): t is number => t !== null && t > year + 1e-6;
+  const times = [nextKnown(ahead, year), ...Object.values(done).filter(later), ...also.filter(later)];
   const real = times.filter((t): t is number => t !== null);
   return real.length ? Math.min(...real) : null;
 }

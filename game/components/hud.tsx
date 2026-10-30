@@ -78,9 +78,11 @@ function Skip() {
     return () => void (live = false);
   }, [seed, query, tenth]);
   if (tenth === null || next === null || next <= tenth) return null;
+  // Shown and landed in tenths, as the Year is: a stop within the tenth we're in lands on the next tenth.
+  const to = Math.max(Math.ceil(next * 10 - 1e-9) / 10, tenth + 0.1);
   return (
-    <button onClick={() => skipTo(next)} className="ml-2 text-you" title="Jump ahead to when something new happens">
-      Next: Year {tenths(next)} ›
+    <button onClick={() => skipTo(to)} className="ml-2 text-you" title="Jump ahead to when something new happens">
+      Next: Year {tenths(to)} ›
     </button>
   );
 }

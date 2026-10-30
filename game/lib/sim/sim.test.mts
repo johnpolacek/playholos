@@ -426,4 +426,6 @@ test("skipping ahead stops at the next thing we learn or build, and says when, n
   // A place in [ra, dec, d] is never taken for a time, and a build done sooner stops the skip first.
   assert.equal(nextStop(ahead, 2000, { "Moon Search": 2100, "Halo Survey": null }), 2100);
   assert.equal(nextStop({ year: 0, felt: [], heard: [], visits: [] }, 5, {}), null);
+  // A rock's Years stop it too, the past ones ignored.
+  assert.equal(nextStop({ year: 0, felt: [], heard: [], visits: [] }, 5, {}, [3, null, 412.5]), 412.5);
 });

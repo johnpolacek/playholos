@@ -959,8 +959,8 @@ export function leadsOf(felt: FeltWorld[], holes: DarkMass[] = [], glows: Glow[]
     {
       slug: "luytens-star",
       star: "Luyten’s Star",
-      what: "A reply could come",
-      line: `To our 2017 message, as soon as Year ${REPLY}, about ${Math.round(REPLY * 5)} minutes after we begin.`,
+      what: "We messaged it",
+      line: `Our 2017 and 2018 messages reached it in 2030. Any reply would reach us from Year ${REPLY}. Minds are rare, so likely none.`,
       ly: 12.3,
       ask: "Could Luyten’s Star answer us?",
       brief: `We sent it two messages, in 2017 and 2018. If anyone answered at once, the first reply reaches us at Year ${REPLY}. Our sky watch sees that star only 10 minutes a day, so we could miss it.`,

@@ -32,7 +32,8 @@ export function span(years: number): string {
 }
 
 /** Light-years as a screen writes them: 4.2, or 1,560 where the tenth is 0. */
-export const lyOf = (ly: number) => ly.toLocaleString("en-US", { maximumFractionDigits: 1 });
+// Tenths near us, whole light-years past a thousand, where a tenth is noise. 2026-10-29.
+export const lyOf = (ly: number) => ly.toLocaleString("en-US", { maximumFractionDigits: ly >= 1000 ? 0 : 1 });
 
 /** Real time for a span of game time, as HH:MM:SS. */
 export function realTime(years: number): string {

@@ -1,4 +1,5 @@
 import { schedule } from "@/lib/game/plan";
+import { rockAt, rockOf } from "@/lib/game/rocks";
 import { kitOf } from "@/lib/game/reach";
 import { nextStop } from "@/lib/sim/next";
 import { earthKnows, willKnows } from "@/lib/sim/knowledge";
@@ -82,6 +83,9 @@ export async function next(req: Request) {
   };
   const scale = Number(world.earth.compute) || 1;
   const ahead = willKnows(world, year + AHEAD, kitOf(plan, scale), readWill(one(q.get("will"))));
-  const stop = nextStop(ahead, year, schedule(plan, scale));
+  const done = schedule(plan, scale);
+  // A rock: the Year we find it, the Year our push lands if it turns it aside, and the Year it would strike. 2026-10-29.
+  const rock = rockAt(rockOf(seed), plan, done, year);
+  const stop = nextStop(ahead, year, done, rock ? [rock.found, rock.pushed ? rock.lands : null, rock.strikes] : []);
   return Response.json({ next: stop, ahead: AHEAD });
 }
