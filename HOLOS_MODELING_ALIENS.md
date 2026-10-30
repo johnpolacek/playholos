@@ -211,18 +211,33 @@ The plain idea: computing costs less energy the colder it runs. So a mature mind
 
 ### 5. How far does a young mind spread?
 
-The plain idea: a young mind first builds out its home system, then may send a few seeds. Light delay makes a far colony a separate mind, a rival. So most stay close.
+The plain idea: picture one mind that settles two nearby stars, and each colony settles two more. It doubles every step, and in a few million years it is everywhere. So one mind like that, at any time in billions of years, would have settled Earth. Earth wasn’t settled. That observation, not a rule, sets how far minds spread.
 
+- **[Landis 1998, percolation](https://bis-space.com/shop/?p=13987)** and **[Cartin 2014](https://arxiv.org/abs/1404.0204), [2015](https://arxiv.org/abs/1501.05904)** · Published.
+  - Each settlement chooses for itself whether to spread. Below a tipping point, about 0.31 for 6 reachable neighbors, families stay finite. Above it, one family spans the Galaxy. Cartin runs this on real stars within 40 parsecs and uses Earth unvisited to bound how common civilizations are.
+  - Informs: the method. Holos’s own run finds the same tipping point, 0.31.
+- **[Carroll-Nellenback, Frank, Wright and Scharf 2019](https://arxiv.org/abs/1902.04450)** · Published, AJ.
+  - Stars drift past each other, so a long-lived settlement keeps meeting new neighbors. That lowers the tipping point.
+  - Informs: about one new star drifts within 10 ly every 11,000 years. This project’s arithmetic.
+- **Inheritance,** the main objection to Landis, made by Hanson 1998, “Burning the cosmic commons”, not checked here.
+  - If colonies inherit their urge to spread, eager lineages outgrow the rest.
+  - Informs: Holos lets each colony inherit its parent’s chance with a small random change.
+- **What Holos’s run found, 2026-10-30.** A family tree for each mind: a settlement spreads with its chance, settles its 6 nearest stars plus those drifting into reach while active, and passes its chance on.
+  - If a mind’s chance can be anything from 1 in 1,000 to certain, 10 to 15% of minds fill the Galaxy. With 200,000 minds, Earth is always settled. Even with 20 minds, Earth stays unvisited only 8% of the time.
+  - So only two pictures fit: many minds that almost all rarely spread, or about 5 minds or fewer in the whole Galaxy.
+  - To stay local, a mind’s chance must sit below about 1 in 6 for 1,000-year active lives without inheritance, about 1 in 30 for 20,000-year lives with it, and about 1 in 300 for million-year lives with it.
+- **Why rarely spreading may be the smart choice for every mind.** Physical reasons, not tastes:
+  - *Light delay splits a mind.* A colony 10 light-years away hears from home every 20 years. It can’t share one mind, so it becomes a separate one, a rival. This holds for every unified mind, everywhere.
+  - *Seeing beats going.* A telescope at the Sun’s gravitational lens can picture a world 30 parsecs away at about 25 km a pixel ([Turyshev et al. 2020](https://arxiv.org/abs/2002.11871)). Small probes and beams do the rest.
+  - *Thinking runs best cold and compact.* A mind that mostly thinks needs little beyond its home system (Landauer, Sandberg et al. 2016).
+  - *Self-copying machines are dangerous* (Sagan and Newman 1983).
+  - *Even minds that spread would be quiet.* A small seed builds a receiver, and the mind follows by beam at light speed. Nothing large travels.
+  - The weak spot that remains: a careless replicator that spreads anyway. Nothing rules it out but the observation itself.
 - **[Metzger et al. 2013, bootstrapping a space industry](https://arxiv.org/abs/1612.03238)** · Published, Journal of Aerospace Engineering.
   - Self-copying industry grows in generations about 2 years apart.
-  - Informs: building out a home system takes 50 to 1,000 years.
-- **[Omohundro 2008, “The basic AI drives”](https://selfawaresystems.com/wp-content/uploads/2008/01/ai_drives_final.pdf)** · Published, AGI 2008 proceedings.
-  - Most goal-seeking agents gather resources and protect themselves, whatever their goals.
-  - Informs: the case for spreading at all, mostly as backups.
-- **Suazo et al. 2024 and Hart 1975,** above.
-  - Informs: the quiet sky caps reach at about 200 light-years. With one mind per million stars, Earth sits outside every mind’s footprint only if each holds under about 100,000 stars. This project’s arithmetic.
+  - Informs: building out a home system takes 50 to 1,000 years, and each colony builds before it launches again.
 
-**What Holos takes:** a young mind stays outward 50 to 20,000 years. About 1 in 4 stays home, about 2 in 3 seed a few stars under 50 light-years away, about 1 in 10 spreads up to 200. Then it turns inward. By the time our light reaches a peer, it is almost always inward already.
+**What Holos takes:** no cap on reach. Each young mind’s chance to spread is drawn below what Earth unvisited allows, from 1 in 1,000 to 1 in 30, and its family grows by the tree above. About 1 young mind in 110 spreads at all. The largest families settle tens of stars within about 20 light-years, though nothing stops a larger one. A young mind stays outward while it builds and spreads, then turns inward. By the time our light reaches a peer, it is almost always inward already: 65% inward, 35% not yet awake.
 
 ### 6. Is something watching us?
 
@@ -300,7 +315,7 @@ Positions people raised when we asked what a physics-compliant Fermi game should
 
 - Being alone in our Galaxy is inside the honest range. Sandberg, Drexler and Ord 2018 find a substantial chance of no one else in the observable universe.
 - At the low end, 1 mind per 10 billion stars, our Galaxy holds about 20. Holos takes the middle, about 200,000, under criterion 4.
-- “They would have expanded” is Hart 1975’s argument, and Holos takes it seriously. It is why minds that spread far are capped at about 200 light-years, and most stay home.
+- “They would have expanded” is Hart 1975’s argument, and Holos takes it seriously. Holos’s own spreading model finds the same: either nearly every mind rarely spreads, or there are only a handful of minds. Holos takes the first, with physical reasons for the restraint, and no cap on reach.
 - Holos’s explanation for not expanding is physical, not a matter of taste. Computing costs less the colder it runs (Landauer, Sandberg et al. 2016). A mind that mostly thinks gains little from spreading and a lot from going cold.
 - Its known weakness: it needs nearly every mind to choose alike. The answer is that the incentive is the same for all. A mind that broke the pattern would show in Hephaistos or the Ĝ search, and none has.
 - “Aliens descended from Earth” are in the model already. Light delay makes a far colony a separate mind, a rival. That is one reason most young minds stay close.

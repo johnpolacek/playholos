@@ -294,7 +294,7 @@ test("the realistic premise's minds: rare and old near us, a few peers far off, 
     // A peer's warm phase reaches us d Years after it shines, and our light finds it inward, outward or not yet awake.
     for (const p of minds.peers) {
       assert.ok(Math.abs(p.flash[0] - (p.wake + p.d)) <= 0.15, p.id);
-      assert.ok(p.outwardYears >= 50 && p.outwardYears <= 21000 && p.reachLy <= 200);
+      assert.ok(p.outwardYears >= 50 && p.reachLy % 5 === 0 && (p.settlements > 0) === (p.reachLy > 0));
       const at = p.wake > p.d ? "unborn" : p.wake + p.outwardYears < p.d ? "inward" : "outward";
       assert.equal(p.atContact, at, p.id);
     }

@@ -47,8 +47,16 @@ CO_ORBITALS = ('Kamoʻoalewa', '2023 FW13', '2002 AA29', '2004 GU9', '2006 FV35'
 
 # A young mind's outward time: building out its home, then spreading if it does (concept, 2026-10-29).
 BUILD_YEARS = (50, 1000)                        # evenly in log
-SPREAD = (('home', 0.25, 0), ('near', 0.65, 50), ('far', 0.10, 200))   # kind, share, farthest reach (ly)
 SEED_C = (0.01, 0.2)                            # seed ships' speed, evenly in log
+# Spreading, settled 2026-10-30, with no cap on reach. Each settlement spreads with its own chance, inherited from its
+# parent with a small random change (Landis 1998, with inheritance). If it spreads it settles every star in reach
+# while active: its 6 nearest, plus one drifting into 10 ly every 11,000 years (Carroll-Nellenback et al. 2019).
+# A mind's chance is drawn below what Earth unvisited allows: past about 1 in 30, with 20,000-year active lives and
+# inheritance, some of 200,000 minds would fill the Galaxy. This project's branching model, 2026-10-30.
+SPREAD_CHANCE = (1e-3, 0.03)                    # a mind's chance to spread, evenly in log
+NEIGHBORS = 6 + 20_000 / 11_000                 # stars in reach over an active life
+HOP_LY = 5                                      # typical distance to a neighbor star, at 0.0028 stars per ly^3
+INHERIT_SD = 0.3                                # a colony's chance, its parent's times e^N(0, 0.3)
 
 
 def rng(seed, *key):
@@ -159,18 +167,22 @@ def peer(seed, i):
     d = math.hypot(*pos)
     wake = r.uniform(-PEER_WINDOW, PEER_WINDOW)                 # game Years, before (negative) or after our waking
     build = log_between(r, *BUILD_YEARS)
-    u, kind, reach = r.random(), None, 0.0
-    for k, share, top in SPREAD:
-        if u < share: kind = k; break
-        u -= share
-    kind = kind or SPREAD[-1][0]
-    top = dict((k, t) for k, _, t in SPREAD)[kind]
-    if top: reach = r.uniform(4, top)                            # the nearest stars sit about 4 ly apart
-    speed = log_between(r, *SEED_C) if reach else None
-    outward = build + (reach / speed if reach else 0)
+    chance = log_between(r, *SPREAD_CHANCE)
+    settlements, deepest, todo = 0, 0, [(chance, 0)]
+    while todo:                                                 # the family tree, generation by generation
+        p, gen = todo.pop()
+        if r.random() >= p: continue
+        for _ in range(poisson(r, NEIGHBORS)):
+            settlements += 1; deepest = max(deepest, gen + 1)
+            todo.append((min(1.0, p * math.exp(r.gauss(0, INHERIT_SD))), gen + 1))
+    reach = HOP_LY * deepest
+    speed = log_between(r, *SEED_C) if settlements else None
+    # Each generation flies a hop and builds before it can launch again.
+    outward = build + (sum(HOP_LY / speed + log_between(r, *BUILD_YEARS) for _ in range(deepest)) if deepest else 0)
     contact = wake + outward < d and 'inward' or wake <= d and 'outward' or 'unborn'
     return dict(id=f'peer-{i}', pos=[round(c, 1) for c in pos], d=round(d, 1), wake=round(wake, 1),
-                buildYears=round(build, 1), spread=kind, reachLy=round(reach, 1), seedC=speed and round(speed, 4),
+                buildYears=round(build, 1), spreadChance=round(chance, 5), settlements=settlements,
+                reachLy=round(reach, 1), seedC=speed and round(speed, 4),
                 outwardYears=round(outward, 1), asleep=r.random() < ASLEEP_SHARE,
                 flash=[round(wake + d, 1), round(wake + outward + d, 1)],   # its warm phase, as its light reaches us
                 ourLight=round(d, 1),                                       # our waking reaches it in Year d
@@ -211,7 +223,7 @@ if __name__ == '__main__':
         print(f"  {o['id']:>7} {o['d']:7.1f} ly  {'real star ' + str(o['star']) if o['star'] is not None else 'seeded':>16}  "
               f"{o['age'] / 1e9:4.2f} Gyr  {'asleep' if o['asleep'] else 'awake, %.2g W' % o['glowW']}")
     for p in m['peers']:
-        print(f"  {p['id']:>7} {p['d']:9.0f} ly  woke {p['wake']:+9.0f}  outward {p['outwardYears']:8.0f} y ({p['spread']})  "
+        print(f"  {p['id']:>7} {p['d']:9.0f} ly  woke {p['wake']:+9.0f}  outward {p['outwardYears']:8.0f} y ({p['settlements']} settled)  "
               f"flash Years {p['flash'][0]:.0f} to {p['flash'][1]:.0f}  at contact: {p['atContact']}")
     w = m['watcher']
     print(f"  watcher at {w['place']}, from {w['maker']}, here {w['arrivedYearsAgo']:.2g} years. "

@@ -121,7 +121,9 @@ export interface Peer {
   /** When it woke, before (negative) or after our Year 0. */
   wake: number;
   buildYears: number;
-  spread: "home" | "near" | "far";
+  /** Its chance to spread, and the stars its family settled. No cap on reach (2026-10-30). */
+  spreadChance: number;
+  settlements: number;
   reachLy: number;
   seedC: number | null;
   outwardYears: number;
