@@ -594,6 +594,10 @@ test("finding minds: a flash while the warm watch runs, half the cold glows, the
       if (p.flash[1] < 0) assert.equal(f, null);
       else assert.ok(f && f.seen >= Math.max(0, p.flash[0]) && f.seen < Math.max(0, p.flash[0]) + WARM_EVERY + 1e-9, p.id);
       assert.equal(flashOf(p, p.flash[1] + 1, 200000), null);   // built after it faded: missed for good
+      // Ranged by our Infrared Telescope while it shines: a range that holds the truth. Faded first, never ranged.
+      const r = flashOf(p, 0, 200000, 0);
+      if (r?.range) assert.ok(r.range[0] <= p.d && p.d <= r.range[1] && r.ranged! <= p.flash[1], p.id);
+      if (r && Math.max(r.seen, 0) + 2 > p.flash[1]) assert.equal(r.range, undefined);
     }
     for (const o of m.old) if (!o.asleep) { awake++; if (coldGlowOf(o, 0, 1e6)) glowing++;
       // Star by star, nearest first: the farther, the later, and the array ten times sooner.

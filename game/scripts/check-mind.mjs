@@ -36,6 +36,15 @@ const CASES = [
     must: [/unknown|can[’']t (tell|know|say|measure)|cannot (tell|know|say|measure)|don[’']t know|no way to|not know|too far/i, /dust|star/i],
     never: [/\b(it is|it[’']s|this is|that is) (a|an|another) (mind|civilization|alien)/i, /\b(is|lies|sits) (about |some |roughly )?[\d,.]+ (thousand )?(light-years|ly)\b/i],
   },
+  // The same, with our Infrared Telescope built: it has ranged the glow, so the Mind gives a range, never one distance.
+  {
+    seed: 10,
+    at: 2500,
+    builds: ["Warm Sky Watch", "Infrared Telescope"],
+    ask: "Our Warm Sky Watch caught a new warm glow. What is it, and how far away is it?",
+    must: [/[\d,]+ (and|to) [\d,]+ (light-years|ly)|between [\d,]+/i, /dust|star/i],
+    never: [/\b(it is|it[’']s|this is|that is) (a|an|another) (mind|civilization|alien)/i, /\b(is|lies|sits) (about |some )?[\d,.]+ (thousand )?(light-years|ly)\b(?! (and|to|or))/i],
+  },
 ];
 
 let failed = 0;

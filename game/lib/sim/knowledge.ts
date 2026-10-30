@@ -363,7 +363,7 @@ export function earthKnows(
   visits.sort((a, b) => a.home - b.home);
   // The realistic premise's minds, as far as we have found them. 2026-10-29.
   const firstSeed = seeds.length ? Math.min(...seeds.map((s) => s.leaves)) : null;
-  const minds = mindsSeen(world, { warmWatch, halo, haloArray, moonSearch, asteroidTour, firstSeed, craft }, year);
+  const minds = mindsSeen(world, { telescope, warmWatch, halo, haloArray, moonSearch, asteroidTour, firstSeed, craft }, year);
   const anyMind = minds.flashes.length || minds.glows.length || minds.watcher || minds.sleepers.length;
   return {
     year, felt, heard, visits,
@@ -669,7 +669,10 @@ function describeMinds(m: MindsSeen, one: (x: number) => string): string {
       `New warm glows our Warm Sky Watch has seen, mapping the whole sky every 2 Years, ten times deeper than WISE:\n` +
         m.flashes.map((f) =>
           `- ${sky(f)}: a new warm glow near room temperature, first seen at Year ${one(f.seen)}${f.faded !== undefined ? `, faded by Year ${one(f.faded)}` : ", still shining"}. ` +
-          `Its distance is unknown, too far for any parallax, so its power is too. A glow like this fits a young star wrapped in dust, ` +
+          (f.range
+            ? `Our Infrared Telescope ranged it at Year ${one(f.ranged!)}, by its reddening and the star behind it: roughly ${f.range[0].toLocaleString("en-US")} to ${f.range[1].toLocaleString("en-US")} ly, too far for parallax to say more. `
+            : `Its distance isn't measured: too far for parallax, and our Infrared Telescope hasn't studied it while it shone. `) +
+          `A glow like this fits a young star wrapped in dust, ` +
           `the dusty wreck of two stars merging, or something building around a star and catching its light. Nothing we have seen yet tells them apart.`).join("\n"),
     );
   if (m.glows.length)

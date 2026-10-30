@@ -8,6 +8,8 @@ const PC_LY = 3.2616;
 
 /** What our watches and craft can find minds with: the Year each is done or arrives. */
 export interface MindKit {
+  /** Our Infrared Telescope, which studies a new warm glow and ranges it. */
+  telescope?: number | null;
   /** The all-sky mid-infrared watch, about ten times deeper than WISE: it catches any peer's warm flash while it runs. */
   warmWatch?: number | null;
   /** The Halo Survey, an ALMA program looking at each star for an hour, nearest first. */
@@ -31,6 +33,9 @@ export interface FlashSeen {
   seen: number;
   /** The Year it faded, once it has. */
   faded?: number;
+  /** Its rough distance, nearest and farthest, in light-years, once our Infrared Telescope has studied it, and when. */
+  range?: [number, number];
+  ranged?: number;
 }
 
 /** A cold far-infrared glow beside a star, steady as nothing young is. */
@@ -96,13 +101,33 @@ export function skyOf([ax, ay, az]: readonly [number, number, number]) {
 }
 
 /** A peer's flash is seen at the watch's first look once both have begun, if the flash still shines then. */
-export function flashOf(p: Peer, watch: number | null | undefined, year: number): FlashSeen | null {
+export function flashOf(p: Peer, watch: number | null | undefined, year: number, telescope: number | null = null): FlashSeen | null {
   if (watch === null || watch === undefined) return null;
   const [rises, fades] = p.flash;
   const from = Math.max(rises, watch);
   const seen = watch + WARM_EVERY * Math.ceil((from - watch) / WARM_EVERY - 1e-9);
   if (seen > fades || seen > year) return null;
-  return { ...skyOf(p.pos), seen, ...(fades <= year ? { faded: fades } : {}) };
+  // Our Infrared Telescope studies it while it still shines: its reddening by dust, against dust maps, and the star
+  // behind it, if it shows, by its type and speed. That gives a range, not a distance: about a third either way.
+  const ranged = telescope === null ? null : Math.max(seen, telescope) + RANGE_YEARS;
+  const range = ranged !== null && ranged <= fades && ranged <= year ? rangeOf(p) : null;
+  return {
+    ...skyOf(p.pos), seen,
+    ...(fades <= year ? { faded: fades } : {}),
+    ...(range ? { range, ranged: ranged! } : {}),
+  };
+}
+
+/** Years our Infrared Telescope takes to study a new warm glow and range it. */
+export const RANGE_YEARS = 2;
+/** A rough distance: centered off the truth by up to a fifth, a fixed draw for each peer, and a third wide either way,
+ *  so it always holds the truth. */
+export function rangeOf(p: Peer): [number, number] {
+  let h = 0;
+  for (const c of p.id + p.pos.join()) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+  const center = p.d * (1 + 0.4 * ((h % 1000) / 1000 - 0.5));
+  const round = (x: number) => Math.round(x / 1000) * 1000;
+  return [round(center / 1.35), round(center * 1.35)];
 }
 
 /** Stars within a distance, from calcs/minds.py's disk model, which matches the census: light-years and count. */
@@ -168,7 +193,7 @@ export function mindsSeen(world: World, kit: MindKit, year: number): MindsSeen {
   if (!m) return { flashes: [], glows: [], watcher: null, sleepers: [] };
   const bySeen = <T extends { seen: number }>(xs: (T | null)[]) => xs.filter((x): x is T => x !== null).sort((a, b) => a.seen - b.seen);
   return {
-    flashes: bySeen(m.peers.map((p) => flashOf(p, kit.warmWatch, year))),
+    flashes: bySeen(m.peers.map((p) => flashOf(p, kit.warmWatch, year, kit.telescope ?? null))),
     glows: bySeen(m.old.map((o) => coldGlowOf(o, kit.halo, year, kit.haloArray ?? null))),
     watcher: watcherOf(world, kit, year),
     sleepers: bySeen(m.old.map((o) => sleeperOf(o, kit.craft, year))),
