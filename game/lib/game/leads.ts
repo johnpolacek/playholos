@@ -54,6 +54,8 @@ export interface Reading {
   sight?: Visit["sight"];
   /** An elder's home: its cold works drawn round it, lit or dark. 2026-10-28. */
   elder?: Visit["elder"];
+  /** The Mind's word, now, that something lives there, where this reading says. 2026-10-29. */
+  life?: Odds;
 }
 
 /** What a lead's page draws: a world's orbit against its star's warm zone, or a message's trip. */
@@ -90,6 +92,8 @@ export interface Lead {
   art: Art;
   /** Its star and what is known to go round it, drawn on its page. */
   system?: System;
+  /** The Mind's word that something lives there, before any reading. None where life isn't the question. 2026-10-29. */
+  life?: Odds;
 }
 
 /** The scene names Luyten's Star as the catalog does. */
@@ -157,6 +161,14 @@ function feltLead(f: FeltWorld): Lead {
           ? `It sits too close to its star for the Infrared Telescope to split. The 15 m Mirror could${wide.gases.length ? `, and read its ${and(wide.gases)}` : ""}.`
           : "It sits too close to its star for either telescope we can build to split. For now its tug is all we have.";
   const kind = m < 1.5 ? "Small enough that it is likely rock." : m < 3 ? "Rock or gas, we can’t tell yet." : "At that mass, likely a gas world.";
+  // Life, before its air is read: none we know of too hot, little on gas or ice, and on warm rock only if its air held,
+  // which a red dwarf's flares make less likely. Whether life starts at all, no one knows.
+  const life: Odds =
+    gas === "likely" ? "very unlikely"
+      : f.hz && f.a < f.hz[0] ? "almost no chance"
+        : f.hz && f.a > f.hz[1] ? "very unlikely"
+          : rock === "likely" && f.kind !== "M" ? "unlikely"
+            : "very unlikely";
   return {
     slug: slugOf(f.star),
     star: f.star,
@@ -183,6 +195,7 @@ function feltLead(f: FeltWorld): Lead {
       },
     ],
     tells: [tell],
+    life,
     art: { kind: "orbit", a: f.a, e: 0, hz: f.hz },
     // Its star by its kind, and the one world felt there. The rest of its system is unknown.
     system: {
@@ -358,12 +371,54 @@ export function visitReading(v: Visit): Reading {
     line: `${who} ${saw}${air}`,
     mind: MIND[v.sight as keyof typeof MIND],
     now,
+    life: lifeSeen(v),
     tells:
       v.by === "probe" || v.sight === "bare"
         ? ["To learn more we would have to stay. A Seed Ship takes a copy of our Mind to a star for good."]
         : ["A probe passing after them could read its air."],
     sight: v.sight,
   };
+}
+
+/** The Mind's word that something lives on a world we have seen up close, from its face and any air read. Forests say
+ *  life. Seas can't tell an empty sea from one full of microbes, and oxygen with them leans toward life. 2026-10-29. */
+function lifeSeen(v: Visit): Odds | undefined {
+  if (v.lives) return "almost certain";
+  if (v.ruins) return "very likely";
+  const SEEN: Record<Visit["sight"], Odds | undefined> = {
+    bare: "almost no chance",
+    rocks: "almost no chance",
+    haze: "very unlikely",
+    ice: "unlikely",
+    seas: v.air?.oxygen ? "likely" : "roughly even",
+    green: v.air?.oxygen ? "almost certain" : "very likely",
+    cities: "almost certain",
+    dark: undefined,
+  };
+  return SEEN[v.sight];
+}
+
+/** What a telescope's read of a world's air says of life, once a band is in. Oxygen with water is what life made of
+ *  Earth's air, but oxygen can build up without it. Water alone is an empty sea or Earth's early microbes. No water,
+ *  no life as we know it. 2026-10-29. */
+function lifeRead(read: Read): Odds | undefined {
+  const oxygen = read.oxygen ?? read.ozone;
+  if (read.water === false) return "almost no chance";
+  if (oxygen) return read.water ? "likely" : "roughly even";
+  if (read.water) return "roughly even";
+  if (oxygen === false) return "unlikely";
+  return undefined;
+}
+
+/** The Mind's word, now, that something lives at a lead: the latest reading that says, or the lead's own. None where
+ *  life isn't the question, as a lone black hole or a reply we wait on. Scan's map lights each lead by it. 2026-10-29. */
+export function lifeOf(lead: Lead, readings: readonly Reading[]): Odds | null {
+  const latest = readings.map((r, i) => [r, i] as const).sort(([a, i], [b, j]) => b.at - a.at || j - i);
+  for (const [r] of latest) {
+    const word = r.life ?? (r.air ? lifeRead(r.air) : undefined);
+    if (word) return word;
+  }
+  return lead.life ?? null;
 }
 
 /** What a sentinel saw once it braked and stayed, as a reading on its lead: its face as a pass sees it, its air, and
@@ -400,6 +455,7 @@ function sentinelReading(v: Visit): Reading {
     now: v.sight === "haze" ? ["almost no chance", "almost certain", "almost no chance"] : ["almost certain", "almost no chance", "almost no chance"],
     tells: ["It keeps watching, and sends word of anything that changes."],
     sight: v.sight,
+    life: lifeSeen(v),
     ...(v.elder ? { elder: v.elder } : {}),
   };
 }
@@ -457,6 +513,7 @@ function seedReading(v: Visit): Reading {
     now: v.sight === "haze" ? ["almost no chance", "almost certain", "almost no chance"] : ["almost certain", "almost no chance", "almost no chance"],
     tells: ["It keeps watching, and sends word of anything that changes."],
     sight: v.sight,
+    life: lifeSeen(v),
     ...(v.elder ? { elder: v.elder } : {}),
   };
 }
@@ -512,6 +569,7 @@ function darkReading(v: Visit): Reading {
     now: ["almost certain", "almost no chance", "almost no chance"],
     tells: ["It keeps watching, and sends word of anything that changes."],
     sight: "dark",
+    ...(v.others?.some((o) => o.kind === "colony") ? { life: "almost certain" as const } : {}),
   };
 }
 /** Later word from our sentinel at a black hole: someone braking in after it, or its end. 2026-10-26. */
@@ -532,6 +590,7 @@ function watchReading(v: Visit): Reading {
       now: ["almost certain", "almost no chance", "almost no chance"],
       tells: ["We no longer see this hole. Another craft would have to go."],
       sight: "dark",
+      life: "likely",
     };
   return {
     id: `sentinel-${slugOf(v.star)}-came-${Math.round(v.passed * 10)}`,
@@ -539,6 +598,7 @@ function watchReading(v: Visit): Reading {
     at,
     by: "Our sentinel",
     title: ship ? "A ship came to stay" : "Another craft came",
+    ...(ship ? { life: "almost certain" as const } : {}),
     line: ship
       ? `Our sentinel at ${v.star} saw a ship not ours, tens of thousands of tonnes, brake to a stop and stay. Its flame pointed back along its track to ${v.came}.`
       : `Our sentinel at ${v.star} saw a craft not ours brake to a stop, to watch the hole. Its flame pointed back along its track to ${v.came}.`,
@@ -585,6 +645,7 @@ function lensReading(v: Visit): Reading {
     now: v.sight === "haze" ? ["almost no chance", "almost certain", "almost no chance"] : ["almost certain", "almost no chance", "almost no chance"],
     tells: v.sight === "cities" ? ["Listening there, or a knock, would tell us more. A knock tells them we are here."] : ["To learn more we would have to go there."],
     sight: v.sight,
+    life: lifeSeen(v),
   };
 }
 
@@ -675,6 +736,7 @@ function glowLead(g: Glow): Lead {
       "A sentinel could go and stay. A knock would tell them we are here.",
     ],
     art: { kind: "glow", ly: g.d, ...(g.steady ? { steady: true } : {}) },
+    life: "likely",
   };
 }
 
@@ -689,6 +751,7 @@ export function glowReading(g: Glow): Reading {
     line: `Our Halo Survey sees a compact cold glow round ${g.star}, about ${watts(g.watts)}, near 12 K. Its color stays grey from 0.87 to 3 mm, where dust reddens.`,
     mind: "Its color fits no dust. Cold computing far from a star would glow so. It says someone may think there, never who, or what they would make of us.",
     now: ["likely", "unlikely", "almost no chance"],
+    life: "likely",
     tells: [g.steady ? "It hasn't brightened in all our looking. A young Mind doubles every decade or so. This one stopped growing long ago." : "It brightens if its computing grows. A decade of watching would show it."],
   };
 }
@@ -745,6 +808,8 @@ export function leadsOf(felt: FeltWorld[], holes: DarkMass[] = [], glows: Glow[]
         "A flyby would see it whole: the two roads on Reach go there.",
       ],
       art: { kind: "orbit", a: 0.0485, e: 0, hz: [0.042, 0.082] },
+      // Likely bare, and on rock under air, life would still have to start.
+      life: "very unlikely",
     },
     {
       slug: "82-eridani",
@@ -778,6 +843,7 @@ export function leadsOf(felt: FeltWorld[], holes: DarkMass[] = [], glows: Glow[]
       ],
       tells: ["The Infrared Telescope can split it from its star and read its air. Water would show in about 3 days."],
       art: { kind: "orbit", a: 1.354, e: 0.45, hz: [0.83, 1.45] },
+      life: "very unlikely",
     },
     ...felt.map(feltLead),
     ...shown.filter(([, far]) => !far).map(([h]) => darkLead(h)),
@@ -838,7 +904,8 @@ export function describeLeads(observe: string[] | undefined, year: number | null
       })
       .join("; ");
     const found = read ? ` Landed at Year ${read.at}, by the ${read.by.toLowerCase()}: ${read.title}. ${read.line}` : "";
-    return `- ${lead.star}, ${lead.what.toLowerCase()}.${found} Our words: ${words}.`;
+    const life = lifeOf(lead, landed(lead.slug, observe, year));
+    return `- ${lead.star}, ${lead.what.toLowerCase()}.${found} Our words: ${words}.${life ? ` That something lives there: ${life}.` : ""}`;
   });
   return `Our words on the named leads, as the Scan tab shows them. Keep to them, and say so if a reading moved one:\n${lines.join("\n")}`;
 }

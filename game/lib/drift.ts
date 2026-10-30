@@ -115,6 +115,9 @@ export interface Show {
   /** For "leads": neighbors' calls every way at once that we have overheard, each by its star's place and the decimal
    *  year it left: a ring round their star, the edge of its light. 2026-10-26. */
   theirCalls?: { name: string; ra: number; dec: number; ly: number; sent: number; flash?: boolean }[];
+  /** For "leads": the Mind's word that something lives at each lead, by its place in `leads`, from 0 for almost no
+   *  chance to 6 for almost certain, or -1 where life isn't the question. Filled in place, read each frame. 2026-10-29. */
+  life?: number[];
 
   /** For "beams": our messages on their way, each by its star, the decimal year we sent it, the light-years it goes,
    *  and whether it is the reply that could come back. */
@@ -1918,7 +1921,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
 
   // ── What doesn't fit: Earth's leads among the stars within 50 light-years ──
   function leading(ids: string[]) {
-    const leads = ids.filter(leadAt).map((id) => ({ id, at: leadAt(id)! }));
+    const leads = ids.filter(leadAt).map((id) => ({ id, at: leadAt(id)!, n: ids.indexOf(id) }));
     const v = new THREE.Vector3();
     // Rings every ten light-years in the Galaxy's plane, as on Where things stand.
     const ringMat = line("ink", 0);
@@ -2037,6 +2040,9 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     const pulsePts = pulse.points(pulseGlow);
     stars.scene.add(beadPts, pulsePts);
     const looked = leads.map(() => 0);
+    // The Mind's word on life at each lead, eased, so a reading that raises it brightens its lead over a few seconds.
+    const warm = leads.map(({ n }) => spec.life?.[n] ?? -1);
+    const haloSize = haloPts.geometry.attributes.aSize as THREE.BufferAttribute;
     let pulseOf = -1;
     let pulseAt = 0;
     let then = clock;
@@ -2054,6 +2060,11 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       then = clock;
       const ease = still ? 1 : 1 - Math.exp(-dt * LOOK * 2);
       looked.forEach((l, i) => (looked[i] = l + ((i === focus ? 1 : 0) - l) * ease));
+      const warmEase = still ? 1 : 1 - Math.exp(-dt / 1.2);
+      leads.forEach(({ n }, i) => {
+        const to = spec.life?.[n] ?? -1;
+        warm[i] = to < 0 || warm[i] < 0 ? to : warm[i] + (to - warm[i]) * warmEase;
+      });
       const any = Math.max(0, ...looked);
       if (!dim && within50.length) {
         const cold = new Cloud();
@@ -2118,10 +2129,16 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         coreB.setX(i, lit);
         const flare = 4 * lit * (1 - lit);
         const breathe = 0.35 + 0.15 * Math.sin(clock * 1.8 + i * 1.7);
-        haloB.setX(i, lit * (breathe + (0.9 - breathe) * seen) + flare + (i === focus ? 0.8 * arrive : 0));
+        // Where life is the question, its halo grows and brightens with the Mind's word: faint for almost no chance,
+        // full and bright for almost certain. 2026-10-29.
+        const w = warm[i];
+        const gain = w < 0 ? 1 : 0.3 + 0.25 * w;
+        haloSize.setX(i, 26 * (w < 0 ? 1 : 0.7 + 0.12 * w));
+        haloB.setX(i, lit * (breathe + (0.9 - breathe) * seen) * gain + flare + (i === focus ? 0.8 * arrive : 0));
       });
       coreB.needsUpdate = true;
       haloB.needsUpdate = true;
+      haloSize.needsUpdate = true;
       beadB.needsUpdate = true;
 
       // What we sent, by the year the dials hold.

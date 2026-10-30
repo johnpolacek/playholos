@@ -127,6 +127,14 @@ Settled 2026-10-28, one step at a time. The premise itself, how many minds exist
   - *Examples:* the Pleiades at 444 ly, the Orion Nebula at 1,344 ly, Gaia BH1 at 1,560 ly, the nearest known black hole, and the Galaxy’s central black hole at about 26,700 ly.
   - *First nine, 2026-10-29:* the Hyades, the Pleiades, the Beehive, the Orion Nebula, Gaia BH2 and BH3, the Crab Nebula, 47 Tucanae and Omega Centauri. A tap names each on Reach’s map. Gaia BH1 was already a destination.
   - *Later, the full catalogs:* Gaia’s open clusters (Cantat-Gaudin 2020) and all of the Galaxy’s globular clusters (Harris).
+- **How Earth finds minds, way 1: a peer’s warm flash.** Settled 2026-10-29. A new build, an all-sky mid-infrared watch, repeats every few Years and catches any flash above its depth while it runs.
+  - *The flash.* A peer building out its home glows warm for its outward time, and its light takes its distance in Years to reach us. Over 400 seeds, about 1.7 flashes a game passed before Year 0, gone. About 2.5 arrive in 100,000 Years, the first typically near Year 29,000, and 1 game in 5 sees one inside 10,000 Years.
+  - *Its depth.* A Sun’s full output from 30,000 ly is about 1.5 mJy at 12 µm, dimmed 3 to 4 times by dust in the plane (from memory). WISE reached about 1 mJy. A watch about 10 times deeper sees a flash anywhere in the Galaxy.
+  - *A flash we aren’t watching for passes unseen.* The watch must already run when it arrives.
+  - Set aside: the Halo Survey catching warm flashes too. A warm flash and a cold glow need different instruments.
+- **Way 2: an awake old mind’s cold glow.** Settled 2026-10-29. The Halo Survey finds about half of them. Its depth, 3×10¹⁸ W at 10 pc, is 4.5×10²⁰ W at 400 ly, where 56% of awake minds glow brighter, and 2.8×10²¹ W at 1,000 ly, where 50% do. A deeper survey later could find more.
+  - *It becomes an all-sky far-infrared mapper.* Pointing at each star in turn worked for 50 ly. Within 1,000 ly there are 8.5 million stars.
+  - Set aside: every awake old mind glowing above the floor. Physics doesn’t promise a bright glow.
   - Set aside: seeding everything beyond 326 ly, landmarks included.
 - **The draw, in calcs/minds.py.** Added 2026-10-29, beside the old neighbors, as each world’s `minds`. Over 400 seeds: 8.6 old minds within 1,000 ly, the nearest typically 397 ly away, and 5.1 peers, 63% inward at contact.
   - *Old minds* sit on real stars inside 326 ly and at seeded places out to 1,000 ly, weighted by the disk. Each is about a billion years older, at most 5 billion. Half sleep, as before. Awake, a glow stays under what the shallow all-sky maps would catch.
@@ -784,6 +792,13 @@ Settled 2026-10-13.
 - **The Mind gives its judgment in words, never in numbers.** Settled 2026-10-13.
   - *A report still lists what a thing could be.* Each explanation carries a word. If a reading moved it, the word before shows too: Life, very unlikely → likely.
   - *Seven words,* a sample, after the scale US intelligence analysts use: almost no chance, very unlikely, unlikely, roughly even, likely, very likely, almost certain.
+  - *Scan’s map glows with the Mind’s word on life.* Settled 2026-10-29, after Epitaph and Radioscope from the 2016 Fermi Paradox Jam.
+    - *Each lead carries a word that something lives there.* Its halo grows and brightens with it, from faint at almost no chance to full at almost certain. A reading that moves the word brightens the lead over a few seconds.
+    - *Before any reading:* too hot, almost no chance. Gas or cold, very unlikely. Warm rock, unlikely, or very unlikely round a red dwarf, whose flares strip air. Whether life starts at all, no one knows.
+    - *Its air:* no water, almost no chance. Water alone, roughly even: an empty sea, or Earth’s early microbes. Oxygen alone, roughly even. Oxygen with water, likely, since oxygen can build up without life.
+    - *Seen up close:* bare rock, almost no chance. Ice, unlikely. Seas, roughly even, or likely with oxygen. Forests, very likely, or almost certain with oxygen. Cities, almost certain.
+    - *A grey glow, likely:* cold computing would glow so. A black hole glows only once someone is seen there. A reply we wait on keeps its own color.
+    - Set aside: the player guessing per star. At one mind per million stars an honest guess reads almost no chance everywhere. The Mind’s own hunches, judged at a game’s end, wait for an end-of-game replay.
   - *This replaces v1’s percentages.* The rest of v1’s rule holds ([v1: What we know, and how we know it](legacy/v1/HOLOS_GAME_CONCEPT.md#what-we-know-and-how-we-know-it)): explanations compete, and each instrument runs one test.
   - *A number that is a measurement stays a number:* a distance, a time, a mass.
   - *Known cost.* People read such words differently, and nearer to even than meant (Budescu et al. 2014). One fixed scale, used everywhere, is the guard.

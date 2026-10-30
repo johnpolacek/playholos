@@ -34,11 +34,14 @@ export function LeadsMap({
   dials,
   ids,
   system,
+  life,
   onReady,
   className,
 }: {
   dials: Dials;
   ids: string[];
+  /** The Mind's word that something lives at each lead, by its place in ids, as ODDS counts it. -1 for none. */
+  life: number[];
   /** The system of the lead in view, which its Close View flies into, its worlds named there. */
   system?: System;
   onReady(flight: number): void;
@@ -51,6 +54,9 @@ export function LeadsMap({
   const [sent] = useState<NonNullable<Show["sent"]>>(() => []);
   const [calls] = useState<NonNullable<Show["calls"]>>(() => []);
   const [theirs] = useState<NonNullable<Show["theirCalls"]>>(() => []);
+  // The Mind's word on life at each lead, filled in place, so a reading landing brightens its lead without a new scene.
+  const [warm] = useState<number[]>(() => []);
+  useEffect(() => void warm.splice(0, warm.length, ...life), [warm, life]);
   useEffect(() => void Object.assign(dials, { year: YEAR_0 + (year ?? 0) }), [dials, year]);
   useEffect(() => {
     const list = save?.sent ?? [];
@@ -112,6 +118,7 @@ export function LeadsMap({
       sent={sent}
       calls={calls}
       theirCalls={theirs}
+      life={warm}
       system={system}
       onReady={onReady}
       onMarks={onMarks}

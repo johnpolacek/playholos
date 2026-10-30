@@ -94,6 +94,7 @@ export function SkyArt({
   sent,
   calls,
   theirCalls,
+  life,
   beams,
   works,
   system,
@@ -128,6 +129,7 @@ export function SkyArt({
       sent,
       calls,
       theirCalls,
+      life,
       beams,
       works,
       system,
@@ -140,7 +142,7 @@ export function SkyArt({
       onScale,
     });
     onReady?.(flight);
-  }, [sky, mode, dials, moments, leads, sent, calls, theirCalls, beams, works, system, onFrame, onMind, onMarks, onScale, onReady]);
+  }, [sky, mode, dials, moments, leads, sent, calls, theirCalls, life, beams, works, system, onFrame, onMind, onMarks, onScale, onReady]);
 
   return (
     <div ref={box} aria-hidden className={className}>

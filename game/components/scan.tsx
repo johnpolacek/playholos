@@ -11,7 +11,7 @@ import type { Dials } from "@/lib/drift";
 import { newsOf } from "@/lib/game/clock";
 import { placeLeads } from "@/lib/game/places";
 import { lossesOf } from "@/lib/sim/meetings";
-import { airReading, glowReading, type Lead, landed, leadsOf, nearestReading, type Reading, skyId, visitReading } from "@/lib/game/leads";
+import { airReading, glowReading, type Lead, landed, leadsOf, lifeOf, nearestReading, ODDS, type Reading, skyId, visitReading } from "@/lib/game/leads";
 import { gsap, prefersReducedMotion } from "@/lib/motion";
 import type { EarthView, Heard as Signal, Visit } from "@/lib/sim/types";
 
@@ -218,7 +218,15 @@ export function useStepTap(step: (by: 1 | -1) => void) {
 /** The map on Scan: the stars within 50 light-years, and the leads lit in turn as the camera arrives. An open lead's
  * page holds the focus, so the camera goes on to its star once all are lit. */
 export function ScanMap({ className }: { className: string }) {
-  const { ids, dials, look } = useLeads();
+  const { leads, ids, dials, look, readings } = useLeads();
+  // Each lead glows by the Mind's word that something lives there, brighter as a reading raises it. 2026-10-29.
+  const life = useMemo(
+    () => leads.map((l) => {
+      const word = lifeOf(l, readings[l.slug] ?? []);
+      return word ? ODDS.indexOf(word) : -1;
+    }),
+    [leads, readings],
+  );
   // The leads light once as the map opens, not again as a lead's system comes and goes.
   const lit = useRef(false);
   // A lead found after they lit lights too. Until all are lit the map holds no focus, so no Close View.
@@ -245,7 +253,7 @@ export function ScanMap({ className }: { className: string }) {
   }, [dials, ids]);
   useEffect(() => () => void gsap.killTweensOf(dials), [dials]);
   return ids.length ? (
-    <LeadsMap dials={dials} ids={ids} system={look?.system} onReady={onReady} className={className} />
+    <LeadsMap dials={dials} ids={ids} life={life} system={look?.system} onReady={onReady} className={className} />
   ) : null;
 }
 
