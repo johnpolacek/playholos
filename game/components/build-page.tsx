@@ -29,6 +29,7 @@ import {
 } from "@/lib/game/plan";
 import { GROWS, grownDone, grownSpans } from "@/lib/game/halo";
 import { SWARM } from "@/lib/sim/conflict";
+import { CATALOG } from "@/lib/sim/works";
 import { SITES } from "@/lib/game/sites";
 import { FOUND, harm, rockAt, rockOf } from "@/lib/game/rocks";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
@@ -88,7 +89,8 @@ function InPlay({ name, scale, done }: { name: string; scale: number; done: Reco
       const growing = back === null;
       const swarm = name === "Solar Swarm";
       const every = swarm ? SWARM.doubling : 10;
-      const n = Math.floor(grew / every);
+      // Past all the Sun it doubles no more: the Solar Swarm stops at 55 doublings.
+      const n = Math.min(Math.floor(grew / every), swarm ? Math.ceil(CATALOG.works["Solar swarm"].full ?? Infinity) : Infinity);
       const full = swarm && SWARM.watts * 2 ** n >= SWARM.most;
       const sheds = swarm ? `catches about ${watts(Math.min(SWARM.most, SWARM.watts * 2 ** n))} of sunlight, near 500 K` : `sheds about ${watts(1.2e12 * 2 ** (grew / 10))} at 77 K`;
       return (

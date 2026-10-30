@@ -16,7 +16,7 @@ import neptuneMap from "../../assets/neptune.jpg";
 import { PC_LY, PLANETS, julianDate, orbitPath, seededRandom } from "../../src/astronomy.js";
 import { bodyOrientation, bodyPosition, moonOffset } from "../../src/ephemeris.js";
 import { GALAXIES, galaxyExtent, galaxyPosition, galaxyViewRadius } from "../../src/galaxies.js";
-import { GALACTIC_CENTER, LY_AU, eclipticToGalactic } from "../../src/navigation.js";
+import { GALACTIC_CENTER, LY_AU, eclipticToGalactic, homeTarget } from "../../src/navigation.js";
 import { LANDMARKS, landmarkAt } from "./game/landmarks";
 import { skyBasis } from "../../src/coordinates.js";
 import { AGE, WHOLE_ROAD, agoAt, place as placeOf, roadZoom } from "./game/road";
@@ -2798,6 +2798,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     // f of the Sun's light they fill a band of latitude b round Mercury's plane with sin b = f: a thin ring until f
     // nears a tenth, a shell at all of it. A dot stands for countless collectors, and the ring is drawn a degree wide,
     // wider than it is, or it couldn't be seen. 2026-10-29.
+    const THIN = 0.017;
     const swarm = (() => {
       const STEPS = 720;
       const path: THREE.Vector3[] = orbitPath(PLANETS[0], jd, STEPS).map((q: number[]) =>
@@ -2811,7 +2812,9 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       const s: number[] = [];
       const c = new Cloud();
       for (let k = 0; k < 9000; k++) {
-        const [uu, ss] = [scatter() - 0.5, scatter() * 2 - 1];
+        // Two in five in the drawn ring, the rest spread over the whole shell, so the young ring shows.
+        const ring = k % 5 < 2;
+        const [uu, ss] = [scatter() - 0.5, ring ? (scatter() * 2 - 1) * THIN : scatter() * 2 - 1];
         const q = path[(((i0 + Math.round(uu * STEPS)) % STEPS) + STEPS) % STEPS].clone().multiplyScalar(1 + (scatter() - 0.5) * 0.02);
         const lat = Math.asin(ss);
         const at = q.clone().multiplyScalar(Math.cos(lat)).addScaledVector(normal, q.length() * Math.sin(lat));
@@ -2823,7 +2826,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       mat.blending = THREE.AdditiveBlending;
       const pts = c.points(mat);
       solar.scene.add(pts);
-      return { u, s, mat, bright: pts.geometry.attributes.aBright as THREE.BufferAttribute, grew: -1 };
+      return { u, s, mat, bright: pts.geometry.attributes.aBright as THREE.BufferAttribute, grew: -1, f: 0 };
     })();
     const made = new Map<string, ReturnType<typeof mark>>();
     const v = new THREE.Vector3();
@@ -2842,14 +2845,22 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       if (focus?.site.on === "planet") globeOf(focus.site.body!);
       // The swarm as it stands this Year, round the Sun, once a build at Mercury is in view.
       const grew = (list.find((w) => w.name === "Solar Swarm")?.spans ?? []).reduce((y, [a, b]) => y + Math.max(0, Math.min(b ?? years, years) - a), 0);
-      swarm.mat.uniforms.uOpacity.value = p * Number(grew > 0 && focus?.site.body === "Mercury");
+      const showing = p * Number(grew > 0 && focus?.site.body === "Mercury");
+      swarm.mat.uniforms.uOpacity.value = showing;
+      // Seen from outside, the swarm hides the Sun by the share it catches: only Earth's line stays clear.
+      sunGlow.uniforms.uOpacity.value = 1 - 0.9 * showing * swarm.f;
       if (Math.abs(grew - swarm.grew) > 0.02) {
         swarm.grew = grew;
         const f = Math.min(1, (SWARM.watts * 2 ** Math.floor(grew / SWARM.doubling + 1e-9)) / SWARM.most);
+        swarm.f = f;
         const arc = Math.min(1, grew * CATALOG.swarm.spread);
-        const band = Math.max(0.017, f);
-        const b = 0.3 + 0.7 * ramp(Math.log10(f), -17, -1);
-        swarm.u.forEach((uu, k) => swarm.bright.setX(k, Math.abs(uu) <= arc / 2 && Math.abs(swarm.s[k]) <= band ? b : 0));
+        const band = Math.max(THIN, f);
+        const b = 0.45 + 0.55 * ramp(Math.log10(f), -17, -1);
+        // The ring's own dots fade as the band widens past it, so a shell isn't brighter at its middle.
+        const ringB = b * Math.min(1, (2 * THIN) / band);
+        swarm.u.forEach((uu, k) =>
+          swarm.bright.setX(k, Math.abs(uu) > arc / 2 || Math.abs(swarm.s[k]) > band ? 0 : k % 5 < 2 ? ringB : b),
+        );
         swarm.bright.needsUpdate = true;
         dirty = true;
       }
@@ -3378,7 +3389,9 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     if (work?.site.on === "moon")
       goal.copy(siteAt(work)).multiplyScalar(MOON_R * 0.45).add(moonAt).multiplyScalar(R_E_AU);
     else if (work?.site.on === "l2" || work?.site.on === "l4") goal.copy(farAt(work.site)).multiplyScalar(0.55 * R_E_AU);
-    else if (work?.site.on === "planet" && work.site.view === "orbit") goal.copy(earthAU).negate();
+    // Framing an orbit, the view's middle comes to the Sun: the middle has already slid part way there at that distance.
+    else if (work?.site.on === "planet" && work.site.view === "orbit")
+      goal.copy(homeTarget(3.4 * PLANETS.find((x: { name: string }) => x.name === work.site.body)!.elements[0], earthAU)).negate();
     else if (work?.site.on === "planet") goal.copy(farAt(work.site)).multiplyScalar(R_E_AU);
     else goal.set(0, 0, 0);
     if (!goal.equals(hop.to)) {
