@@ -11,6 +11,9 @@ import { CLI_BARE } from "./scripts/ask-mind.mjs";
 // says whether the Mind is open. The CLI takes one prompt, so earlier turns ride in the system prompt. 2026-10-25.
 
 const DRY = "x-holos-dry";
+/** Said on what we ask the Worker, so it opens the Mind without a key or code: the CLI spends none. The Worker takes
+ *  it only on the dev server. A .dev.vars with ACCESS_CODE locked the CLI Mind until 2026-10-30. */
+export const CLI = "x-holos-cli";
 
 async function bodyOf(req: IncomingMessage) {
   let raw = "";
@@ -33,13 +36,18 @@ export const mindCli: Plugin = {
   apply: () => process.env.MIND_VIA === "cli",
   configureServer(server) {
     server.middlewares.use(async (req, res, next) => {
+      // The Mind answers on our login here, so it is open to whoever plays on this server.
+      if (req.method === "GET" && req.url === "/api/access") {
+        res.setHeader("content-type", "application/json");
+        return res.end(JSON.stringify({ open: "code" }));
+      }
       if (req.method !== "POST" || req.url !== "/api/mind" || req.headers[DRY]) return next();
       const body = await bodyOf(req);
       // Asked dry, as trace:mind asks, the Worker answers. Its body was read here, so it goes on whole.
       if (body.dry) {
         const dry = await fetch(`http://${req.headers.host}/api/mind`, {
           method: "POST",
-          headers: { "content-type": "application/json", cookie: req.headers.cookie ?? "", [DRY]: "1" },
+          headers: { "content-type": "application/json", cookie: req.headers.cookie ?? "", [DRY]: "1", [CLI]: "1" },
           body: JSON.stringify(body),
         });
         res.statusCode = dry.status;
@@ -49,7 +57,7 @@ export const mindCli: Plugin = {
       // The Worker builds the prompt and checks the cookie, as it does for every question.
       const told = await fetch(`http://${req.headers.host}/api/mind`, {
         method: "POST",
-        headers: { "content-type": "application/json", cookie: req.headers.cookie ?? "", [DRY]: "1" },
+        headers: { "content-type": "application/json", cookie: req.headers.cookie ?? "", [DRY]: "1", [CLI]: "1" },
         body: JSON.stringify({ ...body, dry: true }),
       });
       if (!told.ok) {

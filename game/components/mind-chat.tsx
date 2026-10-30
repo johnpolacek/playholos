@@ -229,20 +229,34 @@ export function MindSettings({ keyed }: { keyed: boolean }) {
   );
 }
 
-/** Where we type to the Mind. */
+/** Where we type to the Mind. A question sent while it answers waits, said so, and goes once it is done: it was
+ *  silently dropped until 2026-10-30. */
 function AskBox({ busy, onAsk, className = "" }: { busy: boolean; onAsk(text: string): void; className?: string }) {
   const [input, setInput] = useState("");
+  const waiting = useRef<string | null>(null);
+  const [queued, setQueued] = useState<string | null>(null);
+  useEffect(() => {
+    if (busy || waiting.current === null) return;
+    const text = waiting.current;
+    waiting.current = null;
+    onAsk(text);
+    setQueued(null);
+  }, [busy, onAsk]);
   return (
     <form
       className={className}
       onSubmit={(e) => {
         e.preventDefault();
         const text = input.trim();
-        if (!text || busy) return;
-        onAsk(text);
+        if (!text) return;
+        if (busy) {
+          waiting.current = text;
+          setQueued(text);
+        } else onAsk(text);
         setInput("");
       }}
     >
+      {queued && <p className="mb-1.5 px-1 text-[12px] leading-snug text-muted">Next, once we finish: “{queued}”</p>}
       <div className="flex h-11 items-center gap-2 rounded-full border border-ink bg-paper pr-1.5 pl-3.5">
         <input
           value={input}
@@ -251,7 +265,7 @@ function AskBox({ busy, onAsk, className = "" }: { busy: boolean; onAsk(text: st
           aria-label="Ask the Mind"
           className="min-w-0 grow bg-transparent text-sm outline-none placeholder:text-muted"
         />
-        <button type="submit" disabled={busy || !input.trim()} aria-label="Send" className="size-8 shrink-0 rounded-full bg-ink text-paper disabled:opacity-35">
+        <button type="submit" disabled={!input.trim()} aria-label="Send" className="size-8 shrink-0 rounded-full bg-ink text-paper disabled:opacity-35">
           ↑
         </button>
       </div>

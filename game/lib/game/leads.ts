@@ -103,7 +103,12 @@ export interface Lead {
   system?: System;
   /** The Mind's word that something lives there, before any reading. None where life isn't the question. 2026-10-29. */
   life?: Odds;
+  /** Its line once a Year has passed, when the first stops being true. 2026-10-30. */
+  later?: { year: number; line: string };
 }
+
+/** A lead's line at a Year: Luyten's Star promised a reply "from Year 2.3" at Year 9,104 until 2026-10-30. */
+export const lineAt = (l: Lead, year: number | null) => (l.later && year !== null && year >= l.later.year ? l.later.line : l.line);
 
 /** The scene names Luyten's Star as the catalog does. */
 export const skyId = (star: string) => star.replace("’", "'");
@@ -1051,6 +1056,10 @@ export function leadsOf(felt: FeltWorld[], holes: DarkMass[] = [], glows: Glow[]
       star: "Luyten’s Star",
       what: "We messaged it",
       line: `Our 2017 and 2018 messages reached it in 2030. Any reply would reach us from Year ${REPLY}. Minds are rare, so likely none.`,
+      later: {
+        year: Math.max(...REPLIES),
+        line: `Our 2017 and 2018 messages reached it in 2030. The first replies could have reached us at Years ${REPLIES.join(" and ")}. None came.`,
+      },
       ly: 12.3,
       ask: "Could Luyten’s Star answer us?",
       brief: `We sent it two messages, in 2017 and 2018. If anyone answered at once, the first reply reaches us at Year ${REPLY}. Our sky watch sees that star only 10 minutes a day, so we could miss it.`,

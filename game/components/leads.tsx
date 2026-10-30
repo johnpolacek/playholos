@@ -10,7 +10,7 @@ import { Face } from "@/components/tab-head";
 import type { Dials, Mark, Show } from "@/lib/drift";
 import { span, YEAR_0, lyOf } from "@/lib/game/clock";
 import { target } from "@/lib/game/sends";
-import { type Lead, type Reading } from "@/lib/game/leads";
+import { type Lead, lineAt, type Reading } from "@/lib/game/leads";
 import { type System, worldName } from "@/lib/game/systems";
 import { placeLabel } from "@/components/place-label";
 
@@ -201,6 +201,7 @@ export function LeadList({
   readings?: Record<string, Reading[]>;
   fresh?: Set<string>;
 }) {
+  const { year } = useGame();
   // The lead in view: the one the Will points at, or else the one they picked, which stays until picked again.
   const [picked, setPicked] = useState<number | null>(null);
   const [peeked, setPeeked] = useState<number | null>(null);
@@ -235,7 +236,7 @@ export function LeadList({
               {read.title}, Year {read.at}.
             </span>
           ) : (
-            l.line
+            lineAt(l, year)
           )
         }
         right={reach(l)}
@@ -294,7 +295,7 @@ export function LeadList({
               >
                 <div className="min-h-0 overflow-hidden">
                   <div className="pb-3 pl-5">
-                    <p className="text-[13.5px] leading-snug text-page-ink2">{l.line}</p>
+                    <p className="text-[13.5px] leading-snug text-page-ink2">{lineAt(l, year)}</p>
                     <dl className="mt-2 grid grid-cols-[auto_1fr] items-baseline gap-x-3 gap-y-1 text-[13px] leading-snug">
                       {l.facts.map(([label, value]) => (
                         <Fragment key={label}>

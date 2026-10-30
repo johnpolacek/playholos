@@ -176,8 +176,13 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
       leads.map((l) => [l.slug, [...landed(l.slug, observe, tenth), ...(air[l.star] ?? []), ...(visited[l.star] ?? []), ...(glowed[l.star] ?? [])]]),
     );
     const opened = new Set(seen);
+    // New until opened, or for 50 Years: a badge from Year 10 still read NEW at Year 9,104 until 2026-10-30.
+    const recent = (at: number) => tenth === null || tenth - at < 50;
     const fresh = new Set(
-      [...Object.values(readings).flatMap((rs) => rs.map((r) => r.id)), ...heard.map(heardId)].filter((id) => !opened.has(id)),
+      [
+        ...Object.values(readings).flatMap((rs) => rs.filter((r) => recent(r.at)).map((r) => r.id)),
+        ...heard.filter((h) => recent(h.arrived)).map(heardId),
+      ].filter((id) => !opened.has(id)),
     );
     return { leads, ids, dials, readings, fresh, heard, visits, colony, minds, look, setLook, close, setClose, step, setStep };
   }, [leads, felt, proxima, ids, dials, observe, tenth, seen, heard, visits, colony, minds, look, setLook, close, setClose, step, setStep]);
