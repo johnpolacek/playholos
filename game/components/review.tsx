@@ -7,6 +7,7 @@ import { MindNote } from "@/components/mind-note";
 import { LeadMark } from "@/components/marks";
 import { useLeads, useStepTap } from "@/components/scan";
 import { span, lyOf } from "@/lib/game/clock";
+import { starName } from "@/lib/game/leads";
 import {
   gsap,
   prefersReducedMotion,
@@ -202,7 +203,7 @@ export function Review({ onClose }: { onClose(): void }) {
                 <LeadMark art={lead.art} size={18} />
               </span>
               <h2 className="text-[19px] leading-snug font-medium">
-                {lead.star}
+                {starName(lead.star)}
               </h2>
             </div>
             <p data-r className="mt-0.5 text-[13.5px] text-page-ink2">

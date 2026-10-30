@@ -11,7 +11,7 @@ import { Face, ListHead } from "@/components/tab-head";
 import type { Dials, Mark as Place } from "@/lib/drift";
 import { YEAR_0, lyOf } from "@/lib/game/clock";
 import { LANDMARKS } from "@/lib/game/landmarks";
-import { visitReading } from "@/lib/game/leads";
+import { starName, visitReading } from "@/lib/game/leads";
 import { lean, type moves } from "@/lib/game/plan";
 import {
   auFor,
@@ -669,7 +669,8 @@ export function Reach() {
   // Our leads' stars, nearest first, each with the soonest either road could arrive.
   const places = useMemo(
     () =>
-      [...leads]
+      // What is here at home has no road to it. 2026-10-30.
+      leads.filter((l) => l.art.kind !== "near")
         .sort((a, b) => a.ly - b.ly)
         .map((l) => {
           const at = base.map((r) => toward(r, l.ly).arrives).filter((y): y is number => y !== null);
@@ -720,7 +721,7 @@ export function Reach() {
               <Face
                 mark={<LeadMark art={lead.art} />}
                 tone={lead.reply ? "text-other" : "text-you"}
-                name={<b className="font-semibold">{lead.star}</b>}
+                name={<b className="font-semibold">{starName(lead.star)}</b>}
                 line={`${lead.what} · ${lyOf(lead.ly)} ly`}
                 right={soonest === null ? "Not yet" : `Year ${year(soonest)}`}
               />

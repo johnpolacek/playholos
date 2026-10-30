@@ -9,7 +9,7 @@ import { Lens } from "@/components/icons";
 import { axis, Brings, Key, says, sooner, Thread, useReach, year, Years } from "@/components/reach";
 import { useLeads } from "@/components/scan";
 import { VisitArt } from "@/components/visit-art";
-import { isHole, skyId, visitReading } from "@/lib/game/leads";
+import { isHole, skyId, starName, visitReading } from "@/lib/game/leads";
 import { Face, ListHead } from "@/components/tab-head";
 import { HISTORY } from "@/lib/game/charter";
 import { span, lyOf } from "@/lib/game/clock";
@@ -246,7 +246,7 @@ export function DestinationPage({ slug }: { slug: string }) {
         <span className={`mt-[4px] shrink-0 ${lead.reply ? "text-other" : "text-you"}`}>
           <LeadMark art={lead.art} size={18} />
         </span>
-        <h1 className="text-[19px] leading-snug font-medium">{lead.star}</h1>
+        <h1 className="text-[19px] leading-snug font-medium">{starName(lead.star)}</h1>
       </div>
       <p data-m className="mt-0.5 text-[13.5px] text-page-ink2">
         {lead.what} · {lead.range ? `${lyOf(lead.range[0])} to ${lyOf(lead.range[1])}` : lyOf(lead.ly)} ly · a message takes{" "}

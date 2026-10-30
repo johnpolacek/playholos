@@ -65,7 +65,8 @@ function Meter({
 function Skip() {
   const { save, year, skipTo } = useGame();
   const tenth = year === null ? null : Math.floor(year * 10) / 10;
-  const [next, setNext] = useState<number | null>(null);
+  // Undefined while we ask, null once the server says nothing comes. 2026-10-30.
+  const [next, setNext] = useState<number | null | undefined>(undefined);
   const seed = save?.seed;
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const query = useMemo(() => knownQuery(save, tenth), [tenth, save?.plan, save?.will]);
@@ -74,10 +75,18 @@ function Skip() {
     let live = true;
     fetch(`/api/next?seed=${seed}&${query}`)
       .then((r) => (r.ok ? r.json() : null))
-      .then((v: { next: number | null } | null) => live && setNext(v?.next ?? null), () => live && setNext(null));
+      .then((v: { next: number | null } | null) => live && setNext(v ? v.next : undefined), () => live && setNext(undefined));
     return () => void (live = false);
   }, [seed, query, tenth]);
-  if (tenth === null || next === null || next <= tenth) return null;
+  // A stop behind us is stale, while the server answers for the Year we skipped to.
+  if (tenth === null || next === undefined || (next !== null && next <= tenth)) return null;
+  // The link vanished with no word until 2026-10-30, and players thought it broke.
+  if (next === null)
+    return (
+      <span className="ml-2 text-muted" title="Nothing new comes in the next 100,000 Years unless we order it. The clock runs on.">
+        Nothing ahead
+      </span>
+    );
   // Shown and landed in tenths, as the Year is: a stop within the tenth we're in lands on the next tenth.
   const to = Math.max(Math.ceil(next * 10 - 1e-9) / 10, tenth + 0.1);
   return (

@@ -5,7 +5,7 @@ import { SkyArt } from "@/components/sky";
 import { tenths, YEAR_0 } from "@/lib/game/clock";
 import { CLOSE } from "@/lib/game/close";
 import { GROWS, grownSpans } from "@/lib/game/halo";
-import { keptOf, ordered, takenAt } from "@/lib/game/plan";
+import { keptOf, ordered, orderedAt, takenAt } from "@/lib/game/plan";
 import { type Site, SITES } from "@/lib/game/sites";
 import type { Plan } from "@/lib/game/types";
 import type { Dials, Mark } from "@/lib/drift";
@@ -23,8 +23,10 @@ export interface Work {
   site: Site;
   /** In the queue, or under way. */
   queued: boolean;
-  /** When it is done, in Years from Year 0. Null when not queued, or past 40 Years. */
+  /** When it is done, in Years from Year 0. Null when not queued, or past the horizon. */
   done: number | null;
+  /** The Year it was last ordered, so what is built counts from then. 2026-10-30. */
+  from: number;
   /** Taken back in play: the share of it built then, or null for Thought Fields, which keeps no work. 2026-10-23. */
   back?: number | null;
   /** For a build that grows once done: the Years it grew, as spans, the last open while it grows. 2026-10-29. */
@@ -42,7 +44,7 @@ export const placedOf = (plan: Plan, done: Record<string, number | null>, scale:
     // One that grows, held, is taken back in our order but still stands: drawn built, from the Year it was done.
     const held = !queued && !!spans?.length;
     return {
-      name, site, queued: queued || held, done: queued ? (done[name] ?? null) : held ? spans![0][0] : null, ...back,
+      name, site, queued: queued || held, from: orderedAt(plan, name), done: queued ? (done[name] ?? null) : held ? spans![0][0] : null, ...back,
       ...(spans ? { spans } : {}),
     };
   });
@@ -119,15 +121,15 @@ export function WorksProvider({ children }: { children: React.ReactNode }) {
   return <WorksContext value={value}>{children}</WorksContext>;
 }
 
-/** Where a build is, in words: waiting, how much is built, or done. Built evenly from Year 0, near enough. */
+/** Where a build is, in words: waiting, how much is built, or done. Built evenly from its order, near enough. */
 function state(w: Work, year: number | null) {
   // The Cold Halo, or the Solar Swarm, taken back once built is held at its size, not undone. 2026-10-28.
   if (GROWS.includes(w.name) && w.back === null) return "Built, held at its size";
   if (w.back !== undefined) return w.back === null ? "Taken back" : `Taken back, ${Math.floor(100 * w.back)}% built`;
   if (!w.queued) return "Not queued";
-  if (w.done === null) return "Past Year 1,000";
+  if (w.done === null) return "More than 1,000 Years out";
   if (year === null) return `Done by Year ${tenths(w.done)}`;
-  return year >= w.done ? "Built" : `${Math.floor((100 * year) / w.done)}% built`;
+  return year >= w.done ? "Built" : `${Math.floor((100 * (year - w.from)) / (w.done - w.from))}% built`;
 }
 
 /** Which way a place off the map is, as an arrow: one of eight, from the map's middle. */

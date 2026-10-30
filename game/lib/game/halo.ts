@@ -1,7 +1,7 @@
 // What grows once done, from our order: the Cold Halo doubles every 10 Years, and since 2026-10-29 the Solar Swarm
 // every 2. Each time we take one back it stops, until we order it again. 2026-10-28.
 import { pace } from "@/lib/sim/works";
-import { HORIZON, ordersOf, pacedName } from "./plan";
+import { horizonOf, ordersOf, pacedName } from "./plan";
 import type { Plan } from "./types";
 
 /** The builds that grow once done. */
@@ -11,7 +11,7 @@ export const GROWS = ["Cold Halo", "Solar Swarm", "Helium-3 Harvest"];
  *  one is taking it back, so this reads the pace itself. */
 export function grownDone(plan: Plan, scale: number, name: string): number | null {
   const { orders, ...opts } = ordersOf(plan);
-  return pace(orders, HORIZON, { scale, ...opts }).done[pacedName(name)] ?? null;
+  return pace(orders, horizonOf(orders), { scale, ...opts }).done[pacedName(name)] ?? null;
 }
 
 /** The Years it grew, as spans from one Year to another, the last open while it still grows. Empty until done. */

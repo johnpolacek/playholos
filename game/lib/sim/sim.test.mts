@@ -421,8 +421,11 @@ test("skipping ahead stops at the next thing we learn or build, and says when, n
   // Seed 10 with the Warm Sky Watch at Year 0 and our Infrared Telescope: a warm glow is seen at Year 2,386, ranged two Years on.
   const ahead = earthKnows(world, 102500, { warmWatch: 0, telescope: 0 });
   const first = ahead.minds!.flashes[0];
-  assert.equal(nextKnown(ahead, 2000), first.seen);
-  assert.equal(nextKnown(ahead, first.seen), first.ranged);
+  // Once it will be ranged, the skip stops when it is, where Scan shows it, not when first seen. 2026-10-30.
+  assert.equal(nextKnown(ahead, 2000), first.ranged);
+  // Never ranged, as with no Infrared Telescope, the Warm Sky Watch's sighting stops it.
+  const unranged = earthKnows(world, 102500, { warmWatch: 0 });
+  assert.equal(nextKnown(unranged, 2000), unranged.minds!.flashes[0].seen);
   // A place in [ra, dec, d] is never taken for a time, and a build done sooner stops the skip first.
   assert.equal(nextStop(ahead, 2000, { "Moon Search": 2100, "Halo Survey": null }), 2100);
   assert.equal(nextStop({ year: 0, felt: [], heard: [], visits: [] }, 5, {}), null);

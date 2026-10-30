@@ -7,7 +7,7 @@ import { SystemArt } from "@/components/system-art";
 import { LeadMark } from "@/components/marks";
 import { useLeads } from "@/components/scan";
 import { span, lyOf } from "@/lib/game/clock";
-import { ODDS, type Odds, type Reading } from "@/lib/game/leads";
+import { ODDS, type Odds, type Reading, starName } from "@/lib/game/leads";
 import { VisitArt } from "@/components/visit-art";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
 
@@ -156,14 +156,21 @@ export function LeadPage({ slug }: { slug: string }) {
         <span className={`mt-[4px] shrink-0 ${lead.reply ? "text-other" : "text-you"}`}>
           <LeadMark art={lead.art} size={18} />
         </span>
-        <h1 className="text-[19px] leading-snug font-medium">{lead.star}</h1>
+        <h1 className="text-[19px] leading-snug font-medium">{starName(lead.star)}</h1>
       </div>
       <p data-m className="mt-0.5 text-[13.5px] text-page-ink2">
-        {lead.what} · {lead.range ? `${lyOf(lead.range[0])} to ${lyOf(lead.range[1])}` : lyOf(lead.ly)} ly · reached in <span className="font-mono tabular-nums">{span(lead.ly)}</span>{" "}
-        ·{" "}
-        <Link to={`/reach/${lead.slug}`} className="whitespace-nowrap text-you">
-          Ways to go ›
-        </Link>
+        {lead.art.kind === "near" ? (
+          // Here at home: no light-years, and no road to it on Reach. 2026-10-30.
+          <>{lead.what}</>
+        ) : (
+          <>
+            {lead.what} · {lead.range ? `${lyOf(lead.range[0])} to ${lyOf(lead.range[1])}` : lyOf(lead.ly)} ly · reached in{" "}
+            <span className="font-mono tabular-nums">{lead.range ? `${span(lead.range[0])} to ${span(lead.range[1])}` : span(lead.ly)}</span> ·{" "}
+            <Link to={`/reach/${lead.slug}`} className="whitespace-nowrap text-you">
+              Ways to go ›
+            </Link>
+          </>
+        )}
       </p>
 
       {read && (
@@ -213,7 +220,8 @@ export function LeadPage({ slug }: { slug: string }) {
         </>
       )}
 
-      <h2 data-m className={`mt-5 ${HEAD}`}>What it could be</h2>
+      {/* A rock coming has nothing to weigh: these headings show only over something. 2026-10-30. */}
+      {lead.could.length > 0 && <h2 data-m className={`mt-5 ${HEAD}`}>What it could be</h2>}
       <ul className="mt-1 flex flex-col">
         {lead.could.map((c, k) => (
           <li key={c.what} data-m className="border-t border-faint py-2.5 first:border-t-0">
@@ -226,7 +234,7 @@ export function LeadPage({ slug }: { slug: string }) {
         ))}
       </ul>
 
-      <h2 data-m className={`mt-4 ${HEAD}`}>What would tell us</h2>
+      {(read?.tells ?? lead.tells).length > 0 && <h2 data-m className={`mt-4 ${HEAD}`}>What would tell us</h2>}
       {(read?.tells ?? lead.tells).map((t) => (
         <p key={t} data-m className="mt-1.5 text-[13.5px] leading-snug">
           {t}

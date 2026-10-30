@@ -596,7 +596,8 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         // as Gaia BH1 at 1,560 ly, pulls the view back until its whole path and Sol show, to scale. 2026-10-27.
         const turns = [pilot.facing(-P.z, P.x), pilot.facing(P.z, -P.x)].map((a) => wrap(a - az));
         az += (Math.abs(turns[0]) < Math.abs(turns[1]) ? turns[0] : turns[1]) * k;
-        logD += (Math.min(8.7, Math.max(6.3, Math.log10(2.5 * P.length() * LY_AU))) - logD) * k;
+        // Out to a warm glow tens of thousands of ly off, too: capped near 2,000 ly until 2026-10-30, it never showed.
+        logD += (Math.min(10.3, Math.max(6.3, Math.log10(2.5 * P.length() * LY_AU))) - logD) * k;
         tilt += (-0.3 - tilt) * k;
       } else {
         az += drift(dt, 600);

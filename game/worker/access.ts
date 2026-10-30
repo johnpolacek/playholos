@@ -26,8 +26,10 @@ function opens(jar: Map<string, string>): Access {
   return admits(jar.get(ACCESS_COOKIE)) ? "code" : null;
 }
 
-/** The key a question to the Mind spends: the player's own, ours behind the code, or null while it is locked. */
+/** The key a question to the Mind spends: the player's own, ours behind the code, or null while it is locked. On the
+ *  dev server, the CLI Mind asks for its prompt with none, and spends none. 2026-10-30. */
 export function apiKeyFor(req: Request) {
+  if (import.meta.env.DEV && req.headers.get("x-holos-cli")) return "";
   const jar = cookies(req);
   const theirs = jar.get(KEY_COOKIE);
   if (isAnthropicKey(theirs)) return theirs;

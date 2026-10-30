@@ -10,7 +10,7 @@ import { Face } from "@/components/tab-head";
 import type { Dials, Mark, Show } from "@/lib/drift";
 import { span, YEAR_0, lyOf } from "@/lib/game/clock";
 import { target } from "@/lib/game/sends";
-import { type Lead, type Reading } from "@/lib/game/leads";
+import { type Lead, lineAt, type Reading, starName } from "@/lib/game/leads";
 import { type System, worldName } from "@/lib/game/systems";
 import { placeLabel } from "@/components/place-label";
 
@@ -21,11 +21,14 @@ import { placeLabel } from "@/components/place-label";
 // and opens what we measured of it.
 
 /** How long a message takes to reach a star, one way, in play time, and under it how far it is: 1h 38m, 19.7 ly.
- *  Stacked, so on a phone the names keep their one line. */
-const reach = (ly: number) => (
+ *  Stacked, so on a phone the names keep their one line. A range where Earth has one, and what is here at home said
+ *  so. 2026-10-30. */
+const reach = (l: Lead) => (
   <span className="flex flex-col items-end">
-    <span>{span(ly)}</span>
-    <span className="mt-[3px] text-[10px] text-muted/80">{lyOf(ly)} ly</span>
+    <span>{l.art.kind === "near" ? "here" : l.range ? `${span(l.range[0])} to ${span(l.range[1])}` : span(l.ly)}</span>
+    <span className="mt-[3px] text-[10px] text-muted/80">
+      {l.art.kind === "near" ? "by Earth" : l.range ? `${lyOf(l.range[0])} to ${lyOf(l.range[1])}` : lyOf(l.ly)}{l.art.kind === "near" ? "" : " ly"}
+    </span>
   </span>
 );
 
@@ -92,7 +95,8 @@ export function LeadsMap({
       // Leads and Sol first, then what we sent, then calls and flashes, and the rings' distances last, so the
       // later give way.
       const rank = (id: string) => (ids.includes(id) || id === "Sol" ? 0 : id.startsWith("sent:") ? 1 : id.startsWith("ring:") ? 3 : 2);
-      const taken: Parameters<typeof placeLabel>[4] = [];
+      // The LEADS chip sits at the top left, and covered Gaia BH1's name there until 2026-10-30.
+      const taken: Parameters<typeof placeLabel>[4] = [{ l: 0, t: 0, r: 76, b: 36 }];
       for (const { id, x, y, a } of [...marks].sort((p, q) => rank(p.id) - rank(q.id))) {
         const n = names.current[id];
         if (!n) continue;
@@ -100,7 +104,9 @@ export function LeadsMap({
         const ring = id.startsWith("ring:") || id.startsWith("call:") || (id.startsWith("theirs:") && theirs[Number(id.slice(7))]?.ly === 0);
         const lead = ids.includes(id);
         const clear = placeLabel(n, x, y, ring ? (id.startsWith("call:") ? 16 : 4) : null, taken);
-        n.style.opacity = String(a * clear * (focus && lead && id !== focus ? 0.45 : 1));
+        // A lead's name stays, faint, where it can't be clear. Any other gives way whole: a star we sent to sat over
+        // Proxima Centauri's name until 2026-10-30.
+        n.style.opacity = String(a * (lead || id === "Sol" ? clear : clear === 1 ? 1 : 0) * (focus && lead && id !== focus ? 0.45 : 1));
       }
     },
     [dials, ids, theirs],
@@ -162,7 +168,7 @@ export function LeadsMap({
           }}
           className={`pointer-events-none absolute top-0 left-0 font-mono text-[9px] whitespace-nowrap opacity-0 ${id === "Luyten's Star" ? "text-other" : id.startsWith("ring:") || id === "Sol" ? "text-muted" : "text-you"}`}
         >
-          {id.startsWith("ring:") ? `${id.slice(5)} ly` : id}
+          {id.startsWith("ring:") ? `${id.slice(5)} ly` : starName(id)}
         </span>
       ))}
       {system?.worlds.map((w, i) => (
@@ -198,6 +204,7 @@ export function LeadList({
   readings?: Record<string, Reading[]>;
   fresh?: Set<string>;
 }) {
+  const { year } = useGame();
   // The lead in view: the one the Will points at, or else the one they picked, which stays until picked again.
   const [picked, setPicked] = useState<number | null>(null);
   const [peeked, setPeeked] = useState<number | null>(null);
@@ -220,7 +227,7 @@ export function LeadList({
         tone={l.reply ? "text-other" : "text-you"}
         name={
           <>
-            <b className="font-semibold">{l.star}</b> · {l.what}
+            <b className="font-semibold">{starName(l.star)}</b> · {l.what}
           </>
         }
         line={
@@ -232,10 +239,10 @@ export function LeadList({
               {read.title}, Year {read.at}.
             </span>
           ) : (
-            l.line
+            lineAt(l, year)
           )
         }
-        right={reach(l.ly)}
+        right={reach(l)}
       />
     );
   };
@@ -278,9 +285,9 @@ export function LeadList({
                   <LeadMark art={l.art} />
                 </span>
                 <span className="min-w-0 grow truncate text-[15px] leading-snug">
-                  <b className="font-semibold">{l.star}</b> · {l.what}
+                  <b className="font-semibold">{starName(l.star)}</b> · {l.what}
                 </span>
-                <span className="shrink-0 font-mono text-[11px] text-muted tabular-nums">{reach(l.ly)}</span>
+                <span className="shrink-0 font-mono text-[11px] text-muted tabular-nums">{reach(l)}</span>
                 <span className={`shrink-0 text-muted transition-transform duration-300 ${open ? "rotate-90" : ""}`}>
                   ›
                 </span>
@@ -291,7 +298,7 @@ export function LeadList({
               >
                 <div className="min-h-0 overflow-hidden">
                   <div className="pb-3 pl-5">
-                    <p className="text-[13.5px] leading-snug text-page-ink2">{l.line}</p>
+                    <p className="text-[13.5px] leading-snug text-page-ink2">{lineAt(l, year)}</p>
                     <dl className="mt-2 grid grid-cols-[auto_1fr] items-baseline gap-x-3 gap-y-1 text-[13px] leading-snug">
                       {l.facts.map(([label, value]) => (
                         <Fragment key={label}>

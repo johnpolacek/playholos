@@ -22,11 +22,13 @@ export function tenths(years: number): number {
 }
 
 /** Real time for a span of game time, as a list shows it: 1h 38m, 21m, or under a minute, 30s. Read at a glance,
- *  where HH:MM:SS reads like a time of day. Settled 2026-10-19. */
+ *  where HH:MM:SS reads like a time of day. Settled 2026-10-19. Past two days, in days, 88d 6h, where 2118h read as
+ *  noise. 2026-10-30. */
 export function span(years: number): string {
   const s = Math.max(0, Math.floor((years * MS_PER_YEAR) / 1000));
   const h = Math.floor(s / 3600);
   const m = Math.floor((s % 3600) / 60);
+  if (h >= 48) return h % 24 ? `${Math.floor(h / 24)}d ${h % 24}h` : `${h / 24}d`;
   if (h) return m ? `${h}h ${String(m).padStart(2, "0")}m` : `${h}h`;
   return m ? `${m}m` : `${s}s`;
 }

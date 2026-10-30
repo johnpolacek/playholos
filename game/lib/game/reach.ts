@@ -3,7 +3,7 @@
 // dated where the plan has it, and one not yet as if queued now, with this game's compute. Queued, a road can slow
 // what is before it: see moves() in plan.ts. Distances at Year 0 are HOLOS_GAME_CONCEPT.md's. Built 2026-10-18.
 import { BULLET, bulletsReady, SCREEN } from "@/lib/sim/conflict";
-import { ordersOf, pacedName, schedule, searchOf } from "./plan";
+import { horizonOf, ordersOf, pacedName, schedule, searchOf } from "./plan";
 import { grownSpans } from "./halo";
 import type { Plan, Will } from "./types";
 import { CATALOG, type Order, pace } from "@/lib/sim/works";
@@ -67,7 +67,7 @@ export function roads(plan: Plan, scale: number, from = 0): Road[] {
   const { orders, ...opts } = ordersOf(plan);
   const doneOf = (work: string) => {
     const more: Order[] = plan.builds.includes(work) ? [] : [{ y: from, begin: pacedName(work) }];
-    return pace([...orders, ...more], 200, { scale, ...opts }).done[pacedName(work)] ?? null;
+    return pace([...orders, ...more], horizonOf([...orders, ...more], 200), { scale, ...opts }).done[pacedName(work)] ?? null;
   };
   const road = (name: string, build: string, craft: string, wait: number, speed: number): Road => {
     const done = doneOf(build);
@@ -115,7 +115,7 @@ export function lensRoad(plan: Plan, scale: number, from: number, star: string):
   const { orders, ...opts } = ordersOf(plan);
   const ordered = plan.builds.includes("Solar Lens") || (plan.later ?? []).some((o) => o.name === "Solar Lens");
   const more: Order[] = ordered ? [] : [{ y: from, begin: pacedName("Solar Lens") }];
-  const done = pace([...orders, ...more], 200, { scale, ...opts }).done[pacedName("Solar Lens")] ?? null;
+  const done = pace([...orders, ...more], horizonOf([...orders, ...more], 200), { scale, ...opts }).done[pacedName("Solar Lens")] ?? null;
   const sent = (plan.lenses ?? []).find((o) => o.name === star);
   const leaves = done === null ? null : Math.max(sent?.y ?? from, done);
   const trip = leaves === null ? null : lensTrip(schedule(plan, scale), leaves);
@@ -162,7 +162,7 @@ export function strikesOf(plan: Plan, scale: number) {
 export function sentinelRoad(plan: Plan, scale: number, from: number, star: string, ly: number): Road {
   const { orders, ...opts } = ordersOf(plan);
   const more: Order[] = SENTINEL_NEEDS.filter((n) => !inOrder(plan, n)).map((n) => ({ y: from, begin: pacedName(n) }));
-  const at = pace([...orders, ...more], 300, { scale, ...opts }).done;
+  const at = pace([...orders, ...more], horizonOf([...orders, ...more], 300), { scale, ...opts }).done;
   const ready = SENTINEL_NEEDS.every((n) => at[pacedName(n)] !== undefined) ? Math.max(...SENTINEL_NEEDS.map((n) => at[pacedName(n)])) : null;
   const sent = (plan.sentinels ?? []).find((o) => o.name === star);
   const leaves = ready === null ? null : Math.max(sent?.y ?? from, ready) + SENTINEL.build;
@@ -175,7 +175,7 @@ export const sentinelReady = (plan: Plan) => SENTINEL_NEEDS.every((n) => inOrder
 function yardDone(plan: Plan, scale: number, from: number, yard: string) {
   const { orders, ...opts } = ordersOf(plan);
   const more: Order[] = inOrder(plan, yard) ? [] : [{ y: from, begin: pacedName(yard) }];
-  return pace([...orders, ...more], 300, { scale, ...opts }).done[pacedName(yard)] ?? null;
+  return pace([...orders, ...more], horizonOf([...orders, ...more], 300), { scale, ...opts }).done[pacedName(yard)] ?? null;
 }
 
 /** A pellet screen on the line to a star, as a road: the Picket Yard, then 4 Years to build and place it, 4 million
@@ -213,7 +213,7 @@ export const SHIP_NEEDS = ["Seed Ship", "Fusion Drive", "Deuterium Works"];
 export function colonyRoad(plan: Plan, scale: number, from: number, star: string, ly: number): Road & { stands: number | null } {
   const { orders, ...opts } = ordersOf(plan);
   const more: Order[] = SHIP_NEEDS.filter((n) => !inOrder(plan, n)).map((n) => ({ y: from, begin: pacedName(n) }));
-  const at = pace([...orders, ...more], 300, { scale, ...opts }).done;
+  const at = pace([...orders, ...more], horizonOf([...orders, ...more], 300), { scale, ...opts }).done;
   const ready = SHIP_NEEDS.every((n) => at[pacedName(n)] !== undefined) ? Math.max(...SHIP_NEEDS.map((n) => at[pacedName(n)])) : null;
   const sent = plan.colony?.name === star ? plan.colony : undefined;
   const leaves = ready === null ? null : Math.max(sent?.y ?? from, ready);
@@ -245,7 +245,7 @@ export function seedsOf(plan: Plan, scale: number) {
 export function seedRoad(plan: Plan, scale: number, from: number, star: string, ly: number): Road & { copies: number | null } {
   const { orders, ...opts } = ordersOf(plan);
   const more: Order[] = SEED_NEEDS.filter((n) => !inOrder(plan, n)).map((n) => ({ y: from, begin: pacedName(n) }));
-  const at = pace([...orders, ...more], 300, { scale, ...opts }).done;
+  const at = pace([...orders, ...more], horizonOf([...orders, ...more], 300), { scale, ...opts }).done;
   const ready = SEED_NEEDS.every((n) => at[pacedName(n)] !== undefined) ? Math.max(...SEED_NEEDS.map((n) => at[pacedName(n)])) : null;
   const sent = (plan.seeds ?? []).find((o) => o.name === star);
   const leaves = ready === null ? null : Math.max(sent?.y ?? from, ready) + PROBE.build;
@@ -269,7 +269,7 @@ export function linkYears(ly: number) {
 export function willRoad(plan: Plan, scale: number, from: number, ly: number, heard: number | null, will?: Will): Road {
   const { orders, ...opts } = ordersOf(plan);
   const more: Order[] = inOrder(plan, "Mind Link") ? [] : [{ y: from, begin: pacedName("Mind Link") }];
-  const done = pace([...orders, ...more], 300, { scale, ...opts }).done[pacedName("Mind Link")] ?? null;
+  const done = pace([...orders, ...more], horizonOf([...orders, ...more], 300), { scale, ...opts }).done[pacedName("Mind Link")] ?? null;
   const leaves = will ? will.y : done === null || heard === null ? null : Math.max(from, done, heard);
   const arrives = leaves === null ? null : leaves + linkYears(ly) + ly;
   return { name: "Move the Will", n: will ? 1 : null, build: "Mind Link", craft: "The Will", speed: 1, done, leaves, arrives, home: null };

@@ -1,7 +1,7 @@
 // What Earth can build, and how far our order has come, for the Mind. Without it the Mind named builds that don't
 // exist, guessed whether a watch was done, and called the drift scan our only ear at Year 40 with the All-Sky Watch long
 // built. Times are Build's: a build's standard pace, and each one in our order as schedule dates it. 2026-10-23.
-import { BUILDS, kt, LATER, ordered, takenAt, takes } from "@/lib/game/plan";
+import { BUILDS, kt, LATER, moves, openAt, ordered, PAST, takenAt, takes } from "@/lib/game/plan";
 import { lensTrip } from "@/lib/game/reach";
 import { FOUND, harm, rockAt, type Rock } from "@/lib/game/rocks";
 import type { Plan } from "@/lib/game/types";
@@ -20,7 +20,7 @@ const MORE: Record<string, string> = {
   "Seed Ship": "It carries one copy of our Mind, so it goes to one place, from that place's page on Reach. To a black hole we have found, to feed the hole for power or to hide in its shadow: a furnace grows fast and shows to X-ray surveys once it passes about a millionth of the Sun, and a refuge stays small and unseen. Or to a star with a world we know, the world next door or one we have felt, to settle on its light and rock. Anyone living there sees it brake in. Any of these is a Mind of ours that lives if Earth does not.",
   "Halo Survey": "Once done, it looks at each star for an hour, nearest first, on its own: about 3,000 stars a Year, 100 ly in 4 Years, 400 ly in about 220. It sees a compact cold glow, not a wide one, and tells a grey glow from dust's. No whole-sky map reaches as deep.",
   "Halo Array": "Once done, it searches as the Halo Survey does, ten times as fast: 40,000 stars a Year, 400 ly in about 17 Years, 1,000 ly in about 210.",
-  "Asteroid Tour": "Once done, its probe reaches Kamoʻoalewa a Year later and maps each of the six asteroids sharing Earth's orbit in turn, a Year each and a Year between, about 12 Years in all, Cruithne last. It finds anything on them down to centimeters. It can't search the Sun–Earth L4 or L5 zones, which are tens of millions of km wide.",
+  "Asteroid Tour": "Once done, its probe maps each of the six asteroids sharing Earth's orbit in turn, a Year each and a Year between, Kamoʻoalewa first and Cruithne last, ending 11 Years after it is done. It finds anything on them down to centimeters. It can't search the Sun–Earth L4 or L5 zones, which are tens of millions of km wide.",
   "Moon Search": "Once done, it stacks deep images of the Earth–Moon L4 and L5 points for 3 Years and finds anything there down to about 10 cm, even near black. It sees nothing at the Sun–Earth points or on asteroids.",
   "Warm Sky Watch": "Once done, it maps the whole sky in warm infrared every 2 Years, on its own, and sees a new warm glow appear anywhere in our galaxy. It can't tell how far a glow is, or what makes it. A glow that rose and faded before it ran is gone for good.",
   "Mind Link": "Once done, and once word has come that our Mind there stands, the Will can move to it, wherever it is, from that place's page on Reach. It goes as a transmission, 100 PB, which takes days at that distance, then the light-time. The crossing costs that time: the Will is dark for it, a Year for each light-year, ordering nothing and hearing nothing, while Earth goes on by our orders and charter. Living there, every order from the Will reaches Earth that many Years late, and Earth's news reaches the Will as late. In a refuge, our Mind there can spread over chips 10 cm wide on the innermost stable orbit, which tides can't break, so its clock runs slow and the sky outside goes by faster. A furnace's disk fills that orbit, so it can't.",
@@ -57,8 +57,8 @@ ${BUILDS.map((b) => line(b)).join("\n")}
 ${LATER.filter((b) => b.after !== FOUND).map((b) => line(b, b.after)).join("\n")}`;
 }
 
-/** Our order, in line, with where each build stands at Year `year`: done, under way and when it will be, or past Year
- *  40. Before Begin, `year` is null and each says when it would be done. Then what the Will took back, and when, its
+/** Our order, in line, with where each build stands at Year `year`: done, under way and when it will be, or past the
+ *  horizon. Before Begin, `year` is null and each says when it would be done. Then what the Will took back, and when, its
  *  work kept, since 2026-10-23. */
 export function describeQueue(plan: Plan, done: Record<string, number | null>, year: number | null): string {
   const names = ordered(plan);
@@ -67,7 +67,7 @@ export function describeQueue(plan: Plan, done: Record<string, number | null>, y
   const at = (name: string) => {
     const d = done[name];
     const fields = name === "Thought Fields";
-    if (d == null) return `${name}: not done by Year 1,000.`;
+    if (d == null) return `${name}: done ${PAST}.`;
     if (year === null) return fields ? `${name}: would fill the grid about Year ${tenth(d)}.` : `${name}: would be done about Year ${tenth(d)}.`;
     if (d <= year) return fields ? `${name}: its campuses filled the grid at Year ${tenth(d)}.` : `${name}: done at Year ${tenth(d)}.`;
     return fields ? `${name}: a campus a Year, filling the grid about Year ${tenth(d)}.` : `${name}: under way, done about Year ${tenth(d)}.`;
@@ -110,6 +110,23 @@ export function describeQueue(plan: Plan, done: Record<string, number | null>, y
   ].join("\n");
 }
 
+/** Each build open to order now, as Build's catalog dates it with this game's compute: when it would be done, and the
+ *  build in our order it slows or speeds most. The Mind gave standard-pace Years and guessed at slowing, where Build
+ *  said "in 20m" and "slows nothing". Playtest 2026-10-30. */
+export function describeOffers(plan: Plan, scale: number, done: Record<string, number | null>, year: number | null) {
+  const at = tenth(year ?? 0);
+  const open = openAt(plan, done, at);
+  if (!open.length) return "";
+  const lines = open.map((b) => {
+    const m = moves(plan, scale, b.name, year === null ? null : at);
+    const when = m.at == null ? `done ${PAST}` : `done about Year ${tenth(m.at)}`;
+    const slows = m.late ? `slowing the ${m.late.name} by about ${tenth(m.late.by)} Years` : "slowing nothing we've queued";
+    const speeds = m.soon ? `, and speeding the ${m.soon.name} by about ${tenth(m.soon.by)} Years` : "";
+    return `- ${b.name}: ordered now, ${when}, ${slows}${speeds}.`;
+  });
+  return `Builds the Will could order now, as Build shows them. When asked how long one takes or what it slows, say these, never the standard pace:\n${lines.join("\n")}`;
+}
+
 /** The rock coming, once our surveys find it, and how it ended. Nothing while it is unknown: the Mind knows only what
  *  Earth does. The Rock Deflector is offered only then. 2026-10-28. */
 export function describeRock(rock: Rock | null, plan: Plan, done: Record<string, number | null>, year: number | null) {
@@ -117,7 +134,8 @@ export function describeRock(rock: Rock | null, plan: Plan, done: Record<string,
   if (!r || r.state === "unknown") return "";
   const at = (y: number) => `Year ${tenth(y)}`;
   if (r.state === "struck")
-    return `A rock ${r.m} m wide struck Earth at ${at(r.strikes)}: ${harm(r.m)}.${r.found === null ? " No survey saw it coming." : ""}`;
+    // Its warning, plainly, so the Mind never says it came unwarned when we had Years. Playtest 2026-10-30.
+    return `A rock ${r.m} m wide struck Earth at ${at(r.strikes)}: ${harm(r.m)}.${r.found === null ? " No survey saw it coming." : ` We found it at ${at(r.found)}, ${tenth(r.strikes - r.found)} Years ahead, time enough for a push landing by ${at(r.strikes - r.lead)}. ${r.lands === null ? "We never ordered the Rock Deflector." : `Our Rock Deflector's push landed at ${at(r.lands)}, too late.`}`}`;
   if (r.state === "pushed") return `Our Rock Deflector pushed aside the ${r.m} m rock that would have struck Earth at ${at(r.strikes)}. It passes us by.`;
   return `A rock ${r.m} m wide, found at ${at(r.found!)}, will strike Earth at ${at(r.strikes)}: ${harm(r.m)}. A new build is open: the Rock Deflector, ten impactors of a tonne, as DART was, ${tenth(takes("Rock Deflector").years ?? 4)} Years at standard pace and a Year's flight. Its push must land by ${at(r.strikes - r.lead)}, or the rock strikes.${r.lands !== null ? ` Ours lands at ${at(r.lands)}${r.pushed ? ", in time" : ", too late"}.` : ""}`;
 }

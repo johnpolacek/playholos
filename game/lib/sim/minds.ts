@@ -79,6 +79,9 @@ export const CO_ORBITALS = ["Kamoʻoalewa", "2023 FW13", "2002 AA29", "2004 GU9"
 export const TOUR_EACH = 2;
 /** Years mapping one asteroid. */
 export const TOUR_MAP = 1;
+/** The Year each survey ends, from the Year it was built: the search once stacked, the tour at its last rock mapped. */
+export const moonSearchEnds = (built: number) => built + MOON_SEARCH_YEARS;
+export const tourEnds = (built: number) => built + (CO_ORBITALS.length - 1) * TOUR_EACH + TOUR_MAP;
 /** How near a flyby's path must pass a sleeping mind for its 1 m telescope to see it, in AU. */
 export const FLYBY_SEES_AU = 50;
 /** Years a probe that stays takes to map a whole system. */

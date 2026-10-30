@@ -188,7 +188,7 @@ export const SAYS: Record<string, string> = {
   "Infrared Telescope":
     "It would read the air of the nearest worlds. Oxygen can build up without life, so we would weigh it against the water and everything else we read.",
   "Asteroid Tour":
-    "Six known asteroids share Earth’s orbit, circling the Sun beside us for centuries. Something left to watch us could ride one. A probe maps each whole surface to centimeters in a Year, then flies on: Kamoʻoalewa first, Cruithne last, about 12 Years in all. A watcher floating free at the Sun–Earth L4 or L5 points it can’t find: those zones are tens of millions of km wide.",
+    "Six known asteroids share Earth’s orbit, circling the Sun beside us for centuries. Something left to watch us could ride one. A probe maps each whole surface to centimeters in a Year, then flies on: Kamoʻoalewa first, Cruithne last, 11 Years in all. A watcher floating free at the Sun–Earth L4 or L5 points it can’t find: those zones are tens of millions of km wide.",
   "Moon Search":
     "Sixty degrees ahead of the Moon and behind it, its pull and Earth’s balance, and a small thing can sit there for ages. Something left to watch us could. Stacked over 3 Years, Rubin-class images reach magnitude 28, enough to see a dark object about 10 cm wide there. Anything farther out it can’t see.",
   "Warm Sky Watch":
@@ -326,6 +326,9 @@ function lastOf(plan: Plan, name: string): { y: number; stop: boolean } | null {
   return last;
 }
 
+/** The Year a build was last ordered: Year 0 for one queued at Begin. 2026-10-30. */
+export const orderedAt = (plan: Plan, name: string) => Math.max(0, lastOf(plan, name)?.y ?? 0);
+
 /** Every build in our order: those from Year 0, then those ordered in play, in the order ordered. Not those taken back,
  *  and one ordered again stands where it was ordered again. */
 export const ordered = (plan: Plan) => [
@@ -390,7 +393,11 @@ export const needs = (names: string[]) => names.map((n) => `the ${n}`).join(" an
  *  Years until 2026-10-26, so a build ordered at Year 400 read "after Year 40". */
 export const HORIZON = 1000;
 /** Past the horizon, in words. */
-export const PAST = "past Year 1,000";
+export const PAST = "more than 1,000 Years out";
+
+/** The Year we pace to: so many Years past our last order, the horizon unless said. It was Year 1,000 itself until
+ *  2026-10-30, so a build ordered past it, as skip-ahead makes easy, was never done. */
+export const horizonOf = (orders: readonly Order[], ahead = HORIZON) => orders.reduce((y, o) => Math.max(y, o.y), 0) + ahead;
 
 /** When each queued build is done, in Years from Year 0, with this game's compute. Null past the horizon. Thought Fields
  *  is done once its campuses fill the grid. A build that needs others is done once they all are, and never if our
@@ -398,7 +405,7 @@ export const PAST = "past Year 1,000";
 export function schedule(plan: Plan, scale: number, harm: readonly Order[] = []): Record<string, number | null> {
   const { orders, ...opts } = ordersOf(plan);
   // Strikes landed on Earth, as lib/game/hits.ts has them: our thought cut, and won back as we rebuild. 2026-10-28.
-  const p = pace([...orders, ...harm], HORIZON, { scale, ...opts });
+  const p = pace([...orders, ...harm], horizonOf([...orders, ...harm]), { scale, ...opts });
   const done: Record<string, number | null> = Object.fromEntries(
     ordered(plan).map((b) => [b, b === "Thought Fields" ? (p.dataCenters[centers(scale) - 1] ?? null) : doneOf(p, b)]),
   );
@@ -411,13 +418,13 @@ export function schedule(plan: Plan, scale: number, harm: readonly Order[] = [])
  *  by then. 2026-10-28. */
 export function searchOf(plan: Plan, scale: number) {
   const { orders, ...opts } = ordersOf(plan);
-  return pace(orders, HORIZON, { scale, ...opts }).searchLog;
+  return pace(orders, horizonOf(orders), { scale, ...opts }).searchLog;
 }
 
 /** What a build does to the rest of our order: when it is done, and the queued build it delays most and speeds up
  *  most, each by Years, against our order without it. Each work in line gets its want in turn before any is pushed
  *  past it, so a work with a large want, even last, takes the push from those before it, and some speed others, as
- *  the Orbital Yard does what is built in orbit. Past the horizon counts as the horizon. Null under a tenth of a Year. One not
+ *  the Orbital Yard does what is built in orbit. Past the horizon counts as the horizon of our order with it. Null under a tenth of a Year. One not
  *  in our order is added last at Year 0, or in play at Year `y`. */
 export function moves(plan: Plan, scale: number, work: string, y: number | null = null) {
   const others = ordered(plan).filter((b) => b !== work);
@@ -429,10 +436,11 @@ export function moves(plan: Plan, scale: number, work: string, y: number | null 
       ? { ...plan, builds: [...plan.builds, work] }
       : orderLater(work, y)(plan);
   const within = schedule(more, scale);
+  const far = horizonOf(ordersOf(more).orders);
   let late: { name: string; by: number } | null = null;
   let soon: { name: string; by: number } | null = null;
   for (const name of others) {
-    const d = (within[name] ?? HORIZON) - (less[name] ?? HORIZON);
+    const d = (within[name] ?? far) - (less[name] ?? far);
     if (d >= 0.1 && (!late || d > late.by)) late = { name, by: d };
     if (d <= -0.1 && (!soon || -d > soon.by)) soon = { name, by: -d };
   }
@@ -526,7 +534,9 @@ export function drawAt(plan: Plan, scale: number, year: number) {
   for (const g of [...(plan.gifts ?? [])].sort((a, b) => a.y - b.y)) if (g.y <= year && !gifts.has(g.name)) gifts.set(g.name, GIFT_STEPS[g.size ?? "collection"]);
   const gifted = [...gifts.values()].reduce((a, b) => a + b, 0);
   const earth = thought / CATALOG.step ** (doublings + own + gifted);
-  return { compute: room > 0 ? 1 - idle / room : 1, energy: (earth * CATALOG.flagship) / (CATALOG.gridRoom * grid) };
+  // Of all our compute, studies counted at work, as Build's ring counts it: the top bar said 3% where Build said 6%
+  // until 2026-10-30.
+  return { compute: thought > 0 ? 1 - idle / thought : 1, energy: (earth * CATALOG.flagship) / (CATALOG.gridRoom * grid) };
 }
 
 /** The share of our compute the plan's builds would use at Year 0. A plan is enough when it uses it all. */
@@ -552,6 +562,8 @@ export function sharesAt(plan: Plan, scale: number, year: number) {
       need: Math.min(want, give) / all,
       spare: Math.max(0, give - want) / all,
       short: Math.max(0, want - give) / all,
+      // Pushed as far as compute can push it: two thirds of its standard time, and no further. 2026-10-30.
+      fastest: s >= (CATALOG.works[work].most ?? CATALOG.push) - 1e-6,
     };
   });
   const sum = (k: "need" | "spare" | "short") => parts.reduce((t, x) => t + x[k], 0);

@@ -179,7 +179,8 @@ function List({ onClose, onBegin }: { onClose(then?: () => void): void; onBegin(
 
       <div data-b="item" className="mt-4">
         <MindNote className="text-[13px] leading-[1.45]">
-          <span data-b="say" className="block">
+          {/* Said aloud too: the first press of Begin now asks, and the reason is here. */}
+          <span data-b="say" className="block" aria-live="polite">
             {sure
               ? "Once we begin, the clock doesn’t stop, even while we’re away, and what’s queued starts at Year 0. We would finish these first, while it still waits."
               : next
@@ -197,7 +198,7 @@ function List({ onClose, onBegin }: { onClose(then?: () => void): void; onBegin(
               onClick={() => (sure ? onBegin() : setSure(true))}
               className="h-[46px] rounded-full border border-ink text-[15px] font-medium"
             >
-              {sure ? "Begin anyway" : "Begin now"}
+              {sure ? "Yes, begin" : "Begin now"}
             </button>
             <Link
               to={next.to}
@@ -332,7 +333,7 @@ export function Begin() {
   );
   if (!save) return null;
   const done = STEPS.map((s) => s.done(save, now));
-  const count = n === STEPS.length ? "ALL READY" : `${n} OF ${STEPS.length} READY`;
+  const count = n === STEPS.length ? "ALL STEPS DONE" : `${n} OF ${STEPS.length} STEPS DONE`;
 
   return (
     <>
@@ -345,7 +346,7 @@ export function Begin() {
           className="-my-1 -mr-1 inline-flex h-6 items-center gap-1.5 rounded-full border border-you/50 pr-2.5 pl-1.5 text-xs text-ink transition-colors hover:bg-you/10"
         >
           <Count done={done} />
-          {n === STEPS.length ? "All ready" : `${n} of ${STEPS.length} ready`}
+          {n === STEPS.length ? "All steps done" : `${n} of ${STEPS.length} steps done`}
           <span className="text-muted">·</span>
           <b className="font-medium text-you">{next ? next.short : "Begin"}</b>
         </button>
