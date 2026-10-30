@@ -1,5 +1,7 @@
 # Holos · Neighbors
 
+**Retired 2026-10-29.** The neighbor roster is gone from the game under the realistic premise (HOLOS_GAME_CONCEPT.md). Kept as history.
+
 Last updated: October 28, 2026.
 
 The hand-written roster of neighbors, and the template every one must fill. The rules behind it are in [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md#the-neighbors). Each game's seed picks some of these neighbors, places each at a host star by weight, draws its waking time, and rolls its branches. Veyra, Hael and Kesh are reworked from v1. Twenty-seven more were added on October 10, for a roster of 30.

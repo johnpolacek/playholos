@@ -1,5 +1,7 @@
 # Holos · Voices
 
+**Retired 2026-10-29.** The neighbor roster is gone from the game under the realistic premise (HOLOS_GAME_CONCEPT.md). Kept as history.
+
 Last updated: October 10, 2026.
 
 Briefs for each neighbor's voice bank. A voice bank is the prose a neighbor's messages are read in, as [How neighbors play](HOLOS_GAME_CONCEPT.md#how-neighbors-play) sets. Each brief, with the neighbor's entry in [HOLOS_NEIGHBORS.md](HOLOS_NEIGHBORS.md#the-roster), is the input for writing its bank once, by Claude Opus 5.5, then reviewed by hand.

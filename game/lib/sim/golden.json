@@ -50,13 +50,6 @@
    0.30354535253903836
   ]
  },
- "rolls": {
-  "10:Ombe:silence": "knock",
-  "10:Hael:silence": "knock",
-  "10:Ombe:reply": "probe",
-  "10:Ree:reply": "gift",
-  "11:Hael:reply": "answer"
- },
  "observe": [
   {
    "args": [

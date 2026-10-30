@@ -124,38 +124,6 @@ def xyz(ra, dec, d):
     a, b = math.radians(ra), math.radians(dec)
     return (d * math.cos(b) * math.cos(a), d * math.cos(b) * math.sin(a), d * math.sin(b))
 
-def claim(seed, holes, neighbors, place):
-    """Who goes to which hole, and when: each living neighbor, by its own keyed roll. `place` gives a neighbor's xyz in
-    ly. Adds `claims` to each hole, soonest first, and returns them all."""
-    at = {h['id']: xyz(h['ra'], h['dec'], h['d']) for h in holes}
-    out = []
-    for p in neighbors:
-        if p['dead'] or p['n'].get('elder'): continue              # an elder is done growing, 2026-10-28
-        rng = random.Random(f"{seed}:holes:{p['name']}")
-        lean = p['n']['disposition'] if p['n']['disposition'] in ('inward', 'hunter') else p['dials'].split()[1]
-        if rng.random() >= GO.get(lean, 0): continue
-        home = place(p)
-        h = min(holes, key=lambda h: math.dist(at[h['id']], home))
-        hop = math.dist(at[h['id']], home)
-        waking = p['waking'] - Y0
-        leaves = waking + MAPPER_YEARS + FIND_YEARS + SENTINEL_BUILD
-        c = dict(who=p['name'], kind='sentinel', leaves=round(leaves, 2), arrives=round(leaves + hop / V + BURNS, 2), hop=round(hop, 2))
-        h.setdefault('claims', []).append(c); out.append(c)
-        if rng.random() < SETTLE.get(lean, 0):
-            sent = waking + S_FIRST_SHIP
-            lands = sent + hop / V + S_BURN + S_BRAKE
-            mode = 'furnace' if p['dials'].split()[0] in ('O1', 'O2') else 'refuge'
-            c = dict(who=p['name'], kind='colony', mode=mode, leaves=round(sent, 2), arrives=round(lands, 2), stands=round(lands + S_STANDS, 2),
-                     hop=round(hop, 2), doubling=p['n'].get('doubling', 10))
-            if mode == 'furnace':
-                # When Earth's X-ray sky could first see it, in its light: Year it crosses, plus light time to Earth.
-                need = XRAY_LIMIT * 4 * math.pi * (h['d'] * 9.4607e17) ** 2 * 1e-7 / XRAY_SHARE     # W
-                c['seen'] = round(c['stands'] + c['doubling'] * math.log2(need / 1e13) + h['d'], 1)
-            h['claims'].append(c); out.append(c)
-    for h in holes:
-        if 'claims' in h: h['claims'].sort(key=lambda c: c['arrives'])
-    return out
-
 Y0 = 2040.0
 S_FIRST_SHIP, S_BURN, S_BRAKE, S_STANDS = 40, 10, 15, 20     # calcs/seed.py's seed-ship timings
 
