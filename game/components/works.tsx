@@ -38,8 +38,13 @@ export const placedOf = (plan: Plan, done: Record<string, number | null>, scale:
     const queued = ordered(plan).includes(name);
     const at = takenAt(plan, name);
     const back = at === null ? {} : { back: keptOf(plan, scale, name, at)?.built ?? null };
-    const grows = GROWS.includes(name) ? { spans: grownSpans(plan, scale, name) } : {};
-    return { name, site, queued, done: queued ? (done[name] ?? null) : null, ...back, ...grows };
+    const spans = GROWS.includes(name) ? grownSpans(plan, scale, name) : null;
+    // One that grows, held, is taken back in our order but still stands: drawn built, from the Year it was done.
+    const held = !queued && !!spans?.length;
+    return {
+      name, site, queued: queued || held, done: queued ? (done[name] ?? null) : held ? spans![0][0] : null, ...back,
+      ...(spans ? { spans } : {}),
+    };
   });
 
 interface Works {
