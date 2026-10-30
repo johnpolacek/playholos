@@ -1325,6 +1325,13 @@ Added 2026-10-28, for [The realistic premise](HOLOS_GAME_CONCEPT.md#the-realisti
   - **[Schödel et al. 2010, extinction toward the Galactic center](https://arxiv.org/abs/0912.1273)** · Published, A&A. Checked 2026-10-29. A(Ks) about 2.5 to 2.7 mag at the center, so about 1.4 mag at 12 µm, a factor of 3.7. Elsewhere in the plane, less.
     - Used: a peer’s flash dims 2 to 4 times. The earlier “3 to 4 times” held only toward the center.
   - **[Bennett, Hanson and Riedel 2019](https://arxiv.org/abs/1902.06730)** · Published, Foundations of Physics 49, 820. Checked 2026-10-29. Argues that computing later in a colder universe gains nothing, against Sandberg et al. 2016. Backs awake old minds that compute steadily now.
+- **Objections from r/FermiParadox, 2026-10-30.** Read for questions, never as a source. Answered in [HOLOS_MODELING_ALIENS.md](HOLOS_MODELING_ALIENS.md#common-objections-and-where-holos-stands).
+  - **[Griffith et al. 2015, the Ĝ search, part III](https://arxiv.org/abs/1504.03418)** · Published, ApJS. Abstract read 2026-10-30. No galaxy in the WISE sample hosts a civilization turning more than 85% of its starlight into mid-infrared heat. Only 50 are consistent with more than 50%.
+    - Matters: rules out galaxy-scale minds, not star-scale ones. Fits awake old minds that stay cold and small.
+    - Used: the objection that infrared surveys only rule out the largest civilizations.
+  - **[Ward and Brownlee 2000, Rare Earth](https://openlibrary.org/isbn/9780387987019)** · Book. Not read, catalog checked 2026-10-30. Complex life needs many unlikely conditions, so it is uncommon, while microbes may be common.
+    - Matters: the view Holos sets aside for life. Holos keeps rarity only at the last step, from animals to minds.
+    - Used: the Rare Earth objection.
 - **Smart et al. 2021, the Gaia Catalogue of Nearby Stars** · Published, A&A 649, A6. Count checked 2026-10-29: 331,312 objects within 100 pc from Gaia EDR3, downloaded from ESA’s Gaia archive. 300,098 have median positions inside 326 ly. Within 100 ly it holds 9,281, below the disk model’s 12,000, since it misses the faintest brown dwarfs.
   - Matters: a real, complete census to 326 ly, small enough to ship in a browser.
   - Used: [Real stars to 326 ly](HOLOS_GAME_CONCEPT.md#the-realistic-premise), the game’s star catalog. Check its counts against the disk model below.

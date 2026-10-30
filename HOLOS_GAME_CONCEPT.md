@@ -28,7 +28,7 @@ Iain M. Banks’s Culture books remain an inspiration. This does not authorize d
 
 ## The realistic premise
 
-Settled 2026-10-28, one step at a time. The premise itself, how many minds exist, where and how old, follows the best current estimate, never what plays well. Each number lives in one place so research can change it. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#how-common-minds-are).
+Settled 2026-10-28, one step at a time. The premise itself, how many minds exist, where and how old, follows the best current estimate, never what plays well. Each number lives in one place so research can change it. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#how-common-minds-are). The criteria, the evidence by question, and answers to common objections are in [HOLOS_MODELING_ALIENS.md](HOLOS_MODELING_ALIENS.md).
 
 - **One mind per million stars.** The honest range runs from 1 per 1,000 to 1 per 10 billion. A million is its middle.
   - *Minds don’t die,* as ours won’t. So the odds are warm worlds × life starts × a mind arises, with no lifetime factor.
