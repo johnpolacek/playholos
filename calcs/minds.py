@@ -2,7 +2,7 @@
 Run: python3 calcs/minds.py [seed]
 
 Settled 2026-10-28 and 2026-10-29 in HOLOS_GAME_CONCEPT.md, The realistic premise. One mind per million stars, all
-older than us and inward. About 5 peers woke within 100,000 years of us. A watcher sits in every game, sent by a maker
+older than us and inward. About 7 peers woke within 100,000 years of us. A watcher sits in every game, sent by a maker
 that cares about spreaders. Drawn beside the old neighbors until the rework retires them (rework step 5).
 
 Positions are in the atlas frame, light-years: (Galactic X toward the center, Galactic Z north, -Galactic Y), as
@@ -18,10 +18,18 @@ PC_LY = 3.261563777
 STARS_PER_MIND = 1e6                    # one mind per million stars, the best guess (concept, the realistic premise)
 CATALOG_LY = 326                        # real stars inside, data/gcns-326ly.bin. Seeded beyond
 OLD_MINDS_LY = 1000                     # old minds drawn one by one out to here. Beyond, the Galaxy's count only
-PEERS = 5                               # mean young minds that woke within PEER_WINDOW of us, Galaxy-wide
+PEERS = 7                               # mean young minds within PEER_WINDOW of us, Galaxy-wide, from HEAD_START below
 PEER_WINDOW = 1e5                       # years either side of our waking
 ASLEEP_SHARE = 0.5                      # as calcs/neighbors.py, a sample
-MAX_AGE = 5e9                           # years older than us: Earth is 4.5 billion, the thin disk at most about 10
+# How much older than us a mind is, settled 2026-10-30: its world's age less the time its mind took. Lineweaver 2001
+# and Lineweaver, Fenner and Gibson 2004: 3 in 4 Earth-like worlds are older than Earth, by 1.8 ± 0.9 billion years on
+# average, drawn as a gamma of that mean and spread. The rest are younger, evenly. A mind takes Earth's 4.54 billion
+# years, faster or slower by calcs/seed.py's pace, 1.6 times at one sigma. Over 2 million draws: a median head start
+# of 2.3 billion years, two thirds between 0.8 and 3.9. Minds within 100,000 years of us are 1.6e-5 of all, so
+# about 7 across the Galaxy, either side. It was 10^N(9, 0.5) capped at 5 billion, with peers from an even pace over
+# 8 billion years, and the two disagreed.
+EARTH_GYR, OLDER_SHARE, OLDER_K, OLDER_THETA, PACE = 4.54, 0.75, 4, 0.45, math.log(1.6)
+OLDEST_GYR = 10.5                       # the thin disk's oldest stars, as calcs/seed.py
 REST_AU = (30, 2000)                    # where a sleeping mind rests from its star, evenly in log (concept, way 4)
 REPLY_C = 0.1                           # what a mind sends travels at a tenth of light's speed, as our own bullets
 
@@ -108,18 +116,25 @@ def in_galaxy(r):
 
 # ---------- Old minds ----------
 def old_mind(seed, i, pos, star=None):
-    """How much older than us (about a billion years, concept), whether it sleeps, and how bright its cold glow is. Awake, it stays under what the shallow all-sky
+    """How much older than us (about 2.3 billion years, typically), whether it sleeps, and how bright its cold glow is. Awake, it stays under what the shallow all-sky
     maps would catch at its distance, 0.3% of a Sun at 400 ly, since none has been seen."""
     r = rng(seed, 'old', i)
     d = math.hypot(*pos)
     asleep = r.random() < ASLEEP_SHARE
     limit = 0.003 * 3.828e26 * (d / 400) ** 2
-    age = round(min(MAX_AGE, 10 ** r.gauss(9, 0.5)))
+    age = head_start(r)
     glow = None if asleep else float(f'{log_between(r, 1e18, limit):.3g}')
     # Asleep, it folds up small and rests in the cold: 12 K lies about 540 AU from a Sun, 54 AU from a dim red dwarf.
     rest = round(log_between(r, *REST_AU)) if asleep else None
     return dict(id=f'old-{i}', pos=[round(c, 3) for c in pos], d=round(d, 2), star=star, age=age, asleep=asleep,
                 glowW=glow, restAU=rest)
+
+def head_start(r):
+    """Years an old mind woke before us: its world's age less the time its mind took, past the peers' window."""
+    while True:
+        world = min(OLDEST_GYR, EARTH_GYR + r.gammavariate(OLDER_K, OLDER_THETA)) if r.random() < OLDER_SHARE else r.uniform(0, EARTH_GYR)
+        took = EARTH_GYR * math.exp(r.gauss(0, PACE))
+        if (world - took) * 1e9 > PEER_WINDOW: return round((world - took) * 1e9)
 
 def old_minds(seed):
     """Every old mind out to OLD_MINDS_LY: on real stars inside the catalog, at seeded places beyond."""

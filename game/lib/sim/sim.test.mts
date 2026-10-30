@@ -284,11 +284,12 @@ test("the realistic premise's minds: rare and old near us, a few peers far off, 
     const { minds } = await loadWorld(s);
     assert.ok(minds, `seed ${s} has no minds`);
     olds += minds.old.length; peers += minds.peers.length;
-    // Old minds lie out to 1,000 ly, nearest first, on real stars only inside the 326 ly catalog.
+    // Old minds lie out to 1,000 ly, nearest first, on real stars only inside the 326 ly catalog. Each woke before the
+    // peers' window and after the thin disk's first stars.
     minds.old.forEach((o, i) => {
       assert.ok(o.d <= 2000 && (i === 0 || o.d >= minds.old[i - 1].d));
       assert.ok(o.star === null ? o.d >= 326 : o.d <= 326.5, `${o.id} at ${o.d} ly`);
-      assert.ok(o.age > 0 && o.age <= 5e9 && (o.asleep ? o.glowW === null : o.glowW! > 0));
+      assert.ok(o.age > 1e5 && o.age <= 10.5e9 && (o.asleep ? o.glowW === null : o.glowW! > 0));
     });
     // A peer's warm phase reaches us d Years after it shines, and our light finds it inward, outward or not yet awake.
     for (const p of minds.peers) {
@@ -304,9 +305,9 @@ test("the realistic premise's minds: rare and old near us, a few peers far off, 
     assert.equal(w.ladder[0].delay, 0);
     assert.ok(w.ladder[1].delay >= maker.d * 10);
   }
-  // About 8.5 old minds within 1,000 ly and 5 peers a game, loosely, over the pool.
+  // About 8.5 old minds within 1,000 ly and 7 peers a game, loosely, over the pool.
   assert.ok(olds / POOL.length > 5 && olds / POOL.length < 12, `${olds / POOL.length} old minds a game`);
-  assert.ok(peers / POOL.length > 3 && peers / POOL.length < 7, `${peers / POOL.length} peers a game`);
+  assert.ok(peers / POOL.length > 4.5 && peers / POOL.length < 9.5, `${peers / POOL.length} peers a game`);
 });
 
 test("finding minds: a flash while the warm watch runs, half the cold glows, the watcher by where it sits, a sleeper up close", async () => {

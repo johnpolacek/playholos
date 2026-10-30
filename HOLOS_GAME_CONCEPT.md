@@ -38,7 +38,7 @@ Settled 2026-10-28, one step at a time. The premise itself, how many minds exist
   - *Every count scales with it.* Ten times the minds is ten times the peers.
   - Set aside: drawing the density per game across the whole range, which claims no best guess. A tilt toward sparse, which double-counts what the checker already enforces. And a mind on 1 living world in 1,000, which leans toward one side of a live debate, considered 2026-10-28.
 - **Any mind we find is older.** Earth is younger than about three quarters of the Earth-like worlds that exist now, by 1.8 ± 0.9 billion years on average. About 90% sure.
-  - So a mind we find most likely woke long before us, probably by around a billion years. About 75% sure, since minds may take very different times to arise.
+  - So a mind we find woke long before us, typically by about 2.3 billion years, two thirds of them by 0.8 to 3.9. Settled 2026-10-30: a mind’s head start is its world’s age less the time its mind took, with Lineweaver’s ages and Earth’s 4.54 billion years scaled by each world’s pace, in calcs/minds.py. Before: about a billion years, which disagreed with the even pace behind the peer counts.
   - A peer within a century of our waking is effectively zero. Peers are counted across the Galaxy instead, below.
   - *Early is a different comparison.* Earth formed before about 92% of the Earth-like worlds that will ever exist. Those don’t exist yet, so we can’t meet them.
 - **Old minds are inward.** We model only what physics lets us see, and assume nothing about what they want.
@@ -66,13 +66,13 @@ Settled 2026-10-28, one step at a time. The premise itself, how many minds exist
   - *Why.* Peers exist only at Galaxy scale. Minds near us woke about once per billion years.
   - | Woke within | Within 1,000 ly | In our Galaxy |
     | --- | --- | --- |
-    | 1,000 years of us | 1 in 470,000 | 0.05 |
-    | 100,000 years | 1 in 4,700 | about 5 |
-    | 1 million years | 1 in 470 | about 50 |
-    | 10 million years | 1 in 47 | about 500 |
-  - *So about 5 peers,* young minds within 100,000 years of us, typically 10,000 to 50,000 ly away. Their light and ours take that many Years to cross.
+    | 1,000 years of us | 1 in 340,000 | 0.07 |
+    | 100,000 years | 1 in 3,400 | about 7 |
+    | 1 million years | 1 in 340 | about 70 |
+    | 10 million years | 1 in 34 | about 700 |
+  - *So about 7 peers,* young minds within 100,000 years of us, the nearest typically about 18,000 ly away. Recounted 2026-10-30 from the age model: 1.6 minds in 100,000 wake within 100,000 years of us on either side. The nearest peer within a million years is typically about 6,500 ly away, within 10 million about 2,400. Their light and ours take that many Years to cross.
   - *Near stars stay a real catalog.* Beyond Gaia’s detail the Galaxy is drawn from its measured structure.
-  - *Assumed:* 200 billion stars, minds arising evenly over 8 billion years. Star birth peaked long ago, so peers may be 2 to 3 times rarer.
+  - *Assumed:* 200 billion stars. When minds arise follows when Earth-like worlds formed, and how long a mind takes, as above. Settled 2026-10-30, replacing an even pace over 8 billion years.
   - Set aside: a 1,000 ly map, chosen first on 2026-10-28. It held about 8 old minds and no peers.
   - *How long each peer stays outward* is drawn per peer, below.
 - **A young mind is outward for 50 to 20,000 years.** Settled 2026-10-29. Drawn per peer, then it turns inward and goes cold.
@@ -160,7 +160,7 @@ Settled 2026-10-28, one step at a time. The premise itself, how many minds exist
   - Set aside: any probe finding it, flyby or not.
   - Set aside: seeding everything beyond 326 ly, landmarks included.
 - **The draw, in calcs/minds.py.** Added 2026-10-29, beside the old neighbors, as each world’s `minds`. Over 400 seeds: 8.6 old minds within 1,000 ly, the nearest typically 397 ly away, and 5.1 peers, 63% inward at contact.
-  - *Old minds* sit on real stars inside 326 ly and at seeded places out to 1,000 ly, weighted by the disk. Each is about a billion years older, at most 5 billion. Half sleep, as before. Awake, a glow stays under what the shallow all-sky maps would catch.
+  - *Old minds* sit on real stars inside 326 ly and at seeded places out to 1,000 ly, weighted by the disk. Each is typically about 2.3 billion years older, from the age model above, at most about 9. Half sleep, as before. Awake, a glow stays under what the shallow all-sky maps would catch.
   - *Peers* are placed by the Galaxy’s shape, 1 in 5 in the bulge and bar. Each carries its flash, the Years its warm phase shines at Earth.
   - *The watcher’s maker is the nearest old mind.* Settled 2026-10-29: if several watch, the nearest answers first. Set aside: a maker drawn at random within 1,000 ly.
   - *What a mind sends travels at a tenth of light’s speed,* as our bullets, by parity.

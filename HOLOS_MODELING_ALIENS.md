@@ -34,8 +34,8 @@ Every choice about other minds has to pass these, in order.
 | How common is life? | Common. Life starts on about 3 in 4 suitable worlds | Moderate, for Earth-like conditions |
 | Where is the rare step? | From animals to a mind that builds | Low. Contested |
 | How far is the nearest mind? | Typically about 400 light-years | Follows from the density |
-| How old is a mind we find? | Older, likely by around a billion years | About 75% |
-| Any minds our age? | About 5 in the whole Galaxy, 10,000 to 50,000 light-years away | Follows from the density |
+| How old is a mind we find? | Older, typically by about 2.3 billion years, two thirds by 0.8 to 3.9 | Moderate |
+| Any minds our age? | About 7 in the whole Galaxy within 100,000 years of us, the nearest typically 18,000 light-years away | Follows from the density and ages |
 | What do old minds do? | Turn inward. Compute cold, or sleep | Moderate. Forced by the quiet sky |
 | Has anyone heard us? | Almost surely not. Our radio reaches about 90 light-years | About 99% |
 | Is something watching us? | Yes, a small dark watcher in our system | About 2 in 3. Low |
@@ -84,8 +84,8 @@ The middle column follows 100 typical stars near us. The counts for steps 2 to 6
 - *The window.* A world with animals stays habitable only so long. Mills et al. 2025 give Earth’s land life about 1.0 to 1.9 billion years more. So Earth’s window for a mind runs about 1.5 to 2.5 billion years from animals. Each world’s clock runs faster or slower with its pace.
 - *If the step is rare,* a mind that does arise could come at any time in the window, about evenly. A typical wait is then about half the window, around a billion years. Earth, at 0.5 billion, came early in its window but not unusually.
 - *As a rate:* about 1 chance in 12,000 per billion years of animal life, on any one world.
-- *What it sets.* A world reaches animals at about 4 billion years old, and a mind about a billion years later. Earth-like worlds near us are about 1.8 billion years older than Earth on average (Lineweaver 2001). So most minds woke long ago, and any mind we find is likely older than us by around a billion years.
-- *In 2040.* Minds arise at about 25 per million years across the Galaxy. Nearly all 200,000 are already old. About 5 woke within 100,000 years of us, either side, thousands of light-years away.
+- *What it sets.* A world reaches animals at about 4 billion years old, and a mind about a billion years later. Earth-like worlds near us are about 1.8 billion years older than Earth on average (Lineweaver 2001). So most minds woke long ago. The age model below puts a typical mind about 2.3 billion years ahead of us.
+- *In 2040.* A mind’s head start is its world’s age less the time its mind took. Earth-like worlds are mostly older than Earth, by 1.8 ± 0.9 billion years on average (Lineweaver 2001), and a mind takes about Earth’s 4.5 billion years, faster or slower by each world’s pace. So the typical mind is about 2.3 billion years older than us, two thirds between 0.8 and 3.9. About 7 woke within 100,000 years of us, either side, the nearest typically 18,000 light-years away. Within a million years, the nearest is typically 6,500 light-years away. Within 10 million, 2,400.
 
 ## The evidence, by question
 
@@ -130,7 +130,7 @@ The plain idea: most Earth-like planets that exist today formed before ours. So 
 
 - **[Lineweaver 2001, “An estimate of the age distribution of terrestrial planets in the universe”](https://arxiv.org/abs/astro-ph/0012399)** · Published, Icarus.
   - About three quarters of Earth-like planets are older than Earth, by 1.8 ± 0.9 billion years on average.
-  - Informs: any mind we find is older, likely by around a billion years.
+  - Informs: any mind we find is older, typically by about 2.3 billion years.
 - **[Lineweaver, Fenner and Gibson 2004, the Galactic habitable zone](https://arxiv.org/abs/astro-ph/0401024)** · Published, Science.
   - The same answer for our own Galaxy. About three quarters of stars in its habitable ring are older than the Sun.
   - Informs: the same.
@@ -138,7 +138,7 @@ The plain idea: most Earth-like planets that exist today formed before ours. So 
   - Earth formed before about 92% of the Earth-like planets the universe will ever make.
   - Informs: why Earth is early in cosmic time but young among worlds that exist now. Those future worlds don’t exist yet, so we can’t meet them.
 
-**What Holos takes:** a peer waking within a century of us is effectively zero. Across the whole Galaxy, about 5 minds woke within 100,000 years of us, typically 10,000 to 50,000 light-years away. That is why the game’s map is the Galaxy, and a game can run 100,000 Years or more.
+**What Holos takes:** a peer waking within a century of us is effectively zero. Across the whole Galaxy, about 7 minds woke within 100,000 years of us, the nearest typically about 18,000 light-years away. That is why the game’s map is the Galaxy, and a game can run 100,000 Years or more.
 
 ### 3. Why is the sky quiet?
 
@@ -324,7 +324,7 @@ Positions people raised when we asked what a physics-compliant Fermi game should
 
 - This is near the Holos model.
 - The watcher is the warden. It has been here for millions of years, and when our first seed launches, it warns us.
-- Its maker is old, likely by around a billion years. By parity we can build whatever it can, at the same price and pace. Parity gives us the same choices, not the same head start.
+- Its maker is old, typically by about 2 billion years. By parity we can build whatever it can, at the same price and pace. Parity gives us the same choices, not the same head start.
 - Stopping expansion doesn’t stop discovery. Probes that only look, telescopes and messages never trigger the ladder.
 - The other branch, a nearly empty universe, sits inside the model’s range. See the density above.
 

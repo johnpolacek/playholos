@@ -1375,6 +1375,7 @@ Added 2026-10-28, when every game gained one Mind far older than ours. Prompted 
   - Three quarters of Earth-like planets in the universe are older than Earth, by 1.8 ± 0.9 billion years on average. From star formation over cosmic time and a window of metallicity for Earths.
   - Matters: a Mind far older than ours is the likely case, not the odd one. It is about planets, not life: life follows only if it starts readily.
   - Used: [Elders](HOLOS_GAME_CONCEPT.md#elders), why every game has one.
+  - Used since 2026-10-30: how much older each old mind is, in calcs/minds.py. Its world’s age is drawn as Lineweaver gives it, 3 in 4 older than Earth by a gamma of mean 1.8 and spread 0.9 billion years, the rest younger. Less the time its mind took, Earth’s 4.54 billion years times its pace, that gives a median head start of 2.3 billion years and about 7 peers within 100,000 years of us. This project’s model on his numbers.
 - **[Lineweaver, Fenner and Gibson 2004, the Galactic habitable zone](https://arxiv.org/abs/astro-ph/0401024)** · Published, Science 303, 59. Abstract read.
   - A ring 7 to 9 kpc from the Galaxy’s center, of stars formed 8 to 4 billion years ago. Three quarters of its stars are older than the Sun. Others doubted the data could support such a map (Livio, in press coverage).
   - Matters: the same answer for our own Galaxy.
