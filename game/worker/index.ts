@@ -3,7 +3,6 @@ import { access } from "./access";
 import { earth } from "./earth";
 import { known, leads, next } from "./leads";
 import { mind } from "./mind";
-import { react } from "./react";
 
 // The Mind, held to MIND_LIMIT's questions a minute from one address. The dev server, where the evals ask a hundred in
 // a row, is never held back.
@@ -23,7 +22,6 @@ const ROUTES: Record<string, (req: Request) => Promise<Response>> = {
   "GET /api/known": known,
   "GET /api/next": next,
   "POST /api/mind": limited,
-  "POST /api/react": react,
 };
 
 export default {

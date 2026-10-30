@@ -5,7 +5,6 @@ import { Crossing } from "@/components/crossing";
 import { PreviewProvider } from "@/components/costs";
 import { GameProvider } from "@/components/game-provider";
 import { Hud } from "@/components/hud";
-import { Listening } from "@/components/listening";
 import { MapStrip } from "@/components/map-strip";
 import { ReachProvider } from "@/components/reach";
 import { Rail } from "@/components/rail";
@@ -18,7 +17,6 @@ import { Opening } from "@/components/wake";
 export default function PlayLayout() {
   return (
     <GameProvider>
-      <Listening />
       <Crossing />
       <Fate />
       <Opening className="flex h-dvh w-full flex-col overflow-hidden bg-paper">

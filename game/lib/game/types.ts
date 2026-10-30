@@ -28,9 +28,6 @@ export interface Save {
   talk?: UIMessage[];
   /** What we have sent, in the order sent. The list only grows: a stop is marked, never removed. Since 2026-10-26. */
   sent?: Sent[];
-  /** How each neighbor took a message of ours once it landed, decided then and kept. Plain in the save: reading ahead
-   *  spoils only this game. Since 2026-10-26. */
-  reactions?: Reaction[];
   /** The Will, sent by the Mind Link to live at our Mind at a hole or a star. Since 2026-10-26. */
   will?: Will;
 }
@@ -46,41 +43,6 @@ export interface Will {
   rate: number;
   /** Earth's Mind was lost, and the Will crossed to a vault or colony that still stood. 2026-10-28. */
   lost?: boolean;
-}
-
-/** A neighbor's move on a message, ours or another neighbor's, by the star it lives at: what it did, and what it sent,
- *  if anything, with the Year that reaches Earth when it does. "unheard" when a people before its Mind missed it. */
-export interface Reaction {
-  /** The message's id and the star. */
-  key: string;
-  sent: string;
-  star: string;
-  d: number;
-  /** The Year our message landed there. */
-  at: number;
-  move: string;
-  text?: string;
-  /** How big what they sent is, which sets how long their dishes take to send it, and the Year all of it reaches
-   *  Earth. */
-  size?: Size;
-  arrives?: number;
-  /** What they doubted in our message, weighed against what they can see of Earth. Theirs, never shown. */
-  doubts?: string;
-  /** Whose message it took, when not ours: another neighbor's star. Neighbors hear each other, 2026-10-26. */
-  from?: string;
-  /** Where what they sent goes, when not back to the sender: every way at once. */
-  to?: string;
-  /** On news of a craft of ours at a black hole, not a message: which, in words. 2026-10-26. */
-  about?: string;
-  /** Sent from the hole, by their Mind standing there, not from home: the hole's name, and its light-years from us. */
-  via?: { star: string; d: number };
-  /** A catch or a strike: the Year it ends our craft there. */
-  ends?: number;
-  /** A bullet fired at Earth: the Year it lands and its megatons. Dark until then. 2026-10-28. */
-  lands?: number;
-  mt?: number;
-  /** Our colony's own move, by its stand-in Will: where it stands. Reported home, heard at `arrives`. 2026-10-28. */
-  ours?: string;
 }
 
 /** One message we sent: aimed at a star, or every way at once. Our words as the Will said them, and the Mind's label,

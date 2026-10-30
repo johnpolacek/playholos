@@ -1,6 +1,5 @@
 import { BUILDS, LATER } from "@/lib/game/plan";
 import type { Ordered, Size, Will } from "@/lib/game/types";
-import type { Loss } from "@/lib/sim/meetings";
 import type { ColonyMode } from "@/lib/sim/types";
 import { GIFT_STEPS } from "@/lib/sim/messages";
 
@@ -64,18 +63,6 @@ export function readColony(c: unknown): (Ordered & { mode: ColonyMode }) | undef
   if (o.mode !== "furnace" && o.mode !== "refuge" && o.mode !== "settle") return undefined;
   return { name: o.name, y: o.y, mode: o.mode };
 }
-
-/** Our craft lost at black holes, from the browser: each by its key, the Year, and how. 2026-10-26. */
-export const readLosses = (l: unknown): Loss[] =>
-  Array.isArray(l)
-    ? l.filter((x): x is Loss => !!x && typeof x.craft === "string" && typeof x.at === "number" && Number.isFinite(x.at) && (x.how === "catch" || x.how === "strike")).slice(0, 16)
-    : [];
-
-/** Neighbors' hides, from the browser: each by its star and the Year of the move. 2026-10-28. */
-export const readHides = (l: unknown): { star: string; at: number }[] =>
-  Array.isArray(l)
-    ? l.filter((x): x is { star: string; at: number } => !!x && typeof x.star === "string" && x.star.length <= 80 && typeof x.at === "number" && Number.isFinite(x.at)).slice(0, 64)
-    : [];
 
 /** Where the Will lives, from the browser, if it moved to a hole. 2026-10-26. */
 export function readWill(w: unknown): Will | null {

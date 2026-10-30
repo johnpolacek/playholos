@@ -4,18 +4,13 @@
 import { mindsSeen, type MindKit, type MindsSeen } from "./minds.ts";
 import { giftWords } from "../game/sends.ts";
 import { lightTime } from "../light.ts";
-import { hidesOf } from "./conflict.ts";
 import { BANDS, iwa, observe, owa, WIDE } from "./observing.ts";
 import { proximaB } from "./proxima.ts";
-import type { ColonyMode, DarkMass, EarthView, Find, FeltWorld, Gas, Glow, Heard, Hole, Read, Visit, World } from "./types.ts";
+import type { ColonyMode, DarkMass, EarthView, Find, FeltWorld, Gas, Hole, Read, Visit, World } from "./types.ts";
 import catalog from "../../data/works.json" with { type: "json" };
-import type { Loss } from "./meetings.ts";
 import { seedProbes } from "./spread.ts";
 
-/** A sender's voice bank: its knock reads as its hail and its close, and the close may carry its name. */
-import { ARCHIVE, combedAt, combedBy } from "./works.ts";
-
-export type Voices = Record<string, { hail: string[]; close: string[] }>;
+import { combedAt } from "./works.ts";
 
 /** What Earth has built to listen and look with: the Year each is done, if our order finishes it. */
 export interface Kit {
@@ -38,13 +33,9 @@ export interface Kit {
   /** Each road to Proxima b, if our order flies it: the Year it passes, and the Year its word reaches us. */
   sails?: { passed: number; home: number } | null;
   probe?: { passed: number; home: number } | null;
-  /** Our craft at black holes a neighbor caught or struck, from its moves kept in the save. 2026-10-26. */
-  losses?: Loss[];
   /** The Year our radars went quiet: a neighbor whose ears open only after our last sweep has passed never hears them,
    *  so never answers them. 2026-10-28. */
   quiet?: number | null;
-  /** Neighbors that chose to hide, by star and the Year of the move, from the save. Their glow stops growing. */
-  hides?: { star: string; at: number }[];
   /** Our idle thought combing old recordings: each Year the line changed, and the flagship-Years spent by then. */
   searched?: [number, number][];
   /** What finds the realistic premise's minds, beyond the Halo Survey: lib/sim/minds.ts. 2026-10-29. */
@@ -155,35 +146,6 @@ function visit(world: World, by: Visit["by"], { passed, home }: { passed: number
   };
 }
 
-/** What the Halo Survey has seen by `year`, once it is done at `from`. A Mind computes cold and its computing doubles
- *  every so many Years after it wakes, from Earth's 2040 scale, as calcs/neighbors.py's glow_at has it. ALMA sees a
- *  compact 12 K glow over the floor at 10 pc, growing with distance squared, in light that left d Years ago. The
- *  survey looks at each star once a Year. The dead never wake, as glow_at has it. Settled 2026-10-26. */
-const START_W = 1e13, PC_LY = 3.2616;
-export function glows(world: World, from: number, year: number, hides: Map<string, number> = new Map()): Glow[] {
-  const { floor, every } = catalog.halo;
-  const out: Glow[] = [];
-  for (const p of world.neighbors) {
-    if (p.dead) continue;
-    const need = floor * (p.d / (10 * PC_LY)) ** 2;
-    if (p.elder && p.elder.ceiling < need) continue;                           // an elder asleep sheds almost nothing
-    // A Mind that hid stops growing its glow: if it hid before its glow crossed the floor, we never see it. 2026-10-28.
-    const hid = hides.get(world.stars[p.star]?.shown ?? p.star) ?? Infinity;
-    const emits = p.waking + p.doubling * Math.log2(need / START_W);
-    if (hid < emits) continue;
-    const crosses = p.d + emits;                                                // the Year its light here crosses the floor
-    const seen = from + every * Math.ceil(Math.max(0, crosses - from) / every - 1e-9);
-    if (seen > year) continue;
-    const at = world.stars[p.star];
-    out.push({
-      star: at?.shown ?? p.star, d: p.d, seen, watts: Math.min(START_W * 2 ** Math.min((Math.min(year - p.d, hid) - p.waking) / p.doubling, 1000), p.elder?.ceiling ?? Infinity),
-      ...(p.elder && year - seen >= 5 ? { steady: true } : {}),
-      ...(at?.ra !== undefined ? { ra: at.ra, dec: at.dec } : {}),
-    });
-  }
-  return out.sort((a, b) => a.seen - b.seen);
-}
-
 /** What a lens pictures of a felt world, from its truth: everything wider than its pixel, 25 km at 30 pc. A home's
  *  cities and cleared land show. A world whose makers are gone looks merely alive, since its forests have taken its
  *  fields back. HOLOS_GAME_CONCEPT.md's "A picture shows everything larger than a pixel", 2026-10-14. */
@@ -239,8 +201,7 @@ export function iscoClock(spin: number) {
 export function earthKnows(
   world: World,
   year: number,
-  voices: Voices = {},
-  { allSky = null, flash = null, telescope = null, mirror = null, halo = null, mapper = null, hyper = null, lenses = [], sentinels = [], seeds = [], colony = null, sails = null, probe = null, losses = [], quiet = null, hides = [], searched = [], warmWatch = null, haloArray = null, moonSearch = null, asteroidTour = null, craft = [] }: Kit = {},
+  { telescope = null, mirror = null, halo = null, mapper = null, hyper = null, lenses = [], sentinels = [], seeds = [], colony = null, sails = null, probe = null, warmWatch = null, haloArray = null, moonSearch = null, asteroidTour = null, craft = [] }: Kit = {},
 ): EarthView {
   const shown = (id: string) => world.stars[id]?.shown ?? id;
   // Earth's finds at Year 0: every world whose tug shows by 2040. Measured, not understood. Its star is in the catalogs.
@@ -253,31 +214,9 @@ export function earthKnows(
     ...(read.has(f.star) ? { read: read.get(f.star) } : {}),
     ...(wide.has(f.star) ? { wide: wide.get(f.star) } : {}),
   }));
-  // Signals that have arrived and were caught: by Year 0's sky watch, or, once each is done, by the All-Sky Watch, which
-  // hears what reaches us from anywhere at any hour, or the Deep Flash Watch, which alone sees knocks sent as laser
-  // flashes. The world records which would catch each. 2026-10-20.
-  const heard: Heard[] = [];
-  for (const p of world.neighbors) {
-    // Our radars cut before they reached it: what it would have sent on hearing them is never sent.
-    const deaf = quiet !== null && (p.heardSince ?? Infinity) > quiet + p.d;
-    for (const i of p.inbound) {
-      if (deaf && i.what.includes("radars")) continue;
-      const wide = allSky !== null && i.year >= allSky && !!i.allsky;
-      const seen = flash !== null && i.year >= flash && !!i.flash;
-      // Missed when it came, a radio signal in recordings since 2016 is found once our search combs that far.
-      const dug = !(i.kit0 || wide || seen) && i.allsky && !i.laser && i.year >= ARCHIVE.from ? combedBy(searched, i.year) : null;
-      const found = dug !== null && dug <= year ? dug : null;
-      if (i.year > year || !(i.kit0 || wide || seen || found !== null)) continue;
-      const bank = voices[p.name];
-      heard.push({
-        star: shown(p.star), d: p.d, sent: i.sent, arrived: i.year, move: i.move,
-        text: bank && i.move === "knock" ? `${bank.hail[0]} ${bank.close[0]}` : null,
-        ...(i.kit0 ? {} : found !== null ? { found } : { by: seen ? "Deep Flash Watch" : "All-Sky Watch" }),
-        ...(i.laser ? { laser: true } : {}),
-      });
-    }
-  }
-  heard.sort((a, b) => a.arrived - b.arrived);
+  // Signals caught came from the neighbors' messages to us. They are retired, so none comes, 2026-10-29. The list
+  // stays for Scan and the Mind.
+
   // What our sails and probe saw of Proxima b, once their word is home.
   const visits = (
     [
@@ -323,17 +262,15 @@ export function earthKnows(
     if (dark) {
       const passed = x.leaves + dark.d / speed + burns, home = passed + dark.d;
       const truth = world.holes!.find((h) => h.id === dark.id)!;
-      const lost = losses.find((l) => l.craft === `sentinel:${truth.id}`);
       const claims = truth.claims ?? [];
       // Who got there first: a neighbor's sentinel or colony braked there by the time ours arrives, seen up close.
       const others = claims.filter((c) => c.arrives <= passed).map((c) => ({ kind: c.kind, ...(c.mode ? { mode: c.mode } : {}) }));
       const at = { star: x.star, world: x.star, by: "sentinel" as const, sight: "dark" as const };
       if (home <= year) visits.push({ ...at, passed, home, spin: truth.spin, clock: iscoClock(truth.spin), ...(others.length ? { others } : {}) });
-      // It keeps watching, and sends word of each who brakes in after it, until it is lost. 2026-10-26.
+      // It keeps watching, and sends word of each who brakes in after it. 2026-10-26.
       for (const c of claims)
-        if (c.arrives > passed && c.arrives < (lost?.at ?? Infinity) && c.arrives + dark.d <= year)
+        if (c.arrives > passed && c.arrives + dark.d <= year)
           visits.push({ ...at, passed: c.arrives, home: c.arrives + dark.d, came: comer(world, c.who), others: [{ kind: c.kind }] });
-      if (lost && lost.at + dark.d <= year) visits.push({ ...at, passed: lost.at, home: lost.at + dark.d, lost: lost.how });
       continue;
     }
     const d = x.star === PROXIMA.star ? PROXIMA.d : f?.d;
@@ -366,11 +303,10 @@ export function earthKnows(
   const minds = mindsSeen(world, { telescope, warmWatch, halo, haloArray, moonSearch, asteroidTour, firstSeed, craft }, year);
   const anyMind = minds.flashes.length || minds.glows.length || minds.watcher || minds.sleepers.length;
   return {
-    year, felt, heard, visits,
+    year, felt, heard: [], visits,
     ...(anyMind ? { minds } : {}),
     ...(wide.has(PROXIMA.star) ? { proxima: wide.get(PROXIMA.star) } : {}),
-    ...(halo !== null && year >= halo ? { glows: glows(world, halo, year, hidesOf(world, hides)) } : {}),
-    ...(colony ? { colony: colonyAt(world, holes, colony, year, losses) } : {}),
+    ...(colony ? { colony: colonyAt(world, holes, colony, year) } : {}),
     ...(holes.length ? { holes: holes.map((h) => ({ name: h.name, d: h.d, ra: h.ra, dec: h.dec, mass: h.mass, found: h.found, by: h.by })) } : {}),
   };
 }
@@ -429,31 +365,28 @@ function air(f: FeltWorld) {
 /** Our Mind at a black hole, as far as its word has reached us by `year`: on its way, landed, or standing alone as a
  *  Mind, and, once it stands, who was there before it, and how its furnace has grown, a Mind's computing doubling every
  *  10 Years from our 2040 scale, as a neighbor's does. A refuge stays as small and dark as it began. 2026-10-26. */
-function colonyAt(world: World, holes: (DarkMass & { id: string })[], c: { star: string; mode: ColonyMode; leaves: number }, year: number, losses: Loss[] = []) {
+function colonyAt(world: World, holes: (DarkMass & { id: string })[], c: { star: string; mode: ColonyMode; leaves: number }, year: number) {
   const { speed, burn, brake, stands } = catalog.seedShip;
   const h = holes.find((x) => x.name === c.star);
-  if (!h) return colonyAtStar(world, c, year, losses);
+  if (!h) return colonyAtStar(world, c, year);
   const lands = c.leaves + h.d / speed + burn + brake, alone = lands + stands;
   const heard = year - h.d;                                       // what its word home shows of it now
   const truth = world.holes!.find((x) => x.id === h.id)!;
   const claims = truth.claims ?? [];
   const others = heard >= lands ? claims.filter((x) => x.arrives <= lands).map((x) => ({ kind: x.kind, ...(x.mode ? { mode: x.mode } : {}) })) : [];
-  // Who braked in after it, and its end, a neighbor's catch or strike, as far as its word has reached us. 2026-10-26.
-  const loss = losses.find((l) => l.craft === `colony:${h.id}`);
-  const lost = loss && heard >= loss.at ? { at: loss.at, how: loss.how } : null;
-  const until = Math.min(heard, loss?.at ?? Infinity);
-  const came = claims.filter((x) => x.arrives > lands && x.arrives <= until).map((x) => ({ kind: x.kind, at: x.arrives, from: comer(world, x.who) }));
-  const watts = c.mode === "furnace" && until >= alone ? 1e13 * 2 ** ((until - alone) / 10) : null;
+  // Who braked in after it, as far as its word has reached us. 2026-10-26.
+  const came = claims.filter((x) => x.arrives > lands && x.arrives <= heard).map((x) => ({ kind: x.kind, at: x.arrives, from: comer(world, x.who) }));
+  const watts = c.mode === "furnace" && heard >= alone ? 1e13 * 2 ** ((heard - alone) / 10) : null;
   // It measures its hole's spin once it lands, as a sentinel does, and so the clock on its innermost orbit.
   const spin = heard >= lands ? { spin: truth.spin, clock: iscoClock(truth.spin) } : {};
-  return { star: c.star, mode: c.mode, leaves: c.leaves, lands, stands: alone, d: h.d, ...spin, ...(others.length ? { others } : {}), ...(came.length ? { came } : {}), ...(lost ? { lost } : {}), ...(watts ? { watts } : {}) };
+  return { star: c.star, mode: c.mode, leaves: c.leaves, lands, stands: alone, d: h.d, ...spin, ...(others.length ? { others } : {}), ...(came.length ? { came } : {}), ...(watts ? { watts } : {}) };
 }
 
 /** Our Mind settled at a star, on its light and its rock, as far as its word has reached us by `year`: on its way,
  *  landed, or standing alone as a Mind. Who was there first: a people at home, or their ruins, or a neighbor's colony
  *  landed before it. Who came after, its end, and its works growing as a furnace's do. No slow clock: a star has no
  *  innermost orbit to live on. 2026-10-27. */
-function colonyAtStar(world: World, c: { star: string; mode: ColonyMode; leaves: number }, year: number, losses: Loss[] = []) {
+function colonyAtStar(world: World, c: { star: string; mode: ColonyMode; leaves: number }, year: number) {
   const { speed, burn, brake, stands } = catalog.seedShip;
   const id = Object.keys(world.stars).find((k) => world.stars[k].shown === c.star);
   if (!id) return { star: c.star, mode: c.mode, leaves: c.leaves };
@@ -465,12 +398,9 @@ function colonyAtStar(world: World, c: { star: string; mode: ColonyMode; leaves:
   const others = heard >= lands
     ? [...(n ? [{ kind: n.dead ? ("ruins" as const) : n.elder ? ("elder" as const) : ("home" as const) }] : []), ...theirs.filter((x) => x.lands <= lands).map(() => ({ kind: "colony" as const }))]
     : [];
-  const loss = losses.find((l) => l.craft === `colony:${id}`);
-  const lost = loss && heard >= loss.at ? { at: loss.at, how: loss.how } : null;
-  const until = Math.min(heard, loss?.at ?? Infinity);
-  const came = theirs.filter((x) => x.lands > lands && x.lands <= until).map((x) => ({ kind: "colony" as const, at: x.lands, from: comer(world, x.root) }));
-  const watts = until >= alone ? 1e13 * 2 ** ((until - alone) / 10) : null;
-  return { star: c.star, mode: c.mode, leaves: c.leaves, lands, stands: alone, d, atStar: true, ...(others.length ? { others } : {}), ...(came.length ? { came } : {}), ...(lost ? { lost } : {}), ...(watts ? { watts } : {}) };
+  const came = theirs.filter((x) => x.lands > lands && x.lands <= heard).map((x) => ({ kind: "colony" as const, at: x.lands, from: comer(world, x.root) }));
+  const watts = heard >= alone ? 1e13 * 2 ** ((heard - alone) / 10) : null;
+  return { star: c.star, mode: c.mode, leaves: c.leaves, lands, stands: alone, d, atStar: true, ...(others.length ? { others } : {}), ...(came.length ? { came } : {}), ...(watts ? { watts } : {}) };
 }
 
 /** The star a craft braking in at a hole came from: its flame points back along its track. Its star, never who. */
@@ -481,11 +411,11 @@ function comer(world: World, who: string) {
 
 /** What the Will knows at Year `year`: Earth's news a light-time old once it lives at our Mind at a hole or a star,
  *  and, at first hand, our Mind there and any craft of ours at the same place. 2026-10-26, a star since 2026-10-27. */
-export function willKnows(world: World, year: number, voices: Voices, kit: Kit, will?: { hole: string; d: number; at: number } | null): EarthView {
-  if (!will || year < will.at) return earthKnows(world, year, voices, kit);
-  const view = earthKnows(world, year - will.d, voices, kit);
+export function willKnows(world: World, year: number, kit: Kit, will?: { hole: string; d: number; at: number } | null): EarthView {
+  if (!will || year < will.at) return earthKnows(world, year, kit);
+  const view = earthKnows(world, year - will.d, kit);
   // What Earth would know a light-time from now is what is here now.
-  const here = earthKnows(world, year + will.d, voices, kit);
+  const here = earthKnows(world, year + will.d, kit);
   return {
     ...view,
     year,
@@ -617,18 +547,6 @@ export function describe(view: EarthView): string {
           : `- ${v.world}, passed by our ${v.by} at Year ${one(v.passed)}, word home at Year ${one(v.home)}: ${SIGHT[v.sight]}.`) +
       (v.air && !v.sent ? ` The ${v.by === "seed" ? "probe" : v.by} read its air: ${v.air.water ? "water" : "no water"}, ${v.air.oxygen ? "oxygen" : "no oxygen"}.` : ""),
   );
-  // What the Halo Survey has seen. Grey and line-free, its color fits no dust: cold computing would glow so, and
-  // nothing natural we know of does. Said as seen, not as a Mind, since a glow carries no word. 2026-10-26.
-  const glow = !view.glows
-    ? ""
-    : `\n\nCold glows our Halo Survey has seen near our neighbors' stars, looking at each star for an hour, nearest first, and again each Year. It sees a compact glow near 12 K ` +
-      `over about 3×10¹⁸ W at 10 pc, and four times that at twice the distance. A glow hundreds of AU wide would slip past it:\n` +
-      (view.glows.length
-        ? view.glows.map((g) =>
-            `- At ${g.star}, ${one(g.d)} ly: a grey, line-free glow, first seen at Year ${one(g.seen)}, now about ${g.watts.toExponential(0).replace("e+", "×10^")} W ` +
-            `in light that left ${one(g.d)} Years ago. Its color fits no dust. Cold computing far from a star would glow so.` +
-            (g.steady ? " It has held steady since we first saw it: not growing, as nothing young is." : "")).join("\n")
-        : "- None. Each star's glow it has seen has dust's color, or it sees none.");
   // Black holes found. Each is dark: we know it by the stars it shifted. 2026-10-26.
   const dark = (view.holes ?? []).map(
     (h) =>
@@ -655,7 +573,7 @@ export function describe(view: EarthView): string {
 ${felt}${nearest}
 
 Signals Earth's watch has caught:
-${heard}${visits.length ? `\n\nWhat our craft have seen up close:\n${visits.join("\n")}` : ""}${glow}${holesText}${colonyText}${mindsText}`;
+${heard}${visits.length ? `\n\nWhat our craft have seen up close:\n${visits.join("\n")}` : ""}${holesText}${colonyText}${mindsText}`;
 }
 
 /** What Earth has found of the realistic premise's minds, as measured and never as who: each with what it could be,

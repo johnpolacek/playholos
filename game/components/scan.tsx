@@ -2,13 +2,11 @@ import { createContext, use, useCallback, useEffect, useMemo, useRef, useState }
 import { useSearchParams } from "react-router";
 import { useGame } from "@/components/game-provider";
 import { Heard } from "@/components/heard";
-import { answersHeard } from "@/lib/game/sends";
 import { LeadList, LeadsMap } from "@/components/leads";
 import { Messages } from "@/components/messages";
 import { Review } from "@/components/review";
 import { ListHead } from "@/components/tab-head";
 import type { Dials } from "@/lib/drift";
-import { newsOf } from "@/lib/game/clock";
 import { placeLeads } from "@/lib/game/places";
 import { knownQuery } from "@/lib/game/known-query";
 import { airReading, glowReading, type Lead, landed, leadsOf, lifeOf, nearestReading, ODDS, type Reading, skyId, visitReading } from "@/lib/game/leads";
@@ -80,7 +78,7 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
   const plan = save?.plan;
   // What the server needs from the save, shared with the skip. 2026-10-29.
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const query = useMemo(() => knownQuery(save, tenth), [tenth, plan, save?.reactions, save?.will]);
+  const query = useMemo(() => knownQuery(save, tenth), [tenth, plan, save?.will]);
   const [view, setView] = useState<EarthView>();
   useEffect(() => {
     if (seed === undefined) return;
@@ -94,12 +92,8 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
     return () => void (live = false);
   }, [seed, query]);
   const felt = view?.felt;
-  // Answers to what we sent in play come from the save, where they were written when our message landed.
-  const sent = save?.sent, reactions = save?.reactions, will = save?.will;
-  const heard = useMemo(
-    () => [...(view?.heard ?? []), ...answersHeard(sent ?? [], reactions ?? [], tenth === null ? null : newsOf(tenth, will))].sort((a, b) => a.arrived - b.arrived),
-    [view, sent, reactions, tenth, will],
-  );
+  // What our watches caught. Answers to what we sent went with the neighbors, 2026-10-29.
+  const heard = useMemo(() => view?.heard ?? [], [view]);
   const visits = useMemo(() => view?.visits ?? [], [view]);
   const colony = view?.colony;
   const proxima = view?.proxima;

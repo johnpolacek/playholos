@@ -2,7 +2,7 @@ import { createContext, use, useEffect, useRef, useState } from "react";
 import { MS_PER_YEAR, ordersLand, yearAt } from "@/lib/game/clock";
 import { browserStore } from "@/lib/game/store";
 import { POOL } from "@/lib/sim/pool";
-import type { Reaction, Save, Sent, Will } from "@/lib/game/types";
+import type { Save, Sent, Will } from "@/lib/game/types";
 
 interface Game {
   /** Undefined until the save loads. */
@@ -22,8 +22,6 @@ interface Game {
   send(message: Sent): void;
   /** Stops a message sent every way at once from repeating, at Year `y`. What has left keeps going. */
   stopSending(id: string, y: number): void;
-  /** Keeps how neighbors took our messages. Each is decided once: one already kept is never replaced. */
-  addReactions(list: Reaction[]): void;
   /** Marks readings as opened. */
   see(ids: string[]): void;
   /** Marks one of the things we would do before Begin as done. Once done, it stays done. */
@@ -91,20 +89,6 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     setGuide: (guide) => change((s) => ({ ...s, guide })),
     setTalk: (talk) => change((s) => ({ ...s, talk })),
     send: (message) => change((s) => (s.sent?.some((x) => x.id === message.id) ? s : { ...s, sent: [...(s.sent ?? []), message] })),
-    addReactions: (list) =>
-      change((s) => {
-        const had = new Set((s.reactions ?? []).map((r) => r.key));
-        const fresh = list.filter((r) => !had.has(r.key));
-        // A gift of knowledge speeds our thinking once all of it has reached us: one a star, in our plan's pacing.
-        const given = new Set((s.plan?.gifts ?? []).map((g) => g.name));
-        const gifts = fresh.filter((r) => r.move === "gift" && r.arrives !== undefined && !given.has(r.star) && !!given.add(r.star));
-        const plan = s.plan ?? { builds: [], observe: [] };
-        return {
-          ...s,
-          reactions: [...(s.reactions ?? []), ...fresh],
-          ...(gifts.length ? { plan: { ...plan, gifts: [...(plan.gifts ?? []), ...gifts.map((r) => ({ name: r.star, y: r.arrives!, ...(r.size ? { size: r.size } : {}) }))] } } : {}),
-        };
-      }),
     stopSending: (id, y) => change((s) => ({ ...s, sent: s.sent?.map((x) => (x.id === id && x.stopped === undefined ? { ...x, stopped: y } : x)) })),
     see: (ids) => change((s) => ({ ...s, seen: [...new Set([...(s.seen ?? []), ...ids])] })),
     did: (step) => void ((latest.current ?? save)?.[step] || change((s) => ({ ...s, [step]: true }))),

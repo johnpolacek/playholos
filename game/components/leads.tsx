@@ -71,25 +71,20 @@ export function LeadsMap({
       once: !m.repeat,
     })));
   }, [save?.sent, sent, calls]);
-  // Neighbors' calls every way at once, once we have overheard them: we learn of one as its light passes us. 2026-10-26.
   const tenth = year === null ? null : Math.floor(year * 10) / 10;
   // A strike's flash, as a ring of its light spreading: one on Earth from Sol as it lands, and ours from its star once
   // that light has reached us. 2026-10-28.
   const { hits, scale } = useSchedule();
   const plan = save?.plan;
   useEffect(() => {
-    const calls = (save?.reactions ?? []).flatMap((r) => {
-      const t = (r.to === "everywhere" || r.move === "call") && r.arrives !== undefined && tenth !== null && r.arrives <= tenth ? target(r.star) : null;
-      return t ? [{ name: t.name, ra: t.ra, dec: t.dec, ly: t.d, sent: YEAR_0 + r.arrives! - r.d }] : [];
-    });
     const onUs = hits.filter((h) => !h.screened).map((h) => ({ name: "Earth", ra: 0, dec: 0, ly: 0, sent: YEAR_0 + h.lands, flash: true }));
     const ours = (plan ? strikesOf(plan, scale) : []).flatMap((s) => {
       const t = target(s.star);
       const lands = s.fired === null || !t ? null : s.fired + t.d / BULLET.v;
       return lands !== null && tenth !== null && lands + t!.d <= tenth ? [{ name: t!.name, ra: t!.ra, dec: t!.dec, ly: t!.d, sent: YEAR_0 + lands, flash: true }] : [];
     });
-    theirs.splice(0, theirs.length, ...calls, ...onUs, ...ours);
-  }, [save?.reactions, tenth, theirs, hits, plan, scale]);
+    theirs.splice(0, theirs.length, ...onUs, ...ours);
+  }, [tenth, theirs, hits, plan, scale]);
   const named = [...new Set(sent.map((m) => m.name))].filter((n) => !ids.includes(n));
   const onMarks = useCallback(
     (marks: Mark[]) => {

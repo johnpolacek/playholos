@@ -50,7 +50,7 @@ Started October 28, 2026, after [The realistic premise](HOLOS_GAME_CONCEPT.md#th
 
 ## 4. Still assumes the old premise
 
-For the rework, not decided one by one.
+For the rework, not decided one by one. **2026-10-29:** the roster is retired, so the neighbor items below lose their source. Each is fixed as its code is deleted or reworded.
 
 - **50 ly reach:** sends.ts:51 and 85, send-card.tsx:59, leads.tsx:32, scan.tsx:218, sources.ts:182, the Halo Survey in builds.ts:21, sites.ts:126 and concept L1305-1312, the 50 ly census for seed probes at L1199.
 - **Black holes:** the region stays 100 ly and no neighbor woke more than a century before Earth, L1255-1260. A 1,000 ly map holds about 76,000 holes, and any old mind reached the near ones long ago.

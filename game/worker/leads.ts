@@ -3,8 +3,8 @@ import { kitOf } from "@/lib/game/reach";
 import { nextStop } from "@/lib/sim/next";
 import { earthKnows, willKnows } from "@/lib/sim/knowledge";
 import { readGifts, readLater, readColony, readLenses, readObserve, readSentinels, readSeeds, readQueue, readStops } from "./orders";
-import { readHides, readLosses, readPickets, readStrikes, readWill } from "./orders";
-import { inPool, loadVoices, loadWorld } from "./world";
+import { readPickets, readStrikes, readWill } from "./orders";
+import { inPool, loadWorld } from "./world";
 
 // The worlds Earth's planet hunters have felt by Year 0, through the knowledge wall: measured, never who lives there.
 export async function leads(req: Request) {
@@ -53,12 +53,8 @@ export async function known(req: Request) {
     pickets: readPickets(list(q.get("pickets"))),
     strikes: readStrikes(list(q.get("strikes"))),
   };
-  // Our craft at holes a neighbor caught or struck, from the save's reactions. 2026-10-26.
-  const losses = readLosses(list(q.get("losses")));
-  // Neighbors that chose to hide, whose glow stops growing. 2026-10-28.
-  const hides = readHides(list(q.get("hides")));
   // Once the Will lives at a hole, Earth's news reaches it a light-time late. 2026-10-26.
-  return Response.json(willKnows(world, year, await loadVoices(world), { ...kitOf(plan, Number(world.earth.compute) || 1), losses, hides }, readWill(one(q.get("will")))));
+  return Response.json(willKnows(world, year, kitOf(plan, Number(world.earth.compute) || 1), readWill(one(q.get("will")))));
 }
 
 /** How far ahead a skip looks for what comes next, in Years. A skip with nothing in reach goes this far at most. */
@@ -85,8 +81,7 @@ export async function next(req: Request) {
     strikes: readStrikes(list(q.get("strikes"))),
   };
   const scale = Number(world.earth.compute) || 1;
-  const kit = { ...kitOf(plan, scale), losses: readLosses(list(q.get("losses"))), hides: readHides(list(q.get("hides"))) };
-  const ahead = willKnows(world, year + AHEAD, await loadVoices(world), kit, readWill(one(q.get("will"))));
+  const ahead = willKnows(world, year + AHEAD, kitOf(plan, scale), readWill(one(q.get("will"))));
   const stop = nextStop(ahead, year, schedule(plan, scale));
   return Response.json({ next: stop, ahead: AHEAD });
 }

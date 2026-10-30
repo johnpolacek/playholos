@@ -4,7 +4,6 @@ import path from "node:path";
 import { gunzipSync } from "node:zlib";
 import { POOL } from "./pool.ts";
 import type { World } from "./types.ts";
-import type { Voices } from "./knowledge.ts";
 
 const DATA = path.join(process.cwd(), "data");
 const cache = new Map<number, World>();
@@ -21,16 +20,4 @@ export async function loadWorld(seed: number): Promise<World> {
     cache.set(seed, world);
   }
   return world;
-}
-
-/** The senders' voice banks, from ../data/voices, read for their hails and closes. */
-export async function loadVoices(world: World): Promise<Voices> {
-  const out: Voices = {};
-  for (const p of world.neighbors) {
-    try {
-      const bank = JSON.parse(await readFile(path.join(DATA, "..", "..", "data", "voices", `${p.name.toLowerCase()}.json`), "utf8"));
-      out[p.name] = { hail: bank.hail, close: bank.close };
-    } catch {}
-  }
-  return out;
 }

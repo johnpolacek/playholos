@@ -1,7 +1,7 @@
 import { type AnthropicLanguageModelOptions, createAnthropic } from "@ai-sdk/anthropic";
 import { APICallError, convertToModelMessages, createUIMessageStreamResponse, streamText, type TextStreamPart, toUIMessageStream, type ToolSet, type UIMessage } from "ai";
 import { BAD_KEY, KEY_NEEDS_CREDIT, KEY_NEEDS_WORKSPACE, readMindPick, type Usage } from "@/lib/access";
-import { newsOf, realTime, tenths, YEAR_0, yearAt } from "@/lib/game/clock";
+import { realTime, tenths, YEAR_0, yearAt } from "@/lib/game/clock";
 import type { Will } from "@/lib/game/types";
 import { describeCharter } from "@/lib/game/charter";
 import { describeLeads } from "@/lib/game/leads";
@@ -11,16 +11,13 @@ import { readGifts, readLater, readColony, readLenses, readObserve, readSentinel
 import { describeBuilds, describeQueue, describeRock } from "@/lib/mind/builds";
 import { FOUND, rockOf } from "@/lib/game/rocks";
 import { colonyOf, harmOrders, hitsAt, restoreOf, survivorAt } from "@/lib/game/hits";
-import { describeConflict } from "@/lib/mind/conflict";
-import { answersHeard, describeSent, readSent } from "@/lib/game/sends";
-import { readReactions } from "./react";
+import { describeSent, readSent } from "@/lib/game/sends";
 import { EARTH_AT_YEAR_0, roadOf } from "@/lib/mind/earth";
 import { EARTH_LEADS } from "@/lib/mind/leads";
 import { describe, describeSearch, willKnows } from "@/lib/sim/knowledge";
-import { lossesOf } from "@/lib/sim/meetings";
 import { apiKeyFor, workspaceFor } from "./access";
 import { pastOf } from "./earth";
-import { inPool, loadVoices, loadWorld } from "./world";
+import { inPool, loadWorld } from "./world";
 
 // The Mind's voice. Staying in the game, length, punctuation, plain names and marked guesses were settled
 // 2026-10-23, from the first traces in evals/mind/. So were turning down help outside the game, which every call
@@ -102,7 +99,6 @@ export async function mind(req: Request) {
     pickets,
     strikes,
     sent,
-    reactions,
     pick,
     dry,
     will,
@@ -123,7 +119,6 @@ export async function mind(req: Request) {
     pickets?: unknown;
     strikes?: unknown;
     sent?: unknown;
-    reactions?: unknown;
     pick?: unknown;
     dry?: unknown;
     will?: unknown;
@@ -145,7 +140,7 @@ export async function mind(req: Request) {
   const at = yearAt(began, Date.now(), away);
   const year = at === null || at < 0 ? null : at;
   const base = schedule(plan, scale);
-  const hits = inPool(seed) ? hitsAt(plan, scale, seed, readReactions(reactions), { ...base, [FOUND]: rockOf(seed)?.found ?? null }, year ?? 0) : [];
+  const hits = inPool(seed) ? hitsAt(plan, seed, { ...base, [FOUND]: rockOf(seed)?.found ?? null }, year ?? 0) : [];
   // Earth lost: our backup wakes where something can run it, and regrows. 2026-10-28.
   const end = hits.find((h) => !h.screened && h.harm.ends);
   const lives = end && world ? survivorAt(base, end.lands, colonyOf(plan, scale, (n) => starD(world, n))) : null;
@@ -155,9 +150,7 @@ export async function mind(req: Request) {
   if (world) {
     const kit = kitOf(plan, scale);
     const held = kt(matterAt({ ...plan, observe: [] }, done, year ?? 0));
-    const view = willKnows(world, year ?? 0, await loadVoices(world), { ...kit, losses: lossesOf(readReactions(reactions)), hides: readReactions(reactions).filter((r) => r.move === "hide") }, away);
-    // Answers to what we sent in play, written when our message landed, kept in the save.
-    view.heard = [...view.heard, ...answersHeard(readSent(sent), readReactions(reactions), year === null ? null : newsOf(year, away))].sort((a, b) => a.arrived - b.arrived);
+    const view = willKnows(world, year ?? 0, kit, away);
     known = `${describe(view)}\n\nMatter we hold in orbit now, less what our builds take: ${held}.${year === null ? "" : `\n\n${describeSearch(kit.searched, year)}`}`;
   }
   const told = {
@@ -172,7 +165,6 @@ export async function mind(req: Request) {
     queue: describeQueue(plan, done, year),
     sent: describeSent(readSent(sent), year),
     known,
-    conflict: world ? describeConflict(world, readReactions(reactions), kitOf(plan, scale), hits, done, colonyOf(plan, scale, (n) => starD(world, n)), year) : "",
     rock: inPool(seed) ? describeRock(rockOf(seed), plan, { ...done, [FOUND]: rockOf(seed)?.found ?? null }, year) : "",
     now: now(began, away),
   };

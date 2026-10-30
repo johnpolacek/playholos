@@ -65,8 +65,8 @@ export function useSchedule() {
   const { year } = useGame();
   const tenth = year === null ? null : Math.floor(year * 10) / 10;
   const hits = useMemo(
-    () => (tenth === null ? [] : hitsAt(plan, scale, seed, save?.reactions ?? [], base, tenth)),
-    [plan, scale, seed, save?.reactions, base, tenth],
+    () => (tenth === null ? [] : hitsAt(plan, seed, base, tenth)),
+    [plan, seed, base, tenth],
   );
   // Earth lost: our backup wakes where something can run it, and regrows. 2026-10-28.
   const { lives, restore } = useMemo(() => {

@@ -55,7 +55,6 @@ const transport = new DefaultChatTransport({
       will: save?.will ?? null,
       stops: save?.plan?.stops ?? [],
       sent: save?.sent ?? [],
-      reactions: save?.reactions ?? [],
       pick: loadPick(),
     };
   },

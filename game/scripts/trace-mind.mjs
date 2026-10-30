@@ -49,7 +49,7 @@ async function saveFor(state, line) {
   const beganAt = state.year === null ? null : Date.now() - state.year * MS_PER_YEAR;
   return {
     seed: state.seed, beganAt, charter, builds: state.builds ?? [], observe: state.observe ?? [], later: state.later ?? [], stops: state.stops ?? [],
-    sent: state.sent ?? [], reactions: state.reactions ?? [],
+    sent: state.sent ?? [],
   };
 }
 

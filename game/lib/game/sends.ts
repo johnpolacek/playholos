@@ -3,10 +3,8 @@
 // tap on Send sends it. The Mind can't press buttons, so the line is how it hands the card over, on the API and the
 // Claude login alike.
 import targets from "../../data/targets.json" with { type: "json" };
-import { aimedYears, GIFT_STEPS, SIZES } from "../sim/messages.ts";
-import { giftTimes } from "../sim/works.ts";
-import type { Heard } from "../sim/types.ts";
-import type { Kind, Reaction, Sent, Size } from "./types.ts";
+import { aimedYears, SIZES } from "../sim/messages.ts";
+import type { Kind, Sent, Size } from "./types.ts";
 
 const KINDS: Kind[] = ["words", "pictures", "questions", "knowledge"];
 const SIZE_NAMES = Object.keys(SIZES) as Size[];
@@ -119,30 +117,6 @@ export function describeSent(sent: Sent[], year: number | null): string {
     return `- To ${s.to}, ${one(s.d!)} ly, sent from Year ${one(s.y)}, ${where}.${sending} The soonest an answer to all of it could be home is Year ${one(back)}. It holds: ${s.travels}${lie}`;
   });
   return `What we have sent since Year 0, and nothing else has gone. A star learns of it only once it lands:\n${lines.join("\n")}`;
-}
-
-/** Neighbors' answers to our messages that have reached Earth by Year `year`, as signals heard. We keep listening at
- *  every star we sent to, so none is missed, settled 2026-10-26. A call every way at once is heard too, even one on
- *  another world's news. */
-export function answersHeard(sent: Sent[], reactions: Reaction[], year: number | null): Heard[] {
-  if (year === null) return [];
-  // Our colony reports every choice home, with or without words. 2026-10-28.
-  const home = reactions.flatMap((r): Heard[] =>
-    r.ours && r.move !== "unheard" && r.arrives !== undefined && r.arrives <= year
-      ? [{ star: r.ours, d: r.d, sent: r.arrives - r.d, arrived: r.arrives, move: "report", text: r.text ?? null, ours: { chose: r.move, on: r.from } }]
-      : [],
-  );
-  return reactions
-    .filter((r) => !r.ours && r.text && r.arrives !== undefined && r.arrives <= year)
-    .map((r): Heard => ({
-      star: r.star, d: r.d, sent: r.arrives! - r.d, arrived: r.arrives!, move: r.move, text: r.text!,
-      // A call every way at once, on another world's news, is overheard: it answers no message of ours.
-      // Sent on news of our craft at a hole: from the hole, if their Mind stands there.
-      ...(r.via ? { star: r.via.star, d: r.via.d, sent: r.arrives! - r.via.d } : {}),
-      ...(r.move === "warn" ? { warning: true as const } : r.from ? { overheard: true } : r.about ? { about: r.about } : { answers: sent.find((s) => s.id === r.sent)?.travels ?? "" }),
-      ...(r.move === "gift" ? { gift: giftTimes(GIFT_STEPS[r.size ?? "collection"]) } : {}),
-    }))
-    .concat(home);
 }
 
 /** What a gift does for our thinking, in words. */

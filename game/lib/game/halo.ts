@@ -1,6 +1,5 @@
 // What grows once done, from our order: the Cold Halo doubles every 10 Years, and since 2026-10-29 the Solar Swarm
-// every 2. Each time we take one back it stops, until we order it again. What neighbors could see of them is
-// lib/sim/answers.ts's glowsSeen(). 2026-10-28.
+// every 2. Each time we take one back it stops, until we order it again. 2026-10-28.
 import { pace } from "@/lib/sim/works";
 import { HORIZON, ordersOf, pacedName } from "./plan";
 import type { Plan } from "./types";

@@ -1,16 +1,16 @@
-// Strikes that have landed on Earth by a Year, and what they cost: a neighbor's bullets, unless a screen stood on the
-// line to its star, and a rock no one pushed aside. Each is harm in the pace from the Year it lands, and nothing before:
-// a coasting bullet is dark, so we learn of it as it lands. From 10⁸ Mt no Mind of ours lives on Earth, and the Will
-// lives on in a vault or a colony, if one stands. Settled 2026-10-28, lib/sim/conflict.ts.
+// Strikes that have landed on Earth by a Year, and what they cost: a rock no one pushed aside. Each is harm in the pace
+// from the Year it lands, and nothing before. From 10⁸ Mt no Mind of ours lives on Earth, and the Will lives on in a
+// vault or a colony, if one stands. Settled 2026-10-28, lib/sim/conflict.ts. Neighbors' bullets went with the
+// neighbors, 2026-10-29.
 import { harmOf, rockMt } from "@/lib/sim/conflict";
 import type { Order } from "@/lib/sim/works";
 import { YEAR_0 } from "./clock";
-import { colonyRoad, screensOf } from "./reach";
+import { colonyRoad } from "./reach";
 import { rockAt, rockOf } from "./rocks";
-import type { Plan, Reaction } from "./types";
+import type { Plan } from "./types";
 
 export interface Hit {
-  /** A neighbor's star, or "a rock". */
+  /** Where it came from: "a rock". */
   from: string;
   lands: number;
   mt: number;
@@ -21,18 +21,11 @@ export interface Hit {
 /** Every strike landed by Year `year`, oldest first. */
 export function hitsAt(
   plan: Plan,
-  scale: number,
   seed: number | undefined,
-  reactions: readonly Reaction[],
   done: Record<string, number | null>,
   year: number,
 ): Hit[] {
-  const screens = screensOf(plan, scale);
-  const out: Hit[] = reactions.flatMap((r) => {
-    if (r.lands === undefined || r.mt === undefined || r.lands > year) return [];
-    const screened = screens.some((s) => s.star === r.star && s.done !== null && s.done <= r.lands!);
-    return [{ from: r.star, lands: r.lands, mt: r.mt, screened, harm: harmOf(screened ? 0 : r.mt) }];
-  });
+  const out: Hit[] = [];
   const rock = seed === undefined ? null : rockAt(rockOf(seed), plan, done, year);
   if (rock?.state === "struck") out.push({ from: "a rock", lands: rock.strikes, mt: rockMt(rock.m), screened: false, harm: harmOf(rockMt(rock.m)) });
   return out.sort((a, b) => a.lands - b.lands);

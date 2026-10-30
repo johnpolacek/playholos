@@ -176,7 +176,7 @@ Settled 2026-10-28, one step at a time. The premise itself, how many minds exist
 - **How we find an old mind.** Awake, by a far-infrared sky survey Earth builds. Asleep, only by a probe in its system.
   - Our deep far-infrared archives cover stars within about 150 ly. Beyond, only shallow all-sky maps, which catch a mind only above about 0.3% of a Sun’s power at 400 ly. So an old mind can hide today.
   - Set aside for now: reading an old mind’s home world through its air, which needs telescopes kilometers wide.
-- **Still to rework:** the neighbor roster, how neighbors play, the elder, the seed, the 50 ly map and catalog, Earth’s leads, and the Mind’s words. Fixes found by the realism audit are tracked in [HOLOS_REALISM_AUDIT.md](HOLOS_REALISM_AUDIT.md). Sections below that assume peers in our century are kept until then, marked superseded. The numbers tuned to 50 ly are listed in [To recheck at a wider scale](#to-recheck-at-a-wider-scale).
+- **Done 2026-10-29:** the seed, the star catalog to 326 ly, how we find minds, and the skip. The neighbor roster and the elder are retired: no game draws them, and their mechanics are being deleted (rework 5). **Still to rework:** Earth’s leads, the 50 ly map, and the Mind’s words where they assume neighbors. Fixes found by the realism audit are tracked in [HOLOS_REALISM_AUDIT.md](HOLOS_REALISM_AUDIT.md). Sections below that assume peers in our century are kept until then, marked superseded. The numbers tuned to 50 ly are listed in [To recheck at a wider scale](#to-recheck-at-a-wider-scale).
 
 ## Settled 2026-10-06
 
@@ -906,7 +906,7 @@ Settled 2026-10-13.
 
 ## The neighbors
 
-**Superseded 2026-10-28** by [The realistic premise](#the-realistic-premise). Kept until the rework lands.
+**Retired 2026-10-29.** No game draws neighbors, and their mechanics are deleted from the game. Kept as history. See [The realistic premise](#the-realistic-premise).
 
 Settled 2026-10-06, from first principles rather than for the game’s sake.
 
@@ -941,7 +941,7 @@ Settled 2026-10-06, from first principles rather than for the game’s sake.
 
 ## Elders
 
-**Superseded 2026-10-28** by [The realistic premise](#the-realistic-premise): every mind we find is an elder, and inward. The awake and asleep halves below carry over. Kept until the rework lands.
+**Retired 2026-10-29.** No game draws an elder. Old minds in calcs/minds.py replace it, awake or asleep as below. Corrected 2026-10-29: asleep, a mind folds up small, since a spread swarm in starlight would glow. Kept as history.
 
 Settled 2026-10-28. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#elders). Asked after reading r/FermiParadox, whose commonest objection to games like this is “why did everyone wake at once?”
 
@@ -1035,6 +1035,8 @@ Settled 2026-10-28, from the designer: anything available to another civilizatio
 
 ## Hostility
 
+**Retired 2026-10-29** with the neighbor roster. Conflict is now the ladder in [The realistic premise](#the-realistic-premise): warn, contain, strike, from the watcher and its maker. Kept as history.
+
 Settled 2026-10-10. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#hostility).
 
 - **The evidence first.** A quiet sky fits minds hiding from killers as well as minds hiding by caution. The newest game theory finds first strikes rational only for an attacker that accepts the strike may be its last, and everyone hiding is the stable outcome wherever strikes are easier to see than hiders (Dam 2026). Corrected 2026-10-28: in Holos a strike can’t be seen from afar. A drive of tens of terawatts is about magnitude 40 at 10 ly, past any telescope, and plain only within its own system. Only the struck world learns the sender, from the bullet’s track, and only a watcher in the shooter’s system sees it fired. So Dam’s condition fails, and striking is less deterred than this first said. Strikes still need a helium-3 industry, take decades, rarely kill every Mind, and invite an answer in kind. Hiding and watching still pay. Before, this said strikes were easy to see: exhaust from behind, laser launches ahead, braking glow.
@@ -1050,6 +1052,8 @@ Settled 2026-10-10. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#hostility).
 - **Earth is the loud one.** A hunter that has found Earth has an obvious target.
 
 ## How neighbors play
+
+**Retired 2026-10-29** with the neighbor roster. Conflict is now the ladder in [The realistic premise](#the-realistic-premise): warn, contain, strike, from the watcher and its maker. Kept as history.
 
 Settled 2026-10-10. Costs in [calcs/ai_cost.py](calcs/ai_cost.py), prices in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#running-the-neighbors).
 

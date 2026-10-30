@@ -68,7 +68,7 @@ function Skip() {
   const [next, setNext] = useState<number | null>(null);
   const seed = save?.seed;
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const query = useMemo(() => knownQuery(save, tenth), [tenth, save?.plan, save?.reactions, save?.will]);
+  const query = useMemo(() => knownQuery(save, tenth), [tenth, save?.plan, save?.will]);
   useEffect(() => {
     if (seed === undefined || tenth === null) return;
     let live = true;

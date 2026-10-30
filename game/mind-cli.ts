@@ -1,6 +1,4 @@
 import { spawn } from "node:child_process";
-import { createHash } from "node:crypto";
-import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import type { IncomingMessage } from "node:http";
 import { tmpdir } from "node:os";
 import { createUIMessageStream, pipeUIMessageStreamToResponse, type UIMessage } from "ai";
@@ -13,15 +11,6 @@ import { CLI_BARE } from "./scripts/ask-mind.mjs";
 // says whether the Mind is open. The CLI takes one prompt, so earlier turns ride in the system prompt. 2026-10-25.
 
 const DRY = "x-holos-dry";
-
-// A tape of the neighbors' answers, for replaying a game in tests: real model trials, kept by what was asked. With
-// HOLOS_TAPE set to a file, each answer is recorded. With HOLOS_TAPE_MODE=replay too, answers come from it, and one
-// never asked comes back empty, so the neighbor takes its likeliest move. Hold the rolls with react's roll to match.
-// 2026-10-26.
-const TAPE = process.env.HOLOS_TAPE;
-const REPLAY = process.env.HOLOS_TAPE_MODE === "replay";
-const tapeKey = (...parts: string[]) => createHash("sha256").update(parts.join("\u0000")).digest("hex").slice(0, 24);
-const tape = (): Record<string, string> => (TAPE && existsSync(TAPE) ? JSON.parse(readFileSync(TAPE, "utf8")) : {});
 
 async function bodyOf(req: IncomingMessage) {
   let raw = "";
@@ -44,38 +33,6 @@ export const mindCli: Plugin = {
   apply: () => process.env.MIND_VIA === "cli",
   configureServer(server) {
     server.middlewares.use(async (req, res, next) => {
-      // A neighbor's reaction, worker/react.ts: marked so the Worker asks back here, where the CLI can run.
-      if (req.method === "POST" && req.url === "/api/react") {
-        // The Worker reads the raw headers, so it is set in both. Before 2026-10-26 only the parsed one was, and the
-        // neighbors answered on the API key.
-        req.headers["x-holos-cli"] = "1";
-        req.rawHeaders.push("x-holos-cli", "1");
-        return next();
-      }
-      if (req.method === "POST" && req.url === "/__holos/cli") {
-        const { system, user, model, effort } = await bodyOf(req);
-        const key = tapeKey(model, effort, system, user);
-        if (TAPE && REPLAY) {
-          const text = tape()[key];
-          if (text === undefined) console.error("Tape: not recorded", key);
-          res.setHeader("content-type", "application/json");
-          return res.end(JSON.stringify({ text: text ?? "" }));
-        }
-        const child = spawn("claude", [...CLI_BARE, "--model", model, "--effort", effort, "--system-prompt", system, "--output-format", "json"], { cwd: tmpdir() });
-        let out = "";
-        child.stdout.on("data", (d) => (out += d));
-        child.stdin.end(user);
-        child.on("close", () => {
-          let text = "";
-          try {
-            text = JSON.parse(out).result ?? "";
-          } catch {}
-          if (TAPE && text) writeFileSync(TAPE, JSON.stringify({ ...tape(), [key]: text }, null, 1));
-          res.setHeader("content-type", "application/json");
-          res.end(JSON.stringify({ text }));
-        });
-        return;
-      }
       if (req.method !== "POST" || req.url !== "/api/mind" || req.headers[DRY]) return next();
       const body = await bodyOf(req);
       // Asked dry, as trace:mind asks, the Worker answers. Its body was read here, so it goes on whole.

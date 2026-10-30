@@ -2,30 +2,19 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import golden from "./golden.json" with { type: "json" };
-import { describe, earthKnows, glows } from "./knowledge.ts";
+import { describe, earthKnows } from "./knowledge.ts";
 import { observe } from "./observing.ts";
 import { PyRandom } from "./pyrandom.ts";
-import { roll } from "./reactions.ts";
 import { hop, seedProbes } from "./spread.ts";
 import { POOL } from "./pool.ts";
-import { loadVoices, loadWorld } from "./world.ts";
-import { ARCHIVE, combedAt, offEarth, pace, type Order } from "./works.ts";
-import { between, glowsSeen, knownTo, landings, SOL } from "./answers.ts";
-import { BULLET, haloReaches, HALO, SWARM, swarmSeenAt } from "./conflict.ts";
+import { loadWorld } from "./world.ts";
+import { offEarth, pace, type Order } from "./works.ts";
 import catalog from "../../data/works.json" with { type: "json" };
-import { colonyActor, earthActor, ourCodes, ourKind, ourTable } from "./colony.ts";
 
 test("the generator is CPython's, seeded from ints and strings", () => {
   for (const [key, want] of Object.entries(golden.random)) {
     const r = new PyRandom(/^\d+$/.test(key) ? BigInt(key) : key);
     assert.deepEqual(want.map(() => r.random()), want, key);
-  }
-});
-
-test("rolls match the mocks: Ombe and Hael knock again, Ombe answers ours with a probe", () => {
-  for (const [key, want] of Object.entries(golden.rolls)) {
-    const [seed, name, news] = key.split(":");
-    assert.equal(roll(Number(seed), name, news as "silence" | "reply"), want, key);
   }
 });
 
@@ -38,7 +27,7 @@ test("seed 10 at Year 0: one felt world, natural, and no signals: the neighbors 
 test("the wall: the Mind's words never name who lives where", async () => {
   for (const seed of [10, 11, 62]) {
     const world = await loadWorld(seed);
-    const words = describe(earthKnows(world, 0, await loadVoices(world)));
+    const words = describe(earthKnows(world, 0));
     for (const p of world.neighbors) assert.ok(!words.includes(p.name), `seed ${seed} leaks ${p.name}`);
     for (const rung of ["bare rock", "hiding microbes", "showing oxygen", "animals", "where life died", "frozen"])
       assert.ok(!words.includes(rung), `seed ${seed} leaks a rung: ${rung}`);
@@ -128,8 +117,8 @@ test("a rock coming: the same for a seed, found before it strikes, and pushed as
   assert.equal(rockAt(rock, { builds: [], observe: [] }, {}, rock.found!)!.state, "coming");
 });
 
-test("strikes: a tonne at a tenth of light speed lands with 108 Mt, harm grows with energy, and a screen stops a bullet", async () => {
-  const { bulletMt, harmOf, mtPerTonne, rockMt, screened, strikesLanded } = await import("./conflict.ts");
+test("strikes: a tonne at a tenth of light speed lands with 108 Mt, and harm grows with energy", async () => {
+  const { bulletMt, harmOf, mtPerTonne, rockMt } = await import("./conflict.ts");
   assert.equal(Math.round(mtPerTonne(0.1)), 108);
   assert.equal(Math.round(bulletMt() / 1000), 108);
   assert.equal(harmOf(5).tier, "local");
@@ -138,11 +127,6 @@ test("strikes: a tonne at a tenth of light speed lands with 108 Mt, harm grows w
   assert.ok(harmOf(1e8).ends && !harmOf(1e7).ends);
   // A 60 m rock lands like Tunguska, a 140 m one like a hundred of them.
   assert.ok(rockMt(60) > 5 && rockMt(60) < 20 && rockMt(140) > 50 && rockMt(140) < 300, `${rockMt(60)}, ${rockMt(140)}`);
-  const s = { star: "Tau Ceti", fired: 30, lands: 149, mt: bulletMt() };
-  assert.ok(screened(s, [{ star: "Tau Ceti", done: 100 }]) && !screened(s, [{ star: "Tau Ceti", done: 150 }]));
-  const { landed, ends } = strikesLanded([s, { ...s, star: "Ross 128", mt: 2e8 }], [{ star: "Tau Ceti", done: 100 }], 200);
-  assert.equal(landed[0].harm.share, 0);
-  assert.equal(ends, 149);
 });
 
 test("a strike cuts our thought, and it comes back as we rebuild", () => {
@@ -185,8 +169,8 @@ test("a lens pictures a felt world's face once its picture is home: its ground, 
   const f = world.finds[0];
   const star = world.stars[f.star]?.shown ?? f.star;
   const kit = { lenses: [{ star, looks: 30, home: 30.5 }] };
-  assert.equal(earthKnows(world, 30.4, {}, kit).visits.filter((v) => v.by === "lens").length, 0);
-  const v = earthKnows(world, 30.5, {}, kit).visits.find((x) => x.by === "lens")!;
+  assert.equal(earthKnows(world, 30.4, kit).visits.filter((v) => v.by === "lens").length, 0);
+  const v = earthKnows(world, 30.5, kit).visits.find((x) => x.by === "lens")!;
   assert.notEqual(v.sight, "cities");
   assert.ok(Math.abs(v.km! - (25 * f.d) / (30 * 3.2616)) < 1e-9);
 });
@@ -197,8 +181,8 @@ test("a sentinel stays and reads a felt world up close: its first word comes hom
   const star = world.stars[f.star]?.shown ?? f.star;
   const word = 10 + f.d / 0.1 + 10 + f.d;
   const kit = { sentinels: [{ star, leaves: 10 }] };
-  assert.equal(earthKnows(world, word - 0.01, {}, kit).visits.length, 0);
-  const v = earthKnows(world, word, {}, kit).visits.find((x) => x.by === "sentinel")!;
+  assert.equal(earthKnows(world, word - 0.01, kit).visits.length, 0);
+  const v = earthKnows(world, word, kit).visits.find((x) => x.by === "sentinel")!;
   assert.ok(v && !v.lives && !v.ruins && v.sight !== "cities");
 });
 
@@ -216,7 +200,7 @@ test("black holes: Gaia's finds are known at Year 0, the Star Mapper finds more,
   const world = await loadWorld(10);
   const h = darkMasses(world, 300, 0)[0];
   const home = 10 + h.d / 0.1 + 10 + h.d;
-  const v = earthKnows(world, home, {}, { mapper: 0, sentinels: [{ star: h.name, leaves: 10 }] }).visits.find((x) => x.sight === "dark")!;
+  const v = earthKnows(world, home, { mapper: 0, sentinels: [{ star: h.name, leaves: 10 }] }).visits.find((x) => x.sight === "dark")!;
   assert.equal(v.spin, world.holes!.find((x) => x.id === h.id)!.spin);
 });
 
@@ -230,7 +214,7 @@ test("our Mind at a black hole: word of its landing comes one light-time later, 
   const world = await loadWorld(10);
   const h = darkMasses(world, 300, 0)[0];
   const lands = 10 + h.d / 0.1 + 10 + 15;
-  const at = (year: number, mode: "furnace" | "refuge") => earthKnows(world, year, {}, { mapper: 0, colony: { star: h.name, mode, leaves: 10 } }).colony!;
+  const at = (year: number, mode: "furnace" | "refuge") => earthKnows(world, year, { mapper: 0, colony: { star: h.name, mode, leaves: 10 } }).colony!;
   assert.equal(at(lands + h.d - 1, "furnace").others, undefined);
   assert.ok(Math.abs(at(lands + h.d, "furnace").lands! - lands) < 1e-9);
   assert.ok(at(lands + h.d + 60, "furnace").watts! > 1e14);
@@ -259,10 +243,10 @@ test("a seed probe's word comes home from each star a light-time after it lands,
   const star = world.stars[world.finds[0].star].shown;
   const [p] = seedProbes([{ star, leaves: 10 }]);
   const kit = { seeds: [{ star, leaves: 10 }] };
-  assert.equal(earthKnows(world, p.lands + p.d - 0.01, {}, kit).visits.filter((v) => v.by === "seed").length, 0);
-  const v = earthKnows(world, p.lands + p.d, {}, kit).visits.find((x) => x.by === "seed")!;
+  assert.equal(earthKnows(world, p.lands + p.d - 0.01, kit).visits.filter((v) => v.by === "seed").length, 0);
+  const v = earthKnows(world, p.lands + p.d, kit).visits.find((x) => x.by === "seed")!;
   assert.ok(v.gen === 1 && !v.lives);
-  const later = earthKnows(world, 1000, {}, kit);
+  const later = earthKnows(world, 1000, kit);
   assert.equal(later.visits.filter((x) => x.by === "seed" && !x.sent).length, 7);
   assert.equal(later.visits.filter((x) => x.sent).length, 6);
   assert.match(describe(later), /seed probe/);
@@ -274,25 +258,11 @@ test("our Mind settled at a star: word of its landing comes one light-time later
   const star = world.stars[f.star].shown, d = world.stars[f.star].d;
   const lands = 10 + hop(d);
   const kit = { colony: { star, mode: "settle" as const, leaves: 10 } };
-  const at = (year: number) => earthKnows(world, year, {}, kit).colony!;
+  const at = (year: number) => earthKnows(world, year, kit).colony!;
   const c = at(lands + d);
   assert.ok(c.atStar && Math.abs(c.lands! - lands) < 1e-9);
   assert.equal(c.others, undefined);
-  assert.match(describe(earthKnows(world, lands + d, {}, kit)), /settle there/);
-});
-
-test("our colony's table comes from our charter: a lean is 1, far past the middle 2, and it never strikes first", () => {
-  assert.equal(ourCodes([35, 50, 62]), "O1 B1");
-  assert.equal(ourCodes([20, 80, 50]), "O2 D2");
-  assert.equal(ourKind("O1 B1"), "contacter");
-  assert.equal(ourKind("H1 D1"), "inward");
-  assert.equal(ourKind("H1 E1"), "watcher");
-  for (const codes of ["O1 B1", "H2 D2 C2", ""]) {
-    for (const [news, row] of Object.entries(ourTable(codes))) {
-      assert.ok(Math.abs(row.reduce((t, [, w]) => t + w, 0) - 1) < 1e-9);
-      if (news !== "struck") assert.ok(!row.some(([m]) => m === "strike"), `${codes} ${news}`);
-    }
-  }
+  assert.match(describe(earthKnows(world, lands + d, kit)), /settle there/);
 });
 
 test("the Cold Halo doubles every 10 Years once done, a data center's step each, and holds while taken back", () => {
@@ -414,7 +384,7 @@ test("the Hypertelescope pictures each felt world in its reach, nearest first, a
     const world = await loadWorld(seed);
     const f = world.finds.find((x) => x.d <= catalog.hyper.reach);
     if (!f) continue;
-    const seen = earthKnows(world, 500, {}, { hyper: 40 }).visits.filter((v) => v.by === "hyper");
+    const seen = earthKnows(world, 500, { hyper: 40 }).visits.filter((v) => v.by === "hyper");
     const reach = new Set(world.finds.filter((x) => x.d <= catalog.hyper.reach).map((x) => world.stars[x.star]?.shown ?? x.star));
     assert.equal(seen.length, reach.size + 1);
     assert.equal(seen[0].world, "Proxima b");
@@ -422,7 +392,7 @@ test("the Hypertelescope pictures each felt world in its reach, nearest first, a
     assert.ok(!seen.some((v) => v.sight === "cities"));
     const v = seen.find((x) => x.star === (world.stars[f.star]?.shown ?? f.star))!;
     assert.ok(Math.abs(v.km! - catalog.hyper.kmPerLy * f.d) < 1e-9);
-    assert.equal(earthKnows(world, 39.9, {}, { hyper: 40 }).visits.filter((x) => x.by === "hyper").length, 0);
+    assert.equal(earthKnows(world, 39.9, { hyper: 40 }).visits.filter((x) => x.by === "hyper").length, 0);
     return;
   }
   assert.fail("no seed has a felt world in reach");
@@ -449,7 +419,7 @@ test("skipping ahead stops at the next thing we learn or build, and says when, n
   const { nextKnown, nextStop } = await import("./next.ts");
   const world = await loadWorld(10);
   // Seed 10 with the Warm Sky Watch at Year 0 and our Infrared Telescope: a warm glow is seen at Year 2,386, ranged two Years on.
-  const ahead = earthKnows(world, 102500, {}, { warmWatch: 0, telescope: 0 });
+  const ahead = earthKnows(world, 102500, { warmWatch: 0, telescope: 0 });
   const first = ahead.minds!.flashes[0];
   assert.equal(nextKnown(ahead, 2000), first.seen);
   assert.equal(nextKnown(ahead, first.seen), first.ranged);
