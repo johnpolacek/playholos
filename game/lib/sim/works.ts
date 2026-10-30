@@ -51,7 +51,7 @@ interface Catalog {
   lens: { au: number; flight: number; look: number; km30pc: number };
   /** Calcs/mercury.py: what pushes a lens, the Solar Swarm's glow, and what the Hypertelescope pictures. 2026-10-29. */
   beams: { array: number; beam: number; look: number };
-  swarm: { watts: number; doubling: number; excess: number; perLy2: number; kelvin: number };
+  swarm: { watts: number; doubling: number; excess: number; perLy2: number; kelvin: number; spread: number };
   hyper: { kmPerLy: number; reach: number; slew: number; cities: number };
   sentinel: { build: number; speed: number; burns: number };
   seedShip: { speed: number; burn: number; brake: number; stands: number };

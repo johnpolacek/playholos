@@ -10,8 +10,10 @@ const PC_LY = 3.2616;
 export interface MindKit {
   /** The all-sky mid-infrared watch, about ten times deeper than WISE: it catches any peer's warm flash while it runs. */
   warmWatch?: number | null;
-  /** The Halo Survey, mapping the whole sky in cold far-infrared light. */
+  /** The Halo Survey, an ALMA program looking at each star for an hour, nearest first. */
   halo?: number | null;
+  /** The Halo Array, our own, ten times as fast. */
+  haloArray?: number | null;
   /** A deep, stacked search of the Earth–Moon L4 and L5 points from Earth. */
   moonSearch?: number | null;
   /** The asteroid tour: the Year its probe reaches the first Earth co-orbital asteroid. It maps each in turn. */
@@ -103,13 +105,30 @@ export function flashOf(p: Peer, watch: number | null | undefined, year: number)
   return { ...skyOf(p.pos), seen, ...(fades <= year ? { faded: fades } : {}) };
 }
 
-/** An awake old mind's glow is seen once the Halo Survey has mapped the sky, if it is over the floor at its distance.
- *  It has glowed for ages, so its light is already here. */
-export function coldGlowOf(m: OldMind, halo: number | null | undefined, year: number): ColdGlowSeen | null {
-  if (halo === null || halo === undefined || m.asleep || m.glowW === null) return null;
-  const { floor, every } = catalog.halo;
-  const seen = halo + every;
-  if (m.glowW < floor * (m.d / (10 * PC_LY)) ** 2 || seen > year) return null;
+/** Stars within a distance, from calcs/minds.py's disk model, which matches the census: light-years and count. */
+const STARS_WITHIN: [number, number][] = [[50, 1.48e3], [100, 1.16e4], [200, 8.96e4], [400, 6.66e5], [700, 3.22e6], [1000, 8.49e6], [2000, 4.8e7]];
+export function starsWithin(ly: number) {
+  if (ly <= STARS_WITHIN[0][0]) return STARS_WITHIN[0][1] * (ly / STARS_WITHIN[0][0]) ** 3;
+  const i = Math.max(1, STARS_WITHIN.findIndex(([r]) => r >= ly));
+  const [[r0, n0], [r1, n1]] = [STARS_WITHIN[i - 1], STARS_WITHIN[i]];
+  return n0 * Math.exp((Math.log(n1 / n0) * Math.log(ly / r0)) / Math.log(r1 / r0));
+}
+/** Stars a Year each looks at for an hour, nearest first. The Halo Survey, an ALMA program, takes about two thirds of
+ *  ALMA's year. The Halo Array, its own, is about ten times as fast. 2026-10-29. */
+export const HALO_RATE = 3000;
+export const ARRAY_RATE = 40000;
+
+/** An awake old mind's glow is seen once a survey looking star by star, nearest first, reaches its star, if it is over
+ *  the floor at its distance. A whole-sky map can't: far-infrared skies are crowded with faint galaxies, so only an
+ *  array sees a faint glow sharply, one star at a time. It has glowed for ages, so its light is already here. */
+export function coldGlowOf(m: OldMind, halo: number | null | undefined, year: number, array: number | null = null): ColdGlowSeen | null {
+  if (m.asleep || m.glowW === null) return null;
+  const { floor } = catalog.halo;
+  if (m.glowW < floor * (m.d / (10 * PC_LY)) ** 2) return null;
+  const n = starsWithin(m.d);
+  const when = [halo != null ? halo + n / HALO_RATE : Infinity, array != null ? array + n / ARRAY_RATE : Infinity];
+  const seen = Math.min(...when);
+  if (seen > year) return null;
   return { ...skyOf(m.pos), d: m.d, seen, watts: m.glowW };
 }
 
@@ -150,7 +169,7 @@ export function mindsSeen(world: World, kit: MindKit, year: number): MindsSeen {
   const bySeen = <T extends { seen: number }>(xs: (T | null)[]) => xs.filter((x): x is T => x !== null).sort((a, b) => a.seen - b.seen);
   return {
     flashes: bySeen(m.peers.map((p) => flashOf(p, kit.warmWatch, year))),
-    glows: bySeen(m.old.map((o) => coldGlowOf(o, kit.halo, year))),
+    glows: bySeen(m.old.map((o) => coldGlowOf(o, kit.halo, year, kit.haloArray ?? null))),
     watcher: watcherOf(world, kit, year),
     sleepers: bySeen(m.old.map((o) => sleeperOf(o, kit.craft, year))),
   };

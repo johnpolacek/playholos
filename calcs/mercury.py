@@ -49,6 +49,21 @@ def steps(n):
     """Our thought from n doublings, as data centers' steps of 1.5."""
     return math.log(1 + SEED_W * 0.2 * 2 ** n / EARTH_THINK_W) / math.log(1.5)
 
+# ---------- Its shape, as the map draws it, 2026-10-29 ----------
+# Collectors leave Mercury's mass driver a little faster or slower than Mercury, so they drift along its orbit. A spread
+# of 0.3 km/s, a sample for a driver's aim, spreads their periods by 3 dv/v and the arc by that share of an orbit each
+# orbit, both ways. Mercury goes round 4.15 times a Year.
+MERCURY_V, LAUNCH_DV = 47.4e3, 300
+SPREAD = 3 * LAUNCH_DV / MERCURY_V * (1 / 0.2408467)        # share of an orbit the arc widens a Year, both ways together
+RING_YEARS = 1 / SPREAD                                       # until the arc closes into a ring
+# A collector shades those behind it, so the swarm keeps to one layer: the share of the Sun's light it catches is the
+# share of the sky round the Sun it covers. Collectors spread from Mercury's orbital plane, so at a share f it fills a
+# band of latitude b with sin b = f round that plane: a thin ring until f nears a tenth, a shell at f = 1.
+def band_deg(f): return math.degrees(math.asin(min(1.0, f)))
+# The swarm keeps Earth's line to the Sun clear: Earth subtends 8.5e-5 rad from the Sun, a hole of about 1e-8 of the
+# shell. Otherwise a full swarm would darken Earth by its share: 1% of sunlight is about 2.4 W/m^2 of cooling.
+EARTH_HOLE = (6371e3 / AU) ** 2 / 4
+
 # ---------- Its glow ----------
 EFF = 0.2                                                       # what a collector turns to power; the rest is heat now
 T_SWARM = (FLUX * (1 - EFF) / (2 * SIGMA)) ** 0.25              # a flat collector, lit on one face, shedding from both
@@ -114,6 +129,11 @@ if __name__ == '__main__':
           f"A whole shell at 1 g/m^2 weighs {SWARM_KG:.1e} kg, {SWARM_KG / MERCURY_KG:.1e} of Mercury.")
     print(f"  Thought: {steps(0):.2f} steps at first, {steps(10):.1f} after 10 doublings, {steps(SWARM_FULL):.0f} at full.")
     print(f"  Its collectors sit near {T_SWARM:.0f} K.")
+    print(f"  Its arc widens {SPREAD * 360:.0f} degrees a Year and closes into a ring in {RING_YEARS:.1f} Years.")
+    for n in (20, 43, 49, 52, 54, 55.2):
+        f = min(1, SEED_W * 2 ** n / L_SUN)
+        print(f"  After {n} doublings, {n * DOUBLING:.0f} Years: {f:.1e} of the Sun, a band {band_deg(f):.2f} degrees either side.")
+    print(f"  Earth's line to the Sun is a hole of {EARTH_HOLE:.0e} of the shell.")
     print(f"  The Sun at 10 pc: {SUN_12(10 * PC) * 1e3:.0f} mJy at 12 µm. A swarm shows as an excess past "
           f"{FRACTION_SEEN:.2e} of the Sun, {FRACTION_SEEN * L_SUN:.1e} W.")
     for d in (10, 50, 300, 1000, 30000):
@@ -136,5 +156,5 @@ def catalog():
     return works, dict(
         beams=dict(array=round(flight(ARRAY_V), 2), beam=round(flight(BEAM_V), 2), look=round(BEAM_LOOK, 4)),
         swarm=dict(watts=float(f'{SEED_W:.3g}'), doubling=DOUBLING, excess=float(f'{FRACTION_SEEN * L_SUN:.3g}'),
-                   perLy2=float(f'{W3_JY / jansky(1, T_SWARM, LY):.3g}'), kelvin=round(T_SWARM, -1)),
+                   perLy2=float(f'{W3_JY / jansky(1, T_SWARM, LY):.3g}'), kelvin=round(T_SWARM, -1), spread=round(SPREAD, 4)),
         hyper=dict(kmPerLy=round(hyper_km(1), 2), reach=round(HYPER_REACH), slew=round(HYPER_SLEW, 4), cities=CITIES_KM))

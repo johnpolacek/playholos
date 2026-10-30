@@ -4,7 +4,7 @@ import { useGame } from "@/components/game-provider";
 import { SkyArt } from "@/components/sky";
 import { tenths, YEAR_0 } from "@/lib/game/clock";
 import { CLOSE } from "@/lib/game/close";
-import { GROWS } from "@/lib/game/halo";
+import { GROWS, grownSpans } from "@/lib/game/halo";
 import { keptOf, ordered, takenAt } from "@/lib/game/plan";
 import { type Site, SITES } from "@/lib/game/sites";
 import type { Plan } from "@/lib/game/types";
@@ -27,6 +27,8 @@ export interface Work {
   done: number | null;
   /** Taken back in play: the share of it built then, or null for Thought Fields, which keeps no work. 2026-10-23. */
   back?: number | null;
+  /** For a build that grows once done: the Years it grew, as spans, the last open while it grows. 2026-10-29. */
+  spans?: [number, number | null][];
 }
 
 /** Our builds with places, as the plan has them: queued or not, when each queued one is done, and how much of one
@@ -36,7 +38,8 @@ export const placedOf = (plan: Plan, done: Record<string, number | null>, scale:
     const queued = ordered(plan).includes(name);
     const at = takenAt(plan, name);
     const back = at === null ? {} : { back: keptOf(plan, scale, name, at)?.built ?? null };
-    return { name, site, queued, done: queued ? (done[name] ?? null) : null, ...back };
+    const grows = GROWS.includes(name) ? { spans: grownSpans(plan, scale, name) } : {};
+    return { name, site, queued, done: queued ? (done[name] ?? null) : null, ...back, ...grows };
   });
 
 interface Works {

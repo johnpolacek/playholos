@@ -959,6 +959,7 @@ export function BuildMark({ name, size = 16, still }: { name: string; size?: num
     case "Power from Orbit":
       return <Beamed size={size} still={still} />;
     case "Halo Survey":
+    case "Halo Array":
       return <Halo size={size} still={still} />;
     case "Cold Annex":
       return <Annex size={size} still={still} />;

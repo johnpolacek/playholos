@@ -28,6 +28,8 @@ import { onPlace, placeOf as placedLead } from "./game/places";
 import TARGETS from "../data/targets.json";
 import { MACHINES, type MachineKind } from "./game/machines";
 import { CLOSE } from "./game/close";
+import { SWARM } from "./sim/conflict";
+import { CATALOG } from "./sim/works";
 import { scarsNow } from "./scars";
 import type { System } from "./game/systems";
 import {
@@ -138,6 +140,8 @@ export interface Show {
       on: "earth" | "moon" | "orbit" | "l2" | "l4" | "planet";
       /** At a planet: which. 2026-10-29. */
       body?: string;
+      /** Framed with its planet's whole orbit round the Sun. */
+      view?: "orbit";
       draw: "dome" | "ring" | "launch";
       places: { lat: number; lon: number }[];
       orbit?: { km: number; tilt: number; minutes: number; behind?: number };
@@ -145,6 +149,8 @@ export interface Show {
     };
     queued: boolean;
     done: number | null;
+    /** For one that grows once done, the Years it grew. */
+    spans?: [number, number | null][];
   }[];
   /** For "people" and "mind": where the Mind is on screen, in CSS pixels, each frame. */
   onMind?(x: number, y: number): void;
@@ -634,6 +640,11 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         const { sunDir } = pilot.sky;
         v = sunDir.clone().cross(eN).normalize().addScaledVector(eN, 0.5).normalize();
         logD = w.site.on === "l4" ? L4_WORK : L2_WORK;
+      } else if (w.site.on === "planet" && w.site.view === "orbit") {
+        // Its planet's whole orbit round the Sun, from high over the plane the planets go round in. 2026-10-29.
+        const a = PLANETS.find((x: { name: string }) => x.name === w.site.body)!.elements[0];
+        v = eN.clone().multiplyScalar(0.8).addScaledVector(eX, 0.35).addScaledVector(eZ, 0.35).normalize();
+        logD = Math.log10(3.4 * a);
       } else if (w.site.on === "planet") {
         // A planet: from its day side and a little off the line to the Sun, so it shows lit with its night edge, and
         // the works round it, from about seven of its widths across. 2026-10-29.
@@ -2782,6 +2793,38 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         });
       return made;
     }
+    // Our Solar Swarm round the Sun, by calcs/mercury.py. Collectors thrown off Mercury drift along its orbit, so the arc
+    // widens about 28° a Year both ways and closes into a ring in about 13 Years. They keep to one layer, so at a share
+    // f of the Sun's light they fill a band of latitude b round Mercury's plane with sin b = f: a thin ring until f
+    // nears a tenth, a shell at all of it. A dot stands for countless collectors, and the ring is drawn a degree wide,
+    // wider than it is, or it couldn't be seen. 2026-10-29.
+    const swarm = (() => {
+      const STEPS = 720;
+      const path: THREE.Vector3[] = orbitPath(PLANETS[0], jd, STEPS).map((q: number[]) =>
+        new THREE.Vector3().copy(eclipticToGalactic(new THREE.Vector3(q[0], q[1], q[2]))),
+      );
+      const here = new THREE.Vector3().copy(bodyPosition("Mercury", date));
+      const i0 = path.reduce((best, q, i) => (q.distanceToSquared(here) < path[best].distanceToSquared(here) ? i : best), 0);
+      const normal = new THREE.Vector3().crossVectors(path[0], path[STEPS / 4]).normalize();
+      const scatter = seededRandom(2013);
+      const u: number[] = [];
+      const s: number[] = [];
+      const c = new Cloud();
+      for (let k = 0; k < 9000; k++) {
+        const [uu, ss] = [scatter() - 0.5, scatter() * 2 - 1];
+        const q = path[(((i0 + Math.round(uu * STEPS)) % STEPS) + STEPS) % STEPS].clone().multiplyScalar(1 + (scatter() - 0.5) * 0.02);
+        const lat = Math.asin(ss);
+        const at = q.clone().multiplyScalar(Math.cos(lat)).addScaledVector(normal, q.length() * Math.sin(lat));
+        c.add(at.x, at.y, at.z, 0.0035, 0, K.warm);
+        u.push(uu);
+        s.push(ss);
+      }
+      const mat = glow({ minPx: 1, maxPx: 3 });
+      mat.blending = THREE.AdditiveBlending;
+      const pts = c.points(mat);
+      solar.scene.add(pts);
+      return { u, s, mat, bright: pts.geometry.attributes.aBright as THREE.BufferAttribute, grew: -1 };
+    })();
     const made = new Map<string, ReturnType<typeof mark>>();
     const v = new THREE.Vector3();
     const n = new THREE.Vector3();
@@ -2797,6 +2840,19 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       ground.uniforms.uOpacity.value =
         p * arrived(groundAt) * Number(focus?.site.on === "moon") * ramp(moonHigh, 10, 40);
       if (focus?.site.on === "planet") globeOf(focus.site.body!);
+      // The swarm as it stands this Year, round the Sun, once a build at Mercury is in view.
+      const grew = (list.find((w) => w.name === "Solar Swarm")?.spans ?? []).reduce((y, [a, b]) => y + Math.max(0, Math.min(b ?? years, years) - a), 0);
+      swarm.mat.uniforms.uOpacity.value = p * Number(grew > 0 && focus?.site.body === "Mercury");
+      if (Math.abs(grew - swarm.grew) > 0.02) {
+        swarm.grew = grew;
+        const f = Math.min(1, (SWARM.watts * 2 ** Math.floor(grew / SWARM.doubling + 1e-9)) / SWARM.most);
+        const arc = Math.min(1, grew * CATALOG.swarm.spread);
+        const band = Math.max(0.017, f);
+        const b = 0.3 + 0.7 * ramp(Math.log10(f), -17, -1);
+        swarm.u.forEach((uu, k) => swarm.bright.setX(k, Math.abs(uu) <= arc / 2 && Math.abs(swarm.s[k]) <= band ? b : 0));
+        swarm.bright.needsUpdate = true;
+        dirty = true;
+      }
       for (const [body, g] of globes) {
         const o = p * arrived(g.at) * Number(focus?.site.on === "planet" && focus.site.body === body);
         g.mat.uniforms.uOpacity.value = o;
@@ -3322,6 +3378,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     if (work?.site.on === "moon")
       goal.copy(siteAt(work)).multiplyScalar(MOON_R * 0.45).add(moonAt).multiplyScalar(R_E_AU);
     else if (work?.site.on === "l2" || work?.site.on === "l4") goal.copy(farAt(work.site)).multiplyScalar(0.55 * R_E_AU);
+    else if (work?.site.on === "planet" && work.site.view === "orbit") goal.copy(earthAU).negate();
     else if (work?.site.on === "planet") goal.copy(farAt(work.site)).multiplyScalar(R_E_AU);
     else goal.set(0, 0, 0);
     if (!goal.equals(hop.to)) {

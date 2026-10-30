@@ -134,7 +134,8 @@ Settled 2026-10-28, one step at a time. The premise itself, how many minds exist
   - *The Warm Sky Watch, built 2026-10-29:* a cooled telescope about 1.3 m wide at L2, 0.25 flagships, about $2.5 billion, 8 Years, a quarter quicker with the yard. NEO Surveyor’s 0.5 m took a $1.2 billion development baseline (NASA, 2022), scaled by aperture, a sample. Not on the starting list.
   - Set aside: the Halo Survey catching warm flashes too. A warm flash and a cold glow need different instruments.
 - **Way 2: an awake old mind’s cold glow.** Settled 2026-10-29. The Halo Survey finds about half of them. Its depth, 3×10¹⁸ W at 10 pc, is 4.5×10²⁰ W at 400 ly, where 56% of awake minds glow brighter, and 2.8×10²¹ W at 1,000 ly, where 50% do. A deeper survey later could find more.
-  - *It becomes an all-sky far-infrared mapper.* Pointing at each star in turn worked for 50 ly. Within 1,000 ly there are 8.5 million stars.
+  - *Corrected 2026-10-29: it looks star by star, nearest first.* A whole-sky map can’t reach the depth: faint galaxies crowd far-infrared light, so a single dish confuses a glow with them, as Herschel did at a few mJy. Only an array sees sharply, one star at a time. An hour a star, as an ALMA program taking two thirds of its time, is about 3,000 stars a Year: 100 ly in 4 Years, 400 ly in about 220.
+  - *The Halo Array,* our own ALMA-class array ten times as fast, unlocks after it: 40,000 stars a Year, 400 ly in about 17 Years, 1,000 ly in about 210. 1.5 flagships, about $15 billion scaled from ALMA’s $1.5 billion, 12 Years as ALMA took. Samples.
   - Set aside: every awake old mind glowing above the floor. Physics doesn’t promise a bright glow.
 - **Way 3: the watcher, found by where it sits.** Settled 2026-10-29. A 1 kg watcher is about a dark 10 cm object, absolute magnitude about 39 at albedo 0.05, this project’s arithmetic.
   - *Earth–Moon L4 or L5:* about magnitude 26 to 27 from Earth, or 28 if coated near black. A deep, stacked search from Earth finds it in some Years.
@@ -1023,7 +1024,9 @@ Settled 2026-10-28, from the designer: anything available to another civilizatio
     - *Never cities.* Fields and towns need a pixel under about 50 km, which it has only within 1.6 ly. A home reads as forests, and the Mind says it can’t tell who lives there.
   - *The same rule for lenses.* A lens’s pixel passes 50 km past about 195 ly, and there it shows forests, not cities.
   - *On the map, 2026-10-29:* each of Mercury’s three stands at Mercury, a globe in dots read off its map as the Moon’s is, with its works in a ring round it and a thread home. Every planet can hold a build so, and the map names all eight at the Sun’s family.
-  - *Not yet:* the swarm drawn as a ring round the Sun; close views; the Star Beam pushing seed ships; a hypertelescope grown wider from the swarm’s mirrors; peers across the Galaxy seeing our swarm.
+  - *The swarm on the map, 2026-10-29:* collectors leave Mercury’s driver about 0.3 km/s apart, a sample, so their orbits differ and they drift along Mercury’s orbit: the arc widens about 28° a Year and closes into a ring in about 13 Years. They keep to one layer, since a collector shades those behind it, so at a share f of the Sun’s light they fill a band round Mercury’s plane with sin b = f: under a degree until f passes a hundredth, about 98 Years in, then a shell within about 12 Years more. The ring is drawn a degree wide, wider than it is, so it shows.
+  - *Earth stays lit.* A full swarm would darken Earth by its share. It keeps Earth’s line to the Sun clear, a hole of about 5×10⁻¹⁰ of the shell.
+  - *Not yet:* close views; the Star Beam pushing seed ships; a hypertelescope grown wider from the swarm’s mirrors; peers across the Galaxy seeing our swarm.
   - *Why not every world in our quadrant.* A lens sees one star a craft. A hypertelescope can turn to any, but resolving cities at 10,000 ly needs a baseline near 2 million km. The physics allows it, built from the swarm, but nothing like it is designed.
 
 ## Hostility

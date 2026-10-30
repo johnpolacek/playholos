@@ -575,7 +575,7 @@ test("the realistic premise's minds: rare and old near us, a few peers far off, 
 });
 
 test("finding minds: a flash while the warm watch runs, half the cold glows, the watcher by where it sits, a sleeper up close", async () => {
-  const { skyOf, flashOf, coldGlowOf, watcherOf, sleeperOf, WARM_EVERY, MOON_SEARCH_YEARS, STAY_SEARCH_YEARS, FLYBY_SEES_AU, CO_ORBITALS, TOUR_EACH, TOUR_MAP } = await import("./minds.ts");
+  const { skyOf, flashOf, coldGlowOf, watcherOf, sleeperOf, WARM_EVERY, MOON_SEARCH_YEARS, STAY_SEARCH_YEARS, FLYBY_SEES_AU, CO_ORBITALS, TOUR_EACH, TOUR_MAP, HALO_RATE, ARRAY_RATE } = await import("./minds.ts");
   const { skyBasis } = await import("../../../src/coordinates.js");
   // Sky positions agree with the atlas's own frame.
   for (const [ra, dec] of [[56.6, 24.1], [262.17, -0.58], [6.02, -72.08]]) {
@@ -595,7 +595,11 @@ test("finding minds: a flash while the warm watch runs, half the cold glows, the
       else assert.ok(f && f.seen >= Math.max(0, p.flash[0]) && f.seen < Math.max(0, p.flash[0]) + WARM_EVERY + 1e-9, p.id);
       assert.equal(flashOf(p, p.flash[1] + 1, 200000), null);   // built after it faded: missed for good
     }
-    for (const o of m.old) if (!o.asleep) { awake++; if (coldGlowOf(o, 0, 10)) glowing++; }
+    for (const o of m.old) if (!o.asleep) { awake++; if (coldGlowOf(o, 0, 1e6)) glowing++;
+      // Star by star, nearest first: the farther, the later, and the array ten times sooner.
+      const slow = coldGlowOf(o, 0, 1e6), fast = coldGlowOf(o, null, 1e6, 0);
+      if (slow) assert.ok(fast && Math.abs(fast.seen * (ARRAY_RATE / HALO_RATE) - slow.seen) < 1e-6 * slow.seen);
+    }
     // The watcher shows itself when it warns us, and a moon search finds it only at the Moon's L4 or L5.
     const w = m.watcher;
     assert.deepEqual(watcherOf(world, { firstSeed: 40 }, 39), null);

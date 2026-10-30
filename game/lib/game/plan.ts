@@ -77,6 +77,8 @@ export interface Later extends Build {
  *  data centers fill the grid. Lists show only what we can start, each with what it opens. Chosen 2026-10-20. */
 export const LATER: Later[] = [
   { name: "Ground Solar", what: "A fifth more energy, from sunlight on the ground.", does: "think", after: "Thought Fields" },
+  // Our own ALMA-class array for the halo search, ten times as fast, 2026-10-29: the reach to old minds hundreds of ly out.
+  { name: "Halo Array", what: "An array of our own that searches for cold glows ten times as fast.", does: "see", after: "Halo Survey" },
   {
     name: "15 m Mirror",
     what: "A telescope more than twice as wide, to read the air the first can’t.",
@@ -194,7 +196,9 @@ export const SAYS: Record<string, string> = {
   "Star Mapper":
     "Dozens of black holes should lie within 100 light years, and we have found almost none, since they give off no light. Passing in front of a star, one shifts where the star seems to be. A sharper Gaia, seeing through dust in the infrared, would catch them as they pass, a few each decade.",
   "Halo Survey":
-    "A mind that computes cold, far from its star, glows grey, a color no dust has. Herschel saw no such glow. ALMA could see one 25 times fainter, if it is compact. Early on it will likely find only dust. A neighbor whose thinking keeps growing would show in time.",
+    "A mind that computes cold, far from its star, glows grey, a color no dust has. Herschel saw no such glow. ALMA could see one 25 times fainter, if it is compact, an hour at each star, nearest first: about 3,000 stars a Year, 100 ly in 4 Years, 400 ly in 220. A whole-sky map can’t go as deep, since faint galaxies crowd that light. Early on it will likely find only dust.",
+  "Halo Array":
+    "An ALMA-class array of our own, built for this one search, about ten times as fast: 40,000 stars a Year, 400 ly in 17 Years, 1,000 ly in about 210. Old minds are rare, the nearest typically about 400 ly away, so only a search this fast reaches one in our time. No one has priced one.",
   "Fusion Plants":
     "The first fusion plants, about 400 MW each, come online near Year 0. This grows them to a fleet of about 30,000, half again the energy we have. Each new plant starts on tritium the others breed, so the fleet can only double so fast: about 30 Years. Once done, one more data center fits under the grid. If the plants breed less than planned, the fleet grows slower.",
   "Launch Complex":
@@ -284,6 +288,7 @@ const FIRST: Record<string, string> = {
   "Far-Side Array": "Far-side array, one fifth",
   "Warm Sky Watch": "Warm sky watch",
   "Moon Search": "Moon search",
+  "Halo Array": "Halo array",
   "Asteroid Tour": "Asteroid tour",
 };
 export const pacedName = (name: string) => FIRST[name] ?? PACED[name.toLowerCase()] ?? name;

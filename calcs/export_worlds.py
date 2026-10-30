@@ -161,6 +161,8 @@ def works_catalog():
     works['Moon search'] = dict(years=1, want=eg.WANTS['Moon search'][0])
     # The Asteroid Tour, settled 2026-10-29: built in 5 Years, a Year to the first rock, then 2 Years each.
     works['Asteroid tour'] = dict(years=5, want=eg.WANTS['Asteroid tour'][0])
+    # The Halo Array, settled 2026-10-29: ALMA took about 12 years from agreement to full operations.
+    works['Halo array'] = dict(years=12, want=eg.WANTS['Halo array'][0])
     # The Mind Link, settled 2026-10-26: 100 m optics in orbit and a 1 GW laser, to send the Will to our Mind at a hole.
     # calcs/holes.py.
     works['Mind link'] = dict(years=H.LINK_YEARS, want=H.LINK_WANT, orbit=True)

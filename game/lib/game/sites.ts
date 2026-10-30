@@ -18,6 +18,8 @@ export interface Site {
   on: "earth" | "moon" | "orbit" | "l2" | "l4" | "planet";
   /** At a planet: which, by the atlas's name. 2026-10-29. */
   body?: string;
+  /** At a planet: framed with its whole orbit round the Sun, not up close. The Solar Swarm's, 2026-10-29. */
+  view?: "orbit";
   /** How the map draws it: a dome of the sky each place watches, a ring round it, or paths up to orbit from it. */
   draw: "dome" | "ring" | "launch";
   /** In orbit or at L2, one place, its name only. */
@@ -165,8 +167,19 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
       have: "Herschel and the JCMT watched hundreds of near stars for cold glow, and saw dust or nothing. PRIMA, launched in 2033, sees warmer glow faster, but not the coldest.",
       where: "ALMA’s 66 dishes on the Chajnantor plateau, 5,000 m up in Chile’s Atacama desert.",
       why: "Water in the air drinks the submillimetre light a cold glow gives off, and this is among the driest places on Earth. An hour in each of two bands shows a glow’s color: dust reddens, cold computing stays grey.",
-      takes: "About a Year of ALMA’s time to look at each star within 50 ly, then a look each Year after. It builds nothing new.",
+      takes: "Two thirds of ALMA’s time, an hour at each star, nearest first: about 3,000 stars a Year. It builds nothing new.",
       before: "In 2026 Garrett read the Herschel and JCMT surveys as limits on cold computing: nothing over about 7×10¹⁹ W at 10 pc. No one has looked deeper.",
+    },
+  },
+  "Halo Array": {
+    // Beside ALMA on the Chajnantor plateau, as dry as anywhere on Earth.
+    site: { on: "earth", draw: "dome", places: [{ lat: -23.03, lon: -67.75, name: "Chajnantor, Chile, beside ALMA" }] },
+    story: {
+      have: "ALMA gives its time to many searches, so a halo search on it alone crawls outward, about 3,000 stars a Year.",
+      where: "On the Chajnantor plateau, 5,000 m up in Chile’s Atacama, beside ALMA.",
+      why: "Faint galaxies crowd the far-infrared sky, so only an array sees a faint glow sharply, and it looks at one star at a time. Ten times as many dishes and receivers, kept on this one search, look at 40,000 stars a Year.",
+      takes: "About ten ALMAs’ worth of dishes and receivers, a sample near $15 billion, and about 12 Years, as ALMA took.",
+      before: "ALMA’s 66 dishes cost about $1.5 billion and took about 12 years from agreement to full operations, in 2013.",
     },
   },
   "Launch Complex": {
@@ -423,7 +436,7 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
     },
   },
   "Solar Swarm": {
-    site: { on: "planet", body: "Mercury", draw: "ring", places: [{ lat: 0, lon: 0, name: "Round the Sun, near Mercury’s orbit" }] },
+    site: { on: "planet", body: "Mercury", view: "orbit", draw: "ring", places: [{ lat: 0, lon: 0, name: "Round the Sun, near Mercury’s orbit" }] },
     story: {
       have: "Mercury Works, a seed copying itself from Mercury’s rock.",
       where: "In orbit round the Sun near Mercury’s distance, thrown off Mercury and spreading round its orbit.",

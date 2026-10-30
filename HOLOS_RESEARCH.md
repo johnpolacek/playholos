@@ -2344,6 +2344,7 @@ For a player’s plan: Mercury mined, its light beamed, giant telescopes at the 
   - The Sun at 10 pc gives about 1.6 Jy at 12 µm, which matches its W3 magnitude near 3.3. A swarm near 500 K shows as a tenth more at about 2.5×10⁻⁴ of the Sun’s light. The tenth is our sample, for WISE’s calibration of a few percent.
   - A hypertelescope’s pixel is wavelength over baseline times distance: 0.5 µm over 150 km is about 32 km a light year.
   - Fields and cities need a pixel under about 50 km, our sample, so a lens shows them to about 195 ly and the hypertelescope never.
+  - The swarm’s shape: a launch spread of 0.3 km/s, a sample, spreads Mercury’s 88-day period by 3 dv/v, 1.9%, so the arc widens about 28° a Year. One layer of collectors covering a share f of the sky fills a band with sin b = f. Earth’s shadow cone through the shell is about (R_E / AU)² / 4, 5×10⁻¹⁰ of it.
   - Used: Mercury Works, the Solar Swarm, the Star Beam and the Hypertelescope, in [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md#parity-what-a-neighbor-can-do-we-can-build).
 
 ## Watch list

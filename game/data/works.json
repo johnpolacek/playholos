@@ -123,6 +123,10 @@
    "years": 5,
    "want": 0.05
   },
+  "Halo array": {
+   "years": 12,
+   "want": 1.5
+  },
   "Mind link": {
    "years": 18,
    "want": 0.5,
@@ -269,7 +273,8 @@
   "doubling": 2,
   "excess": 9.42e+22,
   "perLy2": 4.06e+17,
-  "kelvin": 500.0
+  "kelvin": 500.0,
+  "spread": 0.0788
  },
  "hyper": {
   "kmPerLy": 31.54,

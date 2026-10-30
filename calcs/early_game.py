@@ -343,6 +343,9 @@ WANTS['Moon search'] = (0.01, 'sample: about 100 million dollars of observing ti
 # Settled 2026-10-29: the asteroid tour, one probe of Tianwen-2's class mapping each Earth co-orbital asteroid in turn.
 # Discovery-class, about half a billion dollars: a sample, since Tianwen-2's price isn't public.
 WANTS['Asteroid tour'] = (0.05, 'sample: a Discovery-class probe, about 500 million dollars')
+# Settled 2026-10-29: the halo array, our own ALMA-class array about ten times its speed for this one task, 40,000
+# stars a Year. ALMA cost about 1.5 billion dollars: a sample, scaled.
+WANTS['Halo array'] = (1.5, 'sample: about ten ALMAs\' worth of dishes and receivers, scaled from ALMA\'s 1.5 billion dollars')
 # Wants for the seed ship's works, samples: no real price exists for any of them.
 WANTS.update({'Fusion drive': (10, 'sample: no real price exists'), 'Seed ship': (5, 'sample'),
               'Deuterium works': (1, 'sample: twenty-four Bruce plants'), 'Seed ship line': (2, 'sample')})

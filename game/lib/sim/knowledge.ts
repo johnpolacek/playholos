@@ -49,6 +49,7 @@ export interface Kit {
   searched?: [number, number][];
   /** What finds the realistic premise's minds, beyond the Halo Survey: lib/sim/minds.ts. 2026-10-29. */
   warmWatch?: number | null;
+  haloArray?: number | null;
   moonSearch?: number | null;
   asteroidTour?: number | null;
   craft?: MindKit["craft"];
@@ -239,7 +240,7 @@ export function earthKnows(
   world: World,
   year: number,
   voices: Voices = {},
-  { allSky = null, flash = null, telescope = null, mirror = null, halo = null, mapper = null, hyper = null, lenses = [], sentinels = [], seeds = [], colony = null, sails = null, probe = null, losses = [], quiet = null, hides = [], searched = [], warmWatch = null, moonSearch = null, asteroidTour = null, craft = [] }: Kit = {},
+  { allSky = null, flash = null, telescope = null, mirror = null, halo = null, mapper = null, hyper = null, lenses = [], sentinels = [], seeds = [], colony = null, sails = null, probe = null, losses = [], quiet = null, hides = [], searched = [], warmWatch = null, haloArray = null, moonSearch = null, asteroidTour = null, craft = [] }: Kit = {},
 ): EarthView {
   const shown = (id: string) => world.stars[id]?.shown ?? id;
   // Earth's finds at Year 0: every world whose tug shows by 2040. Measured, not understood. Its star is in the catalogs.
@@ -362,7 +363,7 @@ export function earthKnows(
   visits.sort((a, b) => a.home - b.home);
   // The realistic premise's minds, as far as we have found them. 2026-10-29.
   const firstSeed = seeds.length ? Math.min(...seeds.map((s) => s.leaves)) : null;
-  const minds = mindsSeen(world, { warmWatch, halo, moonSearch, asteroidTour, firstSeed, craft }, year);
+  const minds = mindsSeen(world, { warmWatch, halo, haloArray, moonSearch, asteroidTour, firstSeed, craft }, year);
   const anyMind = minds.flashes.length || minds.glows.length || minds.watcher || minds.sleepers.length;
   return {
     year, felt, heard, visits,
@@ -620,7 +621,7 @@ export function describe(view: EarthView): string {
   // nothing natural we know of does. Said as seen, not as a Mind, since a glow carries no word. 2026-10-26.
   const glow = !view.glows
     ? ""
-    : `\n\nCold glows our Halo Survey has seen, looking at each star within 50 ly once a Year. It sees a compact glow near 12 K ` +
+    : `\n\nCold glows our Halo Survey has seen near our neighbors' stars, looking at each star for an hour, nearest first, and again each Year. It sees a compact glow near 12 K ` +
       `over about 3×10¹⁸ W at 10 pc, and four times that at twice the distance. A glow hundreds of AU wide would slip past it:\n` +
       (view.glows.length
         ? view.glows.map((g) =>
@@ -673,7 +674,7 @@ function describeMinds(m: MindsSeen, one: (x: number) => string): string {
     );
   if (m.glows.length)
     out.push(
-      `Cold glows our Halo Survey has seen, mapping the whole sky in far infrared:\n` +
+      `Cold glows our Halo Survey has seen, looking at each star for an hour, nearest first:\n` +
         m.glows.map((g) =>
           `- ${sky(g)}, beside a star ${one(g.d)} ly away: a compact glow near 12 K, about ${watts(g.watts)} W, first seen at Year ${one(g.seen)}, steady. ` +
           `Its color fits no dust we know. It could be a cold disk of unusual grains, a measuring error, or computing done cold, far from a star.`).join("\n"),
