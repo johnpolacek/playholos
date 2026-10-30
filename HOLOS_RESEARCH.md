@@ -1320,7 +1320,11 @@ Added 2026-10-28, for [The realistic premise](HOLOS_GAME_CONCEPT.md#the-realisti
     - Matters: the case for spreading. Light delay makes a colony a separate mind, which weakens it.
   - **Suazo et al. 2024, Project Hephaistos**, logged above. No warm footprints near us, which fits small reaches.
   - **The 200 ly cap, this project’s estimate.** One mind per million stars, so footprints under 100,000 stars keep Earth outside all of them at 90% odds. At 0.0028 stars per cubic light-year that is a radius of about 200 ly.
-  - **WISE at 12 µm, this project’s estimate.** About 1 mJy at 5σ, from memory. A 3.8×10²⁶ W swarm at 30,000 ly gives about 1.5 mJy, before dust.
+  - **[AllWISE explanatory supplement, sensitivity](https://irsa.ipac.caltech.edu/data/WISE/docs/release/AllWISE/expsup/sec2_3a.html)** · Checked 2026-10-29. W3 at 12 µm reaches about 0.73 mJy at 5σ in unconfused sky, worse in the crowded plane. A 3.8×10²⁶ W swarm at 30,000 ly gives about 1.5 mJy, before dust.
+  - **[Xue et al. 2016, the mid-infrared extinction law](https://arxiv.org/abs/1602.02928)** · Published, ApJS 224, 23. Checked 2026-10-29. A(W3)/A(Ks) = 0.537 from APOGEE giants.
+  - **[Schödel et al. 2010, extinction toward the Galactic center](https://arxiv.org/abs/0912.1273)** · Published, A&A. Checked 2026-10-29. A(Ks) about 2.5 to 2.7 mag at the center, so about 1.4 mag at 12 µm, a factor of 3.7. Elsewhere in the plane, less.
+    - Used: a peer’s flash dims 2 to 4 times. The earlier “3 to 4 times” held only toward the center.
+  - **[Bennett, Hanson and Riedel 2019](https://arxiv.org/abs/1902.06730)** · Published, Foundations of Physics 49, 820. Checked 2026-10-29. Argues that computing later in a colder universe gains nothing, against Sandberg et al. 2016. Backs awake old minds that compute steadily now.
 - **Smart et al. 2021, the Gaia Catalogue of Nearby Stars** · Published, A&A 649, A6. Count checked 2026-10-29: 331,312 objects within 100 pc from Gaia EDR3, downloaded from ESA’s Gaia archive. 300,098 have median positions inside 326 ly. Within 100 ly it holds 9,281, below the disk model’s 12,000, since it misses the faintest brown dwarfs.
   - Matters: a real, complete census to 326 ly, small enough to ship in a browser.
   - Used: [Real stars to 326 ly](HOLOS_GAME_CONCEPT.md#the-realistic-premise), the game’s star catalog. Check its counts against the disk model below.
@@ -1333,6 +1337,8 @@ Added 2026-10-28, for [The realistic premise](HOLOS_GAME_CONCEPT.md#the-realisti
   - **Gaia BH3, Gaia Collaboration (Panuzzo et al.) 2024** · Published, A&A. From memory, not checked. 33 Suns at 590 pc. Gaia DR3’s own parallax, 1.64 mas, gives 608 pc.
   - **Gaia BH2, El-Badry et al. 2023** · Published, MNRAS. From memory, not checked. About 9 Suns at 1.16 kpc, a red giant on a 1,277-day orbit. DR3’s single-star parallax, 0.67 mas, is unreliable for this binary.
   - Gaia BH1 is already a destination, logged with El-Badry et al. 2023.
+- **[JWST MIRI sensitivity, STScI](https://jwst-docs.stsci.edu/display/Latest/MIRI+Sensitivity)** · Checked 2026-10-29. F1000W reaches 0.48 µJy at 10σ in 10,000 s, from ETC 3.0. Glasse et al. 2015 predicted 0.60 µJy before launch.
+  - Used: [Way 4](HOLOS_GAME_CONCEPT.md#the-realistic-premise), how near a probe must pass a sleeping mind. Scaled to a 1 m telescope as the square of aperture, background-limited, this project’s arithmetic.
 - **Star counts, this project’s model.** An exponential thin disk: 0.1 stars per cubic parsec here, 300 pc scale height, 2.6 kpc scale length. It gives about 1,500 stars within 50 ly, matching the census, and 8.5 million within 1,000 ly. Check against Gaia before building the wider catalog.
 
 ## Elders

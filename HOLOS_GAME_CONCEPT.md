@@ -129,12 +129,25 @@ Settled 2026-10-28, one step at a time. The premise itself, how many minds exist
   - *Later, the full catalogs:* Gaia’s open clusters (Cantat-Gaudin 2020) and all of the Galaxy’s globular clusters (Harris).
 - **How Earth finds minds, way 1: a peer’s warm flash.** Settled 2026-10-29. A new build, an all-sky mid-infrared watch, repeats every few Years and catches any flash above its depth while it runs.
   - *The flash.* A peer building out its home glows warm for its outward time, and its light takes its distance in Years to reach us. Over 400 seeds, about 1.7 flashes a game passed before Year 0, gone. About 2.5 arrive in 100,000 Years, the first typically near Year 29,000, and 1 game in 5 sees one inside 10,000 Years.
-  - *Its depth.* A Sun’s full output from 30,000 ly is about 1.5 mJy at 12 µm, dimmed 3 to 4 times by dust in the plane (from memory). WISE reached about 1 mJy. A watch about 10 times deeper sees a flash anywhere in the Galaxy.
+  - *Its depth.* A Sun’s full output from 30,000 ly is about 1.5 mJy at 12 µm. Dust dims it 2 to 4 times, the most toward the Galaxy’s center (Xue et al. 2016, Schödel et al. 2010). AllWISE reached 0.73 mJy in clear sky, far worse in the crowded plane. A watch about 10 times deeper sees a flash anywhere in the Galaxy, a fifth-built swarm included. Spotting a new source against a crowded plane is what a repeating watch is for. Checked 2026-10-29.
   - *A flash we aren’t watching for passes unseen.* The watch must already run when it arrives.
   - Set aside: the Halo Survey catching warm flashes too. A warm flash and a cold glow need different instruments.
 - **Way 2: an awake old mind’s cold glow.** Settled 2026-10-29. The Halo Survey finds about half of them. Its depth, 3×10¹⁸ W at 10 pc, is 4.5×10²⁰ W at 400 ly, where 56% of awake minds glow brighter, and 2.8×10²¹ W at 1,000 ly, where 50% do. A deeper survey later could find more.
   - *It becomes an all-sky far-infrared mapper.* Pointing at each star in turn worked for 50 ly. Within 1,000 ly there are 8.5 million stars.
   - Set aside: every awake old mind glowing above the floor. Physics doesn’t promise a bright glow.
+- **Way 3: the watcher, found by where it sits.** Settled 2026-10-29. A 1 kg watcher is about a dark 10 cm object, absolute magnitude about 39 at albedo 0.05, this project’s arithmetic.
+  - *Earth–Moon L4 or L5:* about magnitude 26 to 27 from Earth, or 28 if coated near black. A deep, stacked search from Earth finds it in some Years.
+  - *Sun–Earth L4 or L5:* about magnitude 39, beyond any telescope. Only a probe searching the region up close finds it.
+  - *An Earth co-orbital asteroid,* such as Kamoʻoalewa: only a probe at each one finds it.
+  - *Anywhere,* its warning at our first seed launch reveals it.
+  - Set aside: one generic search that finds it anywhere after set Years.
+- **Way 4: an asleep old mind, found only up close.** Settled 2026-10-29.
+  - *Asleep, it folds up small.* A swarm left spread in starlight warms and glows asleep or not: 10²² m² at 540 AU from a Sun soaks up about 5×10¹⁹ W. So a sleeping mind stows itself compact and out of the light, as Sandberg et al. store theirs cold. Corrects “asleep, it hangs dark” in the Elders section below.
+  - *It still sheds its housekeeping heat,* about 10¹⁰ W, a sample. From a body a km or so across that comes out warm, 200 to 490 K, a warm moving dot in a cold outer system.
+  - *How near a probe must pass.* JWST’s MIRI reaches 0.48 µJy at 10 µm in 10,000 s (STScI). A 6.5 m telescope sees such a body from 270 to 430 AU, a probe’s 1 m one from 40 to 65 AU, by this project’s arithmetic.
+  - *So:* a gram sail carries no telescope and never finds it. A flyby at a tenth of light’s speed spends about 6 days within 50 AU of any point on its path, so it finds the mind only if its path passes that close. A probe that brakes and stays maps the system over a few Years and always finds it.
+  - From Earth, 400 ly off, it is 10¹¹ times too faint. The gap between stars is the barrier, not the system.
+  - Set aside: any probe finding it, flyby or not.
   - Set aside: seeding everything beyond 326 ly, landmarks included.
 - **The draw, in calcs/minds.py.** Added 2026-10-29, beside the old neighbors, as each world’s `minds`. Over 400 seeds: 8.6 old minds within 1,000 ly, the nearest typically 397 ly away, and 5.1 peers, 63% inward at contact.
   - *Old minds* sit on real stars inside 326 ly and at seeded places out to 1,000 ly, weighted by the disk. Each is about a billion years older, at most 5 billion. Half sleep, as before. Awake, a glow stays under what the shallow all-sky maps would catch.
