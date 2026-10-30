@@ -249,7 +249,7 @@ export function DestinationPage({ slug }: { slug: string }) {
         <h1 className="text-[19px] leading-snug font-medium">{lead.star}</h1>
       </div>
       <p data-m className="mt-0.5 text-[13.5px] text-page-ink2">
-        {lead.what} · {lyOf(lead.ly)} ly · a message takes{" "}
+        {lead.what} · {lead.range ? `${lyOf(lead.range[0])} to ${lyOf(lead.range[1])}` : lyOf(lead.ly)} ly · a message takes{" "}
         <span className="font-mono tabular-nums">{span(lead.ly)}</span> ·{" "}
         <Link to={`/lead/${lead.slug}`} className="whitespace-nowrap text-you">
           Its lead ›

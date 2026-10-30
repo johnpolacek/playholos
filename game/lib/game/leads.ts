@@ -66,6 +66,8 @@ export type Art =
   | { kind: "dark"; mass: number; ly: number }
   | { kind: "pair"; mass: number; ly: number; a: number; e: number; days: number }
   | { kind: "glow"; ly: number; steady?: boolean }
+  /** A warm glow ranged, not measured: its nearest and farthest, light-years. 2026-10-29. */
+  | { kind: "warm"; near: number; far: number }
   | { kind: "seed"; sight: Visit["sight"]; elder?: Visit["elder"] };
 
 /** A black hole's lead: one drawn alone, or with a star going round it, as Gaia BH1. 2026-10-28. */
@@ -80,6 +82,8 @@ export interface Lead {
   what: string;
   line: string;
   ly: number;
+  /** Its distance as a range, where Earth has no better: nearest and farthest, light-years. Shown in place of ly. */
+  range?: [number, number];
   /** What asking the Mind about it asks. */
   ask: string;
   /** The Mind's word on it when we review our scans, in a breath. */
@@ -783,6 +787,7 @@ export function mindLeads(m: MindsSeen | undefined): Lead[] {
         what: "A new warm glow",
         line: `It appeared where nothing shone, ${n(near)} to ${n(far)} ly away.`,
         ly: mid,
+        range: f.range,
         ask: `What is warm glow ${i + 1}, and why did it appear?`,
         brief: `Our Warm Sky Watch saw a new warm glow, near room temperature, toward ${sky(f.ra, f.dec)}. Our Infrared Telescope puts it ${n(near)} to ${n(far)} ly away. Young stars in dust and merging stars glow like this. So would something built around a star, catching its light.`,
         facts: [
@@ -800,7 +805,7 @@ export function mindLeads(m: MindsSeen | undefined): Lead[] {
           "A young star sits in a dark cloud, and a merger leaves a fading shell. Neither would hold steady for centuries, then dim away together.",
           "Light from it takes tens of thousands of Years to cross. Whatever made it has moved on long since.",
         ],
-        art: { kind: "glow", ly: mid },
+        art: { kind: "warm", near, far },
         life: "very unlikely",
       }];
     }),

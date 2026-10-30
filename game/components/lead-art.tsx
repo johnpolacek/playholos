@@ -293,7 +293,48 @@ function GlowArt({ ly, steady }: { ly: number; steady?: boolean }) {
   );
 }
 
+/** A warm glow, ranged: where it could lie on a line out from the Sun past the Galaxy's heart, by its reddening and the
+ *  star behind it. A band, not a point, since no measure says more. Its middle pulses warm. 2026-10-29. */
+function WarmArt({ near, far }: { near: number; far: number }) {
+  const dot = useRef<SVGCircleElement>(null);
+  const [x0, x1, y] = [24, 296, 112];
+  const top = Math.max(80000, far * 1.15);
+  const X = (ly: number) => x0 + (ly / top) * (x1 - x0);
+  const mid = Math.sqrt(near * far);
+  useTicks((t) => {
+    const b = Math.sin(t * 1.4);
+    dot.current?.setAttribute("r", String(5 + 1.5 * b));
+    dot.current?.setAttribute("opacity", String(0.75 + 0.2 * b));
+  }, 12);
+  const k = (ly: number) => `${Math.round(ly / 1000)},000`;
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img" aria-label={`A warm glow between ${k(near)} and ${k(far)} light years away`}>
+      <text x={x0} y={40} className="fill-muted font-mono text-[7.5px]">
+        WHERE IT LIES, BY ITS REDDENING AND THE STAR BEHIND IT
+      </text>
+      <line x1={x0} x2={x1} y1={y} y2={y} stroke="var(--faint)" />
+      <rect x={X(near)} y={y - 14} width={X(far) - X(near)} height={28} rx={14} fill="var(--other)" opacity={0.18} />
+      <circle ref={dot} cx={X(mid)} cy={y} r={5} fill="var(--other)" />
+      <circle cx={x0} cy={y} r={3} fill="#f4f6ff" />
+      <text x={x0} y={y + 26} className="fill-muted font-mono text-[7.5px]">
+        SUN
+      </text>
+      <line x1={X(27000)} x2={X(27000)} y1={y - 8} y2={y + 8} stroke="var(--muted)" />
+      <text x={X(27000)} y={y + 26} textAnchor="middle" className="fill-muted font-mono text-[7.5px]">
+        GALAXY’S HEART
+      </text>
+      <text x={X(near)} y={y - 22} className="fill-other font-mono text-[7.5px]">
+        {k(near)} TO {k(far)} LY
+      </text>
+      <text x={x0} y={y + 62} className="fill-muted font-mono text-[7.5px]">
+        TOO FAR FOR PARALLAX. A RANGE, NOT A DISTANCE
+      </text>
+    </svg>
+  );
+}
+
 export function LeadArt({ art }: { art: Art }) {
+  if (art.kind === "warm") return <WarmArt near={art.near} far={art.far} />;
   if (art.kind === "orbit") return <Orbit a={art.a} e={art.e} hz={art.hz} />;
   if (art.kind === "dark") return <Dark mass={art.mass} ly={art.ly} />;
   if (art.kind === "pair") return <Pair mass={art.mass} ly={art.ly} a={art.a} e={art.e} days={art.days} />;

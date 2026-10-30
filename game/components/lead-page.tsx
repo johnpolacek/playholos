@@ -159,7 +159,7 @@ export function LeadPage({ slug }: { slug: string }) {
         <h1 className="text-[19px] leading-snug font-medium">{lead.star}</h1>
       </div>
       <p data-m className="mt-0.5 text-[13.5px] text-page-ink2">
-        {lead.what} · {lyOf(lead.ly)} ly · reached in <span className="font-mono tabular-nums">{span(lead.ly)}</span>{" "}
+        {lead.what} · {lead.range ? `${lyOf(lead.range[0])} to ${lyOf(lead.range[1])}` : lyOf(lead.ly)} ly · reached in <span className="font-mono tabular-nums">{span(lead.ly)}</span>{" "}
         ·{" "}
         <Link to={`/reach/${lead.slug}`} className="whitespace-nowrap text-you">
           Ways to go ›
