@@ -27,7 +27,7 @@ const COLORS: { name: string; v: string; use: string }[] = [
   { name: "fill2", v: "#bdb9af", use: "Belts and fills in the art." },
   { name: "ink", v: "#e6e3db", use: "Words, and the primary button." },
   { name: "you", v: "#5bb8d6", use: "Us: our Mind, our messages, what is ours. Listening builds." },
-  { name: "other", v: "#e0a24a", use: "Them: a neighbor, a reply, what is not ours." },
+  { name: "other", v: "#e0a24a", use: "Them: another mind, a signal, what is not ours." },
   { name: "ok", v: "#70d1a9", use: "A thing set and working, as a key." },
 ];
 

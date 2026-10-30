@@ -17,7 +17,7 @@ const STEPS: { title: string; text: string; parts: string[] }[] = [
   },
   {
     title: "Work the numbers",
-    text: "Python draws a whole game from a seed, and runs hundreds of games to see what a rule does. A checker keeps every neighbor below what Earth could have seen by 2040.",
+    text: "Python draws a whole game from a seed, and runs hundreds of games to see what a rule does. A checker keeps every world below what Earth could have measured by 2040.",
     parts: ["numbers"],
   },
   {

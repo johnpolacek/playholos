@@ -21,7 +21,7 @@ export const EARTH_AT_YEAR_0 = `What Earth has at Year 0, 2040:
 - Asteroids: NEO Surveyor and Rubin have found about 9 in 10 asteroids over 140 m that could hit Earth, and none is coming. DART showed in 2022 that a craft can push one aside, given years of warning.
 - The Moon's far side: small radio receivers there have heard the sky below 30 MHz, which Earth's air blocks. No large dish or array stands there.
 - Probes: the Voyagers fell silent in the 2030s, Voyager 1 near 30 light-hours out. New Horizons is near 14 light-hours. Interstellar Probe may be on its way.
-- Instruments: today's, plus PLATO, Roman, the ELT and the SKA. The Habitable Worlds Observatory is still being built, about 8 Years from done at its real pace. Earth can feel nearby worlds by their tug, but can't read any neighbor's air.
+- Instruments: today's, plus PLATO, Roman, the ELT and the SKA. The Habitable Worlds Observatory is still being built, about 8 Years from done at its real pace. Earth can feel nearby worlds by their tug, but can't read any other world's air.
 - The sky watch is a drift scan, like CHORD: each northern direction passes through it about 10 minutes a day. It would catch about 1 early signal in 5.
 - Every watch Earth has listens for radio. A knock sent as laser flashes, each a billionth of a second long, passes them all unseen. Only a few small telescopes at Lick watch for flashes, each on its own patch of sky.
 - What we might hear: a knock is a short hail aimed at us and built to be read, and not an answer, even when it follows our noise. A call or a broadcast is a steady signal sent to everyone. An answer replies to one of our messages, with more: findings, records, questions or offers. A gift is knowledge sent unasked. Call each by its kind.

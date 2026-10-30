@@ -100,7 +100,7 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
     // Where Webb flies, and where NASA meant to send the Habitable Worlds Observatory.
     site: { on: "l2", draw: "ring", places: [{ lat: 0, lon: 0, name: "L2, 1.5 million km out" }], km: 1_500_000 },
     story: {
-      have: "Webb and Roman fly, and the ELT watches from Chile. The Habitable Worlds Observatory is about 8 Years from done. None can read a neighbor’s air.",
+      have: "Webb and Roman fly, and the ELT watches from Chile. The Habitable Worlds Observatory is about 8 Years from done. None can read another world’s air.",
       where:
         "At L2, 1.5 million km out on Earth’s night side, where Webb flies. The Sun, Earth and Moon all stay behind it.",
       why: "Infrared is heat, so the telescope must be colder than the worlds it reads. One shade blocks all three, and behind it Webb holds near 40 K while its sunny side reaches 110 °C.",
@@ -319,7 +319,7 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
     story: {
       have: "A nuclear weapon’s yield tops out near 50 Mt. Nothing we have flies faster than Parker Solar Probe’s 0.06% of light speed.",
       where: "In the Orbital Foundry’s high orbit, where Moon rock and fusion fuel come in.",
-      why: "A neighbor can fire one at us. Whatever they can build, we can. Fired, it coasts dark: only a watcher in our own system sees it leave.",
+      why: "Any mind could fire one. Whatever another can build, we can. Fired, it coasts dark: only a watcher in our own system sees it leave.",
       takes: "Per bullet, 1,000 t and 61 kt of fusion fuel, 20 Years to ready, and 37 kt of it helium-3 from the harvest. The yard itself, 10 Years.",
       before: "No one has built a weapon that crosses between stars. Its physics is a rocket’s, pointed.",
     },
@@ -598,7 +598,7 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
     story: {
       have: "The Cold Annex at L2, 1,200 GW of chips at 77 K behind one shade.",
       where: "From L2 outward, along Earth’s orbit round the Sun, each part behind its own small shade.",
-      why: "More chips at 77 K think more, and asteroid rock is plenty. Doubling, it grows as a neighbor’s Mind grows. Its heat glows grey in the far infrared, so past a size, neighbors’ watches find it, as ours find theirs.",
+      why: "More chips at 77 K think more, and asteroid rock is plenty. Doubling, it grows as any mind grows. Its heat glows grey in the far infrared, so past a size a watch like our Halo Survey finds it, as ours finds old minds’.",
       takes: "The annex’s want, then rock: it doubles every 10 Years until we take it back.",
       before: "In 2026 Garrett read the sky’s far-infrared limits as limits on minds computing cold. Below about 50 K our chips gain little more, so 77 K is where ours run.",
     },

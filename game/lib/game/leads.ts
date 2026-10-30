@@ -687,7 +687,7 @@ function darkLead(h: DarkMass, far = false): Lead {
       // What a hole is worth, and what using it costs, 2026-10-26. Kerr numbers and the X-ray sky's limits, from
       // HOLOS_RESEARCH.md's "Black holes".
       ["What it offers", "A furnace: rock fed to it gives back 6% to about 30% of its mass as light. Fusion gives under 1%. A dark place to put heat. A clock up to 10 times slow, close in"],
-      ["What it costs", "A braking flame shows to anyone close. A furnace stays hidden until it grows past about a millionth of the Sun. A neighbor may get there first"],
+      ["What it costs", "A braking flame shows to anyone close. A furnace stays hidden until it grows past about a millionth of the Sun"],
     ],
     could: far
       ? [
@@ -702,7 +702,7 @@ function darkLead(h: DarkMass, far = false): Lead {
     ],
     tells: [
       "A sentinel could go and stay, and measure its spin. That says how much energy it holds, and how slow a clock would run beside it.",
-      "A neighbor nearer to it could reach it first. If one does, its braking flame or its furnace may show us.",
+      "An old mind may already use it. If one does, a craft of ours there would see it.",
     ],
     art: far ? { kind: "pair", mass: h.mass, ly: h.d, a: 1.4, e: 0.45, days: 186 } : { kind: "dark", mass: h.mass, ly: h.d },
   };
