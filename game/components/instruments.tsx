@@ -11,7 +11,7 @@ import { SWARM } from "@/lib/sim/conflict";
 import type { Reading } from "@/lib/game/leads";
 import { buildOf, buildSlug, computeAt, LAUNCH_LIFT, ordered, PAST } from "@/lib/game/plan";
 import type { Heard, Visit } from "@/lib/sim/types";
-import { CO_ORBITALS, MOON_SEARCH_YEARS, type MindsSeen, TOUR_EACH, TOUR_MAP } from "@/lib/sim/minds";
+import { CO_ORBITALS, MOON_SEARCH_YEARS, type MindsSeen, moonSearchEnds, tourEnds } from "@/lib/sim/minds";
 
 // In play, our builds once done stop being a queue and become instruments: each a card that says what it does now in
 // the world, from what it has caught, read or found. What is still building rises under them, a bar a build. Chosen
@@ -90,14 +90,14 @@ function doing(name: string, k: Known, since: number): { line: string; news: boo
   if (name === "Halo Survey") return { line: "Looking at star after star for cold glows, nearest first. None yet.", news: false };
   if (name === "Halo Array") return { line: "Looking at forty thousand stars a Year for cold glows. None yet.", news: false };
   // Each survey ends: the tour once its last rock is mapped, the search once 3 Years of images are stacked. 2026-10-30.
-  const toured = since + (CO_ORBITALS.length - 1) * TOUR_EACH + TOUR_MAP;
+  const toured = tourEnds(since);
   if (name === "Asteroid Tour")
     return k.now >= toured
       ? { line: `Mapped all ${CO_ORBITALS.length} asteroids that share our orbit by Year ${tenths(toured)}. Only rock.`, news: k.now - toured < 0.5 }
       : { line: "Mapping the asteroids that share our orbit, one by one. Nothing that isn’t rock yet.", news: false };
   if (name === "Moon Search")
-    return k.now >= since + MOON_SEARCH_YEARS
-      ? { line: `Stacked ${MOON_SEARCH_YEARS} Years of deep images of the Moon’s L4 and L5 points. Nothing small and dark there.`, news: k.now - since - MOON_SEARCH_YEARS < 0.5 }
+    return k.now >= moonSearchEnds(since)
+      ? { line: `Stacked ${MOON_SEARCH_YEARS} Years of deep images of the Moon’s L4 and L5 points. Nothing small and dark there.`, news: k.now - moonSearchEnds(since) < 0.5 }
       : { line: "Stacking deep images of the Moon’s L4 and L5 points. Nothing small and dark yet.", news: false };
   if (name === "Warm Sky Watch") return { line: "Mapping the warm sky every 2 Years. No new warm glow yet.", news: false };
   const craft = CRAFT[name];

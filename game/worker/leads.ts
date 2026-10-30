@@ -3,6 +3,7 @@ import { rockAt, rockOf } from "@/lib/game/rocks";
 import { kitOf } from "@/lib/game/reach";
 import { nextStop } from "@/lib/sim/next";
 import { earthKnows, willKnows } from "@/lib/sim/knowledge";
+import { moonSearchEnds, tourEnds } from "@/lib/sim/minds";
 import { readGifts, readLater, readColony, readLenses, readObserve, readSentinels, readSeeds, readQueue, readStops } from "./orders";
 import { readPickets, readStrikes, readWill } from "./orders";
 import { inPool, loadWorld } from "./world";
@@ -86,6 +87,11 @@ export async function next(req: Request) {
   const done = schedule(plan, scale);
   // A rock: the Year we find it, the Year our push lands if it turns it aside, and the Year it would strike. 2026-10-29.
   const rock = rockAt(rockOf(seed), plan, done, year);
-  const stop = nextStop(ahead, year, done, rock ? [rock.found, rock.pushed ? rock.lands : null, rock.strikes] : []);
+  // And the Years the Moon Search and the Asteroid Tour end, each saying so on Build. 2026-10-30.
+  const ends = [
+    done["Moon Search"] == null ? null : moonSearchEnds(done["Moon Search"]),
+    done["Asteroid Tour"] == null ? null : tourEnds(done["Asteroid Tour"]),
+  ];
+  const stop = nextStop(ahead, year, done, [...(rock ? [rock.found, rock.pushed ? rock.lands : null, rock.strikes] : []), ...ends]);
   return Response.json({ next: stop, ahead: AHEAD });
 }

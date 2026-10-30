@@ -15,7 +15,9 @@ export function nextKnown(ahead: EarthView, year: number): number | null {
       // A list of numbers is a place, as [ra, dec, d], not a time.
       if (!x.every((v) => typeof v === "number")) for (const v of x) walk(v, key);
     } else if (x && typeof x === "object") {
-      for (const [k, v] of Object.entries(x)) walk(v, k);
+      // A warm glow shows on Scan once ranged, not when first seen: a stop then found nothing new there. Playtest
+      // 2026-10-30.
+      for (const [k, v] of Object.entries(x)) if (!(k === "seen" && "ranged" in x)) walk(v, k);
     }
   };
   walk(ahead);
