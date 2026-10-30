@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useGame } from "@/components/game-provider";
 import { tenths, yearText } from "@/lib/game/clock";
-import { dates, type Draft, sendTime, target } from "@/lib/game/sends";
+import { dates, type Draft, sendTime, target, WATCHER } from "@/lib/game/sends";
 import sky from "@/lib/game/sky.json";
 import { GRID_2040, noticeReach, powerFor, readReach, SIZES } from "@/lib/sim/messages";
 
@@ -58,7 +58,13 @@ function Aimed({ id, draft, asked }: { id: string; draft: Draft; asked: string }
   const y = sent?.y ?? year ?? 0;
   if (!star) return <p className="pl-3 font-mono text-[11px] text-muted">We know no star named {draft.to} within 50 light-years.</p>;
   const { sendYears, lands, back } = dates(y, star.d, draft.size);
-  const facts: [string, string][] = [
+  // A knock on the watcher lands in seconds, and it answers on its own terms. 2026-10-30.
+  const near = star === WATCHER;
+  const facts: [string, string][] = near ? [
+    ["Sends in", sendTime(sendYears)],
+    ["Lands", sent ? `Year ${yearText(lands)}` : "in seconds"],
+    ["Answer", "If it chooses"],
+  ] : [
     ["Sends in", sendTime(sendYears)],
     // Until it is sent, the clock runs under the card, so it counts from sending. Its Years moved as we read, 4.9 on
     // the card, then 5.0 once sent, until 2026-10-30.
@@ -69,7 +75,7 @@ function Aimed({ id, draft, asked }: { id: string; draft: Draft; asked: string }
     <div className={frame}>
       <div className="flex items-baseline justify-between">
         <span className={`${lab} text-you`}>To</span>
-        <span className="font-mono text-[11px] text-muted">{star.d} ly</span>
+        <span className="font-mono text-[11px] text-muted">{star === WATCHER ? "1.3 light-seconds" : `${star.d} ly`}</span>
       </div>
       <b className="-mt-2 text-[15px] font-semibold">{star.name}</b>
       <Travels draft={draft} />

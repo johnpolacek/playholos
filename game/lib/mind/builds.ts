@@ -2,9 +2,9 @@
 // exist, guessed whether a watch was done, and called the drift scan our only ear at Year 40 with the All-Sky Watch long
 // built. Times are Build's: a build's standard pace, and each one in our order as schedule dates it. 2026-10-23.
 import { yearText } from "@/lib/game/clock";
-import { BUILDS, kt, LATER, moves, openAt, ordered, PAST, takenAt, takes } from "@/lib/game/plan";
+import { BUILDS, EVENTS, kt, LATER, moves, openAt, ordered, PAST, takenAt, takes } from "@/lib/game/plan";
 import { lensTrip } from "@/lib/game/reach";
-import { FOUND, harm, rockAt, type Rock } from "@/lib/game/rocks";
+import { harm, rockAt, type Rock } from "@/lib/game/rocks";
 import type { Plan } from "@/lib/game/types";
 
 const tenth = (y: number) => Number(y.toFixed(1));
@@ -55,7 +55,7 @@ export function describeBuilds(): string {
   };
   return `What Earth can build. Only the Will queues a build, on the Build tab. Name no build or observation that isn't here. Less compute than the kit says slows every build:
 ${BUILDS.map((b) => line(b)).join("\n")}
-${LATER.filter((b) => b.after !== FOUND).map((b) => line(b, b.after)).join("\n")}`;
+${LATER.filter((b) => !EVENTS.includes(b.after)).map((b) => line(b, b.after)).join("\n")}`;
 }
 
 /** Our order, in line, with where each build stands at Year `year`: done, under way and when it will be, or past the

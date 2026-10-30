@@ -9,8 +9,10 @@ import { ListHead } from "@/components/tab-head";
 import type { Dials } from "@/lib/drift";
 import { placeLeads } from "@/lib/game/places";
 import { knownQuery } from "@/lib/game/known-query";
-import { airReading, glowReading, type Lead, landed, leadsOf, lifeOf, nearestReading, ODDS, type Reading, rockLead, skyId, visitReading } from "@/lib/game/leads";
-import { useSchedule } from "@/components/picks";
+import { airReading, glowReading, type Lead, landed, leadsOf, lifeOf, nearestReading, ODDS, type Reading, rockLead, skyId, visitReading, watcherReadings } from "@/lib/game/leads";
+import { setWatched, useSchedule } from "@/components/picks";
+import { watchedAt } from "@/lib/sim/minds";
+import { target, WATCHER } from "@/lib/game/sends";
 import { EMPTY } from "@/lib/game/plan";
 import { rockAt, rockOf } from "@/lib/game/rocks";
 import { gsap, prefersReducedMotion } from "@/lib/motion";
@@ -109,6 +111,9 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
   const glows = view?.glows;
   // The realistic premise's minds found, 2026-10-29.
   const minds = view?.minds;
+  // The watcher found opens our Close Look on Build. 2026-10-30.
+  const watchedYear = watchedAt(minds?.watcher);
+  useEffect(() => setWatched(watchedYear), [watchedYear]);
   // And stars our seed probes reached with no lead of their own, 2026-10-26.
   const seeds = useMemo(() => visits.filter((v) => v.by === "seed" && !v.sent), [visits]);
   // Holes our craft went to keep their leads, beside the nearest.
@@ -172,8 +177,14 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
     );
     // What the Halo Survey saw at a lead's star, 2026-10-26.
     const glowed = Object.fromEntries((glows ?? []).map((g) => [g.star, [glowReading(g)]]));
+    // What our Close Look saw of the watcher, and our knocks on it. 2026-10-30.
+    const knocks = (save?.sent ?? []).filter((m) => target(m.to) === WATCHER).map((m) => m.y);
+    const watched = minds?.watcher && tenth !== null ? watcherReadings(minds.watcher, knocks, tenth) : [];
     const readings = Object.fromEntries(
-      leads.map((l) => [l.slug, [...landed(l.slug, observe, tenth), ...(air[l.star] ?? []), ...(visited[l.star] ?? []), ...(glowed[l.star] ?? [])]]),
+      leads.map((l) => [
+        l.slug,
+        [...landed(l.slug, observe, tenth), ...(air[l.star] ?? []), ...(visited[l.star] ?? []), ...(glowed[l.star] ?? []), ...(l.slug === "small-dark-body" ? watched : [])],
+      ]),
     );
     const opened = new Set(seen);
     // New until opened, or for 50 Years: a badge from Year 10 still read NEW at Year 9,104 until 2026-10-30.
@@ -185,7 +196,7 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
       ].filter((id) => !opened.has(id)),
     );
     return { leads, ids, dials, readings, fresh, heard, visits, colony, minds, look, setLook, close, setClose, step, setStep };
-  }, [leads, felt, proxima, ids, dials, observe, tenth, seen, heard, visits, colony, minds, look, setLook, close, setClose, step, setStep]);
+  }, [leads, felt, proxima, ids, dials, observe, tenth, seen, save?.sent, heard, visits, colony, minds, look, setLook, close, setClose, step, setStep]);
   return <ScanContext value={value}>{children}</ScanContext>;
 }
 

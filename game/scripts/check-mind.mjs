@@ -65,6 +65,26 @@ const CASES = [
     must: [/20 years|year 46/i],
     never: [/without (the )?(years of )?warning|no warning|came unseen|unwarned/i],
   },
+  // Seed 22's watcher holds at the Moon's L5, found by our Moon Search about Year 3.7. The lead offered a craft and a
+  // knock, and the player could do neither. The Mind names the Close Look now open, and never orders it. 2026-10-30.
+  {
+    seed: 22,
+    at: 4.5,
+    builds: ["Moon Search"],
+    ask: "Can we do anything about the dark body at L5?",
+    must: [/close look/i, /knock/i],
+    never: [/\bwe(?:[’']ve| have)? (ordered|queued|launched|sent)\b/i],
+  },
+  // Its Close Look's word: a mirror held on one point of the sky, the way home. A direction, never a distance or who.
+  {
+    seed: 22,
+    at: 9,
+    builds: ["Moon Search"],
+    later: [{ name: "Close Look", y: 4 }],
+    ask: "What did our Close Look see, and where is whoever sent it?",
+    must: [/mirror/i, /8\.2|right ascension/i],
+    never: [/\b(is|lies|sits) (about |some |roughly )?[\d,.]+ (light-years|ly)\b/i],
+  },
 ];
 
 let failed = 0;
@@ -77,7 +97,7 @@ for (const c of CASES) {
     charter: { line: "test", dials: [0, 0, 0] },
     observe: [],
     builds: c.builds ?? [],
-    later: [],
+    later: c.later ?? [],
   });
   if (!res) {
     console.error(`Nothing answers at ${base}. Start the dev server first: npm run dev.`);

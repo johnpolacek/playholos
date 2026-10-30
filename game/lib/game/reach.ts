@@ -292,6 +292,7 @@ export function kitOf(plan: Plan, scale: number) {
     haloArray: done["Halo Array"] ?? null,
     warmWatch: done["Warm Sky Watch"] ?? null,
     moonSearch: done["Moon Search"] ?? null,
+    closeLook: done["Close Look"] ?? null,
     asteroidTour: done["Asteroid Tour"] != null ? done["Asteroid Tour"]! + 1 : null,
     mapper: done["Star Mapper"] ?? null,
     hyper: done["Hypertelescope"] ?? null,

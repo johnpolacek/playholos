@@ -8,8 +8,8 @@ import { SkyArt } from "@/components/sky";
 import { LeadMark } from "@/components/marks";
 import { Face } from "@/components/tab-head";
 import type { Dials, Mark, Show } from "@/lib/drift";
-import { span, YEAR_0, lyOf } from "@/lib/game/clock";
-import { target } from "@/lib/game/sends";
+import { span, YEAR_0, lyOf, yearText } from "@/lib/game/clock";
+import { target, WATCHER } from "@/lib/game/sends";
 import { type Lead, lineAt, type Reading, starName } from "@/lib/game/leads";
 import { type System, worldName } from "@/lib/game/systems";
 import { placeLabel } from "@/components/place-label";
@@ -64,8 +64,9 @@ export function LeadsMap({
   useEffect(() => {
     const list = save?.sent ?? [];
     sent.splice(0, sent.length, ...list.flatMap((m) => {
+      // A knock on the watcher stays home: the map has no line to draw for it. 2026-10-30.
       const t = m.to === "everywhere" ? null : target(m.to);
-      return t ? [{ name: t.name, ra: t.ra, dec: t.dec, ly: t.d, sent: YEAR_0 + m.y }] : [];
+      return t && t !== WATCHER ? [{ name: t.name, ra: t.ra, dec: t.dec, ly: t.d, sent: YEAR_0 + m.y }] : [];
     }));
     calls.splice(0, calls.length, ...list.filter((m) => m.to === "everywhere").map((m) => ({
       sent: YEAR_0 + m.y,
@@ -236,7 +237,7 @@ export function LeadList({
               {isNew && (
                 <span className="mr-1.5 rounded-full bg-you px-1.5 py-px font-mono text-[9px] tracking-[.08em] text-paper">NEW</span>
               )}
-              {read.title}, Year {read.at}.
+              {read.title}, Year {yearText(read.at)}.
             </span>
           ) : (
             lineAt(l, year)

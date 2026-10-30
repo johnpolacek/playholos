@@ -6,7 +6,7 @@ import { LeadArt } from "@/components/lead-art";
 import { SystemArt } from "@/components/system-art";
 import { LeadMark } from "@/components/marks";
 import { useLeads } from "@/components/scan";
-import { span, lyOf } from "@/lib/game/clock";
+import { span, lyOf, yearText } from "@/lib/game/clock";
 import { ODDS, type Odds, type Reading, starName } from "@/lib/game/leads";
 import { VisitArt } from "@/components/visit-art";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
@@ -176,7 +176,7 @@ export function LeadPage({ slug }: { slug: string }) {
       {read && (
         <section data-m className="mt-3 rounded-xl border border-you/60 bg-you/[.06] px-3 py-2.5">
           <span className="font-mono text-[10px] tracking-[.1em] text-you">
-            READING · YEAR {read.at} · {read.by.toUpperCase()}
+            READING · YEAR {yearText(read.at)} · {read.by.toUpperCase()}
           </span>
           <h2 className="mt-1 text-[16px] leading-snug font-semibold">{read.title}</h2>
           <p className="mt-0.5 text-[13.5px] leading-snug">{read.line}</p>

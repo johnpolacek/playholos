@@ -1,4 +1,4 @@
-import { lyOf, YEAR_0, yearText } from "@/lib/game/clock";
+import { lyOf, tenths, YEAR_0, yearText } from "@/lib/game/clock";
 import { KNOCKS } from "@/lib/game/knocks";
 import { lightTime } from "@/lib/light";
 import { BANDS, iwa, owa, WIDE } from "@/lib/sim/observing";
@@ -881,31 +881,33 @@ function watcherLead(w: WatcherSeen): Lead {
   const year = `Year ${yearText(w.seen)}`;
   const moon = w.by === "moon search";
   const rock = w.by === "asteroid tour";
+  // L4 or L5, as the seed placed it: every game read L5 until 2026-10-30.
+  const L = w.place.endsWith("L4") ? "L4" : "L5";
   return {
     slug: "small-dark-body",
     at: [0, 0, 0],
-    star: moon ? "A dark body at L5" : rock ? `A made thing on ${w.place}` : "A signal from close by",
+    star: moon ? `A dark body at ${L}` : rock ? `A made thing on ${w.place}` : "A signal from close by",
     what: moon ? "Something holding where nothing should" : rock ? "Something made, on a rock beside us" : "An answer to our ship",
     line: moon
-      ? "About 10 cm across, at the Moon’s L5 point, where the Sun’s pull clears all rock."
+      ? `About 10 cm across, at the Moon’s ${L} point, where the Sun’s pull clears all rock.`
       : rock
         ? "Smooth, dark and about 10 cm across, not of the rock it rides."
         : "A narrow laser aimed at Earth, timed to our first seed ship.",
     ly: moon ? 1.3 * LY_SEC : rock ? 500 * LY_SEC : 1000 * LY_SEC,
-    ask: moon ? "What is the dark body at the Moon’s L5 point?" : rock ? `What did our Asteroid Tour find on ${w.place}?` : "What sent the laser signal at our first seed ship?",
+    ask: moon ? `What is the dark body at the Moon’s ${L} point?` : rock ? `What did our Asteroid Tour find on ${w.place}?` : "What sent the laser signal at our first seed ship?",
     brief: moon
-      ? `Our Moon Search found a dark body about 10 cm across at the Moon’s L5 point, first seen at ${year}. The Sun’s pull unsettles anything there within years, yet it holds. No rock should. Something small, and steered, has been watching us from beside the Moon.`
+      ? `Our Moon Search found a dark body about 10 cm across at the Moon’s ${L} point, first seen at ${year}. The Sun’s pull unsettles anything there within years, yet it holds. No rock should. Something small, and steered, has been watching us from beside the Moon.`
       : rock
         ? `Our Asteroid Tour found something about 10 cm across on ${w.place}, at ${year}: smooth, dark, and not of the rock. It has been there a long time, and sends nothing we can hear.`
         : `A narrow laser aimed at Earth from ${w.place}, from ${year}, the Year our first seed ship left. Its timing reads as an answer to that ship. Whatever sent it is small, and we never found it.`,
     facts: [
       ["First seen", `${year}, by ${moon ? "our Moon Search" : rock ? "our Asteroid Tour" : "our watches"}`],
       ["Its size", moon || rock ? "About 10 cm across" : "Too small to see"],
-      ["Where", moon ? "The Moon’s L5 point, 1.3 light-seconds from Earth" : w.place],
+      ["Where", moon ? `The Moon’s ${L} point, 1.3 light-seconds from Earth` : w.place],
     ],
     could: moon
       ? [
-          { what: "Something made, steering to stay", why: "Only a body that steers holds at the Moon’s L5 for long. The Sun’s pull clears rock out within years.", odds: "likely" },
+          { what: "Something made, steering to stay", why: `Only a body that steers holds at the Moon’s ${L} for long. The Sun’s pull clears rock out within years.`, odds: "likely" },
           { what: "A rock just caught", why: "A passing rock can linger a few years before the Sun pulls it away. It would drift, and this one holds.", odds: "unlikely" },
           { what: "Our own junk", why: "A lost piece of an old mission could sit near there for a while. None is listed, and it wouldn’t hold.", odds: "very unlikely" },
         ]
@@ -920,6 +922,44 @@ function watcherLead(w: WatcherSeen): Lead {
     art: { kind: "near", where: moon ? "moon" : rock ? "co-orbital" : "warning" },
     life: "very unlikely",
   };
+}
+
+/** What came of the watcher once found: our Close Look's word, and each knock we sent it, in the order they came. Its
+ *  odds are the moon find's or the rock's, as watcherLead() lists them. 2026-10-30. */
+export function watcherReadings(w: WatcherSeen, knocks: number[], year: number): Reading[] {
+  const made = w.by === "moon search" ? (["almost certain", "almost no chance", "almost no chance"] as Odds[]) : (["almost certain", "almost no chance"] as Odds[]);
+  const sky = (x: { ra: number; dec: number }) => `RA ${(Math.round(x.ra * 10) / 10 % 24).toFixed(1)} h, Dec ${x.dec.toFixed(0)}°`;
+  const out: Reading[] = [];
+  if (w.looked && w.looked.at <= year)
+    out.push({
+      id: "watcher-looked",
+      needs: "",
+      at: tenths(w.looked.at),
+      by: "Close Look",
+      title: "Seen up close",
+      line: `Near black and about 10 cm across, smooth, with a mirror about 2 cm wide. It holds that mirror on one point of the sky, toward ${sky(w.looked)}, turning as the Earth and Moon turn to keep it there.`,
+      mind: "A thing that reports home by laser would aim so. Whoever sent it likely lies that way, at a distance we can’t tell, and we can’t tell who. It saw our craft come.",
+      now: made,
+      tells: [
+        `Its mirror points toward ${sky(w.looked)}. Whoever sent it lies along that line, near or far.`,
+        "A knock aimed at it would tell it we know it is there.",
+      ],
+    });
+  // A knock shows in the tenth it is sent, as the Year does.
+  for (const [i, y] of knocks.entries())
+    if (tenths(y) <= year)
+      out.push({
+        id: `watcher-knock-${i}`,
+        needs: "",
+        at: tenths(y),
+        by: "Our knock",
+        title: "No answer",
+        line: `Our knock reached it within seconds of Year ${yearText(y)}. It made no answer we could see, and held its place.`,
+        mind: "It answers on its own terms, if at all. Whether it passed word of our knock home, we can’t know.",
+        now: w.looked ? made : watcherLead(w).could.map((c) => c.odds),
+        tells: ["Its silence tells us little. Something left to watch would watch, and wait."],
+      });
+  return out.sort((a, b) => a.at - b.at);
 }
 
 /** A rock coming, once found, as a lead: how wide, when it strikes, and whether our push turned it aside. Before
@@ -1111,7 +1151,7 @@ export function describeLeads(observe: string[] | undefined, year: number | null
         return `${c.what}, ${now}${now === c.odds ? "" : ` (was ${c.odds})`}`;
       })
       .join("; ");
-    const found = read ? ` Landed at Year ${read.at}, by the ${read.by.toLowerCase()}: ${read.title}. ${read.line}` : "";
+    const found = read ? ` Landed at Year ${yearText(read.at)}, by the ${read.by.toLowerCase()}: ${read.title}. ${read.line}` : "";
     const life = lifeOf(lead, landed(lead.slug, observe, year));
     return `- ${lead.star}, ${lead.what.toLowerCase()}.${found} Our words: ${words}.${life ? ` That something lives there: ${life}.` : ""}`;
   });

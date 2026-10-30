@@ -146,6 +146,8 @@ export interface Show {
       places: { lat: number; lon: number }[];
       orbit?: { km: number; tilt: number; minutes: number; behind?: number };
       km?: number;
+      /** At L2's kind of place, but on the Moon's path, 60° behind it: its L5. 2026-10-30. */
+      lunar?: boolean;
     };
     queued: boolean;
     done: number | null;
@@ -538,13 +540,20 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     new THREE.Vector3().copy(bodyPosition(body, pilot.sky.date)).sub(pilot.sky.earthAU).divideScalar(R_E_AU);
   const planetR = (body: string) => PLANETS.find((x: { name: string }) => x.name === body)!.radius / 6371.0084;
   /** A far site's middle, in Earth radii from Earth: L2's, L4's or a planet's. */
-  const farAt = (site: { on: string; km?: number; body?: string }) =>
-    site.on === "planet" ? planetAt(site.body!) : site.on === "l4" ? l4At(6e6) : l2At(site.km ?? 1.5e6);
+  /** The Moon's L5 today: on its path, 60° behind it, as the Moon's ring is drawn through where it is. */
+  const moonL5 = () => {
+    const u = moonAt.clone().normalize();
+    const v = u.clone().cross(pilot.sky.eN).normalize();
+    return u.multiplyScalar(0.5).addScaledVector(v, Math.sqrt(3) / 2).multiplyScalar(moonAt.length());
+  };
+  const farAt = (site: { on: string; km?: number; body?: string; lunar?: boolean }) =>
+    site.on === "planet" ? planetAt(site.body!) : site.on === "l4" ? l4At(6e6) : site.lunar ? moonL5() : l2At(site.km ?? 1.5e6);
   const Z = new THREE.Vector3(0, 0, 1);
   /** A telescope at L2, where it flies on a halo orbit round L2 drawn across the line to the Sun, 800,000 by 400,000
    *  km, in Earth radii from Earth. At L4, a trojan's loop round it, drawn 1.6 million by 400,000 km to suit L4 as
    *  drawn: ours. */
-  const loopOf = (site: { on: string }) => (site.on === "l4" ? [1.6e6, 4e5] : [800000, 400000]).map((km) => km / 6371.0084);
+  const loopOf = (site: { on: string; lunar?: boolean }) =>
+    (site.on === "l4" ? [1.6e6, 4e5] : site.lunar ? [60000, 20000] : [800000, 400000]).map((km) => km / 6371.0084);
   function haloAt(site: { on: string; km?: number }) {
     const flat = new THREE.Quaternion().setFromUnitVectors(Z, pilot.sky.sunDir);
     const [a, b] = loopOf(site);
@@ -2941,7 +2950,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
           v.set(0, 0, 0).project(earth.camera);
           const k = behind ? -1000 : 1;
           const a = focus.site.on === "l2" || focus.site.on === "l4" || focus.site.on === "planet" ? p : p * ramp(-x, 2.4, 3.2);
-          marks.push({ id: `earth:${focus.site.on === "planet" ? `planet:${focus.site.body}` : focus.site.on}`, x: ((v.x * k + 1) / 2) * w, y: ((1 - v.y * k) / 2) * h, a });
+          marks.push({ id: `earth:${focus.site.on === "planet" ? `planet:${focus.site.body}` : focus.site.lunar ? "moon" : focus.site.on}`, x: ((v.x * k + 1) / 2) * w, y: ((1 - v.y * k) / 2) * h, a });
         }
         spec.onMarks(marks);
       }

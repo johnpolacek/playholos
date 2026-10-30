@@ -47,9 +47,14 @@ export function readDraft(d: unknown): Draft | null {
 const plain = (s: string) => s.toLowerCase().replace(/[’']/g, "'").replace(/\s+/g, " ").trim();
 const TARGETS = targets as { name: string; ra: number; dec: number; d: number }[];
 
-/** A star we can aim at by the name the Mind gave, from every star to 50 ly. The same list in every game. */
+/** The watcher, once found: a knock aimed at it lands within seconds, from the Moon's L5. 2026-10-30. */
+export const WATCHER = { name: "The watcher", ra: 0, dec: 0, d: 1.3 / 3.156e7 };
+
+/** A star we can aim at by the name the Mind gave, from every star to 50 ly, or the watcher. The same list in every
+ *  game. */
 export function target(name: string) {
   const n = plain(name);
+  if (["the watcher", "watcher"].includes(n)) return WATCHER;
   return TARGETS.find((t) => plain(t.name) === n) ?? null;
 }
 

@@ -60,7 +60,12 @@ function found(name: string, k: Known): { line: string; news: boolean } | null {
   }
   const w = m.watcher;
   if (name === "Moon Search" && w?.by === "moon search")
-    return { line: `Found a dark body about 10 cm across at the Moon’s L5, at Year ${yearText(w.seen)}. It holds where no rock should.`, news: recent(w.seen) };
+    return { line: `Found a dark body about 10 cm across at the Moon’s ${w.place.slice(-2)}, at Year ${yearText(w.seen)}. It holds where no rock should.`, news: recent(w.seen) };
+  // Our Close Look: on its way, then what it saw up close. 2026-10-30.
+  if (name === "Close Look" && w)
+    return w.looked
+      ? { line: `Saw it up close at Year ${yearText(w.looked.at)}: near black, with a small mirror held on one point of the sky. It saw us come.`, news: recent(w.looked.at) }
+      : { line: `Flying to the dark body at ${w.by === "moon search" ? `the Moon’s ${w.place.slice(-2)}` : w.place}.`, news: false };
   if (name === "Asteroid Tour" && w?.by === "asteroid tour")
     return { line: `Found something made on ${w.place}, at Year ${yearText(w.seen)}.`, news: recent(w.seen) };
   return null;

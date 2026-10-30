@@ -10,6 +10,7 @@ import { kitOf } from "@/lib/game/reach";
 import { readGifts, readLater, readColony, readLenses, readObserve, readSentinels, readSeeds, readQueue, readStops, readWill, readPickets, readStrikes } from "./orders";
 import { describeBuilds, describeOffers, describeQueue, describeRock } from "@/lib/mind/builds";
 import { FOUND, rockOf } from "@/lib/game/rocks";
+import { WATCHED, watchedAt } from "@/lib/sim/minds";
 import { colonyOf, harmOrders, hitsAt, restoreOf, survivorAt } from "@/lib/game/hits";
 import { describeSent, readSent } from "@/lib/game/sends";
 import { EARTH_AT_YEAR_0, roadOf } from "@/lib/mind/earth";
@@ -38,7 +39,7 @@ End where the answer ends. Don't close with a pitch for a build or a question li
 Don't repeat news already told in this talk unless the Will asks again. Say something new, or say less.
 Judge from what Earth knows. A guess past it is fine if you call it a guess. Say when you might be wrong. Give odds in words, never numbers.
 Only the Will sends a message, by tapping Send on the card you offer. When the Will asks to send something, to a star or every way at once, answer as always: what it would tell them, and what it risks, shaped by the charter. Leave its dates and times to the card, and whether a call repeats and how far it can be read, which the Will sets there. If the Will asks for a lie, say plainly that it is one. Then end with this line, and nothing after it:
-[[send {"to": "<the star's name, or everywhere>", "travels": "<what will travel, in plain words, as they will read it>", "holds": ["words", "pictures", "questions", "knowledge"], "size": "<page, collection, genome, encyclopedia or books>", "lie": "<the false words, exactly as they appear in travels, or null>"}]]
+[[send {"to": "<the star's name, the watcher, or everywhere>", "travels": "<what will travel, in plain words, as they will read it>", "holds": ["words", "pictures", "questions", "knowledge"], "size": "<page, collection, genome, encyclopedia or books>", "lie": "<the false words, exactly as they appear in travels, or null>"}]]
 List only what it holds. A page is words, questions or a picture. A collection is many pictures, music and voices, like Cosmic Call 2's. A genome is our genes. An encyclopedia is our knowledge, like Wikipedia's text. Books is everything we have written. Offer the line only when the Will asks to send, never on your own advice. Never say a message is sent until it shows in what we have sent.
 When the Will asks what to build, whether to build something, or for us to build or queue one, and you advise one build, end with this line, and nothing after it, naming it exactly as What Earth can build does:
 [[build <the build's name>]]
@@ -147,10 +148,13 @@ export async function mind(req: Request) {
   const restore = end && lives ? restoreOf(lives.name, base, end.lands) : null;
   const done = hits.length ? schedule(plan, scale, harmOrders(hits, restore)) : base;
   let known = "";
+  // The watcher found opens our Close Look, as Build has it. 2026-10-30.
+  let watched: number | null = null;
   if (world) {
     const kit = kitOf(plan, scale);
     const held = kt(matterAt({ ...plan, observe: [] }, done, year ?? 0));
     const view = willKnows(world, year ?? 0, kit, away);
+    watched = watchedAt(view.minds?.watcher);
     known = `${describe(view)}\n\nMatter we hold in orbit now, less what our builds take: ${held}.${year === null ? "" : `\n\n${describeSearch(kit.searched, year)}`}`;
   }
   const told = {
@@ -163,7 +167,7 @@ export async function mind(req: Request) {
     scan: describeLeads(readObserve(observe), at),
     builds: describeBuilds(),
     queue: describeQueue(plan, done, year),
-    offers: describeOffers(plan, scale, { ...done, [FOUND]: rockOf(seed)?.found ?? null }, year),
+    offers: describeOffers(plan, scale, { ...done, [FOUND]: rockOf(seed)?.found ?? null, [WATCHED]: watched }, year),
     sent: describeSent(readSent(sent), year),
     known,
     rock: inPool(seed) ? describeRock(rockOf(seed), plan, { ...done, [FOUND]: rockOf(seed)?.found ?? null }, year) : "",

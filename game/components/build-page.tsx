@@ -13,6 +13,7 @@ import { CLOSE } from "@/lib/game/close";
 import {
   BUILDS,
   buildSlug,
+  EVENTS,
   keptOf,
   lacks,
   LATER,
@@ -28,6 +29,7 @@ import {
   PAST,
 } from "@/lib/game/plan";
 import { GROWS, grownDone, grownSpans } from "@/lib/game/halo";
+import { WATCHED } from "@/lib/sim/minds";
 import { SWARM } from "@/lib/sim/conflict";
 import { HE3, he3By } from "@/lib/sim/meetings";
 import { CATALOG } from "@/lib/sim/works";
@@ -264,7 +266,7 @@ export function Waits({ build, scale, done }: { build: Later; scale: number; don
   const now = orderAt === null ? null : tenths(orderAt);
   // Its last order, while it stands in our order.
   const order = ordered(plan).includes(build.name) ? plan.later?.filter((o) => o.name === build.name).at(-1) : undefined;
-  const by = ordered(plan).includes(build.after) || build.after === FOUND ? done[build.after] : undefined;
+  const by = ordered(plan).includes(build.after) || EVENTS.includes(build.after) ? done[build.after] : undefined;
   const open = now !== null && by != null && now >= by;
   // Its Year if we order it now, last in line.
   const when = useMemo(
@@ -290,7 +292,7 @@ export function Waits({ build, scale, done }: { build: Later; scale: number; don
       <div className="flex flex-col">
         {build.after === FOUND && <RockLine done={done} />}
         <p className="mt-2.5 text-[13px] leading-snug text-page-ink2">
-          Open since Year {yearText(by)}, {build.after === FOUND ? "when we found a rock coming" : `after the ${build.after}`}.{" "}
+          Open since Year {yearText(by)}, {build.after === FOUND ? "when we found a rock coming" : build.after === WATCHED ? "when we found the watcher" : `after the ${build.after}`}.{" "}
           {when == null ? "Ordered now, it would be done after Year 1,000." : `Ordered now, it would be done by Year ${yearText(when)}, in ${span(when - now)}.`}
         </p>
         <button
@@ -309,6 +311,16 @@ export function Waits({ build, scale, done }: { build: Later; scale: number; don
           <LockMark size={13} />
         </span>
         <span>Opens only if our surveys find a rock coming at Earth.</span>
+      </p>
+    );
+  // And the Close Look, only once our searches find something watching where a craft can reach it. 2026-10-30.
+  if (build.after === WATCHED)
+    return (
+      <p className="mt-2.5 flex items-start gap-1.5 text-[13px] leading-snug text-page-ink2">
+        <span className="mt-[2px] text-muted">
+          <LockMark size={13} />
+        </span>
+        <span>Opens only if our Moon Search or Asteroid Tour finds something watching us.</span>
       </p>
     );
   const after = (

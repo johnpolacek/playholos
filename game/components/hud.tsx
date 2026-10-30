@@ -4,6 +4,7 @@ import { useGame } from "@/components/game-provider";
 import { Menu } from "@/components/menu";
 import { useShown } from "@/components/costs";
 import { useSchedule } from "@/components/picks";
+import { LONG_QUIET, Quiet } from "@/components/quiet";
 import { realTime, tenths, yearText, YEAR_0 } from "@/lib/game/clock";
 import { ceiling, drawAt, kt, matterAt, ordered, schedule, searchOf, sharesAt, shortAt } from "@/lib/game/plan";
 import { combedAt } from "@/lib/sim/works";
@@ -64,6 +65,8 @@ function Meter({
  *  The clock still runs at 5 minutes a Year without it. 2026-10-29. */
 function Skip() {
   const { save, year, skipTo } = useGame();
+  // A skip past a long quiet says what passed. 2026-10-30.
+  const [leap, setLeap] = useState<{ from: number; to: number } | null>(null);
   const tenth = year === null ? null : Math.floor(year * 10) / 10;
   // Undefined while we ask, null once the server says nothing comes. 2026-10-30.
   const [next, setNext] = useState<number | null | undefined>(undefined);
@@ -78,21 +81,35 @@ function Skip() {
       .then((v: { next: number | null } | null) => live && setNext(v ? v.next : undefined), () => live && setNext(undefined));
     return () => void (live = false);
   }, [seed, query, tenth]);
+  const quiet = leap && <Quiet from={leap.from} to={leap.to} onClose={() => setLeap(null)} />;
   // A stop behind us is stale, while the server answers for the Year we skipped to.
-  if (tenth === null || next === undefined || (next !== null && next <= tenth)) return null;
+  if (tenth === null || next === undefined || (next !== null && next <= tenth)) return quiet;
   // The link vanished with no word until 2026-10-30, and players thought it broke.
   if (next === null)
     return (
-      <span className="ml-2 text-muted" title="Nothing new comes in the next 100,000 Years unless we order it. The clock runs on.">
-        Nothing ahead
-      </span>
+      <>
+        <span className="ml-2 text-muted" title="Nothing new comes in the next 100,000 Years unless we order it. The clock runs on.">
+          Nothing ahead
+        </span>
+        {quiet}
+      </>
     );
   // Shown and landed in tenths, as the Year is: a stop within the tenth we're in lands on the next tenth.
   const to = Math.max(Math.ceil(next * 10 - 1e-9) / 10, tenth + 0.1);
   return (
-    <button onClick={() => skipTo(to)} className="ml-2 text-you" title="Jump ahead to when something new happens">
-      Next: Year {yearText(to)} ›
-    </button>
+    <>
+      <button
+        onClick={() => {
+          setLeap(to - tenth >= LONG_QUIET ? { from: tenth, to } : null);
+          skipTo(to);
+        }}
+        className="ml-2 text-you"
+        title="Jump ahead to when something new happens"
+      >
+        Next: Year {yearText(to)} ›
+      </button>
+      {quiet}
+    </>
   );
 }
 
@@ -122,13 +139,13 @@ export function Hud() {
   return (
     <header
       data-shell="top"
-      className="grid shrink-0 grid-cols-[1fr_auto] items-baseline gap-x-4 gap-y-1.5 border-b border-faint bg-paper px-4 pt-4 pb-3 wide:col-span-2 wide:grid-cols-[auto_1fr_auto] wide:gap-x-10 wide:px-6 wide:py-3"
+      className="relative grid shrink-0 grid-cols-[1fr_auto] items-baseline gap-x-4 gap-y-1.5 border-b border-faint bg-paper px-4 pt-4 pb-3 wide:col-span-2 wide:grid-cols-[auto_1fr_auto] wide:gap-x-10 wide:px-6 wide:py-3"
     >
       <div className="row-span-2 self-center">
         <Menu />
       </div>
       <span data-year className="text-right text-[15px] font-medium wide:col-start-3">
-        {!save ? "" : `Year ${y ?? 0}`}
+        {!save ? "" : `Year ${yearText(y ?? 0)}`}
       </span>
       <span className="text-right text-xs text-muted wide:col-start-3">
         {/* Before Begin, the count of what we would do first, which opens Begin. */}

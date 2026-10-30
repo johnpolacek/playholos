@@ -2,6 +2,7 @@
 // data/works.json, paced by lib/sim/works.ts from the player's own order, so every date on the screen is the game's.
 // The Mind names what it would start with only when asked, 2026-10-19, and never queues anything itself.
 import { FOUND } from "./rocks";
+import { WATCHED } from "@/lib/sim/minds";
 import { BULLET, SCREEN } from "@/lib/sim/conflict";
 import { plainBuild } from "./build-offer";
 import { KNOCKS } from "./knocks";
@@ -138,6 +139,8 @@ export const LATER: Later[] = [
     does: "keep",
     after: FOUND,
   },
+  // The watcher found, 2026-10-30: a small craft flies to look at it up close, once we know where it sits.
+  { name: "Close Look", what: "A small craft that flies to the watcher and looks at it up close.", does: "see", after: WATCHED },
   // Sends the Will to our Mind at a black hole, as a transmission, 2026-10-26. calcs/holes.py.
   { name: "Mind Link", what: "A laser 100 m wide, to send the Will to our Mind far away.", does: "reach", after: "Seed Ship" },
   // The cold compute annex at scale, 2026-10-26: chips run cold behind a shade, on sunlight caught beside them.
@@ -189,6 +192,8 @@ export const SAYS: Record<string, string> = {
     "It would read the air of the nearest worlds. Oxygen can build up without life, so we would weigh it against the water and everything else we read.",
   "Asteroid Tour":
     "Six known asteroids share Earth’s orbit, circling the Sun beside us for centuries. Something left to watch us could ride one. A probe maps each whole surface to centimeters in a Year, then flies on: Kamoʻoalewa first, Cruithne last, 11 Years in all. A watcher floating free at the Sun–Earth L4 or L5 points it can’t find: those zones are tens of millions of km wide.",
+  "Close Look":
+    "We know where it sits now. A craft the size of CAPSTONE, with a sharp camera, flies there in about 4 months, or a Year to a rock beside us, and looks from a few kilometers. It would see what it is made of and how it holds. It would also see us come.",
   "Moon Search":
     "Sixty degrees ahead of the Moon and behind it, its pull and Earth’s balance, and a small thing can sit there for ages. Something left to watch us could. Stacked over 3 Years, Rubin-class images reach magnitude 28, enough to see a dark object about 10 cm wide there. Anything farther out it can’t see.",
   "Warm Sky Watch":
@@ -288,6 +293,7 @@ const FIRST: Record<string, string> = {
   "Far-Side Array": "Far-side array, one fifth",
   "Warm Sky Watch": "Warm sky watch",
   "Moon Search": "Moon search",
+  "Close Look": "Close look",
   "Halo Array": "Halo array",
   "Asteroid Tour": "Asteroid tour",
 };
@@ -590,6 +596,9 @@ export function needOf(name: string, all: number, scale = 1) {
   return want / all;
 }
 
+/** What opens a build that waits on something found, not built: a rock coming, or the watcher. */
+export const EVENTS = [FOUND, WATCHED];
+
 /** What we can order in play, and haven't: Year 0's builds, and each build that waits, once what it waits on is
  *  done. */
 export function openAt(plan: Plan, done: Record<string, number | null>, year: number) {
@@ -598,7 +607,7 @@ export function openAt(plan: Plan, done: Record<string, number | null>, year: nu
   // back did, and one left out at Begin could never be built.
   return [
     ...BUILDS.filter((b) => !ours.includes(b.name)),
-    ...LATER.filter((b) => !ours.includes(b.name) && (takenAt(plan, b.name) !== null || ((ours.includes(b.after) || b.after === FOUND) && (done[b.after] ?? Infinity) <= year))),
+    ...LATER.filter((b) => !ours.includes(b.name) && (takenAt(plan, b.name) !== null || ((ours.includes(b.after) || EVENTS.includes(b.after)) && (done[b.after] ?? Infinity) <= year))),
   ];
 }
 

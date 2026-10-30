@@ -29,6 +29,8 @@ export interface Site {
   orbit?: { km: number; tilt: number; minutes: number; behind?: number };
   /** At L2: how far out from Earth, in km. */
   km?: number;
+  /** Out from Earth as L2 is, but on the Moon's path at its L5. 2026-10-30. */
+  lunar?: boolean;
 }
 
 /** A build's story: what we have at Year 0, where it stands, why there, what it takes, and who tried before us. How
@@ -118,6 +120,18 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
       why: "Six known asteroids share our orbit and stay near us for centuries. Anything left to watch us could ride one, and only a probe in orbit round each sees something a few centimeters across.",
       takes: "One probe of Tianwen-2’s class, about $500 million, 5 Years to build. A Year to the first rock, then 2 Years each.",
       before: "Kamoʻoalewa, 40 to 100 m wide, may be a piece of our Moon thrown off long ago. Benford 2019 named such rocks as where a watcher could sit.",
+    },
+  },
+  "Close Look": {
+    // Where the watcher sits: the Moon's L4 or L5, as far out as the Moon, or a rock beside Earth's orbit. 2026-10-30.
+    // On the Moon's own path, drawn at its L5, 60° behind it.
+    site: { on: "l2", draw: "ring", places: [{ lat: 0, lon: 0, name: "The Moon’s L4 or L5, 384,000 km out" }], km: 384_400, lunar: true },
+    story: {
+      have: "CAPSTONE, a 25 kg craft, reached its orbit round the Moon in 2022 after 4 months on a low-energy path, for about $30 million. Nothing has looked at the Moon’s L4 or L5 points up close.",
+      where: "Flown from Earth to wherever the watcher sits, and held a few kilometers from it.",
+      why: "From Earth it is a faint dot. A camera a few kilometers off sees its shape, its surface and how it holds its place.",
+      takes: "One small craft of CAPSTONE’s class with a sharp camera, about $50 million, 2 Years to build. About 4 months to the Moon’s L4 or L5, or a Year to a rock beside us.",
+      before: "No one has sent a craft to meet something made elsewhere. Whatever it is will see ours come.",
     },
   },
   "Moon Search": {

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { Link } from "react-router";
 import { useGame } from "@/components/game-provider";
 import { CostLine, previews, usePreview } from "@/components/costs";
@@ -7,6 +7,7 @@ import { OpensLine } from "@/components/opens";
 import { Face, ListHead } from "@/components/tab-head";
 import { span, tenths } from "@/lib/game/clock";
 import { FOUND, rockOf } from "@/lib/game/rocks";
+import { WATCHED } from "@/lib/sim/minds";
 import { colonyOf, harmOrders, hitsAt, restoreOf, survivorAt } from "@/lib/game/hits";
 import { target } from "@/lib/game/sends";
 import type { EarthPast } from "@/lib/game/past";
@@ -50,6 +51,17 @@ function useEarth() {
   return past;
 }
 
+// The Year we found the watcher where a craft can reach it, as Scan hears it from the server: it opens the Close Look,
+// as a rock found opens the deflector. Kept here, since Scan's leads read the schedule too. 2026-10-30.
+let watched: number | null = null;
+const hearing = new Set<() => void>();
+export function setWatched(at: number | null) {
+  if (at === watched) return;
+  watched = at;
+  hearing.forEach((f) => f());
+}
+const hear = (f: () => void) => (hearing.add(f), () => void hearing.delete(f));
+
 /** This game's Earth, from the server, and when each queued build is done with the compute it has. Until the Earth
  *  comes, the dates are at today's compute. */
 export function useSchedule() {
@@ -60,7 +72,11 @@ export function useSchedule() {
   // A rock coming opens the Rock Deflector the Year a survey finds it, as a build opens once another is done.
   const seed = save?.seed;
   const found = seed === undefined ? null : (rockOf(seed)?.found ?? null);
-  const base = useMemo((): Record<string, number | null> => ({ ...schedule(plan, scale), [FOUND]: found }), [plan, scale, found]);
+  const seenAt = useSyncExternalStore(hear, () => watched);
+  const base = useMemo(
+    (): Record<string, number | null> => ({ ...schedule(plan, scale), [FOUND]: found, [WATCHED]: seenAt }),
+    [plan, scale, found, seenAt],
+  );
   // Strikes landed on us by now cut our thought from the Year each landed, and only from then. 2026-10-28.
   const { year } = useGame();
   const tenth = year === null ? null : Math.floor(year * 10) / 10;
@@ -76,8 +92,8 @@ export function useSchedule() {
   }, [hits, base, plan, scale]);
   const harm = useMemo(() => harmOrders(hits, restore), [hits, restore]);
   const done = useMemo(
-    (): Record<string, number | null> => (harm.length ? { ...schedule(plan, scale, harm), [FOUND]: found } : base),
-    [harm, plan, scale, found, base],
+    (): Record<string, number | null> => (harm.length ? { ...schedule(plan, scale, harm), [FOUND]: found, [WATCHED]: seenAt } : base),
+    [harm, plan, scale, found, seenAt, base],
   );
   return { past, scale, done, hits, lives, restore };
 }

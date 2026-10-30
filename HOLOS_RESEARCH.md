@@ -2373,6 +2373,16 @@ For a player’s plan: Mercury mined, its light beamed, giant telescopes at the 
   - The swarm’s shape: a launch spread of 0.3 km/s, a sample, spreads Mercury’s 88-day period by 3 dv/v, 1.9%, so the arc widens about 28° a Year. One layer of collectors covering a share f of the sky fills a band with sin b = f. Earth’s shadow cone through the shell is about (R_E / AU)² / 4, 5×10⁻¹⁰ of it.
   - Used: Mercury Works, the Solar Swarm, the Star Beam and the Hypertelescope, in [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md#parity-what-a-neighbor-can-do-we-can-build).
 
+### A close look at the watcher, 2026-10-30
+
+- **NASA’s CAPSTONE, 2022** · Flown mission. From memory, not checked.
+  - A 25 kg craft built by Terran Orbital for Advanced Space, launched June 2022 on an Electron. It took about 4 months on a low-energy path to its orbit round the Moon, arriving in November 2022. About $30 million with its launch, and under 3 years from contract to launch.
+  - Matters: our Close Look is one craft of its class with a sharp camera, about $50 million and 2 Years to build, a sample. About 4 months to the Moon’s L4 or L5, and a Year to a co-orbital rock, as Tianwen-2 took to Kamoʻoalewa.
+- **What it sees: a mirror held on one point of the sky** · This project’s reasoning, not a source.
+  - A 1 kg watcher that reports home by laser needs an aperture held on its maker. From a few kilometers, a 2 cm mirror shows, and which way it points. That gives the maker’s direction, never its distance or who.
+  - Used: `game/lib/sim/minds.ts` `watcherOf()`, the watcher lead’s reading, and the Mind’s brief. The direction is the nearest old mind’s, which is its maker in every game.
+- Used: the Close Look, a build since 2026-10-30, opened by the watcher found, as a rock found opens the Rock Deflector.
+
 ## Watch list
 
 Results the design is waiting on. Check each when its date comes.

@@ -119,6 +119,10 @@
    "years": 1,
    "want": 0.01
   },
+  "Close look": {
+   "years": 2,
+   "want": 0.005
+  },
   "Asteroid tour": {
    "years": 5,
    "want": 0.05

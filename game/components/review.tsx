@@ -6,7 +6,7 @@ import { Lens } from "@/components/icons";
 import { MindNote } from "@/components/mind-note";
 import { LeadMark } from "@/components/marks";
 import { useLeads, useStepTap } from "@/components/scan";
-import { span, lyOf } from "@/lib/game/clock";
+import { span, lyOf, yearText } from "@/lib/game/clock";
 import { starName } from "@/lib/game/leads";
 import {
   gsap,
@@ -215,7 +215,7 @@ export function Review({ onClose }: { onClose(): void }) {
                 {read ? (
                   <>
                     <b className="font-semibold">
-                      {read.title}, Year {read.at}.
+                      {read.title}, Year {yearText(read.at)}.
                     </b>{" "}
                     {read.mind}
                   </>

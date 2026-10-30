@@ -148,7 +148,8 @@ export function WorksMap({ className }: { className: string }) {
     const m = moonOffset(new Date());
     return (Math.hypot(m.x, m.y, m.z) * AU_KM) / 299792.458;
   });
-  const l2 = (list.find((w) => w.site.on === "l2")?.site.km ?? 1.5e6) / 299792.458;
+  // A site on the Moon's path is as far as the Moon, and labeled so.
+  const l2 = (list.find((w) => w.site.on === "l2" && !w.site.lunar)?.site.km ?? 1.5e6) / 299792.458;
   const l4 = (list.find((w) => w.site.on === "l4")?.site.km ?? 149_597_871) / 299792.458;
   // From a planet, Earth is light-minutes away, as far as it is today. 2026-10-29.
   const [planet] = useState(() => {

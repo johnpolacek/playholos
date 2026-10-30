@@ -20,6 +20,8 @@ export interface MindKit {
   moonSearch?: number | null;
   /** The asteroid tour: the Year its probe reaches the first Earth co-orbital asteroid. It maps each in turn. */
   asteroidTour?: number | null;
+  /** The Year our Close Look is built: a small craft that flies to the watcher once we know where it sits. */
+  closeLook?: number | null;
   /** The Year our first seed ship leaves: the watcher warns us, and so shows itself. */
   firstSeed?: number | null;
   /** Our craft at other stars: where, in atlas light-years, the Year it arrives, and whether it brakes and stays. */
@@ -51,6 +53,9 @@ export interface WatcherSeen {
   place: string;
   seen: number;
   by: "moon search" | "asteroid tour" | "its warning";
+  /** What our Close Look saw up close, and when its word came home: a small mirror held on one point of the sky, the
+   *  way home its reports would go. Where its maker lies, never how far, or who. 2026-10-30. */
+  looked?: { at: number; ra: number; dec: number };
 }
 
 /** A compact warm body resting in the cold outer reaches of another star's system. */
@@ -82,6 +87,14 @@ export const TOUR_MAP = 1;
 /** The Year each survey ends, from the Year it was built: the search once stacked, the tour at its last rock mapped. */
 export const moonSearchEnds = (built: number) => built + MOON_SEARCH_YEARS;
 export const tourEnds = (built: number) => built + (CO_ORBITALS.length - 1) * TOUR_EACH + TOUR_MAP;
+/** Years our Close Look flies to the watcher: about 4 months to the Moon's L5 on a low-energy path, as CAPSTONE took
+ *  to its lunar orbit, and a Year to a co-orbital rock, as Tianwen-2 to Kamoʻoalewa. */
+export const CLOSE_FLIGHT = { moon: 0.3, rock: 1 } as const;
+/** The event that opens our Close Look: the watcher found where a craft can reach it. */
+export const WATCHED = "The watcher found";
+/** The Year a found watcher opens our Close Look, or null: one known only by its warning sits where no craft finds it. */
+export const watchedAt = (w: WatcherSeen | null | undefined) => (w && w.by !== "its warning" ? w.seen : null);
+
 /** How near a flyby's path must pass a sleeping mind for its 1 m telescope to see it, in AU. */
 export const FLYBY_SEES_AU = 50;
 /** Years a probe that stays takes to map a whole system. */
@@ -172,7 +185,12 @@ export function watcherOf(world: World, kit: MindKit, year: number): WatcherSeen
   if (at >= 0 && kit.asteroidTour != null) ways.push({ place: w.rock!, seen: kit.asteroidTour + at * TOUR_EACH + TOUR_MAP, by: "asteroid tour" });
   if (kit.firstSeed != null) ways.push({ place: w.place, seen: kit.firstSeed, by: "its warning" });
   const first = ways.filter((x) => x.seen <= year).sort((a, b) => a.seen - b.seen)[0];
-  return first ?? null;
+  if (!first) return null;
+  // Up close, its mirror shows which way its reports go: toward its maker, the nearest old mind. 2026-10-30.
+  const maker = world.minds?.old.find((o) => o.id === w.maker);
+  if (kit.closeLook == null || watchedAt(first) === null || !maker) return first;
+  const home = Math.max(kit.closeLook, first.seen) + (first.by === "moon search" ? CLOSE_FLIGHT.moon : CLOSE_FLIGHT.rock);
+  return home <= year ? { ...first, looked: { at: home, ...skyOf(maker.pos) } } : first;
 }
 
 /** A sleeping old mind, found only by our craft in its system: one that stays always finds it, a flyby only if the

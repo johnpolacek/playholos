@@ -146,6 +146,10 @@ Settled 2026-10-28, one step at a time. The premise itself, how many minds exist
   - *An Earth co-orbital asteroid:* the Asteroid Tour, one probe of Tianwen-2’s class, maps each of the six known in turn: Kamoʻoalewa, 2023 FW13, 2002 AA29, 2004 GU9, 2006 FV35, Cruithne. 0.05 flagships, about $500 million, a sample. 5 Years to build, a Year to the first rock, then 2 Years each. The seed draws which rock.
   - Set aside: a fleet of about 100 small probes sweeping the Sun–Earth zones for decades, about $2 billion and still unlikely to find it.
   - *Anywhere,* its warning at our first seed launch reveals it.
+  - *Once found, two moves, settled 2026-10-30.* A playtest found the watcher a dead end: its lead offered a craft and a knock, and Build had neither.
+    - *The Close Look:* a craft of CAPSTONE’s class, about $50 million, 2 Years to build, a sample. It flies about 4 months to the Moon’s L4 or L5, or a Year to a co-orbital rock. Up close it sees a 2 cm mirror held on one point of the sky, the way home its reports go: its maker’s direction, never how far, or who. It opens only once the watcher is found where a craft can reach it, and the watcher sees it come.
+    - *A knock:* a message aimed at the watcher, through the send card. It lands in seconds. The watcher answers on its own terms, which in every game so far means silence. Whether it passes word home is the maker’s to know, not ours. The ladder’s triggers stay seeds alone.
+    - Set aside: taking or breaking it. By parity we could, and its maker would learn when its reports stop. Left for later.
   - Set aside: one generic search that finds it anywhere after set Years.
 - **Way 4: an asleep old mind, found only up close.** Settled 2026-10-29.
   - *Asleep, it folds up small.* A swarm left spread in starlight warms and glows asleep or not: 10²² m² at 540 AU from a Sun soaks up about 5×10¹⁹ W. So a sleeping mind stows itself compact and out of the light, as Sandberg et al. store theirs cold. Corrects “asleep, it hangs dark” in the Elders section below.
@@ -165,6 +169,7 @@ Settled 2026-10-28, one step at a time. The premise itself, how many minds exist
   - *Multiplayer, later:* each player keeps their own clock, never more than light-time ahead of another. Hundreds of light-years apart, that limit almost never binds, so no turns are needed.
   - Set aside: a faster fixed clock, which blurs early builds, and fully player-set speed.
   - *Built 2026-10-29:* a “Next: Year …” link by the Year jumps there. The server finds the soonest thing Earth will learn within 100,000 Years, or a build we finish, and says when, never what. A skip moves Begin back, so the clock runs on from the new Year.
+  - *A long quiet, said, 2026-10-30.* A skip of more than 100 Years shows what passed: the span drawn filling, the watches that stood through it, and the Mind’s word on why the sky is quiet. A playtest skipped 37,197 Years in one press and read it as nothing happening.
   - *Checked 2026-10-29 in a headless browser:* seed 10 skipped from Year 0 past 50,000 in ten jumps of about a second each, with no console errors. Seed 15 stopped at its rock’s discovery, Year 46.3, and its strike, 66.6. A rock’s Years are stops too. Stops land on the next tenth of a Year, as the clock shows it.
 - **Life is common, minds are not.** The ladder in [How Earth learns](#how-earth-learns) stands: life starts on 3 airy worlds in 4, and climbs at Earth’s pace as its world allows.
   - *3 in 4 is this project’s sample.* Kipping 2025’s 13 to 1 is the odds that life starts fast where conditions are Earth-like, not a share of worlds. The sample follows it.

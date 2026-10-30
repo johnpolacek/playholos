@@ -43,6 +43,8 @@ export interface Kit {
   warmWatch?: number | null;
   haloArray?: number | null;
   moonSearch?: number | null;
+  /** Our Close Look, built once the watcher is found. 2026-10-30. */
+  closeLook?: number | null;
   asteroidTour?: number | null;
   craft?: MindKit["craft"];
 }
@@ -202,7 +204,7 @@ export function iscoClock(spin: number) {
 export function earthKnows(
   world: World,
   year: number,
-  { telescope = null, mirror = null, halo = null, mapper = null, hyper = null, lenses = [], sentinels = [], seeds = [], colony = null, sails = null, probe = null, warmWatch = null, haloArray = null, moonSearch = null, asteroidTour = null, craft = [] }: Kit = {},
+  { telescope = null, mirror = null, halo = null, mapper = null, hyper = null, lenses = [], sentinels = [], seeds = [], colony = null, sails = null, probe = null, warmWatch = null, haloArray = null, moonSearch = null, asteroidTour = null, closeLook = null, craft = [] }: Kit = {},
 ): EarthView {
   const shown = (id: string) => world.stars[id]?.shown ?? id;
   // Earth's finds at Year 0: every world whose tug shows by 2040. Measured, not understood. Its star is in the catalogs.
@@ -301,7 +303,7 @@ export function earthKnows(
   visits.sort((a, b) => a.home - b.home);
   // The realistic premise's minds, as far as we have found them. 2026-10-29.
   const firstSeed = seeds.length ? Math.min(...seeds.map((s) => s.leaves)) : null;
-  const minds = mindsSeen(world, { telescope, warmWatch, halo, haloArray, moonSearch, asteroidTour, firstSeed, craft }, year);
+  const minds = mindsSeen(world, { telescope, warmWatch, halo, haloArray, moonSearch, asteroidTour, closeLook, firstSeed, craft }, year);
   const anyMind = minds.flashes.length || minds.glows.length || minds.watcher || minds.sleepers.length;
   return {
     year, felt, heard: [], visits,
@@ -610,6 +612,19 @@ function describeMinds(m: MindsSeen, one: (x: number) => string): string {
           ? `On ${w.place}, our Asteroid Tour found a made thing about 10 cm across, at Year ${yearText(w.seen)}: smooth, dark and not of the rock. It has been there a long time. It sends nothing we can hear.`
           : `A narrow laser signal aimed at Earth from ${w.place}, beginning at Year ${yearText(w.seen)}, the Year our first seed ship left. Its timing reads as an answer to that ship. It comes from something small that we never found there.`,
     );
+    // Our Close Look's word, and a knock the Will may send it. 2026-10-30.
+    if (w.looked)
+      out.push(
+        `Our Close Look reached it and sent word home at Year ${yearText(w.looked.at)}. Up close it is near black, about 10 cm across, with a mirror about 2 cm wide held on one point of the sky, ${sky(w.looked)}, turning as the Earth and Moon turn to keep it there. ` +
+          "A thing that reports home by laser would aim so. Whoever sent it likely lies that way, at a distance we can't tell, and we can't tell who. It surely saw our craft come.",
+      );
+    else if (w.by !== "its warning")
+      out.push(
+        "Finding it opened a new build, the Close Look: a small craft of CAPSTONE's class with a sharp camera, 2 Years to build, then about 4 months' flight to the Moon's L4 or L5 or a Year to a rock beside us. " +
+          "From a few kilometers it would see what the body is made of and how it holds. It would also see our craft come.",
+      );
+    if (w.by !== "its warning")
+      out.push(`The Will can knock on it, with a message aimed at "the watcher". It lands within seconds. What it does with a knock, and whether it passes word home, we can't know.`);
   }
   if (m.sleepers.length)
     out.push(

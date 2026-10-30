@@ -12,7 +12,7 @@ import { VisitArt } from "@/components/visit-art";
 import { isHole, skyId, starName, visitReading } from "@/lib/game/leads";
 import { Face, ListHead } from "@/components/tab-head";
 import { HISTORY } from "@/lib/game/charter";
-import { span, lyOf } from "@/lib/game/clock";
+import { span, lyOf, yearText } from "@/lib/game/clock";
 import { buildSlug, moves } from "@/lib/game/plan";
 import {
   colonyRoad,
@@ -265,7 +265,7 @@ export function DestinationPage({ slug }: { slug: string }) {
               <VisitArt sight={v.sight} elder={v.elder} size={96} />
               <div className="min-w-0">
                 <span className="font-mono text-[10px] tracking-[.1em] text-other uppercase">
-                  {v.world} · {r.by} · Year {r.at}
+                  {v.world} · {r.by} · Year {yearText(r.at)}
                 </span>
                 <h2 className="mt-0.5 text-[16px] leading-snug font-semibold">{r.title}</h2>
                 <p className="mt-0.5 text-[13px] leading-snug text-page-ink2">{r.line}</p>
