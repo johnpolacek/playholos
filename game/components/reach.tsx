@@ -10,6 +10,7 @@ import { SkyArt } from "@/components/sky";
 import { Face, ListHead } from "@/components/tab-head";
 import type { Dials, Mark as Place } from "@/lib/drift";
 import { YEAR_0, lyOf } from "@/lib/game/clock";
+import { LANDMARKS } from "@/lib/game/landmarks";
 import { visitReading } from "@/lib/game/leads";
 import { lean, type moves } from "@/lib/game/plan";
 import {
@@ -176,6 +177,7 @@ const NAMES: Record<string, string> = {
  *  Distances are the atlas's: GRAVITY 2022 for the center, the Local Volume Database for the rest. The odds on
  *  Andromeda are Sawala et al. 2025. */
 const SIGHTS: Record<string, { name: string; line: string }> = {
+  ...Object.fromEntries(LANDMARKS.map(({ id, name, line }) => [id, { name, line }])),
   gc: {
     name: "The Milky Way’s center · 27,000 light-years",
     line: "Its bulge and long bar, behind dust. At its heart is Sagittarius A*, a black hole of four million Suns.",

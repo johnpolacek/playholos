@@ -1324,6 +1324,15 @@ Added 2026-10-28, for [The realistic premise](HOLOS_GAME_CONCEPT.md#the-realisti
 - **Smart et al. 2021, the Gaia Catalogue of Nearby Stars** · Published, A&A 649, A6. Count checked 2026-10-29: 331,312 objects within 100 pc from Gaia EDR3, downloaded from ESA’s Gaia archive. 300,098 have median positions inside 326 ly. Within 100 ly it holds 9,281, below the disk model’s 12,000, since it misses the faintest brown dwarfs.
   - Matters: a real, complete census to 326 ly, small enough to ship in a browser.
   - Used: [Real stars to 326 ly](HOLOS_GAME_CONCEPT.md#the-realistic-premise), the game’s star catalog. Check its counts against the disk model below.
+- **Landmarks, 2026-10-29.** For [Known landmarks sit at their real places](HOLOS_GAME_CONCEPT.md#the-realistic-premise), in game/lib/game/landmarks.ts.
+  - **Positions:** SIMBAD, through the Harvard mirror since CDS was unreachable, for the clusters and nebulae. Gaia DR3 for the black holes’ companion stars, sources 4318465066420528000 (BH3) and 5870569352746779008 (BH2).
+  - **Cluster distances:** SIMBAD’s parallaxes. The Hyades 21.05 mas, 155 ly. The Pleiades 7.36 mas, 443 ly. The Beehive 5.37 mas, 607 ly.
+  - **Baumgardt and Vasiliev 2021, globular cluster distances** · Published, MNRAS. From memory, not checked. Omega Centauri 5.43 kpc, 47 Tucanae 4.52 kpc. SIMBAD’s parallaxes give 5.2 and 4.3 kpc, within 5%.
+  - **Kounkel et al. 2017, the Orion Nebula at 388 pc** · Published, ApJ, by VLBA parallaxes. From memory, not checked. Menten et al. 2007 gave 414 pc.
+  - **The Crab Nebula at about 2 kpc** · Long-standing estimate, from memory, not checked.
+  - **Gaia BH3, Gaia Collaboration (Panuzzo et al.) 2024** · Published, A&A. From memory, not checked. 33 Suns at 590 pc. Gaia DR3’s own parallax, 1.64 mas, gives 608 pc.
+  - **Gaia BH2, El-Badry et al. 2023** · Published, MNRAS. From memory, not checked. About 9 Suns at 1.16 kpc, a red giant on a 1,277-day orbit. DR3’s single-star parallax, 0.67 mas, is unreliable for this binary.
+  - Gaia BH1 is already a destination, logged with El-Badry et al. 2023.
 - **Star counts, this project’s model.** An exponential thin disk: 0.1 stars per cubic parsec here, 300 pc scale height, 2.6 kpc scale length. It gives about 1,500 stars within 50 ly, matching the census, and 8.5 million within 1,000 ly. Check against Gaia before building the wider catalog.
 
 ## Elders

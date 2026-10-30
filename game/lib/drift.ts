@@ -9,6 +9,7 @@ import { PC_LY, PLANETS, julianDate, orbitPath, seededRandom } from "../../src/a
 import { bodyOrientation, bodyPosition, moonOffset } from "../../src/ephemeris.js";
 import { GALAXIES, galaxyExtent, galaxyPosition, galaxyViewRadius } from "../../src/galaxies.js";
 import { GALACTIC_CENTER, LY_AU, eclipticToGalactic } from "../../src/navigation.js";
+import { LANDMARKS, landmarkAt } from "./game/landmarks";
 import { skyBasis } from "../../src/coordinates.js";
 import { AGE, WHOLE_ROAD, agoAt, place as placeOf, roadZoom } from "./game/road";
 import { YEAR_0 } from "./game/clock";
@@ -163,6 +164,8 @@ export interface Drift {
 }
 
 const KLY_AU = 1000 * LY_AU;
+/** How far Gaia's census of nearby stars reaches, 100 pc. Inside it every object is real, beyond only HYG's brighter stars. */
+const CENSUS_LY = 326;
 const KM_AU = R_E_AU / 6371.0084;
 /** How long the Close View's fall to the ground takes, and its climb back, in seconds. */
 const DOWN = 4.5;
@@ -1530,6 +1533,12 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         const g = GALAXIES.find((g) => g.id === id)!;
         return [id, new THREE.Vector3().copy(galaxyPosition(g)).divideScalar(1000), basisOf(g).size];
       }),
+      // Known places in our galaxy, at their real positions: clusters, nebulae, black holes. lib/game/landmarks.ts.
+      ...LANDMARKS.map((l): [string, THREE.Vector3, number] => [
+        l.id,
+        new THREE.Vector3(...landmarkAt(l)).divideScalar(1000),
+        l.size / 1000,
+      ]),
     ];
     const v = new THREE.Vector3();
     const side = new THREE.Vector3();
@@ -2964,22 +2973,36 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     surfaceAt = clock;
     dirty = true;
   });
-  fetch(new URL("../../data/stars.bin", import.meta.url))
-    .then((r) => r.arrayBuffer())
-    .then((buf) => {
+  // Gaia's census of every object within 326 ly (scripts/prepare-neighborhood.py), and HYG's brighter stars beyond it
+  // out to 1,000 pc. Both are x, y, z light-years, apparent magnitude, B − V. 2026-10-29.
+  Promise.all(
+    [new URL("../../data/stars.bin", import.meta.url), new URL("../../data/gcns-326ly.bin", import.meta.url)].map((u) =>
+      fetch(u).then((r) => r.arrayBuffer()),
+    ),
+  )
+    .then(([hyg, gaia]) => {
       if (gone) return;
-      const raw = new Float32Array(buf);
+      const far = new Float32Array(hyg);
+      const keep: number[] = [];
+      for (let i = 0; i < far.length; i += 5) {
+        const ly = Math.hypot(far[i], far[i + 1], far[i + 2]);
+        if (ly < 1e-3 || ly > CENSUS_LY) for (let k = 0; k < 5; k++) keep.push(far[i + k]);
+      }
+      const near = new Float32Array(gaia);
+      const raw = new Float32Array(keep.length + near.length);
+      raw.set(keep);
+      raw.set(near, keep.length);
       const n = raw.length / 5;
       const pos = new Float32Array(n * 3);
       const abs = new Float32Array(n);
       const bv = new Float32Array(n);
-      const near = new Cloud();
+      const close = new Cloud();
       const stalk: number[] = [];
       for (let i = 0; i < n; i++) {
         const [x, y, z, mag, color] = [raw[i * 5], raw[i * 5 + 1], raw[i * 5 + 2], raw[i * 5 + 3], raw[i * 5 + 4]];
         const ly = Math.hypot(x, y, z);
         if (ly > 1e-3 && ly < 20) {
-          near.add(x, y, z, 2.6, 0.9, color < 0.3 ? K.young : color > 1.2 ? K.warm : K.ink);
+          close.add(x, y, z, 2.6, 0.9, color < 0.3 ? K.young : color > 1.2 ? K.warm : K.ink);
           stalk.push(x, y, z, x, 0, z);
         }
         if (ly > 1e-3 && ly < 50) within50.push(x, y, z, ly);
@@ -2998,7 +3021,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       const pts = new THREE.Points(g, starMat);
       pts.frustumCulled = false;
       stars.scene.add(pts);
-      stars.scene.add(near.points(mapDots));
+      stars.scene.add(close.points(mapDots));
       const segs = new THREE.LineSegments(
         new THREE.BufferGeometry().setAttribute("position", new THREE.Float32BufferAttribute(stalk, 3)),
         stalks,

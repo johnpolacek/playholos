@@ -125,7 +125,8 @@ Settled 2026-10-28, one step at a time. The premise itself, how many minds exist
   - Set aside: a real catalog to 100 ly only, about 12,000 stars, and a seeded Galaxy everywhere.
 - **Known landmarks sit at their real places.** Settled 2026-10-29. The seed fills in around them.
   - *Examples:* the Pleiades at 444 ly, the Orion Nebula at 1,344 ly, Gaia BH1 at 1,560 ly, the nearest known black hole, and the Galaxy’s central black hole at about 26,700 ly.
-  - *To gather:* open clusters, nebulae, known black holes, globular clusters, each from a published catalog, logged in the research log.
+  - *First nine, 2026-10-29:* the Hyades, the Pleiades, the Beehive, the Orion Nebula, Gaia BH2 and BH3, the Crab Nebula, 47 Tucanae and Omega Centauri. A tap names each on Reach’s map. Gaia BH1 was already a destination.
+  - *Later, the full catalogs:* Gaia’s open clusters (Cantat-Gaudin 2020) and all of the Galaxy’s globular clusters (Harris).
   - Set aside: seeding everything beyond 326 ly, landmarks included.
 - **The draw, in calcs/minds.py.** Added 2026-10-29, beside the old neighbors, as each world’s `minds`. Over 400 seeds: 8.6 old minds within 1,000 ly, the nearest typically 397 ly away, and 5.1 peers, 63% inward at contact.
   - *Old minds* sit on real stars inside 326 ly and at seeded places out to 1,000 ly, weighted by the disk. Each is about a billion years older, at most 5 billion. Half sleep, as before. Awake, a glow stays under what the shallow all-sky maps would catch.
