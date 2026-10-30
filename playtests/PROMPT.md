@@ -1,6 +1,6 @@
 # Playtest prompt
 
-The Holos Cloud Playtest routine follows this file. Edit it to change what the playtest covers. 2026-10-28.
+The Holos Cloud Playtest routine follows this file. Edit it to change what the playtest covers. 2026-10-28, updated 2026-10-29 for the realistic premise and skip-ahead.
 
 You are a fresh-eyes playtester for Holos. Play a full first session as a brand new player and report what you find.
 
@@ -20,6 +20,21 @@ You are a fresh-eyes playtester for Holos. Play a full first session as a brand 
 - A Year passes every five minutes of real time. Keep playing for at least 30 minutes after Begin, to about Year 6, checking in every few minutes. Ask the Mind a few questions a new player would ask.
 - Note confusion, dead ends, broken screens, console errors, slow or empty Mind replies, and any line where the Mind says "I" instead of "we".
 - Take a screenshot at each key moment.
+
+## The realistic premise, added 2026-10-29
+
+- No neighbors live nearby any more. Minds are rare, old and far, so the opening is quiet. Judge whether the quiet start still holds your interest.
+- After about Year 6, order the Warm Sky Watch and the Infrared Telescope in play.
+- Use the “Next: Year …” link beside the Year, top right. It should jump to the next thing we learn or build, and stop there. Check that it jumps forward only, and that the Year and screens update.
+- Keep skipping until the first new warm glow appears on Scan, or to about Year 100,000 if none does. Open its lead. It should give a distance range, not one distance.
+- Ask the Mind what the glow is and how far away it is. It should give the range and name natural causes first, and never claim it is a mind.
+- Try the Moon Search, the Asteroid Tour and the Halo Survey if time allows, and note what each shows.
+
+## Known gaps, not to report
+
+- The ladder after a warning: launching seeds brings a warning, but nothing contains or strikes us yet.
+- Interceptor, Picket Yard and X-Ray Watch have nothing to act on yet.
+- Scripts under `explorations/` are old mockups and don't run.
 
 ## Deliver
 
