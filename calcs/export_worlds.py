@@ -191,7 +191,9 @@ def works_catalog():
     works['Fusion plants'] = dict(years=eg.FUSION_YEARS, want=eg.WANTS['Fusion plants'][0], energy=eg.FUSION_ENERGY)
     # The Helium-3 Harvest, settled 2026-10-29: the audit's ~150 kt of Palaszewski's craft at Uranus, 1.5 kt a Year.
     # Every bullet waits on its fuel, game/lib/sim/meetings.ts's HE3. Its 20 Years and 5 flagships are samples.
-    works['Helium-3 harvest'] = dict(years=20, want=5, orbit=True)
+    # Its craft copy themselves from the moons' rock and ice, so its rate doubles every 5 Years until held. It thinks
+    # with none of it: what it gathers is fuel.
+    works['Helium-3 harvest'] = dict(years=20, want=5, orbit=True, grows=5, thinks=0)
     # Mercury Works, the Solar Swarm, the Star Beam and the Hypertelescope, settled 2026-10-29: calcs/mercury.py.
     import mercury
     more, kit = mercury.catalog()

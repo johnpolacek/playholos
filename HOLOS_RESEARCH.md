@@ -526,7 +526,7 @@ Anchors for [the project audit](HOLOS_PROJECT_AUDIT.md).
 - **[Palaszewski 2014, atmospheric mining in the outer solar system](https://ntrs.nasa.gov/api/citations/20140006386/downloads/20140006386.pdf)** · Study, NASA TM-2014-217892 ([2021 update](https://ntrs.nasa.gov/api/citations/20210018165/downloads/Palaszewski_Atmospheric%20Mining%20in%20the%20Outer%20Solar%20System%20ASC.pdf)).
   - Helium-3 is about 1.5×10⁻⁵ of Uranus’s air and 1.9×10⁻⁵ of Neptune’s. A 100 t gas-core nuclear aerospacecraft gathers 500 kg in 38 to 95 days. Uranus and Neptune are easier to mine than Jupiter or Saturn.
   - Matters: a helium-3 harvest of about 1.5 kt a Year needs about 150 kt of craft.
-  - Used: the project audit, helium-3 harvest. Since 2026-10-29, the Helium-3 Harvest build, 1.5 kt a Year, which every bullet’s fuel waits on: `game/lib/sim/meetings.ts`.
+  - Used: the project audit, helium-3 harvest. Since 2026-10-29, the Helium-3 Harvest build, 1.5 kt a Year at first, which every bullet’s fuel waits on: `game/lib/sim/meetings.ts`. It doubles every 5 Years, Metzger et al. 2013’s pace with help from home, logged under Industry and big works.
 - **[CHORD](https://arxiv.org/abs/2607.09374)** · Under construction ([progress](https://spaceq.ca/chord-the-successor-to-chime-readies-for-first-big-test-this-fall/)).
   - 512 six-meter dishes at 300 to 1,500 MHz, a transit instrument that scans the sky as Earth turns. Complete by the end of 2027, commissioned in 2028.
   - Matters: Earth’s Year 0 sky watch is a drift scan, not an always-on watch of the whole sky.

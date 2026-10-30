@@ -4,6 +4,7 @@
 // what is before it: see moves() in plan.ts. Distances at Year 0 are HOLOS_GAME_CONCEPT.md's. Built 2026-10-18.
 import { BULLET, bulletsReady, SCREEN } from "@/lib/sim/conflict";
 import { ordersOf, pacedName, schedule, searchOf } from "./plan";
+import { grownSpans } from "./halo";
 import type { Plan, Will } from "./types";
 import { CATALOG, type Order, pace } from "@/lib/sim/works";
 
@@ -151,7 +152,7 @@ export function screensOf(plan: Plan, scale: number) {
  *  isn't. 2026-10-28, its helium-3 2026-10-29. */
 export function strikesOf(plan: Plan, scale: number) {
   const done = schedule(plan, scale);
-  const ready = bulletsReady((plan.strikes ?? []).map((o) => o.y), done["Strike Yard"] ?? null, done["Helium-3 Harvest"] ?? null);
+  const ready = bulletsReady((plan.strikes ?? []).map((o) => o.y), done["Strike Yard"] ?? null, grownSpans(plan, scale, "Helium-3 Harvest"));
   return (plan.strikes ?? []).map((o, i) => ({ star: o.name, fired: ready[i] }));
 }
 
@@ -191,7 +192,10 @@ export function screenRoad(plan: Plan, scale: number, from: number, star: string
  *  speed. Nothing comes home from it: its Year is the Year it lands. 2026-10-28. */
 export function strikeRoad(plan: Plan, scale: number, from: number, star: string, ly: number): Road {
   const yard = yardDone(plan, scale, from, "Strike Yard");
-  const harvest = yardDone(plan, scale, from, "Helium-3 Harvest");
+  // Our harvest as it grows, or one begun now if it isn't in our order.
+  const ordered = grownSpans(plan, scale, "Helium-3 Harvest");
+  const begun = yardDone(plan, scale, from, "Helium-3 Harvest");
+  const harvest: [number, number | null][] = ordered.length ? ordered : begun === null ? [] : [[begun, null]];
   const strikes = plan.strikes ?? [];
   const sent = strikes.find((o) => o.name === star);
   // Its place among our bullets: the helium-3 goes to each in the order ordered, and one not yet sent comes last.

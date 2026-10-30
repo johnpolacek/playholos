@@ -185,7 +185,9 @@
   "Helium-3 harvest": {
    "years": 20,
    "want": 5,
-   "orbit": true
+   "orbit": true,
+   "grows": 5,
+   "thinks": 0
   },
   "Mercury works": {
    "years": 12,

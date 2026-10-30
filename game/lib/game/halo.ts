@@ -6,7 +6,7 @@ import { HORIZON, ordersOf, pacedName } from "./plan";
 import type { Plan } from "./types";
 
 /** The builds that grow once done. */
-export const GROWS = ["Cold Halo", "Solar Swarm"];
+export const GROWS = ["Cold Halo", "Solar Swarm", "Helium-3 Harvest"];
 
 /** The Year a build that grows was done, held or not. Our order's schedule leaves out a build taken back, and holding
  *  one is taking it back, so this reads the pace itself. */

@@ -66,7 +66,7 @@ const WHAT: Record<string, string> = {
   screen:
     "10 g pellets 0.7 m apart, 10 km wide, about 2,000 t, held 4 million km out on the line to this star. A bullet from here that crosses it is wrecked into spray, and lands as a flash high in the air. A bullet coasts dark, so the screen must stand before one comes.",
   strike:
-    "1,000 t at a tenth of light speed, readied in 20 Years, and fired once the Helium-3 Harvest gathers its 37 kt, about 24 Years of it, after any bullet before it. It lands with about 110,000 Mt: a region gone, the ozone thinned, the climate cooled. Its launch flame shows only here, to a probe of theirs watching us.",
+    "1,000 t at a tenth of light speed, readied in 20 Years, and fired once the Helium-3 Harvest gathers its 37 kt, after any bullet before it: about 12 Years for the first, less as the harvest grows. It lands with about 110,000 Mt: a region gone, the ozone thinned, the climate cooled. Its launch flame shows only here, to a probe of theirs watching us.",
   "Laser Sail Array": "Sails weighing a few grams, pushed by a beam from Earth, fly past at a fifth of light speed.",
   "Probe Yard": "A probe built and fueled in orbit. It leaves 12 Years after its yard is done and flies past at an eighth of light speed.",
   mind:

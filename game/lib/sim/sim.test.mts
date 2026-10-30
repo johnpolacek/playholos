@@ -11,7 +11,7 @@ import { POOL } from "./pool.ts";
 import { loadVoices, loadWorld } from "./world.ts";
 import { ARCHIVE, combedAt, offEarth, pace, type Order } from "./works.ts";
 import { between, glowsSeen, knownTo, landings, SOL } from "./answers.ts";
-import { haloReaches, HALO, SWARM, swarmSeenAt } from "./conflict.ts";
+import { BULLET, haloReaches, HALO, SWARM, swarmSeenAt } from "./conflict.ts";
 import catalog from "../../data/works.json" with { type: "json" };
 import { colonyActor, earthActor, ourCodes, ourKind, ourTable } from "./colony.ts";
 
@@ -178,10 +178,10 @@ test("parity: our bullet is news where it lands, its flame seen only by a probe 
   const later = landings(world, [], [], 60, "test", [], { strikes: [{ star: "Gliese 570 A", fired: 40, lands: 232 }], caught: [], quiet: null });
   const seen = later.filter((l) => l.news === "strike_seen");
   assert.ok(seen.length === 1 && seen[0].star === "Alpha Centauri A" && Math.abs(seen[0].at - 44.32) < 1e-6);
-  // Struck, Hael strikes back: its bullet leaves once its harvest is built and filled, 44.4 Years on, and lands at a
-  // tenth of light speed.
+  // Struck, Hael strikes back: its bullet leaves once its harvest is built and filled, about 32.4 Years on, and lands at
+  // a tenth of light speed.
   const back = strikesOnUs(world, [{ key: struck.key, sent: "strike:Alpha Centauri A", star: "Alpha Centauri A", d: 4.32, at: struck.at, move: "strike" }]);
-  assert.ok(back.length === 1 && Math.abs(back[0].lands - (53.2 + 0.25 + 44.4 + 43.2)) < 1e-6);
+  assert.ok(back.length === 1 && Math.abs(back[0].lands - (53.2 + 0.25 + BULLET.ready + 43.2)) < 1e-6);
   // Hael's probe burns all the way in at Year 36.2: our watch sees it weeks out, and an interceptor ready by then wrecks it.
   const hael = probesToUs(world, []).find((p) => p.star === "Alpha Centauri A")!;
   assert.ok(hael.close && Math.abs(hael.arrives - 36.16) < 0.01);
@@ -203,7 +203,7 @@ test("parity both ways: a neighbor's guard screens our bullet, and neighbors str
   // Hael strikes Iru, at Gliese 570 A, on Iru's news: Iru is struck once it lands, and watchers near Hael see the launch.
   const strike = { key: "s:Alpha Centauri A", sent: "y", star: "Alpha Centauri A", d: 4.32, at: 5, move: "strike", from: "Gliese 570 A" };
   const [b] = strikesBetween(world, [strike]);
-  assert.ok(b && b.to === "Gliese 570 A" && Math.abs(b.fired - 49.65) < 1e-6 && b.lands > b.fired && !b.screened);
+  assert.ok(b && b.to === "Gliese 570 A" && Math.abs(b.fired - (5.25 + BULLET.ready)) < 1e-6 && b.lands > b.fired && !b.screened);
   const due = landings(world, [], [strike], b.lands + 1, "test");
   const struck = due.find((l) => l.news === "struck" && l.star === "Gliese 570 A")!;
   assert.ok(struck && struck.signal.from === "Alpha Centauri A" && Math.abs(struck.at - b.lands) < 1e-6);
@@ -677,17 +677,21 @@ test("the Hypertelescope pictures each felt world in its reach, nearest first, a
   assert.fail("no seed has a felt home in reach");
 });
 
-test("bullets wait on helium-3: 37 kt each from a harvest of 1.5 kt a Year, in the order ordered, and none without one", async () => {
+test("bullets wait on helium-3 from a harvest that doubles every 5 Years, in the order ordered, and none without one", async () => {
   const { bulletsReady, BULLET } = await import("./conflict.ts");
-  const { HE3 } = await import("./meetings.ts");
+  const { HE3, he3By, he3When } = await import("./meetings.ts");
+  // 1.5 kt a Year for 5 Years, 3 for the next 5: 22.5 kt by 10 Years in.
+  assert.ok(Math.abs(he3By([[30, null]], 40) - 22.5) < 1e-9);
+  // Held from Year 37 to 50, it gathers at 3 kt a Year, its size, then doubles again 3 Years after it grows on.
+  assert.ok(Math.abs(he3By([[30, 37], [50, null]], 55) - (1.5 * 5 + 3 * 2 + 3 * 13 + 3 * 3 + 6 * 2)) < 1e-9);
   // The yard done at 10, the harvest at 30: the first waits on its fuel, the second on more, the third on its build.
-  const ready = bulletsReady([10, 10, 200], 10, 30);
-  assert.ok(Math.abs(ready[0]! - (30 + HE3.bullet / HE3.perYear)) < 1e-9);
-  assert.ok(Math.abs(ready[1]! - (30 + (2 * HE3.bullet) / HE3.perYear)) < 1e-9);
+  const ready = bulletsReady([10, 10, 200], 10, [[30, null]]);
+  assert.ok(Math.abs(ready[0]! - he3When([[30, null]], HE3.bullet)!) < 1e-6 && ready[0]! > 42 && ready[0]! < 43);
+  assert.ok(Math.abs(ready[1]! - he3When([[30, null]], 2 * HE3.bullet)!) < 1e-6);
   assert.equal(ready[2], 220);
-  assert.deepEqual(bulletsReady([10], 10, null), [null]);
-  // A neighbor starts its harvest when it chooses to strike: 20 Years to build, 24.4 to fill.
-  assert.ok(Math.abs(BULLET.ready - 44.4) < 1e-9);
+  assert.deepEqual(bulletsReady([10], 10, []), [null]);
+  // A neighbor starts its harvest when it chooses to strike: 20 Years to build, about 12.4 to fill.
+  assert.ok(Math.abs(BULLET.ready - 32.4) < 0.05, String(BULLET.ready));
 });
 
 test("skipping ahead stops at the next thing we learn or build, and says when, never what", async () => {

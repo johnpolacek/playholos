@@ -29,6 +29,7 @@ import {
 } from "@/lib/game/plan";
 import { GROWS, grownDone, grownSpans } from "@/lib/game/halo";
 import { SWARM } from "@/lib/sim/conflict";
+import { HE3, he3By } from "@/lib/sim/meetings";
 import { CATALOG } from "@/lib/sim/works";
 import { SITES } from "@/lib/game/sites";
 import { FOUND, harm, rockAt, rockOf } from "@/lib/game/rocks";
@@ -88,11 +89,14 @@ function InPlay({ name, scale, done }: { name: string; scale: number; done: Reco
       const grew = grownSpans(plan, scale, name, at).reduce((y, [a, b]) => y + Math.max(0, Math.min(b ?? now, now) - a), 0);
       const growing = back === null;
       const swarm = name === "Solar Swarm";
-      const every = swarm ? SWARM.doubling : 10;
+      const harvest = name === "Helium-3 Harvest";
+      const every = swarm ? SWARM.doubling : harvest ? HE3.doubling : 10;
       // Past all the Sun it doubles no more: the Solar Swarm stops at 55 doublings.
       const n = Math.min(Math.floor(grew / every), swarm ? Math.ceil(CATALOG.works["Solar swarm"].full ?? Infinity) : Infinity);
       const full = swarm && SWARM.watts * 2 ** n >= SWARM.most;
-      const sheds = swarm ? `catches about ${watts(Math.min(SWARM.most, SWARM.watts * 2 ** n))} of sunlight, near 500 K` : `sheds about ${watts(1.2e12 * 2 ** (grew / 10))} at 77 K`;
+      const sheds = harvest
+        ? `gathers about ${(HE3.perYear * 2 ** n).toLocaleString("en-US", { maximumFractionDigits: 1 })} kt of helium-3 a Year, ${Math.round(he3By(grownSpans(plan, scale, name, at), now)).toLocaleString("en-US")} kt so far`
+        : swarm ? `catches about ${watts(Math.min(SWARM.most, SWARM.watts * 2 ** n))} of sunlight, near 500 K` : `sheds about ${watts(1.2e12 * 2 ** (grew / 10))} at 77 K`;
       return (
         <div className="flex flex-col">
           <p className="mt-2.5 text-[13px] leading-snug text-page-ink2">

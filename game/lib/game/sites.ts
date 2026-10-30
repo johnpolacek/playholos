@@ -330,7 +330,7 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
       have: "One craft has flown past Uranus, Voyager 2 in 1986. Earth gathers a few kilograms of helium-3 a year, from the tritium in old warheads.",
       where: "In Uranus’s upper air, where craft dip down and climb back to tankers in orbit.",
       why: "Helium-3 is about 15 parts in a million of Uranus’s air, and its pull is far gentler than Jupiter’s, so a craft climbs out on far less fuel. The Moon’s soil holds about a thousandth as much a tonne.",
-      takes: "About 150 kt of craft, bases and tankers, gathering about 1.5 kt a Year.",
+      takes: "About 150 kt of craft, bases and tankers, gathering about 1.5 kt a Year at first, then twice that every 5 Years as its moons’ factories copy them.",
       before: "In the 2010s Bryan Palaszewski of NASA Glenn sized craft that gather 500 kg of helium-3 from Uranus in 38 to 95 days.",
     },
   },
