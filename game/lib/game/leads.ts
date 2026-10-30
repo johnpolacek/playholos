@@ -2,6 +2,7 @@ import { lyOf, YEAR_0 } from "@/lib/game/clock";
 import { KNOCKS } from "@/lib/game/knocks";
 import { lightTime } from "@/lib/light";
 import { BANDS, iwa, owa, WIDE } from "@/lib/sim/observing";
+import type { MindsSeen } from "@/lib/sim/minds";
 import type { DarkMass, FeltWorld, Gas, Glow, Read, Visit } from "@/lib/sim/types";
 import { CATALOG } from "@/lib/sim/works";
 import { type System, SYSTEMS } from "./systems";
@@ -762,7 +763,95 @@ export function glowReading(g: Glow): Reading {
   };
 }
 
-export function leadsOf(felt: FeltWorld[], holes: DarkMass[] = [], glows: Glow[] = [], seeds: Visit[] = [], kept: string[] = []): Lead[] {
+/** What Earth has found of the realistic premise's minds, as leads: each placed where Earth knows it, and said as
+ *  measured, natural causes first, since minds are rare. A warm glow waits for its range to be placed. lib/sim/minds.ts.
+ *  2026-10-29. */
+export function mindLeads(m: MindsSeen | undefined): Lead[] {
+  if (!m) return [];
+  const sky = (ra: number, dec: number) => `RA ${(Math.round(ra * 10) / 10 % 24).toFixed(1)} h, Dec ${dec.toFixed(0)}°`;
+  const year = (y: number) => `Year ${Math.floor(y * 10) / 10}`;
+  const n = (x: number) => x.toLocaleString("en-US");
+  return [
+    ...m.flashes.flatMap((f, i): Lead[] => {
+      if (!f.range) return [];
+      const [near, far] = f.range;
+      const mid = Math.sqrt(near * far);
+      return [{
+        slug: `warm-glow-${i + 1}`,
+        at: [f.ra, f.dec, mid],
+        star: `Warm glow ${i + 1}`,
+        what: "A new warm glow",
+        line: `It appeared where nothing shone, ${n(near)} to ${n(far)} ly away.`,
+        ly: mid,
+        ask: `What is warm glow ${i + 1}, and why did it appear?`,
+        brief: `Our Warm Sky Watch saw a new warm glow, near room temperature, toward ${sky(f.ra, f.dec)}. Our Infrared Telescope puts it ${n(near)} to ${n(far)} ly away. Young stars in dust and merging stars glow like this. So would something built around a star, catching its light.`,
+        facts: [
+          ["First seen", `${year(f.seen)}, by our Warm Sky Watch`],
+          ["Its distance", `${n(near)} to ${n(far)} ly, by our Infrared Telescope at ${year(f.ranged!)}`],
+          ["Its warmth", "Near room temperature, like a planet's, far cooler than any star"],
+          ...(f.faded !== undefined ? [["Faded", year(f.faded)] as [string, string]] : []),
+        ],
+        could: [
+          { what: "A young star wrapped in dust", why: "Stars forming in dust glow warm in infrared, and can brighten over decades.", odds: "likely" },
+          { what: "Two stars merging", why: "Their wreck throws off dust that glows warm for centuries, then fades.", odds: "unlikely" },
+          { what: "Something built around a star", why: "Collectors catching a star's light shed it as warm glow. Minds are rare, so this is the long shot.", odds: "very unlikely" },
+        ],
+        tells: [
+          "A young star sits in a dark cloud, and a merger leaves a fading shell. Neither would hold steady for centuries, then dim away together.",
+          "Light from it takes tens of thousands of Years to cross. Whatever made it has moved on long since.",
+        ],
+        art: { kind: "glow", ly: mid },
+        life: "very unlikely",
+      }];
+    }),
+    ...m.glows.map((g, i): Lead => ({
+      slug: `cold-glow-${i + 1}`,
+      at: [g.ra, g.dec, g.d],
+      star: `Cold glow ${i + 1}`,
+      what: "A cold grey glow",
+      line: `Cold light beside a star ${n(Math.round(g.d))} ly away, its color fitting no dust.`,
+      ly: g.d,
+      ask: `What is cold glow ${i + 1}?`,
+      brief: `Our Halo Survey saw a compact glow near 12 K beside a star ${n(Math.round(g.d))} ly away, about ${watts(g.watts)}, steady. Its color fits no dust we know. A cold disk of odd grains could glow so, or a fault in our looking. Computing done cold, far from a star, would too.`,
+      facts: [
+        ["Its glow", `About ${watts(g.watts)}, steady`],
+        ["First seen", `${year(g.seen)}, by our Halo Survey`],
+      ],
+      could: [
+        { what: "Something natural we don't know", why: "Dust of grains we haven't measured, or a disk cold and far out. The sky has surprised us before.", odds: "likely" },
+        { what: "An error in our looking", why: "A faint galaxy behind the star, or a fault in the data. A second look rules it out.", odds: "unlikely" },
+        { what: "A mind computing cold", why: "Waste heat shed far from a star glows grey and line-free, as this does. Minds are rare.", odds: "unlikely" },
+      ],
+      tells: ["A second look in other bands shows whether its color holds.", "A craft that stays there would see what makes it, 10,000 Years from now or more."],
+      art: { kind: "glow", ly: g.d, steady: true },
+      life: "unlikely",
+    })),
+    ...m.sleepers.map((x, i): Lead => ({
+      slug: `warm-body-${i + 1}`,
+      at: [x.ra, x.dec, x.d],
+      star: `Warm body ${i + 1}`,
+      what: "A body warmer than its place",
+      line: `Something resting ${lightTime(x.restAU)} from its star, hundreds of degrees too warm.`,
+      ly: x.d,
+      ask: `What is warm body ${i + 1}?`,
+      brief: `Our craft in a system ${n(Math.round(x.d))} ly away found a compact body ${lightTime(x.restAU)} from its star, shedding about 10^10 W. Starlight that far out would leave it near ${Math.round(278 / Math.sqrt(x.restAU))} K. It is hundreds of degrees warmer, so something inside it makes heat.`,
+      facts: [
+        ["Word home", year(x.seen)],
+        ["Its heat", "About 10^10 W, from within"],
+        ["Its place", `${lightTime(x.restAU)} from its star, where starlight leaves things near ${Math.round(278 / Math.sqrt(x.restAU))} K`],
+      ],
+      could: [
+        { what: "Something made, resting", why: "A body folded small and cold, keeping just enough warmth, as a mind waiting would.", odds: "likely" },
+        { what: "A body warmed from inside", why: "Radioactive rock or tides warm small worlds, but not this much this far out.", odds: "unlikely" },
+      ],
+      tells: ["Our craft can watch whether it stirs. A knock would tell it we are here."],
+      art: { kind: "glow", ly: x.d, steady: true },
+      life: "likely",
+    })),
+  ];
+}
+
+export function leadsOf(felt: FeltWorld[], holes: DarkMass[] = [], glows: Glow[] = [], seeds: Visit[] = [], kept: string[] = [], minds?: MindsSeen): Lead[] {
   // Scan shows one black hole, the nearest, and any we have sent craft to. 2026-10-28.
   const dark = [...holes.map((h) => [h, false] as const), ...FAR.map((h) => [h, true] as const)];
   const nearest = dark.reduce<(typeof dark)[number] | undefined>((n, x) => (!n || x[0].d < n[0].d ? x : n), undefined);
@@ -856,6 +945,8 @@ export function leadsOf(felt: FeltWorld[], holes: DarkMass[] = [], glows: Glow[]
     // A glow at a star with a lead already lands on that lead as a reading.
     ...glows.filter((g) => !felt.some((f) => f.star === g.star)).map(glowLead),
     ...reached.map(seedLead),
+    // The realistic premise's minds Earth has found, 2026-10-29.
+    ...mindLeads(minds),
     // The nearest known black hole, far past the region, which Earth knows at Year 0. El-Badry et al. 2023. Its
     // position from Gaia's catalog. A landmark to aim at, 2026-10-26. Gaia BH3 left out, 2026-10-27: a second far hole
     // told the intro nothing new.
