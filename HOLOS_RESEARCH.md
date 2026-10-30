@@ -1140,7 +1140,13 @@ What a neighbor’s world can plausibly be, beyond an Earth twin. Each roster en
   - **[Sandberg et al. 2018](https://arxiv.org/abs/1806.02404)** · Preprint. With honest error bars on every factor, there is a substantial chance no one else is in the observable universe. So the game’s many neighbors are improbable. Nothing observed contradicts them.
   - **[Schmidt and Frank 2018](https://arxiv.org/abs/1804.03748)** · Published. An industrial age leaves a clear but thin layer in rock, much like natural climate events.
   - From a search summary, not read: Glidden et al. 2025, on TRAPPIST-1 e. Four transits neither show nor rule out air. Air like Venus’s or Mars’s is disfavored, hydrogen air is excluded, and nitrogen air is allowed.
-  - From memory, abstract not found: Chopra and Lineweaver 2016, the Gaian bottleneck. Most young wet worlds freeze or overheat within about a billion years unless life steadies them, so early extinction is the usual outcome.
+  - **[Chopra and Lineweaver 2016, “The Case for a Gaian Bottleneck”](https://doi.org/10.1089/ast.2015.1387)** · Published, Astrobiology 16, 7. Found by search 2026-10-30, the paper behind a paywall. Life that starts on a wet rocky world rarely evolves fast enough to steady its climate, so early extinction is the usual outcome.
+    - Read 2026-10-30 in full, from the authors’ PDF. No rate is given: “almost all” early life dies within about 1 to 1.5 billion years, and Earth is a rare exception. Its own caveats: Gaian regulation is contested, and early regulation more so. Its test: old warm worlds should mostly have air in chemical equilibrium.
+    - Used since 2026-10-30: life dies out on 1 in 2 worlds where it started, in calcs/seed.py and game/lib/sim/proxima.ts, the middle of a range from 1 in 5 to 9 in 10. It was 1 in 5, a sample with no source. Step 5 of the chain in [HOLOS_MODELING_ALIENS.md](HOLOS_MODELING_ALIENS.md#the-chain-from-stars-to-minds-in-2040).
+  - **[Nicholson, Wilkinson, Williams and Lenton 2018, ExoGaia](https://arxiv.org/abs/1803.08063)** · Published, MNRAS. Abstract read 2026-10-30. Model planets seeded with life fall into five classes, including clear Gaian bottlenecks, where life either dies fast or keeps its world livable indefinitely. No survival rate.
+    - Used: the range for life’s die-off.
+  - **[Arthur and Nicholson 2023, a Gaian habitable zone](https://arxiv.org/abs/2301.02150)** · Published, MNRAS. Abstract read 2026-10-30. Across many worlds, life tends to keep or improve conditions for itself on average, which can widen the warm zone.
+    - Used: the gentle end of the range for life’s die-off.
   - From memory, not checked: Earth’s air gained oxygen about 2.4 billion years ago, animals appear about 0.6 billion years ago, and our species is about 300,000 years old.
   - Matters: on the one world we know, life is microbes for most of its history, shows in the air for between a ninth and a half of it, and has had radio for 130 years of 4.5 billion.
   - Matters: the game’s premise puts a mind at about 1 warm world in 18. Minds can’t be commoner than life, so in this game most warm worlds that can hold life do.
@@ -1325,6 +1331,13 @@ Added 2026-10-28, for [The realistic premise](HOLOS_GAME_CONCEPT.md#the-realisti
   - **[Schödel et al. 2010, extinction toward the Galactic center](https://arxiv.org/abs/0912.1273)** · Published, A&A. Checked 2026-10-29. A(Ks) about 2.5 to 2.7 mag at the center, so about 1.4 mag at 12 µm, a factor of 3.7. Elsewhere in the plane, less.
     - Used: a peer’s flash dims 2 to 4 times. The earlier “3 to 4 times” held only toward the center.
   - **[Bennett, Hanson and Riedel 2019](https://arxiv.org/abs/1902.06730)** · Published, Foundations of Physics 49, 820. Checked 2026-10-29. Argues that computing later in a colder universe gains nothing, against Sandberg et al. 2016. Backs awake old minds that compute steadily now.
+- **The chain from stars to minds, 2026-10-30.** For [HOLOS_MODELING_ALIENS.md](HOLOS_MODELING_ALIENS.md#the-chain-from-stars-to-minds-in-2040).
+  - **[Licquia and Newman 2015](https://arxiv.org/abs/1407.1078)** · Published, ApJ 806, 96. Abstract read 2026-10-30. Our Galaxy’s stars weigh about 6.08 ± 1.14 × 10¹⁰ Suns, disk and bulge together.
+    - Matters: with most stars lighter than the Sun, that is about 100 to 400 billion stars. Holos takes 200 billion.
+    - Used: step 1 of the chain, and `calcs/minds.py`’s Galaxy count.
+  - **[Kreidberg et al. 2019](https://arxiv.org/abs/1908.06834)** · Published, Nature. Abstract read 2026-10-30. LHS 3844 b, an Earth-sized world at a red dwarf, has no air thicker than about 10 bar, and fits bare rock.
+    - Matters: with Greene et al. 2023 on TRAPPIST-1 b, the rocky red-dwarf worlds measured so far are bare. It backs the shoreline stripping most red dwarfs’ warm worlds.
+    - Used: step 3 of the chain.
 - **Objections from r/FermiParadox, 2026-10-30.** Read for questions, never as a source. Answered in [HOLOS_MODELING_ALIENS.md](HOLOS_MODELING_ALIENS.md#common-objections-and-where-holos-stands).
   - **[Griffith et al. 2015, the Ĝ search, part III](https://arxiv.org/abs/1504.03418)** · Published, ApJS. Abstract read 2026-10-30. No galaxy in the WISE sample hosts a civilization turning more than 85% of its starlight into mid-infrared heat. Only 50 are consistent with more than 50%.
     - Matters: rules out galaxy-scale minds, not star-scale ones. Fits awake old minds that stay cold and small.

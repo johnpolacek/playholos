@@ -154,7 +154,10 @@ def warm_world(seed, host):
 #   the log, a sample. Checked 2026-10-16: Nguyen et al. 2026 put this line between their nominal and volatile-poor
 #   Sun-like cases, so it stays a middle case, and the luck stands for each world's unknown volatiles.
 # - Life. Kipping 2025 gives 13 to 1 that life starts fast where conditions allow, and not how often they allow. Here
-#   it started on 3 airy worlds in 4, and later died out on 1 in 5 of those: both samples.
+#   it started on 3 airy worlds in 4: a sample. It later died out on 1 in 2 of those, settled 2026-10-30. Chopra and
+#   Lineweaver 2016 argue almost all early life dies before it can steady its world's climate, and models of the idea
+#   (Nicholson et al. 2018, Arthur and Nicholson 2023) give no rate. The range runs from about 1 in 5 to 9 in 10, so
+#   this takes its middle. It was 1 in 5, a sample with no source.
 # - Pace. Earth had lasting oxygen at 2.3 billion years old (Poulton et al. 2021), and air rich enough to read, with
 #   animals and forests, at about 4.0 (Reinhard et al. 2017). Each world runs faster or slower by its own factor, 1.6
 #   at one sigma: a sample. Settled 2026-10-15: Earth's pace is typical, with no hard steps, as Mills et al. 2025 argue.
@@ -171,7 +174,7 @@ def warm_world(seed, host):
 #   refill the seas (Godolt et al. 2019).
 RUNGS = ('bare rock', 'airy and lifeless', 'hiding microbes', 'showing oxygen', 'with animals and forests', 'where life died', 'frozen')
 ALIVE = RUNGS[2:5]
-SHORE_LUCK, STARTED, DIED, PACE = 0.5, 0.75, 0.2, math.log(1.6)
+SHORE_LUCK, STARTED, DIED, PACE = 0.5, 0.75, 0.5, math.log(1.6)
 OXYGEN_AT, RICH_AT, OLDEST = 2.3, 4.0, 10.5
 OUTER_LIGHT, THAW_LIGHT = 1 / 1.67 ** 2, 0.62
 def brightness(x): return 1 / (1.4 - 0.875 * min(1.0, max(0.0, x)))    # Gough 1981, x in main-sequence lives

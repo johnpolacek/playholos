@@ -21,7 +21,7 @@ const AGES = [4.2, 6.7];
 // calcs/seed.py's samples.
 const SHORE_LUCK = 0.5;
 const STARTED = 0.75;
-const DIED = 0.2;
+const DIED = 0.5; // 1 in 2, settled 2026-10-30 from Chopra and Lineweaver 2016
 const PACE = Math.log(1.6);
 const OXYGEN_AT = 2.3;
 const RICH_AT = 4.0;
