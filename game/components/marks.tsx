@@ -864,6 +864,15 @@ const Hyper = ({ size, still }: MarkProps) => (
   </Moving>
 );
 
+/** The Helium-3 Harvest: an ice giant, and a craft dipping into its air and climbing out again. Ours. 2026-10-29. */
+const Harvest = ({ size, still }: MarkProps) => (
+  <Moving size={size} still={still} move={(_, part) => void sway(part("craft"), { x: 0, y: 0 }, { x: -1.8, y: 2.2 }, 1.8)}>
+    <circle cx="6.4" cy="9.6" r="4.6" />
+    <path d="M2.6 8.4h7.6" opacity={0.45} />
+    <circle data-k="craft" cx="12.6" cy="4.2" r="1" fill="currentColor" stroke="none" />
+  </Moving>
+);
+
 /** The Mind Link: a wide mirror, its beam going out in pulses. Ours. 2026-10-26. */
 const Link = ({ size, still }: MarkProps) => (
   <Moving
@@ -965,6 +974,8 @@ export function BuildMark({ name, size = 16, still }: { name: string; size?: num
       return <StarBeam size={size} still={still} />;
     case "Hypertelescope":
       return <Hyper size={size} still={still} />;
+    case "Helium-3 Harvest":
+      return <Harvest size={size} still={still} />;
     case "Star Mapper":
       return <Hole size={size} still={still} />;
     case "Mind Link":

@@ -307,8 +307,18 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
       have: "A nuclear weapon’s yield tops out near 50 Mt. Nothing we have flies faster than Parker Solar Probe’s 0.06% of light speed.",
       where: "In the Orbital Foundry’s high orbit, where Moon rock and fusion fuel come in.",
       why: "A neighbor can fire one at us. Whatever they can build, we can. Fired, it coasts dark: only a watcher in our own system sees it leave.",
-      takes: "Per bullet, 1,000 t and 61 kt of fusion fuel, 20 Years to ready. The yard itself, 10 Years.",
+      takes: "Per bullet, 1,000 t and 61 kt of fusion fuel, 20 Years to ready, and 37 kt of it helium-3 from the harvest. The yard itself, 10 Years.",
       before: "No one has built a weapon that crosses between stars. Its physics is a rocket’s, pointed.",
+    },
+  },
+  "Helium-3 Harvest": {
+    site: { on: "planet", body: "Uranus", draw: "ring", places: [{ lat: 0, lon: 0, name: "Uranus’s air, 19 AU from the Sun" }] },
+    story: {
+      have: "One craft has flown past Uranus, Voyager 2 in 1986. Earth gathers a few kilograms of helium-3 a year, from the tritium in old warheads.",
+      where: "In Uranus’s upper air, where craft dip down and climb back to tankers in orbit.",
+      why: "Helium-3 is about 15 parts in a million of Uranus’s air, and its pull is far gentler than Jupiter’s, so a craft climbs out on far less fuel. The Moon’s soil holds about a thousandth as much a tonne.",
+      takes: "About 150 kt of craft, bases and tankers, gathering about 1.5 kt a Year.",
+      before: "In the 2010s Bryan Palaszewski of NASA Glenn sized craft that gather 500 kg of helium-3 from Uranus in 38 to 95 days.",
     },
   },
   "Rock Deflector": {

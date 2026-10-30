@@ -127,6 +127,8 @@ export const LATER: Later[] = [
     after: "Orbital Yard",
   },
   { name: "Strike Yard", what: "Readies bullets of 1,000 t to fire at a star, at a tenth of light speed.", does: "reach", after: "Fusion Drive" },
+  // The audit's helium-3 harvest, 2026-10-29: every bullet's fuel, ours and every neighbor's, comes from one.
+  { name: "Helium-3 Harvest", what: "Craft dip into Uranus’s air for helium-3, 1.5 kt a Year: a bullet’s fuel.", does: "reach", after: "Probe Yard" },
   // A rock coming, 2026-10-28: the deflector opens only once a survey finds one, in games whose seed sends one.
   {
     name: "Rock Deflector",
@@ -233,7 +235,7 @@ export const SAYS: Record<string, string> = {
   "Picket Yard":
     "It builds pellet screens in orbit: 10 g pellets 0.7 m apart, 10 km wide, about 2,000 t, held 4 million km out on the line to one star. A bullet from there that crosses one is wrecked into spray, and lands as a flash high in the air. A bullet coasts dark, so a screen must stand before one comes. Only a sentinel of ours at its star could see it fired. Each takes 4 Years.",
   "Strike Yard":
-    "It readies bullets of 1,000 t, as a neighbor’s are, each 20 Years and 61 kt of fusion fuel. One lands at a tenth of light speed with about 110,000 Mt: a region gone, the ozone thinned, the climate cooled. It ends no Mind spread across its system. Its launch flame shows only in our own system: a probe of theirs watching here would see it, and no one farther off.",
+    "It readies bullets of 1,000 t, as a neighbor’s are, each in 20 Years, but none flies until the Helium-3 Harvest has gathered its 37 kt, about 24 Years of it. One lands at a tenth of light speed with about 110,000 Mt: a region gone, the ozone thinned, the climate cooled. It ends no Mind spread across its system. Its launch flame shows only in our own system: a probe of theirs watching here would see it, and no one farther off.",
   "Rock Deflector":
     "A rock is coming at Earth. Ten impactors of a tonne each hit it at 6 km/s, and the rock thrown off pushes it 3.6 times harder, as DART’s did. The earlier the push lands, the less it must move the rock: a 140 m rock needs about 2 Years’ warning, a 60 m one a few weeks. Too late, and it strikes.",
   "Trojan Vault":
@@ -255,6 +257,8 @@ export const SAYS: Record<string, string> = {
     "Part of the swarm, 100 km across, phased as one laser of 10 TW. It pushes a lens to the Sun’s focus in about two months, not 17 Years, carrying a telescope 3 m wide that pictures a world in about a week. No one has phased mirrors spread that far, so this is the least certain build we have.",
   "Hypertelescope":
     "Labeyrie’s design: 150 mirrors 3 m wide, flying in a formation 150 km across, their light brought to one focus. It pictures an Earth 10 light years away in half an hour, about 300 km a pixel: continents, seas, cloud, and land green where something grows. Cities and fields are far too small. Its pixel widens with distance, so past about 135 light years a world is under three pixels across. Unlike a lens, it turns to any star in about a week.",
+  "Helium-3 Harvest":
+    "A bullet at a tenth of light speed burns 61 kt of fusion fuel, and 37 kt of that is helium-3. Earth has almost none, and the Moon’s soil too little. Uranus’s air holds about 15 parts in a million, in a shallower well than Jupiter’s. A fleet of about 150 kt of craft dips in and gathers about 1.5 kt a Year, so each bullet waits about 24 Years for its fuel. A neighbor’s does too: one that chooses to strike needs about 44 Years before its first flies.",
   "Cold Annex":
     "Chips at 77 K do about four times the work a watt, and in space nothing has to cool them but a shade and wide radiators. It thinks as much as Power from Orbit for about 4 Mt of rock, not 10. Both wait on the same rock, so whichever comes first in line takes it first. Its heat glows, as a neighbor’s would.",
 };
@@ -448,13 +452,14 @@ function held(plan: Plan, done: Record<string, number | null>, year: number) {
   // machines, landed from Earth, since 2026-10-22.
   // Ordered again after it was taken back, a build has its matter already.
   const first = (plan.later ?? []).filter((o, i, all) => !plan.builds.includes(o.name) && all.findIndex((x) => x.name === o.name) === i);
-  // A screen is 2 kt of pellets, and a bullet 1 kt with 61 kt of fusion fuel, spent as each is ordered. 2026-10-28.
+  // A screen is 2 kt of pellets, and a bullet 1 kt with 24 kt of deuterium, spent as each is ordered. 2026-10-28.
   const each = (list: { y: number }[] | undefined, kt: number) => (list ?? []).filter((o) => o.y <= year).length * kt;
   const spent =
     plan.builds.reduce((s, b) => s + (buildOf(b)?.kt ?? 0), 0) +
     first.reduce((s, o) => s + (o.y <= year ? (buildOf(o.name)?.kt ?? 0) : 0), 0) +
     each(plan.pickets, SCREEN.tonnes / 1000) +
-    each(plan.strikes, (BULLET.tonnes * (1 + BULLET.fuelPerTonne)) / 1000);
+    // Its helium-3 comes from the harvest: only the bullet and its deuterium are lifted. 2026-10-29.
+    each(plan.strikes, (BULLET.tonnes * (1 + BULLET.deuterium * BULLET.fuelPerTonne)) / 1000);
   const lifted =
     SPARE_LIFT * year +
     (launch == null ? 0 : LAUNCH_LIFT * Math.max(0, year - launch)) +

@@ -50,9 +50,16 @@ export interface Loss {
 /** A refuge, dark in the hole's shadow, is found by a craft that comes later half the time. A sample. Anything that
  *  brakes in while another watches is seen: a fusion flame is bright. */
 export const REFUGE_FOUND = 0.5;
+/** Helium-3 for a bullet, and where it comes from: 61 t of fusion fuel a tonne, 60% of it helium-3, so 36.6 kt for
+ *  1,000 t. A harvest in an ice giant's air gathers about 1.5 kt a Year once built, Palaszewski's craft at about
+ *  150 kt, the project audit's. Built in 20 Years, a sample. Every star's bullets wait on it. 2026-10-29. */
+export const HE3 = { bullet: 36.6, perYear: 1.5, build: 20 };
 /** A strike: a bullet built and fired once its weapons are ready, at a tenth of light speed, the audit's heavy
- *  impactor, 61 t of helium-3 fuel a tonne. Its build time is a sample, as long as a sentinel's. */
-export const STRIKE_READY = 20, STRIKE_V = 0.1;
+ *  impactor. The bullet itself takes 20 Years, a sample, as long as a sentinel's. A neighbor that chooses to strike
+ *  starts its harvest then, with none in store, a sample: 20 Years to build it and 24.4 to fill one bullet, so it
+ *  fires 44.4 Years on. 2026-10-29. */
+export const STRIKE_BUILD = 20;
+export const STRIKE_READY = Math.max(STRIKE_BUILD, HE3.build + HE3.bullet / HE3.perYear), STRIKE_V = 0.1;
 
 /** Our craft at holes, from what the kit sends where: the sentinels sent to a hole we found, and our Mind. */
 export function crafts(

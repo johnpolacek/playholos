@@ -178,6 +178,11 @@
    "want": 100,
    "energy": 0.5
   },
+  "Helium-3 harvest": {
+   "years": 20,
+   "want": 5,
+   "orbit": true
+  },
   "Mercury works": {
    "years": 12,
    "want": 3.0,

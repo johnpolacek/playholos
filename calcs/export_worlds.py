@@ -187,6 +187,9 @@ def works_catalog():
     # Ground solar's fifth counts too, 2026-10-28: a whole data center more only where the grid's room was near one.
     works['Ground solar']['energy'] = 0.2
     works['Fusion plants'] = dict(years=eg.FUSION_YEARS, want=eg.WANTS['Fusion plants'][0], energy=eg.FUSION_ENERGY)
+    # The Helium-3 Harvest, settled 2026-10-29: the audit's ~150 kt of Palaszewski's craft at Uranus, 1.5 kt a Year.
+    # Every bullet waits on its fuel, game/lib/sim/meetings.ts's HE3. Its 20 Years and 5 flagships are samples.
+    works['Helium-3 harvest'] = dict(years=20, want=5, orbit=True)
     # Mercury Works, the Solar Swarm, the Star Beam and the Hypertelescope, settled 2026-10-29: calcs/mercury.py.
     import mercury
     more, kit = mercury.catalog()

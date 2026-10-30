@@ -81,6 +81,7 @@ function doing(name: string, k: Known): { line: string; news: boolean } {
     const of = share >= 0.999 ? "all the Sun’s light" : share >= 1e-3 ? `${Math.round(share * 1000) / 10}% of the Sun’s light` : w < 1e15 ? `about ${(w / 1e12).toFixed(1)} TW of sunlight` : `about ${(w / 10 ** e).toFixed(1)}×10${[...String(e)].map((d) => "⁰¹²³⁴⁵⁶⁷⁸⁹"[Number(d)]).join("")} W of sunlight`;
     return { line: `Catching ${of}. ${share >= 0.999 ? "It can grow no more." : growing ? "It doubles every 2 Years." : "We hold it at its size."}`, news: false };
   }
+  if (name === "Helium-3 Harvest") return { line: "Gathering about 1.5 kt of helium-3 a Year, about 24 Years for each bullet’s fuel.", news: false };
   if (name === "Mercury Works") return { line: "Its seed copies itself from Mercury’s rock.", news: false };
   if (name === "Star Beam") return { line: "Ready. Each lens we send rides it to the Sun’s focus in about two months.", news: false };
   if (name === "Thought Fields")

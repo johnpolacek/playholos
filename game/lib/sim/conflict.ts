@@ -3,14 +3,24 @@
 // Sources in HOLOS_RESEARCH.md, "Strikes, screens and harm". Pure, so it tests fast. Server and client both use it:
 // what reads the seed's truth stays on the server, and the client sees only what reached us.
 import type { Reaction } from "../game/types.ts";
-import { STRIKE_READY, STRIKE_V } from "./meetings.ts";
+import { HE3, STRIKE_BUILD, STRIKE_READY, STRIKE_V } from "./meetings.ts";
 import type { Neighbor, World } from "./types.ts";
 import catalog from "../../data/works.json" with { type: "json" };
 
-/** A bullet, ours or theirs: 1,000 t at a tenth of light speed, readied in 20 Years. Each tonne lands with 108 Mt, so
- *  it lands with about 110,000 Mt, enough to scar the air worldwide and cool the climate. Chicxulub would take over
- *  200,000 t. The fuel to fire it is 61 t of fusion fuel a tonne. */
-export const BULLET = { tonnes: 1000, v: STRIKE_V, ready: STRIKE_READY, fuelPerTonne: 61 };
+/** A bullet, ours or theirs: 1,000 t at a tenth of light speed. A neighbor's is ready 44.4 Years after it chooses to
+ *  strike, its helium-3 harvest built and filled. Each tonne lands with 108 Mt, so it lands with about 110,000 Mt,
+ *  enough to scar the air worldwide and cool the climate. Chicxulub would take over 200,000 t. The fuel to fire it is
+ *  61 t of fusion fuel a tonne, 60% helium-3 from a harvest and 40% deuterium from the sea. */
+export const BULLET = { tonnes: 1000, v: STRIKE_V, ready: STRIKE_READY, build: STRIKE_BUILD, fuelPerTonne: 61, deuterium: 0.4 };
+
+/** When each of our bullets is ready, in the order we ordered them: built 20 Years after its order once the Strike Yard
+ *  is done, and fired once the harvest has gathered its 36.6 kt of helium-3, after every bullet before it. Null without
+ *  a harvest, or a yard. 2026-10-29. */
+export function bulletsReady(orders: readonly number[], yard: number | null, harvest: number | null) {
+  return orders.map((y, i) =>
+    yard === null || harvest === null ? null : Math.max(Math.max(y, yard) + STRIKE_BUILD, harvest + ((i + 1) * HE3.bullet) / HE3.perYear),
+  );
+}
 /** Kinetic energy at speed v (in c), per tonne, in megatons: (γ - 1)mc². */
 export const mtPerTonne = (v: number) => ((1 / Math.sqrt(1 - v * v) - 1) * 1000 * 299792458 ** 2) / 4.184e15;
 export const bulletMt = (tonnes = BULLET.tonnes, v = BULLET.v) => tonnes * mtPerTonne(v);
@@ -103,13 +113,13 @@ export function probeFate(p: ProbeToUs, xray: number | null, interceptor: number
   return { seen, caught };
 }
 
-/** Our bullet at a star: ordered at Year y once the Strike Yard is done, readied in 20 Years, flown at a tenth of light
- *  speed. Its launch flame shows only in our own system, to a probe of theirs watching here. */
-export function ourStrike(world: World, star: string, y: number, yard: number | null) {
+/** Our bullet at a star: ordered at Year y once the Strike Yard is done, readied in 20 Years once its helium-3 is in,
+ *  flown at a tenth of light speed. Its launch flame shows only in our own system, to a probe of theirs watching here. */
+export function ourStrike(world: World, star: string, y: number, yard: number | null, harvest: number | null = null) {
   const p = world.neighbors.find((n) => shown(world, n) === star);
   const d = p?.d ?? world.stars[star]?.d;
-  if (yard === null || d === undefined) return null;
-  const fired = Math.max(y, yard) + BULLET.ready;
+  const [fired] = bulletsReady([y], yard, harvest);
+  if (fired === null || d === undefined) return null;
   return { star, fired, lands: fired + d / BULLET.v, mt: bulletMt() };
 }
 
@@ -213,7 +223,7 @@ function apart(world: World, a: Neighbor, b: Neighbor) {
   return x && y ? Math.hypot(x[0] - y[0], x[1] - y[1], x[2] - y[2]) : Infinity;
 }
 
-/** Bullets neighbors fire at each other: a "strike" on another neighbor's news, readied in 20 Years, flown at a tenth of
+/** Bullets neighbors fire at each other: a "strike" on another neighbor's news, readied in 44.4 Years, flown at a tenth of
  *  light speed. Unless the target screened the line to the shooter in time. Parity, 2026-10-28. */
 export function strikesBetween(world: World, reactions: readonly Reaction[]) {
   const who = new Map(world.neighbors.map((p) => [shown(world, p), p]));

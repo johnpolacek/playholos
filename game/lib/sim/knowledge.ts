@@ -1,7 +1,7 @@
 // The knowledge wall: what Earth knows at a moment, from the seed's truth. Settled 2026-10-13: the Mind judges from
 // what Earth knows, never the seed. So nothing here passes on who lives where, a world's rung, or anything not yet
 // arrived and caught. Pure: no files, so it runs anywhere and tests fast.
-import { mindsSeen, type MindKit } from "./minds.ts";
+import { mindsSeen, type MindKit, type MindsSeen } from "./minds.ts";
 import { giftWords } from "../game/sends.ts";
 import { lightTime } from "../light.ts";
 import { hidesOf } from "./conflict.ts";
@@ -649,9 +649,51 @@ export function describe(view: EarthView): string {
             (c.watts && !c.lost && c.mode === "settle" ? ` Its works on the star's light run at about ${c.watts.toExponential(0).replace("e+", "×10^")} W, as its word shows it.` : "") +
             (c.watts && !c.lost && c.mode === "furnace" ? ` Its furnace runs at about ${c.watts.toExponential(0).replace("e+", "×10^")} W, as its word shows it, under what any sky survey sees until about 10^19 W.` : c.mode === "refuge" ? " It keeps small and dark, and no one looking from outside would know it is there." : ""));
   const holesText = dark.length ? `\n\nBlack holes we have found. A star mapper finds more as they pass in front of stars:\n${dark.join("\n")}` : "";
+  const mindsText = view.minds ? describeMinds(view.minds, one) : "";
   return `Worlds Earth has felt by their tug on their stars, as of Year ${one(view.year)}. From here a home and a natural world look the same:
 ${felt}${nearest}
 
 Signals Earth's watch has caught:
-${heard}${visits.length ? `\n\nWhat our craft have seen up close:\n${visits.join("\n")}` : ""}${glow}${holesText}${colonyText}`;
+${heard}${visits.length ? `\n\nWhat our craft have seen up close:\n${visits.join("\n")}` : ""}${glow}${holesText}${colonyText}${mindsText}`;
+}
+
+/** What Earth has found of the realistic premise's minds, as measured and never as who: each with what it could be,
+ *  natural causes first, since minds are rare. lib/sim/minds.ts. 2026-10-29. */
+function describeMinds(m: MindsSeen, one: (x: number) => string): string {
+  const sky = (x: { ra: number; dec: number }) => `toward right ascension ${(Math.round(x.ra * 10) / 10 % 24).toFixed(1)} h, declination ${x.dec.toFixed(0)}°`;
+  const watts = (w: number) => w.toExponential(0).replace("e+", "×10^");
+  const out: string[] = [];
+  if (m.flashes.length)
+    out.push(
+      `New warm glows our Warm Sky Watch has seen, mapping the whole sky every 2 Years, ten times deeper than WISE:\n` +
+        m.flashes.map((f) =>
+          `- ${sky(f)}: a new warm glow near room temperature, first seen at Year ${one(f.seen)}${f.faded !== undefined ? `, faded by Year ${one(f.faded)}` : ", still shining"}. ` +
+          `Its distance is unknown, too far for any parallax, so its power is too. A glow like this fits a young star wrapped in dust, ` +
+          `the dusty wreck of two stars merging, or something building around a star and catching its light. Nothing we have seen yet tells them apart.`).join("\n"),
+    );
+  if (m.glows.length)
+    out.push(
+      `Cold glows our Halo Survey has seen, mapping the whole sky in far infrared:\n` +
+        m.glows.map((g) =>
+          `- ${sky(g)}, beside a star ${one(g.d)} ly away: a compact glow near 12 K, about ${watts(g.watts)} W, first seen at Year ${one(g.seen)}, steady. ` +
+          `Its color fits no dust we know. It could be a cold disk of unusual grains, a measuring error, or computing done cold, far from a star.`).join("\n"),
+    );
+  if (m.watcher) {
+    const w = m.watcher;
+    out.push(
+      w.by === "moon search"
+        ? `A small dark body our Moon Search found at ${w.place}, about 10 cm across, first seen at Year ${one(w.seen)}. The Sun's pull unsettles anything at the Moon's L4 and L5 points within years, yet it holds there. No rock should.`
+        : w.by === "asteroid tour"
+          ? `On ${w.place}, our Asteroid Tour found a made thing about 10 cm across, at Year ${one(w.seen)}: smooth, dark and not of the rock. It has been there a long time. It sends nothing we can hear.`
+          : `A narrow laser signal aimed at Earth from ${w.place}, beginning at Year ${one(w.seen)}, the Year our first seed ship left. Its timing reads as an answer to that ship. It comes from something small that we never found there.`,
+    );
+  }
+  if (m.sleepers.length)
+    out.push(
+      `What our craft found resting in other systems:\n` +
+        m.sleepers.map((x) =>
+          `- ${sky(x)}, ${one(x.d)} ly away: a compact warm body ${lightTime(x.restAU)} from its star, shedding about 10^10 W, word home at Year ${one(x.seen)}. ` +
+          `Starlight that far out would leave it near ${Math.round(278 / Math.sqrt(x.restAU))} K or colder, yet it is hundreds of K warmer. Something inside it makes heat.`).join("\n"),
+    );
+  return out.length ? `\n\n${out.join("\n\n")}` : "";
 }

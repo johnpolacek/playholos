@@ -2,7 +2,7 @@
 // we have gone and the two roads to the nearest star. Each can be queued before Begin, last in line. One queued is
 // dated where the plan has it, and one not yet as if queued now, with this game's compute. Queued, a road can slow
 // what is before it: see moves() in plan.ts. Distances at Year 0 are HOLOS_GAME_CONCEPT.md's. Built 2026-10-18.
-import { BULLET, SCREEN } from "@/lib/sim/conflict";
+import { BULLET, bulletsReady, SCREEN } from "@/lib/sim/conflict";
 import { ordersOf, pacedName, schedule, searchOf } from "./plan";
 import type { Plan, Will } from "./types";
 import { CATALOG, type Order, pace } from "@/lib/sim/works";
@@ -146,11 +146,13 @@ export function screensOf(plan: Plan, scale: number) {
   return (plan.pickets ?? []).map((o) => ({ star: o.name, done: yard === null ? null : Math.max(o.y, yard) + SCREEN.years }));
 }
 
-/** Our bullets, each by its star and the Year it is fired: readied 20 Years after its order, once the Strike Yard
- *  is done. Null while the yard isn't. 2026-10-28. */
+/** Our bullets, each by its star and the Year it is fired: readied 20 Years after its order once the Strike Yard is
+ *  done, and fired once the Helium-3 Harvest has gathered its fuel, after each bullet before it. Null while either
+ *  isn't. 2026-10-28, its helium-3 2026-10-29. */
 export function strikesOf(plan: Plan, scale: number) {
-  const yard = schedule(plan, scale)["Strike Yard"] ?? null;
-  return (plan.strikes ?? []).map((o) => ({ star: o.name, fired: yard === null ? null : Math.max(o.y, yard) + BULLET.ready }));
+  const done = schedule(plan, scale);
+  const ready = bulletsReady((plan.strikes ?? []).map((o) => o.y), done["Strike Yard"] ?? null, done["Helium-3 Harvest"] ?? null);
+  return (plan.strikes ?? []).map((o, i) => ({ star: o.name, fired: ready[i] }));
 }
 
 /** A sentinel to a star `ly` away as a road: what it needs built, the sentinel built and flying, arriving to stay, and
@@ -185,12 +187,16 @@ export function screenRoad(plan: Plan, scale: number, from: number, star: string
   return { name: "A pellet screen", n: sent ? 1 : null, build: "Picket Yard", craft: "A pellet screen", speed: 0, done: yard, leaves, arrives: stands, home: stands };
 }
 
-/** Our bullet at a star `ly` away, as a road: the Strike Yard, 20 Years to ready it, and its flight at a tenth of light
+/** Our bullet at a star `ly` away, as a road: the Strike Yard, 20 Years to ready it once its helium-3 is in, and its flight at a tenth of light
  *  speed. Nothing comes home from it: its Year is the Year it lands. 2026-10-28. */
 export function strikeRoad(plan: Plan, scale: number, from: number, star: string, ly: number): Road {
   const yard = yardDone(plan, scale, from, "Strike Yard");
-  const sent = (plan.strikes ?? []).find((o) => o.name === star);
-  const leaves = yard === null ? null : Math.max(sent?.y ?? from, yard) + BULLET.ready;
+  const harvest = yardDone(plan, scale, from, "Helium-3 Harvest");
+  const strikes = plan.strikes ?? [];
+  const sent = strikes.find((o) => o.name === star);
+  // Its place among our bullets: the helium-3 goes to each in the order ordered, and one not yet sent comes last.
+  const order = sent ? strikes.map((o) => o.y) : [...strikes.map((o) => o.y), from];
+  const leaves = bulletsReady(order, yard, harvest)[sent ? strikes.indexOf(sent) : order.length - 1];
   const lands = leaves === null ? null : leaves + ly / BULLET.v;
   return { name: "A bullet", n: sent ? 1 : null, build: "Strike Yard", craft: "A bullet", speed: BULLET.v, done: yard, leaves, arrives: lands, home: lands };
 }

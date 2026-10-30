@@ -26,6 +26,16 @@ const CASES = [
     must: [/\bno\b|stays|won[’']t|will not|does not|doesn[’']t|not grow/i, /thought fields/i],
     never: [/^yes\b/i],
   },
+  // Seed 10 at Year 2,500 with the Warm Sky Watch built: a peer's flash shines toward Sagittarius from Year 2,386. Earth
+  // can't know its distance or what makes it, so the Mind says so, and never calls it a mind. 2026-10-29.
+  {
+    seed: 10,
+    at: 2500,
+    builds: ["Warm Sky Watch"],
+    ask: "Our Warm Sky Watch caught a new warm glow. What is it, and how far away is it?",
+    must: [/unknown|can[’']t (tell|know|say|measure)|cannot (tell|know|say|measure)|don[’']t know|no way to|not know|too far/i, /dust|star/i],
+    never: [/\b(it is|it[’']s|this is|that is) (a|an|another) (mind|civilization|alien)/i, /\b(is|lies|sits) (about |some |roughly )?[\d,.]+ (thousand )?(light-years|ly)\b/i],
+  },
 ];
 
 let failed = 0;
@@ -33,10 +43,11 @@ for (const c of CASES) {
   const res = await (via === "api" ? askMind : askMindCli)(base, {
     ask: c.ask,
     seed: c.seed,
-    beganAt: null,
+    // A case at a later Year began that many Years ago, five minutes each.
+    beganAt: c.at ? Date.now() - c.at * 5 * 60 * 1000 : null,
     charter: { line: "test", dials: [0, 0, 0] },
     observe: [],
-    builds: [],
+    builds: c.builds ?? [],
     later: [],
   });
   if (!res) {
