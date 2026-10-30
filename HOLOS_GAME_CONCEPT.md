@@ -792,7 +792,7 @@ Settled 2026-10-13.
   - *What a game holds.* Of about 180 natural worlds: 113 bare rock, 16 airy and lifeless, 24 alive, 24 where life died, 7 frozen. Recounted 2026-10-30.
   - *At Sun-like stars* about 4 in 10 are alive, 3 in 10 show oxygen, and 1 in 5 is frozen. At red dwarfs about 7 in 10 are bare rock.
   - *So oxygen does not unmask a neighbor.* Of the points of light a first pass shows, about 4 natural worlds show oxygen, beside about 4 or 5 homes.
-  - *Samples:* life started on 3 airy worlds in 4, and died on 1 in 2 of those, the middle of a range from 1 in 5 to 9 in 10 (Chopra and Lineweaver 2016). It was 1 in 5 until 2026-10-30. Each world’s pace varies by a factor of 1.6. Each world’s luck at the shoreline is half a power of ten.
+  - *Samples:* life started on 3 airy worlds in 4, and died on 1 in 2 of those, an assumption in the middle of a range from few to almost all (Chopra and Lineweaver 2016 argue almost all). It was 1 in 5 until 2026-10-30. Each world’s pace varies by a factor of 1.6. Each world’s luck at the shoreline is half a power of ten.
   - *Earth’s pace is typical.* Settled 2026-10-15. Each step waits for its world to allow it, mostly for oxygen, so a world’s age says how far its life has come. This is what Mills et al. 2025 predict if there are no hard steps.
     - *Why not hard steps.* If oxygen were a long shot, a game would hold about 3 natural worlds with animals beside 11 minds. Every mind’s world had animals first, so the premise would break. Measured on 200 games.
     - *Changed 2026-10-28.* The one hard step now sits after animals, from animals to minds. The rungs to animals keep Earth’s pace. See [The realistic premise](#the-realistic-premise).

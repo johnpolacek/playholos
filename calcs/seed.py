@@ -156,8 +156,9 @@ def warm_world(seed, host):
 # - Life. Kipping 2025 gives 13 to 1 that life starts fast where conditions allow, and not how often they allow. Here
 #   it started on 3 airy worlds in 4: a sample. It later died out on 1 in 2 of those, settled 2026-10-30. Chopra and
 #   Lineweaver 2016 argue almost all early life dies before it can steady its world's climate, and models of the idea
-#   (Nicholson et al. 2018, Arthur and Nicholson 2023) give no rate. The range runs from about 1 in 5 to 9 in 10, so
-#   this takes its middle. It was 1 in 5, a sample with no source.
+#   (Nicholson et al. 2018, Arthur and Nicholson 2023) disagree on how often and give no rate. The usual warm zone has
+#   rock weathering steady the climate without life, so few would die. So the range runs from few to almost all, and
+#   half is an assumption at its middle. It was 1 in 5, a sample with no source.
 # - Pace. Earth had lasting oxygen at 2.3 billion years old (Poulton et al. 2021), and air rich enough to read, with
 #   animals and forests, at about 4.0 (Reinhard et al. 2017). Each world runs faster or slower by its own factor, 1.6
 #   at one sigma: a sample. Settled 2026-10-15: Earth's pace is typical, with no hard steps, as Mills et al. 2025 argue.
