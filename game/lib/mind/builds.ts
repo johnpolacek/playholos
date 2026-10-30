@@ -1,6 +1,7 @@
 // What Earth can build, and how far our order has come, for the Mind. Without it the Mind named builds that don't
 // exist, guessed whether a watch was done, and called the drift scan our only ear at Year 40 with the All-Sky Watch long
 // built. Times are Build's: a build's standard pace, and each one in our order as schedule dates it. 2026-10-23.
+import { yearText } from "@/lib/game/clock";
 import { BUILDS, kt, LATER, moves, openAt, ordered, PAST, takenAt, takes } from "@/lib/game/plan";
 import { lensTrip } from "@/lib/game/reach";
 import { FOUND, harm, rockAt, type Rock } from "@/lib/game/rocks";
@@ -119,7 +120,7 @@ export function describeOffers(plan: Plan, scale: number, done: Record<string, n
   if (!open.length) return "";
   const lines = open.map((b) => {
     const m = moves(plan, scale, b.name, year === null ? null : at);
-    const when = m.at == null ? `done ${PAST}` : `done about Year ${tenth(m.at)}`;
+    const when = m.at == null ? `done ${PAST}` : `done about Year ${yearText(m.at)}`;
     const slows = m.late ? `slowing the ${m.late.name} by about ${tenth(m.late.by)} Years` : "slowing nothing we've queued";
     const speeds = m.soon ? `, and speeding the ${m.soon.name} by about ${tenth(m.soon.by)} Years` : "";
     return `- ${b.name}: ordered now, ${when}, ${slows}${speeds}.`;
@@ -132,7 +133,7 @@ export function describeOffers(plan: Plan, scale: number, done: Record<string, n
 export function describeRock(rock: Rock | null, plan: Plan, done: Record<string, number | null>, year: number | null) {
   const r = rockAt(rock, plan, done, year ?? 0);
   if (!r || r.state === "unknown") return "";
-  const at = (y: number) => `Year ${tenth(y)}`;
+  const at = (y: number) => `Year ${yearText(y)}`;
   if (r.state === "struck")
     // Its warning, plainly, so the Mind never says it came unwarned when we had Years. Playtest 2026-10-30.
     return `A rock ${r.m} m wide struck Earth at ${at(r.strikes)}: ${harm(r.m)}.${r.found === null ? " No survey saw it coming." : ` We found it at ${at(r.found)}, ${tenth(r.strikes - r.found)} Years ahead, time enough for a push landing by ${at(r.strikes - r.lead)}. ${r.lands === null ? "We never ordered the Rock Deflector." : `Our Rock Deflector's push landed at ${at(r.lands)}, too late.`}`}`;

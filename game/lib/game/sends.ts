@@ -4,6 +4,7 @@
 // Claude login alike.
 import targets from "../../data/targets.json" with { type: "json" };
 import { aimedYears, SIZES } from "../sim/messages.ts";
+import { yearText } from "./clock.ts";
 import type { Kind, Sent, Size } from "./types.ts";
 
 const KINDS: Kind[] = ["words", "pictures", "questions", "knowledge"];
@@ -102,19 +103,19 @@ export function describeSent(sent: Sent[], year: number | null): string {
   const lines = sent.map((s) => {
     const lie = s.lie ? ` It carries a lie, which they will take as true: ${s.lie}` : "";
     if (s.to === "everywhere") {
-      const run = s.repeat ? (s.stopped !== undefined ? `, repeated until we stopped it at Year ${one(s.stopped)}` : ", repeating until the Will stops it") : ", once";
-      return `- Every way at once, from Year ${one(s.y)}${run}, readable to ${s.reach} ly: ${s.travels}${lie}`;
+      const run = s.repeat ? (s.stopped !== undefined ? `, repeated until we stopped it at Year ${yearText(s.stopped)}` : ", repeating until the Will stops it") : ", once";
+      return `- Every way at once, from Year ${yearText(s.y)}${run}, readable to ${s.reach} ly: ${s.travels}${lie}`;
     }
     const { sendYears, lands, back } = dates(s.y, s.d!, s.size);
     // A big message takes Years to send, at our dishes' pace, and lands over as long. Said, since the Mind took a
     // 15-Year send for one long gone, 2026-10-26.
     const first = s.y + s.d!;
     const long = sendYears >= 0.05;
-    const sending = long ? (s.y + sendYears > now ? ` Our dishes are still sending it, until Year ${one(s.y + sendYears)}.` : ` Our dishes sent it until Year ${one(s.y + sendYears)}.`) : "";
+    const sending = long ? (s.y + sendYears > now ? ` Our dishes are still sending it, until Year ${yearText(s.y + sendYears)}.` : ` Our dishes sent it until Year ${yearText(s.y + sendYears)}.`) : "";
     const where = long
-      ? `${lands <= now ? "it landed" : "it lands"} from Year ${one(first)} to Year ${one(lands)}`
-      : lands <= now ? `landed at Year ${one(lands)}` : `lands at Year ${one(lands)}`;
-    return `- To ${s.to}, ${one(s.d!)} ly, sent from Year ${one(s.y)}, ${where}.${sending} The soonest an answer to all of it could be home is Year ${one(back)}. It holds: ${s.travels}${lie}`;
+      ? `${lands <= now ? "it landed" : "it lands"} from Year ${yearText(first)} to Year ${yearText(lands)}`
+      : lands <= now ? `landed at Year ${yearText(lands)}` : `lands at Year ${yearText(lands)}`;
+    return `- To ${s.to}, ${one(s.d!)} ly, sent from Year ${yearText(s.y)}, ${where}.${sending} The soonest an answer to all of it could be home is Year ${yearText(back)}. It holds: ${s.travels}${lie}`;
   });
   return `What we have sent since Year 0, and nothing else has gone. A star learns of it only once it lands:\n${lines.join("\n")}`;
 }

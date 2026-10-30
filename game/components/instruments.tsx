@@ -5,10 +5,10 @@ import { BuildMark, buildColor, buildTone } from "@/components/marks";
 import { usePlan, useSchedule } from "@/components/picks";
 import { useLeads } from "@/components/scan";
 import { ListHead } from "@/components/tab-head";
-import { span, tenths } from "@/lib/game/clock";
+import { span, tenths, yearText } from "@/lib/game/clock";
 import { grownSpans } from "@/lib/game/halo";
 import { SWARM } from "@/lib/sim/conflict";
-import type { Reading } from "@/lib/game/leads";
+import { type Reading, starName } from "@/lib/game/leads";
 import { buildOf, buildSlug, computeAt, LAUNCH_LIFT, ordered, PAST } from "@/lib/game/plan";
 import type { Heard, Visit } from "@/lib/sim/types";
 import { CO_ORBITALS, MOON_SEARCH_YEARS, type MindsSeen, moonSearchEnds, tourEnds } from "@/lib/sim/minds";
@@ -45,19 +45,24 @@ function found(name: string, k: Known): { line: string; news: boolean } | null {
   if (name === "Warm Sky Watch" && m.flashes.length) {
     const f = m.flashes.at(-1)!;
     const i = m.flashes.length;
-    const at = f.range ? `Warm glow ${i}, ranged by our Infrared Telescope.` : "Our Infrared Telescope must range it before we can place it.";
-    return { line: `Has seen ${n(i)} new warm glow${i > 1 ? "s" : ""}, the latest at Year ${tenths(f.seen)}. ${at}`, news: recent(f.ranged ?? f.seen) };
+    const at =
+      f.faded !== undefined
+        ? `Warm glow ${i} faded by Year ${yearText(f.faded)}.`
+        : f.range
+          ? `Warm glow ${i}, ranged by our Infrared Telescope.`
+          : "Our Infrared Telescope must range it before we can place it.";
+    return { line: `Has seen ${n(i)} new warm glow${i > 1 ? "s" : ""}, the latest at Year ${yearText(f.seen)}. ${at}`, news: recent(f.faded ?? f.ranged ?? f.seen) };
   }
   if ((name === "Halo Survey" || name === "Halo Array") && m.glows.length) {
     const g = m.glows.at(-1)!;
     const i = m.glows.length;
-    return { line: `Found ${n(i)} cold glow${i > 1 ? "s" : ""}. The latest, Cold glow ${i}, at Year ${tenths(g.seen)}.`, news: recent(g.seen) };
+    return { line: `Found ${n(i)} cold glow${i > 1 ? "s" : ""}. The latest, Cold glow ${i}, at Year ${yearText(g.seen)}.`, news: recent(g.seen) };
   }
   const w = m.watcher;
   if (name === "Moon Search" && w?.by === "moon search")
-    return { line: `Found a dark body about 10 cm across at the Moon’s L5, at Year ${tenths(w.seen)}. It holds where no rock should.`, news: recent(w.seen) };
+    return { line: `Found a dark body about 10 cm across at the Moon’s L5, at Year ${yearText(w.seen)}. It holds where no rock should.`, news: recent(w.seen) };
   if (name === "Asteroid Tour" && w?.by === "asteroid tour")
-    return { line: `Found something made on ${w.place}, at Year ${tenths(w.seen)}.`, news: recent(w.seen) };
+    return { line: `Found something made on ${w.place}, at Year ${yearText(w.seen)}.`, news: recent(w.seen) };
   return null;
 }
 
@@ -68,7 +73,7 @@ function doing(name: string, k: Known, since: number): { line: string; news: boo
   if (caught.length) {
     const h = caught.at(-1)!;
     const more = caught.length > 1 ? ` ${caught.length} caught in all.` : "";
-    return { line: `Caught ${A(h.move)} from ${h.star} at Year ${tenths(h.arrived)}.${more}`, news: recent(h.arrived) };
+    return { line: `Caught ${A(h.move)} from ${h.star} at Year ${yearText(h.arrived)}.${more}`, news: recent(h.arrived) };
   }
   if (name === "All-Sky Watch") return { line: "Listening to the whole sky, at every hour. Nothing yet our old watches would miss.", news: false };
   if (name === "Deep Flash Watch") return { line: "Watching for laser flashes. None yet.", news: false };
@@ -76,7 +81,8 @@ function doing(name: string, k: Known, since: number): { line: string; news: boo
   if (sign) return sign;
   const read = k.read.filter((x) => x.r.by === name && x.r.at <= k.now).sort((a, b) => a.r.at - b.r.at);
   if (read.length) {
-    const { star, r } = read.at(-1)!;
+    const { r } = read.at(-1)!;
+    const star = starName(read.at(-1)!.star);
     const stars = new Set(read.map((x) => x.star)).size;
     const line =
       name === "Halo Survey"
@@ -93,7 +99,7 @@ function doing(name: string, k: Known, since: number): { line: string; news: boo
   const toured = tourEnds(since);
   if (name === "Asteroid Tour")
     return k.now >= toured
-      ? { line: `Mapped all ${CO_ORBITALS.length} asteroids that share our orbit by Year ${tenths(toured)}. Only rock.`, news: k.now - toured < 0.5 }
+      ? { line: `Mapped all ${CO_ORBITALS.length} asteroids that share our orbit by Year ${yearText(toured)}. Only rock.`, news: k.now - toured < 0.5 }
       : { line: "Mapping the asteroids that share our orbit, one by one. Nothing that isn’t rock yet.", news: false };
   if (name === "Moon Search")
     return k.now >= moonSearchEnds(since)
@@ -107,8 +113,8 @@ function doing(name: string, k: Known, since: number): { line: string; news: boo
       const v = home.at(-1)!;
       // The Hypertelescope pictures many on its own: how many, and the latest. 2026-10-29.
       if (craft === "hyper")
-        return { line: `Has pictured ${home.length === 1 ? "a world" : `${home.length} worlds`}. The latest, ${v.world}, at Year ${tenths(v.home)}.`, news: recent(v.home) };
-      return { line: `Word home from ${v.world}, at Year ${tenths(v.home)}.`, news: recent(v.home) };
+        return { line: `Has pictured ${home.length === 1 ? "a world" : `${home.length} worlds`}. The latest, ${v.world}, at Year ${yearText(v.home)}.`, news: recent(v.home) };
+      return { line: `Word home from ${v.world}, at Year ${yearText(v.home)}.`, news: recent(v.home) };
     }
     if (craft === "hyper") return { line: "Turning to the nearest worlds we’ve felt. No picture in yet.", news: false };
     return { line: "Ready. We send from Reach.", news: false };
@@ -145,7 +151,7 @@ function Card({ name, since, line, news }: { name: string; since: number; line: 
           <span className="text-[15px] leading-snug font-medium">{name}</span>
           <span className={`text-[13px] leading-snug ${news ? "text-(--c)" : "text-page-ink2"}`}>{line}</span>
         </span>
-        <span className="shrink-0 self-start font-mono text-[10.5px] text-muted tabular-nums">since Y{tenths(since)}</span>
+        <span className="shrink-0 self-start font-mono text-[10.5px] text-muted tabular-nums">since Y{yearText(since)}</span>
       </Link>
     </li>
   );

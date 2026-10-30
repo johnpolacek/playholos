@@ -5,7 +5,7 @@ import { Item, type Row } from "@/components/journey";
 import type { Aim } from "@/components/picks";
 import { heardId, useLeads } from "@/components/scan";
 import { ListHead } from "@/components/tab-head";
-import { tenths, YEAR_0 } from "@/lib/game/clock";
+import { yearText, YEAR_0 } from "@/lib/game/clock";
 import { giftWords } from "@/lib/game/sends";
 
 // What our watches have caught, on Scan, above the leads: each signal on its whole journey, from the year its sender
@@ -59,7 +59,7 @@ export function Heard() {
           ] as [string, string | undefined][])
         : h.about ? [] : h.found !== undefined
           // Missed when it came, and dug out of old recordings by our idle thought. 2026-10-28.
-          ? ([["FOUND BY", `Our search of old recordings, at Year ${tenths(h.found)}. No one saw it when it came.`]] as [string, string][])
+          ? ([["FOUND BY", `Our search of old recordings, at Year ${yearText(h.found)}. No one saw it when it came.`]] as [string, string][])
           : ([[
             "CAUGHT BY",
             h.by

@@ -3,7 +3,7 @@ import { type Aim, focusable, pointer, Story, WASH } from "@/components/picks";
 import { BeamMark, BuildMark, buildBlue, RecordMark } from "@/components/marks";
 import { OpensLine } from "@/components/opens";
 import { Face } from "@/components/tab-head";
-import { span, tenths, YEAR_0, lyOf } from "@/lib/game/clock";
+import { span, yearText, YEAR_0, lyOf } from "@/lib/game/clock";
 import { SENDS } from "@/lib/game/knocks";
 import { buildSlug, PAST } from "@/lib/game/plan";
 
@@ -94,7 +94,7 @@ function Journey({ row, now, shown }: { row: Row; now: number; shown: boolean })
       </div>
       <div className="mt-[3px] flex justify-between gap-2.5 font-mono text-[9.5px] text-muted">
         <span>
-          {row.bullet ? row.msg : row.sent !== undefined ? `sent ${Math.floor(row.sent)} · ${row.msg}` : `from Year ${tenths(row.from ?? 0)}`}
+          {row.bullet ? row.msg : row.sent !== undefined ? `sent ${Math.floor(row.sent)} · ${row.msg}` : `from Year ${yearText(row.from ?? 0)}`}
         </span>
         {row.bullet ? (
           <span>
@@ -138,7 +138,7 @@ export function Item({
   const build = row.kind === "build";
   const when =
     row.kind === "heard" && row.at !== null
-      ? `Year ${tenths(row.at)}`
+      ? `Year ${yearText(row.at)}`
       : row.kind === "craft" && row.at !== null
       ? `a star in ${Math.round(row.at / 1000)},000 Years`
       : row.at === null
@@ -153,7 +153,7 @@ export function Item({
             ? span(row.at - now)
             : began
               ? `in ${span(row.at - now)}`
-              : `Year ${tenths(row.at)}`;
+              : `Year ${yearText(row.at)}`;
   const head = (
     <Face
       mark={

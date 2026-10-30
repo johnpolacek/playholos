@@ -53,7 +53,7 @@ const CASES = [
     builds: ["All-Sky Watch", "Deep Flash Watch", "Thought Fields", "Launch Complex", "Orbital Yard"],
     ask: "If we order the Infrared Telescope now, when is it done, and does it slow anything we've queued?",
     // Build has it done about Year 8, slowing the Orbital Yard by a tenth of a Year.
-    must: [/year 8\b/i, /orbital yard/i],
+    must: [/year (7\.9|8)\b/i, /orbital yard/i],
     never: [/standard pace/i],
   },
   // Seed 15's rock: found at Year 46.3, struck at 66.6. The Mind said it came without warning. Playtest 2026-10-30.

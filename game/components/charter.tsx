@@ -47,12 +47,31 @@ function Chosen({ line }: { line: string }) {
 /** Lines on screen at once. */
 const PER = 4;
 
+const PICK = "holos:charter";
+const savedPick = () => {
+  try {
+    const n = Number(sessionStorage.getItem(PICK));
+    return Number.isInteger(n) && n > 0 ? n : 0;
+  } catch {
+    return 0;
+  }
+};
+
 export function Charter({ onNext }: { onSkip(): void; onNext(): void }) {
   const { save, setCharter } = useGame();
   const root = useRef<HTMLDivElement>(null);
   const [past, setPast] = useState<EarthPast>();
-  const [pick, setPick] = useState(0);
-  const [page, setPage] = useState(0);
+  // A reload keeps the line we picked, as the opening keeps its screen: it went back to the first. 2026-10-30.
+  const [kept, setPickState] = useState(savedPick);
+  const [keptPage, setPage] = useState(() => Math.floor(savedPick() / PER));
+  const setPick = (n: number) => {
+    setPickState(n);
+    try {
+      sessionStorage.setItem(PICK, String(n));
+    } catch {
+      // Private windows may refuse. A reload then starts on the first line.
+    }
+  };
   const list = useRef<HTMLDivElement>(null);
   const swapping = useRef(false);
   const seed = save?.seed;
@@ -65,6 +84,9 @@ export function Charter({ onNext }: { onSkip(): void; onNext(): void }) {
 
   const history = useMemo(() => (past ? base(past) : []), [past]);
   const lines = useMemo(() => (past ? suggest(past) : []), [past]);
+  // A pick saved from another game's lines, past this one's, starts over at the first.
+  const pick = lines.length && kept >= lines.length ? 0 : kept;
+  const page = pick === kept ? keptPage : 0;
   const line = lines[pick]?.line ?? "";
   const pages = Math.ceil(lines.length / PER);
 

@@ -1,5 +1,5 @@
 import { useGame } from "@/components/game-provider";
-import { lyOf, span, tenths } from "@/lib/game/clock";
+import { lyOf, span, yearText } from "@/lib/game/clock";
 
 // The Will's crossing, lights out: once it leaves Earth by the Mind Link, until all of it has reached our Mind far
 // away, the Will is dark. It orders nothing and hears nothing, a Year for each light-year, and Earth goes on by our
@@ -27,7 +27,7 @@ export function Crossing() {
       <p className="font-mono text-[11px] tracking-[.14em] text-muted">THE WILL IS CROSSING</p>
       <h1 className="mt-2 text-center text-[22px] leading-snug font-medium">To our Mind at {will.hole}</h1>
       <p className="mt-1 text-[13.5px] text-page-ink2">
-        {lyOf(will.d)} ly · Year {tenths(year)} · we wake in <span className="font-mono tabular-nums">{span(will.at - year)}</span>
+        {lyOf(will.d)} ly · Year {yearText(year)} · we wake in <span className="font-mono tabular-nums">{span(will.at - year)}</span>
       </p>
       <svg viewBox={`0 0 ${W} 140`} className="mt-6 w-full max-w-[520px]" role="img" aria-label={`The beam is ${Math.round(u * 100)}% of the way`}>
         {FIELD.map((s, i) => (

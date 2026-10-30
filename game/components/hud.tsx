@@ -4,7 +4,7 @@ import { useGame } from "@/components/game-provider";
 import { Menu } from "@/components/menu";
 import { useShown } from "@/components/costs";
 import { useSchedule } from "@/components/picks";
-import { realTime, tenths, YEAR_0 } from "@/lib/game/clock";
+import { realTime, tenths, yearText, YEAR_0 } from "@/lib/game/clock";
 import { ceiling, drawAt, kt, matterAt, ordered, schedule, searchOf, sharesAt, shortAt } from "@/lib/game/plan";
 import { combedAt } from "@/lib/sim/works";
 import { knownQuery } from "@/lib/game/known-query";
@@ -91,7 +91,7 @@ function Skip() {
   const to = Math.max(Math.ceil(next * 10 - 1e-9) / 10, tenth + 0.1);
   return (
     <button onClick={() => skipTo(to)} className="ml-2 text-you" title="Jump ahead to when something new happens">
-      Next: Year {tenths(to)} ›
+      Next: Year {yearText(to)} ›
     </button>
   );
 }

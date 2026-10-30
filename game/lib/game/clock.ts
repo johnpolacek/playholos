@@ -21,6 +21,9 @@ export function tenths(years: number): number {
   return Math.floor(years * 10 + 1e-9) / 10;
 }
 
+/** A Year as text, to the tenth below, with its thousands marked: 37,206.3, as distances are. 2026-10-30. */
+export const yearText = (years: number) => tenths(years).toLocaleString("en-US", { maximumFractionDigits: 1 });
+
 /** Real time for a span of game time, as a list shows it: 1h 38m, 21m, or under a minute, 30s. Read at a glance,
  *  where HH:MM:SS reads like a time of day. Settled 2026-10-19. Past two days, in days, 88d 6h, where 2118h read as
  *  noise. 2026-10-30. */

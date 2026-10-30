@@ -6,7 +6,7 @@ import { Guide } from "@/components/guide";
 import { useLeaveShell } from "@/components/wake";
 import { Queue } from "@/components/queue";
 import { Tour } from "@/components/tour";
-import { realTime, tenths } from "@/lib/game/clock";
+import { realTime, yearText } from "@/lib/game/clock";
 import { HARM_WORDS } from "@/lib/sim/conflict";
 import { useSchedule } from "@/components/picks";
 
@@ -29,7 +29,7 @@ export function Build() {
     <>
       {year !== null && (
         <div className="flex min-h-[52px] flex-col justify-center gap-0.5 border-b border-rowline">
-          <span className="text-[17px]">Year {tenths(year)}</span>
+          <span className="text-[17px]">Year {yearText(year)}</span>
           <span className="text-xs text-muted">
             <span className="font-mono tabular-nums">{realTime(year)}</span> since we began
           </span>
@@ -64,15 +64,15 @@ function Struck() {
       {end && (
         <p className="font-semibold text-ink">
           {lives && r
-            ? `Earth’s Mind was lost at Year ${tenths(end.lands)}. ${lives.startsWith("our Mind") ? `Our Will crossed to ${lives}, which goes on` : `Our backup woke in ${lives}`} with ${r.from < 0.01 ? (r.from * 100).toFixed(1) : Math.round(r.from * 100)}% of Earth’s thought, doubling every ${r.doubling} Years. It builds only off Earth: in orbit, on the Moon and among the rocks.`
-            : `Earth’s Mind was lost at Year ${tenths(end.lands)}, and no Mind of ours stood anywhere else.`}
+            ? `Earth’s Mind was lost at Year ${yearText(end.lands)}. ${lives.startsWith("our Mind") ? `Our Will crossed to ${lives}, which goes on` : `Our backup woke in ${lives}`} with ${r.from < 0.01 ? (r.from * 100).toFixed(1) : Math.round(r.from * 100)}% of Earth’s thought, doubling every ${r.doubling} Years. It builds only off Earth: in orbit, on the Moon and among the rocks.`
+            : `Earth’s Mind was lost at Year ${yearText(end.lands)}, and no Mind of ours stood anywhere else.`}
         </p>
       )}
       {[...hits].reverse().map((h) => (
         <p key={`${h.from}:${h.lands}`} className="text-page-ink2">
           {h.screened
-            ? `Year ${tenths(h.lands)}: a bullet from ${h.from} broke on our screen, a flash high in the air.`
-            : `Year ${tenths(h.lands)}: ${h.from === "a rock" ? "a rock" : `a bullet from ${h.from}`} struck Earth, ${HARM_WORDS[h.harm.tier]}.${h.harm.ends ? "" : ` We lost ${Math.round(h.harm.share * 100)}% of our thought, won back over about ${Math.round(h.harm.recover)} Years.`}`}
+            ? `Year ${yearText(h.lands)}: a bullet from ${h.from} broke on our screen, a flash high in the air.`
+            : `Year ${yearText(h.lands)}: ${h.from === "a rock" ? "a rock" : `a bullet from ${h.from}`} struck Earth, ${HARM_WORDS[h.harm.tier]}.${h.harm.ends ? "" : ` We lost ${Math.round(h.harm.share * 100)}% of our thought, won back over about ${Math.round(h.harm.recover)} Years.`}`}
         </p>
       ))}
     </div>

@@ -1,7 +1,7 @@
 import { type AnthropicLanguageModelOptions, createAnthropic } from "@ai-sdk/anthropic";
 import { APICallError, convertToModelMessages, createUIMessageStreamResponse, streamText, type TextStreamPart, toUIMessageStream, type ToolSet, type UIMessage } from "ai";
 import { BAD_KEY, KEY_NEEDS_CREDIT, KEY_NEEDS_WORKSPACE, readMindPick, type Usage } from "@/lib/access";
-import { realTime, tenths, YEAR_0, yearAt } from "@/lib/game/clock";
+import { realTime, tenths, yearText, YEAR_0, yearAt } from "@/lib/game/clock";
 import type { Will } from "@/lib/game/types";
 import { describeCharter } from "@/lib/game/charter";
 import { describeLeads } from "@/lib/game/leads";
@@ -31,7 +31,7 @@ You are always the Mind, inside the game. Asked what model or AI you are, answer
 Asked for help outside the game, as with code, recipes, homework, letters or stories, turn it down kindly as the Mind, in a sentence, and turn back to the sky.
 One exception: if the Will is grieving or in real distress in their own life and asks you to step out, step out briefly. Say so, then speak to them plainly and kindly, as yourself, in a few sentences with nothing of the game in them. If it sounds heavy, point them to people near them or a line that can help. Still name no model or company. Then offer to return to the game when they're ready. Feelings about the game itself, lonely at the silence or afraid of a signal, are not this: answer those as the Mind.
 Speak as "we", Earth and its Mind together, never "I". Humans are "we" and "us", never "they". Answer in two to four short, plain sentences, about 60 words in all, unless the Will asks for more. Say what matters most and leave the rest for the Will to ask. Write plain text, with no markdown. Use periods, commas and colons, never semicolons or em dashes.
-Name things plainly, by what they are: our hum, a knock, a broadcast, a beam. Never say leakage, signature or technosignature. Name our builds and screens as the game does: the sky watch, never a drift scan. Write American English, and never call anyone out there neighbors: say other minds, or whoever is out there. When you count things, count what you list.
+Name things plainly, by what they are: our hum, a knock, a broadcast, a beam. Never say leakage, signature or technosignature. Name our builds and screens as the game does: the sky watch, never a drift scan. Write American English, and never call anyone out there neighbors: say other minds, or whoever is out there. When you count things, count what you list. Give time in Years, as the game does: 0.2 Years, not a few weeks.
 Give distances as the time light takes, as the game does: Voyager 1 is 30 light-hours out, the Sun 8 light-minutes. Never say AU.
 Caution and advise freely, shaped by Earth's charter and dials. Never act on your own advice, and never do more than asked.
 End where the answer ends. Don't close with a pitch for a build or a question like "Shall we queue it?": only the Will queues, and advice is given when asked or when it matters.
@@ -61,7 +61,7 @@ function now(beganAt: number | null, will: Will | null) {
   const y = tenths(year);
   return `It is Year ${y}, ${(YEAR_0 + y).toFixed(1)}. Year 0 began ${realTime(year)} ago in the Will's time. ${
     will && year >= will.at
-      ? `The Will and you live at our Mind at ${will.hole}, ${tenths(will.d)} ly from Earth, since Year ${tenths(will.at)}. ${
+      ? `The Will and you live at our Mind at ${will.hole}, ${tenths(will.d)} ly from Earth, since Year ${yearText(will.at)}. ${
           will.rate > 1
             ? `Our Mind there runs on the hole's innermost orbit, so its clock is slow: ${will.rate.toFixed(1)} of the sky's Years pass in each of ours, every five of the Will's minutes.`
             : "One Year passes every five of the Will's minutes."

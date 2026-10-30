@@ -4,6 +4,7 @@
 import { mindsSeen, type MindKit, type MindsSeen } from "./minds.ts";
 import { giftWords } from "../game/sends.ts";
 import { lightTime } from "../light.ts";
+import { yearText } from "../game/clock.ts";
 import { BANDS, iwa, observe, owa, WIDE } from "./observing.ts";
 import { proximaB } from "./proxima.ts";
 import type { ColonyMode, DarkMass, EarthView, Find, FeltWorld, Gas, Hole, Read, Visit, World } from "./types.ts";
@@ -496,22 +497,22 @@ export function describe(view: EarthView): string {
     ? view.heard.map((h) =>
         // Word from our colony, on its own choice. 2026-10-28.
         h.ours
-          ? `- From our Mind ${h.star === "Earth" ? "on Earth" : `at ${h.star}`}, ${one(h.d)} ly, arrived at Year ${one(h.arrived)}: it chose to ${h.ours.chose}${h.ours.on ? `, on news from ${h.ours.on}` : ""}. It decides for itself by our charter, since our word takes ${one(h.d)} Years to reach it.${h.text ? ` It sent: "${h.text}"` : ""}` :
+          ? `- From our Mind ${h.star === "Earth" ? "on Earth" : `at ${h.star}`}, ${one(h.d)} ly, arrived at Year ${yearText(h.arrived)}: it chose to ${h.ours.chose}${h.ours.on ? `, on news from ${h.ours.on}` : ""}. It decides for itself by our charter, since our word takes ${one(h.d)} Years to reach it.${h.text ? ` It sent: "${h.text}"` : ""}` :
         `- From ${h.star}, ${one(h.d)} ly: ${/^[aeiou]/.test(h.move) ? "an" : "a"} ${h.move}${h.laser ? " sent as laser flashes" : ""} ` +
-        `that arrived at Year ${one(h.arrived)}, sent in ${Math.round(2040 + h.sent)}.` +
+        `that arrived at Year ${yearText(h.arrived)}, sent in ${Math.round(2040 + h.sent)}.` +
         // Our radars' first sweeps left in 1950, so they reach a star d light years out in 1950 + d. Added 2026-10-23,
         // after the Mind said a call was sent before we could be heard, twenty years after our noise had reached it.
         (h.about
           ? ` Whoever watches there sent it to ${h.about.replace(/^Our/, "our")}, which passed it home.`
           : ` Our radars first reached it about ${Math.round(1950 + h.d)}, ${2040 + h.sent >= 1950 + h.d ? "before" : "after"} it was sent.`) +
         (h.laser ? ` Only our ${h.by} sees flashes. No radio watch hears them.` : h.by ? ` Our ${h.by} caught it. Year 0's sky watch would have missed it.` : "") +
-        (h.found !== undefined ? ` No one saw it when it came. Our search of old recordings dug it out at Year ${one(h.found)}.` : "") +
+        (h.found !== undefined ? ` No one saw it when it came. Our search of old recordings dug it out at Year ${yearText(h.found)}.` : "") +
         // Only a knock's words are read at once, and nothing in the game reads the rest. Added 2026-10-23, after the
         // Mind offered to go through an answer's words, and then, told they were unread, to read them.
         (h.overheard ? " It was sent every way at once, on news from another world, not to us. We overheard it." : "") +
         (h.warning ? " It was sent to us as a warning about another world they know of. Which one, only its words can say." : "") +
         (h.answers !== undefined ? ` It answers our message, which said: "${h.answers}" We caught it listening at every star we send to.` : "") +
-        (h.gift ? ` It is a gift of their knowledge, all of it here. From Year ${one(h.arrived)}: ${giftWords(h.gift)}` : "") +
+        (h.gift ? ` It is a gift of their knowledge, all of it here. From Year ${yearText(h.arrived)}: ${giftWords(h.gift)}` : "") +
         (h.text ? ` It reads: "${h.text}"` : " Its words aren't in what Earth holds, and no build reads them.")).join("\n")
     : "- Nothing. Earth has heard no one.";
   const SIGHT: Record<Visit["sight"], string> = {
@@ -527,49 +528,49 @@ export function describe(view: EarthView): string {
   const visits = (view.visits ?? []).map(
     (v) =>
       (v.by === "lens" || v.by === "hyper"
-        ? `- ${v.world}, ${one(view.felt.find((f) => f.star === v.star)?.d ?? 0)} ly, pictured by ${v.by === "lens" ? "our lens at the Sun’s focus" : "our Hypertelescope"} from Year ${one(v.passed)}, about ${Math.round(v.km ?? 0)} km a pixel, picture home at Year ${one(v.home)}: ${SIGHT[v.sight]}. Nothing narrower than a pixel shows.${v.coarse ? " Its pixels are too wide for fields or cities, so it can't tell whether anyone lives there." : ""}`
+        ? `- ${v.world}, ${one(view.felt.find((f) => f.star === v.star)?.d ?? 0)} ly, pictured by ${v.by === "lens" ? "our lens at the Sun’s focus" : "our Hypertelescope"} from Year ${yearText(v.passed)}, about ${Math.round(v.km ?? 0)} km a pixel, picture home at Year ${yearText(v.home)}: ${SIGHT[v.sight]}. Nothing narrower than a pixel shows.${v.coarse ? " Its pixels are too wide for fields or cities, so it can't tell whether anyone lives there." : ""}`
         : v.by === "seed" && v.sent
-          ? `- ${v.world}: our seed probe there sent a copy of itself toward ${v.sent} at Year ${one(v.passed)}, word home at Year ${one(v.home)}.`
+          ? `- ${v.world}: our seed probe there sent a copy of itself toward ${v.sent} at Year ${yearText(v.passed)}, word home at Year ${yearText(v.home)}.`
         : v.by === "seed"
-          ? `- ${v.world}, ${one(v.at![2])} ly, reached by our seed probe at Year ${one(v.passed)}, built ${v.from ? `by our probe at ${v.from}` : "at home"}, its first word home at Year ${one(v.home)}: ${SIGHT[v.sight]}. ` +
+          ? `- ${v.world}, ${one(v.at![2])} ly, reached by our seed probe at Year ${yearText(v.passed)}, built ${v.from ? `by our probe at ${v.from}` : "at home"}, its first word home at Year ${yearText(v.home)}: ${SIGHT[v.sight]}. ` +
             `It braked on its sail, unseen, and stays, mining rock to copy itself: a generation ${v.gen} of the ${GENERATIONS} we allow, the last making no copies.` +
             (v.lives ? " It sees them up close: their towns, their craft, their radio. It came in quiet, so they may not know it is there." : v.ruins ? " Among the forests it sees ruins: cities long empty. Whoever lived there is gone." : v.elder ? ELDER[v.elder] : "") +
             (v.others?.length ? " Someone else has works here, not ours: a colony already landed. Whose, it can't tell." : "")
         : v.by === "sentinel" && v.lost
-          ? `- ${v.world}: our sentinel there went silent at Year ${one(v.passed)}, word of it home at Year ${one(v.home)}. ${v.lost === "catch" ? "Its last pictures show a craft not ours closing on it." : "Its last word shows nothing coming."}`
+          ? `- ${v.world}: our sentinel there went silent at Year ${yearText(v.passed)}, word of it home at Year ${yearText(v.home)}. ${v.lost === "catch" ? "Its last pictures show a craft not ours closing on it." : "Its last word shows nothing coming."}`
         : v.by === "sentinel" && v.came
-          ? `- ${v.world}: at Year ${one(v.passed)} our sentinel there saw ${v.others?.[0]?.kind === "colony" ? "a ship not ours, tens of thousands of tonnes, brake to a stop and stay" : "a craft not ours brake to a stop and stay, watching"}. Word home at Year ${one(v.home)}. Its flame, as it slowed, pointed back along its track to ${v.came}. Whoever it is has seen ours.`
+          ? `- ${v.world}: at Year ${yearText(v.passed)} our sentinel there saw ${v.others?.[0]?.kind === "colony" ? "a ship not ours, tens of thousands of tonnes, brake to a stop and stay" : "a craft not ours brake to a stop and stay, watching"}. Word home at Year ${yearText(v.home)}. Its flame, as it slowed, pointed back along its track to ${v.came}. Whoever it is has seen ours.`
         : v.by === "sentinel"
-          ? `- ${v.world}, reached by our sentinel at Year ${one(v.passed)}, where it stays to watch, its first word home at Year ${one(v.home)}: ${SIGHT[v.sight]}.` +
+          ? `- ${v.world}, reached by our sentinel at Year ${yearText(v.passed)}, where it stays to watch, its first word home at Year ${yearText(v.home)}: ${SIGHT[v.sight]}.` +
             (v.clock ? ` It spins at ${v.spin!.toFixed(2)} of the most a hole can. A clock on its innermost stable orbit would run ${(1 / v.clock).toFixed(1)} times slower than ours.` : "") +
             (v.sight === "dark" ? (v.others?.length ? ` We are not the first. ${others(v.others)} Whose, it can't tell.` : " No one else is there that it can see.") : "") +
             (v.lives ? " It sees them up close: their towns, their craft, their radio. They may have seen its flame." : v.ruins ? " Among the forests it sees ruins: cities long empty. Whoever lived there is gone." : v.elder ? ELDER[v.elder] : "")
-          : `- ${v.world}, passed by our ${v.by} at Year ${one(v.passed)}, word home at Year ${one(v.home)}: ${SIGHT[v.sight]}.`) +
+          : `- ${v.world}, passed by our ${v.by} at Year ${yearText(v.passed)}, word home at Year ${yearText(v.home)}: ${SIGHT[v.sight]}.`) +
       (v.air && !v.sent ? ` The ${v.by === "seed" ? "probe" : v.by} read its air: ${v.air.water ? "water" : "no water"}, ${v.air.oxygen ? "oxygen" : "no oxygen"}.` : ""),
   );
   // Black holes found. Each is dark: we know it by the stars it shifted. 2026-10-26.
   const dark = (view.holes ?? []).map(
     (h) =>
-      `- ${h.name}, ${one(h.d)} ly: about ${h.mass} times the Sun's mass, found ${h.found < 0 ? `in ${2040 + h.found} by Gaia` : `at Year ${one(h.found)} by our Star Mapper`}, by how it shifted a star behind it. It gives off no light we can see. Its spin is unknown.`,
+      `- ${h.name}, ${one(h.d)} ly: about ${h.mass} times the Sun's mass, found ${h.found < 0 ? `in ${2040 + h.found} by Gaia` : `at Year ${yearText(h.found)} by our Star Mapper`}, by how it shifted a star behind it. It gives off no light we can see. Its spin is unknown.`,
   );
   const c = view.colony;
   const colonyText = !c
     ? ""
     : `\n\nOur Mind sent to ${c.star} on the Seed Ship, to ${c.mode === "furnace" ? "feed the hole for power" : c.mode === "refuge" ? "live hidden in its shadow" : "settle there on the star's light and rock"}: ` +
       (c.lands === undefined
-        ? `it leaves at Year ${one(c.leaves)}.`
+        ? `it leaves at Year ${yearText(c.leaves)}.`
         : view.year < c.lands + c.d!
-          ? `it left at Year ${one(c.leaves)}, lands about Year ${one(c.lands)}, and its word of landing reaches us about Year ${one(c.lands + c.d!)}.`
-          : `it landed at Year ${one(c.lands)} and stands alone as a Mind from Year ${one(c.stands!)}, ${one(c.d!)} light-years and Years away from us.` +
+          ? `it left at Year ${yearText(c.leaves)}, lands about Year ${yearText(c.lands)}, and its word of landing reaches us about Year ${yearText(c.lands + c.d!)}.`
+          : `it landed at Year ${yearText(c.lands)} and stands alone as a Mind from Year ${yearText(c.stands!)}, ${one(c.d!)} light-years and Years away from us.` +
             (c.others?.length ? ` It was not the first there. ${c.atStar ? settledBy(c.others) : others(c.others)}` : " No one else was there.") +
             (c.clock ? ` The hole spins at ${c.spin!.toFixed(2)} of the most a hole can, so a clock on its innermost stable orbit runs ${(1 / c.clock).toFixed(1)} times slower than ours. ${c.mode === "refuge" ? "Our Mind there could spread over chips 10 cm wide on that orbit, small enough that its tides can't break them, and run that slow, once the Will lives there." : "Its furnace's disk fills that orbit, so our Mind can't live there."}` : "") +
-            (c.came?.length ? ` Since then: ${c.came.map((x) => `at Year ${one(x.at)}, ${x.kind === "colony" ? "a ship not ours braked in and stayed" : "a craft not ours braked in and stays, watching"}, its track back to ${x.from}`).join("; ")}. Whoever came has seen ours.` : "") +
-            (c.lost ? ` Its word stopped at Year ${one(c.lost.at)}. It is gone. ${c.lost.how === "strike" ? "Its last word showed nothing coming: whatever hit it came cold and fast." : "Its last word showed a craft not ours closing on it."}` : "") +
+            (c.came?.length ? ` Since then: ${c.came.map((x) => `at Year ${yearText(x.at)}, ${x.kind === "colony" ? "a ship not ours braked in and stayed" : "a craft not ours braked in and stays, watching"}, its track back to ${x.from}`).join("; ")}. Whoever came has seen ours.` : "") +
+            (c.lost ? ` Its word stopped at Year ${yearText(c.lost.at)}. It is gone. ${c.lost.how === "strike" ? "Its last word showed nothing coming: whatever hit it came cold and fast." : "Its last word showed a craft not ours closing on it."}` : "") +
             (c.watts && !c.lost && c.mode === "settle" ? ` Its works on the star's light run at about ${c.watts.toExponential(0).replace("e+", "×10^")} W, as its word shows it.` : "") +
             (c.watts && !c.lost && c.mode === "furnace" ? ` Its furnace runs at about ${c.watts.toExponential(0).replace("e+", "×10^")} W, as its word shows it, under what any sky survey sees until about 10^19 W.` : c.mode === "refuge" ? " It keeps small and dark, and no one looking from outside would know it is there." : ""));
   const holesText = dark.length ? `\n\nBlack holes we have found. A star mapper finds more as they pass in front of stars:\n${dark.join("\n")}` : "";
   const mindsText = view.minds ? describeMinds(view.minds, one) : "";
-  return `Worlds Earth has felt by their tug on their stars, as of Year ${one(view.year)}. From here a home and a natural world look the same:
+  return `Worlds Earth has felt by their tug on their stars, as of Year ${yearText(view.year)}. From here a home and a natural world look the same:
 ${felt}${nearest}
 
 Signals Earth's watch has caught:
@@ -586,9 +587,9 @@ function describeMinds(m: MindsSeen, one: (x: number) => string): string {
     out.push(
       `New warm glows our Warm Sky Watch has seen, mapping the whole sky every 2 Years, ten times deeper than WISE:\n` +
         m.flashes.map((f) =>
-          `- ${sky(f)}: a new warm glow near room temperature, first seen at Year ${one(f.seen)}${f.faded !== undefined ? `, faded by Year ${one(f.faded)}` : ", still shining"}. ` +
+          `- ${sky(f)}: a new warm glow near room temperature, first seen at Year ${yearText(f.seen)}${f.faded !== undefined ? `, faded by Year ${yearText(f.faded)}` : ", still shining"}. ` +
           (f.range
-            ? `Our Infrared Telescope ranged it at Year ${one(f.ranged!)}, by its reddening and the star behind it: roughly ${f.range[0].toLocaleString("en-US")} to ${f.range[1].toLocaleString("en-US")} ly, too far for parallax to say more. `
+            ? `Our Infrared Telescope ranged it at Year ${yearText(f.ranged!)}, by its reddening and the star behind it: roughly ${f.range[0].toLocaleString("en-US")} to ${f.range[1].toLocaleString("en-US")} ly, too far for parallax to say more. `
             : `Its distance isn't measured: too far for parallax, and our Infrared Telescope hasn't studied it while it shone. `) +
           `A glow like this fits a young star wrapped in dust, ` +
           `the dusty wreck of two stars merging, or something building around a star and catching its light. Nothing we have seen yet tells them apart.`).join("\n"),
@@ -597,24 +598,24 @@ function describeMinds(m: MindsSeen, one: (x: number) => string): string {
     out.push(
       `Cold glows our Halo Survey has seen, looking at each star for an hour, nearest first:\n` +
         m.glows.map((g) =>
-          `- ${sky(g)}, beside a star ${one(g.d)} ly away: a compact glow near 12 K, about ${watts(g.watts)} W, first seen at Year ${one(g.seen)}, steady. ` +
+          `- ${sky(g)}, beside a star ${one(g.d)} ly away: a compact glow near 12 K, about ${watts(g.watts)} W, first seen at Year ${yearText(g.seen)}, steady. ` +
           `Its color fits no dust we know. It could be a cold disk of unusual grains, a measuring error, or computing done cold, far from a star.`).join("\n"),
     );
   if (m.watcher) {
     const w = m.watcher;
     out.push(
       w.by === "moon search"
-        ? `A small dark body our Moon Search found at ${w.place}, about 10 cm across, first seen at Year ${one(w.seen)}. The Sun's pull unsettles anything at the Moon's L4 and L5 points within years, yet it holds there. No rock should.`
+        ? `A small dark body our Moon Search found at ${w.place}, about 10 cm across, first seen at Year ${yearText(w.seen)}. How long it held there before we looked, we can't tell. The Sun's pull unsettles anything at the Moon's L4 and L5 points within years, yet it holds there. No rock should.`
         : w.by === "asteroid tour"
-          ? `On ${w.place}, our Asteroid Tour found a made thing about 10 cm across, at Year ${one(w.seen)}: smooth, dark and not of the rock. It has been there a long time. It sends nothing we can hear.`
-          : `A narrow laser signal aimed at Earth from ${w.place}, beginning at Year ${one(w.seen)}, the Year our first seed ship left. Its timing reads as an answer to that ship. It comes from something small that we never found there.`,
+          ? `On ${w.place}, our Asteroid Tour found a made thing about 10 cm across, at Year ${yearText(w.seen)}: smooth, dark and not of the rock. It has been there a long time. It sends nothing we can hear.`
+          : `A narrow laser signal aimed at Earth from ${w.place}, beginning at Year ${yearText(w.seen)}, the Year our first seed ship left. Its timing reads as an answer to that ship. It comes from something small that we never found there.`,
     );
   }
   if (m.sleepers.length)
     out.push(
       `What our craft found resting in other systems:\n` +
         m.sleepers.map((x) =>
-          `- ${sky(x)}, ${one(x.d)} ly away: a compact warm body ${lightTime(x.restAU)} from its star, shedding about 10^10 W, word home at Year ${one(x.seen)}. ` +
+          `- ${sky(x)}, ${one(x.d)} ly away: a compact warm body ${lightTime(x.restAU)} from its star, shedding about 10^10 W, word home at Year ${yearText(x.seen)}. ` +
           `Starlight that far out would leave it near ${Math.round(278 / Math.sqrt(x.restAU))} K or colder, yet it is hundreds of K warmer. Something inside it makes heat.`).join("\n"),
     );
   return out.length ? `\n\n${out.join("\n\n")}` : "";

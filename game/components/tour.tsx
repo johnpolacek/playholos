@@ -12,7 +12,7 @@ import { Thread } from "@/components/review";
 import { ListHead } from "@/components/tab-head";
 import { Welcome } from "@/components/welcome";
 import { placedOf, useWorks } from "@/components/works";
-import { tenths } from "@/lib/game/clock";
+import { tenths, yearText } from "@/lib/game/clock";
 import { BUILDS, lacks, matter, moves, needs, PAST, SAYS, STARTS } from "@/lib/game/plan";
 import { SITES } from "@/lib/game/sites";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
@@ -27,7 +27,7 @@ import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motio
 // Enough is all our compute in use at Year 0: what the queue leaves sits idle. A bar in the head fills as we queue,
 // and once full the step is done and the next of the four leads, with the walk still open beside it.
 
-const when = (d: number | null | undefined) => (d == null ? PAST : `Year ${tenths(d)}`);
+const when = (d: number | null | undefined) => (d == null ? PAST : `Year ${yearText(d)}`);
 /** A change in Years, as a row says it: 0.3 Years, 1 Year. */
 const years = (d: number) => `${tenths(d)} Year${tenths(d) === 1 ? "" : "s"}`;
 

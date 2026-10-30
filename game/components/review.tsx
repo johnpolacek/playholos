@@ -182,7 +182,7 @@ export function Review({ onClose }: { onClose(): void }) {
           stops={[
             { name: "All our leads" },
             ...order.map((k) => ({
-              name: leads[k].star,
+              name: starName(leads[k].star),
               reply: leads[k].reply,
             })),
           ]}
@@ -241,7 +241,7 @@ export function Review({ onClose }: { onClose(): void }) {
               What we can’t explain yet
             </h2>
             <p data-r className="mt-0.5 text-[13.5px] text-page-ink2">
-              {leads.length} leads, {near.toFixed(1)} to {far.toFixed(1)}{" "}
+              {leads.length} leads, {lyOf(near)} to {lyOf(far)}{" "}
               light-years out
             </p>
             <div data-r className="mt-3">
@@ -275,8 +275,8 @@ export function Review({ onClose }: { onClose(): void }) {
           {at === last
             ? (then?.name ?? "Back to Scan")
             : at
-              ? `Next · ${leads[order[at]].star}`
-              : `First · ${leads[order[0]].star}`}
+              ? `Next · ${starName(leads[order[at]].star)}`
+              : `First · ${starName(leads[order[0]].star)}`}
         </button>
       </div>
     </div>

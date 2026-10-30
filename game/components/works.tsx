@@ -2,7 +2,7 @@ import { createContext, use, useCallback, useEffect, useMemo, useRef, useState }
 import { useBeams } from "@/components/beams";
 import { useGame } from "@/components/game-provider";
 import { SkyArt } from "@/components/sky";
-import { tenths, YEAR_0 } from "@/lib/game/clock";
+import { yearText, YEAR_0 } from "@/lib/game/clock";
 import { CLOSE } from "@/lib/game/close";
 import { GROWS, grownSpans } from "@/lib/game/halo";
 import { keptOf, ordered, orderedAt, takenAt } from "@/lib/game/plan";
@@ -128,7 +128,7 @@ function state(w: Work, year: number | null) {
   if (w.back !== undefined) return w.back === null ? "Taken back" : `Taken back, ${Math.floor(100 * w.back)}% built`;
   if (!w.queued) return "Not queued";
   if (w.done === null) return "More than 1,000 Years out";
-  if (year === null) return `Done by Year ${tenths(w.done)}`;
+  if (year === null) return `Done by Year ${yearText(w.done)}`;
   return year >= w.done ? "Built" : `${Math.floor((100 * (year - w.from)) / (w.done - w.from))}% built`;
 }
 

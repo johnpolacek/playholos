@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
 import { useGame } from "@/components/game-provider";
 import { heardId, useLeads } from "@/components/scan";
-import { tenths, YEAR_0 } from "@/lib/game/clock";
+import { yearText, YEAR_0 } from "@/lib/game/clock";
 import { gsap, prefersReducedMotion } from "@/lib/motion";
 import type { Heard } from "@/lib/sim/types";
 
@@ -78,7 +78,7 @@ function Banner({ h, more, onHide }: { h: Heard; more: number; onHide(): void })
           {more > 0 && <span className="font-normal text-muted">, and {more} more</span>}
         </span>
         <span className="truncate font-mono text-[10.5px] text-ink/70">
-          sent {Math.floor(YEAR_0 + h.sent)} · {h.d.toFixed(1)} ly · {h.found !== undefined ? "found in old recordings" : "reached us"} at Year {tenths(at)}
+          sent {Math.floor(YEAR_0 + h.sent)} · {h.d.toFixed(1)} ly · {h.found !== undefined ? "found in old recordings" : "reached us"} at Year {yearText(at)}
         </span>
       </div>
       <Link

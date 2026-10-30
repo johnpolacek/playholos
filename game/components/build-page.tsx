@@ -8,7 +8,7 @@ import { BackBar } from "@/components/back-bar";
 import { Opens } from "@/components/opens";
 import { buildStory, Story, toggleBuild, usePlan, useSchedule } from "@/components/picks";
 import { placedOf, useWorks } from "@/components/works";
-import { span, tenths } from "@/lib/game/clock";
+import { span, tenths, yearText } from "@/lib/game/clock";
 import { CLOSE } from "@/lib/game/close";
 import {
   BUILDS,
@@ -48,7 +48,7 @@ const ORDINAL = ["first", "second", "third", "fourth", "fifth", "sixth", "sevent
 
 /** Where the build stands: in our order or not, and when it is done, in Years and in play time, as the list counts. */
 function status(open: boolean, at: number, by: number | null | undefined, year: number) {
-  const when = by == null ? PAST : `by Year ${tenths(by)}, ${span(by)} after we begin`;
+  const when = by == null ? PAST : `by Year ${yearText(by)}, ${span(by)} after we begin`;
   if (open)
     return at < 0 ? `Last in our order, it would be done ${when}.` : `Queued, ${ORDINAL[at]} in our order. Done ${when}.`;
   if (at < 0) return "Not in our order yet.";
@@ -100,8 +100,8 @@ function InPlay({ name, scale, done }: { name: string; scale: number; done: Reco
       return (
         <div className="flex flex-col">
           <p className="mt-2.5 text-[13px] leading-snug text-page-ink2">
-            {`Done at Year ${tenths(at)}. It has doubled ${n} times, and ${sheds}. `}
-            {full ? "It catches all the Sun, and can grow no more." : growing ? `It doubles every ${every} Years while it grows.` : `We hold it at its size, since Year ${tenths(back!)}.`}
+            {`Done at Year ${yearText(at)}. It has doubled ${n} times, and ${sheds}. `}
+            {full ? "It catches all the Sun, and can grow no more." : growing ? `It doubles every ${every} Years while it grows.` : `We hold it at its size, since Year ${yearText(back!)}.`}
           </p>
           {!full && (
             <button
@@ -121,7 +121,7 @@ function InPlay({ name, scale, done }: { name: string; scale: number; done: Reco
         <p className="mt-2.5 text-[13px] leading-snug text-page-ink2">
           {again.at == null
             ? `Ordered now, it would be done ${PAST}.`
-            : `Ordered now, it would be done by Year ${tenths(again.at)}, in ${span(again.at - now)}.`}
+            : `Ordered now, it would be done by Year ${yearText(again.at)}, in ${span(again.at - now)}.`}
         </p>
         <button
           onClick={() => change(orderLater(name, now))}
@@ -141,11 +141,11 @@ function InPlay({ name, scale, done }: { name: string; scale: number; done: Reco
     return (
       <div className="flex flex-col">
         <p className="mt-2.5 text-[13px] leading-snug text-page-ink2">
-          Taken back at Year {tenths(back)}
+          Taken back at Year {yearText(back)}
           {kept}{" "}
           {again.at == null
             ? "Ordered again now, it would be done after Year 1,000."
-            : `Ordered again now, it would be done by Year ${tenths(again.at)}, in ${span(again.at - now)}.`}
+            : `Ordered again now, it would be done by Year ${yearText(again.at)}, in ${span(again.at - now)}.`}
         </p>
         <button
           onClick={() => change(orderLater(name, now))}
@@ -247,10 +247,10 @@ function RockLine({ done }: { done: Record<string, number | null> }) {
   if (!rock || rock.found === null) return null;
   const line =
     rock.state === "pushed"
-      ? `Our impactors pushed it aside at Year ${tenths(rock.lands!)}. It passes Earth at Year ${tenths(rock.strikes)}.`
+      ? `Our impactors pushed it aside at Year ${yearText(rock.lands!)}. It passes Earth at Year ${yearText(rock.strikes)}.`
       : rock.state === "struck"
-        ? `It struck Earth at Year ${tenths(rock.strikes)}: ${harm(rock.m)}.`
-        : `A rock ${rock.m} m wide strikes Earth at Year ${tenths(rock.strikes)}. To move it, our push must land by Year ${tenths(rock.strikes - rock.lead)}.`;
+        ? `It struck Earth at Year ${yearText(rock.strikes)}: ${harm(rock.m)}.`
+        : `A rock ${rock.m} m wide strikes Earth at Year ${yearText(rock.strikes)}. To move it, our push must land by Year ${yearText(rock.strikes - rock.lead)}.`;
   return <p className="mt-2.5 text-[13px] leading-snug text-ink">{line}</p>;
 }
 
@@ -277,8 +277,8 @@ export function Waits({ build, scale, done }: { build: Later; scale: number; don
       <div className="flex flex-col">
         {build.after === FOUND && <RockLine done={done} />}
         <p className="mt-2.5 text-[13px] leading-snug text-you">
-          Ordered at Year {tenths(order.y)}.{" "}
-          {at == null ? "Done after Year 1,000." : now! >= at ? "Done." : `Done in ${span(at - now!)}, by Year ${tenths(at)}.`}
+          Ordered at Year {yearText(order.y)}.{" "}
+          {at == null ? "Done after Year 1,000." : now! >= at ? "Done." : `Done in ${span(at - now!)}, by Year ${yearText(at)}.`}
         </p>
         <InPlay name={build.name} scale={scale} done={done} />
       </div>
@@ -290,8 +290,8 @@ export function Waits({ build, scale, done }: { build: Later; scale: number; don
       <div className="flex flex-col">
         {build.after === FOUND && <RockLine done={done} />}
         <p className="mt-2.5 text-[13px] leading-snug text-page-ink2">
-          Open since Year {tenths(by)}, {build.after === FOUND ? "when we found a rock coming" : `after the ${build.after}`}.{" "}
-          {when == null ? "Ordered now, it would be done after Year 1,000." : `Ordered now, it would be done by Year ${tenths(when)}, in ${span(when - now)}.`}
+          Open since Year {yearText(by)}, {build.after === FOUND ? "when we found a rock coming" : `after the ${build.after}`}.{" "}
+          {when == null ? "Ordered now, it would be done after Year 1,000." : `Ordered now, it would be done by Year ${yearText(when)}, in ${span(when - now)}.`}
         </p>
         <button
           onClick={() => change(orderLater(build.name, now))}
@@ -338,9 +338,9 @@ export function Waits({ build, scale, done }: { build: Later; scale: number; don
         ) : by === null ? (
           <>Opens after the {after}, {PAST}.</>
         ) : year !== null && year >= by ? (
-          <>Open since Year {tenths(by)}, after the {after}.</>
+          <>Open since Year {yearText(by)}, after the {after}.</>
         ) : (
-          <>Opens at Year {tenths(by)}, after the {after}.</>
+          <>Opens at Year {yearText(by)}, after the {after}.</>
         )}
         {long}
       </span>

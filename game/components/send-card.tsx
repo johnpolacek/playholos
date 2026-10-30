@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useGame } from "@/components/game-provider";
-import { tenths } from "@/lib/game/clock";
+import { tenths, yearText } from "@/lib/game/clock";
 import { dates, type Draft, sendTime, target } from "@/lib/game/sends";
 import sky from "@/lib/game/sky.json";
 import { GRID_2040, noticeReach, powerFor, readReach, SIZES } from "@/lib/sim/messages";
@@ -60,8 +60,10 @@ function Aimed({ id, draft, asked }: { id: string; draft: Draft; asked: string }
   const { sendYears, lands, back } = dates(y, star.d, draft.size);
   const facts: [string, string][] = [
     ["Sends in", sendTime(sendYears)],
-    ["Lands", `Year ${one(lands)}`],
-    ["Answer, soonest", `Year ${one(back)}`],
+    // Until it is sent, the clock runs under the card, so it counts from sending. Its Years moved as we read, 4.9 on
+    // the card, then 5.0 once sent, until 2026-10-30.
+    ["Lands", sent ? `Year ${yearText(lands)}` : `in ${one(lands - y)} Years`],
+    ["Answer, soonest", sent ? `Year ${yearText(back)}` : `in ${one(back - y)} Years`],
   ];
   return (
     <div className={frame}>
@@ -80,7 +82,7 @@ function Aimed({ id, draft, asked }: { id: string; draft: Draft; asked: string }
         ))}
       </div>
       {sent ? (
-        <p className="font-mono text-[11px] text-ok">Sent at Year {one(sent.y)} · on its way, lands Year {one(lands)}</p>
+        <p className="font-mono text-[11px] text-ok">Sent at Year {yearText(sent.y)} · on its way, lands Year {yearText(lands)}</p>
       ) : (
         <Buttons label="Send" onSend={() => send({ ...draft, to: star.name, d: star.d, id, y: year ?? 0, asked })} />
       )}
@@ -170,7 +172,7 @@ function Everywhere({ id, draft, asked }: { id: string; draft: Draft; asked: str
         <p className="font-mono text-[11px] text-ok">
           {sent.repeat && sent.stopped === undefined ? (
             <>
-              Calling since Year {one(sent.y)} ·{" "}
+              Calling since Year {yearText(sent.y)} ·{" "}
               <button type="button" onClick={() => stopSending(id, year ?? sent.y)} className="underline">
                 Stop
               </button>

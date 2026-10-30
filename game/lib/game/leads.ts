@@ -1,4 +1,4 @@
-import { lyOf, YEAR_0 } from "@/lib/game/clock";
+import { lyOf, YEAR_0, yearText } from "@/lib/game/clock";
 import { KNOCKS } from "@/lib/game/knocks";
 import { lightTime } from "@/lib/light";
 import { BANDS, iwa, owa, WIDE } from "@/lib/sim/observing";
@@ -786,7 +786,7 @@ export function glowReading(g: Glow): Reading {
 export function mindLeads(m: MindsSeen | undefined): Lead[] {
   if (!m) return [];
   const sky = (ra: number, dec: number) => `RA ${(Math.round(ra * 10) / 10 % 24).toFixed(1)} h, Dec ${dec.toFixed(0)}°`;
-  const year = (y: number) => `Year ${Math.floor(y * 10) / 10}`;
+  const year = (y: number) => `Year ${yearText(y)}`;
   const n = (x: number) => x.toLocaleString("en-US");
   return [
     ...m.flashes.flatMap((f, i): Lead[] => {
@@ -798,7 +798,10 @@ export function mindLeads(m: MindsSeen | undefined): Lead[] {
         at: [f.ra, f.dec, mid],
         star: `Warm glow ${i + 1}`,
         what: "A new warm glow",
-        line: `It appeared where nothing shone, ${n(near)} to ${n(far)} ly away.`,
+        // Its fade is news on Scan too, not only on its page. 2026-10-30.
+        line: f.faded !== undefined
+          ? `It shone ${n(near)} to ${n(far)} ly away, and faded by ${year(f.faded)}.`
+          : `It appeared where nothing shone, ${n(near)} to ${n(far)} ly away.`,
         ly: mid,
         range: f.range,
         ask: `What is warm glow ${i + 1}, and why did it appear?`,
@@ -875,7 +878,7 @@ const LY_SEC = 1 / 3.156e7;
 
 /** The watcher, once found, as a lead: where it sits, said as measured. Nothing tells us who made it. 2026-10-30. */
 function watcherLead(w: WatcherSeen): Lead {
-  const year = `Year ${Math.floor(w.seen * 10) / 10}`;
+  const year = `Year ${yearText(w.seen)}`;
   const moon = w.by === "moon search";
   const rock = w.by === "asteroid tour";
   return {
@@ -922,7 +925,7 @@ function watcherLead(w: WatcherSeen): Lead {
 /** A rock coming, once found, as a lead: how wide, when it strikes, and whether our push turned it aside. Before
  *  2026-10-30 it showed only on Build, so a player skipping on Scan never saw it come or strike. */
 export function rockLead(r: NonNullable<ReturnType<typeof rockAt>>): Lead {
-  const year = (y: number) => `Year ${Math.floor(y * 10) / 10}`;
+  const year = (y: number) => `Year ${yearText(y)}`;
   const struck = r.state === "struck";
   const pushed = r.state === "pushed";
   return {
