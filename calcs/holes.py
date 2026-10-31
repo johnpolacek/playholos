@@ -117,7 +117,8 @@ GO = {'inward': 0.6, 'D2': 0.4, 'D1': 0.25, 'E1': 0.15, 'E2': 0.1, 'hunter': 0.3
 SETTLE = {'inward': 0.5, 'D2': 0.3}
 MAPPER_YEARS, FIND_YEARS, SENTINEL_BUILD, V, BURNS = 8, 10, 20, 0.1, 10
 # A furnace: its Mind starts at Earth's 2040 scale and doubles as calcs/neighbors.py's glow does. A sample tenth of its
-# light falls in soft X-rays, where eRASS1 reaches about 5e-14 erg/s/cm2 (HOLOS_RESEARCH.md, "Black holes").
+# light falls in soft X-rays, where eRASS1 reaches about 5e-14 erg/s/cm2 (HOLOS_RESEARCH.md, "Black holes"). At 20 ly
+# that is 2.2e19 W in the band, so 2.2e20 W in all. Corrected 2026-10-31, audit 2.4.
 XRAY_SHARE, XRAY_LIMIT = 0.1, 5e-14
 
 def xyz(ra, dec, d):

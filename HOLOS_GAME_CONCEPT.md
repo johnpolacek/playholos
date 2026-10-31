@@ -1436,7 +1436,7 @@ Settled 2026-10-26. Numbers from `python3 calcs/holes.py`. Sources in [HOLOS_RES
   - *Who:* inward Minds most, 60%, then by how far a Mind leans Deepen: 40%, 25%, and 15% or 10% for those leaning Expand. Hunters 30%, to watch. Samples, from Smart’s transcension. Each goes for the hole nearest it.
   - *How:* a sentinel first, on Earth’s own timings: a mapper 8 Years after waking, a find within 10, 20 Years to build, a tenth of light speed and 10 Years of burns. Half of inward Minds and 3 in 10 of those strongly Deepen also send a colony, on the seed ship’s timings. It runs a furnace if the Mind leans Open, a refuge in the hole’s shadow if Hidden.
   - *Never before Year 0:* no neighbor woke more than about a century before Earth. The export checks it. Across the 33 games, 29 have a neighbor bound for a hole. The soonest arrives at Year 92, the middle one at Year 248. Three holes are contested.
-  - *Quiet from home:* a furnace starts at Earth’s 2040 scale and doubles as a neighbor’s computing does. A tenth of its light in soft X-rays shows to an eRASS1-depth sky only past about 10¹⁹ W at 20 ly. The first is seen from Earth no sooner than Year 392.
+  - *Quiet from home:* a furnace starts at Earth’s 2040 scale and doubles as a neighbor’s computing does. A tenth of its light in soft X-rays shows to an eRASS1-depth sky only past about 2×10²⁰ W at 20 ly. *Corrected 2026-10-31,* audit 2.4: before, 10¹⁹ W, which put all its light in the band. The first was seen from Earth no sooner than Year 392 under the retired neighbor model. Ten times the threshold is about 3 more doublings.
   - *So we learn by going.* Our sentinel at a hole sees who got there first, never by name: a craft keeping station, a furnace’s glowing disk, or a refuge’s cold radiators. The lead and the Mind say so.
   - *Not yet:* an X-ray sky watch to see furnaces from home.
 - **Neighbors notice our craft at a hole, and act on it,** settled 2026-10-26, in lib/sim/meetings.ts, played live as neighbors take our messages.
@@ -1451,7 +1451,7 @@ Settled 2026-10-26. Numbers from `python3 calcs/holes.py`. Sources in [HOLOS_RES
   - *How often:* hunters live in 15 of the 33 games, and one goes: Daal, in game 11, at a hole 45 ly from us from Year 146.5. The rolls ran low, about 5 would be usual. So catches are common, and a strike is rare and real.
 - **Our Mind can go to a black hole, to feed it or to hide in it,** settled 2026-10-26. A found hole’s destination offers the Seed Ship once it, the Fusion Drive and the Deuterium Works are in our order. One Seed Ship, one Mind, one hole.
   - *Timings, calcs/seed.py’s:* it leaves when all three are done, flies at a tenth of light speed with 10 Years of burn and 15 of braking, and stands alone as a Mind 20 Years after landing. Word of each step reaches us one light-time later.
-  - *Feed It:* its furnace starts at our 2040 scale and doubles every 10 Years. It shows to an eRASS1-depth X-ray sky only past about 10¹⁹ W at 20 ly, a few centuries on.
+  - *Feed It:* its furnace starts at our 2040 scale and doubles every 10 Years. It shows to an eRASS1-depth X-ray sky only past about 2×10²⁰ W at 20 ly, a tenth of its light in the band: about 23 doublings, some 230 Years on. Corrected 2026-10-31 from 10¹⁹ W.
   - *Hide in It:* its heat falls into the hole, so it stays as small and dark as it began, and no one outside would know.
   - *What it is worth now:* a Mind of ours that lives if Earth does not, which is what keeps a game going.
   - *It may not be first.* It sees who was there when it landed, as a sentinel would.

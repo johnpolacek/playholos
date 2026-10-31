@@ -1486,7 +1486,7 @@ Gathered 2026-10-26 for a late game: a black hole in the outer Solar System, the
 
 - **[Tubín-Arenas et al. 2024, eROSITA upper limits](https://arxiv.org/abs/2401.17305)** and **[HEASARC, eRASS1 main catalog](https://heasarc.gsfc.nasa.gov/W3Browse/all/erass1main.html)** · Published, A&A, and a reference.
   - The first all-sky survey reaches about 5×10⁻¹⁴ erg/s/cm² in soft X-rays, 0.5 to 2 keV at half completeness. Its public catalog covers the western galactic half.
-  - Matters: *ours,* a hole fed for power shows to it at 20 ly only above about 2×10¹⁹ W, if all its light fell in the band. Earth’s 24 TW is a million times fainter. So a furnace at a Mind’s scale hides. A braking flame shows only close in (calcs/seed.py).
+  - Matters: *ours,* a hole fed for power shows to it at 20 ly only above about 2×10¹⁹ W, if all its light fell in the band. With a tenth in the band, as Holos takes, about 2×10²⁰ W, corrected 2026-10-31. Earth’s 24 TW is about ten million times fainter. So a furnace at a Mind’s scale hides. A braking flame shows only close in (calcs/seed.py).
   - Used: a hole’s lead, “What it costs”, 2026-10-26.
 - *Ours, from the seeded games:* no neighbor could reach a hole by Year 0, since none woke more than 97 Years before Earth. After it, the soonest could arrive about Year 136 in the middle game, against our soonest sentinel near Year 262. In 5 of 33 games two could reach the same hole by Year 200.
 
