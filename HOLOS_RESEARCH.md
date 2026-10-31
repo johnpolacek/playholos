@@ -1629,7 +1629,7 @@ Gathered 2026-10-14 for the round on Earth’s outposts and colonies.
 - **[Carroll-Nellenback et al. 2019, the Aurora effect](https://arxiv.org/abs/1902.04450v1)** · Published, AJ 158, 117.
   - With conservative ship speeds and launch rates, settlement fills the galaxy well within its age. Stars’ own motions speed the front. Settlements that fail, or end, can leave the galaxy partly filled in a steady state.
   - Why it matters: an empty neighborhood is possible without a ban, if settling often fails or settlements end.
-  - Used: the spread round, 2026-10-14. Since 2026-10-30, the quiet-sky argument in [HOLOS_MODELING_ALIENS.md](HOLOS_MODELING_ALIENS.md): Earth unvisited limits unbroken settlement, not spreading, and doesn’t limit how many quiet minds exist.
+  - Used: the spread round, 2026-10-14. Since 2026-10-30, the quiet-sky argument in [HOLOS_MODELING_ALIENS.md](HOLOS_MODELING_ALIENS.md): Earth unsettled limits unbroken, hungry settlement, not quiet spreading, and doesn’t limit how many quiet minds exist.
 - **[Landis 1998, percolation](https://bis-space.com/shop/?p=13987)** · Published, JBIS 51, 163. Abstract and summaries only.
   - Each colony spreads with some chance P, else stays. Below a critical P, spreading stops, ringed by colonies that chose to stay. Above it, it spans the galaxy but leaves empty pockets. His example used P of a third.
   - Why it matters: a choice made by each settlement, not each species, can leave Earth in a quiet pocket.
@@ -1638,7 +1638,7 @@ Gathered 2026-10-14 for the round on Earth’s outposts and colonies.
 - **[Cartin 2014, quantifying the Fermi paradox locally](https://arxiv.org/abs/1404.0204)** · Published, JBIS 67, 119. Abstract read 2026-10-30. Percolation on the real stars within 40 parsecs, each with a maximum travel distance. Many systems can be settled without colonists reaching Sol.
   - Used: the method behind the spreading model.
 - **[Cartin 2015, upper limits on civilizations nearby](https://arxiv.org/abs/1501.05904)** · Published, International Journal of Astrobiology. Abstract read 2026-10-30. Sol never visited bounds how often civilizations arise, at about 1 in 1,000 habitable worlds if colonizing is likely and far-reaching, and barely at all if not.
-  - Used: Earth unvisited as the filter on spreading, 2026-10-30.
+  - Used: Earth unsettled as the filter on hungry spreading, 2026-10-30. Quiet seeds and beamed minds aren’t limited by it.
 - **[Galera, Galanti and Kinouchi 2018, invasion percolation](https://iag.usp.br/eventos/invasion-percolation-solves-fermi-paradox-challenges-seti-programs)** · Published, International Journal of Astrobiology 18, 316. Found by search 2026-10-30, not read. Invasion percolation leaves large empty regions, and argues SETI at nearby stars is misdirected.
 - **Spreading with inheritance, this project’s model, 2026-10-30.** A family tree per mind: a settlement spreads with its chance, settles its 6 nearest stars plus one drifting into 10 ly every 11,000 years while active, and passes its chance on with a change of e^N(0, 0.3). If a mind’s chance runs from 1 in 1,000 to certain, 10 to 15% of minds fill the Galaxy, so 200,000 minds always reach Earth, and even 20 do 92% of the time. Staying local needs a chance under about 0.16, 0.03 and 0.003 for active lives of 1,000, 20,000 and a million years, the last two with inheritance.
   - Used: young minds’ spread chance, drawn from 1 in 1,000 to 1 in 30.

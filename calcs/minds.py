@@ -51,8 +51,9 @@ SEED_C = (0.01, 0.2)                            # seed ships' speed, evenly in l
 # Spreading, settled 2026-10-30, with no cap on reach. Each settlement spreads with its own chance, inherited from its
 # parent with a small random change (Landis 1998, with inheritance). If it spreads it settles every star in reach
 # while active: its 6 nearest, plus one drifting into 10 ly every 11,000 years (Carroll-Nellenback et al. 2019).
-# A mind's chance is drawn below what Earth unvisited allows: past about 1 in 30, with 20,000-year active lives and
-# inheritance, some of 200,000 minds would fill the Galaxy. This project's branching model, 2026-10-30.
+# To settle is to build a star out, hungry spread. Quiet seeds and beamed minds could be here unseen, so only
+# hungry spread is limited. A mind's chance is drawn below what Earth unsettled allows: past about 1 in 30, with
+# 20,000-year active lives and inheritance, some of 200,000 minds would fill the Galaxy. This project's branching model, 2026-10-30.
 SPREAD_CHANCE = (1e-3, 0.03)                    # a mind's chance to spread, evenly in log
 NEIGHBORS = 6 + 20_000 / 11_000                 # stars in reach over an active life
 HOP_LY = 5                                      # typical distance to a neighbor star, at 0.0028 stars per ly^3

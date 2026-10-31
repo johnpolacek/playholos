@@ -163,16 +163,16 @@ The plain idea: if minds are out there, why haven’t we seen them? Part of the 
 
 - **[Hart 1975, “An explanation for the absence of extraterrestrials on Earth”](https://ui.adsabs.harvard.edu/abs/1975QJRAS..16..128H/abstract)** · Published, QJRAS.
   - If anyone spread, they would have filled the Galaxy long ago. They aren’t here, so no one spread.
-  - Informs: criterion 5. No one has settled or mined our system, and the Sun’s light is unblocked. That rules out full, unbroken settlement reaching us, not spreading itself.
+  - Informs: criterion 5. No one has settled or mined our system, and the Sun’s light is unblocked. That rules out hungry settlement reaching us, the kind that mines a system, blocks its star or remakes its worlds. It doesn’t rule out quiet spreading, by small probes and minds sent by beam, which could be here unseen.
 - **[Carroll-Nellenback, Frank, Wright and Scharf 2019, “The Fermi Paradox and the Aurora Effect”](https://arxiv.org/abs/1902.04450)** · Published, AJ.
   - With conservative ship speeds and launch rates, settlement can fill the Galaxy well within its age. But when settlements fail or end, the Galaxy reaches a steady state that is only partly filled, and some systems stay unvisited for very long times.
-  - Informs: Earth can be unvisited in a Galaxy where minds spread. Hart’s argument limits unbroken settlement, not spreading.
+  - Informs: Earth can be unsettled in a Galaxy where minds spread. Hart’s argument limits unbroken settlement, not spreading.
 - **[Landis 1998, percolation](https://bis-space.com/shop/?p=13987)** · Published, JBIS.
   - If each colony chooses for itself whether to spread, the spread breaks into branches and leaves empty pockets.
   - Informs: the same. Restraint need not be universal, only common enough at each settlement.
 - **[Haqq-Misra and Kopparapu 2012, “On the likelihood of non-terrestrial artifacts in the Solar System”](https://arxiv.org/abs/1111.1212)** · Published, Acta Astronautica.
   - Our searches of the Solar System are too limited to rule out small probes.
-  - Informs: a small watcher here is allowed by the evidence.
+  - Informs: a small watcher here is allowed by the evidence, and so is a quiet spreader’s seed. Earth’s evidence limits only spread that consumes.
 - **[Nicholson and Forgan 2013, slingshot dynamics for self-replicating probes](https://arxiv.org/abs/1307.1648)** · Published, International Journal of Astrobiology.
   - Self-copying probes could explore the Galaxy in about 10 million years.
   - Informs: an old mind had a hundred times that long. So either no one sent them, or they are here and quiet.
@@ -211,10 +211,12 @@ The plain idea: computing costs less energy the colder it runs. So a mature mind
 
 ### 5. How far does a young mind spread?
 
-The plain idea: picture one mind that settles two nearby stars, and each colony settles two more. It doubles every step, and in a few million years it is everywhere. So one mind like that, at any time in billions of years, would have settled Earth. Earth wasn’t settled. That observation, not a rule, sets how far minds spread.
+The plain idea: picture one mind that settles two nearby stars, and each colony settles two more. It doubles every step, and in a few million years it is everywhere. So one mind like that, at any time in billions of years, would have reached Earth.
+
+Reaching isn’t the same as being seen. A seed that builds a receiver from a comet, then takes a mind by beam, could be among our comets now, unnoticed. What Earth rules out is the hungry kind: a settlement that builds out its system, mining it, blocking its star or remaking its worlds. Earth’s life ran 4 billion years with none of that. That observation, not a rule, sets how often minds spread hungrily. In the model below, to settle a star means to build it out.
 
 - **[Landis 1998, percolation](https://bis-space.com/shop/?p=13987)** and **[Cartin 2014](https://arxiv.org/abs/1404.0204), [2015](https://arxiv.org/abs/1501.05904)** · Published.
-  - Each settlement chooses for itself whether to spread. Below a tipping point, about 0.31 for 6 reachable neighbors, families stay finite. Above it, one family spans the Galaxy. Cartin runs this on real stars within 40 parsecs and uses Earth unvisited to bound how common civilizations are.
+  - Each settlement chooses for itself whether to spread. Below a tipping point, about 0.31 for 6 reachable neighbors, families stay finite. Above it, one family spans the Galaxy. Cartin runs this on real stars within 40 parsecs and uses Earth unsettled to bound how common civilizations are.
   - Informs: the method. Holos’s own run finds the same tipping point, 0.31.
 - **[Carroll-Nellenback, Frank, Wright and Scharf 2019](https://arxiv.org/abs/1902.04450)** · Published, AJ.
   - Stars drift past each other, so a long-lived settlement keeps meeting new neighbors. That lowers the tipping point.
@@ -223,25 +225,30 @@ The plain idea: picture one mind that settles two nearby stars, and each colony 
   - If colonies inherit their urge to spread, eager lineages outgrow the rest.
   - Informs: Holos lets each colony inherit its parent’s chance with a small random change.
 - **What Holos’s run found, 2026-10-30.** A family tree for each mind: a settlement spreads with its chance, settles its 6 nearest stars plus those drifting into reach while active, and passes its chance on.
-  - If a mind’s chance can be anything from 1 in 1,000 to certain, 10 to 15% of minds fill the Galaxy. With 200,000 minds, Earth is always settled. Even with 20 minds, Earth stays unvisited only 8% of the time.
-  - So only two pictures fit: many minds that almost all rarely spread, or about 5 minds or fewer in the whole Galaxy.
+  - If a mind’s chance can be anything from 1 in 1,000 to certain, 10 to 15% of minds fill the Galaxy. With 200,000 minds, Earth is always settled. Even with 20 minds, Earth stays unsettled only 8% of the time.
+  - So only two pictures fit: many minds that almost all rarely spread hungrily, or about 5 minds or fewer in the whole Galaxy.
   - To stay local, a mind’s chance must sit below about 1 in 6 for 1,000-year active lives without inheritance, about 1 in 30 for 20,000-year lives with it, and about 1 in 300 for million-year lives with it.
-- **Why rarely spreading may be the smart choice for every mind.** Physical reasons, not tastes:
+- **Why quiet may be the smart choice for almost every mind.** Physical reasons, not tastes:
   - *Light delay splits a mind.* A colony 10 light-years away hears from home every 20 years. It can’t share one mind, so it becomes a separate one, a rival. This holds for every unified mind, everywhere.
   - *Seeing beats going.* A telescope at the Sun’s gravitational lens can picture a world 30 parsecs away at about 25 km a pixel ([Turyshev et al. 2020](https://arxiv.org/abs/2002.11871)). Small probes and beams do the rest.
   - *Thinking runs best cold and compact.* A mind that mostly thinks needs little beyond its home system (Landauer, Sandberg et al. 2016).
   - *Self-copying machines are dangerous* (Sagan and Newman 1983).
-  - *Even minds that spread would be quiet.* A small seed builds a receiver, and the mind follows by beam at light speed. Nothing large travels.
-  - The weak spot that remains: a careless replicator that spreads anyway. Nothing rules it out but the observation itself.
+  - *Quiet spreading beats hungry spreading.* A small seed builds a receiver from a comet’s worth of matter, and the mind follows by beam at light speed. Nothing large travels, and no planet is taken apart. The evidence doesn’t limit spread like this, and the watcher is spread of exactly this kind.
+  - These reasons make hungry spreaders rare. That matters most for the very first minds, since no one was watching them.
+- **Why the rare hungry one is stopped.** The weak spot is a careless replicator that grows anyway. Rarity alone doesn’t close it, since one is enough. Policing does:
+  - *Old minds are far ahead.* The minds already out there are typically billions of years older. Unchecked growth is the one thing that threatens them.
+  - *Watching is cheap.* A 1 kg probe at every star is about 100 million tonnes in all.
+  - *A young grower starts slow and local.* Each colony builds for 50 to 1,000 years before it launches again (Metzger et al. 2013), so it is caught early.
+  - So it doesn’t take every mind being careful, only rare hunger and one careful old mind watching. If nothing polices the Galaxy, the many-minds picture breaks and near-alone wins.
 - **[Metzger et al. 2013, bootstrapping a space industry](https://arxiv.org/abs/1612.03238)** · Published, Journal of Aerospace Engineering.
   - Self-copying industry grows in generations about 2 years apart.
   - Informs: building out a home system takes 50 to 1,000 years, and each colony builds before it launches again.
 
-**What Holos takes:** no cap on reach. Each young mind’s chance to spread is drawn below what Earth unvisited allows, from 1 in 1,000 to 1 in 30, and its family grows by the tree above. About 1 young mind in 110 spreads at all. The largest families settle tens of stars within about 20 light-years, though nothing stops a larger one. A young mind stays outward while it builds and spreads, then turns inward. By the time our light reaches a peer, it is almost always inward already: 65% inward, 35% not yet awake.
+**What Holos takes:** no cap on reach. Each young mind’s chance to spread hungrily is drawn below what Earth unsettled allows, from 1 in 1,000 to 1 in 30, and its family grows by the tree above. About 1 young mind in 110 spreads at all. The largest families settle tens of stars within about 20 light-years, though nothing stops a larger one. A young mind stays outward while it builds and spreads, then turns inward. By the time our light reaches a peer, it is almost always inward already: 65% inward, 35% not yet awake. Quiet spreading, seeds and beamed minds that build nothing large, isn’t drawn for peers. The watcher is the one quiet spread the game holds.
 
 ### 6. Is something watching us?
 
-The plain idea: with about 200,000 old minds in our Galaxy, only one has to send a watcher. A 1 kg watcher for every star is trivial for an old mind.
+The plain idea: with about 200,000 old minds in our Galaxy, only one has to send a watcher. A 1 kg watcher for every star is trivial for an old mind. Its purpose is the policing above: to see hungry growth early, while it is still small and near.
 
 - **[Benford 2019, “Looking for Lurkers: Co-orbiters as SETI Observables”](https://arxiv.org/abs/1903.09582)** · Published, AJ.
   - Earth’s co-orbiting asteroids, such as Kamoʻoalewa, are where a watcher could sit unseen. They could be searched.
@@ -316,8 +323,9 @@ Positions people raised when we asked what a physics-compliant Fermi game should
 - Being alone in our Galaxy is inside the honest range. Sandberg, Drexler and Ord 2018 find a substantial chance of no one else in the observable universe.
 - At the low end, 1 mind per 10 billion stars, our Galaxy holds about 20. Holos takes the middle, about 200,000, under criterion 4.
 - “They would have expanded” is Hart 1975’s argument, and Holos takes it seriously. Holos’s own spreading model finds the same: either nearly every mind rarely spreads, or there are only a handful of minds. Holos takes the first, with physical reasons for the restraint, and no cap on reach.
-- Holos’s explanation for not expanding is physical, not a matter of taste. Computing costs less the colder it runs (Landauer, Sandberg et al. 2016). A mind that mostly thinks gains little from spreading and a lot from going cold.
-- Its known weakness: it needs nearly every mind to choose alike. The answer is that the incentive is the same for all. A mind that broke the pattern would show in Hephaistos or the Ĝ search, and none has.
+- Expanding quietly is allowed. A mind spreading by small probes and beamed minds could be here unseen, since our system has never been searched for small objects (Haqq-Misra and Kopparapu 2012). What Earth rules out is the hungry kind: 4 billion years of life with nothing mining our system or remaking our world.
+- Holos’s explanation for not expanding hungrily is physical, not a matter of taste. Computing costs less the colder it runs (Landauer, Sandberg et al. 2016). A mind that mostly thinks gains little from spreading and a lot from going cold.
+- Its known weakness: one careless mind is enough. Two answers work together. The incentive is the same for all, so hungry minds are rare. And the rare one is caught early, since old minds are billions of years ahead and watching every star costs about 100 million tonnes. It takes rare hunger and one careful old mind, not every mind choosing alike.
 - “Aliens descended from Earth” are in the model already. Light delay makes a far colony a separate mind, a rival. That is one reason most young minds stay close.
 
 ### “Infrared surveys only rule out the very largest civilizations. Smaller ones could still be out there.”
