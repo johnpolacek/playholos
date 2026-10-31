@@ -313,4 +313,6 @@ export interface EarthView {
   minds?: import("./minds.ts").MindsSeen;
   /** What our 15 m Mirror has read of Proxima b, once built. */
   proxima?: Read;
+  /** What ground telescopes saw of Proxima b by Year 0: its true mass, tilt and brightness. 2026-10-31. */
+  proximaSeen?: import("./proxima.ts").ProximaSeen;
 }

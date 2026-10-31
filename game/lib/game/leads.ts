@@ -3,6 +3,7 @@ import { KNOCKS } from "@/lib/game/knocks";
 import { lightTime } from "@/lib/light";
 import { BANDS, iwa, owa, WIDE } from "@/lib/sim/observing";
 import type { MindsSeen, WatcherSeen } from "@/lib/sim/minds";
+import type { ProximaSeen } from "@/lib/sim/proxima";
 import { harm, type rockAt } from "./rocks";
 import type { DarkMass, FeltWorld, Gas, Read, Visit } from "@/lib/sim/types";
 import { CATALOG } from "@/lib/sim/works";
@@ -993,6 +994,81 @@ export function rockLead(r: NonNullable<ReturnType<typeof rockAt>>): Lead {
   };
 }
 
+/** Proxima b's lead. Without what ground telescopes saw, as the Mind's static words have it, its least mass alone.
+ *  With it, since 2026-10-31, audit 3.3: its true mass, tilt and brightness, and odds that follow them. Dim reads
+ *  bare, bright reads air, between leans bare, and past 2 Earths it likely holds thick gas. Checked over 4,000 seeds:
+ *  dim is bare rock 99.5% of the time, between 93%, and bright has air 82%. */
+export function proximaLead(seen?: ProximaSeen): Lead {
+  const gas = seen ? seen.mass > 2 : false;
+  const read = !seen || gas ? "even" : seen.albedo < 0.17 ? "dim" : seen.albedo > 0.28 ? "bright" : "even";
+  const odds = {
+    bare: gas ? "unlikely" : read === "dim" ? "very likely" : read === "bright" ? "unlikely" : "likely",
+    air: gas ? "unlikely" : read === "dim" ? "unlikely" : read === "bright" ? "likely" : "unlikely",
+    gas: !seen ? "very unlikely" : gas ? "likely" : "almost no chance",
+  } as const;
+  const tone = gas ? "as a world of thick gas may" : read === "dim" ? "dim, as the Moon and Mercury are" : read === "bright" ? "bright, as cloud and air are" : "between the Moon’s dimness and cloud’s brightness";
+  return {
+    slug: "proxima-centauri",
+    star: "Proxima Centauri",
+    what: "A world next door",
+    line: seen
+      ? `${seen.mass.toFixed(2)} Earths, in its star’s warm zone, and ${gas ? "heavy enough for thick gas" : tone}. Its air is unread.`
+      : "About Earth’s mass, in its star’s warm zone. Its air is unread.",
+    ly: 4.24,
+    ask: "Could Proxima b keep its air?",
+    brief: seen
+      ? `The nearest world outside our solar system, warm enough for water. In the 2030s, telescopes on the ground caught its starlight reflected, and gave its tilt, its true mass, ${seen.mass.toFixed(2)} Earths, and how much light it reflects: about ${Math.round(seen.albedo * 100)}%, ${tone}. No one has read its air. The 15 m Mirror would barely reach it, and going there would show it whole.`
+      : "The nearest world outside our solar system, about Earth’s mass and warm enough for water. Its star flares, and has likely stripped its air. No one has read its air. The 15 m Mirror would barely reach it, and going there would show it whole.",
+    facts: [
+      ["Mass", seen ? `${seen.mass.toFixed(2)} Earths, from its tilt` : "At least 1.06 Earths"],
+      ...(seen
+        ? ([
+            ["Its tilt", `${Math.round(seen.tilt)}° from face on`],
+            ["It reflects", `About ${Math.round(seen.albedo * 100)}% of its starlight`],
+          ] as [string, string][])
+        : []),
+      ["Its year", "11.2 days"],
+      ["From its star", "24 light-seconds"],
+      ["Warmth", "In the warm zone, with two thirds of Earth’s sunlight"],
+      ["Its star", "A red dwarf that flares, the Sun’s nearest neighbor"],
+      ["Felt by", "Pale Red Dot, 2016, and ESPRESSO since"],
+      ...(seen ? ([["Seen by", "RISTRETTO and ANDES, in the 2030s"]] as [string, string][]) : []),
+    ],
+    could: [
+      {
+        what: "Bare rock",
+        why: seen && read === "dim"
+          ? "It reflects as little as the Moon and Mercury do, and its star’s flares strip small worlds this close."
+          : "Its star’s flares and wind strip small worlds this close. Rocky worlds measured near red dwarfs have proved bare, and models keep air only on the largest and coolest.",
+        odds: odds.bare,
+      },
+      {
+        what: "Rock under air, maybe water",
+        why: seen && read === "bright"
+          ? "It reflects more than bare rock does, as clouds would. Bright ice or salt could do it too."
+          : "Cooler worlds hold air better, and it gets only two thirds of Earth’s sunlight. At its mass, it would need luck.",
+        odds: odds.air,
+      },
+      {
+        what: "A small gas world",
+        why: seen
+          ? gas
+            ? "Past about 2 Earths, worlds hold thick gas, and its tilt shows it is that heavy."
+            : "Its tilt shows its true mass, too light to hold thick gas."
+          : "Its tug gives only its least mass. If we see its orbit near face on, it could be several times heavier.",
+        odds: odds.gas,
+      },
+    ],
+    tells: [
+      "No one has read its air. Oxygen takes long campaigns on the ground. The 15 m Mirror would barely reach it, for its oxygen and ozone, not its water.",
+      "A flyby would see it whole: the two roads on Reach go there.",
+    ],
+    art: { kind: "orbit", a: 0.0485, e: 0, hz: [0.042, 0.082] },
+    // On rock under air, life would still have to start.
+    life: odds.air === "likely" ? "unlikely" : "very unlikely",
+  };
+}
+
 /** Betelgeuse's end, once its light reaches us: the one natural event that leads Scan. Real place, its distance as
  *  Joyce et al. 2020 have it, its brightness a type II supernova's at that distance, a sample. lib/game/natural.ts.
  *  2026-10-30. */
@@ -1019,7 +1095,7 @@ export function betelgeuseLead(at: number): Lead {
   };
 }
 
-export function leadsOf(felt: FeltWorld[], holes: DarkMass[] = [], seeds: Visit[] = [], kept: string[] = [], minds?: MindsSeen): Lead[] {
+export function leadsOf(felt: FeltWorld[], holes: DarkMass[] = [], seeds: Visit[] = [], kept: string[] = [], minds?: MindsSeen, seen?: ProximaSeen): Lead[] {
   // Scan shows one black hole, the nearest, and any we have sent craft to. 2026-10-28.
   const dark = [...holes.map((h) => [h, false] as const), ...FAR.map((h) => [h, true] as const)];
   const nearest = dark.reduce<(typeof dark)[number] | undefined>((n, x) => (!n || x[0].d < n[0].d ? x : n), undefined);
@@ -1029,51 +1105,12 @@ export function leadsOf(felt: FeltWorld[], holes: DarkMass[] = [], seeds: Visit[
   const landed = seeds.filter((v) => v.by === "seed" && !v.sent && !own.has(v.star));
   const reached = landed.filter((v, i) => landed.findIndex((x) => x.star === v.star) === i);
   return withSystems([
-    // The nearest world, and the reason for the two roads on Reach: no telescope we have can split it from its star, so
-    // going is how we would read it. Added 2026-10-19. Its warm zone is ours, from Kopparapu et al. 2013 at the star's
-    // 0.0016 Suns. Its odds follow the shoreline the seed draws by, since 2026-10-22: likely bare rock.
-    {
-      slug: "proxima-centauri",
-      star: "Proxima Centauri",
-      what: "A world next door",
-      line: "About Earth’s mass, in its star’s warm zone. Its air is unread.",
-      ly: 4.24,
-      ask: "Could Proxima b keep its air?",
-      brief:
-        "The nearest world outside our solar system, about Earth’s mass and warm enough for water. Its star flares, and has likely stripped its air. It sits too close to its star for any telescope we have to split. The 15 m Mirror would barely reach it, and going there would show it whole.",
-      facts: [
-        ["Mass", "At least 1.06 Earths"],
-        ["Its year", "11.2 days"],
-        ["From its star", "24 light-seconds"],
-        ["Warmth", "In the warm zone, with two thirds of Earth’s sunlight"],
-        ["Its star", "A red dwarf that flares, the Sun’s nearest neighbor"],
-        ["Felt by", "Pale Red Dot, 2016, and ESPRESSO since"],
-      ],
-      could: [
-        {
-          what: "Bare rock",
-          why: "Its star’s flares and wind strip small worlds this close. Rocky worlds measured near red dwarfs have proved bare, and models keep air only on the largest and coolest.",
-          odds: "likely",
-        },
-        {
-          what: "Rock under air, maybe water",
-          why: "Cooler worlds hold air better, and it gets only two thirds of Earth’s sunlight. At its mass, it would need luck.",
-          odds: "unlikely",
-        },
-        {
-          what: "A small gas world",
-          why: "Its tug gives only its least mass. If we see its orbit near face on, it could be several times heavier.",
-          odds: "very unlikely",
-        },
-      ],
-      tells: [
-        "It sits too close to its star for the Infrared Telescope to split. The 15 m Mirror would barely reach it, for its oxygen and ozone, not its water.",
-        "A flyby would see it whole: the two roads on Reach go there.",
-      ],
-      art: { kind: "orbit", a: 0.0485, e: 0, hz: [0.042, 0.082] },
-      // Likely bare, and on rock under air, life would still have to start.
-      life: "very unlikely",
-    },
+    // The nearest world, and the reason for the two roads on Reach: no telescope we have can read its air, so going is
+    // how we would see it whole. Added 2026-10-19. Its warm zone is ours, from Kopparapu et al. 2013 at the star's
+    // 0.0016 Suns. Its odds follow the shoreline the seed draws by, since 2026-10-22: likely bare rock. Since
+    // 2026-10-31, audit 3.3: ground telescopes caught its reflected light in the 2030s, so this Earth knows its tilt,
+    // its true mass and its brightness, and its odds follow them. lib/sim/proxima.ts proximaSeen.
+    proximaLead(seen),
     {
       slug: "82-eridani",
       star: "82 Eridani",
@@ -1161,8 +1198,8 @@ export function landed(slug: string, observe: string[] | undefined, year: number
 }
 
 /** The Mind's words on Earth's named leads now, with what any reading found, for the Mind to judge from. */
-export function describeLeads(observe: string[] | undefined, year: number | null): string {
-  const lines = leadsOf([]).map((lead) => {
+export function describeLeads(observe: string[] | undefined, year: number | null, seen?: ProximaSeen): string {
+  const lines = leadsOf([], [], [], [], undefined, seen).map((lead) => {
     const read = landed(lead.slug, observe, year).at(-1);
     const words = lead.could
       .map((c, i) => {

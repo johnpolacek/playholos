@@ -66,3 +66,26 @@ export function proximaB(seed: number): { mass: number; nature: Nature } {
               : RUNGS[4];
   return { mass, nature };
 }
+
+/** What ground telescopes saw of Proxima b by Year 0, 2040: its starlight reflected, picked out by RISTRETTO on the VLT
+ *  in about 55 hours and by ANDES on the ELT in about 6 (Bugatti et al. 2025, Palle et al. 2023). That gives its tilt,
+ *  so its true mass, and how much light it reflects. No one had read its air: oxygen takes 85 to 320 hours more. A
+ *  surface's brightness hints at its nature without settling it: bare rock is dark, as the Moon and Mercury are, about
+ *  0.08 to 0.16, cloud and air brighter, about 0.2 to 0.4, and a small gas world 0.3 to 0.5, our samples. Measured to
+ *  about 0.06, a sample. Its own stream, so the truth above draws as before. Settled 2026-10-31, audit 3.3. */
+export interface ProximaSeen {
+  mass: number;
+  /** Degrees from face on. */
+  tilt: number;
+  /** The share of its starlight it reflects, as measured. */
+  albedo: number;
+}
+export function proximaSeen(seed: number): ProximaSeen {
+  const { mass, nature } = proximaB(seed);
+  const rand = stream(`${seed}:proxima-b-light`);
+  const [lo, hi] = nature === "bare rock" ? [0.08, 0.16] : nature === "a small gas world" ? [0.3, 0.5] : [0.2, 0.4];
+  const truth = lo + rand() * (hi - lo);
+  const noise = 0.06 * Math.sqrt(-2 * Math.log(1 - rand())) * Math.cos(2 * Math.PI * rand());
+  const tilt = (Math.asin(Math.min(1, PROXIMA.msini / mass)) * 180) / Math.PI;
+  return { mass, tilt, albedo: Math.min(0.8, Math.max(0.03, truth + noise)) };
+}

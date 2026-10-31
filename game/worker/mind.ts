@@ -5,6 +5,7 @@ import { realTime, tenths, yearText, YEAR_0, yearAt } from "@/lib/game/clock";
 import type { Will } from "@/lib/game/types";
 import { describeCharter } from "@/lib/game/charter";
 import { describeLeads } from "@/lib/game/leads";
+import { proximaSeen } from "@/lib/sim/proxima";
 import { kt, matterAt, schedule } from "@/lib/game/plan";
 import { kitOf } from "@/lib/game/reach";
 import { readGifts, readLater, readColony, readLenses, readObserve, readSentinels, readSeeds, readQueue, readStops, readWill, readStrikes } from "./orders";
@@ -164,7 +165,7 @@ export async function mind(req: Request) {
     kit: EARTH_AT_YEAR_0,
     road,
     leads: EARTH_LEADS,
-    scan: describeLeads(readObserve(observe), at),
+    scan: describeLeads(readObserve(observe), at, inPool(seed) ? proximaSeen(seed) : undefined),
     builds: describeBuilds(),
     queue: describeQueue(plan, done, year),
     offers: describeOffers(plan, scale, { ...done, [FOUND]: inPool(seed) ? (rockOf(seed)?.found ?? null) : null, [WATCHED]: watched }, year),

@@ -135,11 +135,13 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
     `betelgeuse ${blown}`,
     ...kept.map((k) => `kept ${k}`), ...(felt ?? []).map((f) => f.star), ...(holes ?? []).map((h) => h.name), ...seeds.map((v) => `seed ${v.star}`),
     ...(minds ? [JSON.stringify([minds.flashes.map((f) => f.range ?? f.seen), minds.glows.length, minds.sleepers.length, minds.watcher?.seen])] : []),
+    // What ground telescopes saw of Proxima b, 2026-10-31.
+    view?.proximaSeen ? `proxima ${view.proximaSeen.albedo}` : "",
   ].join("|");
   const leads = useMemo(
     () =>
       felt
-        ? [...(rockKey ? [rockLead(rock!)] : []), ...(blown !== null ? [betelgeuseLead(blown)] : []), ...leadsOf(felt, holes ?? [], seeds, kept, minds)]
+        ? [...(rockKey ? [rockLead(rock!)] : []), ...(blown !== null ? [betelgeuseLead(blown)] : []), ...leadsOf(felt, holes ?? [], seeds, kept, minds, view?.proximaSeen)]
         : [],
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [stars],

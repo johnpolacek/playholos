@@ -6,7 +6,7 @@ import { giftWords } from "../game/sends.ts";
 import { lightTime } from "../light.ts";
 import { yearText } from "../game/clock.ts";
 import { BANDS, iwa, observe, owa, WIDE } from "./observing.ts";
-import { proximaB } from "./proxima.ts";
+import { proximaB, proximaSeen } from "./proxima.ts";
 import type { ColonyMode, DarkMass, EarthView, Find, FeltWorld, Gas, Hole, Read, Visit, World } from "./types.ts";
 import catalog from "../../data/works.json" with { type: "json" };
 import { ladderOf } from "./ladder.ts";
@@ -336,6 +336,7 @@ export function earthKnows(
     year, felt, heard: [], visits,
     ...(anyMind ? { minds } : {}),
     ...(wide.has(PROXIMA.star) ? { proxima: wide.get(PROXIMA.star) } : {}),
+    proximaSeen: proximaSeen(world.seed),
     ...(ours ? { colony: ours } : {}),
     ...(holes.length ? { holes: holes.map((h) => ({ name: h.name, d: h.d, ra: h.ra, dec: h.dec, mass: h.mass, found: h.found, by: h.by })) } : {}),
   };
@@ -514,6 +515,12 @@ function settledBy(o: Others) {
     .join(" ");
 }
 
+/** What Proxima b's brightness and mass hint, in words. 2026-10-31. */
+export function brightness(p: { mass: number; albedo: number }): string {
+  if (p.mass > 2) return "That heavy, it likely holds thick gas.";
+  return p.albedo < 0.17 ? "That is dim, as the Moon and Mercury are." : p.albedo > 0.28 ? "That is bright, as cloud and air are." : "That is between the Moon’s dimness and cloud’s brightness, nearer the Moon’s.";
+}
+
 /** The view in words, for the Mind's prompt. It takes the view and nothing else, so the truth can't reach it. */
 export function describe(view: EarthView): string {
   const one = (x: number) => x.toFixed(1);
@@ -522,7 +529,10 @@ export function describe(view: EarthView): string {
         `- ${f.star}, ${one(f.d)} ly: at least ${one(f.minMass)} Earth masses, a year of ${Math.round(f.periodDays)} days, ` +
         `${lightTime(f.a)} from its star. Felt by ${f.by} in ${2040 + f.year}. ${air(f)}`).join("\n")
     : "- None. The planet hunters felt no new world by 2040.";
-  const nearest = view.proxima ? `\n- Proxima b, 4.2 ly, the nearest world: ${told(view.proxima, "15 m Mirror")}` : "";
+  const seen = view.proximaSeen
+    ? `\n- Proxima b, 4.2 ly, the nearest world: ground telescopes caught its reflected light in the 2030s. About ${view.proximaSeen.mass.toFixed(2)} Earth masses, tilted ${Math.round(view.proximaSeen.tilt)}° from face on, reflecting about ${Math.round(view.proximaSeen.albedo * 100)}% of its starlight. ${brightness(view.proximaSeen)} No one has read its air.`
+    : "";
+  const nearest = seen + (view.proxima ? `\n- Proxima b, 4.2 ly, the nearest world: ${told(view.proxima, "15 m Mirror")}` : "");
   const heard = view.heard.length
     ? view.heard.map((h) =>
         // Word from our colony, on its own choice. 2026-10-28.
