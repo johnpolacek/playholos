@@ -95,7 +95,7 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
       where:
         "Around Hyperion, in Richland Parish, Louisiana, and on campuses like it. Each campus we build is a Year of the fabs’ chips.",
       why: "The land and the power lines are already there, so chips are the only wait.",
-      takes: "Chips as fast as the fabs make them, a campus a Year. Each adds half again to all our compute, so the first draws about 120 GW, half a percent of Earth’s energy. After eleven, compute draws nine tenths of it.",
+      takes: "Chips as fast as the fabs make them, a campus a Year. Each adds half again to all our compute, so the first draws about 120 GW, about 2.5% of Earth’s electricity. After seven, compute draws about 85% of it.",
     },
   },
   "Infrared Telescope": {
