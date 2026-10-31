@@ -1,6 +1,6 @@
 # Playtest prompt
 
-The Holos Cloud Playtest routine follows this file. Edit it to change what the playtest covers. 2026-10-28, updated 2026-10-29 for the realistic premise and skip-ahead.
+The Holos Cloud Playtest routine follows this file. Edit it to change what the playtest covers. 2026-10-28, updated 2026-10-29 for the realistic premise and skip-ahead, and 2026-10-31 for the relay and the ladder.
 
 You are a fresh-eyes playtester for Holos. Play a full first session as a brand new player and report what you find.
 
@@ -30,9 +30,17 @@ You are a fresh-eyes playtester for Holos. Play a full first session as a brand 
 - Ask the Mind what the glow is and how far away it is. It should give the range and name natural causes first, and never claim it is a mind.
 - Try the Moon Search, the Asteroid Tour and the Halo Survey if time allows, and note what each shows.
 
+## The dark body, the relay and the ladder, added 2026-10-31
+
+- If the Moon Search finds a dark body, order the Close Look, then the Relay Search it points to. Note what the relay lead says, and ask the Mind what it is. The Mind may call it a dark craft, never a mind's home or a known maker.
+- Then play the ladder. Order the Seed Ship, Fusion Drive and Deuterium Works. From Proxima's lead, under How we reach, send a seed probe. A warning should come.
+- After the warning, send a second seed probe. Skip ahead. Our probes should fall silent once their word is overdue. Check Scan and the watcher's lead.
+- Keep skipping. A strike from beyond our system should land on Earth. Check that its harm shows, and that no screen names who sent it.
+- Ask the Mind why our probes went quiet and what struck us. It should reason from what we saw, and never claim to know the maker.
+
 ## Known gaps, not to report
 
-- The ladder after a warning: launching seeds brings a warning, but nothing contains or strikes us yet.
+- Our screens on the line to the maker, since we never learn its star. Strikes on a Mind sent to a black hole.
 - Interceptor, Picket Yard and X-Ray Watch have nothing to act on yet.
 - Scripts under `explorations/` are old mockups and don't run.
 
