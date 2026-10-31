@@ -5,10 +5,8 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "predev": "node scripts/build-log.mjs",
     "dev": "vite",
     "dev:cli": "MIND_VIA=cli npm run dev",
-    "prebuild": "node scripts/build-log.mjs",
     "build": "vite build",
     "preview": "vite preview",
     "deploy": "npm run build && wrangler deploy",
@@ -17,7 +15,6 @@
     "check:mind": "node scripts/check-mind.mjs",
     "trace:mind": "node scripts/trace-mind.mjs",
     "review:mind": "node scripts/review-mind.mjs",
-    "log": "node scripts/build-log.mjs",
     "types:worker": "wrangler types ./worker/worker-configuration.d.ts"
   },
   "dependencies": {

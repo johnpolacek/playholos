@@ -11,7 +11,6 @@ const ABOUT = [
   ["/about", "About Holos"],
   ["/about/research", "Research"],
   ["/about/design", "Design"],
-  ["/about/building", "Building"],
 ] as const;
 
 const ELSEWHERE = [

@@ -8,7 +8,6 @@ export const PAGES = {
   "/about": () => import("@/app/about"),
   "/about/research": () => import("@/app/about/research"),
   "/about/design": () => import("@/app/about/design"),
-  "/about/building": () => import("@/app/about/building"),
 } satisfies Record<string, Page>;
 
 /** Starts loading an about page's code, by its address. Any other address is left alone. */

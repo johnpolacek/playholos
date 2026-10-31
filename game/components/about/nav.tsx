@@ -9,7 +9,6 @@ const PAGES = [
   ["/about", "About"],
   ["/about/research", "Research"],
   ["/about/design", "Design"],
-  ["/about/building", "Building"],
 ] as const;
 
 // The about pages' top bar: the game's mark, the four pages, and Play. The mark, like Play, goes back to the game. A

@@ -37,7 +37,6 @@ export const router = createBrowserRouter([
           { index: true, lazy: later(PAGES["/about"]) },
           { path: "research", lazy: later(PAGES["/about/research"]) },
           { path: "design", lazy: later(PAGES["/about/design"]) },
-          { path: "building", lazy: later(PAGES["/about/building"]) },
         ],
       },
       // The game's colors, type and shared parts, drawn live. 2026-10-28.

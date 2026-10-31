@@ -1,6 +1,5 @@
 import { AboutHero } from "@/components/about/hero";
 import { AboutLink } from "@/components/about/motion";
-import log from "@/data/build-log.json";
 import { sections } from "../../../HOLOS_GAME_CONCEPT.md?stats";
 import { sources } from "../../../HOLOS_RESEARCH.md?stats";
 
@@ -24,7 +23,6 @@ const out = (href: string, label: string) => (
 );
 
 export default function About() {
-  const changes = log.parts.reduce((n, p) => n + p.items.length, 0);
   const pages: [href: string, kicker: string, title: string, text: string, stat: string][] = [
     [
       "/about/research",
@@ -39,13 +37,6 @@ export default function About() {
       "The rules, one question at a time",
       "The design document as it stands today, every answer dated.",
       `${sections} sections`,
-    ],
-    [
-      "/about/building",
-      "HOW IT IS BUILT",
-      "Evidence, then rules, then the game",
-      "The method step by step, and every change so far, by the part of the work it touched.",
-      `${changes} changes`,
     ],
   ];
 
@@ -154,7 +145,7 @@ export default function About() {
           <h2 data-a className={H2}>
             Everything behind the game
           </h2>
-          <div className="mt-10 grid gap-4 wide:grid-cols-3">
+          <div className="mt-10 grid gap-4 wide:grid-cols-2">
             {pages.map(([href, kicker, title, text, stat]) => (
               <AboutLink
                 key={href}
