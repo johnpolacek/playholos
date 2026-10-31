@@ -203,7 +203,7 @@ export const SAYS: Record<string, string> = {
   "Halo Array":
     "An ALMA-class array of our own, built for this one search, about ten times as fast: 40,000 stars a Year, the 300,000 within 326 ly in about 8. The nearest old mind is likely about 50 ly away, but most lie farther, and this reaches them in our time. No one has priced one.",
   "Fusion Plants":
-    "The first fusion plants, about 400 MW each, come online near Year 0. This grows them to a fleet of about 30,000, half again the energy we have. Each new plant starts on tritium the others breed, so the fleet can only double so fast: about 30 Years. Once done, one more data center fits under the grid. If the plants breed less than planned, the fleet grows slower.",
+    "Forecasters put the first fusion plant near Year 1, and on a bit under half our Earths small ones already feed the grid. Each ARC-class plant runs about 400 MW. This grows them to a fleet of about 30,000, half again the energy we have. Each new plant starts on tritium the others breed, so the fleet can only double so fast: about 30 Years. Once done, one more data center fits under the grid. If the plants breed less than planned, the fleet grows slower.",
   "Launch Complex":
     "It doubles what we lift to orbit. Nothing we could start now waits on lift, but the Mass Driver can’t reach the Moon without it.",
   "Launch Tunnel":

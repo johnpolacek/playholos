@@ -375,7 +375,7 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
       ],
     },
     story: {
-      have: "The first fusion plants are coming online. Commonwealth Fusion’s ARC, 400 MW, was planned for the early 2030s.",
+      have: "Commonwealth Fusion’s ARC, 400 MW, was planned for the early 2030s. Forecasters put the first 100 MW plant near 2041, so most Earths reach Year 0 with none on the grid.",
       where:
         "Beside old power stations, where the grid already runs: ARC beside Chesterfield’s coal plant in Virginia, STEP at West Burton’s, and China’s tokamaks at Hefei.",
       why: "Fusion runs day and night on the heavy hydrogen in seawater. Old plant sites already have the lines, the cooling water and the people.",
