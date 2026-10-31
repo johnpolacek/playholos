@@ -34,7 +34,9 @@ export interface Inbound {
 
 /** How our Mind lives where the Seed Ship sets it down: feeding a hole, hiding in its shadow, or settled at a star on
  *  its light and its rock. A star since 2026-10-27. */
-export type ColonyMode = "furnace" | "refuge" | "settle";
+/** At a hole, feed it or hide in it. At a star, settle and build out, or keep small: a receiver and a cold Mind made
+ *  from a comet's worth of rock, which no watcher counts as growth. 2026-10-30. */
+export type ColonyMode = "furnace" | "refuge" | "settle" | "quiet";
 
 export interface Neighbor {
   name: string;

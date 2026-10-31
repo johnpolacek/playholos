@@ -350,6 +350,12 @@ test("finding minds: a flash while the warm watch runs, half the cold glows, the
     const tour = watcherOf(world, { asteroidTour: 20 }, 1000);
     assert.equal(tour?.seen ?? null, w.rock ? 20 + CO_ORBITALS.indexOf(w.rock) * TOUR_EACH + TOUR_MAP : null);
     if (w.place.startsWith("Sun–Earth")) assert.equal(watcherOf(world, { moonSearch: 10, asteroidTour: 20 }, 1e5), null);
+    // Only seeds that build out a star draw its warning: a Mind sent to settle does, one kept small never does.
+    const star = "Proxima Centauri";
+    const told = (mode: "settle" | "quiet") => earthKnows(world, 60, { colony: { star, mode, leaves: 50 } }).minds?.watcher ?? null;
+    assert.equal(told("settle")?.by, "its warning");
+    assert.equal(told("settle")?.seen, 50);
+    assert.equal(told("quiet"), null);
     // Up close its mirror points at its relay, opposite its maker, and a Relay Search out that line finds it there.
     assert.ok(w.relayAU >= 1000 && w.relayAU <= 2500, `relay at ${w.relayAU} AU`);
     if (w.place.startsWith("Earth–Moon")) {

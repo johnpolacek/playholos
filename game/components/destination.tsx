@@ -72,7 +72,7 @@ const WHAT: Record<string, string> = {
   mind:
     "A copy of our Mind on the Seed Ship, to stand alone beside the hole. Feed it, and its furnace grows us fast, and shows once it passes a millionth of the Sun. Hide in it, and its heat falls in unseen, so it stays small, and safe.",
   settle:
-    "A copy of our Mind on the Seed Ship, to stand alone at this star. It mines the moons and asteroids there and builds on the star’s light. Anyone living here sees its flame as it brakes in. One Seed Ship, one Mind: once sent, no other place.",
+    "A copy of our Mind on the Seed Ship, to stand alone at this star. Settle, and it mines the moons and asteroids there and builds on the star’s light, growing as it goes, and a watcher counts that as growth. Keep it small, and it builds a receiver and a cold Mind from a comet’s worth of rock, and stays that size. Anyone living here sees its flame as it brakes in. One Seed Ship, one Mind: once sent, no other place.",
   seed:
     "A seed ship with no Mind on board, built beside the Seed Ship. It brakes on its sail, unseen, and stays. It mines the moons and asteroids there to build two copies of itself, which go on to the nearest stars no probe of ours is bound for. Copies make copies, for three generations: at most seven craft. Once sent, it can’t be called back.",
   sentinel:
@@ -340,9 +340,9 @@ export function DestinationPage({ slug }: { slug: string }) {
             can={shipReady(plan) && (!plan.colony || plan.colony.name === lead.star)}
             send={() => {}}
             what="Mind"
-            sentAs={plan.colony?.mode === "furnace" ? "Sent, to feed it" : plan.colony?.mode === "refuge" ? "Sent, to hide" : "Sent, to settle"}
-            choices={(hole ? (["furnace", "refuge"] as const) : (["settle"] as const)).map((mode) => ({
-              label: mode === "furnace" ? "Feed It" : mode === "refuge" ? "Hide in It" : "Settle Here",
+            sentAs={plan.colony?.mode === "furnace" ? "Sent, to feed it" : plan.colony?.mode === "refuge" ? "Sent, to hide" : plan.colony?.mode === "quiet" ? "Sent, to keep small" : "Sent, to settle"}
+            choices={(hole ? (["furnace", "refuge"] as const) : (["quiet", "settle"] as const)).map((mode) => ({
+              label: mode === "furnace" ? "Feed It" : mode === "refuge" ? "Hide in It" : mode === "quiet" ? "Keep Small" : "Settle Here",
               send: () => change((p) => ({ ...p, colony: { name: lead.star, y: from, mode } })),
             }))}
           />

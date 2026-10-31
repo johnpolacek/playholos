@@ -60,7 +60,7 @@ export function readColony(c: unknown): (Ordered & { mode: ColonyMode }) | undef
   if (!c || typeof c !== "object") return undefined;
   const o = c as Record<string, unknown>;
   if (typeof o.name !== "string" || o.name.length > 80 || typeof o.y !== "number" || !Number.isFinite(o.y) || o.y < 0) return undefined;
-  if (o.mode !== "furnace" && o.mode !== "refuge" && o.mode !== "settle") return undefined;
+  if (o.mode !== "furnace" && o.mode !== "refuge" && o.mode !== "settle" && o.mode !== "quiet") return undefined;
   return { name: o.name, y: o.y, mode: o.mode };
 }
 

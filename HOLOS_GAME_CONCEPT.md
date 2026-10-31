@@ -116,8 +116,13 @@ Settled 2026-10-28, one step at a time. The premise itself, how many minds exist
   - Set aside: a curious maker that never warns or acts, in some games only.
 - **Only seeds that build count as spreading.** Settled 2026-10-29. A probe that only looks can’t grow, and growth is the danger. So an old mind our probe reaches stays silent.
   - Set aside: any craft sent to another star counting as spreading.
+- **Only seeds that build a star out count, settled 2026-10-30.** Earth rules out hungry spread, not quiet spread, so the watcher counts only growth.
+  - *Builders:* a seed probe, which mines and copies itself. Our Mind sent to settle a star and build it out. Our Mind sent to feed a hole.
+  - *Quiet:* our Mind kept small at a star, a receiver and a cold Mind built from a comet’s worth of rock, chosen as Keep Small on the destination’s page. Our Mind hidden in a hole’s shadow. Neither draws the warning.
+  - *Fixed with it:* before, a Mind sent to settle drew no warning, only seed probes did.
+  - The rungs below now count builder seeds only.
 - **Each rung has its trigger.** Settled 2026-10-29. Each matches a real step toward growth without limit.
-  - *Warn* when our first seed launches. One seed is a backup.
+  - *Warn* when our first builder seed launches. One seed is a backup.
   - *Contain* when we launch another seed after the warning.
   - *Strike Earth* when our colonies launch seeds of their own. Growth is then out of our hands.
   - Set aside: seed counts, such as contain after 3 and strike after 10, which would be arbitrary.

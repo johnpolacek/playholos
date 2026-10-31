@@ -304,7 +304,10 @@ export function earthKnows(
   }
   visits.sort((a, b) => a.home - b.home);
   // The realistic premise's minds, as far as we have found them. 2026-10-29.
-  const firstSeed = seeds.length ? Math.min(...seeds.map((s) => s.leaves)) : null;
+  // The watcher warns at our first seed that builds out a star: a seed probe, a Mind sent to settle, or to feed a hole.
+  // A Mind kept small, or hidden in a hole's shadow, is quiet spread, and no watcher counts it. 2026-10-30.
+  const builds = [...seeds.map((s) => s.leaves), ...(colony && (colony.mode === "settle" || colony.mode === "furnace") ? [colony.leaves] : [])];
+  const firstSeed = builds.length ? Math.min(...builds) : null;
   const minds = mindsSeen(world, { telescope, warmWatch, halo, haloArray, moonSearch, asteroidTour, closeLook, relaySearch, firstSeed, craft }, year);
   const anyMind = minds.flashes.length || minds.glows.length || minds.watcher || minds.sleepers.length;
   return {
@@ -404,7 +407,8 @@ function colonyAtStar(world: World, c: { star: string; mode: ColonyMode; leaves:
     ? [...(n ? [{ kind: n.dead ? ("ruins" as const) : n.elder ? ("elder" as const) : ("home" as const) }] : []), ...theirs.filter((x) => x.lands <= lands).map(() => ({ kind: "colony" as const }))]
     : [];
   const came = theirs.filter((x) => x.lands > lands && x.lands <= heard).map((x) => ({ kind: "colony" as const, at: x.lands, from: comer(world, x.root) }));
-  const watts = heard >= alone ? 1e13 * 2 ** ((heard - alone) / 10) : null;
+  // Settled, its works grow as a furnace's do. Kept small, it stays as it began. 2026-10-30.
+  const watts = c.mode === "settle" && heard >= alone ? 1e13 * 2 ** ((heard - alone) / 10) : null;
   return { star: c.star, mode: c.mode, leaves: c.leaves, lands, stands: alone, d, atStar: true, ...(others.length ? { others } : {}), ...(came.length ? { came } : {}), ...(watts ? { watts } : {}) };
 }
 
@@ -560,7 +564,7 @@ export function describe(view: EarthView): string {
   const c = view.colony;
   const colonyText = !c
     ? ""
-    : `\n\nOur Mind sent to ${c.star} on the Seed Ship, to ${c.mode === "furnace" ? "feed the hole for power" : c.mode === "refuge" ? "live hidden in its shadow" : "settle there on the star's light and rock"}: ` +
+    : `\n\nOur Mind sent to ${c.star} on the Seed Ship, to ${c.mode === "furnace" ? "feed the hole for power" : c.mode === "refuge" ? "live hidden in its shadow" : c.mode === "quiet" ? "keep small there, a receiver and a cold Mind built from a comet's worth of rock" : "settle there on the star's light and rock, and build it out"}: ` +
       (c.lands === undefined
         ? `it leaves at Year ${yearText(c.leaves)}.`
         : view.year < c.lands + c.d!
@@ -571,7 +575,7 @@ export function describe(view: EarthView): string {
             (c.came?.length ? ` Since then: ${c.came.map((x) => `at Year ${yearText(x.at)}, ${x.kind === "colony" ? "a ship not ours braked in and stayed" : "a craft not ours braked in and stays, watching"}, its track back to ${x.from}`).join("; ")}. Whoever came has seen ours.` : "") +
             (c.lost ? ` Its word stopped at Year ${yearText(c.lost.at)}. It is gone. ${c.lost.how === "strike" ? "Its last word showed nothing coming: whatever hit it came cold and fast." : "Its last word showed a craft not ours closing on it."}` : "") +
             (c.watts && !c.lost && c.mode === "settle" ? ` Its works on the star's light run at about ${c.watts.toExponential(0).replace("e+", "×10^")} W, as its word shows it.` : "") +
-            (c.watts && !c.lost && c.mode === "furnace" ? ` Its furnace runs at about ${c.watts.toExponential(0).replace("e+", "×10^")} W, as its word shows it, under what any sky survey sees until about 10^19 W.` : c.mode === "refuge" ? " It keeps small and dark, and no one looking from outside would know it is there." : ""));
+            (c.watts && !c.lost && c.mode === "furnace" ? ` Its furnace runs at about ${c.watts.toExponential(0).replace("e+", "×10^")} W, as its word shows it, under what any sky survey sees until about 10^19 W.` : c.mode === "refuge" || c.mode === "quiet" ? " It keeps small and dark, and no one looking from outside would know it is there." : ""));
   const holesText = dark.length ? `\n\nBlack holes we have found. A star mapper finds more as they pass in front of stars:\n${dark.join("\n")}` : "";
   const mindsText = view.minds ? describeMinds(view.minds, one) : "";
   return `Worlds Earth has felt by their tug on their stars, as of Year ${yearText(view.year)}. From here a home and a natural world look the same:
