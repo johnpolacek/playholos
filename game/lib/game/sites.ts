@@ -342,7 +342,7 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
     // DART left from Vandenberg's SLC-4E in November 2021, so ours leave from there.
     site: { on: "earth", draw: "launch", places: [{ lat: 34.632, lon: -120.611, name: "Vandenberg, California, USA" }] },
     story: {
-      have: "NEO Surveyor and Rubin have mapped about 9 in 10 rocks over 140 m, and none is coming. Smaller ones still slip by.",
+      have: "NEO Surveyor and Rubin have mapped about 9 in 10 rocks over 140 m, and none known is coming. Smaller ones, and the last large ones, still slip by.",
       where: "Launched from Vandenberg in California, where DART left in 2021, to meet the rock a Year out.",
       why: "A small push early moves a rock far by the time it reaches us. The later it lands, the harder it must push.",
       takes: "Ten impactors of a tonne each, flying at 6 km/s. None of the matter we hold in orbit.",

@@ -503,7 +503,7 @@ Settled 2026-10-06. Replaces v1’s numbers ([v1: Economy and projects](legacy/v
   - Set aside: hiding matter until a megatonne work is on offer, and shrinking Earth’s lift so matter stays scarce.
 - **What else stands at Year 0, settled 2026-10-27.** From the newest results, logged in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#builds-we-lack). The Mind is told all three.
   - *No lift beyond rockets.* No space elevator: the best long fiber, 12.5 GPa in 2026, is about an eighth of what one needs. SpinLaunch hasn’t flown to orbit. Power beamed from orbit stays at test scale: China aims at 10 MW by 2035, and none feeds a grid.
-  - *Asteroids are known.* NEO Surveyor, launched about 2027, and Rubin find about 9 in 10 over 140 m by the late 2030s, and none is coming. DART showed in 2022 that a craft can push one aside, given years of warning. No build guards against them, since nothing is coming.
+  - *Asteroids are known.* NEO Surveyor, launched about 2027, and Rubin find about 9 in 10 over 140 m by the late 2030s, and none known is coming. DART showed in 2022 that a craft can push one aside, given years of warning. No build guards against them at Year 0, since none known is coming. Corrected 2026-10-31, audit 3.9: a rock no survey mapped strikes in 12 of 33 seeds. Before: “none is coming”.
   - *The far side has been heard.* LuSEE-Night, landing in 2027, and small craft like it have listened below 30 MHz, which Earth’s air blocks. No large dish stands there.
 - **Instruments and probes:** as in the backbone above.
 - **The sky watch is a drift scan.** Like CHORD, finished in 2028: each northern direction passes through it for about 10 minutes a day. v1’s always-on watch of the whole sky becomes a project: dense aperture arrays on two continents ([the audit](HOLOS_PROJECT_AUDIT.md#calculations)).
@@ -659,7 +659,7 @@ Settled 2026-10-10. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#earth-to-ye
   - *A tethered ring:* Earth-built, 32 km up, with a 15 km/s launcher. Weighed 2026-10-28. The Orbital Ring and Launch Tunnel already cover lift.
   - *A crater dish on the far side:* tonnes, not megatonnes, but at 350 m it hears no neighbor’s hum. It reads the early universe, not minds.
   - *A space solar pilot:* 2 GW, under a hundredth of a percent of the grid. Power from Orbit already covers the road.
-  - *Asteroid defense:* nothing is coming. A build can wait for a rock that is.
+  - *Asteroid defense:* none known is coming. A build can wait for a rock that is.
   - *A focus probe:* the Solar Lens already reaches the Sun’s focus.
   - *New drives:* none beats the Fusion Drive to the stars. Fission fragment, PuFF and direct fusion are fast inside the solar system only. Mini-Mag Orion claims a tenth of light speed, untested.
   - *The mock’s game at standard pace, each begun when the Mind first offers it.* Replaced 2026-10-14 by the paced replay in [Growing compute](#growing-compute). The mirror: Year 23. Driver and foundry: Year 30. Belt mining: Year 32. Laser array: Year 34. Ten megatonnes in orbit: Year 45. Far-side array: Year 60.

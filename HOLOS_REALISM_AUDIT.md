@@ -44,7 +44,7 @@ Started October 28, 2026, after [The realistic premise](HOLOS_GAME_CONCEPT.md#th
 - **3.6 82 Eridani d is at least 5.8 Earth masses, not 5.** Fixed 2026-10-28. mind/leads.ts:266.
 - **3.7 Luyten’s Star b sits at the warm zone’s hot edge, not in it.** Fixed 2026-10-28. 0.091 AU against an inner edge of 0.098. leads.ts:802.
 - **3.8 Luyten’s reasons.** Fixed 2026-10-28: rests on rarity, and a quiet old mind is the likelier of the two unlikely cases. “No one heard” should rest on rarity, not “no search has found anyone”. An old mind that heard would most likely stay quiet, so “heard and stays quiet” should rank at least as high as “a reply”. leads.ts:806-808.
-- **3.9 “None is coming” should be “none known to be coming”.** Open. Rocks no survey mapped strike in 12 of 33 seeds. Concept L368, L524.
+- **3.9 “None is coming” should be “none known to be coming”.** Fixed 2026-10-31: “none known is coming” in the concept, sites.ts, rocks.ts and the Mind’s earth.ts. Before: Open. Rocks no survey mapped strike in 12 of 33 seeds. Concept L368, L524.
 - **3.10 About 90 lithography tools a year is capacity, not shipments.** Open. Shipments have run about 45 to 55, unchecked. Concept L438.
 - **3.11 Fusion timing reads three ways.** Open. earth.ts:211, sites.ts:309, plan.ts:178.
 - **3.12 First life by 3.7 billion years ago or earlier, not 3.5.** Fixed 2026-10-28. past.ts:28.

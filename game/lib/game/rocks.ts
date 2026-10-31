@@ -1,7 +1,7 @@
 import type { Plan } from "./types";
 
 // A rock coming: the asteroids our surveys missed. By Year 0 NEO Surveyor and Rubin have mapped about 9 in 10 of those
-// over 140 m, and none is coming. What is left are the smaller ones, and the few large ones still unmapped. Each game's
+// over 140 m, and none known is coming. What is left are the smaller ones, and the few large ones still unmapped. Each game's
 // seed decides whether one is on its way in the first 1,000 Years, at real rates, how wide, when we find it and when it
 // would strike. Found in time, the Rock Deflector can push it aside, as DART pushed Dimorphos. Sources in
 // HOLOS_RESEARCH.md, "A rock coming". Settled 2026-10-28.
