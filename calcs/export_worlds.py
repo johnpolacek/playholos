@@ -163,8 +163,8 @@ def works_catalog():
     # The Orbital Ring, settled 2026-10-28: Birch's seed ring of Moon metal, then its ladders. What they lift comes as
     # rock does, so the works that wait on megatonnes take it too.
     works['Orbital ring'] = dict(years=eg.RING_YEARS, want=eg.WANTS['Orbital ring'][0])
-    # Fusion Plants, settled 2026-10-28: a fleet grown by the tritium it breeds. Once done, the grid holds half again
-    # as much, and the data centers that room holds fit.
+    # Fusion Plants, settled 2026-10-28: a fleet grown by the tritium it breeds. Once done, the grid holds 2.4 times
+    # Year 0's electricity more, and the data centers that room holds fit. Was half again all energy until 2026-10-31.
     # The Trojan Vault, settled 2026-10-28: built in orbit's way, out at L4, so the yard cuts it as it does the rest.
     works['Trojan vault'] = dict(years=eg.TROJAN_YEARS, want=eg.WANTS['Trojan vault'][0], orbit=True)
     # The Cold Halo, settled 2026-10-28: once done it grows, doubling every so many Years until taken back.
@@ -176,8 +176,9 @@ def works_catalog():
     works['Interceptor'] = dict(years=eg.INTERCEPTOR_YEARS, want=eg.WANTS['Interceptor'][0])
     works['Quiet radars'] = dict(years=eg.QUIET_YEARS, want=eg.WANTS['Quiet radars'][0])
     works['Strike yard'] = dict(years=eg.STRIKE_YARD_YEARS, want=eg.WANTS['Strike yard'][0], orbit=True)
-    # Ground solar's fifth counts too, 2026-10-28: a whole data center more only where the grid's room was near one.
-    works['Ground solar']['energy'] = 0.2
+    # Ground solar counts too, 2026-10-28: a fifth more of all energy, about 4.8 TW, which since 2026-10-31 is about as
+    # much again as Year 0's 5 TW of electricity, audit 3.1.
+    works['Ground solar']['energy'] = eg.SOLAR_ENERGY
     works['Fusion plants'] = dict(years=eg.FUSION_YEARS, want=eg.WANTS['Fusion plants'][0], energy=eg.FUSION_ENERGY)
     # The Helium-3 Harvest, settled 2026-10-29: the audit's ~150 kt of Palaszewski's craft at Uranus, 1.5 kt a Year.
     # Every bullet waits on its fuel, game/lib/sim/meetings.ts's HE3. Its 20 Years and 5 flagships are samples.

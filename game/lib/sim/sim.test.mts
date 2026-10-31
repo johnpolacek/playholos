@@ -8,7 +8,7 @@ import { PyRandom } from "./pyrandom.ts";
 import { hop, seedProbes } from "./spread.ts";
 import { POOL } from "./pool.ts";
 import { loadWorld } from "./world.ts";
-import { offEarth, pace, type Order } from "./works.ts";
+import { centers, offEarth, pace, type Order } from "./works.ts";
 import catalog from "../../data/works.json" with { type: "json" };
 
 test("the generator is CPython's, seeded from ints and strings", () => {
@@ -92,13 +92,15 @@ test("power from orbit and the cold annex never share rock: the second waits for
   assert.equal(both.dataCenters.length, alone.dataCenters.length + 1);
 });
 
-test("fusion plants add half again to the grid, so one more data center fits once they are done", () => {
+test("fusion plants add 2.4 times Year 0's electricity, so the data centers that room holds fit once they are done", () => {
   const g = golden.works[0];
   const alone = mock(g);
   const fused = pace([...(g.orders as Order[]), { y: 0, begin: "Fusion plants" }], 80, { scale: g.scale, aside: g.aside as [number, number, number][] });
-  // 30 standard Years, and no faster than two thirds of that however much thought pushes it.
-  assert.ok(fused.done["Fusion plants"] >= 20 && fused.done["Fusion plants"] <= 30, `done at Year ${fused.done["Fusion plants"]}`);
-  assert.equal(fused.dataCenters.length, alone.dataCenters.length + 1);
+  // 30 standard Years, no faster than two thirds of that however much thought pushes it, and slower when thought is
+  // short, as it is under electricity's limit since 2026-10-31.
+  assert.ok(fused.done["Fusion plants"] >= 20 && fused.done["Fusion plants"] <= 45, `done at Year ${fused.done["Fusion plants"]}`);
+  // Ground solar's room is already in the mock, so fusion's own adds what the two together hold beyond it.
+  assert.equal(fused.dataCenters.length, alone.dataCenters.length + centers(1, 0.96 + 2.4) - centers(1, 0.96));
   assert.ok(fused.dataCenters.at(-1)! >= fused.done["Fusion plants"] - 1e-9);
 });
 

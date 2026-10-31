@@ -481,7 +481,7 @@ Settled 2026-10-06. v1 used three dials without defining them here.
 Settled 2026-10-06. Replaces v1’s numbers ([v1: Economy and projects](legacy/v1/HOLOS_GAME_CONCEPT.md#economy-and-projects)). Shares on screen work as v1 set them. 100% now means these amounts.
 
 - **Energy:** about 24 TW. 1% is 0.24 TW.
-- **Compute:** about 10²⁵ operations a second, on about 0.25 TW of its own, about 1% of energy. 1% of compute is 10²³ a second. Chips are about 40 to 100 times as efficient per watt as in 2026.
+- **Compute:** about 10²⁵ operations a second, on about 0.25 TW of its own, about 5% of Earth’s 5 TW of electricity and 1% of all energy. 1% of compute is 10²³ a second. Chips are about 40 to 100 times as efficient per watt as in 2026.
 - **Matter in orbit:** about 20 kt spare, plus 40 kt a year from reusable heavy lift. Settled 2026-10-10, replacing 250 kt ([calcs/early_game.py](calcs/early_game.py)).
   - *Only what is spare counts.* About 124 kt is up at Year 0, but nearly all of it is working craft. Low-orbit satellites last about five years and are then brought down.
   - *The spare stock* is depots, spent stages and dead craft. In 2026 spent stages are 22% of the 17,400 t in orbit, and about 18% of satellites are dead (ESA). The 20 kt is a sample.
@@ -523,9 +523,9 @@ Settled 2026-10-06. Replaces v1’s numbers ([v1: Economy and projects](legacy/v
 Settled 2026-10-10. Numbers in [calcs/early_game.py](calcs/early_game.py). Replaces the audit’s unlimited data center.
 
 - **Chips set the pace.** Earth’s compute grew about 1.5 times a year from 2026 to 2040, as fast as chips could be made, new fabs included. So at Year 0 the fabs fill one ground data center a Year, and each adds half again to Earth’s compute.
-- **Energy sets the ceiling.** Thinking draws about 1% of Earth’s energy at Year 0, and each data center draws in proportion to its chips.
-  - After 6 data centers, thinking draws a tenth of the grid. After 11, nine tenths, for 86 times the thought.
-  - The twelfth would need more than Earth has. At full pace that is about Year 11, under an hour of play.
+- **Electricity sets the ceiling.** Thinking draws about 5% of Earth’s electricity at Year 0, about 0.25 TW of 5, and each data center draws in proportion to its chips. Corrected 2026-10-31, audit 3.1: compute runs on electricity, about 5 TW at Year 0, not all 24 TW of energy. Electricity was about 30,000 TWh in 2024, 3.4 TW, and the IEA sees about 1,000 TWh more a year (World Energy Outlook 2025). Before: 1% of all energy, eleven data centers, the limit at Year 11.
+  - After 2 data centers, thinking draws about a tenth of our electricity. After 7, about 85%, for 17 times the thought.
+  - The eighth would need more than Earth has. At full pace that is about Year 7, about half an hour of play.
 - **So early energy is for thought.** It sits idle only until compute grows into it.
 - **Past the ceiling.** More thought then needs more energy, or colder chips. Computing costs less energy the colder it runs, which is what the cold compute annex in orbit is for.
 - **The plateau stands.** Settled 2026-10-13. At the grid limit thought stops growing until energy does.
@@ -551,7 +551,7 @@ Settled 2026-10-10. Numbers in [calcs/early_game.py](calcs/early_game.py). Repla
 - **A work wants thought in scale with its real cost.** Settled 2026-10-13. Numbers from `python3 calcs/early_game.py`.
   - *Counted in flagships.* One flagship is the Habitable Worlds Observatory, about 11 billion dollars.
   - *Four works have a real price.* A 15 m mirror: 2 flagships, as LUVOIR-A costs 18 to 24 billion. The laser sail array: 0.7, as Starshot’s beam director costs 8 billion. An SKA-class array: 0.2, as the SKA costs about 1.9 billion euros.
-  - *One number ties the scale to the game.* The first telescope takes 0.15 of Year 0’s thought, the mocks’ own share. So Earth has thought for about 7 flagships at Year 0, and for about 577 at the grid limit.
+  - *One number ties the scale to the game.* The first telescope takes 0.15 of Year 0’s thought, the mocks’ own share. So Earth has thought for about 7 flagships at Year 0, and for about 114 at the grid limit, 577 before 2026-10-31.
   - *So thought is tight early and for megatonne works.* At Year 0 a second flagship is a real cost. At the limit every real-priced work can run at its floor.
   - *Megatonne works have no real price.* Samples: the probe yard 10, belt mining 20, the mass driver 30, the foundry 30, a fifth of the far-side array 40, power from orbit 200.
   - *At the limit:* the works begun at Year 12 want 93 flagships and would each take 72% of their standard time. To push the mass driver alone to ten times its want takes half of all thought.
@@ -562,7 +562,7 @@ Settled 2026-10-10. Numbers in [calcs/early_game.py](calcs/early_game.py). Repla
   - *Paced, in the order begun:* the watches are built at Year 4.2, not 6. The telescope at 6.1, not 8.4. The vault at 9.1, not 11.6. The yard at 9.8, not 11.3.
   - *The launch complex stays at Year 3.7.* Behind the watches and the telescope in the line, it gets only its want.
   - *Wants of the first hour’s works are samples:* the deep flash watch 0.1 flagship, the vault 1, the launch complex 0.3, the yard 0.7.
-  - *Thought sits idle when the line is short.* About four tenths idle after the watches are built, and eight tenths at the grid limit, until the long works begin at Year 12.
+  - *Thought sits idle when the line is short.* About four tenths idle after the watches are built. Since 2026-10-31, under electricity’s limit, none is idle once the long works begin at Year 12. Before, eight tenths was.
 - **Thought is split by an order the player sets.** Settled 2026-10-14. Numbers from `python3 calcs/early_game.py`.
   - *The line.* A new work joins the end. The player can move it. One decision, and no sliders.
   - *How the Mind fills it.* First each work gets its want, in order. Then each in turn is pushed to ten times its want.
@@ -574,9 +574,9 @@ Settled 2026-10-10. Numbers in [calcs/early_game.py](calcs/early_game.py). Repla
   - *So the order moves small works by Years, and matter’s road by about one.* Rock from the Moon sets that pace, not thought.
   - Set aside: an even split, which leaves the player nothing to decide. And a share for each work, retuned at every new one.
 - **Faster than one a Year needs new fabs.** A chip fab project adds a second line: 3 Years, a tenth of compute, no matter. Priced 2026-10-11. A leading-edge fab takes 2 to 4 years, and one firm makes the tools that print the finest chips. It shipped about 45 to 55 a year in 2024 and 2025, against plans for 90, corrected 2026-10-31, audit 3.10. Two lines make compute grow 2.25 times a Year. The chip stock grew 3.4 times a year in 2026, so that pace has been seen.
-  - *It only reaches the ceiling sooner.* Eleven data centers fit under the grid. One line fills them by Year 11, two by Year 7. A third line gains a third of a Year.
+  - *It only reaches the ceiling sooner.* Seven data centers fit under Year 0’s electricity, eleven before 2026-10-31. One line fills them by Year 7. A third line gains a third of a Year.
 - **Only if the player chooses.** One at a time, or a standing order to keep them coming. Compute never grows on its own.
-  - *Thought Fields is the standing order, 2026-10-20.* Queued once, the fabs fill a campus a Year until the grid is full: Year 11 on a typical Earth, for 86 times the thought, and Year 15 on an Earth with a fifth of it. It counts as done then, and Ground Solar opens. It uses none of our builds’ thought. With the watches, the telescope, the yard, the sail array and the probe yard queued, it brings the probe yard from Year 25.6 to 15.3, where one campus brought it to 20.9.
+  - *Thought Fields is the standing order, 2026-10-20.* Queued once, the fabs fill a campus a Year until the grid is full: Year 7 on a typical Earth, for 17 times the thought, and Year 11 on an Earth with a fifth of it. Since 2026-10-31, under electricity’s limit; before, Year 11 and 86 times. The probe yard figures here are from before. It counts as done then, and Ground Solar opens. It uses none of our builds’ thought. With the watches, the telescope, the yard, the sail array and the probe yard queued, it brings the probe yard from Year 25.6 to 15.3, where one campus brought it to 20.9.
 - **A Taiwan branch lowers where compute starts, not the pace.** Tested 2026-10-14 on a second game, seed 11: a blockade left 67% of compute.
   - *This project’s reading:* thinking’s draw on energy falls with the chips, so the grid caps the same height. A twelfth data center fits, and the limit comes a Year later, at Year 12.1.
   - *Builds run slower while thought is short.* The telescope is done at Year 6.5, not 6.1, and the vault at 9.4, not 9.1.
@@ -642,7 +642,7 @@ Settled 2026-10-10. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#earth-to-ye
 - **Fusion Plants, built 2026-10-28.** A fleet of ARC-class plants, 400 MW each. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#fusion-plants-2026-10-28).
   - *What it is.* The first plants stand near Year 0. The fleet grows to about 30,000, half again Year 0’s 24 TW.
   - *Its price:* 30 Years at standard pace, a sample: 15 doublings of about 2 Years, each new plant started on tritium the fleet bred. Want 100 flagships, a sample.
-  - *What it gives:* once done, the grid holds half again as much, and one more data center fits at every Year 0 compute. It cuts into the plateau, from Year 11 to Power from Orbit.
+  - *What it gives:* once done, its 12 TW is 2.4 times Year 0’s electricity, so about two more data centers fit beyond Ground Solar’s. Before 2026-10-31: half again all energy, one more data center.
   - *The pace now models energy.* A build can add a share of the grid, and the data centers that room holds fit. Ground Solar uses it too, from 2026-10-28: its fifth adds a whole data center only where the grid had nearly room for one, as on an Earth that starts at half our compute.
 - **The Orbital Ring, built 2026-10-28.** Birch’s bootstrapped ring (JBIS 1983), read clean. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#builds-we-lack).
   - *What it is.* A seed ring of Moon metal, 300 km up round the equator, spun faster than orbit. Skyhooks ride it standing still, and 20 cables hang to the ground.
@@ -663,7 +663,7 @@ Settled 2026-10-10. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#earth-to-ye
   - *A focus probe:* the Solar Lens already reaches the Sun’s focus.
   - *New drives:* none beats the Fusion Drive to the stars. Fission fragment, PuFF and direct fusion are fast inside the solar system only. Mini-Mag Orion claims a tenth of light speed, untested.
   - *The mock’s game at standard pace, each begun when the Mind first offers it.* Replaced 2026-10-14 by the paced replay in [Growing compute](#growing-compute). The mirror: Year 23. Driver and foundry: Year 30. Belt mining: Year 32. Laser array: Year 34. Ten megatonnes in orbit: Year 45. Far-side array: Year 60.
-  - *So the plateau lasts about 34 Years:* 2.8 hours of play, from the grid limit at Year 11 to power from orbit at about Year 45, whose fifth more energy makes room for a twelfth data center. Ground solar adds a fifth at Year 21.
+  - *So the plateau lasts about 15 Years:* about 1.3 hours of play, from the grid limit at Year 7 to Ground Solar at about Year 22. Its 4.8 TW is about as much again as Year 0’s electricity, room for two more data centers. Power from orbit adds one more at about Year 47. Before 2026-10-31: 34 Years, from Year 11 to power from orbit at Year 45.
   - *The whole far-side array arrives about when Varn wakes,* Year 57.6. Its first fifth arrives 24 Years sooner.
 - **The far-side array grows in stages.** Settled 2026-10-13. Numbers from `python3 calcs/signs.py stats`.
   - *Five fifths, 6 Years each.* FarView’s builders give 4 to 8 years for an array of about that area, and plan it as a core that grows outward.
@@ -1570,7 +1570,7 @@ Answered one at a time, in this order. Every answer must be permitted by current
     - **Replayed 2026-10-14** with every work paced by thought, down the line in the order begun, from Year 0. Years 12 to 51, about three hours.
     - *What it shows.* 35 minutes with no wake. Smog at four worlds at Year 22, each of them a home, and a solar lens sent to the farthest. Sails launched at Year 24.8. A second voice at Year 30, and a first answer, 21 Years late. Radio from two worlds at Year 34: the first proof of minds by Earth’s own instruments. Each new fifth of the far-side array listens again: radio from 12 Ophiuchi at Year 38.4 and Gliese 1021 at 43.1. Power from orbit at Year 44. The lens’s picture of Hael’s world at 45.7. What the sails saw at Alpha Centauri reaches us at Year 51.
     - *Wakes, as played:* twelve in about three hours, about one every 16 minutes. The longest quiet is 35 minutes, Years 12 to 19.
-    - *The plateau, as played:* 34 Years, 2.8 hours, from the grid limit until power from orbit makes room for a twelfth data center. At standard pace it is also about 34, by `python3 calcs/early_game.py`, 2026-10-25.
+    - *The plateau, as played:* about 15 Years since 2026-10-31, from the grid limit at Year 7 until Ground Solar makes room for two more data centers. It was 34 Years, until power from orbit, by `python3 calcs/early_game.py`, 2026-10-25.
     - *One knock is never heard.* Hael’s, at Year 20, is under the all-sky watch’s floor. A deep-field receiver held on that star would have caught it. The Mind advised one at Year 9.9, and this player left it.
     - **Settled 2026-10-13:** thought buys speed, down to a floor physics sets. See [Growing compute](#growing-compute).
     - **Settled 2026-10-13:** a work wants thought in scale with its real cost. See [Growing compute](#growing-compute).

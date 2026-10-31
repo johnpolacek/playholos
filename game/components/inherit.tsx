@@ -113,7 +113,7 @@ function stops(past: EarthPast) {
     {
       kick: "GROW · ENERGY AND COMPUTE",
       big: "24 TW",
-      line: `Earth’s grid. Compute takes about 1% of it: ${compute(past.compute).replace("a second", "operations a second")}.`,
+      line: `Earth’s grid. Compute takes about 5% of its electricity: ${compute(past.compute).replace("a second", "operations a second")}.`,
     },
     {
       kick: "GROW · MATTER",

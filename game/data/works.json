@@ -37,7 +37,7 @@
   "Ground solar": {
    "years": 10,
    "want": 20,
-   "energy": 0.2
+   "energy": 0.96
   },
   "A 15 m mirror": {
    "years": 18,
@@ -184,7 +184,7 @@
   "Fusion plants": {
    "years": 30,
    "want": 100,
-   "energy": 0.5
+   "energy": 2.4
   },
   "Helium-3 harvest": {
    "years": 20,
@@ -218,7 +218,7 @@
  "floor": 0.6666666666666666,
  "push": 10,
  "flagship": 0.15,
- "gridRoom": 96.0,
+ "gridRoom": 20.0,
  "step": 1.5,
  "dataCenter": {
   "years": 1,

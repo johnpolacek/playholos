@@ -7,7 +7,11 @@ import math
 LY = 9.4607e15          # m
 JY = 1e-26              # W m^-2 Hz^-1
 YEAR = 3.156e7          # s
-GRID_2040 = 24e12       # W, Earth's energy at Year 0
+GRID_2040 = 24e12       # W, Earth's energy at Year 0, all of it
+# Earth's electricity at Year 0, what chips run on. About 30,000 TWh in 2024, 3.4 TW, and the IEA's World Energy
+# Outlook 2025 sees about 1,000 TWh more a year, about 40% more by 2035: about 5 TW by 2040. Settled 2026-10-31,
+# audit 3.1: compute's room is electricity, not all energy.
+ELECTRIC_2040 = 5e12
 
 # ---------- The broadcast beacon ----------
 # A steady narrowband tone sent the same way in every direction. A receiver hears it when its flux beats
@@ -94,9 +98,9 @@ def all_sky(side=100, spacing=0.125, bandwidth=1e9, t_sys=30, efficiency=0.7):
 
 # ---------- Growing compute ----------
 # Earth's compute went from about 3e22 operations a second in 2026 to about 1e25 in 2040. That pace already holds the
-# fabs built along the way, so it is what chips allow. Thinking draws about 0.25 TW of 24 at Year 0, and a data
+# fabs built along the way, so it is what chips allow. Thinking draws about 0.25 TW of 5 TW of electricity at Year 0, and a data
 # center's draw grows with its chips. So the fabs set how fast compute grows, and the grid sets how far.
-def compute_growth(start=3e22, end=1e25, years=14, share=0.25 / 24, step=1.5):
+def compute_growth(start=3e22, end=1e25, years=14, share=0.25 / 5, step=1.5):
     pace = (end / start) ** (1 / years)
     print(f'Compute grew {pace:.2f} times a year from 2026 to 2040. One ground data center a Year, each +{step - 1:.0%}:')
     for n in (1, 2, 3, 6, 11):
@@ -143,7 +147,7 @@ def wall_year(fits, more_lines=()):
 GROUND = [('Launch complex', 2), ('Chip fabs', 3), ('All-sky watch', 6), ('Deep flash watch', 6), ('Spectrograph bank', 8),
           ('Ground solar build-out', 10), ('Deep-field receiver', 12), ('Fusion plants', 40)]
 ORBIT = [('Cold compute annex', 12), ('A new infrared telescope', 18), ('Starshade', 20), ('Probe yard', 24), ('Orbital foundry', 30), ('Habitat ring', 60)]
-def raise_the_pace(share=0.25 / 24, step=1.5, fab=3, factory=(3, 1 / 3), yard=(5, 1 / 4)):
+def raise_the_pace(share=0.25 / 5, step=1.5, fab=3, factory=(3, 1 / 3), yard=(5, 1 / 4)):
     fits = math.floor(math.log(1 / share) / math.log(step))
     one, two, three = wall_year(fits), wall_year(fits, [fab]), wall_year(fits, [fab, 2 * fab])
     print(f'Chip fabs, {fab} Years a line. {fits} data centers fit under the grid. One line fills them by Year {one:.0f}, '
@@ -297,15 +301,19 @@ WANTS = {  # work: (flagships, where the number comes from)
     'Laser sail array': (0.7, 'Starshot: 8 billion dollars for the ground beam director'),
     'Probe yard': (10, 'sample'), 'Belt mining': (20, 'sample'), 'Mass driver': (30, 'sample'), 'Orbital foundry': (30, 'sample'),
     'Far-side array, one fifth': (40, 'sample'), 'Power from orbit': (200, 'sample'), 'Cold annex': (80, 'sample: power from orbit\'s, for the same thought')}
-LIMIT_THOUGHT = 1.5 ** 11                # eleven data centers fit under the grid
+LIMIT_THOUGHT = 1.5 ** 7                 # seven data centers fit under Year 0's electricity, 2026-10-31. Was eleven, under all energy
 # A game whose Taiwan branch cut Earth's compute starts lower on the same curve: scale is Year 0's compute over the
-# no-branch path's. Thinking's draw on energy scales with it, so the grid holds 96 times full Year 0 thought, and the
+# no-branch path's. Thinking's draw on energy scales with it, so the grid holds 20 times full Year 0 thought, 5 TW of
+# electricity over 0.25, and the
 # fabs keep filling a center a Year until the next would pass that. At 67%, twelve fit, a Year later, at the same height.
 # What is set aside, studies, observations and the data centers' build, is a share of that Earth's own Year 0 thought,
 # so studies keep a tenth of it whatever a war left. Before 2026-10-22 it was the no-branch path's share, and at 20%
 # compute the studies took half.
-GRID_ROOM = 24 / 0.25
+GRID_ROOM = ELECTRIC_2040 / 1e12 / 0.25
 def centers(scale=1.0): return int(math.log(GRID_ROOM / scale) / math.log(1.5))
+def centers_more(scale=1.0, more=0.0): return int(math.log(GRID_ROOM * (1 + more) / scale) / math.log(1.5))
+# Ground solar's 4.8 TW, about as much again as Year 0's 5 TW of electricity, 2026-10-31. It was a fifth of all energy.
+SOLAR_ENERGY = 0.96
 
 def at_the_limit(running=('A 15 m mirror', 'Laser sail array', 'Probe yard', 'Belt mining', 'Mass driver', 'Orbital foundry')):
     room = LIMIT_THOUGHT / FLAGSHIP_THOUGHT
@@ -373,7 +381,8 @@ RING_YEARS, RING_SEED_KT, RING_KT = 10, 180, 189_000
 # doublings at about 2 Years each: 30 Years, a sample. Its want is a sample between ground solar's and power from
 # orbit's. Overnight costs run from $3,000 to $22,000 a kW in studies, so no real price fits a flagship count.
 WANTS['Fusion plants'] = (100, 'sample: tens of trillions of dollars at any studied price')
-FUSION_YEARS, FUSION_ENERGY = 30, 0.5
+# A fleet of 30,000 plants of 400 MW is 12 TW, 2.4 times Year 0's electricity. It was half of all energy, 2026-10-28.
+FUSION_YEARS, FUSION_ENERGY = 30, 2.4
 # Settled 2026-10-28: the Trojan Vault, a third home for our Mind inside 2020 XL5, the 1.2 km asteroid at Earth's L4
 # (Santana-Ros et al. 2022). The Moon Vault's 10 kt of machines, flown a year or two out, and hollowing as long as the
 # vault took: 12 Years, a sample. Its want a little over the Moon Vault's, a sample.
@@ -416,7 +425,13 @@ def replay(order, start=12.0, dt=0.01, studies=0.1, show=True, early=None, scale
     left = {'Probe yard': early['Probe yard'], 'Laser sail array': early['Laser sail array'], 'Ground solar': 10, 'A 15 m mirror': ROADS['mirror'] * 0.75,
             'Mass driver': ROADS['driver'], 'Orbital foundry': ROADS['foundry'] * 0.75, 'Belt mining': ROADS['prospect'] + ROADS['mining']}
     line = [w for w in order if w in left]
-    done, fifths, y, first, dc12, spare = {}, 0, start, None, math.inf, []
+    done, fifths, y, first, spare = {}, 0, start, None, []
+    # Data centers that fit later, built one at a Year each, as works.ts's settle builds them: one for power from
+    # orbit, and as many as Ground solar's new electricity holds. Each draws a share while it is built. 2026-10-31.
+    builds = []
+    def more_centers(at, k):
+        for _ in range(k):
+            b = max(at, builds[-1][1] if builds else at); builds.append((b, b + 1))
     rock = lambda y: DRIVER_KT * max(0, y - done.get('Mass driver', math.inf)) + MINING_KT * max(0, y - done.get('Belt mining', math.inf))
     extra = sorted(extra)                                       # (Year, work, standard Years): works the player adds later, and keeps last in the line
     added = {w for _, w, _ in extra}
@@ -425,19 +440,21 @@ def replay(order, start=12.0, dt=0.01, studies=0.1, show=True, early=None, scale
             _, w, years = extra.pop(0); left[w] = years
             if w in front: line.insert(0, w)                  # the player moved it to the front of the line
             else: line.append(w)
-        room = scale * 1.5 ** (min(n, sum(y >= d for d in dc_done(n))) + (y >= dc12)) / FLAGSHIP_THOUGHT - scale * studies / FLAGSHIP_THOUGHT
+        building = any(a <= y + 1e-9 < b - 1e-9 for a, b in builds)
+        room = scale * 1.5 ** (min(n, sum(y >= d for d in dc_done(n))) + sum(y >= b - 1e-9 for _, b in builds)) / FLAGSHIP_THOUGHT - scale * (studies + (0.05 if building else 0)) / FLAGSHIP_THOUGHT
         s, idle = split([(w, WANTS[w.split(' (')[0]][0], 1 if w == 'Power from orbit' else PUSH) for w in line], room)
         if first is None: first = dict(s, idle=idle)
         spare.append((y, idle / room))
         for w in list(line):
             if w == 'Power from orbit':
-                if rock(y) >= ORBIT_POWER_MT * 1000: done[w] = y; line.remove(w); dc12 = y + 1
+                if rock(y) >= ORBIT_POWER_MT * 1000: done[w] = y; line.remove(w); more_centers(y, 1)
                 continue
-            left[w] -= dt / paced(1, s[w])
+            if s[w] > 0: left[w] -= dt / paced(1, s[w])        # a work given no thought waits, as works.ts has it
             if w == 'Belt mining' and 'Belt prospecting' not in done and left[w] <= ROADS['mining']: done['Belt prospecting'] = y
             if left[w] <= 0:
                 line.remove(w)
                 if w != 'Far-side array, one fifth': done[w] = y
+                if w == 'Ground solar': more_centers(y, centers_more(scale, SOLAR_ENERGY) - n)
                 k = next((i for i, x in enumerate(line) if x in added and x not in front), len(line))    # before the works added later, unless moved first
                 if w == 'Mass driver': line[k:k] = ['Far-side array, one fifth', 'Power from orbit']; left['Far-side array, one fifth'] = ROADS['far_side'] / 5
                 if w == 'Far-side array, one fifth':
@@ -481,7 +498,7 @@ def first_hour(until=12.0, dt=0.005, show=True, scale=1.0):
         spare.append((y, idle / (room + scale * sum(share for a, b, share in aside if a <= y < b) / FLAGSHIP_THOUGHT)))
         for w in line:
             if w not in shown: shown[w] = (y, s[w])
-            left[w] -= dt / paced(1, s[w])
+            if s[w] > 0: left[w] -= dt / paced(1, s[w])        # a work given no thought waits, as works.ts has it
             if w == 'Probe yard' and 'Orbital yard' in done and not done.get('yard cut'): left[w] *= 0.75; done['yard cut'] = y
             if left[w] <= 0: done[w] = y
         y += dt

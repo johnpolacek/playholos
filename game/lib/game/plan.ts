@@ -28,7 +28,7 @@ export const BUILDS: Build[] = [
   { name: "Deep Flash Watch", what: "Sees knocks sent as laser flashes, which no radio watch hears.", does: "listen" },
   { name: "Thought Fields", what: "Half again as much compute each Year, until the grid is full.", does: "think" },
   // A fleet of ARC-class plants, 2026-10-28: the first stand near Year 0, and the fleet grows on the tritium it breeds.
-  { name: "Fusion Plants", what: "Half again as much energy, from a fleet of fusion plants.", does: "think" },
+  { name: "Fusion Plants", what: "About 12 TW of electricity, from a fleet of fusion plants.", does: "think" },
   { name: "Infrared Telescope", what: "Reads the air of the nearest worlds.", does: "see" },
   // An observing program on a telescope we have, ALMA, so it is quick and takes little. Added 2026-10-26.
   { name: "Halo Survey", what: "Looks for the cold glow of minds computing far from their stars.", does: "see" },
@@ -77,7 +77,7 @@ export interface Later extends Build {
  *  megatonnes of rock on the driver that throws it, as the model has it. Ground solar follows Thought Fields, whose
  *  data centers fill the grid. Lists show only what we can start, each with what it opens. Chosen 2026-10-20. */
 export const LATER: Later[] = [
-  { name: "Ground Solar", what: "A fifth more energy, from sunlight on the ground.", does: "think", after: "Thought Fields" },
+  { name: "Ground Solar", what: "About as much electricity again, from sunlight on the ground.", does: "think", after: "Thought Fields" },
   // Our own ALMA-class array for the halo search, ten times as fast, 2026-10-29: the reach to old minds hundreds of ly out.
   { name: "Halo Array", what: "An array of our own that searches for cold glows ten times as fast.", does: "see", after: "Halo Survey" },
   {
@@ -183,7 +183,7 @@ export const SAYS: Record<string, string> = {
   "Deep Flash Watch":
     "A laser knock could last a billionth of a second. Only a watch built for flashes that short would ever see one.",
   "Thought Fields":
-    "The fabs fill a campus a Year, each adding half again to our compute, until our compute draws the whole grid. Every build goes faster as they come, and so do our studies.",
+    "The fabs fill a campus a Year, each adding half again to our compute, until our compute draws all our electricity. Every build goes faster as they come, and so do our studies.",
   "Infrared Telescope":
     "It would read the air of the nearest worlds. Oxygen can build up without life, so we would weigh it against the water and everything else we read.",
   "Asteroid Tour":
@@ -203,7 +203,7 @@ export const SAYS: Record<string, string> = {
   "Halo Array":
     "An ALMA-class array of our own, built for this one search, about ten times as fast: 40,000 stars a Year, the 300,000 within 326 ly in about 8. The nearest old mind is likely about 50 ly away, but most lie farther, and this reaches them in our time. No one has priced one.",
   "Fusion Plants":
-    "Forecasters put the first fusion plant near Year 1, and on a bit under half our Earths small ones already feed the grid. Each ARC-class plant runs about 400 MW. This grows them to a fleet of about 30,000, half again the energy we have. Each new plant starts on tritium the others breed, so the fleet can only double so fast: about 30 Years. Once done, one more data center fits under the grid. If the plants breed less than planned, the fleet grows slower.",
+    "Forecasters put the first fusion plant near Year 1, and on a bit under half our Earths small ones already feed the grid. Each ARC-class plant runs about 400 MW. This grows them to a fleet of about 30,000, about 12 TW, more than twice the electricity we have. Each new plant starts on tritium the others breed, so the fleet can only double so fast: about 30 Years. Once done, about two more data centers fit under the grid. If the plants breed less than planned, the fleet grows slower.",
   "Launch Complex":
     "It doubles what we lift to orbit. Nothing we could start now waits on lift, but the Mass Driver can’t reach the Moon without it.",
   "Launch Tunnel":
@@ -222,7 +222,7 @@ export const SAYS: Record<string, string> = {
   "Seed Ship":
     "A copy of our Mind that goes and stays, about 1,500 tonnes with its seed. It flies only on a Fusion Drive, fed by the Deuterium Works, so it leaves once both are done.",
   "Ground Solar":
-    "Our data centers will fill the grid. This adds a fifth more energy in 10 Years, building solar five times as fast as we do today.",
+    "Our data centers will fill the grid. This adds about 4.8 TW in 10 Years, about as much electricity again, building solar five times as fast as we do today.",
   "15 m Mirror":
     // Counted 2026-10-31 over the 32 seeded games, by lib/sim/observing.ts: of about 12 worlds a game whose air holds
     // oxygen, the 6.5 m reads it within two months at 1 in 50, the 15 m at 1 in 5. Audit 3.4. Before: smog, from homes.
