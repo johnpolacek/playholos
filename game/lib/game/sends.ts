@@ -50,18 +50,19 @@ const TARGETS = targets as { name: string; ra: number; dec: number; d: number }[
 /** The watcher, once found: a knock aimed at it lands within seconds, from the Moon's L5. 2026-10-30. */
 export const WATCHER = { name: "The watcher", ra: 0, dec: 0, d: 1.3 / 3.156e7 };
 
-/** The real catalog's reach, Gaia's census to 326 ly. Old minds sit on its stars, so we can aim at any. 2026-10-31. */
-export const REACH_LY = 326;
+/** How far a message can be aimed: any lead's direction in our Galaxy, a warm glow thousands of light-years off
+ *  included. Light needs no star catalog, only a direction. 2026-10-31. */
+export const REACH_LY = 200_000;
 type Star = { name: string; ra: number; dec: number; d: number };
-/** Stars on this game's leads past the 50 ly census: a cold glow, a warm body, any star a lead names, set by Scan as
+/** Places on this game's leads past the 50 ly census: a cold glow, a warm body, a warm glow far off, set by Scan as
  *  its leads come. 2026-10-31. */
 const KNOWN = new Map<string, Star>();
 export function knowStars(stars: Star[]) {
   for (const s of stars) if (s.d > 0 && s.d <= REACH_LY) KNOWN.set(plain(s.name), s);
 }
 
-/** A star we can aim at by the name the Mind gave: every star to 50 ly, a star on one of our leads out to 326 ly, or
- *  the watcher. */
+/** A star we can aim at by the name the Mind gave: every star to 50 ly, any place on one of our leads, or the
+ *  watcher. */
 export function target(name: string): Star | null {
   const n = plain(name);
   if (["the watcher", "watcher"].includes(n)) return WATCHER;

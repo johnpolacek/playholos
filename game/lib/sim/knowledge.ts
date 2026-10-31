@@ -8,6 +8,7 @@ import { lightTime } from "../light.ts";
 import { yearText } from "../game/clock.ts";
 import { BANDS, iwa, observe, owa, WIDE } from "./observing.ts";
 import { proximaB, proximaSeen } from "./proxima.ts";
+import { peerAnswers, type Aimed } from "./peers.ts";
 import type { ColonyMode, DarkMass, EarthView, Find, FeltWorld, Gas, Hole, Read, Visit, World } from "./types.ts";
 import catalog from "../../data/works.json" with { type: "json" };
 import { ladderOf } from "./ladder.ts";
@@ -49,6 +50,8 @@ export interface Kit {
   closeLook?: number | null;
   /** The Years we knocked on the watcher. 2026-10-31. */
   knocks?: number[];
+  /** Our messages aimed at peers' warm glows, for their answers. 2026-10-31. */
+  aimed?: Aimed[];
   /** Our Relay Search, built once the Close Look is: when, and its Years each AU out. 2026-10-30. */
   relaySearch?: { built: number; perAU: number } | null;
   asteroidTour?: number | null;
@@ -204,7 +207,7 @@ export function iscoClock(spin: number) {
 export function earthKnows(
   world: World,
   year: number,
-  { telescope = null, mirror = null, halo = null, mapper = null, hyper = null, lenses = [], sentinels = [], seeds = [], colony = null, sails = null, probe = null, warmWatch = null, haloArray = null, moonSearch = null, asteroidTour = null, closeLook = null, relaySearch = null, craft = [], knocks = [] }: Kit = {},
+  { telescope = null, mirror = null, halo = null, mapper = null, hyper = null, lenses = [], sentinels = [], seeds = [], colony = null, sails = null, probe = null, warmWatch = null, haloArray = null, moonSearch = null, asteroidTour = null, closeLook = null, relaySearch = null, craft = [], knocks = [], aimed = [] }: Kit = {},
 ): EarthView {
   const shown = (id: string) => world.stars[id]?.shown ?? id;
   // Earth's finds at Year 0: every world whose tug shows by 2040. Measured, not understood. Its star is in the catalogs.
@@ -336,7 +339,8 @@ export function earthKnows(
   if (ours && ladder.colonyLost !== null && ours.d !== undefined && ladder.colonyLost + ours.d <= year) ours.lost = { at: ladder.colonyLost, how: "strike" };
   const anyMind = minds.flashes.length || minds.glows.length || minds.watcher || minds.sleepers.length;
   return {
-    year, felt, heard: [], visits,
+    // A peer's answer, once it reaches us. 2026-10-31. lib/sim/peers.ts.
+    year, felt, heard: peerAnswers(world, kit0, aimed, year), visits,
     ...(anyMind ? { minds } : {}),
     ...(wide.has(PROXIMA.star) ? { proxima: wide.get(PROXIMA.star) } : {}),
     proximaSeen: proximaSeen(world.seed),

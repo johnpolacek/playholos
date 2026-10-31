@@ -15,6 +15,7 @@ import { describeSky } from "@/lib/game/natural";
 import { WATCHED, watchedAt } from "@/lib/sim/minds";
 import { colonyOf, harmOrders, hitsAt, restoreOf, survivorAt } from "@/lib/game/hits";
 import { describeSent, readSent, WATCHER } from "@/lib/game/sends";
+import { aimedOf } from "@/lib/game/known-query";
 import { EARTH_AT_YEAR_0, roadOf } from "@/lib/mind/earth";
 import { EARTH_LEADS } from "@/lib/mind/leads";
 import { describe, describeSearch, willKnows } from "@/lib/sim/knowledge";
@@ -144,7 +145,7 @@ export async function mind(req: Request) {
   // What Earth knows now, the ladder's strike among it, before the strike's harm is dated. 2026-10-30.
   // Our knocks on the watcher, for its maker's answer. 2026-10-31.
   const knocks = readSent(sent).filter((m) => m.to === WATCHER.name).map((m) => m.y);
-  const kit = world ? { ...kitOf(plan, scale), knocks } : null;
+  const kit = world ? { ...kitOf(plan, scale), knocks, aimed: aimedOf(readSent(sent)) } : null;
   const view = world && kit ? willKnows(world, year ?? 0, kit, away) : null;
   const hits = inPool(seed) ? hitsAt(plan, seed, { ...base, [FOUND]: rockOf(seed)?.found ?? null }, year ?? 0, view?.minds?.watcher?.struck ?? null) : [];
   // Earth lost: our backup wakes where something can run it, and regrows. 2026-10-28.

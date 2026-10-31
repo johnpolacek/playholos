@@ -79,7 +79,7 @@ const NOTHING: EarthView = { year: 0, felt: [], heard: [], visits: [] };
 export const heardId = (h: Signal) => `heard-${h.star}-${h.arrived}`;
 
 export function ScanProvider({ children }: { children: React.ReactNode }) {
-  const { save, year } = useGame();
+  const { save, year, setPlan } = useGame();
   const seed = save?.seed;
   // Landing depends only on the tenth of a Year, so what we know changes at most every thirty seconds.
   const tenth = year === null ? null : Math.floor(year * 10) / 10;
@@ -102,6 +102,15 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
   const felt = view?.felt;
   // What our watches caught. Answers to what we sent went with the neighbors, 2026-10-29.
   const heard = useMemo(() => view?.heard ?? [], [view]);
+  // A peer's gift, once it reaches us, goes into our plan, where our thinking counts it. 2026-10-31.
+  useEffect(() => {
+    const plan = save?.plan;
+    if (!plan) return;
+    const have = new Set((plan.gifts ?? []).map((g) => g.name));
+    const fresh = heard.filter((h) => h.gift && h.gift > 1 && !have.has(h.star));
+    if (!fresh.length) return;
+    setPlan({ ...plan, gifts: [...(plan.gifts ?? []), ...fresh.map((h) => ({ name: h.star, y: h.arrived, size: h.gift! > 2 ? ("encyclopedia" as const) : ("collection" as const) }))] });
+  }, [heard, save?.plan, setPlan]);
   const visits = useMemo(() => view?.visits ?? [], [view]);
   const colony = view?.colony;
   const proxima = view?.proxima;
