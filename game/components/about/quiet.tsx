@@ -1,145 +1,133 @@
-import { useRef } from "react";
+import { useEffect, useState } from "react";
 import { round } from "@/lib/about/dials";
 import {
   COLD,
-  FROM,
-  glow,
   peak,
+  SAY,
   SEARCHES,
   SOURCES,
-  TO,
+  verdict,
   WARM,
-  where,
+  type Verdict,
 } from "@/lib/about/quiet";
 import { Stat } from "./ages";
 import { color, KICK, Sources, useCanvas } from "./dials";
 
-// Why the sky is quiet, on /about/research: a mind's glow slides from where we searched to where we barely have, as it
-// runs colder. It drifts on its own until a reader takes the slider.
+// Why the sky is quiet, on /about/research: turn how cold a mind runs and how far it is, and see which telescopes have
+// looked at its glow. Warm minds glow where WISE searched the whole sky. Cold ones glow where only a few hundred
+// nearby stars were checked.
 
 const STEPS = 1000,
-  DRIFT = 18,
-  PAD = 12,
-  TOP = 20;
-const toSlider = (T: number) =>
-  Math.round((Math.log(T / COLD) / Math.log(WARM / COLD)) * STEPS);
-const fromSlider = (n: number) => COLD * (WARM / COLD) ** (n / STEPS);
+  NEAR = 10,
+  FAR = 30000;
+const logSlider = (v: number, lo: number, hi: number) =>
+  Math.round((Math.log(v / lo) / Math.log(hi / lo)) * STEPS);
+const fromLog = (n: number, lo: number, hi: number) =>
+  lo * (hi / lo) ** (n / STEPS);
 
-function Glow() {
-  const held = useRef<number | null>(null);
-  const slider = useRef<HTMLInputElement>(null);
-  const said = useRef<HTMLParagraphElement>(null);
-  const shown = useRef("");
+/** The glow's tint: orange at our computers' warmth, deepening to a dim violet near the coldest space allows. */
+function tint(T: number): [number, number, number] {
+  const f = Math.log(T / COLD) / Math.log(WARM / COLD);
+  return [
+    Math.round(110 + 145 * f),
+    Math.round(40 + 90 * f ** 2),
+    Math.round(150 - 110 * f),
+  ];
+}
+
+/** The mind, a glowing ball, smaller the farther it is, its heat rippling out. */
+function Orb({ T, ly }: { T: number; ly: number }) {
   const ref = useCanvas((c, w, h, t) => {
-    // The temperature: the reader's, or a slow drift between warm and cold, or Garrett's 12 K when nothing moves.
-    const swing = 0.5 - 0.5 * Math.cos((2 * Math.PI * t) / DRIFT);
-    const T =
-      held.current ??
-      (t === 0 ? 12 : WARM * (COLD / WARM) ** (0.08 + 0.84 * swing));
-    const x = (um: number) =>
-      PAD + (Math.log(um / FROM) / Math.log(TO / FROM)) * (w - 2 * PAD);
-    const rows = SEARCHES.length,
-      rowH = 18,
-      base = h - rows * rowH - 34;
-    const ink = color("--ink"),
-      other = color("--other"),
-      muted = color("--muted");
-    c.font = "10.5px var(--font-plex-mono), monospace";
-    // The searches, a row each, beneath the curve, with their reach drawn up faintly.
-    SEARCHES.forEach((s, i) => {
-      const y = base + 30 + i * rowH,
-        a = x(s.from),
-        b = x(s.to);
-      c.fillStyle = muted;
-      c.globalAlpha = 0.06;
-      c.fillRect(a, TOP, b - a, base - TOP);
-      c.globalAlpha = 0.7;
-      c.fillRect(a, y, b - a, 3);
-      c.globalAlpha = 1;
-      const label = `${s.name.toUpperCase()} · ${s.reach.toUpperCase()}`,
-        lw = c.measureText(label).width;
-      c.fillText(label, b + 6 + lw > w - PAD ? a - 6 - lw : b + 6, y + 4);
-    });
-    // Microns.
-    c.fillStyle = muted;
-    c.fillRect(PAD, base, w - 2 * PAD, 1);
-    for (const um of [1, 10, 100, 1000]) {
-      c.fillRect(x(um), base, 1, 4);
-      c.fillText(um.toLocaleString("en-US"), x(um) - 4, base + 16);
-    }
-    c.fillText("MICRONS", w - PAD - c.measureText("MICRONS").width, base + 16);
-    // A warm build, as Earth's own works would glow, for scale.
-    const curve = (temp: number) => {
+    const [r, g, b] = tint(T);
+    const size = 10 + 46 * (1 - Math.log(ly / NEAR) / Math.log(FAR / NEAR));
+    const cx = w / 2,
+      cy = h / 2 - 8;
+    // Ripples of heat, leaving the ball.
+    for (let i = 0; i < 4; i++) {
+      const k = (t * 0.35 + i / 4) % 1;
+      c.strokeStyle = `rgba(${r},${g},${b},${0.35 * (1 - k)})`;
+      c.lineWidth = 1.5;
       c.beginPath();
-      for (let i = 0; i <= 240; i++) {
-        const um = FROM * (TO / FROM) ** (i / 240),
-          y = base - glow(temp, um) * (base - TOP - 10);
-        if (i) c.lineTo(x(um), y);
-        else c.moveTo(x(um), y);
-      }
-    };
-    c.strokeStyle = muted;
-    c.globalAlpha = 0.5;
-    c.setLineDash([3, 4]);
-    curve(WARM);
-    c.stroke();
-    c.setLineDash([]);
-    c.globalAlpha = 1;
-    c.fillText("ROOM TEMPERATURE", x(peak(WARM)) - 50, TOP + 2);
-    // The mind's glow, filled.
-    curve(T);
-    c.lineTo(x(TO), base);
-    c.lineTo(x(FROM), base);
-    c.closePath();
-    c.fillStyle = other;
-    c.globalAlpha = 0.18;
-    c.fill();
-    c.globalAlpha = 1;
-    c.strokeStyle = other;
-    c.lineWidth = 1.5;
-    curve(T);
-    c.stroke();
-    c.lineWidth = 1;
-    c.fillStyle = ink;
-    const tag = `${round(T)} K`;
-    c.fillText(tag, x(peak(T)) - c.measureText(tag).width / 2, TOP + 14);
-    // The slider and the words follow the drift, set only when they change.
-    if (held.current === null && slider.current)
-      slider.current.value = String(toSlider(T));
-    const k = WARM / T;
-    const line = `At ${round(T)} K, a mind’s glow peaks near ${round(peak(T))} microns, ${where(peak(T))}. Each thought costs ${round(k)} times less heat than at room temperature, but shedding each watt takes ${round(k ** 4)} times the radiator.`;
-    if (said.current && line !== shown.current) {
-      said.current.textContent = line;
-      shown.current = line;
+      c.arc(cx, cy, size + k * (Math.min(w, h) / 2 - size), 0, 2 * Math.PI);
+      c.stroke();
     }
+    const glow = c.createRadialGradient(cx, cy, 0, cx, cy, size * 1.6);
+    glow.addColorStop(0, `rgba(${r},${g},${b},0.95)`);
+    glow.addColorStop(0.6, `rgba(${r},${g},${b},0.35)`);
+    glow.addColorStop(1, `rgba(${r},${g},${b},0)`);
+    c.fillStyle = glow;
+    c.beginPath();
+    c.arc(cx, cy, size * 1.6, 0, 2 * Math.PI);
+    c.fill();
+    c.fillStyle = color("--muted");
+    c.font = "10.5px var(--font-plex-mono), monospace";
+    const label = `ITS GLOW PEAKS NEAR ${round(peak(T))} MICRONS`;
+    c.fillText(label, cx - c.measureText(label).width / 2, h - 4);
   });
+  useEffect(
+    () => void ref.current?.dispatchEvent(new Event("dials")),
+    [T, ly, ref],
+  );
+  return <canvas ref={ref} aria-hidden className="h-[260px] w-full" />;
+}
+
+const PILL: Record<Verdict, string> = {
+  searched: "border-other text-other",
+  few: "border-other text-other",
+  aimed: "border-faint text-ink",
+  far: "border-faint text-muted",
+  wrong: "border-faint text-muted",
+  planned: "border-dashed border-faint text-muted",
+};
+
+function Dial(p: {
+  label: string;
+  lo: number;
+  hi: number;
+  value: number;
+  set: (v: number) => void;
+  left: string;
+  right: string;
+  show: string;
+}) {
   return (
-    <div data-a>
-      <canvas ref={ref} aria-hidden className="h-[340px] w-full" />
-      <label className="mt-4 flex items-center gap-4">
-        <span className={KICK}>WARM</span>
-        <input
-          ref={slider}
-          type="range"
-          min={0}
-          max={STEPS}
-          defaultValue={toSlider(12)}
-          aria-label="How cold a mind runs"
-          onInput={(e) => (held.current = fromSlider(+e.currentTarget.value))}
-          className="w-full max-w-[420px] accent-[var(--other)]"
-          style={{ direction: "rtl" }}
-        />
-        <span className={KICK}>COLD</span>
-      </label>
-      <p
-        ref={said}
-        className="mt-4 min-h-[4.5em] max-w-[60ch] text-[15px] leading-[1.55]"
+    <div>
+      <div className="flex items-baseline justify-between gap-4">
+        <span className="text-[15px] font-semibold">{p.label}</span>
+        <span className="font-mono text-[14px] tabular-nums">{p.show}</span>
+      </div>
+      <input
+        type="range"
+        min={0}
+        max={STEPS}
+        value={logSlider(p.value, p.lo, p.hi)}
+        aria-label={p.label}
+        aria-valuetext={p.show}
+        onChange={(e) => p.set(fromLog(+e.target.value, p.lo, p.hi))}
+        className="mt-2 w-full accent-[var(--other)]"
       />
+      <div className="mt-1 flex justify-between font-mono text-[10.5px] tracking-[.05em] text-muted">
+        <span>{p.left}</span>
+        <span>{p.right}</span>
+      </div>
     </div>
   );
 }
 
 export function Quiet() {
+  const [T, setT] = useState(12);
+  const [ly, setLy] = useState(100);
+  const rows = SEARCHES.map((s) => ({ s, v: verdict(s, T, ly) }));
+  const names = (v: Verdict) =>
+    rows
+      .filter((r) => r.v === v)
+      .map((r) => r.s.name)
+      .join(" and ");
+  const answer = names("searched")
+    ? `${names("searched")} looked for this glow across the whole sky, and found nothing confirmed.`
+    : names("few")
+      ? `Only ${names("few")} looked for this glow, and only at a few hundred nearby stars.`
+      : "No survey has looked for this glow this far out. Only a telescope aimed at this one star could catch it.";
   return (
     <section
       id="quiet"
@@ -156,7 +144,7 @@ export function Quiet() {
         data-a
         className="mt-4 max-w-[60ch] text-[16px] leading-[1.6] text-page-ink2"
       >
-        A mind that thinks cold glows faintly, at wavelengths we have barely
+        A mind that thinks cold glows faintly, in a kind of light we have barely
         searched.
       </p>
       <dl data-a className="mt-8 flex flex-wrap gap-x-10 gap-y-5">
@@ -167,9 +155,63 @@ export function Quiet() {
         />
         <Stat value="5 to 28 K" label="Where a mature mind may run" />
       </dl>
-      <div className="mt-8">
-        <Glow />
-        <Sources list={SOURCES} />
+
+      <div className="mt-10 grid gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+        <div data-a>
+          <Orb T={T} ly={ly} />
+          <div className="mt-6 flex flex-col gap-6">
+            <Dial
+              label="How cold it runs"
+              lo={COLD}
+              hi={WARM}
+              value={T}
+              set={setT}
+              left="NEAR THE COLDEST SPACE ALLOWS"
+              right="AS WARM AS OUR COMPUTERS"
+              show={`${round(T)} K`}
+            />
+            <Dial
+              label="How far away"
+              lo={NEAR}
+              hi={FAR}
+              value={ly}
+              set={setLy}
+              left="10 LY"
+              right="ACROSS THE GALAXY"
+              show={`${round(ly)} ly`}
+            />
+          </div>
+        </div>
+
+        <div data-a>
+          <div className={KICK}>WHO HAS LOOKED FOR THIS GLOW</div>
+          <ul className="mt-3 flex flex-col">
+            {rows.map(({ s, v }) => (
+              <li
+                key={s.name}
+                className={`flex items-center justify-between gap-4 border-b border-rowline py-3 transition-opacity ${v === "searched" || v === "few" || v === "aimed" ? "" : "opacity-45"}`}
+              >
+                <div>
+                  <div className="text-[15px] font-semibold">{s.name}</div>
+                  <div className="text-[13px] text-muted">{s.reach}</div>
+                </div>
+                <span
+                  className={`shrink-0 rounded-full border px-3 py-1 font-mono text-[10.5px] tracking-[.1em] ${PILL[v]}`}
+                >
+                  {SAY[v].toUpperCase()}
+                </span>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-5 text-[15px] leading-[1.55]">{answer}</p>
+          <p className="mt-3 text-[13.5px] leading-[1.5] text-muted">
+            Colder thinking costs less: each thought takes {round(WARM / T)}{" "}
+            times less heat than at our computers’ warmth. The catch is shedding
+            it, which takes {round((WARM / T) ** 4)} times the radiator for each
+            watt.
+          </p>
+          <Sources list={SOURCES} />
+        </div>
       </div>
     </section>
   );

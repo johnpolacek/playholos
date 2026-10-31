@@ -19,30 +19,93 @@ export function glow(T: number, um: number): number {
   return x > 700 ? 0 : shape(x) / shape(3.92);
 }
 
-/** Where we have looked, by wavelength in microns. */
-export const SEARCHES: {
+/** Where we have looked: the glow each telescope sees, in microns, and how much of the sky. A whole-sky survey looked at
+ *  every star. A nearby-star survey looked at a few hundred, out to `ly`. A pointed one, only where we aimed it. */
+export interface Search {
   name: string;
   from: number;
   to: number;
+  kind: "sky" | "near" | "pointed" | "planned";
+  ly?: number;
   reach: string;
-}[] = [
-  { name: "WISE", from: 3.4, to: 22, reach: "whole sky" },
-  { name: "JWST", from: 5, to: 28, reach: "star by star" },
-  { name: "PRIMA", from: 24, to: 261, reach: "from 2033" },
-  { name: "Herschel", from: 70, to: 500, reach: "hundreds of nearby stars" },
-  { name: "ALMA, JCMT", from: 350, to: 3600, reach: "star by star" },
+}
+
+export const SEARCHES: Search[] = [
+  {
+    name: "WISE",
+    from: 3.4,
+    to: 22,
+    kind: "sky",
+    reach: "The whole sky, twice",
+  },
+  {
+    name: "JWST",
+    from: 5,
+    to: 28,
+    kind: "pointed",
+    reach: "Only stars we aim it at",
+  },
+  {
+    name: "Herschel",
+    from: 70,
+    to: 500,
+    kind: "near",
+    ly: 147,
+    reach: "446 stars within 147 ly",
+  },
+  {
+    name: "JCMT",
+    from: 450,
+    to: 850,
+    kind: "near",
+    ly: 163,
+    reach: "100 stars within 163 ly",
+  },
+  {
+    name: "ALMA",
+    from: 350,
+    to: 3600,
+    kind: "pointed",
+    reach: "Dusty stars, one at a time",
+  },
+  {
+    name: "PRIMA",
+    from: 24,
+    to: 261,
+    kind: "planned",
+    reach: "Launching about 2033",
+  },
 ];
 
-/** Where a glow peaking at λ microns falls among the searches. */
-export function where(um: number): string {
-  if (um <= 22)
-    return "where WISE searched the whole sky, and nothing is confirmed";
-  if (um <= 70)
-    return "between the bands, where only JWST looks, one star at a time, until PRIMA flies in 2033";
-  if (um <= 500)
-    return "where Herschel looked at only a few hundred nearby stars";
-  return "where only ALMA and JCMT look, one star at a time";
+/** Whether a telescope's band holds the brighter half of a glow at T. */
+export function sees(s: Search, T: number): boolean {
+  for (let i = 0; i <= 40; i++) {
+    const um = s.from * (s.to / s.from) ** (i / 40);
+    if (glow(T, um) >= 0.5) return true;
+  }
+  return false;
 }
+
+export type Verdict =
+  "searched" | "few" | "aimed" | "far" | "wrong" | "planned";
+
+/** What a telescope tells us of a mind at T kelvin, `ly` away. */
+export function verdict(s: Search, T: number, ly: number): Verdict {
+  if (!sees(s, T)) return "wrong";
+  if (s.kind === "planned") return "planned";
+  if (s.kind === "sky") return "searched";
+  if (s.kind === "pointed") return "aimed";
+  return ly <= (s.ly ?? 0) ? "few" : "far";
+}
+
+export const SAY: Record<Verdict, string> = {
+  searched: "Looked everywhere",
+  few: "Looked, at a few hundred stars",
+  aimed: "Only if we aimed at it",
+  far: "Too far for its survey",
+  wrong: "Wrong glow",
+  planned: "Not yet",
+};
 
 export const SOURCES: Source[] = [
   {
