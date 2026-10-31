@@ -72,7 +72,7 @@ export function proximaB(seed: number): { mass: number; nature: Nature } {
  *  so its true mass, and how much light it reflects. No one had read its air: oxygen takes 85 to 320 hours more. A
  *  surface's brightness hints at its nature without settling it: bare rock is dark, as the Moon and Mercury are, about
  *  0.08 to 0.16, cloud and air brighter, about 0.2 to 0.4, and a small gas world 0.3 to 0.5, our samples. Measured to
- *  about 0.06, a sample. Its own stream, so the truth above draws as before. Settled 2026-10-31, audit 3.3. */
+ *  about 0.04, a sample, and never darker than 0.05, about the darkest rock known. Its own stream, so the truth above draws as before. Settled 2026-10-31, audit 3.3. */
 export interface ProximaSeen {
   mass: number;
   /** Degrees from face on. */
@@ -85,7 +85,7 @@ export function proximaSeen(seed: number): ProximaSeen {
   const rand = stream(`${seed}:proxima-b-light`);
   const [lo, hi] = nature === "bare rock" ? [0.08, 0.16] : nature === "a small gas world" ? [0.3, 0.5] : [0.2, 0.4];
   const truth = lo + rand() * (hi - lo);
-  const noise = 0.06 * Math.sqrt(-2 * Math.log(1 - rand())) * Math.cos(2 * Math.PI * rand());
+  const noise = 0.04 * Math.sqrt(-2 * Math.log(1 - rand())) * Math.cos(2 * Math.PI * rand());
   const tilt = (Math.asin(Math.min(1, PROXIMA.msini / mass)) * 180) / Math.PI;
-  return { mass, tilt, albedo: Math.min(0.8, Math.max(0.03, truth + noise)) };
+  return { mass, tilt, albedo: Math.min(0.8, Math.max(0.05, truth + noise)) };
 }

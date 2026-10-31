@@ -997,13 +997,13 @@ export function rockLead(r: NonNullable<ReturnType<typeof rockAt>>): Lead {
 /** Proxima b's lead. Without what ground telescopes saw, as the Mind's static words have it, its least mass alone.
  *  With it, since 2026-10-31, audit 3.3: its true mass, tilt and brightness, and odds that follow them. Dim reads
  *  bare, bright reads air, between leans bare, and past 2 Earths it likely holds thick gas. Checked over 4,000 seeds:
- *  dim is bare rock 99.5% of the time, between 93%, and bright has air 82%. */
+ *  dim is bare rock 99.8% of the time, between 89%, and bright has air 99%. */
 export function proximaLead(seen?: ProximaSeen): Lead {
   const gas = seen ? seen.mass > 2 : false;
   const read = !seen || gas ? "even" : seen.albedo < 0.17 ? "dim" : seen.albedo > 0.28 ? "bright" : "even";
   const odds = {
-    bare: gas ? "unlikely" : read === "dim" ? "very likely" : read === "bright" ? "unlikely" : "likely",
-    air: gas ? "unlikely" : read === "dim" ? "unlikely" : read === "bright" ? "likely" : "unlikely",
+    bare: gas ? "unlikely" : read === "dim" ? "very likely" : read === "bright" ? "very unlikely" : "likely",
+    air: gas ? "unlikely" : read === "dim" ? "unlikely" : read === "bright" ? "very likely" : "unlikely",
     gas: !seen ? "very unlikely" : gas ? "likely" : "almost no chance",
   } as const;
   const tone = gas ? "as a world of thick gas may" : read === "dim" ? "dim, as the Moon and Mercury are" : read === "bright" ? "bright, as cloud and air are" : "between the Moon’s dimness and cloud’s brightness";
@@ -1065,7 +1065,7 @@ export function proximaLead(seen?: ProximaSeen): Lead {
     ],
     art: { kind: "orbit", a: 0.0485, e: 0, hz: [0.042, 0.082] },
     // On rock under air, life would still have to start.
-    life: odds.air === "likely" ? "unlikely" : "very unlikely",
+    life: odds.air === "very likely" ? "unlikely" : "very unlikely",
   };
 }
 

@@ -658,7 +658,7 @@ What Sol’s own instruments have found nearby. For v2 open question 3.
   - **[Palle et al. 2023, “Ground-breaking exoplanet science with the ANDES spectrograph at the ELT”](https://arxiv.org/abs/2311.17075)** · Preprint. Checked 2026-10-31 by search summary. Proxima b found in about 6 hours, oxygen alone in about 320 hours, about 45 nights, at 5 sigma.
     - Matters: oxygen is a long campaign, so its air can be unread at Year 0.
     - Used: the same.
-  - **Brightness by kind, this project’s samples:** bare rock 0.08 to 0.16, as the Moon’s 0.12 and Mercury’s 0.09, rock under cloud and air 0.2 to 0.4, a small gas world 0.3 to 0.5, measured to about 0.06.
+  - **Brightness by kind, this project’s samples:** bare rock 0.08 to 0.16, as the Moon’s 0.12 and Mercury’s 0.09, rock under cloud and air 0.2 to 0.4, a small gas world 0.3 to 0.5, measured to about 0.04, never under 0.05, about the darkest rock known.
 - **Proxima b’s nature, drawn, 2026-10-22.** For arrivals on Reach. Nothing new read: each piece is logged elsewhere here.
   - Its least mass, 1.055 Earths, 0.0485 AU out from a star of 0.00157 Suns: the entry above.
   - The cosmic shoreline with Pass et al. 2025’s factor of 3.1 for a fully convective red dwarf, and each world’s luck of 0.5 in the log: calcs/seed.py’s, under “Kinds of worlds”.
