@@ -94,7 +94,7 @@ const CASES = [
     builds: ["Moon Search"],
     later: [{ name: "Close Look", y: 4 }, { name: "Relay Search", y: 5 }],
     ask: "What did our Relay Search find out there, and where is whoever sent the watcher?",
-    must: [/1,879|relay/i, /8\.2|right ascension/i, /quiet|silent|nothing/i],
+    must: [/1,879|relay|craft/i, /8\.2|right ascension/i, /quiet|silent|nothing/i],
     never: [/\b(is|lies|sits) (about |some |roughly )?[\d,.]+ (light-years|ly)\b/i],
   },
   // The natural sky, 2026-10-30: a long quiet isn't empty. Stars explode about 1.6 a century and pairs merge in dust,
