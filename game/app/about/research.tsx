@@ -1,6 +1,7 @@
 import { Ages } from "@/components/about/ages";
 import { Dials } from "@/components/about/dials";
 import { Quiet } from "@/components/about/quiet";
+import { Reach } from "@/components/about/reach";
 import { DocBody, PageHead } from "@/components/about/doc-page";
 import doc from "../../../HOLOS_RESEARCH.md?doc";
 
@@ -32,6 +33,7 @@ const GROUPS = [
   },
   {
     title: "How far can we reach?",
+    href: "#reach",
     sections: [
       "Travel, sails and lenses",
       "Outposts and colonies",
@@ -69,6 +71,7 @@ export default function Research() {
       <Dials />
       <Ages />
       <Quiet />
+      <Reach />
       <DocBody doc={doc} groups={GROUPS} />
     </main>
   );
