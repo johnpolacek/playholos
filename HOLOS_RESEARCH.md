@@ -314,6 +314,7 @@ For sending in play: what a message costs, how far it can be read, and how long 
   - Matters: Earth’s compute per watt at Year 0, about 40 to 100 times 2026’s. With about 0.25 TW for thinking, about 10²⁵ operations a second.
 - **[Ho, Erdil and Besiroglu 2023, limits of today’s chips](https://arxiv.org/abs/2312.08595)** · Preprint, Epoch AI. I read the abstract, 2026-10-13.
   - Today’s kind of chip can become about 200 times more efficient than 2023’s, and no more: about 4.7×10¹⁵ operations a joule at 4-bit precision. That counts the energy to switch a transistor, to charge its wires, and what leaks.
+  - *Checked in the paper’s text, 2026-10-31:* 4.7×10¹⁵ is the geometric mean of a distribution with a standard deviation of about 0.7 orders of magnitude in log space, so about 40 to 1,000 times at one sigma. Used: audit 3.2.
   - Matters: at 28 to 40% a year that ceiling is reached between 2039 and 2044. So at Year 0 chips sit at or near it, with a doubling left at most. That arithmetic is this project’s.
   - Used: v2 [Growing compute](HOLOS_GAME_CONCEPT.md#growing-compute), as support for energy setting the ceiling, and for the open question on the grid limit.
 - **[Hobbhahn and Besiroglu 2022, predicting GPU performance](https://epoch.ai/blog/predicting-gpu-performance)** · Epoch AI report. Read on the page, 2026-10-13.
