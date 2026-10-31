@@ -1,5 +1,4 @@
 import { readFile } from "node:fs/promises";
-import { gunzipSync } from "node:zlib";
 import { cloudflare } from "@cloudflare/vite-plugin";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
@@ -8,14 +7,6 @@ import { appleIcon } from "./app/apple-icon.tsx";
 import { card } from "./app/card.tsx";
 import { countDoc, renderDoc } from "./lib/about/docs.ts";
 import { mindCli } from "./mind-cli.ts";
-
-// The seeds' worlds are gzipped JSON. Opened as the Worker is built, so it holds them as plain modules.
-const worlds: Plugin = {
-  name: "holos-worlds",
-  async load(id) {
-    if (id.endsWith(".json.gz")) return `export default JSON.parse(${JSON.stringify(gunzipSync(await readFile(id)).toString("utf8"))})`;
-  },
-};
 
 // The about pages' docs: HOLOS_*.md?doc is the doc rendered, and ?stats its counts, both from the markdown at the
 // repo root.
@@ -55,7 +46,7 @@ const images: Plugin = {
 // The client is built to static files, and worker/ is built beside it as the Worker that serves them and the API.
 // The game's scene reads the atlas's ephemeris, stars and galaxies from ../src, ../assets and ../data.
 export default defineConfig({
-  plugins: [mindCli, react(), tailwindcss(), cloudflare(), worlds, docs, images],
+  plugins: [mindCli, react(), tailwindcss(), cloudflare(), docs, images],
   resolve: { alias: { "@": import.meta.dirname } },
   server: { fs: { allow: [".."] } },
 });
