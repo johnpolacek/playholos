@@ -158,7 +158,7 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
     story: {
       have: "WISE mapped the warm sky in 2010 and NEO Surveyor from 2027. Neither reaches a new warm glow across our galaxy through its dust.",
       where: "At L2, 1.5 million km out, cooled behind a shade, as Webb flies.",
-      why: "A young mind building out its home glows like a new warm star for centuries. Seen from tens of thousands of light-years, it is faint and buried in the crowded plane, so only repeated deep maps catch one appearing.",
+      why: "A young mind building out its home glows like a new warm star for centuries. Seen from thousands of light-years, it is faint and buried in the crowded plane, so only repeated deep maps catch one appearing.",
       takes: "A telescope about 1.3 m wide, cooled to its detectors' limit, and about $2.5 billion. Built in orbit, a quarter quicker once the yard is done.",
       before: "WISE, 0.4 m, mapped the whole sky at 12 µm to about 0.7 mJy. NEO Surveyor, 0.5 m, cost $1.2 billion to build.",
     },
