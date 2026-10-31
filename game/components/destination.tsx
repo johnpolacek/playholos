@@ -168,9 +168,10 @@ export function DestinationPage({ slug }: { slug: string }) {
   const felt = lead?.what === "A new world";
   const lens = useMemo(() => (felt && lead ? lensRoad(plan, scale, from, lead.star) : null), [felt, lead, plan, scale, from]);
   // A sentinel can go wherever a world is known, the world next door or one we've felt, or to a black hole we found.
+  // Or to a cold glow's star, to see what glows, out to 326 ly. 2026-10-31.
   const stay = useMemo(
     () =>
-      lead && (felt || lead.slug === "proxima-centauri" || isHole(lead.art)) ? sentinelRoad(plan, scale, from, lead.star, lead.ly) : null,
+      lead && (felt || lead.slug === "proxima-centauri" || isHole(lead.art) || lead.slug.startsWith("cold-glow-")) ? sentinelRoad(plan, scale, from, lead.star, lead.ly) : null,
     [felt, lead, plan, scale, from],
   );
   // A seed probe goes where there is rock to copy itself from: the world next door, or a world we've felt. 2026-10-26.

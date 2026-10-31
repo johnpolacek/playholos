@@ -784,17 +784,25 @@ export function mindLeads(m: MindsSeen | undefined): Lead[] {
       line: `Cold light beside a star ${n(Math.round(g.d))} ly away, its color fitting no dust.`,
       ly: g.d,
       ask: `What is cold glow ${i + 1}?`,
-      brief: `Our Halo Survey saw a compact glow near 12 K beside a star ${n(Math.round(g.d))} ly away, about ${watts(g.watts)}, steady. Its color fits no dust we know. A cold disk of odd grains could glow so, or a fault in our looking. Computing done cold, far from a star, would too.`,
+      brief: `Our Halo Survey saw a compact glow near 12 K beside a star ${n(Math.round(g.d))} ly away, about ${watts(g.watts)}, steady. Its color fits no dust we know. A cold disk of odd grains could glow so, or a fault in our looking. Computing done cold, far from a star, would too.${g.near !== undefined ? " Our sentinel there has seen what glows: thin dark panels far out from the star, each as cold as the glow, on orbits too orderly for rubble. Something made them." : ""}`,
       facts: [
         ["Its glow", `About ${watts(g.watts)}, steady`],
         ["First seen", `${year(g.seen)}, by our Halo Survey`],
+        ...(g.near !== undefined ? ([["Up close", `${year(g.near)}, by our sentinel`]] as [string, string][]) : []),
       ],
-      could: [
+      // A sentinel that stays sees its source up close, and that settles it. 2026-10-31.
+      could: g.near !== undefined ? [
+        { what: "Something natural we don't know", why: "Nothing natural we know sets panels on orbits this orderly.", odds: "almost no chance" },
+        { what: "An error in our looking", why: "Our sentinel is there, and sees it.", odds: "almost no chance" },
+        { what: "A mind computing cold", why: "Made panels shedding heat at 12 K, far from their star, are what cold computing would build.", odds: "almost certain" },
+      ] : [
         { what: "Something natural we don't know", why: "Dust of grains we haven't measured, or a disk cold and far out. The sky has surprised us before.", odds: "roughly even" },
         { what: "An error in our looking", why: "A faint galaxy behind the star, or a fault in the data. A second look rules it out.", odds: "unlikely" },
         { what: "A mind computing cold", why: "Waste heat shed far from a star glows grey and line-free, as this does. About one star in 1,600 holds a mind.", odds: "roughly even" },
       ],
-      tells: ["A second look in other bands shows whether its color holds.", "A craft that stays there would see what makes it, 10,000 Years from now or more."],
+      tells: g.near !== undefined
+        ? ["It hasn't acted on our sentinel. Whether it noticed, we can't tell."]
+        : ["A second look in other bands shows whether its color holds.", `A sentinel that stays there would see what makes it, about ${n(Math.round(g.d / CATALOG.sentinel.speed + CATALOG.sentinel.burns + 3 + g.d))} Years after it leaves.`],
       art: { kind: "glow", ly: g.d, steady: true },
       life: "unlikely",
     })),

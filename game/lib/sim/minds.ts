@@ -50,6 +50,8 @@ export interface ColdGlowSeen {
   d: number;
   seen: number;
   watts: number;
+  /** The Year word comes home from a craft of ours that stayed in its system and saw its source up close. 2026-10-31. */
+  near?: number;
 }
 
 export interface WatcherSeen {
@@ -174,7 +176,7 @@ export const ARRAY_RATE = 40000;
 /** An awake old mind's glow is seen once a survey looking star by star, nearest first, reaches its star, if it is over
  *  the floor at its distance. A whole-sky map can't: far-infrared skies are crowded with faint galaxies, so only an
  *  array sees a faint glow sharply, one star at a time. It has glowed for ages, so its light is already here. */
-export function coldGlowOf(m: OldMind, halo: number | null | undefined, year: number, array: number | null = null): ColdGlowSeen | null {
+export function coldGlowOf(m: OldMind, halo: number | null | undefined, year: number, array: number | null = null, craft: MindKit["craft"] = []): ColdGlowSeen | null {
   if (m.asleep || m.glowW === null) return null;
   const { floor } = catalog.halo;
   if (m.glowW < floor * (m.d / (10 * PC_LY)) ** 2) return null;
@@ -182,7 +184,35 @@ export function coldGlowOf(m: OldMind, halo: number | null | undefined, year: nu
   const when = [halo != null ? halo + n / HALO_RATE : Infinity, array != null ? array + n / ARRAY_RATE : Infinity];
   const seen = Math.min(...when);
   if (seen > year) return null;
-  return { ...skyOf(m.pos), d: m.d, seen, watts: m.glowW };
+  // A craft that stays in its system maps it in a few Years and sees what glows, up close. 2026-10-31.
+  const near = closest(m, craft, true);
+  return { ...skyOf(m.pos), d: m.d, seen, watts: m.glowW, ...(near !== null && near <= year ? { near } : {}) };
+}
+
+/** The soonest word home from a craft of ours in a mind's system, a craft that stays only if `stays`. */
+function closest(m: OldMind, craft: MindKit["craft"], stays: boolean): number | null {
+  let best: number | null = null;
+  for (const c of craft ?? []) {
+    if (Math.hypot(c.pos[0] - m.pos[0], c.pos[1] - m.pos[1], c.pos[2] - m.pos[2]) > SAME_SYSTEM_LY) continue;
+    if (stays && !c.stays) continue;
+    const home = c.arrives + (c.stays ? STAY_SEARCH_YEARS : 0) + m.d;
+    if (best === null || home < best) best = home;
+  }
+  return best;
+}
+
+/** An atlas position, light-years in (Galactic X, Galactic Z, -Galactic Y), from right ascension in hours,
+ *  declination in degrees and distance: the inverse of skyOf. 2026-10-31. */
+export function atlasOf(ra: number, dec: number, d: number): [number, number, number] {
+  const a = (ra * Math.PI) / 12, b = (dec * Math.PI) / 180;
+  const e = [Math.cos(b) * Math.cos(a), Math.cos(b) * Math.sin(a), Math.sin(b)];
+  const M = [
+    [-0.0548755604, -0.87343709, -0.4838350155],
+    [0.4941094279, -0.44482963, 0.7469822445],
+    [-0.867666149, -0.1980763734, 0.4559837762],
+  ];
+  const g = M.map((row) => d * (row[0] * e[0] + row[1] * e[1] + row[2] * e[2]));
+  return [g[0], g[2], -g[1]];
 }
 
 /** The watcher, found by where it sits: from Earth at the Moon's L4 or L5, by the asteroid tour on a co-orbital rock,
@@ -233,7 +263,7 @@ export function mindsSeen(world: World, kit: MindKit, year: number): MindsSeen {
   const bySeen = <T extends { seen: number }>(xs: (T | null)[]) => xs.filter((x): x is T => x !== null).sort((a, b) => a.seen - b.seen);
   return {
     flashes: bySeen(m.peers.map((p) => flashOf(p, kit.warmWatch, year, kit.telescope ?? null))),
-    glows: bySeen(m.old.map((o) => coldGlowOf(o, kit.halo, year, kit.haloArray ?? null))),
+    glows: bySeen(m.old.map((o) => coldGlowOf(o, kit.halo, year, kit.haloArray ?? null, kit.craft))),
     watcher: watcherOf(world, kit, year),
     sleepers: bySeen(m.old.map((o) => sleeperOf(o, kit.craft, year))),
   };

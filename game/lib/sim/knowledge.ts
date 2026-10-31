@@ -1,7 +1,8 @@
 // The knowledge wall: what Earth knows at a moment, from the seed's truth. Settled 2026-10-13: the Mind judges from
 // what Earth knows, never the seed. So nothing here passes on who lives where, a world's rung, or anything not yet
 // arrived and caught. Pure: no files, so it runs anywhere and tests fast.
-import { mindsSeen, type MindKit, type MindsSeen } from "./minds.ts";
+import { atlasOf, mindsSeen, type MindKit, type MindsSeen } from "./minds.ts";
+import targets from "../../data/targets.json" with { type: "json" };
 import { giftWords } from "../game/sends.ts";
 import { lightTime } from "../light.ts";
 import { yearText } from "../game/clock.ts";
@@ -318,7 +319,24 @@ export function earthKnows(
   // A Mind kept small, or hidden in a hole's shadow, is quiet spread, and no watcher counts it. 2026-10-30.
   const builds = [...seeds.map((s) => s.leaves), ...(colony && (colony.mode === "settle" || colony.mode === "furnace") ? [colony.leaves] : [])];
   const firstSeed = builds.length ? Math.min(...builds) : null;
-  const minds = mindsSeen(world, { telescope, warmWatch, halo, haloArray, moonSearch, asteroidTour, closeLook, relaySearch, firstSeed, craft }, year);
+  // Our craft in other systems, for finding minds there: sentinels and seed probes stay, and a sentinel can go to a cold
+  // glow's star, named as Scan names it. Until 2026-10-31 this list was never filled, so no game could find a sleeper.
+  const kit0 = { telescope, warmWatch, halo, haloArray, moonSearch, asteroidTour, closeLook, relaySearch, firstSeed };
+  const glows = mindsSeen(world, kit0, year).glows;
+  const placeOf = (star: string): [number, number, number] | null => {
+    const t = targets.find((x) => x.name === star);
+    if (t) return atlasOf(t.ra, t.dec, t.d);
+    const g = /^Cold glow (\d+)$/.exec(star);
+    const glow = g ? glows[Number(g[1]) - 1] : undefined;
+    return glow ? atlasOf(glow.ra, glow.dec, glow.d) : null;
+  };
+  const crafts: NonNullable<MindKit["craft"]> = [...(craft ?? [])];
+  for (const x of sentinels) {
+    const pos = placeOf(x.star);
+    if (pos) crafts.push({ pos, arrives: x.leaves + Math.hypot(...pos) / speed + burns, stays: true });
+  }
+  for (const p of probes) if (!ladder.cancelled.has(p.star)) crafts.push({ pos: atlasOf(p.ra, p.dec, p.d), arrives: p.lands, stays: true });
+  const minds = mindsSeen(world, { ...kit0, craft: crafts }, year);
   // What Earth knows of the ladder: a seed probe's silence once its word is overdue, and a strike once it lands.
   if (minds.watcher) {
     const dOf = new Map(probes.map((p) => [p.star, p.d]));
@@ -639,7 +657,8 @@ function describeMinds(m: MindsSeen, one: (x: number) => string): string {
       `Cold glows our Halo Survey has seen, looking at each star for an hour, nearest first:\n` +
         m.glows.map((g, i) =>
           `- Cold glow ${i + 1}, as Scan names it, ${sky(g)}, beside a star ${one(g.d)} ly away: a compact glow near 12 K, about ${watts(g.watts)} W, first seen at Year ${yearText(g.seen)}, steady. ` +
-          `Its color fits no dust we know. It could be a cold disk of unusual grains, a measuring error, or computing done cold, far from a star.`).join("\n"),
+          `Its color fits no dust we know. It could be a cold disk of unusual grains, a measuring error, or computing done cold, far from a star.` +
+          (g.near !== undefined ? ` Our sentinel there sent word at Year ${yearText(g.near)}: thin dark panels far out from the star, as cold as the glow, on orbits too orderly for rubble. Something made them. It has not acted on our sentinel.` : "")).join("\n"),
     );
   if (m.watcher) {
     const w = m.watcher;
