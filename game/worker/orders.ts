@@ -28,7 +28,7 @@ export function readLater(l: unknown): Ordered[] {
 }
 export const readStops = readLater;
 
-// Neighbors' gifts from the save: a star's name, the Year all of it reached us, and its size. Checked, one a star, at
+// Gifts from another mind, from the save: a star's name, the Year all of it reached us, and its size. Checked, one a star, at
 // most 32.
 export function readGifts(g: unknown): (Ordered & { size?: Size })[] {
   if (!Array.isArray(g)) return [];

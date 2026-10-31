@@ -4,9 +4,9 @@ import type { Visit } from "@/lib/sim/types";
 // that is dark for good, since it turns once each orbit. Bare rock and its craters, a gas world's bands under haze, or
 // cloud drifting over dark seas, with forests dark green on the land, as plants under a red star would look. Air
 // shows as a thin glow on its lit edge. 2026-10-22. A lens at the Sun's focus pictures felt worlds too, 2026-10-26:
-// ice from pole to pole, or a lived-in world, its fields cleared in squares and its cities' lights on the night side,
-// blinking on as we look. An elder's home, 2026-10-28: round its green world, far out, its works hang in a thin ring
-// of sheets. Awake, they glow faint and cold, never brightening, and turn slowly. Asleep, they are dark and still.
+// ice from pole to pole. An old mind's works, 2026-10-28: round a world, far out, they hang in a thin ring of sheets.
+// Awake, they glow faint and cold, never brightening, and turn slowly. Asleep, they are dark and still. Lived-in worlds
+// and their cities went with the neighbors, 2026-10-31.
 
 /** Sheets in a ring, each turned along it. Fixed, so the picture is the same each time. */
 const SHEETS = Array.from({ length: 44 }, (_, k) => {
@@ -45,7 +45,7 @@ function Works({ asleep }: { asleep: boolean }) {
   );
 }
 
-export function VisitArt({ sight, elder, size = 132 }: { sight: Visit["sight"]; elder?: Visit["elder"]; size?: number }) {
+export function VisitArt({ sight, elder, size = 132 }: { sight: Visit["sight"]; elder?: "awake" | "asleep"; size?: number }) {
   // At a black hole: its dark disk, and the sky behind it bent into a ring of light. 2026-10-26.
   if (sight === "dark")
     return (
@@ -138,7 +138,7 @@ export function VisitArt({ sight, elder, size = 132 }: { sight: Visit["sight"]; 
             <path d="M58 60l8 12-6 10M80 40l-4 14 10 8" fill="none" stroke="#8fa2a9" strokeWidth=".7" />
           </>
         )}
-        {(sight === "seas" || sight === "green" || sight === "cities") && (
+        {(sight === "seas" || sight === "green") && (
           <>
             <rect width="132" height="132" fill="#173244" />
             <path
@@ -146,14 +146,6 @@ export function VisitArt({ sight, elder, size = 132 }: { sight: Visit["sight"]; 
               fill={sight === "seas" ? "#55463b" : "#29391f"}
             />
             {sight !== "seas" && <path d="M30 42q10-8 20-2t2 14q-12 4-22-12zM56 88q10-2 16 4t-6 10q-10-2-10-14z" fill="#36502b" />}
-            {/* Fields cleared in squares, lighter than the forest round them. */}
-            {sight === "cities" && (
-              <g fill="#6b6a3c" opacity=".85">
-                {[[36, 36], [42, 40], [36, 44], [60, 88], [66, 92], [58, 96]].map(([x, y]) => (
-                  <rect key={`${x}${y}`} x={x} y={y} width="5" height="4" />
-                ))}
-              </g>
-            )}
             <g className="animate-drift motion-reduce:animate-none" filter={`url(#${id}-soft)`} fill="#eee2d6" opacity=".8">
               {[0, 132].map((dx) => (
                 <g key={dx} transform={`translate(${dx} 0)`}>
@@ -170,19 +162,6 @@ export function VisitArt({ sight, elder, size = 132 }: { sight: Visit["sight"]; 
         {/* Red light, then shading from the lit side to the night. */}
         <rect width="132" height="132" fill="#c9533a" opacity=".14" />
         <rect width="132" height="132" fill={`url(#${id}-light)`} />
-        {/* Cities' lights on the night side, over the dark: they come on one by one. */}
-        {sight === "cities" &&
-          [[78, 50], [86, 58], [82, 66], [94, 76], [74, 98], [88, 92], [100, 62]].map(([x, y], k) => (
-            <circle
-              key={k}
-              cx={x}
-              cy={y}
-              r={k % 3 ? 0.9 : 1.4}
-              fill="#ffd28a"
-              className="animate-pulse motion-reduce:animate-none"
-              style={{ animationDelay: `${k * 0.37}s`, animationDuration: "3.2s" }}
-            />
-          ))}
       </g>
       {/* Air glows on the lit edge, thicker for a gas world's haze. */}
       {airy && (

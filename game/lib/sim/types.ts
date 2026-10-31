@@ -38,33 +38,6 @@ export interface Inbound {
  *  from a comet's worth of rock, which no watcher counts as growth. 2026-10-30. */
 export type ColonyMode = "furnace" | "refuge" | "settle" | "quiet";
 
-export interface Neighbor {
-  name: string;
-  star: string;
-  d: number;
-  dead: boolean;
-  waking: number;
-  disposition: string;
-  /** Years its computing takes to double after waking: 10 for most, 5 for those that turn inward. */
-  doubling: number;
-  dials: string;
-  thinks: number;
-  heard: boolean;
-  heardSince: number | null;
-  world: { mass: number; a: number; pole: number; tug: number };
-  foundBy2040: boolean;
-  swept: boolean;
-  inbound: Inbound[];
-  afterSilence: { at: number; move: string } | null;
-  probes: Record<string, number | string | boolean>[];
-  /** An elder, awake for millennia before us and done growing: asleep, or computing cold at a steady ceiling, in watts.
-   *  One a game, 2026-10-28. */
-  elder?: { asleep: boolean; ceiling: number };
-  /** Our colony, played by its stand-in Will from our charter: its own table, and where it stands. lib/sim/colony.ts,
-   *  2026-10-28. */
-  ours?: { where: string; table: Record<string, [string, number][]> };
-}
-
 export interface Find {
   star: string;
   d: number;
@@ -73,16 +46,15 @@ export interface Find {
   periodDays: number;
   by: string;
   year: number;
-  truth: { kind: "home" | "dead" | "natural"; who?: string; rung?: string; elder?: "awake" | "asleep" };
+  /** What the world is. Every find is natural since the neighbors retired, 2026-10-29. */
+  truth: { kind: "natural"; rung?: string };
 }
 
 export interface World {
   v: 1;
   seed: number;
   earth: Record<string, unknown>;
-  neighbors: Neighbor[];
   worlds: { star: string; d: number; a: number; radius: number; mass: number; felt: boolean; swept: boolean; rung: string }[];
-  colonies: { root: string; star: string; lands: number; stands: number }[];
   finds: Find[];
   stars: Record<string, Star>;
   /** Lone black holes in the region, from calcs/holes.py: where, how heavy, how fast it spins, its speed across the
@@ -162,9 +134,6 @@ export interface Hole {
   vt: number;
   found2040: boolean;
   events: number[];
-  /** Neighbors bound for it, soonest first: a sentinel to watch, or a colony to stay, a bright furnace or a dark
-   *  refuge. From calcs/holes.py's claim(). */
-  claims?: { who: string; kind: "sentinel" | "colony"; mode?: "furnace" | "refuge"; arrives: number; stands?: number }[];
 }
 
 /** A black hole Earth has found, by how it shifted a star behind it: its name, where, its mass as measured, and when
@@ -252,25 +221,13 @@ export interface Visit {
   /** The Year it passed, or for a lens the Year it began to look, and the Year its word reached us. */
   passed: number;
   home: number;
-  sight: "haze" | "bare" | "seas" | "green" | "ice" | "cities" | "dark" | "rocks";
+  sight: "haze" | "bare" | "seas" | "green" | "ice" | "dark" | "rocks";
   air?: { water: boolean; oxygen: boolean };
   /** A lens's or the Hypertelescope's pixel, in km across the world. */
   km?: number;
-  /** Its pixel too wide to show fields or cities, so a home reads as forests. 2026-10-29. */
-  coarse?: boolean;
-  /** What a sentinel, staying, saw that a pass can't: someone living there, or the ruins of those who did. */
-  lives?: boolean;
-  ruins?: boolean;
-  /** An elder's home, as a craft there sees it: cold works far out, humming, or dark and still. 2026-10-28. */
-  elder?: "awake" | "asleep";
   /** At a black hole: its spin, measured, and how slow a clock runs on its innermost stable orbit. */
   spin?: number;
   clock?: number;
-  /** Who else is there when our sentinel arrives, as it sees them, never by name: a craft watching, or works. */
-  others?: { kind: "sentinel" | "colony"; mode?: "furnace" | "refuge" }[];
-  /** Word from a sentinel at a black hole after it arrived: someone else braking in at `passed`, from the star its
-   *  track runs back to, or its own end. */
-  came?: string;
   lost?: "catch" | "strike";
   /** A seed probe's: its generation, 1 for one we sent, the star it was built at, and where its place is in our sky, for
    *  a star with no lead of its own. Word that it sent a copy on carries the copy's star. 2026-10-26. */
@@ -293,10 +250,6 @@ export interface EarthView {
     lands?: number;
     stands?: number;
     d?: number;
-    /** Who was there first. At a star, a people at home, or the ruins of one. */
-    others?: { kind: "sentinel" | "colony" | "home" | "ruins" | "elder"; mode?: "furnace" | "refuge" }[];
-    /** Who braked in after it, each as it saw them and when, and its end, as far as its word has reached us. */
-    came?: { kind: "sentinel" | "colony"; at: number; from: string }[];
     lost?: { at: number; how: "catch" | "strike" };
     watts?: number;
     /** At a star, not a hole. */

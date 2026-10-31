@@ -55,8 +55,6 @@ export interface Reading {
   air?: Read;
   /** What a flyby's pictures showed, drawn as the world. */
   sight?: Visit["sight"];
-  /** An elder's home: its cold works drawn round it, lit or dark. 2026-10-28. */
-  elder?: Visit["elder"];
   /** The Mind's word, now, that something lives there, where this reading says. 2026-10-29. */
   life?: Odds;
 }
@@ -70,7 +68,7 @@ export type Art =
   | { kind: "glow"; ly: number; steady?: boolean }
   /** A warm glow ranged, not measured: its nearest and farthest, light-years. 2026-10-29. */
   | { kind: "warm"; near: number; far: number }
-  | { kind: "seed"; sight: Visit["sight"]; elder?: Visit["elder"] }
+  | { kind: "seed"; sight: Visit["sight"] }
   /** Something here at home, drawn where it sits: at the Moon's L5, on a rock sharing our orbit, or a rock coming in.
    *  2026-10-30. */
   | { kind: "near"; where: "moon" | "co-orbital" | "warning" | "rock"; struck?: boolean }
@@ -404,8 +402,6 @@ export function visitReading(v: Visit): Reading {
 /** The Mind's word that something lives on a world we have seen up close, from its face and any air read. Forests say
  *  life. Seas can't tell an empty sea from one full of microbes, and oxygen with them leans toward life. 2026-10-29. */
 function lifeSeen(v: Visit): Odds | undefined {
-  if (v.lives) return "almost certain";
-  if (v.ruins) return "very likely";
   const SEEN: Record<Visit["sight"], Odds | undefined> = {
     bare: "almost no chance",
     rocks: "almost no chance",
@@ -413,7 +409,6 @@ function lifeSeen(v: Visit): Odds | undefined {
     ice: "unlikely",
     seas: v.air?.oxygen ? "likely" : "roughly even",
     green: v.air?.oxygen ? "almost certain" : "very likely",
-    cities: "almost certain",
     dark: undefined,
   };
   return SEEN[v.sight];
@@ -442,8 +437,8 @@ export function lifeOf(lead: Lead, readings: readonly Reading[]): Odds | null {
   return lead.life ?? null;
 }
 
-/** What a sentinel saw once it braked and stayed, as a reading on its lead: its face as a pass sees it, its air, and
- *  what only staying shows, who lives there or the ruins of those who did. It keeps watching. 2026-10-26. */
+/** What a sentinel saw once it braked and stayed, as a reading on its lead: its face as a pass sees it, and its air.
+ *  It keeps watching. 2026-10-26. */
 function sentinelReading(v: Visit): Reading {
   const SAW: Record<Visit["sight"], [string, string]> = {
     bare: ["Bare rock", "bare rock and craters, no cloud and no sea"],
@@ -451,22 +446,17 @@ function sentinelReading(v: Visit): Reading {
     green: ["Seas and forests", "cloud and seas, and forests on its land"],
     ice: ["Ice", "ice from pole to pole"],
     haze: ["A small gas world", "haze to the horizon, and no ground"],
-    cities: ["Someone lives there", "seas and forests, fields, and cities lit at night"],
     dark: ["A black hole, weighed", "the black hole, dark, the stars behind it bent into a ring"],
     rocks: ["Only rock", "no warm world, only rock going round"],
   };
   if (v.sight === "dark") return darkReading(v);
-  const [title, saw] = v.ruins ? ["Ruins", "forests over the ruins of cities, long empty"] : SAW[v.sight];
+  const [title, saw] = SAW[v.sight];
   const air = v.air ? ` It read ${v.air.water ? "water" : "no water"} and ${v.air.oxygen ? "oxygen" : "no oxygen"} in its air.` : "";
-  const mind = v.lives
-    ? "They are real, and close enough to see. Our sentinel burned its flame toward them to stop, so they may know it is there. What it sends next is theirs to shape as much as ours."
-    : v.ruins
-      ? "Someone lived here, and is gone. Their cities stand under the forest. What ended them is the question now."
-      : v.air?.oxygen
-        ? "Oxygen and life up close, and no one who builds. It stays, and watches for anything that changes."
-        : "No one lives there, and nothing it sees could. It stays, and watches.";
+  const mind = v.air?.oxygen
+    ? "Oxygen and life up close, and no one who builds. It stays, and watches for anything that changes."
+    : "No one lives there, and nothing it sees could. It stays, and watches.";
   return {
-    id: `sentinel-${slugOf(v.star)}-${v.ruins ? "ruins" : v.sight}`,
+    id: `sentinel-${slugOf(v.star)}-${v.sight}`,
     needs: "",
     at: Math.floor(v.home * 10 + 1e-9) / 10,
     by: "Our sentinel",
@@ -477,7 +467,6 @@ function sentinelReading(v: Visit): Reading {
     tells: ["It keeps watching, and sends word of anything that changes."],
     sight: v.sight,
     life: lifeSeen(v),
-    ...(v.elder ? { elder: v.elder } : {}),
   };
 }
 
@@ -507,35 +496,26 @@ function seedReading(v: Visit): Reading {
     green: ["Seas and forests", "a world of cloud and seas, and forests on its land"],
     ice: ["Ice", "a world of ice from pole to pole"],
     haze: ["A small gas world", "a world of haze to the horizon, and no ground"],
-    cities: ["Someone lives there", "a world of seas and forests, fields, and cities lit at night"],
     dark: ["Dark", "nothing"],
     rocks: ["Only rock", "no warm world, only asteroids and small moons going round"],
   };
-  const [title, saw] = v.ruins ? ["Ruins", "a world of forests over the ruins of cities, long empty"] : SAW[v.sight];
+  const [title, saw] = SAW[v.sight];
   const air = v.air ? ` It read ${v.air.water ? "water" : "no water"} and ${v.air.oxygen ? "oxygen" : "no oxygen"} in its air.` : "";
-  const theirs = v.others?.length ? " Works not ours are already here: someone landed first." : "";
-  const mind = v.lives
-    ? "They are real, and close enough to see. Our probe braked on its sail, with no flame, so they may not know it is there. Its mining would show only to someone looking closely."
-    : v.ruins
-      ? "Someone lived here, and is gone. Their cities stand under the forest. Our probe stays among their ruins, and copies itself from their rock."
-      : v.others?.length
-        ? "We are not the first to come here. Whoever did may see our probe’s work, as we see theirs."
-        : v.gen! >= GENERATIONS
-          ? "It is the last of its line, as we chose. It stays, and watches."
-          : "No one is here. It mines quietly, and will send copies on once it has built them.";
+  const mind = v.gen! >= GENERATIONS
+    ? "It is the last of its line, as we chose. It stays, and watches."
+    : "No one is here. It mines quietly, and will send copies on once it has built them.";
   return {
-    id: `seed-${slugOf(v.star)}-${v.ruins ? "ruins" : v.sight}`,
+    id: `seed-${slugOf(v.star)}-${v.sight}`,
     needs: "",
     at,
     by,
-    title: v.others?.length && !v.lives && !v.ruins ? "Someone was here first" : title,
-    line: `${by} braked at ${v.star} on its sail and stays. It sees ${saw}.${air}${theirs}`,
+    title,
+    line: `${by} braked at ${v.star} on its sail and stays. It sees ${saw}.${air}`,
     mind,
     now: v.sight === "haze" ? ["almost no chance", "almost certain", "almost no chance"] : ["almost certain", "almost no chance", "almost no chance"],
     tells: ["It keeps watching, and sends word of anything that changes."],
     sight: v.sight,
     life: lifeSeen(v),
-    ...(v.elder ? { elder: v.elder } : {}),
   };
 }
 
@@ -563,69 +543,22 @@ function seedLead(v: Visit): Lead {
       { what: "Nothing at all", why: "Its word has come home.", odds: "almost no chance" },
     ],
     tells: ["It keeps watching, and sends word of anything that changes."],
-    art: { kind: "seed", sight: v.sight, ...(v.elder ? { elder: v.elder } : {}) },
+    art: { kind: "seed", sight: v.sight },
   };
 }
 
-/** What a sentinel found at a black hole: its spin, and the clock on its innermost stable orbit. 2026-10-26. */
+/** What a sentinel found at a black hole: its spin, and the clock on its innermost stable orbit. 2026-10-26. Others
+ *  there went with the neighbors, 2026-10-31. */
 function darkReading(v: Visit): Reading {
-  if (v.came || v.lost) return watchReading(v);
   const slow = 1 / (v.clock ?? 1);
   return {
     id: `sentinel-${slugOf(v.star)}-dark`,
     needs: "",
     at: Math.floor(v.home * 10 + 1e-9) / 10,
     by: "Our sentinel",
-    title: v.others?.some((o) => o.kind === "colony") ? "Someone is here" : v.others?.length ? "A craft not ours" : `Spinning at ${(v.spin ?? 0).toFixed(2)}`,
+    title: `Spinning at ${(v.spin ?? 0).toFixed(2)}`,
     line: `Our sentinel braked at ${v.star} and stays, out of reach of its tides. From the light and dust going round it, it spins at ${(v.spin ?? 0).toFixed(2)} of the most a hole can.`,
-    mind: `A clock on its innermost stable orbit would run ${slow.toFixed(1)} times slower than ours. Matter fed to it would give back ${Math.round(100 * (1 - Math.sqrt(1 - 2 / (3 * isco(v.spin ?? 0)))))}% of its mass as light, where fusion gives under 1%. ${
-      !v.others?.length
-        ? "No one else is there that it can see."
-        : v.others.some((o) => o.kind === "colony")
-          ? v.others.some((o) => o.mode === "furnace")
-            ? "Someone got here first, and feeds it. Their furnace is still too faint for any sky survey at home to see."
-            : "Someone got here first, and lives dark in its shadow. From home we would never have known."
-          : "A craft not ours already watches it. Someone found it before us."
-    }`,
-    now: ["almost certain", "almost no chance", "almost no chance"],
-    tells: ["It keeps watching, and sends word of anything that changes."],
-    sight: "dark",
-    ...(v.others?.some((o) => o.kind === "colony") ? { life: "almost certain" as const } : {}),
-  };
-}
-/** Later word from our sentinel at a black hole: someone braking in after it, or its end. 2026-10-26. */
-function watchReading(v: Visit): Reading {
-  const ship = v.others?.[0]?.kind === "colony";
-  const at = Math.floor(v.home * 10 + 1e-9) / 10;
-  if (v.lost)
-    return {
-      id: `sentinel-${slugOf(v.star)}-lost`,
-      needs: "",
-      at,
-      by: "Our sentinel",
-      title: "Gone silent",
-      line: v.lost === "catch"
-        ? `Our sentinel at ${v.star} went silent. Its last pictures show a craft not ours closing on it.`
-        : `Our sentinel at ${v.star} went silent. Its last word shows nothing coming.`,
-      mind: "Whoever watches this hole would rather we didn’t. It cost them nothing we could see, and it tells us what they think of being watched.",
-      now: ["almost certain", "almost no chance", "almost no chance"],
-      tells: ["We no longer see this hole. Another craft would have to go."],
-      sight: "dark",
-      life: "likely",
-    };
-  return {
-    id: `sentinel-${slugOf(v.star)}-came-${Math.round(v.passed * 10)}`,
-    needs: "",
-    at,
-    by: "Our sentinel",
-    title: ship ? "A ship came to stay" : "Another craft came",
-    ...(ship ? { life: "almost certain" as const } : {}),
-    line: ship
-      ? `Our sentinel at ${v.star} saw a ship not ours, tens of thousands of tonnes, brake to a stop and stay. Its flame pointed back along its track to ${v.came}.`
-      : `Our sentinel at ${v.star} saw a craft not ours brake to a stop, to watch the hole. Its flame pointed back along its track to ${v.came}.`,
-    mind: ship
-      ? `A ship that size carries a factory, or a Mind. Someone at ${v.came} means to stay. They have seen ours, as we saw theirs.`
-      : `Someone at ${v.came} found this hole too. They have seen ours, as we saw theirs.`,
+    mind: `A clock on its innermost stable orbit would run ${slow.toFixed(1)} times slower than ours. Matter fed to it would give back ${Math.round(100 * (1 - Math.sqrt(1 - 2 / (3 * isco(v.spin ?? 0)))))}% of its mass as light, where fusion gives under 1%. No one else is there that it can see.`,
     now: ["almost certain", "almost no chance", "almost no chance"],
     tells: ["It keeps watching, and sends word of anything that changes."],
     sight: "dark",
@@ -641,8 +574,7 @@ function isco(spin: number) {
 }
 
 /** What a lens at the Sun's focus, or since 2026-10-29 the Hypertelescope, pictured of a felt world, as a reading on its
- *  lead: everything wider than its pixel.
- *  Cities and cleared fields say someone lives there. A world whose makers are gone looks merely alive. 2026-10-26. */
+ *  lead: everything wider than its pixel. 2026-10-26. */
 function lensReading(v: Visit): Reading {
   const px = `about ${Math.round(v.km ?? 0)} km a pixel`;
   const SAW: Record<Visit["sight"], [string, string, string]> = {
@@ -651,15 +583,10 @@ function lensReading(v: Visit): Reading {
     green: ["Seas and forests", "cloud and seas, and its land dark in patches the size of forests.", "Something there turns starlight into life, as our plants do. We see no fields and no cities. If anyone lived there, they are gone, or never cleared land."],
     ice: ["Ice", "ice from pole to pole, and no open sea.", "A frozen world. Any sea it has lies under the ice, out of sight."],
     haze: ["A small gas world", "haze to the horizon, and no ground.", "No ground to stand on."],
-    cities: ["Cities", "seas and dark forests, and on the land, patterns no forest makes: fields cleared in squares, and cities.", "Someone lives there. Nothing natural we know of draws straight lines a pixel wide across a continent. They may not know we have seen them."],
     dark: ["Dark", "nothing.", "A lens pictures only what shines."],
     rocks: ["Only rock", "no world.", "A lens pictures only a world we have felt."],
   };
   const [title, saw, mind] = SAW[v.sight];
-  // Too wide a pixel for fields or towns: forests say life, and nothing says who. 2026-10-29.
-  const blur = v.coarse && v.sight === "green"
-    ? "Something there turns starlight into life, as our plants do. Its pixels are far wider than any field or town, so whether anyone lives there, it can’t tell. A lens could."
-    : null;
   const hyper = v.by === "hyper";
   return {
     id: `${hyper ? "hyper" : "lens"}-${slugOf(v.star)}-${v.sight}`,
@@ -668,9 +595,9 @@ function lensReading(v: Visit): Reading {
     by: hyper ? "Our Hypertelescope" : "Our lens",
     title,
     line: `${hyper ? "Our Hypertelescope" : "Our lens at the Sun’s focus"} pictured its face, ${px}: ${saw}`,
-    mind: blur ?? mind,
+    mind,
     now: v.sight === "haze" ? ["almost no chance", "almost certain", "almost no chance"] : ["almost certain", "almost no chance", "almost no chance"],
-    tells: v.sight === "cities" ? ["Listening there, or a knock, would tell us more. A knock tells them we are here."] : ["To learn more we would have to go there."],
+    tells: ["To learn more we would have to go there."],
     sight: v.sight,
     life: lifeSeen(v),
   };

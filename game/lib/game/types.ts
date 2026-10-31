@@ -110,7 +110,7 @@ export interface Plan {
   /** Builds taken back in play, at the Year each was. Each keeps its work, and ordering it again picks up there.
    *  2026-10-23. */
   stops?: Ordered[];
-  /** Neighbors' gifts of knowledge, each by its star, the Year all of it reached us, and its size. From then our
+  /** Another mind's gifts of knowledge, in a reply, each by its star, the Year all of it reached us, and its size. From then our
    *  thought goes further, by messages.ts's GIFT_STEPS. A gift saved without a size counts as a collection, as all
    *  did before 2026-10-26's sizes. */
   gifts?: (Ordered & { size?: Size })[];

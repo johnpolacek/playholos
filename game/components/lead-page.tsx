@@ -183,7 +183,7 @@ export function LeadPage({ slug }: { slug: string }) {
           {read.air && <AirBands air={read.air} />}
           {read.sight && (
             <div className="mt-2.5 flex justify-center">
-              <VisitArt sight={read.sight} elder={read.elder} />
+              <VisitArt sight={read.sight} />
             </div>
           )}
           <p className="mt-2 text-[13.5px] leading-snug text-page-ink2">

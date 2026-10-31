@@ -533,7 +533,7 @@ export function drawAt(plan: Plan, scale: number, year: number) {
   // The Cold Halo thinks on its own sunlight, so what it adds draws nothing from Earth's grid. Nor does the data
   // center Power from Orbit or the Cold Annex adds, each on the power that came with it. 2026-10-28.
   const own = Object.keys(done).filter((w) => CATALOG.works[w]?.rock !== undefined).length;
-  // A neighbor's gift takes our thought further on the same power, once a star, as the pace has it.
+  // Another mind's gift takes our thought further on the same power, once a star, as the pace has it.
   const gifts = new Map<string, number>();
   for (const g of [...(plan.gifts ?? [])].sort((a, b) => a.y - b.y)) if (g.y <= year && !gifts.has(g.name)) gifts.set(g.name, GIFT_STEPS[g.size ?? "collection"]);
   const gifted = [...gifts.values()].reduce((a, b) => a + b, 0);

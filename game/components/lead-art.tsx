@@ -441,6 +441,6 @@ export function LeadArt({ art }: { art: Art }) {
   if (art.kind === "pair") return <Pair mass={art.mass} ly={art.ly} a={art.a} e={art.e} days={art.days} />;
   if (art.kind === "glow") return <GlowArt ly={art.ly} steady={art.steady} />;
   if (art.kind === "nova") return <NovaArt ly={art.ly} />;
-  if (art.kind === "seed") return <VisitArt sight={art.sight} elder={art.elder} size={220} />;
+  if (art.kind === "seed") return <VisitArt sight={art.sight} size={220} />;
   return <Reply sent={art.sent} ly={art.ly} />;
 }

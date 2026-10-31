@@ -78,8 +78,6 @@ const AIR: Record<string, "none" | "water" | "oxygen"> = {
 
 /** A find's true width in Earths, from its world. Rock's mass grows as width to the 3.7. */
 function width(world: World, f: Find) {
-  const home = world.neighbors.find((p) => p.star === f.star);
-  if (home) return home.world.mass ** (1 / 3.7);
   return world.worlds.find((w) => w.star === f.star)?.radius ?? (f.msini / 0.87) ** (1 / 3.7);
 }
 
@@ -153,18 +151,14 @@ function visit(world: World, by: Visit["by"], { passed, home }: { passed: number
   };
 }
 
-/** What a lens pictures of a felt world, from its truth: everything wider than its pixel, 25 km at 30 pc. A home's
- *  cities and cleared land show. A world whose makers are gone looks merely alive, since its forests have taken its
- *  fields back. HOLOS_GAME_CONCEPT.md's "A picture shows everything larger than a pixel", 2026-10-14. */
+/** What a lens pictures of a felt world, from its truth: everything wider than its pixel, 25 km at 30 pc.
+ *  HOLOS_GAME_CONCEPT.md's "A picture shows everything larger than a pixel", 2026-10-14. Homes and ruins went with
+ *  the neighbors, 2026-10-31. */
 const PICTURED: Record<string, Visit["sight"]> = {
   "bare rock": "bare", "airy and lifeless": "seas", "hiding microbes": "seas", "showing oxygen": "seas",
   "with animals and forests": "green", "where life died": "seas", frozen: "ice",
 };
-function pictured(f: Find, km = 0): Visit["sight"] {
-  if (f.truth.elder) return "green";                // an elder's people live lightly, its works far out in the cold
-  // Fields and cities show only to a pixel narrower than about 50 km: calcs/mercury.py. 2026-10-29.
-  if (f.truth.kind === "home") return km > HYPER.cities ? "green" : "cities";
-  if (f.truth.kind === "dead") return "green";
+function pictured(f: Find): Visit["sight"] {
   return PICTURED[f.truth.rung ?? ""] ?? "seas";
 }
 const LENS_KM_30PC = catalog.lens.km30pc;
@@ -238,7 +232,7 @@ export function earthKnows(
     const f = world.finds.find((x) => shown(x.star) === l.star);
     if (!f || l.home > year) continue;
     const km = (LENS_KM_30PC * f.d) / (30 * 3.2616);
-    visits.push({ star: l.star, world: `${l.star}’s world`, by: "lens", passed: l.looks, home: l.home, sight: pictured(f, km), km, ...(km > HYPER.cities ? { coarse: true } : {}) });
+    visits.push({ star: l.star, world: `${l.star}’s world`, by: "lens", passed: l.looks, home: l.home, sight: pictured(f), km });
   }
   // What the Hypertelescope has pictured: each felt world within its reach, nearest first, a week a star. Its pixel
   // widens with distance, too wide anywhere for fields or cities. It sits at L2, so its picture is home at once.
@@ -252,14 +246,13 @@ export function earthKnows(
     near.forEach(({ star, d, f }, i) => {
       const passed = hyper + i * HYPER.slew, home = passed + HYPER.slew, km = HYPER.kmPerLy * d;
       if (home > year) return;
-      const coarse = km > HYPER.cities ? { coarse: true as const } : {};
-      if (!f) visits.push({ ...visit(world, "hyper", { passed, home }), km, ...coarse });
-      else visits.push({ star, world: `${star}’s world`, by: "hyper", passed, home, sight: pictured(f, km), km, ...coarse });
+      if (!f) visits.push({ ...visit(world, "hyper", { passed, home }), km });
+      else visits.push({ star, world: `${star}’s world`, by: "hyper", passed, home, sight: pictured(f), km });
     });
   }
 
   // What each sentinel has seen, once its first word is home: it arrives at a tenth of light speed and stays, so it
-  // sees what a pass can't: who lives there, or their ruins. Its air read from the world's truth, as a probe's.
+  // maps what a pass can't. Its air read from the world's truth, as a probe's.
   const { speed, burns } = catalog.sentinel;
   const holes = darkMasses(world, year, mapper);
   for (const x of sentinels) {
@@ -269,15 +262,7 @@ export function earthKnows(
     if (dark) {
       const passed = x.leaves + dark.d / speed + burns, home = passed + dark.d;
       const truth = world.holes!.find((h) => h.id === dark.id)!;
-      const claims = truth.claims ?? [];
-      // Who got there first: a neighbor's sentinel or colony braked there by the time ours arrives, seen up close.
-      const others = claims.filter((c) => c.arrives <= passed).map((c) => ({ kind: c.kind, ...(c.mode ? { mode: c.mode } : {}) }));
-      const at = { star: x.star, world: x.star, by: "sentinel" as const, sight: "dark" as const };
-      if (home <= year) visits.push({ ...at, passed, home, spin: truth.spin, clock: iscoClock(truth.spin), ...(others.length ? { others } : {}) });
-      // It keeps watching, and sends word of each who brakes in after it. 2026-10-26.
-      for (const c of claims)
-        if (c.arrives > passed && c.arrives + dark.d <= year)
-          visits.push({ ...at, passed: c.arrives, home: c.arrives + dark.d, came: comer(world, c.who), others: [{ kind: c.kind }] });
+      if (home <= year) visits.push({ star: x.star, world: x.star, by: "sentinel", sight: "dark", passed, home, spin: truth.spin, clock: iscoClock(truth.spin) });
       continue;
     }
     const d = x.star === PROXIMA.star ? PROXIMA.d : f?.d;
@@ -285,13 +270,11 @@ export function earthKnows(
     const passed = x.leaves + d / speed + burns, home = passed + d;
     if (home > year) continue;
     if (!f) { visits.push(visit(world, "sentinel", { passed, home })); continue; }
-    const kind = f.truth.kind;
-    const air = kind === "natural" ? (AIR[f.truth.rung ?? ""] ?? "water") : "oxygen";
+    const air = AIR[f.truth.rung ?? ""] ?? "water";
     const sight = pictured(f);
     visits.push({
       star: x.star, world: `${x.star}’s world`, by: "sentinel", passed, home, sight,
       ...(sight !== "haze" ? { air: { water: air !== "none", oxygen: air === "oxygen" } } : {}),
-      ...(f.truth.elder ? { elder: f.truth.elder } : kind === "home" ? { lives: true } : kind === "dead" ? { ruins: true } : {}),
     });
   }
   // What each seed probe found where it landed, once its word is home, and word of each copy it sent on. It stays, as a
@@ -421,20 +404,15 @@ function colonyAt(world: World, holes: (DarkMass & { id: string })[], c: { star:
   const lands = c.leaves + h.d / speed + burn + brake, alone = lands + stands;
   const heard = year - h.d;                                       // what its word home shows of it now
   const truth = world.holes!.find((x) => x.id === h.id)!;
-  const claims = truth.claims ?? [];
-  const others = heard >= lands ? claims.filter((x) => x.arrives <= lands).map((x) => ({ kind: x.kind, ...(x.mode ? { mode: x.mode } : {}) })) : [];
-  // Who braked in after it, as far as its word has reached us. 2026-10-26.
-  const came = claims.filter((x) => x.arrives > lands && x.arrives <= heard).map((x) => ({ kind: x.kind, at: x.arrives, from: comer(world, x.who) }));
   const watts = c.mode === "furnace" && heard >= alone ? 1e13 * 2 ** ((heard - alone) / 10) : null;
   // It measures its hole's spin once it lands, as a sentinel does, and so the clock on its innermost orbit.
   const spin = heard >= lands ? { spin: truth.spin, clock: iscoClock(truth.spin) } : {};
-  return { star: c.star, mode: c.mode, leaves: c.leaves, lands, stands: alone, d: h.d, ...spin, ...(others.length ? { others } : {}), ...(came.length ? { came } : {}), ...(watts ? { watts } : {}) };
+  return { star: c.star, mode: c.mode, leaves: c.leaves, lands, stands: alone, d: h.d, ...spin, ...(watts ? { watts } : {}) };
 }
 
 /** Our Mind settled at a star, on its light and its rock, as far as its word has reached us by `year`: on its way,
- *  landed, or standing alone as a Mind. Who was there first: a people at home, or their ruins, or a neighbor's colony
- *  landed before it. Who came after, its end, and its works growing as a furnace's do. No slow clock: a star has no
- *  innermost orbit to live on. 2026-10-27. */
+ *  landed, or standing alone as a Mind, and its works growing as a furnace's do. No slow clock: a star has no
+ *  innermost orbit to live on. 2026-10-27. Who was there first went with the neighbors, 2026-10-31. */
 function colonyAtStar(world: World, c: { star: string; mode: ColonyMode; leaves: number }, year: number) {
   const { speed, burn, brake, stands } = catalog.seedShip;
   const id = Object.keys(world.stars).find((k) => world.stars[k].shown === c.star);
@@ -442,21 +420,9 @@ function colonyAtStar(world: World, c: { star: string; mode: ColonyMode; leaves:
   const d = world.stars[id].d;
   const lands = c.leaves + d / speed + burn + brake, alone = lands + stands;
   const heard = year - d;
-  const n = world.neighbors.find((x) => x.star === id);
-  const theirs = world.colonies.filter((x) => x.star === id);
-  const others = heard >= lands
-    ? [...(n ? [{ kind: n.dead ? ("ruins" as const) : n.elder ? ("elder" as const) : ("home" as const) }] : []), ...theirs.filter((x) => x.lands <= lands).map(() => ({ kind: "colony" as const }))]
-    : [];
-  const came = theirs.filter((x) => x.lands > lands && x.lands <= heard).map((x) => ({ kind: "colony" as const, at: x.lands, from: comer(world, x.root) }));
   // Settled, its works grow as a furnace's do. Kept small, it stays as it began. 2026-10-30.
   const watts = c.mode === "settle" && heard >= alone ? 1e13 * 2 ** ((heard - alone) / 10) : null;
-  return { star: c.star, mode: c.mode, leaves: c.leaves, lands, stands: alone, d, atStar: true, ...(others.length ? { others } : {}), ...(came.length ? { came } : {}), ...(watts ? { watts } : {}) };
-}
-
-/** The star a craft braking in at a hole came from: its flame points back along its track. Its star, never who. */
-function comer(world: World, who: string) {
-  const p = world.neighbors.find((n) => n.name === who);
-  return p ? (world.stars[p.star]?.shown ?? p.star) : "a star we can't name";
+  return { star: c.star, mode: c.mode, leaves: c.leaves, lands, stands: alone, d, atStar: true, ...(watts ? { watts } : {}) };
 }
 
 /** What the Will knows at Year `year`: Earth's news a light-time old once it lives at our Mind at a hole or a star,
@@ -475,62 +441,19 @@ export function willKnows(world: World, year: number, kit: Kit, will?: { hole: s
   };
 }
 
-/** What a seed probe finds at a star, as the world has it: a neighbor at home, or the ruins of one, a natural warm world,
- *  or only rock. A neighbor's colony landed there by `at` it sees as works not ours. */
-function seedFinds(world: World, star: string, at: number): Pick<Visit, "world" | "sight" | "air" | "lives" | "ruins" | "elder" | "others"> {
-  const id = Object.keys(world.stars).find((k) => world.stars[k].shown === star);
-  const others = world.colonies.some((c) => c.star === id && c.lands <= at) ? { others: [{ kind: "colony" as const }] } : {};
+/** What a seed probe finds at a star, as the world has it: a natural warm world, or only rock. 2026-10-26. Homes,
+ *  ruins and neighbor colonies went with the neighbors, 2026-10-31. */
+function seedFinds(world: World, star: string, at: number): Pick<Visit, "world" | "sight" | "air"> {
   // Proxima b, drawn for every game apart from the census's warm worlds, as a flyby sees it.
   if (star === PROXIMA.star) {
     const { world: name, sight, air } = visit(world, "seed", { passed: at, home: at });
-    return { world: name, sight, ...(air ? { air } : {}), ...others };
+    return { world: name, sight, ...(air ? { air } : {}) };
   }
-  const n = world.neighbors.find((x) => x.star === id);
-  if (n?.elder) return { world: `${star}’s world`, sight: "green", air: { water: true, oxygen: true }, elder: n.elder.asleep ? "asleep" : "awake", ...others };
-  if (n) return { world: `${star}’s world`, sight: n.dead ? "green" : "cities", air: { water: true, oxygen: true }, ...(n.dead ? { ruins: true } : { lives: true }), ...others };
+  const id = Object.keys(world.stars).find((k) => world.stars[k].shown === star);
   const w = world.worlds.find((x) => x.star === id);
-  if (!w) return { world: star, sight: "rocks", ...others };
+  if (!w) return { world: star, sight: "rocks" };
   const sight = PICTURED[w.rung] ?? "seas", air = AIR[w.rung] ?? "water";
-  return { world: `${star}’s world`, sight, ...(sight !== "haze" ? { air: { water: air !== "none", oxygen: air === "oxygen" } } : {}), ...others };
-}
-
-type Others = NonNullable<NonNullable<EarthView["colony"]>["others"]>;
-
-/** An elder's home, up close. Its world is green, its towns few. Its works are far out in the cold: a 12 K glow of
- *  10¹⁹ W sheds from about 10²² m², a thin swarm some 50 million km across. Awake, they shed heat. Asleep, they are
- *  dark and still. 2026-10-28. */
-const ELDER_SEEN = "Someone old lives there: its world is green, its towns few and small, and far out in the cold hang works tens of millions of km across.";
-const ELDER: Record<"awake" | "asleep", string> = {
-  awake: " Its towns are few and small. Far out in the cold, a thin swarm tens of millions of km across sheds heat into the dark, steady, as it has for longer than we can tell: someone computing, awake and very old.",
-  asleep: " Its towns are few, small and still. Far out in the cold, a thin swarm tens of millions of km across hangs dark: no heat to speak of, no radio. Whoever built it is asleep, or gone.",
-};
-
-/** What a sentinel at a black hole sees of whoever got there first. */
-function others(o: Others) {
-  return o
-    .map((x) =>
-      x.kind === "sentinel"
-        ? "A craft not ours keeps station there, watching."
-        : x.mode === "furnace"
-          ? "Someone feeds the hole: a disk of matter glows round it, hot enough to shine in X-rays, and works round that take its light."
-          : "Someone lives in its shadow: cold radiators and collectors, dark against the sky, shedding what heat they can into the hole and the rest faintly outward.",
-    )
-    .join(" ");
-}
-
-/** Who our Mind found at a star when it landed. */
-function settledBy(o: Others) {
-  return o
-    .map((x) =>
-      x.kind === "home"
-        ? "A people live there: cities on its world, and it braked in under their sky, its flame plain to them."
-        : x.kind === "ruins"
-          ? "A people lived there once: their world is green, and their cities are ruins."
-        : x.kind === "elder"
-          ? `${ELDER_SEEN} It braked in under their sky, its flame plain to anything awake there.`
-          : "A ship not ours had landed there before it, and stayed.",
-    )
-    .join(" ");
+  return { world: `${star}’s world`, sight, ...(sight !== "haze" ? { air: { water: air !== "none", oxygen: air === "oxygen" } } : {}) };
 }
 
 /** What Proxima b's brightness and mass hint, in words. 2026-10-31. */
@@ -576,7 +499,6 @@ export function describe(view: EarthView): string {
   const SIGHT: Record<Visit["sight"], string> = {
     dark: "a black hole, dark against the stars it bends",
     ice: "ice from pole to pole, and no open sea",
-    cities: "cloud, seas and dark forests, and on its land, patterns no forest makes: cities, and fields cleared in squares. Someone lives there",
     haze: "haze to the horizon and no ground: a small gas world",
     bare: "bare rock under a black sky, no cloud, no sea: its air is gone",
     seas: "cloud, and seas under it. Pictures can't show whether anything lives there",
@@ -586,23 +508,18 @@ export function describe(view: EarthView): string {
   const visits = (view.visits ?? []).map(
     (v) =>
       (v.by === "lens" || v.by === "hyper"
-        ? `- ${v.world}, ${one(view.felt.find((f) => f.star === v.star)?.d ?? 0)} ly, pictured by ${v.by === "lens" ? "our lens at the Sun’s focus" : "our Hypertelescope"} from Year ${yearText(v.passed)}, about ${Math.round(v.km ?? 0)} km a pixel, picture home at Year ${yearText(v.home)}: ${SIGHT[v.sight]}. Nothing narrower than a pixel shows.${v.coarse ? " Its pixels are too wide for fields or cities, so it can't tell whether anyone lives there." : ""}`
+        ? `- ${v.world}, ${one(view.felt.find((f) => f.star === v.star)?.d ?? 0)} ly, pictured by ${v.by === "lens" ? "our lens at the Sun’s focus" : "our Hypertelescope"} from Year ${yearText(v.passed)}, about ${Math.round(v.km ?? 0)} km a pixel, picture home at Year ${yearText(v.home)}: ${SIGHT[v.sight]}. Nothing narrower than a pixel shows.`
         : v.by === "seed" && v.sent
           ? `- ${v.world}: our seed probe there sent a copy of itself toward ${v.sent} at Year ${yearText(v.passed)}, word home at Year ${yearText(v.home)}.`
         : v.by === "seed"
           ? `- ${v.world}, ${one(v.at![2])} ly, reached by our seed probe at Year ${yearText(v.passed)}, built ${v.from ? `by our probe at ${v.from}` : "at home"}, its first word home at Year ${yearText(v.home)}: ${SIGHT[v.sight]}. ` +
-            `It braked on its sail, unseen, and stays, mining rock to copy itself: a generation ${v.gen} of the ${GENERATIONS} we allow, the last making no copies.` +
-            (v.lives ? " It sees them up close: their towns, their craft, their radio. It came in quiet, so they may not know it is there." : v.ruins ? " Among the forests it sees ruins: cities long empty. Whoever lived there is gone." : v.elder ? ELDER[v.elder] : "") +
-            (v.others?.length ? " Someone else has works here, not ours: a colony already landed. Whose, it can't tell." : "")
+            `It braked on its sail, unseen, and stays, mining rock to copy itself: a generation ${v.gen} of the ${GENERATIONS} we allow, the last making no copies.`
         : v.by === "sentinel" && v.lost
           ? `- ${v.world}: our sentinel there went silent at Year ${yearText(v.passed)}, word of it home at Year ${yearText(v.home)}. ${v.lost === "catch" ? "Its last pictures show a craft not ours closing on it." : "Its last word shows nothing coming."}`
-        : v.by === "sentinel" && v.came
-          ? `- ${v.world}: at Year ${yearText(v.passed)} our sentinel there saw ${v.others?.[0]?.kind === "colony" ? "a ship not ours, tens of thousands of tonnes, brake to a stop and stay" : "a craft not ours brake to a stop and stay, watching"}. Word home at Year ${yearText(v.home)}. Its flame, as it slowed, pointed back along its track to ${v.came}. Whoever it is has seen ours.`
         : v.by === "sentinel"
           ? `- ${v.world}, reached by our sentinel at Year ${yearText(v.passed)}, where it stays to watch, its first word home at Year ${yearText(v.home)}: ${SIGHT[v.sight]}.` +
             (v.clock ? ` It spins at ${v.spin!.toFixed(2)} of the most a hole can. A clock on its innermost stable orbit would run ${(1 / v.clock).toFixed(1)} times slower than ours.` : "") +
-            (v.sight === "dark" ? (v.others?.length ? ` We are not the first. ${others(v.others)} Whose, it can't tell.` : " No one else is there that it can see.") : "") +
-            (v.lives ? " It sees them up close: their towns, their craft, their radio. They may have seen its flame." : v.ruins ? " Among the forests it sees ruins: cities long empty. Whoever lived there is gone." : v.elder ? ELDER[v.elder] : "")
+            (v.sight === "dark" ? " No one else is there that it can see." : "")
           : `- ${v.world}, passed by our ${v.by} at Year ${yearText(v.passed)}, word home at Year ${yearText(v.home)}: ${SIGHT[v.sight]}.`) +
       (v.air && !v.sent ? ` The ${v.by === "seed" ? "probe" : v.by} read its air: ${v.air.water ? "water" : "no water"}, ${v.air.oxygen ? "oxygen" : "no oxygen"}.` : ""),
   );
@@ -620,15 +537,14 @@ export function describe(view: EarthView): string {
         : view.year < c.lands + c.d!
           ? `it left at Year ${yearText(c.leaves)}, lands about Year ${yearText(c.lands)}, and its word of landing reaches us about Year ${yearText(c.lands + c.d!)}.`
           : `it landed at Year ${yearText(c.lands)} and stands alone as a Mind from Year ${yearText(c.stands!)}, ${one(c.d!)} light-years and Years away from us.` +
-            (c.others?.length ? ` It was not the first there. ${c.atStar ? settledBy(c.others) : others(c.others)}` : " No one else was there.") +
+            " No one else was there." +
             (c.clock ? ` The hole spins at ${c.spin!.toFixed(2)} of the most a hole can, so a clock on its innermost stable orbit runs ${(1 / c.clock).toFixed(1)} times slower than ours. ${c.mode === "refuge" ? "Our Mind there could spread over chips 10 cm wide on that orbit, small enough that its tides can't break them, and run that slow, once the Will lives there." : "Its furnace's disk fills that orbit, so our Mind can't live there."}` : "") +
-            (c.came?.length ? ` Since then: ${c.came.map((x) => `at Year ${yearText(x.at)}, ${x.kind === "colony" ? "a ship not ours braked in and stayed" : "a craft not ours braked in and stays, watching"}, its track back to ${x.from}`).join("; ")}. Whoever came has seen ours.` : "") +
             (c.lost ? ` Its word stopped at Year ${yearText(c.lost.at)}. It is gone. ${c.lost.how === "strike" ? "Its last word showed nothing coming: whatever hit it came cold and fast." : "Its last word showed a craft not ours closing on it."}` : "") +
             (c.watts && !c.lost && c.mode === "settle" ? ` Its works on the star's light run at about ${c.watts.toExponential(0).replace("e+", "×10^")} W, as its word shows it.` : "") +
             (c.watts && !c.lost && c.mode === "furnace" ? ` Its furnace runs at about ${c.watts.toExponential(0).replace("e+", "×10^")} W, as its word shows it, under what any sky survey sees until about 2×10^20 W.` : c.mode === "refuge" || c.mode === "quiet" ? " It keeps small and dark, and no one looking from outside would know it is there." : ""));
   const holesText = dark.length ? `\n\nBlack holes we have found. A star mapper finds more as they pass in front of stars:\n${dark.join("\n")}` : "";
   const mindsText = view.minds ? describeMinds(view.minds, one) : "";
-  return `Worlds Earth has felt by their tug on their stars, as of Year ${yearText(view.year)}. From here a home and a natural world look the same:
+  return `Worlds Earth has felt by their tug on their stars, as of Year ${yearText(view.year)}:
 ${felt}${nearest}
 
 Signals Earth's watch has caught:

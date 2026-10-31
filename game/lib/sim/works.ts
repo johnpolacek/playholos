@@ -16,7 +16,7 @@ export type Order =
                                             // pick up there if begun again. "Data center" ends the fabs' standing
                                             // order, and a campus under way is finished. 2026-10-23
   | { y: number; studies: number }          // thought set aside for the Mind's studies
-  | { y: number; gift: string; steps: number } // a neighbor's knowledge, all of it come: our thought goes `steps`
+  | { y: number; gift: string; steps: number } // another mind's knowledge, all of it come: our thought goes `steps`
                                             // steps further from then, as many data centers would. Once a star.
                                             // 2026-10-26
   | { y: number; harm: number; recover: number } // a strike on Earth: this share of our thought lost, won back

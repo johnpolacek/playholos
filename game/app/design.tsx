@@ -60,7 +60,7 @@ const LEADS: { name: string; art: Art }[] = [
   { name: "A seed’s star", art: { kind: "seed", sight: "seas" } },
 ];
 
-const SIGHTS = ["bare", "seas", "green", "ice", "haze", "cities", "dark", "rocks"] as const;
+const SIGHTS = ["bare", "seas", "green", "ice", "haze", "dark", "rocks"] as const;
 const STOPS = ["How we reach", "Voyager 1", "Send a sail", "Send a flyby probe", "Roads to come"].map((name) => ({ name }));
 
 /** One part: its name, its file, when to use it, and it drawn. */
