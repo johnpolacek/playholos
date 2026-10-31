@@ -1,3 +1,4 @@
+import { Dials } from "@/components/about/dials";
 import { DocBody, PageHead } from "@/components/about/doc-page";
 import doc from "../../../HOLOS_RESEARCH.md?doc";
 import { sources } from "../../../HOLOS_RESEARCH.md?stats";
@@ -18,6 +19,7 @@ export default function Research() {
         there is. Each source below says what it found, why it matters to the game, and where the design uses it. A
         newer result never deletes an older one: the older is marked superseded.
       </PageHead>
+      <Dials />
       <DocBody doc={doc} />
     </main>
   );

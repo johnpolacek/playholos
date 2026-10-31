@@ -1351,6 +1351,14 @@ Added 2026-10-28, for [The realistic premise](HOLOS_GAME_CONCEPT.md#the-realisti
   - **[Ward and Brownlee 2000, Rare Earth](https://openlibrary.org/isbn/9780387987019)** · Book. Not read, catalog checked 2026-10-30. Complex life needs many unlikely conditions, so it is uncommon, while microbes may be common.
     - Matters: the view Holos sets aside for life. Holos keeps rarity only at the last step, from animals to minds.
     - Used: the Rare Earth objection.
+- **The dials, 2026-10-31.** For the dials on the research page, game/lib/about/dials.ts: each step of the chain turned within its range, and where the nearest mind and the nearest peer would be.
+  - **[Tamm et al. 2012, stellar mass map of M31](https://arxiv.org/abs/1208.5712)** · Published, A&A 546, A4. Checked 2026-10-31 by search summary. Andromeda’s stars weigh about 1.0 to 1.5 × 10¹¹ Suns. Infrared-only estimates run lower, about 0.55 to 0.7 × 10¹¹.
+    - Matters: Andromeda holds about twice our Galaxy’s stars, not the trillion often quoted. Counted at our Galaxy’s stars per Sun’s mass, about 400 billion.
+    - Used: the nearest peer beyond our Galaxy. Holos takes 1.2 × 10¹¹ Suns at 2.5 million ly.
+  - **Triangulum (M33)** · Distances 730 to 964 kpc across methods, its disk about 3 to 6 × 10⁹ Suns, from search summaries and Wikipedia, not checked against a paper. Holos takes 5 × 10⁹ Suns at 2.8 million ly.
+  - **[Madau and Dickinson 2014, cosmic star formation history](https://arxiv.org/abs/1403.0007)** · Published, ARA&A 52, 415. From memory, not checked: today’s stellar mass density, about 5 × 10⁸ Suns per cubic Mpc.
+    - Used: stars beyond the Local Group, at the cosmic average. Check the review’s own number.
+  - **This project’s arithmetic.** At Holos’s values, a peer within 2,000 years of us is in our Galaxy about 1 time in 8, and half the time the nearest is within about 17 million ly. At 1 in 10 from animals to minds, about 90 peers, the nearest within about 9,000 ly.
 - **Smart et al. 2021, the Gaia Catalogue of Nearby Stars** · Published, A&A 649, A6. Count checked 2026-10-29: 331,312 objects within 100 pc from Gaia EDR3, downloaded from ESA’s Gaia archive. 300,098 have median positions inside 326 ly. Within 100 ly it holds 9,281, below the disk model’s 12,000, since it misses the faintest brown dwarfs.
   - Matters: a real, complete census to 326 ly, small enough to ship in a browser.
   - Used: [Real stars to 326 ly](HOLOS_GAME_CONCEPT.md#the-realistic-premise), the game’s star catalog. Check its counts against the disk model below.
