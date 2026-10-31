@@ -1,133 +1,51 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { round } from "@/lib/about/dials";
-import {
-  COLD,
-  peak,
-  SAY,
-  SEARCHES,
-  SOURCES,
-  verdict,
-  WARM,
-  type Verdict,
-} from "@/lib/about/quiet";
+import { ruledAbove } from "@/lib/about/haystack";
+import { COLD, peak, SOURCES, WARM } from "@/lib/about/quiet";
 import { Stat } from "./ages";
-import { color, KICK, Sources, useCanvas } from "./dials";
+import { KICK, Sources } from "./dials";
+import { Gauge, HeatChart, RadioChart } from "./haystack";
 
-// Why the sky is quiet, on /about/research: turn how cold a mind runs and how far it is, and see which telescopes have
-// looked at its glow. Warm minds glow where WISE searched the whole sky. Cold ones glow where only a few hundred
-// nearby stars were checked.
+// Why the sky is quiet, on /about/research: what our searches rule out, and what is still possible. Heat, by how cold
+// a mind runs. Radio, by how loud. And how much of the haystack we have searched at all.
 
 const STEPS = 1000,
-  NEAR = 10,
-  FAR = 30000;
-const logSlider = (v: number, lo: number, hi: number) =>
-  Math.round((Math.log(v / lo) / Math.log(hi / lo)) * STEPS);
-const fromLog = (n: number, lo: number, hi: number) =>
-  lo * (hi / lo) ** (n / STEPS);
+  SUN = 3.828e26;
 
-/** The glow's tint: orange at our computers' warmth, deepening to a dim violet near the coldest space allows. */
-function tint(T: number): [number, number, number] {
-  const f = Math.log(T / COLD) / Math.log(WARM / COLD);
-  return [
-    Math.round(110 + 145 * f),
-    Math.round(40 + 90 * f ** 2),
-    Math.round(150 - 110 * f),
-  ];
+/** A share of the Sun's power as people say it: "a ten-thousandth", "a third", "40 times". */
+function share(f: number): string {
+  if (f >= 1.5) return `${round(f)} times`;
+  if (f >= 0.95) return "about all";
+  if (f >= 0.01) return `about ${Math.round(f * 100)}%`;
+  return `1 part in ${round(1 / f)}`;
 }
+const toSlider = (T: number) =>
+  Math.round((Math.log(T / COLD) / Math.log(WARM / COLD)) * STEPS);
+const fromSlider = (n: number) => COLD * (WARM / COLD) ** (n / STEPS);
 
-/** The mind, a glowing ball, smaller the farther it is, its heat rippling out. */
-function Orb({ T, ly }: { T: number; ly: number }) {
-  const ref = useCanvas((c, w, h, t) => {
-    const [r, g, b] = tint(T);
-    const size = 10 + 46 * (1 - Math.log(ly / NEAR) / Math.log(FAR / NEAR));
-    const cx = w / 2,
-      cy = h / 2 - 8;
-    // Ripples of heat, leaving the ball.
-    for (let i = 0; i < 4; i++) {
-      const k = (t * 0.35 + i / 4) % 1;
-      c.strokeStyle = `rgba(${r},${g},${b},${0.35 * (1 - k)})`;
-      c.lineWidth = 1.5;
-      c.beginPath();
-      c.arc(cx, cy, size + k * (Math.min(w, h) / 2 - size), 0, 2 * Math.PI);
-      c.stroke();
-    }
-    const glow = c.createRadialGradient(cx, cy, 0, cx, cy, size * 1.6);
-    glow.addColorStop(0, `rgba(${r},${g},${b},0.95)`);
-    glow.addColorStop(0.6, `rgba(${r},${g},${b},0.35)`);
-    glow.addColorStop(1, `rgba(${r},${g},${b},0)`);
-    c.fillStyle = glow;
-    c.beginPath();
-    c.arc(cx, cy, size * 1.6, 0, 2 * Math.PI);
-    c.fill();
-    c.fillStyle = color("--muted");
-    c.font = "10.5px var(--font-plex-mono), monospace";
-    const label = `ITS GLOW PEAKS NEAR ${round(peak(T))} MICRONS`;
-    c.fillText(label, cx - c.measureText(label).width / 2, h - 4);
-  });
-  useEffect(
-    () => void ref.current?.dispatchEvent(new Event("dials")),
-    [T, ly, ref],
-  );
-  return <canvas ref={ref} aria-hidden className="h-[260px] w-full" />;
-}
-
-const PILL: Record<Verdict, string> = {
-  searched: "border-other text-other",
-  few: "border-other text-other",
-  aimed: "border-faint text-ink",
-  far: "border-faint text-muted",
-  wrong: "border-faint text-muted",
-  planned: "border-dashed border-faint text-muted",
-};
-
-function Dial(p: {
-  label: string;
-  lo: number;
-  hi: number;
-  value: number;
-  set: (v: number) => void;
-  left: string;
-  right: string;
-  show: string;
+function Part({
+  title,
+  says,
+  children,
+}: {
+  title: string;
+  says: string;
+  children: React.ReactNode;
 }) {
   return (
-    <div>
-      <div className="flex items-baseline justify-between gap-4">
-        <span className="text-[15px] font-semibold">{p.label}</span>
-        <span className="font-mono text-[14px] tabular-nums">{p.show}</span>
-      </div>
-      <input
-        type="range"
-        min={0}
-        max={STEPS}
-        value={logSlider(p.value, p.lo, p.hi)}
-        aria-label={p.label}
-        aria-valuetext={p.show}
-        onChange={(e) => p.set(fromLog(+e.target.value, p.lo, p.hi))}
-        className="mt-2 w-full accent-[var(--other)]"
-      />
-      <div className="mt-1 flex justify-between font-mono text-[10.5px] tracking-[.05em] text-muted">
-        <span>{p.left}</span>
-        <span>{p.right}</span>
-      </div>
+    <div data-a className="mt-14">
+      <h3 className="text-[20px] leading-[1.25] font-semibold">{title}</h3>
+      <p className="mt-2 max-w-[60ch] text-[15px] leading-[1.55] text-page-ink2">
+        {says}
+      </p>
+      <div className="mt-5">{children}</div>
     </div>
   );
 }
 
 export function Quiet() {
   const [T, setT] = useState(12);
-  const [ly, setLy] = useState(100);
-  const rows = SEARCHES.map((s) => ({ s, v: verdict(s, T, ly) }));
-  const names = (v: Verdict) =>
-    rows
-      .filter((r) => r.v === v)
-      .map((r) => r.s.name)
-      .join(" and ");
-  const answer = names("searched")
-    ? `${names("searched")} looked for this glow across the whole sky, and found nothing confirmed.`
-    : names("few")
-      ? `Only ${names("few")} looked for this glow, and only at a few hundred nearby stars.`
-      : "No survey has looked for this glow this far out. Only a telescope aimed at this one star could catch it.";
+  const warm = peak(T) < 30;
   return (
     <section
       id="quiet"
@@ -144,8 +62,8 @@ export function Quiet() {
         data-a
         className="mt-4 max-w-[60ch] text-[16px] leading-[1.6] text-page-ink2"
       >
-        A mind that thinks cold glows faintly, in a kind of light we have barely
-        searched.
+        Our searches rule out the loud and the bright. Cold, quiet minds fit in
+        everything we have not yet looked at.
       </p>
       <dl data-a className="mt-8 flex flex-wrap gap-x-10 gap-y-5">
         <Stat value="None" label="Galaxies turning most starlight to heat" />
@@ -153,66 +71,62 @@ export function Quiet() {
           value="5 million"
           label="Stars screened, no warm build confirmed"
         />
-        <Stat value="5 to 28 K" label="Where a mature mind may run" />
+        <Stat value="6 × 10⁻¹⁸" label="Of the radio haystack searched" />
       </dl>
 
-      <div className="mt-10 grid gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
-        <div data-a>
-          <Orb T={T} ly={ly} />
-          <div className="mt-6 flex flex-col gap-6">
-            <Dial
-              label="How cold it runs"
-              lo={COLD}
-              hi={WARM}
-              value={T}
-              set={setT}
-              left="NEAR THE COLDEST SPACE ALLOWS"
-              right="AS WARM AS OUR COMPUTERS"
-              show={`${round(T)} K`}
-            />
-            <Dial
-              label="How far away"
-              lo={NEAR}
-              hi={FAR}
-              value={ly}
-              set={setLy}
-              left="10 LY"
-              right="ACROSS THE GALAXY"
-              show={`${round(ly)} ly`}
-            />
+      <Part
+        title="Heat"
+        says="Every mind gives off heat. Above each line, a survey would have seen it. The colder a mind runs, the higher the lines climb, and the more room is left beneath them."
+      >
+        <HeatChart T={T} />
+        <div className="mt-4 max-w-[560px]">
+          <div className="flex items-baseline justify-between gap-4">
+            <span className="text-[15px] font-semibold">How cold it runs</span>
+            <span className="font-mono text-[14px] tabular-nums">
+              {round(T)} K
+            </span>
+          </div>
+          <input
+            type="range"
+            min={0}
+            max={STEPS}
+            value={toSlider(T)}
+            aria-label="How cold it runs"
+            aria-valuetext={`${round(T)} K`}
+            onChange={(e) => setT(fromSlider(+e.target.value))}
+            className="mt-2 w-full accent-[var(--other)]"
+            style={{ direction: "rtl" }}
+          />
+          <div className="mt-1 flex justify-between font-mono text-[10.5px] tracking-[.05em] text-muted">
+            <span>AS WARM AS OUR COMPUTERS</span>
+            <span>NEAR THE COLDEST SPACE ALLOWS</span>
           </div>
         </div>
+        <p className="mt-4 max-w-[60ch] text-[15px] leading-[1.55]">
+          {`At ${round(T)} K a mind glows near ${round(peak(T))} microns${warm ? ", where WISE mapped the whole sky" : ""}. 400 light-years away, it stays hidden under ${share(ruledAbove(T, 400) / SUN)} of the Sun’s power.`}
+        </p>
+        <p className={`mt-2 ${KICK}`}>
+          DOTS: OLD MINDS AS THE GAME DRAWS THEM, ALL STILL UNSEEN
+        </p>
+      </Part>
 
-        <div data-a>
-          <div className={KICK}>WHO HAS LOOKED FOR THIS GLOW</div>
-          <ul className="mt-3 flex flex-col">
-            {rows.map(({ s, v }) => (
-              <li
-                key={s.name}
-                className={`flex items-center justify-between gap-4 border-b border-rowline py-3 transition-opacity ${v === "searched" || v === "few" || v === "aimed" ? "" : "opacity-45"}`}
-              >
-                <div>
-                  <div className="text-[15px] font-semibold">{s.name}</div>
-                  <div className="text-[13px] text-muted">{s.reach}</div>
-                </div>
-                <span
-                  className={`shrink-0 rounded-full border px-3 py-1 font-mono text-[10.5px] tracking-[.1em] ${PILL[v]}`}
-                >
-                  {SAY[v].toUpperCase()}
-                </span>
-              </li>
-            ))}
-          </ul>
-          <p className="mt-5 text-[15px] leading-[1.55]">{answer}</p>
-          <p className="mt-3 text-[13.5px] leading-[1.5] text-muted">
-            Colder thinking costs less: each thought takes {round(WARM / T)}{" "}
-            times less heat than at our computers’ warmth. The catch is shedding
-            it, which takes {round((WARM / T) ** 4)} times the radiator for each
-            watt.
-          </p>
-          <Sources list={SOURCES} />
+      <Part
+        title="Radio"
+        says="Radio searches listened for steady tones from nearby stars. A tone louder than the line, from one of those stars, would have been heard. Old minds speak by tight beams aimed at each other, which never sweep past us."
+      >
+        <RadioChart />
+      </Part>
+
+      <Part
+        title="How much we have searched"
+        says="If every way a radio signal could hide were Earth’s oceans, all our searches together have checked about a hot tub’s worth."
+      >
+        <div className="max-w-[520px]">
+          <Gauge />
         </div>
-      </div>
+      </Part>
+
+      <Sources list={SOURCES} />
     </section>
   );
 }

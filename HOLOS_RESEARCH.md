@@ -36,7 +36,8 @@ Every source the game rests on, grouped by the question it answers. Each entry s
   - Matters: why the game needs its one “what if”, many neighbors in the same century.
   - Used: v1 “Why the sky stays quiet”.
 - **[Price et al. 2020, Breakthrough Listen, 1,327 nearby stars](https://arxiv.org/abs/1906.07750)** · Published, AJ.
-  - About 15 minutes per star, 1.1 to 3.45 GHz, searching for narrow drifting tones. Rules out steady narrowband transmitters above about 2×10¹⁰ to 3×10¹¹ W at the neighbors’ distances.
+  - About 15 minutes per star, 1.1 to 3.45 GHz, searching for narrow drifting tones. *Superseded 2026-10-31, see below:* rules out steady narrowband transmitters above about 2×10¹⁰ to 3×10¹¹ W at the neighbors’ distances.
+  - Corrected 2026-10-31, abstract and HTML read: “no evidence of putative radio transmitters above 2.1×10¹² W, and 9.1×10¹² W for Green Bank and Parkes observations, respectively”, 1,138 stars at Green Bank and 189 at Parkes. A search summary ties these to the sample's 50 pc edge, so nearer stars are limited proportionally lower, as distance squared. Used: the radio chart on the research page, game/lib/about/haystack.ts.
   - Matters: what Earth’s null results exclude about the neighbors. They search for tones, so they barely limit pulsed radar.
   - Used: v1 “Why Earth hears none of it today”. v2 open question 4.
 - **[Wright, Kanodia and Lubar 2018, how much SETI has been done](https://arxiv.org/abs/1809.07252)** · Published, AJ 156, 260. Abstract read 2026-10-17.
@@ -1394,6 +1395,12 @@ Added 2026-10-28, for [The realistic premise](HOLOS_GAME_CONCEPT.md#the-realisti
   - **[Madau and Dickinson 2014, cosmic star formation history](https://arxiv.org/abs/1403.0007)** · Published, ARA&A 52, 415. From memory, not checked: today’s stellar mass density, about 5 × 10⁸ Suns per cubic Mpc.
     - Used: stars beyond the Local Group, at the cosmic average. Check the review’s own number.
   - **This project’s arithmetic.** At Holos’s values, a peer within 2,000 years of us is in our Galaxy about 1 time in 8, and half the time the nearest is within about 17 million ly. At 1 in 10 from animals to minds, about 90 peers, the nearest within about 9,000 ly.
+- **The haystack, 2026-10-31.** For “Why is the sky quiet?” on the research page, game/lib/about/haystack.ts: what our searches rule out and what is still possible.
+  - **[IRAS explanatory supplement](https://heasarc.gsfc.nasa.gov/W3Browse/catalog/iraspsc.html)** · Reference, read through HEASARC's catalog page. The 1983 all-sky survey is complete to about 0.4, 0.5, 0.6 and 1.0 Jy at 12, 25, 60 and 100 µm, away from confused sky. SAO's copy gives a more cautious 1.5 Jy at 100 µm.
+  - **[AKARI FIS bright source catalogue](https://www.ipac.caltech.edu/doi/10.26131/IRSA180)** · Reference, through IRSA's metadata. All-sky, about 0.55 Jy at 90 µm. The beta release gave about 1.3 Jy, a per-scan figure.
+  - **[Wright, Kanodia and Lubar 2018](https://arxiv.org/abs/1809.07252)**, logged above. Rechecked 2026-10-31 through ar5iv, partly by a summary of the full text: searches so far sum to about 6.0×10⁻¹⁸ of the haystack, about 8,000 liters against the oceans' 1.335×10²¹. The haystack runs to 10 kpc, 10 MHz to 115 GHz, up to Arecibo's radar, about 10¹³ W.
+  - **Familiar volumes** · General knowledge, not sources read. The Mediterranean about 3.75 million km³, Lake Superior about 12,100 km³, Lake Tahoe about 151 km³, an Olympic pool about 2,500 m³.
+  - *This project's arithmetic:* a grey body's glow in each survey's band, against its faintest. At 12 K the all-sky maps catch a mind 400 ly away only above about 2.7×10²⁶ W, about 70% of a Sun. calcs/minds.py's “shallow all-sky maps, 0.3% of a Sun at 400 ly” is about 240 times stricter at 12 K and about 5 times near 30 K. Its old minds are dimmer than the maps require, so nothing is contradicted. Flagged for whoever owns minds.py.
 - **The research page’s sections, 2026-10-31.** “How old are they?”, “Why is the sky quiet?”, “How far can we reach?” and “What can we see?”, in game/lib/about/. Each draws on sources already logged here.
   - **Earth’s pull on the Sun, about 9 cm/s** · General knowledge, not a source read. Used: “What can we see?”, the first rung.
   - **The Sun’s lens at 10 pc** · This project’s arithmetic. A pixel scales with distance, so Turyshev et al. 2020’s 25 km at 30 pc is about 8 km at 10 pc, about 1,500 pixels across an Earth.

@@ -1,113 +1,42 @@
 // Why the sky is quiet, on /about/research: a mind's waste heat glows at a wavelength set by how cold it runs, and the
-// searches so far watched the warm end. Garrett 2026 puts mature minds at 5 to 28 K. Pure, so the page draws from it.
+// searches so far watched the warm end. Garrett 2026 puts mature minds at 5 to 28 K. The limits are in haystack.ts.
 import type { Source } from "./dials.ts";
 
 /** Coldest and warmest a mind might run, in kelvin: near the cosmic background, and room temperature. */
 export const COLD = 3,
   WARM = 300;
-/** The wavelengths drawn, in microns. */
-export const FROM = 1,
-  TO = 5000;
-
 /** Where the glow of a grey body at T is brightest per log wavelength, in microns: hc / 3.92 kT. */
 export const peak = (T: number) => 14388 / 3.92 / T;
 
-/** That glow's brightness per log wavelength at λ microns, 1 at its peak. */
-export function glow(T: number, um: number): number {
-  const shape = (x: number) => x ** 4 / Math.expm1(x);
-  const x = 14388 / (um * T);
-  return x > 700 ? 0 : shape(x) / shape(3.92);
-}
-
-/** Where we have looked: the glow each telescope sees, in microns, and how much of the sky. A whole-sky survey looked at
- *  every star. A nearby-star survey looked at a few hundred, out to `ly`. A pointed one, only where we aimed it. */
-export interface Search {
-  name: string;
-  from: number;
-  to: number;
-  kind: "sky" | "near" | "pointed" | "planned";
-  ly?: number;
-  reach: string;
-}
-
-export const SEARCHES: Search[] = [
-  {
-    name: "WISE",
-    from: 3.4,
-    to: 22,
-    kind: "sky",
-    reach: "The whole sky, twice",
-  },
-  {
-    name: "JWST",
-    from: 5,
-    to: 28,
-    kind: "pointed",
-    reach: "Only stars we aim it at",
-  },
-  {
-    name: "Herschel",
-    from: 70,
-    to: 500,
-    kind: "near",
-    ly: 147,
-    reach: "446 stars within 147 ly",
-  },
-  {
-    name: "JCMT",
-    from: 450,
-    to: 850,
-    kind: "near",
-    ly: 163,
-    reach: "100 stars within 163 ly",
-  },
-  {
-    name: "ALMA",
-    from: 350,
-    to: 3600,
-    kind: "pointed",
-    reach: "Dusty stars, one at a time",
-  },
-  {
-    name: "PRIMA",
-    from: 24,
-    to: 261,
-    kind: "planned",
-    reach: "Launching about 2033",
-  },
-];
-
-/** Whether a telescope's band holds the brighter half of a glow at T. */
-export function sees(s: Search, T: number): boolean {
-  for (let i = 0; i <= 40; i++) {
-    const um = s.from * (s.to / s.from) ** (i / 40);
-    if (glow(T, um) >= 0.5) return true;
-  }
-  return false;
-}
-
-export type Verdict =
-  "searched" | "few" | "aimed" | "far" | "wrong" | "planned";
-
-/** What a telescope tells us of a mind at T kelvin, `ly` away. */
-export function verdict(s: Search, T: number, ly: number): Verdict {
-  if (!sees(s, T)) return "wrong";
-  if (s.kind === "planned") return "planned";
-  if (s.kind === "sky") return "searched";
-  if (s.kind === "pointed") return "aimed";
-  return ly <= (s.ly ?? 0) ? "few" : "far";
-}
-
-export const SAY: Record<Verdict, string> = {
-  searched: "Looked everywhere",
-  few: "Looked, at a few hundred stars",
-  aimed: "Only if we aimed at it",
-  far: "Too far for its survey",
-  wrong: "Wrong glow",
-  planned: "Not yet",
-};
-
 export const SOURCES: Source[] = [
+  {
+    who: "IRAS explanatory supplement",
+    url: "https://heasarc.gsfc.nasa.gov/W3Browse/catalog/iraspsc.html",
+    found:
+      "The 1983 all-sky map is complete to about 0.4, 0.5, 0.6 and 1.0 Jy at 12, 25, 60 and 100 µm.",
+  },
+  {
+    who: "AKARI bright source catalogue",
+    url: "https://www.ipac.caltech.edu/doi/10.26131/IRSA180",
+    found: "An all-sky far-infrared map, about 0.55 Jy at 90 µm.",
+  },
+  {
+    who: "AllWISE explanatory supplement",
+    url: "https://irsa.ipac.caltech.edu/data/WISE/docs/release/AllWISE/expsup/sec2_3a.html",
+    found: "The whole sky at 12 µm, to about 0.73 mJy.",
+  },
+  {
+    who: "Price et al. 2020",
+    url: "https://arxiv.org/abs/1906.07750",
+    found:
+      "Breakthrough Listen heard no steady tone above 2.1 × 10¹² W from 1,327 stars, out to 50 pc, at 1.1 to 3.45 GHz.",
+  },
+  {
+    who: "Wright, Kanodia and Lubar 2018",
+    url: "https://arxiv.org/abs/1809.07252",
+    found:
+      "Radio searches so far cover about 6 × 10⁻¹⁸ of the haystack: a hot tub against Earth’s oceans.",
+  },
   {
     who: "Garrett 2026",
     url: "https://arxiv.org/abs/2608.31153",
