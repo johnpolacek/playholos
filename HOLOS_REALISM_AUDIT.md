@@ -37,7 +37,7 @@ Started October 28, 2026, after [The realistic premise](HOLOS_GAME_CONCEPT.md#th
 - **3.1 Compute’s cap uses all primary energy, 24 TW, not electricity.** Open. Electricity is about 3.5 TW today, about 5 TW by 2040. Concept L372, L388-390, L507, L1188.
 - **3.2 Chips can get 50 to 1,000 times more efficient than 2023’s, not exactly 200.** Open. 200 is the geometric mean (Epoch). Concept L394.
 - **3.3 Proxima b’s reflected light is likely seen from the ground before 2040.** Open. RISTRETTO on the VLT about 55 hours (A&A 702, A230, 2025). ANDES on the ELT about 320 hours for oxygen. Concept L555, L308.
-- **3.4 The 15 m Mirror pitch counts homes from the old premise.** Open. “Smog at about 1 living world in 12” came from about 4 homes a game. It also clashes with builds.ts:19. plan.ts:199.
+- **3.4 The 15 m Mirror pitch counts homes from the old premise.** Fixed 2026-10-31. It now pitches oxygen, not smog. Over the 32 seeded games, about 12 worlds a game hold oxygen in their air. Within two months, the 6.5 m reads 8 of 382, about 1 in 50, and the 15 m reads 72, about 1 in 5, by lib/sim/observing.ts. builds.ts:43 already agreed. plan.ts. Before: Open. “Smog at about 1 living world in 12” came from about 4 homes a game. It also clashes with builds.ts:19. plan.ts:199.
 - **3.5 Voyager 1 is about 215 AU out at Year 0, not 170.** Fixed 2026-10-28. sites.ts:468.
 - **3.6 82 Eridani d is at least 5.8 Earth masses, not 5.** Fixed 2026-10-28. mind/leads.ts:266.
 - **3.7 Luyten’s Star b sits at the warm zone’s hot edge, not in it.** Fixed 2026-10-28. 0.091 AU against an inner edge of 0.098. leads.ts:802.

@@ -199,9 +199,9 @@ export const SAYS: Record<string, string> = {
   "Star Mapper":
     "Dozens of black holes should lie within 100 light years, and we have found almost none, since they give off no light. Passing in front of a star, one shifts where the star seems to be. A sharper Gaia, seeing through dust in the infrared, would catch them as they pass, a few each decade.",
   "Halo Survey":
-    "A mind that computes cold, far from its star, glows grey, a color no dust has. Herschel saw no such glow. ALMA could see one 25 times fainter, if it is compact, an hour at each star, nearest first: about 3,000 stars a Year, 100 ly in 4 Years, 400 ly in 220. A whole-sky map can’t go as deep, since faint galaxies crowd that light. Early on it will likely find only dust.",
+    "A mind that computes cold, far from its star, glows grey, a color no dust has. Herschel saw no such glow. ALMA could see one 25 times fainter, if it is compact, an hour at each star, nearest first: about 3,000 stars a Year, 100 ly in 4 Years, 400 ly in 220. A whole-sky map can’t go as deep, since faint galaxies crowd that light. If minds are as common as we think, it finds one within 100 ly, among much dust.",
   "Halo Array":
-    "An ALMA-class array of our own, built for this one search, about ten times as fast: 40,000 stars a Year, 400 ly in 17 Years, 1,000 ly in about 210. Old minds are rare, the nearest typically about 400 ly away, so only a search this fast reaches one in our time. No one has priced one.",
+    "An ALMA-class array of our own, built for this one search, about ten times as fast: 40,000 stars a Year, the 300,000 within 326 ly in about 8. The nearest old mind is likely about 50 ly away, but most lie farther, and this reaches them in our time. No one has priced one.",
   "Fusion Plants":
     "The first fusion plants, about 400 MW each, come online near Year 0. This grows them to a fleet of about 30,000, half again the energy we have. Each new plant starts on tritium the others breed, so the fleet can only double so fast: about 30 Years. Once done, one more data center fits under the grid. If the plants breed less than planned, the fleet grows slower.",
   "Launch Complex":
@@ -224,7 +224,9 @@ export const SAYS: Record<string, string> = {
   "Ground Solar":
     "Our data centers will fill the grid. This adds a fifth more energy in 10 Years, building solar five times as fast as we do today.",
   "15 m Mirror":
-    "Our first telescope could read smog at about 1 living world in 12. A 15 m mirror would read it at about 3 in 4.",
+    // Counted 2026-10-31 over the 32 seeded games, by lib/sim/observing.ts: of about 12 worlds a game whose air holds
+    // oxygen, the 6.5 m reads it within two months at 1 in 50, the 15 m at 1 in 5. Audit 3.4. Before: smog, from homes.
+    "About a dozen worlds near us have oxygen in their air. Our first telescope could read it at about 1 in 50 of them. A 15 m mirror would read it at about 1 in 5.",
   "Mass Driver":
     "Megatonnes can’t come from Earth by rocket: 10 Mt is 180 Years of lift. This throws 600 kt of Moon rock a Year, by O’Neill’s estimate. No one has priced one.",
   "Solar Lens":
