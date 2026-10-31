@@ -149,6 +149,9 @@ def works_catalog():
     works['Asteroid tour'] = dict(years=5, want=eg.WANTS['Asteroid tour'][0])
     # The Close Look, settled 2026-10-30: opens once the watcher is found, 2 Years to build, as CAPSTONE took.
     works['Close look'] = dict(years=2, want=eg.WANTS['Close look'][0])
+    # The Relay Search, settled 2026-10-30: one sailcraft flown out along the line the watcher's mirror points, built in
+    # 5 Years, as a Discovery-class probe. It flies as a lens does, to its relay's distance (lib/sim/minds.ts).
+    works['Relay search'] = dict(years=5, want=eg.WANTS['Relay search'][0], orbit=True)
     # The Halo Array, settled 2026-10-29: ALMA took about 12 years from agreement to full operations.
     works['Halo array'] = dict(years=12, want=eg.WANTS['Halo array'][0])
     # The Mind Link, settled 2026-10-26: 100 m optics in orbit and a 1 GW laser, to send the Will to our Mind at a hole.

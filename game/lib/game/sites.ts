@@ -578,6 +578,22 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
       before: "Peter Glaser proposed it in 1968. In 2023 Caltech’s MAPLE beamed a little power from orbit to a rooftop in Pasadena.",
     },
   },
+  "Relay Search": {
+    // Built at the Orbital Yard as a lens is, then flown out along the line the watcher's mirror points. 2026-10-30.
+    site: {
+      on: "orbit",
+      draw: "ring",
+      places: [{ lat: 0, lon: 0, name: "Low orbit, 400 km up" }],
+      orbit: { km: 400, tilt: 51.6, minutes: 92.9, behind: 30 },
+    },
+    story: {
+      have: "In 2022 Green Bank listened along the Sun’s focal line opposite Alpha Centauri for a relay’s signal, and heard nothing. No other line has been searched, and no craft has gone past about 215 AU.",
+      where: "Built at the Orbital Yard, 400 km up. It dives past the Sun as a lens does, then flies out along the line the watcher’s mirror points, 1,000 AU and beyond.",
+      why: "A mind far away could keep a relay where our Sun focuses light, to carry a watcher’s reports home. It would have to sit on one exact line, and fire to stay there as the Sun wobbles.",
+      takes: "One sailcraft of our lenses’ class, with a camera and a heat imager, about $500 million, 5 Years to build. It flies as our lenses do, faster once a beam pushes it.",
+      before: "Hippke placed such relays 1,000 to 2,500 AU from their star. Whatever is there will see ours come a long way off.",
+    },
+  },
   "Solar Lens": {
     // Built at the Orbital Yard, in the ISS's orbit, before each lens dives for the Sun.
     site: {

@@ -141,6 +141,8 @@ export const LATER: Later[] = [
   },
   // The watcher found, 2026-10-30: a small craft flies to look at it up close, once we know where it sits.
   { name: "Close Look", what: "A small craft that flies to the watcher and looks at it up close.", does: "see", after: WATCHED },
+  // The watcher's mirror seen, 2026-10-30: a sailcraft flies out along the line it points, past the Sun's focus.
+  { name: "Relay Search", what: "A sailcraft that flies out along the line the watcher’s mirror points.", does: "see", after: "Close Look" },
   // Sends the Will to our Mind at a black hole, as a transmission, 2026-10-26. calcs/holes.py.
   { name: "Mind Link", what: "A laser 100 m wide, to send the Will to our Mind far away.", does: "reach", after: "Seed Ship" },
   // The cold compute annex at scale, 2026-10-26: chips run cold behind a shade, on sunlight caught beside them.
@@ -194,6 +196,8 @@ export const SAYS: Record<string, string> = {
     "Six known asteroids share Earth’s orbit, circling the Sun beside us for centuries. Something left to watch us could ride one. A probe maps each whole surface to centimeters in a Year, then flies on: Kamoʻoalewa first, Cruithne last, 11 Years in all. A watcher floating free at the Sun–Earth L4 or L5 points it can’t find: those zones are tens of millions of km wide.",
   "Close Look":
     "We know where it sits now. A craft the size of CAPSTONE, with a sharp camera, flies there in about 4 months, or a Year to a rock beside us, and looks from a few kilometers. It would see what it is made of and how it holds. It would also see us come.",
+  "Relay Search":
+    "The watcher’s mirror points out past the planets. Beyond 550 AU the Sun’s pull bends light to a focus, and a craft there could send a weak beam very far, out the other side of the Sun. A sailcraft of our lenses’ class flies out along that line with a camera and a heat imager, looking for whatever the mirror talks to. It would see us come.",
   "Moon Search":
     "Sixty degrees ahead of the Moon and behind it, its pull and Earth’s balance, and a small thing can sit there for ages. Something left to watch us could. Stacked over 3 Years, Rubin-class images reach magnitude 28, enough to see a dark object about 10 cm wide there. Anything farther out it can’t see.",
   "Warm Sky Watch":
@@ -294,6 +298,7 @@ const FIRST: Record<string, string> = {
   "Warm Sky Watch": "Warm sky watch",
   "Moon Search": "Moon search",
   "Close Look": "Close look",
+  "Relay Search": "Relay search",
   "Halo Array": "Halo array",
   "Asteroid Tour": "Asteroid tour",
 };

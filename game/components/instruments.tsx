@@ -66,6 +66,11 @@ function found(name: string, k: Known): { line: string; news: boolean } | null {
     return w.looked
       ? { line: `Saw it up close at Year ${yearText(w.looked.at)}: near black, with a small mirror held on one point of the sky. It saw us come.`, news: recent(w.looked.at) }
       : { line: `Flying to the dark body at ${w.by === "moon search" ? `the Moon’s ${w.place.slice(-2)}` : w.place}.`, news: false };
+  // Our Relay Search: flying out along the mirror's line, then what it found there. 2026-10-30.
+  if (name === "Relay Search" && w?.looked)
+    return w.relay
+      ? { line: `Found a dark craft ${w.relay.au.toLocaleString("en-US")} AU out at Year ${yearText(w.relay.at)}, holding on the line. It sent nothing while we were near.`, news: recent(w.relay.at) }
+      : { line: "Flying out along the line the watcher’s mirror points.", news: false };
   if (name === "Asteroid Tour" && w?.by === "asteroid tour")
     return { line: `Found something made on ${w.place}, at Year ${yearText(w.seen)}.`, news: recent(w.seen) };
   return null;

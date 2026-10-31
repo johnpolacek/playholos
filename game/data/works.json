@@ -119,13 +119,18 @@
    "years": 1,
    "want": 0.01
   },
+  "Asteroid tour": {
+   "years": 5,
+   "want": 0.05
+  },
   "Close look": {
    "years": 2,
    "want": 0.005
   },
-  "Asteroid tour": {
+  "Relay search": {
    "years": 5,
-   "want": 0.05
+   "want": 0.05,
+   "orbit": true
   },
   "Halo array": {
    "years": 12,

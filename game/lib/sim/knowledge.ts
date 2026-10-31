@@ -45,6 +45,8 @@ export interface Kit {
   moonSearch?: number | null;
   /** Our Close Look, built once the watcher is found. 2026-10-30. */
   closeLook?: number | null;
+  /** Our Relay Search, built once the Close Look is: when, and its Years each AU out. 2026-10-30. */
+  relaySearch?: { built: number; perAU: number } | null;
   asteroidTour?: number | null;
   craft?: MindKit["craft"];
 }
@@ -204,7 +206,7 @@ export function iscoClock(spin: number) {
 export function earthKnows(
   world: World,
   year: number,
-  { telescope = null, mirror = null, halo = null, mapper = null, hyper = null, lenses = [], sentinels = [], seeds = [], colony = null, sails = null, probe = null, warmWatch = null, haloArray = null, moonSearch = null, asteroidTour = null, closeLook = null, craft = [] }: Kit = {},
+  { telescope = null, mirror = null, halo = null, mapper = null, hyper = null, lenses = [], sentinels = [], seeds = [], colony = null, sails = null, probe = null, warmWatch = null, haloArray = null, moonSearch = null, asteroidTour = null, closeLook = null, relaySearch = null, craft = [] }: Kit = {},
 ): EarthView {
   const shown = (id: string) => world.stars[id]?.shown ?? id;
   // Earth's finds at Year 0: every world whose tug shows by 2040. Measured, not understood. Its star is in the catalogs.
@@ -303,7 +305,7 @@ export function earthKnows(
   visits.sort((a, b) => a.home - b.home);
   // The realistic premise's minds, as far as we have found them. 2026-10-29.
   const firstSeed = seeds.length ? Math.min(...seeds.map((s) => s.leaves)) : null;
-  const minds = mindsSeen(world, { telescope, warmWatch, halo, haloArray, moonSearch, asteroidTour, closeLook, firstSeed, craft }, year);
+  const minds = mindsSeen(world, { telescope, warmWatch, halo, haloArray, moonSearch, asteroidTour, closeLook, relaySearch, firstSeed, craft }, year);
   const anyMind = minds.flashes.length || minds.glows.length || minds.watcher || minds.sleepers.length;
   return {
     year, felt, heard: [], visits,
@@ -616,7 +618,17 @@ function describeMinds(m: MindsSeen, one: (x: number) => string): string {
     if (w.looked)
       out.push(
         `Our Close Look reached it and sent word home at Year ${yearText(w.looked.at)}. Up close it is near black, about 10 cm across, with a mirror about 2 cm wide held on one point of the sky, ${sky(w.looked)}, turning as the Earth and Moon turn to keep it there. ` +
-          "A thing that reports home by laser would aim so. Whoever sent it likely lies that way, at a distance we can't tell, and we can't tell who. It surely saw our craft come.",
+          "A thing that reports home by laser would aim so. It may aim straight home. Or it may aim at a relay out past 550 AU, where the Sun's pull focuses light, and then home lies the other way, through the Sun. We can't tell how far, or who. It surely saw our craft come.",
+      );
+    // Our Relay Search's word, or the build it opened. 2026-10-30.
+    if (w.looked && w.relay)
+      out.push(
+        `Our Relay Search flew out along that line and found, at Year ${yearText(w.relay.at)}, a dark craft a few metres across, ${w.relay.au.toLocaleString("en-US")} AU out, holding exactly on the line. It fires faint thrusters to stay there as the Sun wobbles. It sent nothing while our craft was near. ` +
+          `From there the Sun's lens carries a weak beam a very long way, out the other side, toward ${sky({ ra: (w.looked.ra + 12) % 24, dec: -w.looked.dec })}. Whoever sent the watcher likely lies that way, at a distance we can't tell, and we can't tell who. It saw us come, and went quiet.`,
+      );
+    else if (w.looked)
+      out.push(
+        "Its mirror opened a new build, the Relay Search: one sailcraft of our lenses' class, about $500 million, 5 Years to build, flown out along the mirror's line past the Sun's focus, 1,000 AU and beyond, as our lenses fly. It would find a relay if one is there. Whatever is there would see it come.",
       );
     else if (w.by !== "its warning")
       out.push(

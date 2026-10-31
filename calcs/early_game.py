@@ -346,6 +346,7 @@ WANTS['Asteroid tour'] = (0.05, 'sample: a Discovery-class probe, about 500 mill
 # Settled 2026-10-30: the close look, a small craft to the watcher once found, CAPSTONE's class with a sharp camera.
 # CAPSTONE cost about 30 million dollars and took about 2 years to build: a sample.
 WANTS['Close look'] = (0.005, 'sample: a CAPSTONE-class smallsat with a camera, about 50 million dollars')
+WANTS['Relay search'] = (0.05, 'sample: one sailcraft of the solar lens class with a camera and a heat imager, about 500 million dollars')
 # Settled 2026-10-29: the halo array, our own ALMA-class array about ten times its speed for this one task, 40,000
 # stars a Year. ALMA cost about 1.5 billion dollars: a sample, scaled.
 WANTS['Halo array'] = (1.5, 'sample: about ten ALMAs\' worth of dishes and receivers, scaled from ALMA\'s 1.5 billion dollars')

@@ -940,11 +940,29 @@ export function watcherReadings(w: WatcherSeen, knocks: number[], year: number):
       by: "Close Look",
       title: "Seen up close",
       line: `Near black and about 10 cm across, smooth, with a mirror about 2 cm wide. It holds that mirror on one point of the sky, toward ${sky(w.looked)}, turning as the Earth and Moon turn to keep it there.`,
-      mind: "A thing that reports home by laser would aim so. Whoever sent it likely lies that way, at a distance we can’t tell, and we can’t tell who. It saw our craft come.",
+      mind: "A thing that reports home by laser would aim so. It may aim straight home. Or it may aim at a relay out past 550 AU, where the Sun’s pull focuses light, and then home lies the other way, through the Sun. It saw our craft come.",
       now: made,
       tells: [
-        `Its mirror points toward ${sky(w.looked)}. Whoever sent it lies along that line, near or far.`,
+        `Its mirror points toward ${sky(w.looked)}. Whatever it reports to lies that way, near or far.`,
+        "A craft flown out along that line, past the Sun’s focus, would find a relay if one is there.",
         "A knock aimed at it would tell it we know it is there.",
+      ],
+    });
+  // Our Relay Search's word: a dark craft holding on the line, gone quiet while we were near. 2026-10-30.
+  const home = w.looked && { ra: (w.looked.ra + 12) % 24, dec: -w.looked.dec };
+  if (w.relay && home && w.relay.at <= year)
+    out.push({
+      id: "watcher-relay",
+      needs: "",
+      at: tenths(w.relay.at),
+      by: "Relay Search",
+      title: "The relay",
+      line: `A dark craft a few metres across, ${w.relay.au.toLocaleString("en-US")} AU out, holding exactly on the line the watcher’s mirror points. It fires faint thrusters to stay there as the Sun wobbles. It sent nothing while our craft was near.`,
+      mind: `Nothing natural holds on one line like that. From there the Sun’s lens carries a weak beam a very long way, out the other side, toward ${sky(home)}. Whoever sent the watcher likely lies that way, at a distance we can’t tell. It saw us come, and went quiet.`,
+      now: made,
+      tells: [
+        `Whoever sent the watcher likely lies toward ${sky(home)}, near or far.`,
+        "It went quiet for us. Whatever it carries, it means to keep from us.",
       ],
     });
   // A knock shows in the tenth it is sent, as the Year does.

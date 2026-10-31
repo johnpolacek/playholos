@@ -350,6 +350,16 @@ test("finding minds: a flash while the warm watch runs, half the cold glows, the
     const tour = watcherOf(world, { asteroidTour: 20 }, 1000);
     assert.equal(tour?.seen ?? null, w.rock ? 20 + CO_ORBITALS.indexOf(w.rock) * TOUR_EACH + TOUR_MAP : null);
     if (w.place.startsWith("Sun–Earth")) assert.equal(watcherOf(world, { moonSearch: 10, asteroidTour: 20 }, 1e5), null);
+    // Up close its mirror points at its relay, opposite its maker, and a Relay Search out that line finds it there.
+    assert.ok(w.relayAU >= 1000 && w.relayAU <= 2500, `relay at ${w.relayAU} AU`);
+    if (w.place.startsWith("Earth–Moon")) {
+      const kit = { moonSearch: 10, closeLook: 20, relaySearch: { built: 30, perAU: 0.03 } };
+      const seen = watcherOf(world, kit, 1e5)!, sent = skyOf(m.old.find((o) => o.id === w.maker)!.pos);
+      assert.ok(Math.abs(((seen.looked!.ra + 12) % 24) - sent.ra) < 1e-3 && Math.abs(seen.looked!.dec + sent.dec) < 1e-2);
+      assert.ok(Math.abs(seen.relay!.at - (30 + 0.03 * w.relayAU + w.relayAU / 63241)) < 1e-9);
+      assert.equal(watcherOf(world, kit, seen.relay!.at - 0.01)?.relay, undefined);
+      assert.equal(watcherOf(world, { ...kit, relaySearch: null }, 1e5)?.relay, undefined);
+    }
     // A craft that stays finds a sleeper. A flyby only if it rests within a 1 m telescope's reach.
     for (const o of m.old.filter((o) => o.asleep)) {
       const stay = sleeperOf(o, [{ pos: o.pos, arrives: 5000, stays: true }], 1e6);

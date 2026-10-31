@@ -37,7 +37,7 @@ export function Quiet({ from, to, onClose }: { from: number; to: number; onClose
   // had ended and the Close Look, which looks once.
   const watches = useMemo(() => {
     const ended = (n: string, at: number) =>
-      n === "Close Look" || (n === "Moon Search" && moonSearchEnds(at) <= from) || (n === "Asteroid Tour" && tourEnds(at) <= from);
+      n === "Close Look" || n === "Relay Search" || (n === "Moon Search" && moonSearchEnds(at) <= from) || (n === "Asteroid Tour" && tourEnds(at) <= from);
     return ordered(plan).filter((n) => {
       const at = done[n];
       return ["listen", "see"].includes(buildOf(n)?.does ?? "") && at != null && at <= from && !ended(n, at);

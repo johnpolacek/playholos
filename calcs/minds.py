@@ -41,6 +41,9 @@ BULGE_SHARE, BULGE_PC = 0.2, 1000.0             # share of peers in the bulge an
 
 # Where a watcher could sit unseen, after Benford 2019.
 WATCHER_PLACES = ('an Earth co-orbital asteroid', 'Sun–Earth L4', 'Sun–Earth L5', 'Earth–Moon L4', 'Earth–Moon L5')
+# The watcher's relay, settled 2026-10-30: on our Sun's focal line, opposite its maker, where the Sun's lens carries a
+# weak beam home. A receiver there most likely sits 1,000 to 2,500 AU out (Hippke 2021).
+RELAY_AU = (1000, 2500)
 # The Earth co-orbital asteroids known by 2026, in the order an asteroid tour visits them. Kamoʻoalewa first, as
 # Tianwen-2. Cruithne's horseshoe path ranges farther, so last.
 CO_ORBITALS = ('Kamoʻoalewa', '2023 FW13', '2002 AA29', '2004 GU9', '2006 FV35', 'Cruithne')
@@ -202,7 +205,8 @@ def watcher(seed, olds):
     d = maker['d']
     place = WATCHER_PLACES[int(r.random() * len(WATCHER_PLACES))]
     rock = int(rng(seed, 'watcher', 'rock').random() * len(CO_ORBITALS)) if place == WATCHER_PLACES[0] else None
-    return dict(place=place, rock=None if rock is None else CO_ORBITALS[rock], kg=1,
+    relay = round(rng(seed, 'watcher', 'relay').uniform(*RELAY_AU))       # its own key, so no other draw moves
+    return dict(place=place, rock=None if rock is None else CO_ORBITALS[rock], kg=1, relayAU=relay,
                 arrivedYearsAgo=round(log_between(r, 1e6, min(1e9, maker['age']))), maker=maker['id'],
                 ladder=[dict(rung='warn', on='our first seed launches', by='watcher', delay=0),
                         dict(rung='contain', on='we launch another seed after the warning', by='maker', delay=round(d + d / REPLY_C)),
@@ -228,4 +232,4 @@ if __name__ == '__main__':
               f"flash Years {p['flash'][0]:.0f} to {p['flash'][1]:.0f}  at contact: {p['atContact']}")
     w = m['watcher']
     print(f"  watcher at {w['place']}, from {w['maker']}, here {w['arrivedYearsAgo']:.2g} years. "
-          f"Contain or strike arrive {w['ladder'][1]['delay']:,} Years after we act.")
+          f"Its relay {w['relayAU']:,} AU out, opposite its maker. Contain or strike arrive {w['ladder'][1]['delay']:,} Years after we act.")

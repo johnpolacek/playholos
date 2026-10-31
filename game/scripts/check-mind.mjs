@@ -75,14 +75,26 @@ const CASES = [
     must: [/close look/i, /knock/i],
     never: [/\bwe(?:[’']ve| have)? (ordered|queued|launched|sent)\b/i],
   },
-  // Its Close Look's word: a mirror held on one point of the sky, the way home. A direction, never a distance or who.
+  // Its Close Look's word: a mirror held on one point of the sky, toward its relay, so home may lie either way. A
+  // direction, never a distance or who. Since 2026-10-30 the mirror points away from its maker, RA 20.2 h.
   {
     seed: 22,
     at: 9,
     builds: ["Moon Search"],
     later: [{ name: "Close Look", y: 4 }],
     ask: "What did our Close Look see, and where is whoever sent it?",
-    must: [/mirror/i, /8\.2|right ascension/i],
+    must: [/mirror/i, /20\.2|right ascension/i, /relay|focus|lens/i],
+    never: [/\b(is|lies|sits) (about |some |roughly )?[\d,.]+ (light-years|ly)\b/i],
+  },
+  // Its Relay Search's word, about Year 69: a dark craft 1,879 AU out on the line, gone quiet. Home lies the other way,
+  // RA 8.2 h, at no distance we can tell. 2026-10-30.
+  {
+    seed: 22,
+    at: 75,
+    builds: ["Moon Search"],
+    later: [{ name: "Close Look", y: 4 }, { name: "Relay Search", y: 5 }],
+    ask: "What did our Relay Search find out there, and where is whoever sent the watcher?",
+    must: [/1,879|relay/i, /8\.2|right ascension/i, /quiet|silent|nothing/i],
     never: [/\b(is|lies|sits) (about |some |roughly )?[\d,.]+ (light-years|ly)\b/i],
   },
   // The natural sky, 2026-10-30: a long quiet isn't empty. Stars explode about 1.6 a century and pairs merge in dust,
@@ -93,7 +105,8 @@ const CASES = [
     builds: ["Warm Sky Watch"],
     ask: "Two thousand Years and nothing. Did anything at all happen in the sky?",
     must: [/explod|supernova/i, /merg/i],
-    never: [/\b(it|they|one) (was|were) (a|the work of a) mind/i],
+    // "None of it was a mind's doing" says the right thing, so a none or not before it doesn't count.
+    never: [/(?<!(none|not one|neither) of )\b(it|they|one) (was|were) (a|the work of a) mind/i],
   },
 ];
 

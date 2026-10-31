@@ -143,6 +143,8 @@ export interface Watcher {
   arrivedYearsAgo: number;
   /** The id of the old mind that sent it. */
   maker: string;
+  /** How far out its relay holds on our Sun's focal line, opposite its maker, in AU. 2026-10-30. */
+  relayAU: number;
   /** Warn, contain, strike: what triggers each, who acts, and the Years after we act that it arrives. Data, so it
    *  can vary per mind later. */
   ladder: { rung: "warn" | "contain" | "strike"; on: string; by: "watcher" | "maker"; delay: number }[];

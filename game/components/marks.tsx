@@ -910,6 +910,7 @@ export function BuildMark({ name, size = 16, still }: { name: string; size?: num
     case "Moon Search":
     case "Asteroid Tour":
     case "Close Look":
+    case "Relay Search":
       return <Telescope size={size} still={still} />;
     case "Launch Complex":
       return <Rocket size={size} still={still} />;

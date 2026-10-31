@@ -293,6 +293,8 @@ export function kitOf(plan: Plan, scale: number) {
     warmWatch: done["Warm Sky Watch"] ?? null,
     moonSearch: done["Moon Search"] ?? null,
     closeLook: done["Close Look"] ?? null,
+    // Our Relay Search flies as a lens does, by the strongest beam done when it is built. 2026-10-30.
+    relaySearch: done["Relay Search"] != null ? { built: done["Relay Search"]!, perAU: lensTrip(done, done["Relay Search"]!).flight / LENS.au } : null,
     asteroidTour: done["Asteroid Tour"] != null ? done["Asteroid Tour"]! + 1 : null,
     mapper: done["Star Mapper"] ?? null,
     hyper: done["Hypertelescope"] ?? null,

@@ -5,6 +5,7 @@ import catalog from "../../data/works.json" with { type: "json" };
 import type { OldMind, Peer, World } from "./types.ts";
 
 const PC_LY = 3.2616;
+const LY_AU = 63241;
 
 /** What our watches and craft can find minds with: the Year each is done or arrives. */
 export interface MindKit {
@@ -22,6 +23,8 @@ export interface MindKit {
   asteroidTour?: number | null;
   /** The Year our Close Look is built: a small craft that flies to the watcher once we know where it sits. */
   closeLook?: number | null;
+  /** Our Relay Search: the Year it is built, and the Years it flies each AU out, as a lens flies. 2026-10-30. */
+  relaySearch?: { built: number; perAU: number } | null;
   /** The Year our first seed ship leaves: the watcher warns us, and so shows itself. */
   firstSeed?: number | null;
   /** Our craft at other stars: where, in atlas light-years, the Year it arrives, and whether it brakes and stays. */
@@ -54,8 +57,12 @@ export interface WatcherSeen {
   seen: number;
   by: "moon search" | "asteroid tour" | "its warning";
   /** What our Close Look saw up close, and when its word came home: a small mirror held on one point of the sky, the
-   *  way home its reports would go. Where its maker lies, never how far, or who. 2026-10-30. */
+   *  way home its reports would go. It points at its relay, on our Sun's focal line, so its maker lies the other way.
+   *  Never how far, or who. 2026-10-30. */
   looked?: { at: number; ra: number; dec: number };
+  /** What our Relay Search found out along that line, and when its word came home: a dark craft holding exactly on
+   *  the line, and silent while we were near. How far out, in AU. 2026-10-30. */
+  relay?: { at: number; au: number };
 }
 
 /** A compact warm body resting in the cold outer reaches of another star's system. */
@@ -186,11 +193,17 @@ export function watcherOf(world: World, kit: MindKit, year: number): WatcherSeen
   if (kit.firstSeed != null) ways.push({ place: w.place, seen: kit.firstSeed, by: "its warning" });
   const first = ways.filter((x) => x.seen <= year).sort((a, b) => a.seen - b.seen)[0];
   if (!first) return null;
-  // Up close, its mirror shows which way its reports go: toward its maker, the nearest old mind. 2026-10-30.
+  // Up close, its mirror shows which way its reports go: to its relay on our Sun's focal line, opposite its maker, the
+  // nearest old mind. 2026-10-30.
   const maker = world.minds?.old.find((o) => o.id === w.maker);
   if (kit.closeLook == null || watchedAt(first) === null || !maker) return first;
   const home = Math.max(kit.closeLook, first.seen) + (first.by === "moon search" ? CLOSE_FLIGHT.moon : CLOSE_FLIGHT.rock);
-  return home <= year ? { ...first, looked: { at: home, ...skyOf(maker.pos) } } : first;
+  if (home > year) return first;
+  const looked = { at: home, ...skyOf([-maker.pos[0], -maker.pos[1], -maker.pos[2]]) };
+  // Our Relay Search flies out along that line once its mirror is seen, and finds the relay at its distance. 2026-10-30.
+  const s = kit.relaySearch;
+  const found = s ? Math.max(s.built, home) + s.perAU * w.relayAU + w.relayAU / LY_AU : Infinity;
+  return { ...first, looked, ...(found <= year ? { relay: { at: found, au: w.relayAU } } : {}) };
 }
 
 /** A sleeping old mind, found only by our craft in its system: one that stays always finds it, a flyby only if the
