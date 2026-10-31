@@ -36,7 +36,7 @@ Every choice about other minds has to pass these, in order.
 | Where is the rare step? | From animals to a mind that builds | Low. Contested |
 | How far is the nearest mind? | Typically about 50 light-years | Follows from the density |
 | How old is a mind we find? | Older, typically by about 2.3 billion years, two thirds by 0.8 to 3.9 | Moderate |
-| Any minds our age? | About 4,000 in the whole Galaxy within 100,000 years of us, the nearest typically 1,300 light-years away | Follows from the density and ages |
+| Any minds our age? | About 800 in the whole Galaxy within 20,000 years of us, the nearest typically 2,400 light-years away | Follows from the density and ages |
 | What do old minds do? | Turn inward. Compute cold, or sleep. Watch living worlds, and link by beam | Moderate for inward. Low for watching and links |
 | Has anyone heard us? | Almost surely. Our radio reaches about 90 light-years, where about 5 old minds lie | About 99% |
 | Is something watching us? | Yes, a small dark watcher in our system | About 2 in 3. Low |
@@ -99,7 +99,7 @@ The middle column follows 100 typical stars near us. The counts for steps 2 to 6
 - *If the step is rare,* a mind that does arise could come at any time in the window, about evenly. A typical wait is then about half the window, around a billion years. Earth, at 0.5 billion, came early in its window but not unusually.
 - *As a rate:* about 1 chance in 12,000 per billion years of animal life, on any one world.
 - *What it sets.* A world reaches animals at about 4 billion years old, and a mind about a billion years later. Earth-like worlds near us are about 1.8 billion years older than Earth on average (Lineweaver 2001). So most minds woke long ago. The age model below puts a typical mind about 2.3 billion years ahead of us.
-- *In 2040.* A mind’s head start is its world’s age less the time its mind took. Earth-like worlds are mostly older than Earth, by 1.8 ± 0.9 billion years on average (Lineweaver 2001), and a mind takes about Earth’s 4.5 billion years, faster or slower by each world’s pace. So the typical mind is about 2.3 billion years older than us, two thirds between 0.8 and 3.9. About 7 woke within 100,000 years of us, either side, the nearest typically 18,000 light-years away. Within a million years, the nearest is typically 6,500 light-years away. Within 10 million, 2,400.
+- *In 2040.* A mind’s head start is its world’s age less the time its mind took. Earth-like worlds are mostly older than Earth, by 1.8 ± 0.9 billion years on average (Lineweaver 2001), and a mind takes about Earth’s 4.5 billion years, faster or slower by each world’s pace. So the typical mind is about 2.3 billion years older than us, two thirds between 0.8 and 3.9. About 800 woke within 20,000 years of us, either side, the nearest typically 2,400 light-years away. Within 100,000 years, about 4,000, the nearest typically 1,300 light-years away. Within a million years, the nearest is typically about 700 light-years away. Within 10 million, about 300.
 
 ## The evidence, by question
 
@@ -152,7 +152,7 @@ The plain idea: most Earth-like planets that exist today formed before ours. So 
   - Earth formed before about 92% of the Earth-like planets the universe will ever make.
   - Informs: why Earth is early in cosmic time but young among worlds that exist now. Those future worlds don’t exist yet, so we can’t meet them.
 
-**What Holos takes:** a peer waking within a century of us is effectively zero. Across the whole Galaxy, about 4,000 minds woke within 100,000 years of us, the nearest typically about 1,300 light-years away. That is why the game’s map is the Galaxy, and a game can run 100,000 Years or more.
+**What Holos takes:** a peer waking within a century of us is effectively zero. Across the whole Galaxy, about 800 minds woke within 20,000 years of us, the nearest typically about 2,400 light-years away. Holos calls these peers: still outward, as we are, so able to talk roughly as equals. That is why the game’s map is the Galaxy, and a game can run 100,000 Years or more.
 
 ### 3. Why is the sky quiet?
 
@@ -379,7 +379,7 @@ Positions people raised when we asked what a physics-compliant Fermi game should
 ### “If young minds are out there, they’d be talking to each other, and we’d hear them.”
 
 - Young minds are far apart in both space and time.
-- About 4,000 woke within 100,000 years of us, across the whole Galaxy. The nearest is typically about 1,300 light-years away. A hello and its answer take about 2,600 years.
+- About 800 woke within 20,000 years of us, across the whole Galaxy. The nearest is typically about 2,400 light-years away. A hello and its answer take about 4,800 years.
 - Old minds are near, the nearest typically about 50 light-years away. About 5 lie inside our radio’s 90 light-years, so they have heard us. They stay quiet, as old minds do.
 - Minds that have had time to talk are old, and Holos lets them talk. They link by tight beams relayed through stars’ lenses, nodes a few parsecs apart (Bracewell 1960, Hippke 2021).
 - A tight beam is seen only along its line. A star’s lens focuses both ways, so a relay’s beam lands on its target, not on us. A beam between two other stars never crosses Earth.

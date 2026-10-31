@@ -2,7 +2,7 @@
 Run: python3 calcs/minds.py [seed]
 
 Settled 2026-10-28 and 2026-10-29 in HOLOS_GAME_CONCEPT.md, The realistic premise, and raised 2026-10-31: one mind
-per 1,600 stars, nearly all older than us and inward. About 4,000 peers woke within 100,000 years of us. A watcher
+per 1,600 stars, nearly all older than us and inward. About 800 peers woke within 20,000 years of us. A watcher
 sits in every game, sent by a maker that cares about spreaders. Drawn beside the old neighbors until the rework retires them (rework step 5).
 
 Positions are in the atlas frame, light-years: (Galactic X toward the center, Galactic Z north, -Galactic Y), as
@@ -20,8 +20,10 @@ CATALOG_LY = 326                        # real stars inside, data/gcns-326ly.bin
 # Old minds drawn one by one out to here, so all on real stars, about 190 a game. Beyond, the Galaxy's count only.
 # It was 1,000 ly at one per million stars. At one per 1,600 that is 5,300 a game, too many to ship. 2026-10-31.
 OLD_MINDS_LY = CATALOG_LY
-PEERS = 4000                            # mean young minds within PEER_WINDOW of us, Galaxy-wide, from HEAD_START below
-PEER_WINDOW = 1e5                       # years either side of our waking
+# A peer, settled 2026-10-31: a mind that woke within 20,000 years of us, either side, so still in its outward phase
+# (50 to 20,000 years) and able to talk with us roughly as an equal. It was 100,000 years, about 4,000 peers.
+PEERS = 800                             # mean young minds within PEER_WINDOW of us, Galaxy-wide, from HEAD_START below
+PEER_WINDOW = 2e4                       # years either side of our waking
 ASLEEP_SHARE = 0.5                      # as calcs/neighbors.py, a sample
 # How much older than us a mind is, settled 2026-10-30: its world's age less the time its mind took. Lineweaver 2001
 # and Lineweaver, Fenner and Gibson 2004: 3 in 4 Earth-like worlds are older than Earth, by 1.8 ± 0.9 billion years on

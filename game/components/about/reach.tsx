@@ -36,7 +36,7 @@ function Race({ pick }: { pick: string }) {
     const bottom = TOP + CRAFT.length * ROW;
     PLACES.forEach((p, i) => {
       const px = x(p.ly),
-        mind = p.name === "Nearest mind";
+        mind = p.name.startsWith("Nearest");
       c.fillStyle = mind ? other : muted;
       c.globalAlpha = mind ? 0.6 : 0.3;
       c.fillRect(px, TOP - 8, 1, bottom - TOP);
@@ -144,7 +144,7 @@ export function Reach() {
           {k.name}, {k.note}:{" "}
           {PLACES.map(
             (p, i) =>
-              `${i === PLACES.length - 1 ? "and " : ""}${p.name === "Nearest mind" || p.name.startsWith("Galaxy") ? `the ${p.name.replace("Nearest", "nearest")}` : p.name} in ${years(trip(k, p.ly))}`,
+              `${i === PLACES.length - 1 ? "and " : ""}${p.name.startsWith("Nearest") || p.name.startsWith("Galaxy") ? `the ${p.name.replace("Nearest", "nearest")}` : p.name} in ${years(trip(k, p.ly))}`,
           ).join(", ")}
           .
         </p>

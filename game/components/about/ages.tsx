@@ -170,7 +170,7 @@ export function Ages() {
         />
         <Stat
           value={`1 in ${round(1 / PEER_SHARE)}`}
-          label="Woke within 100,000 years of us"
+          label="Woke within 20,000 years of us, our peers"
         />
       </dl>
       <div className="mt-8">

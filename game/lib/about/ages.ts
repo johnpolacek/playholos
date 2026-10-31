@@ -11,8 +11,9 @@ const EARTH_GYR = 4.54,
   OLDER_THETA = 0.45,
   PACE = Math.log(1.6),
   OLDEST_GYR = 10.5;
-/** The share of minds that woke within 100,000 years of us, either side, from calcs/minds.py. */
-export const PEER_SHARE = 1.6e-5;
+/** The share of minds that are our peers, within 20,000 years of us either side: calcs/minds.py finds 1.6e-5 within
+ *  100,000 years on each side. */
+export const PEER_SHARE = 2 * 1.6e-5 * (2e4 / 1e5);
 /** The timeline runs back this far, in billions of years. */
 export const SPAN = 7;
 export const BIN = 0.1;

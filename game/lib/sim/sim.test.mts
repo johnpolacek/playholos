@@ -305,9 +305,10 @@ test("the realistic premise's minds: old near us, peers across the Galaxy, a wat
     assert.equal(w.ladder[0].delay, 0);
     assert.ok(w.ladder[1].delay >= maker.d * 10);
   }
-  // About 190 old minds within 326 ly a game, and 2,600 peers still to shine of the Galaxy's 4,000, loosely.
+  // About 190 old minds within 326 ly a game, and about 785 peers still to shine of the Galaxy's 800 within 20,000
+  // years of us, loosely.
   assert.ok(olds / POOL.length > 160 && olds / POOL.length < 230, `${olds / POOL.length} old minds a game`);
-  assert.ok(peers / POOL.length > 2300 && peers / POOL.length < 2900, `${peers / POOL.length} peers a game`);
+  assert.ok(peers / POOL.length > 700 && peers / POOL.length < 870, `${peers / POOL.length} peers a game`);
 });
 
 test("finding minds: a flash while the warm watch runs, half the cold glows, the watcher by where it sits, a sleeper up close", async () => {

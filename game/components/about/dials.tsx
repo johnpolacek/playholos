@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import {
   chain,
+  PEER_YEARS,
   type Source,
   DIALS,
   far,
@@ -18,7 +19,6 @@ import { prefersReducedMotion } from "@/lib/motion";
 
 export const KICK = "font-mono text-[10.5px] tracking-[.1em] text-muted";
 const STEPS = 1000;
-const WINDOWS = [2000, 1e5];
 
 const toSlider = (v: number, lo: number, hi: number) =>
   Math.round((Math.log(v / lo) / Math.log(hi / lo)) * STEPS);
@@ -308,10 +308,9 @@ export function Sources({ list }: { list: Source[] }) {
 
 export function Dials() {
   const [values, setValues] = useState<Record<string, number>>({});
-  const [span, setSpan] = useState(WINDOWS[0]);
-  const result = chain(values, span);
+  const result = chain(values, PEER_YEARS);
   const holos = Object.keys(values).length === 0;
-  const years = span.toLocaleString("en-US");
+  const years = PEER_YEARS.toLocaleString("en-US");
 
   const peerLine =
     result.peers >= 1
@@ -447,24 +446,13 @@ export function Dials() {
             </figure>
           </div>
           <p className="mt-5 text-[15px] leading-[1.55]">{nearLine}</p>
-          <div className="mt-6 flex flex-wrap items-center gap-2">
-            <span className={KICK}>PEERS, WITHIN</span>
-            {WINDOWS.map((w) => (
-              <button
-                key={w}
-                type="button"
-                onClick={() => setSpan(w)}
-                className={`rounded-full border px-3 py-1 font-mono text-[10.5px] tracking-[.1em] transition-colors ${w === span ? "border-other text-other" : "border-faint text-muted hover:text-ink"}`}
-              >
-                {w.toLocaleString("en-US")} YEARS
-              </button>
-            ))}
-          </div>
-          <p className="mt-3 text-[15px] leading-[1.55]">{peerLine}</p>
+          <div className={`mt-6 ${KICK}`}>PEERS</div>
+          <p className="mt-2 text-[15px] leading-[1.55]">{peerLine}</p>
           <p className="mt-3 text-[13.5px] leading-[1.5] text-muted">
-            A peer is a mind that woke near when we did, so it knows about what
-            we know. Minds wake across billions of years, so peers are few among
-            them at any density.
+            A peer woke within {years} years of us, before or after. Like us it
+            is still outward and building, so we could talk roughly as equals.
+            Minds wake across billions of years, so peers are few among them at
+            any density.
           </p>
         </div>
       </div>

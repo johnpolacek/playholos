@@ -1,7 +1,7 @@
 // How far can we reach, on /about/research: craft real and planned, flown out past real stars to the nearest mind and
 // beyond. The seed ship is the game's own, from data/works.json. Pure, so the page draws from it.
 import works from "../../data/works.json" with { type: "json" };
-import { chain } from "./dials.ts";
+import { chain, PEER_YEARS } from "./dials.ts";
 import type { Source } from "./dials.ts";
 
 const { speed, burn, brake } = works.seedShip;
@@ -56,6 +56,10 @@ export const PLACES: { name: string; ly: number }[] = [
   {
     name: "Nearest mind",
     ly: Math.round(chain({}, 2000).nearest.ly / 10) * 10,
+  },
+  {
+    name: "Nearest peer",
+    ly: Math.round(chain({}, PEER_YEARS).nearestPeer.ly / 100) * 100,
   },
   { name: "Galaxy’s center", ly: 26_700 },
   { name: "Andromeda", ly: 2.5e6 },

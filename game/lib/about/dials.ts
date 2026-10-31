@@ -239,6 +239,9 @@ const GALAXY = 2e11;
 const PER_SUN = GALAXY / 6.08e10;
 /** Minds that woke within ±1 year of us, as a share of all: 1.6e-5 within 100,000 years on each side (calcs/minds.py). */
 const PEER_PER_YEAR = (2 * 1.6e-5) / 1e5;
+/** A peer woke within this many years of us, either side: still outward, as we are, so roughly an equal. Settled
+ *  2026-10-31, as calcs/minds.py's PEER_WINDOW. */
+export const PEER_YEARS = 2e4;
 
 // The thin disk of calcs/minds.py: stars per cubic parsec here, scale height, scale length, the Sun's radius (pc).
 const N0 = 0.1,
@@ -292,14 +295,28 @@ function normal(z: number): number {
 
 /** Stars within r light-years of the Sun: the disk, with the rest of the Galaxy's count at its center, 26,700 ly away. */
 function starsWithin(ly: number): number {
+  const core = (GALAXY - DISK) * normal((ly - R0 * PC_LY) / (1000 * PC_LY));
+  return Math.min(GALAXY, diskWithin(ly) + core);
+}
+
+/** Thin-disk stars within ly of the Sun. Between rows, along the cube root, so a small radius keeps its r³. */
+function diskWithin(ly: number): number {
   const x = Math.min(ly, 1e5) / TABLE.dly,
     i = Math.min(Math.floor(x), TABLE.out.length - 2);
-  // Between rows, along the cube root, so a small radius keeps its r³.
   const a = Math.cbrt(TABLE.out[i]),
     b = Math.cbrt(TABLE.out[i + 1]);
-  const disk = (a + (b - a) * (x - i)) ** 3;
-  const core = (GALAXY - DISK) * normal((ly - R0 * PC_LY) / (1000 * PC_LY));
-  return Math.min(GALAXY, disk + core);
+  return (a + (b - a) * (x - i)) ** 3;
+}
+
+/** Peers within ly, counted as stars: placed as calcs/minds.py places them, 4 in 5 by the disk's shape, 1 in 5 in the
+ *  bulge, so the page's nearest peer is the game's. */
+const BULGE_SHARE = 0.2;
+function peersWithin(ly: number): number {
+  return (
+    GALAXY *
+    ((1 - BULGE_SHARE) * (diskWithin(ly) / DISK) +
+      BULGE_SHARE * normal((ly - R0 * PC_LY) / (1000 * PC_LY)))
+  );
 }
 
 // Beyond our Galaxy: Andromeda, Tamm et al. 2012, about 1.0 to 1.5 × 10¹¹ Suns, 2.5 million ly. Triangulum, its disk
@@ -316,14 +333,17 @@ function starsOut(ly: number): number {
 }
 
 /** The distance at which half of draws hold one: where the count expected is ln 2. */
-function median(perStar: number): { ly: number; beyond: boolean } {
+function median(
+  perStar: number,
+  within: (ly: number) => number = starsWithin,
+): { ly: number; beyond: boolean } {
   const want = Math.LN2 / perStar;
   if (want <= GALAXY) {
     let lo = 0,
       hi = 1e5;
     for (let i = 0; i < 60; i++) {
       const mid = (lo + hi) / 2;
-      if (starsWithin(mid) < want) lo = mid;
+      if (within(mid) < want) lo = mid;
       else hi = mid;
     }
     return { ly: hi, beyond: false };
@@ -364,7 +384,7 @@ export function chain(values: Record<string, number>, window: number): Result {
     near: perStar * starsWithin(NEAR_LY),
     peers,
     peerChance: 1 - Math.exp(-peers),
-    nearestPeer: median(peerPerStar),
+    nearestPeer: median(peerPerStar, peersWithin),
   };
 }
 
