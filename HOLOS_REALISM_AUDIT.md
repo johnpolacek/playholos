@@ -50,7 +50,7 @@ Started October 28, 2026, after [The realistic premise](HOLOS_GAME_CONCEPT.md#th
 - **3.12 First life by 3.7 billion years ago or earlier, not 3.5.** Fixed 2026-10-28. past.ts:28.
 - **3.13 The Solar Lens in 6 months is a best case.** Open. Others estimate 14 months to years. Concept L754, L757.
 - **3.14 A young Mind’s doubling is a tuned number stated as fact.** Open. leads.ts:673-676, 687.
-- **3.15 Labels.** Open. The 77 K choice is about radiator area, not where chips stop gaining (L882). 10⁸ Mt as the end of Earth’s Mind is a design line (L860). A 100 PB Mind is a sample (L1286).
+- **3.15 Labels.** Fixed 2026-10-31: all three labeled in the concept, and the 77 K comment in calcs/early_game.py. Before: Open. The 77 K choice is about radiator area, not where chips stop gaining (L882). 10⁸ Mt as the end of Earth’s Mind is a design line (L860). A 100 PB Mind is a sample (L1286).
 
 ## 4. Still assumes the old premise
 
