@@ -29,7 +29,7 @@ Started October 28, 2026, after [The realistic premise](HOLOS_GAME_CONCEPT.md#th
 - **2.6 Rocks.** Fixed 2026-10-28 in rocks.ts: four sizes, up to 1 km darkening the sky. 300 m wrecks a region, not a continent. Dimming the sky needs about 1 km (Toon et al. 1997). 100 m is about 40 Mt. rocks.ts:95-96.
 - **2.7 The black hole furnace gives 6% to about 30%, not 42%.** Fixed 2026-10-28. The code caps spin at 0.998. builds.ts:22, leads.ts:617.
 - **2.8 A vault seed doubles about every 5 Years, not 2.** Open. Metzger et al. 2013 grow 12 t to 156 t in about 20 years, and lean on Earth for parts. Concept L867.
-- **2.9 The Strike Yard has no helium-3 gate.** Open. One bullet needs 61 kt of fuel, but helium-3 comes from Uranus at 5,000 t a haul. Concept L854, L891, L1271.
+- **2.9 The Strike Yard has no helium-3 gate.** Fixed 2026-10-29, marked 2026-10-31. A bullet now waits on the Helium-3 Harvest: 36.6 kt of helium-3 in its 61 kt of fuel, from Uranus at 1.5 kt a Year, doubling every 5 Years. First bullet about 12 Years after the harvest is done. meetings.ts `HE3`, conflict.ts, reach.ts, and concept “Bullets wait on helium-3”. Before: One bullet needs 61 kt of fuel, but helium-3 comes from Uranus at 5,000 t a haul. Concept L854, L891, L1271.
 - **2.10 Tritium limits fusion’s doubling to about 4 to 5 Years, not 2.** Open. Fuel-cycle studies, and the project’s own note on France’s fastest build-out. Concept L505-506.
 
 ## 3. Stale or overstated facts
