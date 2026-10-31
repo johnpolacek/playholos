@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useRef } from "react";
 import { stream } from "@/lib/about/random";
+import { dots, type Behave } from "@/lib/about/behave";
 import {
   allSkyAbove,
-  holosMinds,
   least,
   LISTEN,
   listenLeast,
@@ -159,9 +159,10 @@ function trace(
 
 /** Heat: what the whole-sky maps rule out for a mind at T kelvin, solid, and what a few hundred nearby stars' surveys
  *  add, hatched, against what a mind might put out. */
-export function HeatChart({ T }: { T: number }) {
+export function HeatChart({ b }: { b: Behave }) {
+  const T = b.cold;
   const shown = useRef(T);
-  const minds = useMemo(() => holosMinds(80, stream(4)), []);
+  const minds = useMemo(() => dots(b, 80, stream(4)), [b]);
   const LO = 1e12,
     HI = 1e34;
   const ref = useCanvas((c, w, h, t) => {
@@ -224,13 +225,21 @@ export function HeatChart({ T }: { T: number }) {
         a.y(m.w) - 4,
       );
     }
-    // The game's awake old minds, as it draws them for a 12 K glow.
-    c.fillStyle = you;
+    // Awake minds at the dial's power. One in the solid region would already have been seen.
     minds.forEach((m, i) => {
+      const caught = m.w > allSkyAbove(temp, m.ly);
+      c.fillStyle = caught ? other : you;
       c.globalAlpha = 0.55 + 0.45 * Math.sin(t * 1.3 + i * 1.7);
       c.beginPath();
-      c.arc(a.x(m.ly), a.y(m.w), 2.2, 0, 2 * Math.PI);
+      c.arc(a.x(m.ly), a.y(m.w), caught ? 3 : 2.2, 0, 2 * Math.PI);
       c.fill();
+      if (caught) {
+        c.strokeStyle = other;
+        c.globalAlpha = 1;
+        c.beginPath();
+        c.arc(a.x(m.ly), a.y(m.w), 6, 0, 2 * Math.PI);
+        c.stroke();
+      }
     });
     c.globalAlpha = 1;
     c.font = "12px var(--font-plex-mono), monospace";
@@ -241,7 +250,7 @@ export function HeatChart({ T }: { T: number }) {
   });
   useEffect(
     () => void ref.current?.dispatchEvent(new Event("dials")),
-    [T, ref],
+    [b, ref],
   );
   return <canvas ref={ref} aria-hidden className="h-[380px] w-full" />;
 }

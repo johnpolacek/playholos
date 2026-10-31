@@ -294,7 +294,7 @@ function normal(z: number): number {
 }
 
 /** Stars within r light-years of the Sun: the disk, with the rest of the Galaxy's count at its center, 26,700 ly away. */
-function starsWithin(ly: number): number {
+export function starsWithin(ly: number): number {
   const core = (GALAXY - DISK) * normal((ly - R0 * PC_LY) / (1000 * PC_LY));
   return Math.min(GALAXY, diskWithin(ly) + core);
 }

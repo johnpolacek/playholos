@@ -1,0 +1,1076 @@
+[
+ {
+  "name": "Proxima Centauri",
+  "d": 4.25,
+  "listen": {
+   "telescope": "Parkes",
+   "sure": true
+  },
+  "debris": null,
+  "dunes": null,
+  "sons": null,
+  "notes": "Listen: ProxCen, Parkes. In the DEBRIS parent list (UNS G001) but not in the DEBRIS sample."
+ },
+ {
+  "name": "Alpha Centauri B",
+  "d": 4.32,
+  "listen": {
+   "telescope": "Parkes",
+   "sure": true
+  },
+  "debris": null,
+  "dunes": {
+   "disk": false,
+   "sure": true
+  },
+  "sons": null,
+  "notes": "Listen pointed at AlphaCen, both stars in beam. DUNES HIP 71681, no excess. Not in the DEBRIS sample."
+ },
+ {
+  "name": "Alpha Centauri A",
+  "d": 4.32,
+  "listen": {
+   "telescope": "Parkes",
+   "sure": true
+  },
+  "debris": null,
+  "dunes": {
+   "disk": false,
+   "sure": true
+  },
+  "sons": null,
+  "notes": "Listen pointed at AlphaCen, both stars in beam. DUNES HIP 71683, no excess. Not in the DEBRIS sample."
+ },
+ {
+  "name": "Barnard’s Star",
+  "d": 5.99,
+  "listen": {
+   "telescope": "GBT",
+   "sure": true
+  },
+  "debris": null,
+  "dunes": null,
+  "sons": null,
+  "notes": "Listen: GJ699, GBT L and S band. In the SUNS list only (UNS M001), not the DEBRIS sample."
+ },
+ {
+  "name": "Wolf 359",
+  "d": 7.86,
+  "listen": {
+   "telescope": "GBT",
+   "sure": true
+  },
+  "debris": {
+   "disk": false,
+   "sure": true
+  },
+  "dunes": null,
+  "sons": null,
+  "notes": "Listen: GJ406. DEBRIS M002A, no excess (Lestrade 2025)."
+ },
+ {
+  "name": "Lalande 21185",
+  "d": 8.3,
+  "listen": {
+   "telescope": "GBT",
+   "sure": true
+  },
+  "debris": {
+   "disk": false,
+   "sure": true
+  },
+  "dunes": null,
+  "sons": null,
+  "notes": "Listen: GJ411. DEBRIS M003A, no excess."
+ },
+ {
+  "name": "Sirius",
+  "d": 8.6,
+  "listen": {
+   "telescope": "GBT",
+   "sure": true
+  },
+  "debris": null,
+  "dunes": null,
+  "sons": null,
+  "notes": "Listen: GJ244 at GBT, also HIP32349 at Parkes. Not in the DEBRIS sample. Thureau 2014 lists Herschel calibration images of Sirius as unpublished, no result."
+ },
+ {
+  "name": "Gliese 65 A",
+  "d": 8.72,
+  "listen": {
+   "telescope": "GBT",
+   "sure": true
+  },
+  "debris": {
+   "disk": false,
+   "sure": true
+  },
+  "dunes": null,
+  "sons": null,
+  "notes": "Listen: GJ65A, GBT. DEBRIS M004AB, A and B measured together, no excess."
+ },
+ {
+  "name": "Gliese 65 B",
+  "d": 8.87,
+  "listen": {
+   "telescope": "GBT",
+   "sure": false
+  },
+  "debris": {
+   "disk": false,
+   "sure": true
+  },
+  "dunes": null,
+  "sons": null,
+  "notes": "Listen pointing named GJ65A; B is about 2 arcsec away, inside the beam. DEBRIS M004AB covers both, no excess."
+ },
+ {
+  "name": "Ross 154",
+  "d": 9.71,
+  "listen": {
+   "telescope": "Parkes",
+   "sure": true
+  },
+  "debris": null,
+  "dunes": null,
+  "sons": null,
+  "notes": "Listen: HIP92403, Parkes. In the SUNS list only (UNS M005), not the DEBRIS sample."
+ },
+ {
+  "name": "Ross 248",
+  "d": 10.31,
+  "listen": {
+   "telescope": "GBT",
+   "sure": true
+  },
+  "debris": {
+   "disk": false,
+   "sure": true
+  },
+  "dunes": null,
+  "sons": null,
+  "notes": "Listen: GJ905. DEBRIS M006A, no excess."
+ },
+ {
+  "name": "Epsilon Eridani",
+  "d": 10.49,
+  "listen": {
+   "telescope": "GBT",
+   "sure": true
+  },
+  "debris": {
+   "disk": true,
+   "sure": true
+  },
+  "dunes": null,
+  "sons": {
+   "disk": true,
+   "sure": true
+  },
+  "notes": "Known debris ring. Listen: GJ144, GBT S band. DEBRIS analysis K001A detected (Sibthorpe 2018, chi 57, resolved). SONS resolved at 850 um, 31.3 mJy."
+ },
+ {
+  "name": "Lacaille 9352",
+  "d": 10.86,
+  "listen": {
+   "telescope": "Parkes",
+   "sure": true
+  },
+  "debris": {
+   "disk": false,
+   "sure": true
+  },
+  "dunes": null,
+  "sons": null,
+  "notes": "Listen: GJ887, Parkes. DEBRIS M007A, no excess."
+ },
+ {
+  "name": "Ross 128",
+  "d": 11.01,
+  "listen": {
+   "telescope": "GBT",
+   "sure": true
+  },
+  "debris": {
+   "disk": false,
+   "sure": true
+  },
+  "dunes": null,
+  "sons": null,
+  "notes": "Listen: GJ447. DEBRIS M008A, no excess."
+ },
+ {
+  "name": "61 Cygni B",
+  "d": 11.4,
+  "listen": {
+   "telescope": "GBT",
+   "sure": true
+  },
+  "debris": null,
+  "dunes": {
+   "disk": false,
+   "sure": true
+  },
+  "sons": null,
+  "notes": "Listen: GJ820B, GBT L and S band. DUNES HIP 104217, no excess. Not in the DEBRIS sample."
+ },
+ {
+  "name": "61 Cygni A",
+  "d": 11.4,
+  "listen": {
+   "telescope": "GBT",
+   "sure": true
+  },
+  "debris": null,
+  "dunes": {
+   "disk": false,
+   "sure": true
+  },
+  "sons": null,
+  "notes": "Listen: GJ820A, GBT S band only. DUNES HIP 104214, no excess. Not in the DEBRIS sample."
+ },
+ {
+  "name": "Struve 2398 A",
+  "d": 11.42,
+  "listen": {
+   "telescope": "GBT",
+   "sure": false
+  },
+  "debris": {
+   "disk": false,
+   "sure": true
+  },
+  "dunes": null,
+  "sons": null,
+  "notes": "Listen entry is GJ725 with no component given; A and B are 13 arcsec apart, both in beam. DEBRIS M010A, no excess."
+ },
+ {
+  "name": "Procyon",
+  "d": 11.46,
+  "listen": {
+   "telescope": "GBT",
+   "sure": true
+  },
+  "debris": {
+   "disk": false,
+   "sure": true
+  },
+  "dunes": null,
+  "sons": null,
+  "notes": "Listen: GJ280. DEBRIS F001A (HIP 37279), no disc in Sibthorpe 2018."
+ },
+ {
+  "name": "Struve 2398 B",
+  "d": 11.49,
+  "listen": {
+   "telescope": "GBT",
+   "sure": false
+  },
+  "debris": {
+   "disk": false,
+   "sure": true
+  },
+  "dunes": null,
+  "sons": null,
+  "notes": "Listen entry is GJ725 with no component given; both in beam. DEBRIS M010B, no excess."
+ },
+ {
+  "name": "Groombridge 34",
+  "d": 11.62,
+  "listen": null,
+  "debris": {
+   "disk": false,
+   "sure": true
+  },
+  "dunes": null,
+  "sons": null,
+  "notes": "In the Isaacson 2017 target list (GJ15A) but not in the Price 2020 observation tables. DEBRIS M011A, no excess."
+ },
+ {
+  "name": "Gliese 15 B",
+  "d": 11.62,
+  "listen": null,
+  "debris": {
+   "disk": false,
+   "sure": true
+  },
+  "dunes": null,
+  "sons": null,
+  "notes": "In the Isaacson 2017 target list (GJ15B) but not in the Price 2020 observation tables. DEBRIS M011B, no excess."
+ },
+ {
+  "name": "Gliese 1111",
+  "d": 11.68,
+  "listen": {
+   "telescope": "GBT",
+   "sure": true
+  },
+  "debris": {
+   "disk": false,
+   "sure": true
+  },
+  "dunes": null,
+  "sons": null,
+  "notes": "Listen: GJ1111. DEBRIS M012A, no excess."
+ },
+ {
+  "name": "Epsilon Indi",
+  "d": 11.87,
+  "listen": null,
+  "debris": {
+   "disk": false,
+   "sure": true
+  },
+  "dunes": {
+   "disk": false,
+   "sure": true
+  },
+  "sons": null,
+  "notes": "In the Isaacson 2017 target list (GJ845A) but not in the Price 2020 observation tables. DEBRIS K003A, no disc. DUNES HIP 108870, no excess."
+ },
+ {
+  "name": "Tau Ceti",
+  "d": 11.91,
+  "listen": {
+   "telescope": "GBT",
+   "sure": true
+  },
+  "debris": {
+   "disk": true,
+   "sure": true
+  },
+  "dunes": null,
+  "sons": {
+   "disk": true,
+   "sure": true
+  },
+  "notes": "Known debris disc. Listen: GJ71 at GBT S band, also HIP8102 at Parkes. DEBRIS analysis G002A detected (Sibthorpe 2018, chi 22, resolved). SONS detected, 4.4 mJy at 850 um."
+ },
+ {
+  "name": "Gliese 1061",
+  "d": 11.98,
+  "listen": {
+   "telescope": "Parkes",
+   "sure": true
+  },
+  "debris": {
+   "disk": false,
+   "sure": true
+  },
+  "dunes": null,
+  "sons": null,
+  "notes": "Listen: GJ1061, Parkes. DEBRIS M013A, no excess."
+ },
+ {
+  "name": "Gliese 54.1",
+  "d": 12.12,
+  "listen": {
+   "telescope": "GBT",
+   "sure": true
+  },
+  "debris": {
+   "disk": false,
+   "sure": true
+  },
+  "dunes": null,
+  "sons": null,
+  "notes": "Listen: GJ54.1 at GBT, also LHS138 (same star) at Parkes. DEBRIS M014A, no excess."
+ },
+ {
+  "name": "Luyten’s Star",
+  "d": 12.26,
+  "listen": {
+   "telescope": "GBT",
+   "sure": true
+  },
+  "debris": {
+   "disk": false,
+   "sure": true
+  },
+  "dunes": null,
+  "sons": null,
+  "notes": "Listen: GJ273. DEBRIS M015A, no excess."
+ },
+ {
+  "name": "Kapteyn’s Star",
+  "d": 12.89,
+  "listen": {
+   "telescope": "Parkes",
+   "sure": true
+  },
+  "debris": {
+   "disk": false,
+   "sure": true
+  },
+  "dunes": null,
+  "sons": null,
+  "notes": "Listen: GJ191 and HIP24186 (same star), Parkes. DEBRIS M017A, no excess."
+ },
+ {
+  "name": "Lacaille 8760",
+  "d": 12.95,
+  "listen": {
+   "telescope": "Parkes",
+   "sure": true
+  },
+  "debris": {
+   "disk": false,
+   "sure": true
+  },
+  "dunes": null,
+  "sons": null,
+  "notes": "Listen: HIP105090, Parkes. DEBRIS K004A (HD 202560), no disc."
+ },
+ {
+  "name": "Gliese 473 A",
+  "d": 14.11,
+  "listen": {
+   "telescope": "GBT",
+   "sure": true
+  },
+  "debris": {
+   "disk": false,
+   "sure": true
+  },
+  "dunes": null,
+  "sons": null,
+  "notes": "Listen: GJ473AB. DEBRIS M022AB, A and B measured together, no excess."
+ },
+ {
+  "name": "Wolf 1061",
+  "d": 14.12,
+  "listen": {
+   "telescope": "GBT",
+   "sure": true
+  },
+  "debris": null,
+  "dunes": null,
+  "sons": null,
+  "notes": "Listen: GJ628. In the SUNS list only (UNS M020), not the DEBRIS sample."
+ },
+ {
+  "name": "Gliese 1",
+  "d": 14.17,
+  "listen": {
+   "telescope": "Parkes",
+   "sure": true
+  },
+  "debris": {
+   "disk": false,
+   "sure": true
+  },
+  "dunes": null,
+  "sons": null,
+  "notes": "Listen: GJ1, Parkes. DEBRIS M021A, no excess."
+ },
+ {
+  "name": "Gliese 83.1",
+  "d": 14.58,
+  "listen": {
+   "telescope": "GBT",
+   "sure": true
+  },
+  "debris": {
+   "disk": false,
+   "sure": true
+  },
+  "dunes": null,
+  "sons": null,
+  "notes": "Listen: GJ83.1. DEBRIS M023A, no excess."
+ },
+ {
+  "name": "Gliese 473 B",
+  "d": 14.6,
+  "listen": {
+   "telescope": "GBT",
+   "sure": true
+  },
+  "debris": {
+   "disk": false,
+   "sure": true
+  },
+  "dunes": null,
+  "sons": null,
+  "notes": "Listen: GJ473AB names the pair. DEBRIS M022AB covers both, no excess."
+ },
+ {
+  "name": "Gliese 674",
+  "d": 14.85,
+  "listen": {
+   "telescope": "Parkes",
+   "sure": true
+  },
+  "debris": null,
+  "dunes": null,
+  "sons": null,
+  "notes": "Listen: GJ674 and HIP85523 (same star), Parkes. In the DEBRIS parent list (UNS M026) but not the DEBRIS sample."
+ },
+ {
+  "name": "Gliese 1245 A",
+  "d": 15.2,
+  "listen": {
+   "telescope": "GBT",
+   "sure": true
+  },
+  "debris": null,
+  "dunes": null,
+  "sons": null,
+  "notes": "Listen: GJ1245AC, also GJ1245B observed. In the SUNS list only (UNS M027), not the DEBRIS sample."
+ },
+ {
+  "name": "Gliese 3618",
+  "d": 15.76,
+  "listen": {
+   "telescope": "Parkes",
+   "sure": true
+  },
+  "debris": null,
+  "dunes": null,
+  "sons": null,
+  "notes": "Listen: LHS288 (same star), Parkes. In the DEBRIS parent list (UNS M030) but not the DEBRIS sample."
+ },
+ {
+  "name": "Gliese 1002",
+  "d": 15.8,
+  "listen": {
+   "telescope": "GBT",
+   "sure": true
+  },
+  "debris": {
+   "disk": false,
+   "sure": true
+  },
+  "dunes": null,
+  "sons": null,
+  "notes": "Listen: GJ1002. DEBRIS M029A, no excess."
+ },
+ {
+  "name": "Gliese 380",
+  "d": 15.88,
+  "listen": {
+   "telescope": "GBT",
+   "sure": true
+  },
+  "debris": {
+   "disk": false,
+   "sure": true
+  },
+  "dunes": {
+   "disk": true,
+   "sure": true
+  },
+  "sons": null,
+  "notes": "Results disagree. DUNES (HIP 49908) lists a new faint cold-disc excess at 160 um. Sibthorpe 2018 reanalysed the same data, fit a nearby confusing source, and found no disc (DEBRIS K005A). Listen: GJ380."
+ },
+ {
+  "name": "Gliese 412 A",
+  "d": 16.0,
+  "listen": {
+   "telescope": "GBT",
+   "sure": true
+  },
+  "debris": {
+   "disk": false,
+   "sure": true
+  },
+  "dunes": null,
+  "sons": null,
+  "notes": "Listen: GJ412A. DEBRIS M031A, no excess."
+ },
+ {
+  "name": "Gliese 412 B",
+  "d": 16.0,
+  "listen": {
+   "telescope": "GBT",
+   "sure": true
+  },
+  "debris": {
+   "disk": false,
+   "sure": true
+  },
+  "dunes": null,
+  "sons": null,
+  "notes": "Listen: GJ412B. DEBRIS M031B, no excess."
+ },
+ {
+  "name": "Gliese 388",
+  "d": 16.19,
+  "listen": {
+   "telescope": "GBT",
+   "sure": true
+  },
+  "debris": {
+   "disk": false,
+   "sure": true
+  },
+  "dunes": null,
+  "sons": null,
+  "notes": "Listen: GJ388, GBT S band. DEBRIS M032A, no excess."
+ },
+ {
+  "name": "Gliese 832",
+  "d": 16.2,
+  "listen": {
+   "telescope": "Parkes",
+   "sure": true
+  },
+  "debris": {
+   "disk": false,
+   "sure": true
+  },
+  "dunes": null,
+  "sons": null,
+  "notes": "Listen: HIP106440, Parkes. DEBRIS M033A, no excess."
+ },
+ {
+  "name": "Gliese 682",
+  "d": 16.33,
+  "listen": {
+   "telescope": "Parkes",
+   "sure": true
+  },
+  "debris": null,
+  "dunes": null,
+  "sons": null,
+  "notes": "Listen: GJ682 and HIP86214 (same star), Parkes. In the DEBRIS parent list (UNS M034) but not the DEBRIS sample."
+ },
+ {
+  "name": "Keid",
+  "d": 16.34,
+  "listen": {
+   "telescope": "GBT",
+   "sure": true
+  },
+  "debris": {
+   "disk": false,
+   "sure": true
+  },
+  "dunes": {
+   "disk": false,
+   "sure": true
+  },
+  "sons": null,
+  "notes": "Listen: GJ166 / HIP19849. DEBRIS K006A, no disc. DUNES HIP 19849, no excess."
+ },
+ {
+  "name": "Gliese 873",
+  "d": 16.48,
+  "listen": {
+   "telescope": "GBT",
+   "sure": true
+  },
+  "debris": null,
+  "dunes": null,
+  "sons": null,
+  "notes": "Listen: GJ873. In the SUNS list only (UNS M035), not the DEBRIS sample."
+ },
+ {
+  "name": "Gliese 1116 A",
+  "d": 16.62,
+  "listen": null,
+  "debris": {
+   "disk": false,
+   "sure": true
+  },
+  "dunes": null,
+  "sons": null,
+  "notes": "Not in Isaacson 2017 or Price 2020. DEBRIS M036AB, A and B measured together, no excess."
+ },
+ {
+  "name": "Gliese 702 B",
+  "d": 16.65,
+  "listen": {
+   "telescope": "GBT",
+   "sure": true
+  },
+  "debris": null,
+  "dunes": {
+   "disk": false,
+   "sure": false
+  },
+  "sons": null,
+  "notes": "Listen: GJ702B observed on its own. DUNES target was HIP 88601 (70 Oph); B is about 5 arcsec from A, so it is blended in the PACS beam, no excess. Not in the DEBRIS sample."
+ },
+ {
+  "name": "70 Ophiuchi",
+  "d": 16.68,
+  "listen": {
+   "telescope": "GBT",
+   "sure": true
+  },
+  "debris": null,
+  "dunes": {
+   "disk": false,
+   "sure": true
+  },
+  "sons": null,
+  "notes": "Listen: GJ702A / HIP88601. DUNES HIP 88601, no excess. Not in the DEBRIS sample."
+ },
+ {
+  "name": "Altair",
+  "d": 16.73,
+  "listen": {
+   "telescope": "GBT",
+   "sure": true
+  },
+  "debris": {
+   "disk": false,
+   "sure": true
+  },
+  "dunes": null,
+  "sons": null,
+  "notes": "Listen: GJ768. DEBRIS A002A, no disc (Thureau 2014 table A1)."
+ },
+ {
+  "name": "Gliese 1116 B",
+  "d": 16.8,
+  "listen": null,
+  "debris": {
+   "disk": false,
+   "sure": true
+  },
+  "dunes": null,
+  "sons": null,
+  "notes": "Not in Isaacson 2017 or Price 2020. DEBRIS M036AB is named GJ 1116A but covers the pair, no excess."
+ },
+ {
+  "name": "Gliese 3379",
+  "d": 16.99,
+  "listen": null,
+  "debris": null,
+  "dunes": null,
+  "sons": null,
+  "notes": "Not in Isaacson 2017 or Price 2020. In the SUNS list only (UNS M037), not the DEBRIS sample."
+ },
+ {
+  "name": "Gliese 445",
+  "d": 17.14,
+  "listen": null,
+  "debris": {
+   "disk": false,
+   "sure": true
+  },
+  "dunes": null,
+  "sons": null,
+  "notes": "Not in Isaacson 2017 or Price 2020. DEBRIS M039A, no excess."
+ },
+ {
+  "name": "Gaia 5985290231327158144",
+  "d": 17.37,
+  "listen": {
+   "telescope": "Parkes",
+   "sure": true
+  },
+  "debris": null,
+  "dunes": null,
+  "sons": null,
+  "notes": "Listen: 2MASSJ154043.42-510135.7 (WISEA J154045.67-510139.3, M7), Parkes. One of the stars within 5 pc that Price 2020 added. Matched by position, 0.56 arcmin offset, consistent with its motion."
+ },
+ {
+  "name": "Gliese 3323",
+  "d": 17.53,
+  "listen": null,
+  "debris": {
+   "disk": false,
+   "sure": true
+  },
+  "dunes": null,
+  "sons": null,
+  "notes": "Not in Isaacson 2017 or Price 2020. DEBRIS M038A, no excess."
+ },
+ {
+  "name": "Gliese 526",
+  "d": 17.73,
+  "listen": {
+   "telescope": "GBT",
+   "sure": true
+  },
+  "debris": {
+   "disk": false,
+   "sure": true
+  },
+  "dunes": null,
+  "sons": null,
+  "notes": "Listen: HIP67155, GBT S band. DEBRIS M040A, no excess."
+ },
+ {
+  "name": "Gliese 169.1 A",
+  "d": 18.0,
+  "listen": null,
+  "debris": null,
+  "dunes": null,
+  "sons": null,
+  "notes": "Not in Isaacson 2017 or Price 2020. In the SUNS list only (UNS M041), not the DEBRIS sample."
+ },
+ {
+  "name": "Gliese 251",
+  "d": 18.21,
+  "listen": {
+   "telescope": "GBT",
+   "sure": true
+  },
+  "debris": {
+   "disk": false,
+   "sure": true
+  },
+  "dunes": null,
+  "sons": null,
+  "notes": "Listen: HIP33226. DEBRIS M042A, no excess."
+ },
+ {
+  "name": "HIP 103039",
+  "d": 18.33,
+  "listen": {
+   "telescope": "GBT",
+   "sure": true
+  },
+  "debris": {
+   "disk": false,
+   "sure": true
+  },
+  "dunes": null,
+  "sons": null,
+  "notes": "Listen: HIP103039. DEBRIS M044A, no excess."
+ },
+ {
+  "name": "Gliese 205",
+  "d": 18.61,
+  "listen": {
+   "telescope": "GBT",
+   "sure": true
+  },
+  "debris": null,
+  "dunes": null,
+  "sons": null,
+  "notes": "Listen: HIP25878, GBT S band. In the SUNS list only (UNS M043), not the DEBRIS sample."
+ },
+ {
+  "name": "Gliese 229",
+  "d": 18.67,
+  "listen": {
+   "telescope": "Parkes",
+   "sure": true
+  },
+  "debris": {
+   "disk": false,
+   "sure": true
+  },
+  "dunes": null,
+  "sons": null,
+  "notes": "Listen: HIP29295, Parkes. DEBRIS M045A, no excess."
+ },
+ {
+  "name": "Alsafi",
+  "d": 18.8,
+  "listen": {
+   "telescope": "GBT",
+   "sure": true
+  },
+  "debris": null,
+  "dunes": {
+   "disk": false,
+   "sure": true
+  },
+  "sons": null,
+  "notes": "Listen: HIP96100, GBT S band. DUNES HIP 96100, no excess. Not in the DEBRIS sample."
+ },
+ {
+  "name": "Gliese 213",
+  "d": 18.89,
+  "listen": {
+   "telescope": "GBT",
+   "sure": true
+  },
+  "debris": null,
+  "dunes": null,
+  "sons": null,
+  "notes": "Listen: HIP26857, GBT S band. In the SUNS list only (UNS M048), not the DEBRIS sample."
+ },
+ {
+  "name": "Gliese 570 A",
+  "d": 19.2,
+  "listen": {
+   "telescope": "Parkes",
+   "sure": true
+  },
+  "debris": {
+   "disk": false,
+   "sure": true
+  },
+  "dunes": {
+   "disk": false,
+   "sure": true
+  },
+  "sons": null,
+  "notes": "Listen: HIP73184, Parkes. DEBRIS K008A, no disc. DUNES HIP 73184, no excess."
+ },
+ {
+  "name": "Gliese 693",
+  "d": 19.2,
+  "listen": {
+   "telescope": "Parkes",
+   "sure": true
+  },
+  "debris": {
+   "disk": false,
+   "sure": true
+  },
+  "dunes": null,
+  "sons": null,
+  "notes": "Listen: HIP86990, Parkes. DEBRIS M046A, no excess."
+ },
+ {
+  "name": "Gliese 34 B",
+  "d": 19.21,
+  "listen": {
+   "telescope": "GBT",
+   "sure": false
+  },
+  "debris": null,
+  "dunes": null,
+  "sons": null,
+  "notes": "Listen pointing named HIP3821 (Eta Cas A); B is about 13 arcsec away, inside the beam. DUNES targeted A only and gives no result for B."
+ },
+ {
+  "name": "Gliese 754",
+  "d": 19.27,
+  "listen": null,
+  "debris": {
+   "disk": false,
+   "sure": true
+  },
+  "dunes": null,
+  "sons": null,
+  "notes": "Not in Isaacson 2017 or Price 2020. DEBRIS M049A, no excess."
+ },
+ {
+  "name": "Gliese 908",
+  "d": 19.27,
+  "listen": {
+   "telescope": "GBT",
+   "sure": true
+  },
+  "debris": {
+   "disk": false,
+   "sure": true
+  },
+  "dunes": null,
+  "sons": null,
+  "notes": "Listen: HIP117473, GBT S band. DEBRIS M052A, no excess."
+ },
+ {
+  "name": "Gliese 588",
+  "d": 19.3,
+  "listen": {
+   "telescope": "Parkes",
+   "sure": true
+  },
+  "debris": {
+   "disk": false,
+   "sure": true
+  },
+  "dunes": null,
+  "sons": null,
+  "notes": "Listen: HIP76074, Parkes. DEBRIS M050A, no excess."
+ },
+ {
+  "name": "Achird",
+  "d": 19.32,
+  "listen": {
+   "telescope": "GBT",
+   "sure": true
+  },
+  "debris": null,
+  "dunes": {
+   "disk": false,
+   "sure": true
+  },
+  "sons": null,
+  "notes": "Listen: HIP3821. DUNES HIP 3821, no excess. Not in the DEBRIS sample."
+ },
+ {
+  "name": "Guniibuu B",
+  "d": 19.4,
+  "listen": {
+   "telescope": "Parkes",
+   "sure": false
+  },
+  "debris": null,
+  "dunes": null,
+  "sons": null,
+  "notes": "Listen pointing named HIP84405 (36 Oph A); B is about 5 arcsec away, inside the beam. Not in the DEBRIS sample."
+ },
+ {
+  "name": "Guniibuu",
+  "d": 19.42,
+  "listen": {
+   "telescope": "Parkes",
+   "sure": true
+  },
+  "debris": null,
+  "dunes": null,
+  "sons": null,
+  "notes": "Listen: HIP84405, Parkes. Not in the DEBRIS sample."
+ },
+ {
+  "name": "Gliese 664",
+  "d": 19.42,
+  "listen": {
+   "telescope": "Parkes",
+   "sure": true
+  },
+  "debris": null,
+  "dunes": null,
+  "sons": null,
+  "notes": "Listen: HIP84478, Parkes. Not in the DEBRIS sample."
+ },
+ {
+  "name": "Gliese 783 A",
+  "d": 19.61,
+  "listen": {
+   "telescope": "Parkes",
+   "sure": true
+  },
+  "debris": {
+   "disk": false,
+   "sure": true
+  },
+  "dunes": {
+   "disk": false,
+   "sure": true
+  },
+  "sons": null,
+  "notes": "Listen: HIP99461, Parkes. DEBRIS K010A, no disc. DUNES HIP 99461, no excess."
+ },
+ {
+  "name": "82 G. Eri",
+  "d": 19.7,
+  "listen": {
+   "telescope": "Parkes",
+   "sure": true
+  },
+  "debris": {
+   "disk": true,
+   "sure": true
+  },
+  "dunes": null,
+  "sons": null,
+  "notes": "Faint disc. Listen: HIP15510, Parkes. DEBRIS G005A (HD 20794) detected, chi 5.9, unresolved (Sibthorpe 2018)."
+ },
+ {
+  "name": "Delta Pavonis",
+  "d": 19.89,
+  "listen": {
+   "telescope": "Parkes",
+   "sure": true
+  },
+  "debris": null,
+  "dunes": {
+   "disk": false,
+   "sure": true
+  },
+  "sons": null,
+  "notes": "Listen: HIP99240, Parkes. DUNES HIP 99240, no excess. Not in the DEBRIS parent list."
+ }
+]

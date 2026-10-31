@@ -12,6 +12,8 @@ import {
   type Result,
 } from "@/lib/about/dials";
 import { gauss, stream } from "@/lib/about/random";
+import { BehaveDials } from "./behave";
+import { PeerWindow } from "./peers";
 import { prefersReducedMotion } from "@/lib/motion";
 
 // The dials on /about/research: turn a step of the chain from stars to minds, within what the research allows, and
@@ -76,7 +78,7 @@ function nearDots(n: number, seed: number): Dot[] {
 }
 
 const G_DOTS = 5000,
-  P_DOTS = 400,
+  P_DOTS = 2000,
   N_DOTS = 3000;
 
 export function color(name: string) {
@@ -178,7 +180,7 @@ function Galaxy({ result }: { result: Result }) {
       const [x, y] = at(d);
       c.globalAlpha = 0.35 + 0.3 * Math.sin(t * 1.6 + i * 2.1);
       c.beginPath();
-      c.arc(x, y, 3.5, 0, 2 * Math.PI);
+      c.arc(x, y, shownPeers > 200 ? 2.2 : 3.5, 0, 2 * Math.PI);
       c.fill();
       c.globalAlpha = 1;
       c.fillRect(x - 1.2, y - 1.2, 2.4, 2.4);
@@ -420,10 +422,11 @@ export function Dials() {
               must all stay quiet.
             </p>
           )}
+          <BehaveDials />
         </div>
 
         <div data-a>
-          <dl className="grid grid-cols-2 gap-x-6 gap-y-5">
+          <dl className="grid grid-cols-3 gap-x-6 gap-y-5">
             <Stat
               value={round(result.perMillion)}
               label="Minds per million stars"
@@ -432,12 +435,26 @@ export function Dials() {
               value={round(Math.max(1, result.galaxy))}
               label="Minds in our Galaxy"
             />
+            <div>
+              <dt className="sr-only">Peers in our Galaxy</dt>
+              <dd className="font-mono text-[26px] leading-none text-other tabular-nums">
+                {result.peers >= 1
+                  ? round(result.peers)
+                  : `1 in ${round(1 / result.peerChance)}`}
+              </dd>
+              <div className={`mt-1.5 ${KICK}`}>
+                {result.peers >= 1
+                  ? "PEERS IN OUR GALAXY"
+                  : "CHANCE OF ONE PEER"}
+              </div>
+            </div>
           </dl>
           <div className="mt-6 grid grid-cols-[minmax(0,3fr)_minmax(0,2fr)] items-end gap-4">
             <figure>
               <Galaxy result={result} />
               <figcaption className={`mt-2 ${KICK}`}>
-                OUR GALAXY, FACE ON
+                OUR GALAXY, FACE ON ·{" "}
+                <span className="text-other">AMBER, PEERS</span>
               </figcaption>
             </figure>
             <figure>
@@ -446,14 +463,19 @@ export function Dials() {
             </figure>
           </div>
           <p className="mt-5 text-[15px] leading-[1.55]">{nearLine}</p>
-          <div className={`mt-6 ${KICK}`}>PEERS</div>
-          <p className="mt-2 text-[15px] leading-[1.55]">{peerLine}</p>
-          <p className="mt-3 text-[13.5px] leading-[1.5] text-muted">
-            A peer woke within {years} years of us, before or after. Like us it
-            is still outward and building, so we could talk roughly as equals.
-            Minds wake across billions of years, so peers are few among them at
-            any density.
-          </p>
+          <div className="mt-8 border-t border-rowline pt-6">
+            <h3 className="text-[18px] font-semibold">What is a peer?</h3>
+            <p className="mt-2 text-[15px] leading-[1.55]">
+              A mind that woke within {years} years of us, before or after. Like
+              us it is still young, outward and building, so we could talk
+              roughly as equals. Every other mind is millions or billions of
+              years ahead.
+            </p>
+            <div className="mt-4">
+              <PeerWindow peers={result.peers} />
+            </div>
+            <p className="mt-3 text-[15px] leading-[1.55]">{peerLine}</p>
+          </div>
         </div>
       </div>
     </section>
