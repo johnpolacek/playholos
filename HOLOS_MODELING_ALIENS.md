@@ -81,6 +81,11 @@ The middle column follows 100 typical stars near us. The counts for steps 2 to 6
   - *Against.* Booth and Doolittle 2015 argue one surviving lineage doesn’t show the step was unlikely, only that one line won. Bacteria have become organelles again since: a nitrogen-fixing one in a sea alga, about 100 million years ago (Coale et al. 2024).
   - *What Holos takes.* The rare step stays after animals. The evidence on complex cells is split, while step 7 shows many clever lines and one builder.
   - *What moving it would change.* Not the count of minds, which comes from the density. Most living worlds near us would hold only microbes, and the 9 animal worlds within 50 light-years would mostly go.
+- *Why not oxygen.* Weighed 2026-10-31. Oxygen-making life arose once, and Earth’s air took a billion years or more to fill with oxygen. Watson 2025 ties two or three hard steps to the two great ice ages, which came with the two rises in oxygen.
+  - *For.* Watson 2025 treats each hard step as starting a whole-Earth change that lasts hundreds of millions of years. Its test: worlds with early-Earth air should be common, and oxygen air rare.
+  - *Against.* Oxygen-making life may have arisen by 3.5 billion years ago, and certainly by 2.5. That is early in Earth’s window, which a hard step rarely is. The long wait after it was the planet’s doing. Volcanic gases ate the oxygen, and too little phosphorus kept life sparse (Horne, Goldblatt and Kump 2025). In their model an earlier start gives a longer wait.
+  - *What Holos takes.* Oxygen stays a clock in step 6, set by each world’s pace, as Mills et al. 2025 propose. Its timing is the planet’s, not luck.
+  - *The window’s other end.* Earth keeps oxygen air about 1.08 ± 0.14 billion years more (Ozaki and Reinhard 2021). That sits inside the 1.0 to 1.9 billion years of land life Holos already uses.
 - *Why no rarer.* At the low end, our Galaxy holds about 20 minds. That is allowed. Holos takes the middle of the range, per criterion 4.
 
 **How long it takes.** On a world where it happens, about 0.5 to 2 billion years after animals.
@@ -460,6 +465,7 @@ Each of these would move a number, and the doc and game would follow.
 - **A deep far-infrared or submillimetre null.** Fewer awake cold minds, or dimmer ones.
 - **Confirmed Dyson-sphere candidates.** Minds that grow and stay outward longer than modeled.
 - **A deep search of Earth’s co-orbitals and Lagrange points that finds nothing.** Lowers the watcher’s odds.
+- **Living worlds with early-Earth air, and none with oxygen air.** Watson 2025’s test. It would back a hard step at oxygen, leaving far fewer animal worlds near us.
 - **Settling the hard-steps debate.** The single biggest lever. It moves the density by up to a billion times.
 
 ## Set aside, and why
