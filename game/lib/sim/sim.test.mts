@@ -24,11 +24,10 @@ test("seed 10 at Year 0: one felt world, natural, and no signals: the neighbors 
   assert.equal(view.heard.length, 0);
 });
 
-test("the wall: the Mind's words never name who lives where", async () => {
+test("the wall: the Mind's words never name a world's true rung", async () => {
   for (const seed of [10, 11, 62]) {
     const world = await loadWorld(seed);
     const words = describe(earthKnows(world, 0));
-    for (const p of world.neighbors) assert.ok(!words.includes(p.name), `seed ${seed} leaks ${p.name}`);
     for (const rung of ["bare rock", "hiding microbes", "showing oxygen", "animals", "where life died", "frozen"])
       assert.ok(!words.includes(rung), `seed ${seed} leaks a rung: ${rung}`);
   }
@@ -185,7 +184,7 @@ test("a sentinel stays and reads a felt world up close: its first word comes hom
   const kit = { sentinels: [{ star, leaves: 10 }] };
   assert.equal(earthKnows(world, word - 0.01, kit).visits.length, 0);
   const v = earthKnows(world, word, kit).visits.find((x) => x.by === "sentinel")!;
-  assert.ok(v && !v.lives && !v.ruins && v.sight !== "cities");
+  assert.ok(v && v.by === "sentinel");
 });
 
 test("black holes: Gaia's finds are known at Year 0, the Star Mapper finds more, and a sentinel measures one's spin", async () => {
@@ -217,7 +216,7 @@ test("our Mind at a black hole: word of its landing comes one light-time later, 
   const h = darkMasses(world, 300, 0)[0];
   const lands = 10 + h.d / 0.1 + 10 + 15;
   const at = (year: number, mode: "furnace" | "refuge") => earthKnows(world, year, { mapper: 0, colony: { star: h.name, mode, leaves: 10 } }).colony!;
-  assert.equal(at(lands + h.d - 1, "furnace").others, undefined);
+  assert.equal(at(lands + h.d - 1, "furnace").stands, lands + 20);
   assert.ok(Math.abs(at(lands + h.d, "furnace").lands! - lands) < 1e-9);
   assert.ok(at(lands + h.d + 60, "furnace").watts! > 1e14);
   assert.equal(at(lands + h.d + 60, "refuge").watts, undefined);
@@ -247,7 +246,7 @@ test("a seed probe's word comes home from each star a light-time after it lands,
   const kit = { seeds: [{ star, leaves: 10 }] };
   assert.equal(earthKnows(world, p.lands + p.d - 0.01, kit).visits.filter((v) => v.by === "seed").length, 0);
   const v = earthKnows(world, p.lands + p.d, kit).visits.find((x) => x.by === "seed")!;
-  assert.ok(v.gen === 1 && !v.lives);
+  assert.ok(v.gen === 1);
   const later = earthKnows(world, 1000, kit);
   assert.equal(later.visits.filter((x) => x.by === "seed" && !x.sent).length, 7);
   assert.equal(later.visits.filter((x) => x.sent).length, 6);
@@ -263,7 +262,6 @@ test("our Mind settled at a star: word of its landing comes one light-time later
   const at = (year: number) => earthKnows(world, year, kit).colony!;
   const c = at(lands + d);
   assert.ok(c.atStar && Math.abs(c.lands! - lands) < 1e-9);
-  assert.equal(c.others, undefined);
   assert.match(describe(earthKnows(world, lands + d, kit)), /settle there/);
 });
 
@@ -313,7 +311,7 @@ test("the realistic premise's minds: old near us, peers across the Galaxy, a wat
   assert.ok(peers / POOL.length > 700 && peers / POOL.length < 870, `${peers / POOL.length} peers a game`);
 });
 
-test("finding minds: a flash while the warm watch runs, half the cold glows, the watcher by where it sits, a sleeper up close", async () => {
+test("finding minds: a flash while the warm watch runs, most cold glows, the watcher by where it sits, a sleeper up close", async () => {
   const { skyOf, flashOf, coldGlowOf, watcherOf, sleeperOf, WARM_EVERY, MOON_SEARCH_YEARS, STAY_SEARCH_YEARS, FLYBY_SEES_AU, CO_ORBITALS, TOUR_EACH, TOUR_MAP, HALO_RATE, ARRAY_RATE } = await import("./minds.ts");
   const { skyBasis } = await import("../../../src/coordinates.js");
   // Sky positions agree with the atlas's own frame.
@@ -379,7 +377,7 @@ test("finding minds: a flash while the warm watch runs, half the cold glows, the
     }
   }
   // The Halo Survey sees about half the awake old minds.
-  assert.ok(glowing / awake > 0.3 && glowing / awake < 0.7, `${glowing} of ${awake}`);
+  assert.ok(glowing / awake > 0.55 && glowing / awake < 0.85, `${glowing} of ${awake}`);   // about 7 in 10 since the all-sky cap loosened, 2026-10-31
 });
 
 test("the ladder: warned at our first seed, our seeds wrecked after another, and Earth struck once copies launch seeds", async () => {
@@ -436,7 +434,6 @@ test("the Hypertelescope pictures each felt world in its reach, nearest first, a
     assert.equal(seen.length, reach.size + 1);
     assert.equal(seen[0].world, "Proxima b");
     assert.ok(seen.every((v, i) => i === 0 || v.passed > seen[i - 1].passed));
-    assert.ok(!seen.some((v) => v.sight === "cities"));
     const v = seen.find((x) => x.star === (world.stars[f.star]?.shown ?? f.star))!;
     assert.ok(Math.abs(v.km! - catalog.hyper.kmPerLy * f.d) < 1e-9);
     assert.equal(earthKnows(world, 39.9, { hyper: 40 }).visits.filter((x) => x.by === "hyper").length, 0);

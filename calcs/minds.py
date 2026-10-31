@@ -35,6 +35,7 @@ ASLEEP_SHARE = 0.5                      # as calcs/neighbors.py, a sample
 EARTH_GYR, OLDER_SHARE, OLDER_K, OLDER_THETA, PACE = 4.54, 0.75, 4, 0.45, math.log(1.6)
 OLDEST_GYR = 10.5                       # the thin disk's oldest stars, as calcs/seed.py
 ARCHIVE_LY, ARCHIVE_W = 150, 7e19          # the nearby-star far-infrared surveys' reach and depth at 10 pc (HOLOS_RESEARCH.md)
+ALL_SKY_W = 2.7e26                         # IRAS and AKARI's floor for a 12 K grey glow 400 ly away (HOLOS_RESEARCH.md, the haystack)
 REST_AU = (30, 2000)                    # where a sleeping mind rests from its star, evenly in log (concept, way 4)
 REPLY_C = 0.1                           # what a mind sends travels at a tenth of light's speed, as our own bullets
 
@@ -136,13 +137,15 @@ def in_galaxy(r):
 # ---------- Old minds ----------
 def old_mind(seed, i, pos, star=None):
     """How much older than us (about 2.3 billion years, typically), whether it sleeps, and how bright its cold glow is.
-    Awake, it stays under what our maps would have caught at its distance, since none has been seen: the shallow all-sky
-    maps, 0.3% of a Sun at 400 ly, and within 150 ly Herschel's and JCMT's nearby-star surveys, 7e19 W at 10 pc. That
-    nearer limit mattered once the nearest mind came in to about 50 ly, 2026-10-31."""
+    Awake, it stays under what our maps would have caught at its distance, since none has been seen: IRAS and AKARI's
+    all-sky maps, which catch a 12 K grey glow 400 ly away above about 2.7e26 W, and within 150 ly Herschel's and JCMT's
+    nearby-star surveys, 7e19 W at 10 pc. The nearer limit mattered once the nearest mind came in to about 50 ly. The
+    all-sky one was 0.3% of a Sun at 400 ly, about 240 times stricter than the maps require. HOLOS_RESEARCH.md, the
+    haystack. Both 2026-10-31."""
     r = rng(seed, 'old', i)
     d = math.hypot(*pos)
     asleep = r.random() < ASLEEP_SHARE
-    limit = 0.003 * 3.828e26 * (d / 400) ** 2
+    limit = ALL_SKY_W * (d / 400) ** 2
     if d <= ARCHIVE_LY: limit = min(limit, ARCHIVE_W * (d / PC_LY / 10) ** 2)
     age = head_start(r)
     glow = None if asleep else float(f'{log_between(r, min(1e18, limit / 2), limit):.3g}')
