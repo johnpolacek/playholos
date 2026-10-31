@@ -1408,6 +1408,7 @@ Noted 2026-10-10. v2 is single-player, but a later version may be multiplayer, w
 - **Earth is one seat, always.**
 - **A shared start would return.** v1’s cohort machinery, a scheduled start and entry lock, is in [legacy/v1](legacy/v1/HOLOS_GAME_CONCEPT.md#time). v2’s Begin tap is for one player only.
 - **The simulation already recomputes a civilization only when another’s actions reach it,** after light delay. That works the same with many players.
+- **Parked 2026-10-30: a game set billions of years ago in the inner Galaxy.** The first minds woke there, likely 5 or more billion years ago, in the inner disk outside the core, with no one watching yet. Players would be those first minds. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#do-minds-gather-there), where the first life likely was. Also parked with it: old minds gathering at the Galactic Center, judged open on the data.
 
 ## Black holes
 
