@@ -56,18 +56,49 @@ export function PageHead({
   );
 }
 
+/** Contents grouped under a page's own questions: each names doc headings by how they start. */
+export type Group = { title: string; href?: string; sections: string[] };
+
+const link = "block py-1 text-muted transition-colors hover:text-ink";
+
 /** One of the design docs, whole: its contents beside it on a wide screen, folded above it on a phone. */
-export function DocBody({ doc }: { doc: Rendered }) {
-  const contents = doc.toc.map(({ id, text }) => (
+export function DocBody({ doc, groups }: { doc: Rendered; groups?: Group[] }) {
+  const item = ({ id, text }: Rendered["toc"][number]) => (
     <li key={id}>
-      <a
-        href={`#${id}`}
-        className="block py-1 text-muted transition-colors hover:text-ink"
-      >
+      <a href={`#${id}`} className={link}>
         {text}
       </a>
     </li>
-  ));
+  );
+  const contents = groups
+    ? (() => {
+        const owner = (text: string) =>
+          groups.findIndex((g) => g.sections.some((s) => text.startsWith(s)));
+        return groups.map((g, i) => {
+          const mine = doc.toc.filter((t) => {
+            const o = owner(t.text);
+            return o === i || (o === -1 && i === groups.length - 1);
+          });
+          return (
+            <li key={g.title} className="mt-4 first:mt-0">
+              {g.href ? (
+                <a
+                  href={g.href}
+                  className="block py-1 font-semibold text-ink hover:text-you"
+                >
+                  {g.title}
+                </a>
+              ) : (
+                <span className="block py-1 font-semibold text-ink">
+                  {g.title}
+                </span>
+              )}
+              <ol className="border-l border-faint pl-3">{mine.map(item)}</ol>
+            </li>
+          );
+        });
+      })()
+    : doc.toc.map(item);
   return (
     <div className="mx-auto grid max-w-[1180px] gap-x-14 px-4 pb-24 lg:grid-cols-[220px_minmax(0,1fr)]">
       <nav aria-label="Contents" className="hidden lg:block">

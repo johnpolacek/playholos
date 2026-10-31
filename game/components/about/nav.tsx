@@ -23,7 +23,9 @@ export function AboutNav() {
   // Where the line goes: under the page you're on.
   const target = () => {
     const on = bar.current?.querySelector<HTMLElement>('[aria-current="page"]');
-    return on ? { x: on.offsetLeft, width: on.offsetWidth, autoAlpha: 1 } : { autoAlpha: 0 };
+    return on
+      ? { x: on.offsetLeft, width: on.offsetWidth, autoAlpha: 1 }
+      : { autoAlpha: 0 };
   };
 
   // It slides on every page change after the first, and keeps its place between them.
@@ -75,7 +77,12 @@ export function AboutNav() {
           </AboutLink>
         ))}
         <Play ref={play} />
-        <span ref={line} data-a-bar aria-hidden className="invisible absolute bottom-3 left-0 h-px w-0 bg-ink" />
+        <span
+          ref={line}
+          data-a-bar
+          aria-hidden
+          className="invisible absolute bottom-3 left-0 h-px w-0 bg-ink"
+        />
       </div>
     </nav>
   );

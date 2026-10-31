@@ -34,7 +34,13 @@ export type PlayHandle = {
   blast(): void;
 };
 
-export function Play({ ref, delay = 0 }: { ref?: React.Ref<PlayHandle>; delay?: number }) {
+export function Play({
+  ref,
+  delay = 0,
+}: {
+  ref?: React.Ref<PlayHandle>;
+  delay?: number;
+}) {
   const scope = useRef<HTMLSpanElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
   const fx = useRef<PlayHandle>(null);
@@ -107,7 +113,11 @@ export function Play({ ref, delay = 0 }: { ref?: React.Ref<PlayHandle>; delay?: 
       };
 
       // Sparks straight out from the whole outline, evenly spaced.
-      const flash = (count: number, speed: [number, number], life: [number, number]) => {
+      const flash = (
+        count: number,
+        speed: [number, number],
+        life: [number, number],
+      ) => {
         const { box, radius } = field;
         for (let i = 0; i < count; i++) {
           const pt = perimeterPoint(box, radius, i / count + rnd(-0.01, 0.01));
@@ -133,7 +143,8 @@ export function Play({ ref, delay = 0 }: { ref?: React.Ref<PlayHandle>; delay?: 
           size: 0,
           alpha,
           life: duration,
-          update: (p) => (p.size = spread * gsap.parseEase("power2.out")(p.age / p.life)),
+          update: (p) =>
+            (p.size = spread * gsap.parseEase("power2.out")(p.age / p.life)),
         });
 
       const idle = () => {
@@ -142,7 +153,8 @@ export function Play({ ref, delay = 0 }: { ref?: React.Ref<PlayHandle>; delay?: 
       };
 
       // One owner for the pill's scale: the entrance, the swell, the squash, and the spring back.
-      const scaleTo = (scale: number, vars: gsap.TweenVars) => gsap.to(el, { scale, overwrite: "auto", ...vars });
+      const scaleTo = (scale: number, vars: gsap.TweenVars) =>
+        gsap.to(el, { scale, overwrite: "auto", ...vars });
       const rest = () => (state.hot ? SWELL : 1);
 
       const heat = safe!((on: boolean) => {
@@ -154,7 +166,11 @@ export function Play({ ref, delay = 0 }: { ref?: React.Ref<PlayHandle>; delay?: 
           ease: on ? "power3.out" : "power2.inOut",
           overwrite: true,
         });
-        if (!state.pressed) scaleTo(rest(), { duration: 0.3, ease: on ? "back.out(2)" : "power2.out" });
+        if (!state.pressed)
+          scaleTo(rest(), {
+            duration: 0.3,
+            ease: on ? "back.out(2)" : "power2.out",
+          });
         if (on) {
           ring(18, 0.5, 0.7);
           flash(28, [90, 220], [0.3, 0.6]);
@@ -163,7 +179,10 @@ export function Play({ ref, delay = 0 }: { ref?: React.Ref<PlayHandle>; delay?: 
 
       // The ink spreads from the press, far enough to reach the farthest corner.
       const ripple = (x: number, y: number) => {
-        const reach = Math.hypot(Math.max(x, el.offsetWidth - x), Math.max(y, el.offsetHeight - y));
+        const reach = Math.hypot(
+          Math.max(x, el.offsetWidth - x),
+          Math.max(y, el.offsetHeight - y),
+        );
         const drop = document.createElement("span");
         drop.setAttribute("aria-hidden", "true");
         Object.assign(drop.style, {
@@ -206,7 +225,10 @@ export function Play({ ref, delay = 0 }: { ref?: React.Ref<PlayHandle>; delay?: 
       });
 
       // Hover is for a mouse or pen. A touch only presses. Focus heats the pill only from the keyboard.
-      const listen = <K extends keyof HTMLElementEventMap>(type: K, fn: (e: HTMLElementEventMap[K]) => void) => {
+      const listen = <K extends keyof HTMLElementEventMap>(
+        type: K,
+        fn: (e: HTMLElementEventMap[K]) => void,
+      ) => {
         el.addEventListener(type, fn);
         return () => el.removeEventListener(type, fn);
       };
@@ -231,7 +253,8 @@ export function Play({ ref, delay = 0 }: { ref?: React.Ref<PlayHandle>; delay?: 
         listen("pointerup", release),
         listen("pointercancel", release),
         listen("keydown", (e) => {
-          if (e.key === "Enter" && !e.repeat) press(el.offsetWidth / 2, el.offsetHeight / 2);
+          if (e.key === "Enter" && !e.repeat)
+            press(el.offsetWidth / 2, el.offsetHeight / 2);
         }),
         listen("keyup", release),
       ];
@@ -252,13 +275,27 @@ export function Play({ ref, delay = 0 }: { ref?: React.Ref<PlayHandle>; delay?: 
           gsap.delayedCall(0.06, () => ring(40, 0.5, 0.6));
           gsap.delayedCall(0.12, () => ring(62, 0.55, 0.3));
           flash(70, [260, 700], [0.3, 0.55]);
-          for (let i = 0; i < 8; i++) glint(perimeterPoint(box, radius, Math.random()));
+          for (let i = 0; i < 8; i++)
+            glint(perimeterPoint(box, radius, Math.random()));
           // Sol leaves its track: a bright streak flung along its way round.
           const pt = perimeterPoint(box, radius, sol);
           const fling = { vx: pt.ny * 900, vy: -pt.nx * 900 };
-          field.spawn({ x: pt.x, y: pt.y, ...fling, size: 2.4, life: 0.5, drag: 0.2, shape: "spark" });
+          field.spawn({
+            x: pt.x,
+            y: pt.y,
+            ...fling,
+            size: 2.4,
+            life: 0.5,
+            drag: 0.2,
+            shape: "spark",
+          });
           scaleTo(1.14, { duration: 0.12, ease: "power2.out" });
-          scaleTo(1, { duration: 0.4, ease: "power2.inOut", delay: 0.12, overwrite: false });
+          scaleTo(1, {
+            duration: 0.4,
+            ease: "power2.inOut",
+            delay: 0.12,
+            overwrite: false,
+          });
           // Should the page stay, as when back cuts the leaving short, Sol takes up its lap again.
           back = gsap.delayedCall(1.2, () => {
             state.hot = el.matches(":hover, :focus-visible");
@@ -280,7 +317,12 @@ export function Play({ ref, delay = 0 }: { ref?: React.Ref<PlayHandle>; delay?: 
           const cx = box.x + box.w / 2;
           const cy = box.y + box.h / 2;
           const tl = gsap.timeline({ delay });
-          const pop = { autoAlpha: 1, scale: 1, duration: 0.5, ease: "back.out(1.7)" };
+          const pop = {
+            autoAlpha: 1,
+            scale: 1,
+            duration: 0.5,
+            ease: "back.out(1.7)",
+          };
           tl.fromTo(el, { autoAlpha: 0, scale: 0.5 }, pop, 0.45);
           const count = 40;
           for (let i = 0; i < count; i++) {
@@ -303,7 +345,13 @@ export function Play({ ref, delay = 0 }: { ref?: React.Ref<PlayHandle>; delay?: 
                 alpha: 1,
                 duration: rnd(0.45, 0.7),
                 ease: "power3.inOut",
-                onComplete: () => Object.assign(p, { life: 0.4, age: 0, fade: true, shrink: true }),
+                onComplete: () =>
+                  Object.assign(p, {
+                    life: 0.4,
+                    age: 0,
+                    fade: true,
+                    shrink: true,
+                  }),
               },
               rnd(0, 0.2),
             );

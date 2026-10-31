@@ -127,7 +127,7 @@ function Timeline() {
   );
 }
 
-function Stat({ value, label }: { value: string; label: string }) {
+export function Stat({ value, label }: { value: string; label: string }) {
   return (
     <div>
       <dd className="font-mono text-[26px] leading-none tabular-nums">
@@ -142,8 +142,9 @@ export function Ages() {
   const a = useMemo(() => ages(), []);
   return (
     <section
+      id="ages"
       aria-label="How old are they"
-      className="mx-auto max-w-[1180px] px-4 pb-16"
+      className="mx-auto max-w-[1180px] scroll-mt-16 px-4 pb-16"
     >
       <h2
         data-a

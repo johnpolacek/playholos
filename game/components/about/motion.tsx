@@ -2,7 +2,13 @@ import { createContext, use, useRef } from "react";
 import { Link, type LinkProps, useLocation, useNavigate } from "react-router";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { plainClick } from "@/lib/leave";
-import { charsRise, fontsReady, gsap, prefersReducedMotion, useGSAP } from "@/lib/motion";
+import {
+  charsRise,
+  fontsReady,
+  gsap,
+  prefersReducedMotion,
+  useGSAP,
+} from "@/lib/motion";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -16,7 +22,6 @@ const ITEMS = "[data-a], .doc > :not(ul), .doc > ul > li";
 /** Plays the page out, then navigates. False when another link already won. */
 const Go = createContext<(href: string) => boolean>(() => false);
 
-
 function countUp(el: HTMLElement) {
   const end = Number(el.dataset.count);
   const n = { v: 0 };
@@ -28,7 +33,13 @@ function countUp(el: HTMLElement) {
   });
 }
 
-export function AboutMotion({ nav, children }: { nav: React.ReactNode; children: React.ReactNode }) {
+export function AboutMotion({
+  nav,
+  children,
+}: {
+  nav: React.ReactNode;
+  children: React.ReactNode;
+}) {
   const root = useRef<HTMLDivElement>(null);
   const route = useRef<HTMLDivElement>(null);
   const { pathname } = useLocation();
@@ -87,7 +98,8 @@ export function AboutMotion({ nav, children }: { nav: React.ReactNode; children:
           overwrite: "auto",
           clearProps: "transform,opacity",
         });
-        for (const el of counts) if (fresh.some((f) => f.contains(el))) countUp(el);
+        for (const el of counts)
+          if (fresh.some((f) => f.contains(el))) countUp(el);
       };
       // From above too: a jump to a heading passes items that enter on the way back up.
       ScrollTrigger.batch(items, {
@@ -107,7 +119,8 @@ export function AboutMotion({ nav, children }: { nav: React.ReactNode; children:
         );
       return () => {
         live = false;
-        for (const el of counts) el.textContent = Number(el.dataset.count).toLocaleString("en-US");
+        for (const el of counts)
+          el.textContent = Number(el.dataset.count).toLocaleString("en-US");
       };
     },
     { scope: route, dependencies: [pathname] },
@@ -121,13 +134,18 @@ export function AboutMotion({ nav, children }: { nav: React.ReactNode; children:
     contextSafe(() => {
       if (leaving.current) return false;
       const page = route.current!;
-      const on = gsap.utils.toArray<HTMLElement>(`${ITEMS}, [data-a-title], [data-a-out]`, page).filter((el) => {
-        const r = el.getBoundingClientRect();
-        return r.height > 0 && r.bottom > 0 && r.top < window.innerHeight;
-      });
+      const on = gsap.utils
+        .toArray<HTMLElement>(`${ITEMS}, [data-a-title], [data-a-out]`, page)
+        .filter((el) => {
+          const r = el.getBoundingClientRect();
+          return r.height > 0 && r.bottom > 0 && r.top < window.innerHeight;
+        });
       const bar = href.startsWith("/about")
         ? []
-        : gsap.utils.toArray<HTMLElement>("[data-a-nav], [data-a-bar]", root.current);
+        : gsap.utils.toArray<HTMLElement>(
+            "[data-a-nav], [data-a-bar]",
+            root.current,
+          );
       const push = () => navigate(href);
       if ((!on.length && !bar.length) || prefersReducedMotion()) {
         push();
@@ -143,7 +161,18 @@ export function AboutMotion({ nav, children }: { nav: React.ReactNode; children:
           stagger: { amount: 0.12 },
           overwrite: true,
         })
-        .to(bar, { autoAlpha: 0, y: -8, duration: 0.25, ease: "power2.in", stagger: 0.04, overwrite: true }, 0.12);
+        .to(
+          bar,
+          {
+            autoAlpha: 0,
+            y: -8,
+            duration: 0.25,
+            ease: "power2.in",
+            stagger: 0.04,
+            overwrite: true,
+          },
+          0.12,
+        );
       return true;
     })();
 
@@ -151,7 +180,16 @@ export function AboutMotion({ nav, children }: { nav: React.ReactNode; children:
   // router, so back and forward know it. A doc link to another about page takes the same way out as a Link.
   const onClick = (e: React.MouseEvent) => {
     const a = (e.target as Element).closest<HTMLAnchorElement>("a[href]");
-    if (!a || a.target || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey)
+    if (
+      !a ||
+      a.target ||
+      e.defaultPrevented ||
+      e.button !== 0 ||
+      e.metaKey ||
+      e.ctrlKey ||
+      e.shiftKey ||
+      e.altKey
+    )
       return;
     const url = new URL(a.href);
     if (url.origin !== location.origin) return;
@@ -159,7 +197,9 @@ export function AboutMotion({ nav, children }: { nav: React.ReactNode; children:
       if (!url.hash) return;
       e.preventDefault();
       navigate(url.hash);
-      document.getElementById(decodeURIComponent(url.hash.slice(1)))?.scrollIntoView();
+      document
+        .getElementById(decodeURIComponent(url.hash.slice(1)))
+        ?.scrollIntoView();
       return;
     }
     if (!a.closest(".doc")) return;
@@ -183,7 +223,11 @@ export function AboutMotion({ nav, children }: { nav: React.ReactNode; children:
  * A link that plays the page out before it navigates, and calls `onLeave` as it starts. Same-page and new-tab clicks
  * stay native.
  */
-export function AboutLink({ href, onLeave, ...props }: Omit<LinkProps, "to"> & { href: string; onLeave?(): void }) {
+export function AboutLink({
+  href,
+  onLeave,
+  ...props
+}: Omit<LinkProps, "to"> & { href: string; onLeave?(): void }) {
   const go = use(Go);
   return (
     <Link

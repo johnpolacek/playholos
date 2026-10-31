@@ -323,8 +323,9 @@ export function Dials() {
 
   return (
     <section
+      id="dials"
       aria-label="The dials"
-      className="mx-auto max-w-[1180px] px-4 pb-16"
+      className="mx-auto max-w-[1180px] scroll-mt-16 px-4 pb-16"
     >
       <h2
         data-a
