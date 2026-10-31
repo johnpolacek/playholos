@@ -57,20 +57,20 @@ export interface Ages {
   awakeBy: (gyr: number) => number;
 }
 
+/** A gamma draw of whole-number shape: the sum of that many exponential waits. */
+function gamma(r: () => number, k: number, theta: number): number {
+  let p = 1;
+  for (let i = 0; i < k; i++) p *= r() || 1e-9;
+  return -theta * Math.log(p);
+}
+
 export function ages(n = 200_000, seed = 23): Ages {
   const r = stream(seed),
     out: number[] = [];
   while (out.length < n) {
     const world =
       r() < OLDER_SHARE
-        ? Math.min(
-            OLDEST_GYR,
-            EARTH_GYR -
-              OLDER_THETA *
-                Math.log(
-                  (r() || 1e-9) * (r() || 1e-9) * (r() || 1e-9) * (r() || 1e-9),
-                ),
-          )
+        ? Math.min(OLDEST_GYR, EARTH_GYR + gamma(r, OLDER_K, OLDER_THETA))
         : r() * EARTH_GYR;
     const ahead = world - EARTH_GYR * Math.exp(gauss(r) * PACE);
     if (ahead > 1e-4) out.push(ahead);

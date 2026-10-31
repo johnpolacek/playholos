@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import {
   chain,
   type Source,
@@ -92,7 +92,9 @@ export function useCanvas(
 ) {
   const ref = useRef<HTMLCanvasElement>(null);
   const paint = useRef(draw);
-  paint.current = draw;
+  useLayoutEffect(() => {
+    paint.current = draw;
+  });
   useEffect(() => {
     const el = ref.current!;
     let frame = 0,
