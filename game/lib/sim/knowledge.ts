@@ -494,7 +494,7 @@ function others(o: Others) {
         ? "A craft not ours keeps station there, watching."
         : x.mode === "furnace"
           ? "Someone feeds the hole: a disk of matter glows round it, hot enough to shine in X-rays, and works round that take its light."
-          : "Someone lives in its shadow: cold radiators and collectors, dark against the sky, dumping their heat into the hole.",
+          : "Someone lives in its shadow: cold radiators and collectors, dark against the sky, shedding what heat they can into the hole and the rest faintly outward.",
     )
     .join(" ");
 }
@@ -597,7 +597,7 @@ export function describe(view: EarthView): string {
             (c.came?.length ? ` Since then: ${c.came.map((x) => `at Year ${yearText(x.at)}, ${x.kind === "colony" ? "a ship not ours braked in and stayed" : "a craft not ours braked in and stays, watching"}, its track back to ${x.from}`).join("; ")}. Whoever came has seen ours.` : "") +
             (c.lost ? ` Its word stopped at Year ${yearText(c.lost.at)}. It is gone. ${c.lost.how === "strike" ? "Its last word showed nothing coming: whatever hit it came cold and fast." : "Its last word showed a craft not ours closing on it."}` : "") +
             (c.watts && !c.lost && c.mode === "settle" ? ` Its works on the star's light run at about ${c.watts.toExponential(0).replace("e+", "×10^")} W, as its word shows it.` : "") +
-            (c.watts && !c.lost && c.mode === "furnace" ? ` Its furnace runs at about ${c.watts.toExponential(0).replace("e+", "×10^")} W, as its word shows it, under what any sky survey sees until about 10^19 W.` : c.mode === "refuge" || c.mode === "quiet" ? " It keeps small and dark, and no one looking from outside would know it is there." : ""));
+            (c.watts && !c.lost && c.mode === "furnace" ? ` Its furnace runs at about ${c.watts.toExponential(0).replace("e+", "×10^")} W, as its word shows it, under what any sky survey sees until about 2×10^20 W.` : c.mode === "refuge" || c.mode === "quiet" ? " It keeps small and dark, and no one looking from outside would know it is there." : ""));
   const holesText = dark.length ? `\n\nBlack holes we have found. A star mapper finds more as they pass in front of stars:\n${dark.join("\n")}` : "";
   const mindsText = view.minds ? describeMinds(view.minds, one) : "";
   return `Worlds Earth has felt by their tug on their stars, as of Year ${yearText(view.year)}. From here a home and a natural world look the same:

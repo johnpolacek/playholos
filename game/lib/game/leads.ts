@@ -701,7 +701,7 @@ function darkLead(h: DarkMass, far = false): Lead {
       ...(far ? [["Beside it", "A Sun-like star, round it every 186 days"] as [string, string]] : []),
       // What a hole is worth, and what using it costs, 2026-10-26. Kerr numbers and the X-ray sky's limits, from
       // HOLOS_RESEARCH.md's "Black holes".
-      ["What it offers", "A furnace: rock fed to it gives back 6% to about 30% of its mass as light. Fusion gives under 1%. A dark place to put heat. A clock up to 10 times slow, close in"],
+      ["What it offers", "A furnace: rock fed to it gives back 6% to about 30% of its mass as light. Fusion gives under 1%. A place to put some heat, up to about half of it at top spin. A clock up to 10 times slow, close in"],
       ["What it costs", "A braking flame shows to anyone close. A furnace stays hidden until it grows past about a millionth of the Sun"],
     ],
     could: far

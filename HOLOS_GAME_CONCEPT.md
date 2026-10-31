@@ -1452,7 +1452,7 @@ Settled 2026-10-26. Numbers from `python3 calcs/holes.py`. Sources in [HOLOS_RES
 - **Our Mind can go to a black hole, to feed it or to hide in it,** settled 2026-10-26. A found hole’s destination offers the Seed Ship once it, the Fusion Drive and the Deuterium Works are in our order. One Seed Ship, one Mind, one hole.
   - *Timings, calcs/seed.py’s:* it leaves when all three are done, flies at a tenth of light speed with 10 Years of burn and 15 of braking, and stands alone as a Mind 20 Years after landing. Word of each step reaches us one light-time later.
   - *Feed It:* its furnace starts at our 2040 scale and doubles every 10 Years. It shows to an eRASS1-depth X-ray sky only past about 2×10²⁰ W at 20 ly, a tenth of its light in the band: about 23 doublings, some 230 Years on. Corrected 2026-10-31 from 10¹⁹ W.
-  - *Hide in It:* its heat falls into the hole, so it stays as small and dark as it began, and no one outside would know.
+  - *Hide in It:* it stays as small as it began, so it stays dark, and no one outside would know. *Corrected 2026-10-31,* audit 2.3. A hole swallows only part of its heat. Even on the innermost orbit of a hole at top spin, about 55% of light given off escapes (Gates, Hadar and Lupsasca 2021). Without spin, about 85% does, by this project’s arithmetic for a radiator at rest there. It hides by staying small: at our 2040 scale its heat is far under anything a survey at home sees. Before: “its heat falls into the hole”.
   - *What it is worth now:* a Mind of ours that lives if Earth does not, which is what keeps a game going.
   - *It may not be first.* It sees who was there when it landed, as a sentinel would.
   - *Not yet:* its thought or power reaching home.
