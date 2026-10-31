@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { round } from "@/lib/about/dials";
-import { ruledAbove } from "@/lib/about/haystack";
+import { NEARBY_STARS, ruledAbove, STARS_PER_MIND } from "@/lib/about/haystack";
 import { COLD, peak, SOURCES, WARM } from "@/lib/about/quiet";
 import { Stat } from "./ages";
-import { KICK, Sources } from "./dials";
+import { Sources } from "./dials";
 import { HeatChart, RadioChart } from "./haystack";
 
 // Why the sky is quiet, on /about/research: what our searches rule out, and what is still possible. Heat, by how cold
@@ -76,7 +76,7 @@ export function Quiet() {
 
       <Part
         title="Heat"
-        says="Every mind gives off heat. Above each line, a survey would have seen it. The colder a mind runs, the higher the lines climb, and the more room is left beneath them."
+        says="Every mind gives off heat. The solid region is ruled out at every star: the whole-sky maps would have seen it. The hatched region was checked more deeply, but only at a few hundred nearby stars. The colder a mind runs, the higher the lines climb."
       >
         <HeatChart T={T} />
         <div className="mt-4 max-w-[560px]">
@@ -105,14 +105,17 @@ export function Quiet() {
         <p className="mt-4 max-w-[60ch] text-[15px] leading-[1.55]">
           {`At ${round(T)} K a mind glows near ${round(peak(T))} microns${warm ? ", where WISE mapped the whole sky" : ""}. 400 light-years away, it stays hidden under ${share(ruledAbove(T, 400) / SUN)} of the Sun’s power.`}
         </p>
-        <p className={`mt-2 ${KICK}`}>
-          DOTS: OLD MINDS AS THE GAME DRAWS THEM, ALL STILL UNSEEN
+        <p className="mt-2 max-w-[60ch] text-[15px] leading-[1.55]">
+          At one mind per {STARS_PER_MIND.toLocaleString("en-US")} stars, the{" "}
+          {NEARBY_STARS} stars checked deeply would hold about{" "}
+          {(NEARBY_STARS / STARS_PER_MIND).toFixed(1)} minds. Finding none there
+          is what we would expect, however bright minds are.
         </p>
       </Part>
 
       <Part
         title="Radio"
-        says="Radio searches listened for steady tones from nearby stars. A tone louder than the line, from one of those stars, would have been heard. Old minds speak by tight beams aimed at each other, which never sweep past us."
+        says="Breakthrough Listen listened to 1,327 nearby stars for steady tones, about 15 minutes each. A tone louder than the line, from one of those stars, would have been heard. Those stars would hold about 0.8 minds, and old minds speak by tight beams aimed at each other, which never sweep past us."
       >
         <RadioChart />
       </Part>

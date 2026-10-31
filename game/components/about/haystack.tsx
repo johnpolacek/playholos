@@ -1,19 +1,20 @@
-import { useEffect, useMemo, useRef } from "react";
-import { stream } from "@/lib/about/random";
+import { useEffect, useRef } from "react";
 import {
-  holosMinds,
+  allSkyAbove,
   least,
   LISTEN,
   listenLeast,
   MARKS,
   NEARBY,
   nearbyLeast,
-  ruledAbove,
+  NEARBY_STARS,
+  starsWithin,
   SURVEYS,
 } from "@/lib/about/haystack";
 import { color, useCanvas } from "./dials";
 
-// The haystack, on /about/research: what our searches rule out, painted, and what is left. Distance runs across, power
+// The haystack, on /about/research: what our searches rule out, painted where they looked at every star and hatched
+// where they looked at only a few hundred, and what is left. Distance runs across, power
 // up, both by tens. A mind above a line would have been seen. Below every line, it is still possible.
 
 const NEAR = 10,
@@ -95,6 +96,36 @@ function paint(
   c.globalAlpha = 1;
 }
 
+/** A region searched only at some stars: hatched above `edge`, out to `upto` ly, so it reads as partly checked. */
+function hatch(
+  c: CanvasRenderingContext2D,
+  a: Axes,
+  edge: (ly: number) => number,
+  upto: number,
+  stroke: string,
+) {
+  const cols = Math.ceil(a.x(upto) - PAD.l);
+  c.save();
+  c.beginPath();
+  c.moveTo(PAD.l, PAD.t);
+  for (let i = 0; i <= cols; i++) {
+    const ly = NEAR * (FAR / NEAR) ** (i / Math.ceil(a.w - PAD.l - PAD.r));
+    c.lineTo(PAD.l + i, Math.max(PAD.t, Math.min(a.h - PAD.b, a.y(edge(ly)))));
+  }
+  c.lineTo(PAD.l + cols, PAD.t);
+  c.closePath();
+  c.clip();
+  c.strokeStyle = stroke;
+  c.globalAlpha = 0.35;
+  for (let x = PAD.l - a.h; x < PAD.l + cols; x += 7) {
+    c.beginPath();
+    c.moveTo(x, a.h);
+    c.lineTo(x + a.h, 0);
+    c.stroke();
+  }
+  c.restore();
+}
+
 /** A line along `edge`, where it is finite and on the chart. */
 function trace(
   c: CanvasRenderingContext2D,
@@ -124,49 +155,54 @@ function trace(
   c.lineWidth = 1;
 }
 
-/** Heat: what the infrared maps rule out for a mind at T kelvin, and the game's old minds beneath. */
+/** Heat: what the whole-sky maps rule out for a mind at T kelvin, solid, and what a few hundred nearby stars' surveys
+ *  add, hatched, against what a mind might put out. */
 export function HeatChart({ T }: { T: number }) {
-  const minds = useMemo(() => holosMinds(80, stream(4)), []);
   const shown = useRef(T);
   const LO = 1e12,
     HI = 1e34;
-  const ref = useCanvas((c, w, h, t) => {
+  const ref = useCanvas((c, w, h) => {
     // Ease toward the dial, in log, so the painted region slides.
     const a0 = Math.log(shown.current),
       b0 = Math.log(T);
     shown.current =
-      t === 0 || Math.abs(b0 - a0) < 0.002
-        ? T
-        : Math.exp(a0 + (b0 - a0) * 0.15);
+      Math.abs(b0 - a0) < 0.002 ? T : Math.exp(a0 + (b0 - a0) * 0.15);
     const temp = shown.current;
     const a = axes(w, h, LO, HI),
       ink = color("--ink"),
       muted = color("--muted"),
-      other = color("--other"),
-      you = color("--you");
+      other = color("--other");
     frame(c, a, LO, HI, muted);
-    paint(c, a, (ly) => ruledAbove(temp, ly), other);
-    // Each survey's own line, faint, named where it enters the chart.
+    paint(c, a, (ly) => allSkyAbove(temp, ly), other);
+    // Each whole-sky survey's own line, faint, named where it enters the chart.
     for (const s of SURVEYS) {
       trace(c, a, (ly) => least(s, temp, ly), muted);
-      const ly = 30,
-        p = least(s, temp, ly);
+      const p = least(s, temp, 12);
       if (isFinite(p) && a.y(p) > PAD.t + 8 && a.y(p) < a.h - PAD.b) {
         c.fillStyle = muted;
-        c.fillText(s.name.toUpperCase(), a.x(ly), a.y(p) - 4);
+        c.fillText(s.name.toUpperCase(), a.x(12), a.y(p) - 4);
       }
     }
+    trace(c, a, (ly) => allSkyAbove(temp, ly), other, 1.5);
+    // The nearby-star surveys: deeper, but only at their few hundred stars.
     if (isFinite(nearbyLeast(temp, 50))) {
-      trace(c, a, (ly) => nearbyLeast(temp, ly), muted);
-      c.fillStyle = muted;
+      const edge = (ly: number) => nearbyLeast(temp, ly);
+      hatch(
+        c,
+        a,
+        (ly) => Math.min(edge(ly), allSkyAbove(temp, ly)),
+        NEARBY.ly,
+        other,
+      );
+      trace(c, a, edge, other);
+      c.fillStyle = other;
       c.fillText(
-        "HERSCHEL, JCMT",
-        a.x(NEARBY.ly) - 96,
-        a.y(nearbyLeast(temp, NEARBY.ly)) + 14,
+        `HERSCHEL, JCMT: ${NEARBY_STARS} OF ABOUT ${Math.round(starsWithin(NEARBY.ly) / 1000)},000 STARS`,
+        a.x(12),
+        a.y(edge(12)) + 16,
       );
     }
-    trace(c, a, (ly) => ruledAbove(temp, ly), other, 1.5);
-    // Powers to measure by.
+    // What a mind might put out.
     for (const m of MARKS.filter((m) => !m.radio)) {
       c.strokeStyle = ink;
       c.globalAlpha = 0.5;
@@ -184,20 +220,11 @@ export function HeatChart({ T }: { T: number }) {
         a.y(m.w) - 4,
       );
     }
-    // The game's old minds, twinkling, under every line.
-    c.fillStyle = you;
-    minds.forEach((m, i) => {
-      c.globalAlpha = 0.55 + 0.45 * Math.sin(t * 1.3 + i * 1.7);
-      c.beginPath();
-      c.arc(a.x(m.ly), a.y(m.w), 2.2, 0, 2 * Math.PI);
-      c.fill();
-    });
-    c.globalAlpha = 1;
     c.font = "12px var(--font-plex-mono), monospace";
     c.fillStyle = other;
-    c.fillText("RULED OUT", a.x(3000), PAD.t + 18);
+    c.fillText("RULED OUT, EVERY STAR", a.x(2000), PAD.t + 18);
     c.fillStyle = ink;
-    c.fillText("STILL POSSIBLE", a.x(3000), a.y(1e14));
+    c.fillText("STILL POSSIBLE", a.x(2000), a.y(1e15));
   });
   useEffect(
     () => void ref.current?.dispatchEvent(new Event("dials")),
@@ -216,11 +243,11 @@ export function RadioChart() {
       muted = color("--muted"),
       other = color("--other");
     frame(c, a, LO, HI, muted);
-    paint(c, a, listenLeast, other);
+    hatch(c, a, listenLeast, LISTEN.at, other);
     trace(c, a, listenLeast, other, 1.5);
-    c.fillStyle = muted;
+    c.fillStyle = other;
     c.fillText(
-      `BREAKTHROUGH LISTEN · ${LISTEN.stars.toLocaleString("en-US")} STARS`,
+      `BREAKTHROUGH LISTEN: ${LISTEN.stars.toLocaleString("en-US")} OF ABOUT ${Math.round(starsWithin(LISTEN.at) / 1000)},000 STARS`,
       a.x(12),
       a.y(listenLeast(12)) - 6,
     );
@@ -257,8 +284,6 @@ export function RadioChart() {
       a.y(1e17) - 6,
     );
     c.font = "12px var(--font-plex-mono), monospace";
-    c.fillStyle = other;
-    c.fillText("RULED OUT", a.x(14), a.y(1e19));
     c.fillStyle = ink;
     c.fillText("UNHEARD", a.x(3000), a.y(1e10));
   });

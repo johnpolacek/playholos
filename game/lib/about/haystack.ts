@@ -74,27 +74,17 @@ export function ruledAbove(T: number, ly: number): number {
   return Math.min(nearbyLeast(T, ly), ...SURVEYS.map((s) => least(s, T, ly)));
 }
 
-/** What the all-sky maps would have caught 400 ly away, as calcs/minds.py's ALL_SKY_W: IRAS's and AKARI's floor for a
- *  12 K glow, about 70% of a Sun. Settled 2026-10-31. */
-const ALL_SKY_W = 2.7e26;
-
-/** Holos's awake old minds, drawn by calcs/minds.py's rule: under what our maps would have caught at their distance,
- *  log-evenly between a tenth of that and it. A sample for the page, not any game's. */
-export function holosMinds(
-  n: number,
-  rand: () => number,
-): { ly: number; w: number }[] {
-  const out = [];
-  for (let i = 0; i < n; i++) {
-    const ly = 30 * (326 / 30) ** rand();
-    let limit = ALL_SKY_W * (ly / 400) ** 2;
-    if (ly <= NEARBY.ly)
-      limit = Math.min(limit, NEARBY.w * (ly / NEARBY.at) ** 2);
-    const lo = Math.min(1e18, limit / 2);
-    out.push({ ly, w: lo * (limit / lo) ** rand() });
-  }
-  return out;
+/** What the whole-sky maps rule out: they looked at every star. */
+export function allSkyAbove(T: number, ly: number): number {
+  return Math.min(...SURVEYS.map((s) => least(s, T, ly)));
 }
+
+/** Stars within ly of the Sun, at calcs/minds.py's 0.0028 a cubic light-year, so how few the targeted surveys saw. */
+export const starsWithin = (ly: number) => (4 / 3) * Math.PI * ly ** 3 * 0.0028;
+/** Holos's density, one mind per 1,600 stars, so how many minds a targeted survey's stars would hold. */
+export const STARS_PER_MIND = 1600;
+/** Herschel's DEBRIS and DUNES, and JCMT's SONS: about 580 stars between them, some shared. */
+export const NEARBY_STARS = 580;
 
 /** Radio: Breakthrough Listen's 1,327 stars, Price et al. 2020. No steady tone above 2.1e12 W at Green Bank, at the
  *  sample's 50 pc. Only tones, only 1.1 to 3.45 GHz, about 15 minutes a star. */
@@ -105,6 +95,7 @@ export const listenLeast = (ly: number) =>
 /** Powers to measure by, in watts. */
 export const MARKS: { name: string; w: number; radio?: boolean }[] = [
   { name: "Earth’s whole power use", w: 2e13 },
-  { name: "The Sun", w: 3.828e26 },
+  { name: "A cold halo, Garrett 2026", w: 1e20 },
+  { name: "A mind using its whole star, a Sun", w: 3.828e26 },
   { name: "Arecibo’s radar, aimed", w: 1e13, radio: true },
 ];
