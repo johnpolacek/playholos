@@ -265,10 +265,20 @@ function Near({ result }: { result: Result }) {
   return <canvas ref={ref} aria-hidden className="aspect-square w-full" />;
 }
 
-function Stat({ value, label }: { value: string; label: string }) {
+function Stat({
+  value,
+  label,
+  tone = "",
+}: {
+  value: string;
+  label: string;
+  tone?: string;
+}) {
   return (
     <div className="border-t border-rowline pt-3">
-      <div className="font-mono text-[22px] leading-none tabular-nums">
+      <div
+        className={`font-mono text-[22px] leading-none tabular-nums ${tone}`}
+      >
         {value}
       </div>
       <div className={`mt-1.5 ${KICK}`}>{label.toUpperCase()}</div>
@@ -435,19 +445,17 @@ export function Dials() {
               value={round(Math.max(1, result.galaxy))}
               label="Minds in our Galaxy"
             />
-            <div>
-              <dt className="sr-only">Peers in our Galaxy</dt>
-              <dd className="font-mono text-[26px] leading-none text-other tabular-nums">
-                {result.peers >= 1
+            <Stat
+              tone="text-other"
+              value={
+                result.peers >= 1
                   ? round(result.peers)
-                  : `1 in ${round(1 / result.peerChance)}`}
-              </dd>
-              <div className={`mt-1.5 ${KICK}`}>
-                {result.peers >= 1
-                  ? "PEERS IN OUR GALAXY"
-                  : "CHANCE OF ONE PEER"}
-              </div>
-            </div>
+                  : `1 in ${round(1 / result.peerChance)}`
+              }
+              label={
+                result.peers >= 1 ? "Peers in our Galaxy" : "Chance of one peer"
+              }
+            />
           </dl>
           <div className="mt-6 grid grid-cols-[minmax(0,3fr)_minmax(0,2fr)] items-end gap-4">
             <figure>
