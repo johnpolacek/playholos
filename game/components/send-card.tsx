@@ -56,7 +56,7 @@ function Aimed({ id, draft, asked }: { id: string; draft: Draft; asked: string }
   const star = target(draft.to);
   const sent = save?.sent?.find((s) => s.id === id);
   const y = sent?.y ?? year ?? 0;
-  if (!star) return <p className="pl-3 font-mono text-[11px] text-muted">We know no star named {draft.to} within 50 light-years.</p>;
+  if (!star) return <p className="pl-3 font-mono text-[11px] text-muted">We know no star named {draft.to} on our leads or within 50 light-years.</p>;
   const { sendYears, lands, back } = dates(y, star.d, draft.size);
   // A knock on the watcher lands in seconds, and it answers on its own terms. 2026-10-30.
   const near = star === WATCHER;
@@ -90,7 +90,7 @@ function Aimed({ id, draft, asked }: { id: string; draft: Draft; asked: string }
       {sent ? (
         <p className="font-mono text-[11px] text-ok">Sent at Year {yearText(sent.y)} · on its way, lands Year {yearText(lands)}</p>
       ) : (
-        <Buttons label="Send" onSend={() => send({ ...draft, to: star.name, d: star.d, id, y: year ?? 0, asked })} />
+        <Buttons label="Send" onSend={() => send({ ...draft, to: star.name, d: star.d, ...(star.d > 50 ? { ra: star.ra, dec: star.dec } : {}), id, y: year ?? 0, asked })} />
       )}
     </div>
   );

@@ -50,12 +50,22 @@ const TARGETS = targets as { name: string; ra: number; dec: number; d: number }[
 /** The watcher, once found: a knock aimed at it lands within seconds, from the Moon's L5. 2026-10-30. */
 export const WATCHER = { name: "The watcher", ra: 0, dec: 0, d: 1.3 / 3.156e7 };
 
-/** A star we can aim at by the name the Mind gave, from every star to 50 ly, or the watcher. The same list in every
- *  game. */
-export function target(name: string) {
+/** The real catalog's reach, Gaia's census to 326 ly. Old minds sit on its stars, so we can aim at any. 2026-10-31. */
+export const REACH_LY = 326;
+type Star = { name: string; ra: number; dec: number; d: number };
+/** Stars on this game's leads past the 50 ly census: a cold glow, a warm body, any star a lead names, set by Scan as
+ *  its leads come. 2026-10-31. */
+const KNOWN = new Map<string, Star>();
+export function knowStars(stars: Star[]) {
+  for (const s of stars) if (s.d > 0 && s.d <= REACH_LY) KNOWN.set(plain(s.name), s);
+}
+
+/** A star we can aim at by the name the Mind gave: every star to 50 ly, a star on one of our leads out to 326 ly, or
+ *  the watcher. */
+export function target(name: string): Star | null {
   const n = plain(name);
   if (["the watcher", "watcher"].includes(n)) return WATCHER;
-  return TARGETS.find((t) => plain(t.name) === n) ?? null;
+  return TARGETS.find((t) => plain(t.name) === n) ?? KNOWN.get(n) ?? null;
 }
 
 /** When an aimed message is done sending, lands, and the soonest its answer could be home: a tenth of a Year to answer,
@@ -84,7 +94,13 @@ export function readSent(list: unknown): Sent[] {
       const draft = readDraft(x);
       const { id, y, asked, reach, repeat, stopped } = (x ?? {}) as Record<string, unknown>;
       if (!draft || typeof id !== "string" || typeof y !== "number" || !Number.isFinite(y) || y < 0) return [];
-      const star = draft.to === "everywhere" ? null : target(draft.to);
+      const { ra, dec, d } = (x ?? {}) as Record<string, unknown>;
+      // A lead's star past the census keeps its place in the save. 2026-10-31.
+      const kept =
+        typeof ra === "number" && typeof dec === "number" && typeof d === "number" && d > 0 && d <= REACH_LY && Math.abs(dec) <= 90
+          ? { name: draft.to, ra, dec, d }
+          : null;
+      const star = draft.to === "everywhere" ? null : (target(draft.to) ?? kept);
       if (draft.to !== "everywhere" && !star) return [];
       const num = (v: unknown) => (typeof v === "number" && Number.isFinite(v) ? v : undefined);
       return [{
@@ -92,7 +108,7 @@ export function readSent(list: unknown): Sent[] {
         id: id.slice(0, 64),
         y,
         asked: typeof asked === "string" ? asked.slice(0, 600) : "",
-        ...(star ? { to: star.name, d: star.d } : { reach: Math.min(50, Math.max(1, num(reach) ?? 10)), repeat: repeat === true }),
+        ...(star ? { to: star.name, d: star.d, ...(star === kept ? { ra: star.ra, dec: star.dec } : {}) } : { reach: Math.min(50, Math.max(1, num(reach) ?? 10)), repeat: repeat === true }),
         ...(num(stopped) !== undefined ? { stopped: num(stopped) } : {}),
       } satisfies Sent];
     })

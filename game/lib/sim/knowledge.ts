@@ -637,8 +637,8 @@ function describeMinds(m: MindsSeen, one: (x: number) => string): string {
   if (m.glows.length)
     out.push(
       `Cold glows our Halo Survey has seen, looking at each star for an hour, nearest first:\n` +
-        m.glows.map((g) =>
-          `- ${sky(g)}, beside a star ${one(g.d)} ly away: a compact glow near 12 K, about ${watts(g.watts)} W, first seen at Year ${yearText(g.seen)}, steady. ` +
+        m.glows.map((g, i) =>
+          `- Cold glow ${i + 1}, as Scan names it, ${sky(g)}, beside a star ${one(g.d)} ly away: a compact glow near 12 K, about ${watts(g.watts)} W, first seen at Year ${yearText(g.seen)}, steady. ` +
           `Its color fits no dust we know. It could be a cold disk of unusual grains, a measuring error, or computing done cold, far from a star.`).join("\n"),
     );
   if (m.watcher) {
@@ -688,8 +688,8 @@ function describeMinds(m: MindsSeen, one: (x: number) => string): string {
   if (m.sleepers.length)
     out.push(
       `What our craft found resting in other systems:\n` +
-        m.sleepers.map((x) =>
-          `- ${sky(x)}, ${one(x.d)} ly away: a compact warm body ${lightTime(x.restAU)} from its star, shedding about 10^10 W, word home at Year ${yearText(x.seen)}. ` +
+        m.sleepers.map((x, i) =>
+          `- Warm body ${i + 1}, as Scan names it, ${sky(x)}, ${one(x.d)} ly away: a compact warm body ${lightTime(x.restAU)} from its star, shedding about 10^10 W, word home at Year ${yearText(x.seen)}. ` +
           `Starlight that far out would leave it near ${Math.round(278 / Math.sqrt(x.restAU))} K or colder, yet it is hundreds of K warmer. Something inside it makes heat.`).join("\n"),
     );
   return out.length ? `\n\n${out.join("\n\n")}` : "";

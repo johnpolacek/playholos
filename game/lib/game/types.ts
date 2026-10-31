@@ -56,6 +56,10 @@ export interface Sent {
   to: string | "everywhere";
   /** Light-years to the star. */
   d?: number;
+  /** Where a star past the 50 ly census sits, right ascension in hours and declination, so a save keeps a lead's
+   *  star out to 326 ly. 2026-10-31. */
+  ra?: number;
+  dec?: number;
   /** What the Will asked, and what travels, in the Mind's words, as they will read it. */
   asked: string;
   travels: string;

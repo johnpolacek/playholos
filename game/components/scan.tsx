@@ -13,7 +13,7 @@ import { airReading, type Lead, landed, leadsOf, lifeOf, nearestReading, ODDS, t
 import { setStruck, setWatched, useSchedule } from "@/components/picks";
 import { watchedAt } from "@/lib/sim/minds";
 import { skyOf } from "@/lib/game/natural";
-import { target, WATCHER } from "@/lib/game/sends";
+import { knowStars, target, WATCHER } from "@/lib/game/sends";
 import { EMPTY } from "@/lib/game/plan";
 import { rockAt, rockOf } from "@/lib/game/rocks";
 import { gsap, prefersReducedMotion } from "@/lib/motion";
@@ -146,6 +146,8 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [stars],
   );
+  // A lead's star past the 50 ly census can be aimed at too, out to the catalog's 326 ly. 2026-10-31.
+  useEffect(() => knowStars(leads.flatMap((l) => (l.at && l.at[2] > 50 ? [{ name: l.star, ra: l.at[0], dec: l.at[1], d: l.at[2] }] : []))), [leads]);
   // The map places leads the sky file lacks: black holes found, and far landmarks.
   useEffect(() => placeLeads(Object.fromEntries(leads.flatMap((l) => (l.at ? [[skyId(l.star), l.at]] : [])))), [leads]);
   // The scene reads Close View from the dials each frame, and the screen from here. Another lead starts outside.
