@@ -1465,6 +1465,14 @@ Gathered 2026-10-26 for a late game: a black hole in the outer Solar System, the
 - **[Wright 2018](https://arxiv.org/abs/1707.02175)** and **[Seto 2024](https://arxiv.org/abs/2404.00840)** · Published. The Galactic Center as a point any searcher picks. Seto uses the star S2 round Sgr A* as a shared clock.
 - *Ours:* a black hole swallows heat that never glows back. Gaia BH1 takes about 3×10¹³ W at 300 K. Sgr A* takes 3×10²² W at 77 K, more than Garrett’s haloes. A mind dumping heat into a hole shows no cold glow.
 - Verdict: not contradicted. Gathering at the Galactic Center is improbable and open, 27,000 ly away. At nearby stellar holes it is improbable on energy: they are dormant and weak.
+- **Rechecked 2026-10-30, data only, the Galactic Center:**
+  - **[Gowanlock, Patton and McConnell 2011](https://arxiv.org/abs/1107.1286)** · Published, Astrobiology. Monte Carlo of the Galaxy: most planets that could have held complex life lie toward the inner Galaxy, despite more supernovae. Critics questioned its assumptions.
+  - **[Balbi and Tombesi 2017](https://www.nature.com/articles/s41598-017-16110-0)** · Published, Scientific Reports. Sgr A*’s active phase could strip Earth-like atmospheres within about 1 kpc of the center. [Wisłocka et al. 2019](https://arxiv.org/pdf/1902.07950.pdf) find up to several Earth atmospheres lost in the bulge.
+  - **[Di Stefano and Ray 2016](https://arxiv.org/abs/1601.03455)** · Published, ApJ 827. Dense, stable star clusters ease travel and talk: the nearest star about 20 times closer. Theory, no evidence.
+  - **[Gajjar et al. 2021](https://arxiv.org/pdf/2104.14148v1)** · Published, AJ. No narrowband transmitter toward the center above 1.9×10¹⁷ W, 1 to 8 GHz, in about 18 hours. **[Brzycki et al. 2024](https://doaj.org/article/d72625e6c34d49b9a01d904e9eb48993)** · Published, AJ 168, 284. A C-band search of the center and plane for scintillated signals.
+  - **[GRAVITY 2022](https://arxiv.org/pdf/2112.07478) and [2024](https://www.aanda.org/2024-highlights/3031)** · Published, A&A. Any extended mass inside S2’s orbit is under about 3,000, then 1,200, Suns.
+  - **[Sgr A* review, 2022](https://arxiv.org/pdf/2211.07008)** and **[2013](https://arxiv.org/pdf/1306.0900)** · Published. About 10³⁶ erg/s, near 10⁻⁹ of its Eddington limit, feeding on about 10⁻⁸ Suns a year.
+  - Verdict changed: open, not improbable. No data favors or disfavors minds there. Life likely starts outside the inner kiloparsec, so any there came later. The searches are hours long and radio only.
 
 ## Travel, sails and lenses
 
