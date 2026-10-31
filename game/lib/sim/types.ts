@@ -280,21 +280,6 @@ export interface Visit {
   sent?: string;
 }
 
-/** A grey glow our Halo Survey has seen at a star: cold computing's waste heat, line-free, whose color fits no dust.
- *  2026-10-26. */
-export interface Glow {
-  star: string;
-  d: number;
-  /** The Year the survey first saw it, and how bright it is now, in watts, as its light shows it. */
-  seen: number;
-  watts: number;
-  /** It has held steady over five Years of looks or more: not growing, as nothing young is. An elder's. 2026-10-28. */
-  steady?: boolean;
-  /** Where its star sits: right ascension in hours, declination. */
-  ra?: number;
-  dec?: number;
-}
-
 export interface EarthView {
   year: number;
   felt: FeltWorld[];
@@ -324,8 +309,6 @@ export interface EarthView {
   will?: { hole: string; d: number };
   /** Black holes found, by Gaia before Year 0 and by our Star Mapper since. */
   holes?: DarkMass[];
-  /** Once the Halo Survey is done, every grey glow it has seen. */
-  glows?: Glow[];
   /** The realistic premise's minds Earth has found: warm flashes, cold glows, the watcher, sleepers. lib/sim/minds.ts. */
   minds?: import("./minds.ts").MindsSeen;
   /** What our 15 m Mirror has read of Proxima b, once built. */

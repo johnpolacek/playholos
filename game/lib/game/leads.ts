@@ -4,7 +4,7 @@ import { lightTime } from "@/lib/light";
 import { BANDS, iwa, owa, WIDE } from "@/lib/sim/observing";
 import type { MindsSeen, WatcherSeen } from "@/lib/sim/minds";
 import { harm, type rockAt } from "./rocks";
-import type { DarkMass, FeltWorld, Gas, Glow, Read, Visit } from "@/lib/sim/types";
+import type { DarkMass, FeltWorld, Gas, Read, Visit } from "@/lib/sim/types";
 import { CATALOG } from "@/lib/sim/works";
 import { type System, SYSTEMS } from "./systems";
 
@@ -730,58 +730,6 @@ const watts = (w: number) => {
   return `${m}×10${[...e].map((d) => SUP[+d]).join("")} W`;
 };
 
-/** A grey glow the Halo Survey saw at a star with no lead of its own, as a lead. Its color is the case: dust's falls
- *  steeply from 0.87 to 3 mm, an index of 2.4 to 3.1 (MacGregor et al. 2016), and a body near 12 K stays near 1.6.
- *  2026-10-26. */
-function glowLead(g: Glow): Lead {
-  return {
-    slug: `glow-${slugOf(g.star)}`,
-    ...(g.ra !== undefined ? { at: [g.ra, g.dec!, g.d] as [number, number, number] } : {}),
-    star: g.star,
-    what: "A grey glow",
-    line: `Cold light round ${g.star} whose color fits no dust.`,
-    ly: g.d,
-    ask: `What is the grey glow at ${g.star}?`,
-    brief: `Our Halo Survey saw a cold glow round ${g.star}, near 12 K, in light that left it ${Math.round(g.d)} Years ago. Dust glows redder the longer the wavelength. This stays grey, with no lines in it. A Mind computing far from its star, cold, would glow just so.`,
-    facts: [
-      ["Its glow", `About ${watts(g.watts)}, as its light shows it`],
-      ["Its color", "Index about 1.6 from 0.87 to 3 mm. Dust is 2.4 to 3.1"],
-      ["First seen", `Year ${Math.floor(g.seen * 10) / 10}, by our Halo Survey`],
-      // An elder's glow holds level, and five Years of looks show it. 2026-10-28.
-      ...(g.steady ? [["Since then", "Steady. Not growing, as nothing young is"] as [string, string]] : []),
-    ],
-    could: [
-      { what: "A Mind computing cold", why: "Waste heat from collectors far out, at 5 to 28 K, glows grey and line-free, as this does.", odds: "likely" },
-      { what: "Something natural we don't know", why: "Nothing known glows grey this cold round a star, but the sky has surprised us before.", odds: "unlikely" },
-      { what: "Dust", why: "Its color doesn't fit any dust we have measured.", odds: "almost no chance" },
-    ],
-    tells: [
-      g.steady
-        ? "It hasn't brightened in all our looking. A young Mind doubles every decade or so. This one stopped growing long ago."
-        : "It brightens if its computing grows. Watching it a decade would show the doubling.",
-      "A sentinel could go and stay. A knock would tell them we are here.",
-    ],
-    art: { kind: "glow", ly: g.d, ...(g.steady ? { steady: true } : {}) },
-    life: "likely",
-  };
-}
-
-/** What the Halo Survey saw at a star, as a reading on its lead, landing the Year it first saw it. */
-export function glowReading(g: Glow): Reading {
-  return {
-    id: `glow-${slugOf(g.star)}`,
-    needs: "",
-    at: Math.floor(g.seen * 10 + 1e-9) / 10,
-    by: "Halo Survey",
-    title: "A grey glow",
-    line: `Our Halo Survey sees a compact cold glow round ${g.star}, about ${watts(g.watts)}, near 12 K. Its color stays grey from 0.87 to 3 mm, where dust reddens.`,
-    mind: "Its color fits no dust. Cold computing far from a star would glow so. It says someone may think there, never who, or what they would make of us.",
-    now: ["likely", "unlikely", "almost no chance"],
-    life: "likely",
-    tells: [g.steady ? "It hasn't brightened in all our looking. A young Mind doubles every decade or so. This one stopped growing long ago." : "It brightens if its computing grows. A decade of watching would show it."],
-  };
-}
-
 /** What Earth has found of the realistic premise's minds, as leads: each placed where Earth knows it, and said as
  *  measured, natural causes first, since minds are rare. A warm glow waits for its range to be placed. lib/sim/minds.ts.
  *  2026-10-29. */
@@ -1071,13 +1019,13 @@ export function betelgeuseLead(at: number): Lead {
   };
 }
 
-export function leadsOf(felt: FeltWorld[], holes: DarkMass[] = [], glows: Glow[] = [], seeds: Visit[] = [], kept: string[] = [], minds?: MindsSeen): Lead[] {
+export function leadsOf(felt: FeltWorld[], holes: DarkMass[] = [], seeds: Visit[] = [], kept: string[] = [], minds?: MindsSeen): Lead[] {
   // Scan shows one black hole, the nearest, and any we have sent craft to. 2026-10-28.
   const dark = [...holes.map((h) => [h, false] as const), ...FAR.map((h) => [h, true] as const)];
   const nearest = dark.reduce<(typeof dark)[number] | undefined>((n, x) => (!n || x[0].d < n[0].d ? x : n), undefined);
   const shown = dark.filter((x) => x === nearest || kept.includes(x[0].name));
-  // A star our seed probes reached with no lead of its own: Proxima, a felt world, or a glow already has one.
-  const own = new Set(["Proxima Centauri", ...felt.map((f) => f.star), ...glows.map((g) => g.star)]);
+  // A star our seed probes reached with no lead of its own: Proxima or a felt world already has one.
+  const own = new Set(["Proxima Centauri", ...felt.map((f) => f.star)]);
   const landed = seeds.filter((v) => v.by === "seed" && !v.sent && !own.has(v.star));
   const reached = landed.filter((v, i) => landed.findIndex((x) => x.star === v.star) === i);
   return withSystems([
@@ -1162,8 +1110,6 @@ export function leadsOf(felt: FeltWorld[], holes: DarkMass[] = [], glows: Glow[]
     },
     ...felt.map(feltLead),
     ...shown.filter(([, far]) => !far).map(([h]) => darkLead(h)),
-    // A glow at a star with a lead already lands on that lead as a reading.
-    ...glows.filter((g) => !felt.some((f) => f.star === g.star)).map(glowLead),
     ...reached.map(seedLead),
     // The realistic premise's minds Earth has found, 2026-10-29.
     ...mindLeads(minds),

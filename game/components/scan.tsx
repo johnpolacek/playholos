@@ -9,7 +9,7 @@ import { ListHead } from "@/components/tab-head";
 import type { Dials } from "@/lib/drift";
 import { placeLeads } from "@/lib/game/places";
 import { knownQuery } from "@/lib/game/known-query";
-import { airReading, glowReading, type Lead, landed, leadsOf, lifeOf, nearestReading, ODDS, type Reading, rockLead, skyId, visitReading, watcherReadings, betelgeuseLead } from "@/lib/game/leads";
+import { airReading, type Lead, landed, leadsOf, lifeOf, nearestReading, ODDS, type Reading, rockLead, skyId, visitReading, watcherReadings, betelgeuseLead } from "@/lib/game/leads";
 import { setStruck, setWatched, useSchedule } from "@/components/picks";
 import { watchedAt } from "@/lib/sim/minds";
 import { skyOf } from "@/lib/game/natural";
@@ -109,7 +109,6 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
   // Keyed by the stars felt, so a reading landing never rebuilds the leads the map lights.
   // Black holes found join them, after the worlds, 2026-10-26.
   const holes = view?.holes;
-  const glows = view?.glows;
   // The realistic premise's minds found, 2026-10-29.
   const minds = view?.minds;
   // The watcher found opens our Close Look on Build. 2026-10-30.
@@ -134,13 +133,13 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
   const stars = [
     rockKey,
     `betelgeuse ${blown}`,
-    ...kept.map((k) => `kept ${k}`), ...(felt ?? []).map((f) => f.star), ...(holes ?? []).map((h) => h.name), ...(glows ?? []).map((g) => `glow ${g.star}`), ...seeds.map((v) => `seed ${v.star}`),
+    ...kept.map((k) => `kept ${k}`), ...(felt ?? []).map((f) => f.star), ...(holes ?? []).map((h) => h.name), ...seeds.map((v) => `seed ${v.star}`),
     ...(minds ? [JSON.stringify([minds.flashes.map((f) => f.range ?? f.seen), minds.glows.length, minds.sleepers.length, minds.watcher?.seen])] : []),
   ].join("|");
   const leads = useMemo(
     () =>
       felt
-        ? [...(rockKey ? [rockLead(rock!)] : []), ...(blown !== null ? [betelgeuseLead(blown)] : []), ...leadsOf(felt, holes ?? [], glows ?? [], seeds, kept, minds)]
+        ? [...(rockKey ? [rockLead(rock!)] : []), ...(blown !== null ? [betelgeuseLead(blown)] : []), ...leadsOf(felt, holes ?? [], seeds, kept, minds)]
         : [],
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [stars],
@@ -185,15 +184,13 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
     const visited = Object.fromEntries(
       leads.map((l) => [l.star, visits.filter((v) => v.star === l.star).map(visitReading)]),
     );
-    // What the Halo Survey saw at a lead's star, 2026-10-26.
-    const glowed = Object.fromEntries((glows ?? []).map((g) => [g.star, [glowReading(g)]]));
     // What our Close Look saw of the watcher, and our knocks on it. 2026-10-30.
     const knocks = (save?.sent ?? []).filter((m) => target(m.to) === WATCHER).map((m) => m.y);
     const watched = minds?.watcher && tenth !== null ? watcherReadings(minds.watcher, knocks, tenth) : [];
     const readings = Object.fromEntries(
       leads.map((l) => [
         l.slug,
-        [...landed(l.slug, observe, tenth), ...(air[l.star] ?? []), ...(visited[l.star] ?? []), ...(glowed[l.star] ?? []), ...(l.slug === "small-dark-body" ? watched : [])],
+        [...landed(l.slug, observe, tenth), ...(air[l.star] ?? []), ...(visited[l.star] ?? []), ...(l.slug === "small-dark-body" ? watched : [])],
       ]),
     );
     const opened = new Set(seen);
