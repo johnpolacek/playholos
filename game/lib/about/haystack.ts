@@ -86,6 +86,28 @@ export const STARS_PER_MIND = 1600;
 /** Herschel's DEBRIS and DUNES, and JCMT's SONS: about 580 stars between them, some shared. */
 export const NEARBY_STARS = 580;
 
+/** What the all-sky maps would have caught 400 ly away, as calcs/minds.py's ALL_SKY_W: IRAS's and AKARI's floor for a
+ *  12 K glow, about 70% of a Sun. */
+const ALL_SKY_W = 2.7e26;
+
+/** The game's awake old minds, drawn by calcs/minds.py's rule: since none has been seen, each glows under what our
+ *  maps would have caught at its distance, log-evenly up to it. A sample for the page, not any game's. */
+export function holosMinds(
+  n: number,
+  rand: () => number,
+): { ly: number; w: number }[] {
+  const out = [];
+  for (let i = 0; i < n; i++) {
+    const ly = 30 * (326 / 30) ** rand();
+    let limit = ALL_SKY_W * (ly / 400) ** 2;
+    if (ly <= NEARBY.ly)
+      limit = Math.min(limit, NEARBY.w * (ly / NEARBY.at) ** 2);
+    const lo = Math.min(1e18, limit / 2);
+    out.push({ ly, w: lo * (limit / lo) ** rand() });
+  }
+  return out;
+}
+
 /** Radio: Breakthrough Listen's 1,327 stars, Price et al. 2020. No steady tone above 2.1e12 W at Green Bank, at the
  *  sample's 50 pc. Only tones, only 1.1 to 3.45 GHz, about 15 minutes a star. */
 export const LISTEN = { w: 2.1e12, at: 163, stars: 1327 };

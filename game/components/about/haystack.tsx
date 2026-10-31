@@ -1,6 +1,8 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
+import { stream } from "@/lib/about/random";
 import {
   allSkyAbove,
+  holosMinds,
   least,
   LISTEN,
   listenLeast,
@@ -159,9 +161,10 @@ function trace(
  *  add, hatched, against what a mind might put out. */
 export function HeatChart({ T }: { T: number }) {
   const shown = useRef(T);
+  const minds = useMemo(() => holosMinds(80, stream(4)), []);
   const LO = 1e12,
     HI = 1e34;
-  const ref = useCanvas((c, w, h) => {
+  const ref = useCanvas((c, w, h, t) => {
     // Ease toward the dial, in log, so the painted region slides.
     const a0 = Math.log(shown.current),
       b0 = Math.log(T);
@@ -171,7 +174,8 @@ export function HeatChart({ T }: { T: number }) {
     const a = axes(w, h, LO, HI),
       ink = color("--ink"),
       muted = color("--muted"),
-      other = color("--other");
+      other = color("--other"),
+      you = color("--you");
     frame(c, a, LO, HI, muted);
     paint(c, a, (ly) => allSkyAbove(temp, ly), other);
     // Each whole-sky survey's own line, faint, named where it enters the chart.
@@ -220,6 +224,15 @@ export function HeatChart({ T }: { T: number }) {
         a.y(m.w) - 4,
       );
     }
+    // The game's awake old minds, as it draws them for a 12 K glow.
+    c.fillStyle = you;
+    minds.forEach((m, i) => {
+      c.globalAlpha = 0.55 + 0.45 * Math.sin(t * 1.3 + i * 1.7);
+      c.beginPath();
+      c.arc(a.x(m.ly), a.y(m.w), 2.2, 0, 2 * Math.PI);
+      c.fill();
+    });
+    c.globalAlpha = 1;
     c.font = "12px var(--font-plex-mono), monospace";
     c.fillStyle = other;
     c.fillText("RULED OUT, EVERY STAR", a.x(2000), PAD.t + 18);
