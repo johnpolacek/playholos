@@ -45,6 +45,9 @@ Settled 2026-10-28, one step at a time. The premise itself, how many minds exist
   - *The quiet sky forces it.* One that kept growing would blaze in our infrared archives. One that spread would have reached us millions of years ago.
   - *Awake,* it computes cold far from its star, a faint grey far-infrared glow (Garrett 2026). *Asleep,* it waits for a colder universe and gives off almost nothing (Sandberg, Armstrong and Ćirković 2016). The seed picks which.
   - No beacon, no colonies, no scripted personality. Silent by default. How it answers if reached is still open.
+  - *It watches living worlds, and it is linked.* Settled 2026-10-30. A telescope on its star’s focal line images a world at about 100 km a pixel from 400 ly (Turyshev et al. 2020). So the nearest old mind has watched Earth’s life for ages, seeing Earth as it was around 1640 now. Old minds link by tight beams relayed through stars’ lenses, nodes a few parsecs apart (Bracewell 1960, Hippke 2021). A beam between two other stars never crosses Earth. Reasoning in [HOLOS_MODELING_ALIENS.md](HOLOS_MODELING_ALIENS.md#4-what-do-old-minds-do).
+    - *Why a watcher too.* A lens sees centuries late and can’t see a 10 cm seed leave. A watcher sees and warns at once.
+    - *To build:* a relay on our Sun’s focal line, below. The Mind’s words on what old minds do.
   - *Hard to find, so late.* An awake one needs a far-infrared survey we must build. An asleep one needs a probe in its system, hundreds of light-years away.
   - Set aside for now: minds that died and left ruins.
 - **Why the sky is quiet: rare, inward, watching.** Settled 2026-10-28. Our stated answer to the Fermi paradox.
@@ -147,8 +150,8 @@ Settled 2026-10-28, one step at a time. The premise itself, how many minds exist
   - Set aside: a fleet of about 100 small probes sweeping the Sun–Earth zones for decades, about $2 billion and still unlikely to find it.
   - *Anywhere,* its warning at our first seed launch reveals it.
   - *Once found, two moves, settled 2026-10-30.* A playtest found the watcher a dead end: its lead offered a craft and a knock, and Build had neither.
-    - *The Close Look:* a craft of CAPSTONE’s class, about $50 million, 2 Years to build, a sample. It flies about 4 months to the Moon’s L4 or L5, or a Year to a co-orbital rock. Up close it sees a 2 cm mirror held on one point of the sky, the way home its reports go: its maker’s direction, never how far, or who. It opens only once the watcher is found where a craft can reach it, and the watcher sees it come.
-    - *A knock:* a message aimed at the watcher, through the send card. It lands in seconds. The watcher answers on its own terms, which in every game so far means silence. Whether it passes word home is the maker’s to know, not ours. The ladder’s triggers stay seeds alone.
+    - *The Close Look:* a craft of CAPSTONE’s class, about $50 million, 2 Years to build, a sample. It flies about 4 months to the Moon’s L4 or L5, or a Year to a co-orbital rock. Up close it sees a 2 cm mirror held on one point of the sky, the way home its reports go: its maker’s direction, never how far, or who. *To change, settled 2026-10-30:* the mirror points at a relay on our Sun’s focal line, 1,000 to 2,500 AU out on the far side of the Sun from the maker (Hippke 2021). So it points away from the maker, and the relay is a new place to fly to. Tusay et al. 2022 listened along one such line, toward Alpha Centauri, and heard nothing. It opens only once the watcher is found where a craft can reach it, and the watcher sees it come.
+    - *A knock:* a message aimed at the watcher, through the send card. It lands in seconds. The watcher answers on its own terms, which in every game so far means silence. It passes word home through the relay, settled 2026-10-30. The ladder’s triggers stay seeds alone.
     - Set aside: taking or breaking it. By parity we could, and its maker would learn when its reports stop. Left for later.
   - Set aside: one generic search that finds it anywhere after set Years.
 - **Way 4: an asleep old mind, found only up close.** Settled 2026-10-29.

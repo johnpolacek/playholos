@@ -2425,6 +2425,25 @@ For a player’s plan: Mercury mined, its light beamed, giant telescopes at the 
   - Betelgeuse is early in burning helium in its core, about 530 ly away, and its end is of order 100,000 years off. Saio et al. argued for centuries, and Joyce’s team disputed it.
   - Used: Betelgeuse explodes once per game, drawn between Year 50,000 and 200,000, a sample. Its brightness is a type II’s, absolute magnitude −17, so about a half Moon’s at its distance.
 
+### What old minds do: watching and links, 2026-10-30
+
+- **[Bracewell 1960, “Communications from superior galactic communities”](https://doi.org/10.1038/186670a0)** · Published, Nature 186, 670. Read through summaries and a scan of the first page, 2026-10-30. Expanded in *The Galactic Club*, 1974.
+  - Advanced communities would send messenger probes to nearby stars rather than signal across the gap, and would form a linked club.
+  - Why it matters: the oldest serious case for a quiet, linked network with a messenger near us.
+  - Used: old minds are linked, and the watcher is their messenger.
+- **[Hippke 2020 and 2021, “Interstellar communication network” II and III](https://arxiv.org/abs/2104.09564)** · Published, AJ. Abstracts read 2026-10-30 ([II](https://arxiv.org/abs/2009.01866)).
+  - Data rates fall with distance squared, so high rates need stars’ lenses. Nodes are relays a few parsecs apart, and a receiver most likely sits 1,000 to 2,500 AU from its star.
+  - Why it matters: the physics of how old minds would link, and where a node at our Sun would sit.
+  - Used: the network, and the watcher’s relay on our Sun’s focal line.
+- **[Kerby and Wright 2021, stellar lens relays](https://arxiv.org/abs/2109.08657)** · Published, AJ. Found by search 2026-10-30, abstract only.
+  - The engineering and upkeep of relays at a star’s lens, including keeping station as the star wobbles.
+  - Used: a relay is an active, long-lived craft.
+- **[Tusay et al. 2022, radio search at the solar lens toward Alpha Centauri](https://arxiv.org/abs/2206.14807)** · Published, AJ. Found by search 2026-10-30.
+  - Green Bank searched for a relay’s signal along the Sun’s focal line opposite Alpha Centauri. Nothing found.
+  - Used: a relay here is allowed, searchable, and barely searched.
+- **Turyshev et al. 2020,** above under lenses. 25 km a pixel at 30 pc scales to about 100 km at 400 ly.
+  - Used since 2026-10-30: old minds watch living worlds, Earth’s included, from home.
+
 ## Watch list
 
 Results the design is waiting on. Check each when its date comes.

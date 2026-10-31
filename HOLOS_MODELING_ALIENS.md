@@ -36,7 +36,7 @@ Every choice about other minds has to pass these, in order.
 | How far is the nearest mind? | Typically about 400 light-years | Follows from the density |
 | How old is a mind we find? | Older, typically by about 2.3 billion years, two thirds by 0.8 to 3.9 | Moderate |
 | Any minds our age? | About 7 in the whole Galaxy within 100,000 years of us, the nearest typically 18,000 light-years away | Follows from the density and ages |
-| What do old minds do? | Turn inward. Compute cold, or sleep | Moderate. Forced by the quiet sky |
+| What do old minds do? | Turn inward. Compute cold, or sleep. Watch living worlds, and link by beam | Moderate for inward. Low for watching and links |
 | Has anyone heard us? | Almost surely not. Our radio reaches about 90 light-years | About 99% |
 | Is something watching us? | Yes, a small dark watcher in our system | About 2 in 3. Low |
 | What is dangerous? | Spreading. Seeds that build can draw a warning, then worse | A guess. No evidence on motives |
@@ -209,6 +209,23 @@ The plain idea: computing costs less energy the colder it runs. So a mature mind
   - Heavy computing far from a star could shed its heat at 5 to 28 K. It would glow faint, grey and featureless in the far infrared and submillimetre, bands older searches mostly skipped. Existing archives could be reread for it.
   - Informs: how an awake old mind shows, and why it can hide today. Our deep far-infrared archives only cover stars within about 150 light-years.
 
+**What else they do: watch life, and talk.** The plain idea: a mind that has stopped growing still has reasons to look and to talk, and both are cheap. Its own star bends light like a lens, so a small telescope out on the focal line can photograph another world. And minds that link up can share what each sees.
+
+- **[Turyshev et al. 2020](https://arxiv.org/abs/2002.11871)** · NASA NIAC study.
+  - A telescope about 1 m wide at the Sun’s lens, 550 AU and beyond, images a world 30 parsecs away at about 25 km a pixel.
+  - Informs: an old mind can watch living worlds from home. At 400 light-years, about 100 km a pixel, enough to see forests spread and fields appear. One telescope per target, so watching all 90,000 living worlds within 1,000 light-years is cheap.
+- **[Bracewell 1960, “Communications from superior galactic communities”](https://doi.org/10.1038/186670a0)** · Published, Nature 186, 670. Expanded in his 1974 book *The Galactic Club*.
+  - Advanced communities would send messenger probes rather than shout, and would form a linked club.
+  - Informs: the idea that old minds are linked, and that the watcher is their messenger here.
+- **[Hippke 2020 and 2021, “Interstellar communication network”](https://arxiv.org/abs/2104.09564)** · Published, AJ ([II](https://arxiv.org/abs/2009.01866), [III](https://arxiv.org/abs/2104.09564)).
+  - Tight beams relayed through stars’ lenses carry far more data than any direct link. Relay nodes are likely a few parsecs apart, with receivers most likely 1,000 to 2,500 AU from their star.
+  - Informs: how old minds link. A beam aimed between two other stars never crosses Earth, so the network is invisible to us.
+- **[Kerby and Wright 2021, stellar lens relays](https://arxiv.org/abs/2109.08657)** · Published, AJ.
+  - The engineering such relays need, including keeping station on the focal line as their star wobbles.
+  - Informs: a relay is a small, active, long-lived craft, not a passive mirror.
+
+**What Holos takes:** old minds watch the living worlds near them through their stars’ lenses, and they are linked by beams through relays. Watching is how they know Earth’s life already. Their light is old: the nearest, about 400 light-years away, sees Earth as it was around 1640. The links are how a watcher’s word gets home. Low confidence, but every piece is cheap and none is contradicted.
+
 ### 5. How far does a young mind spread?
 
 The plain idea: picture one mind that settles two nearby stars, and each colony settles two more. It doubles every step, and in a few million years it is everywhere. So one mind like that, at any time in billions of years, would have reached Earth.
@@ -249,6 +266,8 @@ Reaching isn’t the same as being seen. A seed that builds a receiver from a co
 ### 6. Is something watching us?
 
 The plain idea: with about 200,000 old minds in our Galaxy, only one has to send a watcher. A 1 kg watcher for every star is trivial for an old mind. Its purpose is the policing above: to see hungry growth early, while it is still small and near.
+
+Why send one if a lens sees from home? The lens sees Earth as it was centuries ago. A watcher sees at once and warns at once. And a lens shows a world, not a 10 cm seed leaving it. The watcher reports home through the network: up close, its mirror points at a relay on our Sun’s focal line, out beyond 550 AU on the far side of the Sun from its maker. So its mirror points away from its maker, not toward it.
 
 - **[Benford 2019, “Looking for Lurkers: Co-orbiters as SETI Observables”](https://arxiv.org/abs/1903.09582)** · Published, AJ.
   - Earth’s co-orbiting asteroids, such as Kamoʻoalewa, are where a watcher could sit unseen. They could be searched.
@@ -297,6 +316,9 @@ The plain idea: our ability to look is about to jump. Holos starts on Year 0, wi
 
 - **[Vera C. Rubin Observatory](https://rubinobservatory.org/)** · Maps the whole southern sky every few nights to about magnitude 24.5.
   - Informs: the deep, stacked search for a watcher at the Earth–Moon L4 and L5 points.
+- **[Tusay et al. 2022, a search at the Sun’s lens toward Alpha Centauri](https://arxiv.org/abs/2206.14807)** · Published, AJ.
+  - Green Bank listened for a relay’s signal along the Sun’s focal line opposite Alpha Centauri. Nothing found.
+  - Informs: a relay here is searchable, and has barely been searched. Only one direction has been tried.
 - **[ESO’s Extremely Large Telescope](https://www.eso.org/public/announcements/ann25001/)** · First light planned for March 2029.
 - **[Square Kilometre Array](https://www.skao.int/)** · Science verification from 2029 for SKA-Low and 2031 for SKA-Mid.
   - Informs: how far Earth’s radars could be heard, and real build times for large radio arrays.
