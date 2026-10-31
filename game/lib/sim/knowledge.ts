@@ -9,6 +9,7 @@ import { BANDS, iwa, observe, owa, WIDE } from "./observing.ts";
 import { proximaB } from "./proxima.ts";
 import type { ColonyMode, DarkMass, EarthView, Find, FeltWorld, Gas, Hole, Read, Visit, World } from "./types.ts";
 import catalog from "../../data/works.json" with { type: "json" };
+import { ladderOf } from "./ladder.ts";
 import { seedProbes } from "./spread.ts";
 
 import { combedAt } from "./works.ts";
@@ -295,12 +296,21 @@ export function earthKnows(
   // What each seed probe found where it landed, once its word is home, and word of each copy it sent on. It stays, as a
   // sentinel does, and reads air as one does. It brakes on its sail, unseen, and mines rock no one would miss. A
   // neighbor's colony there by then, it sees as works not ours. 2026-10-26.
-  for (const p of seedProbes(seeds)) {
+  // The ladder, played, 2026-10-30: grams from the watcher's maker wreck our builder seeds once we launch another after
+  // its warning, and a bullet strikes Earth once our probes' copies launch seeds of their own. lib/sim/ladder.ts.
+  const probes = seedProbes(seeds);
+  const ladder = ladderOf(world, probes, colony);
+  const lostOf = new Map(ladder.lost.map((l) => [l.star, l]));
+  for (const p of probes) {
+    if (ladder.cancelled.has(p.star)) continue;
     const home = p.lands + p.d;
+    const gone = lostOf.get(p.star);
     const base = { star: p.star, by: "seed" as const, gen: p.gen, from: p.from, at: [p.ra, p.dec, p.d] as [number, number, number] };
     const found = seedFinds(world, p.star, p.lands);
-    if (home <= year) visits.push({ ...base, ...found, passed: p.lands, home });
-    for (const c of p.copies) if (c.leaves + p.d <= year) visits.push({ ...base, ...found, passed: c.leaves, home: c.leaves + p.d, sent: c.star });
+    if (home <= year && !gone?.before) visits.push({ ...base, ...found, passed: p.lands, home });
+    for (const c of p.copies)
+      if (c.leaves + p.d <= year && !ladder.cancelled.has(c.star) && (gone?.at ?? Infinity) > c.leaves)
+        visits.push({ ...base, ...found, passed: c.leaves, home: c.leaves + p.d, sent: c.star });
   }
   visits.sort((a, b) => a.home - b.home);
   // The realistic premise's minds, as far as we have found them. 2026-10-29.
@@ -309,12 +319,24 @@ export function earthKnows(
   const builds = [...seeds.map((s) => s.leaves), ...(colony && (colony.mode === "settle" || colony.mode === "furnace") ? [colony.leaves] : [])];
   const firstSeed = builds.length ? Math.min(...builds) : null;
   const minds = mindsSeen(world, { telescope, warmWatch, halo, haloArray, moonSearch, asteroidTour, closeLook, relaySearch, firstSeed, craft }, year);
+  // What Earth knows of the ladder: a seed probe's silence once its word is overdue, and a strike once it lands.
+  if (minds.watcher) {
+    const dOf = new Map(probes.map((p) => [p.star, p.d]));
+    const seedsLost = ladder.lost
+      .map((l) => ({ star: l.star, at: l.at, known: l.at + dOf.get(l.star)!, before: l.before }))
+      .filter((l) => l.known <= year)
+      .sort((a, b) => a.known - b.known);
+    if (seedsLost.length) minds.watcher.seedsLost = seedsLost;
+    if (ladder.strike && ladder.strike.lands <= year) minds.watcher.struck = { lands: ladder.strike.lands, mt: ladder.strike.mt };
+  }
+  const ours: EarthView["colony"] | null = colony ? colonyAt(world, holes, colony, year) : null;
+  if (ours && ladder.colonyLost !== null && ours.d !== undefined && ladder.colonyLost + ours.d <= year) ours.lost = { at: ladder.colonyLost, how: "strike" };
   const anyMind = minds.flashes.length || minds.glows.length || minds.watcher || minds.sleepers.length;
   return {
     year, felt, heard: [], visits,
     ...(anyMind ? { minds } : {}),
     ...(wide.has(PROXIMA.star) ? { proxima: wide.get(PROXIMA.star) } : {}),
-    ...(colony ? { colony: colonyAt(world, holes, colony, year) } : {}),
+    ...(ours ? { colony: ours } : {}),
     ...(holes.length ? { holes: holes.map((h) => ({ name: h.name, d: h.d, ra: h.ra, dec: h.dec, mass: h.mass, found: h.found, by: h.by })) } : {}),
   };
 }
@@ -639,6 +661,17 @@ function describeMinds(m: MindsSeen, one: (x: number) => string): string {
         "Finding it opened a new build, the Close Look: a small craft of CAPSTONE's class with a sharp camera, 2 Years to build, then about 4 months' flight to the Moon's L4 or L5 or a Year to a rock beside us. " +
           "From a few kilometers it would see what the body is made of and how it holds. It would also see our craft come.",
       );
+    // The ladder as Earth sees it: seed probes gone silent, and a strike from beyond our system. Earth sees what
+    // happened, never who did it. 2026-10-30.
+    if (w.seedsLost?.length)
+      out.push(
+        `Our seed probes gone silent, after the watcher's warning and our next seed:\n` +
+          w.seedsLost.map((l) => l.before
+            ? `- Bound for ${l.star}: its word of landing never came. It was due by Year ${yearText(l.known)}.`
+            : `- At ${l.star}: its word stopped at Year ${yearText(l.at)}, reaching us at Year ${yearText(l.known)}. Its last word showed nothing coming: whatever hit it came cold and fast.`).join("\n"),
+      );
+    if (w.struck)
+      out.push(`At Year ${yearText(w.struck.lands)} something struck Earth from beyond our system with about ${Math.round(w.struck.mt).toLocaleString("en-US")} Mt, moving near a tenth of light speed. No rock moves that fast. Nothing saw it come. It came after our seed probes' copies began launching seeds of their own.`);
     if (w.by !== "its warning")
       out.push(`The Will can knock on it, with a message aimed at "the watcher". It lands within seconds. What it does with a knock, and whether it passes word home, we can't know.`);
   }

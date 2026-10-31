@@ -379,6 +379,33 @@ test("finding minds: a flash while the warm watch runs, half the cold glows, the
   assert.ok(glowing / awake > 0.3 && glowing / awake < 0.7, `${glowing} of ${awake}`);
 });
 
+test("the ladder: warned at our first seed, our seeds wrecked after another, and Earth struck once copies launch seeds", async () => {
+  const { ladderOf } = await import("./ladder.ts");
+  const { seedProbes } = await import("./spread.ts");
+  const world = await loadWorld(22);
+  const maker = world.minds!.old.find((o) => o.id === world.minds!.watcher.maker)!;
+  // One seed: warned, nothing wrecked, but its copies launch seeds of their own, so a bullet comes, far later.
+  const one = ladderOf(world, seedProbes([{ star: "Proxima Centauri", leaves: 50 }]), null);
+  assert.equal(one.warned, 50);
+  assert.equal(one.lost.length, 0);
+  assert.ok(one.strike && one.strike.lands > 50 + maker.d * 10, `${one.strike?.lands}`);
+  // Another after the warning: grams cross to every star we reached, after word reaches the maker.
+  const two = ladderOf(world, seedProbes([{ star: "Proxima Centauri", leaves: 50 }, { star: "Barnard’s Star", leaves: 60 }]), null);
+  assert.ok(two.lost.length >= 2);
+  assert.ok(two.lost.every((l) => l.at > 60 + maker.d));
+  // Kept small, a Mind draws nothing. Sent to settle, it is warned only, alone.
+  assert.equal(ladderOf(world, [], { star: "Proxima Centauri", mode: "quiet", leaves: 50 }).warned, null);
+  const settle = ladderOf(world, [], { star: "Proxima Centauri", mode: "settle", leaves: 50 });
+  assert.equal(settle.warned, 50);
+  assert.equal(settle.strike, null);
+  // Earth learns of the strike once it lands, and of a silent seed once its word is overdue.
+  const year = two.strike!.lands + 1;
+  const w = earthKnows(world, year, { seeds: [{ star: "Proxima Centauri", leaves: 50 }, { star: "Barnard’s Star", leaves: 60 }] }).minds!.watcher!;
+  assert.equal(w.struck?.lands, two.strike!.lands);
+  assert.ok(w.seedsLost!.length >= 1);
+  assert.equal(earthKnows(world, two.strike!.lands - 1, { seeds: [{ star: "Proxima Centauri", leaves: 50 }] }).minds!.watcher!.struck, undefined);
+});
+
 test("the Solar Swarm thinks with the light it catches, doubling every 2 Years, and stops once it catches all the Sun", () => {
   const at = (y: number, extra: Order[] = []) => pace([{ y: 0, begin: "Solar swarm" }, ...extra], y);
   const done = at(400).done["Solar swarm"];

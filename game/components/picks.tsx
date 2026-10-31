@@ -61,6 +61,13 @@ export function setWatched(at: number | null) {
   hearing.forEach((f) => f());
 }
 const hear = (f: () => void) => (hearing.add(f), () => void hearing.delete(f));
+// And the ladder's strike once it has landed, as Scan hears it: only the server's world knows who fires. 2026-10-30.
+let struck: { lands: number; mt: number } | null = null;
+export function setStruck(at: { lands: number; mt: number } | null) {
+  if (at?.lands === struck?.lands) return;
+  struck = at;
+  hearing.forEach((f) => f());
+}
 
 /** This game's Earth, from the server, and when each queued build is done with the compute it has. Until the Earth
  *  comes, the dates are at today's compute. */
@@ -73,6 +80,7 @@ export function useSchedule() {
   const seed = save?.seed;
   const found = seed === undefined ? null : (rockOf(seed)?.found ?? null);
   const seenAt = useSyncExternalStore(hear, () => watched);
+  const bullet = useSyncExternalStore(hear, () => struck);
   const base = useMemo(
     (): Record<string, number | null> => ({ ...schedule(plan, scale), [FOUND]: found, [WATCHED]: seenAt }),
     [plan, scale, found, seenAt],
@@ -81,8 +89,8 @@ export function useSchedule() {
   const { year } = useGame();
   const tenth = year === null ? null : Math.floor(year * 10) / 10;
   const hits = useMemo(
-    () => (tenth === null ? [] : hitsAt(plan, seed, base, tenth)),
-    [plan, seed, base, tenth],
+    () => (tenth === null ? [] : hitsAt(plan, seed, base, tenth, bullet)),
+    [plan, seed, base, tenth, bullet],
   );
   // Earth lost: our backup wakes where something can run it, and regrows. 2026-10-28.
   const { lives, restore } = useMemo(() => {

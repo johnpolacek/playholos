@@ -10,7 +10,7 @@ import type { Dials } from "@/lib/drift";
 import { placeLeads } from "@/lib/game/places";
 import { knownQuery } from "@/lib/game/known-query";
 import { airReading, glowReading, type Lead, landed, leadsOf, lifeOf, nearestReading, ODDS, type Reading, rockLead, skyId, visitReading, watcherReadings, betelgeuseLead } from "@/lib/game/leads";
-import { setWatched, useSchedule } from "@/components/picks";
+import { setStruck, setWatched, useSchedule } from "@/components/picks";
 import { watchedAt } from "@/lib/sim/minds";
 import { skyOf } from "@/lib/game/natural";
 import { target, WATCHER } from "@/lib/game/sends";
@@ -115,6 +115,9 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
   // The watcher found opens our Close Look on Build. 2026-10-30.
   const watchedYear = watchedAt(minds?.watcher);
   useEffect(() => setWatched(watchedYear), [watchedYear]);
+  // And the maker's bullet, once it has landed, cuts our thought from then. 2026-10-30.
+  const struck = minds?.watcher?.struck ?? null;
+  useEffect(() => setStruck(struck), [struck]);
   // And stars our seed probes reached with no lead of their own, 2026-10-26.
   const seeds = useMemo(() => visits.filter((v) => v.by === "seed" && !v.sent), [visits]);
   // Holes our craft went to keep their leads, beside the nearest.

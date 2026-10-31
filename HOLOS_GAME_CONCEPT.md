@@ -126,6 +126,12 @@ Settled 2026-10-28, one step at a time. The premise itself, how many minds exist
   - *Contain* when we launch another seed after the warning.
   - *Strike Earth* when our colonies launch seeds of their own. Growth is then out of our hands.
   - Set aside: seed counts, such as contain after 3 and strike after 10, which would be arbitrary.
+- **The ladder, played, built 2026-10-30.** Before, only the warning played. lib/sim/ladder.ts.
+  - *Contain:* word of a second builder seed reaches the maker, a light-time later. Its grams fly at a tenth of light speed to every star our seeds reached and wreck each probe there, or on arrival. Copies a lost probe hadn’t sent never leave. A Mind sent to settle is lost the same way.
+  - *Strike:* the first copy to leave a star, seen by a watcher there, sends word to the maker. It readies a bullet as any mind does, about 32 Years by parity, and fires it at Earth: 1,000 t at a tenth of light speed, about 108,000 Mt, climate harm, not Earth’s end.
+  - *Seed 22, maker 480 ly off:* one seed probe at Year 50 draws a strike landing about Year 5,484. A second at Year 60 loses all 14 of our probes between Years 5,277 and 5,478.
+  - *What Earth sees:* a probe’s silence once its word is overdue, and a strike from beyond our system when it lands. Never who. On Scan, as readings on the watcher’s lead. Its harm cuts our thought as a rock’s does.
+  - *Not yet:* our screens on the line to the maker, since we never learn its star. Strikes on a Mind at a hole.
 - **Real stars to 326 ly, a seeded Galaxy beyond.** Settled 2026-10-29. Gaia’s census of nearby stars lists about 331,000 within 100 pc (Smart et al. 2021), a few MB to ship.
   - *Beyond,* stars are drawn from the Galaxy’s measured shape, its disk, bar, arms and bulge. They are made from the seed as we look, the same every time.
   - *Why so far.* The typical nearest old mind sits about 400 ly away, so most of the early game stays inside real data.

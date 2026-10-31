@@ -63,6 +63,10 @@ export interface WatcherSeen {
   /** What our Relay Search found out along that line, and when its word came home: a dark craft holding exactly on
    *  the line, and silent while we were near. How far out, in AU. 2026-10-30. */
   relay?: { at: number; au: number };
+  /** The ladder, as Earth learns it. Our seed probes the maker's grams wrecked, each once its silence tells us: its
+   *  star, the Year it was lost, and the Year we knew. And the bullet that struck Earth. 2026-10-30. */
+  seedsLost?: { star: string; at: number; known: number; before: boolean }[];
+  struck?: { lands: number; mt: number };
 }
 
 /** A compact warm body resting in the cold outer reaches of another star's system. */

@@ -10,7 +10,7 @@ import { rockAt, rockOf } from "./rocks";
 import type { Plan } from "./types";
 
 export interface Hit {
-  /** Where it came from: "a rock". */
+  /** Where it came from: "a rock", or "beyond our system" for the bullet the watcher's maker fires. */
   from: string;
   lands: number;
   mt: number;
@@ -24,8 +24,11 @@ export function hitsAt(
   seed: number | undefined,
   done: Record<string, number | null>,
   year: number,
+  // The ladder's strike, once it has landed, as the server's view tells it: only the world knows who fires. 2026-10-30.
+  struck: { lands: number; mt: number } | null = null,
 ): Hit[] {
   const out: Hit[] = [];
+  if (struck && struck.lands <= year) out.push({ from: "beyond our system", lands: struck.lands, mt: struck.mt, screened: false, harm: harmOf(struck.mt) });
   const rock = seed === undefined ? null : rockAt(rockOf(seed), plan, done, year);
   if (rock?.state === "struck") out.push({ from: "a rock", lands: rock.strikes, mt: rockMt(rock.m), screened: false, harm: harmOf(rockMt(rock.m)) });
   return out.sort((a, b) => a.lands - b.lands);

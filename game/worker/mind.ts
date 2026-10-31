@@ -142,7 +142,10 @@ export async function mind(req: Request) {
   const at = yearAt(began, Date.now(), away);
   const year = at === null || at < 0 ? null : at;
   const base = schedule(plan, scale);
-  const hits = inPool(seed) ? hitsAt(plan, seed, { ...base, [FOUND]: rockOf(seed)?.found ?? null }, year ?? 0) : [];
+  // What Earth knows now, the ladder's strike among it, before the strike's harm is dated. 2026-10-30.
+  const kit = world ? kitOf(plan, scale) : null;
+  const view = world && kit ? willKnows(world, year ?? 0, kit, away) : null;
+  const hits = inPool(seed) ? hitsAt(plan, seed, { ...base, [FOUND]: rockOf(seed)?.found ?? null }, year ?? 0, view?.minds?.watcher?.struck ?? null) : [];
   // Earth lost: our backup wakes where something can run it, and regrows. 2026-10-28.
   const end = hits.find((h) => !h.screened && h.harm.ends);
   const lives = end && world ? survivorAt(base, end.lands, colonyOf(plan, scale, (n) => starD(world, n))) : null;
@@ -151,10 +154,8 @@ export async function mind(req: Request) {
   let known = "";
   // The watcher found opens our Close Look, as Build has it. 2026-10-30.
   let watched: number | null = null;
-  if (world) {
-    const kit = kitOf(plan, scale);
+  if (world && kit && view) {
     const held = kt(matterAt({ ...plan, observe: [] }, done, year ?? 0));
-    const view = willKnows(world, year ?? 0, kit, away);
     watched = watchedAt(view.minds?.watcher);
     known = `${describe(view)}\n\nMatter we hold in orbit now, less what our builds take: ${held}.${year === null ? "" : `\n\n${describeSearch(kit.searched, year)}`}`;
   }

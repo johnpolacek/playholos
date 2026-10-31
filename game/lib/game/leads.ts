@@ -965,6 +965,33 @@ export function watcherReadings(w: WatcherSeen, knocks: number[], year: number):
         "It went quiet for us. Whatever it carries, it means to keep from us.",
       ],
     });
+  // The ladder as we see it: seed probes gone silent, and a strike from beyond our system. 2026-10-30.
+  if (w.seedsLost?.length && w.seedsLost[0].known <= year) {
+    const gone = w.seedsLost.filter((l) => l.known <= year);
+    out.push({
+      id: "watcher-silence",
+      needs: "",
+      at: tenths(gone[0].known),
+      by: "Our seed probes",
+      title: "Our seeds gone silent",
+      line: `${gone.length === 1 ? "One of our seed probes" : `${gone.length} of our seed probes`} went silent after we launched another seed past the watcher’s warning: ${gone.map((l) => l.star).join(", ")}. The last word from each showed nothing coming.`,
+      mind: "Something cold and fast found each of them at its star. We were warned, and we sent another. This reads as the answer.",
+      now: made,
+      tells: ["Each seed that copies itself on may draw more than silence."],
+    });
+  }
+  if (w.struck && w.struck.lands <= year)
+    out.push({
+      id: "watcher-strike",
+      needs: "",
+      at: tenths(w.struck.lands),
+      by: "Earth",
+      title: "Struck from beyond",
+      line: `Something struck Earth with about ${Math.round(w.struck.mt).toLocaleString("en-US")} Mt, moving near a tenth of light speed. No rock moves that fast, and nothing saw it come.`,
+      mind: "It came after our seed probes’ copies began launching seeds of their own. Whoever sent the watcher answered our growth, from far off, long after we started it.",
+      now: made,
+      tells: ["What we started then, we can’t call back."],
+    });
   // A knock shows in the tenth it is sent, as the Year does.
   for (const [i, y] of knocks.entries())
     if (tenths(y) <= year)
