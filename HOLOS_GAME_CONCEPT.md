@@ -1,6 +1,6 @@
 # Holos · Game Concept
 
-Last updated: October 28, 2026.
+Last updated: October 31, 2026.
 
 ## Status
 

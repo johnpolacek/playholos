@@ -97,9 +97,9 @@ export default function About() {
             Where forecasts split, each game rolls a branch, weighted by its odds.
           </p>
           <div className="mt-12 grid gap-8 wide:grid-cols-3">
-            <Fact value="9,484">
-              Stars and companions within 100 light-years, from Gaia&rsquo;s census of the Sun&rsquo;s neighborhood and
-              Hipparcos.
+            <Fact value="301,387">
+              Stars and companions within 326 light-years, each at its real place, from Gaia&rsquo;s census of the
+              Sun&rsquo;s neighborhood and Hipparcos.
             </Fact>
             <Fact value="9.2 billion">People on Earth at Year 0, from the UN&rsquo;s 2024 projections.</Fact>
             <Fact value="5 minutes">
@@ -119,11 +119,16 @@ export default function About() {
           <div className="mt-10 grid gap-10 wide:grid-cols-2">
             <div data-a>
               <div className="font-mono text-[26px] leading-none">1</div>
-              <h3 className="mt-3 text-[18px] font-semibold">If we aren&rsquo;t alone, the others woke when we did</h3>
+              <h3 className="mt-3 text-[18px] font-semibold">If we aren&rsquo;t alone, the others are far older</h3>
               <p className="mt-2 text-[15px] leading-[1.6] text-page-ink2">
-                Two civilizations like ours, placed at random in the galaxy, would overhear each other about one time in
-                ten million ({out("https://arxiv.org/abs/1007.0850", "Forgan and Nichol 2010")}). So the game supposes
-                that anyone near enough to find woke in the same century as us.
+                Holos takes one mind per million stars, so the nearest is typically about 400 light-years away. Most
+                Earth-like worlds are older than ours, so a mind we find likely woke billions of years before us (
+                {out("https://arxiv.org/abs/astro-ph/0012399", "Lineweaver 2001")}). The quiet sky says they went inward, and
+                one may already be watching us. You can turn the odds yourself on the{" "}
+                <AboutLink href="/about/research" className="text-you underline decoration-you/40 underline-offset-2">
+                  research page
+                </AboutLink>
+                .
               </p>
             </div>
             <div data-a>
