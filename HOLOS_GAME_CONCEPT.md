@@ -47,7 +47,7 @@ Settled 2026-10-28, one step at a time. The premise itself, how many minds exist
   - No beacon, no colonies, no scripted personality. Silent by default. How it answers if reached is still open.
   - *It watches living worlds, and it is linked.* Settled 2026-10-30. A telescope on its star’s focal line images a world at about 100 km a pixel from 400 ly (Turyshev et al. 2020). So the nearest old mind has watched Earth’s life for ages, seeing Earth as it was around 1640 now. Old minds link by tight beams relayed through stars’ lenses, nodes a few parsecs apart (Bracewell 1960, Hippke 2021). A beam between two other stars never crosses Earth. Reasoning in [HOLOS_MODELING_ALIENS.md](HOLOS_MODELING_ALIENS.md#4-what-do-old-minds-do).
     - *Why a watcher too.* A lens sees centuries late and can’t see a 10 cm seed leave. A watcher sees and warns at once.
-    - *Built 2026-10-30:* the relay on our Sun’s focal line and the Relay Search that finds it, below. Still to write: the Mind’s words on what old minds do, beyond what we have found.
+    - *Built 2026-10-30:* the relay on our Sun’s focal line and the Relay Search that finds it, below. The Mind says nothing of what old minds do beyond what we have found, settled 2026-10-30. Watching and links are the model’s truth, not Earth’s knowledge, until our finds show them. Set aside: the Mind offering them at Year 0 as theory.
   - *Hard to find, so late.* An awake one needs a far-infrared survey we must build. An asleep one needs a probe in its system, hundreds of light-years away.
   - Set aside for now: minds that died and left ruins.
 - **Why the sky is quiet: rare, inward, watching.** Settled 2026-10-28. Our stated answer to the Fermi paradox.
