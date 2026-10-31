@@ -1,9 +1,32 @@
 import { useRef, useState } from "react";
 import { record, STARS, verdict, type Star } from "@/lib/about/checked";
+import { starsWithin } from "@/lib/about/dials";
+import { STARS_PER_MIND } from "@/lib/about/haystack";
 import { color, KICK, useCanvas } from "./dials";
 
 // Checked stars, on /about/research: every real star within 20 ly, turning slowly around the Sun, lit by how closely
 // it has been searched. Tap one for its record: what each search rules out there, and what it leaves open.
+
+/** Stars worth a closer look, from checked.json: the only cold dust rings within 20 ly, where a cold mind could pass for
+ *  dust until checked at several wavelengths, a target Breakthrough Listen planned and never heard, and the two no
+ *  survey looked at closely. */
+const LOOK = [
+  {
+    name: "Epsilon Eridani",
+    why: "A ring of cold dust, never checked at enough wavelengths to tell it from a cold mind",
+  },
+  {
+    name: "Tau Ceti",
+    why: "A ring of cold dust too, though the most searched star near us",
+  },
+  { name: "82 G. Eri", why: "The third dust ring within 20 ly" },
+  {
+    name: "Epsilon Indi",
+    why: "Breakthrough Listen planned to listen and never did",
+  },
+  { name: "Gliese 3379", why: "No close search at all" },
+  { name: "Gliese 169.1 A", why: "No close search at all" },
+];
 
 const R = 20,
   TILT = 1.05;
@@ -115,16 +138,80 @@ function StarMap({ pick, onPick }: { pick: Star; onPick: (s: Star) => void }) {
 export function CheckedStars() {
   const start = STARS.find((s) => s.name === "Tau Ceti") ?? STARS[0];
   const [pick, setPick] = useState<Star>(start);
-  const radio = STARS.filter((s) => s.listen).length,
-    cold = STARS.filter((s) => s.debris || s.dunes || s.sons).length,
-    none = STARS.filter((s) => s.checks === 0).length;
+  const isCold = (s: Star) => !!(s.debris || s.dunes || s.sons);
+  const split = [
+    {
+      label: "Both",
+      n: STARS.filter((s) => s.listen && isCold(s)).length,
+      tone: "bg-other",
+    },
+    {
+      label: "Radio only",
+      n: STARS.filter((s) => s.listen && !isCold(s)).length,
+      tone: "bg-other/50",
+    },
+    {
+      label: "Cold glow only",
+      n: STARS.filter((s) => !s.listen && isCold(s)).length,
+      tone: "bg-ink/50",
+    },
+    {
+      label: "Never checked closely",
+      n: STARS.filter((s) => s.checks === 0).length,
+      tone: "bg-faint",
+    },
+  ];
+  const odds = Math.round(
+    1 / (1 - Math.exp(-starsWithin(20) / STARS_PER_MIND)),
+  );
   return (
     <div className="grid gap-x-14 gap-y-8 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
       <div>
         <StarMap pick={pick} onPick={setPick} />
-        <p className={`mt-2 ${KICK}`}>
-          {STARS.length} STARS WITHIN 20 LY · {radio} LISTENED TO, RINGED ·{" "}
-          {cold} CHECKED FOR COLD GLOW · {none} ONLY PASSED OVER, DIM
+        <div className={`mt-2 ${KICK}`}>
+          HOW THE {STARS.length} STARS WITHIN 20 LY WERE SEARCHED
+        </div>
+        <div className="mt-2 flex h-2.5 w-full overflow-hidden rounded-full">
+          {split.map((p) => (
+            <div
+              key={p.label}
+              className={p.tone}
+              style={{ width: `${(p.n / STARS.length) * 100}%` }}
+              title={`${p.label}: ${p.n}`}
+            />
+          ))}
+        </div>
+        <ul className="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-[13px]">
+          {split.map((p) => (
+            <li key={p.label} className="flex items-center gap-1.5">
+              <span className={`inline-block size-2 rounded-full ${p.tone}`} />
+              <span className="font-mono tabular-nums">{p.n}</span>
+              <span className="text-muted">{p.label.toLowerCase()}</span>
+            </li>
+          ))}
+        </ul>
+        <div className={`mt-6 ${KICK}`}>WORTH A CLOSER LOOK</div>
+        <ul className="mt-2 flex flex-col gap-2">
+          {LOOK.map((l) => {
+            const star = STARS.find((s) => s.name === l.name);
+            if (!star) return null;
+            return (
+              <li key={l.name}>
+                <button
+                  type="button"
+                  onClick={() => setPick(star)}
+                  className={`text-left text-[14px] leading-[1.45] ${star.name === pick.name ? "text-other" : "hover:text-ink"}`}
+                >
+                  <span className="font-semibold">{l.name}</span>
+                  <span className="text-muted">. {l.why}</span>
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+        <p className="mt-5 text-[15px] leading-[1.55]">
+          At one mind per {STARS_PER_MIND.toLocaleString("en-US")} stars, there
+          is about a 1 in {odds} chance that any mind lies this close.
         </p>
         <label className="mt-4 flex items-center gap-3">
           <span className={KICK}>OR CHOOSE</span>
