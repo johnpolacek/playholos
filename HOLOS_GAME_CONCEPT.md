@@ -1005,7 +1005,7 @@ Settled 2026-10-28, from the designer: anything available to another civilizatio
   - *The Moon Vault* wakes on what we built off Earth: its own seed of machines, 0.1% of Earth’s thought, plus the Cold Annex 20%, Power from Orbit 15%, the Orbital Foundry 3%, the Mass Driver and Belt Mining 2% each, the Orbital Yard 1%. Samples.
   - *The Trojan Vault* has only its seed and a small dark rock: 0.1%, and slower to grow.
   - *Our colony* is a Mind with its own industry: 1%.
-  - *Then its industry copies itself,* doubling every 2 Years as Metzger et al. 2013’s lunar seed grows, 3 at the Trojan Vault, back to all Earth had. So space builds are Earth’s real insurance.
+  - *Then its industry copies itself,* back to all Earth had. A vault doubles every 5 Years, 7 at the Trojan Vault, and our colony every 2. *Corrected 2026-10-31,* audit 2.8. Metzger et al. 2013’s lunar seed grows 12 t to 156 t in 20 years, a doubling about every 5.4, with chips sent from Earth. A vault wakes with Earth gone, so it gets no faster than that. Our colony makes its own chips, so it takes Metzger’s fast case, about 2. Before: 2 Years, 3 at the Trojan Vault, which was Metzger’s generation, not its doubling. So space builds are Earth’s real insurance.
   - *A backup builds only off Earth.* What is joined in orbit, on the Moon or among the rocks goes on. Works on Earth, and its data centers, are lost with it. Settled 2026-10-28.
   - *A backup sleeps unseen.* Until it wakes it sends nothing and builds nothing. No neighbor learns of our builds anyway, only our launches, catches and radar.
   - *A colony is a second Mind, with its own Will.* Word from Earth takes a Year a light-year, so it must decide alone. Our Will can cross to it by the Mind Link. Built 2026-10-28:
@@ -1519,7 +1519,7 @@ Set 2026-10-28, before the refactor to a larger, sparser universe and a longer t
 - **Probes to us.** A probe on news of us takes 20 Years to build, a tenth of light speed, and 10 Years of burns. `probesToUs`.
 - **The model’s budget.** 60 neighbor moves on each other’s news per century, `STAR_BUDGET`. Longer games mean more calls to the model in all.
 - **Our colony and Earth’s stand-in.** Each reports a light-time late. A farther colony is silent far longer. A colony stands 20 Years after landing. [game/lib/sim/colony.ts](game/lib/sim/colony.ts).
-- **Backups.** A woken vault doubles every 2 Years, 3 at the Trojan Vault, back to all Earth had. Fine at any scale, but a longer game makes losing Earth likelier to matter. [game/lib/game/hits.ts](game/lib/game/hits.ts).
+- **Backups.** A woken vault doubles every 5 Years, 7 at the Trojan Vault, our colony every 2, back to all Earth had. Fine at any scale, but a longer game makes losing Earth likelier to matter. [game/lib/game/hits.ts](game/lib/game/hits.ts).
 - **Rocks.** 12 of 33 seeds send a rock, timed to a game of a few centuries. [game/lib/game/rocks.ts](game/lib/game/rocks.ts).
 
 ## Open questions

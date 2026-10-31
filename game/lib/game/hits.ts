@@ -47,10 +47,12 @@ export function harmOrders(hits: readonly Hit[], restore: Restore | null = null)
 }
 
 /** How a backup of our Mind comes back: the share of Earth's thought it wakes with, and the Years its industry takes to
- *  double, back to all of it. A vault alone is 10 kt of machines and a copy of us: a seed factory, which Metzger et al.
- *  2013 grow in generations 2 years apart. The Moon Vault wakes on whatever else we built off Earth, as samples. The
- *  Trojan Vault has only a small dark rock to work, so it doubles slower, a sample. Our colony is a Mind with its own
- *  industry already. 2026-10-28. */
+ *  double, back to all of it. A vault alone is 10 kt of machines and a copy of us: a seed factory. Metzger et al. 2013
+ *  grow one in generations 2 years apart, 12 t to 156 t in 20 years, a doubling about every 5.4, with chips from Earth.
+ *  A vault wakes with Earth gone, so it gets that slower pace, 5 Years. The Moon Vault wakes on whatever else we built
+ *  off Earth, as samples. The Trojan Vault has only a small dark rock to work, so it doubles slower, 7, a sample. Our
+ *  colony is a Mind with its own industry already, chips included, so Metzger's fast case, 2. 2026-10-28, its vault
+ *  pace 2026-10-31, audit 2.8. */
 export interface Restore {
   from: number;
   doubling: number;
@@ -65,8 +67,8 @@ const OFF_EARTH: [string, number][] = [
 ];
 export function restoreOf(lives: string, done: Record<string, number | null>, lost: number): Restore {
   if (lives === "the Moon Vault")
-    return { from: OFF_EARTH.reduce((s, [n, share]) => s + ((done[n] ?? Infinity) <= lost ? share : 0), 0.001), doubling: 2 };
-  if (lives === "the Trojan Vault") return { from: 0.001, doubling: 3 };
+    return { from: OFF_EARTH.reduce((s, [n, share]) => s + ((done[n] ?? Infinity) <= lost ? share : 0), 0.001), doubling: 5 };
+  if (lives === "the Trojan Vault") return { from: 0.001, doubling: 7 };
   return { from: 0.01, doubling: 2 };
 }
 
