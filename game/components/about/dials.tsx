@@ -1,27 +1,29 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { chain, DIALS, far, NEAR_LY, odds, PRESETS, round, type Result } from "@/lib/about/dials";
+import {
+  chain,
+  type Source,
+  DIALS,
+  far,
+  NEAR_LY,
+  odds,
+  PRESETS,
+  round,
+  type Result,
+} from "@/lib/about/dials";
+import { gauss, stream } from "@/lib/about/random";
 import { prefersReducedMotion } from "@/lib/motion";
 
 // The dials on /about/research: turn a step of the chain from stars to minds, within what the research allows, and
 // watch the Galaxy fill or empty. Minds are dots, peers glow amber, and our Sun sits 26,700 ly from the center.
 
-const KICK = "font-mono text-[10.5px] tracking-[.1em] text-muted";
+export const KICK = "font-mono text-[10.5px] tracking-[.1em] text-muted";
 const STEPS = 1000;
 const WINDOWS = [2000, 1e5];
 
-const toSlider = (v: number, lo: number, hi: number) => Math.round((Math.log(v / lo) / Math.log(hi / lo)) * STEPS);
-const fromSlider = (n: number, lo: number, hi: number) => lo * (hi / lo) ** (n / STEPS);
-
-/** A seeded random stream, so the dots stay put as the dials turn. */
-function stream(seed: number) {
-  return () => {
-    seed = (seed + 0x6d2b79f5) | 0;
-    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
-const gauss = (r: () => number) => Math.sqrt(-2 * Math.log(r() || 1e-9)) * Math.cos(2 * Math.PI * r());
+const toSlider = (v: number, lo: number, hi: number) =>
+  Math.round((Math.log(v / lo) / Math.log(hi / lo)) * STEPS);
+const fromSlider = (n: number, lo: number, hi: number) =>
+  lo * (hi / lo) ** (n / STEPS);
 
 type Dot = { x: number; y: number; u: number; d?: number };
 
@@ -29,20 +31,27 @@ type Dot = { x: number; y: number; u: number; d?: number };
 // disk 8,500 ly in scale length. The Sun is at 26,700 ly.
 const SUN = { x: 0, y: 26700 };
 function galaxyDots(n: number, seed: number): Dot[] {
-  const r = stream(seed), out: Dot[] = [];
-  const bar = (27 * Math.PI) / 180, pitch = Math.tan((12 * Math.PI) / 180);
+  const r = stream(seed),
+    out: Dot[] = [];
+  const bar = (27 * Math.PI) / 180,
+    pitch = Math.tan((12 * Math.PI) / 180);
   while (out.length < n) {
     const k = r();
     let x: number, y: number;
     if (k < 0.15) {
-      const a = gauss(r) * 9000, b = gauss(r) * 3000;
+      const a = gauss(r) * 9000,
+        b = gauss(r) * 3000;
       x = a * Math.cos(bar) - b * Math.sin(bar);
       y = a * Math.sin(bar) + b * Math.cos(bar);
     } else {
       const R = -8500 * Math.log(r() * r() || 1e-9);
       if (R > 60000 || R < 3000) continue;
       let phi = r() * 2 * Math.PI;
-      if (k < 0.7) phi = (Math.floor(r() * 4) * Math.PI) / 2 + Math.log(R / 3000) / pitch + gauss(r) * 0.22;
+      if (k < 0.7)
+        phi =
+          (Math.floor(r() * 4) * Math.PI) / 2 +
+          Math.log(R / 3000) / pitch +
+          gauss(r) * 0.22;
       x = R * Math.cos(phi);
       y = R * Math.sin(phi);
     }
@@ -53,32 +62,47 @@ function galaxyDots(n: number, seed: number): Dot[] {
 
 // Our neighborhood, 1,000 ly round the Sun: points even in a ball, drawn face on, each with its true distance.
 function nearDots(n: number, seed: number): Dot[] {
-  const r = stream(seed), out: Dot[] = [];
+  const r = stream(seed),
+    out: Dot[] = [];
   while (out.length < n) {
-    const x = r() * 2 - 1, y = r() * 2 - 1, z = r() * 2 - 1, d = Math.hypot(x, y, z);
-    if (d <= 1) out.push({ x: x * NEAR_LY, y: y * NEAR_LY, u: r(), d: d * NEAR_LY });
+    const x = r() * 2 - 1,
+      y = r() * 2 - 1,
+      z = r() * 2 - 1,
+      d = Math.hypot(x, y, z);
+    if (d <= 1)
+      out.push({ x: x * NEAR_LY, y: y * NEAR_LY, u: r(), d: d * NEAR_LY });
   }
   return out;
 }
 
-const G_DOTS = 5000, P_DOTS = 400, N_DOTS = 3000;
+const G_DOTS = 5000,
+  P_DOTS = 400,
+  N_DOTS = 3000;
 
-function color(name: string) {
-  return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || "#fff";
+export function color(name: string) {
+  return (
+    getComputedStyle(document.documentElement).getPropertyValue(name).trim() ||
+    "#fff"
+  );
 }
 
 /** A canvas sized to its box and the screen's pixels, redrawn by `draw` each frame it's given. */
-function useCanvas(draw: (c: CanvasRenderingContext2D, w: number, h: number, t: number) => void) {
+export function useCanvas(
+  draw: (c: CanvasRenderingContext2D, w: number, h: number, t: number) => void,
+) {
   const ref = useRef<HTMLCanvasElement>(null);
   const paint = useRef(draw);
   paint.current = draw;
   useEffect(() => {
     const el = ref.current!;
-    let frame = 0, live = true;
+    let frame = 0,
+      live = true;
     const still = prefersReducedMotion();
     const tick = (t: number) => {
       if (!live) return;
-      const w = el.clientWidth, h = el.clientHeight, dpr = Math.min(2, window.devicePixelRatio || 1);
+      const w = el.clientWidth,
+        h = el.clientHeight,
+        dpr = Math.min(2, window.devicePixelRatio || 1);
       if (el.width !== Math.round(w * dpr)) el.width = Math.round(w * dpr);
       if (el.height !== Math.round(h * dpr)) el.height = Math.round(h * dpr);
       const c = el.getContext("2d")!;
@@ -105,8 +129,12 @@ function useCanvas(draw: (c: CanvasRenderingContext2D, w: number, h: number, t: 
 function useEased(target: number) {
   const now = useRef(target);
   return () => {
-    const a = Math.log10(now.current + 1e-3), b = Math.log10(target + 1e-3);
-    now.current = Math.abs(b - a) < 0.005 || prefersReducedMotion() ? target : 10 ** (a + (b - a) * 0.12) - 1e-3;
+    const a = Math.log10(now.current + 1e-3),
+      b = Math.log10(target + 1e-3);
+    now.current =
+      Math.abs(b - a) < 0.005 || prefersReducedMotion()
+        ? target
+        : 10 ** (a + (b - a) * 0.12) - 1e-3;
     return now.current;
   };
 }
@@ -117,9 +145,14 @@ function Galaxy({ result }: { result: Result }) {
   const minds = useEased(result.galaxy);
   const peerCount = useEased(result.peers);
   const ref = useCanvas((c, w, h, t) => {
-    const s = Math.min(w, h) / 2 / 58000, cx = w / 2, cy = h / 2 - 8;
+    const s = Math.min(w, h) / 2 / 58000,
+      cx = w / 2,
+      cy = h / 2 - 8;
     const at = (d: { x: number; y: number }) => [cx + d.x * s, cy + d.y * s];
-    const ink = color("--ink"), other = color("--other"), you = color("--you"), muted = color("--muted");
+    const ink = color("--ink"),
+      other = color("--other"),
+      you = color("--you"),
+      muted = color("--muted");
     // Starlight: every dot, faint, so the Galaxy keeps its shape however few minds it holds.
     c.fillStyle = muted;
     c.globalAlpha = 0.16;
@@ -171,7 +204,10 @@ function Galaxy({ result }: { result: Result }) {
     c.fillText("100,000 LIGHT-YEARS", cx - 50000 * s, h - 6);
     c.fillRect(cx - 50000 * s, h - 20, 100000 * s, 1);
   });
-  useEffect(() => void ref.current?.dispatchEvent(new Event("dials")), [result, ref]);
+  useEffect(
+    () => void ref.current?.dispatchEvent(new Event("dials")),
+    [result, ref],
+  );
   return <canvas ref={ref} aria-hidden className="aspect-square w-full" />;
 }
 
@@ -179,14 +215,20 @@ function Near({ result }: { result: Result }) {
   const dots = useMemo(() => nearDots(N_DOTS, 3), []);
   const count = useEased(result.near);
   const ref = useCanvas((c, w, h) => {
-    const s = Math.min(w, h) / 2 / (NEAR_LY * 1.25), cx = w / 2, cy = h / 2 + 6;
-    const ink = color("--ink"), you = color("--you"), muted = color("--muted"), faint = color("--faint");
+    const s = Math.min(w, h) / 2 / (NEAR_LY * 1.25),
+      cx = w / 2,
+      cy = h / 2 + 6;
+    const ink = color("--ink"),
+      you = color("--you"),
+      muted = color("--muted"),
+      faint = color("--faint");
     c.strokeStyle = faint;
     c.beginPath();
     c.arc(cx, cy, NEAR_LY * s, 0, 2 * Math.PI);
     c.stroke();
     // As many dots as minds expected within 1,000 ly, up to the sample: the first by their draws.
-    const n = count(), shown = Math.round(Math.min(n, N_DOTS));
+    const n = count(),
+      shown = Math.round(Math.min(n, N_DOTS));
     c.fillStyle = ink;
     dots.forEach((d, i) => {
       if (i >= shown) return;
@@ -212,16 +254,53 @@ function Near({ result }: { result: Result }) {
     c.font = "10.5px var(--font-plex-mono), monospace";
     c.fillText("1,000 LY", cx - 26, cy - NEAR_LY * s - 6);
   });
-  useEffect(() => void ref.current?.dispatchEvent(new Event("dials")), [result, ref]);
+  useEffect(
+    () => void ref.current?.dispatchEvent(new Event("dials")),
+    [result, ref],
+  );
   return <canvas ref={ref} aria-hidden className="aspect-square w-full" />;
 }
 
 function Stat({ value, label }: { value: string; label: string }) {
   return (
     <div className="border-t border-rowline pt-3">
-      <div className="font-mono text-[22px] leading-none tabular-nums">{value}</div>
+      <div className="font-mono text-[22px] leading-none tabular-nums">
+        {value}
+      </div>
       <div className={`mt-1.5 ${KICK}`}>{label.toUpperCase()}</div>
     </div>
+  );
+}
+
+/** The research behind a part of the page, tucked away until asked for. */
+export function Sources({ list }: { list: Source[] }) {
+  return (
+    <details className="group mt-2">
+      <summary className="cursor-pointer list-none font-mono text-[10.5px] tracking-[.1em] text-muted hover:text-ink">
+        <span className="inline-block transition-transform group-open:rotate-90">
+          ›
+        </span>{" "}
+        SOURCES · {list.length}
+      </summary>
+      <ul className="mt-2 flex flex-col gap-1.5 border-l border-faint pl-3">
+        {list.map((src) => (
+          <li
+            key={src.who}
+            className="text-[13.5px] leading-[1.45] text-page-ink2"
+          >
+            <a
+              href={src.url}
+              target="_blank"
+              rel="noreferrer"
+              className="font-semibold text-ink underline decoration-faint underline-offset-2 hover:decoration-current"
+            >
+              {src.who}
+            </a>
+            . {src.found}
+          </li>
+        ))}
+      </ul>
+    </details>
   );
 }
 
@@ -243,17 +322,22 @@ export function Dials() {
       : `Half the time the nearest mind is within ${far(result.nearest.ly)}.`;
 
   return (
-    <section aria-label="The dials" className="mx-auto max-w-[1180px] px-4 pb-16">
-      <div data-a className={KICK}>
-        THE DIALS
-      </div>
-      <h2 data-a className="mt-3 max-w-[22ch] text-[28px] leading-[1.15] font-semibold text-balance wide:text-[34px]">
-        How common are minds?
+    <section
+      aria-label="The dials"
+      className="mx-auto max-w-[1180px] px-4 pb-16"
+    >
+      <h2
+        data-a
+        className="text-[28px] leading-[1.15] font-semibold text-balance wide:text-[34px]"
+      >
+        The Dials
       </h2>
-      <p data-a className="mt-4 max-w-[60ch] text-[16px] leading-[1.6] text-page-ink2">
-        Holos counts minds with a chain of six steps, from stars to minds. Each step keeps a share of what passed the one
-        before. Each dial below is one step, set to the value Holos takes and limited to what the research allows. Turn
-        one and the Galaxy fills or empties. The game itself always plays at Holos’s values.
+      <p
+        data-a
+        className="mt-4 max-w-[60ch] text-[16px] leading-[1.6] text-page-ink2"
+      >
+        Each dial is one step from stars to minds, set where Holos plays it and
+        turnable as far as the research allows.
       </p>
 
       <div className="mt-10 grid gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
@@ -279,11 +363,18 @@ export function Dials() {
               return (
                 <li key={d.key}>
                   <div className="flex items-baseline justify-between gap-4">
-                    <label htmlFor={`dial-${d.key}`} className="text-[15px] font-semibold">
-                      <span className="mr-2 font-mono text-[10.5px] text-muted">{i + 1}</span>
+                    <label
+                      htmlFor={`dial-${d.key}`}
+                      className="text-[15px] font-semibold"
+                    >
+                      <span className="mr-2 font-mono text-[10.5px] text-muted">
+                        {i + 1}
+                      </span>
                       {d.label}
                     </label>
-                    <span className="font-mono text-[14px] tabular-nums">{odds(v)}</span>
+                    <span className="font-mono text-[14px] tabular-nums">
+                      {odds(v)}
+                    </span>
                   </div>
                   <div className="relative mt-2">
                     <input
@@ -293,14 +384,21 @@ export function Dials() {
                       max={STEPS}
                       value={toSlider(v, d.lo, d.hi)}
                       aria-valuetext={odds(v)}
-                      onChange={(e) => setValues({ ...values, [d.key]: fromSlider(+e.target.value, d.lo, d.hi) })}
+                      onChange={(e) =>
+                        setValues({
+                          ...values,
+                          [d.key]: fromSlider(+e.target.value, d.lo, d.hi),
+                        })
+                      }
                       className="relative z-10 w-full accent-[var(--you)]"
                     />
                     <span
                       aria-hidden
                       title="Holos"
                       className="absolute top-full mt-0.5 h-1.5 w-px bg-muted"
-                      style={{ left: `calc(${toSlider(d.holos, d.lo, d.hi) / 10}% - 0px)` }}
+                      style={{
+                        left: `calc(${toSlider(d.holos, d.lo, d.hi) / 10}% - 0px)`,
+                      }}
                     />
                   </div>
                   <div className="mt-2 flex justify-between font-mono text-[10.5px] tracking-[.05em] text-muted">
@@ -308,27 +406,37 @@ export function Dials() {
                     <span>{d.basis.toUpperCase()}</span>
                     <span>{odds(d.hi)}</span>
                   </div>
+                  <Sources list={d.sources} />
                 </li>
               );
             })}
           </ol>
           {!holos && (
             <p className="mt-6 text-[14px] leading-[1.5] text-muted">
-              The quiet sky can’t settle these alone. Quiet minds leave a quiet sky however many there are, though the
-              more there are, the more must all stay quiet.
+              The quiet sky can’t settle these alone. Quiet minds leave a quiet
+              sky however many there are, though the more there are, the more
+              must all stay quiet.
             </p>
           )}
         </div>
 
         <div data-a>
           <dl className="grid grid-cols-2 gap-x-6 gap-y-5">
-            <Stat value={round(result.perMillion)} label="Minds per million stars" />
-            <Stat value={round(Math.max(1, result.galaxy))} label="Minds in our Galaxy" />
+            <Stat
+              value={round(result.perMillion)}
+              label="Minds per million stars"
+            />
+            <Stat
+              value={round(Math.max(1, result.galaxy))}
+              label="Minds in our Galaxy"
+            />
           </dl>
           <div className="mt-6 grid grid-cols-[minmax(0,3fr)_minmax(0,2fr)] items-end gap-4">
             <figure>
               <Galaxy result={result} />
-              <figcaption className={`mt-2 ${KICK}`}>OUR GALAXY, FACE ON</figcaption>
+              <figcaption className={`mt-2 ${KICK}`}>
+                OUR GALAXY, FACE ON
+              </figcaption>
             </figure>
             <figure>
               <Near result={result} />
@@ -351,8 +459,9 @@ export function Dials() {
           </div>
           <p className="mt-3 text-[15px] leading-[1.55]">{peerLine}</p>
           <p className="mt-3 text-[13.5px] leading-[1.5] text-muted">
-            A peer is a mind that woke near when we did, so it knows about what we know. Minds wake across billions of
-            years, so a peer is rare at any density.
+            A peer is a mind that woke near when we did, so it knows about what
+            we know. Minds wake across billions of years, so a peer is rare at
+            any density.
           </p>
         </div>
       </div>
