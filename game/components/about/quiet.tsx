@@ -4,10 +4,10 @@ import { ruledAbove } from "@/lib/about/haystack";
 import { COLD, peak, SOURCES, WARM } from "@/lib/about/quiet";
 import { Stat } from "./ages";
 import { KICK, Sources } from "./dials";
-import { Gauge, HeatChart, RadioChart } from "./haystack";
+import { HeatChart, RadioChart } from "./haystack";
 
 // Why the sky is quiet, on /about/research: what our searches rule out, and what is still possible. Heat, by how cold
-// a mind runs. Radio, by how loud. And how much of the haystack we have searched at all.
+// a mind runs. Radio, by how loud.
 
 const STEPS = 1000,
   SUN = 3.828e26;
@@ -71,7 +71,7 @@ export function Quiet() {
           value="5 million"
           label="Stars screened, no warm build confirmed"
         />
-        <Stat value="6 × 10⁻¹⁸" label="Of the radio haystack searched" />
+        <Stat value="1,327" label="Nearby stars listened to, no steady tone" />
       </dl>
 
       <Part
@@ -115,15 +115,6 @@ export function Quiet() {
         says="Radio searches listened for steady tones from nearby stars. A tone louder than the line, from one of those stars, would have been heard. Old minds speak by tight beams aimed at each other, which never sweep past us."
       >
         <RadioChart />
-      </Part>
-
-      <Part
-        title="How much we have searched"
-        says="If every way a radio signal could hide were Earth’s oceans, all our searches together have checked about a hot tub’s worth."
-      >
-        <div className="max-w-[520px]">
-          <Gauge />
-        </div>
       </Part>
 
       <Sources list={SOURCES} />

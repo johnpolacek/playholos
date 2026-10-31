@@ -108,15 +108,3 @@ export const MARKS: { name: string; w: number; radio?: boolean }[] = [
   { name: "The Sun", w: 3.828e26 },
   { name: "Arecibo’s radar, aimed", w: 1e13, radio: true },
 ];
-
-/** The cosmic haystack, Wright, Kanodia and Lubar 2018: if every place a radio signal could hide were Earth's
- *  oceans, what has been searched is about 8,000 liters. Familiar volumes on the way down, in liters. */
-export const SEARCHED_L = 8000;
-export const VOLUMES: { name: string; l: number }[] = [
-  { name: "Earth’s oceans", l: 1.335e21 },
-  { name: "The Mediterranean", l: 3.75e18 },
-  { name: "Lake Superior", l: 1.21e16 },
-  { name: "Lake Tahoe", l: 1.51e14 },
-  { name: "An Olympic pool", l: 2.5e6 },
-  { name: "A hot tub", l: SEARCHED_L },
-];

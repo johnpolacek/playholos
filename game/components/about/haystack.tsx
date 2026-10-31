@@ -9,9 +9,7 @@ import {
   NEARBY,
   nearbyLeast,
   ruledAbove,
-  SEARCHED_L,
   SURVEYS,
-  VOLUMES,
 } from "@/lib/about/haystack";
 import { color, useCanvas } from "./dials";
 
@@ -265,44 +263,4 @@ export function RadioChart() {
     c.fillText("UNHEARD", a.x(3000), a.y(1e10));
   });
   return <canvas ref={ref} aria-hidden className="h-[300px] w-full" />;
-}
-
-/** The haystack's share searched, as water: a marker sinks from Earth's oceans to a hot tub, tens at a time. */
-export function Gauge() {
-  const TOP = VOLUMES[0].l;
-  const ref = useCanvas((c, w, h, t) => {
-    const ink = color("--ink"),
-      muted = color("--muted"),
-      other = color("--other");
-    const y = (l: number) =>
-      16 + (Math.log(TOP / l) / Math.log(TOP / SEARCHED_L)) * (h - 40);
-    const x0 = 24;
-    // The column of water, darkening downward.
-    const g = c.createLinearGradient(0, 16, 0, h - 24);
-    g.addColorStop(0, "rgba(40,90,150,0.55)");
-    g.addColorStop(1, "rgba(40,90,150,0.08)");
-    c.fillStyle = g;
-    c.fillRect(x0, 16, 10, h - 40);
-    c.font = "10.5px var(--font-plex-mono), monospace";
-    VOLUMES.forEach((v) => {
-      c.fillStyle = muted;
-      c.fillRect(x0 + 10, y(v.l), 8, 1);
-      c.fillStyle = v.l === SEARCHED_L ? other : ink;
-      c.fillText(
-        `${v.name.toUpperCase()} · 10${sup(Math.round(Math.log10(v.l)))} L`,
-        x0 + 26,
-        y(v.l) + 4,
-      );
-    });
-    // The marker, sinking a power of ten every half second, resting at the hot tub.
-    const steps = Math.log10(TOP / SEARCHED_L),
-      run = steps * 0.5 + 3;
-    const k = t === 0 ? steps : Math.min(steps, ((t % run) / 0.5) | 0);
-    const at = TOP / 10 ** k;
-    c.fillStyle = other;
-    c.beginPath();
-    c.arc(x0 + 5, y(at), 6, 0, 2 * Math.PI);
-    c.fill();
-  });
-  return <canvas ref={ref} aria-hidden className="h-[280px] w-full" />;
 }
