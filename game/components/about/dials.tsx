@@ -463,8 +463,8 @@ export function Dials() {
           <p className="mt-3 text-[15px] leading-[1.55]">{peerLine}</p>
           <p className="mt-3 text-[13.5px] leading-[1.5] text-muted">
             A peer is a mind that woke near when we did, so it knows about what
-            we know. Minds wake across billions of years, so a peer is rare at
-            any density.
+            we know. Minds wake across billions of years, so peers are few among
+            them at any density.
           </p>
         </div>
       </div>

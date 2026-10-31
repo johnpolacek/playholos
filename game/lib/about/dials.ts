@@ -169,7 +169,7 @@ export const DIALS: Dial[] = [
   {
     key: "minds",
     label: "Animals become a mind",
-    holos: 1 / 6200,
+    holos: 1 / 10,
     lo: 1e-10,
     hi: 1 / 2,
     basis: "Contested",
@@ -207,7 +207,7 @@ export const PRESETS: { name: string; set: Record<string, number> }[] = [
       start: 1,
       last: 1 / 2,
       animals: 9 / 10,
-      minds: 1 / 10,
+      minds: 1 / 2,
     },
   },
   {
@@ -229,7 +229,7 @@ export const PRESETS: { name: string; set: Record<string, number> }[] = [
       start: 1 / 100,
       last: 1 / 10,
       animals: 3 / 5,
-      minds: 1 / 6200,
+      minds: 1 / 10,
     },
   },
 ];
@@ -237,8 +237,8 @@ export const PRESETS: { name: string; set: Record<string, number> }[] = [
 /** Stars in our Galaxy, Holos's 200 billion, and what they weigh, Licquia and Newman 2015, so stars per Sun's mass. */
 const GALAXY = 2e11;
 const PER_SUN = GALAXY / 6.08e10;
-/** Minds that woke within ±1 year of us, as a share of all: 7 of 200,000 within ±100,000 years (calcs/minds.py). */
-const PEER_PER_YEAR = 7 / 2e5 / 1e5;
+/** Minds that woke within ±1 year of us, as a share of all: 1.6e-5 within 100,000 years on each side (calcs/minds.py). */
+const PEER_PER_YEAR = (2 * 1.6e-5) / 1e5;
 
 // The thin disk of calcs/minds.py: stars per cubic parsec here, scale height, scale length, the Sun's radius (pc).
 const N0 = 0.1,
@@ -368,7 +368,7 @@ export function chain(values: Record<string, number>, window: number): Result {
   };
 }
 
-/** A share as people say it: “3 in 4”, “1 in 6,200”. */
+/** A share as people say it: “3 in 4”, “1 in 10”. */
 export function odds(p: number): string {
   if (p >= 0.995) return "all";
   if (p >= 0.3) {

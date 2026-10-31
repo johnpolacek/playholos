@@ -1,9 +1,9 @@
 """The realistic premise's minds for one seed: old minds near us, young peers across the Galaxy, and the watcher.
 Run: python3 calcs/minds.py [seed]
 
-Settled 2026-10-28 and 2026-10-29 in HOLOS_GAME_CONCEPT.md, The realistic premise. One mind per million stars, all
-older than us and inward. About 7 peers woke within 100,000 years of us. A watcher sits in every game, sent by a maker
-that cares about spreaders. Drawn beside the old neighbors until the rework retires them (rework step 5).
+Settled 2026-10-28 and 2026-10-29 in HOLOS_GAME_CONCEPT.md, The realistic premise, and raised 2026-10-31: one mind
+per 1,600 stars, nearly all older than us and inward. About 4,000 peers woke within 100,000 years of us. A watcher
+sits in every game, sent by a maker that cares about spreaders. Drawn beside the old neighbors until the rework retires them (rework step 5).
 
 Positions are in the atlas frame, light-years: (Galactic X toward the center, Galactic Z north, -Galactic Y), as
 data/gcns-326ly.bin. Times are game Years, Year 0 = 2040. Every draw is keyed on the seed and a name of its own, so
@@ -15,21 +15,24 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 PC_LY = 3.261563777
 
-STARS_PER_MIND = 1e6                    # one mind per million stars, the best guess (concept, the realistic premise)
+STARS_PER_MIND = 1600                   # one in 10 worlds with animals makes a mind, so one per 1,600 stars. 2026-10-31
 CATALOG_LY = 326                        # real stars inside, data/gcns-326ly.bin. Seeded beyond
-OLD_MINDS_LY = 1000                     # old minds drawn one by one out to here. Beyond, the Galaxy's count only
-PEERS = 7                               # mean young minds within PEER_WINDOW of us, Galaxy-wide, from HEAD_START below
+# Old minds drawn one by one out to here, so all on real stars, about 190 a game. Beyond, the Galaxy's count only.
+# It was 1,000 ly at one per million stars. At one per 1,600 that is 5,300 a game, too many to ship. 2026-10-31.
+OLD_MINDS_LY = CATALOG_LY
+PEERS = 4000                            # mean young minds within PEER_WINDOW of us, Galaxy-wide, from HEAD_START below
 PEER_WINDOW = 1e5                       # years either side of our waking
 ASLEEP_SHARE = 0.5                      # as calcs/neighbors.py, a sample
 # How much older than us a mind is, settled 2026-10-30: its world's age less the time its mind took. Lineweaver 2001
 # and Lineweaver, Fenner and Gibson 2004: 3 in 4 Earth-like worlds are older than Earth, by 1.8 ± 0.9 billion years on
 # average, drawn as a gamma of that mean and spread. The rest are younger, evenly. A mind takes Earth's 4.54 billion
 # years, faster or slower by calcs/seed.py's pace, 1.6 times at one sigma. Over 2 million draws: a median head start
-# of 2.3 billion years, two thirds between 0.8 and 3.9. Minds within 100,000 years of us are 1.6e-5 of all, so
-# about 7 across the Galaxy, either side. It was 10^N(9, 0.5) capped at 5 billion, with peers from an even pace over
-# 8 billion years, and the two disagreed.
+# of 2.3 billion years, two thirds between 0.8 and 3.9. Minds within 100,000 years of us on each side are 1.6e-5 of
+# all, so about 4,000 of the Galaxy's 125 million, both sides. It was 10^N(9, 0.5) capped at 5 billion, with peers
+# from an even pace over 8 billion years, and the two disagreed.
 EARTH_GYR, OLDER_SHARE, OLDER_K, OLDER_THETA, PACE = 4.54, 0.75, 4, 0.45, math.log(1.6)
 OLDEST_GYR = 10.5                       # the thin disk's oldest stars, as calcs/seed.py
+ARCHIVE_LY, ARCHIVE_W = 150, 7e19          # the nearby-star far-infrared surveys' reach and depth at 10 pc (HOLOS_RESEARCH.md)
 REST_AU = (30, 2000)                    # where a sleeping mind rests from its star, evenly in log (concept, way 4)
 REPLY_C = 0.1                           # what a mind sends travels at a tenth of light's speed, as our own bullets
 
@@ -55,9 +58,10 @@ SEED_C = (0.01, 0.2)                            # seed ships' speed, evenly in l
 # parent with a small random change (Landis 1998, with inheritance). If it spreads it settles every star in reach
 # while active: its 6 nearest, plus one drifting into 10 ly every 11,000 years (Carroll-Nellenback et al. 2019).
 # To settle is to build a star out, hungry spread. Quiet seeds and beamed minds could be here unseen, so only
-# hungry spread is limited. A mind's chance is drawn below what Earth unsettled allows: past about 1 in 30, with
-# 20,000-year active lives and inheritance, some of 200,000 minds would fill the Galaxy. This project's branching model, 2026-10-30.
-SPREAD_CHANCE = (1e-3, 0.03)                    # a mind's chance to spread, evenly in log
+# hungry spread is limited. A mind's chance is drawn below what Earth unsettled allows: past about 1 in 84, with
+# 20,000-year active lives and inheritance, some of 125 million minds would fill the Galaxy. It was 1 in 33 for
+# 200,000 minds. calcs/spread_limit.py, 2026-10-31.
+SPREAD_CHANCE = (1e-3, 0.012)                   # a mind's chance to spread, evenly in log
 NEIGHBORS = 6 + 20_000 / 11_000                 # stars in reach over an active life
 HOP_LY = 5                                      # typical distance to a neighbor star, at 0.0028 stars per ly^3
 INHERIT_SD = 0.3                                # a colony's chance, its parent's times e^N(0, 0.3)
@@ -70,7 +74,8 @@ def log_between(r, lo, hi):
     return lo * (hi / lo) ** r.random()
 
 def poisson(r, mean):
-    """Knuth's method, fine for the small means here."""
+    """Knuth's method. Past a mean of 500 its product underflows, so a large mean is drawn in parts, as counts add."""
+    if mean > 500: return sum(poisson(r, mean / math.ceil(mean / 500)) for _ in range(math.ceil(mean / 500)))
     limit, k, p = math.exp(-mean), 0, r.random()
     while p > limit:
         k += 1; p *= r.random()
@@ -128,14 +133,17 @@ def in_galaxy(r):
 
 # ---------- Old minds ----------
 def old_mind(seed, i, pos, star=None):
-    """How much older than us (about 2.3 billion years, typically), whether it sleeps, and how bright its cold glow is. Awake, it stays under what the shallow all-sky
-    maps would catch at its distance, 0.3% of a Sun at 400 ly, since none has been seen."""
+    """How much older than us (about 2.3 billion years, typically), whether it sleeps, and how bright its cold glow is.
+    Awake, it stays under what our maps would have caught at its distance, since none has been seen: the shallow all-sky
+    maps, 0.3% of a Sun at 400 ly, and within 150 ly Herschel's and JCMT's nearby-star surveys, 7e19 W at 10 pc. That
+    nearer limit mattered once the nearest mind came in to about 50 ly, 2026-10-31."""
     r = rng(seed, 'old', i)
     d = math.hypot(*pos)
     asleep = r.random() < ASLEEP_SHARE
     limit = 0.003 * 3.828e26 * (d / 400) ** 2
+    if d <= ARCHIVE_LY: limit = min(limit, ARCHIVE_W * (d / PC_LY / 10) ** 2)
     age = head_start(r)
-    glow = None if asleep else float(f'{log_between(r, 1e18, limit):.3g}')
+    glow = None if asleep else float(f'{log_between(r, min(1e18, limit / 2), limit):.3g}')
     # Asleep, it folds up small and rests in the cold: 12 K lies about 540 AU from a Sun, 54 AU from a dim red dwarf.
     rest = round(log_between(r, *REST_AU)) if asleep else None
     return dict(id=f'old-{i}', pos=[round(c, 3) for c in pos], d=round(d, 2), star=star, age=age, asleep=asleep,
@@ -193,7 +201,9 @@ def peer(seed, i):
                 atContact=contact)
 
 def peers(seed):
-    return sorted((peer(seed, i) for i in range(poisson(rng(seed, 'peers'), PEERS))), key=lambda p: p['d'])
+    """The peers whose warm phase still reaches us from Year 0 on. One already faded can't be seen, so isn't shipped."""
+    every = (peer(seed, i) for i in range(poisson(rng(seed, 'peers'), PEERS)))
+    return sorted((p for p in every if p['flash'][1] >= 0), key=lambda p: p['d'])
 
 
 # ---------- The watcher ----------
@@ -215,7 +225,7 @@ def watcher(seed, olds):
 
 def draw(seed):
     olds = old_minds(seed)
-    if not olds:                                                # about 1 game in 5,000: the nearest lies beyond
+    if not olds:                                                # never at about 5,300 a game, kept for safety
         olds = [old_mind(seed, 'far', in_shell(rng(seed, 'old', 'far'), OLD_MINDS_LY, 2 * OLD_MINDS_LY))]
     return dict(old=olds, peers=peers(seed), watcher=watcher(seed, olds))
 
@@ -224,10 +234,10 @@ if __name__ == '__main__':
     seed = int(sys.argv[1]) if len(sys.argv) > 1 else 10
     m = draw(seed)
     print(f'seed {seed}: {len(m["old"])} old minds within {OLD_MINDS_LY} ly, {len(m["peers"])} peers')
-    for o in m['old']:
+    for o in m['old'][:12]:                                    # the nearest dozen
         print(f"  {o['id']:>7} {o['d']:7.1f} ly  {'real star ' + str(o['star']) if o['star'] is not None else 'seeded':>16}  "
               f"{o['age'] / 1e9:4.2f} Gyr  {'asleep' if o['asleep'] else 'awake, %.2g W' % o['glowW']}")
-    for p in m['peers']:
+    for p in m['peers'][:12]:
         print(f"  {p['id']:>7} {p['d']:9.0f} ly  woke {p['wake']:+9.0f}  outward {p['outwardYears']:8.0f} y ({p['settlements']} settled)  "
               f"flash Years {p['flash'][0]:.0f} to {p['flash'][1]:.0f}  at contact: {p['atContact']}")
     w = m['watcher']

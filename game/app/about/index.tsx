@@ -121,7 +121,7 @@ export default function About() {
               <div className="font-mono text-[26px] leading-none">1</div>
               <h3 className="mt-3 text-[18px] font-semibold">If we aren&rsquo;t alone, the others are far older</h3>
               <p className="mt-2 text-[15px] leading-[1.6] text-page-ink2">
-                Holos takes one mind per million stars, so the nearest is typically about 400 light-years away. Most
+                Holos takes one mind per 1,600 stars, so the nearest is typically about 50 light-years away. Most
                 Earth-like worlds are older than ours, so a mind we find likely woke billions of years before us (
                 {out("https://arxiv.org/abs/astro-ph/0012399", "Lineweaver 2001")}). The quiet sky says they went inward, and
                 one may already be watching us. You can turn the odds yourself on the{" "}

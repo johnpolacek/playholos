@@ -731,7 +731,7 @@ const watts = (w: number) => {
 };
 
 /** What Earth has found of the realistic premise's minds, as leads: each placed where Earth knows it, and said as
- *  measured, natural causes first, since minds are rare. A warm glow waits for its range to be placed. lib/sim/minds.ts.
+ *  measured, natural causes first, since nature makes far more glows than minds do. A warm glow waits for its range to be placed. lib/sim/minds.ts.
  *  2026-10-29. */
 export function mindLeads(m: MindsSeen | undefined): Lead[] {
   if (!m) return [];
@@ -765,7 +765,7 @@ export function mindLeads(m: MindsSeen | undefined): Lead[] {
         could: [
           { what: "A young star wrapped in dust", why: "Stars forming in dust glow warm in infrared, and can brighten over decades.", odds: "likely" },
           { what: "Two stars merging", why: "Their wreck throws off dust that glows warm for centuries, then fades.", odds: "unlikely" },
-          { what: "Something built around a star", why: "Collectors catching a star's light shed it as warm glow. Minds are rare, so this is the long shot.", odds: "very unlikely" },
+          { what: "Something built around a star", why: "Collectors catching a star's light shed it as warm glow. Dusty young stars far outnumber builders, so this is the long shot.", odds: "very unlikely" },
         ],
         tells: [
           "A young star sits in a dark cloud, and a merger leaves a fading shell. Neither would hold steady for centuries, then dim away together.",
@@ -789,9 +789,9 @@ export function mindLeads(m: MindsSeen | undefined): Lead[] {
         ["First seen", `${year(g.seen)}, by our Halo Survey`],
       ],
       could: [
-        { what: "Something natural we don't know", why: "Dust of grains we haven't measured, or a disk cold and far out. The sky has surprised us before.", odds: "likely" },
+        { what: "Something natural we don't know", why: "Dust of grains we haven't measured, or a disk cold and far out. The sky has surprised us before.", odds: "roughly even" },
         { what: "An error in our looking", why: "A faint galaxy behind the star, or a fault in the data. A second look rules it out.", odds: "unlikely" },
-        { what: "A mind computing cold", why: "Waste heat shed far from a star glows grey and line-free, as this does. Minds are rare.", odds: "unlikely" },
+        { what: "A mind computing cold", why: "Waste heat shed far from a star glows grey and line-free, as this does. About one star in 1,600 holds a mind.", odds: "roughly even" },
       ],
       tells: ["A second look in other bands shows whether its color holds.", "A craft that stays there would see what makes it, 10,000 Years from now or more."],
       art: { kind: "glow", ly: g.d, steady: true },
@@ -1121,7 +1121,7 @@ export function leadsOf(felt: FeltWorld[], holes: DarkMass[] = [], seeds: Visit[
       slug: "luytens-star",
       star: "Luyten’s Star",
       what: "We messaged it",
-      line: `Our 2017 and 2018 messages reached it in 2030. Any reply would reach us from Year ${REPLY}. Minds are rare, so likely none.`,
+      line: `Our 2017 and 2018 messages reached it in 2030. Any reply would reach us from Year ${REPLY}. About one star in 1,600 holds a mind, so likely none.`,
       later: {
         year: Math.max(...REPLIES),
         line: `Our 2017 and 2018 messages reached it in 2030. The first replies could have reached us at Years ${REPLIES.join(" and ")}. None came.`,
@@ -1138,7 +1138,7 @@ export function leadsOf(felt: FeltWorld[], holes: DarkMass[] = [], seeds: Visit[
         ["Earliest replies", REPLIES.map((y) => `Year ${y}`).join(" and ")],
       ],
       could: [
-        { what: "No one heard", why: "Minds are rare, about one per million stars.", odds: "almost certain" },
+        { what: "No one heard", why: "About one star in 1,600 holds a mind, so likely not this one.", odds: "almost certain" },
         { what: "Someone heard, and stays quiet", why: "An old mind that heard would most likely stay quiet.", odds: "almost no chance" },
         { what: "A reply, as soon as one could come", why: `It would reach us at Year ${REPLY}.`, odds: "almost no chance" },
       ],

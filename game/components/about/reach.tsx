@@ -110,7 +110,7 @@ export function Reach() {
         className="mt-4 max-w-[60ch] text-[16px] leading-[1.6] text-page-ink2"
       >
         The stars are within reach, but slowly: even at a tenth of light speed,
-        the nearest mind is thousands of years away.
+        the nearest mind is centuries away.
       </p>
       <dl data-a className="mt-8 flex flex-wrap gap-x-10 gap-y-5">
         <Stat

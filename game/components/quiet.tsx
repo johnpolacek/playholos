@@ -10,8 +10,8 @@ import { gsap, prefersReducedMotion, useGSAP } from "@/lib/motion";
 
 // A long skip, said: the Years that passed in quiet, drawn as a span filling, the watches that kept it, and the Mind's
 // word on why the sky is so quiet. A skip of 37,197 Years landed with no word, and the player read it as nothing
-// happening. Playtest 2026-10-30. Rates from HOLOS_GAME_CONCEPT.md: about 200,000 minds in our Galaxy, the nearest old
-// one typically about 400 ly away, and about 2.5 young minds' warm glows reaching us in 100,000 Years. And what the
+// happening. Playtest 2026-10-30. Rates from HOLOS_GAME_CONCEPT.md, raised 2026-10-31: about 125 million minds in our Galaxy,
+// the nearest old one typically about 50 ly away, and a young mind's warm glow reaching us about every 50 Years. And what the
 // natural sky did meanwhile, lib/game/natural.ts: each star that exploded drawn where it was in our galaxy, top down,
 // flaring in turn, and the mergers our Warm Sky Watch set aside. 2026-10-30.
 
@@ -138,9 +138,9 @@ export function Quiet({ from, to, onClose }: { from: number; to: number; onClose
       )}
       <p data-q className="text-[13px] leading-snug text-page-ink2">
         <span className="mr-1.5 font-mono text-[10px] tracking-[.1em] text-you">THE MIND</span>
-        A quiet sky is what we expected. Minds are rare, about 200,000 in our galaxy, the nearest old one likely about
-        400 ly off. A young one’s warm glow reaches us perhaps once in 40,000 Years. Each quiet Year tells us where they
-        are not.
+        A quiet sky is what we expected. Minds are common, about 125 million in our galaxy, the nearest old one likely
+        about 50 ly off, and they keep quiet. A young one’s warm glow reaches us about once in 50 Years, if we watch for
+        it. Each quiet Year tells us where they are not.
       </p>
       <button data-q onClick={onClose} className="h-9 self-start rounded-full border border-ink px-4 text-[13px] font-medium">
         Go on

@@ -148,13 +148,14 @@ export function flashOf(p: Peer, watch: number | null | undefined, year: number,
 /** Years our Infrared Telescope takes to study a new warm glow and range it. */
 export const RANGE_YEARS = 2;
 /** A rough distance: centered off the truth by up to a fifth, a fixed draw for each peer, and a third wide either way,
- *  so it always holds the truth. */
+ *  so it always holds the truth. Each end to two figures, outward, so a near peer's range still holds it. */
 export function rangeOf(p: Peer): [number, number] {
   let h = 0;
   for (const c of p.id + p.pos.join()) h = (h * 31 + c.charCodeAt(0)) >>> 0;
   const center = p.d * (1 + 0.4 * ((h % 1000) / 1000 - 0.5));
-  const round = (x: number) => Math.round(x / 1000) * 1000;
-  return [round(center / 1.35), round(center * 1.35)];
+  const step = (x: number) => 10 ** (Math.floor(Math.log10(x)) - 1);
+  const lo = center / 1.35, hi = center * 1.35;
+  return [Math.floor(lo / step(lo)) * step(lo), Math.ceil(hi / step(hi)) * step(hi)];
 }
 
 /** Stars within a distance, from calcs/minds.py's disk model, which matches the census: light-years and count. */

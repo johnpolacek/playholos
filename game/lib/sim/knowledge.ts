@@ -608,7 +608,7 @@ ${heard}${visits.length ? `\n\nWhat our craft have seen up close:\n${visits.join
 }
 
 /** What Earth has found of the realistic premise's minds, as measured and never as who: each with what it could be,
- *  natural causes first, since minds are rare. lib/sim/minds.ts. 2026-10-29. */
+ *  natural causes first, since nature makes far more glows than minds do. lib/sim/minds.ts. 2026-10-29. */
 function describeMinds(m: MindsSeen, one: (x: number) => string): string {
   const sky = (x: { ra: number; dec: number }) => `toward right ascension ${(Math.round(x.ra * 10) / 10 % 24).toFixed(1)} h, declination ${x.dec.toFixed(0)}°`;
   const watts = (w: number) => w.toExponential(0).replace("e+", "×10^");

@@ -28,13 +28,14 @@ Iain M. Banks’s Culture books remain an inspiration. This does not authorize d
 
 ## The realistic premise
 
-Settled 2026-10-28, one step at a time. The premise itself, how many minds exist, where and how old, follows the best current estimate, never what plays well. Each number lives in one place so research can change it. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#how-common-minds-are). The criteria, the evidence by question, and answers to common objections are in [HOLOS_MODELING_ALIENS.md](HOLOS_MODELING_ALIENS.md).
+Settled 2026-10-28, one step at a time. The premise itself, how many minds exist, where and how old, follows the evidence, never what plays well. Where the evidence is split, the designer picks the reading, as for the density, 2026-10-31. Each number lives in one place so research can change it. Sources in [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md#how-common-minds-are). The criteria, the evidence by question, and answers to common objections are in [HOLOS_MODELING_ALIENS.md](HOLOS_MODELING_ALIENS.md).
 
-- **One mind per million stars.** The honest range runs from 1 per 1,000 to 1 per 10 billion. A million is its middle.
+- **One mind per 1,600 stars.** Raised 2026-10-31. The honest range runs from 1 per 1,000 to 1 per 10 billion. Holos sits near the top by the designer’s reading of the one contested step: 1 world with animals in 10 makes a mind, as Mills et al. 2025 read Earth. Many lines grew clever on Earth, and minds came on time once animals did.
+  - *It was one per million,* the range’s middle, 2026-10-28 to 2026-10-31. That set the step from animals to minds at 1 in 6,200, worked back from the density, not from evidence. The user, 2026-10-31: “I care about picking what makes sense to me. The game can adjust.”
   - *Minds don’t die,* as ours won’t. So the odds are warm worlds × life starts × a mind arises, with no lifetime factor.
   - *The quiet sky barely limits density.* Corrected 2026-10-30: quiet minds leave a quiet sky however many there are. More minds only need more of them to hold back, and patchy settlement means not all must (Carroll-Nellenback et al. 2019, Landis 1998). Before: “denser fights the quiet sky”, which assumed minds are loud.
-  - *What it gives,* from a model of the Galaxy’s disk: about 1,500 stars within 50 ly and a 0.15% chance of a mind there. The nearest is typically about 400 ly away.
-  - *Almost all the doubt is one step,* a living world making a mind. No hard steps (Mills et al. 2025) puts it near 1 in 10. Hard steps (Snyder-Beattie et al. 2021, Watson 2025) put it near 1 in 10 billion. About 1 in 30,000 sits near the middle. Earth ran the experiment once, so it can’t say.
+  - *What it gives,* from a model of the Galaxy’s disk: about 1,500 stars within 50 ly and about a 60% chance of a mind there. The nearest is typically about 50 ly away, and about 190 lie within 326 ly. About 125 million in our Galaxy.
+  - *Almost all the doubt is one step,* a living world making a mind. No hard steps (Mills et al. 2025) puts it near 1 in 10. Hard steps (Snyder-Beattie et al. 2021, Watson 2025) put it near 1 in 10 billion. About 1 in 30,000 sits near the middle. Earth ran the experiment once, so it can’t say. Holos takes 1 in 10.
   - *Every count scales with it.* Ten times the minds is ten times the peers.
   - Set aside: drawing the density per game across the whole range, which claims no best guess. A tilt toward sparse, which double-counts what the checker already enforces. And a mind on 1 living world in 1,000, which leans toward one side of a live debate, considered 2026-10-28.
 - **Any mind we find is older.** Earth is younger than about three quarters of the Earth-like worlds that exist now, by 1.8 ± 0.9 billion years on average. About 90% sure.
@@ -45,42 +46,43 @@ Settled 2026-10-28, one step at a time. The premise itself, how many minds exist
   - *The quiet sky forces it.* One that kept growing would blaze in our infrared archives. One that spread would have reached us millions of years ago.
   - *Awake,* it computes cold far from its star, a faint grey far-infrared glow (Garrett 2026). *Asleep,* it waits for a colder universe and gives off almost nothing (Sandberg, Armstrong and Ćirković 2016). The seed picks which.
   - No beacon, no colonies, no scripted personality. Silent by default. How it answers if reached is still open.
-  - *It watches living worlds, and it is linked.* Settled 2026-10-30. A telescope on its star’s focal line images a world at about 100 km a pixel from 400 ly (Turyshev et al. 2020). So the nearest old mind has watched Earth’s life for ages, seeing Earth as it was around 1640 now. Old minds link by tight beams relayed through stars’ lenses, nodes a few parsecs apart (Bracewell 1960, Hippke 2021). A beam between two other stars never crosses Earth. Reasoning in [HOLOS_MODELING_ALIENS.md](HOLOS_MODELING_ALIENS.md#4-what-do-old-minds-do).
+  - *It watches living worlds, and it is linked.* Settled 2026-10-30. A telescope on its star’s focal line images a world at about 13 km a pixel from 50 ly (Turyshev et al. 2020). So the nearest old mind has watched Earth’s life for ages, seeing Earth as it was around 1975 now. Old minds link by tight beams relayed through stars’ lenses, nodes a few parsecs apart (Bracewell 1960, Hippke 2021). A beam between two other stars never crosses Earth. Reasoning in [HOLOS_MODELING_ALIENS.md](HOLOS_MODELING_ALIENS.md#4-what-do-old-minds-do).
     - *Why a watcher too.* A lens sees centuries late and can’t see a 10 cm seed leave. A watcher sees and warns at once.
     - *Built 2026-10-30:* the relay on our Sun’s focal line and the Relay Search that finds it, below. The Mind says nothing of what old minds do beyond what we have found, settled 2026-10-30. Watching and links are the model’s truth, not Earth’s knowledge, until our finds show them. Set aside: the Mind offering them at Year 0 as theory.
-  - *Hard to find, so late.* An awake one needs a far-infrared survey we must build. An asleep one needs a probe in its system, hundreds of light-years away.
+  - *Hard to find, so late.* An awake one needs a far-infrared survey we must build. An asleep one needs a probe in its system, tens of light-years away at the nearest.
   - Set aside for now: minds that died and left ruins.
-- **Why the sky is quiet: rare, inward, watching.** Settled 2026-10-28. Our stated answer to the Fermi paradox.
-  - *Rare.* About 200,000 minds in our Galaxy, not billions.
+- **Why the sky is quiet: inward and watching.** Settled 2026-10-28. Our stated answer to the Fermi paradox.
+  - *Not rare.* Since 2026-10-31, about 125 million minds in our Galaxy. Rarity was part of the answer at 200,000. Now restraint carries it all.
   - *Inward, for a reason physics gives every mind.* Computing costs less the colder it runs, so waiting and computing cold pays best (Sandberg, Armstrong and Ćirković 2016). Spreading adds little to a mind that only thinks. The same incentive for all is why all of them can choose alike.
   - *Watching.* An inward mind’s one danger is a young mind that spreads. Watching it is cheap and invisible.
   - *So the game’s tension is ours.* By parity we can spread. If we do, we become what the watchers watch for.
   - Set aside: a test universe or simulation, which can’t be tested. The Mind may still raise it as an open idea.
 - **A silent watcher is here.** Settled 2026-10-28. Every game has one, small and dark, in our system for millions of years.
-  - *Why always.* About 200,000 old minds in our Galaxy, and one that watches is enough. A 1 kg watcher for every star is about 10⁸ t, sent at 1% of light’s speed for about 20 minutes of the Sun’s output: trivial for an old mind, with no self-copying machines to drift. More likely than not, about 2 in 3. Low confidence.
+  - *Why always.* About 125 million old minds in our Galaxy, and one that watches is enough. A 1 kg watcher for every star is about 10⁸ t, sent at 1% of light’s speed for about 20 minutes of the Sun’s output: trivial for an old mind, with no self-copying machines to drift. More likely than not, about 2 in 3. Low confidence.
   - *What evidence allows.* Our system has never been searched well for metre-sized objects. The best places are Earth’s co-orbiting asteroids and the Lagrange points (Benford 2019).
-  - *What it does.* It saw Earth’s life long ago and heard our radio. It may report home at light speed, a maker hundreds of light-years away or more. Its maker may not care.
+  - *What it does.* It saw Earth’s life long ago and heard our radio. It may report home at light speed, a maker tens of light-years away or more. Its maker may not care.
   - *Finding it* tells us minds exist, not who or where.
-  - Set aside: a watcher in some games only, which the user ruled out: all or none, by likelihood. And none, which needs every one of 200,000 minds to refrain.
-- **Earth is unheard at Year 0.** Settled 2026-10-28. Our radar front began in the 1950s, so by 2040 it reaches about 90 ly. The nearest mind is typically 400 ly away, so the chance one lies inside is about 1%.
-  - Only the watcher has heard us.
+  - Set aside: a watcher in some games only, which the user ruled out: all or none, by likelihood. And none, which needs every one of 125 million minds to refrain.
+- **Earth is heard at Year 0.** Changed 2026-10-31. Our radar front began in the 1950s, so by 2040 it reaches about 90 ly. About 8,500 stars lie inside, so about 5 old minds, and the chance of none is under 1%.
+  - They stay quiet, as old minds do. Hearing us tells them little their lenses hadn’t: they have watched Earth’s life for ages.
+  - *Before,* at one mind per million stars, the chance one lay inside was about 1%, and only the watcher had heard us.
   - *Quieting our radars* shapes the front that reaches minds centuries from now. It no longer hides us from minds that heard.
 - **The map is the Galaxy.** Settled 2026-10-28. A game can run 100,000 Years or more.
   - *Why.* Peers exist only at Galaxy scale. Minds near us woke about once per billion years.
   - | Woke within | Within 1,000 ly | In our Galaxy |
     | --- | --- | --- |
-    | 1,000 years of us | 1 in 340,000 | 0.07 |
-    | 100,000 years | 1 in 3,400 | about 7 |
-    | 1 million years | 1 in 340 | about 70 |
-    | 10 million years | 1 in 34 | about 700 |
-  - *So about 7 peers,* young minds within 100,000 years of us, the nearest typically about 18,000 ly away. Recounted 2026-10-30 from the age model: 1.6 minds in 100,000 wake within 100,000 years of us on either side. The nearest peer within a million years is typically about 6,500 ly away, within 10 million about 2,400. Their light and ours take that many Years to cross.
+    | 1,000 years of us | 1 in 600 | about 40 |
+    | 100,000 years | 1 in 6 | about 4,000 |
+    | 1 million years | about 2 | about 40,000 |
+    | 10 million years | about 20 | about 400,000 |
+  - *So about 4,000 peers,* young minds within 100,000 years of us, the nearest typically about 1,300 ly away. Recounted 2026-10-31 at the raised density, from the age model: 1.6 minds in 100,000 wake within 100,000 years of us on either side. The nearest peer within a million years is typically about 700 ly away, within 10 million about 300. At one per million stars it was about 7 peers, the nearest about 18,000 ly away. Their light and ours take that many Years to cross.
   - *Near stars stay a real catalog.* Beyond Gaia’s detail the Galaxy is drawn from its measured structure.
   - *Assumed:* 200 billion stars. When minds arise follows when Earth-like worlds formed, and how long a mind takes, as above. Settled 2026-10-30, replacing an even pace over 8 billion years.
   - Set aside: a 1,000 ly map, chosen first on 2026-10-28. It held about 8 old minds and no peers.
   - *How long each peer stays outward* is drawn per peer, below.
 - **A young mind is outward while it builds and spreads.** Settled 2026-10-29, revised 2026-10-30. Drawn per peer, then it turns inward and goes cold.
   - *Building out its home system: 50 to 1,000 years.* From about Earth’s industry today to a swarm of Mercury’s mass is about 38 doublings. At 1 to 5 years a doubling (Metzger et al. 2013) that is 40 to 200 years. A cautious mind takes up to 1,000.
-  - *Spreading, with no cap, settled 2026-10-30.* Each settlement spreads with its own chance, inherited from its parent with a small change, and settles its 6 nearest stars plus those drifting into reach while it is active. Settling here means building a star out, hungry spread. A mind’s chance is drawn from 1 in 1,000 to 1 in 30, below what Earth unsettled allows. About 1 young mind in 110 spreads at all, the largest families tens of stars within about 20 ly. Seeds travel at 1% to 20% of light’s speed. In calcs/minds.py, reasoning in [HOLOS_MODELING_ALIENS.md](HOLOS_MODELING_ALIENS.md#5-how-far-does-a-young-mind-spread).
+  - *Spreading, with no cap, settled 2026-10-30.* Each settlement spreads with its own chance, inherited from its parent with a small change, and settles its 6 nearest stars plus those drifting into reach while it is active. Settling here means building a star out, hungry spread. A mind’s chance is drawn from 1 in 1,000 to 1 in 84, below what Earth unsettled allows for 125 million minds, calcs/spread_limit.py. It was 1 in 30 for 200,000. About 1 young mind in 220 spreads at all, the largest families tens of stars within about 20 ly. Seeds travel at 1% to 20% of light’s speed. In calcs/minds.py, reasoning in [HOLOS_MODELING_ALIENS.md](HOLOS_MODELING_ALIENS.md#5-how-far-does-a-young-mind-spread).
   - *Why so few spread hungrily.* Earth unsettled demands it: with free choice, 10 to 15% of minds would fill the Galaxy. Quiet spread, small seeds and minds sent by beam, could be here unseen, so the evidence doesn’t limit it. The restraint has physical reasons. A colony years away by light can’t share our thinking, so it becomes a separate mind, a rival. Seeing by telescope and probe beats going. Thinking runs best cold and compact. And the rare hungry one is caught early: old minds are billions of years ahead, a watcher at every star costs about 100 million tonnes, and a young grower starts slow and local.
   - *Set aside 2026-10-30: a 200 ly cap on reach.* It assumed a mind’s territory is a solid ball that would swallow Earth. Settlement is patchy, and the observation, not a cap, sets the limit. The old split, 1 in 4 home, 2 in 3 near, 1 in 10 far, went with it.
   - *What we see.* A peer’s warm phase reaches us as an infrared flash lasting centuries to millennia, somewhere in a long game. A Sun’s full output at 30,000 ly is about 1.5 mJy at 12 µm, right at WISE’s limit, so a survey we build must catch it.
@@ -91,7 +93,7 @@ Settled 2026-10-28, one step at a time. The premise itself, how many minds exist
   - *Its reply takes as long again* to reach us, tens of thousands of Years.
   - *Later, human players* can take a peer’s place on the same terms.
   - Set aside: every peer played live from the start, which costs much and changes nothing we could see. Fully scripted peers that never react.
-- **At contact a peer is almost always inward.** Settled 2026-10-29. In 200,000 draws of wake time, distance and outward time, our light finds 63% already inward and 35% not yet awake. Only 2% are still outward.
+- **At contact a peer is almost always inward.** Settled 2026-10-29. In 200,000 draws of wake time, distance and outward time, our light finds 63% already inward and 35% not yet awake. Only 2% are still outward. Rechecked 2026-10-31 with 4,000 peers a game and the tighter spread: 65% inward, 35% unborn, about 0.1% outward.
   - *So peers and old minds share one reaction model.* At contact they are the same kind of mind.
   - *A peer that wakes after us* finds our old light in its sky, the mirror of us finding an older mind.
 - **An inward mind stays silent unless we spread.** Settled 2026-10-29. If it sees us spread, it may act, drawn per mind.
@@ -129,12 +131,12 @@ Settled 2026-10-28, one step at a time. The premise itself, how many minds exist
 - **The ladder, played, built 2026-10-30.** Before, only the warning played. lib/sim/ladder.ts.
   - *Contain:* word of a second builder seed reaches the maker, a light-time later. Its grams fly at a tenth of light speed to every star our seeds reached and wreck each probe there, or on arrival. Copies a lost probe hadn’t sent never leave. A Mind sent to settle is lost the same way.
   - *Strike:* the first copy to leave a star, seen by a watcher there, sends word to the maker. It readies a bullet as any mind does, about 32 Years by parity, and fires it at Earth: 1,000 t at a tenth of light speed, about 108,000 Mt, climate harm, not Earth’s end.
-  - *Seed 22, maker 480 ly off:* one seed probe at Year 50 draws a strike landing about Year 5,484. A second at Year 60 loses all 14 of our probes between Years 5,277 and 5,478.
+  - *Before 2026-10-31, seed 22, maker 480 ly off:* one seed probe at Year 50 draws a strike landing about Year 5,484. A second at Year 60 loses all 14 of our probes between Years 5,277 and 5,478.
   - *What Earth sees:* a probe’s silence once its word is overdue, and a strike from beyond our system when it lands. Never who. On Scan, as readings on the watcher’s lead. Its harm cuts our thought as a rock’s does.
   - *Not yet:* strikes on a Mind at a hole. Screens on the line to the maker went with the Picket Yard, 2026-10-31.
 - **Real stars to 326 ly, a seeded Galaxy beyond.** Settled 2026-10-29. Gaia’s census of nearby stars lists about 331,000 within 100 pc (Smart et al. 2021), a few MB to ship.
   - *Beyond,* stars are drawn from the Galaxy’s measured shape, its disk, bar, arms and bulge. They are made from the seed as we look, the same every time.
-  - *Why so far.* The typical nearest old mind sits about 400 ly away, so most of the early game stays inside real data.
+  - *Why so far.* Old minds are drawn one by one only inside it, about 190 a game, all on real stars. The nearest typically sits about 50 ly away. Until 2026-10-31 they were drawn to 1,000 ly, about 8.5 a game. At the raised density that is 5,300, too many to ship.
   - Replaces the 536 stars within about 50 ly in game/lib/game/sky.json.
   - Set aside: a real catalog to 100 ly only, about 12,000 stars, and a seeded Galaxy everywhere.
 - **Known landmarks sit at their real places.** Settled 2026-10-29. The seed fills in around them.
@@ -142,7 +144,7 @@ Settled 2026-10-28, one step at a time. The premise itself, how many minds exist
   - *First nine, 2026-10-29:* the Hyades, the Pleiades, the Beehive, the Orion Nebula, Gaia BH2 and BH3, the Crab Nebula, 47 Tucanae and Omega Centauri. A tap names each on Reach’s map. Gaia BH1 was already a destination.
   - *Later, the full catalogs:* Gaia’s open clusters (Cantat-Gaudin 2020) and all of the Galaxy’s globular clusters (Harris).
 - **How Earth finds minds, way 1: a peer’s warm flash.** Settled 2026-10-29. A new build, an all-sky mid-infrared watch, repeats every few Years and catches any flash above its depth while it runs.
-  - *The flash.* A peer building out its home glows warm for its outward time, and its light takes its distance in Years to reach us. Over 400 seeds, about 2.4 flashes a game passed before Year 0, gone. About 3.5 arrive in 100,000 Years, the first typically near Year 21,000, and 1 game in 4 sees one inside 10,000 Years. Recounted 2026-10-30 with 7 peers and the uncapped spread.
+  - *The flash.* A peer building out its home glows warm for its outward time, and its light takes its distance in Years to reach us. Recounted 2026-10-31 with 4,000 peers: about 1,400 flashes a game passed before Year 0, gone, so a world ships only those still to come. About 6 already shine at Year 0, and about 2,000 arrive in 100,000 Years, one every 50 Years or so. AllWISE’s catalog may already hold one, filed as a dusty star. Before, with 7 peers, about 3.5 arrived in 100,000 Years, the first near Year 21,000.
   - *Its depth.* A Sun’s full output from 30,000 ly is about 1.5 mJy at 12 µm. Dust dims it 2 to 4 times, the most toward the Galaxy’s center (Xue et al. 2016, Schödel et al. 2010). AllWISE reached 0.73 mJy in clear sky, far worse in the crowded plane. A watch about 10 times deeper sees a flash anywhere in the Galaxy, a fifth-built swarm included. Spotting a new source against a crowded plane is what a repeating watch is for. Checked 2026-10-29.
   - *A flash we aren’t watching for passes unseen.* The watch must already run when it arrives.
   - *Its direction is exact, its distance only a range.* Parallax at 30,000 ly is about a ten-thousandth of an arcsecond, beyond any star mapper for a faint infrared source behind dust. Settled 2026-10-29: our Infrared Telescope studies a new glow while it shines, by its reddening against dust maps and the star behind it if it shows, and in about 2 Years gives a range about a third either way. One that fades first is never ranged.
@@ -151,7 +153,7 @@ Settled 2026-10-28, one step at a time. The premise itself, how many minds exist
   - Set aside: the Halo Survey catching warm flashes too. A warm flash and a cold glow need different instruments.
 - **Way 2: an awake old mind’s cold glow.** Settled 2026-10-29. The Halo Survey finds about half of them. Its depth, 3×10¹⁸ W at 10 pc, is 4.5×10²⁰ W at 400 ly, where 56% of awake minds glow brighter, and 2.8×10²¹ W at 1,000 ly, where 50% do. A deeper survey later could find more.
   - *Corrected 2026-10-29: it looks star by star, nearest first.* A whole-sky map can’t reach the depth: faint galaxies crowd far-infrared light, so a single dish confuses a glow with them, as Herschel did at a few mJy. Only an array sees sharply, one star at a time. An hour a star, as an ALMA program taking two thirds of its time, is about 3,000 stars a Year: 100 ly in 4 Years, 400 ly in about 220.
-  - *The Halo Array,* our own ALMA-class array ten times as fast, unlocks after it: 40,000 stars a Year, 400 ly in about 17 Years, 1,000 ly in about 210. 1.5 flagships, about $15 billion scaled from ALMA’s $1.5 billion, 12 Years as ALMA took. Samples.
+  - *The Halo Array,* our own ALMA-class array ten times as fast, unlocks after it: 40,000 stars a Year, the 300,000 within 326 ly in about 8 Years. Old minds past 326 ly aren’t drawn, so it finds none beyond. 1.5 flagships, about $15 billion scaled from ALMA’s $1.5 billion, 12 Years as ALMA took. Samples.
   - Set aside: every awake old mind glowing above the floor. Physics doesn’t promise a bright glow.
 - **Way 3: the watcher, found by where it sits.** Settled 2026-10-29. A 1 kg watcher is about a dark 10 cm object, absolute magnitude about 39 at albedo 0.05, this project’s arithmetic.
   - *Earth–Moon L4 or L5:* about magnitude 26 to 27 from Earth, or 28 if coated near black. A deep, stacked search from Earth finds it in some Years.
@@ -172,10 +174,10 @@ Settled 2026-10-28, one step at a time. The premise itself, how many minds exist
   - *It still sheds its housekeeping heat,* about 10¹⁰ W, a sample. From a body a km or so across that comes out warm, 200 to 490 K, a warm moving dot in a cold outer system.
   - *How near a probe must pass.* JWST’s MIRI reaches 0.48 µJy at 10 µm in 10,000 s (STScI). A 6.5 m telescope sees such a body from 270 to 430 AU, a probe’s 1 m one from 40 to 65 AU, by this project’s arithmetic.
   - *So:* a gram sail carries no telescope and never finds it. A flyby at a tenth of light’s speed spends about 6 days within 50 AU of any point on its path, so it finds the mind only if its path passes that close. A probe that brakes and stays maps the system over a few Years and always finds it.
-  - From Earth, 400 ly off, it is 10¹¹ times too faint. The gap between stars is the barrier, not the system.
+  - From Earth, 400 ly off, it is 10¹¹ times too faint, and still 10⁹ times at 50 ly. The gap between stars is the barrier, not the system.
   - Set aside: any probe finding it, flyby or not.
   - Set aside: seeding everything beyond 326 ly, landmarks included.
-- **The draw, in calcs/minds.py.** Added 2026-10-29, beside the old neighbors, as each world’s `minds`. Over 400 seeds: 8.6 old minds within 1,000 ly, the nearest typically 397 ly away, and 5.1 peers, 63% inward at contact.
+- **The draw, in calcs/minds.py.** Added 2026-10-29, beside the old neighbors, as each world’s `minds`. Raised 2026-10-31. Over the 33 pool seeds: about 190 old minds within 326 ly, the nearest typically 47 ly away, and about 4,000 peers, 65% inward at contact. Before, over 400 seeds: 8.6 old minds within 1,000 ly, the nearest typically 397 ly away, and 5.1 peers.
   - *Old minds* sit on real stars inside 326 ly and at seeded places out to 1,000 ly, weighted by the disk. Each is typically about 2.3 billion years older, from the age model above, at most about 9. Half sleep, as before. Awake, a glow stays under what the shallow all-sky maps would catch.
   - *Peers* are placed by the Galaxy’s shape, 1 in 5 in the bulge and bar. Each carries its flash, the Years its warm phase shines at Earth.
   - *The watcher’s maker is the nearest old mind.* Settled 2026-10-29: if several watch, the nearest answers first. Set aside: a maker drawn at random within 1,000 ly.
@@ -198,6 +200,7 @@ Settled 2026-10-28, one step at a time. The premise itself, how many minds exist
   - Set aside: life on 10% of warm worlds, chosen first on 2026-10-28. It had no source behind its split, and the ladder does.
 - **How we find an old mind.** Awake, by a far-infrared sky survey Earth builds. Asleep, only by a probe in its system.
   - Our deep far-infrared archives cover stars within about 150 ly. Beyond, only shallow all-sky maps, which catch a mind only above about 0.3% of a Sun’s power at 400 ly. So an old mind can hide today.
+  - *Within 150 ly, the archives bind,* 2026-10-31. With the nearest mind about 50 ly off, an awake one’s glow is drawn under 7×10¹⁹ W at 10 pc there too, in calcs/minds.py.
   - Set aside for now: reading an old mind’s home world through its air, which needs telescopes kilometers wide.
 - **Done 2026-10-29:** the seed, the star catalog to 326 ly, how we find minds, and the skip. The neighbor roster and the elder are retired: no game draws them, and their mechanics are being deleted (rework 5). **Still to rework:** Earth’s leads, the 50 ly map, and the Mind’s words where they assume neighbors. Fixes found by the realism audit are tracked in [HOLOS_REALISM_AUDIT.md](HOLOS_REALISM_AUDIT.md). Sections below that assume peers in our century are kept until then, marked superseded. The numbers tuned to 50 ly are listed in [To recheck at a wider scale](#to-recheck-at-a-wider-scale).
 
@@ -802,7 +805,7 @@ Settled 2026-10-13.
   - *The telescope reads, 2026-10-20.* Once our order finishes the Infrared Telescope, it reads the worlds Earth has felt, nearest first, each band landing when its days are up. The Mind is told what each air shows, water, oxygen and ozone, or that the mirror can’t split it or read it. Across the 33 test Earths it can split 80 of 138 felt worlds, read water on 26, in 17 Earths, and oxygen on 17. 5 of the 17 homes among them can be read, in 5 Earths. Not shown on Scan yet.
   - *Which reading a game opens with.* Measured on 300 games, 2026-10-14, and again 2026-10-16. At the nearest felt world it can read, the first mirror reads water and oxygen in 6 games of 10. It reads only color and ozone in 1 in 17, as in the mocks’ game. In 1 in 3 it can read no felt world, and the player reads 82 Eridani d.
   - *The premise makes life common.* It puts a mind at about 1 warm world in 18. Minds can’t be commoner than life, so most worlds that can hold life do.
-    - *Superseded 2026-10-28.* Minds are now one per million stars, so this reason is gone. Life stays common on Kipping 2025’s fast start. See [The realistic premise](#the-realistic-premise).
+    - *Superseded 2026-10-28.* Minds became one per million stars, one per 1,600 since 2026-10-31, so this reason is gone. Life stays common on Kipping 2025’s fast start. See [The realistic premise](#the-realistic-premise).
   - *Later:* stone-age worlds and old ruins can join the roster as written entries.
   - Set aside: minds without industry drawn by the seed, and every rung drawn, ruins included.
 - **A natural world’s rung comes from its star’s age, and physics says whether it kept its air.** Settled 2026-10-13. Built in [calcs/seed.py](calcs/seed.py).
@@ -841,7 +844,7 @@ Settled 2026-10-13.
     - *Its air:* no water, almost no chance. Water alone, roughly even: an empty sea, or Earth’s early microbes. Oxygen alone, roughly even. Oxygen with water, likely, since oxygen can build up without life.
     - *Seen up close:* bare rock, almost no chance. Ice, unlikely. Seas, roughly even, or likely with oxygen. Forests, very likely, or almost certain with oxygen. Cities, almost certain.
     - *A grey glow, likely:* cold computing would glow so. A black hole glows only once someone is seen there. A reply we wait on keeps its own color.
-    - Set aside: the player guessing per star. At one mind per million stars an honest guess reads almost no chance everywhere. The Mind’s own hunches, judged at a game’s end, wait for an end-of-game replay.
+    - Set aside: the player guessing per star. At one mind per 1,600 stars an honest guess still reads almost no chance at any one star. The Mind’s own hunches, judged at a game’s end, wait for an end-of-game replay.
   - *This replaces v1’s percentages.* The rest of v1’s rule holds ([v1: What we know, and how we know it](legacy/v1/HOLOS_GAME_CONCEPT.md#what-we-know-and-how-we-know-it)): explanations compete, and each instrument runs one test.
   - *A number that is a measurement stays a number:* a distance, a time, a mass.
   - *Known cost.* People read such words differently, and nearer to even than meant (Budescu et al. 2014). One fixed scale, used everywhere, is the guard.

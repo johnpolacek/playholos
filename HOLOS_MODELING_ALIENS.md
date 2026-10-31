@@ -1,6 +1,6 @@
 # Holos · Modeling Other Minds
 
-Last updated: October 30, 2026.
+Last updated: October 31, 2026.
 
 How Holos decides who else is out there, how many, how old, where, and what they do. First the criteria every decision must meet. Then the model those criteria produce. Then the science, research and data behind each part, with links.
 
@@ -18,6 +18,7 @@ Every choice about other minds has to pass these, in order.
 3. **The premise follows the best estimate, not what plays well.** How many minds exist, where and how old, is set by the middle of the evidence.
    - Example: until October 28, 2026, Holos put a few to a few dozen neighbors within 50 light-years, all waking in our century. That was chosen for play, not from evidence, so it went.
 4. **Carry the whole range, then pick its middle.** Where estimates span many orders of magnitude, we say so, and take the center. We don’t lean toward either end without a reason.
+   - The one exception, 2026-10-31: the step from animals to minds. The designer read Earth as Mills et al. 2025 do, minds arising in turn once animals do, and set it at 1 in 10, near the top of its range. The count of minds follows from it. It stays inside the evidence, so criterion 2 holds.
 5. **The quiet sky is a hard constraint.** Any model must explain what we actually see: no signals, no visitors, no galaxies glowing with waste heat. A model that predicts a loud sky is wrong.
 6. **Model what physics lets us see.** We assume nothing about what other minds want, beyond incentives physics gives every mind. No scripted personalities.
 7. **Nothing faster than light.** Every observation is old news. Every reply takes as long again.
@@ -30,14 +31,14 @@ Every choice about other minds has to pass these, in order.
 
 | Question | Holos’s answer | Confidence |
 | --- | --- | --- |
-| How common are minds? | About 1 per million stars, about 200,000 in our Galaxy | Low. The honest range is 1 per 1,000 to 1 per 10 billion |
+| How common are minds? | About 1 per 1,600 stars, about 125 million in our Galaxy | Low. The honest range is 1 per 1,000 to 1 per 10 billion. Holos sits near the top, by the designer’s choice |
 | How common is life? | Common. Life starts on about 3 in 4 suitable worlds | Moderate, for Earth-like conditions |
 | Where is the rare step? | From animals to a mind that builds | Low. Contested |
-| How far is the nearest mind? | Typically about 400 light-years | Follows from the density |
+| How far is the nearest mind? | Typically about 50 light-years | Follows from the density |
 | How old is a mind we find? | Older, typically by about 2.3 billion years, two thirds by 0.8 to 3.9 | Moderate |
-| Any minds our age? | About 7 in the whole Galaxy within 100,000 years of us, the nearest typically 18,000 light-years away | Follows from the density and ages |
+| Any minds our age? | About 4,000 in the whole Galaxy within 100,000 years of us, the nearest typically 1,300 light-years away | Follows from the density and ages |
 | What do old minds do? | Turn inward. Compute cold, or sleep. Watch living worlds, and link by beam | Moderate for inward. Low for watching and links |
-| Has anyone heard us? | Almost surely not. Our radio reaches about 90 light-years | About 99% |
+| Has anyone heard us? | Almost surely. Our radio reaches about 90 light-years, where about 5 old minds lie | About 99% |
 | Is something watching us? | Yes, a small dark watcher in our system | About 2 in 3. Low |
 | What is dangerous? | Spreading. Seeds that build can draw a warning, then worse | A guess. No evidence on motives |
 
@@ -55,38 +56,41 @@ The middle column follows 100 typical stars near us. The counts for steps 2 to 6
 | 4. Life starts | 3.1 | 3 in 4 | [Kipping 2025](https://arxiv.org/abs/2504.05993): a fast start favored 13 to 1 where conditions are Earth-like. It rests on the last common ancestor living about 4.2 billion years ago ([Moody et al. 2024](https://doi.org/10.1038/s41559-024-02461-1)). [Spiegel and Turner 2012](https://arxiv.org/abs/1107.3835) caution that a fast start is weak evidence, since we had to exist to ask | Moderate, for Earth-like worlds |
 | 5. Life lasts | 1.0 | 1 in 3 | A world can drift too hot or too cold before life, or rock weathering, steadies its climate. Simulated Earth-like worlds without life stay livable for 4 billion years in about 32% of runs under a brightening star, and 10 to 97% across setups ([Coy, Kite and Graham 2025](https://iopscience.iop.org/article/10.3847/PSJ/adf643)). Life may help, since many living worlds tend to keep conditions livable ([Arthur and Nicholson 2023](https://arxiv.org/abs/2301.02150)), or fail to: [Chopra and Lineweaver 2016](https://doi.org/10.1089/ast.2015.1387) argue almost all early life dies, and [Nicholson et al. 2018](https://arxiv.org/abs/1803.08063) find both outcomes in models. No one has a rate for life itself, so Holos takes the one measured anchor | Low |
 | 6. Life reaches animals, by now | 0.62 | About 3 in 5 of living worlds | Each step waits for oxygen, as on Earth ([Mills et al. 2025](https://doi.org/10.1126/sciadv.ads5698)). Oxygen lasted from 2.3 billion years ([Poulton et al. 2021](https://doi.org/10.1038/s41586-021-03393-7)), animals and forests from about 4.0 ([Reinhard et al. 2017](https://arxiv.org/abs/1702.01137)). Each world runs faster or slower, 1.6 times at one sigma | Moderate |
-| 7. Animals to a mind that builds | 0.0001 | **About 1 in 6,200** | What the chain needs to reach 1 mind per million stars. Bounded by [Mills et al. 2025](https://doi.org/10.1126/sciadv.ads5698), no hard steps, and [Snyder-Beattie et al. 2021](https://doi.org/10.1089/ast.2019.2149), hard steps. [Kipping 2020](https://arxiv.org/abs/2005.09008) slightly favors rare intelligence. Details below | Low. This is the contested step |
+| 7. Animals to a mind that builds | 0.062 | **About 1 in 10** | The designer’s reading, 2026-10-31: many lines on Earth grew clever, and minds arose on time once animals did. It was 1 in 6,200, what the chain needed to reach 1 mind per million stars. Bounded by [Mills et al. 2025](https://doi.org/10.1126/sciadv.ads5698), no hard steps, and [Snyder-Beattie et al. 2021](https://doi.org/10.1089/ast.2019.2149), hard steps. [Kipping 2020](https://arxiv.org/abs/2005.09008) slightly favors rare intelligence. Details below | Low. This is the contested step |
 | 8. Minds don’t die | 0.0001 | All | No outside evidence. It follows the [game’s premise](HOLOS_GAME_CONCEPT.md#the-realistic-premise): at Year 0, aging and illness are solved and Earth’s people and machines wake as one Mind. A mind like that doesn’t age out, so minds add up over the Galaxy’s history | An assumption |
 
-**The result:** about 1 mind per million stars. Times 200 billion stars, that is about 200,000 minds in our Galaxy in 2040. The nearest is typically about 400 light-years from us.
+**The result:** about 1 mind per 1,600 stars. Times 200 billion stars, that is about 125 million minds in our Galaxy in 2040. The nearest is typically about 50 light-years from us. Until 2026-10-31 it was 1 per million, 200,000 minds, the nearest about 400 light-years away.
 
-**How much step 5 matters.** Its range is wide, from few dying to almost all. Holos takes 1 in 3 lasting. It doesn’t move the count of minds, since that comes from the density’s range as a whole, and step 7 is what is left over. It moves where the rarity sits.
+**How much step 5 matters.** Its range is wide, from few dying to almost all. Holos takes 1 in 3 lasting. Since step 7 is set on its own, step 5 moves the count of minds with it.
 
-- *If few die, say 1 in 5,* about 2.5 worlds per 100 stars keep life, about 1.5 reach animals, and step 7 becomes about 1 in 15,000.
-- *If 99 in 100 die,* about 0.03 per 100 stars keep life, nearby life is rare, and step 7 becomes about 1 in 200. The Gaian bottleneck would then be much of the answer to the Fermi paradox, as Chopra and Lineweaver argue.
+- *If few die, say 1 in 5,* about 2.5 worlds per 100 stars keep life, about 1.5 reach animals, and minds are 2.4 times as many, about 300 million.
+- *If 99 in 100 die,* about 0.03 per 100 stars keep life, nearby life is rare, and minds are about 4 million. The Gaian bottleneck would then be much of the answer to the Fermi paradox, as Chopra and Lineweaver argue.
 - *Either way,* step 7’s own range, from 1 in 6 to 1 in 62 million, is far wider. Step 5 shifts the picture of life near us more than the count of minds.
 
 ### Step 7: from animals to a mind that builds
 
-**How often.** About 1 world with animals in 6,200 ever produces a mind that builds. That is what the chain needs to land on 1 mind per million stars, given steps 1 to 6.
+**How often.** About 1 world with animals in 10 ever produces a mind that builds. Chosen 2026-10-31 by the designer, who reads Earth as Mills et al. 2025 do: many lines grew clever, and one built, on time. The density follows from it.
 
-- Put another way: of all the worlds near us that have had animals, about 0.62 per 100 stars, a mind is very unlikely on any one of them.
-- Across the Galaxy there are about 1.2 billion worlds with animals, and about 200,000 minds.
+- Put another way: of all the worlds near us that have had animals, about 0.62 per 100 stars, one in 10 made a mind.
+- Across the Galaxy there are about 1.2 billion worlds with animals, and about 125 million minds.
+- *It was 1 in 6,200,* worked back from 1 mind per million stars, the middle of the density’s range. That made the step the rare one by construction, not by evidence.
 - *The range.* It inherits the density’s honest range, 1 mind per 1,000 stars to 1 per 10 billion. Step 7 then runs from about 1 in 6 to about 1 in 62 million.
 - *The high end* is the no-hard-steps view (Mills et al. 2025). Each step waited for the planet to allow it, and humans arose on time. Then minds should be common on old enough worlds with animals.
 - *The low end* is the hard-steps view (Snyder-Beattie et al. 2021). Each big step is so unlikely that it usually doesn’t happen before a world stops being habitable.
-- *Why Holos puts the rarity here, not earlier.* Animals have lived on Earth for about 600 million years. Many lines grew clever, octopuses, crows, dolphins, apes, and only one built lasting tools. Kipping 2020 slightly favors rare intelligence, about 3 to 2. Steps 4 to 6 have physical clocks, oxygen above all. Step 7 has none we know of.
+- *Why Holos put the rarity here, until 2026-10-31.* Animals have lived on Earth for about 600 million years. Many lines grew clever, octopuses, crows, dolphins, apes, and only one built lasting tools. Kipping 2020 slightly favors rare intelligence, about 3 to 2. Steps 4 to 6 have physical clocks, oxygen above all. Step 7 has none we know of.
 - *Why not complex cells.* Weighed 2026-10-31. Complex cells, eukaryotes, arose once on Earth, about 2 billion years after life began. That is the strongest case for putting the rare step early.
   - *For an early step.* Lane and Martin 2010 argue the merger that made them was a single, energy-gated event. Mills et al. 2022 tie its timing to no rise in oxygen, so the long wait had no clear planetary cause.
   - *Against.* Booth and Doolittle 2015 argue one surviving lineage doesn’t show the step was unlikely, only that one line won. Bacteria have become organelles again since: a nitrogen-fixing one in a sea alga, about 100 million years ago (Coale et al. 2024).
-  - *What Holos takes.* The rare step stays after animals. The evidence on complex cells is split, while step 7 shows many clever lines and one builder.
+  - *What Holos took.* The rare step stayed after animals. The evidence on complex cells is split, while step 7 shows many clever lines and one builder.
+  - *Since 2026-10-31,* step 7 is 1 in 10, so Holos has no rare step after life starts. Complex cells and oxygen stay as Mills et al. 2025 read them, waits the planet sets. This argument now bears on a rarer reading, not on where Holos’s rarity sits.
   - *What moving it would change.* Not the count of minds, which comes from the density. Most living worlds near us would hold only microbes, and the 9 animal worlds within 50 light-years would mostly go.
 - *Why not oxygen.* Weighed 2026-10-31. Oxygen-making life arose once, and Earth’s air took a billion years or more to fill with oxygen. Watson 2025 ties two or three hard steps to the two great ice ages, which came with the two rises in oxygen.
   - *For.* Watson 2025 treats each hard step as starting a whole-Earth change that lasts hundreds of millions of years. Its test: worlds with early-Earth air should be common, and oxygen air rare.
   - *Against.* Oxygen-making life may have arisen by 3.5 billion years ago, and certainly by 2.5. That is early in Earth’s window, which a hard step rarely is. The long wait after it was the planet’s doing. Volcanic gases ate the oxygen, and too little phosphorus kept life sparse (Horne, Goldblatt and Kump 2025). In their model an earlier start gives a longer wait.
   - *What Holos takes.* Oxygen stays a clock in step 6, set by each world’s pace, as Mills et al. 2025 propose. Its timing is the planet’s, not luck.
   - *The window’s other end.* Earth keeps oxygen air about 1.08 ± 0.14 billion years more (Ozaki and Reinhard 2021). That sits inside the 1.0 to 1.9 billion years of land life Holos already uses.
-- *Why no rarer.* At the low end, our Galaxy holds about 20 minds. That is allowed. Holos takes the middle of the range, per criterion 4.
+- *Why no rarer.* At the low end, our Galaxy holds about 20 minds. That is allowed. Holos took the middle of the range, per criterion 4, until the designer chose 1 in 10.
+- *Why no commoner.* At 1 in 2, the Galaxy holds about 630 million minds, the nearest about 29 light-years away. Hungry spreading would then have to be rarer still, and 1 in 10 already matches Earth’s many clever lines and one builder.
 
 **How long it takes.** On a world where it happens, about 0.5 to 2 billion years after animals.
 
@@ -132,7 +136,7 @@ The plain idea: count the steps from a star to a mind, and multiply the odds of 
   - Reads Earth’s fast start as at least a 13% chance of life on suitable worlds older than a billion years.
   - Informs: the same bounds, from the other side.
 
-**What Holos takes:** one mind per million stars, the middle of a range from 1 per 1,000 to 1 per 10 billion. The quiet sky barely limits it. Quiet minds leave a quiet sky however many there are, so a denser count isn’t ruled out. What argues softly against crowding is that more minds need more of them to hold back, though settlement can be patchy, so not all must (Carroll-Nellenback et al. 2019, below). Minds here don’t die, as ours won’t, so there is no lifetime factor.
+**What Holos takes:** one mind per 1,600 stars, near the top of a range from 1 per 1,000 to 1 per 10 billion, by the designer’s reading of step 7, 2026-10-31. It was one per million, the middle. The quiet sky barely limits it. Quiet minds leave a quiet sky however many there are, so a denser count isn’t ruled out. What argues softly against crowding is that more minds need more of them to hold back, though settlement can be patchy, so not all must (Carroll-Nellenback et al. 2019, below). Minds here don’t die, as ours won’t, so there is no lifetime factor.
 
 ### 2. How old would they be?
 
@@ -148,7 +152,7 @@ The plain idea: most Earth-like planets that exist today formed before ours. So 
   - Earth formed before about 92% of the Earth-like planets the universe will ever make.
   - Informs: why Earth is early in cosmic time but young among worlds that exist now. Those future worlds don’t exist yet, so we can’t meet them.
 
-**What Holos takes:** a peer waking within a century of us is effectively zero. Across the whole Galaxy, about 7 minds woke within 100,000 years of us, the nearest typically about 18,000 light-years away. That is why the game’s map is the Galaxy, and a game can run 100,000 Years or more.
+**What Holos takes:** a peer waking within a century of us is effectively zero. Across the whole Galaxy, about 4,000 minds woke within 100,000 years of us, the nearest typically about 1,300 light-years away. That is why the game’s map is the Galaxy, and a game can run 100,000 Years or more.
 
 ### 3. Why is the sky quiet?
 
@@ -252,9 +256,10 @@ Reaching isn’t the same as being seen. A seed that builds a receiver from a co
   - If colonies inherit their urge to spread, eager lineages outgrow the rest.
   - Informs: Holos lets each colony inherit its parent’s chance with a small random change.
 - **What Holos’s run found, 2026-10-30.** A family tree for each mind: a settlement spreads with its chance, settles its 6 nearest stars plus those drifting into reach while active, and passes its chance on.
-  - If a mind’s chance can be anything from 1 in 1,000 to certain, 10 to 15% of minds fill the Galaxy. With 200,000 minds, Earth is always settled. Even with 20 minds, Earth stays unsettled only 8% of the time.
+  - If a mind’s chance can be anything from 1 in 1,000 to certain, 10 to 15% of minds fill the Galaxy. With 200,000 minds, let alone 125 million, Earth is always settled. Even with 20 minds, Earth stays unsettled only 8% of the time.
   - So only two pictures fit: many minds that almost all rarely spread hungrily, or about 5 minds or fewer in the whole Galaxy.
   - To stay local, a mind’s chance must sit below about 1 in 6 for 1,000-year active lives without inheritance, about 1 in 30 for 20,000-year lives with it, and about 1 in 300 for million-year lives with it.
+  - *Rerun 2026-10-31 for 125 million minds,* solved exactly in `calcs/spread_limit.py`, which reproduces the numbers above for 200,000. Without inheritance nothing changes, still 1 in 6. With it, about 1 in 84 for 20,000-year lives and about 1 in 980 for million-year lives.
 - **Why quiet may be the smart choice for almost every mind.** Physical reasons, not tastes:
   - *Light delay splits a mind.* A colony 10 light-years away hears from home every 20 years. It can’t share one mind, so it becomes a separate one, a rival. This holds for every unified mind, everywhere.
   - *Seeing beats going.* A telescope at the Sun’s gravitational lens can picture a world 30 parsecs away at about 25 km a pixel ([Turyshev et al. 2020](https://arxiv.org/abs/2002.11871)). Small probes and beams do the rest.
@@ -271,11 +276,11 @@ Reaching isn’t the same as being seen. A seed that builds a receiver from a co
   - Self-copying industry grows in generations about 2 years apart.
   - Informs: building out a home system takes 50 to 1,000 years, and each colony builds before it launches again.
 
-**What Holos takes:** no cap on reach. Each young mind’s chance to spread hungrily is drawn below what Earth unsettled allows, from 1 in 1,000 to 1 in 30, and its family grows by the tree above. About 1 young mind in 110 spreads at all. The largest families settle tens of stars within about 20 light-years, though nothing stops a larger one. A young mind stays outward while it builds and spreads, then turns inward. By the time our light reaches a peer, it is almost always inward already: 65% inward, 35% not yet awake. Quiet spreading, seeds and beamed minds that build nothing large, isn’t drawn for peers. The watcher is the one quiet spread the game holds.
+**What Holos takes:** no cap on reach. Each young mind’s chance to spread hungrily is drawn below what Earth unsettled allows, from 1 in 1,000 to 1 in 84, and its family grows by the tree above. About 1 young mind in 220 spreads at all. The largest families settle tens of stars within about 20 light-years, though nothing stops a larger one. A young mind stays outward while it builds and spreads, then turns inward. By the time our light reaches a peer, it is almost always inward already: 65% inward, 35% not yet awake. Quiet spreading, seeds and beamed minds that build nothing large, isn’t drawn for peers. The watcher is the one quiet spread the game holds.
 
 ### 6. Is something watching us?
 
-The plain idea: with about 200,000 old minds in our Galaxy, only one has to send a watcher. A 1 kg watcher for every star is trivial for an old mind. Its purpose is the policing above: to see hungry growth early, while it is still small and near.
+The plain idea: with about 125 million old minds in our Galaxy, only one has to send a watcher. A 1 kg watcher for every star is trivial for an old mind. Its purpose is the policing above: to see hungry growth early, while it is still small and near.
 
 Why send one if a lens sees from home? The lens sees Earth as it was centuries ago. A watcher sees at once and warns at once. And a lens shows a world, not a 10 cm seed leaving it. The watcher reports home through the network: up close, its mirror points at a relay on our Sun’s focal line, out beyond 550 AU on the far side of the Sun from its maker. So its mirror points away from its maker, not toward it.
 
@@ -345,16 +350,16 @@ Positions people raised when we asked what a physics-compliant Fermi game should
 
 ### “There’s no alien tech anywhere. At most, microbes.”
 
-- Holos agrees minds are rare and leans toward common life. It parts ways on where the rarity sits.
+- Holos leans toward common life, and since 2026-10-31 toward common minds too. The microbes-only view puts a rare step where Holos has none.
 - The microbes-only view puts the hard step early, at complex cells or animals. Snyder-Beattie et al. 2021 and Watson 2025 support that.
-- Holos follows Mills et al. 2025 for the rungs to animals. Each waited for oxygen, and Earth got there on time. The rare step is the last one, from animals to a mind that builds.
-- Complex cells arising once is the strongest case for an early hard step. Holos weighs it under [step 7](#step-7-from-animals-to-a-mind-that-builds) and keeps the rare step after animals.
-- In practice the two views look alike near us. Within 50 light-years, Holos gives a mind only a 0.15% chance. Of about 16 living worlds within 50 light-years, about 9 hold animals and forests. Life died on about 32 more.
+- Holos follows Mills et al. 2025 for every rung. Each waited for the planet, and Earth got there on time. From animals to a mind that builds is 1 in 10.
+- Complex cells arising once is the strongest case for an early hard step. Holos weighs it under [step 7](#step-7-from-animals-to-a-mind-that-builds) and keeps complex cells as a wait, not a rare step.
+- Near us, within 50 light-years, Holos gives a mind about a 60% chance. Of about 16 living worlds within 50 light-years, about 9 hold animals and forests. Life died on about 32 more.
 
 ### “We’re probably alone. The rare explanations are plausible. A mind that existed would have expanded, and they’re not here.”
 
 - Being alone in our Galaxy is inside the honest range. Sandberg, Drexler and Ord 2018 find a substantial chance of no one else in the observable universe.
-- At the low end, 1 mind per 10 billion stars, our Galaxy holds about 20. Holos takes the middle, about 200,000, under criterion 4.
+- At the low end, 1 mind per 10 billion stars, our Galaxy holds about 20. Holos takes about 125 million, near the top, by the designer’s reading of step 7.
 - “They would have expanded” is Hart 1975’s argument, and Holos takes it seriously. Holos’s own spreading model finds the same: either nearly every mind rarely spreads, or there are only a handful of minds. Holos takes the first, with physical reasons for the restraint, and no cap on reach.
 - Expanding quietly is allowed. A mind spreading by small probes and beamed minds could be here unseen, since our system has never been searched for small objects (Haqq-Misra and Kopparapu 2012). What Earth rules out is the hungry kind: 4 billion years of life with nothing mining our system or remaking our world.
 - Holos’s explanation for not expanding hungrily is physical, not a matter of taste. Computing costs less the colder it runs (Landauer, Sandberg et al. 2016). A mind that mostly thinks gains little from spreading and a lot from going cold.
@@ -368,16 +373,17 @@ Positions people raised when we asked what a physics-compliant Fermi game should
 - Red dwarfs push that further. Loeb, Batista and Sloan 2016 find life’s odds keep rising far into the future, if red dwarfs can host it. Their flares may strip their worlds bare, as the rocky red-dwarf worlds measured so far are (Kreidberg et al. 2019).
 - Worlds that don’t exist yet can’t be met. Against worlds that exist now, Earth is young. It is younger than about three quarters of them, by 1.8 ± 0.9 billion years on average (Lineweaver 2001).
 - The universe’s full lifespan doesn’t bear on it. Almost all of that time is dark, with no new stars to make worlds.
-- Being first is still possible. It is the low end of the density, where only a handful of minds exist. At the middle, a mind we find woke typically about 2.3 billion years before us.
+- Being first is still possible. It is the low end of the density, where only a handful of minds exist. At Holos’s density, about 125 million minds, a mind we find woke typically about 2.3 billion years before us.
 - The usual case for “first” is that complex cells arose only once. Holos weighs it under [step 7](#step-7-from-animals-to-a-mind-that-builds).
 
 ### “If young minds are out there, they’d be talking to each other, and we’d hear them.”
 
 - Young minds are far apart in both space and time.
-- About 7 woke within 100,000 years of us, across the whole Galaxy. The nearest is typically 18,000 light-years away. A hello and its answer take 36,000 years.
+- About 4,000 woke within 100,000 years of us, across the whole Galaxy. The nearest is typically about 1,300 light-years away. A hello and its answer take about 2,600 years.
+- Old minds are near, the nearest typically about 50 light-years away. About 5 lie inside our radio’s 90 light-years, so they have heard us. They stay quiet, as old minds do.
 - Minds that have had time to talk are old, and Holos lets them talk. They link by tight beams relayed through stars’ lenses, nodes a few parsecs apart (Bracewell 1960, Hippke 2021).
 - A tight beam is seen only along its line. A star’s lens focuses both ways, so a relay’s beam lands on its target, not on us. A beam between two other stars never crosses Earth.
-- What we could hear is a young mind’s noise, as ours is now. An SKA-class array hears Earth’s radars to about 200 parsecs, far short of 18,000 light-years.
+- What we could hear is a young mind’s noise, as ours is now. An SKA-class array hears Earth’s radars to about 200 parsecs, about 650 light-years, short of the nearest young mind’s typical 1,300.
 
 ### “Infrared surveys only rule out the very largest civilizations. Smaller ones could still be out there.”
 
@@ -390,9 +396,9 @@ Positions people raised when we asked what a physics-compliant Fermi game should
 ### “We haven’t looked enough. We may find plenty of aliens in the next 100 years.”
 
 - The first half matches the evidence. Wright et al. 2018 put radio’s search so far at a hot tub against Earth’s oceans.
-- The second half depends on density. At 1 mind per million stars, the nearest is typically about 400 light-years away.
+- The second half depends on density. At 1 mind per 1,600 stars, the nearest is typically about 50 light-years away.
 - New instruments improve the odds for life first. The Habitable Worlds Observatory aims to read the air of about 25 nearby worlds.
-- Minds come slower. In Holos a deep search of the Earth–Moon L4 and L5 points could find a watcher within years. A star-by-star far-infrared survey takes about 220 Years to reach 400 light-years. A young mind’s warm flash reaches us typically near Year 29,000.
+- Minds come slower. In Holos a deep search of the Earth–Moon L4 and L5 points could find a watcher within years. A star-by-star far-infrared survey reaches 100 light-years in about 4 Years, where about 7 old minds lie. About 6 young minds’ warm flashes already shine at Year 0, and a new one reaches us about every 50 Years.
 - If the density were near the high end, 1 per 1,000 stars, this view would be right. That is one of the things that would change the model, below.
 
 ### “Make it a dark forest. Space gets dangerous as we explore, and probes past some radius or tech level get destroyed.”
@@ -460,7 +466,7 @@ Positions people raised when we asked what a physics-compliant Fermi game should
 
 Each of these would move a number, and the doc and game would follow.
 
-- **A confirmed technosignature,** anywhere. Minds would be commoner than 1 per million stars, or louder than inward.
+- **A confirmed technosignature,** anywhere. Minds would be louder than inward, or commoner than 1 per 1,600 stars.
 - **Oxygen or other life signs on several nearby worlds.** Supports common life. A clean null would push life rarer.
 - **A deep far-infrared or submillimetre null.** Fewer awake cold minds, or dimmer ones.
 - **Confirmed Dyson-sphere candidates.** Minds that grow and stay outward longer than modeled.

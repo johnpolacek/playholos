@@ -1306,7 +1306,7 @@ Gathered 2026-10-26 for four candidate builds. Numbers marked *ours* are this pr
 
 ## How common minds are
 
-Added 2026-10-28, for [The realistic premise](HOLOS_GAME_CONCEPT.md#the-realistic-premise): one mind per million stars, all older than us and inward, life common and the one rare step from animals to minds. The odds themselves are this project’s best guess. The sources bound them.
+Added 2026-10-28, for [The realistic premise](HOLOS_GAME_CONCEPT.md#the-realistic-premise): one mind per million stars, all older than us and inward, life common and the one rare step from animals to minds. The odds themselves are this project’s best guess. The sources bound them. Raised 2026-10-31 to one mind per 1,600 stars: the designer reads the step from animals to minds as Mills et al. 2025 do, 1 in 10, near the top of its range.
 
 - **Already logged, used here:** Sandberg et al. 2018, Kipping 2020 and 2025, Mills et al. 2025 and Snyder-Beattie et al. 2021, under [Kinds of worlds](#kinds-of-worlds), “How common life and minds are”. Lineweaver 2001 and Lineweaver, Fenner and Gibson 2004, under [Elders](#elders). Price et al. 2020, under [Hearing technology by radio](#hearing-technology-by-radio). Garrett 2026 and Sandberg, Armstrong and Ćirković 2016, under [Why the sky is quiet](#why-the-sky-is-quiet-computing-and-heat).
   - Sandberg et al. 2018 now backs the density: with honest error bars, being alone in the Galaxy is quite possible, so a sparse best guess is the honest one.
@@ -1692,7 +1692,8 @@ Gathered 2026-10-14 for the round on Earth’s outposts and colonies.
   - Used: Earth unsettled as the filter on hungry spreading, 2026-10-30. Quiet seeds and beamed minds aren’t limited by it.
 - **[Galera, Galanti and Kinouchi 2018, invasion percolation](https://iag.usp.br/eventos/invasion-percolation-solves-fermi-paradox-challenges-seti-programs)** · Published, International Journal of Astrobiology 18, 316. Found by search 2026-10-30, not read. Invasion percolation leaves large empty regions, and argues SETI at nearby stars is misdirected.
 - **Spreading with inheritance, this project’s model, 2026-10-30.** A family tree per mind: a settlement spreads with its chance, settles its 6 nearest stars plus one drifting into 10 ly every 11,000 years while active, and passes its chance on with a change of e^N(0, 0.3). If a mind’s chance runs from 1 in 1,000 to certain, 10 to 15% of minds fill the Galaxy, so 200,000 minds always reach Earth, and even 20 do 92% of the time. Staying local needs a chance under about 0.16, 0.03 and 0.003 for active lives of 1,000, 20,000 and a million years, the last two with inheritance.
-  - Used: young minds’ spread chance, drawn from 1 in 1,000 to 1 in 30.
+  - Rerun 2026-10-31 for 125 million minds, solved exactly in calcs/spread_limit.py, which reproduces the numbers above: 0.16, 0.012 and 0.001.
+  - Used: young minds’ spread chance, drawn from 1 in 1,000 to 1 in 84. It was 1 in 30 for 200,000 minds.
 
 - **[Suazo et al. 2024, Project Hephaistos II](https://arxiv.org/pdf/2405.02927)** · Published, MNRAS 531, 695.
   - About five million stars screened in Gaia, 2MASS and WISE for the warm glow of partial Dyson spheres. Seven candidates, all M dwarfs, with infrared excess hard to explain. More study needed, such as checking for young dust disks.

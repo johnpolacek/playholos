@@ -278,13 +278,13 @@ test("the Cold Halo doubles every 10 Years once done, a data center's step each,
   assert.ok(Math.abs(at(done + 40.01, held).thought / t0 - 1.5 ** 2) < 1e-6);
 });
 
-test("the realistic premise's minds: rare and old near us, a few peers far off, a watcher every game", async () => {
+test("the realistic premise's minds: old near us, peers across the Galaxy, a watcher every game", async () => {
   let olds = 0, peers = 0;
   for (const s of POOL) {
     const { minds } = await loadWorld(s);
     assert.ok(minds, `seed ${s} has no minds`);
     olds += minds.old.length; peers += minds.peers.length;
-    // Old minds lie out to 1,000 ly, nearest first, on real stars only inside the 326 ly catalog. Each woke before the
+    // Old minds lie out to the 326 ly catalog's edge, nearest first, on real stars. Each woke before the
     // peers' window and after the thin disk's first stars.
     minds.old.forEach((o, i) => {
       assert.ok(o.d <= 2000 && (i === 0 || o.d >= minds.old[i - 1].d));
@@ -305,9 +305,9 @@ test("the realistic premise's minds: rare and old near us, a few peers far off, 
     assert.equal(w.ladder[0].delay, 0);
     assert.ok(w.ladder[1].delay >= maker.d * 10);
   }
-  // About 8.5 old minds within 1,000 ly and 7 peers a game, loosely, over the pool.
-  assert.ok(olds / POOL.length > 5 && olds / POOL.length < 12, `${olds / POOL.length} old minds a game`);
-  assert.ok(peers / POOL.length > 4.5 && peers / POOL.length < 9.5, `${peers / POOL.length} peers a game`);
+  // About 190 old minds within 326 ly a game, and 2,600 peers still to shine of the Galaxy's 4,000, loosely.
+  assert.ok(olds / POOL.length > 160 && olds / POOL.length < 230, `${olds / POOL.length} old minds a game`);
+  assert.ok(peers / POOL.length > 2300 && peers / POOL.length < 2900, `${peers / POOL.length} peers a game`);
 });
 
 test("finding minds: a flash while the warm watch runs, half the cold glows, the watcher by where it sits, a sleeper up close", async () => {
@@ -326,12 +326,12 @@ test("finding minds: a flash while the warm watch runs, half the cold glows, the
     // Earth knows no mind with nothing built: the wall holds.
     assert.equal(earthKnows(world, 100000).minds, undefined);
     for (const p of m.peers) {
-      const f = flashOf(p, 0, 200000);
+      const f = flashOf(p, 0, 1e6);
       if (p.flash[1] < 0) assert.equal(f, null);
       else assert.ok(f && f.seen >= Math.max(0, p.flash[0]) && f.seen < Math.max(0, p.flash[0]) + WARM_EVERY + 1e-9, p.id);
-      assert.equal(flashOf(p, p.flash[1] + 1, 200000), null);   // built after it faded: missed for good
+      assert.equal(flashOf(p, p.flash[1] + 1, 1e6), null);   // built after it faded: missed for good
       // Ranged by our Infrared Telescope while it shines: a range that holds the truth. Faded first, never ranged.
-      const r = flashOf(p, 0, 200000, 0);
+      const r = flashOf(p, 0, 1e6, 0);
       if (r?.range) assert.ok(r.range[0] <= p.d && p.d <= r.range[1] && r.ranged! <= p.flash[1], p.id);
       if (r && Math.max(r.seen, 0) + 2 > p.flash[1]) assert.equal(r.range, undefined);
     }
@@ -462,16 +462,18 @@ test("bullets wait on helium-3 from a harvest that doubles every 5 Years, in the
 test("skipping ahead stops at the next thing we learn or build, and says when, never what", async () => {
   const { nextKnown, nextStop } = await import("./next.ts");
   const world = await loadWorld(10);
-  // Seed 10 with the Warm Sky Watch at Year 0 and our Infrared Telescope: a warm glow is seen at Year 2,386, ranged two Years on.
+  // Seed 10 with the Warm Sky Watch at Year 0 and our Infrared Telescope: warm glows rise and fade every few centuries.
   const ahead = earthKnows(world, 102500, { warmWatch: 0, telescope: 0 });
-  const first = ahead.minds!.flashes[0];
+  const soonest = (fs: NonNullable<typeof ahead.minds>["flashes"], at: (f: (typeof fs)[number]) => number) =>
+    Math.min(...fs.flatMap((f) => [at(f), f.faded ?? Infinity]).filter((t) => t > 2000));
   // Once it will be ranged, the skip stops when it is, where Scan shows it, not when first seen. 2026-10-30.
-  assert.equal(nextKnown(ahead, 2000), first.ranged);
+  assert.ok(ahead.minds!.flashes.some((f) => f.ranged! > 2000));
+  assert.equal(nextKnown(ahead, 2000), soonest(ahead.minds!.flashes, (f) => f.ranged ?? f.seen));
   // Never ranged, as with no Infrared Telescope, the Warm Sky Watch's sighting stops it.
   const unranged = earthKnows(world, 102500, { warmWatch: 0 });
-  assert.equal(nextKnown(unranged, 2000), unranged.minds!.flashes[0].seen);
+  assert.equal(nextKnown(unranged, 2000), soonest(unranged.minds!.flashes, (f) => f.seen));
   // A place in [ra, dec, d] is never taken for a time, and a build done sooner stops the skip first.
-  assert.equal(nextStop(ahead, 2000, { "Moon Search": 2100, "Halo Survey": null }), 2100);
+  assert.equal(nextStop(ahead, 2000, { "Moon Search": 2001, "Halo Survey": null }), 2001);
   assert.equal(nextStop({ year: 0, felt: [], heard: [], visits: [] }, 5, {}), null);
   // A rock's Years stop it too, the past ones ignored.
   assert.equal(nextStop({ year: 0, felt: [], heard: [], visits: [] }, 5, {}, [3, null, 412.5]), 412.5);
