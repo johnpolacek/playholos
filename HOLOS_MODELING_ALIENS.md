@@ -76,6 +76,11 @@ The middle column follows 100 typical stars near us. The counts for steps 2 to 6
 - *The high end* is the no-hard-steps view (Mills et al. 2025). Each step waited for the planet to allow it, and humans arose on time. Then minds should be common on old enough worlds with animals.
 - *The low end* is the hard-steps view (Snyder-Beattie et al. 2021). Each big step is so unlikely that it usually doesn’t happen before a world stops being habitable.
 - *Why Holos puts the rarity here, not earlier.* Animals have lived on Earth for about 600 million years. Many lines grew clever, octopuses, crows, dolphins, apes, and only one built lasting tools. Kipping 2020 slightly favors rare intelligence, about 3 to 2. Steps 4 to 6 have physical clocks, oxygen above all. Step 7 has none we know of.
+- *Why not complex cells.* Weighed 2026-10-31. Complex cells, eukaryotes, arose once on Earth, about 2 billion years after life began. That is the strongest case for putting the rare step early.
+  - *For an early step.* Lane and Martin 2010 argue the merger that made them was a single, energy-gated event. Mills et al. 2022 tie its timing to no rise in oxygen, so the long wait had no clear planetary cause.
+  - *Against.* Booth and Doolittle 2015 argue one surviving lineage doesn’t show the step was unlikely, only that one line won. Bacteria have become organelles again since: a nitrogen-fixing one in a sea alga, about 100 million years ago (Coale et al. 2024).
+  - *What Holos takes.* The rare step stays after animals. The evidence on complex cells is split, while step 7 shows many clever lines and one builder.
+  - *What moving it would change.* Not the count of minds, which comes from the density. Most living worlds near us would hold only microbes, and the 9 animal worlds within 50 light-years would mostly go.
 - *Why no rarer.* At the low end, our Galaxy holds about 20 minds. That is allowed. Holos takes the middle of the range, per criterion 4.
 
 **How long it takes.** On a world where it happens, about 0.5 to 2 billion years after animals.
@@ -338,6 +343,7 @@ Positions people raised when we asked what a physics-compliant Fermi game should
 - Holos agrees minds are rare and leans toward common life. It parts ways on where the rarity sits.
 - The microbes-only view puts the hard step early, at complex cells or animals. Snyder-Beattie et al. 2021 and Watson 2025 support that.
 - Holos follows Mills et al. 2025 for the rungs to animals. Each waited for oxygen, and Earth got there on time. The rare step is the last one, from animals to a mind that builds.
+- Complex cells arising once is the strongest case for an early hard step. Holos weighs it under [step 7](#step-7-from-animals-to-a-mind-that-builds) and keeps the rare step after animals.
 - In practice the two views look alike near us. Within 50 light-years, Holos gives a mind only a 0.15% chance. Of about 16 living worlds within 50 light-years, about 9 hold animals and forests. Life died on about 32 more.
 
 ### “We’re probably alone. The rare explanations are plausible. A mind that existed would have expanded, and they’re not here.”
@@ -349,6 +355,24 @@ Positions people raised when we asked what a physics-compliant Fermi game should
 - Holos’s explanation for not expanding hungrily is physical, not a matter of taste. Computing costs less the colder it runs (Landauer, Sandberg et al. 2016). A mind that mostly thinks gains little from spreading and a lot from going cold.
 - Its known weakness: one careless mind is enough. Two answers work together. The incentive is the same for all, so hungry minds are rare. And the rare one is caught early, since old minds are billions of years ahead and watching every star costs about 100 million tonnes. It takes rare hunger and one careful old mind, not every mind choosing alike.
 - “Aliens descended from Earth” are in the model already. Light delay makes a far colony a separate mind, a rival. That is one reason most young minds stay close.
+
+### “We’re the first. The universe has barely begun.”
+
+- Holos agrees we are early in cosmic time. It disagrees about who exists now.
+- Against all the worlds that will ever form, Earth is early. It formed before about 92% of Earth-like worlds (Behroozi and Peeples 2015).
+- Red dwarfs push that further. Loeb, Batista and Sloan 2016 find life’s odds keep rising far into the future, if red dwarfs can host it. Their flares may strip their worlds bare, as the rocky red-dwarf worlds measured so far are (Kreidberg et al. 2019).
+- Worlds that don’t exist yet can’t be met. Against worlds that exist now, Earth is young. It is younger than about three quarters of them, by 1.8 ± 0.9 billion years on average (Lineweaver 2001).
+- The universe’s full lifespan doesn’t bear on it. Almost all of that time is dark, with no new stars to make worlds.
+- Being first is still possible. It is the low end of the density, where only a handful of minds exist. At the middle, a mind we find woke typically about 2.3 billion years before us.
+- The usual case for “first” is that complex cells arose only once. Holos weighs it under [step 7](#step-7-from-animals-to-a-mind-that-builds).
+
+### “If young minds are out there, they’d be talking to each other, and we’d hear them.”
+
+- Young minds are far apart in both space and time.
+- About 7 woke within 100,000 years of us, across the whole Galaxy. The nearest is typically 18,000 light-years away. A hello and its answer take 36,000 years.
+- Minds that have had time to talk are old, and Holos lets them talk. They link by tight beams relayed through stars’ lenses, nodes a few parsecs apart (Bracewell 1960, Hippke 2021).
+- A tight beam is seen only along its line. A star’s lens focuses both ways, so a relay’s beam lands on its target, not on us. A beam between two other stars never crosses Earth.
+- What we could hear is a young mind’s noise, as ours is now. An SKA-class array hears Earth’s radars to about 200 parsecs, far short of 18,000 light-years.
 
 ### “Infrared surveys only rule out the very largest civilizations. Smaller ones could still be out there.”
 

@@ -1351,6 +1351,22 @@ Added 2026-10-28, for [The realistic premise](HOLOS_GAME_CONCEPT.md#the-realisti
   - **[Ward and Brownlee 2000, Rare Earth](https://openlibrary.org/isbn/9780387987019)** · Book. Not read, catalog checked 2026-10-30. Complex life needs many unlikely conditions, so it is uncommon, while microbes may be common.
     - Matters: the view Holos sets aside for life. Holos keeps rarity only at the last step, from animals to minds.
     - Used: the Rare Earth objection.
+- **Objections from r/FermiParadox, “The First Civilization Theory”, 2026-10-31.** Read for questions, never as a source. Answered in [HOLOS_MODELING_ALIENS.md](HOLOS_MODELING_ALIENS.md#common-objections-and-where-holos-stands): “we’re the first” and “young minds would be talking”. Complex cells weighed under step 7.
+  - **[Lane and Martin 2010, “The energetics of genome complexity”](https://doi.org/10.1038/nature09486)** · Published, Nature 467, 929. Checked 2026-10-31 by search summary, not the full text. Mitochondria gave complex cells far more energy per gene, so their origin was a single, energy-gated merger. Contested.
+    - Matters: the strongest case for a hard step at complex cells.
+    - Used: step 7, “Why not complex cells”, as the view for.
+  - **[Booth and Doolittle 2015, “Eukaryogenesis, how special really?”](https://doi.org/10.1073/pnas.1421376112)** · Published, PNAS 112, 10278. Checked 2026-10-31 by search summary and PMC listing. One last common ancestor of complex cells doesn’t show their origin was unrepeatable or unlikely. Lane and Martin replied in PNAS.
+    - Matters: “it happened once” is not proof a step is hard, the same point as Mills et al. 2025.
+    - Used: step 7, as the view against.
+  - **[Coale et al. 2024, “Nitrogen-fixing organelle in a marine alga”](https://doi.org/10.1126/science.adk1075)** · Published, Science 384, 217. Checked 2026-10-31 by search summary and press. The bacterium UCYN-A became an organelle, the nitroplast, in *Braarudosphaera bigelowii*, about 100 million years ago.
+    - Matters: bacteria becoming organelles has happened more than once.
+    - Used: step 7, as the view against.
+  - **[Mills et al. 2022, “Eukaryogenesis and oxygen in Earth history”](https://doi.org/10.1038/s41559-022-01733-y)** · Published, Nature Ecology and Evolution 6, 520. Checked 2026-10-31 by search summary. Neither fossils nor molecular clocks tie the origin of complex cells to either rise in oxygen. The merger likely began without oxygen. Other 2022 work finds a tie, so the timing is disputed.
+    - Matters: if no planetary change gated complex cells, their long wait fits a hard step.
+    - Used: step 7, as the view for.
+  - **[Loeb, Batista and Sloan 2016, “Relative likelihood for life as a function of cosmic time”](https://arxiv.org/abs/1606.08448)** · Published, JCAP. Checked 2026-10-31 by abstract and press. If red dwarfs can host life, its odds per unit time keep rising far into the future, so life now is premature. Or red dwarfs’ flares make them hostile. The result is relative, not a count.
+    - Matters: early in cosmic time, which doesn’t bear on who exists now.
+    - Used: the “we’re the first” objection.
 - **The dials, 2026-10-31.** For the dials on the research page, game/lib/about/dials.ts: each step of the chain turned within its range, and where the nearest mind and the nearest peer would be.
   - **[Tamm et al. 2012, stellar mass map of M31](https://arxiv.org/abs/1208.5712)** · Published, A&A 546, A4. Checked 2026-10-31 by search summary. Andromeda’s stars weigh about 1.0 to 1.5 × 10¹¹ Suns. Infrared-only estimates run lower, about 0.55 to 0.7 × 10¹¹.
     - Matters: Andromeda holds about twice our Galaxy’s stars, not the trillion often quoted. Counted at our Galaxy’s stars per Sun’s mass, about 400 billion.
