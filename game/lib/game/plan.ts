@@ -525,7 +525,7 @@ export function matter(plan: Plan, name: string) {
  *  idle. Thought Fields uses none of it: the fabs build data centers. 2026-10-21. */
 export function drawAt(plan: Plan, scale: number, year: number) {
   const { orders, ...opts } = ordersOf(plan);
-  const { room, idle, thought, done, doublings } = pace(orders, year, { scale, ...opts });
+  const { idle, thought, done, doublings } = pace(orders, year, { scale, ...opts });
   // Fusion Plants grow the grid itself, so the same thought draws a smaller share of it. 2026-10-28.
   const grid = 1 + Object.keys(done).reduce((e, w) => e + (CATALOG.works[w]?.energy ?? 0), 0);
   // The Cold Halo thinks on its own sunlight, so what it adds draws nothing from Earth's grid. Nor does the data

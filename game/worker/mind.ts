@@ -167,7 +167,7 @@ export async function mind(req: Request) {
     scan: describeLeads(readObserve(observe), at),
     builds: describeBuilds(),
     queue: describeQueue(plan, done, year),
-    offers: describeOffers(plan, scale, { ...done, [FOUND]: rockOf(seed)?.found ?? null, [WATCHED]: watched }, year),
+    offers: describeOffers(plan, scale, { ...done, [FOUND]: inPool(seed) ? (rockOf(seed)?.found ?? null) : null, [WATCHED]: watched }, year),
     sent: describeSent(readSent(sent), year),
     known,
     // The natural sky so far: stars exploding and merging, and Betelgeuse once gone. 2026-10-30.
