@@ -261,7 +261,7 @@ export const SAYS: Record<string, string> = {
   "Power from Orbit":
     "A fifth more energy, from sunlight caught above the weather and beamed down. It takes 10 Mt of rock, so it comes only as fast as rock does.",
   "Cold Halo":
-    "Factories copy the Cold Annex’s panels, chips and radiators out of asteroid rock. Once done it doubles every 10 Years, and each doubling thinks as much more as a data center. It sheds its heat at 77 K, where a glow is hard to see. Small, nothing far off sees it. Grown past about 8×10²⁰ W at 10 pc, it would show to a watch like our Halo Survey, as an old mind’s glow shows to ours. Taken back, it stops growing and keeps its size.",
+    "Factories copy the Cold Annex’s panels, chips and radiators out of asteroid rock. Once done it doubles every 10 Years, and each doubling thinks as much more as a data center. It sheds its heat at 77 K, where a glow is hard to see. Small, nothing far off sees it. Grown past about 4×10²⁰ W at 10 pc, it would show to a watch like our Halo Survey, as an old mind’s glow shows to ours. Taken back, it stops growing and keeps its size.",
   "Mercury Works":
     "Mercury’s face catches under a billionth of the Sun’s light, and half of it is always dark, so lasers there would do little. Its rock is worth more: a seed of panels a kilometer square, landed there, makes more of itself from the ground it stands on. It flies as BepiColombo did, about 7 Years, and is built in orbit from the foundry’s parts.",
   "Solar Swarm":
