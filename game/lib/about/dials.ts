@@ -195,13 +195,42 @@ export const DIALS: Dial[] = [
   },
 ];
 
+// Each preset sets every dial, a whole reading of the research: the hopeful end (Mills, Bryson, Arthur and
+// Nicholson), the hard steps (Snyder-Beattie), and a rare start (Spiegel and Turner, Chopra and Lineweaver, JWST).
 export const PRESETS: { name: string; set: Record<string, number> }[] = [
   { name: "Holos", set: {} },
-  { name: "Minds come easy", set: { minds: 1 / 10 } },
-  { name: "Minds are rare", set: { minds: 1e-8 } },
+  {
+    name: "Minds come easy",
+    set: {
+      warm: 1 / 4,
+      air: 1 / 2,
+      start: 1,
+      last: 1 / 2,
+      animals: 9 / 10,
+      minds: 1 / 10,
+    },
+  },
+  {
+    name: "Minds are rare",
+    set: {
+      warm: 1 / 8,
+      air: 1 / 3,
+      start: 3 / 4,
+      last: 1 / 3,
+      animals: 1 / 5,
+      minds: 1e-8,
+    },
+  },
   {
     name: "Life is rare",
-    set: { start: 1 / 100, last: 1 / 10, minds: 1 / 6200 },
+    set: {
+      warm: 1 / 12,
+      air: 1 / 10,
+      start: 1 / 100,
+      last: 1 / 10,
+      animals: 3 / 5,
+      minds: 1 / 6200,
+    },
   },
 ];
 

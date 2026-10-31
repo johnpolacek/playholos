@@ -1383,6 +1383,9 @@ Added 2026-10-28, for [The realistic premise](HOLOS_GAME_CONCEPT.md#the-realisti
   - **[Madau and Dickinson 2014, cosmic star formation history](https://arxiv.org/abs/1403.0007)** · Published, ARA&A 52, 415. From memory, not checked: today’s stellar mass density, about 5 × 10⁸ Suns per cubic Mpc.
     - Used: stars beyond the Local Group, at the cosmic average. Check the review’s own number.
   - **This project’s arithmetic.** At Holos’s values, a peer within 2,000 years of us is in our Galaxy about 1 time in 8, and half the time the nearest is within about 17 million ly. At 1 in 10 from animals to minds, about 90 peers, the nearest within about 9,000 ly.
+- **The research page’s sections, 2026-10-31.** “How old are they?”, “Why is the sky quiet?”, “How far can we reach?” and “What can we see?”, in game/lib/about/. Each draws on sources already logged here.
+  - **Earth’s pull on the Sun, about 9 cm/s** · General knowledge, not a source read. Used: “What can we see?”, the first rung.
+  - **The Sun’s lens at 10 pc** · This project’s arithmetic. A pixel scales with distance, so Turyshev et al. 2020’s 25 km at 30 pc is about 8 km at 10 pc, about 1,500 pixels across an Earth.
 - **Smart et al. 2021, the Gaia Catalogue of Nearby Stars** · Published, A&A 649, A6. Count checked 2026-10-29: 331,312 objects within 100 pc from Gaia EDR3, downloaded from ESA’s Gaia archive. 300,098 have median positions inside 326 ly. Within 100 ly it holds 9,281, below the disk model’s 12,000, since it misses the faintest brown dwarfs.
   - Matters: a real, complete census to 326 ly, small enough to ship in a browser.
   - Used: [Real stars to 326 ly](HOLOS_GAME_CONCEPT.md#the-realistic-premise), the game’s star catalog. Check its counts against the disk model below.

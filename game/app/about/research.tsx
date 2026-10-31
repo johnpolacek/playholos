@@ -2,6 +2,7 @@ import { Ages } from "@/components/about/ages";
 import { Dials } from "@/components/about/dials";
 import { Quiet } from "@/components/about/quiet";
 import { Reach } from "@/components/about/reach";
+import { See } from "@/components/about/see";
 import { DocBody, PageHead } from "@/components/about/doc-page";
 import doc from "../../../HOLOS_RESEARCH.md?doc";
 
@@ -45,6 +46,7 @@ const GROUPS = [
   },
   {
     title: "What can we see?",
+    href: "#see",
     sections: ["Seeing worlds", "Reading air", "The leads", "Earth’s leads"],
   },
   {
@@ -72,6 +74,7 @@ export default function Research() {
       <Ages />
       <Quiet />
       <Reach />
+      <See />
       <DocBody doc={doc} groups={GROUPS} />
     </main>
   );
