@@ -123,8 +123,9 @@ export function Quiet() {
           >
             The Dials
           </a>
-          , a tenfold spread either way. Any ringed in the solid region would
-          already have been seen. {verdictLine(b)}
+          , a tenfold spread either way, or at Holos’s marks as the game draws
+          them. A full ring would have been seen. A half ring would have been
+          seen if its star was one the nearby surveys checked. {verdictLine(b)}
         </p>
       </Part>
 

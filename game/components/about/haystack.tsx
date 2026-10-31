@@ -233,11 +233,14 @@ export function HeatChart({ b }: { b: Behave }) {
       c.beginPath();
       c.arc(a.x(m.ly), a.y(m.w), caught ? 3 : 2.2, 0, 2 * Math.PI);
       c.fill();
-      if (caught) {
+      // A full ring: the whole-sky maps would have seen it. A half ring: seen if its star was one the nearby
+      // surveys checked, most within 20 ly.
+      const partly = !caught && m.w > nearbyLeast(temp, m.ly);
+      if (caught || partly) {
         c.strokeStyle = other;
         c.globalAlpha = 1;
         c.beginPath();
-        c.arc(a.x(m.ly), a.y(m.w), 6, 0, 2 * Math.PI);
+        c.arc(a.x(m.ly), a.y(m.w), 6, 0, caught ? 2 * Math.PI : Math.PI);
         c.stroke();
       }
     });

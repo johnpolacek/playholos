@@ -1,5 +1,12 @@
 import { useSyncExternalStore } from "react";
-import { behave, HOLOS, RANGES, seen, type Behave } from "@/lib/about/behave";
+import {
+  behave,
+  HOLOS,
+  isHolos,
+  RANGES,
+  seen,
+  type Behave,
+} from "@/lib/about/behave";
 import { round } from "@/lib/about/dials";
 
 // How minds behave, on The Dials: power, temperature and sleep, shared with the quiet sky's heat chart, and a verdict
@@ -47,6 +54,8 @@ const fromSlider = (k: keyof Behave, n: number) => {
 
 /** The verdict: how many awake minds our searches would already have seen. */
 export function verdictLine(b: Behave): string {
+  if (isHolos(b))
+    return "These are the game’s own minds. It keeps each under what our searches would have seen at its distance, checked star or not, so none would have shown.";
   const n = seen(b);
   if (n >= 1.5)
     return `About ${round(n)} awake minds would already shine in our searches. We see none, so minds like this are ruled out.`;
@@ -119,9 +128,9 @@ export function BehaveDials() {
       </ol>
       <p className="mt-6 text-[15px] leading-[1.55]">{verdictLine(b)}</p>
       <p className="mt-2 text-[13.5px] leading-[1.5] text-muted">
-        Holos’s marks follow Garrett 2026: a cold halo of about 10²⁰ W at 12 K,
-        and half of all minds asleep. Their glow shows on the quiet sky’s heat
-        chart, below.
+        Holos’s marks are the game’s own: its awake old minds glow about 4 ×
+        10²¹ W at the median, though from 10¹⁹ to 4 × 10²⁴ W, at 12 K, with half
+        asleep. Their glow shows on the quiet sky’s heat chart, below.
       </p>
     </div>
   );
