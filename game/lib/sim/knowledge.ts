@@ -47,6 +47,8 @@ export interface Kit {
   moonSearch?: number | null;
   /** Our Close Look, built once the watcher is found. 2026-10-30. */
   closeLook?: number | null;
+  /** The Years we knocked on the watcher. 2026-10-31. */
+  knocks?: number[];
   /** Our Relay Search, built once the Close Look is: when, and its Years each AU out. 2026-10-30. */
   relaySearch?: { built: number; perAU: number } | null;
   asteroidTour?: number | null;
@@ -202,7 +204,7 @@ export function iscoClock(spin: number) {
 export function earthKnows(
   world: World,
   year: number,
-  { telescope = null, mirror = null, halo = null, mapper = null, hyper = null, lenses = [], sentinels = [], seeds = [], colony = null, sails = null, probe = null, warmWatch = null, haloArray = null, moonSearch = null, asteroidTour = null, closeLook = null, relaySearch = null, craft = [] }: Kit = {},
+  { telescope = null, mirror = null, halo = null, mapper = null, hyper = null, lenses = [], sentinels = [], seeds = [], colony = null, sails = null, probe = null, warmWatch = null, haloArray = null, moonSearch = null, asteroidTour = null, closeLook = null, relaySearch = null, craft = [], knocks = [] }: Kit = {},
 ): EarthView {
   const shown = (id: string) => world.stars[id]?.shown ?? id;
   // Earth's finds at Year 0: every world whose tug shows by 2040. Measured, not understood. Its star is in the catalogs.
@@ -304,7 +306,7 @@ export function earthKnows(
   const firstSeed = builds.length ? Math.min(...builds) : null;
   // Our craft in other systems, for finding minds there: sentinels and seed probes stay, and a sentinel can go to a cold
   // glow's star, named as Scan names it. Until 2026-10-31 this list was never filled, so no game could find a sleeper.
-  const kit0 = { telescope, warmWatch, halo, haloArray, moonSearch, asteroidTour, closeLook, relaySearch, firstSeed };
+  const kit0 = { telescope, warmWatch, halo, haloArray, moonSearch, asteroidTour, closeLook, relaySearch, firstSeed, knocks };
   const glows = mindsSeen(world, kit0, year).glows;
   const placeOf = (star: string): [number, number, number] | null => {
     const t = targets.find((x) => x.name === star);
@@ -590,6 +592,12 @@ function describeMinds(m: MindsSeen, one: (x: number) => string): string {
       out.push(
         `Our Close Look reached it and sent word home at Year ${yearText(w.looked.at)}. Up close it is near black, about 10 cm across, with a mirror about 2 cm wide held on one point of the sky, ${sky(w.looked)}, turning as the Earth and Moon turn to keep it there. ` +
           "A thing that reports home by laser would aim so. It may aim straight home. Or it may aim at a relay out past 550 AU, where the Sun's pull focuses light, and then home lies the other way, through the Sun. We can't tell how far, or who. It surely saw our craft come.",
+      );
+    // Its maker's answer to our first knock, one round trip later. 2026-10-31.
+    if (w.answer)
+      out.push(
+        `A tight beam aimed at Earth, its source ${sky(w.answer)}, arriving at Year ${yearText(w.answer.at)}, ${one(2 * w.answer.ly)} Years after our first knock on the watcher at Year ${yearText(w.answer.knock)}. Built to be read, in pictures. A picture of Earth from far above at the hour we knocked. A short message: look, listen and speak as you like, and build at no other star. Then pictures of Earth, one for every thousand years, as far back as our records go and further: ice sheets coming and going, the Sahara green and then dry, and lately fields and cities. ` +
+          `Its timing puts whoever sent the watcher about ${one(w.answer.ly)} light-years away. It gave nothing that makes us faster, and said nothing of what it would do if we built at another star.`,
       );
     // Our Relay Search's word, or the build it opened. 2026-10-30.
     if (w.looked && w.relay)

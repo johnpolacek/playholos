@@ -1,5 +1,6 @@
 // What the server needs from the save to say what Earth knows, or what comes next: Scan's /api/known and the skip's
 // /api/next ask with the same. 2026-10-29.
+import { target, WATCHER } from "./sends";
 import type { Save } from "./types";
 
 export function knownQuery(save: Save | undefined, year: number | null) {
@@ -17,5 +18,7 @@ export function knownQuery(save: Save | undefined, year: number | null) {
     will: JSON.stringify(save?.will ?? null),
     stops: JSON.stringify(plan?.stops ?? []),
     observe: JSON.stringify(plan?.observe ?? []),
+    // Our knocks on the watcher, for its maker's answer. 2026-10-31.
+    knocks: JSON.stringify((save?.sent ?? []).filter((m) => target(m.to) === WATCHER).map((m) => m.y)),
   }).toString();
 }

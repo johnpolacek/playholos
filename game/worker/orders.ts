@@ -71,3 +71,13 @@ export function readWill(w: unknown): Will | null {
     ? { hole: x.hole.slice(0, 80), d: x.d as number, y: x.y as number, at: x.at as number, rate: x.rate as number }
     : null;
 }
+
+/** Our knocks on the watcher, from the save: the Years we sent them. Checked, at most 64. 2026-10-31. */
+export function readKnocks(raw: string | null): number[] {
+  try {
+    const v = JSON.parse(raw ?? "[]");
+    return Array.isArray(v) ? v.filter((y): y is number => typeof y === "number" && Number.isFinite(y) && y >= 0).slice(0, 64) : [];
+  } catch {
+    return [];
+  }
+}

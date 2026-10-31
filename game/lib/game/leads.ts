@@ -849,6 +849,19 @@ export function watcherReadings(w: WatcherSeen, knocks: number[], year: number):
         "It went quiet for us. Whatever it carries, it means to keep from us.",
       ],
     });
+  // Its maker's answer to our first knock, one round trip later, settled 2026-10-31. Its timing gives the distance.
+  if (w.answer && w.answer.at <= year)
+    out.push({
+      id: "watcher-answer",
+      needs: "",
+      at: tenths(w.answer.at),
+      by: "A beam aimed at Earth",
+      title: "An answer",
+      line: `A tight beam aimed at Earth from ${sky(w.answer)}, built to be read: a picture of Earth from far above at the hour we knocked, at Year ${yearText(w.answer.knock)}, and a short message in pictures anyone could read. Look, listen and speak as you like. Build at no other star. Then pictures of Earth, one for every thousand years: ice sheets coming and going, the Sahara green and then dry, and in the last few thousand years, fields and cities.`,
+      mind: `It came ${Math.round(2 * w.answer.ly).toLocaleString("en-US")} Years after our knock, so whoever sent the watcher lies about ${Math.round(w.answer.ly).toLocaleString("en-US")} light-years away, and has watched Earth for longer than we have kept records. It told us the one thing it cares about. It gave us nothing that makes us faster. What it would do if we built at another star, it didn’t say.`,
+      now: made,
+      tells: ["It has answered once. It may not answer again.", "What it asks is that we stay. Whether we do is ours to choose."],
+    });
   // The ladder as we see it: seed probes gone silent, and a strike from beyond our system. 2026-10-30.
   if (w.seedsLost?.length && w.seedsLost[0].known <= year) {
     const gone = w.seedsLost.filter((l) => l.known <= year);

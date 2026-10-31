@@ -21,6 +21,8 @@ export interface MindKit {
   moonSearch?: number | null;
   /** The asteroid tour: the Year its probe reaches the first Earth co-orbital asteroid. It maps each in turn. */
   asteroidTour?: number | null;
+  /** The Years we knocked on the watcher, once found. 2026-10-31. */
+  knocks?: number[];
   /** The Year our Close Look is built: a small craft that flies to the watcher once we know where it sits. */
   closeLook?: number | null;
   /** Our Relay Search: the Year it is built, and the Years it flies each AU out, as a lens flies. 2026-10-30. */
@@ -69,6 +71,12 @@ export interface WatcherSeen {
    *  star, the Year it was lost, and the Year we knew. And the bullet that struck Earth. 2026-10-30. */
   seedsLost?: { star: string; at: number; known: number; before: boolean }[];
   struck?: { lands: number; mt: number };
+  /** Its maker's answer to our first knock, settled 2026-10-31: the knock reaches the watcher in seconds, its word
+   *  crosses to the maker at light speed, and the maker beams back, so the answer comes one round trip later, and its
+   *  timing tells us how far the maker is. It holds a picture of Earth at the hour we knocked, the rule, and Earth's
+   *  past as its lens saw it. The Year we knocked, the Year it came, the light-years its timing gives, and where it came
+   *  from in our sky. */
+  answer?: { knock: number; at: number; ly: number; ra: number; dec: number };
 }
 
 /** A compact warm body resting in the cold outer reaches of another star's system. */
@@ -231,14 +239,17 @@ export function watcherOf(world: World, kit: MindKit, year: number): WatcherSeen
   // Up close, its mirror shows which way its reports go: to its relay on our Sun's focal line, opposite its maker, the
   // nearest old mind. 2026-10-30.
   const maker = world.minds?.old.find((o) => o.id === w.maker);
-  if (kit.closeLook == null || watchedAt(first) === null || !maker) return first;
+  // Its maker answers our first knock once, one round trip later. 2026-10-31.
+  const knock = (kit.knocks ?? []).filter((k) => k >= first.seen).sort((a, b) => a - b)[0];
+  const answered = maker && knock !== undefined && knock + 2 * maker.d <= year ? { answer: { knock, at: knock + 2 * maker.d, ly: maker.d, ...skyOf(maker.pos) } } : {};
+  if (kit.closeLook == null || watchedAt(first) === null || !maker) return { ...first, ...answered };
   const home = Math.max(kit.closeLook, first.seen) + (first.by === "moon search" ? CLOSE_FLIGHT.moon : CLOSE_FLIGHT.rock);
-  if (home > year) return first;
+  if (home > year) return { ...first, ...answered };
   const looked = { at: home, ...skyOf([-maker.pos[0], -maker.pos[1], -maker.pos[2]]) };
   // Our Relay Search flies out along that line once its mirror is seen, and finds the relay at its distance. 2026-10-30.
   const s = kit.relaySearch;
   const found = s ? Math.max(s.built, home) + s.perAU * w.relayAU + w.relayAU / LY_AU : Infinity;
-  return { ...first, looked, ...(found <= year ? { relay: { at: found, au: w.relayAU } } : {}) };
+  return { ...first, looked, ...(found <= year ? { relay: { at: found, au: w.relayAU } } : {}), ...answered };
 }
 
 /** A sleeping old mind, found only by our craft in its system: one that stays always finds it, a flyby only if the

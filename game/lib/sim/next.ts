@@ -3,7 +3,8 @@
 import type { EarthView } from "./types.ts";
 
 /** Times in what Earth knows that mark something arriving or being found, by their keys. */
-const WHEN = new Set(["arrived", "found", "home", "seen", "ranged", "faded", "lands", "stands", "at"]);
+// "near": a sentinel's word on a cold glow, up close, 2026-10-31. The watcher's answer comes under "at".
+const WHEN = new Set(["arrived", "found", "home", "seen", "ranged", "faded", "lands", "stands", "at", "near"]);
 
 /** The earliest Year after `year` that anything in `ahead`, what Earth will know by some later Year, became known. */
 export function nextKnown(ahead: EarthView, year: number): number | null {
