@@ -180,8 +180,8 @@ export async function mind(req: Request) {
   const system = Object.values(told).filter(Boolean).join("\n\n");
   // The same text in two parts: what stays the same through a talk, cached, then what changes as the clock runs.
   // Changing the head means changing every answer's cache, so new lines that move go after leads. 2026-10-25.
-  const { voice, screens, charter: c, kit, road: r, leads, ...moving } = told;
-  const head = [voice, screens, c, kit, r, leads].filter(Boolean).join("\n\n");
+  const { voice, screens, charter: c, kit: k, road: r, leads, ...moving } = told;
+  const head = [voice, screens, c, k, r, leads].filter(Boolean).join("\n\n");
   const tail = Object.values(moving).filter(Boolean).join("\n\n");
   // On the dev server, scripts/trace-mind.mjs reads what the Mind was told: with dry, instead of asking it, and
   // otherwise beside its answer. A deployed Worker never sends it. Dry needs no key, since nothing is asked. 2026-10-23.
