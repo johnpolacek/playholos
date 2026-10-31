@@ -2,7 +2,7 @@
 // we have gone and the two roads to the nearest star. Each can be queued before Begin, last in line. One queued is
 // dated where the plan has it, and one not yet as if queued now, with this game's compute. Queued, a road can slow
 // what is before it: see moves() in plan.ts. Distances at Year 0 are HOLOS_GAME_CONCEPT.md's. Built 2026-10-18.
-import { BULLET, bulletsReady, SCREEN } from "@/lib/sim/conflict";
+import { BULLET, bulletsReady } from "@/lib/sim/conflict";
 import { horizonOf, ordersOf, pacedName, schedule, searchOf } from "./plan";
 import { grownSpans } from "./halo";
 import type { Plan, Will } from "./types";
@@ -140,13 +140,6 @@ export function sentinels(plan: Plan, scale: number) {
   return (plan.sentinels ?? []).map((o) => ({ star: o.name, leaves: ready === null ? null : Math.max(o.y, ready) + SENTINEL.build }));
 }
 
-/** Our pellet screens, each by its star and the Year it stands: once the Picket Yard is done, 4 Years after its order.
- *  Null while the yard isn't. 2026-10-28. */
-export function screensOf(plan: Plan, scale: number) {
-  const yard = schedule(plan, scale)["Picket Yard"] ?? null;
-  return (plan.pickets ?? []).map((o) => ({ star: o.name, done: yard === null ? null : Math.max(o.y, yard) + SCREEN.years }));
-}
-
 /** Our bullets, each by its star and the Year it is fired: readied 20 Years after its order once the Strike Yard is
  *  done, and fired once the Helium-3 Harvest has gathered its fuel, after each bullet before it. Null while either
  *  isn't. 2026-10-28, its helium-3 2026-10-29. */
@@ -176,16 +169,6 @@ function yardDone(plan: Plan, scale: number, from: number, yard: string) {
   const { orders, ...opts } = ordersOf(plan);
   const more: Order[] = inOrder(plan, yard) ? [] : [{ y: from, begin: pacedName(yard) }];
   return pace([...orders, ...more], horizonOf([...orders, ...more], 300), { scale, ...opts }).done[pacedName(yard)] ?? null;
-}
-
-/** A pellet screen on the line to a star, as a road: the Picket Yard, then 4 Years to build and place it, 4 million
- *  km out. It stands then, and we know it at once. 2026-10-28. */
-export function screenRoad(plan: Plan, scale: number, from: number, star: string): Road {
-  const yard = yardDone(plan, scale, from, "Picket Yard");
-  const sent = (plan.pickets ?? []).find((o) => o.name === star);
-  const leaves = yard === null ? null : Math.max(sent?.y ?? from, yard);
-  const stands = leaves === null ? null : leaves + SCREEN.years;
-  return { name: "A pellet screen", n: sent ? 1 : null, build: "Picket Yard", craft: "A pellet screen", speed: 0, done: yard, leaves, arrives: stands, home: stands };
 }
 
 /** Our bullet at a star `ly` away, as a road: the Strike Yard, 20 Years to ready it once its helium-3 is in, and its flight at a tenth of light
@@ -312,7 +295,6 @@ export function kitOf(plan: Plan, scale: number) {
     xray: done["X-Ray Watch"] ?? null,
     interceptor: done["Interceptor"] ?? null,
     quiet: done["Quiet Radars"] ?? null,
-    screens: screensOf(plan, scale).flatMap((x) => (x.done !== null ? [{ star: x.star, done: x.done }] : [])),
     strikes: strikesOf(plan, scale).flatMap((x) => (x.fired !== null ? [{ star: x.star, fired: x.fired }] : [])),
   };
 }

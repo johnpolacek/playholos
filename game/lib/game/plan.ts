@@ -3,7 +3,7 @@
 // The Mind names what it would start with only when asked, 2026-10-19, and never queues anything itself.
 import { FOUND } from "./rocks";
 import { WATCHED } from "@/lib/sim/minds";
-import { BULLET, SCREEN } from "@/lib/sim/conflict";
+import { BULLET } from "@/lib/sim/conflict";
 import { plainBuild } from "./build-offer";
 import { KNOCKS } from "./knocks";
 import { YEAR_0 } from "./clock";
@@ -121,14 +121,8 @@ export const LATER: Later[] = [
     does: "think",
     after: "Mass Driver",
   },
-  // Parity, 2026-10-28: catch what the watch sees, screen a line to a star, and strike one.
+  // Parity, 2026-10-28: catch what the watch sees, and strike a star. Screens retired 2026-10-31, audit 2.1.
   { name: "Interceptor", what: "Kill vehicles that catch a probe in our system once the watch sees it.", does: "keep", after: "X-Ray Watch" },
-  {
-    name: "Picket Yard",
-    what: "Builds pellet screens on the line to a star, to wreck a bullet from there.",
-    does: "keep",
-    after: "Orbital Yard",
-  },
   { name: "Strike Yard", what: "Readies bullets of 1,000 t to fire at a star, at a tenth of light speed.", does: "reach", after: "Fusion Drive" },
   // The audit's helium-3 harvest, 2026-10-29: every bullet's fuel, ours and every neighbor's, comes from one.
   { name: "Helium-3 Harvest", what: "Craft dip into Uranus’s air for helium-3, a bullet’s fuel, doubling every 5 Years.", does: "reach", after: "Probe Yard" },
@@ -245,8 +239,6 @@ export const SAYS: Record<string, string> = {
     "Ninety years of our radar sweeps are already out there, and nothing recalls them. Cutting the radars now means a listener whose ears open after our last sweep passes never hears us. Every listener who has heard us hears us stop, and can’t tell waking from dying.",
   "Interceptor":
     "Stored kill vehicles of a tonne each, about 5 Years. Once the X-Ray Watch sees a probe braking in, one meets it as it stops and wrecks it. Its sender loses its eyes here, and may take that as the act of war it is.",
-  "Picket Yard":
-    "It builds pellet screens in orbit: 10 g pellets 0.7 m apart, 10 km wide, about 2,000 t, held 4 million km out on the line to one star. A bullet from there that crosses one is wrecked into spray, and lands as a flash high in the air. A bullet coasts dark, so a screen must stand before one comes. Only a sentinel of ours at its star could see it fired. Each takes 4 Years.",
   "Strike Yard":
     "It readies bullets of 1,000 t, as any mind could, each in 20 Years, but none flies until the Helium-3 Harvest has gathered its 37 kt, about 12 Years for the first, less as the harvest grows. One lands at a tenth of light speed with about 110,000 Mt: a region gone, the ozone thinned, the climate cooled. It ends no Mind spread across its system. Its launch flame shows only in our own system: a probe of theirs watching here would see it, and no one farther off.",
   "Rock Deflector":
@@ -476,12 +468,11 @@ function held(plan: Plan, done: Record<string, number | null>, year: number) {
   // machines, landed from Earth, since 2026-10-22.
   // Ordered again after it was taken back, a build has its matter already.
   const first = (plan.later ?? []).filter((o, i, all) => !plan.builds.includes(o.name) && all.findIndex((x) => x.name === o.name) === i);
-  // A screen is 2 kt of pellets, and a bullet 1 kt with 24 kt of deuterium, spent as each is ordered. 2026-10-28.
+  // A bullet is 1 kt with 24 kt of deuterium, spent as each is ordered. 2026-10-28.
   const each = (list: { y: number }[] | undefined, kt: number) => (list ?? []).filter((o) => o.y <= year).length * kt;
   const spent =
     plan.builds.reduce((s, b) => s + (buildOf(b)?.kt ?? 0), 0) +
     first.reduce((s, o) => s + (o.y <= year ? (buildOf(o.name)?.kt ?? 0) : 0), 0) +
-    each(plan.pickets, SCREEN.tonnes / 1000) +
     // Its helium-3 comes from the harvest: only the bullet and its deuterium are lifted. 2026-10-29.
     each(plan.strikes, (BULLET.tonnes * (1 + BULLET.deuterium * BULLET.fuelPerTonne)) / 1000);
   const lifted =

@@ -12,13 +12,13 @@ import { target } from "@/lib/game/sends";
 export function Fate() {
   const { save, year, moveWill, newGame } = useGame();
   const { hits, done, scale } = useSchedule();
-  const end = hits.find((h) => !h.screened && h.harm.ends);
+  const end = hits.find((h) => h.harm.ends);
   const plan = save?.plan;
   const colony = useMemo(() => (plan ? colonyOf(plan, scale, (n) => target(n)?.d) : null), [plan, scale]);
   const lives = end ? survivorAt(done, end.lands, colony) : null;
   const will = save?.will;
   // Every strike that landed, a flash and a scar on the globe, on every screen that shows it.
-  const scars = useMemo(() => hits.filter((h) => !h.screened).map(scarOf), [hits]);
+  const scars = useMemo(() => hits.map(scarOf), [hits]);
   useEffect(() => void setScars(scars, YEAR_0 + (year ?? 0)), [scars, year]);
   useEffect(() => {
     if (end && lives && !will) moveWill({ hole: lives.name, d: lives.d, y: end.lands, at: end.lands + lives.d, rate: 1, lost: true });

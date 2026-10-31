@@ -58,7 +58,7 @@ export function Build() {
 function Struck() {
   const { hits, lives, restore: r } = useSchedule();
   if (!hits.length) return null;
-  const end = hits.find((h) => !h.screened && h.harm.ends);
+  const end = hits.find((h) => h.harm.ends);
   return (
     <div className="flex flex-col gap-1 border-b border-rowline py-2.5 text-[13px] leading-snug">
       {end && (
@@ -70,9 +70,7 @@ function Struck() {
       )}
       {[...hits].reverse().map((h) => (
         <p key={`${h.from}:${h.lands}`} className="text-page-ink2">
-          {h.screened
-            ? `Year ${yearText(h.lands)}: a bullet from ${h.from} broke on our screen, a flash high in the air.`
-            : `Year ${yearText(h.lands)}: ${h.from === "a rock" ? "a rock" : `a bullet from ${h.from}`} struck Earth, ${HARM_WORDS[h.harm.tier]}.${h.harm.ends ? "" : ` We lost ${Math.round(h.harm.share * 100)}% of our thought, won back over about ${Math.round(h.harm.recover)} Years.`}`}
+          {`Year ${yearText(h.lands)}: ${h.from === "a rock" ? "a rock" : `a bullet from ${h.from}`} struck Earth, ${HARM_WORDS[h.harm.tier]}.${h.harm.ends ? "" : ` We lost ${Math.round(h.harm.share * 100)}% of our thought, won back over about ${Math.round(h.harm.recover)} Years.`}`}
         </p>
       ))}
     </div>

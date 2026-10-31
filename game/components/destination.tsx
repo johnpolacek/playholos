@@ -27,7 +27,6 @@ import {
   SENTINEL_NEEDS,
   sentinelReady,
   sentinelRoad,
-  screenRoad,
   strikeRoad,
   SHIP_NEEDS,
   shipReady,
@@ -63,8 +62,6 @@ function Need({ name, queued, done }: { name: string; queued: boolean; done: boo
 }
 
 const WHAT: Record<string, string> = {
-  screen:
-    "10 g pellets 0.7 m apart, 10 km wide, about 2,000 t, held 4 million km out on the line to this star. A bullet from here that crosses it is wrecked into spray, and lands as a flash high in the air. A bullet coasts dark, so the screen must stand before one comes.",
   strike:
     "1,000 t at a tenth of light speed, readied in 20 Years, and fired once the Helium-3 Harvest gathers its 37 kt, after any bullet before it: about 12 Years for the first, less as the harvest grows. It lands with about 110,000 Mt: a region gone, the ozone thinned, the climate cooled. Its launch flame shows only here, to a probe of theirs watching us.",
   "Laser Sail Array": "Sails weighing a few grams, pushed by a beam from Earth, fly past at a fifth of light speed.",
@@ -181,8 +178,7 @@ export function DestinationPage({ slug }: { slug: string }) {
     () => (lead && (felt || lead.slug === "proxima-centauri") ? seedRoad(plan, scale, from, lead.star, lead.ly) : null),
     [felt, lead, plan, scale, from],
   );
-  // What a neighbor can do to us, we can do here: screen the line to this star, or fire on it. 2026-10-28.
-  const screen = useMemo(() => (lead ? screenRoad(plan, scale, from, lead.star) : null), [lead, plan, scale, from]);
+  // What a mind can do to us, we can do here: fire on this star. 2026-10-28. Screens retired 2026-10-31.
   const bullet = useMemo(() => (lead ? strikeRoad(plan, scale, from, lead.star, lead.ly) : null), [lead, plan, scale, from]);
   // Our Mind can go to a black hole, a furnace to feed or a shadow to hide in, 2026-10-26, or settle where a seed probe
   // could, on a star's light and rock, 2026-10-27.
@@ -392,23 +388,6 @@ export function DestinationPage({ slug }: { slug: string }) {
             can={seedReady(plan)}
             send={() => change((p) => ({ ...p, seeds: [...(p.seeds ?? []), { name: lead.star, y: from }] }))}
             what="Seed probe"
-          />
-        )}
-        {screen && (
-          <Sent
-            road={screen}
-            i={ways.length + 5}
-            to={to}
-            name="A screen on the line from here"
-            line={WHAT.screen}
-            needs={["Picket Yard"]}
-            have={(n) => ({ queued: inOrder(n), done: !before && (doneBy[n] ?? Infinity) <= clock })}
-            // Ordered once the Picket Yard is in our order: it stands 4 Years after the yard is done. One a star.
-            can={inOrder("Picket Yard")}
-            send={() => {}}
-            what="Screen"
-            sentAs="Screen ordered"
-            choices={[{ label: "Screen This Line", send: () => change((p) => ({ ...p, pickets: [...(p.pickets ?? []), { name: lead!.star, y: from }] })) }]}
           />
         )}
         {bullet && (

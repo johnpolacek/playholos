@@ -292,15 +292,6 @@ const Intercept = ({ size, still }: MarkProps) => (
   </Moving>
 );
 
-/** The Picket Yard: a grid of pellets on a line, and a bullet breaking on it. 2026-10-28. */
-const Picket = ({ size, still }: MarkProps) => (
-  <Moving size={size} still={still} move={(_, part) => void sway(part("spray"), { opacity: 0 }, { opacity: 0.9 }, 1.1)}>
-    <path d="M9 2.6v10.8" strokeDasharray="0.6 1.6" />
-    <path d="M2 8h6" />
-    <path data-k="spray" d="M10.4 8l3.4-2.4M10.4 8h3.8M10.4 8l3.4 2.4" opacity={still ? 0.9 : 0} />
-  </Moving>
-);
-
 /** The Strike Yard: a bullet on its long flame, outbound. 2026-10-28. */
 const Strike = ({ size, still }: MarkProps) => (
   <Moving size={size} still={still} move={(_, part) => void sway(part("flame"), { opacity: 0.3 }, { opacity: 1 }, 0.7)}>
@@ -934,8 +925,6 @@ export function BuildMark({ name, size = 16, still }: { name: string; size?: num
       return <Quiet size={size} still={still} />;
     case "Interceptor":
       return <Intercept size={size} still={still} />;
-    case "Picket Yard":
-      return <Picket size={size} still={still} />;
     case "Strike Yard":
       return <Strike size={size} still={still} />;
     case "Rock Deflector":

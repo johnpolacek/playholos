@@ -318,16 +318,6 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
       before: "In NASA’s 2021 exercise, six months’ warning delivered about 8.65 t to a rock. Five Years is the usual lead to build one.",
     },
   },
-  "Picket Yard": {
-    site: { on: "orbit", draw: "ring", places: [{ lat: 0, lon: 0, name: "Low orbit, 400 km up" }], orbit: { km: 400, tilt: 51.6, minutes: 92.9, behind: 20 } },
-    story: {
-      have: "Whipple shields guard the ISS: a thin bumper breaks a grain into a spreading cloud before it reaches the hull.",
-      where: "Beside the Orbital Yard, which builds each screen and sends it 4 million km out on the line to its star.",
-      why: "At a tenth of light speed a gram carries 450 GJ, far past what any solid survives. A bullet that crosses a pellet is spray.",
-      takes: "About 2,000 t a screen, 10 g pellets 0.7 m apart over 10 km, and 4 Years to build and place.",
-      before: "No one has screened a line in space. The estimate is ours, from Whipple shield physics.",
-    },
-  },
   "Strike Yard": {
     site: { on: "orbit", draw: "ring", places: [{ lat: 0, lon: 0, name: "High orbit, by the foundry" }], orbit: { km: 235_000, tilt: 25, minutes: 19_672, behind: 60 } },
     story: {

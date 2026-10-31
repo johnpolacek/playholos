@@ -81,7 +81,7 @@ export function LeadsMap({
   const { hits, scale } = useSchedule();
   const plan = save?.plan;
   useEffect(() => {
-    const onUs = hits.filter((h) => !h.screened).map((h) => ({ name: "Earth", ra: 0, dec: 0, ly: 0, sent: YEAR_0 + h.lands, flash: true }));
+    const onUs = hits.map((h) => ({ name: "Earth", ra: 0, dec: 0, ly: 0, sent: YEAR_0 + h.lands, flash: true }));
     const ours = (plan ? strikesOf(plan, scale) : []).flatMap((s) => {
       const t = target(s.star);
       const lands = s.fired === null || !t ? null : s.fired + t.d / BULLET.v;

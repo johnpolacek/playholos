@@ -1,5 +1,5 @@
-// Strikes, screens and harm: what a bullet or a rock does to a world, by the same physics. Our Strike Yard, Interceptor
-// and screens stay buildable at the same price and pace. The neighbors who struck back are retired, and their side of
+// Strikes and harm: what a bullet or a rock does to a world, by the same physics. Our Strike Yard and Interceptor
+// stay buildable at the same price and pace. Pellet screens were retired 2026-10-31, audit 2.1. The neighbors who struck back are retired, and their side of
 // it went 2026-10-29. Sources in HOLOS_RESEARCH.md, "Strikes, screens and harm". Pure, so it tests fast.
 import { HE3, he3When, STRIKE_BUILD, STRIKE_READY, STRIKE_V } from "./meetings.ts";
 import catalog from "../../data/works.json" with { type: "json" };
@@ -46,11 +46,6 @@ export const HARM_WORDS: Record<ReturnType<typeof harmOf>["tier"], string> = {
   winter: "a sky dark with soot for Years, too dark for crops, and most of our industry lost",
   extinction: "Chicxulub’s class: no Mind of ours can live on Earth after it",
 };
-
-/** A pellet screen on the line to one star: 10 g pellets 0.7 m apart, 10 km wide, about 2,000 t, held 4 million km out.
- *  Any bullet from that star that crosses it is wrecked into spray that spreads wider than Earth before it arrives, and
- *  lands as a flash in the high air. Our estimate: no paper models one. 4 Years at standard pace. */
-export const SCREEN = { tonnes: 2000, km: 10, outKm: 4e6, years: 4 };
 
 /** Our Solar Swarm's glow: it starts at the sunlight Mercury Works' seed catches, doubles every 2 Years while it grows,
  *  up to all the Sun, and sheds its heat near 500 K. calcs/mercury.py. 2026-10-29. */

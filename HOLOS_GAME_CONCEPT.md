@@ -131,7 +131,7 @@ Settled 2026-10-28, one step at a time. The premise itself, how many minds exist
   - *Strike:* the first copy to leave a star, seen by a watcher there, sends word to the maker. It readies a bullet as any mind does, about 32 Years by parity, and fires it at Earth: 1,000 t at a tenth of light speed, about 108,000 Mt, climate harm, not Earth’s end.
   - *Seed 22, maker 480 ly off:* one seed probe at Year 50 draws a strike landing about Year 5,484. A second at Year 60 loses all 14 of our probes between Years 5,277 and 5,478.
   - *What Earth sees:* a probe’s silence once its word is overdue, and a strike from beyond our system when it lands. Never who. On Scan, as readings on the watcher’s lead. Its harm cuts our thought as a rock’s does.
-  - *Not yet:* our screens on the line to the maker, since we never learn its star. Strikes on a Mind at a hole.
+  - *Not yet:* strikes on a Mind at a hole. Screens on the line to the maker went with the Picket Yard, 2026-10-31.
 - **Real stars to 326 ly, a seeded Galaxy beyond.** Settled 2026-10-29. Gaia’s census of nearby stars lists about 331,000 within 100 pc (Smart et al. 2021), a few MB to ship.
   - *Beyond,* stars are drawn from the Galaxy’s measured shape, its disk, bar, arms and bulge. They are made from the seed as we look, the same every time.
   - *Why so far.* The typical nearest old mind sits about 400 ly away, so most of the early game stays inside real data.
@@ -991,7 +991,7 @@ Settled 2026-10-28, from the designer: anything available to another civilizatio
 - **The X-Ray Watch.** Six Einstein Probe-class telescopes, 4 Years. It sees a probe braking all the way in, weeks out, with its direction. Probes that stop far out, and bullets, stay dark.
 - **The Interceptor,** after the watch. 5 Years. It wrecks every probe the watch sees, as it stops. The sender learns its probe went dark one light-time later, as “struck” news.
 - **Quiet Radars.** The cut from [Quieting Earth’s radars](#quieting-earths-radars), 2 Years. A neighbor whose ears open after our last sweep never answers our radars. Every listener hears us stop, as “quiet” news. The fade is not built.
-- **The Picket Yard,** after the Orbital Yard. Each screen, on the line to one star from its page on Reach: 2 kt, 4 Years. A bullet from that star landing after it stands is a flash in the high air.
+- **The Picket Yard, retired 2026-10-31,** audit 2.1. A screen must cover Earth’s whole face, about 2.6 Gt of pellets, not 2 kt over 10 km. A bullet it breaks keeps its speed: 4 million km out, the spray still lands, about 3.5 MJ/m² across the face. Only far out, near 0.4 AU at 30 km/s of spread, our guess, would most of it miss, and the line to a star sweeps as Earth orbits. The watcher sees all we build, so its maker could plan round one. No code ever marked a strike screened. Before: each screen 2 kt and 4 Years, a bullet from that star landing as a flash in the high air.
 - **The Strike Yard,** after the Fusion Drive. Each bullet, at one star from its page on Reach: 1,000 t, 61 kt of fuel, 20 Years to ready, then a tenth of light speed. About 110,000 Mt.
   - It lands as “struck” news, and the struck star answers by its own table, maybe in kind.
   - Its launch shows only in our own system. A neighbor sees it only through a probe of its own watching Sol, not caught, as “strike seen” news a light-time later. Corrected 2026-10-28: before, every watcher within 60 ly saw it.
@@ -1515,7 +1515,7 @@ Set 2026-10-28, before the refactor to a larger, sparser universe and a longer t
 - **Glow floors.** Every watch sees a glow over 3×10¹⁸ W at 10 pc, times about 135 for ours at 77 K, at 850 µm (corrected 2026-10-31 from (77/12)³), growing as the square of distance. A neighbor’s glow starts at 10¹³ W and doubles every 10 Years, 5 if inward. Who finds whom, and when, rests on these. [game/lib/sim/answers.ts](game/lib/sim/answers.ts) `glowsSeen`, [game/lib/sim/knowledge.ts](game/lib/sim/knowledge.ts) `glows`.
 - **Calls.** A call every way at once reads to 60 ly, `CALL_REACH`. In a sparser universe few would hear one, and neighbors would rarely come to know each other.
 - **Warnings.** Only to worlds a neighbor knows of, by message, call or glow. Fewer known worlds, fewer warnings. `knownTo`.
-- **Bullets and screens.** 20 Years to ready, a tenth of light speed, about 110,000 Mt. A screen takes 4 Years. At hundreds of light-years a strike takes millennia to land. `BULLET`, `SCREEN` in conflict.ts.
+- **Bullets.** 20 Years to ready, a tenth of light speed, about 110,000 Mt. At hundreds of light-years a strike takes millennia to land. `BULLET` in conflict.ts. Screens retired 2026-10-31.
 - **Probes to us.** A probe on news of us takes 20 Years to build, a tenth of light speed, and 10 Years of burns. `probesToUs`.
 - **The model’s budget.** 60 neighbor moves on each other’s news per century, `STAR_BUDGET`. Longer games mean more calls to the model in all.
 - **Our colony and Earth’s stand-in.** Each reports a light-time late. A farther colony is silent far longer. A colony stands 20 Years after landing. [game/lib/sim/colony.ts](game/lib/sim/colony.ts).

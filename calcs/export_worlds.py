@@ -175,7 +175,6 @@ def works_catalog():
     works['X-ray sky watch'] = dict(years=eg.XRAY_YEARS, want=eg.WANTS['X-ray sky watch'][0], orbit=True)
     works['Interceptor'] = dict(years=eg.INTERCEPTOR_YEARS, want=eg.WANTS['Interceptor'][0])
     works['Quiet radars'] = dict(years=eg.QUIET_YEARS, want=eg.WANTS['Quiet radars'][0])
-    works['Picket yard'] = dict(years=eg.PICKET_YEARS, want=eg.WANTS['Picket yard'][0], orbit=True)
     works['Strike yard'] = dict(years=eg.STRIKE_YARD_YEARS, want=eg.WANTS['Strike yard'][0], orbit=True)
     # Ground solar's fifth counts too, 2026-10-28: a whole data center more only where the grid's room was near one.
     works['Ground solar']['energy'] = 0.2

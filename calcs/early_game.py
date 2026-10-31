@@ -393,12 +393,12 @@ WANTS['Rock deflector'] = (0.3, 'sample: ten DARTs, a few billion dollars')
 DEFLECTOR_YEARS = 4
 # Settled 2026-10-28, parity with what neighbors can do. Interceptors: stored kill vehicles of a tonne, readied as
 # planetary defense's rapid-response studies ask, about 5 Years and $2B (Barbee et al.). Quiet radars: the concept's
-# cut, 2 Years of ground work. A picket yard builds pellet screens in orbit, each 2,000 t and 4 Years, our estimate. A
+# cut, 2 Years of ground work. The picket yard and its screens were retired 2026-10-31, audit 2.1. A
 # strike yard readies bullets of 1,000 t, as a neighbor's: 20 Years each once the yard stands. Its want and Years are
 # samples between the probe yard's and the fusion drive's.
 WANTS.update({'Interceptor': (0.2, 'about 2 billion dollars'), 'Quiet radars': (0.01, 'sample: ground work'),
-              'Picket yard': (0.5, 'sample'), 'Strike yard': (3, 'sample')})
-INTERCEPTOR_YEARS, QUIET_YEARS, PICKET_YEARS, STRIKE_YARD_YEARS = 5, 2, 6, 10
+              'Strike yard': (3, 'sample')})
+INTERCEPTOR_YEARS, QUIET_YEARS, STRIKE_YARD_YEARS = 5, 2, 10
 def split(line, room, push=PUSH):
     """line: (name, want, most) in the player's order, most = how many times its want it can use. Returns {name: s}, idle."""
     give = {}

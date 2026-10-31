@@ -6,7 +6,7 @@ import { nextStop } from "@/lib/sim/next";
 import { earthKnows, willKnows } from "@/lib/sim/knowledge";
 import { moonSearchEnds, tourEnds } from "@/lib/sim/minds";
 import { readGifts, readLater, readColony, readLenses, readObserve, readSentinels, readSeeds, readQueue, readStops } from "./orders";
-import { readPickets, readStrikes, readWill } from "./orders";
+import { readStrikes, readWill } from "./orders";
 import { inPool, loadWorld } from "./world";
 
 // The worlds Earth's planet hunters have felt by Year 0, through the knowledge wall: measured, never who lives there.
@@ -53,7 +53,6 @@ export async function known(req: Request) {
     sentinels: readSentinels(list(q.get("sentinels"))),
     seeds: readSeeds(list(q.get("seeds"))),
     colony: readColony(one(q.get("colony"))),
-    pickets: readPickets(list(q.get("pickets"))),
     strikes: readStrikes(list(q.get("strikes"))),
   };
   // Once the Will lives at a hole, Earth's news reaches it a light-time late. 2026-10-26.
@@ -80,7 +79,6 @@ export async function next(req: Request) {
     sentinels: readSentinels(list(q.get("sentinels"))),
     seeds: readSeeds(list(q.get("seeds"))),
     colony: readColony(one(q.get("colony"))),
-    pickets: readPickets(list(q.get("pickets"))),
     strikes: readStrikes(list(q.get("strikes"))),
   };
   const scale = Number(world.earth.compute) || 1;

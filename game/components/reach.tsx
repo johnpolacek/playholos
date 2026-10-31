@@ -464,8 +464,8 @@ export function Thread({ road, i, to }: { road: Road; i: number; to: number }) {
             </text>
           </>
         )}
-        {/* A screen and a bullet send nothing home: their Year is when they stand or land. */}
-        {home !== null && road.craft !== "A pellet screen" && road.craft !== "A bullet" && (
+        {/* A bullet sends nothing home: its Year is when it lands. */}
+        {home !== null && road.craft !== "A bullet" && (
           <>
             <circle cx={x(home)} cy={20} r={3} className="fill-other" />
             <text x={x(home)} y={36} textAnchor="middle" className="fill-other font-mono text-[8.5px]">
@@ -526,14 +526,6 @@ export function Brings({ road }: { road: Road }) {
         {item("pass", "lives there")}
         {item("pictures", "news a light-time late")}
         {item("air", "orders a light-time late")}
-      </div>
-    );
-  if (road.craft === "A pellet screen")
-    return (
-      <div className="flex flex-wrap gap-x-4 gap-y-1 font-mono text-[10.5px]">
-        {item("pass", "stands on the line")}
-        {item("pictures", "wrecks a bullet from here")}
-        {item("air", "2 kt of pellets")}
       </div>
     );
   if (road.craft === "A bullet")

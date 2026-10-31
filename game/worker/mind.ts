@@ -7,7 +7,7 @@ import { describeCharter } from "@/lib/game/charter";
 import { describeLeads } from "@/lib/game/leads";
 import { kt, matterAt, schedule } from "@/lib/game/plan";
 import { kitOf } from "@/lib/game/reach";
-import { readGifts, readLater, readColony, readLenses, readObserve, readSentinels, readSeeds, readQueue, readStops, readWill, readPickets, readStrikes } from "./orders";
+import { readGifts, readLater, readColony, readLenses, readObserve, readSentinels, readSeeds, readQueue, readStops, readWill, readStrikes } from "./orders";
 import { describeBuilds, describeOffers, describeQueue, describeRock } from "@/lib/mind/builds";
 import { FOUND, rockOf } from "@/lib/game/rocks";
 import { describeSky } from "@/lib/game/natural";
@@ -98,7 +98,6 @@ export async function mind(req: Request) {
     sentinels,
     seeds,
     colony,
-    pickets,
     strikes,
     sent,
     pick,
@@ -118,7 +117,6 @@ export async function mind(req: Request) {
     sentinels?: unknown;
     seeds?: unknown;
     colony?: unknown;
-    pickets?: unknown;
     strikes?: unknown;
     sent?: unknown;
     pick?: unknown;
@@ -136,7 +134,7 @@ export async function mind(req: Request) {
   // Where this Earth's road to Year 0 left the base kit, read beside the kit it changes.
   const road = world ? roadOf(pastOf(world)) : "";
   // Our order, dated as Build dates it with this game's compute.
-  const plan = { builds: queue, observe: readObserve(observe), later: orders, stops: readStops(stops), gifts: readGifts(gifts), lenses: readLenses(lenses), sentinels: readSentinels(sentinels), seeds: readSeeds(seeds), colony: readColony(colony), pickets: readPickets(pickets), strikes: readStrikes(strikes) };
+  const plan = { builds: queue, observe: readObserve(observe), later: orders, stops: readStops(stops), gifts: readGifts(gifts), lenses: readLenses(lenses), sentinels: readSentinels(sentinels), seeds: readSeeds(seeds), colony: readColony(colony), strikes: readStrikes(strikes) };
   const scale = Number(world?.earth.compute) || 1;
   // Strikes landed by now cut our thought from when each landed. 2026-10-28.
   const at = yearAt(began, Date.now(), away);
@@ -147,7 +145,7 @@ export async function mind(req: Request) {
   const view = world && kit ? willKnows(world, year ?? 0, kit, away) : null;
   const hits = inPool(seed) ? hitsAt(plan, seed, { ...base, [FOUND]: rockOf(seed)?.found ?? null }, year ?? 0, view?.minds?.watcher?.struck ?? null) : [];
   // Earth lost: our backup wakes where something can run it, and regrows. 2026-10-28.
-  const end = hits.find((h) => !h.screened && h.harm.ends);
+  const end = hits.find((h) => h.harm.ends);
   const lives = end && world ? survivorAt(base, end.lands, colonyOf(plan, scale, (n) => starD(world, n))) : null;
   const restore = end && lives ? restoreOf(lives.name, base, end.lands) : null;
   const done = hits.length ? schedule(plan, scale, harmOrders(hits, restore)) : base;

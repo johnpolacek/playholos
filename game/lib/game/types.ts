@@ -124,9 +124,6 @@ export interface Plan {
    *  hole for power, hides in its shadow, or settles at a star. One a game, since the Seed Ship carries one.
    *  2026-10-26, a star since 2026-10-27. */
   colony?: Ordered & { mode: ColonyMode };
-  /** Pellet screens on the line to a star, each by the star and the Year we ordered it, built by the Picket Yard. A
-   *  bullet from that star that crosses one is wrecked. One a star. 2026-10-28. */
-  pickets?: Ordered[];
   /** Our bullets, each by the star it is fired at and the Year we ordered it, readied by the Strike Yard. One a star.
    *  2026-10-28. */
   strikes?: (Ordered & { d?: number })[];

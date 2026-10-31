@@ -94,7 +94,7 @@ export function useSchedule() {
   );
   // Earth lost: our backup wakes where something can run it, and regrows. 2026-10-28.
   const { lives, restore } = useMemo(() => {
-    const end = hits.find((h) => !h.screened && h.harm.ends);
+    const end = hits.find((h) => h.harm.ends);
     const lives = end ? survivorAt(base, end.lands, colonyOf(plan, scale, (n) => target(n)?.d)) : null;
     return { lives: lives?.name ?? null, restore: end && lives ? restoreOf(lives.name, base, end.lands) : null };
   }, [hits, base, plan, scale]);

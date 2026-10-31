@@ -14,7 +14,6 @@ export interface Hit {
   from: string;
   lands: number;
   mt: number;
-  screened: boolean;
   harm: ReturnType<typeof harmOf>;
 }
 
@@ -28,9 +27,9 @@ export function hitsAt(
   struck: { lands: number; mt: number } | null = null,
 ): Hit[] {
   const out: Hit[] = [];
-  if (struck && struck.lands <= year) out.push({ from: "beyond our system", lands: struck.lands, mt: struck.mt, screened: false, harm: harmOf(struck.mt) });
+  if (struck && struck.lands <= year) out.push({ from: "beyond our system", lands: struck.lands, mt: struck.mt, harm: harmOf(struck.mt) });
   const rock = seed === undefined ? null : rockAt(rockOf(seed), plan, done, year);
-  if (rock?.state === "struck") out.push({ from: "a rock", lands: rock.strikes, mt: rockMt(rock.m), screened: false, harm: harmOf(rockMt(rock.m)) });
+  if (rock?.state === "struck") out.push({ from: "a rock", lands: rock.strikes, mt: rockMt(rock.m), harm: harmOf(rockMt(rock.m)) });
   return out.sort((a, b) => a.lands - b.lands);
 }
 

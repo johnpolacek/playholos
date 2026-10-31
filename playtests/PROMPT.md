@@ -41,7 +41,7 @@ You are a fresh-eyes playtester for Holos. Play a full first session as a brand 
 ## Known gaps, not to report
 
 - Our screens on the line to the maker, since we never learn its star. Strikes on a Mind sent to a black hole.
-- Interceptor, Picket Yard and X-Ray Watch have nothing to act on yet.
+- Interceptor and X-Ray Watch have nothing to act on yet. The Picket Yard was retired 2026-10-31.
 - Scripts under `explorations/` are old mockups and don't run.
 
 ## Deliver

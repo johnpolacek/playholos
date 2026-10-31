@@ -2395,7 +2395,8 @@ Three research passes by agents, from abstracts and summaries, not full papers. 
 - **Pellet screens** · ours, from Whipple shield physics ([a hypervelocity impact review](https://pure.bit.edu.cn/en/publications/research-and-development-on-hypervelocity-impact-protection-using)).
   - A gram at 0.1c carries 4.5 × 10¹¹ J, far past what any solid survives. A grid 0.7 m apart always hits a 1 m bullet: 2 pellets a m².
   - 10 g pellets over 10 km: about 2,000 t. Spray spreads at about 50 km/s, so 4 million km out it is wider than Earth, and lands as about 3.5 kJ/m² high in the air.
-  - Used: the Picket Yard and its screens, one a star.
+  - Used: the Picket Yard and its screens, one a star, until 2026-10-31.
+  - *Corrected 2026-10-31,* audit 2.1. A bullet can be aimed anywhere on Earth’s face, so a screen must cover it all, about 2.6 Gt. At 50 km/s the spray spreads only about 6,700 km in the 2 minutes it takes to cover 4 million km, about Earth’s size. So it lands as about 3.5 MJ/m², not 3.5 kJ/m². For 1% to land, the spray must spread to 10 Earth radii, which puts a screen near 0.4 AU at 30 km/s. The Picket Yard is retired.
 - **Damage by energy** · [Toon et al. 1997](https://ntrs.nasa.gov/citations/19970030230), Rev. Geophys., summary; [Bardeen et al. 2017](https://pmc.ncbi.nlm.nih.gov/articles/PMC5594694), PNAS.
   - Under 10⁴ Mt, local. 10⁴ to 10⁵, global water vapor and ozone harm. 10⁵ to 10⁶, regional turns global. 10⁶ to 10⁷, too dark for photosynthesis.
   - Chelyabinsk about 500 kt, Tunguska 3 to 50 Mt by estimate.
