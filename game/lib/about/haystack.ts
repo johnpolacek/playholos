@@ -74,6 +74,10 @@ export function ruledAbove(T: number, ly: number): number {
   return Math.min(nearbyLeast(T, ly), ...SURVEYS.map((s) => least(s, T, ly)));
 }
 
+/** What the all-sky maps would have caught 400 ly away, as calcs/minds.py's ALL_SKY_W: IRAS's and AKARI's floor for a
+ *  12 K glow, about 70% of a Sun. Settled 2026-10-31. */
+const ALL_SKY_W = 2.7e26;
+
 /** Holos's awake old minds, drawn by calcs/minds.py's rule: under what our maps would have caught at their distance,
  *  log-evenly between a tenth of that and it. A sample for the page, not any game's. */
 export function holosMinds(
@@ -83,7 +87,7 @@ export function holosMinds(
   const out = [];
   for (let i = 0; i < n; i++) {
     const ly = 30 * (326 / 30) ** rand();
-    let limit = 0.003 * 3.828e26 * (ly / 400) ** 2;
+    let limit = ALL_SKY_W * (ly / 400) ** 2;
     if (ly <= NEARBY.ly)
       limit = Math.min(limit, NEARBY.w * (ly / NEARBY.at) ** 2);
     const lo = Math.min(1e18, limit / 2);
