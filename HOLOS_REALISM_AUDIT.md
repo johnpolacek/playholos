@@ -48,7 +48,7 @@ Started October 28, 2026, after [The realistic premise](HOLOS_GAME_CONCEPT.md#th
 - **3.10 About 90 lithography tools a year is capacity, not shipments.** Fixed 2026-10-31. The concept now says about 45 to 55 shipped a year in 2024 and 2025, against plans for 90. Press figures, not yet checked against ASML’s annual report. No game number used it. Before: Open. Shipments have run about 45 to 55, unchecked. Concept L438.
 - **3.11 Fusion timing reads three ways.** Open. earth.ts:211, sites.ts:309, plan.ts:178.
 - **3.12 First life by 3.7 billion years ago or earlier, not 3.5.** Fixed 2026-10-28. past.ts:28.
-- **3.13 The Solar Lens in 6 months is a best case.** Open. Others estimate 14 months to years. Concept L754, L757.
+- **3.13 The Solar Lens in 6 months is a best case.** Kept 2026-10-31. NASA’s 6 months is for our picture, about 0.2 megapixels at 30 pc. The longer estimates are for a megapixel, and time grows with the pixels wanted: 3.8 years for a megapixel at 100 ly is about 9 months at 0.2. The concept now says so, and works.json’s look of 0.5 stays. Before: Open. Others estimate 14 months to years. Concept L754, L757.
 - **3.14 A young Mind’s doubling is a tuned number stated as fact.** Open. leads.ts:673-676, 687.
 - **3.15 Labels.** Fixed 2026-10-31: all three labeled in the concept, and the 77 K comment in calcs/early_game.py. Before: Open. The 77 K choice is about radiator area, not where chips stop gaining (L882). 10⁸ Mt as the end of Earth’s Mind is a design line (L860). A 100 PB Mind is a sample (L1286).
 

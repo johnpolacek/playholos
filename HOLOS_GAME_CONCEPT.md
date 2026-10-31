@@ -896,7 +896,7 @@ Settled 2026-10-13.
     - Look, telling no one: a solar lens pictures one world by Year 46 to 48. An infrared interferometer reads industry’s gases by Year 62.
     - Go: what the sails see reaches us after Year 200.
     - Knock: it lands from Year 52, and they learn we are here.
-  - *The solar lens.* A craft beyond 548 AU, on the line from a star through the Sun, pictures that star’s world. NASA’s concept: an exo-Earth at 30 pc, about 25 km a pixel, in six months of looking (Turyshev and colleagues, 2020).
+  - *The solar lens.* A craft beyond 548 AU, on the line from a star through the Sun, pictures that star’s world. NASA’s concept: an exo-Earth at 30 pc, about 25 km a pixel, in six months of looking (Turyshev and colleagues, 2020). Kept 2026-10-31, audit 3.13: that picture is about 0.2 megapixels. Longer estimates are for a megapixel, 14 months at Proxima (Turyshev and Toth 2022) and 3.8 years at 100 ly, and looking time grows with the pixels wanted, so 0.2 megapixels at 100 ly is about 9 months. Six months sits near the fast end, not past it.
     - It flies at about 150 km/s from a dive past the Sun: 17 Years out. One craft serves one star.
     - At 49 ly a pixel is about 13 km. The build, 8 Years, and its want, half a flagship, are samples.
     - *Built, 2026-10-26.* The Solar Lens opens after the Orbital Yard, joined in orbit: the yard’s line of small sails. Once it is ordered, each felt world’s destination on Reach can send a lens, one a star. It leaves once the Solar Lens is done, reaches the focus 17.3 Years later, looks for half a Year, and its picture is home 3 days after.

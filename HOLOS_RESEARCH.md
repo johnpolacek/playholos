@@ -2444,7 +2444,7 @@ For a player’s plan: Mercury mined, its light beamed, giant telescopes at the 
 - **[Turyshev, Shao and Toth, an essay on the solar gravitational lens](https://www.vttoth.com/DOCUMENTS/SGL-essay.pdf)** · Essay. Through a search summary, the PDF not readable here.
   - Integration time grows with the pixels wanted and falls as the telescope’s width cubed. A megapixel image of an exo-Earth at 100 ly takes about 3.8 years with their baseline.
   - **[Turyshev and Toth 2022](https://arxiv.org/abs/2204.04866)** · Preprint. Abstract read. 1,000 by 1,000 pixels of a planet at Proxima Centauri, SNR over 10, in about 14 months.
-  - Matters: our lens’s 6 months is a best case, as the realism audit says, and a wider telescope cuts it sharply.
+  - Matters: our lens’s 6 months is for about 0.2 megapixels, 25 km pixels across an Earth at 30 pc. Scaled by pixels, the essay’s 3.8 years for a megapixel at 100 ly is about 9 months. So 6 months is near the fast end, not a best case beyond the sources. Rechecked 2026-10-31, audit 3.13. A wider telescope cuts it sharply.
   - Used: a lens pushed by the Star Beam carries a 3 m telescope and looks for a week.
 - **Lubin 2016 and Parkin 2018**, logged under Travel, sails and lenses. A sail is pushed only while it sits inside the beam’s spot, so its top speed goes as the square root of power, array width and sail width over mass. Used: the Laser Sail Array pushes a 100 kg lens to about 530 km/s, and the Star Beam a 2 t lens to 0.054 c.
 - **[AllWISE sensitivity](https://irsa.ipac.caltech.edu/data/WISE/docs/release/AllWISE/expsup/sec2_3a.html)**, logged under How common minds are. Used: past about 300 ly a neighbor needs our swarm’s 12 µm light above 0.73 mJy.
