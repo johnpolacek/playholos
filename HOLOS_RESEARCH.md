@@ -1380,6 +1380,11 @@ Added 2026-10-28, when every game gained one Mind far older than ours. Prompted 
   - A ring 7 to 9 kpc from the Galaxy’s center, of stars formed 8 to 4 billion years ago. Three quarters of its stars are older than the Sun. Others doubted the data could support such a map (Livio, in press coverage).
   - Matters: the same answer for our own Galaxy.
   - Used: [Elders](HOLOS_GAME_CONCEPT.md#elders).
+- **Where the first life likely was, checked 2026-10-30.**
+  - **[Prantzos 2008, on the Galactic habitable zone](https://ar5iv.labs.arxiv.org/html/astro-ph/0612316)** · Published, Space Science Reviews. Doubts the ring can be mapped with today’s planet-formation and metallicity data. The habitable ring moves outward over time.
+  - **[Spitoni et al. 2014, habitable zone with gas radial flows](https://ar5iv.arxiv.org/html/1403.2268)** · Published, A&A. Chemical evolution maps of the habitable zone for the Milky Way and M31. **[Spitoni and Palla 2025](https://www.aanda.org/articles/aa/full_html/2025/08/aa55050-25/aa55050-25.html)** · Published, A&A. Star migration mainly raises habitability in the outer Galaxy.
+  - Gowanlock et al. 2011 and Balbi and Tombesi 2017, under [Do minds gather there?](#do-minds-gather-there).
+  - Summary: metals built up first in the inner Galaxy, which formed first. The core within about 1 kpc was hit by Sgr A*’s active phases. So the first Earths likely formed in the inner disk outside the core, and the ring of likely worlds spread outward with time. Contested, and no source gives a firm map.
 - Also used there: Sandberg, Armstrong and Ćirković 2016, and Bennett, Hanson and Riedel 2019, under [Why the sky is quiet](#why-the-sky-is-quiet-computing-and-heat). Garrett 2026 sets the ceiling an awake elder must stay under.
 
 ## Black holes
