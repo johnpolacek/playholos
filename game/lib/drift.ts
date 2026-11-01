@@ -2084,12 +2084,41 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     const edge = new THREE.Mesh(new THREE.SphereGeometry(EDGE_KLY, 96, 64), edgeMat);
     edge.frustumCulled = false;
     cosmos.scene.add(edge);
+    // The rest, drawn: faint galaxies through the whole sphere, lumped about clusters as real surveys find them, past
+    // the survey's 2.5 billion ly. Drawn, not measured, so only seen from far enough out that each dot stands for
+    // millions. They thin toward the edge, where we see back to before the first galaxies.
+    const fillGlow = glow({ fixed: true });
+    {
+      const r = seededRandom(1977);
+      const fill = new Cloud();
+      const INNER = 2.5e6, OUTER = EDGE_KLY * 0.93;
+      const nodes = Array.from({ length: 900 }, () => {
+        const d = Math.cbrt(r()) * OUTER, mu = r() * 2 - 1, phi = r() * 2 * Math.PI, s = Math.sqrt(1 - mu * mu);
+        return [d * s * Math.cos(phi), d * mu, d * s * Math.sin(phi)];
+      });
+      for (let i = 0; i < 36000; i++) {
+        // Half about the clusters, half spread through the space between, as a web's walls and voids average out.
+        let p: number[];
+        if (r() < 0.5) {
+          const n = nodes[Math.floor(r() * nodes.length)], spread = 1.6e6 * (0.3 + r());
+          p = n.map((c) => c + (r() + r() + r() - 1.5) * spread);
+        } else {
+          const d = Math.cbrt(r()) * OUTER, mu = r() * 2 - 1, phi = r() * 2 * Math.PI, s = Math.sqrt(1 - mu * mu);
+          p = [d * s * Math.cos(phi), d * mu, d * s * Math.sin(phi)];
+        }
+        const d = Math.hypot(p[0], p[1], p[2]);
+        if (d < INNER || d > OUTER) continue;
+        fill.add(p[0], p[1], p[2], 2, 0.6 * (1 - 0.5 * (d / OUTER) ** 2), K.ink);
+      }
+      cosmos.scene.add(fill.points(fillGlow));
+    }
     const to = new THREE.Vector3();
     let aimed = "";
     let aimedAt = 0;
     return (on: number, x: number) => {
       surveyGlow.uniforms.uOpacity.value = on * arrived(surveyAt) * ramp(x, 11.2, 12.2);
       edgeMat.uniforms.uOpacity.value = on * ramp(x, 14.6, 15.4);
+      fillGlow.uniforms.uOpacity.value = on * ramp(x, 14.4, 15.3);
       const s = spec.mode === "sim" ? spec.sim : undefined;
       const key = s?.focus?.join() ?? "";
       if (key !== aimed) {

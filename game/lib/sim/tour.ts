@@ -28,6 +28,8 @@ export interface Stop {
   auto?: number;
   /** Time passes here: a slider runs the years ahead. */
   time?: boolean;
+  /** Words the map puts at places, light-years in the atlas frame. They stand in for Sol's name. */
+  notes?: { id: string; pos: Vec; text: string }[];
 }
 
 /** How far time runs ahead, in years: a peer is a mind that woke within 20,000 years of us. */
@@ -157,10 +159,16 @@ export function tourOf(m: DrawnMinds, o: Odds, names: Record<string, string> = {
     id: "universe",
     title: "The universe we can see",
     words:
-      "The bright knot at the center is 43,000 galaxies, each placed by how fast it moves away from us, out to about 2 billion light-years. Hundreds of billions more fill the rest, out to the edge of what we can see, 46 billion light-years away in every direction.",
+      "Everything we have mapped, 43,000 galaxies, fits in the bright knot at the center. Hundreds of billions more fill the rest, out to the edge, as far as light has had time to reach us. We sit at the center only because we are the ones looking.",
     focus: null,
     zoom: UNIVERSE,
-    auto: 6,
+    auto: 8,
+    notes: [
+      { id: "mapped", pos: [0, 3.2e9, 0], text: "All we have mapped: 43,000 galaxies" },
+      { id: "drawn", pos: [-1.6e10, -9e9, 0], text: "Hundreds of billions more, drawn" },
+      // Toward the Galaxy's center, which the opening's view puts at the sphere's right edge.
+      { id: "edge", pos: [4.65e10, 0, 0], text: "The edge of what we can see, 46 billion light-years" },
+    ],
   });
   stops.push({
     id: "laniakea",

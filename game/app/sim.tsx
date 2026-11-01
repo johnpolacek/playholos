@@ -131,7 +131,7 @@ export default function Sim() {
       // The place in view first, so its name wins a crowded spot, then Sol, then the minds round us.
       marks: [
         ...(stop?.focus ? [{ id: "here", pos: stop.focus }] : []),
-        { id: "Sol", pos: [0, 0, 0] as [number, number, number] },
+        ...(stop?.notes ? stop.notes : [{ id: "Sol", pos: [0, 0, 0] as [number, number, number] }]),
         ...(spokes ? near.map((n, i) => ({ id: `near-${i}`, pos: n.pos })) : []),
         ...(revealed && stop.zoom < NAMES_UNTIL ? named.filter((n) => n.pos.join() !== stop.focus?.join()) : []),
       ],
@@ -189,7 +189,9 @@ export default function Sim() {
   }, [revealed]);
 
   const set = (key: string, v: number) => setValues((o) => ({ ...o, [key]: v }));
-  const label = "pointer-events-none absolute top-0 left-0 font-mono text-[10px] whitespace-nowrap opacity-0";
+  // Labels sit on stars and glows, so each carries a dark halo to stay readable.
+  const label =
+    "pointer-events-none absolute top-0 left-0 font-mono text-[11px] whitespace-nowrap opacity-0 [text-shadow:0_0_3px_#000,0_0_6px_#000,0_0_10px_#000]";
 
   return (
     <div className="relative flex h-dvh w-full flex-col overflow-hidden bg-paper text-ink">
@@ -215,6 +217,11 @@ export default function Sim() {
               >
                 {stop?.label}
               </span>
+              {stop?.notes?.map((n) => (
+                <span key={n.id} ref={(el) => void (names.current[n.id] = el)} className={`${label} text-ink`}>
+                  {n.text}
+                </span>
+              ))}
               {near.map((n, i) => (
                 <span
                   key={n.name}
@@ -246,7 +253,7 @@ export default function Sim() {
             {clashes.length > 0 && (
               <div
                 role="alert"
-                className="absolute inset-x-4 bottom-4 max-w-xl rounded-lg border-2 bg-paper/90 p-3"
+                className="absolute inset-x-4 bottom-4 max-w-xl rounded-lg border-2 bg-paper/95 p-3 backdrop-blur-sm"
                 style={{ borderColor: ROSE }}
               >
                 <p className="font-mono text-[11px] font-semibold tracking-[.1em]" style={{ color: ROSE }}>
@@ -265,7 +272,7 @@ export default function Sim() {
             {stop && (
               <section
                 ref={card}
-                className="absolute top-4 left-4 right-36 max-w-md rounded-lg border border-faint bg-paper/85 p-3"
+                className="absolute top-4 left-4 right-36 max-w-md rounded-lg border border-faint bg-paper/95 p-3 shadow-lg shadow-black/40 backdrop-blur-sm"
               >
                 <div className="flex items-center justify-between gap-2">
                   <p className={KICK}>
@@ -292,7 +299,7 @@ export default function Sim() {
                 <h2 data-rise className="mt-1.5 font-semibold" style={{ color: stop.clash ? ROSE : undefined }}>
                   {stop.title}
                 </h2>
-                <p data-rise className="mt-1 text-[13px] leading-snug text-page-ink2">
+                <p data-rise className="mt-1 text-[14px] leading-snug text-ink/85">
                   {stop.words}
                 </p>
                 {stop.time && drawn && (
