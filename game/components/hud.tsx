@@ -4,7 +4,8 @@ import { useGame } from "@/components/game-provider";
 import { Menu } from "@/components/menu";
 import { useShown } from "@/components/costs";
 import { useSchedule } from "@/components/picks";
-import { LONG_QUIET, Quiet } from "@/components/quiet";
+import { Quiet } from "@/components/quiet";
+import { announceJump, Arrived, type Snap, Specks, useJumpYear, useSnap, Warp } from "@/components/jump";
 import { tenths, yearText } from "@/lib/game/clock";
 import { ceiling, drawAt, kt, matterAt, ordered, schedule, searchOf, sharesAt, shortAt } from "@/lib/game/plan";
 import { combedAt } from "@/lib/sim/works";
@@ -66,10 +67,13 @@ function Meter({
 function Skip() {
   const { save, year, skipTo } = useGame();
   // A skip past a long quiet says what passed. 2026-10-30.
-  const [leap, setLeap] = useState<{ from: number; to: number } | null>(null);
+  const [leap, setLeap] = useState<{ from: number; to: number; snap: Snap } | null>(null);
+  const snapshot = useSnap();
+  const [why, setWhy] = useState<string | null>(null);
   const tenth = year === null ? null : Math.floor(year * 10) / 10;
   // Undefined while we ask, null once the server says nothing comes. 2026-10-30.
   const [next, setNext] = useState<number | null | undefined>(undefined);
+  const [hover, setHover] = useState(false);
   const seed = save?.seed;
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const query = useMemo(() => knownQuery(save, tenth), [tenth, save?.plan, save?.will]);
@@ -78,10 +82,21 @@ function Skip() {
     let live = true;
     fetch(`/api/next?seed=${seed}&${query}`)
       .then((r) => (r.ok ? r.json() : null))
-      .then((v: { next: number | null } | null) => live && setNext(v ? v.next : undefined), () => live && setNext(undefined));
+      .then(
+        (v: { next: number | null; why?: string | null } | null) => {
+          if (!live) return;
+          setNext(v ? v.next : undefined);
+          setWhy(v?.why ?? null);
+        },
+        () => live && setNext(undefined),
+      );
     return () => void (live = false);
   }, [seed, query, tenth]);
-  const quiet = leap && <Quiet from={leap.from} to={leap.to} onClose={() => setLeap(null)} />;
+  const quiet = leap && (
+    <Quiet key={leap.to} from={leap.from} to={leap.to} onClose={() => setLeap(null)}>
+      <Arrived from={leap.from} to={leap.to} snap={leap.snap} />
+    </Quiet>
+  );
   // A stop behind us is stale, while the server answers for the Year we skipped to.
   if (tenth === null || next === undefined || (next !== null && next <= tenth)) return quiet;
   // The link vanished with no word until 2026-10-30, and players thought it broke.
@@ -98,15 +113,24 @@ function Skip() {
   const to = Math.max(Math.ceil(next * 10 - 1e-9) / 10, tenth + 0.1);
   return (
     <>
+      {/* A pill with faint specks of light, named for what it does: "Next" read as unclear in play. 2026-11-01. */}
       <button
         onClick={() => {
-          setLeap(to - tenth >= LONG_QUIET ? { from: tenth, to } : null);
+          setLeap({ from: tenth, to, snap: snapshot() });
+          announceJump(year ?? tenth, to);
           skipTo(to);
         }}
-        className="ml-2 text-you"
+        onPointerEnter={() => setHover(true)}
+        onPointerLeave={() => setHover(false)}
+        onFocus={() => setHover(true)}
+        onBlur={() => setHover(false)}
+        className="relative -my-1 ml-2 inline-flex h-7 items-center rounded-full border border-you/60 bg-you/10 px-3 text-[12.5px] font-medium text-you transition-colors hover:bg-you/20"
         title="Jump ahead to when something new happens"
       >
-        Next: Year {yearText(to)} ›
+        <Specks on={hover} />
+        Jump to {yearText(to)}
+        {why && <span className="ml-1.5 font-normal text-ink/70">· {why}</span>}
+        <span className="ml-1">›</span>
       </button>
       {quiet}
     </>
@@ -120,6 +144,8 @@ export function Hud() {
   const done = useMemo(() => schedule(plan, scale), [plan, scale]);
   const hint = !!adding;
   const y = year === null ? null : tenths(year);
+  // Through a jump, the Year counts up. 2026-11-01.
+  const shown = useJumpYear(year);
   const now = Math.max(0, y ?? 0);
   const matter = matterAt(plan, done, now);
   const short = shortAt(plan, done, now);
@@ -141,10 +167,11 @@ export function Hud() {
     >
       <div className="row-span-2 self-center">
         <Menu />
+        <Warp />
       </div>
       <span data-year className="text-right text-[15px] font-medium wide:col-start-3">
         {/* To hundredths, so the Year visibly ticks, a hundredth every 3 seconds, and the pace needs no words. 2026-11-01. */}
-        {!save ? "" : `Year ${Math.max(0, year ?? 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+        {!save ? "" : `Year ${Math.max(0, shown ?? 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
       </span>
       <span className="text-right text-xs text-muted wide:col-start-3">
         {/* Before Begin, the count of what we would do first, which opens Begin. */}

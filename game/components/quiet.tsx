@@ -23,7 +23,9 @@ const gy = (y: number) => 90 - y * PX;
 /** A skip at least this long, in Years, is a long quiet. */
 export const LONG_QUIET = 100;
 
-export function Quiet({ from, to, onClose }: { from: number; to: number; onClose(): void }) {
+export function Quiet({ from, to, onClose, children }: { from: number; to: number; onClose(): void; children?: React.ReactNode }) {
+  // Every jump says what reached us, and a long one says what the quiet held too. 2026-11-01.
+  const long = to - from >= LONG_QUIET;
   const { plan } = usePlan();
   const { done } = useSchedule();
   const { save } = useGame();
@@ -62,8 +64,13 @@ export function Quiet({ from, to, onClose }: { from: number; to: number; onClose
       role="status"
       className="absolute top-full right-4 z-30 mt-2 flex w-[min(340px,calc(100vw-32px))] flex-col gap-2.5 rounded-xl border border-faint bg-panel p-3.5 text-left shadow-lg wide:right-6"
     >
-      <span className="font-mono text-[10px] tracking-[.1em] text-muted uppercase">A long quiet</span>
-      <b className="-mt-1.5 text-[17px] leading-snug font-semibold">{Math.round(span).toLocaleString("en-US")} Years passed</b>
+      <span className="font-mono text-[10px] tracking-[.1em] text-muted uppercase">
+        {long ? "A long quiet" : "We jumped ahead"} · {span < 10 ? span.toFixed(1) : Math.round(span).toLocaleString("en-US")} Years
+      </span>
+      <b className="-mt-1.5 text-[17px] leading-snug font-semibold">Year {yearText(to)}</b>
+      {children}
+      {long && (
+      <>
       <svg viewBox="0 0 300 34" className="w-full" aria-hidden>
         <line x1="4" x2="296" y1="14" y2="14" className="stroke-track" strokeWidth="3" strokeLinecap="round" />
         <line data-fill x1="4" x2="296" y1="14" y2="14" stroke="var(--you)" strokeWidth="3" strokeLinecap="round" />
@@ -81,7 +88,7 @@ export function Quiet({ from, to, onClose }: { from: number; to: number; onClose
       <p data-q className="text-[13px] leading-snug text-page-ink2">
         {/* The skip stops because something new has come, so the quiet ends here. A playtest read "Nothing new" as the
             stop's own news, 2026-11-01. */}
-        {`Nothing new reached us until Year ${yearText(to)}, when something did. ${watches.length ? "On watch all the while:" : "No watch of ours was running."}`}
+        {`Nothing else reached us on the way. ${watches.length ? "On watch all the while:" : "No watch of ours was running."}`}
       </p>
       {watches.length > 0 && (
         <ul data-q className="flex flex-wrap gap-x-3 gap-y-1.5">
@@ -144,6 +151,8 @@ export function Quiet({ from, to, onClose }: { from: number; to: number; onClose
         about 50 ly off, and they keep quiet. A young one’s warm glow reaches us about once in 50 Years, if we watch for
         it. Each quiet Year tells us where they are not.
       </p>
+      </>
+      )}
       <button data-q onClick={onClose} className="h-9 self-start rounded-full border border-ink px-4 text-[13px] font-medium">
         Go on
       </button>

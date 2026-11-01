@@ -2,7 +2,7 @@ import { schedule } from "@/lib/game/plan";
 import { rockAt, rockOf } from "@/lib/game/rocks";
 import { skyOf } from "@/lib/game/natural";
 import { kitOf } from "@/lib/game/reach";
-import { nextStop } from "@/lib/sim/next";
+import { nextStopWhy } from "@/lib/sim/next";
 import { earthKnows, willKnows } from "@/lib/sim/knowledge";
 import { moonSearchEnds, tourEnds } from "@/lib/sim/minds";
 import { readGifts, readLater, readColony, readLenses, readObserve, readSentinels, readSeeds, readQueue, readStops } from "./orders";
@@ -88,10 +88,21 @@ export async function next(req: Request) {
   const rock = rockAt(rockOf(seed), plan, done, year);
   // And the Years the Moon Search and the Asteroid Tour end, each saying so on Build. 2026-10-30.
   const ends = [
-    done["Moon Search"] == null ? null : moonSearchEnds(done["Moon Search"]),
-    done["Asteroid Tour"] == null ? null : tourEnds(done["Asteroid Tour"]),
+    { at: done["Moon Search"] == null ? null : moonSearchEnds(done["Moon Search"]), why: "Moon Search ends" },
+    { at: done["Asteroid Tour"] == null ? null : tourEnds(done["Asteroid Tour"]), why: "Asteroid Tour ends" },
   ];
   // Betelgeuse's end, once, the one natural event that stops a skip. 2026-10-30.
-  const stop = nextStop(ahead, year, done, [...(rock ? [rock.found, rock.pushed ? rock.lands : null, rock.strikes] : []), ...ends, skyOf(seed).betelgeuse]);
-  return Response.json({ next: stop, ahead: AHEAD });
+  // And why, in words that spoil nothing: what is ours is named, the sky's is only new. 2026-11-01.
+  const stop = nextStopWhy(ahead, year, done, [
+    ...(rock
+      ? [
+          { at: rock.found, why: "something new in the sky" },
+          { at: rock.pushed ? rock.lands : null, why: "our push reaches the rock" },
+          { at: rock.strikes, why: "the rock arrives" },
+        ]
+      : []),
+    ...ends,
+    { at: skyOf(seed).betelgeuse, why: "something new in the sky" },
+  ]);
+  return Response.json({ next: stop?.at ?? null, why: stop?.why ?? null, ahead: AHEAD });
 }

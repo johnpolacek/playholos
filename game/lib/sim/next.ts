@@ -12,18 +12,39 @@ export const GLOW_GAP = 1000;
 
 /** The earliest Year after `year` that anything in `ahead`, what Earth will know by some later Year, became known. */
 export function nextKnown(ahead: EarthView, year: number): number | null {
+  return nextKnownWhy(ahead, year)?.at ?? null;
+}
+
+/** The kind of thing that comes next, said without spoiling the sky: word from our own craft, a signal, a reading, or
+ *  something new in the sky. The Jump button names it, 2026-11-01: a jump to a bare Year read as unexplained. */
+export type Why = string;
+export function whyOf(path: readonly string[]): Why {
+  const [top] = path;
+  const key = path.at(-1);
+  if (top === "visits" || top === "colony" || key === "near" || key === "home" || (top === "minds" && path.includes("seedsLost"))) return "word from our craft";
+  if (top === "heard" || key === "warned" || (top === "minds" && path.includes("answer"))) return "a signal reaches us";
+  if (top === "felt" || top === "proxima") return "a new reading of a world";
+  return "something new in the sky";
+}
+
+/** The earliest Year after `year` that anything in `ahead` became known, and what kind of thing it is. */
+export function nextKnownWhy(ahead: EarthView, year: number): { at: number; why: Why } | null {
   let best: number | null = null;
-  const walk = (x: unknown, key = "") => {
+  let where: string[] = [];
+  const walk = (x: unknown, key = "", path: string[] = []) => {
     if (typeof x === "number") {
-      if (WHEN.has(key) && x > year + 1e-6 && (best === null || x < best)) best = x;
+      if (WHEN.has(key) && x > year + 1e-6 && (best === null || x < best)) {
+        best = x;
+        where = path;
+      }
     } else if (Array.isArray(x)) {
       // A list of numbers is a place, as [ra, dec, d], not a time.
-      if (!x.every((v) => typeof v === "number")) for (const v of x) walk(v, key);
+      if (!x.every((v) => typeof v === "number")) for (const v of x) walk(v, key, path);
     } else if (x && typeof x === "object") {
       // A warm glow shows on Scan once ranged, not when first seen: a stop then found nothing new there. Playtest
       // 2026-10-30.
       // A seed gone silent shows once its silence is known, not at the Year it was lost. 2026-11-01.
-      for (const [k, v] of Object.entries(x)) if (!(k === "seen" && "ranged" in x) && !(k === "at" && "known" in x)) walk(v, k);
+      for (const [k, v] of Object.entries(x)) if (!(k === "seen" && "ranged" in x) && !(k === "at" && "known" in x)) walk(v, k, [...path, k]);
     }
   };
   // Only the first cold glow stops the skip. The Halo Survey finds one every few Years, and each stopping it took about
@@ -40,14 +61,27 @@ export function nextKnown(ahead: EarthView, year: number): number | null {
     .filter((t) => (t - last >= GLOW_GAP ? ((last = t), true) : false))
     .map((t) => ({ seen: t }));
   walk({ ...ahead, minds: ahead.minds && { ...ahead.minds, flashes, glows: glows.map((g, i) => (i === 0 ? g : { near: g.near })) } });
-  return best;
+  return best === null ? null : { at: best, why: whyOf(where) };
 }
 
 /** The next Year to stop at: the soonest of what Earth will learn, the builds we finish, and any other Year something
  *  happens, such as a rock found, pushed aside or striking. */
 export function nextStop(ahead: EarthView, year: number, done: Record<string, number | null>, also: readonly (number | null)[] = []): number | null {
+  return nextStopWhy(ahead, year, done, also.map((at) => ({ at, why: "" })))?.at ?? null;
+}
+
+/** The next stop, and why: a build of ours done names it, and any other Year comes with its own words. */
+export function nextStopWhy(
+  ahead: EarthView,
+  year: number,
+  done: Record<string, number | null>,
+  also: readonly { at: number | null; why: Why }[] = [],
+): { at: number; why: Why } | null {
   const later = (t: number | null): t is number => t !== null && t > year + 1e-6;
-  const times = [nextKnown(ahead, year), ...Object.values(done).filter(later), ...also.filter(later)];
-  const real = times.filter((t): t is number => t !== null);
-  return real.length ? Math.min(...real) : null;
+  const all = [
+    nextKnownWhy(ahead, year),
+    ...Object.entries(done).flatMap(([name, at]) => (later(at) ? [{ at, why: `${name} done` }] : [])),
+    ...also.flatMap((x) => (later(x.at) ? [{ at: x.at, why: x.why }] : [])),
+  ].filter((x): x is { at: number; why: Why } => x !== null);
+  return all.length ? all.reduce((a, b) => (b.at < a.at ? b : a)) : null;
 }
