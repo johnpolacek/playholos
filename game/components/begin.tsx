@@ -59,7 +59,8 @@ const STEPS: Step[] = [
       s.plan?.builds.length
         ? `${s.plan.builds.join(", ")}. ${over ? `${Math.round(short * 100)}% more than our compute carries.` : `${full ? "All" : `${Math.floor(used * 100)}%`} of our compute in use.`}`
         : "Enough to put all our compute to work at Year 0.",
-    done: (_, { full }) => full,
+    // Past 100% all our compute is at work too, so the step stays done. It went back to undone. Playtest 2026-11-01.
+    done: (_, { full, over }) => full || over,
     to: "/build?tour",
   },
   {
