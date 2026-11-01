@@ -1,6 +1,8 @@
 import { spawn } from "node:child_process";
+import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import type { IncomingMessage } from "node:http";
 import { tmpdir } from "node:os";
+import path from "node:path";
 import { createUIMessageStream, pipeUIMessageStreamToResponse, type UIMessage } from "ai";
 import type { Plugin } from "vite";
 import { readMindPick, type Usage } from "./lib/access.ts";
@@ -67,7 +69,12 @@ export const mindCli: Plugin = {
       }
       const { system } = (await told.json()) as { system: string };
       const { model, effort } = readMindPick(body.pick);
-      const args = [...CLI_BARE, "--model", model, "--effort", effort, "--system-prompt", system + talkOf(body.messages)];
+      // The system prompt goes by file: late in a game it passes 128 KiB, past what Linux takes as one argument, and
+      // spawn failed with E2BIG. Playtest 2026-11-01.
+      const dir = mkdtempSync(path.join(tmpdir(), "holos-mind-"));
+      const promptFile = path.join(dir, "system.txt");
+      writeFileSync(promptFile, system + talkOf(body.messages));
+      const args = [...CLI_BARE, "--model", model, "--effort", effort, "--system-prompt-file", promptFile];
       args.push("--output-format", "stream-json", "--verbose", "--include-partial-messages");
       const stream = createUIMessageStream({
         execute: ({ writer }) =>
@@ -111,6 +118,7 @@ export const mindCli: Plugin = {
             });
             child.stderr.on("data", (d) => (err += d));
             child.on("error", () => reject(new Error("No claude CLI on this machine.")));
+            child.on("close", () => rmSync(dir, { recursive: true, force: true }));
             child.on("close", (code) => (code ? reject(new Error(err.trim().slice(0, 200) || `claude exited ${code}`)) : resolve()));
             child.stdin.end(textOf(body.messages.at(-1)));
           }),
