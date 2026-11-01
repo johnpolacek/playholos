@@ -172,7 +172,8 @@ export async function mind(req: Request) {
     builds: describeBuilds(),
     queue: describeQueue(plan, done, year),
     offers: describeOffers(plan, scale, { ...done, [FOUND]: inPool(seed) ? (rockOf(seed)?.found ?? null) : null, [WATCHED]: watched }, year),
-    sent: describeSent(readSent(sent), year),
+    // A far warm glow's range, by Scan's name for it, so the Mind dates a message there by the range we know.
+    sent: describeSent(readSent(sent), year, Object.fromEntries((view?.minds?.flashes ?? []).flatMap((f, i) => (f.range ? [[`Warm glow ${i + 1}`, f.range]] : [])))),
     known,
     // The natural sky so far: stars exploding and merging, and Betelgeuse once gone. 2026-10-30.
     sky: inPool(seed) ? describeSky(seed, year, done["Warm Sky Watch"] ?? null) : "",

@@ -6,7 +6,7 @@ import type { Aim } from "@/components/picks";
 import { ListHead } from "@/components/tab-head";
 import { yearText, YEAR_0 } from "@/lib/game/clock";
 import { events } from "@/lib/game/plan";
-import { dates } from "@/lib/game/sends";
+import { dates, target } from "@/lib/game/sends";
 import type { Sent } from "@/lib/game/types";
 import { useSchedule } from "@/components/picks";
 import { strikesOf } from "@/lib/game/reach";
@@ -46,10 +46,12 @@ function sentRows(sent: Sent[]): Row[] {
         key: `sent${i}`, name: EVERYWHERE, at: s.y + s.reach!, kind: "send", msg, sent: YEAR_0 + s.y, ly: s.reach,
         note: s.repeat && s.stopped === undefined ? `Calling, readable to ${s.reach} ly` : `Readable to ${s.reach} ly`,
       }];
-    const { lands, back } = dates(s.y, s.d!, s.size);
-    const base = { name: s.to, kind: "send" as const, msg, sent: YEAR_0 + s.y, ly: s.d };
+    // A far warm glow has only a range, so its rows count to the near end, at the soonest. Playtest 2026-11-01.
+    const range = target(s.to)?.range;
+    const { lands, back } = dates(s.y, range?.[0] ?? s.d!, s.size);
+    const base = { name: s.to, kind: "send" as const, msg, sent: YEAR_0 + s.y, ly: s.d, ...(range ? { range } : {}) };
     return [
-      { ...base, key: `sent${i}`, note: "Our message arrives", at: lands },
+      { ...base, key: `sent${i}`, note: range ? "Our message arrives, at the soonest" : "Our message arrives", at: lands },
       { ...base, key: `sent${i}back`, note: "An answer could come, at the soonest", at: back, kind: "reply" },
     ];
   });

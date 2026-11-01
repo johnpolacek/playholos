@@ -53,7 +53,9 @@ export const WATCHER = { name: "The watcher", ra: 0, dec: 0, d: 1.3 / 3.156e7 };
 /** How far a message can be aimed: any lead's direction in our Galaxy, a warm glow thousands of light-years off
  *  included. Light needs no star catalog, only a direction. 2026-10-31. */
 export const REACH_LY = 200_000;
-type Star = { name: string; ra: number; dec: number; d: number };
+/** A star, and for a warm glow too far for parallax, the range we know in place of its distance. The sim keeps the
+ *  true distance, and no screen or Mind line shows it. Playtest 2026-11-01: a send card read 10178.408519999579 ly. */
+type Star = { name: string; ra: number; dec: number; d: number; range?: [number, number] };
 /** Places on this game's leads past the 50 ly census: a cold glow, a warm body, a warm glow far off, set by Scan as
  *  its leads come. 2026-10-31. */
 const KNOWN = new Map<string, Star>();
@@ -117,9 +119,15 @@ export function readSent(list: unknown): Sent[] {
 }
 
 const one = (x: number) => x.toFixed(1);
+const lyText = (x: number) => x.toLocaleString("en-US", { maximumFractionDigits: x >= 1000 ? 0 : 1 });
+
+/** How far a star is, as we know it: its range where we have only that, else its distance. */
+export function farText(s: { d: number; range?: [number, number] }) {
+  return s.range ? `${lyText(s.range[0])} to ${lyText(s.range[1])} ly` : `${lyText(s.d)} ly`;
+}
 
 /** Our messages in words, for the Mind: each one's star, when it left and lands, what it holds, and any lie. */
-export function describeSent(sent: Sent[], year: number | null): string {
+export function describeSent(sent: Sent[], year: number | null, ranges: Record<string, [number, number]> = {}): string {
   if (!sent.length) return "";
   const now = year ?? 0;
   const lines = sent.map((s) => {
@@ -127,6 +135,12 @@ export function describeSent(sent: Sent[], year: number | null): string {
     if (s.to === "everywhere") {
       const run = s.repeat ? (s.stopped !== undefined ? `, repeated until we stopped it at Year ${yearText(s.stopped)}` : ", repeating until the Will stops it") : ", once";
       return `- Every way at once, from Year ${yearText(s.y)}${run}, readable to ${s.reach} ly: ${s.travels}${lie}`;
+    }
+    const range = ranges[s.to] ?? target(s.to)?.range;
+    if (range) {
+      // Only a range: it lands, and an answer could come, somewhere across it, never at a Year we can name.
+      const [a, b] = [dates(s.y, range[0], s.size), dates(s.y, range[1], s.size)];
+      return `- To ${s.to}, ${farText({ d: s.d!, range })}, a range, not a distance, sent from Year ${yearText(s.y)}. It lands somewhere from Year ${yearText(a.lands)} to Year ${yearText(b.lands)}, we can't say when. The soonest an answer could be home is somewhere from Year ${yearText(a.back)} to Year ${yearText(b.back)}. It holds: ${s.travels}${lie}`;
     }
     const { sendYears, lands, back } = dates(s.y, s.d!, s.size);
     // A big message takes Years to send, at our dishes' pace, and lands over as long. Said, since the Mind took a

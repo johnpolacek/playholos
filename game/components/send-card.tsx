@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useGame } from "@/components/game-provider";
 import { tenths, yearText } from "@/lib/game/clock";
-import { dates, type Draft, sendTime, target, WATCHER } from "@/lib/game/sends";
+import { dates, type Draft, farText, sendTime, target, WATCHER } from "@/lib/game/sends";
 import sky from "@/lib/game/sky.json";
 import { GRID_2040, noticeReach, powerFor, readReach, SIZES } from "@/lib/sim/messages";
 
@@ -58,6 +58,12 @@ function Aimed({ id, draft, asked }: { id: string; draft: Draft; asked: string }
   const y = sent?.y ?? year ?? 0;
   if (!star) return <p className="pl-3 font-mono text-[11px] text-muted">We know no star named {draft.to} on our leads or within 50 light-years.</p>;
   const { sendYears, lands, back } = dates(y, star.d, draft.size);
+  // Only a range for a far warm glow: it lands, and an answer could come, somewhere across it. Playtest 2026-11-01.
+  const r = star.range;
+  const span2 = (f: (x: ReturnType<typeof dates>) => number, rel: boolean) => {
+    const [a, b] = [f(dates(y, r![0], draft.size)), f(dates(y, r![1], draft.size))].map((t) => (rel ? Math.round(t - y).toLocaleString("en-US") : yearText(t)));
+    return rel ? `in ${a} to ${b} Years` : `Year ${a} to ${b}`;
+  };
   // A knock on the watcher lands in seconds, and it answers on its own terms. 2026-10-30.
   const near = star === WATCHER;
   const facts: [string, string][] = near ? [
@@ -68,14 +74,14 @@ function Aimed({ id, draft, asked }: { id: string; draft: Draft; asked: string }
     ["Sends in", sendTime(sendYears)],
     // Until it is sent, the clock runs under the card, so it counts from sending. Its Years moved as we read, 4.9 on
     // the card, then 5.0 once sent, until 2026-10-30.
-    ["Lands", sent ? `Year ${yearText(lands)}` : `in ${one(lands - y)} Years`],
-    ["Answer, soonest", sent ? `Year ${yearText(back)}` : `in ${one(back - y)} Years`],
+    ["Lands", r ? span2((d) => d.lands, !sent) : sent ? `Year ${yearText(lands)}` : `in ${one(lands - y)} Years`],
+    ["Answer, soonest", r ? span2((d) => d.back, !sent) : sent ? `Year ${yearText(back)}` : `in ${one(back - y)} Years`],
   ];
   return (
     <div className={frame}>
       <div className="flex items-baseline justify-between">
         <span className={`${lab} text-you`}>To</span>
-        <span className="font-mono text-[11px] text-muted">{star === WATCHER ? "1.3 light-seconds" : `${star.d} ly`}</span>
+        <span className="font-mono text-[11px] text-muted">{star === WATCHER ? "1.3 light-seconds" : farText(star)}</span>
       </div>
       <b className="-mt-2 text-[15px] font-semibold">{star.name}</b>
       <Travels draft={draft} />
@@ -88,7 +94,7 @@ function Aimed({ id, draft, asked }: { id: string; draft: Draft; asked: string }
         ))}
       </div>
       {sent ? (
-        <p className="font-mono text-[11px] text-ok">Sent at Year {yearText(sent.y)} · on its way, lands Year {yearText(lands)}</p>
+        <p className="font-mono text-[11px] text-ok">Sent at Year {yearText(sent.y)} · on its way, lands {r ? span2((d) => d.lands, false) : `Year ${yearText(lands)}`}</p>
       ) : (
         <Buttons label="Send" onSend={() => send({ ...draft, to: star.name, d: star.d, ...(star.d > 50 ? { ra: star.ra, dec: star.dec } : {}), id, y: year ?? 0, asked })} />
       )}

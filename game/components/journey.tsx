@@ -31,6 +31,8 @@ export interface Row {
   msg?: string;
   sent?: number;
   ly?: number;
+  /** Only a range, for a far warm glow: shown in place of ly. Playtest 2026-11-01. */
+  range?: [number, number];
   /** A bullet at a tenth of light speed, ours or theirs: its star's real distance, since `ly` is its Years of flight.
    *  2026-10-28. */
   bullet?: { d: number; theirs?: boolean };
@@ -103,7 +105,7 @@ function Journey({ row, now, shown }: { row: Row; now: number; shown: boolean })
           </span>
         ) : row.ly !== undefined && (
           <span>
-            {`${lyOf(row.ly)} ly${reply ? " there and back" : ""}`}
+            {`${row.range ? `${lyOf(row.range[0])} to ${lyOf(row.range[1])}` : lyOf(row.ly)} ly${reply ? " there and back" : ""}`}
             {!theirs && <span className={shown ? "text-you" : ""}> ↗</span>}
           </span>
         )}
