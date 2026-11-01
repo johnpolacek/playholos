@@ -5,7 +5,7 @@ import { Menu } from "@/components/menu";
 import { useShown } from "@/components/costs";
 import { useSchedule } from "@/components/picks";
 import { LONG_QUIET, Quiet } from "@/components/quiet";
-import { realTime, tenths, yearText, YEAR_0 } from "@/lib/game/clock";
+import { tenths, yearText } from "@/lib/game/clock";
 import { ceiling, drawAt, kt, matterAt, ordered, schedule, searchOf, sharesAt, shortAt } from "@/lib/game/plan";
 import { combedAt } from "@/lib/sim/works";
 import { knownQuery } from "@/lib/game/known-query";
@@ -120,8 +120,6 @@ export function Hud() {
   const done = useMemo(() => schedule(plan, scale), [plan, scale]);
   const hint = !!adding;
   const y = year === null ? null : tenths(year);
-  // The Will on a refuge's slow clock sees the sky's Years go by faster. 2026-10-26.
-  const slow = save?.will && year !== null && year >= save.will.at ? save.will.rate : 1;
   const now = Math.max(0, y ?? 0);
   const matter = matterAt(plan, done, now);
   const short = shortAt(plan, done, now);
@@ -145,13 +143,14 @@ export function Hud() {
         <Menu />
       </div>
       <span data-year className="text-right text-[15px] font-medium wide:col-start-3">
-        {!save ? "" : `Year ${yearText(y ?? 0)}`}
+        {/* To hundredths, so the Year visibly ticks, a hundredth every 3 seconds, and the pace needs no words. 2026-11-01. */}
+        {!save ? "" : `Year ${Math.max(0, year ?? 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
       </span>
       <span className="text-right text-xs text-muted wide:col-start-3">
         {/* Before Begin, the count of what we would do first, which opens Begin. */}
         {save && y !== null && (
           <>
-            {(YEAR_0 + y).toFixed(1)} · 1 Year = <span className="font-mono tabular-nums">{realTime(1 / slow)}</span>
+            {/* The calendar year and the pace read as noise beside the Year. Removed 2026-11-01. */}
             <Skip />
           </>
         )}
