@@ -394,7 +394,9 @@ export function CostLine({ name, move, at = 0 }: { name: string; move: ReturnTyp
             )}
             {s > 1 && <circle cx="7" cy="7" r="6.6" fill="none" stroke={c} strokeDasharray="1.5 1.5" />}
           </svg>
-          {pct(s)} of our compute{name === "Thought Fields" ? ", while a campus builds" : ""}
+          {/* Past all we have, as a multiple: 1500% read as a glitch. 2026-10-31. */}
+          {s > 1 ? `${s < 10 ? s.toFixed(1).replace(/\.0$/, "") : Math.round(s)}× our compute` : `${pct(s)} of our compute`}
+          {name === "Thought Fields" ? ", while a campus builds" : ""}
         </span>
         {matter && <span>{kt(matter)}</span>}
       </span>
