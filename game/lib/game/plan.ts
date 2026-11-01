@@ -176,6 +176,54 @@ export const STARTS = BUILDS.filter(
   (b) => !["Moon Vault", "Halo Survey", "Star Mapper", "Warm Sky Watch", "Moon Search", "Asteroid Tour", "Launch Tunnel", "X-Ray Watch", "Quiet Radars", "Deuterium Works", "Fusion Drive", "Seed Ship"].includes(b.name),
 );
 
+/** A way to start, picked whole at our order's stop: its builds in the order they join the queue. Ours to pick, never
+ *  the Mind's, and the order stays ours to change. Chosen 2026-10-31. */
+export interface Package {
+  name: string;
+  /** What it does for us, in a line. */
+  what: string;
+  /** What the Mind cautions, once we pick it. */
+  says: string;
+  builds: string[];
+}
+
+// Each leads with Thought Fields, then its own builds, then small ones that fill spare compute on a richer Earth.
+export const PACKAGES: Package[] = [
+  {
+    name: "Listen first",
+    what: "Hear any knock or broadcast, by radio or laser.",
+    says: "Listening gives nothing away. It hears only minds that choose to call, and the quiet ones never do.",
+    builds: ["Thought Fields", "All-Sky Watch", "Deep Flash Watch", "Warm Sky Watch", "Halo Survey", "Asteroid Tour"],
+  },
+  {
+    name: "Look hard",
+    what: "Read the nearest worlds’ air, and search for the glow of minds.",
+    says: "Looking gives nothing away, and finds minds that stay quiet. Its finds come slowly: the Halo Survey takes 4 Years to reach 100 ly.",
+    builds: ["Thought Fields", "Infrared Telescope", "Halo Survey", "Star Mapper", "Warm Sky Watch", "Asteroid Tour"],
+  },
+  {
+    name: "Stay quiet",
+    what: "Stop our radars, watch for probes, and keep a copy of us safe.",
+    says: "Ninety years of our radar sweeps are already out there, and nothing recalls them. This only keeps us from adding more.",
+    builds: ["Thought Fields", "Quiet Radars", "X-Ray Watch", "Moon Vault", "Moon Search", "Asteroid Tour"],
+  },
+  {
+    name: "Reach out",
+    what: "Our soonest road to the nearest star, and the lift to build for it.",
+    says: "A beam strong enough to push sails is bright. Anyone looking our way while it fires could see it.",
+    builds: ["Thought Fields", "Laser Sail Array", "Launch Complex", "Orbital Yard", "Halo Survey", "Asteroid Tour"],
+  },
+];
+
+/** A package as this Earth can run it: its builds in turn, each skipped if our compute couldn't give it all it needs.
+ *  On every seeded Earth what is left uses all our compute, 2026-10-31. */
+export function packed(pkg: Package, scale: number): string[] {
+  const builds: string[] = [];
+  for (const name of pkg.builds)
+    if (sharesAt({ ...EMPTY, builds: [...builds, name] }, scale, 0).short <= 0.005) builds.push(name);
+  return builds;
+}
+
 /** What the Mind says of each build, on its page and in the walk. */
 export const SAYS: Record<string, string> = {
   "All-Sky Watch":

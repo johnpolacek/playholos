@@ -13,7 +13,7 @@ import { ListHead } from "@/components/tab-head";
 import { Welcome } from "@/components/welcome";
 import { placedOf, useWorks } from "@/components/works";
 import { tenths, yearText } from "@/lib/game/clock";
-import { BUILDS, lacks, matter, moves, needs, PAST, SAYS, STARTS } from "@/lib/game/plan";
+import { BUILDS, lacks, matter, moves, needs, packed, PACKAGES, PAST, SAYS, STARTS, type Package } from "@/lib/game/plan";
 import { SITES } from "@/lib/game/sites";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
 
@@ -135,6 +135,42 @@ function Choose({ scale, done }: { scale: number; done: Record<string, number | 
   );
 }
 
+/** Ways to start, each a card with its builds' marks: a tap queues just those, as many as our compute can give all they
+ *  need, and the order below stays ours to change. The one our queue matches is lit, and a tap on it empties the queue. */
+function Packages({ scale, picked, known }: { scale: number; picked: Package | undefined; known: boolean }) {
+  const { change } = usePlan();
+  return (
+    <>
+      <ListHead data-r left="Ways to start" right="" className="mt-4" />
+      <div data-r className="mt-1.5 grid grid-cols-2 gap-2">
+        {PACKAGES.map((p) => {
+          const on = p === picked;
+          const builds = packed(p, scale);
+          return (
+            <button
+              key={p.name}
+              disabled={!known}
+              aria-pressed={on}
+              onClick={() => change((plan) => ({ ...plan, builds: on ? [] : builds }))}
+              className={`rounded-xl border p-2.5 text-left transition-colors ${on ? "border-you bg-you/[.06]" : "border-faint hover:border-muted"}`}
+            >
+              <span className="flex items-center gap-1.5">
+                {builds.map((b) => (
+                  <span key={b} className={buildTone(b, on)}>
+                    <BuildMark name={b} size={15} still={!on} />
+                  </span>
+                ))}
+              </span>
+              <span className={`mt-2 block text-[13.5px] leading-snug font-medium ${on ? "text-you" : ""}`}>{p.name}</span>
+              <span className="mt-0.5 block text-[12px] leading-snug text-page-ink2">{p.what}</span>
+            </button>
+          );
+        })}
+      </div>
+    </>
+  );
+}
+
 /** Our compute at Year 0, drawn: how much of it the queue would use. Full is enough, and says so. Over, it says how
  *  much our order needs, as the top bar does, and what we have is drawn as part of it. */
 function ComputeBar({ used, short, full }: { used: number; short: number; full: boolean }) {
@@ -160,7 +196,9 @@ export function Tour({ onClose }: { onClose(): void }) {
   const { year } = useGame();
   const { plan } = usePlan();
   const { scale, done } = useSchedule();
-  const { used, short, over, full } = useCompute();
+  const { known, used, short, over, full } = useCompute();
+  // The way to start our queue is, if it is one, just as that card would queue it.
+  const picked = PACKAGES.find((p) => packed(p, scale).join() === plan.builds.join());
   const { set: place, pick } = useWorks();
   const { talk } = useTalk();
   const root = useRef<HTMLDivElement>(null);
@@ -322,10 +360,12 @@ export function Tour({ onClose }: { onClose(): void }) {
                         : plan.builds.length
                         ? `${Math.floor(used * 100)}% of our compute would be in use. The rest would sit idle until we queue more.`
                         : "All our compute would sit idle. We would queue enough to use it all."}
+                  {open && picked && ` ${picked.says}`}
                 </p>
                 <Told talk={talk} />
               </MindNote>
             </div>
+            {open && <Packages scale={scale} picked={picked} known={known} />}
             <Choose scale={scale} done={done} />
           </>
         ) : (
