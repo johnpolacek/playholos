@@ -98,7 +98,15 @@ export type Mode =
   | "mind"
   | "leads"
   | "beams"
-  | "works";
+  | "works"
+  | "sim";
+
+/** One mind a simulation drew, by kind: an old mind awake or asleep, a young peer, or a peer whose family never stopped
+ *  spreading, which today's sky rules out. Light-years in the atlas frame, as data/gcns-326ly.bin. 2026-11-01. */
+export interface SimMind {
+  pos: [number, number, number];
+  kind: "awake" | "asleep" | "peer" | "fills";
+}
 
 /** One screen's view of the sky. */
 export interface Show {
@@ -129,6 +137,9 @@ export interface Show {
    *  chance to 6 for almost certain, or -1 where life isn't the question. Filled in place, read each frame. 2026-10-29. */
   life?: number[];
 
+  /** For "sim": the minds a simulation drew, the place in view, light-years in the atlas frame, or none for Sol, how
+   *  far out to look from, as log10 AU, and the places whose screen positions come back through onMarks. */
+  sim?: { minds: SimMind[]; focus: [number, number, number] | null; zoom?: number; marks?: { id: string; pos: [number, number, number] }[] };
   /** For "beams": our messages on their way, each by its star, the decimal year we sent it, the light-years it goes,
    *  and whether it is the reply that could come back. */
   beams?: { star: string; sent: number; ly: number; reply: boolean }[];
@@ -578,6 +589,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
   };
   /** Where it is, the lead or the message's star, in light-years from Sol. */
   const lookedAt = () => {
+    if (spec.mode === "sim") return spec.sim?.focus ? new THREE.Vector3(...spec.sim.focus) : null;
     if (spec.mode === "beams") {
       const b = spec.beams?.[aimed()];
       return b ? targetAt(b.star) : null;
@@ -606,11 +618,12 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         const turns = [pilot.facing(-P.z, P.x), pilot.facing(P.z, -P.x)].map((a) => wrap(a - az));
         az += (Math.abs(turns[0]) < Math.abs(turns[1]) ? turns[0] : turns[1]) * k;
         // Out to a warm glow tens of thousands of ly off, too: capped near 2,000 ly until 2026-10-30, it never showed.
-        logD += (Math.min(10.3, Math.max(6.3, Math.log10(2.5 * P.length() * LY_AU))) - logD) * k;
+        const z = spec.mode === "sim" ? spec.sim?.zoom : undefined;
+        logD += ((z ?? Math.min(10.3, Math.max(6.3, Math.log10(2.5 * P.length() * LY_AU)))) - logD) * k;
         tilt += (-0.3 - tilt) * k;
       } else {
         az += drift(dt, 600);
-        logD += (7.0 - logD) * k;
+        logD += ((spec.mode === "sim" ? spec.sim?.zoom ?? 7.0 : 7.0) - logD) * k;
         tilt += (0.75 - tilt) * k;
       }
       return [logD, az, tilt, 0];
@@ -712,6 +725,9 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         return leadsPose();
       // Our messages: the same, from beside the one in view.
       case "beams":
+        return leadsPose();
+      // A simulation: the same, from beside the place in view, as far out as its stop says.
+      case "sim":
         return leadsPose();
       // Our builds: close by the one in view.
       case "works":
@@ -1964,6 +1980,51 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
               return { id, x: ((v.x + 1) / 2) * w, y: ((1 - v.y) / 2) * h, a: v.z < 1 ? p * grid : 0 };
             },
           ),
+        );
+      }
+    };
+  }
+
+  // ── A simulation: the minds drawn at the dials' odds, among the real stars and across the Galaxy. 2026-11-01 ──
+  function simulating() {
+    const SIZE = { awake: 8, asleep: 6, peer: 6, fills: 10 } as const;
+    const BRIGHT = { awake: 1, asleep: 0.75, peer: 0.95, fills: 1 } as const;
+    const KIND = { awake: K.mind, asleep: K.ink, peer: K.lamp, fills: K.rose } as const;
+    const coreGlow = glow({ fixed: true });
+    const haloGlow = glow({ fixed: true });
+    const v = new THREE.Vector3();
+    let built: SimMind[] | null = null;
+    let made: THREE.Points[] = [];
+    return (on: number) => {
+      const s = spec.mode === "sim" ? spec.sim : undefined;
+      if (s && s.minds !== built) {
+        for (const m of made) {
+          stars.scene.remove(m);
+          m.geometry.dispose();
+        }
+        const core = new Cloud();
+        const halo = new Cloud();
+        for (const m of s.minds) {
+          core.add(m.pos[0], m.pos[1], m.pos[2], SIZE[m.kind], BRIGHT[m.kind], KIND[m.kind]);
+          // A peer glows warm, and one that would have filled the Galaxy glows wide, so it can't be missed.
+          // Awake old minds get a halo too, so they stand out from the real stars round them.
+          if (m.kind !== "asleep") halo.add(m.pos[0], m.pos[1], m.pos[2], m.kind === "fills" ? 40 : m.kind === "awake" ? 22 : 18, 0.35, KIND[m.kind]);
+        }
+        core.add(0, 0, 0, 8, 1, K.sun);
+        made = [halo.points(haloGlow), core.points(coreGlow)];
+        stars.scene.add(...made);
+        built = s.minds;
+      }
+      coreGlow.uniforms.uOpacity.value = on;
+      haloGlow.uniforms.uOpacity.value = on * (0.75 + 0.25 * Math.sin(clock * 1.8));
+      if (s?.marks && spec.onMarks) {
+        const w = parent.clientWidth;
+        const h = parent.clientHeight;
+        spec.onMarks(
+          s.marks.map(({ id, pos }) => {
+            v.set(...pos).project(stars.camera);
+            return { id, x: ((v.x + 1) / 2) * w, y: ((1 - v.y) / 2) * h, a: v.z < 1 ? on : 0 };
+          }),
         );
       }
     };
@@ -3335,6 +3396,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
   let clues: ReturnType<typeof leading> | null = null;
   let sent: ReturnType<typeof sending> | null = null;
   let builds: ReturnType<typeof building> | null = null;
+  let drawn: ReturnType<typeof simulating> | null = null;
   let nearby: ReturnType<typeof closeUp> | null = null;
   /** Close View into another system, once one is wanted. */
   let visitor: ReturnType<typeof visiting> | null = null;
@@ -3515,7 +3577,8 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     earth.on = x < -0.2;
     // Inside another system, ours is a star behind: its own scene steps aside.
     solar.on = x < 7 && sysDown < 0.6;
-    stars.on = x < 9.4;
+    // A simulation's peers lie across the Galaxy, so its stars stay on out past it.
+    stars.on = x < 9.4 || spec.mode === "sim";
     const pPeople = present("people", dt);
     const pInherit = present("inherit", dt);
     const pReach = present("reach", dt);
@@ -3525,6 +3588,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     const pLeads = present("leads", dt);
     const pBeams = present("beams", dt);
     const pWorks = present("works", dt);
+    const pSim = present("sim", dt);
     /** How high the camera is over Earth's ground, in km. */
     const high = cam.distanceTo(earthAU) / KM_AU - 6371.0084;
     // Close by our builds, the Moon's dots carry its face, so its globe goes dark under them.
@@ -3577,6 +3641,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     }
     if (pBeams > 0) (sent ??= sending())(x, pBeams);
     if (pWorks > 0) (builds ??= building())(x, pWorks, dt);
+    if (pSim > 0) (drawn ??= simulating())(pSim);
     if (local.on && closing) (nearby ??= closeUp())(closing);
     if (spec.onScale && framing) spec.onScale((D * 149597870.7) / focal, framing.w, framing.h);
 

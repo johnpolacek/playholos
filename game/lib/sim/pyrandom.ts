@@ -1,9 +1,10 @@
 // CPython's random.Random, exactly: Mersenne Twister, seeded from an int or a string as Python 3 seeds it.
 // The calcs roll with it (calcs/seed.py, the mocks), so a roll made here matches the same roll made there.
 // Tested against Python's own output in golden.json.
-import { createHash } from "node:crypto";
+import { sha512 } from "./sha512.ts";
 
 const N = 624, M = 397;
+const TWOPI = 2 * Math.PI, LOG4 = Math.log(4), SG_MAGICCONST = 1 + Math.log(4.5);
 
 export class PyRandom {
   private mt = new Uint32Array(N);
@@ -61,6 +62,43 @@ export class PyRandom {
     return (a * 67108864 + b) / 9007199254740992;
   }
 
+  private gaussNext: number | null = null;
+
+  /** As Python's uniform(a, b). */
+  uniform(a: number, b: number): number {
+    return a + (b - a) * this.random();
+  }
+
+  /** As Python's gauss(mu, sigma): Box–Muller, keeping the pair's second for the next call. */
+  gauss(mu: number, sigma: number): number {
+    let z = this.gaussNext;
+    this.gaussNext = null;
+    if (z === null) {
+      const x2pi = this.random() * TWOPI, g2rad = Math.sqrt(-2 * Math.log(1 - this.random()));
+      z = Math.cos(x2pi) * g2rad;
+      this.gaussNext = Math.sin(x2pi) * g2rad;
+    }
+    return mu + z * sigma;
+  }
+
+  /** As Python's expovariate(lambd). */
+  expovariate(lambd: number): number {
+    return -Math.log(1 - this.random()) / lambd;
+  }
+
+  /** As Python's gammavariate(alpha, beta), for alpha above 1 only: Cheng 1977, as CPython. */
+  gammavariate(alpha: number, beta: number): number {
+    if (!(alpha > 1)) throw new Error("gammavariate is ported for alpha > 1 only");
+    const ainv = Math.sqrt(2 * alpha - 1), bbb = alpha - LOG4, ccc = alpha + ainv;
+    for (;;) {
+      const u1 = this.random();
+      if (!(1e-7 < u1 && u1 < 0.9999999)) continue;
+      const u2 = 1 - this.random();
+      const v = Math.log(u1 / (1 - u1)) / ainv, x = alpha * Math.exp(v), z = u1 * u1 * u2, r = bbb + ccc * v - x;
+      if (r + SG_MAGICCONST - 4.5 * z >= 0 || r >= Math.log(z)) return x * beta;
+    }
+  }
+
   /** One pick, as Python's choices(population, weights)[0]: cumulative weights and a right bisection. */
   choice<T>(population: readonly T[], weights: readonly number[]): T {
     const cum: number[] = [];
@@ -83,8 +121,10 @@ const ZERO = BigInt(0), WORD = BigInt(0xffffffff), BITS = BigInt(32);     // no 
 function keyOf(seed: number | bigint | string): number[] {
   let n: bigint;
   if (typeof seed === "string") {
-    const bytes = Buffer.from(seed, "utf8");
-    n = BigInt("0x" + Buffer.concat([bytes, createHash("sha512").update(bytes).digest()]).toString("hex"));
+    const bytes = new TextEncoder().encode(seed), all = new Uint8Array(bytes.length + 64);
+    all.set(bytes);
+    all.set(sha512(bytes), bytes.length);
+    n = BigInt("0x" + Array.from(all, (b) => b.toString(16).padStart(2, "0")).join(""));
   } else {
     n = BigInt(seed);
     if (n < ZERO) n = -n;

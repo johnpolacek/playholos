@@ -5,6 +5,10 @@ import golden from "./golden.json" with { type: "json" };
 import { describe, earthKnows } from "./knowledge.ts";
 import { observe } from "./observing.ts";
 import { PyRandom } from "./pyrandom.ts";
+import { sha512 } from "./sha512.ts";
+import { catalogOf, drawMinds, fillers, HOLOS_ODDS, safeTop } from "./draw-minds.ts";
+import { createHash } from "node:crypto";
+import { readFileSync } from "node:fs";
 import { hop, seedProbes } from "./spread.ts";
 import { POOL } from "./pool.ts";
 import { loadWorld } from "./world.ts";
@@ -16,6 +20,28 @@ test("the generator is CPython's, seeded from ints and strings", () => {
     const r = new PyRandom(/^\d+$/.test(key) ? BigInt(key) : key);
     assert.deepEqual(want.map(() => r.random()), want, key);
   }
+});
+
+test("the browser's SHA-512 is node's", () => {
+  for (const s of ["", "abc", "10:minds:peer:5", "x".repeat(111), "x".repeat(112), "y".repeat(300)]) {
+    const b = new TextEncoder().encode(s);
+    assert.equal(Buffer.from(sha512(b)).toString("hex"), createHash("sha512").update(b).digest("hex"), `${s.length} bytes`);
+  }
+});
+
+test("the minds draw at Holos's odds is calcs/minds.py's, in every shipped world", async () => {
+  const b = readFileSync(new URL("../../../data/gcns-326ly.bin", import.meta.url));
+  const stars = catalogOf(b.buffer.slice(b.byteOffset, b.byteOffset + b.byteLength));
+  for (const seed of POOL) {
+    const got = drawMinds(seed, stars);
+    const peers = got.peers.map(({ fills, ...p }) => (assert.ok(!fills), p));
+    assert.equal(JSON.stringify({ ...got, peers }), JSON.stringify((await loadWorld(seed)).minds), `seed ${seed}`);
+  }
+});
+
+test("spreading's limit is calcs/spread_limit.py's: under about 1 in 84 at one mind per 1,600 stars", () => {
+  assert.equal(Math.round(1 / safeTop(1600)), 84);
+  assert.ok(fillers(HOLOS_ODDS) < 0.5 && fillers({ ...HOLOS_ODDS, spreadTop: 0.05 }) > 1);
 });
 
 test("seed 10 at Year 0: one felt world, natural, and no signals: the neighbors are retired", async () => {

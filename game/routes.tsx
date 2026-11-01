@@ -39,6 +39,8 @@ export const router = createBrowserRouter([
           { path: "design", lazy: later(PAGES["/about/design"]) },
         ],
       },
+      // Simulation mode: a sky drawn at the odds we set, and a tour through it. No game. 2026-11-01.
+      { path: "sim", lazy: later(() => import("@/app/sim")) },
       // The game's colors, type and shared parts, drawn live. 2026-10-28.
       { path: "design", lazy: later(() => import("@/app/design")) },
       // Godview shows what the player can't see, so only the dev server has it.
