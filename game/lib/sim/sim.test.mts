@@ -7,6 +7,9 @@ import { observe } from "./observing.ts";
 import { PyRandom } from "./pyrandom.ts";
 import { sha512 } from "./sha512.ts";
 import { catalogOf, drawMinds, fillers, HOLOS_ODDS, safeTop } from "./draw-minds.ts";
+import { blake2b } from "./blake2b.ts";
+import { drawWorlds, HOLOS_WORLD_ODDS, keyed, RUNGS, type Host } from "./draw-worlds.ts";
+import hostsJson from "../../data/sim-hosts.json" with { type: "json" };
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { hop, seedProbes } from "./spread.ts";
@@ -37,6 +40,32 @@ test("the minds draw at Holos's odds is calcs/minds.py's, in every shipped world
     const peers = got.peers.map(({ fills, ...p }) => (assert.ok(!fills), p));
     assert.equal(JSON.stringify({ ...got, peers }), JSON.stringify((await loadWorld(seed)).minds), `seed ${seed}`);
   }
+});
+
+const hosts = hostsJson as Host[];
+
+test("the browser's BLAKE2b is Python's, as calcs/seed.py's keyed() reads it", () => {
+  const hex = (u: Uint8Array) => Buffer.from(u).toString("hex");
+  assert.equal(hex(blake2b(new TextEncoder().encode("abc"), 8)), "d8bb14d833d59559");
+  assert.equal(hex(blake2b(new TextEncoder().encode("y".repeat(200)), 8)), "21bbef050e848d31");
+  assert.ok(keyed(10, "natural", "HIP 71681") > 0 && keyed(10, "natural", "HIP 71681") < 1);
+});
+
+test("natural warm worlds at Holos's odds are calcs/seed.py's, in every shipped world", async () => {
+  const r4 = (x: number | null) => (x === null ? null : Math.round(x * 1e4) / 1e4);
+  for (const seed of POOL) {
+    const got = drawWorlds(seed, hosts).map((w) => [w.star, r4(w.d), r4(w.a), r4(w.radius), r4(w.mass), r4(w.pole), r4(w.tug), w.rung, r4(w.age), w.ageBy, r4(w.thaw)]);
+    const want = ((await loadWorld(seed)).worlds as unknown as Record<string, unknown>[]).map((w) =>
+      ["star", "d", "a", "radius", "mass", "pole", "tug", "rung", "age", "ageBy", "thaw"].map((k) => w[k]));
+    assert.deepEqual(got, want, `seed ${seed}`);
+  }
+});
+
+test("the air and animals dials nudge the physics: more air, more airy worlds; slower life, fewer with animals", () => {
+  const count = (o: Partial<typeof HOLOS_WORLD_ODDS>, rung: (typeof RUNGS)[number]) =>
+    drawWorlds(10, hosts, { ...HOLOS_WORLD_ODDS, ...o }).filter((w) => w.rung === rung).length;
+  assert.ok(count({ air: 0.9 }, RUNGS[0]) < count({}, RUNGS[0]));
+  assert.ok(count({ animals: 0.1 }, RUNGS[4]) < count({}, RUNGS[4]));
 });
 
 test("spreading's limit is calcs/spread_limit.py's: under about 1 in 84 at one mind per 1,600 stars", () => {

@@ -5,6 +5,7 @@ import { Sky, SkyArt } from "@/components/sky";
 import { DIALS, odds, round } from "@/lib/about/dials";
 import type { Dials, Mark } from "@/lib/drift";
 import { HOLOS_ODDS, type Odds } from "@/lib/sim/draw-minds";
+import type { WorldOdds } from "@/lib/sim/draw-worlds";
 import type { Ask, Drawn } from "@/lib/sim/draw-worker";
 import { clashesOf, namedOf, pointsOf, tourOf } from "@/lib/sim/tour";
 import { gsap, prefersReducedMotion } from "@/lib/motion";
@@ -35,6 +36,11 @@ export default function Sim() {
 
   const perStar = DIALS.reduce((p, d) => p * (values[d.key] ?? d.holos), 1);
   const odds_: Odds = useMemo(() => ({ starsPerMind: 1 / perStar, spreadTop: spread }), [perStar, spread]);
+  // The steps a natural world turns on, from the same dials.
+  const worldOdds: WorldOdds = useMemo(() => {
+    const v = (k: string) => values[k] ?? DIALS.find((d) => d.key === k)!.holos;
+    return { warm: v("warm"), air: v("air"), start: v("start"), last: v("last"), animals: v("animals") };
+  }, [values]);
 
   // The draw, off the page's thread. Only the latest answer counts.
   const worker = useRef<Worker | null>(null);
@@ -48,21 +54,21 @@ export default function Sim() {
     worker.current = w;
     return () => w.terminate();
   }, []);
-  const key = `${seed}:${odds_.starsPerMind}:${odds_.spreadTop}`;
+  const key = `${seed}:${odds_.starsPerMind}:${odds_.spreadTop}:${Object.values(worldOdds).join(",")}`;
   const busy = drawn?.key !== key;
   useEffect(() => {
     const t = setTimeout(() => {
-      const ask: Ask = { id: ++asked.current, key: `${seed}:${odds_.starsPerMind}:${odds_.spreadTop}`, seed, odds: odds_ };
+      const ask: Ask = { id: ++asked.current, key, seed, odds: odds_, worlds: worldOdds };
       worker.current?.postMessage(ask);
     }, 250);
     return () => clearTimeout(t);
-  }, [seed, odds_]);
+  }, [key, seed, odds_, worldOdds]);
 
-  const tour = useMemo(() => (drawn ? tourOf(drawn.minds, odds_, drawn.names) : []), [drawn, odds_]);
+  const tour = useMemo(() => (drawn ? tourOf(drawn.minds, odds_, drawn.names, drawn.worlds) : []), [drawn, odds_]);
   const clashes = useMemo(() => (drawn ? clashesOf(drawn.minds, odds_, drawn.fillers) : []), [drawn, odds_]);
-  const points = useMemo(() => (drawn ? pointsOf(drawn.minds) : []), [drawn]);
+  const points = useMemo(() => (drawn ? pointsOf(drawn.minds, drawn.worlds) : []), [drawn]);
   const stop = tour[Math.min(at, tour.length - 1)];
-  const named = useMemo(() => (drawn ? namedOf(drawn.minds, drawn.names) : []), [drawn]);
+  const named = useMemo(() => (drawn ? namedOf(drawn.minds, drawn.names, drawn.worlds) : []), [drawn]);
 
   const sim = useMemo(
     () => ({

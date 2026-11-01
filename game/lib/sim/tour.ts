@@ -1,7 +1,9 @@
 // Simulation mode's tour: the stops through a drawn sky, and what in it today's sky rules out. Pure, from the draw, so
 // gameplay could take the same words later. 2026-11-01.
 import { far, odds, round } from "@/lib/about/dials";
-import type { SimMind } from "@/lib/drift";
+import type { SimMind, WorldKind } from "@/lib/drift";
+import { skyBasis } from "../../../src/coordinates.js";
+import { ALIVE, RUNGS, type NaturalWorld } from "./draw-worlds.ts";
 import type { DrawnMinds, Odds } from "./draw-minds.ts";
 
 type Vec = [number, number, number];
@@ -21,9 +23,11 @@ export interface Stop {
 }
 
 /** The minds the map names round the place in view: the nearest old minds and the nearest peers, with what each is. */
-export function namedOf(m: DrawnMinds, names: Record<string, string>): { id: string; pos: Vec; label: string }[] {
+export function namedOf(m: DrawnMinds, names: Record<string, string>, worlds: NaturalWorld[] = []): { id: string; pos: Vec; label: string }[] {
   const ly = (d: number) => `${round(d)} ly`;
+  const short = { animals: "animals", oxygen: "oxygen", microbes: "microbes", lifeless: "" };
   return [
+    ...worlds.filter(living).slice(0, 6).map((w) => ({ id: `world-${w.star}`, pos: placeOf(w), label: `${w.name} · ${short[kindOf(w)]}` })),
     ...m.old.slice(0, 8).map((o) => ({ id: o.id, pos: o.pos, label: `${names[o.id] ?? ly(o.d)} · ${o.asleep ? "asleep" : "awake"}` })),
     ...m.peers.slice(0, 4).map((p) => ({ id: p.id, pos: p.pos, label: `peer · ${ly(p.d)}` })),
   ];
@@ -47,9 +51,19 @@ const LIKELY = Math.LN2;
 const years = (y: number) => `${round(y)} years`;
 const year = (y: number) => `Year ${Math.round(y).toLocaleString("en-US")}`;
 
-/** The map's points: each old mind and peer by kind. */
-export function pointsOf(m: DrawnMinds): SimMind[] {
+/** Where a world's star is, light-years in the atlas frame. */
+const placeOf = (w: NaturalWorld): Vec => {
+  const r = skyBasis(w.ra * 15, w.dec).radial.multiplyScalar(w.d);
+  return [r.x, r.y, r.z];
+};
+const kindOf = (w: NaturalWorld): WorldKind =>
+  w.rung === RUNGS[4] ? "animals" : w.rung === RUNGS[3] ? "oxygen" : w.rung === RUNGS[2] ? "microbes" : "lifeless";
+const living = (w: NaturalWorld) => ALIVE.includes(w.rung);
+
+/** The map's points: each natural world by how far its life has come, then each old mind and peer by kind. */
+export function pointsOf(m: DrawnMinds, worlds: NaturalWorld[] = []): SimMind[] {
   return [
+    ...worlds.map((w): SimMind => ({ pos: placeOf(w), kind: kindOf(w) })),
     ...m.old.map((o): SimMind => ({ pos: o.pos, kind: o.asleep ? "asleep" : "awake" })),
     ...m.peers.map((p): SimMind => ({ pos: p.pos, kind: p.fills ? "fills" : "peer" })),
   ];
@@ -73,8 +87,8 @@ export function clashesOf(m: DrawnMinds, odds_: Odds, fillers: number): Clash[] 
   return out;
 }
 
-/** The tour. names gives some old minds' stars by name, by mind id. */
-export function tourOf(m: DrawnMinds, o: Odds, names: Record<string, string> = {}): Stop[] {
+/** The tour. names gives some old minds' stars by name, by mind id, and worlds the natural warm worlds within 50 ly. */
+export function tourOf(m: DrawnMinds, o: Odds, names: Record<string, string> = {}, worlds: NaturalWorld[] = []): Stop[] {
   const galaxy = 2e11 / o.starsPerMind;
   const stops: Stop[] = [];
   stops.push({
@@ -85,6 +99,27 @@ export function tourOf(m: DrawnMinds, o: Odds, names: Record<string, string> = {
     zoom: 7.0,
     label: "Sol",
   });
+
+  if (worlds.length) {
+    const n = (r: (typeof RUNGS)[number]) => worlds.filter((w) => w.rung === r).length;
+    const airy = worlds.length - n(RUNGS[0]);
+    const alive = worlds.filter(living).length;
+    const best = worlds.find((w) => w.rung === RUNGS[4]) ?? worlds.find(living);
+    const count = (k: number, one: string, many: string) => `${k.toLocaleString("en-US")} ${k === 1 ? one : many}`;
+    stops.push({
+      id: "worlds",
+      title: "Worlds round us",
+      words:
+        `Within 50 light-years, ${count(worlds.length, "warm rocky world", "warm rocky worlds")}. ${airy.toLocaleString("en-US")} kept ${airy === 1 ? "its" : "their"} air. ` +
+        (alive
+          ? `Life holds on ${alive.toLocaleString("en-US")}: ${n(RUNGS[4])} with animals and forests, ${n(RUNGS[3])} showing oxygen, ${n(RUNGS[2])} with microbes hidden. On ${n(RUNGS[5])} more, life began and died. `
+          : `Life holds on none. `) +
+        (best ? `The nearest ${best.rung === RUNGS[4] ? "with animals" : "alive"} circles ${best.name}, ${far(best.d)} away.` : ""),
+      focus: best ? placeOf(best) : null,
+      zoom: best ? sideZoom(best.d) : 7.0,
+      label: best?.name,
+    });
+  }
 
   const near = m.old[0];
   const alone = near.d > 1e5;

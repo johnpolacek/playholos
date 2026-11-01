@@ -105,8 +105,10 @@ export type Mode =
  *  spreading, which today's sky rules out. Light-years in the atlas frame, as data/gcns-326ly.bin. 2026-11-01. */
 export interface SimMind {
   pos: [number, number, number];
-  kind: "awake" | "asleep" | "peer" | "fills";
+  kind: "awake" | "asleep" | "peer" | "fills" | WorldKind;
 }
+/** A natural warm world a simulation drew, by how far its life has come. */
+export type WorldKind = "animals" | "oxygen" | "microbes" | "lifeless";
 
 /** One screen's view of the sky. */
 export interface Show {
@@ -1994,9 +1996,10 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
 
   // ── A simulation: the minds drawn at the dials' odds, among the real stars and across the Galaxy. 2026-11-01 ──
   function simulating() {
-    const SIZE = { awake: 8, asleep: 6, peer: 6, fills: 10 } as const;
-    const BRIGHT = { awake: 1, asleep: 0.75, peer: 0.95, fills: 1 } as const;
-    const KIND = { awake: K.mind, asleep: K.ink, peer: K.lamp, fills: K.rose } as const;
+    const SIZE = { awake: 8, asleep: 6, peer: 6, fills: 10, animals: 8, oxygen: 6, microbes: 5, lifeless: 3 } as const;
+    const BRIGHT = { awake: 1, asleep: 0.75, peer: 0.95, fills: 1, animals: 1, oxygen: 0.9, microbes: 0.8, lifeless: 0.4 } as const;
+    // Worlds where life has come far glow warm, microbes young, and the lifeless faint.
+    const KIND = { awake: K.mind, asleep: K.ink, peer: K.lamp, fills: K.rose, animals: K.warm, oxygen: K.warm, microbes: K.young, lifeless: K.ink } as const;
     const coreGlow = glow({ fixed: true });
     const haloGlow = glow({ fixed: true });
     const v = new THREE.Vector3();
@@ -2057,7 +2060,8 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
           core.add(m.pos[0], m.pos[1], m.pos[2], SIZE[m.kind], BRIGHT[m.kind], KIND[m.kind]);
           // A peer glows warm, and one that would have filled the Galaxy glows wide, so it can't be missed.
           // Awake old minds get a halo too, so they stand out from the real stars round them.
-          if (m.kind !== "asleep") halo.add(m.pos[0], m.pos[1], m.pos[2], m.kind === "fills" ? 40 : m.kind === "awake" ? 22 : 18, 0.35, KIND[m.kind]);
+          const ring = { fills: 40, awake: 22, peer: 18, animals: 24 } as Partial<Record<SimMind["kind"], number>>;
+          if (ring[m.kind]) halo.add(m.pos[0], m.pos[1], m.pos[2], ring[m.kind]!, 0.35, KIND[m.kind]);
         }
         core.add(0, 0, 0, 8, 1, K.sun);
         made = [halo.points(haloGlow), core.points(coreGlow)];

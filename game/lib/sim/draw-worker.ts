@@ -2,6 +2,7 @@
 // of peers, a second or more of work. It reads the real census once, then draws each sky asked for. 2026-11-01.
 import { starsWithin } from "@/lib/about/dials";
 import { catalogOf, drawMinds, fillers, safeTop, type DrawnMinds, type Odds } from "./draw-minds.ts";
+import { drawWorlds, type Host, type NaturalWorld, type WorldOdds } from "./draw-worlds.ts";
 
 export interface Ask {
   id: number;
@@ -9,6 +10,7 @@ export interface Ask {
   key: string;
   seed: number;
   odds: Odds;
+  worlds: WorldOdds;
 }
 export interface Drawn {
   id: number;
@@ -20,6 +22,8 @@ export interface Drawn {
   safeTop: number;
   /** The names of old minds' stars we have names for, by mind id: the nearby stars of data/stars.json. */
   names: Record<string, string>;
+  /** The natural warm worlds within 50 ly, nearest first. */
+  worlds: NaturalWorld[];
 }
 
 /** Named stars, by place: data/stars.json, the same frame as the census, out to about 50 ly and some beyond. */
@@ -42,6 +46,7 @@ function namesOf(minds: DrawnMinds, list: Named[]): Record<string, string> {
 }
 
 let stars: ReturnType<typeof catalogOf> | null = null;
+const hosts: Promise<Host[]> = fetch(new URL("../../data/sim-hosts.json", import.meta.url)).then((r) => r.json());
 const catalog = fetch(new URL("../../../data/gcns-326ly.bin", import.meta.url))
   .then((r) => r.arrayBuffer())
   .then((b) => (stars = catalogOf(b)));
@@ -50,6 +55,7 @@ self.onmessage = async ({ data }: MessageEvent<Ask>) => {
   await catalog;
   const minds = drawMinds(data.seed, stars!, data.odds, starsWithin);
   const names = namesOf(minds, await named.catch(() => []));
-  const out: Drawn = { id: data.id, key: data.key, minds, fillers: fillers(data.odds), safeTop: safeTop(data.odds.starsPerMind), names };
+  const worlds = drawWorlds(data.seed, await hosts, data.worlds);
+  const out: Drawn = { id: data.id, key: data.key, minds, fillers: fillers(data.odds), safeTop: safeTop(data.odds.starsPerMind), names, worlds };
   (self as unknown as Worker).postMessage(out);
 };
