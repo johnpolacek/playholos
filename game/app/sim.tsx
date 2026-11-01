@@ -8,7 +8,7 @@ import type { Dials, Mark } from "@/lib/drift";
 import { HOLOS_ODDS, type Odds } from "@/lib/sim/draw-minds";
 import type { WorldOdds } from "@/lib/sim/draw-worlds";
 import type { Ask, Drawn } from "@/lib/sim/draw-worker";
-import { CENTER, OPENING, clashesOf, namedOf, pointsOf, tourOf } from "@/lib/sim/tour";
+import { UNIVERSE, clashesOf, namedOf, pointsOf, tourOf } from "@/lib/sim/tour";
 import { gsap, prefersReducedMotion } from "@/lib/motion";
 
 // Simulation mode, 2026-11-01: no game, only a sky drawn at the odds we set. The six steps from stars to minds, as on
@@ -35,6 +35,8 @@ export default function Sim() {
   const [seed, setSeed] = useState(10);
   const [drawn, setDrawn] = useState<Drawn | null>(null);
   const [at, setAt] = useState(0);
+  // The opening dive plays by itself until we step the tour ourselves.
+  const [stepped, setStepped] = useState(false);
 
   const perStar = DIALS.reduce((p, d) => p * (values[d.key] ?? d.holos), 1);
   const odds_: Odds = useMemo(() => ({ starsPerMind: 1 / perStar, spreadTop: spread }), [perStar, spread]);
@@ -94,9 +96,9 @@ export default function Sim() {
   const sim = useMemo(
     () => ({
       minds: revealed ? points : NONE,
-      // Before the first draw comes, the tour's opening: the whole Galaxy.
-      focus: stop ? stop.focus : CENTER,
-      zoom: stop?.zoom ?? OPENING,
+      // Before the first draw comes, the tour's opening: the universe we can see.
+      focus: stop ? stop.focus : null,
+      zoom: stop?.zoom ?? UNIVERSE,
       clash: stop?.clash,
       spokes,
       // The place in view first, so its name wins a crowded spot, then Sol, then the minds round us.
@@ -121,6 +123,12 @@ export default function Sim() {
       n.style.opacity = a <= 0 ? "0" : String(a * placeLabel(n, x, y, null, taken));
     }
   }, []);
+
+  useEffect(() => {
+    if (stepped || !stop?.auto) return;
+    const t = setTimeout(() => setAt((a) => a + 1), stop.auto * 1000);
+    return () => clearTimeout(t);
+  }, [stepped, stop?.auto, stop?.id]);
 
   // Each stop's card rises in as the view turns to it.
   const card = useRef<HTMLElement>(null);
@@ -241,14 +249,14 @@ export default function Sim() {
                     <button
                       className="rounded-full border border-faint px-3 py-0.5 font-mono text-[11px] disabled:opacity-30"
                       disabled={at <= 0}
-                      onClick={() => setAt((a) => Math.max(0, a - 1))}
+                      onClick={() => (setStepped(true), setAt((a) => Math.max(0, a - 1)))}
                     >
                       Back
                     </button>
                     <button
                       className="rounded-full border border-faint px-3 py-0.5 font-mono text-[11px] disabled:opacity-30"
                       disabled={at >= tour.length - 1}
-                      onClick={() => setAt((a) => Math.min(tour.length - 1, a + 1))}
+                      onClick={() => (setStepped(true), setAt((a) => Math.min(tour.length - 1, a + 1)))}
                     >
                       Next
                     </button>

@@ -27,6 +27,14 @@ Errors are combined in quadrature for display, with both originals preserved. Th
 
 Use M33 for the second object. `D25` is log10 of the major-axis diameter in units of 0.1 arcminutes; `R25` is log10 of the major/minor axis ratio. Semi-major axis in arcminutes is `10^D25 / 20`, and `b/a = 10^(−R25)`. Quoted log errors remain in the generated records. These B-band 25 mag/arcsec² contours differ from half-light ellipses and are not total galaxy boundaries.
 
+## 2MASS Redshift Survey
+
+`2mrs/2mrs.tsv` is the original VizieR response for [Huchra et al. (2012), J/ApJS/199/26](https://vizier.cfa.harvard.edu/viz-bin/VizieR?-source=J/ApJS/199/26), table3, retrieved November 1, 2026 from the Harvard mirror. Query:
+
+`https://vizier.cfa.harvard.edu/viz-bin/asu-tsv?-source=J/ApJS/199/26/table3&-out.max=unlimited&-out=RAJ2000,DEJ2000,cz,Ktmag&-oc.form=dec`
+
+`scripts/prepare-2mrs.py` turns it into `data/2mrs.bin`: each galaxy at its speed over H0 = 70 km/s per Mpc, in the atlas frame, for the simulation's view of the universe we can see.
+
 ## Rendering and regeneration
 
 Run `python3 scripts/prepare-galaxies.py` to rebuild `data/galaxies.json`, then `npm run build`. No network or third-party Python packages are required.

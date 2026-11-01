@@ -2031,10 +2031,44 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     stars.scene.add(spokes);
     let spokesOf: [number, number, number][] | undefined;
     let spokesAt = 0;
+    // The universe we can see: the 2MASS Redshift Survey's 43,000 galaxies, each placed by its speed away from us, in
+    // thousands of light-years (scripts/prepare-2mrs.py). The brightest glow warm. Past them, the edge of what light
+    // has had time to bring us, 46.5 billion light-years out. 2026-11-01.
+    const EDGE_KLY = 4.65e7;
+    // Dots of a fixed size: at these distances a galaxy is far smaller than a pixel, and would fade to nothing.
+    const surveyGlow = glow({ fixed: true });
+    let surveyAt = Infinity;
+    fetch(new URL("../../data/2mrs.bin", import.meta.url))
+      .then((r) => r.arrayBuffer())
+      .then((b) => {
+        if (gone) return;
+        const v = new Float32Array(b);
+        const survey = new Cloud();
+        for (let i = 0; i < v.length; i += 4) {
+          const k = v[i + 3];
+          survey.add(v[i], v[i + 1], v[i + 2], k < 9 ? 3.2 : 2.2, Math.min(1, Math.max(0.35, (12.5 - k) / 3.5)), k < 9 ? K.warm : K.ink);
+        }
+        cosmos.scene.add(survey.points(surveyGlow));
+        surveyAt = clock;
+      });
+    const edgeMat = new THREE.ShaderMaterial({
+      uniforms: { uColor: { value: pal[K.young] }, uOpacity: { value: 0 } },
+      vertexShader: SHELL_VERT,
+      fragmentShader: SHELL_FRAG,
+      transparent: true,
+      depthWrite: false,
+      depthTest: false,
+      blending: THREE.AdditiveBlending,
+    });
+    const edge = new THREE.Mesh(new THREE.SphereGeometry(EDGE_KLY, 96, 64), edgeMat);
+    edge.frustumCulled = false;
+    cosmos.scene.add(edge);
     const to = new THREE.Vector3();
     let aimed = "";
     let aimedAt = 0;
-    return (on: number) => {
+    return (on: number, x: number) => {
+      surveyGlow.uniforms.uOpacity.value = on * arrived(surveyAt) * ramp(x, 11.2, 12.2);
+      edgeMat.uniforms.uOpacity.value = on * ramp(x, 14.6, 15.4);
       const s = spec.mode === "sim" ? spec.sim : undefined;
       const key = s?.focus?.join() ?? "";
       if (key !== aimed) {
@@ -3717,7 +3751,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     }
     if (pBeams > 0) (sent ??= sending())(x, pBeams);
     if (pWorks > 0) (builds ??= building())(x, pWorks, dt);
-    if (pSim > 0) (drawn ??= simulating())(pSim);
+    if (pSim > 0) (drawn ??= simulating())(pSim, x);
     if (local.on && closing) (nearby ??= closeUp())(closing);
     if (spec.onScale && framing) spec.onScale((D * 149597870.7) / focal, framing.w, framing.h);
 

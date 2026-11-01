@@ -24,6 +24,8 @@ export interface Stop {
   reveal?: boolean;
   /** Lines out from Sol to our nearest stars, each with its distance. */
   spokes?: boolean;
+  /** On first opening, the tour moves on by itself after this many seconds: the dive from the universe to our Galaxy. */
+  auto?: number;
 }
 
 /** One of our nearest stars, as data/stars.json names and places it. */
@@ -70,6 +72,13 @@ const sideZoom = (ly: number) => Math.min(10.3, Math.max(6.6, Math.log10(4.5 * l
 export const CENTER: Vec = [26745, 0, 0];
 /** The opening's view, log10 AU: far enough out that the whole disk and our Sun at its edge both show. */
 export const OPENING = 9.95;
+/** The universe we can see, log10 AU: its edge, 46.5 billion light-years out, all in view. */
+export const UNIVERSE = 15.9;
+/** Andromeda, 776 kpc out, the Local Volume Database's distance, at its place in the sky. */
+const ANDROMEDA: Vec = (() => {
+  const r = skyBasis(10.6847, 41.2688).radial.multiplyScalar(2.532e6);
+  return [r.x, r.y, r.z];
+})();
 const CATALOG_LY = 326;
 /** Above about this many fillers on average, more likely than not one mind's family filled the Galaxy. */
 const LIKELY = Math.LN2;
@@ -119,6 +128,34 @@ export function clashesOf(m: DrawnMinds, odds_: Odds, fillers: number): Clash[] 
 export function tourOf(m: DrawnMinds, o: Odds, names: Record<string, string> = {}, worlds: NaturalWorld[] = [], nearest: Near[] = []): Stop[] {
   const galaxy = GALAXY_STARS / o.starsPerMind;
   const stops: Stop[] = [];
+  // The dive: from the edge of what we can see, in through the galaxies round us, to ours.
+  stops.push({
+    id: "universe",
+    title: "The universe we can see",
+    words:
+      "The bright knot at the center is 43,000 galaxies, each placed by how fast it moves away from us, out to about 2 billion light-years. Hundreds of billions more fill the rest, out to the edge of what we can see, 46 billion light-years away in every direction.",
+    focus: null,
+    zoom: UNIVERSE,
+    auto: 6,
+  });
+  stops.push({
+    id: "laniakea",
+    title: "Our corner of it",
+    words:
+      "Laniakea, the supercluster we live in: about 100,000 galaxies across 520 million light-years, all falling toward one place.",
+    focus: null,
+    zoom: 13.4,
+    auto: 5,
+  });
+  stops.push({
+    id: "group",
+    title: "Our Local Group",
+    words: "Andromeda, 2.5 million light-years away, and dozens of small galaxies, held to ours by gravity.",
+    focus: ANDROMEDA,
+    zoom: 11.0,
+    label: "Andromeda",
+    auto: 5,
+  });
   stops.push({
     id: "galaxy",
     title: "Our Galaxy",
