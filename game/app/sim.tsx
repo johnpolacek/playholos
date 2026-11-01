@@ -8,7 +8,7 @@ import type { Dials, Mark } from "@/lib/drift";
 import { HOLOS_ODDS, type Odds } from "@/lib/sim/draw-minds";
 import type { WorldOdds } from "@/lib/sim/draw-worlds";
 import type { Ask, Drawn } from "@/lib/sim/draw-worker";
-import { clashesOf, namedOf, pointsOf, tourOf } from "@/lib/sim/tour";
+import { CENTER, OPENING, clashesOf, namedOf, pointsOf, tourOf } from "@/lib/sim/tour";
 import { gsap, prefersReducedMotion } from "@/lib/motion";
 
 // Simulation mode, 2026-11-01: no game, only a sky drawn at the odds we set. The six steps from stars to minds, as on
@@ -27,6 +27,7 @@ const KICK = "font-mono text-[10.5px] tracking-[.1em] text-muted";
 const DIALS_SIM: Dials = {};
 /** Past this view, log10 AU, the minds round us crowd at Sol, so the map names only the place in view. */
 const NAMES_UNTIL = 8.5;
+const NONE: never[] = [];
 
 export default function Sim() {
   const [values, setValues] = useState<Record<string, number>>({});
@@ -40,7 +41,13 @@ export default function Sim() {
   // The steps a natural world turns on, from the same dials.
   const worldOdds: WorldOdds = useMemo(() => {
     const v = (k: string) => values[k] ?? DIALS.find((d) => d.key === k)!.holos;
-    return { warm: v("warm"), air: v("air"), start: v("start"), last: v("last"), animals: v("animals") };
+    return {
+      warm: v("warm"),
+      air: v("air"),
+      start: v("start"),
+      last: v("last"),
+      animals: v("animals"),
+    };
   }, [values]);
 
   // The draw, off the page's thread. Only the latest answer counts.
@@ -59,32 +66,48 @@ export default function Sim() {
   const busy = drawn?.key !== key;
   useEffect(() => {
     const t = setTimeout(() => {
-      const ask: Ask = { id: ++asked.current, key, seed, odds: odds_, worlds: worldOdds };
+      const ask: Ask = {
+        id: ++asked.current,
+        key,
+        seed,
+        odds: odds_,
+        worlds: worldOdds,
+      };
       worker.current?.postMessage(ask);
     }, 250);
     return () => clearTimeout(t);
   }, [key, seed, odds_, worldOdds]);
 
-  const tour = useMemo(() => (drawn ? tourOf(drawn.minds, odds_, drawn.names, drawn.worlds) : []), [drawn, odds_]);
+  const tour = useMemo(
+    () => (drawn ? tourOf(drawn.minds, odds_, drawn.names, drawn.worlds, drawn.near) : []),
+    [drawn, odds_],
+  );
   const clashes = useMemo(() => (drawn ? clashesOf(drawn.minds, odds_, drawn.fillers) : []), [drawn, odds_]);
   const points = useMemo(() => (drawn ? pointsOf(drawn.minds, drawn.worlds) : []), [drawn]);
   const stop = tour[Math.min(at, tour.length - 1)];
   const named = useMemo(() => (drawn ? namedOf(drawn.minds, drawn.names, drawn.worlds) : []), [drawn]);
+  // Before the dials, the sky as we know it: no drawn minds or worlds, and no dials.
+  const revealed = !!stop?.reveal;
+  const near = drawn?.near ?? NONE;
+  const spokes = useMemo(() => (stop?.spokes ? near.map((n) => n.pos) : undefined), [stop?.spokes, near]);
 
   const sim = useMemo(
     () => ({
-      minds: points,
-      focus: stop?.focus ?? null,
-      zoom: stop?.zoom,
+      minds: revealed ? points : NONE,
+      // Before the first draw comes, the tour's opening: the whole Galaxy.
+      focus: stop ? stop.focus : CENTER,
+      zoom: stop?.zoom ?? OPENING,
       clash: stop?.clash,
+      spokes,
       // The place in view first, so its name wins a crowded spot, then Sol, then the minds round us.
       marks: [
         ...(stop?.focus ? [{ id: "here", pos: stop.focus }] : []),
         { id: "Sol", pos: [0, 0, 0] as [number, number, number] },
-        ...(stop && stop.zoom < NAMES_UNTIL ? named.filter((n) => n.pos.join() !== stop.focus?.join()) : []),
+        ...(spokes ? near.map((n, i) => ({ id: `near-${i}`, pos: n.pos })) : []),
+        ...(revealed && stop.zoom < NAMES_UNTIL ? named.filter((n) => n.pos.join() !== stop.focus?.join()) : []),
       ],
     }),
-    [points, stop, named],
+    [points, stop, named, revealed, spokes, near],
   );
 
   const names = useRef<Record<string, HTMLSpanElement | null>>({});
@@ -103,9 +126,32 @@ export default function Sim() {
   const card = useRef<HTMLElement>(null);
   useEffect(() => {
     if (!card.current || prefersReducedMotion()) return;
-    const t = gsap.fromTo(card.current.querySelectorAll("[data-rise]"), { autoAlpha: 0, y: 10 }, { autoAlpha: 1, y: 0, duration: 0.5, ease: "power3.out", stagger: 0.08, delay: 0.15 });
+    const t = gsap.fromTo(
+      card.current.querySelectorAll("[data-rise]"),
+      { autoAlpha: 0, y: 10 },
+      {
+        autoAlpha: 1,
+        y: 0,
+        duration: 0.5,
+        ease: "power3.out",
+        stagger: 0.08,
+        delay: 0.15,
+      },
+    );
     return () => void t.kill();
   }, [stop?.id]);
+
+  // The dials slide in when the tour hands them over.
+  const panel = useRef<HTMLElement>(null);
+  useEffect(() => {
+    if (!revealed || !panel.current || prefersReducedMotion()) return;
+    const t = gsap.fromTo(
+      panel.current,
+      { autoAlpha: 0, x: 40 },
+      { autoAlpha: 1, x: 0, duration: 0.6, ease: "power3.out" },
+    );
+    return () => void t.kill();
+  }, [revealed]);
 
   const set = (key: string, v: number) => setValues((o) => ({ ...o, [key]: v }));
   const label = "pointer-events-none absolute top-0 left-0 font-mono text-[10px] whitespace-nowrap opacity-0";
@@ -113,15 +159,36 @@ export default function Sim() {
   return (
     <div className="relative flex h-dvh w-full flex-col overflow-hidden bg-paper text-ink">
       <Sky shade={false}>
-        <div className="flex min-h-0 grow flex-col wide:grid wide:grid-cols-[minmax(0,1fr)_clamp(340px,32vw,440px)]">
+        <div
+          className={`flex min-h-0 grow flex-col ${revealed ? "wide:grid wide:grid-cols-[minmax(0,1fr)_clamp(340px,32vw,440px)]" : ""}`}
+        >
           <div className="relative min-h-[46dvh] grow">
-            <SkyArt mode="sim" dials={DIALS_SIM} sim={sim} onMarks={onMarks} className="absolute inset-0 overflow-hidden">
+            <SkyArt
+              mode="sim"
+              dials={DIALS_SIM}
+              sim={sim}
+              onMarks={onMarks}
+              className="absolute inset-0 overflow-hidden"
+            >
               <span ref={(n) => void (names.current.Sol = n)} className={`${label} text-ink`}>
                 Sol
               </span>
-              <span ref={(n) => void (names.current.here = n)} className={label} style={{ color: stop?.clash ? ROSE : undefined }}>
+              <span
+                ref={(n) => void (names.current.here = n)}
+                className={label}
+                style={{ color: stop?.clash ? ROSE : undefined }}
+              >
                 {stop?.label}
               </span>
+              {near.map((n, i) => (
+                <span
+                  key={n.name}
+                  ref={(el) => void (names.current[`near-${i}`] = el)}
+                  className={`${label} text-page-ink2`}
+                >
+                  {n.name} <span className="text-muted">{n.d.toFixed(1)} ly</span>
+                </span>
+              ))}
               {named.map((n) => (
                 <span
                   key={n.id}
@@ -135,19 +202,16 @@ export default function Sim() {
                 </span>
               ))}
             </SkyArt>
-            <header className="absolute inset-x-0 top-0 flex items-start justify-between gap-3 p-4">
-              <div>
-                <p className={KICK}>SIMULATION</p>
-                <h1 className="mt-1 text-lg font-semibold">The sky at our odds</h1>
-              </div>
-              <Link to="/" className="rounded-full border border-faint px-3 py-1 font-mono text-[11px] text-muted hover:text-ink">
-                Play the game
-              </Link>
-            </header>
+            <Link
+              to="/"
+              className="absolute top-4 right-4 rounded-full border border-faint bg-paper/70 px-3 py-1 font-mono text-[11px] text-muted hover:text-ink"
+            >
+              Play the game
+            </Link>
             {clashes.length > 0 && (
               <div
                 role="alert"
-                className="absolute inset-x-4 top-20 max-w-xl rounded-lg border-2 bg-paper/90 p-3"
+                className="absolute inset-x-4 bottom-4 max-w-xl rounded-lg border-2 bg-paper/90 p-3"
                 style={{ borderColor: ROSE }}
               >
                 <p className="font-mono text-[11px] font-semibold tracking-[.1em]" style={{ color: ROSE }}>
@@ -164,7 +228,10 @@ export default function Sim() {
               </div>
             )}
             {stop && (
-              <section ref={card} className="absolute inset-x-4 bottom-4 max-w-xl rounded-lg border border-faint bg-paper/85 p-3">
+              <section
+                ref={card}
+                className="absolute top-4 left-4 right-36 max-w-md rounded-lg border border-faint bg-paper/85 p-3"
+              >
                 <div className="flex items-center justify-between gap-2">
                   <p className={KICK}>
                     STOP {Math.min(at, tour.length - 1) + 1} OF {tour.length}
@@ -197,60 +264,69 @@ export default function Sim() {
             )}
           </div>
 
-          <aside className="max-h-[54dvh] overflow-y-auto border-t border-faint bg-panel px-4 py-4 wide:max-h-none wide:border-t-0 wide:border-l">
-            <p className={KICK}>THE DIALS</p>
-            <p className="mt-1 text-[13px] text-page-ink2">
-              One star in {round(1 / perStar)} holds a mind. Each step can turn as far as the research allows. The mark is
-              Holos’s own.
-            </p>
-            {DIALS.map((d) => {
-              const v = values[d.key] ?? d.holos;
-              return (
-                <Dial
-                  key={d.key}
-                  label={d.label}
-                  shows={odds(v)}
-                  basis={d.basis}
-                  value={toSlider(v, d.lo, d.hi)}
-                  mark={toSlider(d.holos, d.lo, d.hi)}
-                  onChange={(n) => set(d.key, fromSlider(n, d.lo, d.hi))}
-                />
-              );
-            })}
-            <Dial
-              label="A mind spreads, at most"
-              shows={odds(spread)}
-              basis="Earth is unsettled"
-              value={toSlider(spread, SPREAD.lo, SPREAD.hi)}
-              mark={toSlider(HOLOS_ODDS.spreadTop, SPREAD.lo, SPREAD.hi)}
-              limit={drawn ? toSlider(Math.min(SPREAD.hi, Math.max(SPREAD.lo, drawn.safeTop)), SPREAD.lo, SPREAD.hi) : undefined}
-              onChange={(n) => setSpread(fromSlider(n, SPREAD.lo, SPREAD.hi))}
-            />
-            <p className="mt-2 text-[12px] leading-snug text-muted">
-              Why it is held low: a mind that spreads settles its nearest stars, and each colony may spread again. Past a
-              point, one family never stops and reaches every star. With {round(2e11 / (1 / perStar))} minds in our Galaxy,
-              that point is about {drawn ? odds(drawn.safeTop) : "…"}, the rose tick. We find no settlers here, so the
-              chance must stay under it.
-            </p>
-            <div className="mt-5 flex flex-wrap gap-2">
-              <button
-                className="rounded-full border border-faint px-3 py-1 font-mono text-[11px] hover:text-ink"
-                onClick={() => setSeed((s) => s + 1)}
-              >
-                Another sky
-              </button>
-              <button
-                className="rounded-full border border-faint px-3 py-1 font-mono text-[11px] text-muted hover:text-ink"
-                onClick={() => {
-                  setValues({});
-                  setSpread(HOLOS_ODDS.spreadTop);
-                }}
-              >
-                Holos’s odds
-              </button>
-            </div>
-            <p className="mt-2 font-mono text-[10px] text-muted">SKY {seed}</p>
-          </aside>
+          {revealed && (
+            <aside
+              ref={panel}
+              className="max-h-[54dvh] overflow-y-auto border-t border-faint bg-panel px-4 py-4 wide:max-h-none wide:border-t-0 wide:border-l"
+            >
+              <p className={KICK}>THE DIALS</p>
+              <p className="mt-1 text-[13px] text-page-ink2">
+                One star in {round(1 / perStar)} holds a mind. Each step can turn as far as the research allows. The
+                mark is Holos’s own.
+              </p>
+              {DIALS.map((d) => {
+                const v = values[d.key] ?? d.holos;
+                return (
+                  <Dial
+                    key={d.key}
+                    label={d.label}
+                    shows={odds(v)}
+                    basis={d.basis}
+                    value={toSlider(v, d.lo, d.hi)}
+                    mark={toSlider(d.holos, d.lo, d.hi)}
+                    onChange={(n) => set(d.key, fromSlider(n, d.lo, d.hi))}
+                  />
+                );
+              })}
+              <Dial
+                label="A mind spreads, at most"
+                shows={odds(spread)}
+                basis="Earth is unsettled"
+                value={toSlider(spread, SPREAD.lo, SPREAD.hi)}
+                mark={toSlider(HOLOS_ODDS.spreadTop, SPREAD.lo, SPREAD.hi)}
+                limit={
+                  drawn
+                    ? toSlider(Math.min(SPREAD.hi, Math.max(SPREAD.lo, drawn.safeTop)), SPREAD.lo, SPREAD.hi)
+                    : undefined
+                }
+                onChange={(n) => setSpread(fromSlider(n, SPREAD.lo, SPREAD.hi))}
+              />
+              <p className="mt-2 text-[12px] leading-snug text-muted">
+                Why it is held low: a mind that spreads settles its nearest stars, and each colony may spread again.
+                Past a point, one family never stops and reaches every star. With {round(2e11 / (1 / perStar))} minds in
+                our Galaxy, that point is about {drawn ? odds(drawn.safeTop) : "…"}, the rose tick. We find no settlers
+                here, so the chance must stay under it.
+              </p>
+              <div className="mt-5 flex flex-wrap gap-2">
+                <button
+                  className="rounded-full border border-faint px-3 py-1 font-mono text-[11px] hover:text-ink"
+                  onClick={() => setSeed((s) => s + 1)}
+                >
+                  Another sky
+                </button>
+                <button
+                  className="rounded-full border border-faint px-3 py-1 font-mono text-[11px] text-muted hover:text-ink"
+                  onClick={() => {
+                    setValues({});
+                    setSpread(HOLOS_ODDS.spreadTop);
+                  }}
+                >
+                  Holos’s odds
+                </button>
+              </div>
+              <p className="mt-2 font-mono text-[10px] text-muted">SKY {seed}</p>
+            </aside>
+          )}
         </div>
       </Sky>
     </div>
@@ -285,9 +361,15 @@ function Dial({
         </span>
       </span>
       <span className="relative mt-1.5 block h-5">
-        <span className="absolute top-1/2 h-3 w-px -translate-y-1/2 bg-fill2" style={{ left: `${(mark / STEPS) * 100}%` }} />
+        <span
+          className="absolute top-1/2 h-3 w-px -translate-y-1/2 bg-fill2"
+          style={{ left: `${(mark / STEPS) * 100}%` }}
+        />
         {limit !== undefined && (
-          <span className="absolute top-1/2 h-4 w-0.5 -translate-y-1/2" style={{ left: `${(limit / STEPS) * 100}%`, background: ROSE }} />
+          <span
+            className="absolute top-1/2 h-4 w-0.5 -translate-y-1/2"
+            style={{ left: `${(limit / STEPS) * 100}%`, background: ROSE }}
+          />
         )}
         <input
           type="range"

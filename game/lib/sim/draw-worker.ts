@@ -3,6 +3,7 @@
 import { starsWithin } from "@/lib/about/dials";
 import { catalogOf, drawMinds, fillers, safeTop, type DrawnMinds, type Odds } from "./draw-minds.ts";
 import { drawWorlds, type Host, type NaturalWorld, type WorldOdds } from "./draw-worlds.ts";
+import type { Near } from "./tour.ts";
 
 export interface Ask {
   id: number;
@@ -24,7 +25,12 @@ export interface Drawn {
   names: Record<string, string>;
   /** The natural warm worlds within 50 ly, nearest first. */
   worlds: NaturalWorld[];
+  /** Our nearest named stars, nearest first. */
+  near: Near[];
 }
+
+/** How many of our nearest stars the tour draws lines to. */
+const NEAREST = 12;
 
 /** Named stars, by place: data/stars.json, the same frame as the census, out to about 50 ly and some beyond. */
 type Named = { name: string; pos: [number, number, number]; distance: number };
@@ -56,6 +62,8 @@ self.onmessage = async ({ data }: MessageEvent<Ask>) => {
   const minds = drawMinds(data.seed, stars!, data.odds, starsWithin);
   const names = namesOf(minds, await named.catch(() => []));
   const worlds = drawWorlds(data.seed, await hosts, data.worlds);
-  const out: Drawn = { id: data.id, key: data.key, minds, fillers: fillers(data.odds), safeTop: safeTop(data.odds.starsPerMind), names, worlds };
+  const near = (await named.catch(() => [])).filter((n) => n.distance > 0.01).sort((p, q) => p.distance - q.distance).slice(0, NEAREST)
+    .map((n): Near => ({ name: n.name, pos: n.pos, d: n.distance }));
+  const out: Drawn = { id: data.id, key: data.key, minds, fillers: fillers(data.odds), safeTop: safeTop(data.odds.starsPerMind), names, worlds, near };
   (self as unknown as Worker).postMessage(out);
 };

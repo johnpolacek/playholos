@@ -20,7 +20,24 @@ export interface Stop {
   label?: string;
   /** Today's sky rules this stop's subject out. */
   clash?: boolean;
+  /** The drawn sky shows, and the dials with it: from the stop that hands them over on. */
+  reveal?: boolean;
+  /** Lines out from Sol to our nearest stars, each with its distance. */
+  spokes?: boolean;
 }
+
+/** One of our nearest stars, as data/stars.json names and places it. */
+export interface Near {
+  name: string;
+  pos: Vec;
+  d: number;
+}
+
+/** The Galaxy's stars, and how far our Sun is from its center, as calcs/minds.py's disk puts it. */
+const GALAXY_STARS = 2e11;
+const SUN_FROM_CENTER = 26745;
+/** The objects within 50 ly in Gaia's census of nearby stars, data/gcns-326ly-meta.json. */
+const WITHIN_50 = 1210;
 
 /** The minds the map names round the place in view: the nearest old minds and the nearest peers, with what each is. */
 export function namedOf(m: DrawnMinds, names: Record<string, string>, worlds: NaturalWorld[] = []): Named[] {
@@ -50,7 +67,9 @@ const zoomFor = (ly: number) => Math.log10(2.5 * ly * LY_AU);
 /** For a place off to one side: farther out, since the view turns round Sol and the place sits toward its edge. */
 const sideZoom = (ly: number) => Math.min(10.3, Math.max(6.6, Math.log10(4.5 * ly * LY_AU)));
 /** The Galaxy's center in the atlas frame: Galactic X toward it, 8.2 kpc. */
-const CENTER: Vec = [26745, 0, 0];
+export const CENTER: Vec = [26745, 0, 0];
+/** The opening's view, log10 AU: far enough out that the whole disk and our Sun at its edge both show. */
+export const OPENING = 9.95;
 const CATALOG_LY = 326;
 /** Above about this many fillers on average, more likely than not one mind's family filled the Galaxy. */
 const LIKELY = Math.LN2;
@@ -94,17 +113,48 @@ export function clashesOf(m: DrawnMinds, odds_: Odds, fillers: number): Clash[] 
   return out;
 }
 
-/** The tour. names gives some old minds' stars by name, by mind id, and worlds the natural warm worlds within 50 ly. */
-export function tourOf(m: DrawnMinds, o: Odds, names: Record<string, string> = {}, worlds: NaturalWorld[] = []): Stop[] {
-  const galaxy = 2e11 / o.starsPerMind;
+/** The tour. It opens on the Galaxy as we know it, comes down to our Sun today and out to our nearest stars, then
+ *  hands over the dials and goes through what they draw. names gives some old minds' stars by name, by mind id, worlds
+ *  the natural warm worlds within 50 ly, and near our nearest stars. Settled 2026-11-01. */
+export function tourOf(m: DrawnMinds, o: Odds, names: Record<string, string> = {}, worlds: NaturalWorld[] = [], nearest: Near[] = []): Stop[] {
+  const galaxy = GALAXY_STARS / o.starsPerMind;
   const stops: Stop[] = [];
   stops.push({
-    id: "sun",
-    title: "Our Sun",
-    words: `At these odds, ${odds(1 / o.starsPerMind)} stars holds a mind. Our Galaxy holds about ${round(galaxy)} of them, nearly all far older than us.`,
+    id: "galaxy",
+    title: "Our Galaxy",
+    words: `About ${round(GALAXY_STARS)} stars. Ours is one of them, ${far(SUN_FROM_CENTER)} from the center. Are we alone among them?`,
+    focus: CENTER,
+    zoom: OPENING,
+    label: "The Galaxy’s center",
+  });
+  stops.push({
+    id: "today",
+    title: "Our Sun, today",
+    words:
+      "Eight planets, and one with life we know of: ours. Voyager 1, the farthest we have reached, is about one light-day out. " +
+      "We know thousands of worlds round other stars, 227 of them within 50 light-years. We have heard no one, seen no one’s works, and met no settlers.",
+    focus: null,
+    zoom: 1.75,
+    label: "Sol",
+  });
+  const first = nearest[0];
+  stops.push({
+    id: "near",
+    title: "Our nearest stars",
+    words: first
+      ? `Each line to scale. ${first.name} is the nearest, ${first.d.toFixed(1)} light-years away: its light takes ${first.d.toFixed(1)} years to reach us, and Voyager 1, at 3.6 AU a year, would take about ${round((first.d * LY_AU) / 3.6)}. Within 50 light-years lie about ${WITHIN_50.toLocaleString("en-US")} stars.`
+      : `Within 50 light-years lie about ${WITHIN_50.toLocaleString("en-US")} stars.`,
+    focus: null,
+    zoom: 6.35,
+    spokes: true,
+  });
+  stops.push({
+    id: "dials",
+    title: "Turn the dials",
+    words: `No one yet knows how often life starts, lasts, or wakes into a mind. Each dial is one step, set as far as the research allows. At these odds, ${odds(1 / o.starsPerMind)} stars holds a mind, about ${round(galaxy)} in our Galaxy, nearly all far older than us. Turn one and watch who appears.`,
     focus: null,
     zoom: 7.0,
-    label: "Sol",
+    reveal: true,
   });
 
   if (worlds.length) {
@@ -192,5 +242,6 @@ export function tourOf(m: DrawnMinds, o: Odds, names: Record<string, string> = {
       label: "Never stopped",
       clash: true,
     });
+  for (const s of stops.slice(stops.findIndex((x) => x.id === "dials"))) s.reveal = true;
   return stops;
 }

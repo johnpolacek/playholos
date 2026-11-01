@@ -148,6 +148,8 @@ export interface Show {
     marks?: { id: string; pos: [number, number, number] }[];
     /** The place in view is one today's sky rules out: its thread and pulse are rose. */
     clash?: boolean;
+    /** Lines out from Sol to these places, light-years in the atlas frame: our nearest stars, to scale. */
+    spokes?: [number, number, number][];
   };
   /** For "beams": our messages on their way, each by its star, the decimal year we sent it, the light-years it goes,
    *  and whether it is the reply that could come back. */
@@ -613,7 +615,8 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
   // messages are seen the same way, each on its path out to its star.
   function leadsPose(): Pose {
     let at: number | null = null;
-    let [logD, az, tilt] = [7.0, 0, 0.75];
+    // A simulation opens where its first stop stands, not at 50 ly.
+    let [logD, az, tilt] = [spec.mode === "sim" ? (spec.sim?.zoom ?? 7.0) : 7.0, 0, 0.75];
     return (t) => {
       if (still) return [7.0, 1.1, 0.75, 0];
       if (at === null) az = 1.1 + drift(t, 600);
@@ -2019,6 +2022,15 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     const pulseGlow = glow({ fixed: true });
     const pulsePts = pulse.points(pulseGlow);
     stars.scene.add(thread, pulsePts);
+    // Our nearest stars' lines, which grow out from Sol together when they come.
+    const SPOKES = 16;
+    const spokeMat = line("ink", 0);
+    const spokePos = new Float32Array(SPOKES * 6);
+    const spokes = new THREE.LineSegments(new THREE.BufferGeometry().setAttribute("position", new THREE.BufferAttribute(spokePos, 3)), spokeMat);
+    spokes.frustumCulled = false;
+    stars.scene.add(spokes);
+    let spokesOf: [number, number, number][] | undefined;
+    let spokesAt = 0;
     const to = new THREE.Vector3();
     let aimed = "";
     let aimedAt = 0;
@@ -2049,6 +2061,17 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       pb.setX(1, here);
       pp.needsUpdate = pb.needsUpdate = pk.needsUpdate = true;
       pulseGlow.uniforms.uOpacity.value = on;
+      if (s?.spokes !== spokesOf) {
+        spokesOf = s?.spokes;
+        spokesAt = clock;
+      }
+      const out = still ? 1 : smooth((clock - spokesAt - 0.6) / 1.8);
+      for (let i = 0; i < SPOKES; i++) {
+        const p = spokesOf?.[i] ?? [0, 0, 0];
+        spokePos.set([0, 0, 0, p[0] * out, p[1] * out, p[2] * out], i * 6);
+      }
+      spokes.geometry.attributes.position.needsUpdate = true;
+      spokeMat.uniforms.uOpacity.value = spokesOf?.length ? 0.4 * on : 0;
       if (s && s.minds !== built) {
         for (const m of made) {
           stars.scene.remove(m);
