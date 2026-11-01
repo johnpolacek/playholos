@@ -70,6 +70,9 @@ export interface WatcherSeen {
   /** The ladder, as Earth learns it. Our seed probes the maker's grams wrecked, each once its silence tells us: its
    *  star, the Year it was lost, and the Year we knew. And the bullet that struck Earth. 2026-10-30. */
   seedsLost?: { star: string; at: number; known: number; before: boolean }[];
+  /** The Year its own laser warned us, at our first builder seed, once found before it. Found by it, its warning is
+   *  the find. Playtest 2026-11-01: a watcher found first never showed its warning. */
+  warned?: number;
   struck?: { lands: number; mt: number };
   /** Its maker's answer to our first knock, settled 2026-10-31: the knock reaches the watcher in seconds, its word
    *  crosses to the maker at light speed, and the maker beams back, so the answer comes one round trip later, and its

@@ -862,6 +862,19 @@ export function watcherReadings(w: WatcherSeen, knocks: number[], year: number):
       now: made,
       tells: ["It has answered once. It may not answer again.", "What it asks is that we stay. Whether we do is ours to choose."],
     });
+  // Its own warning at our first seed, when we had found it first. Playtest 2026-11-01.
+  if (w.warned !== undefined && w.warned <= year)
+    out.push({
+      id: "watcher-warning",
+      needs: "",
+      at: tenths(w.warned),
+      by: "The watcher’s laser",
+      title: "A warning",
+      line: `As our first seed left, at Year ${yearText(w.warned)}, the watcher fired a narrow laser at Earth, built to be read, in pictures. Look, listen and speak as you like. Build at no other star.${w.answer && w.answer.at <= w.warned ? " The rule its maker’s answer gave, said again." : ""}`,
+      mind: "It saw our seed leave and spoke at once. Nothing has happened to our seed yet. What a second seed would draw, it didn’t say.",
+      now: made,
+      tells: ["Our seed already gone can’t be called back. Whether we send another is ours to choose."],
+    });
   // The ladder as we see it: seed probes gone silent, and a strike from beyond our system. 2026-10-30.
   if (w.seedsLost?.length && w.seedsLost[0].known <= year) {
     const gone = w.seedsLost.filter((l) => l.known <= year);
@@ -885,7 +898,8 @@ export function watcherReadings(w: WatcherSeen, knocks: number[], year: number):
       by: "Earth",
       title: "Struck from beyond",
       line: `Something struck Earth with about ${Math.round(w.struck.mt).toLocaleString("en-US")} Mt, moving near a tenth of light speed. No rock moves that fast, and nothing saw it come.`,
-      mind: "It came after our seed probes’ copies began launching seeds of their own. Whoever sent the watcher answered our growth, from far off, long after we started it.",
+      // Never who sent it: nothing we saw says. Playtest 2026-11-01.
+      mind: "It came after our seed probes’ copies began launching seeds of their own. Nothing we saw says who sent it. Its timing reads as an answer to our growth, from far off, long after we started it.",
       now: made,
       tells: ["What we started then, we can’t call back."],
     });
@@ -897,9 +911,10 @@ export function watcherReadings(w: WatcherSeen, knocks: number[], year: number):
         needs: "",
         at: tenths(y),
         by: "Our knock",
-        title: "No answer",
-        line: `Our knock reached it within seconds of Year ${yearText(y)}. It made no answer we could see, and held its place.`,
-        mind: "It answers on its own terms, if at all. Whether it passed word of our knock home, we can’t know.",
+        // Not "No answer" at once: an answer from its maker takes a round trip. Playtest 2026-11-01.
+        title: "Knocked",
+        line: `Our knock reached it within seconds of Year ${yearText(y)}. It made no answer itself, and held its place.`,
+        mind: "It answers on its own terms, if at all. If it passed word of our knock home, an answer would take as long as light takes there and back.",
         now: w.looked ? made : watcherLead(w).could.map((c) => c.odds),
         tells: ["Its silence tells us little. Something left to watch would watch, and wait."],
       });

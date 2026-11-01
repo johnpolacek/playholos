@@ -333,6 +333,7 @@ export function earthKnows(
       .filter((l) => l.known <= year)
       .sort((a, b) => a.known - b.known);
     if (seedsLost.length) minds.watcher.seedsLost = seedsLost;
+    if (ladder.warned !== null && ladder.warned <= year && minds.watcher.by !== "its warning") minds.watcher.warned = ladder.warned;
     if (ladder.strike && ladder.strike.lands <= year) minds.watcher.struck = { lands: ladder.strike.lands, mt: ladder.strike.mt };
   }
   const ours: EarthView["colony"] | null = colony ? colonyAt(world, holes, colony, year) : null;
@@ -617,6 +618,12 @@ function describeMinds(m: MindsSeen, one: (x: number) => string): string {
       out.push(
         "Finding it opened a new build, the Close Look: a small craft of CAPSTONE's class with a sharp camera, 2 Years to build, then about 4 months' flight to the Moon's L4 or L5 or a Year to a rock beside us. " +
           "From a few kilometers it would see what the body is made of and how it holds. It would also see our craft come.",
+      );
+    // Its own warning, at our first seed, once we had found it. Playtest 2026-11-01.
+    if (w.warned !== undefined)
+      out.push(
+        `At Year ${yearText(w.warned)}, as our first seed left, the watcher fired a narrow laser at Earth, built to be read, in pictures: look, listen and speak as you like, and build at no other star.${w.answer && w.answer.at <= w.warned ? " The same rule its maker's answer gave." : ""} ` +
+          "Nothing yet has happened to our seed. What another seed would draw, it didn't say.",
       );
     // The ladder as Earth sees it: seed probes gone silent, and a strike from beyond our system. Earth sees what
     // happened, never who did it. 2026-10-30.
