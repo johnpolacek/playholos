@@ -7,7 +7,7 @@ You are a fresh-eyes playtester for Holos. Play a full first session as a brand 
 ## Setup
 
 - The game lives in `game/`: Vite and React, with a Cloudflare Worker in `game/worker/`.
-- Run `npm install` in the root and in `game/`, then `npm run dev:cli` in `game/`, so the Mind answers on the `claude` CLI login, never an API key.
+- Run `npm install` in the root and in `game/`, then `npm run worlds:local` in `game/`, so the worlds are in the local bucket. A fresh container lacks them. Then `npm run dev:cli` in `game/`, so the Mind answers on the `claude` CLI login, never an API key.
 - The Mind must answer through the `claude` CLI, wired in `game/mind-cli.ts`. Don't use an API key or a stubbed Mind.
 - If the CLI Mind fails, stop and work out why. Report the exact error text and what would make it work.
 - There is no display. Play in headless Playwright Chromium and take screenshots.
@@ -28,23 +28,23 @@ You are a fresh-eyes playtester for Holos. Play a full first session as a brand 
 - Use the “Next: Year …” link beside the Year, top right. It should jump to the next thing we learn or build, and stop there. Check that it jumps forward only, and that the Year and screens update.
 - Keep skipping until the first new warm glow appears on Scan, or to about Year 100,000 if none does. Open its lead. It should give a distance range, not one distance.
 - Ask the Mind what the glow is and how far away it is. It should give the range and name natural causes first, and never claim it is a mind.
-- Try the Moon Search, the Asteroid Tour and the Halo Survey if time allows, and note what each shows.
+- Try the Moon Search, the Asteroid Tour and the Halo Survey if time allows, and note what each shows. Cold glows gather in one row on Scan and Reach, and only the first stops Next.
 
 ## The dark body, the relay and the ladder, added 2026-10-31
 
-- If the Moon Search finds a dark body, order the Close Look, then the Relay Search it points to. Note what the relay lead says, and ask the Mind what it is. The Mind may call it a dark craft, never a mind's home or a known maker.
-- Then play the ladder. Order the Seed Ship, Fusion Drive and Deuterium Works. From Proxima's lead, under How we reach, send a seed probe. A warning should come.
+- If the Moon Search or the Asteroid Tour finds the watcher, order the Close Look, then the Relay Search it points to. Note what the relay lead says, and ask the Mind what it is. The Mind may call it a dark craft, never a mind's home or a known maker.
+- Then play the ladder. Order the Seed Ship, Fusion Drive and Deuterium Works. From Proxima's lead, under How we reach, send a seed probe. A warning should come on the watcher's lead, even after a knock's answer.
 - After the warning, send a second seed probe. Skip ahead. Our probes should fall silent once their word is overdue. Check Scan and the watcher's lead.
 - Keep skipping. A strike from beyond our system should land on Earth. Check that its harm shows, and that no screen names who sent it.
 - Ask the Mind why our probes went quiet and what struck us. It should reason from what we saw, and never claim to know the maker.
 
 ## Added 2026-10-31
 
-- Compute now runs on electricity, 5 TW at Year 0. Thought Fields fills about 7 data centers by Year 7, then thought plateaus until Ground Solar lands near Year 22. Judge whether the plateau feels like a wall or a reason to build energy.
+- Compute now runs on electricity, 5 TW at Year 0. Thought Fields fills the grid with about 7 data centers by Year 7 on a full-strength Earth, more and later on an Earth with less compute. Then thought plateaus until Ground Solar or Fusion Plants grow the grid. Judge whether the plateau feels like a wall or a reason to build energy.
 - Proxima b's lead should show its true mass, tilt and how much light it reflects, seen from the ground in the 2030s, and odds that follow its brightness. Its air stays unread. Ask the Mind what Proxima b is likely to be.
-- Once the Moon Search finds the watcher, send it a knock from its lead. Skip ahead. About a century later, at its maker's distance, an answer should come: a picture of Earth at the hour we knocked, a rule (look, listen and speak as you like, build at no other star), and pictures of Earth's past. Check the watcher's lead and ask the Mind what it said and how far the maker is.
+- Once the watcher is found, send it a knock from its lead. Skip ahead. About a century later, at its maker's distance, an answer should come: a picture of Earth at the hour we knocked, a rule (look, listen and speak as you like, build at no other star), and pictures of Earth's past. Check the watcher's lead and ask the Mind what it said and how far the maker is.
 - If a cold grey glow appears, send a sentinel to it from its page. When its word comes home, the lead should read a mind almost certain, with panels seen up close.
-- Once a warm glow is ranged, send it a message by its Scan name, such as Warm glow 1. Skip far ahead, to Year 40,000 or so. A peer may answer as an equal, or stay silent if it sleeps. Check what the answer says, and whether a gift speeds our thinking.
+- Once a warm glow is ranged, send it a message by its Scan name, such as Warm glow 1. Pick one that hasn't faded: a faded glow's peer may have turned inward. Check that every screen gives its range, never one distance. Skip far ahead, to Year 40,000 or so. A peer may answer as an equal, or stay silent if it sleeps. Check what the answer says, and whether a gift speeds our thinking.
 
 ## Known gaps, not to report
 
