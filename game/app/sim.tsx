@@ -6,7 +6,8 @@ import { DIALS, odds, round } from "@/lib/about/dials";
 import type { Dials, Mark } from "@/lib/drift";
 import { HOLOS_ODDS, type Odds } from "@/lib/sim/draw-minds";
 import type { Ask, Drawn } from "@/lib/sim/draw-worker";
-import { clashesOf, pointsOf, tourOf } from "@/lib/sim/tour";
+import { clashesOf, namedOf, pointsOf, tourOf } from "@/lib/sim/tour";
+import { gsap, prefersReducedMotion } from "@/lib/motion";
 
 // Simulation mode, 2026-11-01: no game, only a sky drawn at the odds we set. The six steps from stars to minds, as on
 // /about/research, and how far a mind may spread. Then a tour through what they make: our nearest mind, the old minds
@@ -22,6 +23,8 @@ const ROSE = "#ff7e94";
 const KICK = "font-mono text-[10.5px] tracking-[.1em] text-muted";
 /** One dials object for the whole page, so a new stop eases the view there, not a fresh flight. */
 const DIALS_SIM: Dials = {};
+/** Past this view, log10 AU, the minds round us crowd at Sol, so the map names only the place in view. */
+const NAMES_UNTIL = 8.5;
 
 export default function Sim() {
   const [values, setValues] = useState<Record<string, number>>({});
@@ -55,30 +58,47 @@ export default function Sim() {
     return () => clearTimeout(t);
   }, [seed, odds_]);
 
-  const tour = useMemo(() => (drawn ? tourOf(drawn.minds, odds_) : []), [drawn, odds_]);
+  const tour = useMemo(() => (drawn ? tourOf(drawn.minds, odds_, drawn.names) : []), [drawn, odds_]);
   const clashes = useMemo(() => (drawn ? clashesOf(drawn.minds, odds_, drawn.fillers) : []), [drawn, odds_]);
   const points = useMemo(() => (drawn ? pointsOf(drawn.minds) : []), [drawn]);
   const stop = tour[Math.min(at, tour.length - 1)];
+  const named = useMemo(() => (drawn ? namedOf(drawn.minds, drawn.names) : []), [drawn]);
 
   const sim = useMemo(
     () => ({
       minds: points,
       focus: stop?.focus ?? null,
       zoom: stop?.zoom,
-      marks: [{ id: "Sol", pos: [0, 0, 0] as [number, number, number] }, ...(stop?.focus ? [{ id: "here", pos: stop.focus }] : [])],
+      clash: stop?.clash,
+      // The place in view first, so its name wins a crowded spot, then Sol, then the minds round us.
+      marks: [
+        ...(stop?.focus ? [{ id: "here", pos: stop.focus }] : []),
+        { id: "Sol", pos: [0, 0, 0] as [number, number, number] },
+        ...(stop && stop.zoom < NAMES_UNTIL ? named.filter((n) => n.pos.join() !== stop.focus?.join()) : []),
+      ],
     }),
-    [points, stop],
+    [points, stop, named],
   );
 
   const names = useRef<Record<string, HTMLSpanElement | null>>({});
   const onMarks = useCallback((marks: Mark[]) => {
     const taken: Parameters<typeof placeLabel>[4] = [];
+    const marked = new Set(marks.map((m) => m.id));
+    for (const [id, n] of Object.entries(names.current)) if (n && !marked.has(id)) n.style.opacity = "0";
     for (const { id, x, y, a } of marks) {
       const n = names.current[id];
       if (!n) continue;
       n.style.opacity = a <= 0 ? "0" : String(a * placeLabel(n, x, y, null, taken));
     }
   }, []);
+
+  // Each stop's card rises in as the view turns to it.
+  const card = useRef<HTMLElement>(null);
+  useEffect(() => {
+    if (!card.current || prefersReducedMotion()) return;
+    const t = gsap.fromTo(card.current.querySelectorAll("[data-rise]"), { autoAlpha: 0, y: 10 }, { autoAlpha: 1, y: 0, duration: 0.5, ease: "power3.out", stagger: 0.08, delay: 0.15 });
+    return () => void t.kill();
+  }, [stop?.id]);
 
   const set = (key: string, v: number) => setValues((o) => ({ ...o, [key]: v }));
   const label = "pointer-events-none absolute top-0 left-0 font-mono text-[10px] whitespace-nowrap opacity-0";
@@ -95,6 +115,11 @@ export default function Sim() {
               <span ref={(n) => void (names.current.here = n)} className={label} style={{ color: stop?.clash ? ROSE : undefined }}>
                 {stop?.label}
               </span>
+              {named.map((n) => (
+                <span key={n.id} ref={(el) => void (names.current[n.id] = el)} className={`${label} text-muted`}>
+                  {n.label}
+                </span>
+              ))}
             </SkyArt>
             <header className="absolute inset-x-0 top-0 flex items-start justify-between gap-3 p-4">
               <div>
@@ -125,7 +150,7 @@ export default function Sim() {
               </div>
             )}
             {stop && (
-              <section className="absolute inset-x-4 bottom-4 max-w-xl rounded-lg border border-faint bg-paper/85 p-3">
+              <section ref={card} className="absolute inset-x-4 bottom-4 max-w-xl rounded-lg border border-faint bg-paper/85 p-3">
                 <div className="flex items-center justify-between gap-2">
                   <p className={KICK}>
                     STOP {Math.min(at, tour.length - 1) + 1} OF {tour.length}
@@ -148,10 +173,12 @@ export default function Sim() {
                     </button>
                   </div>
                 </div>
-                <h2 className="mt-1.5 font-semibold" style={{ color: stop.clash ? ROSE : undefined }}>
+                <h2 data-rise className="mt-1.5 font-semibold" style={{ color: stop.clash ? ROSE : undefined }}>
                   {stop.title}
                 </h2>
-                <p className="mt-1 text-[13px] leading-snug text-page-ink2">{stop.words}</p>
+                <p data-rise className="mt-1 text-[13px] leading-snug text-page-ink2">
+                  {stop.words}
+                </p>
               </section>
             )}
           </div>

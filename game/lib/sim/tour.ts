@@ -20,6 +20,15 @@ export interface Stop {
   clash?: boolean;
 }
 
+/** The minds the map names round the place in view: the nearest old minds and the nearest peers, with what each is. */
+export function namedOf(m: DrawnMinds, names: Record<string, string>): { id: string; pos: Vec; label: string }[] {
+  const ly = (d: number) => `${round(d)} ly`;
+  return [
+    ...m.old.slice(0, 8).map((o) => ({ id: o.id, pos: o.pos, label: `${names[o.id] ?? ly(o.d)} · ${o.asleep ? "asleep" : "awake"}` })),
+    ...m.peers.slice(0, 4).map((p) => ({ id: p.id, pos: p.pos, label: `peer · ${ly(p.d)}` })),
+  ];
+}
+
 export interface Clash {
   title: string;
   words: string;
@@ -27,6 +36,8 @@ export interface Clash {
 
 const LY_AU = 63241.077;
 const zoomFor = (ly: number) => Math.log10(2.5 * ly * LY_AU);
+/** For a place off to one side: farther out, since the view turns round Sol and the place sits toward its edge. */
+const sideZoom = (ly: number) => Math.min(10.3, Math.max(6.6, Math.log10(4.5 * ly * LY_AU)));
 /** The Galaxy's center in the atlas frame: Galactic X toward it, 8.2 kpc. */
 const CENTER: Vec = [26745, 0, 0];
 const CATALOG_LY = 326;
@@ -62,7 +73,8 @@ export function clashesOf(m: DrawnMinds, odds_: Odds, fillers: number): Clash[] 
   return out;
 }
 
-export function tourOf(m: DrawnMinds, o: Odds): Stop[] {
+/** The tour. names gives some old minds' stars by name, by mind id. */
+export function tourOf(m: DrawnMinds, o: Odds, names: Record<string, string> = {}): Stop[] {
   const galaxy = 2e11 / o.starsPerMind;
   const stops: Stop[] = [];
   stops.push({
@@ -84,10 +96,10 @@ export function tourOf(m: DrawnMinds, o: Odds): Stop[] {
     title: "Our nearest mind",
     words: alone
       ? `No mind in our Galaxy but us. The nearest lies about ${far(near.d)} away, past its edge.`
-      : `${near.star === null ? `None of the stars within ${CATALOG_LY} light-years holds one. It` : "It"} lies ${far(near.d)} away and woke ${years(near.age)} before us. ${sleeping} Its watcher waits near Earth, at ${m.watcher.place}.`,
+      : `${near.star === null ? `None of the stars within ${CATALOG_LY} light-years holds one. It lies ${far(near.d)} away` : names[near.id] ? `It lives at ${names[near.id]}, ${far(near.d)} away,` : `It lies ${far(near.d)} away`} and woke ${years(near.age)} before us. ${sleeping} Its watcher waits near Earth, at ${m.watcher.place}.`,
     focus: near.pos,
-    zoom: alone ? 10.3 : Math.min(10.3, Math.max(6.6, zoomFor(near.d))),
-    label: "Nearest mind",
+    zoom: alone ? 10.3 : sideZoom(near.d),
+    label: names[near.id] ?? "Nearest mind",
   });
 
   const inside = m.old.filter((x) => x.d <= CATALOG_LY);
@@ -110,7 +122,7 @@ export function tourOf(m: DrawnMinds, o: Odds): Stop[] {
       title: "Our nearest peer",
       words: `A mind that woke within 20,000 years of us, ${far(peer.d)} away. ${now ? `Its warm glow reaches us now, until ${year(peer.flash[1])}.` : `Its warm glow reaches us from ${year(peer.flash[0])} to ${year(peer.flash[1])}.`}${peer.fills ? " Its family never stops spreading." : ""}`,
       focus: peer.pos,
-      zoom: Math.min(10.3, Math.max(6.6, zoomFor(peer.d))),
+      zoom: sideZoom(peer.d),
       label: "Nearest peer",
       clash: peer.fills,
     });
@@ -134,7 +146,7 @@ export function tourOf(m: DrawnMinds, o: Odds): Stop[] {
       title: "A mind that filled the Galaxy",
       words: "Its family never stopped spreading. In time it would have settled every star, ours too. Today’s sky shows no such thing.",
       focus: filler.pos,
-      zoom: Math.min(10.3, Math.max(6.6, zoomFor(filler.d))),
+      zoom: sideZoom(filler.d),
       label: "Never stopped",
       clash: true,
     });

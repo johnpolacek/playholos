@@ -139,7 +139,14 @@ export interface Show {
 
   /** For "sim": the minds a simulation drew, the place in view, light-years in the atlas frame, or none for Sol, how
    *  far out to look from, as log10 AU, and the places whose screen positions come back through onMarks. */
-  sim?: { minds: SimMind[]; focus: [number, number, number] | null; zoom?: number; marks?: { id: string; pos: [number, number, number] }[] };
+  sim?: {
+    minds: SimMind[];
+    focus: [number, number, number] | null;
+    zoom?: number;
+    marks?: { id: string; pos: [number, number, number] }[];
+    /** The place in view is one today's sky rules out: its thread and pulse are rose. */
+    clash?: boolean;
+  };
   /** For "beams": our messages on their way, each by its star, the decimal year we sent it, the light-years it goes,
    *  and whether it is the reply that could come back. */
   beams?: { star: string; sent: number; ly: number; reply: boolean }[];
@@ -1995,8 +2002,50 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     const v = new THREE.Vector3();
     let built: SimMind[] | null = null;
     let made: THREE.Points[] = [];
+    // The way to the place in view: a thread out from Sol that grows to it, and a pulse there once it arrives, in blue,
+    // or rose for what today's sky rules out.
+    const threads = { mind: line("mind", 0), rose: line("rose", 0) };
+    const thread = new THREE.Line(
+      new THREE.BufferGeometry().setAttribute("position", new THREE.BufferAttribute(new Float32Array(6), 3)),
+      threads.mind,
+    );
+    thread.frustumCulled = false;
+    const pulse = new Cloud();
+    pulse.add(0, 0, 0, 34, 0, K.mind);
+    pulse.add(0, 0, 0, 10, 0, K.mind);
+    const pulseGlow = glow({ fixed: true });
+    const pulsePts = pulse.points(pulseGlow);
+    stars.scene.add(thread, pulsePts);
+    const to = new THREE.Vector3();
+    let aimed = "";
+    let aimedAt = 0;
     return (on: number) => {
       const s = spec.mode === "sim" ? spec.sim : undefined;
+      const key = s?.focus?.join() ?? "";
+      if (key !== aimed) {
+        aimed = key;
+        aimedAt = clock;
+      }
+      // The thread waits a moment for the view to turn, then runs out.
+      const grow = still ? 1 : smooth((clock - aimedAt - 0.4) / 1.6);
+      if (s?.focus) to.set(...s.focus);
+      const tp = thread.geometry.attributes.position as THREE.BufferAttribute;
+      tp.setXYZ(1, to.x * grow, to.y * grow, to.z * grow);
+      tp.needsUpdate = true;
+      thread.material = s?.clash ? threads.rose : threads.mind;
+      threads.mind.uniforms.uOpacity.value = threads.rose.uniforms.uOpacity.value = s?.focus ? 0.45 * on : 0;
+      const pp = pulsePts.geometry.attributes.position as THREE.BufferAttribute;
+      const pb = pulsePts.geometry.attributes.aBright as THREE.BufferAttribute;
+      const pk = pulsePts.geometry.attributes.aKind as THREE.BufferAttribute;
+      const here = s?.focus ? smooth((clock - aimedAt - 1.8) / 0.6) : 0;
+      for (let i = 0; i < 2; i++) {
+        pp.setXYZ(i, to.x, to.y, to.z);
+        pk.setX(i, s?.clash ? K.rose : K.mind);
+      }
+      pb.setX(0, here * (0.35 + 0.3 * Math.sin(clock * 2.4)));
+      pb.setX(1, here);
+      pp.needsUpdate = pb.needsUpdate = pk.needsUpdate = true;
+      pulseGlow.uniforms.uOpacity.value = on;
       if (s && s.minds !== built) {
         for (const m of made) {
           stars.scene.remove(m);
