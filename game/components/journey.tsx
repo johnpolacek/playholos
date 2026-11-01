@@ -150,7 +150,10 @@ export function Item({
             ? "done"
             : row.kind === "flight"
               ? "home"
-              : "landed"
+              : row.kind === "reply"
+                // The soonest a reply could come, gone by. It read "landed" after an empty window. Playtest 2026-11-01.
+                ? "passed"
+                : "landed"
           : build
             ? span(row.at - now)
             : began
