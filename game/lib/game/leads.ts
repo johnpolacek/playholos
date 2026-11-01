@@ -697,7 +697,7 @@ export function mindLeads(m: MindsSeen | undefined): Lead[] {
         ],
         tells: [
           "A young star sits in a dark cloud, and a merger leaves a fading shell. Neither would hold steady for centuries, then dim away together.",
-          "Light from it takes tens of thousands of Years to cross. Whatever made it has moved on long since.",
+          `Light from it takes ${far >= 20000 ? "tens of thousands of" : far >= 2000 ? "thousands of" : "hundreds of"} Years to cross. Whatever made it has moved on long since.`,
         ],
         art: { kind: "warm", near, far },
         life: "very unlikely",

@@ -306,7 +306,8 @@ function WarmArt({ near, far }: { near: number; far: number }) {
     dot.current?.setAttribute("r", String(5 + 1.5 * b));
     dot.current?.setAttribute("opacity", String(0.75 + 0.2 * b));
   }, 12);
-  const k = (ly: number) => `${Math.round(ly / 1000)},000`;
+  // As the lead's text says it: 7,400, not 7,000. Playtest 2026-11-01.
+  const k = (ly: number) => ly.toLocaleString("en-US");
   return (
     <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img" aria-label={`A warm glow between ${k(near)} and ${k(far)} light years away`}>
       <text x={x0} y={40} className="fill-muted font-mono text-[7.5px]">
