@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { BackBar } from "@/components/back-bar";
 import { useGame } from "@/components/game-provider";
 import { BuildMark, buildBlue, buildTone, LeadMark, LockMark } from "@/components/marks";
@@ -99,6 +99,8 @@ function Sent(props: {
 }) {
   const { road, i, to, name, line, needs, have, can, send, what, choices, sentAs } = props;
   const sent = road.n !== null;
+  // A send is never taken back, so it asks once before it goes. Playtest 2026-11-01: a seed probe went in one tap.
+  const [asking, setAsking] = useState<{ label: string; send(): void } | null>(null);
   return (
     <li data-m style={buildBlue(needs[0])} className="border-t border-faint py-2.5">
       <Face
@@ -121,19 +123,36 @@ function Sent(props: {
               <Need key={n} name={n} {...have(n)} />
             ))}
           </span>
-          {can && (sent || !choices) && (
+          {can && !sent && asking && (
+            <span className="flex shrink-0 items-center gap-1.5">
+              <span className="text-[12.5px] text-muted">Can’t be called back.</span>
+              <button onClick={() => setAsking(null)} className="h-8 rounded-full border border-faint px-3.5 text-[13px] font-medium">
+                Wait
+              </button>
+              <button
+                onClick={() => {
+                  asking.send();
+                  setAsking(null);
+                }}
+                className="h-8 rounded-full bg-ink px-3.5 text-[13px] font-medium text-paper"
+              >
+                {asking.label}
+              </button>
+            </span>
+          )}
+          {can && !asking && (sent || !choices) && (
             <button
               disabled={sent}
-              onClick={send}
+              onClick={() => setAsking({ label: `Send it`, send })}
               className={`h-8 shrink-0 rounded-full px-3.5 text-[13px] font-medium ${sent ? "border border-faint text-muted" : "bg-ink text-paper"}`}
             >
               {sent ? (sentAs ?? `${what} sent`) : `Send a ${what}`}
             </button>
           )}
-          {can && !sent && choices && (
+          {can && !sent && !asking && choices && (
             <span className="flex shrink-0 gap-1.5">
               {choices.map((c) => (
-                <button key={c.label} onClick={c.send} className="h-8 rounded-full bg-ink px-3.5 text-[13px] font-medium text-paper">
+                <button key={c.label} onClick={() => setAsking(c)} className="h-8 rounded-full bg-ink px-3.5 text-[13px] font-medium text-paper">
                   {c.label}
                 </button>
               ))}
@@ -199,11 +218,12 @@ export function DestinationPage({ slug }: { slug: string }) {
   // Reach's map flies out to the star while the page is open, and back to the nearest star when we leave.
   const star = lead?.star;
   const system = lead?.system;
+  const range = lead?.range;
   useEffect(() => {
     if (!star) return;
-    aim({ id: skyId(star), name: star, ly, system });
+    aim({ id: skyId(star), name: star, ly, system, ...(range ? { far: `${lyOf(range[0])} to ${lyOf(range[1])} ly` } : {}) });
     return () => aim(null);
-  }, [aim, star, ly, system]);
+  }, [aim, star, ly, system, range]);
 
   useEffect(() => {
     const back = (e: KeyboardEvent) => e.key === "Escape" && navigate("/reach");
@@ -247,7 +267,7 @@ export function DestinationPage({ slug }: { slug: string }) {
       </div>
       <p data-m className="mt-0.5 text-[13.5px] text-page-ink2">
         {lead.what} · {lead.range ? `${lyOf(lead.range[0])} to ${lyOf(lead.range[1])}` : lyOf(lead.ly)} ly · a message takes{" "}
-        <span className="font-mono tabular-nums">{span(lead.ly)}</span> ·{" "}
+        <span className="font-mono tabular-nums">{lead.range ? `${span(lead.range[0])} to ${span(lead.range[1])}` : span(lead.ly)}</span> ·{" "}
         <Link to={`/lead/${lead.slug}`} className="whitespace-nowrap text-you">
           Its lead ›
         </Link>
