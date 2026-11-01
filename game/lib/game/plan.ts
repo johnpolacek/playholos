@@ -462,7 +462,9 @@ export function schedule(plan: Plan, scale: number, harm: readonly Order[] = [])
   const done: Record<string, number | null> = Object.fromEntries(
     ordered(plan).map((b) => [b, b === "Thought Fields" ? (p.dataCenters[centers(scale) - 1] ?? null) : doneOf(p, b)]),
   );
-  for (const b of plan.builds)
+  // Ordered in play too: a Seed Ship ordered then read done at Year 76.1, before its Fusion Drive at 82.3, until
+  // 2026-11-01's playtest.
+  for (const b of ordered(plan))
     for (const n of NEEDS[b] ?? []) done[b] = done[b] == null || done[n] == null ? null : Math.max(done[b]!, done[n]!);
   return done;
 }
