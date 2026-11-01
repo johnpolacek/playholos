@@ -105,12 +105,16 @@ export function LeadPage({ slug }: { slug: string }) {
   const root = useRef<HTMLDivElement>(null);
   const i = leads.findIndex((l) => l.slug === slug);
   const lead = leads[i];
-  const read = lead && readings[lead.slug]?.at(-1);
+  const all = (lead && readings[lead.slug]) || [];
+  const read = all.at(-1);
+  // What came before the latest stays on the page, newest first: the watcher's answer and its relay were gone once a
+  // strike landed. Playtest 2026-11-01.
+  const earlier = all.slice(0, -1).reverse();
 
   // Opening the page reads what landed on it.
-  const unread = read && fresh.has(read.id) ? read.id : null;
+  const unread = all.filter((r) => fresh.has(r.id)).map((r) => r.id).join(" ");
   useEffect(() => {
-    if (unread) see([unread]);
+    if (unread) see(unread.split(" "));
   }, [unread, see]);
 
   // The map turns to the lead, and its system, if we know it, is open to the map's Close View.
@@ -190,6 +194,25 @@ export function LeadPage({ slug }: { slug: string }) {
             <span className="mr-1.5 font-mono text-[10px] tracking-[.1em] text-you">THE MIND</span>
             {read.mind}
           </p>
+        </section>
+      )}
+
+      {earlier.length > 0 && (
+        <section data-m className="mt-2 flex flex-col">
+          {earlier.map((r) => (
+            <div key={r.id} className="border-t border-faint py-2 first:border-t-0">
+              <span className="font-mono text-[10px] tracking-[.1em] text-muted">
+                EARLIER · YEAR {yearText(r.at)} · {r.by.toUpperCase()}
+              </span>
+              <h3 className="mt-0.5 text-[14.5px] leading-snug font-semibold">{r.title}</h3>
+              <p className="mt-0.5 text-[13.5px] leading-snug text-page-ink2">{r.line}</p>
+              {r.sight && (
+                <div className="mt-2 flex justify-center">
+                  <VisitArt sight={r.sight} />
+                </div>
+              )}
+            </div>
+          ))}
         </section>
       )}
 
