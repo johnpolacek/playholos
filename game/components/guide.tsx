@@ -185,6 +185,26 @@ export function useTalk() {
       ...was.builds.filter((b) => !plan.builds.includes(b)).map((name) => ({ name, adding: false })),
       ...plan.builds.filter((b) => !was.builds.includes(b)).map((name) => ({ name, adding: true })),
     ];
+    // A way to start swaps many builds at once. The Mind reads only where it lands, since a queue halfway there was
+    // never ours, and no one build's change is the last. 2026-10-31.
+    if (changes.length > 1) {
+      const r = readOf(plan, scale);
+      const tries: [Key, boolean][] = [
+        ["over", r.over],
+        ["grow", changes.some((c) => c.adding && c.name === "Thought Fields")],
+        ["idle", r.idle && r.used > 0],
+        ["full", r.full],
+      ];
+      const key = tries.find(([k, ok]) => ok && !t.seen.includes(k))?.[0];
+      t.changes++;
+      t.last = null;
+      if (key) {
+        t.ideas[key] = { ...explain(key, null, r, plan, scale), at: t.changes };
+        t.seen.push(key);
+        t.now = key;
+      }
+      return setGuide({ ...t, builds: plan.builds });
+    }
     for (const { name, adding } of changes) {
       const { at, late, soon } = moves(was, scale, name);
       const c: Change = { name, adding, at: at ?? null, late, soon };
@@ -554,7 +574,12 @@ export function Guide() {
   const { talk, reread } = useTalk();
   const next = useNext("/build?tour");
   const [more, setMore] = useState(false);
-  const idea = !talk ? undefined : talk.now === "intro" ? { ...intro(past), at: 0 } : talk.ideas[talk.now];
+  const told = !talk ? undefined : talk.now === "intro" ? { ...intro(past), at: 0 } : talk.ideas[talk.now];
+  // Idle is read from our order now, not when first explained: a way to start can change it without a new idea.
+  const idea =
+    told && talk?.now === "idle" && known
+      ? { ...told, say: used < 0.995 ? explain("idle", null, { ...read, used }, plan, scale).say : explain("full", null, read, plan, scale).say }
+      : told;
 
   // A new idea, or one read again, rises in.
   const first = useRef(true);
