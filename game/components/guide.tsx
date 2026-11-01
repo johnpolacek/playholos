@@ -439,7 +439,9 @@ function Streams({ plan, scale, r, hot }: { plan: Plan; scale: number; r: Read; 
   const done = useMemo(() => schedule(plan, scale), [plan, scale]);
   const k = plan.builds.length;
   const two = k > 7;
-  const H = k ? 196 : 112;
+  // Room for builds even with none queued: pointing at a build draws it, and a drawing that grew would push the list
+  // out from under the pointer, which would let it go. 2026-10-31.
+  const H = 196;
   const target = useMemo(() => {
     const out = new Map<string, Node>();
     const half = Math.min(CX - 34, 58 * (k - 1));
