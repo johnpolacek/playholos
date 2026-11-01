@@ -14,6 +14,8 @@ import { type Lead, lineAt, type Reading, starName } from "@/lib/game/leads";
 import { type System, worldName } from "@/lib/game/systems";
 import { placeLabel } from "@/components/place-label";
 
+const n = (x: number) => x.toLocaleString("en-US");
+
 // Earth's leads, drawn for Scan. The stars within 50 light-years from above, and Earth's real leads lit, each with a
 // thread out from Sol: a world on a stretched orbit, every world the planet hunters felt by 2040, nearest first,
 // and the first star that could answer our messages. Beside each, how long a message takes to
@@ -209,6 +211,7 @@ export function LeadList({
   // The lead in view: the one the Will points at, or else the one they picked, which stays until picked again.
   const [picked, setPicked] = useState<number | null>(null);
   const [peeked, setPeeked] = useState<number | null>(null);
+  const [coldOpen, setColdOpen] = useState(false);
   const shown = peeked ?? picked;
   const look = (peek: number | null, pick = picked) => {
     setPeeked(peek);
@@ -254,18 +257,59 @@ export function LeadList({
     onBlur: () => look(null),
   });
 
-  if (!fold)
+  if (!fold) {
+    const link = (l: Lead, i: number) => (
+      <Link to={`/lead/${l.slug}`} {...peek(i)} className="block py-2.5 text-left">
+        {row(l)}
+      </Link>
+    );
+    // Cold glows our craft hasn't seen up close gather in one row, where the first stood. The Halo Survey finds
+    // hundreds, and they buried the watcher and the strike. Playtest 2026-11-01.
+    const grouped = (l: Lead) => l.slug.startsWith("cold-glow-") && !l.facts.some(([k]) => k === "Up close") && !(fresh && readings[l.slug]?.some((r) => fresh.has(r.id)));
+    const cold = leads.filter(grouped);
+    const first = cold.length > 1 ? cold[0] : undefined;
+    const latest = cold.at(-1);
     return (
       <ul className="mt-1 flex flex-col">
-        {leads.map((l, i) => (
-          <li key={l.star} className="border-t border-faint">
-            <Link to={`/lead/${l.slug}`} {...peek(i)} className="block py-2.5 text-left">
-              {row(l)}
-            </Link>
-          </li>
-        ))}
+        {leads.map((l, i) =>
+          first && grouped(l) ? (
+            l === first && (
+              <li key="cold-glows" className="border-t border-faint">
+                <button onClick={() => setColdOpen(!coldOpen)} aria-expanded={coldOpen} className="block w-full py-2.5 text-left">
+                  <Face
+                    mark={<LeadMark art={l.art} />}
+                    tone="text-you"
+                    name={
+                      <>
+                        <b className="font-semibold">Cold glows</b> · {n(cold.length)} found
+                      </>
+                    }
+                    line={`Each a mind computing cold, or something we don’t know. The latest, ${starName(latest!.star)}.`}
+                    right={
+                      <span className="flex flex-col items-end">
+                        <span>{lyOf(Math.min(...cold.map((c) => c.ly)))} to {lyOf(Math.max(...cold.map((c) => c.ly)))}</span>
+                        <span className="mt-[3px] text-[10px] text-muted/80">ly</span>
+                      </span>
+                    }
+                    more={false}
+                  />
+                </button>
+                {coldOpen && (
+                  <ul className="mb-1 flex flex-col pl-5">
+                    {leads.map((c, j) => grouped(c) && <li key={c.star} className="border-t border-faint">{link(c, j)}</li>)}
+                  </ul>
+                )}
+              </li>
+            )
+          ) : (
+            <li key={l.star} className="border-t border-faint">
+              {link(l, i)}
+            </li>
+          ),
+        )}
       </ul>
     );
+  }
 
   return (
     <ul className="mt-1 flex flex-col" onKeyDown={(e) => e.key === "Escape" && pick(null)}>

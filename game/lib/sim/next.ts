@@ -4,7 +4,8 @@ import type { EarthView } from "./types.ts";
 
 /** Times in what Earth knows that mark something arriving or being found, by their keys. */
 // "near": a sentinel's word on a cold glow, up close, 2026-10-31. The watcher's answer comes under "at".
-const WHEN = new Set(["arrived", "found", "home", "seen", "ranged", "faded", "lands", "stands", "at", "near"]);
+// "warned" and "known": the watcher's warning and a seed gone silent, playtest 2026-11-01.
+const WHEN = new Set(["arrived", "found", "home", "seen", "ranged", "faded", "lands", "stands", "at", "near", "warned", "known"]);
 
 /** The earliest Year after `year` that anything in `ahead`, what Earth will know by some later Year, became known. */
 export function nextKnown(ahead: EarthView, year: number): number | null {
@@ -18,10 +19,15 @@ export function nextKnown(ahead: EarthView, year: number): number | null {
     } else if (x && typeof x === "object") {
       // A warm glow shows on Scan once ranged, not when first seen: a stop then found nothing new there. Playtest
       // 2026-10-30.
-      for (const [k, v] of Object.entries(x)) if (!(k === "seen" && "ranged" in x)) walk(v, k);
+      // A seed gone silent shows once its silence is known, not at the Year it was lost. 2026-11-01.
+      for (const [k, v] of Object.entries(x)) if (!(k === "seen" && "ranged" in x) && !(k === "at" && "known" in x)) walk(v, k);
     }
   };
-  walk(ahead);
+  // Only the first cold glow stops the skip. The Halo Survey finds one every few Years, and each stopping it took about
+  // 460 presses to reach Year 20,000. The rest gather on Scan as one row. Word from our craft up close still stops it.
+  // Playtest 2026-11-01.
+  const glows = ahead.minds?.glows ?? [];
+  walk({ ...ahead, minds: ahead.minds && { ...ahead.minds, glows: glows.map((g, i) => (i === 0 ? g : { near: g.near })) } });
   return best;
 }
 
