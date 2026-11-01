@@ -5,10 +5,11 @@ import { placeLabel } from "@/components/place-label";
 import { Sky, SkyArt } from "@/components/sky";
 import { DIALS, odds, round } from "@/lib/about/dials";
 import type { Dials, Mark } from "@/lib/drift";
+import { YEAR_0 } from "@/lib/game/clock";
 import { HOLOS_ODDS, type Odds } from "@/lib/sim/draw-minds";
 import type { WorldOdds } from "@/lib/sim/draw-worlds";
 import type { Ask, Drawn } from "@/lib/sim/draw-worker";
-import { UNIVERSE, clashesOf, namedOf, pointsOf, tourOf } from "@/lib/sim/tour";
+import { AHEAD, UNIVERSE, clashesOf, lightAt, timeOf, namedOf, pointsOf, tourOf } from "@/lib/sim/tour";
 import { gsap, prefersReducedMotion } from "@/lib/motion";
 
 // Simulation mode, 2026-11-01: no game, only a sky drawn at the odds we set. The six steps from stars to minds, as on
@@ -28,6 +29,11 @@ const DIALS_SIM: Dials = {};
 /** Past this view, log10 AU, the minds round us crowd at Sol, so the map names only the place in view. */
 const NAMES_UNTIL = 8.5;
 const NONE: never[] = [];
+/** Today, as a decimal year, and how far ahead the game's Year 0, 2040, lies: peers' glows are counted from it. */
+const TODAY = 1970 + Date.now() / (365.25 * 864e5);
+const TO_NOW = YEAR_0 - TODAY;
+/** Seconds the play button takes to run all 20,000 years. */
+const PLAY_SECONDS = 40;
 
 export default function Sim() {
   const [values, setValues] = useState<Record<string, number>>({});
@@ -85,7 +91,27 @@ export default function Sim() {
     [drawn, odds_],
   );
   const clashes = useMemo(() => (drawn ? clashesOf(drawn.minds, odds_, drawn.fillers) : []), [drawn, odds_]);
-  const points = useMemo(() => (drawn ? pointsOf(drawn.minds, drawn.worlds) : []), [drawn]);
+  const points = useMemo(() => (drawn ? pointsOf(drawn.minds, drawn.worlds, TO_NOW) : []), [drawn]);
+  // Time passing, on its stop: years from now, and whether it runs by itself.
+  const [years, setYears] = useState(0);
+  const [playing, setPlaying] = useState(false);
+  useEffect(() => {
+    if (!playing) return;
+    let raf = 0,
+      last = performance.now();
+    const step = (now: number) => {
+      const dt = (now - last) / 1000;
+      last = now;
+      setYears((y) => {
+        const next = Math.min(AHEAD, y + (dt * AHEAD) / PLAY_SECONDS);
+        if (next >= AHEAD) setPlaying(false);
+        return next;
+      });
+      raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, [playing]);
   const stop = tour[Math.min(at, tour.length - 1)];
   const named = useMemo(() => (drawn ? namedOf(drawn.minds, drawn.names, drawn.worlds) : []), [drawn]);
   // Before the dials, the sky as we know it: no drawn minds or worlds, and no dials.
@@ -101,6 +127,7 @@ export default function Sim() {
       zoom: stop?.zoom ?? UNIVERSE,
       clash: stop?.clash,
       spokes,
+      time: stop?.time ? { years, light: lightAt(years, TODAY) } : undefined,
       // The place in view first, so its name wins a crowded spot, then Sol, then the minds round us.
       marks: [
         ...(stop?.focus ? [{ id: "here", pos: stop.focus }] : []),
@@ -109,7 +136,7 @@ export default function Sim() {
         ...(revealed && stop.zoom < NAMES_UNTIL ? named.filter((n) => n.pos.join() !== stop.focus?.join()) : []),
       ],
     }),
-    [points, stop, named, revealed, spokes, near],
+    [points, stop, named, revealed, spokes, near, years],
   );
 
   const names = useRef<Record<string, HTMLSpanElement | null>>({});
@@ -268,6 +295,15 @@ export default function Sim() {
                 <p data-rise className="mt-1 text-[13px] leading-snug text-page-ink2">
                   {stop.words}
                 </p>
+                {stop.time && drawn && (
+                  <Time
+                    years={years}
+                    playing={playing}
+                    onYears={(y) => (setPlaying(false), setYears(y))}
+                    onPlay={() => (years >= AHEAD && setYears(0), setPlaying((p) => !p))}
+                    {...timeOf(drawn.minds, years, TO_NOW, TODAY)}
+                  />
+                )}
               </section>
             )}
           </div>
@@ -390,5 +426,53 @@ function Dial({
       </span>
       <span className="mt-0.5 block font-mono text-[10px] text-muted">{basis}</span>
     </label>
+  );
+}
+
+/** The years ahead, a slider and a play button, and what the sky holds then. */
+function Time({
+  years,
+  playing,
+  glowing,
+  reached,
+  light,
+  onYears,
+  onPlay,
+}: {
+  years: number;
+  playing: boolean;
+  glowing: number;
+  reached: number;
+  light: number;
+  onYears(y: number): void;
+  onPlay(): void;
+}) {
+  return (
+    <div className="mt-3">
+      <div className="flex items-center gap-2">
+        <button
+          className="w-14 shrink-0 rounded-full border border-faint px-2 py-0.5 font-mono text-[11px]"
+          onClick={onPlay}
+        >
+          {playing ? "Pause" : "Play"}
+        </button>
+        <input
+          type="range"
+          min={0}
+          max={AHEAD}
+          step={10}
+          value={years}
+          aria-label="Years from now"
+          onChange={(e) => onYears(Number(e.target.value))}
+          className="w-full accent-[#5bb8d6]"
+        />
+      </div>
+      <p className="mt-1.5 font-mono text-[11px] text-muted">
+        <span className="text-ink">{Math.round(years).toLocaleString("en-US")}</span> years from now ·{" "}
+        <span style={{ color: "var(--other)" }}>{glowing.toLocaleString("en-US")}</span> glowing at us · our light{" "}
+        {Math.round(light).toLocaleString("en-US")} ly out, it has reached{" "}
+        <span style={{ color: "var(--you)" }}>{reached.toLocaleString("en-US")}</span>
+      </p>
+    </div>
   );
 }

@@ -26,6 +26,26 @@ export interface Stop {
   spokes?: boolean;
   /** On first opening, the tour moves on by itself after this many seconds: the dive from the universe to our Galaxy. */
   auto?: number;
+  /** Time passes here: a slider runs the years ahead. */
+  time?: boolean;
+}
+
+/** How far time runs ahead, in years: a peer is a mind that woke within 20,000 years of us. */
+export const AHEAD = 20_000;
+/** Our first radio, the start of our light out among the stars. */
+const FIRST_RADIO = 1950;
+/** How far our light has gone, `years` from now, in light-years. */
+export const lightAt = (years: number, today: number) => today - FIRST_RADIO + years;
+
+/** At `years` from now: how many peers glow at us, and how many our light has reached. `toNow` turns a game Year,
+ *  counted from 2040, into years from now. */
+export function timeOf(m: DrawnMinds, years: number, toNow: number, today: number) {
+  const light = lightAt(years, today);
+  return {
+    glowing: m.peers.filter((p) => p.flash[0] + toNow <= years && years <= p.flash[1] + toNow).length,
+    reached: m.peers.filter((p) => p.d <= light).length,
+    light,
+  };
 }
 
 /** One of our nearest stars, as data/stars.json names and places it. */
@@ -96,11 +116,15 @@ const kindOf = (w: NaturalWorld): WorldKind =>
 const living = (w: NaturalWorld) => ALIVE.includes(w.rung);
 
 /** The map's points: each natural world by how far its life has come, then each old mind and peer by kind. */
-export function pointsOf(m: DrawnMinds, worlds: NaturalWorld[] = []): SimMind[] {
+export function pointsOf(m: DrawnMinds, worlds: NaturalWorld[] = [], toNow = 0): SimMind[] {
   return [
     ...worlds.map((w): SimMind => ({ pos: placeOf(w), kind: kindOf(w) })),
     ...m.old.map((o): SimMind => ({ pos: o.pos, kind: o.asleep ? "asleep" : "awake" })),
-    ...m.peers.map((p): SimMind => ({ pos: p.pos, kind: p.fills ? "fills" : "peer" })),
+    ...m.peers.map((p): SimMind => ({
+      pos: p.pos,
+      kind: p.fills ? "fills" : "peer",
+      flash: [p.flash[0] + toNow, p.flash[1] + toNow],
+    })),
   ];
 }
 
@@ -267,6 +291,17 @@ export function tourOf(m: DrawnMinds, o: Odds, names: Record<string, string> = {
     zoom: 9.75,
     label: "The Galaxy’s center",
   });
+
+  if (m.peers.length)
+    stops.push({
+      id: "time",
+      title: "The next 20,000 years",
+      words:
+        "Slide time forward. A peer glows warm at us only while it builds out and spreads, a few centuries to a few thousand years, then fades. Our own light, out since our first radio, spreads to meet them.",
+      focus: CENTER,
+      zoom: 9.75,
+      time: true,
+    });
 
   const filler = m.peers.find((p) => p.fills);
   if (filler)

@@ -106,6 +106,8 @@ export type Mode =
 export interface SimMind {
   pos: [number, number, number];
   kind: "awake" | "asleep" | "peer" | "fills" | WorldKind;
+  /** A peer's warm glow at us: the years from now it starts and ends. */
+  flash?: [number, number];
 }
 /** A natural warm world a simulation drew, by how far its life has come. */
 export type WorldKind = "animals" | "oxygen" | "microbes" | "lifeless";
@@ -150,6 +152,9 @@ export interface Show {
     clash?: boolean;
     /** Lines out from Sol to these places, light-years in the atlas frame: our nearest stars, to scale. */
     spokes?: [number, number, number][];
+    /** Time passing: how many years from now the sky shows. Peers glow only while their warm light reaches us, and
+     *  our own light, out since our first radio, spreads to `light` light-years. Unset, every peer glows. */
+    time?: { years: number; light: number };
   };
   /** For "beams": our messages on their way, each by its star, the decimal year we sent it, the light-years it goes,
    *  and whether it is the reply that could come back. */
@@ -2008,6 +2013,22 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     const v = new THREE.Vector3();
     let built: SimMind[] | null = null;
     let made: THREE.Points[] = [];
+    // For time passing: each point's place in the core and halo clouds, and its own brightness, to dim and restore.
+    let timed: { core: number; halo: number; bright: number; flash: [number, number]; size?: number }[] = [];
+    let timedAt: number | undefined;
+    // Our light, a shell out from Sol since our first radio, edged where its front is.
+    const ourMat = new THREE.ShaderMaterial({
+      uniforms: { uColor: { value: pal[K.mind] }, uOpacity: { value: 0 } },
+      vertexShader: SHELL_VERT,
+      fragmentShader: SHELL_FRAG,
+      transparent: true,
+      depthWrite: false,
+      depthTest: false,
+      blending: THREE.AdditiveBlending,
+    });
+    const ours = new THREE.Mesh(new THREE.SphereGeometry(1, 72, 48), ourMat);
+    ours.frustumCulled = false;
+    stars.scene.add(ours);
     // The way to the place in view: a thread out from Sol that grows to it, and a pulse there once it arrives, in blue,
     // or rose for what today's sky rules out.
     const threads = { mind: line("mind", 0), rose: line("rose", 0) };
@@ -2113,7 +2134,10 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         }
         const core = new Cloud();
         const halo = new Cloud();
+        timed = [];
+        timedAt = undefined;
         for (const m of s.minds) {
+          if (m.flash) timed.push({ core: core.size.length, halo: halo.size.length, bright: BRIGHT[m.kind], flash: m.flash });
           core.add(m.pos[0], m.pos[1], m.pos[2], SIZE[m.kind], BRIGHT[m.kind], KIND[m.kind]);
           // A peer glows warm, and one that would have filled the Galaxy glows wide, so it can't be missed.
           // Awake old minds get a halo too, so they stand out from the real stars round them.
@@ -2125,6 +2149,25 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         stars.scene.add(...made);
         built = s.minds;
       }
+      // Time passing: a peer not yet seen is a faint dot, one glowing at us is lit with its halo, one faded is fainter.
+      const years = s?.time?.years;
+      if (years !== timedAt && made.length) {
+        timedAt = years;
+        const cb = made[1].geometry.attributes.aBright as THREE.BufferAttribute;
+        const hb = made[0].geometry.attributes.aBright as THREE.BufferAttribute;
+        const hs = made[0].geometry.attributes.aSize as THREE.BufferAttribute;
+        for (const t of timed) {
+          const lit = years === undefined || (years >= t.flash[0] && years <= t.flash[1]);
+          cb.setX(t.core, lit ? t.bright : years! < t.flash[0] ? 0.16 : 0.07);
+          hb.setX(t.halo, lit ? (years === undefined ? 0.35 : 0.7) : 0);
+          // While time passes, the few glowing at once flare wide, so each can be found in the Galaxy.
+          if (!t.size) t.size = hs.getX(t.halo);
+          hs.setX(t.halo, years === undefined ? t.size : 46);
+        }
+        cb.needsUpdate = hb.needsUpdate = hs.needsUpdate = true;
+      }
+      ours.scale.setScalar(Math.max(0.01, s?.time?.light ?? 0));
+      ourMat.uniforms.uOpacity.value = s?.time ? 0.9 * on : 0;
       coreGlow.uniforms.uOpacity.value = on;
       haloGlow.uniforms.uOpacity.value = on * (0.75 + 0.25 * Math.sin(clock * 1.8));
       if (s?.marks && spec.onMarks) {
