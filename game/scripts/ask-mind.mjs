@@ -1,8 +1,9 @@
 // Asks the Mind on a running dev server, as the Mind tab does, and reads its answer back from the stream, or on the
 // Claude CLI with the prompt the dev server builds. Shared by check-mind.mjs and trace-mind.mjs. 2026-10-23.
 import { spawn } from "node:child_process";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
+import path from "node:path";
 import { MIND_EFFORT, MIND_MODEL } from "../lib/access.ts";
 
 // The code in .dev.vars opens the Mind, as the Mind tab's cookie does. It is never printed.
@@ -64,13 +65,22 @@ const CLI = [...CLI_BARE, "--model", MIND_MODEL, "--effort", MIND_EFFORT, "--out
 function askCli(system, ask) {
   const started = Date.now();
   return new Promise((resolve) => {
-    const child = spawn("claude", [...CLI, "--system-prompt", system], { cwd: tmpdir() });
+    // By file, as mind-cli.ts does: a late game's prompt passes 128 KiB, past what Linux takes as one argument.
+    // Playtest 2026-11-01.
+    const dir = mkdtempSync(path.join(tmpdir(), "holos-mind-"));
+    const file = path.join(dir, "system.txt");
+    writeFileSync(file, system);
+    const child = spawn("claude", [...CLI, "--system-prompt-file", file], { cwd: tmpdir() });
     let out = "";
     let err = "";
     child.stdout.on("data", (d) => (out += d));
     child.stderr.on("data", (d) => (err += d));
-    child.on("error", () => resolve({ ok: false, status: "no claude CLI", text: "" }));
+    child.on("error", () => {
+      rmSync(dir, { recursive: true, force: true });
+      resolve({ ok: false, status: "no claude CLI", text: "" });
+    });
     child.on("close", () => {
+      rmSync(dir, { recursive: true, force: true });
       const ms = Date.now() - started;
       try {
         const d = JSON.parse(out);
