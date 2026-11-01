@@ -164,7 +164,7 @@ export function Hud() {
           at={energy}
           to={full !== undefined && now < full ? most : undefined}
           value={pct(energy)}
-          sub={full === undefined ? "of Earth’s" : now < full ? `${pct(most)} by Year ${Math.round(full)}` : "grid full"}
+          sub={full === undefined ? "of the grid" : now < full ? `${pct(most)} by Year ${Math.round(full)}` : "grid full"}
         />
         <Meter
           label="MATTER"

@@ -6,6 +6,7 @@ import { span, tenths } from "@/lib/game/clock";
 import {
   buildOf,
   ceiling,
+  drawAt,
   HELD,
   kt,
   LAUNCH_LIFT,
@@ -234,12 +235,18 @@ function Blocks({ builds, adding }: { builds: string[]; adding: string | null })
 function Ceiling({ queued, now, began }: { queued: boolean; now: number; began: boolean }) {
   const { plan } = usePlan();
   const { scale } = useSchedule();
-  const { campuses, step, room } = useMemo(() => ceiling(plan, scale), [plan, scale]);
+  const { campuses, step } = useMemo(() => ceiling(plan, scale), [plan, scale]);
   const last = campuses.at(-1) ?? 0;
   const end = Math.max(12, Math.ceil(last) + 2);
   const X = (y: number) => (y / end) * 300;
   const Y = (e: number) => 60 - e * 52;
-  const at = (k: number) => step ** k / room;
+  // The share of the grid as it stands at each campus: Ground Solar or Fusion Plants grow the grid, and more campuses
+  // fit. Build said compute drew 192% of the grid after Ground Solar until 2026-11-01.
+  const shares = useMemo(() => {
+    const tf = plan.builds.includes("Thought Fields") ? plan : { ...plan, builds: [...plan.builds, "Thought Fields"] };
+    return [0, ...campuses].map((y) => drawAt(tf, scale, y + 1e-6).energy);
+  }, [plan, scale, campuses]);
+  const at = (k: number) => shares[k] ?? shares.at(-1)!;
   let climb = `M0 ${Y(at(0))}`;
   campuses.forEach((y, k) => (climb += `H${X(y)}V${Y(at(k + 1))}`));
   climb += `H300`;

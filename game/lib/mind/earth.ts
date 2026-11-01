@@ -7,6 +7,7 @@
 // reactions.py's MOVES, added the same day after the Mind said Ombe's knock answered us. Lift beyond rockets,
 // asteroids and the far side, 2026-10-27, from HOLOS_RESEARCH.md's "Builds we lack".
 import type { EarthPast } from "@/lib/game/past";
+import { centers } from "@/lib/sim/works";
 
 export const EARTH_AT_YEAR_0 = `What Earth has at Year 0, 2040:
 - People: about 9.2 billion. The long-term average warming passed 1.5°C around 2030.
@@ -45,7 +46,7 @@ export function roadOf(e: EarthPast): string {
       y.taiwan,
       c >= 0.99
         ? `${what} Output caught up, so our compute is as above.`
-        : `${what} Our compute at Year 0 is ${Math.round(c * 100)}% of what the kit above says, about ${Number((c * 10).toFixed(1))} × 10^24 operations a second, drawing about ${Number((c * 0.25).toFixed(2))} TW. Every build takes longer than it would have, and Thought Fields grows from less. Build says so.`,
+        : `${what} Our compute at Year 0 is ${Math.round(c * 100)}% of what the kit above says, about ${Number((c * 10).toFixed(1))} × 10^24 operations a second, drawing about ${Number((c * 0.25).toFixed(2))} TW, about ${Number((c * 5).toFixed(1))}% of our electricity, so about ${centers(c)} data centers fit under the grid, not seven. Every build takes longer than it would have, and Thought Fields grows from less. Build says so.`,
     ]);
   }
   if (e.nuclear) turns.push([y.nuclear, "A nuclear weapon was used in war. One, and none since."]);
