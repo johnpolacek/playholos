@@ -2166,11 +2166,11 @@ The first screen, before Earth wakes, flies from Earth out to the Local Group an
   - Matters: the deepest map of real galaxies that covers the whole sky.
   - Used: the dots of the opening's first two stops, 43,463 of them, placed by `scripts/prepare-2mrs.py` at their speed over H0. Galaxies slower than 300 km/s are left out, since their own motions rule there and the Local Volume Database places them.
 - **The Hubble constant** · split. [Planck 2018](https://arxiv.org/abs/1807.06209) gives 67.4 km/s per Mpc from the early universe. [Riess et al. 2022](https://arxiv.org/abs/2112.04510) give 73.0 from the distance ladder.
-  - Used: 70, between them. It moves every survey galaxy by under 5%. A pick to confirm.
+  - Used: 70, between them, the user's pick 2026-11-01. It moves every survey galaxy by under 5%.
 - **[Tully et al. 2014, The Laniakea supercluster of galaxies](https://arxiv.org/abs/1409.0880)** · Published, Nature 513, 71. Our supercluster, about 160 Mpc (520 million ly) across, about 100,000 large galaxies, its flows converging on the Great Attractor. Used: the Our corner of it stop's words.
 - **The observable universe** · Reference, from Planck 2018's cosmology. Its edge is about 46.5 billion ly away in every direction, measured today. Used: the opening's sphere and words.
 - **[Lauer et al. 2021, New Horizons' cosmic optical background](https://arxiv.org/abs/2011.03052)** · Published, ApJ 906, 77. The dark sky past Pluto leaves room for a few hundred billion galaxies, not the two trillion of Conselice et al. 2016. Used: “hundreds of billions more.”
-- **Voyager 1 at one light-day** · not yet checked. Its distance grows about 3.6 AU a year, which puts it near 173 AU, one light-day, in late 2026. Used: the Our Sun, today stop.
+- **[Voyager 1 at one light-day](https://iflscience.com/its-official-voyager-1-will-cross-the-1-light-day-threshold-on-november-18-2026-82733)** · News, checked 2026-11-01 by search summary. NASA said on 2026-06-17 that Voyager 1 crosses one light-day from Earth, 173.14 AU, on November 18, 2026, the first craft to. Used: the Our Sun, today stop, “about one light-day out.”
 
 ### Neighbor galaxies against ours, 2026-10-30
 
