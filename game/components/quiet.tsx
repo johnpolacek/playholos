@@ -79,7 +79,9 @@ export function Quiet({ from, to, onClose }: { from: number; to: number; onClose
         </text>
       </svg>
       <p data-q className="text-[13px] leading-snug text-page-ink2">
-        {watches.length ? "Nothing new reached us on the way. On watch all the while:" : "Nothing new reached us on the way. No watch of ours was running to see it."}
+        {/* The skip stops because something new has come, so the quiet ends here. A playtest read "Nothing new" as the
+            stop's own news, 2026-11-01. */}
+        {`Nothing new reached us until Year ${yearText(to)}, when something did. ${watches.length ? "On watch all the while:" : "No watch of ours was running."}`}
       </p>
       {watches.length > 0 && (
         <ul data-q className="flex flex-wrap gap-x-3 gap-y-1.5">

@@ -50,6 +50,15 @@ const TARGETS = targets as { name: string; ra: number; dec: number; d: number }[
 /** The watcher, once found: a knock aimed at it lands within seconds, from the Moon's L5. 2026-10-30. */
 export const WATCHER = { name: "The watcher", ra: 0, dec: 0, d: 1.3 / 3.156e7 };
 
+/** How far the watcher sits from Earth, as light-time, by where it sits: the Moon's L4 or L5 at 1.3 light-seconds, the
+ *  Sun–Earth L4 or L5 at 1 AU, 8.3 light-minutes, and a co-orbital rock minutes off. A knock card read 1.3
+ *  light-seconds for every place until a playtest, 2026-11-01. */
+export function watcherAway(place: string | undefined) {
+  if (!place || place.startsWith("Earth–Moon")) return { far: "1.3 light-seconds", lands: "in seconds", ls: 1.3 };
+  if (place.startsWith("Sun–Earth")) return { far: "8.3 light-minutes", lands: "in 8 minutes", ls: 499 };
+  return { far: "a few light-minutes", lands: "in minutes", ls: 500 };
+}
+
 /** How far a message can be aimed: any lead's direction in our Galaxy, a warm glow thousands of light-years off
  *  included. Light needs no star catalog, only a direction. 2026-10-31. */
 export const REACH_LY = 200_000;

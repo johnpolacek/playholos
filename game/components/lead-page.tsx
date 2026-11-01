@@ -8,6 +8,7 @@ import { LeadMark } from "@/components/marks";
 import { useLeads } from "@/components/scan";
 import { span, lyOf, yearText } from "@/lib/game/clock";
 import { ODDS, type Odds, type Reading, starName } from "@/lib/game/leads";
+import { dates } from "@/lib/game/sends";
 import { VisitArt } from "@/components/visit-art";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
 
@@ -100,11 +101,23 @@ function AirBands({ air }: { air: NonNullable<Reading["air"]> }) {
 
 export function LeadPage({ slug }: { slug: string }) {
   const { leads, dials, readings, fresh, setLook } = useLeads();
-  const { see } = useGame();
+  const { see, save } = useGame();
   const navigate = useNavigate();
   const root = useRef<HTMLDivElement>(null);
   const i = leads.findIndex((l) => l.slug === slug);
   const lead = leads[i];
+  // What we sent it, when it lands and when an answer could come, here as on Scan's Messages. A warm glow's page never
+  // said we had messaged it until a playtest, 2026-11-01.
+  const ours: [string, string][] = !lead
+    ? []
+    : (save?.sent ?? [])
+        .filter((m) => m.to === lead.star)
+        .map((m) => {
+          const ds = (lead.range ?? [lead.ly, lead.ly]).map((d) => dates(m.y, d, m.size));
+          const when = (f: (x: (typeof ds)[number]) => number) =>
+            ds[0] === ds[1] || f(ds[0]) === f(ds[1]) ? `Year ${yearText(f(ds[0]))}` : `Year ${yearText(f(ds[0]))} to ${yearText(f(ds[1]))}`;
+          return ["Our message", `Sent Year ${yearText(m.y)}. It lands ${when((x) => x.lands)}, and an answer could come ${when((x) => x.back)}.`];
+        });
   const all = (lead && readings[lead.slug]) || [];
   const read = all.at(-1);
   // What came before the latest stays on the page, newest first: the watcher's answer and its relay were gone once a
@@ -226,7 +239,7 @@ export function LeadPage({ slug }: { slug: string }) {
 
       <h2 data-m className={`mt-5 ${HEAD}`}>What we measured</h2>
       <dl data-m className="mt-1.5 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-[13.5px] leading-snug">
-        {lead.facts.map(([label, value]) => (
+        {[...lead.facts, ...ours].map(([label, value]) => (
           <div key={label} className="contents">
             <dt className="text-muted">{label}</dt>
             <dd>{value}</dd>

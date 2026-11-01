@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useGame } from "@/components/game-provider";
+import { useLeads } from "@/components/scan";
 import { tenths, yearText } from "@/lib/game/clock";
-import { dates, type Draft, farText, sendTime, target, WATCHER } from "@/lib/game/sends";
+import { dates, type Draft, farText, sendTime, target, WATCHER, watcherAway } from "@/lib/game/sends";
 import sky from "@/lib/game/sky.json";
 import { GRID_2040, noticeReach, powerFor, readReach, SIZES } from "@/lib/sim/messages";
 
@@ -53,6 +54,7 @@ const frame = "flex flex-col gap-3 rounded-xl border border-rowline bg-paper p-3
 /** Aimed at one star: the ledger. */
 function Aimed({ id, draft, asked }: { id: string; draft: Draft; asked: string }) {
   const { orderAt: year, save, send } = useGame();
+  const away = watcherAway(useLeads().minds?.watcher?.place);
   const star = target(draft.to);
   const sent = save?.sent?.find((s) => s.id === id);
   const y = sent?.y ?? year ?? 0;
@@ -68,7 +70,7 @@ function Aimed({ id, draft, asked }: { id: string; draft: Draft; asked: string }
   const near = star === WATCHER;
   const facts: [string, string][] = near ? [
     ["Sends in", sendTime(sendYears)],
-    ["Lands", sent ? `Year ${yearText(lands)}` : "in seconds"],
+    ["Lands", sent ? `Year ${yearText(lands)}` : away.lands],
     ["Answer", "If it chooses"],
   ] : [
     ["Sends in", sendTime(sendYears)],
@@ -81,7 +83,7 @@ function Aimed({ id, draft, asked }: { id: string; draft: Draft; asked: string }
     <div className={frame}>
       <div className="flex items-baseline justify-between">
         <span className={`${lab} text-you`}>To</span>
-        <span className="font-mono text-[11px] text-muted">{star === WATCHER ? "1.3 light-seconds" : farText(star)}</span>
+        <span className="font-mono text-[11px] text-muted">{star === WATCHER ? away.far : farText(star)}</span>
       </div>
       <b className="-mt-2 text-[15px] font-semibold">{star.name}</b>
       <Travels draft={draft} />

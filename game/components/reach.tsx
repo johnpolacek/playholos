@@ -9,7 +9,7 @@ import { useLeads } from "@/components/scan";
 import { SkyArt } from "@/components/sky";
 import { Face, ListHead } from "@/components/tab-head";
 import type { Dials, Mark as Place } from "@/lib/drift";
-import { YEAR_0, lyOf } from "@/lib/game/clock";
+import { YEAR_0, lyOf, yearText } from "@/lib/game/clock";
 import { LANDMARKS } from "@/lib/game/landmarks";
 import { starName, visitReading } from "@/lib/game/leads";
 import { lean, type moves } from "@/lib/game/plan";
@@ -47,7 +47,8 @@ import { gsap, prefersReducedMotion } from "@/lib/motion";
 const W = 360;
 const L = 14;
 const R = W - 14;
-export const year = (y: number) => (Math.round(y * 10) / 10).toString();
+// With thousands marked, as every other screen: "Year 80035.6" read raw until a playtest, 2026-11-01.
+export const year = (y: number) => yearText(y);
 /** The map's zoom that frames a star `ly` out. */
 export const farZoom = (ly: number) => zoomFor(ly * LY_AU);
 const [NEAR_ZOOM, FAR_ZOOM] = [zoomFor(NEAR_AU), farZoom(NEAREST.ly)];
@@ -674,17 +675,33 @@ export function Reach() {
           // A road that has flown went to the nearest star, so a time already past is no road to any other. At Year
           // 20,858, Proxima's soonest still read Year 125.1. Playtest 2026-11-01.
           const ly = l.range?.[0] ?? l.ly;
-          const at = base.map((r) => toward(r, ly).arrives).filter((y): y is number => y !== null);
+          const at = base.map((r) => toward(r, ly, l.star === NEAREST.name ? undefined : from).arrives).filter((y): y is number => y !== null);
           const ahead = at.filter((y) => y > from);
           const reached = l.star === NEAREST.name && ahead.length < at.length ? Math.min(...at) : null;
           return { lead: l, soonest: ahead.length ? Math.min(...ahead) : null, reached };
         }),
     [leads, base, from],
   );
-  // Cold glows no craft of ours has seen up close gather in one row, as on Scan. Playtest 2026-11-01.
-  const [coldOpen, setColdOpen] = useState(false);
-  const isCold = (l: (typeof places)[number]["lead"]) => l.slug.startsWith("cold-glow-") && !l.facts.some(([k]) => k === "Up close");
-  const cold = places.filter((p) => isCold(p.lead));
+  // Cold glows no craft of ours has seen up close gather in one row, as on Scan, and faded warm glows we haven't
+  // messaged in another. Playtest 2026-11-01.
+  const [openGroup, setOpenGroup] = useState<string | null>(null);
+  const messaged = new Set((save?.sent ?? []).map((m) => m.to));
+  type Place = (typeof places)[number];
+  const groups = [
+    {
+      key: "cold-glows",
+      title: "Cold glows",
+      line: "A sentinel can go to any of them",
+      test: (p: Place) => p.lead.slug.startsWith("cold-glow-") && !p.lead.facts.some(([k]) => k === "Up close"),
+    },
+    {
+      key: "faded-glows",
+      title: "Faded warm glows",
+      line: "A message can go to any of them",
+      test: (p: Place) => p.lead.slug.startsWith("warm-glow-") && p.lead.facts.some(([k]) => k === "Faded") && !messaged.has(p.lead.star),
+    },
+  ].map((g) => ({ ...g, members: places.filter(g.test) }));
+  const groupOf = (p: Place) => groups.find((g) => g.members.length > 1 && g.test(p));
 
   // Our sails and probe join Voyager 1 once they leave, each on its way from leaving to its word home from Proxima b.
   const flying: Row[] = base
@@ -762,27 +779,30 @@ export function Reach() {
 
       <ListHead left={`Destinations · ${places.length}`} right="Soonest" className="mt-5" />
       <ul className="mt-1">
-        {places.map((p) =>
-          cold.length > 1 && isCold(p.lead) ? (
-            p === cold[0] && (
-              <li key="cold-glows" className="border-t border-faint">
-                <button onClick={() => setColdOpen(!coldOpen)} aria-expanded={coldOpen} className="block w-full py-2.5 text-left">
-                  <Face
-                    mark={<LeadMark art={p.lead.art} />}
-                    tone="text-you"
-                    name={<b className="font-semibold">Cold glows · {cold.length.toLocaleString("en-US")}</b>}
-                    line={`A sentinel can go to any of them · ${lyOf(cold[0].lead.ly)} to ${lyOf(cold.at(-1)!.lead.ly)} ly`}
-                    right={cold[0].soonest === null ? "Not yet" : `Year ${year(cold[0].soonest)}`}
-                    more={false}
-                  />
-                </button>
-                {coldOpen && <ul className="mb-1 pl-5">{cold.map(place)}</ul>}
-              </li>
-            )
-          ) : (
-            place(p)
-          ),
-        )}
+        {places.map((p) => {
+          const g = groupOf(p);
+          if (!g) return place(p);
+          if (p !== g.members[0]) return null;
+          const open = openGroup === g.key;
+          const near = (q: Place) => q.lead.range?.[0] ?? q.lead.ly;
+          const far = (q: Place) => q.lead.range?.[1] ?? q.lead.ly;
+          const soonest = g.members.map((q) => q.soonest).filter((y): y is number => y !== null);
+          return (
+            <li key={g.key} className="border-t border-faint">
+              <button onClick={() => setOpenGroup(open ? null : g.key)} aria-expanded={open} className="block w-full py-2.5 text-left">
+                <Face
+                  mark={<LeadMark art={p.lead.art} />}
+                  tone="text-you"
+                  name={<b className="font-semibold">{g.title} · {g.members.length.toLocaleString("en-US")}</b>}
+                  line={`${g.line} · ${lyOf(Math.min(...g.members.map(near)))} to ${lyOf(Math.max(...g.members.map(far)))} ly`}
+                  right={soonest.length ? `Year ${year(Math.min(...soonest))}` : "Not yet"}
+                  more={false}
+                />
+              </button>
+              {open && <ul className="mb-1 pl-5">{g.members.map(place)}</ul>}
+            </li>
+          );
+        })}
       </ul>
     </div>
   );

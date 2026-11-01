@@ -300,9 +300,12 @@ export function kitOf(plan: Plan, scale: number) {
 }
 
 /** A road toward a star `ly` away: the build and the wait are the same, the flight and the word home are its own. */
-export function toward(road: Road, ly: number): Road {
-  const arrives = road.leaves === null ? null : road.leaves + ly / road.speed;
-  return { ...road, arrives, home: arrives === null ? null : arrives + ly };
+export function toward(road: Road, ly: number, from?: number): Road {
+  // Our Year 0 craft flew to the nearest star. To any other, given `from`, a craft whose leaving is past is a new one
+  // built from now: at Year 979, 82 Eridani's flyby still read passes Year 420.4. Playtest 2026-11-01.
+  const leaves = road.leaves !== null && from !== undefined && road.leaves < from ? from + (road.leaves - (road.done ?? road.leaves)) : road.leaves;
+  const arrives = leaves === null ? null : leaves + ly / road.speed;
+  return { ...road, leaves, arrives, home: arrives === null ? null : arrives + ly };
 }
 
 /** A way to go that waits on builds beyond the two roads: what it is, and the builds it needs, by name, each a link to

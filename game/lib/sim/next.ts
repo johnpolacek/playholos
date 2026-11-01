@@ -7,6 +7,9 @@ import type { EarthView } from "./types.ts";
 // "warned" and "known": the watcher's warning and a seed gone silent, playtest 2026-11-01.
 const WHEN = new Set(["arrived", "found", "home", "seen", "ranged", "faded", "lands", "stands", "at", "near", "warned", "known"]);
 
+/** Years at least between two warm glows that stop the skip. */
+export const GLOW_GAP = 1000;
+
 /** The earliest Year after `year` that anything in `ahead`, what Earth will know by some later Year, became known. */
 export function nextKnown(ahead: EarthView, year: number): number | null {
   let best: number | null = null;
@@ -27,7 +30,16 @@ export function nextKnown(ahead: EarthView, year: number): number | null {
   // 460 presses to reach Year 20,000. The rest gather on Scan as one row. Word from our craft up close still stops it.
   // Playtest 2026-11-01.
   const glows = ahead.minds?.glows ?? [];
-  walk({ ...ahead, minds: ahead.minds && { ...ahead.minds, glows: glows.map((g, i) => (i === 0 ? g : { near: g.near })) } });
+  // A warm glow stops the skip once it is ranged, at most once in GLOW_GAP Years, and its fade never does. The Warm
+  // Sky Watch finds hundreds: 464 by Year 34,944, and each stopping it twice took about 1,000 presses. The rest gather
+  // on Scan. Playtest 2026-11-01.
+  let last = -Infinity;
+  const flashes = [...(ahead.minds?.flashes ?? [])]
+    .map((f) => f.ranged ?? f.seen)
+    .sort((a, b) => a - b)
+    .filter((t) => (t - last >= GLOW_GAP ? ((last = t), true) : false))
+    .map((t) => ({ seen: t }));
+  walk({ ...ahead, minds: ahead.minds && { ...ahead.minds, flashes, glows: glows.map((g, i) => (i === 0 ? g : { near: g.near })) } });
   return best;
 }
 

@@ -19,6 +19,7 @@ import {
   lensKm,
   lensRoad,
   LOCKED,
+  NEAREST,
   type Road,
   roads,
   SEED_NEEDS,
@@ -123,23 +124,6 @@ function Sent(props: {
               <Need key={n} name={n} {...have(n)} />
             ))}
           </span>
-          {can && !sent && asking && (
-            <span className="flex shrink-0 items-center gap-1.5">
-              <span className="text-[12.5px] text-muted">Can’t be called back.</span>
-              <button onClick={() => setAsking(null)} className="h-8 rounded-full border border-faint px-3.5 text-[13px] font-medium">
-                Wait
-              </button>
-              <button
-                onClick={() => {
-                  asking.send();
-                  setAsking(null);
-                }}
-                className="h-8 rounded-full bg-ink px-3.5 text-[13px] font-medium text-paper"
-              >
-                {asking.label}
-              </button>
-            </span>
-          )}
           {can && !asking && (sent || !choices) && (
             <button
               disabled={sent}
@@ -159,6 +143,24 @@ function Sent(props: {
             </span>
           )}
         </div>
+        {/* The ask sits on its own line: beside the needs it ran off the panel, playtest 2026-11-01. */}
+        {can && !sent && asking && (
+          <div className="mt-2 flex flex-wrap items-center justify-end gap-1.5">
+            <span className="text-[12.5px] text-muted">Can’t be called back.</span>
+            <button onClick={() => setAsking(null)} className="h-8 rounded-full border border-faint px-3.5 text-[13px] font-medium">
+              Wait
+            </button>
+            <button
+              onClick={() => {
+                asking.send();
+                setAsking(null);
+              }}
+              className="h-8 rounded-full bg-ink px-3.5 text-[13px] font-medium text-paper"
+            >
+              {asking.label}
+            </button>
+          </div>
+        )}
       </div>
     </li>
   );
@@ -180,7 +182,8 @@ export function DestinationPage({ slug }: { slug: string }) {
   // Ordered from a hole, it begins on Earth a light-time later. 2026-10-26.
   const from = before ? 0 : Math.floor((orderAt ?? clock) * 10) / 10;
   const ly = lead?.ly ?? 0;
-  const ways = useMemo(() => roads(plan, scale, from).map((r) => toward(r, ly)), [plan, scale, from, ly]);
+  const nearest = lead?.star === NEAREST.name;
+  const ways = useMemo(() => roads(plan, scale, from).map((r) => toward(r, ly, nearest ? undefined : from)), [plan, scale, from, ly, nearest]);
   const tip = useMemo(() => sooner(plan, scale, from, ways[1].home, ly), [plan, scale, from, ways, ly]);
   const slow = useMemo(() => (before ? moves(plan, scale, "Probe Yard").late : null), [before, plan, scale]);
   // A lens pictures only a world we have felt, one lens a star. 2026-10-26.

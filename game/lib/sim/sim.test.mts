@@ -460,18 +460,23 @@ test("bullets wait on helium-3 from a harvest that doubles every 5 Years, in the
 });
 
 test("skipping ahead stops at the next thing we learn or build, and says when, never what", async () => {
-  const { nextKnown, nextStop } = await import("./next.ts");
+  const { nextKnown, nextStop, GLOW_GAP } = await import("./next.ts");
   const world = await loadWorld(10);
   // Seed 10 with the Warm Sky Watch at Year 0 and our Infrared Telescope: warm glows rise and fade every few centuries.
   const ahead = earthKnows(world, 102500, { warmWatch: 0, telescope: 0 });
-  const soonest = (fs: NonNullable<typeof ahead.minds>["flashes"], at: (f: (typeof fs)[number]) => number) =>
-    Math.min(...fs.flatMap((f) => [at(f), f.faded ?? Infinity]).filter((t) => t > 2000));
-  // Once it will be ranged, the skip stops when it is, where Scan shows it, not when first seen. 2026-10-30.
+  // Once ranged, a glow stops the skip when it is, where Scan shows it, at most once in GLOW_GAP Years, and its fade
+  // never does. Playtest 2026-11-01.
+  const stops = (fs: NonNullable<typeof ahead.minds>["flashes"], at: (f: (typeof fs)[number]) => number) => {
+    let last = -Infinity;
+    return fs.map(at).sort((a, b) => a - b).filter((t) => (t - last >= GLOW_GAP ? ((last = t), true) : false));
+  };
+  const after = (ts: number[], y: number) => Math.min(...ts.filter((t) => t > y));
   assert.ok(ahead.minds!.flashes.some((f) => f.ranged! > 2000));
-  assert.equal(nextKnown(ahead, 2000), soonest(ahead.minds!.flashes, (f) => f.ranged ?? f.seen));
+  assert.equal(nextKnown(ahead, 2000), after(stops(ahead.minds!.flashes, (f) => f.ranged ?? f.seen), 2000));
+  assert.ok(stops(ahead.minds!.flashes, (f) => f.ranged!).length < ahead.minds!.flashes.length / 2);
   // Never ranged, as with no Infrared Telescope, the Warm Sky Watch's sighting stops it.
   const unranged = earthKnows(world, 102500, { warmWatch: 0 });
-  assert.equal(nextKnown(unranged, 2000), soonest(unranged.minds!.flashes, (f) => f.seen));
+  assert.equal(nextKnown(unranged, 2000), after(stops(unranged.minds!.flashes, (f) => f.seen), 2000));
   // A place in [ra, dec, d] is never taken for a time, and a build done sooner stops the skip first.
   assert.equal(nextStop(ahead, 2000, { "Moon Search": 2001, "Halo Survey": null }), 2001);
   assert.equal(nextStop({ year: 0, felt: [], heard: [], visits: [] }, 5, {}), null);

@@ -97,7 +97,10 @@ export function LeadsMap({
       const focus = ids[(dials.focus ?? 0) - 1];
       // Leads and Sol first, then what we sent, then calls and flashes, and the rings' distances last, so the
       // later give way.
-      const rank = (id: string) => (ids.includes(id) || id === "Sol" ? 0 : id.startsWith("sent:") ? 1 : id.startsWith("ring:") ? 3 : 2);
+      // A glow's name ranks after the other leads and gives way whole when crowded, unless in view: hundreds of glows
+      // covered the map in a playtest, 2026-11-01.
+      const glow = (id: string) => /^(Warm|Cold) glow \d+$/.test(id) && id !== focus;
+      const rank = (id: string) => (glow(id) ? 0.5 : ids.includes(id) || id === "Sol" ? 0 : id.startsWith("sent:") ? 1 : id.startsWith("ring:") ? 3 : 2);
       // The LEADS chip sits at the top left, and covered Gaia BH1's name there until 2026-10-30.
       const taken: Parameters<typeof placeLabel>[4] = [{ l: 0, t: 0, r: 76, b: 36 }];
       for (const { id, x, y, a } of [...marks].sort((p, q) => rank(p.id) - rank(q.id))) {
@@ -105,11 +108,11 @@ export function LeadsMap({
         if (!n) continue;
         if (a <= 0) { n.style.opacity = "0"; continue; }
         const ring = id.startsWith("ring:") || id.startsWith("call:") || (id.startsWith("theirs:") && theirs[Number(id.slice(7))]?.ly === 0);
-        const lead = ids.includes(id);
+        const lead = ids.includes(id) && !glow(id);
         const clear = placeLabel(n, x, y, ring ? (id.startsWith("call:") ? 16 : 4) : null, taken);
         // A lead's name stays, faint, where it can't be clear. Any other gives way whole: a star we sent to sat over
         // Proxima Centauri's name until 2026-10-30.
-        n.style.opacity = String(a * (lead || id === "Sol" ? clear : clear === 1 ? 1 : 0) * (focus && lead && id !== focus ? 0.45 : 1));
+        n.style.opacity = String(a * (lead || id === "Sol" ? clear : clear === 1 ? 1 : 0) * (focus && ids.includes(id) && id !== focus ? 0.45 : 1));
       }
     },
     [dials, ids, theirs],
@@ -207,11 +210,13 @@ export function LeadList({
   readings?: Record<string, Reading[]>;
   fresh?: Set<string>;
 }) {
-  const { year } = useGame();
+  const { year, save } = useGame();
+  // Glows we have messaged keep their own rows. 2026-11-01.
+  const messaged = new Set((save?.sent ?? []).map((m) => m.to));
   // The lead in view: the one the Will points at, or else the one they picked, which stays until picked again.
   const [picked, setPicked] = useState<number | null>(null);
   const [peeked, setPeeked] = useState<number | null>(null);
-  const [coldOpen, setColdOpen] = useState(false);
+  const [openGroup, setOpenGroup] = useState<string | null>(null);
   const shown = peeked ?? picked;
   const look = (peek: number | null, pick = picked) => {
     setPeeked(peek);
@@ -264,49 +269,68 @@ export function LeadList({
       </Link>
     );
     // Cold glows our craft hasn't seen up close gather in one row, where the first stood. The Halo Survey finds
-    // hundreds, and they buried the watcher and the strike. Playtest 2026-11-01.
-    const grouped = (l: Lead) => l.slug.startsWith("cold-glow-") && !l.facts.some(([k]) => k === "Up close") && !(fresh && readings[l.slug]?.some((r) => fresh.has(r.id)));
-    const cold = leads.filter(grouped);
-    const first = cold.length > 1 ? cold[0] : undefined;
-    const latest = cold.at(-1);
+    // hundreds, and they buried the watcher and the strike. Playtest 2026-11-01. Faded warm glows we haven't messaged
+    // gather too: the Warm Sky Watch finds hundreds over the Years. Playtest 2026-11-01, 464 by Year 34,944.
+    const unread = (l: Lead) => !(fresh && readings[l.slug]?.some((r) => fresh.has(r.id)));
+    const has = (l: Lead, fact: string) => l.facts.some(([k]) => k === fact);
+    const groups = [
+      {
+        key: "cold-glows",
+        title: "Cold glows",
+        line: (latest: Lead) => `Each a mind computing cold, or something we don’t know. The latest, ${starName(latest.star)}.`,
+        test: (l: Lead) => l.slug.startsWith("cold-glow-") && !has(l, "Up close") && unread(l),
+      },
+      {
+        key: "faded-glows",
+        title: "Faded warm glows",
+        line: (latest: Lead) => `Each shone a few centuries, then dimmed. The latest, ${starName(latest.star)}.`,
+        test: (l: Lead) => l.slug.startsWith("warm-glow-") && has(l, "Faded") && !messaged.has(l.star) && unread(l),
+      },
+    ].map((g) => ({ ...g, members: leads.filter(g.test) }));
+    const groupOf = (l: Lead) => groups.find((g) => g.members.length > 1 && g.test(l));
     return (
       <ul className="mt-1 flex flex-col">
-        {leads.map((l, i) =>
-          first && grouped(l) ? (
-            l === first && (
-              <li key="cold-glows" className="border-t border-faint">
-                <button onClick={() => setColdOpen(!coldOpen)} aria-expanded={coldOpen} className="block w-full py-2.5 text-left">
-                  <Face
-                    mark={<LeadMark art={l.art} />}
-                    tone="text-you"
-                    name={
-                      <>
-                        <b className="font-semibold">Cold glows</b> · {n(cold.length)} found
-                      </>
-                    }
-                    line={`Each a mind computing cold, or something we don’t know. The latest, ${starName(latest!.star)}.`}
-                    right={
-                      <span className="flex flex-col items-end">
-                        <span>{lyOf(Math.min(...cold.map((c) => c.ly)))} to {lyOf(Math.max(...cold.map((c) => c.ly)))}</span>
-                        <span className="mt-[3px] text-[10px] text-muted/80">ly</span>
-                      </span>
-                    }
-                    more={false}
-                  />
-                </button>
-                {coldOpen && (
-                  <ul className="mb-1 flex flex-col pl-5">
-                    {leads.map((c, j) => grouped(c) && <li key={c.star} className="border-t border-faint">{link(c, j)}</li>)}
-                  </ul>
-                )}
+        {leads.map((l, i) => {
+          const g = groupOf(l);
+          if (!g)
+            return (
+              <li key={l.star} className="border-t border-faint">
+                {link(l, i)}
               </li>
-            )
-          ) : (
-            <li key={l.star} className="border-t border-faint">
-              {link(l, i)}
+            );
+          if (l !== g.members[0]) return null;
+          const open = openGroup === g.key;
+          return (
+            <li key={g.key} className="border-t border-faint">
+              <button onClick={() => setOpenGroup(open ? null : g.key)} aria-expanded={open} className="block w-full py-2.5 text-left">
+                <Face
+                  mark={<LeadMark art={l.art} />}
+                  tone="text-you"
+                  name={
+                    <>
+                      <b className="font-semibold">{g.title}</b> · {n(g.members.length)} found
+                    </>
+                  }
+                  line={g.line(g.members.at(-1)!)}
+                  right={
+                    <span className="flex flex-col items-end">
+                      <span>
+                        {lyOf(Math.min(...g.members.map((c) => c.range?.[0] ?? c.ly)))} to {lyOf(Math.max(...g.members.map((c) => c.range?.[1] ?? c.ly)))}
+                      </span>
+                      <span className="mt-[3px] text-[10px] text-muted/80">ly</span>
+                    </span>
+                  }
+                  more={false}
+                />
+              </button>
+              {open && (
+                <ul className="mb-1 flex flex-col pl-5">
+                  {leads.map((c, j) => g.test(c) && <li key={c.star} className="border-t border-faint">{link(c, j)}</li>)}
+                </ul>
+              )}
             </li>
-          ),
-        )}
+          );
+        })}
       </ul>
     );
   }

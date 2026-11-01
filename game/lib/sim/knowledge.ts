@@ -333,7 +333,8 @@ export function earthKnows(
       .filter((l) => l.known <= year)
       .sort((a, b) => a.known - b.known);
     if (seedsLost.length) minds.watcher.seedsLost = seedsLost;
-    if (ladder.warned !== null && ladder.warned <= year && minds.watcher.by !== "its warning") minds.watcher.warned = ladder.warned;
+    // Found by it too: the warning's words are a reading of their own, kept once later ones come. Playtest 2026-11-01.
+    if (ladder.warned !== null && ladder.warned <= year) minds.watcher.warned = ladder.warned;
     if (ladder.strike && ladder.strike.lands <= year) minds.watcher.struck = { lands: ladder.strike.lands, mt: ladder.strike.mt };
   }
   const ours: EarthView["colony"] | null = colony ? colonyAt(world, holes, colony, year) : null;
@@ -629,7 +630,7 @@ function describeMinds(m: MindsSeen, one: (x: number) => string): string {
     // happened, never who did it. 2026-10-30.
     if (w.seedsLost?.length)
       out.push(
-        `Our seed probes gone silent, after the watcher's warning and our next seed:\n` +
+        `${w.seedsLost.length === 1 ? "One of our seed probes gone silent" : `${w.seedsLost.length} of our seed probes gone silent`}, after the watcher's warning and our next seed:\n` +
           w.seedsLost.map((l) => l.before
             ? `- Bound for ${l.star}: its word of landing never came. It was due by Year ${yearText(l.known)}.`
             : `- At ${l.star}: its word stopped at Year ${yearText(l.at)}, reaching us at Year ${yearText(l.known)}. Its last word showed nothing coming: whatever hit it came cold and fast.`).join("\n"),
@@ -637,7 +638,7 @@ function describeMinds(m: MindsSeen, one: (x: number) => string): string {
     if (w.struck)
       out.push(`At Year ${yearText(w.struck.lands)} something struck Earth from beyond our system with about ${Math.round(w.struck.mt).toLocaleString("en-US")} Mt, moving near a tenth of light speed. No rock moves that fast. Nothing saw it come. It came after our seed probes' copies began launching seeds of their own.`);
     if (w.by !== "its warning")
-      out.push(`The Will can knock on it, with a message aimed at "the watcher". It lands within seconds. What it does with a knock, and whether it passes word home, we can't know.`);
+      out.push(`The Will can knock on it, with a message aimed at "the watcher". It lands within seconds, or minutes if it sits out by the Sun–Earth L4 or L5. What it does with a knock, and whether it passes word home, we can't know.`);
   }
   if (m.sleepers.length)
     out.push(

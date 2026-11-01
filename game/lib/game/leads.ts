@@ -1,5 +1,6 @@
 import { lyOf, tenths, YEAR_0, yearText } from "@/lib/game/clock";
 import { KNOCKS } from "@/lib/game/knocks";
+import { watcherAway } from "@/lib/game/sends";
 import { lightTime } from "@/lib/light";
 import { BANDS, iwa, owa, WIDE } from "@/lib/sim/observing";
 import type { MindsSeen, WatcherSeen } from "@/lib/sim/minds";
@@ -769,6 +770,15 @@ function watcherLead(w: WatcherSeen): Lead {
   const rock = w.by === "asteroid tour";
   // L4 or L5, as the seed placed it: every game read L5 until 2026-10-30.
   const L = w.place.endsWith("L4") ? "L4" : "L5";
+  // Known only by its warning, it is placed only as its laser places it, and no craft can find it there, as
+  // lib/sim/minds.ts has it. Its lead named Sun–Earth L4 and offered a craft no Build had until a playtest, 2026-11-01.
+  const away = watcherAway(w.place);
+  const sun = w.place.startsWith("Sun–Earth");
+  const from = w.place.startsWith("Earth–Moon")
+    ? `the Moon’s ${L} point`
+    : sun
+      ? `near the Sun–Earth ${L} point, ${L === "L4" ? "ahead of" : "behind"} Earth in its orbit`
+      : "near a rock sharing Earth’s orbit";
   return {
     slug: "small-dark-body",
     at: [0, 0, 0],
@@ -779,17 +789,17 @@ function watcherLead(w: WatcherSeen): Lead {
       : rock
         ? "Smooth, dark and about 10 cm across, not of the rock it rides."
         : "A narrow laser aimed at Earth, timed to our first seed ship.",
-    ly: moon ? 1.3 * LY_SEC : rock ? 500 * LY_SEC : 1000 * LY_SEC,
+    ly: away.ls * LY_SEC,
     ask: moon ? `What is the dark body at the Moon’s ${L} point?` : rock ? `What did our Asteroid Tour find on ${w.place}?` : "What sent the laser signal at our first seed ship?",
     brief: moon
       ? `Our Moon Search found a dark body about 10 cm across at the Moon’s ${L} point, first seen at ${year}. The Sun’s pull unsettles anything there within years, yet it holds. No rock should. Something small, and steered, has been watching us from beside the Moon.`
       : rock
         ? `Our Asteroid Tour found something about 10 cm across on ${w.place}, at ${year}: smooth, dark, and not of the rock. It has been there a long time, and sends nothing we can hear.`
-        : `A narrow laser aimed at Earth from ${w.place}, from ${year}, the Year our first seed ship left. Its timing reads as an answer to that ship. Whatever sent it is small, and we never found it.`,
+        : `A narrow laser aimed at Earth from ${from}, from ${year}, the Year our first seed ship left. Its timing reads as an answer to that ship. Whatever sent it is small, and we never found it.`,
     facts: [
       ["First seen", `${year}, by ${moon ? "our Moon Search" : rock ? "our Asteroid Tour" : "our watches"}`],
       ["Its size", moon || rock ? "About 10 cm across" : "Too small to see"],
-      ["Where", moon ? `The Moon’s ${L} point, 1.3 light-seconds from Earth` : w.place],
+      ["Where", moon ? `The Moon’s ${L} point, 1.3 light-seconds from Earth` : rock ? w.place : `Its laser came from ${from}, ${away.far} away`],
     ],
     could: moon
       ? [
@@ -802,7 +812,11 @@ function watcherLead(w: WatcherSeen): Lead {
           { what: "Something natural we don't know", why: "Rock and ice can take odd shapes. None we know is this smooth.", odds: "unlikely" },
         ],
     tells: [
-      "A craft sent to look closely would see what it is. It may see us coming.",
+      moon || rock
+        ? "A craft sent to look closely would see what it is. It may see us coming."
+        : sun
+          ? "Its laser came from a zone tens of millions of km wide. A craft there would see a thing this small only within about 200,000 km, so none could find it."
+          : "We never looked closely where it sits. Its laser is all we have of it.",
       "A knock aimed at it would tell it we know it is there.",
     ],
     art: { kind: "near", where: moon ? "moon" : rock ? "co-orbital" : "warning" },
@@ -883,9 +897,17 @@ export function watcherReadings(w: WatcherSeen, knocks: number[], year: number):
       needs: "",
       at: tenths(gone[0].known),
       by: "Our seed probes",
-      title: "Our seeds gone silent",
-      line: `${gone.length === 1 ? "One of our seed probes" : `${gone.length} of our seed probes`} went silent after we launched another seed past the watcher’s warning: ${gone.map((l) => l.star).join(", ")}. The last word from each showed nothing coming.`,
-      mind: "Something cold and fast found each of them at its star. We were warned, and we sent another. This reads as the answer.",
+      // One or many, said as one or many: one lost read "Our seeds gone silent" and "each of them" until a playtest,
+      // 2026-11-01.
+      title: gone.length === 1 ? "A seed gone silent" : "Our seeds gone silent",
+      line:
+        gone.length === 1
+          ? `One of our seed probes went silent after we launched another seed past the watcher’s warning, at ${gone[0].star}. Its last word showed nothing coming.`
+          : `${gone.length} of our seed probes went silent after we launched another seed past the watcher’s warning: ${gone.map((l) => l.star).join(", ")}. The last word from each showed nothing coming.`,
+      mind:
+        gone.length === 1
+          ? "Something cold and fast found it at its star. We were warned, and we sent another. This reads as the answer."
+          : "Something cold and fast found each of them at its star. We were warned, and we sent another. This reads as the answer.",
       now: made,
       tells: ["Each seed that copies itself on may draw more than silence."],
     });
