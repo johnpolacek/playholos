@@ -13,6 +13,7 @@ import { YEAR_0, lyOf } from "@/lib/game/clock";
 import { LANDMARKS } from "@/lib/game/landmarks";
 import { starName, visitReading } from "@/lib/game/leads";
 import { lean, type moves } from "@/lib/game/plan";
+import { target as starOf } from "@/lib/game/sends";
 import {
   auFor,
   LIGHT,
@@ -20,8 +21,11 @@ import {
   MARKS,
   NEAR_AU,
   NEAREST,
+  lensRoad,
   type Road,
   roads,
+  seedRoad,
+  sentinelRoad,
   toward,
   zoomFor,
 } from "@/lib/game/reach";
@@ -55,6 +59,8 @@ export interface Target {
   id: string;
   name: string;
   ly: number;
+  /** How far, in words, where we know only a range: a far warm glow. Playtest 2026-11-01. */
+  far?: string;
   /** Its system, which Close View flies into. */
   system?: System;
 }
@@ -221,7 +227,7 @@ export function ReachMap({ className }: { className: string }) {
   const toured = useRef(false);
   // The scene rings the star it is given, and the name follows it.
   const star = useMemo(() => [target.id], [target.id]);
-  const named: Record<string, string> = { ...NAMES, alpha: `${target.name} · ${lyOf(target.ly)} ly` };
+  const named: Record<string, string> = { ...NAMES, alpha: `${target.name} · ${target.far ?? `${lyOf(target.ly)} ly`}` };
   target.system?.worlds.forEach((w, i) => {
     named[`w${i}`] = worldName(w);
   });
@@ -413,7 +419,7 @@ export function Ruler() {
         each tick ten times farther · tap or drag to fly the map
       </text>
       <text x={r} y={80} textAnchor="end" className="fill-muted/80 font-mono text-[7.5px]">
-        {lyOf(target.ly)} ly
+        {target.far ?? `${lyOf(target.ly)} ly`}
       </text>
       {/* The map's view: where it is looking out to, now. */}
       <g ref={view} className="pointer-events-none">
@@ -665,11 +671,20 @@ export function Reach() {
       leads.filter((l) => l.art.kind !== "near")
         .sort((a, b) => a.ly - b.ly)
         .map((l) => {
-          const at = base.map((r) => toward(r, l.ly).arrives).filter((y): y is number => y !== null);
-          return { lead: l, soonest: at.length ? Math.min(...at) : null };
+          // A road that has flown went to the nearest star, so a time already past is no road to any other. At Year
+          // 20,858, Proxima's soonest still read Year 125.1. Playtest 2026-11-01.
+          const ly = l.range?.[0] ?? l.ly;
+          const at = base.map((r) => toward(r, ly).arrives).filter((y): y is number => y !== null);
+          const ahead = at.filter((y) => y > from);
+          const reached = l.star === NEAREST.name && ahead.length < at.length ? Math.min(...at) : null;
+          return { lead: l, soonest: ahead.length ? Math.min(...ahead) : null, reached };
         }),
-    [leads, base],
+    [leads, base, from],
   );
+  // Cold glows no craft of ours has seen up close gather in one row, as on Scan. Playtest 2026-11-01.
+  const [coldOpen, setColdOpen] = useState(false);
+  const isCold = (l: (typeof places)[number]["lead"]) => l.slug.startsWith("cold-glow-") && !l.facts.some(([k]) => k === "Up close");
+  const cold = places.filter((p) => isCold(p.lead));
 
   // Our sails and probe join Voyager 1 once they leave, each on its way from leaving to its word home from Proxima b.
   const flying: Row[] = base
@@ -693,33 +708,81 @@ export function Reach() {
       };
     });
 
+  // Our craft sent to other stars once each leaves: lenses, sentinels and seed probes. Reach listed only Voyager 1
+  // after all of these went. Playtest 2026-11-01.
+  const stays: (Row & { id: string })[] = clock === null ? [] : [
+    ...(plan.lenses ?? []).map((o) => ({ o, road: lensRoad(plan, scale, from, o.name), what: "A lens", to: "at its Sun’s focus, toward" })),
+    ...(plan.sentinels ?? []).map((o) => ({ o, road: sentinelRoad(plan, scale, from, o.name, starOf(o.name)?.d ?? 0), what: "A sentinel", to: "to stay at" })),
+    ...(plan.seeds ?? []).map((o) => ({ o, road: seedRoad(plan, scale, from, o.name, starOf(o.name)?.d ?? 0), what: "A seed probe", to: "to stay at" })),
+  ].flatMap(({ o, road: r, what, to }) => {
+    if (r.leaves === null || r.home === null || r.arrives === null || clock < r.leaves) return [];
+    const star = starName(o.name);
+    const there = what === "A lens" ? `Reached its focus in Year ${year(r.arrives)}` : `Reached ${star} in Year ${year(r.arrives)}`;
+    return [{
+      id: `${what}:${o.name}`,
+      key: r.build,
+      name: `${what}, ${star}`,
+      note: clock >= r.home ? `${there}. Its first word has reached us.` : clock >= r.arrives ? `${there}. Its first word is on its way to us.` : `Bound ${to} ${star}, arriving in Year ${year(r.arrives)}.`,
+      at: r.home,
+      kind: "flight" as const,
+      msg: `to ${star}`,
+      sent: YEAR_0 + r.leaves,
+      ly: what === "A lens" ? 3 / 365.25 : (starOf(o.name)?.d ?? 0),
+    }];
+  });
+
   if (!save) return null;
+
+  const place = ({ lead, soonest, reached }: (typeof places)[number]) => (
+    <li key={lead.slug} className="border-t border-faint">
+      <Link to={`/reach/${lead.slug}`} className="block py-2.5">
+        <Face
+          mark={<LeadMark art={lead.art} />}
+          tone={lead.reply ? "text-other" : "text-you"}
+          name={<b className="font-semibold">{starName(lead.star)}</b>}
+          line={`${lead.what} · ${lead.range ? `${lyOf(lead.range[0])} to ${lyOf(lead.range[1])}` : lyOf(lead.ly)} ly`}
+          right={soonest !== null ? `Year ${year(soonest)}` : reached !== null ? `Reached, Year ${year(reached)}` : "Not yet"}
+        />
+      </Link>
+    </li>
+  );
 
   return (
     <div className="flex flex-col pb-4">
-      <ListHead left={`Sent · ${1 + flying.length}`} right="Word home" className="mt-1" />
+      <ListHead left={`Sent · ${1 + flying.length + stays.length}`} right="Word home" className="mt-1" />
       <ul className="mt-1">
         {flying.map((r) => (
           <Item key={r.key} row={r} now={clock ?? 0} began={clock !== null} />
+        ))}
+        {stays.map((r) => (
+          <Item key={r.id} row={r} now={clock ?? 0} began={clock !== null} />
         ))}
         <Item row={SENT} now={clock ?? 0} began={clock !== null} aim={voyager} />
       </ul>
 
       <ListHead left={`Destinations · ${places.length}`} right="Soonest" className="mt-5" />
       <ul className="mt-1">
-        {places.map(({ lead, soonest }) => (
-          <li key={lead.slug} className="border-t border-faint">
-            <Link to={`/reach/${lead.slug}`} className="block py-2.5">
-              <Face
-                mark={<LeadMark art={lead.art} />}
-                tone={lead.reply ? "text-other" : "text-you"}
-                name={<b className="font-semibold">{starName(lead.star)}</b>}
-                line={`${lead.what} · ${lyOf(lead.ly)} ly`}
-                right={soonest === null ? "Not yet" : `Year ${year(soonest)}`}
-              />
-            </Link>
-          </li>
-        ))}
+        {places.map((p) =>
+          cold.length > 1 && isCold(p.lead) ? (
+            p === cold[0] && (
+              <li key="cold-glows" className="border-t border-faint">
+                <button onClick={() => setColdOpen(!coldOpen)} aria-expanded={coldOpen} className="block w-full py-2.5 text-left">
+                  <Face
+                    mark={<LeadMark art={p.lead.art} />}
+                    tone="text-you"
+                    name={<b className="font-semibold">Cold glows · {cold.length.toLocaleString("en-US")}</b>}
+                    line={`A sentinel can go to any of them · ${lyOf(cold[0].lead.ly)} to ${lyOf(cold.at(-1)!.lead.ly)} ly`}
+                    right={cold[0].soonest === null ? "Not yet" : `Year ${year(cold[0].soonest)}`}
+                    more={false}
+                  />
+                </button>
+                {coldOpen && <ul className="mb-1 pl-5">{cold.map(place)}</ul>}
+              </li>
+            )
+          ) : (
+            place(p)
+          ),
+        )}
       </ul>
     </div>
   );
