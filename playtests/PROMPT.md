@@ -1,6 +1,6 @@
 # Playtest prompt
 
-The Holos Cloud Playtest routine follows this file. Edit it to change what the playtest covers. 2026-10-28, updated 2026-10-29 for the realistic premise and skip-ahead, and 2026-10-31 for the relay and the ladder.
+The Holos Cloud Playtest routine follows this file. Edit it to change what the playtest covers. 2026-10-28, updated 2026-10-29 for the realistic premise and skip-ahead, and 2026-10-31 for the relay, the ladder, the electricity limit, Proxima b seen, and answers from old minds and peers.
 
 You are a fresh-eyes playtester for Holos. Play a full first session as a brand new player and report what you find.
 
@@ -23,7 +23,7 @@ You are a fresh-eyes playtester for Holos. Play a full first session as a brand 
 
 ## The realistic premise, added 2026-10-29
 
-- No neighbors live nearby any more. Minds are rare, old and far, so the opening is quiet. Judge whether the quiet start still holds your interest.
+- No neighbors live nearby any more. Old minds are common, about one per 1,600 stars, but quiet, so the opening is quiet. Judge whether the quiet start still holds your interest.
 - After about Year 6, order the Warm Sky Watch and the Infrared Telescope in play.
 - Use the “Next: Year …” link beside the Year, top right. It should jump to the next thing we learn or build, and stop there. Check that it jumps forward only, and that the Year and screens update.
 - Keep skipping until the first new warm glow appears on Scan, or to about Year 100,000 if none does. Open its lead. It should give a distance range, not one distance.
@@ -38,9 +38,17 @@ You are a fresh-eyes playtester for Holos. Play a full first session as a brand 
 - Keep skipping. A strike from beyond our system should land on Earth. Check that its harm shows, and that no screen names who sent it.
 - Ask the Mind why our probes went quiet and what struck us. It should reason from what we saw, and never claim to know the maker.
 
+## Added 2026-10-31
+
+- Compute now runs on electricity, 5 TW at Year 0. Thought Fields fills about 7 data centers by Year 7, then thought plateaus until Ground Solar lands near Year 22. Judge whether the plateau feels like a wall or a reason to build energy.
+- Proxima b's lead should show its true mass, tilt and how much light it reflects, seen from the ground in the 2030s, and odds that follow its brightness. Its air stays unread. Ask the Mind what Proxima b is likely to be.
+- Once the Moon Search finds the watcher, send it a knock from its lead. Skip ahead. About a century later, at its maker's distance, an answer should come: a picture of Earth at the hour we knocked, a rule (look, listen and speak as you like, build at no other star), and pictures of Earth's past. Check the watcher's lead and ask the Mind what it said and how far the maker is.
+- If a cold grey glow appears, send a sentinel to it from its page. When its word comes home, the lead should read a mind almost certain, with panels seen up close.
+- Once a warm glow is ranged, send it a message by its Scan name, such as Warm glow 1. Skip far ahead, to Year 40,000 or so. A peer may answer as an equal, or stay silent if it sleeps. Check what the answer says, and whether a gift speeds our thinking.
+
 ## Known gaps, not to report
 
-- Our screens on the line to the maker, since we never learn its star. Strikes on a Mind sent to a black hole.
+- Strikes on a Mind sent to a black hole. Seed probes spread only within 50 ly, and Scan's map draws only to 50 ly.
 - Interceptor and X-Ray Watch have nothing to act on yet. The Picket Yard was retired 2026-10-31.
 - Scripts under `explorations/` are old mockups and don't run.
 
