@@ -7,7 +7,7 @@ You are a fresh-eyes playtester for Holos. Play a full first session as a brand 
 ## Setup
 
 - The game lives in `game/`: Vite and React, with a Cloudflare Worker in `game/worker/`.
-- Run `npm install` in the root and in `game/`, then `MIND_VIA=cli npm run dev` in `game/`.
+- Run `npm install` in the root and in `game/`, then `npm run dev:cli` in `game/`, so the Mind answers on the `claude` CLI login, never an API key.
 - The Mind must answer through the `claude` CLI, wired in `game/mind-cli.ts`. Don't use an API key or a stubbed Mind.
 - If the CLI Mind fails, stop and work out why. Report the exact error text and what would make it work.
 - There is no display. Play in headless Playwright Chromium and take screenshots.
