@@ -23,14 +23,21 @@ export interface Stop {
 }
 
 /** The minds the map names round the place in view: the nearest old minds and the nearest peers, with what each is. */
-export function namedOf(m: DrawnMinds, names: Record<string, string>, worlds: NaturalWorld[] = []): { id: string; pos: Vec; label: string }[] {
+export function namedOf(m: DrawnMinds, names: Record<string, string>, worlds: NaturalWorld[] = []): Named[] {
   const ly = (d: number) => `${round(d)} ly`;
-  const short = { animals: "animals", oxygen: "oxygen", microbes: "microbes", lifeless: "" };
   return [
-    ...worlds.filter(living).slice(0, 6).map((w) => ({ id: `world-${w.star}`, pos: placeOf(w), label: `${w.name} · ${short[kindOf(w)]}` })),
-    ...m.old.slice(0, 8).map((o) => ({ id: o.id, pos: o.pos, label: `${names[o.id] ?? ly(o.d)} · ${o.asleep ? "asleep" : "awake"}` })),
-    ...m.peers.slice(0, 4).map((p) => ({ id: p.id, pos: p.pos, label: `peer · ${ly(p.d)}` })),
+    ...worlds.filter(living).slice(0, 6).map((w) => ({ id: `world-${w.star}`, pos: placeOf(w), label: w.name, kind: kindOf(w) as Named["kind"] })),
+    ...m.old.slice(0, 8).map((o): Named => ({ id: o.id, pos: o.pos, label: names[o.id] ?? ly(o.d), kind: o.asleep ? "asleep" : "awake" })),
+    ...m.peers.slice(0, 4).map((p): Named => ({ id: p.id, pos: p.pos, label: ly(p.d), kind: "peer" })),
   ];
+}
+
+/** A place the map names: its words, and the mark beside them for what it is. */
+export interface Named {
+  id: string;
+  pos: Vec;
+  label: string;
+  kind: "awake" | "asleep" | "peer" | "animals" | "oxygen" | "microbes";
 }
 
 export interface Clash {

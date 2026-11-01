@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router";
+import { SIM_COLOR, SimMark } from "@/components/icons";
 import { placeLabel } from "@/components/place-label";
 import { Sky, SkyArt } from "@/components/sky";
 import { DIALS, odds, round } from "@/lib/about/dials";
@@ -122,7 +123,14 @@ export default function Sim() {
                 {stop?.label}
               </span>
               {named.map((n) => (
-                <span key={n.id} ref={(el) => void (names.current[n.id] = el)} className={`${label} text-muted`}>
+                <span
+                  key={n.id}
+                  ref={(el) => void (names.current[n.id] = el)}
+                  className={`${label} inline-flex items-center gap-1 text-muted`}
+                >
+                  <span style={{ color: SIM_COLOR[n.kind] }}>
+                    <SimMark kind={n.kind} />
+                  </span>
                   {n.label}
                 </span>
               ))}
