@@ -148,7 +148,8 @@ export interface Show {
     minds: SimMind[];
     focus: [number, number, number] | null;
     zoom?: number;
-    marks?: { id: string; pos: [number, number, number] }[];
+    /** `rim`: the place is on the edge of what we can see, where its outline shows to the right, a little low. */
+    marks?: { id: string; pos: [number, number, number]; rim?: boolean }[];
     /** The place in view is one today's sky rules out: its thread and pulse are rose. */
     clash?: boolean;
     /** Lines out from Sol to these places, light-years in the atlas frame: our nearest stars, to scale. */
@@ -2111,6 +2112,25 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     };
   }
 
+  /** Where the edge of what we can see shows its outline, in light-years: the point on the sphere whose sight line
+   *  from the camera just grazes it, out to the right and a little below, so it is always in view as the view turns. */
+  const rimSide = new THREE.Vector3();
+  const rimUp = new THREE.Vector3();
+  const rimTo = new THREE.Vector3();
+  function rimPoint(out: THREE.Vector3) {
+    const R = 4.65e10;
+    const cam = stars.camera;
+    rimTo.copy(cam.position);
+    const L = rimTo.length();
+    rimTo.divideScalar(L || 1);
+    rimSide.setFromMatrixColumn(cam.matrixWorld, 0);
+    rimUp.setFromMatrixColumn(cam.matrixWorld, 1);
+    rimSide.multiplyScalar(Math.cos(0.35)).addScaledVector(rimUp, -Math.sin(0.35));
+    rimSide.addScaledVector(rimTo, -rimSide.dot(rimTo)).normalize();
+    const k = Math.min(1, R / (L || R));
+    return out.copy(rimTo).multiplyScalar(R * k).addScaledVector(rimSide, R * Math.sqrt(1 - k * k));
+  }
+
   // ── A simulation: the minds drawn at the dials' odds, among the real stars and across the Galaxy. 2026-11-01 ──
   function simulating() {
     const SIZE = { awake: 8, asleep: 6, peer: 6, fills: 10, animals: 8, oxygen: 6, microbes: 5, lifeless: 3 } as const;
@@ -2392,8 +2412,10 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         const w = parent.clientWidth;
         const h = parent.clientHeight;
         spec.onMarks(
-          s.marks.map(({ id, pos }) => {
-            v.set(...pos).project(stars.camera);
+          s.marks.map(({ id, pos, rim }) => {
+            if (rim) rimPoint(v);
+            else v.set(...pos);
+            v.project(stars.camera);
             return { id, x: ((v.x + 1) / 2) * w, y: ((1 - v.y) / 2) * h, a: v.z < 1 ? on : 0 };
           }),
         );

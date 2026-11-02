@@ -183,8 +183,13 @@ export default function Sim() {
       const pop = part(0, 0.28), run = out(part(0.08, 0.5)), words = out(part(0.32, 0.75));
       // The words go out to the side the line leaves on, and the line meets them at their near end.
       const w = n.offsetWidth, h = n.offsetHeight;
-      const [ex, ey] = [x + off[0], y + off[1]];
-      const left = off[0] < 0 ? ex - w - 8 : ex + 8;
+      // Kept inside the frame: where the words would cross its edge, they and the line's end move in.
+      const W = n.parentElement?.clientWidth ?? 0, H = n.parentElement?.clientHeight ?? 0;
+      const fitX = (l: number) => Math.min(Math.max(l, 12), W - w - 12);
+      const fitY = (yy: number) => Math.min(Math.max(yy, h / 2 + 12), H - h / 2 - 12);
+      const left = fitX(off[0] < 0 ? x + off[0] - w - 8 : x + off[0] + 8);
+      const ey = fitY(y + off[1]);
+      const ex = off[0] < 0 ? left + w + 8 : left - 8;
       // They slide in from back along the line, as if carried out on it.
       const len = Math.hypot(off[0], off[1]) || 1;
       const back = (1 - words) * 28;
@@ -196,8 +201,8 @@ export default function Sim() {
         const [line, dot] = g.children as unknown as [SVGLineElement, SVGCircleElement];
         line.setAttribute("x1", String(x));
         line.setAttribute("y1", String(y));
-        line.setAttribute("x2", String(x + off[0] * run));
-        line.setAttribute("y2", String(y + off[1] * run));
+        line.setAttribute("x2", String(x + (ex - x) * run));
+        line.setAttribute("y2", String(y + (ey - y) * run));
         line.style.opacity = run > 0 ? "1" : "0";
         dot.setAttribute("cx", String(x));
         dot.setAttribute("cy", String(y));

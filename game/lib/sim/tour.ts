@@ -29,7 +29,8 @@ export interface Stop {
   time?: boolean;
   /** Words the map puts by places, light-years in the atlas frame, each joined to its place by a line. `off` is where
    *  the words sit from the place, in px: right and down. They stand in for Sol's name. */
-  notes?: { id: string; pos: Vec; text: string; off: [number, number] }[];
+  /** `rim` puts the place on the edge sphere's outline as seen, not at `pos`, so it stays in view as the view turns. */
+  notes?: { id: string; pos: Vec; text: string; off: [number, number]; rim?: boolean }[];
 }
 
 /** How far time runs ahead, in years: a peer is a mind that woke within 20,000 years of us. */
@@ -170,7 +171,7 @@ export function tourOf(m: DrawnMinds, o: Odds, names: Record<string, string> = {
       { id: "mapped", pos: [0, 0, 0], text: "All we have mapped: 43,000 galaxies", off: [90, -80] },
       { id: "drawn", pos: [-1.6e10, -9e9, 0], text: "Hundreds of billions more, drawn", off: [-40, 70] },
       // Toward the Galaxy's center, which the opening's view puts at the sphere's right edge.
-      { id: "edge", pos: [4.65e10, 0, 0], text: "The first light, at the edge of what we can see, 46 billion light-years", off: [-70, -110] },
+      { id: "edge", pos: [4.65e10, 0, 0], rim: true, text: "The first light, at the edge of what we can see, 46 billion light-years", off: [-70, -110] },
     ],
   });
   stops.push({
