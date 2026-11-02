@@ -27,6 +27,8 @@ export interface Drawn {
   worlds: NaturalWorld[];
   /** Our nearest named stars, nearest first. */
   near: Near[];
+  /** What Gaia measured of each old mind's star in the catalog, by mind id: apparent magnitude and B − V color. */
+  starOf: Record<string, { mag: number; bv: number }>;
 }
 
 /** How many of our nearest stars the tour draws lines to. */
@@ -53,17 +55,23 @@ function namesOf(minds: DrawnMinds, list: Named[]): Record<string, string> {
 
 let stars: ReturnType<typeof catalogOf> | null = null;
 const hosts: Promise<Host[]> = fetch(new URL("../../data/sim-hosts.json", import.meta.url)).then((r) => r.json());
+let rows: Float32Array | null = null;
 const catalog = fetch(new URL("../../../data/gcns-326ly.bin", import.meta.url))
   .then((r) => r.arrayBuffer())
-  .then((b) => (stars = catalogOf(b)));
+  .then((b) => {
+    rows = new Float32Array(b);
+    stars = catalogOf(b);
+  });
 
 self.onmessage = async ({ data }: MessageEvent<Ask>) => {
   await catalog;
   const minds = drawMinds(data.seed, stars!, data.odds, starsWithin);
   const names = namesOf(minds, await named.catch(() => []));
   const worlds = drawWorlds(data.seed, await hosts, data.worlds);
+  const starOf: Drawn["starOf"] = {};
+  for (const m of minds.old) if (m.star !== null && rows) starOf[m.id] = { mag: rows[m.star * 5 + 3], bv: rows[m.star * 5 + 4] };
   const near = (await named.catch(() => [])).filter((n) => n.distance > 0.01).sort((p, q) => p.distance - q.distance).slice(0, NEAREST)
     .map((n): Near => ({ name: n.name, pos: n.pos, d: n.distance }));
-  const out: Drawn = { id: data.id, key: data.key, minds, fillers: fillers(data.odds), safeTop: safeTop(data.odds.starsPerMind), names, worlds, near };
+  const out: Drawn = { id: data.id, key: data.key, minds, fillers: fillers(data.odds), safeTop: safeTop(data.odds.starsPerMind), names, worlds, near, starOf };
   (self as unknown as Worker).postMessage(out);
 };

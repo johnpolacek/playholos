@@ -52,6 +52,12 @@ export interface NaturalWorld {
   age: number;
   ageBy: string;
   thaw: number | null;
+  /** Its star's kind, M to F, light in Suns, and known planets: real, as data/sim-hosts.json has them. */
+  kind: string;
+  lum: number;
+  planets: number;
+  /** Whether the star's age was published, not drawn. */
+  agePublished: boolean;
 }
 
 /** The chain's steps a natural world turns on, as shares. Holos's own: the dials' marks. */
@@ -187,6 +193,7 @@ export function drawWorlds(seed: number, hosts: Host[], odds: WorldOdds = HOLOS_
     .map((w) => ({
       star: w.h.id, name: w.h.name, d: w.h.d, ra: w.h.ra, dec: w.h.dec, a: w.a, radius: w.radius, mass: w.mass, pole: w.pole,
       tug: w.k, rung: rungOf(w), age: w.age, ageBy: w.h.ageBy ?? "drawn", thaw: w.thaw,
+      kind: w.h.kind, lum: w.h.lum, planets: w.h.planets.length, agePublished: !!w.h.age,
     }))
     .sort((p, q) => p.d - q.d);
 }
