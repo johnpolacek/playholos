@@ -152,6 +152,8 @@ export interface Show {
     clash?: boolean;
     /** Lines out from Sol to these places, light-years in the atlas frame: our nearest stars, to scale. */
     spokes?: [number, number, number][];
+    /** The opening shot: a new number plays it once, from inside our patch of galaxies out to the edge. */
+    intro?: number;
     /** Time passing: how many years from now the sky shows. Peers glow only while their warm light reaches us, and
      *  our own light, out since our first radio, spreads to `light` light-years. Unset, every peer glows. */
     time?: { years: number; light: number };
@@ -268,7 +270,7 @@ const PALETTE: { bg: string } & Record<Kind, string> = {
 
 const GLOW_VERT = /* glsl */ `
 uniform vec3 uPal[8];
-uniform float uFocal, uDpr, uOpacity, uMinPx, uMaxPx, uFixed, uReveal;
+uniform float uFocal, uDpr, uOpacity, uMinPx, uMaxPx, uFixed, uReveal, uFlash;
 uniform vec2 uNear;
 attribute float aSize, aBright, aKind, aRank;
 varying vec3 vColor;
@@ -279,8 +281,12 @@ void main() {
   float depth = max(-mv.z, 1e-12);
   // A point waits for its turn, where a screen reveals them in order.
   float a = aBright * uOpacity * clamp((uReveal - aRank) * 400.0 + 1.0, 0.0, 1.0);
+  // Where a screen flashes its points as they come, each flares as the reveal passes it, then settles, by the time
+  // the reveal is half again as far. The simulation's opening, its front of light. 2026-11-01.
+  float fresh = uFlash * clamp(1.0 - log(max(uReveal, 1e-9) / max(aRank, 1e-9)) / 0.4, 0.0, 1.0) * step(aRank, uReveal);
+  a *= 1.0 + 3.0 * fresh;
   float px;
-  if (uFixed > 0.5) px = aSize * uDpr;
+  if (uFixed > 0.5) px = aSize * uDpr * (1.0 + 1.6 * fresh);
   else {
     // World-sized, and a point too small to see dims into the smallest dot instead. Linearly, not by area, so a far
     // galaxy's many faint points still add up in an 8-bit buffer.
@@ -648,6 +654,31 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
   /** A simulation's view: from stop to stop in one eased flight, slow out, slow in, timed to how far the zoom goes, so
    *  the dive from the universe down to our Galaxy has no lurch at its start. Turning to face a place in view eases
    *  alongside. 2026-11-01. */
+  // ── The simulation's opening shot, 2026-11-01 ──
+  // From inside our own patch of real galaxies, a front of light runs out from us at a steady pace in the log, and
+  // each galaxy lights as it passes, as their light reaches us in truth, nearest first. The camera rides back ahead of
+  // it, swinging round and rising so the galaxies near and far slide past each other in depth. The front reaches the
+  // edge of what we can see, and the view settles there, turning.
+  const INTRO = 10;
+  const EDGE_R = 4.65e7; // thousand ly: the edge of what we can see
+  /** Where the camera starts, log10 AU: about 300 million ly round us, our own patch of real galaxies. */
+  const INTRO_NEAR = 13.2;
+  let intro: { key: number; at: number } | null = null;
+  const between = (t: number, a: number, b: number) => easeInOut(Math.min(1, Math.max(0, (t - a) / (b - a))));
+  /** The shot at time t: the front's radius in thousand ly, the camera's distance as log10 AU, and how far through
+   *  it, 0 to 1. The front sets out from us at once and races ahead; the camera holds close while our own patch
+   *  lights, then pulls back behind the front and out through the edge. Null outside the shot. */
+  function introAt(t: number) {
+    if (!intro || t - intro.at > INTRO) return null;
+    const s = t - intro.at;
+    const u = between(s, 0.3, 7.2);
+    const r = 10 ** (3 + (Math.log10(EDGE_R) - 3) * u);
+    const d = INTRO_NEAR + (UNIVERSE_D - INTRO_NEAR) * between(s, 2.2, INTRO - 0.4);
+    return { r, d, u, k: s / INTRO };
+  }
+  /** Where the camera ends, as the opening stop stands: the edge, all in view. */
+  const UNIVERSE_D = Math.log10(2.7 * EDGE_R * KLY_AU);
+
   function simPose(): Pose {
     let at: number | null = null;
     let [logD, az, tilt] = [spec.sim?.zoom ?? 7.0, 1.1, 0.75];
@@ -660,6 +691,19 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       const P = lookedAt();
       const toD = spec.sim?.zoom ?? 7.0;
       const toTilt = P ? -0.3 : 0.75;
+      // The opening shot: a new key plays it. It ends where the stop stands, so no leg follows.
+      const ik = spec.sim?.intro;
+      if (ik !== undefined && ik !== intro?.key) intro = { key: ik, at: t };
+      const shot = ik !== undefined ? introAt(t) : null;
+      if (shot) {
+        logD = shot.d;
+        // A long swing round and up, so near galaxies slide across far ones.
+        az = 0.2 + 2.2 * (1 - (1 - shot.k) ** 2);
+        tilt = -0.05 + 0.8 * easeInOut(shot.k);
+        key = `${spec.sim?.focus?.join() ?? ""}:${toD}`;
+        leg = null;
+        return [logD, az, tilt, 0];
+      }
       const next = `${spec.sim?.focus?.join() ?? ""}:${toD}`;
       if (next !== key) {
         key = next;
@@ -674,8 +718,9 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       if (P) {
         const turns = [pilot.facing(-P.z, P.x), pilot.facing(P.z, -P.x)].map((a) => wrap(a - az));
         az += (Math.abs(turns[0]) < Math.abs(turns[1]) ? turns[0] : turns[1]) * (1 - Math.exp(-dt * LOOK * 0.7));
-      } else az += drift(dt, 600);
-      return [logD, az, tilt, 0];
+      } else az += drift(dt, logD > 14.5 ? 150 : 600);
+      // Out at the edge the view keeps turning and gently rising and falling, so the galaxies' depth shows.
+      return [logD, az, tilt + (logD > 14.5 ? 0.12 * Math.sin(t / 9) : 0), 0];
     };
   }
 
@@ -838,6 +883,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         uFixed: { value: fixed ? 1 : 0 },
         uNear: { value: new THREE.Vector2(...near) },
         uReveal: { value: 1 },
+        uFlash: { value: 0 },
       },
       vertexShader: GLOW_VERT,
       fragmentShader: GLOW_FRAG,
@@ -2099,7 +2145,8 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         const survey = new Cloud();
         for (let i = 0; i < v.length; i += 4) {
           const k = v[i + 3];
-          survey.add(v[i], v[i + 1], v[i + 2], k < 9 ? 2.2 : 1.5, Math.min(1, Math.max(0.45, (12.5 - k) / 3)), k < 9 ? K.warm : K.ink);
+          const r = Math.hypot(v[i], v[i + 1], v[i + 2]) / EDGE_KLY;
+          survey.add(v[i], v[i + 1], v[i + 2], k < 9 ? 2.2 : 1.5, Math.min(1, Math.max(0.45, (12.5 - k) / 3)), k < 9 ? K.warm : K.ink, r);
         }
         cosmos.scene.add(survey.points(surveyGlow));
         surveyAt = clock;
@@ -2116,6 +2163,19 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     const edge = new THREE.Mesh(new THREE.SphereGeometry(EDGE_KLY, 96, 64), edgeMat);
     edge.frustumCulled = false;
     cosmos.scene.add(edge);
+    // The opening's front of light, a shell running out from us.
+    const frontMat = new THREE.ShaderMaterial({
+      uniforms: { uColor: { value: pal[K.young] }, uOpacity: { value: 0 } },
+      vertexShader: SHELL_VERT,
+      fragmentShader: SHELL_FRAG,
+      transparent: true,
+      depthWrite: false,
+      depthTest: false,
+      blending: THREE.AdditiveBlending,
+    });
+    const front = new THREE.Mesh(new THREE.SphereGeometry(1, 96, 64), frontMat);
+    front.frustumCulled = false;
+    cosmos.scene.add(front);
     // The rest, drawn: faint galaxies through the whole sphere, lumped about clusters as real surveys find them, past
     // the survey's 2.5 billion ly. Drawn, not measured, so only seen from far enough out that each dot stands for
     // millions. They thin toward the edge, where we see back to before the first galaxies.
@@ -2128,7 +2188,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         const d = Math.cbrt(r()) * OUTER, mu = r() * 2 - 1, phi = r() * 2 * Math.PI, s = Math.sqrt(1 - mu * mu);
         return [d * s * Math.cos(phi), d * mu, d * s * Math.sin(phi)];
       });
-      for (let i = 0; i < 20000; i++) {
+      for (let i = 0; i < 24000; i++) {
         // Half about the clusters, half spread through the space between, as a web's walls and voids average out.
         let p: number[];
         if (r() < 0.5) {
@@ -2140,7 +2200,9 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         }
         const d = Math.hypot(p[0], p[1], p[2]);
         if (d < INNER || d > OUTER) continue;
-        fill.add(p[0], p[1], p[2], 1.8, 0.8 * (1 - 0.5 * (d / OUTER) ** 2), K.ink);
+        // Redder the farther: their light is stretched on its way to us.
+        const f = d / OUTER;
+        fill.add(p[0], p[1], p[2], 1.8, 0.85 * (1 - 0.45 * f * f), f < 0.4 ? K.ink : f < 0.72 ? K.warm : K.rose, d / EDGE_KLY);
       }
       cosmos.scene.add(fill.points(fillGlow));
     }
@@ -2161,10 +2223,18 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     let aimedAt = 0;
     return (on: number, x: number) => {
       const far = ramp(x, 14.6, 15.2);
+      // In the opening shot, each galaxy lights as the front passes it, and the edge glows only once it arrives.
+      const shot = spec.mode === "sim" && spec.sim?.intro !== undefined ? introAt(clock) : null;
+      const reveal = shot ? shot.r / EDGE_KLY : 1;
+      surveyGlow.uniforms.uReveal.value = fillGlow.uniforms.uReveal.value = reveal;
+      surveyGlow.uniforms.uFlash.value = fillGlow.uniforms.uFlash.value = shot ? 1 : 0;
+      front.scale.setScalar(shot ? shot.r : 1);
+      // The front shows as a glowing bubble while the camera is outside it, and is gone once it passes us by.
+      show(frontMat, shot ? on * 1.4 * (1 - ramp(shot.u, 0.9, 1)) : 0);
       show(surveyGlow, on * arrived(surveyAt) * ramp(x, 11.2, 12.2) * (1 - far));
       show(knotGlow, on * arrived(surveyAt) * far);
-      show(edgeMat, on * ramp(x, 14.6, 15.4));
-      show(fillGlow, on * ramp(x, 14.4, 15.3));
+      show(edgeMat, on * ramp(x, 14.6, 15.4) * (shot ? ramp(shot.k, 0.75, 0.95) : 1));
+      show(fillGlow, on * ramp(x, 13.6, 14.4));
       const s = spec.mode === "sim" ? spec.sim : undefined;
       const key = s?.focus?.join() ?? "";
       if (key !== aimed) {

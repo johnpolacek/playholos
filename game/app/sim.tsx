@@ -36,6 +36,8 @@ const TO_NOW = YEAR_0 - TODAY;
 const PLAY_SECONDS = 40;
 /** The opening's notes: seconds before the first draws in, and between each. */
 const NOTE_DELAY = 0.35;
+/** The opening shot's length, as lib/drift.ts's INTRO. */
+const INTRO_SECONDS = 10;
 const NOTE_STAGGER = 0.25;
 
 export default function Sim() {
@@ -44,6 +46,8 @@ export default function Sim() {
   const [seed, setSeed] = useState(10);
   const [drawn, setDrawn] = useState<Drawn | null>(null);
   const [at, setAt] = useState(0);
+  // The opening shot plays once, on first arriving: the card and labels wait for it to land, and stepping on ends it.
+  const [opening, setOpening] = useState(true);
 
   const perStar = DIALS.reduce((p, d) => p * (values[d.key] ?? d.holos), 1);
   const odds_: Odds = useMemo(() => ({ starsPerMind: 1 / perStar, spreadTop: spread }), [perStar, spread]);
@@ -129,6 +133,7 @@ export default function Sim() {
       clash: stop?.clash,
       spokes,
       time: stop?.time ? { years, light: lightAt(years, TODAY) } : undefined,
+      intro: opening && stop?.id === "universe" ? 1 : undefined,
       // The place in view first, so its name wins a crowded spot, then Sol, then the minds round us.
       marks: [
         ...(stop?.focus ? [{ id: "here", pos: stop.focus }] : []),
@@ -137,7 +142,7 @@ export default function Sim() {
         ...(revealed && stop.zoom < NAMES_UNTIL ? named.filter((n) => n.pos.join() !== stop.focus?.join()) : []),
       ],
     }),
-    [points, stop, named, revealed, spokes, near, years],
+    [points, stop, named, revealed, spokes, near, years, opening],
   );
 
   const names = useRef<Record<string, HTMLSpanElement | null>>({});
@@ -151,8 +156,13 @@ export default function Sim() {
   useEffect(() => {
     offs.current = Object.fromEntries((stop?.notes ?? []).map((n) => [n.id, n.off]));
     order.current = Object.fromEntries((stop?.notes ?? []).map((n, i) => [n.id, i]));
-    notesAt.current = performance.now();
-  }, [stop]);
+    notesAt.current = opening ? Infinity : performance.now();
+  }, [stop, opening]);
+  useEffect(() => {
+    if (!opening || stop?.id !== "universe") return;
+    const t = setTimeout(() => setOpening(false), INTRO_SECONDS * 1000);
+    return () => clearTimeout(t);
+  }, [opening, stop?.id]);
   const onMarks = useCallback((marks: Mark[]) => {
     const taken: Parameters<typeof placeLabel>[4] = [];
     const marked = new Set(marks.map((m) => m.id));
@@ -214,7 +224,7 @@ export default function Sim() {
       },
     );
     return () => void t.kill();
-  }, [stop?.id]);
+  }, [stop?.id, opening]);
 
   // The dials slide in when the tour hands them over.
   const panel = useRef<HTMLElement>(null);
@@ -329,7 +339,7 @@ export default function Sim() {
             {stop && (
               <section
                 ref={card}
-                className="absolute top-4 left-4 right-36 max-w-md rounded-lg border border-faint bg-paper/95 p-3 shadow-lg shadow-black/40 backdrop-blur-sm"
+                className={`absolute top-4 left-4 right-36 max-w-md rounded-lg border border-faint bg-paper/95 p-3 shadow-lg shadow-black/40 backdrop-blur-sm transition-opacity duration-700 ${opening ? "pointer-events-none opacity-0" : "opacity-100"}`}
               >
                 <div className="flex items-center justify-between gap-2">
                   <p className={KICK}>
@@ -347,7 +357,7 @@ export default function Sim() {
                     <button
                       className="rounded-full border border-faint px-3 py-0.5 font-mono text-[11px] disabled:opacity-30"
                       disabled={at >= tour.length - 1}
-                      onClick={() => setAt((a) => Math.min(tour.length - 1, a + 1))}
+                      onClick={() => (setOpening(false), setAt((a) => Math.min(tour.length - 1, a + 1)))}
                     >
                       Next
                     </button>
