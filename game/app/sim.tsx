@@ -436,7 +436,7 @@ export default function Sim() {
                   className="rounded-full border border-faint px-3 py-1 font-mono text-[11px] hover:text-ink"
                   onClick={() => setSeed((s) => s + 1)}
                 >
-                  Another sky
+                  Roll again
                 </button>
                 <button
                   className="rounded-full border border-faint px-3 py-1 font-mono text-[11px] text-muted hover:text-ink"
@@ -448,7 +448,8 @@ export default function Sim() {
                   Holos’s odds
                 </button>
               </div>
-              <p className="mt-2 font-mono text-[10px] text-muted">SKY {seed}</p>
+              <p className="mt-2 text-[12px] text-muted">Same odds, a new roll of the dice.</p>
+              <p className="mt-1 font-mono text-[10px] text-muted">ROLL {seed}</p>
             </aside>
           )}
         </div>
