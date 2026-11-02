@@ -185,15 +185,15 @@ export function tourOf(m: DrawnMinds, o: Odds, names: Record<string, string> = {
   stops.push({
     id: "group",
     title: "Our Local Group",
-    words: "Andromeda, 2.5 million light-years away, and dozens of small galaxies, held to ours by gravity.",
+    words: "Andromeda, 2.5 million light-years away, and dozens of small galaxies, held to the Milky Way by gravity.",
     focus: ANDROMEDA,
     zoom: 11.0,
     label: "Andromeda",
   });
   stops.push({
     id: "galaxy",
-    title: "Our Galaxy",
-    words: `About ${round(GALAXY_STARS)} stars. Ours is one of them, ${far(SUN_FROM_CENTER)} from the center. Are we alone among them?`,
+    title: "The Milky Way",
+    words: `Our Galaxy, the Milky Way: about ${round(GALAXY_STARS)} stars. Ours is one of them, ${far(SUN_FROM_CENTER)} from the center. Are we alone among them?`,
     focus: CENTER,
     zoom: OPENING,
     label: "The Galaxy’s center",
@@ -222,7 +222,7 @@ export function tourOf(m: DrawnMinds, o: Odds, names: Record<string, string> = {
   stops.push({
     id: "dials",
     title: "Turn the dials",
-    words: `No one yet knows how often life starts, lasts, or wakes into a mind. Each dial is one step, set as far as the research allows. At these odds, ${odds(1 / o.starsPerMind)} stars holds a mind, about ${round(galaxy)} in our Galaxy, nearly all far older than us. Turn one and watch who appears.`,
+    words: `No one yet knows how often life starts, lasts, or wakes into a mind. Each dial is one step, set as far as the research allows. At these odds, ${odds(1 / o.starsPerMind)} stars holds a mind, about ${round(galaxy)} in the Milky Way, nearly all far older than us. Turn one and watch who appears.`,
     focus: null,
     // Out to the edge of the real star map, 326 ly, where enough minds live that a turn of a dial shows.
     zoom: zoomFor(CATALOG_LY),
@@ -296,7 +296,7 @@ export function tourOf(m: DrawnMinds, o: Odds, names: Record<string, string> = {
     id: "peers",
     title: "Every peer",
     words: m.peers.length
-      ? `${m.peers.length.toLocaleString("en-US")} peers across the Galaxy whose warm glow still reaches us, in amber. Each woke within 20,000 years of us.`
+      ? `${m.peers.length.toLocaleString("en-US")} peers across the Milky Way whose warm glow still reaches us, in amber. Each woke within 20,000 years of us.`
       : "No peer: no mind woke within 20,000 years of us, so none is young as we are.",
     focus: CENTER,
     zoom: 9.75,
