@@ -24,12 +24,11 @@ export interface Stop {
   reveal?: boolean;
   /** Lines out from Sol to our nearest stars, each with its distance. */
   spokes?: boolean;
-  /** On first opening, the tour moves on by itself after this many seconds: the dive from the universe to our Galaxy. */
-  auto?: number;
   /** Time passes here: a slider runs the years ahead. */
   time?: boolean;
-  /** Words the map puts at places, light-years in the atlas frame. They stand in for Sol's name. */
-  notes?: { id: string; pos: Vec; text: string }[];
+  /** Words the map puts by places, light-years in the atlas frame, each joined to its place by a line. `off` is where
+   *  the words sit from the place, in px: right and down. They stand in for Sol's name. */
+  notes?: { id: string; pos: Vec; text: string; off: [number, number] }[];
 }
 
 /** How far time runs ahead, in years: a peer is a mind that woke within 20,000 years of us. */
@@ -162,12 +161,11 @@ export function tourOf(m: DrawnMinds, o: Odds, names: Record<string, string> = {
       "Everything we have mapped, 43,000 galaxies, fits in the bright knot at the center. Hundreds of billions more fill the rest, out to the edge, as far as light has had time to reach us. We sit at the center only because we are the ones looking.",
     focus: null,
     zoom: UNIVERSE,
-    auto: 8,
     notes: [
-      { id: "mapped", pos: [0, 3.2e9, 0], text: "All we have mapped: 43,000 galaxies" },
-      { id: "drawn", pos: [-1.6e10, -9e9, 0], text: "Hundreds of billions more, drawn" },
+      { id: "mapped", pos: [0, 0, 0], text: "All we have mapped: 43,000 galaxies", off: [90, -80] },
+      { id: "drawn", pos: [-1.6e10, -9e9, 0], text: "Hundreds of billions more, drawn", off: [-40, 70] },
       // Toward the Galaxy's center, which the opening's view puts at the sphere's right edge.
-      { id: "edge", pos: [4.65e10, 0, 0], text: "The edge of what we can see, 46 billion light-years" },
+      { id: "edge", pos: [4.65e10, 0, 0], text: "The edge of what we can see, 46 billion light-years", off: [-70, -110] },
     ],
   });
   stops.push({
@@ -177,7 +175,6 @@ export function tourOf(m: DrawnMinds, o: Odds, names: Record<string, string> = {
       "Laniakea, the supercluster we live in: about 100,000 galaxies across 520 million light-years, all falling toward one place.",
     focus: null,
     zoom: 13.4,
-    auto: 5,
   });
   stops.push({
     id: "group",
@@ -186,7 +183,6 @@ export function tourOf(m: DrawnMinds, o: Odds, names: Record<string, string> = {
     focus: ANDROMEDA,
     zoom: 11.0,
     label: "Andromeda",
-    auto: 5,
   });
   stops.push({
     id: "galaxy",

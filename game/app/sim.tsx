@@ -41,8 +41,6 @@ export default function Sim() {
   const [seed, setSeed] = useState(10);
   const [drawn, setDrawn] = useState<Drawn | null>(null);
   const [at, setAt] = useState(0);
-  // The opening dive plays by itself until we step the tour ourselves.
-  const [stepped, setStepped] = useState(false);
 
   const perStar = DIALS.reduce((p, d) => p * (values[d.key] ?? d.holos), 1);
   const odds_: Odds = useMemo(() => ({ starsPerMind: 1 / perStar, spreadTop: spread }), [perStar, spread]);
@@ -140,22 +138,42 @@ export default function Sim() {
   );
 
   const names = useRef<Record<string, HTMLSpanElement | null>>({});
+  // A note's words sit off from its place, joined by a line that ends in a dot on the place.
+  const leads = useRef<Record<string, SVGGElement | null>>({});
+  const offs = useRef<Record<string, [number, number]>>({});
+  useEffect(() => void (offs.current = Object.fromEntries((stop?.notes ?? []).map((n) => [n.id, n.off]))), [stop]);
   const onMarks = useCallback((marks: Mark[]) => {
     const taken: Parameters<typeof placeLabel>[4] = [];
     const marked = new Set(marks.map((m) => m.id));
     for (const [id, n] of Object.entries(names.current)) if (n && !marked.has(id)) n.style.opacity = "0";
+    for (const [id, g] of Object.entries(leads.current)) if (g && !marked.has(id)) g.style.opacity = "0";
     for (const { id, x, y, a } of marks) {
       const n = names.current[id];
       if (!n) continue;
-      n.style.opacity = a <= 0 ? "0" : String(a * placeLabel(n, x, y, null, taken));
+      const off = offs.current[id];
+      if (!off) {
+        n.style.opacity = a <= 0 ? "0" : String(a * placeLabel(n, x, y, null, taken));
+        continue;
+      }
+      // The words go out to the side the line leaves on, and the line meets them at their near end.
+      const w = n.offsetWidth, h = n.offsetHeight;
+      const [ex, ey] = [x + off[0], y + off[1]];
+      const left = off[0] < 0 ? ex - w - 6 : ex + 6;
+      n.style.transform = `translate(${left}px, ${ey - h / 2}px)`;
+      n.style.opacity = a <= 0 ? "0" : String(a);
+      const g = leads.current[id];
+      if (g) {
+        g.style.opacity = a <= 0 ? "0" : String(a);
+        const [line, dot] = g.children as unknown as [SVGLineElement, SVGCircleElement];
+        line.setAttribute("x1", String(x));
+        line.setAttribute("y1", String(y));
+        line.setAttribute("x2", String(ex));
+        line.setAttribute("y2", String(ey));
+        dot.setAttribute("cx", String(x));
+        dot.setAttribute("cy", String(y));
+      }
     }
   }, []);
-
-  useEffect(() => {
-    if (stepped || !stop?.auto) return;
-    const t = setTimeout(() => setAt((a) => a + 1), stop.auto * 1000);
-    return () => clearTimeout(t);
-  }, [stepped, stop?.auto, stop?.id]);
 
   // Each stop's card rises in as the view turns to it.
   const card = useRef<HTMLElement>(null);
@@ -191,7 +209,7 @@ export default function Sim() {
   const set = (key: string, v: number) => setValues((o) => ({ ...o, [key]: v }));
   // Labels sit on stars and glows, so each carries a dark halo to stay readable, and fades in and out with its stop.
   const label =
-    "pointer-events-none absolute top-0 left-0 font-mono text-[11px] whitespace-nowrap opacity-0 transition-opacity duration-700 [text-shadow:0_0_3px_#000,0_0_6px_#000,0_0_10px_#000]";
+    "pointer-events-none absolute top-0 left-0 font-mono text-[12px] whitespace-nowrap opacity-0 transition-opacity duration-700 [text-shadow:0_0_3px_#000,0_0_6px_#000,0_0_10px_#000]";
 
   return (
     <div className="relative flex h-dvh w-full flex-col overflow-hidden bg-paper text-ink">
@@ -217,8 +235,25 @@ export default function Sim() {
               >
                 {stop?.label}
               </span>
+              <svg className="pointer-events-none absolute inset-0 h-full w-full overflow-visible">
+                {stop?.notes?.map((n) => (
+                  <g
+                    key={n.id}
+                    ref={(el) => void (leads.current[n.id] = el)}
+                    className="opacity-0 transition-opacity duration-700"
+                    stroke="var(--ink)"
+                  >
+                    <line strokeWidth={1} strokeOpacity={0.55} />
+                    <circle r={2.5} fill="var(--ink)" stroke="none" />
+                  </g>
+                ))}
+              </svg>
               {stop?.notes?.map((n) => (
-                <span key={n.id} ref={(el) => void (names.current[n.id] = el)} className={`${label} text-ink`}>
+                <span
+                  key={n.id}
+                  ref={(el) => void (names.current[n.id] = el)}
+                  className={`${label} text-[13px] text-ink`}
+                >
                   {n.text}
                 </span>
               ))}
@@ -283,14 +318,14 @@ export default function Sim() {
                     <button
                       className="rounded-full border border-faint px-3 py-0.5 font-mono text-[11px] disabled:opacity-30"
                       disabled={at <= 0}
-                      onClick={() => (setStepped(true), setAt((a) => Math.max(0, a - 1)))}
+                      onClick={() => setAt((a) => Math.max(0, a - 1))}
                     >
                       Back
                     </button>
                     <button
                       className="rounded-full border border-faint px-3 py-0.5 font-mono text-[11px] disabled:opacity-30"
                       disabled={at >= tour.length - 1}
-                      onClick={() => (setStepped(true), setAt((a) => Math.min(tour.length - 1, a + 1)))}
+                      onClick={() => setAt((a) => Math.min(tour.length - 1, a + 1))}
                     >
                       Next
                     </button>
