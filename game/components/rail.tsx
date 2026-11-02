@@ -1,4 +1,5 @@
 import { Link, useLocation } from "react-router";
+import { useMindUnread } from "@/components/mind-news";
 import { heardId, useLeads } from "@/components/scan";
 
 const TABS = [
@@ -15,6 +16,8 @@ export function Rail() {
   const { fresh, heard } = useLeads();
   const news = fresh.size > 0;
   const calls = heard.filter((h) => !h.ours && fresh.has(heardId(h))).length;
+  // The Mind told us something unasked that we haven't read. 2026-10-31.
+  const said = useMindUnread() && path !== "/mind";
   return (
     <nav data-shell="rail" aria-label="Main" className="grid h-16 shrink-0 grid-cols-4 border-t border-faint bg-paper wide:col-start-2 wide:row-start-3 wide:border-l">
       {TABS.map(({ label, href }) => {
@@ -26,7 +29,7 @@ export function Rail() {
             key={href}
             to={href}
             aria-current={on ? "page" : undefined}
-            aria-label={href === "/" && calls ? `${label}, ${calls === 1 ? "a signal" : `${calls} signals`} heard` : href === "/" && news ? `${label}, a new reading` : undefined}
+            aria-label={href === "/mind" && said ? `${label}, the Mind told us something` : href === "/" && calls ? `${label}, ${calls === 1 ? "a signal" : `${calls} signals`} heard` : href === "/" && news ? `${label}, a new reading` : undefined}
             className={`flex items-center justify-center gap-1.5 text-[11px] ${on ? "font-semibold text-ink shadow-[inset_0_2px_0_var(--ink)]" : "text-muted"} ${href === "/" && calls ? "bg-other/10" : ""}`}
           >
             {label}
@@ -35,7 +38,7 @@ export function Rail() {
                 {calls}
               </span>
             ) : (
-              href === "/" && news && <span aria-hidden className="size-1.5 rounded-full bg-you" />
+              ((href === "/" && news) || (href === "/mind" && said)) && <span aria-hidden className="size-1.5 rounded-full bg-you" />
             )}
           </Link>
         );

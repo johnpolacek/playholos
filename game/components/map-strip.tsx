@@ -2,6 +2,9 @@ import { useLocation } from "react-router";
 import { Arrival } from "@/components/arrival";
 import { useCallback, useRef, useState } from "react";
 import { BeamsMap, useBeams } from "@/components/beams";
+import { BeginOnMap } from "@/components/begin";
+import { MindSays } from "@/components/mind-news";
+import { Through } from "@/components/through";
 import { Globe, Lens } from "@/components/icons";
 import { ReachMap, Ruler, useReach } from "@/components/reach";
 import { ScanMap, useLeads, useStepTap } from "@/components/scan";
@@ -134,6 +137,10 @@ export function MapStrip() {
       ) : (
         <Stops />
       )}
+      {/* Reach's ruler lies along the foot, so there Begin waits at the top. */}
+      <BeginOnMap className={reaching ? "top-2" : "bottom-[9%]"} />
+      <MindSays />
+      <Through />
       <button
         onClick={() => setTall(!tall)}
         aria-label={tall ? "Show less of the map" : "Show more of the map"}

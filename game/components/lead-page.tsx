@@ -1,3 +1,4 @@
+import { Chances } from "@/components/chances";
 import { Link, useNavigate } from "react-router";
 import { useEffect, useRef } from "react";
 import { useGame } from "@/components/game-provider";
@@ -228,6 +229,10 @@ export function LeadPage({ slug }: { slug: string }) {
           ))}
         </section>
       )}
+
+      <div data-m className="mt-3">
+        <Chances lead={lead} readings={all} />
+      </div>
 
       <div data-m className="mt-3 rounded-xl border border-faint bg-paper px-2 py-1">
         {lead.system && lead.art.kind === "orbit" ? (

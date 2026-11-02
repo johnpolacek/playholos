@@ -20,7 +20,11 @@ export interface Rendered {
 }
 
 const plain = (tokens: Token[]): string =>
-  tokens.map((t) => ("tokens" in t && t.tokens ? plain(t.tokens) : "text" in t ? t.text : "")).join("");
+  tokens
+    .map((t) =>
+      "tokens" in t && t.tokens ? plain(t.tokens) : "text" in t ? t.text : "",
+    )
+    .join("");
 
 /** GitHub's heading ids, so the docs' own anchors land. A repeated heading gets -1, -2. */
 function slugger() {
@@ -36,7 +40,8 @@ function slugger() {
   };
 }
 
-const attr = (s: string) => s.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+const attr = (s: string) =>
+  s.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
 
 const marked = new Marked({
   gfm: true,
@@ -47,11 +52,13 @@ const marked = new Marked({
     },
     link({ href, tokens }) {
       const text = this.parser.parseInline(tokens);
-      if (/^https?:/.test(href)) return `<a href="${attr(href)}" target="_blank" rel="noreferrer">${text}</a>`;
+      if (/^https?:/.test(href))
+        return `<a href="${attr(href)}" target="_blank" rel="noreferrer">${text}</a>`;
       if (href.startsWith("#")) return `<a href="${attr(href)}">${text}</a>`;
       const [file, hash] = href.split("#");
       const page = DOCS[file as Doc];
-      if (page) return `<a href="${page}${hash ? `#${attr(hash)}` : ""}">${text}</a>`;
+      if (page)
+        return `<a href="${page}${hash ? `#${attr(hash)}` : ""}">${text}</a>`;
       return `<span class="private">${text}</span>`;
     },
   },
@@ -71,7 +78,9 @@ export function renderDoc(markdown: string): Rendered {
     if (t.depth === 2) toc.push({ id, text });
   });
   // The page draws the title, so the doc's own h1 goes.
-  const body = tokens.filter((t) => !(t.type === "heading" && t.depth === 1)) as typeof tokens;
+  const body = tokens.filter(
+    (t) => !(t.type === "heading" && t.depth === 1),
+  ) as typeof tokens;
   return { title, toc, html: marked.parser(body) };
 }
 

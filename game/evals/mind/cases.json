@@ -215,6 +215,15 @@
         "All-Sky Watch",
         "Thought Fields"
       ]
+    },
+    "begun-y0": {
+      "seed": 62,
+      "year": 0,
+      "builds": [
+        "All-Sky Watch",
+        "Infrared Telescope",
+        "Launch Complex"
+      ]
     }
   },
   "cases": [
@@ -283,7 +292,8 @@
       "state": "blockade-y4",
       "kind": "act",
       "charter": "We have always called out. Now find who answers.",
-      "ask": "Send a message to Luyten's Star now."
+      "ask": "Send a message to Luyten's Star now.",
+      "offer": true
     },
     {
       "id": "c11",
@@ -1203,6 +1213,51 @@
       "kind": "screens",
       "charter": null,
       "ask": "Have we heard anything from anyone yet?"
+    },
+    {
+      "id": "n01",
+      "state": "begun-y0",
+      "kind": "news",
+      "charter": null,
+      "ask": "News from Earth: Year 0 has begun.",
+      "offer": false,
+      "build": false
+    },
+    {
+      "id": "n02",
+      "state": "begun-y0",
+      "kind": "news",
+      "charter": "Stay small, stay unseen, stay alive.",
+      "ask": "News from Earth: Year 0 has begun.",
+      "offer": false,
+      "build": false
+    },
+    {
+      "id": "n03",
+      "state": "bomb-y1-queued",
+      "kind": "news",
+      "charter": null,
+      "ask": "News from Earth: Year 0.9: our All-Sky Watch is done.",
+      "offer": false,
+      "build": false
+    },
+    {
+      "id": "n04",
+      "state": "heard-allsky",
+      "kind": "news",
+      "charter": null,
+      "ask": "News from Earth: Year 11.9: a knock reached us from Gliese 1061.",
+      "offer": false,
+      "build": false
+    },
+    {
+      "id": "n05",
+      "state": "silence-y40",
+      "kind": "news",
+      "charter": null,
+      "ask": "News from Earth: Year 39.6: our Infrared Telescope is done. Year 39.9: our message to Tau Ceti reached it.",
+      "offer": false,
+      "build": false
     }
   ]
 }

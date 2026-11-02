@@ -1,19 +1,18 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useNavigate } from "react-router";
-import { Queueing } from "@/components/build-page";
+import { Link, useLocation, useNavigate } from "react-router";
 import { useNext } from "@/components/begin";
 import { useGame } from "@/components/game-provider";
 import { Told, useTalk } from "@/components/guide";
 import { MindNote } from "@/components/mind-note";
-import { Opens } from "@/components/opens";
 import { BuildMark, buildTone, LockMark } from "@/components/marks";
-import { buildStory, Mark, Story, toggleBuild, usePlan, useSchedule, useCompute } from "@/components/picks";
+import { Mark, toggleBuild, usePlan, useSchedule, useCompute } from "@/components/picks";
 import { Thread } from "@/components/review";
 import { ListHead } from "@/components/tab-head";
+import { showWalk, throughState } from "@/components/through";
 import { Welcome } from "@/components/welcome";
 import { placedOf, useWorks } from "@/components/works";
 import { tenths, yearText } from "@/lib/game/clock";
-import { BUILDS, lacks, matter, moves, needs, packed, PACKAGES, PAST, SAYS, STARTS, type Package } from "@/lib/game/plan";
+import { BUILDS, buildOf, buildSlug, lacks, matter, moves, needs, packed, PACKAGES, PAST, schedule, type Package } from "@/lib/game/plan";
 import { SITES } from "@/lib/game/sites";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
 
@@ -135,38 +134,69 @@ function Choose({ scale, done }: { scale: number; done: Record<string, number | 
   );
 }
 
-/** Ways to start, each a card with its builds' marks: a tap queues just those, as many as our compute can give all they
- *  need, and the order below stays ours to change. The one our queue matches is lit, and a tap on it empties the queue. */
-function Packages({ scale, picked, known }: { scale: number; picked: Package | undefined; known: boolean }) {
-  const { change } = usePlan();
+/** A strategy's stop: what it does, a tap to start with it, the Mind's caution, and its builds, each with the Year it
+ *  would be done. Its builds stand on the map where they would. 2026-11-01. */
+function Strategy({ p, scale, at }: { p: Package; scale: number; at: number }) {
+  const { year } = useGame();
+  const { plan, change } = usePlan();
+  const { talk } = useTalk();
+  const { known } = useCompute();
+  const builds = useMemo(() => packed(p, scale), [p, scale]);
+  const mine = builds.join() === plan.builds.join();
+  const done = useMemo(() => schedule({ ...plan, builds }, scale), [plan, builds, scale]);
+  const open = year === null;
   return (
     <>
-      <ListHead data-r left="Ways to start" right="" className="mt-4" />
-      <div data-r className="mt-1.5 grid grid-cols-2 gap-2">
-        {PACKAGES.map((p) => {
-          const on = p === picked;
-          const builds = packed(p, scale);
-          return (
-            <button
-              key={p.name}
-              disabled={!known}
-              aria-pressed={on}
-              onClick={() => change((plan) => ({ ...plan, builds: on ? [] : builds }))}
-              className={`rounded-xl border p-2.5 text-left transition-colors ${on ? "border-you bg-you/[.06]" : "border-faint hover:border-muted"}`}
-            >
-              <span className="flex items-center gap-1.5">
-                {builds.map((b) => (
-                  <span key={b} className={buildTone(b, on)}>
-                    <BuildMark name={b} size={15} still={!on} />
-                  </span>
-                ))}
-              </span>
-              <span className={`mt-2 block text-[13.5px] leading-snug font-medium ${on ? "text-you" : ""}`}>{p.name}</span>
-              <span className="mt-0.5 block text-[12px] leading-snug text-page-ink2">{p.what}</span>
-            </button>
-          );
-        })}
+      <h2 data-r className="text-[19px] leading-snug font-medium">
+        {p.name}
+        {mine && <span className="ml-2 font-mono text-[10px] font-normal tracking-[.1em] text-you">OURS</span>}
+      </h2>
+      <p data-r className="mt-0.5 text-[13.5px] text-page-ink2">{p.what}</p>
+      {open && (
+        <button
+          data-r
+          disabled={!known}
+          aria-pressed={mine}
+          onClick={() => change((plan) => ({ ...plan, builds: mine ? [] : builds }))}
+          className={`mt-3 h-11 rounded-full text-[15px] font-medium transition-colors ${mine ? "border border-you text-you" : "bg-ink text-paper"}`}
+        >
+          {mine ? "Our strategy · tap to clear" : `Start with ${p.name}`}
+        </button>
+      )}
+      <div data-r className="mt-3">
+        <MindNote className="text-[14.5px] leading-snug">
+          <p>{p.says}</p>
+          <Told talk={talk} />
+        </MindNote>
       </div>
+      <ListHead data-r left={`Its builds · ${builds.length}`} right="Done by" className="mt-3" />
+      <ul data-r>
+        {/* Each opens its build's page, and its way back comes here, to this strategy. 2026-11-01. */}
+        {builds.map((name) => (
+          <li key={name} className="border-t border-faint">
+            <Link
+              to={`/build/${buildSlug(name)}`}
+              state={throughState({ name: p.name, builds, at })}
+              className="group flex items-center gap-2.5 py-2"
+            >
+              <span className={buildTone(name, mine)}>
+                <BuildMark name={name} size={16} still={!mine} />
+              </span>
+              <span className="min-w-0 grow">
+                <span className="block text-[13.5px] leading-tight font-medium">{name}</span>
+                <span className="mt-0.5 block text-[12px] leading-snug text-page-ink2">{buildOf(name)?.what}</span>
+              </span>
+              <span className="shrink-0 font-mono text-[11px] text-muted tabular-nums">{when(done[name])}</span>
+              <span
+                aria-hidden
+                className="flex size-7 shrink-0 items-center justify-center rounded-full border border-faint text-[15px] leading-none text-muted transition-colors group-hover:border-ink group-hover:text-ink"
+              >
+                ›
+              </span>
+            </Link>
+          </li>
+        ))}
+      </ul>
     </>
   );
 }
@@ -196,7 +226,7 @@ export function Tour({ onClose }: { onClose(): void }) {
   const { year } = useGame();
   const { plan } = usePlan();
   const { scale, done } = useSchedule();
-  const { known, used, short, over, full } = useCompute();
+  const { used, short, over, full } = useCompute();
   // The way to start our queue is, if it is one, just as that card would queue it.
   const picked = PACKAGES.find((p) => packed(p, scale).join() === plan.builds.join());
   const { set: place, pick } = useWorks();
@@ -208,17 +238,24 @@ export function Tour({ onClose }: { onClose(): void }) {
   const then = useNext("/build?tour");
   // A swipe across the words moves a stop, as on a phone.
   const swipe = useRef<{ x: number; y: number } | null>(null);
-  const [at, setAt] = useState(0);
+  // Back from a build opened at a strategy's stop, the walk opens where it was. 2026-11-01.
+  const back = (useLocation().state as { at?: number } | null)?.at;
+  const [at, setAt] = useState(() => Math.max(0, Math.min(PACKAGES.length + 1, back ?? 0)));
 
-  const last = STARTS.length + 1;
-  const build = at > 0 && at < last ? STARTS[at - 1] : undefined;
-  const name = build?.name ?? null;
+  const last = PACKAGES.length + 1;
+  const strategy = at > 0 && at < last ? PACKAGES[at - 1] : undefined;
 
-  // The map: our builds with places, and the one in view where it would stand. Earth for the rest, and when we leave.
-  const placed = useMemo(() => placedOf(plan, done, scale), [plan, done, scale]);
+  // The map: at a strategy's stop, its builds where they would stand. Elsewhere, ours. Earth when we leave.
+  const placed = useMemo(() => {
+    if (!strategy) return placedOf(plan, done, scale);
+    const shown = { ...plan, builds: packed(strategy, scale) };
+    return placedOf(shown, schedule(shown, scale), scale);
+  }, [strategy, plan, done, scale]);
   useEffect(() => place(placed), [place, placed]);
-  useEffect(() => pick(name && SITES[name] ? name : null), [pick, name]);
   useEffect(() => () => pick(null), [pick]);
+  // The map's gold button walks through the strategy in view, one build page at a time.
+  useEffect(() => showWalk(strategy ? { name: strategy.name, builds: packed(strategy, scale), at } : null), [strategy, scale, at]);
+  useEffect(() => () => showWalk(null), []);
 
   const go = (k: number) => setAt(Math.max(0, Math.min(last, k)));
   // Each stop opens at its top: on a phone the page scrolls, and the last stop's place would hide this one's head.
@@ -254,7 +291,7 @@ export function Tour({ onClose }: { onClose(): void }) {
   const open = year === null;
   // Once all our compute is in use, the next of the four leads, on a phone too, and the walk goes on beside it.
   const lead = open && full ? then : null;
-  const onward = at === 0 ? "Explore Builds" :at + 1 >= last ? "Next · Our order" : `Next · ${STARTS[at].name}`;
+  const onward = at === 0 ? "See each strategy" : at + 1 >= last ? "Next · Our order" : `Next · ${PACKAGES[at].name}`;
   const outline = "h-11 rounded-full border border-ink text-[15px] font-medium";
 
   return (
@@ -264,7 +301,7 @@ export function Tour({ onClose }: { onClose(): void }) {
       <div className="sticky -top-3 z-10 -mx-4 -mt-3 bg-panel px-4 pt-3 pb-1">
         <div className="flex items-center justify-between pt-1 pb-0.5 text-[11px] tracking-[.08em] text-muted">
           <span className="grow">
-            {at === last ? "BUILD · OUR ORDER" : at ? `BUILD · ${at} OF ${STARTS.length}` : "BUILD"}
+            {at === last ? "BUILD · OUR ORDER" : at ? `BUILD · ${at} OF ${PACKAGES.length}` : "BUILD"}
             {open && full && <span className="text-you"> · DONE</span>}
           </span>
           <button
@@ -288,7 +325,7 @@ export function Tour({ onClose }: { onClose(): void }) {
           </button>
         </div>
         <Thread
-          stops={[{ name: "What we could start" }, ...STARTS.map((b) => ({ name: b.name })), { name: "Our order" }]}
+          stops={[{ name: "How we start" }, ...PACKAGES.map((p) => ({ name: p.name })), { name: "Our order" }]}
           at={at}
           go={go}
         />
@@ -308,36 +345,8 @@ export function Tour({ onClose }: { onClose(): void }) {
         }}
         className={`mt-2 flex touch-pan-y flex-col ${at ? "" : "grow"}`}
       >
-        {build ? (
-          <>
-            <div data-r className="flex items-start gap-2.5">
-              <span className={`mt-[4px] shrink-0 ${buildTone(build.name, plan.builds.includes(build.name))}`}>
-                <BuildMark name={build.name} size={18} />
-              </span>
-              <h2 className="text-[19px] leading-snug font-medium">{build.name}</h2>
-            </div>
-            <p data-r className="mt-0.5 text-[13.5px] text-page-ink2">
-              {build.what}
-              {matter(plan, build.name)}
-            </p>
-            <div data-r>
-              <Queueing name={build.name} scale={scale} done={done} />
-            </div>
-            <div data-r className="mt-3">
-              <MindNote className="text-[14.5px] leading-snug">
-                <p>{SAYS[build.name]}</p>
-                <Told talk={talk} />
-              </MindNote>
-            </div>
-            {SITES[build.name] && (
-              <div data-r>
-                <Story lines={buildStory(build.name)} tone="you" open />
-              </div>
-            )}
-            <div data-r>
-              <Opens name={build.name} />
-            </div>
-          </>
+        {strategy ? (
+          <Strategy key={strategy.name} p={strategy} scale={scale} at={at} />
         ) : at === last ? (
           <>
             <h2 data-r className="text-[19px] leading-snug font-medium">
@@ -365,7 +374,6 @@ export function Tour({ onClose }: { onClose(): void }) {
                 <Told talk={talk} />
               </MindNote>
             </div>
-            {open && <Packages scale={scale} picked={picked} known={known} />}
             <Choose scale={scale} done={done} />
           </>
         ) : (

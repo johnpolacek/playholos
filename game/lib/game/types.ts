@@ -26,6 +26,10 @@ export interface Save {
   guide?: Guide;
   /** Our talk with the Mind, kept so a reload doesn't lose it. A new game starts a new talk. Since 2026-10-25. */
   talk?: UIMessage[];
+  /** The Year up to which the Mind has told us its news unasked, so a reload never tells it twice. 2026-10-31. */
+  told?: number;
+  /** The Mind's latest words we have read, by message id, so the Mind tab marks what we haven't. 2026-10-31. */
+  read?: string;
   /** What we have sent, in the order sent. The list only grows: a stop is marked, never removed. Since 2026-10-26. */
   sent?: Sent[];
   /** The Will, sent by the Mind Link to live at our Mind at a hole or a star. Since 2026-10-26. */

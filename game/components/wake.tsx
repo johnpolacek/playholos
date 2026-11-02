@@ -7,7 +7,6 @@ import { People } from "@/components/people";
 import { Stand } from "@/components/stand";
 import { Inherit } from "@/components/inherit";
 import { FILL, Spread } from "@/components/spread";
-import { Charter } from "@/components/charter";
 import { Meet } from "@/components/meet";
 import { Drift } from "@/components/drift";
 import { Sky, SkyArt } from "@/components/sky";
@@ -107,7 +106,8 @@ export const useLeaveShell = () => use(LeaveShell);
 // straight to the shell. Past the last screen, the shell opens on the review of our scans, the first of the things we
 // would do before Begin. A reload comes back to the screen we were on, in this tab: it started over at the drift, and
 // a charter picked was lost, until 2026-10-30.
-const SCREENS = [Drift, Wake, Origins, People, Stand, Inherit, Charter, Meet];
+// The charter's own screen left 2026-11-01: the strategy we begin with sets it now.
+const SCREENS = [Drift, Wake, Origins, People, Stand, Inherit, Meet];
 const AT = "holos:opening";
 const savedAt = () => {
   try {
@@ -208,20 +208,19 @@ export function Opening({ className, children }: { className: string; children: 
       wake();
     };
     const next = () => (at + 1 < SCREENS.length ? setAt(at + 1) : plan());
-    // Skip leaves the memories for the charter on Wake, and skips one memory after that.
-    const charter = SCREENS.indexOf(Charter);
-    // Past the charter, Skip goes to the review, as Begin does on Meeting the Mind.
+    // Skip leaves the memories for Meeting the Mind on Wake, and skips one memory after that.
+    const meet = SCREENS.indexOf(Meet);
+    // On Meeting the Mind, Skip goes to the review, as Begin does there.
     const skip = () =>
-      at > charter ? plan() : setAt(at === SCREENS.indexOf(Wake) ? charter : Math.min(at + 2, charter));
+      at >= meet ? plan() : setAt(at === SCREENS.indexOf(Wake) ? meet : Math.min(at + 2, meet));
     body = (
       <>
-        <Screen key={at} onSkip={skip} onNext={next} />
-        {/* The charter has no sky art of its own: the sky holds on Earth and the Moon behind it. */}
-        {Screen === Charter && <SkyArt mode="charter" className="hidden" />}
+        {/* Replay goes back to Earth waking, and the opening runs again from there. 2026-11-01. */}
+        <Screen key={at} onSkip={skip} onNext={next} onReplay={() => setAt(SCREENS.indexOf(Wake))} />
       </>
     );
   }
-  // One sky behind every screen from the title to the charter, and on into the map. The camera flies between them.
+  // One sky behind every screen from the title to Meeting the Mind, and on into the map. The camera flies between them.
   // The game fits the screen, so a touch only scrolls up and down: a pinch never zooms it, nor leaves it to slide sideways.
   return (
     <div ref={frame} id="phone" className={`relative touch-pan-y ${className}`}>

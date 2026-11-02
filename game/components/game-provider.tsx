@@ -27,6 +27,10 @@ interface Game {
   /** Marks one of the things we would do before Begin as done. Once done, it stays done. */
   did(step: "reviewed" | "reached" | "asked"): void;
   begin(): void;
+  /** The Mind has told us its news up to Year `y`. */
+  tell(y: number): void;
+  /** We have read the Mind's words up to the message `id`. */
+  read(id: string): void;
   /** Jump the clock ahead to Year `to`, never back. */
   skipTo(to: number): void;
   newGame(): void;
@@ -93,6 +97,8 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     see: (ids) => change((s) => ({ ...s, seen: [...new Set([...(s.seen ?? []), ...ids])] })),
     did: (step) => void ((latest.current ?? save)?.[step] || change((s) => ({ ...s, [step]: true }))),
     begin: () => change((s) => ({ ...s, beganAt: Date.now() })),
+    tell: (y) => change((s) => (y > (s.told ?? 0) ? { ...s, told: y } : s)),
+    read: (id) => void ((latest.current ?? save)?.read === id || change((s) => ({ ...s, read: id }))),
     // A skip moves Begin back, so the clock reads the later Year and runs on from there. On a refuge's slow clock the
     // sky's Years pass faster, so fewer of the Will's minutes go. 2026-10-29.
     skipTo: (to) =>

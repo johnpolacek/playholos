@@ -11,6 +11,7 @@ import { SendCard } from "@/components/send-card";
 import { BAD_KEY, costOf, type Effort, EFFORTS, KEY_NEEDS_CREDIT, KEY_NEEDS_WORKSPACE, MIND_MODELS, type MindModel, readMindPick, type Usage } from "@/lib/access";
 import { readBuildOffer } from "@/lib/game/build-offer";
 import { buildNamed } from "@/lib/game/plan";
+import { NEWS } from "@/lib/mind/news";
 import { readOffer } from "@/lib/game/sends";
 import { browserStore } from "@/lib/game/store";
 import { forgetKey } from "@/lib/key";
@@ -72,24 +73,43 @@ function chatFor(seed?: number, kept?: UIMessage[]) {
   return talk.chat;
 }
 
-/** Our talk with the Mind. An answer from the Mind is one of the things we would have before Begin. */
+/** Our talk with the Mind, as many places show it. */
 function useMind() {
-  const { save, did, setTalk } = useGame();
+  const { save } = useGame();
   const seed = save?.seed;
   const kept = save?.talk;
   const chat = useMemo(() => chatFor(seed, kept), [seed, kept]);
   const helpers = useChat({ chat });
   const lastAnswer = helpers.messages.findLast((message) => message.role === "assistant")?.id;
+  const busy = helpers.status === "submitted" || helpers.status === "streaming";
+  return { ...helpers, busy, lastAnswer };
+}
+
+/** Keeps our talk in the save, from one place always there, so news told on any tab is kept. An answer from the
+ *  Mind, on any tab, also marks Begin's Mind step done. */
+export function useKeepTalk() {
+  const { save, did, setTalk } = useGame();
+  const { messages, busy, lastAnswer } = useMind();
+  const seed = save?.seed;
+  const kept = save?.talk;
   useEffect(() => {
     if (lastAnswer) did("asked");
   }, [lastAnswer, did]);
-  const busy = helpers.status === "submitted" || helpers.status === "streaming";
   // Kept once an answer is done, not on every word of it.
-  const { messages } = helpers;
   useEffect(() => {
     if (!busy && seed !== undefined && messages.length && messages !== kept) setTalk(messages);
   }, [busy, messages, seed, kept, setTalk]);
-  return { ...helpers, busy, lastAnswer };
+}
+
+/** The Mind speaking unasked: `tell` hands it news from Earth, which it speaks of first. With the latest of its words,
+ *  for showing them away from the Mind tab, and whether the news led to them. 2026-10-31. */
+export function useMindNews() {
+  const { messages, sendMessage, busy, lastAnswer, error } = useMind();
+  const at = messages.findIndex((m) => m.id === lastAnswer);
+  const before = at > 0 ? messages[at - 1].parts.map((p) => (p.type === "text" ? p.text : "")).join("") : "";
+  const words = at >= 0 ? messages[at].parts.map((p) => (p.type === "text" ? p.text : "")).join("") : "";
+  const tell = useMemo(() => (news: string) => sendMessage({ text: NEWS + news }), [sendMessage]);
+  return { tell, busy, error, last: lastAnswer, words, news: before.startsWith(NEWS) ? before.slice(NEWS.length) : null };
 }
 
 /** One of the Mind's answers: its words, and the card if it offers to send, or a build. */
@@ -127,6 +147,13 @@ function Talk({ messages, lastAnswer, status, error }: Pick<ReturnType<typeof us
       {messages.map((message, i) => {
         if (thinking.here && i > asked) return null;
         const text = message.parts.map((part) => (part.type === "text" ? part.text : "")).join("");
+        // News the Mind tells unasked: what happened, small, over what the Mind says of it.
+        if (message.role === "user" && text.startsWith(NEWS))
+          return (
+            <p key={message.id} className="mt-1 self-center text-center font-mono text-[10.5px] leading-snug tracking-[.06em] text-muted">
+              {text.slice(NEWS.length)}
+            </p>
+          );
         return message.role === "user" ? (
           <div key={message.id} className="max-w-[86%] self-end rounded-xl bg-ink px-3 py-[9px] text-[13.5px] leading-[1.45] whitespace-pre-wrap text-paper">
             {text}
@@ -302,6 +329,11 @@ function Hello({ onAsk }: { onAsk(text: string): void }) {
 export function MindChat({ ask }: { ask?: string }) {
   const { messages, sendMessage, status, error, busy, lastAnswer } = useMind();
   const asked = useRef(false);
+  // Here, we read what the Mind said.
+  const { read } = useGame();
+  useEffect(() => {
+    if (lastAnswer && !busy) read(lastAnswer);
+  }, [lastAnswer, busy, read]);
 
   // A question brought from Meeting the Mind: asked once, then dropped from the address.
   useEffect(() => {

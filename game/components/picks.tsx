@@ -30,7 +30,7 @@ export function usePlan() {
 // is tried again on the next screen that asks.
 const earths = new Map<number, Promise<EarthPast | undefined>>();
 
-function useEarth() {
+export function useEarth() {
   const { save } = useGame();
   const [past, setPast] = useState<EarthPast>();
   const seed = save?.seed;

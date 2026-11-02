@@ -63,15 +63,16 @@ export function People({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
       const show = () => (count.current!.textContent = Math.round(n.v).toLocaleString("en-US"));
       tl.fromTo(q('[data-m="kick"]'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.6 }, 0)
         .set(q('[data-m="globe"]'), { autoAlpha: 1 }, 0)
-        .to(s, { lit: 1, duration: 3.6, ease: "power1.in" }, 1)
+        // The count runs in 2 seconds, not 3.6, and what follows comes 1.6 sooner. 2026-11-01.
+        .to(s, { lit: 1, duration: 2, ease: "power1.in" }, 1)
         .fromTo(q('[data-m="count"]'), riseFrom, { ...rise, duration: 0.6 }, 1.1)
-        .to(n, { v: PEOPLE, duration: 3.6, ease: "power1.in", onUpdate: show }, 1)
-        .fromTo(q('[data-m="still"]'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.6 }, 4.4);
-      q('[data-m="line"]').forEach((line, i) => tl.fromTo(line, riseFrom, { ...rise, duration: 0.6 }, 4.8 + i * 1.1));
-      tl.to(s, { threads: 1, duration: 1.8, ease: "power2.inOut" }, 6.2)
-        .to(s, { mind: 1, duration: 0.6, ease: "back.out(2)" }, 7.7)
-        .fromTo(q('[data-m="last"]'), riseFrom, { ...rise, duration: 0.8 }, 8.6)
-        .fromTo(q('[data-m="act"]'), riseFrom, { ...rise, stagger: 0.08 }, 9.2);
+        .to(n, { v: PEOPLE, duration: 2, ease: "power1.in", onUpdate: show }, 1)
+        .fromTo(q('[data-m="still"]'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.6 }, 2.8);
+      q('[data-m="line"]').forEach((line, i) => tl.fromTo(line, riseFrom, { ...rise, duration: 0.6 }, 3.2 + i * 1.1));
+      tl.to(s, { threads: 1, duration: 1.8, ease: "power2.inOut" }, 4.6)
+        .to(s, { mind: 1, duration: 0.6, ease: "back.out(2)" }, 6.1)
+        .fromTo(q('[data-m="last"]'), riseFrom, { ...rise, duration: 0.8 }, 7.0)
+        .fromTo(q('[data-m="act"]'), riseFrom, { ...rise, stagger: 0.08 }, 7.6);
     },
     ready,
   );

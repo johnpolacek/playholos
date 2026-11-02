@@ -10,18 +10,20 @@ export function Spread({
   sources,
   head,
   art,
+  tool,
   pinned = false,
   children,
 }: {
   sources?: Source[];
   head?: React.ReactNode;
   art: React.ReactNode;
+  tool?: React.ReactNode;
   pinned?: boolean;
   children: React.ReactNode;
 }) {
   return (
     <>
-      <ScreenBar sources={sources} />
+      <ScreenBar sources={sources} tool={tool} />
       <div
         className={`mx-auto flex w-full max-w-xl grow flex-col ${pinned ? "min-h-0 wide:min-h-auto" : ""} wide:grid wide:max-w-[1440px] wide:grid-cols-[minmax(0,1fr)_clamp(280px,34vw,400px)] wide:grid-rows-[1fr_auto_auto_1fr] wide:gap-x-[clamp(24px,5vw,80px)] wide:pb-6`}
       >
