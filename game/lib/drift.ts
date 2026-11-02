@@ -159,6 +159,8 @@ export interface Show {
     spokes?: [number, number, number][];
     /** The opening shot: a new number plays it once, from inside our patch of galaxies out to the edge. */
     intro?: number;
+    /** The place in view is only where the view turns round, with no thread out to it or pulse on it. */
+    bare?: boolean;
     /** Time passing: how many years from now the sky shows. Peers glow only while their warm light reaches us, and
      *  our own light, out since our first radio, spreads to `light` light-years. Unset, every peer glows. */
     time?: { years: number; light: number };
@@ -256,7 +258,7 @@ const BAR = { half: 5.0, angle: 28 };
 /** Thin disk scale length and height, kpc. Bland-Hawthorn & Gerhard 2016. */
 const DISK = { length: 2.6, height: 0.3 };
 
-const KINDS = ["ink", "warm", "young", "rose", "lamp", "mind", "sun", "dust"] as const;
+const KINDS = ["ink", "warm", "young", "rose", "lamp", "mind", "sun", "dust", "white"] as const;
 type Kind = (typeof KINDS)[number];
 const K = Object.fromEntries(KINDS.map((k, i) => [k, i])) as Record<Kind, number>;
 
@@ -271,10 +273,12 @@ const PALETTE: { bg: string } & Record<Kind, string> = {
   mind: "91,184,214",
   sun: "255,236,190",
   dust: "18,19,20",
+  // Pure white, for Sol in the simulation, so we can always find ourselves. 2026-11-02.
+  white: "255,255,255",
 };
 
 const GLOW_VERT = /* glsl */ `
-uniform vec3 uPal[8];
+uniform vec3 uPal[9];
 uniform float uFocal, uDpr, uOpacity, uMinPx, uMaxPx, uFixed, uReveal, uFlash;
 uniform vec2 uNear;
 attribute float aSize, aBright, aKind, aRank;
@@ -320,7 +324,7 @@ void main() {
 // The HYG stars, as bright as they look from wherever the camera is: each star's absolute magnitude, moved to the
 // camera's distance. 6.5, the naked eye's limit, is a faint dot.
 const STAR_VERT = /* glsl */ `
-uniform vec3 uPal[8];
+uniform vec3 uPal[9];
 uniform float uDpr, uOpacity;
 attribute float aAbs, aBV;
 varying vec3 vColor;
@@ -393,7 +397,7 @@ void main() {
 
 // Earth's land in dots, lit by the Sun, and its night lights where the Sun is down.
 const SURFACE_VERT = /* glsl */ `
-uniform vec3 uPal[8];
+uniform vec3 uPal[9];
 uniform vec3 uSun;
 uniform float uFocal, uDpr, uOpacity, uLights, uLit;
 attribute float aSize, aBright, aKind, aRank;
@@ -2172,7 +2176,8 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     stars.scene.add(ours);
     // The way to the place in view: a thread out from Sol that grows to it, and a pulse there once it arrives, in blue,
     // or rose for what today's sky rules out.
-    const threads = { mind: line("mind", 0), rose: line("rose", 0) };
+    // White, so it shows even across the Milky Way's bright disk.
+    const threads = { mind: line("white", 0), rose: line("rose", 0) };
     const thread = new THREE.Line(
       new THREE.BufferGeometry().setAttribute("position", new THREE.BufferAttribute(new Float32Array(6), 3)),
       threads.mind,
@@ -2363,11 +2368,11 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       tp.setXYZ(1, to.x * grow, to.y * grow, to.z * grow);
       tp.needsUpdate = true;
       thread.material = s?.clash ? threads.rose : threads.mind;
-      threads.mind.uniforms.uOpacity.value = threads.rose.uniforms.uOpacity.value = s?.focus ? 0.45 * on : 0;
+      threads.mind.uniforms.uOpacity.value = threads.rose.uniforms.uOpacity.value = s?.focus && !s.bare ? 0.75 * on : 0;
       const pp = pulsePts.geometry.attributes.position as THREE.BufferAttribute;
       const pb = pulsePts.geometry.attributes.aBright as THREE.BufferAttribute;
       const pk = pulsePts.geometry.attributes.aKind as THREE.BufferAttribute;
-      const here = s?.focus ? smooth((clock - aimedAt - 1.8) / 0.6) : 0;
+      const here = s?.focus && !s.bare ? smooth((clock - aimedAt - 1.8) / 0.6) : 0;
       for (let i = 0; i < 2; i++) {
         pp.setXYZ(i, to.x, to.y, to.z);
         pk.setX(i, s?.clash ? K.rose : K.mind);
@@ -2404,7 +2409,9 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
           const ring = { fills: 40, awake: 22, peer: 18, animals: 24 } as Partial<Record<SimMind["kind"], number>>;
           if (ring[m.kind]) halo.add(m.pos[0], m.pos[1], m.pos[2], ring[m.kind]!, 0.35, KIND[m.kind]);
         }
-        core.add(0, 0, 0, 8, 1, K.sun);
+        // Sol, pure white and a size up, with a halo, so we can find ourselves at every scale.
+        core.add(0, 0, 0, 11, 1, K.white);
+        halo.add(0, 0, 0, 26, 0.45, K.white);
         made = [halo.points(haloGlow), core.points(coreGlow)];
         stars.scene.add(...made);
         built = s.minds;

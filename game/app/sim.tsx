@@ -170,6 +170,7 @@ export default function Sim() {
       focus: picked ? picked.pos : stop ? stop.focus : null,
       zoom: picked ? Math.min(8.3, Math.max(6.5, Math.log10(5 * picked.d * 63241.077))) : (stop?.zoom ?? UNIVERSE),
       clash: stop?.clash,
+      bare: !picked && stop?.bare,
       spokes,
       time: stop?.time ? { years, light: lightAt(years, TODAY) } : undefined,
       ring: stop?.id === "dials" && !result.nearest.beyond ? result.nearest.ly : undefined,
