@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router";
-import { SIM_COLOR, SimMark } from "@/components/icons";
+import { Play, SIM_COLOR, SimMark } from "@/components/icons";
 import { placeLabel } from "@/components/place-label";
 import { Sky, SkyArt, useSky } from "@/components/sky";
 import { chain, DIALS, far, odds, PEER_YEARS, round } from "@/lib/about/dials";
@@ -25,6 +25,10 @@ const fromSlider = (n: number, lo: number, hi: number) => lo * (hi / lo) ** (n /
 /** A mind's chance to spread, at its top: 1 in 900 up to 1 in 3. */
 const SPREAD = { lo: 1 / 900, hi: 1 / 3 };
 const ROSE = "#ff7e94";
+const SECTIONS = [
+  { id: "universe", label: "Universe" },
+  { id: "simulation", label: "Simulation" },
+] as const;
 const KICK = "font-mono text-[10.5px] tracking-[.1em] text-muted";
 /** One dials object for the whole page, so a new stop eases the view there, not a fresh flight. */
 const DIALS_SIM: Dials = {};
@@ -114,6 +118,10 @@ export default function Sim() {
     () => (drawn ? tourOf(drawn.minds, odds_, drawn.names, drawn.worlds, drawn.near) : []),
     [drawn, odds_],
   );
+  // Two sections: the universe as we see it, steps 1 to 6, then the simulation, from the dials on.
+  const split = Math.max(0, tour.findIndex((s) => s.id === "dials"));
+  const here = Math.min(at, tour.length - 1);
+  const section = here < split ? "universe" : "simulation";
   const clashes = useMemo(() => (drawn ? clashesOf(drawn.minds, odds_, drawn.fillers) : []), [drawn, odds_]);
   const points = useMemo(() => (drawn ? pointsOf(drawn.minds, drawn.worlds, TO_NOW) : []), [drawn]);
   // Time passing, on its stop: years from now, and whether it runs by itself.
@@ -372,12 +380,22 @@ export default function Sim() {
             {picked && pick?.open && (
               <Details item={picked} onClose={() => setPick({ id: picked.id, open: false, stop: "dials" })} />
             )}
-            <Link
-              to="/"
-              className="absolute top-4 right-4 rounded-full border border-faint bg-paper/70 px-3 py-1 font-mono text-[11px] text-muted hover:text-ink"
-            >
-              Play the game
-            </Link>
+            <nav className="absolute top-4 right-4 flex items-center gap-1 rounded-full border border-faint bg-paper/70 p-0.5 font-mono text-[11px] backdrop-blur-sm">
+              {SECTIONS.map((s) => (
+                <button
+                  key={s.id}
+                  aria-current={section === s.id ? "step" : undefined}
+                  className={`rounded-full px-3 py-0.5 ${section === s.id ? "bg-ink/15 text-ink" : "text-muted hover:text-ink"}`}
+                  onClick={() => (setOpening(false), setAt(s.id === "universe" ? 0 : split))}
+                >
+                  {s.label}
+                </button>
+              ))}
+              <Link to="/" className="flex items-center gap-1.5 rounded-full px-3 py-0.5 text-muted hover:text-ink">
+                Play
+                <Play size={11} />
+              </Link>
+            </nav>
             {stop?.id === "dials" && <Count minds={result.galaxy} />}
             <div className="pointer-events-none absolute bottom-4 left-4 flex max-w-xl flex-col items-start gap-2 pr-4">
               {clashes.length > 0 && (
@@ -412,11 +430,13 @@ export default function Sim() {
             {stop && (
               <section
                 ref={card}
-                className={`absolute top-4 left-4 right-36 max-w-md rounded-lg border border-faint bg-paper/95 p-3 shadow-lg shadow-black/40 backdrop-blur-sm transition-opacity duration-700 ${opening ? "pointer-events-none opacity-0" : "opacity-100"}`}
+                className={`absolute top-16 left-4 right-4 max-w-md md:top-4 md:right-80 rounded-lg border border-faint bg-paper/95 p-3 shadow-lg shadow-black/40 backdrop-blur-sm transition-opacity duration-700 ${opening ? "pointer-events-none opacity-0" : "opacity-100"}`}
               >
                 <div className="flex items-center justify-between gap-2">
                   <p className={KICK}>
-                    {Math.min(at, tour.length - 1) + 1} / {tour.length}
+                    {section === "universe"
+                      ? `UNIVERSE ${here + 1} / ${split}`
+                      : `SIMULATION ${here - split + 1} / ${tour.length - split}`}
                     {busy ? " · DRAWING…" : ""}
                   </p>
                   <div className="flex gap-1.5">
