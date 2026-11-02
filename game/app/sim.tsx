@@ -349,7 +349,7 @@ export default function Sim() {
               >
                 <div className="flex items-center justify-between gap-2">
                   <p className={KICK}>
-                    STOP {Math.min(at, tour.length - 1) + 1} OF {tour.length}
+                    {Math.min(at, tour.length - 1) + 1} / {tour.length}
                     {busy ? " · DRAWING…" : ""}
                   </p>
                   <div className="flex gap-1.5">
