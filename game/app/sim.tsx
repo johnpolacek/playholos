@@ -333,7 +333,7 @@ export default function Sim() {
               <svg className="pointer-events-none absolute inset-0 h-full w-full overflow-visible">
                 {stop?.notes?.map((n) => (
                   <g key={n.id} ref={(el) => void (leads.current[n.id] = el)} className="opacity-0" stroke="var(--ink)">
-                    <line strokeWidth={1} strokeOpacity={0.55} />
+                    <line strokeWidth={1} strokeOpacity={0.7} strokeDasharray="3 3" />
                     <circle r={0} fill="var(--ink)" stroke="none" />
                   </g>
                 ))}
