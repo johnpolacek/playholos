@@ -158,14 +158,14 @@ export function tourOf(m: DrawnMinds, o: Odds, names: Record<string, string> = {
     id: "universe",
     title: "The universe we can see",
     words:
-      "Everything we have mapped, 43,000 galaxies, fits in the bright knot at the center. Hundreds of billions more fill the rest, out to the edge, as far as light has had time to reach us. We sit at the center only because we are the ones looking.",
+      "Everything we have mapped, 43,000 galaxies, fits in the bright knot at the center. Hundreds of billions more fill the rest, out to the edge, as far as light has had time to reach us. There glows the universe’s first light, as Planck mapped it. We sit at the center only because we are the ones looking.",
     focus: null,
     zoom: UNIVERSE,
     notes: [
       { id: "mapped", pos: [0, 0, 0], text: "All we have mapped: 43,000 galaxies", off: [90, -80] },
       { id: "drawn", pos: [-1.6e10, -9e9, 0], text: "Hundreds of billions more, drawn", off: [-40, 70] },
       // Toward the Galaxy's center, which the opening's view puts at the sphere's right edge.
-      { id: "edge", pos: [4.65e10, 0, 0], text: "The edge of what we can see, 46 billion light-years", off: [-70, -110] },
+      { id: "edge", pos: [4.65e10, 0, 0], text: "The first light, at the edge of what we can see, 46 billion light-years", off: [-70, -110] },
     ],
   });
   stops.push({

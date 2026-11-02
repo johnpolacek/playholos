@@ -5,6 +5,7 @@
 import * as THREE from "three";
 import earthDaymap from "../../assets/earth_daymap.jpg";
 import moonMap from "../../assets/moon.jpg";
+import planckMap from "../../assets/planck_cmb.jpg";
 import mercuryMap from "../../assets/mercury.jpg";
 import venusMap from "../../assets/venus_atmosphere.jpg";
 import marsMap from "../../assets/mars.jpg";
@@ -2163,6 +2164,45 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     const edge = new THREE.Mesh(new THREE.SphereGeometry(EDGE_KLY, 96, 64), edgeMat);
     edge.frustumCulled = false;
     cosmos.scene.add(edge);
+    // The universe's first light, as Planck mapped it (ESA and the Planck Collaboration, 2018), on the edge's far side:
+    // a backdrop behind every galaxy, warm and cool where the young universe was a little denser or thinner. The map
+    // is in galactic longitude and latitude, the center at its middle and longitude growing to the left, so each point
+    // of the sphere looks up its own direction. 2026-11-01.
+    const cmbMat = new THREE.ShaderMaterial({
+      uniforms: { uMap: { value: null as THREE.Texture | null }, uOpacity: { value: 0 } },
+      vertexShader: /* glsl */ `
+        varying vec3 vDir;
+        void main() {
+          vDir = normalize(position);
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }`,
+      fragmentShader: /* glsl */ `
+        uniform sampler2D uMap;
+        uniform float uOpacity;
+        varying vec3 vDir;
+        void main() {
+          float l = atan(-vDir.z, vDir.x);
+          float b = asin(clamp(vDir.y, -1.0, 1.0));
+          vec2 uv = vec2(fract(0.5 - l / 6.2831853), 0.5 + b / 3.1415927);
+          gl_FragColor = vec4(texture2D(uMap, uv).rgb, uOpacity);
+        }`,
+      transparent: true,
+      depthWrite: false,
+      depthTest: false,
+      side: THREE.BackSide,
+      blending: THREE.AdditiveBlending,
+    });
+    new THREE.TextureLoader().load(planckMap, (tex) => {
+      if (gone) return;
+      tex.generateMipmaps = true;
+      tex.minFilter = THREE.LinearMipmapLinearFilter;
+      tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+      cmbMat.uniforms.uMap.value = tex;
+    });
+    const cmb = new THREE.Mesh(new THREE.SphereGeometry(EDGE_KLY * 0.999, 128, 96), cmbMat);
+    cmb.frustumCulled = false;
+    cmb.renderOrder = -1;
+    cosmos.scene.add(cmb);
     // The opening's front of light, a shell running out from us.
     const frontMat = new THREE.ShaderMaterial({
       uniforms: { uColor: { value: pal[K.young] }, uOpacity: { value: 0 } },
@@ -2234,7 +2274,9 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       show(frontMat, shot ? on * 1.4 * (1 - ramp(shot.u, 0.9, 1)) : 0);
       show(surveyGlow, on * arrived(surveyAt) * ramp(x, 11.2, 12.2) * (1 - far));
       show(knotGlow, on * arrived(surveyAt) * far);
-      show(edgeMat, on * ramp(x, 14.6, 15.4) * (shot ? ramp(shot.k, 0.75, 0.95) : 1));
+      const edgeIn = ramp(x, 14.6, 15.4) * (shot ? ramp(shot.k, 0.75, 0.95) : 1);
+      show(edgeMat, on * edgeIn);
+      cmbMat.uniforms.uOpacity.value = cmbMat.uniforms.uMap.value ? on * edgeIn * 0.13 : 0;
       show(fillGlow, on * ramp(x, 13.6, 14.4));
       const s = spec.mode === "sim" ? spec.sim : undefined;
       const key = s?.focus?.join() ?? "";

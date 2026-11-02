@@ -35,6 +35,12 @@ Use M33 for the second object. `D25` is log10 of the major-axis diameter in unit
 
 `scripts/prepare-2mrs.py` turns it into `data/2mrs.bin`: each galaxy at its speed over H0 = 70 km/s per Mpc, in the atlas frame, for the simulation's view of the universe we can see.
 
+## Planck's first light
+
+`planck/ESA_Planck_CMB2018_equirectangular_HR.png` is ESA's [Planck CMB map in equirectangular projection](https://sci.esa.int/web/planck/-/60505-planck-s-cosmic-microwave-background-equirectangular-projection), 6350 × 3175, Planck Legacy release 2018, retrieved November 1, 2026. Galactic coordinates, the center in the middle, longitude growing to the left. © ESA and the Planck Collaboration. `assets/planck_cmb.jpg` is it shrunk for the game:
+
+`sips -s format jpeg -s formatOptions 60 -z 800 1600 data/galaxy-sources/planck/ESA_Planck_CMB2018_equirectangular_HR.png --out assets/planck_cmb.jpg`
+
 ## Rendering and regeneration
 
 Run `python3 scripts/prepare-galaxies.py` to rebuild `data/galaxies.json`, then `npm run build`. No network or third-party Python packages are required.
