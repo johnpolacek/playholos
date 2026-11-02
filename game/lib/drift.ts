@@ -2227,7 +2227,8 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       const shot = spec.mode === "sim" && spec.sim?.intro !== undefined ? introAt(clock) : null;
       const reveal = shot ? shot.r / EDGE_KLY : 1;
       surveyGlow.uniforms.uReveal.value = fillGlow.uniforms.uReveal.value = reveal;
-      surveyGlow.uniforms.uFlash.value = fillGlow.uniforms.uFlash.value = shot ? 1 : 0;
+      // The flare settles over the shot's last seconds, so the farthest, lit last, ease down instead of dropping.
+      surveyGlow.uniforms.uFlash.value = fillGlow.uniforms.uFlash.value = shot ? 1 - easeInOut(ramp(shot.k, 0.7, 1)) : 0;
       front.scale.setScalar(shot ? shot.r : 1);
       // The front shows as a glowing bubble while the camera is outside it, and is gone once it passes us by.
       show(frontMat, shot ? on * 1.4 * (1 - ramp(shot.u, 0.9, 1)) : 0);
