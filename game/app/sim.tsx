@@ -350,25 +350,36 @@ export default function Sim() {
               Play the game
             </Link>
             {stop?.id === "dials" && <Count minds={result.galaxy} />}
-            {clashes.length > 0 && (
-              <div
-                role="alert"
-                className="absolute inset-x-4 bottom-4 max-w-xl rounded-lg border-2 bg-paper/95 p-3 backdrop-blur-sm"
-                style={{ borderColor: ROSE }}
-              >
-                <p className="font-mono text-[11px] font-semibold tracking-[.1em]" style={{ color: ROSE }}>
-                  TODAY’S SKY RULES THIS OUT
-                </p>
-                {clashes.map((c) => (
-                  <p key={c.title} className="mt-1.5 text-[13px] leading-snug">
-                    <span className="font-semibold" style={{ color: ROSE }}>
-                      {c.title}.
-                    </span>{" "}
-                    {c.words}
+            <div className="pointer-events-none absolute bottom-4 left-4 flex max-w-xl flex-col items-start gap-2 pr-4">
+              {clashes.length > 0 && (
+                <div
+                  role="alert"
+                  className="pointer-events-auto rounded-lg border-2 bg-paper/95 p-3 backdrop-blur-sm"
+                  style={{ borderColor: ROSE }}
+                >
+                  <p className="font-mono text-[11px] font-semibold tracking-[.1em]" style={{ color: ROSE }}>
+                    TODAY’S SKY RULES THIS OUT
                   </p>
-                ))}
-              </div>
-            )}
+                  {clashes.map((c) => (
+                    <p key={c.title} className="mt-1.5 text-[13px] leading-snug">
+                      <span className="font-semibold" style={{ color: ROSE }}>
+                        {c.title}.
+                      </span>{" "}
+                      {c.words}
+                    </p>
+                  ))}
+                </div>
+              )}
+              {/* Where the real ends: from the dials on, the minds and their worlds are drawn, not seen. */}
+              {revealed && (
+                <p className="flex items-center gap-2 rounded-full border border-dashed border-[#b39ef2]/60 bg-paper/90 px-3 py-1 font-mono text-[11px] text-[#b39ef2] backdrop-blur-sm">
+                  <span className="tracking-[.12em]">SPECULATION</span>
+                  <span className="text-page-ink2">
+                    Real stars. The minds and their worlds are drawn at the dials’ odds.
+                  </span>
+                </p>
+              )}
+            </div>
             {stop && (
               <section
                 ref={card}
@@ -424,7 +435,7 @@ export default function Sim() {
               <Funnel tiers={tiers} />
               <p className="mt-1 text-[13px] text-page-ink2">
                 One star in {round(1 / perStar)} holds a mind. Each step can turn as far as the research allows. The
-                mark is Holos’s own.
+                mark is the Holos game’s.
               </p>
               {DIALS.map((d) => {
                 const v = values[d.key] ?? d.holos;
@@ -473,7 +484,7 @@ export default function Sim() {
                     setSpread(HOLOS_ODDS.spreadTop);
                   }}
                 >
-                  Holos’s odds
+                  Holos game odds
                 </button>
               </div>
               <p className="mt-2 text-[12px] text-muted">Same odds, a new roll of the dice.</p>
@@ -649,7 +660,7 @@ function Count({ minds }: { minds: number }) {
         {countText(minds)}
       </span>
       <span className="mt-1 block font-mono text-[12px] text-page-ink2">
-        {minds < Math.LN2 ? "IN OUR GALAXY" : "MINDS IN OUR GALAXY"}
+        {minds < Math.LN2 ? "IN THE MILKY WAY" : "MINDS IN THE MILKY WAY"}
       </span>
     </div>
   );
