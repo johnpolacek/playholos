@@ -3,7 +3,8 @@ import { Link } from "react-router";
 import { SIM_COLOR, SimMark } from "@/components/icons";
 import { placeLabel } from "@/components/place-label";
 import { Sky, SkyArt, useSky } from "@/components/sky";
-import { DIALS, odds, round } from "@/lib/about/dials";
+import { chain, DIALS, far, odds, PEER_YEARS, round } from "@/lib/about/dials";
+import { Funnel, type Tier } from "@/components/funnel";
 import type { Dials, Mark } from "@/lib/drift";
 import { YEAR_0 } from "@/lib/game/clock";
 import { HOLOS_ODDS, type Odds } from "@/lib/sim/draw-minds";
@@ -50,6 +51,23 @@ export default function Sim() {
   const [opening, setOpening] = useState(true);
 
   const perStar = DIALS.reduce((p, d) => p * (values[d.key] ?? d.holos), 1);
+  // The chain worked out at once, as a dial turns, ahead of the slower draw: the funnel, the count and the ring.
+  const result = useMemo(() => chain(values, PEER_YEARS), [values]);
+  const tiers: Tier[] = useMemo(() => {
+    const v = (k: string) => values[k] ?? DIALS.find((d) => d.key === k)!.holos;
+    let n = 2e11;
+    const out: Tier[] = [{ label: "Stars", count: n, color: "rgb(230,227,219)" }];
+    for (const [k, label, color] of [
+      ["warm", "Rocky warm worlds", "rgb(230,227,219)"],
+      ["air", "Keep their air", "rgb(168,198,255)"],
+      ["start", "Life starts", "rgb(112,209,169)"],
+      ["last", "Life lasts", "rgb(112,209,169)"],
+      ["animals", "Animals", "rgb(255,206,150)"],
+      ["minds", "Minds", "rgb(91,184,214)"],
+    ] as const)
+      out.push({ label, count: (n *= v(k)), color });
+    return out;
+  }, [values]);
   const odds_: Odds = useMemo(() => ({ starsPerMind: 1 / perStar, spreadTop: spread }), [perStar, spread]);
   // The steps a natural world turns on, from the same dials.
   const worldOdds: WorldOdds = useMemo(() => {
@@ -87,7 +105,7 @@ export default function Sim() {
         worlds: worldOdds,
       };
       worker.current?.postMessage(ask);
-    }, 250);
+    }, 120);
     return () => clearTimeout(t);
   }, [key, seed, odds_, worldOdds]);
 
@@ -133,16 +151,18 @@ export default function Sim() {
       clash: stop?.clash,
       spokes,
       time: stop?.time ? { years, light: lightAt(years, TODAY) } : undefined,
+      ring: stop?.id === "dials" && !result.nearest.beyond ? result.nearest.ly : undefined,
       intro: opening && stop?.id === "universe" ? 1 : undefined,
       // The place in view first, so its name wins a crowded spot, then Sol, then the minds round us.
       marks: [
         ...(stop?.focus ? [{ id: "here", pos: stop.focus }] : []),
         ...(stop?.notes ? stop.notes : [{ id: "Sol", pos: [0, 0, 0] as [number, number, number] }]),
         ...(spokes ? near.map((n, i) => ({ id: `near-${i}`, pos: n.pos })) : []),
+        ...(stop?.id === "dials" ? [{ id: "ring", pos: [0, 0, 0] as [number, number, number], ring: true }] : []),
         ...(revealed && stop.zoom < NAMES_UNTIL ? named.filter((n) => n.pos.join() !== stop.focus?.join()) : []),
       ],
     }),
-    [points, stop, named, revealed, spokes, near, years, opening],
+    [points, stop, named, revealed, spokes, near, years, opening, result],
   );
 
   const names = useRef<Record<string, HTMLSpanElement | null>>({});
@@ -180,11 +200,15 @@ export default function Sim() {
       const t = (performance.now() - notesAt.current) / 1000 - NOTE_DELAY - NOTE_STAGGER * (order.current[id] ?? 0);
       const part = (from: number, to: number) => Math.min(1, Math.max(0, (t - from) / (to - from)));
       const out = (k: number) => 1 - (1 - k) ** 3;
-      const pop = part(0, 0.28), run = out(part(0.08, 0.5)), words = out(part(0.32, 0.75));
+      const pop = part(0, 0.28),
+        run = out(part(0.08, 0.5)),
+        words = out(part(0.32, 0.75));
       // The words go out to the side the line leaves on, and the line meets them at their near end.
-      const w = n.offsetWidth, h = n.offsetHeight;
+      const w = n.offsetWidth,
+        h = n.offsetHeight;
       // Kept inside the frame: where the words would cross its edge, they and the line's end move in.
-      const W = n.parentElement?.clientWidth ?? 0, H = n.parentElement?.clientHeight ?? 0;
+      const W = n.parentElement?.clientWidth ?? 0,
+        H = n.parentElement?.clientHeight ?? 0;
       const fitX = (l: number) => Math.min(Math.max(l, 12), W - w - 12);
       const fitY = (yy: number) => Math.min(Math.max(yy, h / 2 + 12), H - h / 2 - 12);
       const left = fitX(off[0] < 0 ? x + off[0] - w - 8 : x + off[0] + 8);
@@ -274,12 +298,7 @@ export default function Sim() {
               </span>
               <svg className="pointer-events-none absolute inset-0 h-full w-full overflow-visible">
                 {stop?.notes?.map((n) => (
-                  <g
-                    key={n.id}
-                    ref={(el) => void (leads.current[n.id] = el)}
-                    className="opacity-0"
-                    stroke="var(--ink)"
-                  >
+                  <g key={n.id} ref={(el) => void (leads.current[n.id] = el)} className="opacity-0" stroke="var(--ink)">
                     <line strokeWidth={1} strokeOpacity={0.55} />
                     <circle r={0} fill="var(--ink)" stroke="none" />
                   </g>
@@ -294,6 +313,13 @@ export default function Sim() {
                   {n.text}
                 </span>
               ))}
+              <span
+                ref={(el) => void (names.current.ring = el)}
+                className={`${label} text-[13px]`}
+                style={{ color: "var(--you)" }}
+              >
+                Our nearest mind, likely within {far(result.nearest.ly)}
+              </span>
               {near.map((n, i) => (
                 <span
                   key={n.name}
@@ -323,6 +349,7 @@ export default function Sim() {
             >
               Play the game
             </Link>
+            {stop?.id === "dials" && <Count minds={result.galaxy} />}
             {clashes.length > 0 && (
               <div
                 role="alert"
@@ -394,6 +421,7 @@ export default function Sim() {
               className="max-h-[54dvh] overflow-y-auto border-t border-faint bg-panel px-4 py-4 wide:max-h-none wide:border-t-0 wide:border-l"
             >
               <p className={KICK}>THE DIALS</p>
+              <Funnel tiers={tiers} />
               <p className="mt-1 text-[13px] text-page-ink2">
                 One star in {round(1 / perStar)} holds a mind. Each step can turn as far as the research allows. The
                 mark is Holos’s own.
@@ -579,5 +607,45 @@ function Turn() {
       onPointerUp={() => (from.current = null)}
       onPointerCancel={() => (from.current = null)}
     />
+  );
+}
+
+/** The minds in our Galaxy at these odds, large, counting to each new value as a dial turns. */
+function Count({ minds }: { minds: number }) {
+  const el = useRef<HTMLSpanElement>(null);
+  const shown = useRef({ v: minds });
+  useEffect(() => {
+    const write = () => el.current && (el.current.textContent = round(shown.current.v));
+    if (prefersReducedMotion()) {
+      shown.current.v = minds;
+      write();
+      return;
+    }
+    // In the log, so a jump from a hundred to a hundred million counts up as steadily as one from a million to two.
+    const from = Math.log10(Math.max(1, shown.current.v)),
+      to = Math.log10(Math.max(1, minds));
+    const k = { t: 0 };
+    const tw = gsap.to(k, {
+      t: 1,
+      duration: 0.6,
+      ease: "power2.out",
+      onUpdate: () => {
+        shown.current.v = k.t >= 1 ? minds : 10 ** (from + (to - from) * k.t);
+        write();
+      },
+    });
+    return () => void tw.kill();
+  }, [minds]);
+  return (
+    <div className="pointer-events-none absolute inset-x-0 bottom-6 text-center [text-shadow:0_0_8px_#000,0_0_16px_#000]">
+      <span
+        ref={el}
+        className="block text-[44px] leading-none font-semibold tracking-tight"
+        style={{ color: "var(--you)" }}
+      >
+        {round(minds)}
+      </span>
+      <span className="mt-1 block font-mono text-[12px] text-page-ink2">MINDS IN OUR GALAXY</span>
+    </div>
   );
 }

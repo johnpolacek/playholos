@@ -149,7 +149,10 @@ export interface Show {
     focus: [number, number, number] | null;
     zoom?: number;
     /** `rim`: the place is on the edge of what we can see, where its outline shows to the right, a little low. */
-    marks?: { id: string; pos: [number, number, number]; rim?: boolean }[];
+    marks?: { id: string; pos: [number, number, number]; rim?: boolean; ring?: boolean }[];
+    /** A ring round Sol in the Galaxy's plane, light-years out: where our nearest mind likely is. A mark with `ring`
+     *  sits on it, to the right as seen. */
+    ring?: number;
     /** The place in view is one today's sky rules out: its thread and pulse are rose. */
     clash?: boolean;
     /** Lines out from Sol to these places, light-years in the atlas frame: our nearest stars, to scale. */
@@ -2132,6 +2135,15 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
   }
 
   // ── A simulation: the minds drawn at the dials' odds, among the real stars and across the Galaxy. 2026-11-01 ──
+  /** The ring's radius as drawn, in ly, easing to the dials'. */
+  let ringR = 0;
+  let ringAt = 0;
+  /** Seconds since the ring last eased, for its pace. */
+  const dt60 = () => {
+    const dt = Math.min(0.1, Math.max(0, clock - ringAt));
+    ringAt = clock;
+    return dt;
+  };
   function simulating() {
     const SIZE = { awake: 8, asleep: 6, peer: 6, fills: 10, animals: 8, oxygen: 6, microbes: 5, lifeless: 3 } as const;
     const BRIGHT = { awake: 1, asleep: 0.75, peer: 0.95, fills: 1, animals: 1, oxygen: 0.9, microbes: 0.8, lifeless: 0.4 } as const;
@@ -2179,6 +2191,13 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     const spokes = new THREE.LineSegments(new THREE.BufferGeometry().setAttribute("position", new THREE.BufferAttribute(spokePos, 3)), spokeMat);
     spokes.frustumCulled = false;
     stars.scene.add(spokes);
+    // The nearest mind's likely distance, a ring in the plane that eases out or in as the dials turn.
+    const ringMat = line("mind", 0);
+    const ringLoop = loop(
+      Array.from({ length: 256 }, (_, i) => new THREE.Vector3(Math.cos((i / 256) * 2 * Math.PI), 0, Math.sin((i / 256) * 2 * Math.PI))),
+      ringMat,
+    );
+    stars.scene.add(ringLoop);
     let spokesOf: [number, number, number][] | undefined;
     let spokesAt = 0;
     // The universe we can see: the 2MASS Redshift Survey's 43,000 galaxies, each placed by its speed away from us, in
@@ -2329,6 +2348,9 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       cmbMat.uniforms.uOpacity.value = cmbMat.uniforms.uMap.value ? on * edgeIn * 0.13 : 0;
       show(fillGlow, on * ramp(x, 13.6, 14.4));
       const s = spec.mode === "sim" ? spec.sim : undefined;
+      if (s?.ring) ringR = ringR ? ringR * Math.exp(Math.log(s.ring / ringR) * (1 - Math.exp(-dt60() * 5))) : s.ring;
+      ringLoop.scale.setScalar(Math.max(0.01, ringR));
+      ringMat.uniforms.uOpacity.value = s?.ring ? 0.55 * on * (0.8 + 0.2 * Math.sin(clock * 2)) : 0;
       const key = s?.focus?.join() ?? "";
       if (key !== aimed) {
         aimed = key;
@@ -2412,9 +2434,12 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         const w = parent.clientWidth;
         const h = parent.clientHeight;
         spec.onMarks(
-          s.marks.map(({ id, pos, rim }) => {
+          s.marks.map(({ id, pos, rim, ring: onRing }) => {
             if (rim) rimPoint(v);
-            else v.set(...pos);
+            else if (onRing) {
+              v.setFromMatrixColumn(stars.camera.matrixWorld, 0).setY(0);
+              v.normalize().multiplyScalar(ringR);
+            } else v.set(...pos);
             v.project(stars.camera);
             return { id, x: ((v.x + 1) / 2) * w, y: ((1 - v.y) / 2) * h, a: v.z < 1 ? on : 0 };
           }),

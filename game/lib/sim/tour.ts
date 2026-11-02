@@ -224,7 +224,8 @@ export function tourOf(m: DrawnMinds, o: Odds, names: Record<string, string> = {
     title: "Turn the dials",
     words: `No one yet knows how often life starts, lasts, or wakes into a mind. Each dial is one step, set as far as the research allows. At these odds, ${odds(1 / o.starsPerMind)} stars holds a mind, about ${round(galaxy)} in our Galaxy, nearly all far older than us. Turn one and watch who appears.`,
     focus: null,
-    zoom: 7.0,
+    // Out to the edge of the real star map, 326 ly, where enough minds live that a turn of a dial shows.
+    zoom: zoomFor(CATALOG_LY),
     reveal: true,
   });
 
