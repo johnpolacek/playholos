@@ -8,6 +8,7 @@ import { Funnel, type Tier } from "@/components/funnel";
 import type { Dials, Mark } from "@/lib/drift";
 import { YEAR_0 } from "@/lib/game/clock";
 import { HOLOS_ODDS, type Odds } from "@/lib/sim/draw-minds";
+import { pickablesOf, type Pickable } from "@/lib/sim/pick";
 import type { WorldOdds } from "@/lib/sim/draw-worlds";
 import type { Ask, Drawn } from "@/lib/sim/draw-worker";
 import { AHEAD, UNIVERSE, clashesOf, lightAt, timeOf, namedOf, pointsOf, tourOf } from "@/lib/sim/tour";
@@ -141,13 +142,33 @@ export default function Sim() {
   const revealed = !!stop?.reveal;
   const near = drawn?.near ?? NONE;
   const spokes = useMemo(() => (stop?.spokes ? near.map((n) => n.pos) : undefined), [stop?.spokes, near]);
+  // On the dials stop, each world and mind can be tapped: once to fly to it, again to read what we know of it.
+  const picking = stop?.id === "dials";
+  const pickables = useMemo(
+    () => (drawn && picking ? pickablesOf(drawn.minds, drawn.worlds, drawn.names, drawn.starOf) : []),
+    [drawn, picking],
+  );
+  // A pick holds only on the stop it was made on, so stepping on lets it go.
+  const [pick, setPick] = useState<{ id: string; open: boolean; stop: string } | null>(null);
+  const picked: Pickable | undefined =
+    pick && pick.stop === stop?.id ? pickables.find((p) => p.id === pick.id) : undefined;
+  const pickAt = useRef<Record<string, { x: number; y: number; a: number }>>({});
+  const onTap = useCallback((x: number, y: number) => {
+    let best: string | null = null,
+      gap = 22;
+    for (const [id, p] of Object.entries(pickAt.current)) {
+      const g = Math.hypot(p.x - x, p.y - y);
+      if (p.a > 0 && g < gap) [best, gap] = [id, g];
+    }
+    setPick((was) => (best ? { id: best, open: was?.id === best, stop: "dials" } : null));
+  }, []);
 
   const sim = useMemo(
     () => ({
       minds: revealed ? points : NONE,
       // Before the first draw comes, the tour's opening: the universe we can see.
-      focus: stop ? stop.focus : null,
-      zoom: stop?.zoom ?? UNIVERSE,
+      focus: picked ? picked.pos : stop ? stop.focus : null,
+      zoom: picked ? Math.min(8.3, Math.max(6.5, Math.log10(5 * picked.d * 63241.077))) : (stop?.zoom ?? UNIVERSE),
       clash: stop?.clash,
       spokes,
       time: stop?.time ? { years, light: lightAt(years, TODAY) } : undefined,
@@ -155,14 +176,16 @@ export default function Sim() {
       intro: opening && stop?.id === "universe" ? 1 : undefined,
       // The place in view first, so its name wins a crowded spot, then Sol, then the minds round us.
       marks: [
-        ...(stop?.focus ? [{ id: "here", pos: stop.focus }] : []),
+        ...(picked ? [{ id: "here", pos: picked.pos }] : stop?.focus ? [{ id: "here", pos: stop.focus }] : []),
+        ...(picked ? [{ id: "Sol", pos: [0, 0, 0] as [number, number, number] }] : []),
+        ...pickables.map((p) => ({ id: `pick:${p.id}`, pos: p.pos })),
         ...(stop?.notes ? stop.notes : [{ id: "Sol", pos: [0, 0, 0] as [number, number, number] }]),
         ...(spokes ? near.map((n, i) => ({ id: `near-${i}`, pos: n.pos })) : []),
         ...(stop?.id === "dials" ? [{ id: "ring", pos: [0, 0, 0] as [number, number, number], ring: true }] : []),
         ...(revealed && stop.zoom < NAMES_UNTIL ? named.filter((n) => n.pos.join() !== stop.focus?.join()) : []),
       ],
     }),
-    [points, stop, named, revealed, spokes, near, years, opening, result],
+    [points, stop, named, revealed, spokes, near, years, opening, result, picked, pickables],
   );
 
   const names = useRef<Record<string, HTMLSpanElement | null>>({});
@@ -188,7 +211,9 @@ export default function Sim() {
     const marked = new Set(marks.map((m) => m.id));
     for (const [id, n] of Object.entries(names.current)) if (n && !marked.has(id)) n.style.opacity = "0";
     for (const [id, g] of Object.entries(leads.current)) if (g && !marked.has(id)) g.style.opacity = "0";
+    pickAt.current = {};
     for (const { id, x, y, a } of marks) {
+      if (id.startsWith("pick:")) pickAt.current[id.slice(5)] = { x, y, a };
       const n = names.current[id];
       if (!n) continue;
       const off = offs.current[id];
@@ -294,7 +319,7 @@ export default function Sim() {
                 className={label}
                 style={{ color: stop?.clash ? ROSE : undefined }}
               >
-                {stop?.label}
+                {picked ? `${picked.title} · ${far(picked.d)}` : stop?.label}
               </span>
               <svg className="pointer-events-none absolute inset-0 h-full w-full overflow-visible">
                 {stop?.notes?.map((n) => (
@@ -342,7 +367,10 @@ export default function Sim() {
                 </span>
               ))}
             </SkyArt>
-            <Turn />
+            <Turn onTap={picking ? onTap : undefined} />
+            {picked && pick?.open && (
+              <Details item={picked} onClose={() => setPick({ id: picked.id, open: false, stop: "dials" })} />
+            )}
             <Link
               to="/"
               className="absolute top-4 right-4 rounded-full border border-faint bg-paper/70 px-3 py-1 font-mono text-[11px] text-muted hover:text-ink"
@@ -370,16 +398,16 @@ export default function Sim() {
                   ))}
                 </div>
               )}
-              {/* Where the real ends: from the dials on, the minds and their worlds are drawn, not seen. */}
-              {revealed && (
-                <p className="flex items-center gap-2 rounded-full border border-dashed border-[#b39ef2]/60 bg-paper/90 px-3 py-1 font-mono text-[11px] text-[#b39ef2] backdrop-blur-sm">
-                  <span className="tracking-[.12em]">SPECULATION</span>
-                  <span className="text-page-ink2">
-                    Real stars. The minds and their worlds are drawn at the dials’ odds.
-                  </span>
-                </p>
-              )}
             </div>
+            {/* Where the real ends: from the dials on, the minds and their worlds are drawn, not seen. */}
+            {revealed && (
+              <p className="pointer-events-none absolute right-4 bottom-4 flex max-w-[320px] items-start gap-2 rounded-lg border border-dashed border-[#b39ef2]/60 bg-paper/90 px-3 py-1.5 font-mono text-[11px] text-[#b39ef2] backdrop-blur-sm">
+                <span className="tracking-[.12em]">SPECULATION</span>
+                <span className="text-page-ink2">
+                  Real stars. The minds and their worlds are drawn at the dials’ odds.
+                </span>
+              </p>
+            )}
             {stop && (
               <section
                 ref={card}
@@ -598,15 +626,18 @@ function Time({
 }
 
 /** The map turned by hand: a drag spins the view round and tips it, in every stop. It sits under the cards. */
-function Turn() {
+function Turn({ onTap }: { onTap?(x: number, y: number): void }) {
   const sky = useSky();
   const from = useRef<{ x: number; y: number } | null>(null);
+  // Where a press began, to tell a tap from a drag.
+  const down = useRef<{ x: number; y: number } | null>(null);
   return (
     <div
       aria-hidden
       className="absolute inset-0 cursor-grab touch-none active:cursor-grabbing"
       onPointerDown={(e) => {
         from.current = { x: e.clientX, y: e.clientY };
+        down.current = { x: e.clientX, y: e.clientY };
         e.currentTarget.setPointerCapture(e.pointerId);
       }}
       onPointerMove={(e) => {
@@ -615,7 +646,14 @@ function Turn() {
         sky?.turn((e.clientX - from.current.x) / width, (e.clientY - from.current.y) / height);
         from.current = { x: e.clientX, y: e.clientY };
       }}
-      onPointerUp={() => (from.current = null)}
+      onPointerUp={(e) => {
+        from.current = null;
+        const d = down.current;
+        down.current = null;
+        if (!onTap || !d || Math.hypot(e.clientX - d.x, e.clientY - d.y) > 5) return;
+        const r = e.currentTarget.getBoundingClientRect();
+        onTap(e.clientX - r.left, e.clientY - r.top);
+      }}
       onPointerCancel={() => (from.current = null)}
     />
   );
@@ -663,5 +701,47 @@ function Count({ minds }: { minds: number }) {
         {minds < Math.LN2 ? "IN THE MILKY WAY" : "MINDS IN THE MILKY WAY"}
       </span>
     </div>
+  );
+}
+
+/** What we know of a tapped world or mind: what is measured, then, set apart in violet, what the dials drew. */
+function Details({ item, onClose }: { item: Pickable; onClose(): void }) {
+  const box = useRef<HTMLElement>(null);
+  useEffect(() => {
+    if (!box.current || prefersReducedMotion()) return;
+    const t = gsap.fromTo(
+      box.current,
+      { autoAlpha: 0, x: 24 },
+      { autoAlpha: 1, x: 0, duration: 0.45, ease: "power3.out" },
+    );
+    return () => void t.kill();
+  }, [item.id]);
+  return (
+    <section
+      ref={box}
+      className="absolute top-16 right-4 w-[min(340px,calc(100%-2rem))] rounded-lg border border-faint bg-paper/95 p-4 shadow-lg shadow-black/40 backdrop-blur-sm"
+    >
+      <div className="flex items-start justify-between gap-3">
+        <h3 className="font-semibold">{item.title}</h3>
+        <button aria-label="Close" className="font-mono text-[12px] text-muted hover:text-ink" onClick={onClose}>
+          ✕
+        </button>
+      </div>
+      <p className="mt-3 font-mono text-[10.5px] tracking-[.12em] text-muted">MEASURED</p>
+      {item.real.map((l) => (
+        <p key={l} className="mt-1 text-[13px] leading-snug text-ink/90">
+          {l}
+        </p>
+      ))}
+      <p className="mt-3 font-mono text-[10.5px] tracking-[.12em] text-[#b39ef2]">SPECULATION</p>
+      {item.drawn.map((l) => (
+        <p
+          key={l}
+          className="mt-1 border-l border-dashed border-[#b39ef2]/60 pl-2 text-[13px] leading-snug text-page-ink2"
+        >
+          {l}
+        </p>
+      ))}
+    </section>
   );
 }
