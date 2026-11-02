@@ -3,7 +3,8 @@
 import { far, odds, round } from "@/lib/about/dials";
 import type { SimMind, WorldKind } from "@/lib/drift";
 import { skyBasis } from "../../../src/coordinates.js";
-import { GALACTIC_CENTER } from "../../../src/navigation.js";
+import { GALACTIC_CENTER, LOCAL_GROUP_CENTER } from "../../../src/navigation.js";
+import { GALAXIES, galaxyPosition } from "../../../src/galaxies.js";
 import { ALIVE, RUNGS, type NaturalWorld } from "./draw-worlds.ts";
 import type { DrawnMinds, Odds } from "./draw-minds.ts";
 
@@ -27,6 +28,8 @@ export interface Stop {
   spokes?: boolean;
   /** Time passes here: a slider runs the years ahead. */
   time?: boolean;
+  /** The place in view is only where the view turns round: no thread out to it, no pulse. */
+  bare?: boolean;
   /** Words the map puts by places, light-years in the atlas frame, each joined to its place by a line. `off` is where
    *  the words sit from the place, in px: right and down. They stand in for Sol's name. */
   /** `rim` puts the place on the edge sphere's outline as seen, not at `pos`, so it stays in view as the view turns. */
@@ -101,11 +104,26 @@ export const CENTER: Vec = (() => {
 export const OPENING = 9.95;
 /** The universe we can see, log10 AU: its edge, 46.5 billion light-years out, all in view. */
 export const UNIVERSE = 15.9;
-/** Andromeda, 776 kpc out, the Local Volume Database's distance, at its place in the sky. */
-const ANDROMEDA: Vec = (() => {
-  const r = skyBasis(10.6847, 41.2688).radial.multiplyScalar(2.532e6);
+/** A place in the sky at a distance, light-years in the atlas frame. */
+function at(raDeg: number, dec: number, ly: number): Vec {
+  const r = skyBasis(raDeg, dec).radial.multiplyScalar(ly);
   return [r.x, r.y, r.z];
+}
+/** The Local Group's middle, between the Milky Way and Andromeda, so the view turns round the whole group. */
+const GROUP: Vec = (() => {
+  const c = LOCAL_GROUP_CENTER.clone().divideScalar(63241.077);
+  return [c.x, c.y, c.z];
 })();
+/** The Local Group's galaxies the map draws, by the Local Volume Database's id, each named with where its words sit. */
+const LOCAL: [string, string, [number, number]][] = [
+  ["m31", "Andromeda", [70, -60]],
+  ["m33", "Triangulum", [80, 40]],
+  ["lmc", "Large Magellanic Cloud", [-90, -50]],
+  ["smc", "Small Magellanic Cloud", [-80, 80]],
+  ["ngc6822", "NGC 6822", [60, -90]],
+  ["ic1613", "IC 1613", [-60, -100]],
+  ["wlm", "WLM", [60, 90]],
+];
 const CATALOG_LY = 326;
 /** Above about this many fillers on average, more likely than not one mind's family filled the Galaxy. */
 const LIKELY = Math.LN2;
@@ -178,17 +196,32 @@ export function tourOf(m: DrawnMinds, o: Odds, names: Record<string, string> = {
     id: "laniakea",
     title: "Our corner of it",
     words:
-      "Laniakea, the supercluster we live in: about 100,000 galaxies across 520 million light-years, all falling toward one place.",
+      "Laniakea, the supercluster we live in: about 100,000 galaxies across 520 million light-years, all falling toward one place. Galaxies gather in clusters and walls round empty voids. They are only the bright part: most of the atoms are thin gas strung between them, and most of the mass is dark matter no one has seen.",
     focus: null,
-    zoom: 13.4,
+    zoom: 13.85,
+    notes: [
+      { id: "virgo", pos: at(187.7, 12.4, 5.4e7), text: "Virgo Cluster, 54 million ly: a knot of over a thousand galaxies", off: [70, -70] },
+      { id: "attractor", pos: at(243.6, -60.9, 2.2e8), text: "The Great Attractor, 220 million ly: where Laniakea’s galaxies flow", off: [-60, 70] },
+      { id: "wall", pos: at(195.0, 28.0, 3.2e8), text: "The Great Wall through Coma, 320 million ly: a sheet of galaxies", off: [60, 60] },
+      { id: "void", pos: at(285, 10, 7.5e7), text: "The Local Void, next to us: nearly empty", off: [-70, -60] },
+    ],
   });
   stops.push({
     id: "group",
     title: "Our Local Group",
-    words: "Andromeda, 2.5 million light-years away, and dozens of small galaxies, held to the Milky Way by gravity.",
-    focus: ANDROMEDA,
-    zoom: 11.0,
-    label: "Andromeda",
+    words:
+      "Three big spirals, the Milky Way, Andromeda and Triangulum, and dozens of small galaxies round them, all held together by gravity, across about 10 million light-years.",
+    focus: GROUP,
+    zoom: 11.85,
+    bare: true,
+    notes: [
+      { id: "mw", pos: CENTER, text: "The Milky Way, ours", off: [-70, 50] },
+      ...LOCAL.map(([id, name, off]) => {
+        const g = GALAXIES.find((x: { id: string }) => x.id === id) as unknown as { kpc: number; ra: number; dec: number };
+        const r = galaxyPosition(g);
+        return { id, pos: [r.x, r.y, r.z] as Vec, text: `${name}, ${round(g.kpc * 3261.56)} ly`, off };
+      }),
+    ],
   });
   stops.push({
     id: "galaxy",
