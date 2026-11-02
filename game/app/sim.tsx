@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router";
 import { SIM_COLOR, SimMark } from "@/components/icons";
 import { placeLabel } from "@/components/place-label";
-import { Sky, SkyArt } from "@/components/sky";
+import { Sky, SkyArt, useSky } from "@/components/sky";
 import { DIALS, odds, round } from "@/lib/about/dials";
 import type { Dials, Mark } from "@/lib/drift";
 import { YEAR_0 } from "@/lib/game/clock";
@@ -311,6 +311,7 @@ export default function Sim() {
                 </span>
               ))}
             </SkyArt>
+            <Turn />
             <Link
               to="/"
               className="absolute top-4 right-4 rounded-full border border-faint bg-paper/70 px-3 py-1 font-mono text-[11px] text-muted hover:text-ink"
@@ -548,5 +549,29 @@ function Time({
         <span style={{ color: "var(--you)" }}>{reached.toLocaleString("en-US")}</span>
       </p>
     </div>
+  );
+}
+
+/** The map turned by hand: a drag spins the view round and tips it, in every stop. It sits under the cards. */
+function Turn() {
+  const sky = useSky();
+  const from = useRef<{ x: number; y: number } | null>(null);
+  return (
+    <div
+      aria-hidden
+      className="absolute inset-0 cursor-grab touch-none active:cursor-grabbing"
+      onPointerDown={(e) => {
+        from.current = { x: e.clientX, y: e.clientY };
+        e.currentTarget.setPointerCapture(e.pointerId);
+      }}
+      onPointerMove={(e) => {
+        if (!from.current) return;
+        const { width, height } = e.currentTarget.getBoundingClientRect();
+        sky?.turn((e.clientX - from.current.x) / width, (e.clientY - from.current.y) / height);
+        from.current = { x: e.clientX, y: e.clientY };
+      }}
+      onPointerUp={() => (from.current = null)}
+      onPointerCancel={() => (from.current = null)}
+    />
   );
 }

@@ -680,6 +680,10 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
   /** Where the camera ends, as the opening stop stands: the edge, all in view. */
   const UNIVERSE_D = Math.log10(2.7 * EDGE_R * KLY_AU);
 
+  /** A simulation's view turned by hand: a drag spins it round and tips it up or down, and a flick keeps turning a
+   *  moment. A new stop eases it back to its own framing. 2026-11-01. */
+  const simDrag = { az: 0, tilt: 0, vAz: 0, vTilt: 0, held: 0 };
+
   function simPose(): Pose {
     let at: number | null = null;
     let [logD, az, tilt] = [spec.sim?.zoom ?? 7.0, 1.1, 0.75];
@@ -709,6 +713,20 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       if (next !== key) {
         key = next;
         leg = { d: logD, tilt, at: t, span: Math.min(6, Math.max(2.4, 2.2 + 0.6 * Math.abs(toD - logD))) };
+        simDrag.vAz = simDrag.vTilt = 0;
+      }
+      // The hand's turn: a flick coasts and slows, and while a stop's flight runs the turn eases home.
+      if (t - simDrag.held > 0.05) {
+        const slow = Math.exp(-dt * 3);
+        simDrag.az += simDrag.vAz * dt;
+        simDrag.tilt += simDrag.vTilt * dt;
+        simDrag.vAz *= slow;
+        simDrag.vTilt *= slow;
+      }
+      if (leg) {
+        const home = 1 - Math.exp(-dt * 2.5);
+        simDrag.az -= simDrag.az * home;
+        simDrag.tilt -= simDrag.tilt * home;
       }
       if (leg) {
         const e = easeInOut(Math.min(1, (t - leg.at) / leg.span));
@@ -721,7 +739,8 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         az += (Math.abs(turns[0]) < Math.abs(turns[1]) ? turns[0] : turns[1]) * (1 - Math.exp(-dt * LOOK * 0.7));
       } else az += drift(dt, logD > 14.5 ? 150 : 600);
       // Out at the edge the view keeps turning and gently rising and falling, so the galaxies' depth shows.
-      return [logD, az, tilt + (logD > 14.5 ? 0.12 * Math.sin(t / 9) : 0), 0];
+      const lean = tilt + (logD > 14.5 ? 0.12 * Math.sin(t / 9) : 0) + simDrag.tilt;
+      return [logD, az + simDrag.az, Math.max(-1.35, Math.min(1.35, lean)), 0];
     };
   }
 
@@ -4038,6 +4057,14 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       if (downAt > 0) {
         closeTurn.az -= dx * Math.PI;
         closeTurn.el = Math.max(-0.15, Math.min(1.1, closeTurn.el + dy * 1.2));
+      } else if (spec.mode === "sim") {
+        const now = clock, dt = Math.max(1 / 120, now - simDrag.held);
+        simDrag.az -= dx * Math.PI;
+        simDrag.tilt = Math.max(-1.6, Math.min(1.6, simDrag.tilt + dy * 1.6));
+        // How fast the hand moved, for the coast after it lets go.
+        simDrag.vAz = Math.max(-5, Math.min(5, (-dx * Math.PI) / dt));
+        simDrag.vTilt = Math.max(-3, Math.min(3, (dy * 1.6) / dt));
+        simDrag.held = now;
       } else pilot.turnBy(dx, dy);
       dirty = true;
     },
