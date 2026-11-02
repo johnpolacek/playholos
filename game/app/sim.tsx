@@ -610,12 +610,15 @@ function Turn() {
   );
 }
 
+/** The count as it reads. Under ln 2 on average, more likely than not there is no other mind at all. */
+const countText = (n: number) => (n < Math.LN2 ? "Likely none but us" : round(n));
+
 /** The minds in our Galaxy at these odds, large, counting to each new value as a dial turns. */
 function Count({ minds }: { minds: number }) {
   const el = useRef<HTMLSpanElement>(null);
   const shown = useRef({ v: minds });
   useEffect(() => {
-    const write = () => el.current && (el.current.textContent = round(shown.current.v));
+    const write = () => el.current && (el.current.textContent = countText(shown.current.v));
     if (prefersReducedMotion()) {
       shown.current.v = minds;
       write();
@@ -643,9 +646,11 @@ function Count({ minds }: { minds: number }) {
         className="block text-[44px] leading-none font-semibold tracking-tight"
         style={{ color: "var(--you)" }}
       >
-        {round(minds)}
+        {countText(minds)}
       </span>
-      <span className="mt-1 block font-mono text-[12px] text-page-ink2">MINDS IN OUR GALAXY</span>
+      <span className="mt-1 block font-mono text-[12px] text-page-ink2">
+        {minds < Math.LN2 ? "IN OUR GALAXY" : "MINDS IN OUR GALAXY"}
+      </span>
     </div>
   );
 }
