@@ -189,9 +189,9 @@ export default function Sim() {
   }, [revealed]);
 
   const set = (key: string, v: number) => setValues((o) => ({ ...o, [key]: v }));
-  // Labels sit on stars and glows, so each carries a dark halo to stay readable.
+  // Labels sit on stars and glows, so each carries a dark halo to stay readable, and fades in and out with its stop.
   const label =
-    "pointer-events-none absolute top-0 left-0 font-mono text-[11px] whitespace-nowrap opacity-0 [text-shadow:0_0_3px_#000,0_0_6px_#000,0_0_10px_#000]";
+    "pointer-events-none absolute top-0 left-0 font-mono text-[11px] whitespace-nowrap opacity-0 transition-opacity duration-700 [text-shadow:0_0_3px_#000,0_0_6px_#000,0_0_10px_#000]";
 
   return (
     <div className="relative flex h-dvh w-full flex-col overflow-hidden bg-paper text-ink">

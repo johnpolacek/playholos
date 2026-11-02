@@ -620,8 +620,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
   // messages are seen the same way, each on its path out to its star.
   function leadsPose(): Pose {
     let at: number | null = null;
-    // A simulation opens where its first stop stands, not at 50 ly.
-    let [logD, az, tilt] = [spec.mode === "sim" ? (spec.sim?.zoom ?? 7.0) : 7.0, 0, 0.75];
+    let [logD, az, tilt] = [7.0, 0, 0.75];
     return (t) => {
       if (still) return [7.0, 1.1, 0.75, 0];
       if (at === null) az = 1.1 + drift(t, 600);
@@ -635,14 +634,47 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         const turns = [pilot.facing(-P.z, P.x), pilot.facing(P.z, -P.x)].map((a) => wrap(a - az));
         az += (Math.abs(turns[0]) < Math.abs(turns[1]) ? turns[0] : turns[1]) * k;
         // Out to a warm glow tens of thousands of ly off, too: capped near 2,000 ly until 2026-10-30, it never showed.
-        const z = spec.mode === "sim" ? spec.sim?.zoom : undefined;
-        logD += ((z ?? Math.min(10.3, Math.max(6.3, Math.log10(2.5 * P.length() * LY_AU)))) - logD) * k;
+        logD += (Math.min(10.3, Math.max(6.3, Math.log10(2.5 * P.length() * LY_AU))) - logD) * k;
         tilt += (-0.3 - tilt) * k;
       } else {
         az += drift(dt, 600);
-        logD += ((spec.mode === "sim" ? spec.sim?.zoom ?? 7.0 : 7.0) - logD) * k;
+        logD += (7.0 - logD) * k;
         tilt += (0.75 - tilt) * k;
       }
+      return [logD, az, tilt, 0];
+    };
+  }
+
+  /** A simulation's view: from stop to stop in one eased flight, slow out, slow in, timed to how far the zoom goes, so
+   *  the dive from the universe down to our Galaxy has no lurch at its start. Turning to face a place in view eases
+   *  alongside. 2026-11-01. */
+  function simPose(): Pose {
+    let at: number | null = null;
+    let [logD, az, tilt] = [spec.sim?.zoom ?? 7.0, 1.1, 0.75];
+    let key = "";
+    let leg: { d: number; tilt: number; at: number; span: number } | null = null;
+    return (t) => {
+      if (still) return [spec.sim?.zoom ?? 7.0, 1.1, 0.75, 0];
+      const dt = at === null ? 0 : Math.min(0.1, Math.max(0, t - at));
+      at = t;
+      const P = lookedAt();
+      const toD = spec.sim?.zoom ?? 7.0;
+      const toTilt = P ? -0.3 : 0.75;
+      const next = `${spec.sim?.focus?.join() ?? ""}:${toD}`;
+      if (next !== key) {
+        key = next;
+        leg = { d: logD, tilt, at: t, span: Math.min(6, Math.max(2.4, 2.2 + 0.6 * Math.abs(toD - logD))) };
+      }
+      if (leg) {
+        const e = easeInOut(Math.min(1, (t - leg.at) / leg.span));
+        logD = leg.d + (toD - leg.d) * e;
+        tilt = leg.tilt + (toTilt - leg.tilt) * e;
+        if (e >= 1) leg = null;
+      } else [logD, tilt] = [toD, toTilt];
+      if (P) {
+        const turns = [pilot.facing(-P.z, P.x), pilot.facing(P.z, -P.x)].map((a) => wrap(a - az));
+        az += (Math.abs(turns[0]) < Math.abs(turns[1]) ? turns[0] : turns[1]) * (1 - Math.exp(-dt * LOOK * 0.7));
+      } else az += drift(dt, 600);
       return [logD, az, tilt, 0];
     };
   }
@@ -745,7 +777,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         return leadsPose();
       // A simulation: the same, from beside the place in view, as far out as its stop says.
       case "sim":
-        return leadsPose();
+        return simPose();
       // Our builds: close by the one in view.
       case "works":
         return worksPose();
@@ -2067,7 +2099,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         const survey = new Cloud();
         for (let i = 0; i < v.length; i += 4) {
           const k = v[i + 3];
-          survey.add(v[i], v[i + 1], v[i + 2], k < 9 ? 3.2 : 2.2, Math.min(1, Math.max(0.35, (12.5 - k) / 3.5)), k < 9 ? K.warm : K.ink);
+          survey.add(v[i], v[i + 1], v[i + 2], k < 9 ? 2.2 : 1.5, Math.min(1, Math.max(0.45, (12.5 - k) / 3)), k < 9 ? K.warm : K.ink);
         }
         cosmos.scene.add(survey.points(surveyGlow));
         surveyAt = clock;
@@ -2096,7 +2128,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         const d = Math.cbrt(r()) * OUTER, mu = r() * 2 - 1, phi = r() * 2 * Math.PI, s = Math.sqrt(1 - mu * mu);
         return [d * s * Math.cos(phi), d * mu, d * s * Math.sin(phi)];
       });
-      for (let i = 0; i < 36000; i++) {
+      for (let i = 0; i < 20000; i++) {
         // Half about the clusters, half spread through the space between, as a web's walls and voids average out.
         let p: number[];
         if (r() < 0.5) {
@@ -2108,17 +2140,31 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         }
         const d = Math.hypot(p[0], p[1], p[2]);
         if (d < INNER || d > OUTER) continue;
-        fill.add(p[0], p[1], p[2], 2, 0.6 * (1 - 0.5 * (d / OUTER) ** 2), K.ink);
+        fill.add(p[0], p[1], p[2], 1.8, 0.8 * (1 - 0.5 * (d / OUTER) ** 2), K.ink);
       }
       cosmos.scene.add(fill.points(fillGlow));
     }
+    // From all the way out, the survey's 43,000 dots pile into a few pixels and slow every frame, so one glow of the
+    // same size stands in for them there, and they cross over as the view comes in.
+    const knotGlow = glow({ fixed: true });
+    {
+      const knot = new Cloud();
+      knot.add(0, 0, 0, 30, 1, K.ink);
+      knot.add(0, 0, 0, 12, 1, K.ink);
+      cosmos.scene.add(knot.points(knotGlow));
+    }
+    // Each stays in the scene at any opacity: a glow at none moves its points off screen, so it costs nothing, and
+    // hiding it instead would leave its first showing to build it, a stall mid-flight.
+    const show = (m: THREE.ShaderMaterial, a: number) => void (m.uniforms.uOpacity.value = a);
     const to = new THREE.Vector3();
     let aimed = "";
     let aimedAt = 0;
     return (on: number, x: number) => {
-      surveyGlow.uniforms.uOpacity.value = on * arrived(surveyAt) * ramp(x, 11.2, 12.2);
-      edgeMat.uniforms.uOpacity.value = on * ramp(x, 14.6, 15.4);
-      fillGlow.uniforms.uOpacity.value = on * ramp(x, 14.4, 15.3);
+      const far = ramp(x, 14.6, 15.2);
+      show(surveyGlow, on * arrived(surveyAt) * ramp(x, 11.2, 12.2) * (1 - far));
+      show(knotGlow, on * arrived(surveyAt) * far);
+      show(edgeMat, on * ramp(x, 14.6, 15.4));
+      show(fillGlow, on * ramp(x, 14.4, 15.3));
       const s = spec.mode === "sim" ? spec.sim : undefined;
       const key = s?.focus?.join() ?? "";
       if (key !== aimed) {
@@ -3759,8 +3805,9 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     earth.on = x < -0.2;
     // Inside another system, ours is a star behind: its own scene steps aside.
     solar.on = x < 7 && sysDown < 0.6;
-    // A simulation's peers lie across the Galaxy, so its stars stay on out past it.
-    stars.on = x < 9.4 || spec.mode === "sim";
+    // A simulation's peers lie across the Galaxy, so its stars stay on out past it, but not out among the other
+    // galaxies, where all 400,000 would draw into one pixel.
+    stars.on = x < 9.4 || (spec.mode === "sim" && x < 10.8);
     const pPeople = present("people", dt);
     const pInherit = present("inherit", dt);
     const pReach = present("reach", dt);
@@ -3794,7 +3841,10 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     oortGlow.uniforms.uOpacity.value = band(x, 2.6, 3.6, 5.2, 6.0);
     pairGlow.uniforms.uOpacity.value = band(x, -2.7, -2.3, -0.9, -0.4);
     // From inside the Milky Way, the other galaxies are faint smudges.
-    othersGlow.uniforms.uOpacity.value = 0.3 + 0.7 * ramp(x, 9.5, 10.6);
+    // Out past the Local Group, only a simulation goes: each galaxy's own dots pile onto a pixel or two, which costs
+    // more to draw than a whole view, so they fade, and the halos' glow and the survey's dots stand in. 2026-11-01.
+    const specks = ramp(x, 11.8, 12.6);
+    othersGlow.uniforms.uOpacity.value = (0.3 + 0.7 * ramp(x, 9.5, 10.6)) * (1 - ramp(x, 12.4, 13.0));
     halosGlow.uniforms.uOpacity.value = ramp(x, 10.4, 11.1);
     // The star map's stalks and rings, on the title's flight and the map, not on the screens between.
     const pTitle = present("title", dt);
@@ -3804,7 +3854,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     rings.uniforms.uOpacity.value = 0.16 * map;
     starMat.uniforms.uOpacity.value = arrived(starsAt) * (1 - ramp(x, 8.6, 9.3));
     // From inside, the Milky Way is a soft band across the sky.
-    mwGlow.uniforms.uOpacity.value = dustGlow.uniforms.uOpacity.value = 0.4 + 0.6 * ramp(x, 7.5, 9);
+    mwGlow.uniforms.uOpacity.value = dustGlow.uniforms.uOpacity.value = (0.4 + 0.6 * ramp(x, 7.5, 9)) * (1 - specks);
     mwGlow.uniforms.uMaxPx.value = 1.6 + 1.9 * ramp(x, 7.5, 9);
     homeGlow.uniforms.uOpacity.value = band(x, 5.4, 6.1) * (0.65 + 0.35 * Math.sin(clock * 2.2));
 

@@ -110,7 +110,9 @@ export function animateTab() {
   const link = document.querySelector<HTMLLinkElement>('link[rel="icon"]');
   const canvas = document.createElement("canvas");
   canvas.width = canvas.height = TAB.px;
-  const ctx = canvas.getContext("2d");
+  // Drawn on the CPU: each frame is read back as a PNG, and a canvas on the GPU would wait behind the map's own drawing
+  // for each read, 50 to 200 ms in the simulation's far views. 2026-11-01.
+  const ctx = canvas.getContext("2d", { willReadFrequently: true });
   if (!link || !ctx) return;
   const css = getComputedStyle(document.documentElement);
   const [paper, ink, muted, you] = ["--paper", "--ink", "--muted", "--you"].map((v) => css.getPropertyValue(v).trim());
