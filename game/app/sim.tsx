@@ -34,6 +34,9 @@ const TODAY = 1970 + Date.now() / (365.25 * 864e5);
 const TO_NOW = YEAR_0 - TODAY;
 /** Seconds the play button takes to run all 20,000 years. */
 const PLAY_SECONDS = 40;
+/** The opening's notes: seconds before the first draws in, and between each. */
+const NOTE_DELAY = 0.35;
+const NOTE_STAGGER = 0.25;
 
 export default function Sim() {
   const [values, setValues] = useState<Record<string, number>>({});
@@ -141,7 +144,15 @@ export default function Sim() {
   // A note's words sit off from its place, joined by a line that ends in a dot on the place.
   const leads = useRef<Record<string, SVGGElement | null>>({});
   const offs = useRef<Record<string, [number, number]>>({});
-  useEffect(() => void (offs.current = Object.fromEntries((stop?.notes ?? []).map((n) => [n.id, n.off]))), [stop]);
+  // When the stop's notes came, so each can draw itself in: its dot pops, its line runs out, its words slide in off the
+  // line's end, one note after another.
+  const notesAt = useRef(0);
+  const order = useRef<Record<string, number>>({});
+  useEffect(() => {
+    offs.current = Object.fromEntries((stop?.notes ?? []).map((n) => [n.id, n.off]));
+    order.current = Object.fromEntries((stop?.notes ?? []).map((n, i) => [n.id, i]));
+    notesAt.current = performance.now();
+  }, [stop]);
   const onMarks = useCallback((marks: Mark[]) => {
     const taken: Parameters<typeof placeLabel>[4] = [];
     const marked = new Set(marks.map((m) => m.id));
@@ -155,22 +166,33 @@ export default function Sim() {
         n.style.opacity = a <= 0 ? "0" : String(a * placeLabel(n, x, y, null, taken));
         continue;
       }
+      // Its reveal, in seconds since the notes came: a quarter second after the one before.
+      const t = (performance.now() - notesAt.current) / 1000 - NOTE_DELAY - NOTE_STAGGER * (order.current[id] ?? 0);
+      const part = (from: number, to: number) => Math.min(1, Math.max(0, (t - from) / (to - from)));
+      const out = (k: number) => 1 - (1 - k) ** 3;
+      const pop = part(0, 0.28), run = out(part(0.08, 0.5)), words = out(part(0.32, 0.75));
       // The words go out to the side the line leaves on, and the line meets them at their near end.
       const w = n.offsetWidth, h = n.offsetHeight;
       const [ex, ey] = [x + off[0], y + off[1]];
-      const left = off[0] < 0 ? ex - w - 6 : ex + 6;
-      n.style.transform = `translate(${left}px, ${ey - h / 2}px)`;
-      n.style.opacity = a <= 0 ? "0" : String(a);
+      const left = off[0] < 0 ? ex - w - 8 : ex + 8;
+      // They slide in from back along the line, as if carried out on it.
+      const len = Math.hypot(off[0], off[1]) || 1;
+      const back = (1 - words) * 28;
+      n.style.transform = `translate(${left - (off[0] / len) * back}px, ${ey - h / 2 - (off[1] / len) * back}px)`;
+      n.style.opacity = a <= 0 ? "0" : String(a * words);
       const g = leads.current[id];
       if (g) {
         g.style.opacity = a <= 0 ? "0" : String(a);
         const [line, dot] = g.children as unknown as [SVGLineElement, SVGCircleElement];
         line.setAttribute("x1", String(x));
         line.setAttribute("y1", String(y));
-        line.setAttribute("x2", String(ex));
-        line.setAttribute("y2", String(ey));
+        line.setAttribute("x2", String(x + off[0] * run));
+        line.setAttribute("y2", String(y + off[1] * run));
+        line.style.opacity = run > 0 ? "1" : "0";
         dot.setAttribute("cx", String(x));
         dot.setAttribute("cy", String(y));
+        // The dot overshoots, then settles.
+        dot.setAttribute("r", String(3 * (pop < 1 ? Math.sin(pop * Math.PI * 0.75) / Math.sin(Math.PI * 0.75) : 1)));
       }
     }
   }, []);
@@ -209,7 +231,7 @@ export default function Sim() {
   const set = (key: string, v: number) => setValues((o) => ({ ...o, [key]: v }));
   // Labels sit on stars and glows, so each carries a dark halo to stay readable, and fades in and out with its stop.
   const label =
-    "pointer-events-none absolute top-0 left-0 font-mono text-[12px] whitespace-nowrap opacity-0 transition-opacity duration-700 [text-shadow:0_0_3px_#000,0_0_6px_#000,0_0_10px_#000]";
+    "pointer-events-none absolute top-0 left-0 font-mono text-[13px] whitespace-nowrap opacity-0 transition-opacity duration-700 [text-shadow:0_0_3px_#000,0_0_6px_#000,0_0_10px_#000]";
 
   return (
     <div className="relative flex h-dvh w-full flex-col overflow-hidden bg-paper text-ink">
@@ -240,11 +262,11 @@ export default function Sim() {
                   <g
                     key={n.id}
                     ref={(el) => void (leads.current[n.id] = el)}
-                    className="opacity-0 transition-opacity duration-700"
+                    className="opacity-0"
                     stroke="var(--ink)"
                   >
                     <line strokeWidth={1} strokeOpacity={0.55} />
-                    <circle r={2.5} fill="var(--ink)" stroke="none" />
+                    <circle r={0} fill="var(--ink)" stroke="none" />
                   </g>
                 ))}
               </svg>
@@ -252,7 +274,7 @@ export default function Sim() {
                 <span
                   key={n.id}
                   ref={(el) => void (names.current[n.id] = el)}
-                  className={`${label} text-[13px] text-ink`}
+                  className={`${label} !text-[16px] !transition-none text-ink`}
                 >
                   {n.text}
                 </span>
