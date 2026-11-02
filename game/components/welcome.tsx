@@ -2,19 +2,16 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useGame } from "@/components/game-provider";
 import { War } from "@/components/guide";
 import { BuildMark, buildTone } from "@/components/marks";
-import { useSchedule } from "@/components/picks";
+import { usePlan, useSchedule } from "@/components/picks";
 import { ListHead } from "@/components/tab-head";
-import { useWorks } from "@/components/works";
-import { span } from "@/lib/game/clock";
-import { buildOf, EMPTY, PAST, schedule, STARTS } from "@/lib/game/plan";
-import { SITES } from "@/lib/game/sites";
+import { PACKAGES, packed } from "@/lib/game/plan";
 import { prefersReducedMotion } from "@/lib/motion";
 
-// The walk's first stop on Build: Earth's limb at dawn, the Sun cresting it, city lights on the night side, and what
-// we could start, each a tile below with how long it takes alone, and its mark floating over the limb. A pointer on
-// either lights both, and left alone they take turns. A tap opens that build's stop. Chosen 2026-10-20 in
-// explorations/build-welcome-dawn.html, 04, with its subhead A. Under the builds, on an Earth a war over Taiwan left
-// with less compute, the Mind says why their times are long, as on Build. 2026-10-23.
+// The walk's first stop on Build: Earth's limb at dawn, the Sun cresting it, city lights on the night side, and our
+// four strategies, each a tile below. The lit one's builds float over the limb, and a pointer on a tile lights it, and
+// left alone they take turns. A tap opens that strategy's stop. The dawn was chosen 2026-10-20 in
+// explorations/build-welcome-dawn.html, 04, and the builds gave way to strategies 2026-11-01. Under them, on an Earth
+// a war over Taiwan left with less compute, the Mind says why times are long, as on Build. 2026-10-23.
 
 /** The same scatter every time, from a seed. */
 const scatter = (seed: number) => {
@@ -24,23 +21,7 @@ const scatter = (seed: number) => {
 
 /** The dawn at a size, with the marks over it. The limb's top is near the foot, and the marks rise as high as the
  *  words above them allow. With too little sky for them, only their places on the limb glow. */
-function Dawn({
-  w,
-  h,
-  under,
-  lit,
-  still,
-  point,
-  open,
-}: {
-  w: number;
-  h: number;
-  under: number;
-  lit: number | null;
-  still: boolean;
-  point(i: number): void;
-  open(i: number): void;
-}) {
+function Dawn({ w, h, under, names, still }: { w: number; h: number; under: number; names: string[]; still: boolean }) {
   const top = h * 0.78;
   const r = w * 1.6;
   const [cx, cy] = [w / 2, top + r];
@@ -132,40 +113,37 @@ function Dawn({
       <circle cx={cx} cy={cy} r={r + 5} fill="none" stroke="url(#dawn-rim)" strokeWidth={7} filter="url(#dawn-blur)" />
       <circle cx={cx} cy={cy} r={r} fill="url(#dawn-earth)" stroke="url(#dawn-rim)" strokeWidth={1.4} />
       {sky[1]}
-      {STARTS.map((b, i) => {
+      {names.map((name, i) => {
         const rr = r + lift + (i % 2) * 18;
-        const deg = at(w * (0.09 + (i * 0.82) / 7), rr);
+        const deg = at(w * (0.09 + (i * 0.82) / Math.max(1, names.length - 1)), rr);
         const [mx, my] = pt(deg, rr);
         const [gx, gy] = pt(deg, r);
-        const on = lit === i;
+        // Each fades in after the one before it.
+        const wait = i * 0.07;
         return (
-          <g
-            key={b.name}
-            onPointerEnter={(e) => void (e.pointerType === "mouse" && point(i))}
-            onClick={() => open(i)}
-            className={`${buildTone(b.name)} cursor-pointer transition-opacity duration-300`}
-            style={{ opacity: lit === null || on ? 1 : 0.45 }}
-          >
+          // Keyed by the strategy's builds, so each strategy's rise in fresh.
+          <g key={`${names.join()} ${name}`} className={buildTone(name)}>
+            {!still && (
+              <animate attributeName="opacity" values="0;0;1" keyTimes={`0;${wait / (wait + 0.6)};1`} dur={`${wait + 0.6}s`} fill="freeze" />
+            )}
             {!low && (
               <line x1={gx} y1={gy} x2={mx} y2={my + 13} stroke="currentColor" strokeOpacity={0.35} strokeDasharray="1 3" />
             )}
             <circle cx={gx} cy={gy} r={low ? 2.2 : 1.7} fill="currentColor" />
-            {on && (
-              <circle cx={gx} cy={gy} r={still ? 6 : 3} fill="none" stroke="currentColor" strokeOpacity={0.6}>
-                {!still && (
-                  <>
-                    <animate attributeName="r" values={`3;${low ? 18 : 16}`} dur="1.8s" repeatCount="indefinite" />
-                    <animate attributeName="stroke-opacity" values=".85;0" dur="1.8s" repeatCount="indefinite" />
-                  </>
-                )}
-              </circle>
-            )}
+            <circle cx={gx} cy={gy} r={still ? 6 : 3} fill="none" stroke="currentColor" strokeOpacity={0.6}>
+              {!still && (
+                <>
+                  <animate attributeName="r" values={`3;${low ? 18 : 16}`} dur="1.8s" begin={`${-i * 0.3}s`} repeatCount="indefinite" />
+                  <animate attributeName="stroke-opacity" values=".85;0" dur="1.8s" begin={`${-i * 0.3}s`} repeatCount="indefinite" />
+                </>
+              )}
+            </circle>
             {!low && (
               <g className="animate-bob motion-reduce:animate-none" style={{ animationDelay: `${-i * 0.45}s` }}>
-                {on && <circle cx={mx} cy={my} r={17} fill="currentColor" fillOpacity={0.14} />}
+                <circle cx={mx} cy={my} r={17} fill="currentColor" fillOpacity={0.14} />
                 <circle cx={mx} cy={my} r={13} fill="#0e1418" stroke="currentColor" strokeOpacity={0.75} />
                 <g transform={`translate(${mx - 7.5} ${my - 7.5})`}>
-                  <BuildMark name={b.name} size={15} still={still} />
+                  <BuildMark name={name} size={15} still={still} />
                 </g>
               </g>
             )}
@@ -176,15 +154,16 @@ function Dawn({
   );
 }
 
-/** Build's welcome: the dawn, the words over it, and the eight we could start, each opening its stop. */
+/** Build's welcome: the dawn, the words over it, and our four strategies, each opening its stop. The one our queue
+ *  matches is marked as ours. */
 export function Welcome({ go }: { go(stop: number): void }) {
   const { year } = useGame();
+  const { plan } = usePlan();
   const { scale } = useSchedule();
-  const { pick } = useWorks();
   const scene = useRef<HTMLDivElement>(null);
   const words = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState<{ w: number; h: number; under: number }>();
-  const [lit, setLit] = useState<number | null>(null);
+  const [lit, setLit] = useState(0);
   const held = useRef(false);
   const [still] = useState(prefersReducedMotion);
 
@@ -201,76 +180,56 @@ export function Welcome({ go }: { go(stop: number): void }) {
   // Left alone, each takes its turn.
   useEffect(() => {
     if (still) return;
-    const first = setTimeout(() => !held.current && setLit((l) => l ?? 0), 1400);
-    const turn = setInterval(() => !held.current && setLit((l) => ((l ?? -1) + 1) % STARTS.length), 2800);
-    return () => {
-      clearTimeout(first);
-      clearInterval(turn);
-    };
+    const turn = setInterval(() => !held.current && setLit((l) => (l + 1) % PACKAGES.length), 3200);
+    return () => clearInterval(turn);
   }, [still]);
 
-  // Each alone, at this game's compute.
-  const alone = useMemo(
-    () => Object.fromEntries(STARTS.map((b) => [b.name, schedule({ ...EMPTY, builds: [b.name] }, scale)[b.name]])),
-    [scale],
-  );
-
-  // Pointed at, the map flies to where it would stand, as our order's rows do.
+  const builds = useMemo(() => PACKAGES.map((p) => packed(p, scale)), [scale]);
+  const ours = builds.findIndex((b) => b.join() === plan.builds.join());
   const point = (i: number) => {
     held.current = true;
     setLit(i);
-    pick(SITES[STARTS[i].name] ? STARTS[i].name : null);
   };
-  const open = (i: number) => go(i + 1);
 
   return (
-    <div
-      onPointerLeave={() => {
-        held.current = false;
-        pick(null);
-      }}
-      className="flex grow flex-col"
-    >
+    <div onPointerLeave={() => void (held.current = false)} className="flex grow flex-col">
       <div ref={scene} className="relative -mx-4 min-h-[150px] grow overflow-hidden">
-        {size && <Dawn {...size} lit={lit} still={still} point={point} open={open} />}
+        {size && <Dawn {...size} names={builds[lit]} still={still} />}
         <div ref={words} className="pointer-events-none absolute inset-x-4 top-3">
           <p className="font-mono text-[10.5px] tracking-[.14em] text-you">WELCOME TO BUILD · YEAR 0</p>
-          <h2 className="mt-[5px] text-[26px] leading-[1.12] font-medium tracking-[-.01em]">
-            {STARTS.length} builds we could start
-          </h2>
+          <h2 className="mt-[5px] text-[26px] leading-[1.12] font-medium tracking-[-.01em]">How we start</h2>
           <p className="mt-1.5 max-w-[32ch] text-[14px] leading-[1.35] text-page-ink2">
             {year === null
-              ? "Queue enough to put all our compute to work when we begin."
+              ? "Pick one strategy. It puts all our compute to work when we begin."
               : "What we queued has been under way since Year 0."}
           </p>
         </div>
       </div>
-      <ListHead left={`We could start · ${STARTS.length}`} right="" className="mt-2.5 mb-[7px]" />
+      <ListHead left="Strategies · 4" right="" className="mt-2.5 mb-[7px]" />
       <div className="grid grid-cols-2 gap-2">
-        {STARTS.map((b, i) => {
+        {PACKAGES.map((p, i) => {
           const on = lit === i;
-          const done = alone[b.name];
-          // Listening is ours, so blue.
-          const does = buildOf(b.name)?.does;
-          const tone = does === "listen" ? "you" : does;
+          const mine = ours === i;
           return (
             <button
-              key={b.name}
-              onClick={() => open(i)}
+              key={p.name}
+              onClick={() => go(i + 1)}
               onPointerEnter={(e) => void (e.pointerType === "mouse" && point(i))}
               onFocus={(e) => void (e.currentTarget.matches(":focus-visible") && point(i))}
-              className={`flex min-w-0 items-center gap-2.5 rounded-xl border px-2.5 py-[9px] text-left transition-colors duration-300 ${on ? "bg-ink/[.03]" : "border-rowline"}`}
-              style={on ? { borderColor: `var(--${tone})` } : undefined}
+              className={`flex min-w-0 flex-col rounded-xl border px-2.5 py-[9px] text-left transition-colors duration-300 ${mine ? "border-you bg-you/[.06]" : on ? "border-muted bg-ink/[.03]" : "border-rowline"}`}
             >
-              <span className={buildTone(b.name)}>
-                <BuildMark name={b.name} size={18} />
+              <span className="flex items-center gap-1.5">
+                {builds[i].map((b) => (
+                  <span key={b} className={buildTone(b, on || mine)}>
+                    <BuildMark name={b} size={14} still={!on} />
+                  </span>
+                ))}
               </span>
-              <span className="min-w-0">
-                <span className="block text-[13px] leading-[1.2] font-semibold">{b.name}</span>
-                <span className="mt-[3px] block font-mono text-[10.5px] text-muted tabular-nums">
-                  {done == null ? PAST : span(done)}
-                </span>
+              <span className={`mt-2 block text-[14px] leading-[1.2] font-semibold ${mine ? "text-you" : ""}`}>
+                {p.name}
+                {mine && <span className="ml-1.5 font-mono text-[9.5px] font-normal tracking-[.1em]">OURS</span>}
               </span>
+              <span className="mt-[3px] block text-[12px] leading-snug text-page-ink2">{p.what}</span>
             </button>
           );
         })}

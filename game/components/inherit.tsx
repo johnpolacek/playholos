@@ -251,7 +251,8 @@ export function Inherit({ onSkip, onNext }: { onSkip(): void; onNext(): void }) 
             onClick={() => leave(onNext)}
             className="h-[46px] rounded-full bg-ink text-[15px] font-medium text-paper"
           >
-            Earth’s charter
+            {/* The next screen's name, as each opening screen's button gives it. The charter's own screen left 2026-11-01. */}
+            Meet the Mind
           </button>
         </div>
       </Spread>

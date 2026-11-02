@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { KNOCKS, RADARS_SINCE } from "@/lib/game/knocks";
 import { YEAR_0 } from "@/lib/game/clock";
+import { ReplayButton } from "@/components/screen-bar";
 import { SkyArt } from "@/components/sky";
 import { FILL, Spread } from "@/components/spread";
 import type { Dials, Mark } from "@/lib/drift";
@@ -73,7 +74,7 @@ const LINES = [
   `The next could come in ${NEXT_YEAR}, from ${NEXT}.`,
 ];
 
-export function Stand({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
+export function Stand({ onSkip, onNext, onReplay }: { onSkip(): void; onNext(): void; onReplay(): void }) {
   const root = useRef<HTMLDivElement>(null);
   const clock = useRef<HTMLSpanElement>(null);
   // One object for the whole screen: the intro runs the years, and the scene reads them every frame.
@@ -138,9 +139,10 @@ export function Stand({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
           </div>
         }
         art={<Map dials={dials} onReady={onReady} />}
+        tool={<ReplayButton onReplay={() => leave(onReplay)} />}
       >
         <h1 data-m="lead" className="mt-2 text-[24px] leading-tight font-semibold wide:mt-4 wide:text-[30px]">
-          Ninety years loud. Nothing heard.
+          Ninety years of listening. Nothing heard.
         </h1>
         <div className="mt-2.5 flex flex-col gap-1.5 text-[15px] leading-snug text-page-ink2">
           {LINES.map((line) => (

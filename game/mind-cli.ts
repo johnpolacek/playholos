@@ -7,6 +7,7 @@ import { createUIMessageStream, pipeUIMessageStreamToResponse, type UIMessage } 
 import type { Plugin } from "vite";
 import { readMindPick, type Usage } from "./lib/access.ts";
 import { CLI_BARE } from "./scripts/ask-mind.mjs";
+import { NEWS } from "./lib/mind/news.ts";
 
 // With MIND_VIA=cli, the dev server's Mind answers on your own Claude login through the claude CLI, not the API key,
 // so play while we build spends the subscription. The Worker still builds what the Mind is told, asked dry, and still
@@ -29,7 +30,8 @@ const textOf = (m: UIMessage) => m.parts.map((p) => (p.type === "text" ? p.text 
 function talkOf(messages: UIMessage[]) {
   const before = messages.slice(0, -1);
   if (!before.length) return "";
-  const talk = before.map((m) => `${m.role === "user" ? "The Will" : "We"}: ${textOf(m)}`).join("\n\n");
+  // News the Mind tells unasked rides as a turn of the Will's, but isn't the Will's. 2026-10-31.
+  const talk = before.map((m) => `${m.role === "assistant" ? "We" : textOf(m).startsWith(NEWS) ? "Earth" : "The Will"}: ${textOf(m)}`).join("\n\n");
   return `\n\nOur talk so far, which you remember as your own and never recite:\n\n${talk}`;
 }
 

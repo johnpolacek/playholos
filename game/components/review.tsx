@@ -3,11 +3,12 @@ import { useNavigate } from "react-router";
 import { useNext } from "@/components/begin";
 import { useGame } from "@/components/game-provider";
 import { Lens } from "@/components/icons";
+import { Chances } from "@/components/chances";
 import { MindNote } from "@/components/mind-note";
 import { LeadMark } from "@/components/marks";
 import { useLeads, useStepTap } from "@/components/scan";
 import { span, lyOf, yearText } from "@/lib/game/clock";
-import { starName } from "@/lib/game/leads";
+import { isHole, starName } from "@/lib/game/leads";
 import {
   gsap,
   prefersReducedMotion,
@@ -85,8 +86,14 @@ export function Review({ onClose }: { onClose(): void }) {
   const then = useNext("/?review");
   const [at, setAt] = useState(0);
 
-  // The leads in the order we take them: as Scan lists them.
-  const order = useMemo(() => [...leads.keys()], [leads]);
+  // The leads we take, nine at most: the nearest eight, nearest first, then the nearest black hole, last. Twelve read
+  // alike past the sixth, a playtest found 2026-11-01. The rest wait on Scan.
+  const order = useMemo(() => {
+    const by = (ks: number[]) => ks.sort((a, b) => leads[a].ly - leads[b].ly);
+    const holes = by([...leads.keys()].filter((k) => isHole(leads[k].art)));
+    const rest = by([...leads.keys()].filter((k) => !isHole(leads[k].art)));
+    return [...rest.slice(0, 9 - Math.min(1, holes.length)), ...holes.slice(0, 1)];
+  }, [leads]);
   const last = order.length;
   const i = at > 0 ? order[at - 1] : -1;
   const lead = leads[i];
@@ -141,8 +148,9 @@ export function Review({ onClose }: { onClose(): void }) {
   );
 
   if (!leads.length) return null;
-  const near = Math.min(...leads.map((l) => l.ly));
-  const far = Math.max(...leads.map((l) => l.ly));
+  const near = Math.min(...order.map((k) => leads[k].ly));
+  const far = Math.max(...order.map((k) => leads[k].ly));
+  const more = leads.length - order.length;
 
   return (
     <div ref={root} {...tap} className="flex grow flex-col">
@@ -207,8 +215,8 @@ export function Review({ onClose }: { onClose(): void }) {
               </h2>
             </div>
             <p data-r className="mt-0.5 text-[13.5px] text-page-ink2">
-              {lead.what} · {lyOf(lead.ly)} ly · reached in{" "}
-              <span className="font-mono tabular-nums">{span(lead.ly)}</span>
+              {lead.what} · {lead.range ? `${lyOf(lead.range[0])} to ${lyOf(lead.range[1])}` : lyOf(lead.ly)} ly · reached in{" "}
+              <span className="font-mono tabular-nums">{lead.range ? `${span(lead.range[0])} to ${span(lead.range[1])}` : span(lead.ly)}</span>
             </p>
             <div data-r className="mt-3">
               <MindNote className="text-[14.5px] leading-snug">
@@ -223,6 +231,9 @@ export function Review({ onClose }: { onClose(): void }) {
                   lead.brief
                 )}
               </MindNote>
+            </div>
+            <div data-r className="mt-1">
+              <Chances lead={lead} readings={readings[lead.slug] ?? []} />
             </div>
             {lead.system && (
               <button
@@ -241,8 +252,8 @@ export function Review({ onClose }: { onClose(): void }) {
               What we can’t explain yet
             </h2>
             <p data-r className="mt-0.5 text-[13.5px] text-page-ink2">
-              {leads.length} leads, {lyOf(near)} to {lyOf(far)}{" "}
-              light-years out
+              {order.length} leads, {lyOf(near)} to {lyOf(far)}{" "}
+              light-years out{more > 0 && `, and ${more} more on Scan`}
             </p>
             <div data-r className="mt-3">
               <MindNote className="text-[14.5px] leading-snug">

@@ -172,7 +172,7 @@ export function LeadsMap({
           ref={(n) => {
             names.current[id] = n;
           }}
-          className={`pointer-events-none absolute top-0 left-0 font-mono text-[9px] whitespace-nowrap opacity-0 ${id === "Luyten's Star" ? "text-other" : id.startsWith("ring:") || id === "Sol" ? "text-muted" : "text-you"}`}
+          className={`pointer-events-none absolute top-0 left-0 font-mono text-[9px] whitespace-nowrap opacity-0 ${id.startsWith("ring:") || id === "Sol" ? "text-muted" : "text-you"}`}
         >
           {id.startsWith("ring:") ? `${id.slice(5)} ly` : starName(id)}
         </span>

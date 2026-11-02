@@ -35,19 +35,10 @@ export function originsSources(past: EarthPast): Source[] {
       links: [["Homo sapiens", W("Homo_sapiens")]],
     },
     {
-      title: "Writing",
-      text: "Cuneiform in Mesopotamia and hieroglyphs in Egypt, a little over 5,000 years ago.",
-      links: [["History of writing", W("History_of_writing")]],
-    },
-    {
-      title: "The bomb",
-      text: "Hiroshima and Nagasaki, August 1945. No nuclear weapon has been used in war since.",
-      links: [["Atomic bombings of Hiroshima and Nagasaki", W("Atomic_bombings_of_Hiroshima_and_Nagasaki")]],
-    },
-    {
-      title: "Radars and messages",
-      text: "Military and air radars have swept the sky since the 1950s. The Arecibo message went out in 1974, and the Golden Records left on the Voyagers in 1977.",
+      title: "The search begins",
+      text: "In April 1960, Frank Drake’s Project Ozma turned a 26 m dish at Green Bank, West Virginia, on Tau Ceti and Epsilon Eridani, the first search for signals from other minds. Military and air radars have swept the sky since the 1950s. The Arecibo message went out in 1974, and the Golden Records left on the Voyagers in 1977.",
       links: [
+        ["Project Ozma", W("Project_Ozma")],
         ["Arecibo message", W("Arecibo_message")],
         ["Voyager Golden Record", W("Voyager_Golden_Record")],
       ],
@@ -265,9 +256,12 @@ const LEADS_SOURCES: Source[] = [
     ],
   },
   {
-    title: "Luyten’s Star",
-    text: "Sónar Calling GJ273b was sent there in 2017 and 2018, and both reached it in 2030. A reply to the first could reach Earth in Year 2.3.",
-    links: [["Luyten’s Star", W("Luyten's_Star")]],
+    title: "Luyten’s Star, and our other messages",
+    text: "Sónar Calling GJ273b was sent there in 2017 and 2018, and both reached it in 2030. A reply to the first could reach Earth in Year 2.3, the first window of the twelve stars our fifteen aimed messages went to since 1983. Replies could have come from Altair, Teegarden’s Star and TZ Arietis by now, and none did.",
+    links: [
+      ["Active SETI", W("Active_SETI")],
+      ["Luyten’s Star", W("Luyten's_Star")],
+    ],
   },
   {
     title: "The new worlds",

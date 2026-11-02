@@ -9,7 +9,7 @@ import { ListHead } from "@/components/tab-head";
 import type { Dials } from "@/lib/drift";
 import { placeLeads } from "@/lib/game/places";
 import { knownQuery } from "@/lib/game/known-query";
-import { airReading, type Lead, landed, leadsOf, lifeOf, nearestReading, ODDS, type Reading, rockLead, skyId, visitReading, watcherReadings, betelgeuseLead } from "@/lib/game/leads";
+import { type Lead, leadsOf, lifeOf, ODDS, type Reading, readingsOf, rockLead, skyId, betelgeuseLead } from "@/lib/game/leads";
 import { setStruck, setWatched, useSchedule } from "@/components/picks";
 import { watchedAt } from "@/lib/sim/minds";
 import { skyOf } from "@/lib/game/natural";
@@ -35,6 +35,8 @@ interface Leads {
   readings: Record<string, Reading[]>;
   /** Readings landed and not yet opened, by id, and signals caught and not yet opened. */
   fresh: Set<string>;
+  /** The Year what we know was read at, once it has loaded. */
+  known?: number;
   /** Signals our watches have caught, as they arrived. */
   heard: Signal[];
   /** What our sails and probe have seen up close, once their word is home. */
@@ -184,28 +186,9 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
   const observe = save?.plan?.observe;
   const seen = save?.seen;
   const value = useMemo(() => {
-    // What our telescopes have read, on each felt world's lead, after any observation's: the Infrared Telescope's,
-    // then the 15 m Mirror's, which reads Proxima b too.
-    const air: Record<string, Reading[]> = Object.fromEntries(
-      (felt ?? []).map((f) => [
-        f.star,
-        [airReading(f), airReading(f, true)].filter((r): r is Reading => r !== null).sort((a, b) => a.at - b.at),
-      ]),
-    );
-    if (proxima) air["Proxima Centauri"] = [nearestReading(proxima)];
-    // And what our sails and probe saw of Proxima b, last.
-    const visited = Object.fromEntries(
-      leads.map((l) => [l.star, visits.filter((v) => v.star === l.star).map(visitReading)]),
-    );
-    // What our Close Look saw of the watcher, and our knocks on it. 2026-10-30.
+    // What each lead has had read of it, as the Mind judges from too. Our knocks on the watcher, for its readings.
     const knocks = (save?.sent ?? []).filter((m) => target(m.to) === WATCHER).map((m) => m.y);
-    const watched = minds?.watcher && tenth !== null ? watcherReadings(minds.watcher, knocks, tenth) : [];
-    const readings = Object.fromEntries(
-      leads.map((l) => [
-        l.slug,
-        [...landed(l.slug, observe, tenth), ...(air[l.star] ?? []), ...(visited[l.star] ?? []), ...(l.slug === "small-dark-body" ? watched : [])],
-      ]),
-    );
+    const readings = readingsOf(leads, { felt, proxima, visits, watcher: minds?.watcher ?? undefined, knocks, observe, year: tenth });
     const opened = new Set(seen);
     // New until opened, or for 50 Years: a badge from Year 10 still read NEW at Year 9,104 until 2026-10-30.
     const recent = (at: number) => tenth === null || tenth - at < 50;
@@ -215,8 +198,8 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
         ...heard.filter((h) => recent(h.arrived)).map(heardId),
       ].filter((id) => !opened.has(id)),
     );
-    return { leads, ids, dials, readings, fresh, heard, visits, colony, minds, look, setLook, close, setClose, step, setStep };
-  }, [leads, felt, proxima, ids, dials, observe, tenth, seen, save?.sent, heard, visits, colony, minds, look, setLook, close, setClose, step, setStep]);
+    return { known: view?.year, leads, ids, dials, readings, fresh, heard, visits, colony, minds, look, setLook, close, setClose, step, setStep };
+  }, [view?.year, leads, felt, proxima, ids, dials, observe, tenth, seen, save?.sent, heard, visits, colony, minds, look, setLook, close, setClose, step, setStep]);
   return <ScanContext value={value}>{children}</ScanContext>;
 }
 

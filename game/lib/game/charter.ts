@@ -42,17 +42,36 @@ export function lean(dial: number, v: number) {
   return dial === 1 ? "even" : "near the middle";
 }
 
-/** The charter as the Mind reads it. */
+/** The charter as the Mind reads it: the strategy the Will began with, and the dials it set. */
 export function describeCharter(line: string, dials: number[]) {
   const words = dials.map((v, i) => lean(i, v)).join(", ");
-  return `Earth's charter. Founding line, chosen by the Will: "${line}". Dials: ${words} (Open or Hidden, Expand or Deepen, Cautious or Bold). Reason from these when the Will asks your view. They shape advice, never what Earth can build.`;
+  // A save from before 2026-11-01 holds a founding line from the old charter screen.
+  const how = LEANS[line]
+    ? `set by the strategy the Will began with, ${line}`
+    : line
+      ? `set by the founding line the Will chose, "${line}"`
+      : "where Earth's history left them, since the Will began with no strategy";
+  return `Earth's charter. Its dials are ${how}: ${words} (Open or Hidden, Expand or Deepen, Cautious or Bold). Reason from these when the Will asks your view. They shape advice, never what Earth can build.`;
 }
 
-// "Our Charter": the Will picks a founding line, and the line is the setting. Each sets Earth's three dials, so
-// the lines are spread across characters. The Mind opens on "The window is open now", then the lines Earth's history
-// fits best, and more wait behind them. Settled 2026-10-16, replacing the dials on screen. Writing your own was set
-// aside 2026-10-17: every line needs a setting, so the Mind offers many instead. A pull of half leans less hard, so
-// the Mind hears the line's full pull first.
+// The strategy we begin with sets the charter, which the opening's own screen did until 2026-11-01: two near-same
+// choices a few screens apart. History moves the dials first, then the strategy leans them, and they hold from Begin.
+// Balanced leaves them where history did.
+const LEANS: Record<string, [number, number, number]> = {
+  Search: [0, 1, 0],
+  Protect: [1, 0, -1],
+  Expand: [0, -1, 1],
+  Balanced: [0, 0, 0],
+};
+
+/** The charter a strategy sets at Begin, from where history left the dials. None picked leaves them there. */
+export function charterFor(strategy: string | undefined, history: number[]) {
+  const pull = (strategy && LEANS[strategy]) || [0, 0, 0];
+  return { line: strategy && LEANS[strategy] ? strategy : "", dials: dialsFor(pull, history) };
+}
+
+// Founding lines, from the charter screen the opening had from 2026-10-16 to 2026-11-01. Each set the three dials.
+// The Mind's evals still begin from them, and saves from then keep theirs.
 export const CHARTERS: { line: string; pull: [number, number, number] }[] = [
   { line: "We have always called out. Now find who answers.", pull: [-1, 0, 1] },
   { line: "We were loud by accident. Be quiet on purpose.", pull: [1, 0, -1] },
@@ -82,17 +101,6 @@ const SWAY = 22;
 /** The dials a line sets. Where it has no pull, the dial stays where history left it. */
 export function dialsFor(pull: number[], history: number[]) {
   return pull.map((p, i) => (p === 0 ? history[i] : 50 + p * SWAY));
-}
-
-/** The line the screen opens on, whatever Earth's history. Settled 2026-10-18. */
-export const OPENING = "The window is open now. Go through it.";
-
-/** Every line, the opening first, then the ones Earth's history fits best. The screen shows four at a time. */
-export function suggest(past: EarthPast) {
-  const d = base(past).map((v) => (v - 50) / 50);
-  const fit = (pull: number[]) => pull.reduce((s, p, i) => s + p * d[i], 0) / pull.filter((p) => p !== 0).length;
-  const first = (line: string) => Number(line === OPENING);
-  return [...CHARTERS].sort((a, b) => first(b.line) - first(a.line) || fit(b.pull) - fit(a.pull));
 }
 
 /**

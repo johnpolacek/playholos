@@ -27,7 +27,6 @@ const DEEP: Moment[] = [
   { when: "3.7 billion", ago: 3.7e9, what: "First life, or earlier" },
   { when: "2.4 billion", ago: 2.4e9, what: "Oxygen fills the air" },
   { when: "300,000", ago: 3e5, what: "The first people" },
-  { when: "5,000", ago: 5000, what: "Writing" },
 ];
 
 /** Every moment to 2040, and how many of them this game rolled. */
@@ -39,19 +38,12 @@ export function history(e: EarthPast): { moments: Moment[]; rolled: number } {
       : "Output caught up. Compute is what it would have been.";
   const real: Moment[] = [
     ...DEEP,
+    // Writing and the bomb left the road, and the search took the radars' place, 2026-11-01.
     {
-      when: "1945",
-      ago: 95,
-      what: "The bomb",
-      detail:
-        "Used twice in war" +
-        (e.nuclear && y.nuclear ? `, then not for ${y.nuclear - 1945} years.` : ", and never since."),
-    },
-    {
-      when: "1950s",
-      ago: 85,
-      what: "Radars sweep the sky",
-      detail: "They still do. Then a message from Arecibo, 1974, and two records on the Voyagers, 1977.",
+      when: "1960",
+      ago: 80,
+      what: "The search begins",
+      detail: "A dish in West Virginia listens to two nearby stars. Our radars sweep the sky, then a message from Arecibo, 1974, and two records on the Voyagers, 1977.",
       dial: "set Open",
     },
     { when: "1969", ago: 71, what: "People on the Moon", detail: "Then a long pause, and back in 2028." },

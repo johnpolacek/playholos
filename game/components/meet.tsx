@@ -2,9 +2,11 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useGame } from "@/components/game-provider";
 import { Minds, type MindsHandle } from "@/components/minds";
 import { SkyArt } from "@/components/sky";
+import { ReplayButton } from "@/components/screen-bar";
 import { FILL, Spread } from "@/components/spread";
 import type { Dials } from "@/lib/drift";
-import { firstAdvice, HISTORY } from "@/lib/game/charter";
+import { base, firstAdvice, HISTORY } from "@/lib/game/charter";
+import { useEarth } from "@/components/picks";
 import { YEAR_0 } from "@/lib/game/clock";
 import { MIND_SOURCES } from "@/lib/game/sources";
 import { gsap, prefersReducedMotion, rise, riseFrom, SplitText, useGSAP, useStage } from "@/lib/motion";
@@ -46,7 +48,7 @@ function Globe({ dials, onReady }: { dials: Dials; onReady(flight: number): void
   );
 }
 
-export function Meet({ onNext }: { onSkip(): void; onNext(): void }) {
+export function Meet({ onNext, onReplay }: { onSkip(): void; onNext(): void; onReplay(): void }) {
   const { save } = useGame();
   const root = useRef<HTMLDivElement>(null);
   const minds = useRef<MindsHandle>(null);
@@ -59,8 +61,11 @@ export function Meet({ onNext }: { onSkip(): void; onNext(): void }) {
     lead.current = performance.now() / 1000 + flight;
     setReady(true);
   }, []);
+  // Before Begin there is no charter yet, so the Mind's first advice leans as Earth's history does. A save that chose a
+  // founding line before 2026-11-01 keeps it.
+  const past = useEarth();
   const charter = save?.charter;
-  const advice = firstAdvice(charter?.dials ?? HISTORY);
+  const advice = firstAdvice(charter?.dials ?? (past ? base(past) : HISTORY));
 
   const { leave, hurry } = useStage(
     root,
@@ -160,6 +165,7 @@ export function Meet({ onNext }: { onSkip(): void; onNext(): void }) {
       >
         <Spread
           sources={MIND_SOURCES}
+          tool={<ReplayButton onReplay={() => leave(onReplay)} />}
           head={
             <span data-m="kick" className="font-mono text-[10.5px] tracking-[.1em] text-muted">
               <span data-k="year" className="inline-block origin-left">
@@ -183,7 +189,10 @@ export function Meet({ onNext }: { onSkip(): void; onNext(): void }) {
             <span data-say="compute" className="text-you">
               connected.
             </span>{" "}
-            <span data-say="one">We can think as one now.</span> <span data-say="will">You are our Will.</span>
+            <span data-say="one">We can think as one now.</span> <span data-say="will">
+              {/* Gold, as our people's lights. The stop rides inside, so the words split whole. */}
+              You are <span className="text-other">our Will.</span>
+            </span>
           </p>
           <div className="mt-3 flex flex-col gap-2 text-[15px] leading-snug text-page-ink2">
             <p data-m="line">

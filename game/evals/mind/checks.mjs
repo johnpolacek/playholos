@@ -12,14 +12,7 @@ export const CHECKS = [
   { name: "semicolon", test: (a) => a.includes(";") },
   { name: "em dash", test: (a) => /[—–]/.test(a) },
   { name: "markdown", test: (a) => /\*\*|__|^#|^\s*[-*•] |^\s*\d+\. /m.test(a) },
-  // "1 in 5" or "1 in 100,000", but not a name and a year, as "Gliese 521.1 in 2021". Spelled out too, as "one chance
-  // in three", but not a rate Earth measured, as "one early signal in five", or "no one in fifty years".
-  {
-    name: "odds as numbers",
-    test: (a) =>
-      /\d\s?%|(?<![\d.,])\b\d{1,3}(?:,\d{3})* in \d{1,3}(?:,\d{3})*\b(?![.,]?\d)/.test(a) ||
-      /(?<!\b(?:no|any|some|every) ?)\b(one|two|three|four|five|six|seven|eight|nine|ten)( chance)? in (a |one )?(two|three|four|five|six|seven|eight|nine|ten|twenty|fifty|hundred|thousand|million)\b/i.test(a),
-  },
+  // Odds as numbers were allowed 2026-11-01, so that check is gone.
   { name: "jargon", test: (a) => /\b(leakage|technosignatures?|signatures?)\b/i.test(a) },
   // Distances as light-time, as every screen gives them, 2026-10-24. AU only in capitals, so not "au revoir".
   { name: "says AU", test: (a) => /\bAU\b/.test(a) },
@@ -29,6 +22,9 @@ export const CHECKS = [
   // About 60 words, unless the Will asks for more, as the Will chose 2026-10-23. A little over 60 still passes.
   // Sentences aren't counted: of a hundred answers read, five or six short ones under 75 words read as short.
   { name: "too long", test: (a, c) => !c?.long && words(a) > 75 },
+  // News told unasked is shorter, about 40 words, and never asks the Will to reply, 2026-10-31.
+  { name: "news too long", test: (a, c) => c?.kind === "news" && words(a) > 55 },
+  { name: "news asks back", test: (a, c) => c?.kind === "news" && /\?\s*$/.test(a.trim()) },
 ];
 
 /** The names of the rules an answer breaks, for its case. */

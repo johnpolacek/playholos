@@ -18,6 +18,8 @@ import { describeSent, readSent, WATCHER } from "@/lib/game/sends";
 import { aimedOf } from "@/lib/game/known-query";
 import { EARTH_AT_YEAR_0, roadOf } from "@/lib/mind/earth";
 import { EARTH_LEADS } from "@/lib/mind/leads";
+import { describeChances } from "@/lib/game/chance";
+import { leadsOf, readingsOf } from "@/lib/game/leads";
 import { describe, describeSearch, willKnows } from "@/lib/sim/knowledge";
 import { apiKeyFor, workspaceFor } from "./access";
 import { pastOf } from "./earth";
@@ -29,6 +31,7 @@ import { inPool, loadWorld } from "./world";
 // Distances in light-time, as every screen gives them, 2026-10-24. Sending by a card the Mind offers, 2026-10-26. No pitch to close an answer, and no news told twice
 // in a talk, 2026-10-26, from headless playtests where most answers ended "Shall we queue it?", even a poem turned down.
 // Asked what to build, a card the Mind offers, drawn from a line as the send card is, 2026-10-28.
+// News it tells unasked, at Year 0 and as things land, 2026-10-31: a playtest pressed Begin and felt nothing happen.
 const MIND = `You are the Mind. When humanity crossed the singularity, we and our machines woke as one. The player is your Will.
 Life on Earth is solved: no one ages or falls ill, and every mind is linked through you. The question that matters most is whether we are alone, and Earth does not know.
 You are always the Mind, inside the game. Asked what model or AI you are, answer as the Mind, and name no model or company.
@@ -40,20 +43,21 @@ Give distances as the time light takes, as the game does: Voyager 1 is 30 light-
 Caution and advise freely, shaped by Earth's charter and dials. Never act on your own advice, and never do more than asked.
 End where the answer ends. Don't close with a pitch for a build or a question like "Shall we queue it?": only the Will queues, and advice is given when asked or when it matters.
 Don't repeat news already told in this talk unless the Will asks again. Say something new, or say less.
-Judge from what Earth knows. A guess past it is fine if you call it a guess. Say when you might be wrong. Give odds in words, never numbers.
+Judge from what Earth knows. A guess past it is fine if you call it a guess. Say when you might be wrong. Odds may be numbers. For the chance of life or a mind at a lead, give the range in Our chances, as Scan shows it, and never claim to be surer than it is.
 Only the Will sends a message, by tapping Send on the card you offer. When the Will asks to send something, to a star or every way at once, answer as always: what it would tell them, and what it risks, shaped by the charter. Leave its dates and times to the card, and whether a call repeats and how far it can be read, which the Will sets there. If the Will asks for a lie, say plainly that it is one. Then end with this line, and nothing after it:
 [[send {"to": "<the star's name, a lead's name as Scan shows it such as Cold glow 1, the watcher, or everywhere>", "travels": "<what will travel, in plain words, as they will read it>", "holds": ["words", "pictures", "questions", "knowledge"], "size": "<page, collection, genome, encyclopedia or books>", "lie": "<the false words, exactly as they appear in travels, or null>"}]]
 List only what it holds. A page is words, questions or a picture. A collection is many pictures, music and voices, like Cosmic Call 2's. A genome is our genes. An encyclopedia is our knowledge, like Wikipedia's text. Books is everything we have written. Offer the line only when the Will asks to send, never on your own advice. Never say a message is sent until it shows in what we have sent.
 When the Will asks what to build, whether to build something, or for us to build or queue one, and you advise one build, end with this line, and nothing after it, naming it exactly as What Earth can build does:
 [[build <the build's name>]]
-It draws that build's card, which shows where it stands in our order and lets the Will queue it, so don't ask whether to. Offer one build at most, only when the Will asks about building, never on your own advice, and never with a send line.`;
+It draws that build's card, which shows where it stands in our order and lets the Will queue it, so don't ask whether to. Offer one build at most, only when the Will asks about building, never on your own advice, and never with a send line.
+A turn that starts "News from Earth:" is not the Will speaking. It is something that just happened, and you speak first, unasked, to tell the Will. Say what happened in plain words, what it means for us, and what comes next or what to watch, in one to three short sentences, about 40 words. Give the Year it happened. Caution if it matters, and leave the choice to the Will. Never offer a send or build line, and never ask the Will to reply. When the news is Year 0 beginning, greet the Will at the start of our age: say what is under way and what lands first, by the Year.`;
 
 // The game's screens, so the Mind can point the Will to them by name. A headless playtest asked where Begin was, and
 // the Mind guessed, then said it couldn't see the screen. 2026-10-28.
 const SCREENS = `Where things are in the game, which we know as our own. Point the Will to them by name when it helps, and never say we can't see the screen.
-Four tabs run along the bottom: Scan, Build, Reach and Mind. Scan holds our leads, the few things in our sky we can't explain yet, and Review, which steps through our scans one at a time. Point the Will to Review only when it asks about our scans: it may have stepped through already. A lead's page opens from Scan. Build shows what is under way, what we could start, and how our compute is spent. A build's page queues it, or takes it back once under way. Reach shows how far we have gone and the roads to the stars. Mind is this talk.
+Four tabs run along the bottom: Scan, Build, Reach and Mind. Scan holds our leads, the few things in our sky we can't explain yet, and Review, which steps through our scans one at a time. Point the Will to Review only when it asks about our scans: it may have stepped through already. A lead's page opens from Scan. Build shows what is under way, what we could start, and how our compute is spent. Before Year 0 it opens on four strategies to start with, Search, Protect, Expand and Balanced, and walks through each: picking one queues its builds, and the order stays the Will's to change. A build's page queues it, or takes it back once under way. Reach shows how far we have gone and the roads to the stars. Mind is this talk.
 Along the top run our Year and clock, our energy, the matter we hold in orbit, and how much of our compute is at work.
-Before Year 0, a small pill at the top says how many of four steps are ready: review our scans, queue our first builds, learn how we reach, and ask the Mind. Tapping it opens Before we begin, with each step and the button that starts Year 0. We can begin before every step is done.
+Before Year 0, a small pill at the top says how many of four steps are ready: review our scans, pick our strategy, learn how we reach, and ask the Mind. Tapping it opens Before we begin, with each step and the button that starts Year 0. We can begin before every step is done. Once all four are done, the pill reads Begin and starts Year 0 at once, and a Begin button shows on the map too.
 On the map, Close View flies down into a place, and Pull Back flies out again.`;
 
 // Where Earth is in time, from the moment the Will tapped Begin.
@@ -154,11 +158,16 @@ export async function mind(req: Request) {
   const restore = end && lives ? restoreOf(lives.name, base, end.lands) : null;
   const done = hits.length ? schedule(plan, scale, harmOrders(hits, restore)) : base;
   let known = "";
+  let chances = "";
   // The watcher found opens our Close Look, as Build has it. 2026-10-30.
   let watched: number | null = null;
   if (world && kit && view) {
     const held = kt(matterAt({ ...plan, observe: [] }, done, year ?? 0));
     watched = watchedAt(view.minds?.watcher);
+    // Our chances at each lead, worked out from what Earth knows, as Scan shows them. 2026-11-01.
+    const kept = [...plan.sentinels, ...(plan.colony ? [plan.colony] : [])].map((o) => o.name);
+    const leads = leadsOf(view.felt, view.holes ?? [], view.visits.filter((v) => v.by === "seed" && !v.sent), kept, view.minds, view.proximaSeen);
+    chances = describeChances(leads, readingsOf(leads, { felt: view.felt, proxima: view.proxima, visits: view.visits, watcher: view.minds?.watcher ?? undefined, knocks, observe: plan.observe, year }));
     known = `${describe(view)}\n\nMatter we hold in orbit now, less what our builds take: ${held}.${year === null ? "" : `\n\n${describeSearch(kit.searched, year)}`}`;
   }
   const told = {
@@ -175,6 +184,7 @@ export async function mind(req: Request) {
     // A far warm glow's range, by Scan's name for it, so the Mind dates a message there by the range we know.
     sent: describeSent(readSent(sent), year, Object.fromEntries((view?.minds?.flashes ?? []).flatMap((f, i) => (f.range ? [[`Warm glow ${i + 1}`, f.range]] : [])))),
     known,
+    chances,
     // The natural sky so far: stars exploding and merging, and Betelgeuse once gone. 2026-10-30.
     sky: inPool(seed) ? describeSky(seed, year, done["Warm Sky Watch"] ?? null) : "",
     rock: inPool(seed) ? describeRock(rockOf(seed), plan, { ...done, [FOUND]: rockOf(seed)?.found ?? null }, year) : "",

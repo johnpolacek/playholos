@@ -1,12 +1,12 @@
 import { useEffect, useRef } from "react";
 import { useGame } from "@/components/game-provider";
-import { YEAR_0, lyOf } from "@/lib/game/clock";
-import type { Art } from "@/lib/game/leads";
+import { lyOf } from "@/lib/game/clock";
+import type { Art, Window } from "@/lib/game/leads";
 import { VisitArt } from "@/components/visit-art";
 import { prefersReducedMotion } from "@/lib/motion";
 
-// A lead's page, drawn: a world's orbit against its star's warm zone, or our
-// message's trip to Luyten's Star and the earliest a reply could come back, or a black hole shifting the stars behind
+// A lead's page, drawn: a world's orbit against its star's warm zone, or every star we messaged at the Year a reply
+// could first come back, or a black hole shifting the stars behind
 // it. Each moves, unless motion is reduced.
 
 const W = 320;
@@ -85,55 +85,56 @@ function Orbit({ a, e, hz }: { a: number; e: number; hz?: [number, number] }) {
   );
 }
 
-// Time runs left to right, from 2015 to past the last reply, and distance bottom to top, from Sol to Luyten's Star.
-// Our messages climb out at the speed of light. A reply sent the moment one arrived would come back down. Now is
-// marked where the game's clock is.
-function Reply({ sent, ly }: { sent: number[]; ly: number }) {
+// Every star we messaged, at the Year a reply could first reach us, left to right, and its distance, bottom to top.
+// Windows passed are faint, with none come. The next to open breathes in their color, and now is marked where the
+// game's clock is. Luyten's Star alone was drawn here until 2026-11-01.
+function Reply({ windows }: { windows: Window[] }) {
   const { year: clock } = useGame();
-  const [y0, y1] = [2015, Math.ceil(Math.max(...sent) + 2 * ly) + 3];
-  const year = Math.min(y1, YEAR_0 + Math.max(0, clock ?? 0));
-  const X = (y: number) => 18 + ((y - y0) / (y1 - y0)) * (W - 36);
-  const [sol, star] = [H - 34, 34];
-  const pulse = useRef<SVGCircleElement>(null);
-  const first = sent[0];
-  useTicks((t) => {
-    // One trip out and back in six seconds.
-    const k = (t % 6) / 6;
-    const y = first + 2 * ly * k;
-    const up = k < 0.5 ? k * 2 : 2 - k * 2;
-    pulse.current?.setAttribute("cx", String(X(y)));
-    pulse.current?.setAttribute("cy", String(sol + (star - sol) * up));
-  }, 1.5);
+  const now = Math.max(0, clock ?? 0);
+  const [x0, x1] = [Math.floor(Math.min(...windows.map((w) => w.at)) / 10) * 10 - 2, Math.ceil(Math.max(...windows.map((w) => w.at)) / 10) * 10 + 2];
+  const [d0, d1] = [0, Math.ceil(Math.max(...windows.map((w) => w.ly)) / 10) * 10];
+  const X = (y: number) => 22 + ((y - x0) / (x1 - x0)) * (W - 44);
+  const Y = (d: number) => H - 30 - ((d - d0) / (d1 - d0)) * (H - 62);
+  const next = windows.find((w) => w.at > now);
+  const glow = useRef<SVGCircleElement>(null);
+  useTicks((t) => glow.current?.setAttribute("r", String(5 + 3 * Math.sin(t * 2.4) ** 2)), 0.3);
+  // Names close together share one label, as 55 Cancri and HD 10307 do.
+  const labels: { x: number; y: number; names: string[]; up: boolean }[] = [];
+  for (const w of windows) {
+    const near = labels.find((l) => Math.abs(l.x - X(w.at)) < 14 && Math.abs(l.y - Y(w.ly)) < 10);
+    if (near) near.names.push(w.star);
+    else labels.push({ x: X(w.at), y: Y(w.ly), names: [w.star], up: labels.length % 2 === 0 });
+  }
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img" aria-label="Our messages to Luyten’s Star and the earliest replies">
-      <line x1={X(y0)} x2={X(y1)} y1={sol} y2={sol} stroke="var(--muted)" strokeWidth={0.7} />
-      <line x1={X(y0)} x2={X(y1)} y1={star} y2={star} stroke="var(--muted)" strokeWidth={0.7} />
-      <text x={X(y0)} y={sol - 6} className="fill-muted font-mono text-[8px]">
-        SOL
-      </text>
-      <text x={X(y0)} y={star - 6} className="fill-other font-mono text-[8px]">
-        LUYTEN’S STAR · {lyOf(ly)} LY
-      </text>
-      {sent.map((s) => (
-        <g key={s}>
-          <line x1={X(s)} y1={sol} x2={X(s + ly)} y2={star} stroke="var(--you)" strokeWidth={1} />
-          <line x1={X(s + ly)} y1={star} x2={X(s + 2 * ly)} y2={sol} stroke="var(--other)" strokeWidth={1} strokeDasharray="3 3" />
-          <circle cx={X(s + 2 * ly)} cy={sol} r={3} fill="var(--other)" />
-        </g>
-      ))}
-      {[first, first + ly].map((y) => (
-        <text key={y} x={X(y)} y={sol + 13} textAnchor="middle" className="fill-muted font-mono text-[7.5px]">
-          {Math.floor(y)}
+    <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img" aria-label={`Reply windows for the ${windows.length} stars we messaged`}>
+      <line x1={X(x0)} x2={X(x1)} y1={Y(0)} y2={Y(0)} stroke="var(--muted)" strokeWidth={0.7} />
+      {[0, 20, 40].filter((y) => y > x0 && y < x1).map((y) => (
+        <text key={y} x={X(y)} y={Y(0) + 13} textAnchor="middle" className="fill-muted font-mono text-[7.5px]">
+          YEAR {y}
         </text>
       ))}
-      <text x={X(first + 2 * ly)} y={sol + 13} textAnchor="middle" className="fill-other font-mono text-[7.5px]">
-        YEAR {(Math.floor((first + 2 * ly - YEAR_0) * 10) / 10).toFixed(1)}
+      <text x={X(x0)} y={14} className="fill-muted font-mono text-[7.5px]">
+        {d1} LY
       </text>
-      <line x1={X(year)} x2={X(year)} y1={star - 2} y2={sol + 2} stroke="var(--ink)" strokeWidth={0.8} strokeDasharray="1 2" />
-      <text x={X(year)} y={star + 12} textAnchor="middle" className="fill-ink font-mono text-[7.5px]">
+      {windows.map((w) => {
+        const passed = w.at <= now;
+        return (
+          <g key={w.star}>
+            <line x1={X(w.at)} x2={X(w.at)} y1={Y(0)} y2={Y(w.ly)} stroke={passed ? "var(--faint)" : "var(--other)"} strokeOpacity={passed ? 1 : 0.35} strokeWidth={0.7} />
+            <circle cx={X(w.at)} cy={Y(w.ly)} r={2.6} fill={passed ? "var(--paper)" : "var(--other)"} stroke={passed ? "var(--muted)" : "none"} strokeWidth={0.8} />
+          </g>
+        );
+      })}
+      {next && <circle ref={glow} cx={X(next.at)} cy={Y(next.ly)} r={6} fill="none" stroke="var(--other)" strokeOpacity={0.7} />}
+      {labels.map((l) => (
+        <text key={l.names.join()} x={l.x} y={l.up ? l.y - 7 : l.y + 12} textAnchor="middle" className="fill-page-ink2 font-mono text-[7px]">
+          {l.names.join(" · ")}
+        </text>
+      ))}
+      <line x1={X(now)} x2={X(now)} y1={22} y2={Y(0) + 2} stroke="var(--ink)" strokeWidth={0.8} strokeDasharray="1 2" />
+      <text x={X(now)} y={18} textAnchor="middle" className="fill-ink font-mono text-[7.5px]">
         NOW
       </text>
-      <circle ref={pulse} cx={X(first)} cy={sol} r={2.5} fill="var(--ink)" />
     </svg>
   );
 }
@@ -443,5 +444,5 @@ export function LeadArt({ art }: { art: Art }) {
   if (art.kind === "glow") return <GlowArt ly={art.ly} steady={art.steady} />;
   if (art.kind === "nova") return <NovaArt ly={art.ly} />;
   if (art.kind === "seed") return <VisitArt sight={art.sight} size={220} />;
-  return <Reply sent={art.sent} ly={art.ly} />;
+  return <Reply windows={art.windows} />;
 }

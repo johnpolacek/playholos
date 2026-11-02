@@ -10,7 +10,7 @@ export const EARTH_LEADS = `Earth's leads at Year 0. These are real oddities. Wh
 - Proxima b, 4.24 ly, the nearest world: at least 1.06 Earth masses, in a flaring red dwarf's warm zone, 11.2-day year. Its air is unread: it sits 37 thousandths of an arcsecond from its star in our sky, too close for any telescope Earth has, and for the Infrared Telescope, which splits a world from 56. The 15 m Mirror splits from 24, so it would just reach Proxima b, and read its oxygen and ozone but not its water. Its star has likely stripped it bare: rocky worlds measured near red dwarfs have proved bare, and models keep air only on the largest and coolest. The two roads on Reach, sails and a flyby probe, go there.
 - 82 Eridani d, 19.7 ly: at least 5.8 Earth masses, on a stretched orbit through a Sun-like star's warm zone. Its air is unread.
 - Every world Earth has felt by its tug on its star is a lead too. They are listed below, from what Earth knows. Never invent one.
-- The first reply window: Luyten's Star, 12.3 ly. Earth's 2017 and 2018 messages both reached it in 2030. A reply to the 2017 message could come at Year 2.3, and to the 2018 message at Year 2.9.
+- Luyten's Star, 12.3 ly, a lead on Scan: Earth's 2017 and 2018 messages both reached it in 2030, so a reply could come at Year 2.3 or 2.9. It is the first of the 12 stars we messaged whose window opens, listed below under Earth's noise, and no likelier to answer than any of them: about one star in 1,600 holds a mind.
 
 Old records the Mind studies on its own from Begin. It can read them better than their first readers did:
 - Gliese 12 b, 39.7 ly: a world Earth's size, 12.8 days around a quiet red star. Its air is unread.

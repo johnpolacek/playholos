@@ -7,7 +7,7 @@ import { WalkHead } from "@/components/reach-tour";
 import { Thread } from "@/components/review";
 import { Face, ListHead, TabHead } from "@/components/tab-head";
 import { VisitArt } from "@/components/visit-art";
-import type { Art } from "@/lib/game/leads";
+import { type Art, WINDOWS } from "@/lib/game/leads";
 import { BUILDS, LATER } from "@/lib/game/plan";
 
 // The game's parts, in one place: its colors, its type, and each shared piece drawn live, with the file it lives in
@@ -54,7 +54,7 @@ const TYPE: { cls: string; spec: string; use: string; text: string }[] = [
 const LEADS: { name: string; art: Art }[] = [
   { name: "A world felt", art: { kind: "orbit", a: 1, e: 0 } },
   { name: "A stretched orbit", art: { kind: "orbit", a: 1.35, e: 0.45 } },
-  { name: "A reply", art: { kind: "reply", sent: [], ly: 12 } },
+  { name: "A reply", art: { kind: "reply", windows: WINDOWS } },
   { name: "A black hole", art: { kind: "dark", mass: 9.6, ly: 1560 } },
   { name: "A grey glow", art: { kind: "glow", ly: 30 } },
   { name: "A seed’s star", art: { kind: "seed", sight: "seas" } },

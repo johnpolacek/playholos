@@ -168,21 +168,14 @@ export const opens = (name: string) => LATER.filter((b) => b.after === name);
 export const buildOf = (name: string): Build | Later | undefined =>
   BUILDS.find((b) => b.name === name) ?? LATER.find((b) => b.name === name);
 
-/** What we could start with, walked one at a time on Build: all but the longest roads' builds, which pay only once
- *  a drive is coming, and the Moon Vault, which can come later. They wait in the list. Chosen 2026-10-19,
- *  the vault left out 2026-10-20, the Halo Survey and Star Mapper 2026-10-26, which pay off late, and the Launch
- *  Tunnel 2026-10-27, since nothing we could start waits on lift. */
-export const STARTS = BUILDS.filter(
-  (b) => !["Moon Vault", "Halo Survey", "Star Mapper", "Warm Sky Watch", "Moon Search", "Asteroid Tour", "Launch Tunnel", "X-Ray Watch", "Quiet Radars", "Deuterium Works", "Fusion Drive", "Seed Ship"].includes(b.name),
-);
-
-/** A way to start, picked whole at our order's stop: its builds in the order they join the queue. Ours to pick, never
- *  the Mind's, and the order stays ours to change. Chosen 2026-10-31. */
+/** A strategy to start with, picked whole on Build: its builds in the order they join the queue. Ours to pick, never
+ *  the Mind's, and the order stays ours to change. Ways to start, chosen 2026-10-31, became four strategies
+ *  2026-11-01: Search, Protect, Expand, and Balanced last. */
 export interface Package {
   name: string;
   /** What it does for us, in a line. */
   what: string;
-  /** What the Mind cautions, once we pick it. */
+  /** What the Mind cautions of it. */
   says: string;
   builds: string[];
 }
@@ -190,28 +183,28 @@ export interface Package {
 // Each leads with Thought Fields, then its own builds, then small ones that fill spare compute on a richer Earth.
 export const PACKAGES: Package[] = [
   {
-    name: "Listen first",
-    what: "Hear any knock or broadcast, by radio or laser.",
-    says: "Listening gives nothing away. It hears only minds that choose to call, and the quiet ones never do.",
-    builds: ["Thought Fields", "All-Sky Watch", "Deep Flash Watch", "Warm Sky Watch", "Halo Survey", "Asteroid Tour"],
+    name: "Search",
+    what: "Listen for any call, read the nearest worlds’ air, and look for the glow of minds.",
+    says: "Searching gives nothing away. It hears only minds that choose to call, and finds the quiet ones slowly: the Halo Survey takes 4 Years to reach 100 ly.",
+    builds: ["Thought Fields", "All-Sky Watch", "Infrared Telescope", "Deep Flash Watch", "Halo Survey", "Warm Sky Watch", "Star Mapper", "Asteroid Tour"],
   },
   {
-    name: "Look hard",
-    what: "Read the nearest worlds’ air, and search for the glow of minds.",
-    says: "Looking gives nothing away, and finds minds that stay quiet. Its finds come slowly: the Halo Survey takes 4 Years to reach 100 ly.",
-    builds: ["Thought Fields", "Infrared Telescope", "Halo Survey", "Star Mapper", "Warm Sky Watch", "Asteroid Tour"],
-  },
-  {
-    name: "Stay quiet",
+    name: "Protect",
     what: "Stop our radars, watch for probes, and keep a copy of us safe.",
     says: "Ninety years of our radar sweeps are already out there, and nothing recalls them. This only keeps us from adding more.",
     builds: ["Thought Fields", "Quiet Radars", "X-Ray Watch", "Moon Vault", "Moon Search", "Asteroid Tour"],
   },
   {
-    name: "Reach out",
+    name: "Expand",
     what: "Our soonest road to the nearest star, and the lift to build for it.",
     says: "A beam strong enough to push sails is bright. Anyone looking our way while it fires could see it.",
     builds: ["Thought Fields", "Laser Sail Array", "Launch Complex", "Orbital Yard", "Halo Survey", "Asteroid Tour"],
+  },
+  {
+    name: "Balanced",
+    what: "A little of each: listen, read the nearest air, go quiet, and lift.",
+    says: "Each part runs slower than it would alone. We would see more kinds of news, and be first at none.",
+    builds: ["Thought Fields", "All-Sky Watch", "Infrared Telescope", "Quiet Radars", "Launch Complex", "Asteroid Tour"],
   },
 ];
 

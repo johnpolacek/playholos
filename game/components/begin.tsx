@@ -2,9 +2,12 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router";
 import { useGame } from "@/components/game-provider";
 import { MindNote } from "@/components/mind-note";
-import { useCompute } from "@/components/picks";
+import { Sparks } from "@/components/sparks";
+import { useCompute, useEarth } from "@/components/picks";
 import type { Save } from "@/lib/game/types";
 import { useAccess } from "@/lib/key";
+import { base, charterFor, HISTORY } from "@/lib/game/charter";
+import { PACKAGES, packed } from "@/lib/game/plan";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
 
 // Begin: Year 0 starts at the tap, and the clock runs from then, offline too. Settled 2026-10-10. Before it, the top
@@ -52,13 +55,13 @@ const STEPS: Step[] = [
     to: "/?review",
   },
   {
-    name: "Queue our first builds",
-    short: "Queue builds",
+    name: "Pick our strategy",
+    short: "Pick strategy",
     // Enough is all our compute in use at Year 0, and none short. What the queue leaves sits idle.
     line: (s, { used, short, over, full }) =>
       s.plan?.builds.length
         ? `${s.plan.builds.join(", ")}. ${over ? `${Math.round(short * 100)}% more than our compute carries.` : `${full ? "All" : `${Math.floor(used * 100)}%`} of our compute in use.`}`
-        : "Enough to put all our compute to work at Year 0.",
+        : "Search, Protect, Expand or Balanced. Each puts all our compute to work at Year 0.",
     // Past 100% all our compute is at work too, so the step stays done. It went back to undone. Playtest 2026-11-01.
     done: (_, { full, over }) => full || over,
     to: "/build?tour",
@@ -82,6 +85,21 @@ const STEPS: Step[] = [
     to: "/mind",
   },
 ];
+
+/** Begin, and the charter our strategy sets, held from now: the dials lean as the strategy our queue matches, from
+ *  where history left them. A save that chose a founding line before 2026-11-01 keeps it. */
+function useBegin() {
+  const { save, begin, setCharter } = useGame();
+  const past = useEarth();
+  return () => {
+    if (save && !save.charter) {
+      const builds = save.plan?.builds.join() ?? "";
+      const strategy = PACKAGES.find((p) => packed(p, past?.compute ?? 1).join() === builds);
+      setCharter(charterFor(strategy?.name, past ? base(past) : HISTORY));
+    }
+    begin();
+  };
+}
 
 /** The first of the four not yet done, in order, or null once all are. `but` leaves out the one we are on. */
 export function useNext(but?: string) {
@@ -309,8 +327,10 @@ function Sheet({ count, onClose, onBegin }: { count: string; onClose(): void; on
 
 /** Before Begin, the top bar's count of what we would do first, naming the next, and the sheet it opens. */
 export function Begin() {
-  const { save, year, begin } = useGame();
+  const { save, year } = useGame();
+  const begin = useBegin();
   const [open, setOpen] = useState(false);
+  const [hover, setHover] = useState(false);
   const button = useRef<HTMLButtonElement>(null);
   const now = useNow();
   const next = useNext();
@@ -341,15 +361,31 @@ export function Begin() {
       {year === null && (
         <button
           ref={button}
-          onClick={() => setOpen(true)}
-          aria-haspopup="dialog"
-          aria-expanded={open}
-          className="-my-1 -mr-1 inline-flex h-6 items-center gap-1.5 rounded-full border border-you/50 pr-2.5 pl-1.5 text-xs text-ink transition-colors hover:bg-you/10"
+          // All four done, Begin begins. The sheet is for what is still open.
+          onClick={() => (next ? setOpen(true) : begin())}
+          onPointerEnter={() => setHover(true)}
+          onPointerLeave={() => setHover(false)}
+          aria-haspopup={next ? "dialog" : undefined}
+          aria-expanded={next ? open : undefined}
+          className={
+            next
+              ? "-my-1 -mr-1 inline-flex h-6 items-center gap-1.5 rounded-full border border-you/50 pr-2.5 pl-1.5 text-xs text-ink transition-colors hover:bg-you/10"
+              : "relative -my-1.5 -mr-1 inline-flex h-8 items-center rounded-full bg-you px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110"
+          }
         >
-          <Count done={done} />
-          {n === STEPS.length ? "All steps done" : `${n} of ${STEPS.length} steps done`}
-          <span className="text-muted">·</span>
-          <b className="font-medium text-you">{next ? next.short : "Begin"}</b>
+          {next ? (
+            <>
+              <Count done={done} />
+              {`${n} of ${STEPS.length} steps done`}
+              <span className="text-muted">·</span>
+              <b className="font-medium text-you">{next.short}</b>
+            </>
+          ) : (
+            <>
+              <Sparks on={hover} />
+              Begin
+            </>
+          )}
         </button>
       )}
       {open && (
@@ -363,5 +399,29 @@ export function Begin() {
         />
       )}
     </>
+  );
+}
+
+/** Once all four are done and the clock still waits, Begin on the map too, where the eye is. */
+export function BeginOnMap({ className = "" }: { className?: string }) {
+  const { save, year } = useGame();
+  const begin = useBegin();
+  const now = useNow();
+  const [hover, setHover] = useState(false);
+  if (!save || year !== null || !now.known || STEPS.some((s) => !s.done(save, now))) return null;
+  return (
+    <button
+      onClick={begin}
+      onPointerEnter={() => setHover(true)}
+      onPointerLeave={() => setHover(false)}
+      onFocus={() => setHover(true)}
+      onBlur={() => setHover(false)}
+      className={`absolute left-1/2 inline-flex h-12 -translate-x-1/2 items-center rounded-full bg-you px-8 text-lg font-medium text-paper transition-[filter] hover:brightness-110 ${className}`}
+    >
+      {/* Begin is the one thing left, so it calls the way the next step's node does. */}
+      <span aria-hidden className="absolute inset-0 rounded-full border border-you motion-safe:animate-ping" />
+      <Sparks on={hover} />
+      Begin
+    </button>
   );
 }

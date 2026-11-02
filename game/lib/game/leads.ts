@@ -14,11 +14,12 @@ import { type System, SYSTEMS } from "./systems";
 const GENERATIONS = CATALOG.seedProbe.generations;
 
 // Earth's real leads in 2040, each with its own page: the world next door, whose air we can't read from here, a world
-// on a stretched orbit, every world the planet hunters felt by 2040, nearest first, and the first star that could answer our messages. Each page is a
+// on a stretched orbit, every world the planet hunters felt by 2040, nearest first, and our messages, waiting on replies. Each page is a
 // report as HOLOS_GAME_CONCEPT.md has it: what we measured, what it could be, each with the Mind's word, and what would
 // tell us. Real numbers from HOLOS_RESEARCH.md, "Earth's leads, as of October 2026".
 
-/** The Mind's seven words for how likely a thing is, after the scale US intelligence analysts use. Never numbers. */
+/** The Mind's seven words for how likely a thing is, after the scale US intelligence analysts use. Scan shows each as
+ *  a range of percents, in lib/game/chance.ts: numbers were allowed 2026-11-01. */
 export const ODDS = [
   "almost no chance",
   "very unlikely",
@@ -63,7 +64,7 @@ export interface Reading {
 /** What a lead's page draws: a world's orbit against its star's warm zone, or a message's trip. */
 export type Art =
   | { kind: "orbit"; a: number; e: number; hz?: [number, number] }
-  | { kind: "reply"; sent: number[]; ly: number }
+  | { kind: "reply"; windows: Window[] }
   | { kind: "dark"; mass: number; ly: number }
   | { kind: "pair"; mass: number; ly: number; a: number; e: number; days: number }
   | { kind: "glow"; ly: number; steady?: boolean }
@@ -125,11 +126,23 @@ const slugOf = (star: string) =>
     .replace(/[’']/g, "")
     .replace(/[^a-z0-9]+/g, "-");
 
-/** Luyten's Star: our two messages, and the first Year a reply to each could reach us. */
-const LUYTEN = KNOCKS.filter((k) => k[2] === "Luyten's Star");
-const REPLIES = LUYTEN.map(([, sent, , ly]) => Math.round((sent + 2 * ly - YEAR_0) * 10) / 10);
-const REPLY = Math.min(...REPLIES);
-
+/** Each star we messaged before Year 0, nearest first in time: the soonest a reply could reach us, in Years from Year
+ *  0, below zero once passed. 2026-11-01. */
+export interface Window {
+  star: string;
+  ly: number;
+  at: number;
+}
+export const WINDOWS: Window[] = [...new Set(KNOCKS.map((k) => k[2]))]
+  .map((star) => {
+    const ks = KNOCKS.filter((k) => k[2] === star);
+    const soonest = Math.min(...ks.map(([, sent, , ly]) => sent + 2 * ly));
+    return { star: star.replace("'", "’"), ly: ks[0][3], at: Math.round((soonest - YEAR_0) * 10) / 10 };
+  })
+  .sort((a, b) => a.at - b.at);
+const AHEAD = WINDOWS.filter((w) => w.at > 0);
+const LUYTEN = WINDOWS.find((w) => w.star === "Luyten’s Star")!;
+const PASSED = WINDOWS.filter((w) => w.at <= 0);
 const STARS: Record<string, string> = {
   M: "A red dwarf",
   K: "An orange dwarf",
@@ -1089,7 +1102,7 @@ export function leadsOf(felt: FeltWorld[], holes: DarkMass[] = [], seeds: Visit[
   const own = new Set(["Proxima Centauri", ...felt.map((f) => f.star)]);
   const landed = seeds.filter((v) => v.by === "seed" && !v.sent && !own.has(v.star));
   const reached = landed.filter((v, i) => landed.findIndex((x) => x.star === v.star) === i);
-  return withSystems([
+  return withSystems(byDistance([
     // The nearest world, and the reason for the two roads on Reach: no telescope we have can read its air, so going is
     // how we would see it whole. Added 2026-10-19. Its warm zone is ours, from Kopparapu et al. 2013 at the star's
     // 0.0016 Suns. Its odds follow the shoreline the seed draws by, since 2026-10-22: likely bare rock. Since
@@ -1131,45 +1144,50 @@ export function leadsOf(felt: FeltWorld[], holes: DarkMass[] = [], seeds: Visit[
       life: "very unlikely",
     },
     ...felt.map(feltLead),
-    ...shown.filter(([, far]) => !far).map(([h]) => darkLead(h)),
     ...reached.map(seedLead),
     // The realistic premise's minds Earth has found, 2026-10-29.
     ...mindLeads(minds),
-    // The nearest known black hole, far past the region, which Earth knows at Year 0. El-Badry et al. 2023. Its
-    // position from Gaia's catalog. A landmark to aim at, 2026-10-26. Gaia BH3 left out, 2026-10-27: a second far hole
-    // told the intro nothing new.
-    ...shown.filter(([, far]) => far).map(([h]) => darkLead(h, true)),
+    // Luyten's Star, a star like any other lead, blue since 2026-11-01: amber gave it more weight than one star in
+    // 1,600 deserves. It is the first of the stars we messaged whose reply window opens, and its page shows them all.
     {
       slug: "luytens-star",
       star: "Luyten’s Star",
       what: "We messaged it",
-      line: `Our 2017 and 2018 messages reached it in 2030. Any reply would reach us from Year ${REPLY}. About one star in 1,600 holds a mind, so likely none.`,
-      later: {
-        year: Math.max(...REPLIES),
-        line: `Our 2017 and 2018 messages reached it in 2030. The first replies could have reached us at Years ${REPLIES.join(" and ")}. None came.`,
-      },
+      line: `Our 2017 and 2018 messages reached it in 2030, so a reply could come at Year ${LUYTEN.at}. It is the first of ${WINDOWS.length} stars we messaged whose window opens.`,
       ly: 12.3,
       ask: "Could Luyten’s Star answer us?",
-      brief: `We sent it two messages, in 2017 and 2018. If anyone answered at once, the first reply reaches us at Year ${REPLY}. Our sky watch sees that star only 10 minutes a day, so we could miss it.`,
-      reply: true,
+      brief: `We sent it two messages, in 2017 and 2018. A reply could reach us at Year ${LUYTEN.at}, the first window of the ${WINDOWS.length} stars we have messaged since 1983. ${PASSED.length} windows passed before Year 0, and nothing came. Our sky watch sees each star only minutes a day, so we could miss one.`,
       facts: [
         ["Its star", "A red dwarf"],
         ["Its worlds", "Two felt, one at the warm zone’s hot edge"],
-        ["Our messages", "Sent October 2017 and May 2018"],
-        ["They arrived", "2030"],
-        ["Earliest replies", REPLIES.map((y) => `Year ${y}`).join(" and ")],
+        ["Our messages", "Sent October 2017 and May 2018, arrived 2030"],
+        ["All we messaged", `${KNOCKS.length} messages to ${WINDOWS.length} stars, 1983 to 2018`],
+        ["Windows passed", and(PASSED.map((w) => w.star))],
+        ["Windows next", AHEAD.slice(0, 3).map((w) => `${w.star}, Year ${w.at}`).join(" · ")],
       ],
       could: [
         { what: "No one heard", why: "About one star in 1,600 holds a mind, so likely not this one.", odds: "almost certain" },
         { what: "Someone heard, and stays quiet", why: "An old mind that heard would most likely stay quiet.", odds: "almost no chance" },
-        { what: "A reply, as soon as one could come", why: `It would reach us at Year ${REPLY}.`, odds: "almost no chance" },
+        { what: "A reply, as soon as one could come", why: `It would reach us at Year ${LUYTEN.at}.`, odds: "almost no chance" },
       ],
       tells: [
-        "Listening as each window opens. Our sky watch sees its star about 10 minutes a day, and a knock lasts hours. The All-Sky Watch hears at any hour.",
+        "Listening as each window opens. Our sky watch sees each star about 10 minutes a day, and a knock lasts hours. The All-Sky Watch hears at any hour.",
       ],
-      art: { kind: "reply", sent: LUYTEN.map(([, sent]) => sent), ly: LUYTEN[0][3] },
+      art: { kind: "reply", windows: WINDOWS },
     },
-  ]);
+    // Black holes last, the near ones found, then the nearest known, far past the region, which Earth knows at Year 0
+    // (El-Badry et al. 2023, its position from Gaia's catalog). They hold the least for us to go on. 2026-11-01. A
+    // landmark to aim at, 2026-10-26. Gaia BH3 left out, 2026-10-27: a second far hole told the intro nothing new.
+    ...shown.filter(([, far]) => !far).map(([h]) => darkLead(h)),
+    ...shown.filter(([, far]) => far).map(([h]) => darkLead(h, true)),
+  ]));
+}
+
+/** Stars and their worlds first, nearest first, so Luyten’s Star sits at its 12 light-years among the worlds, not at
+ *  the end. The rest keep their order after: our seeds, the minds found, and black holes last. 2026-11-01. */
+function byDistance(leads: Lead[]): Lead[] {
+  const star = (l: Lead) => l.art.kind === "orbit" || l.art.kind === "reply";
+  return [...leads.filter(star).sort((a, b) => a.ly - b.ly), ...leads.filter((l) => !star(l))];
 }
 
 /** Readings by lead, from what the plan observes. None is open at Year 0 since Fomalhaut’s lead was dropped,
@@ -1197,4 +1215,33 @@ export function describeLeads(observe: string[] | undefined, year: number | null
     return `- ${lead.star}, ${lead.what.toLowerCase()}.${found} Our words: ${words}.${life ? ` That something lives there: ${life}.` : ""}`;
   });
   return `Our words on the named leads, as the Scan tab shows them. Keep to them, and say so if a reading moved one:\n${lines.join("\n")}`;
+}
+
+/** What each lead has had read of it by this Year, by its slug: what the plan observes, then what our telescopes have
+ *  read of a felt world's air, the Infrared Telescope's, then the 15 m Mirror's, which reads Proxima b too, then what
+ *  our craft saw up close, last, and what our Close Look saw of the watcher. Shared by Scan and the Mind, so both judge
+ *  from the same. 2026-11-01. */
+export function readingsOf(
+  leads: Lead[],
+  k: { felt?: FeltWorld[]; proxima?: Read; visits: Visit[]; watcher?: WatcherSeen; knocks: number[]; observe?: string[]; year: number | null },
+): Record<string, Reading[]> {
+  const air: Record<string, Reading[]> = Object.fromEntries(
+    (k.felt ?? []).map((f) => [
+      f.star,
+      [airReading(f), airReading(f, true)].filter((r): r is Reading => r !== null).sort((a, b) => a.at - b.at),
+    ]),
+  );
+  if (k.proxima) air["Proxima Centauri"] = [nearestReading(k.proxima)];
+  const watched = k.watcher && k.year !== null ? watcherReadings(k.watcher, k.knocks, k.year) : [];
+  return Object.fromEntries(
+    leads.map((l) => [
+      l.slug,
+      [
+        ...landed(l.slug, k.observe, k.year),
+        ...(air[l.star] ?? []),
+        ...k.visits.filter((v) => v.star === l.star).map(visitReading),
+        ...(l.slug === "small-dark-body" ? watched : []),
+      ],
+    ]),
+  );
 }
