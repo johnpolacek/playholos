@@ -3,6 +3,7 @@
 import { far, odds, round } from "@/lib/about/dials";
 import type { SimMind, WorldKind } from "@/lib/drift";
 import { skyBasis } from "../../../src/coordinates.js";
+import { GALACTIC_CENTER } from "../../../src/navigation.js";
 import { ALIVE, RUNGS, type NaturalWorld } from "./draw-worlds.ts";
 import type { DrawnMinds, Odds } from "./draw-minds.ts";
 
@@ -90,7 +91,11 @@ const zoomFor = (ly: number) => Math.log10(2.5 * ly * LY_AU);
 /** For a place off to one side: farther out, since the view turns round Sol and the place sits toward its edge. */
 const sideZoom = (ly: number) => Math.min(10.3, Math.max(6.6, Math.log10(4.5 * ly * LY_AU)));
 /** The Galaxy's center in the atlas frame: Galactic X toward it, 8.2 kpc. */
-export const CENTER: Vec = [26745, 0, 0];
+export const CENTER: Vec = (() => {
+  // Sgr A*, where the map draws the Galaxy's middle (GRAVITY 2022, 8,277 pc), so a view turned round it stays on it.
+  const c = GALACTIC_CENTER.clone().divideScalar(63241.077);
+  return [c.x, c.y, c.z];
+})();
 /** The opening's view, log10 AU: far enough out that the whole disk and our Sun at its edge both show. */
 export const OPENING = 9.95;
 /** The universe we can see, log10 AU: its edge, 46.5 billion light-years out, all in view. */

@@ -155,6 +155,9 @@ function framer({ earthAU, sunDir, eX, eN, eZ }: Sky) {
       .addScaledVector(z, Math.cos(el) * Math.sin(az))
       .addScaledVector(n, Math.sin(el));
 
+  /** A view that turns round a point of its own, in AU, instead of home, and keeps its own heading out past the
+   *  Galaxy: the simulation's. Unset, every other screen's framing stands. 2026-11-01. */
+  const pivot: { at: THREE.Vector3 | null } = { at: null };
   const frame = (logD: number, az: number, tilt: number, swing: number) => {
     const { up, dir } = view;
     const D = 10 ** logD;
@@ -166,7 +169,7 @@ function framer({ earthAU, sunDir, eX, eN, eZ }: Sky) {
     aim(eX, eN, eZ, az0 + az, el, ecl);
     aim(gX, gN, gZ, az0 + az, el, gal);
     dir.copy(ecl).lerp(gal, w).normalize();
-    const wg = ramp(logD, 10.15, 10.55);
+    const wg = pivot.at ? 0 : ramp(logD, 10.15, 10.55);
     if (wg > 0) {
       group
         .copy(toUs)
@@ -181,11 +184,12 @@ function framer({ earthAU, sunDir, eX, eN, eZ }: Sky) {
     side.crossVectors(dir, up);
     up.multiplyScalar(Math.cos(roll)).addScaledVector(side, Math.sin(roll));
 
-    view.target.copy(homeTarget(D, earthAU)).lerp(mwAU, wg);
+    if (pivot.at) view.target.copy(pivot.at);
+    else view.target.copy(homeTarget(D, earthAU)).lerp(mwAU, wg);
     view.cam.copy(view.target).addScaledVector(dir, D);
     return view;
   };
-  return Object.assign(frame, { az0 });
+  return Object.assign(frame, { az0, pivot });
 }
 
 export const easeInOut = (s: number) => (s < 0.5 ? 4 * s * s * s : 1 - (-2 * s + 2) ** 3 / 2);
@@ -290,6 +294,8 @@ export function createDirector({ still }: { still: boolean }) {
     /** The turn that puts the camera off toward x, z in the plane the view turns in: the Milky Way's from the stars
      *  outward, and nearer, the ecliptic's, given as x along eX and z along eZ. */
     facing: (x: number, z: number) => Math.atan2(z, x) - frame.az0,
+    /** Turns the view round this point, in AU, or back round home with null. */
+    pivot: (at: THREE.Vector3 | null) => void (frame.pivot.at = at),
     /** The map: flies to a stop. Returns the flight's length in seconds. */
     go(to: Stop, clock: number) {
       const from = map(clock)[0];

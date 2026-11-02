@@ -688,14 +688,22 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     let at: number | null = null;
     let [logD, az, tilt] = [spec.sim?.zoom ?? 7.0, 1.1, 0.75];
     let key = "";
-    let leg: { d: number; tilt: number; at: number; span: number } | null = null;
+    let leg: { d: number; tilt: number; at: number; span: number; from: THREE.Vector3 } | null = null;
+    // The point the view turns round, in AU: the place in view, or Sol. It eases between stops with the flight.
+    const pivot = new THREE.Vector3();
+    const pivotTo = new THREE.Vector3();
     return (t) => {
-      if (still) return [spec.sim?.zoom ?? 7.0, 1.1, 0.75, 0];
+      pivotTo.set(...(spec.sim?.focus ?? [0, 0, 0])).multiplyScalar(LY_AU);
+      pilot.pivot(pivot);
+      if (still) {
+        pivot.copy(pivotTo);
+        return [spec.sim?.zoom ?? 7.0, 1.1, 0.75, 0];
+      }
       const dt = at === null ? 0 : Math.min(0.1, Math.max(0, t - at));
       at = t;
       const P = lookedAt();
       const toD = spec.sim?.zoom ?? 7.0;
-      const toTilt = P ? -0.3 : 0.75;
+      const toTilt = P ? 0.35 : 0.75;
       // The opening shot: a new key plays it. It ends where the stop stands, so no leg follows.
       const ik = spec.sim?.intro;
       if (ik !== undefined && ik !== intro?.key) intro = { key: ik, at: t };
@@ -707,12 +715,13 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         tilt = -0.05 + 0.8 * easeInOut(shot.k);
         key = `${spec.sim?.focus?.join() ?? ""}:${toD}`;
         leg = null;
-        return [logD, az, tilt, 0];
+        pivot.copy(pivotTo);
+        return [logD, az + simDrag.az, tilt + simDrag.tilt, 0];
       }
       const next = `${spec.sim?.focus?.join() ?? ""}:${toD}`;
       if (next !== key) {
         key = next;
-        leg = { d: logD, tilt, at: t, span: Math.min(6, Math.max(2.4, 2.2 + 0.6 * Math.abs(toD - logD))) };
+        leg = { d: logD, tilt, at: t, span: Math.min(6, Math.max(2.4, 2.2 + 0.6 * Math.abs(toD - logD))), from: pivot.clone() };
         simDrag.vAz = simDrag.vTilt = 0;
       }
       // The hand's turn: a flick coasts and slows, and while a stop's flight runs the turn eases home.
@@ -732,12 +741,14 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         const e = easeInOut(Math.min(1, (t - leg.at) / leg.span));
         logD = leg.d + (toD - leg.d) * e;
         tilt = leg.tilt + (toTilt - leg.tilt) * e;
+        // The point turned round glides with the flight to the next place.
+        pivot.lerpVectors(leg.from, pivotTo, e);
         if (e >= 1) leg = null;
-      } else [logD, tilt] = [toD, toTilt];
-      if (P) {
-        const turns = [pilot.facing(-P.z, P.x), pilot.facing(P.z, -P.x)].map((a) => wrap(a - az));
-        az += (Math.abs(turns[0]) < Math.abs(turns[1]) ? turns[0] : turns[1]) * (1 - Math.exp(-dt * LOOK * 0.7));
-      } else az += drift(dt, logD > 14.5 ? 150 : 600);
+      } else {
+        [logD, tilt] = [toD, toTilt];
+        pivot.copy(pivotTo);
+      }
+      az += drift(dt, logD > 14.5 ? 150 : 600);
       // Out at the edge the view keeps turning and gently rising and falling, so the galaxies' depth shows.
       const lean = tilt + (logD > 14.5 ? 0.12 * Math.sin(t / 9) : 0) + simDrag.tilt;
       return [logD, az + simDrag.az, Math.max(-1.35, Math.min(1.35, lean)), 0];
@@ -4034,6 +4045,8 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
 
   return {
     show(next) {
+      // Only a simulation turns round its own point; every other view turns round home.
+      if (next.mode !== "sim") pilot.pivot(null);
       // The same screen again, as on a remount or once its data comes: take its new callbacks, keep flying, and say
       // how long is left.
       if (next.moments?.length) momentsOf = next.moments;
