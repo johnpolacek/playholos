@@ -28,6 +28,15 @@ export function Replay({ size = 14 }: { size?: number }) {
   );
 }
 
+/** A triangle pointing on, to play. */
+export function Play({ size = 14 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 16 16" aria-hidden className="shrink-0" {...LINE} strokeLinejoin="round">
+      <path d="M5 3.25v9.5L12.5 8z" fill="currentColor" />
+    </svg>
+  );
+}
+
 /** Earth: its edge, a meridian and the equator. */
 export function Globe({ size = 14 }: { size?: number }) {
   return (
