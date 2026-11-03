@@ -4,7 +4,7 @@ import { useGame } from "@/components/game-provider";
 import { Item, type Row } from "@/components/journey";
 import type { Aim } from "@/components/picks";
 import { ListHead } from "@/components/tab-head";
-import { yearText, YEAR_0 } from "@/lib/game/clock";
+import { tenths, yearText, YEAR_0 } from "@/lib/game/clock";
 import { events } from "@/lib/game/plan";
 import { dates, target } from "@/lib/game/sends";
 import type { Sent } from "@/lib/game/types";
@@ -67,6 +67,16 @@ function bulletRows(fired: { star: string; fired: number | null; d?: number }[])
   });
 }
 
+/** A message's line at a Year, counting: how long until it lands or its soonest reply, or how long since. A window gone
+ *  by read "A reply could come, at the soonest", as though one might still be due. Playtest 2026-11-02. */
+function noteAt(r: Row, now: number | null): string {
+  if (now === null || r.at === null || r.bullet || r.name === EVERYWHERE || (r.kind !== "send" && r.kind !== "reply")) return r.note;
+  const left = r.at - now;
+  const n = `${tenths(Math.abs(left)).toFixed(1)} Years`;
+  if (r.kind === "reply") return left > 0 ? `Soonest reply in ${n}` : `No reply for ${n}`;
+  return left > 0 ? `Our message arrives in ${n}${r.range ? ", at the soonest" : ""}` : `Our message arrived ${n} ago`;
+}
+
 export function Messages() {
   const { year, save } = useGame();
   const { scale } = useSchedule();
@@ -103,11 +113,11 @@ export function Messages() {
       <ListHead left={`Messages · ${ROWS.length + ours.length}`} right="Arrives" className="mt-5" />
       <ul className="mt-1">
         {ROWS.map((r, i) => (
-          <Item key={r.key} row={r} now={year ?? 0} began={year !== null} aim={aim(i)} />
+          <Item key={r.key} row={{ ...r, note: noteAt(r, year) }} now={year ?? 0} began={year !== null} counted={year !== null && noteAt(r, year) !== r.note} aim={aim(i)} />
         ))}
         {ours.map((r) => {
           const i = list.findIndex((b) => b.key === r.key);
-          return <Item key={r.key} row={r} now={year ?? 0} began={year !== null} aim={i < 0 ? undefined : aim(i)} />;
+          return <Item key={r.key} row={{ ...r, note: noteAt(r, year) }} now={year ?? 0} began={year !== null} counted={year !== null && noteAt(r, year) !== r.note} aim={i < 0 ? undefined : aim(i)} />;
         })}
       </ul>
     </section>

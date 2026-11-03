@@ -1154,6 +1154,11 @@ export function leadsOf(felt: FeltWorld[], holes: DarkMass[] = [], seeds: Visit[
       star: "Luyten’s Star",
       what: "We messaged it",
       line: `Our 2017 and 2018 messages reached it in 2030, so a reply could come at Year ${LUYTEN.at}. It is the first of ${WINDOWS.length} stars we messaged whose window opens.`,
+      // Its window gone by, it read "a reply could come at Year 2.3" at Year 173. Playtest 2026-11-02.
+      later: {
+        year: LUYTEN.at,
+        line: `Our 2017 and 2018 messages reached it in 2030, so a reply could have come from Year ${LUYTEN.at}. None has.`,
+      },
       ly: 12.3,
       ask: "Could Luyten’s Star answer us?",
       brief: `We sent it two messages, in 2017 and 2018. A reply could reach us at Year ${LUYTEN.at}, the first window of the ${WINDOWS.length} stars we have messaged since 1983. ${PASSED.length} windows passed before Year 0, and nothing came. Our sky watch sees each star only minutes a day, so we could miss one.`,
@@ -1161,6 +1166,7 @@ export function leadsOf(felt: FeltWorld[], holes: DarkMass[] = [], seeds: Visit[
         ["Its star", "A red dwarf"],
         ["Its worlds", "Two felt, one at the warm zone’s hot edge"],
         ["Our messages", "Sent October 2017 and May 2018, arrived 2030"],
+        ["What we sent", "Prime numbers, a lesson in counting, geometry, radio and time, then 10-second pieces of music"],
         ["All we messaged", `${KNOCKS.length} messages to ${WINDOWS.length} stars, 1983 to 2018`],
         ["Windows passed", and(PASSED.map((w) => w.star))],
         ["Windows next", AHEAD.slice(0, 3).map((w) => `${w.star}, Year ${w.at}`).join(" · ")],

@@ -124,6 +124,7 @@ export function Item({
   grip,
   point,
   style,
+  counted,
 }: {
   row: Row;
   now: number;
@@ -134,6 +135,8 @@ export function Item({
   /** A build's handle for reordering, under its mark, outside its link. */
   grip?: React.ReactNode;
   style?: React.CSSProperties;
+  /** Its line counts the Years itself, so the right says only once it's done. 2026-11-02. */
+  counted?: boolean;
 }) {
   const done = over(row, now);
   const theirs = row.kind === "heard";
@@ -154,6 +157,8 @@ export function Item({
                 // The soonest a reply could come, gone by. It read "landed" after an empty window. Playtest 2026-11-01.
                 ? "passed"
                 : "landed"
+          : counted
+            ? ""
           : build
             ? span(row.at - now)
             : began

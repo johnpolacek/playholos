@@ -77,7 +77,7 @@ function whereNow(b: Beam, year: number) {
     return left <= 0 ? "arrived" : `${left < 0.1 ? "under 0.1" : tenths(left).toFixed(1)} ly to go`;
   }
   const home = b.sent + 2 * b.ly - year;
-  return home <= 0 ? "if they answered, it is here" : `if they answered: ${tenths(home).toFixed(1)} ly away`;
+  return home <= 0 ? "no answer yet" : `an answer could come in ${tenths(home).toFixed(1)} Years`;
 }
 
 /** The map on our messages: Sol, each message's star, and words for where the light in view is now. */
