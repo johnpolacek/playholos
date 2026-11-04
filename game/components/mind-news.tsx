@@ -26,7 +26,7 @@ const BEGUN = "Year 0 has begun.";
 const MOST = 6;
 
 /** What landed after Year `from`, up to `to`, as news from Earth, or "" if nothing did. */
-function newsBetween(from: number, to: number, plan: Plan | undefined, done: Record<string, number | null>, heard: Heard[], sent: Sent[]) {
+function newsBetween(from: number, to: number, plan: Plan | undefined, done: Record<string, number | null>, heard: Heard[], sent: Sent[], firstGlow?: { ranged?: number; range?: [number, number] }) {
   const within = (at: number | null | undefined): at is number => typeof at === "number" && at > from && at <= to;
   const named = new Set([...(plan?.builds ?? []), ...(plan?.later ?? []).map((o) => o.name)]);
   const items: { at: number; say: string }[] = [];
@@ -40,6 +40,9 @@ function newsBetween(from: number, to: number, plan: Plan | undefined, done: Rec
       items.push({ at, say: `${kindOf(h).toLowerCase()} reached us from ${h.star}${h.found !== undefined ? ", found in old recordings" : ""}${text}` });
     }
   }
+  // Our first warm glow, once placed. Later ones gather on Scan: there are hundreds. 2026-11-03.
+  if (firstGlow?.range && within(firstGlow.ranged))
+    items.push({ at: firstGlow.ranged!, say: `our first new warm glow, Warm glow 1, was ranged at ${firstGlow.range[0].toLocaleString("en-US")} to ${firstGlow.range[1].toLocaleString("en-US")} ly, where nothing shone before` });
   // A reply window opening on one of the stars we messaged before Year 0. 2026-11-01.
   for (const w of WINDOWS) if (within(w.at)) items.push({ at: w.at, say: `the first window for a reply from ${w.star} opened` });
   // A message lands at a Year we can name only when its star's distance is known, not a range.
@@ -73,7 +76,8 @@ export function MindNews() {
   const open = useAccess();
   const { tell, busy } = useMindNews();
   const { done } = useSchedule();
-  const { heard, known } = useLeads();
+  const { heard, known, minds } = useLeads();
+  const firstGlow = minds?.flashes[0];
   const tenth = year === null ? null : Math.floor(year * 10) / 10;
   const from = save?.told ?? 0;
   const will = save?.will;
@@ -86,10 +90,10 @@ export function MindNews() {
     // What we know must be read at this Year, so a signal isn't passed over before it loads. And the Mind finishes
     // what it is saying first.
     if (open === undefined || known !== tenth || busy) return;
-    const news = newsBetween(from, tenth, save.plan, done, heard, save.sent ?? []);
+    const news = newsBetween(from, tenth, save.plan, done, heard, save.sent ?? [], firstGlow);
     told(tenth);
     if (news) tell(news);
-  }, [save, tenth, from, dark, open, known, busy, done, heard, told, tell]);
+  }, [save, tenth, from, dark, open, known, busy, done, heard, firstGlow, told, tell]);
   return null;
 }
 

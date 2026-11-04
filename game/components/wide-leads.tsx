@@ -9,7 +9,8 @@ import { prefersReducedMotion } from "@/lib/motion";
 export function WideLeads() {
   const { leads, dials, close } = useLeads();
   const [wide, setWide] = useState(false);
-  const any = leads.some((l) => l.slug.startsWith("warm-glow-"));
+  const count = leads.filter((l) => l.slug.startsWith("warm-glow-")).length;
+  const any = count > 0;
   useEffect(() => void Object.assign(dials, { wide: wide ? 1 : 0 }), [dials, wide]);
   useEffect(() => () => void Object.assign(dials, { wide: 0 }), [dials]);
   if (!any || close || prefersReducedMotion()) return null;
@@ -20,7 +21,7 @@ export function WideLeads() {
       className="absolute right-2.5 bottom-3 inline-flex h-8 items-center gap-1.5 rounded-full border border-faint bg-paper pr-3 pl-2.5 text-xs"
     >
       <Lens closer={wide} />
-      {wide ? "Nearby Stars" : "Milky Way"}
+      {wide ? "Nearby Stars" : `Milky Way · ${count} warm glow${count > 1 ? "s" : ""}`}
     </button>
   );
 }
