@@ -2690,7 +2690,8 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         pos.setXYZ(j, v.x, v.y, v.z);
         const b = j === 0 ? 0.45 : (1 - (j - 1) / (TRAIL + 1)) ** 2;
         pulseB.setX(j, on ? b * looked[focus] * (back ? 0.7 : 1) : 0);
-        pulseK.setX(j, back ? K.lamp : K.mind);
+        // Gold along a warm glow's way, where blue read as something else on the line. 2026-11-03.
+        pulseK.setX(j, back || warmOf[focus] ? K.lamp : K.mind);
       }
       pos.needsUpdate = pulseB.needsUpdate = pulseK.needsUpdate = true;
       leads.forEach(({ at }, i) => {

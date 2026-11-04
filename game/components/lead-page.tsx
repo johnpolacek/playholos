@@ -171,10 +171,10 @@ export function LeadPage({ slug }: { slug: string }) {
         <BackBar to="/" label="All leads" />
       </div>
       <div data-m className="mt-1 flex items-start gap-2.5">
-        <span className={`mt-[4px] shrink-0 ${lead.reply ? "text-other" : "text-you"}`}>
+        <span className={`mt-[4px] shrink-0 ${lead.reply || lead.art.kind === "warm" ? "text-other" : "text-you"}`}>
           <LeadMark art={lead.art} size={18} />
         </span>
-        <h1 className="text-[19px] leading-snug font-medium">{starName(lead.star)}</h1>
+        <h1 className={`text-[19px] leading-snug font-medium ${lead.art.kind === "warm" ? "text-other" : ""}`}>{starName(lead.star)}</h1>
       </div>
       <p data-m className="mt-0.5 text-[13.5px] text-page-ink2">
         {lead.art.kind === "near" ? (
@@ -242,6 +242,14 @@ export function LeadPage({ slug }: { slug: string }) {
         )}
       </div>
 
+      {lead.art.kind === "warm" && (
+        <>
+          <h2 data-m className={`mt-5 ${HEAD}`}>What a warm glow is</h2>
+          <p data-m className="mt-1.5 text-[13.5px] leading-snug text-page-ink2">
+            A spot in the sky that turned warm, about as warm as a planet, where nothing shone before. Dust around a newborn star or two merging stars can glow like this, and it fades. So can collectors built around a star: they catch its light and must shed it as heat. That glow lasts as long as they stay.
+          </p>
+        </>
+      )}
       <h2 data-m className={`mt-5 ${HEAD}`}>What we measured</h2>
       <dl data-m className="mt-1.5 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-[13.5px] leading-snug">
         {[...lead.facts, ...ours].map(([label, value]) => (
