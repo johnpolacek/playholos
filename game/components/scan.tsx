@@ -5,15 +5,14 @@ import { Heard } from "@/components/heard";
 import { LeadList, LeadsMap } from "@/components/leads";
 import { Messages } from "@/components/messages";
 import { Review } from "@/components/review";
-import { ListHead } from "@/components/tab-head";
 import type { Dials } from "@/lib/drift";
 import { placeLeads } from "@/lib/game/places";
 import { knownQuery } from "@/lib/game/known-query";
-import { type Lead, leadsOf, lifeOf, ODDS, type Reading, readingsOf, rockLead, skyId, betelgeuseLead } from "@/lib/game/leads";
+import { type Lead, due, leadsOf, lifeOf, ODDS, type Reading, readingsOf, rockLead, skyId, betelgeuseLead } from "@/lib/game/leads";
 import { setStruck, setWatched, useSchedule } from "@/components/picks";
 import { watchedAt } from "@/lib/sim/minds";
 import { skyOf } from "@/lib/game/natural";
-import { knowStars, target, WATCHER } from "@/lib/game/sends";
+import { dates, knowStars, target, WATCHER } from "@/lib/game/sends";
 import { EMPTY } from "@/lib/game/plan";
 import { rockAt, rockOf } from "@/lib/game/rocks";
 import { gsap, prefersReducedMotion } from "@/lib/motion";
@@ -35,6 +34,8 @@ interface Leads {
   readings: Record<string, Reading[]>;
   /** Readings landed and not yet opened, by id, and signals caught and not yet opened. */
   fresh: Set<string>;
+  /** Where each lead stands, by its slug: a reading to open, something of ours on its way, or nothing to do. */
+  standing: Record<string, Standing>;
   /** The Year what we know was read at, once it has loaded. */
   known?: number;
   /** Signals our watches have caught, as they arrived. */
@@ -57,12 +58,17 @@ interface Leads {
   setStep(step: ((by: 1 | -1) => void) | null): void;
 }
 
+/** Where a lead stands. 76 leads in one list left the Will not knowing what to do, so Scan sorts them: what has news
+ *  for us, what we are waiting on, and the rest, folded. Playtest 2026-11-02. */
+export type Standing = "needs" | "waiting" | "quiet";
+
 const ScanContext = createContext<Leads>({
   leads: [],
   ids: [],
   dials: {},
   readings: {},
   fresh: new Set(),
+  standing: {},
   heard: [],
   visits: [],
   look: null,
@@ -116,7 +122,7 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
   const visits = useMemo(() => view?.visits ?? [], [view]);
   const colony = view?.colony;
   const proxima = view?.proxima;
-  const [dials] = useState<Dials>(() => ({ found: 0, grid: 0, focus: 0, close: 0 }));
+  const [dials] = useState<Dials>(() => ({ found: 0, grid: 0, focus: 0, close: 0, calm: 0 }));
   // Keyed by the stars felt, so a reading landing never rebuilds the leads the map lights.
   // Black holes found join them, after the worlds, 2026-10-26.
   const holes = view?.holes;
@@ -198,8 +204,28 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
         ...heard.filter((h) => recent(h.arrived)).map(heardId),
       ].filter((id) => !opened.has(id)),
     );
-    return { known: view?.year, leads, ids, dials, readings, fresh, heard, visits, colony, minds, look, setLook, close, setClose, step, setStep };
-  }, [view?.year, leads, felt, proxima, ids, dials, observe, tenth, seen, save?.sent, heard, visits, colony, minds, look, setLook, close, setClose, step, setStep]);
+    // What of ours is on its way to a star, or due back from it: a message until its soonest reply, a craft until its
+    // word is home.
+    const star = (name: string) => skyId(name);
+    const owed = new Set<string>();
+    for (const m of save?.sent ?? []) {
+      const t = m.to === "everywhere" ? null : target(m.to);
+      if (t && tenth !== null && tenth < dates(m.y, t.d, m.size).back) owed.add(star(t.name));
+    }
+    const went = new Set(visits.map((v) => star(v.star)));
+    for (const o of [...(plan?.lenses ?? []), ...(plan?.sentinels ?? []), ...(plan?.seeds ?? []), ...(plan?.colony ? [plan.colony] : [])])
+      if (!went.has(star(o.name))) owed.add(star(o.name));
+    const standing: Record<string, Standing> = Object.fromEntries(
+      leads.map((l) => {
+        if (readings[l.slug]?.some((r) => fresh.has(r.id))) return [l.slug, "needs"];
+        const windows = l.art.kind === "reply" ? l.art.windows.filter((w) => w.star === l.star) : [];
+        const waiting =
+          owed.has(star(l.star)) || due(l.slug, observe, tenth).length > 0 || (tenth !== null && windows.some((w) => w.at > tenth));
+        return [l.slug, waiting ? "waiting" : "quiet"];
+      }),
+    );
+    return { known: view?.year, leads, ids, dials, readings, fresh, standing, heard, visits, colony, minds, look, setLook, close, setClose, step, setStep };
+  }, [view?.year, leads, felt, proxima, ids, dials, observe, tenth, seen, save?.sent, plan, heard, visits, colony, minds, look, setLook, close, setClose, step, setStep]);
   return <ScanContext value={value}>{children}</ScanContext>;
 }
 
@@ -228,7 +254,8 @@ export function useStepTap(step: (by: 1 | -1) => void) {
 /** The map on Scan: the stars within 50 light-years, and the leads lit in turn as the camera arrives. An open lead's
  * page holds the focus, so the camera goes on to its star once all are lit. */
 export function ScanMap({ className }: { className: string }) {
-  const { leads, ids, dials, look, readings } = useLeads();
+  const { leads, ids, dials, look, readings, standing } = useLeads();
+  const quiet = useMemo(() => leads.map((l) => (standing[l.slug] === "needs" ? 0 : 1)), [leads, standing]);
   // Each lead glows by the Mind's word that something lives there, brighter as a reading raises it. 2026-10-29.
   const life = useMemo(
     () => leads.map((l) => {
@@ -237,6 +264,14 @@ export function ScanMap({ className }: { className: string }) {
     }),
     [leads, readings],
   );
+  // A warm glow's distance on the map, and which have faded, for the view over the Milky Way. 2026-11-03.
+  const notes = useMemo(
+    () => Object.fromEntries(leads.flatMap((l) => (l.range && l.slug.startsWith("warm-glow-") ? [[l.star, `${l.range[0].toLocaleString("en-US")} to ${l.range[1].toLocaleString("en-US")} ly${l.facts.some(([k]) => k === "Faded") ? ", faded" : ""}`]] : []))),
+    [leads],
+  );
+  useEffect(() => {
+    Object.assign(dials, { faded: new Set(leads.filter((l) => l.slug.startsWith("warm-glow-") && l.facts.some(([k]) => k === "Faded")).map((l) => l.star)) });
+  }, [dials, leads]);
   // The leads light once as the map opens, not again as a lead's system comes and goes.
   const lit = useRef(false);
   // A lead found after they lit lights too. Until all are lit the map holds no focus, so no Close View.
@@ -246,12 +281,14 @@ export function ScanMap({ className }: { className: string }) {
       if (lit.current) return;
       lit.current = true;
       gsap.killTweensOf(dials);
-      if (prefersReducedMotion()) return void Object.assign(dials, { grid: 1, found: count.current });
-      Object.assign(dials, { grid: 0, found: 0 });
+      if (prefersReducedMotion()) return void Object.assign(dials, { grid: 1, found: count.current, calm: 1 });
+      Object.assign(dials, { grid: 0, found: 0, calm: 0 });
       gsap
         .timeline({ delay: Math.max(0, flight - 0.6) })
         .to(dials, { grid: 1, duration: 1 }, 0)
-        .to(dials, { found: () => count.current, duration: Math.min(3, 0.4 * count.current), ease: "power1.inOut" }, 0.4);
+        .to(dials, { found: () => count.current, duration: Math.min(3, 0.4 * count.current), ease: "power1.inOut" }, 0.4)
+        // All shown first, then the quiet ones step back, so the map settles on what needs us. Playtest 2026-11-02.
+        .to(dials, { calm: 1, duration: 1.6, ease: "power2.inOut" }, "+=1.2");
     },
     [dials],
   );
@@ -263,13 +300,13 @@ export function ScanMap({ className }: { className: string }) {
   }, [dials, ids]);
   useEffect(() => () => void gsap.killTweensOf(dials), [dials]);
   return ids.length ? (
-    <LeadsMap dials={dials} ids={ids} life={life} system={look?.system} onReady={onReady} className={className} />
+    <LeadsMap dials={dials} ids={ids} life={life} quiet={quiet} notes={notes} system={look?.system} onReady={onReady} className={className} />
   ) : null;
 }
 
 /** The Scan tab: Earth's leads, and how long a message takes to reach each. Each opens its own page. */
 export function Scan() {
-  const { leads, dials, readings, fresh, heard } = useLeads();
+  const { leads, dials, readings, fresh, standing, heard } = useLeads();
   const [params, setParams] = useSearchParams();
   const close = useCallback(() => setParams({}, { replace: true }), [setParams]);
   if (!leads.length) return null;
@@ -277,8 +314,7 @@ export function Scan() {
   return (
     <>
       {heard.length > 0 && <Heard />}
-      <ListHead left={`Leads · ${leads.length}`} right="Reached in" className={heard.length ? "mt-5" : "mt-1"} />
-      <LeadList leads={leads} dials={dials} readings={readings} fresh={fresh} />
+      <LeadList leads={leads} dials={dials} readings={readings} fresh={fresh} standing={standing} headClass={heard.length ? "mt-5" : "mt-1"} />
       <Messages />
     </>
   );

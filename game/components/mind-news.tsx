@@ -8,6 +8,7 @@ import { useSchedule } from "@/components/picks";
 import { useLeads } from "@/components/scan";
 import { readBuildOffer } from "@/lib/game/build-offer";
 import { yearText, YEAR_0 } from "@/lib/game/clock";
+import { buildSlug } from "@/lib/game/plan";
 import type { Plan, Sent } from "@/lib/game/types";
 import { readOffer, target } from "@/lib/game/sends";
 import { useAccess } from "@/lib/key";
@@ -51,6 +52,18 @@ function newsBetween(from: number, to: number, plan: Plan | undefined, done: Rec
   const told = items.slice(0, MOST).map((i) => `Year ${yearText(i.at)}: ${i.say}.`);
   if (items.length > MOST) told.push(`And ${items.length - MOST} more since.`);
   return told.join(" ");
+}
+
+/** Where the news points, read back from the lines `newsBetween` writes: a build done opens its page, and a star
+ *  heard from, reached or with a window open opens its lead. So each note ends on something to do. 2026-11-02. */
+function newsLinks(news: string, leads: { star: string; slug: string }[]) {
+  const links: { to: string; label: string }[] = [];
+  for (const [, name] of news.matchAll(/our (.+?) is done\./g)) links.push({ to: `/build/${buildSlug(name)}`, label: `See ${name}` });
+  for (const [, star] of news.matchAll(/(?:reached us from|reply from|our message to) (.+?)(?:,| opened| reached)/g)) {
+    const lead = leads.find((l) => l.star === star);
+    if (lead && !links.some((k) => k.to === `/lead/${lead.slug}`)) links.push({ to: `/lead/${lead.slug}`, label: `Open ${star}` });
+  }
+  return links.slice(0, 2);
 }
 
 /** Always there: keeps our talk, and hands the Mind news as it lands, once each tenth of a Year, never twice. */
@@ -169,6 +182,7 @@ export function MindSays() {
   const { save, year, read } = useGame();
   const path = useLocation().pathname;
   const { last, words, news, busy } = useMindNews();
+  const { leads } = useLeads();
   const [away, setAway] = useState<string | null>(null);
   const root = useRef<HTMLDivElement>(null);
   const shown = year !== null && !!last && news !== null && news !== BEGUN && last !== save?.read && last !== away && path !== "/mind";
@@ -185,17 +199,24 @@ export function MindSays() {
       role="status"
       className="absolute bottom-3 left-2.5 z-20 w-[min(420px,calc(100%-20px))] rounded-xl border border-faint bg-paper/90 pt-2 pr-2 backdrop-blur-sm"
     >
-      <button onClick={() => setAway(last)} aria-label="Put away" className="absolute top-0 right-0 flex size-9 items-center justify-center text-muted hover:text-ink">
+      <button onClick={() => setAway(last)} aria-label="Put away" className="absolute top-0 right-0 z-10 flex size-9 items-center justify-center text-muted hover:text-ink">
         <svg aria-hidden width="10" height="10" viewBox="0 0 12 12">
           <path d="M1.5 1.5l9 9m0-9l-9 9" stroke="currentColor" strokeWidth="1.4" />
         </svg>
       </button>
-      <MindNote still={!busy} className="pr-6 text-[13.5px] leading-[1.45]">
+      <MindNote still={!busy} edge={false} className="pr-6 text-[13.5px] leading-[1.45]">
         <p className="mb-1 font-mono text-[10px] leading-snug tracking-[.06em] text-muted">{news}</p>
         {said(words) || "…"}
-        <Link to="/mind" onClick={() => read(last)} className="mt-1.5 block text-[12.5px] text-you hover:underline">
-          Reply ›
-        </Link>
+        <span className="mt-1.5 flex flex-wrap gap-x-4 gap-y-1 text-[12.5px]">
+          {newsLinks(news, leads).map((k) => (
+            <Link key={k.to} to={k.to} onClick={() => read(last)} className="font-medium text-you hover:underline">
+              {k.label} ›
+            </Link>
+          ))}
+          <Link to="/mind" onClick={() => read(last)} className="text-you hover:underline">
+            Reply ›
+          </Link>
+        </span>
       </MindNote>
     </div>
   );

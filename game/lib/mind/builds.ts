@@ -77,7 +77,7 @@ export function describeQueue(plan: Plan, done: Record<string, number | null>, y
   return [
     "The Will's order, in line, and where each build stands:",
     ...names.map((b) => (since(b) === undefined ? `- ${at(b)}` : `- ${at(b)} Ordered at Year ${since(b)}.`)),
-    ...back.map((b) => `- ${b}: taken back at Year ${takenAt(plan, b)}, its work kept. Ordered again, it picks up there.`),
+    ...back.map((b) => `- ${b}: paused at Year ${takenAt(plan, b)}, its work kept. Resumed, it picks up there.`),
     // Each lens sent, as reach.ts's lenses() dates it: it leaves once the Solar Lens is done, pushed by the strongest
     // beam done by then.
     ...(plan.lenses ?? []).map((o) => {

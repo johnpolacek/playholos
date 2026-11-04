@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { Begin } from "@/components/begin";
 import { useGame } from "@/components/game-provider";
 import { Menu } from "@/components/menu";
 import { useShown } from "@/components/costs";
-import { useSchedule } from "@/components/picks";
+import { usePlan, useSchedule } from "@/components/picks";
+import { Link } from "react-router";
 import { Quiet } from "@/components/quiet";
 import { announceJump, Arrived, type Snap, Specks, useJumpYear, useSnap, Warp } from "@/components/jump";
 import { tenths, yearText } from "@/lib/game/clock";
@@ -28,6 +29,7 @@ function Meter({
   sub,
   late = false,
   hint = false,
+  go,
 }: {
   label: string;
   at?: number;
@@ -36,7 +38,8 @@ function Meter({
   value: string;
   sub: string;
   late?: boolean;
-  /** As if a build pointed at were queued. */
+  /** Where its word under it leads, marked as a link. */
+  go?: string;
   hint?: boolean;
 }) {
   return (
@@ -57,10 +60,31 @@ function Meter({
         </b>
       )}
       <em className={`font-mono text-xs leading-tight font-semibold tracking-normal not-italic ${hint ? "text-you" : "text-ink"}`}>{value}</em>
-      <span className={`truncate text-[11px] leading-tight tracking-normal ${late ? "text-other" : ""}`}>{sub}</span>
+      {go ? (
+        <Link to={go} className="truncate text-[11px] leading-tight tracking-normal text-you hover:underline">
+          {sub} ›
+        </Link>
+      ) : (
+        <span className={`truncate text-[11px] leading-tight tracking-normal ${late ? "text-other" : ""}`}>{sub}</span>
+      )}
     </span>
   );
 }
+
+/** The next stop, shared so the Mind's note on the map can offer the same jump as the pill. 2026-11-02. */
+export type Ahead = { to: number; why: string | null; go(): void };
+let ahead: Ahead | null = null;
+const heed = new Set<() => void>();
+function setAhead(a: Ahead | null) {
+  ahead = a;
+  heed.forEach((f) => f());
+}
+export const useAhead = () =>
+  useSyncExternalStore(
+    (f) => (heed.add(f), () => void heed.delete(f)),
+    () => ahead,
+    () => null,
+  );
 
 /** The skip: the next Year something new happens, from the server, which says when, never what. A tap jumps there.
  *  The clock still runs at 5 minutes a Year without it. 2026-10-29. */
@@ -97,8 +121,23 @@ function Skip() {
       <Arrived from={leap.from} to={leap.to} snap={leap.snap} />
     </Quiet>
   );
+  const stale = tenth === null || next === undefined || (next !== null && next <= tenth);
+  // Shown and landed in tenths, as the Year is: a stop within the tenth we're in lands on the next tenth.
+  const to = stale || next === null ? null : Math.max(Math.ceil(next * 10 - 1e-9) / 10, tenth + 0.1);
+  const jump = () => {
+    if (to === null || tenth === null) return;
+    setLeap({ from: tenth, to, snap: snapshot() });
+    announceJump(year ?? tenth, to);
+    skipTo(to);
+  };
+  const go = useRef(jump);
+  useEffect(() => void (go.current = jump));
+  useEffect(() => {
+    setAhead(to === null ? null : { to, why, go: () => go.current() });
+    return () => setAhead(null);
+  }, [to, why]);
   // A stop behind us is stale, while the server answers for the Year we skipped to.
-  if (tenth === null || next === undefined || (next !== null && next <= tenth)) return quiet;
+  if (stale) return quiet;
   // The link vanished with no word until 2026-10-30, and players thought it broke.
   if (next === null)
     return (
@@ -109,27 +148,23 @@ function Skip() {
         {quiet}
       </>
     );
-  // Shown and landed in tenths, as the Year is: a stop within the tenth we're in lands on the next tenth.
-  const to = Math.max(Math.ceil(next * 10 - 1e-9) / 10, tenth + 0.1);
+  if (to === null) return quiet;
   return (
     <>
       {/* A pill with faint specks of light, named for what it does: "Next" read as unclear in play. 2026-11-01. */}
       <button
-        onClick={() => {
-          setLeap({ from: tenth, to, snap: snapshot() });
-          announceJump(year ?? tenth, to);
-          skipTo(to);
-        }}
+        onClick={jump}
         onPointerEnter={() => setHover(true)}
         onPointerLeave={() => setHover(false)}
         onFocus={() => setHover(true)}
         onBlur={() => setHover(false)}
-        className="relative -my-1 ml-2 inline-flex h-7 items-center rounded-full border border-you/60 bg-you/10 px-3 text-[12.5px] font-medium text-you transition-colors hover:bg-you/20"
+        // Filled, as the one move on a quiet screen: as a faint outline it read as a status. Playtest 2026-11-02.
+        className="relative -my-1 ml-2 inline-flex h-7 items-center rounded-full bg-you px-3 text-[12.5px] font-medium text-paper transition-[filter] hover:brightness-110"
         title="Jump ahead to when something new happens"
       >
-        <Specks on={hover} />
+        <Specks on={hover} tone="--paper" />
         Jump to {yearText(to)}
-        {why && <span className="ml-1.5 font-normal text-ink/70">· {why}</span>}
+        {why && <span className="ml-1.5 font-normal text-paper/75">· {why}</span>}
         <span className="ml-1">›</span>
       </button>
       {quiet}
@@ -137,8 +172,50 @@ function Skip() {
   );
 }
 
+/** Whether anything we ordered still rises, and the Year the last was done. Once nothing rises, the clock holds until
+ *  we order a build or play on, so our compute never sits idle unseen: at Year 198 it had sat idle since Year 15,
+ *  with 16 builds open. Playtest 2026-11-02. */
+export function useIdleNow() {
+  const { save, year } = useGame();
+  const { plan } = usePlan();
+  // Not until Earth's past has loaded, which sets how fast we build.
+  const { done, past } = useSchedule();
+  const names = ordered(plan);
+  const rising = year !== null && names.some((n) => done[n] == null || done[n]! > year);
+  const last = Math.max(0, ...names.flatMap((n) => (done[n] == null ? [] : [done[n]!])));
+  return { idle: year !== null && !!past && !rising, held: save?.held !== undefined, last };
+}
+
+function useIdle() {
+  const { save, hold, playOn } = useGame();
+  const { idle, held, last } = useIdleNow();
+  useEffect(() => {
+    // Not on a refuge's slow clock, where the sky's Years run on their own.
+    if (idle && !held && !save?.will && (save?.heldFor ?? -1) < last) hold(last);
+    if (held && !idle) playOn();
+  }, [idle, held, last, save?.heldFor, save?.will, hold, playOn]);
+  return { idle, held };
+}
+
+/** The clock held, as nothing is building: what to do, under the Year. */
+function Held() {
+  const { playOn } = useGame();
+  return (
+    <span className="ml-2 inline-flex items-baseline gap-2 text-[12.5px]">
+      <span className="text-ink">Paused, nothing building.</span>
+      <Link to="/build" className="text-you hover:underline">
+        Build ›
+      </Link>
+      <button onClick={playOn} className="text-muted hover:text-ink">
+        Play on
+      </button>
+    </span>
+  );
+}
+
 export function Hud() {
   const { save, year } = useGame();
+  const { idle, held } = useIdle();
   const { scale } = useSchedule();
   const { shown: plan, adding } = useShown();
   const done = useMemo(() => schedule(plan, scale), [plan, scale]);
@@ -178,7 +255,7 @@ export function Hud() {
         {save && y !== null && (
           <>
             {/* The calendar year and the pace read as noise beside the Year. Removed 2026-11-01. */}
-            <Skip />
+            {held ? <Held /> : <Skip />}
           </>
         )}
         <Begin />
@@ -204,8 +281,9 @@ export function Hud() {
           hint={hint}
           at={compute}
           value={over ? `${pct(1 + share.short)} needed` : `${pct(compute)} at work`}
-          sub={over ? `${pct(share.short)} short` : compute < 0.995 ? `${pct(1 - compute)} ${searching ? "searching" : "idle"}` : "none idle"}
+          sub={over ? `${pct(share.short)} short` : idle ? "nothing building" : compute < 0.995 ? `${pct(1 - compute)} ${searching ? "searching" : "idle"}` : "none idle"}
           late={over}
+          go={idle && !over ? "/build" : undefined}
         />
       </div>
     </header>

@@ -1206,6 +1206,12 @@ export function landed(slug: string, observe: string[] | undefined, year: number
   return (READINGS[slug] ?? []).filter((r) => observe.includes(r.needs) && year >= r.at);
 }
 
+/** Readings planned for a lead and not yet landed: what Scan waits on. 2026-11-02. */
+export function due(slug: string, observe: string[] | undefined, year: number | null): Reading[] {
+  if (year === null || !observe) return [];
+  return (READINGS[slug] ?? []).filter((r) => observe.includes(r.needs) && year < r.at);
+}
+
 /** The Mind's words on Earth's named leads now, with what any reading found, for the Mind to judge from. */
 export function describeLeads(observe: string[] | undefined, year: number | null, seen?: ProximaSeen): string {
   const lines = leadsOf([], [], [], [], undefined, seen).map((lead) => {

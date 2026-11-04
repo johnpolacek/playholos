@@ -143,17 +143,17 @@ function InPlay({ name, scale, done }: { name: string; scale: number; done: Reco
     return (
       <div className="flex flex-col">
         <p className="mt-2.5 text-[13px] leading-snug text-page-ink2">
-          Taken back at Year {yearText(back)}
+          Paused at Year {yearText(back)}
           {kept}{" "}
           {again.at == null
-            ? "Ordered again now, it would be done after Year 1,000."
-            : `Ordered again now, it would be done by Year ${yearText(again.at)}, in ${span(again.at - now)}.`}
+            ? "Resumed now, it would be done after Year 1,000."
+            : `Resumed now, it would be done by Year ${yearText(again.at)}, in ${span(again.at - now)}.`}
         </p>
         <button
           onClick={() => change(orderLater(name, now))}
           className="mt-2.5 h-11 rounded-full bg-ink text-[15px] font-medium text-paper"
         >
-          Add to Queue
+          Resume Build
         </button>
       </div>
     );
@@ -162,7 +162,7 @@ function InPlay({ name, scale, done }: { name: string; scale: number; done: Reco
   if (!ordered(plan).includes(name) || (at != null && at <= now)) return null;
   return (
     <button onClick={() => change(takeBack(name, now))} className="mt-2.5 h-11 rounded-full border border-ink text-[15px] font-medium">
-      Take back
+      Pause Build
     </button>
   );
 }

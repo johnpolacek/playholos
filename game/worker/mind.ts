@@ -1,6 +1,6 @@
 import { type AnthropicLanguageModelOptions, createAnthropic } from "@ai-sdk/anthropic";
 import { APICallError, convertToModelMessages, createUIMessageStreamResponse, streamText, type TextStreamPart, toUIMessageStream, type ToolSet, type UIMessage } from "ai";
-import { BAD_KEY, KEY_NEEDS_CREDIT, KEY_NEEDS_WORKSPACE, readMindPick, type Usage } from "@/lib/access";
+import { BAD_KEY, KEY_NEEDS_CREDIT, KEY_NEEDS_WORKSPACE, MIND_BUSY, readMindPick, type Usage } from "@/lib/access";
 import { realTime, tenths, yearText, YEAR_0, yearAt } from "@/lib/game/clock";
 import type { Will } from "@/lib/game/types";
 import { describeCharter } from "@/lib/game/charter";
@@ -218,11 +218,14 @@ export async function mind(req: Request) {
   const onError = (e: unknown) => {
     // To the Worker's logs: Anthropic's status and words, never the key or what was asked.
     console.error("Mind:", APICallError.isInstance(e) ? `${e.statusCode} ${e.message}` : String(e));
-    if (!APICallError.isInstance(e)) return "The Mind can’t answer right now.";
+    if (!APICallError.isInstance(e)) return import.meta.env.DEV ? `The Mind can’t answer: ${String(e)}` : "The Mind can’t answer right now.";
     if (e.statusCode === 401 || e.statusCode === 403) return BAD_KEY;
     if (e.statusCode === 400 && e.responseBody?.includes("anthropic-workspace-id")) return KEY_NEEDS_WORKSPACE;
     if (e.statusCode === 400 && e.responseBody?.includes("credit balance")) return KEY_NEEDS_CREDIT;
-    return "The Mind can’t answer right now.";
+    // Rate limited, overloaded, or down for a moment: asking again usually works.
+    if (e.statusCode === undefined || e.statusCode === 429 || e.statusCode >= 500) return MIND_BUSY;
+    // On the dev server, the reason itself, so a failure in play says why. 2026-11-03.
+    return import.meta.env.DEV ? `The Mind can’t answer: ${e.statusCode} ${e.message}` : "The Mind can’t answer right now.";
   };
   // What each answer used, so the Mind tab can show what the talk costs. On the dev server, what it was told too.
   const messageMetadata = ({ part }: { part: TextStreamPart<ToolSet> }) => {

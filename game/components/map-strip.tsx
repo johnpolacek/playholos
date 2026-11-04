@@ -4,7 +4,9 @@ import { useCallback, useRef, useState } from "react";
 import { BeamsMap, useBeams } from "@/components/beams";
 import { BeginOnMap } from "@/components/begin";
 import { MindSays } from "@/components/mind-news";
+import { IdleNote } from "@/components/idle-note";
 import { Through } from "@/components/through";
+import { WideLeads } from "@/components/wide-leads";
 import { Globe, Lens } from "@/components/icons";
 import { ReachMap, Ruler, useReach } from "@/components/reach";
 import { ScanMap, useLeads, useStepTap } from "@/components/scan";
@@ -83,6 +85,7 @@ export function MapStrip() {
               {leads.close ? "Pull Back" : "Close View"}
             </button>
           )}
+          <WideLeads />
         </>
       ) : built ? (
         <>
@@ -140,6 +143,7 @@ export function MapStrip() {
       {/* Reach's ruler lies along the foot, so there Begin waits at the top. */}
       <BeginOnMap className={reaching ? "top-2" : "bottom-[9%]"} />
       <MindSays />
+      <IdleNote />
       <Through />
       <button
         onClick={() => setTall(!tall)}

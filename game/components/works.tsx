@@ -125,7 +125,7 @@ export function WorksProvider({ children }: { children: React.ReactNode }) {
 function state(w: Work, year: number | null) {
   // The Cold Halo, or the Solar Swarm, taken back once built is held at its size, not undone. 2026-10-28.
   if (GROWS.includes(w.name) && w.back === null) return "Built, held at its size";
-  if (w.back !== undefined) return w.back === null ? "Taken back" : `Taken back, ${Math.floor(100 * w.back)}% built`;
+  if (w.back !== undefined) return w.back === null ? "Paused" : `Paused, ${Math.floor(100 * w.back)}% built`;
   if (!w.queued) return "Not queued";
   if (w.done === null) return "More than 1,000 Years out";
   if (year === null) return `Done by Year ${yearText(w.done)}`;

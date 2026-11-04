@@ -108,18 +108,45 @@ export function Messages() {
     },
   });
 
+  // Landed, or past its soonest reply: nothing to watch for, so folded, as Quiet leads are. Nine old sends filled Scan
+  // long after they landed. Playtest 2026-11-02.
+  const [pastOpen, setPastOpen] = useState(false);
+  const item = (r: Row) => {
+    const i = list.findIndex((b) => b.key === r.key);
+    return <Item key={r.key} row={{ ...r, note: noteAt(r, year) }} now={year ?? 0} began={year !== null} counted={year !== null && noteAt(r, year) !== r.note} aim={i < 0 ? undefined : aim(i)} />;
+  };
+  const all = [...ROWS, ...ours];
+  const gone = (r: Row) => year !== null && r.at !== null && r.at <= year;
+  const live = all.filter((r) => !gone(r));
+  const past = all.filter(gone);
+
   return (
     <section onKeyDown={(e) => e.key === "Escape" && pick(list, null)}>
-      <ListHead left={`Messages · ${ROWS.length + ours.length}`} right="Arrives" className="mt-5" />
-      <ul className="mt-1">
-        {ROWS.map((r, i) => (
-          <Item key={r.key} row={{ ...r, note: noteAt(r, year) }} now={year ?? 0} began={year !== null} counted={year !== null && noteAt(r, year) !== r.note} aim={aim(i)} />
-        ))}
-        {ours.map((r) => {
-          const i = list.findIndex((b) => b.key === r.key);
-          return <Item key={r.key} row={{ ...r, note: noteAt(r, year) }} now={year ?? 0} began={year !== null} counted={year !== null && noteAt(r, year) !== r.note} aim={i < 0 ? undefined : aim(i)} />;
-        })}
-      </ul>
+      {live.length > 0 && (
+        <>
+          <ListHead left={`Messages · ${live.length}`} right="Arrives" className="mt-5" />
+          <ul className="mt-1">{live.map(item)}</ul>
+        </>
+      )}
+      {past.length > 0 && (
+        <>
+          <button
+            onClick={() => setPastOpen(!pastOpen)}
+            aria-expanded={pastOpen}
+            className="mt-5 flex w-full items-baseline justify-between pr-5 text-left font-mono text-[10px] tracking-[.1em] text-muted uppercase hover:text-ink"
+          >
+            <span>Past messages · {past.length}</span>
+            <span className={`transition-transform duration-300 ${pastOpen ? "rotate-90" : ""}`}>›</span>
+          </button>
+          {pastOpen ? (
+            <ul className="mt-1">{past.map(item)}</ul>
+          ) : (
+            <p className="mt-1 border-t border-faint py-2.5 text-[13.5px] text-page-ink2">
+              All landed, or past their soonest reply. Nothing to watch for.
+            </p>
+          )}
+        </>
+      )}
     </section>
   );
 }

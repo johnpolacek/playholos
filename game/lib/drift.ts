@@ -78,8 +78,14 @@ export interface Dials {
   compute?: number;
   /** What doesn't fit: how many of Earth's leads are lit, one by one, from 0 to all of them. */
   found?: number;
+  /** Scan: how far the quiet leads have stepped back, from 0, all shown, to 1, a dot without a thread. 2026-11-02. */
+  calm?: number;
   /** The lead the Will is looking at, the message, or the build, counted from 1. 0 for none. */
   focus?: number;
+  /** Scan: 1 to pull back over the Milky Way and show our warm glows, where they lie, Sol among them. 2026-11-03. */
+  wide?: number;
+  /** Scan: the warm glows that have faded, by their names, drawn dim and with no way out to them. 2026-11-03. */
+  faded?: ReadonlySet<string>;
   /** Our builds: 1 to fly down to the ground at the one in view, its Close View, and 0 to come back up. On Reach, 1 to
    *  fly into the destination's system, and on Scan into the system of the lead in view. */
   close?: number;
@@ -141,6 +147,9 @@ export interface Show {
   /** For "leads": the Mind's word that something lives at each lead, by its place in `leads`, from 0 for almost no
    *  chance to 6 for almost certain, or -1 where life isn't the question. Filled in place, read each frame. 2026-10-29. */
   life?: number[];
+  /** For "leads": 1 for a lead with nothing for us to do, which steps back as the calm dial rises, 0 for one that needs
+   *  us. By its place in `leads`. Filled in place, read each frame. 2026-11-02. */
+  hush?: number[];
 
   /** For "sim": the minds a simulation drew, the place in view, light-years in the atlas frame, or none for Sol, how
    *  far out to look from, as log10 AU, and the places whose screen positions come back through onMarks. */
@@ -258,7 +267,7 @@ const BAR = { half: 5.0, angle: 28 };
 /** Thin disk scale length and height, kpc. Bland-Hawthorn & Gerhard 2016. */
 const DISK = { length: 2.6, height: 0.3 };
 
-const KINDS = ["ink", "warm", "young", "rose", "lamp", "mind", "sun", "dust", "white"] as const;
+const KINDS = ["ink", "warm", "young", "rose", "lamp", "mind", "sun", "dust", "white", "wait"] as const;
 type Kind = (typeof KINDS)[number];
 const K = Object.fromEntries(KINDS.map((k, i) => [k, i])) as Record<Kind, number>;
 
@@ -275,10 +284,12 @@ const PALETTE: { bg: string } & Record<Kind, string> = {
   dust: "18,19,20",
   // Pure white, for Sol in the simulation, so we can always find ourselves. 2026-11-02.
   white: "255,255,255",
+  // Pale blue, for a star that could answer us and has not: ours, waiting, not news. 2026-11-02.
+  wait: "159,196,209",
 };
 
 const GLOW_VERT = /* glsl */ `
-uniform vec3 uPal[9];
+uniform vec3 uPal[10];
 uniform float uFocal, uDpr, uOpacity, uMinPx, uMaxPx, uFixed, uReveal, uFlash;
 uniform vec2 uNear;
 attribute float aSize, aBright, aKind, aRank;
@@ -324,7 +335,7 @@ void main() {
 // The HYG stars, as bright as they look from wherever the camera is: each star's absolute magnitude, moved to the
 // camera's distance. 6.5, the naked eye's limit, is a faint dot.
 const STAR_VERT = /* glsl */ `
-uniform vec3 uPal[9];
+uniform vec3 uPal[10];
 uniform float uDpr, uOpacity;
 attribute float aAbs, aBV;
 varying vec3 vColor;
@@ -397,7 +408,7 @@ void main() {
 
 // Earth's land in dots, lit by the Sun, and its night lights where the Sun is down.
 const SURFACE_VERT = /* glsl */ `
-uniform vec3 uPal[9];
+uniform vec3 uPal[10];
 uniform vec3 uSun;
 uniform float uFocal, uDpr, uOpacity, uLights, uLit;
 attribute float aSize, aBright, aKind, aRank;
@@ -485,6 +496,8 @@ const leadsAt = new Map<string, THREE.Vector3 | null>();
 onPlace((id) => leadsAt.delete(id));
 /** Where a lead's star is, in light-years from Sol in the galactic frame. None for a star scripts/leads.mjs lacks,
  *  unless placed at run time, as a black hole found in play is. */
+/** A young mind's warm glow, by the name it goes by among the leads. */
+const WARM_GLOW = /^Warm glow \d+$/;
 function leadAt(id: string) {
   if (!leadsAt.has(id)) {
     const at = (LEADS as unknown as Record<string, [ra: number, dec: number, ly: number]>)[id] ?? placedLead(id);
@@ -636,6 +649,12 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
   function leadsPose(): Pose {
     let at: number | null = null;
     let [logD, az, tilt] = [7.0, 0, 0.75];
+    // Over the whole Milky Way, its middle in view's middle, far enough out for our farthest warm glow. 2026-11-03.
+    const wideLog = () => {
+      let far = 30_000;
+      for (const id of spec.leads ?? []) if (WARM_GLOW.test(id)) far = Math.max(far, leadAt(id)?.length() ?? 0);
+      return Math.min(10.3, Math.log10(3.6 * far * LY_AU));
+    };
     return (t) => {
       if (still) return [7.0, 1.1, 0.75, 0];
       if (at === null) az = 1.1 + drift(t, 600);
@@ -651,6 +670,10 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         // Out to a warm glow tens of thousands of ly off, too: capped near 2,000 ly until 2026-10-30, it never showed.
         logD += (Math.min(10.3, Math.max(6.3, Math.log10(2.5 * P.length() * LY_AU))) - logD) * k;
         tilt += (-0.3 - tilt) * k;
+      } else if (spec.mode === "leads" && dialsOf.leads?.wide) {
+        az += drift(dt, 600);
+        logD += (wideLog() - logD) * k;
+        tilt += (0.9 - tilt) * k;
       } else {
         az += drift(dt, 600);
         logD += (7.0 - logD) * k;
@@ -2457,6 +2480,9 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
 
   // ── What doesn't fit: Earth's leads among the stars within 50 light-years ──
   function leading(ids: string[]) {
+    const group = new THREE.Group();
+    stars.scene.add(group);
+    cluesGroup = group;
     const leads = ids.filter(leadAt).map((id) => ({ id, at: leadAt(id)!, n: ids.indexOf(id) }));
     const v = new THREE.Vector3();
     // Rings every ten light-years in the Galaxy's plane, as on Where things stand.
@@ -2464,51 +2490,61 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     const RINGS = [10, 20, 30, 40, 50];
     const ringAt = (r: number, i: number, n: number) =>
       new THREE.Vector3(r * Math.cos((i / n) * 2 * Math.PI), 0, r * Math.sin((i / n) * 2 * Math.PI));
-    for (const r of RINGS) stars.scene.add(loop(Array.from({ length: 128 }, (_, i) => ringAt(r, i, 128)), ringMat));
+    for (const r of RINGS) group.add(loop(Array.from({ length: 128 }, (_, i) => ringAt(r, i, 128)), ringMat));
     // Each lead: a point, a halo that breathes, a stalk down to the plane, and a thread out from Sol.
     const core = new Cloud();
     const halo = new Cloud();
     const feet = new Cloud();
     const stalk: number[] = [];
+    // A warm glow in amber, as the simulation draws a peer. 2026-11-03.
+    const warmOf = leads.map(({ id }) => WARM_GLOW.test(id));
+    const inkOf = (id: string): Kind => (id === "Luyten's Star" ? "wait" : WARM_GLOW.test(id) ? "lamp" : "mind");
     const threads = leads.map(({ id, at }) => {
-      const kind = id === "Luyten's Star" ? K.lamp : K.mind;
+      const kind = K[inkOf(id)];
       core.add(at.x, at.y, at.z, 6.5, 1, kind);
       halo.add(at.x, at.y, at.z, 26, 0, kind);
       feet.add(at.x, 0, at.z, 2.5, 0.7, K.ink);
       stalk.push(at.x, at.y, at.z, at.x, 0, at.z);
-      const mat = line(id === "Luyten's Star" ? "lamp" : "mind", 0);
+      const mat = line(inkOf(id), 0);
       const l = new THREE.Line(
         new THREE.BufferGeometry().setAttribute("position", new THREE.BufferAttribute(new Float32Array(6), 3)),
         mat,
       );
       l.frustumCulled = false;
-      stars.scene.add(l);
+      group.add(l);
       return { l, mat };
     });
     core.add(0, 0, 0, 8, 1, K.sun);
+    // Sol from far out, pure white, so we can always find ourselves, as in the simulation.
+    const solFar = new Cloud();
+    solFar.add(0, 0, 0, 7, 1, K.white);
+    solFar.add(0, 0, 0, 30, 0.45, K.white);
+    const solGlow = glow({ fixed: true });
+    group.add(solFar.points(solGlow));
     const coreGlow = glow({ fixed: true });
     const haloGlow = glow({ fixed: true });
     const feetGlow = glow({ fixed: true });
     const corePts = core.points(coreGlow);
     const haloPts = halo.points(haloGlow);
-    stars.scene.add(haloPts, corePts, feet.points(feetGlow));
+    group.add(haloPts, corePts, feet.points(feetGlow));
     const stalkMat = line("ink", 0);
     const stalks = new THREE.LineSegments(
       new THREE.BufferGeometry().setAttribute("position", new THREE.Float32BufferAttribute(stalk, 3)),
       stalkMat,
     );
     stalks.frustumCulled = false;
-    stars.scene.add(stalks);
+    group.add(stalks);
     // The lead the Will looks at, in depth: its shadow on the plane and its stalk, square to each other, and a bead at
     // each light-year along its thread. Past the region, a bead each hundred, so they stay apart. 2026-10-27.
     const beads = new Cloud();
     const paths = leads.map(({ id, at }) => {
       const from = beads.size.length;
       const ly = at.length();
-      const each = ly > 60 ? 100 : 1;
+      // A warm glow's way out, in two dozen dots: its distance is a range, so the way is dashed, not ruled. 2026-11-03.
+      const each = WARM_GLOW.test(id) ? ly / 24 : ly > 60 ? 100 : 1;
       for (let y = each; y < ly; y += each) {
         v.copy(at).multiplyScalar(y / ly);
-        beads.add(v.x, v.y, v.z, 4.5, 0, id === "Luyten's Star" ? K.lamp : K.mind);
+        beads.add(v.x, v.y, v.z, 4.5, 0, K[inkOf(id)]);
       }
       const mat = line("ink", 0);
       const legs = new THREE.LineSegments(
@@ -2519,7 +2555,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         mat,
       );
       legs.frustumCulled = false;
-      stars.scene.add(legs);
+      group.add(legs);
       return { from, to: beads.size.length, mat };
     });
     const beadGlow = glow({ fixed: true });
@@ -2536,7 +2572,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         mat,
       );
       l.frustumCulled = false;
-      stars.scene.add(l);
+      group.add(l);
       return { l, mat, to: new THREE.Vector3() };
     });
     const oursHead = new Cloud();
@@ -2547,13 +2583,13 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     }
     const oursGlow = glow({ fixed: true });
     const oursPts = oursHead.points(oursGlow);
-    stars.scene.add(oursPts);
+    group.add(oursPts);
     const unit = Array.from({ length: 128 }, (_, i) => ringAt(1, i, 128));
     const callRings = Array.from({ length: MAX_CALLS * 2 }, () => {
       const mat = line("mind", 0);
       const ring = loop(unit, mat);
       ring.frustumCulled = false;
-      stars.scene.add(ring);
+      group.add(ring);
       return { ring, mat };
     });
     // Neighbors' calls we overheard: a ring round their star, in their color, as ours round Sol. 2026-10-26.
@@ -2562,7 +2598,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       const mat = line("lamp", 0);
       const ring = loop(unit, mat);
       ring.frustumCulled = false;
-      stars.scene.add(ring);
+      group.add(ring);
       return { ring, mat };
     });
     const theirAt = (c: { ra: number; dec: number; ly: number }) => skyBasis(c.ra * 15, c.dec).radial.clone().multiplyScalar(c.ly);
@@ -2574,8 +2610,9 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     for (let j = 0; j <= TRAIL; j++) pulse.add(0, 0, 0, 10 - j * 0.8, 0, K.mind);
     const pulseGlow = glow({ fixed: true });
     const pulsePts = pulse.points(pulseGlow);
-    stars.scene.add(beadPts, pulsePts);
+    group.add(beadPts, pulsePts);
     const looked = leads.map(() => 0);
+    let wideK = 0;
     // The Mind's word on life at each lead, eased, so a reading that raises it brightens its lead over a few seconds.
     const warm = leads.map(({ n }) => spec.life?.[n] ?? -1);
     const haloSize = haloPts.geometry.attributes.aSize as THREE.BufferAttribute;
@@ -2591,7 +2628,10 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       const d = dialsOf.leads;
       const found = d?.found ?? leads.length;
       const grid = d?.grid ?? 1;
-      const focus = looking();
+      const calm = d?.calm ?? 0;
+      // By its place among the leads drawn: one with no place on the map shifted the rest, and a far lead's way out never
+      // lit. 2026-11-03.
+      const focus = leads.findIndex((l) => l.n === looking());
       const dt = Math.min(0.1, Math.max(0, clock - then));
       then = clock;
       const ease = still ? 1 : 1 - Math.exp(-dt * LOOK * 2);
@@ -2602,20 +2642,24 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         warm[i] = to < 0 || warm[i] < 0 ? to : warm[i] + (to - warm[i]) * warmEase;
       });
       const any = Math.max(0, ...looked);
+      wideK += ((d?.wide ? 1 : 0) - wideK) * ease;
+      // Far out, the rings and the nearby stars would draw into a smudge over Sol, so they go.
+      const farOut = ramp(Math.log10(stars.camera.position.length() + 1), 2.6, 3.3);
+      solGlow.uniforms.uOpacity.value = p * farOut;
       if (!dim && within50.length) {
         const cold = new Cloud();
         for (let i = 0; i < within50.length; i += 4) cold.add(within50[i], within50[i + 1], within50[i + 2], 2, 0.45, K.ink);
         dim = glow({ fixed: true });
-        stars.scene.add(cold.points(dim));
+        group.add(cold.points(dim));
       }
-      if (dim) dim.uniforms.uOpacity.value = p * grid;
-      ringMat.uniforms.uOpacity.value = 0.12 * p * grid;
+      if (dim) dim.uniforms.uOpacity.value = p * grid * (1 - farOut);
+      ringMat.uniforms.uOpacity.value = 0.12 * p * grid * (1 - farOut);
       coreGlow.uniforms.uOpacity.value = p;
       haloGlow.uniforms.uOpacity.value = p;
-      feetGlow.uniforms.uOpacity.value = p;
+      feetGlow.uniforms.uOpacity.value = p * (1 - farOut);
       beadGlow.uniforms.uOpacity.value = p;
       pulseGlow.uniforms.uOpacity.value = p;
-      stalkMat.uniforms.uOpacity.value = 0.22 * p;
+      stalkMat.uniforms.uOpacity.value = 0.22 * p * (1 - farOut);
       // Lit in turn: the thread runs out from Sol, then the star comes on with a flare, then breathes.
       const shown = leads.map((_, i) => Math.min(1, Math.max(0, found - i)));
       const coreB = corePts.geometry.attributes.aBright as THREE.BufferAttribute;
@@ -2657,20 +2701,28 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         v.copy(at).multiplyScalar(reach);
         pos.setXYZ(1, v.x, v.y, v.z);
         pos.needsUpdate = true;
-        const seen = looked[i];
+        const faded = warmOf[i] && !!d?.faded?.has(leads[i].id);
+        // Over the Milky Way, a warm glow still shining is as good as looked at, and all but the warm glows step aside.
+        const seen = Math.max(looked[i], warmOf[i] && !faded ? wideK : 0);
+        // And looking far out at any lead: the nearby ones would pile up over Sol.
+        const aside = warmOf[i] ? 0 : Math.max(wideK, any * farOut) * (1 - looked[i]);
+        // A quiet lead steps back to a dot once all are lit: its thread fades, and its halo dims. Pointing at it
+        // brings it back.
+        const stepped = calm * (spec.hush?.[leads[i].n] ?? 0) * (1 - seen);
         threads[i].mat.uniforms.uOpacity.value =
-          (0.3 + 0.4 * seen - 0.15 * any * (1 - seen)) * p * Math.min(1, shown[i] * 4);
-        paths[i].mat.uniforms.uOpacity.value = 0.3 * seen * lit * p;
+          (warmOf[i] ? 0.12 + 0.13 * seen : 0.3 + 0.4 * seen - 0.15 * any * (1 - seen)) * p * Math.min(1, shown[i] * 4) * (1 - stepped) * (1 - aside);
+        paths[i].mat.uniforms.uOpacity.value = 0.3 * looked[i] * lit * p;
         for (let b = paths[i].from; b < paths[i].to; b++) beadB.setX(b, 0.9 * seen * lit);
-        coreB.setX(i, lit);
+        coreB.setX(i, lit * (1 - aside) * (faded ? 0.5 : 1));
         const flare = 4 * lit * (1 - lit);
         const breathe = 0.35 + 0.15 * Math.sin(clock * 1.8 + i * 1.7);
         // Where life is the question, its halo grows and brightens with the Mind's word: faint for almost no chance,
         // full and bright for almost certain. 2026-10-29.
         const w = warm[i];
         const gain = w < 0 ? 1 : 0.3 + 0.25 * w;
-        haloSize.setX(i, 26 * (w < 0 ? 1 : 0.7 + 0.12 * w));
-        haloB.setX(i, lit * (breathe + (0.9 - breathe) * seen) * gain + flare + (i === focus ? 0.8 * arrive : 0));
+        // A warm glow in view grows, so its amber holds against the Milky Way's bright arms.
+        haloSize.setX(i, 26 * (w < 0 ? 1 : 0.7 + 0.12 * w) * (warmOf[i] ? 1 + 0.9 * seen : 1));
+        haloB.setX(i, (lit * (breathe + (0.9 - breathe) * seen) * gain * (1 - 0.6 * stepped) + flare + (i === focus ? 0.8 * arrive : 0)) * (1 - aside));
       });
       coreB.needsUpdate = true;
       haloB.needsUpdate = true;
@@ -3819,6 +3871,8 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
   let noise: ReturnType<typeof standing> | null = null;
   let machines: ReturnType<typeof meeting> | null = null;
   let clues: ReturnType<typeof leading> | null = null;
+  let cluesKey = "";
+  let cluesGroup: THREE.Group | null = null;
   let sent: ReturnType<typeof sending> | null = null;
   let builds: ReturnType<typeof building> | null = null;
   let drawn: ReturnType<typeof simulating> | null = null;
@@ -3907,7 +3961,9 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     // What doesn't fit and our messages: the view moves over to the middle of the path in view. Nearer than the stars
     // it stays on Earth, so a flight out to a path starts from Earth, and a flight home ends there.
     const P = (spec.mode === "leads" || spec.mode === "beams") && !still ? lookedAt() : null;
-    aimShift.lerp(P ? mid.copy(P).multiplyScalar(0.5 * LY_AU) : mid.set(0, 0, 0), 1 - Math.exp(-dt * LOOK));
+    // Measured from where the view's middle already is: far out it leans toward the Galaxy's center, and that pushed Sol
+    // off the map, past a warm glow's whole way out from it. 2026-11-03.
+    aimShift.lerp(P ? mid.copy(P).multiplyScalar(0.5 * LY_AU).sub(target) : mid.set(0, 0, 0), 1 - Math.exp(-dt * LOOK));
     shift.copy(aimShift).multiplyScalar(ramp(logD, 5.2, 6.3));
     target.add(shift);
     cam.add(shift);
@@ -4004,7 +4060,8 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     solar.on = x < 7 && sysDown < 0.6;
     // A simulation's peers lie across the Galaxy, so its stars stay on out past it, but not out among the other
     // galaxies, where all 400,000 would draw into one pixel.
-    stars.on = x < 9.4 || (spec.mode === "sim" && x < 10.8);
+    // Scan's too: its warm glows lie as far out, and this hid them, Sol and the line between when it pulled back. 2026-11-03.
+    stars.on = x < 9.4 || ((spec.mode === "sim" || spec.mode === "leads") && x < 10.8);
     const pPeople = present("people", dt);
     const pInherit = present("inherit", dt);
     const pReach = present("reach", dt);
@@ -4065,7 +4122,20 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     if (pStand > 0) (noise ??= standing())(x, pStand);
     if (pMind > 0) (machines ??= meeting())(up, pMind);
     if (pLeads > 0) {
-      if (!clues && spec.mode === "leads" && spec.leads?.length) clues = leading(spec.leads);
+      // A lead found since the map opened is drawn too: until 2026-11-03 it had to wait for a reload, so a jump that
+      // landed on a new warm glow flew out to nothing.
+      if (spec.mode === "leads" && spec.leads?.length && spec.leads.join("|") !== cluesKey) {
+        if (cluesGroup) {
+          stars.scene.remove(cluesGroup);
+          cluesGroup.traverse((o) => {
+            const m = o as THREE.Points;
+            m.geometry?.dispose();
+            (m.material as THREE.Material | undefined)?.dispose();
+          });
+        }
+        cluesKey = spec.leads.join("|");
+        clues = leading(spec.leads);
+      }
       clues?.(pLeads);
     }
     if (pBeams > 0) (sent ??= sending())(x, pBeams);
