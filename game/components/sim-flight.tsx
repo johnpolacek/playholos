@@ -8,6 +8,7 @@ export function SimFlight({
   bodies,
   target,
   light,
+  thread,
   onArrive,
   onTap,
   onTouch,
@@ -17,6 +18,8 @@ export function SimFlight({
   target: Target;
   /** Our light's shell, light-years, or null. */
   light: number | null;
+  /** A dashed line from Sol to this place, or null. */
+  thread: [number, number, number] | null;
   onArrive(id: string): void;
   onTap(id: string | null): void;
   onTouch(): void;
@@ -25,10 +28,10 @@ export function SimFlight({
   const box = useRef<HTMLDivElement>(null);
   const flight = useRef<Flight | null>(null);
   const calls = useRef({ onArrive, onTouch });
-  const wanted = useRef({ bodies, target, light });
+  const wanted = useRef({ bodies, target, light, thread });
   useEffect(() => {
     calls.current = { onArrive, onTouch };
-    wanted.current = { bodies, target, light };
+    wanted.current = { bodies, target, light, thread };
   });
 
   useEffect(() => {
@@ -44,6 +47,7 @@ export function SimFlight({
       f.bodies(wanted.current.bodies);
       f.fly(wanted.current.target);
       f.light(wanted.current.light);
+      f.thread(wanted.current.thread);
     });
     return () => {
       gone = true;
@@ -54,6 +58,7 @@ export function SimFlight({
   useEffect(() => flight.current?.bodies(bodies), [bodies]);
   useEffect(() => flight.current?.fly(target), [target]);
   useEffect(() => flight.current?.light(light), [light]);
+  useEffect(() => flight.current?.thread(thread), [thread]);
 
   // Wheel needs a listener that can stop the page scrolling.
   useEffect(() => {

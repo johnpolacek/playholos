@@ -66,6 +66,8 @@ export default function Sim() {
   const [auto, setAuto] = useState(true);
   const [arrived, setArrived] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
+  // A dashed line from Sol to the place in view, kept on from place to place until turned off.
+  const [thread, setThread] = useState(false);
   // The opening shot plays once, on first arriving: the card and labels wait for it to land, and stepping on ends it.
   const [opening, setOpening] = useState(true);
 
@@ -179,9 +181,9 @@ export default function Sim() {
   );
   const hereKey = here ? `${here.id}:${here.pos.join()}` : "";
   const target: Target = useMemo(
-    () => (here ? { id: here.id, pos: here.pos, stand: here.stand } : tab === "peers" ? GALAXY_VIEW : { id: "sol", pos: [0, 0, 0], stand: 30 }),
+    () => (here ? (thread ? beside(here) : { id: here.id, pos: here.pos, stand: here.stand }) : tab === "peers" ? GALAXY_VIEW : { id: "sol", pos: [0, 0, 0], stand: 30 }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [hereKey, tab],
+    [hereKey, tab, thread],
   );
   // Held at a place for a while, then on to the next nearest.
   useEffect(() => {
@@ -408,7 +410,8 @@ export default function Sim() {
                 bodies={bodies}
                 target={target}
                 light={tab === "peers" ? lightAt(years, TODAY) : null}
-                onArrive={setArrived}
+                thread={thread && here ? here.pos : null}
+                onArrive={(id) => setArrived(id.replace(/:beside$/, ""))}
                 onTap={onTap}
                 onTouch={() => setAuto(false)}
               />
@@ -546,7 +549,23 @@ export default function Sim() {
                 <p data-rise className="mt-1 text-[14px] leading-snug text-ink/85">
                   {here ? here.words : drawn ? emptyOf(tab).words : ""}
                 </p>
-                {here && <p className="mt-1.5 font-mono text-[10.5px] text-muted">Tap it again to read what we know.</p>}
+                {here && (
+                  <div className="mt-2 flex items-center justify-between gap-2">
+                    <p className="font-mono text-[10.5px] text-muted">Tap it again to read what we know.</p>
+                    <button
+                      aria-pressed={thread}
+                      className={`flex shrink-0 items-center gap-1.5 rounded-full border px-2.5 py-0.5 font-mono text-[11px] ${thread ? "border-ink/60 text-ink" : "border-faint text-muted hover:text-ink"}`}
+                      onClick={() => setThread((t) => !t)}
+                    >
+                      <svg width="14" height="8" viewBox="0 0 14 8" aria-hidden>
+                        <circle cx="1.5" cy="6.5" r="1.5" fill="currentColor" />
+                        <path d="M3 5.5 11 1.5" stroke="currentColor" strokeDasharray="2 2" />
+                        <circle cx="12.5" cy="1" r="1" fill="currentColor" />
+                      </svg>
+                      Line to Sol
+                    </button>
+                  </div>
+                )}
                 {tab === "peers" && drawn && drawn.minds.peers.length > 0 && (
                   <Time
                     years={years}
@@ -870,5 +889,20 @@ function readOf(p: Place): Pickable {
     title: p.title,
     real: star ? [p.words] : ["No catalog reaches it. The dials placed it among the Galaxy’s stars."],
     drawn: star ? ["Nothing. This star is as we know it."] : [p.words],
+  };
+}
+
+/** With the line to Sol on, the view stands off to the side, far enough back that Sol and the place both show. */
+function beside(p: Place): Target {
+  const [x, y, z] = p.pos;
+  // Across the line from Sol, tipped up a little: the cross of the place's direction with straight up.
+  const side = Math.hypot(z, x) > 1e-6 ? [-z, 0, x] : [1, 0, 0];
+  const k = Math.hypot(side[0], side[2]) || 1;
+  return {
+    id: `${p.id}:beside`,
+    mark: p.id,
+    pos: [x / 2, y / 2, z / 2],
+    stand: Math.max(p.stand, p.d * 1.25),
+    dir: [side[0] / k, 0.35, side[2] / k],
   };
 }
