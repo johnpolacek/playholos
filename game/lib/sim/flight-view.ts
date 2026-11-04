@@ -477,11 +477,13 @@ export function mountFlight(
   }
 
   // The line from Sol to the place in view, cut where it passes behind the camera, its distance at its middle.
-  let threaded = false;
+  // It fades in and out rather than snapping: `shown` eases toward 1 while there is a place to draw it to.
+  let threaded = false, shown = 0;
   let end: Vec | null = null;
   const va = new THREE.Vector3(), vb = new THREE.Vector3();
   function thread(W: number, H: number) {
-    if (!threaded || !leg || !end) return;
+    shown += ((threaded ? 1 : 0) - shown) * 0.06;
+    if (shown < 0.01 || !end) return;
     va.set(0, 0, 0).applyMatrix4(camera.matrixWorldInverse);
     vb.set(...end).applyMatrix4(camera.matrixWorldInverse);
     const NEAR = -0.02;
@@ -493,7 +495,7 @@ export function mountFlight(
       return [(p.x * 0.5 + 0.5) * W, (-p.y * 0.5 + 0.5) * H] as const;
     };
     const [ax, ay] = toScreen(va), [bx, by] = toScreen(vb);
-    g2.globalAlpha = 0.8;
+    g2.globalAlpha = 0.8 * shown;
     g2.strokeStyle = "#ffffff";
     g2.lineWidth = 1.2;
     g2.setLineDash([5, 5]);
@@ -509,11 +511,12 @@ export function mountFlight(
     g2.font = `11px ${mono}`;
     g2.textAlign = "center";
     g2.textBaseline = "bottom";
-    g2.globalAlpha = 1;
+    g2.globalAlpha = shown;
     g2.fillStyle = "#ffffff";
     g2.shadowColor = "#000";
     g2.shadowBlur = 6;
     g2.fillText(words, mx, my - 6);
+    g2.globalAlpha = 1;
     g2.shadowBlur = 0;
   }
 
@@ -641,7 +644,7 @@ export function mountFlight(
     },
     thread(to) {
       threaded = !!to;
-      end = to;
+      if (to) end = to;
     },
     light(ly) {
       shell.visible = ly !== null && ly > 0;
