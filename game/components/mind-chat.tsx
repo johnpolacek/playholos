@@ -48,6 +48,7 @@ const transport = new DefaultChatTransport({
       later: save?.plan?.later ?? [],
       gifts: save?.plan?.gifts ?? [],
       lenses: save?.plan?.lenses ?? [],
+      closeReads: save?.plan?.closeReads ?? [],
       sentinels: save?.plan?.sentinels ?? [],
       strikes: save?.plan?.strikes ?? [],
       seeds: save?.plan?.seeds ?? [],

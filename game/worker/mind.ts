@@ -8,7 +8,7 @@ import { describeLeads } from "@/lib/game/leads";
 import { proximaSeen } from "@/lib/sim/proxima";
 import { kt, matterAt, schedule } from "@/lib/game/plan";
 import { kitOf } from "@/lib/game/reach";
-import { readGifts, readLater, readColony, readLenses, readObserve, readSentinels, readSeeds, readQueue, readStops, readWill, readStrikes } from "./orders";
+import { readGifts, readLater, readColony, readCloseReads, readLenses, readObserve, readSentinels, readSeeds, readQueue, readStops, readWill, readStrikes } from "./orders";
 import { describeBuilds, describeOffers, describeQueue, describeRock } from "@/lib/mind/builds";
 import { FOUND, rockOf } from "@/lib/game/rocks";
 import { describeSky } from "@/lib/game/natural";
@@ -101,6 +101,7 @@ export async function mind(req: Request) {
     stops,
     gifts,
     lenses,
+    closeReads,
     sentinels,
     seeds,
     colony,
@@ -120,6 +121,7 @@ export async function mind(req: Request) {
     stops?: unknown;
     gifts?: unknown;
     lenses?: unknown;
+    closeReads?: unknown;
     sentinels?: unknown;
     seeds?: unknown;
     colony?: unknown;
@@ -140,7 +142,7 @@ export async function mind(req: Request) {
   // Where this Earth's road to Year 0 left the base kit, read beside the kit it changes.
   const road = world ? roadOf(pastOf(world)) : "";
   // Our order, dated as Build dates it with this game's compute.
-  const plan = { builds: queue, observe: readObserve(observe), later: orders, stops: readStops(stops), gifts: readGifts(gifts), lenses: readLenses(lenses), sentinels: readSentinels(sentinels), seeds: readSeeds(seeds), colony: readColony(colony), strikes: readStrikes(strikes) };
+  const plan = { builds: queue, observe: readObserve(observe), later: orders, stops: readStops(stops), gifts: readGifts(gifts), lenses: readLenses(lenses), closeReads: readCloseReads(closeReads), sentinels: readSentinels(sentinels), seeds: readSeeds(seeds), colony: readColony(colony), strikes: readStrikes(strikes) };
   const scale = Number(world?.earth.compute) || 1;
   // Strikes landed by now cut our thought from when each landed. 2026-10-28.
   const at = yearAt(began, Date.now(), away);

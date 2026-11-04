@@ -52,6 +52,8 @@ export interface Kit {
   knocks?: number[];
   /** Our messages aimed at peers' warm glows, for their answers. 2026-10-31. */
   aimed?: Aimed[];
+  /** Our Close Readings of warm glows. 2026-11-03. */
+  closeReads?: readonly { name: string; y: number }[];
   /** Our Relay Search, built once the Close Look is: when, and its Years each AU out. 2026-10-30. */
   relaySearch?: { built: number; perAU: number } | null;
   asteroidTour?: number | null;
@@ -207,7 +209,7 @@ export function iscoClock(spin: number) {
 export function earthKnows(
   world: World,
   year: number,
-  { telescope = null, mirror = null, halo = null, mapper = null, hyper = null, lenses = [], sentinels = [], seeds = [], colony = null, sails = null, probe = null, warmWatch = null, haloArray = null, moonSearch = null, asteroidTour = null, closeLook = null, relaySearch = null, craft = [], knocks = [], aimed = [] }: Kit = {},
+  { telescope = null, mirror = null, halo = null, mapper = null, hyper = null, lenses = [], sentinels = [], seeds = [], colony = null, sails = null, probe = null, warmWatch = null, closeReads = [], haloArray = null, moonSearch = null, asteroidTour = null, closeLook = null, relaySearch = null, craft = [], knocks = [], aimed = [] }: Kit = {},
 ): EarthView {
   const shown = (id: string) => world.stars[id]?.shown ?? id;
   // Earth's finds at Year 0: every world whose tug shows by 2040. Measured, not understood. Its star is in the catalogs.
@@ -309,7 +311,7 @@ export function earthKnows(
   const firstSeed = builds.length ? Math.min(...builds) : null;
   // Our craft in other systems, for finding minds there: sentinels and seed probes stay, and a sentinel can go to a cold
   // glow's star, named as Scan names it. Until 2026-10-31 this list was never filled, so no game could find a sleeper.
-  const kit0 = { telescope, warmWatch, halo, haloArray, moonSearch, asteroidTour, closeLook, relaySearch, firstSeed, knocks };
+  const kit0 = { telescope, warmWatch, halo, haloArray, moonSearch, asteroidTour, closeLook, relaySearch, firstSeed, knocks, closeReads };
   const glows = mindsSeen(world, kit0, year).glows;
   const placeOf = (star: string): [number, number, number] | null => {
     const t = targets.find((x) => x.name === star);
@@ -574,7 +576,15 @@ function describeMinds(m: MindsSeen, one: (x: number) => string): string {
             ? `Our Infrared Telescope ranged it at Year ${yearText(f.ranged!)}, by its reddening and the star behind it: roughly ${f.range[0].toLocaleString("en-US")} to ${f.range[1].toLocaleString("en-US")} ly, too far for parallax to say more. `
             : `Its distance isn't measured: too far for parallax, and our Infrared Telescope hasn't studied it while it shone. `) +
           `A glow like this fits a young star wrapped in dust, ` +
-          `the dusty wreck of two stars merging, or something building around a star and catching its light. Natural glows fade: FU Orionis, the eruption best measured, has lost about 1% of its light a Year since 1936. So whether it fades is what tells them apart so far.`).join("\n"),
+          `the dusty wreck of two stars merging, or something building around a star and catching its light. Natural glows fade: FU Orionis, the eruption best measured, has lost about 1% of its light a Year since 1936. So whether it fades is one thing that tells them apart.` +
+          (f.read?.saw === "smooth"
+            ? ` Our Close Reading finished at Year ${yearText(f.read.at)}: smooth heat, no dust bump at 10 microns. Very likely built, by whom we can't say.`
+            : f.read?.saw === "dust"
+              ? ` Our Close Reading finished at Year ${yearText(f.read.at)}: a dust bump at 10 microns. It is natural, ${f.read.kind === "merger" ? "two stars merging" : "a young star's eruption"}.`
+              : f.read?.saw === "gone"
+                ? ` Our Close Reading couldn't finish: it faded first.`
+                : "")).join("\n") +
+        `\nWhile a warm glow shines, the Will can order a Close Reading from its page: 3 Years of our Infrared Telescope, one glow at a time. Dust shows a bump near 10 microns, and plain heat from something built doesn't.`,
     );
   if (m.glows.length)
     out.push(

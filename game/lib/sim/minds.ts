@@ -2,6 +2,7 @@
 // ways, settled 2026-10-29 in HOLOS_GAME_CONCEPT.md: a peer's warm flash, an awake old mind's cold glow, the watcher by
 // where it sits, and a sleeping old mind only up close. Earth learns where and when, never who.
 import catalog from "../../data/works.json" with { type: "json" };
+import { stream } from "../game/rocks.ts";
 import type { OldMind, Peer, World } from "./types.ts";
 
 const PC_LY = 3.2616;
@@ -21,6 +22,8 @@ export interface MindKit {
   moonSearch?: number | null;
   /** The asteroid tour: the Year its probe reaches the first Earth co-orbital asteroid. It maps each in turn. */
   asteroidTour?: number | null;
+  /** Our Close Readings of warm glows, each by Scan's name and the Year we ordered it. 2026-11-03. */
+  closeReads?: readonly { name: string; y: number }[];
   /** The Years we knocked on the watcher, once found. 2026-10-31. */
   knocks?: number[];
   /** The Year our Close Look is built: a small craft that flies to the watcher once we know where it sits. */
@@ -43,6 +46,8 @@ export interface FlashSeen {
   /** Its rough distance, nearest and farthest, in light-years, once our Infrared Telescope has studied it, and when. */
   range?: [number, number];
   ranged?: number;
+  /** What a Close Reading of its light saw, once done: plain heat, dust and what made it, or it faded first. */
+  read?: { at: number; saw: "smooth" | "dust" | "gone"; kind?: "eruption" | "merger" };
 }
 
 /** A cold far-infrared glow beside a star, steady as nothing young is. */
@@ -141,8 +146,56 @@ export function skyOf([ax, ay, az]: readonly [number, number, number]) {
   return { ra: +((((Math.atan2(y, x) * 180) / Math.PI + 360) % 360) / 15).toFixed(4), dec: +((Math.asin(z / r) * 180) / Math.PI).toFixed(3) };
 }
 
+/** Anything that can glow warm on our Warm Sky Watch. */
+export type GlowSource = Pick<Peer, "id" | "pos" | "d" | "flash">;
+
+/** A natural warm glow on Scan: dust our Warm Sky Watch can't set aside by itself, as it does the mergers it knows.
+ *  Settled 2026-11-03, so a Close Reading can disappoint. */
+export interface NaturalGlow extends GlowSource {
+  kind: "eruption" | "merger";
+}
+
+/** About two natural glows for every mind's: one each 65 Years to a peer's 130, a sample, so the first is more likely
+ *  dust, as a glow's odds say. Most fade within decades. FU Orionis has dimmed about 1.2% a Year, but some of its class
+ *  held unchanged over 15 years (Kóspál et al. 2004), so about 3 in 10 hold 30 to 150 Years before they go. Past that,
+ *  none, which is why three centuries without fading says so much. */
+const NATURAL_EVERY = 65;
+const NATURAL_SPAN = 110_000;
+const naturalBySeed = new Map<number, NaturalGlow[]>();
+export function naturalGlows(world: World): NaturalGlow[] {
+  const peers = world.minds?.peers ?? [];
+  if (!peers.length) return [];
+  let out = naturalBySeed.get(world.seed);
+  if (out) return out;
+  const r = stream(world.seed * 11 + 5);
+  out = [];
+  for (let at = -150 - Math.log(1 - r()) * NATURAL_EVERY, i = 0; at < NATURAL_SPAN; at += -Math.log(1 - r()) * NATURAL_EVERY, i++) {
+    // Across the Galaxy as peers are: near one, a little way off.
+    const near = peers[Math.floor(r() * peers.length)].pos;
+    const pos = near.map((c) => Math.round((c + (r() - 0.5) * 3000) * 10) / 10) as Peer["pos"];
+    const steady = r() < 0.3;
+    const lasts = steady ? 30 + r() * 120 : 6 + r() * 19;
+    const kind = !steady && r() < 0.5 ? "merger" : "eruption";
+    out.push({ id: `natural-${i}`, pos, d: Math.round(Math.hypot(...pos) * 10) / 10, flash: [Math.round(at * 10) / 10, Math.round((at + lasts) * 10) / 10], kind });
+  }
+  naturalBySeed.set(world.seed, out);
+  return out;
+}
+
+/** Years our Infrared Telescope takes on a Close Reading of one warm glow's light: faint, and split across its colors,
+ *  as JWST's MIRI did for Project Hephaistos's candidates. A sample. */
+export const READ_YEARS = 3;
+
+/** Every warm glow seen by Year `year`, minds' and nature's together, in the order seen: Warm glow 1 is the first. */
+export function glowsFound(world: World, kit: MindKit, year: number) {
+  return [...(world.minds?.peers ?? []), ...naturalGlows(world)]
+    .map((src) => ({ src, f: flashOf(src, kit.warmWatch, year, kit.telescope ?? null) }))
+    .filter((x): x is { src: Peer | NaturalGlow; f: FlashSeen } => x.f !== null)
+    .sort((a, b) => a.f.seen - b.f.seen);
+}
+
 /** A peer's flash is seen at the watch's first look once both have begun, if the flash still shines then. */
-export function flashOf(p: Peer, watch: number | null | undefined, year: number, telescope: number | null = null): FlashSeen | null {
+export function flashOf(p: GlowSource, watch: number | null | undefined, year: number, telescope: number | null = null): FlashSeen | null {
   if (watch === null || watch === undefined) return null;
   const [rises, fades] = p.flash;
   const from = Math.max(rises, watch);
@@ -163,7 +216,7 @@ export function flashOf(p: Peer, watch: number | null | undefined, year: number,
 export const RANGE_YEARS = 2;
 /** A rough distance: centered off the truth by up to a fifth, a fixed draw for each peer, and a third wide either way,
  *  so it always holds the truth. Each end to two figures, outward, so a near peer's range still holds it. */
-export function rangeOf(p: Peer): [number, number] {
+export function rangeOf(p: GlowSource): [number, number] {
   let h = 0;
   for (const c of p.id + p.pos.join()) h = (h * 31 + c.charCodeAt(0)) >>> 0;
   const center = p.d * (1 + 0.4 * ((h % 1000) / 1000 - 0.5));
@@ -277,7 +330,14 @@ export function mindsSeen(world: World, kit: MindKit, year: number): MindsSeen {
   if (!m) return { flashes: [], glows: [], watcher: null, sleepers: [] };
   const bySeen = <T extends { seen: number }>(xs: (T | null)[]) => xs.filter((x): x is T => x !== null).sort((a, b) => a.seen - b.seen);
   return {
-    flashes: bySeen(m.peers.map((p) => flashOf(p, kit.warmWatch, year, kit.telescope ?? null))),
+    flashes: glowsFound(world, kit, year).map(({ src, f }, i) => {
+      // What a Close Reading saw, only once it is done: until then nothing here tells nature from a mind.
+      const asked = kit.closeReads?.find((o) => o.name === `Warm glow ${i + 1}`);
+      if (!asked || !f.range || asked.y + READ_YEARS > year) return f;
+      const at = Math.round((asked.y + READ_YEARS) * 10) / 10;
+      const saw = src.flash[1] < at ? ("gone" as const) : "kind" in src ? ("dust" as const) : ("smooth" as const);
+      return { ...f, read: { at, saw, ...(saw === "dust" ? { kind: (src as NaturalGlow).kind } : {}) } };
+    }),
     glows: bySeen(m.old.map((o) => coldGlowOf(o, kit.halo, year, kit.haloArray ?? null, kit.craft))),
     watcher: watcherOf(world, kit, year),
     sleepers: bySeen(m.old.map((o) => sleeperOf(o, kit.craft, year))),

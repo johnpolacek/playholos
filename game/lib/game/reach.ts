@@ -274,6 +274,7 @@ export function kitOf(plan: Plan, scale: number) {
     halo: done["Halo Survey"] ?? null,
     haloArray: done["Halo Array"] ?? null,
     warmWatch: done["Warm Sky Watch"] ?? null,
+    closeReads: plan.closeReads ?? [],
     moonSearch: done["Moon Search"] ?? null,
     closeLook: done["Close Look"] ?? null,
     // Our Relay Search flies as a lens does, by the strongest beam done when it is built. 2026-10-30.

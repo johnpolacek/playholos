@@ -308,7 +308,7 @@ export function LeadList({
     const isNew = !!read && !!fresh?.has(read.id);
     // A warm glow is gold, on the list as on the map: our hottest kind of lead. Dimmer once faded. 2026-11-03.
     const warm = l.art.kind === "warm";
-    const faded = warm && l.facts.some(([k]) => k === "Faded");
+    const faded = warm && l.facts.some(([k, v]) => k === "Faded" || (k === "Its light" && v.startsWith("Dust")));
     return (
       <Face
         mark={<LeadMark art={l.art} />}

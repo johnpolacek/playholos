@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router";
 import { useEffect, useRef } from "react";
 import { useGame } from "@/components/game-provider";
 import { BackBar } from "@/components/back-bar";
+import { CloseReading } from "@/components/close-reading";
 import { LeadArt } from "@/components/lead-art";
 import { SystemArt } from "@/components/system-art";
 import { LeadMark } from "@/components/marks";
@@ -244,6 +245,7 @@ export function LeadPage({ slug }: { slug: string }) {
 
       {lead.art.kind === "warm" && (
         <>
+          <CloseReading lead={lead} />
           <h2 data-m className={`mt-5 ${HEAD}`}>What a warm glow is</h2>
           <p data-m className="mt-1.5 text-[13.5px] leading-snug text-page-ink2">
             A spot in the sky that turned warm, about as warm as a planet, where nothing shone before. Dust around a newborn star or two merging stars can glow like this, and it fades. So can collectors built around a star: they catch its light and must shed it as heat. That glow lasts as long as they stay.

@@ -152,7 +152,7 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
     rockKey,
     `betelgeuse ${blown}`,
     ...kept.map((k) => `kept ${k}`), ...(felt ?? []).map((f) => f.star), ...(holes ?? []).map((h) => h.name), ...seeds.map((v) => `seed ${v.star}`),
-    ...(minds ? [JSON.stringify([minds.flashes.map((f) => [f.range ?? f.seen, f.faded]), minds.glows.length, minds.sleepers.length, minds.watcher?.seen])] : []),
+    ...(minds ? [JSON.stringify([minds.flashes.map((f) => [f.range ?? f.seen, f.faded, f.read?.at]), minds.glows.length, minds.sleepers.length, minds.watcher?.seen])] : []),
     // What ground telescopes saw of Proxima b, 2026-10-31.
     view?.proximaSeen ? `proxima ${view.proximaSeen.albedo}` : "",
   ].join("|");
@@ -219,7 +219,7 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
     const standing: Record<string, Standing> = Object.fromEntries(
       leads.map((l) => {
         if (readings[l.slug]?.some((r) => fresh.has(r.id))) return [l.slug, "needs"];
-        if (l.slug.startsWith("warm-glow-") && !l.facts.some(([k]) => k === "Faded")) return [l.slug, "watching"];
+        if (l.slug.startsWith("warm-glow-") && !l.facts.some(([k, v]) => k === "Faded" || (k === "Its light" && v.startsWith("Dust")))) return [l.slug, "watching"];
         const windows = l.art.kind === "reply" ? l.art.windows.filter((w) => w.star === l.star) : [];
         const waiting =
           owed.has(star(l.star)) || due(l.slug, observe, tenth).length > 0 || (tenth !== null && windows.some((w) => w.at > tenth));
@@ -272,7 +272,7 @@ export function ScanMap({ className }: { className: string }) {
     [leads],
   );
   useEffect(() => {
-    Object.assign(dials, { faded: new Set(leads.filter((l) => l.slug.startsWith("warm-glow-") && l.facts.some(([k]) => k === "Faded")).map((l) => l.star)) });
+    Object.assign(dials, { faded: new Set(leads.filter((l) => l.slug.startsWith("warm-glow-") && l.facts.some(([k, v]) => k === "Faded" || (k === "Its light" && v.startsWith("Dust")))).map((l) => l.star)) });
   }, [dials, leads]);
   // The leads light once as the map opens, not again as a lead's system comes and goes.
   const lit = useRef(false);

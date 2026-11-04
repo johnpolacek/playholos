@@ -51,6 +51,7 @@ export function readLenses(l: unknown): Ordered[] {
     .slice(0, 16);
 }
 export const readSentinels = readLenses;
+export const readCloseReads = readLenses;
 export const readSeeds = readLenses;
 export const readStrikes = readLenses;
 
