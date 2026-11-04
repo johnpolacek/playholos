@@ -30,6 +30,11 @@ export interface Save {
   told?: number;
   /** The Mind's latest words we have read, by message id, so the Mind tab marks what we haven't. 2026-10-31. */
   read?: string;
+  /** Epoch ms the clock stopped at, while it waits: once the last build is done and nothing rises, it holds until we
+   *  order one or play on. 2026-11-02. */
+  held?: number;
+  /** The Year of the last build done that the clock has held for, so playing on never holds for it again. */
+  heldFor?: number;
   /** What we have sent, in the order sent. The list only grows: a stop is marked, never removed. Since 2026-10-26. */
   sent?: Sent[];
   /** The Will, sent by the Mind Link to live at our Mind at a hole or a star. Since 2026-10-26. */

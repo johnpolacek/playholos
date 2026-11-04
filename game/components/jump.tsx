@@ -179,11 +179,16 @@ export function Arrived({ from, to, snap }: { from: number; to: number; snap: Sn
   }, [plan, done, leads, readings, heard, snap, from, to]);
 
   // The map turns to the first new lead. 2026-11-01.
-  const first = items.find((x) => x.key.startsWith("lead:"));
+  // A new warm glow first: the map pulls back across the Galaxy to show it, and comes home on Go on. 2026-11-03.
+  const first = items.find((x) => x.key.startsWith("lead:warm-glow-")) ?? items.find((x) => x.key.startsWith("lead:"));
   useEffect(() => {
     if (!first) return;
     const i = leads.findIndex((l) => `lead:${l.slug}` === first.key);
-    if (i >= 0) Object.assign(dials, { focus: i + 1 });
+    if (i < 0) return;
+    Object.assign(dials, { focus: i + 1 });
+    return () => {
+      if (dials.focus === i + 1) Object.assign(dials, { focus: 0 });
+    };
   }, [first, leads, dials]);
 
   return (
@@ -215,7 +220,8 @@ export function Arrived({ from, to, snap }: { from: number; to: number; snap: Sn
 /** The Jump button's hover: a few faint specks drifting in to its edge. Begin's sparks, quieter, since this button sits
  *  in the top bar all game long and Begin's rush overpowered it. 2026-11-01. Off when motion is reduced. */
 const SPILL = 14;
-export function Specks({ on }: { on: boolean }) {
+/** `tone` is the color variable the specks take: on a filled pill, the paper's. */
+export function Specks({ on, tone = "--you" }: { on: boolean; tone?: string }) {
   const canvas = useRef<HTMLCanvasElement>(null);
   const live = useRef(on);
   const running = useRef(false);
@@ -226,7 +232,7 @@ export function Specks({ on }: { on: boolean }) {
     const ctx = el?.getContext("2d");
     if (!el || !ctx) return;
     running.current = true;
-    const color = getComputedStyle(el).getPropertyValue("--you").trim() || "#5bb8d6";
+    const color = getComputedStyle(el).getPropertyValue(tone).trim() || "#5bb8d6";
     const dpr = window.devicePixelRatio || 1;
     const w = el.offsetWidth;
     const h = el.offsetHeight;
@@ -267,7 +273,7 @@ export function Specks({ on }: { on: boolean }) {
       }
     };
     requestAnimationFrame(tick);
-  }, [on]);
+  }, [on, tone]);
   useEffect(() => () => void (live.current = false), []);
   return <canvas ref={canvas} aria-hidden style={{ inset: -SPILL }} className="pointer-events-none absolute h-[calc(100%+28px)] w-[calc(100%+28px)]" />;
 }

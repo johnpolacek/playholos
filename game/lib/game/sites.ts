@@ -619,7 +619,7 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
       have: "The Cold Annex at L2, 1,200 GW of chips at 77 K behind one shade.",
       where: "From L2 outward, along Earth’s orbit round the Sun, each part behind its own small shade.",
       why: "More chips at 77 K think more, and asteroid rock is plenty. Doubling, it grows as any mind grows. Its heat glows grey in the far infrared, so past a size a watch like our Halo Survey finds it, as ours finds old minds’.",
-      takes: "The annex’s want, then rock: it doubles every 10 Years until we take it back.",
+      takes: "The annex’s want, then rock: it doubles every 10 Years until we pause it.",
       before: "In 2026 Garrett read the sky’s far-infrared limits as limits on minds computing cold. Below about 50 K our chips gain little more, so 77 K is where ours run.",
     },
   },

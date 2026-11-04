@@ -8,7 +8,7 @@ import { Check, Cross } from "@/components/icons";
 import { MindNote } from "@/components/mind-note";
 import { MindThinking, useThinking } from "@/components/mind-thinking";
 import { SendCard } from "@/components/send-card";
-import { BAD_KEY, costOf, type Effort, EFFORTS, KEY_NEEDS_CREDIT, KEY_NEEDS_WORKSPACE, MIND_MODELS, type MindModel, readMindPick, type Usage } from "@/lib/access";
+import { BAD_KEY, costOf, type Effort, EFFORTS, KEY_NEEDS_CREDIT, KEY_NEEDS_WORKSPACE, MIND_BUSY, MIND_MODELS, MIND_UNREACHED, type MindModel, readMindPick, type Usage } from "@/lib/access";
 import { readBuildOffer } from "@/lib/game/build-offer";
 import { buildNamed } from "@/lib/game/plan";
 import { NEWS } from "@/lib/mind/news";
@@ -85,13 +85,37 @@ function useMind() {
   return { ...helpers, busy, lastAnswer };
 }
 
+/** What to show for a failed answer: the server's words when they are ours, and a lost link as one. Every failure read
+ *  "The Mind can’t answer right now." until 2026-11-03, so none said why. */
+function failure(error: Error) {
+  if (error instanceof TypeError) return MIND_UNREACHED;
+  if ([BAD_KEY, KEY_NEEDS_WORKSPACE, KEY_NEEDS_CREDIT, MIND_BUSY].includes(error.message) || error.message.startsWith("The Mind can’t answer"))
+    return error.message;
+  return "The Mind can’t answer right now.";
+}
+
+/** A failure worth asking again once, on its own, a few seconds on. */
+const RETRY_MS = 4000;
+const retries = (error: Error) => [MIND_BUSY, MIND_UNREACHED].includes(failure(error));
+
 /** Keeps our talk in the save, from one place always there, so news told on any tab is kept. An answer from the
  *  Mind, on any tab, also marks Begin's Mind step done. */
 export function useKeepTalk() {
   const { save, did, setTalk } = useGame();
-  const { messages, busy, lastAnswer } = useMind();
+  const { messages, busy, lastAnswer, error, regenerate } = useMind();
   const seed = save?.seed;
   const kept = save?.talk;
+  // Asks again once for each question that fails for a moment. Twice failed, it stays failed, for the Will to ask again.
+  const asked = messages.findLast((m) => m.role === "user")?.id;
+  const tried = useRef<string | undefined>(undefined);
+  useEffect(() => {
+    if (!error || !asked || tried.current === asked || !retries(error)) return;
+    const t = setTimeout(() => {
+      tried.current = asked;
+      void regenerate();
+    }, RETRY_MS);
+    return () => clearTimeout(t);
+  }, [error, asked, regenerate]);
   useEffect(() => {
     if (lastAnswer) did("asked");
   }, [lastAnswer, did]);
@@ -165,7 +189,7 @@ function Talk({ messages, lastAnswer, status, error }: Pick<ReturnType<typeof us
         );
       })}
       {thinking.here && <MindThinking on={status === "submitted"} gone={thinking.gone} />}
-      {error && <p className="text-xs text-other">{[BAD_KEY, KEY_NEEDS_WORKSPACE, KEY_NEEDS_CREDIT].includes(error.message) ? error.message : "The Mind can’t answer right now."}</p>}
+      {error && <p className="text-xs text-other">{failure(error)}</p>}
     </>
   );
 }

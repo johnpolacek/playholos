@@ -300,7 +300,7 @@ export function Opened({ scale, now, className = "" }: { scale: number; now: num
                 mark={<BuildMark name={b.name} />}
                 tone={buildTone(b.name, false)}
                 name={<b className="font-semibold">{b.name}</b>}
-                line={takenAt(plan, b.name) === null ? b.what : `${b.what} Taken back at Year ${takenAt(plan, b.name)}, its work kept.`}
+                line={takenAt(plan, b.name) === null ? b.what : `${b.what} Paused at Year ${takenAt(plan, b.name)}, its work kept.`}
                 right={by[b.name].at == null ? PAST : span(by[b.name].at! - at)}
               />
               <CostLine name={b.name} move={by[b.name]} at={at} />

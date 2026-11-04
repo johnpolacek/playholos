@@ -1,4 +1,4 @@
-// 5 real minutes = 1 Year. It runs offline, with no pause. Settled 2026-10-06.
+// 5 real minutes = 1 Year. It runs offline. Settled 2026-10-06. It holds once nothing is building, until we order or play on, 2026-11-02.
 export const MS_PER_YEAR = 5 * 60 * 1000;
 export const YEAR_0 = 2040;
 

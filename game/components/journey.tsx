@@ -49,8 +49,9 @@ function Journey({ row, now, shown }: { row: Row; now: number; shown: boolean })
   const done = over(row, now);
   const reply = row.kind === "reply";
   const theirs = row.kind === "heard";
-  // A reply's first leg is ours going out, the second theirs coming home.
-  const head = reply && p < 0.5 ? "you" : reply || theirs ? "other" : "you";
+  // A reply's first leg is ours going out, the second the soonest one could come home. Amber is for word truly heard,
+  // so a reply nobody sent stays ours, its leg home faint. Playtest 2026-11-02: amber made an empty window read as news.
+  const head = theirs ? "other" : reply ? "wait" : "you";
   const run = (from: number, to: number, c: string) => (
     <span
       className={`absolute top-[5.5px] h-[2px] rounded-full bg-linear-to-r ${c}`}
@@ -65,8 +66,8 @@ function Journey({ row, now, shown }: { row: Row; now: number; shown: boolean })
         />
         {reply ? (
           <>
-            {run(0, Math.min(p, 0.5), "from-you/5 to-you/95")}
-            {run(0.5, p, "from-other/5 to-other/95")}
+            {run(0, Math.min(p, 0.5), "from-wait/5 to-wait/95")}
+            {run(0.5, p, "from-muted/5 to-muted/60")}
             <span
               className="absolute top-[6.5px] size-[7px] -translate-1/2 rounded-full bg-ink"
               style={{ left: "50%" }}
@@ -80,16 +81,16 @@ function Journey({ row, now, shown }: { row: Row; now: number; shown: boolean })
         )}
         {row.at !== null && (
           <span
-            className={`absolute top-[6.5px] left-full size-[9px] -translate-1/2 rotate-45 border transition-colors duration-700 ${done ? (reply || theirs ? "border-other bg-other" : "border-you bg-you") : "border-muted bg-panel"}`}
+            className={`absolute top-[6.5px] left-full size-[9px] -translate-1/2 rotate-45 border transition-colors duration-700 ${done ? (theirs ? "border-other bg-other" : reply ? "border-muted bg-panel" : "border-you bg-you") : "border-muted bg-panel"}`}
           />
         )}
         {!done && (
           <span className="absolute top-[6.5px] -translate-1/2" style={{ left: `${p * 100}%` }}>
             <span
-              className={`absolute top-1/2 left-1/2 size-[15px] -translate-1/2 animate-pulse rounded-full ${head === "you" ? "bg-you/25" : "bg-other/25"}`}
+              className={`absolute top-1/2 left-1/2 size-[15px] -translate-1/2 animate-pulse rounded-full ${{ you: "bg-you/25", wait: "bg-wait/25", other: "bg-other/25" }[head]}`}
             />
             <span
-              className={`relative block size-[7px] rounded-full ${head === "you" ? "bg-you shadow-[0_0_10px_var(--you)]" : "bg-other shadow-[0_0_10px_var(--other)]"}`}
+              className={`relative block size-[7px] rounded-full ${{ you: "bg-you shadow-[0_0_10px_var(--you)]", wait: "bg-wait shadow-[0_0_10px_var(--wait)]", other: "bg-other shadow-[0_0_10px_var(--other)]" }[head]}`}
             />
           </span>
         )}
@@ -178,7 +179,7 @@ export function Item({
           <BeamMark back={row.kind === "reply" || theirs} still={!aim?.lit} />
         )
       }
-      tone={row.kind === "reply" || theirs ? "text-other" : "text-you"}
+      tone={theirs ? "text-other" : row.kind === "reply" ? "text-wait" : "text-you"}
       name={<b className="font-semibold">{row.name}</b>}
       line={
         row.fresh ? (
@@ -190,7 +191,7 @@ export function Item({
           row.note
         )
       }
-      right={<span className={done ? (theirs ? "text-other" : "text-you") : ""}>{when}</span>}
+      right={<span className={done ? (theirs ? "text-other" : row.kind === "reply" ? "text-muted" : "text-you") : ""}>{when}</span>}
       more={build}
     />
   );
@@ -235,7 +236,7 @@ export function Item({
               ["FROM", SENDS[row.msg].from],
               ["SINCE", SENDS[row.msg].since],
             ]}
-            tone={row.kind === "reply" ? "other" : "you"}
+            tone="you"
             open={!!aim?.shown}
           />
         </div>

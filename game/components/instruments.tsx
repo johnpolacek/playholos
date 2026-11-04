@@ -169,7 +169,7 @@ function Card({ name, since, line, news }: { name: string; since: number; line: 
 
 /** Our builds in play: those done as instruments at work, then those still rising, each with its bar and how long until
  *  it's done. */
-export function Instruments() {
+export function Instruments({ catalog }: { catalog?: (idle: boolean) => React.ReactNode }) {
   const { year } = useGame();
   const { plan } = usePlan();
   const { done, scale } = useSchedule();
@@ -191,6 +191,24 @@ export function Instruments() {
     return { share: Math.min(1, (SWARM.watts * 2 ** Math.floor(years / SWARM.doubling)) / SWARM.most), growing: spans.at(-1)![1] === null };
   }, [plan, scale, tenth]);
   const known: Known = { now, heard, read, visits, grown, swarm, minds };
+  // Nothing rising: said first, above our instruments, with the Catalog right under, which says it in gold with the
+  // Mind's pick. Below eight instruments it went unseen. Playtest 2026-11-02.
+  if (!rising.length)
+    return (
+      <>
+        {catalog?.(true)}
+        {working.length > 0 && (
+          <>
+            <ListHead left={`Working now · ${working.length}`} right="" className="mt-5" />
+            <ul className="mt-2 flex flex-col gap-2">
+              {[...working].sort((a, b) => done[b]! - done[a]!).map((n) => (
+                <Card key={n} name={n} since={done[n]!} {...doing(n, known, done[n]!)} />
+              ))}
+            </ul>
+          </>
+        )}
+      </>
+    );
   return (
     <>
       {working.length > 0 && (
@@ -228,11 +246,8 @@ export function Instruments() {
             );
           })}
         </ul>
-      ) : (
-        <p className="mt-1 border-t border-faint py-2.5 text-[13.5px] leading-snug text-page-ink2">
-          Nothing rising. Our instruments keep watch, and the Mind keeps studying.
-        </p>
-      )}
+      ) : null}
+      {catalog?.(false)}
     </>
   );
 }

@@ -33,6 +33,10 @@ interface Game {
   read(id: string): void;
   /** Jump the clock ahead to Year `to`, never back. */
   skipTo(to: number): void;
+  /** Stops the clock now, as nothing is building, for the build done at Year `last`. */
+  hold(last: number): void;
+  /** Runs the clock on from where it stopped. */
+  playOn(): void;
   newGame(): void;
 }
 
@@ -42,6 +46,14 @@ const GameContext = createContext<Game | null>(null);
 const drawSeed = () => POOL[Math.floor(Math.random() * POOL.length)];
 function freshSave(): Save {
   return { seed: drawSeed(), beganAt: null };
+}
+
+/** A save with its clock running again: Begin moves on by as long as it was held, so the Year runs on from where it
+ *  stopped. */
+function released(s: Save): Save {
+  if (s.held === undefined || s.beganAt === null) return s;
+  const { held, ...rest } = s;
+  return { ...rest, beganAt: s.beganAt + Math.max(0, Date.now() - held) };
 }
 
 export function GameProvider({ children }: { children: React.ReactNode }) {
@@ -81,9 +93,10 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   };
   const game: Game = {
     save,
-    year: yearAt(began, now, save?.will),
+    // Held, the clock reads the Year it stopped at. 2026-11-02.
+    year: yearAt(began, save?.held ?? now, save?.will),
     orderAt: (() => {
-      const y = yearAt(began, now, save?.will);
+      const y = yearAt(began, save?.held ?? now, save?.will);
       return y === null ? null : ordersLand(y, save?.will);
     })(),
     moveWill: (will) => change((s) => (s.will ? s : { ...s, will })),
@@ -104,11 +117,15 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     skipTo: (to) =>
       change((s) => {
         if (s.beganAt === null) return s;
-        const from = yearAt(s.beganAt, Date.now(), s.will) ?? 0;
-        if (to <= from) return s;
-        const rate = s.will && from >= s.will.at ? s.will.rate : 1;
-        return { ...s, beganAt: s.beganAt - ((to - from) / rate) * MS_PER_YEAR };
+        // A jump while held plays on from the jump.
+        const r = released(s);
+        const from = yearAt(r.beganAt, Date.now(), r.will) ?? 0;
+        if (to <= from) return r;
+        const rate = r.will && from >= r.will.at ? r.will.rate : 1;
+        return { ...r, beganAt: r.beganAt! - ((to - from) / rate) * MS_PER_YEAR };
       }),
+    hold: (last) => change((s) => (s.beganAt === null || s.held !== undefined ? s : { ...s, held: Date.now(), heldFor: last })),
+    playOn: () => change(released),
     newGame: () => update(freshSave()),
   };
   return <GameContext value={game}>{children}</GameContext>;

@@ -191,8 +191,7 @@ export function Queue() {
   if (began)
     return (
       <div ref={root} className="relative">
-        <Instruments />
-        <Catalog className="mt-5" />
+        <Instruments catalog={(idle) => <Catalog className={idle ? "mt-1" : "mt-5"} />} />
       </div>
     );
 

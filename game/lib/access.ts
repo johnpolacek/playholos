@@ -51,6 +51,13 @@ export const BAD_KEY = "That key doesn’t open the Mind.";
 /** What the Mind says when the player's key spans workspaces and Anthropic can't tell which one to bill. */
 export const KEY_NEEDS_WORKSPACE = "That key spans several workspaces. Make a key for a single workspace.";
 
+/** What the Mind says when Anthropic is busy or briefly down: worth asking again, which the Mind tab does once on its
+ *  own. A generic line hid this until 2026-11-03. */
+export const MIND_BUSY = "Anthropic is busy right now. Ask again in a moment.";
+
+/** What the Mind says when the server can't be reached, as while the dev server reloads. */
+export const MIND_UNREACHED = "We lost the link to our server. Ask again in a moment.";
+
 /** What the Mind says when the player's key opens it but its account has no credit to ask with. A key is checked by
  *  counting tokens, which is free, so this only shows once a question is asked. 2026-10-24. */
 export const KEY_NEEDS_CREDIT = "That key’s account has no credit. Add a little at platform.claude.com/settings/billing.";

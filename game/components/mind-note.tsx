@@ -30,13 +30,26 @@ function MindMark({ still }: { still: boolean }) {
 
 // The Mind's words, set off by one corner. Its mark and name sit in the top edge, the top fades out to the right, and
 // the side fades down. Settled 2026-10-18, from explorations/mind-voice-edge.html. The caller sets the words' size.
-export function MindNote({ className = "", still = false, children }: { className?: string; still?: boolean; children: React.ReactNode }) {
+// Inside a card that has its own rounded edge, the corner goes: two rounded corners read as a doubled line. 2026-11-02.
+export function MindNote({
+  className = "",
+  still = false,
+  edge = true,
+  children,
+}: {
+  className?: string;
+  still?: boolean;
+  edge?: boolean;
+  children: React.ReactNode;
+}) {
   return (
     <div className={`relative pr-1 pb-3 pl-3 ${className}`}>
-      <span
-        aria-hidden
-        className="absolute top-2 bottom-0 left-0 w-[9px] rounded-tl-xl border-t border-l border-you/40 [mask-image:linear-gradient(black,transparent)]"
-      />
+      {edge && (
+        <span
+          aria-hidden
+          className="absolute top-2 bottom-0 left-0 w-[9px] rounded-tl-xl border-t border-l border-you/40 [mask-image:linear-gradient(black,transparent)]"
+        />
+      )}
       <div className="mb-1.5 flex h-4 items-center gap-[7px]">
         <MindMark still={still} />
         <span className="font-mono text-[9.5px] tracking-[.1em] whitespace-nowrap text-you">THE MIND</span>

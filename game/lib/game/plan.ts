@@ -208,6 +208,19 @@ export const PACKAGES: Package[] = [
   },
 ];
 
+/** Whether a build fits the strategy we began with, by what it does. Advice only: the Catalog lists those that fit
+ *  first, and the Mind names one when nothing is building. It never changes what we can build or its price.
+ *  Balanced, and a founding line from before strategies, fit nothing over the rest. 2026-11-02. */
+const FITS: Record<string, { does: Does[]; also?: string[] }> = {
+  Search: { does: ["listen", "see"] },
+  Protect: { does: ["keep"], also: ["X-Ray Watch", "Moon Search", "Asteroid Tour"] },
+  Expand: { does: ["reach", "lift"] },
+};
+export function fits(strategy: string | undefined, b: Build): boolean {
+  const f = strategy ? FITS[strategy] : undefined;
+  return !!f && (f.does.includes(b.does) || !!f.also?.includes(b.name));
+}
+
 /** A package as this Earth can run it: its builds in turn, each skipped if our compute couldn't give it all it needs.
  *  On every seeded Earth what is left uses all our compute, 2026-10-31. */
 export function packed(pkg: Package, scale: number): string[] {
