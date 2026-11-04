@@ -39,6 +39,8 @@ const DIALS_SIM: Dials = {};
 const RESTING = { minds: [], focus: null, zoom: 1.75, marks: [] };
 /** Seconds the flight holds at each place before drifting on to the next. */
 const HOLD = 7;
+/** Seconds the line from Sol lingers before the view comes in close. */
+const LINGER = 5;
 /** With no peers, the flight stands back to see the whole Galaxy from above. */
 const GALAXY_VIEW: Target = { id: "galaxy", pos: CENTER, stand: 95_000, dir: [0.2, 1, 0.35] };
 const NONE: never[] = [];
@@ -66,8 +68,10 @@ export default function Sim() {
   const [auto, setAuto] = useState(true);
   const [arrived, setArrived] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
-  // A dashed line from Sol to the place in view, kept on from place to place until turned off.
-  const [thread, setThread] = useState(false);
+  // Each place opens on its line from Sol, seen from the side. Once the line has had its moment, the place this was
+  // set for is seen close.
+  const [closeFor, setCloseFor] = useState<string | null>(null);
+  const [fadeFor, setFadeFor] = useState<string | null>(null);
   // The opening shot plays once, on first arriving: the card and labels wait for it to land, and stepping on ends it.
   const [opening, setOpening] = useState(true);
 
@@ -180,12 +184,20 @@ export default function Sim() {
     [drawn, glowing],
   );
   const hereKey = here ? `${here.id}:${here.pos.join()}` : "";
+  const close = !!here && closeFor === here.id;
   const target: Target = useMemo(
-    () => (here ? (thread ? beside(here) : { id: here.id, pos: here.pos, stand: here.stand }) : tab === "peers" ? GALAXY_VIEW : { id: "sol", pos: [0, 0, 0], stand: 30 }),
+    () => (here ? (close ? { id: here.id, pos: here.pos, stand: here.stand } : beside(here)) : tab === "peers" ? GALAXY_VIEW : { id: "sol", pos: [0, 0, 0], stand: 30 }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [hereKey, tab, thread],
+    [hereKey, tab, close],
   );
-  // Held at a place for a while, then on to the next nearest.
+  // The line lingers, then fades as the view comes in close.
+  useEffect(() => {
+    if (!here || close || arrived !== `${here.id}:beside`) return;
+    const fade = setTimeout(() => setFadeFor(here.id), LINGER * 1000);
+    const near = setTimeout(() => setCloseFor(here.id), (LINGER + 1.2) * 1000);
+    return () => (clearTimeout(fade), clearTimeout(near));
+  }, [here, close, arrived]);
+  // Held close for a while, then on to the next nearest.
   useEffect(() => {
     if (!auto || !here || arrived !== here.id || place >= places.length - 1) return;
     const t = setTimeout(() => setPlace((i) => Math.min(places.length - 1, i + 1)), HOLD * 1000);
@@ -410,8 +422,8 @@ export default function Sim() {
                 bodies={bodies}
                 target={target}
                 light={tab === "peers" ? lightAt(years, TODAY) : null}
-                thread={thread && here ? here.pos : null}
-                onArrive={(id) => setArrived(id.replace(/:beside$/, ""))}
+                thread={here && !close && fadeFor !== here.id ? here.pos : null}
+                onArrive={setArrived}
                 onTap={onTap}
                 onTouch={() => setAuto(false)}
               />
@@ -549,23 +561,7 @@ export default function Sim() {
                 <p data-rise className="mt-1 text-[14px] leading-snug text-ink/85">
                   {here ? here.words : drawn ? emptyOf(tab).words : ""}
                 </p>
-                {here && (
-                  <div className="mt-2 flex items-center justify-between gap-2">
-                    <p className="font-mono text-[10.5px] text-muted">Tap it again to read what we know.</p>
-                    <button
-                      aria-pressed={thread}
-                      className={`flex shrink-0 items-center gap-1.5 rounded-full border px-2.5 py-0.5 font-mono text-[11px] ${thread ? "border-ink/60 text-ink" : "border-faint text-muted hover:text-ink"}`}
-                      onClick={() => setThread((t) => !t)}
-                    >
-                      <svg width="14" height="8" viewBox="0 0 14 8" aria-hidden>
-                        <circle cx="1.5" cy="6.5" r="1.5" fill="currentColor" />
-                        <path d="M3 5.5 11 1.5" stroke="currentColor" strokeDasharray="2 2" />
-                        <circle cx="12.5" cy="1" r="1" fill="currentColor" />
-                      </svg>
-                      Line to Sol
-                    </button>
-                  </div>
-                )}
+                {here && <p className="mt-1.5 font-mono text-[10.5px] text-muted">Tap it again to read what we know.</p>}
                 {tab === "peers" && drawn && drawn.minds.peers.length > 0 && (
                   <Time
                     years={years}
