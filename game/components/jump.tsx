@@ -164,12 +164,14 @@ export function Arrived({ from, to, snap }: { from: number; to: number; snap: Sn
       const isNew = !snap.slugs.has(l.slug);
       if (!isNew && !fresh.length) continue;
       const read = fresh.at(-1);
+      // Each new warm glow says how many we have found: the count is the story. 2026-11-03.
+      const nth = l.slug.match(/^warm-glow-(\d+)$/)?.[1];
       out.push({
         key: `lead:${l.slug}`,
         to: `/lead/${l.slug}`,
         mark: <LeadMark art={l.art} />,
         title: starName(l.star),
-        line: read ? `${read.title}, Year ${yearText(read.at)}` : l.what,
+        line: isNew && nth && nth !== "1" ? `A new warm glow, ${nth} found so far` : read ? `${read.title}, Year ${yearText(read.at)}` : l.what,
       });
     }
     for (const h of heard)
@@ -191,8 +193,18 @@ export function Arrived({ from, to, snap }: { from: number; to: number; snap: Sn
     };
   }, [first, leads, dials]);
 
+  // Our first warm glow is the game's first real sign, so it gets its own word. 2026-11-03.
+  const firstWarm = leads.find((l) => l.slug === "warm-glow-1" && !snap.slugs.has(l.slug));
   return (
     <div className="flex flex-col gap-1.5">
+      {firstWarm?.range && (
+        <div className="mb-1.5 rounded-lg border border-other/50 p-2.5">
+          <span className="font-mono text-[10px] tracking-[.1em] text-other uppercase">Our first warm glow</span>
+          <p className="mt-1 text-[13.5px] leading-snug">
+            A warm light where none shone, {firstWarm.range[0].toLocaleString("en-US")} to {firstWarm.range[1].toLocaleString("en-US")} ly away. Most lights like this are natural. If this one doesn’t fade, we may not be alone.
+          </p>
+        </div>
+      )}
       <span className="font-mono text-[10px] tracking-[.1em] text-you uppercase">What reached us</span>
       {items.length === 0 ? (
         <p className="text-[13px] leading-snug text-muted">{listening ? "Word is still coming in…" : "Nothing more reached us yet."}</p>

@@ -707,14 +707,13 @@ export function mindLeads(m: MindsSeen | undefined): Lead[] {
         could: [
           { what: "A young star wrapped in dust", why: "Stars forming in dust glow warm in infrared, and can brighten over decades.", odds: "likely" },
           { what: "Two stars merging", why: "Their wreck throws off dust that glows warm for centuries, then fades.", odds: "unlikely" },
-          { what: "Something built around a star", why: "Collectors catching a star's light shed it as warm glow. Dusty young stars far outnumber builders, so this is the long shot.", odds: "very unlikely" },
+          { what: "Something built around a star", why: "Collectors catching a star's light shed it as warm glow. Dusty young stars far outnumber builders, so this is the long shot, unless it refuses to fade.", odds: "very unlikely" },
         ],
         tells: [
           "A young star sits in a dark cloud, and a merger leaves a fading shell. Neither would hold steady for centuries, then dim away together.",
           `Light from it takes ${far >= 20000 ? "tens of thousands of" : far >= 2000 ? "thousands of" : "hundreds of"} Years to cross. Whatever made it has moved on long since.`,
         ],
         art: { kind: "warm", near, far },
-        life: "very unlikely",
       }];
     }),
     ...m.glows.map((g, i): Lead => ({
@@ -1229,14 +1228,77 @@ export function describeLeads(observe: string[] | undefined, year: number | null
   return `Our words on the named leads, as the Scan tab shows them. Keep to them, and say so if a reading moved one:\n${lines.join("\n")}`;
 }
 
+/** A warm glow's odds as it refuses to fade, settled 2026-11-03. FU Orionis, the young star's eruption best measured,
+ *  has lost about 1.2% of its light a Year since 1936 (Green et al. 2016), and a merger's dust stays bright for years to
+ *  decades. So a glow that holds is news: at 1.2% a Year, an eruption would have lost about 30% by 30 Years, 70% by 100,
+ *  and 97% by 300. The words are this project's judgment on those numbers. Each lands while it still shines, and our
+ *  first warm glow gets its own reading once it is ranged, so it can't pass unmarked as it did in a playtest. */
+const HOLDS: { age: number; title: string; line: string; mind: string; now: Odds[]; tells: string[] }[] = [
+  {
+    age: 30,
+    title: "Thirty Years, not fading",
+    line: "It shines as it did. By now a young star’s eruption would have lost about 30% of its light, going by FU Orionis.",
+    mind: "It isn’t fading as an eruption should. Natural causes still lead, but we watch it more closely now.",
+    now: ["roughly even", "unlikely", "unlikely"],
+    tells: ["A century without fading would fit an eruption poorly, and a merger’s dust worse."],
+  },
+  {
+    age: 100,
+    title: "A century, not fading",
+    line: "It still shines as it did. An eruption would have lost about 70% of its light by now, and a merger’s dust should have cooled.",
+    mind: "Now we can’t say whether it was born or built. Nothing we know of would hold so long.",
+    now: ["unlikely", "very unlikely", "roughly even"],
+    tells: ["If it dims all at once, that points away from dust, which fades slowly."],
+  },
+  {
+    age: 300,
+    title: "Three centuries, not fading",
+    line: "It still shines as it did. An eruption would have lost about 97% of its light by now.",
+    mind: "We know nothing natural that does this. If someone built it, we are watching what they did thousands of Years ago.",
+    now: ["very unlikely", "almost no chance", "likely"],
+    tells: ["Only a closer reading of its light can say more, and it won’t shine forever."],
+  },
+];
+
+/** What time alone has told us of a warm glow, by its place among those found. */
+export function warmReadings(flashes: readonly { seen: number; ranged?: number; faded?: number; range?: [number, number] }[], year: number | null): Record<string, Reading[]> {
+  if (year === null) return {};
+  return Object.fromEntries(
+    flashes.flatMap((f, i): [string, Reading[]][] => {
+      if (!f.range || f.ranged === undefined) return [];
+      const by = "Warm Sky Watch";
+      const first: Reading[] =
+        i === 0
+          ? [{
+              id: "warm-first",
+              needs: "",
+              at: f.ranged,
+              by: "Infrared Telescope",
+              title: "Our first warm glow",
+              line: `A warm light where none shone, ${f.range[0].toLocaleString("en-US")} to ${f.range[1].toLocaleString("en-US")} ly away.`,
+              mind: "Most lights like this are natural, so we don’t hope yet. But a mind building around its star would look just like this, so we watch to see if it fades.",
+              now: ["likely", "unlikely", "very unlikely"],
+              tells: ["Natural glows fade. Each Year this one doesn’t, the odds shift."],
+            }]
+          : [];
+      const held = HOLDS.flatMap(({ age, ...h }): Reading[] => {
+        const at = Math.round((f.seen + age) * 10) / 10;
+        return at <= year && (f.faded === undefined || f.faded > at) ? [{ ...h, id: `warm-${i + 1}-${age}`, needs: "", at, by }] : [];
+      });
+      return first.length || held.length ? [[`warm-glow-${i + 1}`, [...first, ...held]]] : [];
+    }),
+  );
+}
+
 /** What each lead has had read of it by this Year, by its slug: what the plan observes, then what our telescopes have
  *  read of a felt world's air, the Infrared Telescope's, then the 15 m Mirror's, which reads Proxima b too, then what
  *  our craft saw up close, last, and what our Close Look saw of the watcher. Shared by Scan and the Mind, so both judge
  *  from the same. 2026-11-01. */
 export function readingsOf(
   leads: Lead[],
-  k: { felt?: FeltWorld[]; proxima?: Read; visits: Visit[]; watcher?: WatcherSeen; knocks: number[]; observe?: string[]; year: number | null },
+  k: { felt?: FeltWorld[]; proxima?: Read; visits: Visit[]; watcher?: WatcherSeen; knocks: number[]; observe?: string[]; year: number | null; flashes?: Parameters<typeof warmReadings>[0] },
 ): Record<string, Reading[]> {
+  const warm = warmReadings(k.flashes ?? [], k.year);
   const air: Record<string, Reading[]> = Object.fromEntries(
     (k.felt ?? []).map((f) => [
       f.star,
@@ -1253,6 +1315,7 @@ export function readingsOf(
         ...(air[l.star] ?? []),
         ...k.visits.filter((v) => v.star === l.star).map(visitReading),
         ...(l.slug === "small-dark-body" ? watched : []),
+        ...(warm[l.slug] ?? []),
       ],
     ]),
   );

@@ -102,39 +102,64 @@ export function LeadsMap({
     theirs.splice(0, theirs.length, ...onUs, ...ours);
   }, [tenth, theirs, hits, plan, scale]);
   const named = [...new Set(sent.map((m) => m.name))].filter((n) => !ids.includes(n));
+  // Where the pointer is over the map, so the lead under it is named, even one stepped back. A settled map showed dots
+  // with no names and no way to learn them. Playtest 2026-11-03.
+  const pointer = useRef<{ x: number; y: number } | null>(null);
   const onMarks = useCallback(
     (marks: Mark[]) => {
       const focus = ids[(dials.focus ?? 0) - 1];
+      const p = pointer.current;
+      let pointed: string | null = null;
+      let near = 18 * 18;
+      if (p)
+        for (const m of marks) {
+          const d = (m.x - p.x) ** 2 + (m.y - p.y) ** 2;
+          if (m.a > 0 && d < near && ids.includes(m.id)) [near, pointed] = [d, m.id];
+        }
       // Over the Milky Way, only our warm glows and Sol are named: all else is a smudge round Sol. 2026-11-03.
-      const wide = !!dials.wide;
       const warmName = (id: string) => /^Warm glow \d+$/.test(id);
+      // Looking out at one warm glow, too: nearby stars' names would crowd Sol's.
+      const wide = !!dials.wide || (!!focus && warmName(focus));
       const shining = (id: string) => warmName(id) && !dials.faded?.has(id);
       // Leads and Sol first, then what we sent, then calls and flashes, and the rings' distances last, so the
       // later give way.
       // A glow's name ranks after the other leads and gives way whole when crowded, unless in view: hundreds of glows
       // covered the map in a playtest, 2026-11-01.
       const glow = (id: string) => /^(Warm|Cold) glow \d+$/.test(id) && id !== focus && !(wide && shining(id));
-      const rank = (id: string) => (glow(id) ? 0.5 : ids.includes(id) || id === "Sol" ? 0 : id.startsWith("sent:") ? 1 : id.startsWith("ring:") ? 3 : 2);
+      const rank = (id: string) => (id === pointed ? -1 : glow(id) ? 0.5 : ids.includes(id) || id === "Sol" ? 0 : id.startsWith("sent:") ? 1 : id.startsWith("ring:") ? 3 : 2);
       // The LEADS chip sits at the top left, and covered Gaia BH1's name there until 2026-10-30.
       const taken: Parameters<typeof placeLabel>[4] = [{ l: 0, t: 0, r: 76, b: 36 }];
       for (const { id, x, y, a } of [...marks].sort((p, q) => rank(p.id) - rank(q.id))) {
         const n = names.current[id];
         if (!n) continue;
-        if (a <= 0 || (wide && id !== focus && id !== "Sol" && !warmName(id))) { n.style.opacity = "0"; continue; }
+        if (a <= 0 || (wide && id !== focus && id !== pointed && id !== "Sol" && !warmName(id))) { n.style.opacity = "0"; continue; }
+        if (id === pointed) {
+          placeLabel(n, x, y, null, taken);
+          n.style.opacity = String(a);
+          continue;
+        }
         const ring = id.startsWith("ring:") || id.startsWith("call:") || (id.startsWith("theirs:") && theirs[Number(id.slice(7))]?.ly === 0);
         const lead = ids.includes(id) && !glow(id);
-        if (id === "Sol") n.style.color = wide || (focus && warmName(focus)) ? "var(--ink)" : "";
+        if (id === "Sol") n.style.color = wide ? "var(--ink)" : "";
         const clear = placeLabel(n, x, y, ring ? (id.startsWith("call:") ? 16 : 4) : null, taken);
         // A lead's name stays, faint, where it can't be clear. Any other gives way whole: a star we sent to sat over
         // Proxima Centauri's name until 2026-10-30.
         // A quiet lead's name goes as the map calms, unless it is the one in view.
         const back = id !== focus && !(wide && warmName(id)) && hush[ids.indexOf(id)] ? (dials.calm ?? 0) : 0;
-        n.style.opacity = String(a * (1 - back) * (id === "Sol" && (wide || (focus && warmName(focus))) ? Math.max(clear, 0.9) : lead || id === "Sol" ? clear : clear === 1 ? 1 : 0) * (focus && ids.includes(id) && id !== focus ? 0.45 : 1) * (wide && warmName(id) && !shining(id) ? 0.6 : 1));
+        n.style.opacity = String(a * (1 - back) * (id === "Sol" && wide ? Math.max(clear, 0.9) : lead || id === "Sol" ? clear : clear === 1 ? 1 : 0) * (focus && ids.includes(id) && id !== focus ? 0.45 : 1) * (wide && warmName(id) && !shining(id) ? 0.6 : 1));
       }
     },
     [dials, ids, theirs, hush],
   );
   return (
+    <div
+      className={className}
+      onPointerMove={(e) => {
+        const box = e.currentTarget.getBoundingClientRect();
+        pointer.current = { x: e.clientX - box.left, y: e.clientY - box.top };
+      }}
+      onPointerLeave={() => void (pointer.current = null)}
+    >
     <SkyArt
       mode="leads"
       dials={dials}
@@ -147,7 +172,7 @@ export function LeadsMap({
       system={system}
       onReady={onReady}
       onMarks={onMarks}
-      className={className}
+      className="absolute inset-0"
     >
       {calls.map((c, i) => (
         <span
@@ -208,6 +233,32 @@ export function LeadsMap({
         </span>
       ))}
     </SkyArt>
+    </div>
+  );
+}
+
+/** What the map's marks mean, drawn as the map draws them: a lead on its drop to the Galaxy's plane, a thread from
+ *  Sol, and a message of ours on its way. Dots and lines with no key left the Will guessing. Playtest 2026-11-03. */
+export function MapKey({ className = "" }: { className?: string }) {
+  return (
+    <div aria-label="Map key" className={`pointer-events-none flex flex-col gap-1 rounded-md bg-paper/70 px-2 py-1.5 font-mono text-[9.5px] text-muted backdrop-blur-[2px] ${className}`}>
+      <span className="flex items-center gap-2">
+        <svg aria-hidden width="18" height="12" viewBox="0 0 18 12">
+          <line x1="9" y1="3" x2="9" y2="11" stroke="var(--muted)" strokeWidth="1" />
+          <circle cx="9" cy="3" r="2.2" fill="var(--you)" />
+          <circle cx="9" cy="11" r="0.9" fill="var(--muted)" />
+        </svg>
+        a lead, dropped to the plane
+      </span>
+      <span className="flex items-center gap-2">
+        <svg aria-hidden width="18" height="12" viewBox="0 0 18 12">
+          <line x1="2" y1="10" x2="16" y2="2" stroke="var(--you)" strokeOpacity="0.6" strokeWidth="1" />
+          <circle cx="2" cy="10" r="1.8" fill="var(--ink)" />
+        </svg>
+        from Sol: a thread, or our message
+      </span>
+      <span className="text-muted/80">Point at a star for its name</span>
+    </div>
   );
 }
 
@@ -373,6 +424,7 @@ export function LeadList({
       });
     const count = (part: Standing) => leads.filter((l) => stand(l) === part).length;
     const needs = count("needs");
+    const watching = count("watching");
     const waiting = count("waiting");
     const quiet = count("quiet");
     return (
@@ -382,6 +434,12 @@ export function LeadList({
           <ul className="mt-1 flex flex-col">{rows("needs")}</ul>
         ) : (
           <p className="mt-1 border-t border-faint py-2.5 text-[13.5px] text-page-ink2">Nothing new to read.</p>
+        )}
+        {watching > 0 && (
+          <>
+            <ListHead left={`Warm glows, still shining · ${watching}`} right="" className="mt-5" />
+            <ul className="mt-1 flex flex-col">{rows("watching")}</ul>
+          </>
         )}
         {waiting > 0 && (
           <>

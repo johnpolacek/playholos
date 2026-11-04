@@ -60,7 +60,8 @@ interface Leads {
 
 /** Where a lead stands. 76 leads in one list left the Will not knowing what to do, so Scan sorts them: what has news
  *  for us, what we are waiting on, and the rest, folded. Playtest 2026-11-02. */
-export type Standing = "needs" | "waiting" | "quiet";
+/** "watching": a warm glow still shining, our hottest kind of lead, kept out of Quiet. 2026-11-03. */
+export type Standing = "needs" | "watching" | "waiting" | "quiet";
 
 const ScanContext = createContext<Leads>({
   leads: [],
@@ -151,7 +152,7 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
     rockKey,
     `betelgeuse ${blown}`,
     ...kept.map((k) => `kept ${k}`), ...(felt ?? []).map((f) => f.star), ...(holes ?? []).map((h) => h.name), ...seeds.map((v) => `seed ${v.star}`),
-    ...(minds ? [JSON.stringify([minds.flashes.map((f) => f.range ?? f.seen), minds.glows.length, minds.sleepers.length, minds.watcher?.seen])] : []),
+    ...(minds ? [JSON.stringify([minds.flashes.map((f) => [f.range ?? f.seen, f.faded]), minds.glows.length, minds.sleepers.length, minds.watcher?.seen])] : []),
     // What ground telescopes saw of Proxima b, 2026-10-31.
     view?.proximaSeen ? `proxima ${view.proximaSeen.albedo}` : "",
   ].join("|");
@@ -194,7 +195,7 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
   const value = useMemo(() => {
     // What each lead has had read of it, as the Mind judges from too. Our knocks on the watcher, for its readings.
     const knocks = (save?.sent ?? []).filter((m) => target(m.to) === WATCHER).map((m) => m.y);
-    const readings = readingsOf(leads, { felt, proxima, visits, watcher: minds?.watcher ?? undefined, knocks, observe, year: tenth });
+    const readings = readingsOf(leads, { felt, proxima, visits, watcher: minds?.watcher ?? undefined, flashes: minds?.flashes, knocks, observe, year: tenth });
     const opened = new Set(seen);
     // New until opened, or for 50 Years: a badge from Year 10 still read NEW at Year 9,104 until 2026-10-30.
     const recent = (at: number) => tenth === null || tenth - at < 50;
@@ -218,6 +219,7 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
     const standing: Record<string, Standing> = Object.fromEntries(
       leads.map((l) => {
         if (readings[l.slug]?.some((r) => fresh.has(r.id))) return [l.slug, "needs"];
+        if (l.slug.startsWith("warm-glow-") && !l.facts.some(([k]) => k === "Faded")) return [l.slug, "watching"];
         const windows = l.art.kind === "reply" ? l.art.windows.filter((w) => w.star === l.star) : [];
         const waiting =
           owed.has(star(l.star)) || due(l.slug, observe, tenth).length > 0 || (tenth !== null && windows.some((w) => w.at > tenth));

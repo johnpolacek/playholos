@@ -574,7 +574,7 @@ function describeMinds(m: MindsSeen, one: (x: number) => string): string {
             ? `Our Infrared Telescope ranged it at Year ${yearText(f.ranged!)}, by its reddening and the star behind it: roughly ${f.range[0].toLocaleString("en-US")} to ${f.range[1].toLocaleString("en-US")} ly, too far for parallax to say more. `
             : `Its distance isn't measured: too far for parallax, and our Infrared Telescope hasn't studied it while it shone. `) +
           `A glow like this fits a young star wrapped in dust, ` +
-          `the dusty wreck of two stars merging, or something building around a star and catching its light. Nothing we have seen yet tells them apart.`).join("\n"),
+          `the dusty wreck of two stars merging, or something building around a star and catching its light. Natural glows fade: FU Orionis, the eruption best measured, has lost about 1% of its light a Year since 1936. So whether it fades is what tells them apart so far.`).join("\n"),
     );
   if (m.glows.length)
     out.push(

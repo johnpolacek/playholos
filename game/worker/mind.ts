@@ -167,7 +167,7 @@ export async function mind(req: Request) {
     // Our chances at each lead, worked out from what Earth knows, as Scan shows them. 2026-11-01.
     const kept = [...plan.sentinels, ...(plan.colony ? [plan.colony] : [])].map((o) => o.name);
     const leads = leadsOf(view.felt, view.holes ?? [], view.visits.filter((v) => v.by === "seed" && !v.sent), kept, view.minds, view.proximaSeen);
-    chances = describeChances(leads, readingsOf(leads, { felt: view.felt, proxima: view.proxima, visits: view.visits, watcher: view.minds?.watcher ?? undefined, knocks, observe: plan.observe, year }));
+    chances = describeChances(leads, readingsOf(leads, { felt: view.felt, proxima: view.proxima, visits: view.visits, watcher: view.minds?.watcher ?? undefined, flashes: view.minds?.flashes, knocks, observe: plan.observe, year }));
     known = `${describe(view)}\n\nMatter we hold in orbit now, less what our builds take: ${held}.${year === null ? "" : `\n\n${describeSearch(kit.searched, year)}`}`;
   }
   const told = {
