@@ -4,8 +4,8 @@ import { skyOf } from "@/lib/game/natural";
 import { kitOf } from "@/lib/game/reach";
 import { nextStopWhy } from "@/lib/sim/next";
 import { earthKnows, willKnows } from "@/lib/sim/knowledge";
-import { moonSearchEnds, tourEnds } from "@/lib/sim/minds";
-import { readGifts, readLater, readColony, readLenses, readObserve, readSentinels, readSeeds, readQueue, readStops } from "./orders";
+import { moonSearchEnds, READ_YEARS, tourEnds } from "@/lib/sim/minds";
+import { readGifts, readLater, readColony, readCloseReads, readLenses, readObserve, readSentinels, readSeeds, readQueue, readStops } from "./orders";
 import { readAimed, readKnocks, readStrikes, readWill } from "./orders";
 import { inPool, loadWorld } from "./world";
 
@@ -50,6 +50,7 @@ export async function known(req: Request) {
     stops: readStops(list(q.get("stops"))),
     gifts: readGifts(list(q.get("gifts"))),
     lenses: readLenses(list(q.get("lenses"))),
+    closeReads: readCloseReads(list(q.get("closeReads"))),
     sentinels: readSentinels(list(q.get("sentinels"))),
     seeds: readSeeds(list(q.get("seeds"))),
     colony: readColony(one(q.get("colony"))),
@@ -76,6 +77,7 @@ export async function next(req: Request) {
     stops: readStops(list(q.get("stops"))),
     gifts: readGifts(list(q.get("gifts"))),
     lenses: readLenses(list(q.get("lenses"))),
+    closeReads: readCloseReads(list(q.get("closeReads"))),
     sentinels: readSentinels(list(q.get("sentinels"))),
     seeds: readSeeds(list(q.get("seeds"))),
     colony: readColony(one(q.get("colony"))),
@@ -89,6 +91,7 @@ export async function next(req: Request) {
   // And the Years the Moon Search and the Asteroid Tour end, each saying so on Build. 2026-10-30.
   const ends = [
     { at: done["Moon Search"] == null ? null : moonSearchEnds(done["Moon Search"]), why: "Moon Search ends" },
+    ...plan.closeReads.map((o) => ({ at: o.y + READ_YEARS, why: "Close Reading done" })),
     { at: done["Asteroid Tour"] == null ? null : tourEnds(done["Asteroid Tour"]), why: "Asteroid Tour ends" },
   ];
   // Betelgeuse's end, once, the one natural event that stops a skip. 2026-10-30.

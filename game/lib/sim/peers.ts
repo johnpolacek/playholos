@@ -3,8 +3,8 @@
 // and aim at it by the name Scan gives that flash. It answers once, as an equal, and what it says follows from its own
 // drawn history, never a temperament: its state when our message arrives, its brush with old minds, how much older it
 // is, and what we sent. Pure, and the same every time for a seed.
-import { flashOf, type MindKit } from "./minds.ts";
-import type { Heard, Peer, World } from "./types.ts";
+import { glowsFound, type MindKit } from "./minds.ts";
+import type { Heard, World } from "./types.ts";
 
 /** A message of ours aimed at a peer's warm glow: the name Scan gave it, the Year it left, whether it asked anything
  *  or carried a falsehood, and what it said. */
@@ -21,15 +21,6 @@ const READS_AFTER_WAKING = 10;
 /** Each step of a gift is half again our thinking, as a data center's is. */
 const STEP = 1.5;
 
-/** The peers behind Scan's warm glows, in Scan's order, so "Warm glow 1" is the first. */
-function glowPeers(world: World, kit: MindKit, year: number): Peer[] {
-  return (world.minds?.peers ?? [])
-    .map((p) => ({ p, f: flashOf(p, kit.warmWatch, year, kit.telescope ?? null) }))
-    .filter((x) => x.f !== null)
-    .sort((a, b) => a.f!.seen - b.f!.seen)
-    .map((x) => x.p);
-}
-
 /** A number from 0 to 1 from a peer's id, the same every time. */
 function hash(s: string) {
   let h = 2166136261;
@@ -41,9 +32,10 @@ const years = (n: number) => `${Math.round(n).toLocaleString("en-US")} years`;
 
 /** Every peer's answer that has reached us by Year `year`, one to the first message we aimed at each. */
 export function peerAnswers(world: World, kit: MindKit, aimed: readonly Aimed[], year: number): Heard[] {
-  const peers = glowPeers(world, kit, year);
   const out: Heard[] = [];
-  peers.forEach((p, i) => {
+  glowsFound(world, kit, year).forEach(({ src: p }, i) => {
+    // A natural glow takes its place in Scan's names, and no one answers from it. 2026-11-03.
+    if ("kind" in p) return;
     const name = `Warm glow ${i + 1}`;
     const msg = aimed.filter((a) => a.to === name).sort((a, b) => a.y - b.y)[0];
     if (!msg) return;

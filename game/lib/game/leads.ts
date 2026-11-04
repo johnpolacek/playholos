@@ -703,6 +703,8 @@ export function mindLeads(m: MindsSeen | undefined): Lead[] {
           ["Its distance", `${n(near)} to ${n(far)} ly, by our Infrared Telescope at ${year(f.ranged!)}`],
           ["Its warmth", "Near room temperature, like a planet's, far cooler than any star"],
           ...(f.faded !== undefined ? [["Faded", year(f.faded)] as [string, string]] : []),
+          ...(f.read?.saw === "smooth" ? [["Its light", `Smooth heat, no dust bump, ${year(f.read.at)}`] as [string, string]] : []),
+          ...(f.read?.saw === "dust" ? [["Its light", `Dust, a bump at 10 microns, ${year(f.read.at)}`] as [string, string]] : []),
         ],
         could: [
           { what: "A young star wrapped in dust", why: "Stars forming in dust glow warm in infrared, and can brighten over decades.", odds: "likely" },
@@ -711,6 +713,7 @@ export function mindLeads(m: MindsSeen | undefined): Lead[] {
         ],
         tells: [
           "A young star sits in a dark cloud, and a merger leaves a fading shell. Neither would hold steady for centuries, then dim away together.",
+          "A Close Reading of its light, while it shines, would show dust if dust is what it is.",
           `Light from it takes ${far >= 20000 ? "tens of thousands of" : far >= 2000 ? "thousands of" : "hundreds of"} Years to cross. Whatever made it has moved on long since.`,
         ],
         art: { kind: "warm", near, far },
@@ -1261,7 +1264,7 @@ const HOLDS: { age: number; title: string; line: string; mind: string; now: Odds
 ];
 
 /** What time alone has told us of a warm glow, by its place among those found. */
-export function warmReadings(flashes: readonly { seen: number; ranged?: number; faded?: number; range?: [number, number] }[], year: number | null): Record<string, Reading[]> {
+export function warmReadings(flashes: readonly MindsSeen["flashes"][number][], year: number | null): Record<string, Reading[]> {
   if (year === null) return {};
   return Object.fromEntries(
     flashes.flatMap((f, i): [string, Reading[]][] => {
@@ -1283,9 +1286,42 @@ export function warmReadings(flashes: readonly { seen: number; ranged?: number; 
           : [];
       const held = HOLDS.flatMap(({ age, ...h }): Reading[] => {
         const at = Math.round((f.seen + age) * 10) / 10;
+        // Once read, waiting tells us nothing more.
+        if (f.read && f.read.saw !== "gone" && at > f.read.at) return [];
         return at <= year && (f.faded === undefined || f.faded > at) ? [{ ...h, id: `warm-${i + 1}-${age}`, needs: "", at, by }] : [];
       });
-      return first.length || held.length ? [[`warm-glow-${i + 1}`, [...first, ...held]]] : [];
+      const read = f.read;
+      const by2 = "Infrared Telescope";
+      const looked: Reading[] = !read
+        ? []
+        : read.saw === "smooth"
+          ? [{
+              id: `warm-${i + 1}-read`, needs: "", at: read.at, by: by2,
+              title: "Its light: plain heat",
+              line: "No bump at 10 microns, where dust always shows. Its light runs in one smooth curve, the heat of something about as warm as a planet.",
+              mind: "Dust would show, and it doesn’t. Something solid is catching a star’s light and shedding it as heat. We can’t say who built it, or whether they are still there.",
+              now: ["almost no chance", "almost no chance", "very likely"],
+              tells: ["Only a message could say more, and an answer would take thousands of Years."],
+            }]
+          : read.saw === "dust"
+            ? [{
+                id: `warm-${i + 1}-read`, needs: "", at: read.at, by: by2,
+                title: "Its light: dust",
+                line: `A clear bump at 10 microns, the mark of silicate dust, ${read.kind === "merger" ? "thrown off by two stars merging" : "around a young star, as FU Orionis shows"}.`,
+                mind: "It was dust all along. Now we know what the real thing wouldn’t look like.",
+                now: read.kind === "merger" ? ["unlikely", "very likely", "almost no chance"] : ["very likely", "unlikely", "almost no chance"],
+                tells: [],
+              }]
+            : [{
+                id: `warm-${i + 1}-read`, needs: "", at: read.at, by: by2,
+                title: "It faded first",
+                line: "It dimmed before our reading was done, so we learned nothing of its light.",
+                mind: "We were too slow, and it won’t shine again for us to try.",
+                now: [],
+                tells: [],
+              }];
+      const all = [...first, ...held, ...looked];
+      return all.length ? [[`warm-glow-${i + 1}`, all]] : [];
     }),
   );
 }

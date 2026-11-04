@@ -123,6 +123,8 @@ export interface Plan {
    *  thought goes further, by messages.ts's GIFT_STEPS. A gift saved without a size counts as a collection, as all
    *  did before 2026-10-26's sizes. */
   gifts?: (Ordered & { size?: Size })[];
+  /** Close Readings of warm glows, each by Scan's name and the Year we ordered it. 2026-11-03. */
+  closeReads?: Ordered[];
   /** Lenses we sent to the Sun's focus, each by the star it looks at and the Year we ordered it. It leaves once the
    *  Solar Lens is done. One a star. 2026-10-26. */
   lenses?: Ordered[];
