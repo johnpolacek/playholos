@@ -28,6 +28,8 @@ export interface Target {
   stand: number;
   /** Which way from it to stand, if not on our side of it. */
   dir?: Vec;
+  /** The body to name and ring as the place in view, if not the one at `pos`. */
+  mark?: string;
 }
 
 export interface Flight {
@@ -41,6 +43,8 @@ export interface Flight {
   pick(x: number, y: number): string | null;
   /** Our light's shell round Sol, light-years, or null for none. */
   light(ly: number | null): void;
+  /** A dashed line from Sol to a place, with its distance, or null for none. */
+  thread(to: Vec | null): void;
   dispose(): void;
 }
 
@@ -472,10 +476,52 @@ export function mountFlight(
     return [(tmp.x * 0.5 + 0.5) * W, (-tmp.y * 0.5 + 0.5) * H, z];
   }
 
+  // The line from Sol to the place in view, cut where it passes behind the camera, its distance at its middle.
+  let threaded = false;
+  let end: Vec | null = null;
+  const va = new THREE.Vector3(), vb = new THREE.Vector3();
+  function thread(W: number, H: number) {
+    if (!threaded || !leg || !end) return;
+    va.set(0, 0, 0).applyMatrix4(camera.matrixWorldInverse);
+    vb.set(...end).applyMatrix4(camera.matrixWorldInverse);
+    const NEAR = -0.02;
+    if (va.z > NEAR && vb.z > NEAR) return;
+    if (va.z > NEAR) va.lerp(vb, (va.z - NEAR) / (va.z - vb.z));
+    if (vb.z > NEAR) vb.lerp(va, (vb.z - NEAR) / (vb.z - va.z));
+    const toScreen = (v: THREE.Vector3) => {
+      const p = v.clone().applyMatrix4(camera.projectionMatrix);
+      return [(p.x * 0.5 + 0.5) * W, (-p.y * 0.5 + 0.5) * H] as const;
+    };
+    const [ax, ay] = toScreen(va), [bx, by] = toScreen(vb);
+    g2.globalAlpha = 0.8;
+    g2.strokeStyle = "#ffffff";
+    g2.lineWidth = 1.2;
+    g2.setLineDash([5, 5]);
+    g2.lineDashOffset = performance.now() / 90;
+    g2.beginPath();
+    g2.moveTo(ax, ay);
+    g2.lineTo(bx, by);
+    g2.stroke();
+    g2.setLineDash([]);
+    const d = Math.hypot(...end);
+    const words = `${d < 100 ? d.toFixed(1) : Math.round(d).toLocaleString("en-US")} ly from Sol · light takes ${Math.round(d).toLocaleString("en-US")} years`;
+    const mx = Math.min(W - 12, Math.max(12, (ax + bx) / 2)), my = Math.min(H - 12, Math.max(12, (ay + by) / 2));
+    g2.font = `11px ${mono}`;
+    g2.textAlign = "center";
+    g2.textBaseline = "bottom";
+    g2.globalAlpha = 1;
+    g2.fillStyle = "#ffffff";
+    g2.shadowColor = "#000";
+    g2.shadowBlur = 6;
+    g2.fillText(words, mx, my - 6);
+    g2.shadowBlur = 0;
+  }
+
   function names(W: number, H: number) {
     g2.setTransform(dpr, 0, 0, dpr, 0, 0);
     g2.clearRect(0, 0, W, H);
-    const target = leg?.to.id;
+    thread(W, H);
+    const target = leg?.to.mark ?? leg?.to.id;
     const want: { b: Body; x: number; y: number; z: number; main: boolean }[] = [];
     for (const b of list) {
       const main = b.id === target;
@@ -592,6 +638,10 @@ export function mountFlight(
         if (d < gap) [best, gap] = [b.id, d];
       }
       return best;
+    },
+    thread(to) {
+      threaded = !!to;
+      end = to;
     },
     light(ly) {
       shell.visible = ly !== null && ly > 0;
