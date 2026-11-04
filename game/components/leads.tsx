@@ -306,13 +306,16 @@ export function LeadList({
   const row = (l: Lead) => {
     const read = readings[l.slug]?.at(-1);
     const isNew = !!read && !!fresh?.has(read.id);
+    // A warm glow is gold, on the list as on the map: our hottest kind of lead. Dimmer once faded. 2026-11-03.
+    const warm = l.art.kind === "warm";
+    const faded = warm && l.facts.some(([k]) => k === "Faded");
     return (
       <Face
         mark={<LeadMark art={l.art} />}
-        tone={l.reply ? "text-other" : "text-you"}
+        tone={faded ? "text-other/60" : warm || l.reply ? "text-other" : "text-you"}
         name={
           <>
-            <b className="font-semibold">{starName(l.star)}</b> · {l.what}
+            <b className={`font-semibold ${faded ? "text-other/70" : warm ? "text-other" : ""}`}>{starName(l.star)}</b> · {l.what}
           </>
         }
         line={
@@ -438,6 +441,8 @@ export function LeadList({
         {watching > 0 && (
           <>
             <ListHead left={`Warm glows, still shining · ${watching}`} right="" className="mt-5" />
+            {/* What the words mean, where a player first meets them. Asked for in play, 2026-11-03. */}
+            <p className="mt-1.5 text-[13px] leading-snug text-page-ink2">Warmth where nothing shone before. Dust can do this, and so can a mind building around its star. Dust fades.</p>
             <ul className="mt-1 flex flex-col">{rows("watching")}</ul>
           </>
         )}
