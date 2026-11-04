@@ -1,17 +1,20 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router";
-import { Play, SIM_COLOR, SimMark } from "@/components/icons";
+import { Play } from "@/components/icons";
 import { placeLabel } from "@/components/place-label";
 import { Sky, SkyArt, useSky } from "@/components/sky";
-import { chain, DIALS, far, odds, PEER_YEARS, round } from "@/lib/about/dials";
+import { chain, DIALS, odds, PEER_YEARS, round } from "@/lib/about/dials";
 import { Funnel, type Tier } from "@/components/funnel";
+import { SimFlight } from "@/components/sim-flight";
 import type { Dials, Mark } from "@/lib/drift";
 import { YEAR_0 } from "@/lib/game/clock";
 import { HOLOS_ODDS, type Odds } from "@/lib/sim/draw-minds";
 import { pickablesOf, type Pickable } from "@/lib/sim/pick";
+import { bodiesOf, placesOf, rankOf, TABS, type Place, type Tab } from "@/lib/sim/flight-stops";
+import type { Target } from "@/lib/sim/flight-view";
 import type { WorldOdds } from "@/lib/sim/draw-worlds";
 import type { Ask, Drawn } from "@/lib/sim/draw-worker";
-import { AHEAD, UNIVERSE, clashesOf, lightAt, timeOf, namedOf, pointsOf, tourOf } from "@/lib/sim/tour";
+import { AHEAD, CENTER, UNIVERSE, clashesOf, lightAt, timeOf, tourOf } from "@/lib/sim/tour";
 import { gsap, prefersReducedMotion } from "@/lib/motion";
 
 // Simulation mode, 2026-11-01: no game, only a sky drawn at the odds we set. The six steps from stars to minds, as on
@@ -32,8 +35,12 @@ const SECTIONS = [
 const KICK = "font-mono text-[10.5px] tracking-[.1em] text-muted";
 /** One dials object for the whole page, so a new stop eases the view there, not a fresh flight. */
 const DIALS_SIM: Dials = {};
-/** Past this view, log10 AU, the minds round us crowd at Sol, so the map names only the place in view. */
-const NAMES_UNTIL = 8.5;
+/** While the flight has the screen, the map under it rests on a cheap view: our Sun, close. */
+const RESTING = { minds: [], focus: null, zoom: 1.75, marks: [] };
+/** Seconds the flight holds at each place before drifting on to the next. */
+const HOLD = 7;
+/** With no peers, the flight stands back to see the whole Galaxy from above. */
+const GALAXY_VIEW: Target = { id: "galaxy", pos: CENTER, stand: 95_000, dir: [0.2, 1, 0.35] };
 const NONE: never[] = [];
 /** Today, as a decimal year, and how far ahead the game's Year 0, 2040, lies: peers' glows are counted from it. */
 const TODAY = 1970 + Date.now() / (365.25 * 864e5);
@@ -52,6 +59,13 @@ export default function Sim() {
   const [seed, setSeed] = useState(10);
   const [drawn, setDrawn] = useState<Drawn | null>(null);
   const [at, setAt] = useState(0);
+  // The Simulation section: which list the flight goes through, and where in it. Null for the Universe section.
+  const [tab, setTab] = useState<Tab | null>(null);
+  const [place, setPlace] = useState(0);
+  // The flight drifts on by itself until we take it in hand.
+  const [auto, setAuto] = useState(true);
+  const [arrived, setArrived] = useState<string | null>(null);
+  const [open, setOpen] = useState(false);
   // The opening shot plays once, on first arriving: the card and labels wait for it to land, and stepping on ends it.
   const [opening, setOpening] = useState(true);
 
@@ -118,13 +132,12 @@ export default function Sim() {
     () => (drawn ? tourOf(drawn.minds, odds_, drawn.names, drawn.worlds, drawn.near) : []),
     [drawn, odds_],
   );
-  // Two sections: the universe as we see it, steps 1 to 6, then the simulation, from the dials on.
+  // Two sections: the universe as we see it, a tour up to our nearest stars, then the simulation, a flight.
   const split = Math.max(0, tour.findIndex((s) => s.id === "dials"));
-  const here = Math.min(at, tour.length - 1);
-  const section = here < split ? "universe" : "simulation";
+  const section = tab ? "simulation" : "universe";
+  const stop = tab ? undefined : tour[Math.min(at, Math.max(0, split - 1))];
   const clashes = useMemo(() => (drawn ? clashesOf(drawn.minds, odds_, drawn.fillers) : []), [drawn, odds_]);
-  const points = useMemo(() => (drawn ? pointsOf(drawn.minds, drawn.worlds, TO_NOW) : []), [drawn]);
-  // Time passing, on its stop: years from now, and whether it runs by itself.
+  // Time passing, on the Peers list: years from now, and whether it runs by itself.
   const [years, setYears] = useState(0);
   const [playing, setPlaying] = useState(false);
   useEffect(() => {
@@ -144,57 +157,90 @@ export default function Sim() {
     raf = requestAnimationFrame(step);
     return () => cancelAnimationFrame(raf);
   }, [playing]);
-  const stop = tour[Math.min(at, tour.length - 1)];
-  const named = useMemo(() => (drawn ? namedOf(drawn.minds, drawn.names, drawn.worlds) : []), [drawn]);
-  // Before the dials, the sky as we know it: no drawn minds or worlds, and no dials.
-  const revealed = !!stop?.reveal;
+  const revealed = !!tab;
   const near = drawn?.near ?? NONE;
   const spokes = useMemo(() => (stop?.spokes ? near.map((n) => n.pos) : undefined), [stop?.spokes, near]);
-  // On the dials stop, each world and mind can be tapped: once to fly to it, again to read what we know of it.
-  const picking = stop?.id === "dials";
-  const pickables = useMemo(
-    () => (drawn && picking ? pickablesOf(drawn.minds, drawn.worlds, drawn.names, drawn.starOf) : []),
-    [drawn, picking],
+
+  // The flight: each list nearest first, a place in view, and everything drawn round it.
+  const places: Place[] = useMemo(
+    () => (drawn && tab ? placesOf(tab, drawn.minds, drawn.names, drawn.worlds, drawn.near, TODAY, TO_NOW) : []),
+    [drawn, tab],
   );
-  // A pick holds only on the stop it was made on, so stepping on lets it go.
-  const [pick, setPick] = useState<{ id: string; open: boolean; stop: string } | null>(null);
-  const picked: Pickable | undefined =
-    pick && pick.stop === stop?.id ? pickables.find((p) => p.id === pick.id) : undefined;
-  const pickAt = useRef<Record<string, { x: number; y: number; a: number }>>({});
-  const onTap = useCallback((x: number, y: number) => {
-    let best: string | null = null,
-      gap = 22;
-    for (const [id, p] of Object.entries(pickAt.current)) {
-      const g = Math.hypot(p.x - x, p.y - y);
-      if (p.a > 0 && g < gap) [best, gap] = [id, g];
+  const here: Place | undefined = places[Math.min(place, places.length - 1)];
+  // Which peers glow at us at the chosen time, as a key, so the bodies are drawn again only when that changes.
+  const glowing = useMemo(
+    () => drawn?.minds.peers.map((p) => Number(p.flash[0] + TO_NOW <= years && years <= p.flash[1] + TO_NOW)).join("") ?? "",
+    [drawn, years],
+  );
+  const bodies = useMemo(
+    () => (drawn ? bodiesOf(drawn.minds, drawn.names, drawn.worlds, drawn.near, years, TO_NOW) : []),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [drawn, glowing],
+  );
+  const hereKey = here ? `${here.id}:${here.pos.join()}` : "";
+  const target: Target = useMemo(
+    () => (here ? { id: here.id, pos: here.pos, stand: here.stand } : tab === "peers" ? GALAXY_VIEW : { id: "sol", pos: [0, 0, 0], stand: 30 }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [hereKey, tab],
+  );
+  // Held at a place for a while, then on to the next nearest.
+  useEffect(() => {
+    if (!auto || !here || arrived !== here.id || place >= places.length - 1) return;
+    const t = setTimeout(() => setPlace((i) => Math.min(places.length - 1, i + 1)), HOLD * 1000);
+    return () => clearTimeout(t);
+  }, [auto, arrived, here, place, places.length]);
+  const goTab = (t: Tab | null) => {
+    setTab(t);
+    setPlace(0);
+    setAuto(true);
+    setOpen(false);
+    setOpening(false);
+  };
+  const go = (i: number) => {
+    setPlace(Math.max(0, Math.min(places.length - 1, i)));
+    setOpen(false);
+  };
+  // A tap flies to what is there, in whichever list holds it, and a second tap on the place in view reads it.
+  const onTap = (id: string | null) => {
+    if (!id || !drawn || !tab) return setOpen(false);
+    if (id === here?.id) return setOpen((o) => !o);
+    for (const t of [tab, ...TABS.map((x) => x.id).filter((x) => x !== tab)]) {
+      const i = placesOf(t, drawn.minds, drawn.names, drawn.worlds, drawn.near, TODAY, TO_NOW).findIndex((p) => p.id === id);
+      if (i < 0) continue;
+      setTab(t);
+      setPlace(i);
+      setAuto(false);
+      setOpen(false);
+      return;
     }
-    setPick((was) => (best ? { id: best, open: was?.id === best, stop: "dials" } : null));
-  }, []);
+  };
+  const pickables = useMemo(
+    () => (drawn && tab ? pickablesOf(drawn.minds, drawn.worlds, drawn.names, drawn.starOf) : []),
+    [drawn, tab],
+  );
+  const detail: Pickable | undefined = here && open ? (pickables.find((p) => p.id === here.id) ?? readOf(here)) : undefined;
 
   const sim = useMemo(
-    () => ({
-      minds: revealed ? points : NONE,
-      // Before the first draw comes, the tour's opening: the universe we can see.
-      focus: picked ? picked.pos : stop ? stop.focus : null,
-      zoom: picked ? Math.min(8.3, Math.max(6.5, Math.log10(5 * picked.d * 63241.077))) : (stop?.zoom ?? UNIVERSE),
-      clash: stop?.clash,
-      bare: !picked && stop?.bare,
-      spokes,
-      time: stop?.time ? { years, light: lightAt(years, TODAY) } : undefined,
-      ring: stop?.id === "dials" && !result.nearest.beyond ? result.nearest.ly : undefined,
-      intro: opening && stop?.id === "universe" ? 1 : undefined,
-      // The place in view first, so its name wins a crowded spot, then Sol, then the minds round us.
-      marks: [
-        ...(picked ? [{ id: "here", pos: picked.pos }] : stop?.focus ? [{ id: "here", pos: stop.focus }] : []),
-        ...(picked ? [{ id: "Sol", pos: [0, 0, 0] as [number, number, number] }] : []),
-        ...pickables.map((p) => ({ id: `pick:${p.id}`, pos: p.pos })),
-        ...(stop?.notes ? stop.notes : [{ id: "Sol", pos: [0, 0, 0] as [number, number, number] }]),
-        ...(spokes ? near.map((n, i) => ({ id: `near-${i}`, pos: n.pos })) : []),
-        ...(stop?.id === "dials" ? [{ id: "ring", pos: [0, 0, 0] as [number, number, number], ring: true }] : []),
-        ...(revealed && stop.zoom < NAMES_UNTIL ? named.filter((n) => n.pos.join() !== stop.focus?.join()) : []),
-      ],
-    }),
-    [points, stop, named, revealed, spokes, near, years, opening, result, picked, pickables],
+    () =>
+      tab
+        ? RESTING
+        : {
+            minds: NONE,
+            // Before the first draw comes, the tour's opening: the universe we can see.
+            focus: stop ? stop.focus : null,
+            zoom: stop?.zoom ?? UNIVERSE,
+            clash: stop?.clash,
+            bare: stop?.bare,
+            spokes,
+            intro: opening && stop?.id === "universe" ? 1 : undefined,
+            // The place in view first, so its name wins a crowded spot, then Sol, then the notes.
+            marks: [
+              ...(stop?.focus ? [{ id: "here", pos: stop.focus }] : []),
+              ...(stop?.notes ? stop.notes : [{ id: "Sol", pos: [0, 0, 0] as [number, number, number] }]),
+              ...(spokes ? near.map((n, i) => ({ id: `near-${i}`, pos: n.pos })) : []),
+            ],
+          },
+    [tab, stop, spokes, near, opening],
   );
 
   const names = useRef<Record<string, HTMLSpanElement | null>>({});
@@ -220,9 +266,7 @@ export default function Sim() {
     const marked = new Set(marks.map((m) => m.id));
     for (const [id, n] of Object.entries(names.current)) if (n && !marked.has(id)) n.style.opacity = "0";
     for (const [id, g] of Object.entries(leads.current)) if (g && !marked.has(id)) g.style.opacity = "0";
-    pickAt.current = {};
     for (const { id, x, y, a } of marks) {
-      if (id.startsWith("pick:")) pickAt.current[id.slice(5)] = { x, y, a };
       const n = names.current[id];
       if (!n) continue;
       const off = offs.current[id];
@@ -287,7 +331,7 @@ export default function Sim() {
       },
     );
     return () => void t.kill();
-  }, [stop?.id, opening]);
+  }, [stop?.id, here?.id, tab, opening]);
 
   // The dials slide in when the tour hands them over.
   const panel = useRef<HTMLElement>(null);
@@ -328,7 +372,7 @@ export default function Sim() {
                 className={label}
                 style={{ color: stop?.clash ? ROSE : undefined }}
               >
-                {picked ? `${picked.title} · ${far(picked.d)}` : stop?.label}
+                {stop?.label}
               </span>
               <svg className="pointer-events-none absolute inset-0 h-full w-full overflow-visible">
                 {stop?.notes?.map((n) => (
@@ -347,13 +391,6 @@ export default function Sim() {
                   {n.text}
                 </span>
               ))}
-              <span
-                ref={(el) => void (names.current.ring = el)}
-                className={`${label} text-[13px]`}
-                style={{ color: "var(--you)" }}
-              >
-                Our nearest mind, likely within {far(result.nearest.ly)}
-              </span>
               {near.map((n, i) => (
                 <span
                   key={n.name}
@@ -363,30 +400,27 @@ export default function Sim() {
                   {n.name} <span className="text-muted">{n.d.toFixed(1)} ly</span>
                 </span>
               ))}
-              {named.map((n) => (
-                <span
-                  key={n.id}
-                  ref={(el) => void (names.current[n.id] = el)}
-                  className={`${label} inline-flex items-center gap-1 text-muted`}
-                >
-                  <span style={{ color: SIM_COLOR[n.kind] }}>
-                    <SimMark kind={n.kind} />
-                  </span>
-                  {n.label}
-                </span>
-              ))}
             </SkyArt>
-            <Turn onTap={picking ? onTap : undefined} />
-            {picked && pick?.open && (
-              <Details item={picked} onClose={() => setPick({ id: picked.id, open: false, stop: "dials" })} />
+            <Turn />
+            {tab && (
+              <SimFlight
+                className="absolute inset-0"
+                bodies={bodies}
+                target={target}
+                light={tab === "peers" ? lightAt(years, TODAY) : null}
+                onArrive={setArrived}
+                onTap={onTap}
+                onTouch={() => setAuto(false)}
+              />
             )}
+            {detail && <Details item={detail} onClose={() => setOpen(false)} />}
             <nav className="absolute top-4 right-4 flex items-center gap-1 rounded-full border border-faint bg-paper/70 p-0.5 font-mono text-[11px] backdrop-blur-sm">
               {SECTIONS.map((s) => (
                 <button
                   key={s.id}
                   aria-current={section === s.id ? "step" : undefined}
                   className={`rounded-full px-3 py-0.5 ${section === s.id ? "bg-ink/15 text-ink" : "text-muted hover:text-ink"}`}
-                  onClick={() => (setOpening(false), setAt(s.id === "universe" ? 0 : split))}
+                  onClick={() => (s.id === "universe" ? (goTab(null), setAt(0)) : goTab("stars"))}
                 >
                   {s.label}
                 </button>
@@ -396,9 +430,9 @@ export default function Sim() {
                 <Play size={11} />
               </Link>
             </nav>
-            {stop?.id === "dials" && <Count minds={result.galaxy} />}
+            {tab && <Count minds={result.galaxy} />}
             <div className="pointer-events-none absolute bottom-4 left-4 flex max-w-xl flex-col items-start gap-2 pr-4">
-              {clashes.length > 0 && (
+              {tab && clashes.length > 0 && (
                 <div
                   role="alert"
                   className="pointer-events-auto rounded-lg border-2 bg-paper/95 p-3 backdrop-blur-sm"
@@ -419,7 +453,7 @@ export default function Sim() {
               )}
             </div>
             {/* Where the real ends: from the dials on, the minds and their worlds are drawn, not seen. */}
-            {revealed && (
+            {tab && tab !== "stars" && (
               <p className="pointer-events-none absolute right-4 bottom-4 flex max-w-[320px] items-start gap-2 rounded-lg border border-dashed border-[#b39ef2]/60 bg-paper/90 px-3 py-1.5 font-mono text-[11px] text-[#b39ef2] backdrop-blur-sm">
                 <span className="tracking-[.12em]">SPECULATION</span>
                 <span className="text-page-ink2">
@@ -434,10 +468,7 @@ export default function Sim() {
               >
                 <div className="flex items-center justify-between gap-2">
                   <p className={KICK}>
-                    {section === "universe"
-                      ? `UNIVERSE ${here + 1} / ${split}`
-                      : `SIMULATION ${here - split + 1} / ${tour.length - split}`}
-                    {busy ? " · DRAWING…" : ""}
+                    UNIVERSE {Math.min(at, split - 1) + 1} / {split}
                   </p>
                   <div className="flex gap-1.5">
                     <button
@@ -448,9 +479,8 @@ export default function Sim() {
                       Back
                     </button>
                     <button
-                      className="rounded-full border border-faint px-3 py-0.5 font-mono text-[11px] disabled:opacity-30"
-                      disabled={at >= tour.length - 1}
-                      onClick={() => (setOpening(false), setAt((a) => Math.min(tour.length - 1, a + 1)))}
+                      className="rounded-full border border-faint px-3 py-0.5 font-mono text-[11px]"
+                      onClick={() => (at >= split - 1 ? goTab("stars") : (setOpening(false), setAt((a) => a + 1)))}
                     >
                       Next
                     </button>
@@ -462,7 +492,62 @@ export default function Sim() {
                 <p data-rise className="mt-1 text-[14px] leading-snug text-ink/85">
                   {stop.words}
                 </p>
-                {stop.time && drawn && (
+              </section>
+            )}
+            {tab && (
+              <section
+                ref={card}
+                className="absolute top-16 left-4 right-4 max-w-md rounded-lg border border-faint bg-paper/95 p-3 shadow-lg shadow-black/40 backdrop-blur-sm md:top-4 md:right-80"
+              >
+                <div role="tablist" className="flex flex-wrap gap-1 font-mono text-[11px]">
+                  {TABS.map((t) => (
+                    <button
+                      key={t.id}
+                      role="tab"
+                      aria-selected={tab === t.id}
+                      className={`rounded-full px-3 py-0.5 ${tab === t.id ? "bg-ink/15 text-ink" : "text-muted hover:text-ink"}`}
+                      onClick={() => goTab(t.id)}
+                    >
+                      {t.label}
+                    </button>
+                  ))}
+                </div>
+                <div className="mt-2.5 flex items-center justify-between gap-2">
+                  <p className={KICK}>
+                    {here ? `${rankOf(place, TABS.find((t) => t.id === tab)!.one).toUpperCase()} · ${place + 1} / ${places.length}` : "\u00a0"}
+                    {busy ? " · DRAWING…" : ""}
+                  </p>
+                  <div className="flex gap-1.5">
+                    <button
+                      className="rounded-full border border-faint px-3 py-0.5 font-mono text-[11px] disabled:opacity-30"
+                      disabled={place <= 0}
+                      onClick={() => go(place - 1)}
+                    >
+                      Back
+                    </button>
+                    <button
+                      className="rounded-full border border-faint px-3 py-0.5 font-mono text-[11px] disabled:opacity-30"
+                      disabled={place >= places.length - 1}
+                      onClick={() => go(place + 1)}
+                    >
+                      Next
+                    </button>
+                    <button
+                      className="w-16 rounded-full border border-faint px-2 py-0.5 font-mono text-[11px] text-muted hover:text-ink"
+                      onClick={() => setAuto((a) => !a)}
+                    >
+                      {auto ? "Hold" : "Drift"}
+                    </button>
+                  </div>
+                </div>
+                <h2 data-rise className="mt-1.5 font-semibold" style={{ color: here?.kind === "fills" ? ROSE : undefined }}>
+                  {here ? here.title : drawn ? emptyOf(tab).title : "Drawing…"}
+                </h2>
+                <p data-rise className="mt-1 text-[14px] leading-snug text-ink/85">
+                  {here ? here.words : drawn ? emptyOf(tab).words : ""}
+                </p>
+                {here && <p className="mt-1.5 font-mono text-[10.5px] text-muted">Tap it again to read what we know.</p>}
+                {tab === "peers" && drawn && drawn.minds.peers.length > 0 && (
                   <Time
                     years={years}
                     playing={playing}
@@ -765,4 +850,25 @@ function Details({ item, onClose }: { item: Pickable; onClose(): void }) {
       ))}
     </section>
   );
+}
+
+/** What a list says when it has nothing in it. */
+function emptyOf(tab: Tab): { title: string; words: string } {
+  if (tab === "peers")
+    return { title: "Likely none but us", words: "No mind woke within 20,000 years of us at these odds, so none is young as we are. Here is the whole Galaxy, from above." };
+  if (tab === "worlds") return { title: "No warm worlds drawn", words: "At these odds, no rocky world in a warm zone within 50 light-years." };
+  return { title: "No minds drawn", words: "At these odds, no mind woke on any star near us." };
+}
+
+/** What we know of a star or a peer, for the places pick.ts does not cover. */
+function readOf(p: Place): Pickable {
+  const star = p.kind === "star";
+  return {
+    id: p.id,
+    pos: p.pos,
+    d: p.d,
+    title: p.title,
+    real: star ? [p.words] : ["No catalog reaches it. The dials placed it among the Galaxy’s stars."],
+    drawn: star ? ["Nothing. This star is as we know it."] : [p.words],
+  };
 }

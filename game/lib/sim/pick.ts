@@ -38,7 +38,7 @@ function starKind(mag: number, bv: number, ly: number): string {
 const eye = (mag: number) => (mag < 6 ? "Bright enough to see without a telescope." : "Too faint to see without a telescope.");
 const gyr = (g: number) => `${g.toFixed(1)} billion years`;
 
-const LIFE: Record<string, string> = {
+export const LIFE: Record<string, string> = {
   [RUNGS[0]]: "Bare rock: its star stripped its air away.",
   [RUNGS[1]]: "It kept its air, but life never started.",
   [RUNGS[2]]: "Life holds on, as microbes hidden from view.",
