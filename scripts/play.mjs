@@ -28,5 +28,9 @@ for (const dir of [root, game]) {
   if (spawnSync(npm, ["install"], { cwd: dir, stdio: "inherit", shell: win }).status !== 0) process.exit(1);
 }
 
+// The game reads its worlds from a local bucket, empty on a fresh copy. Only worlds not yet sent are sent. 2026-11-04.
+console.log("Loading the worlds…");
+if (spawnSync(npm, ["run", "--silent", "worlds:local"], { cwd: game, stdio: "inherit", shell: win }).status !== 0) process.exit(1);
+
 const dev = spawn(npm, ["run", "dev", "--", "--open"], { cwd: game, stdio: "inherit", shell: win, env: { ...process.env, MIND_VIA: "cli" } });
 dev.on("close", (code) => process.exit(code ?? 0));

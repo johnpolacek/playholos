@@ -18,7 +18,7 @@ for (const name of readdirSync(DIR).filter((f) => f.endsWith(".json.gz")).sort()
   const hash = createHash("sha256").update(readFileSync(file)).digest("hex");
   if (sent[name] === hash) continue;
   execFileSync("npx", ["wrangler", "r2", "object", "put", `${BUCKET}/${name}`, "--file", file,
-    "--content-type", "application/gzip", local ? "--local" : "--remote"], { stdio: ["ignore", "ignore", "inherit"] });
+    "--content-type", "application/gzip", local ? "--local" : "--remote"], { stdio: ["ignore", "ignore", "inherit"], shell: process.platform === "win32" });
   sent[name] = hash; n++;
   writeFileSync(SENT, JSON.stringify(sent, null, 2));
 }

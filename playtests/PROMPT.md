@@ -55,7 +55,7 @@ You are a fresh-eyes playtester for Holos. Play a full first session as a brand 
 ## Deliver
 
 - Make a branch named `playtest/cloud-` plus the UTC date and time, like `playtest/cloud-2026-10-28-2350`.
-- Commit the screenshots and a report to `playtests/<that date and time>/` and push the branch.
+- Commit the screenshots and a report to `playtests/<that date and time>/` and push the branch. Git ignores that folder, so add it with `git add -f`.
 - The report: what you did, findings ranked by severity with screenshot links, and the CLI Mind status.
 - Don't change game code, except a minimal fix to get the CLI Mind running, in its own commit.
 - Revert lockfile changes from installs. Stop the dev server and browser when done.
