@@ -21,13 +21,20 @@ export const router = createBrowserRouter([
       {
         Component: PlayLayout,
         children: [
-          { index: true, Component: ScanTab },
-          { path: "mind", Component: Mind },
-          { path: "build", Component: BuildTab },
-          { path: "build/:slug", Component: BuildItem },
-          { path: "reach", Component: Reach },
-          { path: "reach/:slug", Component: Destination },
-          { path: "lead/:slug", Component: Lead },
+          // The landing: the title screen, for everyone, with its ways in. The play screen draws it. 2026-11-04.
+          { index: true, Component: () => null },
+          {
+            path: "play",
+            children: [
+              { index: true, Component: ScanTab },
+              { path: "mind", Component: Mind },
+              { path: "build", Component: BuildTab },
+              { path: "build/:slug", Component: BuildItem },
+              { path: "reach", Component: Reach },
+              { path: "reach/:slug", Component: Destination },
+              { path: "lead/:slug", Component: Lead },
+            ],
+          },
         ],
       },
       {

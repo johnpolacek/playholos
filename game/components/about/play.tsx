@@ -387,7 +387,7 @@ export function Play({
     <span ref={scope} className="relative inline-flex sm:ml-1">
       <AboutLink
         data-a-bar
-        href="/"
+        href="/play"
         onLeave={() => fx.current?.blast()}
         className="relative overflow-clip rounded-full border border-ink/70 px-3 py-1.5 text-ink transition-colors [-webkit-tap-highlight-color:transparent] hover:bg-ink hover:text-paper"
       >

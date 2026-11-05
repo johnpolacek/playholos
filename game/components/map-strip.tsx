@@ -41,17 +41,17 @@ export function MapStrip() {
   const { pathname: path, search } = useLocation();
   // The walkthroughs, the Scan review and the Build tour, need room under the map on a phone for the Mind's words.
   const guided = /[?&](review|tour)\b/.test(search);
-  const scan = path === "/" || path.startsWith("/lead/");
+  const scan = path === "/play" || path.startsWith("/play/lead/");
   // Reach's map stays on a destination's page, and flies out to its star.
-  const reaching = path === "/reach" || path.startsWith("/reach/");
+  const reaching = path === "/play/reach" || path.startsWith("/play/reach/");
   const beams = useBeams();
-  const aimed = path === "/" && beams.picked !== null;
+  const aimed = path === "/play" && beams.picked !== null;
   const works = useWorks();
-  const built = (path === "/build" || path.startsWith("/build/")) && works.picked !== null;
+  const built = (path === "/play/build" || path.startsWith("/play/build/")) && works.picked !== null;
   const reach = useReach();
   const leads = useLeads();
   // In the review, a tap on the map steps it as one on the words does, but not in a system's Close View, there to look.
-  const reviewing = path === "/" && /[?&]review\b/.test(search);
+  const reviewing = path === "/play" && /[?&]review\b/.test(search);
   const tap = useStepTap(leads.step);
   const [tall, setTall] = useState(false);
 

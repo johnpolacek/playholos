@@ -83,7 +83,7 @@ export function Review({ onClose }: { onClose(): void }) {
   const next = useRef<HTMLButtonElement>(null);
   const navigate = useNavigate();
   // At the end, the way on is the next of the four things we would do first, or back to the tab once all are done.
-  const then = useNext("/?review");
+  const then = useNext("/play?review");
   const [at, setAt] = useState(0);
 
   // The leads we take, nine at most: the nearest eight, nearest first, then the nearest black hole, last. Twelve read

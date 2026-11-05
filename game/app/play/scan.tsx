@@ -10,7 +10,7 @@ export default function ScanTab() {
   return (
     <>
       {!params.has("review") && (
-        <TabHead title="SCAN" sources={SCAN_SOURCES} walk={{ to: "/?review", label: "Review" }} />
+        <TabHead title="SCAN" sources={SCAN_SOURCES} walk={{ to: "/play?review", label: "Review" }} />
       )}
       <Scan />
     </>

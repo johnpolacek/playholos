@@ -61,10 +61,10 @@ function newsBetween(from: number, to: number, plan: Plan | undefined, done: Rec
  *  heard from, reached or with a window open opens its lead. So each note ends on something to do. 2026-11-02. */
 function newsLinks(news: string, leads: { star: string; slug: string }[]) {
   const links: { to: string; label: string }[] = [];
-  for (const [, name] of news.matchAll(/our (.+?) is done\./g)) links.push({ to: `/build/${buildSlug(name)}`, label: `See ${name}` });
+  for (const [, name] of news.matchAll(/our (.+?) is done\./g)) links.push({ to: `/play/build/${buildSlug(name)}`, label: `See ${name}` });
   for (const [, star] of news.matchAll(/(?:reached us from|reply from|our message to) (.+?)(?:,| opened| reached)/g)) {
     const lead = leads.find((l) => l.star === star);
-    if (lead && !links.some((k) => k.to === `/lead/${lead.slug}`)) links.push({ to: `/lead/${lead.slug}`, label: `Open ${star}` });
+    if (lead && !links.some((k) => k.to === `/play/lead/${lead.slug}`)) links.push({ to: `/play/lead/${lead.slug}`, label: `Open ${star}` });
   }
   return links.slice(0, 2);
 }
@@ -189,7 +189,7 @@ export function MindSays() {
   const { leads } = useLeads();
   const [away, setAway] = useState<string | null>(null);
   const root = useRef<HTMLDivElement>(null);
-  const shown = year !== null && !!last && news !== null && news !== BEGUN && last !== save?.read && last !== away && path !== "/mind";
+  const shown = year !== null && !!last && news !== null && news !== BEGUN && last !== save?.read && last !== away && path !== "/play/mind";
   useGSAP(
     () => {
       if (shown && !prefersReducedMotion()) gsap.fromTo(root.current, riseFrom, rise);
@@ -217,7 +217,7 @@ export function MindSays() {
               {k.label} ›
             </Link>
           ))}
-          <Link to="/mind" onClick={() => read(last)} className="text-you hover:underline">
+          <Link to="/play/mind" onClick={() => read(last)} className="text-you hover:underline">
             Reply ›
           </Link>
         </span>

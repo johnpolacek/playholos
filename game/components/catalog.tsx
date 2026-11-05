@@ -36,7 +36,7 @@ export function Catalog({ className = "" }: { className?: string }) {
           const lacking = lacks(plan, b.name);
           return (
             <li key={b.name} className="border-t border-faint">
-              <Link to={`/build/${buildSlug(b.name)}`} className="block py-2.5" {...previews(b.name, preview)}>
+              <Link to={`/play/build/${buildSlug(b.name)}`} className="block py-2.5" {...previews(b.name, preview)}>
                 <Face
                   mark={<BuildMark name={b.name} />}
                   tone={buildTone(b.name, false)}

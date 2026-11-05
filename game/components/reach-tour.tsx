@@ -73,8 +73,8 @@ export function WalkHead(props: {
 export function WalkBack() {
   const navigate = useNavigate();
   const last = STOPS.length - 1;
-  const to = (k: number) => navigate("/reach?tour", { state: { at: k } });
-  return <WalkHead at={last} go={to} back={() => to(last)} next={() => to(last)} nextOff onClose={() => navigate("/reach")} />;
+  const to = (k: number) => navigate("/play/reach?tour", { state: { at: k } });
+  return <WalkHead at={last} go={to} back={() => to(last)} next={() => to(last)} nextOff onClose={() => navigate("/play/reach")} />;
 }
 
 /** The roads to come, each with its mark and the build it waits on. Each opens its build's page, 2026-10-27. */
@@ -84,8 +84,8 @@ function Later() {
       {LATER_ROADS.map((r) => (
         <li key={r.build} data-r>
           <Link
-            to={`/build/${buildSlug(r.build)}`}
-            state={{ back: { to: "/reach?tour", label: "Roads to come", state: { at: STOPS.length - 1 }, walk: true, stops: { n: STOPS.length, at: STOPS.length - 1 } } }}
+            to={`/play/build/${buildSlug(r.build)}`}
+            state={{ back: { to: "/play/reach?tour", label: "Roads to come", state: { at: STOPS.length - 1 }, walk: true, stops: { n: STOPS.length, at: STOPS.length - 1 } } }}
             className="flex gap-3 pb-3"
           >
             <span className={`mt-[2px] shrink-0 ${buildTone(r.build, false)}`}>
@@ -133,7 +133,7 @@ export function ReachTour({ onClose }: { onClose(): void }) {
   const root = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   // At the end, the way on is the next of the four things we would do first, or back to the tab once all are done.
-  const then = useNext("/reach?tour");
+  const then = useNext("/play/reach?tour");
   const last = STOPS.length - 1;
   // Back from a build opened on Roads to come, the walk opens where it was. 2026-10-28.
   const back = (useLocation().state as { at?: number } | null)?.at;

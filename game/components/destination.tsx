@@ -47,7 +47,7 @@ import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motio
 function Need({ name, queued, done }: { name: string; queued: boolean; done: boolean }) {
   return (
     <Link
-      to={`/build/${buildSlug(name)}`}
+      to={`/play/build/${buildSlug(name)}`}
       className="inline-flex h-7 items-center gap-1.5 rounded-full border border-faint pr-2.5 pl-2 text-[12.5px] text-ink transition-colors hover:border-muted"
     >
       <span className={buildTone(name, queued || done)}>
@@ -229,7 +229,7 @@ export function DestinationPage({ slug }: { slug: string }) {
   }, [aim, star, ly, system, range]);
 
   useEffect(() => {
-    const back = (e: KeyboardEvent) => e.key === "Escape" && navigate("/reach");
+    const back = (e: KeyboardEvent) => e.key === "Escape" && navigate("/play/reach");
     window.addEventListener("keydown", back);
     return () => window.removeEventListener("keydown", back);
   }, [navigate]);
@@ -250,7 +250,7 @@ export function DestinationPage({ slug }: { slug: string }) {
     return (
       <p className="mt-2 text-sm text-muted">
         We have no destination by that name.{" "}
-        <Link to="/reach" className="text-ink underline underline-offset-2">
+        <Link to="/play/reach" className="text-ink underline underline-offset-2">
           Back to Reach
         </Link>
       </p>
@@ -260,7 +260,7 @@ export function DestinationPage({ slug }: { slug: string }) {
     <div ref={root} className="flex flex-col pb-4">
       {/* The way back stays in reach while the page scrolls. */}
       <div className="sticky -top-3 z-10 -mx-4 bg-panel px-4 pt-3 pb-2">
-        <BackBar to="/reach" label="All destinations" />
+        <BackBar to="/play/reach" label="All destinations" />
       </div>
       <div data-m className="mt-1 flex items-start gap-2.5">
         <span className={`mt-[4px] shrink-0 ${lead.reply ? "text-other" : "text-you"}`}>
@@ -271,7 +271,7 @@ export function DestinationPage({ slug }: { slug: string }) {
       <p data-m className="mt-0.5 text-[13.5px] text-page-ink2">
         {lead.what} · {lead.range ? `${lyOf(lead.range[0])} to ${lyOf(lead.range[1])}` : lyOf(lead.ly)} ly · a message takes{" "}
         <span className="font-mono tabular-nums">{lead.range ? `${span(lead.range[0])} to ${span(lead.range[1])}` : span(lead.ly)}</span> ·{" "}
-        <Link to={`/lead/${lead.slug}`} className="whitespace-nowrap text-you">
+        <Link to={`/play/lead/${lead.slug}`} className="whitespace-nowrap text-you">
           Its lead ›
         </Link>
       </p>

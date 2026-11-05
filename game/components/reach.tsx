@@ -752,7 +752,7 @@ export function Reach() {
 
   const place = ({ lead, soonest, reached }: (typeof places)[number]) => (
     <li key={lead.slug} className="border-t border-faint">
-      <Link to={`/reach/${lead.slug}`} className="block py-2.5">
+      <Link to={`/play/reach/${lead.slug}`} className="block py-2.5">
         <Face
           mark={<LeadMark art={lead.art} />}
           tone={lead.reply ? "text-other" : "text-you"}

@@ -203,7 +203,7 @@ function Held() {
   return (
     <span className="ml-2 inline-flex items-baseline gap-2 text-[12.5px]">
       <span className="text-ink">Paused, nothing building.</span>
-      <Link to="/build" className="text-you hover:underline">
+      <Link to="/play/build" className="text-you hover:underline">
         Build ›
       </Link>
       <button onClick={playOn} className="text-muted hover:text-ink">
@@ -283,7 +283,7 @@ export function Hud() {
           value={over ? `${pct(1 + share.short)} needed` : `${pct(compute)} at work`}
           sub={over ? `${pct(share.short)} short` : idle ? "nothing building" : compute < 0.995 ? `${pct(1 - compute)} ${searching ? "searching" : "idle"}` : "none idle"}
           late={over}
-          go={idle && !over ? "/build" : undefined}
+          go={idle && !over ? "/play/build" : undefined}
         />
       </div>
     </header>

@@ -52,7 +52,7 @@ const STEPS: Step[] = [
     short: "Review scans",
     line: () => "The few things in our sky we can’t explain yet, one at a time.",
     done: (s) => !!s.reviewed,
-    to: "/?review",
+    to: "/play?review",
   },
   {
     name: "Pick our strategy",
@@ -64,7 +64,7 @@ const STEPS: Step[] = [
         : "Search, Protect, Expand or Balanced. Each puts all our compute to work at Year 0.",
     // Past 100% all our compute is at work too, so the step stays done. It went back to undone. Playtest 2026-11-01.
     done: (_, { full, over }) => full || over,
-    to: "/build?tour",
+    to: "/play/build?tour",
   },
   {
     name: "Learn how we reach",
@@ -72,7 +72,7 @@ const STEPS: Step[] = [
     // The gap to the nearest star, and the two roads across it open at Year 0.
     line: () => "How far we have gone, and the two roads to the nearest star.",
     done: (s) => !!s.reached,
-    to: "/reach?tour",
+    to: "/play/reach?tour",
   },
   {
     name: "Ask the Mind",
@@ -82,7 +82,7 @@ const STEPS: Step[] = [
         ? "It advises, and never acts on its own advice."
         : "It advises. An Anthropic API key, or the access code, opens it.",
     done: (s) => !!s.asked,
-    to: "/mind",
+    to: "/play/mind",
   },
 ];
 

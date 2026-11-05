@@ -343,7 +343,7 @@ export function LeadList({
 
   if (!fold) {
     const link = (l: Lead, i: number) => (
-      <Link to={`/lead/${l.slug}`} {...peek(i)} className="block py-2.5 text-left">
+      <Link to={`/play/lead/${l.slug}`} {...peek(i)} className="block py-2.5 text-left">
         {row(l)}
       </Link>
     );
