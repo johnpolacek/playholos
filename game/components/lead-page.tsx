@@ -2,6 +2,8 @@ import { Chances } from "@/components/chances";
 import { Link, useNavigate } from "react-router";
 import { useEffect, useRef } from "react";
 import { useGame } from "@/components/game-provider";
+import { usePlan, useSchedule } from "@/components/picks";
+import { flybyRoad } from "@/lib/game/reach";
 import { BackBar } from "@/components/back-bar";
 import { CloseReading } from "@/components/close-reading";
 import { LeadArt } from "@/components/lead-art";
@@ -104,10 +106,15 @@ function AirBands({ air }: { air: NonNullable<Reading["air"]> }) {
 export function LeadPage({ slug }: { slug: string }) {
   const { leads, dials, readings, fresh, setLook } = useLeads();
   const { see, save } = useGame();
+  const { plan } = usePlan();
+  const { scale } = useSchedule();
   const navigate = useNavigate();
   const root = useRef<HTMLDivElement>(null);
   const i = leads.findIndex((l) => l.slug === slug);
   const lead = leads[i];
+  // Our flyby probe there, if one is sent. 2026-11-05.
+  const probe = lead ? plan.flybys?.find((o) => o.by === "probe" && o.name === lead.star) : undefined;
+  const probeRoad = probe ? flybyRoad(plan, scale, probe.y, probe) : null;
   // What we sent it, when it lands and when an answer could come, here as on Scan's Messages. A warm glow's page never
   // said we had messaged it until a playtest, 2026-11-01.
   const ours: [string, string][] = !lead
@@ -188,8 +195,18 @@ export function LeadPage({ slug }: { slug: string }) {
           </>
         )}
       </p>
-      {/* A way to go there, as a button: a link at the end of this line went unseen. Playtest 2026-11-05. */}
-      {lead.art.kind !== "near" && (
+      {/* A way to go there, as a button: a link at the end of this line went unseen. Playtest 2026-11-05. Once a probe of
+          ours is on its way, as our standing order sends to each warm glow, it says so in its place. */}
+      {lead.art.kind !== "near" && probeRoad && (
+        <p data-m className="mt-2 text-[13px] leading-snug text-page-ink2">
+          <span className="text-you">A flyby probe of ours is on its way.</span>{" "}
+          {probeRoad.arrives !== null && probeRoad.home !== null && `It passes in Year ${yearText(probeRoad.arrives)}, and its pictures reach us by Year ${yearText(probeRoad.home)}.`}{" "}
+          <Link to={`/play/reach/${lead.slug}`} className="whitespace-nowrap text-you hover:underline">
+            Other ways to engage ›
+          </Link>
+        </p>
+      )}
+      {lead.art.kind !== "near" && !probeRoad && (
         <Link
           data-m
           to={`/play/reach/${lead.slug}`}

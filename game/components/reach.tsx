@@ -3,7 +3,7 @@ import { Link } from "react-router";
 import { useGame } from "@/components/game-provider";
 import { placeNames } from "@/components/inherit";
 import { Item, type Row } from "@/components/journey";
-import { BringsMark, LeadMark } from "@/components/marks";
+import { BringsMark, BuildMark, LeadMark } from "@/components/marks";
 import { type Aim, usePlan, useSchedule } from "@/components/picks";
 import { useLeads } from "@/components/scan";
 import { SkyArt } from "@/components/sky";
@@ -12,6 +12,7 @@ import type { Dials, Mark as Place } from "@/lib/drift";
 import { steadySide } from "@/lib/steady-side";
 import { YEAR_0, lyOf, yearText } from "@/lib/game/clock";
 import { LANDMARKS } from "@/lib/game/landmarks";
+import { chancesOf, rangeText } from "@/lib/game/chance";
 import { type Lead, skyId, starName, visitReading } from "@/lib/game/leads";
 import { buildSlug, lean, type moves } from "@/lib/game/plan";
 import { target as starOf } from "@/lib/game/sends";
@@ -194,62 +195,93 @@ export function ReachProvider({ children }: { children: React.ReactNode }) {
   return <ReachContext value={value}>{children}</ReachContext>;
 }
 
-/** A flyby probe to every warm glow at once: there can be dozens, most folded away as faded, and sending one at a time
- *  meant finding each. Asked for in play, 2026-11-05. Each leaves 12 Years after its order, one a glow, and can't be
- *  called back. */
-function WarmProbes({
-  places,
-  from,
-  canSend,
-  flybys,
-  send,
-}: {
-  places: Lead[];
-  from: number;
-  canSend: boolean;
-  flybys: NonNullable<Plan["flybys"]>;
-  send(add: NonNullable<Plan["flybys"]>): void;
-}) {
+/** Our standing order for warm glows: a flyby probe to each, as we find it. Sending one at a time meant finding each, and
+ *  a list of every glow ran too long. Asked for in play, 2026-11-05. Each leaves 12 Years after its order, one a glow,
+ *  and can't be called back. Turned off, no new ones go; those sent fly on. */
+function WarmProbes({ warm, sent, on, canSend, set }: { warm: number; sent: number; on: boolean; canSend: boolean; set(on: boolean): void }) {
   const [asking, setAsking] = useState(false);
-  const warm = places.filter((l) => l.slug.startsWith("warm-glow-"));
-  if (!warm.length) return null;
-  const left = warm.filter((l) => !flybys.some((o) => o.by === "probe" && o.name === l.star));
-  const go = () => {
-    send(left.map((l) => ({ name: l.star, y: from, d: Math.round(l.ly), by: "probe" as const })));
-    setAsking(false);
-  };
+  if (!warm) return null;
   return (
-    <section className="mt-5 rounded-xl border border-other/50 bg-other/[.05] px-3 py-2.5">
-      <span className="font-mono text-[10px] tracking-[.1em] text-other uppercase">Warm glows · {warm.length}</span>
+    <section className="mt-1 rounded-xl border border-other/50 bg-other/[.05] px-3 py-2.5">
+      <div className="flex items-center justify-between gap-3">
+        <span className="font-mono text-[10px] tracking-[.1em] text-other uppercase">Warm glows · {warm}</span>
+        <span className="font-mono text-[10px] tracking-[.1em] text-muted uppercase">Probes sent · {sent}</span>
+      </div>
       <p className="mt-1 text-[13.5px] leading-snug text-page-ink2">
-        {!left.length
-          ? "A flyby probe is on its way to every warm glow we have found."
-          : `Send a flyby probe to each warm glow we haven’t yet: ${left.length}. Each leaves 12 Years after its order and passes at an eighth of light speed. A pass is too quick to say what makes the heat, but it pictures a world if one is there.`}
+        {on
+          ? "We send a flyby probe to each warm glow as we find it. Each leaves 12 Years after its glow is ranged and pictures a world if one is there."
+          : "Send a flyby probe to every warm glow, those found and each one we find from now on. Each leaves 12 Years after its order."}
       </p>
-      {left.length > 0 && (
-        <div className="mt-2 flex flex-wrap items-center gap-1.5">
-          {!canSend ? (
-            <Link to={`/play/build/${buildSlug("Probe Yard")}`} className="text-[12.5px] text-you hover:underline">
-              Needs the Probe Yard ›
-            </Link>
-          ) : asking ? (
-            <>
-              <span className="text-[12.5px] text-muted">Can’t be called back.</span>
-              <button onClick={() => setAsking(false)} className="h-8 rounded-full border border-faint px-3.5 text-[13px] font-medium">
-                Wait
-              </button>
-              <button onClick={go} className="h-8 rounded-full bg-ink px-3.5 text-[13px] font-medium text-paper">
-                Send {left.length === 1 ? "it" : `all ${left.length}`}
-              </button>
-            </>
-          ) : (
-            <button onClick={() => setAsking(true)} className="h-8 rounded-full bg-ink px-3.5 text-[13px] font-medium text-paper">
-              Send {left.length === 1 ? "a probe" : `${left.length} probes`}
+      <div className="mt-2 flex flex-wrap items-center gap-1.5">
+        {!canSend ? (
+          <Link to={`/play/build/${buildSlug("Probe Yard")}`} className="text-[12.5px] text-you hover:underline">
+            Needs the Probe Yard ›
+          </Link>
+        ) : on ? (
+          <button onClick={() => set(false)} className="h-8 rounded-full border border-faint px-3.5 text-[13px] font-medium">
+            Stop sending to new ones
+          </button>
+        ) : asking ? (
+          <>
+            <span className="text-[12.5px] text-muted">A probe sent can’t be called back.</span>
+            <button onClick={() => setAsking(false)} className="h-8 rounded-full border border-faint px-3.5 text-[13px] font-medium">
+              Wait
             </button>
-          )}
-        </div>
-      )}
+            <button
+              onClick={() => {
+                set(true);
+                setAsking(false);
+              }}
+              className="h-8 rounded-full bg-ink px-3.5 text-[13px] font-medium text-paper"
+            >
+              Send them
+            </button>
+          </>
+        ) : (
+          <button onClick={() => setAsking(true)} className="h-8 rounded-full bg-ink px-3.5 text-[13px] font-medium text-paper">
+            Probe every warm glow
+          </button>
+        )}
+      </div>
     </section>
+  );
+}
+
+/** The probes and sails we sent past stars, folded into one row: there can be dozens. Opened, each by its glow's
+ *  chance of a mind, likeliest first. 2026-11-05. */
+function Flybys({ rows, now }: { rows: { id: string; slug?: string; name: string; mind?: string; mindAt: number; note: string; home: number }[]; now: number }) {
+  const [open, setOpen] = useState(false);
+  if (!rows.length) return null;
+  const home = rows.filter((r) => r.home <= now).length;
+  const sorted = [...rows].sort((a, b) => b.mindAt - a.mindAt || a.home - b.home);
+  return (
+    <li className="border-t border-faint">
+      <button onClick={() => setOpen(!open)} aria-expanded={open} className="block w-full py-2.5 text-left">
+        <Face
+          mark={<BuildMark name="Probe Yard" />}
+          tone="text-you"
+          name={<b className="font-semibold">Flyby probes and sails · {rows.length}</b>}
+          line={home ? `${home} have sent word home. Open for each, likeliest mind first.` : "On their way. Open for each, likeliest mind first."}
+          right={open ? "Close" : "Open"}
+          more={false}
+        />
+      </button>
+      {open && (
+        <ul className="mb-1 pl-7">
+          {sorted.map((r) => (
+            <li key={r.id} className="border-t border-faint first:border-t-0">
+              <Link to={r.slug ? `/play/reach/${r.slug}` : "/play/reach"} className="flex items-baseline justify-between gap-3 py-1.5">
+                <span className="min-w-0">
+                  <span className="block text-[13.5px] font-medium">{r.name}</span>
+                  <span className="block text-[12px] leading-snug text-muted">{r.note}</span>
+                </span>
+                {r.mind && <span className="shrink-0 font-mono text-[11.5px] text-other tabular-nums">Mind {r.mind}</span>}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
+    </li>
   );
 }
 
@@ -743,7 +775,7 @@ export function says(
 export function Reach() {
   const { save, year: clock, orderAt } = useGame();
   const { fly, aim, target, setTrip } = useReach();
-  const { leads, visits } = useLeads();
+  const { leads, visits, readings } = useLeads();
   const { plan, change } = usePlan();
   const { scale } = useSchedule();
   // Voyager 1, picked, takes the map out to it, and again home to the nearest star.
@@ -837,7 +869,7 @@ export function Reach() {
   // Our craft sent to other stars: lenses, sentinels, seed probes, and sails and probes passing. Reach listed only
   // Voyager 1 after all of these went, playtest 2026-11-01, and each showed only once it left, so a send seemed to do
   // nothing until 2026-11-05.
-  const stays: (Row & { id: string; star: string; y: number; home: number; road: Road })[] = clock === null ? [] : [
+  const stays: (Row & { id: string; star: string; y: number; home: number; road: Road; flyby: boolean })[] = clock === null ? [] : [
     ...(plan.lenses ?? []).map((o) => ({ o, road: lensRoad(plan, scale, from, o.name), what: "A lens", to: "at its Sun’s focus, toward" })),
     ...(plan.sentinels ?? []).map((o) => ({ o, road: sentinelRoad(plan, scale, from, o.name, leads.find((l) => l.star === o.name)?.ly ?? starOf(o.name)?.d ?? 0), what: "A sentinel", to: "to stay at" })),
     ...(plan.seeds ?? []).map((o) => ({ o, road: seedRoad(plan, scale, from, o.name, starOf(o.name)?.d ?? 0), what: "A seed probe", to: "to stay at" })),
@@ -851,6 +883,7 @@ export function Reach() {
       y: o.y,
       home: r.home,
       road: r,
+      flyby: to === "to pass",
       id: `${what}:${o.name}`,
       key: r.build,
       name: `${what}, ${star}`,
@@ -882,6 +915,12 @@ export function Reach() {
     return () => aim(null);
   }, [aim, goingStar, goingLy, goingSystem, goingRange]);
 
+  // A lead's chance of a mind, where we have a word on it, as Scan shows it. 2026-11-05.
+  const mindOf = (lead: Lead) => {
+    const m = chancesOf(lead, readings[lead.slug] ?? [])?.mind;
+    return m && m !== "unknown" ? ` · Mind ${rangeText(m)}` : "";
+  };
+  const warmLeads = leads.filter((l) => l.slug.startsWith("warm-glow-"));
   if (!save) return null;
 
   const place = ({ lead, soonest, reached, bound }: (typeof places)[number]) => (
@@ -891,7 +930,7 @@ export function Reach() {
           mark={<LeadMark art={lead.art} />}
           tone={lead.reply ? "text-other" : "text-you"}
           name={<b className="font-semibold">{starName(lead.star)}</b>}
-          line={`${lead.what} · ${lead.range ? `${lyOf(lead.range[0])} to ${lyOf(lead.range[1])}` : lyOf(lead.ly)} ly`}
+          line={`${lead.what} · ${lead.range ? `${lyOf(lead.range[0])} to ${lyOf(lead.range[1])}` : lyOf(lead.ly)} ly${mindOf(lead)}`}
           right={reached !== null ? `Reached, Year ${year(reached)}` : bound !== null ? `${clock === null ? "" : "On its way, "}Year ${year(bound)}` : soonest !== null ? `Year ${year(soonest)}` : "Not yet"}
         />
       </Link>
@@ -900,18 +939,33 @@ export function Reach() {
 
   return (
     <div className="flex flex-col pb-4">
-      <ListHead left={`Sent · ${1 + flying.length + stays.length}`} right="Word home" className="mt-1" />
+      <WarmProbes
+        warm={warmLeads.length}
+        sent={(plan.flybys ?? []).filter((o) => o.by === "probe" && o.name.startsWith("Warm glow ")).length}
+        on={plan.probeGlows !== undefined}
+        canSend={inOrder(plan, "Probe Yard")}
+        set={(on) => change((p) => ({ ...p, probeGlows: on ? from : undefined }))}
+      />
+
+      <ListHead left={`Sent · ${1 + flying.length + stays.length}`} right="Word home" className="mt-4" />
       <ul className="mt-1">
         {flying.map((r) => (
           <Item key={r.key} row={r} now={clock ?? 0} began={clock !== null} />
         ))}
-        {stays.map((r) => (
+        {stays.filter((r) => !r.flyby).map((r) => (
           <Item key={r.id} row={r} now={clock ?? 0} began={clock !== null} />
         ))}
+        <Flybys
+          now={clock ?? 0}
+          rows={stays.filter((r) => r.flyby).map((r) => {
+            const lead = leads.find((l) => l.star === r.star);
+            const c = lead ? chancesOf(lead, readings[lead.slug] ?? []) : null;
+            const m = c?.mind && c.mind !== "unknown" ? c.mind : null;
+            return { id: r.id, slug: lead?.slug, name: r.name, note: r.note, home: r.home, mind: m ? rangeText(m) : undefined, mindAt: m ? (m.lo + m.hi) / 2 : -1 };
+          })}
+        />
         <Item row={SENT} now={clock ?? 0} began={clock !== null} aim={voyager} />
       </ul>
-
-      <WarmProbes places={places.map((p) => p.lead)} from={from} canSend={inOrder(plan, "Probe Yard")} flybys={plan.flybys ?? []} send={(add) => change((p) => ({ ...p, flybys: [...(p.flybys ?? []), ...add] }))} />
 
       <ListHead left={`Destinations · ${places.length}`} right="Soonest" className="mt-5" />
       <ul className="mt-1">
@@ -942,4 +996,30 @@ export function Reach() {
       </ul>
     </div>
   );
+}
+
+/** Our standing order at work: once on, each warm glow we range without a probe of ours gets one, dated from when we
+ *  ranged it or the order began, whichever is later, so a jump past a find sends it as if we had been there. 2026-11-05. */
+export function ProbeGlows() {
+  const { plan, change } = usePlan();
+  const { leads, minds } = useLeads();
+  const since = plan.probeGlows;
+  const ready = inOrder(plan, "Probe Yard");
+  const sent = new Set((plan.flybys ?? []).filter((o) => o.by === "probe").map((o) => o.name));
+  const want =
+    since === undefined || !ready
+      ? []
+      : leads
+          .filter((l) => l.slug.startsWith("warm-glow-") && !sent.has(l.star))
+          .map((l) => {
+            const f = minds?.flashes[Number(l.slug.slice("warm-glow-".length)) - 1];
+            return { name: l.star, y: Math.max(since, Math.floor((f?.ranged ?? since) * 10) / 10), d: Math.round(l.ly), by: "probe" as const };
+          });
+  const key = want.map((w) => w.name).join("|");
+  useEffect(() => {
+    if (!want.length) return;
+    change((p) => ({ ...p, flybys: [...(p.flybys ?? []), ...want.filter((w) => !(p.flybys ?? []).some((o) => o.by === "probe" && o.name === w.name))] }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [key]);
+  return null;
 }

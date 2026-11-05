@@ -7,7 +7,7 @@ import { GameProvider } from "@/components/game-provider";
 import { Hud } from "@/components/hud";
 import { MapStrip } from "@/components/map-strip";
 import { MindNews, YearZero } from "@/components/mind-news";
-import { ReachProvider } from "@/components/reach";
+import { ProbeGlows, ReachProvider } from "@/components/reach";
 import { Rail } from "@/components/rail";
 import { ScanProvider } from "@/components/scan";
 import { WorksProvider } from "@/components/works";
@@ -26,6 +26,8 @@ export default function PlayLayout() {
             <WorksProvider>
               <ReachProvider>
                 <PreviewProvider>
+                {/* Our standing order to probe each warm glow as we find it. 2026-11-05. */}
+                <ProbeGlows />
                 <div className="flex min-h-0 grow flex-col wide:grid wide:grid-cols-[minmax(0,1fr)_clamp(340px,32vw,440px)] wide:grid-rows-[auto_minmax(0,1fr)_auto]">
                 <Hud />
                 <MindNews />
