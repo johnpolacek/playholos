@@ -294,7 +294,7 @@ export function DestinationPage({ slug }: { slug: string }) {
           );
         })}
 
-      <ListHead data-m left={`Ways to go · ${ways.length + (lens ? 1 : 0) + (stay ? 1 : 0) + (mind ? 1 : 0) + LOCKED.length}`} right="Passes" className="mt-5" />
+      <ListHead data-m left={`Ways to engage · ${ways.length + (lens ? 1 : 0) + (stay ? 1 : 0) + (mind ? 1 : 0) + LOCKED.length}`} right="Passes" className="mt-5" />
       <ul className="mt-1">
         {ways.map((road, k) => {
           const queued = road.n !== null;

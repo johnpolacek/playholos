@@ -13,6 +13,7 @@ import { type Lead, due, leadsOf, lifeOf, ODDS, type Reading, readingsOf, rockLe
 import { setStruck, setWatched, useSchedule } from "@/components/picks";
 import { watchedAt } from "@/lib/sim/minds";
 import { skyOf } from "@/lib/game/natural";
+import { glowNames, knowGlowNames } from "@/lib/game/glow-names";
 import { dates, knowStars, target, WATCHER } from "@/lib/game/sends";
 import { EMPTY } from "@/lib/game/plan";
 import { rockAt, rockOf } from "@/lib/game/rocks";
@@ -165,6 +166,8 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [stars],
   );
+  // The names our glows have earned, set before anything below reads them. 2026-11-04.
+  useMemo(() => knowGlowNames(glowNames(minds)), [minds]);
   // A lead's star past the 50 ly census can be aimed at too, out to the catalog's 326 ly. 2026-10-31.
   useEffect(() => knowStars(leads.flatMap((l) => (l.at && l.at[2] > 50 ? [{ name: l.star, ra: l.at[0], dec: l.at[1], d: l.at[2], ...(l.range ? { range: l.range } : {}) }] : []))), [leads]);
   // The map places leads the sky file lacks: black holes found, and far landmarks.

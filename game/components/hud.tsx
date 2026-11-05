@@ -5,9 +5,8 @@ import { Menu } from "@/components/menu";
 import { useShown } from "@/components/costs";
 import { usePlan, useSchedule } from "@/components/picks";
 import { Link } from "react-router";
-import { Quiet } from "@/components/quiet";
-import { announceJump, Arrived, type Snap, Specks, useJumpYear, useSnap, Warp } from "@/components/jump";
-import { tenths, yearText } from "@/lib/game/clock";
+import { announceJump, setLeap, Specks, useJumpYear, useSnap, Warp } from "@/components/jump";
+import { tenths } from "@/lib/game/clock";
 import { ceiling, drawAt, kt, matterAt, ordered, schedule, searchOf, sharesAt, shortAt } from "@/lib/game/plan";
 import { combedAt } from "@/lib/sim/works";
 import { knownQuery } from "@/lib/game/known-query";
@@ -90,8 +89,6 @@ export const useAhead = () =>
  *  The clock still runs at 5 minutes a Year without it. 2026-10-29. */
 function Skip() {
   const { save, year, skipTo } = useGame();
-  // A skip past a long quiet says what passed. 2026-10-30.
-  const [leap, setLeap] = useState<{ from: number; to: number; snap: Snap } | null>(null);
   const snapshot = useSnap();
   const [why, setWhy] = useState<string | null>(null);
   const tenth = year === null ? null : Math.floor(year * 10) / 10;
@@ -116,11 +113,6 @@ function Skip() {
       );
     return () => void (live = false);
   }, [seed, query, tenth]);
-  const quiet = leap && (
-    <Quiet key={leap.to} from={leap.from} to={leap.to} onClose={() => setLeap(null)}>
-      <Arrived from={leap.from} to={leap.to} snap={leap.snap} />
-    </Quiet>
-  );
   const stale = tenth === null || next === undefined || (next !== null && next <= tenth);
   // Shown and landed in tenths, as the Year is: a stop within the tenth we're in lands on the next tenth.
   const to = stale || next === null ? null : Math.max(Math.ceil(next * 10 - 1e-9) / 10, tenth + 0.1);
@@ -137,18 +129,15 @@ function Skip() {
     return () => setAhead(null);
   }, [to, why]);
   // A stop behind us is stale, while the server answers for the Year we skipped to.
-  if (stale) return quiet;
+  if (stale) return null;
   // The link vanished with no word until 2026-10-30, and players thought it broke.
   if (next === null)
     return (
-      <>
-        <span className="ml-2 text-muted" title="Nothing new comes in the next 100,000 Years unless we order it. The clock runs on.">
-          Nothing ahead
-        </span>
-        {quiet}
-      </>
+      <span className="ml-2 text-muted" title="Nothing new comes in the next 100,000 Years unless we order it. The clock runs on.">
+        Nothing ahead
+      </span>
     );
-  if (to === null) return quiet;
+  if (to === null) return null;
   return (
     <>
       {/* A pill with faint specks of light, named for what it does: "Next" read as unclear in play. 2026-11-01. */}
@@ -163,11 +152,11 @@ function Skip() {
         title="Jump ahead to when something new happens"
       >
         <Specks on={hover} tone="--paper" />
-        Jump to {yearText(to)}
-        {why && <span className="ml-1.5 font-normal text-paper/75">· {why}</span>}
+        {/* What comes next, never its Year, so a finding stays a surprise till it lands: "Jump to 579.5 · something new in
+            the sky" read as cryptic. The long quiet says the Years once we're there. 2026-11-04. */}
+        Jump to {why ?? "what comes next"}
         <span className="ml-1">›</span>
       </button>
-      {quiet}
     </>
   );
 }

@@ -1,4 +1,5 @@
 import { lyOf, tenths, YEAR_0, yearText } from "@/lib/game/clock";
+import { glowNames, properGlows } from "@/lib/game/glow-names";
 import { KNOCKS } from "@/lib/game/knocks";
 import { watcherAway } from "@/lib/game/sends";
 import { lightTime } from "@/lib/light";
@@ -115,7 +116,9 @@ export const lineAt = (l: Lead, year: number | null) => (l.later && year !== nul
 
 /** A star's name as a screen shows it. A star known only by its Gaia number showed all 19 digits, "Gaia
  *  1172618435080418176", and ran long on the map. Shown by its last seven, as papers do. Its id keeps them all. 2026-10-30. */
-export const starName = (star: string) => star.replace(/^Gaia (\d{10,})$/, (_, n: string) => `Gaia …${n.slice(-7)}`);
+export const starName = (star: string) => properGlows(star).replace(/^Gaia (\d{10,})$/, (_, n: string) => `Gaia …${n.slice(-7)}`);
+
+export { properGlows };
 
 /** The scene names Luyten's Star as the catalog does. */
 export const skyId = (star: string) => star.replace("’", "'");
@@ -680,6 +683,7 @@ export function mindLeads(m: MindsSeen | undefined): Lead[] {
   const sky = (ra: number, dec: number) => `RA ${(Math.round(ra * 10) / 10 % 24).toFixed(1)} h, Dec ${dec.toFixed(0)}°`;
   const year = (y: number) => `Year ${yearText(y)}`;
   const n = (x: number) => x.toLocaleString("en-US");
+  const names = glowNames(m);
   return [
     ...m.flashes.flatMap((f, i): Lead[] => {
       if (!f.range) return [];
@@ -704,6 +708,7 @@ export function mindLeads(m: MindsSeen | undefined): Lead[] {
           ["Its warmth", "Near room temperature, like a planet's, far cooler than any star"],
           ...(f.faded !== undefined ? [["Faded", year(f.faded)] as [string, string]] : []),
           ...(f.read?.saw === "smooth" ? [["Its light", `Smooth heat, no dust bump, ${year(f.read.at)}`] as [string, string]] : []),
+          ...(names[`Warm glow ${i + 1}`] ? [["We named it", `${names[`Warm glow ${i + 1}`].name}, for ${names[`Warm glow ${i + 1}`].after}. Once Warm Glow ${i + 1}`] as [string, string]] : []),
           ...(f.read?.saw === "dust" ? [["Its light", `Dust, a bump at 10 microns, ${year(f.read.at)}`] as [string, string]] : []),
         ],
         could: [
@@ -732,6 +737,7 @@ export function mindLeads(m: MindsSeen | undefined): Lead[] {
         ["Its glow", `About ${watts(g.watts)}, steady`],
         ["First seen", `${year(g.seen)}, by our Halo Survey`],
         ...(g.near !== undefined ? ([["Up close", `${year(g.near)}, by our sentinel`]] as [string, string][]) : []),
+        ...(names[`Cold glow ${i + 1}`] ? ([["We named it", `${names[`Cold glow ${i + 1}`].name}, for ${names[`Cold glow ${i + 1}`].after}. Once Cold Glow ${i + 1}`]] as [string, string][]) : []),
       ],
       // A sentinel that stays sees its source up close, and that settles it. 2026-10-31.
       could: g.near !== undefined ? [

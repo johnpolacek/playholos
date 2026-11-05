@@ -194,7 +194,7 @@ export default function Design() {
 
       <Head id="lists">Lists</Head>
       <Part name="ListHead and Face" file="components/tab-head.tsx" use="Every list on Scan, Build and Reach. ListHead says what it holds and what its right column counts. Face is a row: its mark, name, line, count, and a › when it opens a page.">
-        <ListHead left="Ways to go · 3" right="Passes" />
+        <ListHead left="Ways to engage · 3" right="Passes" />
         <ul className="mt-1">
           {["Laser Sail Array", "Probe Yard", "Fusion Drive"].map((b, i) => (
             <li key={b} style={buildBlue(b)} className="border-t border-faint py-2.5">

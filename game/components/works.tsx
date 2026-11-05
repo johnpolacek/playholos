@@ -9,6 +9,7 @@ import { keptOf, ordered, orderedAt, takenAt } from "@/lib/game/plan";
 import { type Site, SITES } from "@/lib/game/sites";
 import type { Plan } from "@/lib/game/types";
 import type { Dials, Mark } from "@/lib/drift";
+import { steadySide } from "@/lib/steady-side";
 import { AU_KM } from "../../src/astronomy.js";
 import { bodyPosition, moonOffset } from "../../src/ephemeris.js";
 
@@ -174,7 +175,7 @@ export function WorksMap({ className }: { className: string }) {
       if (!n || !box) continue;
       if (id.startsWith("site:")) {
         // Beside its place, or on its left where the right would run off the map, as on a phone.
-        const left = x + 26 + n.offsetWidth > box.clientWidth - 8;
+        const left = steadySide(n, x, box.clientWidth - 34 - n.offsetWidth);
         n.style.transform = left
           ? `translate(${x - 26}px, ${y}px) translate(-100%, -50%)`
           : `translate(${x + 26}px, ${y}px) translate(0, -50%)`;

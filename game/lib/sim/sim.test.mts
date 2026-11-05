@@ -538,3 +538,22 @@ test("skipping ahead stops at the next thing we learn or build, and says when, n
   // A rock's Years stop it too, the past ones ignored.
   assert.equal(nextStop({ year: 0, felt: [], heard: [], visits: [] }, 5, {}, [3, null, 412.5]), 412.5);
 });
+
+test("a glow earns its name in the order we read it, and only plain heat or a sentinel's look earns one", async () => {
+  const { glowNames, glowIdOf, knowGlowNames, properGlows } = await import("../game/glow-names.ts");
+  const names = glowNames({
+    flashes: [{ read: { at: 900, saw: "smooth" } }, {}, { read: { at: 500, saw: "smooth" } }, { read: { at: 100, saw: "dust" } }, { read: { at: 100, saw: "gone" } }],
+    glows: [{}, { near: 700 }],
+  });
+  assert.deepEqual(Object.fromEntries(Object.entries(names).map(([id, v]) => [id, v.name])), { "Warm glow 3": "Prometheus", "Warm glow 1": "Hestia", "Cold glow 2": "Skadi" });
+  // More read than we have names: the list comes round again, and no two share one.
+  const many = glowNames({ flashes: Array.from({ length: 30 }, (_, i) => ({ read: { at: i, saw: "smooth" } })), glows: [] });
+  assert.equal(new Set(Object.values(many).map((v) => v.name)).size, 30);
+  knowGlowNames(names);
+  assert.equal(properGlows("Warm glow 3"), "Prometheus");
+  assert.equal(properGlows("Warm glow 2"), "Warm Glow 2");
+  assert.equal(properGlows("Warm glow 3 and cold glow 2, but a warm glow stays a noun."), "Prometheus and Skadi, but a warm glow stays a noun.");
+  assert.equal(glowIdOf("prometheus"), "Warm glow 3");
+  assert.equal(glowIdOf("Proxima Centauri"), "Proxima Centauri");
+  knowGlowNames({});
+});

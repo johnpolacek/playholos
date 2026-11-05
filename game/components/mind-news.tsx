@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router";
 import { kindOf } from "@/components/arrival";
 import { useGame } from "@/components/game-provider";
+import { useLeap } from "@/components/jump";
 import { useKeepTalk, useMindNews } from "@/components/mind-chat";
 import { MindNote } from "@/components/mind-note";
 import { useSchedule } from "@/components/picks";
@@ -14,7 +15,7 @@ import { readOffer, target } from "@/lib/game/sends";
 import { useAccess } from "@/lib/key";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
 import type { Heard } from "@/lib/sim/types";
-import { WINDOWS } from "@/lib/game/leads";
+import { properGlows, WINDOWS } from "@/lib/game/leads";
 
 // The Mind speaks unasked. Pressing Begin felt like nothing happened, a playtest found 2026-10-31, so Year 0 opens on
 // a moment of its own with the Mind's first words, and from then the Mind tells us what lands as it lands: a build
@@ -98,7 +99,7 @@ export function MindNews() {
 }
 
 /** The Mind's words without a card's line. */
-const said = (text: string) => readOffer(readBuildOffer(text).words).words;
+const said = (text: string) => properGlows(readOffer(readBuildOffer(text).words).words);
 
 /** Year 0's moment: once Begin is pressed, the screen turns to the start of our age, and the Mind's first words. */
 export function YearZero() {
@@ -180,6 +181,15 @@ export function YearZero() {
   );
 }
 
+/** The Mind's words on what a jump brought, said inside its note on the jump, after `since`, its latest before it. Go on
+ *  counts them as read, so they don't come again as a note of their own. 2026-11-04. */
+export function useJumpWords(since: string | undefined) {
+  const { save, read } = useGame();
+  const { last, words, news, busy } = useMindNews();
+  const fresh = !!last && news !== null && news !== BEGUN && last !== since && last !== save?.read;
+  return { fresh, busy: fresh && busy, words: fresh ? said(words) : "", read: () => void (fresh && read(last)) };
+}
+
 /** What the Mind just told us unasked, over the map, until we read it or put it away. Not on the Mind tab, where the
  *  talk shows it. */
 export function MindSays() {
@@ -189,7 +199,9 @@ export function MindSays() {
   const { leads } = useLeads();
   const [away, setAway] = useState<string | null>(null);
   const root = useRef<HTMLDivElement>(null);
-  const shown = year !== null && !!last && news !== null && news !== BEGUN && last !== save?.read && last !== away && path !== "/play/mind";
+  // During a jump these words sit in the note that tells it, one voice in one place. 2026-11-04.
+  const leap = useLeap();
+  const shown = !leap && year !== null && !!last && news !== null && news !== BEGUN && last !== save?.read && last !== away && path !== "/play/mind";
   useGSAP(
     () => {
       if (shown && !prefersReducedMotion()) gsap.fromTo(root.current, riseFrom, rise);
@@ -209,7 +221,7 @@ export function MindSays() {
         </svg>
       </button>
       <MindNote still={!busy} edge={false} className="pr-6 text-[13.5px] leading-[1.45]">
-        <p className="mb-1 font-mono text-[10px] leading-snug tracking-[.06em] text-muted">{news}</p>
+        <p className="mb-1 font-mono text-[10px] leading-snug tracking-[.06em] text-muted">{properGlows(news)}</p>
         {said(words) || "…"}
         <span className="mt-1.5 flex flex-wrap gap-x-4 gap-y-1 text-[12.5px]">
           {newsLinks(news, leads).map((k) => (

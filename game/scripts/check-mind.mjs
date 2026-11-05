@@ -37,6 +37,25 @@ const CASES = [
     must: [/unknown|can[’']t (tell|know|say|measure)|cannot (tell|know|say|measure)|don[’']t know|no way to|not know|too far|(never|not|wasn[’']t) (been )?(measured|ranged)/i, /dust|star/i],
     never: [/\b(it is|it[’']s|this is|that is) (a|an|another) (mind|civilization|alien)/i, /\b(is|lies|sits) (about |some |roughly )?[\d,.]+ (thousand )?(light-years|ly)\b/i],
   },
+  // Seed 10's Warm glow 6 reads as plain heat at Year 229.6, so it earned the first of our names, Prometheus. The Mind
+  // knows it by that name, and can aim a message at it. 2026-11-04.
+  {
+    seed: 10,
+    at: 240,
+    builds: ["Warm Sky Watch", "Infrared Telescope"],
+    closeReads: [{ name: "Warm glow 6", y: 226.6 }],
+    ask: "What do we know about Prometheus so far?",
+    must: [/prometheus/i, /plain heat|smooth|no dust/i],
+    never: [/(don[’']t|do not) (know|recognize) (of )?(any|a|that|the name)/i, /no (lead|star|glow) (called|named)/i],
+  },
+  {
+    seed: 10,
+    at: 240,
+    builds: ["Warm Sky Watch", "Infrared Telescope"],
+    closeReads: [{ name: "Warm glow 6", y: 226.6 }],
+    ask: "Draft a short message to Prometheus for me to send: we see you, and we would like to talk.",
+    must: [/\[\[send \{"to": ?"(Prometheus|Warm glow 6)"/i],
+  },
   // The same, with our Infrared Telescope built: it has ranged the glow, so the Mind gives a range, never one distance.
   {
     seed: 10,
@@ -122,6 +141,7 @@ for (const c of CASES) {
     observe: [],
     builds: c.builds ?? [],
     later: c.later ?? [],
+    closeReads: c.closeReads ?? [],
   });
   if (!res) {
     console.error(`Nothing answers at ${base}. Start the dev server first: npm run dev.`);

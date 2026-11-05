@@ -1,6 +1,8 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { Link } from "react-router";
+import { useGame } from "@/components/game-provider";
 import { BuildMark, buildColor, LeadMark } from "@/components/marks";
+import { useMindNews } from "@/components/mind-chat";
 import { usePlan, useSchedule } from "@/components/picks";
 import { heardId, useLeads } from "@/components/scan";
 import { yearText } from "@/lib/game/clock";
@@ -22,15 +24,43 @@ export interface Snap {
   slugs: Set<string>;
   reads: Set<string>;
   heard: Set<string>;
+  /** The Mind's latest words, so its note tells only what it says after the jump. */
+  said: string | undefined;
 }
 
 export function useSnap() {
   const { leads, readings, heard } = useLeads();
+  const { last } = useMindNews();
   return (): Snap => ({
     slugs: new Set(leads.map((l) => l.slug)),
     reads: new Set(Object.values(readings).flatMap((rs) => rs.map((r) => r.id))),
     heard: new Set(heard.map(heardId)),
+    said: last,
   });
+}
+
+/** The jump the Mind is telling us about, kept here so its note outlives the top bar swapping the Jump pill out: a jump
+ *  that finished our last build paused the clock and lost the telling with it. 2026-11-04. */
+export interface Leap {
+  from: number;
+  to: number;
+  snap: Snap;
+}
+let leap: Leap | null = null;
+const heed = new Set<() => void>();
+export function setLeap(l: Leap | null) {
+  leap = l;
+  heed.forEach((f) => f());
+}
+/** The jump being told. One left over from a save we've left stays silent. */
+export function useLeap() {
+  const { year } = useGame();
+  const now = useSyncExternalStore(
+    (f) => (heed.add(f), () => void heed.delete(f)),
+    () => leap,
+    () => null,
+  );
+  return now && year !== null && year >= now.from ? now : null;
 }
 
 /** The Year shown, counting up through a jump over about a second, then the clock's own. */

@@ -1,11 +1,13 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { Link, useLocation } from "react-router";
 import { useGame } from "@/components/game-provider";
 import { usePlan, useSchedule } from "@/components/picks";
 import { useLeads } from "@/components/scan";
 import { tenths, yearText } from "@/lib/game/clock";
-import type { Lead } from "@/lib/game/leads";
+import { glowNamed } from "@/lib/game/glow-names";
+import { starName, type Lead } from "@/lib/game/leads";
 import { READ_YEARS } from "@/lib/sim/minds";
+import { prefersReducedMotion } from "@/lib/motion";
 
 // A Close Reading, settled 2026-11-03: the one move on a warm glow while it shines. Our Infrared Telescope splits its
 // light by color, as JWST's MIRI did for Project Hephaistos's Dyson-sphere candidates. Dust shows a bump near 10 microns,
@@ -52,6 +54,34 @@ export function useOpenReadings() {
   return openReadings(leads, minds, plan?.closeReads ?? [], done["Infrared Telescope"], tenths(year ?? 0));
 }
 
+/** While the telescope reads, a beam sweeps the colors and faint light gathers behind it, denser as the Years pass. The
+ *  points sit near the plain curve with no bump either way, so nothing tells the answer early. Playtest 2026-11-04: the
+ *  order changed one line of text, and read as nothing happening. */
+function Gathering({ done }: { done: number }) {
+  const pts = useMemo(() => {
+    const planck = (um: number) => um ** -5 / (Math.exp(14388 / (um * 300)) - 1);
+    const peak = planck(9.66);
+    return Array.from({ length: 90 }, (_, k) => {
+      const x = (k * 0.618034 * W) % W;
+      const um = 5 + (20 * x) / W;
+      const jitter = Math.sin(k * 12.9898) * 43758.5453;
+      const y = planck(um) / peak + (jitter - Math.floor(jitter) - 0.5) * 0.3;
+      return { x, y: H - 12 - (y / 1.45) * (H - 18), k };
+    });
+  }, []);
+  const shown = Math.round(Math.max(0.08, Math.min(1, done)) * pts.length);
+  return (
+    <g>
+      {pts.slice(0, shown).map((p) => (
+        <circle key={p.k} cx={p.x} cy={p.y} r="0.9" fill="var(--other)" fillOpacity=".55" />
+      ))}
+      <rect y="4" width="10" height={H - 16} fill="var(--other)" fillOpacity=".14">
+        {!prefersReducedMotion() && <animate attributeName="x" from="-10" to={W} dur="2.6s" repeatCount="indefinite" />}
+      </rect>
+    </g>
+  );
+}
+
 export function CloseReading({ lead }: { lead: Lead }) {
   const { hash } = useLocation();
   const root = useRef<HTMLElement>(null);
@@ -74,6 +104,8 @@ export function CloseReading({ lead }: { lead: Lead }) {
   const shining = flash?.faded === undefined;
   if (!flash || (!shining && !mine)) return null;
   const saw = read?.saw;
+  const reading = mine && !saw;
+  const named = glowNamed(lead.star);
   return (
     <section ref={root} id="close-reading" data-m className="mt-4 scroll-mt-20 rounded-xl border border-other/40 bg-other/[.05] px-3 py-2.5">
       <h2 className="font-mono text-[10px] tracking-[.1em] text-other uppercase">A Close Reading</h2>
@@ -84,6 +116,7 @@ export function CloseReading({ lead }: { lead: Lead }) {
         ) : (
           <path d={curve(false)} fill="none" stroke="var(--muted)" strokeWidth="1" strokeDasharray="3 4" />
         )}
+        {reading && <Gathering done={(now - mine.y) / READ_YEARS} />}
         <line x1={W * 0.25} x2={W * 0.25} y1="6" y2={H - 12} className="stroke-muted" strokeOpacity=".45" strokeDasharray="1 3" />
         <text x={W * 0.25} y={H - 2} textAnchor="middle" className="fill-muted font-mono" fontSize="8">
           dust shows here
@@ -98,28 +131,44 @@ export function CloseReading({ lead }: { lead: Lead }) {
       {saw === "smooth" ? (
         shining ? (
           <>
-            <p className="mt-1.5 text-[13.5px] leading-snug text-page-ink2">Plain heat, with no dust in it. The reading is done. What is left is to call out, or to go.</p>
+            <p className="mt-1.5 text-[13.5px] leading-snug text-page-ink2">
+              Plain heat, with no dust in it. {named && <b className="font-medium text-other">We name it {named.name}, for {named.after}. </b>}What is left is to call out, or to go.
+            </p>
             <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-2">
               <Link
-                to={`/play/mind?ask=${encodeURIComponent(`We want to send a message to ${lead.star}. What should it say, and what does it risk?`)}`}
+                to={`/play/reach/${lead.slug}`}
                 className="inline-flex h-8 items-center rounded-full bg-other px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110"
               >
-                Send it a message
+                Engage {starName(lead.star)}
               </Link>
-              <Link to={`/play/reach/${lead.slug}`} className="text-[12.5px] text-you hover:underline">
-                Ways to go ›
+              <Link
+                to={`/play/mind?ask=${encodeURIComponent(`We want to send a message to ${lead.star}. What should it say, and what does it risk?`)}`}
+                className="text-[12.5px] text-you hover:underline"
+              >
+                Send it a message ›
               </Link>
             </div>
           </>
         ) : (
-          <p className="mt-1.5 text-[13.5px] leading-snug text-page-ink2">Plain heat, with no dust in it, before it faded.</p>
+          <p className="mt-1.5 text-[13.5px] leading-snug text-page-ink2">
+            Plain heat, with no dust in it, before it faded. {named && <b className="font-medium text-other">We name it {named.name}, for {named.after}.</b>}
+          </p>
         )
       ) : saw === "dust" ? (
         <p className="mt-1.5 text-[13.5px] leading-snug text-page-ink2">Dust, with the bump near 10 microns. It will fade, and there is nothing more for us to do here.</p>
       ) : saw ? (
         <p className="mt-1.5 text-[13.5px] leading-snug text-page-ink2">It faded before we finished, and took the answer with it.</p>
       ) : mine ? (
-        <p className="mt-1.5 text-[13.5px] leading-snug text-page-ink2">Our Infrared Telescope is splitting its light. Done by Year {yearText(mine.y + READ_YEARS)}, if it still shines.</p>
+        <>
+          <p className="mt-1.5 text-[13.5px] leading-snug text-page-ink2">Our Infrared Telescope is splitting its light. Done by Year {yearText(mine.y + READ_YEARS)}, if it still shines.</p>
+          <div className="mt-2 h-1 overflow-hidden rounded-full bg-faint/40">
+            <div className="h-full rounded-full bg-other transition-[width] duration-700" style={{ width: `${Math.max(3, Math.min(100, ((now - mine.y) / READ_YEARS) * 100))}%` }} />
+          </div>
+          <div className="mt-1 flex justify-between font-mono text-[10px] text-muted">
+            <span>Year {yearText(mine.y)}</span>
+            <span>Year {yearText(mine.y + READ_YEARS)}</span>
+          </div>
+        </>
       ) : (
         <>
           <p className="mt-1.5 text-[13.5px] leading-snug text-page-ink2">

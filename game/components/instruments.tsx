@@ -47,16 +47,16 @@ function found(name: string, k: Known): { line: string; news: boolean } | null {
     const i = m.flashes.length;
     const at =
       f.faded !== undefined
-        ? `Warm glow ${i} faded by Year ${yearText(f.faded)}.`
+        ? `Warm Glow ${i} faded by Year ${yearText(f.faded)}.`
         : f.range
-          ? `Warm glow ${i}, ranged by our Infrared Telescope.`
+          ? `Warm Glow ${i}, ranged by our Infrared Telescope.`
           : "Our Infrared Telescope must range it before we can place it.";
     return { line: `Has seen ${n(i)} new warm glow${i > 1 ? "s" : ""}, the latest at Year ${yearText(f.seen)}. ${at}`, news: recent(f.faded ?? f.ranged ?? f.seen) };
   }
   if ((name === "Halo Survey" || name === "Halo Array") && m.glows.length) {
     const g = m.glows.at(-1)!;
     const i = m.glows.length;
-    return { line: `Found ${n(i)} cold glow${i > 1 ? "s" : ""}. The latest, Cold glow ${i}, at Year ${yearText(g.seen)}.`, news: recent(g.seen) };
+    return { line: `Found ${n(i)} cold glow${i > 1 ? "s" : ""}. The latest, Cold Glow ${i}, at Year ${yearText(g.seen)}.`, news: recent(g.seen) };
   }
   const w = m.watcher;
   if (name === "Moon Search" && w?.by === "moon search")

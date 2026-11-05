@@ -14,6 +14,7 @@ import { gsap, prefersReducedMotion, useGSAP } from "@/lib/motion";
 // the nearest old one typically about 50 ly away, and a young mind's warm glow reaching us about every 50 Years. And what the
 // natural sky did meanwhile, lib/game/natural.ts: each star that exploded drawn where it was in our galaxy, top down,
 // flaring in turn, and the mergers our Warm Sky Watch set aside. 2026-10-30.
+// These are the Mind's words, said in its note on the map, not a card of their own. 2026-11-04.
 
 /** Our galaxy top down, its middle at the drawing's: 88 px for 40,000 ly, so nearly every star fits. */
 const PX = 88 / 40_000;
@@ -59,11 +60,7 @@ export function Quiet({ from, to, onClose, children }: { from: number; to: numbe
     { scope: root, dependencies: [from, to] },
   );
   return (
-    <div
-      ref={root}
-      role="status"
-      className="absolute top-full right-4 z-30 mt-2 flex w-[min(340px,calc(100vw-32px))] flex-col gap-2.5 rounded-xl border border-faint bg-panel p-3.5 text-left shadow-lg wide:right-6"
-    >
+    <div ref={root} className="flex flex-col gap-2.5">
       <span className="font-mono text-[10px] tracking-[.1em] text-muted uppercase">
         {long ? "A long quiet" : "We jumped ahead"} · {span < 10 ? span.toFixed(1) : Math.round(span).toLocaleString("en-US")} Years
       </span>
@@ -146,7 +143,6 @@ export function Quiet({ from, to, onClose, children }: { from: number; to: numbe
         </>
       )}
       <p data-q className="text-[13px] leading-snug text-page-ink2">
-        <span className="mr-1.5 font-mono text-[10px] tracking-[.1em] text-you">THE MIND</span>
         A quiet sky is what we expected. Minds are common, about 125 million in our galaxy, the nearest old one likely
         about 50 ly off, and they keep quiet. A young one’s warm glow reaches us about once in 50 Years, if we watch for
         it. Each quiet Year tells us where they are not.

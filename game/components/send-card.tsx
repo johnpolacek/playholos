@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { starName } from "@/lib/game/leads";
 import { useGame } from "@/components/game-provider";
 import { useLeads } from "@/components/scan";
 import { tenths, yearText } from "@/lib/game/clock";
@@ -85,7 +86,7 @@ function Aimed({ id, draft, asked }: { id: string; draft: Draft; asked: string }
         <span className={`${lab} text-you`}>To</span>
         <span className="font-mono text-[11px] text-muted">{star === WATCHER ? away.far : farText(star)}</span>
       </div>
-      <b className="-mt-2 text-[15px] font-semibold">{star.name}</b>
+      <b className="-mt-2 text-[15px] font-semibold">{starName(star.name)}</b>
       <Travels draft={draft} />
       <div className="grid grid-cols-3 border-y border-rowline">
         {facts.map(([k, v], i) => (

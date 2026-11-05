@@ -1,15 +1,19 @@
 import { useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
 import { useMindPick } from "@/components/catalog";
-import { useOpenReadings } from "@/components/close-reading";
+import { readingStands, useOpenReadings } from "@/components/close-reading";
 import { useGame } from "@/components/game-provider";
+import { Arrived, setLeap, useLeap } from "@/components/jump";
 import { useAhead, useIdleNow } from "@/components/hud";
+import { useJumpWords } from "@/components/mind-news";
 import { MindNote } from "@/components/mind-note";
 import { usePlan, useSchedule } from "@/components/picks";
+import { Quiet } from "@/components/quiet";
 import { useLeads } from "@/components/scan";
 import { starName } from "@/lib/game/leads";
 import { tenths, yearText } from "@/lib/game/clock";
 import { buildSlug, drawAt, orderLater, searchOf } from "@/lib/game/plan";
+import { READ_YEARS } from "@/lib/sim/minds";
 import { combedAt } from "@/lib/sim/works";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
 
@@ -23,11 +27,11 @@ import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motio
 const SPARE = 0.8;
 
 export function IdleNote() {
-  const { year, orderAt, playOn } = useGame();
+  const { save, year, orderAt, playOn } = useGame();
   const { idle, held, last } = useIdleNow();
   const { plan, change } = usePlan();
   const { scale } = useSchedule();
-  const { standing } = useLeads();
+  const { standing, leads, minds } = useLeads();
   const ahead = useAhead();
   const open = useOpenReadings();
   const glow = open[0];
@@ -44,21 +48,69 @@ export function IdleNote() {
   // Put away until the next time nothing builds, or the next stop.
   const key = idle ? `idle ${last}` : `next ${ahead?.to ?? ""}`;
   const [away, setAway] = useState<string | null>(null);
+  // A jump is told here too, ahead of the note's usual word, on every tab: the Mind says what reached us, in one note,
+  // with its own words on it. On the Mind tab the talk shows those. 2026-11-04.
+  const leap = useLeap();
+  const told = useJumpWords(leap?.snap.said);
   const shown = year !== null && (idle || quiet) && away !== key && path !== "/play/mind";
   const pick = useMindPick(shown && (idle || spare));
   const root = useRef<HTMLDivElement>(null);
   useGSAP(
     () => {
-      if (shown && !prefersReducedMotion()) gsap.fromTo(root.current, riseFrom, rise);
+      if ((shown || leap) && !prefersReducedMotion()) gsap.fromTo(root.current, riseFrom, rise);
     },
-    { dependencies: [shown, idle] },
+    { dependencies: [shown, idle, leap?.to] },
   );
+  if (leap)
+    return (
+      <div
+        ref={root}
+        role="status"
+        className="absolute top-10 left-2.5 z-20 max-h-[calc(100%-3.5rem)] w-[min(400px,calc(100%-20px))] overflow-y-auto rounded-xl border border-faint bg-paper/90 pt-2 pr-2 backdrop-blur-sm"
+      >
+        <MindNote still={!told.busy} edge={false} className="text-[13.5px] leading-[1.45]">
+          <Quiet
+            key={leap.to}
+            from={leap.from}
+            to={leap.to}
+            onClose={() => {
+              told.read();
+              setLeap(null);
+            }}
+          >
+            {told.fresh && path !== "/play/mind" && (
+              <p aria-live="polite">
+                {told.words || "…"}{" "}
+                <Link to="/play/mind" onClick={told.read} className="text-[12.5px] whitespace-nowrap text-you hover:underline">
+                  Reply ›
+                </Link>
+              </p>
+            )}
+            <Arrived from={leap.from} to={leap.to} snap={leap.snap} />
+          </Quiet>
+        </MindNote>
+      </div>
+    );
   if (!shown) return null;
   const start = () => {
     if (!pick || orderAt === null) return;
     change(orderLater(pick.build.name, tenths(orderAt)));
     navigate(`/play/build/${buildSlug(pick.build.name)}`);
   };
+  // Every build we can start is ours already: the Mind offers the next move, in the order we can act on it. "We have
+  // built all we can" was a dead end. Playtest 2026-11-04. First a shining glow we read as plain heat and haven't called.
+  const spent = idle && !pick;
+  const reads = plan.closeReads ?? [];
+  const heat = !spent || glow
+    ? undefined
+    : leads.find((l) => {
+        const flash = minds?.flashes[Number(l.slug.replace("warm-glow-", "")) - 1];
+        return readingStands(l, minds, reads) === "done" && flash?.read?.saw === "smooth" && flash.faded === undefined && !save?.sent?.some((m) => m.to === l.star);
+      });
+  // Then the reading under way, then a word with the Mind on where to turn.
+  const reading = spent && !glow && !heat ? reads.find((o) => o.y + READ_YEARS > now) : undefined;
+  const openSky = spent && !glow && !heat && !reading;
+  const clock = held && <span className="text-page-ink2"> The clock waits.</span>;
   const what = pick ? `${pick.build.what.charAt(0).toLowerCase()}${pick.build.what.slice(1)}` : "";
   return (
     <div
@@ -72,21 +124,41 @@ export function IdleNote() {
         </svg>
       </button>
       <MindNote edge={false} className="pr-6 text-[13.5px] leading-[1.45]">
-        {idle ? (
+        {idle && pick ? (
           <p>
             <span className="font-medium text-other">Our compute sits idle.</span>{" "}
             <span className="text-page-ink2">{held ? "Nothing is building, so the clock waits." : "Nothing is building."}</span>
           </p>
+        ) : heat ? (
+          <p>
+            <span className="font-medium text-other">{starName(heat.star)} still shines, and its light is plain heat.</span>{" "}
+            <span className="text-page-ink2">No dust explains it. We can call out to it, or go.</span>
+            {clock}
+          </p>
+        ) : reading ? (
+          <p>
+            <span className="font-medium text-other">Our telescope is reading {starName(reading.name)}.</span>{" "}
+            <span className="text-page-ink2">We will know its light by Year {yearText(reading.y + READ_YEARS)}.</span>
+            {clock}
+          </p>
+        ) : openSky ? (
+          <p>
+            <span className="font-medium text-other">Our builds stand ready. The sky is next.</span>{" "}
+            <span className="text-page-ink2">We can call out to a star, or talk over where to turn.</span>
+            {clock}
+          </p>
         ) : (
           <p>
-            <span className="font-medium text-other">{glow ? "A Close Reading is waiting on us." : "Nothing needs us now."}</span>{" "}
+            {/* Said plainly, the reading first and the next stop apart: "A Close Reading is waiting on us. Next, at Year
+                579.5" read as the reading coming then. Playtest 2026-11-04. */}
+            <span className="font-medium text-other">{glow ? `We can read ${starName(glow.star)} now.` : "Nothing needs us now."}</span>{" "}
             <span className="text-page-ink2">
-              {ahead && <>Next, at Year {yearText(ahead.to)}{ahead.why ? `: ${ahead.why}` : ""}. </>}
+              {glow && `Our telescope is free, and the glow could fade before we look. A Close Reading takes ${READ_YEARS} Years. `}
               {spare && `${Math.round((1 - compute) * 100)}% of our compute sits idle.`}
             </span>
+            {clock}
           </p>
         )}
-        {glow && <p className="mt-1 text-page-ink2">{starName(glow.star)} still shines, and our telescope is free to read its light.</p>}
         {pick && (
           <p className="mt-1 text-page-ink2">
             {pick.fit ? `For our ${pick.strategy} strategy, we would start ` : "We would start "}
@@ -107,19 +179,54 @@ export function IdleNote() {
               See {starName(glow.star)} ›
             </Link>
           )}
-          {!idle && ahead && (
+          {heat && (
+            <>
+              <Link
+                to={`/play/reach/${heat.slug}`}
+                className="inline-flex h-8 items-center rounded-full bg-other px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110"
+              >
+                Engage {starName(heat.star)}
+              </Link>
+              <Link
+                to={`/play/mind?ask=${encodeURIComponent(`We want to send a message to ${heat.star}. What should it say, and what does it risk?`)}`}
+                className="text-[12.5px] text-you hover:underline"
+              >
+                Send it a message ›
+              </Link>
+            </>
+          )}
+          {openSky && (
+            <>
+              <Link
+                to={`/play/mind?ask=${encodeURIComponent("Our builds are done. Where should we turn next?")}`}
+                className="inline-flex h-8 items-center rounded-full bg-other px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110"
+              >
+                Talk it over
+              </Link>
+              <Link to="/play/reach" className="text-[12.5px] text-you hover:underline">
+                Call out to a star ›
+              </Link>
+            </>
+          )}
+          {(!idle || !pick) && ahead && (
             <button
               onClick={ahead.go}
-              className={`h-8 rounded-full px-4 text-[13px] font-medium transition-[filter] hover:brightness-110 ${pick || glow ? "border border-you/60 text-you" : "bg-you text-paper"}`}
+              className={`h-8 rounded-full px-4 text-[13px] font-medium transition-[filter] hover:brightness-110 ${pick || glow || heat || openSky ? "border border-you/60 text-you" : "bg-you text-paper"}`}
             >
-              Jump to {yearText(ahead.to)} ›
+              Jump to {ahead.why ?? "what comes next"} ›
             </button>
           )}
-          <Link to="/play/build" className="text-[12.5px] text-you hover:underline">
-            See the Catalog ›
-          </Link>
+          {(!idle || pick) && (
+            <Link to="/play/build" className="text-[12.5px] text-you hover:underline">
+              See the Catalog ›
+            </Link>
+          )}
           {held && (
-            <button onClick={playOn} className="text-[12.5px] text-muted hover:text-ink">
+            <button
+              onClick={playOn}
+              // Waiting on a reading, the clock is the one thing to move.
+              className={reading ? "h-8 rounded-full bg-you px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110" : "text-[12.5px] text-muted hover:text-ink"}
+            >
               Play on
             </button>
           )}
