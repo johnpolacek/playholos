@@ -19,14 +19,14 @@ export const PLACES: [upTo: number, name: string][] = [
 
 /** The title's ways in, each a reactor of its own. 2026-11-04. */
 const WAYS = [
-  { id: "universe", label: "Universe", to: "/universe" },
-  { id: "sim", label: "Simulation", to: "/sim" },
-  { id: "play", label: "Play", to: "/play" },
+  { id: "universe", label: "Universe", to: "/universe", mood: "orbit" },
+  { id: "sim", label: "Simulation", to: "/sim", mood: "web" },
+  { id: "play", label: "Play", to: "/play", mood: "embers" },
 ] as const;
 
 // The first screen, and the landing for everyone. No title, only the sky: the view drifts out from Earth past the
 // Moon, the planets and the nearby stars to the Milky Way and the Local Group, then home, and says where it is and how
-// far light takes to get there. Its ways in are reactors that gather from sparks. Pressed, one bursts. Universe and
+// far light takes to get there. Its ways in are reactors, each its own mood: moons, a web, embers. Pressed, one bursts. Universe and
 // Simulation lift the screen away to their page. Play, for a new game, dives the view home to Earth, where Earth
 // wakes. A game begun, or an opening part seen, goes straight on (dive false).
 export function Drift({ onNext, dive = true }: { onSkip(): void; onNext(): void; dive?: boolean }) {
@@ -90,10 +90,11 @@ export function Drift({ onNext, dive = true }: { onSkip(): void; onNext(): void;
         <div data-m="where" className="mt-1 mb-7 h-4 font-mono text-[10.5px] text-muted tabular-nums">
           <span ref={far} />
         </div>
-        <div className="flex flex-col items-center gap-3 sm:flex-row">
+        <div className="flex flex-col items-center gap-5 sm:flex-row sm:gap-8">
           {WAYS.map((w, i) => (
             <Reactor
               key={w.id}
+              mood={w.mood}
               ref={(r) => void (reactors.current[i] = r)}
               data-m="act"
               onClick={() => begin(i)}
