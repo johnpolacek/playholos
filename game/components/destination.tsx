@@ -6,10 +6,10 @@ import { BuildMark, buildBlue, buildTone, LeadMark, LockMark } from "@/component
 import { MindNote } from "@/components/mind-note";
 import { toggleBuild, usePlan, useSchedule } from "@/components/picks";
 import { Lens } from "@/components/icons";
-import { axis, Brings, Key, says, sooner, Thread, useReach, year, Years } from "@/components/reach";
+import { axis, Brings, Key, says, sooner, targetOf, Thread, useReach, year, Years } from "@/components/reach";
 import { useLeads } from "@/components/scan";
 import { VisitArt } from "@/components/visit-art";
-import { isHole, skyId, starName, visitReading } from "@/lib/game/leads";
+import { isHole, starName, visitReading } from "@/lib/game/leads";
 import { Face, ListHead } from "@/components/tab-head";
 import { HISTORY } from "@/lib/game/charter";
 import { span, lyOf, yearText } from "@/lib/game/clock";
@@ -240,7 +240,7 @@ export function DestinationPage({ slug }: { slug: string }) {
   const range = lead?.range;
   useEffect(() => {
     if (!star) return;
-    aim({ id: skyId(star), name: star, ly, system, ...(range ? { far: `${lyOf(range[0])} to ${lyOf(range[1])} ly` } : {}) });
+    aim(targetOf(star, ly, system, range));
     return () => aim(null);
   }, [aim, star, ly, system, range]);
 

@@ -642,6 +642,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
   /** Where it is, the lead or the message's star, in light-years from Sol. */
   const lookedAt = () => {
     if (spec.mode === "sim") return spec.sim?.focus ? new THREE.Vector3(...spec.sim.focus) : null;
+    if (spec.mode === "reach") return spec.leads?.[0] ? leadAt(spec.leads[0]) : null;
     if (spec.mode === "beams") {
       const b = spec.beams?.[aimed()];
       return b ? targetAt(b.star) : null;
@@ -4025,9 +4026,9 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     cam.add(workShift).addScaledVector(view.dir, back);
     let D = view.D + back;
     let logD = back ? Math.log10(D) : view.logD;
-    // What doesn't fit and our messages: the view moves over to the middle of the path in view. Nearer than the stars
-    // it stays on Earth, so a flight out to a path starts from Earth, and a flight home ends there.
-    const P = (spec.mode === "leads" || spec.mode === "beams") && !still ? lookedAt() : null;
+    // What doesn't fit, our messages and Reach's target: the view moves over to the middle of the path in view. Nearer
+    // than the stars it stays on Earth, so a flight out to a path starts from Earth, and a flight home ends there.
+    const P = (spec.mode === "leads" || spec.mode === "beams" || spec.mode === "reach") && !still ? lookedAt() : null;
     // Measured from where the view's middle already is: far out it leans toward the Galaxy's center, and that pushed Sol
     // off the map, past a warm glow's whole way out from it. 2026-11-03.
     aimShift.lerp(P ? mid.copy(P).multiplyScalar(0.5 * LY_AU).sub(target) : mid.set(0, 0, 0), 1 - Math.exp(-dt * LOOK));
@@ -4151,7 +4152,8 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     // A simulation's peers lie across the Galaxy, so its stars stay on out past it, but not out among the other
     // galaxies, where all 400,000 would draw into one pixel.
     // Scan's too: its warm glows lie as far out, and this hid them, Sol and the line between when it pulled back. 2026-11-03.
-    stars.on = x < 9.4 || ((spec.mode === "sim" || spec.mode === "leads") && x < 10.8);
+    // Reach's too: a far target's ring and its line from the Sun went dark with them. 2026-11-05.
+    stars.on = x < 9.4 || ((spec.mode === "sim" || spec.mode === "leads" || spec.mode === "reach") && x < 10.8);
     const pPeople = present("people", dt);
     const pInherit = present("inherit", dt);
     const pReach = present("reach", dt);

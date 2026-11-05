@@ -12,7 +12,7 @@ import type { Dials, Mark as Place } from "@/lib/drift";
 import { steadySide } from "@/lib/steady-side";
 import { YEAR_0, lyOf, yearText } from "@/lib/game/clock";
 import { LANDMARKS } from "@/lib/game/landmarks";
-import { starName, visitReading } from "@/lib/game/leads";
+import { skyId, starName, visitReading } from "@/lib/game/leads";
 import { lean, type moves } from "@/lib/game/plan";
 import { target as starOf } from "@/lib/game/sends";
 import {
@@ -68,6 +68,14 @@ export interface Target {
   system?: System;
 }
 const NEAREST_TARGET: Target = { id: NEAREST.name, name: NEAREST.name, ly: NEAREST.ly };
+/** A lead's star as the map's target: named as we name it, with its distance in words where we know only a range. */
+export const targetOf = (star: string, ly: number, system?: System, range?: [number, number]): Target => ({
+  id: skyId(star),
+  name: starName(star),
+  ly,
+  system,
+  ...(range ? { far: `${lyOf(range[0])} to ${lyOf(range[1])} ly` } : {}),
+});
 
 /** What we have sent so far: Voyager 1, silent by Year 0, 40,000 years from passing another star. */
 const SENT: Row = {
@@ -443,6 +451,13 @@ export function Thread({ road, i, to }: { road: Road; i: number; to: number }) {
     return Math.min(W - half, Math.max(half, at));
   };
   const { done, leaves, arrives, home } = road;
+  // Long after a craft flew, its build and its pass sit close on a long axis: "built" gives way so "passes" reads
+  // whole. They printed over each other until 2026-11-05.
+  const builtWords = done === null ? "" : `built ${year(done)}`;
+  const metWords = arrives === null ? "" : `${met} ${year(arrives)}`;
+  const crowded =
+    done !== null && arrives !== null &&
+    Math.abs(inView(x(done), builtWords) - inView(x(arrives), metWords)) < (builtWords.length + metWords.length) * 2.6 + 6;
   return (
     <svg viewBox={`0 0 ${W} 40`} className="w-full overflow-visible" aria-hidden>
       <defs>
@@ -465,9 +480,11 @@ export function Thread({ road, i, to }: { road: Road; i: number; to: number }) {
         {done !== null && (
           <>
             <circle cx={x(done)} cy={20} r={3} className="fill-you" />
-            <text x={inView(x(done), `built ${year(done)}`)} y={10} textAnchor="middle" className="fill-you font-mono text-[8.5px]">
-              built {year(done)}
-            </text>
+            {!crowded && (
+              <text x={inView(x(done), builtWords)} y={10} textAnchor="middle" className="fill-you font-mono text-[8.5px]">
+                {builtWords}
+              </text>
+            )}
           </>
         )}
         {/* Both roads fly by, so the craft passes its star and never stops. A lens reaches the Sun's focus. */}
@@ -652,7 +669,7 @@ export function says(
 
 export function Reach() {
   const { save, year: clock, orderAt } = useGame();
-  const { fly } = useReach();
+  const { fly, aim, target } = useReach();
   const { leads, visits } = useLeads();
   const { plan } = usePlan();
   const { scale } = useSchedule();
@@ -664,7 +681,7 @@ export function Reach() {
     lit: out || hover,
     toggle: () => {
       setOut(!out);
-      fly(out ? FAR_ZOOM : zoomFor(VOYAGER.au));
+      fly(out ? farZoom(target.ly) : zoomFor(VOYAGER.au));
     },
     point: setHover,
   };
@@ -683,12 +700,23 @@ export function Reach() {
           // A road that has flown went to the nearest star, so a time already past is no road to any other. At Year
           // 20,858, Proxima's soonest still read Year 125.1. Playtest 2026-11-01.
           const ly = l.range?.[0] ?? l.ly;
-          const at = base.map((r) => toward(r, ly, l.star === NEAREST.name ? undefined : from).arrives).filter((y): y is number => y !== null);
-          const ahead = at.filter((y) => y > from);
-          const reached = l.star === NEAREST.name && ahead.length < at.length ? Math.min(...at) : null;
-          return { lead: l, soonest: ahead.length ? Math.min(...ahead) : null, reached };
+          const ahead = base.map((r) => toward(r, ly, from).arrives).filter((y): y is number => y !== null && y > from);
+          // What we truly sent: Proxima's first roads, flown by themselves, and any sail or probe sent from a page. Only
+          // these reach a star: Proxima read "Reached" with no craft sent until 2026-11-05.
+          const sent = [
+            ...(l.star === NEAREST.name ? base.filter((r) => r.n !== null).map((r) => toward(r, ly).arrives) : []),
+            ...(plan.flybys ?? []).filter((o) => o.name === l.star).map((o) => flybyRoad(plan, scale, o.y, o).arrives),
+          ].filter((y): y is number => y !== null);
+          const past = sent.filter((y) => y <= from);
+          const coming = sent.filter((y) => y > from);
+          return {
+            lead: l,
+            soonest: ahead.length ? Math.min(...ahead) : null,
+            reached: past.length ? Math.min(...past) : null,
+            bound: coming.length ? Math.min(...coming) : null,
+          };
         }),
-    [leads, base, from],
+    [leads, base, from, plan, scale],
   );
   // Cold glows no craft of ours has seen up close gather in one row, as on Scan, and faded warm glows we haven't
   // messaged in another. Playtest 2026-11-01.
@@ -733,22 +761,26 @@ export function Reach() {
       };
     });
 
-  // Our craft sent to other stars once each leaves: lenses, sentinels, seed probes, and sails and probes passing. Reach listed only Voyager 1
-  // after all of these went. Playtest 2026-11-01.
-  const stays: (Row & { id: string })[] = clock === null ? [] : [
+  // Our craft sent to other stars: lenses, sentinels, seed probes, and sails and probes passing. Reach listed only
+  // Voyager 1 after all of these went, playtest 2026-11-01, and each showed only once it left, so a send seemed to do
+  // nothing until 2026-11-05.
+  const stays: (Row & { id: string; star: string; y: number; home: number })[] = clock === null ? [] : [
     ...(plan.lenses ?? []).map((o) => ({ o, road: lensRoad(plan, scale, from, o.name), what: "A lens", to: "at its Sun’s focus, toward" })),
     ...(plan.sentinels ?? []).map((o) => ({ o, road: sentinelRoad(plan, scale, from, o.name, starOf(o.name)?.d ?? 0), what: "A sentinel", to: "to stay at" })),
     ...(plan.seeds ?? []).map((o) => ({ o, road: seedRoad(plan, scale, from, o.name, starOf(o.name)?.d ?? 0), what: "A seed probe", to: "to stay at" })),
     ...(plan.flybys ?? []).map((o) => ({ o, road: flybyRoad(plan, scale, o.y, o), what: o.by === "sails" ? "Sails" : "A flyby probe", to: "to pass" })),
   ].flatMap(({ o, road: r, what, to }) => {
-    if (r.leaves === null || r.home === null || r.arrives === null || clock < r.leaves) return [];
+    if (r.leaves === null || r.home === null || r.arrives === null) return [];
     const star = starName(o.name);
     const there = what === "A lens" ? `Reached its focus in Year ${year(r.arrives)}` : to === "to pass" ? `Passed ${star} in Year ${year(r.arrives)}` : `Reached ${star} in Year ${year(r.arrives)}`;
     return [{
+      star: o.name,
+      y: o.y,
+      home: r.home,
       id: `${what}:${o.name}`,
       key: r.build,
       name: `${what}, ${star}`,
-      note: clock >= r.home ? `${there}. Its first word has reached us.` : clock >= r.arrives ? `${there}. Its first word is on its way to us.` : `Bound ${to} ${star}, arriving in Year ${year(r.arrives)}.`,
+      note: clock < r.leaves ? `Leaves in Year ${year(r.leaves)}, bound ${to} ${star}, arriving in Year ${year(r.arrives)}.` : clock >= r.home ? `${there}. Its first word has reached us.` : clock >= r.arrives ? `${there}. Its first word is on its way to us.` : `Bound ${to} ${star}, arriving in Year ${year(r.arrives)}.`,
       at: r.home,
       kind: "flight" as const,
       msg: `to ${star}`,
@@ -757,9 +789,19 @@ export function Reach() {
     }];
   });
 
+  // The map shows the way to our latest craft still on its way, or the nearest star with none. 2026-11-05.
+  const bound = [...stays].filter((s) => (clock ?? 0) < s.home).sort((a, b) => b.y - a.y)[0]?.star;
+  const going = leads.find((l) => l.star === bound);
+  const [goingStar, goingLy, goingSystem, goingRange] = [going?.star, going?.ly, going?.system, going?.range];
+  useEffect(() => {
+    if (!goingStar) return;
+    aim(targetOf(goingStar, goingLy!, goingSystem, goingRange));
+    return () => aim(null);
+  }, [aim, goingStar, goingLy, goingSystem, goingRange]);
+
   if (!save) return null;
 
-  const place = ({ lead, soonest, reached }: (typeof places)[number]) => (
+  const place = ({ lead, soonest, reached, bound }: (typeof places)[number]) => (
     <li key={lead.slug} className="border-t border-faint">
       <Link to={`/play/reach/${lead.slug}`} className="block py-2.5">
         <Face
@@ -767,7 +809,7 @@ export function Reach() {
           tone={lead.reply ? "text-other" : "text-you"}
           name={<b className="font-semibold">{starName(lead.star)}</b>}
           line={`${lead.what} · ${lead.range ? `${lyOf(lead.range[0])} to ${lyOf(lead.range[1])}` : lyOf(lead.ly)} ly`}
-          right={soonest !== null ? `Year ${year(soonest)}` : reached !== null ? `Reached, Year ${year(reached)}` : "Not yet"}
+          right={reached !== null ? `Reached, Year ${year(reached)}` : bound !== null ? `${clock === null ? "" : "On its way, "}Year ${year(bound)}` : soonest !== null ? `Year ${year(soonest)}` : "Not yet"}
         />
       </Link>
     </li>
