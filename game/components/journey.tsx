@@ -200,7 +200,7 @@ export function Item({
   if (build)
     return (
       <li data-q="row" data-key={row.key} style={{ ...buildBlue(row.name), ...style }} className="relative border-t border-faint bg-panel">
-        <Link to={`/build/${buildSlug(row.name)}`} className="block py-2.5" {...point}>
+        <Link to={`/play/build/${buildSlug(row.name)}`} className="block py-2.5" {...point}>
           {head}
           <div className="pl-7">
             <Journey row={row} now={now} shown={false} />

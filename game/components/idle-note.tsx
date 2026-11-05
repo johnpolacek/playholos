@@ -39,7 +39,7 @@ export function IdleNote() {
   // Put away until the next time nothing builds, or the next stop.
   const key = idle ? `idle ${last}` : `next ${ahead?.to ?? ""}`;
   const [away, setAway] = useState<string | null>(null);
-  const shown = year !== null && (idle || quiet) && away !== key && path !== "/mind";
+  const shown = year !== null && (idle || quiet) && away !== key && path !== "/play/mind";
   const pick = useMindPick(shown && (idle || spare));
   const root = useRef<HTMLDivElement>(null);
   useGSAP(
@@ -52,7 +52,7 @@ export function IdleNote() {
   const start = () => {
     if (!pick || orderAt === null) return;
     change(orderLater(pick.build.name, tenths(orderAt)));
-    navigate(`/build/${buildSlug(pick.build.name)}`);
+    navigate(`/play/build/${buildSlug(pick.build.name)}`);
   };
   const what = pick ? `${pick.build.what.charAt(0).toLowerCase()}${pick.build.what.slice(1)}` : "";
   return (
@@ -104,7 +104,7 @@ export function IdleNote() {
               Jump to {yearText(ahead.to)} ›
             </button>
           )}
-          <Link to="/build" className="text-[12.5px] text-you hover:underline">
+          <Link to="/play/build" className="text-[12.5px] text-you hover:underline">
             See the Catalog ›
           </Link>
           {held && (

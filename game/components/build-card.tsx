@@ -27,8 +27,8 @@ export function BuildCard({ build }: { build: Build | Later }) {
       </div>
       {later ? <Waits build={later} scale={scale} done={done} /> : <Queueing name={build.name} scale={scale} done={done} />}
       <Link
-        to={`/build/${buildSlug(build.name)}`}
-        state={{ back: { to: "/mind", label: "The Mind" } }}
+        to={`/play/build/${buildSlug(build.name)}`}
+        state={{ back: { to: "/play/mind", label: "The Mind" } }}
         className="mt-1.5 self-start font-mono text-[11px] tracking-[.06em] text-muted uppercase transition-colors hover:text-ink"
       >
         See it on Build ›

@@ -22,7 +22,7 @@ export function OpensLine({ name }: { name: string }) {
       {later.map((b) => (
         <Link
           key={b.name}
-          to={`/build/${buildSlug(b.name)}`}
+          to={`/play/build/${buildSlug(b.name)}`}
           className="inline-flex items-center gap-1.5 py-1 text-page-ink2 transition-colors hover:text-ink"
         >
           <span className={buildTone(b.name, false)}>
@@ -50,7 +50,7 @@ export function Opens({ name, className = "mt-6" }: { name: string; className?: 
       <ul className="mt-1">
         {later.map((b) => (
           <li key={b.name} className="border-t border-faint">
-            <Link to={`/build/${buildSlug(b.name)}`} state={state} className="block py-2.5">
+            <Link to={`/play/build/${buildSlug(b.name)}`} state={state} className="block py-2.5">
               <Face
                 mark={<BuildMark name={b.name} />}
                 tone={buildTone(b.name, false)}

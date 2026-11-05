@@ -60,7 +60,7 @@ export function Arrival() {
   if (landing) return <Crossing h={landing} onDone={() => setPlayed((s) => new Set(s).add(heardId(landing)))} />;
   const next = open.find((h) => !hidden.has(heardId(h)));
   // On Scan the signal heads the tab, marked new, so the banner would only cover the map.
-  if (!next || path === "/") return null;
+  if (!next || path === "/play") return null;
   return <Banner h={next} more={open.length - 1} onHide={() => setHidden((s) => new Set(s).add(heardId(next)))} />;
 }
 
@@ -82,7 +82,7 @@ function Banner({ h, more, onHide }: { h: Heard; more: number; onHide(): void })
         </span>
       </div>
       <Link
-        to={`/?heard=${encodeURIComponent(heardId(h))}`}
+        to={`/play?heard=${encodeURIComponent(heardId(h))}`}
         className="flex h-9 shrink-0 items-center rounded-full bg-other px-4 text-[13px] font-semibold text-page"
       >
         Open on Scan
@@ -187,14 +187,14 @@ function Crossing({ h, onDone }: { h: Heard; onDone(): void }) {
               <button
                 onClick={() => {
                   see([heardId(h)]);
-                  go(`/?heard=${encodeURIComponent(heardId(h))}`);
+                  go(`/play?heard=${encodeURIComponent(heardId(h))}`);
                 }}
                 className="text-you hover:underline"
               >
                 Read it on Scan
               </button>
               <button
-                onClick={() => go(`/mind?ask=${encodeURIComponent(`${kindOf(h)} just reached us from ${h.star}. What should we make of it?`)}`)}
+                onClick={() => go(`/play/mind?ask=${encodeURIComponent(`${kindOf(h)} just reached us from ${h.star}. What should we make of it?`)}`)}
                 className="text-you hover:underline"
               >
                 Talk it through

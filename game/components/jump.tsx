@@ -149,7 +149,7 @@ export function Arrived({ from, to, snap }: { from: number; to: number; snap: Sn
       if (at != null && at > from + 1e-6 && at <= to + 1e-6)
         out.push({
           key: `build:${n}`,
-          to: `/build/${buildSlug(n)}`,
+          to: `/play/build/${buildSlug(n)}`,
           mark: (
             <span style={{ color: buildColor(n) }}>
               <BuildMark name={n} size={16} />
@@ -168,7 +168,7 @@ export function Arrived({ from, to, snap }: { from: number; to: number; snap: Sn
       const nth = l.slug.match(/^warm-glow-(\d+)$/)?.[1];
       out.push({
         key: `lead:${l.slug}`,
-        to: `/lead/${l.slug}`,
+        to: `/play/lead/${l.slug}`,
         mark: <LeadMark art={l.art} />,
         title: starName(l.star),
         line: isNew && nth && nth !== "1" ? `A new warm glow, ${nth} found so far` : read ? `${read.title}, Year ${yearText(read.at)}` : l.what,
@@ -176,7 +176,7 @@ export function Arrived({ from, to, snap }: { from: number; to: number; snap: Sn
     }
     for (const h of heard)
       if (!snap.heard.has(heardId(h)))
-        out.push({ key: `heard:${heardId(h)}`, to: "/", mark: <span className="text-other">◉</span>, title: `A signal from ${starName(h.star)}`, line: `Year ${yearText(h.arrived)}` });
+        out.push({ key: `heard:${heardId(h)}`, to: "/play", mark: <span className="text-other">◉</span>, title: `A signal from ${starName(h.star)}`, line: `Year ${yearText(h.arrived)}` });
     return out;
   }, [plan, done, leads, readings, heard, snap, from, to]);
 

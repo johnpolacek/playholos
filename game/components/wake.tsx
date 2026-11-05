@@ -1,5 +1,5 @@
 import { createContext, use, useCallback, useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { preload } from "@/app/about/load";
 import { useGame } from "@/components/game-provider";
 import { Origins } from "@/components/origins";
@@ -102,7 +102,8 @@ export function Wake({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
 const LeaveShell = createContext<(then: () => void) => void>((then) => then());
 export const useLeaveShell = () => use(LeaveShell);
 
-// The phone. A new game opens on the drift, then Wake and the memories, all under one sky. A game already begun goes
+// The phone. The landing, /, is the drift for everyone, with its ways in, and the game lives at /play. 2026-11-04.
+// A new game opens on the drift, then Wake and the memories, all under one sky. A game already begun goes
 // straight to the shell. Past the last screen, the shell opens on the review of our scans, the first of the things we
 // would do before Begin. A reload comes back to the screen we were on, in this tab: it started over at the drift, and
 // a charter picked was lost, until 2026-10-30.
@@ -131,7 +132,9 @@ export function Opening({ className, children }: { className: string; children: 
     }
   };
   const frame = useRef<HTMLDivElement>(null);
-  const shell = !!save && (save.woke || save.beganAt !== null);
+  const begun = !!save && (save.woke || save.beganAt !== null);
+  const title = useLocation().pathname === "/";
+  const shell = begun && !title;
 
   // The shell enters piece by piece: the top bar drops in, the map opens, the page rises, the rail comes up.
   const { contextSafe } = useGSAP(
@@ -200,11 +203,24 @@ export function Opening({ className, children }: { className: string; children: 
     })();
 
   let body: React.ReactNode = <div className="grow bg-paper" />;
-  if (shell) body = children;
+  // Play from the title: a new game dives home to Earth's waking, and a game begun, or an opening part seen, goes on.
+  if (title)
+    body = (
+      <Drift
+        key="title"
+        dive={!begun && at === 0}
+        onSkip={() => {}}
+        onNext={() => {
+          if (!begun && at === 0) setAt(1);
+          navigate("/play");
+        }}
+      />
+    );
+  else if (shell) body = children;
   else if (save) {
     const Screen = SCREENS[at];
     const plan = () => {
-      navigate("/?review");
+      navigate("/play?review");
       wake();
     };
     const next = () => (at + 1 < SCREENS.length ? setAt(at + 1) : plan());

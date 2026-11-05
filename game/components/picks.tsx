@@ -253,7 +253,7 @@ export function Unqueued({ scale, className = "" }: { scale: number; className?:
           return (
             <li key={b.name} className="border-t border-faint">
               <Link
-                to={`/build/${buildSlug(b.name)}`}
+                to={`/play/build/${buildSlug(b.name)}`}
                 className="block py-2.5"
                 {...(!lacking.length && previews(b.name, preview))}
               >
@@ -295,7 +295,7 @@ export function Opened({ scale, now, className = "" }: { scale: number; now: num
       <ul className="mt-1">
         {open.map((b) => (
           <li key={b.name} className="border-t border-faint">
-            <Link to={`/build/${buildSlug(b.name)}`} className="block py-2.5" {...previews(b.name, preview)}>
+            <Link to={`/play/build/${buildSlug(b.name)}`} className="block py-2.5" {...previews(b.name, preview)}>
               <Face
                 mark={<BuildMark name={b.name} />}
                 tone={buildTone(b.name, false)}

@@ -177,7 +177,7 @@ export default function About() {
           className="mx-auto flex max-w-[1180px] items-center justify-between px-4 py-8 font-mono text-[10.5px] tracking-[.1em] text-muted"
         >
           <span>HOLOS</span>
-          <AboutLink href="/" className="text-ink">
+          <AboutLink href="/play" className="text-ink">
             PLAY →
           </AboutLink>
         </div>

@@ -368,7 +368,7 @@ export function MindChat({ ask }: { ask?: string }) {
       asked.current = true;
       sendMessage({ text: ask });
       // Not a navigation, so the chat stays mounted.
-      window.history.replaceState(null, "", "/mind");
+      window.history.replaceState(null, "", "/play/mind");
     });
     return () => clearTimeout(id);
   }, [ask, sendMessage]);
@@ -403,7 +403,7 @@ export function MindHere() {
       <Talk messages={latest} lastAnswer={lastAnswer} status={status} error={error} />
       <AskBox busy={busy} onAsk={(text) => sendMessage({ text })} />
       {from > 0 && (
-        <Link to="/mind" className="self-end py-1 text-[12.5px] text-page-ink2 transition-colors hover:text-ink">
+        <Link to="/play/mind" className="self-end py-1 text-[12.5px] text-page-ink2 transition-colors hover:text-ink">
           Our whole talk ›
         </Link>
       )}

@@ -28,24 +28,24 @@ const listen = (f: () => void) => {
 };
 
 /** A build page's state when opened through a strategy: its way back, and the walk on. */
-export const throughState = (walk: Walk) => ({ back: { to: "/build?tour", label: walk.name, state: { at: walk.at } }, through: walk });
+export const throughState = (walk: Walk) => ({ back: { to: "/play/build?tour", label: walk.name, state: { at: walk.at } }, through: walk });
 
 export function Through() {
   const { pathname, search, state } = useLocation();
   const navigate = useNavigate();
   const atStop = useSyncExternalStore(listen, () => shown);
   const walk = (state as { through?: Walk } | null)?.through;
-  const page = pathname.startsWith("/build/") && walk;
-  const stop = !page && pathname === "/build" && /[?&]tour\b/.test(search) ? atStop : null;
+  const page = pathname.startsWith("/play/build/") && walk;
+  const stop = !page && pathname === "/play/build" && /[?&]tour\b/.test(search) ? atStop : null;
   const on = page ? walk : stop;
   if (!on?.builds.length) return null;
 
-  const i = page ? on.builds.findIndex((b) => buildSlug(b) === pathname.slice("/build/".length)) : -1;
+  const i = page ? on.builds.findIndex((b) => buildSlug(b) === pathname.slice("/play/build/".length)) : -1;
   // A build reached from one of these, not among them, has no place in the walk.
   if (page && i < 0) return null;
   const next = on.builds[i + 1];
   const go = () =>
-    next ? navigate(`/build/${buildSlug(next)}`, { state: throughState(on) }) : navigate("/build?tour", { state: { at: on.at } });
+    next ? navigate(`/play/build/${buildSlug(next)}`, { state: throughState(on) }) : navigate("/play/build?tour", { state: { at: on.at } });
   return (
     <button
       onClick={go}

@@ -17,23 +17,33 @@ export const PLACES: [upTo: number, name: string][] = [
   [Infinity, "LOCAL GROUP"],
 ];
 
-// The first screen, before Earth wakes. No title, only the sky: the view drifts out from Earth past the Moon, the
-// planets and the nearby stars to the Milky Way and the Local Group, then home, and says where it is and how far light
-// takes to get there. Begin game is a reactor that gathers from sparks, and pressed, it bursts and the view dives home
-// to Earth.
-export function Drift({ onNext }: { onSkip(): void; onNext(): void }) {
+/** The title's ways in, each a reactor of its own. 2026-11-04. */
+const WAYS = [
+  { id: "universe", label: "Universe", to: "/universe" },
+  { id: "sim", label: "Simulation", to: "/sim" },
+  { id: "play", label: "Play", to: "/play" },
+] as const;
+
+// The first screen, and the landing for everyone. No title, only the sky: the view drifts out from Earth past the
+// Moon, the planets and the nearby stars to the Milky Way and the Local Group, then home, and says where it is and how
+// far light takes to get there. Its ways in are reactors that gather from sparks. Pressed, one bursts. Universe and
+// Simulation lift the screen away to their page. Play, for a new game, dives the view home to Earth, where Earth
+// wakes. A game begun, or an opening part seen, goes straight on (dive false).
+export function Drift({ onNext, dive = true }: { onSkip(): void; onNext(): void; dive?: boolean }) {
   const root = useRef<HTMLDivElement>(null);
   const place = useRef<HTMLSpanElement>(null);
   const far = useRef<HTMLSpanElement>(null);
-  const reactor = useRef<ReactorHandle>(null);
+  const reactors = useRef<(ReactorHandle | null)[]>([]);
   const going = useRef(false);
   const sky = useSky();
   const leaveFor = useLeaveFor();
 
   const { leave } = useStage(root, (q, tl) => {
     tl.fromTo(q('[data-m="where"]'), riseFrom, { ...rise, duration: 0.7, stagger: 0.15 }, 1.8);
-    const enter = reactor.current?.enter();
-    if (enter) tl.add(enter, 2.4);
+    reactors.current.forEach((r, i) => {
+      const enter = r?.enter();
+      if (enter) tl.add(enter, 2.4 + i * 0.12);
+    });
     // The footer rises once the button has landed.
     tl.fromTo(q('[data-m="foot"]'), riseFrom, { ...rise, duration: 0.7, stagger: 0.08 }, 3.3);
   });
@@ -51,12 +61,13 @@ export function Drift({ onNext }: { onSkip(): void; onNext(): void }) {
   }, []);
 
   // The words leave and the view falls home to Earth, where Earth wakes. The sky stays.
-  const begin = () =>
+  const begin = (i: number) =>
     contextSafe(() => {
       if (going.current) return;
       going.current = true;
-      reactor.current?.blast();
-      const secs = sky?.home() ?? 0;
+      reactors.current[i]?.blast();
+      if (WAYS[i].id !== "play") return leaveFor(WAYS[i].to);
+      const secs = dive ? (sky?.home() ?? 0) : 0;
       if (!secs) return leave(onNext);
       gsap.to(gsap.utils.toArray('[data-m="act"], [data-m="where"], [data-m="foot"]', root.current), {
         autoAlpha: 0,
@@ -79,14 +90,19 @@ export function Drift({ onNext }: { onSkip(): void; onNext(): void }) {
         <div data-m="where" className="mt-1 mb-7 h-4 font-mono text-[10.5px] text-muted tabular-nums">
           <span ref={far} />
         </div>
-        <Reactor
-          ref={reactor}
-          data-m="act"
-          onClick={begin}
-          className="h-[46px] w-[220px] rounded-full border border-ink bg-paper text-[15px] font-medium transition-colors duration-300 hover:bg-ink hover:text-paper"
-        >
-          Begin game
-        </Reactor>
+        <div className="flex flex-col items-center gap-3 sm:flex-row">
+          {WAYS.map((w, i) => (
+            <Reactor
+              key={w.id}
+              ref={(r) => void (reactors.current[i] = r)}
+              data-m="act"
+              onClick={() => begin(i)}
+              className="h-[46px] w-[180px] rounded-full border border-ink bg-paper text-[15px] font-medium transition-colors duration-300 hover:bg-ink hover:text-paper"
+            >
+              {w.label}
+            </Reactor>
+          ))}
+        </div>
       </div>
       <footer className="relative flex flex-wrap items-center justify-center gap-x-4 gap-y-1 px-6 pb-5 font-mono text-[10px] tracking-[.1em] text-muted uppercase">
         <Link

@@ -175,7 +175,7 @@ function Strategy({ p, scale, at }: { p: Package; scale: number; at: number }) {
         {builds.map((name) => (
           <li key={name} className="border-t border-faint">
             <Link
-              to={`/build/${buildSlug(name)}`}
+              to={`/play/build/${buildSlug(name)}`}
               state={throughState({ name: p.name, builds, at })}
               className="group flex items-center gap-2.5 py-2"
             >
@@ -235,7 +235,7 @@ export function Tour({ onClose }: { onClose(): void }) {
   const next = useRef<HTMLButtonElement>(null);
   const navigate = useNavigate();
   // The next of the four things we would do first, or back to the tab once all are done.
-  const then = useNext("/build?tour");
+  const then = useNext("/play/build?tour");
   // A swipe across the words moves a stop, as on a phone.
   const swipe = useRef<{ x: number; y: number } | null>(null);
   // Back from a build opened at a strategy's stop, the walk opens where it was. 2026-11-01.

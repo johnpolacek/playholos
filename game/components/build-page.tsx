@@ -234,7 +234,7 @@ function Lacking({ names }: { names: string[] }) {
   return names.map((n, i) => (
     <Fragment key={n}>
       {i ? " and " : ""}the{" "}
-      <Link to={`/build/${buildSlug(n)}`} state={state} className="text-ink underline underline-offset-2">
+      <Link to={`/play/build/${buildSlug(n)}`} state={state} className="text-ink underline underline-offset-2">
         {n}
       </Link>
     </Fragment>
@@ -324,7 +324,7 @@ export function Waits({ build, scale, done }: { build: Later; scale: number; don
       </p>
     );
   const after = (
-    <Link to={`/build/${buildSlug(build.after)}`} state={state} className="text-ink underline underline-offset-2">
+    <Link to={`/play/build/${buildSlug(build.after)}`} state={state} className="text-ink underline underline-offset-2">
       {build.after}
     </Link>
   );
@@ -393,7 +393,7 @@ export function BuildPage({ slug }: { slug: string }) {
   useEffect(() => () => pick(null), [pick]);
 
   useEffect(() => {
-    const back = (e: KeyboardEvent) => e.key === "Escape" && navigate(from?.to ?? "/build", { state: from?.state });
+    const back = (e: KeyboardEvent) => e.key === "Escape" && navigate(from?.to ?? "/play/build", { state: from?.state });
     window.addEventListener("keydown", back);
     return () => window.removeEventListener("keydown", back);
   }, [navigate, from]);
@@ -410,7 +410,7 @@ export function BuildPage({ slug }: { slug: string }) {
     return (
       <p className="mt-2 text-sm text-muted">
         We have no build by that name.{" "}
-        <Link to="/build" className="text-ink underline underline-offset-2">
+        <Link to="/play/build" className="text-ink underline underline-offset-2">
           Back to Build
         </Link>
       </p>
@@ -421,7 +421,7 @@ export function BuildPage({ slug }: { slug: string }) {
       {/* The way back stays in reach while the page scrolls. From the walk on Reach, its head stays instead, and the
           way back sits under it, above the title. 2026-10-28. */}
       <div className={from?.walk ? "pt-2 pb-2" : "sticky -top-3 z-10 -mx-4 bg-panel px-4 pt-3 pb-2"}>
-        <BackBar to={from?.to ?? "/build"} state={from?.state} label={from?.label ?? "All builds"} stops={from?.stops} />
+        <BackBar to={from?.to ?? "/play/build"} state={from?.state} label={from?.label ?? "All builds"} stops={from?.stops} />
       </div>
       <div data-m className="mt-1 flex items-start gap-2.5">
         <span className={`mt-[4px] shrink-0 ${buildTone(build.name, ordered(plan).includes(build.name))}`}>
@@ -461,7 +461,7 @@ export function BuildPage({ slug }: { slug: string }) {
         data-m
         onClick={() =>
           navigate(
-            `/mind?ask=${encodeURIComponent(`What would the ${build.name} give us, and what ${later ? "does it wait on" : "would it slow"}?`)}`,
+            `/play/mind?ask=${encodeURIComponent(`What would the ${build.name} give us, and what ${later ? "does it wait on" : "would it slow"}?`)}`,
           )
         }
         className={`${CLOSE[build.name] ? "mt-2.5" : "mt-6"} h-[46px] shrink-0 rounded-full border border-ink text-[15px] font-medium`}

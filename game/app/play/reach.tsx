@@ -13,7 +13,7 @@ export default function ReachTab() {
   if (params.has("tour")) return <ReachTour onClose={close} />;
   return (
     <>
-      <TabHead title="REACH" sources={REACH_SOURCES} walk={{ to: "/reach?tour", label: "How we reach" }} />
+      <TabHead title="REACH" sources={REACH_SOURCES} walk={{ to: "/play/reach?tour", label: "How we reach" }} />
       <Reach />
     </>
   );

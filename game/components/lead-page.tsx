@@ -144,7 +144,7 @@ export function LeadPage({ slug }: { slug: string }) {
   }, [dials, i, leads, setLook]);
 
   useEffect(() => {
-    const back = (e: KeyboardEvent) => e.key === "Escape" && navigate("/");
+    const back = (e: KeyboardEvent) => e.key === "Escape" && navigate("/play");
     window.addEventListener("keydown", back);
     return () => window.removeEventListener("keydown", back);
   }, [navigate]);
@@ -161,7 +161,7 @@ export function LeadPage({ slug }: { slug: string }) {
   if (!lead)
     return (
       <p className="mt-2 text-sm text-muted">
-        We have no lead by that name. <Link to="/" className="text-ink underline underline-offset-2">Back to Scan</Link>
+        We have no lead by that name. <Link to="/play" className="text-ink underline underline-offset-2">Back to Scan</Link>
       </p>
     );
 
@@ -169,7 +169,7 @@ export function LeadPage({ slug }: { slug: string }) {
     <div ref={root} className="flex flex-col pb-4">
       {/* The way back stays in reach while the page scrolls. */}
       <div className="sticky -top-3 z-10 -mx-4 bg-panel px-4 pt-3 pb-2">
-        <BackBar to="/" label="All leads" />
+        <BackBar to="/play" label="All leads" />
       </div>
       <div data-m className="mt-1 flex items-start gap-2.5">
         <span className={`mt-[4px] shrink-0 ${lead.reply || lead.art.kind === "warm" ? "text-other" : "text-you"}`}>
@@ -185,7 +185,7 @@ export function LeadPage({ slug }: { slug: string }) {
           <>
             {lead.what} · {lead.range ? `${lyOf(lead.range[0])} to ${lyOf(lead.range[1])}` : lyOf(lead.ly)} ly · reached in{" "}
             <span className="font-mono tabular-nums">{lead.range ? `${span(lead.range[0])} to ${span(lead.range[1])}` : span(lead.ly)}</span> ·{" "}
-            <Link to={`/reach/${lead.slug}`} className="whitespace-nowrap text-you">
+            <Link to={`/play/reach/${lead.slug}`} className="whitespace-nowrap text-you">
               Ways to go ›
             </Link>
           </>
@@ -294,7 +294,7 @@ export function LeadPage({ slug }: { slug: string }) {
 
       <button
         data-m
-        onClick={() => navigate(`/mind?ask=${encodeURIComponent(lead.ask)}`)}
+        onClick={() => navigate(`/play/mind?ask=${encodeURIComponent(lead.ask)}`)}
         className="mt-6 h-[46px] shrink-0 rounded-full border border-ink text-[15px] font-medium"
       >
         Ask the Mind about it

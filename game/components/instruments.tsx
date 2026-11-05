@@ -150,7 +150,7 @@ function Card({ name, since, line, news }: { name: string; since: number; line: 
   return (
     <li>
       <Link
-        to={`/build/${buildSlug(name)}`}
+        to={`/play/build/${buildSlug(name)}`}
         className={`flex items-center gap-3.5 rounded-lg border bg-paper px-3.5 py-3 transition-colors hover:border-faint ${news ? "border-(--c)" : "border-rowline"}`}
         style={{ "--c": buildColor(name) } as React.CSSProperties}
       >
@@ -230,7 +230,7 @@ export function Instruments({ catalog }: { catalog?: (idle: boolean) => React.Re
             const p = at == null ? 0 : Math.min(1, Math.max(0, (now - from) / Math.max(0.01, at - from)));
             return (
               <li key={n} className="border-t border-faint">
-                <Link to={`/build/${buildSlug(n)}`} className="flex flex-col gap-1.5 py-2.5">
+                <Link to={`/play/build/${buildSlug(n)}`} className="flex flex-col gap-1.5 py-2.5">
                   <span className="flex items-baseline gap-3">
                     <span className={`shrink-0 self-center ${buildTone(n)}`}>
                       <BuildMark name={n} size={16} />

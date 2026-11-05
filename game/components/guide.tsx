@@ -574,7 +574,7 @@ export function Guide() {
   const pick = picked && read.parts.find((p) => p.name === picked);
   const { used, short, over, full, known } = useCompute();
   const { talk, reread } = useTalk();
-  const next = useNext("/build?tour");
+  const next = useNext("/play/build?tour");
   const [more, setMore] = useState(false);
   const told = !talk ? undefined : talk.now === "intro" ? { ...intro(past), at: 0 } : talk.ideas[talk.now];
   // Idle is read from our order now, not when first explained: a way to start can change it without a new idea.

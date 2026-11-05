@@ -124,7 +124,7 @@ function Drawer({ onClose }: { onClose(): void }) {
               Forget
             </button>
           ) : keyed === false ? (
-            <Link to="/mind" onClick={() => close()} className="-mr-2 flex h-11 shrink-0 items-center px-2 text-[13px] underline underline-offset-2">
+            <Link to="/play/mind" onClick={() => close()} className="-mr-2 flex h-11 shrink-0 items-center px-2 text-[13px] underline underline-offset-2">
               Add
             </Link>
           ) : null}
