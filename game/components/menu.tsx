@@ -111,9 +111,15 @@ function Drawer({ onClose }: { onClose(): void }) {
         <Label>SETTINGS</Label>
         <div data-d="item" className={row}>
           <span className="flex flex-col py-2">
-            Anthropic key
+            {open === null ? "The Mind" : "Anthropic key"}
             <span className="text-xs text-muted">
-              {keyed === null ? "…" : keyed ? "In use. Each question is billed to it." : "None. The Mind tab takes one."}
+              {keyed === null
+                ? "…"
+                : keyed
+                  ? "In use. Each question is billed to it."
+                  : open === null
+                    ? "Locked. A key opens it, or play on your Claude plan."
+                    : "None. The Mind tab takes one."}
             </span>
           </span>
           {keyed ? (
@@ -125,7 +131,7 @@ function Drawer({ onClose }: { onClose(): void }) {
             </button>
           ) : keyed === false ? (
             <Link to="/play/mind" onClick={() => close()} className="-mr-2 flex h-11 shrink-0 items-center px-2 text-[13px] underline underline-offset-2">
-              Add
+              {open === null ? "Open" : "Add"}
             </Link>
           ) : null}
         </div>

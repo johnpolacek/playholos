@@ -1,0 +1,23 @@
+{
+  "name": "playholos",
+  "version": "1.0.0",
+  "description": "Play Holos on your own computer, with the Mind answering on your own Claude plan.",
+  "license": "MIT",
+  "author": "John Polacek",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/johnpolacek/playholos.git",
+    "directory": "npx"
+  },
+  "homepage": "https://playholos.com",
+  "type": "module",
+  "bin": {
+    "playholos": "play.mjs"
+  },
+  "files": [
+    "play.mjs"
+  ],
+  "engines": {
+    "node": ">=20.9"
+  }
+}
