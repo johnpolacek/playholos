@@ -188,6 +188,14 @@ export function Opening({ className, children }: { className: string; children: 
       const root = frame.current;
       if (!root || prefersReducedMotion()) return go();
       const q = gsap.utils.selector(root);
+      // The sky's own CSS fade would chase this one for 2.4 seconds, so it stayed bright until the end of the tween hid
+      // it at once: the flash on the way to /universe, until 2026-11-04. It holds where it is, and this fade alone runs.
+      const parts = gsap.utils.toArray<HTMLElement>(root.children);
+      const held = parts.map((el) => getComputedStyle(el).opacity);
+      parts.forEach((el, i) => {
+        el.style.transition = "none";
+        el.style.opacity = held[i];
+      });
       gsap
         .timeline({ onComplete: go })
         .set(root, { pointerEvents: "none" })
@@ -199,7 +207,7 @@ export function Opening({ className, children }: { className: string; children: 
           stagger: { amount: 0.18 },
           overwrite: true,
         })
-        .to(root.children, { autoAlpha: 0, duration: 0.5, ease: "power1.in" }, 0.12);
+        .to(parts, { autoAlpha: 0, duration: 0.5, ease: "power1.in" }, 0.12);
     })();
 
   let body: React.ReactNode = <div className="grow bg-paper" />;

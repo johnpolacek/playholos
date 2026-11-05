@@ -253,9 +253,10 @@ export default function Sim() {
             clash: stop?.clash,
             bare: stop?.bare || !!closeNote,
             spokes,
-            intro: opening && stop?.id === "universe" ? 1 : undefined,
+            // From the first frame, not once the draw comes: the whole universe showed, then the view jumped in close.
+            intro: opening && (!stop || stop.id === "universe") ? 1 : undefined,
             // The place in view first, so its name wins a crowded spot, then Sol, then the notes.
-            marks: [
+            marks: !stop ? NONE : [
               ...(stop?.focus ? [{ id: "here", pos: stop.focus }] : []),
               // Flown in to a note on the rim, its words stay by its place, not the rim as seen.
               ...(stop?.notes
@@ -283,10 +284,10 @@ export default function Sim() {
     notesAt.current = opening ? Infinity : performance.now();
   }, [stop, opening]);
   useEffect(() => {
-    if (!opening || stop?.id !== "universe") return;
+    if (!opening) return;
     const t = setTimeout(() => setOpening(false), INTRO_SECONDS * 1000);
     return () => clearTimeout(t);
-  }, [opening, stop?.id]);
+  }, [opening]);
   // Where each mark was last seen on screen, so a tap can find the note under it.
   const seen = useRef<Record<string, { x: number; y: number; a: number }>>({});
   // Flown in close, only that note's words stay: the rest would crowd the frame's edges.
@@ -400,6 +401,14 @@ export default function Sim() {
     setCloser({ stop: stop.id, id: n.id });
   };
 
+  // The bar comes up with the sky, not all at once on the dark page.
+  const bar = useRef<HTMLElement>(null);
+  useEffect(() => {
+    if (prefersReducedMotion() || !bar.current) return;
+    const t = gsap.fromTo(bar.current, { autoAlpha: 0 }, { autoAlpha: 1, duration: 1.2, delay: 0.4, ease: "power1.out" });
+    return () => void t.revert();
+  }, []);
+
   const set = (key: string, v: number) => setValues((o) => ({ ...o, [key]: v }));
   // Labels sit on stars and glows, so each carries a dark halo to stay readable, and fades in and out with its stop.
   const label =
@@ -470,7 +479,7 @@ export default function Sim() {
               />
             )}
             {detail && <Details item={detail} onClose={() => setOpen(false)} />}
-            <nav className="absolute top-4 right-4 flex items-center gap-1 rounded-full border border-faint bg-paper/70 p-0.5 font-mono text-[11px] backdrop-blur-sm">
+            <nav ref={bar} className="absolute top-4 right-4 flex items-center gap-1 rounded-full border border-faint bg-paper/70 p-0.5 font-mono text-[11px] backdrop-blur-sm">
               {SECTIONS.map((s) => (
                 <Link
                   key={s.id}

@@ -67,7 +67,11 @@ export function Drift({ onNext, dive = true }: { onSkip(): void; onNext(): void;
       if (going.current) return;
       going.current = true;
       reactors.current[i]?.blast();
-      if (WAYS[i].id !== "play") return leaveFor(WAYS[i].to);
+      if (WAYS[i].id !== "play") {
+        // Its code loads as the screen lifts away, so the page is there when the fade ends.
+        void import("@/app/sim");
+        return leaveFor(WAYS[i].to);
+      }
       const secs = dive ? (sky?.home() ?? 0) : 0;
       if (!secs) return leave(onNext);
       gsap.to(gsap.utils.toArray('[data-m="act"], [data-m="where"], [data-m="foot"]', root.current), {
