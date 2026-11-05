@@ -19,14 +19,14 @@ export const PLACES: [upTo: number, name: string][] = [
 
 /** The title's ways in, each a reactor of its own. 2026-11-04. */
 const WAYS = [
-  { id: "universe", label: "Universe", to: "/universe", mood: "orbit" },
-  { id: "sim", label: "Simulation", to: "/sim", mood: "web" },
-  { id: "play", label: "Play", to: "/play", mood: "embers" },
+  { id: "universe", label: "Universe", to: "/universe", mood: "orbit", tone: "border-[#a9c8ee]/80 hover:bg-[#a9c8ee]" },
+  { id: "sim", label: "Simulation", to: "/sim", mood: "web", tone: "border-[#e0a24a]/80 hover:bg-[#e0a24a]" },
+  { id: "play", label: "Play", to: "/play", mood: "pulse", tone: "border-white hover:bg-white" },
 ] as const;
 
 // The first screen, and the landing for everyone. No title, only the sky: the view drifts out from Earth past the
 // Moon, the planets and the nearby stars to the Milky Way and the Local Group, then home, and says where it is and how
-// far light takes to get there. Its ways in are reactors, each its own mood: moons, a web, embers. Pressed, one bursts. Universe and
+// far light takes to get there. Its ways in are reactors, each its own mood: blue moons, an amber web, a white pulse. Pressed, one bursts. Universe and
 // Simulation lift the screen away to their page. Play, for a new game, dives the view home to Earth, where Earth
 // wakes. A game begun, or an opening part seen, goes straight on (dive false).
 export function Drift({ onNext, dive = true }: { onSkip(): void; onNext(): void; dive?: boolean }) {
@@ -98,7 +98,7 @@ export function Drift({ onNext, dive = true }: { onSkip(): void; onNext(): void;
               ref={(r) => void (reactors.current[i] = r)}
               data-m="act"
               onClick={() => begin(i)}
-              className="h-[46px] w-[180px] rounded-full border border-ink bg-paper text-[15px] font-medium transition-colors duration-300 hover:bg-ink hover:text-paper"
+              className={`h-[46px] w-[180px] rounded-full border bg-paper text-[15px] font-medium transition-colors duration-300 hover:text-paper ${w.tone}`}
             >
               {w.label}
             </Reactor>
