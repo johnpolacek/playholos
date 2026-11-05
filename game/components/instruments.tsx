@@ -124,7 +124,7 @@ function doing(name: string, k: Known, since: number): { line: string; news: boo
       // The Hypertelescope pictures many on its own: how many, and the latest. 2026-10-29.
       if (craft === "hyper")
         return { line: `Has pictured ${home.length === 1 ? "a world" : `${home.length} worlds`}. The latest, ${v.world}, at Year ${yearText(v.home)}.`, news: recent(v.home) };
-      return { line: `Word home from ${v.world}, at Year ${yearText(v.home)}.`, news: recent(v.home) };
+      return { line: `Word home from ${starName(v.world)}, at Year ${yearText(v.home)}.`, news: recent(v.home) };
     }
     if (craft === "hyper") return { line: "Turning to the nearest worlds we’ve felt. No picture in yet.", news: false };
     return { line: "Ready. We send from Reach.", news: false };

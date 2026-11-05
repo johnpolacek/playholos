@@ -371,6 +371,7 @@ export function visitReading(v: Visit): Reading {
   if (v.by === "lens" || v.by === "hyper") return lensReading(v);
   if (v.by === "sentinel") return sentinelReading(v);
   if (v.by === "seed") return seedReading(v);
+  if (v.star !== "Proxima Centauri") return flybyReading(v);
   const who = v.by === "sails" ? "Our sails’" : "Our probe’s";
   const SAW = {
     haze: ["A small gas world", "pictures show haze to the horizon, and no ground. It is heavier than its tug told us."],
@@ -427,6 +428,7 @@ function lifeSeen(v: Visit): Odds | undefined {
     seas: v.air?.oxygen ? "likely" : "roughly even",
     green: v.air?.oxygen ? "almost certain" : "very likely",
     dark: undefined,
+    far: undefined,
   };
   return SEEN[v.sight];
 }
@@ -454,6 +456,41 @@ export function lifeOf(lead: Lead, readings: readonly Reading[]): Odds | null {
   return lead.life ?? null;
 }
 
+/** What a sail or flyby probe saw passing a star other than Proxima, as a reading on its lead. A world there is
+ *  pictured, and a probe reads its air. With no world to picture, a pass at this speed tells us little, and the odds
+ *  stay as they were: a sentinel or a Close Reading is how to learn more. 2026-11-05. */
+function flybyReading(v: Visit): Reading {
+  const who = v.by === "sails" ? "Our sails" : "Our probe";
+  const base = { id: `${v.by}-${slugOf(v.star)}-${v.sight}`, needs: "", at: Math.floor(v.home * 10 + 1e-9) / 10, by: who, sight: v.sight };
+  if (v.sight === "far") {
+    const glow = /^(Warm|Cold) glow/.test(v.star);
+    const [title, saw, mind] = glow
+      ? ["A glow, nothing more", "a faint glow, and nothing more resolved", "A pass is too quick to say what makes it."]
+      : v.hole
+        ? ["A dark place, nothing more", "the stars behind it bent for a moment, and nothing more resolved", "A pass is too quick to weigh it."]
+        : ["Its star, nothing more", "its star, and no world near enough to picture", "A pass sees only what lies close to its path."];
+    return { ...base, title, line: `${who} passed and sent back pictures: ${saw}.`, mind, now: [], tells: ["To learn more we would have to stay."] };
+  }
+  const SAW: Partial<Record<Visit["sight"], [string, string, string]>> = {
+    bare: ["Bare rock", "bare rock and craters, no cloud and no sea", "Nothing we know of could live on its face."],
+    seas: ["Cloud and seas", "cloud, and seas under it", "Pictures can’t tell an empty sea from one full of microbes."],
+    green: ["Seas and forests", "cloud and seas, and its land dark in patches the size of forests", "Something there turns starlight into life, as our plants do."],
+    ice: ["Ice", "ice from pole to pole, and no open sea", "A frozen world. Any sea it has lies under the ice, out of sight."],
+    haze: ["A small gas world", "haze to the horizon, and no ground", "No ground to stand on."],
+  };
+  const [title, saw, mind] = SAW[v.sight] ?? ["A world", "a world too quick to make out", "A pass was too quick to tell us more."];
+  const air = v.air ? ` It read ${v.air.water ? "water" : "no water"} and ${v.air.oxygen ? "oxygen" : "no oxygen"} in its air.` : "";
+  return {
+    ...base,
+    title,
+    line: `${who} passed and sent back pictures: ${saw}.${air}`,
+    mind,
+    now: v.sight === "haze" ? ["almost no chance", "almost certain", "almost no chance"] : ["almost certain", "almost no chance", "almost no chance"],
+    tells: [v.by === "sails" && v.sight !== "haze" ? "A probe passing after them could read its air." : "To learn more we would have to stay."],
+    life: lifeSeen(v),
+  };
+}
+
 /** What a sentinel saw once it braked and stayed, as a reading on its lead: its face as a pass sees it, and its air.
  *  It keeps watching. 2026-10-26. */
 function sentinelReading(v: Visit): Reading {
@@ -465,6 +502,7 @@ function sentinelReading(v: Visit): Reading {
     haze: ["A small gas world", "haze to the horizon, and no ground"],
     dark: ["A black hole, weighed", "the black hole, dark, the stars behind it bent into a ring"],
     rocks: ["Only rock", "no warm world, only rock going round"],
+    far: ["Only its star", "its star, and no world near it"],
   };
   if (v.sight === "dark") return darkReading(v);
   const [title, saw] = SAW[v.sight];
@@ -515,6 +553,7 @@ function seedReading(v: Visit): Reading {
     haze: ["A small gas world", "a world of haze to the horizon, and no ground"],
     dark: ["Dark", "nothing"],
     rocks: ["Only rock", "no warm world, only asteroids and small moons going round"],
+    far: ["Only its star", "its star, and no world near it"],
   };
   const [title, saw] = SAW[v.sight];
   const air = v.air ? ` It read ${v.air.water ? "water" : "no water"} and ${v.air.oxygen ? "oxygen" : "no oxygen"} in its air.` : "";
@@ -602,6 +641,7 @@ function lensReading(v: Visit): Reading {
     haze: ["A small gas world", "haze to the horizon, and no ground.", "No ground to stand on."],
     dark: ["Dark", "nothing.", "A lens pictures only what shines."],
     rocks: ["Only rock", "no world.", "A lens pictures only a world we have felt."],
+    far: ["No world", "no world.", "A lens pictures only a world we have felt."],
   };
   const [title, saw, mind] = SAW[v.sight];
   const hyper = v.by === "hyper";

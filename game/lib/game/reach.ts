@@ -66,7 +66,8 @@ export interface Road {
 export function roads(plan: Plan, scale: number, from = 0): Road[] {
   const { orders, ...opts } = ordersOf(plan);
   const doneOf = (work: string) => {
-    const more: Order[] = plan.builds.includes(work) ? [] : [{ y: from, begin: pacedName(work) }];
+    // Ordered in play counts too: it dated a build we had finished as if begun again now until 2026-11-05.
+    const more: Order[] = inOrder(plan, work) ? [] : [{ y: from, begin: pacedName(work) }];
     return pace([...orders, ...more], horizonOf([...orders, ...more], 200), { scale, ...opts }).done[pacedName(work)] ?? null;
   };
   const road = (name: string, build: string, craft: string, wait: number, speed: number): Road => {
@@ -77,6 +78,21 @@ export function roads(plan: Plan, scale: number, from = 0): Road[] {
     return { name, n, build, craft, speed, done, leaves, arrives, home: arrives === null ? null : arrives + NEAREST.ly };
   };
   return [road("Send a sail", "Laser Sail Array", "Sails", 0, 0.2), road("Send a flyby probe", "Probe Yard", "A flyby probe", 12, 1 / 8)];
+}
+
+/** A sail or flyby probe sent past any star, from its destination's page. Each leaves as `toward` dates it: when its
+ *  build is ready, or once ordered, and passes at the road's speed. 2026-11-05. */
+const FLYBY = { sails: 0, probe: 1 } as const;
+type Flyby = NonNullable<Plan["flybys"]>[number];
+export const flybyRoad = (plan: Plan, scale: number, from: number, o: Flyby): Road => ({
+  ...toward(roads(plan, scale, from)[FLYBY[o.by]], o.d, o.y),
+  n: 1,
+});
+export function flybysOf(plan: Plan, scale: number) {
+  return (plan.flybys ?? []).flatMap((o) => {
+    const { arrives, home } = flybyRoad(plan, scale, o.y, o);
+    return arrives === null || home === null ? [] : [{ star: o.name, by: o.by, passed: arrives, home }];
+  });
 }
 
 /** The Solar Lens's flight, from data/works.json: to the focal line, then half a Year of looking. Its word comes home
@@ -131,7 +147,7 @@ export function lensRoad(plan: Plan, scale: number, from: number, star: string):
  *  braking, as calcs/seed.py's probe_trip has it. Then it stays. 2026-10-26. */
 const SENTINEL = CATALOG.sentinel;
 export const SENTINEL_NEEDS = ["Probe Yard", "Fusion Drive", "Deuterium Works"];
-const inOrder = (plan: Plan, name: string) => plan.builds.includes(name) || (plan.later ?? []).some((o) => o.name === name);
+export const inOrder = (plan: Plan, name: string) => plan.builds.includes(name) || (plan.later ?? []).some((o) => o.name === name);
 
 /** The Year each sentinel we sent leaves, by its star, once what it needs is done. Null while any of it isn't. */
 export function sentinels(plan: Plan, scale: number) {
@@ -291,6 +307,7 @@ export function kitOf(plan: Plan, scale: number) {
     sentinels: sentinels(plan, scale).flatMap((x) => (x.leaves !== null ? [{ star: x.star, leaves: x.leaves }] : [])),
     seeds: seedsOf(plan, scale).flatMap((x) => (x.leaves !== null ? [{ star: x.star, leaves: x.leaves }] : [])),
     lenses: lenses(plan, scale).flatMap((l) => (l.looks !== null && l.home !== null ? [{ star: l.star, looks: l.looks, home: l.home }] : [])),
+    flybys: flybysOf(plan, scale),
     sails: fly(sails),
     probe: fly(probe),
     xray: done["X-Ray Watch"] ?? null,

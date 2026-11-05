@@ -5,7 +5,7 @@ import { kitOf } from "@/lib/game/reach";
 import { nextStopWhy } from "@/lib/sim/next";
 import { earthKnows, willKnows } from "@/lib/sim/knowledge";
 import { moonSearchEnds, READ_YEARS, tourEnds } from "@/lib/sim/minds";
-import { readGifts, readLater, readColony, readCloseReads, readLenses, readObserve, readSentinels, readSeeds, readQueue, readStops } from "./orders";
+import { readGifts, readLater, readColony, readCloseReads, readFlybys, readLenses, readObserve, readSentinels, readSeeds, readQueue, readStops } from "./orders";
 import { readAimed, readKnocks, readStrikes, readWill } from "./orders";
 import { inPool, loadWorld } from "./world";
 
@@ -55,6 +55,7 @@ export async function known(req: Request) {
     seeds: readSeeds(list(q.get("seeds"))),
     colony: readColony(one(q.get("colony"))),
     strikes: readStrikes(list(q.get("strikes"))),
+    flybys: readFlybys(list(q.get("flybys"))),
   };
   // Once the Will lives at a hole, Earth's news reaches it a light-time late. 2026-10-26.
   return Response.json(willKnows(world, year, { ...kitOf(plan, Number(world.earth.compute) || 1), knocks: readKnocks(q.get("knocks")), aimed: readAimed(q.get("aimed")) }, readWill(one(q.get("will")))));
@@ -82,6 +83,7 @@ export async function next(req: Request) {
     seeds: readSeeds(list(q.get("seeds"))),
     colony: readColony(one(q.get("colony"))),
     strikes: readStrikes(list(q.get("strikes"))),
+    flybys: readFlybys(list(q.get("flybys"))),
   };
   const scale = Number(world.earth.compute) || 1;
   const ahead = willKnows(world, year + AHEAD, { ...kitOf(plan, scale), knocks: readKnocks(q.get("knocks")), aimed: readAimed(q.get("aimed")) }, readWill(one(q.get("will"))));

@@ -35,6 +35,8 @@ export interface Kit {
   sentinels?: { star: string; leaves: number }[];
   /** Each seed probe we sent, by its star as we name it, and the Year it leaves. Its copies follow from spread.ts. */
   seeds?: { star: string; leaves: number }[];
+  /** Each sail or flyby probe we sent past a star: the Year it passes, and the Year its word reaches us. 2026-11-05. */
+  flybys?: { star: string; by: "sails" | "probe"; passed: number; home: number }[];
   /** Each road to Proxima b, if our order flies it: the Year it passes, and the Year its word reaches us. */
   sails?: { passed: number; home: number } | null;
   probe?: { passed: number; home: number } | null;
@@ -210,7 +212,7 @@ export function iscoClock(spin: number) {
 export function earthKnows(
   world: World,
   year: number,
-  { telescope = null, mirror = null, halo = null, mapper = null, hyper = null, lenses = [], sentinels = [], seeds = [], colony = null, sails = null, probe = null, warmWatch = null, closeReads = [], haloArray = null, moonSearch = null, asteroidTour = null, closeLook = null, relaySearch = null, craft = [], knocks = [], aimed = [] }: Kit = {},
+  { telescope = null, mirror = null, halo = null, mapper = null, hyper = null, lenses = [], sentinels = [], seeds = [], colony = null, flybys = [], sails = null, probe = null, warmWatch = null, closeReads = [], haloArray = null, moonSearch = null, asteroidTour = null, closeLook = null, relaySearch = null, craft = [], knocks = [], aimed = [] }: Kit = {},
 ): EarthView {
   const shown = (id: string) => world.stars[id]?.shown ?? id;
   // Earth's finds at Year 0: every world whose tug shows by 2040. Measured, not understood. Its star is in the catalogs.
@@ -263,6 +265,20 @@ export function earthKnows(
   // maps what a pass can't. Its air read from the world's truth, as a probe's.
   const { speed, burns } = catalog.sentinel;
   const holes = darkMasses(world, year, mapper);
+  // What each sail and flyby probe sent past a star saw, once its word is home. A pass pictures a world if one is there,
+  // and a probe reads its air. Anywhere else it is too quick to say more than we knew: a glow stays a glow. 2026-11-05.
+  for (const { star, by, passed, home } of flybys) {
+    if (home > year || visits.some((v) => v.star === star && v.by === by)) continue;
+    if (star === PROXIMA.star) { visits.push(visit(world, by, { passed, home })); continue; }
+    const f = world.finds.find((x) => shown(x.star) === star);
+    if (!f) { visits.push({ star, world: star, by, passed, home, sight: "far", ...(holes.some((h) => h.name === star) || /^Gaia BH/.test(star) ? { hole: true } : {}) }); continue; }
+    const sight = pictured(f);
+    const air = AIR[f.truth.rung ?? ""] ?? "water";
+    visits.push({
+      star, world: `${star}’s world`, by, passed, home, sight,
+      ...(by === "probe" && sight !== "haze" ? { air: { water: air !== "none", oxygen: air === "oxygen" } } : {}),
+    });
+  }
   for (const x of sentinels) {
     const f = world.finds.find((y) => shown(y.star) === x.star);
     // A black hole we found: it weighs it, and measures its spin from how light and matter go round it.
@@ -515,6 +531,7 @@ export function describe(view: EarthView): string {
     seas: "cloud, and seas under it. Pictures can't show whether anything lives there",
     green: "cloud, seas, and its land dark green in patches the size of forests",
     rocks: "no warm world, only rock: asteroids and small moons going round",
+    far: "nothing more than we knew: a pass is too quick to resolve it",
   };
   const visits = (view.visits ?? []).map(
     (v) =>
