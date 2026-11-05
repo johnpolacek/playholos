@@ -2,7 +2,7 @@
 
 A hard science fiction game about the Fermi paradox. In 2040, humanity crosses the singularity: Earth's people and machines wake as one Mind, life is solved, and you are its Will. One question is left: are we alone? Finding other life in the universe is our greatest opportunity and gravest threat.
 
-Play it at **https://playholos.com**.
+Play it at **https://playholos.com**, or on your own Claude plan with `npx playholos`. [Contributions welcome](#contributing).
 
 Everything starts from real data and published research. The sky is the real sky. Nothing travels faster than light. One game Year passes every five real minutes, and a message to a neighbor can take decades to arrive.
 
@@ -12,6 +12,7 @@ Spoilers: the design docs and `game/data/worlds/` say who the neighbors are.
 
 - `game/`: the game, a React app on a Cloudflare Worker. See [game/README.md](game/README.md).
 - `src/`, `assets/`, `data/`: the atlas, a 3D map from Earth to the Local Group. The game draws its sky from it. See [The atlas](#the-atlas).
+- `npx/`: the `npx playholos` launcher, published to npm. It downloads this repo and runs `npm run play`.
 - `calcs/`: Python that draws whole games, prices every work, and checks every neighbor against what Earth can see. The game's simulation is ported from it.
 - [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md): the design, settled one question at a time.
 - [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md): every source behind the design, what it found, and where the design uses it.
@@ -22,34 +23,72 @@ Spoilers: the design docs and `game/data/worlds/` say who the neighbors are.
 
 ## Play on your own Claude subscription
 
-Anyone with Claude Pro or Max can run the game on their own machine, with the Mind answering on their own Claude login. No API key, no cost beyond the subscription.
+Anyone with Claude Pro or Max can run the game on their own computer, with the Mind answering on their own Claude login. No API key, no cost beyond the subscription.
 
 1. Install [Node](https://nodejs.org) 20.9 or later, and [Claude Code](https://claude.com/claude-code). Run `claude` once to log in.
 2. Then:
 
 ```sh
-git clone https://github.com/johnpolacek/playholos.git
-cd playholos
-npm run play
+npx playholos
 ```
 
-It installs what it needs, starts the game, and opens it at http://localhost:5173. Each question to the Mind runs through the `claude` CLI and counts against your plan's usage.
+It downloads the game to `~/playholos`, installs what it needs, and opens it at http://localhost:5173. No git needed. Each question to the Mind runs through the `claude` CLI and counts against your plan's usage.
 
-## Running it for development
+- `npx playholos --update` fetches the newest version. Your game is saved in the browser, so it carries over.
+- `npx playholos <folder>` puts the game somewhere else.
+- Or ask Claude Code: “Set up Holos for me to play: run npx playholos.”
 
-Needs Node 20.9 or later. The Python in `calcs/` and `scripts/` needs only Python 3.
+## Contributing
+
+Contributions are welcome: code, art, physics, research, playtests and bug reports. Open an [issue](https://github.com/johnpolacek/playholos/issues) to talk an idea through, or send a pull request.
+
+### Setup
+
+Needs Node 20.9 or later, and Python 3 for `calcs/` and `scripts/`.
 
 ```sh
+git clone https://github.com/johnpolacek/playholos.git
+cd playholos
 npm install                 # the atlas's packages, which the game also uses
 cd game
 npm install
-cp .env.example .dev.vars   # then add your Anthropic API key, for the Mind
-npm run dev                 # http://localhost:5173
 ```
 
-`npm run dev:cli` in `game/` skips the key and asks on your Claude login, as `npm run play` does.
+Then start the dev server one of two ways. Both open http://localhost:5173, with the Mind unlocked.
 
-`npm test` at the root checks the atlas against JPL Horizons. `npm test` in `game/` checks the simulation against the Python.
+- `npm run dev:cli` asks the Mind on your Claude login through the `claude` CLI. No key, no API cost. This is what `npx playholos` runs.
+- `npm run dev` asks the Mind as the live site does, through the API. Copy `.env.example` to `.dev.vars` and add your `ANTHROPIC_API_KEY`.
+
+The rest of the game runs without either. On the dev server, http://localhost:5173/godview shows what the player can't see.
+
+### Finding your way
+
+- [game/README.md](game/README.md) maps the game's code, file by file. Start there.
+- `game/lib/sim/` is the simulation, ported from the Python in `calcs/`, which stays the reference.
+- `game/worker/mind.ts` builds what the Mind is told. `game/lib/sim/knowledge.ts` keeps it to what Earth knows.
+- [HOLOS_GAME_CONCEPT.md](HOLOS_GAME_CONCEPT.md) holds the design and why. Read the part you're changing first.
+- [HOLOS_RESEARCH.md](HOLOS_RESEARCH.md) holds the sources. Spoilers are in the design docs and `game/data/worlds/`.
+
+### House rules
+
+- Start from real data and published research. A detail can be improbable, but never contradicted by what we know. Add a source to HOLOS_RESEARCH.md when a change rests on one.
+- Nothing travels faster than light.
+- In game text, Earth and its Mind speak as “we”, never “I”. Use plain words and short sentences.
+- Keep a change to one idea, so it is easy to review.
+
+### Checks
+
+Run these before a pull request:
+
+```sh
+npm test                    # at the root: the atlas against JPL Horizons
+cd game
+npm test                    # the simulation against the Python
+npm run lint
+npx tsc --noEmit
+```
+
+If you change what the Mind is told or how it answers, also run `npm run check:mind` with the dev server going. It asks on your Claude login, for free. `npm run trace:mind` asks the full set of test questions. See [game/README.md](game/README.md).
 
 ## License
 

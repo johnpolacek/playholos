@@ -47,6 +47,9 @@ export function Unlock() {
 
   return (
     <>
+      <p className="mt-3 text-[13px] leading-[1.45] text-page-ink2">
+        Our Mind thinks with Claude. Two ways open it: your own API key here, or your Claude plan on your own computer.
+      </p>
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -93,12 +96,11 @@ export function Unlock() {
 /** The repo's steps for playing on a Claude login. */
 const STEPS = "https://github.com/johnpolacek/playholos#play-on-your-own-claude-subscription";
 /** What to ask Claude Code, which is already on the machine and logged in. */
-const ASK =
-  "Set up Holos for me to play: clone https://github.com/johnpolacek/playholos.git and run npm run play in it. If Node 20.9 or later is missing, help me install it first.";
+const ASK = "Set up Holos for me to play: run npx playholos. If Node 20.9 or later is missing, help me install it first.";
 
 // The other way in, 2026-10-27: on the player's own computer, the Mind answers through Claude Code on their own Claude
-// plan, so no key. Claude Code can set it up itself, so the card gives the ask to paste in, and the steps for doing it
-// by hand.
+// plan, so no key. Claude Code can set it up itself, so the card gives the ask to paste in, and the one command for doing
+// it by hand. npx playholos downloads the game and starts it, with no git, from 2026-11-04.
 function Local() {
   const [copied, setCopied] = useState(false);
   const copy = async () => {
@@ -122,9 +124,12 @@ function Local() {
           {copied ? "Copied" : "Copy"}
         </button>
       </div>
-      <a href={STEPS} target="_blank" rel="noreferrer" className="text-[13px] text-ink underline underline-offset-2">
-        Or follow the steps on GitHub ↗
-      </a>
+      <p className="text-[13px] text-page-ink2">
+        Or run <code className="font-mono text-[12px] text-ink">npx playholos</code> in a terminal.{" "}
+        <a href={STEPS} target="_blank" rel="noreferrer" className="text-ink underline underline-offset-2">
+          The steps on GitHub ↗
+        </a>
+      </p>
     </section>
   );
 }

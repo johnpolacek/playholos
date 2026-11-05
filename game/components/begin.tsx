@@ -80,7 +80,7 @@ const STEPS: Step[] = [
     line: (_, { unlocked }) =>
       unlocked
         ? "It advises, and never acts on its own advice."
-        : "It advises. An Anthropic API key, or the access code, opens it.",
+        : "It advises. An Anthropic API key opens it, or play on your Claude plan.",
     done: (s) => !!s.asked,
     to: "/play/mind",
   },
