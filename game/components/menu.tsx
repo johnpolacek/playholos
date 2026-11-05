@@ -8,7 +8,6 @@ import { plainClick, useLeaveFor } from "@/lib/leave";
 import { gsap, prefersReducedMotion, useGSAP } from "@/lib/motion";
 
 const ABOUT = [
-  ["/about", "About Holos"],
   ["/about/research", "Research"],
   ["/about/design", "Design"],
 ] as const;
