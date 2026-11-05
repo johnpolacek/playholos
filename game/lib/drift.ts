@@ -84,6 +84,9 @@ export interface Dials {
   focus?: number;
   /** Scan: 1 to pull back over the Milky Way and show our warm glows, where they lie, Sol among them. 2026-11-03. */
   wide?: number;
+  /** The Mind's talk: 1 to open the lead in view as a shot: a dashed line out from Sol, a hold, then a drift in to it.
+   *  2026-11-04. */
+  chart?: number;
   /** Scan: the warm glows that have faded, by their names, drawn dim and with no way out to them. 2026-11-03. */
   faded?: ReadonlySet<string>;
   /** Our builds: 1 to fly down to the ground at the one in view, its Close View, and 0 to come back up. On Reach, 1 to
@@ -496,6 +499,11 @@ const leadsAt = new Map<string, THREE.Vector3 | null>();
 onPlace((id) => leadsAt.delete(id));
 /** Where a lead's star is, in light-years from Sol in the galactic frame. None for a star scripts/leads.mjs lacks,
  *  unless placed at run time, as a black hole found in play is. */
+/** The Mind's shot at a lead: a beat for the view to come side on, the line drawing out, a hold on it, the drift in, all
+ *  in seconds. It ends this far from the lead: a share of the way home, but no nearer than a light-year and a half. */
+const CHART_LEAD = 0.5, CHART_DRAW = 2, CHART_HOLD = 1.6, CHART_DRIFT = 10, CHART_DASHES = 44, CHART_NEAR_SHARE = 0.22, CHART_NEAR_LY = 1.5;
+/** When the Mind's shot began. */
+let chartAt = 0;
 /** A young mind's warm glow, by the name it goes by among the leads. */
 const WARM_GLOW = /^Warm glow \d+$/;
 function leadAt(id: string) {
@@ -712,8 +720,9 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
   const UNIVERSE_D = Math.log10(2.7 * EDGE_R * KLY_AU);
 
   /** A simulation's view turned by hand: a drag spins it round and tips it up or down, and a flick keeps turning a
-   *  moment. A new stop eases it back to its own framing. 2026-11-01. */
-  const simDrag = { az: 0, tilt: 0, vAz: 0, vTilt: 0, held: 0 };
+   *  moment. A new stop eases it back to its own framing. 2026-11-01. The hand sets where the view is going, and the
+   *  view eases there each frame, since a hand's moves come unevenly between frames and jolted it. 2026-11-04. */
+  const simDrag = { az: 0, tilt: 0, toAz: 0, toTilt: 0, vAz: 0, vTilt: 0, held: 0, last: 0 };
 
   function simPose(): Pose {
     let at: number | null = null;
@@ -732,6 +741,10 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       }
       const dt = at === null ? 0 : Math.min(0.1, Math.max(0, t - at));
       at = t;
+      // The view eases toward where the hand has set it.
+      const follow = 1 - Math.exp(-dt * 14);
+      simDrag.az += (simDrag.toAz - simDrag.az) * follow;
+      simDrag.tilt += (simDrag.toTilt - simDrag.tilt) * follow;
       const P = lookedAt();
       const toD = spec.sim?.zoom ?? 7.0;
       const toTilt = P ? 0.35 : 0.75;
@@ -758,15 +771,15 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       // The hand's turn: a flick coasts and slows, and while a stop's flight runs the turn eases home.
       if (t - simDrag.held > 0.05) {
         const slow = Math.exp(-dt * 3);
-        simDrag.az += simDrag.vAz * dt;
-        simDrag.tilt += simDrag.vTilt * dt;
+        simDrag.toAz += simDrag.vAz * dt;
+        simDrag.toTilt = Math.max(-1.6, Math.min(1.6, simDrag.toTilt + simDrag.vTilt * dt));
         simDrag.vAz *= slow;
         simDrag.vTilt *= slow;
       }
       if (leg) {
         const home = 1 - Math.exp(-dt * 2.5);
-        simDrag.az -= simDrag.az * home;
-        simDrag.tilt -= simDrag.tilt * home;
+        simDrag.toAz -= simDrag.toAz * home;
+        simDrag.toTilt -= simDrag.toTilt * home;
       }
       if (leg) {
         const e = easeInOut(Math.min(1, (t - leg.at) / leg.span));
@@ -2560,6 +2573,16 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     });
     const beadGlow = glow({ fixed: true });
     const beadPts = beads.points(beadGlow);
+    // The Mind's subject: a dashed line from Sol to the lead in the talk, drawn out from Sol. Rewritten for each lead,
+    // in the lead's own ink. 2026-11-04.
+    const chartMat = line("mind", 0);
+    const chartLine = new THREE.LineSegments(
+      new THREE.BufferGeometry().setAttribute("position", new THREE.BufferAttribute(new Float32Array(CHART_DASHES * 6), 3)),
+      chartMat,
+    );
+    chartLine.frustumCulled = false;
+    group.add(chartLine);
+    let chartDrawn = -1;
     // What we sent in play, as it goes, at the speed of light and no faster: a Year is five minutes, so a message
     // creeps out a light-year each. Each aimed message a line from Sol, lit as far as its light has come, its head
     // bright until it lands, and its star marked. Each call a ring in the Galaxy's plane, the edge of its light, and
@@ -2653,13 +2676,14 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         group.add(cold.points(dim));
       }
       if (dim) dim.uniforms.uOpacity.value = p * grid * (1 - farOut);
-      ringMat.uniforms.uOpacity.value = 0.12 * p * grid * (1 - farOut);
+      // Close in, the Mind's shot has only the lead and its line home.
+      ringMat.uniforms.uOpacity.value = 0.12 * p * grid * (1 - farOut) * (1 - chartIn);
       coreGlow.uniforms.uOpacity.value = p;
       haloGlow.uniforms.uOpacity.value = p;
       feetGlow.uniforms.uOpacity.value = p * (1 - farOut);
       beadGlow.uniforms.uOpacity.value = p;
       pulseGlow.uniforms.uOpacity.value = p;
-      stalkMat.uniforms.uOpacity.value = 0.22 * p * (1 - farOut);
+      stalkMat.uniforms.uOpacity.value = 0.22 * p * (1 - farOut) * (1 - chartIn);
       // Lit in turn: the thread runs out from Sol, then the star comes on with a flare, then breathes.
       const shown = leads.map((_, i) => Math.min(1, Math.max(0, found - i)));
       const coreB = corePts.geometry.attributes.aBright as THREE.BufferAttribute;
@@ -2668,10 +2692,27 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       // The pulse starts out from Sol each time the Will looks at another lead.
       if (focus !== pulseOf) [pulseOf, pulseAt] = [focus, clock];
       const run = leads[focus];
+      // In the Mind's shot, its dashed line stands in for the thread, the dotted way and the running pulse.
+      const charting = !!d?.chart && !!run;
+      if (charting && chartDrawn !== focus) {
+        chartDrawn = focus;
+        const dash = chartLine.geometry.attributes.position as THREE.BufferAttribute;
+        for (let j = 0; j < CHART_DASHES; j++) {
+          v.copy(run.at).multiplyScalar(j / CHART_DASHES);
+          dash.setXYZ(2 * j, v.x, v.y, v.z);
+          v.copy(run.at).multiplyScalar((j + 0.55) / CHART_DASHES);
+          dash.setXYZ(2 * j + 1, v.x, v.y, v.z);
+        }
+        dash.needsUpdate = true;
+        chartMat.uniforms.uColor.value = pal[K[inkOf(run.id)]];
+      }
+      const drawn = charting ? (still ? 1 : easeInOut(Math.min(1, Math.max(0, (clock - chartAt - CHART_LEAD) / CHART_DRAW)))) : 0;
+      chartLine.geometry.setDrawRange(0, 2 * Math.ceil(drawn * CHART_DASHES));
+      chartMat.uniforms.uOpacity.value = charting ? 0.85 * p : 0;
       let u = -1;
       let back = false;
       let arrive = 0;
-      if (run && !still) {
+      if (run && !still && !charting) {
         // Out to a far landmark it takes no longer than to the region's edge.
         const go = Math.min(run.at.length(), 60) / LIGHT;
         const t = (clock - pulseAt) % (2 * go + 1.6);
@@ -2711,9 +2752,9 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         // brings it back.
         const stepped = calm * (spec.hush?.[leads[i].n] ?? 0) * (1 - seen);
         threads[i].mat.uniforms.uOpacity.value =
-          (warmOf[i] ? 0.12 + 0.13 * seen : 0.3 + 0.4 * seen - 0.15 * any * (1 - seen)) * p * Math.min(1, shown[i] * 4) * (1 - stepped) * (1 - aside);
-        paths[i].mat.uniforms.uOpacity.value = 0.3 * looked[i] * lit * p;
-        for (let b = paths[i].from; b < paths[i].to; b++) beadB.setX(b, 0.9 * seen * lit);
+          (warmOf[i] ? 0.12 + 0.13 * seen : 0.3 + 0.4 * seen - 0.15 * any * (1 - seen)) * p * Math.min(1, shown[i] * 4) * (1 - stepped) * (1 - aside) * (charting && i === focus ? 0 : 1);
+        paths[i].mat.uniforms.uOpacity.value = 0.3 * looked[i] * lit * p * (charting ? 0 : 1);
+        for (let b = paths[i].from; b < paths[i].to; b++) beadB.setX(b, charting && i === focus ? 0 : 0.9 * seen * lit);
         coreB.setX(i, lit * (1 - aside) * (faded ? 0.5 : 1));
         const flare = 4 * lit * (1 - lit);
         const breathe = 0.35 + 0.15 * Math.sin(clock * 1.8 + i * 1.7);
@@ -3891,6 +3932,11 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
   let sysAt = 0;
   let sysDown = 0;
   const sysStar = new THREE.Vector3();
+  /** The Mind's shot: the lead it is on, where that lead is in AU, and how far the view has drifted in, 0 to 1. */
+  let chartOf: string | undefined;
+  let chartIn = 0;
+  const chartStar = new THREE.Vector3();
+  let chartFar = 1;
   let sysSpan = 1;
   const sysDir = new THREE.Vector3(0, 1, 0);
   const closeTurn = { az: 0, el: 0 };
@@ -3968,6 +4014,26 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     shift.copy(aimShift).multiplyScalar(ramp(logD, 5.2, 6.3));
     target.add(shift);
     cam.add(shift);
+    // The Mind's shot: the view stands side on, framing the whole line from Sol as it draws, holds, then drifts in to the
+    // lead at the far end. Its clock starts once any flight here has landed. A new lead eases back out first. 2026-11-04.
+    const chartId = spec.mode === "leads" && dialsOf.leads?.chart && !still ? spec.leads?.[looking()] : undefined;
+    const chartTo = chartId ? leadAt(chartId) : null;
+    if (chartId !== chartOf) {
+      chartOf = chartId;
+      chartAt = clock + pilot.remaining(clock);
+    }
+    if (chartTo) {
+      chartStar.copy(chartTo).multiplyScalar(LY_AU);
+      chartFar = Math.log10(Math.max(CHART_NEAR_LY, CHART_NEAR_SHARE * chartTo.length()) * LY_AU);
+    }
+    const chartWant = chartTo ? easeInOut(Math.min(1, Math.max(0, (clock - chartAt - CHART_LEAD - CHART_DRAW - CHART_HOLD) / CHART_DRIFT))) : 0;
+    chartIn = chartWant >= chartIn ? chartWant : chartIn + (chartWant - chartIn) * (1 - Math.exp(-dt * LOOK));
+    if (chartIn > 0.0001) {
+      logD += (chartFar - logD) * chartIn;
+      D = 10 ** logD;
+      target.lerp(chartStar, chartIn);
+      cam.copy(target).addScaledVector(view.dir, D);
+    }
     // Close View: the place, its up, north and east as the sky has them now. The view falls to it at an even pace in
     // log distance, so each scale passes as quickly as the last. Its middle moves onto the place early, and it tips
     // from looking straight down to looking across the ground late, with the horizon near the top.
@@ -4035,6 +4101,9 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         L.camera.far = Math.max(L.camera.far, span + 70);
       }
       L.camera.updateProjectionMatrix();
+      // Settled now, not at render: the names are placed from it first, and a frame behind they shook as the view
+      // turned. 2026-11-04.
+      L.camera.updateMatrixWorld();
     }
 
     // The map at its stops: each planet's name, once the view is out far enough to hold the Sun's family, and gone again
@@ -4196,13 +4265,16 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         closeTurn.az -= dx * Math.PI;
         closeTurn.el = Math.max(-0.15, Math.min(1.1, closeTurn.el + dy * 1.2));
       } else if (spec.mode === "sim") {
-        const now = clock, dt = Math.max(1 / 120, now - simDrag.held);
-        simDrag.az -= dx * Math.PI;
-        simDrag.tilt = Math.max(-1.6, Math.min(1.6, simDrag.tilt + dy * 1.6));
-        // How fast the hand moved, for the coast after it lets go.
-        simDrag.vAz = Math.max(-5, Math.min(5, (-dx * Math.PI) / dt));
-        simDrag.vTilt = Math.max(-3, Math.min(3, (dy * 1.6) / dt));
-        simDrag.held = now;
+        // Timed by the event, not the frame, since several moves can come in one frame.
+        const now = performance.now() / 1000, dt = Math.min(0.1, Math.max(1 / 240, now - simDrag.last));
+        simDrag.toAz -= dx * Math.PI;
+        simDrag.toTilt = Math.max(-1.6, Math.min(1.6, simDrag.toTilt + dy * 1.6));
+        // How fast the hand moved, averaged over its last few moves, for the coast after it lets go.
+        const fresh = now - simDrag.last > 0.1 ? 1 : 0.4;
+        simDrag.vAz += (Math.max(-5, Math.min(5, (-dx * Math.PI) / dt)) - simDrag.vAz) * fresh;
+        simDrag.vTilt += (Math.max(-3, Math.min(3, (dy * 1.6) / dt)) - simDrag.vTilt) * fresh;
+        simDrag.last = now;
+        simDrag.held = clock;
       } else pilot.turnBy(dx, dy);
       dirty = true;
     },

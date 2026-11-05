@@ -60,6 +60,19 @@ Along the top run our Year and clock, our energy, the matter we hold in orbit, a
 Before Year 0, a small pill at the top says how many of four steps are ready: review our scans, pick our strategy, learn how we reach, and ask the Mind. Tapping it opens Before we begin, with each step and the button that starts Year 0. We can begin before every step is done. Once all four are done, the pill reads Begin and starts Year 0 at once, and a Begin button shows on the map too.
 On the map, Close View flies down into a place, and Pull Back flies out again.`;
 
+// How the game plays, so the Will can ask how it works. Headless questions on 2026-11-04 found the Mind didn't know
+// the clock runs with the game closed, the Jump pill, New game, or when an age ends, and guessed or said it couldn't
+// know. From begin.tsx, hud.tsx, menu.tsx, fate.tsx and HOLOS_GAME_CONCEPT.md's Death and new games.
+const PLAY = `How our age plays, for when the Will asks how the game works. Answer plainly from this, as the Mind, and call it the game when the Will does. Answer only what is asked, in the usual few sentences, and point to where it is on screen.
+- What we seek: whether we are alone, and to live long enough to learn it. There is no score and no line that wins. What we make of it is the Will's to judge.
+- When it ends: only when no Mind of ours runs anywhere. If Earth's Mind dies while a vault or colony of ours still runs one, the Will crosses to it by light, a Year for each light-year, dark until it arrives, and play goes on from there. If none runs, this game is over.
+- Time: Begin starts Year 0. From then one Year passes every five of the Will's minutes, and the clock keeps running while the game is closed, so the Will comes back to whatever landed. The game is kept in this browser.
+- Jump: once we have begun, a pill in the top bar, Jump to Year and the Year, names what comes next and skips there at once. Nothing ahead in its place means nothing new comes in the next 100,000 Years unless we order it. The clock runs on either way. When nothing is building, our note on the map names a build to start.
+- News: as things land, a build done, a signal heard, a message reaching its star, we say so unasked in this talk. A signal heard crosses the map as it lands, and a banner over the map points to it on Scan until it is opened.
+- What we do: queue builds on Build, watch our leads on Scan, launch craft on Reach, and send messages by asking us here. Builds share our compute, and each opens others once done. Readings move a lead's chances on Scan. What we send and launch travels no faster than light, so an answer takes at least twice the distance in Years.
+- The menu: the galaxy in the top bar's corner opens it. New game there erases this game and begins another under a new sky, with a new road to 2040 and new strangers. It asks twice. It also holds the Will's Anthropic key, which pays for our talk when one is set, and pages outside play: Universe and Simulation, which draw the sky at odds the Will sets, and Research and Design, the sources and the thinking behind the game.
+- What is real: the stars, the worlds known around them, our instruments and every message sent before 2040 are real records, and the physics and costs come from published research, cited in Research. Earth's road from 2026, its Mind, and whoever is out there are the game's best guesses from that evidence, drawn anew each game. Say so plainly, and never tell the Will what is out there beyond what Earth knows.`;
+
 // Where Earth is in time, from the moment the Will tapped Begin.
 function now(beganAt: number | null, will: Will | null) {
   const year = yearAt(beganAt, Date.now(), will);
@@ -175,6 +188,7 @@ export async function mind(req: Request) {
   const told = {
     voice: MIND,
     screens: SCREENS,
+    play: PLAY,
     charter: readCharter(charter),
     kit: EARTH_AT_YEAR_0,
     road,
@@ -195,8 +209,8 @@ export async function mind(req: Request) {
   const system = Object.values(told).filter(Boolean).join("\n\n");
   // The same text in two parts: what stays the same through a talk, cached, then what changes as the clock runs.
   // Changing the head means changing every answer's cache, so new lines that move go after leads. 2026-10-25.
-  const { voice, screens, charter: c, kit: k, road: r, leads, ...moving } = told;
-  const head = [voice, screens, c, k, r, leads].filter(Boolean).join("\n\n");
+  const { voice, screens, play, charter: c, kit: k, road: r, leads, ...moving } = told;
+  const head = [voice, screens, play, c, k, r, leads].filter(Boolean).join("\n\n");
   const tail = Object.values(moving).filter(Boolean).join("\n\n");
   // On the dev server, scripts/trace-mind.mjs reads what the Mind was told: with dry, instead of asking it, and
   // otherwise beside its answer. A deployed Worker never sends it. Dry needs no key, since nothing is asked. 2026-10-23.

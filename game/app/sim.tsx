@@ -265,6 +265,7 @@ export default function Sim() {
   // A note's words sit off from its place, joined by a line that ends in a dot on the place.
   const leads = useRef<Record<string, SVGGElement | null>>({});
   const offs = useRef<Record<string, [number, number]>>({});
+  const sizes = useRef<Record<string, [number, number]>>({});
   // When the stop's notes came, so each can draw itself in: its dot pops, its line runs out, its words slide in off the
   // line's end, one note after another.
   const notesAt = useRef(0);
@@ -272,6 +273,7 @@ export default function Sim() {
   useEffect(() => {
     offs.current = Object.fromEntries((stop?.notes ?? []).map((n) => [n.id, n.off]));
     order.current = Object.fromEntries((stop?.notes ?? []).map((n, i) => [n.id, i]));
+    sizes.current = {};
     notesAt.current = opening ? Infinity : performance.now();
   }, [stop, opening]);
   useEffect(() => {
@@ -299,9 +301,9 @@ export default function Sim() {
       const pop = part(0, 0.28),
         run = out(part(0.08, 0.5)),
         words = out(part(0.32, 0.75));
-      // The words go out to the side the line leaves on, and the line meets them at their near end.
-      const w = n.offsetWidth,
-        h = n.offsetHeight;
+      // The words go out to the side the line leaves on, and the line meets them at their near end. Their size is
+      // measured once, not every frame, so moving one note doesn't make the page lay out again for the next.
+      const [w, h] = (sizes.current[id] ??= [n.offsetWidth, n.offsetHeight]);
       // Kept inside the frame: where the words would cross its edge, they and the line's end move in.
       const W = n.parentElement?.clientWidth ?? 0,
         H = n.parentElement?.clientHeight ?? 0;

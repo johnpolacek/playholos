@@ -1,11 +1,13 @@
 import { useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
 import { useMindPick } from "@/components/catalog";
+import { useOpenReadings } from "@/components/close-reading";
 import { useGame } from "@/components/game-provider";
 import { useAhead, useIdleNow } from "@/components/hud";
 import { MindNote } from "@/components/mind-note";
 import { usePlan, useSchedule } from "@/components/picks";
 import { useLeads } from "@/components/scan";
+import { starName } from "@/lib/game/leads";
 import { tenths, yearText } from "@/lib/game/clock";
 import { buildSlug, drawAt, orderLater, searchOf } from "@/lib/game/plan";
 import { combedAt } from "@/lib/sim/works";
@@ -27,6 +29,8 @@ export function IdleNote() {
   const { scale } = useSchedule();
   const { standing } = useLeads();
   const ahead = useAhead();
+  const open = useOpenReadings();
+  const glow = open[0];
   const navigate = useNavigate();
   const path = useLocation().pathname;
   const now = tenths(year ?? 0);
@@ -34,7 +38,8 @@ export function IdleNote() {
   // Compute combing old recordings isn't idle.
   const searching = useMemo(() => combedAt(searchOf(plan, scale), now) < now - 0.05, [plan, scale, now]);
   const spare = !idle && !searching && compute < SPARE;
-  const needs = Object.values(standing).some((s) => s === "needs");
+  // A glow waiting on a Close Reading stands under Needs us, and this note is what points to it, so it doesn't hide.
+  const needs = Object.entries(standing).some(([slug, s]) => s === "needs" && !open.some((l) => l.slug === slug));
   const quiet = !idle && !needs && (spare || ahead !== null);
   // Put away until the next time nothing builds, or the next stop.
   const key = idle ? `idle ${last}` : `next ${ahead?.to ?? ""}`;
@@ -74,13 +79,14 @@ export function IdleNote() {
           </p>
         ) : (
           <p>
-            <span className="font-medium text-other">Nothing needs us now.</span>{" "}
+            <span className="font-medium text-other">{glow ? "A Close Reading is waiting on us." : "Nothing needs us now."}</span>{" "}
             <span className="text-page-ink2">
               {ahead && <>Next, at Year {yearText(ahead.to)}{ahead.why ? `: ${ahead.why}` : ""}. </>}
               {spare && `${Math.round((1 - compute) * 100)}% of our compute sits idle.`}
             </span>
           </p>
         )}
+        {glow && <p className="mt-1 text-page-ink2">{starName(glow.star)} still shines, and our telescope is free to read its light.</p>}
         {pick && (
           <p className="mt-1 text-page-ink2">
             {pick.fit ? `For our ${pick.strategy} strategy, we would start ` : "We would start "}
@@ -96,10 +102,15 @@ export function IdleNote() {
               Start {pick.build.name}
             </button>
           )}
+          {glow && path !== `/play/lead/${glow.slug}` && (
+            <Link to={`/play/lead/${glow.slug}#close-reading`} className="inline-flex h-8 items-center rounded-full bg-other px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110">
+              See {starName(glow.star)} ›
+            </Link>
+          )}
           {!idle && ahead && (
             <button
               onClick={ahead.go}
-              className={`h-8 rounded-full px-4 text-[13px] font-medium transition-[filter] hover:brightness-110 ${pick ? "border border-you/60 text-you" : "bg-you text-paper"}`}
+              className={`h-8 rounded-full px-4 text-[13px] font-medium transition-[filter] hover:brightness-110 ${pick || glow ? "border border-you/60 text-you" : "bg-you text-paper"}`}
             >
               Jump to {yearText(ahead.to)} ›
             </button>

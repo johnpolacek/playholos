@@ -4,12 +4,17 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router";
 import { useGame } from "@/components/game-provider";
 import { BuildCard } from "@/components/build-card";
+import { readingStands } from "@/components/close-reading";
 import { Check, Cross } from "@/components/icons";
 import { MindNote } from "@/components/mind-note";
 import { MindThinking, useThinking } from "@/components/mind-thinking";
+import { usePlan } from "@/components/picks";
+import { useLeads } from "@/components/scan";
 import { SendCard } from "@/components/send-card";
 import { BAD_KEY, costOf, type Effort, EFFORTS, KEY_NEEDS_CREDIT, KEY_NEEDS_WORKSPACE, MIND_BUSY, MIND_MODELS, MIND_UNREACHED, type MindModel, readMindPick, type Usage } from "@/lib/access";
 import { readBuildOffer } from "@/lib/game/build-offer";
+import { type Lead, starName } from "@/lib/game/leads";
+import { leadsNamed, onMap } from "@/lib/game/named-leads";
 import { buildNamed } from "@/lib/game/plan";
 import { NEWS } from "@/lib/mind/news";
 import { readOffer } from "@/lib/game/sends";
@@ -90,6 +95,15 @@ function useMind() {
  *  "The Mind can’t answer right now." until 2026-11-03, so none said why. */
 function failure(error: Error) {
   if (error instanceof TypeError) return MIND_UNREACHED;
+  // A refusal before the Mind is asked, as when we ask too fast, comes as the server's JSON. 2026-11-03.
+  const said = (() => {
+    try {
+      return (JSON.parse(error.message) as { error?: unknown }).error;
+    } catch {
+      return undefined;
+    }
+  })();
+  if (typeof said === "string") return said;
   if ([BAD_KEY, KEY_NEEDS_WORKSPACE, KEY_NEEDS_CREDIT, MIND_BUSY].includes(error.message) || error.message.startsWith("The Mind can’t answer"))
     return error.message;
   return "The Mind can’t answer right now.";
@@ -137,15 +151,61 @@ export function useMindNews() {
   return { tell, busy, error, last: lastAnswer, words, news: before.startsWith(NEWS) ? before.slice(NEWS.length) : null };
 }
 
+const textOf = (message?: UIMessage) => message?.parts.map((part) => (part.type === "text" ? part.text : "")).join("") ?? "";
+
+/** The words of an answer and the question it answers, with the lines its cards are drawn from taken off. */
+const spoken = (asked: UIMessage | undefined, answer: UIMessage) => `${textOf(asked)}\n${readOffer(readBuildOffer(textOf(answer)).words).words}`;
+
+/** What our talk is on: the lead named in the latest answer that names one, the question first. The map opens on it. It
+ *  stays there through answers that name nothing, so the map doesn't fly home and back. 2026-11-04. */
+export function useTalkSubject() {
+  const { messages, busy } = useMind();
+  const { leads } = useLeads();
+  for (let i = messages.length - 1; i >= 0; i--) {
+    if (messages[i].role !== "assistant") continue;
+    const lead = leadsNamed(spoken(messages[i - 1], messages[i]), leads, !busy || i < messages.length - 1).find(onMap);
+    if (lead) return { lead, from: messages[i].id };
+  }
+  return null;
+}
+
+const STEP = "rounded-full border border-faint bg-paper px-3 py-1 text-[13.5px] text-page-ink2 transition-colors hover:border-muted hover:text-ink";
+
+/** Under the last answer, the way to each lead it names, up to three, straight to a warm glow's Close Reading. An answer
+ *  that speaks of a Close Reading and names no glow goes to our latest. 2026-11-04. */
+function Steps({ words }: { words: string }) {
+  const { leads, minds } = useLeads();
+  const { plan } = usePlan();
+  const reads = plan?.closeReads ?? [];
+  const named = leadsNamed(words, leads, true);
+  const latest = reads.at(-1);
+  const spokenOf = /close reading/i.test(words) && !named.some((l) => l.slug.startsWith("warm-glow-")) ? leads.find((l) => l.star === latest?.name) : undefined;
+  const list: Lead[] = [...(spokenOf ? [spokenOf] : []), ...named].slice(0, 3);
+  if (!list.length) return null;
+  return (
+    <div className="flex flex-wrap gap-1.5 self-start pl-3">
+      {list.map((lead) => {
+        const stands = readingStands(lead, minds, reads);
+        const name = starName(lead.star);
+        return (
+          <Link key={lead.slug} to={`/play/lead/${lead.slug}${stands ? "#close-reading" : ""}`} className={STEP}>
+            {stands === "done" ? `${name}: Close Reading done ›` : stands === "under way" ? `${name}: Close Reading under way ›` : stands ? `${name}: Close Reading ›` : `${name} ›`}
+          </Link>
+        );
+      })}
+    </div>
+  );
+}
+
 /** One of the Mind's answers: its words, and the card if it offers to send, or a build. */
-function Answer({ id, text, still, asked }: { id: string; text: string; still: boolean; asked?: UIMessage }) {
+function Answer({ id, text, still, asked, last }: { id: string; text: string; still: boolean; asked?: UIMessage; last: boolean }) {
   const { words: said, name } = readBuildOffer(text);
   const build = name ? buildNamed(name) : undefined;
   const { words, draft } = readOffer(said);
-  const ask = asked?.parts.map((part) => (part.type === "text" ? part.text : "")).join("") ?? "";
+  const ask = textOf(asked);
   return (
     <>
-      <MindNote still={still} className="max-w-[86%] self-start text-[13.5px] leading-[1.45] whitespace-pre-wrap">
+      <MindNote still={still} className="max-w-[86%] self-start text-[15px] leading-[1.5] whitespace-pre-wrap">
         {words || "…"}
       </MindNote>
       {draft && (
@@ -158,6 +218,7 @@ function Answer({ id, text, still, asked }: { id: string; text: string; still: b
           <BuildCard build={build} />
         </div>
       )}
+      {last && <Steps words={words} />}
     </>
   );
 }
@@ -175,22 +236,22 @@ function Talk({ messages, lastAnswer, status, error }: Pick<ReturnType<typeof us
         // News the Mind tells unasked: what happened, small, over what the Mind says of it.
         if (message.role === "user" && text.startsWith(NEWS))
           return (
-            <p key={message.id} className="mt-1 self-center text-center font-mono text-[10.5px] leading-snug tracking-[.06em] text-muted">
+            <p key={message.id} className="mt-1 self-center text-center font-mono text-[12px] leading-snug tracking-[.06em] text-muted">
               {text.slice(NEWS.length)}
             </p>
           );
         return message.role === "user" ? (
-          <div key={message.id} className="max-w-[86%] self-end rounded-xl bg-ink px-3 py-[9px] text-[13.5px] leading-[1.45] whitespace-pre-wrap text-paper">
+          <div key={message.id} className="max-w-[86%] self-end rounded-xl bg-ink px-3 py-[9px] text-[15px] leading-[1.5] whitespace-pre-wrap text-paper">
             {text}
           </div>
         ) : (
           // Only the newest answer's mark moves, so a long talk isn't a column of spinning marks. An answer that offers
           // to send ends with a line the card is drawn from, under the Mind's words.
-          <Answer key={message.id} id={message.id} text={text} still={message.id !== lastAnswer} asked={messages[i - 1]} />
+          <Answer key={message.id} id={message.id} text={text} still={message.id !== lastAnswer} asked={messages[i - 1]} last={message.id === lastAnswer && status !== "submitted" && status !== "streaming"} />
         );
       })}
       {thinking.here && <MindThinking on={status === "submitted"} gone={thinking.gone} />}
-      {error && <p className="text-xs text-other">{failure(error)}</p>}
+      {error && <p className="text-[13.5px] text-other">{failure(error)}</p>}
     </>
   );
 }
@@ -307,14 +368,14 @@ function AskBox({ busy, onAsk, className = "" }: { busy: boolean; onAsk(text: st
         setInput("");
       }}
     >
-      {queued && <p className="mb-1.5 px-1 text-[12px] leading-snug text-muted">Next, once we finish: “{queued}”</p>}
+      {queued && <p className="mb-1.5 px-1 text-[13.5px] leading-snug text-muted">Next, once we finish: “{queued}”</p>}
       <div className="flex h-11 items-center gap-2 rounded-full border border-ink bg-paper pr-1.5 pl-3.5">
         <input
           value={input}
           onChange={(e) => setInput(e.currentTarget.value)}
           placeholder="Ask the Mind…"
           aria-label="Ask the Mind"
-          className="min-w-0 grow bg-transparent text-sm outline-none placeholder:text-muted"
+          className="min-w-0 grow bg-transparent text-base outline-none placeholder:text-muted"
         />
         <button type="submit" disabled={!input.trim()} aria-label="Send" className="size-8 shrink-0 rounded-full bg-ink text-paper disabled:opacity-35">
           ↑
@@ -331,7 +392,7 @@ const STARTERS = ["What should we build next and why?", "Are we alone?", "Should
 function Hello({ onAsk }: { onAsk(text: string): void }) {
   return (
     <div className="flex flex-col gap-3">
-      <MindNote className="max-w-[86%] self-start text-[13.5px] leading-[1.45]">
+      <MindNote className="max-w-[86%] self-start text-[15px] leading-[1.5]">
         We are the Mind: all of us and our machines, thinking as one since Year 0. You are our Will. Ask what we know
         of the sky, what to build, or where to reach. We advise, and you decide.
       </MindNote>
@@ -341,7 +402,7 @@ function Hello({ onAsk }: { onAsk(text: string): void }) {
             key={q}
             type="button"
             onClick={() => onAsk(q)}
-            className="rounded-full border border-faint px-3 py-1 text-[12.5px] text-page-ink2 transition-colors hover:border-muted hover:text-ink"
+            className="rounded-full border border-faint px-3 py-1 text-[14px] text-page-ink2 transition-colors hover:border-muted hover:text-ink"
           >
             {q}
           </button>
@@ -373,11 +434,13 @@ export function MindChat({ ask }: { ask?: string }) {
     return () => clearTimeout(id);
   }, [ask, sendMessage]);
   const end = useRef<HTMLDivElement>(null);
+  const leadCount = useLeads().leads.length;
 
   // A block body: newer browsers return a Promise from scrollIntoView, and React would call it as cleanup.
   useEffect(() => {
     end.current?.scrollIntoView({ block: "end" });
-  }, [messages, status]);
+    // Our leads can come after the talk, on a reload, and with them the steps under its last answer.
+  }, [messages, status, leadCount]);
 
   return (
     <>
@@ -403,7 +466,7 @@ export function MindHere() {
       <Talk messages={latest} lastAnswer={lastAnswer} status={status} error={error} />
       <AskBox busy={busy} onAsk={(text) => sendMessage({ text })} />
       {from > 0 && (
-        <Link to="/play/mind" className="self-end py-1 text-[12.5px] text-page-ink2 transition-colors hover:text-ink">
+        <Link to="/play/mind" className="self-end py-1 text-[14px] text-page-ink2 transition-colors hover:text-ink">
           Our whole talk ›
         </Link>
       )}

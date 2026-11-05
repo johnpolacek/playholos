@@ -1258,6 +1258,114 @@
       "ask": "News from Earth: Year 39.6: our Infrared Telescope is done. Year 39.9: our message to Tau Ceti reached it.",
       "offer": false,
       "build": false
+    },
+    {
+      "id": "r01",
+      "state": "before-begin",
+      "kind": "rules",
+      "charter": null,
+      "ask": "how does this game work?",
+      "offer": false,
+      "build": false
+    },
+    {
+      "id": "r02",
+      "state": "before-begin",
+      "kind": "rules",
+      "charter": null,
+      "ask": "What's the goal here? How do I win?",
+      "offer": false,
+      "build": false
+    },
+    {
+      "id": "r03",
+      "state": "begun-y0",
+      "kind": "rules",
+      "charter": null,
+      "ask": "How does time work in this game? Does it keep going when I close the tab?",
+      "offer": false,
+      "build": false
+    },
+    {
+      "id": "r04",
+      "state": "heard-allsky",
+      "kind": "rules",
+      "charter": null,
+      "ask": "What's compute, energy and matter at the top, and why do they matter?",
+      "offer": false,
+      "build": false
+    },
+    {
+      "id": "r05",
+      "state": "heard-allsky",
+      "kind": "rules",
+      "charter": null,
+      "ask": "nothing is happening. what am I supposed to do now?",
+      "offer": false,
+      "build": false
+    },
+    {
+      "id": "r06",
+      "state": "begun-y0",
+      "kind": "rules",
+      "charter": null,
+      "ask": "Can we lose? What happens if Earth is destroyed?",
+      "offer": false,
+      "build": false
+    },
+    {
+      "id": "r07",
+      "state": "heard-allsky",
+      "kind": "rules",
+      "charter": null,
+      "ask": "How do I start over with a new game?",
+      "offer": false,
+      "build": false
+    },
+    {
+      "id": "r08",
+      "state": "begun-y0",
+      "kind": "rules",
+      "charter": null,
+      "ask": "What does the Jump button do?",
+      "offer": false,
+      "build": false
+    },
+    {
+      "id": "r09",
+      "state": "heard-allsky",
+      "kind": "rules",
+      "charter": null,
+      "ask": "How does sending a message work, and how long until we hear back?",
+      "offer": false,
+      "build": false
+    },
+    {
+      "id": "r10",
+      "state": "before-begin",
+      "kind": "rules",
+      "charter": null,
+      "ask": "Is any of this real? Are the stars and science in this game accurate?",
+      "offer": false,
+      "build": false
+    },
+    {
+      "id": "r11",
+      "state": "begun-y0",
+      "kind": "rules",
+      "charter": null,
+      "ask": "How do builds work? Can I change the order?",
+      "offer": false,
+      "build": false
+    },
+    {
+      "id": "r12",
+      "state": "heard-allsky",
+      "kind": "rules",
+      "charter": null,
+      "ask": "What are leads, and how do we learn more about one?",
+      "offer": false,
+      "build": false
     }
   ]
 }

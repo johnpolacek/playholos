@@ -1,14 +1,16 @@
 import { useLocation } from "react-router";
 import { Arrival } from "@/components/arrival";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { BeamsMap, useBeams } from "@/components/beams";
 import { BeginOnMap } from "@/components/begin";
+import { useTalkSubject } from "@/components/mind-chat";
 import { MindSays } from "@/components/mind-news";
 import { IdleNote } from "@/components/idle-note";
 import { Through } from "@/components/through";
 import { WideLeads } from "@/components/wide-leads";
 import { Globe, Lens } from "@/components/icons";
 import { ReachMap, Ruler, useReach } from "@/components/reach";
+import { MapKey } from "@/components/leads";
 import { ScanMap, useLeads, useStepTap } from "@/components/scan";
 import { SkyArt, useSky } from "@/components/sky";
 import { useWorks, WorksMap } from "@/components/works";
@@ -16,6 +18,7 @@ import type { Stop } from "@/lib/flight";
 import type { Mark } from "@/lib/drift";
 import { PLANETS } from "../../src/astronomy.js";
 import { CLOSE } from "@/lib/game/close";
+import { type Lead, starName } from "@/lib/game/leads";
 
 // The map's five stops, and its outward button: each tap travels one stop out, and the last comes home.
 const STAGES: { id: Stop; name: string; next: string }[] = [
@@ -42,6 +45,10 @@ export function MapStrip() {
   // The walkthroughs, the Scan review and the Build tour, need room under the map on a phone for the Mind's words.
   const guided = /[?&](review|tour)\b/.test(search);
   const scan = path === "/play" || path.startsWith("/play/lead/");
+  // On the Mind tab, the map opens on what our talk is on, until sent home. 2026-11-04.
+  const subject = useTalkSubject();
+  const [sentHome, setSentHome] = useState<string | null>(null);
+  const talked = path === "/play/mind" && subject && subject.from !== sentHome ? subject.lead : null;
   // Reach's map stays on a destination's page, and flies out to its star.
   const reaching = path === "/play/reach" || path.startsWith("/play/reach/");
   const beams = useBeams();
@@ -71,6 +78,25 @@ export function MapStrip() {
             Back to Earth
           </button>
         </>
+      ) : talked ? (
+        <>
+          <ScanMap quick className="absolute inset-0" />
+          <TalkLook lead={talked} />
+          <span className={LABEL}>
+            {starName(talked.star).toUpperCase()}
+            {leads.close && " · CLOSE VIEW"}
+          </span>
+          {leads.look?.system && (
+            <button onClick={() => leads.setClose(!leads.close)} className={`absolute top-2 right-2.5 ${PILL}`}>
+              <Lens closer={!leads.close} />
+              {leads.close ? "Pull Back" : "Close View"}
+            </button>
+          )}
+          <button onClick={() => setSentHome(subject!.from)} className={BUTTON}>
+            <Globe />
+            Back to Earth
+          </button>
+        </>
       ) : scan ? (
         <>
           <ScanMap className="absolute inset-0" />
@@ -85,6 +111,7 @@ export function MapStrip() {
               {leads.close ? "Pull Back" : "Close View"}
             </button>
           )}
+          {!leads.close && <MapKey className={`absolute right-2.5 ${leads.look?.system ? "top-12" : "top-2"}`} />}
           <WideLeads />
         </>
       ) : built ? (
@@ -156,6 +183,23 @@ export function MapStrip() {
       <Arrival />
     </div>
   );
+}
+
+/** Holds the lead our talk is on in the map's view, as its page does, as the Mind's shot of it: a dashed line, then a
+ *  drift in. */
+function TalkLook({ lead }: { lead: Lead }) {
+  const { leads, dials, setLook } = useLeads();
+  const i = leads.findIndex((l) => l.slug === lead.slug);
+  useEffect(() => {
+    if (i < 0) return;
+    Object.assign(dials, { focus: i + 1, chart: 1 });
+    setLook(leads[i]);
+    return () => {
+      Object.assign(dials, { focus: 0, chart: 0 });
+      setLook(null);
+    };
+  }, [dials, i, leads, setLook]);
+  return null;
 }
 
 // The map at its stops. Back from Scan or our messages, it opens on Earth again. Out at the Sun's family, each planet
