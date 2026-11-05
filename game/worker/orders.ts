@@ -55,7 +55,8 @@ export const readCloseReads = readLenses;
 export const readSeeds = readLenses;
 export const readStrikes = readLenses;
 
-// Sails and flyby probes we sent past a star, from the save. Checked, one of each a star, at most 32. 2026-11-05.
+// Sails and flyby probes we sent past a star, from the save. Checked, one of each a star, at most 128, since a probe can
+// go to every warm glow at once. 2026-11-05.
 export function readFlybys(l: unknown): (Ordered & { d: number; by: "sails" | "probe" })[] {
   if (!Array.isArray(l)) return [];
   const seen = new Set<string>();
@@ -63,7 +64,7 @@ export function readFlybys(l: unknown): (Ordered & { d: number; by: "sails" | "p
     .filter((o) => !!o && typeof o.name === "string" && o.name.length < 80 && typeof o.y === "number" && Number.isFinite(o.y) && o.y >= 0 && typeof o.d === "number" && Number.isFinite(o.d) && o.d > 0 && o.d < 2e7 && (o.by === "sails" || o.by === "probe"))
     .filter((o) => !seen.has(`${o.by} ${o.name}`) && !!seen.add(`${o.by} ${o.name}`))
     .map(({ name, y, d, by }) => ({ name, y, d, by }))
-    .slice(0, 32);
+    .slice(0, 128);
 }
 
 // Our colony at a black hole or a star, from the save: one, by its name, the Year we sent it and its mode. Checked.

@@ -184,13 +184,20 @@ export function LeadPage({ slug }: { slug: string }) {
         ) : (
           <>
             {lead.what} · {lead.range ? `${lyOf(lead.range[0])} to ${lyOf(lead.range[1])}` : lyOf(lead.ly)} ly · reached in{" "}
-            <span className="font-mono tabular-nums">{lead.range ? `${span(lead.range[0])} to ${span(lead.range[1])}` : span(lead.ly)}</span> ·{" "}
-            <Link to={`/play/reach/${lead.slug}`} className="whitespace-nowrap text-you">
-              Engage {starName(lead.star)} ›
-            </Link>
+            <span className="font-mono tabular-nums">{lead.range ? `${span(lead.range[0])} to ${span(lead.range[1])}` : span(lead.ly)}</span>
           </>
         )}
       </p>
+      {/* A way to go there, as a button: a link at the end of this line went unseen. Playtest 2026-11-05. */}
+      {lead.art.kind !== "near" && (
+        <Link
+          data-m
+          to={`/play/reach/${lead.slug}`}
+          className="mt-2.5 inline-flex h-8 items-center self-start rounded-full bg-you px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110"
+        >
+          Engage {starName(lead.star)}: send a craft or a message ›
+        </Link>
+      )}
 
       {/* What we can do comes first, above what we know. It sat two screens down until a playtest, 2026-11-04. */}
       {lead.art.kind === "warm" && <CloseReading lead={lead} />}

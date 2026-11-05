@@ -12,8 +12,8 @@ import type { Dials, Mark as Place } from "@/lib/drift";
 import { steadySide } from "@/lib/steady-side";
 import { YEAR_0, lyOf, yearText } from "@/lib/game/clock";
 import { LANDMARKS } from "@/lib/game/landmarks";
-import { skyId, starName, visitReading } from "@/lib/game/leads";
-import { lean, type moves } from "@/lib/game/plan";
+import { type Lead, skyId, starName, visitReading } from "@/lib/game/leads";
+import { buildSlug, lean, type moves } from "@/lib/game/plan";
 import { target as starOf } from "@/lib/game/sends";
 import {
   auFor,
@@ -29,6 +29,7 @@ import {
   seedRoad,
   sentinelRoad,
   toward,
+  inOrder,
   zoomFor,
 } from "@/lib/game/reach";
 import { type System, worldName } from "@/lib/game/systems";
@@ -191,6 +192,65 @@ export function ReachProvider({ children }: { children: React.ReactNode }) {
     [dials, fly, hold, tour, target, aim, close, setClose, setTrip],
   );
   return <ReachContext value={value}>{children}</ReachContext>;
+}
+
+/** A flyby probe to every warm glow at once: there can be dozens, most folded away as faded, and sending one at a time
+ *  meant finding each. Asked for in play, 2026-11-05. Each leaves 12 Years after its order, one a glow, and can't be
+ *  called back. */
+function WarmProbes({
+  places,
+  from,
+  canSend,
+  flybys,
+  send,
+}: {
+  places: Lead[];
+  from: number;
+  canSend: boolean;
+  flybys: NonNullable<Plan["flybys"]>;
+  send(add: NonNullable<Plan["flybys"]>): void;
+}) {
+  const [asking, setAsking] = useState(false);
+  const warm = places.filter((l) => l.slug.startsWith("warm-glow-"));
+  if (!warm.length) return null;
+  const left = warm.filter((l) => !flybys.some((o) => o.by === "probe" && o.name === l.star));
+  const go = () => {
+    send(left.map((l) => ({ name: l.star, y: from, d: Math.round(l.ly), by: "probe" as const })));
+    setAsking(false);
+  };
+  return (
+    <section className="mt-5 rounded-xl border border-other/50 bg-other/[.05] px-3 py-2.5">
+      <span className="font-mono text-[10px] tracking-[.1em] text-other uppercase">Warm glows · {warm.length}</span>
+      <p className="mt-1 text-[13.5px] leading-snug text-page-ink2">
+        {!left.length
+          ? "A flyby probe is on its way to every warm glow we have found."
+          : `Send a flyby probe to each warm glow we haven’t yet: ${left.length}. Each leaves 12 Years after its order and passes at an eighth of light speed. A pass is too quick to say what makes the heat, but it pictures a world if one is there.`}
+      </p>
+      {left.length > 0 && (
+        <div className="mt-2 flex flex-wrap items-center gap-1.5">
+          {!canSend ? (
+            <Link to={`/play/build/${buildSlug("Probe Yard")}`} className="text-[12.5px] text-you hover:underline">
+              Needs the Probe Yard ›
+            </Link>
+          ) : asking ? (
+            <>
+              <span className="text-[12.5px] text-muted">Can’t be called back.</span>
+              <button onClick={() => setAsking(false)} className="h-8 rounded-full border border-faint px-3.5 text-[13px] font-medium">
+                Wait
+              </button>
+              <button onClick={go} className="h-8 rounded-full bg-ink px-3.5 text-[13px] font-medium text-paper">
+                Send {left.length === 1 ? "it" : `all ${left.length}`}
+              </button>
+            </>
+          ) : (
+            <button onClick={() => setAsking(true)} className="h-8 rounded-full bg-ink px-3.5 text-[13px] font-medium text-paper">
+              Send {left.length === 1 ? "a probe" : `${left.length} probes`}
+            </button>
+          )}
+        </div>
+      )}
+    </section>
+  );
 }
 
 /** What the map names on the way out, by the scene's marks. */
@@ -684,7 +744,7 @@ export function Reach() {
   const { save, year: clock, orderAt } = useGame();
   const { fly, aim, target, setTrip } = useReach();
   const { leads, visits } = useLeads();
-  const { plan } = usePlan();
+  const { plan, change } = usePlan();
   const { scale } = useSchedule();
   // Voyager 1, picked, takes the map out to it, and again home to the nearest star.
   const [out, setOut] = useState(false);
@@ -746,7 +806,7 @@ export function Reach() {
     {
       key: "faded-glows",
       title: "Faded warm glows",
-      line: "A message can go to any of them",
+      line: "A message or a craft can go to any of them",
       test: (p: Place) => p.lead.slug.startsWith("warm-glow-") && p.lead.facts.some(([k]) => k === "Faded") && !messaged.has(p.lead.star),
     },
   ].map((g) => ({ ...g, members: places.filter(g.test) }));
@@ -850,6 +910,8 @@ export function Reach() {
         ))}
         <Item row={SENT} now={clock ?? 0} began={clock !== null} aim={voyager} />
       </ul>
+
+      <WarmProbes places={places.map((p) => p.lead)} from={from} canSend={inOrder(plan, "Probe Yard")} flybys={plan.flybys ?? []} send={(add) => change((p) => ({ ...p, flybys: [...(p.flybys ?? []), ...add] }))} />
 
       <ListHead left={`Destinations · ${places.length}`} right="Soonest" className="mt-5" />
       <ul className="mt-1">
