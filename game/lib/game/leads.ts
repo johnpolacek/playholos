@@ -429,6 +429,8 @@ function lifeSeen(v: Visit): Odds | undefined {
     green: v.air?.oxygen ? "almost certain" : "very likely",
     dark: undefined,
     far: undefined,
+    works: "almost certain",
+    dusty: undefined,
   };
   return SEEN[v.sight];
 }
@@ -503,8 +505,35 @@ function sentinelReading(v: Visit): Reading {
     dark: ["A black hole, weighed", "the black hole, dark, the stars behind it bent into a ring"],
     rocks: ["Only rock", "no warm world, only rock going round"],
     far: ["Only its star", "its star, and no world near it"],
+    works: ["A mind’s works", "what makes the heat: sheets round a star, catching its light and shedding it warm. Someone built them"],
+    dusty: v.glow === "merger"
+      ? ["Two stars, merged", "what makes the heat: a swollen star in a shell of dust, the wreck of two stars merging"]
+      : ["A young star in dust", "what makes the heat: a young star in its cloud of dust, flaring as young stars do"],
   };
   if (v.sight === "dark") return darkReading(v);
+  // At a warm glow it settles the question its lead asks, in the lead's order: dust, a merger, or something built.
+  if (v.sight === "works" || v.sight === "dusty") {
+    const [title, saw] = SAW[v.sight];
+    return {
+      id: `sentinel-${slugOf(v.star)}-${v.sight}`,
+      needs: "",
+      at: Math.floor(v.home * 10 + 1e-9) / 10,
+      by: "Our sentinel",
+      title,
+      line: `Our sentinel braked at ${starName(v.star)} and stays. It sees ${saw}.`,
+      mind: v.sight === "works"
+        ? "We are not alone. Its braking flame pointed at them, so they may know we came."
+        : "Nature made this heat, not a mind. It stays, and watches.",
+      now: v.glow === "mind"
+        ? ["almost no chance", "almost no chance", "almost certain"]
+        : v.glow === "merger"
+          ? ["almost no chance", "almost certain", "almost no chance"]
+          : ["almost certain", "almost no chance", "almost no chance"],
+      tells: ["It keeps watching, and sends word of anything that changes."],
+      sight: v.sight,
+      life: lifeSeen(v),
+    };
+  }
   const [title, saw] = SAW[v.sight];
   const air = v.air ? ` It read ${v.air.water ? "water" : "no water"} and ${v.air.oxygen ? "oxygen" : "no oxygen"} in its air.` : "";
   const mind = v.air?.oxygen
@@ -554,6 +583,8 @@ function seedReading(v: Visit): Reading {
     dark: ["Dark", "nothing"],
     rocks: ["Only rock", "no warm world, only asteroids and small moons going round"],
     far: ["Only its star", "its star, and no world near it"],
+    works: ["A mind’s works", "a mind’s works"],
+    dusty: ["Dust", "dust round a star"],
   };
   const [title, saw] = SAW[v.sight];
   const air = v.air ? ` It read ${v.air.water ? "water" : "no water"} and ${v.air.oxygen ? "oxygen" : "no oxygen"} in its air.` : "";
@@ -642,6 +673,8 @@ function lensReading(v: Visit): Reading {
     dark: ["Dark", "nothing.", "A lens pictures only what shines."],
     rocks: ["Only rock", "no world.", "A lens pictures only a world we have felt."],
     far: ["No world", "no world.", "A lens pictures only a world we have felt."],
+    works: ["No world", "no world.", "A lens pictures only a world we have felt."],
+    dusty: ["No world", "no world.", "A lens pictures only a world we have felt."],
   };
   const [title, saw, mind] = SAW[v.sight];
   const hyper = v.by === "hyper";

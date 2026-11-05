@@ -15,6 +15,7 @@ import { readFileSync } from "node:fs";
 import { hop, seedProbes } from "./spread.ts";
 import { POOL } from "./pool.ts";
 import { loadWorld } from "./world.ts";
+import { glowsFound } from "./minds.ts";
 import { centers, offEarth, pace, type Order } from "./works.ts";
 import catalog from "../../data/works.json" with { type: "json" };
 
@@ -260,6 +261,18 @@ test("flybys: a pass pictures a felt world, a probe reads its air, and a glow st
   assert.equal(sails.air, undefined);
   assert.ok(probe.sight === "haze" || probe.air);
   assert.equal(seen.find((v) => v.star === "Warm glow 1")!.sight, "far");
+});
+
+test("a sentinel at a warm glow sees what makes its heat", async () => {
+  const world = await loadWorld(10);
+  const found = glowsFound(world, { warmWatch: 0, telescope: 0 }, 5000);
+  assert.ok(found.length > 0);
+  const src = found[0].src;
+  const home = 10 + src.d / 0.1 + 10 + src.d;
+  const kit = { warmWatch: 0, telescope: 0, sentinels: [{ star: "Warm glow 1", leaves: 10 }] };
+  assert.equal(earthKnows(world, home - 0.01, kit).visits.filter((v) => v.by === "sentinel").length, 0);
+  const v = earthKnows(world, home, kit).visits.find((x) => x.by === "sentinel")!;
+  assert.equal(v.sight, "kind" in src ? "dusty" : "works");
 });
 
 test("black holes: Gaia's finds are known at Year 0, the Star Mapper finds more, and a sentinel measures one's spin", async () => {

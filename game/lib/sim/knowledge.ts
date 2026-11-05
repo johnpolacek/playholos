@@ -1,7 +1,7 @@
 // The knowledge wall: what Earth knows at a moment, from the seed's truth. Settled 2026-10-13: the Mind judges from
 // what Earth knows, never the seed. So nothing here passes on who lives where, a world's rung, or anything not yet
 // arrived and caught. Pure: no files, so it runs anywhere and tests fast.
-import { atlasOf, mindsSeen, type MindKit, type MindsSeen } from "./minds.ts";
+import { atlasOf, glowsFound, mindsSeen, type MindKit, type MindsSeen } from "./minds.ts";
 import targets from "../../data/targets.json" with { type: "json" };
 import { glowNames } from "../game/glow-names.ts";
 import { giftWords } from "../game/sends.ts";
@@ -264,6 +264,9 @@ export function earthKnows(
   // What each sentinel has seen, once its first word is home: it arrives at a tenth of light speed and stays, so it
   // maps what a pass can't. Its air read from the world's truth, as a probe's.
   const { speed, burns } = catalog.sentinel;
+  // A warm glow's source, in the order Scan numbers them. A sentinel sent there brakes once it sees the glow up close,
+  // so a range is enough to aim by, and sees what makes the heat: a mind's works, or dust. 2026-11-05.
+  const warmSrc = sentinels.some((x) => x.star.startsWith("Warm glow ")) ? glowsFound(world, { warmWatch, telescope }, year).map((g) => g.src) : [];
   const holes = darkMasses(world, year, mapper);
   // What each sail and flyby probe sent past a star saw, once its word is home. A pass pictures a world if one is there,
   // and a probe reads its air. Anywhere else it is too quick to say more than we knew: a glow stays a glow. 2026-11-05.
@@ -287,6 +290,15 @@ export function earthKnows(
       const passed = x.leaves + dark.d / speed + burns, home = passed + dark.d;
       const truth = world.holes!.find((h) => h.id === dark.id)!;
       if (home <= year) visits.push({ star: x.star, world: x.star, by: "sentinel", sight: "dark", passed, home, spin: truth.spin, clock: iscoClock(truth.spin) });
+      continue;
+    }
+    const warm = /^Warm glow (\d+)$/.exec(x.star);
+    const src = warm ? warmSrc[Number(warm[1]) - 1] : undefined;
+    if (src) {
+      const passed = x.leaves + src.d / speed + burns, home = passed + src.d;
+      if (home > year) continue;
+      const glow = "kind" in src ? (src as { kind: "eruption" | "merger" }).kind : ("mind" as const);
+      visits.push({ star: x.star, world: x.star, by: "sentinel", sight: glow === "mind" ? "works" : "dusty", glow, passed, home });
       continue;
     }
     const d = x.star === PROXIMA.star ? PROXIMA.d : f?.d;
@@ -532,6 +544,8 @@ export function describe(view: EarthView): string {
     green: "cloud, seas, and its land dark green in patches the size of forests",
     rocks: "no warm world, only rock: asteroids and small moons going round",
     far: "nothing more than we knew: a pass is too quick to resolve it",
+    works: "a mind's works: sheets round a star, shedding its light as warm glow. Someone built them",
+    dusty: "dust round a star, glowing warm: nature made this heat",
   };
   const visits = (view.visits ?? []).map(
     (v) =>

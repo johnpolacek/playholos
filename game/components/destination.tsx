@@ -6,7 +6,7 @@ import { BuildMark, buildBlue, buildTone, LeadMark, LockMark } from "@/component
 import { MindNote } from "@/components/mind-note";
 import { toggleBuild, usePlan, useSchedule } from "@/components/picks";
 import { Lens } from "@/components/icons";
-import { axis, Brings, Key, says, sooner, targetOf, Thread, useReach, year, Years } from "@/components/reach";
+import { axis, Brings, Key, says, sooner, targetOf, Thread, tripAt, useReach, year, Years } from "@/components/reach";
 import { useLeads } from "@/components/scan";
 import { VisitArt } from "@/components/visit-art";
 import { isHole, starName, visitReading } from "@/lib/game/leads";
@@ -173,7 +173,7 @@ function Sent(props: {
 
 export function DestinationPage({ slug }: { slug: string }) {
   const { leads, visits, colony } = useLeads();
-  const { aim, close, setClose } = useReach();
+  const { aim, close, setClose, setTrip } = useReach();
   const { save, year: clock, orderAt, moveWill } = useGame();
   const { plan, change } = usePlan();
   const { scale, done: doneBy } = useSchedule();
@@ -206,10 +206,11 @@ export function DestinationPage({ slug }: { slug: string }) {
   const felt = lead?.what === "A new world";
   const lens = useMemo(() => (felt && lead ? lensRoad(plan, scale, from, lead.star) : null), [felt, lead, plan, scale, from]);
   // A sentinel can go wherever a world is known, the world next door or one we've felt, or to a black hole we found.
-  // Or to a cold glow's star, to see what glows, out to 326 ly. 2026-10-31.
+  // Or to a cold glow's star, to see what glows, out to 326 ly. 2026-10-31. Or to a warm glow: it brakes once it sees
+  // the glow up close, so a range is enough, and sees what makes the heat. 2026-11-05.
   const stay = useMemo(
     () =>
-      lead && (felt || lead.slug === "proxima-centauri" || isHole(lead.art) || lead.slug.startsWith("cold-glow-")) ? sentinelRoad(plan, scale, from, lead.star, lead.ly) : null,
+      lead && (felt || lead.slug === "proxima-centauri" || isHole(lead.art) || lead.slug.startsWith("cold-glow-") || lead.slug.startsWith("warm-glow-")) ? sentinelRoad(plan, scale, from, lead.star, lead.ly) : null,
     [felt, lead, plan, scale, from],
   );
   // A seed probe goes where there is rock to copy itself from: the world next door, or a world we've felt. 2026-10-26.
@@ -243,6 +244,21 @@ export function DestinationPage({ slug }: { slug: string }) {
     aim(targetOf(star, ly, system, range));
     return () => aim(null);
   }, [aim, star, ly, system, range]);
+
+  // Our craft here on the map: the one whose word comes home soonest, on its way, then its word coming back. 2026-11-05.
+  const tenth = clock === null ? null : Math.floor(clock * 10) / 10;
+  const going = tenth === null
+    ? null
+    : [...flown, ...(stay ? [stay] : []), ...(seed ? [seed] : [])]
+        .filter((r) => r.n !== null && r.home !== null && r.home > tenth)
+        .sort((a, b) => a.home! - b.home!)[0];
+  const trip = going && tenth !== null ? tripAt(going, tenth) : null;
+  const [tripCraft, tripSignal] = [trip?.craft, trip?.signal];
+  useEffect(() => {
+    if (tripCraft === undefined) return;
+    setTrip({ craft: tripCraft, signal: tripSignal! });
+    return () => setTrip(null);
+  }, [setTrip, tripCraft, tripSignal]);
 
   useEffect(() => {
     const back = (e: KeyboardEvent) => e.key === "Escape" && navigate("/play/reach");
