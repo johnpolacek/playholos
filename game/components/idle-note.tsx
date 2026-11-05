@@ -13,6 +13,7 @@ import { useLeads } from "@/components/scan";
 import { starName } from "@/lib/game/leads";
 import { tenths, yearText } from "@/lib/game/clock";
 import { buildSlug, drawAt, orderLater, searchOf } from "@/lib/game/plan";
+import { flybyRoad } from "@/lib/game/reach";
 import { READ_YEARS } from "@/lib/sim/minds";
 import { combedAt } from "@/lib/sim/works";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
@@ -101,15 +102,23 @@ export function IdleNote() {
   // built all we can" was a dead end. Playtest 2026-11-04. First a shining glow we read as plain heat and haven't called.
   const spent = idle && !pick;
   const reads = plan.closeReads ?? [];
+  // One we have sent a craft to is answered too: it kept asking us to go after a probe was on its way. 2026-11-05.
+  const engaged = new Set([...(plan.flybys ?? []), ...(plan.sentinels ?? []), ...(plan.lenses ?? []), ...(plan.seeds ?? []), ...(plan.strikes ?? [])].map((o) => o.name));
   const heat = !spent || glow
     ? undefined
     : leads.find((l) => {
         const flash = minds?.flashes[Number(l.slug.replace("warm-glow-", "")) - 1];
-        return readingStands(l, minds, reads) === "done" && flash?.read?.saw === "smooth" && flash.faded === undefined && !save?.sent?.some((m) => m.to === l.star);
+        return readingStands(l, minds, reads) === "done" && flash?.read?.saw === "smooth" && flash.faded === undefined && !save?.sent?.some((m) => m.to === l.star) && !engaged.has(l.star);
       });
-  // Then the reading under way, then a word with the Mind on where to turn.
+  // Then the reading under way, then our latest sail or probe on its way, then a word with the Mind on where to turn.
   const reading = spent && !glow && !heat ? reads.find((o) => o.y + READ_YEARS > now) : undefined;
-  const openSky = spent && !glow && !heat && !reading;
+  const flight = spent && !glow && !heat && !reading
+    ? (plan.flybys ?? [])
+        .map((o) => ({ o, r: flybyRoad(plan, scale, o.y, o) }))
+        .filter(({ r }) => r.home !== null && r.home > now)
+        .sort((a, b) => b.o.y - a.o.y)[0]
+    : undefined;
+  const openSky = spent && !glow && !heat && !reading && !flight;
   const clock = held && <span className="text-page-ink2"> The clock waits.</span>;
   const what = pick ? `${pick.build.what.charAt(0).toLowerCase()}${pick.build.what.slice(1)}` : "";
   return (
@@ -139,6 +148,18 @@ export function IdleNote() {
           <p>
             <span className="font-medium text-other">Our telescope is reading {starName(reading.name)}.</span>{" "}
             <span className="text-page-ink2">We will know its light by Year {yearText(reading.y + READ_YEARS)}.</span>
+            {clock}
+          </p>
+        ) : flight ? (
+          <p>
+            <span className="font-medium text-other">
+              {flight.o.by === "sails" ? "Our sails are" : "Our probe is"} on {flight.o.by === "sails" ? "their" : "its"} way to {starName(flight.o.name)}.
+            </span>{" "}
+            <span className="text-page-ink2">
+              {flight.r.leaves !== null && flight.r.leaves > now ? `${flight.o.by === "sails" ? "They leave" : "It leaves"} in Year ${yearText(flight.r.leaves)}. ` : ""}
+              {flight.o.by === "sails" ? "They pass" : "It passes"} in Year {yearText(flight.r.arrives!)}, and {flight.o.by === "sails" ? "their" : "its"} pictures reach us by Year{" "}
+              {yearText(flight.r.home!)}.
+            </span>
             {clock}
           </p>
         ) : openSky ? (
@@ -195,6 +216,11 @@ export function IdleNote() {
               </Link>
             </>
           )}
+          {flight && path !== "/play/reach" && (
+            <Link to="/play/reach" className="text-[12.5px] text-you hover:underline">
+              See it on Reach ›
+            </Link>
+          )}
           {openSky && (
             <>
               <Link
@@ -211,7 +237,7 @@ export function IdleNote() {
           {(!idle || !pick) && ahead && (
             <button
               onClick={ahead.go}
-              className={`h-8 rounded-full px-4 text-[13px] font-medium transition-[filter] hover:brightness-110 ${pick || glow || heat || openSky ? "border border-you/60 text-you" : "bg-you text-paper"}`}
+              className={`h-8 rounded-full px-4 text-[13px] font-medium transition-[filter] hover:brightness-110 ${pick || glow || heat || openSky || flight ? "border border-you/60 text-you" : "bg-you text-paper"}`}
             >
               Jump to {ahead.why ?? "what comes next"} ›
             </button>

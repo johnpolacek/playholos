@@ -221,7 +221,7 @@ export interface Visit {
   /** The Year it passed, or for a lens the Year it began to look, and the Year its word reached us. */
   passed: number;
   home: number;
-  sight: "haze" | "bare" | "seas" | "green" | "ice" | "dark" | "rocks" | "far";
+  sight: "haze" | "bare" | "seas" | "green" | "ice" | "dark" | "rocks" | "far" | "works" | "dusty";
   air?: { water: boolean; oxygen: boolean };
   /** A lens's or the Hypertelescope's pixel, in km across the world. */
   km?: number;
@@ -229,6 +229,8 @@ export interface Visit {
   spin?: number;
   clock?: number;
   lost?: "catch" | "strike";
+  /** What a sentinel found making a warm glow's heat: a mind's works, or dust round a young star or two stars merged. */
+  glow?: "mind" | "eruption" | "merger";
   /** A pass that found no world, at a black hole. */
   hole?: boolean;
   /** A seed probe's: its generation, 1 for one we sent, the star it was built at, and where its place is in our sky, for

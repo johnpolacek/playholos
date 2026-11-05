@@ -60,6 +60,10 @@ export interface Dials {
   mind?: number;
   /** The scale: log10 of the km across half the view's short side. */
   zoom?: number;
+  /** Reach: our craft on its way to the target, as a share of the way out, and its word home, as a share of the way
+   *  back. Below 0 for none. 2026-11-05. */
+  craft?: number;
+  signal?: number;
   /** The Sun rises over Earth's edge. */
   rise?: number;
   /** How far the Sun's light has come on its road, in log time: 0 at its birth to 1 at this morning. */
@@ -1738,6 +1742,21 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     stars.scene.add(toward);
     let towardAt = clock;
     let onReach = false;
+    // Our craft on its way, an amber point along the line, and once it gets there its word coming home, an amber line
+    // running back toward the Sun as fast as light. Dated by the plan: a craft lost on the way sends nothing, so its
+    // word's line still runs, and nothing arrives. 2026-11-05.
+    const craftGlow = glow({ fixed: true });
+    const craftCloud = new Cloud();
+    craftCloud.add(0, 0, 0, 8, 1, K.lamp);
+    const craftPts = craftCloud.points(craftGlow);
+    craftPts.frustumCulled = false;
+    const signalMat = line("lamp", 0);
+    const signal = new THREE.LineSegments(
+      new THREE.BufferGeometry().setAttribute("position", new THREE.BufferAttribute(new Float32Array(6), 3)),
+      signalMat,
+    );
+    signal.frustumCulled = false;
+    stars.scene.add(craftPts, signal);
     let target = "";
     let drawn: THREE.Points[] = [];
     const aim = (id: string) => {
@@ -1812,6 +1831,18 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       towardMat.uniforms.uOpacity.value = 0.85 * ringed;
       const out = still ? 1 : easeInOut(Math.min(1, Math.max(0, (clock - towardAt) / CHART_DRAW)));
       toward.geometry.setDrawRange(0, 2 * Math.ceil(out * CHART_DASHES));
+      const trip = spec.mode === "reach" ? dialsOf.reach : undefined;
+      const goes = trip?.craft ?? -1, back = trip?.signal ?? -1;
+      craftGlow.uniforms.uOpacity.value = goes >= 0 ? ringed * out * (0.8 + 0.2 * Math.sin(clock * 3)) : 0;
+      if (goes >= 0) craftPts.position.copy(alpha).multiplyScalar(Math.min(1, goes));
+      signalMat.uniforms.uOpacity.value = back > 0 ? 0.9 * ringed * out : 0;
+      if (back > 0) {
+        const sp = signal.geometry.attributes.position as THREE.BufferAttribute;
+        sp.setXYZ(0, alpha.x, alpha.y, alpha.z);
+        v.copy(alpha).multiplyScalar(1 - Math.min(1, back));
+        sp.setXYZ(1, v.x, v.y, v.z);
+        sp.needsUpdate = true;
+      }
       debrisGlow.uniforms.uOpacity.value = p * band(x, -3.8, -3.4, -2.2, -1.7);
       belt.uniforms.uOpacity.value = 0.14 * p * band(x, -3.4, -3.0, -2.2, -1.7);
       for (const { group, rate } of rings) group.rotateY((rate < 0 ? (2 * Math.PI) / turnOf() : rate) * dt);

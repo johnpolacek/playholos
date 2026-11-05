@@ -56,6 +56,34 @@ export function VisitArt({ sight, elder, size = 132 }: { sight: Visit["sight"]; 
         <circle cx="66" cy="66" r="30.5" fill="none" stroke="#f4f6ff" strokeWidth=".6" opacity=".8" />
       </svg>
     );
+  // At a warm glow, what makes its heat: a mind's works round its star, glowing faint, or a star in a cloud of warm dust.
+  // 2026-11-05.
+  if (sight === "works")
+    return (
+      <svg width={size} height={size} viewBox="0 0 132 132" aria-hidden className="shrink-0 overflow-visible">
+        <circle cx="66" cy="66" r="6" fill="#ffd28a" />
+        <circle cx="66" cy="66" r="14" fill="#ffd28a" opacity=".12" />
+        <Works asleep={false} />
+      </svg>
+    );
+  if (sight === "dusty")
+    return (
+      <svg width={size} height={size} viewBox="0 0 132 132" aria-hidden className="shrink-0 overflow-visible">
+        <defs>
+          <radialGradient id="visit-dusty">
+            <stop offset="0" stopColor="#f0a777" stopOpacity=".7" />
+            <stop offset=".5" stopColor="#a0603a" stopOpacity=".28" />
+            <stop offset="1" stopColor="#7a4a30" stopOpacity="0" />
+          </radialGradient>
+        </defs>
+        <ellipse cx="66" cy="66" rx="56" ry="40" fill="url(#visit-dusty)" className="animate-pulse motion-reduce:animate-none" />
+        {Array.from({ length: 30 }, (_, k) => {
+          const a = (k / 30) * 2 * Math.PI, r = 20 + ((k * 13) % 30);
+          return <circle key={k} cx={66 + r * Math.cos(a)} cy={66 + r * 0.7 * Math.sin(a)} r={0.8 + (k % 3) * 0.4} fill="#c08a68" opacity=".5" />;
+        })}
+        <circle cx="66" cy="66" r="4" fill="#fff1d6" />
+      </svg>
+    );
   // A pass with no world to picture: a soft smear of light that no frame resolves, the stars behind it streaked by our
   // speed. 2026-11-05.
   if (sight === "far")

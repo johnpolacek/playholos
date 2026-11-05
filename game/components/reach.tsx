@@ -105,6 +105,17 @@ interface ReachView {
   /** In the destination's system, or not, and the way in and out. */
   close: boolean;
   setClose(on: boolean): void;
+  /** Our craft on its way to the target, and its word home, drawn on the map. Null for none. */
+  setTrip(trip: Trip | null): void;
+}
+
+/** Where a craft is on its road, as shares of the way: out to its star, then its word back. */
+export type Trip = { craft: number; signal: number };
+export function tripAt(road: Pick<Road, "leaves" | "arrives" | "home">, now: number): Trip | null {
+  const { leaves, arrives, home } = road;
+  if (leaves === null || arrives === null || home === null || now >= home) return null;
+  const share = (a: number, b: number) => Math.min(1, Math.max(0, (now - a) / Math.max(1e-9, b - a)));
+  return { craft: share(leaves, arrives), signal: now <= arrives ? -1 : share(arrives, home) };
 }
 
 const ReachContext = createContext<ReachView>({
@@ -116,6 +127,7 @@ const ReachContext = createContext<ReachView>({
   aim() {},
   close: false,
   setClose() {},
+  setTrip() {},
 });
 export const useReach = () => use(ReachContext);
 
@@ -151,6 +163,7 @@ export function ReachProvider({ children }: { children: React.ReactNode }) {
     Object.assign(now.current, { close: on ? 1 : 0 });
     setCloseState(on);
   }, []);
+  const setTrip = useCallback((trip: Trip | null) => void Object.assign(now.current, trip ?? { craft: -1, signal: -1 }), []);
   const tour = useCallback(
     (delay = 0) => {
       setClose(false);
@@ -174,8 +187,8 @@ export function ReachProvider({ children }: { children: React.ReactNode }) {
     [fly, setClose],
   );
   const value = useMemo(
-    () => ({ dials, fly, hold, tour, target, aim, close, setClose }),
-    [dials, fly, hold, tour, target, aim, close, setClose],
+    () => ({ dials, fly, hold, tour, target, aim, close, setClose, setTrip }),
+    [dials, fly, hold, tour, target, aim, close, setClose, setTrip],
   );
   return <ReachContext value={value}>{children}</ReachContext>;
 }
@@ -669,7 +682,7 @@ export function says(
 
 export function Reach() {
   const { save, year: clock, orderAt } = useGame();
-  const { fly, aim, target } = useReach();
+  const { fly, aim, target, setTrip } = useReach();
   const { leads, visits } = useLeads();
   const { plan } = usePlan();
   const { scale } = useSchedule();
@@ -764,9 +777,9 @@ export function Reach() {
   // Our craft sent to other stars: lenses, sentinels, seed probes, and sails and probes passing. Reach listed only
   // Voyager 1 after all of these went, playtest 2026-11-01, and each showed only once it left, so a send seemed to do
   // nothing until 2026-11-05.
-  const stays: (Row & { id: string; star: string; y: number; home: number })[] = clock === null ? [] : [
+  const stays: (Row & { id: string; star: string; y: number; home: number; road: Road })[] = clock === null ? [] : [
     ...(plan.lenses ?? []).map((o) => ({ o, road: lensRoad(plan, scale, from, o.name), what: "A lens", to: "at its Sun’s focus, toward" })),
-    ...(plan.sentinels ?? []).map((o) => ({ o, road: sentinelRoad(plan, scale, from, o.name, starOf(o.name)?.d ?? 0), what: "A sentinel", to: "to stay at" })),
+    ...(plan.sentinels ?? []).map((o) => ({ o, road: sentinelRoad(plan, scale, from, o.name, leads.find((l) => l.star === o.name)?.ly ?? starOf(o.name)?.d ?? 0), what: "A sentinel", to: "to stay at" })),
     ...(plan.seeds ?? []).map((o) => ({ o, road: seedRoad(plan, scale, from, o.name, starOf(o.name)?.d ?? 0), what: "A seed probe", to: "to stay at" })),
     ...(plan.flybys ?? []).map((o) => ({ o, road: flybyRoad(plan, scale, o.y, o), what: o.by === "sails" ? "Sails" : "A flyby probe", to: "to pass" })),
   ].flatMap(({ o, road: r, what, to }) => {
@@ -777,6 +790,7 @@ export function Reach() {
       star: o.name,
       y: o.y,
       home: r.home,
+      road: r,
       id: `${what}:${o.name}`,
       key: r.build,
       name: `${what}, ${star}`,
@@ -785,12 +799,21 @@ export function Reach() {
       kind: "flight" as const,
       msg: `to ${star}`,
       sent: YEAR_0 + r.leaves,
-      ly: what === "A lens" ? 3 / 365.25 : "d" in o ? (o.d as number) : (starOf(o.name)?.d ?? 0),
+      ly: what === "A lens" ? 3 / 365.25 : "d" in o ? (o.d as number) : (leads.find((l) => l.star === o.name)?.ly ?? starOf(o.name)?.d ?? 0),
     }];
   });
 
   // The map shows the way to our latest craft still on its way, or the nearest star with none. 2026-11-05.
-  const bound = [...stays].filter((s) => (clock ?? 0) < s.home).sort((a, b) => b.y - a.y)[0]?.star;
+  const latest = [...stays].filter((s) => (clock ?? 0) < s.home).sort((a, b) => b.y - a.y)[0];
+  const bound = latest?.star;
+  // And the craft itself on the way, then its word coming home, a tenth of a Year at a time.
+  const trip = latest && clock !== null ? tripAt(latest.road, Math.floor(clock * 10) / 10) : null;
+  const [tripCraft, tripSignal] = [trip?.craft, trip?.signal];
+  useEffect(() => {
+    if (tripCraft === undefined) return;
+    setTrip({ craft: tripCraft, signal: tripSignal! });
+    return () => setTrip(null);
+  }, [setTrip, tripCraft, tripSignal]);
   const going = leads.find((l) => l.star === bound);
   const [goingStar, goingLy, goingSystem, goingRange] = [going?.star, going?.ly, going?.system, going?.range];
   useEffect(() => {
