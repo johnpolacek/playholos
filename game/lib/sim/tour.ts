@@ -4,7 +4,7 @@ import { far, odds, round } from "@/lib/about/dials";
 import type { SimMind, WorldKind } from "@/lib/drift";
 import { skyBasis } from "../../../src/coordinates.js";
 import { GALACTIC_CENTER, LOCAL_GROUP_CENTER } from "../../../src/navigation.js";
-import { GALAXIES, galaxyPosition } from "../../../src/galaxies.js";
+import { GALAXIES, galaxyPosition, galaxyViewRadius } from "../../../src/galaxies.js";
 import { ALIVE, RUNGS, type NaturalWorld } from "./draw-worlds.ts";
 import type { DrawnMinds, Odds } from "./draw-minds.ts";
 
@@ -33,8 +33,12 @@ export interface Stop {
   /** Words the map puts by places, light-years in the atlas frame, each joined to its place by a line. `off` is where
    *  the words sit from the place, in px: right and down. They stand in for Sol's name. */
   /** `rim` puts the place on the edge sphere's outline as seen, not at `pos`, so it stays in view as the view turns. */
-  notes?: { id: string; pos: Vec; text: string; off: [number, number]; rim?: boolean }[];
+  /** A tap flies in to frame a note's place, `r` light-years round it, or with `go`, steps on to that stop. */
+  notes?: { id: string; pos: Vec; text: string; off: [number, number]; rim?: boolean; r?: number; go?: string }[];
 }
+
+/** How far out to stand, log10 AU, to frame a place `r` light-years round, as the Galaxy's own stop frames it. */
+export const framing = (r: number) => Math.log10(2.8 * r * LY_AU);
 
 /** How far time runs ahead, in years: a peer is a mind that woke within 20,000 years of us. */
 export const AHEAD = 20_000;
@@ -186,10 +190,10 @@ export function tourOf(m: DrawnMinds, o: Odds, names: Record<string, string> = {
     focus: null,
     zoom: UNIVERSE,
     notes: [
-      { id: "mapped", pos: [0, 0, 0], text: "All we have mapped: 43,000 galaxies", off: [90, -80] },
-      { id: "drawn", pos: [-1.6e10, -9e9, 0], text: "Hundreds of billions more, drawn", off: [-40, 70] },
+      { id: "mapped", pos: [0, 0, 0], text: "All we have mapped: 43,000 galaxies", off: [90, -80], go: "laniakea" },
+      { id: "drawn", pos: [-1.6e10, -9e9, 0], text: "Hundreds of billions more, drawn", off: [-40, 70], r: 1e10 },
       // Toward the Galaxy's center, which the opening's view puts at the sphere's right edge.
-      { id: "edge", pos: [4.65e10, 0, 0], rim: true, text: "The first light, at the edge of what we can see, 46 billion light-years", off: [-70, -110] },
+      { id: "edge", pos: [4.65e10, 0, 0], rim: true, text: "The first light, at the edge of what we can see, 46 billion light-years", off: [-70, -110], r: 6e9 },
     ],
   });
   stops.push({
@@ -200,10 +204,10 @@ export function tourOf(m: DrawnMinds, o: Odds, names: Record<string, string> = {
     focus: null,
     zoom: 13.85,
     notes: [
-      { id: "virgo", pos: at(187.7, 12.4, 5.4e7), text: "Virgo Cluster, 54 million ly: a knot of over a thousand galaxies", off: [70, -70] },
-      { id: "attractor", pos: at(243.6, -60.9, 2.2e8), text: "The Great Attractor, 220 million ly: where Laniakea’s galaxies flow", off: [-60, 70] },
-      { id: "wall", pos: at(195.0, 28.0, 3.2e8), text: "The Great Wall through Coma, 320 million ly: a sheet of galaxies", off: [60, 60] },
-      { id: "void", pos: at(285, 10, 7.5e7), text: "The Local Void, next to us: nearly empty", off: [-70, -60] },
+      { id: "virgo", pos: at(187.7, 12.4, 5.4e7), text: "Virgo Cluster, 54 million ly: a knot of over a thousand galaxies", off: [70, -70], r: 8e6 },
+      { id: "attractor", pos: at(243.6, -60.9, 2.2e8), text: "The Great Attractor, 220 million ly: where Laniakea’s galaxies flow", off: [-60, 70], r: 3e7 },
+      { id: "wall", pos: at(195.0, 28.0, 3.2e8), text: "The Great Wall through Coma, 320 million ly: a sheet of galaxies", off: [60, 60], r: 8e7 },
+      { id: "void", pos: at(285, 10, 7.5e7), text: "The Local Void, next to us: nearly empty", off: [-70, -60], r: 3e7 },
     ],
   });
   stops.push({
@@ -215,11 +219,13 @@ export function tourOf(m: DrawnMinds, o: Odds, names: Record<string, string> = {
     zoom: 11.85,
     bare: true,
     notes: [
-      { id: "mw", pos: CENTER, text: "The Milky Way, ours", off: [-70, 50] },
+      { id: "mw", pos: CENTER, text: "The Milky Way, ours", off: [-70, 50], go: "galaxy" },
       ...LOCAL.map(([id, name, off]) => {
         const g = GALAXIES.find((x: { id: string }) => x.id === id) as unknown as { kpc: number; ra: number; dec: number };
-        const r = galaxyPosition(g);
-        return { id, pos: [r.x, r.y, r.z] as Vec, text: `${name}, ${round(g.kpc * 3261.56)} ly`, off };
+        const p = galaxyPosition(g);
+        // Framed by its own size, but never so close that a small one is only a few dots.
+        const r = Math.max(4000, galaxyViewRadius(g as Parameters<typeof galaxyViewRadius>[0]));
+        return { id, pos: [p.x, p.y, p.z] as Vec, text: `${name}, ${round(g.kpc * 3261.56)} ly`, off, r };
       }),
     ],
   });

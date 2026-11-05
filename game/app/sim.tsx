@@ -14,7 +14,7 @@ import { bodiesOf, placesOf, rankOf, TABS, type Place, type Tab } from "@/lib/si
 import type { Target } from "@/lib/sim/flight-view";
 import type { WorldOdds } from "@/lib/sim/draw-worlds";
 import type { Ask, Drawn } from "@/lib/sim/draw-worker";
-import { AHEAD, CENTER, UNIVERSE, clashesOf, lightAt, timeOf, tourOf } from "@/lib/sim/tour";
+import { AHEAD, CENTER, UNIVERSE, clashesOf, framing, lightAt, timeOf, tourOf } from "@/lib/sim/tour";
 import { gsap, prefersReducedMotion } from "@/lib/motion";
 
 // Simulation mode, 2026-11-01: no game, only a sky drawn at the odds we set. The six steps from stars to minds, as on
@@ -145,6 +145,9 @@ export default function Sim() {
   const split = Math.max(0, tour.findIndex((s) => s.id === "dials"));
   const section = tab ? "simulation" : "universe";
   const stop = tab ? undefined : tour[Math.min(at, Math.max(0, split - 1))];
+  // A note tapped on the tour: the view flies in close to its place, until tapped again or the stop changes.
+  const [closer, setCloser] = useState<{ stop: string; id: string } | null>(null);
+  const closeNote = stop && closer?.stop === stop.id ? stop.notes?.find((n) => n.id === closer.id) : undefined;
   const clashes = useMemo(() => (drawn ? clashesOf(drawn.minds, odds_, drawn.fillers) : []), [drawn, odds_]);
   // Time passing, on the Peers list: years from now, and whether it runs by itself.
   const [years, setYears] = useState(0);
@@ -245,20 +248,23 @@ export default function Sim() {
         : {
             minds: NONE,
             // Before the first draw comes, the tour's opening: the universe we can see.
-            focus: stop ? stop.focus : null,
-            zoom: stop?.zoom ?? UNIVERSE,
+            focus: closeNote ? closeNote.pos : stop ? stop.focus : null,
+            zoom: closeNote ? framing(closeNote.r ?? 1e5) : (stop?.zoom ?? UNIVERSE),
             clash: stop?.clash,
-            bare: stop?.bare,
+            bare: stop?.bare || !!closeNote,
             spokes,
             intro: opening && stop?.id === "universe" ? 1 : undefined,
             // The place in view first, so its name wins a crowded spot, then Sol, then the notes.
             marks: [
               ...(stop?.focus ? [{ id: "here", pos: stop.focus }] : []),
-              ...(stop?.notes ? stop.notes : [{ id: "Sol", pos: [0, 0, 0] as [number, number, number] }]),
+              // Flown in to a note on the rim, its words stay by its place, not the rim as seen.
+              ...(stop?.notes
+                ? stop.notes.map((n) => (n === closeNote ? { ...n, rim: false } : n))
+                : [{ id: "Sol", pos: [0, 0, 0] as [number, number, number] }]),
               ...(spokes ? near.map((n, i) => ({ id: `near-${i}`, pos: n.pos })) : []),
             ],
           },
-    [tab, stop, spokes, near, opening],
+    [tab, stop, spokes, near, opening, closeNote],
   );
 
   const names = useRef<Record<string, HTMLSpanElement | null>>({});
@@ -281,7 +287,14 @@ export default function Sim() {
     const t = setTimeout(() => setOpening(false), INTRO_SECONDS * 1000);
     return () => clearTimeout(t);
   }, [opening, stop?.id]);
+  // Where each mark was last seen on screen, so a tap can find the note under it.
+  const seen = useRef<Record<string, { x: number; y: number; a: number }>>({});
+  // Flown in close, only that note's words stay: the rest would crowd the frame's edges.
+  const only = useRef<string | null>(null);
+  useEffect(() => void (only.current = closeNote?.id ?? null), [closeNote]);
   const onMarks = useCallback((marks: Mark[]) => {
+    seen.current = Object.fromEntries(marks.map((m) => [m.id, m]));
+    if (only.current) marks = marks.map((m) => (m.id === only.current || !offs.current[m.id] ? m : { ...m, a: 0 }));
     const taken: Parameters<typeof placeLabel>[4] = [];
     const marked = new Set(marks.map((m) => m.id));
     for (const [id, n] of Object.entries(names.current)) if (n && !marked.has(id)) n.style.opacity = "0";
@@ -365,6 +378,28 @@ export default function Sim() {
     return () => void t.kill();
   }, [revealed]);
 
+  /** The note at a point on the screen: its words, or close by its dot. */
+  const noteAt = (x: number, y: number) => {
+    for (const n of stop?.notes ?? []) {
+      const el = names.current[n.id],
+        m = seen.current[n.id];
+      if (!el?.parentElement || !m || m.a <= 0 || Number(el.style.opacity) < 0.3) continue;
+      const r = el.getBoundingClientRect(),
+        frame = el.parentElement.getBoundingClientRect();
+      const onWords = x >= r.left - 6 && x <= r.right + 6 && y >= r.top - 6 && y <= r.bottom + 6;
+      if (onWords || Math.hypot(x - frame.left - m.x, y - frame.top - m.y) < 16) return n;
+    }
+    return undefined;
+  };
+  // A tap on a note flies in to it, or on to its own stop; on it again, or on open sky, back out.
+  const tapNote = (x: number, y: number) => {
+    const n = noteAt(x, y);
+    if (!stop || !n || n === closeNote) return setCloser(null);
+    const i = n.go ? tour.findIndex((s) => s.id === n.go) : -1;
+    if (i >= 0) return setAt(i);
+    setCloser({ stop: stop.id, id: n.id });
+  };
+
   const set = (key: string, v: number) => setValues((o) => ({ ...o, [key]: v }));
   // Labels sit on stars and glows, so each carries a dark halo to stay readable, and fades in and out with its stop.
   const label =
@@ -421,7 +456,7 @@ export default function Sim() {
                 </span>
               ))}
             </SkyArt>
-            <Turn />
+            <Turn hit={tab || opening ? undefined : noteAt} onTap={tab || opening ? undefined : tapNote} />
             {tab && (
               <SimFlight
                 className="absolute inset-0"
@@ -753,8 +788,9 @@ function Time({
   );
 }
 
-/** The map turned by hand: a drag spins the view round and tips it, in every stop. It sits under the cards. */
-function Turn({ onTap }: { onTap?(x: number, y: number): void }) {
+/** The map turned by hand: a drag spins the view round and tips it, in every stop. It sits under the cards. A tap
+ *  goes to onTap, in the page's coordinates. */
+function Turn({ onTap, hit }: { onTap?(x: number, y: number): void; hit?(x: number, y: number): unknown }) {
   const sky = useSky();
   const from = useRef<{ x: number; y: number } | null>(null);
   // Where a press began, to tell a tap from a drag.
@@ -769,7 +805,8 @@ function Turn({ onTap }: { onTap?(x: number, y: number): void }) {
         e.currentTarget.setPointerCapture(e.pointerId);
       }}
       onPointerMove={(e) => {
-        if (!from.current) return;
+        // Over something a tap would open, the hand shows it.
+        if (!from.current) return void (e.currentTarget.style.cursor = hit?.(e.clientX, e.clientY) ? "pointer" : "");
         const { width, height } = e.currentTarget.getBoundingClientRect();
         sky?.turn((e.clientX - from.current.x) / width, (e.clientY - from.current.y) / height);
         from.current = { x: e.clientX, y: e.clientY };
@@ -779,8 +816,7 @@ function Turn({ onTap }: { onTap?(x: number, y: number): void }) {
         const d = down.current;
         down.current = null;
         if (!onTap || !d || Math.hypot(e.clientX - d.x, e.clientY - d.y) > 5) return;
-        const r = e.currentTarget.getBoundingClientRect();
-        onTap(e.clientX - r.left, e.clientY - r.top);
+        onTap(e.clientX, e.clientY);
       }}
       onPointerCancel={() => (from.current = null)}
     />
