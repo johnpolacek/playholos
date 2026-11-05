@@ -37,6 +37,15 @@ export function Play({ size = 14 }: { size?: number }) {
   );
 }
 
+/** An astroid: four cusps curving in to a point, like a star's glint. Separates the title's footer links. */
+export function Astroid({ size = 7 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 16 16" aria-hidden className="shrink-0">
+      <path d="M8 0Q8.6 7.4 16 8Q8.6 8.6 8 16Q7.4 8.6 0 8Q7.4 7.4 8 0z" fill="currentColor" />
+    </svg>
+  );
+}
+
 /** Earth: its edge, a meridian and the equator. */
 export function Globe({ size = 14 }: { size?: number }) {
   return (

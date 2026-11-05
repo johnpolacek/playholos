@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import { useCallback, useRef } from "react";
+import { Astroid } from "@/components/icons";
 import { Reactor, type ReactorHandle } from "@/components/reactor";
 import { SkyArt, useSky } from "@/components/sky";
 import { plainClick, useLeaveFor } from "@/lib/leave";
@@ -118,6 +119,9 @@ export function Drift({ onNext, dive = true }: { onSkip(): void; onNext(): void;
         >
           About
         </Link>
+        <span data-m="foot" className="opacity-60">
+          <Astroid />
+        </span>
         <a
           data-m="foot"
           href="https://github.com/johnpolacek/playholos"
@@ -127,6 +131,9 @@ export function Drift({ onNext, dive = true }: { onSkip(): void; onNext(): void;
         >
           GitHub
         </a>
+        <span data-m="foot" className="opacity-60">
+          <Astroid />
+        </span>
         <span data-m="foot">
           Created by{" "}
           <a href="https://johnpolacek.com" target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-ink">
