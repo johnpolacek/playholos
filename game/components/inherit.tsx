@@ -4,6 +4,7 @@ import type { EarthPast } from "@/lib/game/past";
 import { FILL, Spread } from "@/components/spread";
 import { SkyArt } from "@/components/sky";
 import type { Dials, Mark } from "@/lib/drift";
+import { steadySide, steadySpot } from "@/lib/steady-side";
 import { INHERIT_SOURCES } from "@/lib/game/sources";
 import { gsap, prefersReducedMotion, rise, riseFrom, useStage } from "@/lib/motion";
 
@@ -48,7 +49,7 @@ export function placeNames(names: Record<string, HTMLSpanElement | null>, marks:
     if (!n) continue;
     const w = n.offsetWidth;
     const h = n.offsetHeight;
-    const right = x > (n.parentElement?.clientWidth ?? 0) * 0.62;
+    const right = steadySide(n, x, (n.parentElement?.clientWidth ?? 0) * 0.62);
     const tries = [
       { dx: right ? -8 - w : 8, dy: -h / 2 },
       { dx: right ? 8 : -8 - w, dy: -h / 2 },
@@ -56,7 +57,7 @@ export function placeNames(names: Record<string, HTMLSpanElement | null>, marks:
     ];
     const box = ({ dx, dy }: (typeof tries)[number]) => ({ l: x + dx, r: x + dx + w, t: y + dy, b: y + dy + h });
     const clear = (b: ReturnType<typeof box>) => placed.every((p) => b.r < p.l || b.l > p.r || b.b < p.t || b.t > p.b);
-    const at = tries.find((t) => clear(box(t))) ?? tries[0];
+    const at = tries[Math.max(0, steadySpot(n, tries, (t) => clear(box(t))))];
     if (a > 0.05) placed.push(box(at));
     n.style.transform = `translate(${x + at.dx}px, ${y + at.dy}px)`;
     n.style.opacity = String(a);

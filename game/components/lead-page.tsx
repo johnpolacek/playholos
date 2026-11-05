@@ -186,7 +186,7 @@ export function LeadPage({ slug }: { slug: string }) {
             {lead.what} · {lead.range ? `${lyOf(lead.range[0])} to ${lyOf(lead.range[1])}` : lyOf(lead.ly)} ly · reached in{" "}
             <span className="font-mono tabular-nums">{lead.range ? `${span(lead.range[0])} to ${span(lead.range[1])}` : span(lead.ly)}</span> ·{" "}
             <Link to={`/play/reach/${lead.slug}`} className="whitespace-nowrap text-you">
-              Ways to go ›
+              Engage {starName(lead.star)} ›
             </Link>
           </>
         )}

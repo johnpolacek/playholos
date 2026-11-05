@@ -13,7 +13,7 @@ import { useLeads } from "@/components/scan";
 import { SendCard } from "@/components/send-card";
 import { BAD_KEY, costOf, type Effort, EFFORTS, KEY_NEEDS_CREDIT, KEY_NEEDS_WORKSPACE, MIND_BUSY, MIND_MODELS, MIND_UNREACHED, type MindModel, readMindPick, type Usage } from "@/lib/access";
 import { readBuildOffer } from "@/lib/game/build-offer";
-import { type Lead, starName } from "@/lib/game/leads";
+import { type Lead, properGlows, starName } from "@/lib/game/leads";
 import { leadsNamed, onMap } from "@/lib/game/named-leads";
 import { buildNamed } from "@/lib/game/plan";
 import { NEWS } from "@/lib/mind/news";
@@ -206,7 +206,7 @@ function Answer({ id, text, still, asked, last }: { id: string; text: string; st
   return (
     <>
       <MindNote still={still} className="max-w-[86%] self-start text-[15px] leading-[1.5] whitespace-pre-wrap">
-        {words || "…"}
+        {properGlows(words) || "…"}
       </MindNote>
       {draft && (
         <div className="max-w-[92%] self-start pl-3">
@@ -242,7 +242,7 @@ function Talk({ messages, lastAnswer, status, error }: Pick<ReturnType<typeof us
           );
         return message.role === "user" ? (
           <div key={message.id} className="max-w-[86%] self-end rounded-xl bg-ink px-3 py-[9px] text-[15px] leading-[1.5] whitespace-pre-wrap text-paper">
-            {text}
+            {properGlows(text)}
           </div>
         ) : (
           // Only the newest answer's mark moves, so a long talk isn't a column of spinning marks. An answer that offers

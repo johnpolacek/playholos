@@ -3,6 +3,7 @@
 // arrived and caught. Pure: no files, so it runs anywhere and tests fast.
 import { atlasOf, mindsSeen, type MindKit, type MindsSeen } from "./minds.ts";
 import targets from "../../data/targets.json" with { type: "json" };
+import { glowNames } from "../game/glow-names.ts";
 import { giftWords } from "../game/sends.ts";
 import { lightTime } from "../light.ts";
 import { yearText } from "../game/clock.ts";
@@ -567,11 +568,14 @@ function describeMinds(m: MindsSeen, one: (x: number) => string): string {
   const sky = (x: { ra: number; dec: number }) => `toward right ascension ${(Math.round(x.ra * 10) / 10 % 24).toFixed(1)} h, declination ${x.dec.toFixed(0)}°`;
   const watts = (w: number) => w.toExponential(0).replace("e+", "×10^");
   const out: string[] = [];
+  // A glow that earned a name, and the id an order still takes. 2026-11-04.
+  const names = glowNames(m);
+  const named = (id: string) => (names[id] ? `${names[id].name}, as Scan names it now, for ${names[id].after}, once ${id}, ` : "");
   if (m.flashes.length)
     out.push(
       `New warm glows our Warm Sky Watch has seen, mapping the whole sky every 2 Years, ten times deeper than WISE:\n` +
-        m.flashes.map((f) =>
-          `- ${sky(f)}: a new warm glow near room temperature, first seen at Year ${yearText(f.seen)}${f.faded !== undefined ? `, faded by Year ${yearText(f.faded)}` : ", still shining"}. ` +
+        m.flashes.map((f, i) =>
+          `- ${named(`Warm glow ${i + 1}`)}${sky(f)}: a new warm glow near room temperature, first seen at Year ${yearText(f.seen)}${f.faded !== undefined ? `, faded by Year ${yearText(f.faded)}` : ", still shining"}. ` +
           (f.range
             ? `Our Infrared Telescope ranged it at Year ${yearText(f.ranged!)}, by its reddening and the star behind it: roughly ${f.range[0].toLocaleString("en-US")} to ${f.range[1].toLocaleString("en-US")} ly, too far for parallax to say more. `
             : `Its distance isn't measured: too far for parallax, and our Infrared Telescope hasn't studied it while it shone. `) +
@@ -590,7 +594,7 @@ function describeMinds(m: MindsSeen, one: (x: number) => string): string {
     out.push(
       `Cold glows our Halo Survey has seen, looking at each star for an hour, nearest first:\n` +
         m.glows.map((g, i) =>
-          `- Cold glow ${i + 1}, as Scan names it, ${sky(g)}, beside a star ${one(g.d)} ly away: a compact glow near 12 K, about ${watts(g.watts)} W, first seen at Year ${yearText(g.seen)}, steady. ` +
+          `- ${named(`Cold glow ${i + 1}`) || `Cold glow ${i + 1}, as Scan names it, `}${sky(g)}, beside a star ${one(g.d)} ly away: a compact glow near 12 K, about ${watts(g.watts)} W, first seen at Year ${yearText(g.seen)}, steady. ` +
           `Its color fits no dust we know. It could be a cold disk of unusual grains, a measuring error, or computing done cold, far from a star.` +
           (g.near !== undefined ? ` Our sentinel there sent word at Year ${yearText(g.near)}: thin dark panels far out from the star, as cold as the glow, on orbits too orderly for rubble. Something made them. It has not acted on our sentinel.` : "")).join("\n"),
     );

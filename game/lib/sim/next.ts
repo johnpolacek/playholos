@@ -15,16 +15,15 @@ export function nextKnown(ahead: EarthView, year: number): number | null {
   return nextKnownWhy(ahead, year)?.at ?? null;
 }
 
-/** The kind of thing that comes next, said without spoiling the sky: word from our own craft, a signal, a reading, or
- *  something new in the sky. The Jump button names it, 2026-11-01: a jump to a bare Year read as unexplained. */
+/** The kind of thing that comes next, said without spoiling the sky: word from our own craft, or a finding. The Jump
+ *  button names it, 2026-11-01: a jump to a bare Year read as unexplained. A signal, a reading and the sky's own news
+ *  are one word, our next finding, and the Year goes unsaid, 2026-11-04: "something new in the sky" read as cryptic. */
 export type Why = string;
 export function whyOf(path: readonly string[]): Why {
   const [top] = path;
   const key = path.at(-1);
   if (top === "visits" || top === "colony" || key === "near" || key === "home" || (top === "minds" && path.includes("seedsLost"))) return "word from our craft";
-  if (top === "heard" || key === "warned" || (top === "minds" && path.includes("answer"))) return "a signal reaches us";
-  if (top === "felt" || top === "proxima") return "a new reading of a world";
-  return "something new in the sky";
+  return "our next finding";
 }
 
 /** The earliest Year after `year` that anything in `ahead` became known, and what kind of thing it is. */
@@ -60,7 +59,13 @@ export function nextKnownWhy(ahead: EarthView, year: number): { at: number; why:
     .sort((a, b) => a - b)
     .filter((t) => (t - last >= GLOW_GAP ? ((last = t), true) : false))
     .map((t) => ({ seen: t }));
-  walk({ ...ahead, minds: ahead.minds && { ...ahead.minds, flashes, glows: glows.map((g, i) => (i === 0 ? g : { near: g.near })) } });
+  // A black hole stops the skip only if it is the nearest yet, since Scan shows only the nearest. A thirteenth, farther
+  // one stopped a jump at Year 584.3 that brought nothing to see. Playtest 2026-11-04.
+  let nearest = Infinity;
+  const holes = [...(ahead.holes ?? [])]
+    .sort((a, b) => a.found - b.found)
+    .filter((h) => (h.d < nearest ? ((nearest = h.d), true) : false));
+  walk({ ...ahead, holes, minds: ahead.minds && { ...ahead.minds, flashes, glows: glows.map((g, i) => (i === 0 ? g : { near: g.near })) } });
   return best === null ? null : { at: best, why: whyOf(where) };
 }
 

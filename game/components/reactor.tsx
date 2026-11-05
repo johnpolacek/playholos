@@ -70,7 +70,8 @@ function pulse(field: ParticleField, el: HTMLElement): Life {
   return {
     enter(tl) {
       tl.to(el, { autoAlpha: 1, scale: 1, duration: 0.8, ease: "expo.out" }, 0.2)
-        .call(() => beat(30, 0.5), [], 0.3)
+        // The first beat waits for the button to land: rung at 0.3, its ring showed round a button not yet seen. 2026-11-04.
+        .call(() => beat(30, 0.5), [], 0.8)
         .call(() => {
           breath = gsap.fromTo(
             el,
@@ -300,9 +301,10 @@ export function Reactor({
         enter: safe!(() => {
           field.sync();
           field.particles.length = 0;
-          const tl = gsap.timeline({ onComplete: () => void (ready = true) });
+          // Its idle life starts when its entrance plays, not when the screen's timeline is built: a heartbeat rang out
+          // from a button not yet seen until 2026-11-04.
+          const tl = gsap.timeline({ onStart: () => field.addEmitter(idle), onComplete: () => void (ready = true) });
           gsap.set(el, { autoAlpha: 0, scale: mood === "pulse" ? 0.8 : 0.94, transformOrigin: "50% 50%" });
-          field.addEmitter(idle);
           life.enter(tl);
           entrance = tl;
           return tl;

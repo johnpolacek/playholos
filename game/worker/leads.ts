@@ -90,22 +90,23 @@ export async function next(req: Request) {
   const rock = rockAt(rockOf(seed), plan, done, year);
   // And the Years the Moon Search and the Asteroid Tour end, each saying so on Build. 2026-10-30.
   const ends = [
-    { at: done["Moon Search"] == null ? null : moonSearchEnds(done["Moon Search"]), why: "Moon Search ends" },
+    { at: done["Moon Search"] == null ? null : moonSearchEnds(done["Moon Search"]), why: "the Moon Search’s end" },
     ...plan.closeReads.map((o) => ({ at: o.y + READ_YEARS, why: "Close Reading done" })),
-    { at: done["Asteroid Tour"] == null ? null : tourEnds(done["Asteroid Tour"]), why: "Asteroid Tour ends" },
+    { at: done["Asteroid Tour"] == null ? null : tourEnds(done["Asteroid Tour"]), why: "the Asteroid Tour’s end" },
   ];
   // Betelgeuse's end, once, the one natural event that stops a skip. 2026-10-30.
-  // And why, in words that spoil nothing: what is ours is named, the sky's is only new. 2026-11-01.
+  // And why, in words that spoil nothing: what is ours is named, the sky's is only our next finding. 2026-11-01.
+  // Each reads after "Jump to", 2026-11-04.
   const stop = nextStopWhy(ahead, year, done, [
     ...(rock
       ? [
-          { at: rock.found, why: "something new in the sky" },
-          { at: rock.pushed ? rock.lands : null, why: "our push reaches the rock" },
-          { at: rock.strikes, why: "the rock arrives" },
+          { at: rock.found, why: "our next finding" },
+          { at: rock.pushed ? rock.lands : null, why: "our push reaching the rock" },
+          { at: rock.strikes, why: "the rock’s arrival" },
         ]
       : []),
     ...ends,
-    { at: skyOf(seed).betelgeuse, why: "something new in the sky" },
+    { at: skyOf(seed).betelgeuse, why: "our next finding" },
   ]);
   return Response.json({ next: stop?.at ?? null, why: stop?.why ?? null, ahead: AHEAD });
 }

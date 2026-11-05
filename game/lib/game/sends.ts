@@ -2,6 +2,7 @@
 // sends. The Will says what to send, and the Mind ends its answer with one line the card is drawn from. Only the Will's
 // tap on Send sends it. The Mind can't press buttons, so the line is how it hands the card over, on the API and the
 // Claude login alike.
+import { glowIdOf } from "./glow-names.ts";
 import targets from "../../data/targets.json" with { type: "json" };
 import { aimedYears, SIZES } from "../sim/messages.ts";
 import { yearText } from "./clock.ts";
@@ -75,7 +76,8 @@ export function knowStars(stars: Star[]) {
 /** A star we can aim at by the name the Mind gave: every star to 50 ly, any place on one of our leads, or the
  *  watcher. */
 export function target(name: string): Star | null {
-  const n = plain(name);
+  // The Mind may draft to the name Scan shows, as Prometheus. Orders keep the id. 2026-11-04.
+  const n = plain(glowIdOf(name));
   if (["the watcher", "watcher"].includes(n)) return WATCHER;
   return TARGETS.find((t) => plain(t.name) === n) ?? KNOWN.get(n) ?? null;
 }

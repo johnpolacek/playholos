@@ -4,6 +4,7 @@
 // off and fills the view as we arrive. Far out, a drawn disk stands in for the Galaxy's other stars. Its own canvas, apart
 // from lib/drift.ts, so the Universe section's map is untouched.
 import * as THREE from "three";
+import { steadySide } from "../steady-side.ts";
 import { CENTER } from "./tour.ts";
 
 type Vec = [number, number, number];
@@ -559,7 +560,7 @@ export function mountFlight(
       g2.font = `${size}px ${mono}`;
       const w = g2.measureText(b.label).width;
       // Off to the upper right, or the left near the right edge, along a dashed line.
-      const left = x > W - w - 60;
+      const left = steadySide(b.label, x, W - w - 60);
       const ex = x + (left ? -20 : 20), ey = y - 16;
       const box: [number, number, number, number] = [left ? ex - w - 6 : ex + 4, ey - size, w + 4, size * 1.6];
       if (!main && taken.some(([a, b2, c, d]) => box[0] < a + c && a < box[0] + box[2] && box[1] < b2 + d && b2 < box[1] + box[3])) continue;

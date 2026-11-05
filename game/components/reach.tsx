@@ -9,6 +9,7 @@ import { useLeads } from "@/components/scan";
 import { SkyArt } from "@/components/sky";
 import { Face, ListHead } from "@/components/tab-head";
 import type { Dials, Mark as Place } from "@/lib/drift";
+import { steadySide } from "@/lib/steady-side";
 import { YEAR_0, lyOf, yearText } from "@/lib/game/clock";
 import { LANDMARKS } from "@/lib/game/landmarks";
 import { starName, visitReading } from "@/lib/game/leads";
@@ -213,7 +214,7 @@ function placeSight(n: HTMLDivElement, { x, y, a }: Place) {
   const card = n.querySelector<HTMLElement>("[data-card]")!;
   const w = n.parentElement?.clientWidth ?? 0;
   const h = n.parentElement?.clientHeight ?? 0;
-  const dx = x > w * 0.55 ? -14 - card.offsetWidth : 14;
+  const dx = steadySide(card, x, w * 0.55) ? -14 - card.offsetWidth : 14;
   const dy = Math.min(Math.max(-card.offsetHeight / 2, 8 - y), h - 8 - y - card.offsetHeight);
   card.style.transform = `translate(${dx}px, ${dy}px)`;
   n.style.transform = `translate(${x}px, ${y}px)`;
