@@ -24,7 +24,7 @@ if (major < 20 || (major === 20 && minor < 9)) {
   process.exit(1);
 }
 
-// Checked before the download, so a missing Claude Code doesn't cost a hundred megabytes first.
+// Checked before the download, so a missing Claude Code doesn't cost the download first.
 if (spawnSync("claude", ["--version"], { shell: win }).status !== 0) {
   console.error("Holos plays on your Claude login through Claude Code, and it isn't installed.");
   console.error("Install it from https://claude.com/claude-code, run claude once to log in, then npx playholos again.");
@@ -43,7 +43,7 @@ async function latest() {
 
 /** Unpacks the repo at a commit into a folder, streamed through tar, which macOS, Linux and Windows 10 all carry. */
 async function download(sha, into) {
-  console.log(`Downloading Holos to ${into}, about 100 MB…`);
+  console.log(`Downloading Holos to ${into}, about 40 MB…`);
   const res = await fetch(`https://codeload.github.com/${REPO}/tar.gz/${sha}`);
   if (!res.ok || !res.body) throw new Error(`GitHub answered ${res.status}.`);
   mkdirSync(into, { recursive: true });

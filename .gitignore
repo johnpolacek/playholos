@@ -13,3 +13,6 @@ __pycache__/
 /.claude/skills/
 /.claude/worktrees/
 /.agents/
+# Playtest reports stay local, and on their cloud branches. The routine reads its prompt from main.
+/playtests/*
+!/playtests/PROMPT.md

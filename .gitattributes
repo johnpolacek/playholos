@@ -1,0 +1,3 @@
+# Left out of the download npx playholos fetches. A clone keeps them.
+legacy export-ignore
+playtests export-ignore
