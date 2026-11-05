@@ -131,6 +131,9 @@ export interface Plan {
   /** Sentinels we sent, each by its star and the Year we ordered it: a probe that brakes and stays to watch. It is
    *  built once the Probe Yard, a Fusion Drive and the Deuterium Works are done. One a star. 2026-10-26. */
   sentinels?: Ordered[];
+  /** Sails and flyby probes we sent past a star, each by its star, the Year we ordered it, how far we took it to be and
+   *  which craft. One of each a star. Proxima's first flew by itself once queued before Begin. 2026-11-05. */
+  flybys?: (Ordered & { d: number; by: "sails" | "probe" })[];
   /** Seed probes we sent, each by its star and the Year we ordered it: a seed ship with no Mind, that brakes, stays, and
    *  copies itself on to the nearest stars, for so many generations. Built once the Seed Ship, a Fusion Drive and the
    *  Deuterium Works are done. One a star. 2026-10-26. */

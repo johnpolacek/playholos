@@ -16,7 +16,8 @@ const tenth = (y: number) => Number(y.toFixed(1));
 const MORE: Record<string, string> = {
   "Infrared Telescope": "It reads three gases in a world's air: water, oxygen and ozone. Once done, it looks at every world we've felt on its own, nearest first, so no one aims it. It also studies each new warm glow our Warm Sky Watch finds, while it shines, and ranges it within about a third either way, in about 2 Years.",
   "Solar Lens": "Once done, the Will sends each lens from a destination's page on Reach, one a star, only to a world we've felt. A lens reaches the Sun's focus about 17 Years after it leaves, looks for half a Year, and its picture is home about 3 days later. Once the Laser Sail Array is done, it pushes each lens out in about 5 Years instead, and once the Star Beam is done, in about two months, carrying a telescope 3 m wide that looks for a week. It shows what is wider than its pixel, about 25 km at 100 ly: cities, cleared land, forests, ice. Never roads or dams.",
-  "Probe Yard": "It builds flyby probes, and sentinels: once a Fusion Drive and the Deuterium Works are done too, the Will can send a sentinel from a destination's page on Reach, one a star. The yard builds it in 20 Years. It flies at a tenth of light speed, brakes on its flame and stays, and sees what a flyby can't: who lives there, or their ruins. Its braking flame points at the star, so whoever lives there may see it come.",
+  "Laser Sail Array": "Once done, the Will sends sails from a destination's page on Reach, one sail a star, past any star on the page. A sail flies by at a fifth of light speed and sends pictures: a world if one is there, and no air. Past a glow, a black hole or a star with no world near its path, it resolves nothing more than we knew.",
+  "Probe Yard": "It builds flyby probes, which the Will sends past any star from a destination's page on Reach, one a star, leaving 12 Years after the order. A flyby probe passes at an eighth of light speed, sends pictures of a world if one is there and reads its air. Past a glow, a black hole or a star with no world near its path, it resolves nothing more than we knew. It builds sentinels too: once a Fusion Drive and the Deuterium Works are done too, the Will can send a sentinel from a destination's page on Reach, one a star. The yard builds it in 20 Years. It flies at a tenth of light speed, brakes on its flame and stays, and sees what a flyby can't: who lives there, or their ruins. Its braking flame points at the star, so whoever lives there may see it come.",
   "Star Mapper": "Once done, it watches on its own and finds each black hole the first time it passes close in front of a star it sees, a few each decade. A black hole found becomes a destination on Reach, where a sentinel can go. A hole is worth having: rock fed to it gives back 6% to about 30% of its mass as light, where fusion gives under 1%, it swallows heat unseen, and close in a clock runs up to 10 times slow. Using it costs little in being seen: a braking flame shows only close in, and a furnace stays below what X-ray surveys see until it grows past about a millionth of the Sun's output.",
   "Seed Ship": "It carries one copy of our Mind, so it goes to one place, from that place's page on Reach. To a black hole we have found, to feed the hole for power or to hide in its shadow: a furnace grows fast and shows to X-ray surveys once it passes about a millionth of the Sun, and a refuge stays small and unseen. Or to a star with a world we know, the world next door or one we have felt, to settle on its light and rock and build it out, or to keep small: a receiver and a cold Mind built from a comet's worth of rock, staying that size. Anyone living there sees it brake in. Any of these is a Mind of ours that lives if Earth does not. A watcher counts only growth: a Mind sent to settle or to feed a hole draws its warning as a seed probe does, and one kept small or hidden never does.",
   "Halo Survey": "Once done, it looks at each star for an hour, nearest first, on its own: about 3,000 stars a Year, 100 ly in 4 Years, 400 ly in about 220. It sees a compact cold glow, not a wide one, and tells a grey glow from dust's. No whole-sky map reaches as deep.",
@@ -63,7 +64,7 @@ ${LATER.filter((b) => !EVENTS.includes(b.after)).map((b) => line(b, b.after)).jo
 export function describeQueue(plan: Plan, done: Record<string, number | null>, year: number | null): string {
   const names = ordered(plan);
   const back = [...new Set([...plan.builds, ...(plan.later ?? []).map((o) => o.name)])].filter((b) => takenAt(plan, b) !== null);
-  if (!names.length && !back.length && !plan.lenses?.length && !plan.sentinels?.length && !plan.seeds?.length && !plan.colony) return "The Will has queued nothing yet.";
+  if (!names.length && !back.length && !plan.lenses?.length && !plan.sentinels?.length && !plan.seeds?.length && !plan.flybys?.length && !plan.colony) return "The Will has queued nothing yet.";
   const at = (name: string) => {
     const d = done[name];
     const fields = name === "Thought Fields";
@@ -91,6 +92,17 @@ export function describeQueue(plan: Plan, done: Record<string, number | null>, y
     ...(plan.colony
       ? [`- Our Mind to ${plan.colony.name} on the Seed Ship, sent at Year ${plan.colony.y}, to ${plan.colony.mode === "furnace" ? "feed the hole for power" : plan.colony.mode === "refuge" ? "hide in its shadow" : "settle on the star's light and rock"}. It leaves once the Seed Ship, Fusion Drive and Deuterium Works are done.`]
       : []),
+    // Each sail and flyby probe sent past a star. 2026-11-05.
+    ...(plan.flybys ?? []).map((o) => {
+      const craft = o.by === "sails" ? "Sails" : "A flyby probe";
+      const [build, wait, speed] = o.by === "sails" ? ["Laser Sail Array", 0, 0.2] as const : ["Probe Yard", 12, 1 / 8] as const;
+      const ready = done[build];
+      if (ready == null) return `- ${craft} to ${o.name}, sent at Year ${o.y}: waits on the ${build}.`;
+      // As reach.ts's toward dates it.
+      const leaves = ready + wait < o.y ? o.y + wait : ready + wait;
+      const passes = leaves + o.d / speed;
+      return `- ${craft} to ${o.name}, sent at Year ${o.y}: passes about Year ${tenth(passes)}, its word home about Year ${tenth(passes + o.d)}.`;
+    }),
     // Each sentinel sent, as reach.ts's sentinels() dates it: built in 20 Years once all it needs is done.
     ...(plan.sentinels ?? []).map((o) => {
       const need = ["Probe Yard", "Fusion Drive", "Deuterium Works"].map((n) => done[n]);

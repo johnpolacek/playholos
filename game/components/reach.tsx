@@ -25,6 +25,7 @@ import {
   lensRoad,
   type Road,
   roads,
+  flybyRoad,
   seedRoad,
   sentinelRoad,
   toward,
@@ -435,6 +436,12 @@ export function Ruler() {
 /** One road as a thread on the Years: the build, solid, the craft's wait, its flight, dashed, and its word home, dotted. */
 export function Thread({ road, i, to }: { road: Road; i: number; to: number }) {
   const x = (y: number) => L + (Math.min(y, to) / to) * (R - L);
+  // A label stays whole inside the view: "built 603.8" lost its start to the left edge until 2026-11-05.
+  const met = road.build === "Solar Lens" ? "at focus" : road.craft === "A sentinel" || road.craft === "A seed probe" ? "stays" : road.craft === "A Mind" ? "lands" : road.craft === "The Will" ? "lives there" : road.craft === "A pellet screen" ? "stands" : road.craft === "A bullet" ? "lands" : "passes";
+  const inView = (at: number, words: string) => {
+    const half = words.length * 2.6 + 1;
+    return Math.min(W - half, Math.max(half, at));
+  };
   const { done, leaves, arrives, home } = road;
   return (
     <svg viewBox={`0 0 ${W} 40`} className="w-full overflow-visible" aria-hidden>
@@ -458,7 +465,7 @@ export function Thread({ road, i, to }: { road: Road; i: number; to: number }) {
         {done !== null && (
           <>
             <circle cx={x(done)} cy={20} r={3} className="fill-you" />
-            <text x={x(done)} y={10} textAnchor="middle" className="fill-you font-mono text-[8.5px]">
+            <text x={inView(x(done), `built ${year(done)}`)} y={10} textAnchor="middle" className="fill-you font-mono text-[8.5px]">
               built {year(done)}
             </text>
           </>
@@ -467,8 +474,8 @@ export function Thread({ road, i, to }: { road: Road; i: number; to: number }) {
         {arrives !== null && (
           <>
             <circle cx={x(arrives)} cy={20} r={3.5} className="fill-ink" />
-            <text x={x(arrives)} y={10} textAnchor="middle" className="fill-ink font-mono text-[8.5px]">
-              {road.build === "Solar Lens" ? "at focus" : road.craft === "A sentinel" || road.craft === "A seed probe" ? "stays" : road.craft === "A Mind" ? "lands" : road.craft === "The Will" ? "lives there" : road.craft === "A pellet screen" ? "stands" : road.craft === "A bullet" ? "lands" : "passes"} {year(arrives)}
+            <text x={inView(x(arrives), `${met} ${year(arrives)}`)} y={10} textAnchor="middle" className="fill-ink font-mono text-[8.5px]">
+              {met} {year(arrives)}
             </text>
           </>
         )}
@@ -476,7 +483,7 @@ export function Thread({ road, i, to }: { road: Road; i: number; to: number }) {
         {home !== null && road.craft !== "A bullet" && (
           <>
             <circle cx={x(home)} cy={20} r={3} className="fill-other" />
-            <text x={x(home)} y={36} textAnchor="middle" className="fill-other font-mono text-[8.5px]">
+            <text x={inView(x(home), `we see it ${year(home)}`)} y={36} textAnchor="middle" className="fill-other font-mono text-[8.5px]">
               we see it {year(home)}
             </text>
           </>
@@ -708,7 +715,7 @@ export function Reach() {
   const flying: Row[] = base
     .filter((r) => r.n !== null && r.leaves !== null && r.home !== null && clock !== null && clock >= r.leaves)
     .map((r) => {
-      const seen = visits.find((v) => v.by === (r.build === "Laser Sail Array" ? "sails" : "probe"));
+      const seen = visits.find((v) => v.star === NEAREST.name && v.by === (r.build === "Laser Sail Array" ? "sails" : "probe"));
       const they = r.build === "Laser Sail Array" ? "they" : "it";
       return {
         key: r.build,
@@ -726,16 +733,17 @@ export function Reach() {
       };
     });
 
-  // Our craft sent to other stars once each leaves: lenses, sentinels and seed probes. Reach listed only Voyager 1
+  // Our craft sent to other stars once each leaves: lenses, sentinels, seed probes, and sails and probes passing. Reach listed only Voyager 1
   // after all of these went. Playtest 2026-11-01.
   const stays: (Row & { id: string })[] = clock === null ? [] : [
     ...(plan.lenses ?? []).map((o) => ({ o, road: lensRoad(plan, scale, from, o.name), what: "A lens", to: "at its Sun’s focus, toward" })),
     ...(plan.sentinels ?? []).map((o) => ({ o, road: sentinelRoad(plan, scale, from, o.name, starOf(o.name)?.d ?? 0), what: "A sentinel", to: "to stay at" })),
     ...(plan.seeds ?? []).map((o) => ({ o, road: seedRoad(plan, scale, from, o.name, starOf(o.name)?.d ?? 0), what: "A seed probe", to: "to stay at" })),
+    ...(plan.flybys ?? []).map((o) => ({ o, road: flybyRoad(plan, scale, o.y, o), what: o.by === "sails" ? "Sails" : "A flyby probe", to: "to pass" })),
   ].flatMap(({ o, road: r, what, to }) => {
     if (r.leaves === null || r.home === null || r.arrives === null || clock < r.leaves) return [];
     const star = starName(o.name);
-    const there = what === "A lens" ? `Reached its focus in Year ${year(r.arrives)}` : `Reached ${star} in Year ${year(r.arrives)}`;
+    const there = what === "A lens" ? `Reached its focus in Year ${year(r.arrives)}` : to === "to pass" ? `Passed ${star} in Year ${year(r.arrives)}` : `Reached ${star} in Year ${year(r.arrives)}`;
     return [{
       id: `${what}:${o.name}`,
       key: r.build,
@@ -745,7 +753,7 @@ export function Reach() {
       kind: "flight" as const,
       msg: `to ${star}`,
       sent: YEAR_0 + r.leaves,
-      ly: what === "A lens" ? 3 / 365.25 : (starOf(o.name)?.d ?? 0),
+      ly: what === "A lens" ? 3 / 365.25 : "d" in o ? (o.d as number) : (starOf(o.name)?.d ?? 0),
     }];
   });
 

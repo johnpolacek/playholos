@@ -242,6 +242,26 @@ test("a sentinel stays and reads a felt world up close: its first word comes hom
   assert.ok(v && v.by === "sentinel");
 });
 
+test("flybys: a pass pictures a felt world, a probe reads its air, and a glow stays a glow", async () => {
+  const world = await loadWorld(10);
+  const f = world.finds[0];
+  const star = world.stars[f.star]?.shown ?? f.star;
+  const kit = {
+    flybys: [
+      { star, by: "sails" as const, passed: 100, home: 120 },
+      { star, by: "probe" as const, passed: 100, home: 120 },
+      { star: "Warm glow 1", by: "probe" as const, passed: 100, home: 120 },
+    ],
+  };
+  assert.equal(earthKnows(world, 119, kit).visits.length, 0);
+  const seen = earthKnows(world, 120, kit).visits;
+  const sails = seen.find((v) => v.star === star && v.by === "sails")!;
+  const probe = seen.find((v) => v.star === star && v.by === "probe")!;
+  assert.equal(sails.air, undefined);
+  assert.ok(probe.sight === "haze" || probe.air);
+  assert.equal(seen.find((v) => v.star === "Warm glow 1")!.sight, "far");
+});
+
 test("black holes: Gaia's finds are known at Year 0, the Star Mapper finds more, and a sentinel measures one's spin", async () => {
   const { darkMasses, iscoClock } = await import("./knowledge.ts");
   assert.ok(Math.abs(iscoClock(0) - Math.SQRT1_2) < 1e-9);

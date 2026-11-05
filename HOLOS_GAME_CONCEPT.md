@@ -764,7 +764,8 @@ Settled 2026-10-13.
       - Our sails and probe join Voyager 1 under Sent once they leave, each with when it passes and when what it sees reaches us.
       - Once they reach us, the pictures settle what it is: haze, bare rock, cloud and seas, or forests. A probe reads its air too. What they saw is drawn on the destination and lands on Proxima’s lead as a reading, its odds moved to almost certain. The Mind hears it.
       - With the roads’ pace, what the sails see reaches us near Year 50, about four hours of play, and what the probe sees near Year 80.
-      - Not yet: a Mind at Alpha Centauri seeing our sails pass, worlds the seed drew at Proxima, and roads to other stars.
+      - Not yet: a Mind at Alpha Centauri seeing our sails pass, and worlds the seed drew at Proxima.
+      - *Roads to other stars, 2026-11-05.* Once its build is ordered, a sail or flyby probe goes past any destination from its page, one of each a star, and can’t be called back. A pass pictures a world if one is there, and a probe reads its air. A glow, a black hole, or a star with no world near its path resolves nothing more, and the odds stay as they were: a pass must not do a Close Reading’s or a sentinel’s work. Like a sentinel, a craft costs nothing past its build.
       - *Its odds, 2026-10-22.* Proxima’s lead now says bare rock is likely, air unlikely, and a gas world very unlikely, to match the physics its truth is drawn by. It said roughly even before.
   - Set aside: an inquiry as a question pinned on a place, which the Mind then pursues by every means. Worth its own round later. And leaving the word unused.
 - **Four words for what comes back.** A search returns a candidate. An observation returns a reading. A study returns a finding. An inquiry returns a dispatch.

@@ -56,6 +56,25 @@ export function VisitArt({ sight, elder, size = 132 }: { sight: Visit["sight"]; 
         <circle cx="66" cy="66" r="30.5" fill="none" stroke="#f4f6ff" strokeWidth=".6" opacity=".8" />
       </svg>
     );
+  // A pass with no world to picture: a soft smear of light that no frame resolves, the stars behind it streaked by our
+  // speed. 2026-11-05.
+  if (sight === "far")
+    return (
+      <svg width={size} height={size} viewBox="0 0 132 132" aria-hidden className="shrink-0 overflow-visible">
+        <defs>
+          <radialGradient id="visit-far">
+            <stop offset="0" stopColor="#f0a777" stopOpacity=".55" />
+            <stop offset=".45" stopColor="#f0a777" stopOpacity=".16" />
+            <stop offset="1" stopColor="#f0a777" stopOpacity="0" />
+          </radialGradient>
+        </defs>
+        {Array.from({ length: 16 }, (_, k) => {
+          const x = 12 + ((k * 37) % 108), y = 14 + ((k * 23) % 104);
+          return <line key={k} x1={x} y1={y} x2={x + 5 + (k % 4) * 2} y2={y} stroke="#f4f6ff" strokeWidth=".6" opacity={0.2 + (k % 3) * 0.15} />;
+        })}
+        <circle cx="66" cy="66" r="46" fill="url(#visit-far)" className="animate-pulse motion-reduce:animate-none" />
+      </svg>
+    );
   // A star with no warm world, as our seed probe sees it: its belt of rock going round, and our probe mining one, its
   // furnace's glow faint beside it. 2026-10-26.
   if (sight === "rocks")

@@ -37,8 +37,8 @@ import {
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
 
 // One destination, opened from Reach: a lead's star, and every way we could go there. The two roads open at Year 0,
-// by sail and by probe, are drawn on the Years they would take, each with the build it needs and, before Begin, the
-// button that queues it. The rest are listed locked, each with the builds it needs, every one a link to its page to
+// by sail and by probe, are drawn on the Years they would take, each with the build it needs and the button that queues
+// it or, once ordered, sends a craft here. The rest are listed locked, each with the builds it needs, every one a link to its page to
 // start it, so the way ahead shows. Reach's map stays, and flies out to the star, its ruler stretched to it. Last, Close
 // View flies the map into the star's system, every world known there going round. Settled 2026-10-19. Once our sails
 // or probe have passed and their word is home, what they saw is drawn above the ways, 2026-10-22.
@@ -97,8 +97,12 @@ function Sent(props: {
   choices?: { label: string; send(): void }[];
   /** What was sent, once it is. */
   sentAs?: string;
+  /** The Year at the row's right, in place of when its word comes home. */
+  right?: string;
+  /** A control beside the needs, in place of sending. */
+  extra?: React.ReactNode;
 }) {
-  const { road, i, to, name, line, needs, have, can, send, what, choices, sentAs } = props;
+  const { road, i, to, name, line, needs, have, can, send, what, choices, sentAs, right, extra } = props;
   const sent = road.n !== null;
   // A send is never taken back, so it asks once before it goes. Playtest 2026-11-01: a seed probe went in one tap.
   const [asking, setAsking] = useState<{ label: string; send(): void } | null>(null);
@@ -109,7 +113,7 @@ function Sent(props: {
         tone={buildTone(needs[0], sent)}
         name={<b className="font-semibold">{name}</b>}
         line={line}
-        right={(road.home ?? (road.craft === "The Will" ? road.arrives : null)) === null ? "Not yet" : `Year ${year((road.home ?? road.arrives)!)}`}
+        right={right ?? ((road.home ?? (road.craft === "The Will" ? road.arrives : null)) === null ? "Not yet" : `Year ${year((road.home ?? road.arrives)!)}`)}
         more={false}
       />
       <div className="pl-7">
@@ -124,6 +128,7 @@ function Sent(props: {
               <Need key={n} name={n} {...have(n)} />
             ))}
           </span>
+          {extra}
           {can && !asking && (sent || !choices) && (
             <button
               disabled={sent}
@@ -184,6 +189,17 @@ export function DestinationPage({ slug }: { slug: string }) {
   const ly = lead?.ly ?? 0;
   const nearest = lead?.star === NEAREST.name;
   const ways = useMemo(() => roads(plan, scale, from).map((r) => toward(r, ly, nearest ? undefined : from)), [plan, scale, from, ly, nearest]);
+  // The same roads as we fly them: Proxima's first flies by itself once queued before Begin, and any other is sent from
+  // here, dated from its order. Until 2026-11-05 no sail or probe could go anywhere but Proxima.
+  const flown = useMemo(
+    () =>
+      roads(plan, scale, from).map((r, k) => {
+        const sent = plan.flybys?.find((o) => o.name === lead?.star && o.by === (k ? "probe" : "sails"));
+        const auto = nearest && r.n !== null;
+        return { ...(auto ? toward(r, ly) : toward(r, ly, sent?.y ?? from)), n: auto || sent ? 1 : null };
+      }),
+    [plan, scale, from, ly, nearest, lead?.star],
+  );
   const tip = useMemo(() => sooner(plan, scale, from, ways[1].home, ly), [plan, scale, from, ways, ly]);
   const slow = useMemo(() => (before ? moves(plan, scale, "Probe Yard").late : null), [before, plan, scale]);
   // A lens pictures only a world we have felt, one lens a star. 2026-10-26.
@@ -216,7 +232,7 @@ export function DestinationPage({ slug }: { slug: string }) {
   const will = useMemo(() => (here ? willRoad(plan, scale, from, ly, heard, gone) : null), [here, plan, scale, from, ly, heard, gone]);
   const rate = ours?.mode === "refuge" && ours.clock ? 1 / ours.clock : 1;
   const inOrder = (n: string) => plan.builds.includes(n) || (plan.later ?? []).some((o) => o.name === n);
-  const { to, step } = axis([...ways, ...(lens ? [lens] : []), ...(stay ? [stay] : []), ...(seed ? [seed] : []), ...(mind ? [mind] : []), ...(will ? [will] : [])]);
+  const { to, step } = axis([...flown, ...(lens ? [lens] : []), ...(stay ? [stay] : []), ...(seed ? [seed] : []), ...(mind ? [mind] : []), ...(will ? [will] : [])]);
 
   // Reach's map flies out to the star while the page is open, and back to the nearest star when we leave.
   const star = lead?.star;
@@ -296,40 +312,35 @@ export function DestinationPage({ slug }: { slug: string }) {
 
       <ListHead data-m left={`Ways to engage · ${ways.length + (lens ? 1 : 0) + (stay ? 1 : 0) + (mind ? 1 : 0) + LOCKED.length}`} right="Passes" className="mt-5" />
       <ul className="mt-1">
-        {ways.map((road, k) => {
-          const queued = road.n !== null;
-          const done = !before && road.done !== null && clock >= road.done;
+        {flown.map((road, k) => {
+          const by = k ? "probe" : "sails";
+          // Before Begin, Proxima's roads and any build not yet ordered queue here. Once ordered, a craft is sent.
+          const queues = before && (nearest || !inOrder(road.build));
           return (
-            // The road's lines take its build's color, as on Build.
-            <li key={road.name} data-m style={buildBlue(road.build)} className="border-t border-faint py-2.5">
-              <Face
-                mark={<BuildMark name={road.build} />}
-                tone={buildTone(road.build, queued)}
-                name={<b className="font-semibold">{road.name}</b>}
-                line={WHAT[road.build]}
-                right={road.arrives === null ? "Not yet" : `Year ${year(road.arrives)}`}
-                more={false}
-              />
-              <div className="pl-7">
-                <div className="mt-1.5 mb-1">
-                  <Brings road={road} />
-                </div>
-                <Thread road={road} i={k} to={to} />
-                <div className="flex items-center justify-between gap-3">
-                  <span className="flex flex-wrap items-center gap-1.5 text-[12.5px] text-muted">
-                    Needs <Need name={road.build} queued={queued} done={done} />
-                  </span>
-                  {before && (
-                    <button
-                      onClick={() => change(toggleBuild(road.build))}
-                      className={`h-8 shrink-0 rounded-full px-3.5 text-[13px] font-medium ${queued ? "border border-ink" : "bg-ink text-paper"}`}
-                    >
-                      {queued ? "Remove from Queue" : "Add to Queue"}
-                    </button>
-                  )}
-                </div>
-              </div>
-            </li>
+            <Sent
+              key={road.name}
+              road={road}
+              i={k}
+              to={to}
+              name={road.name}
+              line={WHAT[road.build]}
+              needs={[road.build]}
+              have={(n) => ({ queued: inOrder(n), done: !before && (doneBy[n] ?? Infinity) <= clock })}
+              can={!queues && inOrder(road.build)}
+              send={() => change((p) => ({ ...p, flybys: [...(p.flybys ?? []), { name: lead.star, y: from, d: ly, by }] }))}
+              what={k ? "Probe" : "Sail"}
+              right={road.arrives === null ? "Not yet" : `Year ${year(road.arrives)}`}
+              extra={
+                queues && (
+                  <button
+                    onClick={() => change(toggleBuild(road.build))}
+                    className={`h-8 shrink-0 rounded-full px-3.5 text-[13px] font-medium ${plan.builds.includes(road.build) ? "border border-ink" : "bg-ink text-paper"}`}
+                  >
+                    {plan.builds.includes(road.build) ? "Remove from Queue" : "Add to Queue"}
+                  </button>
+                )
+              }
+            />
           );
         })}
         {lens && (

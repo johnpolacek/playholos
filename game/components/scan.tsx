@@ -140,7 +140,7 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
   // And stars our seed probes reached with no lead of their own, 2026-10-26.
   const seeds = useMemo(() => visits.filter((v) => v.by === "seed" && !v.sent), [visits]);
   // Holes our craft went to keep their leads, beside the nearest.
-  const kept = [...(plan?.sentinels ?? []), ...(plan?.colony ? [plan.colony] : [])].map((o) => o.name);
+  const kept = [...(plan?.sentinels ?? []), ...(plan?.flybys ?? []), ...(plan?.colony ? [plan.colony] : [])].map((o) => o.name);
   // A rock found, and what befell it, leads Scan from the Year we find it. 2026-10-30.
   const { done } = useSchedule();
   const rock = useMemo(
@@ -218,7 +218,7 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
       if (t && tenth !== null && tenth < dates(m.y, t.d, m.size).back) owed.add(star(t.name));
     }
     const went = new Set(visits.map((v) => star(v.star)));
-    for (const o of [...(plan?.lenses ?? []), ...(plan?.sentinels ?? []), ...(plan?.seeds ?? []), ...(plan?.colony ? [plan.colony] : [])])
+    for (const o of [...(plan?.lenses ?? []), ...(plan?.sentinels ?? []), ...(plan?.seeds ?? []), ...(plan?.flybys ?? []), ...(plan?.colony ? [plan.colony] : [])])
       if (!went.has(star(o.name))) owed.add(star(o.name));
     const readable = new Set(openReadings(leads, minds, plan?.closeReads ?? [], done["Infrared Telescope"], tenth ?? 0));
     const standing: Record<string, Standing> = Object.fromEntries(
