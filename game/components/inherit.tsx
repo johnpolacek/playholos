@@ -41,7 +41,8 @@ export function distance(km: number) {
 }
 
 /** Each name sits beside its place, on the side away from the edge, and shows while its place is in view. On a narrow
- *  screen two places can be close: a name that would cross one already placed tries the other side, then below. */
+ *  screen two places can be close: a name that would cross one already placed tries the other side, then below. A name
+ *  that would run off the map does the same: a held spot left "Proxima Centauri" cut off at the edge until 2026-11-05. */
 export function placeNames(names: Record<string, HTMLSpanElement | null>, marks: Mark[]) {
   const placed: { l: number; r: number; t: number; b: number }[] = [];
   for (const { id, x, y, a } of marks) {
@@ -49,17 +50,20 @@ export function placeNames(names: Record<string, HTMLSpanElement | null>, marks:
     if (!n) continue;
     const w = n.offsetWidth;
     const h = n.offsetHeight;
-    const right = steadySide(n, x, (n.parentElement?.clientWidth ?? 0) * 0.62);
+    const W = n.parentElement?.clientWidth ?? 0;
+    const right = steadySide(n, x, W * 0.62);
     const tries = [
       { dx: right ? -8 - w : 8, dy: -h / 2 },
       { dx: right ? 8 : -8 - w, dy: -h / 2 },
       { dx: -w / 2, dy: 6 },
     ];
     const box = ({ dx, dy }: (typeof tries)[number]) => ({ l: x + dx, r: x + dx + w, t: y + dy, b: y + dy + h });
-    const clear = (b: ReturnType<typeof box>) => placed.every((p) => b.r < p.l || b.l > p.r || b.b < p.t || b.t > p.b);
+    const clear = (b: ReturnType<typeof box>) => b.l >= 4 && b.r <= W - 4 && placed.every((p) => b.r < p.l || b.l > p.r || b.b < p.t || b.t > p.b);
     const at = tries[Math.max(0, steadySpot(n, tries, (t) => clear(box(t))))];
     if (a > 0.05) placed.push(box(at));
-    n.style.transform = `translate(${x + at.dx}px, ${y + at.dy}px)`;
+    // With no spot clear, a place in view still keeps its whole name inside the map.
+    const left = x >= 0 && x <= W && W > w + 8 ? Math.min(Math.max(x + at.dx, 4), W - w - 4) : x + at.dx;
+    n.style.transform = `translate(${left}px, ${y + at.dy}px)`;
     n.style.opacity = String(a);
   }
 }

@@ -1723,11 +1723,20 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     const roadGlow = glow({ fixed: true });
     solar.scene.add(probes.points(probeGlow), roads.points(roadGlow));
 
-    // Reach only: where we would go, ringed, on a dotted road from the Sun. Proxima Centauri, the nearest star, or the
-    // destination open on Reach, its star the one in spec.leads. Redrawn when the destination changes, 2026-10-19.
+    // Reach only: where we would go, ringed, on a dashed line out from the Sun. Proxima Centauri, the nearest star, or the
+    // destination open on Reach, its star the one in spec.leads. Redrawn when the destination changes, 2026-10-19. Dashed
+    // and drawn out from the Sun as the Mind's shot of a lead is, since a row of faint dots hardly showed, 2026-11-05.
     const alpha = new THREE.Vector3();
     const nearestGlow = glow({ fixed: true });
-    const towardGlow = glow({ fixed: true });
+    const towardMat = line("mind", 0);
+    const toward = new THREE.LineSegments(
+      new THREE.BufferGeometry().setAttribute("position", new THREE.BufferAttribute(new Float32Array(CHART_DASHES * 6), 3)),
+      towardMat,
+    );
+    toward.frustumCulled = false;
+    stars.scene.add(toward);
+    let towardAt = clock;
+    let onReach = false;
     let target = "";
     let drawn: THREE.Points[] = [];
     const aim = (id: string) => {
@@ -1739,13 +1748,18 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       }
       const nearest = new Cloud();
       nearest.add(alpha.x, alpha.y, alpha.z, 9, 0.5, K.mind);
-      const toward = new Cloud();
-      for (let i = 1; i < 120; i++) {
-        const q = alpha.clone().multiplyScalar(i / 120);
-        toward.add(q.x, q.y, q.z, 1.6, 0.7, K.mind);
-      }
-      drawn = [nearest.points(nearestGlow), toward.points(towardGlow)];
+      drawn = [nearest.points(nearestGlow)];
       stars.scene.add(...drawn);
+      const dash = toward.geometry.attributes.position as THREE.BufferAttribute;
+      const q = new THREE.Vector3();
+      for (let j = 0; j < CHART_DASHES; j++) {
+        q.copy(alpha).multiplyScalar(j / CHART_DASHES);
+        dash.setXYZ(2 * j, q.x, q.y, q.z);
+        q.copy(alpha).multiplyScalar((j + 0.55) / CHART_DASHES);
+        dash.setXYZ(2 * j + 1, q.x, q.y, q.z);
+      }
+      dash.needsUpdate = true;
+      towardAt = clock;
     };
     aim("Proxima Centauri");
 
@@ -1788,9 +1802,15 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       last = clock;
       const want = (spec.mode === "reach" && spec.leads?.[0]) || "Proxima Centauri";
       if (want !== target) aim(want);
-      // In its Close View, the ring and road give way to the system itself.
-      nearestGlow.uniforms.uOpacity.value = towardGlow.uniforms.uOpacity.value =
-        far * starBand(x) * (1 - ramp(sysDown, 0.2, 0.6));
+      // Opening Reach draws the line again, as a new destination does.
+      if (spec.mode === "reach" && !onReach) towardAt = clock;
+      onReach = spec.mode === "reach";
+      // In its Close View, the ring and line give way to the system itself.
+      const ringed = far * starBand(x) * (1 - ramp(sysDown, 0.2, 0.6));
+      nearestGlow.uniforms.uOpacity.value = ringed;
+      towardMat.uniforms.uOpacity.value = 0.85 * ringed;
+      const out = still ? 1 : easeInOut(Math.min(1, Math.max(0, (clock - towardAt) / CHART_DRAW)));
+      toward.geometry.setDrawRange(0, 2 * Math.ceil(out * CHART_DASHES));
       debrisGlow.uniforms.uOpacity.value = p * band(x, -3.8, -3.4, -2.2, -1.7);
       belt.uniforms.uOpacity.value = 0.14 * p * band(x, -3.4, -3.0, -2.2, -1.7);
       for (const { group, rate } of rings) group.rotateY((rate < 0 ? (2 * Math.PI) / turnOf() : rate) * dt);
