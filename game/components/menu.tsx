@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { Link } from "react-router";
 import { GalacticYear } from "@/components/galactic-year";
 import { useGame } from "@/components/game-provider";
@@ -7,9 +7,10 @@ import { forgetKey, useAccess } from "@/lib/key";
 import { plainClick, useLeaveFor } from "@/lib/leave";
 import { gsap, prefersReducedMotion, useGSAP } from "@/lib/motion";
 
-const ABOUT = [
-  ["/about/research", "Research"],
-  ["/about/design", "Design"],
+// Ways out of the game, each a section: the universe and the simulation, then the about pages. 2026-11-04.
+const PAGES = [
+  ["EXPLORE", [["/universe", "Universe"], ["/sim", "Simulation"]]],
+  ["ABOUT HOLOS", [["/about/research", "Research"], ["/about/design", "Design"]]],
 ] as const;
 
 const ELSEWHERE = [
@@ -134,23 +135,27 @@ function Drawer({ onClose }: { onClose(): void }) {
           </button>
         </div>
 
-        <Label>ABOUT HOLOS</Label>
         {/* The drawer slides away, then the game plays out to the page. */}
-        {ABOUT.map(([href, label]) => (
-          <Link
-            key={href}
-            data-d="item"
-            to={href}
-            onClick={(e) => {
-              if (!plainClick(e)) return;
-              e.preventDefault();
-              close(() => leaveFor(href));
-            }}
-            className={row}
-          >
-            {label}
-            <span className="text-muted">→</span>
-          </Link>
+        {PAGES.map(([title, links]) => (
+          <Fragment key={title}>
+            <Label>{title}</Label>
+            {links.map(([href, label]) => (
+              <Link
+                key={href}
+                data-d="item"
+                to={href}
+                onClick={(e) => {
+                  if (!plainClick(e)) return;
+                  e.preventDefault();
+                  close(() => leaveFor(href));
+                }}
+                className={row}
+              >
+                {label}
+                <span className="text-muted">→</span>
+              </Link>
+            ))}
+          </Fragment>
         ))}
 
         <Label>ELSEWHERE</Label>
