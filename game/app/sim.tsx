@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { Play } from "@/components/icons";
 import { placeLabel } from "@/components/place-label";
 import { Sky, SkyArt, useSky } from "@/components/sky";
@@ -29,8 +29,8 @@ const fromSlider = (n: number, lo: number, hi: number) => lo * (hi / lo) ** (n /
 const SPREAD = { lo: 1 / 900, hi: 1 / 3 };
 const ROSE = "#ff7e94";
 const SECTIONS = [
-  { id: "universe", label: "Universe" },
-  { id: "simulation", label: "Simulation" },
+  { id: "universe", label: "Universe", to: "/universe" },
+  { id: "simulation", label: "Simulation", to: "/sim" },
 ] as const;
 const KICK = "font-mono text-[10.5px] tracking-[.1em] text-muted";
 /** One dials object for the whole page, so a new stop eases the view there, not a fresh flight. */
@@ -61,8 +61,11 @@ export default function Sim() {
   const [seed, setSeed] = useState(10);
   const [drawn, setDrawn] = useState<Drawn | null>(null);
   const [at, setAt] = useState(0);
-  // The Simulation section: which list the flight goes through, and where in it. Null for the Universe section.
-  const [tab, setTab] = useState<Tab | null>(null);
+  // The address picks the section: /universe, or /sim. The Simulation section's list, null in the Universe section.
+  const onSim = useLocation().pathname === "/sim";
+  const navigate = useNavigate();
+  const [chosen, setTab] = useState<Tab>("stars");
+  const tab = onSim ? chosen : null;
   const [place, setPlace] = useState(0);
   // The flight drifts on by itself until we take it in hand.
   const [auto, setAuto] = useState(true);
@@ -73,7 +76,7 @@ export default function Sim() {
   const [closeFor, setCloseFor] = useState<string | null>(null);
   const [fadeFor, setFadeFor] = useState<string | null>(null);
   // The opening shot plays once, on first arriving: the card and labels wait for it to land, and stepping on ends it.
-  const [opening, setOpening] = useState(true);
+  const [opening, setOpening] = useState(!onSim);
 
   const perStar = DIALS.reduce((p, d) => p * (values[d.key] ?? d.holos), 1);
   // The chain worked out at once, as a dial turns, ahead of the slower draw: the funnel, the count and the ring.
@@ -204,7 +207,8 @@ export default function Sim() {
     return () => clearTimeout(t);
   }, [auto, arrived, here, place, places.length]);
   const goTab = (t: Tab | null) => {
-    setTab(t);
+    if (t) setTab(t);
+    if (!!t !== onSim) navigate(t ? "/sim" : "/universe");
     setPlace(0);
     setAuto(true);
     setOpen(false);
@@ -431,14 +435,15 @@ export default function Sim() {
             {detail && <Details item={detail} onClose={() => setOpen(false)} />}
             <nav className="absolute top-4 right-4 flex items-center gap-1 rounded-full border border-faint bg-paper/70 p-0.5 font-mono text-[11px] backdrop-blur-sm">
               {SECTIONS.map((s) => (
-                <button
+                <Link
                   key={s.id}
-                  aria-current={section === s.id ? "step" : undefined}
+                  to={s.to}
+                  aria-current={section === s.id ? "page" : undefined}
                   className={`rounded-full px-3 py-0.5 ${section === s.id ? "bg-ink/15 text-ink" : "text-muted hover:text-ink"}`}
                   onClick={() => (s.id === "universe" ? (goTab(null), setAt(0)) : goTab("stars"))}
                 >
                   {s.label}
-                </button>
+                </Link>
               ))}
               <Link to="/" className="flex items-center gap-1.5 rounded-full px-3 py-0.5 text-muted hover:text-ink">
                 Play
