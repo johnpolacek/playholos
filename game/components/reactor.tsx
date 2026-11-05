@@ -3,15 +3,15 @@ import { gsap, prefersReducedMotion, useGSAP } from "@/lib/motion";
 import { ParticleField, perimeterPoint, type Particle } from "@/lib/particles";
 
 // A button with a life of its own, drawn on a canvas under it, from animaxxing's Get Animaxxed. Each mood is a
-// personality: embers rise off it, small moons circle it, or a web of points drifts round it, threads forming and
-// breaking. Each enters in its own way, wakes under the pointer or focus, and bursts in its own way when pressed. The
+// personality, in its own light: a white heartbeat rings out from it, pale blue moons and stardust circle it, or an
+// amber web of points drifts round it, threads forming and breaking. Each enters in its own way, wakes under the pointer or focus, and bursts in its own way when pressed. The
 // canvas sits under the button, so the button needs a solid fill. Quieter since 2026-11-04, when the title got three.
 
 const rnd = gsap.utils.random;
 /** How far the canvas reaches past the button on each side, in px. */
 const BLEED = 180;
 
-export type Mood = "embers" | "orbit" | "web";
+export type Mood = "pulse" | "orbit" | "web";
 
 export type ReactorHandle = {
   /** The entrance, for the screen's own timeline. It reveals the button. */
@@ -40,129 +40,81 @@ const shockwave = (field: ParticleField, spread: number, duration: number, alpha
     update: (p) => (p.size = spread * gsap.parseEase("power2.out")(p.age / p.life)),
   });
 
-/** Play: a few embers rise off it, and sparks spiral in to light it. */
-function embers(field: ParticleField, el: HTMLElement): Life {
-  const state = { rate: 4, rise: 40 };
-  let lit = false;
-  let due = 0;
-  let pulseIn = 1.5;
-  const erupt = (count: number, speed: [number, number]) => {
-    for (let i = 0; i < count; i++) {
-      const pt = perimeterPoint(field.box, field.radius, Math.random());
-      const v = rnd(speed[0], speed[1]);
-      field.spawn({
-        x: pt.x,
-        y: pt.y,
-        vx: pt.nx * v,
-        vy: pt.ny * v - 30,
-        size: rnd(0.8, 1.8),
-        life: rnd(0.4, 0.9),
-        drag: 0.12,
-        gravity: 200,
-      });
-    }
+/** Sparks off the outline, outward. */
+const erupt = (field: ParticleField, count: number, speed: [number, number]) => {
+  for (let i = 0; i < count; i++) {
+    const pt = perimeterPoint(field.box, field.radius, Math.random());
+    const v = rnd(speed[0], speed[1]);
+    field.spawn({
+      x: pt.x,
+      y: pt.y,
+      vx: pt.nx * v,
+      vy: pt.ny * v - 30,
+      size: rnd(0.8, 1.8),
+      life: rnd(0.4, 0.9),
+      drag: 0.12,
+      gravity: 200,
+    });
+  }
+};
+
+/** Play: white, and alive. A slow heartbeat rings out from it and its glow breathes. */
+function pulse(field: ParticleField, el: HTMLElement): Life {
+  const state = { every: 2.6, alpha: 0.3 };
+  let beatIn = 1.2;
+  let breath: gsap.core.Tween | undefined;
+  const beat = (spread: number, alpha: number) => {
+    shockwave(field, spread, 1.6, alpha);
+    gsap.delayedCall(0.18, () => shockwave(field, spread * 0.6, 1.3, alpha * 0.6));
   };
   return {
     enter(tl) {
-      const { box } = field;
-      const cx = box.x + box.w / 2;
-      const cy = box.y + box.h / 2;
-      for (let i = 0; i < 48; i++) {
-        const orbit = { radius: rnd(120, 200), angle: rnd(0, Math.PI * 2) };
-        const landing = { x: rnd(-box.w * 0.4, box.w * 0.4), y: rnd(-box.h * 0.4, box.h * 0.4) };
-        const p = field.spawn({
-          x: cx + Math.cos(orbit.angle) * orbit.radius,
-          y: cy + Math.sin(orbit.angle) * orbit.radius,
-          size: rnd(0.8, 1.6),
-          alpha: 0,
-          life: Infinity,
-          fade: false,
-          shape: "spark",
-        });
-        const turn = rnd(1, 2) * (Math.random() < 0.5 ? -1 : 1);
-        tl.to(
-          orbit,
-          {
-            radius: 0,
-            angle: orbit.angle + turn,
-            duration: rnd(0.6, 0.9),
-            ease: "power3.in",
-            onUpdate() {
-              const k = 1 - orbit.radius / 200;
-              const nx = cx + landing.x * k + Math.cos(orbit.angle) * orbit.radius;
-              const ny = cy + landing.y * k + Math.sin(orbit.angle) * orbit.radius;
-              // Velocity only points the spark's tail. The tween sets its place.
-              p.vx = (nx - p.x) * 60;
-              p.vy = (ny - p.y) * 60;
-              p.x = nx;
-              p.y = ny;
-              p.alpha = Math.min(0.8, this.progress() * 2.5);
-            },
-            onComplete: () => Object.assign(p, { life: 0.12, age: 0, fade: true, vx: 0, vy: 0 }),
-          },
-          rnd(0, 0.2),
-        );
-      }
-      tl.to(el, { autoAlpha: 1, scale: 1, duration: 0.45, ease: "back.out(1.6)" }, 0.82).call(
-        () => {
-          shockwave(field, 40, 0.6, 0.5);
-          erupt(16, [80, 180]);
-        },
-        [],
-        0.84,
-      ).call(() => void (lit = true), [], 1.05);
+      tl.to(el, { autoAlpha: 1, scale: 1, duration: 0.8, ease: "expo.out" }, 0.2)
+        .call(() => beat(30, 0.5), [], 0.3)
+        .call(() => {
+          breath = gsap.fromTo(
+            el,
+            { boxShadow: "0 0 0px 0px rgba(255,255,255,0)" },
+            { boxShadow: "0 0 18px 1px rgba(255,255,255,.16)", duration: 1.3, ease: "sine.inOut", yoyo: true, repeat: -1 },
+          );
+        }, [], 0.9);
     },
     idle(dt) {
-      if (!lit) return;
-      // Embers start inside the button, hidden behind it, and surface as they rise past its top edge.
-      const { box } = field;
-      due += state.rate * dt;
-      while (due >= 1) {
-        due -= 1;
-        field.spawn({
-          x: box.x + rnd(6, box.w - 6),
-          y: box.y + rnd(2, box.h - 2),
-          vx: rnd(-8, 8),
-          vy: -rnd(state.rise * 0.6, state.rise * 1.3),
-          size: rnd(0.8, 1.8),
-          alpha: rnd(0.5, 0.9),
-          life: rnd(1.2, 2),
-          gravity: -10,
-          wobble: rnd(4, 10),
-          wobbleFreq: rnd(1.5, 3),
-          phase: rnd(0, Math.PI * 2),
-        });
-      }
-      pulseIn -= dt;
-      if (pulseIn <= 0) {
-        pulseIn = 3.2;
-        shockwave(field, 18, 1.3, 0.18);
+      beatIn -= dt;
+      if (beatIn <= 0) {
+        beatIn = state.every;
+        beat(22, state.alpha);
       }
     },
     hover(on) {
-      gsap.to(state, { rate: on ? 22 : 4, rise: on ? 120 : 40, duration: on ? 0.3 : 0.9, overwrite: true });
+      gsap.to(state, { every: on ? 1 : 2.6, alpha: on ? 0.5 : 0.3, duration: 0.4, overwrite: true });
       if (on) {
-        shockwave(field, 24, 0.5, 0.4);
-        erupt(14, [80, 180]);
+        beatIn = 0;
+        erupt(field, 8, [60, 140]);
       }
     },
     blast() {
-      shockwave(field, 90, 0.6, 0.7);
-      gsap.delayedCall(0.1, () => shockwave(field, 130, 0.7, 0.35));
-      erupt(60, [260, 620]);
+      breath?.kill();
+      gsap.to(el, { boxShadow: "0 0 30px 4px rgba(255,255,255,.35)", duration: 0.15, yoyo: true, repeat: 1 });
+      shockwave(field, 90, 0.6, 0.8);
+      gsap.delayedCall(0.1, () => shockwave(field, 130, 0.7, 0.4));
+      gsap.delayedCall(0.2, () => shockwave(field, 170, 0.8, 0.2));
+      erupt(field, 50, [220, 520]);
     },
   };
 }
 
-/** Universe: three small moons circle it, each at its own pace and distance, and now and then a star glints by it. */
+/** Universe: pale blue. Three small moons circle it, each at its own pace and distance, stardust drifts round it, and
+ *  now and then a star glints by it. */
 function orbit(field: ParticleField, el: HTMLElement): Life {
-  const state = { pace: 1, glintEvery: 2.6 };
+  const state = { pace: 1, glintEvery: 2.6, dust: 5 };
   const moons = [
     { t: 0.05, speed: 0.045, out: 6, size: 1.6 },
     { t: 0.4, speed: 0.03, out: 11, size: 1.3 },
     { t: 0.75, speed: -0.02, out: 17, size: 1.1 },
   ].map((m) => ({ ...m, reach: 1, p: null as Particle | null }));
   let glintIn = 1.4;
+  let dust = 0;
   const place = (m: (typeof moons)[number], p: Particle) => {
     const pt = perimeterPoint(field.box, field.radius, m.t);
     p.x = pt.x + pt.nx * m.out * m.reach;
@@ -199,6 +151,25 @@ function orbit(field: ParticleField, el: HTMLElement): Life {
     },
     idle(dt) {
       for (const m of moons) m.t += m.speed * state.pace * dt;
+      // Stardust: fine motes that drift by and fade.
+      dust += state.dust * dt;
+      while (dust >= 1) {
+        dust -= 1;
+        const pt = perimeterPoint(field.box, field.radius, Math.random());
+        const away = rnd(2, 40);
+        field.spawn({
+          x: pt.x + pt.nx * away,
+          y: pt.y + pt.ny * away,
+          vx: rnd(-6, 6) + pt.nx * 3,
+          vy: rnd(-4, 4) + pt.ny * 3,
+          size: rnd(0.4, 0.9),
+          alpha: rnd(0.3, 0.7),
+          life: rnd(2.5, 4.5),
+          wobble: rnd(2, 5),
+          wobbleFreq: rnd(0.3, 0.8),
+          phase: rnd(0, Math.PI * 2),
+        });
+      }
       glintIn -= dt;
       if (glintIn <= 0) {
         glintIn = state.glintEvery * rnd(0.6, 1.4);
@@ -206,7 +177,7 @@ function orbit(field: ParticleField, el: HTMLElement): Life {
       }
     },
     hover(on) {
-      gsap.to(state, { pace: on ? 3.5 : 1, glintEvery: on ? 0.5 : 2.6, duration: on ? 0.4 : 1.2, ease: "power2.out", overwrite: true });
+      gsap.to(state, { pace: on ? 3.5 : 1, glintEvery: on ? 0.5 : 2.6, dust: on ? 18 : 5, duration: on ? 0.4 : 1.2, ease: "power2.out", overwrite: true });
       for (const m of moons) gsap.to(m, { reach: on ? 1.6 : 1, duration: 0.6, ease: "power3.out", overwrite: true });
       if (on) glint(0.9);
     },
@@ -226,7 +197,7 @@ function orbit(field: ParticleField, el: HTMLElement): Life {
   };
 }
 
-/** Simulation: points drift round it, threads forming and breaking between them, like minds finding each other. */
+/** Simulation: amber, glowing. Points drift round it, threads forming and breaking between them, like minds finding each other. */
 function web(field: ParticleField, el: HTMLElement): Life {
   const N = 9;
   const state = { reach: 62, alpha: 0.6, pull: 1 };
@@ -288,11 +259,14 @@ function web(field: ParticleField, el: HTMLElement): Life {
   };
 }
 
-const MOODS = { embers, orbit, web } satisfies Record<Mood, (field: ParticleField, el: HTMLElement) => Life>;
+/** Each mood's light: pale blue, amber, white. */
+const COLOR: Record<Mood, string> = { orbit: "#a9c8ee", web: "#e0a24a", pulse: "#f6f4ee" };
+
+const MOODS = { pulse, orbit, web } satisfies Record<Mood, (field: ParticleField, el: HTMLElement) => Life>;
 
 export function Reactor({
   ref,
-  mood = "embers",
+  mood = "pulse",
   ...props
 }: Omit<React.ComponentProps<"button">, "ref"> & { ref?: React.Ref<ReactorHandle>; mood?: Mood }) {
   const scope = useRef<HTMLSpanElement>(null);
@@ -327,7 +301,7 @@ export function Reactor({
           field.sync();
           field.particles.length = 0;
           const tl = gsap.timeline({ onComplete: () => void (ready = true) });
-          gsap.set(el, { autoAlpha: 0, scale: mood === "embers" ? 0.6 : 0.94, transformOrigin: "50% 50%" });
+          gsap.set(el, { autoAlpha: 0, scale: mood === "pulse" ? 0.8 : 0.94, transformOrigin: "50% 50%" });
           field.addEmitter(idle);
           life.enter(tl);
           entrance = tl;
@@ -364,8 +338,8 @@ export function Reactor({
       <canvas
         ref={canvas}
         aria-hidden
-        className="pointer-events-none absolute -z-10 text-ink"
-        style={{ left: -BLEED, top: -BLEED }}
+        className="pointer-events-none absolute -z-10"
+        style={{ left: -BLEED, top: -BLEED, color: COLOR[mood], filter: "drop-shadow(0 0 3px currentColor)" }}
       />
       <button ref={button} type="button" {...props} />
     </span>
