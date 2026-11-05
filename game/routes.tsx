@@ -1,4 +1,4 @@
-import { createBrowserRouter, Outlet, ScrollRestoration } from "react-router";
+import { createBrowserRouter, Outlet, redirect, ScrollRestoration } from "react-router";
 import { loadLayout, PAGES } from "@/app/about/load";
 import NotFound from "@/app/not-found";
 import PlayLayout from "@/app/play/layout";
@@ -41,7 +41,8 @@ export const router = createBrowserRouter([
         path: "about",
         lazy: later(loadLayout),
         children: [
-          { index: true, lazy: later(PAGES["/about"]) },
+          // The about page left 2026-11-04. Its address opens Research.
+          { index: true, loader: () => redirect("/about/research") },
           { path: "research", lazy: later(PAGES["/about/research"]) },
           { path: "design", lazy: later(PAGES["/about/design"]) },
         ],

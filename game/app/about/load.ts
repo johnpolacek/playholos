@@ -5,7 +5,6 @@ type Page = () => Promise<{ default: React.ComponentType }>;
 export const loadLayout: Page = () => import("@/app/about/layout");
 
 export const PAGES = {
-  "/about": () => import("@/app/about"),
   "/about/research": () => import("@/app/about/research"),
   "/about/design": () => import("@/app/about/design"),
 } satisfies Record<string, Page>;

@@ -8,7 +8,7 @@ import { lightTime } from "@/lib/light";
 import { gsap, rise, riseFrom, useGSAP, useStage } from "@/lib/motion";
 
 // Where the view is, by its distance from Earth in AU. The map's own stage names, with the Moon and the Oort cloud.
-export const PLACES: [upTo: number, name: string][] = [
+const PLACES: [upTo: number, name: string][] = [
   [0.0035, "EARTH"],
   [0.06, "EARTH AND MOON"],
   [400, "SOLAR SYSTEM"],
@@ -109,11 +109,11 @@ export function Drift({ onNext, dive = true }: { onSkip(): void; onNext(): void;
       <footer className="relative flex flex-wrap items-center justify-center gap-x-4 gap-y-1 px-6 pb-5 font-mono text-[10px] tracking-[.1em] text-muted uppercase">
         <Link
           data-m="foot"
-          to="/about"
+          to="/about/research"
           onClick={(e) => {
             if (!plainClick(e)) return;
             e.preventDefault();
-            leaveFor("/about");
+            leaveFor("/about/research");
           }}
           className="transition-colors hover:text-ink"
         >

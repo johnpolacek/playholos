@@ -6,13 +6,12 @@ import { GalacticYear } from "@/components/galactic-year";
 import { gsap, prefersReducedMotion, useGSAP } from "@/lib/motion";
 
 const PAGES = [
-  ["/about", "About"],
   ["/about/research", "Research"],
   ["/about/design", "Design"],
 ] as const;
 
-// The about pages' top bar: the game's mark, the four pages, and Play. The mark, like Play, goes back to the game. A
-// line under the page you're on slides to the next one as you go.
+// The about pages' top bar: the game's mark, Research and Design, and Play. The mark, like Play, goes back to the
+// game. A line under the page you're on slides to the next one as you go.
 export function AboutNav() {
   const here = useLocation().pathname;
   const bar = useRef<HTMLDivElement>(null);
