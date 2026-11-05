@@ -17,6 +17,10 @@
   "observability": { "enabled": true },
   // The seeds' worlds, private, one read when a game first asks. scripts/worlds.mjs uploads game/data/worlds. 2026-10-31.
   "r2_buckets": [{ "binding": "WORLDS", "bucket_name": "holos-worlds" }],
-  // Six questions a minute from one address. Each one spends money, ours behind the code.
-  "ratelimits": [{ "name": "MIND_LIMIT", "namespace_id": "1001", "simple": { "limit": 6, "period": 60 } }]
+  // Six questions a minute from one address. Each one spends money, ours behind the code. The Mind's news, told
+  // unasked, has three of its own, so it never takes a question's place. 2026-11-03.
+  "ratelimits": [
+    { "name": "MIND_LIMIT", "namespace_id": "1001", "simple": { "limit": 6, "period": 60 } },
+    { "name": "MIND_NEWS_LIMIT", "namespace_id": "1002", "simple": { "limit": 3, "period": 60 } }
+  ]
 }

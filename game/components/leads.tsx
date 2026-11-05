@@ -132,7 +132,9 @@ export function LeadsMap({
       for (const { id, x, y, a } of [...marks].sort((p, q) => rank(p.id) - rank(q.id))) {
         const n = names.current[id];
         if (!n) continue;
-        if (a <= 0 || (wide && id !== focus && id !== pointed && id !== "Sol" && !warmName(id))) { n.style.opacity = "0"; continue; }
+        // In the Mind's shot, only the lead our talk is on and Sol are named, unless pointed at. 2026-11-04.
+        const shot = !!dials.chart && !!focus && id !== focus && id !== pointed && id !== "Sol";
+        if (a <= 0 || shot || (wide && id !== focus && id !== pointed && id !== "Sol" && !warmName(id))) { n.style.opacity = "0"; continue; }
         if (id === pointed) {
           placeLabel(n, x, y, null, taken);
           n.style.opacity = String(a);
@@ -262,6 +264,9 @@ export function MapKey({ className = "" }: { className?: string }) {
   );
 }
 
+/** What the words mean, where a player first meets them. Asked for in play, 2026-11-03. */
+const GLOW_WORDS = <p className="mt-1.5 text-[13px] leading-snug text-page-ink2">A warm glow is warmth where nothing shone before. Dust can do this, and so can a mind building around its star. Dust fades.</p>;
+
 /**
  * Earth's leads as rows. Pointing at one turns the map to it. In the opening, each is a line, pointing at one opens
  * what we measured, and picking one holds it open and the map there. On Scan, each opens its own page, and a row
@@ -274,6 +279,7 @@ export function LeadList({
   readings = {},
   fresh,
   standing,
+  readable,
   headClass = "",
 }: {
   leads: Lead[];
@@ -281,6 +287,8 @@ export function LeadList({
   fold?: boolean;
   readings?: Record<string, Reading[]>;
   fresh?: Set<string>;
+  /** Warm glows we could order a Close Reading of now, each row saying so. 2026-11-04. */
+  readable?: Lead[];
   /** Where each lead stands, by slug: the list splits on it. Quiet folds shut. 2026-11-02. */
   standing?: Record<string, Standing>;
   headClass?: string;
@@ -319,16 +327,19 @@ export function LeadList({
           </>
         }
         line={
-          read ? (
-            <span className="text-ink">
-              {isNew && (
-                <span className="mr-1.5 rounded-full bg-you px-1.5 py-px font-mono text-[9px] tracking-[.08em] text-paper">NEW</span>
-              )}
-              {read.title}, Year {yearText(read.at)}.
-            </span>
-          ) : (
-            lineAt(l, year)
-          )
+          <>
+            {read ? (
+              <span className="text-ink">
+                {isNew && (
+                  <span className="mr-1.5 rounded-full bg-you px-1.5 py-px font-mono text-[9px] tracking-[.08em] text-paper">NEW</span>
+                )}
+                {read.title}, Year {yearText(read.at)}.
+              </span>
+            ) : (
+              lineAt(l, year)
+            )}
+            {readable?.includes(l) && <span className="mt-0.5 block font-medium text-other">Ready for a Close Reading</span>}
+          </>
         }
         right={reach(l)}
       />
@@ -434,15 +445,17 @@ export function LeadList({
       <>
         <ListHead left={`Needs us · ${needs}`} right="Reached in" className={headClass} />
         {needs ? (
-          <ul className="mt-1 flex flex-col">{rows("needs")}</ul>
+          <>
+            <ul className="mt-1 flex flex-col">{rows("needs")}</ul>
+            {readable?.length ? GLOW_WORDS : null}
+          </>
         ) : (
           <p className="mt-1 border-t border-faint py-2.5 text-[13.5px] text-page-ink2">Nothing new to read.</p>
         )}
         {watching > 0 && (
           <>
             <ListHead left={`Warm glows, still shining · ${watching}`} right="" className="mt-5" />
-            {/* What the words mean, where a player first meets them. Asked for in play, 2026-11-03. */}
-            <p className="mt-1.5 text-[13px] leading-snug text-page-ink2">Warmth where nothing shone before. Dust can do this, and so can a mind building around its star. Dust fades.</p>
+            {!readable?.length && GLOW_WORDS}
             <ul className="mt-1 flex flex-col">{rows("watching")}</ul>
           </>
         )}

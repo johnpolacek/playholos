@@ -192,6 +192,9 @@ export function LeadPage({ slug }: { slug: string }) {
         )}
       </p>
 
+      {/* What we can do comes first, above what we know. It sat two screens down until a playtest, 2026-11-04. */}
+      {lead.art.kind === "warm" && <CloseReading lead={lead} />}
+
       {read && (
         <section data-m className="mt-3 rounded-xl border border-you/60 bg-you/[.06] px-3 py-2.5">
           <span className="font-mono text-[10px] tracking-[.1em] text-you">
@@ -245,7 +248,6 @@ export function LeadPage({ slug }: { slug: string }) {
 
       {lead.art.kind === "warm" && (
         <>
-          <CloseReading lead={lead} />
           <h2 data-m className={`mt-5 ${HEAD}`}>What a warm glow is</h2>
           <p data-m className="mt-1.5 text-[13.5px] leading-snug text-page-ink2">
             A spot in the sky that turned warm, about as warm as a planet, where nothing shone before. Dust around a newborn star or two merging stars can glow like this, and it fades. So can collectors built around a star: they catch its light and must shed it as heat. That glow lasts as long as they stay.

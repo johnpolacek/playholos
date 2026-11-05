@@ -1,3 +1,5 @@
+import { useEffect, useRef } from "react";
+import { Link, useLocation } from "react-router";
 import { useGame } from "@/components/game-provider";
 import { usePlan, useSchedule } from "@/components/picks";
 import { useLeads } from "@/components/scan";
@@ -24,7 +26,39 @@ function curve(dust: boolean) {
   return pts.join(" ");
 }
 
+/** Where a warm glow's Close Reading stands, or null if it has none to show, as a shine faded with no reading. */
+export function readingStands(lead: Lead, minds: ReturnType<typeof useLeads>["minds"], reads: { name: string }[] = []) {
+  if (!lead.slug.startsWith("warm-glow-")) return null;
+  const flash = minds?.flashes[Number(lead.slug.replace("warm-glow-", "")) - 1];
+  if (!flash) return null;
+  const mine = reads.some((o) => o.name === lead.star);
+  if (flash.read?.saw) return "done";
+  if (mine) return "under way";
+  return flash.faded === undefined ? "open" : null;
+}
+
+/** The warm glows we could read now: still shining, unread, with our telescope built and free. A glow's page buried this
+ *  move two screens down, and the map said nothing needs us. So these stand under Needs us. Playtest 2026-11-04. */
+export function openReadings(leads: Lead[], minds: ReturnType<typeof useLeads>["minds"], reads: { name: string; y: number }[], scope: number | null | undefined, now: number) {
+  if (scope == null || scope > now || reads.some((o) => o.y + READ_YEARS > now)) return [];
+  return leads.filter((l) => readingStands(l, minds, reads) === "open");
+}
+
+export function useOpenReadings() {
+  const { year } = useGame();
+  const { plan } = usePlan();
+  const { done } = useSchedule();
+  const { leads, minds } = useLeads();
+  return openReadings(leads, minds, plan?.closeReads ?? [], done["Infrared Telescope"], tenths(year ?? 0));
+}
+
 export function CloseReading({ lead }: { lead: Lead }) {
+  const { hash } = useLocation();
+  const root = useRef<HTMLElement>(null);
+  // Brought here from the Mind's words.
+  useEffect(() => {
+    if (hash === "#close-reading") root.current?.scrollIntoView({ block: "start" });
+  }, [hash]);
   const { year } = useGame();
   const { plan, change } = usePlan();
   const { done } = useSchedule();
@@ -41,7 +75,7 @@ export function CloseReading({ lead }: { lead: Lead }) {
   if (!flash || (!shining && !mine)) return null;
   const saw = read?.saw;
   return (
-    <section data-m className="mt-4 rounded-xl border border-other/40 bg-other/[.05] px-3 py-2.5">
+    <section ref={root} id="close-reading" data-m className="mt-4 scroll-mt-20 rounded-xl border border-other/40 bg-other/[.05] px-3 py-2.5">
       <h2 className="font-mono text-[10px] tracking-[.1em] text-other uppercase">A Close Reading</h2>
       <svg viewBox={`0 0 ${W} ${H}`} className="mt-1.5 w-full" role="img" aria-label={saw === "dust" ? "Its light, with a bump at 10 microns" : saw === "smooth" ? "Its light, a smooth curve" : "Its light, not yet read"}>
         <line x1="0" x2={W} y1={H - 12} y2={H - 12} className="stroke-faint" />
@@ -61,7 +95,30 @@ export function CloseReading({ lead }: { lead: Lead }) {
           25 microns
         </text>
       </svg>
-      {saw ? null : mine ? (
+      {saw === "smooth" ? (
+        shining ? (
+          <>
+            <p className="mt-1.5 text-[13.5px] leading-snug text-page-ink2">Plain heat, with no dust in it. The reading is done. What is left is to call out, or to go.</p>
+            <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-2">
+              <Link
+                to={`/play/mind?ask=${encodeURIComponent(`We want to send a message to ${lead.star}. What should it say, and what does it risk?`)}`}
+                className="inline-flex h-8 items-center rounded-full bg-other px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110"
+              >
+                Send it a message
+              </Link>
+              <Link to={`/play/reach/${lead.slug}`} className="text-[12.5px] text-you hover:underline">
+                Ways to go ›
+              </Link>
+            </div>
+          </>
+        ) : (
+          <p className="mt-1.5 text-[13.5px] leading-snug text-page-ink2">Plain heat, with no dust in it, before it faded.</p>
+        )
+      ) : saw === "dust" ? (
+        <p className="mt-1.5 text-[13.5px] leading-snug text-page-ink2">Dust, with the bump near 10 microns. It will fade, and there is nothing more for us to do here.</p>
+      ) : saw ? (
+        <p className="mt-1.5 text-[13.5px] leading-snug text-page-ink2">It faded before we finished, and took the answer with it.</p>
+      ) : mine ? (
         <p className="mt-1.5 text-[13.5px] leading-snug text-page-ink2">Our Infrared Telescope is splitting its light. Done by Year {yearText(mine.y + READ_YEARS)}, if it still shines.</p>
       ) : (
         <>

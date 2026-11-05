@@ -1,6 +1,7 @@
 import { createContext, use, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router";
 import { useGame } from "@/components/game-provider";
+import { openReadings, useOpenReadings } from "@/components/close-reading";
 import { Heard } from "@/components/heard";
 import { LeadList, LeadsMap } from "@/components/leads";
 import { Messages } from "@/components/messages";
@@ -216,9 +217,10 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
     const went = new Set(visits.map((v) => star(v.star)));
     for (const o of [...(plan?.lenses ?? []), ...(plan?.sentinels ?? []), ...(plan?.seeds ?? []), ...(plan?.colony ? [plan.colony] : [])])
       if (!went.has(star(o.name))) owed.add(star(o.name));
+    const readable = new Set(openReadings(leads, minds, plan?.closeReads ?? [], done["Infrared Telescope"], tenth ?? 0));
     const standing: Record<string, Standing> = Object.fromEntries(
       leads.map((l) => {
-        if (readings[l.slug]?.some((r) => fresh.has(r.id))) return [l.slug, "needs"];
+        if (readable.has(l) || readings[l.slug]?.some((r) => fresh.has(r.id))) return [l.slug, "needs"];
         if (l.slug.startsWith("warm-glow-") && !l.facts.some(([k, v]) => k === "Faded" || (k === "Its light" && v.startsWith("Dust")))) return [l.slug, "watching"];
         const windows = l.art.kind === "reply" ? l.art.windows.filter((w) => w.star === l.star) : [];
         const waiting =
@@ -227,7 +229,7 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
       }),
     );
     return { known: view?.year, leads, ids, dials, readings, fresh, standing, heard, visits, colony, minds, look, setLook, close, setClose, step, setStep };
-  }, [view?.year, leads, felt, proxima, ids, dials, observe, tenth, seen, save?.sent, plan, heard, visits, colony, minds, look, setLook, close, setClose, step, setStep]);
+  }, [view?.year, leads, felt, proxima, ids, dials, observe, tenth, seen, save?.sent, plan, done, heard, visits, colony, minds, look, setLook, close, setClose, step, setStep]);
   return <ScanContext value={value}>{children}</ScanContext>;
 }
 
@@ -255,7 +257,7 @@ export function useStepTap(step: (by: 1 | -1) => void) {
 
 /** The map on Scan: the stars within 50 light-years, and the leads lit in turn as the camera arrives. An open lead's
  * page holds the focus, so the camera goes on to its star once all are lit. */
-export function ScanMap({ className }: { className: string }) {
+export function ScanMap({ className, quick = false }: { className: string; /** Lights every lead at once, for the map opening on one from our talk. */ quick?: boolean }) {
   const { leads, ids, dials, look, readings, standing } = useLeads();
   const quiet = useMemo(() => leads.map((l) => (standing[l.slug] === "needs" ? 0 : 1)), [leads, standing]);
   // Each lead glows by the Mind's word that something lives there, brighter as a reading raises it. 2026-10-29.
@@ -283,7 +285,7 @@ export function ScanMap({ className }: { className: string }) {
       if (lit.current) return;
       lit.current = true;
       gsap.killTweensOf(dials);
-      if (prefersReducedMotion()) return void Object.assign(dials, { grid: 1, found: count.current, calm: 1 });
+      if (quick || prefersReducedMotion()) return void Object.assign(dials, { grid: 1, found: count.current, calm: 1 });
       Object.assign(dials, { grid: 0, found: 0, calm: 0 });
       gsap
         .timeline({ delay: Math.max(0, flight - 0.6) })
@@ -292,7 +294,7 @@ export function ScanMap({ className }: { className: string }) {
         // All shown first, then the quiet ones step back, so the map settles on what needs us. Playtest 2026-11-02.
         .to(dials, { calm: 1, duration: 1.6, ease: "power2.inOut" }, "+=1.2");
     },
-    [dials],
+    [dials, quick],
   );
   useEffect(() => {
     count.current = ids.length;
@@ -311,12 +313,13 @@ export function Scan() {
   const { leads, dials, readings, fresh, standing, heard } = useLeads();
   const [params, setParams] = useSearchParams();
   const close = useCallback(() => setParams({}, { replace: true }), [setParams]);
+  const open = useOpenReadings();
   if (!leads.length) return null;
   if (params.has("review")) return <Review onClose={close} />;
   return (
     <>
       {heard.length > 0 && <Heard />}
-      <LeadList leads={leads} dials={dials} readings={readings} fresh={fresh} standing={standing} headClass={heard.length ? "mt-5" : "mt-1"} />
+      <LeadList leads={leads} dials={dials} readings={readings} fresh={fresh} standing={standing} readable={open} headClass={heard.length ? "mt-5" : "mt-1"} />
       <Messages />
     </>
   );
