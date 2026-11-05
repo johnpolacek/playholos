@@ -1,6 +1,6 @@
 {
   "name": "playholos",
-  "version": "0.1.0-alpha.1",
+  "version": "0.1.0",
   "description": "Play Holos on your own computer, with the Mind answering on your own Claude plan.",
   "license": "MIT",
   "author": "John Polacek",
