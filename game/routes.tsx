@@ -39,7 +39,9 @@ export const router = createBrowserRouter([
           { path: "design", lazy: later(PAGES["/about/design"]) },
         ],
       },
-      // Simulation mode: a sky drawn at the odds we set, and a tour through it. No game. 2026-11-01.
+      // Simulation mode: a sky drawn at the odds we set, and a tour through it. No game. 2026-11-01. The universe as we
+      // see it at /universe, the flight through the drawn sky at /sim, one page so the sky carries across. 2026-11-04.
+      { path: "universe", lazy: later(() => import("@/app/sim")) },
       { path: "sim", lazy: later(() => import("@/app/sim")) },
       // The game's colors, type and shared parts, drawn live. 2026-10-28.
       { path: "design", lazy: later(() => import("@/app/design")) },
