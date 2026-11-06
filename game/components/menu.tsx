@@ -2,6 +2,7 @@ import { Fragment, useEffect, useRef, useState } from "react";
 import { Link } from "react-router";
 import { GalacticYear } from "@/components/galactic-year";
 import { useGame } from "@/components/game-provider";
+import { RunLocal } from "@/components/run-local";
 import { useLeaveShell } from "@/components/wake";
 import { forgetKey, useAccess } from "@/lib/key";
 import { plainClick, useLeaveFor } from "@/lib/leave";
@@ -171,6 +172,10 @@ function Drawer({ onClose }: { onClose(): void }) {
             <span className="text-muted">↗</span>
           </a>
         ))}
+        <RunLocal data-d="item" className={`${row} w-full text-left`}>
+          Run locally
+          <span className="text-muted">↓</span>
+        </RunLocal>
       </nav>
     </dialog>
   );

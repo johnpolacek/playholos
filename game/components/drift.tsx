@@ -2,6 +2,7 @@ import { Link } from "react-router";
 import { useCallback, useRef } from "react";
 import { Astroid } from "@/components/icons";
 import { Reactor, type ReactorHandle } from "@/components/reactor";
+import { RunLocal } from "@/components/run-local";
 import { SkyArt, useSky } from "@/components/sky";
 import { plainClick, useLeaveFor } from "@/lib/leave";
 import { lightTime } from "@/lib/light";
@@ -135,6 +136,10 @@ export function Drift({ onNext, dive = true }: { onSkip(): void; onNext(): void;
         >
           GitHub
         </a>
+        <span data-m="foot" className="opacity-60">
+          <Astroid />
+        </span>
+        <RunLocal data-m="foot" className="uppercase transition-colors hover:text-ink" />
         <span data-m="foot" className="opacity-60">
           <Astroid />
         </span>
