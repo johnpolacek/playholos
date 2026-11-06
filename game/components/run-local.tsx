@@ -131,10 +131,33 @@ function Sheet({ onClose }: { onClose(): void }) {
             </button>
           </div>
           <p data-r="item" className="mt-2 text-[13px] leading-[1.5] text-page-ink2">
-            Three steps. The Mind answers through Claude Code on your own Claude plan, so you need no API key.
+            The Mind answers through Claude Code on your own Claude plan, so you need no API key.
           </p>
 
-          <ol className="relative mt-4 flex flex-col gap-4">
+          <section data-r="item" className="mt-4 flex flex-col gap-2.5 rounded-lg border border-dashed border-muted p-3.5">
+            <div className="flex items-center gap-2 font-mono text-[10px] tracking-[.12em] text-page-ink2">
+              <Prompt size={13} />
+              HAVE YOUR AGENT DO IT
+            </div>
+            <p className="text-[13px] leading-[1.5] text-page-ink2">
+              Paste this into{" "}
+              <a href="https://claude.com/claude-code" target="_blank" rel="noopener noreferrer" className="text-ink underline underline-offset-2">
+                Claude Code ↗
+              </a>
+              . It needs Claude Pro or Max.
+            </p>
+            <div className="flex flex-col gap-2 rounded-md border border-faint bg-panel p-2.5">
+              <p className="font-mono text-[12px] leading-relaxed text-ink">{ASK}</p>
+              <span className="self-end">
+                <Copy text={ASK} label="the prompt" />
+              </span>
+            </div>
+          </section>
+
+          <span data-r="item" className="mt-5 font-mono text-[10px] tracking-[.12em] text-page-ink2">
+            OR DO IT BY HAND
+          </span>
+          <ol className="relative mt-3 flex flex-col gap-4">
             <span
               data-r="thread"
               aria-hidden
@@ -167,20 +190,6 @@ function Sheet({ onClose }: { onClose(): void }) {
             Later, <code className="font-mono text-[12px] text-ink">npx playholos --update</code> gets the newest version.
             Your game is saved in the browser, so it carries over.
           </p>
-
-          <section data-r="item" className="mt-4 flex flex-col gap-2.5 rounded-lg border border-dashed border-muted p-3.5">
-            <div className="flex items-center gap-2 font-mono text-[10px] tracking-[.12em] text-page-ink2">
-              <Prompt size={13} />
-              OR LET CLAUDE DO IT
-            </div>
-            <p className="text-[13px] leading-[1.5] text-page-ink2">After step 2, paste this into Claude Code:</p>
-            <div className="flex flex-col gap-2 rounded-md border border-faint bg-panel p-2.5">
-              <p className="font-mono text-[12px] leading-relaxed text-ink">{ASK}</p>
-              <span className="self-end">
-                <Copy text={ASK} label="the prompt" />
-              </span>
-            </div>
-          </section>
 
           <a
             data-r="item"
