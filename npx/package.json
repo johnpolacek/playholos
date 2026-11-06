@@ -1,7 +1,7 @@
 {
   "name": "playholos",
-  "version": "0.1.0",
-  "description": "Play Holos on your own computer, with the Mind answering on your own Claude plan.",
+  "version": "0.2.0",
+  "description": "Play Holos on your own computer, with the Mind answering on your own Claude or ChatGPT plan.",
   "license": "MIT",
   "author": "John Polacek",
   "repository": {

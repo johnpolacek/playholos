@@ -7,11 +7,14 @@ import { createUIMessageStream, pipeUIMessageStreamToResponse, type UIMessage } 
 import type { Plugin } from "vite";
 import { readMindPick, type Usage } from "./lib/access.ts";
 import { CLI_BARE } from "./scripts/ask-mind.mjs";
+import { askCodex, mindCli as pickCli } from "./scripts/codex.mjs";
 import { NEWS } from "./lib/mind/news.ts";
 
 // With MIND_VIA=cli, the dev server's Mind answers on your own Claude login through the claude CLI, not the API key,
 // so play while we build spends the subscription. The Worker still builds what the Mind is told, asked dry, and still
 // says whether the Mind is open. The CLI takes one prompt, so earlier turns ride in the system prompt. 2026-10-25.
+// On a machine with Codex and no Claude Code, it answers on the ChatGPT login through the codex CLI instead, or as
+// MIND_CLI names. Codex sends its answer whole. 2026-11-05.
 
 const DRY = "x-holos-dry";
 /** Said on what we ask the Worker, so it opens the Mind without a key or code: the CLI spends none. The Worker takes
@@ -39,6 +42,9 @@ export const mindCli: Plugin = {
   name: "holos-mind-cli",
   apply: () => process.env.MIND_VIA === "cli",
   configureServer(server) {
+    const agent = pickCli();
+    const login = agent === "codex" ? "ChatGPT" : "Claude";
+    server.config.logger.info(`  The Mind answers on your ${login} login through the ${agent} CLI.`);
     server.middlewares.use(async (req, res, next) => {
       // The Mind answers on our login here, so it is open to whoever plays on this server.
       if (req.method === "GET" && req.url === "/api/access") {
@@ -71,6 +77,26 @@ export const mindCli: Plugin = {
       }
       const { system } = (await told.json()) as { system: string };
       const { model, effort } = readMindPick(body.pick);
+      if (agent === "codex") {
+        const stream = createUIMessageStream({
+          execute: async ({ writer }) => {
+            const { text } = await askCodex({
+              system: system + talkOf(body.messages),
+              ask: textOf(body.messages.at(-1)!),
+              effort,
+              onSpawn: (child: { kill(): void }) => req.on("close", () => child.kill()),
+            });
+            writer.write({ type: "text-start", id: "a" });
+            writer.write({ type: "text-delta", id: "a", delta: text });
+            writer.write({ type: "text-end", id: "a" });
+          },
+          onError: (e) => {
+            console.error("Mind (Codex):", e instanceof Error ? e.message : String(e));
+            return "The Mind can’t answer on the ChatGPT login right now.";
+          },
+        });
+        return pipeUIMessageStreamToResponse({ response: res, stream });
+      }
       // The system prompt goes by file: late in a game it passes 128 KiB, past what Linux takes as one argument, and
       // spawn failed with E2BIG. Playtest 2026-11-01.
       const dir = mkdtempSync(path.join(tmpdir(), "holos-mind-"));

@@ -3,9 +3,12 @@ import { Prompt } from "@/components/icons";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
 
 /** The repo's steps for playing on a Claude login. */
-export const STEPS_URL = "https://github.com/johnpolacek/playholos#play-on-your-own-claude-subscription";
-/** What to ask Claude Code, which is already on the machine and logged in. */
+export const STEPS_URL = "https://github.com/johnpolacek/playholos#play-on-your-own-claude-or-chatgpt-plan";
+/** What to ask Claude Code or Codex, already on the machine and logged in. */
 export const ASK = "Set up Holos for me to play: run npx playholos. If Node 20.9 or later is missing, help me install it first.";
+
+const CLAUDE_CODE = "https://claude.com/claude-code";
+const CODEX = "https://developers.openai.com/codex";
 
 const STEPS: { title: string; body: React.ReactNode; code?: string }[] = [
   {
@@ -21,14 +24,18 @@ const STEPS: { title: string; body: React.ReactNode; code?: string }[] = [
     ),
   },
   {
-    title: "Get Claude Code",
+    title: "Get Claude Code or Codex",
     body: (
       <>
-        Install it from{" "}
-        <a href="https://claude.com/claude-code" target="_blank" rel="noopener noreferrer" className="text-ink underline underline-offset-2">
-          claude.com/claude-code ↗
+        Install{" "}
+        <a href={CLAUDE_CODE} target="_blank" rel="noopener noreferrer" className="text-ink underline underline-offset-2">
+          Claude Code ↗
+        </a>{" "}
+        or{" "}
+        <a href={CODEX} target="_blank" rel="noopener noreferrer" className="text-ink underline underline-offset-2">
+          Codex ↗
         </a>
-        , then run <code className="font-mono text-[12px] text-ink">claude</code> once to log in. It needs Claude Pro or Max.
+        , then run it once to log in. It needs a paid Claude or ChatGPT plan.
       </>
     ),
   },
@@ -131,7 +138,7 @@ function Sheet({ onClose }: { onClose(): void }) {
             </button>
           </div>
           <p data-r="item" className="mt-2 text-[13px] leading-[1.5] text-page-ink2">
-            The Mind answers through Claude Code on your own Claude plan, so you need no API key.
+            The Mind answers through Claude Code or Codex on your own plan, so you need no API key.
           </p>
 
           <section data-r="item" className="mt-4 flex flex-col gap-2.5 rounded-lg border border-dashed border-muted p-3.5">
@@ -141,10 +148,14 @@ function Sheet({ onClose }: { onClose(): void }) {
             </div>
             <p className="text-[13px] leading-[1.5] text-page-ink2">
               Paste this into{" "}
-              <a href="https://claude.com/claude-code" target="_blank" rel="noopener noreferrer" className="text-ink underline underline-offset-2">
+              <a href={CLAUDE_CODE} target="_blank" rel="noopener noreferrer" className="text-ink underline underline-offset-2">
                 Claude Code ↗
+              </a>{" "}
+              or{" "}
+              <a href={CODEX} target="_blank" rel="noopener noreferrer" className="text-ink underline underline-offset-2">
+                Codex ↗
               </a>
-              . It needs Claude Pro or Max.
+              . It needs a paid Claude or ChatGPT plan.
             </p>
             <div className="flex flex-col gap-2 rounded-md border border-faint bg-panel p-2.5">
               <p className="font-mono text-[12px] leading-relaxed text-ink">{ASK}</p>
