@@ -2,6 +2,7 @@ import { useState } from "react";
 import { KeyMark, Prompt } from "@/components/icons";
 import type { Wrong } from "@/lib/access";
 import { unlock } from "@/lib/key";
+import { ASK, STEPS_URL as STEPS } from "@/components/run-local";
 
 // Where the player's key goes, drawn as a route: kept in their browser, carried through the game's server, which
 // keeps nothing, to Anthropic, which bills it.
@@ -93,10 +94,6 @@ export function Unlock() {
   );
 }
 
-/** The repo's steps for playing on a Claude login. */
-const STEPS = "https://github.com/johnpolacek/playholos#play-on-your-own-claude-subscription";
-/** What to ask Claude Code, which is already on the machine and logged in. */
-const ASK = "Set up Holos for me to play: run npx playholos. If Node 20.9 or later is missing, help me install it first.";
 
 // The other way in, 2026-10-27: on the player's own computer, the Mind answers through Claude Code on their own Claude
 // plan, so no key. Claude Code can set it up itself, so the card gives the ask to paste in, and the one command for doing
