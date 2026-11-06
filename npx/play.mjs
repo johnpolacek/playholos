@@ -7,7 +7,7 @@ import { Readable } from "node:stream";
 
 // npx playholos: the game on your own machine, with no git and no clone. Downloads the repo from GitHub once, to
 // ~/playholos or the folder named, then runs its npm run play, which installs what it needs and opens the game with
-// the Mind answering on your Claude login. --update swaps in the newest copy. 2026-11-04.
+// the Mind answering on your Claude or ChatGPT login. --update swaps in the newest copy. 2026-11-04.
 
 const REPO = "johnpolacek/playholos";
 /** The commit a downloaded copy came from, kept beside it so a later run can tell it is behind. */
@@ -24,10 +24,13 @@ if (major < 20 || (major === 20 && minor < 9)) {
   process.exit(1);
 }
 
-// Checked before the download, so a missing Claude Code doesn't cost the download first.
-if (spawnSync("claude", ["--version"], { shell: win }).status !== 0) {
-  console.error("Holos plays on your Claude login through Claude Code, and it isn't installed.");
-  console.error("Install it from https://claude.com/claude-code, run claude once to log in, then npx playholos again.");
+// Checked before the download, so a missing agent doesn't cost the download first. Claude Code or Codex, either
+// one: the Mind answers on its login. 2026-11-05.
+const has = (cmd) => spawnSync(cmd, ["--version"], { shell: win }).status === 0;
+if (!has("claude") && !has("codex")) {
+  console.error("Holos's Mind answers through Claude Code or Codex, and neither is installed.");
+  console.error("Install Claude Code from https://claude.com/claude-code or Codex from https://developers.openai.com/codex,");
+  console.error("run it once to log in, then npx playholos again.");
   process.exit(1);
 }
 

@@ -23,22 +23,24 @@ Spoilers: the design docs and `game/data/worlds/` say who the neighbors are.
 - `explorations/v2-mocks/`: the game's screens, mocked from one game. `python3 explorations/v2-mocks/build.py` rebuilds them from a draw of `calcs/seed.py`.
 - `legacy/`: earlier designs. Where v2 says nothing, [v1](legacy/v1/README.md) still holds. First-round records are in [legacy/alpha-1](legacy/alpha-1/README.md).
 
-## Play on your own Claude subscription
+## Play on your own Claude or ChatGPT plan
 
-Anyone with Claude Pro or Max can run the game on their own computer, with the Mind answering on their own Claude login. No API key, no cost beyond the subscription.
+Anyone with a paid Claude or ChatGPT plan can run the game on their own computer, with the Mind answering on their own login. No API key, no cost beyond the plan.
 
-1. Install [Node](https://nodejs.org) 20.9 or later, and [Claude Code](https://claude.com/claude-code). Run `claude` once to log in.
+1. Install [Node](https://nodejs.org) 20.9 or later, and [Claude Code](https://claude.com/claude-code) or [Codex](https://developers.openai.com/codex). Run it once to log in.
 2. Then:
 
 ```sh
 npx playholos
 ```
 
-It downloads the game to `~/playholos`, installs what it needs, and opens it at http://localhost:5173. No git needed. Each question to the Mind runs through the `claude` CLI and counts against your plan's usage.
+It downloads the game to `~/playholos`, installs what it needs, and opens it at http://localhost:5173. No git needed. Each question to the Mind runs through the `claude` or `codex` CLI and counts against your plan's usage.
 
+- With both installed, the Mind uses Claude Code. `MIND_CLI=codex npx playholos` picks Codex.
+- On Codex, the Mind runs on Codex's own model. It was written and tested for Claude, so it may sound a little different. `MIND_CODEX_MODEL` names another model.
 - `npx playholos --update` fetches the newest version. Your game is saved in the browser, so it carries over.
 - `npx playholos <folder>` puts the game somewhere else.
-- Or ask Claude Code: “Set up Holos for me to play: run npx playholos.”
+- Or ask your agent: “Set up Holos for me to play: run npx playholos.”
 
 ## Contributing
 

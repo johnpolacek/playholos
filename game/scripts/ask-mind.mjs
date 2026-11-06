@@ -5,6 +5,7 @@ import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "no
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { MIND_EFFORT, MIND_MODEL } from "../lib/access.ts";
+import { askCodex } from "./codex.mjs";
 
 // The code in .dev.vars opens the Mind, as the Mind tab's cookie does. It is never printed.
 const vars = new URL("../.dev.vars", import.meta.url);
@@ -100,4 +101,17 @@ export async function askMindCli(base, { ask, ...save }) {
   if (!prompt) return null;
   if (!prompt.system) return { ok: false, status: prompt.status, text: "" };
   return { ...(await askCli(prompt.system, ask)), told: prompt.told };
+}
+
+/** The same question on the Codex CLI, on a ChatGPT login, as a player with Codex and not Claude Code plays. 2026-11-05. */
+export async function askMindCodex(base, { ask, ...save }) {
+  const prompt = await askMind(base, { ask, dry: true, ...save });
+  if (!prompt) return null;
+  if (!prompt.system) return { ok: false, status: prompt.status, text: "" };
+  try {
+    const { text, ms } = await askCodex({ system: prompt.system, ask, effort: MIND_EFFORT });
+    return { ok: true, status: 200, text, ms, told: prompt.told };
+  } catch (e) {
+    return { ok: false, status: `Codex: ${e.message}`, text: "", told: prompt.told };
+  }
 }

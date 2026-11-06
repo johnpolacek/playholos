@@ -5,7 +5,7 @@
 // npm run check:mind -- http://localhost:5181. 2026-10-23.
 import { CHECKS } from "../evals/mind/checks.mjs";
 import { costOf } from "../lib/access.ts";
-import { askMind, askMindCli } from "./ask-mind.mjs";
+import { askMind, askMindCli, askMindCodex } from "./ask-mind.mjs";
 
 const args = process.argv.slice(2);
 const via = args.includes("--via") ? args[args.indexOf("--via") + 1] : "cli";
@@ -132,7 +132,7 @@ const CASES = [
 
 let failed = 0;
 for (const c of CASES) {
-  const res = await (via === "api" ? askMind : askMindCli)(base, {
+  const res = await ({ api: askMind, codex: askMindCodex }[via] ?? askMindCli)(base, {
     ask: c.ask,
     seed: c.seed,
     // A case at a later Year began that many Years ago, five minutes each.

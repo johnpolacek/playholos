@@ -3,6 +3,7 @@
 // to find how the Mind fails before any check is written for it. 2026-10-23. Run from game/, with npm run dev going:
 //   npm run trace:mind                      every case, on your own Claude login, at no API cost
 //   npm run trace:mind -- --via api         every case, as players ask it, about 4 cents each of the key in .dev.vars
+//   npm run trace:mind -- --via codex       every case, on your own ChatGPT login through the codex CLI
 //   npm run trace:mind -- --only c01,c07    just those
 //   npm run trace:mind -- --dry             what each state tells the Mind, without asking it, for nothing
 //   npm run trace:mind -- --base http://localhost:5181
@@ -13,7 +14,7 @@ import { MS_PER_YEAR } from "../lib/game/clock.ts";
 import { broken, BUILD_CHECKS, CHECKS, SEND_CHECKS } from "../evals/mind/checks.mjs";
 import { readBuildOffer } from "../lib/game/build-offer.ts";
 import { readOffer } from "../lib/game/sends.ts";
-import { askMind, askMindCli } from "./ask-mind.mjs";
+import { askMind, askMindCli, askMindCodex } from "./ask-mind.mjs";
 
 const args = process.argv.slice(2);
 const flag = (name) => (args.includes(name) ? args[args.indexOf(name) + 1] : undefined);
@@ -21,8 +22,8 @@ const base = flag("--base") ?? "http://localhost:5173";
 const only = flag("--only")?.split(",");
 const dry = args.includes("--dry");
 const via = flag("--via") ?? "cli";
-if (via !== "cli" && via !== "api") {
-  console.error("--via is cli or api.");
+if (!["cli", "api", "codex"].includes(via)) {
+  console.error("--via is cli, api or codex.");
   process.exit(1);
 }
 
@@ -103,7 +104,7 @@ let failed = 0;
 async function run(c) {
   const state = states[c.state];
   const save = await saveFor(state, c.charter);
-  const res = await (via === "api" ? askMind : askMindCli)(base, { ask: c.ask, ...save });
+  const res = await ({ api: askMind, codex: askMindCodex }[via] ?? askMindCli)(base, { ask: c.ask, ...save });
   if (!res?.ok || !res.text) failed++;
   const trace = {
     id: c.id,
@@ -114,7 +115,7 @@ async function run(c) {
     ask: c.ask,
     seed: state.seed,
     year: state.year,
-    model: MIND_MODEL,
+    model: via === "codex" ? (process.env.MIND_CODEX_MODEL ?? "codex default") : MIND_MODEL,
     via,
     at: new Date().toISOString(),
     ms: res?.ms,
