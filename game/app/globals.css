@@ -67,6 +67,14 @@
   --animate-flow: flow 1.6s linear infinite;
   --animate-blink: blink 1s ease-in-out infinite alternate;
   --animate-drift: drift 60s linear infinite;
+  --animate-voice: voice 0.7s ease-out both;
+  /* Each language of the watcher's voice, as it begins. 2026-11-05. */
+  @keyframes voice {
+    from {
+      opacity: 0;
+      filter: blur(4px);
+    }
+  }
   @keyframes drift {
     to {
       transform: translateX(-132px);

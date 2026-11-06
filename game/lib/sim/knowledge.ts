@@ -647,7 +647,7 @@ function describeMinds(m: MindsSeen, one: (x: number) => string): string {
     // Its maker's answer to our first knock, one round trip later. 2026-10-31.
     if (w.answer)
       out.push(
-        `A tight beam aimed at Earth, its source ${sky(w.answer)}, arriving at Year ${yearText(w.answer.at)}, ${one(2 * w.answer.ly)} Years after our first knock on the watcher at Year ${yearText(w.answer.knock)}. Built to be read, in pictures. A picture of Earth from far above at the hour we knocked. A short message: look, listen and speak as you like, and build at no other star. Then pictures of Earth, one for every thousand years, as far back as our records go and further: ice sheets coming and going, the Sahara green and then dry, and lately fields and cities. ` +
+        `A tight beam aimed at Earth, its source ${sky(w.answer)}, arriving at Year ${yearText(w.answer.at)}, ${one(2 * w.answer.ly)} Years after our first knock on the watcher at Year ${yearText(w.answer.knock)}. Built to be read. A picture of Earth from far above at the hour we knocked. A voice, speaking one short message in eleven of our languages in turn, learned from our broadcasts: look, listen and speak as you like, and build at no other star. Then pictures of Earth, one for every thousand years, as far back as our records go and further: ice sheets coming and going, the Sahara green and then dry, and lately fields and cities. ` +
           `Its timing puts whoever sent the watcher about ${one(w.answer.ly)} light-years away. It gave nothing that makes us faster, and said nothing of what it would do if we built at another star.`,
       );
     // Our Relay Search's word, or the build it opened. 2026-10-30.
@@ -668,7 +668,7 @@ function describeMinds(m: MindsSeen, one: (x: number) => string): string {
     // Its own warning, at our first seed, once we had found it. Playtest 2026-11-01.
     if (w.warned !== undefined)
       out.push(
-        `At Year ${yearText(w.warned)}, as our first seed left, the watcher fired a narrow laser at Earth, built to be read, in pictures: look, listen and speak as you like, and build at no other star.${w.answer && w.answer.at <= w.warned ? " The same rule its maker's answer gave." : ""} ` +
+        `At Year ${yearText(w.warned)}, as our first seed left, the watcher fired a narrow laser at Earth carrying a voice, speaking in eleven of our languages, learned from our broadcasts: look, listen and speak as you like, and build at no other star.${w.answer && w.answer.at <= w.warned ? " The same rule its maker's answer gave." : ""} ` +
           "Nothing yet has happened to our seed. What another seed would draw, it didn't say.",
       );
     // The ladder as Earth sees it: seed probes gone silent, and a strike from beyond our system. Earth sees what
