@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { Link } from "react-router";
+import { watcherWords } from "@/lib/game/watcher-words";
 import { useGame } from "@/components/game-provider";
 import { BuildMark, buildColor, LeadMark } from "@/components/marks";
 import { useMindNews } from "@/components/mind-chat";
@@ -207,12 +208,13 @@ export function Arrived({ from, to, snap }: { from: number; to: number; snap: Sn
     for (const h of heard)
       if (!snap.heard.has(heardId(h)))
         out.push({ key: `heard:${heardId(h)}`, to: "/play", mark: <span className="text-other">◉</span>, title: `A signal from ${starName(h.star)}`, line: `Year ${yearText(h.arrived)}` });
-    return out;
+    // The watcher first: word of a mind beside us leads the report, above any glow. Playtest 2026-11-05.
+    return out.sort((x, y) => Number(y.key === "lead:small-dark-body") - Number(x.key === "lead:small-dark-body"));
   }, [plan, done, leads, readings, heard, snap, from, to]);
 
   // The map turns to the first new lead. 2026-11-01.
   // A new warm glow first: the map pulls back across the Galaxy to show it, and comes home on Go on. 2026-11-03.
-  const first = items.find((x) => x.key.startsWith("lead:warm-glow-")) ?? items.find((x) => x.key.startsWith("lead:"));
+  const first = items.find((x) => x.key === "lead:small-dark-body") ?? items.find((x) => x.key.startsWith("lead:warm-glow-")) ?? items.find((x) => x.key.startsWith("lead:"));
   useEffect(() => {
     if (!first) return;
     const i = leads.findIndex((l) => `lead:${l.slug}` === first.key);
@@ -225,8 +227,20 @@ export function Arrived({ from, to, snap }: { from: number; to: number; snap: Sn
 
   // Our first warm glow is the game's first real sign, so it gets its own word. 2026-11-03.
   const firstWarm = leads.find((l) => l.slug === "warm-glow-1" && !snap.slugs.has(l.slug));
+  // And word of the watcher gets its own, the biggest news there is. 2026-11-05.
+  const watcher = items.some((x) => x.key === "lead:small-dark-body") ? leads.find((l) => l.slug === "small-dark-body") : undefined;
+  const { minds } = useLeads();
   return (
     <div className="flex flex-col gap-1.5">
+      {watcher && (
+        <Link to={`/play/lead/${watcher.slug}`} className="mb-1.5 block rounded-lg border border-other p-2.5">
+          <span className="font-mono text-[10px] tracking-[.1em] text-other uppercase">Not alone</span>
+          <p className="mt-1 text-[13.5px] leading-snug">
+            <b className="font-semibold">{watcherWords(watcher, !!minds?.watcher?.warned).head}</b> {watcherWords(watcher, !!minds?.watcher?.warned).tail}{" "}
+            <span className="text-you">Read it ›</span>
+          </p>
+        </Link>
+      )}
       {firstWarm?.range && (
         <div className="mb-1.5 rounded-lg border border-other/50 p-2.5">
           <span className="font-mono text-[10px] tracking-[.1em] text-other uppercase">Our first warm glow</span>

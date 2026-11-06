@@ -31,11 +31,21 @@ const one = (s: string | null): unknown => {
   }
 };
 
+/** The save's query: in the body of a POST, since a long game's flybys outgrow a URL's limit (431 at Year 5,379 with 96
+ *  probes out, 2026-11-05), or in the URL of an older client's GET. */
+async function askOf(req: Request) {
+  const url = new URL(req.url).searchParams;
+  if (req.method !== "POST") return url;
+  const body = new URLSearchParams(await req.text());
+  if (!body.has("seed")) body.set("seed", url.get("seed") ?? "");
+  return body;
+}
+
 // What Earth knows at a Year, for Scan, through the same wall: the worlds felt, with what our telescopes have read of
 // them, Proxima b's air once the 15 m Mirror reads it, and the signals our watches have caught. Each is dated as Build dates our order, with this game's
 // compute, as the Mind hears it. Nothing yet to arrive leaves the server. 2026-10-22.
 export async function known(req: Request) {
-  const q = new URL(req.url).searchParams;
+  const q = await askOf(req);
   const seed = Number(q.get("seed"));
   if (!inPool(seed)) return Response.json({ error: "No such game." }, { status: 404 });
   // A game has no last Year, and word from far holes comes late: Gaia BH1's sentinel reports about Year 17,200.
@@ -66,7 +76,7 @@ const AHEAD = 100_000;
 
 // The next Year something new happens, for a skip, through the same wall: it says when, never what. 2026-10-29.
 export async function next(req: Request) {
-  const q = new URL(req.url).searchParams;
+  const q = await askOf(req);
   const seed = Number(q.get("seed"));
   if (!inPool(seed)) return Response.json({ error: "No such game." }, { status: 404 });
   const year = Math.min(1_000_000, Math.max(0, Number(q.get("year")) || 0));

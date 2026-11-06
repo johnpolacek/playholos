@@ -9,6 +9,9 @@ import { Lens } from "@/components/icons";
 import { axis, Brings, Key, says, sooner, targetOf, Thread, tripAt, useReach, year, Years } from "@/components/reach";
 import { useLeads } from "@/components/scan";
 import { VisitArt } from "@/components/visit-art";
+import { Chances } from "@/components/chances";
+import { LeadArt } from "@/components/lead-art";
+import { SystemArt } from "@/components/system-art";
 import { isHole, starName, visitReading } from "@/lib/game/leads";
 import { Face, ListHead } from "@/components/tab-head";
 import { HISTORY } from "@/lib/game/charter";
@@ -172,7 +175,7 @@ function Sent(props: {
 }
 
 export function DestinationPage({ slug }: { slug: string }) {
-  const { leads, visits, colony } = useLeads();
+  const { leads, visits, colony, readings } = useLeads();
   const { aim, close, setClose, setTrip } = useReach();
   const { save, year: clock, orderAt, moveWill } = useGame();
   const { plan, change } = usePlan();
@@ -325,6 +328,35 @@ export function DestinationPage({ slug }: { slug: string }) {
             </section>
           );
         })}
+
+      {/* What we know of it, where we choose how to go: "is it habitable? what is the system like?" had to be asked,
+          playtest 2026-11-05. Its latest word, its system or its art, what we measured, and its chances. */}
+      {lead.art.kind !== "near" && (
+        <section data-m className="mt-4 rounded-xl border border-faint bg-paper px-3 py-2.5">
+          <div className="flex items-center justify-between gap-2">
+            <span className="font-mono text-[10px] tracking-[.1em] text-muted uppercase">What we know</span>
+            {lead.system && (
+              <button onClick={() => setClose(!close)} className="flex h-7 items-center gap-1.5 rounded-full border border-faint px-3 text-[12.5px] hover:border-muted">
+                <Lens closer={!close} size={13} />
+                {close ? "Pull back" : "See its system"}
+              </button>
+            )}
+          </div>
+          <p className="mt-1 text-[14px] leading-snug">{(readings[lead.slug] ?? []).at(-1)?.title ?? lead.line}</p>
+          <div className="mt-2 rounded-lg border border-faint px-2 py-1">
+            {lead.system && lead.art.kind === "orbit" ? <SystemArt system={lead.system} /> : <LeadArt art={lead.art} />}
+          </div>
+          <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-[13px] leading-snug">
+            {lead.facts.slice(0, 5).map(([label, value]) => (
+              <div key={label} className="contents">
+                <dt className="text-muted">{label}</dt>
+                <dd>{value}</dd>
+              </div>
+            ))}
+          </dl>
+          <Chances lead={lead} readings={readings[lead.slug] ?? []} className="mt-2.5" />
+        </section>
+      )}
 
       <ListHead data-m left={`Ways to engage · ${ways.length + (lens ? 1 : 0) + (stay ? 1 : 0) + (mind ? 1 : 0) + LOCKED.length}`} right="Passes" className="mt-5" />
       <ul className="mt-1">
