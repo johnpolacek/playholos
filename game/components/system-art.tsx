@@ -7,7 +7,7 @@ import { prefersReducedMotion } from "@/lib/motion";
 // go round it, each on its orbit, going as Kepler has it. Distances run on rings at round light-times, with Earth's 8
 // light-minutes among them, so a world close in and one far out both show: the angles are true, the distances squeezed. Claims not confirmed are dashed. The
 // lead's own world is ringed, and lights in the warm zone. Years keep their true ratios: the innermost goes round in
-// three seconds, and the rest as much slower as their years are longer. Settled 2026-10-19.
+// 20 seconds, and the rest as much slower as their years are longer. Settled 2026-10-19, slowed from 3 seconds 2026-11-05.
 
 const W = 320;
 const H = 230;
@@ -55,7 +55,7 @@ export function SystemArt({ system }: { system: System }) {
     // Where each world sits on its orbit after `t` seconds, as Kepler has it.
     const place = (t: number) =>
       worlds.forEach((w, i) => {
-        const M = ((2 * Math.PI * t) / (3 * (w.days / fastest)) + i * 2.1) % (2 * Math.PI);
+        const M = ((2 * Math.PI * t) / (20 * (w.days / fastest)) + i * 2.1) % (2 * Math.PI);
         let E = M;
         for (let k = 0; k < 6; k++) E -= (E - w.e * Math.sin(E) - M) / (1 - w.e * Math.cos(E));
         const x = w.a * (Math.cos(E) - w.e);

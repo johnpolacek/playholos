@@ -1985,8 +1985,9 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       },
       /** Whether the system built is the one wanted. */
       holds: (star: string, system: System) => built?.system === system && built.star === star,
-      /** Its worlds going round as Kepler has it, the innermost in four seconds and the rest as much slower as their
-       *  years are longer, and all of it coming in as the view goes inside. */
+      /** Its worlds going round as Kepler has it, the innermost in 30 seconds and the rest as much slower as their
+       *  years are longer, and all of it coming in as the view goes inside. Four seconds raced a world filling the view
+       *  round it, playtest 2026-11-05. */
       frame() {
         const inside = ramp(sysDown, 0.45, 1);
         sysStarGlow.uniforms.uOpacity.value = sysWorldGlow.uniforms.uOpacity.value = inside;
@@ -1997,7 +1998,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
         const fastest = Math.min(...worlds.map((w) => w.days));
         const pos = sysWorlds.geometry.attributes.position as THREE.BufferAttribute;
         worlds.forEach((w, i) => {
-          const M = ((2 * Math.PI * clock) / (4 * (w.days / fastest)) + i * 2.3) % (2 * Math.PI);
+          const M = ((2 * Math.PI * clock) / (30 * (w.days / fastest)) + i * 2.3) % (2 * Math.PI);
           let E = M;
           for (let k = 0; k < 6; k++) E -= (E - w.e * Math.sin(E) - M) / (1 - w.e * Math.cos(E));
           const px = w.a * (Math.cos(E) - w.e);

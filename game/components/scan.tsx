@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router";
 import { useGame } from "@/components/game-provider";
 import { openReadings, useOpenReadings } from "@/components/close-reading";
 import { Heard } from "@/components/heard";
+import { Path } from "@/components/path";
 import { LeadList, LeadsMap } from "@/components/leads";
 import { Messages } from "@/components/messages";
 import { Review } from "@/components/review";
@@ -102,13 +103,26 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (seed === undefined) return;
     let live = true;
-    fetch(`/api/known?seed=${seed}&${query}`)
-      .then((r) => (r.ok ? r.json() : null))
-      .then(
-        (v: EarthView | null) => live && setView((was) => v ?? was ?? NOTHING),
-        () => live && setView((was) => was ?? NOTHING),
-      );
-    return () => void (live = false);
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    // A failed answer is asked again, a little later each time: with the clock held it never moved on, so one failure
+    // left Scan empty for good. Playtest 2026-11-05.
+    const ask = (tries: number) =>
+      fetch(`/api/known?seed=${seed}`, { method: "POST", body: new URLSearchParams(query) })
+        .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`known ${r.status}`))))
+        .then(
+          (v: EarthView) => live && setView(v),
+          (e) => {
+            if (!live) return;
+            console.warn("[holos] what we know didn't load", e);
+            setView((was) => was ?? NOTHING);
+            if (tries < 6) timer = setTimeout(() => ask(tries + 1), 1500 * 2 ** tries);
+          },
+        );
+    ask(0);
+    return () => {
+      live = false;
+      clearTimeout(timer);
+    };
   }, [seed, query]);
   const felt = view?.felt;
   // What our watches caught. Answers to what we sent went with the neighbors, 2026-10-29.
@@ -321,6 +335,7 @@ export function Scan() {
   if (params.has("review")) return <Review onClose={close} />;
   return (
     <>
+      <Path />
       {heard.length > 0 && <Heard />}
       <LeadList leads={leads} dials={dials} readings={readings} fresh={fresh} standing={standing} readable={open} headClass={heard.length ? "mt-5" : "mt-1"} />
       <Messages />

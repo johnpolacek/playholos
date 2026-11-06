@@ -9,6 +9,8 @@ import { useJumpWords } from "@/components/mind-news";
 import { MindNote } from "@/components/mind-note";
 import { usePlan, useSchedule } from "@/components/picks";
 import { Quiet } from "@/components/quiet";
+import { watcherWords } from "@/lib/game/watcher-words";
+import { usePath } from "@/components/path";
 import { useLeads } from "@/components/scan";
 import { starName } from "@/lib/game/leads";
 import { tenths, yearText } from "@/lib/game/clock";
@@ -32,12 +34,18 @@ export function IdleNote() {
   const { idle, held, last } = useIdleNow();
   const { plan, change } = usePlan();
   const { scale } = useSchedule();
-  const { standing, leads, minds } = useLeads();
+  const { standing, leads, minds, readings } = useLeads();
+  // The watcher found, and its word not yet read: the biggest news there is, so it holds the note until we open it.
+  // It reached us as a small label on the map until a playtest, 2026-11-05.
+  const watchLead = leads.find((l) => l.slug === "small-dark-body");
+  // Unread however long ago it came: Scan's NEW fades after 50 Years, and this mustn't.
+  const watchNew = !!watchLead && (readings[watchLead.slug] ?? []).some((r) => !(save?.seen ?? []).includes(r.id));
   const ahead = useAhead();
   const open = useOpenReadings();
   const glow = open[0];
   const navigate = useNavigate();
   const path = useLocation().pathname;
+  const nextStep = usePath().next;
   const now = tenths(year ?? 0);
   const { compute } = useMemo(() => drawAt(plan, scale, now), [plan, scale, now]);
   // Compute combing old recordings isn't idle.
@@ -47,13 +55,13 @@ export function IdleNote() {
   const needs = Object.entries(standing).some(([slug, s]) => s === "needs" && !open.some((l) => l.slug === slug));
   const quiet = !idle && !needs && (spare || ahead !== null);
   // Put away until the next time nothing builds, or the next stop.
-  const key = idle ? `idle ${last}` : `next ${ahead?.to ?? ""}`;
+  const key = watchNew ? "watcher" : idle ? `idle ${last}` : `next ${ahead?.to ?? ""}`;
   const [away, setAway] = useState<string | null>(null);
   // A jump is told here too, ahead of the note's usual word, on every tab: the Mind says what reached us, in one note,
   // with its own words on it. On the Mind tab the talk shows those. 2026-11-04.
   const leap = useLeap();
   const told = useJumpWords(leap?.snap.said);
-  const shown = year !== null && (idle || quiet) && away !== key && path !== "/play/mind";
+  const shown = year !== null && (idle || quiet || watchNew) && away !== key && path !== "/play/mind";
   const pick = useMindPick(shown && (idle || spare));
   const root = useRef<HTMLDivElement>(null);
   useGSAP(
@@ -112,13 +120,15 @@ export function IdleNote() {
       });
   // Then the reading under way, then our latest sail or probe on its way, then a word with the Mind on where to turn.
   const reading = spent && !glow && !heat ? reads.find((o) => o.y + READ_YEARS > now) : undefined;
-  const flight = spent && !glow && !heat && !reading
+  // Then our path's next step, so the note never leaves us with nowhere to turn. Playtest 2026-11-05.
+  const step = spent && !glow && !heat && !reading ? nextStep : null;
+  const flight = spent && !glow && !heat && !reading && !step
     ? (plan.flybys ?? [])
         .map((o) => ({ o, r: flybyRoad(plan, scale, o.y, o) }))
         .filter(({ r }) => r.home !== null && r.home > now)
         .sort((a, b) => b.o.y - a.o.y)[0]
     : undefined;
-  const openSky = spent && !glow && !heat && !reading && !flight;
+  const openSky = spent && !glow && !heat && !reading && !step && !flight;
   const clock = held && <span className="text-page-ink2"> The clock waits.</span>;
   const what = pick ? `${pick.build.what.charAt(0).toLowerCase()}${pick.build.what.slice(1)}` : "";
   return (
@@ -133,7 +143,12 @@ export function IdleNote() {
         </svg>
       </button>
       <MindNote edge={false} className="pr-6 text-[13.5px] leading-[1.45]">
-        {idle && pick ? (
+        {watchNew && watchLead ? (
+          <p>
+            <span className="font-medium text-other">{watcherWords(watchLead, !!minds?.watcher?.warned).head}</span>{" "}
+            <span className="text-page-ink2">{watcherWords(watchLead, !!minds?.watcher?.warned).tail}</span>
+          </p>
+        ) : idle && pick ? (
           <p>
             <span className="font-medium text-other">Our compute sits idle.</span>{" "}
             <span className="text-page-ink2">{held ? "Nothing is building, so the clock waits." : "Nothing is building."}</span>
@@ -148,6 +163,12 @@ export function IdleNote() {
           <p>
             <span className="font-medium text-other">Our telescope is reading {starName(reading.name)}.</span>{" "}
             <span className="text-page-ink2">We will know its light by Year {yearText(reading.y + READ_YEARS)}.</span>
+            {clock}
+          </p>
+        ) : step ? (
+          <p>
+            <span className="font-medium text-other">Our next step: {step.label.charAt(0).toLowerCase() + step.label.slice(1)}.</span>{" "}
+            <span className="text-page-ink2">We look for life, make contact, and spread. Scan shows where we stand.</span>
             {clock}
           </p>
         ) : flight ? (
@@ -180,14 +201,14 @@ export function IdleNote() {
             {clock}
           </p>
         )}
-        {pick && (
+        {!watchNew && pick && (
           <p className="mt-1 text-page-ink2">
             {pick.fit ? `For our ${pick.strategy} strategy, we would start ` : "We would start "}
             <b className="font-medium text-ink">{pick.build.name}</b>: {what}
           </p>
         )}
         <div className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-2">
-          {pick && orderAt !== null && (
+          {!watchNew && pick && orderAt !== null && (
             <button
               onClick={start}
               className="h-8 rounded-full bg-other px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110"
@@ -195,12 +216,28 @@ export function IdleNote() {
               Start {pick.build.name}
             </button>
           )}
-          {glow && path !== `/play/lead/${glow.slug}` && (
+          {watchNew && watchLead && (
+            <>
+              <Link
+                to={`/play/lead/${watchLead.slug}`}
+                className="inline-flex h-8 items-center rounded-full bg-other px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110"
+              >
+                Read it ›
+              </Link>
+              <Link
+                to={`/play/mind?ask=${encodeURIComponent("We want to answer the watcher. What should we say to it, and what does it risk?")}`}
+                className="text-[12.5px] text-you hover:underline"
+              >
+                Answer it ›
+              </Link>
+            </>
+          )}
+          {!watchNew && glow && path !== `/play/lead/${glow.slug}` && (
             <Link to={`/play/lead/${glow.slug}#close-reading`} className="inline-flex h-8 items-center rounded-full bg-other px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110">
               See {starName(glow.star)} ›
             </Link>
           )}
-          {heat && (
+          {!watchNew && heat && (
             <>
               <Link
                 to={`/play/reach/${heat.slug}`}
@@ -216,12 +253,20 @@ export function IdleNote() {
               </Link>
             </>
           )}
-          {flight && path !== "/play/reach" && (
+          {!watchNew && step?.to && (
+            <Link
+              to={step.to}
+              className="inline-flex h-8 items-center rounded-full bg-other px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110"
+            >
+              {step.label} ›
+            </Link>
+          )}
+          {!watchNew && flight && path !== "/play/reach" && (
             <Link to="/play/reach" className="text-[12.5px] text-you hover:underline">
               See it on Reach ›
             </Link>
           )}
-          {openSky && (
+          {!watchNew && openSky && (
             <>
               <Link
                 to={`/play/mind?ask=${encodeURIComponent("Our builds are done. Where should we turn next?")}`}
@@ -237,7 +282,7 @@ export function IdleNote() {
           {(!idle || !pick) && ahead && (
             <button
               onClick={ahead.go}
-              className={`h-8 rounded-full px-4 text-[13px] font-medium transition-[filter] hover:brightness-110 ${pick || glow || heat || openSky || flight ? "border border-you/60 text-you" : "bg-you text-paper"}`}
+              className={`h-8 rounded-full px-4 text-[13px] font-medium transition-[filter] hover:brightness-110 ${pick || glow || heat || openSky || flight || step ? "border border-you/60 text-you" : "bg-you text-paper"}`}
             >
               Jump to {ahead.why ?? "what comes next"} ›
             </button>

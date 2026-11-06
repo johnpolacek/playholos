@@ -27,6 +27,8 @@ const ROUTES: Record<string, (req: Request) => Promise<Response>> = {
   "GET /api/leads": leads,
   "GET /api/known": known,
   "GET /api/next": next,
+  "POST /api/known": known,
+  "POST /api/next": next,
   "POST /api/mind": limited,
 };
 

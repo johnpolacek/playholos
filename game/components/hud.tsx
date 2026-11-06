@@ -101,7 +101,7 @@ function Skip() {
   useEffect(() => {
     if (seed === undefined || tenth === null) return;
     let live = true;
-    fetch(`/api/next?seed=${seed}&${query}`)
+    fetch(`/api/next?seed=${seed}`, { method: "POST", body: new URLSearchParams(query) })
       .then((r) => (r.ok ? r.json() : null))
       .then(
         (v: { next: number | null; why?: string | null } | null) => {
