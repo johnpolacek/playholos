@@ -1,6 +1,6 @@
 import { Chances } from "@/components/chances";
 import { Link, useNavigate } from "react-router";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useGame } from "@/components/game-provider";
 import { usePlan, useSchedule } from "@/components/picks";
 import { flybyRoad } from "@/lib/game/reach";
@@ -14,6 +14,8 @@ import { span, lyOf, yearText } from "@/lib/game/clock";
 import { ODDS, type Odds, type Reading, starName } from "@/lib/game/leads";
 import { dates } from "@/lib/game/sends";
 import { VisitArt } from "@/components/visit-art";
+import { WatcherVoice } from "@/components/watcher-voice";
+import { VOICED } from "@/lib/game/watcher-voice";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
 
 // One lead, as a report: drawn, then what we measured, what it could be with the Mind's word for each, and what would
@@ -103,6 +105,21 @@ function AirBands({ air }: { air: NonNullable<Reading["air"]> }) {
   );
 }
 
+/** A way back to the watcher's voice. */
+function ListenButton({ onClick }: { onClick(): void }) {
+  return (
+    <button
+      onClick={onClick}
+      className="mt-2 inline-flex h-8 items-center gap-2 self-start rounded-full border border-other/70 px-3.5 text-[13px] text-other transition-colors hover:bg-other/10"
+    >
+      <svg viewBox="0 0 16 10" className="h-2.5 w-4" aria-hidden>
+        <path d="M0 5h2l1-3 2 6 2-8 2 10 2-7 1 4 1-2h3" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" />
+      </svg>
+      Hear its voice
+    </button>
+  );
+}
+
 export function LeadPage({ slug }: { slug: string }) {
   const { leads, dials, readings, fresh, setLook } = useLeads();
   const { see, save } = useGame();
@@ -134,7 +151,16 @@ export function LeadPage({ slug }: { slug: string }) {
   const earlier = all.slice(0, -1).reverse();
 
   // Opening the page reads what landed on it.
-  const unread = all.filter((r) => fresh.has(r.id)).map((r) => r.id).join(" ");
+  // Every one not yet opened, however old: the Mind's word on the watcher waits on it. 2026-11-05.
+  const unread = all.filter((r) => fresh.has(r.id) || !(save?.seen ?? []).includes(r.id)).map((r) => r.id).join(" ");
+  // The watcher's voice opens on its own the first time we come to it, and stays a tap away after. 2026-11-05.
+  const [voice, setVoice] = useState(false);
+  const firstVoice = unread.split(" ").some((id) => VOICED.has(id));
+  const [opened, setOpened] = useState(false);
+  if (firstVoice && !opened) {
+    setOpened(true);
+    setVoice(true);
+  }
   useEffect(() => {
     if (unread) see(unread.split(" "));
   }, [unread, see]);
@@ -174,6 +200,7 @@ export function LeadPage({ slug }: { slug: string }) {
 
   return (
     <div ref={root} className="flex flex-col pb-4">
+      {voice && <WatcherVoice onClose={() => setVoice(false)} />}
       {/* The way back stays in reach while the page scrolls. */}
       <div className="sticky -top-3 z-10 -mx-4 bg-panel px-4 pt-3 pb-2">
         <BackBar to="/play" label="All leads" />
@@ -226,6 +253,7 @@ export function LeadPage({ slug }: { slug: string }) {
           </span>
           <h2 className="mt-1 text-[16px] leading-snug font-semibold">{read.title}</h2>
           <p className="mt-0.5 text-[13.5px] leading-snug">{read.line}</p>
+          {VOICED.has(read.id) && <ListenButton onClick={() => setVoice(true)} />}
           {read.air && <AirBands air={read.air} />}
           {read.sight && (
             <div className="mt-2.5 flex justify-center">
@@ -248,6 +276,7 @@ export function LeadPage({ slug }: { slug: string }) {
               </span>
               <h3 className="mt-0.5 text-[14.5px] leading-snug font-semibold">{r.title}</h3>
               <p className="mt-0.5 text-[13.5px] leading-snug text-page-ink2">{r.line}</p>
+              {VOICED.has(r.id) && <ListenButton onClick={() => setVoice(true)} />}
               {r.sight && (
                 <div className="mt-2 flex justify-center">
                   <VisitArt sight={r.sight} />
