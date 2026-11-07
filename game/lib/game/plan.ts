@@ -62,7 +62,7 @@ export const BUILDS: Build[] = [
   // 2026-10-15 in HOLOS_GAME_CONCEPT.md: a drive 30 Years at standard pace, a seed ship 18, about 1,500 t. Both are
   // joined in orbit, a quarter faster once the yard is done, the drive since 2026-10-22.
   { name: "Deuterium Works", what: "Draws heavy hydrogen from water, to fuel fusion.", does: "reach" },
-  { name: "Fusion Drive", what: "An engine that lets a craft slow at a star, and stay.", does: "reach" },
+  { name: "Fusion Drive", what: "An engine big enough to carry a craft that can slow at a star, and stay.", does: "reach" },
   { name: "Seed Ship", what: "Carries a copy of our Mind to a star, to stay.", kt: 1.5, does: "reach" },
 ];
 
@@ -272,7 +272,7 @@ export const SAYS: Record<string, string> = {
   "Deuterium Works":
     "Fusion burns heavy hydrogen, and the sea holds plenty: about one hydrogen atom in 6,400 is heavy. It takes little, and pays only once a drive is coming.",
   "Fusion Drive":
-    "No one has flown one yet. It lets a craft slow at a star and stay, where a flyby is past within minutes. The longest roads need it. It takes thirty Years at standard pace, a quarter less once the Orbital Yard is done.",
+    "No one has flown one yet. It carries a craft of 1,000 t to a tenth of light speed, heavy enough to slow at a star on a magnetic sail and stay, where a flyby is past within minutes. The longest roads need it. It takes thirty Years at standard pace, a quarter less once the Orbital Yard is done.",
   "Seed Ship":
     "A copy of our Mind that goes and stays, about 1,500 tonnes with its seed. It flies only on a Fusion Drive, fed by the Deuterium Works, so it leaves once both are done.",
   "Ground Solar":

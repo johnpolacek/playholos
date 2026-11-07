@@ -236,7 +236,7 @@ test("a sentinel stays and reads a felt world up close: its first word comes hom
   const world = await loadWorld(10);
   const f = world.finds[0];
   const star = world.stars[f.star]?.shown ?? f.star;
-  const word = 10 + f.d / 0.1 + 10 + f.d;
+  const word = 10 + f.d / 0.1 + 10 + 15 + f.d;
   const kit = { sentinels: [{ star, leaves: 10 }] };
   assert.equal(earthKnows(world, word - 0.01, kit).visits.length, 0);
   const v = earthKnows(world, word, kit).visits.find((x) => x.by === "sentinel")!;
@@ -268,7 +268,7 @@ test("a sentinel at a warm glow sees what makes its heat", async () => {
   const found = glowsFound(world, { warmWatch: 0, telescope: 0 }, 5000);
   assert.ok(found.length > 0);
   const src = found[0].src;
-  const home = 10 + src.d / 0.1 + 10 + src.d;
+  const home = 10 + src.d / 0.1 + 10 + 15 + src.d;
   const kit = { warmWatch: 0, telescope: 0, sentinels: [{ star: "Warm glow 1", leaves: 10 }] };
   assert.equal(earthKnows(world, home - 0.01, kit).visits.filter((v) => v.by === "sentinel").length, 0);
   const v = earthKnows(world, home, kit).visits.find((x) => x.by === "sentinel")!;
@@ -288,7 +288,7 @@ test("black holes: Gaia's finds are known at Year 0, the Star Mapper finds more,
   assert.ok(gaia < mapped, `${gaia} by Gaia, ${mapped} by Year 50 with a mapper`);
   const world = await loadWorld(10);
   const h = darkMasses(world, 300, 0)[0];
-  const home = 10 + h.d / 0.1 + 10 + h.d;
+  const home = 10 + h.d / 0.1 + 10 + 15 + h.d;
   const v = earthKnows(world, home, { mapper: 0, sentinels: [{ star: h.name, leaves: 10 }] }).visits.find((x) => x.sight === "dark")!;
   assert.equal(v.spin, world.holes!.find((x) => x.id === h.id)!.spin);
 });

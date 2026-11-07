@@ -23,11 +23,12 @@ import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motio
 const VOYAGER_AU_YEAR = (17 * 3.156e7) / 149597870.7;
 const GAP_AU = NEAREST.ly * LY_AU;
 
-const STOPS = ["How we reach", "Voyager 1", "Send a sail", "Send a flyby probe", "Roads to come"];
+// How we reach and Voyager 1 were two stops, one stop since 2026-11-07.
+const STOPS = ["How we reach", "Send a sail", "Send a flyby probe", "Roads to come"];
 
 /** The roads our builds open later, each with the build it waits on. Speeds and sizes are plan.ts's and reach.ts's. */
 const LATER_ROADS = [
-  { build: "Fusion Drive", line: "Slows a craft at a star, so it can stay", after: "Deuterium Works" },
+  { build: "Fusion Drive", line: "Carries a craft heavy enough to stop at a star", after: "Deuterium Works" },
   { build: "Solar Lens", line: "Uses the Sun as a lens, to picture one world’s face", after: "Orbital Yard" },
   { build: "Seed Ship", line: "Carries a copy of our Mind, at a tenth of light’s speed", after: "Fusion Drive" },
   { build: "Mind Link", line: "A laser that sends the Will to our Mind, wherever it stands", after: "Seed Ship" },
@@ -142,12 +143,14 @@ export function ReachTour({ onClose }: { onClose(): void }) {
   const from = clock === null ? 0 : Math.floor(clock * 10) / 10;
   const ways = useMemo(() => roads(plan, scale, from), [plan, scale, from]);
   const { to, step: tick } = axis(ways);
-  const road = at === 2 || at === 3 ? ways[at - 2] : null;
+  const road = at === 1 || at === 2 ? ways[at - 1] : null;
 
-  // The map follows the stops: out from Earth on the first, then on to the nearest star.
+  // The map follows the stops, nearest first: out from Earth past New Horizons to Voyager 1 on the first, then on to
+  // the nearest star with the roads. The walk had opened on Proxima Centauri and then drilled back in,
+  // and Voyager 1's stop showed the star with the craft lost at the Sun's mark. Playtest 2026-11-07.
   useEffect(() => aim(null), [aim]);
   useEffect(() => {
-    if (at === 0) tour(0.3);
+    if (at === 0) tour(0.3, "voyager");
     else fly(farZoom(NEAREST.ly));
   }, [at, fly, tour]);
 
@@ -186,13 +189,8 @@ export function ReachTour({ onClose }: { onClose(): void }) {
   const words = [
     {
       head: "How we reach",
-      sub: `${NEAREST.name}, ${NEAREST.ly} light-years out`,
-      mind: "Everything we have ever sent is still inside the Sun’s own neighborhood. The nearest star is a different kind of far. Here is how far we have gone, two ways we could go farther now, and the roads to come.",
-    },
-    {
-      head: "Voyager 1",
-      sub: `Launched 1977 · ${hours} light-hours gone · ${NEAREST.ly} light-years to go`,
-      mind: `Our farthest craft, now silent, carrying the Golden Record. It has gone less than a thousandth of the way. At its speed, the rest would take about ${(crawl * 1000).toLocaleString()} years. To arrive within a lifetime, we must go nearly a thousand times faster, at least a twentieth of light’s speed.`,
+      sub: `Voyager 1 · ${hours} light-hours gone · ${NEAREST.ly} light-years to go`,
+      mind: `Past Neptune fly two of ours. New Horizons, launched in 2006, passed Pluto in 2015 and is still heading out. Voyager 1, launched in 1977, is our farthest craft, silent now, carrying the Golden Record: sounds and pictures of Earth, for whoever finds it. Against the nearest star, ${NEAREST.name}, it has gone less than a thousandth of the way. At its speed, the rest would take about ${(crawl * 1000).toLocaleString()} years. To arrive within a lifetime, we must go nearly a thousand times faster, at least a twentieth of light’s speed.`,
     },
     {
       head: "Send a sail",
@@ -201,13 +199,13 @@ export function ReachTour({ onClose }: { onClose(): void }) {
     },
     {
       head: "Send a flyby probe",
-      sub: "An eighth of light’s speed · Probe Yard",
+      sub: "A tenth of light’s speed · Probe Yard",
       mind: "A heavier probe, built and fueled in orbit. It flies past too, but reads the world’s air, where sails send only pictures. These are our two roads at Year 0.",
     },
     {
       head: "Roads to come",
       sub: "Opened by what we build",
-      mind: "A flyby is past a world in minutes. To stay, a craft must slow, and that takes a fusion drive no one has flown yet. Each waits on a build before it, and the drive alone takes thirty Years, so these roads open slowly.",
+      mind: "A flyby is past a world in minutes. To stay, a craft must slow on a magnetic sail, and only a heavy one can. Carrying that much takes a fusion drive no one has flown yet. Each waits on a build before it, and the drive alone takes thirty Years, so these roads open slowly.",
     },
   ][at];
 
@@ -245,7 +243,7 @@ export function ReachTour({ onClose }: { onClose(): void }) {
             <Brings road={road} />
           </div>
         )}
-        {at === 1 && (
+        {at === 0 && (
           <div data-r>
             <Gap />
           </div>

@@ -250,16 +250,18 @@ def long_roads(early=6.2, reading=9.4, yard=11.3, ly=4.32):
 # Starshot's 0.2c point design (Parkin 2018, read 2026-10-14): 200 GW at 1.06 microns from a 2.7 km array, for 480 s a
 # sail. The sail starts 60,000 km up and reflects 70% of the light, absorbs almost none, and passes the rest forward.
 # Past its focus the light spreads at about the array's width over the sail's distance, so its footprint at the target
-# shrinks as the sail climbs. This project's arithmetic: the forward light alone, 30% of the beam.
-LASER_W, ARRAY_M, SAIL_START_M, PULSE_S, PASSED = 200e9, 2700, 6e7, 480, 0.30
+# shrinks as the sail climbs. This project's arithmetic: 30% of the beam passes the sail at the start. By the end, at
+# 0.13 AU, Parkin has under 20% of the beam reaching the sail, so about 85% goes on: what spills past and 30% of the rest.
+# Corrected 2026-11-07 from 30% throughout and 0.096 AU, which had the flash at 150 times the Sun in its nanometre.
+LASER_W, ARRAY_M, SAIL_START_M, PULSE_S, PASSED, PASSED_END, END_M = 200e9, 2700, 6e7, 480, 0.30, 0.85, 0.13 * 1.496e11
 def launch_glare(ly=4.32, stars_within_ly=50, stars=2000):
     d = ly * 9.4607e15; c = 2.998e8
-    end_m = 0.5 * 0.2 * c * PULSE_S                           # about where the sail is when the beam stops
+    end_m = END_M                                             # where the sail is when the beam stops
     sun_at = 3.828e26 / (4 * math.pi * d ** 2)                # the Sun's light at the target, all colors
     sun_nm = 0.65 * (1.496e11 / d) ** 2                       # the Sun's light per nanometre near 1 micron: about 0.65 W/m2 at Earth
-    print(f'A laser launch, seen from {ly} ly. {PASSED:.0%} of {LASER_W / 1e9:.0f} GW passes the sail and goes on.')
-    for label, L in (('as the beam starts', SAIL_START_M), ('as it stops', end_m)):
-        r = d * ARRAY_M / (2 * L); flux = PASSED * LASER_W / (math.pi * r ** 2)
+    print(f'A laser launch, seen from {ly} ly. {PASSED:.0%} of {LASER_W / 1e9:.0f} GW goes on past the sail at first, {PASSED_END:.0%} at the end.')
+    for label, L, share in (('as the beam starts', SAIL_START_M, PASSED), ('as it stops', end_m, PASSED_END)):
+        r = d * ARRAY_M / (2 * L); flux = share * LASER_W / (math.pi * r ** 2)
         print(f'  {label:18} a spot {2 * r / 1.496e11:6.2f} AU across at the target: {flux:.1e} W/m2, {flux / sun_at:.1e} of all the Sun\'s light there, '
               f'{flux / sun_nm:.2g} times the Sun\'s in that nanometre')
     half = ARRAY_M / (2 * SAIL_START_M)

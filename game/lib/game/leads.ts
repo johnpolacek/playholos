@@ -522,7 +522,7 @@ function sentinelReading(v: Visit): Reading {
       title,
       line: `Our sentinel braked at ${starName(v.star)} and stays. It sees ${saw}.`,
       mind: v.sight === "works"
-        ? "We are not alone. Its braking flame pointed at them, so they may know we came."
+        ? "We are not alone. It braked on its magnetic sail, unseen, so they need not know we came."
         : "Nature made this heat, not a mind. It stays, and watches.",
       now: v.glow === "mind"
         ? ["almost no chance", "almost no chance", "almost certain"]
@@ -720,7 +720,7 @@ function darkLead(h: DarkMass, far = false): Lead {
       // What a hole is worth, and what using it costs, 2026-10-26. Kerr numbers and the X-ray sky's limits, from
       // HOLOS_RESEARCH.md's "Black holes".
       ["What it offers", "A furnace: rock fed to it gives back 6% to about 30% of its mass as light. Fusion gives under 1%. A place to put some heat, up to about half of it at top spin. A clock up to 10 times slow, close in"],
-      ["What it costs", "A braking flame shows to anyone close. A furnace stays hidden until it grows past about a millionth of the Sun"],
+      ["What it costs", "Our craft brake on magnetic sails, unseen. A furnace stays hidden until it grows past about a millionth of the Sun"],
     ],
     could: far
       ? [
@@ -826,7 +826,7 @@ export function mindLeads(m: MindsSeen | undefined): Lead[] {
         ? ["It hasn't acted on our sentinel. Whether it noticed, we can't tell."]
         // Only moves we can make: "a second look in other bands" had no build behind it, and a blind first-timer
         // looked for one. 2026-11-07.
-        : [`A sentinel that stays there would see what makes it, about ${n(Math.round(g.d / CATALOG.sentinel.speed + CATALOG.sentinel.burns + 3 + g.d))} Years after it leaves.`],
+        : [`A sentinel that stays there would see what makes it, about ${n(Math.round(g.d / CATALOG.sentinel.speed + CATALOG.sentinel.burns + CATALOG.sentinel.brake + 3 + g.d))} Years after it leaves.`],
       art: { kind: "glow", ly: g.d, steady: true },
       life: "unlikely",
     })),

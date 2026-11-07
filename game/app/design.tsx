@@ -202,7 +202,7 @@ export default function Design() {
                 mark={<BuildMark name={b} />}
                 tone={buildTone(b, i < 2)}
                 name={<b className="font-semibold">{["Send a sail", "Send a flyby probe", "A sentinel that stays"][i]}</b>}
-                line={["A fifth of light’s speed.", "An eighth of light’s speed.", "Brakes on its fusion flame to stay."][i]}
+                line={["A fifth of light’s speed.", "A tenth of light’s speed.", "Brakes on a magnetic sail to stay."][i]}
                 right={["Year 33.2", "Year 52.8", "Not yet"][i]}
               />
             </li>

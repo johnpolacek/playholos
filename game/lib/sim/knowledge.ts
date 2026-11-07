@@ -263,7 +263,8 @@ export function earthKnows(
 
   // What each sentinel has seen, once its first word is home: it arrives at a tenth of light speed and stays, so it
   // maps what a pass can't. Its air read from the world's truth, as a probe's.
-  const { speed, burns } = catalog.sentinel;
+  // Its burn and its braking on its magnetic sail, 2026-11-07.
+  const { speed } = catalog.sentinel, burns = catalog.sentinel.burns + catalog.sentinel.brake;
   // A warm glow's source, in the order Scan numbers them. A sentinel sent there brakes once it sees the glow up close,
   // so a range is enough to aim by, and sees what makes the heat: a mind's works, or dust. 2026-11-05.
   const warmSrc = sentinels.some((x) => x.star.startsWith("Warm glow ")) ? glowsFound(world, { warmWatch, telescope }, year).map((g) => g.src) : [];

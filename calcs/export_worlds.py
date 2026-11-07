@@ -190,10 +190,14 @@ def works_catalog():
     # Mercury Works, the Solar Swarm, the Star Beam and the Hypertelescope, settled 2026-10-29: calcs/mercury.py.
     import mercury
     more, kit = mercury.catalog()
+    # What each craft costs in deuterium, and the Works' rate, settled 2026-11-07: calcs/craft.py.
+    import craft as craft_mod
+    craft = craft_mod.catalog()
     works.update(more)
     return dict(works=works, floor=eg.FLOOR, push=eg.PUSH, flagship=eg.FLAGSHIP_THOUGHT, gridRoom=eg.GRID_ROOM, step=1.5,
                 dataCenter=dict(years=1, aside=0.05), halo=dict(floor=eg.HALO['floor'], every=eg.HALO['every']), lens=dict(au=signs.LENS_AU, flight=round(signs.LENS_FLIGHT, 3), look=signs.LENS_LOOK, km30pc=25),
-                sentinel=dict(build=S.ROCKET_BUILD, speed=S.ROCKET_V, burns=S.ROCKET_BURNS),
+                sentinel=dict(build=S.ROCKET_BUILD, speed=S.ROCKET_V, burns=S.ROCKET_BURNS, brake=craft['sentinelBrake'], fuel=craft['sentinelFuel']),
+                probe=craft['probe'], deuterium=craft['deuterium'],
                 seedShip=dict(speed=S.SHIP_V, burn=S.BURN, brake=S.BRAKE, stands=S.STANDS),
                 seedProbe=dict(build=S.PROBE_BUILD, first=S.STANDS + S.FIRST_SHIP, every=S.EVERY, copies=S.PROBE_COPIES, generations=S.PROBE_GENERATIONS),
                 mindLink=dict(bits=H.MIND_BITS, aperture=H.LINK_APERTURE, watts=H.LINK_W, wave=H.LINK_WAVE, photons=H.LINK_PHOTONS), studies=0.1, yard=dict(work='Orbital yard', cut=0.25),

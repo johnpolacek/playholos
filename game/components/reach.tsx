@@ -98,8 +98,9 @@ interface ReachView {
   fly(zoom: number): void;
   /** Holds the map at a zoom, as a drag does. */
   hold(zoom: number): void;
-  /** Out from Earth, a pause at Voyager 1, then on to the star in view, after `delay` seconds. */
-  tour(delay?: number): void;
+  /** Out from Earth, a pause at Voyager 1, then on to the star in view, after `delay` seconds. With `end` "voyager" it
+   *  stops at Voyager 1. */
+  tour(delay?: number, end?: "star" | "voyager"): void;
   /** Where the map and its ruler run out to. */
   target: Target;
   /** Turns the map to a destination and flies it out there, or with null, back to the nearest star. */
@@ -167,15 +168,16 @@ export function ReachProvider({ children }: { children: React.ReactNode }) {
   }, []);
   const setTrip = useCallback((trip: Trip | null) => void Object.assign(now.current, trip ?? { craft: -1, signal: -1 }), []);
   const tour = useCallback(
-    (delay = 0) => {
+    (delay = 0, end: "star" | "voyager" = "star") => {
       setClose(false);
-      if (prefersReducedMotion()) return jump(farZoom(target.ly));
+      // Reach's walk ends its first stop at Voyager 1, so the nearest star waits for the roads. 2026-11-07.
+      if (prefersReducedMotion()) return jump(end === "star" ? farZoom(target.ly) : zoomFor(VOYAGER.au));
       const d = now.current;
       gsap.killTweensOf(d);
-      gsap
+      const out = gsap
         .timeline({ delay })
-        .fromTo(d, { zoom: NEAR_ZOOM }, { zoom: zoomFor(VOYAGER.au), duration: 5, ease: "power2.inOut" })
-        .to(d, { zoom: farZoom(target.ly), duration: 3.5, ease: "power2.inOut" }, "+=1.2");
+        .fromTo(d, { zoom: NEAR_ZOOM }, { zoom: zoomFor(VOYAGER.au), duration: 5, ease: "power2.inOut" });
+      if (end === "star") out.to(d, { zoom: farZoom(target.ly), duration: 3.5, ease: "power2.inOut" }, "+=1.2");
     },
     [jump, target, setClose],
   );
@@ -209,8 +211,8 @@ function WarmProbes({ warm, sent, on, canSend, set }: { warm: number; sent: numb
       </div>
       <p className="mt-1 text-[13.5px] leading-snug text-page-ink2">
         {on
-          ? "We send a flyby probe to each warm glow as we find it. Each takes 12 Years to build once its glow is ranged, then leaves, and pictures a world if one is there."
-          : "Send a flyby probe to every warm glow, those found and each one we find from now on. Each takes 12 Years to build, then leaves."}
+          ? "We send a flyby probe to each warm glow as we find it. Each takes 12 Years to build once its glow is ranged, and 6 kt of deuterium from the Works, then leaves, and pictures a world if one is there."
+          : "Send a flyby probe to every warm glow, those found and each one we find from now on. Each takes 12 Years to build and 6 kt of deuterium, under a Year of the Works, then leaves."}
       </p>
       <div className="mt-2 flex flex-wrap items-center gap-1.5">
         {!canSend ? (
@@ -861,7 +863,7 @@ export function Reach() {
           ? `Passed Proxima b in Year ${year(r.arrives!)}. What ${they} saw has reached us: ${visitReading(seen).title.toLowerCase()}.`
           : clock! >= r.arrives!
             ? `Passed Proxima b in Year ${year(r.arrives!)}. What ${they} saw is on its way to us.`
-            : `Bound for Proxima b at ${r.speed === 0.2 ? "a fifth" : "an eighth"} of light speed, passing it in Year ${year(r.arrives!)}.`,
+            : `Bound for Proxima b at ${r.speed === 0.2 ? "a fifth" : "a tenth"} of light speed, passing it in Year ${year(r.arrives!)}.`,
         at: r.home,
         kind: "flight",
         msg: "to Proxima b",

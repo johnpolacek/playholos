@@ -239,7 +239,18 @@
  "sentinel": {
   "build": 20,
   "speed": 0.1,
-  "burns": 10
+  "burns": 10,
+  "brake": 15,
+  "fuel": 40.6
+ },
+ "probe": {
+  "build": 12,
+  "speed": 0.1,
+  "burn": 10,
+  "fuel": 6.1
+ },
+ "deuterium": {
+  "perYear": 8
  },
  "seedShip": {
   "speed": 0.1,

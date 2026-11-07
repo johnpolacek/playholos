@@ -53,7 +53,14 @@ interface Catalog {
   beams: { array: number; beam: number; look: number };
   swarm: { watts: number; doubling: number; excess: number; perLy2: number; kelvin: number; spread: number };
   hyper: { kmPerLy: number; reach: number; slew: number; cities: number };
-  sentinel: { build: number; speed: number; burns: number };
+  /** A sentinel speeds up on deuterium and brakes on a magnetic sail: `burns` and `brake` are the Years each adds over
+   *  cruising, `fuel` its kt of deuterium. Calcs/craft.py, 2026-11-07. */
+  sentinel: { build: number; speed: number; burns: number; brake: number; fuel: number };
+  /** A flyby probe: built in `build` Years, it burns deuterium 20 Years to a tenth of light speed, `burn` Years over
+   *  cruising, on `fuel` kt. Calcs/craft.py, 2026-11-07. */
+  probe: { build: number; speed: number; burn: number; fuel: number };
+  /** The Deuterium Works' kt a Year, which flyby probes and sentinels draw on in the order sent. */
+  deuterium: { perYear: number };
   seedShip: { speed: number; burn: number; brake: number; stands: number };
   seedProbe: { build: number; first: number; every: number; copies: number; generations: number };
   mindLink: { bits: number; aperture: number; watts: number; wave: number; photons: number };
