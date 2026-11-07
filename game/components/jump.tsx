@@ -25,9 +25,14 @@ export interface Snap {
   slugs: Set<string>;
   reads: Set<string>;
   heard: Set<string>;
+  /** Leads our craft had seen up close, so word from a sentinel at a cold glow counts as news. Playtest 2026-11-07. */
+  close: Set<string>;
   /** The Mind's latest words, so its note tells only what it says after the jump. */
   said: string | undefined;
 }
+
+/** A lead our sentinel has seen up close. A cold glow keeps that word as a fact, not a reading. */
+const upClose = (l: { facts: [string, string][] }) => l.facts.some(([k]) => k === "Up close");
 
 export function useSnap() {
   const { leads, readings, heard } = useLeads();
@@ -36,6 +41,7 @@ export function useSnap() {
     slugs: new Set(leads.map((l) => l.slug)),
     reads: new Set(Object.values(readings).flatMap((rs) => rs.map((r) => r.id))),
     heard: new Set(heard.map(heardId)),
+    close: new Set(leads.filter(upClose).map((l) => l.slug)),
     said: last,
   });
 }
@@ -157,11 +163,17 @@ const SHOW = 6;
 
 interface Item {
   key: string;
+  /** Biggest news first: the watcher, then word from other minds, then what our craft and readings found, then builds,
+   *  then new leads. A playtest's peer answer and sentinel word sat under six new warm glows, cut off. 2026-11-07. */
+  rank: number;
   to: string;
   mark: React.ReactNode;
   title: string;
   line: string;
 }
+
+/** How many times as far a gift takes our thinking, said to a tenth, or null when it holds nothing for it. */
+const gifted = (h: { gift?: number }) => (h.gift && h.gift > 1 ? h.gift.toFixed(1).replace(/\.0$/, "") : null);
 
 /** What reached us at the Year we jumped to: builds done, leads new to Scan, readings landed, signals heard. */
 export function Arrived({ from, to, snap }: { from: number; to: number; snap: Snap }) {
@@ -180,6 +192,7 @@ export function Arrived({ from, to, snap }: { from: number; to: number; snap: Sn
       if (at != null && at > from + 1e-6 && at <= to + 1e-6)
         out.push({
           key: `build:${n}`,
+          rank: 3,
           to: `/play/build/${buildSlug(n)}`,
           mark: (
             <span style={{ color: buildColor(n) }}>
@@ -193,23 +206,32 @@ export function Arrived({ from, to, snap }: { from: number; to: number; snap: Sn
     for (const l of leads) {
       const fresh = (readings[l.slug] ?? []).filter((r) => !snap.reads.has(r.id));
       const isNew = !snap.slugs.has(l.slug);
-      if (!isNew && !fresh.length) continue;
+      const close = !snap.close.has(l.slug) && l.facts.find(([k]) => k === "Up close");
+      if (!isNew && !fresh.length && !close) continue;
       const read = fresh.at(-1);
       // Each new warm glow says how many we have found: the count is the story. 2026-11-03.
       const nth = l.slug.match(/^warm-glow-(\d+)$/)?.[1];
       out.push({
         key: `lead:${l.slug}`,
+        rank: l.slug === "small-dark-body" ? 0 : read || close ? 2 : 4,
         to: `/play/lead/${l.slug}`,
         mark: <LeadMark art={l.art} />,
         title: starName(l.star),
-        line: isNew && nth && nth !== "1" ? `A new warm glow, ${nth} found so far` : read ? `${read.title}, Year ${yearText(read.at)}` : l.what,
+        line: isNew && nth && nth !== "1" ? `A new warm glow, ${nth} found so far` : read ? `${read.title}, Year ${yearText(read.at)}` : close ? `Seen up close, ${close[1]}` : l.what,
       });
     }
     for (const h of heard)
       if (!snap.heard.has(heardId(h)))
-        out.push({ key: `heard:${heardId(h)}`, to: "/play", mark: <span className="text-other">◉</span>, title: `A signal from ${starName(h.star)}`, line: `Year ${yearText(h.arrived)}` });
+        out.push({
+          key: `heard:${heardId(h)}`,
+          rank: 1,
+          to: "/play",
+          mark: <span className="text-other">◉</span>,
+          title: `${h.answers !== undefined ? "An answer" : h.warning ? "A warning" : "A signal"} from ${starName(h.star)}`,
+          line: `Year ${yearText(h.arrived)}${gifted(h) ? `, and a gift: our thinking goes ${gifted(h)} times as far` : ""}`,
+        });
     // The watcher first: word of a mind beside us leads the report, above any glow. Playtest 2026-11-05.
-    return out.sort((x, y) => Number(y.key === "lead:small-dark-body") - Number(x.key === "lead:small-dark-body"));
+    return out.sort((x, y) => x.rank - y.rank);
   }, [plan, done, leads, readings, heard, snap, from, to]);
 
   // The map turns to the first new lead. 2026-11-01.
@@ -230,6 +252,9 @@ export function Arrived({ from, to, snap }: { from: number; to: number; snap: Sn
   // And word of the watcher gets its own, the biggest news there is. 2026-11-05.
   const watcher = items.some((x) => x.key === "lead:small-dark-body") ? leads.find((l) => l.slug === "small-dark-body") : undefined;
   const { minds } = useLeads();
+  // Another mind answering us is the game's rarest news, so it gets its own word too. A playtest learned of a peer's
+  // answer and gift only by asking the Mind. 2026-11-07.
+  const answer = heard.find((h) => h.answers !== undefined && !snap.heard.has(heardId(h)));
   return (
     <div className="flex flex-col gap-1.5">
       {watcher && (
@@ -240,6 +265,15 @@ export function Arrived({ from, to, snap }: { from: number; to: number; snap: Sn
             <span className="text-you">Read it ›</span>
           </p>
         </Link>
+      )}
+      {answer && (
+        <div className="mb-1.5 rounded-lg border border-other p-2.5">
+          <span className="font-mono text-[10px] tracking-[.1em] text-other uppercase">An answer</span>
+          <p className="mt-1 text-[13.5px] leading-snug">
+            <b className="font-semibold">{starName(answer.star)} answered us.</b>{" "}
+            {gifted(answer) ? `They sent a gift of what they know, and our thinking now goes ${gifted(answer)} times as far.` : "Its words are ours to read."}
+          </p>
+        </div>
       )}
       {firstWarm?.range && (
         <div className="mb-1.5 rounded-lg border border-other/50 p-2.5">
