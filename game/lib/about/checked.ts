@@ -13,7 +13,7 @@ export interface Seen {
 export interface Checked {
   name: string;
   d: number;
-  listen: { telescope: "GBT" | "Parkes"; sure: boolean } | null;
+  listen: { telescope: "GBT" | "Parkes" | "FAST"; sure: boolean } | null;
   debris: Seen | null;
   dunes: Seen | null;
   sons: Seen | null;
@@ -73,7 +73,16 @@ const ofSun = (w: number) => {
 /** A star's record: each search that looked, what it rules out at this distance, and what it leaves open. */
 export function record(s: Star): Line[] {
   const out: Line[] = [];
-  if (s.listen) {
+  if (s.listen?.telescope === "FAST") {
+    // Hu et al. 2026, arXiv 2601.14630: FAST searched the five nearest stars it could see for repeating beacons, kHz
+    // wide, every 1.1 to 300 s, and found none above about 7 to 9 × 10⁹ W at these distances. Added 2026-11-07.
+    out.push({
+      kind: "Radio",
+      by: "FAST, China’s 500 m dish",
+      rules: `No repeating beacon above about ${W(8e9)}. For scale, Arecibo’s radar, aimed, sent about 10¹³ W.`,
+      not: "It listened for pulses a few seconds to minutes apart. A steady tone, a beam aimed elsewhere, or silence passes.",
+    });
+  } else if (s.listen) {
     // Price et al. 2020: 2.1e12 W at Green Bank, 9.1e12 W at Parkes, at the sample's 50 pc, scaled as distance squared.
     const w =
       (s.listen.telescope === "GBT" ? 2.1e12 : 9.1e12) * (s.d / 163) ** 2;

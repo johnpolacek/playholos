@@ -7,9 +7,11 @@
 // were the years the messages still on their way left, from calcs/knocks.py, after it dated one to 2018. LHS 1140 b's
 // helium was made disputed 2026-10-28, after two JWST papers found none. The reply windows were worded to hold at any Year
 // 2026-11-02, after Luyten's lead still promised a reply at Year 173.
+// GJ 887 d was added 2026-11-07, from Hartogh et al. 2026 (arXiv 2602.08929), after a research recheck found it missing.
 export const EARTH_LEADS = `Earth's leads at Year 0. These are real oddities. What a study or an observation will find is not known yet.
 - Proxima b, 4.24 ly, the nearest world: at least 1.06 Earth masses, in a flaring red dwarf's warm zone, 11.2-day year. Its air is unread: it sits 37 thousandths of an arcsecond from its star in our sky, too close for any telescope Earth has, and for the Infrared Telescope, which splits a world from 56. The 15 m Mirror splits from 24, so it would just reach Proxima b, and read its oxygen and ozone but not its water. Its star has likely stripped it bare: rocky worlds measured near red dwarfs have proved bare, and models keep air only on the largest and coolest. The two roads on Reach, sails and a flyby probe, go there.
 - 82 Eridani d, 19.7 ly: at least 5.8 Earth masses, on a stretched orbit through a Sun-like star's warm zone. Its air is unread.
+- GJ 887 d, around Lacaille 9352, 10.7 ly: a candidate felt by its tug in 2026, at least about 6 Earth masses, a 50.8-day year in a red dwarf's warm zone. Not yet confirmed, and not a lead on Scan. Its air is unread.
 - Every world Earth has felt by its tug on its star is a lead too. They are listed below, from what Earth knows. Never invent one.
 - Luyten's Star, 12.3 ly, a lead on Scan: Earth's 2017 and 2018 messages both reached it in 2030, so the soonest a reply could reach us is Year 2.3 or 2.9. It was the first of the 12 stars we messaged whose window opened after Year 0, listed below under Earth's noise, and no likelier to answer than any of them: about one star in 1,600 holds a mind.
 

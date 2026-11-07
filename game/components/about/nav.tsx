@@ -8,9 +8,10 @@ import { gsap, prefersReducedMotion, useGSAP } from "@/lib/motion";
 const PAGES = [
   ["/about/research", "Research"],
   ["/about/design", "Design"],
+  ["/about/updates", "Updates"],
 ] as const;
 
-// The about pages' top bar: the game's mark, Research and Design, and Play. The mark, like Play, goes back to the
+// The about pages' top bar: the game's mark, Research, Design and Updates, and Play. The mark, like Play, goes back to the
 // game. A line under the page you're on slides to the next one as you go.
 export function AboutNav() {
   const here = useLocation().pathname;

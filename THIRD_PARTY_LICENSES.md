@@ -67,7 +67,7 @@ SOFTWARE.
 
 ## Galaxy observations
 
-Local Volume Database v1.1.1, compiled by Andrew B. Pace: CC0-1.0, https://github.com/apace7/local_volume_database. Pinned source records and transformations are documented in data/galaxy-sources/README.md. Measurements retain references to their original studies.
+Local Volume Database v1.1.2, compiled by Andrew B. Pace: CC0-1.0, https://github.com/apace7/local_volume_database. Pinned source records and transformations are documented in data/galaxy-sources/README.md. Measurements retain references to their original studies.
 
 M31/M33 projected B25 contours: factual values from de Vaucouleurs et al. (1991), Third Reference Catalogue of Bright Galaxies, via CDS/VizieR VII/155: https://cdsarc.cds.unistra.fr/viz-bin/ReadMe/VII/155?format=html.
 

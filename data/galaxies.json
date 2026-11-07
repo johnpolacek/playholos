@@ -1,8 +1,8 @@
 {
-  "catalog": "Local Volume Database v1.1.1",
-  "released": "2026-08-12",
-  "retrieved": "2026-09-06",
-  "source": "https://github.com/apace7/local_volume_database/releases/tag/v1.1.1",
+  "catalog": "Local Volume Database v1.1.2",
+  "released": "2026-11-04",
+  "retrieved": "2026-11-07",
+  "source": "https://github.com/apace7/local_volume_database/releases/tag/v1.1.2",
   "galaxies": [
     {
       "id": "m31",
@@ -31,7 +31,7 @@
         "logDiameterError": 0.01,
         "logAxisRatioError": 0.02
       },
-      "source": "https://github.com/apace7/local_volume_database/blob/v1.1.1/data_input/m_031.yaml"
+      "source": "https://github.com/apace7/local_volume_database/blob/v1.1.2/data_input/m_031.yaml"
     },
     {
       "id": "m33",
@@ -60,7 +60,7 @@
         "logDiameterError": 0.01,
         "logAxisRatioError": 0.02
       },
-      "source": "https://github.com/apace7/local_volume_database/blob/v1.1.1/data_input/m_033.yaml"
+      "source": "https://github.com/apace7/local_volume_database/blob/v1.1.2/data_input/m_033.yaml"
     },
     {
       "id": "lmc",
@@ -87,7 +87,7 @@
         "paDeg": 227.24,
         "ref": "Choi2018ApJ...869..125C"
       },
-      "source": "https://github.com/apace7/local_volume_database/blob/v1.1.1/data_input/lmc.yaml",
+      "source": "https://github.com/apace7/local_volume_database/blob/v1.1.2/data_input/lmc.yaml",
       "statisticalKpc": 0.09,
       "systematicKpc": 0.54
     },
@@ -110,7 +110,7 @@
       "positionAngle": null,
       "structureRef": "Munoz2018ApJ...860...66M",
       "extent": null,
-      "source": "https://github.com/apace7/local_volume_database/blob/v1.1.1/data_input/smc.yaml",
+      "source": "https://github.com/apace7/local_volume_database/blob/v1.1.2/data_input/smc.yaml",
       "statisticalKpc": 0.47,
       "systematicKpc": 0.81
     },
@@ -139,7 +139,7 @@
         "paDeg": 159.0,
         "ref": "McConnachie2012AJ....144....4M"
       },
-      "source": "https://github.com/apace7/local_volume_database/blob/v1.1.1/data_input/m_032.yaml"
+      "source": "https://github.com/apace7/local_volume_database/blob/v1.1.2/data_input/m_032.yaml"
     },
     {
       "id": "ngc205",
@@ -166,7 +166,7 @@
         "paDeg": 28.0,
         "ref": "McConnachie2012AJ....144....4M"
       },
-      "source": "https://github.com/apace7/local_volume_database/blob/v1.1.1/data_input/ngc_0205.yaml"
+      "source": "https://github.com/apace7/local_volume_database/blob/v1.1.2/data_input/ngc_0205.yaml"
     },
     {
       "id": "ic10",
@@ -187,7 +187,7 @@
       "positionAngle": null,
       "structureRef": "McConnachie2012AJ....144....4M",
       "extent": null,
-      "source": "https://github.com/apace7/local_volume_database/blob/v1.1.1/data_input/ic_0010.yaml"
+      "source": "https://github.com/apace7/local_volume_database/blob/v1.1.2/data_input/ic_0010.yaml"
     },
     {
       "id": "ngc6822",
@@ -214,7 +214,7 @@
         "paDeg": 66.88,
         "ref": "Higgs2021MNRAS.503..176H"
       },
-      "source": "https://github.com/apace7/local_volume_database/blob/v1.1.1/data_input/ngc_6822.yaml"
+      "source": "https://github.com/apace7/local_volume_database/blob/v1.1.2/data_input/ngc_6822.yaml"
     },
     {
       "id": "ic1613",
@@ -241,7 +241,7 @@
         "paDeg": 90.49,
         "ref": "Higgs2021MNRAS.503..176H"
       },
-      "source": "https://github.com/apace7/local_volume_database/blob/v1.1.1/data_input/ic_1613.yaml"
+      "source": "https://github.com/apace7/local_volume_database/blob/v1.1.2/data_input/ic_1613.yaml"
     },
     {
       "id": "wlm",
@@ -268,7 +268,7 @@
         "paDeg": 177.02,
         "ref": "Higgs2021MNRAS.503..176H"
       },
-      "source": "https://github.com/apace7/local_volume_database/blob/v1.1.1/data_input/wlm.yaml"
+      "source": "https://github.com/apace7/local_volume_database/blob/v1.1.2/data_input/wlm.yaml"
     }
   ]
 }

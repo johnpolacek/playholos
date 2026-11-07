@@ -26,8 +26,9 @@ export const SIZES = {
 } as const;
 
 /** What a gift of each size does for our thinking, in steps of a data center's half again. Yardstick: our own methods
- *  for language models need half the compute every 8 months, Ho et al. 2024, so three steps, 3.4 times, is about 14
- *  months of our own progress, given in every book. An encyclopedia carries two steps, a collection one.
+ *  for language models need half the compute every 8 months, Ho et al. 2024, and every 4.6 to 6 by Epoch AI's 2026
+ *  trends, so three steps, 3.4 times, is about 8 to 14 months of our own progress, given in every book. Kept 2026-11-07:
+ *  the steps are a sample, and faster progress only shortens the yardstick. An encyclopedia carries two steps, a collection one.
  *  A page is a letter and a genome is biology, with no methods for thinking in them. A sample, settled 2026-10-26,
  *  since no one knows what another mind's knowledge is worth to ours. */
 export const GIFT_STEPS = { page: 0, collection: 1, genome: 0, encyclopedia: 2, books: 3 } as const;

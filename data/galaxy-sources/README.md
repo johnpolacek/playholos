@@ -1,12 +1,12 @@
 # Adopted galaxy observations
 
-Retrieved September 6, 2026. These files pin the inputs so builds and regeneration work offline.
+Retrieved November 7, 2026. v1.1.2 left every pinned row and value unchanged from v1.1.1, adding star formation histories and notes. These files pin the inputs so builds and regeneration work offline.
 
 ## Local Volume Database
 
-[Andrew B. Pace, Local Volume Database v1.1.1](https://github.com/apace7/local_volume_database/releases/tag/v1.1.1), released August 12, 2026, CC0. See the [database paper](https://arxiv.org/abs/2411.07424) and [field documentation](https://local-volume-database.readthedocs.io/en/latest/usage.html).
+[Andrew B. Pace, Local Volume Database v1.1.2](https://github.com/apace7/local_volume_database/releases/tag/v1.1.2), released November 4, 2026, CC0. See the [database paper](https://arxiv.org/abs/2411.07424) and [field documentation](https://local-volume-database.readthedocs.io/en/latest/usage.html).
 
-`lvdb-v1.1.1-subset.csv` retains selected rows and measurement/reference columns of the release's `comb_all.csv`. The ten YAML files are unmodified per-object records from `https://raw.githubusercontent.com/apace7/local_volume_database/v1.1.1/data_input/{key}.yaml`. They preserve comments and provenance absent from the combined table.
+`lvdb-v1.1.2-subset.csv` retains selected rows and measurement/reference columns of the release's `comb_all.csv`. The ten YAML files are unmodified per-object records from `https://raw.githubusercontent.com/apace7/local_volume_database/v1.1.2/data_input/{key}.yaml`. They preserve comments and provenance absent from the combined table.
 
 Coordinates are ICRS/J2000 RA and declination in degrees. `rhalf` is the projected half-light **semi-major axis**, in arcminutes. Ellipticity is `1 − b/a`; position angle is measured north through east. Missing values are not zero. Different tracer populations can have different centers, especially in the Magellanic Clouds.
 

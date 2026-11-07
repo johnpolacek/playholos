@@ -45,6 +45,7 @@ export const router = createBrowserRouter([
           { index: true, loader: () => redirect("/about/research") },
           { path: "research", lazy: later(PAGES["/about/research"]) },
           { path: "design", lazy: later(PAGES["/about/design"]) },
+          { path: "updates", lazy: later(PAGES["/about/updates"]) },
         ],
       },
       // Simulation mode: a sky drawn at the odds we set, and a tour through it. No game. 2026-11-01. The universe as we

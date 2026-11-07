@@ -7,6 +7,7 @@ export const loadLayout: Page = () => import("@/app/about/layout");
 export const PAGES = {
   "/about/research": () => import("@/app/about/research"),
   "/about/design": () => import("@/app/about/design"),
+  "/about/updates": () => import("@/app/about/updates"),
 } satisfies Record<string, Page>;
 
 /** Starts loading an about page's code, by its address. Any other address is left alone. */

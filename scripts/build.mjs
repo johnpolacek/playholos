@@ -14,7 +14,7 @@ const template=await readFile(new URL('src/template.html',root),'utf8');
 const license=await readFile(new URL('node_modules/three/LICENSE',root),'utf8');
 const ephemerisLicense=(await readFile(new URL('node_modules/astronomy-engine/esm/astronomy.js',root),'utf8')).split('*/')[0].replace('/**','').trim();
 const attribution=`<!--\nThree.js license:\n${license}\nAstronomy Engine license:\n${ephemerisLicense}\nPlanetary texture maps: Solar System Scope / INOVE, CC BY 4.0, https://www.solarsystemscope.com/textures/\nHYG 4.1 star data: David Nash / Astronexus, CC BY-SA 4.0, https://github.com/astronexus/HYG-Database\nAdaptations: distance filtering and Galactic coordinate transformation; adapted data remains CC BY-SA 4.0.\nNearby-star census within 100 ly: Gaia Catalogue of Nearby Stars, Gaia Collaboration, Smart et al. (2021), A&A 649, A6. Credit: ESA, Gaia DPAC. Gaia data: CC BY-NC 3.0 IGO; commercial use requires ESA authorization.
-Galaxy compilation: Andrew B. Pace, Local Volume Database v1.1.1, CC0, https://github.com/apace7/local_volume_database\nGalaxy measurements: original studies cited per object; RC3 B25 contours, de Vaucouleurs et al. (1991), CDS VII/155.\n-->\n`;
+Galaxy compilation: Andrew B. Pace, Local Volume Database v1.1.2, CC0, https://github.com/apace7/local_volume_database\nGalaxy measurements: original studies cited per object; RC3 B25 contours, de Vaucouleurs et al. (1991), CDS VII/155.\n-->\n`;
 
 // index.html is the line drawing; color.html keeps the original color rendering.
 // The line drawing traces coastlines and contours from the surface maps, so it

@@ -265,7 +265,7 @@ const LEADS_SOURCES: Source[] = [
   },
   {
     title: "The new worlds",
-    text: "Each is a world this game’s planet hunters feel by 2040, by its tug on its star. ESPRESSO works now in Chile, and the Terra Hunting Experiment began its ten years on La Palma in 2026. The stars are real. Which worlds they find is rolled for this game.",
+    text: "Each is a world this game’s planet hunters feel by 2040, by its tug on its star. ESPRESSO works now in Chile. The Terra Hunting Experiment’s ten years on La Palma wait on HARPS3, whose cooling vessel burst on its first-light day in June 2026. The stars are real. Which worlds they find is rolled for this game.",
     links: [
       ["ESPRESSO", W("ESPRESSO")],
       [

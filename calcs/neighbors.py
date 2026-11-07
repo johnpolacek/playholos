@@ -19,7 +19,8 @@ YEAR_S = 3.156e7
 # A red dwarf's 2026 floor is what the surveys could feel there, from calcs/hosts.py, settled 2026-10-16. One no
 # survey watched hides any warm world. By 2040 a watched red dwarf's floor halves: a decade more, four times the nights.
 # By 2040 a decade of nightly watching reaches about 0.1 m/s for Terra Hunting's bright northern stars, and about
-# 0.3 m/s for other bright Sun-like stars. Above that, Earth found the world: it is a seeded find, not hidden.
+# 0.3 m/s for other bright Sun-like stars. Rechecked 2026-11-07: Terra Hunting has not started, its HARPS3 vessel
+# having burst in June 2026, but a start by 2028 still leaves its decade before 2040. Above that, Earth found the world: it is a seeded find, not hidden.
 RV_2026 = 1.0
 def rv_2040(host):
     if host['kind'] == 'M': return min(host.get('rv_floor', RV_2026), host.get('rv_survey', RV_2026) / 2)

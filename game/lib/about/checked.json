@@ -278,26 +278,32 @@
  {
   "name": "Groombridge 34",
   "d": 11.62,
-  "listen": null,
+  "listen": {
+   "telescope": "FAST",
+   "sure": true
+  },
   "debris": {
    "disk": false,
    "sure": true
   },
   "dunes": null,
   "sons": null,
-  "notes": "In the Isaacson 2017 target list (GJ15A) but not in the Price 2020 observation tables. DEBRIS M011A, no excess."
+  "notes": "In the Isaacson 2017 target list (GJ15A) but not in the Price 2020 observation tables. Listen: FAST, Hu et al. 2026, arXiv 2601.14630, added 2026-11-07. DEBRIS M011A, no excess."
  },
  {
   "name": "Gliese 15 B",
   "d": 11.62,
-  "listen": null,
+  "listen": {
+   "telescope": "FAST",
+   "sure": true
+  },
   "debris": {
    "disk": false,
    "sure": true
   },
   "dunes": null,
   "sons": null,
-  "notes": "In the Isaacson 2017 target list (GJ15B) but not in the Price 2020 observation tables. DEBRIS M011B, no excess."
+  "notes": "In the Isaacson 2017 target list (GJ15B) but not in the Price 2020 observation tables. Listen: FAST, Hu et al. 2026, arXiv 2601.14630, added 2026-11-07. DEBRIS M011B, no excess."
  },
  {
   "name": "Gliese 1111",

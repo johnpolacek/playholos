@@ -20,7 +20,7 @@ def distance_kpc(modulus):
     return 10 ** ((modulus - 10) / 5)
 
 observations = []
-for row in csv.DictReader((source / 'lvdb-v1.1.1-subset.csv').open()):
+for row in csv.DictReader((source / 'lvdb-v1.1.2-subset.csv').open()):
     key = row['key']
     mu, em, ep = (number(row, field) for field in ['distance_modulus', 'distance_modulus_em', 'distance_modulus_ep'])
     d = distance_kpc(mu)
@@ -30,7 +30,7 @@ for row in csv.DictReader((source / 'lvdb-v1.1.1-subset.csv').open()):
                 halfLightArcmin=number(row, 'rhalf'), halfLightMinus=number(row, 'rhalf_em'), halfLightPlus=number(row, 'rhalf_ep'),
                 ellipticity=number(row, 'ellipticity'), positionAngle=number(row, 'position_angle'),
                 structureRef=row['ref_structure'] or None, extent=None,
-                source=f'https://github.com/apace7/local_volume_database/blob/v1.1.1/data_input/{key}.yaml')
+                source=f'https://github.com/apace7/local_volume_database/blob/v1.1.2/data_input/{key}.yaml')
     # Use the direct geometrical distances, retaining both reported error terms.
     # The SMC update supersedes the older Cioni (2000) distance adopted by LVDB.
     if key in ['lmc', 'smc']:
@@ -51,7 +51,7 @@ for row in csv.DictReader((source / 'lvdb-v1.1.1-subset.csv').open()):
                               logDiameterError=float(values[3]), logAxisRatioError=float(values[5]))
     observations.append(item)
 
-output = dict(catalog='Local Volume Database v1.1.1', released='2026-08-12', retrieved='2026-09-06',
-              source='https://github.com/apace7/local_volume_database/releases/tag/v1.1.1', galaxies=observations)
+output = dict(catalog='Local Volume Database v1.1.2', released='2026-11-04', retrieved='2026-11-07',
+              source='https://github.com/apace7/local_volume_database/releases/tag/v1.1.2', galaxies=observations)
 (root / 'data/galaxies.json').write_text(json.dumps(output, indent=2)+'\n')
 print(f'Prepared {len(observations)} galaxies with provenance and distance uncertainty.')
