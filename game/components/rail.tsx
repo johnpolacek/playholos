@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Link, useLocation } from "react-router";
 import { useMindUnread } from "@/components/mind-news";
 import { heardId, useLeads } from "@/components/scan";
@@ -9,8 +10,15 @@ const TABS = [
   { label: "Mind", href: "/play/mind" },
 ] as const;
 
+// Build's tab goes back to where Build was left: a player left the strategies to ask the Mind, came back by the tab to
+// a plain list, and took the checklist to find the strategies again. Blind playtest 2026-11-07.
+let buildAt = "/play/build";
+
 export function Rail() {
-  const path = useLocation().pathname;
+  const { pathname: path, search } = useLocation();
+  useEffect(() => {
+    if (path === "/play/build") buildAt = path + search;
+  }, [path, search]);
   // A reading landed and not yet opened marks Scan. A signal from someone else, not yet opened, marks it louder, with
   // their count in their color, 2026-10-29.
   const { fresh, heard } = useLeads();
@@ -27,7 +35,7 @@ export function Rail() {
         return (
           <Link
             key={href}
-            to={href}
+            to={href === "/play/build" && !on ? buildAt : href}
             aria-current={on ? "page" : undefined}
             aria-label={href === "/play/mind" && said ? `${label}, the Mind told us something` : href === "/play" && calls ? `${label}, ${calls === 1 ? "a signal" : `${calls} signals`} heard` : href === "/play" && news ? `${label}, a new reading` : undefined}
             className={`flex items-center justify-center gap-1.5 text-[11px] ${on ? "font-semibold text-ink shadow-[inset_0_2px_0_var(--ink)]" : "text-muted"} ${href === "/play" && calls ? "bg-other/10" : ""}`}
