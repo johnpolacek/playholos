@@ -78,6 +78,9 @@ function useReorder(names: string[], commit: (order: string[]) => void, list: Re
   const grip = (name: string, i: number): React.ButtonHTMLAttributes<HTMLButtonElement> => ({
     onPointerDown: (e) => {
       e.preventDefault();
+      // Focused, so the arrow keys move it after a tap: a blind first-timer tapped the dots, pressed ArrowUp, and the
+      // focus was elsewhere. 2026-11-07.
+      e.currentTarget.focus({ preventScroll: true });
       e.currentTarget.setPointerCapture(e.pointerId);
       const rects = names.map((n) => row(n)!.getBoundingClientRect());
       start.current = { y: e.clientY, from: i, tops: rects.map((r) => r.top), heights: rects.map((r) => r.height) };
@@ -203,7 +206,7 @@ export function Queue() {
           <ListHead left={`Queued · ${queued.length}`} right="Done in" className="mt-1" />
           {movable && (
             <p data-q="row" className="mt-1 text-xs leading-snug text-muted">
-              Drag a build by its dots to change its place. The first in line gets our compute first.
+              Drag a build by its dots to change its place, or tap its dots and use the arrow keys. The first in line gets our compute first.
             </p>
           )}
           <ul ref={list} data-q="queued" className="mt-1">
