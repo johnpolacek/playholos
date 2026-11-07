@@ -213,7 +213,9 @@ export function Arrived({ from, to, snap }: { from: number; to: number; snap: Sn
       const nth = l.slug.match(/^warm-glow-(\d+)$/)?.[1];
       out.push({
         key: `lead:${l.slug}`,
-        rank: l.slug === "small-dark-body" ? 0 : read || close ? 2 : 4,
+        // A lead new to Scan comes with its first reading, so it ranks as new, not as news on a lead we knew: a new
+        // warm glow's tied with the sentinel's word at Skadi, which came fifth. Playtest 2026-11-07.
+        rank: l.slug === "small-dark-body" ? 0 : close ? 1 : read && !isNew ? 2 : 4,
         to: `/play/lead/${l.slug}`,
         mark: <LeadMark art={l.art} />,
         title: starName(l.star),

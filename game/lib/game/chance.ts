@@ -101,7 +101,10 @@ export function chancesOf(lead: Lead, readings: readonly Reading[]): Chances | n
     // watcher spoke to us in eleven languages and still showed a mind at 0.03 to 0.7%. Playtest 2026-11-07, the Will's
     // call. A glow seen only as a dot keeps the chain.
     const made = madeByEvidence(lead, readings);
-    if (made !== null && made > chain) return { life: around(life, basis.spread), mind: around(made, BASES.close.spread), basis: "seen up close", sure: 1 };
+    // Said as it was learned: seen up close only when it was. A watcher known only by its laser read "seen up close",
+    // and a playtest caught it. 2026-11-07.
+    const seen = basis === BASES.close || lead.facts.some(([k]) => k === "Up close");
+    if (made !== null && made > chain) return { life: around(life, basis.spread), mind: around(made, BASES.close.spread), basis: seen ? "seen up close" : "from what it did", sure: seen ? 1 : 0.8 };
     return { life: around(life, basis.spread), mind: around(chain, basis.spread + UNMEASURED), basis: basis.say, sure };
   }
   // A black hole: whether minds gather at them, no search has looked, so we have nothing to go by. 2026-11-01.

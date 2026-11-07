@@ -903,10 +903,17 @@ function watcherLead(w: WatcherSeen): Lead {
           { what: "A rock just caught", why: "A passing rock can linger a few years before the Sun pulls it away. It would drift, and this one holds.", odds: "unlikely" },
           { what: "Our own junk", why: "A lost piece of an old mission could sit near there for a while. None is listed, and it wouldn’t hold.", odds: "very unlikely" },
         ]
-      : [
-          { what: "Something made, left to watch", why: "Smooth, dark and unlike the rock it rides, as something placed there would be.", odds: "likely" },
-          { what: "Something natural we don't know", why: "Rock and ice can take odd shapes. None we know is this smooth.", odds: "unlikely" },
-        ],
+      : rock
+        ? [
+            { what: "Something made, left to watch", why: "Smooth, dark and unlike the rock it rides, as something placed there would be.", odds: "likely" },
+            { what: "Something natural we don't know", why: "Rock and ice can take odd shapes. None we know is this smooth.", odds: "unlikely" },
+          ]
+        // Known only by its laser, it is judged by what it did, not by a look we never had: it borrowed the rock's
+        // reasons, "smooth, dark", for a thing "too small to see". Playtest 2026-11-07. Same odds.
+        : [
+            { what: "Something made, left to watch", why: "A narrow laser, aimed at Earth and timed to our first seed ship, as only a made thing would send.", odds: "likely" },
+            { what: "Something natural we don't know", why: "Nature makes lasers, in gas around stars, but none aimed at us and timed to a ship.", odds: "unlikely" },
+          ],
     tells: [
       moon || rock
         ? "A craft sent to look closely would see what it is. It may see us coming."
