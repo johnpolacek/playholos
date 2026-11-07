@@ -58,6 +58,7 @@ const pacing = (log) => {
 // The blind player's three code ratings, from its think-aloud log: how many of the six first goals it found, how
 // often it knew what to do, and how often the game did what it expected.
 const GOALS = ["began", "build", "lead", "mind", "jump", "send"];
+const strict = (bad, all) => Math.max(0, Math.round(10 * (10 - (25 * bad) / all)) / 10);
 const blindRatings = (steps) => {
   if (!steps.length) return {};
   const firsts = GOALS.filter((g) => steps.some((s) => s.first === g));
@@ -67,9 +68,11 @@ const blindRatings = (steps) => {
   const ev = ["blind.jsonl"];
   return {
     reach: { score: Math.round((10 * firsts.length) / GOALS.length), why: `Found ${firsts.length} of ${GOALS.length} first goals${firsts.length < GOALS.length ? `, never ${GOALS.filter((g) => !firsts.includes(g)).join(", ")}` : ""}.`, evidence: ev },
-    sure: { score: Math.round(10 * (1 - stuck / steps.length)), why: `Stuck on ${stuck} of ${steps.length} steps.`, evidence: ev },
+    // Each percent of steps stuck or surprised costs a quarter point: a share of steps rounded to 10 out of 10 at 7
+    // stuck in 149, with no room left to climb. 2026-11-07.
+    sure: { score: strict(stuck, steps.length), why: `Stuck on ${stuck} of ${steps.length} steps.`, evidence: ev },
     expect: judged.length
-      ? { score: Math.round((10 * matched) / judged.length), why: `The game did what it expected ${matched} of ${judged.length} times.`, evidence: ev }
+      ? { score: strict(judged.length - matched, judged.length), why: `The game did what it expected ${matched} of ${judged.length} times.`, evidence: ev }
       : { score: null, why: "No expectations judged." },
   };
 };
