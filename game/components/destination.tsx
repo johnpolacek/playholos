@@ -518,6 +518,18 @@ export function DestinationPage({ slug }: { slug: string }) {
           </li>
         ))}
       </ul>
+      {/* A message is a way to engage too, and the fastest: a blind first-timer looked down this list for one, found only
+          craft, and had to guess to ask the Mind. 2026-11-07. */}
+      <Link
+        data-m
+        to={`/play/mind?ask=${encodeURIComponent(`We want to send a message to ${lead.star}. What should it say, and what does it risk?`)}`}
+        className="block border-t border-faint py-2.5 text-[13.5px] leading-snug"
+      >
+        <b className="font-semibold">Or send a message</b>
+        <span className="block text-page-ink2">
+          It goes at the speed of light, sooner than any craft. The Mind drafts it, and we send it. <span className="text-you">Draft it ›</span>
+        </span>
+      </Link>
 
       <div data-m className="mt-4">
         <MindNote className="text-[14.5px] leading-snug">
