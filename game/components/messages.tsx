@@ -73,7 +73,11 @@ function noteAt(r: Row, now: number | null): string {
   if (now === null || r.at === null || r.bullet || r.name === EVERYWHERE || (r.kind !== "send" && r.kind !== "reply")) return r.note;
   const left = r.at - now;
   // Thousands of Years read whole, with commas: "15485.9 Years" read as raw. Playtest 2026-11-07.
-  const n = `${Math.abs(left) >= 100 ? Math.round(Math.abs(left)).toLocaleString("en-US") : tenths(Math.abs(left)).toFixed(1)} Years`;
+  // Under a tenth, in days: "arrives in 0.0 Years" read as already here. Playtest 2026-11-07.
+  const days = Math.max(1, Math.round(Math.abs(left) * 365.25));
+  const n = Math.abs(left) < 0.1
+    ? `${days} day${days === 1 ? "" : "s"}`
+    : `${Math.abs(left) >= 100 ? Math.round(Math.abs(left)).toLocaleString("en-US") : tenths(Math.abs(left)).toFixed(1)} Years`;
   if (r.kind === "reply") return left > 0 ? `Soonest reply in ${n}` : `No reply for ${n}`;
   return left > 0 ? `Our message arrives in ${n}${r.range ? ", at the soonest" : ""}` : `Our message arrived ${n} ago`;
 }
