@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation } from "react-router";
 import { kindOf } from "@/components/arrival";
 import { useGame } from "@/components/game-provider";
@@ -28,7 +28,7 @@ const BEGUN = "Year 0 has begun.";
 const MOST = 6;
 
 /** What landed after Year `from`, up to `to`, as news from Earth, or "" if nothing did. */
-function newsBetween(from: number, to: number, plan: Plan | undefined, done: Record<string, number | null>, heard: Heard[], sent: Sent[], firstGlow?: { ranged?: number; range?: [number, number] }, watcher?: { by: string } | null) {
+function newsBetween(from: number, to: number, plan: Plan | undefined, done: Record<string, number | null>, heard: Heard[], sent: Sent[], firstGlow?: { ranged?: number; range?: [number, number] }, watcher?: { by: string } | null, firstCold?: { seen: number; d: number; n: number }) {
   const within = (at: number | null | undefined): at is number => typeof at === "number" && at > from && at <= to;
   const named = new Set([...(plan?.builds ?? []), ...(plan?.later ?? []).map((o) => o.name)]);
   const items: { at: number; say: string }[] = [];
@@ -45,6 +45,10 @@ function newsBetween(from: number, to: number, plan: Plan | undefined, done: Rec
   // Our first warm glow, once placed. Later ones gather on Scan: there are hundreds. 2026-11-03.
   if (firstGlow?.range && within(firstGlow.ranged))
     items.push({ at: firstGlow.ranged!, say: `our first new warm glow, Warm glow 1, was ranged at ${firstGlow.range[0].toLocaleString("en-US")} to ${firstGlow.range[1].toLocaleString("en-US")} ly, where nothing shone before` });
+  // Our first cold glow too: it came while the clock ran, no jump card named it, and a blind first-timer learned of it
+  // only when the Mind compared Cold glow 2 to it. 2026-11-07.
+  if (firstCold && within(firstCold.seen))
+    items.push({ at: firstCold.seen, say: `our Halo Survey found its first cold glow, Cold glow ${firstCold.n}, beside a star ${Math.round(firstCold.d * 10) / 10} ly away` });
   // A search near Earth ending empty is news too: it rules places out. The Moon Search and the asteroid maps ended in
   // silence, and players wondered if they had run at all. Playtests 2026-11-06 and 2026-11-07.
   const searches = [
@@ -92,6 +96,12 @@ export function MindNews() {
   const { done } = useSchedule();
   const { heard, known, minds } = useLeads();
   const firstGlow = minds?.flashes[0];
+  const glows = minds?.glows;
+  const firstCold = useMemo(() => {
+    if (!glows?.length) return undefined;
+    const i = glows.reduce((b, g, k) => (g.seen < glows[b].seen ? k : b), 0);
+    return { seen: glows[i].seen, d: glows[i].d, n: i + 1 };
+  }, [glows]);
   const tenth = year === null ? null : Math.floor(year * 10) / 10;
   const from = save?.told ?? 0;
   const will = save?.will;
@@ -104,10 +114,10 @@ export function MindNews() {
     // What we know must be read at this Year, so a signal isn't passed over before it loads. And the Mind finishes
     // what it is saying first.
     if (open === undefined || known !== tenth || busy) return;
-    const news = newsBetween(from, tenth, save.plan, done, heard, save.sent ?? [], firstGlow, minds?.watcher);
+    const news = newsBetween(from, tenth, save.plan, done, heard, save.sent ?? [], firstGlow, minds?.watcher, firstCold);
     told(tenth);
     if (news) tell(news);
-  }, [save, tenth, from, dark, open, known, busy, done, heard, firstGlow, minds?.watcher, told, tell]);
+  }, [save, tenth, from, dark, open, known, busy, done, heard, firstGlow, minds?.watcher, firstCold, told, tell]);
   return null;
 }
 
