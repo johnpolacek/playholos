@@ -87,6 +87,9 @@ export function IdleNote() {
               setLeap(null);
             }}
           >
+            {/* What reached us first, the Mind's words after: they stream in late, and above the list they pushed its rows
+                from under the cursor, in two blind playtests. 2026-11-07. */}
+            <Arrived from={leap.from} to={leap.to} snap={leap.snap} />
             {told.fresh && path !== "/play/mind" && (
               <p aria-live="polite">
                 {told.words || "…"}{" "}
@@ -95,7 +98,6 @@ export function IdleNote() {
                 </Link>
               </p>
             )}
-            <Arrived from={leap.from} to={leap.to} snap={leap.snap} />
           </Quiet>
         </MindNote>
       </div>
