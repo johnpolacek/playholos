@@ -222,6 +222,16 @@ export function Queueing({ name, scale, done }: { name: string; scale: number; d
           {queued ? "Remove from Queue" : "Add to Queue"}
         </button>
       )}
+      {/* The first in line gets our compute first. The Mind advised moving one to the front, and its page offered only
+          Remove. Blind playtest 2026-11-07. */}
+      {open && queued && at > 0 && (
+        <button
+          onClick={() => change((p) => ({ ...p, builds: [name, ...p.builds.filter((b) => b !== name)] }))}
+          className="mt-2 h-9 rounded-full text-[13.5px] text-you hover:underline"
+        >
+          Move to the front of the queue
+        </button>
+      )}
       {!open && <InPlay name={name} scale={scale} done={done} />}
     </div>
   );
