@@ -1,4 +1,5 @@
-import { Outlet } from "react-router";
+import { useEffect, useRef } from "react";
+import { Outlet, useLocation } from "react-router";
 import { BeamsProvider } from "@/components/beams";
 import { Fate } from "@/components/fate";
 import { Crossing } from "@/components/crossing";
@@ -16,6 +17,13 @@ import { Opening } from "@/components/wake";
 // The whole screen at every size. Tall, as on a phone: the top bar, the map, the tab page and the rail, stacked.
 // Wide: the top bar across, the map fills the left, and the tab page and rail stand in a column on the right.
 export default function PlayLayout() {
+  // Each page opens at its top: the panel kept the last page's scroll, so a lead opened mid-way down with Engage and
+  // Read its light out of sight, five times in one blind playtest. 2026-11-07.
+  const page = useRef<HTMLElement>(null);
+  const { pathname } = useLocation();
+  useEffect(() => {
+    page.current?.scrollTo({ top: 0 });
+  }, [pathname]);
   return (
     <GameProvider>
       <Crossing />
@@ -34,6 +42,7 @@ export default function PlayLayout() {
                 <YearZero />
                 <MapStrip />
                 <main
+                  ref={page}
                   data-shell="page"
                   className="flex grow flex-col overflow-y-auto bg-panel px-4 pt-3 wide:col-start-2 wide:row-start-2 wide:border-l wide:border-faint"
                 >
