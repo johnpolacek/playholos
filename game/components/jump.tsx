@@ -249,15 +249,19 @@ export function Arrived({ from, to, snap }: { from: number; to: number; snap: Sn
     }
     // New warm glows not yet ranged have no page, so no row of their own: the jump said only "Warm Sky Watch done", and a
     // blind first-timer found the glow only in our talk. 2026-11-07.
-    const unranged = (minds?.flashes ?? []).filter((f) => f.seen > from + 1e-6 && f.seen <= to + 1e-6 && !(f.ranged !== undefined && f.ranged <= to + 1e-6));
+    // Each opens its own page, which says when it is ranged and offers the jump there: the row led to the Mind, with
+    // nothing to do. Playtest 2026-11-07.
+    const unranged = (minds?.flashes ?? [])
+      .map((f, i) => ({ f, n: i + 1 }))
+      .filter(({ f }) => f.seen > from + 1e-6 && f.seen <= to + 1e-6 && !(f.ranged !== undefined && f.ranged <= to + 1e-6));
     if (unranged.length)
       out.push({
         key: "warm:unranged",
         rank: 2,
-        to: done["Infrared Telescope"] != null && done["Infrared Telescope"]! <= to ? "/play/mind" : `/play/build/${buildSlug("Infrared Telescope")}`,
+        to: `/play/lead/warm-glow-${unranged[0].n}`,
         mark: <span className="text-other">✦</span>,
-        title: unranged.length === 1 ? "A new warm glow" : `${unranged.length} new warm glows`,
-        line: `Seen by our Warm Sky Watch. ${unranged.length === 1 ? "It gets" : "Each gets"} a page on Scan once our Infrared Telescope ranges ${unranged.length === 1 ? "it" : "them"}.`,
+        title: unranged.length === 1 ? `A new warm glow, Warm glow ${unranged[0].n}` : `${unranged.length} new warm glows`,
+        line: `Seen by our Warm Sky Watch. How far ${unranged.length === 1 ? "it is" : "they are"}, our Infrared Telescope will find.`,
       });
     // A reply window the jump stopped on, and whether word came: an answer heard shows below as its own row.
     for (const w of WINDOWS)

@@ -79,3 +79,17 @@
   border: 0;
   border-top: 1px solid var(--rowline);
 }
+
+/* The doc's statement of our Fermi answer, blurred until the reader asks for it. 2026-11-07. */
+.doc [data-spoiler] {
+  transition: filter 0.7s, opacity 0.7s;
+}
+[data-spoilers]:not([data-revealed]) .doc [data-spoiler] {
+  filter: blur(7px);
+  opacity: 0.6;
+  cursor: pointer;
+  user-select: none;
+}
+[data-spoilers]:not([data-revealed]) .doc [data-spoiler] * {
+  pointer-events: none;
+}

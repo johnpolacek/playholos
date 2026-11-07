@@ -1371,7 +1371,7 @@ export function warmReadings(flashes: readonly MindsSeen["flashes"][number][], y
               by: "Infrared Telescope",
               title: "Our first warm glow",
               line: `A warm light where none shone, ${f.range[0].toLocaleString("en-US")} to ${f.range[1].toLocaleString("en-US")} ly away.`,
-              mind: "Most lights like this are natural, so we don’t hope yet. But a mind building around its star would look just like this, so we watch to see if it fades.",
+              mind: "Most lights like this are natural. But a mind building around its star would look just like this, so we watch to see if it fades.",
               now: ["likely", "unlikely", "very unlikely"],
               tells: ["Natural glows fade. Each Year this one doesn’t, the odds shift."],
             }]

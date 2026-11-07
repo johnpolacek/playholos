@@ -82,7 +82,7 @@ export const LATER: Later[] = [
   { name: "Halo Array", what: "An array of our own that searches for cold glows ten times as fast.", does: "see", after: "Halo Survey" },
   {
     name: "15 m Mirror",
-    what: "A telescope more than twice as wide, to read the air the first can’t.",
+    what: "A telescope more than twice as wide, to read the air the Infrared Telescope can’t.",
     does: "see",
     after: "Infrared Telescope",
   },

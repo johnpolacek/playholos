@@ -18,6 +18,7 @@ import { VisitArt } from "@/components/visit-art";
 import { WatcherVoice } from "@/components/watcher-voice";
 import { VOICED } from "@/lib/game/watcher-voice";
 import { glowNamed } from "@/lib/game/glow-names";
+import { UnrangedGlow, WARM_WHAT } from "@/components/unranged-glow";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
 
 // One lead, as a report: drawn, then what we measured, what it could be with the Mind's word for each, and what would
@@ -123,7 +124,7 @@ function ListenButton({ onClick }: { onClick(): void }) {
 }
 
 export function LeadPage({ slug }: { slug: string }) {
-  const { leads, dials, readings, fresh, setLook } = useLeads();
+  const { leads, dials, readings, fresh, setLook, minds } = useLeads();
   const { see, save } = useGame();
   const { plan } = usePlan();
   const { scale } = useSchedule();
@@ -193,6 +194,10 @@ export function LeadPage({ slug }: { slug: string }) {
   );
 
   if (!leads.length) return null;
+  // A warm glow seen but not yet ranged has its page here too, at the address its full page takes once ranged.
+  const glow = slug.match(/^warm-glow-(\d+)$/)?.[1];
+  const flash = glow ? minds?.flashes[Number(glow) - 1] : undefined;
+  if (!lead && flash) return <UnrangedGlow n={Number(glow)} flash={flash} />;
   if (!lead)
     return (
       <p className="mt-2 text-sm text-muted">
@@ -320,7 +325,7 @@ export function LeadPage({ slug }: { slug: string }) {
         <>
           <h2 data-m className={`mt-5 ${HEAD}`}>What a warm glow is</h2>
           <p data-m className="mt-1.5 text-[13.5px] leading-snug text-page-ink2">
-            A spot in the sky that turned warm, about as warm as a planet, where nothing shone before. Dust around a newborn star or two merging stars can glow like this, and it fades. So can collectors built around a star: they catch its light and must shed it as heat. That glow lasts as long as they stay. This is how a young mind might look, still building. An old one might glow cold instead.
+            {WARM_WHAT}
           </p>
         </>
       )}

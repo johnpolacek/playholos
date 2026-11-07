@@ -17,7 +17,9 @@ import { CATALOG } from "@/lib/sim/works";
 
 type Kind = "warm" | "cold";
 type By = GlowOrder["by"];
-const WITHIN = [25, 50, 100] as const;
+// Warm glows are flashes seen across the Galaxy, most tens of thousands of ly out, so their ranges are wider. 2026-11-07.
+const WITHIN: Record<Kind, number[]> = { warm: [10_000, 30_000, Infinity], cold: [25, 50, 100] };
+const lyText = (d: number) => (Number.isFinite(d) ? `${d.toLocaleString("en-US")} ly` : "any distance");
 const NEEDS: Record<By, string[]> = { sails: ["Laser Sail Array"], probe: PROBE_NEEDS, sentinel: SENTINEL_NEEDS };
 const NAME: Record<By, string> = { sails: "Sails", probe: "A flyby probe", sentinel: "A sentinel" };
 const t = (kt: number) => `${(kt * 1000).toLocaleString("en-US", { maximumFractionDigits: 0 })} t`;
@@ -81,7 +83,7 @@ function findRate(minds: MindsSeen | undefined, kind: Kind, within: number, now:
 /** The projection, drawn: each find on a line of the Years we have looked, lit if it falls in range, and the deuterium
  *  it would draw a Year against what the Works makes. 2026-11-07, the Will asked for it at the top. */
 function Projection({ pace, now, within, by }: { pace: NonNullable<ReturnType<typeof findRate>>; now: number; within: number; by: By }) {
-  const far = Number.isFinite(within) ? `${within} ly` : "any distance";
+  const far = lyText(within);
   const inside = pace.found.filter((f) => f.ly <= within).length;
   const fuel = by === "sails" ? 0 : CATALOG[by].fuel;
   const draw = pace.perYear * fuel;
@@ -151,14 +153,16 @@ function Row({ kind, found, leads, minds, order, plan, from, set }: { kind: Kind
   const works = useMemo(() => roads(plan, scale, from)[1].works ?? null, [plan, scale, from]);
   const choices: By[] = kind === "warm" ? ["sails", "probe", "sentinel"] : ["sentinel"];
   const [by, setBy] = useState<By>(order?.by ?? (kind === "warm" ? "probe" : "sentinel"));
-  const [within, setWithin] = useState<number>(order?.within ?? 50);
+  const [within, setWithin] = useState<number>(order?.within ?? (kind === "warm" ? 30_000 : 50));
   const [asking, setAsking] = useState(false);
   const missing = NEEDS[by].find((n) => !inOrder(plan, n));
   const sent =
     (plan.flybys ?? []).filter((o) => o.name.startsWith(`${kind === "warm" ? "Warm" : "Cold"} glow `)).length +
     (plan.sentinels ?? []).filter((o) => o.name.startsWith(`${kind === "warm" ? "Warm" : "Cold"} glow `)).length;
   const chip = (on: boolean) => `h-7 rounded-full border px-2.5 text-[12.5px] ${on ? "border-ink text-ink" : "border-faint text-muted"}`;
-  const far = Number.isFinite(within) ? within : 100;
+  const nearest = leads.filter((l) => l.slug.startsWith(`${kind}-glow-`)).reduce((m, l) => Math.min(m, l.ly), Infinity);
+  // How far its word travels: the order's reach, or with no limit, the nearest glow we know of.
+  const far = Number.isFinite(within) ? within : Number.isFinite(nearest) ? Math.round(nearest) : 100;
   const fuel = by === "sails" ? 0 : CATALOG[by].fuel;
   const now = unsent(plan, leads, kind, by, within).length;
   const allIn = now && fuel ? fuelReady(plan, works, "order", now * fuel, Infinity) : null;
@@ -166,10 +170,10 @@ function Row({ kind, found, leads, minds, order, plan, from, set }: { kind: Kind
   const pace = findRate(minds, kind, order?.within ?? within, from);
   // What setting it now would send at once, and when its deuterium is all in. 2026-11-07, the Will asked.
   const estimate = !now
-    ? `No ${kind} glow we have found is within ${far} ly yet.`
+    ? `No ${kind} glow we have found is within ${lyText(within)} yet.`
     : by === "sails"
-      ? `Set now, it sends sails past the ${glows(now)} we have found within ${far} ly.`
-      : `Set now, it sends ${NAME[by].toLowerCase()} to each of the ${glows(now)} we have found within ${far} ly: ${t(now * fuel)} of deuterium${allIn === null ? "" : `, all in by Year ${yearText(Math.max(from, allIn))}`}.`;
+      ? `Set now, it sends sails past the ${glows(now)} we have found within ${lyText(within)}.`
+      : `Set now, it sends ${NAME[by].toLowerCase()} to each of the ${glows(now)} we have found within ${lyText(within)}: ${t(now * fuel)} of deuterium${allIn === null ? "" : `, all in by Year ${yearText(Math.max(from, allIn))}`}.`;
   return (
     <div className="mt-2 border-t border-faint pt-2">
       <div className="flex items-center justify-between gap-3">
@@ -180,7 +184,7 @@ function Row({ kind, found, leads, minds, order, plan, from, set }: { kind: Kind
       {order ? (
         <>
           <p className="mt-1 text-[13.5px] leading-snug text-page-ink2">
-            For each new {kind} glow within {Number.isFinite(order.within) ? `${order.within} ly` : "any distance"}, we send{" "}
+            For each new {kind} glow within {lyText(order.within)}, we send{" "}
             {NAME[order.by].toLowerCase()}. {PRICE[order.by]}
           </p>
           {order.by !== "sails" && <p className="mt-1 text-[12.5px] leading-snug text-muted">{stockLine(plan, works, from)}</p>}
@@ -190,11 +194,11 @@ function Row({ kind, found, leads, minds, order, plan, from, set }: { kind: Kind
         </>
       ) : (
         <>
-          <p className="mt-1 text-[13.5px] leading-snug text-page-ink2">For each {kind} glow within</p>
+          <p className="mt-1 text-[13.5px] leading-snug text-page-ink2">For each {kind} glow</p>
           <div className="mt-1 flex flex-wrap gap-1.5">
-            {WITHIN.map((w) => (
+            {WITHIN[kind].map((w) => (
               <button key={w} onClick={() => setWithin(w)} className={chip(within === w)}>
-                {w} ly
+                {Number.isFinite(w) ? `Within ${w.toLocaleString("en-US")} ly` : "At any distance"}
               </button>
             ))}
           </div>
@@ -207,7 +211,7 @@ function Row({ kind, found, leads, minds, order, plan, from, set }: { kind: Kind
             ))}
           </div>
           <p className="mt-1.5 text-[12.5px] leading-snug text-muted">
-            Each: {PRICE[by]} At {far} ly, its word comes home about {Math.round(homeAfter(by, far))} Years after it leaves.
+            Each: {PRICE[by]} At {far.toLocaleString("en-US")} ly{Number.isFinite(within) ? "" : ", the nearest"}, its word comes home about {Math.round(homeAfter(by, far)).toLocaleString("en-US")} Years after it leaves.
           </p>
           {by !== "sails" && <p className="mt-1 text-[12.5px] leading-snug text-muted">{stockLine(plan, works, from)}</p>}
           <p className="mt-1 text-[12.5px] leading-snug text-page-ink2">{estimate}</p>

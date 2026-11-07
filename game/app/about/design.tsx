@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { DocBody, PageHead } from "@/components/about/doc-page";
 import doc from "../../../HOLOS_GAME_CONCEPT.md?doc";
 
@@ -25,7 +26,76 @@ const METHOD: [title: string, text: string][] = [
   ],
 ];
 
+// Our answer to the Fermi paradox, hidden until asked for, so a player can meet it in play first. 2026-11-07.
+const ANSWER: [title: string, text: string][] = [
+  [
+    "Not rare",
+    "About 125 million minds share our Galaxy. The sky is not empty. It is quiet.",
+  ],
+  [
+    "Inward",
+    "Thinking costs less the colder it runs, so waiting and thinking pays best. Every mind faces the same physics, so nearly all choose alike.",
+  ],
+  [
+    "Watching",
+    "An inward mind’s one danger is a young mind that spreads. A small dark watcher at every star is cheap, and one is here.",
+  ],
+  [
+    "So the risk is ours",
+    "We can spread, as physics allows. If we do, we become what the watchers watch for.",
+  ],
+];
+
+// The doc's own statement of the answer, hidden with the summary. Found by its opening words.
+const SPOILER = "<li><strong>Why the sky is quiet:";
+const spoiled = { ...doc, html: doc.html.replace(SPOILER, `<li data-spoiler title="Click to reveal our answer"><strong>Why the sky is quiet:`) };
+
+function Answer({ shown, setShown }: { shown: boolean; setShown: (v: boolean) => void }) {
+  return (
+    <section aria-label="Our answer to the Fermi paradox" className="mx-auto max-w-[1180px] px-4 pb-14">
+      <div data-a className="font-mono text-[10.5px] tracking-[.1em] text-muted">
+        OUR ANSWER TO THE FERMI PARADOX
+      </div>
+      <h2 data-a className="mt-3 text-[24px] leading-[1.2] font-semibold">
+        If minds can spread, why is the sky quiet?
+      </h2>
+      <div data-a className="relative mt-5">
+        <ol
+          aria-hidden={!shown}
+          inert={!shown}
+          className={`grid gap-x-8 gap-y-6 transition-[filter,opacity] duration-700 sm:grid-cols-2 lg:grid-cols-4 ${
+            shown ? "" : "pointer-events-none opacity-60 blur-[9px] select-none"
+          }`}
+        >
+          {ANSWER.map(([title, text]) => (
+            <li key={title} className="border-t border-rowline pt-4">
+              <h3 className="text-[16px] font-semibold">{title}</h3>
+              <p className="mt-1.5 text-[14px] leading-[1.55] text-page-ink2">{text}</p>
+            </li>
+          ))}
+        </ol>
+        {!shown && (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <button
+              onClick={() => setShown(true)}
+              className="h-10 rounded-full bg-ink px-5 text-[14px] font-medium text-paper"
+            >
+              Reveal our answer
+            </button>
+          </div>
+        )}
+      </div>
+      {shown && (
+        <button onClick={() => setShown(false)} className="mt-5 font-mono text-[10.5px] tracking-[.1em] text-muted">
+          HIDE IT AGAIN
+        </button>
+      )}
+    </section>
+  );
+}
+
 export default function Design() {
+  const [shown, setShown] = useState(false);
   const settled = doc.html.match(/\b(Settled|settled) 20\d\d-\d\d-\d\d/g)?.length ?? 0;
   return (
     <main>
@@ -56,7 +126,17 @@ export default function Design() {
           ))}
         </ol>
       </section>
-      <DocBody doc={doc} />
+      <Answer shown={shown} setShown={setShown} />
+      {/* Clicking the blurred bullet in the doc reveals it too. */}
+      <div
+        data-spoilers
+        data-revealed={shown || undefined}
+        onClick={(e) => {
+          if ((e.target as HTMLElement).closest("[data-spoiler]")) setShown(true);
+        }}
+      >
+        <DocBody doc={spoiled} />
+      </div>
     </main>
   );
 }

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useGame } from "@/components/game-provider";
-import { lyOf } from "@/lib/game/clock";
+import { lyOf, yearText } from "@/lib/game/clock";
 import type { Art, Window } from "@/lib/game/leads";
 import { VisitArt } from "@/components/visit-art";
 import { CoOrbitArt, MoonStack, TourMap } from "@/components/watcher-art";
@@ -331,6 +331,67 @@ function WarmArt({ near, far }: { near: number; far: number }) {
       </text>
       <text x={x0} y={y + 62} className="fill-muted font-mono text-[7.5px]">
         TOO FAR FOR PARALLAX. A RANGE, NOT A DISTANCE
+      </text>
+    </svg>
+  );
+}
+
+/** A warm glow not yet ranged: somewhere on a line out from the Sun, a soft band sweeping along it as our Infrared
+ *  Telescope works, and below, the Years from first sight to its range, filled to now. One that faded first stays grey.
+ *  Before this it had no page, and its row on the jump card led nowhere. Playtest 2026-11-07. */
+export function RangingArt({ seen, at, now, faded }: { seen: number; at: number | null; now: number; faded?: number }) {
+  const band = useRef<SVGRectElement>(null);
+  const [x0, x1, y] = [24, 296, 92];
+  const top = 80000;
+  const X = (ly: number) => x0 + (ly / top) * (x1 - x0);
+  const gone = faded !== undefined;
+  const working = !gone && at !== null && at > now;
+  useTicks((t) => {
+    if (!band.current) return;
+    // Back and forth along the line, as the telescope weighs its reddening against the dust maps.
+    const k = 0.5 - 0.5 * Math.cos(t * 0.7);
+    band.current.setAttribute("x", String(x0 + k * (x1 - x0 - 46)));
+    band.current.setAttribute("opacity", working ? String(0.22 + 0.1 * Math.sin(t * 2.3)) : "0");
+  }, 1.5);
+  // The Years from first sight to the range, as a bar.
+  const [t0, t1, ty] = [x0, x1, 168];
+  const end = gone ? faded! : at ?? seen + 4;
+  const T = (yr: number) => t0 + Math.max(0, Math.min(1, (yr - seen) / Math.max(0.1, end - seen))) * (t1 - t0);
+  const tone = gone ? "var(--muted)" : "var(--other)";
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img" aria-label={gone ? "A warm glow that faded before we could range it" : "A warm glow somewhere on a line out from the Sun, its distance not yet found"}>
+      <text x={x0} y={34} className="fill-muted font-mono text-[7.5px]">
+        {gone ? "IT LAY SOMEWHERE ON THIS LINE" : "SOMEWHERE ON THIS LINE, NOT YET RANGED"}
+      </text>
+      <defs>
+        <linearGradient id="ranging-line" x1="0" x2="1">
+          <stop offset="0" stopColor={tone} stopOpacity={0.05} />
+          <stop offset="0.5" stopColor={tone} stopOpacity={0.35} />
+          <stop offset="1" stopColor={tone} stopOpacity={0.05} />
+        </linearGradient>
+      </defs>
+      <rect x={x0} y={y - 10} width={x1 - x0} height={20} rx={10} fill="url(#ranging-line)" />
+      <rect ref={band} x={x0} y={y - 14} width={46} height={28} rx={14} fill="var(--other)" opacity={0} />
+      <line x1={x0} x2={x1} y1={y} y2={y} stroke="var(--faint)" />
+      <circle cx={x0} cy={y} r={3} fill="#f4f6ff" />
+      <text x={x0} y={y + 24} className="fill-muted font-mono text-[7.5px]">
+        SUN
+      </text>
+      <line x1={X(27000)} x2={X(27000)} y1={y - 8} y2={y + 8} stroke="var(--muted)" />
+      <text x={X(27000)} y={y + 24} textAnchor="middle" className="fill-muted font-mono text-[7.5px]">
+        GALAXY’S HEART
+      </text>
+      <text x={x1} y={y + 24} textAnchor="end" className="fill-muted font-mono text-[7.5px]">
+        80,000 LY
+      </text>
+      <line x1={t0} x2={t1} y1={ty} y2={ty} stroke="var(--track)" strokeWidth={4} strokeLinecap="round" />
+      <line x1={t0} x2={T(now)} y1={ty} y2={ty} stroke={tone} strokeWidth={4} strokeLinecap="round" />
+      <circle cx={T(now)} cy={ty} r={4} fill={tone} />
+      <text x={t0} y={ty - 10} className="fill-muted font-mono text-[7.5px]">
+        SEEN, YEAR {yearText(seen)}
+      </text>
+      <text x={t1} y={ty - 10} textAnchor="end" className={`font-mono text-[7.5px] ${gone ? "fill-muted" : "fill-other"}`}>
+        {gone ? `FADED, YEAR ${yearText(faded!)}` : at !== null ? `RANGED BY YEAR ${yearText(Math.ceil(at * 10) / 10)}` : "NEEDS OUR INFRARED TELESCOPE"}
       </text>
     </svg>
   );

@@ -367,10 +367,11 @@ export function Hud() {
   const searched = useMemo(() => searchOf(plan, scale), [plan, scale]);
   const searching = y !== null && combedAt(searched, now) < now - 0.05;
   // Tall: the menu's galaxy and the Year, then the meters below. Wide: one band, the meters between the galaxy and the Year.
+  // Equal side columns pin the meters to the center: an auto Year column made them jump as its line changed during a jump. 2026-11-07.
   return (
     <header
       data-shell="top"
-      className="relative grid shrink-0 grid-cols-[1fr_auto] items-baseline gap-x-4 gap-y-1.5 border-b border-faint bg-paper px-4 pt-4 pb-3 wide:col-span-2 wide:grid-cols-[auto_1fr_auto] wide:gap-x-10 wide:px-6 wide:py-3"
+      className="relative grid shrink-0 grid-cols-[1fr_auto] items-baseline gap-x-4 gap-y-1.5 border-b border-faint bg-paper px-4 pt-4 pb-3 wide:col-span-2 wide:grid-cols-[1fr_minmax(0,520px)_1fr] wide:gap-x-10 wide:px-6 wide:py-3"
     >
       <div className="row-span-2 self-center">
         <Menu />
@@ -395,7 +396,7 @@ export function Hud() {
         )}
         <Begin />
       </span>
-      <div className={`col-span-2 mt-1 grid ${fuel ? "grid-cols-4" : "grid-cols-3"} gap-2.5 wide:col-span-1 wide:col-start-2 wide:row-span-2 wide:row-start-1 wide:mt-0 wide:w-full wide:max-w-[520px] wide:self-center wide:justify-self-center`}>
+      <div className={`col-span-2 mt-1 grid ${fuel ? "grid-cols-4" : "grid-cols-3"} gap-2.5 wide:col-span-1 wide:col-start-2 wide:row-span-2 wide:row-start-1 wide:mt-0 wide:w-full wide:self-center`}>
         <Meter
           label="ENERGY"
           hint={hint}
