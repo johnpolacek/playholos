@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useLocation } from "react-router";
+import { Link, useLocation } from "react-router";
 import { type Beam, useBeams } from "@/components/beams";
 import { useGame } from "@/components/game-provider";
 import { Item, type Row } from "@/components/journey";
@@ -140,6 +140,14 @@ export function Messages() {
           <ul className="mt-1">{live.map(item)}</ul>
         </>
       )}
+      {/* A way to send from here: a blind first-timer came to our messages to send one, found none, and asked the Mind.
+          2026-11-07. */}
+      <Link
+        to={`/play/mind?ask=${encodeURIComponent("We want to send a message of our own. Which star should hear from us, what should it say, and what does it risk?")}`}
+        className="block border-t border-faint py-2.5 text-[13px] text-page-ink2 hover:text-ink"
+      >
+        Send a message of our own <span className="text-you">›</span>
+      </Link>
       {past.length > 0 && (
         <>
           <button

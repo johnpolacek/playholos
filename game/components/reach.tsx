@@ -970,7 +970,7 @@ export function Reach() {
       {/* Craft are here, and our messages on Scan: a blind first-timer looked for a message just sent, found only
           Voyager, and had to ask the Mind where it went. 2026-11-07. */}
       <Link to="/play#messages" className="border-t border-faint py-2.5 text-[13px] text-page-ink2 hover:text-ink">
-        {(save?.sent ?? []).length ? `Our messages, ${(save?.sent ?? []).length.toLocaleString("en-US")} sent, are on Scan` : "Messages we send are listed on Scan"}{" "}
+        {(save?.sent ?? []).length ? `Our messages, ${(save?.sent ?? []).length.toLocaleString("en-US")} sent, are on Scan. To send one, open a destination below` : "Messages we send are listed on Scan. To send one, open a destination below"}{" "}
         <span className="text-you">›</span>
       </Link>
 
