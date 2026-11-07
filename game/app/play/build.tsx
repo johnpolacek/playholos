@@ -9,7 +9,7 @@ export default function BuildTab() {
   return (
     <>
       {!params.has("tour") && (
-        <TabHead title="BUILD" sources={PLAN_SOURCES} walk={{ to: "/play/build?tour", label: "Explore" }} />
+        <TabHead title="BUILD" sources={PLAN_SOURCES} walk={{ to: "/play/build?tour", label: "Strategies" }} />
       )}
       <Build />
     </>
