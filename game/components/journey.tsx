@@ -6,6 +6,7 @@ import { Face } from "@/components/tab-head";
 import { span, yearText, YEAR_0, lyOf } from "@/lib/game/clock";
 import { SENDS } from "@/lib/game/knocks";
 import { buildSlug, PAST } from "@/lib/game/plan";
+import { starName } from "@/lib/game/leads";
 
 // A row on its whole journey, for our builds on Build and our messages on Reach. A message's thread starts the year we
 // sent it, decades back, with a notch at Year 0, and a reply runs out and back. A build's starts at Year 0. Before
@@ -180,7 +181,7 @@ export function Item({
         )
       }
       tone={theirs ? "text-other" : row.kind === "reply" ? "text-wait" : "text-you"}
-      name={<b className="font-semibold">{row.name}</b>}
+      name={<b className="font-semibold">{starName(row.name)}</b>}
       line={
         row.fresh ? (
           <span className="text-ink">

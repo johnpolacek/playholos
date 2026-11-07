@@ -99,7 +99,7 @@ function Aimed({ id, draft, asked }: { id: string; draft: Draft; asked: string }
       {sent ? (
         <p className="font-mono text-[11px] text-ok">Sent at Year {yearText(sent.y)} · on its way, lands {r ? span2((d) => d.lands, false) : `Year ${yearText(lands)}`}</p>
       ) : (
-        <Buttons label="Send" onSend={() => send({ ...draft, to: star.name, d: star.d, ...(star.d > 50 ? { ra: star.ra, dec: star.dec } : {}), id, y: year ?? 0, asked })} />
+        <Buttons label="Send" onSend={() => send({ ...draft, to: star.name, d: star.d, ...(star.range ? { range: star.range } : {}), ...(star.d > 50 ? { ra: star.ra, dec: star.dec } : {}), id, y: year ?? 0, asked })} />
       )}
     </div>
   );
