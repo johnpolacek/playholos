@@ -59,12 +59,10 @@ export function nextKnownWhy(ahead: EarthView, year: number): { at: number; why:
     .sort((a, b) => a - b)
     .filter((t) => (t - last >= GLOW_GAP ? ((last = t), true) : false))
     .map((t) => ({ seen: t }));
-  // A black hole stops the skip only if it is the nearest yet, since Scan shows only the nearest. A thirteenth, farther
-  // one stopped a jump at Year 584.3 that brought nothing to see. Playtest 2026-11-04.
-  let nearest = Infinity;
-  const holes = [...(ahead.holes ?? [])]
-    .sort((a, b) => a.found - b.found)
-    .filter((h) => (h.d < nearest ? ((nearest = h.d), true) : false));
+  // Only the first black hole stops the skip, as only the first cold glow does: each nearer one after stopped a jump
+  // with nothing to do there, and the next jump's card still names it. Blind playtest, the Will's call, 2026-11-07.
+  // Word from our craft at one still stops it, under visits.
+  const holes = [...(ahead.holes ?? [])].sort((a, b) => a.found - b.found).slice(0, 1);
   walk({ ...ahead, holes, minds: ahead.minds && { ...ahead.minds, flashes, glows: glows.map((g, i) => (i === 0 ? g : { near: g.near })) } });
   return best === null ? null : { at: best, why: whyOf(where) };
 }
