@@ -6,6 +6,7 @@ import type { Aim } from "@/components/picks";
 import { heardId, useLeads } from "@/components/scan";
 import { ListHead } from "@/components/tab-head";
 import { yearText, YEAR_0 } from "@/lib/game/clock";
+import { starName } from "@/lib/game/leads";
 import { giftWords } from "@/lib/game/sends";
 
 // What our watches have caught, on Scan, above the leads: each signal on its whole journey, from the year its sender
@@ -37,8 +38,10 @@ export function Heard() {
   }, [asked, fresh, see, setParams]);
   const rows: Row[] = heard.map((h) => ({
     key: heardId(h),
-    name: h.star,
-    note: `${A(h.move)}${h.laser ? ", in laser flashes" : ""}, sent in ${Math.floor(YEAR_0 + h.sent)}.`,
+    // The name a glow earned, and our Year once sent in our age: "left Warm glow 1 in 11249" read as a calendar with
+    // no Year, under an old name. Feature playtest 2026-11-07.
+    name: starName(h.star),
+    note: `${A(h.move)}${h.laser ? ", in laser flashes" : ""}, sent ${h.sent >= 0 ? `at Year ${yearText(h.sent)}` : `in ${Math.floor(YEAR_0 + h.sent)}`}.`,
     at: h.arrived,
     kind: "heard",
     msg: h.move,
@@ -47,7 +50,7 @@ export function Heard() {
     fresh: fresh.has(heardId(h)),
     story: [
       ["HOLDS", h.text ? `“${h.text}”` : "A pattern no star makes. We can’t read it yet."],
-      ["FROM", `${h.star}, ${h.d.toFixed(1)} light-years away`],
+      ["FROM", `${starName(h.star)}, ${h.d.toLocaleString("en-US", { maximumFractionDigits: 1 })} light-years away`],
       ...(h.overheard ? ([["SENT TO", "Every way at once, on news from another world. We overheard it."]] as [string, string][]) : []),
       ...(h.warning ? ([["SENT TO", "Us, a warning about another world they know of"]] as [string, string][]) : []),
       ...(h.about ? ([["ON NEWS OF", h.about], ["CAUGHT BY", "Our dishes, which keep listening to every craft we send"]] as [string, string][]) : []),

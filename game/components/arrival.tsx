@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router";
 import { useGame } from "@/components/game-provider";
 import { heardId, useLeads } from "@/components/scan";
 import { yearText, YEAR_0 } from "@/lib/game/clock";
+import { starName } from "@/lib/game/leads";
 import { gsap, prefersReducedMotion } from "@/lib/motion";
 import type { Heard } from "@/lib/sim/types";
 
@@ -162,7 +163,7 @@ function Crossing({ h, onDone }: { h: Heard; onDone(): void }) {
         </g>
         <circle cx={X0} cy={Y} r="22" fill="none" stroke="var(--other)" opacity="0.45" />
         <circle cx={X0} cy={Y} r="8" fill="var(--other)" />
-        <text x={X0} y={Y - 128} textAnchor="middle" fill="var(--other)" fontSize="22">{h.star}</text>
+        <text x={X0} y={Y - 128} textAnchor="middle" fill="var(--other)" fontSize="22">{starName(h.star)}</text>
         <g data-earth>
           <circle cx={X1} cy={Y} r="18" fill="none" stroke="var(--ink)" opacity="0.4" />
           <circle cx={X1} cy={Y} r="5" fill="var(--ink)" />
@@ -171,10 +172,10 @@ function Crossing({ h, onDone }: { h: Heard; onDone(): void }) {
       </svg>
       <div className="mx-auto flex w-full max-w-xl flex-col gap-3">
         <p data-words className="font-mono text-[10.5px] tracking-[.12em] text-other">
-          {h.d.toFixed(1)} LIGHT-YEARS · {flew.toFixed(1)} YEARS IN FLIGHT
+          {h.d.toLocaleString("en-US", { maximumFractionDigits: 1 })} LIGHT-YEARS · {flew.toLocaleString("en-US", { maximumFractionDigits: 1 })} YEARS IN FLIGHT
         </p>
         <p data-words className="text-xl leading-tight font-light text-ink wide:text-3xl">
-          {kindOf(h)} left {h.star} in {Math.floor(sent)}. It reaches us now.
+          {kindOf(h)} left {starName(h.star)} {h.sent >= 0 ? `at Year ${yearText(h.sent)}` : `in ${Math.floor(sent)}`}. It reaches us now.
         </p>
         <div data-words className="flex gap-3 rounded-lg border border-frame bg-panel p-3.5">
           <span aria-hidden className="mt-0.5 size-6 shrink-0 rounded-full bg-[radial-gradient(circle,#fff_0%,var(--think)_40%,transparent_72%)]" />
