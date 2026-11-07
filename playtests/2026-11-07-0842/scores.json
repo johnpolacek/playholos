@@ -1,0 +1,11 @@
+{
+  "build": "9b809f5",
+  "blind": {
+    "understood": {
+      "score": 9.8,
+      "grades": { "q1": 9, "q2": 10, "q3": 10, "q4": 10 },
+      "why": "Got the core: you are the Will of Earth's one Mind, the question is whether we are alone. Q1 missed the stakes the key names: 'Finding other minds is our greatest chance and our gravest danger' (I only said 'decide whether and how to call out') and didn't note it rests on real data. Q2 all four tabs right; for Reach I wrote 'destinations ... and the Send a message option', near enough to 'by craft or by message, and what we have sent'. Q3 named a real lead (made dark body at the Moon's L4, then Warm Glow 1) and why it matters. Q4 Close Look before knocking, and finishing the glow reading, both with reasons drawn from the Mind's advice.",
+      "evidence": ["blind/004.png", "blind/020.png", "blind/141.png", "blind/143.png", "blind/149.png", "quiz.md"]
+    }
+  }
+}
