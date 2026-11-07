@@ -31,7 +31,9 @@ export function Catalog({ className = "" }: { className?: string }) {
   // 2026-11-07.
   const [find, setFind] = useState("");
   const q = find.trim().toLowerCase();
-  const shown = q ? open.filter((b) => b.name.toLowerCase().includes(q) || b.what.toLowerCase().includes(q)) : open;
+  // Names first: "probe" listed the X-Ray Watch, for a word in its line, above the Probe Yard. Blind playtest 2026-11-07.
+  const named = (b: (typeof open)[number]) => b.name.toLowerCase().includes(q);
+  const shown = q ? [...open.filter(named), ...open.filter((b) => !named(b) && b.what.toLowerCase().includes(q))] : open;
   // One found but not open yet says what opens it.
   const later = q && !shown.length ? LATER.find((b) => b.name.toLowerCase().includes(q) && !ordered(plan).includes(b.name)) : undefined;
   const opens = (after: string) => (after === "A rock found" ? "a rock is found coming" : after === "The watcher found" ? "the watcher is found" : `the ${after} is done`);
