@@ -146,6 +146,11 @@ export function Path() {
   const [open, setOpen] = useState<string | null>(null);
   return (
     <section className="mt-1 mb-3 rounded-xl border border-faint px-3 py-2.5">
+      {/* Said what it is: a blind first-timer saw no goal until Year 11, then read these dots as decoration. 2026-11-07. */}
+      <p className="mb-1.5 text-[12.5px] leading-snug text-page-ink2">
+        <span className="mr-1.5 font-mono text-[10px] tracking-[.1em] text-muted uppercase">Our path</span>
+        Find life, make contact, spread. Tap one for its steps.
+      </p>
       <div className="flex flex-col">
         {stages.map((s) => (
           <Trail key={s.name} stage={s} next={next} open={open === s.name} toggle={() => setOpen(open === s.name ? null : s.name)} />
