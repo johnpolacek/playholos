@@ -18,7 +18,7 @@ export function OpensLine({ name }: { name: string }) {
   if (!later.length) return null;
   return (
     <p className="-mt-1.5 flex flex-wrap items-center gap-x-3 pb-1.5 pl-7 text-[12.5px] leading-snug">
-      <span className="font-mono text-[9.5px] tracking-[.08em] text-muted">OPENS</span>
+      <span className="font-mono text-[9.5px] tracking-[.08em] text-muted" title="Once done, these can be built">THEN WE CAN BUILD</span>
       {later.map((b) => (
         <Link
           key={b.name}
