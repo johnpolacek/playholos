@@ -29,6 +29,7 @@ function Meter({
   late = false,
   hint = false,
   go,
+  tip,
 }: {
   label: string;
   at?: number;
@@ -39,6 +40,8 @@ function Meter({
   late?: boolean;
   /** Where its word under it leads, marked as a link. */
   go?: string;
+  /** What its word means, on hover. */
+  tip?: string;
   hint?: boolean;
 }) {
   return (
@@ -68,7 +71,7 @@ function Meter({
           {sub} ›
         </Link>
       ) : (
-        <span className={`truncate text-[11px] leading-tight tracking-normal ${late ? "text-other" : ""}`}>{sub}</span>
+        <span title={tip} className={`truncate text-[11px] leading-tight tracking-normal ${late ? "text-other" : ""}`}>{sub}</span>
       )}
     </span>
   );
@@ -278,6 +281,8 @@ export function Hud() {
           sub={over ? `${pct(share.short)} short, builds slow` : idle && !hint ? "nothing building" : compute < 0.995 ? `${pct(1 - compute)} ${searching ? "searching" : "idle"}` : "none idle"}
           // A preview's shortfall stays in the preview's blue: orange read as an alarm. Blind playtest 2026-11-07.
           late={over && !hint}
+          // "Searching" said nothing on its own: a blind first-timer asked the Mind what it meant. 2026-11-07.
+          tip={searching && !over && compute < 0.995 ? "Compute our builds can’t use combs old recordings for signals no one caught." : undefined}
           go={idle && !over && !hint ? "/play/build" : undefined}
         />
       </div>
