@@ -238,6 +238,9 @@ export function ScanProvider({ children }: { children: React.ReactNode }) {
     const standing: Record<string, Standing> = Object.fromEntries(
       leads.map((l) => {
         if (readable.has(l) || readings[l.slug]?.some((r) => fresh.has(r.id))) return [l.slug, "needs"];
+        // The watcher, "Not alone", needs us until we knock or send the Close Look, then waits on its word. It sat
+        // under Quiet, below every world. Playtests 2026-11-07.
+        if (l.slug === "small-dark-body") return [l.slug, knocks.length || plan?.builds.includes("Close Look") ? "waiting" : "needs"];
         if (l.slug.startsWith("warm-glow-") && !l.facts.some(([k, v]) => k === "Faded" || (k === "Its light" && v.startsWith("Dust")))) return [l.slug, "watching"];
         const windows = l.art.kind === "reply" ? l.art.windows.filter((w) => w.star === l.star) : [];
         const waiting =
