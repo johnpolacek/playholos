@@ -966,6 +966,12 @@ export function Reach() {
         />
         <Item row={SENT} now={clock ?? 0} began={clock !== null} aim={voyager} />
       </ul>
+      {/* Craft are here, and our messages on Scan: a blind first-timer looked for a message just sent, found only
+          Voyager, and had to ask the Mind where it went. 2026-11-07. */}
+      <Link to="/play#messages" className="border-t border-faint py-2.5 text-[13px] text-page-ink2 hover:text-ink">
+        {(save?.sent ?? []).length ? `Our messages, ${(save?.sent ?? []).length.toLocaleString("en-US")} sent, are on Scan` : "Messages we send are listed on Scan"}{" "}
+        <span className="text-you">›</span>
+      </Link>
 
       <ListHead left={`Destinations · ${places.length}`} right="Soonest" className="mt-5" />
       <ul className="mt-1">
