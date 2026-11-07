@@ -9,6 +9,7 @@ import { heardId, useLeads } from "@/components/scan";
 import { yearText } from "@/lib/game/clock";
 import { starName } from "@/lib/game/leads";
 import { buildSlug, ordered } from "@/lib/game/plan";
+import { moonSearchEnds, tourEnds } from "@/lib/sim/minds";
 import { gsap, prefersReducedMotion } from "@/lib/motion";
 
 // A jump, felt and said, settled 2026-11-01: the Year counts up as the stars streak past, and a card says what reached
@@ -180,7 +181,7 @@ const gifted = (h: { gift?: number }) => (h.gift && h.gift > 1 ? h.gift.toFixed(
 
 /** What reached us at the Year we jumped to: builds done, leads new to Scan, readings landed, signals heard. */
 export function Arrived({ from, to, snap }: { from: number; to: number; snap: Snap }) {
-  const { leads, readings, heard, dials } = useLeads();
+  const { leads, readings, heard, dials, minds } = useLeads();
   const { plan } = usePlan();
   const { done } = useSchedule();
   const [listening, setListening] = useState(true);
@@ -204,6 +205,25 @@ export function Arrived({ from, to, snap }: { from: number; to: number; snap: Sn
           ),
           title: `${n} done`,
           line: `Year ${yearText(at)}`,
+        });
+    }
+    // A search's end, which a jump stops on: "Jump to the Asteroid Tour's end" landed on a card that never said it
+    // ended. Blind playtest 2026-11-07.
+    for (const [n, end, by] of [["Moon Search", moonSearchEnds, "moon search"], ["Asteroid Tour", tourEnds, "asteroid tour"]] as const) {
+      const built = done[n];
+      const at = built == null ? null : end(built);
+      if (at !== null && at > from + 1e-6 && at <= to + 1e-6)
+        out.push({
+          key: `end:${n}`,
+          rank: 3,
+          to: `/play/build/${buildSlug(n)}`,
+          mark: (
+            <span style={{ color: buildColor(n) }}>
+              <BuildMark name={n} size={16} />
+            </span>
+          ),
+          title: `The ${n} ended`,
+          line: minds?.watcher?.by === by ? `Year ${yearText(at)}, and it found something` : `Year ${yearText(at)}, finding nothing out of place`,
         });
     }
     for (const l of leads) {
@@ -237,7 +257,7 @@ export function Arrived({ from, to, snap }: { from: number; to: number; snap: Sn
         });
     // The watcher first: word of a mind beside us leads the report, above any glow. Playtest 2026-11-05.
     return out.sort((x, y) => x.rank - y.rank);
-  }, [plan, done, leads, readings, heard, snap, from, to]);
+  }, [plan, done, leads, readings, heard, snap, from, to, minds?.watcher?.by]);
 
   // The map turns to the first new lead. 2026-11-01.
   // A new warm glow first: the map pulls back across the Galaxy to show it, and comes home on Go on. 2026-11-03.
@@ -256,7 +276,6 @@ export function Arrived({ from, to, snap }: { from: number; to: number; snap: Sn
   const firstWarm = leads.find((l) => l.slug === "warm-glow-1" && !snap.slugs.has(l.slug));
   // And word of the watcher gets its own, the biggest news there is. 2026-11-05.
   const watcher = items.some((x) => x.key === "lead:small-dark-body") ? leads.find((l) => l.slug === "small-dark-body") : undefined;
-  const { minds } = useLeads();
   // Another mind answering us is the game's rarest news, so it gets its own word too. A playtest learned of a peer's
   // answer and gift only by asking the Mind. 2026-11-07.
   const answer = heard.find((h) => h.answers !== undefined && !snap.heard.has(heardId(h)));
