@@ -1,0 +1,20 @@
+{
+  "build": "be60609",
+  "blind": {
+    "understood": {
+      "score": 9.3,
+      "why": "Got the premise, the tabs, the open question and a grounded next move. Missed that contact is also a danger, and put messages under Scan instead of Reach.",
+      "grades": {
+        "q1": { "score": 9, "why": "Will of Earth's Mind and are-we-alone both there. Missed that finding minds is also the gravest danger, and that it rests on real data." },
+        "q2": { "score": 8, "why": "Scan, Build and Mind right. Reach described as 'getting physically out there' with craft only; the key says Reach is by craft or by message. I wrote that messages are listed on Scan." },
+        "q3": { "score": 10, "why": "Named Warm Glow 1 (built or dust, 4-21% mind odds) with its pending Close Reading." },
+        "q4": { "score": 10, "why": "Jump to the Close Reading result at Year 11.6 and watch for fading, with reasons from the game." }
+      },
+      "wrong": [
+        "Q1: no mention that finding other minds is 'our gravest danger' as well as our chance",
+        "Q2: 'Reach: getting physically out there. Craft we've sent, destinations...' (left out messages)"
+      ],
+      "evidence": ["blind/016.png", "blind/033.png", "blind/070.png", "blind/128.png"]
+    }
+  }
+}
