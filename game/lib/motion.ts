@@ -53,6 +53,13 @@ export function useStage(
           if (!live) return;
           const tl = gsap.timeline({ defaults: { overwrite: "auto" } });
           intro((sel) => gsap.utils.toArray<Element>(sel, root), tl);
+          // A screen that waits for the camera to arrive shows its title now, not after: a blind first-timer sat
+          // through flights with no words on screen, unsure whether to wait or click. Playtest 2026-11-07.
+          const kick = gsap.utils.toArray<Element>('[data-m="kick"]', root);
+          if (tl.delay() > 0.3 && kick.length) {
+            tl.getTweensOf(kick).forEach((t) => t.kill());
+            gsap.fromTo(kick, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.5 });
+          }
           tl.eventCallback("onComplete", () => {
             gsap.set(items, { clearProps: "transform,willChange" });
           });
