@@ -95,8 +95,8 @@ interface ReachView {
   /** The map's zoom, which the scene reads each frame. A new object each change when motion is reduced, so the still
    *  sky redraws. */
   dials: Dials;
-  /** Flies the map to a zoom, or jumps there when motion is reduced. */
-  fly(zoom: number): void;
+  /** Flies the map to a zoom, or jumps there when motion is reduced, in `secs` if given. */
+  fly(zoom: number, secs?: number): void;
   /** Holds the map at a zoom, as a drag does. */
   hold(zoom: number): void;
   /** Out from Earth, a pause at Voyager 1, then on to the star in view, after `delay` seconds. */
@@ -159,11 +159,11 @@ export function ReachProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => void (now.current = dials), [dials]);
   const jump = useCallback((zoom: number) => setDials((d) => (d.zoom === zoom ? d : { ...d, zoom })), []);
   const fly = useCallback(
-    (zoom: number) => {
+    (zoom: number, secs?: number) => {
       if (prefersReducedMotion()) return jump(zoom);
       const d = now.current;
       const far = Math.abs(zoom - (d.zoom ?? zoom));
-      gsap.to(d, { zoom, duration: Math.min(3, 0.5 + 0.35 * far), ease: "power2.inOut", overwrite: true });
+      gsap.to(d, { zoom, duration: secs ?? Math.min(3, 0.5 + 0.35 * far), ease: "power2.inOut", overwrite: true });
     },
     [jump],
   );
@@ -264,6 +264,7 @@ const NAMES: Record<string, string> = {
   moon: "the Moon · south-pole stations",
   l2: "Roman · JWST · L2",
   sun: "the Sun",
+  home: "the Sun · Voyager 1 · New Horizons",
   horizons: "New Horizons · 14 light-hours",
   voyager: "Voyager 1 · silent · 30 light-hours",
 };

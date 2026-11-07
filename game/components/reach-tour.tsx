@@ -11,7 +11,7 @@ import { axis, farZoom, Thread, tripAt, useReach, VOYAGER, year } from "@/compon
 import { Thread as Stops } from "@/components/review";
 import { useStepTap } from "@/components/scan";
 import { buildSlug } from "@/lib/game/plan";
-import { LY_AU, NEAREST, roads } from "@/lib/game/reach";
+import { LY_AU, NEAREST, roads, zoomFor } from "@/lib/game/reach";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
 
 // How we reach, the third of the four things we would do before Begin, 2026-10-23. Scan's review shows what is out
@@ -130,7 +130,7 @@ function Gap() {
 
 export function ReachTour({ onClose }: { onClose(): void }) {
   const { orderAt: clock, did } = useGame();
-  const { fly, tour, aim, setTrip, showCraft, setCount } = useReach();
+  const { fly, hold, aim, setTrip, showCraft, setCount } = useReach();
   const { plan } = usePlan();
   const { scale } = useSchedule();
   const root = useRef<HTMLDivElement>(null);
@@ -152,10 +152,16 @@ export function ReachTour({ onClose }: { onClose(): void }) {
   // Playtest 2026-11-07: Voyager 1 and New Horizons had stops and name tags where the sail and probe should be.
   useEffect(() => aim(null), [aim]);
   useEffect(() => {
-    // Voyager 1 up close first, then out from Earth past it to the nearest star.
-    if (at === 0) tour(CRAFT_SHOT_SECS - 1);
-    else fly(farZoom(NEAREST.ly));
-  }, [at, fly, tour]);
+    if (at !== 0) {
+      fly(farZoom(NEAREST.ly));
+      return;
+    }
+    // Voyager 1 up close, then pulled back to where it is at Year 0, with New Horizons and their dotted roads from the
+    // Sun, held there, then out until the nearest star shows, the two still marked by the Sun. Asked 2026-11-07.
+    hold(zoomFor(VOYAGER.au));
+    const out = gsap.delayedCall(CRAFT_SHOT_SECS + 2.5, () => fly(farZoom(NEAREST.ly), 4.5));
+    return () => void out.kill();
+  }, [at, fly, hold]);
   // Each craft opens up close on the map, then pulls back into its flight. 2026-11-07.
   const kind: CraftKind | null = at === 0 ? "voyager" : at === 1 ? "sail" : at === 2 ? "probe" : at === last ? "sentinel" : null;
   useEffect(() => {

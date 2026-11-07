@@ -1788,12 +1788,17 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
     const l2Band = (x: number) => band(x, -1.7, -1.3, -0.3, 0.2);
     // The probes fade once they are too near the Sun to tell apart from it.
     const farBand = (x: number) => band(x, 1.2, 2.0, 3.8, 4.6);
+    // On Reach the probes and their roads stay as the view goes on out to the nearest star: by then they sit within a
+    // pixel of the Sun, and the Sun's name gathers theirs. Asked 2026-11-07.
+    const keepBand = (x: number) => (spec.mode === "reach" ? ramp(x, 1.2, 2.0) : farBand(x));
+    const homeBand = (x: number) => (spec.mode === "reach" ? ramp(x, 4.2, 4.8) : 0);
     const starBand = (x: number) => ramp(x, 4.6, 5.4);
     const marks: [id: string, layer: Layer, at: THREE.Vector3, show: (x: number) => number][] = [
       ["earth", earth, origin, (x) => band(x, -2.5, -2.1, 1.4, 2.0)],
       ["moon", earth, moonAt, moonBand],
       ["l2", earth, l2, l2Band],
-      ["sun", solar, origin, (x) => ramp(x, -0.3, 0.3)],
+      ["sun", solar, origin, (x) => ramp(x, -0.3, 0.3) * (1 - homeBand(x))],
+      ["home", solar, origin, homeBand],
       ["horizons", solar, horizons, farBand],
       ["voyager", solar, voyager, farBand],
       ["alpha", stars, alpha, (x) => (spec.mode === "reach" ? starBand(x) : 0)],
@@ -1859,7 +1864,7 @@ export function mountDrift(parent: HTMLElement, { still, ...first }: Show & { st
       moonLine.uniforms.uOpacity.value = 0.35 * p * moonBand(x);
       l2Glow.uniforms.uOpacity.value = p * l2Band(x);
       l2Line.uniforms.uOpacity.value = 0.4 * p * l2Band(x);
-      probeGlow.uniforms.uOpacity.value = roadGlow.uniforms.uOpacity.value = p * farBand(x);
+      probeGlow.uniforms.uOpacity.value = roadGlow.uniforms.uOpacity.value = p * keepBand(x);
 
       if ((spec.mode === "inherit" || spec.mode === "reach") && spec.onMarks) {
         const w = parent.clientWidth;
