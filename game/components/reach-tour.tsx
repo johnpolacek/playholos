@@ -11,7 +11,7 @@ import { axis, farZoom, Thread, tripAt, useReach, VOYAGER, year } from "@/compon
 import { Thread as Stops } from "@/components/review";
 import { useStepTap } from "@/components/scan";
 import { buildSlug } from "@/lib/game/plan";
-import { LIGHT_HOUR_AU, LY_AU, NEAREST, roads } from "@/lib/game/reach";
+import { LY_AU, NEAREST, roads } from "@/lib/game/reach";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
 
 // How we reach, the third of the four things we would do before Begin, 2026-10-23. Scan's review shows what is out
@@ -21,8 +21,6 @@ import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motio
 // and the gap were one stop, and the roads to come a stop of their own, 2026-10-27. Reaching the last stop counts as
 // done, and the way on is the next of the four.
 
-/** Voyager 1's speed out of the Solar System, about 17 km/s, in AU a year. */
-const VOYAGER_AU_YEAR = (17 * 3.156e7) / 149597870.7;
 const GAP_AU = NEAREST.ly * LY_AU;
 
 // How we reach and Voyager 1 were two stops, one stop since 2026-11-07.
@@ -219,13 +217,11 @@ export function ReachTour({ onClose }: { onClose(): void }) {
     { scope: root, dependencies: [at] },
   );
 
-  const hours = Math.round(VOYAGER.au / LIGHT_HOUR_AU);
-  const crawl = Math.round(GAP_AU / VOYAGER_AU_YEAR / 1000);
   const words = [
     {
       head: "How we reach",
       sub: `${NEAREST.name}, ${NEAREST.ly} light-years out`,
-      mind: `Our farthest craft, Voyager 1, has gone ${hours} light-hours in ${2040 - 1977} years. At its speed the nearest star is about ${(crawl * 1000).toLocaleString()} years away. To arrive within a lifetime, we must go about a thousand times faster. Here is what could.`,
+      mind: "Voyager 1, launched in 1977 for Jupiter and Saturn, flies at 17 km/s. New Horizons, launched in 2006 for Pluto, at 14. At those speeds the nearest star is 75,000 years away. Here is what could go a thousand times faster.",
     },
     {
       head: "Send a sail",
