@@ -27,6 +27,14 @@ import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motio
 // and once full the step is done and the next of the four leads, with the walk still open beside it.
 
 const when = (d: number | null | undefined) => (d == null ? PAST : `Year ${yearText(d)}`);
+/** How each strategy leans our charter from Begin on, as charter.ts's LEANS sets it. It shapes our advice only. */
+const LEAN_WORDS: Record<string, string> = {
+  Search: "It leans us toward deepening, and our advice follows that lean from Begin on.",
+  Protect: "It leans us hidden and cautious, and our advice follows that lean from Begin on.",
+  Expand: "It leans us toward expanding, and bold, and our advice follows that lean from Begin on.",
+  Balanced: "It keeps the lean our history gave us, and our advice follows it from Begin on.",
+};
+
 /** A change in Years, as a row says it: 0.3 Years, 1 Year. */
 const years = (d: number) => `${tenths(d)} Year${tenths(d) === 1 ? "" : "s"}`;
 
@@ -166,6 +174,9 @@ function Strategy({ p, scale, at }: { p: Package; scale: number; at: number }) {
       <div data-r className="mt-3">
         <MindNote className="text-[14.5px] leading-snug">
           <p>{p.says}</p>
+          {/* A strategy also leans our charter, which the Mind names in its advice: a blind first-timer picked Balanced,
+              heard "our open, bold lean", and had to ask where that came from. 2026-11-07. Words from LEANS in charter.ts. */}
+          {LEAN_WORDS[p.name] && <p className="mt-1.5">{LEAN_WORDS[p.name]}</p>}
           <Told talk={talk} />
         </MindNote>
       </div>
