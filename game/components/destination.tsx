@@ -107,6 +107,10 @@ function Sent(props: {
 }) {
   const { road, i, to, name, line, needs, have, can, send, what, choices, sentAs, right, extra } = props;
   const sent = road.n !== null;
+  // Ordered but not yet gone says when it goes: "Sail sent" read as flying while the Laser Sail Array was only queued.
+  // Blind playtest 2026-11-07.
+  const now = useGame().year ?? 0;
+  const waiting = sent && road.leaves !== null && now < road.leaves;
   // A send is never taken back, so it asks once before it goes. Playtest 2026-11-01: a seed probe went in one tap.
   const [asking, setAsking] = useState<{ label: string; send(): void } | null>(null);
   return (
@@ -138,7 +142,7 @@ function Sent(props: {
               onClick={() => setAsking({ label: `Send it`, send })}
               className={`h-8 shrink-0 rounded-full px-3.5 text-[13px] font-medium ${sent ? "border border-faint text-muted" : "bg-ink text-paper"}`}
             >
-              {sent ? (sentAs ?? `${what} sent`) : `Send a ${what}`}
+              {sent ? (sentAs ?? (waiting ? `${what[0].toUpperCase()}${what.slice(1)} leaves Year ${year(road.leaves!)}` : `${what} sent`)) : `Send a ${what}`}
             </button>
           )}
           {can && !sent && !asking && choices && (
