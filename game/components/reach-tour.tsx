@@ -2,10 +2,11 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
 import { useNext } from "@/components/begin";
 import { useGame } from "@/components/game-provider";
+import { ProbeArt, SailArt, SentinelArt } from "@/components/craft-art";
 import { BuildMark, buildTone } from "@/components/marks";
 import { MindNote } from "@/components/mind-note";
 import { usePlan, useSchedule } from "@/components/picks";
-import { axis, Brings, farZoom, Key, Thread, useReach, VOYAGER, year, Years } from "@/components/reach";
+import { axis, Brings, farZoom, Key, Thread, tripAt, useReach, VOYAGER, year, Years } from "@/components/reach";
 import { Thread as Stops } from "@/components/review";
 import { useStepTap } from "@/components/scan";
 import { buildSlug } from "@/lib/game/plan";
@@ -128,7 +129,8 @@ function Gap() {
 
 export function ReachTour({ onClose }: { onClose(): void }) {
   const { orderAt: clock, did } = useGame();
-  const { fly, tour, aim } = useReach();
+  const { fly, tour, aim, setTrip } = useReach();
+  const flown = useRef<HTMLSpanElement>(null);
   const { plan } = usePlan();
   const { scale } = useSchedule();
   const root = useRef<HTMLDivElement>(null);
@@ -145,14 +147,36 @@ export function ReachTour({ onClose }: { onClose(): void }) {
   const { to, step: tick } = axis(ways);
   const road = at === 1 || at === 2 ? ways[at - 1] : null;
 
-  // The map follows the stops, nearest first: out from Earth past New Horizons to Voyager 1 on the first, then on to
-  // the nearest star with the roads. The walk had opened on Proxima Centauri and then drilled back in,
-  // and Voyager 1's stop showed the star with the craft lost at the Sun's mark. Playtest 2026-11-07.
+  // The map follows the stops: out from Earth past Voyager 1 to the nearest star on the first, then each road's craft
+  // flies there on the map, its Years counted, and its word comes home. The craft themselves are drawn on the page.
+  // Playtest 2026-11-07: Voyager 1 and New Horizons had stops and name tags where the sail and probe should be.
   useEffect(() => aim(null), [aim]);
   useEffect(() => {
-    if (at === 0) tour(0.3, "voyager");
+    if (at === 0) tour(0.3);
     else fly(farZoom(NEAREST.ly));
   }, [at, fly, tour]);
+  useEffect(() => {
+    if (!road || road.leaves === null || road.arrives === null || road.home === null) return;
+    const { leaves, arrives, home } = road;
+    const show = (t: number) => {
+      setTrip(tripAt(road, leaves + Math.min(t, home - leaves - 1e-6)));
+      if (flown.current)
+        flown.current.textContent =
+          leaves + t < arrives ? `${Math.floor(t)} Years out` : `Passed Proxima b · its word ${Math.floor(leaves + t - arrives)} Years on its way home`;
+    };
+    if (prefersReducedMotion()) {
+      show(arrives - leaves);
+      return () => setTrip(null);
+    }
+    // Five Years a second, so a sail's 21 Years and a probe's 52 read as the gap they are.
+    const o = { t: 0 };
+    const tl = gsap.timeline({ repeat: -1, repeatDelay: 1.5, delay: 1.2 });
+    tl.fromTo(o, { t: 0 }, { t: home - leaves, duration: (home - leaves) / 5, ease: "none", onUpdate: () => show(o.t) });
+    return () => {
+      tl.kill();
+      setTrip(null);
+    };
+  }, [road, setTrip]);
 
   useEffect(() => {
     if (at === last) did("reached");
@@ -189,23 +213,23 @@ export function ReachTour({ onClose }: { onClose(): void }) {
   const words = [
     {
       head: "How we reach",
-      sub: `Voyager 1 · ${hours} light-hours gone · ${NEAREST.ly} light-years to go`,
-      mind: `Past Neptune fly two of ours. New Horizons, launched in 2006, passed Pluto in 2015 and is still heading out. Voyager 1, launched in 1977, is our farthest craft, silent now, carrying the Golden Record: sounds and pictures of Earth, for whoever finds it. Against the nearest star, ${NEAREST.name}, it has gone less than a thousandth of the way. At its speed, the rest would take about ${(crawl * 1000).toLocaleString()} years. To arrive within a lifetime, we must go nearly a thousand times faster, at least a twentieth of light’s speed.`,
+      sub: `${NEAREST.name}, ${NEAREST.ly} light-years out`,
+      mind: `Our farthest craft, Voyager 1, has gone ${hours} light-hours in ${2040 - 1977} years. At its speed the nearest star is about ${(crawl * 1000).toLocaleString()} years away. To arrive within a lifetime, we must go about a thousand times faster. Here is what could.`,
     },
     {
       head: "Send a sail",
       sub: "A fifth of light’s speed · Laser Sail Array",
-      mind: "Sails weighing a few grams, pushed by a beam from Earth. Too fast to stop, they are past Proxima b within minutes, and send home pictures. More compute can speed the array’s build, but nothing speeds the flight.",
+      mind: "Too fast to stop, a sail is past Proxima b within minutes and sends home pictures. The light that misses it goes on, and outshines our Sun in its color at the star it is aimed at. Anyone there awake would see where we are.",
     },
     {
       head: "Send a flyby probe",
       sub: "A tenth of light’s speed · Probe Yard",
-      mind: "A heavier probe, built and fueled in orbit. It flies past too, but reads the world’s air, where sails send only pictures. It burns fusion, so it waits on a Fusion Drive no one has flown yet.",
+      mind: "Slower than a sail, but it reads a world’s air, where a sail sends only pictures. Its engine is fusion, so it waits on a Fusion Drive no one has flown, and each one burns deuterium the Works must make.",
     },
     {
       head: "Roads to come",
       sub: "Opened by what we build",
-      mind: "A flyby is past a world in minutes. To stay, a craft must slow on a magnetic sail, and only a heavy one can. Carrying that much takes a fusion drive no one has flown yet. Each waits on a build before it, and the drive alone takes thirty Years, so these roads open slowly.",
+      mind: "To stay at a star, a craft must slow, and fuel for that weighs a hundred times the craft. A sentinel opens a wide magnetic loop and drags on the thin gas between stars instead. Only a heavy craft can, and carrying it takes a fusion drive, thirty Years to build, so these roads open slowly.",
     },
   ][at];
 
@@ -238,8 +262,14 @@ export function ReachTour({ onClose }: { onClose(): void }) {
         <p data-r className="mt-0.5 text-[13.5px] text-page-ink2">
           {words.sub}
         </p>
+        {/* Each craft, drawn: what it is and how it moves. 2026-11-07. */}
+        {(at === 1 || at === 2 || at === last) && (
+          <div data-r className="mt-3">
+            {at === 1 ? <SailArt tone={buildTone("Laser Sail Array")} /> : at === 2 ? <ProbeArt tone={buildTone("Probe Yard")} /> : <SentinelArt tone={buildTone("Fusion Drive")} />}
+          </div>
+        )}
         {road && (
-          <div data-r className="mt-2.5">
+          <div data-r className="mt-3">
             <Brings road={road} />
           </div>
         )}
@@ -254,10 +284,15 @@ export function ReachTour({ onClose }: { onClose(): void }) {
             <Thread road={road} i={at} to={to} />
             <Years to={to} step={tick} />
             <Key road={road} from={from} />
+            {road.home !== null && (
+              <p className="mt-1 font-mono text-[10px] tracking-[.08em] text-muted uppercase">
+                On the map · <span ref={flown} />
+              </p>
+            )}
             <p className="mt-1 text-[12.5px] text-muted">
               {road.home === null
                 ? "What it sees would not reach us within two centuries at our pace."
-                : `${road.n ? "As queued" : `If we start the ${road.build} now`}, we see Proxima b up close in Year ${year(road.home)}.`}
+                : `${road.n ? "As queued" : `If we start the ${road.build}${road.works !== undefined ? ", a Fusion Drive and the Deuterium Works" : ""} now`}, we see Proxima b up close in Year ${year(road.home)}.`}
             </p>
           </div>
         )}

@@ -607,7 +607,7 @@ test("a sail launched at a warm glow flashes there, and a peer awake when it lan
     const heard = peerAnswers(world, kit, flash, leaves + 2 * p.d + 1);
     assert.equal(heard.length, 1);
     assert.equal(heard[0].answers, FLASH_TRAVELS);
-    assert.match(heard[0].text, /laser flashed/);
+    assert.match(heard[0].text ?? "", /laser flashed/);
     // One that lands before it wakes leaves nothing waiting.
     assert.equal(peerAnswers(world, kit, flashesOf([{ star, by: "sails", leaves: p.wake - p.d - 50 }]), leaves + 2 * p.d + 1e5).length, 0);
     return;

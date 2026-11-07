@@ -98,9 +98,8 @@ interface ReachView {
   fly(zoom: number): void;
   /** Holds the map at a zoom, as a drag does. */
   hold(zoom: number): void;
-  /** Out from Earth, a pause at Voyager 1, then on to the star in view, after `delay` seconds. With `end` "voyager" it
-   *  stops at Voyager 1. */
-  tour(delay?: number, end?: "star" | "voyager"): void;
+  /** Out from Earth, a pause at Voyager 1, then on to the star in view, after `delay` seconds. */
+  tour(delay?: number): void;
   /** Where the map and its ruler run out to. */
   target: Target;
   /** Turns the map to a destination and flies it out there, or with null, back to the nearest star. */
@@ -168,16 +167,15 @@ export function ReachProvider({ children }: { children: React.ReactNode }) {
   }, []);
   const setTrip = useCallback((trip: Trip | null) => void Object.assign(now.current, trip ?? { craft: -1, signal: -1 }), []);
   const tour = useCallback(
-    (delay = 0, end: "star" | "voyager" = "star") => {
+    (delay = 0) => {
       setClose(false);
-      // Reach's walk ends its first stop at Voyager 1, so the nearest star waits for the roads. 2026-11-07.
-      if (prefersReducedMotion()) return jump(end === "star" ? farZoom(target.ly) : zoomFor(VOYAGER.au));
+      if (prefersReducedMotion()) return jump(farZoom(target.ly));
       const d = now.current;
       gsap.killTweensOf(d);
-      const out = gsap
+      gsap
         .timeline({ delay })
-        .fromTo(d, { zoom: NEAR_ZOOM }, { zoom: zoomFor(VOYAGER.au), duration: 5, ease: "power2.inOut" });
-      if (end === "star") out.to(d, { zoom: farZoom(target.ly), duration: 3.5, ease: "power2.inOut" }, "+=1.2");
+        .fromTo(d, { zoom: NEAR_ZOOM }, { zoom: zoomFor(VOYAGER.au), duration: 5, ease: "power2.inOut" })
+        .to(d, { zoom: farZoom(target.ly), duration: 3.5, ease: "power2.inOut" }, "+=1.2");
     },
     [jump, target, setClose],
   );
