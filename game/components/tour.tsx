@@ -168,9 +168,15 @@ function Strategy({ p, scale, at }: { p: Package; scale: number; at: number }) {
           disabled={!known}
           aria-pressed={mine}
           onClick={() => change((plan) => ({ ...plan, builds: mine ? [] : builds }))}
-          className={`mt-3 h-11 rounded-full text-[15px] font-medium transition-colors ${mine ? "border border-you text-you" : "bg-ink text-paper"}`}
+          // Clearing is rare, so once it is ours the button shrinks to a small outline. OURS on the title already says it.
+          // 2026-11-07.
+          className={
+            mine
+              ? "mt-1.5 h-5 self-start rounded-full border border-faint px-1.5 text-[12px] leading-none text-muted transition-colors hover:border-muted hover:text-ink"
+              : "mt-3 h-11 rounded-full bg-ink text-[15px] font-medium text-paper transition-colors"
+          }
         >
-          {mine ? "Our strategy · tap to clear" : `Start with ${p.name}`}
+          {mine ? "clear" : `Start with ${p.name}`}
         </button>
       )}
       <div data-r className="mt-3">

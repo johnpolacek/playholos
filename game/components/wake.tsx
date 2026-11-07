@@ -65,7 +65,7 @@ export function Wake({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
           </span>
           <h1
             data-m="title"
-            className="text-[32px] font-semibold tracking-[-.01em] [font-kerning:none] [text-rendering:optimizeSpeed] wide:text-[44px]"
+            className="text-[32px] font-semibold text-you tracking-[-.01em] [font-kerning:none] [text-rendering:optimizeSpeed] wide:text-[44px]"
           >
             Earth wakes.
           </h1>
@@ -74,7 +74,7 @@ export function Wake({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
             one Mind.
           </p>
           <p data-m="copy" className="text-[15.5px] leading-normal text-page-ink2">
-            <b className="font-semibold text-ink">You are its Will.</b> What Earth becomes is yours to choose.
+            <b className="font-semibold text-other">You are its Will.</b> What Earth becomes is yours to choose.
           </p>
           <div className="mt-auto grid grid-cols-[1fr_1.4fr] gap-2 pt-4 wide:pt-6">
             <button
