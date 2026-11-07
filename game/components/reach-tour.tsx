@@ -130,7 +130,9 @@ function Gap() {
 
 export function ReachTour({ onClose }: { onClose(): void }) {
   const { orderAt: clock, did } = useGame();
-  const { fly, hold, aim, setTrip, showCraft, setCount } = useReach();
+  const { fly, hold, aim, setTrip, showCraft, setCount, craft } = useReach();
+  // A replay of the close-up runs the map's part again too.
+  const shot = craft?.shot ?? 0;
   const { plan } = usePlan();
   const { scale } = useSchedule();
   const root = useRef<HTMLDivElement>(null);
@@ -161,7 +163,8 @@ export function ReachTour({ onClose }: { onClose(): void }) {
     hold(zoomFor(VOYAGER.au));
     const out = gsap.delayedCall(CRAFT_SHOT_SECS + 2.5, () => fly(farZoom(NEAREST.ly), 4.5));
     return () => void out.kill();
-  }, [at, fly, hold]);
+     
+  }, [at, fly, hold, shot]);
   // Each craft opens up close on the map, then pulls back into its flight. 2026-11-07.
   const kind: CraftKind | null = at === 0 ? "voyager" : at === 1 ? "sail" : at === 2 ? "probe" : at === last ? "sentinel" : null;
   useEffect(() => {

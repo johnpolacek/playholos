@@ -115,6 +115,9 @@ interface ReachView {
   showCraft(kind: CraftKind | null): void;
   /** The walk's flight counter, drawn on the map by the flight. */
   countAt(n: HTMLSpanElement | null): void;
+  /** Where a map mark is on screen now, in the map's pixels, as the scene last placed it. */
+  markOf(id: string): { x: number; y: number } | null;
+  noteMarks(marks: Place[]): void;
   setCount(text: string): void;
 }
 
@@ -140,6 +143,8 @@ const ReachContext = createContext<ReachView>({
   craft: null,
   showCraft() {},
   countAt() {},
+  markOf: () => null,
+  noteMarks() {},
   setCount() {},
 });
 export const useReach = () => use(ReachContext);
@@ -207,12 +212,15 @@ export function ReachProvider({ children }: { children: React.ReactNode }) {
   );
   const [craft, setCraft] = useState<{ kind: CraftKind; shot: number } | null>(null);
   const count = useRef<HTMLSpanElement | null>(null);
+  const marks = useRef<Place[]>([]);
+  const noteMarks = useCallback((m: Place[]) => void (marks.current = m), []);
+  const markOf = useCallback((id: string) => marks.current.find((m) => m.id === id) ?? null, []);
   const countAt = useCallback((n: HTMLSpanElement | null) => void (count.current = n), []);
   const setCount = useCallback((text: string) => void (count.current && (count.current.textContent = text)), []);
   const showCraft = useCallback((kind: CraftKind | null) => setCraft((was) => (kind ? { kind, shot: (was?.shot ?? 0) + 1 } : null)), []);
   const value = useMemo(
-    () => ({ dials, fly, hold, tour, target, aim, close, setClose, setTrip, craft, showCraft, countAt, setCount }),
-    [dials, fly, hold, tour, target, aim, close, setClose, setTrip, craft, showCraft, countAt, setCount],
+    () => ({ dials, fly, hold, tour, target, aim, close, setClose, setTrip, craft, showCraft, countAt, setCount, markOf, noteMarks }),
+    [dials, fly, hold, tour, target, aim, close, setClose, setTrip, craft, showCraft, countAt, setCount, markOf, noteMarks],
   );
   return <ReachContext value={value}>{children}</ReachContext>;
 }
@@ -312,7 +320,7 @@ function placeSight(n: HTMLDivElement, { x, y, a }: Place) {
 /** The map on Reach: the flight out from Earth, and its places named. The ruler along its bottom says how far it looks.
  *  It flies out once each time the tab opens. */
 export function ReachMap({ className }: { className: string }) {
-  const { dials, tour, target } = useReach();
+  const { dials, tour, target, noteMarks } = useReach();
   const names = useRef<Record<string, HTMLSpanElement | null>>({});
   const toured = useRef(false);
   // The scene rings the star it is given, and the name follows it.
@@ -325,12 +333,13 @@ export function ReachMap({ className }: { className: string }) {
   const sight = useRef<HTMLDivElement>(null);
   const [seen, setSeen] = useState<string | null>(null);
   const onMarks = useCallback((marks: Place[]) => {
+    noteMarks(marks);
     placeNames(names.current, marks);
     sights.current = marks.filter((m) => m.id in SIGHTS);
     const n = sight.current;
     const m = sights.current.find((m) => m.id === n?.dataset.id);
     if (n && m) placeSight(n, m);
-  }, []);
+  }, [noteMarks]);
   // A tap names what it lands on: the nearest sight whose glow it falls within, or whose center is a fingertip away. The
   // view drifts, so a fingertip is generous.
   const tap = (e: React.MouseEvent<HTMLDivElement>) => {

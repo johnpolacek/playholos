@@ -253,7 +253,8 @@ function voyager(): Model {
   return {
     ink,
     hot,
-    lamps: [],
+    // Its point of light, which lands on its dot on the map as the view pulls back.
+    lamps: [-0.25, 0, 0],
     labels: [
       { at: [-1.3, 0, 1.83], head: "VOYAGER 1 · 722 KG", line: "launched 1977, silent now" },
       { at: [-0.24, 0, -0.95], head: "GOLDEN RECORD", line: "sounds and pictures of Earth" },
@@ -261,7 +262,7 @@ function voyager(): Model {
       { at: [-0.2, 6.5, 11.3], head: "MAGNETOMETER · 13 M" },
     ],
     near: 10,
-    far: 4e6,
+    far: 2e5,
     el: 22,
   };
 }
@@ -284,7 +285,9 @@ function dotTexture() {
   return new THREE.CanvasTexture(c);
 }
 
-export function CraftView({ kind, shot, className }: { kind: CraftKind; shot: number; className?: string }) {
+/** `anchor` is where the craft sits on the map underneath: the pull back ends there, so it shrinks into its own place
+ *  and not the map's middle. Voyager 1 disappeared into the Sun until 2026-11-07. */
+export function CraftView({ kind, shot, className, anchor }: { kind: CraftKind; shot: number; className?: string; anchor?: () => { x: number; y: number } | null }) {
   const box = useRef<HTMLDivElement>(null);
   const tags = useRef<(HTMLDivElement | null)[]>([]);
   const shade = useRef<HTMLDivElement>(null);
@@ -379,6 +382,13 @@ export function CraftView({ kind, shot, className }: { kind: CraftKind; shot: nu
       else camera.position.set(D * Math.cos(az) * Math.cos(el), D * Math.sin(az) * Math.cos(el), D * Math.sin(el));
       camera.up.set(0, 0, 1);
       camera.lookAt(0, 0, 0);
+      // Slide the view so the craft moves from the middle to its place on the map as it pulls back.
+      const { clientWidth: pw, clientHeight: ph } = parent;
+      const to = anchor?.();
+      // It reaches its place early in the pull, while still big enough to follow, then shrinks there to a point.
+      const slide = Math.min(1, ease * 2.2);
+      if (to && pull > 0) camera.setViewOffset(pw, ph, -(to.x - pw / 2) * slide, -(to.y - ph / 2) * slide, pw, ph);
+      else camera.clearViewOffset();
       camera.near = D / 2000;
       camera.far = D * 2000;
       camera.updateProjectionMatrix();
@@ -428,7 +438,7 @@ export function CraftView({ kind, shot, className }: { kind: CraftKind; shot: nu
       scene.traverse((o) => (o as THREE.Mesh).geometry?.dispose());
       renderer.domElement.remove();
     };
-  }, [kind, shot]);
+  }, [kind, shot, anchor]);
 
   return (
     <div ref={box} className={`pointer-events-none isolate ${className ?? ""}`} aria-hidden>
