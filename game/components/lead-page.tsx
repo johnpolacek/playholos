@@ -349,7 +349,9 @@ export function LeadPage({ slug }: { slug: string }) {
 
       <button
         data-m
-        onClick={() => navigate(`/play/mind?ask=${encodeURIComponent(lead.ask)}`)}
+        // What it is, then what we could do: asked only what it was, the Mind restated a cold glow and a blind first-timer
+        // was left with no next step. 2026-11-07.
+        onClick={() => navigate(`/play/mind?ask=${encodeURIComponent(`${lead.ask} What could we do next?`)}`)}
         className="mt-6 h-[46px] shrink-0 rounded-full border border-ink text-[15px] font-medium"
       >
         Ask the Mind about it
