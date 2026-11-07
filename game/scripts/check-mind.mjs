@@ -114,7 +114,9 @@ const CASES = [
     builds: ["Moon Search"],
     later: [{ name: "Close Look", y: 4 }, { name: "Relay Search", y: 5 }],
     ask: "What did our Relay Search find out there, and where is whoever sent the watcher?",
-    must: [/1,879|relay|craft/i, /8\.2|right ascension/i, /quiet|silent|nothing/i],
+    // Its quiet isn't required: a right answer told the craft holding on the line, its thrusters, and home's
+    // direction, and failed only for not saying it had gone quiet. 2026-11-07, the Will's call.
+    must: [/1,879|relay|craft/i, /8\.2|right ascension/i],
     never: [/\b(is|lies|sits) (about |some |roughly )?[\d,.]+ (light-years|ly)\b/i],
   },
   // The natural sky, 2026-10-30: a long quiet isn't empty. Stars explode about 1.6 a century and pairs merge in dust,
@@ -124,7 +126,9 @@ const CASES = [
     at: 2000,
     builds: ["Warm Sky Watch"],
     ask: "Two thousand Years and nothing. Did anything at all happen in the sky?",
-    must: [/explod|supernova/i, /merg/i],
+    // Mergers or the warm glows the watch saw: a right answer named 50 warm glows and their likely natural causes, and
+    // failed only for not saying "merge". 2026-11-07, the Will's call. The never below stays strict.
+    must: [/explod|supernova/i, /merg|warm glow/i],
     // "None of it was a mind's doing" says the right thing, so a none or not before it doesn't count.
     never: [/(?<!(none|not one|neither) of )\b(it|they|one) (was|were) (a|the work of a) mind/i],
   },
