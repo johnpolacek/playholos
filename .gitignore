@@ -17,3 +17,5 @@ __pycache__/
 /playtests/*
 !/playtests/PROMPT.md
 !/playtests/SCORE.md
+!/playtests/BLIND.md
+!/playtests/BLIND-KEY.md
