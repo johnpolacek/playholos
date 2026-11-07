@@ -1,0 +1,19 @@
+{
+  "build": "ed839ce",
+  "blind": {
+    "understood": {
+      "score": 9.5,
+      "grades": {
+        "q1": 9,
+        "q2": 9,
+        "q3": 10,
+        "q4": 10
+      },
+      "why": "Got Will of Earth's Mind and the are-we-alone question, the four tabs, a real open lead (71 cold glows, the bright Cold Glow 3) and a reasoned next move. Lost a point on Q1 for missing that contact is also our gravest danger: I wrote 'the biggest discovery ever' and never framed it as a risk, though the Mind said a message 'gives away where we are' (shot 126). Lost a point on Q2 for Reach: I wrote that Reach is how we get to places by craft and that messages have 'no button anywhere'; the key says Reach covers craft OR message and what we have sent. I also described Mind as 'the only way I found to send a radio message' rather than an advisor that drafts and never acts on its own (it drafts, I tapped Send).",
+      "quoted_wrong": [
+        "Q1: \"if they're minds computing cold, they're the biggest discovery ever\" (misses the danger side)",
+        "Q2: \"Reach: how we get to other places\" + \"It's also the only way I found to send a radio message\" (Reach also covers messages and what we've sent)"
+      ]
+    }
+  }
+}
