@@ -123,8 +123,17 @@ function Skip() {
   const stale = tenth === null || next === undefined || (next !== null && next <= tenth);
   // Shown and landed in tenths, as the Year is: a stop within the tenth we're in lands on the next tenth.
   const to = stale || next === null ? null : Math.max(Math.ceil(next * 10 - 1e-9) / 10, tenth + 0.1);
+  // A beat after each jump before the next: a reflex second tap flew a blind first-timer 3.9 Years past the biggest
+  // news, and the card it replaced went unread. 2026-11-07.
+  const [rest, setRest] = useState(false);
+  useEffect(() => {
+    if (!rest) return;
+    const t = setTimeout(() => setRest(false), 1500);
+    return () => clearTimeout(t);
+  }, [rest]);
   const jump = () => {
-    if (to === null || tenth === null) return;
+    if (to === null || tenth === null || rest) return;
+    setRest(true);
     setLeap({ from: tenth, to, snap: snapshot() });
     announceJump(year ?? tenth, to);
     skipTo(to);
@@ -150,12 +159,13 @@ function Skip() {
       {/* A pill with faint specks of light, named for what it does: "Next" read as unclear in play. 2026-11-01. */}
       <button
         onClick={jump}
+        disabled={rest}
         onPointerEnter={() => setHover(true)}
         onPointerLeave={() => setHover(false)}
         onFocus={() => setHover(true)}
         onBlur={() => setHover(false)}
         // Filled, as the one move on a quiet screen: as a faint outline it read as a status. Playtest 2026-11-02.
-        className="relative -my-1 ml-2 inline-flex h-7 items-center rounded-full bg-you px-3 text-[12.5px] font-medium text-paper transition-[filter] hover:brightness-110"
+        className="relative -my-1 ml-2 inline-flex h-7 items-center rounded-full bg-you px-3 text-[12.5px] font-medium text-paper transition-[filter,opacity] hover:brightness-110 disabled:opacity-60"
         title="Jump ahead to when something new happens"
       >
         <Specks on={hover} tone="--paper" />
