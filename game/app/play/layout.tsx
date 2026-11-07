@@ -22,8 +22,9 @@ export default function PlayLayout() {
   const page = useRef<HTMLElement>(null);
   const { pathname, hash } = useLocation();
   useEffect(() => {
-    // A link to a place on the page, as #close-reading, scrolls there itself.
-    if (!hash) page.current?.scrollTo({ top: 0 });
+    // A link to a place on the page, as #close-reading, scrolls there itself. The Mind's talk opens at its latest
+    // words, as it scrolls itself: this sent it back to the top, and a note sat cut off below. Blind playtest 2026-11-07.
+    if (!hash && pathname !== "/play/mind") page.current?.scrollTo({ top: 0 });
   }, [pathname, hash]);
   return (
     <GameProvider>
