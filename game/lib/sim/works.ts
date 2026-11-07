@@ -71,6 +71,9 @@ const OFF_EARTH = new Set(["Moon vault", "Orbital yard", "Mass driver", "Belt mi
   "Mercury works", "Solar swarm", "Star beam"]);
 export const offEarth = (w: string) => OFF_EARTH.has(w) || WORKS[w]?.orbit === true;
 
+/** The most doublings a growing work counts, so its thought stays a number. */
+const MOST_DOUBLINGS = 900;
+
 /** Years a work takes when given s times the thought its standard pace needs. */
 export const paced = (years: number, s: number) => years * (FLOOR + (1 - FLOOR) / s);
 
@@ -146,7 +149,9 @@ export function pace(orders: readonly Order[], until: number, { scale = 1, aside
   const doublings = (at: number) =>
     [...grown].reduce((n, [w, g]) => {
       const { grows, thinks, full = Infinity } = WORKS[w];
-      const k = Math.min(full, Math.floor((g.years + (g.since === null ? 0 : at - g.since)) / grows! + EPS));
+      // Held under 900 doublings, past which 2 ** k leaves the numbers a computer holds: the top bar read "NaN%" from
+      // about Year 7,000 in a playtest. Nothing in play turns on growth that large. 2026-11-07.
+      const k = Math.min(full, MOST_DOUBLINGS, Math.floor((g.years + (g.since === null ? 0 : at - g.since)) / grows! + EPS));
       return n + (thinks === undefined ? k : Math.log(1 + thinks * 2 ** k) / Math.log(STEP));
     }, 0);
   /** What strikes leave of our thought at Year t: each loss shrinking as we rebuild. */
@@ -244,7 +249,7 @@ export function pace(orders: readonly Order[], until: number, { scale = 1, aside
     if (backup.o && t + EPS >= backup.o.y && regrown(t) < 1) next = Math.min(next, t + 0.25);
     if (building !== null) next = Math.min(next, building + CATALOG.dataCenter.years);
     for (const [w, g] of grown)
-      if (g.since !== null && (g.years + t - g.since) / WORKS[w].grows! < (WORKS[w].full ?? Infinity) - EPS) {
+      if (g.since !== null && (g.years + t - g.since) / WORKS[w].grows! < Math.min(WORKS[w].full ?? Infinity, MOST_DOUBLINGS) - EPS) {
         // The next doubling: a whole period on from the last.
         const k = WORKS[w].grows!, r = (g.years + t - g.since) % k;
         next = Math.min(next, t + (k - r > EPS ? k - r : k));
