@@ -16,7 +16,7 @@ const root = fileURLToPath(new URL("../playtests/", import.meta.url));
 
 const git = (...a) => {
   try {
-    return execFileSync("git", a, { cwd: root, encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] });
+    return execFileSync("git", a, { cwd: join(root, ".."), encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] });
   } catch {
     return null;
   }
