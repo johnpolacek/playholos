@@ -374,6 +374,13 @@ export function DestinationPage({ slug }: { slug: string }) {
           It goes at the speed of light, sooner than any craft. The Mind drafts it, and we send it. Or send a craft, below. <span className="text-you">Draft it ›</span>
         </span>
       </Link>
+      {/* A glow gone dark says so before we send: a blind first-timer sent a probe to one that had already faded, with no
+          word of it here. 2026-11-07. */}
+      {lead?.facts.find(([k]) => k === "Faded") && (
+        <p data-m className="mt-4 text-[13px] leading-snug text-other">
+          It faded by {lead.facts.find(([k]) => k === "Faded")![1]}. A craft sent now finds only what is left there.
+        </p>
+      )}
       <ListHead data-m left={`Ways to engage · ${ways.length + (lens ? 1 : 0) + (stay ? 1 : 0) + (mind ? 1 : 0) + LOCKED.length}`} right="Passes" className="mt-5" />
       <ul className="mt-1">
         {flown.map((road, k) => {
