@@ -70,7 +70,7 @@ function Struck() {
       )}
       {[...hits].reverse().map((h) => (
         <p key={`${h.from}:${h.lands}`} className="text-page-ink2">
-          {`Year ${yearText(h.lands)}: ${h.from === "a rock" ? "a rock" : `a bullet from ${h.from}`} struck Earth, ${HARM_WORDS[h.harm.tier]}.${h.harm.ends ? "" : ` We lost ${Math.round(h.harm.share * 100)}% of our thought, won back over about ${Math.round(h.harm.recover)} Years.`}`}
+          {`Year ${yearText(h.lands)}: ${h.from === "a rock" ? "a rock" : `a bullet from ${h.from}`} struck Earth, ${HARM_WORDS[h.harm.tier]}.${h.harm.ends ? "" : Math.round(h.harm.share * 100) < 1 ? " Our thought was untouched." : ` We lost ${Math.round(h.harm.share * 100)}% of our thought, won back over about ${Math.round(h.harm.recover)} Years.`}`}
         </p>
       ))}
     </div>
