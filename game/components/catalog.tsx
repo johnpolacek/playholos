@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router";
 import { CostLine, previews, usePreview } from "@/components/costs";
 import { useGame } from "@/components/game-provider";
@@ -36,6 +36,24 @@ export function Catalog({ className = "" }: { className?: string }) {
   const shown = q ? [...open.filter(named), ...open.filter((b) => !named(b) && b.what.toLowerCase().includes(q))] : open;
   // One found but not open yet says what opens it.
   const later = q && !shown.length ? LATER.find((b) => b.name.toLowerCase().includes(q) && !ordered(plan).includes(b.name)) : undefined;
+  // Once the box scrolls away above and the list still shows, a button at the bottom brings it back: pinned at the top,
+  // it covered the compute meter pinned there on wide screens. The Will's call, 2026-11-07.
+  const box = useRef<HTMLInputElement>(null);
+  const end = useRef<HTMLDivElement>(null);
+  const [past, setPast] = useState({ box: false, end: false });
+  const many = open.length > 8;
+  useEffect(() => {
+    if (!many) return;
+    const io = new IntersectionObserver((es) => {
+      for (const e of es) {
+        const above = !e.isIntersecting && e.boundingClientRect.top < (e.rootBounds?.top ?? 0);
+        setPast((p) => (e.target === box.current ? { ...p, box: above } : { ...p, end: above }));
+      }
+    });
+    if (box.current) io.observe(box.current);
+    if (end.current) io.observe(end.current);
+    return () => io.disconnect();
+  }, [many]);
   const opens = (after: string) => (after === "A rock found" ? "a rock is found coming" : after === "The watcher found" ? "the watcher is found" : `the ${after} is done`);
   if (!open.length) return null;
   return (
@@ -43,8 +61,9 @@ export function Catalog({ className = "" }: { className?: string }) {
       {/* The note's "See the Catalog" scrolls here: on Build already, its link went nowhere we could see. 2026-11-07. */}
       <div id="catalog" className="scroll-mt-4" />
       <ListHead left={`Catalog · ${open.length}`} right="Done in" className={className} />
-      {open.length > 8 && (
+      {many && (
         <input
+          ref={box}
           type="search"
           value={find}
           onChange={(e) => setFind(e.target.value)}
@@ -103,6 +122,21 @@ export function Catalog({ className = "" }: { className?: string }) {
           );
         })}
       </ul>
+      {/* Pinned to the panel's bottom left, clear of each row's Add to Queue on the right. */}
+      {many && past.box && !past.end && (
+        <div className="pointer-events-none sticky bottom-3 z-20 flex">
+          <button
+            onClick={() => {
+              box.current?.scrollIntoView({ block: "center", behavior: "smooth" });
+              box.current?.focus({ preventScroll: true });
+            }}
+            className="pointer-events-auto h-9 rounded-full border border-faint bg-panel px-4 text-[13px] text-ink shadow-lg hover:border-muted"
+          >
+            Find a build
+          </button>
+        </div>
+      )}
+      <div ref={end} />
     </>
   );
 }
