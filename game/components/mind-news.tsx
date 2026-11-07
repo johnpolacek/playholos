@@ -190,7 +190,7 @@ export function YearZero() {
         <MindNote still={!busy} className="text-[15px] leading-[1.5]">
           <span aria-live="polite">
             {!open || (error && !ours)
-              ? "The clock runs now, a Year every five minutes, even while we’re away. What we queued has started. We will tell you as it lands."
+              ? "The clock runs now, a Year every five minutes, even while we’re away, and it pauses when nothing is building. What we queued has started. We will tell you as it lands."
               : ours
                 ? said(words) || "…"
                 : "…"}

@@ -203,10 +203,10 @@ function List({ onClose, onBegin }: { onClose(then?: () => void): void; onBegin(
           {/* Said aloud too: the first press of Begin now asks, and the reason is here. */}
           <span data-b="say" className="block" aria-live="polite">
             {sure
-              ? "Once we begin, the clock doesn’t stop, even while we’re away, and what’s queued starts at Year 0. We would finish these first, while it still waits."
+              ? "Once we begin, the clock runs even while we’re away, and pauses only when nothing is building. What’s queued starts at Year 0. We would finish these first, while it still waits."
               : next
-                ? "We would take these one at a time, while the clock waits. Once we begin, a Year passes every five minutes, even while we’re away."
-                : "Nothing here sends anything. Once we begin, a Year passes every five minutes, and the clock keeps running while we’re away."}
+                ? "We would take these one at a time, while the clock waits. Once we begin, a Year passes every five minutes, even while we’re away, until nothing is building."
+                : "Nothing here sends anything. Once we begin, a Year passes every five minutes, and the clock runs while we’re away, pausing only when nothing is building."}
           </span>
         </MindNote>
       </div>
