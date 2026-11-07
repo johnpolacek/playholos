@@ -1377,10 +1377,12 @@ export function warmReadings(flashes: readonly MindsSeen["flashes"][number][], y
           ? [{
               id: `warm-${i + 1}-read`, needs: "", at: read.at, by: by2,
               title: "Its light: plain heat",
-              line: "No bump at 10 microns, where dust always shows. Its light runs in one smooth curve, the heat of something about as warm as a planet.",
-              mind: "Dust would show, and it doesn’t. Something solid is catching a star’s light and shedding it as heat. We can’t say who built it, or whether they are still there.",
-              now: ["almost no chance", "almost no chance", "very likely"],
-              tells: ["Only a message could say more, and an answer would take thousands of Years."],
+              line: "No bump at 10 microns, where silicate dust shows. Its light runs in one smooth curve, the heat of something about as warm as a planet.",
+              // One smooth curve is not proof: carbon-rich dust shows no 10-micron bump either. It raises the odds to
+              // about even, and a sentinel or an answer settles it. Playtest 2026-11-07, the Will's call.
+              mind: "Silicate dust would show, and it doesn’t. Something solid may be catching a star’s light and shedding it as heat. Carbon dust can look this smooth too, so we can’t be sure yet.",
+              now: ["unlikely", "very unlikely", "roughly even"],
+              tells: ["A sentinel there would see what makes the heat. A message could ask, and an answer would take thousands of Years."],
             }]
           : read.saw === "dust"
             ? [{
