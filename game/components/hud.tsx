@@ -276,7 +276,8 @@ export function Hud() {
           value={over ? `${pct(1 + share.short)} needed` : `${pct(compute)} at work`}
           // Says what short means: a blind first-timer queued past our compute and never learned it slowed everything. 2026-11-07.
           sub={over ? `${pct(share.short)} short, builds slow` : idle && !hint ? "nothing building" : compute < 0.995 ? `${pct(1 - compute)} ${searching ? "searching" : "idle"}` : "none idle"}
-          late={over}
+          // A preview's shortfall stays in the preview's blue: orange read as an alarm. Blind playtest 2026-11-07.
+          late={over && !hint}
           go={idle && !over && !hint ? "/play/build" : undefined}
         />
       </div>
