@@ -53,7 +53,7 @@ export const BUILDS: Build[] = [
   { name: "Laser Sail Array", what: "A beam from Earth that pushes sails to a fifth of light speed.", does: "reach" },
   {
     name: "Probe Yard",
-    what: "Builds and fuels probes in orbit. The first flies 12 Years after the yard is done.",
+    what: "Builds and fuels probes in orbit. The first flies 12 Years after the yard, once a Fusion Drive and the Deuterium Works are done.",
     kt: 10,
     does: "reach",
   },

@@ -200,7 +200,7 @@ export function ReachTour({ onClose }: { onClose(): void }) {
     {
       head: "Send a flyby probe",
       sub: "A tenth of light’s speed · Probe Yard",
-      mind: "A heavier probe, built and fueled in orbit. It flies past too, but reads the world’s air, where sails send only pictures. These are our two roads at Year 0.",
+      mind: "A heavier probe, built and fueled in orbit. It flies past too, but reads the world’s air, where sails send only pictures. It burns fusion, so it waits on a Fusion Drive no one has flown yet.",
     },
     {
       head: "Roads to come",

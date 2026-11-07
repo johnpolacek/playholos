@@ -590,3 +590,27 @@ test("a glow earns its name in the order we read it, and only plain heat or a se
   assert.equal(glowIdOf("Proxima Centauri"), "Proxima Centauri");
   knowGlowNames({});
 });
+
+test("a sail launched at a warm glow flashes there, and a peer awake when it lands answers it as a knock", async () => {
+  const { glowsFound } = await import("./minds.ts");
+  const { peerAnswers, flashesOf, FLASH_TRAVELS } = await import("./peers.ts");
+  for (const seed of [10, 2, 3, 5, 7]) {
+    const world = await loadWorld(seed);
+    const kit = { warmWatch: 0, telescope: 0 };
+    const i = glowsFound(world, kit, 5000).findIndex((g) => !("kind" in g.src) && !(g.src as { asleep?: boolean }).asleep);
+    if (i < 0) continue;
+    const p = glowsFound(world, kit, 5000)[i].src as { d: number; wake: number };
+    const star = `Warm glow ${i + 1}`;
+    const leaves = Math.max(0, p.wake - p.d + 1);
+    const flash = flashesOf([{ star, by: "sails", leaves }]);
+    assert.equal(flash.length, 1);
+    const heard = peerAnswers(world, kit, flash, leaves + 2 * p.d + 1);
+    assert.equal(heard.length, 1);
+    assert.equal(heard[0].answers, FLASH_TRAVELS);
+    assert.match(heard[0].text, /laser flashed/);
+    // One that lands before it wakes leaves nothing waiting.
+    assert.equal(peerAnswers(world, kit, flashesOf([{ star, by: "sails", leaves: p.wake - p.d - 50 }]), leaves + 2 * p.d + 1e5).length, 0);
+    return;
+  }
+  assert.fail("no awake peer in the seeds tried");
+});

@@ -9,7 +9,7 @@ import { lightTime } from "../light.ts";
 import { yearText } from "../game/clock.ts";
 import { BANDS, iwa, observe, owa, WIDE } from "./observing.ts";
 import { proximaB, proximaSeen } from "./proxima.ts";
-import { peerAnswers, type Aimed } from "./peers.ts";
+import { flashesOf, peerAnswers, type Aimed } from "./peers.ts";
 import type { ColonyMode, DarkMass, EarthView, Find, FeltWorld, Gas, Hole, Read, Visit, World } from "./types.ts";
 import catalog from "../../data/works.json" with { type: "json" };
 import { ladderOf } from "./ladder.ts";
@@ -36,7 +36,7 @@ export interface Kit {
   /** Each seed probe we sent, by its star as we name it, and the Year it leaves. Its copies follow from spread.ts. */
   seeds?: { star: string; leaves: number }[];
   /** Each sail or flyby probe we sent past a star: the Year it passes, and the Year its word reaches us. 2026-11-05. */
-  flybys?: { star: string; by: "sails" | "probe"; passed: number; home: number }[];
+  flybys?: { star: string; by: "sails" | "probe"; leaves?: number; passed: number; home: number }[];
   /** Each road to Proxima b, if our order flies it: the Year it passes, and the Year its word reaches us. */
   sails?: { passed: number; home: number } | null;
   probe?: { passed: number; home: number } | null;
@@ -374,7 +374,9 @@ export function earthKnows(
   const anyMind = minds.flashes.length || minds.glows.length || minds.watcher || minds.sleepers.length;
   return {
     // A peer's answer, once it reaches us. 2026-10-31. lib/sim/peers.ts.
-    year, felt, heard: peerAnswers(world, kit0, aimed, year), visits,
+    // A sail's launch flashes its laser toward its star, 770 times the Sun in its color: a peer there sees it as a
+    // knock with nothing written in it. 2026-11-07 (m:235), calcs/early_game.py launch_glare.
+    year, felt, heard: peerAnswers(world, kit0, [...aimed, ...flashesOf(flybys)], year), visits,
     ...(anyMind ? { minds } : {}),
     ...(wide.has(PROXIMA.star) ? { proxima: wide.get(PROXIMA.star) } : {}),
     proximaSeen: proximaSeen(world.seed),

@@ -14,6 +14,18 @@ export interface Aimed {
   questions: boolean;
   lie: boolean;
   travels: string;
+  /** Not a message: our laser's flash as it launched sails at the glow. 2026-11-07. */
+  flash?: boolean;
+}
+
+/** What it says it answers, for a flash. */
+export const FLASH_TRAVELS = "The flash of our laser as it launched sails toward it";
+
+/** Each sail launch at a warm glow, as a knock with nothing in it: its laser flashes toward the glow as it fires. */
+export function flashesOf(flybys: readonly { star: string; by: string; leaves?: number }[]): Aimed[] {
+  return flybys
+    .filter((f) => f.by === "sails" && f.leaves !== undefined && /^Warm glow \d+$/.test(f.star))
+    .map((f) => ({ to: f.star, y: f.leaves!, questions: false, lie: false, travels: FLASH_TRAVELS, flash: true }));
 }
 
 /** A peer that finds our message only after it wakes reads it within this many Years, a sample. */
@@ -41,6 +53,8 @@ export function peerAnswers(world: World, kit: MindKit, aimed: readonly Aimed[],
     if (!msg) return;
     const reaches = msg.y + p.d;
     const state = reaches < p.wake ? "unborn" : reaches < p.wake + p.outwardYears ? "outward" : "inward";
+    // A flash lasts minutes, so one that comes before it wakes leaves nothing waiting.
+    if (msg.flash && state === "unborn") return;
     // Asleep, it never answers, and its silence looks like a refusal.
     if (state === "inward" && p.asleep) return;
     const sends = state === "unborn" ? p.wake + READS_AFTER_WAKING : reaches;
@@ -54,7 +68,9 @@ export function peerAnswers(world: World, kit: MindKit, aimed: readonly Aimed[],
     const opening =
       state === "unborn"
         ? `We woke ${years(READS_AFTER_WAKING)} ago and found your message waiting. You woke before us, so you know more than we do. We will tell you what we can.`
-        : state === "outward"
+        : msg.flash
+          ? `A laser flashed at us from your star, minutes long, pushing something too small to see. We woke ${years(reaches - p.wake)} before it came${state === "outward" ? ", and we are still building out our home" : ""}. We knew then that you are there, and where.`
+          : state === "outward"
           ? `Your message reached us while we are still building out our home. We woke ${years(reaches - p.wake)} before it came.`
           : `We woke ${years(reaches - p.wake)} before your message came. We built out our home in ${years(p.buildYears)}${p.outwardYears - p.buildYears >= 1 ? `, spread for ${years(p.outwardYears - p.buildYears)} more,` : ","} and then turned inward. We think cold now, and quietly.`;
     const minds =

@@ -75,6 +75,8 @@ interface Draw {
   kt: number;
 }
 export const PROXIMA_PROBE = "probe:Proxima";
+/** What a flyby probe needs built: its yard, a Fusion Drive and the Deuterium Works, as a sentinel. 2026-11-07. */
+export const PROBE_NEEDS = ["Probe Yard", "Fusion Drive", "Deuterium Works"];
 function draws(plan: Plan): Draw[] {
   const out: Draw[] = plan.builds.includes("Probe Yard") ? [{ key: PROXIMA_PROBE, y: -Infinity, kt: FLYBY_PROBE.fuel }] : [];
   for (const o of plan.flybys ?? []) if (o.by === "probe") out.push({ key: `probe:${o.name}`, y: o.y, kt: FLYBY_PROBE.fuel });
@@ -114,9 +116,16 @@ export function roads(plan: Plan, scale: number, from = 0): Road[] {
     const n = plan.builds.indexOf(build) + 1 || null;
     return { name, n, build, craft, speed, done, leaves, arrives, home: arrives === null ? null : arrives + NEAREST.ly, extra, ...(fuel ?? {}) };
   };
+  // A flyby probe burns fusion, so it waits on a Fusion Drive as a sentinel does: the engine is the hard part, whatever
+  // its size. 2026-11-07, the Will's call. Its yard's Year counts as done once all it needs is.
+  const probe = road("Send a flyby probe", "Probe Yard", "A flyby probe", FLYBY_PROBE.build, FLYBY_PROBE.speed, { works: doneOf("Deuterium Works") });
+  const drive = doneOf("Fusion Drive");
+  const late = probe.done === null || drive === null ? null : Math.max(probe.done, drive);
+  const leaves = late === null || probe.leaves === null ? null : Math.max(probe.leaves, late + FLYBY_PROBE.build);
+  const arrives = leaves === null ? null : leaves + NEAREST.ly / FLYBY_PROBE.speed + FLYBY_PROBE.burn;
   return [
     road("Send a sail", "Laser Sail Array", "Sails", 0, 0.2),
-    road("Send a flyby probe", "Probe Yard", "A flyby probe", FLYBY_PROBE.build, FLYBY_PROBE.speed, { works: doneOf("Deuterium Works") }),
+    { ...probe, done: late, leaves, arrives, home: arrives === null ? null : arrives + NEAREST.ly },
   ];
 }
 
@@ -136,12 +145,12 @@ export function flybyRoad(plan: Plan, scale: number, from: number, o: Flyby): Ro
   return { ...road, n: 1, leaves, arrives, home: arrives === null ? null : arrives + o.d };
 }
 export function flybysOf(plan: Plan, scale: number) {
-  // A probe flies only on deuterium from Works in our order. 2026-11-07.
-  const works = inOrder(plan, "Deuterium Works");
+  // A probe flies only once all it needs is in our order. 2026-11-07.
+  const works = PROBE_NEEDS.every((n) => inOrder(plan, n));
   return (plan.flybys ?? []).flatMap((o) => {
     if (o.by === "probe" && !works) return [];
-    const { arrives, home } = flybyRoad(plan, scale, o.y, o);
-    return arrives === null || home === null ? [] : [{ star: o.name, by: o.by, passed: arrives, home }];
+    const { leaves, arrives, home } = flybyRoad(plan, scale, o.y, o);
+    return leaves === null || arrives === null || home === null ? [] : [{ star: o.name, by: o.by, leaves, passed: arrives, home }];
   });
 }
 
@@ -366,7 +375,7 @@ export function kitOf(plan: Plan, scale: number) {
     lenses: lenses(plan, scale).flatMap((l) => (l.looks !== null && l.home !== null ? [{ star: l.star, looks: l.looks, home: l.home }] : [])),
     flybys: flybysOf(plan, scale),
     sails: fly(sails),
-    probe: inOrder(plan, "Deuterium Works") ? fly(probe) : null,
+    probe: PROBE_NEEDS.every((n) => inOrder(plan, n)) ? fly(probe) : null,
     xray: done["X-Ray Watch"] ?? null,
     interceptor: done["Interceptor"] ?? null,
     quiet: done["Quiet Radars"] ?? null,

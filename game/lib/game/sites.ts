@@ -273,7 +273,7 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
       have: "Nothing we have built has flown faster than Parker Solar Probe: 192 km/s, at its closest to the Sun in 2024.",
       where: "In low orbit, 400 km up, on the Orbital Yard’s path, about 180 km behind it.",
       why: "A probe this big can’t be launched whole. Its parts come up to orbit, so we join and fuel it there.",
-      takes: `${kt("Probe Yard")} kt of the matter we hold in orbit. The first probe flies 12 Years after the yard is done.`,
+      takes: `${kt("Probe Yard")} kt of the matter we hold in orbit. Its probes burn fusion, so the first flies 12 Years after the yard, a Fusion Drive and the Deuterium Works are done.`,
       before:
         "Project Daedalus, from 1973 to 1978, planned a two-stage fusion probe of 54,000 t, built in Earth orbit as this one is. It would pass Barnard’s Star about 50 years after launch.",
     },
