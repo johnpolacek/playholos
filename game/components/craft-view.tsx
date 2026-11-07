@@ -35,6 +35,8 @@ interface Model {
   ink: number[];
   /** What works, drawn in the build's color: the beam, the flame, the loop. */
   hot: number[];
+  /** Its path, drawn in the amber of our craft on the map, so it can't be taken for a part of it. */
+  path?: number[];
   /** Lights: points, each x, y, z. */
   lamps: number[];
   /** Names, at points on it. */
@@ -250,18 +252,22 @@ function voyager(): Model {
   for (let k = 1; k <= 12; k++) ink.push(...ring([-0.2, 0.6 + (5.9 * k) / 12, 0.6 + (10.7 * k) / 12], 0.06, "x", 3));
   // The Golden Record, 30 cm, on the body's side.
   hot.push(...ring([-0.24, 0, -0.9], 0.15, "z", 24));
-  // Its dotted road back to the Sun, as on the map, the dots spreading as they go.
-  for (let k = 0, x = -2.6; k < 34; k++, x *= 1.18) ink.push(...seg([x, 0, 0], [x * 1.04, 0, 0]));
+  // Its dotted road back to the Sun, as on the map, the dots spreading as they go, and a few ahead, outward.
+  const path: number[] = [];
+  for (let k = 0, x = -2.6; k < 34; k++, x *= 1.18) path.push(...seg([x, 0, 0], [x * 1.04, 0, 0]));
+  for (let x = 1.2; x < 9; x += 1.4) path.push(...seg([x, 0, 0], [x + 0.5, 0, 0]));
   return {
     ink,
     hot,
+    path,
     // Its point of light, which lands on its dot on the map as the view pulls back.
     lamps: [-0.25, 0, 0],
     labels: [
       { at: [-1.3, 0, 1.83], head: "VOYAGER 1 · 722 KG", line: "launched 1977, silent now" },
       { at: [-0.24, 0, -0.95], head: "GOLDEN RECORD", line: "sounds and pictures of Earth" },
       { at: [-0.25, 3.3, 0], head: "PLUTONIUM POWER", line: "nearly spent" },
-      { at: [-0.2, 6.5, 11.3], head: "MAGNETOMETER · 13 M" },
+      { at: [-0.2, 1.3, 1.9], head: "MAGNETOMETER BOOM · 13 M", line: "keeps its sensors clear of the craft" },
+      { at: [2.6, 0, 0], head: "OUTWARD, 17 KM/S", line: "its path back to the Sun behind it" },
     ],
     near: 10,
     far: 2e5,
@@ -321,6 +327,8 @@ export function CraftView({ kind, shot, className, anchor, heading }: { kind: Cr
     };
     lines(m.ink, inkMat);
     if (m.hot.length) lines(m.hot, hotMat);
+    const pathMat = new THREE.LineBasicMaterial({ color: css("--other"), transparent: true, opacity: 0.9 });
+    if (m.path?.length) lines(m.path, pathMat);
     const tex = dotTexture();
     const lampMat = new THREE.PointsMaterial({ color: lamp, map: tex, size: 14, sizeAttenuation: false, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending });
     const lamps = new THREE.Points(new THREE.BufferGeometry().setAttribute("position", new THREE.Float32BufferAttribute(m.lamps, 3)), lampMat);
@@ -416,6 +424,7 @@ export function CraftView({ kind, shot, className, anchor, heading }: { kind: Cr
       // The map behind steps back while the craft is close.
       if (shade.current) shade.current.style.opacity = String(fade * (1 - pull));
       lampMat.opacity = fade;
+      pathMat.opacity = 0.9 * fade;
       flowMat.opacity = 0.8 * fade;
       if (flowPos && m.flow && !still) {
         const f = m.flow;
