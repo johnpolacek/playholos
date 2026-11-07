@@ -2698,6 +2698,16 @@ For a player’s plan: Mercury mined, its light beamed, giant telescopes at the 
 - **What it sees: a mirror held on one point of the sky** · This project’s reasoning, not a source.
   - A 1 kg watcher that reports home by laser needs an aperture held on its maker. From a few kilometers, a 2 cm mirror shows, and which way it points. That gives the maker’s direction, never its distance or who.
   - Used: `game/lib/sim/minds.ts` `watcherOf()`, the watcher lead’s reading, and the Mind’s brief. The direction is the nearest old mind’s, which is its maker in every game.
+
+### Drawing the watcher’s find, 2026-11-07
+
+- **[Tianwen-2 at Kamoʻoalewa, Sky & Telescope, July 2026](https://skyandtelescope.org/astronomy-news/tianwen-2-arrives-at-quasi-moon-kamo%ca%bboalewa-returns-images/)** · Read through search summaries ([Space.com](https://www.space.com/space-exploration/asteroid-comet-missions/china-releases-1st-photo-of-earths-elusive-quasi-moon-kamooalewa), [ScienceAlert](https://www.sciencealert.com/first-ever-close-up-revealed-of-earths-rare-minimoon)).
+  - Tianwen-2 arrived in early July 2026. Its first close image, from about 20 km on July 2, shows Kamoʻoalewa about 20 m across, half the smallest ground estimate. It turns once every 28 minutes. It leaves in April 2027, and its sample lands in November 2027.
+  - Matters: the Asteroid Tour’s drawing gives Kamoʻoalewa as about 20 m, not 40 to 100 m. `ROCKS` in `game/components/watcher-art.tsx`.
+- **The other five co-orbitals’ sizes and paths** · From memory, not checked. Sizes from their brightness at a rock’s usual darkness: 2023 FW13 about 15 m, 2002 AA29 about 60 m, 2004 GU9 about 250 m, 2006 FV35 about 200 m, Cruithne about 5 km. Seen from Earth, 2023 FW13, 2004 GU9 and 2006 FV35 loop round us as quasi-moons, as Kamoʻoalewa does. 2002 AA29 and Cruithne swing along our orbit in horseshoes.
+  - Used: `ROCKS` and `CoOrbitArt` in `game/components/watcher-art.tsx`.
+- **How the Moon Search finds it: shift and stack** · This project’s reasoning on a standard method. Many frames, each following the Moon’s L4 or L5 point, are added. Stars smear to trails, and the grain falls with the square root of the frames. A body holding at the point adds up in one spot. A 10 cm body of a rock’s darkness at 384,000 km shines near magnitude 26 to 28, by H ≈ 39 and its distance.
+  - Used: `MoonStack` in `game/components/watcher-art.tsx`. Its 4,000 frames, and the find at a tenth of the grain in one frame, are samples.
 - Used: the Close Look, a build since 2026-10-30, opened by the watcher found, as a rock found opens the Rock Deflector.
 
 ### The natural sky, 2026-10-30

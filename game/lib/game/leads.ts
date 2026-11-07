@@ -58,6 +58,8 @@ export interface Reading {
   air?: Read;
   /** What a flyby's pictures showed, drawn as the world. */
   sight?: Visit["sight"];
+  /** What our Close Look saw of the watcher, drawn: its mirror held on one point of the sky. 2026-11-07. */
+  close?: { ra: number; dec: number };
   /** The Mind's word, now, that something lives there, where this reading says. 2026-10-29. */
   life?: Odds;
 }
@@ -74,7 +76,7 @@ export type Art =
   | { kind: "seed"; sight: Visit["sight"] }
   /** Something here at home, drawn where it sits: at the Moon's L5, on a rock sharing our orbit, or a rock coming in.
    *  2026-10-30. */
-  | { kind: "near"; where: "moon" | "co-orbital" | "warning" | "rock"; struck?: boolean }
+  | { kind: "near"; where: "moon" | "co-orbital" | "warning" | "rock"; struck?: boolean; L?: "L4" | "L5"; rock?: string }
   /** A star exploded: its brightness as we saw it. 2026-10-30. */
   | { kind: "nova"; ly: number };
 
@@ -922,7 +924,8 @@ function watcherLead(w: WatcherSeen): Lead {
           : "We never looked closely where it sits. Its laser is all we have of it.",
       "A knock aimed at it would tell it we know it is there.",
     ],
-    art: { kind: "near", where: moon ? "moon" : rock ? "co-orbital" : "warning" },
+    // Drawn at the point it holds, L4 or L5, and on the rock it rides: every drawing said L5 until 2026-11-07.
+    art: { kind: "near", where: moon ? "moon" : rock ? "co-orbital" : "warning", L, ...(rock ? { rock: w.place } : {}) },
     life: "very unlikely",
   };
 }
@@ -940,6 +943,7 @@ export function watcherReadings(w: WatcherSeen, knocks: number[], year: number):
       at: tenths(w.looked.at),
       by: "Close Look",
       title: "Seen up close",
+      close: { ra: w.looked.ra, dec: w.looked.dec },
       line: `Near black and about 10 cm across, smooth, with a mirror about 2 cm wide. It holds that mirror on one point of the sky, toward ${sky(w.looked)}, turning as the Earth and Moon turn to keep it there.`,
       mind: "A thing that reports home by laser would aim so. It may aim straight home. Or it may aim at a relay out past 550 AU, where the Sun’s pull focuses light, and then home lies the other way, through the Sun. It saw our craft come.",
       now: made,

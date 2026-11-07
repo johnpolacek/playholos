@@ -7,6 +7,7 @@ import { flybyRoad } from "@/lib/game/reach";
 import { BackBar } from "@/components/back-bar";
 import { CloseReading } from "@/components/close-reading";
 import { LeadArt } from "@/components/lead-art";
+import { WatcherClose } from "@/components/watcher-art";
 import { SystemArt } from "@/components/system-art";
 import { LeadMark } from "@/components/marks";
 import { useLeads } from "@/components/scan";
@@ -265,6 +266,12 @@ export function LeadPage({ slug }: { slug: string }) {
               <VisitArt sight={read.sight} />
             </div>
           )}
+          {/* The watcher up close, drawn: its mirror held on one point of the sky. 2026-11-07. */}
+          {read.close && (
+            <div className="mt-2.5 rounded-lg border border-faint bg-paper px-2 py-1">
+              <WatcherClose {...read.close} />
+            </div>
+          )}
           <p className="mt-2 text-[13.5px] leading-snug text-page-ink2">
             <span className="mr-1.5 font-mono text-[10px] tracking-[.1em] text-you">THE MIND</span>
             {read.mind}
@@ -285,6 +292,11 @@ export function LeadPage({ slug }: { slug: string }) {
               {r.sight && (
                 <div className="mt-2 flex justify-center">
                   <VisitArt sight={r.sight} />
+                </div>
+              )}
+              {r.close && (
+                <div className="mt-2 rounded-lg border border-faint bg-paper px-2 py-1">
+                  <WatcherClose {...r.close} />
                 </div>
               )}
             </div>

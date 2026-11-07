@@ -3,6 +3,7 @@ import { useGame } from "@/components/game-provider";
 import { lyOf } from "@/lib/game/clock";
 import type { Art, Window } from "@/lib/game/leads";
 import { VisitArt } from "@/components/visit-art";
+import { CoOrbitArt, MoonStack, TourMap } from "@/components/watcher-art";
 import { prefersReducedMotion } from "@/lib/motion";
 
 // A lead's page, drawn: a world's orbit against its star's warm zone, or every star we messaged at the Year a reply
@@ -13,7 +14,7 @@ const W = 320;
 const H = 220;
 
 /** Runs a frame each tick with the seconds since it began, or one still frame. */
-function useTicks(draw: (t: number) => void, still: number) {
+export function useTicks(draw: (t: number) => void, still: number) {
   const tick = useRef(draw);
   useEffect(() => {
     tick.current = draw;
@@ -383,7 +384,7 @@ function NovaArt({ ly }: { ly: number }) {
 // Here at home, from above. The Moon's L5: Earth, the Moon going round, and the point 60° behind it, where a dark body
 // holds as the Sun's pull would clear rock away. A rock beside us: the Sun, Earth's orbit, and a rock sharing it on its
 // horseshoe. A rock coming: Earth, and the rock's path in, ending in a flash if it struck. 2026-10-30.
-function NearArt({ where, struck }: { where: "moon" | "co-orbital" | "warning" | "rock"; struck?: boolean }) {
+function NearArt({ where, struck, L = "L5", rock: on }: { where: "moon" | "co-orbital" | "warning" | "rock"; struck?: boolean; L?: "L4" | "L5"; rock?: string }) {
   const moving = useRef<SVGCircleElement>(null);
   const point = useRef<SVGCircleElement>(null);
   const rock = useRef<SVGCircleElement>(null);
@@ -403,8 +404,8 @@ function NearArt({ where, struck }: { where: "moon" | "co-orbital" | "warning" |
     const [mx, my] = at(R, a);
     moving.current?.setAttribute("cx", String(mx));
     moving.current?.setAttribute("cy", String(my));
-    // The point 60° behind, the Moon's L5, or the rock's slow horseshoe beside Earth.
-    const [px, py] = where === "co-orbital" ? at(R, a + 0.35 + 0.25 * Math.sin(t * 0.3)) : at(R, a + Math.PI / 3);
+    // The point 60° ahead of the Moon, its L4, or 60° behind, its L5. The Moon goes round the way the angle falls.
+    const [px, py] = where === "co-orbital" ? at(R, a + 0.35 + 0.25 * Math.sin(t * 0.3)) : at(R, a + (L === "L4" ? -1 : 1) * (Math.PI / 3));
     point.current?.setAttribute("cx", String(px));
     point.current?.setAttribute("cy", String(py));
     point.current?.setAttribute("opacity", String(0.55 + 0.45 * Math.sin(t * 2)));
@@ -420,23 +421,39 @@ function NearArt({ where, struck }: { where: "moon" | "co-orbital" | "warning" |
         <text x={W - 20} y={18} textAnchor="end" className="fill-muted font-mono text-[7px]">{struck ? "ITS PATH IN" : "ITS PATH, AS WE MEASURE IT"}</text>
       </svg>
     );
+  // A rock that shares our orbit is drawn as it moves seen from Earth, and the Moon Search's find as it was found.
+  // 2026-11-07.
+  if (where === "co-orbital" && on)
+    return (
+      <div className="flex flex-col gap-3 py-2">
+        <TourMap rock={on} />
+        <CoOrbitArt rock={on} />
+      </div>
+    );
   const co = where === "co-orbital";
-  return (
-    <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img" aria-label={co ? "A rock sharing Earth's orbit, with something on it" : "Earth and the Moon, with a dark body holding at the Moon's L5 point"}>
+  const diagram = (
+    <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img" aria-label={co ? "A rock sharing Earth's orbit, with something on it" : `Earth and the Moon, with a dark body holding at the Moon's ${L} point`}>
       <circle cx={cx} cy={cy} r={R} fill="none" stroke="var(--muted)" strokeWidth={0.6} strokeDasharray="1 3" />
       <circle cx={cx} cy={cy} r={co ? 7 : 6} fill={co ? "#f4e9c8" : "var(--you)"} opacity={0.9} />
       <circle ref={moving} cx={cx + R} cy={cy} r={co ? 4.5 : 3.5} fill={co ? "var(--you)" : "#d8d8d8"} />
       <circle ref={point} cx={cx} cy={cy - R} r={2.4} fill="var(--other)" />
       <text x={cx} y={cy + 18} textAnchor="middle" className="fill-muted font-mono text-[7px]">{co ? "SUN" : "EARTH"}</text>
       <text x={16} y={H - 12} className="fill-muted font-mono text-[7px]">
-        {co ? "A ROCK SHARING OUR ORBIT, AND WHAT RIDES IT" : where === "warning" ? "SOMEWHERE NEAR US, UNSEEN" : "THE MOON’S L5: 60° BEHIND IT, HOLDING"}
+        {co ? "A ROCK SHARING OUR ORBIT, AND WHAT RIDES IT" : where === "warning" ? "SOMEWHERE NEAR US, UNSEEN" : L === "L4" ? "THE MOON’S L4: 60° AHEAD OF IT, HOLDING" : "THE MOON’S L5: 60° BEHIND IT, HOLDING"}
       </text>
     </svg>
+  );
+  if (where !== "moon") return diagram;
+  return (
+    <div className="flex flex-col gap-3 py-2">
+      <MoonStack L={L} />
+      {diagram}
+    </div>
   );
 }
 
 export function LeadArt({ art }: { art: Art }) {
-  if (art.kind === "near") return <NearArt where={art.where} struck={art.struck} />;
+  if (art.kind === "near") return <NearArt where={art.where} struck={art.struck} L={art.L} rock={art.rock} />;
   if (art.kind === "warm") return <WarmArt near={art.near} far={art.far} />;
   if (art.kind === "orbit") return <Orbit a={art.a} e={art.e} hz={art.hz} />;
   if (art.kind === "dark") return <Dark mass={art.mass} ly={art.ly} />;
