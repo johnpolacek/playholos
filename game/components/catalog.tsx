@@ -30,6 +30,8 @@ export function Catalog({ className = "" }: { className?: string }) {
   if (!open.length) return null;
   return (
     <>
+      {/* The note's "See the Catalog" scrolls here: on Build already, its link went nowhere we could see. 2026-11-07. */}
+      <div id="catalog" className="scroll-mt-4" />
       <ListHead left={`Catalog · ${open.length}`} right="Done in" className={className} />
       <ul className="mt-1">
         {open.map((b) => {

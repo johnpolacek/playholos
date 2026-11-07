@@ -288,7 +288,11 @@ export function IdleNote() {
             </button>
           )}
           {(!idle || pick) && (
-            <Link to="/play/build" className="text-[12.5px] text-you hover:underline">
+            <Link
+              to="/play/build"
+              onClick={() => setTimeout(() => document.getElementById("catalog")?.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth", block: "start" }), 250)}
+              className="text-[12.5px] text-you hover:underline"
+            >
               See the Catalog ›
             </Link>
           )}
