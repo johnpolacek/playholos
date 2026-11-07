@@ -63,7 +63,9 @@ const STEPS: Step[] = [
         ? `${s.plan.builds.join(", ")}. ${over ? `${Math.round(short * 100)}% more than our compute carries.` : `${full ? "All" : `${Math.floor(used * 100)}%`} of our compute in use.`}`
         : "Search, Protect, Expand or Balanced. Each puts all our compute to work at Year 0.",
     // Past 100% all our compute is at work too, so the step stays done. It went back to undone. Playtest 2026-11-01.
-    done: (_, { full, over }) => full || over,
+    // And a strategy picked, then trimmed, stays done: dropping one build sent the count back to "Pick strategy", in
+    // three playtests. The line still says how much of our compute is in use. 2026-11-07.
+    done: (s, { full, over }) => full || over || !!s.plan?.builds.length,
     to: "/play/build?tour",
   },
   {
