@@ -1,0 +1,10 @@
+{
+  "blind": {
+    "understood": {
+      "score": 9.8,
+      "why": "Grades 1: 9, 2: 10, 3: 10, 4: 10. I had the core right: the Will of Earth's newly woken Mind in 2040, trying to learn whether we are alone. I lost a point on 1 because I framed it as 'find out, and survive long enough to find out'. I never said that finding other minds is both our greatest chance and our gravest danger, or that the game rests on real data. The risk of revealing ourselves only came up later, under 3. On 2, all four tabs were roughly right, including that the Mind drafts and I send. On 3, I named Prometheus: plain heat, mind at 29 to 71%, still not fading. On 4, I gave sensible moves with reasons from the game: watch Prometheus for fading, raise energy to free compute, and use the Solar Lens on HD 23356.",
+      "evidence": ["quiz.md"]
+    }
+  },
+  "build": "1723656"
+}
