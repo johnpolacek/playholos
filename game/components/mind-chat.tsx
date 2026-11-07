@@ -344,10 +344,16 @@ export function MindSettings({ keyed }: { keyed: boolean }) {
 
 /** Where we type to the Mind. A question sent while it answers waits, said so, and goes once it is done: it was
  *  silently dropped until 2026-10-30. */
-function AskBox({ busy, onAsk, className = "" }: { busy: boolean; onAsk(text: string): void; className?: string }) {
+function AskBox({ busy, onAsk, className = "", focus = false }: { busy: boolean; onAsk(text: string): void; className?: string; focus?: boolean }) {
   const [input, setInput] = useState("");
   const waiting = useRef<string | null>(null);
   const [queued, setQueued] = useState<string | null>(null);
+  // Ready to type on opening, where a mouse is: a blind first-timer's typed question was lost, the box unfocused.
+  // Not on touch, where focus would pop the keyboard over the talk. 2026-11-07.
+  const box = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    if (focus && window.matchMedia("(pointer: fine)").matches) box.current?.focus({ preventScroll: true });
+  }, [focus]);
   useEffect(() => {
     if (busy || waiting.current === null) return;
     const text = waiting.current;
@@ -372,6 +378,7 @@ function AskBox({ busy, onAsk, className = "" }: { busy: boolean; onAsk(text: st
       {queued && <p className="mb-1.5 px-1 text-[13.5px] leading-snug text-muted">Next, once we finish: “{queued}”</p>}
       <div className="flex h-11 items-center gap-2 rounded-full border border-ink bg-paper pr-1.5 pl-3.5">
         <input
+          ref={box}
           value={input}
           onChange={(e) => setInput(e.currentTarget.value)}
           placeholder="Ask the Mind…"
@@ -452,7 +459,7 @@ export function MindChat({ ask }: { ask?: string }) {
         {/* Clear of the ask box, which sticks over the talk's foot, so a card under the last answer shows whole. */}
         <div ref={end} className="scroll-mb-20" />
       </div>
-      <AskBox busy={busy} onAsk={(text) => sendMessage({ text })} className="sticky bottom-0 mt-auto bg-panel pb-3" />
+      <AskBox focus busy={busy} onAsk={(text) => sendMessage({ text })} className="sticky bottom-0 mt-auto bg-panel pb-3" />
     </>
   );
 }
