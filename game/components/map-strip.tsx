@@ -17,6 +17,7 @@ import { useWorks, WorksMap } from "@/components/works";
 import type { Stop } from "@/lib/flight";
 import type { Mark } from "@/lib/drift";
 import { PLANETS } from "../../src/astronomy.js";
+import { CraftView } from "@/components/craft-view";
 import { CLOSE } from "@/lib/game/close";
 import { type Lead, starName } from "@/lib/game/leads";
 
@@ -138,6 +139,8 @@ export function MapStrip() {
       ) : reaching ? (
         <>
           <ReachMap className="absolute inset-0" />
+          {/* Reach's walk: a craft up close over the map, then its flight. 2026-11-07. */}
+          {reach.craft && !reach.close && <CraftView key={`${reach.craft.kind}:${reach.craft.shot}`} kind={reach.craft.kind} shot={reach.craft.shot} className="absolute inset-0" />}
           <span className={LABEL}>
             {reach.close ? `${reach.target.name.toUpperCase()} · CLOSE VIEW` : "FROM EARTH"}
           </span>
@@ -156,7 +159,13 @@ export function MapStrip() {
                 {reach.close ? "Pull Back" : "Close View"}
               </button>
             )}
-            {!reach.close && (
+            {reach.craft && !reach.close && (
+              <button onClick={() => reach.showCraft(reach.craft!.kind)} className={PILL}>
+                <Lens closer />
+                See It Close
+              </button>
+            )}
+            {!reach.close && !reach.craft && (
               <button onClick={() => reach.tour()} className={PILL}>
                 <Lens closer={false} />
                 Fly Out Again

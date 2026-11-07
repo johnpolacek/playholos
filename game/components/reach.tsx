@@ -9,6 +9,7 @@ import { useLeads } from "@/components/scan";
 import { SkyArt } from "@/components/sky";
 import { Face, ListHead } from "@/components/tab-head";
 import { GlowOrderCard } from "@/components/glow-orders";
+import type { CraftKind } from "@/components/craft-view";
 import type { Dials, Mark as Place } from "@/lib/drift";
 import { steadySide } from "@/lib/steady-side";
 import { YEAR_0, lyOf, yearText } from "@/lib/game/clock";
@@ -109,6 +110,9 @@ interface ReachView {
   setClose(on: boolean): void;
   /** Our craft on its way to the target, and its word home, drawn on the map. Null for none. */
   setTrip(trip: Trip | null): void;
+  /** A craft up close over the map, for Reach's walk, and how many times its shot has run. Null for none. 2026-11-07. */
+  craft: { kind: CraftKind; shot: number } | null;
+  showCraft(kind: CraftKind | null): void;
 }
 
 /** Where a craft is on its road, as shares of the way: out to its star, then its word back. */
@@ -130,6 +134,8 @@ const ReachContext = createContext<ReachView>({
   close: false,
   setClose() {},
   setTrip() {},
+  craft: null,
+  showCraft() {},
 });
 export const useReach = () => use(ReachContext);
 
@@ -188,9 +194,11 @@ export function ReachProvider({ children }: { children: React.ReactNode }) {
     },
     [fly, setClose],
   );
+  const [craft, setCraft] = useState<{ kind: CraftKind; shot: number } | null>(null);
+  const showCraft = useCallback((kind: CraftKind | null) => setCraft((was) => (kind ? { kind, shot: (was?.shot ?? 0) + 1 } : null)), []);
   const value = useMemo(
-    () => ({ dials, fly, hold, tour, target, aim, close, setClose, setTrip }),
-    [dials, fly, hold, tour, target, aim, close, setClose, setTrip],
+    () => ({ dials, fly, hold, tour, target, aim, close, setClose, setTrip, craft, showCraft }),
+    [dials, fly, hold, tour, target, aim, close, setClose, setTrip, craft, showCraft],
   );
   return <ReachContext value={value}>{children}</ReachContext>;
 }

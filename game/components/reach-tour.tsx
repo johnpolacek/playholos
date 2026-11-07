@@ -2,7 +2,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
 import { useNext } from "@/components/begin";
 import { useGame } from "@/components/game-provider";
-import { ProbeArt, SailArt, SentinelArt } from "@/components/craft-art";
+import { CraftFacts } from "@/components/craft-art";
+import { CRAFT_SHOT_SECS, type CraftKind } from "@/components/craft-view";
 import { BuildMark, buildTone } from "@/components/marks";
 import { MindNote } from "@/components/mind-note";
 import { usePlan, useSchedule } from "@/components/picks";
@@ -129,7 +130,7 @@ function Gap() {
 
 export function ReachTour({ onClose }: { onClose(): void }) {
   const { orderAt: clock, did } = useGame();
-  const { fly, tour, aim, setTrip } = useReach();
+  const { fly, tour, aim, setTrip, showCraft } = useReach();
   const flown = useRef<HTMLSpanElement>(null);
   const { plan } = usePlan();
   const { scale } = useSchedule();
@@ -155,6 +156,12 @@ export function ReachTour({ onClose }: { onClose(): void }) {
     if (at === 0) tour(0.3);
     else fly(farZoom(NEAREST.ly));
   }, [at, fly, tour]);
+  // Each craft opens up close on the map, then pulls back into its flight. 2026-11-07.
+  const kind: CraftKind | null = at === 1 ? "sail" : at === 2 ? "probe" : at === last ? "sentinel" : null;
+  useEffect(() => {
+    showCraft(kind);
+    return () => showCraft(null);
+  }, [kind, showCraft]);
   useEffect(() => {
     if (!road || road.leaves === null || road.arrives === null || road.home === null) return;
     const { leaves, arrives, home } = road;
@@ -170,7 +177,8 @@ export function ReachTour({ onClose }: { onClose(): void }) {
     }
     // Five Years a second, so a sail's 21 Years and a probe's 52 read as the gap they are.
     const o = { t: 0 };
-    const tl = gsap.timeline({ repeat: -1, repeatDelay: 1.5, delay: 1.2 });
+    // It starts as the close shot pulls back to a point.
+    const tl = gsap.timeline({ repeat: -1, repeatDelay: 1.5, delay: CRAFT_SHOT_SECS - 1 });
     tl.fromTo(o, { t: 0 }, { t: home - leaves, duration: (home - leaves) / 5, ease: "none", onUpdate: () => show(o.t) });
     return () => {
       tl.kill();
@@ -263,9 +271,9 @@ export function ReachTour({ onClose }: { onClose(): void }) {
           {words.sub}
         </p>
         {/* Each craft, drawn: what it is and how it moves. 2026-11-07. */}
-        {(at === 1 || at === 2 || at === last) && (
+        {kind && (
           <div data-r className="mt-3">
-            {at === 1 ? <SailArt tone={buildTone("Laser Sail Array")} /> : at === 2 ? <ProbeArt tone={buildTone("Probe Yard")} /> : <SentinelArt tone={buildTone("Fusion Drive")} />}
+            <CraftFacts kind={kind} />
           </div>
         )}
         {road && (
