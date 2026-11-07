@@ -1,0 +1,10 @@
+{
+  "build": "ea2ec89",
+  "blind": {
+    "understood": {
+      "score": 9.5,
+      "why": "Graded against BLIND-KEY.md. Q1 9: got 'Will of Earth's Mind, 2040, searching for life and minds', but never named the stakes the key stresses, 'finding minds is our greatest chance and our gravest danger', though I saw the Mind's 'giving ourselves away' warnings. Q2 9: all four tabs right, but I described Reach without saying it also tracks what we have sent, and Mind as offering 'one-click build cards' without noting that it never acts on its own. Q3 10: Prometheus, plain heat with no dust bump, MIND 29-71%, watching whether it fades. Q4 10: watch Prometheus and jump ahead, finish the Fusion Drive and Probe Yard for sentinels, add energy for compute, each reason drawn from the game. Average (9+9+10+10)/4 = 9.5.",
+      "evidence": ["quiz.md", "playtests/BLIND-KEY.md"]
+    }
+  }
+}
