@@ -229,6 +229,18 @@ export function Arrived({ from, to, snap }: { from: number; to: number; snap: Sn
           line: minds?.watcher?.by === by ? `Year ${yearText(at)}, and it found something` : `Year ${yearText(at)}, finding nothing out of place`,
         });
     }
+    // New warm glows not yet ranged have no page, so no row of their own: the jump said only "Warm Sky Watch done", and a
+    // blind first-timer found the glow only in our talk. 2026-11-07.
+    const unranged = (minds?.flashes ?? []).filter((f) => f.seen > from + 1e-6 && f.seen <= to + 1e-6 && !(f.ranged !== undefined && f.ranged <= to + 1e-6));
+    if (unranged.length)
+      out.push({
+        key: "warm:unranged",
+        rank: 2,
+        to: done["Infrared Telescope"] != null && done["Infrared Telescope"]! <= to ? "/play/mind" : `/play/build/${buildSlug("Infrared Telescope")}`,
+        mark: <span className="text-other">✦</span>,
+        title: unranged.length === 1 ? "A new warm glow" : `${unranged.length} new warm glows`,
+        line: `Seen by our Warm Sky Watch. ${unranged.length === 1 ? "It gets" : "Each gets"} a page on Scan once our Infrared Telescope ranges ${unranged.length === 1 ? "it" : "them"}.`,
+      });
     // A reply window the jump stopped on, and whether word came: an answer heard shows below as its own row.
     for (const w of WINDOWS)
       if (w.at > from + 1e-6 && w.at <= to + 1e-6 && !heard.some((h) => h.star === w.star && h.arrived <= to + 1e-6))
@@ -275,7 +287,7 @@ export function Arrived({ from, to, snap }: { from: number; to: number; snap: Sn
         });
     // The watcher first: word of a mind beside us leads the report, above any glow. Playtest 2026-11-05.
     return out.sort((x, y) => x.rank - y.rank);
-  }, [plan, done, leads, readings, heard, snap, from, to, minds?.watcher?.by]);
+  }, [plan, done, leads, readings, heard, snap, from, to, minds]);
 
   // The map turns to the first new lead. 2026-11-01.
   // A new warm glow first: the map pulls back across the Galaxy to show it, and comes home on Go on. 2026-11-03.
