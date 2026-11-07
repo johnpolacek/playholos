@@ -52,7 +52,7 @@ const ORDINAL = ["first", "second", "third", "fourth", "fifth", "sixth", "sevent
 function status(open: boolean, at: number, by: number | null | undefined, year: number) {
   const when = by == null ? PAST : `by Year ${yearText(by)}, ${span(by)} after we begin`;
   if (open)
-    return at < 0 ? `Last in our order, it would be done ${when}.` : `Queued, ${ORDINAL[at]} in our order. Done ${when}.`;
+    return at < 0 ? `Added to our order, it would be done ${when}.` : `Queued, ${ORDINAL[at]} in our order. Done ${when}.`;
   if (at < 0) return "Not in our order yet.";
   if (by == null) return `Under way. Done ${PAST}.`;
   return year >= by ? "Done." : `Under way. Done in ${span(by - year)}.`;
