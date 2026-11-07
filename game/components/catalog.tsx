@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Link } from "react-router";
 import { CostLine, previews, usePreview } from "@/components/costs";
 import { useGame } from "@/components/game-provider";
@@ -7,7 +7,7 @@ import { OpensLine } from "@/components/opens";
 import { usePlan, useSchedule } from "@/components/picks";
 import { Face, ListHead } from "@/components/tab-head";
 import { span, tenths } from "@/lib/game/clock";
-import { buildSlug, fits, lacks, moves, needs, openAt, orderLater, PAST, takenAt } from "@/lib/game/plan";
+import { buildSlug, fits, lacks, LATER, moves, needs, openAt, ordered, orderLater, PAST, takenAt } from "@/lib/game/plan";
 
 // In play, the Catalog: everything open to us and not in our order, under our instruments, each with when it would be
 // done if ordered now, last in line, what it would take and slow, what it opens, and Add to Queue on the row itself.
@@ -27,14 +27,39 @@ export function Catalog({ className = "" }: { className?: string }) {
     [plan, done, at, strategy],
   );
   const by = useMemo(() => Object.fromEntries(open.map((b) => [b.name, moves(plan, scale, b.name, at)])), [open, plan, scale, at]);
+  // Twenty builds and more, and no way to find one by name: a blind first-timer scrolled the list for the 15 m Mirror.
+  // 2026-11-07.
+  const [find, setFind] = useState("");
+  const q = find.trim().toLowerCase();
+  const shown = q ? open.filter((b) => b.name.toLowerCase().includes(q) || b.what.toLowerCase().includes(q)) : open;
+  // One found but not open yet says what opens it.
+  const later = q && !shown.length ? LATER.find((b) => b.name.toLowerCase().includes(q) && !ordered(plan).includes(b.name)) : undefined;
+  const opens = (after: string) => (after === "A rock found" ? "a rock is found coming" : after === "The watcher found" ? "the watcher is found" : `the ${after} is done`);
   if (!open.length) return null;
   return (
     <>
       {/* The note's "See the Catalog" scrolls here: on Build already, its link went nowhere we could see. 2026-11-07. */}
       <div id="catalog" className="scroll-mt-4" />
       <ListHead left={`Catalog · ${open.length}`} right="Done in" className={className} />
+      {open.length > 8 && (
+        <input
+          type="search"
+          value={find}
+          onChange={(e) => setFind(e.target.value)}
+          placeholder="Find a build"
+          aria-label="Find a build"
+          className="mt-2 h-9 w-full rounded-full border border-faint bg-transparent px-4 text-[13px] text-ink placeholder:text-muted focus:border-muted focus:outline-none"
+        />
+      )}
+      {q && !shown.length && (
+        <p className="mt-2 text-[13px] text-muted">
+          {later
+            ? `The ${later.name} isn’t open to us yet. It opens once ${opens(later.after)}.`
+            : `No build open to us matches “${find.trim()}”.`}
+        </p>
+      )}
       <ul className="mt-1">
-        {open.map((b) => {
+        {shown.map((b) => {
           const lacking = lacks(plan, b.name);
           return (
             <li key={b.name} className="border-t border-faint">
