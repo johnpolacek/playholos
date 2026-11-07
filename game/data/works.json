@@ -157,7 +157,8 @@
   "Cold halo": {
    "years": 10,
    "want": 80,
-   "grows": 10
+   "grows": 10,
+   "full": 39.1
   },
   "Rock deflector": {
    "years": 4,
@@ -191,7 +192,8 @@
    "want": 5,
    "orbit": true,
    "grows": 5,
-   "thinks": 0
+   "thinks": 0,
+   "full": 45.8
   },
   "Mercury works": {
    "years": 12,

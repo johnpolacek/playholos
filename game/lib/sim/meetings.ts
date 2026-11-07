@@ -6,7 +6,9 @@
  *  150 kt, the project audit's. Built in 20 Years, a sample. Its craft copy themselves from the moons' rock and ice,
  *  doubling every 5 Years, Metzger's pace with help from home, slower than Mercury's 2 since sunlight there is a
  *  370th of ours: so its rate doubles too, until held. Every star's bullets wait on it. 2026-10-29. */
-export const HE3 = { bullet: 36.6, perYear: 1.5, build: 20, doubling: 5 };
+// It stops at 45.8 doublings, once its craft have used up Uranus's five large moons, about 9.1×10²¹ kg from 150 kt
+// (Jacobson et al. 1992). Calcs/export_worlds.py, 2026-11-07.
+export const HE3 = { bullet: 36.6, perYear: 1.5, build: 20, doubling: 5, full: 45.8 };
 
 /** Helium-3 gathered by Year t, kt, from a harvest growing over these spans of Years, the first from the Year it was
  *  done. Held, it gathers at its size. */
@@ -18,7 +20,7 @@ export function he3By(spans: readonly [number, number | null][], t: number) {
   for (const [a, b] of spans) {
     edges.add(a);
     if (b !== null) edges.add(b);
-    for (let k = HE3.doubling; ; k += HE3.doubling) {
+    for (let k = HE3.doubling; k <= HE3.full * HE3.doubling; k += HE3.doubling) {
       const at = a + k - grown(a);
       if (at >= Math.min(b ?? t, t)) break;
       if (at > a) edges.add(at);
@@ -28,7 +30,7 @@ export function he3By(spans: readonly [number, number | null][], t: number) {
   let kt = 0;
   for (let i = 1; i < cut.length; i++) {
     const mid = (cut[i - 1] + cut[i]) / 2;
-    kt += HE3.perYear * 2 ** Math.floor(grown(mid) / HE3.doubling + 1e-9) * (cut[i] - cut[i - 1]);
+    kt += HE3.perYear * 2 ** Math.min(HE3.full, Math.floor(grown(mid) / HE3.doubling + 1e-9)) * (cut[i] - cut[i - 1]);
   }
   return kt;
 }

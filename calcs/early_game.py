@@ -395,6 +395,10 @@ TROJAN_YEARS, TROJAN_KT = 12, 10
 # 2026-10-31 from (77/12)^3, about 264, which is the long-wavelength limit only.
 WANTS['Cold halo'] = (80, 'sample: the Cold Annex\'s')
 COLD_HALO_YEARS, COLD_HALO_DOUBLING = 10, 10
+# Settled 2026-11-07: the Cold Halo stops once it has copied the whole main belt, 4.008e-4 Earth masses, about
+# 2.39e21 kg (Pitjeva and Pitjev 2018), from the Cold Annex's 4 Mt: log2 of their ratio, about 39 doublings.
+BELT_KG, COLD_ANNEX_KG = 2.39e21, 4e9
+COLD_HALO_FULL = round(math.log2(BELT_KG / COLD_ANNEX_KG), 1)
 # Settled 2026-10-28: the Rock Deflector, ten DART-class impactors of a tonne. DART took about five years from its
 # start to launch on a few hundred million dollars, so 4 Years and a few hundredths of a flagship, samples. Which games
 # see a rock is game/lib/game/rocks.ts.

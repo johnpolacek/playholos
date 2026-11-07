@@ -1309,6 +1309,14 @@ Gathered 2026-10-26 for four candidate builds. Numbers marked *ours* are this pr
   - Matter not yet at equilibrium can absorb erasure now, so nothing forces waiting.
   - Matters: cold minds computing today, as Holos has them, fit the physics.
   - Used since 2026-10-28: an elder awake, computing cold at a steady ceiling, in [Elders](HOLOS_GAME_CONCEPT.md#elders).
+- **[Pitjeva and Pitjev 2018, main belt mass](https://arxiv.org/abs/1811.05191)** · Published, Astronomy Letters 44, 554. Checked 2026-11-07 by search summary.
+  - The main asteroid belt holds (4.008 ± 0.029)×10⁻⁴ Earth masses, about 2.39×10²¹ kg.
+  - Matters: the most rock the Cold Halo can copy itself from.
+  - Used since 2026-11-07: the Cold Halo stops at about 39 doublings of the Cold Annex’s 4 Mt, about 390 Years, `calcs/early_game.py`.
+- **[Jacobson et al. 1992, Uranian satellite masses](https://ntrs.nasa.gov/citations/19920059124)** · Published, Astronomical Journal. Checked 2026-11-07 by search summary. Jacobson 2014, AJ 148, 76, refines them.
+  - GM of Miranda 4.4, Ariel 90.3, Umbriel 78.2, Titania 235.3, Oberon 201.1 km³/s², together about 9.1×10²¹ kg.
+  - Matters: the most rock and ice the Helium-3 Harvest’s craft can copy themselves from.
+  - Used since 2026-11-07: the harvest stops at about 46 doublings of its 150 kt fleet, about 230 Years, `calcs/export_worlds.py`.
 - **[Pitjeva and Pitjev 2018, Kuiper belt mass](https://arxiv.org/abs/1811.05191)** · Published.
   - About 0.02 Earth masses, 1.2×10²³ kg, mostly at 39 to 48 AU.
   - Matters: Garrett’s 2×10²⁰ kg halo is about 0.2% of the belt.

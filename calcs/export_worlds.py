@@ -168,7 +168,7 @@ def works_catalog():
     # The Trojan Vault, settled 2026-10-28: built in orbit's way, out at L4, so the yard cuts it as it does the rest.
     works['Trojan vault'] = dict(years=eg.TROJAN_YEARS, want=eg.WANTS['Trojan vault'][0], orbit=True)
     # The Cold Halo, settled 2026-10-28: once done it grows, doubling every so many Years until taken back.
-    works['Cold halo'] = dict(years=eg.COLD_HALO_YEARS, want=eg.WANTS['Cold halo'][0], grows=eg.COLD_HALO_DOUBLING)
+    works['Cold halo'] = dict(years=eg.COLD_HALO_YEARS, want=eg.WANTS['Cold halo'][0], grows=eg.COLD_HALO_DOUBLING, full=eg.COLD_HALO_FULL)
     # The Rock Deflector, settled 2026-10-28: opened only when a rock is found coming, by game/lib/game/rocks.ts.
     works['Rock deflector'] = dict(years=eg.DEFLECTOR_YEARS, want=eg.WANTS['Rock deflector'][0])
     # Parity builds, settled 2026-10-28: what a neighbor can do to us, we can build. lib/sim/conflict.ts.
@@ -184,7 +184,9 @@ def works_catalog():
     # Every bullet waits on its fuel, game/lib/sim/meetings.ts's HE3. Its 20 Years and 5 flagships are samples.
     # Its craft copy themselves from the moons' rock and ice, so its rate doubles every 5 Years until held. It thinks
     # with none of it: what it gathers is fuel.
-    works['Helium-3 harvest'] = dict(years=20, want=5, orbit=True, grows=5, thinks=0)
+    # It stops once its craft have used up Uranus's five large moons, GM 609 km^3/s^2 (Jacobson et al. 1992), about
+    # 9.1e21 kg, from 150 kt: about 46 doublings, 2026-11-07. game/lib/sim/meetings.ts's HE3.full matches.
+    works['Helium-3 harvest'] = dict(years=20, want=5, orbit=True, grows=5, thinks=0, full=round(math.log2(609.3e9 / 6.674e-11 / 1.5e8), 1))
     # Mercury Works, the Solar Swarm, the Star Beam and the Hypertelescope, settled 2026-10-29: calcs/mercury.py.
     import mercury
     more, kit = mercury.catalog()
