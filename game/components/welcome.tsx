@@ -200,7 +200,7 @@ export function Welcome({ go }: { go(stop: number): void }) {
           <h2 className="mt-[5px] text-[26px] leading-[1.12] font-medium tracking-[-.01em]">How we start</h2>
           <p className="mt-1.5 max-w-[32ch] text-[14px] leading-[1.35] text-page-ink2">
             {year === null
-              ? "Pick one strategy. It puts all our compute to work when we begin."
+              ? "Pick one strategy. It puts all our compute to work when we begin, and sets how our advice leans."
               : "What we queued has been under way since Year 0."}
           </p>
         </div>
