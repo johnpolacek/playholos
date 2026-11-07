@@ -12,6 +12,7 @@ import { buildSlug, ordered } from "@/lib/game/plan";
 import { moonSearchEnds, tourEnds } from "@/lib/sim/minds";
 import { glowNamed } from "@/lib/game/glow-names";
 const properName = (id: string) => id.replace(/\bglow\b/, "Glow");
+import { WINDOWS } from "@/lib/game/leads";
 import { gsap, prefersReducedMotion } from "@/lib/motion";
 
 // A jump, felt and said, settled 2026-11-01: the Year counts up as the stars streak past, and a card says what reached
@@ -228,6 +229,17 @@ export function Arrived({ from, to, snap }: { from: number; to: number; snap: Sn
           line: minds?.watcher?.by === by ? `Year ${yearText(at)}, and it found something` : `Year ${yearText(at)}, finding nothing out of place`,
         });
     }
+    // A reply window the jump stopped on, and whether word came: an answer heard shows below as its own row.
+    for (const w of WINDOWS)
+      if (w.at > from + 1e-6 && w.at <= to + 1e-6 && !heard.some((h) => h.star === w.star && h.arrived <= to + 1e-6))
+        out.push({
+          key: `window:${w.star}`,
+          rank: 3,
+          to: "/play#messages",
+          mark: <span className="text-muted">◌</span>,
+          title: `${w.star}’s reply window opened`,
+          line: `Year ${yearText(w.at)}, and nothing has come yet. A reply could still come later.`,
+        });
     for (const l of leads) {
       const fresh = (readings[l.slug] ?? []).filter((r) => !snap.reads.has(r.id));
       const isNew = !snap.slugs.has(l.slug);
