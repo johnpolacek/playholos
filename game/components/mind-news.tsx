@@ -16,6 +16,7 @@ import { useAccess } from "@/lib/key";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
 import type { Heard } from "@/lib/sim/types";
 import { properGlows, WINDOWS } from "@/lib/game/leads";
+import { moonSearchEnds, tourEnds } from "@/lib/sim/minds";
 
 // The Mind speaks unasked. Pressing Begin felt like nothing happened, a playtest found 2026-10-31, so Year 0 opens on
 // a moment of its own with the Mind's first words, and from then the Mind tells us what lands as it lands: a build
@@ -27,7 +28,7 @@ const BEGUN = "Year 0 has begun.";
 const MOST = 6;
 
 /** What landed after Year `from`, up to `to`, as news from Earth, or "" if nothing did. */
-function newsBetween(from: number, to: number, plan: Plan | undefined, done: Record<string, number | null>, heard: Heard[], sent: Sent[], firstGlow?: { ranged?: number; range?: [number, number] }) {
+function newsBetween(from: number, to: number, plan: Plan | undefined, done: Record<string, number | null>, heard: Heard[], sent: Sent[], firstGlow?: { ranged?: number; range?: [number, number] }, watcher?: { by: string } | null) {
   const within = (at: number | null | undefined): at is number => typeof at === "number" && at > from && at <= to;
   const named = new Set([...(plan?.builds ?? []), ...(plan?.later ?? []).map((o) => o.name)]);
   const items: { at: number; say: string }[] = [];
@@ -44,6 +45,18 @@ function newsBetween(from: number, to: number, plan: Plan | undefined, done: Rec
   // Our first warm glow, once placed. Later ones gather on Scan: there are hundreds. 2026-11-03.
   if (firstGlow?.range && within(firstGlow.ranged))
     items.push({ at: firstGlow.ranged!, say: `our first new warm glow, Warm glow 1, was ranged at ${firstGlow.range[0].toLocaleString("en-US")} to ${firstGlow.range[1].toLocaleString("en-US")} ly, where nothing shone before` });
+  // A search near Earth ending empty is news too: it rules places out. The Moon Search and the asteroid maps ended in
+  // silence, and players wondered if they had run at all. Playtests 2026-11-06 and 2026-11-07.
+  const searches = [
+    { name: "Moon Search", by: "moon search", ends: moonSearchEnds, where: "the Moon’s L4 and L5 points, down to about 10 cm" },
+    { name: "Asteroid Tour", by: "asteroid tour", ends: tourEnds, where: "the six asteroids that share Earth’s orbit" },
+  ];
+  for (const x of searches) {
+    const built = done[x.name];
+    if (built == null || !named.has(x.name) || watcher?.by === x.by) continue;
+    const end = x.ends(built);
+    if (within(end)) items.push({ at: end, say: `our ${x.name} ended and found nothing made at ${x.where}` });
+  }
   // A reply window opening on one of the stars we messaged before Year 0. 2026-11-01.
   for (const w of WINDOWS) if (within(w.at)) items.push({ at: w.at, say: `the first window for a reply from ${w.star} opened` });
   // A message lands at a Year we can name only when its star's distance is known, not a range.
@@ -91,10 +104,10 @@ export function MindNews() {
     // What we know must be read at this Year, so a signal isn't passed over before it loads. And the Mind finishes
     // what it is saying first.
     if (open === undefined || known !== tenth || busy) return;
-    const news = newsBetween(from, tenth, save.plan, done, heard, save.sent ?? [], firstGlow);
+    const news = newsBetween(from, tenth, save.plan, done, heard, save.sent ?? [], firstGlow, minds?.watcher);
     told(tenth);
     if (news) tell(news);
-  }, [save, tenth, from, dark, open, known, busy, done, heard, firstGlow, told, tell]);
+  }, [save, tenth, from, dark, open, known, busy, done, heard, firstGlow, minds?.watcher, told, tell]);
   return null;
 }
 
