@@ -20,6 +20,7 @@ You are a fresh-eyes playtester for Holos. Play a full first session as a brand 
 - A Year passes every five minutes of real time. Keep playing for at least 30 minutes after Begin, to about Year 6, checking in every few minutes. Ask the Mind a few questions a new player would ask.
 - Note confusion, dead ends, broken screens, console errors, slow or empty Mind replies, and any line where the Mind says "I" instead of "we".
 - Take a screenshot at each key moment.
+- Write `log.jsonl` in the run's folder as you play: every Next stop, every Mind question and answer, every console error. The format is in `playtests/SCORE.md`.
 
 ## The realistic premise, added 2026-10-29
 
@@ -57,6 +58,7 @@ You are a fresh-eyes playtester for Holos. Play a full first session as a brand 
 - Make a branch named `playtest/cloud-` plus the UTC date and time, like `playtest/cloud-2026-10-28-2350`.
 - Commit the screenshots and a report to `playtests/<that date and time>/` and push the branch. Git ignores that folder, so add it with `git add -f`.
 - The report: what you did, findings ranked by severity with screenshot links, and the CLI Mind status.
+- Score the run per `playtests/SCORE.md`: rate as the First-timer, the Astronomer and the Long-hauler, each in turn, into `scores.json`. Then run `npm run playtest:score playtests/<that date and time>` and commit `log.jsonl`, `scores.json` and `SCORECARD.md` with the rest.
 - Don't change game code, except a minimal fix to get the CLI Mind running, in its own commit.
 - Revert lockfile changes from installs. Stop the dev server and browser when done.
-- End with the branch name, the CLI Mind outcome and the top findings.
+- End with the branch name, the CLI Mind outcome, the three scores and the overall, the trend it printed, and the top findings.
