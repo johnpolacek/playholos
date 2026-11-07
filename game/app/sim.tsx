@@ -491,7 +491,7 @@ export default function Sim() {
                   {s.label}
                 </Link>
               ))}
-              <Link to="/play" className="flex items-center gap-1.5 rounded-full px-3 py-0.5 text-muted hover:text-ink">
+              <Link to="/play" state={{ play: true }} className="flex items-center gap-1.5 rounded-full px-3 py-0.5 text-muted hover:text-ink">
                 Play
                 <Play size={11} />
               </Link>
