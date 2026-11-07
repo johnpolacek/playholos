@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useLocation } from "react-router";
 import { type Beam, useBeams } from "@/components/beams";
 import { useGame } from "@/components/game-provider";
 import { Item, type Row } from "@/components/journey";
@@ -125,8 +126,14 @@ export function Messages() {
   const live = all.filter((r) => !gone(r));
   const past = all.filter(gone);
 
+  // Reach's Sent points here, where our messages are. 2026-11-07.
+  const here = useRef<HTMLElement>(null);
+  const { hash } = useLocation();
+  useEffect(() => {
+    if (hash === "#messages") here.current?.scrollIntoView({ block: "start" });
+  }, [hash]);
   return (
-    <section onKeyDown={(e) => e.key === "Escape" && pick(list, null)}>
+    <section ref={here} id="messages" className="scroll-mt-4" onKeyDown={(e) => e.key === "Escape" && pick(list, null)}>
       {live.length > 0 && (
         <>
           <ListHead left={`Messages · ${live.length}`} right="Arrives" className="mt-5" />
