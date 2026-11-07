@@ -65,6 +65,9 @@ export interface Sent {
   to: string | "everywhere";
   /** Light-years to the star. */
   d?: number;
+  /** A far warm glow's range in light-years, kept with the send: once the glow faded, Scan lost it and gave one
+   *  distance. Playtest 2026-11-07. */
+  range?: [number, number];
   /** Where a star past the 50 ly census sits, right ascension in hours and declination, so a save keeps a lead's
    *  star out to 326 ly. 2026-10-31. */
   ra?: number;

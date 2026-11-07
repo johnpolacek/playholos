@@ -47,7 +47,7 @@ function sentRows(sent: Sent[]): Row[] {
         note: s.repeat && s.stopped === undefined ? `Calling, readable to ${s.reach} ly` : `Readable to ${s.reach} ly`,
       }];
     // A far warm glow has only a range, so its rows count to the near end, at the soonest. Playtest 2026-11-01.
-    const range = target(s.to)?.range;
+    const range = s.range ?? target(s.to)?.range;
     const { lands, back } = dates(s.y, range?.[0] ?? s.d!, s.size);
     const base = { name: s.to, kind: "send" as const, msg, sent: YEAR_0 + s.y, ly: s.d, ...(range ? { range } : {}) };
     return [
@@ -72,7 +72,8 @@ function bulletRows(fired: { star: string; fired: number | null; d?: number }[])
 function noteAt(r: Row, now: number | null): string {
   if (now === null || r.at === null || r.bullet || r.name === EVERYWHERE || (r.kind !== "send" && r.kind !== "reply")) return r.note;
   const left = r.at - now;
-  const n = `${tenths(Math.abs(left)).toFixed(1)} Years`;
+  // Thousands of Years read whole, with commas: "15485.9 Years" read as raw. Playtest 2026-11-07.
+  const n = `${Math.abs(left) >= 100 ? Math.round(Math.abs(left)).toLocaleString("en-US") : tenths(Math.abs(left)).toFixed(1)} Years`;
   if (r.kind === "reply") return left > 0 ? `Soonest reply in ${n}` : `No reply for ${n}`;
   return left > 0 ? `Our message arrives in ${n}${r.range ? ", at the soonest" : ""}` : `Our message arrived ${n} ago`;
 }
