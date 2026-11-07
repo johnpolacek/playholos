@@ -1,0 +1,16 @@
+{
+  "build": "ab63846",
+  "blind": {
+    "understood": {
+      "score": 9.5,
+      "why": "Got who you are (Will of Earth's one Mind), all four tabs, a real lead (Prometheus) as the open question, and a reasoned next move. Missed that finding other minds is also our gravest danger: answer 1 said only 'It's about whether we're alone' and never named the risk.",
+      "grades": {
+        "1": { "score": 8, "why": "Will of the Mind and 'are we alone' both right; missed the danger side and that it rests on real data. Quote: 'It's about whether we're alone.'" },
+        "2": { "score": 10, "why": "All four tabs right, including the Mind advising and drafting while I decide." },
+        "3": { "score": 10, "why": "Named Prometheus (plain heat, 29-71% mind) and Cold Glow 1, with why they matter." },
+        "4": { "score": 10, "why": "Sentinel to Cold Glow 1 once the Fusion Drive and Probe Yard finish, Close Readings on other glows, more builds for idle compute; each reason came from the game." }
+      },
+      "evidence": ["quiz.md", "blind/134.png", "blind/139.png", "blind/143.png"]
+    }
+  }
+}
