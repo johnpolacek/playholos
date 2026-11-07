@@ -8,13 +8,14 @@ import { type Aim, usePlan, useSchedule } from "@/components/picks";
 import { useLeads } from "@/components/scan";
 import { SkyArt } from "@/components/sky";
 import { Face, ListHead } from "@/components/tab-head";
+import { GlowOrderCard } from "@/components/glow-orders";
 import type { Dials, Mark as Place } from "@/lib/drift";
 import { steadySide } from "@/lib/steady-side";
 import { YEAR_0, lyOf, yearText } from "@/lib/game/clock";
 import { LANDMARKS } from "@/lib/game/landmarks";
 import { chancesOf, rangeText } from "@/lib/game/chance";
 import { type Lead, skyId, starName, visitReading } from "@/lib/game/leads";
-import { buildSlug, lean, type moves } from "@/lib/game/plan";
+import { lean, type moves } from "@/lib/game/plan";
 import { target as starOf } from "@/lib/game/sends";
 import {
   auFor,
@@ -30,7 +31,6 @@ import {
   seedRoad,
   sentinelRoad,
   toward,
-  inOrder,
   zoomFor,
 } from "@/lib/game/reach";
 import { type System, worldName } from "@/lib/game/systems";
@@ -193,58 +193,6 @@ export function ReachProvider({ children }: { children: React.ReactNode }) {
     [dials, fly, hold, tour, target, aim, close, setClose, setTrip],
   );
   return <ReachContext value={value}>{children}</ReachContext>;
-}
-
-/** Our standing order for warm glows: a flyby probe to each, as we find it. Sending one at a time meant finding each, and
- *  a list of every glow ran too long. Asked for in play, 2026-11-05. Each leaves 12 Years after its order, one a glow,
- *  and can't be called back. Turned off, no new ones go; those sent fly on. */
-function WarmProbes({ warm, sent, on, canSend, set }: { warm: number; sent: number; on: boolean; canSend: boolean; set(on: boolean): void }) {
-  const [asking, setAsking] = useState(false);
-  if (!warm) return null;
-  return (
-    <section className="mt-1 rounded-xl border border-other/50 bg-other/[.05] px-3 py-2.5">
-      <div className="flex items-center justify-between gap-3">
-        <span className="font-mono text-[10px] tracking-[.1em] text-other uppercase">Warm glows · {warm}</span>
-        <span className="font-mono text-[10px] tracking-[.1em] text-muted uppercase">Probes sent · {sent}</span>
-      </div>
-      <p className="mt-1 text-[13.5px] leading-snug text-page-ink2">
-        {on
-          ? "We send a flyby probe to each warm glow as we find it. Each takes 12 Years to build once its glow is ranged, and 6 kt of deuterium from the Works, then leaves, and pictures a world if one is there."
-          : "Send a flyby probe to every warm glow, those found and each one we find from now on. Each takes 12 Years to build and 6 kt of deuterium, under a Year of the Works, then leaves."}
-      </p>
-      <div className="mt-2 flex flex-wrap items-center gap-1.5">
-        {!canSend ? (
-          <Link to={`/play/build/${buildSlug("Probe Yard")}`} className="text-[12.5px] text-you hover:underline">
-            Needs the Probe Yard ›
-          </Link>
-        ) : on ? (
-          <button onClick={() => set(false)} className="h-8 rounded-full border border-faint px-3.5 text-[13px] font-medium">
-            Stop sending to new ones
-          </button>
-        ) : asking ? (
-          <>
-            <span className="text-[12.5px] text-muted">A probe sent can’t be called back.</span>
-            <button onClick={() => setAsking(false)} className="h-8 rounded-full border border-faint px-3.5 text-[13px] font-medium">
-              Wait
-            </button>
-            <button
-              onClick={() => {
-                set(true);
-                setAsking(false);
-              }}
-              className="h-8 rounded-full bg-ink px-3.5 text-[13px] font-medium text-paper"
-            >
-              Send them
-            </button>
-          </>
-        ) : (
-          <button onClick={() => setAsking(true)} className="h-8 rounded-full bg-ink px-3.5 text-[13px] font-medium text-paper">
-            Probe every warm glow
-          </button>
-        )}
-      </div>
-    </section>
-  );
 }
 
 /** The probes and sails we sent past stars, folded into one row: there can be dozens. Opened, each by its glow's
@@ -780,7 +728,7 @@ export function Reach() {
   const { save, year: clock, orderAt } = useGame();
   const { fly, aim, target, setTrip } = useReach();
   const { leads, visits, readings } = useLeads();
-  const { plan, change } = usePlan();
+  const { plan } = usePlan();
   const { scale } = useSchedule();
   // Voyager 1, picked, takes the map out to it, and again home to the nearest star.
   const [out, setOut] = useState(false);
@@ -924,7 +872,6 @@ export function Reach() {
     const m = chancesOf(lead, readings[lead.slug] ?? [])?.mind;
     return m && m !== "unknown" ? ` · Mind ${rangeText(m)}` : "";
   };
-  const warmLeads = leads.filter((l) => l.slug.startsWith("warm-glow-"));
   if (!save) return null;
 
   const place = ({ lead, soonest, reached, bound }: (typeof places)[number]) => (
@@ -943,13 +890,7 @@ export function Reach() {
 
   return (
     <div className="flex flex-col pb-4">
-      <WarmProbes
-        warm={warmLeads.length}
-        sent={(plan.flybys ?? []).filter((o) => o.by === "probe" && o.name.startsWith("Warm glow ")).length}
-        on={plan.probeGlows !== undefined}
-        canSend={inOrder(plan, "Probe Yard")}
-        set={(on) => change((p) => ({ ...p, probeGlows: on ? from : undefined }))}
-      />
+      <GlowOrderCard from={from} />
 
       {/* "Sent" read as our messages too, and a blind first-timer missed theirs here twice. 2026-11-07. */}
       <ListHead left={`Craft sent · ${1 + flying.length + stays.length}`} right="Word home" className="mt-4" />
@@ -1009,28 +950,3 @@ export function Reach() {
   );
 }
 
-/** Our standing order at work: once on, each warm glow we range without a probe of ours gets one, dated from when we
- *  ranged it or the order began, whichever is later, so a jump past a find sends it as if we had been there. 2026-11-05. */
-export function ProbeGlows() {
-  const { plan, change } = usePlan();
-  const { leads, minds } = useLeads();
-  const since = plan.probeGlows;
-  const ready = inOrder(plan, "Probe Yard");
-  const sent = new Set((plan.flybys ?? []).filter((o) => o.by === "probe").map((o) => o.name));
-  const want =
-    since === undefined || !ready
-      ? []
-      : leads
-          .filter((l) => l.slug.startsWith("warm-glow-") && !sent.has(l.star))
-          .map((l) => {
-            const f = minds?.flashes[Number(l.slug.slice("warm-glow-".length)) - 1];
-            return { name: l.star, y: Math.max(since, Math.floor((f?.ranged ?? since) * 10) / 10), d: Math.round(l.ly), by: "probe" as const };
-          });
-  const key = want.map((w) => w.name).join("|");
-  useEffect(() => {
-    if (!want.length) return;
-    change((p) => ({ ...p, flybys: [...(p.flybys ?? []), ...want.filter((w) => !(p.flybys ?? []).some((o) => o.by === "probe" && o.name === w.name))] }));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [key]);
-  return null;
-}

@@ -137,8 +137,11 @@ export interface Plan {
   /** Sails and flyby probes we sent past a star, each by its star, the Year we ordered it, how far we took it to be and
    *  which craft. One of each a star. Proxima's first flew by itself once queued before Begin. 2026-11-05. */
   flybys?: (Ordered & { d: number; by: "sails" | "probe" })[];
-  /** Our standing order: a flyby probe to each warm glow as we find it, from this Year on. 2026-11-05. */
+  /** Our standing order: a flyby probe to each warm glow as we find it, from this Year on. 2026-11-05. Read as
+   *  glowOrders.warm since 2026-11-07, and cleared once that is set. */
   probeGlows?: number;
+  /** Our standing orders for glows, by kind: from which Year, what we send, and how far out. 2026-11-07. */
+  glowOrders?: { warm?: GlowOrder; cold?: GlowOrder };
   /** Seed probes we sent, each by its star and the Year we ordered it: a seed ship with no Mind, that brakes, stays, and
    *  copies itself on to the nearest stars, for so many generations. Built once the Seed Ship, a Fusion Drive and the
    *  Deuterium Works are done. One a star. 2026-10-26. */
@@ -153,6 +156,13 @@ export interface Plan {
 }
 
 /** A build ordered in play, or taken back: its name, and the Year. */
+/** "For each new glow within `within` ly, send `by`", from Year `since`. */
+export interface GlowOrder {
+  since: number;
+  by: "sails" | "probe" | "sentinel";
+  within: number;
+}
+
 export interface Ordered {
   name: string;
   y: number;
