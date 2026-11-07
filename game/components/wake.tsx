@@ -133,7 +133,8 @@ export function Opening({ className, children }: { className: string; children: 
   };
   const frame = useRef<HTMLDivElement>(null);
   const begun = !!save && (save.woke || save.beganAt !== null);
-  const title = useLocation().pathname === "/";
+  const { pathname, state } = useLocation();
+  const title = pathname === "/";
   const shell = begun && !title;
 
   // The shell enters piece by piece: the top bar drops in, the map opens, the page rises, the rail comes up.
@@ -226,21 +227,24 @@ export function Opening({ className, children }: { className: string; children: 
     );
   else if (shell) body = children;
   else if (save) {
-    const Screen = SCREENS[at];
+    // Play pressed on Universe or Simulation goes on to Earth waking: it opened the title again, and a blind first-timer
+    // pressed Play twice. 2026-11-07.
+    const step = at === 0 && !begun && (state as { play?: boolean } | null)?.play ? 1 : at;
+    const Screen = SCREENS[step];
     const plan = () => {
       navigate("/play?review");
       wake();
     };
-    const next = () => (at + 1 < SCREENS.length ? setAt(at + 1) : plan());
+    const next = () => (step + 1 < SCREENS.length ? setAt(step + 1) : plan());
     // Skip leaves the memories for Meeting the Mind on Wake, and skips one memory after that.
     const meet = SCREENS.indexOf(Meet);
     // On Meeting the Mind, Skip goes to the review, as Begin does there.
     const skip = () =>
-      at >= meet ? plan() : setAt(at === SCREENS.indexOf(Wake) ? meet : Math.min(at + 2, meet));
+      step >= meet ? plan() : setAt(step === SCREENS.indexOf(Wake) ? meet : Math.min(step + 2, meet));
     body = (
       <>
         {/* Replay goes back to Earth waking, and the opening runs again from there. 2026-11-01. */}
-        <Screen key={at} onSkip={skip} onNext={next} onReplay={() => setAt(SCREENS.indexOf(Wake))} />
+        <Screen key={step} onSkip={skip} onNext={next} onReplay={() => setAt(SCREENS.indexOf(Wake))} />
       </>
     );
   }
