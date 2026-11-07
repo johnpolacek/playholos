@@ -20,10 +20,11 @@ export default function PlayLayout() {
   // Each page opens at its top: the panel kept the last page's scroll, so a lead opened mid-way down with Engage and
   // Read its light out of sight, five times in one blind playtest. 2026-11-07.
   const page = useRef<HTMLElement>(null);
-  const { pathname } = useLocation();
+  const { pathname, hash } = useLocation();
   useEffect(() => {
-    page.current?.scrollTo({ top: 0 });
-  }, [pathname]);
+    // A link to a place on the page, as #close-reading, scrolls there itself.
+    if (!hash) page.current?.scrollTo({ top: 0 });
+  }, [pathname, hash]);
   return (
     <GameProvider>
       <Crossing />

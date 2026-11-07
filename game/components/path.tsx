@@ -46,7 +46,9 @@ export function usePath(): { stages: Stage[]; next: Step | null } {
       steps: [
         build("Warm Sky Watch", "Watch for warm glows"),
         build("Infrared Telescope", "Range each glow"),
-        { label: "Read a glow’s light", at: read ? "done" : (plan.closeReads ?? []).length ? "going" : "todo", to: open[0] ? `/play/lead/${open[0].slug}#close-reading` : "/play" },
+        { label: "Read a glow’s light", at: read ? "done" : (plan.closeReads ?? []).length ? "going" : "todo", // With no glow to read yet, only time brings one: no link, so Next skips it. It linked to Scan itself, and a blind
+        // first-timer tapped it twice to no effect. 2026-11-07.
+        to: open[0] ? `/play/lead/${open[0].slug}#close-reading` : undefined },
         { label: "Send a craft to a glow", at: close ? "done" : "todo", to: "/play/reach" },
         { label: "Find a mind", at: found ? "done" : close ? "going" : "todo" },
       ],
