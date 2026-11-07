@@ -43,7 +43,11 @@ function Meter({
 }) {
   return (
     <span className="flex min-w-0 flex-col gap-[3px] text-[10px] tracking-[.08em] text-muted">
-      {label}
+      {/* A preview says so: a blind first-timer read a pointed-at build's numbers as real, twice. 2026-11-07. */}
+      <span className="truncate">
+        {label}
+        {hint && <span className="text-you"> · IF ADDED</span>}
+      </span>
       {at !== undefined && (
         <b className="relative h-1 bg-track">
           <s
@@ -271,9 +275,9 @@ export function Hud() {
           at={compute}
           value={over ? `${pct(1 + share.short)} needed` : `${pct(compute)} at work`}
           // Says what short means: a blind first-timer queued past our compute and never learned it slowed everything. 2026-11-07.
-          sub={over ? `${pct(share.short)} short, builds slow` : idle ? "nothing building" : compute < 0.995 ? `${pct(1 - compute)} ${searching ? "searching" : "idle"}` : "none idle"}
+          sub={over ? `${pct(share.short)} short, builds slow` : idle && !hint ? "nothing building" : compute < 0.995 ? `${pct(1 - compute)} ${searching ? "searching" : "idle"}` : "none idle"}
           late={over}
-          go={idle && !over ? "/play/build" : undefined}
+          go={idle && !over && !hint ? "/play/build" : undefined}
         />
       </div>
     </header>
