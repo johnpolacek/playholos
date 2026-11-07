@@ -10,6 +10,8 @@ const POVS = {
   "first-timer": ["clarity", "feedback", "pull", "friction"],
   astronomer: ["accuracy", "honest doubt", "consistency", "reasoning"],
   "long-hauler": ["pacing", "scale", "agency", "payoff"],
+  // The blind first-timer, playtests/BLIND.md: plays from screenshots alone, with no script. 2026-11-07.
+  blind: ["reach", "sure", "expect", "understood"],
 };
 
 const root = fileURLToPath(new URL("../playtests/", import.meta.url));
@@ -26,8 +28,8 @@ const git = (...a) => {
 const local = (dir) => (f) => (existsSync(join(dir, f)) ? readFileSync(join(dir, f), "utf8") : null);
 const onBranch = (ref, name) => (f) => git("show", `${ref}:playtests/${name}/${f}`);
 
-const readLog = (read) => {
-  const text = read("log.jsonl");
+const readLog = (read, file = "log.jsonl") => {
+  const text = read(file);
   if (!text) return [];
   return text
     .split("\n")
@@ -36,7 +38,7 @@ const readLog = (read) => {
       try {
         return JSON.parse(l);
       } catch {
-        throw new Error(`log.jsonl:${i + 1} is not JSON`);
+        throw new Error(`${file}:${i + 1} is not JSON`);
       }
     });
 };
@@ -53,6 +55,25 @@ const pacing = (log) => {
   };
 };
 
+// The blind player's three code ratings, from its think-aloud log: how many of the six first goals it found, how
+// often it knew what to do, and how often the game did what it expected.
+const GOALS = ["began", "build", "lead", "mind", "jump", "send"];
+const blindRatings = (steps) => {
+  if (!steps.length) return {};
+  const firsts = GOALS.filter((g) => steps.some((s) => s.first === g));
+  const stuck = steps.filter((s) => s.stuck).length;
+  const judged = steps.filter((s) => typeof s.match === "boolean");
+  const matched = judged.filter((s) => s.match).length;
+  const ev = ["blind.jsonl"];
+  return {
+    reach: { score: Math.round((10 * firsts.length) / GOALS.length), why: `Found ${firsts.length} of ${GOALS.length} first goals${firsts.length < GOALS.length ? `, never ${GOALS.filter((g) => !firsts.includes(g)).join(", ")}` : ""}.`, evidence: ev },
+    sure: { score: Math.round(10 * (1 - stuck / steps.length)), why: `Stuck on ${stuck} of ${steps.length} steps.`, evidence: ev },
+    expect: judged.length
+      ? { score: Math.round((10 * matched) / judged.length), why: `The game did what it expected ${matched} of ${judged.length} times.`, evidence: ev }
+      : { score: null, why: "No expectations judged." },
+  };
+};
+
 const mean = (xs) => {
   const ok = xs.filter((x) => typeof x === "number");
   return ok.length ? Math.round((10 * ok.reduce((a, b) => a + b, 0)) / ok.length) / 10 : null;
@@ -64,9 +85,14 @@ const load = (read) => {
   if (!text) return null;
   const scores = JSON.parse(text);
   scores["long-hauler"] = { ...scores["long-hauler"], pacing: pacing(readLog(read)) };
+  const blind = readLog(read, "blind.jsonl");
+  if (blind.length) scores.blind = { ...scores.blind, ...blindRatings(blind) };
+  // A run rates only the players it had: a feature playtest has no blind player, and a blind run none of the rest.
+  for (const p of Object.keys(POVS)) if (!scores[p] || !Object.values(scores[p]).some((r) => typeof r?.score === "number")) delete scores[p];
   const avg = {};
   for (const [pov, keys] of Object.entries(POVS)) avg[pov] = mean(keys.map((k) => scores[pov]?.[k]?.score));
-  avg.overall = mean(Object.keys(POVS).map((p) => avg[p]));
+  // Overall is the three feature-test players. The blind player stands apart: it plays a different run.
+  avg.overall = mean(["first-timer", "astronomer", "long-hauler"].map((p) => avg[p]));
   return { scores, avg };
 };
 
@@ -75,6 +101,7 @@ const fmt = (x) => (x == null ? "–" : String(x));
 const card = (name, { scores, avg }) => {
   const lines = [`# Scorecard, ${name}`, "", `Build \`${scores.build ?? "?"}\`. Overall **${fmt(avg.overall)}** of 10.`, ""];
   for (const [pov, keys] of Object.entries(POVS)) {
+    if (!scores[pov]) continue;
     lines.push(`## ${pov}: ${fmt(avg[pov])}`, "", "| Rating | Score | Why | Evidence |", "|---|---|---|---|");
     for (const k of keys) {
       const r = scores[pov]?.[k];
@@ -98,7 +125,7 @@ if (arg) {
     console.error(`No scores.json in ${dir}. Rate the run per playtests/SCORE.md first.`);
     process.exit(1);
   }
-  const missing = Object.entries(POVS).flatMap(([p, ks]) => ks.filter((k) => !run.scores[p]?.[k]).map((k) => `${p} ${k}`));
+  const missing = Object.entries(POVS).flatMap(([p, ks]) => (run.scores[p] ? ks.filter((k) => !run.scores[p][k]).map((k) => `${p} ${k}`) : []));
   if (missing.length) console.warn(`Missing ratings: ${missing.join(", ")}`);
   writeFileSync(join(dir, "SCORECARD.md"), card(basename(dir), run));
   console.log(`Wrote ${join(dir, "SCORECARD.md")}\n`);
@@ -116,7 +143,7 @@ const runs = [...found.keys()]
   .sort()
   .map((name) => ({ name, run: load(found.get(name)) }))
   .filter((r) => r.run);
-const cols = ["first-timer", "astronomer", "long-hauler", "overall"];
+const cols = ["first-timer", "astronomer", "long-hauler", "blind", "overall"];
 console.log(["run".padEnd(18), "build".padEnd(8), ...cols.map((c) => c.padStart(12))].join(" "));
 for (const { name, run } of runs)
   console.log([name.padEnd(18), String(run.scores.build ?? "?").padEnd(8), ...cols.map((c) => fmt(run.avg[c]).padStart(12))].join(" "));
