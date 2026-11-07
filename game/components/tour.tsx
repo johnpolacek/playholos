@@ -29,9 +29,11 @@ import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motio
 const when = (d: number | null | undefined) => (d == null ? PAST : `Year ${yearText(d)}`);
 /** How each strategy leans our charter from Begin on, as charter.ts's LEANS sets it. It shapes our advice only. */
 const LEAN_WORDS: Record<string, string> = {
-  Search: "It leans us toward deepening, and our advice follows that lean from Begin on.",
-  Protect: "It leans us hidden and cautious, and our advice follows that lean from Begin on.",
-  Expand: "It leans us toward expanding, and bold, and our advice follows that lean from Begin on.",
+  // History leans us first, and the Mind names both: a blind first-timer read "toward deepening" here and heard "bold"
+  // from the Mind. 2026-11-07.
+  Search: "It adds a lean toward deepening to the one our history gave us, and our advice follows both from Begin on.",
+  Protect: "It adds a lean toward hidden and cautious to the one our history gave us, and our advice follows both from Begin on.",
+  Expand: "It adds a lean toward expanding, and bold, to the one our history gave us, and our advice follows both from Begin on.",
   Balanced: "It keeps the lean our history gave us, and our advice follows it from Begin on.",
 };
 
