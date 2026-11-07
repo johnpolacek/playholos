@@ -367,7 +367,9 @@ export function LeadList({
       {
         key: "cold-glows",
         title: "Cold glows",
-        line: (latest: Lead) => `Each a mind computing cold, or something we don’t know. The latest, ${starName(latest.star)}.`,
+        // Said as the odds have it, and that each can wait: a blind first-timer learned only from the Mind that these
+        // could be let pass. 2026-11-07, the Will's call.
+        line: (latest: Lead) => `Likely something natural we don’t know. A mind rarely. Nothing to do unless we send a sentinel. The latest, ${starName(latest.star)}.`,
         test: (l: Lead) => l.slug.startsWith("cold-glow-") && !has(l, "Up close") && unread(l),
       },
       {
