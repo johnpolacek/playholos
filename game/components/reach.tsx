@@ -947,7 +947,8 @@ export function Reach() {
         set={(on) => change((p) => ({ ...p, probeGlows: on ? from : undefined }))}
       />
 
-      <ListHead left={`Sent · ${1 + flying.length + stays.length}`} right="Word home" className="mt-4" />
+      {/* "Sent" read as our messages too, and a blind first-timer missed theirs here twice. 2026-11-07. */}
+      <ListHead left={`Craft sent · ${1 + flying.length + stays.length}`} right="Word home" className="mt-4" />
       <ul className="mt-1">
         {flying.map((r) => (
           <Item key={r.key} row={r} now={clock ?? 0} began={clock !== null} />
