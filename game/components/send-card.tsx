@@ -70,11 +70,12 @@ function Aimed({ id, draft, asked }: { id: string; draft: Draft; asked: string }
   // A knock on the watcher lands in seconds, and it answers on its own terms. 2026-10-30.
   const near = star === WATCHER;
   const facts: [string, string][] = near ? [
-    ["Sends in", sendTime(sendYears)],
+    sent ? ["Sent", `Year ${yearText(sent.y)}`] : ["Sends in", sendTime(sendYears)],
     ["Lands", sent ? `Year ${yearText(lands)}` : away.lands],
     ["Answer", "If it chooses"],
   ] : [
-    ["Sends in", sendTime(sendYears)],
+    // Once sent, it says so: "Sends in 3.4 seconds" stayed on a card already sent. Blind playtest 2026-11-07.
+    sent ? ["Sent", `Year ${yearText(sent.y)}`] : ["Sends in", sendTime(sendYears)],
     // Until it is sent, the clock runs under the card, so it counts from sending. Its Years moved as we read, 4.9 on
     // the card, then 5.0 once sent, until 2026-10-30.
     ["Lands", r ? span2((d) => d.lands, !sent) : sent ? `Year ${yearText(lands)}` : `in ${one(lands - y)} Years`],
