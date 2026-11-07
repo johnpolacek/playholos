@@ -69,7 +69,7 @@ const WHAT: Record<string, string> = {
   strike:
     "1,000 t at a tenth of light speed, readied in 20 Years, and fired once the Helium-3 Harvest gathers its 37 kt, after any bullet before it: about 12 Years for the first, less as the harvest grows. It lands with about 110,000 Mt: a region gone, the ozone thinned, the climate cooled. Its launch flame shows only here, to a probe of theirs watching us.",
   "Laser Sail Array": "Sails weighing a few grams, pushed by a beam from Earth, fly past at a fifth of light speed.",
-  "Probe Yard": "A probe built and fueled in orbit. It leaves 12 Years after its yard is done and flies past at an eighth of light speed.",
+  "Probe Yard": "A probe built and fueled in orbit. Building one takes 12 Years once its yard is done, then it flies past at an eighth of light speed.",
   mind:
     "A copy of our Mind on the Seed Ship, to stand alone beside the hole. Feed it, and its furnace grows us fast, and shows once it passes a millionth of the Sun. Hide in it, and its heat falls in unseen, so it stays small, and safe.",
   settle:

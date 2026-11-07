@@ -209,8 +209,8 @@ function WarmProbes({ warm, sent, on, canSend, set }: { warm: number; sent: numb
       </div>
       <p className="mt-1 text-[13.5px] leading-snug text-page-ink2">
         {on
-          ? "We send a flyby probe to each warm glow as we find it. Each leaves 12 Years after its glow is ranged and pictures a world if one is there."
-          : "Send a flyby probe to every warm glow, those found and each one we find from now on. Each leaves 12 Years after its order."}
+          ? "We send a flyby probe to each warm glow as we find it. Each takes 12 Years to build once its glow is ranged, then leaves, and pictures a world if one is there."
+          : "Send a flyby probe to every warm glow, those found and each one we find from now on. Each takes 12 Years to build, then leaves."}
       </p>
       <div className="mt-2 flex flex-wrap items-center gap-1.5">
         {!canSend ? (
