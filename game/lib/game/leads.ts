@@ -818,9 +818,9 @@ export function mindLeads(m: MindsSeen | undefined): Lead[] {
         { what: "An error in our looking", why: "Our sentinel is there, and sees it.", odds: "almost no chance" },
         { what: "A mind computing cold", why: "Made panels shedding heat at 12 K, far from their star, are what cold computing would build.", odds: "almost certain" },
       ] : [
-        { what: "Something natural we don't know", why: "Dust of grains we haven't measured, or a disk cold and far out. The sky has surprised us before.", odds: "roughly even" },
+        { what: "Something natural we don't know", why: "Dust of grains we haven't measured, or a disk cold and far out. The sky has surprised us before.", odds: "likely" },
         { what: "An error in our looking", why: "A faint galaxy behind the star, or a fault in the data. A second look rules it out.", odds: "unlikely" },
-        { what: "A mind computing cold", why: "Waste heat shed far from a star glows grey and line-free, as this does. About one star in 1,600 holds a mind.", odds: "roughly even" },
+        { what: "A mind computing cold", why: "Waste heat shed far from a star glows grey and line-free, as this does. About one star in 1,600 holds a mind.", odds: "almost no chance" },
       ],
       tells: g.near !== undefined
         ? ["It hasn't acted on our sentinel. Whether it noticed, we can't tell."]
