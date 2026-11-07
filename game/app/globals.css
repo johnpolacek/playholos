@@ -69,6 +69,17 @@
   --animate-drift: drift 60s linear infinite;
   --animate-voice: voice 0.7s ease-out both;
   --animate-fade: fade 0.25s ease-out both;
+  /* A search's three dots, each in turn, while it works. 2026-11-07. */
+  --animate-ellipsis: ellipsis 1.5s ease-in-out infinite;
+  @keyframes ellipsis {
+    0%,
+    100% {
+      opacity: 0.2;
+    }
+    40% {
+      opacity: 1;
+    }
+  }
   /* A preview's words and key, as they change. 2026-11-07. */
   @keyframes fade {
     from {

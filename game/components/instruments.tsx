@@ -11,7 +11,7 @@ import { SWARM } from "@/lib/sim/conflict";
 import { type Reading, starName } from "@/lib/game/leads";
 import { buildOf, buildSlug, computeAt, LAUNCH_LIFT, ordered, PAST } from "@/lib/game/plan";
 import type { Heard, Visit } from "@/lib/sim/types";
-import { CO_ORBITALS, MOON_SEARCH_YEARS, type MindsSeen, moonSearchEnds, tourEnds } from "@/lib/sim/minds";
+import { CO_ORBITALS, MOON_SEARCH_YEARS, type MindsSeen, moonSearchEnds, TOUR_EACH, TOUR_FLIGHT, TOUR_MAP, tourEnds } from "@/lib/sim/minds";
 
 // In play, our builds once done stop being a queue and become instruments: each a card that says what it does now in
 // the world, from what it has caught, read or found. What is still building rises under them, a bar a build. Chosen
@@ -76,8 +76,18 @@ function found(name: string, k: Known): { line: string; news: boolean } | null {
   return null;
 }
 
+/** Where the tour is: flying out, mapping a rock, or flying on to the next, and the Year that ends. One line for up to
+ *  12 Years read as nothing happening. 2026-11-07. */
+function touring(now: number, since: number): string {
+  const n = CO_ORBITALS.length, start = since + TOUR_FLIGHT;
+  if (now < start) return `Flying out to ${CO_ORBITALS[0]}, the first of ${n}. There at Year ${yearText(start)}`;
+  const i = Math.min(n - 1, Math.floor((now - start) / TOUR_EACH)), at = start + i * TOUR_EACH;
+  if (now < at + TOUR_MAP) return `Mapping ${CO_ORBITALS[i]}, rock ${i + 1} of ${n}, until Year ${yearText(at + TOUR_MAP)}. Only rock so far`;
+  return `Flying on to ${CO_ORBITALS[i + 1]}. ${i + 1} of ${n} mapped, all rock. There at Year ${yearText(at + TOUR_EACH)}`;
+}
+
 /** What a build does now, from what it has brought us, and whether that is news: landed in the last half Year. */
-function doing(name: string, k: Known, since: number): { line: string; news: boolean } {
+function doing(name: string, k: Known, since: number): { line: string; news: boolean; busy?: boolean } {
   const recent = (at: number) => k.now - at < 0.5;
   const caught = k.heard.filter((h) => h.by === name && h.arrived <= k.now);
   if (caught.length) {
@@ -110,11 +120,11 @@ function doing(name: string, k: Known, since: number): { line: string; news: boo
   if (name === "Asteroid Tour")
     return k.now >= toured
       ? { line: `Mapped all ${CO_ORBITALS.length} asteroids that share our orbit by Year ${yearText(toured)}. Only rock.`, news: k.now - toured < 0.5 }
-      : { line: "Mapping the asteroids that share our orbit, one by one. Nothing that isn’t rock yet.", news: false };
+      : { line: touring(k.now, since), news: false, busy: true };
   if (name === "Moon Search")
     return k.now >= moonSearchEnds(since)
       ? { line: `Stacked ${MOON_SEARCH_YEARS} Years of deep images of the Moon’s L4 and L5 points. Nothing small and dark there.`, news: k.now - moonSearchEnds(since) < 0.5 }
-      : { line: "Stacking deep images of the Moon’s L4 and L5 points. Nothing small and dark yet.", news: false };
+      : { line: "Stacking deep images of the Moon’s L4 and L5 points. Nothing small and dark yet", news: false, busy: true };
   if (name === "Warm Sky Watch") return { line: "Mapping the warm sky every 2 Years. No new warm glow yet.", news: false };
   const craft = CRAFT[name];
   if (craft) {
@@ -146,7 +156,7 @@ function doing(name: string, k: Known, since: number): { line: string; news: boo
 }
 
 /** A small live trace for each card: the build's own mark, in its color. */
-function Card({ name, since, line, news }: { name: string; since: number; line: string; news: boolean }) {
+function Card({ name, since, line, news, busy }: { name: string; since: number; line: string; news: boolean; busy?: boolean }) {
   return (
     <li>
       <Link
@@ -159,7 +169,17 @@ function Card({ name, since, line, news }: { name: string; since: number; line: 
         </span>
         <span className="flex min-w-0 grow flex-col gap-0.5">
           <span className="text-[15px] leading-snug font-medium">{name}</span>
-          <span className={`text-[13px] leading-snug ${news ? "text-(--c)" : "text-page-ink2"}`}>{line}</span>
+          <span className={`text-[13px] leading-snug ${news ? "text-(--c)" : "text-page-ink2"}`}>
+            {line}
+            {/* A search still at work breathes: three dots in turn. 2026-11-07. */}
+            {busy && (
+              <span aria-hidden>
+                {[0, 1, 2].map((d) => (
+                  <span key={d} className="motion-safe:animate-ellipsis" style={{ animationDelay: `${d * 0.25}s` }}>.</span>
+                ))}
+              </span>
+            )}
+          </span>
         </span>
         <span className="shrink-0 self-start font-mono text-[10.5px] text-muted tabular-nums">since Y{yearText(since)}</span>
       </Link>
