@@ -124,6 +124,35 @@ export function MindNews() {
 /** The Mind's words without a card's line. */
 const said = (text: string) => properGlows(readOffer(readBuildOffer(text).words).words);
 
+/** While the Mind's first words are on their way: a line of light, rippling as a signal does, under three faint lines
+ *  where the words will stand, brightening in turn. Asked for 2026-11-07: Year 0 sat on "…" for a while. */
+function Gathering() {
+  const root = useRef<HTMLDivElement>(null);
+  useGSAP(
+    () => {
+      if (prefersReducedMotion()) return;
+      // Each dot repeats on its own, so the ripple keeps travelling down the line.
+      gsap.to("[data-g=dot]", { y: -6, opacity: 1, duration: 0.55, ease: "sine.inOut", stagger: { each: 0.07, repeat: -1, yoyo: true } });
+      gsap.to("[data-g=line]", { opacity: 0.35, duration: 0.9, ease: "sine.inOut", stagger: { each: 0.3, repeat: -1, yoyo: true } });
+    },
+    { scope: root },
+  );
+  return (
+    <div ref={root} role="status" aria-label="The Mind is gathering its words" className="py-1">
+      <div className="flex h-4 items-end gap-[5px]">
+        {Array.from({ length: 22 }, (_, i) => (
+          <span key={i} data-g="dot" className="size-[3px] rounded-full bg-you opacity-30" />
+        ))}
+      </div>
+      <div className="mt-3 space-y-2">
+        {[92, 84, 58].map((w) => (
+          <div key={w} data-g="line" className="h-[9px] rounded-full bg-ink/10" style={{ width: `${w}%` }} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 /** Year 0's moment: once Begin is pressed, the screen turns to the start of our age, and the Mind's first words. */
 export function YearZero() {
   const { save, year, read } = useGame();
@@ -191,10 +220,11 @@ export function YearZero() {
           <span aria-live="polite">
             {!open || (error && !ours)
               ? "The clock runs now, a Year every five minutes, even while we’re away, and it pauses when nothing is building. What we queued has started. We will tell you as it lands."
-              : ours
-                ? said(words) || "…"
-                : "…"}
+              : ours && said(words)
+                ? said(words)
+                : null}
           </span>
+          {open && !(error && !ours) && !(ours && said(words)) && <Gathering />}
         </MindNote>
       </div>
       <button data-z="item" onClick={close} className="mt-6 h-[46px] rounded-full bg-ink px-8 text-[15px] font-medium text-paper">

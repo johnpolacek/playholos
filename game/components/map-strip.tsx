@@ -62,14 +62,19 @@ export function MapStrip() {
   const voyagerAt = useCallback(() => markOf("voyager"), [markOf]);
   const sunAt = useCallback(() => markOf("sun"), [markOf]);
   // Which way each flies on the map: Voyager 1 out from the Sun to its place, the rest from the Sun to the star.
-  const voyagerWay = useCallback((): [{ x: number; y: number }, { x: number; y: number }] | null => {
-    const [a, b] = [markOf("sun"), markOf("voyager")];
-    return a && b ? [a, b] : null;
-  }, [markOf]);
-  const starWay = useCallback((): [{ x: number; y: number }, { x: number; y: number }] | null => {
-    const [a, b] = [markOf("sun"), markOf("alpha")];
-    return a && b ? [a, b] : null;
-  }, [markOf]);
+  // Zoomed far out the two marks share a pixel and say no way at all, so each keeps the last way it could read: a
+  // replay from out by Proxima had Voyager 1 flying up and left. 2026-11-07.
+  const ways = useRef<Record<string, [{ x: number; y: number }, { x: number; y: number }]>>({});
+  const wayOf = useCallback(
+    (to: string) => {
+      const [a, b] = [markOf("sun"), markOf(to)];
+      if (a && b && Math.hypot(b.x - a.x, b.y - a.y) > 150) ways.current[to] = [a, b];
+      return ways.current[to] ?? null;
+    },
+    [markOf],
+  );
+  const voyagerWay = useCallback(() => wayOf("voyager"), [wayOf]);
+  const starWay = useCallback(() => wayOf("alpha"), [wayOf]);
   const leads = useLeads();
   // In the review, a tap on the map steps it as one on the words does, but not in a system's Close View, there to look.
   const reviewing = path === "/play" && /[?&]review\b/.test(search);
