@@ -16,6 +16,7 @@ import { dates } from "@/lib/game/sends";
 import { VisitArt } from "@/components/visit-art";
 import { WatcherVoice } from "@/components/watcher-voice";
 import { VOICED } from "@/lib/game/watcher-voice";
+import { glowNamed } from "@/lib/game/glow-names";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
 
 // One lead, as a report: drawn, then what we measured, what it could be with the Mind's word for each, and what would
@@ -209,7 +210,11 @@ export function LeadPage({ slug }: { slug: string }) {
         <span className={`mt-[4px] shrink-0 ${lead.reply || lead.art.kind === "warm" ? "text-other" : "text-you"}`}>
           <LeadMark art={lead.art} size={18} />
         </span>
-        <h1 className={`text-[19px] leading-snug font-medium ${lead.art.kind === "warm" ? "text-other" : ""}`}>{starName(lead.star)}</h1>
+        <h1 className={`text-[19px] leading-snug font-medium ${lead.art.kind === "warm" ? "text-other" : ""}`}>{starName(lead.star)}
+          {/* A glow that earned a name says which it was: a blind first-timer worked out Prometheus was Warm Glow 1 only from
+              its distance. 2026-11-07. */}
+          {glowNamed(lead.star) && <span className="ml-2 font-mono text-[10.5px] font-normal tracking-[.06em] text-muted">ONCE {lead.star.toUpperCase()}</span>}
+        </h1>
       </div>
       <p data-m className="mt-0.5 text-[13.5px] text-page-ink2">
         {lead.art.kind === "near" ? (

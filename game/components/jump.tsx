@@ -10,6 +10,8 @@ import { yearText } from "@/lib/game/clock";
 import { starName } from "@/lib/game/leads";
 import { buildSlug, ordered } from "@/lib/game/plan";
 import { moonSearchEnds, tourEnds } from "@/lib/sim/minds";
+import { glowNamed } from "@/lib/game/glow-names";
+const properName = (id: string) => id.replace(/\bglow\b/, "Glow");
 import { gsap, prefersReducedMotion } from "@/lib/motion";
 
 // A jump, felt and said, settled 2026-11-01: the Year counts up as the stars streak past, and a card says what reached
@@ -241,7 +243,8 @@ export function Arrived({ from, to, snap }: { from: number; to: number; snap: Sn
         rank: l.slug === "small-dark-body" ? 0 : close ? 1 : read && !isNew ? 2 : 4,
         to: `/play/lead/${l.slug}`,
         mark: <LeadMark art={l.art} />,
-        title: starName(l.star),
+        // A glow that earned a name since says which it was. 2026-11-07.
+        title: glowNamed(l.star) ? `${starName(l.star)}, once ${properName(l.star)}` : starName(l.star),
         line: isNew && nth && nth !== "1" ? `A new warm glow, ${nth} found so far` : read ? `${read.title}, Year ${yearText(read.at)}` : close ? `${NEWS[close[0]]}, ${close[1]}` : l.what,
       });
     }
