@@ -31,7 +31,7 @@ import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motio
 const SPARE = 0.8;
 
 export function IdleNote() {
-  const { save, year, orderAt, playOn } = useGame();
+  const { save, year, orderAt, playOn, pass } = useGame();
   const { idle, held, last } = useIdleNow();
   const { plan, change } = usePlan();
   const { scale } = useSchedule();
@@ -233,6 +233,11 @@ export function IdleNote() {
               className="h-8 rounded-full bg-other px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110"
             >
               Start {pick.build.name}
+            </button>
+          )}
+          {!watchNew && pick && (
+            <button onClick={() => pass(pick.build.name)} className="text-[12.5px] text-muted hover:text-ink">
+              Not this one
             </button>
           )}
           {watchNew && watchLead && (

@@ -24,6 +24,8 @@ interface Game {
   stopSending(id: string, y: number): void;
   /** Marks readings as opened. */
   see(ids: string[]): void;
+  /** Turns down a build the Mind suggested, so it suggests it no more. */
+  pass(build: string): void;
   /** Marks one of the things we would do before Begin as done. Once done, it stays done. */
   did(step: "reviewed" | "reached" | "asked"): void;
   begin(): void;
@@ -108,6 +110,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     send: (message) => change((s) => (s.sent?.some((x) => x.id === message.id) ? s : { ...s, sent: [...(s.sent ?? []), message] })),
     stopSending: (id, y) => change((s) => ({ ...s, sent: s.sent?.map((x) => (x.id === id && x.stopped === undefined ? { ...x, stopped: y } : x)) })),
     see: (ids) => change((s) => ({ ...s, seen: [...new Set([...(s.seen ?? []), ...ids])] })),
+    pass: (build) => change((s) => ({ ...s, passed: [...new Set([...(s.passed ?? []), build])] })),
     did: (step) => void ((latest.current ?? save)?.[step] || change((s) => ({ ...s, [step]: true }))),
     begin: () => change((s) => ({ ...s, beganAt: Date.now() })),
     tell: (y) => change((s) => (y > (s.told ?? 0) ? { ...s, told: y } : s)),

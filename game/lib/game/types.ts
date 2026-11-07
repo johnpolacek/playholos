@@ -35,6 +35,9 @@ export interface Save {
   held?: number;
   /** The Year of the last build done that the clock has held for, so playing on never holds for it again. */
   heldFor?: number;
+  /** Builds we told the Mind not to suggest. It names the next one instead, and the Catalog still has them. The Mind
+   *  kept offering the Interceptor, which may start a war, with no way to say no. Playtest 2026-11-07. */
+  passed?: string[];
   /** What we have sent, in the order sent. The list only grows: a stop is marked, never removed. Since 2026-10-26. */
   sent?: Sent[];
   /** The Will, sent by the Mind Link to live at our Mind at a hole or a star. Since 2026-10-26. */
