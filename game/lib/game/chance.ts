@@ -18,7 +18,7 @@ const MIDDLE: Record<Odds, number> = {
 
 /** What the chance rests on, from least to most, and how far either way it may be, in log-odds. */
 const BASES = {
-  tug: { say: "from its tug", spread: 1.1 },
+  tug: { say: "from its gravity", spread: 1.1 },
   glow: { say: "from its glow", spread: 0.9 },
   moves: { say: "from how it moves", spread: 0.8 },
   pull: { say: "from its pull", spread: 0.6 },
@@ -57,7 +57,11 @@ const latest = (rs: readonly Reading[]) => [...rs].sort((a, b) => b.at - a.at);
 
 function basisOf(lead: Lead, readings: readonly Reading[]) {
   if (readings.some((r) => r.sight) || lead.art.kind === "seed") return BASES.close;
-  if (readings.some((r) => r.air)) return BASES.air;
+  // Said as it was learned: air read only once a band of it was, and a world seen beside its star but too faint or too
+  // close in to read rests on its light. One too close to split taught us nothing, and keeps its first basis. A blind
+  // first-timer saw "air read" beside "its air stays unread". The Will's call, 2026-11-07.
+  if (readings.some((r) => r.air?.split && [r.air.water, r.air.oxygen, r.air.ozone].some((g) => g !== undefined))) return BASES.air;
+  if (readings.some((r) => r.air?.split)) return BASES.light;
   switch (lead.art.kind) {
     case "orbit":
       return lead.facts.some(([label]) => label === "It reflects") ? BASES.light : BASES.tug;
