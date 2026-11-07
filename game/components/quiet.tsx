@@ -61,10 +61,19 @@ export function Quiet({ from, to, onClose, children }: { from: number; to: numbe
   );
   return (
     <div ref={root} className="flex flex-col gap-2.5">
-      <span className="font-mono text-[10px] tracking-[.1em] text-muted uppercase">
-        {long ? "A long quiet" : "We jumped ahead"} · {span < 10 ? span.toFixed(1) : Math.round(span).toLocaleString("en-US")} Years
-      </span>
-      <b className="-mt-1.5 text-[17px] leading-snug font-semibold">Year {yearText(to)}</b>
+      {/* Go on sits up top, beside the Year, where it never moves: at the bottom, the Mind's words and the list loaded
+          in late and pushed it down under the cursor. A blind first-timer's clicks missed it twice. Playtest 2026-11-07. */}
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex flex-col gap-1">
+          <span className="font-mono text-[10px] tracking-[.1em] text-muted uppercase">
+            {long ? "A long quiet" : "We jumped ahead"} · {span < 10 ? span.toFixed(1) : Math.round(span).toLocaleString("en-US")} Years
+          </span>
+          <b className="text-[17px] leading-snug font-semibold">Year {yearText(to)}</b>
+        </div>
+        <button onClick={onClose} className="h-9 shrink-0 rounded-full border border-ink px-4 text-[13px] font-medium">
+          Go on
+        </button>
+      </div>
       {children}
       {long && (
       <>
@@ -149,9 +158,6 @@ export function Quiet({ from, to, onClose, children }: { from: number; to: numbe
       </p>
       </>
       )}
-      <button data-q onClick={onClose} className="h-9 self-start rounded-full border border-ink px-4 text-[13px] font-medium">
-        Go on
-      </button>
     </div>
   );
 }
