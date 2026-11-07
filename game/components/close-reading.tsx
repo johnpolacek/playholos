@@ -132,7 +132,7 @@ export function CloseReading({ lead }: { lead: Lead }) {
         shining ? (
           <>
             <p className="mt-1.5 text-[13.5px] leading-snug text-page-ink2">
-              Plain heat, with no dust in it. {named && <b className="font-medium text-other">We name it {named.name}, for {named.after}. </b>}What is left is to call out, or to go.
+              Plain heat, with no silicate dust in it. Carbon dust can look this smooth too. {named && <b className="font-medium text-other">We name it {named.name}, for {named.after}. </b>}To be sure, we call out, or go.
             </p>
             <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-2">
               <Link
@@ -151,7 +151,7 @@ export function CloseReading({ lead }: { lead: Lead }) {
           </>
         ) : (
           <p className="mt-1.5 text-[13.5px] leading-snug text-page-ink2">
-            Plain heat, with no dust in it, before it faded. {named && <b className="font-medium text-other">We name it {named.name}, for {named.after}.</b>}
+            Plain heat, with no silicate dust in it, before it faded. {named && <b className="font-medium text-other">We name it {named.name}, for {named.after}.</b>}
           </p>
         )
       ) : saw === "dust" ? (
@@ -172,7 +172,7 @@ export function CloseReading({ lead }: { lead: Lead }) {
       ) : (
         <>
           <p className="mt-1.5 text-[13.5px] leading-snug text-page-ink2">
-            Split its light by color. Dust shows a bump near 10 microns, and plain heat from something built doesn’t. {READ_YEARS} Years, one glow at a time.
+            Split its light by color. Silicate dust shows a bump near 10 microns, and plain heat from something built doesn’t. {READ_YEARS} Years, one glow at a time.
           </p>
           {scope == null || scope > now ? (
             <p className="mt-2 text-[12.5px] text-muted">Needs our Infrared Telescope.</p>

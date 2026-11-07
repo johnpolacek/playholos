@@ -79,6 +79,16 @@ function basisOf(lead: Lead, readings: readonly Reading[]) {
 /** A thing a lead could be that is a mind, or made by one. */
 const MINDFUL = /\bmind\b|made|built|someone/i;
 
+/** The Mind's word that a mind made what is here, when it rests on evidence: a reading's own odds, or a lead our
+ *  sentinel has seen up close. Null when only the first guess stands. */
+function madeByEvidence(lead: Lead, readings: readonly Reading[]): number | null {
+  const now = latest(readings).find((r) => r.now.length)?.now;
+  const close = lead.facts.some(([k]) => k === "Up close");
+  if (!now && !close) return null;
+  const words = lead.could.flatMap((c, i) => (MINDFUL.test(c.what) ? [now?.[i] ?? c.odds] : []));
+  return words.length ? Math.max(...words.map((w) => MIDDLE[w])) : null;
+}
+
 /** The chance of life and of a mind at a lead, from its readings so far. Null where neither is the question. */
 export function chancesOf(lead: Lead, readings: readonly Reading[]): Chances | null {
   const basis = basisOf(lead, readings);
@@ -86,7 +96,13 @@ export function chancesOf(lead: Lead, readings: readonly Reading[]): Chances | n
   const sure = 1 - (basis.spread - BASES.close.spread) / (BASES.tug.spread - BASES.close.spread);
   if (word) {
     const life = MIDDLE[word];
-    return { life: around(life, basis.spread), mind: around(life * ANIMALS * MINDS, basis.spread + UNMEASURED), basis: basis.say, sure };
+    const chain = life * ANIMALS * MINDS;
+    // Hard evidence of something made, seen up close or read in what it did, outranks the steps up from life: the
+    // watcher spoke to us in eleven languages and still showed a mind at 0.03 to 0.7%. Playtest 2026-11-07, the Will's
+    // call. A glow seen only as a dot keeps the chain.
+    const made = madeByEvidence(lead, readings);
+    if (made !== null && made > chain) return { life: around(life, basis.spread), mind: around(made, BASES.close.spread), basis: "seen up close", sure: 1 };
+    return { life: around(life, basis.spread), mind: around(chain, basis.spread + UNMEASURED), basis: basis.say, sure };
   }
   // A black hole: whether minds gather at them, no search has looked, so we have nothing to go by. 2026-11-01.
   if (lead.art.kind === "dark" || lead.art.kind === "pair") return { mind: "unknown", basis: "nothing to go by", sure: 0 };
