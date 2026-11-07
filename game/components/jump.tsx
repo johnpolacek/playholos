@@ -25,14 +25,17 @@ export interface Snap {
   slugs: Set<string>;
   reads: Set<string>;
   heard: Set<string>;
-  /** Leads our craft had seen up close, so word from a sentinel at a cold glow counts as news. Playtest 2026-11-07. */
+  /** Each lead's news held as facts, not readings, as slug and fact: a sentinel's word at a cold glow, a rock that
+   *  struck. Playtests 2026-11-07. */
   close: Set<string>;
   /** The Mind's latest words, so its note tells only what it says after the jump. */
   said: string | undefined;
 }
 
-/** A lead our sentinel has seen up close. A cold glow keeps that word as a fact, not a reading. */
-const upClose = (l: { facts: [string, string][] }) => l.facts.some(([k]) => k === "Up close");
+/** Facts that are news when they first appear: a cold glow keeps our sentinel's word as one, and a rock its strike.
+ *  The rock struck Earth on a stop that said "Nothing more reached us". Feature playtest 2026-11-07. */
+const NEWS: Record<string, string> = { "Up close": "Seen up close", Struck: "Struck Earth" };
+const newsFacts = (l: { slug: string; facts: [string, string][] }) => l.facts.filter(([k]) => k in NEWS).map(([k]) => `${l.slug}:${k}`);
 
 export function useSnap() {
   const { leads, readings, heard } = useLeads();
@@ -41,7 +44,7 @@ export function useSnap() {
     slugs: new Set(leads.map((l) => l.slug)),
     reads: new Set(Object.values(readings).flatMap((rs) => rs.map((r) => r.id))),
     heard: new Set(heard.map(heardId)),
-    close: new Set(leads.filter(upClose).map((l) => l.slug)),
+    close: new Set(leads.flatMap(newsFacts)),
     said: last,
   });
 }
@@ -206,7 +209,7 @@ export function Arrived({ from, to, snap }: { from: number; to: number; snap: Sn
     for (const l of leads) {
       const fresh = (readings[l.slug] ?? []).filter((r) => !snap.reads.has(r.id));
       const isNew = !snap.slugs.has(l.slug);
-      const close = !snap.close.has(l.slug) && l.facts.find(([k]) => k === "Up close");
+      const close = l.facts.find(([k]) => k in NEWS && !snap.close.has(`${l.slug}:${k}`));
       if (!isNew && !fresh.length && !close) continue;
       const read = fresh.at(-1);
       // Each new warm glow says how many we have found: the count is the story. 2026-11-03.
@@ -219,7 +222,7 @@ export function Arrived({ from, to, snap }: { from: number; to: number; snap: Sn
         to: `/play/lead/${l.slug}`,
         mark: <LeadMark art={l.art} />,
         title: starName(l.star),
-        line: isNew && nth && nth !== "1" ? `A new warm glow, ${nth} found so far` : read ? `${read.title}, Year ${yearText(read.at)}` : close ? `Seen up close, ${close[1]}` : l.what,
+        line: isNew && nth && nth !== "1" ? `A new warm glow, ${nth} found so far` : read ? `${read.title}, Year ${yearText(read.at)}` : close ? `${NEWS[close[0]]}, ${close[1]}` : l.what,
       });
     }
     for (const h of heard)
