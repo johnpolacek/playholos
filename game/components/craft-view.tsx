@@ -250,6 +250,8 @@ function voyager(): Model {
   for (let k = 1; k <= 12; k++) ink.push(...ring([-0.2, 0.6 + (5.9 * k) / 12, 0.6 + (10.7 * k) / 12], 0.06, "x", 3));
   // The Golden Record, 30 cm, on the body's side.
   hot.push(...ring([-0.24, 0, -0.9], 0.15, "z", 24));
+  // Its dotted road back to the Sun, as on the map, the dots spreading as they go.
+  for (let k = 0, x = -2.6; k < 34; k++, x *= 1.18) ink.push(...seg([x, 0, 0], [x * 1.04, 0, 0]));
   return {
     ink,
     hot,
@@ -365,8 +367,6 @@ export function CraftView({ kind, shot, className, anchor, heading }: { kind: Cr
     ro.observe(parent);
 
     const v = new THREE.Vector3();
-    // A point a little way along each craft's way forward, in its own metres.
-    const fwdX = new THREE.Vector3(m.near * 0.2, 0, 0), fwdZ = new THREE.Vector3(0, 0, m.near * 0.2);
     const start = performance.now();
     let raf = 0;
     let last = start;
@@ -380,7 +380,9 @@ export function CraftView({ kind, shot, className, anchor, heading }: { kind: Cr
       const ease = pull * pull * (3 - 2 * pull);
       const D = m.near * (m.far / m.near) ** ease;
       const fade = Math.min(1, s / 0.8) * (1 - Math.max(0, (s - (CRAFT_SHOT_SECS - 1.2)) / 1.2));
-      const az = 0.9 + s * 0.12;
+      // Side on to its way forward, so it plainly flies across the view, turning a little. The sail is seen from
+      // below, in its beam.
+      const az = kind === "sail" ? 0.9 + s * 0.12 : 1.25 + s * 0.05;
       const el = (m.el * Math.PI) / 180;
       // Travel is +x for the probe and sentinel, +z for the sail: the camera stands to the side and a little behind.
       if (kind === "sail") camera.position.set(D * Math.cos(az) * Math.cos(el), D * Math.sin(az) * Math.cos(el), -D * Math.sin(el));
@@ -391,13 +393,13 @@ export function CraftView({ kind, shot, className, anchor, heading }: { kind: Cr
       const way = heading?.();
       if (way) {
         camera.updateMatrixWorld();
-        const fwd = kind === "sail" ? fwdZ : fwdX;
-        const a = v.copy(fwd).project(camera);
+        // A point along its way forward, a tenth of the view's distance out, so it reads at any scale.
+        const a = (kind === "sail" ? v.set(0, 0, D * 0.1) : v.set(D * 0.1, 0, 0)).project(camera);
         const [ax, ay] = [a.x, a.y];
         const o = v.set(0, 0, 0).project(camera);
         const have = Math.atan2(ay - o.y, ax - o.x);
         const want = Math.atan2(-(way[1].y - way[0].y), way[1].x - way[0].x);
-        if (Math.hypot(ax - o.x, ay - o.y) > 1e-4) camera.rotateZ(have - want);
+        if (Math.hypot(ax - o.x, ay - o.y) > 1e-6) camera.rotateZ(have - want);
       }
       // Slide the view so the craft moves from the middle to its place on the map as it pulls back.
       const { clientWidth: pw, clientHeight: ph } = parent;
