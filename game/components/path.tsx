@@ -33,6 +33,7 @@ export function usePath(): { stages: Stage[]; next: Step | null } {
     to: `/play/build/${buildSlug(name)}`,
   });
   const warm = (name: string) => name.startsWith("Warm glow ");
+  const firstGlow = leads.find((l) => l.slug.startsWith("warm-glow-"));
   const read = !!minds?.flashes.some((f) => f.read);
   const close = (plan.sentinels ?? []).some((o) => warm(o.name)) || (plan.flybys ?? []).some((o) => warm(o.name));
   const found =
@@ -49,7 +50,9 @@ export function usePath(): { stages: Stage[]; next: Step | null } {
         { label: "Read a glow’s light", at: read ? "done" : (plan.closeReads ?? []).length ? "going" : "todo", // With no glow to read yet, only time brings one: no link, so Next skips it. It linked to Scan itself, and a blind
         // first-timer tapped it twice to no effect. 2026-11-07.
         to: open[0] ? `/play/lead/${open[0].slug}#close-reading` : undefined },
-        { label: "Send a craft to a glow", at: close ? "done" : "todo", to: "/play/reach" },
+        // To a glow we have, once we have one: with none, it opened Reach's list and a blind first-timer tapped it twice
+        // for nothing at Year 0. 2026-11-07.
+        { label: "Send a craft to a glow", at: close ? "done" : "todo", to: firstGlow ? `/play/reach/${firstGlow.slug}` : undefined },
         { label: "Find a mind", at: found ? "done" : close ? "going" : "todo" },
       ],
     },
