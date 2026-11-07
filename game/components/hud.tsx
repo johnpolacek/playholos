@@ -1,13 +1,38 @@
-import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 import { Begin } from "@/components/begin";
 import { useGame } from "@/components/game-provider";
 import { Menu } from "@/components/menu";
 import { useShown } from "@/components/costs";
 import { usePlan, useSchedule } from "@/components/picks";
 import { Link } from "react-router";
-import { announceJump, setLeap, Specks, useJumpYear, useSnap, Warp } from "@/components/jump";
-import { tenths } from "@/lib/game/clock";
-import { ceiling, drawAt, kt, matterAt, ordered, schedule, searchOf, sharesAt, shortAt } from "@/lib/game/plan";
+import {
+  announceJump,
+  setLeap,
+  Specks,
+  useJumpYear,
+  useSnap,
+  Warp,
+} from "@/components/jump";
+import { tenths, yearText } from "@/lib/game/clock";
+import { deuteriumAt, inOrder } from "@/lib/game/reach";
+import { CATALOG } from "@/lib/sim/works";
+import {
+  ceiling,
+  drawAt,
+  kt,
+  matterAt,
+  ordered,
+  schedule,
+  searchOf,
+  sharesAt,
+  shortAt,
+} from "@/lib/game/plan";
 import { combedAt } from "@/lib/sim/works";
 import { knownQuery } from "@/lib/game/known-query";
 
@@ -49,7 +74,12 @@ function Meter({
       {/* A preview says so: a blind first-timer read a pointed-at build's numbers as real, twice. 2026-11-07. */}
       <span className="truncate">
         {label}
-        {hint && <span className="text-you"> · IF ADDED</span>}
+        {hint && (
+          <span className="animate-fade text-you motion-reduce:animate-none">
+            {" "}
+            · IF ADDED
+          </span>
+        )}
       </span>
       {at !== undefined && (
         <b className="relative h-1 bg-track">
@@ -65,13 +95,25 @@ function Meter({
           )}
         </b>
       )}
-      <em className={`font-mono text-xs leading-tight font-semibold tracking-normal not-italic ${hint ? "text-you" : "text-ink"}`}>{value}</em>
+      <em
+        className={`font-mono text-xs leading-tight font-semibold tracking-normal not-italic transition-colors duration-300 ${hint ? "text-you" : "text-ink"}`}
+      >
+        {value}
+      </em>
       {go ? (
-        <Link to={go} className="truncate text-[11px] leading-tight tracking-normal text-you hover:underline">
+        <Link
+          to={go}
+          className="truncate text-[11px] leading-tight tracking-normal text-you hover:underline"
+        >
           {sub} ›
         </Link>
       ) : (
-        <span title={tip} className={`truncate text-[11px] leading-tight tracking-normal ${late ? "text-other" : ""}`}>{sub}</span>
+        <span
+          title={tip}
+          className={`truncate text-[11px] leading-tight tracking-normal ${late ? "text-other" : ""}`}
+        >
+          {sub}
+        </span>
       )}
     </span>
   );
@@ -104,11 +146,17 @@ function Skip() {
   const [hover, setHover] = useState(false);
   const seed = save?.seed;
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const query = useMemo(() => knownQuery(save, tenth), [tenth, save?.plan, save?.will]);
+  const query = useMemo(
+    () => knownQuery(save, tenth),
+    [tenth, save?.plan, save?.will],
+  );
   useEffect(() => {
     if (seed === undefined || tenth === null) return;
     let live = true;
-    fetch(`/api/next?seed=${seed}`, { method: "POST", body: new URLSearchParams(query) })
+    fetch(`/api/next?seed=${seed}`, {
+      method: "POST",
+      body: new URLSearchParams(query),
+    })
       .then((r) => (r.ok ? r.json() : null))
       .then(
         (v: { next: number | null; why?: string | null } | null) => {
@@ -120,9 +168,13 @@ function Skip() {
       );
     return () => void (live = false);
   }, [seed, query, tenth]);
-  const stale = tenth === null || next === undefined || (next !== null && next <= tenth);
+  const stale =
+    tenth === null || next === undefined || (next !== null && next <= tenth);
   // Shown and landed in tenths, as the Year is: a stop within the tenth we're in lands on the next tenth.
-  const to = stale || next === null ? null : Math.max(Math.ceil(next * 10 - 1e-9) / 10, tenth + 0.1);
+  const to =
+    stale || next === null
+      ? null
+      : Math.max(Math.ceil(next * 10 - 1e-9) / 10, tenth + 0.1);
   // A beat after each jump before the next: a reflex second tap flew a blind first-timer 3.9 Years past the biggest
   // news, and the card it replaced went unread. 2026-11-07.
   const [rest, setRest] = useState(false);
@@ -149,7 +201,10 @@ function Skip() {
   // The link vanished with no word until 2026-10-30, and players thought it broke.
   if (next === null)
     return (
-      <span className="ml-2 text-muted" title="Nothing new comes in the next 100,000 Years unless we order it. The clock runs on.">
+      <span
+        className="ml-2 text-muted"
+        title="Nothing new comes in the next 100,000 Years unless we order it. The clock runs on."
+      >
         Nothing ahead
       </span>
     );
@@ -187,28 +242,89 @@ export function useIdleNow() {
   // Not until Earth's past has loaded, which sets how fast we build.
   const { done, past } = useSchedule();
   const names = ordered(plan);
-  const rising = year !== null && names.some((n) => done[n] == null || done[n]! > year);
-  const last = Math.max(0, ...names.flatMap((n) => (done[n] == null ? [] : [done[n]!])));
-  return { idle: year !== null && !!past && !rising, held: save?.held !== undefined, last };
+  const rising =
+    year !== null && names.some((n) => done[n] == null || done[n]! > year);
+  const last = Math.max(
+    0,
+    ...names.flatMap((n) => (done[n] == null ? [] : [done[n]!])),
+  );
+  // The latest build done by now, and whether it left our compute mostly unused.
+  const ended =
+    year === null
+      ? -1
+      : Math.max(
+          -1,
+          ...names.flatMap((n) =>
+            done[n] != null && done[n]! <= year ? [done[n]!] : [],
+          ),
+        );
+  const { scale } = useSchedule();
+  const now = tenths(year ?? 0);
+  const compute = useMemo(
+    () => drawAt(plan, scale, now).compute,
+    [plan, scale, now],
+  );
+  const spare =
+    year !== null && !!past && rising && ended >= 0 && compute < SPARE;
+  return {
+    idle: year !== null && !!past && !rising,
+    spare,
+    held: save?.held !== undefined,
+    last,
+    ended,
+  };
 }
+
+/** Below this share of our compute at work, a build finishing holds the clock, as the Mind's note on the map has it. */
+const SPARE = 0.8;
 
 function useIdle() {
   const { save, hold, playOn } = useGame();
-  const { idle, held, last } = useIdleNow();
+  const { plan } = usePlan();
+  const { idle, spare, held, last, ended } = useIdleNow();
+  // A build finishing that leaves most of our compute unused holds the clock too, until we order another or play on:
+  // at Year 2 our compute fell to 39% at work and ran on for Years unseen. Playtest 2026-11-07.
+  const count = ordered(plan).length;
+  const at = useRef<number | null>(null);
   useEffect(() => {
     // Not on a refuge's slow clock, where the sky's Years run on their own.
-    if (idle && !held && !save?.will && (save?.heldFor ?? -1) < last) hold(last);
-    if (held && !idle) playOn();
-  }, [idle, held, last, save?.heldFor, save?.will, hold, playOn]);
+    if (
+      !held &&
+      !save?.will &&
+      (save?.heldFor ?? -1) < (idle ? last : ended) &&
+      (idle || spare)
+    ) {
+      at.current = count;
+      hold(idle ? last : ended);
+      return;
+    }
+    if (!held) return;
+    at.current ??= count;
+    // Released once a build rises again, or we order one, even if it leaves compute to spare.
+    if (!idle && (!spare || count > at.current)) playOn();
+  }, [
+    idle,
+    spare,
+    held,
+    last,
+    ended,
+    count,
+    save?.heldFor,
+    save?.will,
+    hold,
+    playOn,
+  ]);
   return { idle, held };
 }
 
-/** The clock held, as nothing is building: what to do, under the Year. */
-function Held() {
+/** The clock held, as nothing is building or a build left compute to spare: what to do, under the Year. */
+function Held({ idle }: { idle: boolean }) {
   const { playOn } = useGame();
   return (
     <span className="ml-2 inline-flex items-baseline gap-2 text-[12.5px]">
-      <span className="text-ink">Paused, nothing building.</span>
+      <span className="text-ink">
+        {idle ? "Paused, nothing building." : "Paused, compute to spare."}
+      </span>
       <Link to="/play/build" className="text-you hover:underline">
         Build ›
       </Link>
@@ -232,11 +348,19 @@ export function Hud() {
   const now = Math.max(0, y ?? 0);
   const matter = matterAt(plan, done, now);
   const short = shortAt(plan, done, now);
-  const { energy, compute } = useMemo(() => drawAt(plan, scale, now), [plan, scale, now]);
+  // Our deuterium, once the Works is ordered: free stock, or the Year all we have sent for is in. 2026-11-07.
+  const works = done["Deuterium Works"] ?? null;
+  const fuel = inOrder(plan, "Deuterium Works") ? { d: deuteriumAt(plan, works, now) } : null;
+  const { energy, compute } = useMemo(
+    () => drawAt(plan, scale, now),
+    [plan, scale, now],
+  );
   const share = useMemo(() => sharesAt(plan, scale, now), [plan, scale, now]);
   // Thought Fields grows our compute a campus at a time, until the grid is full.
   const top = useMemo(() => ceiling(plan, scale), [plan, scale]);
-  const full = ordered(plan).includes("Thought Fields") ? top.campuses.at(-1) : undefined;
+  const full = ordered(plan).includes("Thought Fields")
+    ? top.campuses.at(-1)
+    : undefined;
   const most = top.step ** top.campuses.length / top.room;
   const over = share.short > 0.005;
   // In play, idle compute combs old recordings until it catches up with the present. 2026-10-28.
@@ -252,47 +376,94 @@ export function Hud() {
         <Menu />
         <Warp />
       </div>
-      <span data-year className="text-right text-[15px] font-medium wide:col-start-3">
+      <span
+        data-year
+        className="text-right text-[15px] font-medium wide:col-start-3"
+      >
         {/* To hundredths, so the Year visibly ticks, a hundredth every 3 seconds, and the pace needs no words. 2026-11-01. */}
-        {!save ? "" : `Year ${Math.max(0, shown ?? 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+        {!save
+          ? ""
+          : `Year ${Math.max(0, shown ?? 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
       </span>
       <span className="text-right text-xs text-muted wide:col-start-3">
         {/* Before Begin, the count of what we would do first, which opens Begin. */}
         {save && y !== null && (
           <>
             {/* The calendar year and the pace read as noise beside the Year. Removed 2026-11-01. */}
-            {held ? <Held /> : <Skip />}
+            {held ? <Held idle={idle} /> : <Skip />}
           </>
         )}
         <Begin />
       </span>
-      <div className="col-span-2 mt-1 grid grid-cols-3 gap-2.5 wide:col-span-1 wide:col-start-2 wide:row-span-2 wide:row-start-1 wide:mt-0 wide:w-full wide:max-w-[520px] wide:self-center wide:justify-self-center">
+      <div className={`col-span-2 mt-1 grid ${fuel ? "grid-cols-4" : "grid-cols-3"} gap-2.5 wide:col-span-1 wide:col-start-2 wide:row-span-2 wide:row-start-1 wide:mt-0 wide:w-full wide:max-w-[520px] wide:self-center wide:justify-self-center`}>
         <Meter
           label="ENERGY"
           hint={hint}
           at={energy}
           to={full !== undefined && now < full ? most : undefined}
           value={pct(energy)}
-          sub={full === undefined ? "of the grid" : now < full ? `${pct(most)} by Year ${Math.round(full)}` : "grid full"}
+          sub={
+            full === undefined
+              ? "of the grid"
+              : now < full
+                ? `${pct(most)} by Year ${Math.round(full)}`
+                : "grid full"
+          }
         />
         <Meter
           label="MATTER"
           hint={hint}
           value={kt(matter)}
-          sub={short > 0 ? `${Math.round(short * 10) / 10} kt short` : "in orbit"}
+          sub={
+            short > 0 ? `${Math.round(short * 10) / 10} kt short` : "in orbit"
+          }
           late={short > 0}
         />
+        {fuel && (
+          <Meter
+            label="DEUTERIUM"
+            hint={hint}
+            at={fuel.d ? fuel.d.fill : 0}
+            value={kt(fuel.d?.stock ?? 0)}
+            sub={
+              !fuel.d || works === null
+                ? "Works not done"
+                : works > now
+                  ? `from Year ${Math.round(works)}`
+                  : fuel.d.until !== null
+                    ? `spoken for to Year ${yearText(fuel.d.until)}`
+                    : `+${Math.round(CATALOG.deuterium.perYear)} kt a Year`
+            }
+            late={fuel.d?.until != null && !hint}
+            tip={`The Deuterium Works makes ${Math.round(CATALOG.deuterium.perYear)} kt a Year. Each flyby probe draws ${CATALOG.probe.fuel} kt and each sentinel ${CATALOG.sentinel.fuel} kt, in the order sent.`}
+            go={fuel.d?.until != null && !hint ? "/play/reach" : undefined}
+          />
+        )}
         <Meter
           label="COMPUTE"
           hint={hint}
           at={compute}
-          value={over ? `${pct(1 + share.short)} needed` : `${pct(compute)} at work`}
+          value={
+            over ? `${pct(1 + share.short)} needed` : `${pct(compute)} at work`
+          }
           // Says what short means: a blind first-timer queued past our compute and never learned it slowed everything. 2026-11-07.
-          sub={over ? `${pct(share.short)} short, builds slow` : idle && !hint ? "nothing building" : compute < 0.995 ? `${pct(1 - compute)} ${searching ? "searching" : "idle"}` : "none idle"}
+          sub={
+            over
+              ? `${pct(share.short)} short, builds slow`
+              : idle && !hint
+                ? "nothing building"
+                : compute < 0.995
+                  ? `${pct(1 - compute)} ${searching ? "searching" : "idle"}`
+                  : "none idle"
+          }
           // A preview's shortfall stays in the preview's blue: orange read as an alarm. Blind playtest 2026-11-07.
           late={over && !hint}
           // "Searching" said nothing on its own: a blind first-timer asked the Mind what it meant. 2026-11-07.
-          tip={searching && !over && compute < 0.995 ? "Compute our builds can’t use combs old recordings for signals no one caught." : undefined}
+          tip={
+            searching && !over && compute < 0.995
+              ? "Compute our builds can’t use combs old recordings for signals no one caught."
+              : undefined
+          }
           go={idle && !over && !hint ? "/play/build" : undefined}
         />
       </div>

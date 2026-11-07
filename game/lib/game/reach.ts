@@ -7,6 +7,7 @@ import { horizonOf, ordersOf, pacedName, schedule, searchOf } from "./plan";
 import { grownSpans } from "./halo";
 import type { Plan, Will } from "./types";
 import { CATALOG, type Order, pace } from "@/lib/sim/works";
+import { TOUR_FLIGHT } from "@/lib/sim/minds";
 
 export const LY_AU = 63241;
 const AU_KM = 149597870.7;
@@ -94,6 +95,24 @@ export function fuelReady(plan: Plan, works: number | null, key: string, kt: num
     if (d.key === key) return works + sum / D_PER_YEAR;
   }
   return null;
+}
+
+/** Our deuterium at Year `now`, for the top's meter: what the Works holds free, the Year all we have sent for is in,
+ *  and how full the craft now waiting is, or how far toward a sentinel's fuel the stock is. 2026-11-07, the Will's (a). */
+export function deuteriumAt(plan: Plan, works: number | null, now: number) {
+  if (works === null) return null;
+  const made = Math.max(0, now - works) * D_PER_YEAR;
+  const owed = draws(plan).filter((d) => d.y <= now);
+  const sum = owed.reduce((n, d) => n + d.kt, 0);
+  const until = works + sum / D_PER_YEAR;
+  if (until <= now) return { stock: made - sum, until: null, fill: Math.min(1, (made - sum) / CATALOG.sentinel.fuel) };
+  // The craft its fuel is going into now, and how much of its share is in.
+  let cum = 0;
+  for (const d of owed) {
+    if (cum + d.kt > made) return { stock: 0, until, fill: (made - cum) / d.kt };
+    cum += d.kt;
+  }
+  return { stock: 0, until, fill: 0 };
 }
 
 /** Each road where the plan has it, or else begun at Year `from`, last in line.
@@ -361,7 +380,7 @@ export function kitOf(plan: Plan, scale: number) {
     closeLook: done["Close Look"] ?? null,
     // Our Relay Search flies as a lens does, by the strongest beam done when it is built. 2026-10-30.
     relaySearch: done["Relay Search"] != null ? { built: done["Relay Search"]!, perAU: lensTrip(done, done["Relay Search"]!).flight / LENS.au } : null,
-    asteroidTour: done["Asteroid Tour"] != null ? done["Asteroid Tour"]! + 1 : null,
+    asteroidTour: done["Asteroid Tour"] != null ? done["Asteroid Tour"]! + TOUR_FLIGHT : null,
     mapper: done["Star Mapper"] ?? null,
     hyper: done["Hypertelescope"] ?? null,
     colony: (() => {

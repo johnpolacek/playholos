@@ -114,9 +114,14 @@ export const CO_ORBITALS = ["Kamoʻoalewa", "2023 FW13", "2002 AA29", "2004 GU9"
 export const TOUR_EACH = 2;
 /** Years mapping one asteroid. */
 export const TOUR_MAP = 1;
-/** The Year each survey ends, from the Year it was built: the search once stacked, the tour at its last rock mapped. */
+/** Years the tour's probe flies to its first rock, Kamoʻoalewa, about a Year as Tianwen-2. lib/game/reach.ts starts the
+ *  tour this long after it is built. */
+export const TOUR_FLIGHT = 1;
+/** The Year each survey ends, from the Year it was built: the search once stacked, the tour at its last rock mapped.
+ *  The tour's end left out its flight to the first rock, so a watcher on Cruithne turned up a Year after the tour
+ *  said it found only rock. 2026-11-07. */
 export const moonSearchEnds = (built: number) => built + MOON_SEARCH_YEARS;
-export const tourEnds = (built: number) => built + (CO_ORBITALS.length - 1) * TOUR_EACH + TOUR_MAP;
+export const tourEnds = (built: number) => built + TOUR_FLIGHT + (CO_ORBITALS.length - 1) * TOUR_EACH + TOUR_MAP;
 /** Years our Close Look flies to the watcher: about 4 months to the Moon's L5 on a low-energy path, as CAPSTONE took
  *  to its lunar orbit, and a Year to a co-orbital rock, as Tianwen-2 to Kamoʻoalewa. */
 export const CLOSE_FLIGHT = { moon: 0.3, rock: 1 } as const;

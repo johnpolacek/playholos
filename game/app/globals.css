@@ -68,6 +68,13 @@
   --animate-blink: blink 1s ease-in-out infinite alternate;
   --animate-drift: drift 60s linear infinite;
   --animate-voice: voice 0.7s ease-out both;
+  --animate-fade: fade 0.25s ease-out both;
+  /* A preview's words and key, as they change. 2026-11-07. */
+  @keyframes fade {
+    from {
+      opacity: 0;
+    }
+  }
   /* Each language of the watcher's voice, as it begins. 2026-11-05. */
   @keyframes voice {
     from {

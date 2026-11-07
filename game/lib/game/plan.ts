@@ -241,7 +241,7 @@ export const SAYS: Record<string, string> = {
   "Infrared Telescope":
     "It would read the air of the nearest worlds. Oxygen can build up without life, so we would weigh it against the water and everything else we read.",
   "Asteroid Tour":
-    "Six known asteroids share Earth’s orbit, circling the Sun beside us for centuries. Something left to watch us could ride one. A probe maps each whole surface to centimeters in a Year, then flies on: Kamoʻoalewa first, Cruithne last, 11 Years in all. A watcher floating free at the Sun–Earth L4 or L5 points it can’t find: those zones are tens of millions of km wide.",
+    "Six known asteroids share Earth’s orbit, circling the Sun beside us for centuries. Something left to watch us could ride one. A probe maps each whole surface to centimeters in a Year, then flies on: Kamoʻoalewa first, Cruithne last, 12 Years in all with the Year’s flight out. A watcher floating free at the Sun–Earth L4 or L5 points it can’t find: those zones are tens of millions of km wide.",
   "Close Look":
     "We know where it sits now. A craft the size of CAPSTONE, with a sharp camera, flies there in about 4 months, or a Year to a rock beside us, and looks from a few kilometers. It would see what it is made of and how it holds. It would also see us come.",
   "Relay Search":

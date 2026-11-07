@@ -8,7 +8,7 @@ import { usePlan, useSchedule } from "@/components/picks";
 import { heardId, useLeads } from "@/components/scan";
 import { yearText } from "@/lib/game/clock";
 import { starName } from "@/lib/game/leads";
-import { buildSlug, ordered } from "@/lib/game/plan";
+import { buildSlug, drawAt, ordered } from "@/lib/game/plan";
 import { moonSearchEnds, tourEnds } from "@/lib/sim/minds";
 import { glowNamed } from "@/lib/game/glow-names";
 const properName = (id: string) => id.replace(/\bglow\b/, "Glow");
@@ -163,6 +163,9 @@ export function Warp() {
   return <canvas ref={canvas} aria-hidden className="pointer-events-none fixed inset-0 z-20 h-full w-full" />;
 }
 
+/** Below this share at work, a build finishing says our compute has room. As the Mind's note on the map has it. */
+const SPARE = 0.8;
+
 /** How long the card waits for Scan's word before saying nothing else came. */
 const LISTEN_MS = 4000;
 /** Shown at most, then the rest are counted. */
@@ -186,7 +189,7 @@ const gifted = (h: { gift?: number }) => (h.gift && h.gift > 1 ? h.gift.toFixed(
 export function Arrived({ from, to, snap }: { from: number; to: number; snap: Snap }) {
   const { leads, readings, heard, dials, minds } = useLeads();
   const { plan } = usePlan();
-  const { done } = useSchedule();
+  const { done, scale } = useSchedule();
   const [listening, setListening] = useState(true);
   useEffect(() => {
     const t = setTimeout(() => setListening(false), LISTEN_MS);
@@ -209,6 +212,21 @@ export function Arrived({ from, to, snap }: { from: number; to: number; snap: Sn
           title: `${n} done`,
           line: `Year ${yearText(at)}`,
         });
+    }
+    // A build done that leaves our compute mostly unused says so, and points to Build: compute fell to 39% at work when
+    // the radars and the Launch Complex finished, and nothing said to start more. Playtest 2026-11-07.
+    const finished = out.length > 0;
+    const { compute } = drawAt(plan, scale, to);
+    if (finished && compute < SPARE) {
+      const rising = ordered(plan).some((n) => done[n] == null || done[n]! > to + 1e-6);
+      out.push({
+        key: "spare",
+        rank: 3,
+        to: "/play/build",
+        mark: <span className="text-other">◔</span>,
+        title: `Only ${Math.round(compute * 100)}% of our compute is at work`,
+        line: rising ? "Our builds can use no more. We can start another." : "Nothing is building. We can start something.",
+      });
     }
     // A search's end, which a jump stops on: "Jump to the Asteroid Tour's end" landed on a card that never said it
     // ended. Blind playtest 2026-11-07.
@@ -287,7 +305,7 @@ export function Arrived({ from, to, snap }: { from: number; to: number; snap: Sn
         });
     // The watcher first: word of a mind beside us leads the report, above any glow. Playtest 2026-11-05.
     return out.sort((x, y) => x.rank - y.rank);
-  }, [plan, done, leads, readings, heard, snap, from, to, minds]);
+  }, [plan, done, scale, leads, readings, heard, snap, from, to, minds]);
 
   // The map turns to the first new lead. 2026-11-01.
   // A new warm glow first: the map pulls back across the Galaxy to show it, and comes home on Go on. 2026-11-03.

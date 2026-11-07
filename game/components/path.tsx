@@ -170,7 +170,7 @@ export function Path() {
         ))}
       </div>
       {next?.to && (
-        <Link to={next.to} className="mt-2 flex items-center justify-between gap-2 text-[13px] text-you hover:underline">
+        <Link to={next.to} className="mt-2.5 flex items-center justify-between gap-2 rounded-lg border border-you/40 bg-you/5 px-3 py-2 text-[13px] text-you transition-colors hover:border-you hover:bg-you/15">
           <span>
             <span className="mr-1.5 font-mono text-[10px] tracking-[.1em] text-other uppercase">Next</span>
             {next.label}

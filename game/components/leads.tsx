@@ -265,6 +265,9 @@ export function MapKey({ className = "" }: { className?: string }) {
 }
 
 /** What the words mean, where a player first meets them. Asked for in play, 2026-11-03. */
+/** The same for cold glows, shown as their row opens. 2026-11-07. */
+const COLD_WORDS = <p className="mt-1 mb-1.5 text-[13px] leading-snug text-page-ink2">A cold glow is how an old mind might look: faint heat beside a star, far colder than any planet, from thinking done far out where the cold makes it cheap. Most are odd dust.</p>;
+
 const GLOW_WORDS = <p className="mt-1.5 text-[13px] leading-snug text-page-ink2">A warm glow is warmth where nothing shone before. Dust can do this, and so can a mind building around its star. Dust fades.</p>;
 
 /**
@@ -369,7 +372,7 @@ export function LeadList({
         title: "Cold glows",
         // Said as the odds have it, and that each can wait: a blind first-timer learned only from the Mind that these
         // could be let pass. 2026-11-07, the Will's call.
-        line: (latest: Lead) => `Likely something natural we don’t know. A mind rarely. Nothing to do unless we send a sentinel. The latest, ${starName(latest.star)}.`,
+        line: (latest: Lead) => `Most are odd dust. The rare one could be an old mind. Each can wait, or a sentinel there would tell us. The latest, ${starName(latest.star)}.`,
         test: (l: Lead) => l.slug.startsWith("cold-glow-") && !has(l, "Up close") && unread(l),
       },
       {
@@ -430,6 +433,7 @@ export function LeadList({
                 more={false}
               />
             </button>
+            {open && g.key === "cold-glows" && <div className="pl-5">{COLD_WORDS}</div>}
             {open && (
               <ul className="mb-1 flex flex-col pl-5">
                 {leads.map((c, j) => g.members.includes(c) && <li key={c.star} className="border-t border-faint">{link(c, j)}</li>)}

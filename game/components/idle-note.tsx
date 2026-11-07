@@ -51,7 +51,9 @@ export function IdleNote() {
   const { compute } = useMemo(() => drawAt(plan, scale, now), [plan, scale, now]);
   // Compute combing old recordings isn't idle.
   const searching = useMemo(() => combedAt(searchOf(plan, scale), now) < now - 0.05, [plan, scale, now]);
-  const spare = !idle && !searching && compute < SPARE;
+  // Searching counts too: compute combing old recordings is compute our builds could use, and at 39% at work nothing
+  // said so. Playtest 2026-11-07.
+  const spare = !idle && compute < SPARE;
   // A glow waiting on a Close Reading stands under Needs us, and this note is what points to it, so it doesn't hide.
   const needs = Object.entries(standing).some(([slug, s]) => s === "needs" && !open.some((l) => l.slug === slug));
   const quiet = !idle && !needs && (spare || ahead !== null);
@@ -205,10 +207,15 @@ export function IdleNote() {
           <p>
             {/* Said plainly, the reading first and the next stop apart: "A Close Reading is waiting on us. Next, at Year
                 579.5" read as the reading coming then. Playtest 2026-11-04. */}
-            <span className="font-medium text-other">{glow ? `We can read ${starName(glow.star)} now.` : "Nothing needs us now."}</span>{" "}
+            <span className="font-medium text-other">
+              {glow ? `We can read ${starName(glow.star)} now.` : spare ? `Only ${Math.round(compute * 100)}% of our compute is at work.` : "Nothing needs us now."}
+            </span>{" "}
             <span className="text-page-ink2">
               {glow && `Our telescope is free, and the glow could fade before we look. A Close Reading takes ${READ_YEARS} Years. `}
-              {spare && `${Math.round((1 - compute) * 100)}% of our compute sits idle.`}
+              {spare &&
+                (glow
+                  ? `${Math.round((1 - compute) * 100)}% of our compute ${searching ? "only searches" : "sits idle"}.`
+                  : `Our builds can use no more, so the rest ${searching ? "only combs old recordings" : "sits idle"}.`)}
             </span>
             {clock}
           </p>

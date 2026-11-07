@@ -308,7 +308,16 @@ export function LeadPage({ slug }: { slug: string }) {
         <>
           <h2 data-m className={`mt-5 ${HEAD}`}>What a warm glow is</h2>
           <p data-m className="mt-1.5 text-[13.5px] leading-snug text-page-ink2">
-            A spot in the sky that turned warm, about as warm as a planet, where nothing shone before. Dust around a newborn star or two merging stars can glow like this, and it fades. So can collectors built around a star: they catch its light and must shed it as heat. That glow lasts as long as they stay.
+            A spot in the sky that turned warm, about as warm as a planet, where nothing shone before. Dust around a newborn star or two merging stars can glow like this, and it fades. So can collectors built around a star: they catch its light and must shed it as heat. That glow lasts as long as they stay. This is how a young mind might look, still building. An old one might glow cold instead.
+          </p>
+        </>
+      )}
+      {/* Cold glows had no words of their own, only "a cold grey glow" and an unexplained 12 K. 2026-11-07. */}
+      {lead.slug.startsWith("cold-glow-") && (
+        <>
+          <h2 data-m className={`mt-5 ${HEAD}`}>What a cold glow is</h2>
+          <p data-m className="mt-1.5 text-[13.5px] leading-snug text-page-ink2">
+            This is how an old mind might look. A faint spot of heat beside a star, far colder than any planet: about 12 degrees above the coldest anything can be. It holds steady. An old mind that stopped growing would spend its time thinking, and the colder it computes, the less power each thought costs. So it might set its works far out from its star and shed its heat there, cold. Most cold glows are plainer, odd dust far out or a fault in our looking. The rare one could be the oldest neighbor we will ever meet.
           </p>
         </>
       )}
