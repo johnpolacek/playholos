@@ -1,10 +1,11 @@
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
 import { useMindPick } from "@/components/catalog";
 import { readingStands, useOpenReadings } from "@/components/close-reading";
 import { useGame } from "@/components/game-provider";
 import { Arrived, setLeap, useLeap } from "@/components/jump";
 import { useAhead, useIdleNow } from "@/components/hud";
+import { useMindNews } from "@/components/mind-chat";
 import { useJumpWords } from "@/components/mind-news";
 import { MindNote } from "@/components/mind-note";
 import { usePlan, useSchedule } from "@/components/picks";
@@ -61,6 +62,15 @@ export function IdleNote() {
   // with its own words on it. On the Mind tab the talk shows those. 2026-11-04.
   const leap = useLeap();
   const told = useJumpWords(leap?.snap.said);
+  // Later news closes the jump's card, so it shows in its own note: the card kept "Asteroid Tour done · Year 4.7" over
+  // the Mind's words on the Deuterium Works, done after. Blind playtest 2026-11-07.
+  const latest = useMindNews().last;
+  const first = useRef<{ to: number; said: typeof latest } | null>(null);
+  useEffect(() => {
+    if (!leap || !told.fresh || !latest) return;
+    if (first.current?.to !== leap.to) first.current = { to: leap.to, said: latest };
+    else if (first.current.said !== latest) setLeap(null);
+  }, [leap, told.fresh, latest]);
   const shown = year !== null && (idle || quiet || watchNew) && away !== key && path !== "/play/mind";
   const pick = useMindPick(shown && (idle || spare));
   const root = useRef<HTMLDivElement>(null);
