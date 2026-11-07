@@ -243,7 +243,7 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
       where:
         "A cave under a pit in the Sea of Tranquility, 400 km from where Apollo 11 landed. A 2024 study of radar from orbit found signs of it.",
       why: "More than 100 m of rock overhead. In its shade it holds near 17 °C, through the lunar day and night. If Earth is hit, we go on from here.",
-      takes: `${kt("Moon Vault")} kt of the 20 we hold in orbit.`,
+      takes: `${kt("Moon Vault")} kt of the matter we hold in orbit.`,
       before: "In 2025 a small data center reached the Moon’s south pole. Its lander tipped over.",
     },
   },
@@ -273,7 +273,7 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
       have: "Nothing we have built has flown faster than Parker Solar Probe: 192 km/s, at its closest to the Sun in 2024.",
       where: "In low orbit, 400 km up, on the Orbital Yard’s path, about 180 km behind it.",
       why: "A probe this big can’t be launched whole. Its parts come up to orbit, so we join and fuel it there.",
-      takes: `${kt("Probe Yard")} kt of the 20 we hold in orbit. The first probe flies 12 Years after the yard is done.`,
+      takes: `${kt("Probe Yard")} kt of the matter we hold in orbit. The first probe flies 12 Years after the yard is done.`,
       before:
         "Project Daedalus, from 1973 to 1978, planned a two-stage fusion probe of 54,000 t, built in Earth orbit as this one is. It would pass Barnard’s Star about 50 years after launch.",
     },
@@ -664,7 +664,7 @@ export const SITES: Record<string, { site: Site; story: Story }> = {
       have: "Nothing we have launched can stop at another star. Voyager 1, our farthest, passes 1.7 ly from one in 40,000 years.",
       where: "In low orbit, 400 km up, on the Orbital Yard’s path, about 530 km behind it, 180 km past its Fusion Drive.",
       why: "At about 1,500 t it can’t be launched whole. Its parts come up to orbit, so we join it there, beside the drive that will carry it.",
-      takes: `${kt("Seed Ship")} kt of the 20 we hold in orbit. About half is the magnetic sail it brakes on. The seed itself is about 443 t.`,
+      takes: `${kt("Seed Ship")} kt of the matter we hold in orbit. About half is the magnetic sail it brakes on. The seed itself is about 443 t.`,
       before:
         "In 1980 Robert Freitas drew REPRO, a 443 t seed that lands on a giant planet’s moon and grows into a 346,000 t factory over 500 years.",
     },

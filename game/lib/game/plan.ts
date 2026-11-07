@@ -567,11 +567,12 @@ export const kt = (n: number) =>
 
 /** A build's matter, as its line says it: its share of the 20 kt we hold, or, once the rest of our order holds all 20,
  *  how soon spare lift brings what is short. Matter piles up from lift, so it moves no date. */
-export function matter(plan: Plan, name: string) {
+export function matter(plan: Plan, name: string, began = false) {
   const kt = buildOf(name)?.kt;
   if (!kt) return "";
-  // One ordered in play takes it from what lift has brought by then.
-  if (LATER.some((b) => b.name === name)) return ` ${kt} kt.`;
+  // One ordered in play takes it from what lift has brought by then. "10 kt of our 20" read wrong beside 582 kt in the
+  // top bar. Blind playtest 2026-11-07.
+  if (began || LATER.some((b) => b.name === name)) return ` It takes ${kt} kt of matter in orbit.`;
   const short = plan.builds.filter((b) => b !== name).reduce((s, b) => s + (buildOf(b)?.kt ?? 0), kt) - HELD;
   if (short <= 0) return ` ${kt} kt of our ${HELD}.`;
   const years = Math.ceil(short / SPARE_LIFT);

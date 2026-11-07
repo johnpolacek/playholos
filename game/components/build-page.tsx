@@ -375,6 +375,7 @@ export interface Back {
 export const useBack = () => (useLocation().state as { back?: Back } | null)?.back;
 
 export function BuildPage({ slug }: { slug: string }) {
+  const { year } = useGame();
   const { plan } = usePlan();
   const { scale, done } = useSchedule();
   const { set: place, pick, close, setClose } = useWorks();
@@ -431,7 +432,7 @@ export function BuildPage({ slug }: { slug: string }) {
       </div>
       <p data-m className="mt-0.5 text-[13.5px] text-page-ink2">
         {build.what}
-        {matter(plan, build.name)}
+        {matter(plan, build.name, year !== null)}
       </p>
       <div data-m>
         {later ? <Waits build={later} scale={scale} done={done} /> : <Queueing name={build.name} scale={scale} done={done} />}
