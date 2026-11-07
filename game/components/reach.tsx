@@ -249,10 +249,13 @@ function WarmProbes({ warm, sent, on, canSend, set }: { warm: number; sent: numb
 
 /** The probes and sails we sent past stars, folded into one row: there can be dozens. Opened, each by its glow's
  *  chance of a mind, likeliest first. 2026-11-05. */
-function Flybys({ rows, now }: { rows: { id: string; slug?: string; name: string; mind?: string; mindAt: number; note: string; home: number }[]; now: number }) {
+function Flybys({ rows, now }: { rows: { id: string; slug?: string; name: string; mind?: string; mindAt: number; note: string; home: number; leaves: number }[]; now: number }) {
   const [open, setOpen] = useState(false);
   if (!rows.length) return null;
   const home = rows.filter((r) => r.home <= now).length;
+  // None gone yet says when the first goes: "On their way" read as flying for probes that leave in Year 37.7. Blind
+  // playtest 2026-11-07.
+  const first = Math.min(...rows.map((r) => r.leaves));
   const sorted = [...rows].sort((a, b) => b.mindAt - a.mindAt || a.home - b.home);
   return (
     <li className="border-t border-faint">
@@ -261,7 +264,7 @@ function Flybys({ rows, now }: { rows: { id: string; slug?: string; name: string
           mark={<BuildMark name="Probe Yard" />}
           tone="text-you"
           name={<b className="font-semibold">Flyby probes and sails · {rows.length}</b>}
-          line={home ? `${home} have sent word home. Open for each, likeliest mind first.` : "On their way. Open for each, likeliest mind first."}
+          line={home ? `${home} have sent word home. Open for each, likeliest mind first.` : now < first ? `The first leaves in Year ${year(first)}. Open for each, likeliest mind first.` : "On their way. Open for each, likeliest mind first."}
           right={open ? "Close" : "Open"}
           more={false}
         />
@@ -963,7 +966,7 @@ export function Reach() {
             const lead = leads.find((l) => l.star === r.star);
             const c = lead ? chancesOf(lead, readings[lead.slug] ?? []) : null;
             const m = c?.mind && c.mind !== "unknown" ? c.mind : null;
-            return { id: r.id, slug: lead?.slug, name: r.name, note: r.note, home: r.home, mind: m ? rangeText(m) : undefined, mindAt: m ? (m.lo + m.hi) / 2 : -1 };
+            return { id: r.id, slug: lead?.slug, name: r.name, note: r.note, home: r.home, leaves: r.road.leaves ?? r.home, mind: m ? rangeText(m) : undefined, mindAt: m ? (m.lo + m.hi) / 2 : -1 };
           })}
         />
         <Item row={SENT} now={clock ?? 0} began={clock !== null} aim={voyager} />
