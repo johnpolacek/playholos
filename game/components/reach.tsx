@@ -719,7 +719,8 @@ export function Key({ road, from = 0 }: { road?: Road; from?: number }) {
       {wait && (
         <span className="flex items-center gap-1.5">
           <span className="h-[3px] w-4 bg-you/45" />
-          waiting{span(road?.done ?? null, road?.leaves ?? null)}
+          {/* Says what the wait is: "waiting 12 Years" read as unexplained. Blind playtest 2026-11-07. */}
+          readying the craft{span(road?.done ?? null, road?.leaves ?? null)}
         </span>
       )}
       <span className="flex items-center gap-1.5">
