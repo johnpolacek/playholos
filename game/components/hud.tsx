@@ -270,7 +270,8 @@ export function Hud() {
           hint={hint}
           at={compute}
           value={over ? `${pct(1 + share.short)} needed` : `${pct(compute)} at work`}
-          sub={over ? `${pct(share.short)} short` : idle ? "nothing building" : compute < 0.995 ? `${pct(1 - compute)} ${searching ? "searching" : "idle"}` : "none idle"}
+          // Says what short means: a blind first-timer queued past our compute and never learned it slowed everything. 2026-11-07.
+          sub={over ? `${pct(share.short)} short, builds slow` : idle ? "nothing building" : compute < 0.995 ? `${pct(1 - compute)} ${searching ? "searching" : "idle"}` : "none idle"}
           late={over}
           go={idle && !over ? "/play/build" : undefined}
         />
