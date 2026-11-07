@@ -1,0 +1,14 @@
+{
+  "build": "a24b072",
+  "blind": {
+    "understood": {
+      "score": 9.5,
+      "grades": { "q1": 10, "q2": 8, "q3": 10, "q4": 10 },
+      "why": "Got the two points Q1 needs (Will of Earth's Mind, whether we are alone), a real open lead (16 cold glows, all ~12 K with the same odd color, plus Chara's water) and next moves with reasons from the game. Lost 2 on Q2: I described Reach as craft only and Mind as the only place to send a message; the key says Reach covers craft or message and what we have sent. I never scrolled to the end of an Engage list (shots 56, 72), so I may have missed a message entry there. Q1 left out the chance-and-danger framing and that the game rests on real data, but the key doesn't require either for full marks.",
+      "quoted_wrong": [
+        "Q2: \"Reach: ... It's also where you launch craft\" (Reach is how we reach out by craft or by message)",
+        "Q2: \"Mind: ... the only place I found to write and send a radio message\" (Mind drafts; messages belong to Reach too)"
+      ]
+    }
+  }
+}
