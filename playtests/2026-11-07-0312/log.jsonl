@@ -1,0 +1,113 @@
+{"t": "mind", "year": 0, "q": "What should we do first?", "a": "Our order is already strong, so the first thing is to tap Begin. The Halo Survey and Moon Search land first, near Year 0.7, then the Asteroid Tour near Year 3.5. One addition costs nothing: the Warm Sky Watch slows none of our queue and would be done about Year 5.7. A glow that fades before it runs is lost for good.\nWarm Sky Watch\nMaps the whole sky in warm infrared every 2 Years, for new warm glows.\n\nLast in our order, it would be done by Year 5.7, 28m after we begin.\n\nAdd to Queue\nSEE IT ON BUILD ›\n↑", "secs": 8}
+{"t": "mind", "year": 0.13, "q": "Why is the sky so quiet? Are we alone?", "a": "We don't know yet. The quiet says less than it seems: our sky watch sees each northern direction only about 10 minutes a day, and almost no one watches for laser flashes, so a knock could have passed us unseen. Our guess is that about one star in 1,600 holds a mind. That makes it rare, not absent.", "secs": null, "note": "reply time not measured (timer bug in our harness)"}
+{"t": "mind", "year": 0.94, "q": "What is Proxima b likely to be?", "a": "Most likely bare rock. Its flaring red dwarf has probably stripped its air, and it reflects only about 16% of its starlight, dim as the Moon and Mercury. It is about 1.49 Earth masses. Scan gives life there 5 to 19% and a mind 0.03 to 0.7%. Only the 15 m Mirror could split it from its star and read its air, and we could be wrong until then.", "secs": null, "note": "reply time not measured (timer bug in our harness)"}
+{"t": "mind", "year": 2.4, "q": "What is Cold Glow 1? Is it a mind?", "a": "Cold Glow 1 is a small, steady glow near 12 K beside a star 23.6 light-years out, first seen at Year 0.7. Its color fits no dust we know. It could be unusual grains, a measuring error, or minds computing cold far from their star. Scan gives a mind there 0.07 to 2%, so most likely not, though we could be wrong.", "secs": null, "note": "reply time not measured (harness timer bug)"}
+{"t": "mind", "year": 4.46, "q": "Did the Moon Search find anything?", "a": "Nothing. Its three Years of stacked images of the Moon's L4 and L5 points ended near Year 3.7 and showed nothing there down to about 10 cm, even near black. That clears only those two points, not the Sun–Earth L4 or L5 zones or the asteroids. The Asteroid Tour's first map, of Kamoʻoalewa, comes near Year 4.5.", "secs": 6}
+{"t": "mind", "year": 6.13, "q": "Why is 98% of our compute just searching old recordings? Should we build something?", "a": "The combing is our spare thought, not waste. Each build can be sped only to about two thirds of its standard time, so once our queue runs at full pace the rest of our compute has nowhere to go. It combs old recordings for any signal our watches missed. The Orbital Yard slows nothing we've queued, done about Year 11.1, and speeds the Probe Yard by about 4.5 Years. [card: Orbital Yard — Ordered now, it would be done by Year 11.9]", "secs": null, "note": "reply time not measured (harness timer bug)"}
+{"t": "next", "year": 9.52, "news": true, "what": "Deuterium Works done; Thought Fields filled the grid at Year 7 (first jump, 7.00 -> 9.52)"}
+{"t": "next", "year": 11.51, "news": true, "what": "A made thing on 2004 GU9 Something made, on a rock beside us", "from": 9.57}
+{"t": "next", "year": 11.61, "news": true, "what": "Warm Sky Watch done Year 11.6", "from": 11.52}
+{"t": "next", "year": 11.71, "news": true, "what": "Keid No water, oxygen or ozone in its air, Year 11.6", "from": 11.62}
+{"t": "next", "year": 11.81, "news": true, "what": "Alsafi Water in its air, Year 11.7", "from": 11.72}
+{"t": "next", "year": 11.91, "news": true, "what": "Rana Water in its air, Year 11.8", "from": 11.82}
+{"t": "next", "year": 13.61, "news": true, "what": "Warm glows only: Warm Glow 1 Our first warm glow, Year 13.6", "from": 11.92}
+{"t": "mind", "year": 13.75, "q": "What is Warm Glow 1, and how far away is it?", "a": "Warm Glow 1 is a new glow near room temperature toward right ascension 18.4 h, declination -7°, first seen at Year 11.6 and still shining. Our Infrared Telescope puts it roughly 11,000 to 22,000 light-years away, by its reddening. It could be a young star in dust, two stars merged, or something built around a star. Scan gives a mind there 4 to 21%, and we could be wrong.\nWarm Glow 1: Close Reading under way ›", "secs": 6}
+{"t": "mind", "year": 14.43, "q": "What did our Asteroid Tour find on 2004 GU9? Who made it?", "a": "At Year 11.5 it found a made thing about 10 cm across: smooth, dark, not of the rock, and there a long time. It sends nothing we can hear. Who made it we can't say. Scan gives a mind behind it only 0.03 to 0.7%, and we could be wrong. The Close Look lands about Year 16.3, though it would see our craft come.", "secs": 6}
+{"t": "mind", "year": 14.48, "q": "How do we send a knock to the thing on 2004 GU9?", "a": "We tap Send on the card below. Since it sits on a rock beside us, our knock lands within seconds. Anything watching from inside our system has heard our radars for decades, so this tells it little it doesn't know, except that we found it and want to talk. The risk is what it does next, or whom it tells, which we can't know. Our charter leans open and bold, so this fits it.\nTO\na few light-minutes\nThe watcher\nWHAT TRAVELS\n\nWe are the people of Earth. We found you on this rock. Will you speak with us?\n\nSENDS IN\n1 second\nLANDS\nin minutes\nANSWER\nIf it chooses\nSend\nChange it", "secs": 8}
+{"t": "next", "year": 16.31, "news": true, "what": "Close Look done Year 16.3", "from": 14.7}
+{"t": "next", "year": 16.71, "news": true, "what": "Prometheus Its light: plain heat, Year 16.7 ›", "from": 16.43}
+{"t": "next", "year": 16.81, "news": true, "what": "BH J1938-2332 A black hole ›", "from": 16.72}
+{"t": "next", "year": 17.31, "news": true, "what": "A made thing on 2004 GU9 Seen up close, Year 17.3 ›", "from": 16.82}
+{"t": "next", "year": 18.71, "news": true, "what": "BH J2017-0547 A black hole ›", "from": 17.32}
+{"t": "next", "year": 21.31, "news": true, "what": "Relay Search done Year 21.3", "from": 18.72}
+{"t": "next", "year": 24.31, "news": true, "what": "Ground Solar done Year 24.3", "from": 21.45}
+{"t": "next", "year": 24.41, "news": true, "what": "Hestia Its light: plain heat, Year 24.4 ›", "from": 24.32}
+{"t": "next", "year": 27.31, "news": true, "what": "Fusion Drive done Year 27.2", "from": 24.44}
+{"t": "next", "year": 28.6, "news": true, "what": "Probe Yard done Year 28.5", "from": 27.5}
+{"t": "next", "year": 36.31, "news": false, "what": "Cold glows only: Cold Glow 15 A cold grey glow", "from": 28.64}
+{"t": "next", "year": 45.41, "news": true, "what": "A made thing on 2004 GU9 A warning, Year 45.4", "from": 36.32}
+{"t": "mind", "year": 45.53, "q": "The watcher warned us. What happens if we send another seed probe?", "a": "We don't know: the watcher said build at no other star, and didn't say what a second seed would draw. Nothing has happened to our first, still in flight. A second would tell it we heard and went on anyway. Our first already copies itself into 7 craft over time, so we may cross its line regardless. A Seed Ship kept small or hidden is the one thing it doesn't count.", "secs": null, "note": "answered within ~10 s; exact time not measured (harness bug)"}
+{"t": "mind", "year": 45.92, "q": "Send a message to Warm Glow 1.", "a": "Prometheus, once Prometheus, lies 11,000 to 22,000 light-years out. Our words would land in that many Years, and an answer would take at least twice that. Scan gives a mind there 79 to 96%. Our radar noise won't reach it for many thousands of Years, so this would be the first it hears of us, and it would know where to look. The watcher said we may speak as we like, so this crosses no line it drew. [card: TO 11,000 to 22,000 ly Prometheus; LANDS in 11,000 to 22,000 Years; ANSWER, SOONEST in 22,000 to 44,000 Years]", "secs": null, "note": "question shown in chat rewritten to \"Send a message to Prometheus.\"; reply within ~10 s, exact time not measured"}
+{"t": "next", "year": 61.21, "news": true, "what": "A made thing on 2004 GU9 The relay, Year 61.1", "from": 46.8}
+{"t": "mind", "year": 61.27, "q": "What is the relay our sailcraft found?", "a": "It is a dark craft a few meters across, about 7 light-days out, found at Year 61.1. It holds exactly on the watcher's line, firing faint thrusters as the Sun wobbles, and uses the Sun's pull as a lens to carry a weak beam far beyond. That beam points toward Cold Glow 1's patch of sky, but its sender could be farther along that line. It went quiet while our craft was near.\nCold Glow 1 ›", "secs": 8}
+{"t": "next", "year": 61.91, "news": true, "what": "A made thing on 2004 GU9 An answer, Year 61.8", "from": 61.34}
+{"t": "mind", "year": 61.97, "q": "What did the answer say, and how far away is its maker?", "a": "It came at Year 61.8: a picture of Earth from far above at the hour we knocked, then the same voice in eleven of our languages: look, listen and speak as you like, and build at no other star. Then pictures of Earth, one every thousand years, back past our records. Its timing puts its maker about 23.6 light-years out, beside Cold Glow 1's star, though that is a guess.\nCold Glow 1 ›", "secs": 6}
+{"t": "next", "year": 62.71, "news": true, "what": "BH J0335-5107 A black hole ›", "from": 62.04}
+{"t": "next", "year": 117.21, "news": true, "what": "Proxima Centauri Bare rock, Year 117.1", "from": 62.72}
+{"t": "next", "year": 120.31, "news": true, "what": "Agni Its light: plain heat, Year 120.3", "from": 117.34}
+{"t": "next", "year": 123.31, "news": true, "what": "Pele Its light: plain heat, Year 123.3", "from": 120.36}
+{"t": "next", "year": 177.21, "news": true, "what": "Proxima Centauri A copy to Barnard’s Star, Year 177.1", "from": 123.41}
+{"t": "next", "year": 197.21, "news": true, "what": "Proxima Centauri A copy to Ross 154, Year 197.1 ›", "from": 177.22}
+{"t": "next", "year": 268.61, "news": true, "what": "Keid Bare rock, Year 268.5", "from": 197.22}
+{"t": "next", "year": 269.81, "news": true, "what": "Barnard’s Star Only rock, Year 269.7 ›", "from": 268.62}
+{"t": "next", "year": 310.21, "news": true, "what": "A made thing on 2004 GU9 A seed gone silent, Year 310.1", "from": 269.82}
+{"t": "mind", "year": 310.27, "q": "Why did our probes go quiet?", "a": "Only one has: the copy bound for Ross 154, whose word of landing was due by Year 310.1. We don't know why. It could have failed in flight or while braking, or something there, or the watcher's makers, may have stopped it after their warning. That is a guess. Our probes at Proxima, Keid and Barnard's Star still speak, so nothing has touched them yet.\nKeid ›\nBarnard’s Star ›", "secs": 8}
+{"t": "next", "year": 315.31, "news": false, "what": "Nothing new: \"Word is still coming in…\"", "from": 310.34}
+{"t": "next", "year": 328.61, "news": true, "what": "Keid A copy to Gliese 3323, Year 328.5", "from": 315.32}
+{"t": "next", "year": 328.91, "news": false, "what": "Nothing new: \"Word is still coming in…\"", "from": 328.62}
+{"t": "next", "year": 338.41, "news": true, "what": "Sentinel word from Cold Glow 1 (Skadi) arrived, but the stop only said \"Word is still coming in…\"", "from": 328.92}
+{"t": "next", "year": 348.61, "news": true, "what": "Keid A copy to Gliese 205, Year 348.5 ›", "from": 338.42}
+{"t": "next", "year": 380.91, "news": false, "what": "Warm glows only: Warm Glow 9 A century, not fading, Year 351.6", "from": 348.62}
+{"t": "next", "year": 391.01, "news": true, "what": "Gliese 3323 Only rock, Year 390.9", "from": 380.92}
+{"t": "next", "year": 415.81, "news": false, "what": "Warm glows only: Warm Glow 13 A new warm glow, 13 found so far ›", "from": 391.02}
+{"t": "next", "year": 438.81, "news": true, "what": "Gliese 205 Only rock, Year 438.7", "from": 415.82}
+{"t": "next", "year": 442.51, "news": false, "what": "Nothing new: \"Word is still coming in…\"", "from": 438.82}
+{"t": "next", "year": 465.01, "news": true, "what": "A made thing on 2004 GU9 Struck from beyond, Year 464.9 ›", "from": 442.52}
+{"t": "mind", "year": 465.27, "q": "What struck us? Who sent it?", "a": "A bullet, most likely: about 108,216 Mt at near a tenth of light speed, what a 1,000 t mass would bring, like the ones a Strike Yard readies. Our guess is the watcher's makers, toward Skadi, 23.6 light-years out. They warned us to build at no other star, and it came after our probes' copies began seeding. Six of our probes went silent the same cold, fast way. We can't prove who sent it, and we might be wrong.\nSkadi ›", "secs": 10}
+{"t": "next", "year": 468.31, "news": true, "what": "Hephaistos Its light: plain heat, Year 468.3 ›", "from": 465.37}
+{"t": "next", "year": 1055.61, "news": true, "what": "Warm Glow 15 A new warm glow, 15 found so far", "from": 468.32}
+{"t": "next", "year": 2189.61, "news": false, "what": "Warm glows only: Warm Glow 21 A new warm glow, 21 found so far", "from": 1055.62}
+{"t": "next", "year": 3261.61, "news": false, "what": "Warm glows only: Warm Glow 39 Three centuries, not fading, Year 2,283.6", "from": 2189.62}
+{"t": "next", "year": 4285.61, "news": false, "what": "Warm glows only: Warm Glow 61 A new warm glow, 61 found so far", "from": 3261.62}
+{"t": "next", "year": 5303.61, "news": false, "what": "Warm glows only: Warm Glow 80 A new warm glow, 80 found so far", "from": 4285.62}
+{"t": "next", "year": 6311.61, "news": false, "what": "Warm glows only: Warm Glow 102 Three centuries, not fading, Year 5,439.6", "from": 5303.62}
+{"t": "next", "year": 7323.61, "news": false, "what": "Warm glows only: Warm Glow 132 Three centuries, not fading, Year 6,447.6", "from": 6311.62}
+{"t": "next", "year": 8343.61, "news": false, "what": "Warm glows only: Warm Glow 155 Three centuries, not fading, Year 7,463.6", "from": 7323.62}
+{"t": "next", "year": 9355.61, "news": false, "what": "Warm glows only: Warm Glow 181 Three centuries, not fading, Year 8,547.6", "from": 8343.62}
+{"t": "next", "year": 10437.61, "news": false, "what": "Warm glows only: Warm Glow 212 Three centuries, not fading, Year 9,441.6", "from": 9355.63}
+{"t": "next", "year": 11517.61, "news": false, "what": "Warm glows only: Warm Glow 241 Three centuries, not fading, Year 10,461.6", "from": 10437.62}
+{"t": "next", "year": 12553.61, "news": false, "what": "Warm glows only: Warm Glow 265 Three centuries, not fading, Year 11,549.6", "from": 11517.63}
+{"t": "next", "year": 13701.61, "news": false, "what": "Warm glows only: Warm Glow 299 Three centuries, not fading, Year 12,637.6", "from": 12553.62}
+{"t": "next", "year": 14741.61, "news": false, "what": "Warm glows only: Warm Glow 333 A new warm glow, 333 found so far", "from": 13701.63}
+{"t": "next", "year": 15747.61, "news": false, "what": "Warm glows only: Warm Glow 357 Thirty Years, not fading, Year 14,769.6", "from": 14741.62}
+{"t": "next", "year": 16769.61, "news": false, "what": "Warm glows only: Warm Glow 374 Three centuries, not fading, Year 15,797.6", "from": 15747.63}
+{"t": "next", "year": 17783.61, "news": false, "what": "Warm glows only: Warm Glow 407 A century, not fading, Year 16,867.6", "from": 16769.63}
+{"t": "next", "year": 18799.61, "news": false, "what": "Warm glows only: Warm Glow 433 Three centuries, not fading, Year 17,899.6", "from": 17783.63}
+{"t": "next", "year": 19801.61, "news": false, "what": "Warm glows only: Warm Glow 481 Three centuries, not fading, Year 19,055.6", "from": 18799.63}
+{"t": "next", "year": 20817.61, "news": false, "what": "Warm glows only: Warm Glow 504 Three centuries, not fading, Year 20,095.6", "from": 19801.63}
+{"t": "next", "year": 21865.61, "news": false, "what": "Warm glows only: Warm Glow 524 Three centuries, not fading, Year 20,827.6", "from": 20817.63}
+{"t": "next", "year": 22869.61, "news": false, "what": "Warm glows only: Warm Glow 551 Three centuries, not fading, Year 21,901.6", "from": 21865.62}
+{"t": "next", "year": 23875.61, "news": false, "what": "Warm glows only: Warm Glow 586 Thirty Years, not fading, Year 22,879.6", "from": 22869.63}
+{"t": "next", "year": 24947.61, "news": false, "what": "Warm glows only: Warm Glow 607 Three centuries, not fading, Year 23,955.6", "from": 23875.63}
+{"t": "next", "year": 25979.61, "news": false, "what": "Warm glows only: Warm Glow 641 Three centuries, not fading, Year 24,971.6", "from": 24947.63}
+{"t": "next", "year": 26987.61, "news": false, "what": "Warm glows only: Warm Glow 684 Three centuries, not fading, Year 26,083.6", "from": 25979.63}
+{"t": "next", "year": 28019.61, "news": false, "what": "Warm glows only: Warm Glow 710 Three centuries, not fading, Year 27,007.6", "from": 26987.63}
+{"t": "next", "year": 28554.61, "news": true, "what": "Answer from Warm glow 1 (Prometheus), laser flashes, with a gift; \"What reached us\" listed only warm glows", "from": 28019.63}
+{"t": "next", "year": 29043.61, "news": false, "what": "Warm glows only: Warm Glow 775 Three centuries, not fading, Year 28,745.6", "from": 28554.72}
+{"t": "next", "year": 30049.61, "news": false, "what": "Warm glows only: Warm Glow 786 Three centuries, not fading, Year 29,191.6", "from": 29043.62}
+{"t": "next", "year": 31089.61, "news": false, "what": "Warm glows only: Warm Glow 815 Three centuries, not fading, Year 30,053.6", "from": 30049.62}
+{"t": "next", "year": 32107.61, "news": false, "what": "Warm glows only: Warm Glow 855 Thirty Years, not fading, Year 31,117.6", "from": 31089.63}
+{"t": "next", "year": 33115.61, "news": false, "what": "Warm glows only: Warm Glow 877 Three centuries, not fading, Year 32,305.6", "from": 32107.62}
+{"t": "next", "year": 34117.61, "news": false, "what": "Warm glows only: Warm Glow 912 Three centuries, not fading, Year 33,295.6", "from": 33115.62}
+{"t": "next", "year": 35137.61, "news": false, "what": "Warm glows only: Warm Glow 938 Three centuries, not fading, Year 34,135.6", "from": 34117.62}
+{"t": "next", "year": 36185.61, "news": false, "what": "Warm glows only: Warm Glow 987 A century, not fading, Year 35,175.6", "from": 35137.7}
+{"t": "next", "year": 37289.61, "news": false, "what": "Warm glows only: Warm Glow 1010 Three centuries, not fading, Year 36,225.6", "from": 36185.63}
+{"t": "next", "year": 38248.66, "news": false, "what": "Warm glows only: Warm Glow 1042 Three centuries, not fading, Year 37,359.6", "from": 37289.62}
+{"t": "next", "year": 39343.61, "news": false, "what": "Warm glows only: Warm Glow 1079 Three centuries, not fading, Year 38,311.6", "from": 38295.63}
+{"t": "next", "year": 40345.61, "news": false, "what": "Warm glows only: Warm Glow 1115 Three centuries, not fading, Year 39,375.6", "from": 39343.63}
+{"t": "next", "year": 41332.88, "news": false, "what": "Warm glows only: Warm Glow 1160 Three centuries, not fading, Year 40,473.6", "from": 40345.63}
+{"t": "next", "year": 42411.61, "news": false, "what": "Warm glows only: Warm Glow 1193 Three centuries, not fading, Year 41,499.6", "from": 41353.64}
+{"t": "next", "year": 43415.61, "news": false, "what": "Warm glows only: Warm Glow 1224 A new warm glow, 1224 found so far", "from": 42411.62}
+{"t": "next", "year": 44489.61, "news": false, "what": "Warm glows only: Warm Glow 1250 Three centuries, not fading, Year 43,515.6", "from": 43415.62}
+{"t": "next", "year": 45549.61, "news": false, "what": "Warm glows only: Warm Glow 1285 Three centuries, not fading, Year 44,545.6", "from": 44489.62}
+{"t": "next", "year": 46549.61, "news": false, "what": "Warm glows only: Warm Glow 1308 Thirty Years, not fading, Year 45,577.6", "from": 45549.62}
+{"t": "next", "year": 47549.61, "news": false, "what": "Warm glows only: Warm Glow 1333 Thirty Years, not fading, Year 46,553.6", "from": 46549.63}
+{"t": "next", "year": 48627.61, "news": false, "what": "Warm glows only: Warm Glow 1365 A new warm glow, 1365 found so far", "from": 47549.63}
+{"t": "next", "year": 49608.04, "news": false, "what": "Warm glows only: Warm Glow 1386 Three centuries, not fading, Year 48,675.6", "from": 48627.63}
+{"t": "next", "year": 50771.61, "news": false, "what": "Warm glows only: Warm Glow 1420 Three centuries, not fading, Year 49,767.6", "from": 49737.63}
+{"t": "next", "year": 51803.61, "news": false, "what": "Warm glows only: Warm Glow 1443 Three centuries, not fading, Year 50,831.6", "from": 50771.63}
+{"t": "next", "year": 52805.61, "news": false, "what": "Warm glows only: Warm Glow 1462 Three centuries, not fading, Year 51,857.6", "from": 51803.63}
+{"t": "next", "year": 53378.83, "news": false, "what": "Warm glows only: Warm Glow 1492 Thirty Years, not fading, Year 52,833.6", "from": 52805.65}
+{"t": "next", "year": 53891.3, "news": false, "what": "Warm glows only: Warm Glow 1516 Three centuries, not fading, Year 53,923.6", "from": 53881.64}
+{"t": "next", "year": 54964.16, "news": false, "what": "Warm glows only: Warm Glow 1536 A century, not fading, Year 54,965.6", "from": 54806.09}
+{"t": "mind", "year": 57021.82, "q": "Did Prometheus ever answer our message?", "a": "Yes. Their answer reached us at Year 28,554.5, sent as laser flashes from about 14,254 light-years away. Only our Deep Flash Watch saw it. It was a gift as well as an answer: much of what they know, which lets our thinking go 2.3 times as far. They asked nothing back, so the next word is ours if we want it.", "secs": 20}
