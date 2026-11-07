@@ -50,7 +50,9 @@ function Map({ dials, onReady }: { dials: Dials; onReady(flight: number): void }
       dials={dials}
       onReady={onReady}
       onMarks={onMarks}
-      className={`relative mx-auto block aspect-square w-full max-w-[420px] shrink-0 sm:max-w-[520px] wide:aspect-auto ${FILL}`}
+      // Clipped: its star names flew thousands of pixels out while the camera moved, and the page showed scrollbars. Blind
+      // playtests 2026-11-07.
+      className={`relative mx-auto block aspect-square w-full max-w-[420px] shrink-0 overflow-hidden sm:max-w-[520px] wide:aspect-auto ${FILL}`}
     >
       {[...TARGET_NAMES, "Sol"].map((id) => (
         <span
