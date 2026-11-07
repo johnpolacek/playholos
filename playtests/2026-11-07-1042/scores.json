@@ -1,0 +1,10 @@
+{
+  "build": "93b46c4",
+  "blind": {
+    "understood": {
+      "score": 9.5,
+      "why": "Grades 9/9/10/10. Q1 has the Will of Earth's Mind and 'are we alone' but leaves out the danger side of contact ('greatest chance and gravest danger') and that it rests on real data; I wrote only 'whether we're alone'. Q2 gets all four tabs roughly right. For Mind I wrote it 'hands you cards (Add to Queue, Send) to act on' but never said outright that it never acts on its own. Reach is right that messages are drafted from a destination's page, though in play I first believed the Mind's 'Messages leave from Scan, not Reach'. Q3 names real leads (the made thing on 2004 GU9, Prometheus) and why they matter. Q4 gives sensible moves (Close Look, watch Prometheus fade, Solar Lens at Alsafi) with reasons from the game.",
+      "evidence": ["quiz.md"]
+    }
+  }
+}
