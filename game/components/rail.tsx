@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { Link, useLocation } from "react-router";
+import { useGame } from "@/components/game-provider";
 import { useMindUnread } from "@/components/mind-news";
 import { heardId, useLeads } from "@/components/scan";
 
@@ -16,6 +17,9 @@ let buildAt = "/play/build";
 
 export function Rail() {
   const { pathname: path, search } = useLocation();
+  // Only before Begin: once play runs, the tab opens our queue. A blind first-timer came back to the strategies after
+  // Begin and looked for the queue. 2026-11-07.
+  const began = useGame().year !== null;
   useEffect(() => {
     if (path === "/play/build") buildAt = path + search;
   }, [path, search]);
@@ -35,7 +39,7 @@ export function Rail() {
         return (
           <Link
             key={href}
-            to={href === "/play/build" && !on ? buildAt : href}
+            to={href === "/play/build" && !on && !began ? buildAt : href}
             aria-current={on ? "page" : undefined}
             aria-label={href === "/play/mind" && said ? `${label}, the Mind told us something` : href === "/play" && calls ? `${label}, ${calls === 1 ? "a signal" : `${calls} signals`} heard` : href === "/play" && news ? `${label}, a new reading` : undefined}
             className={`flex items-center justify-center gap-1.5 text-[11px] ${on ? "font-semibold text-ink shadow-[inset_0_2px_0_var(--ink)]" : "text-muted"} ${href === "/play" && calls ? "bg-other/10" : ""}`}
