@@ -9,7 +9,7 @@ import { IdleNote } from "@/components/idle-note";
 import { Through } from "@/components/through";
 import { WideLeads } from "@/components/wide-leads";
 import { Globe, Lens } from "@/components/icons";
-import { ReachMap, Ruler, useReach } from "@/components/reach";
+import { FlightCount, ReachMap, Ruler, useReach } from "@/components/reach";
 import { MapKey } from "@/components/leads";
 import { ScanMap, useLeads, useStepTap } from "@/components/scan";
 import { SkyArt, useSky } from "@/components/sky";
@@ -144,6 +144,8 @@ export function MapStrip() {
           <span className={LABEL}>
             {reach.close ? `${reach.target.name.toUpperCase()} · CLOSE VIEW` : "FROM EARTH"}
           </span>
+          {/* The walk's flight, counted by the flight itself. 2026-11-07. */}
+          <FlightCount />
           {/* The ruler is the map's zoom, so it lies on the map, along its foot, clear of the handle on a phone. Inside a
               system it has nothing to measure, so it steps aside. */}
           {!reach.close && (

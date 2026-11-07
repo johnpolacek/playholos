@@ -113,6 +113,9 @@ interface ReachView {
   /** A craft up close over the map, for Reach's walk, and how many times its shot has run. Null for none. 2026-11-07. */
   craft: { kind: CraftKind; shot: number } | null;
   showCraft(kind: CraftKind | null): void;
+  /** The walk's flight counter, drawn on the map by the flight. */
+  countAt(n: HTMLSpanElement | null): void;
+  setCount(text: string): void;
 }
 
 /** Where a craft is on its road, as shares of the way: out to its star, then its word back. */
@@ -136,8 +139,16 @@ const ReachContext = createContext<ReachView>({
   setTrip() {},
   craft: null,
   showCraft() {},
+  countAt() {},
+  setCount() {},
 });
 export const useReach = () => use(ReachContext);
+
+/** The walk's flight, counted on the map by the flight itself. Empty when nothing flies. 2026-11-07. */
+export function FlightCount() {
+  const { countAt } = useReach();
+  return <span ref={countAt} className="pointer-events-none absolute top-12 left-3 font-mono text-[13px] tracking-[.06em] text-other empty:hidden" />;
+}
 
 export function ReachProvider({ children }: { children: React.ReactNode }) {
   // With motion, one object for good: the tweens move it and the scene reads it each frame.
@@ -195,10 +206,13 @@ export function ReachProvider({ children }: { children: React.ReactNode }) {
     [fly, setClose],
   );
   const [craft, setCraft] = useState<{ kind: CraftKind; shot: number } | null>(null);
+  const count = useRef<HTMLSpanElement | null>(null);
+  const countAt = useCallback((n: HTMLSpanElement | null) => void (count.current = n), []);
+  const setCount = useCallback((text: string) => void (count.current && (count.current.textContent = text)), []);
   const showCraft = useCallback((kind: CraftKind | null) => setCraft((was) => (kind ? { kind, shot: (was?.shot ?? 0) + 1 } : null)), []);
   const value = useMemo(
-    () => ({ dials, fly, hold, tour, target, aim, close, setClose, setTrip, craft, showCraft }),
-    [dials, fly, hold, tour, target, aim, close, setClose, setTrip, craft, showCraft],
+    () => ({ dials, fly, hold, tour, target, aim, close, setClose, setTrip, craft, showCraft, countAt, setCount }),
+    [dials, fly, hold, tour, target, aim, close, setClose, setTrip, craft, showCraft, countAt, setCount],
   );
   return <ReachContext value={value}>{children}</ReachContext>;
 }

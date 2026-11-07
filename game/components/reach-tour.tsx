@@ -7,7 +7,7 @@ import { CRAFT_SHOT_SECS, type CraftKind } from "@/components/craft-view";
 import { BuildMark, buildTone } from "@/components/marks";
 import { MindNote } from "@/components/mind-note";
 import { usePlan, useSchedule } from "@/components/picks";
-import { axis, Brings, farZoom, Key, Thread, tripAt, useReach, VOYAGER, year, Years } from "@/components/reach";
+import { axis, farZoom, Thread, tripAt, useReach, VOYAGER, year } from "@/components/reach";
 import { Thread as Stops } from "@/components/review";
 import { useStepTap } from "@/components/scan";
 import { buildSlug } from "@/lib/game/plan";
@@ -27,6 +27,8 @@ const GAP_AU = NEAREST.ly * LY_AU;
 
 // How we reach and Voyager 1 were two stops, one stop since 2026-11-07.
 const STOPS = ["How we reach", "Send a sail", "Send a flyby probe", "Roads to come"];
+/** What flies on each stop, for the map's counter. */
+const NAMED = ["", "Sails", "Flyby probe", ""];
 
 /** The roads our builds open later, each with the build it waits on. Speeds and sizes are plan.ts's and reach.ts's. */
 const LATER_ROADS = [
@@ -130,8 +132,7 @@ function Gap() {
 
 export function ReachTour({ onClose }: { onClose(): void }) {
   const { orderAt: clock, did } = useGame();
-  const { fly, tour, aim, setTrip, showCraft } = useReach();
-  const flown = useRef<HTMLSpanElement>(null);
+  const { fly, tour, aim, setTrip, showCraft, setCount } = useReach();
   const { plan } = usePlan();
   const { scale } = useSchedule();
   const root = useRef<HTMLDivElement>(null);
@@ -145,7 +146,7 @@ export function ReachTour({ onClose }: { onClose(): void }) {
 
   const from = clock === null ? 0 : Math.floor(clock * 10) / 10;
   const ways = useMemo(() => roads(plan, scale, from), [plan, scale, from]);
-  const { to, step: tick } = axis(ways);
+  const { to } = axis(ways);
   const road = at === 1 || at === 2 ? ways[at - 1] : null;
 
   // The map follows the stops: out from Earth past Voyager 1 to the nearest star on the first, then each road's craft
@@ -167,13 +168,14 @@ export function ReachTour({ onClose }: { onClose(): void }) {
     const { leaves, arrives, home } = road;
     const show = (t: number) => {
       setTrip(tripAt(road, leaves + Math.min(t, home - leaves - 1e-6)));
-      if (flown.current)
-        flown.current.textContent =
-          leaves + t < arrives ? `${Math.floor(t)} Years out` : `Passed Proxima b · its word ${Math.floor(leaves + t - arrives)} Years on its way home`;
+      setCount(leaves + t < arrives ? `${NAMED[at]} · ${Math.floor(t)} Years out` : `Passed Proxima b · its word ${Math.floor(leaves + t - arrives)} Years on its way home`);
     };
     if (prefersReducedMotion()) {
       show(arrives - leaves);
-      return () => setTrip(null);
+      return () => {
+        setTrip(null);
+        setCount("");
+      };
     }
     // Five Years a second, so a sail's 21 Years and a probe's 52 read as the gap they are.
     const o = { t: 0 };
@@ -183,8 +185,9 @@ export function ReachTour({ onClose }: { onClose(): void }) {
     return () => {
       tl.kill();
       setTrip(null);
+      setCount("");
     };
-  }, [road, setTrip]);
+  }, [road, at, setTrip, setCount]);
 
   useEffect(() => {
     if (at === last) did("reached");
@@ -270,15 +273,23 @@ export function ReachTour({ onClose }: { onClose(): void }) {
         <p data-r className="mt-0.5 text-[13.5px] text-page-ink2">
           {words.sub}
         </p>
-        {/* Each craft, drawn: what it is and how it moves. 2026-11-07. */}
-        {kind && (
-          <div data-r className="mt-3">
-            <CraftFacts kind={kind} />
-          </div>
-        )}
+        {/* Too much small type on a road's stop: its icons, axis, legend and counter went, 2026-11-07. The counter is on
+            the map, by the flight. What it costs and when we see is in plain words. */}
         {road && (
           <div data-r className="mt-3">
-            <Brings road={road} />
+            <p className="text-[15.5px] leading-snug text-ink">
+              {road.home === null
+                ? "What it sees would not reach us within two centuries at our pace."
+                : `${road.n ? "As queued" : `If we start the ${road.build}${road.works !== undefined ? ", a Fusion Drive and the Deuterium Works" : ""} now`}, we see Proxima b up close in Year ${year(road.home)}.`}
+            </p>
+            <div className="mt-2">
+              <Thread road={road} i={at} to={to} />
+            </div>
+          </div>
+        )}
+        {kind && (
+          <div data-r className="mt-4">
+            <CraftFacts kind={kind} />
           </div>
         )}
         {at === 0 && (
@@ -287,23 +298,6 @@ export function ReachTour({ onClose }: { onClose(): void }) {
           </div>
         )}
         {at === last && <Later />}
-        {road && (
-          <div data-r className="mt-3">
-            <Thread road={road} i={at} to={to} />
-            <Years to={to} step={tick} />
-            <Key road={road} from={from} />
-            {road.home !== null && (
-              <p className="mt-1 font-mono text-[10px] tracking-[.08em] text-muted uppercase">
-                On the map · <span ref={flown} />
-              </p>
-            )}
-            <p className="mt-1 text-[12.5px] text-muted">
-              {road.home === null
-                ? "What it sees would not reach us within two centuries at our pace."
-                : `${road.n ? "As queued" : `If we start the ${road.build}${road.works !== undefined ? ", a Fusion Drive and the Deuterium Works" : ""} now`}, we see Proxima b up close in Year ${year(road.home)}.`}
-            </p>
-          </div>
-        )}
         <div data-r className="mt-3">
           <MindNote className="text-[14.5px] leading-snug">{words.mind}</MindNote>
         </div>

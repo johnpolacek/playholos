@@ -25,11 +25,11 @@ const FACTS: Record<CraftKind, [string, string][]> = {
 
 export function CraftFacts({ kind }: { kind: CraftKind }) {
   return (
-    <dl className="grid grid-cols-3 gap-x-3 gap-y-1">
+    <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-[15px] leading-snug">
       {FACTS[kind].map(([k, v]) => (
-        <div key={k}>
-          <dt className="font-mono text-[9px] tracking-[.08em] text-muted uppercase">{k}</dt>
-          <dd className="text-[12.5px] leading-snug text-ink">{v}</dd>
+        <div key={k} className="contents">
+          <dt className="text-muted">{k}</dt>
+          <dd className="text-ink">{v}</dd>
         </div>
       ))}
     </dl>
