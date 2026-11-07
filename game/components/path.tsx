@@ -62,13 +62,6 @@ export function usePath(): { stages: Stage[]; next: Step | null } {
       ],
     },
     {
-      name: "Make contact",
-      steps: [
-        { label: "Call out to a star", at: (save?.sent ?? []).length ? "done" : "todo", to: "/play/reach" },
-        { label: "Hear an answer", at: heard.length ? "done" : (save?.sent ?? []).length ? "going" : "todo" },
-      ],
-    },
-    {
       name: "Spread",
       steps: [
         build("Deuterium Works"),
@@ -78,10 +71,19 @@ export function usePath(): { stages: Stage[]; next: Step | null } {
         { ...build("Mind Link", "Move the Will there"), at: save?.will ? "done" : inOrder(plan, "Mind Link") ? "going" : "todo", to: colony ? `/play/reach/${colony.slug}` : `/play/build/${buildSlug("Mind Link")}` },
       ],
     },
+    // Calling out last, as Next takes it: calling tells others where we are, so Next never points a new player there
+    // before we go. Shown between, it read as the step after the telescope and Next skipped it. The Will's call,
+    // 2026-11-07.
+    {
+      name: "Make contact",
+      steps: [
+        { label: "Call out to a star", at: (save?.sent ?? []).length ? "done" : "todo", to: "/play/reach" },
+        { label: "Hear an answer", at: heard.length ? "done" : (save?.sent ?? []).length ? "going" : "todo" },
+      ],
+    },
   ];
-  // The next step we can take: finding life first, then going, then calling out. A step only time brings is skipped.
-  const order = [stages[0], stages[2], stages[1]];
-  const next = order.flatMap((s) => s.steps).find((s) => s.at === "todo" && s.to) ?? null;
+  // The next step we can take, in the order shown. A step only time brings is skipped.
+  const next = stages.flatMap((s) => s.steps).find((s) => s.at === "todo" && s.to) ?? null;
   return { stages, next };
 }
 
@@ -160,7 +162,7 @@ export function Path() {
       {/* Said what it is: a blind first-timer saw no goal until Year 11, then read these dots as decoration. 2026-11-07. */}
       <p className="mb-1.5 text-[12.5px] leading-snug text-page-ink2">
         <span className="mr-1.5 font-mono text-[10px] tracking-[.1em] text-muted uppercase">Our path</span>
-        Find life, make contact, spread. Tap one for its steps.
+        Find life, spread, make contact. Tap one for its steps.
       </p>
       <div className="flex flex-col">
         {stages.map((s) => (
