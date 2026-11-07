@@ -443,7 +443,13 @@ export function LeadList({
     const quiet = count("quiet");
     return (
       <>
-        <ListHead left={`Needs us · ${needs}`} right="Reached in" className={headClass} />
+        {/* Only a choice needs us: a glow to read, or the watcher. A new reading alone is news to read. "Needs us · 3"
+            listed three new worlds with nothing to decide, under a note saying nothing needs us. Blind playtest 2026-11-07. */}
+        <ListHead
+          left={`${readable?.length || leads.some((l) => l.slug === "small-dark-body" && stand(l) === "needs") ? "Needs us" : "New to read"} · ${needs}`}
+          right="Reached in"
+          className={headClass}
+        />
         {needs ? (
           <>
             <ul className="mt-1 flex flex-col">{rows("needs")}</ul>
