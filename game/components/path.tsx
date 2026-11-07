@@ -17,6 +17,9 @@ type Step = {
   at: "done" | "going" | "todo";
   /** Where to take it. A step only time brings, as an answer, has none. */
   to?: string;
+  /** Why it can't be taken yet, said under it: a blind first-timer tapped "Read a glow’s light", got nothing, and
+   *  learned only from the Mind that it needs a warm glow and our Infrared Telescope. 2026-11-07. */
+  waits?: string;
 };
 type Stage = { name: string; steps: Step[] };
 
@@ -27,6 +30,7 @@ export function usePath(): { stages: Stage[]; next: Step | null } {
   const { leads, minds, visits, heard } = useLeads();
   const open = useOpenReadings();
   const now = year ?? 0;
+  const scope = done["Infrared Telescope"] != null && done["Infrared Telescope"]! <= now;
   const build = (name: string, label = `Build the ${name}`): Step => ({
     label,
     at: done[name] != null && done[name]! <= now ? "done" : inOrder(plan, name) ? "going" : "todo",
@@ -47,12 +51,13 @@ export function usePath(): { stages: Stage[]; next: Step | null } {
       steps: [
         build("Warm Sky Watch", "Watch for warm glows"),
         build("Infrared Telescope", "Range each glow"),
-        { label: "Read a glow’s light", at: read ? "done" : (plan.closeReads ?? []).length ? "going" : "todo", // With no glow to read yet, only time brings one: no link, so Next skips it. It linked to Scan itself, and a blind
-        // first-timer tapped it twice to no effect. 2026-11-07.
-        to: open[0] ? `/play/lead/${open[0].slug}#close-reading` : undefined },
+        { label: "Read a warm glow’s light", at: read ? "done" : (plan.closeReads ?? []).length ? "going" : "todo", // With no glow to read yet, only time brings one: no link, so Next skips it. It linked to Scan itself, and a blind
+        // first-timer tapped it twice to no effect. 2026-11-07. Warm, since a cold glow has no such reading.
+        to: open[0] ? `/play/lead/${open[0].slug}#close-reading` : undefined,
+        waits: scope ? "Waits for a warm glow, ranged and still shining." : "Needs our Infrared Telescope, and a warm glow to read." },
         // To a glow we have, once we have one: with none, it opened Reach's list and a blind first-timer tapped it twice
         // for nothing at Year 0. 2026-11-07.
-        { label: "Send a craft to a glow", at: close ? "done" : "todo", to: firstGlow ? `/play/reach/${firstGlow.slug}` : undefined },
+        { label: "Send a craft to a glow", at: close ? "done" : "todo", to: firstGlow ? `/play/reach/${firstGlow.slug}` : undefined, waits: "Waits for a warm glow, ranged by our Infrared Telescope." },
         { label: "Find a mind", at: found ? "done" : close ? "going" : "todo" },
       ],
     },
@@ -132,7 +137,10 @@ function Trail({ stage, next, open, toggle }: { stage: Stage; next: Step | null;
                     {words} <span className="text-you">›</span>
                   </Link>
                 ) : (
-                  words
+                  <>
+                    {words}
+                    {s.at === "todo" && s.waits && <span className="block pl-[18px] text-[11.5px] leading-snug text-muted">{s.waits}</span>}
+                  </>
                 )}
               </li>
             );
