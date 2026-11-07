@@ -5,7 +5,7 @@ import { CATALOG } from "@/lib/sim/works";
 
 const t = (kt: number) => `${(kt * 1000).toLocaleString("en-US", { maximumFractionDigits: 0 })} t`;
 
-const FACTS: Record<CraftKind, [string, string][]> = {
+const FACTS: Partial<Record<CraftKind, [string, string][]>> = {
   sail: [
     ["Speed", "A fifth of light’s, in 10 minutes"],
     ["Push", "Up to 15,000 g"],
@@ -24,9 +24,11 @@ const FACTS: Record<CraftKind, [string, string][]> = {
 };
 
 export function CraftFacts({ kind }: { kind: CraftKind }) {
+  const facts = FACTS[kind];
+  if (!facts) return null;
   return (
     <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-[15px] leading-snug">
-      {FACTS[kind].map(([k, v]) => (
+      {facts.map(([k, v]) => (
         <div key={k} className="contents">
           <dt className="text-muted">{k}</dt>
           <dd className="text-ink">{v}</dd>

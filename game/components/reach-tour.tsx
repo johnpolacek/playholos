@@ -152,11 +152,12 @@ export function ReachTour({ onClose }: { onClose(): void }) {
   // Playtest 2026-11-07: Voyager 1 and New Horizons had stops and name tags where the sail and probe should be.
   useEffect(() => aim(null), [aim]);
   useEffect(() => {
-    if (at === 0) tour(0.3);
+    // Voyager 1 up close first, then out from Earth past it to the nearest star.
+    if (at === 0) tour(CRAFT_SHOT_SECS - 1);
     else fly(farZoom(NEAREST.ly));
   }, [at, fly, tour]);
   // Each craft opens up close on the map, then pulls back into its flight. 2026-11-07.
-  const kind: CraftKind | null = at === 1 ? "sail" : at === 2 ? "probe" : at === last ? "sentinel" : null;
+  const kind: CraftKind | null = at === 0 ? "voyager" : at === 1 ? "sail" : at === 2 ? "probe" : at === last ? "sentinel" : null;
   useEffect(() => {
     showCraft(kind);
     return () => showCraft(null);
@@ -221,7 +222,7 @@ export function ReachTour({ onClose }: { onClose(): void }) {
     {
       head: "How we reach",
       sub: `${NEAREST.name}, ${NEAREST.ly} light-years out`,
-      mind: "Voyager 1, launched in 1977 for Jupiter and Saturn, flies at 17 km/s. New Horizons, launched in 2006 for Pluto, at 14. At those speeds the nearest star is 75,000 years away. Here is what could go a thousand times faster.",
+      mind: "Voyager 1, launched in 1977 for Jupiter and Saturn, flies at 17 km/s. New Horizons, launched in 2006 for Pluto, at 14. At those speeds the nearest star is at least 75,000 years away. Here is what could go a thousand times faster.",
     },
     {
       head: "Send a sail",

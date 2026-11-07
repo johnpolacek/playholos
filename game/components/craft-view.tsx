@@ -9,7 +9,7 @@ import * as THREE from "three";
 import { prefersReducedMotion } from "@/lib/motion";
 import { CATALOG } from "@/lib/sim/works";
 
-export type CraftKind = "sail" | "probe" | "sentinel";
+export type CraftKind = "voyager" | "sail" | "probe" | "sentinel";
 
 /** Seconds from opening close to the craft until it is a point and the map's flight takes over. */
 export const CRAFT_SHOT_SECS = 11;
@@ -205,7 +205,68 @@ function sentinel(): Model {
   };
 }
 
-const MODELS: Record<CraftKind, () => Model> = { sail, probe, sentinel };
+/** Voyager 1 as it flies in 2040, silent: its 3.7 m dish still turned home, its ten-sided body 1.8 m across with the
+ *  Golden Record on its side, three plutonium power cells on one boom, the instruments' platform on the other, and the
+ *  13 m magnetometer boom. 722 kg at launch. Travel along +x, the dish back toward Earth. NASA JPL's figures. */
+function voyager(): Model {
+  const ink: number[] = [];
+  const hot: number[] = [];
+  // The body: a ten-sided ring, 1.78 m across and 0.47 m deep.
+  for (const x of [-0.47, 0]) ink.push(...ring([x, 0, 0], 0.89, "x", 10));
+  for (let k = 0; k < 10; k++) {
+    const a = (k / 10) * 2 * Math.PI;
+    ink.push(...seg([-0.47, 0.89 * Math.cos(a), 0.89 * Math.sin(a)], [0, 0.89 * Math.cos(a), 0.89 * Math.sin(a)]));
+  }
+  // The dish, 3.7 m across, facing home, and the struts to its feed.
+  for (const [x, r] of [[-0.5, 0.4], [-0.75, 1.0], [-1.0, 1.45], [-1.3, 1.83]] as const) ink.push(...ring([x, 0, 0], r, "x", 48));
+  for (let k = 0; k < 12; k++) {
+    const a = (k / 12) * 2 * Math.PI;
+    const pt = (x: number, r: number): V => [x, r * Math.cos(a), r * Math.sin(a)];
+    ink.push(...seg(pt(-0.5, 0.4), pt(-0.75, 1.0)), ...seg(pt(-0.75, 1.0), pt(-1.0, 1.45)), ...seg(pt(-1.0, 1.45), pt(-1.3, 1.83)));
+  }
+  for (let k = 0; k < 3; k++) {
+    const a = (k / 3) * 2 * Math.PI + 0.5;
+    ink.push(...seg([-1.3, 1.83 * Math.cos(a), 1.83 * Math.sin(a)], [-2.1, 0, 0]));
+  }
+  ink.push(...ring([-2.1, 0, 0], 0.14, "x", 16));
+  // The power boom: three plutonium cells, warm still, and nearly spent.
+  ink.push(...seg([-0.25, 0.89, 0], [-0.25, 3.3, 0]));
+  for (const y of [1.6, 2.2, 2.8]) {
+    hot.push(...ring([-0.25, y, 0], 0.2, "y", 16), ...ring([-0.25, y + 0.45, 0], 0.2, "y", 16));
+    for (let k = 0; k < 6; k++) {
+      const a = (k / 6) * 2 * Math.PI;
+      hot.push(...seg([-0.25 + 0.2 * Math.cos(a), y, 0.2 * Math.sin(a)], [-0.25 + 0.2 * Math.cos(a), y + 0.45, 0.2 * Math.sin(a)]));
+    }
+  }
+  // The instruments' boom and its platform, its cameras long since off.
+  ink.push(...seg([-0.25, -0.89, 0], [-0.25, -3.2, 0]));
+  ink.push(...ring([-0.25, -3.2, 0], 0.3, "y", 4), ...ring([-0.25, -3.5, 0], 0.3, "y", 4));
+  for (let k = 0; k < 4; k++) {
+    const a = (k / 4) * 2 * Math.PI + Math.PI / 4;
+    ink.push(...seg([-0.25 + 0.3 * Math.cos(a), -3.2, 0.3 * Math.sin(a)], [-0.25 + 0.3 * Math.cos(a), -3.5, 0.3 * Math.sin(a)]));
+  }
+  // The magnetometer boom, 13 m, a thin mast.
+  ink.push(...seg([-0.2, 0.6, 0.6], [-0.2, 6.5, 11.3]));
+  for (let k = 1; k <= 12; k++) ink.push(...ring([-0.2, 0.6 + (5.9 * k) / 12, 0.6 + (10.7 * k) / 12], 0.06, "x", 3));
+  // The Golden Record, 30 cm, on the body's side.
+  hot.push(...ring([-0.24, 0, -0.9], 0.15, "z", 24));
+  return {
+    ink,
+    hot,
+    lamps: [],
+    labels: [
+      { at: [-1.3, 0, 1.83], head: "VOYAGER 1 · 722 KG", line: "launched 1977, silent now" },
+      { at: [-0.24, 0, -0.95], head: "GOLDEN RECORD", line: "sounds and pictures of Earth" },
+      { at: [-0.25, 3.3, 0], head: "PLUTONIUM POWER", line: "nearly spent" },
+      { at: [-0.2, 6.5, 11.3], head: "MAGNETOMETER · 13 M" },
+    ],
+    near: 10,
+    far: 4e6,
+    el: 22,
+  };
+}
+
+const MODELS: Record<CraftKind, () => Model> = { voyager, sail, probe, sentinel };
 
 const css = (name: string) => new THREE.Color(getComputedStyle(document.documentElement).getPropertyValue(name).trim() || "#ffffff");
 
@@ -273,11 +334,25 @@ export function CraftView({ kind, shot, className }: { kind: CraftKind; shot: nu
       pts.frustumCulled = false;
       scene.add(pts);
     }
+    // Its own sky behind it, so the map's Earth or Sun underneath can step right back while the craft is close.
+    const sky = new THREE.Scene();
+    const skyCam = new THREE.PerspectiveCamera(40, 1, 0.1, 1000);
+    const starArr = new Float32Array(1500 * 3);
+    let seed = 7;
+    const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+    for (let i = 0; i < 1500; i++) {
+      const [u, w] = [rnd() * 2 - 1, rnd() * 2 * Math.PI];
+      const r = Math.sqrt(1 - u * u);
+      starArr.set([100 * r * Math.cos(w), 100 * r * Math.sin(w), 100 * u], i * 3);
+    }
+    const starMat = new THREE.PointsMaterial({ color: ink, map: tex, size: 2, sizeAttenuation: false, transparent: true, opacity: 0.5, depthWrite: false });
+    sky.add(new THREE.Points(new THREE.BufferGeometry().setAttribute("position", new THREE.BufferAttribute(starArr, 3)), starMat));
     const resize = () => {
       const { clientWidth: w, clientHeight: h } = parent;
       renderer.setSize(w, h, false);
-      camera.aspect = w / Math.max(1, h);
+      camera.aspect = skyCam.aspect = w / Math.max(1, h);
       camera.updateProjectionMatrix();
+      skyCam.updateProjectionMatrix();
     };
     resize();
     const ro = new ResizeObserver(resize);
@@ -310,7 +385,7 @@ export function CraftView({ kind, shot, className }: { kind: CraftKind; shot: nu
       inkMat.opacity = 0.75 * fade;
       hotMat.opacity = fade * (kind === "probe" ? 0.55 + 0.15 * Math.sin(s * 9) : kind === "sail" ? 0.5 : 0.9);
       // The map behind steps back while the craft is close.
-      if (shade.current) shade.current.style.opacity = String(0.75 * fade * (1 - pull));
+      if (shade.current) shade.current.style.opacity = String(fade * (1 - pull));
       lampMat.opacity = fade;
       flowMat.opacity = 0.8 * fade;
       if (flowPos && m.flow && !still) {
@@ -324,7 +399,13 @@ export function CraftView({ kind, shot, className }: { kind: CraftKind; shot: nu
         }
         flowPos.needsUpdate = true;
       }
+      skyCam.quaternion.copy(camera.quaternion);
+      starMat.opacity = 0.5 * fade * (1 - pull);
+      renderer.clear();
+      renderer.render(sky, skyCam);
+      renderer.autoClear = false;
       renderer.render(scene, camera);
+      renderer.autoClear = true;
       // Names follow their places, and fade as the view pulls back.
       const { clientWidth: w, clientHeight: h } = parent;
       m.labels.forEach((l, i) => {
