@@ -241,8 +241,11 @@ export function Arrived({ from, to, snap }: { from: number; to: number; snap: Sn
           line: `Year ${yearText(w.at)}, and nothing has come yet. A reply could still come later.`,
         });
     for (const l of leads) {
-      const fresh = (readings[l.slug] ?? []).filter((r) => !snap.reads.has(r.id));
-      const isNew = !snap.slugs.has(l.slug);
+      // Only what reached us by the Year we jumped to: while the card stood open, later finds piled in under its Year.
+      // Blind playtest 2026-11-07.
+      const all = (readings[l.slug] ?? []).filter((r) => !snap.reads.has(r.id));
+      const fresh = all.filter((r) => r.at <= to + 1e-6);
+      const isNew = !snap.slugs.has(l.slug) && (!all.length || fresh.length > 0);
       const close = l.facts.find(([k]) => k in NEWS && !snap.close.has(`${l.slug}:${k}`));
       if (!isNew && !fresh.length && !close) continue;
       const read = fresh.at(-1);
@@ -261,7 +264,7 @@ export function Arrived({ from, to, snap }: { from: number; to: number; snap: Sn
       });
     }
     for (const h of heard)
-      if (!snap.heard.has(heardId(h)))
+      if (!snap.heard.has(heardId(h)) && (h.found ?? h.arrived) <= to + 1e-6)
         out.push({
           key: `heard:${heardId(h)}`,
           rank: 1,
