@@ -287,7 +287,10 @@ function dotTexture() {
 
 /** `anchor` is where the craft sits on the map underneath: the pull back ends there, so it shrinks into its own place
  *  and not the map's middle. Voyager 1 disappeared into the Sun until 2026-11-07. */
-export function CraftView({ kind, shot, className, anchor }: { kind: CraftKind; shot: number; className?: string; anchor?: () => { x: number; y: number } | null }) {
+/** `heading` is the way it flies on the map, from one screen point to another: the close view rolls so the craft
+ *  flies that way too. Voyager 1 flew backwards, dish first away from the Sun, until 2026-11-07. */
+type Pt = { x: number; y: number };
+export function CraftView({ kind, shot, className, anchor, heading }: { kind: CraftKind; shot: number; className?: string; anchor?: () => Pt | null; heading?: () => [Pt, Pt] | null }) {
   const box = useRef<HTMLDivElement>(null);
   const tags = useRef<(HTMLDivElement | null)[]>([]);
   const shade = useRef<HTMLDivElement>(null);
@@ -362,6 +365,8 @@ export function CraftView({ kind, shot, className, anchor }: { kind: CraftKind; 
     ro.observe(parent);
 
     const v = new THREE.Vector3();
+    // A point a little way along each craft's way forward, in its own metres.
+    const fwdX = new THREE.Vector3(m.near * 0.2, 0, 0), fwdZ = new THREE.Vector3(0, 0, m.near * 0.2);
     const start = performance.now();
     let raf = 0;
     let last = start;
@@ -382,6 +387,18 @@ export function CraftView({ kind, shot, className, anchor }: { kind: CraftKind; 
       else camera.position.set(D * Math.cos(az) * Math.cos(el), D * Math.sin(az) * Math.cos(el), D * Math.sin(el));
       camera.up.set(0, 0, 1);
       camera.lookAt(0, 0, 0);
+      // Roll about the line of sight so its way forward on screen is its way on the map.
+      const way = heading?.();
+      if (way) {
+        camera.updateMatrixWorld();
+        const fwd = kind === "sail" ? fwdZ : fwdX;
+        const a = v.copy(fwd).project(camera);
+        const [ax, ay] = [a.x, a.y];
+        const o = v.set(0, 0, 0).project(camera);
+        const have = Math.atan2(ay - o.y, ax - o.x);
+        const want = Math.atan2(-(way[1].y - way[0].y), way[1].x - way[0].x);
+        if (Math.hypot(ax - o.x, ay - o.y) > 1e-4) camera.rotateZ(have - want);
+      }
       // Slide the view so the craft moves from the middle to its place on the map as it pulls back.
       const { clientWidth: pw, clientHeight: ph } = parent;
       const to = anchor?.();
@@ -438,7 +455,7 @@ export function CraftView({ kind, shot, className, anchor }: { kind: CraftKind; 
       scene.traverse((o) => (o as THREE.Mesh).geometry?.dispose());
       renderer.domElement.remove();
     };
-  }, [kind, shot, anchor]);
+  }, [kind, shot, anchor, heading]);
 
   return (
     <div ref={box} className={`pointer-events-none isolate ${className ?? ""}`} aria-hidden>

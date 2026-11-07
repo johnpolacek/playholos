@@ -61,6 +61,15 @@ export function MapStrip() {
   const { markOf } = reach;
   const voyagerAt = useCallback(() => markOf("voyager"), [markOf]);
   const sunAt = useCallback(() => markOf("sun"), [markOf]);
+  // Which way each flies on the map: Voyager 1 out from the Sun to its place, the rest from the Sun to the star.
+  const voyagerWay = useCallback((): [{ x: number; y: number }, { x: number; y: number }] | null => {
+    const [a, b] = [markOf("sun"), markOf("voyager")];
+    return a && b ? [a, b] : null;
+  }, [markOf]);
+  const starWay = useCallback((): [{ x: number; y: number }, { x: number; y: number }] | null => {
+    const [a, b] = [markOf("sun"), markOf("alpha")];
+    return a && b ? [a, b] : null;
+  }, [markOf]);
   const leads = useLeads();
   // In the review, a tap on the map steps it as one on the words does, but not in a system's Close View, there to look.
   const reviewing = path === "/play" && /[?&]review\b/.test(search);
@@ -144,7 +153,7 @@ export function MapStrip() {
         <>
           <ReachMap className="absolute inset-0" />
           {/* Reach's walk: a craft up close over the map, then its flight. 2026-11-07. */}
-          {reach.craft && !reach.close && <CraftView key={`${reach.craft.kind}:${reach.craft.shot}`} kind={reach.craft.kind} shot={reach.craft.shot} anchor={reach.craft.kind === "voyager" ? voyagerAt : sunAt} className="absolute inset-0" />}
+          {reach.craft && !reach.close && <CraftView key={`${reach.craft.kind}:${reach.craft.shot}`} kind={reach.craft.kind} shot={reach.craft.shot} anchor={reach.craft.kind === "voyager" ? voyagerAt : sunAt} heading={reach.craft.kind === "voyager" ? voyagerWay : starWay} className="absolute inset-0" />}
           <span className={LABEL}>
             {reach.close ? `${reach.target.name.toUpperCase()} · CLOSE VIEW` : "FROM EARTH"}
           </span>
