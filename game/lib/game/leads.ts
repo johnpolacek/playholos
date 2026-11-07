@@ -824,7 +824,9 @@ export function mindLeads(m: MindsSeen | undefined): Lead[] {
       ],
       tells: g.near !== undefined
         ? ["It hasn't acted on our sentinel. Whether it noticed, we can't tell."]
-        : ["A second look in other bands shows whether its color holds.", `A sentinel that stays there would see what makes it, about ${n(Math.round(g.d / CATALOG.sentinel.speed + CATALOG.sentinel.burns + 3 + g.d))} Years after it leaves.`],
+        // Only moves we can make: "a second look in other bands" had no build behind it, and a blind first-timer
+        // looked for one. 2026-11-07.
+        : [`A sentinel that stays there would see what makes it, about ${n(Math.round(g.d / CATALOG.sentinel.speed + CATALOG.sentinel.burns + 3 + g.d))} Years after it leaves.`],
       art: { kind: "glow", ly: g.d, steady: true },
       life: "unlikely",
     })),
