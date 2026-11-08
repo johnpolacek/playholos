@@ -1,12 +1,13 @@
-import { Link, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { BackBar } from "@/components/back-bar";
 import { useGame } from "@/components/game-provider";
 import { BuildMark, buildBlue, buildTone, LeadMark, LockMark } from "@/components/marks";
 import { MindNote } from "@/components/mind-note";
-import { toggleBuild, usePlan, useSchedule } from "@/components/picks";
+import { toggleBuild, usePlan, useSchedule, WASH } from "@/components/picks";
 import { Lens } from "@/components/icons";
-import { axis, Brings, Key, says, sooner, targetOf, Thread, tripAt, useReach, year, Years } from "@/components/reach";
+import { CRAFT_SHOT_SECS, type CraftKind } from "@/components/craft-view";
+import { axis, Brings, Key, says, sooner, targetOf, Thread, tripAt, useReach, useTripLoop, year, Years } from "@/components/reach";
 import { useLeads } from "@/components/scan";
 import { VisitArt } from "@/components/visit-art";
 import { Chances } from "@/components/chances";
@@ -104,8 +105,11 @@ function Sent(props: {
   right?: string;
   /** A control beside the needs, in place of sending. */
   extra?: React.ReactNode;
+  /** Whether its road plays on the map, and what plays it, or plays it again once sent. 2026-11-08. */
+  previewing: boolean;
+  preview(on: boolean): void;
 }) {
-  const { road, i, to, name, line, needs, have, can, send, what, choices, sentAs, right, extra } = props;
+  const { road, i, to, name, line, needs, have, can, send, what, choices, sentAs, right, extra, previewing, preview } = props;
   const sent = road.n !== null;
   // Ordered but not yet gone says when it goes: "Sail sent" read as flying while the Laser Sail Array was only queued.
   // Blind playtest 2026-11-07.
@@ -115,14 +119,17 @@ function Sent(props: {
   const [asking, setAsking] = useState<{ label: string; send(): void } | null>(null);
   return (
     <li data-m style={buildBlue(needs[0])} className="border-t border-faint py-2.5">
-      <Face
-        mark={<BuildMark name={needs[0]} />}
-        tone={buildTone(needs[0], sent)}
-        name={<b className="font-semibold">{name}</b>}
-        line={line}
-        right={right ?? ((road.home ?? (road.craft === "The Will" ? road.arrives : null)) === null ? "Not yet" : `Year ${year((road.home ?? road.arrives)!)}`)}
-        more={false}
-      />
+      {/* Its head plays its road on the map, the craft up close where we have one, and again to stop. 2026-11-08. */}
+      <button onClick={() => preview(!previewing)} aria-pressed={previewing} className={`block w-full text-left transition-colors duration-200 ${previewing ? WASH : ""}`}>
+        <Face
+          mark={<BuildMark name={needs[0]} />}
+          tone={buildTone(needs[0], sent)}
+          name={<b className="font-semibold">{name}</b>}
+          line={line}
+          right={right ?? ((road.home ?? (road.craft === "The Will" ? road.arrives : null)) === null ? "Not yet" : `Year ${year((road.home ?? road.arrives)!)}`)}
+          more={false}
+        />
+      </button>
       <div className="pl-7">
         <div className="mt-1.5 mb-1">
           <Brings road={road} />
@@ -166,6 +173,8 @@ function Sent(props: {
               onClick={() => {
                 asking.send();
                 setAsking(null);
+                // Sent, it shows on the map at once, before Begin too. 2026-11-08.
+                preview(true);
               }}
               className="h-8 rounded-full bg-ink px-3.5 text-[13px] font-medium text-paper"
             >
@@ -180,7 +189,7 @@ function Sent(props: {
 
 export function DestinationPage({ slug }: { slug: string }) {
   const { leads, visits, colony, readings } = useLeads();
-  const { aim, close, setClose, setTrip } = useReach();
+  const { aim, close, setClose, setTrip, showCraft } = useReach();
   const { save, year: clock, orderAt, moveWill } = useGame();
   const { plan, change } = usePlan();
   const { scale, done: doneBy } = useSchedule();
@@ -252,8 +261,48 @@ export function DestinationPage({ slug }: { slug: string }) {
     return () => aim(null);
   }, [aim, star, ly, system, range]);
 
+  // A way picked plays its road on the map, out and its word home, as the walk's do, its craft up close where we have
+  // one. Opened from a flyby on Reach, that craft shows up close. 2026-11-08.
+  const [previewing, setPreviewing] = useState<string | null>(null);
+  const plays: Record<string, { road: Road | null; craft: CraftKind | null }> = {
+    sails: { road: flown[0], craft: "sail" },
+    probe: { road: flown[1], craft: "probe" },
+    lens: { road: lens, craft: null },
+    mind: { road: mind, craft: null },
+    // The Will crosses at light speed and sends no word of its own, so its road ends as it arrives.
+    will: { road: will && { ...will, home: will.arrives }, craft: null },
+    sentinel: { road: stay, craft: "sentinel" },
+    seed: { road: seed, craft: null },
+    // A bullet sends nothing home: its road ends as it lands.
+    bullet: { road: bullet, craft: null },
+  };
+  const playing = previewing ? plays[previewing] : null;
+  useTripLoop(playing?.road ?? null, undefined, playing?.craft ? CRAFT_SHOT_SECS - 1 : 0);
+  const playingCraft = playing?.craft ?? null;
+  useEffect(() => {
+    if (!playingCraft) return;
+    showCraft(playingCraft);
+    return () => showCraft(null);
+  }, [playingCraft, previewing, showCraft]);
+  const cameWith = (useLocation().state as { craft?: CraftKind | null } | null)?.craft;
+  useEffect(() => {
+    if (!cameWith) return;
+    showCraft(cameWith);
+    return () => showCraft(null);
+  }, [cameWith, showCraft]);
+  const way = (key: string) => ({
+    previewing: previewing === key,
+    preview: (on: boolean) => {
+      // Sent again while it plays, the close-up runs again.
+      const c = plays[key]?.craft;
+      if (on && previewing === key && c) showCraft(c);
+      setPreviewing(on ? key : null);
+    },
+  });
+
   // Our craft here on the map: the one whose word comes home soonest, on its way, then its word coming back. 2026-11-05.
-  const tenth = clock === null ? null : Math.floor(clock * 10) / 10;
+  // A way playing holds the map meanwhile.
+  const tenth = clock === null || previewing ? null : Math.floor(clock * 10) / 10;
   const going = tenth === null
     ? null
     : [...flown, ...(stay ? [stay] : []), ...(seed ? [seed] : [])]
@@ -400,11 +449,16 @@ export function DestinationPage({ slug }: { slug: string }) {
               can={!queues && inOrder(road.build)}
               send={() => change((p) => ({ ...p, flybys: [...(p.flybys ?? []), { name: lead.star, y: from, d: ly, by }] }))}
               what={k ? "Probe" : "Sail"}
+              {...way(by)}
               right={road.arrives === null ? "Not yet" : `Year ${year(road.arrives)}`}
               extra={
                 queues && (
                   <button
-                    onClick={() => change(toggleBuild(road.build))}
+                    onClick={() => {
+                      // Queued, its road plays on the map, as a tap on its head does. 2026-11-08.
+                      if (!plan.builds.includes(road.build)) way(by).preview(true);
+                      change(toggleBuild(road.build));
+                    }}
                     className={`h-8 shrink-0 rounded-full px-3.5 text-[13px] font-medium ${plan.builds.includes(road.build) ? "border border-ink" : "bg-ink text-paper"}`}
                   >
                     {plan.builds.includes(road.build) ? "Remove from Queue" : "Add to Queue"}
@@ -427,6 +481,7 @@ export function DestinationPage({ slug }: { slug: string }) {
             can={!before && inOrder("Solar Lens")}
             send={() => change((p) => ({ ...p, lenses: [...(p.lenses ?? []), { name: lead.star, y: from }] }))}
             what="Lens"
+            {...way("lens")}
           />
         )}
         {mind && (
@@ -442,6 +497,7 @@ export function DestinationPage({ slug }: { slug: string }) {
             can={shipReady(plan) && (!plan.colony || plan.colony.name === lead.star)}
             send={() => {}}
             what="Mind"
+            {...way("mind")}
             sentAs={plan.colony?.mode === "furnace" ? "Sent, to feed it" : plan.colony?.mode === "refuge" ? "Sent, to hide" : plan.colony?.mode === "quiet" ? "Sent, to keep small" : "Sent, to settle"}
             choices={(hole ? (["furnace", "refuge"] as const) : (["quiet", "settle"] as const)).map((mode) => ({
               label: mode === "furnace" ? "Feed It" : mode === "refuge" ? "Hide in It" : mode === "quiet" ? "Keep Small" : "Settle Here",
@@ -462,6 +518,7 @@ export function DestinationPage({ slug }: { slug: string }) {
             can={!before && !save?.will && will.leaves !== null && will.leaves <= from + 0.05}
             send={() => {}}
             what="Will"
+            {...way("will")}
             sentAs={(clock ?? 0) >= will.arrives! ? "The Will lives here" : "The Will is going"}
             choices={[{ label: "Move Here", send: () => moveWill({ hole: lead.star, d: lead.ly, y: will.leaves!, at: will.arrives!, rate }) }]}
           />
@@ -479,6 +536,7 @@ export function DestinationPage({ slug }: { slug: string }) {
             can={sentinelReady(plan)}
             send={() => change((p) => ({ ...p, sentinels: [...(p.sentinels ?? []), { name: lead.star, y: from }] }))}
             what="Sentinel"
+            {...way("sentinel")}
           />
         )}
         {seed && (
@@ -494,6 +552,7 @@ export function DestinationPage({ slug }: { slug: string }) {
             can={seedReady(plan)}
             send={() => change((p) => ({ ...p, seeds: [...(p.seeds ?? []), { name: lead.star, y: from }] }))}
             what="Seed probe"
+            {...way("seed")}
           />
         )}
         {bullet && (
@@ -509,6 +568,7 @@ export function DestinationPage({ slug }: { slug: string }) {
             can={!before && inOrder("Strike Yard")}
             send={() => {}}
             what="Bullet"
+            {...way("bullet")}
             sentAs={bullet.leaves !== null && (clock ?? 0) >= bullet.leaves ? "Fired" : "Readying"}
             choices={[{ label: "Fire Here", send: () => change((p) => ({ ...p, strikes: [...(p.strikes ?? []), { name: lead!.star, y: from, d: lead!.ly }] })) }]}
           />

@@ -5,7 +5,9 @@
 // Works, in the order sent. It replaced the warm glows' one switch, a flyby probe to each, of 2026-11-05.
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router";
+import type { CraftKind } from "@/components/craft-view";
 import { usePlan, useSchedule } from "@/components/picks";
+import { farZoom, useReach } from "@/components/reach";
 import { useLeads } from "@/components/scan";
 import { yearText } from "@/lib/game/clock";
 import type { Lead } from "@/lib/game/leads";
@@ -22,6 +24,8 @@ const WITHIN: Record<Kind, number[]> = { warm: [10_000, 30_000, Infinity], cold:
 const lyText = (d: number) => (Number.isFinite(d) ? `${d.toLocaleString("en-US")} ly` : "any distance");
 const NEEDS: Record<By, string[]> = { sails: ["Laser Sail Array"], probe: PROBE_NEEDS, sentinel: SENTINEL_NEEDS };
 const NAME: Record<By, string> = { sails: "Sails", probe: "A flyby probe", sentinel: "A sentinel" };
+/** Each craft's close-up on Reach's map. */
+const CRAFT: Record<By, CraftKind> = { sails: "sail", probe: "probe", sentinel: "sentinel" };
 const t = (kt: number) => `${(kt * 1000).toLocaleString("en-US", { maximumFractionDigits: 0 })} t`;
 
 /** What each costs a glow, in words. */
@@ -165,6 +169,10 @@ function stockLine(plan: Plan, works: number | null, from: number) {
 
 function Row({ kind, found, leads, minds, order, plan, from, set }: { kind: Kind; found: number; leads: Lead[]; minds?: MindsSeen; order?: GlowOrder; plan: Plan; from: number; set(o?: GlowOrder): void }) {
   const { scale } = useSchedule();
+  // A chip picked shows on the map: a craft up close, or how far out the order reaches. 2026-11-08.
+  const { fly, showCraft } = useReach();
+  // A close-up a chip showed goes when the card does: it stayed on over Reach after we left. 2026-11-08.
+  useEffect(() => () => showCraft(null), [showCraft]);
   const works = useMemo(() => roads(plan, scale, from)[1].works ?? null, [plan, scale, from]);
   const choices: By[] = kind === "warm" ? ["sails", "probe", "sentinel"] : ["sentinel"];
   const [by, setBy] = useState<By>(order?.by ?? (kind === "warm" ? "probe" : "sentinel"));
@@ -230,7 +238,14 @@ function Row({ kind, found, leads, minds, order, plan, from, set }: { kind: Kind
           <p className="mt-1 text-[13.5px] leading-snug text-page-ink2">For each {kind} glow</p>
           <div className="mt-1 flex flex-wrap gap-1.5">
             {WITHIN[kind].map((w) => (
-              <button key={w} onClick={() => setWithin(w)} className={chip(within === w)}>
+              <button
+                key={w}
+                onClick={() => {
+                  setWithin(w);
+                  if (Number.isFinite(w)) fly(farZoom(w));
+                }}
+                className={chip(within === w)}
+              >
                 {Number.isFinite(w) ? `Within ${w.toLocaleString("en-US")} ly` : "At any distance"}
               </button>
             ))}
@@ -238,7 +253,14 @@ function Row({ kind, found, leads, minds, order, plan, from, set }: { kind: Kind
           <p className="mt-1.5 text-[13.5px] leading-snug text-page-ink2">send</p>
           <div className="mt-1 flex flex-wrap gap-1.5">
             {choices.map((c) => (
-              <button key={c} onClick={() => setBy(c)} className={chip(by === c)}>
+              <button
+                key={c}
+                onClick={() => {
+                  setBy(c);
+                  showCraft(CRAFT[c]);
+                }}
+                className={chip(by === c)}
+              >
                 {NAME[c]}
               </button>
             ))}
@@ -263,6 +285,7 @@ function Row({ kind, found, leads, minds, order, plan, from, set }: { kind: Kind
                   onClick={() => {
                     set({ since: from, by, within });
                     setAsking(false);
+                    showCraft(CRAFT[by]);
                   }}
                   className="h-8 rounded-full bg-ink px-3.5 text-[13px] font-medium text-paper"
                 >

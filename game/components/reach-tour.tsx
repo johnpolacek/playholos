@@ -7,13 +7,13 @@ import { CRAFT_SHOT_SECS, type CraftKind } from "@/components/craft-view";
 import { BuildMark, buildTone } from "@/components/marks";
 import { MindNote } from "@/components/mind-note";
 import { usePlan, useSchedule } from "@/components/picks";
-import { axis, farZoom, Thread, tripAt, useReach, VOYAGER, year } from "@/components/reach";
+import { axis, farZoom, Thread, useReach, useTripLoop, VOYAGER, year } from "@/components/reach";
 import { Thread as Stops } from "@/components/review";
 import { useStepTap } from "@/components/scan";
 import { tenths } from "@/lib/game/clock";
 import { buildSlug, lacks, LATER, needs, openAt, ordered } from "@/lib/game/plan";
 import type { Plan } from "@/lib/game/types";
-import { LY_AU, NEAREST, roads, zoomFor } from "@/lib/game/reach";
+import { LY_AU, NEAREST, roads, sentinelRoad, zoomFor } from "@/lib/game/reach";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
 
 // How we reach, the third of the four things we would do before Begin, 2026-10-23. Scan's review shows what is out
@@ -29,7 +29,7 @@ const GAP_AU = NEAREST.ly * LY_AU;
 // "Roads to come" said they came later, but the Fusion Drive and the Seed Ship are open at Year 0. Playtest 2026-11-07.
 const STOPS = ["How we reach", "Send a sail", "Send a flyby probe", "More roads"];
 /** What flies on each stop, for the map's counter. */
-const NAMED = ["", "Sails", "Flyby probe", ""];
+const NAMED = ["", "Sails", "Flyby probe", "Sentinel"];
 
 /** The other roads, each a build. Speeds and sizes are plan.ts's and reach.ts's. */
 const MORE_ROADS = [
@@ -147,7 +147,7 @@ function Gap() {
 
 export function ReachTour({ onClose }: { onClose(): void }) {
   const { orderAt: clock, did } = useGame();
-  const { fly, hold, aim, setTrip, showCraft, setCount, craft } = useReach();
+  const { fly, hold, flyLater, aim, showCraft, craft } = useReach();
   // A replay of the close-up runs the map's part again too.
   const shot = craft?.shot ?? 0;
   const { plan } = usePlan();
@@ -165,6 +165,9 @@ export function ReachTour({ onClose }: { onClose(): void }) {
   const ways = useMemo(() => roads(plan, scale, from), [plan, scale, from]);
   const { to } = axis(ways);
   const road = at === 1 || at === 2 ? ways[at - 1] : null;
+  // The last stop's sentinel flies its road too, as the sail and the probe do: it showed up close, then nothing flew.
+  // 2026-11-08.
+  const stays = useMemo(() => sentinelRoad(plan, scale, from, NEAREST.name, NEAREST.ly), [plan, scale, from]);
 
   // The map follows the stops: out from Earth past Voyager 1 to the nearest star on the first, then each road's craft
   // flies there on the map, its Years counted, and its word comes home. The craft themselves are drawn on the page.
@@ -177,42 +180,21 @@ export function ReachTour({ onClose }: { onClose(): void }) {
     }
     // Voyager 1 up close, then pulled back to where it is at Year 0, with New Horizons and their dotted roads from the
     // Sun, held there, then out until the nearest star shows, the two still marked by the Sun. Asked 2026-11-07.
+    // A press on the ruler calls the flight out off, so it never takes the map from where we put it. 2026-11-08.
     hold(zoomFor(VOYAGER.au));
-    const out = gsap.delayedCall(CRAFT_SHOT_SECS + 2.5, () => fly(farZoom(NEAREST.ly), 4.5));
-    return () => void out.kill();
-     
-  }, [at, fly, hold, shot]);
+    return flyLater(CRAFT_SHOT_SECS + 2.5, farZoom(NEAREST.ly), 4.5);
+  }, [at, fly, hold, flyLater, shot]);
   // Each craft opens up close on the map, then pulls back into its flight. 2026-11-07.
   const kind: CraftKind | null = at === 0 ? "voyager" : at === 1 ? "sail" : at === 2 ? "probe" : at === last ? "sentinel" : null;
   useEffect(() => {
     showCraft(kind);
     return () => showCraft(null);
   }, [kind, showCraft]);
-  useEffect(() => {
-    if (!road || road.leaves === null || road.arrives === null || road.home === null) return;
-    const { leaves, arrives, home } = road;
-    const show = (t: number) => {
-      setTrip(tripAt(road, leaves + Math.min(t, home - leaves - 1e-6)));
-      setCount(leaves + t < arrives ? `${NAMED[at]} · ${Math.floor(t)} Years out` : `Passed Proxima b · its word ${Math.floor(leaves + t - arrives)} Years on its way home`);
-    };
-    if (prefersReducedMotion()) {
-      show(arrives - leaves);
-      return () => {
-        setTrip(null);
-        setCount("");
-      };
-    }
-    // Five Years a second, so a sail's 21 Years and a probe's 52 read as the gap they are.
-    const o = { t: 0 };
-    // It starts as the close shot pulls back to a point.
-    const tl = gsap.timeline({ repeat: -1, repeatDelay: 1.5, delay: CRAFT_SHOT_SECS - 1 });
-    tl.fromTo(o, { t: 0 }, { t: home - leaves, duration: (home - leaves) / 5, ease: "none", onUpdate: () => show(o.t) });
-    return () => {
-      tl.kill();
-      setTrip(null);
-      setCount("");
-    };
-  }, [road, at, setTrip, setCount]);
+  // Each road's craft flies on the map as the close shot pulls back, its Years counted. A sentinel stays, so it is at
+  // Proxima b, not past it.
+  useTripLoop(road ?? (at === last ? stays : null), (years, there, word) =>
+    there ? `${at === last ? "At" : "Passed"} Proxima b · its word ${word} Years on its way home` : `${NAMED[at]} · ${years} Years out`,
+  );
 
   useEffect(() => {
     if (at === last) did("reached");

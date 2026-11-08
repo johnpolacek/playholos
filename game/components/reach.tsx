@@ -4,12 +4,12 @@ import { useGame } from "@/components/game-provider";
 import { placeNames } from "@/components/inherit";
 import { Item, type Row } from "@/components/journey";
 import { BringsMark, BuildMark, LeadMark } from "@/components/marks";
-import { type Aim, usePlan, useSchedule } from "@/components/picks";
+import { type Aim, usePlan, useSchedule, WASH } from "@/components/picks";
 import { useLeads } from "@/components/scan";
 import { SkyArt } from "@/components/sky";
 import { Face, ListHead } from "@/components/tab-head";
 import { GlowOrderCard } from "@/components/glow-orders";
-import type { CraftKind } from "@/components/craft-view";
+import { CRAFT_SHOT_SECS, type CraftKind } from "@/components/craft-view";
 import type { Dials, Mark as Place } from "@/lib/drift";
 import { steadySide } from "@/lib/steady-side";
 import { YEAR_0, lyOf, yearText } from "@/lib/game/clock";
@@ -99,6 +99,10 @@ interface ReachView {
   fly(zoom: number, secs?: number): void;
   /** Holds the map at a zoom, as a drag does. */
   hold(zoom: number): void;
+  /** Flies the map to a zoom after `delay` seconds, unless anything flies or holds it first, as a press on the ruler
+   *  does. Gives back what calls it off. The walk's first stop flew out after a drag had put the map elsewhere until
+   *  2026-11-08. */
+  flyLater(delay: number, zoom: number, secs?: number): () => void;
   /** Out from Earth, a pause at Voyager 1, then on to the star in view, after `delay` seconds. */
   tour(delay?: number): void;
   /** Where the map and its ruler run out to. */
@@ -134,6 +138,7 @@ const ReachContext = createContext<ReachView>({
   dials: {},
   fly() {},
   hold() {},
+  flyLater: () => () => {},
   tour() {},
   target: NEAREST_TARGET,
   aim() {},
@@ -163,8 +168,10 @@ export function ReachProvider({ children }: { children: React.ReactNode }) {
   const now = useRef(dials);
   useEffect(() => void (now.current = dials), [dials]);
   const jump = useCallback((zoom: number) => setDials((d) => (d.zoom === zoom ? d : { ...d, zoom })), []);
+  const later = useRef<gsap.core.Tween | null>(null);
   const fly = useCallback(
     (zoom: number, secs?: number) => {
+      later.current?.kill();
       if (prefersReducedMotion()) return jump(zoom);
       const d = now.current;
       const far = Math.abs(zoom - (d.zoom ?? zoom));
@@ -174,11 +181,24 @@ export function ReachProvider({ children }: { children: React.ReactNode }) {
   );
   const hold = useCallback(
     (zoom: number) => {
+      later.current?.kill();
       if (prefersReducedMotion()) return jump(zoom);
       gsap.killTweensOf(now.current);
       Object.assign(now.current, { zoom });
     },
     [jump],
+  );
+  const flyLater = useCallback(
+    (delay: number, zoom: number, secs?: number) => {
+      later.current?.kill();
+      const call = gsap.delayedCall(delay, () => {
+        later.current = null;
+        fly(zoom, secs);
+      });
+      later.current = call;
+      return () => void call.kill();
+    },
+    [fly],
   );
   const [target, setTarget] = useState<Target>(NEAREST_TARGET);
   // Close View: the scene reads it from the dials each frame, and the screen from here.
@@ -219,10 +239,50 @@ export function ReachProvider({ children }: { children: React.ReactNode }) {
   const setCount = useCallback((text: string) => void (count.current && (count.current.textContent = text)), []);
   const showCraft = useCallback((kind: CraftKind | null) => setCraft((was) => (kind ? { kind, shot: (was?.shot ?? 0) + 1 } : null)), []);
   const value = useMemo(
-    () => ({ dials, fly, hold, tour, target, aim, close, setClose, setTrip, craft, showCraft, countAt, setCount, markOf, noteMarks }),
-    [dials, fly, hold, tour, target, aim, close, setClose, setTrip, craft, showCraft, countAt, setCount, markOf, noteMarks],
+    () => ({ dials, fly, hold, flyLater, tour, target, aim, close, setClose, setTrip, craft, showCraft, countAt, setCount, markOf, noteMarks }),
+    [dials, fly, hold, flyLater, tour, target, aim, close, setClose, setTrip, craft, showCraft, countAt, setCount, markOf, noteMarks],
   );
   return <ReachContext value={value}>{children}</ReachContext>;
+}
+
+/** A craft's whole road played on the map, out to its star and its word home, five Years a second, and again. It
+ *  starts as a close shot pulls back, after `delay` seconds, and `count` says on the map where it is, if given. Without
+ *  motion it rests where it arrives. The walk's, shared with a way picked on a destination, 2026-11-08. */
+export function useTripLoop(
+  road: Pick<Road, "leaves" | "arrives" | "home"> | null,
+  count?: (years: number, there: boolean, word: number) => string,
+  delay = CRAFT_SHOT_SECS - 1,
+) {
+  const { setTrip, setCount } = useReach();
+  // Its words read through a ref, so new words each render never restart the flight.
+  const words = useRef(count);
+  useEffect(() => void (words.current = count));
+  const [leaves, arrives, home] = [road?.leaves ?? null, road?.arrives ?? null, road?.home ?? null];
+  useEffect(() => {
+    if (leaves === null || arrives === null || home === null) return;
+    const way = { leaves, arrives, home };
+    const show = (t: number) => {
+      setTrip(tripAt(way, leaves + Math.min(t, home - leaves - 1e-6)));
+      const say = words.current;
+      if (say) setCount(say(Math.floor(t), leaves + t >= arrives, Math.floor(leaves + t - arrives)));
+    };
+    const stop = () => {
+      setTrip(null);
+      if (words.current) setCount("");
+    };
+    if (prefersReducedMotion()) {
+      show(arrives - leaves);
+      return stop;
+    }
+    // Five Years a second, so a sail's 21 Years and a probe's 52 read as the gap they are.
+    const o = { t: 0 };
+    const tl = gsap.timeline({ repeat: -1, repeatDelay: 1.5, delay });
+    tl.fromTo(o, { t: 0 }, { t: home - leaves, duration: (home - leaves) / 5, ease: "none", onUpdate: () => show(o.t) });
+    return () => {
+      tl.kill();
+      stop();
+    };
+  }, [leaves, arrives, home, delay, setTrip, setCount]);
 }
 
 /** Craft of one kind folded into one row: a line of where each is, from leaving to its word home, and opened, each.
@@ -262,22 +322,44 @@ function Fleet({ title, build, rows, now, children }: { title: string; build: st
 
 /** The probes and sails we sent past stars: there can be dozens. Opened, each by its glow's chance of a mind,
  *  likeliest first. 2026-11-05. */
-function Flybys({ rows, now }: { rows: { id: string; slug?: string; name: string; mind?: string; mindAt: number; note: string; home: number; leaves: number }[]; now: number }) {
+function Flybys({ rows, now, aimAt }: { rows: { id: string; slug?: string; name: string; mind?: string; mindAt: number; note: string; home: number; leaves: number; craft: CraftKind | null }[]; now: number; aimAt(id: string): Aim }) {
   const sorted = [...rows].sort((a, b) => b.mindAt - a.mindAt || a.home - b.home);
   return (
     <Fleet title="Flyby probes and sails" build="Probe Yard" rows={rows} now={now}>
         <ul className="mb-1 pl-7">
-          {sorted.map((r) => (
-            <li key={r.id} className="border-t border-faint first:border-t-0">
-              <Link to={r.slug ? `/play/reach/${r.slug}` : "/play/reach"} className="flex items-baseline justify-between gap-3 py-1.5">
+          {sorted.map((r) => {
+            const words = (
+              <>
                 <span className="min-w-0">
                   <span className="block text-[13.5px] font-medium">{r.name}</span>
                   <span className="block text-[12px] leading-snug text-muted">{r.note}</span>
                 </span>
                 {r.mind && <span className="shrink-0 font-mono text-[11.5px] text-other tabular-nums">Mind {r.mind}</span>}
-              </Link>
-            </li>
-          ))}
+              </>
+            );
+            // Its destination shows it on the map, the craft up close too. With no destination to open, as a glow we
+            // no longer list, it shows on the map here: it linked back to Reach and did nothing until 2026-11-08.
+            const aim = aimAt(r.id);
+            return (
+              <li key={r.id} className="border-t border-faint first:border-t-0">
+                {r.slug ? (
+                  <Link to={`/play/reach/${r.slug}`} state={{ craft: r.craft }} className="flex items-baseline justify-between gap-3 py-1.5">
+                    {words}
+                  </Link>
+                ) : (
+                  <button
+                    onClick={aim.toggle}
+                    onPointerEnter={() => aim.point(true)}
+                    onPointerLeave={() => aim.point(false)}
+                    aria-pressed={aim.shown}
+                    className={`flex w-full items-baseline justify-between gap-3 py-1.5 text-left transition-colors duration-200 ${aim.lit ? WASH : ""}`}
+                  >
+                    {words}
+                  </button>
+                )}
+              </li>
+            );
+          })}
         </ul>
     </Fleet>
   );
@@ -511,6 +593,8 @@ export function Ruler() {
       onPointerDown={(e) => {
         e.currentTarget.setPointerCapture(e.pointerId);
         press.current = { x: xOf(e), moved: false };
+        // A press takes the map where it is, and calls off any flight still to come. 2026-11-08.
+        hold(dials.zoom ?? end);
       }}
       onPointerMove={(e) => {
         const p = press.current;
@@ -810,22 +894,20 @@ export function says(
 
 export function Reach() {
   const { save, year: clock, orderAt } = useGame();
-  const { fly, aim, target, setTrip } = useReach();
+  const { fly, aim, setTrip, showCraft } = useReach();
   const { leads, visits, readings } = useLeads();
   const { plan } = usePlan();
   const { scale } = useSchedule();
-  // Voyager 1, picked, takes the map out to it, and again home to the nearest star.
-  const [out, setOut] = useState(false);
-  const [hover, setHover] = useState(false);
-  const voyager: Aim = {
-    shown: out,
-    lit: out || hover,
-    toggle: () => {
-      setOut(!out);
-      fly(out ? farZoom(target.ly) : zoomFor(VOYAGER.au));
-    },
-    point: setHover,
-  };
+  // A craft row, picked, shows it on the map: its star, where it is on its road, and the craft up close. One at a time,
+  // and picked again, the map goes back to what it shows by itself. Voyager 1 takes the map out to it. 2026-11-08.
+  const [picked, setPicked] = useState<string | null>(null);
+  const [pointed, setPointed] = useState<string | null>(null);
+  const aimAt = (id: string): Aim => ({
+    shown: picked === id,
+    lit: picked === id || pointed === id,
+    toggle: () => setPicked(picked === id ? null : id),
+    point: (on) => setPointed((p) => (on ? id : p === id ? null : p)),
+  });
 
   // Begun now: Year 0 before Begin, and after it the tenth of a Year, so the dates move at most every thirty seconds.
   // Ordered from a hole, it begins on Earth a light-time later. 2026-10-26.
@@ -887,7 +969,7 @@ export function Reach() {
   }).length;
 
   // Our sails and probe join Voyager 1 once they leave, each on its way from leaving to its word home from Proxima b.
-  const flying: Row[] = base
+  const flying = base
     .filter((r) => r.n !== null && r.leaves !== null && r.home !== null && clock !== null && clock >= r.leaves)
     .map((r) => {
       const seen = visits.find((v) => v.star === NEAREST.name && v.by === (r.build === "Laser Sail Array" ? "sails" : "probe"));
@@ -901,22 +983,26 @@ export function Reach() {
             ? `Passed Proxima b in Year ${year(r.arrives!)}. What ${they} saw is on its way to us.`
             : `Bound for Proxima b at ${r.speed === 0.2 ? "a fifth" : "a tenth"} of light speed, passing it in Year ${year(r.arrives!)}.`,
         at: r.home,
-        kind: "flight",
+        kind: "flight" as const,
         msg: "to Proxima b",
         sent: YEAR_0 + r.leaves!,
         ly: NEAREST.ly,
+        road: r,
+        craft: (r.build === "Laser Sail Array" ? "sail" : "probe") as CraftKind,
       };
     });
 
   // Our craft sent to other stars: lenses, sentinels, seed probes, and sails and probes passing. Reach listed only
   // Voyager 1 after all of these went, playtest 2026-11-01, and each showed only once it left, so a send seemed to do
   // nothing until 2026-11-05.
-  const stays: (Row & { id: string; star: string; y: number; home: number; road: Road; flyby: boolean })[] = clock === null ? [] : [
+  const stays: (Row & { id: string; star: string; y: number; home: number; road: Road; flyby: boolean; craft: CraftKind | null })[] = clock === null ? [] : [
     ...(plan.lenses ?? []).map((o) => ({ o, road: lensRoad(plan, scale, from, o.name), what: "A lens", to: "at its Sun’s focus, toward" })),
     ...(plan.sentinels ?? []).map((o) => ({ o, road: sentinelRoad(plan, scale, from, o.name, leads.find((l) => l.star === o.name)?.ly ?? starOf(o.name)?.d ?? 0), what: "A sentinel", to: "to stay at" })),
     ...(plan.seeds ?? []).map((o) => ({ o, road: seedRoad(plan, scale, from, o.name, starOf(o.name)?.d ?? 0), what: "A seed probe", to: "to stay at" })),
     ...(plan.flybys ?? []).map((o) => ({ o, road: flybyRoad(plan, scale, o.y, o), what: o.by === "sails" ? "Sails" : "A flyby probe", to: "to pass" })),
   ].flatMap(({ o, road: r, what, to }) => {
+    // A lens and a seed probe have no close-up of their own yet.
+    const craft: CraftKind | null = what === "Sails" ? "sail" : what === "A flyby probe" ? "probe" : what === "A sentinel" ? "sentinel" : null;
     if (r.leaves === null || r.home === null || r.arrives === null) return [];
     const star = starName(o.name);
     const there = what === "A lens" ? `Reached its focus in Year ${year(r.arrives)}` : to === "to pass" ? `Passed ${star} in Year ${year(r.arrives)}` : `Reached ${star} in Year ${year(r.arrives)}`;
@@ -925,6 +1011,7 @@ export function Reach() {
       y: o.y,
       home: r.home,
       road: r,
+      craft,
       flyby: to === "to pass",
       id: `${what}:${o.name}`,
       key: r.build,
@@ -941,24 +1028,38 @@ export function Reach() {
   // Voyager 1 stands for what we have sent only until a craft of ours leaves. 2026-11-08.
   const gone = clock !== null && (flying.length > 0 || stays.some((r) => r.road.leaves !== null && clock >= r.road.leaves));
 
-  // The map shows the way to our latest craft still on its way, or the nearest star with none. 2026-11-05.
+  // The map shows the way to our latest craft still on its way, or the nearest star with none. 2026-11-05. A craft
+  // picked shows its own way instead, 2026-11-08.
   const latest = [...stays].filter((s) => (clock ?? 0) < s.home).sort((a, b) => b.y - a.y)[0];
-  const bound = latest?.star;
+  const pick = picked === SENT.key ? null : [...flying.map((r) => ({ ...r, id: r.key, star: NEAREST.name })), ...stays].find((r) => r.id === picked);
+  const shows = picked === null ? latest : pick;
+  const bound = shows?.star;
   // And the craft itself on the way, then its word coming home, a tenth of a Year at a time.
-  const trip = latest && clock !== null ? tripAt(latest.road, Math.floor(clock * 10) / 10) : null;
+  const trip = shows && clock !== null ? tripAt(shows.road, Math.floor(clock * 10) / 10) : null;
   const [tripCraft, tripSignal] = [trip?.craft, trip?.signal];
   useEffect(() => {
     if (tripCraft === undefined) return;
     setTrip({ craft: tripCraft, signal: tripSignal! });
     return () => setTrip(null);
   }, [setTrip, tripCraft, tripSignal]);
-  const going = leads.find((l) => l.star === bound);
-  const [goingStar, goingLy, goingSystem, goingRange] = [going?.star, going?.ly, going?.system, going?.range];
+  // With none bound, the nearest star as its lead, with its system, so Close View flies into it on Reach too. Its
+  // plain target had no system, so the tab had no Close View. 2026-11-08.
+  const going = leads.find((l) => l.star === bound) ?? leads.find((l) => l.star === NEAREST.name);
+  // A star we have no lead on, as a glow forgotten: its star as the row has it.
+  const [goingStar, goingLy, goingSystem, goingRange] = going ? [going.star, going.ly, going.system, going.range] : [bound, shows?.ly, undefined, undefined];
   useEffect(() => {
-    if (!goingStar) return;
-    aim(targetOf(goingStar, goingLy!, goingSystem, goingRange));
+    if (goingStar) aim(targetOf(goingStar, goingLy ?? NEAREST.ly, goingSystem, goingRange));
+    else aim(null);
+    if (picked === SENT.key) fly(zoomFor(VOYAGER.au));
     return () => aim(null);
-  }, [aim, goingStar, goingLy, goingSystem, goingRange]);
+  }, [aim, fly, picked, goingStar, goingLy, goingSystem, goingRange]);
+  // The picked craft up close, played again with each pick.
+  const upClose: CraftKind | null = picked === SENT.key ? "voyager" : (pick?.craft ?? null);
+  useEffect(() => {
+    if (!upClose) return;
+    showCraft(upClose);
+    return () => showCraft(null);
+  }, [upClose, picked, showCraft]);
 
   // A lead's chance of a mind, where we have a word on it, as Scan shows it. 2026-11-05.
   const mindOf = (lead: Lead) => {
@@ -991,13 +1092,13 @@ export function Reach() {
       <ListHead left={`Craft sent · ${(gone ? 0 : 1) + flying.length + stays.length}`} right="Word home" className="mt-4" />
       <ul className="mt-1">
         {flying.map((r) => (
-          <Item key={r.key} row={r} now={clock ?? 0} began={clock !== null} />
+          <Item key={r.key} row={r} now={clock ?? 0} began={clock !== null} aim={aimAt(r.key)} />
         ))}
         {/* Two or more of a kind fold into one row, a line of where each is, opened for each. 2026-11-08. */}
         {(["A lens", "A sentinel", "A seed probe"] as const).map((what) => {
           const kin = stays.filter((r) => !r.flyby && r.id.startsWith(`${what}:`));
           if (kin.length < 2)
-            return kin.map((r) => <Item key={r.id} row={r} now={clock ?? 0} began={clock !== null} />);
+            return kin.map((r) => <Item key={r.id} row={r} now={clock ?? 0} began={clock !== null} aim={aimAt(r.id)} />);
           return (
             <Fleet
               key={what}
@@ -1008,7 +1109,7 @@ export function Reach() {
             >
               <ul className="mb-1 pl-7">
                 {kin.map((r) => (
-                  <Item key={r.id} row={r} now={clock ?? 0} began={clock !== null} />
+                  <Item key={r.id} row={r} now={clock ?? 0} began={clock !== null} aim={aimAt(r.id)} />
                 ))}
               </ul>
             </Fleet>
@@ -1020,10 +1121,11 @@ export function Reach() {
             const lead = leads.find((l) => l.star === r.star);
             const c = lead ? chancesOf(lead, readings[lead.slug] ?? []) : null;
             const m = c?.mind && c.mind !== "unknown" ? c.mind : null;
-            return { id: r.id, slug: lead?.slug, name: r.name, note: r.note, home: r.home, leaves: r.road.leaves ?? r.home, mind: c?.ruledOut ? "ruled out" : m ? rangeText(m) : undefined, mindAt: m ? (m.lo + m.hi) / 2 : -1 };
+            return { id: r.id, slug: lead?.slug, name: r.name, note: r.note, home: r.home, leaves: r.road.leaves ?? r.home, craft: r.craft, mind: c?.ruledOut ? "ruled out" : m ? rangeText(m) : undefined, mindAt: m ? (m.lo + m.hi) / 2 : -1 };
           })}
+          aimAt={aimAt}
         />
-        {!gone && <Item row={SENT} now={clock ?? 0} began={clock !== null} aim={voyager} />}
+        {!gone && <Item row={SENT} now={clock ?? 0} began={clock !== null} aim={aimAt(SENT.key)} />}
       </ul>
       {/* Craft are here, and our messages on Scan: a blind first-timer looked for a message just sent, found only
           Voyager, and had to ask the Mind where it went. 2026-11-07. */}
