@@ -4,6 +4,9 @@ import { browserStore } from "@/lib/game/store";
 import { POOL } from "@/lib/sim/pool";
 import type { Save, Sent, Will } from "@/lib/game/types";
 
+/** How long a snoozed build stays out of the Mind's suggestions, in Years: 25 of the Will's minutes. 2026-11-07. */
+export const SNOOZE_YEARS = 5;
+
 interface Game {
   /** Undefined until the save loads. */
   save?: Save;
@@ -24,8 +27,8 @@ interface Game {
   stopSending(id: string, y: number): void;
   /** Marks readings as opened. */
   see(ids: string[]): void;
-  /** Turns down a build the Mind suggested, so it suggests it no more. */
-  pass(build: string): void;
+  /** Snoozes a build the Mind suggested, so it names another until `SNOOZE_YEARS` from Year `y`. */
+  snooze(build: string, y: number): void;
   /** Marks one of the things we would do before Begin as done. Once done, it stays done. */
   did(step: "reviewed" | "reached" | "asked"): void;
   begin(): void;
@@ -110,7 +113,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     send: (message) => change((s) => (s.sent?.some((x) => x.id === message.id) ? s : { ...s, sent: [...(s.sent ?? []), message] })),
     stopSending: (id, y) => change((s) => ({ ...s, sent: s.sent?.map((x) => (x.id === id && x.stopped === undefined ? { ...x, stopped: y } : x)) })),
     see: (ids) => change((s) => ({ ...s, seen: [...new Set([...(s.seen ?? []), ...ids])] })),
-    pass: (build) => change((s) => ({ ...s, passed: [...new Set([...(s.passed ?? []), build])] })),
+    snooze: (build, y) => change((s) => ({ ...s, snoozed: { ...s.snoozed, [build]: y + SNOOZE_YEARS } })),
     did: (step) => void ((latest.current ?? save)?.[step] || change((s) => ({ ...s, [step]: true }))),
     begin: () => change((s) => ({ ...s, beganAt: Date.now() })),
     tell: (y) => change((s) => (y > (s.told ?? 0) ? { ...s, told: y } : s)),

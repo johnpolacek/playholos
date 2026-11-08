@@ -152,10 +152,10 @@ export function useMindPick(on: boolean) {
   const at = tenths(year ?? 0);
   return useMemo(() => {
     if (!on) return null;
-    const passed = save?.passed ?? [];
-    const ready = openAt(plan, done, at).filter((b) => !lacks(plan, b.name).length && !passed.includes(b.name));
+    const snoozed = save?.snoozed ?? {};
+    const ready = openAt(plan, done, at).filter((b) => !lacks(plan, b.name).length && !((snoozed[b.name] ?? -Infinity) > at));
     const soon = Object.fromEntries(ready.map((b) => [b.name, moves(plan, scale, b.name, at).at ?? Infinity]));
     const pick = ready.sort((p, q) => Number(fits(strategy, q)) - Number(fits(strategy, p)) || soon[p.name] - soon[q.name])[0];
     return pick ? { build: pick, fit: fits(strategy, pick), strategy } : null;
-  }, [on, plan, done, at, scale, strategy, save?.passed]);
+  }, [on, plan, done, at, scale, strategy, save?.snoozed]);
 }
