@@ -1,10 +1,19 @@
-// npm run events [days]: how people played playholos.com, from the rows lib/track.ts sends. Players a day, how far
+// npm run events [days] [--since-last]: how people played playholos.com, from the rows lib/track.ts sends. Players a day, how far
 // they got, what they built, and where they came from. Reads Analytics Engine's SQL API with a token that can read
 // Account Analytics, from CLOUDFLARE_API_TOKEN or .dev.vars. Rows are kept 90 days. 2026-11-08.
-import { readFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 
 const ACCOUNT = process.env.CLOUDFLARE_ACCOUNT_ID ?? "712b6921d7579b8ab047b7303a5afd62";
-const days = Math.max(1, Math.min(90, Number(process.argv[2]) || 7));
+// --since-last reads from the last report run with it, kept in .events-last, so a check covers only what is new.
+const LAST = new URL("../.events-last", import.meta.url);
+const sinceLast = process.argv.includes("--since-last");
+let start = null;
+if (sinceLast) {
+  try {
+    start = readFileSync(LAST, "utf8").trim();
+  } catch {}
+}
+const days = Math.max(1, Math.min(90, Number(process.argv.find((a) => /^\d+$/.test(a))) || 7));
 
 function token() {
   if (process.env.CLOUDFLARE_API_TOKEN) return process.env.CLOUDFLARE_API_TOKEN;
@@ -32,8 +41,10 @@ async function sql(query) {
   return (await res.json()).data;
 }
 
-const since = `timestamp > NOW() - INTERVAL '${days}' DAY`;
-const from = `FROM holos_events WHERE ${since}`;
+const since = start ? `timestamp > toDateTime('${start}')` : `timestamp > NOW() - INTERVAL '${days}' DAY`;
+// Our own tests before ?me marked our browsers.
+const ours = `index1 NOT IN ('deploy-check')`;
+const from = `FROM holos_events WHERE ${since} AND ${ours}`;
 
 const [daily, steps, builds, pages, countries, errors] = await Promise.all([
   sql(`SELECT toDate(timestamp) AS day, count(DISTINCT index1) AS players, SUM(_sample_interval) AS events ${from} GROUP BY day ORDER BY day`),
@@ -49,7 +60,7 @@ const PATH = ["page", "wake", "charter", "reviewed", "reached", "ask", "begin", 
 const top = Number(by.page?.players ?? 0) || 1;
 const bar = (n) => "▓".repeat(Math.round((n / top) * 20)).padEnd(20, "░");
 
-console.log(`\nplayholos.com, the last ${days} day${days === 1 ? "" : "s"}\n`);
+console.log(start ? `\nplayholos.com, since ${start} UTC\n` : `\nplayholos.com, the last ${days} day${days === 1 ? "" : "s"}\n`);
 console.log("Players a day");
 for (const d of daily) console.log(`  ${d.day}  ${String(d.players).padStart(5)} players  ${String(d.events).padStart(6)} events`);
 console.log("\nHow far players got");
@@ -64,3 +75,4 @@ if (pages.length) console.log("\nPages\n" + pages.map((p) => `  ${String(p.views
 if (countries.length) console.log("\nCountries\n" + countries.map((c) => `  ${String(c.players).padStart(5)}  ${c.country || "?"}`).join("\n"));
 if (errors.length) console.log("\nThe Mind’s failures\n" + errors.map((e) => `  ${String(e.times).padStart(5)}  ${e.error}`).join("\n"));
 console.log();
+if (sinceLast) writeFileSync(LAST, new Date().toISOString().slice(0, 19).replace("T", " ") + "\n");

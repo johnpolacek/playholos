@@ -3,13 +3,27 @@ import { EVENT_NAMES, type EventName } from "@/lib/events";
 // How people play, one anonymous row an event: what happened, a short detail such as a build's name, and the Year. No
 // cookie, no name, no words from the Mind's talk. Only playholos.com sends. A game on our own machine, by npm run play
 // or a playtest, sends nothing, so our tests never count as players, and no one's local game reports to us unasked.
-// Global Privacy Control turns it off. 2026-11-08.
+// Global Privacy Control turns it off, and so does marking a browser as ours. 2026-11-08.
 
 const LIVE = typeof location !== "undefined" && /^(www\.)?playholos\.com$/.test(location.hostname);
 const PLAYER = "holos-player";
 
+const ME = "holos-me";
+
+// Our own browsers send nothing either: playholos.com/?me marks one as ours, and ?me=0 unmarks it. 2026-11-08.
+function mine() {
+  try {
+    const me = new URLSearchParams(location.search).get("me");
+    if (me === "0") localStorage.removeItem(ME);
+    else if (me !== null) localStorage.setItem(ME, "1");
+    return localStorage.getItem(ME) === "1";
+  } catch {
+    return false;
+  }
+}
+
 function off() {
-  if (!LIVE) return true;
+  if (!LIVE || mine()) return true;
   return (navigator as Navigator & { globalPrivacyControl?: boolean }).globalPrivacyControl === true;
 }
 
