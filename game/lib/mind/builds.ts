@@ -137,11 +137,12 @@ export function describeOffers(plan: Plan, scale: number, done: Record<string, n
   const lines = open.map((b) => {
     const m = moves(plan, scale, b.name, year === null ? null : at);
     const when = m.at == null ? `done ${PAST}` : `done about Year ${yearText(m.at)}`;
-    const slows = m.late ? `slowing the ${m.late.name} by about ${tenth(m.late.by)} Years` : "slowing nothing we've queued";
-    const speeds = m.soon ? `, and speeding the ${m.soon.name} by about ${tenth(m.soon.by)} Years` : "";
-    return `- ${b.name}: ordered now, ${when}, ${slows}${speeds}.`;
+    // Nothing slowed goes unsaid, on Build and here: the Mind said "slowing nothing we've queued" unasked. 2026-11-08.
+    const slows = m.late ? `, slowing the ${m.late.name} by about ${tenth(m.late.by)} Years` : "";
+    const speeds = m.soon ? `, ${m.late ? "and " : ""}speeding the ${m.soon.name} by about ${tenth(m.soon.by)} Years` : "";
+    return `- ${b.name}: ordered now, ${when}${slows}${speeds}.`;
   });
-  return `Builds the Will could order now, as Build shows them. When asked how long one takes or what it slows, say these, never the standard pace:\n${lines.join("\n")}`;
+  return `Builds the Will could order now, as Build shows them. When asked how long one takes or what it slows, say these, never the standard pace. One that names no build it slows slows none. Never say a build slows nothing unless the Will asks what it slows:\n${lines.join("\n")}`;
 }
 
 /** The rock coming, once our surveys find it, and how it ended. Nothing while it is unknown: the Mind knows only what

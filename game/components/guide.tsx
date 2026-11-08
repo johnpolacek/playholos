@@ -241,7 +241,7 @@ function LastLine({ c }: { c: Change }) {
             , and it <span className="text-see">speeds up {the(c.soon.name)} by {span(c.soon.by)}</span>
           </>
         )}
-        {!c.late && !c.soon && ", and it slows nothing else"}.
+        .
       </>
     );
   return (
