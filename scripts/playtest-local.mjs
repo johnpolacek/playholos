@@ -259,6 +259,24 @@ for (const f of readdirSync(join(copy, "playtests/states")))
     cpSync(join(copy, "playtests/states", f), join(repo, "playtests/states", f));
     say(`New saved state: playtests/states/${f}`);
   }
+// The build, so the scorer can tie each score to code, and the player's last message as REPORT.md if it wrote none.
+{
+  const sp = join(out, "scores.json");
+  const sc = existsSync(sp) ? JSON.parse(readFileSync(sp, "utf8")) : {};
+  if (!sc.build) writeFileSync(sp, JSON.stringify({ build, ...sc }, null, 2) + "\n");
+  const rp = join(out, "REPORT.md");
+  if (!existsSync(rp) && existsSync(join(out, "player.jsonl"))) {
+    const ev = readFileSync(join(out, "player.jsonl"), "utf8").split("\n").flatMap((l) => {
+      try {
+        return [JSON.parse(l)];
+      } catch {
+        return [];
+      }
+    });
+    const last = ev.filter((e) => e.type === "result").at(-1)?.result ?? ev.filter((e) => e.type === "item.completed" && e.item?.type === "agent_message").at(-1)?.item?.text;
+    if (last) writeFileSync(rp, `# Report, ${run}\n\n${last}\n`);
+  }
+}
 const readers = kind === "cloud" ? [["scripts/playtest-rate.mjs", [out]]] : [["scripts/playtest-judge.mjs", [out]]];
 // A smoke run checks the wiring only: no quiz to judge, no screens to shoot.
 const smoke = args.includes("--smoke");

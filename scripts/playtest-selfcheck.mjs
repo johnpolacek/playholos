@@ -81,6 +81,8 @@ function checkRun(dir) {
     for (const s of runner.steps) add("runner", `${s.step} finished`, s.code === 0, `exit ${s.code} after ${s.secs}s`, `Run ${s.step} by hand on this folder and fix what it prints.`);
     add("runner", "the player exited cleanly", runner.player.code === 0, `exit ${runner.player.code}`, "Read the tail of player.jsonl for the error, then fix the player's command or sandbox.");
   }
+  // Even a smoke run must see the game once, or nothing after it means anything.
+  add("player", "the player saw the game", shots >= 1, `${shots} shots`, "blind.mjs start failed. Read player.jsonl for its error. For codex, Chrome may not start in its sandbox: try --codex-open.");
   if (!smoke) {
     add("player", "the player played long enough", runner?.player.minutes >= 10, `${runner?.player.minutes ?? "?"} min`, "A short run means a stall or a crash. Read player.jsonl's last lines, and the heartbeat in the runner's output.");
     add("player", "about 150 actions or 60 minutes", actions.length >= 60 || runner?.player.minutes >= 50, `${actions.length} actions`, "Tell the player in BLIND.md to keep going, and say how many actions are left at each check-in.");
@@ -96,6 +98,8 @@ function checkRun(dir) {
     add("player", "it marked its firsts", firsts.size >= 3, [...firsts].join(", ") || "none", "Remind the player of the six first goals in the local note.");
   }
   add("blind", "the player stayed blind", !peeks.length, peeks.length ? `${peeks.length} peeks: ${[...new Set(peeks.map((p) => p.what))].join(", ")}` : `${calls.length} tool calls, none peeked`, "Take the offending read out of reach: tighten the local note in playtest-local.mjs, or leave that file out of the copy.");
+  add("player", "the report was written", read(dir, "REPORT.md"), read(dir, "REPORT.md") ? "REPORT.md" : "no REPORT.md", "Have the runner save the player's last message as REPORT.md.");
+  add("runner", "the build is named in scores.json", scores.build, scores.build ?? "none", "Have the runner write the build into scores.json before the scorer runs.");
   if (!smoke) {
     add("readers", "the judge graded understanding", scores.blind?.understood?.score != null, String(scores.blind?.understood?.score ?? "none"), "Run npm run playtest:judge on this folder and read its error.");
     add("readers", "the judge graded the check-ins", scores.blind?.["check-ins"]?.score != null, String(scores.blind?.["check-ins"]?.score ?? "none"), "No check-ins reached the judge. See the check-in line above.");
@@ -133,17 +137,19 @@ const args = process.argv.slice(2);
 
 if (args[0] === "--pair") {
   const [a, b] = args.slice(1).map(checkRun);
+  // A run that never saw the game, or never finished, can't be compared with anything.
+  const played = (r) => r.checks.filter((c) => c.area === "runner" || c.name === "the player saw the game" || c.name === "the player played long enough").every((c) => c.pass);
   const grades = (r) => r.scores.blind?.understood?.answers ?? {};
   const ids = [...new Set([...Object.keys(grades(a)), ...Object.keys(grades(b))])];
   const split = ids.filter((id) => grades(a)[id]?.grade != null && grades(b)[id]?.grade != null && Math.abs(grades(a)[id].grade - grades(b)[id].grade) >= 5);
   const C = [
-    { name: "both players finished", pass: a.checks.every((c) => c.area !== "runner" || c.pass) && b.checks.every((c) => c.area !== "runner" || c.pass), fix: "See each run's SELFCHECK.md." },
+    { name: "both players played", pass: played(a) && played(b), saw: `${a.who} ${played(a) ? "played" : "did not"}, ${b.who} ${played(b) ? "played" : "did not"}`, fix: "See each run's SELFCHECK.md." },
     { name: "both played the same build", pass: a.build && a.build === b.build, saw: `${a.build} and ${b.build}`, fix: "Have --both take one snapshot and hand it to both copies." },
     { name: "both stayed blind", pass: !a.peeks.length && !b.peeks.length, saw: `${a.peeks.length} and ${b.peeks.length} peeks`, fix: "See each run's Peeks." },
     {
       name: "the judge reads both players alike",
-      pass: split.length <= 1,
-      saw: split.length ? `grades 5 or more apart on ${split.join(", ")}` : "no question 5 apart",
+      pass: played(a) && played(b) && split.length <= 1,
+      saw: !(played(a) && played(b)) ? "not comparable, a player did not play" : split.length ? `grades 5 or more apart on ${split.join(", ")}` : "no question 5 apart",
       fix: "A wide split on one answer means the quiz question is vague or the judge's full-marks line is. Tighten that question's full in regime.html.",
     },
   ];
