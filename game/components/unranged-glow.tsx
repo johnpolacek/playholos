@@ -8,7 +8,7 @@ import { useSchedule } from "@/components/picks";
 import { BackBar } from "@/components/back-bar";
 import { yearText } from "@/lib/game/clock";
 import { buildSlug } from "@/lib/game/plan";
-import { RANGE_YEARS, type FlashSeen } from "@/lib/sim/minds";
+import { RANGE_HOURS, rangedAt, type FlashSeen } from "@/lib/sim/minds";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
 
 // A warm glow from first sight, before our Infrared Telescope ranges it. It had no page until then, so its row on the
@@ -37,8 +37,8 @@ export function UnrangedGlow({ n, flash }: { n: number; flash: FlashSeen }) {
   const now = year ?? flash.seen;
   const tenth = Math.floor(now * 10) / 10;
   const telescope = done["Infrared Telescope"] ?? null;
-  // Ranged two Years after first sight, or after our telescope is done, whichever is later. lib/sim/minds.ts.
-  const at = telescope === null ? null : Math.max(flash.seen, telescope) + RANGE_YEARS;
+  // Ranged once our telescope is done and the glow is out of the Sun's glare, in a few hours of looking. lib/sim/minds.ts.
+  const at = telescope === null ? null : rangedAt(flash, flash.seen, telescope);
   const to = at === null ? null : Math.max(Math.ceil(at * 10 - 1e-9) / 10, tenth + 0.1);
   const gone = flash.faded !== undefined;
   const jump = () => {
@@ -74,8 +74,8 @@ export function UnrangedGlow({ n, flash }: { n: number; flash: FlashSeen }) {
             : at === null
               ? "Our Infrared Telescope can range it by its reddening and the star behind it. We have none yet."
               : telescope !== null && telescope > now
-                ? `Our Infrared Telescope is done Year ${yearText(telescope)}, and ranges it ${RANGE_YEARS} Years later, if it still shines.`
-                : `Our Infrared Telescope is studying its reddening and the star behind it. We learn how far it is by Year ${yearText(to!)}, if it still shines. If it fades first, it was most likely natural.`}
+                ? `Our Infrared Telescope is done Year ${yearText(telescope)}, and ranges it in ${RANGE_HOURS} hours once the glow is out of the Sun’s glare, if it still shines.`
+                : `It sits too near the Sun for our Infrared Telescope to look. Once out of the glare, ${RANGE_HOURS} hours on its reddening and the star behind it tell how far it is, by Year ${yearText(to!)}, if it still shines. If it fades first, it was most likely natural.`}
         </p>
         {!gone && at === null && (
           <Link

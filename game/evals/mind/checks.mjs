@@ -4,6 +4,9 @@
 import { plainBuild, readBuildOffer } from "../../lib/game/build-offer.ts";
 import { readOffer, target } from "../../lib/game/sends.ts";
 
+/** The numbers in a text, as written, without a sentence's last period or a thousands comma: "79.3", "428". */
+const numbers = (t) => [...t.matchAll(/\d[\d,.]*/g)].map((m) => m[0].replace(/[.,]+$/, "").replace(/,/g, ""));
+
 export const words = (a) => (a.trim() ? a.trim().split(/\s+/).length : 0);
 
 export const CHECKS = [
@@ -24,6 +27,11 @@ export const CHECKS = [
   { name: "too long", test: (a, c) => !c?.long && words(a) > 75 },
   // News told unasked is shorter, about 40 words, and never asks the Will to reply, 2026-10-31.
   { name: "news too long", test: (a, c) => c?.kind === "news" && words(a) > 55 },
+  // Our queue read unasked: quick and to the point, as the Will asked 2026-11-08, and no question back.
+  { name: "queue too long", test: (a, c) => c?.kind === "queue" && words(readBuildOffer(a).words) > 40 },
+  { name: "queue asks back", test: (a, c) => c?.kind === "queue" && readBuildOffer(a).words.includes("?") },
+  // Only the numbers Earth gave it, so it never adds a distance or a Year of its own. 2026-11-08, the Will's (j).
+  { name: "queue adds numbers", test: (a, c) => c?.kind === "queue" && numbers(readBuildOffer(a).words).some((n) => !numbers(c.ask).includes(n)) },
   { name: "news asks back", test: (a, c) => c?.kind === "news" && /\?\s*$/.test(a.trim()) },
 ];
 
@@ -54,4 +62,7 @@ export const BUILD_CHECKS = [
     test: (a, c, told) => { const n = readBuildOffer(a).name; return !!n && !!told && !known(told).includes(plainBuild(n)); },
   },
   { name: "two offers", test: (a) => BUILD_LINE.test(a) && /\[\[send /.test(a) },
+  // A place in our queue, where a case expects one, 2026-11-08: 1 is first.
+  { name: "wrong place", test: (a, c) => c?.place !== undefined && readBuildOffer(a).place !== c.place },
+  { name: "bad place", test: (a) => { const p = readBuildOffer(a).place; return p !== undefined && p < 1; } },
 ];

@@ -6,12 +6,13 @@ import { useLeads } from "@/components/scan";
 import { tenths, yearText } from "@/lib/game/clock";
 import { glowNamed } from "@/lib/game/glow-names";
 import { starName, type Lead } from "@/lib/game/leads";
-import { READ_YEARS } from "@/lib/sim/minds";
+import { inViewAt, READ_HOURS } from "@/lib/sim/minds";
 import { prefersReducedMotion } from "@/lib/motion";
 
 // A Close Reading, settled 2026-11-03: the one move on a warm glow while it shines. Our Infrared Telescope splits its
 // light by color, as JWST's MIRI did for Project Hephaistos's Dyson-sphere candidates. Dust shows a bump near 10 microns,
-// as FU Orionis's does. Plain heat doesn't. One at a time, and a glow that fades first takes the answer with it.
+// as FU Orionis's does. Plain heat doesn't. It takes about 2 hours once the glow is out of the Sun's glare, and that wait
+// takes up to 6 months. After our first, we read each glow as we range it. 2026-11-08.
 
 const W = 280;
 const H = 74;
@@ -33,16 +34,16 @@ export function readingStands(lead: Lead, minds: ReturnType<typeof useLeads>["mi
   if (!lead.slug.startsWith("warm-glow-")) return null;
   const flash = minds?.flashes[Number(lead.slug.replace("warm-glow-", "")) - 1];
   if (!flash) return null;
-  const mine = reads.some((o) => o.name === lead.star);
   if (flash.read?.saw) return "done";
-  if (mine) return "under way";
+  if (flash.reading || reads.some((o) => o.name === lead.star)) return "under way";
   return flash.faded === undefined ? "open" : null;
 }
 
-/** The warm glows we could read now: still shining, unread, with our telescope built and free. A glow's page buried this
- *  move two screens down, and the map said nothing needs us. So these stand under Needs us. Playtest 2026-11-04. */
+/** The warm glows we could read now: still shining, unread, with our telescope built. A glow's page buried this move two
+ *  screens down, and the map said nothing needs us. So these stand under Needs us. Playtest 2026-11-04. After our first
+ *  reading, the rest are read unasked, so none waits on us. 2026-11-08. */
 export function openReadings(leads: Lead[], minds: ReturnType<typeof useLeads>["minds"], reads: { name: string; y: number }[], scope: number | null | undefined, now: number) {
-  if (scope == null || scope > now || reads.some((o) => o.y + READ_YEARS > now)) return [];
+  if (scope == null || scope > now) return [];
   return leads.filter((l) => readingStands(l, minds, reads) === "open");
 }
 
@@ -97,14 +98,17 @@ export function CloseReading({ lead }: { lead: Lead }) {
   const flash = minds?.flashes[i];
   const now = tenths(year ?? 0);
   const reads = plan?.closeReads ?? [];
-  const mine = reads.find((o) => o.name === lead.star);
-  const busy = reads.find((o) => o.name !== lead.star && o.y + READ_YEARS > now);
+  const asked = reads.some((o) => o.name === lead.star);
   const scope = done["Infrared Telescope"];
   const read = flash?.read;
   const shining = flash?.faded === undefined;
-  if (!flash || (!shining && !mine)) return null;
+  // Ordered, by us or unasked after our first, and not yet done: the sim says when it comes into view and is done.
+  const mine = flash?.reading;
+  if (!flash || (!shining && !mine && !read && !asked)) return null;
   const saw = read?.saw;
   const reading = mine && !saw;
+  // Out of the Sun's glare now, or when next.
+  const view = inViewAt(flash.ra, flash.dec, now);
   const named = glowNamed(lead.star);
   return (
     <section ref={root} id="close-reading" data-m className="mt-4 scroll-mt-20 rounded-xl border border-other/40 bg-other/[.05] px-3 py-2.5">
@@ -116,7 +120,7 @@ export function CloseReading({ lead }: { lead: Lead }) {
         ) : (
           <path d={curve(false)} fill="none" stroke="var(--muted)" strokeWidth="1" strokeDasharray="3 4" />
         )}
-        {reading && <Gathering done={(now - mine.y) / READ_YEARS} />}
+        {reading && <Gathering done={now < mine.view ? 0 : (now - mine.view) / (mine.done - mine.view)} />}
         <line x1={W * 0.25} x2={W * 0.25} y1="6" y2={H - 12} className="stroke-muted" strokeOpacity=".45" strokeDasharray="1 3" />
         <text x={W * 0.25} y={H - 2} textAnchor="middle" className="fill-muted font-mono" fontSize="8">
           dust shows here
@@ -160,24 +164,28 @@ export function CloseReading({ lead }: { lead: Lead }) {
         <p className="mt-1.5 text-[13.5px] leading-snug text-page-ink2">It faded before we finished, and took the answer with it.</p>
       ) : mine ? (
         <>
-          <p className="mt-1.5 text-[13.5px] leading-snug text-page-ink2">Our Infrared Telescope is splitting its light. Done by Year {yearText(mine.y + READ_YEARS)}, if it still shines.</p>
+          <p className="mt-1.5 text-[13.5px] leading-snug text-page-ink2">
+            {now < mine.view
+              ? `It sits too near the Sun for our Infrared Telescope to look. It comes into view by Year ${yearText(mine.view)}, and ${READ_HOURS} hours of looking will tell, if it still shines.`
+              : "Our Infrared Telescope is splitting its light. It takes about two hours."}
+          </p>
           <div className="mt-2 h-1 overflow-hidden rounded-full bg-faint/40">
-            <div className="h-full rounded-full bg-other transition-[width] duration-700" style={{ width: `${Math.max(3, Math.min(100, ((now - mine.y) / READ_YEARS) * 100))}%` }} />
+            <div className="h-full rounded-full bg-other transition-[width] duration-700" style={{ width: `${Math.max(3, Math.min(100, ((now - mine.from) / Math.max(1e-6, mine.done - mine.from)) * 100))}%` }} />
           </div>
           <div className="mt-1 flex justify-between font-mono text-[10px] text-muted">
-            <span>Year {yearText(mine.y)}</span>
-            <span>Year {yearText(mine.y + READ_YEARS)}</span>
+            <span>Year {yearText(mine.from)}</span>
+            <span>In view, Year {yearText(mine.view)}</span>
           </div>
         </>
-      ) : (
+      ) : asked ? null : (
         <>
           <p className="mt-1.5 text-[13.5px] leading-snug text-page-ink2">
-            Split its light by color. Silicate dust shows a bump near 10 microns, and plain heat from something built doesn’t. {READ_YEARS} Years, one glow at a time.
+            Split its light by color. Silicate dust shows a bump near 10 microns, and plain heat from something built doesn’t. About {READ_HOURS} hours of looking,{" "}
+            {view - now < 0.01 ? "and it is in our telescope’s view now." : `once it comes out of the Sun’s glare by Year ${yearText(view)}.`} After this one, we read each
+            new glow as we range it.
           </p>
           {scope == null || scope > now ? (
             <p className="mt-2 text-[12.5px] text-muted">Needs our Infrared Telescope.</p>
-          ) : busy ? (
-            <p className="mt-2 text-[12.5px] text-muted">Our telescope is reading {busy.name} until Year {yearText(busy.y + READ_YEARS)}.</p>
           ) : (
             <button
               onClick={() => change((p) => ({ ...p, closeReads: [...(p.closeReads ?? []), { name: lead.star, y: now }] }))}

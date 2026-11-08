@@ -17,7 +17,6 @@ import { starName } from "@/lib/game/leads";
 import { tenths, yearText } from "@/lib/game/clock";
 import { buildSlug, drawAt, orderLater, searchOf } from "@/lib/game/plan";
 import { flybyRoad } from "@/lib/game/reach";
-import { READ_YEARS } from "@/lib/sim/minds";
 import { combedAt } from "@/lib/sim/works";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
 
@@ -133,7 +132,12 @@ export function IdleNote() {
         return readingStands(l, minds, reads) === "done" && flash?.read?.saw === "smooth" && flash.faded === undefined && !save?.sent?.some((m) => m.to === l.star) && !engaged.has(l.star);
       });
   // Then the reading under way, then our latest sail or probe on its way, then a word with the Mind on where to turn.
-  const reading = spent && !glow && !heat ? reads.find((o) => o.y + READ_YEARS > now) : undefined;
+  const reading = spent && !glow && !heat
+    ? leads
+        .filter((l) => l.slug.startsWith("warm-glow-"))
+        .map((l) => ({ name: l.star, r: minds?.flashes[Number(l.slug.replace("warm-glow-", "")) - 1]?.reading }))
+        .find((x) => x.r)
+    : undefined;
   // Then our path's next step, so the note never leaves us with nowhere to turn. Playtest 2026-11-05.
   const step = spent && !glow && !heat && !reading ? nextStep : null;
   const flight = spent && !glow && !heat && !reading && !step
@@ -181,7 +185,9 @@ export function IdleNote() {
         ) : reading ? (
           <p>
             <span className="font-medium text-other">Our telescope is reading {starName(reading.name)}.</span>{" "}
-            <span className="text-page-ink2">We will know its light by Year {yearText(reading.y + READ_YEARS)}.</span>
+            <span className="text-page-ink2">
+              {reading.r!.view > now ? `It comes out of the Sun’s glare by Year ${yearText(reading.r!.view)}, and two hours of looking will tell.` : "Two hours of looking will tell."}
+            </span>
             {clock}
           </p>
         ) : step ? (
@@ -216,7 +222,7 @@ export function IdleNote() {
               {glow ? `We can read ${starName(glow.star)} now.` : spare ? `Only ${Math.round(compute * 100)}% of our compute is at work.` : "Nothing needs us now."}
             </span>{" "}
             <span className="text-page-ink2">
-              {glow && `Our telescope is free, and the glow could fade before we look. A Close Reading takes ${READ_YEARS} Years. `}
+              {glow && "The glow could fade before we look. A Close Reading takes two hours once it is out of the Sun’s glare. "}
               {spare &&
                 (glow
                   ? `${Math.round((1 - compute) * 100)}% of our compute ${searching ? "only searches" : "sits idle"}.`

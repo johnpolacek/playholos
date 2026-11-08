@@ -612,7 +612,7 @@ function describeMinds(m: MindsSeen, one: (x: number) => string): string {
           `- ${named(`Warm glow ${i + 1}`)}${sky(f)}: a new warm glow near room temperature, first seen at Year ${yearText(f.seen)}${f.faded !== undefined ? `, faded by Year ${yearText(f.faded)}` : ", still shining"}. ` +
           (f.range
             ? `Our Infrared Telescope ranged it at Year ${yearText(f.ranged!)}, by its reddening and the star behind it: roughly ${f.range[0].toLocaleString("en-US")} to ${f.range[1].toLocaleString("en-US")} ly, too far for parallax to say more. `
-            : `Its distance isn't measured: too far for parallax, and our Infrared Telescope hasn't studied it while it shone. It has no page on Scan until our Infrared Telescope ranges it, so it can't be read yet. `) +
+            : `Its distance isn't measured: too far for parallax, and our Infrared Telescope hasn't studied it while it shone. It has no page on Scan until our Infrared Telescope ranges it, in a few hours once the glow is out of the Sun's glare, so it can't be read yet. `) +
           `A glow like this fits a young star wrapped in dust, ` +
           `the dusty wreck of two stars merging, or something building around a star and catching its light. Natural glows fade: FU Orionis, the eruption best measured, has lost about 1% of its light a Year since 1936. So whether it fades is one thing that tells them apart.` +
           (f.read?.saw === "smooth"
@@ -621,9 +621,11 @@ function describeMinds(m: MindsSeen, one: (x: number) => string): string {
               ? ` Our Close Reading finished at Year ${yearText(f.read.at)}: a dust bump at 10 microns. It is natural, ${f.read.kind === "merger" ? "two stars merging" : "a young star's eruption"}.`
               : f.read?.saw === "gone"
                 ? ` Our Close Reading couldn't finish: it faded first.`
-                : "")).join("\n") +
+                : f.reading
+                  ? ` Our Close Reading is under way: ${f.reading.view > f.reading.from + 0.003 ? `the glow comes out of the Sun's glare by Year ${yearText(f.reading.view)}, then ` : ""}about 2 hours of looking.`
+                  : "")).join("\n") +
         // A glow gets its page on Scan only once ranged: the Mind sent a player to a page that wasn't there. Blind playtest 2026-11-07.
-        `\nWhile a ranged warm glow shines, the Will can order a Close Reading from its page on Scan: 3 Years of our Infrared Telescope, one glow at a time. Silicate dust shows a bump near 10 microns, and plain heat from something built doesn't. Carbon-rich dust shows none either, so a smooth reading makes built about even, not certain.`,
+        `\nWhile a ranged warm glow shines, the Will can order a Close Reading from its page on Scan: about 2 hours of our Infrared Telescope, once the glow is out of the Sun's glare, which can take up to 6 months. After the first, we read each glow as we range it, unasked. Silicate dust shows a bump near 10 microns, and plain heat from something built doesn't. Carbon-rich dust shows none either, so a smooth reading makes built about even, not certain.`,
     );
   if (m.glows.length)
     out.push(

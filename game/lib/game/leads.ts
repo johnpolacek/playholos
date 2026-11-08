@@ -114,6 +114,10 @@ export interface Lead {
   life?: Odds;
   /** Its line once a Year has passed, when the first stops being true. 2026-10-30. */
   later?: { year: number; line: string };
+  /** What we can't explain of it yet, in a line, and the builds that would tell us, each one we can queue now, with
+   *  what it does for this lead. The review shows them, so each mystery leads to its builds. 2026-11-08. */
+  unknown?: string;
+  builds?: { name: string; how: string }[];
 }
 
 /** A lead's line at a Year: Luyten's Star promised a reply "from Year 2.3" at Year 9,104 until 2026-10-30. */
@@ -236,6 +240,12 @@ function feltLead(f: FeltWorld): Lead {
       },
     ],
     tells: [tell],
+    unknown: m < 3 ? "Whether it is rock or gas, and what its air holds." : "What its air holds.",
+    builds: near.split
+      ? [{ name: "Infrared Telescope", how: near.gases.length ? `Reads its ${and(near.gases)}.` : "Sees it beside its star." }]
+      : wide.split
+        ? [{ name: "Infrared Telescope", how: `Opens the 15 m Mirror, which could split it${wide.gases.length ? ` and read its ${and(wide.gases)}` : ""}.` }]
+        : [{ name: "Orbital Yard", how: "Opens the Solar Lens, which could picture its face." }],
     life,
     art: { kind: "orbit", a: f.a, e: 0, hz: f.hz },
     // Its star by its kind, and the one world felt there. The rest of its system is unknown.
@@ -742,6 +752,13 @@ function darkLead(h: DarkMass, far = false): Lead {
       "A sentinel could go and stay, and measure its spin. That says how much energy it holds, and how slow a clock would run beside it.",
       "An old mind may already use it. If one does, a craft of ours there would see it.",
     ],
+    unknown: "How fast it spins, and whether a mind already uses it.",
+    // A sentinel needs all three, reach.ts.
+    builds: [
+      { name: "Probe Yard", how: "Builds the sentinel that could go and stay." },
+      { name: "Fusion Drive", how: "Carries the sentinel there, and slows it at the hole." },
+      { name: "Deuterium Works", how: "Fuels the sentinel." },
+    ],
     art: far ? { kind: "pair", mass: h.mass, ly: h.d, a: 1.4, e: 0.45, days: 186 } : { kind: "dark", mass: h.mass, ly: h.d },
   };
 }
@@ -1158,6 +1175,11 @@ export function proximaLead(seen?: ProximaSeen): Lead {
       "No one has read its air. Oxygen takes long campaigns on the ground. The 15 m Mirror would barely reach it, for its oxygen and ozone, not its water.",
       "A flyby would see it whole: the two roads on Reach go there.",
     ],
+    unknown: gas ? "What its thick air holds." : "Whether it kept any air, or is bare rock.",
+    builds: [
+      { name: "Infrared Telescope", how: "Opens the 15 m Mirror, which barely reaches it, for oxygen." },
+      { name: "Laser Sail Array", how: "Sends sails past it at a fifth of light speed, to see it whole." },
+    ],
     art: { kind: "orbit", a: 0.0485, e: 0, hz: [0.042, 0.082] },
     // On rock under air, life would still have to start.
     life: odds.air === "very likely" ? "unlikely" : "very unlikely",
@@ -1237,6 +1259,8 @@ export function leadsOf(felt: FeltWorld[], holes: DarkMass[] = [], seeds: Visit[
         },
       ],
       tells: ["The Infrared Telescope can split it from its star and read its air. Water would show in about 3 days."],
+      unknown: "Whether it is gas, and whether its air holds water.",
+      builds: [{ name: "Infrared Telescope", how: "Splits it from its star, and shows water in about 3 days." }],
       art: { kind: "orbit", a: 1.354, e: 0.45, hz: [0.83, 1.45] },
       life: "very unlikely",
     },
@@ -1275,6 +1299,11 @@ export function leadsOf(felt: FeltWorld[], holes: DarkMass[] = [], seeds: Visit[
       ],
       tells: [
         "Listening as each window opens. Our sky watch sees each star about 10 minutes a day, and a knock lasts hours. The All-Sky Watch hears at any hour.",
+      ],
+      unknown: "Whether anyone heard us, and could answer.",
+      builds: [
+        { name: "All-Sky Watch", how: "Hears its window at any hour, not 10 minutes a day." },
+        { name: "Deep Flash Watch", how: "Sees an answer sent as laser flashes." },
       ],
       art: { kind: "reply", windows: WINDOWS },
     },

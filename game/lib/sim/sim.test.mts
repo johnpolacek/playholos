@@ -15,7 +15,7 @@ import { readFileSync } from "node:fs";
 import { hop, seedProbes } from "./spread.ts";
 import { POOL } from "./pool.ts";
 import { loadWorld } from "./world.ts";
-import { glowsFound } from "./minds.ts";
+import { rangedAt, glowsFound } from "./minds.ts";
 import { centers, offEarth, pace, type Order } from "./works.ts";
 import catalog from "../../data/works.json" with { type: "json" };
 
@@ -431,7 +431,9 @@ test("finding minds: a flash while the warm watch runs, most cold glows, the wat
       // Ranged by our Infrared Telescope while it shines: a range that holds the truth. Faded first, never ranged.
       const r = flashOf(p, 0, 1e6, 0);
       if (r?.range) assert.ok(r.range[0] <= p.d && p.d <= r.range[1] && r.ranged! <= p.flash[1], p.id);
-      if (r && Math.max(r.seen, 0) + 2 > p.flash[1]) assert.equal(r.range, undefined);
+      // Ranged once out of the Sun's glare, within 6 months, in hours of looking. 2026-11-08.
+      if (r?.ranged !== undefined) assert.ok(r.ranged >= r.seen && r.ranged - r.seen < 0.5 + 1e-3, p.id);
+      if (r && rangedAt(r, Math.max(r.seen, 0), 0) > p.flash[1]) assert.equal(r.range, undefined);
     }
     for (const o of m.old) if (!o.asleep) { awake++; if (coldGlowOf(o, 0, 1e6)) glowing++;
       // Star by star, nearest first: the farther, the later, and the array ten times sooner.

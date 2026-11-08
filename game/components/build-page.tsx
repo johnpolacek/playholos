@@ -46,13 +46,17 @@ import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motio
 // last in line from that Year, 2026-10-22. In play, one under way can be taken back, keeping its work, and one taken
 // back ordered again, picking up there, last in line, 2026-10-23.
 
-const ORDINAL = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth"];
+const ORDINALS = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth"];
+/** A place in line in words, 0 for first: "first", or "12th" past the ninth. */
+const ordinal = (i: number) => ORDINALS[i] ?? `${i + 1}th`;
 
 /** Where the build stands: in our order or not, and when it is done, in Years and in play time, as the list counts. */
+const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+
 function status(open: boolean, at: number, by: number | null | undefined, year: number) {
   const when = by == null ? PAST : `by Year ${yearText(by)}, ${span(by)} after we begin`;
   if (open)
-    return at < 0 ? `Added to our order, it would be done ${when}.` : `Queued, ${ORDINAL[at]} in our order. Done ${when}.`;
+    return at < 0 ? `Added to our order, it would be done ${when}.` : `Queued, ${ordinal(at)} in our order. Done ${when}.`;
   if (at < 0) return "Not in our order yet.";
   if (by == null) return `Under way. Done ${PAST}.`;
   return year >= by ? "Done." : `Under way. Done in ${span(by - year)}.`;
@@ -169,7 +173,18 @@ function InPlay({ name, scale, done }: { name: string; scale: number; done: Reco
 
 /** A build's place in our order, and before Begin, the button that adds it or takes it out. When it is added or taken
  *  out, its new place rises in. */
-export function Queueing({ name, scale, done }: { name: string; scale: number; done: Record<string, number | null> }) {
+export function Queueing({
+  name,
+  scale,
+  done,
+  place,
+}: {
+  name: string;
+  scale: number;
+  done: Record<string, number | null>;
+  /** The place in our queue the Mind advised, 1 for first: added there, or moved there if queued. 2026-11-08. */
+  place?: number;
+}) {
   const { year } = useGame();
   const { plan, change } = usePlan();
   const root = useRef<HTMLDivElement>(null);
@@ -190,8 +205,17 @@ export function Queueing({ name, scale, done }: { name: string; scale: number; d
   // Taken back in play, it says so below, in place of where it stands.
   const back = !open && takenAt(plan, name) !== null;
   const queued = at >= 0;
-  // Its Year: where it stands in our order, or last in line if we add it now.
-  const by = queued ? done[name] : schedule({ ...plan, builds: [...plan.builds, name] }, scale)[name];
+  // Put at a place in line, 0 for first: added there, or moved there.
+  const putAt = (k: number) => (p: typeof plan) => {
+    const rest = p.builds.filter((b) => b !== name);
+    const i = Math.max(0, Math.min(rest.length, k));
+    return { ...p, builds: [...rest.slice(0, i), name, ...rest.slice(i)] };
+  };
+  const front = putAt(0);
+  // Where the Mind advised it, in our line as it would be: past the end is last.
+  const advised = place === undefined ? undefined : Math.max(0, Math.min(plan.builds.filter((b) => b !== name).length, place - 1));
+  // Its Year: where it stands in our order, or where it would go if we add it now, last in line or where advised.
+  const by = queued ? done[name] : schedule(advised !== undefined ? putAt(advised)(plan) : { ...plan, builds: [...plan.builds, name] }, scale)[name];
   // A Seed Ship is queued only once its drive and fuel are, and says which it waits on.
   const lacking = !back ? lacks(plan, name) : [];
   return (
@@ -216,17 +240,27 @@ export function Queueing({ name, scale, done }: { name: string; scale: number; d
       )}
       {open && (queued || !lacking.length) && (
         <button
-          onClick={() => change(toggleBuild(name))}
+          onClick={() => change(advised !== undefined && !queued ? putAt(advised) : toggleBuild(name))}
           className={`mt-2.5 h-11 rounded-full text-[15px] font-medium ${queued ? "border border-ink" : "bg-ink text-paper"}`}
         >
-          {queued ? "Remove from Queue" : "Add to Queue"}
+          {queued
+            ? "Remove from Queue"
+            : advised === undefined || advised === plan.builds.length
+              ? "Add to Queue"
+              : `Add ${cap(ordinal(advised))} in Queue`}
+        </button>
+      )}
+      {/* Queued, and the Mind advised it elsewhere in line: the move it advised, as the main button. 2026-11-08. */}
+      {open && queued && advised !== undefined && advised !== at && (
+        <button onClick={() => change(putAt(advised))} className="mt-2 h-11 rounded-full bg-ink text-[15px] font-medium text-paper">
+          {advised === 0 ? "Move to the Front" : `Move to ${cap(ordinal(advised))} in Queue`}
         </button>
       )}
       {/* The first in line gets our compute first. The Mind advised moving one to the front, and its page offered only
           Remove. Blind playtest 2026-11-07. */}
-      {open && queued && at > 0 && (
+      {open && queued && at > 0 && advised !== 0 && (
         <button
-          onClick={() => change((p) => ({ ...p, builds: [name, ...p.builds.filter((b) => b !== name)] }))}
+          onClick={() => change(front)}
           className="mt-2 h-9 rounded-full text-[13.5px] text-you hover:underline"
         >
           Move to the front of the queue

@@ -287,16 +287,20 @@ export function Arrived({ from, to, snap }: { from: number; to: number; snap: Sn
         line: `Seen by our Warm Sky Watch. How far ${unranged.length === 1 ? "it is" : "they are"}, our Infrared Telescope will find.`,
       });
     // A reply window the jump stopped on, and whether word came: an answer heard shows below as its own row.
+    // A star with a lead opens its page and the map flies there: the row went to our messages list, drew a hollow ring
+    // that read as a radio button, and seemed to do nothing. Playtest 2026-11-08.
     for (const w of WINDOWS)
-      if (w.at > from + 1e-6 && w.at <= to + 1e-6 && !heard.some((h) => h.star === w.star && h.arrived <= to + 1e-6))
+      if (w.at > from + 1e-6 && w.at <= to + 1e-6 && !heard.some((h) => h.star === w.star && h.arrived <= to + 1e-6)) {
+        const lead = leads.find((l) => l.star === w.star);
         out.push({
           key: `window:${w.star}`,
           rank: 3,
-          to: "/play#messages",
-          mark: <span className="text-muted">◌</span>,
+          to: lead ? `/play/lead/${lead.slug}` : "/play#messages",
+          mark: lead ? <LeadMark art={lead.art} /> : <span className="text-muted">◌</span>,
           title: `${w.star}’s reply window opened`,
           line: `Year ${yearText(w.at)}, and nothing has come yet. A reply could still come later.`,
         });
+      }
     for (const l of leads) {
       // Only what reached us by the Year we jumped to: while the card stood open, later finds piled in under its Year.
       // Blind playtest 2026-11-07.
@@ -342,10 +346,17 @@ export function Arrived({ from, to, snap }: { from: number; to: number; snap: Sn
 
   // The map turns to the first new lead. 2026-11-01.
   // A new warm glow first: the map pulls back across the Galaxy to show it, and comes home on Go on. 2026-11-03.
-  const first = items.find((x) => x.key === "lead:small-dark-body") ?? items.find((x) => x.key.startsWith("lead:warm-glow-")) ?? items.find((x) => x.key.startsWith("lead:"));
+  const first = items.find((x) => x.key === "lead:small-dark-body") ?? items.find((x) => x.key.startsWith("lead:warm-glow-")) ?? items.find((x) => x.key.startsWith("lead:")) ?? items.find((x) => x.to.startsWith("/play/lead/") && x.key.startsWith("window:"));
+  // Keyed by the row, not the object: opening another row's lead marks its reading seen, which remade the rows and the
+  // leads, and this flew the map back to the first lead while the page showed the other. Playtest 2026-11-08.
+  const firstKey = first?.key;
+  const leadsNow = useRef(leads);
+  useEffect(() => void (leadsNow.current = leads));
   useEffect(() => {
-    if (!first) return;
-    const i = leads.findIndex((l) => `lead:${l.slug}` === first.key);
+    if (!firstKey) return;
+    const leads = leadsNow.current;
+    // A reply window's row flies to its star too. 2026-11-08.
+    const i = leads.findIndex((l) => `lead:${l.slug}` === firstKey || `window:${l.star}` === firstKey);
     if (i < 0) return;
     const before = dials.focus ?? 0;
     const was = lookNow.current;
@@ -362,7 +373,7 @@ export function Arrived({ from, to, snap }: { from: number; to: number; snap: Sn
       Object.assign(dials, { focus: before });
       setLook(was);
     };
-  }, [first, leads, dials, setLook]);
+  }, [firstKey, dials, setLook]);
 
   // Our first warm glow is the game's first real sign, so it gets its own word. 2026-11-03.
   const firstWarm = leads.find((l) => l.slug === "warm-glow-1" && !snap.slugs.has(l.slug));
@@ -413,7 +424,7 @@ export function Arrived({ from, to, snap }: { from: number; to: number; snap: Sn
                   <span className="truncate text-[12px] text-muted">{x.line}</span>
                   {x.chance && <ChanceTag shift={x.chance} />}
                 </span>
-                <span className="ml-auto text-muted">›</span>
+                <span className="ml-auto pl-1 text-[20px] leading-none text-muted">›</span>
               </Link>
             </li>
           ))}

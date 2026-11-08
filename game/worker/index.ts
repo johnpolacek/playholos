@@ -1,6 +1,7 @@
 import { env } from "cloudflare:workers";
 import type { UIMessage } from "ai";
 import { NEWS } from "@/lib/mind/news";
+import { QUEUE } from "@/lib/mind/queue";
 import { access } from "./access";
 import { earth } from "./earth";
 import { known, leads, next } from "./leads";
@@ -13,7 +14,7 @@ async function limited(req: Request) {
   if (import.meta.env.DEV) return mind(req);
   const body = (await req.clone().json().catch(() => null)) as { messages?: UIMessage[] } | null;
   const asked = body?.messages?.findLast((m) => m.role === "user");
-  const news = asked?.parts.some((p) => p.type === "text" && p.text.startsWith(NEWS));
+  const news = asked?.parts.some((p) => p.type === "text" && (p.text.startsWith(NEWS) || p.text.startsWith(QUEUE)));
   const { success } = await (news ? env.MIND_NEWS_LIMIT : env.MIND_LIMIT).limit({ key: req.headers.get("cf-connecting-ip") ?? "" });
   return success ? mind(req) : Response.json({ error: "Too many questions. Wait a minute." }, { status: 429 });
 }

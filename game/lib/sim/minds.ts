@@ -46,8 +46,11 @@ export interface FlashSeen {
   /** Its rough distance, nearest and farthest, in light-years, once our Infrared Telescope has studied it, and when. */
   range?: [number, number];
   ranged?: number;
+  /** A Close Reading under way: the Year we ordered it, the Year the glow comes into our telescope's view, and the Year
+   *  it is done. 2026-11-08. */
+  reading?: { from: number; view: number; done: number };
   /** What a Close Reading of its light saw, once done: plain heat, dust and what made it, or it faded first. */
-  read?: { at: number; saw: "smooth" | "dust" | "gone"; kind?: "eruption" | "merger" };
+  read?: { from: number; at: number; saw: "smooth" | "dust" | "gone"; kind?: "eruption" | "merger" };
 }
 
 /** A cold far-infrared glow beside a star, steady as nothing young is. */
@@ -187,9 +190,42 @@ export function naturalGlows(world: World): NaturalGlow[] {
   return out;
 }
 
-/** Years our Infrared Telescope takes on a Close Reading of one warm glow's light: faint, and split across its colors,
- *  as JWST's MIRI did for Project Hephaistos's candidates. A sample. */
-export const READ_YEARS = 3;
+// ── When our Infrared Telescope can look, 2026-11-08 ──
+// It sits at L2 behind its shade, as Webb does, and points only 85° to 135° from the Sun: about 39% of the sky on any
+// day, and all of it within 6 months (STScI, JWST field of regard). So a glow waits for the Sun to move off it, and that
+// wait, not the looking, is most of a reading's time and a ranging's.
+const FIELD = [85, 135] as const;
+const OBLIQUITY = (23.44 * Math.PI) / 180;
+const DEG = Math.PI / 180;
+/** A Year in hours. */
+export const HOURS_PER_YEAR = 8766;
+/** Days from J2000.0 to Year 0, 1 January 2040 (YEAR_0 in lib/game/clock.ts). */
+const YEAR0_J2000 = 14609.5;
+/** The Sun's ecliptic longitude in degrees at Year `t`, by the Astronomical Almanac's low-precision formula. */
+function sunLon(t: number) {
+  const n = YEAR0_J2000 + t * 365.25;
+  const g = (357.528 + 0.9856003 * n) * DEG;
+  return 280.46 + 0.9856474 * n + 1.915 * Math.sin(g) + 0.02 * Math.sin(2 * g);
+}
+/** The first Year from `from` that a point of the sky, right ascension in hours and declination in degrees, sits in our
+ *  telescope's view, to the day. */
+export function inViewAt(ra: number, dec: number, from: number): number {
+  const a = ra * 15 * DEG, d = dec * DEG;
+  const beta = Math.asin(Math.sin(d) * Math.cos(OBLIQUITY) - Math.cos(d) * Math.sin(OBLIQUITY) * Math.sin(a));
+  const lam = Math.atan2(Math.sin(a) * Math.cos(OBLIQUITY) + Math.tan(d) * Math.sin(OBLIQUITY), Math.cos(a));
+  for (let k = 0; k <= 366; k++) {
+    const t = from + k / 365.25;
+    const e = Math.acos(Math.cos(beta) * Math.cos(lam - sunLon(t) * DEG)) / DEG;
+    if (e >= FIELD[0] && e <= FIELD[1]) return t;
+  }
+  return from;
+}
+/** Hours our Infrared Telescope takes on a Close Reading once the glow is in view: pointing and settling, then splitting
+ *  its light by color. JWST's MIRI low-resolution spectrograph was to reach about 3 µJy at 10σ in 10,000 s (pre-launch
+ *  figures, Glasse et al. 2015). Our 8 m mirror gathers about 1.5 times Webb's light. Our faintest glow, about 70 µJy at
+ *  our Warm Sky Watch's floor, shows the 10 µm dust bump at 100 times its noise in under an hour, and a Sun's output
+ *  from 30,000 ly, dimmed by dust, in under a minute. About an hour of pointing makes it 2. */
+export const READ_HOURS = 2;
 
 /** Every warm glow seen by Year `year`, minds' and nature's together, in the order seen: Warm glow 1 is the first. */
 export function glowsFound(world: World, kit: MindKit, year: number) {
@@ -208,17 +244,22 @@ export function flashOf(p: GlowSource, watch: number | null | undefined, year: n
   if (seen > fades || seen > year) return null;
   // Our Infrared Telescope studies it while it still shines: its reddening by dust, against dust maps, and the star
   // behind it, if it shows, by its type and speed. That gives a range, not a distance: about a third either way.
-  const ranged = telescope === null ? null : Math.max(seen, telescope) + RANGE_YEARS;
+  const sky = skyOf(p.pos);
+  const ranged = telescope === null ? null : rangedAt(sky, seen, telescope);
   const range = ranged !== null && ranged <= fades && ranged <= year ? rangeOf(p) : null;
   return {
-    ...skyOf(p.pos), seen,
+    ...sky, seen,
     ...(fades <= year ? { faded: fades } : {}),
     ...(range ? { range, ranged: ranged! } : {}),
   };
 }
 
-/** Years our Infrared Telescope takes to study a new warm glow and range it. */
-export const RANGE_YEARS = 2;
+/** Hours our Infrared Telescope takes to range a warm glow once it is in view: a near-infrared spectrum of the star
+ *  behind it, about magnitude 20 in K through the dust of 20,000 ly, for its type and so its reddening. A sample. */
+export const RANGE_HOURS = 4;
+/** The Year our Infrared Telescope ranges a glow first seen at `seen`: once both it is done and the glow is in view. */
+export const rangedAt = (sky: { ra: number; dec: number }, seen: number, telescope: number) =>
+  inViewAt(sky.ra, sky.dec, Math.max(seen, telescope)) + RANGE_HOURS / HOURS_PER_YEAR;
 /** A rough distance: centered off the truth by up to a fifth, a fixed draw for each peer, and a third wide either way,
  *  so it always holds the truth. Each end to two figures, outward, so a near peer's range still holds it. */
 export function rangeOf(p: GlowSource): [number, number] {
@@ -334,14 +375,22 @@ export function mindsSeen(world: World, kit: MindKit, year: number): MindsSeen {
   const m = world.minds;
   if (!m) return { flashes: [], glows: [], watcher: null, sleepers: [] };
   const bySeen = <T extends { seen: number }>(xs: (T | null)[]) => xs.filter((x): x is T => x !== null).sort((a, b) => a.seen - b.seen);
+  const first = Math.min(...(kit.closeReads ?? []).map((o) => o.y));
   return {
     flashes: glowsFound(world, kit, year).map(({ src, f }, i) => {
-      // What a Close Reading saw, only once it is done: until then nothing here tells nature from a mind.
+      if (!f.range) return f;
+      // After our first Close Reading, we read each glow we range while it shines, unasked. Readings take hours, so
+      // our telescope never has to choose between them. 2026-11-08.
       const asked = kit.closeReads?.find((o) => o.name === `Warm glow ${i + 1}`);
-      if (!asked || !f.range || asked.y + READ_YEARS > year) return f;
-      const at = Math.round((asked.y + READ_YEARS) * 10) / 10;
-      const saw = src.flash[1] < at ? ("gone" as const) : "kind" in src ? ("dust" as const) : ("smooth" as const);
-      return { ...f, read: { at, saw, ...(saw === "dust" ? { kind: (src as NaturalGlow).kind } : {}) } };
+      const from = asked ? asked.y : Number.isFinite(first) ? Math.max(f.ranged!, first) : null;
+      if (from === null || from > year || (!asked && f.faded !== undefined && f.faded <= from)) return f;
+      const view = inViewAt(f.ra, f.dec, from);
+      const done = view + READ_HOURS / HOURS_PER_YEAR;
+      if (done > year) return { ...f, reading: { from, view, done } };
+      // What a Close Reading saw, only once it is done: until then nothing here tells nature from a mind.
+      const at = Math.round(done * 1000) / 1000;
+      const saw = src.flash[1] < done ? ("gone" as const) : "kind" in src ? ("dust" as const) : ("smooth" as const);
+      return { ...f, read: { from, at, saw, ...(saw === "dust" ? { kind: (src as NaturalGlow).kind } : {}) } };
     }),
     glows: bySeen(m.old.map((o) => coldGlowOf(o, kit.halo, year, kit.haloArray ?? null, kit.craft))),
     watcher: watcherOf(world, kit, year),

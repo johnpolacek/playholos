@@ -4,6 +4,7 @@ import { useNext } from "@/components/begin";
 import { useGame } from "@/components/game-provider";
 import { CraftFacts } from "@/components/craft-art";
 import { CRAFT_SHOT_SECS, type CraftKind } from "@/components/craft-view";
+import { BuildCard } from "@/components/build-card";
 import { BuildMark, buildTone } from "@/components/marks";
 import { MindNote } from "@/components/mind-note";
 import { usePlan, useSchedule } from "@/components/picks";
@@ -11,15 +12,15 @@ import { axis, farZoom, Thread, useReach, useTripLoop, VOYAGER, year } from "@/c
 import { Thread as Stops } from "@/components/review";
 import { useStepTap } from "@/components/scan";
 import { tenths } from "@/lib/game/clock";
-import { buildSlug, lacks, LATER, needs, openAt, ordered } from "@/lib/game/plan";
+import { buildNamed, buildSlug, lacks, LATER, needs, openAt, ordered } from "@/lib/game/plan";
 import type { Plan } from "@/lib/game/types";
-import { LY_AU, NEAREST, roads, sentinelRoad, zoomFor } from "@/lib/game/reach";
+import { LY_AU, NEAREST, PROBE_NEEDS, roads, sentinelRoad, zoomFor } from "@/lib/game/reach";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
 
 // How we reach, the third of the four things we would do before Begin, 2026-10-23. Scan's review shows what is out
 // there, and this shows how we would get there: how far we have gone against the gap to the nearest star, the two roads
-// open at Year 0, and the roads our builds open later. It explains the roads and queues none, since a road is a build
-// and Build's step queues them. The map flies with each stop, out from Earth, then on to Proxima Centauri. Voyager 1
+// open at Year 0, and the roads our builds open later. Each road's stop shows the builds it needs, ready to queue,
+// since 2026-11-08. The map flies with each stop, out from Earth, then on to Proxima Centauri. Voyager 1
 // and the gap were one stop, and the roads to come a stop of their own, 2026-10-27. Reaching the last stop counts as
 // done, and the way on is the next of the four.
 
@@ -30,6 +31,21 @@ const GAP_AU = NEAREST.ly * LY_AU;
 const STOPS = ["How we reach", "Send a sail", "Send a flyby probe", "More roads"];
 /** What flies on each stop, for the map's counter. */
 const NAMED = ["", "Sails", "Flyby probe", "Sentinel"];
+
+/** What each road needs built, each ready to queue from its stop, as the review's builds are, 2026-11-08. Before, the
+ *  walk queued none and left it to Build's step. A flyby probe needs all three of PROBE_NEEDS. */
+const NEEDS_BUILT: Record<number, { name: string; how: string }[]> = {
+  1: [{ name: "Laser Sail Array", how: "Pushes each sail to a fifth of light speed in 10 minutes." }],
+  2: PROBE_NEEDS.map((name) => ({
+    name,
+    how:
+      name === "Probe Yard"
+        ? "Builds and fuels each probe in orbit."
+        : name === "Fusion Drive"
+          ? "The engine each probe flies on, thirty Years to build."
+          : "Makes the 6 kt of deuterium each probe burns.",
+  })),
+};
 
 /** The other roads, each a build. Speeds and sizes are plan.ts's and reach.ts's. */
 const MORE_ROADS = [
@@ -306,6 +322,26 @@ export function ReachTour({ onClose }: { onClose(): void }) {
         <div data-r className="mt-3">
           <MindNote className="text-[14.5px] leading-snug">{words.mind}</MindNote>
         </div>
+        {NEEDS_BUILT[at] && (
+          <div data-r onPointerUp={(e) => e.stopPropagation()} className="mt-4 flex flex-col gap-2">
+            <span className="font-mono text-[11px] tracking-[.08em] text-muted uppercase">
+              {NEEDS_BUILT[at].length > 1 ? "Builds this needs" : "The build this needs"}
+            </span>
+            {NEEDS_BUILT[at].map((b) => {
+              const build = buildNamed(b.name);
+              return (
+                build && (
+                  <BuildCard
+                    key={b.name}
+                    build={build}
+                    how={b.how}
+                    back={{ to: "/play/reach?tour", label: STOPS[at], state: { at } }}
+                  />
+                )
+              );
+            })}
+          </div>
+        )}
         {at === 0 && (
           <p data-r className="mt-4 text-center font-mono text-[10px] tracking-[.1em] text-muted wide:hidden">
             TAP ANYWHERE TO GO ON

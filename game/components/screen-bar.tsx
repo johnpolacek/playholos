@@ -27,7 +27,7 @@ const WAYS = [
 function WaysOut() {
   const leaveFor = useLeaveFor();
   return (
-    <nav aria-label="Explore" className="flex items-center">
+    <nav aria-label="Explore" className="flex items-center gap-1.5">
       {WAYS.map(([href, label]) => (
         <Link
           key={href}
@@ -40,7 +40,7 @@ function WaysOut() {
             void import("@/app/sim");
             leaveFor(href);
           }}
-          className="flex h-8 items-center px-1.5 font-mono text-[9.5px] tracking-[.1em] text-muted transition-colors hover:text-ink"
+          className="flex items-center rounded-full border border-dotted border-muted/50 px-1.5 py-px font-mono text-[9.5px] leading-tight tracking-[.1em] text-muted transition-colors hover:border-ink/50 hover:text-ink"
         >
           {label}
         </Link>

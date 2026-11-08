@@ -8,7 +8,7 @@ import { readingStands } from "@/components/close-reading";
 import { Check, Cross } from "@/components/icons";
 import { MindNote } from "@/components/mind-note";
 import { MindThinking, useThinking } from "@/components/mind-thinking";
-import { usePlan } from "@/components/picks";
+import { usePlan, useSchedule } from "@/components/picks";
 import { useLeads } from "@/components/scan";
 import { SendCard } from "@/components/send-card";
 import { BAD_KEY, costOf, type Effort, EFFORTS, KEY_NEEDS_CREDIT, KEY_NEEDS_WORKSPACE, MIND_BUSY, MIND_MODELS, MIND_UNREACHED, type MindModel, readMindPick, type Usage } from "@/lib/access";
@@ -18,6 +18,9 @@ import { leadsNamed, onMap } from "@/lib/game/named-leads";
 import { buildNamed } from "@/lib/game/plan";
 import { SITES } from "@/lib/game/sites";
 import { NEWS } from "@/lib/mind/news";
+import { nextNote, QUEUE } from "@/lib/mind/queue";
+import { schedule, sharesAt } from "@/lib/game/plan";
+import { useAccess } from "@/lib/key";
 import { readOffer } from "@/lib/game/sends";
 import { browserStore } from "@/lib/game/store";
 import { forgetKey } from "@/lib/key";
@@ -213,7 +216,7 @@ function Steps({ words }: { words: string }) {
 
 /** One of the Mind's answers: its words, and the card if it offers to send, or a build. */
 function Answer({ id, text, still, asked, last }: { id: string; text: string; still: boolean; asked?: UIMessage; last: boolean }) {
-  const { words: said, name } = readBuildOffer(text);
+  const { words: said, name, place } = readBuildOffer(text);
   const build = name ? buildNamed(name) : undefined;
   const { words, draft } = readOffer(said);
   const ask = textOf(asked);
@@ -229,7 +232,8 @@ function Answer({ id, text, still, asked, last }: { id: string; text: string; st
       )}
       {build && (
         <div className="max-w-[92%] self-start pl-3">
-          <BuildCard build={build} />
+          {/* At the place in our queue the Mind advised, if it named one. 2026-11-08. */}
+          <BuildCard build={build} place={place} />
         </div>
       )}
       {last && <Steps words={words} />}
@@ -247,6 +251,8 @@ function Talk({ messages, lastAnswer, status, error }: Pick<ReturnType<typeof us
       {messages.map((message, i) => {
         if (thinking.here && i > asked) return null;
         const text = message.parts.map((part) => (part.type === "text" ? part.text : "")).join("");
+        // Our queue read unasked: nothing shows of it, since the Mind's words say it all. A label went, 2026-11-08.
+        if (message.role === "user" && text.startsWith(QUEUE)) return null;
         // News the Mind tells unasked: what happened, small, over what the Mind says of it.
         if (message.role === "user" && text.startsWith(NEWS))
           return (
@@ -433,8 +439,57 @@ function Hello({ onAsk }: { onAsk(text: string): void }) {
   );
 }
 
+/** What has been said of our queue in this game, kept in this browser. Storage can be missing: then it may be said
+ *  again on a reload, which costs a line, nothing more. */
+const SAID = (seed: number) => `holos:queue-said:${seed}`;
+function loadSaid(seed: number): string[] {
+  try {
+    const v = JSON.parse(localStorage.getItem(SAID(seed)) ?? "[]");
+    return Array.isArray(v) ? v.filter((k): k is string => typeof k === "string") : [];
+  } catch {
+    return [];
+  }
+}
+function saveSaid(seed: number, said: string[]) {
+  try {
+    localStorage.setItem(SAID(seed), JSON.stringify(said));
+  } catch {}
+}
+
+/** Before Year 0, on the Mind tab, the Mind reads our queue unasked: the one thing about it that matters most and
+ *  hasn't been said, its facts from lib/mind/queue.ts. Only while the Mind is open to us and not answering. 2026-11-08. */
+function useQueueRead(send: (text: string) => void, busy: boolean, waiting: boolean) {
+  const { save, year } = useGame();
+  const { plan } = usePlan();
+  const { scale } = useSchedule();
+  const { leads } = useLeads();
+  const open = useAccess();
+  const seed = save?.seed;
+  const builds = plan.builds;
+  const short = useMemo(() => (builds.length ? sharesAt(plan, scale, 0).short : 0), [plan, scale, builds.length]);
+  // What Thought Fields first in line would change: how much sooner our last build lands. Worked out here, so the
+  // Mind says a number it didn't guess. 2026-11-08.
+  const fields = useMemo(() => {
+    const last = builds.at(-1);
+    if (short <= 0.5 || !last || last === "Thought Fields") return undefined;
+    const now = schedule(plan, scale)[last];
+    const first = schedule({ ...plan, builds: ["Thought Fields", ...builds.filter((b) => b !== "Thought Fields")] }, scale)[last];
+    return now != null && first != null ? { last, sooner: now - first } : undefined;
+  }, [plan, scale, builds, short]);
+  useEffect(() => {
+    if (year !== null || seed === undefined || !open || busy || waiting || !leads.length) return;
+    const mysteries = leads.flatMap((l) => (l.unknown && l.builds ? [{ star: starName(l.star), unknown: l.unknown, builds: l.builds }] : []));
+    const { note, said } = nextNote({ builds, short, fields, mysteries }, loadSaid(seed));
+    if (!note) return saveSaid(seed, said);
+    saveSaid(seed, [...said, note.key]);
+    send(QUEUE + note.facts);
+  }, [year, seed, open, busy, waiting, leads, builds, short, fields, send]);
+}
+
 export function MindChat({ ask }: { ask?: string }) {
   const { messages, sendMessage, status, error, busy, lastAnswer } = useMind();
+  const sendText = useMemo(() => (text: string) => sendMessage({ text }), [sendMessage]);
+  useQueueRead(sendText, busy, !!ask || messages.at(-1)?.role === "user");
   const asked = useRef(false);
   // Here, we read what the Mind said.
   const { read } = useGame();

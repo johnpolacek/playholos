@@ -5,7 +5,7 @@ import { skyOf } from "@/lib/game/natural";
 import { kitOf } from "@/lib/game/reach";
 import { nextStopWhy } from "@/lib/sim/next";
 import { earthKnows, willKnows } from "@/lib/sim/knowledge";
-import { moonSearchEnds, READ_YEARS, tourEnds } from "@/lib/sim/minds";
+import { moonSearchEnds, tourEnds } from "@/lib/sim/minds";
 import { readGifts, readLater, readColony, readCloseReads, readFlybys, readLenses, readObserve, readSentinels, readSeeds, readQueue, readStops } from "./orders";
 import { readAimed, readKnocks, readStrikes, readWill } from "./orders";
 import { inPool, loadWorld } from "./world";
@@ -104,7 +104,8 @@ export async function next(req: Request) {
   // And the Years the Moon Search and the Asteroid Tour end, each saying so on Build. 2026-10-30.
   const ends = [
     { at: done["Moon Search"] == null ? null : moonSearchEnds(done["Moon Search"]), why: "the Moon Search’s end" },
-    ...plan.closeReads.map((o) => ({ at: o.y + READ_YEARS, why: "Close Reading done" })),
+    // Readings already ordered, by us or unasked after our first: one ordered later would tell of a glow not yet found.
+    ...(ahead.minds?.flashes ?? []).filter((f) => f.read && f.read.from <= year).map((f) => ({ at: f.read!.at, why: "Close Reading done" })),
     { at: done["Asteroid Tour"] == null ? null : tourEnds(done["Asteroid Tour"]), why: "the Asteroid Tour’s end" },
   ];
   // Betelgeuse's end, once, the one natural event that stops a skip. 2026-10-30.

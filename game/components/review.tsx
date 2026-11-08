@@ -3,7 +3,10 @@ import { useNavigate } from "react-router";
 import { useNext } from "@/components/begin";
 import { useGame } from "@/components/game-provider";
 import { Lens } from "@/components/icons";
+import { BuildCard } from "@/components/build-card";
+import { useSchedule } from "@/components/picks";
 import { Chances } from "@/components/chances";
+import { buildNamed } from "@/lib/game/plan";
 import { MindNote } from "@/components/mind-note";
 import { LeadMark } from "@/components/marks";
 import { useLeads, useStepTap } from "@/components/scan";
@@ -78,7 +81,8 @@ export function Thread({
 
 export function Review({ onClose }: { onClose(): void }) {
   const { leads, dials, readings, setLook, close, setClose, setStep } = useLeads();
-  const { did } = useGame();
+  const { did, year } = useGame();
+  const { done } = useSchedule();
   const root = useRef<HTMLDivElement>(null);
   const next = useRef<HTMLButtonElement>(null);
   const navigate = useNavigate();
@@ -98,6 +102,9 @@ export function Review({ onClose }: { onClose(): void }) {
   const i = at > 0 ? order[at - 1] : -1;
   const lead = leads[i];
   const read = lead && readings[lead.slug]?.at(-1);
+  // Once every build that would tell us is done, the question is answered or past them, so neither shows. 2026-11-08.
+  const open =
+    !!lead?.builds?.some((b) => year === null || done[b.name] == null || year < done[b.name]!);
 
   // The map turns to the lead in view, and back out to them all when we leave. Its system, if we know it, is open to
   // Close View, from outside each time.
@@ -235,6 +242,35 @@ export function Review({ onClose }: { onClose(): void }) {
             <div data-r className="mt-1">
               <Chances lead={lead} readings={readings[lead.slug] ?? []} />
             </div>
+            {/* What we can't explain of it, then the builds that would, each ready to queue. 2026-11-08. */}
+            {open && lead.unknown && (
+              <div data-r className="mt-4 flex flex-col">
+                <span className="font-mono text-[11px] tracking-[.08em] text-muted uppercase">
+                  What we can’t explain yet
+                </span>
+                <p className="mt-1 text-[16px] leading-snug font-medium">{lead.unknown}</p>
+              </div>
+            )}
+            {open && !!lead.builds?.length && (
+              <div data-r onPointerUp={(e) => e.stopPropagation()} className="mt-3 flex flex-col gap-2">
+                <span className="font-mono text-[11px] tracking-[.08em] text-muted uppercase">
+                  {lead.builds.length > 1 ? "Builds that would tell us" : "The build that would tell us"}
+                </span>
+                {lead.builds.map((b) => {
+                  const build = buildNamed(b.name);
+                  return (
+                    build && (
+                      <BuildCard
+                        key={b.name}
+                        build={build}
+                        how={b.how}
+                        back={{ to: "/play?review", label: "Review scans" }}
+                      />
+                    )
+                  );
+                })}
+              </div>
+            )}
             {lead.system && (
               <button
                 data-r

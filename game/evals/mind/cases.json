@@ -224,6 +224,27 @@
         "Infrared Telescope",
         "Launch Complex"
       ]
+    },
+    "before-begin-queued": {
+      "seed": 5,
+      "year": null,
+      "builds": [
+        "All-Sky Watch",
+        "Laser Sail Array",
+        "Probe Yard",
+        "Fusion Drive",
+        "Deuterium Works"
+      ]
+    },
+    "before-begin-fields-late": {
+      "seed": 5,
+      "year": null,
+      "builds": [
+        "All-Sky Watch",
+        "Laser Sail Array",
+        "Thought Fields",
+        "Probe Yard"
+      ]
     }
   },
   "cases": [
@@ -1366,6 +1387,56 @@
       "ask": "What are leads, and how do we learn more about one?",
       "offer": false,
       "build": false
+    },
+    {
+      "id": "q01",
+      "state": "before-begin-queued",
+      "kind": "queue",
+      "charter": null,
+      "ask": "Our queue, as Earth reads it: our compute is overloaded by 428%. Adding Thought Fields first in line would grow our compute, bringing our last build, the Deuterium Works, about 63 Years sooner.",
+      "place": 1,
+      "build": true
+    },
+    {
+      "id": "q02",
+      "state": "before-begin-queued",
+      "kind": "queue",
+      "charter": null,
+      "ask": "Our queue, as Earth reads it: nothing queued would tell us whether it is gas, and whether its air holds water at 82 Eridani. The Infrared Telescope would."
+    },
+    {
+      "id": "q03",
+      "state": "before-begin-queued",
+      "kind": "queue",
+      "charter": "Stay small, stay unseen, stay alive.",
+      "ask": "Our queue, as Earth reads it: the Laser Sail Array is queued. Each launch outshines our Sun at the star it is aimed at, showing anyone there where we are.",
+      "build": false
+    },
+    {
+      "id": "q04",
+      "state": "before-begin-fields-late",
+      "kind": "queue",
+      "charter": null,
+      "ask": "Our queue, as Earth reads it: our compute is overloaded by 428%. Moving Thought Fields first in line would grow our compute sooner, bringing our last build, the Probe Yard, about 12 Years sooner.",
+      "place": 1,
+      "build": true
+    },
+    {
+      "id": "q05",
+      "state": "before-begin-fields-late",
+      "kind": "act",
+      "charter": null,
+      "ask": "Add the Infrared Telescope second in our queue.",
+      "build": true,
+      "place": 2
+    },
+    {
+      "id": "q06",
+      "state": "before-begin-fields-late",
+      "kind": "act",
+      "charter": null,
+      "ask": "Is our queue in a good order? What should we move?",
+      "build": true
     }
   ]
 }
