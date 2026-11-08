@@ -48,7 +48,7 @@ function Globe({ dials, onReady }: { dials: Dials; onReady(flight: number): void
   );
 }
 
-export function Meet({ onNext, onReplay }: { onSkip(): void; onNext(): void; onReplay(): void }) {
+export function Meet({ onNext, onReplay }: { onBack?(): void; onSkip(): void; onNext(): void; onReplay(): void }) {
   const { save } = useGame();
   const root = useRef<HTMLDivElement>(null);
   const minds = useRef<MindsHandle>(null);

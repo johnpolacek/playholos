@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { OpeningActs } from "@/components/opening-acts";
 import { useGame } from "@/components/game-provider";
 import type { EarthPast } from "@/lib/game/past";
 import { FILL, Spread } from "@/components/spread";
@@ -156,7 +157,7 @@ function Stop({ kick, big, line }: { kick: string; big: string; line: string }) 
   );
 }
 
-export function Inherit({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
+export function Inherit({ onBack, onSkip, onNext }: { onBack(): void; onSkip(): void; onNext(): void }) {
   const { save } = useGame();
   const root = useRef<HTMLDivElement>(null);
   // One object for the whole screen: the intro tweens the scale, and the scene reads it every frame.
@@ -247,19 +248,17 @@ export function Inherit({ onSkip, onNext }: { onSkip(): void; onNext(): void }) 
             </span>
           ))}
         </div>
-        <div className="mt-auto grid shrink-0 grid-cols-[1fr_1.4fr] gap-2 pt-5 pb-4 wide:pt-8">
-          <button data-m="act" onClick={() => leave(onSkip)} className="h-[46px] rounded-full text-[15px] font-medium">
-            Skip
-          </button>
-          <button
-            data-m="act"
-            onClick={() => leave(onNext)}
-            className="h-[46px] rounded-full bg-ink text-[15px] font-medium text-paper"
-          >
-            {/* The next screen's name, as each opening screen's button gives it. The charter's own screen left 2026-11-01. */}
+        <OpeningActs
+          onBack={() => leave(onBack)}
+          onSkip={() => leave(onSkip)}
+          onNext={() => leave(onNext)}
+          next={
+            <>
+              {/* The next screen's name, as each opening screen's button gives it. The charter's own screen left 2026-11-01. */}
             Meet the Mind
-          </button>
-        </div>
+            </>
+          }
+        />
       </Spread>
     </div>
   );

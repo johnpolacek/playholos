@@ -31,7 +31,7 @@ const WAYS = [
 // far light takes to get there. Its ways in are reactors, each its own mood: blue moons, an amber web, a white pulse. Pressed, one bursts. Universe and
 // Simulation lift the screen away to their page. Play, for a new game, dives the view home to Earth, where Earth
 // wakes. A game begun, or an opening part seen, goes straight on (dive false).
-export function Drift({ onNext, dive = true }: { onSkip(): void; onNext(): void; dive?: boolean }) {
+export function Drift({ onNext, dive = true }: { onBack?(): void; onSkip(): void; onNext(): void; dive?: boolean }) {
   const root = useRef<HTMLDivElement>(null);
   const place = useRef<HTMLSpanElement>(null);
   const far = useRef<HTMLSpanElement>(null);

@@ -1,4 +1,5 @@
 import { createContext, use, useCallback, useEffect, useRef, useState } from "react";
+import { OpeningActs } from "@/components/opening-acts";
 import { useLocation, useNavigate } from "react-router";
 import { preload } from "@/app/about/load";
 import { useGame } from "@/components/game-provider";
@@ -19,7 +20,7 @@ const ART = `-mx-6 block h-[min(46vh,380px)] w-[calc(100%+48px)] max-w-none shri
 
 // The first screen of a new game, after the drift. Earth's night side close up, its real cities lit, and as the words
 // come the real Sun rises past its edge: this morning.
-export function Wake({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
+export function Wake({ onBack, onSkip, onNext }: { onBack(): void; onSkip(): void; onNext(): void }) {
   const root = useRef<HTMLDivElement>(null);
   const [dials] = useState<Dials>(() => ({ rise: 0 }));
   const [ready, setReady] = useState(false);
@@ -76,22 +77,12 @@ export function Wake({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
           <p data-m="copy" className="text-[15.5px] leading-normal text-page-ink2">
             <b className="font-semibold text-other">You are its Will.</b> What Earth becomes is yours to choose.
           </p>
-          <div className="mt-auto grid grid-cols-[1fr_1.4fr] gap-2 pt-4 wide:pt-6">
-            <button
-              data-m="act"
-              onClick={() => leave(onSkip)}
-              className="h-[46px] rounded-full text-[15px] font-medium"
-            >
-              Skip memories
-            </button>
-            <button
-              data-m="act"
-              onClick={() => leave(onNext)}
-              className="h-[46px] rounded-full bg-ink text-[15px] font-medium text-paper"
-            >
-              Where we come from
-            </button>
-          </div>
+          <OpeningActs
+            onBack={() => leave(onBack)}
+            onSkip={() => leave(onSkip)}
+            onNext={() => leave(onNext)} pad="pt-4 wide:pt-6"
+            next="Where we come from"
+          />
         </div>
       </Spread>
     </div>
@@ -244,7 +235,7 @@ export function Opening({ className, children }: { className: string; children: 
     body = (
       <>
         {/* Replay goes back to Earth waking, and the opening runs again from there. 2026-11-01. */}
-        <Screen key={step} onSkip={skip} onNext={next} onReplay={() => setAt(SCREENS.indexOf(Wake))} />
+        <Screen key={step} onBack={() => setAt(Math.max(step - 1, 0))} onSkip={skip} onNext={next} onReplay={() => setAt(SCREENS.indexOf(Wake))} />
       </>
     );
   }

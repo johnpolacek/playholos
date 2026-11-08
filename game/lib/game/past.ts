@@ -44,7 +44,6 @@ export function history(e: EarthPast): { moments: Moment[]; rolled: number } {
       ago: 80,
       what: "The search begins",
       detail: "A dish in West Virginia listens to two nearby stars. Our radars sweep the sky, then a message from Arecibo, 1974, and two records on the Voyagers, 1977.",
-      dial: "set Open",
     },
     { when: "1969", ago: 71, what: "People on the Moon", detail: "Then a long pause, and back in 2028." },
     {
@@ -52,7 +51,6 @@ export function history(e: EarthPast): { moments: Moment[]; rolled: number } {
       ago: 18,
       what: "The race to build minds",
       detail: "Two decades went into compute, as fast as chips could be made.",
-      dial: "set Bold",
     },
   ];
   const rolled: [number, Omit<Moment, "ago" | "when">][] = [];

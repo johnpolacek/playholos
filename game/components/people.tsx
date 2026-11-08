@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { OpeningActs } from "@/components/opening-acts";
 import { FILL, Spread } from "@/components/spread";
 import { SkyArt } from "@/components/sky";
 import type { Dials } from "@/lib/drift";
@@ -39,9 +40,10 @@ function Globe({ dials, onReady }: { dials: Dials; onReady(flight: number): void
   );
 }
 
-const LINES = ["About 195 nations. No one government.", "Our air is warmer than our recent ancestors knew."];
+// The two small lines between the count and the last, on nations and warmer air, left 2026-11-08: the lights and
+// threads carry the screen to the last line, and what follows comes 1.2 sooner.
 
-export function People({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
+export function People({ onBack, onSkip, onNext }: { onBack(): void; onSkip(): void; onNext(): void }) {
   const root = useRef<HTMLDivElement>(null);
   const count = useRef<HTMLSpanElement>(null);
   // One object for the whole screen: the intro tweens it, and the scene reads it every frame.
@@ -68,11 +70,10 @@ export function People({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
         .fromTo(q('[data-m="count"]'), riseFrom, { ...rise, duration: 0.6 }, 1.1)
         .to(n, { v: PEOPLE, duration: 2, ease: "power1.in", onUpdate: show }, 1)
         .fromTo(q('[data-m="still"]'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.6 }, 2.8);
-      q('[data-m="line"]').forEach((line, i) => tl.fromTo(line, riseFrom, { ...rise, duration: 0.6 }, 3.2 + i * 1.1));
-      tl.to(s, { threads: 1, duration: 1.8, ease: "power2.inOut" }, 4.6)
-        .to(s, { mind: 1, duration: 0.6, ease: "back.out(2)" }, 6.1)
-        .fromTo(q('[data-m="last"]'), riseFrom, { ...rise, duration: 0.8 }, 7.0)
-        .fromTo(q('[data-m="act"]'), riseFrom, { ...rise, stagger: 0.08 }, 7.6);
+      tl.to(s, { threads: 1, duration: 1.8, ease: "power2.inOut" }, 3.4)
+        .to(s, { mind: 1, duration: 0.6, ease: "back.out(2)" }, 4.9)
+        .fromTo(q('[data-m="last"]'), riseFrom, { ...rise, duration: 0.8 }, 5.8)
+        .fromTo(q('[data-m="act"]'), riseFrom, { ...rise, stagger: 0.08 }, 6.4);
     },
     ready,
   );
@@ -113,31 +114,16 @@ export function People({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
           people, and still rising
         </span>
         <div className="mt-4 flex flex-col gap-1.5 text-[15px] leading-snug text-page-ink2">
-          {LINES.map((line) => (
-            <p key={line} data-m="line">
-              {line}
-            </p>
-          ))}
           <p data-m="last" className="mt-2 text-[17px] leading-snug font-medium text-other">
             Every light is a soul. You are our Will.
           </p>
         </div>
-        <div className="mt-auto grid shrink-0 grid-cols-[1fr_1.4fr] gap-2 pt-5 pb-4 wide:pt-8">
-          <button
-            data-m="act"
-            onClick={() => leave(onSkip)}
-            className="h-[46px] rounded-full text-[15px] font-medium"
-          >
-            Skip
-          </button>
-          <button
-            data-m="act"
-            onClick={() => leave(onNext)}
-            className="h-[46px] rounded-full bg-ink text-[15px] font-medium text-paper"
-          >
-            Where things stand
-          </button>
-        </div>
+        <OpeningActs
+          onBack={() => leave(onBack)}
+          onSkip={() => leave(onSkip)}
+          onNext={() => leave(onNext)}
+          next="Where things stand"
+        />
       </Spread>
     </div>
   );

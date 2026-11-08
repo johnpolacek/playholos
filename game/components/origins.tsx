@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { OpeningActs } from "@/components/opening-acts";
 import { useGame } from "@/components/game-provider";
 import { history, type EarthPast, type Moment } from "@/lib/game/past";
 import { SkyArt } from "@/components/sky";
@@ -37,7 +38,7 @@ function Caption({ m, now }: { m: Moment; now?: boolean }) {
 
 const NOW: Moment = { when: "2040", ago: 0, what: "Earth wakes" };
 
-export function Origins({ onSkip, onNext }: { onSkip(): void; onNext(): void }) {
+export function Origins({ onBack, onSkip, onNext }: { onBack(): void; onSkip(): void; onNext(): void }) {
   const { save } = useGame();
   const [past, setPast] = useState<EarthPast>();
   const root = useRef<HTMLDivElement>(null);
@@ -149,22 +150,12 @@ export function Origins({ onSkip, onNext }: { onSkip(): void; onNext(): void }) 
           ))}
           <Caption m={NOW} now />
         </div>
-        <div className="mt-auto grid shrink-0 grid-cols-[1fr_1.4fr] gap-2 pt-5 pb-4 wide:pt-8">
-          <button
-            data-m="act"
-            onClick={() => leave(onSkip)}
-            className="h-[46px] rounded-full text-[15px] font-medium"
-          >
-            Skip people
-          </button>
-          <button
-            data-m="act"
-            onClick={() => leave(onNext)}
-            className="h-[46px] rounded-full bg-ink text-[15px] font-medium text-paper"
-          >
-            Who we are
-          </button>
-        </div>
+        <OpeningActs
+          onBack={() => leave(onBack)}
+          onSkip={() => leave(onSkip)}
+          onNext={() => leave(onNext)}
+          next="Who we are"
+        />
       </Spread>
     </div>
   );

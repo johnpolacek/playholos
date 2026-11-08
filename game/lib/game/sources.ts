@@ -125,21 +125,6 @@ export const PEOPLE_SOURCES: Source[] = [
     text: "Each light is drawn from NASA’s Black Marble, Earth at night as the Suomi NPP satellite sees it.",
     links: [["NASA, Night Lights", "https://earthobservatory.nasa.gov/features/NightLights"]],
   },
-  {
-    title: "195 nations",
-    text: "193 members of the United Nations, and two observer states.",
-    links: [["Member states of the United Nations", W("Member_states_of_the_United_Nations")]],
-  },
-  {
-    title: "Warmer air",
-    text: "2024 was the first calendar year more than 1.5°C above pre-industrial. The long-term average is expected to cross it around 2030.",
-    links: [
-      [
-        "WMO decadal climate update",
-        "https://wmo.int/resources/publication-series/wmo-global-annual-decadal-climate-update/wmo-global-annual-decadal-climate-update-2025-2029",
-      ],
-    ],
-  },
 ];
 
 export const STAND_SOURCES: Source[] = [

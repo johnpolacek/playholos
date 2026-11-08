@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { OpeningActs } from "@/components/opening-acts";
 import { KNOCKS, RADARS_SINCE } from "@/lib/game/knocks";
 import { YEAR_0 } from "@/lib/game/clock";
 import { ReplayButton } from "@/components/screen-bar";
@@ -78,7 +79,7 @@ const LINES = [
   `The next could come in ${NEXT_YEAR}, from ${NEXT}.`,
 ];
 
-export function Stand({ onSkip, onNext, onReplay }: { onSkip(): void; onNext(): void; onReplay(): void }) {
+export function Stand({ onBack, onSkip, onNext, onReplay }: { onBack(): void; onSkip(): void; onNext(): void; onReplay(): void }) {
   const root = useRef<HTMLDivElement>(null);
   const clock = useRef<HTMLSpanElement>(null);
   // One object for the whole screen: the intro runs the years, and the scene reads them every frame.
@@ -158,18 +159,12 @@ export function Stand({ onSkip, onNext, onReplay }: { onSkip(): void; onNext(): 
             We know where our noise has gone. We can’t know who heard it.
           </p>
         </div>
-        <div className="mt-auto grid shrink-0 grid-cols-[1fr_1.4fr] gap-2 pt-5 pb-4 wide:pt-8">
-          <button data-m="act" onClick={() => leave(onSkip)} className="h-[46px] rounded-full text-[15px] font-medium">
-            Skip
-          </button>
-          <button
-            data-m="act"
-            onClick={() => leave(onNext)}
-            className="h-[46px] rounded-full bg-ink text-[15px] font-medium text-paper"
-          >
-            What you inherit
-          </button>
-        </div>
+        <OpeningActs
+          onBack={() => leave(onBack)}
+          onSkip={() => leave(onSkip)}
+          onNext={() => leave(onNext)}
+          next="What you inherit"
+        />
       </Spread>
     </div>
   );
