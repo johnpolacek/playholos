@@ -1,9 +1,10 @@
 import { execFileSync } from "node:child_process";
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { playwright } from "./pw.mjs";
 import { regime } from "./regime.mjs";
+import { language, measure } from "./screen-audit.mjs";
 import { fixture, fromSave, seedPage, states, writeFixture, writeIndex } from "./states.mjs";
 
 // Screenshots of every named state at every width, into one folder a run, for the screen critic and the contact sheet
@@ -97,32 +98,49 @@ for (const s of list) {
       shot.status = "no save";
       continue;
     }
-    const context = await browser.newContext({ viewport: { width: v.width, height: v.height }, deviceScaleFactor: v.scale ?? 1, isMobile: !!v.touch, hasTouch: !!v.touch, reducedMotion: "reduce" });
-    const page = await context.newPage();
-    page.on("console", (m) => m.type() === "error" && shot.errors.push(m.text().slice(0, 300)));
-    page.on("pageerror", (e) => shot.errors.push(String(e).slice(0, 300)));
-    try {
-      // The clock reads the state's Year and stays there. Timers and the sky's motion still run.
-      await page.clock.setFixedTime(now);
-      await seedPage(page, fx, now);
-      await page.goto(URL_ + s.path, { waitUntil: "networkidle", timeout: R.capture?.timeoutMs ?? 30000 });
-      for (const step of s.steps ?? []) {
-        if (step.click) await page.locator(step.click).first().click({ timeout: 10000 });
-        if (step.wait) await page.waitForTimeout(step.wait);
+    // Two retries, 15 seconds apart: a dev server that restarts mid-run drops a shot or two.
+    for (let attempt = 0; attempt < 3; attempt++) {
+      if (attempt) await new Promise((r) => setTimeout(r, 15000));
+      shot.errors = [];
+      const context = await browser.newContext({ viewport: { width: v.width, height: v.height }, deviceScaleFactor: v.scale ?? 1, isMobile: !!v.touch, hasTouch: !!v.touch, reducedMotion: "reduce" });
+      const page = await context.newPage();
+      page.on("console", (m) => m.type() === "error" && shot.errors.push(m.text().slice(0, 300)));
+      page.on("pageerror", (e) => shot.errors.push(String(e).slice(0, 300)));
+      try {
+        // The clock reads the state's Year and stays there. Timers and the sky's motion still run.
+        await page.clock.setFixedTime(now);
+        await seedPage(page, fx, now);
+        await page.goto(URL_ + s.path, { waitUntil: "networkidle", timeout: R.capture?.timeoutMs ?? 30000 });
+        for (const step of s.steps ?? []) {
+          if (step.click) await page.locator(step.click).first().click({ timeout: 10000 });
+          if (step.wait) await page.waitForTimeout(step.wait);
+        }
+        await page.waitForTimeout(s.settleMs ?? R.capture?.settleMs ?? 2500);
+        await page.screenshot({ path: join(out, file), timeout: 120000 });
+        shot.status = "ok";
+        // What code can tell: layout faults measured in the page, and the words on screen against the language rules.
+        const a = R.audit ?? {};
+        const { texts, faults } = await page.evaluate(measure, { touch: !!v.touch, minTarget: a.minTarget ?? 24, minFont: a.minFont ?? 9.5 });
+        shot.text = file.replace(/\.png$/, ".text.json");
+        writeFileSync(join(out, shot.text), JSON.stringify(texts, null, 1) + "\n");
+        shot.faults = faults;
+        shot.language = language(texts);
+      } catch (e) {
+        shot.status = "failed";
+        shot.errors.push(String(e.message ?? e).split("\n")[0].slice(0, 300));
       }
-      await page.waitForTimeout(s.settleMs ?? R.capture?.settleMs ?? 2500);
-      await page.screenshot({ path: join(out, file), timeout: 120000 });
-      shot.status = "ok";
-    } catch (e) {
-      shot.status = "failed";
-      shot.errors.push(String(e.message ?? e).split("\n")[0].slice(0, 300));
+      await context.close();
+      if (shot.status === "ok") break;
     }
-    await context.close();
-    console.log(`${shot.status.padEnd(8)} ${file}${shot.errors.length ? `  ${shot.errors.length} error(s): ${shot.errors[0]}` : ""}`);
+    const flags = shot.status === "ok" ? `  ${shot.faults.length} layout, ${shot.language.length} language` : "";
+    console.log(`${shot.status.padEnd(8)} ${file}${flags}${shot.errors.length ? `  ${shot.errors.length} error(s): ${shot.errors[0]}` : ""}`);
   }
 }
 await browser.close();
 
+// A rerun of some states into the same run keeps the shots it didn't take again.
+const was = existsSync(join(out, "results.json")) ? JSON.parse(readFileSync(join(out, "results.json"), "utf8")).shots : [];
+shots.unshift(...was.filter((x) => !shots.some((y) => y.state === x.state && y.viewport === x.viewport)));
 const results = { run, build: git("rev-parse", "--short", "HEAD"), dirty: !!git("status", "--porcelain", "game"), at: new Date(now).toISOString(), secs: Math.round((Date.now() - now) / 1000), url: URL_, shots };
 writeFileSync(join(out, "results.json"), JSON.stringify(results, null, 2) + "\n");
 writeIndex();

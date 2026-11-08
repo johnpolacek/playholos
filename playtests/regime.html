@@ -249,7 +249,56 @@
       "Name the worst thing on screen, where it is, and one fix, in a short line each."
     ]
   },
-  "screensRule": "Each named state opens from its saved game in playtests/states/, with the clock stopped at its Year. npm run playtest:capture shots every state at every width, and npm run playtest:critic scores them blind. A state without a save is skipped. Save one from a run with node scripts/capture.mjs snap <id>.",
+  "design": {
+    "who": "A designer who sees every screen at once, laptop and phone, so it can judge how they hold together.",
+    "ratings": [
+      { "id": "consistency", "q": "Do the same things look and sit the same on every screen: buttons, labels, cards, the top bar?", "anchors": ["each screen its own style", "several things differ", "one or two differ", "one system throughout"] },
+      { "id": "spacing", "q": "Are margins, gaps and alignment even, so the eye moves in straight lines?", "anchors": ["cramped or ragged everywhere", "uneven in places", "mostly even", "even and calm"] },
+      { "id": "type", "q": "Do a few clear sizes and weights carry the order of what matters?", "anchors": ["sizes fight", "too many sizes, or too small", "clear, a few slips", "clear at a glance"] },
+      { "id": "clutter", "q": "Does every element earn its place, with room to breathe?", "anchors": ["crowded and noisy", "busy, some parts repeat", "a little extra", "nothing to remove"] }
+    ],
+    "rules": [
+      "Judge only what is on screen. Never the code, the diff, or what a change meant to do.",
+      "Rate from the anchors, so a 6 means the same every run.",
+      "Name up to eight issues, worst first, each with its screen, where on it, and one fix.",
+      "Prefer clarity and breathing room over decoration. Flag any element that does nothing."
+    ]
+  },
+  "editor": {
+    "who": "An editor who reads each screen's words beside its screenshot, and cuts every word a new player doesn't need.",
+    "ratings": [
+      { "id": "clarity", "q": "Does a new player understand each line on first read?", "anchors": ["mostly lost", "often rereads", "clear, a few knots", "plain throughout"] },
+      { "id": "concision", "q": "Does each line say it in as few words as it can?", "anchors": ["padded everywhere", "much could go", "a little could go", "nothing to cut"] }
+    ],
+    "rules": [
+      "Plain words and short sentences. Periods and commas. No em dashes or semicolons.",
+      "We, Earth and its Mind together. Never I. Humans are we and us, never they.",
+      "A sign of a mind might be one, never would. Plain names: emissions, glows, knocks, never leakage or technosignature.",
+      "Keep every number and fact. Cut words, never meaning. Leave quoted words people sent as they are.",
+      "Give up to six rewrites, the biggest cuts first, each the line as it is and as it should be."
+    ]
+  },
+  "audit": {
+    "minTarget": 24,
+    "minFont": 9.5,
+    "limits": { "button": 6, "heading": 8, "sentence": 25 },
+    "rules": [
+      { "name": "clipped", "why": "Text wider or taller than its box, where the box hides the rest, or cut to an ellipsis." },
+      { "name": "covered", "why": "A button or link with something else on top at its middle." },
+      { "name": "small target", "why": "On the phone, a button or link under 24 px across, the WCAG 2.2 minimum." },
+      { "name": "tiny text", "why": "Text under 9.5 px." },
+      { "name": "low contrast", "why": "Text under 4.5 to 1 against its background, or 3 to 1 when large. Text over the sky's canvas isn't measured." },
+      { "name": "off screen", "why": "A button or link that runs past the edge." },
+      { "name": "page scrolls sideways", "why": "The page is wider than the screen." },
+      { "name": "Mind's rules", "why": "Every line on screen holds to the Mind's rules: never I, no semicolons or dashes, no jargon, no AU, no model named. Quoted words people sent are left out." },
+      { "name": "would be a mind", "why": "A sign of a mind might be one, never would." },
+      { "name": "humans are they", "why": "Humans are we and us, never they." },
+      { "name": "long button", "why": "A button over 6 words." },
+      { "name": "long heading", "why": "A heading over 8 words." },
+      { "name": "long sentence", "why": "A sentence over 25 words." }
+    ]
+  },
+  "screensRule": "Each named state opens from its saved game in playtests/states/, with the clock stopped at its Year. npm run playtest:capture shots every state at every width, measures its layout and reads its words against the audit rules, by code. npm run playtest:critic then scores each screen blind, has a designer judge all of them together, and has an editor cut their words. A state without a save is skipped. Save one from a run with node scripts/capture.mjs snap <id>.",
   "scenarioRule": "Each cloud run plays the next scenario in turn, from a fresh game. The seed is drawn at random as for any player, so runs cover every world and no fix is tuned to one. A seed is replayed only to check a fix on the world a finding came from.",
   "checks": [
     { "name": "build named", "why": "scores.json names the build it played, so the trend can tie a score to code." },
@@ -445,6 +494,7 @@ code { font: 12px ui-monospace, Menlo, monospace; background: var(--soft); paddi
   <section class="pane" id="checks" role="tabpanel" aria-labelledby="tab-checks">
   <h2>Code checks</h2>
   <div class="card scroll" id="checkTable"></div>
+  <div class="card scroll" style="margin-top:12px"><b class="small">On every captured screen</b><div id="auditTable"></div></div>
   <div class="card small muted" style="margin-top:12px"><b>Known gaps, not to report</b><ul id="gaps"></ul></div>
   </section>
 
@@ -552,6 +602,7 @@ function drawChecks(runs) {
     .map((c) => { const f = fails[c.name]; return `<tr><td>${esc(c.name)}</td><td class="muted">${esc(c.why)}</td><td class="n ${f.failed ? "fail" : f.ran ? "pass" : "muted"}">${f.ran ? `${f.failed} of ${f.ran}` : "–"}</td></tr>`; })
     .join("")}</table>`;
 }
+$("auditTable").innerHTML = `<table>${R.audit.rules.map((c) => `<tr><td>${esc(c.name)}</td><td class="muted">${esc(c.why)}</td></tr>`).join("")}</table>`;
 $("gaps").innerHTML = R.knownGaps.map((g) => `<li>${esc(g)}</li>`).join("");
 $("openList").innerHTML = R.open.map((g) => `<li>${esc(g)}</li>`).join("");
 
@@ -624,6 +675,7 @@ function drawScreens(caps) {
       (prev ? `<button data-compare aria-pressed="${compare}">Show ${esc(prev.run)} beside</button>` : "");
     const bad = cap.shots.filter((x) => x.status !== "ok");
     $("sheet").innerHTML = `<p class="small muted">Build <code>${esc(cap.build ?? "?")}</code>${cap.dirty ? " with uncommitted game changes" : ""}. ${cap.shots.length - bad.length} of ${cap.shots.length} shots.${cap.critic ? ` Critic: ${esc(cap.critic.model)}.` : " Not scored yet."}</p>` +
+      designCard(cap, prev) +
       R.states.map((st) => {
         const shots = cap.shots.filter((x) => x.state === st.id);
         if (!shots.length) return "";
@@ -639,7 +691,22 @@ function drawScreens(caps) {
           const d = typeof v === "number" && typeof w === "number" ? v - w : 0;
           return `<div class="score-row" title="${esc(c[vp][k]?.why)}"><span>${esc(k)}</span><b>${v ?? "–"}${d ? ` <span class="${d < 0 ? "down" : "up"}">${d > 0 ? "+" : ""}${d}</span>` : ""}</b></div>`;
         }).join("")}<p class="small" style="margin-top:6px"><span class="muted">Worst:</span> ${esc(c[vp].worst)}<br><span class="muted">Fix:</span> ${esc(c[vp].fix)}</p></div>` : "").join("")}</div>` : c?.error ? `<p class="small fail">Critic: ${esc(c.error)}</p>` : "";
-        return `<div class="card" style="margin-top:12px"><h3>${esc(st.title)} <span class="tag">${esc(st.path)}</span></h3><p class="small muted">${esc(st.description)}</p>${pics}${scores}</div>`;
+        // Code's flags for each width, then the editor's cuts.
+        const flags = shots.filter((x) => x.status === "ok").map((x) => {
+          const f = [...(x.faults ?? []).map((y) => ({ ...y, kind: "layout" })), ...(x.language ?? []).map((y) => ({ ...y, kind: "words" }))];
+          if (!f.length) return `<p class="small pass">${esc(x.viewport)}: code found nothing.</p>`;
+          const by = {};
+          for (const y of f) (by[y.rule] ??= []).push(y);
+          return `<details class="small" style="margin-top:6px"><summary>${esc(x.viewport)}: code flagged ${Object.entries(by).map(([k, v]) => `${v.length} ${esc(k)}`).join(", ")}</summary><table>${f
+            .map((y) => `<tr><td>${esc(y.rule)}</td><td>${esc(y.text)}</td><td class="muted">${esc(y.note ?? "")}</td></tr>`)
+            .join("")}</table></details>`;
+        }).join("");
+        const ed = cap.critic?.editor?.[st.id], ped = prev?.critic?.editor?.[st.id];
+        const edit = ed && !ed.error ? `<div style="margin-top:10px"><b class="small">Words</b> <span class="small muted">${R.editor.ratings.map((r) => {
+          const v = ed[r.id]?.score, w = ped?.[r.id]?.score, d = typeof v === "number" && typeof w === "number" ? v - w : 0;
+          return `<span title="${esc(ed[r.id]?.why)}">${esc(r.id)} <b>${v ?? "–"}</b>${d ? ` <span class="${d < 0 ? "down" : "up"}">${d > 0 ? "+" : ""}${d}</span>` : ""}</span>`;
+        }).join(" · ")} · ${ed.saved} of ${ed.words} words could go</span>${ed.rewrites?.length ? `<table style="margin-top:6px"><tr><th>Now</th><th>Cut to</th><th class="n">Saves</th></tr>${ed.rewrites.map((x) => `<tr><td class="muted">${esc(x.was)}</td><td>${esc(x.now)}</td><td class="n">${x.saved}</td></tr>`).join("")}</table>` : ""}</div>` : ed?.error ? `<p class="small fail">Editor: ${esc(ed.error)}</p>` : "";
+        return `<div class="card" style="margin-top:12px"><h3>${esc(st.title)} <span class="tag">${esc(st.path)}</span></h3><p class="small muted">${esc(st.description)}</p>${pics}${scores}${flags}${edit}</div>`;
       }).join("");
   };
   $("capTabs").addEventListener("click", (e) => {
@@ -649,6 +716,16 @@ function drawScreens(caps) {
     draw();
   });
   draw();
+}
+// The designer's pass over every screen at once.
+function designCard(cap, prev) {
+  const d = cap.critic?.design, pd = prev?.critic?.design;
+  if (!d) return "";
+  if (d.error) return `<div class="card small fail">Design pass: ${esc(d.error)}</div>`;
+  return `<div class="card" style="margin-top:12px"><h3>All screens together</h3><p class="small muted">${esc(R.design.who)}</p><div class="scores">${R.design.ratings.map((r) => {
+    const v = d[r.id]?.score, w = pd?.[r.id]?.score, n = typeof v === "number" && typeof w === "number" ? v - w : 0;
+    return `<div class="score-row" title="${esc(d[r.id]?.why)}"><span>${esc(r.id)}</span><b>${v ?? "–"}${n ? ` <span class="${n < 0 ? "down" : "up"}">${n > 0 ? "+" : ""}${n}</span>` : ""}</b></div>`;
+  }).join("")}</div>${d.issues?.length ? `<table style="margin-top:10px"><tr><th>Screen</th><th>Issue</th><th>Fix</th></tr>${d.issues.map((x) => `<tr><td>${esc(x.state)}<br><span class="muted">${esc(x.viewport)}, ${esc(x.where)}</span></td><td>${esc(x.issue)}</td><td>${esc(x.fix)}</td></tr>`).join("")}</table>` : ""}</div>`;
 }
 drawScreens(window.CAPTURES);
 </script>
