@@ -26,6 +26,8 @@ export function Sky({ shade, children }: { shade: boolean; children: React.React
   const frame = useRef<HTMLDivElement>(null);
   const scene = useRef<Drift>(undefined);
   const wanted = useRef<Show>({ mode: "title" });
+  // A stop asked for before the scene has loaded, as when a reload opens the map on the Milky Way from our talk.
+  const wantedStop = useRef<Stop | null>(null);
   // The one fade the sky has: in, when the game first opens.
   const [lit, setLit] = useState(false);
   // No WebGL: the maps and the globe stay blank, so we say why. They went blank with no word until 2026-10-30.
@@ -38,6 +40,7 @@ export function Sky({ shade, children }: { shade: boolean; children: React.React
       .then(({ mountDrift }) => {
         if (gone) return;
         scene.current = mountDrift(el, { still: prefersReducedMotion(), ...wanted.current });
+        if (wantedStop.current) scene.current.go(wantedStop.current);
         setLit(true);
       })
       // No WebGL: the screens carry on over the plain page.
@@ -51,10 +54,14 @@ export function Sky({ shade, children }: { shade: boolean; children: React.React
 
   const show = useCallback((spec: Show) => {
     wanted.current = spec;
+    wantedStop.current = null;
     return scene.current?.show(spec) ?? 0;
   }, []);
   const home = useCallback(() => scene.current?.home() ?? 0, []);
-  const go = useCallback((stop: Stop) => scene.current?.go(stop), []);
+  const go = useCallback((stop: Stop) => {
+    wantedStop.current = stop;
+    scene.current?.go(stop);
+  }, []);
   const turn = useCallback((dx: number, dy: number) => scene.current?.turn(dx, dy), []);
   const [api] = useState<SkyApi>(() => ({ show, home, go, turn, frame }));
   const shading = `pointer-events-none absolute transition-opacity duration-700 ${shade ? "opacity-100" : "opacity-0"}`;

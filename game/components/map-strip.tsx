@@ -17,7 +17,9 @@ import { placedOf, useWorks, WorksMap } from "@/components/works";
 import { useJumpLead } from "@/components/jump";
 import { usePlan, useSchedule } from "@/components/picks";
 import type { Stop } from "@/lib/flight";
-import type { Mark } from "@/lib/drift";
+import type { Mark, SimMind } from "@/lib/drift";
+import type { Place } from "@/lib/game/named-places";
+import { placeLabel } from "@/components/place-label";
 import { PLANETS } from "../../src/astronomy.js";
 import { CraftView } from "@/components/craft-view";
 import { CLOSE } from "@/lib/game/close";
@@ -55,6 +57,9 @@ export function MapStrip() {
   const talked = talking?.lead ?? null;
   // Or the build the Mind offers, where it would stand, as its page shows it. 2026-11-08.
   const talkedBuild = talking?.build ?? null;
+  // Or a star that isn't a lead, two places side by side, or a stop the Will asks for. 2026-11-08.
+  const talkedPlaces = talking?.places ?? null;
+  const talkedStop = talking?.stop ?? null;
   // A jump's card open off Scan shows its lead there too, until the card closes. 2026-11-08.
   // But not over a page about one thing, a destination on Reach or a build: Tau Ceti's Reach page showed Groombridge 34
   // from the card. Blind playtest 2026-11-08.
@@ -160,6 +165,23 @@ export function MapStrip() {
             </button>
           )}
           <button onClick={() => setSentHome(subject!.from)} className={BUTTON}>
+            <Globe />
+            Back to Earth
+          </button>
+        </>
+      ) : talkedPlaces ? (
+        <>
+          <TalkPlaces key={talkedPlaces.map((p) => p.name).join("|")} places={talkedPlaces} />
+          <span className={LABEL}>{talkedPlaces.map((p) => p.name.toUpperCase()).join(" · ")}</span>
+          <button onClick={() => setSentHome(subject!.from)} className={BUTTON}>
+            <Globe />
+            Back to Earth
+          </button>
+        </>
+      ) : talkedStop ? (
+        <>
+          <Stops key={`talk-${talkedStop}`} from={talkedStop} />
+          <button onClick={() => setSentHome(subject!.from)} className={`absolute top-2 right-2.5 ${PILL}`}>
             <Globe />
             Back to Earth
           </button>
@@ -293,11 +315,121 @@ function TalkBuild({ name }: { name: string }) {
   return null;
 }
 
+const NO_MINDS: SimMind[] = [];
+const LY_AU = 63241.077;
+/** How far out to look from a place so that this many light-years round it are in view, as log10 AU. */
+const framing = (ly: number) => Math.log10(2.8 * Math.max(ly, 1.5) * LY_AU);
+const NAME =
+  "pointer-events-none absolute top-0 left-0 font-mono text-[11px] whitespace-nowrap opacity-0 [text-shadow:0_0_3px_#000,0_0_6px_#000,0_0_10px_#000]";
+
+/** The stars our talk names that aren't leads, at their real places: one, with its line out from Sol, or two side by
+ *  side, framed with Sol, with the light-years between them. 2026-11-08. */
+function TalkPlaces({ places }: { places: Place[] }) {
+  const [a, b] = places;
+  const sim = useMemo(() => {
+    if (!b)
+      return {
+        minds: NO_MINDS,
+        focus: a.pos,
+        zoom: framing(Math.hypot(...a.pos)),
+        marks: [{ id: "a", pos: a.pos }, { id: "Sol", pos: [0, 0, 0] as [number, number, number] }],
+      };
+    const mid = a.pos.map((v, i) => (v + b.pos[i]) / 2) as [number, number, number];
+    const span = Math.max(Math.hypot(...a.pos.map((v, i) => v - mid[i])), Math.hypot(...mid));
+    return {
+      minds: NO_MINDS,
+      focus: mid,
+      // Wider than one place's: the view tilts, so two places and Sol need room to its edges.
+      zoom: framing(1.8 * span),
+      bare: true,
+      marks: [
+        { id: "a", pos: a.pos },
+        { id: "b", pos: b.pos },
+        { id: "Sol", pos: [0, 0, 0] as [number, number, number] },
+      ],
+    };
+  }, [a, b]);
+  const apart = b ? Math.hypot(...a.pos.map((v, i) => v - b.pos[i])) : 0;
+  const names = useRef<Record<string, HTMLElement | null>>({});
+  const line = useRef<SVGLineElement>(null);
+  const dots = useRef<Record<string, SVGCircleElement | null>>({});
+  const onMarks = useCallback((marks: Mark[]) => {
+    const taken: Parameters<typeof placeLabel>[4] = [];
+    const at: Record<string, Mark> = {};
+    for (const m of marks) {
+      at[m.id] = m;
+      const n = names.current[m.id];
+      if (n) n.style.opacity = m.a <= 0 ? "0" : String(m.a * placeLabel(n, m.x, m.y, null, taken));
+      const dot = dots.current[m.id];
+      if (dot) {
+        dot.setAttribute("cx", String(m.x));
+        dot.setAttribute("cy", String(m.y));
+        dot.style.opacity = String(Math.max(0, m.a));
+      }
+    }
+    // Between the two, a dashed line and the light-years it spans, at its middle.
+    const [p, q, l, gap] = [at.a, at.b, line.current, names.current.gap];
+    if (p && q && l && gap) {
+      l.setAttribute("x1", String(p.x));
+      l.setAttribute("y1", String(p.y));
+      l.setAttribute("x2", String(q.x));
+      l.setAttribute("y2", String(q.y));
+      const seen = Math.min(p.a, q.a);
+      l.style.opacity = String(Math.max(0, seen));
+      // Beside the line's middle, not on it: out along the line's normal, far enough to clear the words' box.
+      const len = Math.hypot(q.x - p.x, q.y - p.y) || 1;
+      let [nx, ny] = [-(q.y - p.y) / len, (q.x - p.x) / len];
+      if (ny < 0) [nx, ny] = [-nx, -ny];
+      const [w, h] = [gap.offsetWidth, gap.offsetHeight];
+      const off = 6 + Math.abs(nx) * (w / 2) + Math.abs(ny) * (h / 2);
+      gap.style.transform = `translate(${(p.x + q.x) / 2 + nx * off - w / 2}px, ${(p.y + q.y) / 2 + ny * off - h / 2}px)`;
+      gap.style.opacity = String(Math.max(0, seen));
+    }
+  }, []);
+  return (
+    <>
+      <SkyArt mode="sim" sim={sim} onMarks={onMarks} className="absolute inset-0 overflow-hidden">
+        {b && (
+          <svg className="pointer-events-none absolute inset-0 h-full w-full overflow-visible">
+            <line ref={line} stroke="var(--ink)" strokeWidth={1} strokeOpacity={0.7} strokeDasharray="3 3" className="opacity-0" />
+            {(["a", "b"] as const).map((id) => (
+              <circle key={id} ref={(el) => void (dots.current[id] = el)} r={3} fill="var(--ink)" className="opacity-0" />
+            ))}
+          </svg>
+        )}
+        <span ref={(n) => void (names.current.a = n)} className={`${NAME} text-ink`}>
+          {a.name}
+        </span>
+        {b && (
+          <span ref={(n) => void (names.current.b = n)} className={`${NAME} text-ink`}>
+            {b.name}
+          </span>
+        )}
+        <span ref={(n) => void (names.current.Sol = n)} className={`${NAME} text-you`}>
+          Sol
+        </span>
+        {b && (
+          <span ref={(n) => void (names.current.gap = n)} className={`${NAME} text-muted`}>
+            {apart.toFixed(1)} ly apart
+          </span>
+        )}
+      </SkyArt>
+      <Turn />
+    </>
+  );
+}
+
 // The map at its stops. Back from Scan or our messages, it opens on Earth again. Out at the Sun's family, each planet
 // is named beside its point, 2026-10-29.
-function Stops() {
+function Stops({ from }: { from?: Stop } = {}) {
   const sky = useSky();
-  const [stage, setStage] = useState(0);
+  const [stage, setStage] = useState(() => Math.max(0, STAGES.findIndex((s) => s.id === from)));
+  // Opened by our talk on a stop, as the Milky Way: it flies there, and home again once the talk moves on. 2026-11-08.
+  useEffect(() => {
+    if (!from) return;
+    sky?.go(from);
+    return () => sky?.go("earth");
+  }, [sky, from]);
   const names = useRef<Record<string, HTMLSpanElement | null>>({});
   const onMarks = useCallback((marks: Mark[]) => {
     // Earth's name first, then the rest outward: one too close to a name already placed gives way.

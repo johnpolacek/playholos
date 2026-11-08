@@ -14,7 +14,9 @@ import { SendCard } from "@/components/send-card";
 import { BAD_KEY, costOf, FREE_MODEL, type Effort, EFFORTS, KEY_NEEDS_CREDIT, KEY_NEEDS_WORKSPACE, MIND_BUSY, MIND_MODELS, MIND_UNREACHED, type MindModel, readMindPick, type Usage } from "@/lib/access";
 import { readBuildOffer } from "@/lib/game/build-offer";
 import { type Lead, properGlows, starName } from "@/lib/game/leads";
-import { leadsNamed, onMap } from "@/lib/game/named-leads";
+import { leadsNamed } from "@/lib/game/named-leads";
+import { type Place, placesNamed, stopNamed } from "@/lib/game/named-places";
+import type { Stop } from "@/lib/flight";
 import { buildNamed } from "@/lib/game/plan";
 import { SITES } from "@/lib/game/sites";
 import { NEWS } from "@/lib/mind/news";
@@ -177,17 +179,41 @@ const textOf = (message?: UIMessage) => message?.parts.map((part) => (part.type 
 /** The words of an answer and the question it answers, with the lines its cards are drawn from taken off. */
 const spoken = (asked: UIMessage | undefined, answer: UIMessage) => `${textOf(asked)}\n${readOffer(readBuildOffer(textOf(answer)).words).words}`;
 
-/** What our talk is on: the lead named in the latest answer that names one, the question first, or the build the
- *  latest answer offers. The map opens on it. It stays there through answers that name nothing, so the map doesn't fly
- *  home and back. 2026-11-04. */
-export function useTalkSubject(): { lead: Lead | null; build: string | null; from: string } | null {
+/** What our talk is on, which the map opens on: the build the latest answer offers, else the lead it or its question
+ *  names, else the star they name first, of any within 50 ly, 2026-11-08. Two places the Will asks about at once show
+ *  side by side, and a question asking for the Solar System or the Milky Way flies the map to that stop. It stays
+ *  through answers that name nothing, so the map doesn't fly home and back. 2026-11-04. */
+export type TalkSubject = { lead: Lead | null; build: string | null; places: Place[] | null; stop: Stop | null; from: string };
+export function useTalkSubject(): TalkSubject | null {
   const { messages, busy } = useMind();
   const { leads } = useLeads();
+  const none = { lead: null, build: null, places: null, stop: null };
+  /** The Will's own words: news and our queue's read speak first but aren't the Will asking. */
+  const asked = (m?: UIMessage) => {
+    const t = m?.role === "user" ? textOf(m) : "";
+    return t.startsWith(NEWS) || t.startsWith(QUEUE) ? "" : t;
+  };
+  /** What these words are on: two places the Will asks about, then a lead or star the Will names, then a stop the Will
+   *  asks for, as the Milky Way, then a lead or star the answer names. */
+  const placed = (question: string, answer: string, done: boolean, from: string): TalkSubject | null => {
+    const theirs = placesNamed(question, leads, true);
+    if (theirs.length >= 2) return { ...none, places: theirs.slice(0, 2), from };
+    const stop = stopNamed(question);
+    for (const all of stop ? [theirs] : [theirs, placesNamed(answer, leads, done)]) {
+      const lead = all.find((p) => p.lead)?.lead;
+      if (lead) return { ...none, lead, from };
+      if (all[0]) return { ...none, places: [all[0]], from };
+    }
+    return stop ? { ...none, stop, from } : null;
+  };
   for (let i = messages.length - 1; i >= 0; i--) {
-    // A question naming a lead flies there as it is asked: the map sat on Earth until the answer came. 2026-11-07.
+    // A question naming a place flies there as it is asked: the map sat on Earth until the answer came. 2026-11-07.
     if (messages[i].role === "user") {
-      const lead = i === messages.length - 1 || messages[i + 1]?.role !== "assistant" ? leadsNamed(textOf(messages[i]), leads, true).find(onMap) : undefined;
-      if (lead) return { lead, build: null, from: messages[i].id };
+      if (i === messages.length - 1 || messages[i + 1]?.role !== "assistant") {
+        const q = asked(messages[i]);
+        const subject = q && placed(q, q, true, messages[i].id);
+        if (subject) return subject;
+      }
       continue;
     }
     if (messages[i].role !== "assistant") continue;
@@ -195,9 +221,9 @@ export function useTalkSubject(): { lead: Lead | null; build: string | null; fro
     // card is what the answer leads to. The map stayed on Earth under it. 2026-11-08.
     const offered = readBuildOffer(textOf(messages[i])).name;
     const build = offered ? buildNamed(offered)?.name : undefined;
-    if (build && SITES[build]) return { lead: null, build, from: messages[i].id };
-    const lead = leadsNamed(spoken(messages[i - 1], messages[i]), leads, !busy || i < messages.length - 1).find(onMap);
-    if (lead) return { lead, build: null, from: messages[i].id };
+    if (build && SITES[build]) return { ...none, build, from: messages[i].id };
+    const subject = placed(asked(messages[i - 1]), spoken(messages[i - 1], messages[i]), !busy || i < messages.length - 1, messages[i].id);
+    if (subject) return subject;
   }
   return null;
 }
