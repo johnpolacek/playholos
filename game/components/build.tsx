@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { useSearchParams } from "react-router";
 import { Ceilings, Costs, usePreview } from "@/components/costs";
 import { useGame } from "@/components/game-provider";
@@ -8,7 +8,8 @@ import { Queue } from "@/components/queue";
 import { Tour } from "@/components/tour";
 import { realTime, yearText } from "@/lib/game/clock";
 import { HARM_WORDS } from "@/lib/sim/conflict";
-import { useSchedule } from "@/components/picks";
+import { usePlan, useSchedule } from "@/components/picks";
+import { placedOf, useWorks } from "@/components/works";
 
 // The Build tab, laid out as Scan is: the queue and what we could start, in Scan's rows. The walk through what we
 // could start, as Scan's review, opens from the tab's head at any time and from Begin, in the top bar. Asking
@@ -22,8 +23,18 @@ export function Build() {
   // A build pointed at shows in the top bar too, so leaving Build lets it go.
   const [, setPreview] = usePreview();
   useEffect(() => () => setPreview(null), [setPreview]);
+  // Our builds on the map, so a row pointed at below flies it to its site. The walk places its own, its strategy's,
+  // and the walk's effect runs first, so the list's waits until it closes. Leaving Build brings the map home.
+  // 2026-11-08.
+  const { plan } = usePlan();
+  const { scale, done } = useSchedule();
+  const { set: place, pick } = useWorks();
+  const tour = params.has("tour");
+  const placed = useMemo(() => placedOf(plan, done, scale), [plan, done, scale]);
+  useEffect(() => void (!tour && place(placed)), [tour, place, placed]);
+  useEffect(() => () => pick(null), [pick]);
   if (!save) return null;
-  if (params.has("tour")) return <Tour onClose={close} />;
+  if (tour) return <Tour onClose={close} />;
 
   return (
     <>

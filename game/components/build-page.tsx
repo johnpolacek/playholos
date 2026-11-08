@@ -400,14 +400,20 @@ export function BuildPage({ slug }: { slug: string }) {
   // The map: our builds with places, and this one where it would stand.
   const placed = useMemo(() => placedOf(plan, done, scale), [plan, done, scale]);
   useEffect(() => place(placed), [place, placed]);
-  useEffect(() => pick(name && SITES[name] ? name : null), [pick, name]);
+  // A change to our order from this page flies the map back here too, after the map's own Back to Earth. 2026-11-08.
+  useEffect(() => pick(name && SITES[name] ? name : null), [pick, name, plan]);
   useEffect(() => () => pick(null), [pick]);
 
+  // In Close View, Esc pulls back first, as the button does, and the next leaves the page. 2026-11-08.
   useEffect(() => {
-    const back = (e: KeyboardEvent) => e.key === "Escape" && navigate(from?.to ?? "/play/build", { state: from?.state });
+    const back = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      if (close) setClose(false);
+      else navigate(from?.to ?? "/play/build", { state: from?.state });
+    };
     window.addEventListener("keydown", back);
     return () => window.removeEventListener("keydown", back);
-  }, [navigate, from]);
+  }, [navigate, from, close, setClose]);
 
   useGSAP(
     () => {
@@ -461,7 +467,12 @@ export function BuildPage({ slug }: { slug: string }) {
       {CLOSE[build.name] && (
         <button
           data-m
-          onClick={() => setClose(!close)}
+          onClick={() => {
+            // After the map's own Back to Earth nothing is picked, and the button did nothing. Picked again, it flies
+            // here and down. 2026-11-08.
+            pick(build.name);
+            setClose(!close);
+          }}
           className="mt-6 flex h-[46px] shrink-0 items-center justify-center gap-2 rounded-full border border-ink text-[15px] font-medium"
         >
           <Lens closer={!close} size={17} />

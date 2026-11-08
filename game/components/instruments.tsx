@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { Link } from "react-router";
 import { useGame } from "@/components/game-provider";
 import { BuildMark, buildColor, buildTone } from "@/components/marks";
-import { usePlan, useSchedule } from "@/components/picks";
+import { usePlan, usePoint, useSchedule } from "@/components/picks";
 import { useLeads } from "@/components/scan";
 import { ListHead } from "@/components/tab-head";
 import { span, tenths, yearText } from "@/lib/game/clock";
@@ -157,8 +157,10 @@ function doing(name: string, k: Known, since: number): { line: string; news: boo
 
 /** A small live trace for each card: the build's own mark, in its color. */
 function Card({ name, since, line, news, busy }: { name: string; since: number; line: string; news: boolean; busy?: boolean }) {
+  // Pointed at, the map flies to where it stands. 2026-11-08.
+  const point = usePoint();
   return (
-    <li>
+    <li {...point(name)}>
       <Link
         to={`/play/build/${buildSlug(name)}`}
         className={`flex items-center gap-3.5 rounded-lg border bg-paper px-3.5 py-3 transition-colors hover:border-faint ${news ? "border-(--c)" : "border-rowline"}`}
@@ -194,6 +196,7 @@ export function Instruments({ catalog }: { catalog?: (idle: boolean) => React.Re
   const { plan } = usePlan();
   const { done, scale } = useSchedule();
   const { heard, readings, leads, visits, minds } = useLeads();
+  const point = usePoint();
   const now = year ?? 0;
   const names = ordered(plan);
   const working = names.filter((n) => done[n] != null && done[n]! <= now);
@@ -249,7 +252,7 @@ export function Instruments({ catalog }: { catalog?: (idle: boolean) => React.Re
             const from = plan.later?.filter((o) => o.name === n).at(-1)?.y ?? 0;
             const p = at == null ? 0 : Math.min(1, Math.max(0, (now - from) / Math.max(0.01, at - from)));
             return (
-              <li key={n} className="border-t border-faint">
+              <li key={n} className="border-t border-faint" {...point(n)}>
                 <Link to={`/play/build/${buildSlug(n)}`} className="flex flex-col gap-1.5 py-2.5">
                   <span className="flex items-baseline gap-3">
                     <span className={`shrink-0 self-center ${buildTone(n)}`}>

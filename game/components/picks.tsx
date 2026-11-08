@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { Link } from "react-router";
 import { useGame } from "@/components/game-provider";
 import { CostLine, previews, usePreview } from "@/components/costs";
 import { BuildMark, buildTone } from "@/components/marks";
 import { OpensLine } from "@/components/opens";
+import { useWorks } from "@/components/works";
 import { Face, ListHead } from "@/components/tab-head";
 import { span, tenths } from "@/lib/game/clock";
 import { FOUND, rockOf } from "@/lib/game/rocks";
@@ -24,6 +25,30 @@ export function usePlan() {
   const { save, setPlan } = useGame();
   const plan = save?.plan ?? EMPTY;
   return { plan, change: (f: (p: Plan) => Plan) => setPlan(f(plan)) };
+}
+
+/** A build row's pointer and focus on Build. The map flies to the build's site while a mouse points at it or the keys
+ *  focus it, and home once let go, as the walk's Choose rows do. With `ring`, the ring above shows it queued too. Set
+ *  on a row holding more than its link, focus moving inside it keeps the build shown. Touch has no hover, and a tap
+ *  opens the build's page, which flies there itself. Before 2026-11-08 only the ring moved, and the map kept Earth. */
+export function usePoint() {
+  const [, preview] = usePreview();
+  const { pick } = useWorks();
+  return useCallback(
+    (name: string, ring = false): React.HTMLAttributes<HTMLElement> => {
+      const show = (on: boolean) => {
+        if (ring) preview(on ? name : null);
+        pick(on && SITES[name] ? name : null);
+      };
+      return {
+        onPointerEnter: (e) => void (e.pointerType === "mouse" && show(true)),
+        onPointerLeave: (e) => void (e.pointerType === "mouse" && show(false)),
+        onFocus: (e) => void ((e.target as HTMLElement).matches(":focus-visible") && show(true)),
+        onBlur: (e) => void (!e.currentTarget.contains(e.relatedTarget as Node | null) && show(false)),
+      };
+    },
+    [preview, pick],
+  );
 }
 
 // This game's Earth, fetched once a seed and shared: the top bar's count needs it too, on every tab. A failed fetch
@@ -228,6 +253,7 @@ export const buildStory = (name: string): [string, string | undefined][] => {
 export function Unqueued({ scale, className = "" }: { scale: number; className?: string }) {
   const { plan } = usePlan();
   const [, preview] = usePreview();
+  const point = usePoint();
   const builds = BUILDS.filter((b) => !plan.builds.includes(b.name));
   const by = useMemo(
     () =>
@@ -251,7 +277,7 @@ export function Unqueued({ scale, className = "" }: { scale: number; className?:
           // A Seed Ship waits for its drive and fuel in our order, and says which.
           const lacking = lacks(plan, b.name);
           return (
-            <li key={b.name} className="border-t border-faint">
+            <li key={b.name} className="border-t border-faint" {...point(b.name)}>
               <Link
                 to={`/play/build/${buildSlug(b.name)}`}
                 className="block py-2.5"
@@ -282,6 +308,7 @@ export function Opened({ scale, now, className = "" }: { scale: number; now: num
   const { plan } = usePlan();
   const { done } = useSchedule();
   const [, preview] = usePreview();
+  const point = usePoint();
   const at = tenths(now);
   const open = useMemo(() => openAt(plan, done, at), [plan, done, at]);
   const by = useMemo(
@@ -294,7 +321,7 @@ export function Opened({ scale, now, className = "" }: { scale: number; now: num
       <ListHead left={`Open to start · ${open.length}`} right="Done in" className={className} />
       <ul className="mt-1">
         {open.map((b) => (
-          <li key={b.name} className="border-t border-faint">
+          <li key={b.name} className="border-t border-faint" {...point(b.name)}>
             <Link to={`/play/build/${buildSlug(b.name)}`} className="block py-2.5" {...previews(b.name, preview)}>
               <Face
                 mark={<BuildMark name={b.name} />}

@@ -4,9 +4,11 @@ import { CostLine, previews, usePreview } from "@/components/costs";
 import { useGame } from "@/components/game-provider";
 import { BuildMark, buildTone } from "@/components/marks";
 import { OpensLine } from "@/components/opens";
-import { usePlan, useSchedule } from "@/components/picks";
+import { usePlan, usePoint, useSchedule } from "@/components/picks";
+import { useWorks } from "@/components/works";
 import { Face, ListHead } from "@/components/tab-head";
 import { span, tenths } from "@/lib/game/clock";
+import { SITES } from "@/lib/game/sites";
 import { buildSlug, fits, lacks, LATER, moves, needs, openAt, ordered, orderLater, PAST, takenAt } from "@/lib/game/plan";
 
 // In play, the Catalog: everything open to us and not in our order, under our instruments, each with when it would be
@@ -19,6 +21,8 @@ export function Catalog({ className = "" }: { className?: string }) {
   const { plan, change } = usePlan();
   const { done, scale } = useSchedule();
   const [, preview] = usePreview();
+  const point = usePoint();
+  const { pick } = useWorks();
   const at = tenths(year ?? 0);
   // An order lands on Earth a light-time late while the Will lives at a hole.
   const order = orderAt === null ? null : tenths(orderAt);
@@ -83,7 +87,7 @@ export function Catalog({ className = "" }: { className?: string }) {
         {shown.map((b) => {
           const lacking = lacks(plan, b.name);
           return (
-            <li key={b.name} className="border-t border-faint">
+            <li key={b.name} className="border-t border-faint" {...point(b.name)}>
               <Link to={`/play/build/${buildSlug(b.name)}`} className="block py-2.5" {...previews(b.name, preview)}>
                 <Face
                   mark={<BuildMark name={b.name} />}
@@ -110,7 +114,11 @@ export function Catalog({ className = "" }: { className?: string }) {
                 ) : (
                   order !== null && (
                     <button
-                      onClick={() => change(orderLater(b.name, order))}
+                      onClick={() => {
+                        change(orderLater(b.name, order));
+                        // The map shows where it now goes up: on a tap, nothing had flown it from Earth. 2026-11-08.
+                        if (SITES[b.name]) pick(b.name);
+                      }}
                       className="h-9 shrink-0 rounded-full border border-ink px-4 text-[13px] font-medium transition-colors hover:bg-ink hover:text-paper"
                     >
                       {takenAt(plan, b.name) === null ? "Add to Queue" : "Resume Build"}

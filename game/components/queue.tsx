@@ -1,10 +1,11 @@
 import { useLayoutEffect, useMemo, useRef, useState } from "react";
-import { previews, usePreview } from "@/components/costs";
 import { useGame } from "@/components/game-provider";
 import { Item, type Row } from "@/components/journey";
 import { Catalog } from "@/components/catalog";
 import { Instruments } from "@/components/instruments";
-import { Unqueued, usePlan, useSchedule } from "@/components/picks";
+import { Unqueued, usePlan, usePoint, useSchedule } from "@/components/picks";
+import { useWorks } from "@/components/works";
+import { SITES } from "@/lib/game/sites";
 import { ListHead } from "@/components/tab-head";
 import { buildOf, EMPTY, ordered } from "@/lib/game/plan";
 import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motion";
@@ -40,7 +41,12 @@ const moved = (names: string[], from: number, to: number) => {
 
 /** Dragging a queued build to a new place in line, or moving it a place with the arrow keys. The others make room as
  *  it passes, and on release it eases into its place and keeps the focus. */
-function useReorder(names: string[], commit: (order: string[]) => void, list: React.RefObject<HTMLUListElement | null>) {
+function useReorder(
+  names: string[],
+  commit: (order: string[]) => void,
+  list: React.RefObject<HTMLUListElement | null>,
+  show: (name: string) => void,
+) {
   const [drag, setDrag] = useState<{ name: string; dy: number; to: number } | null>(null);
   const start = useRef<{ y: number; from: number; tops: number[]; heights: number[] } | null>(null);
   const settle = useRef<{ name: string; by: number } | null>(null);
@@ -82,6 +88,8 @@ function useReorder(names: string[], commit: (order: string[]) => void, list: Re
       // focus was elsewhere. 2026-11-07.
       e.currentTarget.focus({ preventScroll: true });
       e.currentTarget.setPointerCapture(e.pointerId);
+      // The map flies to the build moved, as it passes the others in line. 2026-11-08.
+      show(name);
       const rects = names.map((n) => row(n)!.getBoundingClientRect());
       start.current = { y: e.clientY, from: i, tops: rects.map((r) => r.top), heights: rects.map((r) => r.height) };
       setDrag({ name, dy: 0, to: i });
@@ -114,6 +122,7 @@ function useReorder(names: string[], commit: (order: string[]) => void, list: Re
       if (to === null || to < 0 || to >= names.length) return;
       e.preventDefault();
       focus.current = name;
+      show(name);
       commit(moved(names, i, to));
     },
   });
@@ -158,9 +167,10 @@ export function Queue() {
   const { change } = usePlan();
   const list = useRef<HTMLUListElement>(null);
   const names = useMemo(() => queued.map((r) => r.key), [queued]);
-  const reorder = useReorder(names, (builds) => change((p) => ({ ...p, builds })), list);
+  const { pick } = useWorks();
+  const reorder = useReorder(names, (builds) => change((p) => ({ ...p, builds })), list, (n) => void (SITES[n] && pick(n)));
   const movable = !began && queued.length > 1;
-  const [, preview] = usePreview();
+  const point = usePoint();
 
   useGSAP(
     () => {
@@ -216,9 +226,9 @@ export function Queue() {
                 row={r}
                 now={now}
                 began={false}
-                point={previews(r.key, preview)}
+                point={point(r.key, true)}
                 style={movable ? reorder.style(r.key, i) : undefined}
-                grip={movable && <Grip name={r.key} i={i} n={queued.length} {...reorder.grip(r.key, i)} />}
+                grip={movable && <Grip name={r.key} i={i} n={queued.length} {...point(r.key)} {...reorder.grip(r.key, i)} />}
               />
             ))}
           </ul>
