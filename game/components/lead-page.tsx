@@ -29,6 +29,18 @@ import { gsap, prefersReducedMotion, rise, riseFrom, useGSAP } from "@/lib/motio
 // every world known there on its orbit. Luyten's Star's messages keep their own drawing, and
 // their systems follow under what we measured, 2026-10-19.
 
+/** Each step of the Mind's scale, said as a range: "Life is unlikely" beside a band of 14 to 41% read as a
+ *  contradiction to a blind first-timer, so the page speaks in numbers only. The Will's call, 2026-11-08. */
+const SPAN: Record<Odds, string> = {
+  "almost no chance": "under 5%",
+  "very unlikely": "5–15%",
+  unlikely: "15–35%",
+  "roughly even": "35–65%",
+  likely: "65–85%",
+  "very likely": "85–95%",
+  "almost certain": "over 95%",
+};
+
 /** The Mind's word, on its seven-step scale. A word a reading moved shows where it was, ringed, and what it was. */
 function Scale({ odds, was }: { odds: Odds; was?: Odds }) {
   const at = ODDS.indexOf(odds);
@@ -45,10 +57,10 @@ function Scale({ odds, was }: { odds: Odds; was?: Odds }) {
       </span>
       {from >= 0 ? (
         <span className="font-mono text-[10.5px] text-ink">
-          <span className="text-muted">{was} →</span> {odds}
+          <span className="text-muted">{SPAN[was!]} →</span> {SPAN[odds]}
         </span>
       ) : (
-        <span className="w-[104px] font-mono text-[10.5px] text-ink">{odds}</span>
+        <span className="w-[64px] font-mono text-[10.5px] text-ink">{SPAN[odds]}</span>
       )}
     </span>
   );
@@ -287,6 +299,7 @@ export function LeadPage({ slug }: { slug: string }) {
         <Link
           data-m
           to={`/play/reach/${lead.slug}`}
+          state={{ engage: true }}
           className="mt-2.5 inline-flex h-8 items-center self-start rounded-full bg-you px-4 text-[13px] font-medium text-paper transition-[filter] hover:brightness-110"
         >
           Engage {starName(lead.star)}: send a craft or a message ›

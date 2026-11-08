@@ -88,7 +88,7 @@ export function Catalog({ className = "" }: { className?: string }) {
           const lacking = lacks(plan, b.name);
           return (
             <li key={b.name} className="border-t border-faint" {...point(b.name)}>
-              <Link to={`/play/build/${buildSlug(b.name)}`} className="block py-2.5" {...previews(b.name, preview)}>
+              <Link to={`/play/build/${buildSlug(b.name)}`} className="block py-2.5">
                 <Face
                   mark={<BuildMark name={b.name} />}
                   tone={buildTone(b.name, false)}
@@ -113,7 +113,10 @@ export function Catalog({ className = "" }: { className?: string }) {
                   <span className="text-xs leading-snug text-muted">Needs {needs(lacking)} in our order first.</span>
                 ) : (
                   order !== null && (
+                    // Only the button previews its build now: a row that scrolled under a resting pointer turned the top
+                    // bar into "IF ADDED" numbers, and a blind first-timer took them for what we had queued. 2026-11-08.
                     <button
+                      {...previews(b.name, preview)}
                       onClick={() => {
                         change(orderLater(b.name, order));
                         // The map shows where it now goes up: on a tap, nothing had flown it from Earth. 2026-11-08.

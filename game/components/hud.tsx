@@ -321,15 +321,21 @@ function useIdle() {
 function Held({ idle }: { idle: boolean }) {
   const { playOn } = useGame();
   return (
-    <span className="ml-2 inline-flex items-baseline gap-2 text-[12.5px]">
-      <span className="text-ink">
-        {idle ? "Paused, nothing building." : "Paused, compute to spare."}
-      </span>
-      <Link to="/play/build" className="text-you hover:underline">
-        Build ›
+    // A blind first-timer read "Paused, compute to spare. Build › Play on" as a status line, not two choices, and
+    // looked for the jump button it replaced. Both are buttons now, Play on in the jump button's place. 2026-11-08.
+    <span className="ml-2 inline-flex items-center gap-2 text-[12.5px]">
+      <span className="text-ink">{idle ? "Paused: nothing is building." : "Paused, so idle compute isn’t wasted."}</span>
+      <Link
+        to="/play/build"
+        className="-my-1 inline-flex h-7 items-center rounded-full border border-you px-3 font-medium text-you hover:bg-you/10"
+      >
+        Add a build
       </Link>
-      <button onClick={playOn} className="text-muted hover:text-ink">
-        Play on
+      <button
+        onClick={playOn}
+        className="-my-1 inline-flex h-7 items-center rounded-full bg-you px-3 font-medium text-paper hover:brightness-110"
+      >
+        Play on ›
       </button>
     </span>
   );

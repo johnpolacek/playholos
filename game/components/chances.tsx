@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { type Lead, lifeOf, type Odds, type Reading } from "@/lib/game/leads";
+import { type Lead, lifeOf, type Reading } from "@/lib/game/leads";
 import { type Chances as ChanceSet, chancesOf, type Range, rangeText } from "@/lib/game/chance";
 import { prefersReducedMotion } from "@/lib/motion";
 
@@ -53,12 +53,18 @@ export function movedBy(lead: Lead, readings: readonly Reading[], r: Reading) {
   const now = chancesOf(lead, [...before(readings, r), r]);
   if (!now) return null;
   const was = chancesOf(lead, before(readings, r));
-  return chanceShift(was, now);
+  return chanceShift(was, now, isGlow(lead));
 }
 
-export function chanceShift(was: ChanceSet | null, now: ChanceSet) {
+/** A glow in the sky, whose chance we give as a mind's. */
+export const isGlow = (l: Lead) => l.art.kind === "glow" || l.art.kind === "warm";
+
+export function chanceShift(was: ChanceSet | null, now: ChanceSet, mindFirst = false) {
   if (now.ruledOut) return { label: "mind", from: was?.ruledOut || !was?.mind || was.mind === "unknown" ? null : rangeText(was.mind), to: "ruled out", up: false };
-  const pick = now.life ? "life" : now.mind && now.mind !== "unknown" ? "mind" : null;
+  // A glow is a question of minds, not life: Cold Glow 1 read "life 12–45%" on the jump card beside "Life is unlikely"
+  // on its page and a mind at 0.07 to 2% in the Mind's word, and a blind first-timer couldn't square them. 2026-11-08.
+  const hasMind = !!now.mind && now.mind !== "unknown";
+  const pick = mindFirst && hasMind ? "mind" : now.life ? "life" : hasMind ? "mind" : null;
   if (!pick) return null;
   const to = now[pick] as Range;
   const from = was?.[pick];
@@ -79,17 +85,9 @@ export function ChanceTag({ shift, className = "" }: { shift: ReturnType<typeof 
   );
 }
 
-const SAY: Record<Odds, string> = {
-  "almost no chance": "Almost no chance of life",
-  "very unlikely": "Life is very unlikely",
-  unlikely: "Life is unlikely",
-  "roughly even": "About even odds of life",
-  likely: "Life is likely",
-  "very likely": "Life is very likely",
-  "almost certain": "Life is almost certain",
-};
 
-/** The page's answer in a line: what we last learned, and what it means for life. Null where life isn't the question. */
+/** The page's answer in a line: what we last learned. Its word on life left 2026-11-08, as the bands beside it say it
+ *  in numbers, and "Life is unlikely" over 14 to 41% read as a contradiction. Null where life isn't the question. */
 export function verdictOf(lead: Lead, readings: readonly Reading[]) {
   const c = chancesOf(lead, readings);
   if (!c) return null;
@@ -97,7 +95,7 @@ export function verdictOf(lead: Lead, readings: readonly Reading[]) {
   if (c.ruledOut) return `${read ? `${read.title}. ` : ""}No mind here.`;
   const word = lifeOf(lead, readings);
   if (!word) return null;
-  return `${read ? `${read.title}. ` : ""}${SAY[word]}.`;
+  return read ? `${read.title}.` : null;
 }
 
 /** `was`: the readings before the latest, so the bands open where they stood and slide to where it put them. */

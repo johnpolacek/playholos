@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "reac
 import { Link } from "react-router";
 import { watcherWords } from "@/lib/game/watcher-words";
 import { useGame } from "@/components/game-provider";
-import { ChanceTag, chanceShift } from "@/components/chances";
+import { ChanceTag, chanceShift, isGlow } from "@/components/chances";
 import { chancesOf } from "@/lib/game/chance";
 import { BuildMark, buildColor, LeadMark } from "@/components/marks";
 import { useMindNews } from "@/components/mind-chat";
@@ -312,7 +312,7 @@ export function Arrived({ from, to, snap }: { from: number; to: number; snap: Sn
       // scrolled. Playtest 2026-11-07.
       const had = (readings[l.slug] ?? []).filter((r) => snap.reads.has(r.id));
       const now = chancesOf(l, [...had, ...fresh]);
-      const shift = now ? chanceShift(snap.slugs.has(l.slug) ? chancesOf(l, had) : null, now) : null;
+      const shift = now ? chanceShift(snap.slugs.has(l.slug) ? chancesOf(l, had) : null, now, isGlow(l)) : null;
       out.push({
         key: `lead:${l.slug}`,
         // A lead new to Scan comes with its first reading, so it ranks as new, not as news on a lead we knew: a new

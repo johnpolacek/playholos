@@ -1,4 +1,4 @@
-import { ChanceTag, chanceShift } from "@/components/chances";
+import { ChanceTag, chanceShift, isGlow } from "@/components/chances";
 import { chancesOf } from "@/lib/game/chance";
 import { Link } from "react-router";
 import { useSchedule } from "@/components/picks";
@@ -323,7 +323,7 @@ export function LeadList({
 
   const chance = (l: Lead) => {
     const c = chancesOf(l, readings[l.slug] ?? []);
-    return c && !(c.mind === "unknown" && !c.life) ? chanceShift(null, c) : null;
+    return c && !(c.mind === "unknown" && !c.life) ? chanceShift(null, c, isGlow(l)) : null;
   };
   const row = (l: Lead) => {
     const read = readings[l.slug]?.at(-1);

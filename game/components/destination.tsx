@@ -284,7 +284,16 @@ export function DestinationPage({ slug }: { slug: string }) {
     showCraft(playingCraft);
     return () => showCraft(null);
   }, [playingCraft, previewing, showCraft]);
-  const cameWith = (useLocation().state as { craft?: CraftKind | null } | null)?.craft;
+  const came = useLocation().state as { craft?: CraftKind | null; engage?: boolean } | null;
+  const cameWith = came?.craft;
+  // Engage on a lead lands on how we send, not on the facts again: blind first-timers, five runs of six, met the
+  // facts they had just read, saw no send, and scrolled or asked the Mind. 2026-11-08.
+  const send = useRef<HTMLAnchorElement>(null);
+  useEffect(() => {
+    if (!came?.engage) return;
+    const t = setTimeout(() => send.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 450);
+    return () => clearTimeout(t);
+  }, [came?.engage, slug]);
   useEffect(() => {
     if (!cameWith) return;
     showCraft(cameWith);
@@ -414,13 +423,14 @@ export function DestinationPage({ slug }: { slug: string }) {
       {/* A message is a way to engage too, and the fastest, so it leads: a blind first-timer looked down this list for
           one, found only craft, and had to guess to ask the Mind. At its foot, a second missed it. 2026-11-07. */}
       <Link
+        ref={send}
         data-m
         to={`/play/mind?ask=${encodeURIComponent(`We want to send a message to ${lead.star}. What should it say, and what does it risk?`)}`}
         className="mt-5 block rounded-lg border border-you/40 px-3 py-2.5 text-[13.5px] leading-snug"
       >
         <b className="font-semibold">Send a message</b>
         <span className="block text-page-ink2">
-          It goes at the speed of light, sooner than any craft. The Mind drafts it, and we send it. Or send a craft, below. <span className="text-you">Draft it ›</span>
+          It goes at the speed of light, sooner than any craft. The Mind drafts it, and we send it. Or send a craft, below. <span className="text-you">Ask the Mind to draft it ›</span>
         </span>
       </Link>
       {/* A glow gone dark says so before we send: a blind first-timer sent a probe to one that had already faded, with no
