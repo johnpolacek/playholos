@@ -56,6 +56,9 @@ export function MapStrip() {
   // Or the build the Mind offers, where it would stand, as its page shows it. 2026-11-08.
   const talkedBuild = talking?.build ?? null;
   // A jump's card open off Scan shows its lead there too, until the card closes. 2026-11-08.
+  // But not over a page about one thing, a destination on Reach or a build: Tau Ceti's Reach page showed Groombridge 34
+  // from the card. Blind playtest 2026-11-08.
+  const onePage = /^\/play\/(reach|build)\/./.test(path);
   const jumped = useJumpLead();
   // Reach's map stays on a destination's page, and flies out to its star.
   const reaching = path === "/play/reach" || path.startsWith("/play/reach/");
@@ -105,7 +108,7 @@ export function MapStrip() {
             Back to Earth
           </button>
         </>
-      ) : jumped && !scan ? (
+      ) : jumped && !scan && !onePage ? (
         <>
           <ScanMap quick className="absolute inset-0" />
           <TalkLook lead={jumped} />
